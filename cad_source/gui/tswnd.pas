@@ -39,7 +39,7 @@ type
     MkCurrentBtn: TSpeedButton;
     procedure Aply(Sender: TObject);
     procedure AplyClose(Sender: TObject);
-    procedure LayerAdd(Sender: TObject);
+    procedure StyleAdd(Sender: TObject);
     procedure LayerDelete(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
@@ -312,94 +312,73 @@ begin
      end;
 end;
 
-procedure TTextStylesWindow.LayerAdd(Sender: TObject); // Процедура добавления слоя
+procedure TTextStylesWindow.StyleAdd(Sender: TObject);
 var
-   player,pcreatedlayer:PGDBTextStyle;
+   pstyle,pcreatedstyle:PGDBTextStyle;
    pdwg:PTSimpleDrawing;
-   layername:string;
+   stylename:string;
    counter:integer;
    li:TListItem;
    domethod,undomethod:tmethod;
 begin
-     (*pdwg:=gdb.GetCurrentDWG;
-     if assigned(ListView1.Selected)then
-                                        player:=(ListView1.Selected.Data)
-                                    else
-                                        player:=pdwg^.TextStyleTable.GetCurrentTextStyle;
+  pdwg:=gdb.GetCurrentDWG;
+  if assigned(ListView1.Selected)then
+                                     pstyle:=(ListView1.Selected.Data)
+                                 else
+                                     pstyle:=pdwg^.TextStyleTable.GetCurrentTextStyle;
 
-     counter:=0;
-     repeat
-          inc(counter);
-          layername:=inttostr(counter);
-          if length(layername)<2 then
-                                     layername:='0'+layername;
-          layername:='Layer'+layername;
-     until pdwg^.LayerTable.getIndex(layername)=-1;
+  stylename:=pdwg^.TextStyleTable.GetFreeName(rsNewTextStyleNameFormat,1);
+  if stylename='' then
+  begin
+    shared.ShowError(rsUnableSelectFreeTextStylerName);
+    exit;
+  end;
 
-     pdwg^.LayerTable.AddItem(name,pcreatedlayer);
-     pcreatedlayer^:=player^;
-     pcreatedlayer^.Name:=layername;
+  pdwg^.TextStyleTable.AddItem(stylename,pcreatedstyle);
+  pcreatedstyle^:=pstyle^;
+  pcreatedstyle^.Name:=stylename;
 
-     domethod:=tmethod(@pdwg^.LayerTable.AddToArray);
-     undomethod:=tmethod(@pdwg^.LayerTable.RemoveFromArray);
-     with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGObjectChangeCommand2(pcreatedlayer,tmethod(domethod),tmethod(undomethod))^ do
-     begin
-          AfterAction:=false;
-          //comit;
-     end;
+  domethod:=tmethod(@pdwg^.TextStyleTable.AddToArray);
+  undomethod:=tmethod(@pdwg^.TextStyleTable.RemoveFromArray);
+  with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGObjectChangeCommand2(pcreatedstyle,tmethod(domethod),tmethod(undomethod))^ do
+  begin
+       AfterAction:=false;
+       //comit;
+  end;
 
-
-     ListView1.BeginUpdate;
-     li:=ListView1.Items.Add;
-     li.Data:=pcreatedlayer;
-     ListView1.UpdateItem(li,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer);
-     ListView1.SortColumn:=-1;
-     ListView1.SortColumn:=1;
-     if assigned(ListView1.Selected)then
-     begin
-         ListView1.Selected.Selected:=false;
-         ListView1.Selected:=nil;
-     end;
-     ListView1.Selected:=li;
-     ListView1.EndUpdate;*)
+  ListView1.AddCreatedItem(pcreatedstyle,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer);
 end;
 
 procedure TTextStylesWindow.LayerDelete(Sender: TObject); // Процедура удаления слоя
 var
-   player:PGDBTextStyle;
+   pstyle:PGDBTextStyle;
    pdwg:PTSimpleDrawing;
    e,b:GDBInteger;
    domethod,undomethod:tmethod;
 begin
-   (*
-  //ShowError(rsNotYetImplemented);
   pdwg:=gdb.GetCurrentDWG;
   if assigned(ListView1.Selected)then
                                      begin
-                                     player:=(ListView1.Selected.Data);
-                                     //countlayer(player,e,b);
+                                     pstyle:=(ListView1.Selected.Data);
+                                     countstyle(pstyle,e,b);
                                      if (e+b)>0 then
                                                   begin
-                                                       ShowError(rsUnableDelUsedLayer);
+                                                       ShowError(rsUnableDelUsedStyle);
                                                        exit;
                                                   end;
 
-                                     domethod:=tmethod(@pdwg^.LayerTable.RemoveFromArray);
-                                     undomethod:=tmethod(@pdwg^.LayerTable.AddToArray);
-                                     with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGObjectChangeCommand2(player,tmethod(domethod),tmethod(undomethod))^ do
+                                     domethod:=tmethod(@pdwg^.TextStyleTable.RemoveFromArray);
+                                     undomethod:=tmethod(@pdwg^.TextStyleTable.AddToArray);
+                                     with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGObjectChangeCommand2(pstyle,tmethod(domethod),tmethod(undomethod))^ do
                                      begin
                                           AfterAction:=false;
                                           comit;
                                      end;
-
-
-                                     //pdwg^.LayerTable.eraseobj(player);
                                      ListView1.Items.Delete(ListView1.Items.IndexOf(ListView1.Selected));
                                      LayerDescLabel.Caption:='';
                                      end
                                  else
-                                     ShowError(rsLayerMustBeSelected);
-   *)
+                                     ShowError(rsStyleMustBeSelected);
 end;
 
 procedure TTextStylesWindow.AplyClose(Sender: TObject);

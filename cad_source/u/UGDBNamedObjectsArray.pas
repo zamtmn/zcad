@@ -34,11 +34,42 @@ GDBNamedObjectsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPIde
                     function GetIndexByPointer(p:PGDBNamedObject):GDBInteger;
                     function AddItem(name:GDBSTRING; out PItem:Pointer):TForCResult;
                     function MergeItem(name:GDBSTRING;LoadMode:TLoadOpt):GDBPointer;
+                    function GetFreeName(NameFormat:GDBString;firstindex:integer):GDBString;
               end;
 {EXPORT-}
 implementation
 uses
     log;
+function GDBNamedObjectsArray.GetFreeName(NameFormat:GDBString;firstindex:integer):GDBString;
+var
+   counter,LoopCounter:integer;
+   OldName:GDBString;
+begin
+  counter:=firstindex-1;
+  OldName:='';
+  LoopCounter:=0;
+  repeat
+    inc(counter);
+    inc(LoopCounter);
+  try
+       result:=sysutils.format({'Unnamed%-3.3d'}NameFormat,[counter]);;
+  except
+       result:='';
+  end;
+  if OldName=result then
+                        begin
+                          result:='';
+                          exit;
+                        end;
+  if LoopCounter>99 then
+                        begin
+                             result:='';
+                             exit;
+                        end;
+  OldName:=result;
+  until getIndex(result)=-1;
+end;
+
 function GDBNamedObjectsArray.MergeItem(name:GDBSTRING;LoadMode:TLoadOpt):GDBPointer;
 begin
      if AddItem(name,result)=IsFounded then

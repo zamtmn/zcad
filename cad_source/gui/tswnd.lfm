@@ -117,7 +117,7 @@ object TextStylesWindow: TTextStylesWindow
     Anchors = [akTop, akLeft, akBottom]
     BorderSpacing.Left = 1
     Flat = True
-    OnClick = LayerAdd
+    OnClick = StyleAdd
   end
   object ListView1: TZListView
     AnchorSideLeft.Control = Owner
@@ -141,7 +141,7 @@ object TextStylesWindow: TTextStylesWindow
       end    
       item
         Caption = 'Name'
-        Width = 48
+        Width = 376
       end    
       item
         Caption = 'FontName'

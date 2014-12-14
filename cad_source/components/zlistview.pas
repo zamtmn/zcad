@@ -58,6 +58,7 @@ type
     procedure UpdateItem(Item: TListItem;CurrentItemData:Pointer);
     procedure UpdateItem2(Item:TObject);
     procedure MakeItemCorrent(Item: TListItem);
+    procedure AddCreatedItem(const PCreatedItemData,PCurrentItemData:Pointer);
   published
     { Published declarations }
     property onMakeCurrent:TOnMakeCurrent read GetMakeCurrent write SetMakeCurrent;
@@ -174,6 +175,25 @@ procedure TZListView.SetMakeCurrent(mk:TOnMakeCurrent);
 begin
      FonMakeCurrent:=mk;
 end;
+procedure TZListView.AddCreatedItem(const PCreatedItemData,PCurrentItemData:Pointer);
+var
+   li:TListItem;
+begin
+  BeginUpdate;
+  li:=Items.Add;
+  li.Data:=PCreatedItemData;
+  UpdateItem(li,PCurrentItemData);
+  SortColumn:=-1;
+  SortColumn:=1;
+  if assigned(Selected)then
+  begin
+      Selected.Selected:=false;
+      Selected:=nil;
+  end;
+  Selected:=li;
+  EndUpdate;
+end;
+
 procedure TZListView.MakeItemCorrent(Item: TListItem);
 begin
   Item.ImageIndex:=DefaultItemIndex;

@@ -206,16 +206,21 @@ msgstr ""
 
 #: ttextstyleswindow.listview1.columns[3].caption
 msgctxt "TTEXTSTYLESWINDOW.LISTVIEW1.COLUMNS[3].CAPTION"
-msgid "Height"
+msgid "FontPath"
 msgstr ""
 
 #: ttextstyleswindow.listview1.columns[4].caption
 msgctxt "TTEXTSTYLESWINDOW.LISTVIEW1.COLUMNS[4].CAPTION"
-msgid "Width factor"
+msgid "Height"
 msgstr ""
 
 #: ttextstyleswindow.listview1.columns[5].caption
 msgctxt "TTEXTSTYLESWINDOW.LISTVIEW1.COLUMNS[5].CAPTION"
+msgid "Width factor"
+msgstr ""
+
+#: ttextstyleswindow.listview1.columns[6].caption
+msgctxt "TTEXTSTYLESWINDOW.LISTVIEW1.COLUMNS[6].CAPTION"
 msgid "Oblique"
 msgstr ""
 
@@ -438,6 +443,16 @@ msgstr ""
 
 #: zcadexternal.acn_copy~hint
 msgid "Copy primitives"
+msgstr ""
+
+#: zcadexternal.acn_cutclip~caption
+msgctxt "zcadexternal.acn_cutclip~caption"
+msgid "Cut to clipboard"
+msgstr ""
+
+#: zcadexternal.acn_cutclip~hint
+msgctxt "zcadexternal.acn_cutclip~hint"
+msgid "Cut to clipboard"
 msgstr ""
 
 #: zcadexternal.acn_dbaseadd~caption
@@ -3713,6 +3728,14 @@ msgctxt "zcadstrconsts.rsncoglc"
 msgid "OpenGL context is not created"
 msgstr ""
 
+#: zcadstrconsts.rsnewlayernameformat
+msgid "Layer%-3.3d"
+msgstr ""
+
+#: zcadstrconsts.rsnewtextstylenameformat
+msgid "Style%-3.3d"
+msgstr ""
+
 #: zcadstrconsts.rsnotyetimplemented
 msgid "Not yet implemented"
 msgstr ""
@@ -3804,6 +3827,10 @@ msgstr ""
 msgid "Select line type..."
 msgstr ""
 
+#: zcadstrconsts.rsstylemustbeselected
+msgid "Style must be selected"
+msgstr ""
+
 #: zcadstrconsts.rssyslinetypewarning
 msgctxt "zcadstrconsts.rssyslinetypewarning"
 msgid "This is system line type!"
@@ -3822,6 +3849,10 @@ msgctxt "zcadstrconsts.rstexteditor"
 msgid "Text editor"
 msgstr ""
 
+#: zcadstrconsts.rstextstyleusedin
+msgid "Text style \"%s\" used in: %d-model, %d-blockdef table"
+msgstr ""
+
 #: zcadstrconsts.rstoolbarnotfound
 msgctxt "zcadstrconsts.rstoolbarnotfound"
 msgid "Toolbar \"%s\" is not found! Create a blank window"
@@ -3835,8 +3866,20 @@ msgstr ""
 msgid "Unable to delete, layer is used"
 msgstr ""
 
+#: zcadstrconsts.rsunabledelusedstyle
+msgid "Unable to delete, Style is used"
+msgstr ""
+
 #: zcadstrconsts.rsunablerenamefiletobak
 msgid "Could not rename file \"%s\" into \"*.bak\""
+msgstr ""
+
+#: zcadstrconsts.rsunableselectfreelayername
+msgid "Unable select free layer name"
+msgstr ""
+
+#: zcadstrconsts.rsunableselectfreetextstylername
+msgid "Unable select free text style name"
 msgstr ""
 
 #: zcadstrconsts.rsunabletofindfile

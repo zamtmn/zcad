@@ -2,7 +2,7 @@ unit objgroup;
 interface
 uses system;
 var
-   GC_HeadDevice:GDBString;(*'Головноге устройство'*)
+   GC_HeadDevice:GDBString;(*'Головное устройство'*)
    GC_HeadDeviceTemplate:GDBString;(*'Шаблон головного устройства'*)
    GC_HDShortName:GDBString;(*'Короткое имя головного устройства'*)
    GC_HDShortNameTemplate:GDBString;(*'Шаблон короткого имени головного устройства'*)

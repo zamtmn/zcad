@@ -201,13 +201,11 @@ msgid "Text styles"
 msgstr "Стили текста"
 
 #: ttextstyleswindow.listview1.columns[0].caption
-#, fuzzy
 msgctxt "ttextstyleswindow.listview1.columns[0].caption"
 msgid "Status"
 msgstr "Статус"
 
 #: ttextstyleswindow.listview1.columns[1].caption
-#, fuzzy
 msgctxt "ttextstyleswindow.listview1.columns[1].caption"
 msgid "Name"
 msgstr "Имя"
@@ -215,20 +213,25 @@ msgstr "Имя"
 #: ttextstyleswindow.listview1.columns[2].caption
 msgctxt "ttextstyleswindow.listview1.columns[2].caption"
 msgid "FontName"
-msgstr "Фонт"
+msgstr "Файл шрифта"
 
 #: ttextstyleswindow.listview1.columns[3].caption
 msgctxt "ttextstyleswindow.listview1.columns[3].caption"
-msgid "Height"
-msgstr "Высота"
+msgid "FontPath"
+msgstr "Путь к файлу"
 
 #: ttextstyleswindow.listview1.columns[4].caption
 msgctxt "ttextstyleswindow.listview1.columns[4].caption"
-msgid "Width factor"
-msgstr "Коэфф. ширины"
+msgid "Height"
+msgstr "Высота"
 
 #: ttextstyleswindow.listview1.columns[5].caption
 msgctxt "ttextstyleswindow.listview1.columns[5].caption"
+msgid "Width factor"
+msgstr "Коэфф. ширины"
+
+#: ttextstyleswindow.listview1.columns[6].caption
+msgctxt "ttextstyleswindow.listview1.columns[6].caption"
 msgid "Oblique"
 msgstr "Наклон"
 
@@ -470,6 +473,16 @@ msgctxt "zcadexternal.acn_copy~hint"
 msgid "Copy primitives"
 msgstr "Копировать примитивы"
 
+#: zcadexternal.acn_cutclip~caption
+msgctxt "zcadexternal.acn_cutclip~caption"
+msgid "Cut to clipboard"
+msgstr ""
+
+#: zcadexternal.acn_cutclip~hint
+msgctxt "zcadexternal.acn_cutclip~hint"
+msgid "Cut to clipboard"
+msgstr ""
+
 #: zcadexternal.acn_dbaseadd~caption
 msgid "Add to drawing database"
 msgstr "Добавить в базу данных чертежа"
@@ -558,9 +571,17 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
+#: zcadexternal.acn_fakecopyclipbase~caption
+msgid ""
+msgstr ""
+
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
+msgstr ""
+
+#: zcadexternal.acn_fakepaste~caption
+msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -886,6 +907,10 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
+#: zcadexternal.acn_processkz~caption
+msgid ""
+msgstr ""
+
 #: zcadexternal.acn_projecttree~caption
 msgctxt "zcadexternal.acn_projecttree~caption"
 msgid "Project tree"
@@ -915,6 +940,10 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
+
+#: zcadexternal.acn_remautocables~caption
+msgid ""
+msgstr ""
 
 #: zcadexternal.acn_rotate~caption
 msgctxt "zcadexternal.acn_rotate~caption"
@@ -2749,6 +2778,10 @@ msgstr "Нумеруесая переменная"
 msgid "Save start number"
 msgstr "Сохранять старовое значение"
 
+#: zcadexternal.tnumberingparams~sortmode
+msgid ""
+msgstr ""
+
 #: zcadexternal.tnumberingparams~startnumber
 msgid "Start"
 msgstr "Начальное значение"
@@ -3580,10 +3613,8 @@ msgid "Position"
 msgstr "Позиция"
 
 #: zcadstrconsts.fontnotfoundandreplace
-msgid ""
-"For text style \"%s\" not found font \"%s\", is replaced by an alternative"
-msgstr ""
-"Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
+msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
+msgstr "Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
 
 #: zcadstrconsts.rsaboutwndcaption
 msgctxt "zcadstrconsts.rsaboutwndcaption"
@@ -3673,7 +3704,7 @@ msgstr "Обработвно %s примитивов"
 
 #: zcadstrconsts.rscmnewbasepoint
 msgid "New base point:"
-msgstr "Новая ьазовая точка:"
+msgstr "Новая базовая точка:"
 
 #: zcadstrconsts.rscmnoblockdefindwg
 msgid "No BlockDef \"%s\" in the drawing"
@@ -3828,8 +3859,7 @@ msgid "Expression %s return %s"
 msgstr "Выражение  %s возвращает %s"
 
 #: zcadstrconsts.rsfardeffilenotfounf
-msgid ""
-"File definition of the variables can not be found for the device \"%s\";"
+msgid "File definition of the variables can not be found for the device \"%s\";"
 msgstr "Файл определения переменных не найден для устройства \"%s\";"
 
 #: zcadstrconsts.rsfileformat
@@ -3912,6 +3942,14 @@ msgctxt "zcadstrconsts.rsncoglc"
 msgid "OpenGL context is not created"
 msgstr "Контекст OpenGL не создан"
 
+#: zcadstrconsts.rsnewlayernameformat
+msgid "Layer%-3.3d"
+msgstr "Слой%-3.3d"
+
+#: zcadstrconsts.rsnewtextstylenameformat
+msgid "Style%-3.3d"
+msgstr "Стиль%-3.3d"
+
 #: zcadstrconsts.rsnotyetimplemented
 msgid "Not yet implemented"
 msgstr "Пока не реализовано"
@@ -3958,20 +3996,15 @@ msgstr "Повторное создание %s!"
 msgid ""
 "-UNDO\\REDO - yet it is better not to use;\n"
 "\n"
-"-If you have problems with rendering or selecting entities, run \"Regen\" "
-"and \"RebuildTree\" in command line;\n"
+"-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
 "\n"
-"-To disable the display of this window comment out line \"About\" in the "
-"file \"components\\autorun.cmd\". Encoding of all configuration files - "
-"UTF8;\n"
+"-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
 msgstr ""
 "-UNDO\\REDO - пока лучше не пользоваться;\n"
 "\n"
-"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" "
-"и \"RebuildTree\" в командной строке;\n"
+"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" и \"RebuildTree\" в командной строке;\n"
 "\n"
-"-Для отключения показа этого окна закоментируйте строку \"About\" в файле "
-"\"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
+"-Для отключения показа этого окна закоментируйте строку \"About\" в файле \"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
 
 #: zcadstrconsts.rsreservefontnotfound
 msgid "Reserve font is not found in the resources"
@@ -4013,6 +4046,10 @@ msgstr "Выбор цвета..."
 msgid "Select line type..."
 msgstr "Выбор типа линий"
 
+#: zcadstrconsts.rsstylemustbeselected
+msgid "Style must be selected"
+msgstr "Стиль должен быть выбран"
+
 #: zcadstrconsts.rssyslinetypewarning
 msgctxt "zcadstrconsts.rssyslinetypewarning"
 msgid "This is system line type!"
@@ -4031,6 +4068,10 @@ msgctxt "zcadstrconsts.rstexteditor"
 msgid "Text editor"
 msgstr "Редактор текста"
 
+#: zcadstrconsts.rstextstyleusedin
+msgid "Text style \"%s\" used in: %d-model, %d-blockdef table"
+msgstr "Стиль текста \"%s\" используется: %d-в модели, %d-в таблице блоков"
+
 #: zcadstrconsts.rstoolbarnotfound
 msgctxt "zcadstrconsts.rstoolbarnotfound"
 msgid "Toolbar \"%s\" is not found! Create a blank window"
@@ -4044,9 +4085,21 @@ msgstr "Тип \"%S\" не задан в модуле \"%S\""
 msgid "Unable to delete, layer is used"
 msgstr "Нельзя удалить, слой используется"
 
+#: zcadstrconsts.rsunabledelusedstyle
+msgid "Unable to delete, Style is used"
+msgstr "Нельзя удалить, стиль используется"
+
 #: zcadstrconsts.rsunablerenamefiletobak
 msgid "Could not rename file \"%s\" into \"*.bak\""
 msgstr "Не могу переименовать файл \"%s\" в \"*.bak\""
+
+#: zcadstrconsts.rsunableselectfreelayername
+msgid "Unable select free layer name"
+msgstr "Не могу выбрать свободное имя слоя"
+
+#: zcadstrconsts.rsunableselectfreetextstylername
+msgid "Unable select free text style name"
+msgstr "Не могу выбрать свободное имя стиля"
 
 #: zcadstrconsts.rsunabletofindfile
 msgid "Unable to find file \"%s\""
@@ -4101,3 +4154,4 @@ msgstr "Внимание!"
 #: zcadstrconsts.rszcadstarted
 msgid "ZCAD v%s started"
 msgstr "ZCAD v%s запущен"
+

@@ -67,6 +67,7 @@ type
 
     {Style name handle procedures}
     function GetStyleName(Item: TListItem):string;
+    function CreateNameEditor(Item: TListItem;r: TRect):boolean;
     {Font name handle procedures}
     function GetFontName(Item: TListItem):string;
     function CreateFontNameEditor(Item: TListItem;r: TRect):boolean;
@@ -117,6 +118,10 @@ end;
 function TTextStylesWindow.GetStyleName(Item: TListItem):string;
 begin
   result:=Tria_AnsiToUtf8(PGDBTextStyle(Item.Data)^.Name);
+end;
+function TTextStylesWindow.CreateNameEditor(Item: TListItem;r: TRect):boolean;
+begin
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.Name,'GDBAnsiString')
 end;
 {Font name handle procedures}
 function TTextStylesWindow.GetFontName(Item: TListItem):string;
@@ -209,6 +214,7 @@ setlength(ListView1.SubItems,ColumnCount);
 with ListView1.SubItems[NameColumn] do
 begin
      OnGetName:=@GetStyleName;
+     OnClick:=@CreateNameEditor;
 end;
 with ListView1.SubItems[FontNameColumn] do
 begin

@@ -3232,7 +3232,7 @@ begin
                                                if i<PEProp.nearestline then
                                                                              p3dpl2^.VertexArrayInOCS.deleteelement(0);
                                                if i>PEProp.nearestline-1 then
-                                                                             p3dpl^.VertexArrayInOCS.deleteelement(PEProp.nearestvertex+1);
+                                                                             p3dpl^.VertexArrayInOCS.deleteelement(PEProp.nearestline+1);
 
                                           end;
                                         if p3dpl2^.VertexArrayInOCS.Count>1 then

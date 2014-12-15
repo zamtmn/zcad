@@ -60,6 +60,7 @@ begin
   if peditor<>nil then
   begin
        Application.RemoveAsyncCalls(self);
+       peditor.geteditor.Hide;
        freeandnil(peditor);
        if assigned(OnUpdateEditedControl) then
                                               OnUpdateEditedControl(EditedControl);
@@ -93,4 +94,4 @@ begin
      EditedControl:=AEditedControl;
 end;
 
-end.
+end.

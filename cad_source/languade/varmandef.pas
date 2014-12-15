@@ -138,6 +138,7 @@ TPropEditor=class(TComponent)
                  RunFastEditorValue:tobject;
                  changed:boolean;
                  constructor Create(AOwner:TComponent;_PInstance:GDBPointer;_PTD:PUserTypeDescriptor;FreeOnLostFocus:boolean);
+                 destructor Destroy;override;
                  procedure EditingDone(Sender: TObject);//Better name ..LostFocus..
                  procedure EditingDone2(Sender: TObject);
                  procedure StoreData(Sender: TObject);
@@ -264,7 +265,11 @@ function TPropEditor.geteditor:TWinControl;
 begin
      tobject(result):=(self.Components[0]);
 end;
-
+destructor TPropEditor.Destroy;
+begin
+     tobject(self.Components[0]).destroy;
+     inherited;
+end;
 procedure TPropEditor.keyPress(Sender: TObject; var Key: char);
 begin
      if key=#13 then

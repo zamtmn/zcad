@@ -333,7 +333,7 @@ begin
                                  else
                                      pstyle:=pdwg^.TextStyleTable.GetCurrentTextStyle;
 
-  stylename:=pdwg^.TextStyleTable.GetFreeName(rsNewTextStyleNameFormat,1);
+  stylename:=pdwg^.TextStyleTable.GetFreeName(Tria_Utf8ToAnsi(rsNewTextStyleNameFormat),1);
   if stylename='' then
   begin
     shared.ShowError(rsUnableSelectFreeTextStylerName);

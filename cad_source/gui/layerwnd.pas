@@ -535,7 +535,7 @@ begin
                                     else
                                         player:=pdwg^.LayerTable.GetCurrentLayer;
 
-     layername:=pdwg^.LayerTable.GetFreeName(rsNewLayerNameFormat,1);
+     layername:=pdwg^.LayerTable.GetFreeName(Tria_Utf8ToAnsi(rsNewLayerNameFormat),1);
      if layername='' then
      begin
        shared.ShowError(rsUnableSelectFreeLayerName);

@@ -1,3 +1,20 @@
+{
+*****************************************************************************
+*                                                                           *
+*  This file is part of the ZCAD                                            *
+*                                                                           *
+*  See the file COPYING.modifiedLGPL.txt, included in this distribution,    *
+*  for details about the copyright.                                         *
+*                                                                           *
+*  This program is distributed in the hope that it will be useful,          *
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                     *
+*                                                                           *
+*****************************************************************************
+}
+{
+@author(Andrey Zubarev <zamtmn@yandex.ru>)
+}
 unit tswnd;
 {$INCLUDE def.inc}
 {$mode objfpc}{$H+}
@@ -58,9 +75,11 @@ type
     FontsSelector:TEnumData;
     SupportTypedEditors:TSupportTypedEditors;
     FontChange:boolean;
+    IsUndoEndMarkerCreated:boolean;
     { private declarations }
-    procedure freeeditor;
     procedure UpdateItem2(Item:TObject);
+    procedure CreateUndoStartMarkerNeeded;
+    procedure CreateUndoEndMarkerNeeded;
 
   public
     { public declarations }
@@ -90,6 +109,24 @@ implementation
 uses
     mainwindow;
 {$R *.lfm}
+
+procedure TTextStylesWindow.CreateUndoStartMarkerNeeded;
+begin
+  if not IsUndoEndMarkerCreated then
+   begin
+    IsUndoEndMarkerCreated:=true;
+    ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushStartMarker('Change text styles');
+   end;
+end;
+procedure TTextStylesWindow.CreateUndoEndMarkerNeeded;
+begin
+  if IsUndoEndMarkerCreated then
+   begin
+    IsUndoEndMarkerCreated:=false;
+    ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushEndMarker;
+   end;
+end;
+
 procedure TTextStylesWindow.UpdateItem2(Item:TObject);
 begin
      if FontChange then
@@ -101,19 +138,6 @@ begin
      FontChange:=false;
 end;
 
-procedure TTextStylesWindow.freeeditor;
-begin
-  //if peditor<>nil then
-  begin
-       peditor.Free;
-       peditor:=nil;
-       //freeandnil(peditor);
-       ListView1.BeginUpdate;
-       ListView1.UpdateItem(EditedItem,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer);
-       ListView1.EndUpdate;
-       EditedItem:=nil;
-  end;
-end;
 {Style name handle procedures}
 function TTextStylesWindow.GetStyleName(Item: TListItem):string;
 begin
@@ -194,9 +218,10 @@ end;
 procedure TTextStylesWindow.onrsz(Sender: TObject);
 begin
      Sender:=Sender;
+     SupportTypedEditors.freeeditor;
 end;
 
-procedure TTextStylesWindow.FormCreate(Sender: TObject); // Процедура выполняется при отрисовке окна
+procedure TTextStylesWindow.FormCreate(Sender: TObject);
 begin
 IconList.GetBitmap(II_Plus, AddLayerBtn.Glyph);
 IconList.GetBitmap(II_Minus, DeleteLayerBtn.Glyph);
@@ -208,6 +233,7 @@ FontsSelector.Enums.init(100);
 SupportTypedEditors:=TSupportTypedEditors.create;
 SupportTypedEditors.OnUpdateEditedControl:=@UpdateItem2;
 FontChange:=false;
+IsUndoEndMarkerCreated:=false;
 
 setlength(ListView1.SubItems,ColumnCount);
 
@@ -245,6 +271,7 @@ procedure TTextStylesWindow.MaceItemCurrent(ListItem:TListItem);
 begin
      if ListView1.CurrentItem<>ListItem then
      begin
+     CreateUndoStartMarkerNeeded;
      with PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(sysvar.dwg.DWG_CTStyle^)^ do
      begin
           SysVar.dwg.DWG_CTStyle^:=ListItem.Data;
@@ -346,6 +373,7 @@ begin
 
   domethod:=tmethod(@pdwg^.TextStyleTable.AddToArray);
   undomethod:=tmethod(@pdwg^.TextStyleTable.RemoveFromArray);
+  CreateUndoStartMarkerNeeded;
   with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGObjectChangeCommand2(pcreatedstyle,tmethod(domethod),tmethod(undomethod))^ do
   begin
        AfterAction:=false;
@@ -355,7 +383,7 @@ begin
   ListView1.AddCreatedItem(pcreatedstyle,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer);
 end;
 
-procedure TTextStylesWindow.LayerDelete(Sender: TObject); // Процедура удаления слоя
+procedure TTextStylesWindow.LayerDelete(Sender: TObject);
 var
    pstyle:PGDBTextStyle;
    pdwg:PTSimpleDrawing;
@@ -367,6 +395,11 @@ begin
                                      begin
                                      pstyle:=(ListView1.Selected.Data);
                                      countstyle(pstyle,e,b);
+                                     if ListView1.Selected.Data=pdwg^.TextStyleTable.GetCurrentTextStyle then
+                                     begin
+                                       ShowError(rsCurrentStyleCannotBeDeleted);
+                                       exit;
+                                     end;
                                      if (e+b)>0 then
                                                   begin
                                                        ShowError(rsUnableDelUsedStyle);
@@ -375,6 +408,7 @@ begin
 
                                      domethod:=tmethod(@pdwg^.TextStyleTable.RemoveFromArray);
                                      undomethod:=tmethod(@pdwg^.TextStyleTable.AddToArray);
+                                     CreateUndoStartMarkerNeeded;
                                      with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGObjectChangeCommand2(pstyle,tmethod(domethod),tmethod(undomethod))^ do
                                      begin
                                           AfterAction:=false;
@@ -406,6 +440,7 @@ procedure TTextStylesWindow.FormClose(Sender: TObject; var CloseAction: TCloseAc
   );
 begin
      Aply(nil);
+     CreateUndoEndMarkerNeeded;
      FontsSelector.Enums.done;
      SupportTypedEditors.Free;
 end;

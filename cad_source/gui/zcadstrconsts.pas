@@ -124,6 +124,7 @@ resourcestring
 
   rsStyleMustBeSelected='Style must be selected';
   rsUnableDelUsedStyle='Unable to delete, Style is used';
+  rsCurrentStyleCannotBeDeleted='Current style cannot be deleted';
 
   rsSaveEmptyDWG='Drawing is empty. Sure?';
   rsBlockIgnored='Ignored block "%s"';

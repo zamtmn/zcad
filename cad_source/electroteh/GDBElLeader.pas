@@ -136,11 +136,13 @@ begin
      {select;}selected:=true;
 end;
 function GDBObjElLeader.DeSelect;
+var
+   DummySelectedObjCount:integer=3;
 begin
      MainLine.Selected:=true;
-     MainLine.DeSelect(SelObjArray,SelectedObjCount);
-     MarkLine.DeSelect(SelObjArray,SelectedObjCount);
-     Tbl.DeSelect(SelObjArray,SelectedObjCount);
+     MainLine.DeSelect(SelObjArray,DummySelectedObjCount);
+     MarkLine.DeSelect(SelObjArray,DummySelectedObjCount);
+     Tbl.DeSelect(SelObjArray,DummySelectedObjCount);
      result:=inherited deselect(SelObjArray,SelectedObjCount);
 end;
 function GDBObjElLeader.GetObjTypeName;

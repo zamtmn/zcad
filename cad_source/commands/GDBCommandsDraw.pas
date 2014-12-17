@@ -1263,7 +1263,11 @@ begin
                                                  begin
                                                       select:=select and isobjtype;
                                                  end;
-           if select then pobj^.select(gdb.GetCurrentDWG^.GetSelObjArray,gdb.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
+           if select then
+           begin
+              pobj^.select(gdb.GetCurrentDWG^.GetSelObjArray,gdb.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
+              gdb.GetCurrentDWG^.wa.param.SelDesc.LastSelectedObject:=pobj;
+           end;
 
            end;
 

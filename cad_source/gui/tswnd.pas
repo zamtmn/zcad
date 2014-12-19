@@ -42,20 +42,24 @@ const
      ColumnCount=5+1;
 
 type
+  TFTFilter=(TFTF_All,TFTF_TTF,TFTF_SHX);
 
   { TTextStylesWindow }
 
   TTextStylesWindow = class(TForm)
     AddLayerBtn: TSpeedButton;
+    ComboBox1: TComboBox;
     DeleteLayerBtn: TSpeedButton;
     Bevel1: TBevel;
     ButtonApplyClose: TBitBtn;
     Button_Apply: TBitBtn;
+    Label1: TLabel;
     LayerDescLabel: TLabel;
     ListView1: TZListView;
     MkCurrentBtn: TSpeedButton;
     procedure Aply(Sender: TObject);
     procedure AplyClose(Sender: TObject);
+    procedure FontsTypesChange(Sender: TObject);
     procedure StyleAdd(Sender: TObject);
     procedure LayerDelete(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -80,6 +84,7 @@ type
     procedure UpdateItem2(Item:TObject);
     procedure CreateUndoStartMarkerNeeded;
     procedure CreateUndoEndMarkerNeeded;
+    procedure GetFontsTypesComboValue;
 
   public
     { public declarations }
@@ -105,10 +110,15 @@ type
 
 var
   TSWindow: TTextStylesWindow;
+  FontsFilter:TFTFilter;
 implementation
 uses
     mainwindow;
 {$R *.lfm}
+procedure TTextStylesWindow.GetFontsTypesComboValue;
+begin
+     ComboBox1.ItemIndex:=ord(FontsFilter);
+end;
 
 procedure TTextStylesWindow.CreateUndoStartMarkerNeeded;
 begin
@@ -136,6 +146,7 @@ begin
      end;
      ListView1.UpdateItem2(TListItem(Item));
      FontChange:=false;
+     ComboBox1.enabled:=true;
 end;
 
 {Style name handle procedures}
@@ -156,6 +167,7 @@ function TTextStylesWindow.CreateFontNameEditor(Item: TListItem;r: TRect):boolea
 begin
   FillFontsSelector(PGDBTextStyle(Item.Data)^.pfont^.fontfile);
   FontChange:=true;
+  ComboBox1.enabled:=false;
   result:=SupportTypedEditors.createeditor(ListView1,Item,r,FontsSelector,'TEnumData')
 end;
 {Font path handle procedures}
@@ -196,6 +208,7 @@ var i:integer;
 begin
      FontsSelector.Selected:=0;
      FontsSelector.Enums.Free;
+     if FontsFilter<>TFTF_SHX then
      for i:=0 to FontManager.ttffontfiles.Count-1 do
      begin
           S:=FontManager.ttffontfiles[i];
@@ -204,6 +217,7 @@ begin
           S:=extractfilename(S);
           FontsSelector.Enums.add(@S);
      end;
+     if FontsFilter<>TFTF_TTF then
      for i:=0 to FontManager.shxfontfiles.Count-1 do
      begin
           S:=FontManager.shxfontfiles[i];
@@ -293,6 +307,7 @@ var
    plp:PGDBTextStyle;
    li:TListItem;
 begin
+     GetFontsTypesComboValue;
      ListView1.BeginUpdate;
      ListView1.Clear;
      pdwg:=gdb.GetCurrentDWG;
@@ -426,6 +441,11 @@ begin
      close;
 end;
 
+procedure TTextStylesWindow.FontsTypesChange(Sender: TObject);
+begin
+  FontsFilter:=TFTFilter(ComboBox1.ItemIndex);
+end;
+
 procedure TTextStylesWindow.Aply(Sender: TObject);
 begin
      if changedstamp then
@@ -444,6 +464,7 @@ begin
      FontsSelector.Enums.done;
      SupportTypedEditors.Free;
 end;
-
+initialization
+  FontsFilter:=TFTF_SHX;
 end.
 

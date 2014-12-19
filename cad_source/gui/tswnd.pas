@@ -22,7 +22,7 @@ unit tswnd;
 interface
 
 uses
-  selectorwnd,ugdbltypearray,ugdbutil,log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
+  ugdbfont,selectorwnd,ugdbltypearray,ugdbutil,log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype,
 
@@ -69,7 +69,7 @@ type
       Selected: Boolean);
     procedure MkCurrent(Sender: TObject);
     procedure MaceItemCurrent(ListItem:TListItem);
-    procedure FillFontsSelector(currentitem:string);
+    procedure FillFontsSelector(currentitem:string;currentitempfont:PGDBfont);
     procedure onrsz(Sender: TObject);
     procedure countstyle(ptextstyle:PGDBTextStyle;out e,b:GDBInteger);
   private
@@ -165,7 +165,7 @@ begin
 end;
 function TTextStylesWindow.CreateFontNameEditor(Item: TListItem;r: TRect):boolean;
 begin
-  FillFontsSelector(PGDBTextStyle(Item.Data)^.pfont^.fontfile);
+  FillFontsSelector(PGDBTextStyle(Item.Data)^.pfont^.fontfile,PGDBTextStyle(Item.Data)^.pfont);
   FontChange:=true;
   ComboBox1.enabled:=false;
   result:=SupportTypedEditors.createeditor(ListView1,Item,r,FontsSelector,'TEnumData')
@@ -202,18 +202,19 @@ function TTextStylesWindow.CreateObliqueEditor(Item: TListItem;r: TRect):boolean
 begin
   result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.oblique,'GDBDouble')
 end;
-procedure TTextStylesWindow.FillFontsSelector(currentitem:string);
+procedure TTextStylesWindow.FillFontsSelector(currentitem:string;currentitempfont:PGDBfont);
 var i:integer;
     s:string;
+    CurrentFontIndex:integer;
 begin
-     FontsSelector.Selected:=0;
+     CurrentFontIndex:=-1;
      FontsSelector.Enums.Free;
      if FontsFilter<>TFTF_SHX then
      for i:=0 to FontManager.ttffontfiles.Count-1 do
      begin
           S:=FontManager.ttffontfiles[i];
           if S=currentitem then
-           FontsSelector.Selected:=FontsSelector.Enums.Count;
+           CurrentFontIndex:=FontsSelector.Enums.Count;
           S:=extractfilename(S);
           FontsSelector.Enums.add(@S);
      end;
@@ -222,10 +223,17 @@ begin
      begin
           S:=FontManager.shxfontfiles[i];
           if S=currentitem then
-           FontsSelector.Selected:=FontsSelector.Enums.Count;
+           CurrentFontIndex:=FontsSelector.Enums.Count;
           S:=extractfilename(S);
           FontsSelector.Enums.add(@S);
      end;
+     if CurrentFontIndex=-1 then
+     begin
+          CurrentFontIndex:=FontsSelector.Enums.Count;
+          S:=extractfilename(currentitempfont^.fontfile);
+          FontsSelector.Enums.add(@S);
+     end;
+     FontsSelector.Selected:=CurrentFontIndex;
      FontsSelector.Enums.SortAndSaveIndex(FontsSelector.Selected);
 end;
 

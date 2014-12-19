@@ -343,7 +343,7 @@ begin
                                                else
                                                    begin
                                                      if selectableeditor then
-                                                      OwnerNotify(self,TMNC_EditingDoneDoNothing)
+                                                      OwnerNotify(self,{TMNC_EditingDoneDoNothing}TMNC_EditingProcess)
                                                      else
                                                       OwnerNotify(self,TMNC_EditingProcess);
                                                    end;

@@ -2329,7 +2329,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                        end;{case}
 
                       outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
-                      p:=drawing.TextStyleTable.FindStyle('Standard',false);
+                      p:=pdsp^.Text.DIMTXSTY{drawing.TextStyleTable.FindStyle('Standard',false)};
 
                       Handle2pointer.MyGetOrCreateValue(p,handle,temphandle);
                       //GetOrCreateHandle(p,handle,temphandle);

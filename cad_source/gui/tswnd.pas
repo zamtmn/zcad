@@ -22,7 +22,7 @@ unit tswnd;
 interface
 
 uses
-  ugdbfont,selectorwnd,ugdbltypearray,ugdbutil,log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
+  ugdbdimstylearray,ugdbfont,selectorwnd,ugdbltypearray,ugdbutil,log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype,
 
@@ -71,7 +71,7 @@ type
     procedure MaceItemCurrent(ListItem:TListItem);
     procedure FillFontsSelector(currentitem:string;currentitempfont:PGDBfont);
     procedure onrsz(Sender: TObject);
-    procedure countstyle(ptextstyle:PGDBTextStyle;out e,b:GDBInteger);
+    procedure countstyle(ptextstyle:PGDBTextStyle;out e,b,inDimStyles:GDBInteger);
   private
     changedstamp:boolean;
     PEditor:TPropEditor;
@@ -343,7 +343,12 @@ begin
      if PCounted=PGDBObjText(PInstance)^.TXTStyleIndex then
                                                            inc(Counter);
 end;
-procedure TTextStylesWindow.countstyle(ptextstyle:PGDBTextStyle;out e,b:GDBInteger);
+procedure TextStyleCounterInDimStyles(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
+begin
+     if PCounted=PGDBDimStyle(PInstance)^.Text.DIMTXSTY then
+                                                           inc(Counter);
+end;
+procedure TTextStylesWindow.countstyle(ptextstyle:PGDBTextStyle;out e,b,inDimStyles:GDBInteger);
 var
    pdwg:PTSimpleDrawing;
 begin
@@ -352,19 +357,21 @@ begin
   pdwg^.mainObjRoot.IterateCounter(ptextstyle,e,@TextStyleCounter);
   b:=0;
   pdwg^.BlockDefArray.IterateCounter(ptextstyle,b,@TextStyleCounter);
+  inDimStyles:=0;
+  pdwg^.DimStyleTable.IterateCounter(ptextstyle,inDimStyles,@TextStyleCounterInDimStyles);
 end;
 procedure TTextStylesWindow.ListView1SelectItem(Sender: TObject; Item: TListItem;Selected: Boolean);
 var
    pstyle:PGDBTextStyle;
    pdwg:PTSimpleDrawing;
-   inent,inblock:integer;
+   inent,inblock,indimstyles:integer;
 begin
      if selected then
      begin
           pdwg:=gdb.GetCurrentDWG;
           pstyle:=(Item.Data);
-          countstyle(pstyle,inent,inblock);
-          LayerDescLabel.Caption:=Format(rsTextStyleUsedIn,[pstyle^.Name,inent,inblock]);
+          countstyle(pstyle,inent,inblock,indimstyles);
+          LayerDescLabel.Caption:=Format(rsTextStyleUsedIn,[pstyle^.Name,inent,inblock,indimstyles]);
      end;
 end;
 
@@ -410,20 +417,20 @@ procedure TTextStylesWindow.LayerDelete(Sender: TObject);
 var
    pstyle:PGDBTextStyle;
    pdwg:PTSimpleDrawing;
-   e,b:GDBInteger;
+   e,b,indimstyles:GDBInteger;
    domethod,undomethod:tmethod;
 begin
   pdwg:=gdb.GetCurrentDWG;
   if assigned(ListView1.Selected)then
                                      begin
                                      pstyle:=(ListView1.Selected.Data);
-                                     countstyle(pstyle,e,b);
+                                     countstyle(pstyle,e,b,indimstyles);
                                      if ListView1.Selected.Data=pdwg^.TextStyleTable.GetCurrentTextStyle then
                                      begin
                                        ShowError(rsCurrentStyleCannotBeDeleted);
                                        exit;
                                      end;
-                                     if (e+b)>0 then
+                                     if (e+b+indimstyles)>0 then
                                                   begin
                                                        ShowError(rsUnableDelUsedStyle);
                                                        exit;

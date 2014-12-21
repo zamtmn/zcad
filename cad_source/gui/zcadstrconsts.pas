@@ -111,7 +111,7 @@ resourcestring
   rsNotYetImplemented='Not yet implemented';
   rsLayerDefpaontsCanNotBePrinted='Layer DEFPOINTS can not be printed';
   rsLayerUsedIn='Layer "%s" used in: %d-model, %d-blockdef table';
-  rsTextStyleUsedIn='Text style "%s" used in: %d-model, %d-blockdef table';
+  rsTextStyleUsedIn='Text style "%s" used in: %d-model, %d-blockdef table, %d-dimstyle table';
   rsLineTypeUsedIn='Line type "%s" used in: %d-model, %d-blockdef table';
   rsLineTypeDesk=';;Pattern length %f'#13#10'%s';
   rsSysLineTypeWarning='This is system line type!';

@@ -26,6 +26,7 @@ const
      cmd_cancel=-2;
      ZCMD_OK_NOEND=-10;
 type
+TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 {EXPORT+}
 (*varcategoryforoi SUMMARY='Суммарно'*)
 (*varcategoryforoi CABLE='Параметры кабеля'*)
@@ -274,6 +275,7 @@ GDBNamedObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                      function GetName:GDBString;
                      function GetFullName:GDBString;virtual;
                      procedure SetDefaultValues;virtual;
+                     procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
                end;
 ODBDevicepassport=packed record
                         category,name,id,nameall,tu,edizm:GDBString;
@@ -380,7 +382,6 @@ TFaceTypedData=packed record
                  PTD: GDBPointer;
                 end;
 {EXPORT-}
-TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 const
   empty_GDBString='Empty GDBString';
   arccount: GDBWord=16;
@@ -483,6 +484,11 @@ end;
 procedure GDBNamedObject.SetDefaultValues;
 begin
 end;
+procedure GDBNamedObject.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
+begin
+    proc(@self,PCounted,Counter);
+end;
+
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('gdbase.initialization');{$ENDIF}
 end.

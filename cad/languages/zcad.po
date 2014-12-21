@@ -189,6 +189,14 @@ msgctxt "TTEXTSTYLESWINDOW.CAPTION"
 msgid "Text styles"
 msgstr ""
 
+#: ttextstyleswindow.combobox1.text
+msgid "All"
+msgstr ""
+
+#: ttextstyleswindow.label1.caption
+msgid "Fonts types filter:"
+msgstr ""
+
 #: ttextstyleswindow.listview1.columns[0].caption
 msgctxt "TTEXTSTYLESWINDOW.LISTVIEW1.COLUMNS[0].CAPTION"
 msgid "Status"
@@ -3596,6 +3604,10 @@ msgstr ""
 
 #: zcadstrconsts.rscurrentlayeroff
 msgid "The current layer is turned off"
+msgstr ""
+
+#: zcadstrconsts.rscurrentstylecannotbedeleted
+msgid "Current style cannot be deleted"
 msgstr ""
 
 #: zcadstrconsts.rsdefault

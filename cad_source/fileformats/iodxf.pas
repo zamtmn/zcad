@@ -749,7 +749,7 @@ begin
                                                                                sysvar.DWG.DWG_CLayer^:=player;
   end;
 end;
-procedure ReadTextstyles(var s:string;ctstyle:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure ReadTextstyles(var s:string;ctstyle:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var h2p:TMapHandleToPointer);
 var
    tstyle:GDBTextStyle;
    ptstyle:PGDBTextStyle;
@@ -837,6 +837,7 @@ begin
         end;
     if ti<>nil then
     begin
+         h2p.Insert(DWGHandle,ti);
          ptstyle:={drawing.TextStyleTable.getelement}(ti);
          pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
          if pltypeprop<>nil then
@@ -1051,7 +1052,7 @@ begin
                                end;
                                end;
 end;
-procedure ReadDimStyles(var s:string;cdimstyle:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure ReadDimStyles(var s:string;cdimstyle:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var h2p:TMapHandleToPointer);
 var
    psimstyleprop:PGDBDimStyle;
    byt:integer;
@@ -1081,7 +1082,7 @@ begin
                          end;
      end
      else
-         psimstyleprop^.SetValueFromDxf(byt,s);
+         psimstyleprop^.SetValueFromDxf(byt,s,h2p);
      end;
 end;
 end;
@@ -1162,7 +1163,7 @@ begin
                    dxfName_DIMSTYLE:
                                     begin
                                       {$IFDEF TOTALYLOG}programlog.logoutstr('Found dimstyles table',lp_IncPos);{$ENDIF}
-                                      ReadDimStyles(s,cdimstyle,f,exitGDBString,owner,LoadMode,drawing);
+                                      ReadDimStyles(s,cdimstyle,f,exitGDBString,owner,LoadMode,drawing,h2p);
                                       {$IFDEF TOTALYLOG}programlog.logoutstr('end; {dimstyles table}',lp_DecPos);{$ENDIF}
                                     end;
                       dxfName_Layer:
@@ -1180,7 +1181,7 @@ begin
                       dxfName_Style:
                                     begin
                                       {$IFDEF TOTALYLOG}programlog.logoutstr('Found style table',lp_IncPos);{$ENDIF}
-                                      ReadTextstyles(s,ctstyle,f,exitGDBString,owner,LoadMode,drawing);
+                                      ReadTextstyles(s,ctstyle,f,exitGDBString,owner,LoadMode,drawing,h2p);
                                       {$IFDEF TOTALYLOG}programlog.logoutstr('end; {style table}',lp_DecPos);{$ENDIF}
                                     end;
                               'UCS':

@@ -1,7 +1,7 @@
 object TextStylesWindow: TTextStylesWindow
-  Left = 380
+  Left = 288
   Height = 590
-  Top = 198
+  Top = 217
   Width = 977
   Caption = 'Text styles'
   ClientHeight = 590
@@ -21,13 +21,13 @@ object TextStylesWindow: TTextStylesWindow
     AnchorSideBottom.Control = ComboBox1
     AnchorSideBottom.Side = asrBottom
     Left = 82
-    Height = 26
+    Height = 27
     Top = 1
-    Width = 675
+    Width = 671
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
     BorderSpacing.Top = 1
-    BorderSpacing.Right = 1
+    BorderSpacing.Right = 2
   end
   object LayerDescLabel: TLabel
     AnchorSideLeft.Control = Bevel1
@@ -37,9 +37,9 @@ object TextStylesWindow: TTextStylesWindow
     AnchorSideBottom.Control = Bevel1
     AnchorSideBottom.Side = asrBottom
     Left = 83
-    Height = 24
+    Height = 25
     Top = 2
-    Width = 673
+    Width = 669
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 1
     Layout = tlCenter
@@ -84,7 +84,7 @@ object TextStylesWindow: TTextStylesWindow
     AnchorSideBottom.Control = Bevel1
     AnchorSideBottom.Side = asrBottom
     Left = 55
-    Height = 26
+    Height = 27
     Top = 1
     Width = 25
     Anchors = [akTop, akLeft, akBottom]
@@ -98,7 +98,7 @@ object TextStylesWindow: TTextStylesWindow
     AnchorSideBottom.Control = Bevel1
     AnchorSideBottom.Side = asrBottom
     Left = 28
-    Height = 26
+    Height = 27
     Top = 1
     Width = 27
     Anchors = [akTop, akLeft, akBottom]
@@ -111,7 +111,7 @@ object TextStylesWindow: TTextStylesWindow
     AnchorSideBottom.Control = Bevel1
     AnchorSideBottom.Side = asrBottom
     Left = 1
-    Height = 26
+    Height = 27
     Top = 1
     Width = 27
     Anchors = [akTop, akLeft, akBottom]
@@ -127,8 +127,8 @@ object TextStylesWindow: TTextStylesWindow
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonApplyClose
     Left = 1
-    Height = 528
-    Top = 29
+    Height = 527
+    Top = 30
     Width = 975
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 1
@@ -179,12 +179,14 @@ object TextStylesWindow: TTextStylesWindow
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 863
+    Left = 862
     Height = 27
-    Top = 0
+    Top = 1
     Width = 114
     Anchors = [akTop, akRight]
     AutoSelect = False
+    BorderSpacing.Top = 1
+    BorderSpacing.Right = 1
     ItemHeight = 19
     ItemIndex = 0
     Items.Strings = (
@@ -202,11 +204,12 @@ object TextStylesWindow: TTextStylesWindow
     AnchorSideRight.Control = ComboBox1
     AnchorSideBottom.Control = ComboBox1
     AnchorSideBottom.Side = asrBottom
-    Left = 758
+    Left = 755
     Height = 27
-    Top = 0
+    Top = 1
     Width = 105
     Anchors = [akTop, akRight, akBottom]
+    BorderSpacing.Right = 2
     Caption = 'Fonts types filter:'
     Layout = tlCenter
     ParentColor = False

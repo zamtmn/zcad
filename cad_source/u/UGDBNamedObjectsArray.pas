@@ -35,11 +35,26 @@ GDBNamedObjectsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPIde
                     function AddItem(name:GDBSTRING; out PItem:Pointer):TForCResult;
                     function MergeItem(name:GDBSTRING;LoadMode:TLoadOpt):GDBPointer;
                     function GetFreeName(NameFormat:GDBString;firstindex:integer):GDBString;
+                    procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
               end;
 {EXPORT-}
 implementation
 uses
     log;
+procedure GDBNamedObjectsArray.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
+var p:PGDBNamedObject;
+    ir:itrec;
+begin
+    inherited;
+    p:=beginiterate(ir);
+    if p<>nil then
+    repeat
+         p^.IterateCounter(PCounted,Counter,proc);
+    p:=iterate(ir);
+    until p=nil;
+end;
+
+
 function GDBNamedObjectsArray.GetFreeName(NameFormat:GDBString;firstindex:integer):GDBString;
 var
    counter,LoopCounter:integer;

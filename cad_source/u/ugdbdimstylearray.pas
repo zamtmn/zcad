@@ -19,7 +19,7 @@
 unit ugdbdimstylearray;
 {$INCLUDE def.inc}
 interface
-uses usimplegenerics,zcadsysvars,gdbasetypes,SysInfo,sysutils,gdbase, geometry,
+uses UGDBTextStyleArray,usimplegenerics,zcadsysvars,gdbasetypes,SysInfo,sysutils,gdbase, geometry,
      strproc,varmandef,shared,UGDBNamedObjectsArray,memman;
 type
 TDimArrowBlockParam=record
@@ -57,6 +57,7 @@ TGDBDimTextProp=packed record
                        DIMTOH:GDBBoolean;//Text outside horizontal if nonzero//group74
                        DIMTAD:TDimTextVertPosition;//Text above dimension line if nonzero//group77
                        DIMGAP:GDBDouble; //Dimension line gap //Смещение текста//group147
+                       DIMTXSTY:PGDBTextStyle;//340 DIMTXSTY (handle of referenced STYLE)
                  end;
 TGDBDimPlacingProp=packed record
                        DIMTMOVE:TDimTextMove;
@@ -80,7 +81,7 @@ GDBDimStyle = packed object(GDBNamedObject)
                       Units:TGDBDimUnitsProp;
                       PDXFLoadingData:PTDimStyleDXFLoadingData;
                       procedure SetDefaultValues;virtual;
-                      procedure SetValueFromDxf(group:GDBInteger;value:GDBString);virtual;
+                      procedure SetValueFromDxf(group:GDBInteger;value:GDBString;var h2p:TMapHandleToPointer);virtual;
                       function GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
                       function GetDimBlockTypeByName(bname:String):TArrowStyle;
                       procedure CreateLDIfNeed;
@@ -207,7 +208,7 @@ begin
      result:=high(TArrowStyle);
 end;
 
-procedure GDBDimStyle.SetValueFromDxf(group:GDBInteger;value:GDBString);
+procedure GDBDimStyle.SetValueFromDxf(group:GDBInteger;value:GDBString;var h2p:TMapHandleToPointer);
 begin
   case group of
   2:
@@ -319,6 +320,10 @@ Units.DIMDEC:=strtoint(value);
                   2:Placing.DIMTMOVE:=DTMnothung;
        end;
   end;
+  340:
+  begin
+       Text.DIMTXSTY:=h2p.MyGetValue(StrToQWord('$'+value));
+  end;
   341:
   begin
        CreateLDIfNeed;
@@ -362,6 +367,7 @@ begin
      text.DIMTOH:=true;
      text.DIMTAD:=DTVPAbove;
      text.DIMGAP:=0.625;
+     text.DIMTXSTY:=nil;
      Placing.DIMTMOVE:=DTMMoveDimLine;
 end;
 procedure GDBDimStyleArray.ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);

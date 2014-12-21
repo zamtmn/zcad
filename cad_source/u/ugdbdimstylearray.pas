@@ -57,7 +57,7 @@ TGDBDimTextProp=packed record
                        DIMTOH:GDBBoolean;//Text outside horizontal if nonzero//group74
                        DIMTAD:TDimTextVertPosition;//Text above dimension line if nonzero//group77
                        DIMGAP:GDBDouble; //Dimension line gap //Смещение текста//group147
-                       DIMTXSTY:PGDBTextStyle;//340 DIMTXSTY (handle of referenced STYLE)
+                       DIMTXSTY:{-}PGDBTextStyle{/PGDBTextStyleObjInsp/};//340 DIMTXSTY (handle of referenced STYLE)
                  end;
 TGDBDimPlacingProp=packed record
                        DIMTMOVE:TDimTextMove;

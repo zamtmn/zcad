@@ -331,7 +331,7 @@ var
 begin
   //CalcTextParam;
   dimtext:={GetLinearDimStr(abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)))}GetDimStr;
-  dimtxtstyle:=drawing.GetTextStyleTable^.getelement(0);
+  dimtxtstyle:=PDimStyle.Text.DIMTXSTY;//drawing.GetTextStyleTable^.getelement(0);
   {txtlines.init(3);
   FormatMtext(dimtxtstyle.pfont,0,PDimStyle.Text.DIMTXT,dimtxtstyle^.prop.wfactor,dimtext,txtlines);
   dimtexth:=GetLinesH(1,PDimStyle.Text.DIMTXT,txtlines);

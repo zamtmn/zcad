@@ -617,6 +617,7 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                           procedure freeelement(p:GDBPointer);virtual;abstract;
                           function findstring(s:GDBString;ucase:gdbboolean):boolean;
                           procedure sort;virtual;abstract;
+                          procedure SortAndSaveIndex(var index:TArrayIndex);virtual;abstract;
                           function add(p:GDBPointer):TArrayIndex;virtual;abstract;
                           function addutoa(p:GDBPointer):TArrayIndex;
                           function addwithscroll(p:GDBPointer):GDBInteger;virtual;abstract;
@@ -774,6 +775,7 @@ GDBNamedObjectsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPIde
                     function GetIndexByPointer(p:PGDBNamedObject):GDBInteger;
                     function AddItem(name:GDBSTRING; out PItem:Pointer):TForCResult;
                     function MergeItem(name:GDBSTRING;LoadMode:TLoadOpt):GDBPointer;
+                    function GetFreeName(NameFormat:GDBString;firstindex:integer):GDBString;
               end;
 //Generate on E:\zcad\CAD_SOURCE\u\UGDBTextStyleArray.pas
 PGDBTextStyleProp=^GDBTextStyleProp;
@@ -940,6 +942,7 @@ TGDBDimTextProp=packed record
                        DIMTOH:GDBBoolean;//Text outside horizontal if nonzero//group74
                        DIMTAD:TDimTextVertPosition;//Text above dimension line if nonzero//group77
                        DIMGAP:GDBDouble; //Dimension line gap //Смещение текста//group147
+                       DIMTXSTY:PGDBTextStyleObjInsp;//340 DIMTXSTY (handle of referenced STYLE)
                  end;
 TGDBDimPlacingProp=packed record
                        DIMTMOVE:TDimTextMove;
@@ -963,7 +966,7 @@ GDBDimStyle = packed object(GDBNamedObject)
                       Units:TGDBDimUnitsProp;
                       PDXFLoadingData:PTDimStyleDXFLoadingData;
                       procedure SetDefaultValues;virtual;abstract;
-                      procedure SetValueFromDxf(group:GDBInteger;value:GDBString);virtual;abstract;
+                      procedure SetValueFromDxf(group:GDBInteger;value:GDBString;var h2p:TMapHandleToPointer);virtual;abstract;
                       function GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
                       function GetDimBlockTypeByName(bname:String):TArrowStyle;
                       procedure CreateLDIfNeed;
@@ -3640,8 +3643,12 @@ TBasicFinter=packed record
   end;
 PGDBFontManager=^GDBFontManager;
 GDBFontManager={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArrayOfData}GDBNamedObjectsArray)(*OpenArrayOfData=GDBfont*)
+                    ttffontfiles:TStringList;
+                    shxfontfiles:TStringList;
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     function addFonf(FontPathName:GDBString):PGDBfont;
+                    procedure EnumerateTTFFontFile(filename:GDBString);
+                    procedure EnumerateSHXFontFile(filename:GDBString);
                     //function FindFonf(FontName:GDBString):GDBPointer;
                     {procedure freeelement(p:GDBPointer);virtual;}abstract;
               end;

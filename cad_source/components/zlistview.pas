@@ -213,10 +213,13 @@ end;
 
 procedure TZListView.MakeItemCorrent(Item: TListItem);
 begin
-  Item.ImageIndex:=DefaultItemIndex;
-  CurrentItem.ImageIndex:=-1;
-  CurrentItem:=Item;
-  invalidate;
+  if Item<>CurrentItem then
+    begin
+      Item.ImageIndex:=DefaultItemIndex;
+      CurrentItem.ImageIndex:=-1;
+      CurrentItem:=Item;
+      invalidate;
+    end;
 end;
 procedure TZListView.Process(ListItem:TListItem;SubItem:Integer;DblClck:Boolean);
 var

@@ -309,9 +309,12 @@ procedure TTextStylesWindow.MkCurrent(Sender: TObject);
 begin
   if assigned(ListView1.Selected)then
                                      begin
-                                     MaceItemCurrent(ListView1.Selected);
-                                     ListView1.MakeItemCorrent(ListView1.Selected);
-                                     UpdateItem2(ListView1.Selected);
+                                     if ListView1.Selected<>ListView1.CurrentItem then
+                                       begin
+                                         MaceItemCurrent(ListView1.Selected);
+                                         ListView1.MakeItemCorrent(ListView1.Selected);
+                                         UpdateItem2(ListView1.Selected);
+                                       end;
                                      end
                                  else
                                      MessageBox(@rsLayerMustBeSelected[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);

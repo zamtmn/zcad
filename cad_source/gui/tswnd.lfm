@@ -1,7 +1,7 @@
 object TextStylesWindow: TTextStylesWindow
-  Left = 288
+  Left = 435
   Height = 590
-  Top = 217
+  Top = 220
   Width = 977
   Caption = 'Text styles'
   ClientHeight = 590
@@ -14,16 +14,16 @@ object TextStylesWindow: TTextStylesWindow
   Position = poMainFormCenter
   LCLVersion = '1.3'
   object Bevel1: TBevel
-    AnchorSideLeft.Control = MkCurrentBtn
+    AnchorSideLeft.Control = PurgeBtn
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Label1
     AnchorSideBottom.Control = ComboBox1
     AnchorSideBottom.Side = asrBottom
-    Left = 82
+    Left = 107
     Height = 27
     Top = 1
-    Width = 671
+    Width = 646
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
     BorderSpacing.Top = 1
@@ -36,10 +36,10 @@ object TextStylesWindow: TTextStylesWindow
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Bevel1
     AnchorSideBottom.Side = asrBottom
-    Left = 83
+    Left = 108
     Height = 25
     Top = 2
-    Width = 669
+    Width = 644
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 1
     Layout = tlCenter
@@ -213,5 +213,19 @@ object TextStylesWindow: TTextStylesWindow
     Caption = 'Fonts types filter:'
     Layout = tlCenter
     ParentColor = False
+  end
+  object PurgeBtn: TSpeedButton
+    AnchorSideLeft.Control = MkCurrentBtn
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Bevel1
+    AnchorSideBottom.Control = Bevel1
+    AnchorSideBottom.Side = asrBottom
+    Left = 80
+    Height = 27
+    Top = 1
+    Width = 25
+    Anchors = [akTop, akLeft, akBottom]
+    Flat = True
+    OnClick = PurgeTStyles
   end
 end

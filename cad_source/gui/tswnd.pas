@@ -57,9 +57,11 @@ type
     LayerDescLabel: TLabel;
     ListView1: TZListView;
     MkCurrentBtn: TSpeedButton;
+    PurgeBtn: TSpeedButton;
     procedure Aply(Sender: TObject);
     procedure AplyClose(Sender: TObject);
     procedure FontsTypesChange(Sender: TObject);
+    procedure PurgeTStyles(Sender: TObject);
     procedure StyleAdd(Sender: TObject);
     procedure LayerDelete(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -85,6 +87,7 @@ type
     procedure CreateUndoStartMarkerNeeded;
     procedure CreateUndoEndMarkerNeeded;
     procedure GetFontsTypesComboValue;
+    procedure doTStyleDelete(ProcessedItem:TListItem);
 
   public
     { public declarations }
@@ -248,6 +251,7 @@ begin
 IconList.GetBitmap(II_Plus, AddLayerBtn.Glyph);
 IconList.GetBitmap(II_Minus, DeleteLayerBtn.Glyph);
 IconList.GetBitmap(II_Ok, MkCurrentBtn.Glyph);
+IconList.GetBitmap(II_Purge, PurgeBtn.Glyph);
 ListView1.SmallImages:=IconList;
 ListView1.DefaultItemIndex:=II_Ok;
 
@@ -304,7 +308,11 @@ end;
 procedure TTextStylesWindow.MkCurrent(Sender: TObject);
 begin
   if assigned(ListView1.Selected)then
-                                     MaceItemCurrent(ListView1.Selected)
+                                     begin
+                                     MaceItemCurrent(ListView1.Selected);
+                                     ListView1.MakeItemCorrent(ListView1.Selected);
+                                     UpdateItem2(ListView1.Selected);
+                                     end
                                  else
                                      MessageBox(@rsLayerMustBeSelected[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
 end;
@@ -412,39 +420,50 @@ begin
 
   ListView1.AddCreatedItem(pcreatedstyle,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer);
 end;
+procedure TTextStylesWindow.doTStyleDelete(ProcessedItem:TListItem);
+var
+   domethod,undomethod:tmethod;
+   pstyle:PGDBTextStyle;
+   pdwg:PTSimpleDrawing;
+begin
+  pdwg:=gdb.GetCurrentDWG;
+  pstyle:=(ProcessedItem.Data);
+  domethod:=tmethod(@pdwg^.TextStyleTable.RemoveFromArray);
+  undomethod:=tmethod(@pdwg^.TextStyleTable.AddToArray);
+  CreateUndoStartMarkerNeeded;
+  with ptdrawing(pdwg)^.UndoStack.PushCreateTGObjectChangeCommand2(pstyle,tmethod(domethod),tmethod(undomethod))^ do
+  begin
+       AfterAction:=false;
+       comit;
+  end;
+  ListView1.Items.Delete(ListView1.Items.IndexOf(ProcessedItem));
+end;
 
 procedure TTextStylesWindow.LayerDelete(Sender: TObject);
 var
    pstyle:PGDBTextStyle;
    pdwg:PTSimpleDrawing;
-   e,b,indimstyles:GDBInteger;
+   inEntities,inBlockTable,indimstyles:GDBInteger;
    domethod,undomethod:tmethod;
 begin
   pdwg:=gdb.GetCurrentDWG;
   if assigned(ListView1.Selected)then
                                      begin
                                      pstyle:=(ListView1.Selected.Data);
-                                     countstyle(pstyle,e,b,indimstyles);
+                                     countstyle(pstyle,inEntities,inBlockTable,indimstyles);
                                      if ListView1.Selected.Data=pdwg^.TextStyleTable.GetCurrentTextStyle then
                                      begin
                                        ShowError(rsCurrentStyleCannotBeDeleted);
                                        exit;
                                      end;
-                                     if (e+b+indimstyles)>0 then
+                                     if (inEntities+inBlockTable+indimstyles)>0 then
                                                   begin
                                                        ShowError(rsUnableDelUsedStyle);
                                                        exit;
                                                   end;
 
-                                     domethod:=tmethod(@pdwg^.TextStyleTable.RemoveFromArray);
-                                     undomethod:=tmethod(@pdwg^.TextStyleTable.AddToArray);
-                                     CreateUndoStartMarkerNeeded;
-                                     with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGObjectChangeCommand2(pstyle,tmethod(domethod),tmethod(undomethod))^ do
-                                     begin
-                                          AfterAction:=false;
-                                          comit;
-                                     end;
-                                     ListView1.Items.Delete(ListView1.Items.IndexOf(ListView1.Selected));
+                                     doTStyleDelete(ListView1.Selected);
+
                                      LayerDescLabel.Caption:='';
                                      end
                                  else
@@ -459,6 +478,33 @@ end;
 procedure TTextStylesWindow.FontsTypesChange(Sender: TObject);
 begin
   FontsFilter:=TFTFilter(ComboBox1.ItemIndex);
+end;
+
+procedure TTextStylesWindow.PurgeTStyles(Sender: TObject);
+var
+   i,purgedcounter:integer;
+   ProcessedItem:TListItem;
+   inEntities,inBlockTable,indimstyles:GDBInteger;
+   PCurrentStyle:PGDBTextStyle;
+begin
+     i:=0;
+     purgedcounter:=0;
+     PCurrentStyle:=gdb.GetCurrentDWG^.TextStyleTable.GetCurrentTextStyle;
+     if ListView1.Items.Count>0 then
+     begin
+       repeat
+          ProcessedItem:=ListView1.Items[i];
+          countstyle(ProcessedItem.Data,inEntities,inBlockTable,indimstyles);
+          if (ProcessedItem.Data<>PCurrentStyle)and((inEntities+inBlockTable+indimstyles)=0) then
+          begin
+           doTStyleDelete(ProcessedItem);
+           inc(purgedcounter);
+          end
+          else
+           inc(i);
+       until i>=ListView1.Items.Count;
+     end;
+     LayerDescLabel.Caption:=Format(rsCountTStylesPurged,[purgedcounter]);
 end;
 
 procedure TTextStylesWindow.Aply(Sender: TObject);

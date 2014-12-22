@@ -38,7 +38,8 @@ var
   II_LayerFreze,
   II_LayerUnFreze,
   II_Bug,
-  II_Dxf
+  II_Dxf,
+  II_Purge
   :integer;
   IconList: TImageList;
 procedure LoadIcons;
@@ -70,6 +71,7 @@ begin
   II_LayerUnFreze:=loadicon(iconlist, sysparam.programpath+'images/unfreze.png');
   II_Bug:=loadicon(iconlist, sysparam.programpath+'images/bug.png');
   II_Dxf:=loadicon(iconlist, sysparam.programpath+'images/dxf.png');
+  II_Purge:=loadicon(iconlist, sysparam.programpath+'images/purge.png');
 end;
 end.
-
+

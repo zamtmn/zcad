@@ -761,7 +761,7 @@ begin
        tv.x:=PGDBArrayVertex2D(Vertex2D_in_OCS_Array.PArray)^[j].x;
        tv.y:=PGDBArrayVertex2D(Vertex2D_in_OCS_Array.PArray)^[j].y;
        tv.z:=0;
-       tv:=geometry.VectorTransform3D(tv,m);
+       //tv:=geometry.VectorTransform3D(tv,m);
     dxfvertex2dout(outhandle,10,PGDBVertex2D(@tv)^);
     //dxfvertex2dout(outhandle,10,PGDBArrayVertex2D(Vertex2D_in_OCS_Array.PArray)^[j]);
     dxfGDBDoubleout(outhandle,40,PGLLWWidth(Width2D_in_OCS_Array.getelement(j)).startw);

@@ -113,6 +113,7 @@ resourcestring
   rsLayerUsedIn='Layer "%s" used in: %d-model, %d-blockdef table';
   rsTextStyleUsedIn='Text style "%s" used in: %d-model, %d-blockdef table, %d-dimstyle table';
   rsCountTStylesPurged='%d Text styles purged';
+  rsCountTStylesFound='%d Text styles found';
   rsLineTypeUsedIn='Line type "%s" used in: %d-model, %d-blockdef table';
   rsLineTypeDesk=';;Pattern length %f'#13#10'%s';
   rsSysLineTypeWarning='This is system line type!';

@@ -58,6 +58,7 @@ type
     ListView1: TZListView;
     MkCurrentBtn: TSpeedButton;
     PurgeBtn: TSpeedButton;
+    RefreshBtn: TSpeedButton;
     procedure Aply(Sender: TObject);
     procedure AplyClose(Sender: TObject);
     procedure FontsTypesChange(Sender: TObject);
@@ -67,6 +68,7 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure RefreshListitems(Sender: TObject);
     procedure ListView1SelectItem(Sender: TObject; Item: TListItem;
       Selected: Boolean);
     procedure MkCurrent(Sender: TObject);
@@ -252,6 +254,7 @@ IconList.GetBitmap(II_Plus, AddLayerBtn.Glyph);
 IconList.GetBitmap(II_Minus, DeleteLayerBtn.Glyph);
 IconList.GetBitmap(II_Ok, MkCurrentBtn.Glyph);
 IconList.GetBitmap(II_Purge, PurgeBtn.Glyph);
+IconList.GetBitmap(II_Refresh, RefreshBtn.Glyph);
 ListView1.SmallImages:=IconList;
 ListView1.DefaultItemIndex:=II_Ok;
 
@@ -320,34 +323,40 @@ begin
                                      MessageBox(@rsLayerMustBeSelected[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
 end;
 procedure TTextStylesWindow.FormShow(Sender: TObject);
+begin
+     GetFontsTypesComboValue;
+     RefreshListItems(nil);
+end;
+procedure TTextStylesWindow.RefreshListItems(Sender: TObject);
 var
    pdwg:PTSimpleDrawing;
    ir:itrec;
    plp:PGDBTextStyle;
    li:TListItem;
+   tscounter:integer;
 begin
-     GetFontsTypesComboValue;
      ListView1.BeginUpdate;
      ListView1.Clear;
      pdwg:=gdb.GetCurrentDWG;
+     tscounter:=0;
      if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
      begin
        plp:=pdwg^.TextStyleTable.beginiterate(ir);
        if plp<>nil then
        repeat
             li:=ListView1.Items.Add;
-
+            inc(tscounter);
             li.Data:=plp;
-
             ListView1.UpdateItem(li,gdb.GetCurrentDWG^.TextStyleTable.GetCurrentTextStyle);
-
             plp:=pdwg^.TextStyleTable.iterate(ir);
        until plp=nil;
      end;
      ListView1.SortColumn:=1;
      ListView1.SetFocus;
      ListView1.EndUpdate;
+     LayerDescLabel.Caption:=Format(rsCountTStylesFound,[tscounter]);
 end;
+
 procedure TextStyleCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 begin
      if (PGDBObjEntity(PInstance)^.vp.ID=GDBMTextID)or(PGDBObjEntity(PInstance)^.vp.ID=GDBTextID) then
@@ -509,7 +518,6 @@ begin
      end;
      LayerDescLabel.Caption:=Format(rsCountTStylesPurged,[purgedcounter]);
 end;
-
 procedure TTextStylesWindow.Aply(Sender: TObject);
 begin
      if changedstamp then

@@ -22,7 +22,7 @@ unit usuptstylecombo;
 interface
 
 uses
-  usupportgui,StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,zcadsysvars,commandline,zcadinterface;
+  gdbasetypes,usupportgui,StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,zcadsysvars,commandline,zcadinterface;
 
 type
   TSupportTStyleCombo = class
@@ -39,20 +39,24 @@ uses
   mainwindow;
 class procedure TSupportTStyleCombo.DropDownTStyle(Sender:Tobject);
 var
-  i:integer;
+  tStyleCounter:integer;
   ptt:PGDBTextStyleArray;
   pts:PGDBTextStyle;
+  ir:itrec;
 begin
   //Correct items count
   ptt:=@gdb.GetCurrentDWG.TextStyleTable;
-  SetcomboItemsCount(tcombobox(Sender),ptt.Count);
+  SetcomboItemsCount(tcombobox(Sender),ptt.GetRealCount);
 
   //Correct items
-  for i:=0 to ptt.Count-1 do
-  begin
-       pts:=gdb.GetCurrentDWG.TextStyleTable.getelement(i);
-       tcombobox(Sender).Items.Objects[i]:=tobject(pts);
-  end;
+  tStyleCounter:=0;
+  pts:=ptt.beginiterate(ir);
+  if pts<>nil then
+  repeat
+       tcombobox(Sender).Items.Objects[tStyleCounter]:=tobject(pts);
+       pts:=ptt.iterate(ir);
+       inc(tStyleCounter);
+  until pts=nil;
   tcombobox(Sender).ItemIndex:=-1;
 end;
 class procedure TSupportTStyleCombo.CloseUpTStyle(Sender:Tobject);

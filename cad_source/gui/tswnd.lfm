@@ -1,7 +1,7 @@
 object TextStylesWindow: TTextStylesWindow
-  Left = 435
+  Left = 542
   Height = 590
-  Top = 220
+  Top = 242
   Width = 977
   Caption = 'Text styles'
   ClientHeight = 590
@@ -14,16 +14,16 @@ object TextStylesWindow: TTextStylesWindow
   Position = poMainFormCenter
   LCLVersion = '1.3'
   object Bevel1: TBevel
-    AnchorSideLeft.Control = RefreshBtn
+    AnchorSideLeft.Control = ToolBar1
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = FontTypeFilterDesc
     AnchorSideBottom.Control = FontTypeFilterComboBox
     AnchorSideBottom.Side = asrBottom
-    Left = 132
+    Left = 130
     Height = 27
     Top = 1
-    Width = 663
+    Width = 665
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
     BorderSpacing.Top = 1
@@ -36,10 +36,10 @@ object TextStylesWindow: TTextStylesWindow
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Bevel1
     AnchorSideBottom.Side = asrBottom
-    Left = 133
+    Left = 131
     Height = 25
     Top = 2
-    Width = 661
+    Width = 663
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 1
     Layout = tlCenter
@@ -60,64 +60,6 @@ object TextStylesWindow: TTextStylesWindow
     Caption = 'Apply and close'
     OnClick = AplyClose
     TabOrder = 0
-  end
-  object ButtonApply: TBitBtn
-    AnchorSideRight.Control = ButtonApplyClose
-    AnchorSideBottom.Control = Owner
-    AnchorSideBottom.Side = asrBottom
-    Left = 671
-    Height = 30
-    Top = 559
-    Width = 150
-    Anchors = [akRight, akBottom]
-    BorderSpacing.Right = 1
-    BorderSpacing.Bottom = 1
-    Caption = 'Apply'
-    OnClick = Aply
-    ParentShowHint = False
-    TabOrder = 1
-  end
-  object MkCurrentBtn: TSpeedButton
-    AnchorSideLeft.Control = DeleteBtn
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = Bevel1
-    AnchorSideBottom.Control = Bevel1
-    AnchorSideBottom.Side = asrBottom
-    Left = 55
-    Height = 27
-    Top = 1
-    Width = 25
-    Anchors = [akTop, akLeft, akBottom]
-    Flat = True
-    OnClick = MkCurrent
-  end
-  object DeleteBtn: TSpeedButton
-    AnchorSideLeft.Control = AddBtn
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = Bevel1
-    AnchorSideBottom.Control = Bevel1
-    AnchorSideBottom.Side = asrBottom
-    Left = 28
-    Height = 27
-    Top = 1
-    Width = 27
-    Anchors = [akTop, akLeft, akBottom]
-    Flat = True
-    OnClick = DeleteItem
-  end
-  object AddBtn: TSpeedButton
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Bevel1
-    AnchorSideBottom.Control = Bevel1
-    AnchorSideBottom.Side = asrBottom
-    Left = 1
-    Height = 27
-    Top = 1
-    Width = 27
-    Anchors = [akTop, akLeft, akBottom]
-    BorderSpacing.Left = 1
-    Flat = True
-    OnClick = StyleAdd
   end
   object ListView1: TZListView
     AnchorSideLeft.Control = Owner
@@ -169,7 +111,7 @@ object TextStylesWindow: TTextStylesWindow
     ScrollBars = ssAutoBoth
     SortColumn = 1
     SortType = stText
-    TabOrder = 2
+    TabOrder = 1
     ViewStyle = vsReport
     OnResize = onrsz
     OnSelectItem = ListView1SelectItem
@@ -196,7 +138,7 @@ object TextStylesWindow: TTextStylesWindow
     )
     OnChange = FontsTypesChange
     Style = csDropDownList
-    TabOrder = 3
+    TabOrder = 2
     Text = 'All'
   end
   object FontTypeFilterDesc: TLabel
@@ -214,32 +156,91 @@ object TextStylesWindow: TTextStylesWindow
     Layout = tlCenter
     ParentColor = False
   end
-  object PurgeBtn: TSpeedButton
-    AnchorSideLeft.Control = MkCurrentBtn
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = Bevel1
-    AnchorSideBottom.Control = Bevel1
-    AnchorSideBottom.Side = asrBottom
-    Left = 80
-    Height = 27
+  object ToolBar1: TToolBar
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 2
+    Height = 22
     Top = 1
-    Width = 25
-    Anchors = [akTop, akLeft, akBottom]
-    Flat = True
-    OnClick = PurgeTStyles
+    Width = 126
+    Align = alNone
+    AutoSize = True
+    BorderSpacing.Left = 2
+    BorderSpacing.Top = 1
+    Caption = 'ToolBar1'
+    EdgeBorders = []
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 3
+    object ToolButton_Add: TToolButton
+      Left = 1
+      Top = 0
+      Action = AddStyle
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object ToolButton_Delete: TToolButton
+      Left = 24
+      Top = 0
+      Action = DelStyle
+    end
+    object ToolButton_MkCurrent: TToolButton
+      Left = 47
+      Top = 0
+      Action = MkCurrentStyle
+    end
+    object Separator1: TToolButton
+      Left = 70
+      Height = 22
+      Top = 0
+      Width = 10
+      Caption = 'Separator1'
+      Style = tbsDivider
+    end
+    object ToolButton_Purge: TToolButton
+      Left = 80
+      Top = 0
+      Action = PurgeStyles
+    end
+    object ToolButton_Refresh: TToolButton
+      Left = 103
+      Top = 0
+      Action = RefreshStyles
+    end
   end
-  object RefreshBtn: TSpeedButton
-    AnchorSideLeft.Control = PurgeBtn
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = Bevel1
-    AnchorSideBottom.Control = Bevel1
-    AnchorSideBottom.Side = asrBottom
-    Left = 105
-    Height = 27
-    Top = 1
-    Width = 25
-    Anchors = [akTop, akLeft, akBottom]
-    Flat = True
-    OnClick = RefreshListitems
+  object ActionList1: TActionList
+    left = 632
+    top = 312
+    object AddStyle: TAction
+      Caption = 'AddStyle'
+      Hint = 'Add text style'
+      ImageIndex = 1
+      OnExecute = StyleAdd
+      ShortCut = 45
+    end
+    object DelStyle: TAction
+      Caption = 'DelStyle'
+      Hint = 'Delete text style'
+      OnExecute = DeleteItem
+      ShortCut = 46
+    end
+    object MkCurrentStyle: TAction
+      Caption = 'MkCurrentStyle'
+      Hint = 'Make selected style curretn'
+      OnExecute = MkCurrent
+      ShortCut = 32
+    end
+    object PurgeStyles: TAction
+      Caption = 'PurgeStyles'
+      Hint = 'Purge not used styles'
+      OnExecute = PurgeTStyles
+      ShortCut = 8238
+    end
+    object RefreshStyles: TAction
+      Caption = 'RefreshStyles'
+      Hint = 'Refresh styles list'
+      OnExecute = RefreshListitems
+      ShortCut = 115
+    end
   end
 end

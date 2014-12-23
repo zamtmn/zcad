@@ -14,16 +14,16 @@ object TextStylesWindow: TTextStylesWindow
   Position = poMainFormCenter
   LCLVersion = '1.3'
   object Bevel1: TBevel
-    AnchorSideLeft.Control = PurgeBtn
+    AnchorSideLeft.Control = RefreshBtn
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Label1
     AnchorSideBottom.Control = ComboBox1
     AnchorSideBottom.Side = asrBottom
-    Left = 107
+    Left = 132
     Height = 27
     Top = 1
-    Width = 646
+    Width = 663
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
     BorderSpacing.Top = 1
@@ -36,10 +36,10 @@ object TextStylesWindow: TTextStylesWindow
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Bevel1
     AnchorSideBottom.Side = asrBottom
-    Left = 108
+    Left = 133
     Height = 25
     Top = 2
-    Width = 644
+    Width = 661
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 1
     Layout = tlCenter
@@ -179,10 +179,10 @@ object TextStylesWindow: TTextStylesWindow
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 862
+    Left = 904
     Height = 27
     Top = 1
-    Width = 114
+    Width = 72
     Anchors = [akTop, akRight]
     AutoSelect = False
     BorderSpacing.Top = 1
@@ -204,7 +204,7 @@ object TextStylesWindow: TTextStylesWindow
     AnchorSideRight.Control = ComboBox1
     AnchorSideBottom.Control = ComboBox1
     AnchorSideBottom.Side = asrBottom
-    Left = 755
+    Left = 797
     Height = 27
     Top = 1
     Width = 105
@@ -227,5 +227,19 @@ object TextStylesWindow: TTextStylesWindow
     Anchors = [akTop, akLeft, akBottom]
     Flat = True
     OnClick = PurgeTStyles
+  end
+  object RefreshBtn: TSpeedButton
+    AnchorSideLeft.Control = PurgeBtn
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Bevel1
+    AnchorSideBottom.Control = Bevel1
+    AnchorSideBottom.Side = asrBottom
+    Left = 105
+    Height = 27
+    Top = 1
+    Width = 25
+    Anchors = [akTop, akLeft, akBottom]
+    Flat = True
+    OnClick = RefreshListitems
   end
 end

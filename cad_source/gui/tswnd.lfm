@@ -17,8 +17,8 @@ object TextStylesWindow: TTextStylesWindow
     AnchorSideLeft.Control = RefreshBtn
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Owner
-    AnchorSideRight.Control = Label1
-    AnchorSideBottom.Control = ComboBox1
+    AnchorSideRight.Control = FontTypeFilterDesc
+    AnchorSideBottom.Control = FontTypeFilterComboBox
     AnchorSideBottom.Side = asrBottom
     Left = 132
     Height = 27
@@ -29,7 +29,7 @@ object TextStylesWindow: TTextStylesWindow
     BorderSpacing.Top = 1
     BorderSpacing.Right = 2
   end
-  object LayerDescLabel: TLabel
+  object DescLabel: TLabel
     AnchorSideLeft.Control = Bevel1
     AnchorSideTop.Control = Bevel1
     AnchorSideRight.Control = Bevel1
@@ -61,7 +61,7 @@ object TextStylesWindow: TTextStylesWindow
     OnClick = AplyClose
     TabOrder = 0
   end
-  object Button_Apply: TBitBtn
+  object ButtonApply: TBitBtn
     AnchorSideRight.Control = ButtonApplyClose
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
@@ -78,7 +78,7 @@ object TextStylesWindow: TTextStylesWindow
     TabOrder = 1
   end
   object MkCurrentBtn: TSpeedButton
-    AnchorSideLeft.Control = DeleteLayerBtn
+    AnchorSideLeft.Control = DeleteBtn
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Bevel1
     AnchorSideBottom.Control = Bevel1
@@ -91,8 +91,8 @@ object TextStylesWindow: TTextStylesWindow
     Flat = True
     OnClick = MkCurrent
   end
-  object DeleteLayerBtn: TSpeedButton
-    AnchorSideLeft.Control = AddLayerBtn
+  object DeleteBtn: TSpeedButton
+    AnchorSideLeft.Control = AddBtn
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Bevel1
     AnchorSideBottom.Control = Bevel1
@@ -103,9 +103,9 @@ object TextStylesWindow: TTextStylesWindow
     Width = 27
     Anchors = [akTop, akLeft, akBottom]
     Flat = True
-    OnClick = LayerDelete
+    OnClick = DeleteItem
   end
-  object AddLayerBtn: TSpeedButton
+  object AddBtn: TSpeedButton
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Bevel1
     AnchorSideBottom.Control = Bevel1
@@ -175,7 +175,7 @@ object TextStylesWindow: TTextStylesWindow
     OnSelectItem = ListView1SelectItem
     onMakeCurrent = MaceItemCurrent
   end
-  object ComboBox1: TComboBox
+  object FontTypeFilterComboBox: TComboBox
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
@@ -199,10 +199,10 @@ object TextStylesWindow: TTextStylesWindow
     TabOrder = 3
     Text = 'All'
   end
-  object Label1: TLabel
-    AnchorSideTop.Control = ComboBox1
-    AnchorSideRight.Control = ComboBox1
-    AnchorSideBottom.Control = ComboBox1
+  object FontTypeFilterDesc: TLabel
+    AnchorSideTop.Control = FontTypeFilterComboBox
+    AnchorSideRight.Control = FontTypeFilterComboBox
+    AnchorSideBottom.Control = FontTypeFilterComboBox
     AnchorSideBottom.Side = asrBottom
     Left = 797
     Height = 27

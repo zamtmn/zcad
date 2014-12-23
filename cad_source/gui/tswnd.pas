@@ -47,14 +47,14 @@ type
   { TTextStylesWindow }
 
   TTextStylesWindow = class(TForm)
-    AddLayerBtn: TSpeedButton;
-    ComboBox1: TComboBox;
-    DeleteLayerBtn: TSpeedButton;
+    AddBtn: TSpeedButton;
+    FontTypeFilterComboBox: TComboBox;
+    DeleteBtn: TSpeedButton;
     Bevel1: TBevel;
     ButtonApplyClose: TBitBtn;
-    Button_Apply: TBitBtn;
-    Label1: TLabel;
-    LayerDescLabel: TLabel;
+    ButtonApply: TBitBtn;
+    FontTypeFilterDesc: TLabel;
+    DescLabel: TLabel;
     ListView1: TZListView;
     MkCurrentBtn: TSpeedButton;
     PurgeBtn: TSpeedButton;
@@ -64,7 +64,7 @@ type
     procedure FontsTypesChange(Sender: TObject);
     procedure PurgeTStyles(Sender: TObject);
     procedure StyleAdd(Sender: TObject);
-    procedure LayerDelete(Sender: TObject);
+    procedure DeleteItem(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -122,7 +122,7 @@ uses
 {$R *.lfm}
 procedure TTextStylesWindow.GetFontsTypesComboValue;
 begin
-     ComboBox1.ItemIndex:=ord(FontsFilter);
+     FontTypeFilterComboBox.ItemIndex:=ord(FontsFilter);
 end;
 
 procedure TTextStylesWindow.CreateUndoStartMarkerNeeded;
@@ -151,7 +151,7 @@ begin
      end;
      ListView1.UpdateItem2(TListItem(Item));
      FontChange:=false;
-     ComboBox1.enabled:=true;
+     FontTypeFilterComboBox.enabled:=true;
 end;
 
 {Style name handle procedures}
@@ -172,7 +172,7 @@ function TTextStylesWindow.CreateFontNameEditor(Item: TListItem;r: TRect):boolea
 begin
   FillFontsSelector(PGDBTextStyle(Item.Data)^.pfont^.fontfile,PGDBTextStyle(Item.Data)^.pfont);
   FontChange:=true;
-  ComboBox1.enabled:=false;
+  FontTypeFilterComboBox.enabled:=false;
   result:=SupportTypedEditors.createeditor(ListView1,Item,r,FontsSelector,'TEnumData')
 end;
 {Font path handle procedures}
@@ -250,8 +250,8 @@ end;
 
 procedure TTextStylesWindow.FormCreate(Sender: TObject);
 begin
-IconList.GetBitmap(II_Plus, AddLayerBtn.Glyph);
-IconList.GetBitmap(II_Minus, DeleteLayerBtn.Glyph);
+IconList.GetBitmap(II_Plus, AddBtn.Glyph);
+IconList.GetBitmap(II_Minus, DeleteBtn.Glyph);
 IconList.GetBitmap(II_Ok, MkCurrentBtn.Glyph);
 IconList.GetBitmap(II_Purge, PurgeBtn.Glyph);
 IconList.GetBitmap(II_Refresh, RefreshBtn.Glyph);
@@ -320,7 +320,7 @@ begin
                                        end;
                                      end
                                  else
-                                     MessageBox(@rsLayerMustBeSelected[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
+                                     MessageBox(@rsStyleMustBeSelected[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
 end;
 procedure TTextStylesWindow.FormShow(Sender: TObject);
 begin
@@ -354,7 +354,7 @@ begin
      ListView1.SortColumn:=1;
      ListView1.SetFocus;
      ListView1.EndUpdate;
-     LayerDescLabel.Caption:=Format(rsCountTStylesFound,[tscounter]);
+     DescLabel.Caption:=Format(rsCountTStylesFound,[tscounter]);
 end;
 
 procedure TextStyleCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
@@ -391,7 +391,7 @@ begin
           pdwg:=gdb.GetCurrentDWG;
           pstyle:=(Item.Data);
           countstyle(pstyle,inent,inblock,indimstyles);
-          LayerDescLabel.Caption:=Format(rsTextStyleUsedIn,[pstyle^.Name,inent,inblock,indimstyles]);
+          DescLabel.Caption:=Format(rsTextStyleUsedIn,[pstyle^.Name,inent,inblock,indimstyles]);
      end;
 end;
 
@@ -430,7 +430,7 @@ begin
        //comit;
   end;
 
-  ListView1.AddCreatedItem(pcreatedstyle,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer);
+  ListView1.AddCreatedItem(pcreatedstyle,gdb.GetCurrentDWG^.TextStyleTable.GetCurrentTextStyle);
 end;
 procedure TTextStylesWindow.doTStyleDelete(ProcessedItem:TListItem);
 var
@@ -451,7 +451,7 @@ begin
   ListView1.Items.Delete(ListView1.Items.IndexOf(ProcessedItem));
 end;
 
-procedure TTextStylesWindow.LayerDelete(Sender: TObject);
+procedure TTextStylesWindow.DeleteItem(Sender: TObject);
 var
    pstyle:PGDBTextStyle;
    pdwg:PTSimpleDrawing;
@@ -476,7 +476,7 @@ begin
 
                                      doTStyleDelete(ListView1.Selected);
 
-                                     LayerDescLabel.Caption:='';
+                                     DescLabel.Caption:='';
                                      end
                                  else
                                      ShowError(rsStyleMustBeSelected);
@@ -489,7 +489,7 @@ end;
 
 procedure TTextStylesWindow.FontsTypesChange(Sender: TObject);
 begin
-  FontsFilter:=TFTFilter(ComboBox1.ItemIndex);
+  FontsFilter:=TFTFilter(FontTypeFilterComboBox.ItemIndex);
 end;
 
 procedure TTextStylesWindow.PurgeTStyles(Sender: TObject);
@@ -516,7 +516,7 @@ begin
            inc(i);
        until i>=ListView1.Items.Count;
      end;
-     LayerDescLabel.Caption:=Format(rsCountTStylesPurged,[purgedcounter]);
+     DescLabel.Caption:=Format(rsCountTStylesPurged,[purgedcounter]);
 end;
 procedure TTextStylesWindow.Aply(Sender: TObject);
 begin

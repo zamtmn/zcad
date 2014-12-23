@@ -24,7 +24,7 @@ interface
 uses
   ugdbdimstylearray,ugdbfont,selectorwnd,ugdbltypearray,ugdbutil,log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
-  Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype,
+  Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 
   gdbobjectsconstdef,UGDBTextStyleArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,usuptypededitors,
 
@@ -47,18 +47,25 @@ type
   { TTextStylesWindow }
 
   TTextStylesWindow = class(TForm)
-    AddBtn: TSpeedButton;
+    DelStyle: TAction;
+    MkCurrentStyle: TAction;
+    PurgeStyles: TAction;
+    RefreshStyles: TAction;
+    AddStyle: TAction;
+    ActionList1: TActionList;
     FontTypeFilterComboBox: TComboBox;
-    DeleteBtn: TSpeedButton;
     Bevel1: TBevel;
     ButtonApplyClose: TBitBtn;
-    ButtonApply: TBitBtn;
     FontTypeFilterDesc: TLabel;
     DescLabel: TLabel;
     ListView1: TZListView;
-    MkCurrentBtn: TSpeedButton;
-    PurgeBtn: TSpeedButton;
-    RefreshBtn: TSpeedButton;
+    ToolBar1: TToolBar;
+    ToolButton_Add: TToolButton;
+    ToolButton_Delete: TToolButton;
+    ToolButton_MkCurrent: TToolButton;
+    Separator1: TToolButton;
+    ToolButton_Purge: TToolButton;
+    ToolButton_Refresh: TToolButton;
     procedure Aply(Sender: TObject);
     procedure AplyClose(Sender: TObject);
     procedure FontsTypesChange(Sender: TObject);
@@ -250,51 +257,54 @@ end;
 
 procedure TTextStylesWindow.FormCreate(Sender: TObject);
 begin
-IconList.GetBitmap(II_Plus, AddBtn.Glyph);
-IconList.GetBitmap(II_Minus, DeleteBtn.Glyph);
-IconList.GetBitmap(II_Ok, MkCurrentBtn.Glyph);
-IconList.GetBitmap(II_Purge, PurgeBtn.Glyph);
-IconList.GetBitmap(II_Refresh, RefreshBtn.Glyph);
-ListView1.SmallImages:=IconList;
-ListView1.DefaultItemIndex:=II_Ok;
+  ActionList1.Images:=IconList;
+  ToolBar1.Images:=IconList;
+  AddStyle.ImageIndex:=II_Plus;
+  DelStyle.ImageIndex:=II_Minus;
+  MkCurrentStyle.ImageIndex:=II_Ok;
+  PurgeStyles.ImageIndex:=II_Purge;
+  RefreshStyles.ImageIndex:=II_Refresh;
 
-FontsSelector.Enums.init(100);
-SupportTypedEditors:=TSupportTypedEditors.create;
-SupportTypedEditors.OnUpdateEditedControl:=@UpdateItem2;
-FontChange:=false;
-IsUndoEndMarkerCreated:=false;
+  ListView1.SmallImages:=IconList;
+  ListView1.DefaultItemIndex:=II_Ok;
 
-setlength(ListView1.SubItems,ColumnCount);
+  FontsSelector.Enums.init(100);
+  SupportTypedEditors:=TSupportTypedEditors.create;
+  SupportTypedEditors.OnUpdateEditedControl:=@UpdateItem2;
+  FontChange:=false;
+  IsUndoEndMarkerCreated:=false;
 
-with ListView1.SubItems[NameColumn] do
-begin
-     OnGetName:=@GetStyleName;
-     OnClick:=@CreateNameEditor;
-end;
-with ListView1.SubItems[FontNameColumn] do
-begin
-     OnGetName:=@GetFontName;
-     OnClick:=@CreateFontNameEditor;
-end;
-with ListView1.SubItems[FontPathColumn] do
-begin
-     OnGetName:=@GetFontPath;
-end;
-with ListView1.SubItems[HeightColumn] do
-begin
-     OnGetName:=@GetHeight;
-     OnClick:=@CreateHeightEditor;
-end;
-with ListView1.SubItems[WidthFactorColumn] do
-begin
-     OnGetName:=@GetWidthFactor;
-     OnClick:=@CreateWidthFactorEditor;
-end;
-with ListView1.SubItems[ObliqueColumn] do
-begin
-     OnGetName:=@GetOblique;
-     OnClick:=@CreateObliqueEditor;
-end;
+  setlength(ListView1.SubItems,ColumnCount);
+
+  with ListView1.SubItems[NameColumn] do
+  begin
+       OnGetName:=@GetStyleName;
+       OnClick:=@CreateNameEditor;
+  end;
+  with ListView1.SubItems[FontNameColumn] do
+  begin
+       OnGetName:=@GetFontName;
+       OnClick:=@CreateFontNameEditor;
+  end;
+  with ListView1.SubItems[FontPathColumn] do
+  begin
+       OnGetName:=@GetFontPath;
+  end;
+  with ListView1.SubItems[HeightColumn] do
+  begin
+       OnGetName:=@GetHeight;
+       OnClick:=@CreateHeightEditor;
+  end;
+  with ListView1.SubItems[WidthFactorColumn] do
+  begin
+       OnGetName:=@GetWidthFactor;
+       OnClick:=@CreateWidthFactorEditor;
+  end;
+  with ListView1.SubItems[ObliqueColumn] do
+  begin
+       OnGetName:=@GetOblique;
+       OnClick:=@CreateObliqueEditor;
+  end;
 end;
 procedure TTextStylesWindow.MaceItemCurrent(ListItem:TListItem);
 begin

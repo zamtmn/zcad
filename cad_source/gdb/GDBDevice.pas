@@ -395,7 +395,7 @@ begin
           //name:=copy(name,8,length(name)-7);
           devnam:=DevicePrefix+name;
           //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(@devnam[1]);
-          index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(@devnam[1]);
+          index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(devnam);
           //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
           if index>-1 then
           begin

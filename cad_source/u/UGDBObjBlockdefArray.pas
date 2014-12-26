@@ -30,7 +30,7 @@ GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*O
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       constructor initnul;
 
-                      function getindex(name:pansichar):GDBInteger;virtual;
+                      function getindex(name:GDBString):GDBInteger;virtual;
                       function getblockdef(name:GDBString):PGDBObjBlockdef;virtual;
                       //function loadblock(filename,bname:pansichar;pdrawing:GDBPointer):GDBInteger;virtual;
                       function create(name:GDBString):PGDBObjBlockdef;virtual;

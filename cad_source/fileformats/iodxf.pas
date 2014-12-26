@@ -1226,7 +1226,7 @@ begin
                 while (s <> 'ENDBLK') do
                   s := f.readGDBString;
               end
-              else if drawing.BlockDefArray.getindex(pointer(@s[1]))>=0 then
+              else if drawing.BlockDefArray.getindex(s)>=0 then
                                begin
                                     //programlog.logoutstr('Ignored double definition block '+s+';',lp_OldPos);
                                     shared.HistoryOutStr(format(rsDoubleBlockIgnored,[s]));

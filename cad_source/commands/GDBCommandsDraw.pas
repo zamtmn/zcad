@@ -22,7 +22,7 @@ unit GDBCommandsDraw;
 interface
 uses
   ugdbopenarrayofgdbdouble,texteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,gdbentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
-  commandlinedef,
+  commandlinedef,strproc,
   gdbasetypes,commandline,GDBCommandsBase,
   plugins,
   commanddefinternal,
@@ -3481,9 +3481,26 @@ begin
 
     if assigned(redrawoglwndproc) then redrawoglwndproc;
 
-    result:=0;
+    result:=cmd_ok;
 
 end;
+function BlocksList_com(operands:TCommandOperands):TCommandResult;
+var pb:PGDBObjBlockdef;
+    ir:itrec;
+begin
+     pb:=gdb.GetCurrentDWG^.BlockDefArray.beginiterate(ir);
+     if pb<>nil then
+     repeat
+           historyoutstr(format('Found block "%s", contains %d entities',[Tria_AnsiToUtf8(pb^.name),pb^.ObjArray.Count]));
+
+
+           pb:=gdb.GetCurrentDWG^.BlockDefArray.iterate(ir);
+     until pb=nil;
+
+    result:=cmd_ok;
+
+end;
+
 procedure PlacePoint(const point:GDBVertex);inline;
 var
     PCreatedGDBPoint:PGDBobjPoint;
@@ -3730,6 +3747,7 @@ begin
   CreateCommandFastObjectPlugin(@CutClip_com,'CutClip',CADWG or CASelEnts,0);
   CreateCommandFastObjectPlugin(@Insert2_com,'Insert2',CADWG,0);
   CreateCommandFastObjectPlugin(@PlaceAllBlocks_com,'PlaceAllBlocks',CADWG,0);
+  CreateCommandFastObjectPlugin(@BlocksList_com,'BlocksList',CADWG,0);
   CreateCommandFastObjectPlugin(@InverseSelected_com,'InverseSelected',CADWG or CASelEnts,0);
   //CreateCommandFastObjectPlugin(@bedit_com,'BEdit');
   pbeditcom:=CreateCommandRTEdObjectPlugin(@bedit_com,nil,nil,@bedit_format,nil,nil,nil,nil,'BEdit',0,0);

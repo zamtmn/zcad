@@ -496,6 +496,7 @@ MainMenuItem Debug;
      Command Command list,CommandList,none,none
      Command Clear File History,ClearFileHistory,none,none
      Command PlaceAllBlocks,PlaceAllBlocks,none,none
+     Command BlocksList,BlocksList,none,none
      Command Check clipboard,DebClip,none,none
      Command Report on memory allocation(for debugbuild),MemSummary,none,none
     }

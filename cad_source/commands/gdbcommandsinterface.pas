@@ -170,7 +170,9 @@ begin
                                     dwgname:=gdb.GetDefaultDrawingName;
                                     operands:=@dwgname[1];
                                     ptd^.FileName:=dwgname;
-                               end;
+                               end
+                            else
+                                ptd^.FileName:=operands;
 
      {tf:=mainform.PageControl.addpage(Operands);
      mainform.PageControl.selpage(mainform.PageControl.lastcreated);

@@ -553,7 +553,7 @@ begin
 
 
   Pointer(FileName):=nil;
-  FileName:=rsUnnamedWindowTitle;
+  FileName:=rsHardUnnamed;
   Changed:=False;
   UndoStack.init;
 

@@ -22,7 +22,7 @@ unit tswnd;
 interface
 
 uses
-  ugdbdimstylearray,ugdbfont,selectorwnd,ugdbltypearray,ugdbutil,log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
+  LMessages,ugdbdimstylearray,ugdbfont,selectorwnd,ugdbltypearray,ugdbutil,log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 
@@ -100,6 +100,7 @@ type
 
   public
     { public declarations }
+    function IsShortcut(var Message: TLMKey): boolean; override;
 
     {Style name handle procedures}
     function GetStyleName(Item: TListItem):string;
@@ -127,6 +128,15 @@ implementation
 uses
     mainwindow;
 {$R *.lfm}
+function TTextStylesWindow.IsShortcut(var Message: TLMKey): boolean;
+var
+   OldFunction:TIsShortcutFunc;
+begin
+   TMethod(OldFunction).code:=@TForm.IsShortcut;
+   TMethod(OldFunction).Data:=self;
+   result:=IsZShortcut(Message,ActiveControl,nil,OldFunction);
+end;
+
 procedure TTextStylesWindow.GetFontsTypesComboValue;
 begin
      FontTypeFilterComboBox.ItemIndex:=ord(FontsFilter);

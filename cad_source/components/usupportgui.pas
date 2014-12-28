@@ -21,13 +21,81 @@ unit usupportgui;
 interface
 
 uses
-  StdCtrls,Controls,Classes,LCLType,ComCtrls,Graphics;
+  StdCtrls,Controls,Classes,LCLType,ComCtrls,Graphics,LMessages,LCLIntf;
+
+type
+  TIsShortcutFunc=function(var Message: TLMKey): boolean of object;
 
 procedure SetcomboItemsCount(cb:tcombobox;ItemsCount:integer);
 procedure ComboBoxDrawItem(Control:TWinControl;ARect:TRect;State:TOwnerDrawState);
 function ListViewDrawSubItem(State: TCustomDrawState;canvas:tcanvas;Item: TListItem;SubItem: Integer): TRect;
 procedure SetComboSize(cb:tcombobox;ItemH:Integer);
+function IsZEditableShortCut(var Message: TLMKey):boolean;
+function IsZShortcut(var Message: TLMKey;const ActiveControl:TWinControl; const CMDEdit:TEdit; const OldFunction:TIsShortcutFunc): boolean;
 implementation
+function IsZEditableShortCut(var Message: TLMKey):boolean;
+var
+   chrcode:word;
+   ss:tshiftstate;
+begin
+     chrcode:=Message.CharCode;
+     ss:=MsgKeyDataToShiftState(Message.KeyData);
+     if ssShift in ss then
+                               chrcode:=chrcode or scShift;
+    if ssCtrl in ss then
+                              chrcode:=chrcode or scCtrl;
+
+     case chrcode of
+               (scCtrl or VK_V),
+               (scCtrl or VK_A),
+               (scCtrl or VK_C),
+               (scCtrl or VK_INSERT),
+               (scShift or VK_INSERT),
+               (scCtrl or VK_Z),
+               (scCtrl or scShift or VK_Z),
+                VK_DELETE,
+                VK_INSERT,
+                VK_SPACE,
+                VK_HOME,VK_END,
+                VK_PRIOR,VK_NEXT,
+                VK_BACK,
+                VK_LEFT,
+                VK_RIGHT,
+                VK_UP,
+                VK_DOWN
+                    :begin
+                         result:=true;
+                     end
+                else result:=false;
+
+     end;
+end;
+function IsZShortcut(var Message: TLMKey;const ActiveControl:TWinControl; const CMDEdit:TEdit; const OldFunction:TIsShortcutFunc): boolean;
+var
+   IsEditableFocus:boolean;
+   IsCommandNotEmpty:boolean;
+begin
+     if message.charcode<>VK_SHIFT then
+     if message.charcode<>VK_CONTROL then
+                                      IsCommandNotEmpty:=IsCommandNotEmpty;
+  IsEditableFocus:=(((ActiveControl is tedit)and(ActiveControl<>cmdedit))
+                  or (ActiveControl is tmemo)
+                  or (ActiveControl is tcombobox));
+  if assigned(cmdedit) then
+                           IsCommandNotEmpty:=((cmdedit.Text<>'')and(ActiveControl=cmdedit))
+                       else
+                           IsCommandNotEmpty:=false;
+  if IsZEditableShortCut(Message)
+  and ((IsEditableFocus)or(IsCommandNotEmpty))
+       then result:=false
+       else
+           begin
+             if assigned(OldFunction) then
+                                          result:=OldFunction(Message)
+                                      else
+                                          result:=false;
+           end;
+end;
 procedure SetComboSize(cb:tcombobox;ItemH:Integer);
 begin
      cb.AutoSize:=false;

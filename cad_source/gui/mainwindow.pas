@@ -2247,42 +2247,6 @@ begin
     freeandnil(updatescontrols);
     inherited;
 end;
-function IsEditableShortCut(var Message: TLMKey):boolean;
-var
-   chrcode:word;
-   ss:tshiftstate;
-begin
-     chrcode:=Message.CharCode;
-     ss:=MsgKeyDataToShiftState(Message.KeyData);
-     if ssShift in ss then
-                               chrcode:=chrcode or scShift;
-    if ssCtrl in ss then
-                              chrcode:=chrcode or scCtrl;
-
-     case chrcode of
-               (scCtrl or VK_V),
-               (scCtrl or VK_A),
-               (scCtrl or VK_C),
-               (scCtrl or VK_INSERT),
-               (scShift or VK_INSERT),
-               (scCtrl or VK_Z),
-               (scCtrl or scShift or VK_Z),
-                VK_DELETE,
-                VK_HOME,VK_END,
-                VK_PRIOR,VK_NEXT,
-                VK_BACK,
-                VK_LEFT,
-                VK_RIGHT,
-                VK_UP,
-                VK_DOWN
-                    :begin
-                         result:=true;
-                     end
-                else result:=false;
-
-     end;
-
-end;
 procedure MainForm.ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
 var
    _disabled:boolean;
@@ -2352,23 +2316,11 @@ end;
 
 function MainForm.IsShortcut(var Message: TLMKey): boolean;
 var
-   IsEditableFocus:boolean;
-   IsCommandNotEmpty:boolean;
+   OldFunction:TIsShortcutFunc;
 begin
-     if message.charcode<>VK_SHIFT then
-     if message.charcode<>VK_CONTROL then
-                                      IsCommandNotEmpty:=IsCommandNotEmpty;
-  IsEditableFocus:=(((ActiveControl is tedit)and(ActiveControl<>cmdedit))
-                  or (ActiveControl is tmemo)
-                  or (ActiveControl is tcombobox));
-  if assigned(cmdedit) then
-                           IsCommandNotEmpty:=((cmdedit.Text<>'')and(ActiveControl=cmdedit))
-                       else
-                           IsCommandNotEmpty:=false;
-  if IsEditableShortCut(Message)
-  and ((IsEditableFocus)or(IsCommandNotEmpty))
-       then result:=false
-       else result:=inherited IsShortcut(Message)
+   TMethod(OldFunction).code:=@TForm.IsShortcut;
+   TMethod(OldFunction).Data:=self;
+   result:=IsZShortcut(Message,ActiveControl,cmdedit,OldFunction);
 end;
 
 procedure MainForm.myKeyPress(Sender: TObject; var Key: Word; Shift: TShiftState);

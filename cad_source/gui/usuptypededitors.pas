@@ -22,19 +22,27 @@ unit usuptypededitors;
 interface
 
 uses
-  usupportgui,Varman,UBaseTypeDescriptor,varmandef,StdCtrls,sysutils,Forms,UGDBDescriptor,zcadstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,zcadsysvars,commandline,zcadinterface;
+  UGDBOpenArrayOfUCommands,usupportgui,Varman,UBaseTypeDescriptor,varmandef,StdCtrls,sysutils,Forms,UGDBDescriptor,zcadstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,zcadsysvars,commandline,zcadinterface;
 
 type
+  TUndoContext=record
+                       //ppropcurrentedit:PPropertyDeskriptor;
+                       UndoStack:PGDBObjOpenArrayOfUCommands;
+                       UndoCommand:PTTypedChangeCommand;
+                 end;
   TOnUpdateControl=procedure (AEditedControl:TObject)of object;
+  TUndoPrefixProcedure=procedure of object;
   TSupportTypedEditors = class
     PEditor:TPropEditor;
     EditedControl:TObject;
     OnUpdateEditedControl:TOnUpdateControl;
+    UndoContext:TUndoContext;
 
     procedure freeeditor;
-    function createeditor(const TheOwner:TPropEditorOwner; const AEditedControl:TObject; const r: TRect; const variable; const vartype:String):boolean;
+    function createeditor(const TheOwner:TPropEditorOwner; const AEditedControl:TObject; const r: TRect; const variable; const vartype:String;UndoPrefixProcedure:TUndoPrefixProcedure; useinternalundo:boolean=true):boolean;
     procedure Notify(Sender: TObject;Command:TMyNotifyCommand); virtual;
     procedure asyncfreeeditor(Data: PtrInt);
+    procedure ClearEDContext;
   end;
 
 implementation
@@ -42,6 +50,14 @@ procedure TSupportTypedEditors.Notify(Sender: TObject;Command:TMyNotifyCommand);
 begin
   if sender=PEditor then
   begin
+       if UndoContext.UndoCommand<>nil then
+                                         begin
+                                              if peditor.changed then
+                                                                     UndoContext.UndoCommand.ComitFromObj
+                                                                 else
+                                                                     UndoContext.UndoStack.KillLastCommand;
+                                              ClearEDContext;
+                                         end;
     if (Command=TMNC_EditingDoneEnterKey)or(Command=TMNC_EditingDoneLostFocus)or(Command=TMNC_EditingDoneDoNothing) then
                                     begin
                                     Application.QueueAsyncCall(asyncfreeeditor,0);
@@ -59,6 +75,7 @@ procedure TSupportTypedEditors.freeeditor;
 begin
   if peditor<>nil then
   begin
+       ClearEDContext;
        Application.RemoveAsyncCalls(self);
        peditor.geteditor.Hide;
        freeandnil(peditor);
@@ -67,19 +84,29 @@ begin
        EditedControl:=nil;
   end;
 end;
-function TSupportTypedEditors.createeditor(const TheOwner:TPropEditorOwner; const AEditedControl:TObject; const r: TRect; const variable; const vartype:String):boolean;
+procedure TSupportTypedEditors.ClearEDContext;
+begin
+     undocontext.UndoCommand:=0;
+     undocontext.UndoStack:=nil;
+end;
+function TSupportTypedEditors.createeditor(const TheOwner:TPropEditorOwner; const AEditedControl:TObject; const r: TRect; const variable; const vartype:String;UndoPrefixProcedure:TUndoPrefixProcedure; useinternalundo:boolean=true):boolean;
 var
   needdropdown:boolean;
+  typemanager:PUserTypeDescriptor;
 begin
      needdropdown:=false;
      freeeditor;
      if uppercase(vartype)='TENUMDATA' then
      begin
+          typemanager:=@GDBEnumDataDescriptorObj;
       PEditor:=GDBEnumDataDescriptorObj.CreateEditor(TheOwner,r,@variable,nil,true).Editor;
       needdropdown:=true;
      end
      else
-     PEditor:=SysUnit^.TypeName2PTD(vartype)^.CreateEditor(TheOwner,r,@variable,nil,true).Editor;
+     begin
+          typemanager:=SysUnit^.TypeName2PTD(vartype);
+          PEditor:=typemanager^.CreateEditor(TheOwner,r,@variable,nil,true).Editor;
+     end;
      if PEditor.geteditor is TComboBox then
                                            begin
                                            SetComboSize(TComboBox(PEditor.geteditor),r.Bottom-r.Top-5);
@@ -92,6 +119,17 @@ begin
       TComboBox(PEditor.geteditor).DroppedDown:=true;
      PEditor.OwnerNotify:=Notify;
      EditedControl:=AEditedControl;
+     ClearEDContext;
+     if assigned(UndoPrefixProcedure) then
+                                          UndoPrefixProcedure;
+     if useinternalundo then
+      begin
+     undocontext.UndoStack:=GetUndoStack;
+     if undocontext.UndoStack<>nil then
+      begin
+       undocontext.UndoCommand:=undocontext.UndoStack.PushCreateTTypedChangeCommand(@variable,typemanager);
+      end;
+      end;
 end;
 
-end.
+end.

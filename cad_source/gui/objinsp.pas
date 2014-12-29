@@ -32,7 +32,7 @@ uses
   strproc,types,graphics,
   ExtCtrls,Controls,Classes,menus,Forms,lcltype,fileutil,
 
-  gdbasetypes,SysUtils,shared,zcadsysvars,
+  usuptypededitors,gdbasetypes,SysUtils,shared,zcadsysvars,
   gdbase,varmandef,UGDBDrawingdef,
   memman,TypeDescriptors;
 const

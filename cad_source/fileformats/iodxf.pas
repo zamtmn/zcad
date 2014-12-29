@@ -2367,17 +2367,20 @@ ENDTAB}
                 instyletable := false;
                 ignoredsource:=false;
                 temphandle2:=handle-2;
-                if drawing.TextStyleTable.count>0 then
-                for i := 0 to drawing.TextStyleTable.count - 1 do
+                if drawing.TextStyleTable.GetRealCount>0 then
                 begin
+                pcurrtextstyle:=drawing.TextStyleTable.beginiterate(ir);
+                if pcurrtextstyle<>nil then
+                //for i := 0 to drawing.TextStyleTable.count - 1 do
+                repeat
                   //if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name <> '0' then
-                  if PGDBTextStyle(drawing.TextStyleTable.getelement(i))^.UsedInLTYPE then
+                  if {drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.UsedInLTYPE then
                   begin
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                   outstream.TXTAddGDBStringEOL(dxfName_Style);
-                  p:=drawing.TextStyleTable.getelement(i);
+                  p:={drawing.TextStyleTable.getelement(i))}pcurrtextstyle;
 
-                  Handle2pointer.MyGetOrCreateValue(drawing.TextStyleTable.getelement(i),handle,temphandle);
+                  Handle2pointer.MyGetOrCreateValue({drawing.TextStyleTable.getelement(i))}pcurrtextstyle,handle,temphandle);
                   //GetOrCreateHandle(drawing.TextStyleTable.getelement(i),handle,temphandle);
 
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
@@ -2395,13 +2398,13 @@ ENDTAB}
                   outstream.TXTAddGDBStringEOL('1');
 
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(40));
-                  outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle(drawing.TextStyleTable.getelement(i))^.prop.size));
+                  outstream.TXTAddGDBStringEOL(floattostr({drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.prop.size));
 
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(41));
-                  outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle(drawing.TextStyleTable.getelement(i))^.prop.wfactor));
+                  outstream.TXTAddGDBStringEOL(floattostr({drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.prop.wfactor));
 
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(50));
-                  outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle(drawing.TextStyleTable.getelement(i))^.prop.oblique));
+                  outstream.TXTAddGDBStringEOL(floattostr({drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.prop.oblique));
 
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(71));
                   outstream.TXTAddGDBStringEOL('0');
@@ -2410,7 +2413,7 @@ ENDTAB}
                   outstream.TXTAddGDBStringEOL('2.5');
 
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(3));
-                  outstream.TXTAddGDBStringEOL(PGDBTextStyle(drawing.TextStyleTable.getelement(i))^.dxfname);
+                  outstream.TXTAddGDBStringEOL({drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.dxfname);
 
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(4));
                   outstream.TXTAddGDBStringEOL('');
@@ -2423,7 +2426,7 @@ ENDTAB}
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
                     //if uppercase(PGDBTextStyle(drawing.TextStyleTable.getelement(i))^.name)<>TSNStandardStyleName then
                     begin
-                    p:=drawing.TextStyleTable.getelement(i);
+                    p:={drawing.TextStyleTable.getelement(i))}pcurrtextstyle;
 
                     Handle2pointer.MyGetOrCreateValue(p,handle,temphandle);
                     //GetOrCreateHandle(p,handle,temphandle);
@@ -2440,18 +2443,18 @@ ENDTAB}
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                     outstream.TXTAddGDBStringEOL('AcDbTextStyleTableRecord');
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(2));
-                    outstream.TXTAddGDBStringEOL(PGDBTextStyle(drawing.TextStyleTable.getelement(i))^.name);
+                    outstream.TXTAddGDBStringEOL({drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.name);
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(70));
                     outstream.TXTAddGDBStringEOL('0');
 
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(40));
-                    outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle(drawing.TextStyleTable.getelement(i))^.prop.size));
+                    outstream.TXTAddGDBStringEOL(floattostr({drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.prop.size));
 
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(41));
-                    outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle(drawing.TextStyleTable.getelement(i))^.prop.wfactor));
+                    outstream.TXTAddGDBStringEOL(floattostr({drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.prop.wfactor));
 
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(50));
-                    outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle(drawing.TextStyleTable.getelement(i))^.prop.oblique));
+                    outstream.TXTAddGDBStringEOL(floattostr({drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.prop.oblique));
 
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(71));
                     outstream.TXTAddGDBStringEOL('0');
@@ -2460,12 +2463,14 @@ ENDTAB}
                     outstream.TXTAddGDBStringEOL('2.5');
 
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(3));
-                    outstream.TXTAddGDBStringEOL(PGDBTextStyle(drawing.TextStyleTable.getelement(i))^.dxfname);
+                    outstream.TXTAddGDBStringEOL({drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.dxfname);
 
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(4));
                     outstream.TXTAddGDBStringEOL('');
 
                   end;
+                pcurrtextstyle:=drawing.TextStyleTable.iterate(ir);
+                until pcurrtextstyle=nil;
                 end;
                 outstream.TXTAddGDBStringEOL(groups);
                 outstream.TXTAddGDBStringEOL(values);

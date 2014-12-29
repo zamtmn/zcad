@@ -160,11 +160,26 @@ begin
 end;
 
 procedure TTextStylesWindow.UpdateItem2(Item:TObject);
+var
+   newfont:PGDBfont;
 begin
      if FontChange then
      begin
-          PGDBTextStyle(TListItem(Item).Data)^.pfont:=FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,pstring(FontsSelector.Enums.getelement(FontsSelector.Selected))^));
-          PGDBTextStyle(TListItem(Item).Data)^.dxfname:=PGDBTextStyle(TListItem(Item).Data)^.pfont^.Name;
+          newfont:=FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,pstring(FontsSelector.Enums.getelement(FontsSelector.Selected))^));
+          if  newfont<>PGDBTextStyle(TListItem(Item).Data)^.pfont then
+          begin
+               CreateUndoStartMarkerNeeded;
+               with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(pointer(PGDBTextStyle(TListItem(Item).Data)^.pfont))^ do
+               begin
+               PGDBTextStyle(TListItem(Item).Data)^.pfont:=newfont;
+               ComitFromObj;
+               end;
+               with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(PGDBTextStyle(TListItem(Item).Data)^.dxfname)^ do
+               begin
+               PGDBTextStyle(TListItem(Item).Data)^.dxfname:=PGDBTextStyle(TListItem(Item).Data)^.pfont^.Name;
+               ComitFromObj;
+               end;
+          end;
      end;
      ListView1.UpdateItem2(TListItem(Item));
      FontChange:=false;
@@ -178,7 +193,7 @@ begin
 end;
 function TTextStylesWindow.CreateNameEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.Name,'GDBAnsiString')
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.Name,'GDBAnsiString',@CreateUndoStartMarkerNeeded)
 end;
 {Font name handle procedures}
 function TTextStylesWindow.GetFontName(Item: TListItem):string;
@@ -190,7 +205,7 @@ begin
   FillFontsSelector(PGDBTextStyle(Item.Data)^.pfont^.fontfile,PGDBTextStyle(Item.Data)^.pfont);
   FontChange:=true;
   FontTypeFilterComboBox.enabled:=false;
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,FontsSelector,'TEnumData')
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,FontsSelector,'TEnumData',nil,false)
 end;
 {Font path handle procedures}
 function TTextStylesWindow.GetFontPath(Item: TListItem):string;
@@ -204,7 +219,7 @@ begin
 end;
 function TTextStylesWindow.CreateHeightEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.size,'GDBDouble')
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.size,'GDBDouble',@CreateUndoStartMarkerNeeded)
 end;
 {Wfactor handle procedures}
 function TTextStylesWindow.GetWidthFactor(Item: TListItem):string;
@@ -213,7 +228,7 @@ begin
 end;
 function TTextStylesWindow.CreateWidthFactorEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.wfactor,'GDBDouble')
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.wfactor,'GDBDouble',@CreateUndoStartMarkerNeeded)
 end;
 {Oblique handle procedures}
 function TTextStylesWindow.GetOblique(Item: TListItem):string;
@@ -222,7 +237,7 @@ begin
 end;
 function TTextStylesWindow.CreateObliqueEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.oblique,'GDBDouble')
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.oblique,'GDBDouble',@CreateUndoStartMarkerNeeded)
 end;
 procedure TTextStylesWindow.FillFontsSelector(currentitem:string;currentitempfont:PGDBfont);
 var i:integer;

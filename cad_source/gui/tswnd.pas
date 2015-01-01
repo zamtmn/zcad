@@ -85,7 +85,6 @@ type
     procedure countstyle(ptextstyle:PGDBTextStyle;out e,b,inDimStyles:GDBInteger);
   private
     changedstamp:boolean;
-    PEditor:TPropEditor;
     EditedItem:TListItem;
     FontsSelector:TEnumData;
     SupportTypedEditors:TSupportTypedEditors;

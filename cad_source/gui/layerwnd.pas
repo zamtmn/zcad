@@ -5,9 +5,9 @@ unit LayerWnd;
 interface
 
 uses
-  selectorwnd,ugdbltypearray,ugdbutil,log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
+  usuptypededitors,LMessages,selectorwnd,ugdbltypearray,ugdbutil,log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
-  Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype,
+  Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 
   gdbobjectsconstdef,UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,
 
@@ -31,15 +31,27 @@ type
 
   { TTextStylesWindow }
 
+  { TLayerWindow }
+
   TLayerWindow = class(TForm)
-    AddLayerBtn: TSpeedButton;
-    DeleteLayerBtn: TSpeedButton;
+    RefreshLayers: TAction;
+    AddLayer: TAction;
+    DelLayer: TAction;
+    MkCurrentLayer: TAction;
+    PurgeLayers: TAction;
+    ActionList1: TActionList;
     Bevel1: TBevel;
     ButtonApplyClose: TBitBtn;
     Button_Apply: TBitBtn;
     LayerDescLabel: TLabel;
     ListView1: TZListView;
-    MkCurrentBtn: TSpeedButton;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
     procedure Aply(Sender: TObject);
     procedure AplyClose(Sender: TObject);
     procedure LayerAdd(Sender: TObject);
@@ -55,14 +67,19 @@ type
     procedure asyncfreeeditor(Data: PtrInt);
     procedure freeeditor;
     procedure countlayer(player:PGDBLayerProp;out e,b:GDBInteger);
+
+    procedure CreateUndoStartMarkerNeeded;
+    procedure CreateUndoEndMarkerNeeded;
   private
     changedstamp:boolean;
     PEditor:TPropEditor;
     EditedItem:TListItem;
+    SupportTypedEditors:TSupportTypedEditors;
+    IsUndoEndMarkerCreated:boolean;
     { private declarations }
   public
     { public declarations }
-    function createeditor(Item: TListItem;r: TRect;ps:PAnsiString):boolean;
+
     {layer name handle procedures}
     function createnameeditor(Item: TListItem;r: TRect):boolean;
     function GetLayerName(Item: TListItem):string;
@@ -92,6 +109,8 @@ type
     {layer description handle procedures}
     function createdesceditor(Item: TListItem;r: TRect):boolean;
     function GetDescName(Item: TListItem):string;
+
+    function IsShortcut(var Message: TLMKey): boolean; override;
   end;
 
 var
@@ -100,25 +119,37 @@ implementation
 uses
     mainwindow;
 {$R *.lfm}
-function TLayerWindow.createeditor(Item: TListItem;r: TRect;ps:PAnsiString):boolean;
+procedure TLayerWindow.CreateUndoStartMarkerNeeded;
 begin
-  if peditor<>nil then
-  begin
-       Application.RemoveAsyncCalls(self);
-       freeeditor;
-  end;
-  PEditor:=GDBAnsiStringDescriptorObj.CreateEditor(self.ListView1,r,ps,nil,true).Editor;
-  PEditor.geteditor.BoundsRect:=r;
-  PEditor.geteditor.Parent:=self.ListView1;
-  PEditor.geteditor.SetFocus;
-  PEditor.OwnerNotify:=@Notify;
-  EditedItem:=Item;
+  if not IsUndoEndMarkerCreated then
+   begin
+    IsUndoEndMarkerCreated:=true;
+    ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushStartMarker('Change layers');
+   end;
 end;
+procedure TLayerWindow.CreateUndoEndMarkerNeeded;
+begin
+  if IsUndoEndMarkerCreated then
+   begin
+    IsUndoEndMarkerCreated:=false;
+    ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushEndMarker;
+   end;
+end;
+
+function TLayerWindow.IsShortcut(var Message: TLMKey): boolean;
+var
+   OldFunction:TIsShortcutFunc;
+begin
+   TMethod(OldFunction).code:=@TForm.IsShortcut;
+   TMethod(OldFunction).Data:=self;
+   result:=IsZShortcut(Message,ActiveControl,nil,OldFunction);
+end;
+
 {layer name handle procedures}
 function TLayerWindow.createnameeditor(Item: TListItem;r: TRect):boolean;
 begin
-  createeditor(Item,r,@PGDBLayerProp(Item.Data)^.Name);
-  result:=false;
+  //createeditor(Item,r,@PGDBLayerProp(Item.Data)^.Name);
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBLayerProp(Item.Data)^.Name,'GDBAnsiString',@CreateUndoStartMarkerNeeded);
 end;
 function TLayerWindow.GetLayerName(Item: TListItem):string;
 begin
@@ -132,7 +163,12 @@ end;
 function TLayerWindow.LayerLockClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
-     PGDBLayerProp(Item.Data)^._lock:=not PGDBLayerProp(Item.Data)^._lock;
+     CreateUndoStartMarkerNeeded;
+     with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(PGDBLayerProp(Item.Data)^._lock)^ do
+     begin
+       PGDBLayerProp(Item.Data)^._lock:=not PGDBLayerProp(Item.Data)^._lock;
+       ComitFromObj;
+     end;
 end;
 {layer on handle procedures}
 function TLayerWindow.IsLayerOn(Item: TListItem):boolean;
@@ -142,7 +178,12 @@ end;
 function TLayerWindow.LayerOnClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
-     PGDBLayerProp(Item.Data)^._on:=not PGDBLayerProp(Item.Data)^._on;
+     CreateUndoStartMarkerNeeded;
+     with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(PGDBLayerProp(Item.Data)^._on)^ do
+     begin
+       PGDBLayerProp(Item.Data)^._on:=not PGDBLayerProp(Item.Data)^._on;
+       ComitFromObj;
+     end;
 end;
 {layer freze handle procedures}
 function TLayerWindow.IsLayerFreze(Item: TListItem):boolean;
@@ -157,7 +198,12 @@ end;
 function TLayerWindow.LayerPlotClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
-     PGDBLayerProp(Item.Data)^._print:=not PGDBLayerProp(Item.Data)^._print;
+     CreateUndoStartMarkerNeeded;
+     with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(PGDBLayerProp(Item.Data)^._print)^ do
+     begin
+       PGDBLayerProp(Item.Data)^._print:=not PGDBLayerProp(Item.Data)^._print;
+       ComitFromObj;
+     end;
 end;
 {layer color handle procedures}
 procedure TLayerWindow.ColorSubitemDraw(aCanvas:TCanvas; Item: TListItem; SubItem:Integer; State: TCustomDrawState);
@@ -219,9 +265,17 @@ begin
     RestoreAllCursorsProc;
   if mr=mrOk then
     begin
-     PGDBLayerProp(Item.Data)^.color:=ColorSelectWND.ColorInfex;
-     Item.SubItems[4]:=GetColorNameFromIndex(ColorSelectWND.ColorInfex);
-     result:=true;
+      if PGDBLayerProp(Item.Data)^.color<>ColorSelectWND.ColorInfex then
+        begin
+           CreateUndoStartMarkerNeeded;
+           with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(PGDBLayerProp(Item.Data)^.color)^ do
+           begin
+             PGDBLayerProp(Item.Data)^.color:=ColorSelectWND.ColorInfex;
+             ComitFromObj;
+           end;
+          //Item.SubItems[4]:=GetColorNameFromIndex(ColorSelectWND.ColorInfex);
+          result:=true;
+        end;
     end;
   freeandnil(ColorSelectWND);
 end;
@@ -331,8 +385,7 @@ end;
 {layer description handle procedures}
 function TLayerWindow.createdesceditor(Item: TListItem;r: TRect):boolean;
 begin
-  createeditor(Item,r,@PGDBLayerProp(Item.Data)^.desk);
-  result:=false;
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBLayerProp(Item.Data)^.desk,'GDBAnsiString',@CreateUndoStartMarkerNeeded);
 end;
 function TLayerWindow.GetDescName(Item: TListItem):string;
 begin
@@ -341,12 +394,20 @@ end;
 
 
 
-procedure TLayerWindow.FormCreate(Sender: TObject); // Процедура выполняется при отрисовке окна
+procedure TLayerWindow.FormCreate(Sender: TObject);
 begin
-// Отрисовываем картинки на кнопках
-IconList.GetBitmap(II_Plus, AddLayerBtn.Glyph);
-IconList.GetBitmap(II_Minus, DeleteLayerBtn.Glyph);
-IconList.GetBitmap(II_Ok, MkCurrentBtn.Glyph);
+  ActionList1.Images:=IconList;
+  ToolBar1.Images:=IconList;
+  AddLayer.ImageIndex:=II_Plus;
+  DelLayer.ImageIndex:=II_Minus;
+  MkCurrentLayer.ImageIndex:=II_Ok;
+  PurgeLayers.ImageIndex:=II_Purge;
+  RefreshLayers.ImageIndex:=II_Refresh;
+
+  SupportTypedEditors:=TSupportTypedEditors.create;
+  SupportTypedEditors.OnUpdateEditedControl:=@ListView1.UpdateItem2;
+  IsUndoEndMarkerCreated:=false;
+
 ListView1.SmallImages:=IconList;
 ListView1.DefaultItemIndex:=II_Ok;
 
@@ -354,7 +415,7 @@ setlength(ListView1.SubItems,ColumnCount);
 
 with ListView1.SubItems[NameColumn] do
 begin
-     On2Click:=@createnameeditor;
+     OnClick:=@createnameeditor;
      OnGetName:=@GetLayerName;
 end;
 with ListView1.SubItems[LockColumn] do
@@ -404,7 +465,7 @@ begin
 end;
 with ListView1.SubItems[DescColumn] do
 begin
-     On2Click:=@createdesceditor;
+     OnClick:=@createdesceditor;
      OnGetName:=@GetDescName;
 end;
 end;
@@ -412,17 +473,18 @@ procedure TLayerWindow.MaceItemCurrent(ListItem:TListItem);
 begin
      if ListView1.CurrentItem<>ListItem then
      begin
+       CreateUndoStartMarkerNeeded;
      with PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(sysvar.dwg.DWG_CLayer^)^ do
      begin
           SysVar.dwg.DWG_CLayer^:={gdb.GetCurrentDWG^.LayerTable.GetIndexByPointer}(ListItem.Data);
           ComitFromObj;
      end;
-     ListItem.ImageIndex:=II_Ok;
-     ListView1.CurrentItem.ImageIndex:=-1;
-     ListView1.CurrentItem:=ListItem;
+     //ListItem.ImageIndex:=II_Ok;
+     //ListView1.CurrentItem.ImageIndex:=-1;
+     //ListView1.CurrentItem:=ListItem;
      if not PGDBLayerProp(ListItem.Data)^._on then
                                                    MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
-     invalidate;
+     //invalidate;
      end;
 end;
 procedure TLayerWindow.Notify(Sender: TObject;Command:TMyNotifyCommand);
@@ -463,7 +525,14 @@ end;
 procedure TLayerWindow.MkCurrent(Sender: TObject);
 begin
   if assigned(ListView1.Selected)then
-                                     MaceItemCurrent(ListView1.Selected)
+                                     begin
+                                     if ListView1.Selected<>ListView1.CurrentItem then
+                                     begin
+                                       MaceItemCurrent(ListView1.Selected);
+                                       ListView1.MakeItemCorrent(ListView1.Selected);
+                                       ListView1.UpdateItem2(ListView1.Selected);
+                                     end;
+                                     end
                                  else
                                      MessageBox(@rsLayerMustBeSelected[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
 end;
@@ -612,6 +681,8 @@ procedure TLayerWindow.FormClose(Sender: TObject; var CloseAction: TCloseAction
   );
 begin
      Aply(nil);
+     CreateUndoEndMarkerNeeded;
+     SupportTypedEditors.Free;
 end;
 
 end.

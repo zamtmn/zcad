@@ -1,11 +1,11 @@
 object LayerWindow: TLayerWindow
-  Left = 380
+  Left = 643
   Height = 590
-  Top = 198
-  Width = 938
+  Top = 222
+  Width = 1051
   Caption = 'Layers'
   ClientHeight = 590
-  ClientWidth = 938
+  ClientWidth = 1051
   Constraints.MinHeight = 500
   Constraints.MinWidth = 800
   OnClose = FormClose
@@ -14,16 +14,16 @@ object LayerWindow: TLayerWindow
   Position = poMainFormCenter
   LCLVersion = '1.3'
   object Bevel1: TBevel
-    AnchorSideLeft.Control = MkCurrentBtn
+    AnchorSideLeft.Control = ToolBar1
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Side = asrBottom
-    Left = 82
+    Left = 123
     Height = 25
     Top = 1
-    Width = 855
+    Width = 927
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 2
     BorderSpacing.Top = 1
@@ -36,10 +36,10 @@ object LayerWindow: TLayerWindow
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Bevel1
     AnchorSideBottom.Side = asrBottom
-    Left = 83
+    Left = 124
     Height = 23
     Top = 2
-    Width = 853
+    Width = 925
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 1
     Layout = tlCenter
@@ -50,7 +50,7 @@ object LayerWindow: TLayerWindow
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 783
+    Left = 896
     Height = 30
     Top = 559
     Width = 154
@@ -65,7 +65,7 @@ object LayerWindow: TLayerWindow
     AnchorSideRight.Control = ButtonApplyClose
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 632
+    Left = 745
     Height = 30
     Top = 559
     Width = 150
@@ -77,48 +77,6 @@ object LayerWindow: TLayerWindow
     ParentShowHint = False
     TabOrder = 1
   end
-  object MkCurrentBtn: TSpeedButton
-    AnchorSideLeft.Control = DeleteLayerBtn
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = Bevel1
-    AnchorSideBottom.Control = Bevel1
-    AnchorSideBottom.Side = asrBottom
-    Left = 55
-    Height = 25
-    Top = 1
-    Width = 25
-    Anchors = [akTop, akLeft, akBottom]
-    Flat = True
-    OnClick = MkCurrent
-  end
-  object DeleteLayerBtn: TSpeedButton
-    AnchorSideLeft.Control = AddLayerBtn
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = Bevel1
-    AnchorSideBottom.Control = Bevel1
-    AnchorSideBottom.Side = asrBottom
-    Left = 28
-    Height = 25
-    Top = 1
-    Width = 27
-    Anchors = [akTop, akLeft, akBottom]
-    Flat = True
-    OnClick = LayerDelete
-  end
-  object AddLayerBtn: TSpeedButton
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Bevel1
-    AnchorSideBottom.Control = Bevel1
-    AnchorSideBottom.Side = asrBottom
-    Left = 1
-    Height = 25
-    Top = 1
-    Width = 27
-    Anchors = [akTop, akLeft, akBottom]
-    BorderSpacing.Left = 1
-    Flat = True
-    OnClick = LayerAdd
-  end
   object ListView1: TZListView
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Bevel1
@@ -129,7 +87,7 @@ object LayerWindow: TLayerWindow
     Left = 1
     Height = 529
     Top = 28
-    Width = 936
+    Width = 1049
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 1
     BorderSpacing.Top = 2
@@ -142,7 +100,7 @@ object LayerWindow: TLayerWindow
       end    
       item
         Caption = 'Name'
-        Width = 125
+        Width = 238
       end    
       item
         Caption = 'On'
@@ -185,5 +143,95 @@ object LayerWindow: TLayerWindow
     ViewStyle = vsReport
     OnSelectItem = ListView1SelectItem
     onMakeCurrent = MaceItemCurrent
+  end
+  object ToolBar1: TToolBar
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 0
+    Height = 24
+    Top = 0
+    Width = 121
+    Align = alNone
+    AutoSize = True
+    Caption = 'ToolBar1'
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 3
+    object ToolButton1: TToolButton
+      Left = 1
+      Top = 2
+      Action = AddLayer
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object ToolButton2: TToolButton
+      Left = 24
+      Top = 2
+      Action = DelLayer
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object ToolButton3: TToolButton
+      Left = 47
+      Top = 2
+      Action = MkCurrentLayer
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object ToolButton4: TToolButton
+      Left = 70
+      Height = 22
+      Top = 2
+      Width = 5
+      Caption = 'ToolButton4'
+      Style = tbsDivider
+    end
+    object ToolButton5: TToolButton
+      Left = 75
+      Top = 2
+      Action = PurgeLayers
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object ToolButton6: TToolButton
+      Left = 98
+      Top = 2
+      Action = RefreshLayers
+      ParentShowHint = False
+      ShowHint = True
+    end
+  end
+  object ActionList1: TActionList
+    left = 754
+    top = 260
+    object AddLayer: TAction
+      Caption = 'AddLayer'
+      Hint = 'Add layer'
+      OnExecute = LayerAdd
+      ShortCut = 45
+    end
+    object DelLayer: TAction
+      Caption = 'DelLayer'
+      Hint = 'Delete layer'
+      OnExecute = LayerDelete
+      ShortCut = 46
+      Visible = False
+    end
+    object MkCurrentLayer: TAction
+      Caption = 'MkCurrentLayer'
+      Hint = 'Make selected layer current'
+      OnExecute = MkCurrent
+      ShortCut = 32
+    end
+    object PurgeLayers: TAction
+      Caption = 'PurgeLayers'
+      Hint = 'Purge layers'
+      ShortCut = 8238
+    end
+    object RefreshLayers: TAction
+      Caption = 'RefreshLayers'
+      Hint = 'Refresh layers'
+      ShortCut = 115
+    end
   end
 end

@@ -22,3 +22,14 @@
 {$DEFINE PTCommand := PTGDBPoinerChangeCommand}
 {$DEFINE TData     := GDBPointer}
   {$I TGChangeCommandIMPL.inc}
+
+{$DEFINE TCommand  := TGDBBooleanChangeCommand}
+{$DEFINE PTCommand := PTGDBBooleanChangeCommand}
+{$DEFINE TData     := GDBBoolean}
+  {$I TGChangeCommandIMPL.inc}
+
+{$DEFINE TCommand  := TGDBGDBByteChangeCommand}
+{$DEFINE PTCommand := PTGDBGDBByteChangeCommand}
+{$DEFINE TData     := GDBByte}
+  {$I TGChangeCommandIMPL.inc}
+

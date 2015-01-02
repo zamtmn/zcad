@@ -56,23 +56,22 @@ type
     procedure AplyClose(Sender: TObject);
     procedure LayerAdd(Sender: TObject);
     procedure LayerDelete(Sender: TObject);
+    procedure _PurgeLayers(Sender: TObject);
+    procedure doLayerDelete(ProcessedItem:TListItem);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
-    procedure FormShow(Sender: TObject);
+    procedure RefreshListItems(Sender: TObject);
     procedure ListView1SelectItem(Sender: TObject; Item: TListItem;
       Selected: Boolean);
     procedure MkCurrent(Sender: TObject);
     procedure MaceItemCurrent(ListItem:TListItem);
-    procedure Notify(Sender: TObject;Command:TMyNotifyCommand); virtual;
-    procedure asyncfreeeditor(Data: PtrInt);
-    procedure freeeditor;
     procedure countlayer(player:PGDBLayerProp;out e,b:GDBInteger);
 
     procedure CreateUndoStartMarkerNeeded;
     procedure CreateUndoEndMarkerNeeded;
   private
     changedstamp:boolean;
-    PEditor:TPropEditor;
+    //PEditor:TPropEditor;
     EditedItem:TListItem;
     SupportTypedEditors:TSupportTypedEditors;
     IsUndoEndMarkerCreated:boolean;
@@ -487,41 +486,6 @@ begin
      //invalidate;
      end;
 end;
-procedure TLayerWindow.Notify(Sender: TObject;Command:TMyNotifyCommand);
-//var
-   //pld:GDBPointer;
-   //pdwg:PTDrawing;
-begin
-  if sender=PEditor then
-  begin
-    //pld:=peditor.PInstance;
-    if (Command=TMNC_EditingDoneEnterKey)or(Command=TMNC_EditingDoneLostFocus) then
-                                    begin
-                                    Application.QueueAsyncCall(@asyncfreeeditor,0);
-                                    end;
-  end;
-end;
-procedure TLayerWindow.asyncfreeeditor(Data: PtrInt);
-begin
-  if peditor<>nil then
-  begin
-       freeeditor;
-  end;
-end;
-procedure TLayerWindow.freeeditor;
-begin
-  //if peditor<>nil then
-  begin
-       peditor.Free;
-       peditor:=nil;
-       //freeandnil(peditor);
-       ListView1.BeginUpdate;
-       ListView1.UpdateItem(EditedItem,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer);
-       ListView1.EndUpdate;
-       EditedItem:=nil;
-  end;
-end;
-
 procedure TLayerWindow.MkCurrent(Sender: TObject);
 begin
   if assigned(ListView1.Selected)then
@@ -536,7 +500,7 @@ begin
                                  else
                                      MessageBox(@rsLayerMustBeSelected[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
 end;
-procedure TLayerWindow.FormShow(Sender: TObject);
+procedure TLayerWindow.RefreshListItems(Sender: TObject);
 var
    pdwg:PTSimpleDrawing;
    ir:itrec;
@@ -625,6 +589,50 @@ begin
 
      ListView1.AddCreatedItem(pcreatedlayer,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer);
 end;
+procedure TLayerWindow.doLayerDelete(ProcessedItem:TListItem);
+var
+   domethod,undomethod:tmethod;
+   player:PGDBLayerProp;
+   pdwg:PTSimpleDrawing;
+begin
+  pdwg:=gdb.GetCurrentDWG;
+  player:=(ProcessedItem.Data);
+  domethod:=tmethod(@pdwg^.LayerTable.RemoveFromArray);
+  undomethod:=tmethod(@pdwg^.LayerTable.AddToArray);
+  CreateUndoStartMarkerNeeded;
+  with ptdrawing(pdwg)^.UndoStack.PushCreateTGObjectChangeCommand2(player,tmethod(domethod),tmethod(undomethod))^ do
+  begin
+       AfterAction:=false;
+       comit;
+  end;
+  ListView1.Items.Delete(ListView1.Items.IndexOf(ProcessedItem));
+end;
+procedure TLayerWindow._PurgeLayers(Sender: TObject);
+var
+   i,purgedcounter:integer;
+   ProcessedItem:TListItem;
+   inEntities,inBlockTable,indimstyles:GDBInteger;
+   PCurrentLayer:PGDBLayerProp;
+begin
+     i:=0;
+     purgedcounter:=0;
+     PCurrentLayer:=gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer;
+     if ListView1.Items.Count>0 then
+     begin
+       repeat
+          ProcessedItem:=ListView1.Items[i];
+          countlayer(ProcessedItem.Data,inEntities,inBlockTable);
+          if (ProcessedItem.Data<>PCurrentLayer)and((inEntities+inBlockTable)=0) then
+          begin
+           doLayerDelete(ProcessedItem);
+           inc(purgedcounter);
+          end
+          else
+           inc(i);
+       until i>=ListView1.Items.Count;
+     end;
+     LayerDescLabel.Caption:=Format(rsCountTStylesPurged,[purgedcounter]);
+end;
 
 procedure TLayerWindow.LayerDelete(Sender: TObject); // Процедура удаления слоя
 var
@@ -645,17 +653,8 @@ begin
                                                        exit;
                                                   end;
 
-                                     domethod:=tmethod(@pdwg^.LayerTable.RemoveFromArray);
-                                     undomethod:=tmethod(@pdwg^.LayerTable.AddToArray);
-                                     with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGObjectChangeCommand2(player,tmethod(domethod),tmethod(undomethod))^ do
-                                     begin
-                                          AfterAction:=false;
-                                          comit;
-                                     end;
+                                     doLayerDelete(ListView1.Selected);
 
-
-                                     //pdwg^.LayerTable.eraseobj(player);
-                                     ListView1.Items.Delete(ListView1.Items.IndexOf(ListView1.Selected));
                                      LayerDescLabel.Caption:='';
                                      end
                                  else

@@ -10,7 +10,7 @@ object LayerWindow: TLayerWindow
   Constraints.MinWidth = 800
   OnClose = FormClose
   OnCreate = FormCreate
-  OnShow = FormShow
+  OnShow = RefreshListItems
   Position = poMainFormCenter
   LCLVersion = '1.3'
   object Bevel1: TBevel
@@ -215,7 +215,6 @@ object LayerWindow: TLayerWindow
       Hint = 'Delete layer'
       OnExecute = LayerDelete
       ShortCut = 46
-      Visible = False
     end
     object MkCurrentLayer: TAction
       Caption = 'MkCurrentLayer'
@@ -226,11 +225,13 @@ object LayerWindow: TLayerWindow
     object PurgeLayers: TAction
       Caption = 'PurgeLayers'
       Hint = 'Purge layers'
+      OnExecute = _PurgeLayers
       ShortCut = 8238
     end
     object RefreshLayers: TAction
       Caption = 'RefreshLayers'
       Hint = 'Refresh layers'
+      OnExecute = RefreshListItems
       ShortCut = 115
     end
   end

@@ -63,6 +63,7 @@ TGDBDimTextProp=packed record
                        DIMTAD:TDimTextVertPosition;//Text above dimension line if nonzero//group77
                        DIMGAP:GDBDouble; //Dimension line gap //Смещение текста//group147
                        DIMTXSTY:{-}PGDBTextStyle{/PGDBTextStyleObjInsp/};//340 DIMTXSTY (handle of referenced STYLE)
+                       DIMCLRT:TGDBPaletteColor;//DIMCLRT//group176
                  end;
 TGDBDimPlacingProp=packed record
                        DIMTMOVE:TDimTextMove;
@@ -367,6 +368,10 @@ Units.DIMDEC:=strtoint(value);
   begin
        Lines.DIMCLRE:=strtoint(value);
   end;
+  178:
+  begin
+       Text.DIMCLRT:=strtoint(value);
+  end;
   end;
 end;
 procedure GDBDimStyle.SetDefaultValues;
@@ -393,6 +398,7 @@ begin
      text.DIMTAD:=DTVPAbove;
      text.DIMGAP:=0.625;
      text.DIMTXSTY:=nil;
+     text.DIMCLRT:=ClByLayer;
      Placing.DIMTMOVE:=DTMMoveDimLine;
 end;
 procedure GDBDimStyleArray.ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);

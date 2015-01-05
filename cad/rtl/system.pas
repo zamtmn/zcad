@@ -950,6 +950,7 @@ TGDBDimTextProp=packed record
                        DIMTAD:TDimTextVertPosition;//Text above dimension line if nonzero//group77
                        DIMGAP:GDBDouble; //Dimension line gap //Смещение текста//group147
                        DIMTXSTY:PGDBTextStyleObjInsp;//340 DIMTXSTY (handle of referenced STYLE)
+                       DIMCLRT:TGDBPaletteColor;//DIMCLRT//group176
                  end;
 TGDBDimPlacingProp=packed record
                        DIMTMOVE:TDimTextMove;

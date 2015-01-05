@@ -282,6 +282,7 @@ GDBNamedObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                      function GetName:GDBString;
                      function GetFullName:GDBString;virtual;abstract;
                      procedure SetDefaultValues;virtual;abstract;
+                     procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;abstract;
                end;
 ODBDevicepassport=packed record
                         category,name,id,nameall,tu,edizm:GDBString;
@@ -776,6 +777,7 @@ GDBNamedObjectsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPIde
                     function AddItem(name:GDBSTRING; out PItem:Pointer):TForCResult;
                     function MergeItem(name:GDBSTRING;LoadMode:TLoadOpt):GDBPointer;
                     function GetFreeName(NameFormat:GDBString;firstindex:integer):GDBString;
+                    procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;abstract;
               end;
 //Generate on E:\zcad\CAD_SOURCE\u\UGDBTextStyleArray.pas
 PGDBTextStyleProp=^GDBTextStyleProp;
@@ -926,9 +928,14 @@ TGDBDimLinesProp=packed record
                        //выносные линии
                        DIMEXE:GDBDouble;//Extension line extension//group44
                        DIMEXO:GDBDouble;//Extension line offset//group42
+                       DIMLWE:TGDBLineWeight;//DIMLWD (lineweight enum value)//group372
+                       DIMCLRE:TGDBPaletteColor;//DIMCLRE//group177
                        //размерные линии
                        DIMDLE:GDBDouble;//Dimension line extension//group46
                        DIMCEN:GDBDouble;//Size of center mark/lines//group141
+                       //DIMLTYPE:PGDBLtypeProp;//Size of center mark/lines//group141
+                       DIMLWD:TGDBLineWeight;//DIMLWD (lineweight enum value)//group371
+                       DIMCLRD:TGDBPaletteColor;//DIMCLRD//group176
                  end;
 TGDBDimArrowsProp=packed record
                        DIMASZ:GDBDouble; //Dimensioning arrow size//group41
@@ -2037,7 +2044,7 @@ BlockdefArray=packed array [0..0] of GDBObjBlockdef;
 GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBObjBlockdef*)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       constructor initnul;
-                      function getindex(name:pansichar):GDBInteger;virtual;abstract;
+                      function getindex(name:GDBString):GDBInteger;virtual;abstract;
                       function getblockdef(name:GDBString):PGDBObjBlockdef;virtual;abstract;
                       //function loadblock(filename,bname:pansichar;pdrawing:GDBPointer):GDBInteger;virtual;abstract;
                       function create(name:GDBString):PGDBObjBlockdef;virtual;abstract;

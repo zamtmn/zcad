@@ -19,7 +19,7 @@
 unit ugdbdimstylearray;
 {$INCLUDE def.inc}
 interface
-uses UGDBTextStyleArray,usimplegenerics,zcadsysvars,gdbasetypes,SysInfo,sysutils,gdbase, geometry,
+uses gdbobjectsconstdef,ugdbltypearray,UGDBTextStyleArray,usimplegenerics,zcadsysvars,gdbasetypes,SysInfo,sysutils,gdbase, geometry,
      strproc,varmandef,shared,UGDBNamedObjectsArray,memman;
 type
 TDimArrowBlockParam=record
@@ -41,9 +41,14 @@ TGDBDimLinesProp=packed record
                        //выносные линии
                        DIMEXE:GDBDouble;//Extension line extension//group44
                        DIMEXO:GDBDouble;//Extension line offset//group42
+                       DIMLWE:TGDBLineWeight;//DIMLWD (lineweight enum value)//group372
+                       DIMCLRE:TGDBPaletteColor;//DIMCLRE//group177
                        //размерные линии
                        DIMDLE:GDBDouble;//Dimension line extension//group46
                        DIMCEN:GDBDouble;//Size of center mark/lines//group141
+                       //DIMLTYPE:PGDBLtypeProp;//Size of center mark/lines//group141
+                       DIMLWD:TGDBLineWeight;//DIMLWD (lineweight enum value)//group371
+                       DIMCLRD:TGDBPaletteColor;//DIMCLRD//group176
                  end;
 TGDBDimArrowsProp=packed record
                        DIMASZ:GDBDouble; //Dimensioning arrow size//group41
@@ -346,6 +351,22 @@ Units.DIMDEC:=strtoint(value);
        CreateLDIfNeed;
        PDXFLoadingData.DIMBLK2handle:=StrToQWord('$'+value);
   end;
+  371:
+  begin
+       Lines.DIMLWD:=strtoint(value);
+  end;
+  372:
+  begin
+       Lines.DIMLWE:=strtoint(value);
+  end;
+  176:
+  begin
+       Lines.DIMCLRD:=strtoint(value);
+  end;
+  177:
+  begin
+       Lines.DIMCLRE:=strtoint(value);
+  end;
   end;
 end;
 procedure GDBDimStyle.SetDefaultValues;
@@ -355,6 +376,10 @@ begin
      lines.DIMEXO:=0.0625;
      Lines.DIMDLE:=0;
      Lines.DIMCEN:=0.09;
+     Lines.DIMLWD:=LnWtByLayer;
+     Lines.DIMLWE:=LnWtByLayer;
+     Lines.DIMCLRD:=ClByLayer;
+     Lines.DIMCLRE:=ClByLayer;
      Units.DIMLFAC:=1;
      Units.DIMLUNIT:=DUDecimal;
      Units.DIMDEC:=4;

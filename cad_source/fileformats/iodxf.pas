@@ -2328,6 +2328,32 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                  DTMnothung:outstream.TXTAddGDBStringEOL('2');
                        end;{case}
 
+                       if pdsp^.Lines.DIMLWD<>LnWtByLayer then
+                       begin
+                        //dxfGDBIntegerout(outhandle,371,pdsp^.Lines.DIMLWD);
+                        outstream.TXTAddGDBStringEOL(dxfGroupCode(371));
+                        outstream.TXTAddGDBStringEOL(inttostr(pdsp^.Lines.DIMLWD));
+                       end;
+                       if pdsp^.Lines.DIMLWE<>LnWtByLayer then
+                       begin
+                        //dxfGDBIntegerout(outhandle,372,pdsp^.Lines.DIMLWE);
+                        outstream.TXTAddGDBStringEOL(dxfGroupCode(372));
+                        outstream.TXTAddGDBStringEOL(inttostr(pdsp^.Lines.DIMLWE));
+                       end;
+
+                       if pdsp^.Lines.DIMCLRD<>ClByLayer then
+                       begin
+                        outstream.TXTAddGDBStringEOL(dxfGroupCode(176));
+                        outstream.TXTAddGDBStringEOL(inttostr(pdsp^.Lines.DIMCLRD));
+                       end;
+                       if pdsp^.Lines.DIMCLRE<>ClByLayer then
+                       begin
+                        outstream.TXTAddGDBStringEOL(dxfGroupCode(177));
+                        outstream.TXTAddGDBStringEOL(inttostr(pdsp^.Lines.DIMCLRE));
+                       end;
+
+
+
                       outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
                       p:=pdsp^.Text.DIMTXSTY{drawing.TextStyleTable.FindStyle('Standard',false)};
 

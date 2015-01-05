@@ -2351,6 +2351,11 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                         outstream.TXTAddGDBStringEOL(dxfGroupCode(177));
                         outstream.TXTAddGDBStringEOL(inttostr(pdsp^.Lines.DIMCLRE));
                        end;
+                       if pdsp^.Text.DIMCLRT<>ClByLayer then
+                       begin
+                        outstream.TXTAddGDBStringEOL(dxfGroupCode(178));
+                        outstream.TXTAddGDBStringEOL(inttostr(pdsp^.Text.DIMCLRT));
+                       end;
 
 
 

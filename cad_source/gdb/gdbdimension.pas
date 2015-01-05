@@ -364,6 +364,7 @@ begin
   ptext.Local.basis.ox.y:=sin(TextAngle);
   ptext.TXTStyleIndex:=dimtxtstyle;
   ptext.textprop.size:=PDimStyle.Text.DIMTXT;
+  ptext.vp.Color:=PDimStyle.Text.DIMCLRT;
   ptext.FormatEntity(drawing);
 
   if PDimStyle.Text.DIMGAP<0 then

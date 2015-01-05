@@ -566,6 +566,8 @@ function GDBObjDimension.DrawDimensionLineLinePart(p1,p2:GDBVertex;const drawing
 begin
   result:=pointer(ConstObjArray.CreateInitObj(GDBlineID,@self));
   result.vp.Layer:=vp.Layer;
+  result.vp.LineWeight:=PDimStyle.Lines.DIMLWD;
+  result.vp.Color:=PDimStyle.Lines.DIMCLRD;
   result.vp.LineType:=vp.LineType;
   result.CoordInOCS.lBegin:=p1;
   result.CoordInOCS.lEnd:=p2;
@@ -574,6 +576,8 @@ function GDBObjDimension.DrawExtensionLineLinePart(p1,p2:GDBVertex;const drawing
 begin
   result:=pointer(ConstObjArray.CreateInitObj(GDBlineID,@self));
   result.vp.Layer:=vp.Layer;
+  result.vp.LineWeight:=PDimStyle.Lines.DIMLWE;
+  result.vp.Color:=PDimStyle.Lines.DIMCLRE;
   result.vp.LineType:=vp.LineType;
   result.CoordInOCS.lBegin:=p1;
   result.CoordInOCS.lEnd:=p2;

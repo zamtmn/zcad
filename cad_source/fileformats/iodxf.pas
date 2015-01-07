@@ -1414,6 +1414,41 @@ begin
      until pv=nil;
 end;
 
+procedure RegisterAcadAppInDXF(appname:GDBSTRING; outstream: PGDBOpenArrayOfByte;var handle: TDWGHandle);
+begin
+  outstream^.TXTAddGDBStringEOL(dxfGroupCode(0));
+  outstream^.TXTAddGDBStringEOL('APPID');
+
+  outstream^.TXTAddGDBStringEOL(dxfGroupCode(5));
+  outstream^.TXTAddGDBStringEOL(inttohex(handle, 0));
+  inc(handle);
+
+  outstream^.TXTAddGDBStringEOL(dxfGroupCode(100));
+  outstream^.TXTAddGDBStringEOL('AcDbSymbolTableRecord');
+  outstream^.TXTAddGDBStringEOL(dxfGroupCode(100));
+  outstream^.TXTAddGDBStringEOL('AcDbRegAppTableRecord');
+  outstream^.TXTAddGDBStringEOL(dxfGroupCode(2));
+  outstream^.TXTAddGDBStringEOL(appname);
+  outstream^.TXTAddGDBStringEOL(dxfGroupCode(70));
+  outstream^.TXTAddGDBStringEOL('0');
+  {
+  0
+  APPID
+  5
+  12
+  >>330
+  >>9
+  100
+  AcDbSymbolTableRecord
+  100
+  AcDbRegAppTableRecord
+  2
+  ACAD
+  70
+  0
+  }
+end;
+
 function savedxf2000(name: GDBString; var drawing:TSimpleDrawing):boolean;
 var
   templatefile: GDBOpenArrayOfByte;
@@ -1424,7 +1459,7 @@ var
   i: integer;
   OldHandele2NewHandle:TMapHandleToHandle;
   //phandlea: pdxfhandlerecopenarray;
-  inlayertable, inblocksec, inblocktable, inlttypetable, indimstyletable: GDBBoolean;
+  inlayertable, inblocksec, inblocktable, inlttypetable, indimstyletable, inappidtable: GDBBoolean;
   handlepos:integer;
   ignoredsource:boolean;
   instyletable:boolean;
@@ -1518,6 +1553,7 @@ begin
   invporttable:=false;
   inlttypetable:=false;
   indimstyletable:=false;
+  inappidtable:=false;
   while templatefile.notEOF do
   begin
     if  (templatefile.count-templatefile.ReadPos)<10
@@ -2392,6 +2428,23 @@ Standard
 ENDTAB}
 
               end
+            else if (groupi = 0) and (values = dxfName_ENDTAB)and inappidtable then
+                begin
+                  inappidtable := false;
+                  ignoredsource:=false;
+
+                  RegisterAcadAppInDXF('ACAD',@outstream,handle);
+                  RegisterAcadAppInDXF('ACAD_PSEXT',@outstream,handle);
+                  RegisterAcadAppInDXF('AcAecLayerStandard',@outstream,handle);
+                  RegisterAcadAppInDXF('DSTP_XDATA',@outstream,handle);
+                  //RegisterAcadAppInDXF('ACAD_NAV_VCDISPLAY',@outstream,handle);
+                  RegisterAcadAppInDXF('ACAD_DSTYLE_DIM_LINETYPE',@outstream,handle);
+                  RegisterAcadAppInDXF('ACAD_DSTYLE_DIM_EXT1_LINETYPE',@outstream,handle);
+                  RegisterAcadAppInDXF('ACAD_DSTYLE_DIM_EXT2_LINETYPE',@outstream,handle);
+
+                  outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
+                  outstream.TXTAddGDBStringEOL('ENDTAB');
+                end
             else
               if (instyletable) and ((groupi = 0) and (values = dxfName_ENDTAB)) then
               begin
@@ -2538,6 +2591,10 @@ ENDTAB}
                   begin
                     indimstyletable := true;
                   end
+                  else if (groupi = 2) and (values = 'APPID') then
+                  begin
+                    inappidtable := true;
+                  end
                   else if (groupi = 2) and (values = 'VPORT') then
                   begin
                     invporttable := true;
@@ -2547,6 +2604,10 @@ ENDTAB}
                 end
 
               else if (groupi = 0) and (values = dxfName_Layer)and inlayertable then
+                  begin
+                    IgnoredSource := true;
+                  end
+              else if (groupi = 0) and (values = 'APPID')and inappidtable then
                   begin
                     IgnoredSource := true;
                   end

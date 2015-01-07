@@ -21,6 +21,12 @@ unit ugdbdimstylearray;
 interface
 uses gdbobjectsconstdef,ugdbltypearray,UGDBTextStyleArray,usimplegenerics,zcadsysvars,gdbasetypes,SysInfo,sysutils,gdbase, geometry,
      strproc,varmandef,shared,UGDBNamedObjectsArray,memman;
+const
+     DIMLWEDefaultValue=LnWtByBlock;
+     DIMCLREDefaultValue=ClByBlock;
+     DIMLWDDefaultValue=LnWtByBlock;
+     DIMCLRDDefaultValue=ClByBlock;
+     DIMCLRTDefaultValue=ClByBlock;
 type
 TDimArrowBlockParam=record
                      name:GDBString;
@@ -381,10 +387,10 @@ begin
      lines.DIMEXO:=0.0625;
      Lines.DIMDLE:=0;
      Lines.DIMCEN:=0.09;
-     Lines.DIMLWD:=LnWtByLayer;
-     Lines.DIMLWE:=LnWtByLayer;
-     Lines.DIMCLRD:=ClByLayer;
-     Lines.DIMCLRE:=ClByLayer;
+     Lines.DIMLWD:=DIMLWDDefaultValue;
+     Lines.DIMLWE:=DIMLWEDefaultValue;
+     Lines.DIMCLRD:=DIMCLRDDefaultValue;
+     Lines.DIMCLRE:=DIMCLREDefaultValue;
      Units.DIMLFAC:=1;
      Units.DIMLUNIT:=DUDecimal;
      Units.DIMDEC:=4;
@@ -398,7 +404,7 @@ begin
      text.DIMTAD:=DTVPAbove;
      text.DIMGAP:=0.625;
      text.DIMTXSTY:=nil;
-     text.DIMCLRT:=ClByLayer;
+     text.DIMCLRT:=DIMCLRTDefaultValue;
      Placing.DIMTMOVE:=DTMMoveDimLine;
 end;
 procedure GDBDimStyleArray.ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);

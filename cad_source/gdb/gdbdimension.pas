@@ -141,6 +141,8 @@ begin
                   pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p1,PDimStyle.Arrows.DIMASZ,ZAngle*180/pi-180,@tbp0.name[1])
               else
                   pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p1,PDimStyle.Arrows.DIMASZ,ZAngle*180/pi,@tbp0.name[1]);
+  pv^.vp.LineWeight:=PDimStyle.Lines.DIMLWD;
+  pv^.vp.Color:=PDimStyle.Lines.DIMCLRD;
   pv^.formatentity(gdb.GetCurrentDWG^);
   end;
   if not supress2 then
@@ -149,6 +151,8 @@ begin
                   pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p2,PDimStyle.Arrows.DIMASZ,ZAngle*180/pi,@tbp1.name[1])
               else
                   pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p2,PDimStyle.Arrows.DIMASZ,ZAngle*180/pi-180,@tbp1.name[1]);
+  pv^.vp.LineWeight:=PDimStyle.Lines.DIMLWD;
+  pv^.vp.Color:=PDimStyle.Lines.DIMCLRD;
   end;
   pv^.formatentity(gdb.GetCurrentDWG^);
   if tbp0.width=0 then

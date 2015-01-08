@@ -160,9 +160,18 @@ end;
 procedure GDBObjComplex.DrawGeometry;
 var
    oldlw:gdbsmallint;
+   oldColor:TGDBPaletteColor;
 begin
   oldlw:=dc.OwnerLineWeight;
+  oldColor:=dc.ownercolor;
   dc.OwnerLineWeight:=self.GetLineWeight;
+  case vp.Color of
+                  ClByBlock:;
+                  ClByLayer:
+                            dc.ownercolor:=vp.Layer^.color;
+                else
+                      dc.ownercolor:=vp.Color;
+  end;
   inc(dc.subrender);
   //ConstObjArray.DrawWithattrib(dc{infrustumactualy,subrender)}{DrawGeometry(CalculateLineWeight});
   treerender(ConstObjArray.ObjTree,dc);
@@ -170,6 +179,7 @@ begin
                                                ConstObjArray.ObjTree.draw(dc);
   dec(dc.subrender);
   dc.OwnerLineWeight:=oldlw;
+  dc.ownercolor:=oldColor;
   inherited;
 end;
 procedure GDBObjComplex.getoutbound;

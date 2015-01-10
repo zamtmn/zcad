@@ -98,7 +98,7 @@ GDBLtypeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
                     procedure ParseStrings(const ltd:tstrings; var CurrentLine:integer;out LTName,LTDesk,LTImpl:GDBString);
                     function createltypeifneed(_source:PGDBLtypeProp;var _DestTextStyleTable:GDBTextStyleArray):PGDBLtypeProp;
                     function GetCurrentLType:PGDBLtypeProp;
-                    function GetSystemLT:PGDBLtypeProp;
+                    function GetSystemLT(neededtype:TLTMode):PGDBLtypeProp;
                     procedure format;virtual;
                     {function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
                     function GetSystemLayer:PGDBLayerProp;
@@ -125,14 +125,14 @@ begin
         pltypeprop:=iterate(ir);
   until pltypeprop=nil;
 end;
-function GDBLtypeArray.GetSystemLT:PGDBLtypeProp;
+function GDBLtypeArray.GetSystemLT(neededtype:TLTMode):PGDBLtypeProp;
 var
    ir:itrec;
 begin
   result:=beginiterate(ir);
   if result<>nil then
   repeat
-    if result^.Mode=TLTContinous then
+    if result^.Mode=neededtype then
                                      exit;
     result:=iterate(ir);
   until result=nil;

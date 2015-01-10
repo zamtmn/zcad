@@ -96,14 +96,14 @@ begin
      if PDimStyle.Lines.DIMCEN<>0 then
      begin
          ls:=abs(PDimStyle.Lines.DIMCEN);
-         DrawExtensionLineLinePart(VertexSub(cp,createvertex(ls,0,0)),VertexAdd(cp,createvertex(ls,0,0)),drawing).FormatEntity(drawing);
-         DrawExtensionLineLinePart(VertexSub(cp,createvertex(0,ls,0)),VertexAdd(cp,createvertex(0,ls,0)),drawing).FormatEntity(drawing);
+         DrawExtensionLineLinePart(VertexSub(cp,createvertex(ls,0,0)),VertexAdd(cp,createvertex(ls,0,0)),drawing,0).FormatEntity(drawing);
+         DrawExtensionLineLinePart(VertexSub(cp,createvertex(0,ls,0)),VertexAdd(cp,createvertex(0,ls,0)),drawing,0).FormatEntity(drawing);
          if PDimStyle.Lines.DIMCEN<0 then
          begin
-              DrawExtensionLineLinePart(VertexSub(cp,createvertex(2*ls,0,0)),VertexSub(cp,createvertex(r+ls,0,0)),drawing).FormatEntity(drawing);
-              DrawExtensionLineLinePart(VertexSub(cp,createvertex(0,2*ls,0)),VertexSub(cp,createvertex(0,r+ls,0)),drawing).FormatEntity(drawing);
-              DrawExtensionLineLinePart(VertexAdd(cp,createvertex(2*ls,0,0)),VertexAdd(cp,createvertex(r+ls,0,0)),drawing).FormatEntity(drawing);
-              DrawExtensionLineLinePart(VertexAdd(cp,createvertex(0,2*ls,0)),VertexAdd(cp,createvertex(0,r+ls,0)),drawing).FormatEntity(drawing);
+              DrawExtensionLineLinePart(VertexSub(cp,createvertex(2*ls,0,0)),VertexSub(cp,createvertex(r+ls,0,0)),drawing,0).FormatEntity(drawing);
+              DrawExtensionLineLinePart(VertexSub(cp,createvertex(0,2*ls,0)),VertexSub(cp,createvertex(0,r+ls,0)),drawing,0).FormatEntity(drawing);
+              DrawExtensionLineLinePart(VertexAdd(cp,createvertex(2*ls,0,0)),VertexAdd(cp,createvertex(r+ls,0,0)),drawing,0).FormatEntity(drawing);
+              DrawExtensionLineLinePart(VertexAdd(cp,createvertex(0,2*ls,0)),VertexAdd(cp,createvertex(0,r+ls,0)),drawing,0).FormatEntity(drawing);
          end;
      end;
 end;

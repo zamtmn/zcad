@@ -94,7 +94,7 @@ begin
         dxfvertexout(outhandle,10,ptn2^.Nextp);
         dxfvertexout(outhandle,11,ptn1^.PrevP);
 
-         dxfGDBStringout(outhandle,1001,'DSTP_XDATA');
+         dxfGDBStringout(outhandle,1001,ZCADAppNameInDXF);
          dxfGDBStringout(outhandle,1002,'{');
          dxfGDBStringout(outhandle,1000,'_OWNERHANDLE=6E');
          //self.SaveToDXFObjXData(handle);

@@ -28,6 +28,10 @@ const
      DIMCLRDDefaultValue=ClByBlock;
      DIMCLRTDefaultValue=ClByBlock;
 type
+TDimStyleReadMode=(TDSRM_ACAD,
+                   TDSRM_ACAD_DSTYLE_DIM_LINETYPE,
+                   TDSRM_ACAD_DSTYLE_DIM_EXT1_LINETYPE,
+                   TDSRM_ACAD_DSTYLE_DIM_EXT2_LINETYPE);
 TDimArrowBlockParam=record
                      name:GDBString;
                      width:GDBDouble;
@@ -49,12 +53,14 @@ TGDBDimLinesProp=packed record
                        DIMEXO:GDBDouble;//Extension line offset//group42
                        DIMLWE:TGDBLineWeight;//DIMLWD (lineweight enum value)//group372
                        DIMCLRE:TGDBPaletteColor;//DIMCLRE//group177
+                       DIMLTEX1,DIMLTEX2:{-}PGDBLtypeProp{/PGDBLtypePropObjInsp/};
                        //размерные линии
                        DIMDLE:GDBDouble;//Dimension line extension//group46
                        DIMCEN:GDBDouble;//Size of center mark/lines//group141
                        //DIMLTYPE:PGDBLtypeProp;//Size of center mark/lines//group141
                        DIMLWD:TGDBLineWeight;//DIMLWD (lineweight enum value)//group371
                        DIMCLRD:TGDBPaletteColor;//DIMCLRD//group176
+                       DIMLTYPE:{-}PGDBLtypeProp{/PGDBLtypePropObjInsp/};
                  end;
 TGDBDimArrowsProp=packed record
                        DIMASZ:GDBDouble; //Dimensioning arrow size//group41
@@ -93,7 +99,7 @@ GDBDimStyle = packed object(GDBNamedObject)
                       Units:TGDBDimUnitsProp;
                       PDXFLoadingData:PTDimStyleDXFLoadingData;
                       procedure SetDefaultValues;virtual;
-                      procedure SetValueFromDxf(group:GDBInteger;value:GDBString;var h2p:TMapHandleToPointer);virtual;
+                      procedure SetValueFromDxf(var mode:TDimStyleReadMode;group:GDBInteger;value:GDBString;var h2p:TMapHandleToPointer);virtual;
                       function GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
                       function GetDimBlockTypeByName(bname:String):TArrowStyle;
                       procedure CreateLDIfNeed;
@@ -106,6 +112,7 @@ GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*Op
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
                     procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
+                    procedure ResolveLineTypes(const lta:GDBLtypeArray);
                     function GetCurrentDimStyle:PGDBDimStyle;
               end;
 {EXPORT-}
@@ -220,164 +227,195 @@ begin
      result:=high(TArrowStyle);
 end;
 
-procedure GDBDimStyle.SetValueFromDxf(group:GDBInteger;value:GDBString;var h2p:TMapHandleToPointer);
+procedure GDBDimStyle.SetValueFromDxf(var mode:TDimStyleReadMode; group:GDBInteger;value:GDBString;var h2p:TMapHandleToPointer);
 begin
-  case group of
-  2:
-    begin
-      self.SetName(value);
-    end;
-  3:
-    begin
-         units.DIMPOST:=value;
-    end;
-  41:
-    begin
-         Arrows.DIMASZ:=strtofloat(value);
-    end;
-  42:
-    begin
-         Lines.DIMEXO:=strtofloat(value);
-    end;
-  44:
-    begin
-         Lines.DIMEXE:=strtofloat(value);
-    end;
-  45:
-    begin
-         Units.DIMRND:=strtofloat(value);
-    end;
-  46:
-    begin
-         Lines.DIMDLE:=strtofloat(value);
-    end;
-  73:
-    begin
-                                   if strtofloat(value)<>0 then
-                                                           Text.DIMTIH:=true
-                                                       else
-                                                           Text.DIMTIH:=false;
-    end;
-  74:
-    begin
-                                   if strtofloat(value)<>0 then
-                                                           Text.DIMTOH:=true
-                                                       else
-                                                           Text.DIMTOH:=false;
-    end;
-  77:
-  begin
-       begin
-            group:=strtoint(value);
-            case group of
-                       0:Text.DIMTAD:=DTVPCenters;
-                       1:Text.DIMTAD:=DTVPAbove;
-                       2:Text.DIMTAD:=DTVPOutside;
-                       3:Text.DIMTAD:=DTVPJIS;
-                       4:Text.DIMTAD:=DTVPBellov;
-            end;
-       end;
-  end;
-  144:
-    begin
-                           Units.DIMLFAC:=strtofloat(value);
-    end;
-  140:
-    begin
-                           Text.DIMTXT:=strtofloat(value);
-    end;
-  141:
-    begin
-                           Lines.DIMCEN:=strtofloat(value);
-    end;
-  147:
-    begin
-         Text.DIMGAP:=strtofloat(value);
-    end;
-  271:
-    begin
-Units.DIMDEC:=strtoint(value);
-    end;
-  277:
-  begin
-       begin
-            group:=strtoint(value);
-            case group of
-                       1:Units.DIMLUNIT:=DUScientific;
-                       2:Units.DIMLUNIT:=DUDecimal;
-                       3:Units.DIMLUNIT:=DUEngineering;
-                       4:Units.DIMLUNIT:=DUArchitectural;
-                       5:Units.DIMLUNIT:=DUFractional;
-                       6:Units.DIMLUNIT:=DUSystem;
-            end;
-       end;
-  end;
-  278:
-  begin
-       begin
-            Units.DIMDSEP:=DDSDot;
-            group:=strtoint(value);
-            case group of
-                       44:Units.DIMDSEP:=DDSComma;
-                       32:Units.DIMDSEP:=DDSSpace;
-            end;
-       end;
-  end;
-  279:
-  begin
-       group:=strtoint(value);
-       case group of
-                  0:Placing.DIMTMOVE:=DTMMoveDimLine;
-                  1:Placing.DIMTMOVE:=DTMCreateLeader;
-                  2:Placing.DIMTMOVE:=DTMnothung;
-       end;
-  end;
-  340:
-  begin
-       Text.DIMTXSTY:=h2p.MyGetValue(StrToQWord('$'+value));
-  end;
-  341:
-  begin
-       CreateLDIfNeed;
-       PDXFLoadingData.DIMLDRBLKhandle:=StrToQWord('$'+value);
-  end;
-  342:
-  begin
-       CreateLDIfNeed;
-       PDXFLoadingData.DIMLDRBLKhandle:=StrToQWord('$'+value);
-       PDXFLoadingData.DIMBLK1handle:=PDXFLoadingData.DIMLDRBLKhandle;
-       PDXFLoadingData.DIMBLK2handle:=PDXFLoadingData.DIMLDRBLKhandle;
-  end;
-  343:
-  begin
-       CreateLDIfNeed;
-       PDXFLoadingData.DIMBLK1handle:=StrToQWord('$'+value);
-  end;
-  344:
-  begin
-       CreateLDIfNeed;
-       PDXFLoadingData.DIMBLK2handle:=StrToQWord('$'+value);
-  end;
-  371:
-  begin
-       Lines.DIMLWD:=strtoint(value);
-  end;
-  372:
-  begin
-       Lines.DIMLWE:=strtoint(value);
-  end;
-  176:
-  begin
-       Lines.DIMCLRD:=strtoint(value);
-  end;
-  177:
-  begin
-       Lines.DIMCLRE:=strtoint(value);
-  end;
-  178:
-  begin
-       Text.DIMCLRT:=strtoint(value);
-  end;
+  if group=1001 then
+                    mode:=TDSRM_ACAD;
+  case mode of
+  TDSRM_ACAD_DSTYLE_DIM_LINETYPE:
+              begin
+                   if group=1005 then
+                                     Lines.DIMLTYPE:=h2p.MyGetValue(StrToQWord('$'+value));
+              end;
+  TDSRM_ACAD_DSTYLE_DIM_EXT1_LINETYPE:
+              begin
+                   if group=1005 then
+                                     Lines.DIMLTEX1:=h2p.MyGetValue(StrToQWord('$'+value));
+              end;
+  TDSRM_ACAD_DSTYLE_DIM_EXT2_LINETYPE:
+              begin
+                   if group=1005 then
+                                     Lines.DIMLTEX2:=h2p.MyGetValue(StrToQWord('$'+value));
+              end;
+  TDSRM_ACAD:
+              begin
+                case group of
+                1001:begin
+                          value:=uppercase(value);
+                          if value='ACAD_DSTYLE_DIM_LINETYPE' then
+                             mode:=TDSRM_ACAD_DSTYLE_DIM_LINETYPE;
+                          if value='ACAD_DSTYLE_DIM_EXT1_LINETYPE' then
+                             mode:=TDSRM_ACAD_DSTYLE_DIM_EXT1_LINETYPE;
+                          if value='ACAD_DSTYLE_DIM_EXT2_LINETYPE' then
+                             mode:=TDSRM_ACAD_DSTYLE_DIM_EXT2_LINETYPE;
+                     end;
+                2:
+                  begin
+                    self.SetName(value);
+                  end;
+                3:
+                  begin
+                       units.DIMPOST:=value;
+                  end;
+                41:
+                  begin
+                       Arrows.DIMASZ:=strtofloat(value);
+                  end;
+                42:
+                  begin
+                       Lines.DIMEXO:=strtofloat(value);
+                  end;
+                44:
+                  begin
+                       Lines.DIMEXE:=strtofloat(value);
+                  end;
+                45:
+                  begin
+                       Units.DIMRND:=strtofloat(value);
+                  end;
+                46:
+                  begin
+                       Lines.DIMDLE:=strtofloat(value);
+                  end;
+                73:
+                  begin
+                                                 if strtofloat(value)<>0 then
+                                                                         Text.DIMTIH:=true
+                                                                     else
+                                                                         Text.DIMTIH:=false;
+                  end;
+                74:
+                  begin
+                                                 if strtofloat(value)<>0 then
+                                                                         Text.DIMTOH:=true
+                                                                     else
+                                                                         Text.DIMTOH:=false;
+                  end;
+                77:
+                begin
+                     begin
+                          group:=strtoint(value);
+                          case group of
+                                     0:Text.DIMTAD:=DTVPCenters;
+                                     1:Text.DIMTAD:=DTVPAbove;
+                                     2:Text.DIMTAD:=DTVPOutside;
+                                     3:Text.DIMTAD:=DTVPJIS;
+                                     4:Text.DIMTAD:=DTVPBellov;
+                          end;
+                     end;
+                end;
+                144:
+                  begin
+                                         Units.DIMLFAC:=strtofloat(value);
+                  end;
+                140:
+                  begin
+                                         Text.DIMTXT:=strtofloat(value);
+                  end;
+                141:
+                  begin
+                                         Lines.DIMCEN:=strtofloat(value);
+                  end;
+                147:
+                  begin
+                       Text.DIMGAP:=strtofloat(value);
+                  end;
+                271:
+                  begin
+              Units.DIMDEC:=strtoint(value);
+                  end;
+                277:
+                begin
+                     begin
+                          group:=strtoint(value);
+                          case group of
+                                     1:Units.DIMLUNIT:=DUScientific;
+                                     2:Units.DIMLUNIT:=DUDecimal;
+                                     3:Units.DIMLUNIT:=DUEngineering;
+                                     4:Units.DIMLUNIT:=DUArchitectural;
+                                     5:Units.DIMLUNIT:=DUFractional;
+                                     6:Units.DIMLUNIT:=DUSystem;
+                          end;
+                     end;
+                end;
+                278:
+                begin
+                     begin
+                          Units.DIMDSEP:=DDSDot;
+                          group:=strtoint(value);
+                          case group of
+                                     44:Units.DIMDSEP:=DDSComma;
+                                     32:Units.DIMDSEP:=DDSSpace;
+                          end;
+                     end;
+                end;
+                279:
+                begin
+                     group:=strtoint(value);
+                     case group of
+                                0:Placing.DIMTMOVE:=DTMMoveDimLine;
+                                1:Placing.DIMTMOVE:=DTMCreateLeader;
+                                2:Placing.DIMTMOVE:=DTMnothung;
+                     end;
+                end;
+                340:
+                begin
+                     Text.DIMTXSTY:=h2p.MyGetValue(StrToQWord('$'+value));
+                end;
+                341:
+                begin
+                     CreateLDIfNeed;
+                     PDXFLoadingData.DIMLDRBLKhandle:=StrToQWord('$'+value);
+                end;
+                342:
+                begin
+                     CreateLDIfNeed;
+                     PDXFLoadingData.DIMLDRBLKhandle:=StrToQWord('$'+value);
+                     PDXFLoadingData.DIMBLK1handle:=PDXFLoadingData.DIMLDRBLKhandle;
+                     PDXFLoadingData.DIMBLK2handle:=PDXFLoadingData.DIMLDRBLKhandle;
+                end;
+                343:
+                begin
+                     CreateLDIfNeed;
+                     PDXFLoadingData.DIMBLK1handle:=StrToQWord('$'+value);
+                end;
+                344:
+                begin
+                     CreateLDIfNeed;
+                     PDXFLoadingData.DIMBLK2handle:=StrToQWord('$'+value);
+                end;
+                371:
+                begin
+                     Lines.DIMLWD:=strtoint(value);
+                end;
+                372:
+                begin
+                     Lines.DIMLWE:=strtoint(value);
+                end;
+                176:
+                begin
+                     Lines.DIMCLRD:=strtoint(value);
+                end;
+                177:
+                begin
+                     Lines.DIMCLRE:=strtoint(value);
+                end;
+                178:
+                begin
+                     Text.DIMCLRT:=strtoint(value);
+                end;
+                end;
+              end;
   end;
 end;
 procedure GDBDimStyle.SetDefaultValues;
@@ -391,6 +429,9 @@ begin
      Lines.DIMLWE:=DIMLWEDefaultValue;
      Lines.DIMCLRD:=DIMCLRDDefaultValue;
      Lines.DIMCLRE:=DIMCLREDefaultValue;
+     Lines.DIMLTYPE:=nil;
+     Lines.DIMLTEX1:=nil;
+     Lines.DIMLTEX2:=nil;
      Units.DIMLFAC:=1;
      Units.DIMLUNIT:=DUDecimal;
      Units.DIMDEC:=4;
@@ -420,6 +461,28 @@ begin
     p:=iterate(ir);
   until p=nil;
 end;
+procedure GDBDimStyleArray.ResolveLineTypes(const lta:GDBLtypeArray);
+var
+  p:PGDBDimStyle;
+  PByBlockLT:PGDBLtypeProp;
+  ir:itrec;
+begin
+  PByBlockLT:=lta.GetSystemLT(TLTByBlock);
+  p:=beginiterate(ir);
+  if p<>nil then
+  repeat
+
+    if p^.lines.DIMLTEX1=nil then
+                           p^.lines.DIMLTEX1:=PByBlockLT;
+    if p^.lines.DIMLTEX2=nil then
+                           p^.lines.DIMLTEX2:=PByBlockLT;
+    if p^.lines.DIMLTYPE=nil then
+                           p^.lines.DIMLTYPE:=PByBlockLT;
+
+    p:=iterate(ir);
+  until p=nil;
+end;
+
 function GDBDimStyleArray.GetCurrentDimStyle:PGDBDimStyle;
 begin
   if assigned(sysvar.dwg.DWG_CDimStyle) then

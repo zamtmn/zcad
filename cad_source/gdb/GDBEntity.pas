@@ -673,7 +673,7 @@ begin
 
     //if (isvarobject or ishavevars)or ishavex then
     begin
-         dxfGDBStringout(handle,1001,'DSTP_XDATA');
+         dxfGDBStringout(handle,1001,ZCADAppNameInDXF);
          dxfGDBStringout(handle,1002,'{');
          if isvarobject then
                             dxfGDBStringout(handle,1000,'VAROBJECT=');
@@ -1164,7 +1164,7 @@ begin
                 1001:begin
                           APP_NAME:=readmystr(f);
                           result:=true;
-                          if APP_NAME='DSTP_XDATA'then
+                          if APP_NAME=ZCADAppNameInDXF then
                           begin
                                repeat
                                  XGroup:=readmystrtoint(f);

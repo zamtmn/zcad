@@ -930,12 +930,14 @@ TGDBDimLinesProp=packed record
                        DIMEXO:GDBDouble;//Extension line offset//group42
                        DIMLWE:TGDBLineWeight;//DIMLWD (lineweight enum value)//group372
                        DIMCLRE:TGDBPaletteColor;//DIMCLRE//group177
+                       DIMLTEX1,DIMLTEX2:PGDBLtypePropObjInsp;
                        //размерные линии
                        DIMDLE:GDBDouble;//Dimension line extension//group46
                        DIMCEN:GDBDouble;//Size of center mark/lines//group141
                        //DIMLTYPE:PGDBLtypeProp;//Size of center mark/lines//group141
                        DIMLWD:TGDBLineWeight;//DIMLWD (lineweight enum value)//group371
                        DIMCLRD:TGDBPaletteColor;//DIMCLRD//group176
+                       DIMLTYPE:PGDBLtypePropObjInsp;
                  end;
 TGDBDimArrowsProp=packed record
                        DIMASZ:GDBDouble; //Dimensioning arrow size//group41

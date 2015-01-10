@@ -535,7 +535,7 @@ begin
   h2p.Destroy;
   {$IFDEF TOTALYLOG}programlog.logoutstr('end; {AddFromDXF12}',lp_decPos);{$ENDIF}
 end;
-procedure ReadLTStyles(var s:String;cltype:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure ReadLTStyles(var s:String;cltype:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var h2p:TMapHandleToPointer);
 var
    pltypeprop:PGDBLtypeProp;
    byt: GDBInteger;
@@ -547,6 +547,7 @@ var
    txtstr:string;
    TempDouble:GDBDouble;
    flags: GDBInteger;
+   DWGHandle:TDWGHandle;
 begin
   dashinfo:=TDIDash;
   if GoToDXForENDTAB(f, 0, dxfName_LType) then
@@ -565,6 +566,7 @@ begin
            case drawing.LTypeStyleTable.AddItem(s,pointer(pltypeprop)) of
                         IsFounded:
                                   begin
+                                       h2p.Insert(DWGHandle,pltypeprop);
                                        if LoadMode=TLOLoad then
                                        begin
                                        end
@@ -575,6 +577,7 @@ begin
                                   begin
                                        pltypeprop^.init(s);
                                        dashinfo:=TDIDash;
+                                       h2p.Insert(DWGHandle,pltypeprop);
                                   end;
                         IsError:
                                   begin
@@ -589,6 +592,9 @@ begin
          begin
               if pltypeprop<>nil then
                                 pltypeprop^.desk:=s;
+         end;
+       5:begin
+              DWGHandle:=strtoint64('$'+s)
          end;
        40:
          begin
@@ -1056,11 +1062,13 @@ procedure ReadDimStyles(var s:string;cdimstyle:string;var f:GDBOpenArrayOfByte; 
 var
    psimstyleprop:PGDBDimStyle;
    byt:integer;
+   ReadDimStylesMode:TDimStyleReadMode;
 begin
 if GoToDXForENDTAB(f, 0, dxfName_DIMSTYLE) then
 while s = dxfName_DIMSTYLE do
 begin
      psimstyleprop:=nil;
+     ReadDimStylesMode:=TDSRM_ACAD;
      byt := 2;
      while byt <> 0 do
      begin
@@ -1082,7 +1090,7 @@ begin
                          end;
      end
      else
-         psimstyleprop^.SetValueFromDxf(byt,s,h2p);
+         psimstyleprop^.SetValueFromDxf(ReadDimStylesMode,byt,s,h2p);
      end;
 end;
 end;
@@ -1175,7 +1183,7 @@ begin
                       dxfName_LType:
                                     begin
                                       {$IFDEF TOTALYLOG}programlog.logoutstr('Found line types table',lp_IncPos);{$ENDIF}
-                                      ReadLTStyles(s,cltype,f,exitGDBString,owner,LoadMode,drawing);
+                                      ReadLTStyles(s,cltype,f,exitGDBString,owner,LoadMode,drawing,h2p);
                                       {$IFDEF TOTALYLOG}programlog.logoutstr('end; (line types table)',lp_DecPos);{$ENDIF}
                                     end;
                       dxfName_Style:
@@ -1279,6 +1287,7 @@ begin
           {$IFDEF TOTALYLOG}programlog.logoutstr('end; {block table}',lp_DecPos);{$ENDIF}
           drawing.BlockDefArray.Format;
           drawing.DimStyleTable.ResolveDXFHandles(Handle2BlockName);
+          drawing.DimStyleTable.ResolveLineTypes(drawing.LTypeStyleTable);
         end;
 
     s := s;
@@ -2089,9 +2098,11 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                    repeat
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                          outstream.TXTAddGDBStringEOL(dxfName_LTYPE);
+                         Handle2pointer.MyGetOrCreateValue(pltp,handle,temphandle);
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
-                         outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
-                         inc(handle);
+                         outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
+                         {outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
+                         inc(handle);}
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(330));
                          outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
@@ -2403,6 +2414,37 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
 
                       outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
 
+                      pltp:=drawing.LTypeStyleTable.GetSystemLT(TLTByBlock);
+                      if (pdsp^.Lines.DIMLTYPE<>pltp)and(pdsp^.Lines.DIMLTYPE<>nil)then
+                      begin
+                           outstream.TXTAddGDBStringEOL(dxfGroupCode(1001));
+                           outstream.TXTAddGDBStringEOL('ACAD_DSTYLE_DIM_LINETYPE');
+                           outstream.TXTAddGDBStringEOL(dxfGroupCode(1070));
+                           outstream.TXTAddGDBStringEOL('380');
+                           outstream.TXTAddGDBStringEOL(dxfGroupCode(1005));
+                           Handle2pointer.MyGetOrCreateValue(pdsp^.Lines.DIMLTYPE,handle,temphandle);
+                           outstream.TXTAddGDBStringEOL(inttohex(temphandle,0));
+                      end;
+                      if (pdsp^.Lines.DIMLTEX1<>pltp)and(pdsp^.Lines.DIMLTEX1<>nil)then
+                      begin
+                           outstream.TXTAddGDBStringEOL(dxfGroupCode(1001));
+                           outstream.TXTAddGDBStringEOL('ACAD_DSTYLE_DIM_EXT1_LINETYPE');
+                           outstream.TXTAddGDBStringEOL(dxfGroupCode(1070));
+                           outstream.TXTAddGDBStringEOL('381');
+                           outstream.TXTAddGDBStringEOL(dxfGroupCode(1005));
+                           Handle2pointer.MyGetOrCreateValue(pdsp^.Lines.DIMLTEX1,handle,temphandle);
+                           outstream.TXTAddGDBStringEOL(inttohex(temphandle,0));
+                      end;
+                      if (pdsp^.Lines.DIMLTEX2<>pltp)and(pdsp^.Lines.DIMLTEX2<>nil)then
+                      begin
+                           outstream.TXTAddGDBStringEOL(dxfGroupCode(1001));
+                           outstream.TXTAddGDBStringEOL('ACAD_DSTYLE_DIM_EXT2_LINETYPE');
+                           outstream.TXTAddGDBStringEOL(dxfGroupCode(1070));
+                           outstream.TXTAddGDBStringEOL('382');
+                           outstream.TXTAddGDBStringEOL(dxfGroupCode(1005));
+                           Handle2pointer.MyGetOrCreateValue(pdsp^.Lines.DIMLTEX2,handle,temphandle);
+                           outstream.TXTAddGDBStringEOL(inttohex(temphandle,0));
+                      end;
 
                       pdsp:=drawing.DimStyleTable.iterate(ir);
                 until pdsp=nil;
@@ -2436,7 +2478,7 @@ ENDTAB}
                   RegisterAcadAppInDXF('ACAD',@outstream,handle);
                   RegisterAcadAppInDXF('ACAD_PSEXT',@outstream,handle);
                   RegisterAcadAppInDXF('AcAecLayerStandard',@outstream,handle);
-                  RegisterAcadAppInDXF('DSTP_XDATA',@outstream,handle);
+                  RegisterAcadAppInDXF(ZCADAppNameInDXF,@outstream,handle);
                   //RegisterAcadAppInDXF('ACAD_NAV_VCDISPLAY',@outstream,handle);
                   RegisterAcadAppInDXF('ACAD_DSTYLE_DIM_LINETYPE',@outstream,handle);
                   RegisterAcadAppInDXF('ACAD_DSTYLE_DIM_EXT1_LINETYPE',@outstream,handle);

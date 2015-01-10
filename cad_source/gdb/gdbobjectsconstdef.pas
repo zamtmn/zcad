@@ -226,6 +226,8 @@ const {as_normal=0;
 
   TSNStandardStyleName='STANDARD';
 
+  ZCADAppNameInDXF='DSTP_XDATA';
+
   H_Root=100;
   H_Trash=110;
 

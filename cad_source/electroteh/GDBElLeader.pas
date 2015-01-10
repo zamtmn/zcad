@@ -159,7 +159,7 @@ procedure GDBObjElLeader.SaveToDXF;
 begin
   MainLine.bp.ListPos.Owner:={gdb.GetCurrentROOT}self.GetMainOwner;
   MainLine.SaveToDXF(handle,outhandle,drawing);
-  dxfGDBStringout(outhandle,1001,'DSTP_XDATA');
+  dxfGDBStringout(outhandle,1001,ZCADAppNameInDXF);
   dxfGDBStringout(outhandle,1002,'{');
   dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
   dxfGDBStringout(outhandle,1000,'%1=size|GDBInteger|'+inttostr(size)+'|');

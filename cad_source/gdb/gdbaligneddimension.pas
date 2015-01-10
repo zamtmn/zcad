@@ -39,7 +39,7 @@ PGDBObjAlignedDimension=^GDBObjAlignedDimension;
 GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                      procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef);
+                      procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef; part:integer);
 
 
 
@@ -331,7 +331,7 @@ begin
   DimData.P14InWCS:= createvertex(300,1,0);
 end;
 
-procedure GDBObjAlignedDimension.DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef);
+procedure GDBObjAlignedDimension.DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef; part:integer);
 var
    pl:pgdbobjline;
    pp:pgdbobjpoint;
@@ -342,7 +342,7 @@ begin
   pp.P_insertInOCS:=p1;
   pp.FormatEntity(drawing);
 
-  pl:=DrawExtensionLineLinePart(Vertexmorphabs2(p1,p2,PDimStyle.Lines.DIMEXO),Vertexmorphabs(p1,p2,PDimStyle.Lines.DIMEXE),drawing);
+  pl:=DrawExtensionLineLinePart(Vertexmorphabs2(p1,p2,PDimStyle.Lines.DIMEXO),Vertexmorphabs(p1,p2,PDimStyle.Lines.DIMEXE),drawing,part);
   pl.FormatEntity(drawing);
 end;
 procedure GDBObjAlignedDimension.CalcDNVectors;
@@ -373,14 +373,14 @@ begin
 
           l:=GetTFromDirNormalizedPoint(DimData.P10InWCS,DimData.P14InWCS,vectorN);
           //DrawExtensionLine(DimData.P14InWCS,DimData.P10InWCS,0,drawing);
-          DrawExtensionLine(DimData.P14InWCS,VertexDmorph(DimData.P14InWCS,self.vectorN,l),0,drawing);
+          DrawExtensionLine(DimData.P14InWCS,VertexDmorph(DimData.P14InWCS,self.vectorN,l),0,drawing,1);
 
           //tv:=geometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
           //tv:=geometry.VertexAdd(DimData.P13InWCS,tv);
           //DrawExtensionLine(DimData.P13InWCS,tv,1,drawing);
           l:=GetTFromDirNormalizedPoint(DimData.P10InWCS,DimData.P13InWCS,vectorN);
           tv:=VertexDmorph(DimData.P13InWCS,self.vectorN,l);
-          DrawExtensionLine(DimData.P13InWCS,tv,0,drawing);
+          DrawExtensionLine(DimData.P13InWCS,tv,0,drawing,2);
 
           CalcTextAngle;
           if not self.DimData.TextMoved then

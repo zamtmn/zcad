@@ -59,7 +59,7 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
 
 
                 function DrawDimensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef):pgdbobjline;
-                function DrawExtensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef):pgdbobjline;
+                function DrawExtensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef; part:integer):pgdbobjline;
                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                 function GetLinearDimStr(l:GDBDouble):GDBString;
@@ -573,17 +573,21 @@ begin
   result.vp.Layer:=vp.Layer;
   result.vp.LineWeight:=PDimStyle.Lines.DIMLWD;
   result.vp.Color:=PDimStyle.Lines.DIMCLRD;
-  result.vp.LineType:=vp.LineType;
+  result.vp.LineType:=PDimStyle.Lines.DIMLTYPE;
   result.CoordInOCS.lBegin:=p1;
   result.CoordInOCS.lEnd:=p2;
 end;
-function GDBObjDimension.DrawExtensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef):pgdbobjline;
+function GDBObjDimension.DrawExtensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef; part:integer):pgdbobjline;
 begin
   result:=pointer(ConstObjArray.CreateInitObj(GDBlineID,@self));
   result.vp.Layer:=vp.Layer;
   result.vp.LineWeight:=PDimStyle.Lines.DIMLWE;
   result.vp.Color:=PDimStyle.Lines.DIMCLRE;
-  result.vp.LineType:=vp.LineType;
+  case part of
+              0:result.vp.LineType:=vp.LineType;
+              1:result.vp.LineType:=PDimStyle.Lines.DIMLTEX1;
+              2:result.vp.LineType:=PDimStyle.Lines.DIMLTEX2;
+  end;
   result.CoordInOCS.lBegin:=p1;
   result.CoordInOCS.lEnd:=p2;
 end;

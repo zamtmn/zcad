@@ -20,7 +20,7 @@ unit UEnumDescriptor;
 {$INCLUDE def.inc}
 interface
 uses types,sysutils,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,TypeDescriptors,gdbasetypes,varmandef,gdbase,
-  usupportgui,UGDBOpenArrayOfData,UGDBStringArray,memman,zcadsysvars,
+  UGDBOpenArrayOfData,UGDBStringArray,memman,zcadsysvars,
   StdCtrls;
 type
 PEnumDescriptor=^EnumDescriptor;
@@ -29,9 +29,8 @@ EnumDescriptor=object(TUserTypeDescriptor)
                      UserValue:GDBGDBStringArray;
                      Value:GDBOpenArrayOfData;
                      constructor init(size:GDBInteger;tname:string;pu:pointer);
-                     procedure EditorChange(Sender:TObject;NewValue:GDBInteger);
                      function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
-                     function CreateEditor(TheOwner:TPropEditorOwner;rect:trect{x,y,w,h:GDBInteger};pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
+                     function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc;virtual;
                      function GetNumberInArrays(addr:GDBPointer;out number:GDBLongword):GDBBoolean;virtual;
                      function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                      function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
@@ -41,6 +40,8 @@ EnumDescriptor=object(TUserTypeDescriptor)
                      function GetTypeAttributes:TTypeAttr;virtual;
                      procedure SetValueFromString(PInstance:GDBPointer;_Value:GDBstring);virtual;
                end;
+var
+    EnumGlobalEditor:TCreateEditorFunc;
 implementation
 uses log;
 function EnumDescriptor.GetTypeAttributes:TTypeAttr;
@@ -185,44 +186,17 @@ begin
      GetNumberInArrays(pinstance,num);
      result:=UserValue.getGDBString(num)
 end;
-procedure EnumDescriptor.EditorChange(Sender:Tobject;NewValue:GDBInteger);
-begin
-    (* case SizeInGDBBytes of
-                      1:begin
-                             pGDBByte(Sender^.LincedData)^:=pGDBByte(Value.getelement(NewValue))^;
-                        end;
-     end;
-     *)
-end;
 function EnumDescriptor.CreateEditor;
-var
-    cbedit:TComboBox;
-    propeditor:TPropEditor;
-    ir:itrec;
-    number:longword;
-    p:pgdbstring;
 begin
-     propeditor:=TPropEditor.Create(theowner,PInstance,@self,FreeOnLostFocus);
-     cbedit:=TComboBox.Create(propeditor);
-     cbedit.Text:=GetValueAsString(pinstance);
-     cbedit.OnChange:=propeditor.EditingProcess;
-     SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6);
-     {$IFNDEF DELPHI}
-     cbedit.ReadOnly:=true;
-     {$ENDIF}
-
-                             p:=UserValue.beginiterate(ir);
-                             if p<>nil then
-                             repeat
-                                   cbedit.Items.Add(p^);
-                                   p:=UserValue.iterate(ir);
-                             until p=nil;
-
-     GetNumberInArrays(PInstance,number);
-     cbedit.ItemIndex:=number;
-
-     result.editor:=propeditor;
-     result.mode:=TEM_Integrate;
+     result:=inherited;
+     if (result.editor=nil)and(result.mode=TEM_Nothing)then
+     if assigned(EnumGlobalEditor) then
+                                         result:=EnumGlobalEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,@self)
+                                   else
+                                       begin
+                                           result.editor:=nil;
+                                           result.mode:=TEM_Nothing;
+                                       end;
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UEnumDescriptor.initialization');{$ENDIF}

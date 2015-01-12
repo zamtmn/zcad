@@ -20,8 +20,7 @@ unit UEnumDescriptor;
 {$INCLUDE def.inc}
 interface
 uses types,sysutils,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,TypeDescriptors,gdbasetypes,varmandef,gdbase,
-  UGDBOpenArrayOfData,UGDBStringArray,memman,zcadsysvars,
-  StdCtrls;
+  UGDBOpenArrayOfData,UGDBStringArray,memman,zcadsysvars;
 type
 PEnumDescriptor=^EnumDescriptor;
 EnumDescriptor=object(TUserTypeDescriptor)

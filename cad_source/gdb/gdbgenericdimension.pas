@@ -38,7 +38,7 @@ GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                    end;
 {EXPORT-}
 implementation
-uses gdbradialdimension,gdbdiametricdimension,gdbrotateddimension,gdbaligneddimension,GDBManager,log;
+uses gdbradialdimension,gdbdiametricdimension,gdbrotateddimension,gdbaligneddimension,log;
 var
   WorkingFormatSettings:TFormatSettings;
 function GDBObjGenericDimension.FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;
@@ -103,6 +103,7 @@ var
 begin
   byt:=readmystrtoint(f);
   dtype:=-1;
+  style:='';
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then

@@ -38,7 +38,7 @@ type
                       end;
     TmyAction=class(TZAction)
                    public
-                   command,options,imgstr:string;
+                   command,options{,imgstr}:string;
                    pfoundcommand:PCommandObjectDef;
                    function Execute: Boolean; override;
                    procedure SetCommand(_Caption,_Command,_Options:TTranslateString);
@@ -53,7 +53,7 @@ type
                        procedure LoadFromACNFile(fname:string);
                        procedure SetImage(img,identifer:string;var action:TZAction);
                        function LoadImage(imgfile:GDBString):Integer;
-                       procedure AddMyAction(Action:TmyAction);
+                       procedure AddMyAction(Action:TZAction);
                        public
                        brocenicon:integer;
                   end;
@@ -334,7 +334,7 @@ begin
                                    commandmanager.executecommand(s,gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
      result:=true;
 end;
-procedure TmyActionList.AddMyAction(Action:TmyAction);
+procedure TmyActionList.AddMyAction(Action:TZAction);
 begin
      self.AddAction(action);
 end;

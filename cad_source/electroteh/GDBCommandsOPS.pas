@@ -297,7 +297,7 @@ begin
   historyout('Первый угол:');
   If assigned(SetGDBObjInspProc)then
   SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),pco,gdb.GetCurrentDWG);
-  //ZWinManager.ShowZObject(pp);
+  result:=cmd_ok;
 end;
 function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): integer;
 begin

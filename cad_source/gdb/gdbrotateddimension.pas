@@ -41,7 +41,7 @@ GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimens
                    end;
 {EXPORT-}
 implementation
-uses GDBManager,log;
+uses log;
 constructor GDBObjRotatedDimension.initnul;
 begin
   inherited initnul(owner);

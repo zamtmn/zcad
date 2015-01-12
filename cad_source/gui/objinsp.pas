@@ -32,7 +32,7 @@ uses
   strproc,types,graphics,
   ExtCtrls,Controls,Classes,menus,Forms,lcltype,fileutil,
 
-  usuptypededitors,gdbasetypes,SysUtils,shared,zcadsysvars,
+  gdbasetypes,SysUtils,shared,zcadsysvars,
   gdbase,varmandef,UGDBDrawingdef,
   memman,TypeDescriptors;
 const
@@ -1112,7 +1112,7 @@ end;
 procedure TGDBobjinsp.ClearEDContext;
 begin
      EDContext.ppropcurrentedit:=nil;
-     EDContext.UndoCommand:=0;
+     EDContext.UndoCommand:=nil;
      EDContext.UndoStack:=nil;
 end;
 

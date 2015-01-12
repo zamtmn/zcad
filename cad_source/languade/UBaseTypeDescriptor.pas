@@ -22,7 +22,7 @@ interface
 uses
       Graphics,classes,Themes,types,
       strproc,log,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,sysutils,UGDBOpenArrayOfByte,gdbasetypes,
-      usupportgui,varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,math,zcadsysvars,
+      {usupportgui,}varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,math,zcadsysvars,
 
       StdCtrls,shared;
 type
@@ -31,16 +31,12 @@ BaseTypeDescriptor=object(TUserTypeDescriptor)
                          function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                          function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                          function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
-                         function CreateEditor(TheOwner:TPropEditorOwner;rect:trect{x,y,w,h:GDBInteger};pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
-                         procedure EditorChange(Sender:TObject);
                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
                    end;
 GDBBooleanDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
-                          function CreateEditor(TheOwner:TPropEditorOwner;rect:trect{x,y,w,h:GDBInteger};pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
-                          procedure EditorChange(Sender:TObject;NewValue:GDBInteger);
                     end;
 GDBShortintDescriptor=object(BaseTypeDescriptor)
                           constructor init;
@@ -115,8 +111,6 @@ GDBPtrUIntDescriptor=object(BaseTypeDescriptor)
                     end;
 TEnumDataDescriptor=object(BaseTypeDescriptor)
                      constructor init;
-                     procedure EditorChange(Sender:TObject;NewValue:GDBInteger);
-                     function CreateEditor(TheOwner:TPropEditorOwner;rect:trect{x,y,w,h:GDBInteger};pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
                      function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                      procedure SetValueFromString(PInstance:GDBPointer;_Value:GDBstring);virtual;
                      function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
@@ -139,7 +133,6 @@ GDBPointerDescriptorOdj:GDBPointerDescriptor;
 GDBEnumDataDescriptorObj:TEnumDataDescriptor;
 GDBPtrUIntDescriptorObj:GDBPtrUIntDescriptor;
 implementation
-//uses varman{,ZComboEdBoxsWithProc};
 function TEnumDataDescriptor.CreateProperties;
 var ppd:PPropertyDeskriptor;
 begin
@@ -253,65 +246,6 @@ function BaseTypeDescriptor.DeSerialize;
 begin
      membuf.ReadData(PInstance,SizeInGDBBytes)
 end;
-function BaseTypeDescriptor.CreateEditor;
-var
-   ps:pgdbstring;
-   ir:itrec;
-   propeditor:TPropEditor;
-   edit:TEdit;
-   cbedit:TComboBox;
-begin
-     result.editor:=nil;
-     result.mode:=TEM_Nothing;
-     if (psa=nil)or(psa^.count=0) then
-                         begin
-                               propeditor:=TPropEditor.Create(theowner,PInstance,@self,FreeOnLostFocus);
-
-                               edit:=TEdit.Create(propeditor);
-                               edit.AutoSize:=false;
-                               edit.Text:=GetValueAsString(pinstance);
-                               edit.OnKeyPress:=propeditor.keyPress;
-                               edit.OnChange:=propeditor.EditingProcess;
-                               edit.OnExit:=propeditor.ExitEdit;
-
-                              result.editor:=propeditor;
-                              result.mode:=TEM_Integrate;
-                         end
-                     else
-                         begin
-                              propeditor:=TPropEditor.Create(theowner,PInstance,@self,FreeOnLostFocus);
-                              cbedit:=TComboBox.Create(propeditor);
-                              {$IFNDEF DELPHI}
-                              cbedit.AutoSize:=false;
-                              {$ENDIF}
-                              cbedit.Text:=GetValueAsString(pinstance);
-                              cbedit.OnKeyPress:=propeditor.keyPress;
-                              cbedit.OnChange:=propeditor.EditingProcess;
-                              cbedit.OnExit:=propeditor.ExitEdit;
-
-                              result.editor:=propeditor;
-                              result.mode:=TEM_Integrate;
-                                    ps:=psa^.beginiterate(ir);
-                                     if (ps<>nil) then
-                                     repeat
-                                          {if uppercase(ps^)=uppercase(s) then
-                                                             begin
-                                                                  exit;
-                                                             end;}
-                                          cbedit.Items.Add(ps^);
-                                          //PZComboEdBoxWithProc(result).AddLine(pansichar(ps^));
-                                          ps:=psa^.iterate(ir);
-                                     until ps=nil;
-                               {$IFNDEF DELPHI}
-                               cbedit.AutoSelect:=true;
-                               {$ENDIF}
-                               cbedit.AutoComplete:=true;
-                         end;
-end;
-procedure BaseTypeDescriptor.EditorChange(Sender:Tobject);
-begin
-     //-----------------------------------------------------------------SetValueFromString(sender.LincedData,sender.text);
-end;
 procedure BaseTypeDescriptor.SetValueFromString;
 begin
 end;
@@ -335,45 +269,6 @@ begin
      else
      result := 'False';
 end;
-function GDBBooleanDescriptor.CreateEditor;
-var
-    cbedit:TComboBox;
-    propeditor:TPropEditor;
-begin
-     propeditor:=TPropEditor.Create(theowner,PInstance,@self,FreeOnLostFocus);
-     cbedit:=TComboBox.Create(propeditor);
-     cbedit.Text:=GetValueAsString(pinstance);
-     cbedit.OnChange:=propeditor.EditingProcess;
-     SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6);
-     {$IFNDEF DELPHI}
-     cbedit.ReadOnly:=true;
-     {$ENDIF}
-
-     cbedit.Items.Add('True');
-     cbedit.Items.Add('False');
-     if pgdbboolean(pinstance)^ then
-                                    cbedit.ItemIndex:=0
-                                else
-                                    cbedit.ItemIndex:=1;
-
-     result.editor:=propeditor;
-     result.mode:=TEM_Integrate;
-end;
-procedure GDBBooleanDescriptor.EditorChange(Sender:Tobject;NewValue:GDBInteger);
-begin
-   {  case NewValue of
-                      0:begin
-                             PGDBBoolean(Sender^.LincedData)^:=false;
-                             //currval:=pGDBByte(pinstance)^;
-                        end;
-                      1:begin
-                             PGDBBoolean(Sender^.LincedData)^:=True;
-                             //currval:=pGDBByte(pinstance)^;
-                        end;
-
-     end;  }
-end;
-
 constructor GDBLongwordDescriptor.init;
 begin
      inherited init(sizeof(GDBLongword),'GDBLongword',nil);
@@ -741,38 +636,6 @@ begin
                                                                                result:=PTEnumData(Pinstance)^.Enums.getGDBString(PTEnumData(Pinstance)^.Selected);
      {GetNumberInArrays(pinstance,num);
      result:=UserValue.getGDBString(num)}
-end;
-procedure TEnumDataDescriptor.EditorChange(Sender:TObject;NewValue:GDBInteger);
-begin
-     //PGDBInteger(Sender^.LincedData)^:=NewValue;
-end;
-function TEnumDataDescriptor.CreateEditor;
-var
-    cbedit:TComboBox;
-    propeditor:TPropEditor;
-    ir:itrec;
-    p:pgdbstring;
-begin
-     propeditor:=TPropEditor.Create(theowner,PInstance,@self,FreeOnLostFocus);
-     cbedit:=TComboBox.Create(propeditor);
-     cbedit.Text:=GetValueAsString(pinstance);
-     cbedit.OnChange:=propeditor.EditingProcess;
-     cbedit.OnExit:=propeditor.ExitEdit;
-     {$IFNDEF DELPHI}
-     cbedit.ReadOnly:=true;
-     {$ENDIF}
-
-                             p:=PTEnumData(Pinstance)^.Enums.beginiterate(ir);
-                             if p<>nil then
-                             repeat
-                                   cbedit.Items.Add(p^);
-                                   p:=PTEnumData(Pinstance)^.Enums.iterate(ir);
-                             until p=nil;
-
-     cbedit.ItemIndex:=PTEnumData(Pinstance)^.Selected;
-
-     result.editor:=propeditor;
-     result.mode:=TEM_Integrate;
 end;
 begin
        {$IFDEF DEBUGINITSECTION}LogOut('GDBBaseTypeDescriptor.initialization');{$ENDIF}

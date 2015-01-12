@@ -22,7 +22,7 @@ unit objinspdecorations;
 interface
 
 uses
-  Objinsp,uinfoform,Forms,ugdbltypearray,sysutils,umytreenode,oswnd,gdbcommandsinterface,
+  UEnumDescriptor,Objinsp,uinfoform,Forms,ugdbltypearray,sysutils,umytreenode,oswnd,gdbcommandsinterface,
   Graphics,LCLType,Themes,types,gdbobjectsconstdef,UGDBNamedObjectsArray,UGDBStringArray,
   varmandef,Varman,colorwnd,UGDBLayerArray,gdbase,lineweightwnd,gdbasetypes,usupportgui,
   StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,strproc,zcadsysvars,commandline,
@@ -35,6 +35,12 @@ type
                          class procedure GetVertexY(Pinstance:PtrInt);
                          class procedure GetVertexZ(Pinstance:PtrInt);
     end;
+    TBaseTypesEditors=class
+                             class function BaseCreateEditor           (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;ptdesc:PUserTypeDescriptor):TEditorDesc;
+                             class function GDBBooleanCreateEditor     (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;ptdesc:PUserTypeDescriptor):TEditorDesc;
+                             class function TEnumDataCreateEditor      (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;ptdesc:PUserTypeDescriptor):TEditorDesc;
+                             class function EnumDescriptorCreateEditor (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;ptdesc:PUserTypeDescriptor):TEditorDesc;
+    END;
 
 procedure DecorateSysTypes;
 implementation
@@ -42,6 +48,145 @@ uses
   mainwindow;
 var
    count:integer;
+class function TBaseTypesEditors.BaseCreateEditor;
+   var
+      ps:pgdbstring;
+      ir:itrec;
+      propeditor:TPropEditor;
+      edit:TEdit;
+      cbedit:TComboBox;
+   begin
+        result.editor:=nil;
+        result.mode:=TEM_Nothing;
+        if (psa=nil)or(psa^.count=0) then
+                            begin
+                                  propeditor:=TPropEditor.Create(theowner,PInstance,ptdesc^,FreeOnLostFocus);
+
+                                  edit:=TEdit.Create(propeditor);
+                                  edit.AutoSize:=false;
+                                  edit.Text:=ptdesc^.GetValueAsString(pinstance);
+                                  edit.OnKeyPress:=propeditor.keyPress;
+                                  edit.OnChange:=propeditor.EditingProcess;
+                                  edit.OnExit:=propeditor.ExitEdit;
+
+                                 result.editor:=propeditor;
+                                 result.mode:=TEM_Integrate;
+                            end
+                        else
+                            begin
+                                 propeditor:=TPropEditor.Create(theowner,PInstance,ptdesc^,FreeOnLostFocus);
+                                 cbedit:=TComboBox.Create(propeditor);
+                                 {$IFNDEF DELPHI}
+                                 cbedit.AutoSize:=false;
+                                 {$ENDIF}
+                                 cbedit.Text:=ptdesc^.GetValueAsString(pinstance);
+                                 cbedit.OnKeyPress:=propeditor.keyPress;
+                                 cbedit.OnChange:=propeditor.EditingProcess;
+                                 cbedit.OnExit:=propeditor.ExitEdit;
+
+                                 result.editor:=propeditor;
+                                 result.mode:=TEM_Integrate;
+                                       ps:=psa^.beginiterate(ir);
+                                        if (ps<>nil) then
+                                        repeat
+                                             {if uppercase(ps^)=uppercase(s) then
+                                                                begin
+                                                                     exit;
+                                                                end;}
+                                             cbedit.Items.Add(ps^);
+                                             //PZComboEdBoxWithProc(result).AddLine(pansichar(ps^));
+                                             ps:=psa^.iterate(ir);
+                                        until ps=nil;
+                                  {$IFNDEF DELPHI}
+                                  cbedit.AutoSelect:=true;
+                                  {$ENDIF}
+                                  cbedit.AutoComplete:=true;
+                            end;
+   end;
+class function TBaseTypesEditors.GDBBooleanCreateEditor;
+var
+    cbedit:TComboBox;
+    propeditor:TPropEditor;
+begin
+     propeditor:=TPropEditor.Create(theowner,PInstance,ptdesc^,FreeOnLostFocus);
+     cbedit:=TComboBox.Create(propeditor);
+     cbedit.Text:=ptdesc^.GetValueAsString(pinstance);
+     cbedit.OnChange:=propeditor.EditingProcess;
+     SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6);
+     {$IFNDEF DELPHI}
+     cbedit.ReadOnly:=true;
+     {$ENDIF}
+
+     cbedit.Items.Add('True');
+     cbedit.Items.Add('False');
+     if pgdbboolean(pinstance)^ then
+                                    cbedit.ItemIndex:=0
+                                else
+                                    cbedit.ItemIndex:=1;
+
+     result.editor:=propeditor;
+     result.mode:=TEM_Integrate;
+end;
+class function TBaseTypesEditors.TEnumDataCreateEditor;
+var
+    cbedit:TComboBox;
+    propeditor:TPropEditor;
+    ir:itrec;
+    p:pgdbstring;
+begin
+     propeditor:=TPropEditor.Create(theowner,PInstance,ptdesc^,FreeOnLostFocus);
+     cbedit:=TComboBox.Create(propeditor);
+     cbedit.Text:=ptdesc^.GetValueAsString(pinstance);
+     cbedit.OnChange:=propeditor.EditingProcess;
+     cbedit.OnExit:=propeditor.ExitEdit;
+     {$IFNDEF DELPHI}
+     cbedit.ReadOnly:=true;
+     {$ENDIF}
+
+                             p:=PTEnumData(Pinstance)^.Enums.beginiterate(ir);
+                             if p<>nil then
+                             repeat
+                                   cbedit.Items.Add(p^);
+                                   p:=PTEnumData(Pinstance)^.Enums.iterate(ir);
+                             until p=nil;
+
+     cbedit.ItemIndex:=PTEnumData(Pinstance)^.Selected;
+
+     result.editor:=propeditor;
+     result.mode:=TEM_Integrate;
+end;
+class function TBaseTypesEditors.EnumDescriptorCreateEditor;
+var
+    cbedit:TComboBox;
+    propeditor:TPropEditor;
+    ir:itrec;
+    number:longword;
+    p:pgdbstring;
+begin
+     propeditor:=TPropEditor.Create(theowner,PInstance,ptdesc^,FreeOnLostFocus);
+     cbedit:=TComboBox.Create(propeditor);
+     cbedit.Text:=ptdesc^.GetValueAsString(pinstance);
+     cbedit.OnChange:=propeditor.EditingProcess;
+     SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6);
+     {$IFNDEF DELPHI}
+     cbedit.ReadOnly:=true;
+     {$ENDIF}
+
+                             p:=PEnumDescriptor(ptdesc)^.UserValue.beginiterate(ir);
+                             if p<>nil then
+                             repeat
+                                   cbedit.Items.Add(p^);
+                                   p:=PEnumDescriptor(ptdesc)^.UserValue.iterate(ir);
+                             until p=nil;
+
+     PEnumDescriptor(ptdesc)^.GetNumberInArrays(PInstance,number);
+     cbedit.ItemIndex:=number;
+
+     result.editor:=propeditor;
+     result.mode:=TEM_Integrate;
+end;
+
+
 function LWDecorator(PInstance:GDBPointer):GDBString;
 begin
      result:=GetLWNameFromLW(PTGDBLineWeight(PInstance)^);
@@ -61,7 +206,7 @@ begin
 end;
 procedure CreateComboPropEditor(TheOwner:TPropEditorOwner;pinstance:pointer;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;out propeditor:TPropEditor; out cbedit:TComboBox);
 begin
-  propeditor:=TPropEditor.Create(theowner,PInstance,ptd,FreeOnLostFocus);
+  propeditor:=TPropEditor.Create(theowner,PInstance,ptd^,FreeOnLostFocus);
   propeditor.byObjects:=true;
   propeditor.changed:=false;
   cbedit:=TComboBox.Create(propeditor);
@@ -160,6 +305,17 @@ begin
                          PT^.Decorators.OnDrawProperty:=DrawProperty;
                     end;
 end;
+procedure AddEditorToType(tn:string; CreateEditor:TCreateEditorFunc);
+var
+   PT:PUserTypeDescriptor;
+begin
+     PT:=SysUnit.TypeName2PTD(tn);
+     if PT<>nil then
+                    begin
+                         PT^.onCreateEditorFunc:=CreateEditor;
+                    end;
+end;
+
 function BooleanGetPrefferedFastEditorSize(PInstance:GDBPointer):TSize;
 var
   Details: TThemedElementDetails;
@@ -640,6 +796,26 @@ begin
 end;
 procedure DecorateSysTypes;
 begin
+     AddEditorToType('GDBBoolean',TBaseTypesEditors.GDBBooleanCreateEditor);
+
+
+     AddEditorToType('GDBShortint',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('GDBByte',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('GDBSmallint',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('GDBWord',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('GDBInteger',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('GDBLongword',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('GDBQWord',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('GDBDouble',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('GDBString',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('GDBAnsiString',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('GDBFloat',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('GDBPointer',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('GDBPtrUInt',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('TEnumDataDescriptor',TBaseTypesEditors.TEnumDataCreateEditor);
+     EnumGlobalEditor:=TBaseTypesEditors.EnumDescriptorCreateEditor;
+
+
      DecorateType('TGDBLineWeight',@LWDecorator,@LineWeightDecoratorCreateEditor,@drawLWProp);
      DecorateType('PGDBLayerPropObjInsp',@NamedObjectsDecorator,@LayersDecoratorCreateEditor,nil);
      DecorateType('PGDBLtypePropObjInsp',@NamedObjectsDecorator,@LTypeDecoratorCreateEditor,@drawLTProp);

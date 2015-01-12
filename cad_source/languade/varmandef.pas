@@ -127,27 +127,7 @@ TOIProps=record
 pvardesk = ^vardesk;
 TMyNotifyCommand=(TMNC_EditingDoneEnterKey,TMNC_EditingDoneLostFocus,TMNC_EditingDoneESC,TMNC_EditingProcess,TMNC_RunFastEditor,TMNC_EditingDoneDoNothing);
 TMyNotifyProc=procedure (Sender: TObject;Command:TMyNotifyCommand) of object;
-TPropEditor=class(TComponent)
-                 public
-                 PInstance:GDBPointer;
-                 PTD:PUserTypeDescriptor;
-                 OwnerNotify:TMyNotifyProc;
-                 fFreeOnLostFocus:boolean;
-                 byObjects:boolean;
-                 CanRunFastEditor:boolean;
-                 RunFastEditorValue:tobject;
-                 changed:boolean;
-                 constructor Create(AOwner:TComponent;_PInstance:GDBPointer;_PTD:PUserTypeDescriptor;FreeOnLostFocus:boolean);
-                 destructor Destroy;override;
-                 procedure EditingDone(Sender: TObject);//Better name ..LostFocus..
-                 procedure EditingDone2(Sender: TObject);
-                 procedure StoreData(Sender: TObject);
-                 procedure EditingProcess(Sender: TObject);
-                 procedure ExitEdit(Sender: TObject);
-                 procedure keyPress(Sender: TObject; var Key: char);
-                 function geteditor:TWinControl;
-            end;
-
+TCreateEditorFunc=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;ptdesc:PUserTypeDescriptor):TEditorDesc of object;
 UserTypeDescriptor=object(GDBaseObject)
                          SizeInGDBBytes:GDBInteger;
                          TypeName:String;
@@ -156,9 +136,10 @@ UserTypeDescriptor=object(GDBaseObject)
                          Collapsed:GDBBoolean;
                          Decorators:TDecoratedProcs;
                          FastEditor:TFastEditorProcs;
+                         onCreateEditorFunc:TCreateEditorFunc;
                          constructor init(size:GDBInteger;tname:string;pu:pointer);
                          procedure _init(size:GDBInteger;tname:string;pu:pointer);
-                         function CreateEditor(TheOwner:TPropEditorOwner;rect:trect{x,y,w,h:GDBInteger};pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
+                         function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
                          procedure ApplyOperator(oper,path:GDBString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;abstract;
                          function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
                          function SerializePreProcess(Value:GDBString;sub:integer):GDBString;virtual;
@@ -177,6 +158,26 @@ UserTypeDescriptor=object(GDBaseObject)
                          procedure IncAddr(var addr:GDBPointer);virtual;
                          function GetFactTypedef:PUserTypeDescriptor;virtual;
                    end;
+TPropEditor=class(TComponent)
+                 public
+                 PInstance:GDBPointer;
+                 PTD:PUserTypeDescriptor;
+                 OwnerNotify:TMyNotifyProc;
+                 fFreeOnLostFocus:boolean;
+                 byObjects:boolean;
+                 CanRunFastEditor:boolean;
+                 RunFastEditorValue:tobject;
+                 changed:boolean;
+                 constructor Create(AOwner:TComponent;_PInstance:GDBPointer;var _PTD:UserTypeDescriptor;FreeOnLostFocus:boolean);
+                 destructor Destroy;override;
+                 procedure EditingDone(Sender: TObject);//Better name ..LostFocus..
+                 procedure EditingDone2(Sender: TObject);
+                 procedure StoreData(Sender: TObject);
+                 procedure EditingProcess(Sender: TObject);
+                 procedure ExitEdit(Sender: TObject);
+                 procedure keyPress(Sender: TObject; var Key: char);
+                 function geteditor:TWinControl;
+            end;
   //pd=^GDBDouble;
   {-}{/pGDBInteger=^GDBInteger;/}
   //pstr=^GDBString;
@@ -250,11 +251,11 @@ var
 implementation
 uses log;
 
-constructor TPropEditor.Create(AOwner:TComponent;_PInstance:GDBPointer;_PTD:PUserTypeDescriptor;FreeOnLostFocus:boolean);
+constructor TPropEditor.Create(AOwner:TComponent;_PInstance:GDBPointer;var _PTD:UserTypeDescriptor;FreeOnLostFocus:boolean);
 begin
      inherited create(AOwner);
      PInstance:=_PInstance;
-     PTD:=_PTD;
+     PTD:=@_PTD;
      fFreeOnLostFocus:=FreeOnLostFocus;
      byObjects:=false;
      CanRunFastEditor:=false;
@@ -402,6 +403,7 @@ begin
      oip.ci:=0;
      oip.barpos:=0;
      collapsed:=true;
+     onCreateEditorFunc:=nil;
 end;
 
 constructor UserTypeDescriptor.init;
@@ -417,8 +419,13 @@ begin
 end;
 function UserTypeDescriptor.CreateEditor;
 begin
-     result.editor:=nil;
-     result.mode:=TEM_Nothing;
+     if assigned(onCreateEditorFunc) then
+                                         result:=onCreateEditorFunc(TheOwner,rect,pinstance,psa,FreeOnLostFocus,@self)
+                                     else
+                                         begin
+                                           result.editor:=nil;
+                                           result.mode:=TEM_Nothing;
+                                         end;
 end;
 function UserTypeDescriptor.GetTypeAttributes;
 begin

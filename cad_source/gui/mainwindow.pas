@@ -22,7 +22,7 @@ unit mainwindow;
 interface
 uses
   {LCL}
-       types,AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
+       AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
        ActnList,LCLType,LCLProc,intftranslations,toolwin,LMessages,LCLIntf,
        Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,FileUtil,
        menus,graphics,dialogs,XMLPropStorage,Buttons,Themes,
@@ -99,7 +99,6 @@ type
     procedure FormCreate(Sender: TObject);
     procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
     procedure AfterConstruction; override;
-    destructor Destroy;override;
     procedure setnormalfocus(Sender: TObject);
 
     procedure draw;
@@ -132,13 +131,13 @@ type
     procedure correctscrollbars;
 
 
-    private
-    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     public
     rt:GDBInteger;
     FileHistory:TFileHistory;
     Drawings:TDrawings;
     CommandsHistory:TCommandHistory;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction); override;
+    destructor Destroy;override;
     procedure CreateAnchorDockingInterface;
     procedure CreateStandartInterface;
     procedure CreateInterfaceLists;
@@ -193,7 +192,6 @@ function getoglwndparam: GDBPointer; export;
 function LoadLayout_com(Operands:pansichar):GDBInteger;
 function _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject):Integer;
 procedure drawLT(const canvas:TCanvas;const ARect: TRect;const s:string;const plt:PGDBLtypeProp);safecall;
-procedure superdrawdraw(const canvas:TCanvas;const ARect: TRect;const s:string;const plt:pointer);
 
 var
   IVars:TInterfaceVars;
@@ -248,7 +246,7 @@ begin
      while not AResult do
      begin
         dwThreadID := GetCurrentThreadId;
-        dwCurThreadID := GetWindowThreadProcessId(hCurWnd,0);
+        dwCurThreadID := GetWindowThreadProcessId(hCurWnd,nil);
         AttachThreadInput(dwThreadID, dwCurThreadID, True);
         AResult := SetForegroundWindow(hWnd);
         AttachThreadInput(dwThreadID, dwCurThreadID, False);
@@ -886,7 +884,7 @@ DHPanel:=TPanel.Create(MainPanel);
 DHPanel.Align:=albottom;
 DHPanel.BevelInner:=bvNone;
 DHPanel.BevelOuter:=bvNone;
-DHPanel.BevelWidth:=0;
+DHPanel.BevelWidth:=1;
 DHPanel.AutoSize:=true;
 DHPanel.Parent:=MainPanel;
 
@@ -1388,20 +1386,6 @@ begin
                                                    end;
     b.Parent:=tb;
 end;
-procedure superdrawdraw(const canvas:TCanvas;const ARect: TRect;const s:string;const plt:pointer);
-var
-  midline:integer;
-  geom:ZGLGeometry;
-  ppoly,poldpoly:^TPOINT;
-begin
-  exit;
-  geom.init;
-  canvas.Line(round(poldpoly.x),round(midline-poldpoly.y),round(ppoly.x),round(midline-ppoly.y));
-  poldpoly:=ppoly;
-  canvas.Pen.Width:=1;
-  geom.done;
-  canvas.TextRect(ARect,ARect.Left,(ARect.Top+ARect.Bottom-5) div 2,s);
-end;
 procedure drawLT(const canvas:TCanvas;const ARect: TRect;const s:string;const plt:PGDBLtypeProp);
 var
   y:integer;
@@ -1669,7 +1653,6 @@ var
     f:GDBOpenArrayOfByte;
     line,ts,ts2,bc,masks:GDBString;
     mask:DWord;
-    buttonpos:GDBInteger;
     b:TToolButton;
     i:longint;
     w,code:GDBInteger;
@@ -1786,7 +1769,7 @@ begin
                                baction:=TmyButtonAction.Create(StandartActions);
                                baction.button:=b;
                                baction.ShortCut:=shortcut;
-                               StandartActions.AddMyAction(TMyAction(baction));
+                               StandartActions.AddMyAction(baction);
                                end;
                                ts2:='';
                           end;
@@ -1847,7 +1830,6 @@ begin
                      end;
                      if uppercase(line)='SEPARATOR' then
                                          begin
-                                         buttonpos:=buttonpos+3;
                                          TToolButton(b):={Tmy}TToolButton.Create(tb);
                                          b.Style:=
                                          tbsDivider;

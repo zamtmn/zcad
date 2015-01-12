@@ -19,7 +19,7 @@
 unit SysInfo;
 {$INCLUDE def.inc}
 interface
-uses strproc,gdbasetypes,Forms,gdbase{$IFNDEF DELPHI},fileutil{$ENDIF},zcadsysvars,sysutils;
+uses gdbasetypes,Forms,gdbase{$IFNDEF DELPHI},fileutil{$ENDIF},zcadsysvars,sysutils;
 {$INCLUDE revision.inc}
 type tsysparam=record
                      programpath: GDBString;
@@ -91,4 +91,4 @@ begin
      ProcessParanstr;
      //sysparam.verstr:=Format('%d.%d.%d.%d SVN: %s',[sysparam.ver.major,sysparam.ver.minor,sysparam.ver.release,sysparam.ver.build,RevisionStr]);
 end;
-end.
+end.

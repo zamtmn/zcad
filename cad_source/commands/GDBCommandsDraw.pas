@@ -2048,6 +2048,7 @@ function CutClip_com(operands:TCommandOperands):TCommandResult;
 begin
    copyclip_com('');
    Erase_com('');
+   result:=cmd_ok;
 end;
 function InverseSelected_com(operands:TCommandOperands):TCommandResult;
 var pv:pGDBObjEntity;
@@ -2523,8 +2524,8 @@ begin
    if pcd<>nil then
    repeat
         m:=tmethod(@pcd^.obj^.Transform);
-        {m.Data:=pcd^.obj;
-        m.Code:={pointer}(@pcd^.obj^.Transform);}
+        (*m.Data:=pcd^.obj;
+        m.Code:={pointer}(@pcd^.obj^.Transform);*)
         AddMethod(m);
 
         dec(pcd^.obj^.vp.LastCameraPos);

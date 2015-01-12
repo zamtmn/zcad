@@ -20,11 +20,11 @@ unit UBaseTypeDescriptor;
 {$INCLUDE def.inc}
 interface
 uses
-      Graphics,classes,Themes,types,
+      Graphics,classes,Themes,
       strproc,log,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,sysutils,UGDBOpenArrayOfByte,gdbasetypes,
       {usupportgui,}varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,math,zcadsysvars,
 
-      StdCtrls,shared;
+      shared;
 type
 PBaseTypeDescriptor=^BaseTypeDescriptor;
 BaseTypeDescriptor=object(TUserTypeDescriptor)

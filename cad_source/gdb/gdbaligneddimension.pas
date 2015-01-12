@@ -71,7 +71,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
 function CorrectPointLine(q:GDBvertex;p1,p2:GDBvertex;out d:GDBDouble):GDBVertex;
 function GetTFromDirNormalizedPoint(q:GDBvertex;var p1,dirNormalized:GDBvertex):double;
 implementation
-uses GDBManager,log,UGDBOpenArrayOfPV,UGDBDescriptor;
+uses log,UGDBOpenArrayOfPV;
 function GDBObjAlignedDimension.GetDimStr:GDBString;
 begin
      result:=GetLinearDimStr(abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)));

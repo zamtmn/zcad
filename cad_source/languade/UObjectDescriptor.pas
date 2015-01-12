@@ -57,7 +57,7 @@ ObjectDescriptor=object(RecordDescriptor)
                        procedure MagicFreeInstance(PInstance:GDBPointer);virtual;
                  end;
 implementation
-uses varman{$IFNDEF DELPHI},lineinfo{$ENDIF};
+uses varman;
 procedure ObjectDescriptor.MagicFreeInstance(PInstance:GDBPointer);
 begin
      //RunMetod('Done',PInstance);

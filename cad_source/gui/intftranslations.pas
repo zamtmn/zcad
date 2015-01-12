@@ -183,12 +183,11 @@ begin
 end;
 function InterfaceTranslate( const Identifier, OriginalValue: String): String;
 var
-   s:string;
   Item: TPOFileItem;
 
 begin
     if UTF8LowerCase(Identifier)='acn_close~caption' then
-                                s:=s;
+                                Item:=Item;
     log.programlog.LogOutStr(Identifier+' '+OriginalValue,0);
     if DisableTranslateCount>0 then
                               begin

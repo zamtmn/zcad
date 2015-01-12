@@ -71,14 +71,14 @@ const
                                   ProgramName:'#';
                            UserName:'Object';
                            PFT:@GDBPointerDescriptorOdj;
-                           Attributes:{FA_HIDDEN_IN_OBJ_INSP or }FA_READONLY;
+                           Attributes:{FA_HIDDEN_IN_OBJ_INSP or }FA_READONLY
                            );
                             //FieldName:'#';
                             //UserName:'Объект';
                             //PFT:@GDBPointerDescriptorOdj;
                             Offset:0;
                             Size:sizeof(GDBPointer);
-                            //Attributes:{FA_HIDDEN_IN_OBJ_INSP or }FA_READONLY;
+                            //Attributes:{FA_HIDDEN_IN_OBJ_INSP or }FA_READONLY
                             );
 procedure TUnitManager.AfterObjectDone;
 begin

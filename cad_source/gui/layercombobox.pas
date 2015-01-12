@@ -121,8 +121,6 @@ uses
   StdCtrls,GraphType,types;
 
 procedure TZCADDropDownForm.CreateParams(var Params: TCreateParams);
-const
-  ClassStylesOff = CS_VREDRAW or CS_HREDRAW;
 begin
   inherited CreateParams(Params);
 end;

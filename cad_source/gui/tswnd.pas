@@ -22,7 +22,7 @@ unit tswnd;
 interface
 
 uses
-  LMessages,ugdbdimstylearray,ugdbfont,selectorwnd,ugdbltypearray,ugdbutil,log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
+  LMessages,ugdbdimstylearray,ugdbfont,log,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 

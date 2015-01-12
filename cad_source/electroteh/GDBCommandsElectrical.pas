@@ -188,19 +188,19 @@ begin
              PGDBInteger(Pprocdata)^:=PGDBInteger(pvd^.data.Instance)^;
      end; *)
 end;
-function icf (pnode:PGDBBaseNode;PExpr:GDBPointer):GDBBoolean;
+(*function icf (pnode:PGDBBaseNode;PExpr:GDBPointer):GDBBoolean;
 //var
 //   pvd:pvardesk;
 begin
- (*    result:=false;
+     result:=false;
      if PGDBEmSEPDeviceNode(pnode)^.upcable<>nil then
      begin
           pvd:=PGDBEmSEPDeviceNode(pnode)^.upcable^.StartSegment.OU.FindVariable('GC_HDGroup');
           if pvd<>nil then
           if PGDBInteger(pvd^.data.Instance)^=PGDBInteger(PExpr)^ then
              result:=true;
-     end; *)
-end;
+     end;
+end;*)
 function g2x(g:gdbinteger):GDBInteger;
 begin
      result:=30*g;
@@ -1747,6 +1747,7 @@ var //i: GDBInteger;
 
     eq:pvardesk;
 begin
+  filename:='';
   if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Сохранить данные...') then
   begin
   DecimalSeparator := ',';
@@ -1900,6 +1901,7 @@ var //i: GDBInteger;
     pcd:PTCableDesctiptor;
 
 begin
+  filename:='';
   if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Сохранить данные...') then
   begin
   bom.init(1000);

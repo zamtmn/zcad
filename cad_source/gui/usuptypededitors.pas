@@ -22,7 +22,7 @@ unit usuptypededitors;
 interface
 
 uses
-  UGDBOpenArrayOfUCommands,usupportgui,Varman,UBaseTypeDescriptor,varmandef,StdCtrls,sysutils,Forms,UGDBDescriptor,zcadstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,zcadsysvars,commandline,zcadinterface;
+  UGDBOpenArrayOfUCommands,usupportgui,Varman,UBaseTypeDescriptor,varmandef,StdCtrls,sysutils,Forms,UGDBDescriptor,Controls,Classes,strproc,zcadsysvars,commandline,zcadinterface;
 
 type
   TUndoContext=record
@@ -86,7 +86,7 @@ begin
 end;
 procedure TSupportTypedEditors.ClearEDContext;
 begin
-     undocontext.UndoCommand:=0;
+     undocontext.UndoCommand:=nil;
      undocontext.UndoStack:=nil;
 end;
 function TSupportTypedEditors.createeditor(const TheOwner:TPropEditorOwner; const AEditedControl:TObject; const r: TRect; const variable; const vartype:String;UndoPrefixProcedure:TUndoPrefixProcedure; useinternalundo:boolean=true):boolean;

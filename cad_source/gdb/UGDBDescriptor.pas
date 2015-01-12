@@ -32,7 +32,7 @@ UGDBTextStyleArray,
 UGDBFontManager,
 ugdbltypearray,
 UGDBOpenArrayOfPV,
-GDBRoot,ugdbfont,
+ugdbfont,
 UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,ugdbtrash,UGDBOpenArrayOfByte,oglwindowdef;
 type
 {EXPORT+}
@@ -79,7 +79,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     constructor init;
                     constructor initnul;
                     destructor done;virtual;
-                    function AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer):integer;virtual;
+                    //function AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer):integer;virtual;
 
                     function GetCurrentROOT:PGDBObjGenericSubEntry;
 
@@ -201,6 +201,7 @@ end;
       begin
            if dwg.GetFileName=rsUnnamedWindowTitle then
            begin
+                s1:='';
                 if not(SaveFileDialog(s1,'dxf',ProjectFileFilter,'',rsSaveFile)) then
                 begin
                      result:=cmd_error;
@@ -631,7 +632,7 @@ begin
   //CurrentDWG.DWGUnits.init;
   inherited initnul;
 end;
-function GDBDescriptor.AfterDeSerialize;
+(*function GDBDescriptor.AfterDeSerialize;
 begin
      CurrentDWG.pcamera:=SysUnit.InterfaceVariables.findvardesc('camera').data.Instance;
      //CurrentDWG.ConstructObjRoot.init({$IFDEF DEBUGBUILD}'{B1036F20-56klhj2D-4B17-A33A-61CF3F5F2A90}',{$ENDIF}65535);
@@ -639,7 +640,7 @@ begin
      CurrentDWG.SelObjArray.init({$IFDEF DEBUGBUILD}'{0CC3A9A3-B9C2-4FkjhB5-BFB1-8791C261C577}',{$ENDIF}65535);
      CurrentDWG.OnMouseObj.init({$IFDEF DEBUGBUILD}'{85654C90-FF49-427длро2-B429-4D134913BC26}',{$ENDIF}100);
      //BlockDefArray.init({$IFDEF DEBUGBUILD}'{E5CE9274-01D8-fgjhfgh9-AF2E-D1AB116B5737}',{$ENDIF}1000);
-end;
+end;*)
 destructor TDrawing.done;
 begin
      inherited;

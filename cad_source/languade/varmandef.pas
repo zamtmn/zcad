@@ -20,7 +20,14 @@ unit varmandef;
 {$INCLUDE def.inc}
 
 interface
-uses zcadsysvars,SysUtils,UGDBTree,UGDBStringArray,{gdbobjectsconstdef,}strutils,gdbasetypes,
+uses
+  {$IFDEF LCLGTK2}
+  gtk2,gdk2,
+  {$ENDIF}
+  {$IFDEF LCLQT}
+  qtwidgets,qt4,qtint,
+  {$ENDIF}
+  zcadsysvars,SysUtils,UGDBTree,UGDBStringArray,{gdbobjectsconstdef,}strutils,gdbasetypes,
   UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,gdbase,UGDBOpenArrayOfData,
   UGDBOpenArrayOfPObjects,
   Classes,Controls,StdCtrls,Graphics,types{$IFNDEF DELPHI},LCLVersion{$ENDIF};
@@ -449,7 +456,9 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('varmandef.initialization');{$ENDIF}
   DecimalSeparator := '.';
-  {$IFNDEF DELPHI}
+
+{$IFNDEF DELPHI}
+
   SysVar.SYS.SSY_CompileInfo.SYS_Compiler:='Free Pascal Compiler (FPC)';
   SysVar.SYS.SSY_CompileInfo.SYS_CompilerVer:={$I %FPCVERSION%};
   SysVar.SYS.SSY_CompileInfo.SYS_CompilerTargetCPU:={$I %FPCTARGETCPU%};
@@ -457,7 +466,22 @@ begin
   SysVar.SYS.SSY_CompileInfo.SYS_CompileDate:={$I %DATE%};
   SysVar.SYS.SSY_CompileInfo.SYS_CompileTime:={$I %TIME%};
   SysVar.SYS.SSY_CompileInfo.SYS_LCLVersion:=lcl_version;
+  SysVar.SYS.SSY_CompileInfo.SYS_LCLFullVersion:=inttostr(lcl_fullversion);
+  {$IFDEF LCLWIN32}
+     SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion:='Windows ';
+     if Win32CSDVersion<>'' then
+                                SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion:=SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion+inttostr(Win32MajorVersion)+'.'+inttostr(Win32MinorVersion)+' build '+inttostr(Win32BuildNumber)+' '+Win32CSDVersion
+                            else
+                                SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion:=SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion+inttostr(Win32MajorVersion)+'.'+inttostr(Win32MinorVersion)+' build '+inttostr(Win32BuildNumber);
   {$ENDIF}
+  {$IFDEF LCLQt}
+     SysVar.SYS.SSY_CompileInfo.SYS_LCLFullVersion:='Qt'+inttostr(QtVersionMajor)+'.'+inttostr(QtVersionMinor)+'.'+inttostr(QtVersionMicro);
+  {$ENDIF}
+  {$IFDEF LCLGTK2}
+     SysVar.SYS.SSY_CompileInfo.SYS_LCLFullVersion:='GTK+'+inttostr(gtk_major_version)+'.'+inttostr(gtk_minor_version)+'.'+inttostr(gtk_micro_version);
+  {$ENDIF}
+
+{$ENDIF}
   SysVar.debug.languadedeb.NotEnlishWord:=0;
   SysVar.debug.languadedeb.UpdatePO:=0;
 end.

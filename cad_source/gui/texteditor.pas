@@ -20,7 +20,7 @@ unit texteditor;
 {$INCLUDE def.inc}
 interface
 uses
-     gdbase,gdbasetypes,
+     zcadsysvars,gdbase,gdbasetypes,
      uinfoform,Varman,zcadinterface,
      UGDBDrawingdef,strproc,GDBText,gdbobjectsconstdef,zcadstrconsts,sltexteditor,
      Controls,Classes,Forms;
@@ -49,6 +49,8 @@ begin
      InfoForm.caption:=(rsMTextEditor);
 
      InfoForm.memo.text:=astring;
+     if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
+        InfoForm.memo.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
      modalresult:=DOShowModal(InfoForm);
      if modalresult=MrOk then
                          begin
@@ -64,6 +66,8 @@ begin
 
      sltexteditor1.helptext.Caption:=rsTextEdCaption;
      sltexteditor1.EditField.TEXT:=astring;
+     if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
+        sltexteditor1.EditField.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
 
      modalresult:=DOShowModal(sltexteditor1);
 

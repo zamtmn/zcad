@@ -118,6 +118,8 @@ type
                      SYS_CompileDate:GDBString;(*'Compile date'*)(*oi_readonly*)
                      SYS_CompileTime:GDBString;(*'Compile time'*)(*oi_readonly*)
                      SYS_LCLVersion:GDBString;(*'LCL version'*)(*oi_readonly*)
+                     SYS_LCLFullVersion:GDBString;(*'LCL full version'*)(*oi_readonly*)
+                     SYS_EnvironmentVersion:GDBString;(*'Environment version'*)(*oi_readonly*)
                end;
 
   tsys=packed record

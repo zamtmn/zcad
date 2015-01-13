@@ -1193,6 +1193,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
               INTF_DwgTabsPosition:PTAlign;(*'Drawing tabs position'*)
               INTF_ShowDwgTabCloseBurron:PGDBBoolean;(*'Show drawing tab close button'*)
               INTF_DefaultControlHeight:PGDBInteger;(*'Default control height'*)(*oi_readonly*)
+              INTF_DefaultEditorFontHeight:PGDBInteger;(*'Default editor font height'*)
               INTF_OBJINSP_Properties:tobjinspinterface;(*'Object inspector properties'*)
              end;
   tdisp=packed record

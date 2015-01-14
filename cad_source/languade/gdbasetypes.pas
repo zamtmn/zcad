@@ -73,8 +73,8 @@ itrec=packed record
             itc:GDBInteger;
       end;
 {EXPORT-}
-GDBPlatformint=PtrInt;
-GDBPlatforumint=PtrUInt;
+GDBPlatformInt=PtrInt;
+GDBPlatformUInt=PtrUInt;
 //GDBchar=Char;
 implementation
 end.

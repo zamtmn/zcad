@@ -276,7 +276,7 @@ begin
                                          end;
                                          line:=pp^.GetObjName+' Layer='+pp^.vp.Layer.GetFullName;
                                          line:=line+' Name='+pvd.data.PTD.GetValueAsString(pvd.data.Instance);
-                                         system.str(GDBPlatforumint(pp),saddr);
+                                         system.str(GDBPlatformUInt(pp),saddr);
                                          ContextMenu.Items.Add(TmyMenuItem.create(ContextMenu,line,'SelectObjectByAddres('+saddr+')'));
                                          //if result='' then
                                          //                 result:=line
@@ -303,7 +303,7 @@ var
    pp:PGDBObjEntity;
    code:integer;
 begin
-     val(Operands,GDBPlatforumint(pp),code);
+     val(Operands,GDBPlatformUInt(pp),code);
      if (code=0)and(assigned(pp))then
                                      begin
                                      pp^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);

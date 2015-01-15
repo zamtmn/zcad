@@ -33,6 +33,11 @@ generic TMyMap <TKey, TValue, TCompare> = class(specialize TMap<TKey, TValue, TC
   function MyGetValue(key:TKey):TValue;inline;
   procedure MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);inline;
 end;
+generic GExt2LoadProcMap <TKey, TValue, TCompare> = class(specialize TMap<TKey, TValue, TCompare>)
+        procedure RegisterKey(const key:TKey; const Value:TValue);
+        function MyGetValue(key:TKey; out Value:TValue):boolean;
+end;
+
 
 
 TMapPointerToHandle=specialize TMyMap<pointer,TDWGHandle, LessPointer>;
@@ -46,6 +51,38 @@ TMapBlockHandle_BlockNames=specialize TMap<TDWGHandle,string,LessDWGHandle>;
 implementation
 uses
     log;
+procedure GExt2LoadProcMap.RegisterKey(const key:TKey; const Value:TValue);
+var
+   {$if LCL_FULLVERSION<1030000}Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;{$ENDIF}
+   {$if LCL_FULLVERSION>=1030000}Iterator:TIterator;{$ENDIF}
+begin
+  Iterator:=Find(key);
+  if  Iterator=nil then
+                       begin
+                            Insert(Key,Value);
+                       end
+                   else
+                       begin
+                            Iterator.Value:=value;
+                            Iterator.Destroy;
+                       end;
+end;
+function GExt2LoadProcMap.MyGetValue(key:TKey; out Value:TValue):boolean;
+var
+   {$if LCL_FULLVERSION>=1030000}Iterator:TIterator;{$ENDIF}
+   {$if LCL_FULLVERSION<1030000}Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;{$ENDIF}
+begin
+  Iterator:=Find(key);
+  if  Iterator=nil then
+                       result:=false
+                   else
+                       begin
+                            Value:=Iterator.GetValue;
+                            Iterator.Destroy;
+                            result:=true;
+                       end;
+end;
+
 function TMyMap.MyGetValue(key:TKey):TValue;
 var
    {$if LCL_FULLVERSION>=1030000}Iterator:TIterator;{$ENDIF}

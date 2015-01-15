@@ -20,7 +20,7 @@ unit fileformatsmanager;
 {$INCLUDE def.inc}
 
 interface
-uses gmap,gdbasetypes,gdbase,usimplegenerics,GDBGenericSubEntry,ugdbsimpledrawing,LCLVersion;
+uses gmap,gdbasetypes,gdbase,usimplegenerics,GDBGenericSubEntry,ugdbsimpledrawing;
 
 type
 TFileLoadProcedure=procedure(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
@@ -28,11 +28,6 @@ TFileFormatData=packed record
                 FormatDesk:GDBString;
                 FileLoadProcedure:TFileLoadProcedure;
                 end;
-
-generic GExt2LoadProcMap <TKey, TValue, TCompare> = class(specialize TMap<TKey, TValue, TCompare>)
-        procedure RegisterKey(const key:TKey; const Value:TValue);
-        function MyGetValue(key:TKey; out Value:TValue):boolean;
-end;
 TExt2LoadProcMapGen=specialize GExt2LoadProcMap<GDBString,TFileFormatData,LessGDBString>;
 TExt2LoadProcMap=class(TExt2LoadProcMapGen)
                       fDefaultFileExt:GDBString;
@@ -110,40 +105,6 @@ function TExt2LoadProcMap.GetDefaultFileExt:GDBString;
 begin
      result:=fDefaultFileExt;
 end;
-
-procedure GExt2LoadProcMap.RegisterKey(const key:TKey; const Value:TValue);
-var
-   {$if LCL_FULLVERSION<1030000}Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;{$ENDIF}
-   {$if LCL_FULLVERSION>=1030000}Iterator:TIterator;{$ENDIF}
-begin
-  Iterator:=Find(key);
-  if  Iterator=nil then
-                       begin
-                            Insert(Key,Value);
-                       end
-                   else
-                       begin
-                            Iterator.Value:=value;
-                            Iterator.Destroy;
-                       end;
-end;
-function GExt2LoadProcMap.MyGetValue(key:TKey; out Value:TValue):boolean;
-var
-   {$if LCL_FULLVERSION>=1030000}Iterator:TIterator;{$ENDIF}
-   {$if LCL_FULLVERSION<1030000}Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;{$ENDIF}
-begin
-  Iterator:=Find(key);
-  if  Iterator=nil then
-                       result:=false
-                   else
-                       begin
-                            Value:=Iterator.GetValue;
-                            Iterator.Destroy;
-                            result:=true;
-                       end;
-end;
-
-
 
 initialization
   Ext2LoadProcMap:=TExt2LoadProcMap.create;

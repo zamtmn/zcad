@@ -21,7 +21,7 @@ unit GDBCommandsBase;
 
 interface
 uses
- gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbdrawingdef,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ fileformatsmanager,gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbdrawingdef,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,FileUtil,Forms,Controls,Clipbrd,lclintf,
   plugins,
   sysinfo,
@@ -35,7 +35,7 @@ uses
   oglwindowdef,
   //OGLtypes,
   UGDBOpenArrayOfByte,
-  iodxf,iodwg,
+  iodxf,{iodwg,}
   //optionswnd,
   {objinsp,}
    zcadinterface,
@@ -351,6 +351,7 @@ var
    isload:boolean;
    mem:GDBOpenArrayOfByte;
    pu:ptunit;
+   loadproc:TFileLoadProcedure;
 begin
      if gdb.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
      if gdb.GetCurrentROOT.ObjArray.Count>0 then
@@ -362,24 +363,25 @@ begin
                                                           end;
                                                      end;
      s:=operands;
-     isload:=FileExists(utf8tosys(s));
+     loadproc:=Ext2LoadProcMap.GetLoadProc(extractfileext(s));
+     isload:=(assigned(loadproc))and(FileExists(utf8tosys(s)));
      if isload then
      begin
           fileext:=uppercase(ExtractFileEXT(s));
-          if fileext='.ZCP' then LoadZCP(s, {@GDB}gdb.GetCurrentDWG^)
+          loadproc(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode,gdb.GetCurrentDWG^);
+     if FileExists(utf8tosys(s+'.dbpas')) then
+     begin
+           pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
+           mem.InitFromFile(s+'.dbpas');
+           //pu^.free;
+           units.parseunit(mem,PTSimpleUnit(pu));
+           remapprjdb(pu);
+           mem.done;
+     end;
+          (*if fileext='.ZCP' then LoadZCP(s, {@GDB}gdb.GetCurrentDWG^)
      else if fileext='.DXF' then
                                 begin
-                                     //if operands<>'QS' then
-                                     //                      gdb.GetCurrentDWG.FileName:=s;
-                                     if gdb.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
-                                                                       begin
-                                                                       //isOpenGLError;
-                                                                       end;
                                      addfromdxf(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode,gdb.GetCurrentDWG^);
-                                     if gdb.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
-                                                                       begin
-                                                                       //isOpenGLError;
-                                                                       end;
                                      if FileExists(utf8tosys(s+'.dbpas')) then
                                      begin
                                            pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
@@ -392,7 +394,7 @@ begin
                                 end
           else if fileext='.DWG' then
                                      begin
-                                          addfromdwg(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode);
+                                          addfromdwg(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode,gdb.GetCurrentDWG^);
                                           if FileExists(utf8tosys(s+'.dbpas')) then
                                           begin
                                                 pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
@@ -401,7 +403,7 @@ begin
                                                 units.parseunit(mem,PTSimpleUnit(pu));
                                                 mem.done;
                                           end;
-                                     end;
+                                     end;*)
 
      gdb.GetCurrentROOT.calcbb;
      //gdb.GetCurrentDWG.ObjRoot.format;//FormatAfterEdit;

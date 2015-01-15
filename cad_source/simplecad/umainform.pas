@@ -5,12 +5,14 @@ unit umainform;
 interface
 
 uses
-  abstractviewarea,openglviewarea,zcadinterface,gdbentityfactory,UGDBLayerArray,ugdbabstractdrawing,LCLType, geometry, GDBase, GDBasetypes, ComCtrls, UGDBDescriptor,
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, Spin,
+  LCLType,Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
+  ExtCtrls, StdCtrls, Spin,
   {From ZCAD}
-  zcadsysvars,{zcadinterface,} iodxf,varmandef, oglwindow,  UUnitManager,{urtl,}
-  UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDB3DFace,GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,ugdbsimpledrawing,{URegisterObjects,}GDBEntity,GDBManager,gdbobjectsconstdef;
+  openglviewarea,abstractviewarea,zcadsysvars, iodxf,varmandef, UUnitManager,
+  zcadinterface,gdbentityfactory,UGDBLayerArray,geometry, GDBase, GDBasetypes,
+  UGDBDescriptor,UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDB3DFace,
+  GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,ugdbsimpledrawing,
+  GDBEntity,GDBManager,gdbobjectsconstdef;
 
 type
 
@@ -139,10 +141,7 @@ end;
 procedure TForm1._FormCreate(Sender: TObject);
 var
    ptd:PTSimpleDrawing;
-   tn:GDBString;
    i:integer;
-   pobj:PGDBObjEntity;
-   v1,v2:gdbvertex;
    wpowner:TAbstractViewArea;
 begin
      {Настройка глобальных переменных необходимых для работы}
@@ -278,8 +277,6 @@ end;}
 
 procedure TForm1.BtnAddLinesClick(Sender: TObject);
 var
-   ptd:PTDrawing;
-   tn:GDBString;
    i:integer;
    pobj:PGDBObjLine;
    v1,v2:gdbvertex;
@@ -304,11 +301,9 @@ end;
 
 procedure TForm1.BtnAddLWPolylines1Click(Sender: TObject);
 var
-   ptd:PTDrawing;
-   tn:GDBString;
    i,j,vcount:integer;
    pobj:PGDBObjLWPolyline;
-   v1,v2:gdbvertex2d;
+   v1:gdbvertex2d;
    lw:GLLWWidth;
 begin
   _StartLongProcess(0,'Add lwpolylines');
@@ -338,13 +333,10 @@ begin
 end;
 procedure TForm1.BtnAdd3DFaces1Click(Sender: TObject);
 var
-   ptd:PTDrawing;
-   tn:GDBString;
    i,j:integer;
    istriangle:boolean;
    pobj:PGDBObj3DFace;
-   v1,v2:gdbvertex;
-   lw:GLLWWidth;
+   v1:gdbvertex;
 begin
   _StartLongProcess(0,'Add 3dfaces');
   for i:=1 to SpinEdit1.Value do
@@ -406,11 +398,9 @@ end;
 
 procedure TForm1.BtnAddCirclesClick(Sender: TObject);
 var
-   ptd:PTDrawing;
-   tn:GDBString;
    i:integer;
    pobj:PGDBObjCircle;
-   v1,v2:gdbvertex;
+   v1:gdbvertex;
 begin
   _StartLongProcess(0,'Add circles');
   for i:=1 to SpinEdit1.Value do
@@ -431,11 +421,9 @@ end;
 
 procedure TForm1.BtnAdd3DpolyLinesClick(Sender: TObject);
 var
-   ptd:PTDrawing;
-   tn:GDBString;
    i,j,vcount:integer;
    pobj:PGDBObjPolyline;
-   v1,v2:gdbvertex;
+   v1:gdbvertex;
 begin
   _StartLongProcess(0,'Add 3dpolylines');
   for i:=1 to SpinEdit1.Value do
@@ -462,11 +450,8 @@ end;
 
 procedure TForm1.BtnAddArcsClick(Sender: TObject);
 var
-   ptd:PTDrawing;
-   tn:GDBString;
    i:integer;
    pobj:PGDBObjArc;
-   v1,v2:gdbvertex;
 begin
   _StartLongProcess(0,'Add arcs');
   for i:=1 to SpinEdit1.Value do
@@ -500,7 +485,6 @@ procedure TForm1.BtnEraseSelClick(Sender: TObject);
 var pv:pGDBObjEntity;
     ir:itrec;
     count:integer;
-    domethod,undomethod:tmethod;
 begin
   if (gdb.GetCurrentROOT^.ObjArray.count = 0)or(GDB.GetCurrentDWG^.wa.param.seldesc.Selectedobjcount=0) then exit;
   _StartLongProcess(0,'Erase entitys');
@@ -525,11 +509,9 @@ begin
 end;
 procedure TForm1.BtnAddTextsClick(Sender: TObject);
 var
-   ptd:PTDrawing;
-   tn:GDBString;
    i:integer;
    pobj:PGDBObjText;
-   v1,v2:gdbvertex;
+   v1:gdbvertex;
    tp:GDBTextStyleProp;
    angl:double;
    ts:PGDBTextStyle;

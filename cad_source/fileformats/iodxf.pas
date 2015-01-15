@@ -72,7 +72,8 @@ procedure LoadZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawi
 procedure Import(name: GDBString;var drawing:TSimpleDrawing);
 {$ENDIF}
 implementation
-uses GDBLine,GDBBlockDef,UGDBLayerArray,varmandef;
+uses GDBLine,GDBBlockDef,UGDBLayerArray,varmandef,fileformatsmanager;
+
 function ISIFNOREDENT(name:GDBString):GDBInteger;
 var i:GDBInteger;
 begin
@@ -2906,4 +2907,5 @@ begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('iodxf.initialization');{$ENDIF} 
      i2:=0;
      FOC:=0;
+     Ext2LoadProcMap.RegisterExt('dxf','AutoCAD DXF files (*.dxf)',@addfromdxf,true);
 end.

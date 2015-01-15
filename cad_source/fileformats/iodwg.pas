@@ -21,10 +21,10 @@ unit iodwg;
 {$MODE OBJFPC}
 interface
 uses gdbentityfactory,zcadinterface,GDBLine,gdbobjectsconstdef,typinfo,zcadstrconsts,iodxf,fileutil,varman,geometry,shared,gdbasetypes,log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, sysutils, memman, UGDBDescriptor,
-     UGDBOpenArrayOfByte,GDBEntity,TypeDescriptors;
-procedure addfromdwg(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
+     UGDBOpenArrayOfByte,GDBEntity,TypeDescriptors,ugdbsimpledrawing;
+procedure addfromdwg(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 implementation
-uses {GDBBlockDef,}UGDBLayerArray;
+uses {GDBBlockDef,}UGDBLayerArray,fileformatsmanager;
 
 type
     PDWGByte=^DWGByte;
@@ -1394,7 +1394,7 @@ begin
          end;
 end;
 
-procedure addfromdwg(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
+procedure addfromdwg(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
   f: GDBOpenArrayOfByte;
   s: GDBString;
@@ -1426,4 +1426,5 @@ begin
 end;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('iodwg.initialization');{$ENDIF}
+     Ext2LoadProcMap.RegisterExt('dwg','AutoCAD DWG files (*.dwg)',@addfromdwg);
 end.

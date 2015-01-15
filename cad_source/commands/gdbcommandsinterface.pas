@@ -21,7 +21,7 @@ unit gdbcommandsinterface;
 
 interface
 uses
- backendmanager,abstractviewarea,uzglopengldrawer,uzglabstractdrawer,colorwnd,dswnd,ltwnd,tswnd,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ fileformatsmanager,backendmanager,abstractviewarea,uzglopengldrawer,uzglabstractdrawer,colorwnd,dswnd,ltwnd,tswnd,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,
   sysinfo,
@@ -263,7 +263,7 @@ begin
                      begin
                           if assigned(Showallcursorsproc) then Showallcursorsproc;
                           //mainformn.ShowAllCursors;
-                          isload:=OpenFileDialog(s,'svg',ImportFileFilter,'','Import...');
+                          isload:=OpenFileDialog(s,1,'svg',ImportFileFilter,'','Import...');
                           if assigned(RestoreAllCursorsproc) then RestoreAllCursorsproc;
                           //mainformn.RestoreCursors;
                           //s:=utf8tosys(s);
@@ -300,7 +300,7 @@ begin
      if length(operands)=0 then
                         begin
                              if assigned(Showallcursorsproc) then Showallcursorsproc;
-                             isload:=OpenFileDialog(s,'dxf',ProjectFileFilter,'',rsOpenFile);
+                             isload:=OpenFileDialog(s,Ext2LoadProcMap.GetDefaultFileFilterIndex,{'dxf'}Ext2LoadProcMap.GetDefaultFileExt,{ProjectFileFilter}Ext2LoadProcMap.GetCurrentFileFilter,'',rsOpenFile);
                              if assigned(RestoreAllCursorsproc) then RestoreAllCursorsproc;
                              //s:=utf8tosys(s);
                              if not isload then

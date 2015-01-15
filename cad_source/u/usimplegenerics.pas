@@ -20,12 +20,13 @@ unit usimplegenerics;
 {$INCLUDE def.inc}
 
 interface
-uses LCLVersion,gdbase,
+uses LCLVersion,gdbase,gdbasetypes,
      sysutils,
      gutil,gmap;
 type
 {$IFNDEF DELPHI}
 LessPointer=specialize TLess<pointer>;
+LessGDBString=specialize TLess<GDBString>;
 LessDWGHandle=specialize TLess<TDWGHandle>;
 
 generic TMyMap <TKey, TValue, TCompare> = class(specialize TMap<TKey, TValue, TCompare>)

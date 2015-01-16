@@ -18,7 +18,7 @@
 unit gdbellipse;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,zcadsysvars,GDBWithLocalCS,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
+uses gdbentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,zcadsysvars,GDBWithLocalCS,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain;
 type
 {Export+}
@@ -692,6 +692,17 @@ begin
   //PGDBObjEllipse(refp)^.format;
   //PGDBObjEllipse(refp)^.renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
 end;
+function AllocEllipse:PGDBObjEllipse;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocEllipse}',{$ENDIF}result,sizeof(GDBObjEllipse));
+end;
+function AllocAndInitEllipse(owner:PGDBObjGenericWithSubordinated):PGDBObjEllipse;
+begin
+  result:=AllocEllipse;
+  result.initnul{(owner)};
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBArc.initialization');{$ENDIF}
+  RegisterDXFEntity(GDBEllipseID,'INSERT','Ellipse',@AllocEllipse,@AllocAndInitEllipse);
 end.

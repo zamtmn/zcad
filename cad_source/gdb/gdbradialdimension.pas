@@ -19,7 +19,7 @@ unit gdbradialdimension;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdiametricdimension,gdbdimension,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,strproc,UGDBOpenArrayOfByte,geometry,gdbasetypes,SysInfo,sysutils,
+uses gdbentityfactory,gdbdiametricdimension,gdbdimension,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,strproc,UGDBOpenArrayOfByte,geometry,gdbasetypes,SysInfo,sysutils,
 gdbEntity,varmandef,
 GDBase,gdbobjectsconstdef,dxflow,memman,GDBSubordinated;
 (*
@@ -145,6 +145,17 @@ function GDBObjRadialDimension.GetObjTypeName;
 begin
      result:=ObjN_ObjRadialDimension;
 end;
+function AllocRadialDimension:PGDBObjRadialDimension;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocRadialDimension}',{$ENDIF}result,sizeof(GDBObjRadialDimension));
+end;
+function AllocAndInitRadialDimension(owner:PGDBObjGenericWithSubordinated):PGDBObjRadialDimension;
+begin
+  result:=AllocRadialDimension;
+  result.initnul(owner);
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('gdbdiametricdimension.initialization');{$ENDIF}
+  RegisterEntity(GDBRadialDimensionID,'RadialDimension',@AllocRadialDimension,@AllocAndInitRadialDimension);
 end.

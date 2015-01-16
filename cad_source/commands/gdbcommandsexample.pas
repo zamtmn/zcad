@@ -316,7 +316,7 @@ begin
         then 
           begin //if all 3 points were obtained - build primitive in the list of primitives
                 //если все 3 точки получены - строим примитив в списке примитивов
-               pd := CreateObjFree(GDBAlignedDimensionID);//allocate memory for the primitive
+               pd := AllocEnt(GDBAlignedDimensionID);//allocate memory for the primitive
                                                           //выделяем вамять под примитив
                pd^.initnul(gdb.GetCurrentROOT);//инициализируем примитив, указываем его владельца
                                                //initialize the primitive, specify its owner
@@ -383,7 +383,7 @@ begin
               vd:=pd^.vectorD;
               vn:=pd^.vectorN;
               gdb.GetCurrentDWG^.FreeConstructionObjects;
-              pd := CreateObjFree(GDBRotatedDimensionID);
+              pd := AllocEnt(GDBRotatedDimensionID);
               pd^.initnul(gdb.GetCurrentROOT);
               GDBObjSetEntityCurrentProp(pd);
 
@@ -497,7 +497,7 @@ var
       if commandmanager.Get3DPointInteractive(rsSpecifyThirdPoint,p3,@InteractiveDDimManipulator,pd) then
       begin
           gdb.GetCurrentDWG^.FreeConstructionObjects;
-          pd := CreateObjFree(GDBDiametricDimensionID);
+          pd := AllocEnt(GDBDiametricDimensionID);
           pd^.initnul(gdb.GetCurrentROOT);
 
           pd^.DimData.P10InWCS:=p1;
@@ -559,7 +559,7 @@ var
     if commandmanager.Get3DPointInteractive(rsSpecifyThirdPoint,p3,@InteractiveDDimManipulator,pd) then
     begin
          gdb.GetCurrentDWG^.FreeConstructionObjects;
-         pd := CreateObjFree(GDBRadialDimensionID);
+         pd := AllocEnt(GDBRadialDimensionID);
          pd^.initnul(gdb.GetCurrentROOT);
 
          pd^.DimData.P10InWCS:=p1;
@@ -654,7 +654,7 @@ begin
         if commandmanager.Get3DPointInteractive('Specify third point:',pe.p3,@InteractiveArcManipulator,@pe) then
           begin
                gdb.GetCurrentDWG^.FreeConstructionObjects;
-               pa := CreateObjFree(GDBArcID);
+               pa := AllocEnt(GDBArcID);
                pe.pentity:=pa;
                pa^.initnul;
 
@@ -752,7 +752,7 @@ begin
                 if commandmanager.Get3DPointInteractive('Specify second point:',pe.p3,@InteractiveSmartCircleManipulator,@pe) then
                 begin
                      gdb.GetCurrentDWG^.FreeConstructionObjects;
-                     pcircle := CreateObjFree(GDBCircleID);
+                     pcircle := AllocEnt(GDBCircleID);
                      pe.pentity:=pcircle;
                      pcircle^.initnul;
                      InteractiveSmartCircleManipulator(@pe,pe.p3,false);
@@ -762,7 +762,7 @@ begin
            else
            begin
                gdb.GetCurrentDWG^.FreeConstructionObjects;
-               pcircle := CreateObjFree(GDBCircleID);
+               pcircle := AllocEnt(GDBCircleID);
                pe.pentity:=pcircle;
                pcircle^.initnul;
                InteractiveSmartCircleManipulator(@pe,pe.p2,false);

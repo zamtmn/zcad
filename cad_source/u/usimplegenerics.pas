@@ -23,17 +23,20 @@ interface
 uses LCLVersion,gdbase,gdbasetypes,
      sysutils,
      gutil,gmap;
+{$if LCL_FULLVERSION<1030000}{$DEFINE OldIteratorDef}{$ENDIF}
+//{$if LCL_FULLVERSION>=1030000}{$ENDIF}
 type
 {$IFNDEF DELPHI}
 LessPointer=specialize TLess<pointer>;
 LessGDBString=specialize TLess<GDBString>;
 LessDWGHandle=specialize TLess<TDWGHandle>;
+LessObjID=specialize TLess<TObjID>;
 
 generic TMyMap <TKey, TValue, TCompare> = class(specialize TMap<TKey, TValue, TCompare>)
   function MyGetValue(key:TKey):TValue;inline;
   procedure MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);inline;
 end;
-generic GExt2LoadProcMap <TKey, TValue, TCompare> = class(specialize TMap<TKey, TValue, TCompare>)
+generic GKey2DataMap <TKey, TValue, TCompare> = class(specialize TMap<TKey, TValue, TCompare>)
         procedure RegisterKey(const key:TKey; const Value:TValue);
         function MyGetValue(key:TKey; out Value:TValue):boolean;
 end;
@@ -51,10 +54,13 @@ TMapBlockHandle_BlockNames=specialize TMap<TDWGHandle,string,LessDWGHandle>;
 implementation
 uses
     log;
-procedure GExt2LoadProcMap.RegisterKey(const key:TKey; const Value:TValue);
+procedure GKey2DataMap.RegisterKey(const key:TKey; const Value:TValue);
 var
-   {$if LCL_FULLVERSION<1030000}Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;{$ENDIF}
-   {$if LCL_FULLVERSION>=1030000}Iterator:TIterator;{$ENDIF}
+   {$IFDEF OldIteratorDef}
+   Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
+   {$ELSE}
+   Iterator:TIterator;
+   {$ENDIF}
 begin
   Iterator:=Find(key);
   if  Iterator=nil then
@@ -67,10 +73,13 @@ begin
                             Iterator.Destroy;
                        end;
 end;
-function GExt2LoadProcMap.MyGetValue(key:TKey; out Value:TValue):boolean;
+function GKey2DataMap.MyGetValue(key:TKey; out Value:TValue):boolean;
 var
-   {$if LCL_FULLVERSION>=1030000}Iterator:TIterator;{$ENDIF}
-   {$if LCL_FULLVERSION<1030000}Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;{$ENDIF}
+   {$IFDEF OldIteratorDef}
+   Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
+   {$ELSE}
+   Iterator:TIterator;
+   {$ENDIF}
 begin
   Iterator:=Find(key);
   if  Iterator=nil then
@@ -85,8 +94,11 @@ end;
 
 function TMyMap.MyGetValue(key:TKey):TValue;
 var
-   {$if LCL_FULLVERSION>=1030000}Iterator:TIterator;{$ENDIF}
-   {$if LCL_FULLVERSION<1030000}Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;{$ENDIF}
+   {$IFDEF OldIteratorDef}
+   Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
+   {$ELSE}
+   Iterator:TIterator;
+   {$ENDIF}
 begin
   Iterator:=Find(key);
   if  Iterator=nil then
@@ -99,8 +111,11 @@ begin
 end;
 procedure TMyMap.MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);
 var
-   {$if LCL_FULLVERSION<1030000}Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;{$ENDIF}
-   {$if LCL_FULLVERSION>=1030000}Iterator:TIterator;{$ENDIF}
+   {$IFDEF OldIteratorDef}
+   Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
+   {$ELSE}
+   Iterator:TIterator;
+   {$ENDIF}
 begin
   Iterator:=Find(key);
   if  Iterator=nil then

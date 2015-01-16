@@ -20,7 +20,7 @@ unit GDBDevice;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,UGDBDrawingdef,GDBCamera,zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
+uses gdbentityfactory,gdbdrawcontext,UGDBDrawingdef,GDBCamera,zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
 uunitmanager{,shared},
 memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,{UGDBOpenArrayOfPV,}gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray{,UGDBDescriptor}{,UGDBLayerArray,oglwindowdef};
 
@@ -627,6 +627,17 @@ begin
      self.lstonmouse:=nil;
      calcbb;
 end;
+function AllocDevice:PGDBObjDevice;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocDevice}',{$ENDIF}result,sizeof(GDBObjDevice));
+end;
+function AllocAndInitDevice(owner:PGDBObjGenericWithSubordinated):PGDBObjDevice;
+begin
+  result:=AllocDevice;
+  result.initnul{(owner)};
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBDevice.initialization');{$ENDIF}
+  RegisterEntity(GDBDeviceID,'Device',@AllocDevice,@AllocAndInitDevice);
 end.

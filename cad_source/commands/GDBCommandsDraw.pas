@@ -1512,7 +1512,7 @@ begin
              PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Width',FA_READONLY,0);
              PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('LineSpace',FA_READONLY,0);
 
-                pt := GDBPointer(CreateObjFree(GDBTextID));
+                pt := GDBPointer(AllocEnt(GDBTextID));
                 pt^.init(@GDB.GetCurrentDWG^.ConstructObjRoot,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,'',nulvertex,2.5,0,1,0,jstl);
            end;
            TIM_MText:
@@ -1523,7 +1523,7 @@ begin
                 PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Width',0,FA_READONLY);
                 PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('LineSpace',0,FA_READONLY);
 
-                pt := GDBPointer(CreateObjFree(GDBMTextID));
+                pt := GDBPointer(AllocEnt(GDBMTextID));
                 pgdbobjmtext(pt)^.init(@GDB.GetCurrentDWG^.ConstructObjRoot,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,
                                   '',nulvertex,2.5,0,1,0,jstl,10,1);
            end;
@@ -1950,7 +1950,7 @@ begin
                          gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.cleareraseobj;
                          //gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
                     end;
-    pointer(pb) :=CreateObjFree(GDBBlockInsertID);
+    pointer(pb) :=AllocEnt(GDBBlockInsertID);
     //pointer(pb) :=gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID,gdb.GetCurrentROOT);
     //pb := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.CreateObj(GDBBlockInsertID,@gdb.GetCurrentDWG^.ObjRoot));
     //PGDBObjBlockInsert(pb)^.initnul;//(@gdb.GetCurrentDWG^.ObjRoot,gdb.LayerTable.GetSystemLayer,0);

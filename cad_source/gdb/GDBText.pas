@@ -21,7 +21,7 @@ unit GDBText;
 
 interface
 uses
-ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,sysutils,ugdbfont,UGDBPoint3DArray,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
+gdbentityfactory,ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,sysutils,ugdbfont,UGDBPoint3DArray,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase,{UGDBDescriptor,}gdbobjectsconstdef,oglwindowdef,geometry,dxflow,strmy,math,memman,log,GDBSubordinated,UGDBTextStyleArray;
 type
 {Export+}
@@ -62,7 +62,7 @@ j2b: array[TTextJustify] of byte=(1,2,3,4,5,6,7,8,9,10,11,12);
 b2j: array[1..12] of TTextJustify=(jstl,jstc,jstr,jsml,jsmc,jsmr,jsbl,jsbc,jsbr,jsbtl,jsbtc,jsbtr);
 function getsymbol(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
 implementation
-uses {io,}shared;
+uses shared;
 function acadvjustify(j:TTextJustify): GDBByte;
 var
   t: GDBByte;
@@ -924,6 +924,17 @@ else if not dxfGDBIntegerload(f,72,byt,gv)then
   end;}
   //format;
 end;
+function AllocText:PGDBObjText;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocText}',{$ENDIF}result,sizeof(GDBObjText));
+end;
+function AllocAndInitText(owner:PGDBObjGenericWithSubordinated):PGDBObjText;
+begin
+  result:=AllocText;
+  result.initnul(owner);
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBText.initialization');{$ENDIF}
+  RegisterDXFEntity(GDBTextID,'TEXT','Text',@AllocText,@AllocAndInitText);
 end.

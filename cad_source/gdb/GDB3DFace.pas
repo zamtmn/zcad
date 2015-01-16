@@ -19,7 +19,7 @@ unit GDB3DFace;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
+uses gdbentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase,gdbobjectsconstdef{,oglwindowdef,dxflow},memman;
 type
 {Export+}
@@ -457,6 +457,17 @@ procedure GDBObj3DFace.rtsave;
 begin
   pGDBObj3DFace(refp)^.PInOCS:=PInOCS;
 end;
+function Alloc3DFace:PGDBObj3DFace;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{Alloc3DFace}',{$ENDIF}result,sizeof(GDBObj3DFace));
+end;
+function AllocAndInit3DFace(owner:PGDBObjGenericWithSubordinated):PGDBObj3DFace;
+begin
+  result:=Alloc3DFace;
+  result.initnul(owner);
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDB3DFace.initialization');{$ENDIF}
+  RegisterDXFEntity(GDB3DFaceID,'3DFACE','3DFace',@Alloc3DFace,@AllocAndInit3DFace);
 end.

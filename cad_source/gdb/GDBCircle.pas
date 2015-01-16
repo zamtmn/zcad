@@ -19,7 +19,7 @@
 unit GDBCircle;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBHelpObj,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray,UGDBPoint3DArray{, UGDBPolyPoint3DArray,UGDBPolyPoint2DArray},UGDBOpenArrayOfByte,varman,varmandef,
+uses gdbentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBHelpObj,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray,UGDBPoint3DArray{, UGDBPolyPoint3DArray,UGDBPolyPoint2DArray},UGDBOpenArrayOfByte,varman,varmandef,
 GDBase,GDBWithLocalCS,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman;
 type
 //PProjPoint:PGDBPolyPoint2DArray;
@@ -758,7 +758,18 @@ begin
                          end;
           end;
 end;
+function AllocCircle:PGDBObjCircle;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocCircle}',{$ENDIF}result,sizeof(GDBObjCircle));
+end;
+function AllocAndInitCircle(owner:PGDBObjGenericWithSubordinated):PGDBObjCircle;
+begin
+  result:=AllocCircle;
+  result.initnul{(owner)};
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBCircle.initialization');{$ENDIF}
+  RegisterDXFEntity(GDBCircleID,'CIRCLE','Circle',@AllocCircle,@AllocAndInitCircle);
 end.
 

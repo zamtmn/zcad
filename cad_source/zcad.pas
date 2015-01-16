@@ -40,6 +40,32 @@ uses
 
   UGDBDescriptor,
 
+  {DXF entities}
+  GDBLine,
+  GDBText,
+  GDBMText,
+  GDBPolyLine,
+  GDBCircle,
+  GDBArc,
+  GDBLWPolyLine,
+  GDBPoint,
+  GDBBlockInsert,
+  gdbellipse,
+  gdbspline,
+  GDB3DFace,
+  GDBSolid,
+  gdbgenericdimension,
+
+  {ZCAD entities}
+  GDBCable,
+  GDBDevice,
+  gdbaligneddimension,
+  gdbrotateddimension,
+  gdbdiametricdimension,
+  gdbradialdimension,
+
+
+
   //varman,
   GDBHelpObj,
   GDBManager,

@@ -242,7 +242,7 @@ begin
 
           if obozn<>'' then
           begin
-          ptext:=pointer(CreateObjFree(GDBMtextID));
+          ptext:=pointer(AllocEnt(GDBMtextID));
           ptext^.init(@gdb.CurrentDWG.ConstructObjRoot,gdb.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,obozn,CreateVertex(p.x+pbdef.vp.BoundingBox.LBN.x-1,p.y,p.z),2.5,0,0.65,90,jsbc,1,1);
           gdb.CurrentDWG.ConstructObjRoot.ObjArray.add(@ptext);
           ptext^.FormatEntity(gdb.GetCurrentDWG^);
@@ -256,7 +256,7 @@ var
    ptext:PGDBObjMText;
    v:gdbvertex;
 begin
-     pl:=pointer(CreateObjFree(GDBLineID));
+     pl:=pointer(AllocEnt(GDBLineID));
      pl^.init(@gdb.CurrentDWG.ConstructObjRoot,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,p1,p2);
      gdb.CurrentDWG.ConstructObjRoot.ObjArray.add(@pl);
      pl^.Formatentity(gdb.GetCurrentDWG^);
@@ -279,12 +279,12 @@ begin
                           else
                               a:=180+vertexangle(PGDBVertex2d(@p1)^,PGDBVertex2d(@p2)^)*180/pi;
 
-          ptext:=pointer(CreateObjFree(GDBMtextID));
+          ptext:=pointer(AllocEnt(GDBMtextID));
           ptext^.init(@gdb.CurrentDWG.ConstructObjRoot,gdb.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,GetCableMaterial(pcabledesk)+' L='+floattostr(pcabledesk^.length)+'м',vertexadd(Vertexmorph(p1,p2,0.5),v),2.5,0,0.65,a,jsbc,vertexlength(p1,p2),1);
           gdb.CurrentDWG.ConstructObjRoot.ObjArray.add(@ptext);
           ptext^.Formatentity(gdb.GetCurrentDWG^);
 
-          ptext:=pointer(CreateObjFree(GDBMtextID));
+          ptext:=pointer(AllocEnt(GDBMtextID));
           ptext^.init(@gdb.CurrentDWG.ConstructObjRoot,gdb.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,pcabledesk^.Name,vertexsub(Vertexmorph(p1,p2,0.5),v),2.5,0,0.65,a,jstc,vertexlength(p1,p2),1);
           gdb.CurrentDWG.ConstructObjRoot.ObjArray.add(@ptext);
           ptext^.Formatentity(gdb.GetCurrentDWG^);

@@ -20,7 +20,7 @@ unit GDBPoint;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,dxflow,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
+uses gdbentityfactory,gdbdrawcontext,dxflow,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,memman;
 type
 {Export+}
@@ -275,6 +275,17 @@ procedure GDBObjPoint.rtsave;
 begin
   pgdbobjpoint(refp)^.P_insertInOCS := P_insertInOCS;
 end;
+function AllocPoint:PGDBObjPoint;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocPoint}',{$ENDIF}result,sizeof(GDBObjPoint));
+end;
+function AllocAndInitPoint(owner:PGDBObjGenericWithSubordinated):PGDBObjPoint;
+begin
+  result:=AllocPoint;
+  result.initnul(owner);
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBPoint.initialization');{$ENDIF}
+  RegisterDXFEntity(GDBPointID,'POINT','Point',@AllocPoint,@AllocAndInitPoint)
 end.

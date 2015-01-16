@@ -19,7 +19,7 @@ unit gdbrotateddimension;
 {$INCLUDE def.inc}
 
 interface
-uses gdbaligneddimension,gdbdimension,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,
+uses gdbentityfactory,gdbaligneddimension,gdbdimension,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,
 strproc,UGDBOpenArrayOfByte,geometry,
 gdbasetypes,SysInfo,sysutils,
 gdbEntity,varmandef,
@@ -143,6 +143,17 @@ function GDBObjRotatedDimension.GetObjTypeName;
 begin
      result:=ObjN_ObjRotatedDimension;
 end;
+function AllocRotatedDimension:PGDBObjRotatedDimension;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocRotatedDimension}',{$ENDIF}result,sizeof(GDBObjRotatedDimension));
+end;
+function AllocAndInitRotatedDimension(owner:PGDBObjGenericWithSubordinated):PGDBObjRotatedDimension;
+begin
+  result:=AllocRotatedDimension;
+  result.initnul(owner);
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('gdbrotateddimension.initialization');{$ENDIF}
+  RegisterEntity(GDBRotatedDimensionID,'RotatedDimension',@AllocRotatedDimension,@AllocAndInitRotatedDimension);
 end.

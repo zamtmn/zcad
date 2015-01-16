@@ -52,7 +52,7 @@ GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
            end;
 {Export-}
 implementation
-uses log;
+uses gdbentityfactory,log;
 function GDBObjCable.Clone;
 var tvo: PGDBObjCable;
     i:GDBInteger;
@@ -563,6 +563,17 @@ begin
   //inherited;
   drawbb(dc);
 end;
+function AllocCable:PGDBObjCable;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocCable}',{$ENDIF}result,sizeof(GDBObjCable));
+end;
+function AllocAndInitCable(owner:PGDBObjGenericWithSubordinated):PGDBObjCable;
+begin
+  result:=AllocCable;
+  result.initnul(owner);
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBCable.initialization');{$ENDIF}
+  RegisterEntity(GDBCableID,'Cable',@AllocCable,@AllocAndInitCable);
 end.

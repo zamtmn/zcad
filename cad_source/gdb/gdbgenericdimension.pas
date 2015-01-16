@@ -19,7 +19,7 @@ unit gdbgenericdimension;
 {$INCLUDE def.inc}
 
 interface
-uses GDBWithLocalCS,gdbdimension,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,strproc,UGDBOpenArrayOfByte,geometry,gdbasetypes,SysInfo,sysutils,
+uses gdbentityfactory,GDBWithLocalCS,gdbdimension,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,strproc,UGDBOpenArrayOfByte,geometry,gdbasetypes,SysInfo,sysutils,
 gdbEntity,varmandef,
 GDBase,gdbobjectsconstdef,dxflow,memman,GDBSubordinated;
 type
@@ -167,8 +167,18 @@ begin
   DimType:=TDimType.DTRotated;
   DimData.TextMoved:=false;
 end;
-
+function AllocGenericDimension:PGDBObjGenericDimension;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocGenericDimension}',{$ENDIF}result,sizeof(GDBObjGenericDimension));
+end;
+function AllocAndInitGenericDimension(owner:PGDBObjGenericWithSubordinated):PGDBObjGenericDimension;
+begin
+  result:=AllocGenericDimension;
+  result.initnul(owner);
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('gdbgenericdimension.initialization');{$ENDIF}
   WorkingFormatSettings:=DefaultFormatSettings;
+  RegisterDXFEntity(GDBGenericDimensionID,'DIMENSION','GenericDimension',@AllocGenericDimension,@AllocAndInitGenericDimension);
 end.

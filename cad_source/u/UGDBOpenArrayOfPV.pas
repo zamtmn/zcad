@@ -234,7 +234,7 @@ begin
                    self.grow;
   if count<max then
   begin
-  temp:=CreateObjFree(t);
+  temp:=AllocEnt(t);
   //temp^.bp.ListPos.Owner:=owner;
   //add(@temp);
   end;

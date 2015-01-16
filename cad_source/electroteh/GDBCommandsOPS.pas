@@ -697,7 +697,7 @@ begin
 
      if name<>'' then
      begin
-     pt:=pointer(CreateObjFree(GDBMtextID));
+     pt:=pointer(AllocEnt(GDBMtextID));
      pt^.init({gdb.GetCurrentROOT}@root,gdb.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,name,tv,2.5,0,0.65,90,jsbc,1,1);
      pt^.TXTStyleIndex:=gdb.GetCurrentDWG.GetTextStyleTable^.getelement(0);
      {gdb.GetCurrentROOT}root.ObjArray.add(@pt);
@@ -725,22 +725,22 @@ else if datcount>1 then
                     end;
      if datcount=2 then
                        begin
-                         pl:=pointer(CreateObjFree(GDBLineID));
+                         pl:=pointer(AllocEnt(GDBLineID));
                          pl^.init({gdb.GetCurrentROOT}@root,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord,oldcoord2);
                          {gdb.GetCurrentROOT}root.ObjArray.add(@pl);
                          pl^.Formatentity(gdb.GetCurrentDWG^);
                        end
 else if datcount>2 then
                        begin
-                         pl:=pointer(CreateObjFree(GDBLineID));
+                         pl:=pointer(AllocEnt(GDBLineID));
                          pl^.init({gdb.GetCurrentROOT}@root,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord, Vertexmorphabs2(oldcoord,oldcoord2,2));
                          {gdb.GetCurrentROOT}root.ObjArray.add(@pl);
                          pl^.Formatentity(gdb.GetCurrentDWG^);
-                         pl:=pointer(CreateObjFree(GDBLineID));
+                         pl:=pointer(AllocEnt(GDBLineID));
                          pl^.init({gdb.GetCurrentROOT}@root,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,Vertexmorphabs2(oldcoord,oldcoord2,4), Vertexmorphabs2(oldcoord,oldcoord2,6));
                          {gdb.GetCurrentROOT}root.ObjArray.add(@pl);
                          pl^.Formatentity(gdb.GetCurrentDWG^);
-                         pl:=pointer(CreateObjFree(GDBLineID));
+                         pl:=pointer(AllocEnt(GDBLineID));
                          pl^.init({gdb.GetCurrentROOT}@root,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,Vertexmorphabs2(oldcoord,oldcoord2,8), oldcoord2);
                          {gdb.GetCurrentROOT}root.ObjArray.add(@pl);
                          pl^.Formatentity(gdb.GetCurrentDWG^);
@@ -748,7 +748,7 @@ else if datcount>2 then
 
      oldcoord:=currentcoord;
      currentcoord.y:=currentcoord.y+10;
-     pl:=pointer(CreateObjFree(GDBLineID));
+     pl:=pointer(AllocEnt(GDBLineID));
      pl^.init({gdb.GetCurrentROOT}@root,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord,currentcoord);
      {gdb.GetCurrentROOT}root.ObjArray.add(@pl);
      pl^.Formatentity(gdb.GetCurrentDWG^);

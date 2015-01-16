@@ -18,7 +18,7 @@
 unit GDBArc;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,ugdbdrawingdef,math,GDBWithLocalCS,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
+uses gdbentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,math,GDBWithLocalCS,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain;
 type
 {Export+}
@@ -829,6 +829,17 @@ begin
   //pgdbobjarc(refp)^.format;
   //pgdbobjarc(refp)^.renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
 end;
+function AllocArc:PGDBObjArc;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocArc}',{$ENDIF}result,sizeof(GDBObjArc));
+end;
+function AllocAndInitArc(owner:PGDBObjGenericWithSubordinated):PGDBObjArc;
+begin
+  result:=AllocArc;
+  result.initnul{(owner)};
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBArc.initialization');{$ENDIF}
+  RegisterDXFEntity(GDBArcID,'ARC','Arc',@AllocArc,@AllocAndInitArc);
 end.

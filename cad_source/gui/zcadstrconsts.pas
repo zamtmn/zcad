@@ -29,10 +29,11 @@ resourcestring
 
 
 
+
   rsRevStr='Revision SVN:';
   rsInitialization='Initialization:';
   rsVInfoText='Unstable version';
-  rsCommEntEeport='Registered commands - %s; supported entities - %s';
+  rsCommEntEeport='Registered commands - %d; registered entities - %d; registered DXF entities - %d';
   rsReleaseNotes='-UNDO\REDO - yet it is better not to use;'+#13#10+
                  #13#10+
                  '-If you have problems with rendering or selecting entities, run "Regen" and "RebuildTree" in command line;'#13#10+

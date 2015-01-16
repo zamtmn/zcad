@@ -93,6 +93,20 @@ msgctxt "tlayerwindow.listview1.columns[9].caption"
 msgid "Description"
 msgstr ""
 
+#: tlineweightselectwindow.caption
+msgid "Form1"
+msgstr ""
+
+#: tlineweightselectwindow.listview1.columns[0].caption
+msgctxt "TLINEWEIGHTSELECTWINDOW.LISTVIEW1.COLUMNS[0].CAPTION"
+msgid "Name"
+msgstr ""
+
+#: tlineweightselectwindow.listview1.columns[1].caption
+msgctxt "TLINEWEIGHTSELECTWINDOW.LISTVIEW1.COLUMNS[1].CAPTION"
+msgid "Description"
+msgstr ""
+
 #: tltwindow.bitbtn1.caption
 msgid "Update"
 msgstr ""
@@ -160,6 +174,10 @@ msgstr ""
 msgid "Object Snap Editor: Not yet implemented"
 msgstr ""
 
+#: tsltexteditor1.cancelbutton.caption
+msgid "Cancel"
+msgstr ""
+
 #: tsltexteditor1.caption
 msgctxt "tsltexteditor1.caption"
 msgid "Text editor"
@@ -174,14 +192,17 @@ msgstr ""
 msgid "Ok"
 msgstr ""
 
+#: ttextstyleswindow.addstyle.caption
+msgid "AddStyle"
+msgstr ""
+
+#: ttextstyleswindow.addstyle.hint
+msgid "Add text style"
+msgstr ""
+
 #: ttextstyleswindow.buttonapplyclose.caption
 msgctxt "TTEXTSTYLESWINDOW.BUTTONAPPLYCLOSE.CAPTION"
 msgid "Apply and close"
-msgstr ""
-
-#: ttextstyleswindow.button_apply.caption
-msgctxt "TTEXTSTYLESWINDOW.BUTTON_APPLY.CAPTION"
-msgid "Apply"
 msgstr ""
 
 #: ttextstyleswindow.caption
@@ -189,11 +210,21 @@ msgctxt "TTEXTSTYLESWINDOW.CAPTION"
 msgid "Text styles"
 msgstr ""
 
-#: ttextstyleswindow.combobox1.text
+#: ttextstyleswindow.delstyle.caption
+msgid "DelStyle"
+msgstr ""
+
+#: ttextstyleswindow.delstyle.hint
+msgid "Delete text style"
+msgstr ""
+
+#: ttextstyleswindow.fonttypefiltercombobox.text
+msgctxt "TTEXTSTYLESWINDOW.FONTTYPEFILTERCOMBOBOX.TEXT"
 msgid "All"
 msgstr ""
 
-#: ttextstyleswindow.label1.caption
+#: ttextstyleswindow.fonttypefilterdesc.caption
+msgctxt "TTEXTSTYLESWINDOW.FONTTYPEFILTERDESC.CAPTION"
 msgid "Fonts types filter:"
 msgstr ""
 
@@ -230,6 +261,38 @@ msgstr ""
 #: ttextstyleswindow.listview1.columns[6].caption
 msgctxt "TTEXTSTYLESWINDOW.LISTVIEW1.COLUMNS[6].CAPTION"
 msgid "Oblique"
+msgstr ""
+
+#: ttextstyleswindow.mkcurrentstyle.caption
+msgid "MkCurrentStyle"
+msgstr ""
+
+#: ttextstyleswindow.mkcurrentstyle.hint
+msgid "Make selected style curretn"
+msgstr ""
+
+#: ttextstyleswindow.purgestyles.caption
+msgid "PurgeStyles"
+msgstr ""
+
+#: ttextstyleswindow.purgestyles.hint
+msgid "Purge not used styles"
+msgstr ""
+
+#: ttextstyleswindow.refreshstyles.caption
+msgid "RefreshStyles"
+msgstr ""
+
+#: ttextstyleswindow.refreshstyles.hint
+msgid "Refresh styles list"
+msgstr ""
+
+#: ttextstyleswindow.separator1.caption
+msgid "Separator1"
+msgstr ""
+
+#: ttextstyleswindow.toolbar1.caption
+msgid "ToolBar1"
 msgstr ""
 
 #: ugdbdescriptor.unnamedwindowtitle
@@ -1661,6 +1724,10 @@ msgstr ""
 msgid "Rebuild entitys tree"
 msgstr ""
 
+#: zcadexternal.menucommand~blockslist
+msgid "BlocksList"
+msgstr ""
+
 #: zcadexternal.menucommand~cam_reset
 msgid "Reset camera"
 msgstr ""
@@ -2232,6 +2299,14 @@ msgstr ""
 msgid "Compile time"
 msgstr ""
 
+#: zcadexternal.tcompileinfo~sys_environmentversion
+msgid "Environment version"
+msgstr ""
+
+#: zcadexternal.tcompileinfo~sys_lclfullversion
+msgid "LCL full version"
+msgstr ""
+
 #: zcadexternal.tcompileinfo~sys_lclversion
 msgid "LCL version"
 msgstr ""
@@ -2538,6 +2613,10 @@ msgstr ""
 
 #: zcadexternal.tinterface~intf_defaultcontrolheight
 msgid "Default control height"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_defaulteditorfontheight
+msgid "Default editor font height"
 msgstr ""
 
 #: zcadexternal.tinterface~intf_dwgtabsposition
@@ -3594,12 +3673,20 @@ msgstr ""
 
 #: zcadstrconsts.rscommenteeport
 msgctxt "zcadstrconsts.rscommenteeport"
-msgid "Registered commands - %s; supported entities - %s"
+msgid "Registered commands - %d; registered entities - %d; registered DXF entities - %d"
 msgstr ""
 
 #: zcadstrconsts.rscompiledtimemsg
 msgctxt "zcadstrconsts.rscompiledtimemsg"
 msgid "Done.  %s second"
+msgstr ""
+
+#: zcadstrconsts.rscounttstylesfound
+msgid "%d Text styles found"
+msgstr ""
+
+#: zcadstrconsts.rscounttstylespurged
+msgid "%d Text styles purged"
 msgstr ""
 
 #: zcadstrconsts.rscurrentlayeroff
@@ -3862,7 +3949,7 @@ msgid "Text editor"
 msgstr ""
 
 #: zcadstrconsts.rstextstyleusedin
-msgid "Text style \"%s\" used in: %d-model, %d-blockdef table"
+msgid "Text style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
 msgstr ""
 
 #: zcadstrconsts.rstoolbarnotfound

@@ -23,7 +23,7 @@ uses
  zcadstrconsts,gettext,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
  strproc,umytreenode,{Classes, SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}
  gdbase,{UGDBDescriptor,math,commandline,varman,}languade{,UGDBTracePropArray},
-  {zforms,ZEditsWithProcedure,zbasicvisible,varmandef,shared,ZGUIsCT,ZStaticsText,}sysinfo,sysutils,iodxf;
+  {zforms,ZEditsWithProcedure,zbasicvisible,varmandef,shared,ZGUIsCT,ZStaticsText,}sysinfo,sysutils{,iodxf};
 type
   TAboutWnd = class(TFreedForm)
     Memo:TMemo;
@@ -33,7 +33,7 @@ type
 var
   AboutWindow:TAboutWnd;
 implementation
-uses {splashwnd,}shared,log,commandline;
+uses gdbentityfactory,shared,log,commandline;
 procedure TAboutWnd.AfterConstruction;
 begin
   inherited;
@@ -51,7 +51,7 @@ begin
                        +rsVinfotext+#13#10+
                        rsReleaseNotes
                        +#13#10
-                       +format(rsCommEntEeport,[inttostr(commandline.commandmanager.Count),inttostr(acadentsupportcol)]));
+                       +format(rsCommEntEeport,[commandline.commandmanager.Count,ObjID2EntInfoData.Size,DXFName2EntInfoData.Size]));
   Memo.Parent := self;
 end;
 begin

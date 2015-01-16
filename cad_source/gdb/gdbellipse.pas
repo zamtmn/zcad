@@ -704,5 +704,5 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBArc.initialization');{$ENDIF}
-  RegisterDXFEntity(GDBEllipseID,'INSERT','Ellipse',@AllocEllipse,@AllocAndInitEllipse);
+  RegisterDXFEntity(GDBEllipseID,'ELLIPSE','Ellipse',@AllocEllipse,@AllocAndInitEllipse);
 end.

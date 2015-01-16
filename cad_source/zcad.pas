@@ -30,7 +30,8 @@ uses
   splashwnd,
   zcadsysvars,
 
-  memman,log,sysinfo,
+  memman,log,
+  SysInfo,
 
   varmandef,
   varman,
@@ -72,7 +73,6 @@ uses
   //UGDBDescriptor,
   commandline,
   oglwindow,
-  shared,
   DeviceBase,
   URecordDescriptor,
   //gdbase,
@@ -95,10 +95,10 @@ uses
   GDBCommandsOPS,
   abstractviewarea,
   plugins,
-  //layerwnd,
-  zcadstrconsts,
   Objinsp,
-  mainwindow;
+  mainwindow,
+  shared,
+  zcadstrconsts;
   //RegCnownTypes,URegisterObjects;
 
 //exports HistoryOut,redrawoglwnd,updatevisible,reloadlayer; {shared}

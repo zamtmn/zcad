@@ -31,7 +31,7 @@ const
      (
      (entname:'HATCH')
      );
-     acadentsupportcol=14;
+     {acadentsupportcol=14;
      entnamtable:array[1..acadentsupportcol]of entnamindex=
      (
      (entname:'POINT'),
@@ -48,7 +48,7 @@ const
      (entname:'ELLIPSE'),
      (entname:'SPLINE'),
      (entname:'DIMENSION')
-     );
+     );}
      NULZCPHeader:ZCPHeader=(
      Signature:'';
      Copyright:'';
@@ -74,7 +74,7 @@ procedure Import(name: GDBString;var drawing:TSimpleDrawing);
 implementation
 uses GDBLine,GDBBlockDef,UGDBLayerArray,varmandef,fileformatsmanager;
 
-function ISIFNOREDENT(name:GDBString):GDBInteger;
+function IsIgnoredEntity(name:GDBString):GDBInteger;
 var i:GDBInteger;
 begin
      result:=-1;
@@ -86,7 +86,7 @@ begin
           end;
 end;
 
-function entname2GDBID(name:GDBString):GDBInteger;
+{function entname2GDBID(name:GDBString):GDBInteger;
 var i:GDBInteger;
 begin
      result:=-1;
@@ -96,7 +96,7 @@ begin
                result:=i;
                exit;
           end;
-end;
+end;}
 procedure gotodxf(var f: GDBOpenArrayOfByte; fcode: GDBInteger; fname: GDBString);
 var
   byt: GDBByte;
@@ -302,6 +302,7 @@ objid: GDBInteger;
   m4:DMatrix4D;
   trash:boolean;
   additionalunit:TUnit;
+  EntInfoData:TEntInfoData;
 begin
   additionalunit.init('temparraryunit');
   additionalunit.InterfaceUses.addnodouble(@SysUnit);
@@ -311,15 +312,17 @@ begin
     if assigned(ProcessLongProcessProc) then
                                             ProcessLongProcessProc(f.ReadPos);
     s := f.readGDBString;
-    objid:=entname2GDBID(s);
-    if (objid>0)and(group=0) then
+    if (group=0)and(DXFName2EntInfoData.MyGetValue(s,EntInfoData)) then
+    //objid:=entname2GDBID(s);
+    //if (objid>0)and(group=0) then
     begin
     if owner <> nil then
       begin
         {$IFDEF TOTALYLOG}programlog.logoutstr('AddEntitiesFromDXF.Found primitive '+s,0);{$ENDIF}
         {$IFDEF DEBUGBUILD}inc(i2);if i2=4349 then
                                                   i2:=i2;{$ENDIF}
-        pobj := {po^.CreateInitObj(objid,owner)}CreateInitObjFree(objid,nil);
+        pobj := EntInfoData.AllocAndInitEntity(nil);
+        //pobj := {po^.CreateInitObj(objid,owner)}CreateInitObjFree(objid,nil);
         PGDBObjEntity(pobj)^.LoadFromDXF(f,@additionalunit,drawing);
         if (PGDBObjEntity(pobj)^.vp.Layer=@DefaultErrorLayer)or(PGDBObjEntity(pobj)^.vp.Layer=nil) then
                                                                  PGDBObjEntity(pobj)^.vp.Layer:=drawing.LayerTable.GetSystemLayer;
@@ -444,7 +447,7 @@ begin
     begin
          if group=0 then
          begin
-         objid:=ISIFNOREDENT(s);
+         objid:=IsIgnoredEntity(s);
          if objid>0 then
          gotodxf(f, 0, '');
          end

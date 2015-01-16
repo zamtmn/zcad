@@ -19,7 +19,7 @@ unit gdbdiametricdimension;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdimension,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,
+uses gdbentityfactory,gdbdimension,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
 (*
@@ -260,6 +260,17 @@ function GDBObjDiametricDimension.GetObjTypeName;
 begin
      result:=ObjN_ObjDiametricDimension;
 end;
+function AllocDiametricDimension:PGDBObjDiametricDimension;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocDiametricDimension}',{$ENDIF}result,sizeof(GDBObjDiametricDimension));
+end;
+function AllocAndInitDiametricDimension(owner:PGDBObjGenericWithSubordinated):PGDBObjDiametricDimension;
+begin
+  result:=AllocDiametricDimension;
+  result.initnul(owner);
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('gdbdiametricdimension.initialization');{$ENDIF}
+  RegisterEntity(GDBDiametricDimensionID,'DiametricDimension',@AllocDiametricDimension,@AllocAndInitDiametricDimension);
 end.

@@ -20,7 +20,7 @@ unit GDBPolyLine;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
+uses gdbentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman;
 type
 {Export+}
@@ -298,6 +298,17 @@ begin
   end;
   vertexarrayinocs.Shrink;
 end;}
+function AllocPolyline:PGDBObjPolyline;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocLine}',{$ENDIF}result,sizeof(GDBObjPolyline));
+end;
+function AllocAndInitPolyline(owner:PGDBObjGenericWithSubordinated):PGDBObjPolyline;
+begin
+  result:=AllocPolyline;
+  result.initnul(owner);
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBPolyline.initialization');{$ENDIF}
+  RegisterDXFEntity(GDBPolylineID,'POLYLINE','3DPolyLine',@AllocPolyline,@AllocAndInitPolyline);
 end.

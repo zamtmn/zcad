@@ -20,7 +20,7 @@ unit GDBLine;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,ugdbltypearray,
+uses gdbentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,ugdbltypearray,
      zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,shared;
 type
@@ -898,6 +898,17 @@ begin
   tv:=vectortransform(tv,t_matrix);
   CoordInOCS.lend:=pgdbvertex(@tv)^;
 end;
+function AllocLine:PGDBObjLine;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocLine}',{$ENDIF}result,sizeof(GDBObjLine));
+end;
+function AllocAndInitLine(owner:PGDBObjGenericWithSubordinated):PGDBObjLine;
+begin
+  result:=AllocLine;
+  result.initnul(owner);
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBLine.initialization');{$ENDIF}
+  RegisterDXFEntity(GDBlineID,'LINE','Line',@AllocLine,@AllocAndInitLine);
 end.

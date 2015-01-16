@@ -19,7 +19,7 @@ unit GDBSolid;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,GDBWithLocalCS,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
+uses gdbentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,GDBWithLocalCS,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase,gdbobjectsconstdef{,oglwindowdef,dxflow},memman;
 type
 {Export+}
@@ -390,6 +390,17 @@ procedure GDBObjSolid.rtsave;
 begin
   pGDBObjSolid(refp)^.PInOCS:=PInOCS;
 end;
+function AllocSolid:PGDBObjSolid;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocSolid}',{$ENDIF}result,sizeof(GDBObjSolid));
+end;
+function AllocAndInitSolid(owner:PGDBObjGenericWithSubordinated):PGDBObjSolid;
+begin
+  result:=AllocSolid;
+  result.initnul(owner);
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBSolid.initialization');{$ENDIF}
+  RegisterDXFEntity(GDBSolidID,'SOLID','Solid',@AllocSolid,@AllocAndInitSolid);
 end.

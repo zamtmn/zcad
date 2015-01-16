@@ -20,7 +20,7 @@ unit GDBLWPolyLine;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,oglwindowdef,GDBCurve,UGDBVectorSnapArray,geometry,UGDBLayerArray,GDBEntity,memman,gdbasetypes,UGDBPoint3DArray,UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,varman,varmandef,
+uses gdbentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,oglwindowdef,GDBCurve,UGDBVectorSnapArray,geometry,UGDBLayerArray,GDBEntity,memman,gdbasetypes,UGDBPoint3DArray,UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase,GDBWithLocalCS,gdbobjectsconstdef,math,dxflow,sysutils,UGDBLineWidthArray;
 type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
@@ -966,6 +966,17 @@ begin
 
   end;
 end;
+function AllocLWpolyline:PGDBObjLWpolyline;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocLWpolyline}',{$ENDIF}result,sizeof(GDBObjLWpolyline));
+end;
+function AllocAndInitLWpolyline(owner:PGDBObjGenericWithSubordinated):PGDBObjLWpolyline;
+begin
+  result:=AllocLWpolyline;
+  result.initnul{(owner)};
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBLWPolyline.initialization');{$ENDIF}
+  RegisterDXFEntity(GDBLWPolylineID,'LWPOLYLINE','LWPolyline',@AllocLWpolyline,@AllocAndInitLWpolyline);
 end.

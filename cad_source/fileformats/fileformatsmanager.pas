@@ -28,7 +28,7 @@ TFileFormatData=packed record
                 FormatDesk:GDBString;
                 FileLoadProcedure:TFileLoadProcedure;
                 end;
-TExt2LoadProcMapGen=specialize GExt2LoadProcMap<GDBString,TFileFormatData,LessGDBString>;
+TExt2LoadProcMapGen=specialize GKey2DataMap<GDBString,TFileFormatData,LessGDBString>;
 TExt2LoadProcMap=class(TExt2LoadProcMapGen)
                       fDefaultFileExt:GDBString;
                       function GetCurrentFileFilter:GDBString;

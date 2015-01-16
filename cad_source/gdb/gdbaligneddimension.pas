@@ -19,7 +19,7 @@ unit gdbaligneddimension;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdimension,GDBPoint,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,
+uses gdbentityfactory,gdbdimension,GDBPoint,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
 (*
@@ -396,6 +396,17 @@ end;
 begin
      geom.DrawGeometry;
 end;}
+function AllocAlignedDimension:PGDBObjAlignedDimension;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocAlignedDimension}',{$ENDIF}result,sizeof(GDBObjAlignedDimension));
+end;
+function AllocAndInitAlignedDimension(owner:PGDBObjGenericWithSubordinated):PGDBObjAlignedDimension;
+begin
+  result:=AllocAlignedDimension;
+  result.initnul(owner);
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('gdbaligneddimension.initialization');{$ENDIF}
+  RegisterEntity(GDBAlignedDimensionID,'AlignedDimension',@AllocAlignedDimension,@AllocAndInitAlignedDimension);
 end.

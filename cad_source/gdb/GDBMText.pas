@@ -20,7 +20,7 @@ unit GDBMText;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBDrawingdef,strproc,ugdbfont,GDBAbstractText,UGDBPoint3DArray,UGDBLayerArray,SysUtils,gdbasetypes,gdbEntity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
+uses gdbentityfactory,UGDBDrawingdef,strproc,ugdbfont,GDBAbstractText,UGDBPoint3DArray,UGDBLayerArray,SysUtils,gdbasetypes,gdbEntity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase,{UGDBDescriptor,}GDBText,gdbobjectsconstdef,geometry,dxflow,strmy,math,memman,GDBSubordinated,UGDBTextStyleArray,zcadsysvars;
 const maxdxfmtextlen=250;
 type
@@ -56,7 +56,7 @@ function GetLinesH(linespace,size:GDBDouble;var lines:XYZWGDBGDBStringArray):GDB
 function GetLinesW(var lines:XYZWGDBGDBStringArray):GDBDouble;
 function GetLineSpaceFromLineSpaceF(linespacef,size:GDBDouble):GDBDouble;
 implementation
-uses {io,}shared,log;
+uses shared,log;
 procedure GDBObjMText.FormatAfterDXFLoad;
 begin
      formatcontent(drawing);
@@ -991,6 +991,17 @@ begin
   dxfGDBIntegerout(outhandle,73,2);
   dxfGDBDoubleout(outhandle,44,3 * linespace / (5 * textprop.size));
 end;
+function AllocMText:PGDBObjMText;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocMText}',{$ENDIF}result,sizeof(GDBObjMText));
+end;
+function AllocAndInitMText(owner:PGDBObjGenericWithSubordinated):PGDBObjMText;
+begin
+  result:=AllocMText;
+  result.initnul(owner);
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBMtext.initialization');{$ENDIF}
+  RegisterDXFEntity(GDBMTextID,'MTEXT','MText',@AllocMText,@AllocAndInitMText);
 end.

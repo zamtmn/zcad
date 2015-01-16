@@ -20,7 +20,7 @@ unit gdbspline;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,OGLSpecFunc,UGDBOpenArrayOfData,UGDBPoint3DArray,UGDBDrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},GDBEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
+uses gdbentityfactory,gdbdrawcontext,OGLSpecFunc,UGDBOpenArrayOfData,UGDBPoint3DArray,UGDBDrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},GDBEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman;
 type
 {Export+}
@@ -463,6 +463,17 @@ begin
   end;
   vertexarrayinocs.Shrink;
 end;}
+function AllocSpline:PGDBObjSpline;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBPolyline.initialization');{$ENDIF}
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocSpline}',{$ENDIF}result,sizeof(GDBObjSpline));
+end;
+function AllocAndInitSpline(owner:PGDBObjGenericWithSubordinated):PGDBObjSpline;
+begin
+  result:=AllocSpline;
+  result.initnul(owner);
+  result.bp.ListPos.Owner:=owner;
+end;
+begin
+  {$IFDEF DEBUGINITSECTION}LogOut('GDBSpline.initialization');{$ENDIF}
+  RegisterDXFEntity(GDBSplineID,'SPLINE','Spline',@AllocSpline,@AllocAndInitSpline);
 end.

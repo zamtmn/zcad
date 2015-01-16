@@ -19,7 +19,7 @@ unit GDBBlockInsert;
 {$INCLUDE def.inc}
 
 interface
-uses ugdbdrawingdef,UGDBLayerArray{,UGDBLayerArray},math,gdbasetypes,GDBComplex,{GDBGenericSubEntry,}SysInfo,sysutils,
+uses gdbentityfactory,ugdbdrawingdef,UGDBLayerArray{,UGDBLayerArray},math,gdbasetypes,GDBComplex,{GDBGenericSubEntry,}SysInfo,sysutils,
 {UGDBOpenArrayOfPV,}UGDBObjBlockdefArray{,UGDBSelectedObjArray,UGDBVisibleOpenArray},gdbEntity,varman{,varmandef},
 GDBBlockDef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBSubordinated,UGDBOpenArrayOfByte;
@@ -67,7 +67,7 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                   end;
 {Export-}
 implementation
-uses {GDBNet,}GDBDevice{,GDBTEXT},log;
+uses GDBDevice{,GDBTEXT},log;
 (*Procedure QDUDecomposition (const m:DMatrix4D; out kQ:DMatrix3D;out kD,kU:DVector3D);
 var
    fInvLength,fDot,fDet,fInvD0:GDBDouble;
@@ -758,6 +758,17 @@ begin
      name:='';
      inherited done;
 end;
+function AllocBlockInsert:PGDBObjBlockInsert;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocBlockInsert}',{$ENDIF}result,sizeof(GDBObjBlockInsert));
+end;
+function AllocAndInitBlockInsert(owner:PGDBObjGenericWithSubordinated):PGDBObjBlockInsert;
+begin
+  result:=AllocBlockInsert;
+  result.initnul{(owner)};
+  result.bp.ListPos.Owner:=owner;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBBlockInsert.initialization');{$ENDIF}
+  RegisterDXFEntity(GDBBlockInsertID,'INSERT','BlockInsert',@AllocBlockInsert,@AllocAndInitBlockInsert);
 end.

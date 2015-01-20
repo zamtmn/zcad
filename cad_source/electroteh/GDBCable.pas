@@ -8,7 +8,7 @@ unit GDBCable;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,GDBGenericSubEntry,ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfByte,UGDBLayerArray{,UGDBObjBlockdefArray},UUnitManager,GDBCurve,geometry,math,UGDBOpenArrayOfData,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,varman},varmandef,
+uses varman,gdbdrawcontext,GDBGenericSubEntry,ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfByte,UGDBLayerArray{,UGDBObjBlockdefArray},UUnitManager,GDBCurve,geometry,math,UGDBOpenArrayOfData,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,varman},varmandef,
 GDBase{,GDBLINE},GDBHelpObj,{UGDBDescriptor,}gdbobjectsconstdef{,oglwindowdef},dxflow,sysutils,memman,GDBSubordinated,GDBDEvICE;
 type
 {Повторное описание типа в Cableы}
@@ -573,7 +573,31 @@ begin
   result.initnul(owner);
   result.bp.ListPos.Owner:=owner;
 end;
+function Upgrade3DPolyline2Cable(ptu:PTUnit;pent:PGDBObjCurve;const drawing:TDrawingDef):PGDBObjCable;
+var
+    ptv:pgdbvertex;
+    ir:itrec;
+begin
+     result:=nil;
+     result:=AllocAndInitCable(pent^.bp.ListPos.Owner);
+     if pent^.PExtAttrib<>nil then
+     begin
+       result^.PExtAttrib:=pent^.PExtAttrib;
+       pent^.PExtAttrib:=nil;
+     end;
+     result^.vp:=pent^.vp;
+     result^.vp.ID:=GDBCableID;
+
+     ptv:=pent^.vertexarrayinocs.beginiterate(ir);
+     if ptv<>nil then
+     repeat
+        result^.AddVertex(ptv^);
+        ptv:=pent^.vertexarrayinocs.iterate(ir);
+     until ptv=nil;
+end;
+
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBCable.initialization');{$ENDIF}
   RegisterEntity(GDBCableID,'Cable',@AllocCable,@AllocAndInitCable);
+  RegisterEntityUpgradeInfo(GDBPolylineID,1,@Upgrade3DPolyline2Cable);
 end.

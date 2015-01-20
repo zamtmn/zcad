@@ -8,7 +8,7 @@ unit GDBNet;
 {$INCLUDE def.inc}
 
 interface
-Uses gdbdrawcontext,UGDBLayerArray,GDBGenericSubEntry,ugdbdrawingdef,gdbvisualprop,zcadsysvars,UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
+Uses gdbentityfactory,Varman,gdbdrawcontext,UGDBLayerArray,GDBGenericSubEntry,ugdbdrawingdef,gdbvisualprop,zcadsysvars,UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
 memman,GDBSubordinated,uunitmanager,shared,sysutils,UGDBOpenArrayOfPObjects;
 const
      UNNAMEDNET='NET';
@@ -555,6 +555,14 @@ function GDBObjNet.CanAddGDBObj;
 begin
      result:=true;
 end;
+function UpgradeLine2Net(ptu:PTUnit;pent:PGDBObjLine;const drawing:TDrawingDef):PGDBObjNet;
+begin
+   GDBGetMem({$IFDEF DEBUGBUILD}'{2D9DEF3C-7BC8-43F0-AA83-37B5F9517A0D}',{$ENDIF}pointer(result),sizeof(GDBObjNet));
+   result^.initnul(pent^.bp.ListPos.Owner);
+   result.vp.Layer:=pent^.vp.Layer;
+   result.vp.LineWeight:=pent^.vp.LineWeight;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBNet.initialization');{$ENDIF}
+  RegisterEntityUpgradeInfo(GDBLineID,UD_LineToNet,@UpgradeLine2Net);
 end.

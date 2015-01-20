@@ -37,7 +37,6 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      constructor initnul;
                      constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                      procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
-                     function FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
 
                      procedure SaveToDXF(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                      procedure CalcObjMatrix;virtual;
@@ -67,7 +66,7 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                   end;
 {Export-}
 implementation
-uses GDBDevice{,GDBTEXT},log;
+uses log;
 (*Procedure QDUDecomposition (const m:DMatrix4D; out kQ:DMatrix3D;out kD,kU:DVector3D);
 var
    fInvLength,fDot,fDet,fInvD0:GDBDouble;
@@ -373,118 +372,6 @@ begin
   //varman.init('Block_Variable');
   //varman.mergefromfile(programpath+'components\defaultblockvar.ini');
   pprojoutbound:=nil;
-end;
-function GDBObjBlockInsert.FromDXFPostProcessBeforeAdd;
-var //pblockdef:PGDBObjBlockdef;
-    //pvisible:PGDBObjEntity;
-    //i:GDBInteger;
-    //m4:DMatrix4D;
-    //TempNet:PGDBObjNet;
-    TempDevice:PGDBObjDevice;
-    //po:pgdbobjgenericsubentry;
-    //    ir:itrec;
-    //s,operand:gdbstring;
-    isdevice:GDBBoolean;
-begin
-     isdevice:=false;
-     if self.PExtAttrib<>nil then
-     if self.PExtAttrib^.Upgrade>0 then
-       isdevice:=true;
-
-     //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
-     index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
-     result:=nil;
-     //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
-     (*if pos('EL_WIRE_',uppercase(name))=1 then
-     begin
-          GDBGetMem({$IFDEF DEBUGBUILD}'{A50F676E-CE01-4795-879F-DC51EE6B1676}',{$ENDIF}GDBPointer(TempNet),sizeof(GDBObjNet));
-          result:=tempnet;
-          TempNet^.initnul(nil);
-          TempNet^.name:=copy(name,9,length(name)-8);
-          pvisible:=pblockdef.ObjArray.beginiterate(ir);
-          if pvisible<>nil then
-          repeat
-                pvisible:=pvisible^.Clone(@self);
-                pvisible^.bp.Owner:=tempnet;
-                pvisible^.format;
-                tempnet.ObjArray.add(@pvisible);
-                pvisible:=pblockdef.ObjArray.iterate(ir);
-          until pvisible=nil;
-     end
-else*) if (pos(DevicePrefix,uppercase(name))=1)or isdevice then
-     begin
-          if isdevice then
-                          name:=DevicePrefix+name;
-          GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(TempDevice),sizeof(GDBObjDevice));
-          result:=tempdevice;
-          TempDevice^.initnul;
-          {pvisible:=pblockdef.ObjArray.beginiterate(ir);
-          if pvisible<>nil then
-          repeat
-                if pvisible^.vp.ID=GDBtextID then
-                begin
-                     s:=pgdbobjtext(pvisible)^.Content;
-                     if length(s)>length(zcadmetric) then
-                     if copy(s,1,length(zcadmetric))=zcadmetric then
-                        begin
-                             s:=copy(s,length(zcadmetric)+1,length(s)-length(zcadmetric));
-                             i:=pos('=',s);
-                             operand:=copy(s,i+1,length(s)-i);
-                             s:=copy(s,1,i-1);
-                             if s='TYPE' then
-                                             begin
-                                                  if operand='CONNECTOR' then
-                                                                             TempDevice^.DType:=DT_Connector;
-                                             end
-                        else if s='GROUP' then
-                                             begin
-                                                  if operand='EL_DEVICE' then
-                                                                             TempDevice^.DGroup:=DG_El_Device;
-
-                                             end
-                        else if s='BORDER' then
-                                             begin
-                                                  if operand='OWNER' then
-                                                                             TempDevice^.DBorder:=DB_Owner
-                                             else if operand='SELF' then
-                                                                             TempDevice^.DBorder:=DB_Self;
-                                             end
-
-
-
-                        end;
-
-
-
-                end;
-                pvisible:=pblockdef.ObjArray.iterate(ir);
-          until pvisible=nil;}
-
-          TempDevice.vp.Layer:=vp.Layer;
-          TempDevice^.Local:=local;
-          TempDevice^.scale:=scale;
-          TempDevice^.rotate:=rotate;
-          TempDevice^.P_insert_in_WCS:=P_insert_in_WCS;
-{БЛЯДЬ так делать нельзя!!!!}          if PExtAttrib<>nil then
-                                                              begin
-                                                              Tempdevice^.PExtAttrib:=CopyExtAttrib;//PExtAttrib;   hjkl
-                                                              //PExtAttrib:=nil;
-                                                              end;
-
-          //TempDevice^..:=PGDBObjWithLocalCS(@self)^;
-          //TempDevice^.bp.Owner:=bp.Owner;
-          TempDevice^.name:=copy(name,8,length(name)-7);
-          //TempDevice^.index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(copy(name,8,length(name)-7)));
-          TempDevice^.index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(copy(name,8,length(name)-7)));
-          //bp.Owner^.addmi(@TempDevice);
-          //gdb.ObjRoot.ObjArray.add(@TempDevice);
-          //TempDevice^.Format;
-          //TempDevice^.CreateVarPart;
-          //gdb.ObjRoot.ObjArray.add(@TempDevice);
-          //po:=pgdbobjgenericsubentry(bp.owner);
-          //self.YouDeleted;
-          //po^.Format;
-     end
 end;
 function GDBObjBlockInsert.Clone;
 var tvo: PGDBObjBlockInsert;

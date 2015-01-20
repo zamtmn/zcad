@@ -32,7 +32,7 @@ TExtAttrib=packed record
                  FreeObject:GDBBoolean;
                  OwnerHandle:GDBQWord;
                  Handle:GDBQWord;
-                 Upgrade:GDBLongword;
+                 Upgrade:TEntUpgradeInfo;
                  ExtAttrib2:GDBBoolean;
            end;
 PGDBObjEntity=^GDBObjEntity;
@@ -161,7 +161,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
 var onlygetsnapcount:GDBInteger;
     ForeGround:TRGB;
 implementation
-uses {UGDBEntTree,}GDBGenericSubEntry,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
+uses usimplegenerics,gdbentityfactory,GDBGenericSubEntry,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
 
 procedure GDBObjEntity.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
 begin
@@ -330,8 +330,20 @@ procedure GDBObjEntity.FromDXFPostProcessAfterAdd;
 begin
 end;
 function GDBObjEntity.FromDXFPostProcessBeforeAdd;
+var
+    EntUpgradeKey:TEntUpgradeKey;
+    EntUpgradeData:TEntUpgradeData;
 begin
      result:=nil;
+     if self.PExtAttrib<>nil then
+     if self.PExtAttrib^.Upgrade>0 then
+     begin
+       EntUpgradeKey.EntityID:=vp.ID;
+       EntUpgradeKey.UprradeInfo:=self.PExtAttrib^.Upgrade;
+       if EntUpgradeKey2EntUpgradeData.MyGetValue(EntUpgradeKey,EntUpgradeData) then
+       if assigned(EntUpgradeData.EntityUpgradeFunc) then
+         result:=EntUpgradeData.EntityUpgradeFunc(ptu,@self,drawing);
+     end;
 end;
 function GDBObjEntity.AddExtAttrib;
 begin

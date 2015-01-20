@@ -8,7 +8,7 @@ unit GDBElLeader;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,GDBAbstractText,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
+uses gdbentityfactory,Varman,gdbdrawcontext,GDBAbstractText,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
 type
@@ -717,6 +717,36 @@ begin
      MarkLine.done;
      tbl.done;
 end;
+function UpgradeLine2Leader(ptu:PTUnit;pent:PGDBObjLine;const drawing:TDrawingDef):PGDBObjElLeader;
+var
+   pvi:pvardesk;
+begin
+     GDBGetMem({$IFDEF DEBUGBUILD}'{6E92EE79-96D1-45BB-94CF-5C4C2141D886}',{$ENDIF}pointer(result),sizeof(GDBObjElLeader));
+     result^.initnul;
+     result^.MainLine.CoordInOCS:=pent^.CoordInOCS;
+     result^.vp.Layer:=pent^.vp.Layer;
+     result^.vp.LineWeight:=pent^.vp.LineWeight;
+
+   if ptu<>nil then
+   begin
+   pvi:=ptu.FindVariable('size');
+   if pvi<>nil then
+                   begin
+                        result^.size:=pgdbinteger(pvi^.data.Instance)^;
+                   end;
+   pvi:=ptu.FindVariable('scale');
+   if pvi<>nil then
+                   begin
+                        result^.scale:=pgdbdouble(pvi^.data.Instance)^;
+                   end;
+   pvi:=ptu.FindVariable('twidth');
+   if pvi<>nil then
+                   begin
+                        result^.twidth:=pgdbdouble(pvi^.data.Instance)^;
+                   end;
+   end;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBElLeader.initialization');{$ENDIF}
+  RegisterEntityUpgradeInfo(GDBLineID,UD_LineToLeader,@UpgradeLine2Leader);
 end.

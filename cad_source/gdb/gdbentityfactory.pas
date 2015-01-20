@@ -21,20 +21,25 @@ unit gdbentityfactory;
 
 
 interface
-uses usimplegenerics,
+uses Varman,usimplegenerics,UGDBDrawingdef,
     memman,gdbobjectsconstdef,zcadsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity;
 type
 TAllocEntFunc=function:GDBPointer;
 TAllocAndInitEntFunc=function (owner:PGDBObjGenericSubEntry): PGDBObjEntity;
+TEntityUpgradeFunc=function (ptu:PTUnit;ent:PGDBObjEntity;const drawing:TDrawingDef): PGDBObjEntity;
 TEntInfoData=packed record
                           DXFName,UserName:GDBString;
                           EntityID:TObjID;
                           AllocEntity:TAllocEntFunc;
                           AllocAndInitEntity:TAllocAndInitEntFunc;
                      end;
+TEntUpgradeData=record
+                      EntityUpgradeFunc:TEntityUpgradeFunc;
+                end;
 
 TDXFName2EntInfoDataMap=GKey2DataMap<GDBString,TEntInfoData,LessGDBString>;
 TObjID2EntInfoDataMap=GKey2DataMap<TObjID,TEntInfoData,LessObjID>;
+TEntUpgradeDataMap=GKey2DataMap<TEntUpgradeKey,TEntUpgradeData,LessEntUpgradeKey>;
 
 function CreateInitObjFree(t:TObjID;owner:PGDBObjGenericSubEntry):PGDBObjEntity;
 function AllocEnt(t:TObjID): GDBPointer;
@@ -47,10 +52,13 @@ procedure RegisterEntity(const _EntityID:TObjID;
                          const _UserName:GDBString;
                          const _AllocEntity:TAllocEntFunc;
                          const _AllocAndInitEntity:TAllocAndInitEntFunc);
-
+procedure RegisterEntityUpgradeInfo(const _EntityID:TObjID;
+                                    const _Upgrade:TEntUpgradeInfo;
+                                    const _EntityUpgradeFunc:TEntityUpgradeFunc);
 var
   DXFName2EntInfoData:TDXFName2EntInfoDataMap;
   ObjID2EntInfoData:TObjID2EntInfoDataMap;
+  EntUpgradeKey2EntUpgradeData:TEntUpgradeDataMap;
   NeedInit:boolean=true;
 implementation
 uses
@@ -67,6 +75,7 @@ begin
      begin
        DXFName2EntInfoData:=TDXFName2EntInfoDataMap.create;
        ObjID2EntInfoData:=TObjID2EntInfoDataMap.create;
+       EntUpgradeKey2EntUpgradeData:=TEntUpgradeDataMap.Create;
        NeedInit:=false;
      end;
      EntInfoData.DXFName:=_DXFName;
@@ -98,6 +107,32 @@ var
 begin
      _RegisterEntity(_EntityID,'',_UserName,_AllocEntity,_AllocAndInitEntity,false);
 end;
+procedure _RegisterEntityUpgradeInfo(const _EntityID:TObjID;
+                                    const _Upgrade:TEntUpgradeInfo;
+                                    const _EntityUpgradeFunc:TEntityUpgradeFunc);
+var
+   EntUpgradeKey:TEntUpgradeKey;
+   EntUpgradeData:TEntUpgradeData;
+begin
+     EntUpgradeKey.EntityID:=_EntityID;
+     EntUpgradeKey.UprradeInfo:=_Upgrade;
+     EntUpgradeData.EntityUpgradeFunc:=_EntityUpgradeFunc;
+     EntUpgradeKey2EntUpgradeData.RegisterKey(EntUpgradeKey,EntUpgradeData);
+end;
+
+procedure RegisterEntityUpgradeInfo(const _EntityID:TObjID;
+                                    const _Upgrade:TEntUpgradeInfo;
+                                    const _EntityUpgradeFunc:TEntityUpgradeFunc);
+begin
+     if needinit then
+     begin
+       DXFName2EntInfoData:=TDXFName2EntInfoDataMap.create;
+       ObjID2EntInfoData:=TObjID2EntInfoDataMap.create;
+       EntUpgradeKey2EntUpgradeData:=TEntUpgradeDataMap.Create;
+       NeedInit:=false;
+     end;
+     _RegisterEntityUpgradeInfo(_EntityID,_Upgrade,_EntityUpgradeFunc);
+end;
 
 
 function CreateInitObjFree(t:TObjID;owner:PGDBObjGenericSubEntry): PGDBObjEntity;export;
@@ -125,9 +160,11 @@ initialization
   begin
     DXFName2EntInfoData:=TDXFName2EntInfoDataMap.create;
     ObjID2EntInfoData:=TObjID2EntInfoDataMap.create;
+    EntUpgradeKey2EntUpgradeData:=TEntUpgradeDataMap.Create;
     NeedInit:=false;
   end;
 finalization
   DXFName2EntInfoData.Destroy;
   ObjID2EntInfoData.Destroy;
+  EntUpgradeKey2EntUpgradeData.Destroy;
 end.

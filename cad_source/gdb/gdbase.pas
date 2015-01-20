@@ -230,6 +230,7 @@ tmatrixs=packed record
 end;
 TActulity=GDBInteger;
 TObjID=GDBWord;
+TEntUpgradeInfo=GDBLongword;
 PGDBBaseCamera=^GDBBaseCamera;
 GDBBaseCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 modelMatrix:DMatrix4D;

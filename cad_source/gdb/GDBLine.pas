@@ -82,8 +82,6 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
 
                   function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                   procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
-                  function FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
-
                   function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
            end;
 {Export-}
@@ -92,76 +90,10 @@ tlinertmodify=record
                     lbegin,lmidle,lend:GDBBoolean;
                 end;
 implementation
-uses GDBElLeader,GDBNet,log;
+uses log;
 function GDBObjLine.GetTangentInPoint(point:GDBVertex):GDBVertex;
 begin
      result:=normalizevertex(VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin));
-end;
-function GDBObjLine.FromDXFPostProcessBeforeAdd;
-var
-//    pvisible:PGDBObjEntity;
-//    i:GDBInteger;
-//    m4:DMatrix4D;
-    //po:pgdbobjgenericsubentry;
-//        ir:itrec;
-//    s,operand:gdbstring;
-//    isdevice:GDBBoolean;
-    pleader:PGDBObjElLeader;
-    pnet:PGDBObjNet;
-    pvi:pvardesk;
-begin
-     result:=nil;
-     if self.PExtAttrib<>nil then
-     if self.PExtAttrib^.Upgrade>0 then
-     begin
-          case self.PExtAttrib^.Upgrade of
- UD_LineToLeader:begin
-                      GDBGetMem({$IFDEF DEBUGBUILD}'{6E92EE79-96D1-45BB-94CF-5C4C2141D886}',{$ENDIF}pointer(pleader),sizeof(GDBObjElLeader));
-                      pleader^.initnul;
-                      pleader.MainLine.CoordInOCS:=CoordInOCS;
-                      pleader.vp.Layer:=vp.Layer;
-                      pleader.vp.LineWeight:=vp.LineWeight;
-
-                    if ptu<>nil then
-                    begin
-                    pvi:=ptu.FindVariable('size');
-                    if pvi<>nil then
-                                    begin
-                                         pleader.size:=pgdbinteger(pvi^.data.Instance)^;
-                                    end;
-                    pvi:=ptu.FindVariable('scale');
-                    if pvi<>nil then
-                                    begin
-                                         pleader.scale:=pgdbdouble(pvi^.data.Instance)^;
-                                    end;
-                    pvi:=ptu.FindVariable('twidth');
-                    if pvi<>nil then
-                                    begin
-                                         pleader.twidth:=pgdbdouble(pvi^.data.Instance)^;
-                                    end;
-                    end;
-                      result:=pleader;
-                 end;
-    UD_LineToNet:begin
-                      GDBGetMem({$IFDEF DEBUGBUILD}'{2D9DEF3C-7BC8-43F0-AA83-37B5F9517A0D}',{$ENDIF}pointer(pnet),sizeof(GDBObjNet));
-                      pnet^.initnul({gdb.GetCurrentROOT}self.bp.ListPos.Owner);
-                      //pleader.MainLine.CoordInOCS:=CoordInOCS;
-                      pnet.vp.Layer:=vp.Layer;
-                      pnet.vp.LineWeight:=vp.LineWeight;
-
-                    {if ptu<>nil then
-                    begin
-                    pvi:=ptu.FindVariable('size');
-                    if pvi<>nil then
-                                    begin
-                                         pleader.size:=pgdbinteger(pvi^.data.Instance)^;
-                                    end;
-                    end;}
-
-                      result:=pnet;
-                 end;
-          end;
-     end;
 end;
 procedure GDBObjLine.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 var tv,dir:gdbvertex;

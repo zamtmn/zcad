@@ -49,11 +49,27 @@ TMapHandleToHandle=specialize TMyMap<TDWGHandle,TDWGHandle, LessDWGHandle>;
 TMapHandleToPointer=specialize TMyMap<TDWGHandle,pointer, LessDWGHandle>;
 
 TMapBlockHandle_BlockNames=specialize TMap<TDWGHandle,string,LessDWGHandle>;
+
+TEntUpgradeKey=record
+                      EntityID:TObjID;
+                      UprradeInfo:TEntUpgradeInfo;
+               end;
+LessEntUpgradeKey=class
+  class function c(a,b:TEntUpgradeKey):boolean;inline;
+end;
 {$ENDIF}
 
 implementation
 uses
     log;
+class function LessEntUpgradeKey.c(a,b:TEntUpgradeKey):boolean;inline;
+begin
+  //c:=a<b;
+  if a.UprradeInfo=b.UprradeInfo then
+                                     exit(a.EntityID<b.EntityID)
+  else result:=a.UprradeInfo<b.UprradeInfo;
+
+end;
 procedure GKey2DataMap.RegisterKey(const key:TKey; const Value:TValue);
 var
    {$IFDEF OldIteratorDef}

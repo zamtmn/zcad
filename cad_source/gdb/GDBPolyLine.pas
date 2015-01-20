@@ -39,7 +39,6 @@ GDBObjPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
-                 function FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
@@ -47,7 +46,7 @@ GDBObjPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
            end;
 {Export-}
 implementation
-uses gdbcable,log;
+uses log;
 procedure GDBObjPolyline.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 begin
   GDBPoint3dArrayAddOnTrackAxis(VertexArrayInWCS,posr,processaxis,closed);
@@ -104,40 +103,6 @@ begin
   end;}
   Geom.DrawPolyLineWithLT(VertexArrayInWCS,vp,closed,false);
   end;
-end;
-
-function GDBObjPolyline.FromDXFPostProcessBeforeAdd;
-var
-    //isdevice:GDBBoolean;
-    tc:PGDBObjCable;
-    ptv:pgdbvertex;
-    ir:itrec;
-begin
-     result:=nil;
-     //isdevice:=false;
-     if self.PExtAttrib<>nil then
-     if self.PExtAttrib^.Upgrade>0 then
-     begin
-          GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(tc),sizeof(GDBObjCable));
-          result:=tc;
-          Tc^.initnul(pointer(bp.ListPos.owner));
-{БЛЯДЬ так делать нельзя!!!!}          if PExtAttrib<>nil then
-                                                              begin
-                                                                   Tc^.PExtAttrib:=PExtAttrib;
-                                                                   PExtAttrib:=nil;
-                                                              end;
-          tc^.vp:=vp;
-          tc^.vp.ID:=GDBCableID;
-
-
-
-  ptv:=vertexarrayinocs.beginiterate(ir);
-  if ptv<>nil then
-  repeat
-        tc.AddVertex(ptv^);
-        ptv:=vertexarrayinocs.iterate(ir);
-  until ptv=nil;
-     end;
 end;
 
 function GDBObjPolyline.GetObjTypeName;

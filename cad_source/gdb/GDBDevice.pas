@@ -20,7 +20,7 @@ unit GDBDevice;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentityfactory,gdbdrawcontext,UGDBDrawingdef,GDBCamera,zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
+uses Varman,gdbentityfactory,gdbdrawcontext,UGDBDrawingdef,GDBCamera,zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
 uunitmanager{,shared},
 memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,{UGDBOpenArrayOfPV,}gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray{,UGDBDescriptor}{,UGDBLayerArray,oglwindowdef};
 
@@ -637,7 +637,31 @@ begin
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
 end;
+function UpgradeBlockInsert2Device(ptu:PTUnit;pent:PGDBObjBlockInsert;const drawing:TDrawingDef):PGDBObjDevice;
+begin
+     pent^.index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(pent^.name));
+     result:=nil;
+     begin
+          result:=AllocAndInitDevice(pent^.bp.ListPos.Owner);
+          result^.name:=DevicePrefix+pent^.name;
+
+          result^.vp.Layer:=pent^.vp.Layer;
+          result^.Local:=pent^.local;
+          result^.scale:=pent^.scale;
+          result^.rotate:=pent^.rotate;
+          result^.P_insert_in_WCS:=pent^.P_insert_in_WCS;
+{БЛЯДЬ так делать нельзя!!!!}          if pent^.PExtAttrib<>nil then
+                                                              begin
+                                                              result^.PExtAttrib:=pent^.CopyExtAttrib;//PExtAttrib;   hjkl
+                                                              //PExtAttrib:=nil;
+                                                              end;
+          result^.name:=copy(result^.name,8,length(result^.name)-7);
+          result^.index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(result^.name));
+     end;
+end;
+
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBDevice.initialization');{$ENDIF}
   RegisterEntity(GDBDeviceID,'Device',@AllocDevice,@AllocAndInitDevice);
+  RegisterEntityUpgradeInfo(GDBBlockInsertID,1,@UpgradeBlockInsert2Device);
 end.

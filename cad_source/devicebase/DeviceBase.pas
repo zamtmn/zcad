@@ -3,7 +3,7 @@ unit DeviceBase;
 interface
 uses intftranslations,gvector,varmandef,CsvDocument,devicebaseabstract,zcadsysvars,fileutil,strproc,strmy,gdbasetypes,gdbase,UUnitManager,varman,{varmandef,}sysutils,typedescriptors,URecordDescriptor,UObjectDescriptor,shared;
 type
-{REGISTEROBJECTTYPE DbBaseObject}
+{REGISTEROBJECTTYPE DeviceDbBaseObject}
 {REGISTEROBJECTTYPE ElDeviceBaseObject}
 {REGISTEROBJECTTYPE CableDeviceBaseObject}
 {EXPORT+}

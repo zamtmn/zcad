@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh                      	
 rm cad_source/dcu/*.ppu cad_source/dcu/*.o cad_source/dcu/*.or cad_source/dcu/*.a cad_source/dcu/*.rst
 rm cad_source/dcu/*.res cad_source/dcu/*.compiled cad_source/dcu/*.lrs
 rm cad/log/*.log
@@ -12,8 +12,10 @@ rm cad_source/*.bak
 rm -rf cad_source/backup
 rm -rf cad_source/electroteh/backup
 rm cad_source/electroteh/*.bak
+rm cad_source/electroteh/*.dcu
 rm -rf cad_source/devicebase/backup
 rm cad_source/devicebase/*.bak
+rm cad_source/devicebase/*.dcu
 rm -rf cad_source/utils/backup
 rm cad_source/utils/*.bak
 rm -rf cad/rtl/backup
@@ -26,6 +28,7 @@ rm -rf cad_source/u/backup
 rm cad_source/u/*.bak
 rm -rf cad_source/commands/backup
 rm cad_source/commands/*.bak
+rm cad_source/commands/*.dcu
 rm -rf cad_source/languade/backup
 rm cad_source/languade/*.bak
 rm -rf cad_source/zwin/backup
@@ -34,10 +37,12 @@ rm cad_source/misc/*.bak
 rm -rf cad_source/simplecad/lib/
 rm cad_source/simplecad/*.bak
 rm cad_source/fileformats/*.bak
+rm cad_source/fileformats/*.dcu
 rm cad_source/other/*.bak
 rm -rf cad_source/GDB/backup
 rm -rf cad_source/misc/backup
 rm cad_source/GDB/*.bak
+rm cad_source/GDB/*.dcu
 rm -rf cad_source/languade/__history
 rm -rf cad_source/commands/__history
 rm -rf cad_source/gdb/__history

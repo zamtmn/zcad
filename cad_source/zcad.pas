@@ -37,10 +37,12 @@ uses
   varman,
   urtl,
   UUnitManager,
-  URegisterObjects,
+
+  {$INCLUDE allgeneratedfiles.inc}
 
   UGDBDescriptor,
 
+  (*            //все нужные файлы перечислены в allgeneratedfiles.inc
   {DXF entities}
   GDBLine,
   GDBText,
@@ -64,6 +66,7 @@ uses
   gdbrotateddimension,
   gdbdiametricdimension,
   gdbradialdimension,
+  *)
 
 
 

@@ -4,8 +4,6 @@ interface
 uses zcadsysvars,{$IFNDEF DELPHI}fileutil,{$ENDIF}strproc,strmy,gdbasetypes,gdbase,UUnitManager,varman,sysutils,typedescriptors,shared;
 type
 {REGISTEROBJECTTYPE DbBaseObject}
-{REGISTEROBJECTTYPE ElDeviceBaseObject}
-{REGISTEROBJECTTYPE CableDeviceBaseObject}
 {EXPORT+}
 TOborudCategory=(_misc(*'**Разное'*),
                  _elapp(*'**Электроаппараты'*),

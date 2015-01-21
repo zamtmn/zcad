@@ -22,6 +22,7 @@ uses ugdbdrawingdef,GDBSubordinated,dxflow,UGDBOpenArrayOfByte,gdbasetypes,sysut
      UGDBLayerArray,
      zcadstrconsts,varmandef,gdbobjectsconstdef,GDBGenericSubEntry,varman;
 type
+{REGISTEROBJECTTYPE GDBObjBlockdef}
 {Export+}
 PGDBObjBlockdef=^GDBObjBlockdef;
 GDBObjBlockdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)

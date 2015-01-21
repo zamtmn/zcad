@@ -21,6 +21,7 @@ interface
 uses gdbentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,math,GDBWithLocalCS,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain;
 type
+{REGISTEROBJECTTYPE GDBObjArc}
 {Export+}
 PGDBObjArc=^GDBObjARC;
 GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)

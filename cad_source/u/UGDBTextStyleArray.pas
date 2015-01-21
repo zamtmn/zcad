@@ -23,6 +23,7 @@ uses UGDBFontManager,zcadsysvars,gdbasetypes,SysInfo,sysutils,gdbase, geometry,
      strproc,varmandef,shared,ugdbfont,zcadstrconsts,UGDBNamedObjectsArray,memman;
 type
   //ptextstyle = ^textstyle;
+{REGISTEROBJECTTYPE GDBTextStyleArray}
 {EXPORT+}
 PGDBTextStyleProp=^GDBTextStyleProp;
   GDBTextStyleProp=packed record

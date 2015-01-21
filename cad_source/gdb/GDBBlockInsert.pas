@@ -25,6 +25,7 @@ GDBBlockDef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBSubordinated,UGDBOpenArrayOfByte;
 const zcadmetric='!!ZMODIFIER:';
 type
+{REGISTEROBJECTTYPE GDBObjBlockInsert}
 {Export+}
 PGDBObjBlockInsert=^GDBObjBlockInsert;
 GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)

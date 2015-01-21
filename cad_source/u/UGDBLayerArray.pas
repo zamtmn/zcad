@@ -22,6 +22,7 @@ interface
 uses zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
      varmandef,gdbobjectsconstdef,UGDBNamedObjectsArray,StrProc;
 type
+{REGISTEROBJECTTYPE GDBLayerArray}
 {EXPORT+}
 PPGDBLayerPropObjInsp=^PGDBLayerPropObjInsp;
 PGDBLayerPropObjInsp={GDBPtrUInt}GDBPointer;

@@ -35,6 +35,7 @@ UGDBOpenArrayOfPV,
 ugdbfont,
 UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,ugdbtrash,UGDBOpenArrayOfByte,oglwindowdef;
 type
+{REGISTEROBJECTTYPE GDBDescriptor}
 {EXPORT+}
 TDWGProps=packed record
                 Name:GDBString;

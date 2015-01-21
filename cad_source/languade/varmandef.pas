@@ -475,10 +475,10 @@ begin
                                 SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion:=SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion+inttostr(Win32MajorVersion)+'.'+inttostr(Win32MinorVersion)+' build '+inttostr(Win32BuildNumber);
   {$ENDIF}
   {$IFDEF LCLQt}
-     SysVar.SYS.SSY_CompileInfo.SYS_LCLFullVersion:='Qt'+inttostr(QtVersionMajor)+'.'+inttostr(QtVersionMinor)+'.'+inttostr(QtVersionMicro);
+     SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion:='Qt'+inttostr(QtVersionMajor)+'.'+inttostr(QtVersionMinor)+'.'+inttostr(QtVersionMicro);
   {$ENDIF}
   {$IFDEF LCLGTK2}
-     SysVar.SYS.SSY_CompileInfo.SYS_LCLFullVersion:='GTK+'+inttostr(gtk_major_version)+'.'+inttostr(gtk_minor_version)+'.'+inttostr(gtk_micro_version);
+     SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion:='GTK+'+inttostr(gtk_major_version)+'.'+inttostr(gtk_minor_version)+'.'+inttostr(gtk_micro_version);
   {$ENDIF}
 
 {$ENDIF}

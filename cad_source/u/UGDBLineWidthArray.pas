@@ -21,6 +21,7 @@ unit UGDBLineWidthArray;
 interface
 uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman;
 type
+{REGISTEROBJECTTYPE GDBLineWidthArray}
 {Export+}
 GDBLineWidthArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GLLWWidth*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);

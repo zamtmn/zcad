@@ -138,11 +138,14 @@ begin
                             find:=find+length(objregtoken);
                             line:=copy(line,find,length(line)-find);
                             writestring(rh,'     pt:=SysUnit.ObjectTypeName2PTD('''+line+''');');
-                            writestring(rh,'     pt^.RegisterVMT(TypeOf('+line+'));');
+                            writestring(rh,'     pt^.RegisterObject(TypeOf('+line+'),@'+line+'.initnul);');
+                            writestring(rh,'     pt^.AddMetod('''',''initnul'','''',@'+line+'.initnul,m_constructor);');
+                            writestring(rh,'');
                             if not alreadyinuses then
                                                  begin
                                                       fn:=ExtractFileName(name);
                                                       fn:=copy(fn,1,pos('.',fn)-1);
+                                                      if fn<>'gdbase' then
                                                       writestring(registerfnhandle,','+fn);
                                                  end;
                             alreadyinuses:=true;
@@ -232,7 +235,7 @@ begin
      writestring(registerhandle,'interface');
      writestring(registerhandle,'procedure RegTypes;');
      writestring(registerhandle,'implementation');
-     writestring(registerhandle,'uses URecordDescriptor,UObjectDescriptor,Varman,gdbase {$INCLUDE RFN.pas};');
+     writestring(registerhandle,'uses URecordDescriptor,UObjectDescriptor,Varman,gdbase,TypeDescriptors {$INCLUDE RFN.pas};');
      writestring(registerhandle,'procedure RegTypes;');
      writestring(registerhandle,'var');
      writestring(registerhandle,'pt:PObjectDescriptor;');

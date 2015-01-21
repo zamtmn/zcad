@@ -25,6 +25,7 @@ Uses
    UGDBEntTree,{UGDBVisibleTreeArray,UGDBOpenArrayOfPV,}
 devices,gdbase,gdbasetypes,gdbobjectsconstdef,varmandef,GDBEntity,GDBGenericSubEntry{,UGDBOpenArrayOfPV},GDBConnected,GDBSubordinated,geometry,uunitmanager{,shared};
 type
+{REGISTEROBJECTTYPE GDBObjRoot}
 {Export+}
 PGDBObjRoot=^GDBObjRoot;
 GDBObjRoot={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)

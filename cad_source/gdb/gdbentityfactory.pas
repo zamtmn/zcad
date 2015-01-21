@@ -22,7 +22,7 @@ unit gdbentityfactory;
 
 interface
 uses Varman,usimplegenerics,UGDBDrawingdef,
-    memman,gdbobjectsconstdef,zcadsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity;
+    memman,zcadsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity;
 type
 TAllocEntFunc=function:GDBPointer;
 TAllocAndInitEntFunc=function (owner:PGDBObjGenericSubEntry): PGDBObjEntity;

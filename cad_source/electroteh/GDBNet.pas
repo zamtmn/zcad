@@ -13,6 +13,7 @@ memman,GDBSubordinated,uunitmanager,shared,sysutils,UGDBOpenArrayOfPObjects;
 const
      UNNAMEDNET='NET';
 type
+{REGISTEROBJECTTYPE GDBObjNet}
 {Export+}
 PGDBObjNet=^GDBObjNet;
 GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)

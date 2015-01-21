@@ -22,6 +22,7 @@ interface
 uses zcadsysvars,gdbasetypes,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
      varmandef,OGLSpecFunc;
 type
+{REGISTEROBJECTTYPE GDBPolyline2DArray}
 {Export+}
 PGDBPolyline2DArray=^GDBPolyline2DArray;
 GDBPolyline2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex2D*)

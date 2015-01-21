@@ -22,6 +22,7 @@ interface
 uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,math,
 geometry;
 type
+{REGISTEROBJECTTYPE GDBPoint3dArray}
 {Export+}
 PGDBPoint3dArray=^GDBPoint3dArray;
 GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex*)
@@ -265,4 +266,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBPoint3DArray.initialization');{$ENDIF}
 end.
-
+

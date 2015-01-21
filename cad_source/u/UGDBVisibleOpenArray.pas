@@ -22,6 +22,7 @@ interface
 uses GDBCamera,{UGDBOpenArray,}gdbasetypes{,math},UGDBOpenArrayOfPV,{,UGDBOpenArray,oglwindowdef}sysutils,gdbase, geometry,
      {varmandef,gdbobjectsconstdef,}memman;
 type
+{REGISTEROBJECTTYPE GDBObjEntityOpenArray}
 {Export+}
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
 GDBObjEntityOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)

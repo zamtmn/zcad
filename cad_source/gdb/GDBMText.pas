@@ -25,6 +25,7 @@ GDBase,{UGDBDescriptor,}GDBText,gdbobjectsconstdef,geometry,dxflow,strmy,math,me
 const maxdxfmtextlen=250;
 type
 //procedure CalcObjMatrix;virtual;
+{REGISTEROBJECTTYPE GDBObjMText}
 {Export+}
 PGDBObjMText=^GDBObjMText;
 GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)

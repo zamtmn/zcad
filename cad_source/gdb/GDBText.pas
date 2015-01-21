@@ -24,6 +24,7 @@ uses
 gdbentityfactory,ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,sysutils,ugdbfont,UGDBPoint3DArray,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase,{UGDBDescriptor,}gdbobjectsconstdef,oglwindowdef,geometry,dxflow,strmy,math,memman,log,GDBSubordinated,UGDBTextStyleArray;
 type
+{REGISTEROBJECTTYPE GDBObjText}
 {Export+}
 PGDBObjText=^GDBObjText;
 GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)

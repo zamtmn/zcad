@@ -21,6 +21,7 @@ unit UGDBOpenArrayOfTObjLinkRecord;
 interface
 uses gdbasetypes,sysutils,uGDBOpenArrayofdata,memman,gdbase;
 type
+{REGISTEROBJECTTYPE GDBOpenArrayOfTObjLinkRecord}
 {Export+}
 TGenLincMode=(EnableGen,DisableGen);
 PGDBOpenArrayOfTObjLinkRecord=^GDBOpenArrayOfTObjLinkRecord;

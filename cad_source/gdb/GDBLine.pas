@@ -32,6 +32,7 @@ type
 
                  pdx:GDBDouble;(*'Проекция dx'*)(*hidden_in_objinsp*)
                  pdy:GDBDouble;(*'Проекция dy'*)(*hidden_in_objinsp*)}
+{REGISTEROBJECTTYPE GDBObjLine}
 {Export+}
 PGDBObjLine=^GDBObjLine;
 GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)

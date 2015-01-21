@@ -27,6 +27,7 @@ const
      ZCMD_OK_NOEND=-10;
 type
 TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
+{REGISTEROBJECTTYPE GDBBaseCamera}
 {EXPORT+}
 (*varcategoryforoi SUMMARY='Суммарно'*)
 (*varcategoryforoi CABLE='Параметры кабеля'*)

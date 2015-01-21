@@ -23,6 +23,7 @@ interface
 uses gdbentityfactory,gdbdrawcontext,dxflow,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,memman;
 type
+{REGISTEROBJECTTYPE GDBObjPoint}
 {Export+}
 PGDBObjPoint=^GDBObjPoint;
 GDBObjPoint={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)

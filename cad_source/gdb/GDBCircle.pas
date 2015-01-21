@@ -24,6 +24,7 @@ GDBase,GDBWithLocalCS,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman;
 type
 //PProjPoint:PGDBPolyPoint2DArray;
 //PProjPoint:{-}PGDBPolyPoint2DArray{/GDBPointer/};
+{REGISTEROBJECTTYPE GDBObjCircle}
 {Export+}
   ptcirclertmodify=^tcirclertmodify;
   tcirclertmodify=packed record

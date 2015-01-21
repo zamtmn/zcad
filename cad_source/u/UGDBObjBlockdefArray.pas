@@ -22,6 +22,7 @@ interface
 uses ugdbdrawingdef,strproc,GDBBlockDef,UGDBOpenArrayOfData,sysutils,gdbase,memman, geometry,
      gdbasetypes;
 type
+{REGISTEROBJECTTYPE GDBObjBlockdefArray}
 {Export+}
 PGDBObjBlockdefArray=^GDBObjBlockdefArray;
 PBlockdefArray=^BlockdefArray;

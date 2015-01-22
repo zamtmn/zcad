@@ -101,7 +101,8 @@ uses
   Objinsp,
   mainwindow,
   shared,
-  zcadstrconsts;
+  zcadstrconsts,
+  iopalette;
   //RegCnownTypes,URegisterObjects;
 
 //exports HistoryOut,redrawoglwnd,updatevisible,reloadlayer; {shared}

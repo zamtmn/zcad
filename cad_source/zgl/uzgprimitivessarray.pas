@@ -50,7 +50,7 @@ TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
              end;
 {Export-}
 implementation
-uses OGLSpecFunc,log;
+uses log;
 procedure TLLPrimitivesArray.AddLLPLine(const P1Index:TLLVertexIndex);
 var
    tl:TLLLine;

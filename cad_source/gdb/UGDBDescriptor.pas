@@ -126,7 +126,7 @@ function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):GDBInteger;
 function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
- uses GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,commandline,log;
+ uses GDBText,GDBDevice,GDBBlockInsert,iodxf, GDBManager,shared,commandline,log;
 function GDBDescriptor.GetDefaultDrawingName:GDBString;
 var
     OldName:GDBString;

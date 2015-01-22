@@ -39,8 +39,17 @@ GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
 {EXPORT-}
 var
    pbasefont: PGDBfont;
+procedure initfont(var pf:pgdbfont;name:gdbstring);
 implementation
 uses {math,}log;
+procedure initfont(var pf:pgdbfont;name:gdbstring);
+//var i:integer;
+begin
+     //GDBGetMem({$IFDEF DEBUGBUILD}'{2D1F6D71-DF5C-46B1-9E3A-9975CC281FAC}',{$ENDIF}GDBPointer(pf),sizeof(gdbfont));
+     pf^.init(name);
+     //pf.ItSHX;
+end;
+
 procedure GDBfont.CreateSymbol(var Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;var Triangles:ZGLTriangle3DArray;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
 var
   psymbol: GDBPointer;

@@ -44,7 +44,7 @@ GDBFontManager={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArrayOfData}GDBName
 var
    FontManager:GDBFontManager;
 implementation
-uses io,log;
+uses ioshx,iottf,log;
 procedure GDBFontManager.EnumerateTTFFontFile(filename:GDBString);
 begin
      ttffontfiles.Add(filename);

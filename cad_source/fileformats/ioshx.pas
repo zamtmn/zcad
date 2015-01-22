@@ -16,31 +16,23 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit io;
+unit ioshx;
 {$INCLUDE def.inc}
 interface
-uses EasyLazFreeType,ugdbshxfont,geometry,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,log{,strutils},strmy,sysutils,UGDBOpenArrayOfByte,gdbasetypes,SysInfo,{UGDBObjBlockdefArray,}gdbase,{GDBManager,}iodxf,memman,{UGDBDescriptor,}gdbobjectsconstdef;
+uses ugdbshxfont,geometry,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
+     ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,log,sysutils,
+     UGDBOpenArrayOfByte,gdbasetypes,SysInfo,gdbase,memman,gdbobjectsconstdef;
 const
-  //IgnoreSHP='() '#13;
-  //BreakSHP='*,'#10;
   fontdirect:array[0..$F,0..1] of GDBDouble=
   ((1,0),(1,0.5),(1,1),(0.5,1),(0,1),(-0.5,1),(-1,1),(-1,0.5),(-1,0),(-1,-0.5),(-1,-1),(-0.5,-1),(0,-1),(0.5,-1),(1,-1),(1,-0.5));
-  //rootblock:GDBString='ROOT_ENTRY';
 type ptsyminfo=^tsyminfo;
      tsyminfo=packed record
                            number,size:word;
                      end;
-procedure readpalette(filename:string);
-//procedure loadblock(s:GDBString);
 function createnewfontfromshx(name:GDBString;var pf:PGDBfont):GDBBoolean;
-function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
-{
-  var
-     fontdirect:array[0..$F,0..1] of GDBDouble;
-}
 implementation
 uses
-    TTTypes,shared;
+    shared;
 function createsymbol(pf:PGDBfont;symbol:GDBInteger;pshxdata:system.pbyte;{var pdata:pbyte;}datalen:integer;unicode:boolean;symname:gdbstring):GDBInteger;
 var
   {temp,}psubsymbol:PGDBByte;
@@ -717,14 +709,6 @@ begin
 
             result:=inccounter;
           end;
-
-procedure initfont(var pf:pgdbfont;name:gdbstring);
-//var i:integer;
-begin
-     //GDBGetMem({$IFDEF DEBUGBUILD}'{2D1F6D71-DF5C-46B1-9E3A-9975CC281FAC}',{$ENDIF}GDBPointer(pf),sizeof(gdbfont));
-     pf^.init(name);
-     //pf.ItSHX;
-end;
 function createnewfontfromshx(name:GDBString;var pf:PGDBfont):GDBBoolean;
 var
    //f:filestream;
@@ -883,99 +867,8 @@ else
   PSHXFont(pf^.font).compiledsize:=PSHXFont(pf^.font).SHXdata.Count;
   memorybuf.done;
 end;
-procedure readpalette;
-var
-  i,code:GDBInteger;
-  line,sub:GDBString;
-  f:GDBOpenArrayOfByte;
-begin
-  f.InitFromFile(sysparam.programpath+filename);
-  while f.notEOF do
-    begin
-      line:=f.readGDBString;
-      if (line[1]<>';')and(line[1]<>'') then
-        begin
-          sub:=GetPredStr(line,'=');
-          val(sub,i,code);
-
-          sub:=GetPredStr(line,',');
-          val(sub,palette[i].RGB.r,code);
-
-          sub:=GetPredStr(line,',');
-          val(sub,palette[i].RGB.g,code);
-
-          sub:=GetPredStr(line,':');
-          val(sub,palette[i].RGB.b,code);
-          palette[i].RGB.a:=255;
-          if line<>'' then
-                          palette[i].name:={$IFNDEF DELPHI}InterfaceTranslate('rgbcolorname~'+line,{$ELSE}({$ENDIF}line)
-                      else
-                          palette[i].name:=format(rsColorNum,[i]);
-        end;
-    end;
-  f.done;
-end;
-function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
-var
-   i:integer;
-   chcode:integer;
-   k:gdbdouble;
-   pttf:PTTFFont;
-   //BS:TBezierSolver2D;
-   si:TTTFSymInfo;
-   Iterator:TMapChar.TIterator;
-begin
-    initfont(pf,extractfilename(name));
-    pf^.fontfile:=name;
-    pf.ItFFT;
-    pttf:=pointer(pf^.font);
-    result:=true;
-    pttf^.ftFont.Hinted:=false;
-    pttf^.ftFont.Name := name;
-    pttf^.ftFont.SizeInPoints:={pttf^.ftFont.SizeInPoints*10}10000;
-    pf.font.unicode:=true;
-    k:=1;
-    {$if FPC_FULlVERSION>=20701}
-    k:=1/pttf^.ftFont.CapHeight;
-    {$ENDIF}
-    for i:=0 to 65535 do
-      begin
-           chcode:=pttf^.ftFont.CharIndex[i];
-           if chcode>0 then
-                      begin
-                           si.GlyphIndex:=chcode;
-                           si.PSymbolInfo:=nil;
-                           pttf^.MapChar.Insert(i,si);
-                           //programlog.LogOutStr('TTF: Symbol index='+inttostr(si.GlyphIndex)+'; code='+inttostr(i),0);
-                      end;
-      end;
-    {exit;}
-    iterator:=pttf^.MapChar.Min;
-    if assigned(iterator) then
-    begin
-    repeat
-          si:=iterator.Value;
-          chcode:=iterator.Key;
-
-          cfeatettfsymbol(chcode,si,pttf);
-          iterator.Value:=si;
-
-    until {not iterator.next}true;
-    iterator.Destroy;
-    end;
-end;
-
-{procedure loadblock(s:GDBString);
-var
-  //bc:GDBInteger;
-  pb:PGDBObjBlockdef;
-begin
-  pb:=gdb.GetCurrentDWG.BlockDefArray.create(s);
-  addfromdxf(sysparam.programpath+'block\'+s+'.dxf',pb,tlomerge,gdb.GetCurrentDWG^);
-end;}
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('io.initialization');{$ENDIF}
-  readpalette('components/palette.rgb');
+  {$IFDEF DEBUGINITSECTION}LogOut('ioshx.initialization');{$ENDIF}
   {fontdirect[ 0,0]:=cos(  0*pi/180);fontdirect[ 0,1]:=sin(  0*pi/180);
   fontdirect[ 1,0]:=cos( 30*pi/180);fontdirect[ 1,1]:=sin( 30*pi/180);
   fontdirect[ 2,0]:=cos( 45*pi/180);fontdirect[ 2,1]:=sin( 45*pi/180);

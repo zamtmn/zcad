@@ -42,7 +42,7 @@ GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*O
                     end;
 {Export-}
 implementation
-uses iodxf{,UGDBDescriptor},UUnitManager{,shared},log{,ugdbsimpledrawing};
+uses log;
 procedure GDBObjBlockdefArray.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
 var p:PGDBObjBlockdef;
     ir:itrec;

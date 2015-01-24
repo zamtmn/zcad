@@ -19,9 +19,16 @@
 unit UGDBFontManager;
 {$INCLUDE def.inc}
 interface
-uses zcadstrconsts,shared,zcadsysvars,strproc,ugdbfont,gdbasetypes,SysInfo,memman,sysutils,gdbase, geometry,
+uses zcadstrconsts,shared,zcadsysvars,strproc,ugdbfont,gdbasetypes,SysInfo,memman,
+     sysutils,gdbase, geometry,usimplegenerics,
      UGDBNamedObjectsArray,classes;
 type
+TFontLoadProcedure=function(name:GDBString;var pf:PGDBfont):GDBBoolean;
+TFontLoadProcedureData=packed record
+                FontDesk:GDBString;
+                FontLoadProcedure:TFontLoadProcedure;
+                end;
+TFontExt2LoadProcMap=GKey2DataMap<GDBString,TFontLoadProcedureData,LessGDBString>;
 {Export+}
   PGDBFontRecord=^GDBFontRecord;
   GDBFontRecord = packed record
@@ -43,8 +50,21 @@ GDBFontManager={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArrayOfData}GDBName
 {Export-}
 var
    FontManager:GDBFontManager;
+   FontExt2LoadProc:TFontExt2LoadProcMap;
+procedure RegisterFontLoadProcedure(const _FontExt,_FontDesk:GDBString;
+                                    const _FontLoadProcedure:TFontLoadProcedure);
 implementation
-uses ioshx,iottf,log;
+uses log;
+procedure RegisterFontLoadProcedure(const _FontExt,_FontDesk:GDBString;
+                                    const _FontLoadProcedure:TFontLoadProcedure);
+var
+   EntInfoData:TFontLoadProcedureData;
+begin
+     EntInfoData.FontDesk:=_FontDesk;
+     EntInfoData.FontLoadProcedure:=_FontLoadProcedure;
+     FontExt2LoadProc.RegisterKey(_FontExt,EntInfoData);
+end;
+
 procedure GDBFontManager.EnumerateTTFFontFile(filename:GDBString);
 begin
      ttffontfiles.Add(filename);
@@ -93,6 +113,8 @@ var
   p:PGDBfont;
   FontName,FontExt:GDBString;
   FontLoaded:GDBBoolean;
+  _key:gdbstring;
+  data:TFontLoadProcedureData;
       //ir:itrec;
 begin
      result:=nil;
@@ -109,10 +131,21 @@ begin
                        begin
                             shared.HistoryOutStr(sysutils.format(rsLoadingFontFile,[FontPathName]));
                             programlog.logoutstr('Loading font '+FontPathName,lp_IncPos);
-                            if FontExt='.SHX' then
-                                                  FontLoaded:=createnewfontfromshx(FontPathName,p)
-                       else if FontExt='.TTF' then
-                                                  FontLoaded:=createnewfontfromttf(FontPathName,p);
+                            _key:=lowercase(FontExt);
+                            if _key<>'' then
+                            begin
+                            while _key[1]='.' do
+                             _key:=copy(_key,2,length(_key)-1);
+                            end;
+                            FontLoaded:=false;
+                            if FontExt2LoadProc.MyGetValue(_key,data) then
+                            begin
+                                 FontLoaded:=data.FontLoadProcedure(FontPathName,p)
+                            end;
+                            {if FontExt='.SHX' then
+                                                  FontLoaded:=createnewfontfromshx(FontPathName,p)}
+                      { else if FontExt='.TTF' then
+                                                  FontLoaded:=createnewfontfromttf(FontPathName,p);}
                             if FontLoaded then
                             begin
                                  programlog.logoutstr('OK',lp_OldPos)
@@ -198,6 +231,8 @@ begin
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBFontManager.initialization');{$ENDIF}
   FontManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);
+  FontExt2LoadProc:=TFontExt2LoadProcMap.Create;
 finalization
- FontManager.FreeAndDone;
+  FontManager.FreeAndDone;
+  FontExt2LoadProc.Destroy;
 end.

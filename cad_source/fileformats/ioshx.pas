@@ -19,7 +19,7 @@
 unit ioshx;
 {$INCLUDE def.inc}
 interface
-uses ugdbshxfont,geometry,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
+uses UGDBFontManager,ugdbshxfont,geometry,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
      ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,log,sysutils,
      UGDBOpenArrayOfByte,gdbasetypes,SysInfo,gdbase,memman,gdbobjectsconstdef;
 const
@@ -869,6 +869,7 @@ else
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('ioshx.initialization');{$ENDIF}
+  RegisterFontLoadProcedure('shx','Autocad SHX font',@createnewfontfromshx);
   {fontdirect[ 0,0]:=cos(  0*pi/180);fontdirect[ 0,1]:=sin(  0*pi/180);
   fontdirect[ 1,0]:=cos( 30*pi/180);fontdirect[ 1,1]:=sin( 30*pi/180);
   fontdirect[ 2,0]:=cos( 45*pi/180);fontdirect[ 2,1]:=sin( 45*pi/180);

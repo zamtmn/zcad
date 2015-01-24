@@ -37,6 +37,8 @@ uses
   varman,
   urtl,
   UUnitManager,
+  UGDBFontManager,
+  ioshx,iottf,
 
   {$INCLUDE allgeneratedfiles.inc}
 

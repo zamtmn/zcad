@@ -369,6 +369,12 @@ GDBsymdolinfo=packed record
     Number:GDBInteger;
     LatestCreate:GDBBoolean;
   end;
+PGDBUNISymbolInfo=^GDBUNISymbolInfo;
+GDBUNISymbolInfo=packed record
+    symbol:GDBInteger;
+    symbolinfo:GDBsymdolinfo;
+  end;
+TSymbolInfoArray=packed array [0..255] of GDBsymdolinfo;
 PTAlign=^TAlign;
 TAlign=(TATop,TABottom,TALeft,TARight);
 TDWGHandle=GDBQWord;

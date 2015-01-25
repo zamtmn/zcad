@@ -10,7 +10,7 @@ object Form1: TForm1
   OnDestroy = _DestroyApp
   OnKeyDown = _KeyDown
   OnShow = _FormShow
-  LCLVersion = '1.3'
+  LCLVersion = '1.5'
   object Panel1: TPanel
     Left = 0
     Height = 909
@@ -37,12 +37,12 @@ object Form1: TForm1
       Width = 824
       Align = alTop
       Caption = 'OpenGL:'
-      ClientHeight = 378
+      ClientHeight = 376
       ClientWidth = 820
       TabOrder = 1
       object PanelUp: TPanel
         Left = 0
-        Height = 378
+        Height = 376
         Top = 0
         Width = 820
         Align = alClient
@@ -58,12 +58,12 @@ object Form1: TForm1
       Width = 824
       Align = alClient
       Caption = 'GDI:'
-      ClientHeight = 477
+      ClientHeight = 475
       ClientWidth = 820
       TabOrder = 2
       object Panel2: TPanel
         Left = 0
-        Height = 477
+        Height = 475
         Top = 0
         Width = 820
         Align = alClient

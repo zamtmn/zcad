@@ -42,7 +42,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="162">
+    <Units Count="163">
       <Unit0>
         <Filename Value="simplecad.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -59,8 +59,7 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="umainform"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="171"/>
-        <CursorPos X="29" Y="186"/>
+        <CursorPos X="39" Y="497"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -104,7 +103,7 @@
       <Unit7>
         <Filename Value="..\languade\varman.pas"/>
         <UnitName Value="Varman"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="8"/>
         <TopLine Value="693"/>
         <CursorPos Y="716"/>
         <UsageCount Value="44"/>
@@ -136,7 +135,7 @@
       <Unit11>
         <Filename Value="..\languade\varmandef.pas"/>
         <UnitName Value="varmandef"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="420"/>
         <CursorPos X="41" Y="420"/>
         <UsageCount Value="65"/>
@@ -146,7 +145,7 @@
       <Unit12>
         <Filename Value="..\languade\UUnitManager.pas"/>
         <UnitName Value="UUnitManager"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="9"/>
         <TopLine Value="194"/>
         <CursorPos Y="210"/>
         <UsageCount Value="59"/>
@@ -204,7 +203,7 @@
       <Unit20>
         <Filename Value="..\fileformats\iodxf.pas"/>
         <UnitName Value="iodxf"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <TopLine Value="1558"/>
         <CursorPos Y="1580"/>
         <UsageCount Value="56"/>
@@ -222,7 +221,7 @@
       <Unit22>
         <Filename Value="..\gdb\UGDBDescriptor.pas"/>
         <UnitName Value="UGDBDescriptor"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="10"/>
         <TopLine Value="1016"/>
         <CursorPos X="60" Y="1029"/>
         <UsageCount Value="73"/>
@@ -232,7 +231,7 @@
       <Unit23>
         <Filename Value="..\misc\strproc.pas"/>
         <UnitName Value="strproc"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="11"/>
         <TopLine Value="467"/>
         <CursorPos Y="492"/>
         <UsageCount Value="22"/>
@@ -853,9 +852,9 @@
       <Unit114>
         <Filename Value="..\languade\UBaseTypeDescriptor.pas"/>
         <UnitName Value="UBaseTypeDescriptor"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="3"/>
-        <CursorPos X="7" Y="25"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="627"/>
+        <CursorPos Y="640"/>
         <UsageCount Value="30"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -932,7 +931,7 @@
       <Unit125>
         <Filename Value="..\u\UGDBFontManager.pas"/>
         <UnitName Value="UGDBFontManager"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <TopLine Value="40"/>
         <CursorPos X="37" Y="59"/>
         <UsageCount Value="17"/>
@@ -1117,7 +1116,7 @@
       <Unit149>
         <Filename Value="..\u\ugdbltypearray.pas"/>
         <UnitName Value="ugdbltypearray"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="12"/>
         <TopLine Value="213"/>
         <CursorPos Y="238"/>
         <UsageCount Value="12"/>
@@ -1199,7 +1198,7 @@
       <Unit160>
         <Filename Value="..\languade\TypeDescriptors.pas"/>
         <UnitName Value="TypeDescriptors"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="88"/>
         <CursorPos Y="110"/>
         <UsageCount Value="11"/>
@@ -1209,133 +1208,143 @@
       <Unit161>
         <Filename Value="..\languade\UEnumDescriptor.pas"/>
         <UnitName Value="UEnumDescriptor"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="188"/>
-        <CursorPos Y="217"/>
+        <CursorPos Y="202"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit161>
+      <Unit162>
+        <Filename Value="..\fileformats\fileformatsmanager.pas"/>
+        <UnitName Value="fileformatsmanager"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="88"/>
+        <CursorPos Y="103"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit162>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="..\misc\strproc.pas"/>
-        <Caret Line="484" TopLine="465"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="534" Column="6" TopLine="519"/>
       </Position1>
       <Position2>
-        <Filename Value="..\misc\strproc.pas"/>
-        <Caret Line="486" TopLine="465"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="531" TopLine="516"/>
       </Position2>
       <Position3>
-        <Filename Value="..\misc\strproc.pas"/>
-        <Caret Line="487" TopLine="465"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="530" TopLine="515"/>
       </Position3>
       <Position4>
-        <Filename Value="..\misc\strproc.pas"/>
-        <Caret Line="492" TopLine="467"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="505" TopLine="490"/>
       </Position4>
       <Position5>
-        <Filename Value="..\languade\UUnitManager.pas"/>
-        <Caret Line="208" TopLine="194"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="514" Column="39" TopLine="499"/>
       </Position5>
       <Position6>
-        <Filename Value="..\languade\UUnitManager.pas"/>
-        <Caret Line="209" TopLine="194"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="471" TopLine="456"/>
       </Position6>
       <Position7>
-        <Filename Value="..\languade\UUnitManager.pas"/>
-        <Caret Line="210" TopLine="194"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="468" TopLine="453"/>
       </Position7>
       <Position8>
-        <Filename Value="..\fileformats\iodxf.pas"/>
-        <Caret Line="1580" TopLine="1558"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="467" TopLine="452"/>
       </Position8>
       <Position9>
-        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
-        <Caret Line="498" TopLine="483"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="440" Column="6" TopLine="425"/>
       </Position9>
       <Position10>
-        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
-        <Caret Line="538" TopLine="523"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="437" TopLine="422"/>
       </Position10>
       <Position11>
-        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
-        <Caret Line="1029" Column="26" TopLine="1016"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="436" TopLine="421"/>
       </Position11>
       <Position12>
-        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
-        <Caret Line="115" Column="59" TopLine="99"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="415" Column="6" TopLine="400"/>
       </Position12>
       <Position13>
         <Filename Value="umainform.pas"/>
-        <Caret Line="186" TopLine="171"/>
+        <Caret Line="412" TopLine="397"/>
       </Position13>
       <Position14>
-        <Filename Value="..\languade\UBaseTypeDescriptor.pas"/>
-        <Caret Line="643" Column="36" TopLine="624"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="411" TopLine="396"/>
       </Position14>
       <Position15>
-        <Filename Value="..\languade\UBaseTypeDescriptor.pas"/>
-        <Caret Line="25" Column="7" TopLine="6"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="349" TopLine="334"/>
       </Position15>
       <Position16>
-        <Filename Value="..\u\UGDBFontManager.pas"/>
-        <Caret Line="61" Column="5" TopLine="50"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="348" Column="6" TopLine="333"/>
       </Position16>
       <Position17>
-        <Filename Value="..\languade\UBaseTypeDescriptor.pas"/>
-        <Caret Line="25" Column="21" TopLine="3"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="344" TopLine="329"/>
       </Position17>
       <Position18>
-        <Filename Value="..\languade\UBaseTypeDescriptor.pas"/>
-        <Caret Line="30" Column="34" TopLine="17"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="343" TopLine="328"/>
       </Position18>
       <Position19>
-        <Filename Value="..\languade\UBaseTypeDescriptor.pas"/>
-        <Caret Line="35" Column="44" TopLine="17"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="313" Column="6" TopLine="298"/>
       </Position19>
       <Position20>
-        <Filename Value="..\languade\varmandef.pas"/>
-        <Caret Line="161" Column="40" TopLine="139"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="310" TopLine="295"/>
       </Position20>
       <Position21>
-        <Filename Value="..\languade\varmandef.pas"/>
-        <Caret Line="418" Column="41" TopLine="414"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="309" TopLine="294"/>
       </Position21>
       <Position22>
-        <Filename Value="..\languade\UBaseTypeDescriptor.pas"/>
-        <Caret Line="35" Column="44" TopLine="17"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="284" TopLine="268"/>
       </Position22>
       <Position23>
-        <Filename Value="..\languade\UEnumDescriptor.pas"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="283" TopLine="268"/>
       </Position23>
       <Position24>
-        <Filename Value="..\languade\UEnumDescriptor.pas"/>
-        <Caret Line="32" Column="24" TopLine="16"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="147" TopLine="132"/>
       </Position24>
       <Position25>
-        <Filename Value="..\languade\UEnumDescriptor.pas"/>
-        <Caret Line="33" Column="43" TopLine="7"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="146" TopLine="131"/>
       </Position25>
       <Position26>
-        <Filename Value="..\languade\UEnumDescriptor.pas"/>
-        <Caret Line="187" Column="37" TopLine="187"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="144" TopLine="129"/>
       </Position26>
       <Position27>
-        <Filename Value="..\languade\UEnumDescriptor.pas"/>
-        <Caret Line="31" Column="36" TopLine="27"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="70" Column="56" TopLine="56"/>
       </Position27>
       <Position28>
-        <Filename Value="..\languade\UEnumDescriptor.pas"/>
-        <Caret Line="33" Column="80" TopLine="13"/>
+        <Filename Value="..\fileformats\fileformatsmanager.pas"/>
       </Position28>
       <Position29>
-        <Filename Value="..\languade\varmandef.pas"/>
-        <Caret Line="142" Column="41" TopLine="126"/>
+        <Filename Value="..\languade\UBaseTypeDescriptor.pas"/>
+        <Caret Line="25" Column="7" TopLine="3"/>
       </Position29>
       <Position30>
-        <Filename Value="..\languade\UEnumDescriptor.pas"/>
-        <Caret Line="33" Column="38" TopLine="13"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="73" Column="33" TopLine="58"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>

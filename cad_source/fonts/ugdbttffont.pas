@@ -16,10 +16,10 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit ugdbshxfont;
+unit ugdbttffont;
 {$INCLUDE def.inc}
 interface
-uses math,OGLSpecFunc,uzglfonttriangles2darray,TTTypes,TTObjs,gvector,gmap,gutil,EasyLazFreeType,memman,gdbobjectsconstdef,strproc,UGDBOpenArrayOfByte,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
+uses ugdbshxfont,{ugdbbasefont,}beziersolver,math,OGLSpecFunc,uzglfonttriangles2darray,TTTypes,TTObjs,gvector,gmap,gutil,EasyLazFreeType,memman,gdbobjectsconstdef,strproc,UGDBOpenArrayOfByte,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
 type
 PTTTFSymInfo=^TTTFSymInfo;
 TTTFSymInfo=packed record
@@ -31,59 +31,7 @@ TTTFSymInfo=packed record
 TLessInt={specialize }TLess<integer>;
 TMapChar={specialize }TMap<integer,{integer}TTTFSymInfo,TLessInt>;
 {$ENDIF}
-{$IFNDEF DELPHI}
-TVector2D={specialize }TVector<GDBvertex2D>;
-{$ENDIF}
-TPointAttr=(TPA_OnCurve,TPA_NotOnCurve);
-TSolverMode=(TSM_WaitStartCountur,TSM_WaitStartPoint,TSM_WaitPoint);
-TBezierSolver2D=class
-                     FArray:TVector2D;
-                     FMode:TSolverMode;
-                     BOrder:integer;
-                     shx:PGDBOpenArrayOfByte;
-                     shxsize:PGDBWord;
-                     scontur,truescontur:GDBvertex2D;
-                     sconturpa:TPointAttr;
-                     constructor create;
-                     destructor Destroy;overload;
-                     procedure AddPoint(x,y:double;pa:TPointAttr);overload;
-                     procedure AddPoint(p:GDBvertex2D;pa:TPointAttr);overload;
-                     procedure ChangeMode(Mode:TSolverMode);
-                     procedure EndCountur;
-                     procedure solve;
-                     function getpoint(t:gdbdouble):GDBvertex2D;
-                end;
 {EXPORT+}
-PGDBUNISymbolInfo=^GDBUNISymbolInfo;
-GDBUNISymbolInfo=packed record
-    symbol:GDBInteger;
-    symbolinfo:GDBsymdolinfo;
-  end;
-TSymbolInfoArray=packed array [0..255] of GDBsymdolinfo;
-PBASEFont=^BASEFont;
-BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-              unicode:GDBBoolean;
-              symbolinfo:TSymbolInfoArray;
-              unisymbolinfo:GDBOpenArrayOfData;
-              constructor init;
-              destructor done;virtual;
-              function GetSymbolDataAddr(offset:integer):pointer;virtual;abstract;
-              function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;
-
-              function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;virtual;
-              function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;virtual;
-              function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
-              function findunisymbolinfos(symbolname:GDBString):PGDBsymdolinfo;
-        end;
-PSHXFont=^SHXFont;
-SHXFont={$IFNDEF DELPHI}packed{$ENDIF} object(BASEFont)
-              compiledsize:GDBInteger;
-              h,u:GDBByte;
-              SHXdata:GDBOpenArrayOfByte;
-              constructor init;
-              destructor done;virtual;
-              function GetSymbolDataAddr(offset:integer):pointer;virtual;
-        end;
 PTTFFont=^TTFFont;
 TTFFont={$IFNDEF DELPHI}packed{$ENDIF} object(SHXFont)
               ftFont: TFreeTypeFont;
@@ -98,17 +46,12 @@ TTFFont={$IFNDEF DELPHI}packed{$ENDIF} object(SHXFont)
         end;
 
 {EXPORT-}
-var
-   BS:TBezierSolver2D;
-   ttessv:gdbvertex;
-   trmode:Cardinal;
-   pointcount:integer;
-   triangle:array[0..2] of GDBFontVertex2D;
 procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:PTTFFont{;var pf:PGDBfont});
 implementation
 uses {math,}log;
 var
    ptrdata:PZGLFontTriangle2DArray;
+   trmode:Cardinal;
 procedure adddcross(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y:fontfloat);
 const
      s=0.01;
@@ -133,16 +76,6 @@ begin
     y:=y-2*s;
     shx.AddFontFloat(@x);
     shx.AddFontFloat(@y);
-    inc(size);
-end;
-procedure addline(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y,x1,y1:fontfloat);
-begin
-    shx.AddByteByVal(SHXLine);
-    shx.AddFontFloat(@x);
-    shx.AddFontFloat(@y);
-
-    shx.AddFontFloat(@x1);
-    shx.AddFontFloat(@y1);
     inc(size);
 end;
 procedure addgcross(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y:fontfloat);
@@ -187,7 +120,6 @@ begin
     inc(size);
 
 end;
-
 procedure TessErrorCallBack(error: Cardinal;v2: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
      error:=error;
@@ -515,310 +447,6 @@ begin
   OGLSM.DeleteTess(tesselator);
   end;
 end;
-constructor TBezierSolver2D.create;
-begin
-     FArray:=TVector2D.Create;
-     FArray.Reserve(10);
-     FMode:=TSM_WaitStartCountur;
-end;
-destructor TBezierSolver2D.Destroy;
-begin
-     FArray.Destroy;
-     inherited;
-end;
-
-procedure TBezierSolver2D.AddPoint(x,y:double;pa:TPointAttr);
-var
-   p:GDBvertex2D;
-begin
-     p.x:=x;
-     p.y:=y;
-     AddPoint(p,pa);
-end;
-procedure TBezierSolver2D.AddPoint(p:GDBvertex2D;pa:TPointAttr);
-begin
-     case FMode of
-     TSM_WaitStartCountur:begin
-                             scontur:=p;
-                             sconturpa:=pa;
-                             if pa=TPA_OnCurve then
-                                                   FArray.PushBack(p);
-                             ChangeMode(TSM_WaitPoint);
-                        end;
-     TSM_WaitStartPoint:begin
-                             FArray.PushBack(p);
-                             ChangeMode(TSM_WaitPoint);
-                        end;
-     TSM_WaitPoint:begin
-                        if pa=TPA_OnCurve then
-                        begin
-                             FArray.PushBack(p);
-                             ChangeMode(TSM_WaitStartPoint);
-                             AddPoint(p,pa);
-                        end
-                        else
-                            begin
-                                 if FArray.Size=0 then
-                                 begin
-                                      truescontur:=Vertexmorph(scontur,p,0.5);
-                                      AddPoint(truescontur,TPA_OnCurve);
-                                      AddPoint(p,pa);
-                                 end
-                            else if FArray.Size=2 then
-                                 begin
-                                      AddPoint(Vertexmorph(FArray.Back,p,0.5),TPA_OnCurve);
-                                      AddPoint(p,pa);
-                                 end
-                                 else
-                                 begin
-                                      FArray.PushBack(p);
-                                 end;
-                            end;
-                   end;
-     end;
-end;
-procedure TBezierSolver2D.ChangeMode(Mode:TSolverMode);
-begin
-  case Mode of
-  TSM_WaitStartPoint:begin
-                          if FMode=TSM_WaitPoint then
-                          begin
-                               solve;
-                               FArray.Clear;
-                          end;
-                     end;
-  end;
-  FMode:=mode;
-end;
-procedure TBezierSolver2D.EndCountur;
-begin
-  //case fMode of
-  //TSM_WaitStartPoint:begin
-
-  if sconturpa=TPA_OnCurve then
-                               AddPoint(scontur,TPA_OnCurve)
-                           else
-                               begin
-                                    AddPoint(scontur,TPA_NotOnCurve);
-                                    AddPoint(truescontur,TPA_OnCurve);
-                               end;
-  //                   end;
-  //end;
-  //solve;
-  ChangeMode(TSM_WaitStartCountur);
-  farray.Clear;
-end;
-function TBezierSolver2D.getpoint(t:gdbdouble):GDBvertex2D;
-var
-   i,j,k,rindex:integer;
-begin
-     rindex:=BOrder-1;
-     j:=BOrder;
-     k:=j;
-     for i:=0 to round((BOrder+2)*(BOrder-1)/2) do
-     begin
-          dec(k);
-          if k>0 then
-          begin
-          inc(rindex);
-          farray[rindex]:=Vertexmorph(FArray[i],FArray[i+1],t);
-          end
-          else
-          begin
-               dec(j);
-               k:=j;
-          end;
-     end;
-     result:=farray[rindex];
-end;
-procedure TBezierSolver2D.solve;
-var
-   size,j,n:integer;
-   p,prevp:GDBvertex2D;
-begin
-     BOrder:=FArray.Size;
-     if border<3 then
-     begin
-          if border=2 then
-          addline(shx,shxsize^,FArray[0].x,FArray[0].y,FArray[1].x,FArray[1].y);
-          exit;
-     end;
-     size:=round((BOrder+2)*(BOrder-1)/2)+1;
-     FArray.Resize(size);
-     n:=BOrder{*2}-1+2;//<----------------------------
-     for j:=1 to n-1 do
-     begin
-          p:=getpoint(j/n);
-          //addgcross(shx,shxsize^,p.x,p.y);
-          if j>1 then
-                     addline(shx,shxsize^,prevp.x,prevp.y,p.x,p.y)
-                 else
-                     addline(shx,shxsize^,FArray[0].x,FArray[0].y,p.x,p.y);
-          prevp:=p;
-     end;
-          addline(shx,shxsize^,p.x,p.y,FArray[BOrder-1].x,FArray[BOrder-1].y);
-end;
-constructor BASEFont.init;
-var
-   i:integer;
-begin
-     inherited;
-     for i:=0 to 255 do
-     begin
-      symbolinfo[i].addr:=0;
-      symbolinfo[i].size:=0;
-      symbolinfo[i].LatestCreate:=false;
-     end;
-     unicode:=false;
-     unisymbolinfo.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1000,sizeof(GDBUNISymbolInfo));
-end;
-destructor BASEFont.done;
-var i:integer;
-    pobj:PGDBUNISymbolInfo;
-    ir:itrec;
-begin
-     inherited;
-     for i:=0 to 255 do
-     begin
-      symbolinfo[i].Name:='';
-     end;
-
-     pobj:=unisymbolinfo.beginiterate(ir);
-     if pobj<>nil then
-     repeat
-           pobj^.symbolinfo.Name:='';
-           pobj:=unisymbolinfo.iterate(ir);
-     until pobj=nil;
-     unisymbolinfo.{FreeAnd}Done;
-end;
-function BASEFont.GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
-//var
-   //usi:GDBUNISymbolInfo;
-begin
-     TrianglesDataInfo.TrianglesAddr:=0;
-     TrianglesDataInfo.TrianglesSize:=0;
-     if symbol=49 then
-                        symbol:=symbol;
-     if symbol<256 then
-                       begin
-                       result:=@symbolinfo[symbol];
-                       if result^.addr=0 then
-                                        result:=@symbolinfo[ord('?')];
-                       end
-                   else
-                       //result:=@self.symbolinfo[ord('?')]
-                       begin
-                            result:=findunisymbolinfo(symbol);
-                            //result:=@symbolinfo[ord('?')];
-                            //usi.symbolinfo:=result^;;
-                            if result=nil then
-                            begin
-                                 result:=@symbolinfo[ord('?')];
-                                 exit;
-                            end;
-                            if result^.addr=0 then
-                                             result:=@symbolinfo[ord('?')];
-
-                       end;
-end;
-function BASEFont.GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;
-begin
-     result:=nil;
-end;
-
-function BASEFont.GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
-var
-   usi:GDBUNISymbolInfo;
-begin
-     if symbol<256 then
-                       result:=@symbolinfo[symbol]
-                   else
-                       //result:=@self.symbolinfo[0]
-                       begin
-                            result:=findunisymbolinfo(symbol);
-                            if result=nil then
-                            begin
-                                 usi.symbol:=symbol;
-                                 usi.symbolinfo.addr:=0;
-                                 usi.symbolinfo.NextSymX:=0;
-                                 usi.symbolinfo.SymMaxY:=0;
-                                 usi.symbolinfo.h:=0;
-                                 usi.symbolinfo.size:=0;
-                                 usi.symbolinfo.w:=0;
-                                 usi.symbolinfo.SymMinY:=0;
-                                 usi.symbolinfo.LatestCreate:=false;
-                                 killstring(usi.symbolinfo.Name);
-                                 unisymbolinfo.Add(@usi);
-
-                                 result:=@(PGDBUNISymbolInfo(unisymbolinfo.getelement(unisymbolinfo.Count-1))^.symbolinfo);
-                            end;
-                       end;
-end;
-function BASEFont.findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
-var
-   pobj:PGDBUNISymbolInfo;
-   ir:itrec;
-   //debug:GDBInteger;
-begin
-     pobj:=unisymbolinfo.beginiterate(ir);
-     if pobj<>nil then
-     repeat
-           //debug:=pobj^.symbol;
-           //debug:=pobj^.symbolinfo.addr;
-           if pobj^.symbol=symbol then
-                                      begin
-                                           result:=@pobj^.symbolinfo;
-                                           exit;
-                                      end;
-           pobj:=unisymbolinfo.iterate(ir);
-     until pobj=nil;
-     result:=nil;
-end;
-function BASEFont.findunisymbolinfos(symbolname:GDBString):PGDBsymdolinfo;
-var
-   pobj:PGDBUNISymbolInfo;
-   ir:itrec;
-   i:integer;
-   //debug:GDBInteger;
-begin
-     symbolname:=uppercase(symbolname);
-
-     for i:=0 to 255 do
-     begin
-          if uppercase(symbolinfo[i].Name)=symbolname then
-          begin
-               result:=@symbolinfo[i];
-               exit;
-          end;
-     end;
-     pobj:=unisymbolinfo.beginiterate(ir);
-     if pobj<>nil then
-     repeat
-           if uppercase(pobj^.symbolinfo.Name)=symbolname then
-                                      begin
-                                           result:=@pobj^.symbolinfo;
-                                           exit;
-                                      end;
-           pobj:=unisymbolinfo.iterate(ir);
-     until pobj=nil;
-     result:=nil;
-end;
-constructor SHXFont.init;
-begin
-     inherited;
-     u:=1;
-     h:=1;
-     SHXdata.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1024);
-end;
-destructor SHXFont.done;
-begin
-     inherited;
-     SHXdata.done;
-end;
-function SHXFont.GetSymbolDataAddr(offset:integer):pointer;
-begin
-     result:=SHXdata.getelement(offset);
-end;
 constructor TTFFont.init;
 begin
      inherited;
@@ -921,8 +549,5 @@ begin
 end;
 
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBSHXFont.initialization');{$ENDIF}
-  BS:=TBezierSolver2D.create;
-finalization
-  bs.Destroy;
+  {$IFDEF DEBUGINITSECTION}LogOut('UGDBTTFFont.initialization');{$ENDIF}
 end.

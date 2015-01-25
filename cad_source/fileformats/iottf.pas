@@ -19,7 +19,7 @@
 unit iottf;
 {$INCLUDE def.inc}
 interface
-uses UGDBFontManager,EasyLazFreeType,ugdbshxfont,geometry,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
+uses UGDBFontManager,EasyLazFreeType,ugdbshxfont,ugdbttffont,geometry,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
     ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,log,sysutils,
     UGDBOpenArrayOfByte,gdbasetypes,SysInfo,gdbase,memman,gdbobjectsconstdef;
 type ptsyminfo=^tsyminfo;

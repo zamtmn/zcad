@@ -19,7 +19,9 @@
 unit ugdbfont;
 {$INCLUDE def.inc}
 interface
-uses uzgltriangles3darray,ugdbshxfont,memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,strproc,UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
+uses uzgltriangles3darray,ugdbshxfont,ugdbttffont,memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,
+     strproc,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,
+     ugdbbasefont,geometry;
 type
 {EXPORT+}
 PGDBfont=^GDBfont;

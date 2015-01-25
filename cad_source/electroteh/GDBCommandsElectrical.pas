@@ -27,8 +27,9 @@ uses
   gdbobjectsconstdef,
   gdbEntity,GDBLine,
   GDBNet,
-  shared,GDBSubordinated,gdbCable,varman,WindowsSpecific,uunitmanager,
-  UGDBOpenArrayOfPObjects,UGDBBillOfMaterial,UCableManager,GDBDevice,GDBTable,UGDBStringArray,math,Masks,log,GDBCommandsBase,strproc;
+  shared,GDBSubordinated,GDBCable,varman,WindowsSpecific,uunitmanager,
+  UGDBOpenArrayOfPObjects,UGDBBillOfMaterial,UCableManager,GDBDevice,GDBTable,
+  UGDBStringArray,math,Masks,log,GDBCommandsBase,strproc;
 type
 {Export+}
   TFindType=(

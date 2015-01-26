@@ -47,9 +47,6 @@ type
     TMethod_String_=procedure (s:String) of object;
 
 
-    //SplashWnd
-    TSplashTextOutProc=procedure (s:string;pm:boolean);
-
     //ObjInsp
     TSetGDBObjInsp=procedure(exttype:PUserTypeDescriptor; addr,context:Pointer);
     TStoreAndSetGDBObjInsp=procedure(exttype:PUserTypeDescriptor; addr,context:Pointer);
@@ -63,9 +60,6 @@ type
     //cmdline
     TSetCommandLineMode=procedure(m:TCLineMode) of object;
 var
-   //SplashWnd
-   SplashTextOut:TSplashTextOutProc;
-
    //Objinsp
    SetGDBObjInspProc:TSetGDBObjInsp;
    StoreAndSetGDBObjInspProc:TStoreAndSetGDBObjInsp;

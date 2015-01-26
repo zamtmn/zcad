@@ -19,7 +19,7 @@
 unit UUnitManager;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,Varman,languade,UGDBOpenArrayOfObjects,{RegCnownTypes,URegisterObjects,}SysUtils,
+uses paths,zcadsysvars,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,Varman,languade,UGDBOpenArrayOfObjects,{RegCnownTypes,URegisterObjects,}SysUtils,
      UBaseTypeDescriptor,gdbasetypes, shared,gdbase,UGDBOpenArrayOfByte, strmy, varmandef,sysinfo,
      UGDBOpenArrayOfData,UGDBStringArray,TypeDescriptors,UEnumDescriptor,UArrayDescriptor,UPointerDescriptor,
      URecordDescriptor,UObjectDescriptor,USinonimDescriptor;

@@ -19,7 +19,7 @@
 unit WindowsSpecific;
 {$INCLUDE def.inc}
 interface
-uses zcadstrconsts,gdbasetypes, gdbase,sysutils,strproc,
+uses gdbasetypes, gdbase,sysutils,strproc,
      {$IFNDEF DELPHI}LResources,{$ENDIF}Dialogs{$IFNDEF DELPHI},FileUtil{$ENDIF};
 const
     ImportFileFilter: GDBString = 'PDF files (*.pdf)|*.pdf|PostScript files (*.ps)|*.ps|SVG files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf|EPS files (*.eps)|*.eps';
@@ -30,7 +30,6 @@ const
     {$INCLUDE revision.inc}
 function OpenFileDialog(out FileName:GDBString;const DefFilterIndex:integer; const DefExt, Filter, InitialDir, Title: string):Boolean;
 function SaveFileDialog(var FileName:GDBString;const DefExt, Filter, InitialDir, Title: string):Boolean;
-function GetVersion(_file:pchar):TmyFileVersionInfo;
 implementation
 uses log;
 //var
@@ -88,67 +87,6 @@ begin
      else
          result:=false;;
      od.Free;
-end;
-function GetVersion(_file:pchar):TmyFileVersionInfo;
-var
- (*VerInfoSize, Dummy: DWord;
- PVerBbuff, PFixed : GDBPointer;
- FixLength : UINT;*)
-
-  i: Integer;
-  //Version: TFileVersionInfo;
-  {MyFile,} MyVersion,ts: GDBString;
-
-begin
-     result.build:=0;
-     result.major:=0;
-     result.minor:=0;
-     result.release:=0;
-
-     {Version:=TFileVersionInfo.create(Nil);
-     Version.fileName:=_file;
-
-     With Version do begin
-       For i:=0 to VersionStrings.Count-1 do begin
-         If VersionCategories[I]='FileVersion' then
-         begin
-           MyVersion := VersionStrings[i];
-           break;
-         end;
-       end;
-     end;}
-
-     MyVersion:='0.9.8 '+rsRevStr+RevisionStr;
-     result.versionstring:=MyVersion;
-
-     ts:=GetPredStr(MyVersion,'.');
-     val(ts,result.major,i);
-     ts:=GetPredStr(MyVersion,'.');
-     val(ts,result.minor,i);
-     ts:=GetPredStr(MyVersion,' ');
-     val(ts,result.release,i);
-
-     val(RevisionStr,result.revision,i);
-
-
-(* fillchar(result,sizeof(result),0);
- VerInfoSize := GetFileVersionInfoSize(_file, Dummy);
- if VerInfoSize = 0 then Exit;
- GetMem(PVerBbuff, VerInfoSize);
- try
-   if GetFileVersionInfo(_file,0,VerInfoSize,PVerBbuff) then
-   begin
-     if VerQueryValue(PVerBbuff,'\',PFixed,FixLength) then
-     begin
-       result.major:=LongRec(PVSFixedFileInfo(PFixed)^.dwFileVersionMS).Hi;
-       result.minor:=LongRec(PVSFixedFileInfo(PFixed)^.dwFileVersionMS).Lo;
-       result.release:=LongRec(PVSFixedFileInfo(PFixed)^.dwFileVersionLS).Hi;
-       result.build:=LongRec(PVSFixedFileInfo(PFixed)^.dwFileVersionLS).Lo;
-     end;
-   end;
- finally
-   FreeMem(PVerBbuff);
- end;*)
 end;
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('WindowsSpecific.initialization');{$ENDIF}

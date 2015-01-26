@@ -19,7 +19,7 @@
 unit shared;
 {$INCLUDE def.inc}
 interface
-uses {$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}Controls,zcadstrconsts,gdbasetypes,strutils,Classes, SysUtils, {$IFNDEF DELPHI}fileutil,{$ENDIF}{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls{$IFNDEF DELPHI},LCLProc{$ENDIF},Masks;
+uses paths,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}Controls,zcadstrconsts,gdbasetypes,strutils,Classes, SysUtils, {$IFNDEF DELPHI}fileutil,{$ENDIF}{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls{$IFNDEF DELPHI},LCLProc{$ENDIF},Masks;
 
 type
 TFromDirIterator=procedure (filename:GDBString);
@@ -55,8 +55,7 @@ var
     CursorOff:SimpleProcOfObject=nil;
 
 implementation
-uses strproc,
-     log;
+uses log;
 procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
 begin
      if RemoveCursor then

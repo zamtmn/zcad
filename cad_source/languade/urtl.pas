@@ -19,7 +19,7 @@
 unit urtl;
 {$INCLUDE def.inc}
 interface
-uses UUnitManager,zcadsysvars,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,Varman,languade,SysUtils,
+uses paths,UUnitManager,zcadsysvars,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,Varman,languade,SysUtils,
      UBaseTypeDescriptor,shared,gdbase,UGDBOpenArrayOfByte, strmy, varmandef,sysinfo,
      TypeDescriptors,
      URecordDescriptor;

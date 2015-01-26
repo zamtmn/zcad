@@ -19,7 +19,8 @@
 unit UGDBOpenArrayOfByte;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,sysutils,UGDBOpenArray,gdbase,{$IFNDEF DELPHI}fileutil,{$ENDIF}shared;
+uses gdbasetypes,sysutils,UGDBOpenArray,gdbase,{$IFNDEF DELPHI}fileutil,{$ENDIF}
+     paths,shared;
 const
      breacer=[#13,#10,' '];
   eol: GDBString=#13 + #10;
@@ -58,7 +59,7 @@ GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
 {Export-}
 procedure WriteString_EOL(h: GDBInteger; s: GDBString);
 implementation
-uses strproc,log;
+uses strproc;
 procedure WriteString_EOL(h: GDBInteger; s: GDBString);
 begin
   s := s + eol;

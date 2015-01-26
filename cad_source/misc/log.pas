@@ -19,7 +19,7 @@
 unit log;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,sysinfo,zcadinterface;
+uses gdbasetypes,sysinfo;
 const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
       {$IFDEF FPC}
                   {$IFDEF LINUX}filelog='log/zcad_linux.log';{$ENDIF}
@@ -31,6 +31,8 @@ const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
 
       tsc2ms=2000;
 type
+//SplashWnd
+TSplashTextOutProc=procedure (s:string;pm:boolean);
 PTMyTimeStamp=^TMyTimeStamp;
 TMyTimeStamp=record
                    time:TDateTime;
@@ -59,6 +61,8 @@ function getprogramlog:GDBPointer;export;
 //procedure startup(s:GDBString);
 procedure LogOut(s:GDBString);
 var programlog:tlog;
+   //SplashWnd
+   SplashTextOut:TSplashTextOutProc;
 implementation
 uses
     UGDBOpenArrayOfByte,UGDBOpenArrayOfData,strutils,sysutils{$IFNDEF DELPHI},fileutil{$ENDIF};

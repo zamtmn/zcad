@@ -75,7 +75,7 @@ E:\zcad\CAD_SOURCE\gdb\GDBLine.pas
 E:\zcad\CAD_SOURCE\gdb\GDBLWPolyLine.pas
 E:\zcad\CAD_SOURCE\gdb\GDBtext.pas
 E:\zcad\CAD_SOURCE\gdb\GDBMText.pas
-E:\zcad\CAD_SOURCE\gdb\GDBpoint.pas
+E:\zcad\CAD_SOURCE\gdb\GDBPoint.pas
 E:\zcad\CAD_SOURCE\gdb\GDBCurve.pas
 E:\zcad\CAD_SOURCE\gdb\GDBPolyLine.pas
 E:\zcad\CAD_SOURCE\gdb\gdbspline.pas

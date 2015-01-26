@@ -8,7 +8,9 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ButtonPanel, Buttons, ExtCtrls, ComCtrls, Spin,
 
-  linetypesloadwnd,zcadsysvars, ugdbsimpledrawing, gdbase, gdbasetypes,ugdbltypearray,UGDBDescriptor,imagesmanager,strproc,usupportgui,ugdbutil,zcadstrconsts,shared,UGDBNamedObjectsArray;
+  linetypesloadwnd,zcadsysvars, ugdbsimpledrawing, gdbase, gdbasetypes,
+  ugdbltypearray,UGDBDescriptor,imagesmanager,sysinfo,strproc,usupportgui,ugdbutil,
+  paths,zcadstrconsts,shared,UGDBNamedObjectsArray;
 
 type
 

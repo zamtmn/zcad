@@ -19,7 +19,8 @@
 unit ugdbbasefont;
 {$INCLUDE def.inc}
 interface
-uses math,OGLSpecFunc,uzglfonttriangles2darray,TTTypes,TTObjs,gvector,gmap,gutil,EasyLazFreeType,memman,gdbobjectsconstdef,strproc,UGDBOpenArrayOfByte,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
+uses memman,strproc,UGDBOpenArrayOfByte,gdbasetypes,UGDBOpenArrayOfData,sysutils,
+     gdbase,geometry;
 type
 {EXPORT+}
 PBASEFont=^BASEFont;

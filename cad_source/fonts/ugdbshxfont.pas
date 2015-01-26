@@ -19,7 +19,8 @@
 unit ugdbshxfont;
 {$INCLUDE def.inc}
 interface
-uses ugdbbasefont,math,OGLSpecFunc,uzglfonttriangles2darray,TTTypes,TTObjs,gvector,gmap,gutil,EasyLazFreeType,memman,gdbobjectsconstdef,strproc,UGDBOpenArrayOfByte,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
+uses ugdbbasefont,memman,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,
+     geometry;
 type
 {EXPORT+}
 PSHXFont=^SHXFont;
@@ -33,7 +34,7 @@ SHXFont={$IFNDEF DELPHI}packed{$ENDIF} object(BASEFont)
         end;
 {EXPORT-}
 implementation
-uses {math,}log;
+uses log;
 constructor SHXFont.init;
 begin
      inherited;

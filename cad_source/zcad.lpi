@@ -197,6 +197,7 @@
       <Unit1>
         <Filename Value="gui/mainwindow.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="mainwindow"/>
       </Unit1>
       <Unit2>
         <Filename Value="gdb/GDBAbstractText.pas"/>
@@ -205,6 +206,7 @@
       <Unit3>
         <Filename Value="languade/UUnitManager.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="UUnitManager"/>
       </Unit3>
       <Unit4>
         <Filename Value="languade/varman.pas"/>
@@ -217,6 +219,7 @@
       <Unit6>
         <Filename Value="devicebase/DeviceBase.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="DeviceBase"/>
       </Unit6>
       <Unit7>
         <Filename Value="gui/oglwindow.pas"/>
@@ -237,6 +240,7 @@
       <Unit11>
         <Filename Value="gui/cmdline.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cmdline"/>
       </Unit11>
       <Unit12>
         <Filename Value="gui/aboutwnd.pas"/>
@@ -245,14 +249,17 @@
       <Unit13>
         <Filename Value="commands/commandline.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="commandline"/>
       </Unit13>
       <Unit14>
         <Filename Value="gdb/UGDBDescriptor.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="UGDBDescriptor"/>
       </Unit14>
       <Unit15>
         <Filename Value="electroteh/GDBCommandsOPS.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="GDBCommandsOPS"/>
       </Unit15>
       <Unit16>
         <Filename Value="gui/tswnd.pas"/>
@@ -260,6 +267,7 @@
         <ComponentName Value="TextStylesWindow"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="tswnd"/>
       </Unit16>
       <Unit17>
         <Filename Value="u/TGMultiObjectChangeCommandIMPL.inc"/>
@@ -293,6 +301,7 @@
         <ComponentName Value="LTWindow"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="ltwnd"/>
       </Unit22>
       <Unit23>
         <Filename Value="gui/lineweightwnd.pas"/>
@@ -357,16 +366,19 @@
         <IsPartOfProject Value="True"/>
       </Unit36>
       <Unit37>
-        <Filename Value="misc/sysinfo.pas"/>
+        <Filename Value="misc/paths.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="paths"/>
       </Unit37>
       <Unit38>
         <Filename Value="misc/WindowsSpecific.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="WindowsSpecific"/>
       </Unit38>
       <Unit39>
         <Filename Value="misc/shared.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="shared"/>
       </Unit39>
       <Unit40>
         <Filename Value="gui/linetypesloadwnd.pas"/>

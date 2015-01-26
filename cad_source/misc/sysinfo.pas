@@ -19,9 +19,10 @@
 unit SysInfo;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,Forms,gdbase{$IFNDEF DELPHI},fileutil{$ENDIF},zcadsysvars,sysutils;
+uses zcadstrconsts,gdbasetypes,Forms,gdbase{$IFNDEF DELPHI},fileutil{$ENDIF},zcadsysvars,sysutils;
 {$INCLUDE revision.inc}
-type tsysparam=record
+type
+  tsysparam=record
                      programpath: GDBString;
                      temppath: GDBString;
                      screenx,screeny:GDBInteger;
@@ -36,8 +37,66 @@ var
 
 Procedure getsysinfo;
 implementation
+uses {WindowsSpecific,}log;
+function GetVersion(_file:pchar):TmyFileVersionInfo;
+var
+ (*VerInfoSize, Dummy: DWord;
+ PVerBbuff, PFixed : GDBPointer;
+ FixLength : UINT;*)
 
-uses WindowsSpecific,log;
+  i: Integer;
+  //Version: TFileVersionInfo;
+  {MyFile,} MyVersion,ts: GDBString;
+
+begin
+     result.build:=0;
+     result.major:=0;
+     result.minor:=0;
+     result.release:=0;
+
+     {Version:=TFileVersionInfo.create(Nil);
+     Version.fileName:=_file;
+
+     With Version do begin
+       For i:=0 to VersionStrings.Count-1 do begin
+         If VersionCategories[I]='FileVersion' then
+         begin
+           MyVersion := VersionStrings[i];
+           break;
+         end;
+       end;
+     end;}
+
+     result.major:=0;
+     result.minor:=9;
+     result.release:=8;
+
+     MyVersion:=inttostr(result.major)+'.'+inttostr(result.minor)+'.'+inttostr(result.release)+' '+rsRevStr+RevisionStr;
+     result.versionstring:=MyVersion;
+
+     val(RevisionStr,result.revision,i);
+
+
+(* fillchar(result,sizeof(result),0);
+ VerInfoSize := GetFileVersionInfoSize(_file, Dummy);
+ if VerInfoSize = 0 then Exit;
+ GetMem(PVerBbuff, VerInfoSize);
+ try
+   if GetFileVersionInfo(_file,0,VerInfoSize,PVerBbuff) then
+   begin
+     if VerQueryValue(PVerBbuff,'\',PFixed,FixLength) then
+     begin
+       result.major:=LongRec(PVSFixedFileInfo(PFixed)^.dwFileVersionMS).Hi;
+       result.minor:=LongRec(PVSFixedFileInfo(PFixed)^.dwFileVersionMS).Lo;
+       result.release:=LongRec(PVSFixedFileInfo(PFixed)^.dwFileVersionLS).Hi;
+       result.build:=LongRec(PVSFixedFileInfo(PFixed)^.dwFileVersionLS).Lo;
+     end;
+   end;
+ finally
+   FreeMem(PVerBbuff);
+ end;*)
+end;
+
 procedure ProcessParanstr;
 var
    i:integer;

@@ -19,7 +19,7 @@
 unit beziersolver;
 {$INCLUDE def.inc}
 interface
-uses OGLSpecFunc,uzglfonttriangles2darray,gvector,memman,gdbobjectsconstdef,
+uses OGLSpecFunc,gvector,memman,gdbobjectsconstdef,
      UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,geometry;
 type
 TPointAttr=(TPA_OnCurve,TPA_NotOnCurve);

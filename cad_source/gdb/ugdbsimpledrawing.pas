@@ -33,7 +33,7 @@ UGDBTextStyleArray,
 GDBCamera,
 UGDBOpenArrayOfPV,
 GDBRoot,ugdbfont,
-UGDBOpenArrayOfPObjects,ugdbshxfont,abstractviewarea{,UGDBVisibleOpenArray};
+UGDBOpenArrayOfPObjects,abstractviewarea{,UGDBVisibleOpenArray};
 type
 {EXPORT+}
 PTSimpleDrawing=^TSimpleDrawing;

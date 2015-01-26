@@ -31,7 +31,7 @@ uses
   gdbobjectsconstdef,
   GDBCommandsDraw,
   UGDBVisibleOpenArray,{gdbEntity,}{GDBCircle,}GDBLine,{GDBGenericSubEntry,}
-  shared,{GDBSubordinated,}GDBBlockInsert,{ZWinMan,}sysinfo,varman,UCableManager,GDBDevice,GDBMText,math;
+  paths,shared,{GDBSubordinated,}GDBBlockInsert,{ZWinMan,}sysinfo,varman,UCableManager,GDBDevice,GDBMText,math;
 
 type
 {Export+}

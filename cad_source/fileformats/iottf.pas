@@ -19,9 +19,9 @@
 unit iottf;
 {$INCLUDE def.inc}
 interface
-uses UGDBFontManager,EasyLazFreeType,ugdbshxfont,ugdbttffont,geometry,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
-    ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,log,sysutils,
-    UGDBOpenArrayOfByte,gdbasetypes,SysInfo,gdbase,memman,gdbobjectsconstdef;
+uses UGDBFontManager,EasyLazFreeType,ugdbttffont,geometry,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
+    ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}log,sysutils,
+    UGDBOpenArrayOfByte,gdbasetypes,SysInfo,gdbase,memman;
 type ptsyminfo=^tsyminfo;
      tsyminfo=packed record
                            number,size:word;
@@ -29,7 +29,7 @@ type ptsyminfo=^tsyminfo;
 function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
 implementation
 uses
-    TTTypes,shared;
+   shared;
 function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
 var
    i:integer;

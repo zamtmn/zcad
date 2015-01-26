@@ -31,7 +31,7 @@ uses
   zcadsysvars,
 
   memman,log,
-  SysInfo,
+  sysinfo,
 
   varmandef,
   varman,
@@ -77,7 +77,6 @@ uses
   GDBManager,
   //UGDBDescriptor,
   commandline,
-  oglwindow,
   DeviceBase,
   URecordDescriptor,
   //gdbase,
@@ -98,7 +97,6 @@ uses
 
   GDBCommandsElectrical,
   GDBCommandsOPS,
-  abstractviewarea,
   plugins,
   Objinsp,
   mainwindow,

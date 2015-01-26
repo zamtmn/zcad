@@ -20,8 +20,8 @@ unit splashwnd;
 {$INCLUDE def.inc}
 interface
 uses
- uniqueinstanceraw,zcadinterface,zcadstrconsts,strproc,Forms, stdctrls, Controls, Graphics,ExtCtrls,
- gdbasetypes,SysInfo,fileutil,sysutils;
+ log,uniqueinstanceraw,zcadstrconsts,strproc,Forms, stdctrls, Controls, Graphics,
+ ExtCtrls,gdbasetypes,SysInfo,fileutil,sysutils;
 type
   TSplashWnd = class(TForm)
     txt:tlabel;
@@ -37,7 +37,6 @@ procedure createsplash;
 procedure removesplash;
 procedure SplashTextOutProc(s:string;pm:boolean);
 implementation
-uses log;
 procedure SplashTextOutProc(s:string;pm:boolean);
 begin
      if assigned(SplashWindow) then

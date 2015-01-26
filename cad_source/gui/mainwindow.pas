@@ -30,7 +30,7 @@ uses
   {FPC}
        //math,
   {ZCAD BASE}
-       oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
+       paths,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
        geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,log,
        varmandef, varman,UUnitManager,SysInfo,shared,strmy,UGDBTextStyleArray,ugdbdimstylearray,
   {ZCAD SIMPLE PASCAL SCRIPT}

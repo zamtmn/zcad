@@ -52,6 +52,8 @@ GDBTableStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*
                     function AddStyle(name:GDBString):PTGDBTableStyle;
               end;
 {EXPORT-}
+var
+  PTempTableStyle:PTGDBTableStyle;
 implementation
 uses
     log;

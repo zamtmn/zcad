@@ -19,21 +19,12 @@
 unit ugdbsimpledrawing;
 {$INCLUDE def.inc}
 interface
-uses //gdbase,gdbasetypes,
-{gdbobjectsconstdef,}ugdbdimstylearray,GDBWithLocalCS,ugdbabstractdrawing,zcadsysvars,{zcadinterface,}{zcadstrconsts,}{GDBWithLocalCS,}{UGDBOpenArrayOfUCommands,}strproc,{GDBBlockDef,}UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
-UGDBNumerator, gdbase,varmandef,varman,
-sysutils, memman, geometry, {gdbobjectsconstdef,}
-gdbasetypes,sysinfo,
-GDBGenericSubEntry,
-UGDBLayerArray,ugdbltypearray,
-GDBEntity,
-UGDBSelectedObjArray,
-UGDBTextStyleArray,
-{UGDBFontManager,}
-GDBCamera,
-UGDBOpenArrayOfPV,
-GDBRoot,ugdbfont,
-UGDBOpenArrayOfPObjects,abstractviewarea{,UGDBVisibleOpenArray};
+uses ugdbdimstylearray,GDBWithLocalCS,ugdbabstractdrawing,zcadsysvars,strproc,
+     UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,UGDBNumerator, gdbase,
+     varmandef,varman,sysutils, memman, geometry,gdbasetypes,sysinfo,
+     GDBGenericSubEntry,UGDBLayerArray,ugdbltypearray,GDBEntity,
+     UGDBSelectedObjArray,UGDBTextStyleArray,GDBCamera,UGDBOpenArrayOfPV,
+     GDBRoot,ugdbfont,UGDBOpenArrayOfPObjects,abstractviewarea;
 type
 {EXPORT+}
 PTSimpleDrawing=^TSimpleDrawing;
@@ -101,7 +92,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 implementation
-uses GDBTable,log;
+uses log;
 function TSimpleDrawing.GetChangeStampt:GDBBoolean;
 begin
      result:=false;

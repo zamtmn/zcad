@@ -28,9 +28,10 @@ BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               unicode:GDBBoolean;
               symbolinfo:TSymbolInfoArray;
               unisymbolinfo:GDBOpenArrayOfData;
+              SHXdata:GDBOpenArrayOfByte;
               constructor init;
               destructor done;virtual;
-              function GetSymbolDataAddr(offset:integer):pointer;virtual;abstract;
+              function GetSymbolDataAddr(offset:integer):pointer;virtual;
               function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;
 
               function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;virtual;
@@ -54,6 +55,7 @@ begin
      end;
      unicode:=false;
      unisymbolinfo.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1000,sizeof(GDBUNISymbolInfo));
+     SHXdata.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1024);
 end;
 destructor BASEFont.done;
 var i:integer;
@@ -73,6 +75,7 @@ begin
            pobj:=unisymbolinfo.iterate(ir);
      until pobj=nil;
      unisymbolinfo.{FreeAnd}Done;
+     SHXdata.done;
 end;
 function BASEFont.GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
 //var
@@ -108,7 +111,10 @@ function BASEFont.GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;
 begin
      result:=nil;
 end;
-
+function BASEFont.GetSymbolDataAddr(offset:integer):pointer;
+begin
+     result:=SHXdata.getelement(offset);
+end;
 function BASEFont.GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
 var
    usi:GDBUNISymbolInfo;

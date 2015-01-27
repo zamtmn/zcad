@@ -864,7 +864,7 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
 else
     result:=false;
   if pf.font<>nil then
-  PSHXFont(pf^.font).compiledsize:=PSHXFont(pf^.font).SHXdata.Count;
+  //PSHXFont(pf^.font).compiledsize:=PSHXFont(pf^.font).SHXdata.Count;
   memorybuf.done;
 end;
 initialization

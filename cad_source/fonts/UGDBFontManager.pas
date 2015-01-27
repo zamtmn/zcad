@@ -40,6 +40,7 @@ GDBFontManager={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArrayOfData}GDBName
                     ttffontfiles:TStringList;
                     shxfontfiles:TStringList;
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                    destructor done;virtual;
 
                     function addFonf(FontPathName:GDBString):PGDBfont;
                     procedure EnumerateTTFFontFile(filename:GDBString);
@@ -73,6 +74,13 @@ procedure GDBFontManager.EnumerateSHXFontFile(filename:GDBString);
 begin
      shxfontfiles.Add(filename);
 end;
+destructor GDBFontManager.done;
+begin
+     inherited;
+     ttffontfiles.Destroy;
+     shxfontfiles.Destroy;
+end;
+
 constructor GDBFontManager.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof({GDBFontRecord}GDBfont));

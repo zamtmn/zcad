@@ -19,12 +19,13 @@
 unit paths;
 {$INCLUDE def.inc}
 interface
-uses sysinfo,gdbasetypes,Forms{$IFNDEF DELPHI},fileutil{$ENDIF},zcadsysvars,sysutils;
+uses gdbasetypes,Forms{$IFNDEF DELPHI},fileutil{$ENDIF},zcadsysvars,sysutils;
 {$INCLUDE revision.inc}
 function ExpandPath(path:GDBString):GDBString;
 function FindInSupportPath(FileName:GDBString):GDBString;
 function FindInPaths(Paths,FileName:GDBString):GDBString;
 function GetPartOfPath(out part:GDBString;var path:GDBString;const separator:GDBString):GDBString;
+var ProgramPath:string;
 implementation
 uses log;
 function FindInPaths(Paths,FileName:GDBString):GDBString;
@@ -123,9 +124,9 @@ end;
 function ExpandPath(path:GDBString):GDBString;
 begin
      if path='' then
-                    result:=sysparam.programpath
+                    result:=programpath
 else if path[1]='*' then
-                    result:=sysparam.programpath+copy(path,2,length(path)-1)
+                    result:=programpath+copy(path,2,length(path)-1)
 else result:=path;
 result:=StringReplace(result,'/', PathDelim,[rfReplaceAll, rfIgnoreCase]);
 if DirectoryExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)) then
@@ -134,4 +135,6 @@ if DirectoryExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)) then
   then
                                      result:=result+PathDelim;
 end;
+initialization
+  programpath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)));
 end.

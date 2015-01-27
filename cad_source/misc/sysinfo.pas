@@ -19,7 +19,7 @@
 unit SysInfo;
 {$INCLUDE def.inc}
 interface
-uses zcadstrconsts,gdbasetypes,Forms,gdbase{$IFNDEF DELPHI},fileutil{$ENDIF},zcadsysvars,sysutils;
+uses paths,zcadstrconsts,gdbasetypes,Forms,gdbase{$IFNDEF DELPHI},fileutil{$ENDIF},zcadsysvars,sysutils;
 {$INCLUDE revision.inc}
 type
   tsysparam=record
@@ -127,7 +127,7 @@ Procedure getsysinfo;
 begin
      SysDefaultFormatSettings:=DefaultFormatSettings;
      {$IFDEF DEBUGINITSECTION}log.LogOut('sysinfo.getsysinfo');{$ENDIF}
-     sysparam.programpath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)));
+     sysparam.programpath:=programpath;
      sysparam.screenx:={GetSystemMetrics(SM_CXSCREEN)}Screen.Width;
      sysparam.screeny:={GetSystemMetrics(SM_CYSCREEN)}Screen.Height;
      sysparam.temppath:=GetEnvironmentVariable('TEMP');

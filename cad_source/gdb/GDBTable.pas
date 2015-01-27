@@ -49,8 +49,6 @@ GDBObjTable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             procedure ReCalcFromObjMatrix;virtual;
             end;
 {EXPORT-}
-var
-  PTempTableStyle:PTGDBTableStyle;
 implementation
 uses GDBBlockInsert,log;
 procedure GDBObjTable.ReCalcFromObjMatrix;

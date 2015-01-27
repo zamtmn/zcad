@@ -19,7 +19,7 @@
 unit log;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,sysinfo;
+uses gdbasetypes,paths;
 const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
       {$IFDEF FPC}
                   {$IFDEF LINUX}filelog='log/zcad_linux.log';{$ENDIF}
@@ -271,9 +271,8 @@ begin
 end;
 initialization
 begin
-    getsysinfo;
     {$IFDEF DEBUGINITSECTION}LogOut('log.initialization');{$ENDIF}
-    programlog.init(sysparam.programpath+filelog);
+    programlog.init(ProgramPath+filelog);
 end;
 end.
 

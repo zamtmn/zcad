@@ -42,7 +42,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="163">
+    <Units Count="164">
       <Unit0>
         <Filename Value="simplecad.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -58,8 +58,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="umainform"/>
-        <IsVisibleTab Value="True"/>
-        <CursorPos X="39" Y="497"/>
+        <CursorPos X="48" Y="15"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -103,7 +102,7 @@
       <Unit7>
         <Filename Value="..\languade\varman.pas"/>
         <UnitName Value="Varman"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="9"/>
         <TopLine Value="693"/>
         <CursorPos Y="716"/>
         <UsageCount Value="44"/>
@@ -135,7 +134,7 @@
       <Unit11>
         <Filename Value="..\languade\varmandef.pas"/>
         <UnitName Value="varmandef"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="420"/>
         <CursorPos X="41" Y="420"/>
         <UsageCount Value="65"/>
@@ -145,7 +144,7 @@
       <Unit12>
         <Filename Value="..\languade\UUnitManager.pas"/>
         <UnitName Value="UUnitManager"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="10"/>
         <TopLine Value="194"/>
         <CursorPos Y="210"/>
         <UsageCount Value="59"/>
@@ -203,7 +202,7 @@
       <Unit20>
         <Filename Value="..\fileformats\iodxf.pas"/>
         <UnitName Value="iodxf"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="8"/>
         <TopLine Value="1558"/>
         <CursorPos Y="1580"/>
         <UsageCount Value="56"/>
@@ -221,9 +220,10 @@
       <Unit22>
         <Filename Value="..\gdb\UGDBDescriptor.pas"/>
         <UnitName Value="UGDBDescriptor"/>
-        <EditorIndex Value="10"/>
-        <TopLine Value="1016"/>
-        <CursorPos X="60" Y="1029"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="11"/>
+        <TopLine Value="1061"/>
+        <CursorPos Y="1075"/>
         <UsageCount Value="73"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -231,7 +231,7 @@
       <Unit23>
         <Filename Value="..\misc\strproc.pas"/>
         <UnitName Value="strproc"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="12"/>
         <TopLine Value="467"/>
         <CursorPos Y="492"/>
         <UsageCount Value="22"/>
@@ -425,10 +425,12 @@
       </Unit49>
       <Unit50>
         <Filename Value="..\u\UGDBTextStyleArray.pas"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="29"/>
-        <CursorPos Y="173"/>
+        <UnitName Value="UGDBTextStyleArray"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="9"/>
+        <CursorPos X="12" Y="22"/>
         <UsageCount Value="14"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit50>
       <Unit51>
@@ -852,7 +854,7 @@
       <Unit114>
         <Filename Value="..\languade\UBaseTypeDescriptor.pas"/>
         <UnitName Value="UBaseTypeDescriptor"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="627"/>
         <CursorPos Y="640"/>
         <UsageCount Value="30"/>
@@ -930,12 +932,10 @@
       </Unit124>
       <Unit125>
         <Filename Value="..\u\UGDBFontManager.pas"/>
-        <UnitName Value="UGDBFontManager"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="40"/>
         <CursorPos X="37" Y="59"/>
         <UsageCount Value="17"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit125>
       <Unit126>
@@ -1116,7 +1116,7 @@
       <Unit149>
         <Filename Value="..\u\ugdbltypearray.pas"/>
         <UnitName Value="ugdbltypearray"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="13"/>
         <TopLine Value="213"/>
         <CursorPos Y="238"/>
         <UsageCount Value="12"/>
@@ -1198,7 +1198,7 @@
       <Unit160>
         <Filename Value="..\languade\TypeDescriptors.pas"/>
         <UnitName Value="TypeDescriptors"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="7"/>
         <TopLine Value="88"/>
         <CursorPos Y="110"/>
         <UsageCount Value="11"/>
@@ -1208,7 +1208,7 @@
       <Unit161>
         <Filename Value="..\languade\UEnumDescriptor.pas"/>
         <UnitName Value="UEnumDescriptor"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="6"/>
         <TopLine Value="188"/>
         <CursorPos Y="202"/>
         <UsageCount Value="11"/>
@@ -1218,134 +1218,139 @@
       <Unit162>
         <Filename Value="..\fileformats\fileformatsmanager.pas"/>
         <UnitName Value="fileformatsmanager"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="88"/>
         <CursorPos Y="103"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit162>
+      <Unit163>
+        <Filename Value="..\fileformats\ioshx.pas"/>
+        <UnitName Value="ioshx"/>
+        <EditorIndex Value="1"/>
+        <CursorPos X="11" Y="19"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit163>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="29" HistoryIndex="28">
       <Position1>
         <Filename Value="umainform.pas"/>
-        <Caret Line="534" Column="6" TopLine="519"/>
+        <Caret Line="514" Column="39" TopLine="499"/>
       </Position1>
       <Position2>
         <Filename Value="umainform.pas"/>
-        <Caret Line="531" TopLine="516"/>
+        <Caret Line="471" TopLine="456"/>
       </Position2>
       <Position3>
         <Filename Value="umainform.pas"/>
-        <Caret Line="530" TopLine="515"/>
+        <Caret Line="468" TopLine="453"/>
       </Position3>
       <Position4>
         <Filename Value="umainform.pas"/>
-        <Caret Line="505" TopLine="490"/>
+        <Caret Line="467" TopLine="452"/>
       </Position4>
       <Position5>
         <Filename Value="umainform.pas"/>
-        <Caret Line="514" Column="39" TopLine="499"/>
+        <Caret Line="440" Column="6" TopLine="425"/>
       </Position5>
       <Position6>
         <Filename Value="umainform.pas"/>
-        <Caret Line="471" TopLine="456"/>
+        <Caret Line="437" TopLine="422"/>
       </Position6>
       <Position7>
         <Filename Value="umainform.pas"/>
-        <Caret Line="468" TopLine="453"/>
+        <Caret Line="436" TopLine="421"/>
       </Position7>
       <Position8>
         <Filename Value="umainform.pas"/>
-        <Caret Line="467" TopLine="452"/>
+        <Caret Line="415" Column="6" TopLine="400"/>
       </Position8>
       <Position9>
         <Filename Value="umainform.pas"/>
-        <Caret Line="440" Column="6" TopLine="425"/>
+        <Caret Line="412" TopLine="397"/>
       </Position9>
       <Position10>
         <Filename Value="umainform.pas"/>
-        <Caret Line="437" TopLine="422"/>
+        <Caret Line="411" TopLine="396"/>
       </Position10>
       <Position11>
         <Filename Value="umainform.pas"/>
-        <Caret Line="436" TopLine="421"/>
+        <Caret Line="349" TopLine="334"/>
       </Position11>
       <Position12>
         <Filename Value="umainform.pas"/>
-        <Caret Line="415" Column="6" TopLine="400"/>
+        <Caret Line="348" Column="6" TopLine="333"/>
       </Position12>
       <Position13>
         <Filename Value="umainform.pas"/>
-        <Caret Line="412" TopLine="397"/>
+        <Caret Line="344" TopLine="329"/>
       </Position13>
       <Position14>
         <Filename Value="umainform.pas"/>
-        <Caret Line="411" TopLine="396"/>
+        <Caret Line="343" TopLine="328"/>
       </Position14>
       <Position15>
         <Filename Value="umainform.pas"/>
-        <Caret Line="349" TopLine="334"/>
+        <Caret Line="313" Column="6" TopLine="298"/>
       </Position15>
       <Position16>
         <Filename Value="umainform.pas"/>
-        <Caret Line="348" Column="6" TopLine="333"/>
+        <Caret Line="310" TopLine="295"/>
       </Position16>
       <Position17>
         <Filename Value="umainform.pas"/>
-        <Caret Line="344" TopLine="329"/>
+        <Caret Line="309" TopLine="294"/>
       </Position17>
       <Position18>
         <Filename Value="umainform.pas"/>
-        <Caret Line="343" TopLine="328"/>
+        <Caret Line="284" TopLine="268"/>
       </Position18>
       <Position19>
         <Filename Value="umainform.pas"/>
-        <Caret Line="313" Column="6" TopLine="298"/>
+        <Caret Line="283" TopLine="268"/>
       </Position19>
       <Position20>
         <Filename Value="umainform.pas"/>
-        <Caret Line="310" TopLine="295"/>
+        <Caret Line="147" TopLine="132"/>
       </Position20>
       <Position21>
         <Filename Value="umainform.pas"/>
-        <Caret Line="309" TopLine="294"/>
+        <Caret Line="146" TopLine="131"/>
       </Position21>
       <Position22>
         <Filename Value="umainform.pas"/>
-        <Caret Line="284" TopLine="268"/>
+        <Caret Line="144" TopLine="129"/>
       </Position22>
       <Position23>
         <Filename Value="umainform.pas"/>
-        <Caret Line="283" TopLine="268"/>
+        <Caret Line="70" Column="56" TopLine="56"/>
       </Position23>
       <Position24>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="147" TopLine="132"/>
+        <Filename Value="..\fileformats\fileformatsmanager.pas"/>
       </Position24>
       <Position25>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="146" TopLine="131"/>
+        <Filename Value="..\languade\UBaseTypeDescriptor.pas"/>
+        <Caret Line="25" Column="7" TopLine="3"/>
       </Position25>
       <Position26>
         <Filename Value="umainform.pas"/>
-        <Caret Line="144" TopLine="129"/>
+        <Caret Line="73" Column="33" TopLine="58"/>
       </Position26>
       <Position27>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="70" Column="56" TopLine="56"/>
+        <Filename Value="..\u\UGDBTextStyleArray.pas"/>
+        <Caret Line="173" TopLine="29"/>
       </Position27>
       <Position28>
-        <Filename Value="..\fileformats\fileformatsmanager.pas"/>
+        <Filename Value="..\u\UGDBTextStyleArray.pas"/>
+        <Caret Line="22" Column="12" TopLine="9"/>
       </Position28>
       <Position29>
-        <Filename Value="..\languade\UBaseTypeDescriptor.pas"/>
-        <Caret Line="25" Column="7" TopLine="3"/>
-      </Position29>
-      <Position30>
         <Filename Value="umainform.pas"/>
-        <Caret Line="73" Column="33" TopLine="58"/>
-      </Position30>
+        <Caret Line="15" Column="48"/>
+      </Position29>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -1355,8 +1360,8 @@
       <Filename Value="..\..\cad\simplecad"/>
     </Target>
     <SearchPaths>
-      <IncludeFiles Value="..;..\u;..\gdb;..\commands;..\gui;..\devicebase;..\languade;..\lclmod;..\electroteh;..\zgl;$(ProjOutDir);..\..\cad;..\misc;..\fileformats;..\other"/>
-      <OtherUnitFiles Value="..;..\u;..\gdb;..\commands;..\gui;..\devicebase;..\languade;..\lclmod;..\electroteh;..\zgl;$(ProjOutDir);..\..\cad;..\misc;..\fileformats;..\other"/>
+      <IncludeFiles Value="..;..\u;..\gdb;..\commands;..\gui;..\devicebase;..\languade;..\lclmod;..\electroteh;..\zgl;$(ProjOutDir);..\..\cad;..\misc;..\fileformats;..\other;..\fonts"/>
+      <OtherUnitFiles Value="..;..\u;..\gdb;..\commands;..\gui;..\devicebase;..\languade;..\lclmod;..\electroteh;..\zgl;$(ProjOutDir);..\..\cad;..\misc;..\fileformats;..\other;..\fonts"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

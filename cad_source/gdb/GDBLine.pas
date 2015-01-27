@@ -20,9 +20,11 @@ unit GDBLine;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,ugdbltypearray,
-     zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBOpenArrayOfByte,varman,varmandef,
-GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,shared;
+uses gdbentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,
+     ugdbltypearray,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,
+     gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,
+     UGDBOpenArrayOfByte,varman,varmandef,GDBase,gdbobjectsconstdef,oglwindowdef,
+     geometry,dxflow,memman,shared;
 type
                  {l_1_4:GDBvertex;(*hidden_in_objinsp*)
                  l_1_3:GDBvertex;(*hidden_in_objinsp*)

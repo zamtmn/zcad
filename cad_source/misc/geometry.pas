@@ -60,7 +60,7 @@ const
       YWCS4D:DVector4D=(0,1,0,1);
       ZWCS4D:DVector4D=(0,0,1,1);
       NulVertex2D:GDBVertex2D=(x:0;y:0);
-      XWCS2D2D:GDBVertex=(x:1;y:0);
+      XWCS2D2D:GDBVertex2D=(x:1;y:0);
 type Intercept3DProp=record
                            isintercept:GDBBoolean;
                            interceptcoord:gdbvertex;
@@ -150,9 +150,9 @@ function NearestPointOnSegment(const p:GDBVertex;const s0,s1:GDBvertex):GDBverte
 function IsPointEqual(const p1,p2:gdbvertex):boolean;inline;
 function IsVectorNul(const p2:gdbvertex):boolean;inline;
 
-function _myGluProject(const objx,objy,objz:GDBdouble;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out winx,winy,winz:GDBdouble):Integer;inline;
-function _myGluProject2(const objcoord:GDBVertex;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out wincoord:GDBVertex):Integer;inline;
-function _myGluUnProject(const winx,winy,winz:GDBdouble;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4;out objx,objy,objz:GDBdouble):Integer;inline;
+procedure _myGluProject(const objx,objy,objz:GDBdouble;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out winx,winy,winz:GDBdouble);inline;
+procedure _myGluProject2(const objcoord:GDBVertex;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out wincoord:GDBVertex);inline;
+procedure _myGluUnProject(const winx,winy,winz:GDBdouble;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4;out objx,objy,objz:GDBdouble);inline;
 
 function ortho(const xmin,xmax,ymin,ymax,zmin,zmax:GDBDouble;const matrix:PDMatrix4D):DMatrix4D;{inline;}
 function Perspective(const fovy,W_H,zmin,zmax:GDBDouble;const matrix:PDMatrix4D):DMatrix4D;inline;
@@ -803,7 +803,7 @@ begin
      //glMultMatrixd(@m);
 
 end;
-function _myGluUnProject(const winx,winy,winz:GDBdouble;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4;out objx,objy,objz:GDBdouble):Integer;
+procedure _myGluUnProject(const winx,winy,winz:GDBdouble;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4;out objx,objy,objz:GDBdouble);
 var
    _in,_out:GDBVertex4D;
    finalMatrix:DMatrix4D;
@@ -833,11 +833,11 @@ begin
      objy:= _out.y;
      objz:= _out.z;
 end;
-function _myGluProject2(const objcoord:GDBVertex;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out wincoord:GDBVertex):Integer;
+procedure _myGluProject2(const objcoord:GDBVertex;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out wincoord:GDBVertex);
 begin
      _myGluProject(objcoord.x,objcoord.y,objcoord.z,modelMatrix,projMatrix,viewport,wincoord.x,wincoord.y,wincoord.z);
 end;
-function _myGluProject(const objx,objy,objz:GDBdouble;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out winx,winy,winz:GDBdouble):Integer;
+procedure _myGluProject(const objx,objy,objz:GDBdouble;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out winx,winy,winz:GDBdouble);
 var
    _in,_out:GDBVertex4D;
 begin

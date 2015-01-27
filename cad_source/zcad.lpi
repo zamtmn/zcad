@@ -202,6 +202,7 @@
       <Unit2>
         <Filename Value="gdb/GDBAbstractText.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="GDBAbstractText"/>
       </Unit2>
       <Unit3>
         <Filename Value="languade/UUnitManager.pas"/>
@@ -259,7 +260,6 @@
       <Unit15>
         <Filename Value="electroteh/GDBCommandsOPS.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GDBCommandsOPS"/>
       </Unit15>
       <Unit16>
         <Filename Value="gui/tswnd.pas"/>
@@ -411,7 +411,10 @@
     </Parsing>
     <Other>
       <Verbosity>
-        <ShowGenInfo Value="False"/>
+        <ShowExecInfo Value="True"/>
+        <ShowSummary Value="True"/>
+        <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
+        <ShowHintsForSenderNotUsed Value="True"/>
       </Verbosity>
       <WriteFPCLogo Value="False"/>
       <ConfigFile>

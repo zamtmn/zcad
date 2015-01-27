@@ -373,6 +373,12 @@ GDBsymdolinfo=packed record
     Number:GDBInteger;
     LatestCreate:GDBBoolean;
   end;
+PGDBUNISymbolInfo=^GDBUNISymbolInfo;
+GDBUNISymbolInfo=packed record
+    symbol:GDBInteger;
+    symbolinfo:GDBsymdolinfo;
+  end;
+TSymbolInfoArray=packed array [0..255] of GDBsymdolinfo;
 PTAlign=^TAlign;
 TAlign=(TATop,TABottom,TALeft,TARight);
 TDWGHandle=GDBQWord;
@@ -677,18 +683,13 @@ GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                       function readtoparser(break:GDBString): GDBString;
                       destructor done;virtual;abstract;
                    end;
-//Generate on E:\zcad\CAD_SOURCE\u\ugdbshxfont.pas
-PGDBUNISymbolInfo=^GDBUNISymbolInfo;
-GDBUNISymbolInfo=packed record
-    symbol:GDBInteger;
-    symbolinfo:GDBsymdolinfo;
-  end;
-TSymbolInfoArray=packed array [0..255] of GDBsymdolinfo;
+//Generate on E:\zcad\CAD_SOURCE\fonts\ugdbbasefont.pas
 PBASEFont=^BASEFont;
 BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               unicode:GDBBoolean;
               symbolinfo:TSymbolInfoArray;
               unisymbolinfo:GDBOpenArrayOfData;
+              SHXdata:GDBOpenArrayOfByte;
               constructor init;
               destructor done;virtual;abstract;
               function GetSymbolDataAddr(offset:integer):pointer;virtual;abstract;
@@ -698,28 +699,16 @@ BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
               function findunisymbolinfos(symbolname:GDBString):PGDBsymdolinfo;
         end;
+//Generate on E:\zcad\CAD_SOURCE\fonts\ugdbshxfont.pas
 PSHXFont=^SHXFont;
 SHXFont={$IFNDEF DELPHI}packed{$ENDIF} object(BASEFont)
-              compiledsize:GDBInteger;
+              //compiledsize:GDBInteger;
               h,u:GDBByte;
-              SHXdata:GDBOpenArrayOfByte;
-              constructor init;
-              destructor done;virtual;abstract;
-              function GetSymbolDataAddr(offset:integer):pointer;virtual;abstract;
-        end;
-PTTFFont=^TTFFont;
-TTFFont={$IFNDEF DELPHI}packed{$ENDIF} object(SHXFont)
-              ftFont: TFreeTypeFont;
-              MapChar:TMapChar;
-              MapCharIterator:TMapChar.TIterator;
-              TriangleData:ZGLFontTriangle2DArray;
-              function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;virtual;abstract;
-              function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;abstract;
-              procedure ProcessTriangleData(ttfsi:TTTFSymInfo);
+              //SHXdata:GDBOpenArrayOfByte;
               constructor init;
               destructor done;virtual;abstract;
         end;
-//Generate on E:\zcad\CAD_SOURCE\u\ugdbfont.pas
+//Generate on E:\zcad\CAD_SOURCE\fonts\ugdbfont.pas
 PGDBfont=^GDBfont;
 GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     fontfile:GDBString;
@@ -2509,7 +2498,7 @@ GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
                  procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;abstract;
                  //procedure CalcObjMatrix;virtual;abstract;
             end;
-//Generate on E:\zcad\CAD_SOURCE\gdb\GDBpoint.pas
+//Generate on E:\zcad\CAD_SOURCE\gdb\GDBPoint.pas
 PGDBObjPoint=^GDBObjPoint;
 GDBObjPoint={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  P_insertInOCS:GDBvertex;(*'Coordinates OCS'*)(*saved_to_shd*)
@@ -3647,7 +3636,7 @@ TBasicFinter=packed record
                        function FindOrCreate(sname:gdbstring):PTCableDesctiptor;virtual;abstract;
                        function Find(sname:gdbstring):PTCableDesctiptor;virtual;abstract;
                  end;
-//Generate on E:\zcad\CAD_SOURCE\u\UGDBFontManager.pas
+//Generate on E:\zcad\CAD_SOURCE\fonts\UGDBFontManager.pas
   PGDBFontRecord=^GDBFontRecord;
   GDBFontRecord = packed record
     Name: GDBString;

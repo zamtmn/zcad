@@ -18,8 +18,9 @@ E:\zcad\CAD_SOURCE\u\UGDBSelectedObjArray.pas
 E:\zcad\CAD_SOURCE\u\UGDBStringArray.pas
 E:\zcad\CAD_SOURCE\zgl\uzglline3darray.pas
 E:\zcad\CAD_SOURCE\u\UGDBOpenArrayOfByte.pas
-E:\zcad\CAD_SOURCE\u\ugdbshxfont.pas
-E:\zcad\CAD_SOURCE\u\ugdbfont.pas
+E:\zcad\CAD_SOURCE\fonts\ugdbbasefont.pas
+E:\zcad\CAD_SOURCE\fonts\ugdbshxfont.pas
+E:\zcad\CAD_SOURCE\fonts\ugdbfont.pas
 E:\zcad\CAD_SOURCE\u\UGDBXYZWStringArray.pas
 E:\zcad\CAD_SOURCE\u\UGDBVectorSnapArray.pas
 E:\zcad\CAD_SOURCE\u\UGDBLineWidthArray.pas
@@ -103,4 +104,4 @@ E:\zcad\CAD_SOURCE\commands\GDBCommandsBase.pas
 E:\zcad\CAD_SOURCE\electroteh\GDBCommandsOPS.pas
 E:\zcad\CAD_SOURCE\electroteh\GDBCommandsElectrical.pas
 E:\zcad\CAD_SOURCE\u\UCableManager.pas
-E:\zcad\CAD_SOURCE\u\UGDBFontManager.pas
+E:\zcad\CAD_SOURCE\fonts\UGDBFontManager.pas

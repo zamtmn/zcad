@@ -25,12 +25,11 @@ type
 {EXPORT+}
 PSHXFont=^SHXFont;
 SHXFont={$IFNDEF DELPHI}packed{$ENDIF} object(BASEFont)
-              compiledsize:GDBInteger;
+              //compiledsize:GDBInteger;
               h,u:GDBByte;
-              SHXdata:GDBOpenArrayOfByte;
+              //SHXdata:GDBOpenArrayOfByte;
               constructor init;
               destructor done;virtual;
-              function GetSymbolDataAddr(offset:integer):pointer;virtual;
         end;
 {EXPORT-}
 implementation
@@ -40,16 +39,12 @@ begin
      inherited;
      u:=1;
      h:=1;
-     SHXdata.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1024);
+     //SHXdata.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1024);
 end;
 destructor SHXFont.done;
 begin
      inherited;
-     SHXdata.done;
-end;
-function SHXFont.GetSymbolDataAddr(offset:integer):pointer;
-begin
-     result:=SHXdata.getelement(offset);
+     //SHXdata.done;
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBSHXFont.initialization');{$ENDIF}

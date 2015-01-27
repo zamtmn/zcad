@@ -150,4 +150,6 @@ begin
      ProcessParanstr;
      //sysparam.verstr:=Format('%d.%d.%d.%d SVN: %s',[sysparam.ver.major,sysparam.ver.minor,sysparam.ver.release,sysparam.ver.build,RevisionStr]);
 end;
+initialization
+getsysinfo;
 end.

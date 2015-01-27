@@ -19,7 +19,7 @@
 unit ugdbttffont;
 {$INCLUDE def.inc}
 interface
-uses ugdbshxfont,{ugdbbasefont,}beziersolver,math,OGLSpecFunc,uzglfonttriangles2darray,TTTypes,TTObjs,gmap,gutil,EasyLazFreeType,memman,gdbobjectsconstdef,strproc,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
+uses ugdbshxfont,ugdbbasefont,beziersolver,math,OGLSpecFunc,uzglfonttriangles2darray,TTTypes,TTObjs,gmap,gutil,EasyLazFreeType,memman,gdbobjectsconstdef,strproc,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
 type
 PTTTFSymInfo=^TTTFSymInfo;
 TTTFSymInfo=packed record
@@ -33,7 +33,7 @@ TMapChar={specialize }TMap<integer,{integer}TTTFSymInfo,TLessInt>;
 {$ENDIF}
 {EXPORT+}
 PTTFFont=^TTFFont;
-TTFFont={$IFNDEF DELPHI}packed{$ENDIF} object(SHXFont)
+TTFFont={$IFNDEF DELPHI}packed{$ENDIF} object({SHXFont}BASEFont)
               ftFont: TFreeTypeFont;
               MapChar:TMapChar;
               MapCharIterator:TMapChar.TIterator;

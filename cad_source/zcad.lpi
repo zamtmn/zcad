@@ -233,6 +233,7 @@
       <Unit9>
         <Filename Value="languade/UObjectDescriptor.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="UObjectDescriptor"/>
       </Unit9>
       <Unit10>
         <Filename Value="gdb/gdbvisualprop.pas"/>
@@ -260,6 +261,7 @@
       <Unit15>
         <Filename Value="electroteh/GDBCommandsOPS.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="GDBCommandsOPS"/>
       </Unit15>
       <Unit16>
         <Filename Value="gui/tswnd.pas"/>

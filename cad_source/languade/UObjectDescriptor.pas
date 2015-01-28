@@ -361,8 +361,8 @@ begin
      if (pmd^.Attributes and m_virtual)<>0 then
                                             begin
                                                  result.Code:=
-                                                 ppointer(GDBPlatformint(self.PVMT)+
-                                                 GDBPlatformint(pmd^.MetodAddr){+12})^;
+                                                 ppointer(GDBPlatformUInt(self.PVMT)+
+                                                 GDBPlatformUInt(pmd^.MetodAddr){+12})^;
                                             end
                                         else
                                             begin

@@ -90,12 +90,12 @@ var //p:GDBPointer;
     i:integer;
     punit:pgdbaseobject;
 begin
-  GDBPlatformint(punit):=GDBPlatformint(parray)+size*(count-1);
+  GDBPlatformUInt(punit):=GDBPlatformUInt(parray)+size*(count-1);
   for i := count-1 downto 0 do
   begin
        punit^.Done;
        AfterObjectDone(punit);
-       dec(GDBPlatformint(punit),size);
+       dec(GDBPlatformUInt(punit),size);
   end;
 
   {p:=beginiterate(ir);
@@ -749,7 +749,7 @@ finalization;
                 PVariantsField:=PTUserTypeDescriptor(PVardeskInDBUnit.data.PTD)^.FindField('Variants');
                 if PVariantsField<>nil then
                 begin
-                     PTObj:=pointer(ptrint(PVardeskInDBUnit.data.Instance)+ptrint(PVariantsField.Offset));
+                     PTObj:=pointer(GDBPlatformUInt(PVardeskInDBUnit.data.Instance)+GDBPlatformUInt(PVariantsField.Offset));
                      (tobject(PTObj^).Free);
                 end;
                 PVardeskInDBUnit:=DBUnit.InterfaceVariables.vardescarray.iterate(IrInDBUnit);

@@ -485,7 +485,7 @@ begin
      if graf.divide then
      begin
           GDBGetMem({$IFDEF DEBUGBUILD}'{4BB9158C-D16F-4310-9770-3BC2F2AF82C9}',{$ENDIF}GDBPointer(TempNet),sizeof(GDBObjNet));
-          if GDBPlatformint(tempnet)=$229FEF0 then
+          if GDBPlatformUInt(tempnet)=$229FEF0 then
                                   tempnet:=tempnet;
           TempNet^.initnul(nil);
           ou.CopyTo(@tempnet.ou);

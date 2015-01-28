@@ -141,13 +141,13 @@ begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{D9D91D43-BD6A-450A-B07E-E964425E7C99}',{$ENDIF}tp, size);
   if p<>nil then
   repeat
-        if GDBPlatformint(pl)<=GDBPlatformint(p) then
+        if GDBPlatformUInt(pl)<=GDBPlatformUInt(p) then
                                          break;
         Move(p^,tp^,size);
         Move(pl^,p^,size);
         Move(tp^,pl^,size);
-        dec(GDBPlatformint(pl),size);
-        inc(GDBPlatformint(p),size);
+        dec(GDBPlatformUInt(pl),size);
+        inc(GDBPlatformUInt(p),size);
         //p:=iterate(ir);
   until {p=nil}false;
   GDBFreeMem(tp);
@@ -180,7 +180,7 @@ begin
                     result:=nil
                 else
                     begin
-                          ir.itp:=pointer(GDBPlatformint(parray)-size);
+                          ir.itp:=pointer(GDBPlatformUInt(parray)-size);
                           ir.itc:=-1;
                           result:=iterate(ir);
                     end;

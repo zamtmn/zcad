@@ -95,7 +95,7 @@ begin
         if pd<>nil then
         repeat
               begin
-                   GDBPlatformint(p):=GDBPlatformint(PInstance)+pd^.Offset;
+                   GDBPlatformUInt(p):=GDBPlatformUInt(PInstance)+pd^.Offset;
                    if assigned(pd^.base.PFT) then
                                                  pd^.base.PFT^.MagicFreeInstance(p)
                                              else
@@ -338,7 +338,7 @@ begin
         if pd<>nil then
         repeat
               if pd^.base.ProgramName<>'#' then
-                                        pd.base.PFT.SavePasToMem(membuf,pointer(GDBPlatformint(PInstance)+pd^.Offset),prefix+'.'+pd^.base.ProgramName);
+                                        pd.base.PFT.SavePasToMem(membuf,pointer(GDBPlatformUInt(PInstance)+pd^.Offset),prefix+'.'+pd^.base.ProgramName);
               pd:=Fields.iterate(ir);
         until pd=nil;
 end;
@@ -593,7 +593,7 @@ begin
         if pd<>nil then
         repeat
               if pd^.base.ProgramName<>'#' then
-                                        pd.base.PFT.MagicAfterCopyInstance(pointer(GDBPlatformint(PInstance)+pd^.Offset));
+                                        pd.base.PFT.MagicAfterCopyInstance(pointer(GDBPlatformUInt(PInstance)+pd^.Offset));
               pd:=Fields.iterate(ir);
         until pd=nil;
 end;

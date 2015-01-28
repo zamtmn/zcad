@@ -62,7 +62,7 @@ begin
 begin
   del := PArray;
   inc(pGDBByte(del),size*index);
-  GDBPlatformint(afterdel):=GDBPlatformint(del)+size;
+  GDBPlatformUInt(afterdel):=GDBPlatformUInt(del)+size;
   s:=(count-index-1)*size;
   Move(del^,afterdel^,s);
   Move(p^,del^,size);
@@ -77,7 +77,7 @@ var
 begin
   del := PArray;
   inc(pGDBByte(del),size*index);
-  GDBPlatformint(afterdel):=GDBPlatformint(del)+size;
+  GDBPlatformUInt(afterdel):=GDBPlatformUInt(del)+size;
   s:=(count-index-1)*size;
   Move(afterdel^,del^,s);
   dec(count);
@@ -88,8 +88,8 @@ var
    afterdel:pointer;
    s:integer;
 begin
-  GDBPlatformint(afterdel):=GDBPlatformint(pel)+size;
-  s:=GDBPlatformint(parray)+count*size-GDBPlatformint(pel);
+  GDBPlatformUInt(afterdel):=GDBPlatformUInt(pel)+size;
+  s:=GDBPlatformUInt(parray)+count*size-GDBPlatformUInt(pel);
   //s:=(count-index-1)*size;
   Move(afterdel^,pel^,s);
   dec(count);

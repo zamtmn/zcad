@@ -1165,14 +1165,14 @@ begin
 
          tp:=pointer(pobj^.vp.ID);
 
-         if (GDBPlatformint(tp)=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
-                                GDBPlatformint(tp):=GDBBlockInsertID;
-         if ((GDBPlatformint(tp)=GDBBlockInsertID)or(GDBPlatformint(tp)=GDBDeviceID)) then
+         if (GDBPlatformUInt(tp)=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
+                                GDBPlatformUInt(tp):=GDBBlockInsertID;
+         if ((GDBPlatformUInt(tp)=GDBBlockInsertID)or(GDBPlatformUInt(tp)=GDBDeviceID)) then
                                     bnames.addnodouble(@PGDBObjBlockInsert(pobj)^.Name);
 
-         if (GDBPlatformint(tp)=GDBMtextID)and(SelSimParams.Texts.DiffTextMText=TD_NotDiff) then
-                                GDBPlatformint(tp):=GDBTextID;
-         if ((GDBPlatformint(tp)=GDBTextID)or(GDBPlatformint(tp)=GDBMTextID)) then
+         if (GDBPlatformUInt(tp)=GDBMtextID)and(SelSimParams.Texts.DiffTextMText=TD_NotDiff) then
+                                GDBPlatformUInt(tp):=GDBTextID;
+         if ((GDBPlatformUInt(tp)=GDBTextID)or(GDBPlatformUInt(tp)=GDBMTextID)) then
                              begin
                                     textcontents.addnodouble(@PGDBObjText(pobj)^.Content);
                                     textremplates.addnodouble(@PGDBObjText(pobj)^.Template);
@@ -1222,21 +1222,21 @@ begin
            isweght:=weights.IsObjExist(tp);
 
            tp:=pointer(pobj^.vp.ID);
-           if (GDBPlatformint(tp)=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
-                                  GDBPlatformint(tp):=GDBBlockInsertID;
-           if (GDBPlatformint(tp)=GDBMtextID)and(SelSimParams.Texts.DiffTextMText=TD_NotDiff) then
-                                  GDBPlatformint(tp):=GDBTextID;
+           if (GDBPlatformUInt(tp)=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
+                                  GDBPlatformUInt(tp):=GDBBlockInsertID;
+           if (GDBPlatformUInt(tp)=GDBMtextID)and(SelSimParams.Texts.DiffTextMText=TD_NotDiff) then
+                                  GDBPlatformUInt(tp):=GDBTextID;
            isobjtype:=objtypes.IsObjExist(tp);
            if isobjtype then
            begin
-                if ((GDBPlatformint(tp)=GDBBlockInsertID)or(GDBPlatformint(tp)=GDBDeviceID))and(SelSimParams.Blocks.SameName) then
+                if ((GDBPlatformUInt(tp)=GDBBlockInsertID)or(GDBPlatformUInt(tp)=GDBDeviceID))and(SelSimParams.Blocks.SameName) then
                 if not bnames.findstring(uppercase(PGDBObjBlockInsert(pobj)^.Name),true) then
                    isobjtype:=false;
 
-                if ((GDBPlatformint(tp)=GDBTextID)or(GDBPlatformint(tp)=GDBMTextID))and(SelSimParams.Texts.SameContent) then
+                if ((GDBPlatformUInt(tp)=GDBTextID)or(GDBPlatformUInt(tp)=GDBMTextID))and(SelSimParams.Texts.SameContent) then
                 if not textcontents.findstring(uppercase(PGDBObjText(pobj)^.Content),true) then
                    isobjtype:=false;
-                if ((GDBPlatformint(tp)=GDBTextID)or(GDBPlatformint(tp)=GDBMTextID))and(SelSimParams.Texts.SameContent) then
+                if ((GDBPlatformUInt(tp)=GDBTextID)or(GDBPlatformUInt(tp)=GDBMTextID))and(SelSimParams.Texts.SameContent) then
                 if not textremplates.findstring(uppercase(PGDBObjText(pobj)^.Template),true) then
                    isobjtype:=false;
 

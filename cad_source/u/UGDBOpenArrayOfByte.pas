@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfByte;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,sysutils,UGDBOpenArray,gdbase,{$IFNDEF DELPHI}fileutil,{$ENDIF}
+uses zcadstrconsts,gdbasetypes,sysutils,UGDBOpenArray,gdbase,{$IFNDEF DELPHI}fileutil,{$ENDIF}
      paths,shared;
 const
      breacer=[#13,#10,' '];
@@ -83,7 +83,7 @@ begin
 end;
 function GDBOpenArrayOfByte.GetChar;
 begin
-     result:=pansichar(GDBPlatformint(parray)+rp)^;
+     result:=pansichar(GDBPlatformUInt(parray)+rp)^;
 end;
 function GDBOpenArrayOfByte.readtoparser;
 var
@@ -198,15 +198,15 @@ end;
 function GDBOpenArrayOfByte.Jump;
 begin
      readpos:=readpos+offset;
-     result:=pointer(GDBPlatformint(parray)+readpos);
+     result:=pointer(GDBPlatformUInt(parray)+readpos);
 end;
 function GDBOpenArrayOfByte.GetCurrentReadAddres;
 begin
-     result:=pointer(GDBPlatformint(parray)+readpos);
+     result:=pointer(GDBPlatformUInt(parray)+readpos);
 end;
 function GDBOpenArrayOfByte.readbyte;
 begin
-     result:=pbyte(GDBPlatformint(parray)+readpos)^;
+     result:=pbyte(GDBPlatformUInt(parray)+readpos)^;
      inc(readpos);
 end;
 function GDBOpenArrayOfByte.readword;
@@ -226,7 +226,7 @@ begin
   setlength(myresult,255);
   lastbreak:=false;
   i:=0;
-  addr:=pointer(GDBPlatformint(parray)+readpos);
+  addr:=pointer(GDBPlatformUInt(parray)+readpos);
     while ReadPos <> count do
     begin
       if (pos(addr[0], break) = 0)or(({s=''}i=0)and(addr[0]=' ')) then
@@ -287,7 +287,7 @@ begin
      initnul;
      infile:=fileopen({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(FileName),fmShareDenyNone);
      if infile<=0 then
-                      shared.ShowError('Не могу открыть файл "'+FileName+'"')
+                      shared.ShowError(sysutils.format(rsUnableToOpenFile,[FileName]))
      else
      begin
      pointer(name):=nil;
@@ -351,7 +351,7 @@ begin
                     createarray;
   if count+sdata>max then
                          Grow;
-  result:=pointer(GDBPlatformint(parray)+count);
+  result:=pointer(GDBPlatformUInt(parray)+count);
   fillchar(result^,sdata,0);
   inc(count,SData);
 end;

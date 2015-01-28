@@ -82,7 +82,7 @@ procedure CreateDBLinkProcess(pEntity:PGDBObjGenericWithSubordinated;const drawi
 procedure CreateDeviceNameSubProcess(pvn:pvardesk; const formatstr:GDBString;pEntity:PGDBObjGenericWithSubordinated);
 function GetEntName(pu:PGDBObjGenericWithSubordinated):GDBString;
 implementation
-uses {UGDBDescriptor,}UUnitManager,URecordDescriptor,shared,log,devicebaseabstract;
+uses UUnitManager,URecordDescriptor,shared,log,devicebaseabstract;
 destructor GDBObjSubordinated.done;
 begin
      inherited;

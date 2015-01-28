@@ -102,7 +102,8 @@ uses
   mainwindow,
   shared,
   zcadstrconsts,
-  iopalette;
+  iopalette,
+  gdbfieldprocessorimpl;
   //RegCnownTypes,URegisterObjects;
 
 //exports HistoryOut,redrawoglwnd,updatevisible,reloadlayer; {shared}

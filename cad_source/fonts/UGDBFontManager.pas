@@ -77,8 +77,10 @@ end;
 destructor GDBFontManager.done;
 begin
      inherited;
-     ttffontfiles.Destroy;
-     shxfontfiles.Destroy;
+     if assigned(ttffontfiles)then
+       ttffontfiles.Destroy;
+     if assigned(shxfontfiles)then
+       shxfontfiles.Destroy;
 end;
 
 constructor GDBFontManager.init;

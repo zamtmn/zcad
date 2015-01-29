@@ -1485,7 +1485,6 @@ GDBObjVisualProp=packed record
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBEntity.pas
 PTExtAttrib=^TExtAttrib;
 TExtAttrib=packed record
-                 FreeObject:GDBBoolean;
                  OwnerHandle:GDBQWord;
                  Handle:GDBQWord;
                  Upgrade:TEntUpgradeInfo;
@@ -3647,6 +3646,7 @@ GDBFontManager={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArrayOfData}GDBName
                     ttffontfiles:TStringList;
                     shxfontfiles:TStringList;
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                    destructor done;virtual;abstract;
                     function addFonf(FontPathName:GDBString):PGDBfont;
                     procedure EnumerateTTFFontFile(filename:GDBString);
                     procedure EnumerateSHXFontFile(filename:GDBString);

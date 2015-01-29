@@ -421,7 +421,6 @@ GDBOpenArrayOfGDBPointer=object(GDBOpenArray)
 //Generate on C:\CAD_SOURCE\gdb\GDBVisible.pas
 PTExtAttrib=^TExtAttrib;
 TExtAttrib=record
-                 FreeObject:GDBBoolean;(*'Владелец'*)
                  ExtAttrib2:GDBBoolean;(*'Владелец'*)
            end;
 PGDBObjEntity=^GDBObjEntity;

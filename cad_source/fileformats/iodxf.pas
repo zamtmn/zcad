@@ -1814,9 +1814,6 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                 outstream.TXTAddGDBStringEOL('0');
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                 outstream.TXTAddGDBStringEOL('AcDbBlockEnd');
-
-                //PBlockdefArray(gdb^.BlockDefArray.parray)^[i].SaveToDXFPostProcess(outstream); asdasd
-
               end;
 
               outstream.TXTAddGDBStringEOL(dxfGroupCode(0));

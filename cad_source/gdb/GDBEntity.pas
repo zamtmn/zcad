@@ -29,7 +29,6 @@ taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
 {Export+}
 PTExtAttrib=^TExtAttrib;
 TExtAttrib=packed record
-                 FreeObject:GDBBoolean;
                  OwnerHandle:GDBQWord;
                  Handle:GDBQWord;
                  Upgrade:TEntUpgradeInfo;
@@ -60,7 +59,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                     procedure DXFOut(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                     procedure SaveToDXFfollow(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
-                    procedure SaveToDXFPostProcess(var handle:{GDBInteger}GDBOpenArrayOfByte);
+                    procedure SaveToDXFPostProcess(var handle:GDBOpenArrayOfByte);
                     procedure Format;virtual;abstract;
                     procedure FormatEntity(const drawing:TDrawingDef);virtual;
                     procedure FormatFast(const drawing:TDrawingDef);virtual;
@@ -665,7 +664,7 @@ begin
 end;
 procedure GDBObjEntity.SaveToDXFPostProcess;
 var
-   isvarobject,ishavevars{,ishavex}:boolean;
+   ishavevars:boolean;
    pvd:pvardesk;
    pfd:PFieldDescriptor;
    pvu:PTUnit;
@@ -674,72 +673,57 @@ var
    i:integer;
    tp:pointer;
 begin
-     isvarobject:=false;
      ishavevars:=false;
-     //ishavex:=IsHaveObjXData;
      if ou.InterfaceVariables.vardescarray.Count>0 then
                                                        ishavevars:=true;
-     if self.PExtAttrib<>nil then
-       if self.PExtAttrib^.FreeObject  then
-                                           isvarobject:=true;
-
-    //if (isvarobject or ishavevars)or ishavex then
     begin
          dxfGDBStringout(handle,1001,ZCADAppNameInDXF);
          dxfGDBStringout(handle,1002,'{');
-         if isvarobject then
-                            dxfGDBStringout(handle,1000,'VAROBJECT=');
          if ishavevars then
-                           begin
-                                pvu:=ou.InterfaceUses.beginiterate(ir);
-                                if pvu<>nil then
-                                repeat
-                                      str:='USES='+pvu^.Name;
-                                      dxfGDBStringout(handle,1000,str);
-                                pvu:=ou.InterfaceUses.iterate(ir);
-                                until pvu=nil;
+         begin
+              pvu:=ou.InterfaceUses.beginiterate(ir);
+              if pvu<>nil then
+              repeat
+                    str:='USES='+pvu^.Name;
+                    dxfGDBStringout(handle,1000,str);
+              pvu:=ou.InterfaceUses.iterate(ir);
+              until pvu=nil;
 
-                                i:=0;
-                                pvd:=ou.InterfaceVariables.vardescarray.beginiterate(ir);
-                                if pvd<>nil then
-                                repeat
-                                      if (pvd^.data.PTD.GetTypeAttributes and TA_COMPOUND)=0 then
-                                      begin
-                                           sv:=PBaseTypeDescriptor(pvd^.data.ptd)^.GetValueAsString(pvd^.data.Instance);
-                                           str:='#'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName;
-                                           str:=str+'|'+sv+'|'+pvd^.username;
-                                           dxfGDBStringout(handle,1000,str);
-                                      end
-                                      else
-                                      begin
-                                           str:='&'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName+'|'+pvd^.username;
-                                           dxfGDBStringout(handle,1000,str);
-                                           inc(i);
-                                           tp:=pvd^.data.Instance;
-                                           pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.beginiterate(ir2);
-                                           if pfd<>nil then
-                                           repeat
-                                                 str:='$'+inttostr(i)+'='+pvd^.name+'|'+pfd^.base.ProgramName+'|'+pfd^.base.PFT^.GetValueAsString(tp);
-                                                 dxfGDBStringout(handle,1000,str);
-                                                 ptruint(tp):=ptruint(tp)+ptruint(pfd^.base.PFT^.SizeInGDBBytes); { TODO : сделать на оффсете }
-                                                 inc(i);
-                                                 pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.iterate(ir2);
-                                           until pfd=nil;
-                                           str:='&'+inttostr(i)+'=END';
-                                           //dxfGDBStringout(handle,1000,str);
-                                           inc(i);
-                                      end;
-
-                                inc(i);
-                                pvd:=ou.InterfaceVariables.vardescarray.iterate(ir);
-                                until pvd=nil;
-
-                           end;
-         //if ishavex then
-
+              i:=0;
+              pvd:=ou.InterfaceVariables.vardescarray.beginiterate(ir);
+              if pvd<>nil then
+              repeat
+                    if (pvd^.data.PTD.GetTypeAttributes and TA_COMPOUND)=0 then
+                    begin
+                         sv:=PBaseTypeDescriptor(pvd^.data.ptd)^.GetValueAsString(pvd^.data.Instance);
+                         str:='#'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName;
+                         str:=str+'|'+sv+'|'+pvd^.username;
+                         dxfGDBStringout(handle,1000,str);
+                    end
+                    else
+                    begin
+                         str:='&'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName+'|'+pvd^.username;
+                         dxfGDBStringout(handle,1000,str);
+                         inc(i);
+                         tp:=pvd^.data.Instance;
+                         pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.beginiterate(ir2);
+                         if pfd<>nil then
+                         repeat
+                               str:='$'+inttostr(i)+'='+pvd^.name+'|'+pfd^.base.ProgramName+'|'+pfd^.base.PFT^.GetValueAsString(tp);
+                               dxfGDBStringout(handle,1000,str);
+                               ptruint(tp):=ptruint(tp)+ptruint(pfd^.base.PFT^.SizeInGDBBytes); { TODO : сделать на оффсете }
+                               inc(i);
+                               pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.iterate(ir2);
+                         until pfd=nil;
+                         str:='&'+inttostr(i)+'=END';
+                         inc(i);
+                    end;
+              inc(i);
+              pvd:=ou.InterfaceVariables.vardescarray.iterate(ir);
+              until pvd=nil;
+         end;
          self.SaveToDXFObjXData(handle);
          dxfGDBStringout(handle,1002,'}');
-
     end;
 end;
 function GDBObjEntity.CalcInFrustum;
@@ -1188,10 +1172,6 @@ begin
                                                          if name='' then
                                                                         name:='empty';
                                                          Value:=copy(Xvalue,i+1,length(xvalue)-i);
-                                                         {if Name='VAROBJECT' then
-                                                                                 begin
-                                                                                      self.AddExtAttrib^.FreeObject:=true;
-                                                                                 end;}
                                                          if Name='_OWNERHANDLE' then
                                                                                  begin
                                                                                       {$IFNDEF DELPHI}

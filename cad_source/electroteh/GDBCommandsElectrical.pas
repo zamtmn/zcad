@@ -2727,7 +2727,7 @@ begin
 end;
 
 begin
-  linesarray.init(10);
+  linesarray.init({$IFDEF DEBUGBUILD}'{B2D2F2AE-360B-4755-8DE8-A950788B7533}',{$ENDIF}10);
   if length(operands)=0 then
                      begin
                           isload:=OpenFileDialog(s,1,'csv',CSVFileFilter,'','Открыть журнал...');

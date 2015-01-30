@@ -19,7 +19,7 @@
 unit GDBEntity;
 {$INCLUDE def.inc}
 interface
-uses uzglabstractdrawer,gdbdrawcontext,ugdbdrawingdef,GDBCamera,gdbvisualprop,uzglgeometry,ugdbltypearray,zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
+uses gdbobjectextender,uzglabstractdrawer,gdbdrawcontext,ugdbdrawingdef,GDBCamera,gdbvisualprop,uzglgeometry,ugdbltypearray,zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
      {UGDBPolyPoint2DArray,}varman,varmandef,
      GDBase,gdbobjectsconstdef,
      oglwindowdef,geometry,dxflow,sysutils,memman,UGDBOpenArrayOfByte,UGDBLayerArray,UGDBOpenArrayOfPObjects;
@@ -47,6 +47,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
                     procedure SaveToDXFObjPrefix(var handle:TDWGHandle;var  outhandle:{GDBInteger}GDBOpenArrayOfByte;entname,dbname:GDBString);
                     function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit;const drawing:TDrawingDef):GDBBoolean;
+                    function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef):GDBBoolean;virtual;
                     function FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                     procedure FromDXFPostProcessAfterAdd;virtual;
                     function IsHaveObjXData:GDBBoolean;virtual;
@@ -155,10 +156,12 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     function CanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;inline;
                     procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;
                     procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
+                    class function GetDXFIOFeatures:TDXFEntIODataManager;
               end;
 {Export-}
 var onlygetsnapcount:GDBInteger;
     ForeGround:TRGB;
+    GDBObjEntityDXFFeatures:TDXFEntIODataManager;
 implementation
 uses usimplegenerics,gdbentityfactory,GDBGenericSubEntry,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
 
@@ -251,19 +254,6 @@ procedure GDBObjEntity.AddOnTrackAxis(var posr:os_record;const processaxis:taddo
 begin
 
 end;
-{function GDBObjEntity.ProcessFromDXFObjXData(_Name,_Value:GDBString):GDBBoolean;
-begin
-     result:=inherited ProcessFromDXFObjXData(_Name,_Value);
-     if not result then
-     if _Name='_HANDLE' then
-                           begin
-                                self.AddExtAttrib^.Handle:=strtoint('$'+_value);
-                           end;
-     if _Name='_UPGRADE' then
-                           begin
-                                self.AddExtAttrib^.Upgrade:=strtoint(_value);
-                           end;
-end;}
 procedure GDBObjEntity.BuildGeometry;
 begin
 
@@ -1172,7 +1162,7 @@ begin
                                                          if name='' then
                                                                         name:='empty';
                                                          Value:=copy(Xvalue,i+1,length(xvalue)-i);
-                                                         if Name='_OWNERHANDLE' then
+                                                         (*if Name='_OWNERHANDLE' then
                                                                                  begin
                                                                                       {$IFNDEF DELPHI}
                                                                                       if not TryStrToQWord('$'+value,self.AddExtAttrib^.OwnerHandle)then
@@ -1202,8 +1192,8 @@ begin
                                                                                     vp.Layer:=drawing.getlayertable.getAddres(value);
                                                                                end;
 
-                                                    //else
-                                                           ProcessFromDXFObjXData(Name,Value,ptu);
+                                                    //else*)
+                                                           ProcessFromDXFObjXData(Name,Value,ptu,drawing);
                                                     end;
                                until (XGroup=1002)and(XValue='}')
                           end;
@@ -1212,6 +1202,32 @@ begin
      end;
 
 end;
+class function GDBObjEntity.GetDXFIOFeatures:TDXFEntIODataManager;
 begin
+  result:=GDBObjEntityDXFFeatures;
+end;
+function GDBObjEntity.ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef):GDBBoolean;
+var
+   features:TDXFEntIODataManager;
+   FeatureLoadProc:TDXFEntLoadFeature;
+begin
+     result:=false;
+     features:=GetDXFIOFeatures;
+     if assigned(features) then
+     begin
+          FeatureLoadProc:=features.GetLoadFeature(_Name);
+          if assigned(FeatureLoadProc)then
+          begin
+               result:=FeatureLoadProc(_Name,_Value,ptu,drawing,@self);
+          end;
+     end;
+     {if not(result) then
+     result:=inherited ProcessFromDXFObjXData(_Name,_Value,ptu,drawing);}
+end;
+
+initialization
   {$IFDEF DEBUGINITSECTION}LogOut('GDBEntity.initialization');{$ENDIF}
+  GDBObjEntityDXFFeatures:=TDXFEntIODataManager.Create;
+finalization
+  GDBObjEntityDXFFeatures.Destroy;
 end.

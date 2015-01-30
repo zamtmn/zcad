@@ -43,6 +43,6 @@ end;
 begin
   sysvar.RD.RD_RendererBackEnd.Enums.init(10);
   sysvar.RD.RD_RendererBackEnd.Selected:=0;
-  Backends.init(10);
+  Backends.init({$IFDEF DEBUGBUILD}'{143AA836-9372-462F-B107-229B50E7A37C}',{$ENDIF}10);
 end.
 

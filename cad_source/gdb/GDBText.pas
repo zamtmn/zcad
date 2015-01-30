@@ -21,7 +21,7 @@ unit GDBText;
 
 interface
 uses
-gdbfieldprocessor,gdbentityfactory,ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,sysutils,ugdbfont,UGDBPoint3DArray,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
+gdbobjectextender,gdbfieldprocessor,gdbentityfactory,ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,sysutils,ugdbfont,UGDBPoint3DArray,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase,{UGDBDescriptor,}gdbobjectsconstdef,oglwindowdef,geometry,dxflow,strmy,math,memman,log,GDBSubordinated,UGDBTextStyleArray;
 type
 {REGISTEROBJECTTYPE GDBObjText}
@@ -54,13 +54,15 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  function IsHaveObjXData:GDBBoolean;virtual;
                  procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-                 function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit):GDBBoolean;virtual;
+                 function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef):GDBBoolean;virtual;
+                 class function GetDXFIOFeatures:TDXFEntIODataManager;
            end;
 {Export-}
 var
 jt: array[0..3, 0..4] of TTextJustify = ((jsbl, jsbc, jsbr, jsbl, jsmc), (jsbtl, jsbtc, jsbtr, jsbl, jsbl), (jsml, jsmc, jsmr, jsbl, jsbl), (jstl, jstc, jstr, jsbl, jsbl));
 j2b: array[TTextJustify] of byte=(1,2,3,4,5,6,7,8,9,10,11,12);
 b2j: array[1..12] of TTextJustify=(jstl,jstc,jstr,jsml,jsmc,jsmr,jsbl,jsbc,jsbr,jsbtl,jsbtc,jsbtr);
+GDBObjTextDXFFeatures:TDXFEntIODataManager;
 function getsymbol(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
 implementation
 uses shared;
@@ -777,17 +779,6 @@ begin
                               dxfGDBStringout(outhandle,1000,'_TMPL1='+template);
      inherited;
 end;
-function GDBObjText.ProcessFromDXFObjXData;
-begin
-     result:=inherited ProcessFromDXFObjXData(_Name,_Value,ptu);
-     if not result then
-
-     if _Name='_TMPL1' then
-                           begin
-                                template:=_value;
-                                result:=true;
-                           end;
-end;
 function z2dxftext(s:gdbstring):gdbstring;
 var i:GDBInteger;
 begin
@@ -935,7 +926,32 @@ begin
   result.initnul(owner);
   result.bp.ListPos.Owner:=owner;
 end;
+class function GDBObjText.GetDXFIOFeatures:TDXFEntIODataManager;
 begin
+  result:=GDBObjTextDXFFeatures;
+end;
+function GDBObjText.ProcessFromDXFObjXData;
+var
+   features:TDXFEntIODataManager;
+   FeatureLoadProc:TDXFEntLoadFeature;
+begin
+  result:=false;
+  features:=GetDXFIOFeatures;
+  if assigned(features) then
+  begin
+       FeatureLoadProc:=features.GetLoadFeature(_Name);
+       if assigned(FeatureLoadProc)then
+       begin
+            result:=FeatureLoadProc(_Name,_Value,ptu,drawing,@self);
+       end;
+  end;
+  if not(result) then
+  result:=inherited ProcessFromDXFObjXData(_Name,_Value,ptu,drawing);
+end;
+initialization
   {$IFDEF DEBUGINITSECTION}LogOut('GDBText.initialization');{$ENDIF}
   RegisterDXFEntity(GDBTextID,'TEXT','Text',@AllocText,@AllocAndInitText);
+  GDBObjTextDXFFeatures:=TDXFEntIODataManager.Create;
+finalization
+  GDBObjTextDXFFeatures.Destroy;
 end.

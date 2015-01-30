@@ -18,7 +18,8 @@
 unit GDBBlockDef;
 {$INCLUDE def.inc}
 interface
-uses ugdbdrawingdef,GDBSubordinated,dxflow,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,memman, geometry,
+uses gdbobjectextender,ugdbdrawingdef,GDBSubordinated,dxflow,UGDBOpenArrayOfByte,
+     gdbasetypes,sysutils,gdbase,memman, geometry,
      UGDBLayerArray,
      zcadstrconsts,varmandef,gdbobjectsconstdef,GDBGenericSubEntry,varman;
 type
@@ -36,14 +37,17 @@ GDBObjBlockdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                      procedure FormatEntity(const drawing:TDrawingDef);virtual;
                      function FindVariable(varname:GDBString):pvardesk;virtual;
                      procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
-                     function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit):GDBBoolean;virtual;
+                     function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef):GDBBoolean;virtual;
                      destructor done;virtual;
                      function GetMatrix:PDMatrix4D;virtual;
                      function GetHandle:GDBPlatformint;virtual;
                      function GetMainOwner:PGDBObjSubordinated;virtual;
                      function GetType:GDBPlatformint;virtual;
+                     class function GetDXFIOFeatures:TDXFEntIODataManager;
                end;
 {Export-}
+var
+   GDBObjBlockDefDXFFeatures:TDXFEntIODataManager;
 implementation
 uses {iodxf,}UUnitManager,shared,log,GDBEntity;
 function GDBObjBlockdef.GetType:GDBPlatformint;
@@ -67,76 +71,6 @@ begin
      Name:='';
      VarFromFile:='';
      inherited;
-end;
-function GDBObjBlockdef.ProcessFromDXFObjXData;
-var
-   uou:PTObjectUnit;
-begin
-     result:=inherited ProcessFromDXFObjXData(_Name,_Value,ptu);
-      if not result then
-                       begin
-                        begin
-                             if _Name='_TYPE' then
-                                             begin
-                                                  if _Value='BT_CONNECTOR' then
-                                                                            begin
-                                                                             BlockDesc.BType:=BT_Connector;
-                                                                             result:=true;
-                                                                        end
-                                             else if _Value='BT_UNKNOWN' then
-                                                                            begin
-                                                                             BlockDesc.BType:=BT_Unknown;
-                                                                             result:=true;
-                                                                        end;
-                                             end
-                        else if _Name='_GROUP' then
-                                             begin
-                                                  if _Value='BG_EL_DEVICE' then
-                                                                            begin
-                                                                             BlockDesc.BGroup:=BG_El_Device;
-                                                                             result:=true;
-                                                                        end
-                                             else if _Value='BG_UNKNOWN' then
-                                                                            begin
-                                                                             BlockDesc.BGroup:=BG_Unknown;
-                                                                             result:=true;
-                                                                        end;
-                                             end
-                        else if _Name='_BORDER' then
-                                             begin
-                                                  if _Value='BB_OWNER' then
-                                                                        begin
-                                                                             BlockDesc.BBorder:=BB_Owner;
-                                                                             result:=true;
-                                                                        end
-                                             else if _Value='BB_SELF' then
-                                                                       begin
-                                                                             BlockDesc.BBorder:=BB_Self;
-                                                                             result:=true;
-                                                                       end
-                                             else if _Value='BB_EMPTY' then
-                                                                       begin
-                                                                             BlockDesc.BBorder:=BB_Empty;
-                                                                             result:=true;
-                                                                       end;
-                                             end
-      else if _Name='SETFROMFILE' then
-                             begin
-                                  ShowError('Deprecated option: SETFROMFILE');
-                                  uou:=pointer(units.findunit(_Value));
-                                  if uou<>nil then
-                                                  begin
-                                                        ou.CopyFrom(uou);
-                                                  end
-                                              else
-                                                  begin
-                                                       ShowError('BlockDef "'+self.Name+'" (SETFROMFILE):'+sysutils.format(rsUnableToFindFile,[_Value]));
-                                                  end;
-                                  self.VarFromFile:=_Value;
-                                  result:=true;
-                             end
-                        end;
-                       end;
 end;
 procedure GDBObjBlockdef.LoadFromDXF;
 var //s{, layername}: GDBString;
@@ -214,6 +148,31 @@ begin
      Name:=_name;
      Base:=nulvertex;
 end;
+class function GDBObjBlockdef.GetDXFIOFeatures:TDXFEntIODataManager;
 begin
+  result:=GDBObjBlockDefDXFFeatures;
+end;
+function GDBObjBlockdef.ProcessFromDXFObjXData;
+var
+   features:TDXFEntIODataManager;
+   FeatureLoadProc:TDXFEntLoadFeature;
+begin
+  result:=false;
+  features:=GetDXFIOFeatures;
+  if assigned(features) then
+  begin
+       FeatureLoadProc:=features.GetLoadFeature(_Name);
+       if assigned(FeatureLoadProc)then
+       begin
+            result:=FeatureLoadProc(_Name,_Value,ptu,drawing,@self);
+       end;
+  end;
+  if not(result) then
+  result:=inherited ProcessFromDXFObjXData(_Name,_Value,ptu,drawing);
+end;
+initialization
   {$IFDEF DEBUGINITSECTION}LogOut('GDBBlockDef.initialization');{$ENDIF}
+  GDBObjBlockDefDXFFeatures:=TDXFEntIODataManager.Create;
+finalization
+  GDBObjBlockDefDXFFeatures.Destroy;
 end.

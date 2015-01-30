@@ -62,8 +62,6 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      procedure setrot(r:GDBDouble);virtual;
 
                      property testrotate:GDBDouble read getrot write setrot;(*'Rotate'*)
-
-                     //function ProcessFromDXFObjXData(_Name,_Value:GDBString):GDBBoolean;virtual;
                   end;
 {Export-}
 implementation

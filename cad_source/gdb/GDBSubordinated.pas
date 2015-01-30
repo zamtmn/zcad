@@ -39,7 +39,6 @@ GDBObjGenericWithSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject
                                     function CreateOU:GDBInteger;virtual;
                                     procedure createfield;virtual;
                                     function FindVariable(varname:GDBString):pvardesk;virtual;
-                                    function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit):GDBBoolean;virtual;
                                     destructor done;virtual;
                                     function GetMatrix:PDMatrix4D;virtual;abstract;
                                     //function GetLineWeight:GDBSmallint;virtual;abstract;
@@ -81,6 +80,10 @@ procedure CreateDeviceNameProcess(pEntity:PGDBObjGenericWithSubordinated;const d
 procedure CreateDBLinkProcess(pEntity:PGDBObjGenericWithSubordinated;const drawing:TDrawingDef);
 procedure CreateDeviceNameSubProcess(pvn:pvardesk; const formatstr:GDBString;pEntity:PGDBObjGenericWithSubordinated);
 function GetEntName(pu:PGDBObjGenericWithSubordinated):GDBString;
+
+procedure extractvarfromdxfstring2(_Value:GDBString;out vn,vt,vun:GDBString);
+procedure extractvarfromdxfstring(_Value:GDBString;out vn,vt,vv,vun:GDBString);
+procedure OldVersVarRename(var vn,vt,vv,vun:GDBString);
 implementation
 uses UUnitManager,URecordDescriptor,shared,log,devicebaseabstract;
 destructor GDBObjSubordinated.done;
@@ -323,71 +326,6 @@ begin
 end;
 procedure GDBObjGenericWithSubordinated.Build;
 begin
-
-end;
-function GDBObjGenericWithSubordinated.ProcessFromDXFObjXData;
-var //APP_NAME:GDBString;
-    //XGroup:GDBInteger;
-//    XValue:GDBString;
-    svn,vn,vt,vv,vun:GDBString;
-//    i:integer;
-    vd: vardesk;
-    pvd:pvardesk;
-    uou:PTObjectUnit;
-    offset:GDBInteger;
-    tc:PUserTypeDescriptor;
-begin
-     result:=false;
-     if length(_name)>1 then
-     begin
-           if _Name[1]='#' then
-                             begin
-                                  extractvarfromdxfstring(_Value,vn,vt,vv,vun);
-                                  if vv='3.1' then
-                                                  vv:=vv;
-                                  
-                                  OldVersVarRename(vn,vt,vv,vun);
-                                  ou.setvardesc(vd,vn,vun,vt);
-                                  ou.InterfaceVariables.createvariable(vd.name,vd);
-                                  PBaseTypeDescriptor(vd.data.PTD)^.SetValueFromString(vd.data.Instance,vv);
-                                  result:=true;
-                             end
-      else if _Name[1]='%' then
-                             begin
-                                  extractvarfromdxfstring(_Value,vn,vt,vv,vun);
-
-                                  ptu.setvardesc(vd,vn,vun,vt);
-                                  ptu.InterfaceVariables.createvariable(vd.name,vd);
-                                  PBaseTypeDescriptor(vd.data.PTD)^.SetValueFromString(vd.data.Instance,vv);
-                                  result:=true;
-                             end
-      else if _Name[1]='&' then
-                             begin
-                                  extractvarfromdxfstring2(_Value,vn,vt,vun);
-
-                                  ou.setvardesc(vd,vn,vun,vt);
-                                  ou.InterfaceVariables.createvariable(vd.name,vd);
-                                  result:=true;
-                             end
-      else if _Name[1]='$' then
-                             begin
-                                  extractvarfromdxfstring2(_Value,vn,svn,vv);
-                                  pvd:=ou.InterfaceVariables.findvardesc(vn);
-                                  offset:=GDBPlatformint(pvd.data.Instance);
-                                  if pvd<>nil then
-                                  begin
-                                       PRecordDescriptor(pvd^.data.PTD)^.ApplyOperator('.',svn,offset,tc);
-                                  end;
-                                  PBaseTypeDescriptor(tc)^.SetValueFromString(pointer(offset),vv);
-                                  result:=true;
-                             end
-      else if _Name='USES' then
-                             begin
-                                  uou:=pointer(units.findunit(_Value));
-                                  ou.InterfaceUses.addnodouble(@uou);
-                                  result:=true;
-                             end;
-     end;
 
 end;
 procedure GDBObjSubordinated.createfield;

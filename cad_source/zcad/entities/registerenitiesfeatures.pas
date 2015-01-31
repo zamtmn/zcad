@@ -20,7 +20,7 @@ unit registerenitiesfeatures;
 
 interface
 uses sysutils,
-     TypeDescriptors,dxflow,gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,gdbobjectextender,GDBSubordinated,GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,UGDBDrawingdef;
+     GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,dxflow,gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,gdbobjectextender,GDBSubordinated,GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,UGDBDrawingdef;
 
 implementation
 function EntIOLoad_OWNERHANDLE(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
@@ -231,6 +231,110 @@ else if _Value='BB_EMPTY' then
                                 result:=true;
                           end;
 end;
+procedure DeviceNameSubProcess(pvn:pvardesk; const formatstr:GDBString; pEntity:PGDBObjGenericWithSubordinated);
+begin
+     if (pvn<>nil) then
+     begin
+     if (formatstr<>'') then
+                                      begin
+                                           if pEntity<>nil then
+                                                               pstring(pvn^.data.Instance)^:=textformat(formatstr,pEntity)
+                                                            else
+                                                               pstring(pvn^.data.Instance)^:='!!ERR(pEnttity=nil)';
+                                           pvn^.attrib:=pvn^.attrib or vda_RO;
+                                      end
+                                         else
+                                             pvn^.attrib:=pvn^.attrib and (not vda_RO);
+     end;
+
+end;
+procedure DeviceNameProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
+var
+   pvn,pvnt:pvardesk;
+begin
+     pvn:=pEntity^.OU.FindVariable('NMO_Name');
+     pvnt:=pEntity^.OU.FindVariable('NMO_Template');
+
+     if (pvnt<>nil) then
+     DeviceNameSubProcess(pvn,pstring(pvnt^.data.Instance)^,pEntity);
+
+     DBLinkProcess(pentity,drawing);
+end;
+procedure CableNameProcess(pCable:PGDBObjCable;const drawing:TDrawingDef);
+var
+   pvn,pvnt:pvardesk;
+   ptn:PTNodeProp;
+   s:GDBstring;
+   //c:gdbinteger;
+   pdev:PGDBObjDevice;
+begin
+     pvn:=pCable^.OU.FindVariable('NMO_Name');
+     if pvn<>nil then
+     if pstring(pvn^.data.Instance)^='@1' then
+                                                 s:=s;
+     if pCable^.NodePropArray.Count>0 then
+                                           begin
+                                                ptn:=pCable^.NodePropArray.getelement(0);
+                                                pdev:=ptn^.DevLink;
+                                           end
+                                      else
+                                          pdev:=nil;
+     pvn:=pCable^.OU.FindVariable('NMO_Prefix');
+     pvnt:=pCable^.OU.FindVariable('NMO_PrefixTemplate');
+     if (pvnt<>nil) then
+                        s:=pstring(pvnt^.data.Instance)^
+                    else
+                        s:='';
+     DeviceNameSubProcess(pvn,s,pdev);
+
+     if pCable^.NodePropArray.Count>0 then
+                                           begin
+                                                ptn:=pCable^.NodePropArray.getelement(pCable^.NodePropArray.Count-1);
+                                                pdev:=ptn^.DevLink;
+                                           end
+                                      else
+                                          pdev:=nil;
+     pvn:=pCable^.OU.FindVariable('NMO_Suffix');
+     pvnt:=pCable^.OU.FindVariable('NMO_SuffixTemplate');
+     if (pvnt<>nil) then
+                        s:=pstring(pvnt^.data.Instance)^
+                    else
+                        s:='';
+     DeviceNameSubProcess(pvn,s,pdev);
+
+     pvn:=pCable^.OU.FindVariable('NMO_Name');
+     pvnt:=pCable^.OU.FindVariable('NMO_Template');
+     if (pvnt<>nil) then
+     DeviceNameSubProcess(pvn,pstring(pvnt^.data.Instance)^,pCable);
+
+     pvn:=pCable^.OU.FindVariable('GC_HDGroup');
+     pvnt:=pCable^.OU.FindVariable('GC_HDGroupTemplate');
+     if (pvnt<>nil) then
+                        s:=pstring(pvnt^.data.Instance)^
+                    else
+                        s:='';
+     DeviceNameSubProcess(pvn,s,pCable);
+
+     pvn:=pCable^.OU.FindVariable('GC_HeadDevice');
+     pvnt:=pCable^.OU.FindVariable('GC_HeadDeviceTemplate');
+     if (pvnt<>nil) then
+                        s:=pstring(pvnt^.data.Instance)^
+                    else
+                        s:='';
+     DeviceNameSubProcess(pvn,s,pCable);
+
+
+     pvn:=pCable^.OU.FindVariable('GC_HDShortName');
+     pvnt:=pCable^.OU.FindVariable('GC_HDShortNameTemplate');
+     if (pvnt<>nil) then
+                        s:=pstring(pvnt^.data.Instance)^
+                    else
+                        s:='';
+     DeviceNameSubProcess(pvn,s,pCable);
+
+     DBLinkProcess(pCable,drawing);
+end;
+
 begin
   {from GDBObjEntity}
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_OWNERHANDLE',@EntIOLoad_OWNERHANDLE);
@@ -254,5 +358,14 @@ begin
   GDBObjBlockdef.GetDXFIOFeatures.RegisterNamedLoadFeature('_TYPE',@BlockDefIOLoad_TYPE);
   GDBObjBlockdef.GetDXFIOFeatures.RegisterNamedLoadFeature('_GROUP',@BlockDefIOLoad_GROUP);
   GDBObjBlockdef.GetDXFIOFeatures.RegisterNamedLoadFeature('_BORDER',@BlockDefIOLoad_BORDER);
+
+  {from GDBObjDevice}
+  GDBObjDevice.GetDXFIOFeatures.RegisterFormatFeature(@DeviceNameProcess);
+
+  {from GDBObjNet}
+  GDBObjNet.GetDXFIOFeatures.RegisterFormatFeature(@DeviceNameProcess);
+
+  {from GDBObjCable}
+  GDBObjCable.GetDXFIOFeatures.RegisterFormatFeature(@CableNameProcess);
 end.
 

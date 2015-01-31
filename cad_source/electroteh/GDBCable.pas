@@ -8,7 +8,7 @@ unit GDBCable;
 {$INCLUDE def.inc}
 
 interface
-uses varman,gdbdrawcontext,GDBGenericSubEntry,ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfByte,UGDBLayerArray{,UGDBObjBlockdefArray},UUnitManager,GDBCurve,geometry,math,UGDBOpenArrayOfData,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,varman},varmandef,
+uses gdbobjectextender,varman,gdbdrawcontext,GDBGenericSubEntry,ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfByte,UGDBLayerArray{,UGDBObjBlockdefArray},UUnitManager,GDBCurve,geometry,math,UGDBOpenArrayOfData,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,varman},varmandef,
 GDBase{,GDBLINE},GDBHelpObj,{UGDBDescriptor,}gdbobjectsconstdef{,oglwindowdef},dxflow,sysutils,memman,GDBSubordinated,GDBDEvICE;
 type
 {Повторное описание типа в Cableы}
@@ -47,10 +47,13 @@ GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
 
                  destructor done;virtual;
+                 class function GetDXFIOFeatures:TDXFEntIODataManager;
 
                  //function Clone(own:GDBPointer):PGDBObjEntity;virtual;
            end;
 {Export-}
+var
+    GDBObjCableDXFFeatures:TDXFEntIODataManager;
 implementation
 uses gdbentityfactory,log;
 function GDBObjCable.Clone;
@@ -129,82 +132,6 @@ begin
   dxfGDBIntegerout(outhandle,70,8);
 
   vp.Layer:=pl;
-end;
-procedure CreateCableNameProcess(pCable:PGDBObjCable;const drawing:TDrawingDef);
-var
-   pvn,pvnt:pvardesk;
-   ptn:PTNodeProp;
-   s:GDBstring;
-   //c:gdbinteger;
-   pdev:PGDBObjDevice;
-begin
-     pvn:=pCable^.OU.FindVariable('NMO_Name');
-     if pvn<>nil then
-     if pstring(pvn^.data.Instance)^='@1' then
-                                                 s:=s;
-     if pCable^.NodePropArray.Count>0 then
-                                           begin
-                                                ptn:=pCable^.NodePropArray.getelement(0);
-                                                pdev:=ptn^.DevLink;
-                                           end
-                                      else
-                                          pdev:=nil;
-     pvn:=pCable^.OU.FindVariable('NMO_Prefix');
-     pvnt:=pCable^.OU.FindVariable('NMO_PrefixTemplate');
-     if (pvnt<>nil) then
-                        s:=pstring(pvnt^.data.Instance)^
-                    else
-                        s:='';
-     CreateDeviceNameSubProcess(pvn,s,pdev);
-
-     if pCable^.NodePropArray.Count>0 then
-                                           begin
-                                                ptn:=pCable^.NodePropArray.getelement(pCable^.NodePropArray.Count-1);
-                                                pdev:=ptn^.DevLink;
-                                           end
-                                      else
-                                          pdev:=nil;
-     pvn:=pCable^.OU.FindVariable('NMO_Suffix');
-     pvnt:=pCable^.OU.FindVariable('NMO_SuffixTemplate');
-     if (pvnt<>nil) then
-                        s:=pstring(pvnt^.data.Instance)^
-                    else
-                        s:='';
-     CreateDeviceNameSubProcess(pvn,s,pdev);
-
-     pvn:=pCable^.OU.FindVariable('NMO_Name');
-     pvnt:=pCable^.OU.FindVariable('NMO_Template');
-     if (pvnt<>nil) then
-     CreateDeviceNameSubProcess(pvn,pstring(pvnt^.data.Instance)^,pCable);
-
-     pvn:=pCable^.OU.FindVariable('GC_HDGroup');
-     pvnt:=pCable^.OU.FindVariable('GC_HDGroupTemplate');
-     if (pvnt<>nil) then
-                        s:=pstring(pvnt^.data.Instance)^
-                    else
-                        s:='';
-     CreateDeviceNameSubProcess(pvn,s,pCable);
-
-     pvn:=pCable^.OU.FindVariable('GC_HeadDevice');
-     pvnt:=pCable^.OU.FindVariable('GC_HeadDeviceTemplate');
-     if (pvnt<>nil) then
-                        s:=pstring(pvnt^.data.Instance)^
-                    else
-                        s:='';
-     CreateDeviceNameSubProcess(pvn,s,pCable);
-
-
-     pvn:=pCable^.OU.FindVariable('GC_HDShortName');
-     pvnt:=pCable^.OU.FindVariable('GC_HDShortNameTemplate');
-     if (pvnt<>nil) then
-                        s:=pstring(pvnt^.data.Instance)^
-                    else
-                        s:='';
-     CreateDeviceNameSubProcess(pvn,s,pCable);
-
-     CreateDBLinkProcess(pCable,drawing);
-
-
 end;
 procedure GDBObjCable.FormatFast;
 var
@@ -368,8 +295,8 @@ begin
      until CurrentObj=nil;
 
 
-
-  CreateCableNameProcess(@self,drawing);
+  GetDXFIOFeatures.RunFormatProcs(drawing,@self);
+  //CreateCableNameProcess(@self,drawing);
 
 
   l:=0;
@@ -595,9 +522,15 @@ begin
         ptv:=pent^.vertexarrayinocs.iterate(ir);
      until ptv=nil;
 end;
-
+class function GDBObjCable.GetDXFIOFeatures:TDXFEntIODataManager;
 begin
+  result:=GDBObjCableDXFFeatures;
+end;
+initialization
   {$IFDEF DEBUGINITSECTION}LogOut('GDBCable.initialization');{$ENDIF}
   RegisterEntity(GDBCableID,'Cable',@AllocCable,@AllocAndInitCable);
   RegisterEntityUpgradeInfo(GDBPolylineID,1,@Upgrade3DPolyline2Cable);
+  GDBObjCableDXFFeatures:=TDXFEntIODataManager.Create;
+finalization
+  GDBObjCableDXFFeatures.Destroy
 end.

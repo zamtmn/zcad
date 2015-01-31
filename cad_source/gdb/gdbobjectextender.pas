@@ -25,6 +25,7 @@ uses Varman,UGDBDrawingdef,gdbasetypes,gdbase,usimplegenerics,gvector,UGDBOpenAr
 type
 TDXFEntSaveFeature=procedure(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer);
 TDXFEntLoadFeature=function(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:Pointer):boolean;
+TDXFEntFormatFeature=procedure (pEntity:Pointer;const drawing:TDrawingDef);
 TDXFEntLoadData=record
                 DXFEntLoadFeature:TDXFEntLoadFeature;
               end;
@@ -33,14 +34,18 @@ TDXFEntSaveData=record
               end;
 TDXFEntLoadDataMap=specialize GKey2DataMap<GDBString,TDXFEntLoadData,LessGDBString>;
 TDXFEntSaveDataVector=specialize TVector<TDXFEntSaveData>;
+TDXFEntFormatProcsVector=specialize TVector<TDXFEntFormatFeature>;
 TDXFEntIODataManager=class
                       fDXFEntLoadDataMapByName:TDXFEntLoadDataMap;
                       fDXFEntLoadDataMapByPrefix:TDXFEntLoadDataMap;
                       fDXFEntSaveDataVector:TDXFEntSaveDataVector;
+                      fDXFEntFormatprocsVector:TDXFEntFormatprocsVector;
                       procedure RegisterNamedLoadFeature(name:GDBString;PLoadProc:TDXFEntLoadFeature);
                       procedure RegisterPrefixLoadFeature(prefix:GDBString;PLoadProc:TDXFEntLoadFeature);
                       procedure RegisterSaveFeature(PSaveProc:TDXFEntSaveFeature);
+                      procedure RegisterFormatFeature(PFormatProc:TDXFEntFormatFeature);
                       procedure RunSaveFeatures(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer);
+                      procedure RunFormatProcs(const drawing:TDrawingDef;pEntity:Pointer);
                       function GetLoadFeature(name:GDBString):TDXFEntLoadFeature;
 
                       constructor create;
@@ -52,12 +57,14 @@ begin
      fDXFEntLoadDataMapByName:=TDXFEntLoadDataMap.Create;
      fDXFEntLoadDataMapByPrefix:=TDXFEntLoadDataMap.Create;
      fDXFEntSaveDataVector:=TDXFEntSaveDataVector.Create;
+     fDXFEntFormatprocsVector:=TDXFEntFormatprocsVector.Create;
 end;
 destructor TDXFEntIODataManager.destroy;
 begin
      fDXFEntLoadDataMapByName.Destroy;
      fDXFEntLoadDataMapByPrefix.Destroy;
      fDXFEntSaveDataVector.Destroy;
+     fDXFEntFormatprocsVector.Destroy;
 end;
 
 function TDXFEntIODataManager.GetLoadFeature(name:GDBString):TDXFEntLoadFeature;
@@ -93,12 +100,23 @@ begin
      data.DXFEntSaveFeature:=PSaveProc;
      fDXFEntSaveDataVector.PushBack(data);
 end;
+procedure TDXFEntIODataManager.RegisterFormatFeature(PFormatProc:TDXFEntFormatFeature);
+begin
+     fDXFEntFormatprocsVector.PushBack(PFormatProc);
+end;
 procedure TDXFEntIODataManager.RunSaveFeatures(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer);
 var
   i:integer;
 begin
      for i:=0 to fDXFEntSaveDataVector.Size-1 do
       fDXFEntSaveDataVector[i].DXFEntSaveFeature(outhandle,PEnt);
+end;
+procedure TDXFEntIODataManager.RunFormatProcs(const drawing:TDrawingDef;pEntity:Pointer);
+var
+  i:integer;
+begin
+     for i:=0 to fDXFEntFormatprocsVector.Size-1 do
+      fDXFEntFormatprocsVector[i](pEntity,drawing);
 end;
 end.
 

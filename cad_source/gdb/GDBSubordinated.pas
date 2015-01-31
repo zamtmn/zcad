@@ -20,8 +20,10 @@ unit GDBSubordinated;
 {$INCLUDE def.inc}
 
 interface
-uses gdbfieldprocessor,ugdbdrawingdef,gdbobjectsconstdef,strproc{$IFNDEF DELPHI},LCLProc{$ENDIF},UGDBOpenArrayOfByte,devices,gdbase,gdbasetypes,varman,varmandef,
-     dxflow,UBaseTypeDescriptor,sysutils,UGDBLayerArray{,strutils};
+uses gdbfieldprocessor,ugdbdrawingdef,gdbobjectsconstdef,strproc
+     {$IFNDEF DELPHI},LCLProc{$ENDIF},UGDBOpenArrayOfByte,devices,
+     gdbase,gdbasetypes,varman,varmandef,
+     sysutils,UGDBLayerArray{,strutils};
 type
 //Owner:PGDBObjGenericWithSubordinated;(*'Владелец'*)
 //PSelfInOwnerArray:TArrayIndex;(*'Индекс у владельца'*)
@@ -70,7 +72,6 @@ GDBObjSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericWithSubord
                          function GetOwner:PGDBObjSubordinated;virtual;abstract;
                          procedure createfield;virtual;
                          function FindVariable(varname:GDBString):pvardesk;virtual;
-                         procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                          function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
                          destructor done;virtual;
 
@@ -85,7 +86,7 @@ procedure extractvarfromdxfstring2(_Value:GDBString;out vn,vt,vun:GDBString);
 procedure extractvarfromdxfstring(_Value:GDBString;out vn,vt,vv,vun:GDBString);
 procedure OldVersVarRename(var vn,vt,vv,vun:GDBString);
 implementation
-uses UUnitManager,URecordDescriptor,shared,log,devicebaseabstract;
+uses UUnitManager,shared,log,devicebaseabstract;
 destructor GDBObjSubordinated.done;
 begin
      inherited;
@@ -175,10 +176,6 @@ begin
                                       begin
                                            result:=pstring(pvn^.data.Instance)^;
                                       end;
-end;
-procedure GDBObjSubordinated.SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
-begin
-     dxfGDBStringout(outhandle,1000,'_OWNERHANDLE='+inttohex(bp.ListPos.owner.GetHandle,10));
 end;
 function GDBObjGenericWithSubordinated.GetType:GDBPlatformint;
 begin

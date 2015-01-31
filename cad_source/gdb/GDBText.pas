@@ -775,8 +775,7 @@ begin
 end;
 procedure GDBObjText.SaveToDXFObjXData;
 begin
-     if content<>convertfromunicode(template) then
-                              dxfGDBStringout(outhandle,1000,'_TMPL1='+template);
+     GetDXFIOFeatures.RunSaveFeatures(outhandle,@self);
      inherited;
 end;
 function z2dxftext(s:gdbstring):gdbstring;

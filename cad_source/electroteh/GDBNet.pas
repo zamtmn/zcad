@@ -8,7 +8,7 @@ unit GDBNet;
 {$INCLUDE def.inc}
 
 interface
-Uses gdbentityfactory,Varman,gdbdrawcontext,UGDBLayerArray,GDBGenericSubEntry,ugdbdrawingdef,gdbvisualprop,zcadsysvars,UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
+Uses gdbobjectextender,gdbentityfactory,Varman,gdbdrawcontext,UGDBLayerArray,GDBGenericSubEntry,ugdbdrawingdef,gdbvisualprop,zcadsysvars,UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
 memman,GDBSubordinated,uunitmanager,shared,sysutils,UGDBOpenArrayOfPObjects;
 const
      UNNAMEDNET='NET';
@@ -46,8 +46,11 @@ GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
                  destructor done;virtual;
                  procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;
                  function IsHaveGRIPS:GDBBoolean;virtual;
+                 class function GetDXFIOFeatures:TDXFEntIODataManager;
            end;
 {Export-}
+var
+    GDBObjNetDXFFeatures:TDXFEntIODataManager;
 implementation
 uses GDBLine,dxflow,math,log;
 function GDBObjNet.IsHaveGRIPS:GDBBoolean;
@@ -150,7 +153,8 @@ begin
 end;
 procedure GDBObjNet.FormatEntity(const drawing:TDrawingDef);
 begin
-     CreateDeviceNameProcess(@self,drawing);
+     //CreateDeviceNameProcess(@self,drawing);
+     GetDXFIOFeatures.RunFormatProcs(drawing,@self);
      inherited;
      if self.ObjArray.Count=0 then
                                   begin
@@ -563,7 +567,14 @@ begin
    result.vp.Layer:=pent^.vp.Layer;
    result.vp.LineWeight:=pent^.vp.LineWeight;
 end;
+class function GDBObjNet.GetDXFIOFeatures:TDXFEntIODataManager;
 begin
+  result:=GDBObjNetDXFFeatures;
+end;
+initialization
   {$IFDEF DEBUGINITSECTION}LogOut('GDBNet.initialization');{$ENDIF}
   RegisterEntityUpgradeInfo(GDBLineID,UD_LineToNet,@UpgradeLine2Net);
+  GDBObjNetDXFFeatures:=TDXFEntIODataManager.Create;
+finalization
+  GDBObjNetDXFFeatures.Destroy;
 end.

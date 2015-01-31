@@ -20,7 +20,7 @@ unit GDBSubordinated;
 {$INCLUDE def.inc}
 
 interface
-uses gdbfieldprocessor,ugdbdrawingdef,gdbobjectsconstdef,strproc
+uses gdbfieldprocessor,ugdbdrawingdef,strproc
      {$IFNDEF DELPHI},LCLProc{$ENDIF},UGDBOpenArrayOfByte,devices,
      gdbase,gdbasetypes,varman,varmandef,
      sysutils,UGDBLayerArray{,strutils};
@@ -77,16 +77,13 @@ GDBObjSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericWithSubord
 
          end;
 {EXPORT-}
-procedure CreateDeviceNameProcess(pEntity:PGDBObjGenericWithSubordinated;const drawing:TDrawingDef);
-procedure CreateDBLinkProcess(pEntity:PGDBObjGenericWithSubordinated;const drawing:TDrawingDef);
-procedure CreateDeviceNameSubProcess(pvn:pvardesk; const formatstr:GDBString;pEntity:PGDBObjGenericWithSubordinated);
 function GetEntName(pu:PGDBObjGenericWithSubordinated):GDBString;
 
 procedure extractvarfromdxfstring2(_Value:GDBString;out vn,vt,vun:GDBString);
 procedure extractvarfromdxfstring(_Value:GDBString;out vn,vt,vv,vun:GDBString);
 procedure OldVersVarRename(var vn,vt,vv,vun:GDBString);
 implementation
-uses UUnitManager,shared,log,devicebaseabstract;
+uses shared,log;
 destructor GDBObjSubordinated.done;
 begin
      inherited;
@@ -105,66 +102,6 @@ begin
                        if bp.ListPos.owner<>nil then
                                              result:=PGDBObjSubordinated(bp.ListPos.owner).FindShellByClass(_type);
                                                                       
-end;
-procedure CreateDeviceNameSubProcess(pvn:pvardesk; const formatstr:GDBString; pEntity:PGDBObjGenericWithSubordinated);
-begin
-     if (pvn<>nil) then
-     begin
-     if (formatstr<>'') then
-                                      begin
-                                           if pEntity<>nil then
-                                                               pstring(pvn^.data.Instance)^:=textformat(formatstr,pEntity)
-                                                            else
-                                                               pstring(pvn^.data.Instance)^:='!!ERR(pEnttity=nil)';
-                                           pvn^.attrib:=pvn^.attrib or vda_RO;
-                                      end
-                                         else
-                                             pvn^.attrib:=pvn^.attrib and (not vda_RO);
-     end;
-
-end;
-procedure CreateDBLinkProcess(pEntity:PGDBObjGenericWithSubordinated;const drawing:TDrawingDef);
-var
-   pvn,pvnt,pdbv:pvardesk;
-   pdbu:ptunit;
-   pum:PTUnitManager;
-begin
-     pvn:=pEntity^.OU.FindVariable('DB_link');
-     pvnt:=pEntity^.OU.FindVariable('DB_MatName');
-     if pvnt<>nil then
-     pvnt^.attrib:=pvnt^.attrib or (vda_RO);
-     if (pvn<>nil)and(pvnt<>nil) then
-     begin
-          pum:=drawing.GetDWGUnits;
-          if pum<>nil then
-          begin
-            pdbu:=pum^.findunit(DrawingDeviceBaseUnitName);
-            if pdbu<>nil then
-            begin
-              pdbv:=pdbu^.FindVariable(pstring(pvn.data.Instance)^);
-              if pdbv<>nil then
-                               pstring(pvnt.data.Instance)^:=PDbBaseObject(pdbv.data.Instance)^.Name
-                           else
-                               pstring(pvnt.data.Instance)^:='Error!!!';
-              exit;
-            end;
-          end;
-     end;
-     if pvnt<>nil then
-                      pstring(pvnt.data.Instance)^:='Error!!!'
-end;
-procedure CreateDeviceNameProcess(pEntity:PGDBObjGenericWithSubordinated;const drawing:TDrawingDef);
-var
-   pvn,pvnt{,pdbv}:pvardesk;
-   //pdbu:ptunit;
-begin
-     pvn:=pEntity^.OU.FindVariable('NMO_Name');
-     pvnt:=pEntity^.OU.FindVariable('NMO_Template');
-
-     if (pvnt<>nil) then
-     CreateDeviceNameSubProcess(pvn,pstring(pvnt^.data.Instance)^,pEntity);
-
-     CreateDBLinkProcess(pentity,drawing);
 end;
 function GetEntName(pu:PGDBObjGenericWithSubordinated):GDBString;
 var

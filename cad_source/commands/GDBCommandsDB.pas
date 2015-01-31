@@ -33,7 +33,10 @@ uses
   iodxf,
   gdbEntity,
   shared,
-  gdbasetypes,strutils,forms,Controls,zcadinterface;
+  devicebaseabstract,UUnitManager,gdbasetypes,strutils,forms,Controls,zcadinterface,UGDBDrawingdef;
+
+procedure DBLinkProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
+
 implementation
 uses sltexteditor,UObjectDescriptor,projecttreewnd,commandline,log,GDBSubordinated;
 
@@ -94,6 +97,36 @@ begin
             HistoryOutStr(rscmCommandOnlyCTXMenu);
      result:=cmd_ok;
 end;
+procedure DBLinkProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
+var
+   pvn,pvnt,pdbv:pvardesk;
+   pdbu:ptunit;
+   pum:PTUnitManager;
+begin
+     pvn:=pEntity^.OU.FindVariable('DB_link');
+     pvnt:=pEntity^.OU.FindVariable('DB_MatName');
+     if pvnt<>nil then
+     pvnt^.attrib:=pvnt^.attrib or (vda_RO);
+     if (pvn<>nil)and(pvnt<>nil) then
+     begin
+          pum:=drawing.GetDWGUnits;
+          if pum<>nil then
+          begin
+            pdbu:=pum^.findunit(DrawingDeviceBaseUnitName);
+            if pdbu<>nil then
+            begin
+              pdbv:=pdbu^.FindVariable(pstring(pvn.data.Instance)^);
+              if pdbv<>nil then
+                               pstring(pvnt.data.Instance)^:=PDbBaseObject(pdbv.data.Instance)^.Name
+                           else
+                               pstring(pvnt.data.Instance)^:='Error!!!';
+              exit;
+            end;
+          end;
+     end;
+     if pvnt<>nil then
+                      pstring(pvnt.data.Instance)^:='Error!!!'
+end;
 function DBaseLink_com(operands:TCommandOperands):TCommandResult;
 var //t:PUserTypeDescriptor;
     pvd,pdbv:pvardesk;
@@ -122,7 +155,7 @@ begin
                                                if pvd<>nil then
                                                begin
                                                     PGDBString(pvd^.data.Instance)^:=pdbv^.name;
-                                                    CreateDBLinkProcess(pv,gdb.GetCurrentDWG^);
+                                                    DBLinkProcess(pv,gdb.GetCurrentDWG^);
                                                     inc(c);
                                                end;
                                           end;

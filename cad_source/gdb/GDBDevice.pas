@@ -20,7 +20,7 @@ unit GDBDevice;
 {$INCLUDE def.inc}
 
 interface
-uses Varman,gdbentityfactory,gdbdrawcontext,UGDBDrawingdef,GDBCamera,zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
+uses gdbobjectextender,Varman,gdbentityfactory,gdbdrawcontext,UGDBDrawingdef,GDBCamera,zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
 uunitmanager{,shared},
 memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,{UGDBOpenArrayOfPV,}gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray{,UGDBDescriptor}{,UGDBLayerArray,oglwindowdef};
 
@@ -62,8 +62,11 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
                    procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
                    procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;
+                   class function GetDXFIOFeatures:TDXFEntIODataManager;
              end;
 {EXPORT-}
+var
+    GDBObjDeviceDXFFeatures:TDXFEntIODataManager;
 implementation
 uses GDBBlockDef,dxflow,log,UGDBSelectedObjArray,UGDBEntTree;
 procedure GDBObjDevice.correctobjects;
@@ -561,7 +564,9 @@ begin
           index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
           assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), 'Неверный индекс блока');
 
-          CreateDeviceNameProcess(@self,drawing);
+          self.GetDXFIOFeatures.RunFormatProcs(drawing,@self);
+
+          //CreateDeviceNameProcess(@self,drawing);
 
           pvn:=ou.FindVariable('Device_Type');
           if pvn<>nil then
@@ -660,9 +665,15 @@ begin
           result^.index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(result^.name));
      end;
 end;
-
+class function GDBObjDevice.GetDXFIOFeatures:TDXFEntIODataManager;
 begin
+  result:=GDBObjDeviceDXFFeatures;
+end;
+initialization
   {$IFDEF DEBUGINITSECTION}LogOut('GDBDevice.initialization');{$ENDIF}
   RegisterEntity(GDBDeviceID,'Device',@AllocDevice,@AllocAndInitDevice);
   RegisterEntityUpgradeInfo(GDBBlockInsertID,1,@UpgradeBlockInsert2Device);
+  GDBObjDeviceDXFFeatures:=TDXFEntIODataManager.Create;
+finalization
+  GDBObjDeviceDXFFeatures.Destroy;
 end.

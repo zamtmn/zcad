@@ -19,10 +19,12 @@
 unit GDBEntity;
 {$INCLUDE def.inc}
 interface
-uses gdbobjectextender,uzglabstractdrawer,gdbdrawcontext,ugdbdrawingdef,GDBCamera,gdbvisualprop,uzglgeometry,ugdbltypearray,zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
-     {UGDBPolyPoint2DArray,}varman,varmandef,
-     GDBase,gdbobjectsconstdef,
-     oglwindowdef,geometry,dxflow,sysutils,memman,UGDBOpenArrayOfByte,UGDBLayerArray,UGDBOpenArrayOfPObjects;
+uses gdbobjectextender,uzglabstractdrawer,gdbdrawcontext,ugdbdrawingdef,GDBCamera,
+     gdbvisualprop,uzglgeometry,ugdbltypearray,zcadsysvars,gdbasetypes,
+     UGDBControlPointArray,GDBSubordinated,
+     varman,varmandef,GDBase,gdbobjectsconstdef,
+     oglwindowdef,geometry,dxflow,sysutils,memman,UGDBOpenArrayOfByte,
+     UGDBLayerArray,UGDBOpenArrayOfPObjects;
 type
 //Owner:{-}PGDBObjEntity{/GDBPointer/};(*'Владелец'*)
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
@@ -61,6 +63,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure DXFOut(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                     procedure SaveToDXFfollow(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                     procedure SaveToDXFPostProcess(var handle:GDBOpenArrayOfByte);
+                    procedure SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte);virtual;
                     procedure Format;virtual;abstract;
                     procedure FormatEntity(const drawing:TDrawingDef);virtual;
                     procedure FormatFast(const drawing:TDrawingDef);virtual;
@@ -163,7 +166,7 @@ var onlygetsnapcount:GDBInteger;
     ForeGround:TRGB;
     GDBObjEntityDXFFeatures:TDXFEntIODataManager;
 implementation
-uses usimplegenerics,gdbentityfactory,GDBGenericSubEntry,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
+uses usimplegenerics,gdbentityfactory,GDBGenericSubEntry,UGDBSelectedObjArray,log;
 
 procedure GDBObjEntity.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
 begin
@@ -652,69 +655,18 @@ end;
 procedure GDBObjEntity.SaveToDXFfollow;
 begin
 end;
-procedure GDBObjEntity.SaveToDXFPostProcess;
-var
-   ishavevars:boolean;
-   pvd:pvardesk;
-   pfd:PFieldDescriptor;
-   pvu:PTUnit;
-   ir,ir2:itrec;
-   str,sv:gdbstring;
-   i:integer;
-   tp:pointer;
+procedure GDBObjEntity.SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte);
 begin
-     ishavevars:=false;
-     if ou.InterfaceVariables.vardescarray.Count>0 then
-                                                       ishavevars:=true;
-    begin
-         dxfGDBStringout(handle,1001,ZCADAppNameInDXF);
-         dxfGDBStringout(handle,1002,'{');
-         if ishavevars then
-         begin
-              pvu:=ou.InterfaceUses.beginiterate(ir);
-              if pvu<>nil then
-              repeat
-                    str:='USES='+pvu^.Name;
-                    dxfGDBStringout(handle,1000,str);
-              pvu:=ou.InterfaceUses.iterate(ir);
-              until pvu=nil;
+     GetDXFIOFeatures.RunSaveFeatures(outhandle,@self);
+     inherited;
+end;
 
-              i:=0;
-              pvd:=ou.InterfaceVariables.vardescarray.beginiterate(ir);
-              if pvd<>nil then
-              repeat
-                    if (pvd^.data.PTD.GetTypeAttributes and TA_COMPOUND)=0 then
-                    begin
-                         sv:=PBaseTypeDescriptor(pvd^.data.ptd)^.GetValueAsString(pvd^.data.Instance);
-                         str:='#'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName;
-                         str:=str+'|'+sv+'|'+pvd^.username;
-                         dxfGDBStringout(handle,1000,str);
-                    end
-                    else
-                    begin
-                         str:='&'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName+'|'+pvd^.username;
-                         dxfGDBStringout(handle,1000,str);
-                         inc(i);
-                         tp:=pvd^.data.Instance;
-                         pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.beginiterate(ir2);
-                         if pfd<>nil then
-                         repeat
-                               str:='$'+inttostr(i)+'='+pvd^.name+'|'+pfd^.base.ProgramName+'|'+pfd^.base.PFT^.GetValueAsString(tp);
-                               dxfGDBStringout(handle,1000,str);
-                               ptruint(tp):=ptruint(tp)+ptruint(pfd^.base.PFT^.SizeInGDBBytes); { TODO : сделать на оффсете }
-                               inc(i);
-                               pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.iterate(ir2);
-                         until pfd=nil;
-                         str:='&'+inttostr(i)+'=END';
-                         inc(i);
-                    end;
-              inc(i);
-              pvd:=ou.InterfaceVariables.vardescarray.iterate(ir);
-              until pvd=nil;
-         end;
-         self.SaveToDXFObjXData(handle);
-         dxfGDBStringout(handle,1002,'}');
-    end;
+procedure GDBObjEntity.SaveToDXFPostProcess;
+begin
+  dxfGDBStringout(handle,1001,ZCADAppNameInDXF);
+  dxfGDBStringout(handle,1002,'{');
+  self.SaveToDXFObjXData(handle);
+  dxfGDBStringout(handle,1002,'}');
 end;
 function GDBObjEntity.CalcInFrustum;
 begin

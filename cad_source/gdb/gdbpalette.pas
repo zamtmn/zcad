@@ -19,7 +19,7 @@
 unit gdbpalette;
 {$INCLUDE def.inc}
 interface
-uses gdbase,gdbasetypes;
+uses gdbasetypes;
 type
 {EXPORT+}
   PTRGB=^TRGB;

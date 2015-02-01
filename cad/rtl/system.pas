@@ -373,7 +373,7 @@ PTGDBOSMode=^TGDBOSMode;
 TGDBOSMode=GDBInteger;
 TGDB3StateBool=(T3SB_Fale(*'False'*),T3SB_True(*'True'*),T3SB_Default(*'Default'*));
 PTGDB3StateBool=^TGDB3StateBool;
-PTypedData=^TFaceTypedData;
+PTFaceTypedData=^TFaceTypedData;
 TFaceTypedData=packed record
                  Instance: GDBPointer;
                  PTD: GDBPointer;
@@ -2261,6 +2261,7 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      function getrot:GDBDouble;virtual;abstract;
                      procedure setrot(r:GDBDouble);virtual;abstract;
                      property testrotate:GDBDouble read getrot write setrot;(*'Rotate'*)
+                     function FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;abstract;
                   end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBDevice.pas
 PGDBObjDevice=^GDBObjDevice;

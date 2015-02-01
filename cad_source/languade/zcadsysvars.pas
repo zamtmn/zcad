@@ -20,7 +20,7 @@ unit zcadsysvars;
 {$INCLUDE def.inc}
 
 interface
-uses gdbasetypes,
+uses gdbasetypes,gdbpalette,
      gdbase,UGDBStringArray;
 type
 {EXPORT+}

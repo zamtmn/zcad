@@ -1,5 +1,6 @@
 E:\zcad\CAD_SOURCE\languade\gdbasetypes.pas
 E:\zcad\CAD_SOURCE\gdb\gdbase.pas
+E:\zcad\CAD_SOURCE\gdb\gdbpalette.pas
 E:\zcad\CAD_SOURCE\u\UOpenArray.pas
 E:\zcad\CAD_SOURCE\u\UGDBOpenArray.pas
 E:\zcad\CAD_SOURCE\u\UGDBOpenArrayOfData.pas

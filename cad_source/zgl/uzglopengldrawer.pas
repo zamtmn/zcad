@@ -20,7 +20,7 @@ unit uzglopengldrawer;
 {$INCLUDE def.inc}
 interface
 uses
-    {$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
+    gdbpalette,{$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}

@@ -20,7 +20,7 @@ unit GDBWithLocalCS;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,zcadsysvars,gdbasetypes,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,GDBWithMatrix,
+uses gdbpalette,gdbdrawcontext,ugdbdrawingdef,GDBCamera,zcadsysvars,gdbasetypes,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,GDBWithMatrix,
 GDBase,{gDBDescriptor,gdbobjectsconstdef,oglwindowdef,}geometry,dxflow,sysutils,memman,GDBSubordinated,UGDBLayerArray{,GDBGenericSubEntry};
 type
 //pprojoutbound:{-}PGDBOOutbound2DIArray{/GDBPointer/};

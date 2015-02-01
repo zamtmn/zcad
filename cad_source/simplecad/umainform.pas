@@ -12,7 +12,7 @@ uses
   zcadinterface,gdbentityfactory,UGDBLayerArray,geometry, GDBase, GDBasetypes,
   UGDBDescriptor,UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDB3DFace,
   GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,ugdbsimpledrawing,
-  GDBEntity,GDBManager,gdbobjectsconstdef,ioshx;
+  GDBEntity,GDBManager,gdbobjectsconstdef,ioshx,gdbpalette;
 
 type
 

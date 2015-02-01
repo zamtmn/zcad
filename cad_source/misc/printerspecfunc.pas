@@ -20,7 +20,7 @@ unit printerspecfunc;
 {$INCLUDE def.inc}
 
 interface
-uses gdbasetypes,gdbase,LCLType,Printers,
+uses gdbpalette,gdbasetypes,gdbase,LCLType,Printers,
      gl,glu,OGLSpecFunc,
      {$IFDEF SLINUX}glx,{$ENDIF}
      log,sysutils,varmandef,Graphics;

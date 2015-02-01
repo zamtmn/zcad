@@ -19,7 +19,7 @@
 unit GDBEntity;
 {$INCLUDE def.inc}
 interface
-uses gdbobjectextender,uzglabstractdrawer,gdbdrawcontext,ugdbdrawingdef,GDBCamera,
+uses gdbpalette,gdbobjectextender,uzglabstractdrawer,gdbdrawcontext,ugdbdrawingdef,GDBCamera,
      gdbvisualprop,uzglgeometry,ugdbltypearray,zcadsysvars,gdbasetypes,
      UGDBControlPointArray,GDBSubordinated,
      varman,varmandef,GDBase,gdbobjectsconstdef,

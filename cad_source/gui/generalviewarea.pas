@@ -20,7 +20,7 @@ unit generalviewarea;
 {$INCLUDE def.inc}
 interface
 uses
-     GDBHelpObj{нужно убрать},texteditor,
+     gdbpalette,GDBHelpObj{нужно убрать},texteditor,
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
      UGDBLayerArray,ugdbdimstylearray,
      oglwindowdef,gdbdrawcontext,varmandef,zcadsysvars,GDBEntity,Varman,zcadinterface,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,

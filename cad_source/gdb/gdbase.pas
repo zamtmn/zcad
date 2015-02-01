@@ -252,21 +252,6 @@ GDBBaseCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 CamCSOffset:GDBvertex;
                 procedure NextPosition;virtual; abstract;
           end;
-PTRGB=^TRGB;
-TRGB=packed record
-          r:GDBByte;(*'Red'*)
-          g:GDBByte;(*'Green'*)
-          b:GDBByte;(*'Blue'*)
-          a:GDBByte;(*'Alpha'*)
-    end;
-PTDXFCOLOR=^TDXFCOLOR;
-TDXFCOLOR=packed record
-          RGB:TRGB;(*'Color'*)
-          name:GDBString;(*'Name'*)
-    end;
-PTGDBPaletteColor=^TGDBPaletteColor;
-TGDBPaletteColor=GDBInteger;
-GDBPalette=packed array[0..255] of TDXFCOLOR;
 PGDBNamedObject=^GDBNamedObject;
 GDBNamedObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                      Name:GDBAnsiString;(*saved_to_shd*)(*'Name'*)
@@ -411,8 +396,6 @@ const
                      );
    ZCPHeadOffsetTableOffset=3*sizeof(word)+length(ZCPSignature)+length(ZCPCopyright)+length(ZCPComent)
                              +sizeof(ZCPHead.HiVersion)+sizeof(ZCPHead.LoVersion);
-var
-  palette: gdbpalette;
 implementation
 uses
      log;

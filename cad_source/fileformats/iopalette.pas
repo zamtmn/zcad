@@ -19,7 +19,7 @@
 unit iopalette;
 {$INCLUDE def.inc}
 interface
-uses zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
+uses gdbpalette,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
      strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}log,sysutils,
      UGDBOpenArrayOfByte,gdbasetypes,SysInfo,gdbase;
 procedure readpalette(filename:string);

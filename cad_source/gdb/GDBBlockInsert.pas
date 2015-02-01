@@ -62,6 +62,7 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      procedure setrot(r:GDBDouble);virtual;
 
                      property testrotate:GDBDouble read getrot write setrot;(*'Rotate'*)
+                     function FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                   end;
 {Export-}
 implementation
@@ -175,7 +176,15 @@ begin
         kU[1] := kR[0][2]*fInvD0;
         kU[2] := kR[1][2]/kD[1];
 end;*)
-
+function GDBObjBlockInsert.FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;
+begin
+  if pos(DevicePrefix,Name)=1 then
+  begin
+    AddExtAttrib^.upgrade:=1;
+    Name:=Copy(Name,Length(DevicePrefix)+1,length(Name)-Length(DevicePrefix));
+  end;
+  result:=inherited;
+end;
 procedure GDBObjBlockInsert.ReCalcFromObjMatrix;
 var
     ox:gdbvertex;

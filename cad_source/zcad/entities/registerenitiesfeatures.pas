@@ -20,7 +20,7 @@ unit registerenitiesfeatures;
 
 interface
 uses sysutils,
-     GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,dxflow,gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,gdbobjectextender,GDBSubordinated,GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,UGDBDrawingdef;
+     devices,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,dxflow,gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,gdbobjectextender,GDBSubordinated,GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,UGDBDrawingdef;
 
 implementation
 function EntIOLoad_OWNERHANDLE(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
@@ -260,6 +260,68 @@ begin
 
      DBLinkProcess(pentity,drawing);
 end;
+procedure DeviceSilaProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
+var
+   pvn,pvp,pvphase,pvi,pvcos:pvardesk;
+   volt:TVoltage;
+   calcip:TCalcIP;
+   u:gdbdouble;
+begin
+     pvn:=pEntity^.ou.FindVariable('Device_Type');
+     if pvn<>nil then
+     begin
+          case PTDeviceType(pvn^.data.Instance)^ of
+          TDT_SilaPotr:
+          begin
+               pvn:=pEntity^.ou.FindVariable('Voltage');
+               if pvn<>nil then
+               begin
+                     volt:=PTVoltage(pvn^.data.Instance)^;
+                     u:=0;
+                     case volt of
+                                 _AC_220V_50Hz:u:=0.22;
+                                 _AC_380V_50Hz:u:=0.38;
+                     end;{case}
+                     pvn:=pEntity^.ou.FindVariable('CalcIP');
+                     if pvn<>nil then
+                                     calcip:=PTCalcIP(pvn^.data.Instance)^;
+                     pvp:=pEntity^.ou.FindVariable('Power');
+                     pvi:=pEntity^.ou.FindVariable('Current');
+                     pvcos:=pEntity^.ou.FindVariable('CosPHI');
+                     pvphase:=pEntity^.ou.FindVariable('Phase');
+                     if pvn<>nil then
+                                     calcip:=PTCalcIP(pvn^.data.Instance)^;
+                     if (pvp<>nil)and(pvi<>nil)and(pvcos<>nil)and(pvphase<>nil) then
+                     begin
+                     if calcip=_ICOS_from_P then
+                     begin
+                          if pgdbdouble(pvp^.data.Instance)^<1 then pgdbdouble(pvcos^.data.Instance)^:=0.65
+                     else if pgdbdouble(pvp^.data.Instance)^<=4 then pgdbdouble(pvcos^.data.Instance)^:=0.75
+                     else pgdbdouble(pvcos^.data.Instance)^:=0.85;
+
+                          calcip:=_I_from_p;
+                     end;
+
+                     case calcip of
+                          _I_from_P:begin
+                                         if PTPhase(pvphase^.data.Instance)^=_ABC
+                                         then pgdbdouble(pvi^.data.Instance)^:=pgdbdouble(pvp^.data.Instance)^/u/1.73/pgdbdouble(pvcos^.data.Instance)^
+                                         else pgdbdouble(pvi^.data.Instance)^:=pgdbdouble(pvp^.data.Instance)^/u/pgdbdouble(pvcos^.data.Instance)^
+                                    end;
+                          _P_from_I:begin
+                                         if PTPhase(pvphase^.data.Instance)^=_ABC
+                                         then pgdbdouble(pvp^.data.Instance)^:=pgdbdouble(pvi^.data.Instance)^*u*1.73*pgdbdouble(pvcos^.data.Instance)^
+                                         else pgdbdouble(pvp^.data.Instance)^:=pgdbdouble(pvi^.data.Instance)^*u*pgdbdouble(pvcos^.data.Instance)^
+                                    end
+
+
+                     end;{case}
+                     end;
+               end;
+          end;
+          end;{case}
+     end;
+end;
 procedure CableNameProcess(pCable:PGDBObjCable;const drawing:TDrawingDef);
 var
    pvn,pvnt:pvardesk;
@@ -361,6 +423,7 @@ begin
 
   {from GDBObjDevice}
   GDBObjDevice.GetDXFIOFeatures.RegisterFormatFeature(@DeviceNameProcess);
+  GDBObjDevice.GetDXFIOFeatures.RegisterFormatFeature(@DeviceSilaProcess);
 
   {from GDBObjNet}
   GDBObjNet.GetDXFIOFeatures.RegisterFormatFeature(@DeviceNameProcess);

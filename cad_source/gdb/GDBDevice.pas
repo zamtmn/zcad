@@ -36,6 +36,7 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    destructor done;virtual;
                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
                    procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                   procedure FormatFeatures(const drawing:TDrawingDef);virtual;
                    procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                    procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                    procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
@@ -549,6 +550,12 @@ begin
   //DGroup:=DG_Unknown;
   //uunitmanager.units.loadunit(expandpath('*blocks\el\device_plan.pas'),@ou);
 end;
+procedure GDBObjDevice.FormatFeatures(const drawing:TDrawingDef);
+begin
+     inherited;
+     GetDXFIOFeatures.RunFormatProcs(drawing,@self);
+end;
+
 procedure GDBObjDevice.FormatEntity(const drawing:TDrawingDef);
 var pvn,{pvnt,}pvp,pvphase,pvi,pvcos:pvardesk;
     volt:TVoltage;
@@ -564,11 +571,11 @@ begin
           index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
           assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), 'Неверный индекс блока');
 
-          self.GetDXFIOFeatures.RunFormatProcs(drawing,@self);
+          FormatFeatures(drawing);
 
           //CreateDeviceNameProcess(@self,drawing);
 
-          pvn:=ou.FindVariable('Device_Type');
+          (*pvn:=ou.FindVariable('Device_Type');
           if pvn<>nil then
           begin
                case PTDeviceType(pvn^.data.Instance)^ of
@@ -621,7 +628,7 @@ begin
                     end;
                end;
                end;{case}
-          end;
+          end;*)
 
           calcobjmatrix;
           //buildgeometry;

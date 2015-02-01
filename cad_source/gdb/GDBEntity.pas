@@ -477,6 +477,7 @@ begin
   vp.LineTypeScale:=1;
   bp.ListPos.owner:=own;
   geom.init;
+  GetDXFIOFeatures.RunConstructorFeature(@self);
 end;
 constructor GDBObjEntity.initnul;
 begin
@@ -484,6 +485,7 @@ begin
      if owner<>nil then
                        bp.ListPos.owner:=owner;
      geom.init;
+     GetDXFIOFeatures.RunConstructorFeature(@self);
 end;
 procedure GDBObjEntity.DrawWithOutAttrib;
 var lw: GDBInteger;
@@ -837,6 +839,7 @@ begin
                             gdbfreemem(pointer(PExtAttrib));
      vp.LineType:={''}nil;
      geom.done;
+     GetDXFIOFeatures.RunDestructorFeature(@self);
 end;
 
 procedure GDBObjEntity.rtsave;

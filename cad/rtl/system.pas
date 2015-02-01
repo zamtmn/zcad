@@ -1517,6 +1517,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte);virtual;abstract;
                     procedure Format;virtual;abstract;
                     procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;
+                    procedure FormatFeatures(const drawing:TDrawingDef);virtual;abstract;
                     procedure FormatFast(const drawing:TDrawingDef);virtual;abstract;
                     procedure FormatAfterEdit(const drawing:TDrawingDef);virtual;abstract;
                     procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
@@ -2271,6 +2272,7 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    destructor done;virtual;abstract;
                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;abstract;
                    procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;
+                   procedure FormatFeatures(const drawing:TDrawingDef);virtual;abstract;
                    procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                    procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                    procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;abstract;

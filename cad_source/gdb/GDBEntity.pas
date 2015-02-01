@@ -66,6 +66,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte);virtual;
                     procedure Format;virtual;abstract;
                     procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                    procedure FormatFeatures(const drawing:TDrawingDef);virtual;
                     procedure FormatFast(const drawing:TDrawingDef);virtual;
                     procedure FormatAfterEdit(const drawing:TDrawingDef);virtual;
                     procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
@@ -616,6 +617,11 @@ begin
 end;
 procedure GDBObjEntity.FormatEntity(const drawing:TDrawingDef);
 begin
+end;
+procedure GDBObjEntity.FormatFeatures(const drawing:TDrawingDef);
+begin
+     inherited;
+     GetDXFIOFeatures.RunFormatProcs(drawing,@self);
 end;
 
 procedure GDBObjEntity.FormatAfterEdit;

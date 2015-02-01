@@ -369,7 +369,7 @@ PTGDBOSMode=^TGDBOSMode;
 TGDBOSMode=GDBInteger;
 TGDB3StateBool=(T3SB_Fale(*'False'*),T3SB_True(*'True'*),T3SB_Default(*'Default'*));
 PTGDB3StateBool=^TGDB3StateBool;
-PTypedData=^TFaceTypedData;
+PTFaceTypedData=^TFaceTypedData;
 TFaceTypedData=packed record
                  Instance: GDBPointer;
                  PTD: GDBPointer;

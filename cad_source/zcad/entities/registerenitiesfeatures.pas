@@ -20,7 +20,13 @@ unit registerenitiesfeatures;
 
 interface
 uses sysutils,
-     devices,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,dxflow,gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,gdbobjectextender,GDBSubordinated,GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,UGDBDrawingdef;
+     devices,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,dxflow,
+     gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,gdbobjectextender,
+     GDBSubordinated,GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,
+     URecordDescriptor,UBaseTypeDescriptor,UGDBDrawingdef,memman;
+
+var
+   PFCTTD:GDBPointer=nil;
 
 implementation
 function EntIOLoad_OWNERHANDLE(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
@@ -397,6 +403,23 @@ begin
      DBLinkProcess(pCable,drawing);
 end;
 
+procedure ConstructorFeature(pEntity:PGDBObjEntity);
+begin
+     if PFCTTD=nil then
+                       PFCTTD:=sysunit.TypeName2PTD('PTObjectUnit');
+     memman.GDBGetMem(PGDBObjEntity(pEntity).OOU.Instance,sizeof(TObjectUnit));
+     PTObjectUnit(PGDBObjEntity(pEntity).OOU.Instance).init('Entity');
+     PTObjectUnit(PGDBObjEntity(pEntity).OOU.Instance).InterfaceUses.add(@SysUnit);
+     PGDBObjEntity(pEntity).OOU.PTD:=PFCTTD;
+end;
+
+procedure DestructorFeature(pEntity:PGDBObjEntity);
+begin
+     PTObjectUnit(PGDBObjEntity(pEntity).OOU.Instance).done;
+     memman.GDBFreeMem(PGDBObjEntity(pEntity).OOU.Instance);
+end;
+
+
 begin
   {from GDBObjEntity}
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_OWNERHANDLE',@EntIOLoad_OWNERHANDLE);
@@ -404,6 +427,8 @@ begin
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_UPGRADE',@EntIOLoad_UPGRADE);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('_LAYER',@EntIOLoad_LAYER);
   GDBObjEntity.GetDXFIOFeatures.RegisterSaveFeature(@EntityIOSave_all);
+
+  GDBObjEntity.GetDXFIOFeatures.RegisterCreateEntFeature(@ConstructorFeature,@DestructorFeature);
 
   {from GDBObjGenericWithSubordinated}
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('USES',@EntIOLoadUSES);

@@ -19,7 +19,7 @@
 unit uzglabstractdrawer;
 {$INCLUDE def.inc}
 interface
-uses types,Classes,UGDBOpenArrayOfData,uzgprimitivessarray,Graphics,gdbase,gdbasetypes,GDBCamera,geometry;
+uses gdbpalette,types,Classes,UGDBOpenArrayOfData,uzgprimitivessarray,Graphics,gdbase,gdbasetypes,GDBCamera,geometry;
 type
 TRenderMode=(TRM_ModelSpace,TRM_DisplaySpace,TRM_WindowSpace);
 TZGLPenStyle=(TPS_Solid,TPS_Dot,TPS_Dash,TPS_Selected);

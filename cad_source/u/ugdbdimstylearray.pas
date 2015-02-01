@@ -19,7 +19,7 @@
 unit ugdbdimstylearray;
 {$INCLUDE def.inc}
 interface
-uses gdbobjectsconstdef,ugdbltypearray,UGDBTextStyleArray,usimplegenerics,zcadsysvars,gdbasetypes,SysInfo,sysutils,gdbase, geometry,
+uses gdbpalette,gdbobjectsconstdef,ugdbltypearray,UGDBTextStyleArray,usimplegenerics,zcadsysvars,gdbasetypes,SysInfo,sysutils,gdbase, geometry,
      strproc,varmandef,shared,UGDBNamedObjectsArray,memman;
 const
      DIMLWEDefaultValue=LnWtByBlock;

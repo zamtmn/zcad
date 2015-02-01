@@ -20,7 +20,7 @@ unit OGLSpecFunc;
 {$INCLUDE def.inc}
 
 interface
-uses zcadsysvars,gdbasetypes,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
+uses gdbpalette,zcadsysvars,gdbasetypes,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
      {$IFNDEF DELPHI}gl,glu,glext,{$ELSE}dglOpenGL,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
      {$IFDEF WINDOWS}windows,{$ENDIF}
@@ -169,7 +169,7 @@ type
                            _LineStipplepattern: GLushort;
                            _ppolygonpattern:pointer;
 
-                           _colour:gdbase.TRGB;
+                           _colour:gdbpalette.TRGB;
 
                            procedure myglbegin(mode:GLenum);inline;
                            procedure myglend;inline;

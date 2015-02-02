@@ -69,7 +69,7 @@ TDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
            function GetUndoStack:GDBPointer;virtual;
            function CanUndo:boolean;virtual;
            function CanRedo:boolean;virtual;
-           function GetDWGUnits:PTUnitManager;virtual;
+           function GetDWGUnits:{PTUnitManager}pointer;virtual;
            procedure AddBlockFromDBIfNeed(name:GDBString);virtual;
      end;
 PGDBDescriptor=^GDBDescriptor;
@@ -520,7 +520,7 @@ begin
                                                  else
                                                      result:=false;
 end;
-function TDrawing.GetDWGUnits:PTUnitManager;
+function TDrawing.GetDWGUnits:{PTUnitManager}pointer;
 begin
      result:=@DWGUnits;
 end;
@@ -890,7 +890,7 @@ begin
          repeat
                if pvisible.vp.ID=objID then
                begin
-                    pvd:=pvisible^.ou.FindVariable(vname);
+                    pvd:=PTObjectUnit(pvisible^.ou.Instance)^.FindVariable(vname);
                     if pvd<>nil then
                     begin
                          if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then
@@ -918,7 +918,7 @@ begin
          repeat
                if pvisible.vp.ID=objID then
                begin
-                    pvd:=pvisible^.ou.FindVariable(vname);
+                    pvd:=PTObjectUnit(pvisible^.ou.Instance)^.FindVariable(vname);
                     if pvd<>nil then
                     begin
                          entarray.Add(@pvisible);
@@ -945,7 +945,7 @@ begin
          repeat
                if pvisible.vp.ID=objID then
                begin
-                    pvd:=pvisible^.ou.FindVariable(vname);
+                    pvd:=PTObjectUnit(pvisible^.ou.Instance)^.FindVariable(vname);
                     if pvd<>nil then
                     begin
                          if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then
@@ -977,7 +977,7 @@ begin
      _dest.Base:=_source.Base;
      _dest.BlockDesc:=_source.BlockDesc;
 
-     _source.OU.CopyTo(@_dest.OU);
+     PTObjectUnit(_source.ou.Instance)^.CopyTo(PTObjectUnit(_dest.ou.Instance));
 
      pvisible:=_source.ObjArray.beginiterate(ir);
      if pvisible<>nil then

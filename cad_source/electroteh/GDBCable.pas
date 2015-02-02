@@ -75,7 +75,7 @@ begin
       inc(p)
   end;
   result := tvo;
-  ou.CopyTo(@tvo.OU);
+  PTObjectUnit(ou.Instance)^.CopyTo(PTObjectUnit(tvo.ou.Instance));
 end;
 procedure GDBObjCable.SaveToDXFFollow;
 var
@@ -321,7 +321,7 @@ begin
                     inc(count);
                     pgdbinteger(pvd^.data.Instance)^:=count;
                     end;}
-                    pvd:=CurrentObj.ou.FindVariable('EL_Cab_AddLength');
+                    pvd:=PTObjectUnit(CurrentObj.ou.Instance)^.FindVariable('EL_Cab_AddLength');
                     if pvd<>nil then
                                     begin
                                          l:=l+pgdbdouble(pvd^.data.Instance)^;
@@ -334,19 +334,19 @@ begin
 
                     ptn:=NodePropArray.iterate(ir_inNodeArray);
                 until ptn=nil;
-  pvd:=ou.FindVariable('CABLE_TotalCD');
+  pvd:=PTObjectUnit(ou.Instance)^.FindVariable('CABLE_TotalCD');
   if pvd<>nil then
                                   pgdbinteger(pvd^.data.Instance)^:=count;
-  pvd:=ou.FindVariable('AmountD');
-  pvds:=ou.FindVariable('LENGTH_Scale');
-  pvdal:=ou.FindVariable('LENGTH_Add');
-  pvdrt:=ou.FindVariable('LENGTH_RoundTo');
+  pvd:=PTObjectUnit(ou.Instance)^.FindVariable('AmountD');
+  pvds:=PTObjectUnit(ou.Instance)^.FindVariable('LENGTH_Scale');
+  pvdal:=PTObjectUnit(ou.Instance)^.FindVariable('LENGTH_Add');
+  pvdrt:=PTObjectUnit(ou.Instance)^.FindVariable('LENGTH_RoundTo');
   if pvds<>nil then
   if pgdbdouble(pvds^.data.Instance)^>0 then
                                              begin
                                              if (pvd<>nil)and(pvds<>nil)and(pvdal<>nil){and(pvdrt<>nil)} then
                                              pgdbdouble(pvd^.data.Instance)^:={roundto(}length*pgdbdouble(pvds^.data.Instance)^+pgdbdouble(pvdal^.data.Instance)^+l{,pgdbinteger(pvdrt^.data.Instance)^)};
-                                             pvds:=ou.FindVariable('LENGTH_KReserve');
+                                             pvds:=PTObjectUnit(ou.Instance)^.FindVariable('LENGTH_KReserve');
                                              if pvds<>nil then
                                                               pgdbdouble(pvd^.data.Instance)^:=pgdbdouble(pvd^.data.Instance)^*pgdbdouble(pvds^.data.Instance)^;
                                              if (pvdrt<>nil) then
@@ -412,7 +412,7 @@ begin
   inherited init(own,layeraddres, lw);
   NodePropArray.init({$IFDEF DEBUGBUILD}'{28ED5BF5-7598-4903-A715-C525BC68C116}',{$ENDIF}1000,sizeof(TNodeProp));
   vp.ID := GDBCableID;
-  self.OU.init('cable');
+  PTObjectUnit(self.ou.Instance)^.init('cable');
 end;
 constructor GDBObjCable.initnul;
 begin

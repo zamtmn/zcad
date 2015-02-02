@@ -32,7 +32,7 @@ uses
   strproc,types,graphics,
   ExtCtrls,Controls,Classes,menus,Forms,lcltype,fileutil,
 
-  gdbasetypes,SysUtils,shared,zcadsysvars,
+  Varman,gdbasetypes,SysUtils,shared,zcadsysvars,
   gdbase,varmandef,UGDBDrawingdef,
   memman,TypeDescriptors;
 const
@@ -1573,7 +1573,7 @@ begin
                   if self.GDBobj then
                   if (pobj^.GetObjType=pgdbobjentity(pcurrobj)^.GetObjType)or(pgdbobjentity(pcurrobj)^.GetObjType=0) then
                   begin
-                       pv:=pobj.OU.FindVariable(pp^.valkey);
+                       pv:=PTObjectUnit(pobj.ou.Instance)^.FindVariable(pp^.valkey);
                        if pv<>nil then
                        begin
                             vv:=pv.data.PTD.GetValueAsString(pv.data.Instance);

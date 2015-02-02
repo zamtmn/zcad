@@ -323,7 +323,7 @@ begin
                    end;
         treepos:=uncat_+pb^.name;
 
-        pvd:=pb^.ou.FindVariable('BTY_TreeCoord');
+        pvd:=PTObjectUnit(pb^.ou.Instance)^.FindVariable('BTY_TreeCoord');
         if pvd<>nil then
         if pvd^.data.Instance<>nil then
                                         treepos:=pstring(pvd^.data.Instance)^;

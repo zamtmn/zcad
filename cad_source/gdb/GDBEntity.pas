@@ -19,10 +19,10 @@
 unit GDBEntity;
 {$INCLUDE def.inc}
 interface
-uses gdbpalette,gdbobjectextender,uzglabstractdrawer,gdbdrawcontext,ugdbdrawingdef,GDBCamera,
+uses uabstractunit,gdbpalette,gdbobjectextender,uzglabstractdrawer,gdbdrawcontext,ugdbdrawingdef,GDBCamera,
      gdbvisualprop,uzglgeometry,ugdbltypearray,zcadsysvars,gdbasetypes,
      UGDBControlPointArray,GDBSubordinated,
-     varman,varmandef,GDBase,gdbobjectsconstdef,
+     {varman,}varmandef,GDBase,gdbobjectsconstdef,
      oglwindowdef,geometry,dxflow,sysutils,memman,UGDBOpenArrayOfByte,
      UGDBLayerArray,UGDBOpenArrayOfPObjects;
 type
@@ -48,9 +48,9 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
                     procedure SaveToDXFObjPrefix(var handle:TDWGHandle;var  outhandle:{GDBInteger}GDBOpenArrayOfByte;entname,dbname:GDBString);
-                    function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit;const drawing:TDrawingDef):GDBBoolean;
-                    function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef):GDBBoolean;virtual;
-                    function FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
+                    function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTAbstractUnit;const drawing:TDrawingDef):GDBBoolean;
+                    function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTAbstractUnit;const drawing:TDrawingDef):GDBBoolean;virtual;
+                    function FromDXFPostProcessBeforeAdd(ptu:PTAbstractUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                     procedure FromDXFPostProcessAfterAdd;virtual;
                     function IsHaveObjXData:GDBBoolean;virtual;
 
@@ -58,7 +58,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure createfield;virtual;
                     function AddExtAttrib:PTExtAttrib;
                     function CopyExtAttrib:PTExtAttrib;
-                    procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;abstract;
+                    procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTAbstractUnit;const drawing:TDrawingDef);virtual;abstract;
                     procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                     procedure DXFOut(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                     procedure SaveToDXFfollow(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
@@ -1167,7 +1167,7 @@ class function GDBObjEntity.GetDXFIOFeatures:TDXFEntIODataManager;
 begin
   result:=GDBObjEntityDXFFeatures;
 end;
-function GDBObjEntity.ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef):GDBBoolean;
+function GDBObjEntity.ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTAbstractUnit;const drawing:TDrawingDef):GDBBoolean;
 var
    features:TDXFEntIODataManager;
    FeatureLoadProc:TDXFEntLoadFeature;

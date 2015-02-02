@@ -20,7 +20,7 @@ unit GDBMText;
 {$INCLUDE def.inc}
 
 interface
-uses gdbfieldprocessor,gdbentityfactory,UGDBDrawingdef,strproc,ugdbfont,GDBAbstractText,UGDBPoint3DArray,UGDBLayerArray,SysUtils,gdbasetypes,gdbEntity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
+uses uabstractunit,gdbfieldprocessor,gdbentityfactory,UGDBDrawingdef,strproc,ugdbfont,GDBAbstractText,UGDBPoint3DArray,UGDBLayerArray,SysUtils,gdbasetypes,gdbEntity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varmandef,
 GDBase,{UGDBDescriptor,}GDBText,gdbobjectsconstdef,geometry,dxflow,strmy,math,memman,GDBSubordinated,UGDBTextStyleArray,zcadsysvars;
 const maxdxfmtextlen=250;
 type
@@ -35,7 +35,7 @@ GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
                  text:XYZWGDBGDBStringArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify;wi,l:GDBDouble);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTAbstractUnit;const drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  //procedure getoutbound;virtual;

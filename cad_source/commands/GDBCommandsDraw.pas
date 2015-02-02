@@ -739,9 +739,9 @@ begin
 
     if BlockReplaceParams.SaveVariables then
     begin
-         nb^.OU.free;
+         PTObjectUnit(nb^.ou.Instance)^.free;
          //pb.OU.CopyTo(@nb.OU);
-         nb^.OU.CopyFrom(@pb^.OU);
+         PTObjectUnit(nb^.ou.Instance)^.CopyFrom(PTObjectUnit(pb^.ou.Instance));
     end;
 
     nb^.Formatentity(gdb.GetCurrentDWG^);
@@ -998,7 +998,7 @@ begin
 
             if NumberingParams.BaseName<>'' then
             begin
-            pvd:=pdev^.OU.FindVariable('NMO_BaseName');
+            pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('NMO_BaseName');
             if pvd<>nil then
             begin
             if uppercase(pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Instance))=
@@ -1017,7 +1017,7 @@ begin
                    process:=true;
             if process then
             begin
-            pvd:=pdev^.OU.FindVariable(NumberingParams.NumberVar);
+            pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable(NumberingParams.NumberVar);
             if pvd<>nil then
             begin
                  pvd^.data.PTD^.SetValueFromString(pvd^.data.Instance,inttostr(index));

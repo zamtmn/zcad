@@ -272,7 +272,7 @@ begin
   //tvo.FromDXFPostProcessAfterAdd;
   tvo^.bp.ListPos.Owner:=own;
   result := tvo;
-  ou.CopyTo(@tvo.OU);
+  PTObjectUnit(ou.Instance)^.CopyTo(PTObjectUnit(tvo.ou.Instance));
   tvo^.BlockDesc:=BlockDesc;
 end;
 function GDBObjDevice.DeSelect;
@@ -440,7 +440,7 @@ begin
           ConstObjArray.Shrink;
           VarObjArray.Shrink;
           self.BlockDesc:=pblockdef.BlockDesc;
-          pblockdef^.ou.copyto(@ou);
+          PTObjectUnit(pblockdef^.ou.Instance)^.copyto(PTObjectUnit(ou.Instance));
           end;
 end;
 procedure GDBObjDevice.BuildGeometry;
@@ -562,7 +562,7 @@ var pvn,{pvnt,}pvp,pvphase,pvi,pvcos:pvardesk;
     calcip:TCalcIP;
     u:gdbdouble;
 begin
-         if ou.InterfaceVariables.vardescarray.Count=0 then
+         if PTObjectUnit(ou.Instance)^.InterfaceVariables.vardescarray.Count=0 then
                                                         begin
                                                              //GDB.BlockDefArray.getblockdef(name)^.OU.CopyTo(@ou);
                                                         end;

@@ -19,7 +19,7 @@ unit GDBBlockInsert;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentityfactory,ugdbdrawingdef,UGDBLayerArray{,UGDBLayerArray},math,gdbasetypes,GDBComplex,{GDBGenericSubEntry,}SysInfo,sysutils,
+uses uabstractunit,gdbentityfactory,ugdbdrawingdef,UGDBLayerArray{,UGDBLayerArray},math,gdbasetypes,GDBComplex,{GDBGenericSubEntry,}SysInfo,sysutils,
 {UGDBOpenArrayOfPV,}UGDBObjBlockdefArray{,UGDBSelectedObjArray,UGDBVisibleOpenArray},gdbEntity,varman{,varmandef},
 GDBBlockDef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBSubordinated,UGDBOpenArrayOfByte;
@@ -37,7 +37,7 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
                      constructor initnul;
                      constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
-                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
+                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTAbstractUnit;const drawing:TDrawingDef);virtual;
 
                      procedure SaveToDXF(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                      procedure CalcObjMatrix;virtual;
@@ -62,7 +62,7 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      procedure setrot(r:GDBDouble);virtual;
 
                      property testrotate:GDBDouble read getrot write setrot;(*'Rotate'*)
-                     function FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
+                     function FromDXFPostProcessBeforeAdd(ptu:PTAbstractUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                   end;
 {Export-}
 implementation
@@ -176,7 +176,7 @@ begin
         kU[1] := kR[0][2]*fInvD0;
         kU[2] := kR[1][2]/kD[1];
 end;*)
-function GDBObjBlockInsert.FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;
+function GDBObjBlockInsert.FromDXFPostProcessBeforeAdd(ptu:PTAbstractUnit;const drawing:TDrawingDef):PGDBObjSubordinated;
 begin
   if pos(DevicePrefix,Name)=1 then
   begin
@@ -419,7 +419,7 @@ begin
      index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
      //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
      pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getelement(index);
-     pblockdef^.ou.copyto(@ou);
+     PTObjectUnit(pblockdef^.ou.Instance)^.copyto(PTObjectUnit(ou.Instance));
 end;
 procedure GDBObjBlockInsert.BuildGeometry;
 var pblockdef:PGDBObjBlockdef;

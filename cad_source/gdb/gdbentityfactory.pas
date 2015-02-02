@@ -21,12 +21,12 @@ unit gdbentityfactory;
 
 
 interface
-uses Varman,usimplegenerics,UGDBDrawingdef,
+uses uabstractunit,usimplegenerics,UGDBDrawingdef,
     memman,zcadsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity;
 type
 TAllocEntFunc=function:GDBPointer;
 TAllocAndInitEntFunc=function (owner:PGDBObjGenericSubEntry): PGDBObjEntity;
-TEntityUpgradeFunc=function (ptu:PTUnit;ent:PGDBObjEntity;const drawing:TDrawingDef): PGDBObjEntity;
+TEntityUpgradeFunc=function (ptu:PTAbstractUnit;ent:PGDBObjEntity;const drawing:TDrawingDef): PGDBObjEntity;
 TEntInfoData=packed record
                           DXFName,UserName:GDBString;
                           EntityID:TObjID;

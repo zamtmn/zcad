@@ -104,7 +104,7 @@ begin
   ObjArray.CloneEntityTo(@tvo.ObjArray,tvo);
   tvo^.bp.ListPos.Owner:=own;
   result := tvo;
-  ou.CopyTo(@tvo.OU);
+  PTObjectUnit(ou.Instance)^.CopyTo(PTObjectUnit(tvo.ou.Instance));
 end;
 procedure GDBObjNet.DelSelectedSubitem;
 var pv:pGDBObjEntity;
@@ -329,8 +329,8 @@ var
    n1,n2:gdbstring;
 begin
      result:=0;
-     pvd1:=net1.ou.FindVariable('NMO_Name');
-     pvd2:=net2.ou.FindVariable('NMO_Name');
+     pvd1:=PTObjectUnit(net1.ou.Instance)^.FindVariable('NMO_Name');
+     pvd2:=PTObjectUnit(net2.ou.Instance)^.FindVariable('NMO_Name');
      n1:=pstring(pvd1^.data.Instance)^;
      n2:=pstring(pvd2^.data.Instance)^;
      if (n1='')and(n2='') then
@@ -382,8 +382,8 @@ begin
                                       if nn=2 then
                                       begin
                                            //name:=nn;
-                                           ou.free;
-                                           currentnet.OU.CopyTo(@ou);
+                                           PTObjectUnit(ou.Instance)^.free;
+                                           PTObjectUnit(currentnet.ou.Instance)^.CopyTo(PTObjectUnit(ou.Instance));
                                       end;
                                       //format;
                                       formatentity(drawing);
@@ -492,7 +492,7 @@ begin
           if GDBPlatformUInt(tempnet)=$229FEF0 then
                                   tempnet:=tempnet;
           TempNet^.initnul(nil);
-          ou.CopyTo(@tempnet.ou);
+          PTObjectUnit(ou.Instance)^.CopyTo(PTObjectUnit(tempnet.ou.Instance));
           //TempNet^.name:=name;
           PGDBObjGenericSubEntry(GetMainOwner)^
           {gdb.GetCurrentROOT}.AddObjectToObjArray{ObjArray.add}(@TempNet);

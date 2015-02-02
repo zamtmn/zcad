@@ -18,10 +18,10 @@
 unit GDBBlockDef;
 {$INCLUDE def.inc}
 interface
-uses gdbobjectextender,ugdbdrawingdef,GDBSubordinated,dxflow,UGDBOpenArrayOfByte,
+uses uabstractunit,gdbobjectextender,ugdbdrawingdef,GDBSubordinated,dxflow,UGDBOpenArrayOfByte,
      gdbasetypes,sysutils,gdbase,memman, geometry,
      UGDBLayerArray,
-     zcadstrconsts,varmandef,gdbobjectsconstdef,GDBGenericSubEntry,varman;
+     varmandef,gdbobjectsconstdef,GDBGenericSubEntry{,varman};
 type
 {REGISTEROBJECTTYPE GDBObjBlockdef}
 {Export+}
@@ -35,9 +35,9 @@ GDBObjBlockdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                      constructor initnul(owner:PGDBObjGenericWithSubordinated);
                      constructor init(_name:GDBString);
                      procedure FormatEntity(const drawing:TDrawingDef);virtual;
-                     function FindVariable(varname:GDBString):pvardesk;virtual;
-                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
-                     function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef):GDBBoolean;virtual;
+                     //function FindVariable(varname:GDBString):pvardesk;virtual;
+                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTAbstractUnit;const drawing:TDrawingDef);virtual;
+                     function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTAbstractUnit;const drawing:TDrawingDef):GDBBoolean;virtual;
                      destructor done;virtual;
                      function GetMatrix:PDMatrix4D;virtual;
                      function GetHandle:GDBPlatformint;virtual;
@@ -49,7 +49,7 @@ GDBObjBlockdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
 var
    GDBObjBlockDefDXFFeatures:TDXFEntIODataManager;
 implementation
-uses {iodxf,}UUnitManager,shared,log,GDBEntity;
+uses {iodxf,}{UUnitManager,}shared,log,GDBEntity;
 function GDBObjBlockdef.GetType:GDBPlatformint;
 begin
      result:=1;
@@ -73,45 +73,23 @@ begin
      inherited;
 end;
 procedure GDBObjBlockdef.LoadFromDXF;
-var //s{, layername}: GDBString;
-  byt{, code}: GDBInteger;
-  uou:PTObjectUnit;
+var
+  byt: GDBInteger;
 begin
   //initnul(@gdb.ObjRoot);
   byt:=readmystrtoint(f);
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-                                           {s:=}f.ReadGDBString;
+                                           f.ReadGDBString;
     byt:=readmystrtoint(f);
   end;
-
-  if name='DEVICE_KIP_UK-P'
-                            then
-                                name:=name;
-
-  //if ou.InterfaceVariables.vararray.Count=0 then
-                                       begin
-                                            if pos(DevicePrefix,name)=1 then
-                                            begin
-                                                uou:=pointer(units.findunit(name));
-                                                if uou<>nil then
-                                                                begin
-                                                                      ou.CopyFrom(uou);
-                                                                end
-                                                            else
-                                                                begin
-                                                                       HistoryOutStr(sysutils.format(rsfardeffilenotfounf,[self.Name]));
-                                                                end;
-                                            end;
-                                       end;
-  
-  //format;
+  GetDXFIOFeatures.RunAfterLoadFeature(@self);
 end;
-function GDBObjBlockdef.FindVariable;
+{function GDBObjBlockdef.FindVariable;
 begin
      result:=nil;//ou.FindVariable(varname);
-end;
+end;}
 procedure GDBObjBlockdef.FormatEntity(const drawing:TDrawingDef);
 var
   p:pgdbobjEntity;

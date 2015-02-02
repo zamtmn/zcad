@@ -1,16 +1,16 @@
 unit umainform;
 
 {$mode objfpc}{$H+}
-
+{.$define dxfio}
 interface
 
 uses
   LCLType,Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, StdCtrls, Spin,
   {From ZCAD}
-  openglviewarea,abstractviewarea,zcadsysvars, iodxf,varmandef, UUnitManager,
+  openglviewarea,abstractviewarea,zcadsysvars, {$ifdef dxfio}iodxf,{$endif}varmandef, UUnitManager,
   zcadinterface,gdbentityfactory,UGDBLayerArray,geometry, GDBase, GDBasetypes,
-  UGDBDescriptor,UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDB3DFace,
+  UGDBDescriptor,UGDBTextStyleArray,UGDBEntTree,GDB3DFace,
   GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,ugdbsimpledrawing,
   GDBEntity,GDBManager,gdbobjectsconstdef,ioshx,gdbpalette;
 
@@ -550,6 +550,7 @@ end;
 
 procedure TForm1.BtnOpenDXFClick(Sender: TObject);
 begin
+     {$ifdef dxfio}
      if OpenDialog1.Execute then
      begin
           addfromdxf(OpenDialog1.FileName,@gdb.GetCurrentDWG^.pObjRoot^,TLOLoad,gdb.GetCurrentDWG^);
@@ -557,14 +558,17 @@ begin
           gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
           UGDBDescriptor.redrawoglwnd;
      end;
+     {$endif}
 end;
 
 procedure TForm1.BtnSaveDXFClick(Sender: TObject);
 begin
+     {$ifdef dxfio}
      if SaveDialog1.Execute then
      begin
           savedxf2000(SaveDialog1.FileName, GDB.GetCurrentDWG^);
      end;
+     {$endif}
 end;
 
 procedure TForm1.BtnSelectAllClick(Sender: TObject);

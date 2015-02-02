@@ -18,7 +18,7 @@
 unit GDBArc;
 {$INCLUDE def.inc}
 interface
-uses gdbentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,math,GDBWithLocalCS,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
+uses uabstractunit,gdbentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,math,GDBWithLocalCS,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain;
 type
 {REGISTEROBJECTTYPE GDBObjArc}
@@ -39,7 +39,7 @@ GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  pq2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;RR,S,E:GDBDouble);
                  constructor initnul;
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTAbstractUnit;const drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;

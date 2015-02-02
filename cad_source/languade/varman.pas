@@ -21,7 +21,7 @@ unit Varman;
 
 interface
 uses
-  zcadstrconsts,UGDBOpenArrayOfPointer,SysUtils,UBaseTypeDescriptor,
+  uabstractunit,zcadstrconsts,UGDBOpenArrayOfPointer,SysUtils,UBaseTypeDescriptor,
   gdbasetypes, shared,gdbase,UGDBOpenArrayOfByte,UGDBStringArray,varmandef,sysinfo,
   log,memman,TypeDescriptors,URecordDescriptor,UObjectDescriptor,strproc{$IFNDEF DELPHI},intftranslations{$ENDIF},classes;
 type
@@ -161,7 +161,7 @@ varmanager={$IFNDEF DELPHI}packed{$ENDIF} object(varmanagerdef)
 TunitPart=(TNothing,TInterf,TImpl,TProg);
 PTUnit=^TUnit;
 PTSimpleUnit=^TSimpleUnit;
-TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseobject)
+TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
                   Name:GDBString;
                   InterfaceUses:GDBOpenArrayOfGDBPointer;
                   InterfaceVariables: varmanager;

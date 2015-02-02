@@ -19,7 +19,7 @@
 unit UGDBGraf;
 {$INCLUDE def.inc}
 interface
-uses ugdbdrawingdef,varmandef,UGDBPoint3DArray,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry,gdbEntity,UGDBOpenArrayOfPV;
+uses varman,ugdbdrawingdef,varmandef,UGDBPoint3DArray,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry,gdbEntity,UGDBOpenArrayOfPV;
 type
 {EXPORT+}
 PTLinkType=^TLinkType;
@@ -74,7 +74,7 @@ function getlinktype(pv:PGDBObjEntity):TLinktype;
 var
     pvd:pvardesk;
 begin
-     pvd:=pv^.ou.FindVariable('LinkType');
+     pvd:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('LinkType');
      if pvd=nil then
                     result:=LT_Normal
                 else
@@ -84,7 +84,7 @@ function getlinklength(pv:PGDBObjLine):GDBDouble;
 var
     pvd:pvardesk;
 begin
-     pvd:=pv^.ou.FindVariable('LengthOverrider');
+     pvd:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('LengthOverrider');
      if pvd=nil then
                     result:=pv^.Length
                 else

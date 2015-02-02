@@ -20,7 +20,7 @@ unit GDBPolyLine;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
+uses uabstractunit,gdbentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte{,varmandef},
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman;
 type
 {REGISTEROBJECTTYPE GDBObjPolyline}
@@ -30,7 +30,7 @@ GDBObjPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  Closed:GDBBoolean;(*saved_to_shd*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTAbstractUnit;const drawing:TDrawingDef);virtual;
 
                  procedure FormatEntity(const drawing:TDrawingDef);virtual;
                  procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;

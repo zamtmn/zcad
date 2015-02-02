@@ -20,7 +20,7 @@ unit GDBPoint;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentityfactory,gdbdrawcontext,dxflow,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
+uses uabstractunit,gdbentityfactory,gdbdrawcontext,dxflow,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,memman;
 type
 {REGISTEROBJECTTYPE GDBObjPoint}
@@ -32,7 +32,7 @@ GDBObjPoint={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  ProjPoint:GDBvertex;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTAbstractUnit;const drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure FormatEntity(const drawing:TDrawingDef);virtual;
 

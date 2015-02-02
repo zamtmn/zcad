@@ -19,7 +19,7 @@ unit gdbfieldprocessorimpl;
 {$INCLUDE def.inc}
 
 interface
-uses gdbfieldprocessor,languade,strproc,sysutils,gdbasetypes,varmandef,GDBase;
+uses gdbentity,zcadvariablesutils,gdbfieldprocessor,languade,strproc,sysutils,gdbasetypes,varmandef,GDBase;
 implementation
 uses
    log,GDBSubordinated;
@@ -36,7 +36,7 @@ begin
     varname:=copy(str,startpos+3,endpos-startpos-3);
     pv:=nil;
     if pobj<>nil then
-                     pv:=PGDBObjGenericWithSubordinated(pobj).FindVariable(varname);
+                     pv:=FindVariableInEnt(PGDBObjEntity(pobj),varname);
     if pv<>nil then
                    begin
                         str:=copy(str,1,startpos-1)+pv.data.ptd^.GetValueAsString(pv^.data.Instance)+copy(str,endpos+1,length(str)-endpos)

@@ -252,37 +252,37 @@ begin
      //if (pobj.vp.ID=GDBBlockInsertID)or
      //   (pobj.vp.ID=GDBCableID) then
         begin
-             if pobj^.ou.FindVariable('GC_HeadDevice')<>nil then
-             if pobj^.ou.FindVariable('GC_Metric')=nil then
+             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_HeadDevice')<>nil then
+             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_Metric')=nil then
              begin
-                  pobj^.ou.setvardesc(vd,'GC_Metric','','GDBString');
-                  pobj^.ou.InterfaceVariables.createvariable(vd.name,vd);
+                  PTObjectUnit(pobj^.ou.Instance)^.setvardesc(vd,'GC_Metric','','GDBString');
+                  PTObjectUnit(pobj^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
              end;
 
-             if pobj^.ou.FindVariable('GC_HDGroup')<>nil then
-             if pobj^.ou.FindVariable('GC_HDGroupTemplate')=nil then
+             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_HDGroup')<>nil then
+             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_HDGroupTemplate')=nil then
              begin
-                  pobj^.ou.setvardesc(vd,'GC_HDGroupTemplate','Шаблон группы','GDBString');
-                  pobj^.ou.InterfaceVariables.createvariable(vd.name,vd);
+                  PTObjectUnit(pobj^.ou.Instance)^.setvardesc(vd,'GC_HDGroupTemplate','Шаблон группы','GDBString');
+                  PTObjectUnit(pobj^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
              end;
-             if pobj^.ou.FindVariable('GC_HeadDevice')<>nil then
-             if pobj^.ou.FindVariable('GC_HeadDeviceTemplate')=nil then
+             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_HeadDevice')<>nil then
+             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_HeadDeviceTemplate')=nil then
              begin
-                  pobj^.ou.setvardesc(vd,'GC_HeadDeviceTemplate','Шаблон головного устройства','GDBString');
-                  pobj^.ou.InterfaceVariables.createvariable(vd.name,vd);
+                  PTObjectUnit(pobj^.ou.Instance)^.setvardesc(vd,'GC_HeadDeviceTemplate','Шаблон головного устройства','GDBString');
+                  PTObjectUnit(pobj^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
              end;
 
-             if pobj^.ou.FindVariable('GC_HDShortName')<>nil then
-             if pobj^.ou.FindVariable('GC_HDShortNameTemplate')=nil then
+             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_HDShortName')<>nil then
+             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_HDShortNameTemplate')=nil then
              begin
-                  pobj^.ou.setvardesc(vd,'GC_HDShortNameTemplate','Шаблон короткого имени головного устройства','GDBString');
-                  pobj^.ou.InterfaceVariables.createvariable(vd.name,vd);
+                  PTObjectUnit(pobj^.ou.Instance)^.setvardesc(vd,'GC_HDShortNameTemplate','Шаблон короткого имени головного устройства','GDBString');
+                  PTObjectUnit(pobj^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
              end;
-             if pobj^.ou.FindVariable('GC_Metric')<>nil then
-             if pobj^.ou.FindVariable('GC_InGroup_Metric')=nil then
+             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_Metric')<>nil then
+             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_InGroup_Metric')=nil then
              begin
-                  pobj^.ou.setvardesc(vd,'GC_InGroup_Metric','Метрика нумерации в группе','GDBString');
-                  pobj^.ou.InterfaceVariables.createvariable(vd.name,vd);
+                  PTObjectUnit(pobj^.ou.Instance)^.setvardesc(vd,'GC_InGroup_Metric','Метрика нумерации в группе','GDBString');
+                  PTObjectUnit(pobj^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
              end;
 
 
@@ -413,7 +413,7 @@ begin
                                 end;
 
                                  newowner^.AddMi(@postobj);
-                                 pobj^.OU.CopyTo(@PGDBObjEntity(postobj)^.ou);
+                                 PTObjectUnit(pobj^.ou.Instance)^.CopyTo(PTObjectUnit(PGDBObjEntity(postobj)^.ou.Instance));
                                  if foc=0 then
                                               begin
                                                    PGDBObjEntity(postobj)^.BuildGeometry(drawing);

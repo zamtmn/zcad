@@ -24,7 +24,7 @@ uses {gdbase,gdbasetypes,
      oglwindowdef,gdbdrawcontext,UGDBEntTree,ugdbabstractdrawing,
      uinfoform,}
      uzglabstractdrawer,GDBGenericSubEntry,gdbase,gdbasetypes,
-     oglwindowdef,gdbdrawcontext,varmandef,Varman,UGDBPoint3DArray,UGDBEntTree,geometry,ugdbabstractdrawing,
+     oglwindowdef,gdbdrawcontext,varmandef,{Varman,}UGDBPoint3DArray,UGDBEntTree,geometry,ugdbabstractdrawing,
      shared,sysutils,
      ExtCtrls,Controls,Classes,LCLType,Forms,zcadsysvars,GDBEntity,LMessages;
 

@@ -555,7 +555,7 @@ begin
   repeat
         begin
 
-            pvd:=pcabledesk.StartSegment.ou.FindVariable('GC_Metric');
+            pvd:=PTObjectUnit(pcabledesk.StartSegment.ou.Instance)^.FindVariable('GC_Metric');
             if pvd<>nil then
                             begin
                                  cablemetric:=pvd.data.PTD.GetValueAsString(pvd.data.Instance);
@@ -584,7 +584,7 @@ begin
              if ptn<>nil then
                 repeat
                     begin
-                        pvd:=ptn^.bp.ListPos.Owner.ou.FindVariable('GC_Metric');
+                        pvd:=PTObjectUnit(ptn^.bp.ListPos.Owner.ou.Instance)^.FindVariable('GC_Metric');
                         if pvd<>nil then
                                         begin
                                              devicemetric:=pvd.data.PTD.GetValueAsString(pvd.data.Instance);
@@ -593,7 +593,7 @@ begin
                                         begin
                                              devicemetric:='';
                                         end;
-                        pvd:=ptn^.bp.ListPos.Owner.ou.FindVariable('GC_InGroup_Metric');
+                        pvd:=PTObjectUnit(ptn^.bp.ListPos.Owner.ou.Instance)^.FindVariable('GC_InGroup_Metric');
                                         if pvd<>nil then
                                                         begin
                                                              numingroupmetric:=pvd.data.PTD.GetValueAsString(pvd.data.Instance);
@@ -611,14 +611,14 @@ begin
                     begin
                          currentunit:=GetNumUnit(numingroupmetric);
 
-                         SaveCabUName:=pcabledesk.StartSegment.ou.Name;
-                         pcabledesk.StartSegment.ou.Name:='Cable';
+                         SaveCabUName:=PTObjectUnit(pcabledesk.StartSegment.ou.Instance)^.Name;
+                         PTObjectUnit(pcabledesk.StartSegment.ou.Instance)^.Name:='Cable';
                          p:=@pcabledesk.StartSegment.ou;
                          currentunit.InterfaceUses.addnodouble(@p);
                          ucount:=currentunit.InterfaceUses.Count;
 
-                         SaveEntUName:=ptn^.bp.ListPos.Owner.ou.Name;
-                         ptn^.bp.ListPos.Owner.ou.Name:='Entity';
+                         SaveEntUName:=PTObjectUnit(ptn^.bp.ListPos.Owner.ou.Instance)^.Name;
+                         PTObjectUnit(ptn^.bp.ListPos.Owner.ou.Instance)^.Name:='Entity';
                          p:=@ptn^.bp.ListPos.Owner.ou;
                          currentunit.InterfaceUses.addnodouble(@p);
 
@@ -628,14 +628,14 @@ begin
 
                          dec(currentunit.InterfaceUses.Count,2);
 
-                         ptn^.bp.ListPos.Owner.ou.Name:=SaveEntUName;
-                         pcabledesk.StartSegment.ou.Name:=SaveCabUName;
+                         PTObjectUnit(ptn^.bp.ListPos.Owner.ou.Instance)^.Name:=SaveEntUName;
+                         PTObjectUnit(pcabledesk.StartSegment.ou.Instance)^.Name:=SaveCabUName;
 
                          PGDBObjLine(ptn^.bp.ListPos.Owner)^.Formatentity(gdb.GetCurrentDWG^);
                     end
                         else
                             begin
-                            pvd:=ptn^.bp.ListPos.Owner.ou.FindVariable('NMO_Name');
+                            pvd:=PTObjectUnit(ptn^.bp.ListPos.Owner.ou.Instance)^.FindVariable('NMO_Name');
                             if pvd<>nil then
                                         begin
                                              name:='"'+pvd.data.PTD.GetValueAsString(pvd.data.Instance)+'"';
@@ -658,7 +658,7 @@ begin
              if currentunit<>nil then
              currentunit.InterfaceUses.Count:=ucount-1;
         end;
-  pcabledesk.StartSegment.ou.Name:=SaveCabUName;
+  PTObjectUnit(pcabledesk.StartSegment.ou.Instance)^.Name:=SaveCabUName;
   pcabledesk:=cman.iterate(ir);
   until pcabledesk=nil;
 
@@ -794,7 +794,7 @@ begin
   if pcabledesk<>nil then
   repeat
         PCableSS:=pcabledesk^.StartSegment;
-        pvd:=PCableSS.ou.FindVariable('CABLE_Type');     { TODO : Сделать поиск переменных caseнезависимым }
+        pvd:=PTObjectUnit(PCableSS.ou.Instance)^.FindVariable('CABLE_Type');     { TODO : Сделать поиск переменных caseнезависимым }
 
         if pvd<>nil then
         begin
@@ -812,7 +812,7 @@ begin
                   pointer(pv):=addblockinsert(@GDB.GetCurrentDWG.ConstructObjRoot,@{gdb.GetCurrentROOT.ObjArray}GDB.GetCurrentDWG.ConstructObjRoot.ObjArray,currentcoord, 1, 0,'DEVICE_CABLE_MARK');
 
                   SysVar.dwg.DWG_CLayer^:=lsave;
-                  pvmc:=pv^.ou.FindVariable('CableName');
+                  pvmc:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('CableName');
                   if pvmc<>nil then
                   begin
                       pstring(pvmc^.data.Instance)^:=pcabledesk.Name;
@@ -840,14 +840,14 @@ begin
                   repeat
                         if nodeend^.bp.ListPos.Owner<>pointer(gdb.GetCurrentROOT) then
                                                                           nodeend:=pointer(nodeend^.bp.ListPos.Owner);
-                        pvd:=nodeend^.ou.FindVariable('NMO_Name');
+                        pvd:=PTObjectUnit(nodeend^.ou.Instance)^.FindVariable('NMO_Name');
                         if pvd<>nil then
                         begin
                              //endname:=pstring(pvd^.data.Instance)^;
                              endname:=pvd^.data.PTD.GetValueAsString(pvd^.data.Instance);
                         end
                            else endname:='';
-                        pvd:=nodeend^.ou.FindVariable('DB_link');
+                        pvd:=PTObjectUnit(nodeend^.ou.Instance)^.FindVariable('DB_link');
                         if pvd<>nil then
                         begin
                             //endmat:=pstring(pvd^.data.Instance)^;
@@ -878,7 +878,7 @@ begin
                                     else
                                         InsertDat('_error_here',startname,endname,count,currentcoord,GDB.GetCurrentDWG.ConstructObjRoot).YouDeleted(gdb.GetCurrentDWG^);
 
-                  pvd:=PCableSS.ou.FindVariable('CABLE_WireCount');
+                  pvd:=PTObjectUnit(PCableSS.ou.Instance)^.FindVariable('CABLE_WireCount');
                   if pvd=nil then
                                  coord.x:=coord.x+12
                              else

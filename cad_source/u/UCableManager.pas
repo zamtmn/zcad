@@ -7,7 +7,7 @@
 unit UCableManager;
 {$INCLUDE def.inc}
 interface
-uses {strmy}strproc,GDBCable,GDBDevice,gdbobjectsconstdef,UGDBOpenArrayOfPObjects{,Varman},languade,UGDBOpenArrayOfObjects{,RegCnownTypes,URegisterObjects},SysUtils{,UBaseTypeDescriptor},gdbasetypes{, shared},gdbase{,UGDBOpenArrayOfByte}, varmandef,sysinfo{,UGDBOpenArrayOfData},log,memman;
+uses zcadvariablesutils,Varman,strproc,GDBCable,GDBDevice,gdbobjectsconstdef,UGDBOpenArrayOfPObjects{,Varman},languade,UGDBOpenArrayOfObjects{,RegCnownTypes,URegisterObjects},SysUtils{,UBaseTypeDescriptor},gdbasetypes{, shared},gdbase{,UGDBOpenArrayOfByte}, varmandef,sysinfo{,UGDBOpenArrayOfData},log,memman;
 const
      DefCableName='Создан. Не назван';
      UnNamedCable='Имя отсутствует';
@@ -85,7 +85,7 @@ begin
      repeat
            if pobj^.vp.ID=GDBCableID then
            begin
-                pvn:=pobj^.OU.FindVariable('NMO_Name');
+                pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
                 if pvn<>nil then
                                 sname:=pgdbstring(pvn^.data.Instance)^
                             else
@@ -94,7 +94,7 @@ begin
                                sname:=sname;
                 pcd:=FindOrCreate(sname);
                 pcd^.Segments.AddRef(pobj^);
-                pvn:=pobj^.OU.FindVariable('AmountD');
+                pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('AmountD');
                 if pvn<>nil then
                                 pcd^.length:=pcd^.length+pgdbdouble(pvn^.data.Instance)^;
            end;
@@ -113,8 +113,8 @@ begin
                 p1:=pointer(ir.itp);
                 if pobj<>nil then
                 repeat
-                      pvn :=pobj^.OU.FindVariable('CABLE_Segment');
-                      pvn2:=pobj2^.OU.FindVariable('CABLE_Segment');
+                      pvn :=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('CABLE_Segment');
+                      pvn2:=PTObjectUnit(pobj2^.ou.Instance)^.FindVariable('CABLE_Segment');
                       if pgdbinteger(pvn^.data.Instance)^<
                          pgdbinteger(pvn2^.data.Instance)^ then
                          begin
@@ -152,14 +152,14 @@ begin
                                  end;
                                  if pcd^.EndDevice<>nil then
                                  begin
-                                      pvn :=pnp^.DevLink.FindVariable('RiserName');
-                                      pvn2:=pcd^.EndDevice^.FindVariable('RiserName');
+                                      pvn :=FindVariableInEnt(pnp^.DevLink,'RiserName');
+                                      pvn2:=FindVariableInEnt(pcd^.EndDevice,'RiserName');
                                       if (pvn<>nil)and(pvn2<>nil)then
                                       begin
                                            if pstring(pvn^.data.Instance)^=pstring(pvn2^.data.Instance)^ then
                                            begin
-                                                pvn :=pnp^.DevLink.FindVariable('Elevation');
-                                                pvn2:=pcd^.EndDevice^.FindVariable('Elevation');
+                                                pvn :=FindVariableInEnt(pnp^.DevLink,'Elevation');
+                                                pvn2:=FindVariableInEnt(pcd^.EndDevice,'Elevation');
                                                 if (pvn<>nil)and(pvn2<>nil)then
                                                 begin
                                                      pcd^.length:=pcd^.length+abs(pgdbdouble(pvn^.data.Instance)^-pgdbdouble(pvn2^.data.Instance)^);

@@ -20,7 +20,7 @@ unit gdbvisualprop;
 {$INCLUDE def.inc}
 interface
 uses gdbpalette,log,ugdbltypearray,zcadsysvars,gdbasetypes,
-     varman,varmandef,
+     {varman,}varmandef,
      GDBase,
      geometry,sysutils,memman,UGDBOpenArrayOfByte,UGDBLayerArray;
 type

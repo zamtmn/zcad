@@ -20,8 +20,8 @@ unit ugdbsimpledrawing;
 {$INCLUDE def.inc}
 interface
 uses ugdbdimstylearray,GDBWithLocalCS,ugdbabstractdrawing,zcadsysvars,strproc,
-     UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,UGDBNumerator, gdbase,
-     varmandef,varman,sysutils, memman, geometry,gdbasetypes,sysinfo,
+     UGDBObjBlockdefArray,UGDBTableStyleArray,{UUnitManager,}UGDBNumerator, gdbase,
+     varmandef,{varman,}sysutils, memman, geometry,gdbasetypes,sysinfo,
      GDBGenericSubEntry,UGDBLayerArray,ugdbltypearray,GDBEntity,
      UGDBSelectedObjArray,UGDBTextStyleArray,GDBCamera,UGDBOpenArrayOfPV,
      GDBRoot,ugdbfont,UGDBOpenArrayOfPObjects,abstractviewarea;
@@ -81,7 +81,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function CanUndo:boolean;virtual;
                        function CanRedo:boolean;virtual;
                        function GetUndoStack:GDBPointer;virtual;
-                       function GetDWGUnits:PTUnitManager;virtual;
+                       function GetDWGUnits:{PTUnitManager}pointer;virtual;
                        procedure AssignLTWithFonts(pltp:PGDBLtypeProp);virtual;
                        function GetMouseEditorMode:GDBByte;virtual;
                        function DefMouseEditorMode(SetMask,ReSetMask:GDBByte):GDBByte;virtual;
@@ -184,7 +184,7 @@ begin
 end;
 
 
-function TSimpleDrawing.GetDWGUnits:PTUnitManager;
+function TSimpleDrawing.GetDWGUnits:{PTUnitManager}pointer;
 begin
      result:=nil;
 end;

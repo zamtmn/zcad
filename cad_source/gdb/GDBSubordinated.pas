@@ -21,8 +21,8 @@ unit GDBSubordinated;
 
 interface
 uses gdbfieldprocessor,ugdbdrawingdef,strproc
-     {$IFNDEF DELPHI},LCLProc{$ENDIF},UGDBOpenArrayOfByte,devices,
-     gdbase,gdbasetypes,varman,varmandef,
+     {$IFNDEF DELPHI},LCLProc{$ENDIF},UGDBOpenArrayOfByte,
+     gdbase,gdbasetypes,{varman,}varmandef,
      sysutils,UGDBLayerArray{,strutils};
 type
 //Owner:PGDBObjGenericWithSubordinated;(*'Владелец'*)
@@ -32,8 +32,7 @@ type
 PGDBObjSubordinated=^GDBObjSubordinated;
 PGDBObjGenericWithSubordinated=^GDBObjGenericWithSubordinated;
 GDBObjGenericWithSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                                    OU:TObjectUnit;(*'Variables'*)
-                                    OOU:TFaceTypedData;(*'Variables'*)
+                                    OU:TFaceTypedData;(*'Variables'*)
                                     function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
                                     function ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
                                     procedure DelSelectedSubitem(const drawing:TDrawingDef);virtual;
@@ -41,7 +40,7 @@ GDBObjGenericWithSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject
                                     procedure RemoveInArray(pobjinarray:GDBInteger);virtual;abstract;
                                     function CreateOU:GDBInteger;virtual;
                                     procedure createfield;virtual;
-                                    function FindVariable(varname:GDBString):pvardesk;virtual;
+                                    //function FindVariable(varname:GDBString):pvardesk;virtual;
                                     destructor done;virtual;
                                     function GetMatrix:PDMatrix4D;virtual;abstract;
                                     //function GetLineWeight:GDBSmallint;virtual;abstract;
@@ -72,13 +71,12 @@ GDBObjSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericWithSubord
                          bp:GDBObjBaseProp;(*'Owner'*)(*oi_readonly*)(*hidden_in_objinsp*)
                          function GetOwner:PGDBObjSubordinated;virtual;abstract;
                          procedure createfield;virtual;
-                         function FindVariable(varname:GDBString):pvardesk;virtual;
-                         function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
+                         //function FindVariable(varname:GDBString):pvardesk;virtual;
+                         //function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
                          destructor done;virtual;
 
          end;
 {EXPORT-}
-function GetEntName(pu:PGDBObjGenericWithSubordinated):GDBString;
 
 procedure extractvarfromdxfstring2(_Value:GDBString;out vn,vt,vun:GDBString);
 procedure extractvarfromdxfstring(_Value:GDBString;out vn,vt,vv,vun:GDBString);
@@ -90,12 +88,12 @@ begin
      inherited;
 end;
 
-function GDBObjSubordinated.FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;
+{function GDBObjSubordinated.FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;
 var
    pvd:pvardesk;
 begin
      result:=nil;
-     pvd:=ou.FindVariable('Device_Class');
+     pvd:=PTObjectUnit(ou.Instance)^.FindVariable('Device_Class');
      if pvd<>nil then
      if PTDeviceClass(pvd^.data.Instance)^=_type then
                                                       result:=@self;
@@ -103,18 +101,7 @@ begin
                        if bp.ListPos.owner<>nil then
                                              result:=PGDBObjSubordinated(bp.ListPos.owner).FindShellByClass(_type);
                                                                       
-end;
-function GetEntName(pu:PGDBObjGenericWithSubordinated):GDBString;
-var
-   pvn{,pvnt}:pvardesk;
-begin
-     result:='';
-     pvn:=pu^.OU.FindVariable('NMO_Name');
-     if (pvn<>nil) then
-                                      begin
-                                           result:=pstring(pvn^.data.Instance)^;
-                                      end;
-end;
+end;}
 function GDBObjGenericWithSubordinated.GetType:GDBPlatformint;
 begin
      result:=0;
@@ -125,7 +112,7 @@ begin
 end;
 destructor GDBObjGenericWithSubordinated.done;
 begin
-     ou.done;
+     //ou.done;
 end;
 procedure GDBObjGenericWithSubordinated.FormatAfterDXFLoad;
 begin
@@ -272,21 +259,21 @@ end;
 procedure GDBObjGenericWithSubordinated.createfield;
 begin
      inherited;
-     OU.init('Entity');
-     ou.InterfaceUses.add(@SysUnit);
+     //OU.init('Entity');
+     //ou.InterfaceUses.add(@SysUnit);
 end;
-function GDBObjGenericWithSubordinated.FindVariable;
+{function GDBObjGenericWithSubordinated.FindVariable;
 begin
-     result:=ou.FindVariable(varname);
+     result:=PTObjectUnit(ou.Instance)^.FindVariable(varname);
 end;
 function GDBObjSubordinated.FindVariable;
 begin
-     result:=ou.FindVariable(varname);
+     result:=PTObjectUnit(ou.Instance)^.FindVariable(varname);
      if result=nil then
                        if self.bp.ListPos.Owner<>nil then
                                                  result:=self.bp.ListPos.Owner.FindVariable(varname);
 
-end;
+end;}
 function GDBObjGenericWithSubordinated.CreateOU;
 begin
 end;

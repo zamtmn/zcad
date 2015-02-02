@@ -20,7 +20,7 @@ unit GDBWithLocalCS;
 {$INCLUDE def.inc}
 
 interface
-uses gdbpalette,gdbdrawcontext,ugdbdrawingdef,GDBCamera,zcadsysvars,gdbasetypes,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,GDBWithMatrix,
+uses uabstractunit,gdbpalette,gdbdrawcontext,ugdbdrawingdef,GDBCamera,zcadsysvars,gdbasetypes,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varmandef,GDBWithMatrix,
 GDBase,{gDBDescriptor,gdbobjectsconstdef,oglwindowdef,}geometry,dxflow,sysutils,memman,GDBSubordinated,UGDBLayerArray{,GDBGenericSubEntry};
 type
 //pprojoutbound:{-}PGDBOOutbound2DIArray{/GDBPointer/};
@@ -41,7 +41,7 @@ GDBObjWithLocalCS={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;
                procedure SaveToDXFObjPostfix(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
-               function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit;const drawing:TDrawingDef):GDBBoolean;
+               function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTAbstractUnit;const drawing:TDrawingDef):GDBBoolean;
 
                procedure FormatEntity(const drawing:TDrawingDef);virtual;
                procedure CalcObjMatrix;virtual;

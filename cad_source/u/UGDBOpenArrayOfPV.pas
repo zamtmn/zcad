@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfPV;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,UGDBDrawingdef,GDBEntity,GDBCamera,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
+uses {varman,}gdbdrawcontext,UGDBDrawingdef,GDBEntity,GDBCamera,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
      gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman,GDBSubordinated;
 type
 {PGDBObjEntityArray=^GDBObjEntityArray;
@@ -47,12 +47,12 @@ GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects
                       procedure FormatAfterEdit(const drawing:TDrawingDef);virtual;
                       //function InRect:TInRect;virtual;
                       function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
-                      function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;virtual;
+                      //function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;virtual;
                 end;
 {Export-}
 implementation
 uses {UGDBDescriptor,}{GDBManager,}{GDBEntity,}gdbentityfactory,varmandef;
-function GDBObjOpenArrayOfPV.FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;
+{function GDBObjOpenArrayOfPV.FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;
 var
    pvisible:PGDBObjEntity;
    ir:itrec;
@@ -65,7 +65,7 @@ begin
          repeat
                if pvisible.vp.ID=objID then
                begin
-                    pvd:=pvisible^.ou.FindVariable(vname);
+                    pvd:=PTObjectUnit(pvisible^.ou.Instance)^.FindVariable(vname);
                     if pvd<>nil then
                     begin
                          if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then
@@ -78,7 +78,7 @@ begin
               pvisible:=iterate(ir);
          until pvisible=nil;
      end;
-end;
+end;}
 function GDBObjOpenArrayOfPV.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
 var pobj:pGDBObjEntity;
     ir:itrec;

@@ -28,7 +28,7 @@ uses
      {$ENDIF}
      abstractviewarea,uzglopengldrawer,sysutils,GDBHelpObj,memman,OGLSpecFunc,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
-     oglwindow,oglwindowdef,gdbdrawcontext,varmandef,commandline,zcadsysvars,Varman,geometry,shared,LCLType,
+     oglwindow,oglwindowdef,gdbdrawcontext,varmandef,commandline,zcadsysvars,geometry,shared,LCLType,
      ExtCtrls,classes,Controls,Graphics,generalviewarea,math,uzglabstractdrawer,log,backendmanager;
 type
     TOpenGLViewArea=class(TGeneralViewArea)

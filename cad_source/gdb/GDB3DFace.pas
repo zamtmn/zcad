@@ -19,7 +19,7 @@ unit GDB3DFace;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
+uses uabstractunit,gdbentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase,gdbobjectsconstdef{,oglwindowdef,dxflow},memman;
 type
 {Export+}
@@ -34,7 +34,7 @@ GDBObj3DFace={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  //ProjPoint:GDBvertex;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTAbstractUnit;const drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure FormatEntity(const drawing:TDrawingDef);virtual;
 

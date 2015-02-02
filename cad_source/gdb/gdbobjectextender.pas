@@ -20,7 +20,7 @@ unit gdbobjectextender;
 {$INCLUDE def.inc}
 
 interface
-uses Varman,UGDBDrawingdef,gdbasetypes,gdbase,usimplegenerics,gvector,UGDBOpenArrayOfByte;
+uses uabstractunit,UGDBDrawingdef,gdbasetypes,gdbase,usimplegenerics,gvector,UGDBOpenArrayOfByte;
 
 type
 TConstructorFeature=procedure(pEntity:Pointer);
@@ -30,7 +30,8 @@ TCreateEntFeatureData=record
                 destr:TDestructorFeature;
               end;
 TDXFEntSaveFeature=procedure(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer);
-TDXFEntLoadFeature=function(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:Pointer):boolean;
+TDXFEntLoadFeature=function(_Name,_Value:GDBString;ptu:PTAbstractUnit;const drawing:TDrawingDef;PEnt:Pointer):boolean;
+TDXFEntAfterLoadFeature=procedure(pEntity:Pointer);
 TDXFEntFormatFeature=procedure (pEntity:Pointer;const drawing:TDrawingDef);
 TDXFEntLoadData=record
                 DXFEntLoadFeature:TDXFEntLoadFeature;
@@ -42,18 +43,22 @@ TDXFEntLoadDataMap=specialize GKey2DataMap<GDBString,TDXFEntLoadData,LessGDBStri
 TDXFEntSaveDataVector=specialize TVector<TDXFEntSaveData>;
 TDXFEntFormatProcsVector=specialize TVector<TDXFEntFormatFeature>;
 TCreateEntFeatureVector=specialize TVector<TCreateEntFeatureData>;
+TDXFEntAfterLoadFeatureVector=specialize TVector<TDXFEntAfterLoadFeature>;
 TDXFEntIODataManager=class
                       fDXFEntLoadDataMapByName:TDXFEntLoadDataMap;
                       fDXFEntLoadDataMapByPrefix:TDXFEntLoadDataMap;
                       fDXFEntSaveDataVector:TDXFEntSaveDataVector;
                       fDXFEntFormatprocsVector:TDXFEntFormatprocsVector;
                       fCreateEntFeatureVector:TCreateEntFeatureVector;
+                      fDXFEntAfterLoadFeatureVector:TDXFEntAfterLoadFeatureVector;
                       procedure RegisterNamedLoadFeature(name:GDBString;PLoadProc:TDXFEntLoadFeature);
+                      procedure RegisterAfterLoadFeature(PAfterLoadProc:TDXFEntAfterLoadFeature);
                       procedure RegisterPrefixLoadFeature(prefix:GDBString;PLoadProc:TDXFEntLoadFeature);
                       procedure RegisterSaveFeature(PSaveProc:TDXFEntSaveFeature);
                       procedure RegisterFormatFeature(PFormatProc:TDXFEntFormatFeature);
                       procedure RunSaveFeatures(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer);
                       procedure RunFormatProcs(const drawing:TDrawingDef;pEntity:Pointer);
+                      procedure RunAfterLoadFeature(pEntity:Pointer);
                       function GetLoadFeature(name:GDBString):TDXFEntLoadFeature;
 
                       procedure RegisterCreateEntFeature(_constr:TConstructorFeature;_destr:TDestructorFeature);
@@ -71,6 +76,7 @@ begin
      fDXFEntSaveDataVector:=TDXFEntSaveDataVector.Create;
      fDXFEntFormatprocsVector:=TDXFEntFormatprocsVector.Create;
      fCreateEntFeatureVector:=TCreateEntFeatureVector.Create;
+     fDXFEntAfterLoadFeatureVector:=TDXFEntAfterLoadFeatureVector.create;
 end;
 destructor TDXFEntIODataManager.destroy;
 begin
@@ -79,6 +85,7 @@ begin
      fDXFEntSaveDataVector.Destroy;
      fDXFEntFormatprocsVector.Destroy;
      fCreateEntFeatureVector.Destroy;
+     fDXFEntAfterLoadFeatureVector.Destroy;
 end;
 
 function TDXFEntIODataManager.GetLoadFeature(name:GDBString):TDXFEntLoadFeature;
@@ -98,6 +105,10 @@ var
 begin
      data.DXFEntLoadFeature:=PLoadProc;
      fDXFEntLoadDataMapByName.RegisterKey(name,data);
+end;
+procedure TDXFEntIODataManager.RegisterAfterLoadFeature(PAfterLoadProc:TDXFEntAfterLoadFeature);
+begin
+     fDXFEntAfterLoadFeatureVector.PushBack(PAfterLoadProc);
 end;
 
 procedure TDXFEntIODataManager.RegisterPrefixLoadFeature(prefix:GDBString;PLoadProc:TDXFEntLoadFeature);
@@ -146,6 +157,13 @@ var
 begin
      for i:=0 to fCreateEntFeatureVector.Size-1 do
       fCreateEntFeatureVector[i].constr(pEntity);
+end;
+procedure TDXFEntIODataManager.RunAfterLoadFeature(pEntity:Pointer);
+var
+  i:integer;
+begin
+     for i:=0 to fDXFEntAfterLoadFeatureVector.Size-1 do
+      fDXFEntAfterLoadFeatureVector[i](pEntity);
 end;
 procedure TDXFEntIODataManager.RunDestructorFeature(pEntity:Pointer);
 var

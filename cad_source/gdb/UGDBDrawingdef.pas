@@ -18,7 +18,7 @@
 
 unit UGDBDrawingdef;
 interface
-uses ugdbdimstylearray,gdbase,gdbasetypes,UGDBLayerArray,UGDBTextStyleArray,ugdbltypearray,UUnitManager,UGDBTableStyleArray;
+uses ugdbdimstylearray,gdbase,gdbasetypes,UGDBLayerArray,UGDBTextStyleArray,ugdbltypearray,{UUnitManager,}UGDBTableStyleArray;
 type
 {EXPORT+}
 PTDrawingDef=^TDrawingDef;
@@ -28,7 +28,7 @@ TDrawingDef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseobject)
                        function GetTextStyleTable:PGDBTextStyleArray;virtual;abstract;
                        function GetTableStyleTable:PGDBTableStyleArray;virtual;abstract;
                        function GetDimStyleTable:PGDBDimStyleArray;virtual;abstract;
-                       function GetDWGUnits:PTUnitManager;virtual;abstract;
+                       function GetDWGUnits:{PTUnitManager}pointer;virtual;abstract;
                        procedure AddBlockFromDBIfNeed(name:GDBString);virtual;abstract;
                        function GetCurrentRootSimple:GDBPointer;virtual;abstract;
                        function GetCurrentRootObjArraySimple:GDBPointer;virtual;abstract;

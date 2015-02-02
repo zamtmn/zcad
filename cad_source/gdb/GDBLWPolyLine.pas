@@ -20,7 +20,7 @@ unit GDBLWPolyLine;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,oglwindowdef,GDBCurve,UGDBVectorSnapArray,geometry,UGDBLayerArray,GDBEntity,memman,gdbasetypes,UGDBPoint3DArray,UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,varman,varmandef,
+uses uabstractunit,gdbentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,oglwindowdef,GDBCurve,UGDBVectorSnapArray,geometry,UGDBLayerArray,GDBEntity,memman,gdbasetypes,UGDBPoint3DArray,UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,varmandef,
 GDBase,GDBWithLocalCS,gdbobjectsconstdef,math,dxflow,sysutils,UGDBLineWidthArray;
 type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
@@ -37,7 +37,7 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  Square:GDBdouble;(*'Oriented area'*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul;
-                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTAbstractUnit;const drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;

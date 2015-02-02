@@ -33,7 +33,6 @@ uses
   memman,log,
   sysinfo,
 
-  varmandef,
   varman,
   urtl,
   UUnitManager,

@@ -20,10 +20,10 @@ unit GDBLine;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,
+uses uabstractunit,gdbentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,
      ugdbltypearray,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,
      gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,
-     UGDBOpenArrayOfByte,varman,varmandef,GDBase,gdbobjectsconstdef,oglwindowdef,
+     UGDBOpenArrayOfByte,varmandef,GDBase,gdbobjectsconstdef,oglwindowdef,
      geometry,dxflow,memman,shared;
 type
                  {l_1_4:GDBvertex;(*hidden_in_objinsp*)
@@ -49,7 +49,7 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
 
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTAbstractUnit;const drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure FormatEntity(const drawing:TDrawingDef);virtual;

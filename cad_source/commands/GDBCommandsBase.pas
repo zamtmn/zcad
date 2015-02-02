@@ -136,7 +136,7 @@ begin
                    if pv^.Selected then
                    if (pv^.GetObjType=GetObjType)or(GetObjType=0) then
                    begin
-                        pvdmy:=pv^.ou.InterfaceVariables.findvardesc(pvd^.name);
+                        pvdmy:=PTObjectUnit(pv^.ou.Instance)^.InterfaceVariables.findvardesc(pvd^.name);
                         if pvdmy<>nil then
                           if pvd^.data.PTD=pvdmy^.data.PTD then
                           begin
@@ -193,13 +193,13 @@ begin
        inc(self.SelCount);
        if (pv^.GetObjType=GetObjType)or(GetObjType=0) then
        begin
-            pu:=pv^.ou.InterfaceUses.beginiterate(ir2);
+            pu:=PTObjectUnit(pv^.ou.Instance)^.InterfaceUses.beginiterate(ir2);
             if pu<>nil then
             repeat
                   ou.InterfaceUses.addnodouble(@pu);
-                  pu:=pv^.ou.InterfaceUses.iterate(ir2)
+                  pu:=PTObjectUnit(pv^.ou.Instance)^.InterfaceUses.iterate(ir2)
             until pu=nil;
-            pvd:=pv^.ou.InterfaceVariables.vardescarray.beginiterate(ir2);
+            pvd:=PTObjectUnit(pv^.ou.Instance)^.InterfaceVariables.vardescarray.beginiterate(ir2);
             if pvd<>nil then
             repeat
                   pvdmy:=ou.InterfaceVariables.findvardesc(pvd^.name);
@@ -224,7 +224,7 @@ begin
                                            pvdmy.attrib:=vda_different;
                                    end;
 
-                  pvd:=pv^.ou.InterfaceVariables.vardescarray.iterate(ir2)
+                  pvd:=PTObjectUnit(pv^.ou.Instance)^.InterfaceVariables.vardescarray.iterate(ir2)
             until pvd=nil;
        end;
        end;
@@ -266,7 +266,7 @@ begin
      if pp<>nil then
                     begin
                          repeat
-                         pvd:=pp.ou.FindVariable('NMO_Name');
+                         pvd:=PTObjectUnit(pp.ou.Instance)^.FindVariable('NMO_Name');
                          if pvd<>nil then
                                          begin
                                          if Result=20 then
@@ -1008,7 +1008,7 @@ else if length(Operands)>3 then
   then
       begin
            mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
-           pobj^.OU.SaveToMem(mem);
+           PTObjectUnit(pobj^.ou.Instance)^.SaveToMem(mem);
            mem.SaveToFile(sysparam.programpath+'autosave\lastvariableset.pas');
 
            setlength(astring,mem.Count);
@@ -1026,7 +1026,7 @@ else if length(Operands)>3 then
                                      mem.Clear;
                                      mem.AddData(@astring[1],length(astring));
 
-                                     pobj^.OU.free;
+                                     PTObjectUnit(pobj^.ou.Instance)^.free;
                                      units.parseunit(mem,PTSimpleUnit(@pobj^.OU));
                                      if assigned(rebuildproc)then
                                      rebuildproc;
@@ -1073,7 +1073,7 @@ begin
                                      repeat
                                            if pobj^.Selected then
                                            begin
-                                                pobj^.OU.free;
+                                                PTObjectUnit(pobj^.ou.Instance)^.free;
                                                 units.parseunit(mem,PTSimpleUnit(@pobj^.OU));
                                                 mem.Seek(0);
                                                 inc(counter);

@@ -2101,7 +2101,7 @@ begin
      begin
           if (pent^.vp.ID=GDBDeviceID)or(pent^.vp.ID=GDBCableID)or(pent^.vp.ID=GDBNetID)then
           begin
-               pvname:=pent^.ou.FindVariable('NMO_Name');
+               pvname:=PTObjectUnit(pent^.ou.Instance)^.FindVariable('NMO_Name');
                if pvname<>nil then
                begin
                    pobj:=pdwg.GetCurrentROOT.ObjArray.beginiterate(ir);
@@ -2109,7 +2109,7 @@ begin
                    repeat
                          if (pobj<>pent)and((pobj^.vp.ID=GDBDeviceID)or(pobj^.vp.ID=GDBCableID)or(pobj^.vp.ID=GDBNetID)) then
                          begin
-                              pvname2:=pobj^.OU.FindVariable('NMO_Name');
+                              pvname2:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
                               if pvname2<>nil then
                               if pgdbstring(pvname2^.data.Instance)^=pgdbstring(pvname^.data.Instance)^ then
                               begin
@@ -2533,7 +2533,9 @@ begin
      if pp<>nil then
                     begin
                          repeat
-                         pvd:=pp.ou.FindVariable('NMO_Name');
+                         pvd:=nil;
+                         if pp.ou.Instance<>nil then
+                         pvd:=PTObjectUnit(pp.ou.Instance)^.FindVariable('NMO_Name');
                          if pvd<>nil then
                                          begin
                                          if i=20 then

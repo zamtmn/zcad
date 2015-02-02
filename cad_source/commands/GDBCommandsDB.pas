@@ -103,8 +103,8 @@ var
    pdbu:ptunit;
    pum:PTUnitManager;
 begin
-     pvn:=pEntity^.OU.FindVariable('DB_link');
-     pvnt:=pEntity^.OU.FindVariable('DB_MatName');
+     pvn:=PTObjectUnit(pEntity^.ou.Instance)^.FindVariable('DB_link');
+     pvnt:=PTObjectUnit(pEntity^.ou.Instance)^.FindVariable('DB_MatName');
      if pvnt<>nil then
      pvnt^.attrib:=pvnt^.attrib or (vda_RO);
      if (pvn<>nil)and(pvnt<>nil) then
@@ -151,7 +151,7 @@ begin
                  repeat
                       if pv^.Selected then
                                           begin
-                                               pvd:=pv^.ou.FindVariable('DB_link');
+                                               pvd:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('DB_link');
                                                if pvd<>nil then
                                                begin
                                                     PGDBString(pvd^.data.Instance)^:=pdbv^.name;

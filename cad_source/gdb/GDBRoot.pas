@@ -21,9 +21,9 @@ unit GDBRoot;
 
 interface
 Uses
-   Varman,gdbdrawcontext,ugdbdrawingdef,GDBCamera,OGLSpecFunc,
+   {Varman,}gdbdrawcontext,ugdbdrawingdef,GDBCamera,OGLSpecFunc,
    UGDBEntTree,{UGDBVisibleTreeArray,UGDBOpenArrayOfPV,}
-devices,gdbase,gdbasetypes,gdbobjectsconstdef,varmandef,GDBEntity,GDBGenericSubEntry{,UGDBOpenArrayOfPV},GDBConnected,GDBSubordinated,geometry,uunitmanager{,shared};
+   gdbase,gdbasetypes,gdbobjectsconstdef,varmandef,GDBEntity,GDBGenericSubEntry{,UGDBOpenArrayOfPV},GDBConnected,GDBSubordinated,geometry{,uunitmanager}{,shared};
 type
 {REGISTEROBJECTTYPE GDBObjRoot}
 {Export+}
@@ -37,7 +37,7 @@ GDBObjRoot={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                  function getowner:PGDBObjSubordinated;virtual;
                  function GetMainOwner:PGDBObjSubordinated;virtual;
                  procedure getoutbound;virtual;
-                 function FindVariable(varname:GDBString):pvardesk;virtual;
+                 //function FindVariable(varname:GDBString):pvardesk;virtual;
                  function GetHandle:GDBPlatformint;virtual;
                  function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
 
@@ -46,7 +46,7 @@ GDBObjRoot={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                  function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
                  function CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
                  procedure calcbb;virtual;
-                 function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
+                 //function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
            end;
 
 {Export-}
@@ -57,10 +57,10 @@ function GDBObjRoot.GetMainOwner:PGDBObjSubordinated;
 begin
      result:=@self;
 end;
-function GDBObjRoot.FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;
+{function GDBObjRoot.FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;
 begin
      result:=nil;
-end;
+end;}
 procedure GDBObjRoot.calcbb;
 begin
      inherited;
@@ -134,10 +134,10 @@ function GDBObjRoot.GetHandle:GDBPlatformint;
 begin
      result:=H_Root;
 end;
-function GDBObjRoot.FindVariable;
+{function GDBObjRoot.FindVariable;
 begin
-     result:=ou.FindVariable(varname);
-end;
+     result:=PTObjectUnit(ou.Instance)^.FindVariable(varname);
+end;}
 procedure GDBObjRoot.getoutbound;
 begin
      vp.BoundingBox.LBN:=geometry.NulVertex;
@@ -163,8 +163,8 @@ begin
      inherited done;
 end;
 constructor GDBObjRoot.initnul;
-var
-    prootonit:ptunit;
+{var
+    prootonit:ptunit;}
 begin
      inherited initnul(nil);
      bp.ListPos.owner:=nil;
@@ -172,9 +172,9 @@ begin
      //bp.PSelfInOwnerArray:=nil;
      bp.ListPos.SelfIndex:=-1;
      ObjToConnectedArray.init({$IFDEF DEBUGBUILD}'{0AD3CD18-E887-4038-BADA-7616D9F52963}',{$ENDIF}100);
-     prootonit:=units.findunit('objroot');
+     {prootonit:=units.findunit('objroot');
      if prootonit<>nil then
-                           ou.copyfrom(units.findunit('objroot'));
+                           PTObjectUnit(ou.Instance)^.copyfrom(units.findunit('objroot'));}
      //uunitmanager.units.loadunit(expandpath('*blocks\objroot.pas'),@ou);
 end;
 procedure GDBObjRoot.formatafteredit;

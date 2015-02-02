@@ -21,7 +21,7 @@ unit GDBText;
 
 interface
 uses
-gdbobjectextender,gdbfieldprocessor,gdbentityfactory,ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,sysutils,ugdbfont,UGDBPoint3DArray,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
+uabstractunit,gdbobjectextender,gdbfieldprocessor,gdbentityfactory,ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,sysutils,ugdbfont,UGDBPoint3DArray,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varmandef,
 GDBase,{UGDBDescriptor,}gdbobjectsconstdef,oglwindowdef,geometry,dxflow,strmy,math,memman,log,GDBSubordinated,UGDBTextStyleArray;
 type
 {REGISTEROBJECTTYPE GDBObjText}
@@ -38,7 +38,7 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  obj_y:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTAbstractUnit;const drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  procedure getoutbound;virtual;
@@ -54,7 +54,7 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  function IsHaveObjXData:GDBBoolean;virtual;
                  procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-                 function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef):GDBBoolean;virtual;
+                 function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTAbstractUnit;const drawing:TDrawingDef):GDBBoolean;virtual;
                  class function GetDXFIOFeatures:TDXFEntIODataManager;
            end;
 {Export-}

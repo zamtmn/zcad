@@ -58,10 +58,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="umainform"/>
-        <EditorIndex Value="1"/>
         <CursorPos X="37" Y="13"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
       <Unit2>
@@ -101,7 +101,6 @@
       </Unit6>
       <Unit7>
         <Filename Value="..\languade\varman.pas"/>
-        <UnitName Value="Varman"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="693"/>
         <CursorPos Y="716"/>
@@ -132,7 +131,6 @@
       </Unit10>
       <Unit11>
         <Filename Value="..\languade\varmandef.pas"/>
-        <UnitName Value="varmandef"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="420"/>
         <CursorPos X="41" Y="420"/>
@@ -141,7 +139,6 @@
       </Unit11>
       <Unit12>
         <Filename Value="..\languade\UUnitManager.pas"/>
-        <UnitName Value="UUnitManager"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="194"/>
         <CursorPos Y="210"/>
@@ -198,7 +195,6 @@
       </Unit19>
       <Unit20>
         <Filename Value="..\fileformats\iodxf.pas"/>
-        <UnitName Value="iodxf"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="338" Y="22"/>
         <UsageCount Value="58"/>
@@ -214,17 +210,14 @@
       </Unit21>
       <Unit22>
         <Filename Value="..\gdb\UGDBDescriptor.pas"/>
-        <UnitName Value="UGDBDescriptor"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="24"/>
         <CursorPos X="18" Y="24"/>
         <UsageCount Value="75"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit22>
       <Unit23>
         <Filename Value="..\misc\strproc.pas"/>
-        <UnitName Value="strproc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="467"/>
         <CursorPos Y="492"/>
@@ -307,7 +300,6 @@
       </Unit34>
       <Unit35>
         <Filename Value="..\gdb\GDBEntity.pas"/>
-        <UnitName Value="GDBEntity"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="20" Y="22"/>
         <UsageCount Value="52"/>
@@ -396,7 +388,6 @@
       </Unit46>
       <Unit47>
         <Filename Value="..\gdb\GDBText.pas"/>
-        <UnitName Value="GDBText"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="11"/>
         <CursorPos X="242" Y="24"/>
@@ -420,7 +411,6 @@
       </Unit49>
       <Unit50>
         <Filename Value="..\u\UGDBTextStyleArray.pas"/>
-        <UnitName Value="UGDBTextStyleArray"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="9"/>
         <CursorPos X="12" Y="22"/>
@@ -546,7 +536,6 @@
       <Unit68>
         <Filename Value="..\gdb\UGDBDrawingdef.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="UGDBDrawingdef"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="9"/>
         <CursorPos Y="43"/>
@@ -577,10 +566,13 @@
       </Unit71>
       <Unit72>
         <Filename Value="..\languade\zcadsysvars.pas"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="157"/>
-        <CursorPos X="40" Y="180"/>
+        <UnitName Value="zcadsysvars"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="6"/>
+        <CursorPos X="18" Y="23"/>
         <UsageCount Value="10"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit72>
       <Unit73>
@@ -591,7 +583,6 @@
       </Unit73>
       <Unit74>
         <Filename Value="..\gdb\GDBPolyLine.pas"/>
-        <UnitName Value="GDBPolyLine"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="5"/>
         <CursorPos X="309" Y="23"/>
@@ -619,7 +610,6 @@
       </Unit77>
       <Unit78>
         <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <UnitName Value="GDBLWPolyLine"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="283" Y="23"/>
         <UsageCount Value="21"/>
@@ -825,7 +815,6 @@
       </Unit109>
       <Unit110>
         <Filename Value="..\gdb\GDB3DFace.pas"/>
-        <UnitName Value="GDB3DFace"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="18"/>
         <CursorPos X="20" Y="22"/>
@@ -855,7 +844,6 @@
       </Unit113>
       <Unit114>
         <Filename Value="..\languade\UBaseTypeDescriptor.pas"/>
-        <UnitName Value="UBaseTypeDescriptor"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="627"/>
         <CursorPos Y="640"/>
@@ -919,7 +907,6 @@
       </Unit122>
       <Unit123>
         <Filename Value="..\gdb\GDBMText.pas"/>
-        <UnitName Value="GDBMText"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="227" Y="23"/>
         <UsageCount Value="14"/>
@@ -965,12 +952,10 @@
       </Unit128>
       <Unit129>
         <Filename Value="..\gui\generalviewarea.pas"/>
-        <UnitName Value="generalviewarea"/>
-        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="26"/>
         <CursorPos X="66" Y="26"/>
         <UsageCount Value="17"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit129>
       <Unit130>
@@ -991,7 +976,6 @@
       </Unit131>
       <Unit132>
         <Filename Value="..\gui\openglviewarea.pas"/>
-        <UnitName Value="openglviewarea"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="78" Y="31"/>
         <UsageCount Value="22"/>
@@ -1119,7 +1103,6 @@
       </Unit148>
       <Unit149>
         <Filename Value="..\u\ugdbltypearray.pas"/>
-        <UnitName Value="ugdbltypearray"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="213"/>
         <CursorPos Y="238"/>
@@ -1200,7 +1183,6 @@
       </Unit159>
       <Unit160>
         <Filename Value="..\languade\TypeDescriptors.pas"/>
-        <UnitName Value="TypeDescriptors"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="88"/>
         <CursorPos Y="110"/>
@@ -1209,7 +1191,6 @@
       </Unit160>
       <Unit161>
         <Filename Value="..\languade\UEnumDescriptor.pas"/>
-        <UnitName Value="UEnumDescriptor"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="188"/>
         <CursorPos Y="202"/>
@@ -1218,7 +1199,6 @@
       </Unit161>
       <Unit162>
         <Filename Value="..\fileformats\fileformatsmanager.pas"/>
-        <UnitName Value="fileformatsmanager"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="88"/>
         <CursorPos Y="103"/>
@@ -1227,70 +1207,17 @@
       </Unit162>
       <Unit163>
         <Filename Value="..\fileformats\ioshx.pas"/>
-        <UnitName Value="ioshx"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="11" Y="19"/>
         <UsageCount Value="12"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit163>
     </Units>
-    <JumpHistory Count="14" HistoryIndex="13">
+    <JumpHistory Count="1">
       <Position1>
-        <Filename Value="..\gui\generalviewarea.pas"/>
-        <Caret Line="2536" Column="35" TopLine="2516"/>
+        <Filename Value="..\languade\zcadsysvars.pas"/>
+        <Caret Line="180" Column="40" TopLine="157"/>
       </Position1>
-      <Position2>
-        <Filename Value="..\gui\generalviewarea.pas"/>
-        <Caret Line="26" Column="75"/>
-      </Position2>
-      <Position3>
-        <Filename Value="..\gui\generalviewarea.pas"/>
-        <Caret Line="2126" Column="7" TopLine="2092"/>
-      </Position3>
-      <Position4>
-        <Filename Value="..\gui\generalviewarea.pas"/>
-        <Caret Line="2127" Column="6" TopLine="2097"/>
-      </Position4>
-      <Position5>
-        <Filename Value="..\gui\generalviewarea.pas"/>
-        <Caret Line="2561" Column="7" TopLine="2531"/>
-      </Position5>
-      <Position6>
-        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
-        <Caret Line="24" Column="20" TopLine="5"/>
-      </Position6>
-      <Position7>
-        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
-        <Caret Line="198" Column="8" TopLine="166"/>
-      </Position7>
-      <Position8>
-        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
-        <Caret Line="439" Column="7" TopLine="415"/>
-      </Position8>
-      <Position9>
-        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
-        <Caret Line="565" Column="7" TopLine="537"/>
-      </Position9>
-      <Position10>
-        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
-        <Caret Line="575" Column="7" TopLine="553"/>
-      </Position10>
-      <Position11>
-        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
-        <Caret Line="905" Column="7" TopLine="874"/>
-      </Position11>
-      <Position12>
-        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
-        <Caret Line="930" Column="7" TopLine="902"/>
-      </Position12>
-      <Position13>
-        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
-        <Caret Line="961" Column="7" TopLine="929"/>
-      </Position13>
-      <Position14>
-        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
-        <Caret Line="1005" Column="7" TopLine="979"/>
-      </Position14>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -1300,8 +1227,8 @@
       <Filename Value="..\..\cad\simplecad"/>
     </Target>
     <SearchPaths>
-      <IncludeFiles Value="..;..\u;..\gdb;..\commands;..\gui;..\devicebase;..\languade;..\lclmod;..\electroteh;..\zgl;$(ProjOutDir);..\..\cad;..\misc;..\fileformats;..\other;..\fonts"/>
-      <OtherUnitFiles Value="..;..\u;..\gdb;..\commands;..\gui;..\devicebase;..\languade;..\lclmod;..\electroteh;..\zgl;$(ProjOutDir);..\..\cad;..\misc;..\fileformats;..\other;..\fonts"/>
+      <IncludeFiles Value="..;..\u;..\zengine\gdb;..\commands;..\gui;..\devicebase;..\languade;..\lclmod;..\electroteh;..\zengine\zgl;$(ProjOutDir);..\..\cad;..\misc;..\fileformats;..\other;..\fonts"/>
+      <OtherUnitFiles Value="..;..\u;..\zengine\gdb;..\commands;..\gui;..\devicebase;..\languade;..\lclmod;..\electroteh;..\zengine\zgl;$(ProjOutDir);..\..\cad;..\misc;..\fileformats;..\other;..\fonts"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

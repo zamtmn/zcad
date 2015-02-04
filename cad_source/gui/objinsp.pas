@@ -1571,7 +1571,7 @@ begin
             if pobj<>nil then
             repeat
                   if self.GDBobj then
-                  if (pobj^.GetObjType=pgdbobjentity(pcurrobj)^.GetObjType)or(pgdbobjentity(pcurrobj)^.GetObjType=0) then
+                  if ((pobj^.GetObjType=pgdbobjentity(pcurrobj)^.GetObjType)or(pgdbobjentity(pcurrobj)^.GetObjType=0))and(pobj.ou.Instance<>nil) then
                   begin
                        pv:=PTObjectUnit(pobj.ou.Instance)^.FindVariable(pp^.valkey);
                        if pv<>nil then

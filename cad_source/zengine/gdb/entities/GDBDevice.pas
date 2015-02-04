@@ -549,6 +549,7 @@ begin
   //DBorder:=DB_Empty;
   //DGroup:=DG_Unknown;
   //uunitmanager.units.loadunit(expandpath('*blocks\el\device_plan.pas'),@ou);
+  GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
 procedure GDBObjDevice.FormatFeatures(const drawing:TDrawingDef);
 begin

@@ -20,7 +20,7 @@ unit gdbobjectextender;
 {$INCLUDE def.inc}
 
 interface
-uses uabstractunit,UGDBDrawingdef,gdbasetypes,gdbase,usimplegenerics,gvector,UGDBOpenArrayOfByte;
+uses gdbentityextender,GDBSubordinated,uabstractunit,UGDBDrawingdef,gdbasetypes,gdbase,usimplegenerics,gvector,UGDBOpenArrayOfByte;
 
 type
 TConstructorFeature=procedure(pEntity:Pointer);
@@ -44,6 +44,7 @@ TDXFEntSaveDataVector=specialize TVector<TDXFEntSaveData>;
 TDXFEntFormatProcsVector=specialize TVector<TDXFEntFormatFeature>;
 TCreateEntFeatureVector=specialize TVector<TCreateEntFeatureData>;
 TDXFEntAfterLoadFeatureVector=specialize TVector<TDXFEntAfterLoadFeature>;
+TEntityCreateExtenderVector=specialize TVector<TCreateThisExtender>;
 TDXFEntIODataManager=class
                       fDXFEntLoadDataMapByName:TDXFEntLoadDataMap;
                       fDXFEntLoadDataMapByPrefix:TDXFEntLoadDataMap;
@@ -51,6 +52,7 @@ TDXFEntIODataManager=class
                       fDXFEntFormatprocsVector:TDXFEntFormatprocsVector;
                       fCreateEntFeatureVector:TCreateEntFeatureVector;
                       fDXFEntAfterLoadFeatureVector:TDXFEntAfterLoadFeatureVector;
+                      fTEntityExtenderVector:TEntityCreateExtenderVector;
                       procedure RegisterNamedLoadFeature(name:GDBString;PLoadProc:TDXFEntLoadFeature);
                       procedure RegisterAfterLoadFeature(PAfterLoadProc:TDXFEntAfterLoadFeature);
                       procedure RegisterPrefixLoadFeature(prefix:GDBString;PLoadProc:TDXFEntLoadFeature);
@@ -65,6 +67,9 @@ TDXFEntIODataManager=class
                       procedure RunConstructorFeature(pEntity:Pointer);
                       procedure RunDestructorFeature(pEntity:Pointer);
 
+                      procedure RegisterEntityExtenderObject(CreateFunc:TCreateThisExtender);
+                      procedure AddExtendersToEntity(pEntity:Pointer);
+
                       constructor create;
                       destructor destroy;override;
                  end;
@@ -77,6 +82,7 @@ begin
      fDXFEntFormatprocsVector:=TDXFEntFormatprocsVector.Create;
      fCreateEntFeatureVector:=TCreateEntFeatureVector.Create;
      fDXFEntAfterLoadFeatureVector:=TDXFEntAfterLoadFeatureVector.create;
+     fTEntityExtenderVector:=TEntityCreateExtenderVector.Create;
 end;
 destructor TDXFEntIODataManager.destroy;
 begin
@@ -86,8 +92,8 @@ begin
      fDXFEntFormatprocsVector.Destroy;
      fCreateEntFeatureVector.Destroy;
      fDXFEntAfterLoadFeatureVector.Destroy;
+     fTEntityExtenderVector.Destroy;
 end;
-
 function TDXFEntIODataManager.GetLoadFeature(name:GDBString):TDXFEntLoadFeature;
 var
   data:TDXFEntLoadData;
@@ -172,5 +178,24 @@ begin
      for i:=0 to fCreateEntFeatureVector.Size-1 do
       fCreateEntFeatureVector[i].destr(pEntity);
 end;
+
+procedure TDXFEntIODataManager.RegisterEntityExtenderObject(CreateFunc:TCreateThisExtender);
+begin
+     fTEntityExtenderVector.PushBack(CreateFunc);
+end;
+procedure TDXFEntIODataManager.AddExtendersToEntity(pEntity:Pointer);
+var
+  i:integer;
+  size:integer;
+  pobj:pointer;
+begin
+     for i:=0 to fTEntityExtenderVector.Size-1 do
+     begin
+      pobj:=fTEntityExtenderVector[i](pEntity,size);
+      if size>0 then
+        PGDBObjSubordinated(pEntity)^.AddExtension(pobj,size);
+     end;
+end;
+
 end.
 

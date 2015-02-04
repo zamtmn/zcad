@@ -23,9 +23,11 @@ interface
 uses
   gdbase;
 type
+{Export+}
   PTAbstractUnit=^TAbstractUnit;
   TAbstractUnit={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseobject)
             end;
+{Export-}
 implementation
 end.
 

@@ -478,6 +478,7 @@ begin
   bp.ListPos.owner:=own;
   geom.init;
   GetDXFIOFeatures.RunConstructorFeature(@self);
+  GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
 constructor GDBObjEntity.initnul;
 begin
@@ -486,6 +487,7 @@ begin
                        bp.ListPos.owner:=owner;
      geom.init;
      GetDXFIOFeatures.RunConstructorFeature(@self);
+     GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
 procedure GDBObjEntity.DrawWithOutAttrib;
 var lw: GDBInteger;

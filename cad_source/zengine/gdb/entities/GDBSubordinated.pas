@@ -20,7 +20,7 @@ unit GDBSubordinated;
 {$INCLUDE def.inc}
 
 interface
-uses gdbfieldprocessor,ugdbdrawingdef,strproc
+uses gdbentityextender,gdbfieldprocessor,ugdbdrawingdef,strproc
      {$IFNDEF DELPHI},LCLProc{$ENDIF},UGDBOpenArrayOfByte,
      gdbase,gdbasetypes,{varman,}varmandef,
      sysutils,UGDBLayerArray{,strutils};
@@ -29,9 +29,14 @@ type
 //PSelfInOwnerArray:TArrayIndex;(*'Индекс у владельца'*)
 
 {EXPORT+}
+GDBObjExtendable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+                                 EntExtensions:{-}TEntityExtensions{/GDBPointer/};
+                                 procedure AddExtension(ExtObj:PTBaseEntityExtender;ObjSize:GDBInteger);
+end;
+
 PGDBObjSubordinated=^GDBObjSubordinated;
 PGDBObjGenericWithSubordinated=^GDBObjGenericWithSubordinated;
-GDBObjGenericWithSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+GDBObjGenericWithSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjExtendable)
                                     OU:TFaceTypedData;(*'Variables'*)
                                     function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
                                     function ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
@@ -82,7 +87,13 @@ procedure extractvarfromdxfstring2(_Value:GDBString;out vn,vt,vun:GDBString);
 procedure extractvarfromdxfstring(_Value:GDBString;out vn,vt,vv,vun:GDBString);
 procedure OldVersVarRename(var vn,vt,vv,vun:GDBString);
 implementation
-uses shared,log;
+uses gdbobjectextender,shared,log;
+procedure GDBObjExtendable.AddExtension(ExtObj:PTBaseEntityExtender;ObjSize:GDBInteger);
+begin
+     if not assigned(EntExtensions) then
+                                        EntExtensions:=TEntityExtensions.create;
+     EntExtensions.AddExtension(ExtObj,ObjSize);
+end;
 destructor GDBObjSubordinated.done;
 begin
      inherited;

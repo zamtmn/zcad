@@ -173,10 +173,10 @@ var
    i:integer;
    tp:pointer;
 begin
+     ishavevars:=false;
+     if PEnt^.ou.Instance<>nil then
      if PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.vardescarray.Count>0 then
-                                                       ishavevars:=true
-                                                   else
-                                                       ishavevars:=false;
+                                                       ishavevars:=true;
      begin
          if ishavevars then
          begin

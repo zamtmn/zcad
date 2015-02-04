@@ -134,7 +134,7 @@ begin
                  if pv<>nil then
                  repeat
                    if pv^.Selected then
-                   if (pv^.GetObjType=GetObjType)or(GetObjType=0) then
+                   if ((pv^.GetObjType=GetObjType)or(GetObjType=0))and(pv^.ou.Instance<>nil) then
                    begin
                         pvdmy:=PTObjectUnit(pv^.ou.Instance)^.InterfaceVariables.findvardesc(pvd^.name);
                         if pvdmy<>nil then
@@ -191,7 +191,7 @@ begin
        if pv^.Selected then
        begin
        inc(self.SelCount);
-       if (pv^.GetObjType=GetObjType)or(GetObjType=0) then
+       if ((pv^.GetObjType=GetObjType)or(GetObjType=0))and(pv^.ou.Instance<>nil) then
        begin
             pu:=PTObjectUnit(pv^.ou.Instance)^.InterfaceUses.beginiterate(ir2);
             if pu<>nil then

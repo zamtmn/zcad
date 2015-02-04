@@ -20,7 +20,7 @@ unit GDBDevice;
 {$INCLUDE def.inc}
 
 interface
-uses gdbpalette,gdbobjectextender,Varman,gdbentityfactory,gdbdrawcontext,UGDBDrawingdef,GDBCamera,zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
+uses UGDBLayerArray,gdbpalette,gdbobjectextender,Varman,gdbentityfactory,gdbdrawcontext,UGDBDrawingdef,GDBCamera,zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
 uunitmanager{,shared},
 memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,{UGDBOpenArrayOfPV,}gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray{,UGDBDescriptor}{,UGDBLayerArray,oglwindowdef};
 
@@ -33,6 +33,7 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    lstonmouse:PGDBObjEntity;(*oi_readonly*)(*hidden_in_objinsp*)
                    function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                    constructor initnul;
+                   constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                    destructor done;virtual;
                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
                    procedure FormatEntity(const drawing:TDrawingDef);virtual;
@@ -272,6 +273,7 @@ begin
   //tvo.FromDXFPostProcessAfterAdd;
   tvo^.bp.ListPos.Owner:=own;
   result := tvo;
+  if ou.Instance<>nil then
   PTObjectUnit(ou.Instance)^.CopyTo(PTObjectUnit(tvo.ou.Instance));
   tvo^.BlockDesc:=BlockDesc;
 end;
@@ -539,7 +541,13 @@ begin
   calcbb;
   //format;
 end;
-
+constructor GDBObjDevice.init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+begin
+  inherited init(own,layeraddres,LW);
+  vp.ID:=GDBDeviceID;
+  VarObjArray.init({$IFDEF DEBUGBUILD}'{1C49F5F6-5AA4-493D-90FF-A86D9EA666CE}',{$ENDIF}100);
+  GetDXFIOFeatures.AddExtendersToEntity(@self);
+end;
 constructor GDBObjDevice.initnul;
 begin
   inherited initnul;

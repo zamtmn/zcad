@@ -83,7 +83,7 @@ begin
          until (i<=0)or(counter>maxitertations);
        end;
      until (not iterator.Next)or(counter>maxitertations);
-
+     iterator.destroy;
      if counter>maxitertations then
                         result:='!!ERR(Loop detected)'
                     else

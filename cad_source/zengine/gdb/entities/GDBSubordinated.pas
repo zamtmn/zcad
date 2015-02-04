@@ -32,6 +32,7 @@ type
 GDBObjExtendable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  EntExtensions:{-}TEntityExtensions{/GDBPointer/};
                                  procedure AddExtension(ExtObj:PTBaseEntityExtender;ObjSize:GDBInteger);
+                                 destructor done;virtual;
 end;
 
 PGDBObjSubordinated=^GDBObjSubordinated;
@@ -94,6 +95,11 @@ begin
                                         EntExtensions:=TEntityExtensions.create;
      EntExtensions.AddExtension(ExtObj,ObjSize);
 end;
+destructor GDBObjExtendable.done;
+begin
+     if assigned(EntExtensions)then
+       EntExtensions.destroy;
+end;
 destructor GDBObjSubordinated.done;
 begin
      inherited;
@@ -124,6 +130,7 @@ end;
 destructor GDBObjGenericWithSubordinated.done;
 begin
      //ou.done;
+     inherited;
 end;
 procedure GDBObjGenericWithSubordinated.FormatAfterDXFLoad;
 begin

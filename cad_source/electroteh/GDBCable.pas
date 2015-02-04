@@ -413,12 +413,14 @@ begin
   NodePropArray.init({$IFDEF DEBUGBUILD}'{28ED5BF5-7598-4903-A715-C525BC68C116}',{$ENDIF}1000,sizeof(TNodeProp));
   vp.ID := GDBCableID;
   PTObjectUnit(self.ou.Instance)^.init('cable');
+  GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
 constructor GDBObjCable.initnul;
 begin
   inherited initnul(owner);
   NodePropArray.init({$IFDEF DEBUGBUILD}'{28ED5BF5-7598-4903-A715-C525BC68C116}',{$ENDIF}1000,sizeof(TNodeProp));
   vp.ID := GDBCableID;
+  GetDXFIOFeatures.AddExtendersToEntity(@self);
   //OU.done;
   //OU.init('cable');
 end;

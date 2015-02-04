@@ -115,6 +115,7 @@ begin
      Formated:=false;
      ObjArray.initnul;
      Base:=nulvertex;
+     GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
 constructor GDBObjBlockdef.init;
 begin
@@ -125,6 +126,7 @@ begin
      //ObjArray.init({$IFDEF DEBUGBUILD}'{E5C5FEFE-BF2A-48FA-8E54-D1F406DA9462}',{$ENDIF}10000);
      Name:=_name;
      Base:=nulvertex;
+     GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
 class function GDBObjBlockdef.GetDXFIOFeatures:TDXFEntIODataManager;
 begin

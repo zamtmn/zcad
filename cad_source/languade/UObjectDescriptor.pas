@@ -504,6 +504,7 @@ var pcmd:PMetodDescriptor;
     pmd:PMetodDescriptor;
         ir:itrec;
 begin
+     programlog.LogOutStr(RD.TypeName,0);
      if self.TypeName='DeviceDbBaseObject' then
                                                TypeName:=TypeName;
      if rd^.TypeName='DbBaseObject' then

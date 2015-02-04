@@ -29,6 +29,8 @@ function FindEntityByVar(arr:GDBObjOpenArrayOfPV;objID:GDBWord;vname,vvalue:GDBS
 implementation
 function FindVariableInEnt(PEnt:PGDBObjEntity;varname:gdbstring):pvardesk;
 begin
+     result:=nil;
+     if PEnt^.ou.Instance<>nil then
      result:=PTObjectUnit(PEnt^.ou.Instance)^.FindVariable(varname);
      if result=nil then
      if PEnt^.bp.ListPos.Owner<>nil then

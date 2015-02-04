@@ -550,6 +550,7 @@ begin
      vp.ID := GDBNetID;
      graf.init(10000);
      riserarray.init({$IFDEF DEBUGBUILD}'{6D2E18F8-2C19-45B8-A12A-025849ABCDC2}',{$ENDIF}100);
+     GetDXFIOFeatures.AddExtendersToEntity(@self);
      //uunitmanager.units.loadunit(expandpath('*CAD\rtl\objdefunits\elwire.pas'),@ou);
 end;
 function GDBObjNet.EubEntryType;

@@ -251,6 +251,7 @@ var vd:vardesk;
 begin
      //if (pobj.vp.ID=GDBBlockInsertID)or
      //   (pobj.vp.ID=GDBCableID) then
+     if pobj^.ou.Instance<>nil then
         begin
              if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_HeadDevice')<>nil then
              if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_Metric')=nil then
@@ -413,6 +414,7 @@ begin
                                 end;
 
                                  newowner^.AddMi(@postobj);
+                                 if pobj^.ou.Instance<>nil then
                                  PTObjectUnit(pobj^.ou.Instance)^.CopyTo(PTObjectUnit(PGDBObjEntity(postobj)^.ou.Instance));
                                  if foc=0 then
                                               begin

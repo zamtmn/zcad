@@ -20,15 +20,41 @@ unit registerenitiesfeatures;
 
 interface
 uses sysutils,
-     zcadstrconsts,shared,gdbobjectsconstdef,devices,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,dxflow,
+     gdbentityextender,zcadstrconsts,shared,gdbobjectsconstdef,devices,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,dxflow,
      gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,gdbobjectextender,
      GDBSubordinated,GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,
      URecordDescriptor,UBaseTypeDescriptor,UGDBDrawingdef,memman;
+
+type
+PTTestExtende=^TTestExtende;
+TTestExtende={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseEntityExtender)
+    entityunit:tunit;
+    class function CreateTestExtender(pEntity:Pointer; out ObjSize:Integer):PTTestExtende;static;
+    constructor init(pEntity:Pointer);
+  end;
 
 var
    PFCTTD:GDBPointer=nil;
 
 implementation
+constructor TTestExtende.init;
+begin
+     entityunit.init('test');
+     entityunit.InterfaceUses.add(@SysUnit);
+     if PFCTTD=nil then
+                       PFCTTD:=sysunit.TypeName2PTD('PTObjectUnit');
+     PGDBObjEntity(pEntity).OU.Instance:=@entityunit;
+     PGDBObjEntity(pEntity).OU.PTD:=PFCTTD;
+end;
+
+class function TTestExtende.CreateTestExtender(pEntity:Pointer; out ObjSize:Integer):PTTestExtende;
+begin
+     ObjSize:=sizeof(TTestExtende);
+     GDBGetMem({$IFDEF DEBUGBUILD}'{30663E63-CA7B-43F7-90C6-5ACAD2061DB6}',{$ENDIF}result,ObjSize);
+     result.init(pentity);
+end;
+
+
 function EntIOLoad_OWNERHANDLE(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
 begin
      {$IFNDEF DELPHI}
@@ -59,11 +85,25 @@ begin
      PEnt^.vp.Layer:=drawing.getlayertable.getAddres(_value);
      result:=true;
 end;
+procedure addvariablestoentity(PEnt:PGDBObjEntity);
+var
+    ObjSize:Integer;
+    p:PTTestExtende;
+begin
+     p:=TTestExtende.CreateTestExtender(PEnt,ObjSize);
+     if ObjSize>0 then
+       PEnt^.AddExtension(p,ObjSize);
+
+end;
 function EntIOLoadUSES(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
 var
     uou:PTObjectUnit;
 begin
      uou:=pointer(units.findunit(_Value));
+     if PEnt^.ou.Instance=nil then
+     begin
+          addvariablestoentity(PEnt);
+     end;
      PTObjectUnit(PEnt^.ou.Instance)^.InterfaceUses.addnodouble(@uou);
      result:=true;
 end;
@@ -112,6 +152,10 @@ var
 begin
      extractvarfromdxfstring(_Value,vn,vt,vv,vun);
      OldVersVarRename(vn,vt,vv,vun);
+     if PEnt^.ou.Instance=nil then
+     begin
+          addvariablestoentity(PEnt);
+     end;
      PTObjectUnit(PEnt^.ou.Instance)^.setvardesc(vd,vn,vun,vt);
      PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
      PBaseTypeDescriptor(vd.data.PTD)^.SetValueFromString(vd.data.Instance,vv);
@@ -405,18 +449,18 @@ end;
 
 procedure ConstructorFeature(pEntity:PGDBObjEntity);
 begin
-     if PFCTTD=nil then
-                       PFCTTD:=sysunit.TypeName2PTD('PTObjectUnit');
-     memman.GDBGetMem(PGDBObjEntity(pEntity).OU.Instance,sizeof(TObjectUnit));
-     PTObjectUnit(PGDBObjEntity(pEntity).OU.Instance).init('Entity');
-     PTObjectUnit(PGDBObjEntity(pEntity).OU.Instance).InterfaceUses.add(@SysUnit);
-     PGDBObjEntity(pEntity).OU.PTD:=PFCTTD;
+     //if PFCTTD=nil then
+     //                  PFCTTD:=sysunit.TypeName2PTD('PTObjectUnit');
+     //memman.GDBGetMem(PGDBObjEntity(pEntity).OU.Instance,sizeof(TObjectUnit));
+     //PTObjectUnit(PGDBObjEntity(pEntity).OU.Instance).init('Entity');
+     //PTObjectUnit(PGDBObjEntity(pEntity).OU.Instance).InterfaceUses.add(@SysUnit);
+     //PGDBObjEntity(pEntity).OU.PTD:=PFCTTD;
 end;
 
 procedure DestructorFeature(pEntity:PGDBObjEntity);
 begin
-     PTObjectUnit(PGDBObjEntity(pEntity).OU.Instance).done;
-     memman.GDBFreeMem(PGDBObjEntity(pEntity).OU.Instance);
+     //PTObjectUnit(PGDBObjEntity(pEntity).OU.Instance).done;
+     //memman.GDBFreeMem(PGDBObjEntity(pEntity).OU.Instance);
 end;
 
 procedure GDBObjBlockDefLoadVarsFromFile(pEntity:PGDBObjBlockDef);
@@ -464,15 +508,23 @@ begin
   GDBObjBlockdef.GetDXFIOFeatures.RegisterNamedLoadFeature('_GROUP',@BlockDefIOLoad_GROUP);
   GDBObjBlockdef.GetDXFIOFeatures.RegisterNamedLoadFeature('_BORDER',@BlockDefIOLoad_BORDER);
   GDBObjBlockdef.GetDXFIOFeatures.RegisterAfterLoadFeature(@GDBObjBlockDefLoadVarsFromFile);
+  GDBObjBlockdef.GetDXFIOFeatures.RegisterEntityExtenderObject(@TTestExtende.CreateTestExtender);
 
   {from GDBObjDevice}
   GDBObjDevice.GetDXFIOFeatures.RegisterFormatFeature(@DeviceNameProcess);
   GDBObjDevice.GetDXFIOFeatures.RegisterFormatFeature(@DeviceSilaProcess);
+  GDBObjDevice.GetDXFIOFeatures.RegisterEntityExtenderObject(@TTestExtende.CreateTestExtender);
 
   {from GDBObjNet}
   GDBObjNet.GetDXFIOFeatures.RegisterFormatFeature(@DeviceNameProcess);
+  GDBObjNet.GetDXFIOFeatures.RegisterEntityExtenderObject(@TTestExtende.CreateTestExtender);
 
   {from GDBObjCable}
   GDBObjCable.GetDXFIOFeatures.RegisterFormatFeature(@CableNameProcess);
+  GDBObjCable.GetDXFIOFeatures.RegisterEntityExtenderObject(@TTestExtende.CreateTestExtender);
+
+
+  {test}
+  //GDBObjEntity.GetDXFIOFeatures.RegisterEntityExtenderObject(@TTestExtende.CreateTestExtender);
 end.
 

@@ -20,46 +20,14 @@ unit registerenitiesfeatures;
 
 interface
 uses sysutils,
-     gdbentityextender,zcadstrconsts,shared,gdbobjectsconstdef,devices,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,dxflow,
+     enitiesextendervariables,gdbentityextender,zcadstrconsts,shared,gdbobjectsconstdef,devices,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,dxflow,
      gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,gdbobjectextender,
      GDBSubordinated,GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,
      URecordDescriptor,UBaseTypeDescriptor,UGDBDrawingdef,memman;
-
-type
-PTTestExtende=^TTestExtende;
-TTestExtende={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseEntityExtender)
-    entityunit:tunit;
-    class function CreateTestExtender(pEntity:Pointer; out ObjSize:Integer):PTTestExtende;static;
-    constructor init(pEntity:Pointer);
-    destructor Done;virtual;
-  end;
-
 var
    PFCTTD:GDBPointer=nil;
 
 implementation
-constructor TTestExtende.init;
-begin
-     entityunit.init('test');
-     entityunit.InterfaceUses.add(@SysUnit);
-     if PFCTTD=nil then
-                       PFCTTD:=sysunit.TypeName2PTD('PTObjectUnit');
-     PGDBObjEntity(pEntity).OU.Instance:=@entityunit;
-     PGDBObjEntity(pEntity).OU.PTD:=PFCTTD;
-end;
-destructor TTestExtende.Done;
-begin
-     entityunit.done;
-end;
-
-class function TTestExtende.CreateTestExtender(pEntity:Pointer; out ObjSize:Integer):PTTestExtende;
-begin
-     ObjSize:=sizeof(TTestExtende);
-     GDBGetMem({$IFDEF DEBUGBUILD}'{30663E63-CA7B-43F7-90C6-5ACAD2061DB6}',{$ENDIF}result,ObjSize);
-     result.init(pentity);
-end;
-
-
 function EntIOLoad_OWNERHANDLE(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
 begin
      {$IFNDEF DELPHI}
@@ -90,27 +58,28 @@ begin
      PEnt^.vp.Layer:=drawing.getlayertable.getAddres(_value);
      result:=true;
 end;
-procedure addvariablestoentity(PEnt:PGDBObjEntity);
-var
-    ObjSize:Integer;
-    p:PTTestExtende;
-begin
-     p:=TTestExtende.CreateTestExtender(PEnt,ObjSize);
-     if ObjSize>0 then
-       PEnt^.AddExtension(p,ObjSize);
-
-end;
 function EntIOLoadUSES(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
 var
-    uou:PTObjectUnit;
+    usedunit:PTObjectUnit;
+    vardata:PTVariablesExtender;
 begin
-     uou:=pointer(units.findunit(_Value));
+     vardata:=PEnt^.GetExtension(typeof(TVariablesExtender));
+     usedunit:=pointer(units.findunit(_Value));
+     if vardata=nil then
+     begin
+          vardata:=addvariablestoentity(PEnt);
+     end;
+     vardata^.entityunit.InterfaceUses.addnodouble(@usedunit);
+     result:=true;
+     {vardata:=PEnt^.GetExtension(typeof(TVariablesExtender));
+     test:=@vardata^.entityunit;
+     usedunit:=pointer(units.findunit(_Value));
      if PEnt^.ou.Instance=nil then
      begin
           addvariablestoentity(PEnt);
      end;
-     PTObjectUnit(PEnt^.ou.Instance)^.InterfaceUses.addnodouble(@uou);
-     result:=true;
+     PTObjectUnit(PEnt^.ou.Instance)^.InterfaceUses.addnodouble(@usedunit);
+     result:=true;}
 end;
 function EntIOLoadDollar(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
 var
@@ -118,9 +87,12 @@ var
     pvd:pvardesk;
     offset:GDBInteger;
     tc:PUserTypeDescriptor;
+    vardata:PTVariablesExtender;
 begin
      extractvarfromdxfstring2(_Value,vn,svn,vv);
-     pvd:=PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.findvardesc(vn);
+     vardata:=PEnt^.GetExtension(typeof(TVariablesExtender));
+     pvd:=vardata^.entityunit.InterfaceVariables.findvardesc(vn);
+     //pvd:=PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.findvardesc(vn);
      offset:=GDBPlatformint(pvd.data.Instance);
      if pvd<>nil then
      begin
@@ -133,10 +105,14 @@ function EntIOLoadAmpersand(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDra
 var
     vn,vt,vun:GDBString;
     vd: vardesk;
+    vardata:PTVariablesExtender;
 begin
      extractvarfromdxfstring2(_Value,vn,vt,vun);
-     PTObjectUnit(PEnt^.ou.Instance)^.setvardesc(vd,vn,vun,vt);
-     PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
+     vardata:=PEnt^.GetExtension(typeof(TVariablesExtender));
+     vardata^.entityunit.setvardesc(vd,vn,vun,vt);
+     vardata^.entityunit.InterfaceVariables.createvariable(vd.name,vd);
+     //PTObjectUnit(PEnt^.ou.Instance)^.setvardesc(vd,vn,vun,vt);
+     //PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
      result:=true;
 end;
 function EntIOLoadPercent(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
@@ -154,15 +130,19 @@ function EntIOLoadHash(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingD
 var
     vn,vt,vv,vun:GDBString;
     vd: vardesk;
+    vardata:PTVariablesExtender;
 begin
      extractvarfromdxfstring(_Value,vn,vt,vv,vun);
      OldVersVarRename(vn,vt,vv,vun);
-     if PEnt^.ou.Instance=nil then
+     vardata:=PEnt^.GetExtension(typeof(TVariablesExtender));
+     if {PEnt^.ou.Instance}vardata=nil then
      begin
-          addvariablestoentity(PEnt);
+          vardata:=addvariablestoentity(PEnt);
      end;
-     PTObjectUnit(PEnt^.ou.Instance)^.setvardesc(vd,vn,vun,vt);
-     PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
+     vardata^.entityunit.setvardesc(vd,vn,vun,vt);
+     vardata^.entityunit.InterfaceVariables.createvariable(vd.name,vd);
+     //PTObjectUnit(PEnt^.ou.Instance)^.setvardesc(vd,vn,vun,vt);
+     //PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
      PBaseTypeDescriptor(vd.data.PTD)^.SetValueFromString(vd.data.Instance,vv);
      result:=true;
 end;
@@ -177,24 +157,26 @@ var
    str,sv:gdbstring;
    i:integer;
    tp:pointer;
+   vardata:PTVariablesExtender;
 begin
      ishavevars:=false;
-     if PEnt^.ou.Instance<>nil then
-     if PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.vardescarray.Count>0 then
+     vardata:=PEnt^.GetExtension(typeof(TVariablesExtender));
+     if vardata<>nil then
+     if vardata^.entityunit.InterfaceVariables.vardescarray.Count>0 then
                                                        ishavevars:=true;
      begin
          if ishavevars then
          begin
-              pvu:=PTObjectUnit(PEnt^.ou.Instance)^.InterfaceUses.beginiterate(ir);
+              pvu:=vardata^.entityunit.InterfaceUses.beginiterate(ir);
               if pvu<>nil then
               repeat
                     str:='USES='+pvu^.Name;
                     dxfGDBStringout(outhandle,1000,str);
-              pvu:=PTObjectUnit(PEnt^.ou.Instance)^.InterfaceUses.iterate(ir);
+              pvu:=vardata^.entityunit.InterfaceUses.iterate(ir);
               until pvu=nil;
 
               i:=0;
-              pvd:=PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.vardescarray.beginiterate(ir);
+              pvd:=vardata^.entityunit.InterfaceVariables.vardescarray.beginiterate(ir);
               if pvd<>nil then
               repeat
                     if (pvd^.data.PTD.GetTypeAttributes and TA_COMPOUND)=0 then
@@ -223,7 +205,7 @@ begin
                          inc(i);
                     end;
               inc(i);
-              pvd:=PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.vardescarray.iterate(ir);
+              pvd:=vardata^.entityunit.InterfaceVariables.vardescarray.iterate(ir);
               until pvd=nil;
          end;
          dxfGDBStringout(outhandle,1000,'_OWNERHANDLE='+inttohex(PEnt^.bp.ListPos.owner.GetHandle,10));
@@ -513,20 +495,16 @@ begin
   GDBObjBlockdef.GetDXFIOFeatures.RegisterNamedLoadFeature('_GROUP',@BlockDefIOLoad_GROUP);
   GDBObjBlockdef.GetDXFIOFeatures.RegisterNamedLoadFeature('_BORDER',@BlockDefIOLoad_BORDER);
   GDBObjBlockdef.GetDXFIOFeatures.RegisterAfterLoadFeature(@GDBObjBlockDefLoadVarsFromFile);
-  GDBObjBlockdef.GetDXFIOFeatures.RegisterEntityExtenderObject(@TTestExtende.CreateTestExtender);
 
   {from GDBObjDevice}
   GDBObjDevice.GetDXFIOFeatures.RegisterFormatFeature(@DeviceNameProcess);
   GDBObjDevice.GetDXFIOFeatures.RegisterFormatFeature(@DeviceSilaProcess);
-  GDBObjDevice.GetDXFIOFeatures.RegisterEntityExtenderObject(@TTestExtende.CreateTestExtender);
 
   {from GDBObjNet}
   GDBObjNet.GetDXFIOFeatures.RegisterFormatFeature(@DeviceNameProcess);
-  GDBObjNet.GetDXFIOFeatures.RegisterEntityExtenderObject(@TTestExtende.CreateTestExtender);
 
   {from GDBObjCable}
   GDBObjCable.GetDXFIOFeatures.RegisterFormatFeature(@CableNameProcess);
-  GDBObjCable.GetDXFIOFeatures.RegisterEntityExtenderObject(@TTestExtende.CreateTestExtender);
 
 
   {test}

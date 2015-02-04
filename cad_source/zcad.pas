@@ -103,7 +103,8 @@ uses
   zcadstrconsts,
   iopalette,
   gdbfieldprocessorimpl,
-  registerenitiesfeatures;
+  registerenitiesfeatures,
+  registerenitiesextenders;
   //RegCnownTypes,URegisterObjects;
 
 //exports HistoryOut,redrawoglwnd,updatevisible,reloadlayer; {shared}

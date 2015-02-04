@@ -33,7 +33,7 @@ uses
   ExtCtrls,Controls,
   gdbasetypes,sysutils,
   {$IFNDEF DELPHI}{GLext,gl,glu,}OpenGLContext,{$ELSE}dglOpenGL,UOpenGLControl,{$ENDIF}
-  gdbase,varmandef,varman,UUnitManager,
+  gdbase,{varmandef,varman,UUnitManager,}
   oglwindowdef,
   GDBHelpObj,
   sysinfo,

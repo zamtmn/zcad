@@ -20,7 +20,7 @@ unit GDBDevice;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBLayerArray,gdbpalette,gdbobjectextender,Varman,gdbentityfactory,gdbdrawcontext,UGDBDrawingdef,GDBCamera,zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
+uses UGDBLayerArray,gdbpalette,gdbobjectextender,uabstractunit,{Varman,}gdbentityfactory,gdbdrawcontext,UGDBDrawingdef,GDBCamera,zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
 uunitmanager{,shared},
 memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,{UGDBOpenArrayOfPV,}gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray{,UGDBDescriptor}{,UGDBLayerArray,oglwindowdef};
 
@@ -273,8 +273,10 @@ begin
   //tvo.FromDXFPostProcessAfterAdd;
   tvo^.bp.ListPos.Owner:=own;
   result := tvo;
-  if ou.Instance<>nil then
-  PTObjectUnit(ou.Instance)^.CopyTo(PTObjectUnit(tvo.ou.Instance));
+  if assigned(EntExtensions)then
+    EntExtensions.RunOnCloneProcedures(@self,tvo);
+  {if ou.Instance<>nil then
+  PTObjectUnit(ou.Instance)^.CopyTo(PTObjectUnit(tvo.ou.Instance));}
   tvo^.BlockDesc:=BlockDesc;
 end;
 function GDBObjDevice.DeSelect;
@@ -442,7 +444,9 @@ begin
           ConstObjArray.Shrink;
           VarObjArray.Shrink;
           self.BlockDesc:=pblockdef.BlockDesc;
-          PTObjectUnit(pblockdef^.ou.Instance)^.copyto(PTObjectUnit(ou.Instance));
+          if assigned(EntExtensions)then
+            EntExtensions.RunOnBuildVarGeometryProcedures(@self,drawing);
+          //PTObjectUnit(pblockdef^.ou.Instance)^.copyto(PTObjectUnit(ou.Instance));
           end;
 end;
 procedure GDBObjDevice.BuildGeometry;
@@ -571,7 +575,7 @@ var pvn,{pvnt,}pvp,pvphase,pvi,pvcos:pvardesk;
     calcip:TCalcIP;
     u:gdbdouble;
 begin
-         if PTObjectUnit(ou.Instance)^.InterfaceVariables.vardescarray.Count=0 then
+         //if PTObjectUnit(ou.Instance)^.InterfaceVariables.vardescarray.Count=0 then
                                                         begin
                                                              //GDB.BlockDefArray.getblockdef(name)^.OU.CopyTo(@ou);
                                                         end;
@@ -659,7 +663,7 @@ begin
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
 end;
-function UpgradeBlockInsert2Device(ptu:PTUnit;pent:PGDBObjBlockInsert;const drawing:TDrawingDef):PGDBObjDevice;
+function UpgradeBlockInsert2Device(ptu:PTAbstractUnit;pent:PGDBObjBlockInsert;const drawing:TDrawingDef):PGDBObjDevice;
 begin
      pent^.index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(pent^.name));
      result:=nil;

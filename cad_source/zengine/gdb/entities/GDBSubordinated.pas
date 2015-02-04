@@ -32,6 +32,7 @@ type
 GDBObjExtendable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  EntExtensions:{-}TEntityExtensions{/GDBPointer/};
                                  procedure AddExtension(ExtObj:PTBaseEntityExtender;ObjSize:GDBInteger);
+                                 function GetExtension(_ExtType:pointer):{PTBaseEntityExtender}pointer;
                                  destructor done;virtual;
 end;
 
@@ -95,6 +96,14 @@ begin
                                         EntExtensions:=TEntityExtensions.create;
      EntExtensions.AddExtension(ExtObj,ObjSize);
 end;
+function GDBObjExtendable.GetExtension(_ExtType:pointer):{PTBaseEntityExtender}pointer;
+begin
+     if assigned(EntExtensions) then
+                                    result:=EntExtensions.GetExtension(_ExtType)
+                                else
+                                    result:=nil;
+end;
+
 destructor GDBObjExtendable.done;
 begin
      if assigned(EntExtensions)then

@@ -20,7 +20,7 @@ unit GDBBlockInsert;
 
 interface
 uses uabstractunit,gdbentityfactory,ugdbdrawingdef,UGDBLayerArray{,UGDBLayerArray},math,gdbasetypes,GDBComplex,{GDBGenericSubEntry,}SysInfo,sysutils,
-{UGDBOpenArrayOfPV,}UGDBObjBlockdefArray{,UGDBSelectedObjArray,UGDBVisibleOpenArray},gdbEntity,varman{,varmandef},
+{UGDBOpenArrayOfPV,}UGDBObjBlockdefArray{,UGDBSelectedObjArray,UGDBVisibleOpenArray},gdbEntity{,varman,varmandef},
 GDBBlockDef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBSubordinated,UGDBOpenArrayOfByte;
 const zcadmetric='!!ZMODIFIER:';
@@ -409,17 +409,19 @@ begin
   result := tvo;
 end;
 procedure GDBObjBlockInsert.BuildVarGeometry;
-var pblockdef:PGDBObjBlockdef;
+{var pblockdef:PGDBObjBlockdef;
     //pvisible,pvisible2:PGDBObjEntity;
     //freelayer:PGDBLayerProp;
     //i:GDBInteger;
-    //varobject:gdbboolean;
+    //varobject:gdbboolean;}
 begin
+{
      //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
      index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
      //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
      pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getelement(index);
      PTObjectUnit(pblockdef^.ou.Instance)^.copyto(PTObjectUnit(ou.Instance));
+}
 end;
 procedure GDBObjBlockInsert.BuildGeometry;
 var pblockdef:PGDBObjBlockdef;

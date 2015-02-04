@@ -20,7 +20,7 @@ unit gdbentityextender;
 {$INCLUDE def.inc}
 
 interface
-uses uabstractunit,UGDBDrawingdef,gdbasetypes,gdbase,usimplegenerics,gvector,UGDBOpenArrayOfByte;
+uses memman,uabstractunit,UGDBDrawingdef,gdbasetypes,gdbase,usimplegenerics,gvector,UGDBOpenArrayOfByte;
 
 type
 TBaseObjExtender={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -56,7 +56,16 @@ begin
      fEntityExtensions:=TEntityExtenderVector.Create;
 end;
 destructor TEntityExtensions.destroy;
+var
+  i:integer;
+  p:PTBaseEntityExtender;
 begin
+     for i:=0 to fEntityExtensions.Size-1 do
+     begin
+       p:=fEntityExtensions[i];
+       p^.Done;
+       GDBFreeMem(p);
+     end;
      fEntityExtensions.Destroy;
 end;
 end.

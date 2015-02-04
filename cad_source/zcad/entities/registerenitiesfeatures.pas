@@ -31,6 +31,7 @@ TTestExtende={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseEntityExtender)
     entityunit:tunit;
     class function CreateTestExtender(pEntity:Pointer; out ObjSize:Integer):PTTestExtende;static;
     constructor init(pEntity:Pointer);
+    destructor Done;virtual;
   end;
 
 var
@@ -45,6 +46,10 @@ begin
                        PFCTTD:=sysunit.TypeName2PTD('PTObjectUnit');
      PGDBObjEntity(pEntity).OU.Instance:=@entityunit;
      PGDBObjEntity(pEntity).OU.PTD:=PFCTTD;
+end;
+destructor TTestExtende.Done;
+begin
+     entityunit.done;
 end;
 
 class function TTestExtende.CreateTestExtender(pEntity:Pointer; out ObjSize:Integer):PTTestExtende;

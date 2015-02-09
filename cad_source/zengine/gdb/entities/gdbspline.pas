@@ -20,7 +20,7 @@ unit gdbspline;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentityfactory,gdbdrawcontext,OGLSpecFunc,UGDBOpenArrayOfData,UGDBPoint3DArray,UGDBDrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},GDBEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
+uses uabstractunit,gdbentityfactory,gdbdrawcontext,OGLSpecFunc,UGDBOpenArrayOfData,UGDBPoint3DArray,UGDBDrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},GDBEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman;
 type
 {REGISTEROBJECTTYPE GDBObjSpline}
@@ -36,7 +36,7 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  destructor done;virtual;
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTAbstractUnit;const drawing:TDrawingDef);virtual;
 
                  procedure FormatEntity(const drawing:TDrawingDef);virtual;
                  procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
@@ -47,7 +47,7 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
-                 function FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
+                 function FromDXFPostProcessBeforeAdd(ptu:PTAbstractUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;

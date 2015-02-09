@@ -20,7 +20,7 @@ unit gdbentityextender;
 {$INCLUDE def.inc}
 
 interface
-uses memman,uabstractunit,UGDBDrawingdef,gdbasetypes,gdbase,usimplegenerics,
+uses memman,UGDBDrawingdef,gdbasetypes,gdbase,usimplegenerics,
      gvector,gmap,UGDBOpenArrayOfByte;
 
 type

@@ -69,6 +69,7 @@ begin
      counter:=0;
      iterator:=Prefix2ProcessFunc.Min;
      if assigned(iterator) then
+     begin
      repeat
        s2:=iterator.key;
        if assigned(iterator.value)then
@@ -84,6 +85,7 @@ begin
        end;
      until (not iterator.Next)or(counter>maxitertations);
      iterator.destroy;
+     end;
      if counter>maxitertations then
                         result:='!!ERR(Loop detected)'
                     else

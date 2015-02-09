@@ -1432,6 +1432,9 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
 //Generate on E:\zcad\CAD_SOURCE\zengine\gdb\entities\GDBSubordinated.pas
 GDBObjExtendable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  EntExtensions:GDBPointer;
+                                 procedure AddExtension(ExtObj:PTBaseEntityExtender;ObjSize:GDBInteger);
+                                 function GetExtension(_ExtType:pointer):{PTBaseEntityExtender}pointer;
+                                 destructor done;virtual;abstract;
 end;
 PGDBObjSubordinated=^GDBObjSubordinated;
 PGDBObjGenericWithSubordinated=^GDBObjGenericWithSubordinated;
@@ -2277,6 +2280,7 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    lstonmouse:PGDBObjEntity;(*oi_readonly*)(*hidden_in_objinsp*)
                    function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                    constructor initnul;
+                   constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                    destructor done;virtual;abstract;
                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;abstract;
                    procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;

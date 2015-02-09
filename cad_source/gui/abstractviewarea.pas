@@ -23,7 +23,7 @@ uses {gdbase,gdbasetypes,
      UGDBLayerArray,ugdbltypearray,UGDBTextStyleArray,ugdbdimstylearray,UGDBPoint3DArray,
      oglwindowdef,gdbdrawcontext,UGDBEntTree,ugdbabstractdrawing,
      uinfoform,}
-     uzglabstractdrawer,GDBGenericSubEntry,gdbase,gdbasetypes,
+     UGDBOpenArrayOfPV,uzglabstractdrawer,GDBGenericSubEntry,gdbase,gdbasetypes,
      oglwindowdef,gdbdrawcontext,varmandef,{Varman,}UGDBPoint3DArray,UGDBEntTree,geometry,ugdbabstractdrawing,
      shared,sysutils,
      ExtCtrls,Controls,Classes,LCLType,Forms,zcadsysvars,GDBEntity,LMessages;
@@ -48,6 +48,11 @@ type
                 property onpaint;
                 end;
     TCameraChangedNotify=procedure of object;
+    TAbstractViewArea=class;
+    TOnWaMouseDown=function (Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;OnMouseEntity:GDBPointer):boolean of object;
+    TOnWaMouseSelect=procedure (Sender:TAbstractViewArea;SelectedEntity:GDBPointer) of object;
+    TOnGetEntsDesc=function (ents:PGDBObjOpenArrayOfPV):GDBString of object;
+    TWAGeneralMethod=procedure (Sender:TAbstractViewArea) of object;
     TAbstractViewArea=class(tcomponent)
                            public
                            Drawer:TZGLAbstractDrawer;
@@ -62,6 +67,10 @@ type
                            MainMouseDown:function:boolean of object;
                            tocommandmcliccount:GDBInteger;
                            currentmousemovesnaptogrid:GDBBoolean;
+                           OnWaMouseDown:TOnWaMouseDown;
+                           OnWaMouseSelect:TOnWaMouseSelect;
+                           OnGetEntsDesc:TOnGetEntsDesc;
+                           OnSetObjInsp:TWAGeneralMethod;
 
                            procedure GDBActivate;virtual;abstract;
                            procedure GDBActivateGLContext;virtual;abstract;

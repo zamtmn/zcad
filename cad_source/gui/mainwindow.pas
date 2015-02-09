@@ -30,7 +30,7 @@ uses
   {FPC}
        //math,
   {ZCAD BASE}
-       gdbpalette,paths,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
+       UGDBOpenArrayOfPV,ugdbabstractdrawing,gdbpalette,paths,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
        geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,log,
        varmandef, varman,UUnitManager,SysInfo,shared,strmy,UGDBTextStyleArray,ugdbdimstylearray,
   {ZCAD SIMPLE PASCAL SCRIPT}
@@ -129,6 +129,10 @@ type
 
     procedure PageControlMouseDown(Sender: TObject;Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure correctscrollbars;
+    function wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer):boolean;
+    procedure wams(Sender:TAbstractViewArea;SelectedEntity:GDBPointer);
+    function GetEntsDesc(ents:PGDBObjOpenArrayOfPV):GDBString;
+    procedure waSetObjInsp(Sender:TAbstractViewArea);
 
 
     public
@@ -2766,6 +2770,142 @@ else if sender=VScrollBar then
      pdwg.wa.SetCameraPosZoom(nevpos,PDWG.Getpcamera^.prop.zoom,true);
      pdwg.wa.draworinvalidate;
   end;
+end;
+function MainForm.wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer):boolean;
+begin
+  if ssDouble in shift then
+                           begin
+                                if mbLeft=button then
+                                  begin
+                                       if assigned(OnMouseObject) then
+                                         if (PGDBObjEntity(OnMouseObject).vp.ID=GDBtextID)
+                                         or (PGDBObjEntity(OnMouseObject).vp.ID=GDBMTextID) then
+                                           begin
+                                                 RunTextEditor(OnMouseObject,Sender.PDWG^);
+                                           end;
+                                       exit(true);
+                                  end;
+
+                           end;
+  result:=false;
+end;
+function SelectRelatedObjects(PDWG:PTAbstractDrawing;param:POGLWndtype;pent:PGDBObjEntity):GDBInteger;
+var
+   pvname,pvname2:pvardesk;
+   ir:itrec;
+   pobj:PGDBObjEntity;
+begin
+     result:=0;
+     if pent=nil then
+                     exit;
+     if assigned(sysvar.DSGN.DSGN_SelSameName)then
+     if sysvar.DSGN.DSGN_SelSameName^ then
+     begin
+          if (pent^.vp.ID=GDBDeviceID)or(pent^.vp.ID=GDBCableID)or(pent^.vp.ID=GDBNetID)then
+          begin
+               pvname:=PTObjectUnit(pent^.ou.Instance)^.FindVariable('NMO_Name');
+               if pvname<>nil then
+               begin
+                   pobj:=pdwg.GetCurrentROOT.ObjArray.beginiterate(ir);
+                   if pobj<>nil then
+                   repeat
+                         if (pobj<>pent)and((pobj^.vp.ID=GDBDeviceID)or(pobj^.vp.ID=GDBCableID)or(pobj^.vp.ID=GDBNetID)) then
+                         begin
+                              pvname2:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
+                              if pvname2<>nil then
+                              if pgdbstring(pvname2^.data.Instance)^=pgdbstring(pvname^.data.Instance)^ then
+                              begin
+                                   if pobj^.select(pdwg.GetSelObjArray,param.SelDesc.Selectedobjcount)then
+                                                                                                          inc(result);
+                              end;
+                         end;
+                         pobj:=pdwg.GetCurrentROOT.ObjArray.iterate(ir);
+                   until pobj=nil;
+               end;
+          end;
+     end;
+end;
+
+procedure MainForm.wams(Sender:TAbstractViewArea;SelectedEntity:GDBPointer);
+var
+    RelSelectedObjects:Integer;
+begin
+  RelSelectedObjects:=SelectRelatedObjects(Sender.PDWG,@Sender.param,Sender.param.SelDesc.LastSelectedObject);
+  if (commandmanager.pcommandrunning=nil)or(commandmanager.pcommandrunning^.IData.GetPointMode<>TGPWaitEnt) then
+  begin
+  if PGDBObjEntity(Sender.param.SelDesc.OnMouseObject)^.select(Sender.PDWG^.GetSelObjArray,Sender.param.SelDesc.Selectedobjcount) then
+    begin
+          if assigned(addoneobjectproc) then addoneobjectproc;
+          Sender.SetObjInsp;
+          if assigned(updatevisibleproc) then updatevisibleproc;
+    end;
+  end;
+end;
+function MainForm.GetEntsDesc(ents:PGDBObjOpenArrayOfPV):GDBString;
+var
+  i: GDBInteger;
+  pp:PGDBObjEntity;
+  ir:itrec;
+  //inr:TINRect;
+  line:GDBString;
+  pvd:pvardesk;
+begin
+     result:='';
+     i:=0;
+     pp:=ents.beginiterate(ir);
+     if pp<>nil then
+                    begin
+                         repeat
+                         pvd:=nil;
+                         if pp.ou.Instance<>nil then
+                         pvd:=PTObjectUnit(pp.ou.Instance)^.FindVariable('NMO_Name');
+                         if pvd<>nil then
+                                         begin
+                                         if i=20 then
+                                         begin
+                                              result:=result+#13#10+'...';
+                                              exit;
+                                         end;
+                                         line:=pp^.GetObjName+' Layer='+pp^.vp.Layer.GetFullName;
+                                         line:=line+' Name='+pvd.data.PTD.GetValueAsString(pvd.data.Instance);
+                                         if result='' then
+                                                          result:=line
+                                                      else
+                                                          result:=result+#13#10+line;
+                                         inc(i);
+                                         end;
+                               pp:=ents.iterate(ir);
+                         until pp=nil;
+                    end;
+end;
+procedure MainForm.waSetObjInsp;
+var
+    tn:GDBString;
+    ptype:PUserTypeDescriptor;
+begin
+  if Sender.param.SelDesc.Selectedobjcount>1 then
+    begin
+       commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',Sender.pdwg,@Sender.param);
+    end
+  else
+  begin
+  if assigned(SysVar.DWG.DWG_SelectedObjToInsp)then
+  if (Sender.param.SelDesc.LastSelectedObject <> nil)and SysVar.DWG.DWG_SelectedObjToInsp^ then
+  begin
+       tn:=PGDBObjEntity(Sender.param.SelDesc.LastSelectedObject)^.GetObjTypeName;
+       ptype:=SysUnit.TypeName2PTD(tn);
+       if ptype<>nil then
+       begin
+            If assigned(SetGDBObjInspProc)then
+            SetGDBObjInspProc(ptype,Sender.param.SelDesc.LastSelectedObject,Sender.pdwg);
+       end;
+  end
+  else
+  begin
+    If assigned(ReturnToDefaultProc)then
+    ReturnToDefaultProc;
+  end;
+  end
 end;
 
 procedure MainForm.correctscrollbars;

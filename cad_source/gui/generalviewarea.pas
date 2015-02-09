@@ -20,10 +20,10 @@ unit generalviewarea;
 {$INCLUDE def.inc}
 interface
 uses
-     gdbpalette,GDBHelpObj{нужно убрать},texteditor,
+     gdbpalette,GDBHelpObj{нужно убрать},
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
      UGDBLayerArray,ugdbdimstylearray,
-     oglwindowdef,gdbdrawcontext,varmandef,zcadsysvars,GDBEntity,Varman,zcadinterface,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
+     oglwindowdef,gdbdrawcontext,varmandef,zcadsysvars,GDBEntity,zcadinterface,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
      gdbobjectsconstdef,shared,zcadstrconsts,UGDBTracePropArray,math,sysutils,commandlinedef,UGDBDrawingdef,strproc,
      ExtCtrls,Controls,Classes,LCLType,Forms,UGDBOpenArrayOfPV,GDBGenericSubEntry,GDBCamera,UGDBVisibleOpenArray,uzglabstractdrawer,abstractviewarea;
 const
@@ -81,7 +81,6 @@ type
                            procedure SetOTrackTimer(Sender: TObject);override;
                            procedure KillOHintTimer(Sender: TObject);override;
                            procedure SetOHintTimer(Sender: TObject);override;
-                           function GetOnMouseObjDesc:GDBString;virtual;
                            procedure getosnappoint(radius: GDBFloat);override;
                            procedure getonmouseobject(pva: PGDBObjEntityOpenArray);virtual;
                            function findonmobj(pva: PGDBObjEntityOpenArray; var i: GDBInteger): GDBInteger;virtual;
@@ -90,7 +89,6 @@ type
                            procedure AddOntrackpoint;override;
                            procedure CorrectMouseAfterOS;override;
                            function CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;override;
-                           function SelectRelatedObjects(pent:PGDBObjEntity):GDBInteger;override;
                            procedure sendcoordtocommand(coord:GDBVertex;key: GDBByte);virtual;
                            procedure sendmousecoordwop(key: GDBByte);override;
                            procedure sendmousecoord(key: GDBByte);override;
@@ -1806,16 +1804,8 @@ var key: GDBByte;
                           PDWG^.GetSelObjArray.clearallobjects;
                     end;
                     param.SelDesc.LastSelectedObject := param.SelDesc.OnMouseObject;
-                    RelSelectedObjects:=SelectRelatedObjects(param.SelDesc.LastSelectedObject);
-                    if (commandmanager.pcommandrunning=nil)or(commandmanager.pcommandrunning^.IData.GetPointMode<>TGPWaitEnt) then
-                    begin
-                    if PGDBObjEntity(param.SelDesc.OnMouseObject)^.select(PDWG^.GetSelObjArray,param.SelDesc.Selectedobjcount) then
-                      begin
-                            if assigned(addoneobjectproc) then addoneobjectproc;
-                            SetObjInsp;
-                            if assigned(updatevisibleproc) then updatevisibleproc;
-                      end;
-                    end;
+                    if assigned(OnWaMouseSelect)then
+                      OnWaMouseSelect(self,param.SelDesc.LastSelectedObject);
                end
            else
                begin
@@ -1859,6 +1849,9 @@ begin
                                 SetCurrentDWGProc(pdwg);
   //ActivePopupMenu:=ActivePopupMenu;
   NeedRedraw:=false;
+  if assigned(OnWaMouseDown) then
+  if OnWaMouseDown(self,Button,Shift,X, Y,param.SelDesc.OnMouseObject) then
+    exit;
   if ssDouble in shift then
                            begin
                                 if mbMiddle=button then
@@ -1872,20 +1865,8 @@ begin
                                        //Pre_MBMouseDblClk(Button,Shift,X, Y);
                                        {exclude(shift,ssdouble);
                                        exclude(shift,ssMiddle);}
-                                       inherited;
                                        exit;
                                   end;
-                                if mbLeft=button then
-                                  begin
-                                       if assigned(param.SelDesc.OnMouseObject) then
-                                         if (PGDBObjEntity(param.SelDesc.OnMouseObject).vp.ID=GDBtextID)
-                                         or (PGDBObjEntity(param.SelDesc.OnMouseObject).vp.ID=GDBMTextID) then
-                                           begin
-                                                 RunTextEditor(param.SelDesc.OnMouseObject,self.PDWG^);
-                                           end;
-                                       exit;
-                                  end;
-
                            end;
   if ssRight in shift then
                            begin
@@ -2086,42 +2067,6 @@ begin
            project0axis;
      end;
      //end;
-end;
-function TGeneralViewArea.SelectRelatedObjects(pent:PGDBObjEntity):GDBInteger;
-var
-   pvname,pvname2:pvardesk;
-   ir:itrec;
-   pobj:PGDBObjEntity;
-begin
-     result:=0;
-     if pent=nil then
-                     exit;
-     if assigned(sysvar.DSGN.DSGN_SelSameName)then
-     if sysvar.DSGN.DSGN_SelSameName^ then
-     begin
-          if (pent^.vp.ID=GDBDeviceID)or(pent^.vp.ID=GDBCableID)or(pent^.vp.ID=GDBNetID)then
-          begin
-               pvname:=PTObjectUnit(pent^.ou.Instance)^.FindVariable('NMO_Name');
-               if pvname<>nil then
-               begin
-                   pobj:=pdwg.GetCurrentROOT.ObjArray.beginiterate(ir);
-                   if pobj<>nil then
-                   repeat
-                         if (pobj<>pent)and((pobj^.vp.ID=GDBDeviceID)or(pobj^.vp.ID=GDBCableID)or(pobj^.vp.ID=GDBNetID)) then
-                         begin
-                              pvname2:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
-                              if pvname2<>nil then
-                              if pgdbstring(pvname2^.data.Instance)^=pgdbstring(pvname^.data.Instance)^ then
-                              begin
-                                   if pobj^.select(pdwg.GetSelObjArray,param.SelDesc.Selectedobjcount)then
-                                                                                                          inc(result);
-                              end;
-                         end;
-                         pobj:=pdwg.GetCurrentROOT.ObjArray.iterate(ir);
-                   until pobj=nil;
-               end;
-          end;
-     end;
 end;
 function TGeneralViewArea.CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;
 begin
@@ -2503,7 +2448,10 @@ end;
 
 procedure TGeneralViewArea.SetOHintTimer(Sender: TObject);
 begin
-    getviewcontrol.Hint:=GetOnMouseObjDesc;
+    if assigned(OnGetEntsDesc)then
+                                  getviewcontrol.Hint:=OnGetEntsDesc(PDWG^.GetOnMouseObj)
+                              else
+                                  getviewcontrol.Hint:='';
     getviewcontrol.ShowHint:=true;
     if getviewcontrol.hint<>'' then
     Application.ActivateHint(getviewcontrol.ClientToScreen(Point(param.md.mouse.x,param.md.mouse.y)))
@@ -2517,43 +2465,6 @@ begin
                                         OHTimer.Enabled:=true;
 
                                    end;
-end;
-function TGeneralViewArea.GetOnMouseObjDesc:GDBString;
-var
-  i: GDBInteger;
-  pp:PGDBObjEntity;
-  ir:itrec;
-  //inr:TINRect;
-  line:GDBString;
-  pvd:pvardesk;
-begin
-     result:='';
-     i:=0;
-     pp:=PDWG.GetOnMouseObj.beginiterate(ir);
-     if pp<>nil then
-                    begin
-                         repeat
-                         pvd:=nil;
-                         if pp.ou.Instance<>nil then
-                         pvd:=PTObjectUnit(pp.ou.Instance)^.FindVariable('NMO_Name');
-                         if pvd<>nil then
-                                         begin
-                                         if i=20 then
-                                         begin
-                                              result:=result+#13#10+'...';
-                                              exit;
-                                         end;
-                                         line:=pp^.GetObjName+' Layer='+pp^.vp.Layer.GetFullName;
-                                         line:=line+' Name='+pvd.data.PTD.GetValueAsString(pvd.data.Instance);
-                                         if result='' then
-                                                          result:=line
-                                                      else
-                                                          result:=result+#13#10+line;
-                                         inc(i);
-                                         end;
-                               pp:=PDWG.GetOnMouseObj.iterate(ir);
-                         until pp=nil;
-                    end;
 end;
 procedure TGeneralViewArea.CalcMouseFrustum;
 var
@@ -3710,34 +3621,9 @@ begin
      param.md.WPPointUR.y:=ph;
 end;
 procedure TGeneralViewArea.SetObjInsp;
-var
-    tn:GDBString;
-    ptype:PUserTypeDescriptor;
 begin
-
-  if param.SelDesc.Selectedobjcount>1 then
-    begin
-       commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',pdwg,@param);
-    end
-  else
-  begin
-  if assigned(SysVar.DWG.DWG_SelectedObjToInsp)then
-  if (param.SelDesc.LastSelectedObject <> nil)and SysVar.DWG.DWG_SelectedObjToInsp^ then
-  begin
-       tn:=PGDBObjEntity(param.SelDesc.LastSelectedObject)^.GetObjTypeName;
-       ptype:=SysUnit.TypeName2PTD(tn);
-       if ptype<>nil then
-       begin
-            If assigned(SetGDBObjInspProc)then
-            SetGDBObjInspProc(ptype,param.SelDesc.LastSelectedObject,pdwg);
-       end;
-  end
-  else
-  begin
-    If assigned(ReturnToDefaultProc)then
-    ReturnToDefaultProc;
-  end;
-  end
+     if assigned(OnSetObjInsp)then
+                                  OnSetObjInsp(self);
 end;
 
 begin

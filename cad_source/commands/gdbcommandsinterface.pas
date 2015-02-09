@@ -199,9 +199,13 @@ begin
      //wpowner:={TOpenGLViewArea}TCanvasViewArea.Create(myts);
      wpowner:=GetCurrentBackEnd.Create(myts);
      wpowner.onCameraChanged:=MainFormN.correctscrollbars;
+     wpowner.OnWaMouseDown:=MainFormN.wamd;
+     wpowner.OnWaMouseSelect:=MainFormN.wams;
+     wpowner.OnGetEntsDesc:=MainFormN.GetEntsDesc;
      wpowner.ShowCXMenu:=MainFormN.ShowCXMenu;
      wpowner.MainMouseMove:=MainFormN.MainMouseMove;
      wpowner.MainMouseDown:=MainFormN.MainMouseDown;
+     wpowner.OnSetObjInsp:=MainFormN.waSetObjInsp;
      oglwnd:=wpowner.getviewcontrol;// TOGLWnd.Create(myts);
 
 

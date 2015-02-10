@@ -44,6 +44,7 @@ uses
   //gdbobjectsconstdef,
   GDBEntity,
  shared,
+ ugdbdrawing,
   {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}AboutWnd,HelpWnd,memman,WindowsSpecific,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}log,Varman,UGDBNumerator,cmdline,
  AnchorDocking,dialogs,XMLPropStorage,xmlconf,openglviewarea{,

@@ -21,7 +21,7 @@ unit GDBCommandsDB;
 
 interface
 uses
-  gdbobjectsconstdef,zcadstrconsts,plugins,
+  ugdbdrawing,gdbobjectsconstdef,zcadstrconsts,plugins,
   commandlinedef,
   commanddefinternal,
   gdbase,

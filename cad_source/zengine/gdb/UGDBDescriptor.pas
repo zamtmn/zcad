@@ -73,14 +73,14 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     procedure FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:GDBOpenArrayOfPObjects);
                     procedure FindMultiEntityByVar2(objID:GDBWord;vname:GDBString;var entarray:GDBOpenArrayOfPObjects);
                     procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
-                    procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
+                    //procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
                     function GetDefaultDrawingName:GDBString;
                     function FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
               end;
 {EXPORT-}
 var GDB: GDBDescriptor;
-    BlockBaseDWG:PTDrawing=nil;
-    ClipboardDWG:PTDrawing=nil;
+    BlockBaseDWG:{PTDrawing}PTSimpleDrawing=nil;
+    ClipboardDWG:{PTDrawing}PTSimpleDrawing=nil;
     //GDBTrash:GDBObjTrash;
     LtypeManager:GDBLtypeArray;
 procedure CalcZ(z:GDBDouble);
@@ -136,17 +136,17 @@ begin
        result:=iterate(ir);
   until result=nil;
 end;
- procedure GDBDescriptor.AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
+ {procedure GDBDescriptor.AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
  var
      domethod,undomethod:tmethod;
  begin
       SetObjCreateManipulator(domethod,undomethod);
-      with ptdrawing(GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+      with PTDrawing(GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
       begin
            AddObject(PEnt);
            comit;
       end;
- end;
+ end;}
 
  function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):GDBInteger;
  var

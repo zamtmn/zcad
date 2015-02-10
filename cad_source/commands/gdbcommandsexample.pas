@@ -337,7 +337,7 @@ begin
                pd^.FormatEntity(gdb.GetCurrentDWG^);//format entity
                                                     //"форматируем" примитив в соответствии с заданными параметрами
 
-               gdb.AddEntToCurrentDrawingWithUndo(pd);//Add entity to drawing considering tying to undo-redo
+               {gdb.}AddEntToCurrentDrawingWithUndo(pd);//Add entity to drawing considering tying to undo-redo
                                                       //Добавляем примитив в чертеж с учетом обвязки для undo-redo
           end;
       end;
@@ -398,7 +398,7 @@ begin
               InteractiveRDimManipulator(pd,p3,false);
 
               pd^.FormatEntity(gdb.GetCurrentDWG^);
-              gdb.AddEntToCurrentDrawingWithUndo(pd);
+              {gdb.}AddEntToCurrentDrawingWithUndo(pd);
          end;
     end;
     result:=cmd_ok;
@@ -508,7 +508,7 @@ var
           InteractiveDDimManipulator(pd,p3,false);
 
           pd^.FormatEntity(gdb.GetCurrentDWG^);
-          gdb.AddEntToCurrentDrawingWithUndo(pd);
+          {gdb.}AddEntToCurrentDrawingWithUndo(pd);
       end;
   end;
 
@@ -570,7 +570,7 @@ var
          InteractiveDDimManipulator(pd,p3,false);
 
          pd^.FormatEntity(gdb.GetCurrentDWG^);
-         gdb.AddEntToCurrentDrawingWithUndo(pd);
+         {gdb.}AddEntToCurrentDrawingWithUndo(pd);
     end;
   end;
 
@@ -662,7 +662,7 @@ begin
                InteractiveArcManipulator(@pe,pe.p3,false);
                pa^.FormatEntity(gdb.GetCurrentDWG^);
 
-               gdb.AddEntToCurrentDrawingWithUndo(pa);
+               {gdb.}AddEntToCurrentDrawingWithUndo(pa);
           end;
       end;
     end;
@@ -757,7 +757,7 @@ begin
                      pe.pentity:=pcircle;
                      pcircle^.initnul;
                      InteractiveSmartCircleManipulator(@pe,pe.p3,false);
-                     gdb.AddEntToCurrentDrawingWithUndo(pcircle);
+                     {gdb.}AddEntToCurrentDrawingWithUndo(pcircle);
                 end;
            end
            else
@@ -767,7 +767,7 @@ begin
                pe.pentity:=pcircle;
                pcircle^.initnul;
                InteractiveSmartCircleManipulator(@pe,pe.p2,false);
-               gdb.AddEntToCurrentDrawingWithUndo(pcircle);
+               {gdb.}AddEntToCurrentDrawingWithUndo(pcircle);
            end;
       end;
     end;

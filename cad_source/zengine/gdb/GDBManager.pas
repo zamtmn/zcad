@@ -54,11 +54,24 @@ procedure GDBObjSetCircleProp(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLaye
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:GDBString;p_insert:GDBVertex;
                         scale:GDBVertex;rotate:GDBDouble;needundo:GDBBoolean=false
                         ):PGDBObjBlockInsert;
+procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
 var a: GDBObjLine;
   p: gdbvertex;
 implementation
 uses
     log;
+procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
+var
+    domethod,undomethod:tmethod;
+begin
+     SetObjCreateManipulator(domethod,undomethod);
+     with PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+     begin
+          AddObject(PEnt);
+          comit;
+     end;
+end;
+
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;//владелец
                         BlockName:GDBString;       //имя блока
                         p_insert:GDBVertex;        //точка вставки

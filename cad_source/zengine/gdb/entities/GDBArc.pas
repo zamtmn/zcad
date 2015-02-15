@@ -410,38 +410,17 @@ begin
 end;
 procedure GDBObjARC.createpoint;
 var
-  //psymbol: PGDBByte;
-  i{, j, k}: GDBInteger;
-  //len: GDBWord;
-  //matr{,m1}: DMatrix4D;
+  i: GDBInteger;
+  l: GDBDouble;
   v:GDBvertex;
   pv:GDBVertex;
 begin
-  {oglsm.myglpushmatrix;
-  glscaledf(r, r, 1);
-  gltranslatef(p_insert.x / r, p_insert.y / r, p_insert.z);
   angle := endangle - startangle;
   if angle < 0 then angle := 2 * pi + angle;
-  myglbegin(GL_line_strip);
-  glVertex3d(cos(startangle), sin(startangle), 0);
-  for i := 1 to arccount do
-  begin
-    glVertex3d(cos(startangle + i / arccount * angle), sin(startangle + i / arccount * angle), 0);
-  end;
-  myglend;
-  oglsm.myglpopmatrix;}
-  angle := endangle - startangle;
-  if angle < 0 then angle := 2 * pi + angle;
+  l:=r*angle;
 
   Vertex3D_in_WCS_Array.clear;
-  {if ppoint<>nil then
-                     begin
-                          ppoint^.done;
-                          GDBFreeMem(ppoint);
-                     end;
-  GDBGetMem(PPoint,sizeof(GDBPoint2DArray));
-  PPoint^.init(lod+1);}
-  //matr:=objMatrix;
+
   v.x:=cos(startangle);
   v.y:=sin(startangle);
   v.z:=0;
@@ -449,6 +428,7 @@ begin
   Vertex3D_in_WCS_Array.add(@pv);
 
   lod:=100;  { TODO : А кто лод считать будет? }
+  //lod:=2;
 
   for i:=1 to lod do
   begin

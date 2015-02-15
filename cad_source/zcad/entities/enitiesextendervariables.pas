@@ -26,10 +26,12 @@ uses sysutils,
      URecordDescriptor,UBaseTypeDescriptor,memman;
 
 type
+TBaseVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseEntityExtender)
+  end;
 PTVariablesExtender=^TVariablesExtender;
-TVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseEntityExtender)
+TVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseVariablesExtender)
     entityunit:tunit;
-    class function CreateTestExtender(pEntity:Pointer; out ObjSize:Integer):PTVariablesExtender;static;
+    class function CreateEntVariablesExtender(pEntity:Pointer; out ObjSize:Integer):PTVariablesExtender;static;
     constructor init(pEntity:Pointer);
     destructor Done;virtual;
 
@@ -45,7 +47,7 @@ function AddVariablesToEntity(PEnt:PGDBObjEntity):PTVariablesExtender;
 var
     ObjSize:Integer;
 begin
-     result:=TVariablesExtender.CreateTestExtender(PEnt,ObjSize);
+     result:=TVariablesExtender.CreateEntVariablesExtender(PEnt,ObjSize);
      if ObjSize>0 then
        PEnt^.AddExtension(result,ObjSize);
 
@@ -88,7 +90,7 @@ begin
        pbdunit^.entityunit.CopyTo(@self.entityunit);
      //PTObjectUnit(pblockdef^.ou.Instance)^.copyto(PTObjectUnit(ou.Instance));
 end;
-class function TVariablesExtender.CreateTestExtender(pEntity:Pointer; out ObjSize:Integer):PTVariablesExtender;
+class function TVariablesExtender.CreateEntVariablesExtender(pEntity:Pointer; out ObjSize:Integer):PTVariablesExtender;
 begin
      ObjSize:=sizeof(TVariablesExtender);
      GDBGetMem({$IFDEF DEBUGBUILD}'{30663E63-CA7B-43F7-90C6-5ACAD2061DB6}',{$ENDIF}result,ObjSize);

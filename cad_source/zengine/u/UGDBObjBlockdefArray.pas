@@ -19,7 +19,7 @@
 unit UGDBObjBlockdefArray;
 {$INCLUDE def.inc}
 interface
-uses ugdbdrawingdef,strproc,GDBBlockDef,UGDBOpenArrayOfData,sysutils,gdbase,memman, geometry,
+uses gdbdrawcontext,ugdbdrawingdef,strproc,GDBBlockDef,UGDBOpenArrayOfData,sysutils,gdbase,memman, geometry,
      gdbasetypes;
 type
 {REGISTEROBJECTTYPE GDBObjBlockdefArray}
@@ -36,7 +36,7 @@ GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*O
                       //function loadblock(filename,bname:pansichar;pdrawing:GDBPointer):GDBInteger;virtual;
                       function create(name:GDBString):PGDBObjBlockdef;virtual;
                       procedure freeelement(p:GDBPointer);virtual;
-                      procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                      procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       procedure Grow;virtual;
                       procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
                     end;
@@ -107,7 +107,7 @@ begin
                                                                    result := i;
                         end;
 end;
-procedure GDBObjBlockdefArray.FormatEntity(const drawing:TDrawingDef);
+procedure GDBObjBlockdefArray.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 var
   p:PGDBObjBlockdef;
       ir:itrec;
@@ -119,7 +119,7 @@ begin
                             p^.Name:=p^.Name;
 
        programlog.LogOutStr('GDBObjBlockdefArray.format; '+p^.name,lp_OldPos);
-       p^.FormatEntity(drawing);
+       p^.FormatEntity(drawing,dc);
        p:=iterate(ir);
   until p=nil;
 end;

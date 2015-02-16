@@ -31,7 +31,7 @@ GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
                  function CalcNewName(Net1,Net2:PGDBObjNet):GDBInteger;
                  procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry;const drawing:TDrawingDef);virtual;
                  function GetObjTypeName:GDBString;virtual;
-                 procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                 procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure DelSelectedSubitem(const drawing:TDrawingDef);virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
@@ -151,7 +151,7 @@ begin
           until pl=nil;
      end;
 end;
-procedure GDBObjNet.FormatEntity(const drawing:TDrawingDef);
+procedure GDBObjNet.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 begin
      //CreateDeviceNameProcess(@self,drawing);
      GetDXFIOFeatures.RunFormatProcs(drawing,@self);
@@ -353,8 +353,10 @@ var CurrentNet:PGDBObjNet;
     inter:intercept3dprop;
     ir,ir2,ir3:itrec;
     //p:pointer;
+    DC:TDrawContext;
 begin
-     formatentity(drawing);
+     dc:=drawing.createdrawingrc;
+     formatentity(drawing,dc);
      CurrentNet:=ConnectedArea.ObjArray.beginiterate(ir);
      if (currentnet<>nil) then
      repeat
@@ -386,7 +388,7 @@ begin
                                            PTObjectUnit(currentnet.ou.Instance)^.CopyTo(PTObjectUnit(ou.Instance));
                                       end;
                                       //format;
-                                      formatentity(drawing);
+                                      formatentity(drawing,dc);
                                       currentnet.YouDeleted(drawing);
                                       system.break;
                                       end
@@ -414,7 +416,9 @@ var pl,pl2:pgdbobjline;
     tgf: pgrafelement;
     ti:GDBObjOpenArrayOfPV;
         ir:itrec;
+    DC:TDrawContext;
 begin
+     dc:=drawing.createdrawingrc;
      //inherited format;
      if ObjArray.count=0 then
                              exit;
@@ -443,7 +447,7 @@ begin
                                 begin
                                      tv:=pl^.CoordInOCS.lbegin;
                                      pl^.CoordInOCS.lbegin:=ip.interceptcoord;
-                                     pl^.Formatentity(drawing);
+                                     pl^.Formatentity(drawing,dc);
                                      //tpl:=GDBPointer(CreateObjFree(GDBLineID));
                                      {выдрано из CreateObjFree для отвязки от GDBManager}
                                      GDBGetMem({$IFDEF DEBUGBUILD}'{Net.CreateObjFree.line}',{$ENDIF}GDBPointer(tpl), sizeof(GDBObjLine));
@@ -454,14 +458,14 @@ begin
                                      objarray.add(addr(tpl));
                                      {tpl := GDBPointer(self.ObjArray.CreateObj(GDBLineID,@self));
                                      GDBObjLineInit(@self,tpl, sysvar.DWG_CLayer^, sysvar.DWG_CLinew^, tv,ip.interceptcoord);}
-                                     tpl.FormatEntity(drawing);
+                                     tpl.FormatEntity(drawing,dc);
                                 end;
                                 //else
                                 if (ip.t1<=1)and(ip.t1>=0)and(ip.t2<1)and(ip.t2>0)then
                                 begin
                                      tv:=pl2^.CoordInOCS.lbegin;
                                      pl2^.CoordInOCS.lbegin:=ip.interceptcoord;
-                                     pl2^.FormatEntity(drawing);
+                                     pl2^.FormatEntity(drawing,dc);
                                      //tpl:=GDBPointer(CreateObjFree(GDBLineID));
                                      {выдрано из CreateObjFree для отвязки от GDBManager}
                                      GDBGetMem({$IFDEF DEBUGBUILD}'{Net.CreateObjFree.line}',{$ENDIF}GDBPointer(tpl), sizeof(GDBObjLine));
@@ -472,7 +476,7 @@ begin
                                      objarray.add(addr(tpl));
                                      {tpl := GDBPointer(self.ObjArray.CreateObj(GDBLineID,@self));
                                      GDBObjLineInit(@self,tpl, sysvar.DWG_CLayer^, sysvar.DWG_CLinew^, tv,ip.interceptcoord);}
-                                     tpl.FormatEntity(drawing);
+                                     tpl.FormatEntity(drawing,dc);
                                 end
 
                            end;
@@ -528,7 +532,7 @@ begin
           self.ObjArray.pack;
           //self.correctobjects(pointer(bp.Owner),bp.PSelfInOwnerArray);
           //format;
-          TempNet^.Formatentity(drawing);
+          TempNet^.Formatentity(drawing,dc);
           TempNet^.addtoconnect(tempnet,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray{gdb.GetCurrentROOT.ObjToConnectedArray});
           ti.Clear;
           ti.done;

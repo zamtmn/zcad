@@ -19,7 +19,7 @@ unit gdbaligneddimension;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentityfactory,gdbdimension,GDBPoint,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,
+uses gdbdrawcontext,gdbentityfactory,gdbdimension,GDBPoint,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
 (*
@@ -39,11 +39,11 @@ PGDBObjAlignedDimension=^GDBObjAlignedDimension;
 GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                      procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef; part:integer);
+                      procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef;var DC:TDrawContext; part:integer);
 
 
 
-                      procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                      procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                       //procedure DrawGeometry;
 
@@ -331,7 +331,7 @@ begin
   DimData.P14InWCS:= createvertex(300,1,0);
 end;
 
-procedure GDBObjAlignedDimension.DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef; part:integer);
+procedure GDBObjAlignedDimension.DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef;var DC:TDrawContext; part:integer);
 var
    pl:pgdbobjline;
    pp:pgdbobjpoint;
@@ -340,10 +340,10 @@ begin
   pp.vp.Layer:=vp.Layer;
   pp.vp.LineType:=vp.LineType;
   pp.P_insertInOCS:=p1;
-  pp.FormatEntity(drawing);
+  pp.FormatEntity(drawing,dc);
 
   pl:=DrawExtensionLineLinePart(Vertexmorphabs2(p1,p2,PDimStyle.Lines.DIMEXO),Vertexmorphabs(p1,p2,PDimStyle.Lines.DIMEXE),drawing,part);
-  pl.FormatEntity(drawing);
+  pl.FormatEntity(drawing,dc);
 end;
 procedure GDBObjAlignedDimension.CalcDNVectors;
 begin
@@ -363,7 +363,7 @@ begin
      vectorN:=normalizevertex(vectorN)
 end;
 
-procedure GDBObjAlignedDimension.FormatEntity(const drawing:TDrawingDef);
+procedure GDBObjAlignedDimension.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 var
   tv:GDBVertex;
   l:double;
@@ -373,23 +373,23 @@ begin
 
           l:=GetTFromDirNormalizedPoint(DimData.P10InWCS,DimData.P14InWCS,vectorN);
           //DrawExtensionLine(DimData.P14InWCS,DimData.P10InWCS,0,drawing);
-          DrawExtensionLine(DimData.P14InWCS,VertexDmorph(DimData.P14InWCS,self.vectorN,l),0,drawing,1);
+          DrawExtensionLine(DimData.P14InWCS,VertexDmorph(DimData.P14InWCS,self.vectorN,l),0,drawing,dc,1);
 
           //tv:=geometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
           //tv:=geometry.VertexAdd(DimData.P13InWCS,tv);
           //DrawExtensionLine(DimData.P13InWCS,tv,1,drawing);
           l:=GetTFromDirNormalizedPoint(DimData.P10InWCS,DimData.P13InWCS,vectorN);
           tv:=VertexDmorph(DimData.P13InWCS,self.vectorN,l);
-          DrawExtensionLine(DimData.P13InWCS,tv,0,drawing,2);
+          DrawExtensionLine(DimData.P13InWCS,tv,0,drawing,dc,2);
 
           CalcTextAngle;
           if not self.DimData.TextMoved then
                                             CalcDefaultPlaceText(tv,DimData.P10InWCS,drawing);
           CalcTextParam(tv,DimData.P10InWCS);
 
-          DrawDimensionText(DimData.P11InOCS,drawing);
+          DrawDimensionText(DimData.P11InOCS,drawing,dc);
 
-          DrawDimensionLine(tv,DimData.P10InWCS,false,false,true,drawing);
+          DrawDimensionLine(tv,DimData.P10InWCS,false,false,true,drawing,dc);
    inherited;
 end;
 {procedure GDBObjAlignedDimension.DrawGeometry;

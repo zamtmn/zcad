@@ -38,7 +38,7 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  destructor done;virtual;
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTAbstractUnit;const drawing:TDrawingDef);virtual;
 
-                 procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                 procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
                  function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
 
@@ -136,7 +136,7 @@ begin
      tv:=1;
 end;
 
-procedure GDBObjSpline.FormatEntity(const drawing:TDrawingDef);
+procedure GDBObjSpline.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 var //i,j: GDBInteger;
     ptv: pgdbvertex;
     //tv:gdbvertex;

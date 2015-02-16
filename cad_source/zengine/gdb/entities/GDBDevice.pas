@@ -36,11 +36,11 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                    destructor done;virtual;
                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
-                   procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                   procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                    procedure FormatFeatures(const drawing:TDrawingDef);virtual;
                    procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                    procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                   procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
+                   procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                    function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                    function ReturnLastOnMouse:PGDBObjEntity;virtual;
                    function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
@@ -168,6 +168,7 @@ var
   pv,pvc:pgdbobjEntity;
   ir:itrec;
   m4:DMatrix4D;
+  DC:TDrawContext;
 begin
      //historyoutstr('Device DXFOut self='+inttohex(longword(@self),10)+' owner'+inttohex(bp.owner.gethandle,10));
      inherited;
@@ -184,10 +185,13 @@ begin
          pvc^.bp.ListPos.Owner:=@self;
 
          self.ObjMatrix:=onematrix;
+         dc:=drawing.createdrawingrc;
          if pvc^.IsHaveLCS then
-                               pvc^.FormatEntity(drawing);
+                               begin
+                               pvc^.FormatEntity(drawing,dc);
+                               end;
          pvc^.transform(m4);
-         pvc^.FormatEntity(drawing);
+         pvc^.FormatEntity(drawing,dc);
 
 
          //pvc^.DXFOut(handle, outhandle);
@@ -326,14 +330,14 @@ begin
   until p=nil;
   if not result then lstonmouse:=nil;
 end;
-procedure GDBObjDevice.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);
+procedure GDBObjDevice.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
 //var pblockdef:PGDBObjBlockdef;
     //pvisible:PGDBObjEntity;
     //i:GDBInteger;
 begin
   //if POGLWnd=nil then exit;
   inherited;
-  VarObjArray.RenderFeedbac(infrustumactualy,pcount,camera,ProjectProc);
+  VarObjArray.RenderFeedbac(infrustumactualy,pcount,camera,ProjectProc,dc);
 end;
 procedure GDBObjDevice.DrawOnlyGeometry;
 var p:pgdbobjEntity;
@@ -400,6 +404,7 @@ var pblockdef:PGDBObjBlockdef;
     i:GDBInteger;
     //varobject:gdbboolean;
     devnam:GDBString;
+    DC:TDrawContext;
 begin
           //name:=copy(name,8,length(name)-7);
           devnam:=DevicePrefix+name;
@@ -414,10 +419,11 @@ begin
                pvisible:=GDBPointer(pblockdef.ObjArray.getelement(i)^);
                pvisible:=pvisible^.Clone(@self);
                pvisible2:=PGDBObjEntity(pvisible^.FromDXFPostProcessBeforeAdd(nil,drawing));
+               dc:=drawing.createdrawingrc;
                if pvisible2=nil then
                                      begin
                                           pvisible^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
-                                          pvisible^.formatEntity(drawing);
+                                          pvisible^.formatEntity(drawing,dc);
                                           pvisible.BuildGeometry(drawing);
                                           if pvisible^.vp.ID=GDBDeviceID then
                                           begin
@@ -431,7 +437,7 @@ begin
                                      begin
                                           pvisible2^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
                                           pvisible2^.FromDXFPostProcessBeforeAdd(nil,drawing);
-                                          pvisible2^.formatEntity(drawing);
+                                          pvisible2^.formatEntity(drawing,dc);
                                           pvisible2.BuildGeometry(drawing);
                                           if pvisible2^.vp.ID=GDBDeviceID then
                                           begin
@@ -456,12 +462,14 @@ var pblockdef:PGDBObjBlockdef;
     i:GDBInteger;
     //varobject:gdbboolean;
     //devnam:GDBString;
+    DC:TDrawContext;
 begin
      inherited;
      exit;
      begin
+          dc:=drawing.createdrawingrc;
           if not PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].Formated then
-                                                                               PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].formatEntity(drawing);
+                                                                               PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].formatEntity(drawing,dc);
           //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
           index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
           assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), 'Неверный индекс блока');
@@ -476,7 +484,7 @@ begin
                if pvisible2=nil then
                                      begin
                                          pvisible^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
-                                         pvisible^.formatEntity(drawing);
+                                         pvisible^.formatEntity(drawing,dc);
                                         pvisible.BuildGeometry(drawing);
                                         ConstObjArray.add(@pvisible)
 
@@ -485,7 +493,7 @@ begin
                                      begin
                                          pvisible2^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
                                          pvisible2^.FromDXFPostProcessBeforeAdd(nil,drawing);
-                                         pvisible2^.formatEntity(drawing);
+                                         pvisible2^.formatEntity(drawing,dc);
                                         pvisible2.BuildGeometry(drawing);
                                         ConstObjArray.add(@pvisible2)
                                     end;
@@ -524,7 +532,7 @@ procedure GDBObjDevice.FormatAfterDXFLoad;
 var
     p:pgdbobjEntity;
     ir:itrec;
-    //pblockdef:PGDBObjBlockdef;
+    DC:TDrawContext;
 begin
   //BuildVarGeometry;
   inherited;
@@ -540,8 +548,9 @@ begin
   self.BlockDesc:=pblockdef.BlockDesc;
   calcobjmatrix;
   CreateDeviceNameProcess(@self);}
-  ConstObjArray.FormatEntity(drawing);
-  VarObjArray.FormatEntity(drawing);
+  dc:=drawing.createdrawingrc;
+  ConstObjArray.FormatEntity(drawing,dc);
+  VarObjArray.FormatEntity(drawing,dc);
   calcbb;
   //format;
 end;
@@ -569,7 +578,7 @@ begin
      GetDXFIOFeatures.RunFormatProcs(drawing,@self);
 end;
 
-procedure GDBObjDevice.FormatEntity(const drawing:TDrawingDef);
+procedure GDBObjDevice.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 var pvn,{pvnt,}pvp,pvphase,pvi,pvcos:pvardesk;
     volt:TVoltage;
     calcip:TCalcIP;
@@ -648,8 +657,8 @@ begin
           //ConstObjArray.Shrink;
           //VarObjArray.Shrink;
 
-          ConstObjArray.FormatEntity(drawing);
-          VarObjArray.FormatEntity(drawing);
+          ConstObjArray.FormatEntity(drawing,dc);
+          VarObjArray.FormatEntity(drawing,dc);
      self.lstonmouse:=nil;
      calcbb;
 end;

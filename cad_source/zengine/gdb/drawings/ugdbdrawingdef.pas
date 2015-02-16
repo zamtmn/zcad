@@ -18,7 +18,7 @@
 
 unit UGDBDrawingdef;
 interface
-uses ugdbdimstylearray,gdbase,gdbasetypes,UGDBLayerArray,UGDBTextStyleArray,ugdbltypearray,{UUnitManager,}UGDBTableStyleArray;
+uses gdbdrawcontext,ugdbdimstylearray,gdbase,gdbasetypes,UGDBLayerArray,UGDBTextStyleArray,ugdbltypearray,UGDBTableStyleArray;
 type
 {EXPORT+}
 PTDrawingDef=^TDrawingDef;
@@ -37,6 +37,7 @@ TDrawingDef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseobject)
                        function GetChangeStampt:GDBBoolean;virtual;abstract;
                        function CanUndo:boolean;virtual;abstract;
                        function CanRedo:boolean;virtual;abstract;
+                       function CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;virtual;abstract;
                  end;
 {EXPORT-}
 implementation

@@ -32,7 +32,7 @@ GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects
                       procedure DrawWithattrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
                       procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                       procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                      procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
+                      procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                       function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
                       function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                       function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
@@ -43,8 +43,8 @@ GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects
                       function getoutbound:GDBBoundingBbox;
                       function getonlyoutbound:GDBBoundingBbox;
                       procedure Format;virtual;abstract;
-                      procedure FormatEntity(const drawing:TDrawingDef);virtual;
-                      procedure FormatAfterEdit(const drawing:TDrawingDef);virtual;
+                      procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                      procedure FormatAfterEdit(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       //function InRect:TInRect;virtual;
                       function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                       //function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;virtual;
@@ -272,7 +272,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       p^.FormatEntity(drawing);;
+       p^.FormatEntity(drawing,dc);
        p:=iterate(ir);
   until p=nil;
 end;
@@ -284,11 +284,11 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       p^.formatafteredit(drawing);
+       p^.formatafteredit(drawing,dc);
        p:=iterate(ir);
   until p=nil;
 end;
-procedure GDBObjOpenArrayOfPV.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);
+procedure GDBObjOpenArrayOfPV.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
 var
   p:pGDBObjEntity;
       ir:itrec;
@@ -306,7 +306,7 @@ begin
        if (p^.infrustum=infrustumactualy)or(p^.Selected) then
                                             begin
                                                  {$IFDEF TOTALYLOG}programlog.logoutstr(p^.GetObjTypeName+'.renderfeedback',0);{$ENDIF}
-                                                 p^.renderfeedback(pcount,camera,ProjectProc);
+                                                 p^.renderfeedback(pcount,camera,ProjectProc,dc);
                                             end;
        p:=iterate(ir);
   until p=nil;

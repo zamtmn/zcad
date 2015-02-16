@@ -20,7 +20,7 @@ unit UGDBDescriptor;
 {$INCLUDE def.inc}
 interface
 uses
-ugdbdrawing,ugdbdrawingdef,paths,ugdbdimstylearray,ugdbabstractdrawing,WindowsSpecific,LResources,zcadsysvars,zcadinterface,zcadstrconsts,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
+gdbdrawcontext,ugdbdrawing,ugdbdrawingdef,paths,ugdbdimstylearray,ugdbabstractdrawing,WindowsSpecific,LResources,zcadsysvars,zcadinterface,zcadstrconsts,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
 gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,sysinfo,ugdbsimpledrawing,
@@ -193,12 +193,14 @@ end;
 procedure redrawoglwnd;
 var
    pdwg:PTSimpleDrawing;
+   DC:TDrawContext;
 begin
   //isOpenGLError;
   pdwg:=gdb.GetCurrentDWG;
   if pdwg<>nil then
   begin
-       gdb.GetCurrentRoot.FormatAfterEdit(pdwg^);
+       DC:=pdwg^.CreateDrawingRC;
+       gdb.GetCurrentRoot.FormatAfterEdit(pdwg^,dc);
   pdwg.wa.param.firstdraw := TRUE;
   pdwg.wa.CalcOptimalMatrix;
   pdwg.pcamera^.totalobj:=0;
@@ -445,9 +447,8 @@ begin
 end;*)
 
 constructor GDBDescriptor.init;
-//var //tp:GDBTextStyleProp;
-    //ts:PTGDBTableStyle;
-    //cs:TGDBTableCellStyle;
+var
+   DC:TDrawContext;
 begin
   inherited init({$IFDEF DEBUGBUILD}'{F5A454F1-CB6B-43AA-AD8D-AF3B9D781ED0}',{$ENDIF}100);
   FileNameCounter:=0;
@@ -459,7 +460,8 @@ begin
   if CurrentDWG<>nil then
   begin
        CurrentDWG.init(@ProjectUnits);
-       CurrentDWG.pObjRoot^.FormatEntity(CurrentDWG^);
+       dc:=CurrentDWG^.CreateDrawingRC;
+       CurrentDWG.pObjRoot^.FormatEntity(CurrentDWG^,dc);
        //addfromdxf(sysvar.path.Program_Run^+'blocks\el\general\_connector.dxf',@CurrentDWG.ObjRoot);
        //addfromdxf(sysvar.path.Program_Run^+'blocks\el\general\_nok.dxf',@CurrentDWG.ObjRoot);
        //addfromdxf(sysvar.path.Program_Run^+'blocks\el\general\_OPS.dxf',@CurrentDWG.ObjRoot);
@@ -803,12 +805,10 @@ end;
 
 procedure GDBDescriptor.CopyBlock(_from,_to:PTSimpleDrawing;_source:PGDBObjBlockdef);
 var
-   _dest{,td}:PGDBObjBlockdef;
-   //tn:gdbstring;
+   _dest:PGDBObjBlockdef;
    ir:itrec;
-   pvisible,pvisible2{,pv}:PGDBObjEntity;
-   //pl:PGDBLayerProp;
-
+   pvisible,pvisible2:PGDBObjEntity;
+   DC:TDrawContext;
 begin
       if pos(DevicePrefix,_source.Name)=1 then
                                          CopyBlock(_from,_to,_from.BlockDefArray.getblockdef(copy(_source.Name,8,length(_source.Name)-7)));
@@ -819,6 +819,8 @@ begin
      _dest.BlockDesc:=_source.BlockDesc;
 
      PTObjectUnit(_source.ou.Instance)^.CopyTo(PTObjectUnit(_dest.ou.Instance));
+
+     dc:=_to^.CreateDrawingRC;
 
      pvisible:=_source.ObjArray.beginiterate(ir);
      if pvisible<>nil then
@@ -834,7 +836,7 @@ begin
                //pvisible2:=nil;
                                       begin
                                           pvisible2^.correctobjects(_dest,ir.itc);
-                                          pvisible2^.FormatEntity(_to^);
+                                          pvisible2^.FormatEntity(_to^,dc);
                                           pvisible2.BuildGeometry(_to^);
                                           _dest.ObjArray.add(@pvisible2);
                                      end;
@@ -842,7 +844,7 @@ begin
      until pvisible=nil;
 
 
-     _dest.formatentity(_to^);
+     _dest.formatentity(_to^,dc);
 end;
 procedure addf(fn:gdbstring);
 begin

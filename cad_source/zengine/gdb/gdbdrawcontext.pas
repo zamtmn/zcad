@@ -18,7 +18,7 @@
 unit gdbdrawcontext;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,gdbase,uzglabstractdrawer;
+uses gdbasetypes,gdbase,uzglabstractdrawer,gdbobjectsconstdef,geometry;
 type
 TDrawContext=packed record
                    VisibleActualy:TActulity;
@@ -38,7 +38,29 @@ TDrawContext=packed record
                    matrixs:tmatrixs;
                    pcamera:PGDBBaseCamera;
              end;
+function CreateAbstractRC:TDrawContext;
 implementation
+function CreateAbstractRC:TDrawContext;
+begin
+      result.Subrender:=0;
+      result.Selected:=false;
+      result.VisibleActualy:=0;
+      result.InfrustumActualy:=0;
+      result.DRAWCOUNT:=0;
+      result.SysLayer:=nil;
+      result.MaxDetail:=true;
+      result.DrawMode:=true;
+      result.OwnerLineWeight:=-3;
+      result.OwnerColor:=ClWhite;
+      result.MaxWidth:=20;
+      result.ScrollMode:=false;
+      result.Zoom:=1;
+      result.drawer:=nil;
+      result.matrixs.pmodelMatrix:=@OneMatrix;
+      result.matrixs.pprojMatrix:=@OneMatrix;
+      result.matrixs.pviewport:=@DefaultVP;
+      result.pcamera:=nil;
+end;
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('gdbase.initialization');{$ENDIF}
 end.

@@ -46,10 +46,10 @@ GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure CalcObjMatrix;virtual;
-                 procedure FormatEntity(const drawing:TDrawingDef);virtual;
-                 procedure createpoint;virtual;
+                 procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure createpoints(var DC:TDrawContext);virtual;
                  procedure getoutbound;virtual;
-                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
+                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure projectpoint;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
@@ -267,7 +267,7 @@ begin
   MatrixInvert(m1);
   v:=VectorTransform(v,m1);
 end;
-procedure GDBObjARC.FormatEntity(const drawing:TDrawingDef);
+procedure GDBObjARC.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 var
   v:GDBvertex4D;
 begin
@@ -295,7 +295,7 @@ begin
   q2:=pgdbvertex(@v)^;
 
   calcbb;
-  createpoint;
+  createpoints(dc);
   Geom.Clear;
   Geom.DrawPolyLineWithLT(Vertex3D_in_WCS_Array,vp,false,false);
 end;
@@ -408,16 +408,16 @@ begin
        PProjoutbound^.init({$IFDEF DEBUGBUILD}'{2D0D05D3-F10A-473F-88FC-D5FB9BD7B539}',{$ENDIF}4);
   end;
 end;
-procedure GDBObjARC.createpoint;
+procedure GDBObjARC.createpoints(var DC:TDrawContext);
 var
   i: GDBInteger;
   l: GDBDouble;
   v:GDBvertex;
   pv:GDBVertex;
+  maxlod:integer;
 begin
   angle := endangle - startangle;
   if angle < 0 then angle := 2 * pi + angle;
-  l:=r*angle;
 
   Vertex3D_in_WCS_Array.clear;
 
@@ -427,8 +427,18 @@ begin
   pv:=VectorTransform3D(v,objmatrix);
   Vertex3D_in_WCS_Array.add(@pv);
 
-  lod:=100;  { TODO : А кто лод считать будет? }
-  //lod:=2;
+  if dc.MaxDetail then
+                      maxlod:=50
+                  else
+                      maxlod:=20;
+
+  l:=r*angle/(dc.zoom*dc.zoom*3);
+  if l>maxlod then lod:=maxlod
+           else
+               begin
+                    lod:=round(l);
+                    if lod<5 then lod:=5;
+               end;
 
   for i:=1 to lod do
   begin
@@ -459,7 +469,7 @@ begin
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q0,pq0);
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q1,pq1);
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q2,pq2);
-           if pprojoutbound^.count<4 then
+           (*if pprojoutbound^.count<4 then
            begin
             lod:=4;
             //projectpoint;
@@ -473,10 +483,10 @@ begin
                 if lod<>round(d) then
                 begin
                      lod:=round(d);
-                     createpoint;
+                     createpoints(dc);
                 end;
                 projectpoint;
-           end;
+           end;*)
 end;
 procedure GDBObjARC.DrawGeometry;
 var
@@ -503,7 +513,7 @@ begin
   if dc.selected then
                      begin
                      //Vertex3D_in_WCS_Array.drawgeometry2
-                          Geom.DrawGeometry(DC);
+                          Geom.{DrawGeometry}DrawNiceGeometry(DC);
                      end
                  else
                      begin
@@ -548,6 +558,7 @@ end;
 procedure GDBObjARC.LoadFromDXF;
 var //s: GDBString;
   byt{, code}: GDBInteger;
+  dc:TDrawContext;
 begin
   //initnul;
   byt:=readmystrtoint(f);
@@ -563,7 +574,8 @@ begin
   startangle := startangle * pi / 180;
   endangle := endangle * pi / 180;
   PProjoutbound:=nil;
-  FormatEntity(drawing);
+  dc:=drawing.createdrawingrc;
+  FormatEntity(drawing,dc);
 end;
 function GDBObjARC.onmouse;
 var i:GDBInteger;

@@ -65,10 +65,10 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure SaveToDXFPostProcess(var handle:GDBOpenArrayOfByte);
                     procedure SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte);virtual;
                     procedure Format;virtual;abstract;
-                    procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                    procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                     procedure FormatFeatures(const drawing:TDrawingDef);virtual;
-                    procedure FormatFast(const drawing:TDrawingDef);virtual;
-                    procedure FormatAfterEdit(const drawing:TDrawingDef);virtual;
+                    procedure FormatFast(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                    procedure FormatAfterEdit(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                     procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
 
                     procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
@@ -80,8 +80,8 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure Draw(lw:GDBInteger;var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
                     procedure DrawG(lw:GDBInteger;var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
 
-                    procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
-                    procedure RenderFeedbackIFNeed(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
+                    procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
+                    procedure RenderFeedbackIFNeed(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                     function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;
                     function CalculateLineWeight(const DC:TDrawContext):GDBInteger;//inline;
                     //function InRect:TInRect;virtual;
@@ -111,7 +111,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                     function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;virtual;
                     function SelectQuik:GDBBoolean;virtual;
-                    procedure remapcontrolpoints(pp:PGDBControlPointArray;pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
+                    procedure remapcontrolpoints(pp:PGDBControlPointArray;pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                     //procedure rtmodify(md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                     procedure transform(const t_matrix:DMatrix4D);virtual;
@@ -603,7 +603,7 @@ end;
 procedure GDBObjEntity.RenderFeedbackIFNeed;
 begin
      if vp.LastCameraPos<>{gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount then
-                                                               Renderfeedback(pcount,camera,ProjectProc);
+                                                               Renderfeedback(pcount,camera,ProjectProc,dc);
 
 end;
 procedure GDBObjEntity.Renderfeedback;
@@ -617,9 +617,9 @@ begin
 end;}
 procedure GDBObjEntity.FormatFast;
 begin
-     FormatEntity(drawing);
+     FormatEntity(drawing,dc);
 end;
-procedure GDBObjEntity.FormatEntity(const drawing:TDrawingDef);
+procedure GDBObjEntity.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 begin
 end;
 procedure GDBObjEntity.FormatFeatures(const drawing:TDrawingDef);
@@ -630,7 +630,7 @@ end;
 
 procedure GDBObjEntity.FormatAfterEdit;
 begin
-     formatentity(drawing);
+     formatentity(drawing,dc);
      //AddObjectToObjArray
 end;
 procedure GDBObjEntity.FormatAfterFielfmod;
@@ -925,14 +925,14 @@ var pdesc:pcontrolpointdesc;
     i:GDBInteger;
 begin
           { TODO : В примитивах нахуй ненужна проекция точек, убрать это хозяйство }
-          {if ScrollMode then }renderfeedback({gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount,camera,ProjectProc);
+          {if ScrollMode then }renderfeedback({gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount,camera,ProjectProc,dc);
           if pp.count<>0 then
           begin
                pdesc:=pp^.parray;
                for i:=0 to pp.count-1 do
                begin
                     if pdesc.pobject<>nil then
-                                              PGDBObjEntity(pdesc.pobject).RenderFeedback({gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount,camera,ProjectProc);
+                                              PGDBObjEntity(pdesc.pobject).RenderFeedback({gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount,camera,ProjectProc,dc);
                     remaponecontrolpoint(pdesc);
                     inc(pdesc);
                end;

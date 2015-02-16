@@ -46,10 +46,10 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                             procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
                             function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
-                            procedure FormatEntity(const drawing:TDrawingDef);virtual;
-                            procedure FormatAfterEdit(const drawing:TDrawingDef);virtual;
+                            procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                            procedure FormatAfterEdit(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                             procedure restructure(const drawing:TDrawingDef);virtual;
-                            procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
+                            procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                             //function select:GDBBoolean;virtual;
                             function getowner:PGDBObjSubordinated;virtual;
                             function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;
@@ -529,10 +529,10 @@ procedure GDBObjGenericSubEntry.getonlyoutbound;
 begin
      vp.BoundingBox:=ObjArray.getonlyoutbound;
 end;
-procedure GDBObjGenericSubEntry.FormatEntity(const drawing:TDrawingDef);
+procedure GDBObjGenericSubEntry.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 begin
-  inherited FormatEntity(drawing);
-  ObjArray.FormatEntity(drawing);
+  inherited FormatEntity(drawing,dc);
+  ObjArray.FormatEntity(drawing,dc);
   calcbb;
   restructure(drawing);
 end;
@@ -542,7 +542,7 @@ procedure GDBObjGenericSubEntry.formatafteredit;
       //ir:itrec;
 
 begin
-  ObjCasheArray.Formatafteredit(drawing);
+  ObjCasheArray.Formatafteredit(drawing,dc);
 
   ObjCasheArray.clear;
   calcbb;
@@ -551,9 +551,9 @@ end;
 procedure GDBObjGenericSubEntry.restructure;
 begin
 end;
-procedure GDBObjGenericSubEntry.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);
+procedure GDBObjGenericSubEntry.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
 begin
-  ObjArray.renderfeedbac(infrustumactualy,pcount,camera,ProjectProc);
+  ObjArray.renderfeedbac(infrustumactualy,pcount,camera,ProjectProc,dc);
 end;
 function GDBObjGenericSubEntry.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
 var //t,xx,yy:GDBDouble;

@@ -515,6 +515,10 @@ begin
            Segmentator.done;
        end;
   end;
+  shx.Shrink;
+  Triangles.Shrink;
+  Vertex3S.Shrink;
+  LLprimitives.Shrink;
 end;
 
 procedure ZGLGeometry.DrawLineWithLT(const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);

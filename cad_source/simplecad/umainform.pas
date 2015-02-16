@@ -1,14 +1,14 @@
 unit umainform;
 
 {$mode objfpc}{$H+}
-{.$define dxfio}
+{$define dxfio}
 interface
 
 uses
   LCLType,Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, StdCtrls, Spin,
   {From ZCAD}
-  openglviewarea,abstractviewarea,zcadsysvars, {$ifdef dxfio}iodxf,{$endif}varmandef, UUnitManager,
+  gdbdrawcontext,openglviewarea,abstractviewarea,zcadsysvars, {$ifdef dxfio}iodxf,{$endif}varmandef, UUnitManager,
   zcadinterface,gdbentityfactory,UGDBLayerArray,geometry, GDBase, GDBasetypes,
   UGDBDescriptor,UGDBTextStyleArray,UGDBEntTree,GDB3DFace,
   GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,ugdbsimpledrawing,
@@ -280,8 +280,10 @@ var
    i:integer;
    pobj:PGDBObjLine;
    v1,v2:gdbvertex;
+   dc:TDrawContext;
 begin
   _StartLongProcess(0,'Add lines');
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   for i:=1 to SpinEdit1.Value do
   begin
     pobj := PGDBObjLine(CreateInitObjFree(GDBLineID,nil));
@@ -292,7 +294,7 @@ begin
     gdb.GetCurrentRoot^.AddMi(@pobj);
     processobj(pobj);
     pobj^.BuildGeometry(gdb.GetCurrentDWG^);
-    pobj^.formatEntity(gdb.GetCurrentDWG^);
+    pobj^.formatEntity(gdb.GetCurrentDWG^,dc);
   end;
   _EndLongProcess;
   //FormatEntitysAndRebuildTreeAndRedraw;
@@ -305,8 +307,10 @@ var
    pobj:PGDBObjLWPolyline;
    v1:gdbvertex2d;
    lw:GLLWWidth;
+   dc:TDrawContext;
 begin
   _StartLongProcess(0,'Add lwpolylines');
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   for i:=1 to SpinEdit1.Value do
   begin
     pobj := PGDBObjLWPolyline(CreateInitObjFree(GDBLWPolyLineID,nil));
@@ -325,7 +329,7 @@ begin
     gdb.GetCurrentRoot^.AddMi(@pobj);
     processobj(pobj);
     pobj^.BuildGeometry(gdb.GetCurrentDWG^);
-    pobj^.formatEntity(gdb.GetCurrentDWG^);
+    pobj^.formatEntity(gdb.GetCurrentDWG^,dc);
   end;
   _EndLongProcess;
   //FormatEntitysAndRebuildTreeAndRedraw;
@@ -337,8 +341,10 @@ var
    istriangle:boolean;
    pobj:PGDBObj3DFace;
    v1:gdbvertex;
+   dc:TDrawContext;
 begin
   _StartLongProcess(0,'Add 3dfaces');
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   for i:=1 to SpinEdit1.Value do
   begin
     pobj := PGDBObj3DFace(CreateInitObjFree(GDB3DFaceID,nil));
@@ -356,7 +362,7 @@ begin
     gdb.GetCurrentRoot^.AddMi(@pobj);
     processobj(pobj);
     pobj^.BuildGeometry(gdb.GetCurrentDWG^);
-    pobj^.formatEntity(gdb.GetCurrentDWG^);
+    pobj^.formatEntity(gdb.GetCurrentDWG^,dc);
   end;
   _EndLongProcess;
   //FormatEntitysAndRebuildTreeAndRedraw;
@@ -401,8 +407,10 @@ var
    i:integer;
    pobj:PGDBObjCircle;
    v1:gdbvertex;
+   dc:TDrawContext;
 begin
   _StartLongProcess(0,'Add circles');
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   for i:=1 to SpinEdit1.Value do
   begin
     pobj := PGDBObjCircle(CreateInitObjFree(GDBCircleID,nil));
@@ -412,7 +420,7 @@ begin
     gdb.GetCurrentRoot^.AddMi(@pobj);
     processobj(pobj);
     pobj^.BuildGeometry(gdb.GetCurrentDWG^);
-    pobj^.formatEntity(gdb.GetCurrentDWG^);
+    pobj^.formatEntity(gdb.GetCurrentDWG^,dc);
   end;
   _EndLongProcess;
   //FormatEntitysAndRebuildTreeAndRedraw;
@@ -424,8 +432,10 @@ var
    i,j,vcount:integer;
    pobj:PGDBObjPolyline;
    v1:gdbvertex;
+   dc:TDrawContext;
 begin
   _StartLongProcess(0,'Add 3dpolylines');
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   for i:=1 to SpinEdit1.Value do
   begin
     pobj := PGDBObjPolyline(CreateInitObjFree(GDBPolyLineID,nil));
@@ -441,7 +451,7 @@ begin
     gdb.GetCurrentRoot^.AddMi(@pobj);
     processobj(pobj);
     pobj^.BuildGeometry(gdb.GetCurrentDWG^);
-    pobj^.formatEntity(gdb.GetCurrentDWG^);
+    pobj^.formatEntity(gdb.GetCurrentDWG^,dc);
   end;
   _EndLongProcess;
   //FormatEntitysAndRebuildTreeAndRedraw;
@@ -452,8 +462,10 @@ procedure TForm1.BtnAddArcsClick(Sender: TObject);
 var
    i:integer;
    pobj:PGDBObjArc;
+   dc:TDrawContext;
 begin
   _StartLongProcess(0,'Add arcs');
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   for i:=1 to SpinEdit1.Value do
   begin
     pobj := PGDBObjArc(CreateInitObjFree(GDBArcID,nil));
@@ -464,7 +476,7 @@ begin
     gdb.GetCurrentRoot^.AddMi(@pobj);
     processobj(pobj);
     pobj^.BuildGeometry(gdb.GetCurrentDWG^);
-    pobj^.formatEntity(gdb.GetCurrentDWG^);
+    pobj^.formatEntity(gdb.GetCurrentDWG^,dc);
   end;
   _EndLongProcess;
   //FormatEntitysAndRebuildTreeAndRedraw;
@@ -515,6 +527,7 @@ var
    tp:GDBTextStyleProp;
    angl:double;
    ts:PGDBTextStyle;
+   dc:TDrawContext;
 begin
   if gdb.GetCurrentDWG^.TextStyleTable.count=0 then
   begin
@@ -524,6 +537,7 @@ begin
   end;
   ts:= gdb.GetCurrentDWG^.TextStyleTable.getAddres('standart');
   _StartLongProcess(0,'Add texts');
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   for i:=1 to SpinEdit1.Value do
   begin
     pGDBObjEntity(pobj):=CreateInitObjFree(GDBTextID,nil);
@@ -541,7 +555,7 @@ begin
     gdb.GetCurrentRoot^.AddMi(@pobj);
     processobj(pobj);
     pobj^.BuildGeometry(gdb.GetCurrentDWG^);
-    pobj^.formatEntity(gdb.GetCurrentDWG^);
+    pobj^.formatEntity(gdb.GetCurrentDWG^,dc);
   end;
   _EndLongProcess;
   //FormatEntitysAndRebuildTreeAndRedraw;
@@ -549,12 +563,15 @@ begin
 end;
 
 procedure TForm1.BtnOpenDXFClick(Sender: TObject);
+var
+   dc:TDrawContext;
 begin
      {$ifdef dxfio}
      if OpenDialog1.Execute then
      begin
+          dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
           addfromdxf(OpenDialog1.FileName,@gdb.GetCurrentDWG^.pObjRoot^,TLOLoad,gdb.GetCurrentDWG^);
-          gdb.GetCurrentDWG^.pObjRoot^.FormatEntity(gdb.GetCurrentDWG^);
+          gdb.GetCurrentDWG^.pObjRoot^.FormatEntity(gdb.GetCurrentDWG^,dc);
           gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
           UGDBDescriptor.redrawoglwnd;
      end;

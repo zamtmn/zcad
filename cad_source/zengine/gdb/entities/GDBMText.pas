@@ -20,7 +20,7 @@ unit GDBMText;
 {$INCLUDE def.inc}
 
 interface
-uses uabstractunit,gdbfieldprocessor,gdbentityfactory,UGDBDrawingdef,strproc,ugdbfont,GDBAbstractText,UGDBPoint3DArray,UGDBLayerArray,SysUtils,gdbasetypes,gdbEntity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varmandef,
+uses gdbdrawcontext,uabstractunit,gdbfieldprocessor,gdbentityfactory,UGDBDrawingdef,strproc,ugdbfont,GDBAbstractText,UGDBPoint3DArray,UGDBLayerArray,SysUtils,gdbasetypes,gdbEntity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varmandef,
 GDBase,{UGDBDescriptor,}GDBText,gdbobjectsconstdef,geometry,dxflow,strmy,math,memman,GDBSubordinated,UGDBTextStyleArray,zcadsysvars;
 const maxdxfmtextlen=250;
 type
@@ -39,7 +39,7 @@ GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  //procedure getoutbound;virtual;
-                 procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                 procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure FormatContent(const drawing:TDrawingDef);virtual;
                  procedure createpoint(const drawing:TDrawingDef);virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
@@ -471,7 +471,7 @@ begin
     calcbb;
     createpoint(drawing);}
 end;
-procedure GDBObjMText.FormatEntity(const drawing:TDrawingDef);
+procedure GDBObjMText.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 begin
   formatcontent(drawing);
   calcobjmatrix;

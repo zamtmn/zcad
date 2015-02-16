@@ -34,6 +34,8 @@ const
                                 (0, 2, 0, 0),
                                 (0, 0, 2, 0),
                                 (0, 0, 0, 2));
+        DefaultVP:IMatrix4=(0,0,
+                            100,100);
         IdentityQuaternion: GDBQuaternion = (ImagPart:(x:0;y:0;z:0); RealPart: 1);
       EPSILON  : Single = 1e-40;
       EPSILON2 : Single = 1e-30;

@@ -62,6 +62,7 @@ uses
                       //модуль описывающий "фабрику" для создания примитивов
   zcadsysvars,        //system global variables
                       //системные переменные
+  gdbdrawcontext,
   zcadinterface,
   gdbase,gdbasetypes, //base types
                       //описания базовых типов
@@ -134,7 +135,7 @@ procedure InteractiveLineEndManipulator( const PInteractiveData : GDBPointer {po
                                                           Click : GDBBoolean {true if lmb presseed});
 var
   ln : PGDBObjLine absolute PInteractiveData;
-
+  dc:TDrawContext;
 begin
 
   // assign general properties from system variables to entity
@@ -146,7 +147,8 @@ begin
   ln^.CoordInOCS.lEnd:=Point;
   //format entity
   //"форматируем" примитив в соответствии с заданными параметрами
-  ln^.FormatEntity(gdb.GetCurrentDWG^);
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+  ln^.FormatEntity(gdb.GetCurrentDWG^,dc);
 
 end;
 
@@ -157,11 +159,13 @@ procedure InteractiveADimManipulator( const PInteractiveData : GDBPointer;
                                                        Click : GDBBoolean );
 var
   ad : PGDBObjAlignedDimension absolute PInteractiveData;
+  dc:TDrawContext;
 begin
 
   // assign general properties from system variables to entity
   // присваиваем примитиву общие свойства из системных переменных
   GDBObjSetEntityCurrentProp(ad);
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   with ad^ do
    begin
      //specify the dimension style
@@ -186,7 +190,7 @@ begin
 
      //format entity
      //"форматируем" примитив в соответствии с заданными параметрами
-     FormatEntity(gdb.GetCurrentDWG^);
+     FormatEntity(gdb.GetCurrentDWG^,dc);
 
    end;
 end;
@@ -222,9 +226,11 @@ procedure InteractiveRDimManipulator( const PInteractiveData : GDBPointer;
                                                        Click : GDBBoolean );
 var
   rd : PGDBObjRotatedDimension absolute PInteractiveData;
+  dc:TDrawContext;
 begin
 
   GDBObjSetEntityCurrentProp(rd);
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   with rd^ do
    begin
     PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
@@ -244,7 +250,7 @@ begin
     end;
     DimData.P10InWCS :=Point;
     DimData.P10InWCS := P10ChangeTo(Point);
-    FormatEntity(gdb.GetCurrentDWG^);
+    FormatEntity(gdb.GetCurrentDWG^,dc);
    end;
 end;
 
@@ -268,7 +274,9 @@ var
                                // pointer to temporary line
     p1,p2,p3:gdbvertex;        // 3 points to be obtained from the user
                                // 3 точки которые будут получены от пользователя
+    dc:TDrawContext;
 begin
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   // try to get from the user first point
   // пытаемся получить от пользователя первую точку
   if commandmanager.get3dpoint('Specify first point:',p1) then
@@ -334,7 +342,7 @@ begin
                InteractiveADimManipulator(pd,p3,false);//use the interactive function for final configuration entity
                                                        //используем интерактивную функцию для окончательной настройки примитива
 
-               pd^.FormatEntity(gdb.GetCurrentDWG^);//format entity
+               pd^.FormatEntity(gdb.GetCurrentDWG^,dc);//format entity
                                                     //"форматируем" примитив в соответствии с заданными параметрами
 
                {gdb.}AddEntToCurrentDrawingWithUndo(pd);//Add entity to drawing considering tying to undo-redo
@@ -368,7 +376,9 @@ function DrawRotatedDim_com(operands:TCommandOperands):TCommandResult;
 var
     pd:PGDBObjRotatedDimension;
     p1,p2,p3,vd,vn:gdbvertex;
+    dc:TDrawContext;
 begin
+    dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
     if GetInteractiveLine(rsSpecifyfirstPoint,rsSpecifySecondPoint,p1,p2) then
     begin
          pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBRotatedDimensionID,gdb.GetCurrentROOT));
@@ -397,7 +407,7 @@ begin
               pd^.vectorN:=vn;
               InteractiveRDimManipulator(pd,p3,false);
 
-              pd^.FormatEntity(gdb.GetCurrentDWG^);
+              pd^.FormatEntity(gdb.GetCurrentDWG^,dc);
               {gdb.}AddEntToCurrentDrawingWithUndo(pd);
          end;
     end;
@@ -409,15 +419,16 @@ procedure InteractiveDDimManipulator( const PInteractiveData:GDBPointer;
                                                        Click:GDBBoolean);
 var
     dd : pgdbObjDiametricDimension absolute PInteractiveData;
+    dc:TDrawContext;
 begin
-
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   GDBObjSetEntityCurrentProp(dd);
   with dd^ do
    begin
     PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
     DimData.P11InOCS:=Point;
     DimData.P11InOCS:=P11ChangeTo(Point);
-    FormatEntity(gdb.GetCurrentDWG^);
+    FormatEntity(gdb.GetCurrentDWG^,dc);
    end;
 end;
 
@@ -426,12 +437,14 @@ procedure InteractiveBlockInsertManipulator( const PInteractiveData:GDBPointer;
                                                    Click:GDBBoolean);
 var
     PBlockInsert : PGDBObjBlockInsert absolute PInteractiveData;
+    dc:TDrawContext;
 begin
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   GDBObjSetEntityCurrentProp(PBlockInsert);
   with PBlockInsert^ do
    begin
     PBlockInsert^.Local.P_insert:=Point;
-    FormatEntity(gdb.GetCurrentDWG^);
+    FormatEntity(gdb.GetCurrentDWG^,dc);
    end;
 end;
 
@@ -442,6 +455,7 @@ var
     PBlockInsert : PGDBObjBlockInsert;
     PInsert,vscale : GDBVertex;
     rscale:GDBDouble;
+    dc:TDrawContext;
 begin
   PBlockInsert:=pointer(PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.PEntity);
   PInsert:=PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.PInsert;
@@ -452,11 +466,12 @@ begin
   PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Scale.y:=rscale;
   PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Scale.z:=rscale;
 
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   GDBObjSetEntityCurrentProp(PBlockInsert);
   with PBlockInsert^ do
    begin
     PBlockInsert^.scale:=PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Scale;
-    FormatEntity(gdb.GetCurrentDWG^);
+    FormatEntity(gdb.GetCurrentDWG^,dc);
    end;
 end;
 
@@ -467,6 +482,7 @@ var
     PBlockInsert : PGDBObjBlockInsert;
     PInsert,AngleVector : GDBVertex;
     rRotate:GDBDouble;
+    dc:TDrawContext;
 begin
   PBlockInsert:=pointer(PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.PEntity);
   PInsert:=PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.PInsert;
@@ -475,11 +491,12 @@ begin
   rRotate:=Vertexangle(CreateVertex2D(1,0),CreateVertex2D(AngleVector.x,AngleVector.y))*180/pi;
   PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Rotate:=rRotate;
 
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   GDBObjSetEntityCurrentProp(PBlockInsert);
   with PBlockInsert^ do
    begin
     PBlockInsert^.rotate:=rRotate;
-    FormatEntity(gdb.GetCurrentDWG^);
+    FormatEntity(gdb.GetCurrentDWG^,dc);
    end;
 end;
 
@@ -488,7 +505,7 @@ var
     pd:PGDBObjDiametricDimension;
     pcircle:PGDBObjCircle;
     p1,p2,p3:gdbvertex;
-
+    dc:TDrawContext;
   procedure FinalCreateDDim;
   begin
       pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBDiametricDimensionID,gdb.GetCurrentROOT));
@@ -507,7 +524,7 @@ var
 
           InteractiveDDimManipulator(pd,p3,false);
 
-          pd^.FormatEntity(gdb.GetCurrentDWG^);
+          pd^.FormatEntity(gdb.GetCurrentDWG^,dc);
           {gdb.}AddEntToCurrentDrawingWithUndo(pd);
       end;
   end;
@@ -524,6 +541,7 @@ begin
     begin
          if commandmanager.GetEntity('Select circle or arc',pcircle) then
          begin
+              dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
               case pcircle^.vp.ID of
               GDBCircleID:begin
                               p1:=pcircle^.q1;
@@ -550,7 +568,7 @@ var
     pd:PGDBObjRadialDimension;
     pcircle:PGDBObjCircle;
     p1,p2,p3:gdbvertex;
-
+    dc:TDrawContext;
   procedure FinalCreateRDim;
   begin
          pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBRadialDimensionID,gdb.GetCurrentROOT));
@@ -569,7 +587,7 @@ var
 
          InteractiveDDimManipulator(pd,p3,false);
 
-         pd^.FormatEntity(gdb.GetCurrentDWG^);
+         pd^.FormatEntity(gdb.GetCurrentDWG^,dc);
          {gdb.}AddEntToCurrentDrawingWithUndo(pd);
     end;
   end;
@@ -612,6 +630,7 @@ procedure InteractiveArcManipulator( const PInteractiveData : GDBPointer;
 var
     PointData:TArcrtModify;
     ad:TArcData;
+    dc:TDrawContext;
 begin
      PointData.p1.x:=PT3PointPentity(PInteractiveData)^.p1.x;
      PointData.p1.y:=PT3PointPentity(PInteractiveData)^.p1.y;
@@ -633,8 +652,8 @@ begin
                            sysvar.dwg.DWG_CLType^,
                            sysvar.dwg.DWG_CColor^,
                            sysvar.dwg.DWG_CLinew^);
-
-       PT3PointPentity(PInteractiveData)^.pentity^.FormatEntity(gdb.GetCurrentDWG^);
+       dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+       PT3PointPentity(PInteractiveData)^.pentity^.FormatEntity(gdb.GetCurrentDWG^,dc);
      end;
 end;
 function DrawArc_com(operands:TCommandOperands):TCommandResult;
@@ -642,6 +661,7 @@ var
     pa:PGDBObjArc;
     pline:PGDBObjLine;
     pe:T3PointPentity;
+    dc:TDrawContext;
 begin
     if commandmanager.get3dpoint('Specify first point:',pe.p1) then
     begin
@@ -660,7 +680,8 @@ begin
                pa^.initnul;
 
                InteractiveArcManipulator(@pe,pe.p3,false);
-               pa^.FormatEntity(gdb.GetCurrentDWG^);
+               dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+               pa^.FormatEntity(gdb.GetCurrentDWG^,dc);
 
                {gdb.}AddEntToCurrentDrawingWithUndo(pa);
           end;
@@ -675,8 +696,10 @@ procedure InteractiveSmartCircleManipulator( const PInteractiveData:GDBPointer;
 var
     PointData:tarcrtmodify;
     ad:TArcData;
+    dc:TDrawContext;
 begin
   GDBObjSetEntityCurrentProp(PT3PointCircleModePentity(PInteractiveData)^.pentity);
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   case PT3PointCircleModePentity(PInteractiveData)^.npoint of
      0:begin
          PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert:=PT3PointCircleModePentity(PInteractiveData)^.p1;
@@ -720,7 +743,7 @@ begin
          end;
        end;
   end;
-  PT3PointCircleModePentity(PInteractiveData)^.pentity^.FormatEntity(gdb.GetCurrentDWG^);
+  PT3PointCircleModePentity(PInteractiveData)^.pentity^.FormatEntity(gdb.GetCurrentDWG^,dc);
 end;
 
 function DrawCircle_com(operands:TCommandOperands):TCommandResult;
@@ -786,12 +809,14 @@ end;
 function matchprop_com(operands:TCommandOperands):TCommandResult;
 var
     ps,pd:PGDBObjCircle;
+    dc:TDrawContext;
 begin
     if commandmanager.getentity('Select source entity: ',ps) then
     begin
          SetGDBObjInspProc( SysUnit^.TypeName2PTD( 'TMatchPropParam'),
                             @MatchPropParam,
                             gdb.GetCurrentDWG );
+         dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
          while commandmanager.getentity('Select destination entity:',pd) do
          begin
               if MatchPropParam.ProcessLayer then
@@ -804,7 +829,7 @@ begin
                  pd^.vp.color:=ps^.vp.Color;
               if MatchPropParam.ProcessLineTypeScale then
                  pd^.vp.LineTypeScale:=ps^.vp.LineTypeScale;
-              pd^.FormatEntity(gdb.GetCurrentDWG^);
+              pd^.FormatEntity(gdb.GetCurrentDWG^,dc);
               if assigned(redrawoglwndproc) then redrawoglwndproc;
          end;
     end;

@@ -19,7 +19,7 @@ unit gdbdimension;
 {$INCLUDE def.inc}
 
 interface
-uses GDBAbstractText,UGDBTextStyleArray,UGDBXYZWStringArray,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,UGDBOpenArrayOfByte,math,GDBText,geometry,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,
+uses gdbdrawcontext,GDBAbstractText,UGDBTextStyleArray,UGDBXYZWStringArray,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,UGDBOpenArrayOfByte,math,GDBText,geometry,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,
 gdbEntity,varmandef,
 GDBase,gdbobjectsconstdef,memman;
 type
@@ -61,7 +61,7 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 function DrawDimensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef):pgdbobjline;
                 function DrawExtensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef; part:integer):pgdbobjline;
                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
-                procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
+                procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                 function GetLinearDimStr(l:GDBDouble):GDBString;
                 function GetDimStr:GDBString;virtual;
                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
@@ -75,7 +75,7 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 procedure transform(const t_matrix:DMatrix4D);virtual;
                 procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
 
-                procedure DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);virtual;
+                procedure DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                 function GetTextOffset(const drawing:TDrawingDef):GDBVertex;virtual;
                 function TextNeedOffset(dimdir:gdbvertex):GDBBoolean;virtual;
                 function TextAlwaysMoved:GDBBoolean;virtual;
@@ -84,7 +84,7 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 procedure CalcTextAngle;virtual;
                 procedure CalcTextParam(dlStart,dlEnd:Gdbvertex);virtual;
                 procedure CalcTextInside;virtual;
-                procedure DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;const drawing:TDrawingDef);
+                procedure DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;const drawing:TDrawingDef;var DC:TDrawContext);
                 function GetDIMTMOVE:TDimTextMove;virtual;
                 destructor done;virtual;
                 end;
@@ -93,7 +93,7 @@ var
   WorkingFormatSettings:TFormatSettings;
 implementation
 uses GDBManager,log,UGDBOpenArrayOfPV,UGDBDescriptor,GDBBlockInsert;
-procedure GDBObjDimension.DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;const drawing:TDrawingDef);
+procedure GDBObjDimension.DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;const drawing:TDrawingDef;var DC:TDrawContext);
 var
    l:GDBDouble;
    pl:pgdbobjline;
@@ -143,7 +143,7 @@ begin
                   pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p1,PDimStyle.Arrows.DIMASZ,ZAngle*180/pi,@tbp0.name[1]);
   pv^.vp.LineWeight:=PDimStyle.Lines.DIMLWD;
   pv^.vp.Color:=PDimStyle.Lines.DIMCLRD;
-  pv^.formatentity(gdb.GetCurrentDWG^);
+  pv^.formatentity(gdb.GetCurrentDWG^,dc);
   end;
   if not supress2 then
   begin
@@ -154,7 +154,7 @@ begin
   pv^.vp.LineWeight:=PDimStyle.Lines.DIMLWD;
   pv^.vp.Color:=PDimStyle.Lines.DIMCLRD;
   end;
-  pv^.formatentity(gdb.GetCurrentDWG^);
+  pv^.formatentity(gdb.GetCurrentDWG^,dc);
   if tbp0.width=0 then
                       pp1:=Vertexmorphabs(p2,p1,PDimStyle.Lines.DIMDLE)
                   else
@@ -175,7 +175,7 @@ begin
                       end;
 
   pl:=DrawDimensionLineLinePart(pp1,pp2,drawing);
-  pl.FormatEntity(drawing);
+  pl.FormatEntity(drawing,dc);
   if drawlinetotext then
   case self.PDimStyle.Placing.DIMTMOVE of
   DTMMoveDimLine:
@@ -185,12 +185,12 @@ begin
                       if TextTParam>0.5 then
                                             begin
                                                  pl:=DrawDimensionLineLinePart(pp2,DimData.P11InOCS,drawing);
-                                                 pl.FormatEntity(drawing);
+                                                 pl.FormatEntity(drawing,dc);
                                             end
                                         else
                                             begin
                                               pl:=DrawDimensionLineLinePart(pp1,DimData.P11InOCS,drawing);
-                                              pl.FormatEntity(drawing);
+                                              pl.FormatEntity(drawing,dc);
                                             end;
                  end;
         end;
@@ -199,9 +199,9 @@ begin
              if self.DimData.TextMoved then
              begin
              pl:=DrawDimensionLineLinePart(VertexMulOnSc(vertexadd(p1,p2),0.5),DimData.P11InOCS,drawing);
-             pl.FormatEntity(drawing);
+             pl.FormatEntity(drawing,dc);
              pl:=DrawDimensionLineLinePart(DimData.P11InOCS,VertexDmorph(DimData.P11InOCS,VectorT,getpsize),drawing);
-             pl.FormatEntity(drawing);
+             pl.FormatEntity(drawing,dc);
              end;
         end;
   end;{case}
@@ -327,7 +327,7 @@ begin
      result:=PDimStyle.Placing.DIMTMOVE;
 end;
 
-procedure GDBObjDimension.DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);
+procedure GDBObjDimension.DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   ptext:PGDBObjMText;
   dimtxtstyle:PGDBTextStyle;
@@ -369,7 +369,7 @@ begin
   ptext.TXTStyleIndex:=dimtxtstyle;
   ptext.textprop.size:=PDimStyle.Text.DIMTXT;
   ptext.vp.Color:=PDimStyle.Text.DIMCLRT;
-  ptext.FormatEntity(drawing);
+  ptext.FormatEntity(drawing,dc);
 
   if PDimStyle.Text.DIMGAP<0 then
   begin
@@ -377,16 +377,16 @@ begin
   p:=geometry.VertexDmorph(p,ptext.Local.basis.oy,dimtexth/2);
 
   p2:=geometry.VertexDmorph(p,ptext.Local.basis.ox,dimtextw);
-  DrawDimensionLineLinePart(p,p2,drawing).FormatEntity(drawing);
+  DrawDimensionLineLinePart(p,p2,drawing).FormatEntity(drawing,dc);
 
   p:=geometry.VertexDmorph(p2,ptext.Local.basis.oy,-dimtexth);
-  DrawDimensionLineLinePart(p2,p,drawing).FormatEntity(drawing);
+  DrawDimensionLineLinePart(p2,p,drawing).FormatEntity(drawing,dc);
 
   p2:=geometry.VertexDmorph(p,ptext.Local.basis.ox,-dimtextw);
-  DrawDimensionLineLinePart(p,p2,drawing).FormatEntity(drawing);
+  DrawDimensionLineLinePart(p,p2,drawing).FormatEntity(drawing,dc);
 
   p:=geometry.VertexDmorph(p2,ptext.Local.basis.oy,dimtexth);
-  DrawDimensionLineLinePart(p2,p,drawing).FormatEntity(drawing);
+  DrawDimensionLineLinePart(p2,p,drawing).FormatEntity(drawing,dc);
   end;
 
 end;

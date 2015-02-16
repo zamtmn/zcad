@@ -43,11 +43,11 @@ GDBObjWithLocalCS={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                procedure SaveToDXFObjPostfix(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
                function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTAbstractUnit;const drawing:TDrawingDef):GDBBoolean;
 
-               procedure FormatEntity(const drawing:TDrawingDef);virtual;
+               procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                procedure CalcObjMatrix;virtual;
                function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
                procedure transform(const t_matrix:DMatrix4D);virtual;
-               procedure Renderfeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
+               procedure Renderfeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                function GetCenterPoint:GDBVertex;virtual;
                procedure createfield;virtual;
 
@@ -192,7 +192,7 @@ begin
   pprojoutbound:=nil;
   //CalcObjMatrix;
 end;
-procedure GDBObjWithLocalCS.FormatEntity(const drawing:TDrawingDef);
+procedure GDBObjWithLocalCS.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 begin
      CalcObjMatrix;
 end;

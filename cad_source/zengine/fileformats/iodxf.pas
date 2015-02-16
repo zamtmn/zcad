@@ -19,7 +19,7 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses usimplegenerics,ugdbdimstylearray,gdbentityfactory,{$IFNDEF DELPHI}dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,{pdfvectorialreader,}GDBCircle,GDBArc,oglwindowdef,dxflow,zcadstrconsts,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, {GDBManager,} {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
+uses gdbdrawcontext,usimplegenerics,ugdbdimstylearray,gdbentityfactory,{$IFNDEF DELPHI}dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,{pdfvectorialreader,}GDBCircle,GDBArc,oglwindowdef,dxflow,zcadstrconsts,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, {GDBManager,} {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
    entnamindex=record
@@ -304,6 +304,7 @@ objid: GDBInteger;
   trash:boolean;
   additionalunit:TUnit;
   EntInfoData:TEntInfoData;
+  DC:TDrawContext;
 begin
   additionalunit.init('temparraryunit');
   additionalunit.InterfaceUses.addnodouble(@SysUnit);
@@ -405,11 +406,12 @@ begin
                                 end;
                                 if newowner=pointer($ffffffff) then
                                                            newowner:=newowner;
+                                DC:=drawing.CreateDrawingRC;
                                 if newowner<>owner then
                                 begin
                                      m4:=PGDBObjEntity(newowner)^.getmatrix^;
                                      MatrixInvert(m4);
-                                     postobj^.FormatEntity(drawing);
+                                     postobj^.FormatEntity(drawing,dc);
                                      postobj^.transform(m4);
                                 end;
 
@@ -1630,7 +1632,10 @@ else if (groupi = 9) and (ucvalues = '$DIMSTYLE') then
       outstream.TXTAddGDBStringEOL(groups);
       outstream.TXTAddGDBStringEOL('$DIMSTYLE');
       outstream.TXTAddGDBStringEOL('2');
-      outstream.TXTAddGDBStringEOL(drawing.DimStyleTable.GetCurrentDimStyle^.Name);
+      if assigned(drawing.DimStyleTable.GetCurrentDimStyle) then
+        outstream.TXTAddGDBStringEOL(drawing.DimStyleTable.GetCurrentDimStyle^.Name)
+      else
+        outstream.TXTAddGDBStringEOL('Standatd');
       groups := templatefile.readGDBString;
       values := templatefile.readGDBString;
     end
@@ -2835,8 +2840,10 @@ var
   CurSegment: TPathSegment;
   Cur2DSegment: T2DSegment absolute CurSegment;
   PosX, PosY: Double;
+  DC:TDrawContext;
 begin
     Vec := TvVectorialDocument.Create;
+     DC:=drawing.CreateDrawingRC;
   try
     Vec.ReadFromFile(name);
     source:=Vec.GetPage(0);
@@ -2851,7 +2858,7 @@ begin
            pgdbobjCircle(pobj)^.Local.P_insert.y:=TvCircle(CurEntity).y;
            drawing{gdb}.GetCurrentRoot^.AddMi(@pobj);
            PGDBObjEntity(pobj)^.BuildGeometry(drawing);
-           PGDBObjEntity(pobj)^.formatEntity(drawing);
+           PGDBObjEntity(pobj)^.formatEntity(drawing,dc);
       end
  else if CurEntity is TvCircularArc then
       begin
@@ -2863,7 +2870,7 @@ begin
            pgdbobjArc(pobj)^.EndAngle:=TvCircularArc(CurEntity).EndAngle*pi/180;
            drawing{gdb}.GetCurrentRoot^.AddMi(@pobj);
            PGDBObjEntity(pobj)^.BuildGeometry(drawing);
-           PGDBObjEntity(pobj)^.formatEntity(drawing);
+           PGDBObjEntity(pobj)^.formatEntity(drawing,dc);
       end
   else if CurEntity is fpvectorial.TPath then
       begin
@@ -2887,7 +2894,7 @@ begin
            PGDBObjLine(pobj)^.CoordInOCS.lEnd:=createvertex(PosX,PosY,0);
            drawing{gdb}.GetCurrentRoot^.AddMi(@pobj);
            PGDBObjEntity(pobj)^.BuildGeometry(drawing);
-           PGDBObjEntity(pobj)^.formatEntity(drawing);
+           PGDBObjEntity(pobj)^.formatEntity(drawing,dc);
         end;
         end;
       end;

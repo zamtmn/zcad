@@ -39,12 +39,12 @@ GDBObjComplex={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                     function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
                     function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                     function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
-                    procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
+                    procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                     procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                    procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                    procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                     //procedure feedbackinrect;virtual;
                     //function InRect:TInRect;virtual;
                     //procedure Draw(lw:GDBInteger);virtual;
@@ -286,7 +286,7 @@ begin
               end;
      end;
 end;}
-procedure GDBObjComplex.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);
+procedure GDBObjComplex.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
 //var pblockdef:PGDBObjBlockdef;
     //pvisible:PGDBObjEntity;
     //i:GDBInteger;
@@ -295,9 +295,9 @@ begin
   {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(P_insert_in_WCS,ProjP_insert);
   //pdx:=PProjPoint[1].x-PProjPoint[0].x;
   //pdy:=PProjPoint[1].y-PProjPoint[0].y;
-     ConstObjArray.RenderFeedbac(infrustumactualy,pcount,camera,ProjectProc);
+     ConstObjArray.RenderFeedbac(infrustumactualy,pcount,camera,ProjectProc,dc);
 end;
-procedure GDBObjComplex.FormatEntity(const drawing:TDrawingDef);
+procedure GDBObjComplex.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 {var pblockdef:PGDBObjBlockdef;
     pvisible,pvisible2:PGDBObjEntity;
     i:GDBInteger;
@@ -307,7 +307,7 @@ procedure GDBObjComplex.FormatEntity(const drawing:TDrawingDef);
     po:pgdbobjgenericsubentry;}
 begin
      calcobjmatrix;
-     ConstObjArray.FormatEntity(drawing);
+     ConstObjArray.FormatEntity(drawing,dc);
      calcbb;
      self.BuildGeometry(drawing);
 end;

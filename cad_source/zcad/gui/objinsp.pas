@@ -22,7 +22,7 @@ unit Objinsp;
 interface
 
 uses
-  math,LMessages,LCLIntf,zcadstrconsts,usupportgui,GDBRoot,UGDBOpenArrayOfUCommands,StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
+  gdbdrawcontext,math,LMessages,LCLIntf,zcadstrconsts,usupportgui,GDBRoot,UGDBOpenArrayOfUCommands,StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
   Themes,
   {$IFDEF LCLGTK2}
   x,xlib,{x11,}{xutil,}
@@ -1193,6 +1193,8 @@ begin
   end;
 end;
 procedure TGDBobjinsp.UpdateObjectInInsp;
+var
+   dc:TDrawContext;
 begin
   if GDBobj then
                 begin
@@ -1203,14 +1205,15 @@ begin
                                                                PObjectDescriptor(currobjgdbtype)^.SimpleRunMetodWithArg(EDContext.ppropcurrentedit^.w,pcurrobj,EDContext.ppropcurrentedit^.valueAddres);
                                                              end;
                     end;
+                     dc:=PTDrawingDef(pcurcontext)^.CreateDrawingRC;
                     if CurrObjIsEntity then
                                            begin
-                                               PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^);
+                                               PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^,dc);
                                                if IsEntityInCurrentContext
                                                then
                                                    PGDBObjEntity(pcurrobj).YouChanged(PTDrawingDef(pcurcontext)^)
                                                else
-                                                   PGDBObjRoot(PTDrawingDef(pcurcontext)^.GetCurrentRootSimple)^.FormatAfterEdit(PTDrawingDef(pcurcontext)^);
+                                                   PGDBObjRoot(PTDrawingDef(pcurcontext)^.GetCurrentRootSimple)^.FormatAfterEdit(PTDrawingDef(pcurcontext)^,dc);
                                            end
                                        else
                                         begin

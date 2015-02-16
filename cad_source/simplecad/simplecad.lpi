@@ -42,7 +42,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="180">
+    <Units Count="185">
       <Unit0>
         <Filename Value="simplecad.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -57,8 +57,12 @@
         <ComponentName Value="Form1"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="-1"/>
+        <UnitName Value="umainform"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="552"/>
+        <CursorPos X="74" Y="574"/>
         <UsageCount Value="201"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
       <Unit2>
@@ -1294,7 +1298,7 @@
       <Unit175>
         <Filename Value="..\zengine\gdb\GDBManager.pas"/>
         <UnitName Value="GDBManager"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="7"/>
         <TopLine Value="49"/>
         <CursorPos X="62" Y="57"/>
         <UsageCount Value="10"/>
@@ -1311,11 +1315,10 @@
       </Unit176>
       <Unit177>
         <Filename Value="..\zengine\gdb\ugdbabstractdrawing.pas"/>
-        <UnitName Value="ugdbabstractdrawing"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="12"/>
         <CursorPos X="34" Y="36"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit177>
       <Unit178>
@@ -1329,16 +1332,65 @@
       <Unit179>
         <Filename Value="..\zengine\gdb\drawings\ugdbdrawingdef.pas"/>
         <UnitName Value="UGDBDrawingdef"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
         <TopLine Value="10"/>
         <CursorPos X="2" Y="24"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit179>
+      <Unit180>
+        <Filename Value="..\zengine\u\UGDBSelectedObjArray.pas"/>
+        <UnitName Value="UGDBSelectedObjArray"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="45"/>
+        <CursorPos X="58" Y="69"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit180>
+      <Unit181>
+        <Filename Value="..\zengine\gdb\drawings\ugdbdescriptor.pas"/>
+        <UnitName Value="UGDBDescriptor"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="53"/>
+        <CursorPos X="30" Y="56"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit181>
+      <Unit182>
+        <Filename Value="..\zengine\gdb\drawings\ugdbsimpledrawing.pas"/>
+        <UnitName Value="ugdbsimpledrawing"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="74"/>
+        <CursorPos X="83" Y="93"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit182>
+      <Unit183>
+        <Filename Value="..\zengine\gdb\gdbdrawcontext.pas"/>
+        <UnitName Value="gdbdrawcontext"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="7"/>
+        <CursorPos X="6" Y="18"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit183>
+      <Unit184>
+        <Filename Value="..\zengine\fileformats\iodxf.pas"/>
+        <UnitName Value="iodxf"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="1621"/>
+        <CursorPos X="85" Y="1636"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit184>
     </Units>
-    <JumpHistory Count="3" HistoryIndex="2">
+    <JumpHistory Count="23" HistoryIndex="22">
       <Position1>
         <Filename Value="..\zengine\gdb\GDBManager.pas"/>
       </Position1>
@@ -1350,6 +1402,84 @@
         <Filename Value="..\zengine\gdb\GDBManager.pas"/>
         <Caret Line="67" Column="20" TopLine="49"/>
       </Position3>
+      <Position4>
+        <Filename Value="..\zengine\u\UGDBSelectedObjArray.pas"/>
+      </Position4>
+      <Position5>
+        <Filename Value="umainform.pas"/>
+      </Position5>
+      <Position6>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="295" Column="5" TopLine="280"/>
+      </Position6>
+      <Position7>
+        <Filename Value="..\zengine\gdb\drawings\ugdbdescriptor.pas"/>
+        <Caret Line="56" Column="30" TopLine="53"/>
+      </Position7>
+      <Position8>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="295" Column="5" TopLine="280"/>
+      </Position8>
+      <Position9>
+        <Filename Value="..\zengine\gdb\drawings\ugdbsimpledrawing.pas"/>
+        <Caret Line="93" Column="83" TopLine="74"/>
+      </Position9>
+      <Position10>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="295" Column="5" TopLine="280"/>
+      </Position10>
+      <Position11>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="11" Column="18"/>
+      </Position11>
+      <Position12>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="296" Column="46" TopLine="280"/>
+      </Position12>
+      <Position13>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="297" Column="45" TopLine="280"/>
+      </Position13>
+      <Position14>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="313" Column="42" TopLine="300"/>
+      </Position14>
+      <Position15>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="365" Column="45" TopLine="342"/>
+      </Position15>
+      <Position16>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="344" Column="20" TopLine="340"/>
+      </Position16>
+      <Position17>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="423" Column="45" TopLine="409"/>
+      </Position17>
+      <Position18>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="454" Column="45" TopLine="440"/>
+      </Position18>
+      <Position19>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="479" Column="45" TopLine="455"/>
+      </Position19>
+      <Position20>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="465" Column="20" TopLine="494"/>
+      </Position20>
+      <Position21>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="4" Column="2"/>
+      </Position21>
+      <Position22>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="574" Column="74" TopLine="552"/>
+      </Position22>
+      <Position23>
+        <Filename Value="..\zengine\fileformats\iodxf.pas"/>
+        <Caret Line="1638" Column="40" TopLine="1620"/>
+      </Position23>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -1359,8 +1489,8 @@
       <Filename Value="..\..\cad\simplecad"/>
     </Target>
     <SearchPaths>
-      <IncludeFiles Value="..;..\u;..\zengine\gdb;..\zengine\gdb\entities;..\commands;..\gui;..\devicebase;..\languade;..\lclmod;..\electroteh;..\zengine\zgl;$(ProjOutDir);..\..\cad;..\misc;..\fileformats;..\other;..\fonts"/>
-      <OtherUnitFiles Value="..;..\zengine\u;..\zengine\gdb;..\zengine\gdb\entities;..\zcad\commands;..\zcad\gui;..\zcad\devicebase;..\zcad\languade;..\zcad\lclmod;..\zcad\electroteh;..\zengine\zgl;$(ProjOutDir);..\..\cad;..\zengine\misc;..\zengine\fileformats;..\other;..\zengine\fonts;..\zcad"/>
+      <IncludeFiles Value="..;..\u;..\zengine\gdb;..\zengine\gdb\entities;..\commands;..\gui;..\devicebase;..\languade;..\lclmod;..\electroteh;..\zengine\zgl;$(ProjOutDir);..\..\cad;..\misc;..\fileformats;..\other;..\fonts;..\zengine\gdb\drawings"/>
+      <OtherUnitFiles Value="..;..\zengine\u;..\zengine\gdb;..\zengine\gdb\entities;..\zcad\commands;..\zcad\gui;..\zcad\devicebase;..\zcad\languade;..\zcad\lclmod;..\zcad\electroteh;..\zengine\zgl;$(ProjOutDir);..\..\cad;..\zengine\misc;..\zengine\fileformats;..\other;..\zengine\fonts;..\zcad;..\zengine\gdb\drawings"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

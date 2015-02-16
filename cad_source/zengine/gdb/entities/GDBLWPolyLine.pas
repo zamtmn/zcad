@@ -41,7 +41,7 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
 
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                 procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                 procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  function CalcSquare:GDBDouble;virtual;
                  function isPointInside(point:GDBVertex):GDBBoolean;virtual;
                  procedure createpoint;virtual;
@@ -49,7 +49,7 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  destructor done;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
+                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
@@ -805,11 +805,11 @@ begin
     result:=result/2;
 end;
 
-procedure GDBObjLWpolyline.FormatEntity(const drawing:TDrawingDef);
+procedure GDBObjLWpolyline.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 begin
      Vertex2D_in_OCS_Array.Shrink;
      Width2D_in_OCS_Array.Shrink;
-     inherited FormatEntity(drawing);
+     inherited FormatEntity(drawing,dc);
      createpoint;
      CalcWidthSegment;
      Square:=CalcSquare;

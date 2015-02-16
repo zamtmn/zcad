@@ -32,7 +32,7 @@ GDBObjRoot={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                  constructor initnul;
                  destructor done;virtual;
                  //function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
-                 procedure FormatAfterEdit(const drawing:TDrawingDef);virtual;
+                 procedure FormatAfterEdit(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  function AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer):integer;virtual;
                  function getowner:PGDBObjSubordinated;virtual;
                  function GetMainOwner:PGDBObjSubordinated;virtual;
@@ -184,7 +184,7 @@ var pobj:PGDBObjConnected;
 begin
 
      //inherited formatafteredit;
-       ObjCasheArray.Formatafteredit(drawing);
+       ObjCasheArray.Formatafteredit(drawing,dc);
 
        p:=ObjCasheArray.beginiterate(ir);
        if p<>nil then

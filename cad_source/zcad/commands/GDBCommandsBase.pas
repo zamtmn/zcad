@@ -21,7 +21,7 @@ unit GDBCommandsBase;
 
 interface
 uses
- ugdbdrawing,paths,fileformatsmanager,gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbdrawingdef,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ gdbdrawcontext,ugdbdrawing,paths,fileformatsmanager,gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbdrawingdef,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,FileUtil,Forms,Controls,Clipbrd,lclintf,
   plugins,
   sysinfo,
@@ -123,7 +123,9 @@ var //i: GDBInteger;
     //vd:vardesk;
     ir,ir2:itrec;
     //etype:integer;
+    DC:TDrawContext;
 begin
+      dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
       pvd:=ou.InterfaceVariables.vardescarray.beginiterate(ir2);
       if pvd<>nil then
       repeat
@@ -142,7 +144,7 @@ begin
                           begin
                                pvdmy.data.PTD.CopyInstanceTo(pvd.data.Instance,pvdmy.data.Instance);
 
-                               pv^.Formatentity(gdb.GetCurrentDWG^);
+                               pv^.Formatentity(gdb.GetCurrentDWG^,dc);
 
                                if pvd^.data.PTD.GetValueAsString(pvd^.data.Instance)<>pvdmy^.data.PTD.GetValueAsString(pvdmy^.data.Instance) then
                                pvd.attrib:=pvd.attrib or vda_different;
@@ -352,6 +354,7 @@ var
    mem:GDBOpenArrayOfByte;
    pu:ptunit;
    loadproc:TFileLoadProcedure;
+   DC:TDrawContext;
 begin
      if gdb.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
      if gdb.GetCurrentROOT.ObjArray.Count>0 then
@@ -410,7 +413,8 @@ begin
      //gdb.GetCurrentROOT.sddf
      //gdb.GetCurrentROOT.format;
      gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
-     gdb.GetCurrentROOT.FormatEntity(gdb.GetCurrentDWG^);
+     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+     gdb.GetCurrentROOT.FormatEntity(gdb.GetCurrentDWG^,dc);
      if assigned(updatevisibleproc) then updatevisibleproc;
      if gdb.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
                                          begin
@@ -677,10 +681,12 @@ var //i: GDBInteger;
   pv:PGDBObjEntity;
   ir:itrec;
   r:TInRect;
+  DC:TDrawContext;
 begin
   result:=mclick;
   GDB.GetCurrentDWG.wa.param.seldesc.Frame2 := mc;
   GDB.GetCurrentDWG.wa.param.seldesc.Frame23d := wc;
+  dc:=GDB.GetCurrentDWG^.CreateDrawingRC;
   if (button and MZW_LBUTTON)<>0 then
   begin
     begin
@@ -741,7 +747,7 @@ begin
                         begin
                              if r<>IREmpty then
                                                begin
-                                               pv^.RenderFeedbackIFNeed(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
+                                               pv^.RenderFeedbackIFNeed(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2,dc);
                                                if (button and MZW_SHIFT)=0 then
                                                                                pv^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount)
                                                                            else
@@ -753,7 +759,7 @@ begin
                         begin
                              if r=IRFully then
                                               begin
-                                               pv^.RenderFeedbackIFNeed(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
+                                               pv^.RenderFeedbackIFNeed(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2,dc);
                                                if (button and MZW_SHIFT)=0 then
                                                                                pv^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount)
                                                                            else
@@ -808,18 +814,20 @@ var pv:pGDBObjEntity;
     psv:PSelectedObjDesc;
     plt:PGDBLtypeProp;
     ir:itrec;
+    DC:TDrawContext;
 begin
   if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0) then exit;
   plt:={gdb.GetCurrentDWG.LTypeStyleTable.getelement}(SysVar.dwg.DWG_CLType^);
   if plt=nil then
                  exit;
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
     if pv^.Selected then
                         begin
                              pv^.vp.LineType:=plt;
-                             pv^.Formatentity(gdb.GetCurrentDWG^);
+                             pv^.Formatentity(gdb.GetCurrentDWG^,dc);
                         end;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
@@ -830,7 +838,7 @@ begin
              if psv.objaddr^.Selected then
                                           begin
                                                psv.objaddr^.vp.LineType:=plt;
-                                               psv.objaddr^.Formatentity(gdb.GetCurrentDWG^);
+                                               psv.objaddr^.Formatentity(gdb.GetCurrentDWG^,dc);
                                           end;
        psv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
        until psv=nil;
@@ -843,11 +851,13 @@ var pv:PGDBObjText;
     psv:PSelectedObjDesc;
     prs:PGDBTextStyle;
     ir:itrec;
+    DC:TDrawContext;
 begin
   if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0) then exit;
   prs:=(SysVar.dwg.DWG_CTStyle^);
   if prs=nil then
                  exit;
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
@@ -855,7 +865,7 @@ begin
     if (pv^.vp.ID=GDBMTextID)or(pv^.vp.ID=GDBTextID) then
                         begin
                              pv^.TXTStyleIndex:=prs;
-                             pv^.Formatentity(gdb.GetCurrentDWG^);
+                             pv^.Formatentity(gdb.GetCurrentDWG^,dc);
                         end;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
@@ -867,7 +877,7 @@ begin
              if (psv.objaddr^.vp.ID=GDBMTextID)or(psv.objaddr^.vp.ID=GDBTextID) then
                                           begin
                                                PGDBObjText(psv.objaddr)^.TXTStyleIndex:=prs;
-                                               psv.objaddr^.Formatentity(gdb.GetCurrentDWG^);
+                                               psv.objaddr^.Formatentity(gdb.GetCurrentDWG^,dc);
                                           end;
        psv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
        until psv=nil;
@@ -880,11 +890,13 @@ var pv:PGDBObjDimension;
     psv:PSelectedObjDesc;
     prs:PGDBDimStyle;
     ir:itrec;
+    DC:TDrawContext;
 begin
   if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0) then exit;
   prs:=(SysVar.dwg.DWG_CDimStyle^);
   if prs=nil then
                  exit;
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
@@ -892,7 +904,7 @@ begin
     if (pv^.vp.ID=GDBAlignedDimensionID)or(pv^.vp.ID=GDBRotatedDimensionID)or(pv^.vp.ID=GDBDiametricDimensionID) then
                         begin
                              pv^.PDimStyle:=prs;
-                             pv^.Formatentity(gdb.GetCurrentDWG^);
+                             pv^.Formatentity(gdb.GetCurrentDWG^,dc);
                         end;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
@@ -904,7 +916,7 @@ begin
              if (psv.objaddr^.vp.ID=GDBAlignedDimensionID)or(psv.objaddr^.vp.ID=GDBRotatedDimensionID)or(psv.objaddr^.vp.ID=GDBDiametricDimensionID) then
                                           begin
                                                PGDBObjDimension(psv.objaddr)^.PDimStyle:=prs;
-                                               psv.objaddr^.Formatentity(gdb.GetCurrentDWG^);
+                                               psv.objaddr^.Formatentity(gdb.GetCurrentDWG^,dc);
                                           end;
        psv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
        until psv=nil;
@@ -916,15 +928,17 @@ function SelObjChangeLayerToCurrent_com(operands:TCommandOperands):TCommandResul
 var pv:pGDBObjEntity;
     psv:PSelectedObjDesc;
     ir:itrec;
+    DC:TDrawContext;
 begin
   if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0) then exit;
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
     if pv^.Selected then
                         begin
                              pv^.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
-                             pv^.Formatentity(gdb.GetCurrentDWG^);
+                             pv^.Formatentity(gdb.GetCurrentDWG^,dc);
                         end;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
@@ -935,7 +949,7 @@ begin
              if psv.objaddr^.Selected then
                                           begin
                                                psv.objaddr^.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
-                                               psv.objaddr^.Formatentity(gdb.GetCurrentDWG^);
+                                               psv.objaddr^.Formatentity(gdb.GetCurrentDWG^,dc);
                                           end;
        psv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
        until psv=nil;
@@ -1099,13 +1113,15 @@ var //i: GDBInteger;
     pv:pGDBObjEntity;
         ir:itrec;
     drawing:PTDrawingDef;
+    DC:TDrawContext;
 begin
   if assigned(StartLongProcessProc) then StartLongProcessProc(gdb.GetCurrentROOT.ObjArray.count,'Regenerate drawing');
   drawing:=gdb.GetCurrentDwg;
+  dc:=gdb.GetCurrentDwg^.CreateDrawingRC;
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
-    pv^.FormatEntity(drawing^);
+    pv^.FormatEntity(drawing^,dc);
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   if assigned(ProcessLongProcessProc) then ProcessLongProcessProc(ir.itc);
   until pv=nil;
@@ -1215,15 +1231,17 @@ var //res:longbool;
 //    I:gdbinteger;
       {tv,}pobj: pGDBObjEntity;
       ir:itrec;
+      DC:TDrawContext;
 begin
    ClipboardDWG.pObjRoot.ObjArray.cleareraseobj;
+   dc:=gdb.GetCurrentDwg^.CreateDrawingRC;
    pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
    if pobj<>nil then
    repeat
           begin
               if pobj.selected then
               begin
-                gdb.CopyEnt(gdb.GetCurrentDWG,ClipboardDWG,pobj).Formatentity(gdb.GetCurrentDWG^);
+                gdb.CopyEnt(gdb.GetCurrentDWG,ClipboardDWG,pobj).Formatentity(gdb.GetCurrentDWG^,dc);
               end;
           end;
           pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
@@ -1505,6 +1523,7 @@ var
    nstep,i:integer;
    p3dpl:PGDBObjPolyline;
    wc:gdbvertex;
+   DC:TDrawContext;
 begin
      nstep:=0;
      repeat
@@ -1532,7 +1551,7 @@ begin
      p3dpl.Closed:=true;
      p3dpl^.vp.Layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
      p3dpl^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
-
+     dc:=gdb.GetCurrentDwg^.CreateDrawingRC;
      while i<pvr.Count do
      begin
           wc.x:=PGDBVertex2D(pvr.getelement(i))^.x;
@@ -1543,8 +1562,8 @@ begin
 
           if ((i+1) mod 4)=0 then
           begin
-               p3dpl^.Formatentity(gdb.GetCurrentDWG^);
-               p3dpl^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
+               p3dpl^.Formatentity(gdb.GetCurrentDWG^,dc);
+               p3dpl^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2,dc);
                gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
                if i<>pvr.Count-1 then
                p3dpl := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateInitObj(GDBPolylineID,gdb.GetCurrentROOT));
@@ -1553,8 +1572,8 @@ begin
           inc(i);
      end;
 
-     p3dpl^.Formatentity(gdb.GetCurrentDWG^);
-     p3dpl^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
+     p3dpl^.Formatentity(gdb.GetCurrentDWG^,dc);
+     p3dpl^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2,dc);
      gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
      //redrawoglwnd;
 end;

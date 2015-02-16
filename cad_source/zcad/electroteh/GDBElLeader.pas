@@ -34,13 +34,13 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
             function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
             function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
-            procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
+            procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
             procedure addcontrolpoints(tdesc:GDBPointer);virtual;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
             procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
             function beforertmodify:GDBPointer;virtual;
             function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;virtual;
-            procedure FormatEntity(const drawing:TDrawingDef);virtual;
+            procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
             function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
 
             constructor initnul;
@@ -187,12 +187,14 @@ var
   pv,pvc:pgdbobjEntity;
   ir:itrec;
   m4:DMatrix4D;
+  DC:TDrawContext;
 begin
      //historyoutstr('ElLeader DXFOut self='+inttohex(longword(@self),10)+' owner'+inttohex(bp.owner.gethandle,10));
      inherited;
      m4:={self.ObjMatrix; //}getmatrix^;
      //MatrixInvert(m4);
      pv:=ConstObjArray.beginiterate(ir);
+     dc:=drawing.createdrawingrc;
      if pv<>nil then
      repeat
          pvc:=pv^.Clone(@self{.bp.Owner});
@@ -203,9 +205,9 @@ begin
          pvc^.bp.ListPos.Owner:=@gdbtrash;
          self.ObjMatrix:=onematrix;
          if pvc^.IsHaveLCS then
-                               pvc^.Formatentity(drawing);
+                               pvc^.Formatentity(drawing,dc);
          pvc^.transform(m4);
-         pvc^.Formatentity(drawing);
+         pvc^.Formatentity(drawing,dc);
 
               pvc^.SaveToDXF(handle, outhandle,drawing);
               pvc^.SaveToDXFPostProcess(outhandle);
@@ -228,7 +230,7 @@ begin
      //bp.owner^.ImEdited(@self,bp.PSelfInOwnerArray);
      //ObjCasheArray.addnodouble(@pobj);
 end;
-procedure GDBObjElLeader.FormatEntity(const drawing:TDrawingDef);
+procedure GDBObjElLeader.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 var
    pl:pgdbobjline;
    tv,tv2{,tv3}:gdbvertex;
@@ -256,7 +258,7 @@ begin
      //pobj:=nil;
      sta.init(10);
      mainline.vp.Layer:=vp.Layer;
-     mainline.FormatEntity(drawing);
+     mainline.FormatEntity(drawing,dc);
 
      pcable:=nil;
 
@@ -438,14 +440,14 @@ begin
      MarkLine.CoordInOCS.lBegin:=VertexSub(MainLine.CoordInOCS.lBegin,tv);
      MarkLine.CoordInOCS.lEnd:=VertexAdd(MainLine.CoordInOCS.lBegin,tv);
 
-     MarkLine.FormatEntity(drawing);;
+     MarkLine.FormatEntity(drawing,dc);
 
      tbl.Local.P_insert:=mainline.CoordInOCS.lEnd;
      if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then
                             tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w;
      if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).y>=0 then
                             tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h;
-     tbl.FormatEntity(drawing);;
+     tbl.FormatEntity(drawing,dc);
      ConstObjArray.cleareraseobj;
      if pdev<>nil then
      begin
@@ -476,14 +478,14 @@ begin
                                    ptext.textprop.justify:=jsbr;
                                    end;
           ptext.textprop.size:=2.5*scale;
-          ptext.FormatEntity(drawing);;
+          ptext.FormatEntity(drawing,dc);
           pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
           pl.vp.Layer:=vp.Layer;
           pl.CoordInOCS.lBegin:=ptext.Local.P_insert;
           pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5*scale;
           pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;
           pl.CoordInOCS.lEnd.y:=pl.CoordInOCS.lEnd.y-1*scale;
-          pl.FormatEntity(drawing);
+          pl.FormatEntity(drawing,dc);
           pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
           pl.vp.Layer:=vp.Layer;
           pl.CoordInOCS.lBegin:=ptext.Local.P_insert;
@@ -493,7 +495,7 @@ begin
                                    pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x+ptext.obj_width*ptext.textprop.size*0.7
                                else
                                    pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x-ptext.obj_width*ptext.textprop.size*0.7;
-          pl.FormatEntity(drawing);
+          pl.FormatEntity(drawing,dc);
           end;
 
      end;
@@ -554,9 +556,9 @@ procedure GDBObjElLeader.RenderFeedback;
 //    i:GDBInteger;
 begin
      inherited;
-     MainLine.RenderFeedback(pcount,camera,ProjectProc);
-     markline.RenderFeedback(pcount,camera,ProjectProc);
-     tbl.RenderFeedback(pcount,camera,ProjectProc);
+     MainLine.RenderFeedback(pcount,camera,ProjectProc,dc);
+     markline.RenderFeedback(pcount,camera,ProjectProc,dc);
+     tbl.RenderFeedback(pcount,camera,ProjectProc,dc);
 end;
 function GDBObjElLeader.onmouse;
 var //t,xx,yy:GDBDouble;

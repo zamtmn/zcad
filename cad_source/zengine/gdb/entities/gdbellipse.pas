@@ -48,10 +48,10 @@ GDBObjEllipse={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure CalcObjMatrix;virtual;
-                 procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                 procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure createpoint;virtual;
                  procedure getoutbound;virtual;
-                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
+                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure projectpoint;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
@@ -233,7 +233,7 @@ begin
   MatrixInvert(m1);
   v:=VectorTransform(v,m1);
 end;
-procedure GDBObjEllipse.FormatEntity(const drawing:TDrawingDef);
+procedure GDBObjEllipse.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 var
   v:GDBvertex4D;
 begin

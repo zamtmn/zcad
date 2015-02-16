@@ -19,7 +19,7 @@ unit gdbdiametricdimension;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentityfactory,gdbdimension,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,
+uses gdbdrawcontext,gdbentityfactory,gdbdimension,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
 (*
@@ -39,7 +39,7 @@ GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
                         function GetObjTypeName:GDBString;virtual;
 
-                        procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                        procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                         function GetDimStr:GDBString;virtual;
                         function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                         procedure addcontrolpoints(tdesc:GDBPointer);virtual;
@@ -47,7 +47,7 @@ GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                        procedure DrawCenterMarker(cp:GDBVertex;r:GDBDouble;const drawing:TDrawingDef);
+                        procedure DrawCenterMarker(cp:GDBVertex;r:GDBDouble;const drawing:TDrawingDef;var DC:TDrawContext);
                         procedure CalcDNVectors;virtual;
 
                         function TextNeedOffset(dimdir:gdbvertex):GDBBoolean;virtual;
@@ -89,21 +89,21 @@ begin
      vectorN:=normalizevertex(vectorN)
 end;
 
-procedure GDBObjDiametricDimension.DrawCenterMarker(cp:GDBVertex;r:GDBDouble;const drawing:TDrawingDef);
+procedure GDBObjDiametricDimension.DrawCenterMarker(cp:GDBVertex;r:GDBDouble;const drawing:TDrawingDef;var DC:TDrawContext);
 var
    ls:GDBDouble;
 begin
      if PDimStyle.Lines.DIMCEN<>0 then
      begin
          ls:=abs(PDimStyle.Lines.DIMCEN);
-         DrawExtensionLineLinePart(VertexSub(cp,createvertex(ls,0,0)),VertexAdd(cp,createvertex(ls,0,0)),drawing,0).FormatEntity(drawing);
-         DrawExtensionLineLinePart(VertexSub(cp,createvertex(0,ls,0)),VertexAdd(cp,createvertex(0,ls,0)),drawing,0).FormatEntity(drawing);
+         DrawExtensionLineLinePart(VertexSub(cp,createvertex(ls,0,0)),VertexAdd(cp,createvertex(ls,0,0)),drawing,0).FormatEntity(drawing,dc);
+         DrawExtensionLineLinePart(VertexSub(cp,createvertex(0,ls,0)),VertexAdd(cp,createvertex(0,ls,0)),drawing,0).FormatEntity(drawing,dc);
          if PDimStyle.Lines.DIMCEN<0 then
          begin
-              DrawExtensionLineLinePart(VertexSub(cp,createvertex(2*ls,0,0)),VertexSub(cp,createvertex(r+ls,0,0)),drawing,0).FormatEntity(drawing);
-              DrawExtensionLineLinePart(VertexSub(cp,createvertex(0,2*ls,0)),VertexSub(cp,createvertex(0,r+ls,0)),drawing,0).FormatEntity(drawing);
-              DrawExtensionLineLinePart(VertexAdd(cp,createvertex(2*ls,0,0)),VertexAdd(cp,createvertex(r+ls,0,0)),drawing,0).FormatEntity(drawing);
-              DrawExtensionLineLinePart(VertexAdd(cp,createvertex(0,2*ls,0)),VertexAdd(cp,createvertex(0,r+ls,0)),drawing,0).FormatEntity(drawing);
+              DrawExtensionLineLinePart(VertexSub(cp,createvertex(2*ls,0,0)),VertexSub(cp,createvertex(r+ls,0,0)),drawing,0).FormatEntity(drawing,dc);
+              DrawExtensionLineLinePart(VertexSub(cp,createvertex(0,2*ls,0)),VertexSub(cp,createvertex(0,r+ls,0)),drawing,0).FormatEntity(drawing,dc);
+              DrawExtensionLineLinePart(VertexAdd(cp,createvertex(2*ls,0,0)),VertexAdd(cp,createvertex(r+ls,0,0)),drawing,0).FormatEntity(drawing,dc);
+              DrawExtensionLineLinePart(VertexAdd(cp,createvertex(0,2*ls,0)),VertexAdd(cp,createvertex(0,r+ls,0)),drawing,0).FormatEntity(drawing,dc);
          end;
      end;
 end;
@@ -197,7 +197,7 @@ function GDBObjDiametricDimension.GetRadius:GDBDouble;
 begin
      result:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS)/2;
 end;
-procedure GDBObjDiametricDimension.FormatEntity(const drawing:TDrawingDef);
+procedure GDBObjDiametricDimension.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 var
   center:GDBVertex;
   pl:pgdbobjline;
@@ -208,19 +208,19 @@ begin
 
           CalcTextParam(DimData.P10InWCS,DimData.P15InWCS);
           if not self.TextInside then
-            DrawCenterMarker(center,GetRadius,drawing);
+            DrawCenterMarker(center,GetRadius,drawing,dc);
           //DrawDimensionText(DimData.P11InOCS,drawing);
 
-          DrawDimensionText(DimData.P11InOCS,drawing);
+          DrawDimensionText(DimData.P11InOCS,drawing,dc);
           if (self.TextInside)or(self.TextAngle=0) then
                                  begin
-                                 DrawDimensionLine{LinePart}(DimData.P11InOCS,DimData.P15InWCS,true,false,false,drawing);
+                                 DrawDimensionLine{LinePart}(DimData.P11InOCS,DimData.P15InWCS,true,false,false,drawing,dc);
                                  pl:=DrawDimensionLineLinePart(DimData.P11InOCS,VertexDmorph(DimData.P11InOCS,VectorT,getpsize),drawing);
-                                 pl.FormatEntity(drawing);
+                                 pl.FormatEntity(drawing,dc);
                                  end
                              else
                                  begin
-                                      DrawDimensionLine{LinePart}(geometry.VertexDmorph(DimData.P11InOCS,vectord, Self.dimtextw),DimData.P15InWCS,true,false,false,drawing)
+                                      DrawDimensionLine{LinePart}(geometry.VertexDmorph(DimData.P11InOCS,vectord, Self.dimtextw),DimData.P15InWCS,true,false,false,drawing,dc)
                                  end;
    inherited;
 end;

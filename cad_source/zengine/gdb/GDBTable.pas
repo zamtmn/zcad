@@ -20,7 +20,7 @@ unit GDBTable;
 {$INCLUDE def.inc}
 
 interface
-uses GDBAbstractText,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,UGDBTableStyleArray,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,UGDBTable,UGDBStringArray,GDBMText,
+uses gdbdrawcontext,GDBAbstractText,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,UGDBTableStyleArray,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,UGDBTable,UGDBStringArray,GDBMText,
 gdbEntity,
 GDBase,gdbobjectsconstdef,geometry,memman;
 //jcm(*'TopMiddle'*),
@@ -76,11 +76,13 @@ var
   pv,pvc:pgdbobjEntity;
   ir:itrec;
   m4:DMatrix4D;
+  DC:TDrawContext;
 begin
      //historyoutstr('Table DXFOut self='+inttohex(longword(@self),10)+' owner'+inttohex(bp.owner.gethandle,10));
      inherited;
      m4:={self.ObjMatrix; //}getmatrix^;
      //MatrixInvert(m4);
+     dc:=drawing.CreateDrawingRC;
      pv:=ConstObjArray.beginiterate(ir);
      if pv<>nil then
      repeat
@@ -92,9 +94,9 @@ begin
          pvc^.bp.ListPos.Owner:=@self;
          self.ObjMatrix:=onematrix;
          if pvc^.IsHaveLCS then
-                               pvc^.FormatEntity(drawing);
+                               pvc^.FormatEntity(drawing,dc);
          pvc^.transform(m4);
-         pvc^.FormatEntity(drawing);
+         pvc^.FormatEntity(drawing,dc);
 
          if bp.ListPos.Owner<>@GDBTrash then
                                     pvc^.bp.ListPos.Owner:=drawing.GetCurrentRootSimple// gdb.GetCurrentROOT //@GDBTrash;
@@ -150,6 +152,7 @@ var
    pcf:PTGDBTableItemFormat;
    x{,y},xw:gdbdouble;
    xcount,xcurrcount,ycount,ycurrcount,ccount:integer;
+   DC:TDrawContext;
 begin
 
 ConstObjArray.cleareraseobj;
@@ -158,6 +161,7 @@ ConstObjArray.cleareraseobj;
      ccount:=0;
      xcount:=0;
      xw:=0;
+     dc:=drawing.CreateDrawingRC;
      if psa<>nil then
      begin
           repeat
@@ -198,7 +202,7 @@ ConstObjArray.cleareraseobj;
                                                    pgdbmtext.Local.P_insert.x:=(x-scale)+pcf^.Width*scale;
                                               end;
                            end;
-                           pgdbmtext.FormatEntity(drawing);;
+                           pgdbmtext.FormatEntity(drawing,dc);
                            ycurrcount:=pgdbmtext^.text.Count;
                            end;
                            if ycurrcount>ycount then
@@ -237,7 +241,7 @@ ConstObjArray.cleareraseobj;
            pl^.CoordInOCS.lEnd.x:=xw{*scale};
            pl^.CoordInOCS.lEnd.y:=-({ccount+}i)*PTableStyle^.rowheight*scale;
            pl^.vp.Layer:=vp.Layer;
-           pl^.FormatEntity(drawing);;
+           pl^.FormatEntity(drawing,dc);
            end;
      if xcount<PTableStyle^.tblformat.Count then
                                    xcount:=PTableStyle^.tblformat.Count;
@@ -251,7 +255,7 @@ ConstObjArray.cleareraseobj;
            pl^.CoordInOCS.lEnd.x:=x*scale;
            pl^.CoordInOCS.lEnd.y:=-(ccount)*PTableStyle^.rowheight*scale;
            pl^.vp.Layer:=vp.Layer;
-           pl^.FormatEntity(drawing);
+           pl^.FormatEntity(drawing,dc);
 
 
            x:=x+pcf^.Width;
@@ -268,7 +272,7 @@ ConstObjArray.cleareraseobj;
      pl^.CoordInOCS.lEnd.x:=x*scale;
      pl^.CoordInOCS.lEnd.y:=-(ccount)*PTableStyle^.rowheight*scale;
      pl^.vp.Layer:=vp.Layer;
-     pl^.FormatEntity(drawing);
+     pl^.FormatEntity(drawing,dc);
 
      h:=(ccount)*PTableStyle^.rowheight*scale;
      w:=x*scale;

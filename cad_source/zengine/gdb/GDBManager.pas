@@ -21,7 +21,7 @@ unit GDBManager;
 
 
 interface
-uses ugdbdrawing,ugdbltypearray,zcadsysvars,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
+uses gdbdrawcontext,ugdbdrawing,ugdbltypearray,zcadsysvars,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
      UGDBDescriptor,varmandef,gdbobjectsconstdef,
      UGDBVisibleOpenArray,GDBGenericSubEntry,gdbEntity,
      GDBBlockInsert,GDBCircle,GDBLine,
@@ -82,6 +82,7 @@ function GDBInsertBlock(own:PGDBObjGenericSubEntry;//владелец
 var
   tb:PGDBObjBlockInsert;
   domethod,undomethod:tmethod;
+  DC:TDrawContext;
 begin
   result := GDBPointer(own.ObjArray.CreateObj(GDBBlockInsertID));
   result.init(gdb.GetCurrentROOT,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,0);
@@ -113,12 +114,13 @@ begin
   result^.CalcObjMatrix;
   result^.BuildGeometry(gdb.GetCurrentDWG^);
   result^.BuildVarGeometry(gdb.GetCurrentDWG^);
-  result^.FormatEntity(gdb.GetCurrentDWG^);
+  DC:=gdb.GetCurrentDWG^.CreateDrawingRC;
+  result^.FormatEntity(gdb.GetCurrentDWG^,dc);
   if needundo then
   begin
   gdb.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(result);
   result^.Visible:=0;
-  result^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
+  result^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,gdb.GetCurrentDWG^.myGluProject2,dc);
   end;
 end;
 
@@ -247,6 +249,7 @@ var
   //i, objnum: GDBInteger;
   pb:pgdbobjblockinsert;
   nam:gdbstring;
+  DC:TDrawContext;
 begin
   result:=nil;
   if pos(DevicePrefix, uppercase(s))=1  then
@@ -281,7 +284,8 @@ begin
   pb.rotate:=angle;
   pb^.BuildGeometry(gdb.GetCurrentDWG^);
   pb^.BuildVarGeometry(gdb.GetCurrentDWG^);
-  pb^.formatEntity(gdb.GetCurrentDWG^);
+  DC:=gdb.GetCurrentDWG^.CreateDrawingRC;
+  pb^.formatEntity(gdb.GetCurrentDWG^,dc);
   gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
   //own.AddObjectToObjArray(addr(pb));
   result:=pb;

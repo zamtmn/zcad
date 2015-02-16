@@ -2428,7 +2428,7 @@ begin
      begin
               if  pdwg.pcamera.DRAWNOTEND then
                                               begin
-                                                   rc:=pdwg.wa.CreateRC;
+                                                   rc:=pdwg.CreateDrawingRC;
                                               pdwg.wa.finishdraw(rc);
                                               done:=false;
                                               end;

@@ -707,6 +707,7 @@ var pb:PGDBObjBlockInsert;
     {i,}result:gdbinteger;
     poa:PGDBObjEntityTreeArray;
     selname,newname:GDBString;
+    DC:TDrawContext;
 procedure rb(pb:PGDBObjBlockInsert);
 var
     nb,tb:PGDBObjBlockInsert;
@@ -744,11 +745,11 @@ begin
          PTObjectUnit(nb^.ou.Instance)^.CopyFrom(PTObjectUnit(pb^.ou.Instance));
     end;
 
-    nb^.Formatentity(gdb.GetCurrentDWG^);
+    nb^.Formatentity(gdb.GetCurrentDWG^,dc);
     gdb.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(nb);
     nb^.Visible:=0;
     gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
-    nb^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2);
+    nb^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2,dc);
 
 
      pb^.YouDeleted(gdb.GetCurrentDWG^);
@@ -760,6 +761,7 @@ begin
                                                   Error(rscmCantGetBlockToReplace)
                                               else
      begin
+          dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
           poa:=@gdb.GetCurrentROOT^.ObjArray;
           result:=0;
           //i:=0;
@@ -847,10 +849,12 @@ var
    ir,ir2:itrec;
    //tp:gdbpointer;
    m,m2:DMatrix4D;
+   DC:TDrawContext;
 begin
      m:=powner^.objmatrix;
      m2:=m;
      matrixinvert(m);
+     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
      pobj:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
      if pobj<>nil then
      repeat
@@ -867,7 +871,7 @@ begin
 
                 powner^.VarObjArray.cloneentityto(@pobj^.VarObjArray,psubobj);
                 pobj^.correctobjects(pointer(pobj^.bp.ListPos.Owner),pobj^.bp.ListPos.SelfIndex);
-                pobj^.FormatEntity(gdb.GetCurrentDWG^);
+                pobj^.FormatEntity(gdb.GetCurrentDWG^,dc);
 
                 //pobj^.VarObjArray.free;
            {powner^.objmatrix:=onematrix;
@@ -883,7 +887,7 @@ begin
            end;
            pobj:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
      until pobj=nil;
-     powner^.Formatentity(gdb.GetCurrentDWG^);
+     powner^.Formatentity(gdb.GetCurrentDWG^,dc);
      powner^.objmatrix:=m2;
      powner:=nil;
      Commandmanager.executecommandend;
@@ -946,10 +950,12 @@ var
     dcoord:tdevcoord;
     i,count:integer;
     process:boolean;
+    DC:TDrawContext;
 begin
      mpd:=devcoordarray.Create;
      psd:=gdb.GetCurrentDWG^.SelObjArray.beginiterate(ir);
      count:=0;
+     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
      if psd<>nil then
      repeat
            if psd^.objaddr^.vp.ID=GDBDeviceID then
@@ -1023,7 +1029,7 @@ begin
                  pvd^.data.PTD^.SetValueFromString(pvd^.data.Instance,inttostr(index));
                  inc(index,NumberingParams.Increment);
                  inc(count);
-                 pdev^.FormatEntity(gdb.GetCurrentDWG^);
+                 pdev^.FormatEntity(gdb.GetCurrentDWG^,dc);
             end
                else
                historyoutstr('In device not found numbering variable');
@@ -1075,10 +1081,12 @@ var
    ir:itrec;
    //tp:gdbpointer;
    m,m2:DMatrix4D;
+   DC:TDrawContext;
 begin
      m:=powner^.objmatrix;
      m2:=m;
      matrixinvert(m);
+     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
      pobj:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
      if pobj<>nil then
      repeat
@@ -1088,18 +1096,18 @@ begin
            powner^.objmatrix:=onematrix;
            pvisible:=pobj^.Clone(@powner^);
                     if pvisible^.IsHaveLCS then
-                               pvisible^.Formatentity(gdb.GetCurrentDWG^);
+                               pvisible^.Formatentity(gdb.GetCurrentDWG^,dc);
            pvisible^.transform(m);
            //pvisible^.correctobjects(powner,{pblockdef.ObjArray.getelement(i)}i);
            powner^.objmatrix:=m2;
-           pvisible^.formatentity(gdb.GetCurrentDWG^);
+           pvisible^.formatentity(gdb.GetCurrentDWG^,dc);
            pvisible^.BuildGeometry(gdb.GetCurrentDWG^);
            powner^.VarObjArray.add(@pvisible);
            pobj^.YouDeleted(gdb.GetCurrentDWG^);
            end;
            pobj:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
      until pobj=nil;
-     powner^.Formatentity(gdb.GetCurrentDWG^);
+     powner^.Formatentity(gdb.GetCurrentDWG^,dc);
      powner^.objmatrix:=m2;
      powner:=nil;
      Commandmanager.executecommandend;
@@ -1435,7 +1443,7 @@ begin
   gdb.GetCurrentDWG^.wa.param.firstdraw := TRUE;
   //cdwg^.OGLwindow1.param.debugfrustum:=cdwg^.pcamera^.frustum;
   //cdwg^.OGLwindow1.param.ShowDebugFrustum:=true;
-  dc:=cdwg^.wa.CreateRC(true);
+  dc:=cdwg^.CreateDrawingRC(true);
   dc.DrawMode:=true;
   gdb.GetCurrentROOT^.CalcVisibleByTree(cdwg^.pcamera^.frustum{calcfrustum(@_clip)},cdwg^.pcamera^.POSCOUNT,cdwg^.pcamera^.VISCOUNT,gdb.GetCurrentROOT^.ObjArray.ObjTree,cdwg^.pcamera^.totalobj,cdwg^.pcamera^.infrustum,@cdwg^.myGluProject2,cdwg^.pcamera^.prop.zoom);
   //gdb.GetCurrentDWG^.OGLwindow1.draw;
@@ -1579,6 +1587,8 @@ begin
 end;
 
 procedure TextInsert_com.Format;
+var
+   DC:TDrawContext;
 begin
      if ((pt^.vp.ID=GDBTextID)and(TextInsertParams.mode=TIM_MText))
      or ((pt^.vp.ID=GDBMTextID)and(TextInsertParams.mode=TIM_Text)) then
@@ -1614,7 +1624,8 @@ begin
               end;
 
      end;
-     pt^.FormatEntity(gdb.GetCurrentDWG^);
+     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+     pt^.FormatEntity(gdb.GetCurrentDWG^,dc);
 end;
 procedure FloatInsert_com.CommandStart(Operands:pansichar);
 begin
@@ -1797,6 +1808,7 @@ var
     //s,suni:gdbstring;
     //I:gdbinteger;
       tv,pobj: pGDBObjEntity;
+      DC:TDrawContext;
 begin
 
       //gdb.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
@@ -1811,7 +1823,7 @@ begin
       dispmatr:=onematrix;
       PGDBVertex(@dispmatr[3])^:=dist;
 
-
+   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
    pobj:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
    if pobj<>nil then
    repeat
@@ -1822,7 +1834,7 @@ begin
                 if tv^.IsHaveLCS then
                                     PGDBObjWithLocalCS(tv)^.CalcObjMatrix;
                 tv^.transform(dispmatr);
-                tv^.FormatEntity(ClipboardDWG^);
+                tv^.FormatEntity(ClipboardDWG^,dc);
               end;
           end;
           pobj:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
@@ -1885,8 +1897,10 @@ end;
 function Insert_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var tb:PGDBObjSubordinated;
     domethod,undomethod:tmethod;
+    DC:TDrawContext;
 begin
   result:=mclick;
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   if (button and MZW_LBUTTON)<>0 then
   begin
     if pb<>nil then begin
@@ -1929,11 +1943,11 @@ begin
     pb^.CalcObjMatrix;
     pb^.BuildGeometry(gdb.GetCurrentDWG^);
     pb^.BuildVarGeometry(gdb.GetCurrentDWG^);
-    pb^.FormatEntity(gdb.GetCurrentDWG^);
+    pb^.FormatEntity(gdb.GetCurrentDWG^,dc);
     gdb.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
     pb^.Visible:=0;
     gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
-    pb^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2);
+    pb^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2,dc);
     pb:=nil;
     //commandmanager.executecommandend;
     //result:=1;
@@ -1978,7 +1992,7 @@ begin
     pb^.CalcObjMatrix;
     pb^.BuildGeometry(gdb.GetCurrentDWG^);
     pb^.BuildVarGeometry(gdb.GetCurrentDWG^);
-    pb^.FormatEntity(gdb.GetCurrentDWG^);
+    pb^.FormatEntity(gdb.GetCurrentDWG^,dc);
     //gdb.GetCurrentDWG^.ConstructObjRoot.Count := 0;
     //pb^.RenderFeedback;
   end;
@@ -2132,6 +2146,7 @@ var //oldi, newi, i: GDBInteger;
   pobj: GDBPointer;
   xdir,ydir,tv:GDBVertex;
   rotmatr,dispmatr,dispmatr2:DMatrix4D;
+  DC:TDrawContext;
 begin
   if fixentities then
   gdb.GetCurrentDWG^.SelObjArray.freeclones;
@@ -2153,7 +2168,7 @@ begin
       gdb.GetCurrentDWG^{.UndoStack}.PushStartMarker('Редактирование на чертеже');
       gdb.GetCurrentDWG^.SelObjArray.modifyobj(dist,wc,true,pobj,gdb.GetCurrentDWG^);
       gdb.GetCurrentDWG^{.UndoStack}.PushEndMarker;
-      gdb.GetCurrentDWG^.SelObjArray.resprojparam(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2);
+      gdb.GetCurrentDWG^.SelObjArray.resprojparam(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2,dc);
 
 
       if fixentities then
@@ -2264,16 +2279,20 @@ begin
 end;
 
 function Circle_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+var
+  dc:TDrawContext;
 begin
   if (button and MZW_LBUTTON)<>0 then
   begin
+    dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
     historyoutstr(rscmPointOnCircle);
     pc := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,gdb.GetCurrentROOT));
     GDBObjSetCircleProp(pc,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^, wc, 0);
     //GDBObjCircleInit(pc,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, 0);
     //pc^.lod:=4;
-    pc^.Formatentity(gdb.GetCurrentDWG^);
-    pc^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2);
+    dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+    pc^.Formatentity(gdb.GetCurrentDWG^,dc);
+    pc^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2,dc);
   end;
   result:=0;
 end;
@@ -2281,13 +2300,15 @@ end;
 function Circle_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var
     domethod,undomethod:tmethod;
+    dc:TDrawContext;
 begin
   result:=mclick;
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   pc^.vp.Layer := gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer;
   pc^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
   pc^.Radius := Vertexlength(pc^.local.P_insert, wc);
-  pc^.Formatentity(gdb.GetCurrentDWG^);
-  pc^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2);
+  pc^.Formatentity(gdb.GetCurrentDWG^,dc);
+  pc^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2,dc);
   if (button and MZW_LBUTTON)<>0 then
   begin
 
@@ -2322,35 +2343,40 @@ begin
 end;
 
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+var
+    dc:TDrawContext;
 begin
   result:=0;
   if (button and MZW_LBUTTON)<>0 then
   begin
     //historyout('Вторая точка:');
+    dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
     PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
     GDBObjSetLineProp(PCreatedGDBLine,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^, wc, wc);
     //GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, wc);
-    PCreatedGDBLine^.FormatEntity(gdb.GetCurrentDWG^);
+    PCreatedGDBLine^.FormatEntity(gdb.GetCurrentDWG^,dc);
   end
 end;
 
 function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var po:PGDBObjSubordinated;
     domethod,undomethod:tmethod;
+    dc:TDrawContext;
 begin
   result:=mclick;
   {PCreatedGDBLine^.vp.Layer :=gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer;
   PCreatedGDBLine^.vp.lineweight := sysvar.dwg.DWG_CLinew^;}
   GDBObjSetEntityProp(PCreatedGDBLine,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^);
   PCreatedGDBLine^.CoordInOCS.lEnd:= wc;
-  PCreatedGDBLine^.FormatEntity(gdb.GetCurrentDWG^);
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+  PCreatedGDBLine^.FormatEntity(gdb.GetCurrentDWG^,dc);
   po:=nil;
   if osp<>nil then
   begin
        if (PGDBObjEntity(osp^.PGDBObject)<>nil)and(osp^.PGDBObject<>pold)
        then
        begin
-            PGDBObjEntity(osp^.PGDBObject)^.formatentity(gdb.GetCurrentDWG^);
+            PGDBObjEntity(osp^.PGDBObject)^.formatentity(gdb.GetCurrentDWG^,dc);
             //PGDBObjEntity(osp^.PGDBObject)^.ObjToGDBString('Found: ','');
             historyout(GDBPointer(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ','')));
             po:=PGDBObjEntity(osp^.PGDBObject)^.getowner;
@@ -2360,7 +2386,7 @@ begin
   //pl^.RenderFeedback;
   if (button and MZW_LBUTTON)<>0 then
   begin
-    PCreatedGDBLine^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2);
+    PCreatedGDBLine^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2,dc);
     if po<>nil then
     begin
     PCreatedGDBLine^.bp.ListPos.Owner:=po;
@@ -2431,6 +2457,7 @@ var //i: GDBInteger;
       ir:itrec;
       counter:integer;
       tcd:TCopyObjectDesc;
+      dc:TDrawContext;
 begin
   self.savemousemode:=GDB.GetCurrentDWG^.wa.param.md.mode;
   counter:=0;
@@ -2449,7 +2476,7 @@ begin
   inherited CommandStart('');
   GDB.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   showprompt(0);
-
+   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
    GDBGetMem({$IFDEF DEBUGBUILD}'{7702D93A-064E-4935-BFB5-DFDDBAFF9A93}',{$ENDIF}GDBPointer(pcoa),sizeof(GDBOpenArrayOfData));
    pcoa^.init({$IFDEF DEBUGBUILD}'{379DC609-F39E-42E5-8E79-6D15F8630061}',{$ENDIF}counter,sizeof(TCopyObjectDesc));
    pobj:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
@@ -2465,7 +2492,7 @@ begin
                     tcd.obj:=pobj;
                     tcd.clone:=tv;
                     pcoa^.Add(@tcd);
-                    tv^.formatentity(gdb.GetCurrentDWG^);
+                    tv^.formatentity(gdb.GetCurrentDWG^,dc);
                 end;
               end;
           end;
@@ -2514,10 +2541,12 @@ var
     ir:itrec;
     pcd:PTCopyObjectDesc;
     m:tmethod;
+    dc:TDrawContext;
 begin
     im:=dispmatr;
     geometry.MatrixInvert(im);
     ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushStartMarker(UndoMaker);
+    dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
     with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGMultiObjectChangeCommand(dispmatr,im,pcoa^.Count)^ do
     begin
      pcd:=pcoa^.beginiterate(ir);
@@ -2529,7 +2558,7 @@ begin
         AddMethod(m);
 
         dec(pcd^.obj^.vp.LastCameraPos);
-        pcd^.obj^.Formatentity(gdb.GetCurrentDWG^);
+        pcd^.obj^.Formatentity(gdb.GetCurrentDWG^,dc);
 
         pcd:=pcoa^.iterate(ir);
    until pcd=nil;
@@ -2545,17 +2574,18 @@ var //i:GDBInteger;
     //ir:itrec;
     //pcd:PTCopyObjectDesc;
     //m:tmethod;
+    dc:TDrawContext;
 begin
       dispmatr:=CalcTransformMatrix(t3dp,wc);
       gdb.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
-
+      dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   if (button and MZW_LBUTTON)<>0 then
   begin
    move(dispmatr,self.CommandName);
 
    gdb.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=onematrix;
    gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.cleareraseobj;
-   gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^);
+   gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
 
    commandmanager.executecommandend;
   end;
@@ -2570,9 +2600,11 @@ var
     //m:tmethod;
     domethod,undomethod:tmethod;
     pcopyofcopyobj:pGDBObjEntity;
+    dc:TDrawContext;
 begin
   ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushStartMarker(UndoMaker);
   SetObjCreateManipulator(domethod,undomethod);
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
      with ptdrawing(gdb.GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
      begin
      pcd:=pcoa^.beginiterate(ir);
@@ -2581,7 +2613,7 @@ begin
                             begin
                             {}pcopyofcopyobj:=pcd^.obj^.Clone(pcd^.obj^.bp.ListPos.Owner);
                               pcopyofcopyobj^.TransformAt(pcd^.obj,@dispmatr);
-                              pcopyofcopyobj^.formatentity(gdb.GetCurrentDWG^);
+                              pcopyofcopyobj^.formatentity(gdb.GetCurrentDWG^,dc);
 
                                begin
                                     AddObject(pcopyofcopyobj);
@@ -2669,12 +2701,14 @@ var
     pcd:PTCopyObjectDesc;
     //v1,v2:GDBVertex2d;
     m:tmethod;
+    dc:TDrawContext;
 begin
   dispmatr:=geometry.CreateTranslationMatrix(createvertex(-t3dp.x,-t3dp.y,-t3dp.z));
   rotmatr:=geometry.CreateRotationMatrixZ(sin(a),cos(a));
   rotmatr:=geometry.MatrixMultiply(dispmatr,rotmatr);
   dispmatr:=geometry.CreateTranslationMatrix(createvertex(t3dp.x,t3dp.y,t3dp.z));
   dispmatr:=geometry.MatrixMultiply(rotmatr,dispmatr);
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
 
 if (button and MZW_LBUTTON)=0 then
                  begin
@@ -2714,7 +2748,7 @@ if (button and MZW_LBUTTON)=0 then
                 end;
 if (button and MZW_LBUTTON)<>0 then
 begin
-gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^);
+gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
 gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.cleareraseobj;
 commandend;
 commandmanager.executecommandend;
@@ -2768,6 +2802,7 @@ var
     pcd:PTCopyObjectDesc;
     //v:GDBVertex;
     m:tmethod;
+    dc:TDrawContext;
 begin
 if a<eps then a:=1;
 
@@ -2781,7 +2816,7 @@ rotmatr[2][2]:=a;
 rotmatr:=geometry.MatrixMultiply(dispmatr,rotmatr);
 dispmatr:=geometry.CreateTranslationMatrix(createvertex(t3dp.x,t3dp.y,t3dp.z));
 dispmatr:=geometry.MatrixMultiply(rotmatr,dispmatr);
-
+dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
 {pcd:=pcoa^.beginiterate(ir);
 if pcd<>nil then
 repeat
@@ -2833,7 +2868,7 @@ if (button and MZW_LBUTTON)=0 then
 
 if (button and MZW_LBUTTON)<>0 then
 begin
-gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^);
+gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
 gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.cleareraseobj;
 commandend;
 commandmanager.executecommandend;
@@ -2898,17 +2933,19 @@ end;
 
 
 function _3DPoly_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+var
+    dc:TDrawContext;
 begin
   result:=mclick;
   if (button and MZW_LBUTTON)<>0 then
   begin
     if p3dpl=nil then
     begin
-
+    dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
     p3dpl := GDBPointer({gdb.GetCurrentROOT^.ObjArray.CreateInitObj}gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBPolylineID,{gdb.GetCurrentROOT}gdb.GetCurrentDWG^.GetConstructObjRoot));
     GDBObjSetEntityProp(p3dpl,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^);
     p3dpl^.AddVertex(wc);
-    p3dpl^.Formatentity(gdb.GetCurrentDWG^);
+    p3dpl^.Formatentity(gdb.GetCurrentDWG^,dc);
     //gdb.GetCurrentROOT^.ObjArray.ObjTree.AddObjectToNodeTree(p3dpl);
     //gdb.GetCurrentROOT^.ObjArray.ObjTree.{AddObjectToNodeTree(p3dpl)}CorrectNodeTreeBB(p3dpl);   vbnvbn
     //gdb.GetCurrentROOT^.AddObjectToObjArray(addr(p3dpl));
@@ -2929,12 +2966,14 @@ var
     //_tv:gdbvertex;
     //p3dpl2:pgdbobjpolyline;
     //i:integer;
+    dc:TDrawContext;
 begin
   result:=mclick;
   p3dpl^.vp.Layer :=gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer;
   p3dpl^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
   //p3dpl^.CoordInOCS.lEnd:= wc;
-  p3dpl^.Formatentity(gdb.GetCurrentDWG^);
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+  p3dpl^.Formatentity(gdb.GetCurrentDWG^,dc);
   if (button and MZW_LBUTTON)<>0 then
   begin
 
@@ -2956,8 +2995,8 @@ begin
   end;
 
     //p3dpl^.AddVertex(wc);
-    p3dpl^.Formatentity(gdb.GetCurrentDWG^);
-    p3dpl^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2);
+    p3dpl^.Formatentity(gdb.GetCurrentDWG^,dc);
+    p3dpl^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2,dc);
     //gdb.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
     //gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
     result:=1;
@@ -3020,6 +3059,7 @@ var
     _tv:gdbvertex;
     p3dpl2:pgdbobjpolyline;
     i:integer;
+    dc:TDrawContext;
 begin
   if (button and MZW_LBUTTON)<>0 then
                     button:=button;
@@ -3032,6 +3072,7 @@ begin
                       pc:=nil;
                       PCreatedGDBLine:=nil;
                  end;
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   result:={mclick}0;
   if not PEProp.setpoint then
   begin
@@ -3076,7 +3117,7 @@ begin
 
                           //pc := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBCircleID,gdb.GetCurrentROOT));
                           //GDBObjCircleInit(pc,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.vvertex,10*gdb.GetCurrentDWG^.pcamera^.prop.zoom);
-                          pc^.Formatentity(gdb.GetCurrentDWG^);
+                          pc^.Formatentity(gdb.GetCurrentDWG^,dc);
                           end;
   end;
   if (PEProp.Action=TSPE_Insert) then
@@ -3088,14 +3129,14 @@ begin
 
                                                //PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
                                                //GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.lvertex1, wc);
-                                               PCreatedGDBLine^.Formatentity(gdb.GetCurrentDWG^);
+                                               PCreatedGDBLine^.Formatentity(gdb.GetCurrentDWG^,dc);
 
                                                PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
                                                GDBObjSetLineProp(PCreatedGDBLine,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^, PEProp.lvertex2, wc);
 
                                                //PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
                                                //GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc,PEProp.lvertex2);
-                                               PCreatedGDBLine^.Formatentity(gdb.GetCurrentDWG^);
+                                               PCreatedGDBLine^.Formatentity(gdb.GetCurrentDWG^,dc);
                                                PEProp.dir:=-1;
                                           end
                                      else
@@ -3106,7 +3147,7 @@ begin
                                                GDBObjSetLineProp(PCreatedGDBLine,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^, PEProp.lvertex1, wc);
                                                    //PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
                                                    //GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.lvertex1, wc);
-                                                   PCreatedGDBLine^.Formatentity(gdb.GetCurrentDWG^);
+                                                   PCreatedGDBLine^.Formatentity(gdb.GetCurrentDWG^,dc);
                                                    PEProp.nearestline:=PEProp.nearestvertex;
                                                    PEProp.dir:=-1;
                                               end
@@ -3116,7 +3157,7 @@ begin
                                                GDBObjSetLineProp(PCreatedGDBLine,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^, PEProp.lvertex2, wc);
                                                    //PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
                                                    //GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.lvertex2, wc);
-                                                   PCreatedGDBLine^.Formatentity(gdb.GetCurrentDWG^);
+                                                   PCreatedGDBLine^.Formatentity(gdb.GetCurrentDWG^,dc);
                                                    PEProp.nearestline:=PEProp.nearestvertex;
                                                    PEProp.dir:=1;
                                               end
@@ -3132,14 +3173,14 @@ begin
                                          GDBObjSetCircleProp(pc,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^, _tv, 10*gdb.GetCurrentDWG^.pcamera^.prop.zoom);
                                         //pc := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBCircleID,gdb.GetCurrentROOT));
                                         //GDBObjCircleInit(pc,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, _tv, 10*gdb.GetCurrentDWG^.pcamera^.prop.zoom);
-                                        pc^.Formatentity(gdb.GetCurrentDWG^);
+                                        pc^.Formatentity(gdb.GetCurrentDWG^,dc);
 
                                         PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
                                         GDBObjSetLineProp(PCreatedGDBLine,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^, _tv, wc);
 
                                         //PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
                                         //GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, _tv, wc);
-                                        PCreatedGDBLine^.Formatentity(gdb.GetCurrentDWG^);
+                                        PCreatedGDBLine^.Formatentity(gdb.GetCurrentDWG^,dc);
                                    end
                                else
                                begin
@@ -3148,7 +3189,7 @@ begin
 
                                     //pc := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBCircleID,gdb.GetCurrentROOT));
                                     //GDBObjCircleInit(pc,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.vvertex, 40*gdb.GetCurrentDWG^.pcamera^.prop.zoom);
-                                    pc^.Formatentity(gdb.GetCurrentDWG^);
+                                    pc^.Formatentity(gdb.GetCurrentDWG^,dc);
                                end
 
   end;
@@ -3183,7 +3224,7 @@ begin
 
                                                   //p3dpl^.vertexarrayinocs.deleteelement(PEProp.nearestvertex);
                                                   p3dpl^.YouChanged(gdb.GetCurrentDWG^);
-                                                  gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^);
+                                                  gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
                                                   //p3dpl^.Format;
                                                   if assigned(redrawoglwndproc) then redrawoglwndproc;
                                              end
@@ -3213,7 +3254,7 @@ begin
 
                                                                          //p3dpl^.vertexarrayinocs.InsertElement(PEProp.nearestline,PEProp.dir,@wc);
                                                                          p3dpl^.YouChanged(gdb.GetCurrentDWG^);
-                                                                         gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^);
+                                                                         gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
                                                                          //p3dpl^.Format;
                                                                          if assigned(redrawoglwndproc) then redrawoglwndproc;
                                                                          PEProp.setpoint:=false;
@@ -3246,8 +3287,8 @@ begin
                                                                            else
                                                                                p3dpl2^.VertexArrayInOCS.InsertElement(0,-1,@_tv);
                                         p3dpl^.VertexArrayInOCS.InsertElement(p3dpl^.VertexArrayInOCS.Count-1,1,@_tv);
-                                        p3dpl2^.Formatentity(gdb.GetCurrentDWG^);
-                                        p3dpl^.Formatentity(gdb.GetCurrentDWG^);
+                                        p3dpl2^.Formatentity(gdb.GetCurrentDWG^,dc);
+                                        p3dpl^.Formatentity(gdb.GetCurrentDWG^,dc);
                                         gdb.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl2);
                                         end
                                     else
@@ -3268,8 +3309,8 @@ begin
                                                                               p3dpl^.VertexArrayInOCS.deleteelement(PEProp.nearestvertex+1);
 
                                            end;
-                                         p3dpl2^.Formatentity(gdb.GetCurrentDWG^);
-                                         p3dpl^.Formatentity(gdb.GetCurrentDWG^);
+                                         p3dpl2^.Formatentity(gdb.GetCurrentDWG^,dc);
+                                         p3dpl^.Formatentity(gdb.GetCurrentDWG^,dc);
                                          gdb.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl2);
                                     end
 
@@ -3324,6 +3365,7 @@ var //pv:pGDBObjEntity;
     psl:PGDBGDBStringArray;
     i,j:integer;
     s:gdbstring;
+    dc:TDrawContext;
 begin
   GDB.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
 
@@ -3334,6 +3376,7 @@ begin
 
   pt^.ptablestyle:=gdb.GetCurrentDWG^.TableStyleTable.getAddres('ShRaspr');
   pt^.tbl.cleareraseobj;
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
 
 
   for j := 1 to 10 do
@@ -3348,7 +3391,7 @@ begin
   end;
 
   pt^.Build(gdb.GetCurrentDWG^);
-  pt^.FormatEntity(gdb.GetCurrentDWG^);
+  pt^.FormatEntity(gdb.GetCurrentDWG^,dc);
 
   //gdb.GetCurrentROOT^.getoutbound;
   //redrawoglwnd;
@@ -3445,6 +3488,7 @@ var pb:PGDBObjBlockdef;
     ir:itrec;
     xcoord:GDBDouble;
     BLinsert,tb:PGDBObjBlockInsert;
+    dc:TDrawContext;
 begin
      pb:=gdb.GetCurrentDWG^.BlockDefArray.beginiterate(ir);
      xcoord:=0;
@@ -3470,9 +3514,10 @@ begin
     BLINSERT^.CalcObjMatrix;
     BLINSERT^.BuildGeometry(gdb.GetCurrentDWG^);
     BLINSERT^.BuildVarGeometry(gdb.GetCurrentDWG^);
-    BLINSERT^.FormatEntity(gdb.GetCurrentDWG^);
+    dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+    BLINSERT^.FormatEntity(gdb.GetCurrentDWG^,dc);
     BLINSERT^.Visible:=0;
-    BLINSERT^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2);
+    BLINSERT^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2,dc);
     //BLINSERT:=nil;
     //commandmanager.executecommandend;
 
@@ -3505,11 +3550,13 @@ end;
 procedure PlacePoint(const point:GDBVertex);inline;
 var
     PCreatedGDBPoint:PGDBobjPoint;
+    dc:TDrawContext;
 begin
     PCreatedGDBPoint := GDBPointer(gdb.GetCurrentDWG^.mainObjRoot.ObjArray.CreateInitObj(GDBPointID,gdb.GetCurrentROOT));
     PCreatedGDBPoint^.P_insertInOCS:=point;
     PCreatedGDBPoint^.vp.layer:=gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer;
-    PCreatedGDBPoint^.FormatEntity(gdb.GetCurrentDWG^);
+    dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+    PCreatedGDBPoint^.FormatEntity(gdb.GetCurrentDWG^,dc);
 end;
 
 procedure CheckIntersection(pl1,pl2:PGDBObjLine;var linelinetests,intersectcount:integer;pparray:PGDBPoint3dArray;LinesMap:MapPointOnCurve3DPropArray;var lineiterator:MapPointOnCurve3DPropArray.TIterator);
@@ -3604,8 +3651,10 @@ var
     arr:PointOnCurve3DPropArray;
     point,point2:gdbvertex;
     i:integer;
+    dc:TDrawContext;
 begin
       lineiterator:=LinesMap.Min;
+      dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
       if lineiterator<>nil then
       repeat
             arr:=lineiterator.Value;
@@ -3616,7 +3665,7 @@ begin
                  lc:=pl^.CoordInOCS;
                  point:=geometry.Vertexmorph(lc.lBegin,lc.lEnd,arr[0]);
                  pl^.CoordInOCS.lend:=point;
-                 pl^.FormatEntity(gdb.GetCurrentDWG^);
+                 pl^.FormatEntity(gdb.GetCurrentDWG^,dc);
                  inc(lm);
                  for i:=1 to arr.size-1 do
                  begin
@@ -3627,7 +3676,7 @@ begin
                           PCreatedGDBLine^.vp:=pl^.vp;
                           PCreatedGDBLine^.CoordInOCS.lbegin:=point;
                           PCreatedGDBLine^.CoordInOCS.lend:=point2;
-                          PCreatedGDBLine^.FormatEntity(gdb.GetCurrentDWG^);
+                          PCreatedGDBLine^.FormatEntity(gdb.GetCurrentDWG^,dc);
                           inc(lcr);
                       end;
 
@@ -3638,7 +3687,7 @@ begin
                  PCreatedGDBLine^.vp:=pl^.vp;
                  PCreatedGDBLine^.CoordInOCS.lbegin:=point;
                  PCreatedGDBLine^.CoordInOCS.lend:=lc.lEnd;
-                 PCreatedGDBLine^.FormatEntity(gdb.GetCurrentDWG^);
+                 PCreatedGDBLine^.FormatEntity(gdb.GetCurrentDWG^,dc);
                  inc(lcr);
 
 

@@ -36,13 +36,13 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
 
                           function addobject(objnum:PGDBObjEntity):pselectedobjdesc;virtual;
                           procedure clearallobjects;virtual;
-                          procedure remappoints(pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
+                          procedure remappoints(pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                           procedure drawpoint(var DC:TDrawContext);virtual;
                           procedure drawobject(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                           function getnearesttomouse(mx,my:integer):tcontrolpointdist;virtual;
                           function getonlyoutbound:GDBBoundingBbox;
                           procedure selectcurrentcontrolpoint(key:GDBByte;mx,my,h:integer);virtual;
-                          procedure RenderFeedBack(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
+                          procedure RenderFeedBack(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                           //destructor done;virtual;
                           procedure modifyobj(dist,wc:gdbvertex;save:GDBBoolean;pconobj:pgdbobjEntity;var drawing:TDrawingDef);virtual;
                           procedure freeclones;
@@ -54,7 +54,7 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                           procedure drawobj(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                           procedure freeelement(p:GDBPointer);virtual;
                           function calcvisible(frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
-                          procedure resprojparam(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);
+                          procedure resprojparam(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
                     end;
 {EXPORT-}
 implementation
@@ -69,7 +69,7 @@ begin
        for i:=0 to count-1 do
        begin
             //dec(tdesc^.objaddr^.vp.LastCameraPos);
-            tdesc^.objaddr^.Renderfeedback(pcount,camera,ProjectProc);
+            tdesc^.objaddr^.Renderfeedback(pcount,camera,ProjectProc,dc);
             inc(tdesc);
        end;
   end;
@@ -177,11 +177,11 @@ begin
        begin
             if tdesc^.objaddr<>nil then
             begin
-                 tdesc^.objaddr^.RenderFeedbackIFNeed(pcount,camera,ProjectProc);
+                 tdesc^.objaddr^.RenderFeedbackIFNeed(pcount,camera,ProjectProc,dc);
             end;
             if tdesc^.ptempobj<>nil then
             begin
-                 tdesc^.ptempobj^.RenderFeedbackIFNeed(pcount,camera,ProjectProc);
+                 tdesc^.ptempobj^.RenderFeedbackIFNeed(pcount,camera,ProjectProc,dc);
             end;
             inc(tdesc);
        end;
@@ -214,7 +214,7 @@ begin
        begin
             if tdesc^.pcontrolpoint<>nil then
             begin
-                 tdesc^.objaddr^.remapcontrolpoints(tdesc^.pcontrolpoint,pcount,ScrollMode,camera,ProjectProc);
+                 tdesc^.objaddr^.remapcontrolpoints(tdesc^.pcontrolpoint,pcount,ScrollMode,camera,ProjectProc,dc);
             end;
             inc(tdesc);
        end;
@@ -477,6 +477,8 @@ var i: GDBInteger;
 //  d: GDBDouble;
 //  td:tcontrolpointdist;
   tdesc:pselectedobjdesc;
+  dc:TDrawContext;
+
 begin
   if count > 0 then
   begin
@@ -492,7 +494,10 @@ begin
     end;
   end;
   if save then
-              PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.FormatAfterEdit({gdb.GetCurrentDWG^}drawing);
+              begin
+                   dc:=drawing.CreateDrawingRC;
+                   PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.FormatAfterEdit(drawing,dc);
+              end;
 
 end;
 procedure GDBSelectedObjArray.freeclones;

@@ -24,7 +24,7 @@ uses ugdbdimstylearray,GDBWithLocalCS,ugdbabstractdrawing,zcadsysvars,strproc,
      varmandef,{varman,}sysutils, memman, geometry,gdbasetypes,sysinfo,
      GDBGenericSubEntry,UGDBLayerArray,ugdbltypearray,GDBEntity,
      UGDBSelectedObjArray,UGDBTextStyleArray,GDBCamera,UGDBOpenArrayOfPV,
-     GDBRoot,ugdbfont,UGDBOpenArrayOfPObjects,abstractviewarea;
+     GDBRoot,ugdbfont,UGDBOpenArrayOfPObjects,abstractviewarea,gdbdrawcontext;
 type
 {EXPORT+}
 PTSimpleDrawing=^TSimpleDrawing;
@@ -88,11 +88,22 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function SetMouseEditorMode(mode:GDBByte):GDBByte;virtual;
                        procedure FreeConstructionObjects;virtual;
                        function GetChangeStampt:GDBBoolean;virtual;
+                       function CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;virtual;
                  end;
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 implementation
 uses log;
+function TSimpleDrawing.CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;
+begin
+  if assigned(wa)then
+                     result:=wa.CreateRC(_maxdetail)
+  else
+  begin
+
+  end;
+end;
+
 function TSimpleDrawing.GetChangeStampt:GDBBoolean;
 begin
      result:=false;
@@ -258,13 +269,15 @@ var i:GDBInteger;
     //tt:dvector4d;
     rtmod:TRTModifyData;
     //tum:TUndableMethod;
+    dc:TDrawContext;
 begin
      if PSelectedObjDesc(md).pcontrolpoint^.count=0 then exit;
      if PSelectedObjDesc(md).ptempobj=nil then
      begin
           PSelectedObjDesc(md).ptempobj:=obj^.Clone(nil);
           PSelectedObjDesc(md).ptempobj^.bp.ListPos.Owner:=obj^.bp.ListPos.Owner;
-          PSelectedObjDesc(md).ptempobj.{format}FormatFast(self);
+          dc:=self.CreateDrawingRC;
+          PSelectedObjDesc(md).ptempobj.{format}FormatFast(self,dc);
           PSelectedObjDesc(md).ptempobj.BuildGeometry(self);
      end;
      p:=obj^.beforertmodify;
@@ -373,7 +386,8 @@ begin
      end
      else
      begin
-          PSelectedObjDesc(md).ptempobj.FormatFast(self);
+          dc:=self.CreateDrawingRC;
+          PSelectedObjDesc(md).ptempobj.FormatFast(self,dc);
           PSelectedObjDesc(md).ptempobj.BuildGeometry(self);
           //PSelectedObjDesc(md).ptempobj.renderfeedback;
      end;

@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfUCommands;
 {$INCLUDE def.inc}
 interface
-uses varmandef,zcadinterface,UGDBLayerArray,UGDBTextStyleArray,zcadstrconsts,UGDBOpenArrayOfPV,GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
+uses gdbdrawcontext,varmandef,zcadinterface,UGDBLayerArray,UGDBTextStyleArray,zcadstrconsts,UGDBOpenArrayOfPV,GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
      gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman{,GDBSubordinated};
 const BeginUndo:GDBString='BeginUndo';
       EndUndo:GDBString='EndUndo';
@@ -330,6 +330,8 @@ begin
 end;
 
 procedure TGObjectChangeCommand2.UnDo;
+var
+  DC:TDrawContext;
 type
     TCangeMethod=procedure(const data:_T)of object;
 begin
@@ -339,11 +341,16 @@ begin
      if AutoProcessGDB then
                            PGDBObjEntity(undomethod.Data)^.YouChanged(gdb.GetCurrentDWG^)
                        else
-                           PGDBObjEntity(undomethod.Data)^.formatEntity(gdb.GetCurrentDWG^);
+                           begin
+                                dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+                                PGDBObjEntity(undomethod.Data)^.formatEntity(gdb.GetCurrentDWG^,dc);
+                           end;
      end;
 end;
 
 procedure TGObjectChangeCommand2.Comit;
+var
+  DC:TDrawContext;
 type
     TCangeMethod=procedure(const data:_T)of object;
 begin
@@ -353,7 +360,10 @@ begin
      if AutoProcessGDB then
                            PGDBObjEntity(undomethod.Data)^.YouChanged(gdb.GetCurrentDWG^)
                        else
-                           PGDBObjEntity(undomethod.Data)^.formatEntity(gdb.GetCurrentDWG^);
+                           begin
+                           dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+                           PGDBObjEntity(undomethod.Data)^.formatEntity(gdb.GetCurrentDWG^,dc);
+                           end;
      end;
 end;
 {TTypedChangeCommand=object(TCustomChangeCommand)
@@ -378,6 +388,8 @@ begin
      PEntity:=nil;
 end;
 procedure TTypedChangeCommand.UnDo;
+var
+  DC:TDrawContext;
 begin
      PTypeManager^.MagicFreeInstance(Addr);
      PTypeManager^.CopyInstanceTo(OldData,Addr);
@@ -389,14 +401,17 @@ begin
                                       PEntity^.YouChanged(gdb.GetCurrentDWG^)
                                   else
                                       begin
-                                           PEntity^.FormatEntity(gdb.GetCurrentDWG^);
-                                           gdb.GetCurrentDWG^.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^);
+                                           dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+                                           PEntity^.FormatEntity(gdb.GetCurrentDWG^,dc);
+                                           gdb.GetCurrentDWG^.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
                                       end;
                              end;
      if assigned(SetVisuaProplProc)then
                                        SetVisuaProplProc;
 end;
 procedure TTypedChangeCommand.Comit;
+var
+  DC:TDrawContext;
 begin
      PTypeManager^.MagicFreeInstance(Addr);
      PTypeManager^.CopyInstanceTo(NewData,Addr);
@@ -408,8 +423,9 @@ begin
                                       PEntity^.YouChanged(gdb.GetCurrentDWG^)
                                   else
                                       begin
-                                           PEntity^.FormatEntity(gdb.GetCurrentDWG^);
-                                           gdb.GetCurrentDWG^.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^);
+                                           dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+                                           PEntity^.FormatEntity(gdb.GetCurrentDWG^,dc);
+                                           gdb.GetCurrentDWG^.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
                                       end;
                              end;
      if assigned(SetVisuaProplProc)then
@@ -508,13 +524,19 @@ begin //TTC_MNotUndableIfOverlay
                           result:=TTC_MBegin;}
 end;
 procedure TMarkerCommand.UnDo;
+var
+  DC:TDrawContext;
 begin
-     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^);
+     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
 end;
 
 procedure TMarkerCommand.Comit;
+var
+  DC:TDrawContext;
 begin
-     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^);
+     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
 end;
 
 constructor TMarkerCommand.init(_name:GDBString;_index:TArrayIndex);
@@ -613,6 +635,7 @@ procedure GDBObjOpenArrayOfUCommands.undo(prevheap:TArrayIndex;overlay:GDBBoolea
 var
    pcc:PTChangeCommand;
    mcounter:integer;
+   DC:TDrawContext;
 begin
      if CurrentCommand>prevheap then
      begin
@@ -654,12 +677,14 @@ begin
                     else
                         shared.ShowError(rscmNoCTUSE)
          end;
-     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^);
+     DC:=gdb.GetCurrentDWG^.CreateDrawingRC;
+     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
 end;
 procedure GDBObjOpenArrayOfUCommands.redo;
 var
    pcc:PTChangeCommand;
    mcounter:integer;
+   DC:TDrawContext;
 begin
      if CurrentCommand<count then
      begin
@@ -688,7 +713,8 @@ begin
      end
      else
          shared.ShowError(rscmNoCTR);
-     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^);
+     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
 end;
 
 constructor GDBObjOpenArrayOfUCommands.init;

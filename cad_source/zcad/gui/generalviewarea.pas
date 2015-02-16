@@ -736,7 +736,7 @@ begin
     PDWG.GetConstructObjRoot.DrawBB(dc);
 
 
-    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode,PDWG.GetPcamera^,PDWG^.myGluProject2);
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode,PDWG.GetPcamera^,PDWG^.myGluProject2,dc);
     dc.drawer.DisableStencil;
     dc.MaxDetail:=true;
     PDWG.GetSelObjArray.drawobj(dc);
@@ -941,6 +941,7 @@ end;
 procedure TGeneralViewArea.RestoreMouse;
 var
   fv1: GDBVertex;
+  DC:TDrawContext;
 begin
   CalcOptimalMatrix;
   mouseunproject(param.md.mouse.x, getviewcontrol.clientheight-param.md.mouse.y);
@@ -962,13 +963,14 @@ begin
   pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.getpcamera^.frustum,pdwg.getpcamera.POSCOUNT,pdwg.getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
   //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
   pdwg.GetCurrentROOT.calcvisible(pdwg.getpcamera^.frustum,pdwg.getpcamera.POSCOUNT,pdwg.getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
-  pdwg.GetSelObjArray.RenderFeedBack(pdwg^.GetPcamera^.POSCOUNT,pdwg^.GetPcamera^,pdwg^.myGluProject2);
+  DC:=self.CreateRC;
+  pdwg.GetSelObjArray.RenderFeedBack(pdwg^.GetPcamera^.POSCOUNT,pdwg^.GetPcamera^,pdwg^.myGluProject2,dc);
 
   calcmousefrustum;
 
   if param.lastonmouseobject<>nil then
                                       begin
-                                           PGDBObjEntity(param.lastonmouseobject)^.RenderFeedBack(pdwg.GetPcamera^.POSCOUNT,pdwg^.GetPcamera^, pdwg^.myGluProject2);
+                                           PGDBObjEntity(param.lastonmouseobject)^.RenderFeedBack(pdwg.GetPcamera^.POSCOUNT,pdwg^.GetPcamera^, pdwg^.myGluProject2,dc);
                                       end;
 
   Set3dmouse;
@@ -2176,6 +2178,7 @@ var
   pp:PGDBObjEntity;
   ir:itrec;
   //inr:TINRect;
+  DC:TDrawContext;
 begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobjectbytree',lp_IncPos);{$ENDIF}
   i := 0;
@@ -2191,9 +2194,10 @@ begin
   if pp<>nil then
                  begin
                       param.lastonmouseobject:=pp;
+                      dc:=CreateRC;
                       repeat
                             if pp^.vp.LastCameraPos<>PDWG.Getpcamera^.POSCOUNT then
-                            pp^.RenderFeedback(PDWG.Getpcamera^.POSCOUNT,PDWG.Getpcamera^,PDWG.myGluProject2);
+                            pp^.RenderFeedback(PDWG.Getpcamera^.POSCOUNT,PDWG.Getpcamera^,PDWG.myGluProject2,dc);
 
 
                             pp:=PDWG.GetOnMouseObj.iterate(ir);
@@ -2248,7 +2252,8 @@ procedure TGeneralViewArea.getonmouseobject;
 var
   i: GDBInteger;
   pp:PGDBObjEntity;
-      ir:itrec;
+  ir:itrec;
+  DC:TDrawContext;
 begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobject',lp_IncPos);{$ENDIF}
   i := 0;
@@ -2259,9 +2264,10 @@ begin
   if pp<>nil then
                  begin
                      param.lastonmouseobject:=pp;
+                     dc:=CreateRC;
                       repeat
                             if pp^.vp.LastCameraPos<>PDWG.Getpcamera^.POSCOUNT then
-                            pp^.RenderFeedback(PDWG.Getpcamera^.POSCOUNT,PDWG.Getpcamera^,PDWG.myGluProject2);
+                            pp^.RenderFeedback(PDWG.Getpcamera^.POSCOUNT,PDWG.Getpcamera^,PDWG.myGluProject2,dc);
 
 
                             pp:=PDWG.GetOnMouseObj.iterate(ir);

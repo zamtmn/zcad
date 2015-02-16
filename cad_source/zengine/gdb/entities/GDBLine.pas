@@ -52,10 +52,10 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTAbstractUnit;const drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
-                 procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                 procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure CalcGeometry;virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
+                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                   function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
@@ -141,6 +141,7 @@ end;
 var t1,t2,a1,a2:GDBDouble;
     q:GDBBoolean;
     w,u,dir:gdbvertex;
+    dc:TDrawContext;
 begin
      result:=false;
      if length<pl^.length then
@@ -167,7 +168,8 @@ begin
      self.CoordInOCS.lbegin:=VertexDmorph(self.CoordInOCS.lbegin,dir,a1);
      self.CoordInWCS.lend:=VertexDmorph(self.CoordInWCS.lbegin,dir,a2);
      self.CoordInWCS.lbegin:=VertexDmorph(self.CoordInWCS.lbegin,dir,a1);
-     FormatEntity(drawing);
+     dc:=drawing.CreateDrawingRC;
+     FormatEntity(drawing,dc);
      pl^.YouDeleted(drawing);
      result:=true;
 end;
@@ -236,7 +238,7 @@ begin
                                     end;
 end;
 
-procedure GDBObjLine.FormatEntity(const drawing:TDrawingDef);
+procedure GDBObjLine.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 //var m:DMatrix4D;
 begin
   calcgeometry;

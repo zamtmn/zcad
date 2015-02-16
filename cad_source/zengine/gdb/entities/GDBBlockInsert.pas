@@ -19,7 +19,7 @@ unit GDBBlockInsert;
 {$INCLUDE def.inc}
 
 interface
-uses uabstractunit,gdbentityfactory,ugdbdrawingdef,UGDBLayerArray{,UGDBLayerArray},math,gdbasetypes,GDBComplex,{GDBGenericSubEntry,}SysInfo,sysutils,
+uses gdbdrawcontext,uabstractunit,gdbentityfactory,ugdbdrawingdef,UGDBLayerArray{,UGDBLayerArray},math,gdbasetypes,GDBComplex,{GDBGenericSubEntry,}SysInfo,sysutils,
 {UGDBOpenArrayOfPV,}UGDBObjBlockdefArray{,UGDBSelectedObjArray,UGDBVisibleOpenArray},gdbEntity{,varman,varmandef},
 GDBBlockDef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBSubordinated,UGDBOpenArrayOfByte;
@@ -56,7 +56,7 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      procedure rtsave(refp:GDBPointer);virtual;
 
                      procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
-                     procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                     procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
 
                      function getrot:GDBDouble;virtual;
                      procedure setrot(r:GDBDouble);virtual;
@@ -290,7 +290,7 @@ begin
      result:=arccos((objmatrix[0,0])/geometry.oneVertexlength(PGDBVertex(@objmatrix[0])^))*180/pi
 end;
 
-procedure GDBObjBlockInsert.FormatEntity(const drawing:TDrawingDef);
+procedure GDBObjBlockInsert.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 begin
      inherited;
 end;
@@ -429,6 +429,7 @@ var pblockdef:PGDBObjBlockdef;
     //freelayer:PGDBLayerProp;
     i:GDBInteger;
     mainowner:PGDBObjSubordinated;
+    dc:TDrawContext;
     //varobject:gdbboolean;
 begin
           if name='' then
@@ -441,7 +442,8 @@ begin
 
           if not PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].Formated then
                                                                                begin
-                                                                                PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].FormatEntity(drawing);
+                                                                                dc:=drawing.CreateDrawingRC;
+                                                                                PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].FormatEntity(drawing,dc);
                                                                                end;
           ConstObjArray.cleareraseobj;
           mainowner:=getmainowner;
@@ -461,17 +463,18 @@ begin
                pvisible:=GDBPointer(pblockdef.ObjArray.getelement(i)^);
                pvisible:=pvisible^.Clone(@self);
                pvisible2:=pgdbobjEntity(pvisible.FromDXFPostProcessBeforeAdd(nil,drawing));
+               dc:=drawing.CreateDrawingRC;
                if pvisible2=nil then
                                      begin
                                           pvisible^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
-                                          pvisible^.FormatEntity(drawing);
+                                          pvisible^.FormatEntity(drawing,dc);
                                           pvisible.BuildGeometry(drawing);
                                           ConstObjArray.add(@pvisible);
                                      end
                                  else
                                      begin
                                           pvisible2^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
-                                          pvisible2^.FormatEntity(drawing);
+                                          pvisible2^.FormatEntity(drawing,dc);
                                           pvisible.BuildGeometry(drawing);
                                           ConstObjArray.add(@pvisible2);
                                      end;

@@ -1941,6 +1941,7 @@ begin
   if pv<>nil then
   repeat
     if pv^.vp.ID<>GDBCableID then
+    if pv^.ou.Instance<>nil then
     begin
          pvm:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('DB_link');
          if pvm<>nil then

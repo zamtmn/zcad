@@ -617,13 +617,13 @@ begin
 
                          SaveCabUName:=PTObjectUnit(pcabledesk.StartSegment.ou.Instance)^.Name;
                          PTObjectUnit(pcabledesk.StartSegment.ou.Instance)^.Name:='Cable';
-                         p:=@pcabledesk.StartSegment.ou;
+                         p:=pcabledesk.StartSegment.ou.Instance;
                          currentunit.InterfaceUses.addnodouble(@p);
                          ucount:=currentunit.InterfaceUses.Count;
 
                          SaveEntUName:=PTObjectUnit(ptn^.bp.ListPos.Owner.ou.Instance)^.Name;
                          PTObjectUnit(ptn^.bp.ListPos.Owner.ou.Instance)^.Name:='Entity';
-                         p:=@ptn^.bp.ListPos.Owner.ou;
+                         p:=ptn^.bp.ListPos.Owner.ou.Instance;
                          currentunit.InterfaceUses.addnodouble(@p);
 
                          units.loadunit(expandpath('*rtl/objcalc/opsmark.pas'),(currentunit));

@@ -74,21 +74,31 @@ function getlinktype(pv:PGDBObjEntity):TLinktype;
 var
     pvd:pvardesk;
 begin
+  if pv^.ou.Instance<>nil then
+  begin
      pvd:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('LinkType');
      if pvd=nil then
                     result:=LT_Normal
                 else
                     result:=PTLinkType(pvd.data.Instance)^;
+  end
+  else
+      result:=LT_Normal;
 end;
 function getlinklength(pv:PGDBObjLine):GDBDouble;
 var
     pvd:pvardesk;
 begin
+     if pv^.ou.Instance<>nil then
+     begin
      pvd:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('LengthOverrider');
      if pvd=nil then
                     result:=pv^.Length
                 else
                     result:=PGDBDouble(pvd.data.Instance)^;
+     end
+        else
+            result:=pv^.Length;
 end;
 procedure GDBGraf.FindPath;
 var

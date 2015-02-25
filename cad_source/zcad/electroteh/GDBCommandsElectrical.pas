@@ -2371,6 +2371,7 @@ begin
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   count:=0;
   if pv<>nil then
+  if pv^.ou.Instance<>nil then
   repeat
         findvarvalue:=false;
         v:=PTObjectUnit(pv^.ou.Instance)^.FindVariable(varname);

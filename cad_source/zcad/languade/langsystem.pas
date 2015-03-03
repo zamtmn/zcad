@@ -323,8 +323,12 @@ begin
   //data.Instance := nil;
   // r.data.Instance=nil then
                               GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}result.data.Instance,GDBStringDescriptorObj.SizeInGDBBytes);
+                              ppointer(result.data.Instance)^:=nil;
   if rez.data.Instance=nil then
-                              GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}rez.data.Instance,GDBStringDescriptorObj.SizeInGDBBytes)
+                               begin
+                               GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}rez.data.Instance,GDBStringDescriptorObj.SizeInGDBBytes);
+                               ppointer(rez.data.Instance)^:=nil;
+                               end
                           else
                               GDBString(rez.data.Instance^):='';
   //GDBGetMem(r.pvalue, basetypearrayptr^.typearray[TGDBString].size);

@@ -407,7 +407,7 @@
         <StopAfterErrCount Value="5"/>
       </ConfigFile>
       <CompilerMessages>
-        <IgnoredMessages idx11023="True" idx4056="True" idx4055="True" idx4035="True" idx3104="True" idx1010="True"/>
+        <IgnoredMessages idx4056="True" idx4055="True" idx4035="True"/>
       </CompilerMessages>
     </Other>
   </CompilerOptions>

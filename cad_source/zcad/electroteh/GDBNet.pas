@@ -52,7 +52,7 @@ GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
 var
     GDBObjNetDXFFeatures:TDXFEntIODataManager;
 implementation
-uses GDBLine,dxflow,math,log;
+uses enitiesextendervariables,GDBLine,dxflow,math,log;
 function GDBObjNet.IsHaveGRIPS:GDBBoolean;
 begin
      result:=false;
@@ -104,7 +104,8 @@ begin
   ObjArray.CloneEntityTo(@tvo.ObjArray,tvo);
   tvo^.bp.ListPos.Owner:=own;
   result := tvo;
-  PTObjectUnit(ou.Instance)^.CopyTo(PTObjectUnit(tvo.ou.Instance));
+  EntExtensions.RunOnCloneProcedures(@self,tvo);
+  //PTObjectUnit(ou.Instance)^.CopyTo(PTObjectUnit(tvo.ou.Instance));
 end;
 procedure GDBObjNet.DelSelectedSubitem;
 var pv:pGDBObjEntity;
@@ -327,10 +328,13 @@ function GDBObjNet.CalcNewName(Net1,Net2:PGDBObjNet):GDBInteger;
 var
    pvd1,pvd2:pvardesk;
    n1,n2:gdbstring;
+   pentvarext1,pentvarext2:PTVariablesExtender;
 begin
      result:=0;
-     pvd1:=PTObjectUnit(net1.ou.Instance)^.FindVariable('NMO_Name');
-     pvd2:=PTObjectUnit(net2.ou.Instance)^.FindVariable('NMO_Name');
+     pentvarext1:=net1.GetExtension(typeof(TVariablesExtender));
+     pentvarext2:=net2.GetExtension(typeof(TVariablesExtender));
+     pvd1:=pentvarext1^.entityunit.FindVariable('NMO_Name');
+     pvd2:=pentvarext2^.entityunit.FindVariable('NMO_Name');
      n1:=pstring(pvd1^.data.Instance)^;
      n2:=pstring(pvd2^.data.Instance)^;
      if (n1='')and(n2='') then
@@ -354,12 +358,15 @@ var CurrentNet:PGDBObjNet;
     ir,ir2,ir3:itrec;
     //p:pointer;
     DC:TDrawContext;
+    pentvarext,pentvarextcurrentnet:PTVariablesExtender;
 begin
      dc:=drawing.createdrawingrc;
      formatentity(drawing,dc);
+     pentvarext:=GetExtension(typeof(TVariablesExtender));
      CurrentNet:=ConnectedArea.ObjArray.beginiterate(ir);
      if (currentnet<>nil) then
      repeat
+           pentvarextcurrentnet:=currentnet.GetExtension(typeof(TVariablesExtender));
            //p:=@self;
            //p:=currentnet;
            if (currentnet<>@self) then
@@ -384,8 +391,8 @@ begin
                                       if nn=2 then
                                       begin
                                            //name:=nn;
-                                           PTObjectUnit(ou.Instance)^.free;
-                                           PTObjectUnit(currentnet.ou.Instance)^.CopyTo(PTObjectUnit(ou.Instance));
+                                           pentvarext.entityunit.free;
+                                           pentvarextcurrentnet.entityunit.CopyTo(@pentvarext.entityunit);
                                       end;
                                       //format;
                                       formatentity(drawing,dc);
@@ -417,12 +424,14 @@ var pl,pl2:pgdbobjline;
     ti:GDBObjOpenArrayOfPV;
         ir:itrec;
     DC:TDrawContext;
+    pentvarext,pentvarexttempnet:PTVariablesExtender;
 begin
      dc:=drawing.createdrawingrc;
      //inherited format;
      if ObjArray.count=0 then
                              exit;
      i:=0;
+     pentvarext:=GetExtension(typeof(TVariablesExtender));
      repeat
            pl:=pgdbobjline(ObjArray.getelement(i)^);
            if pl<>nil then
@@ -496,7 +505,9 @@ begin
           if GDBPlatformUInt(tempnet)=$229FEF0 then
                                   tempnet:=tempnet;
           TempNet^.initnul(nil);
-          PTObjectUnit(ou.Instance)^.CopyTo(PTObjectUnit(tempnet.ou.Instance));
+          pentvarexttempnet:=tempnet.GetExtension(typeof(TVariablesExtender));
+
+          pentvarext.entityunit.CopyTo(@pentvarexttempnet.entityunit);
           //TempNet^.name:=name;
           PGDBObjGenericSubEntry(GetMainOwner)^
           {gdb.GetCurrentROOT}.AddObjectToObjArray{ObjArray.add}(@TempNet);

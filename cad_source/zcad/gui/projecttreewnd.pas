@@ -20,7 +20,7 @@ unit projecttreewnd;
 {$INCLUDE def.inc}
 interface
 uses
- ugdbdrawing,paths,UGDBStringArray,gdbobjectsconstdef,zcadstrconsts,ucxmenumgr,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ enitiesextendervariables,ugdbdrawing,paths,UGDBStringArray,gdbobjectsconstdef,zcadstrconsts,ucxmenumgr,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}ComCtrls,
  {ZTabControlsGeneric,zmenus,}{DeviceBase}devicebaseabstract,log,SysUtils,{UGDBTree,}gdbase,UGDBDescriptor{,math,commandline},varman,languade{,UGDBTracePropArray},
   {ZEditsWithProcedure,zbasicvisible,}varmandef,shared,sysinfo{,ZTreeViewsGeneric},memman,gdbasetypes,commanddefinternal,commandlinedef;
@@ -264,6 +264,7 @@ var
     //pmenuitem:pzmenuitem;
 
     BlockNode:TBlockTreeNode;
+    pentvarext:PTVariablesExtender;
 begin
   inherited;
   //self.Position:=poScreenCenter;
@@ -322,8 +323,8 @@ begin
                         CurrNode:=DeviceNodeN;
                    end;
         treepos:=uncat_+pb^.name;
-
-        pvd:=PTObjectUnit(pb^.ou.Instance)^.FindVariable('BTY_TreeCoord');
+        pentvarext:=pb.GetExtension(typeof(TVariablesExtender));
+        pvd:=pentvarext.entityunit.FindVariable('BTY_TreeCoord');
         if pvd<>nil then
         if pvd^.data.Instance<>nil then
                                         treepos:=pstring(pvd^.data.Instance)^;

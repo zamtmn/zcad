@@ -72,7 +72,7 @@ procedure LoadZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawi
 procedure Import(name: GDBString;var drawing:TSimpleDrawing);
 {$ENDIF}
 implementation
-uses GDBLine,GDBBlockDef,UGDBLayerArray,varmandef,fileformatsmanager;
+uses enitiesextendervariables,GDBLine,GDBBlockDef,UGDBLayerArray,varmandef,fileformatsmanager;
 
 function IsIgnoredEntity(name:GDBString):GDBInteger;
 var i:GDBInteger;
@@ -248,42 +248,44 @@ end;
 
 procedure correctvariableset(pobj: PGDBObjEntity);
 var vd:vardesk;
+    pentvarext:PTVariablesExtender;
 begin
      //if (pobj.vp.ID=GDBBlockInsertID)or
      //   (pobj.vp.ID=GDBCableID) then
-     if pobj^.ou.Instance<>nil then
+     pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+     if pentvarext<>nil then
         begin
-             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_HeadDevice')<>nil then
-             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_Metric')=nil then
+             if pentvarext^.entityunit.FindVariable('GC_HeadDevice')<>nil then
+             if pentvarext^.entityunit.FindVariable('GC_Metric')=nil then
              begin
-                  PTObjectUnit(pobj^.ou.Instance)^.setvardesc(vd,'GC_Metric','','GDBString');
-                  PTObjectUnit(pobj^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
+                  pentvarext^.entityunit.setvardesc(vd,'GC_Metric','','GDBString');
+                  pentvarext^.entityunit.InterfaceVariables.createvariable(vd.name,vd);
              end;
 
-             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_HDGroup')<>nil then
-             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_HDGroupTemplate')=nil then
+             if pentvarext^.entityunit.FindVariable('GC_HDGroup')<>nil then
+             if pentvarext^.entityunit.FindVariable('GC_HDGroupTemplate')=nil then
              begin
-                  PTObjectUnit(pobj^.ou.Instance)^.setvardesc(vd,'GC_HDGroupTemplate','Шаблон группы','GDBString');
-                  PTObjectUnit(pobj^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
+                  pentvarext^.entityunit.setvardesc(vd,'GC_HDGroupTemplate','Шаблон группы','GDBString');
+                  pentvarext^.entityunit.InterfaceVariables.createvariable(vd.name,vd);
              end;
-             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_HeadDevice')<>nil then
-             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_HeadDeviceTemplate')=nil then
+             if pentvarext^.entityunit.FindVariable('GC_HeadDevice')<>nil then
+             if pentvarext^.entityunit.FindVariable('GC_HeadDeviceTemplate')=nil then
              begin
-                  PTObjectUnit(pobj^.ou.Instance)^.setvardesc(vd,'GC_HeadDeviceTemplate','Шаблон головного устройства','GDBString');
-                  PTObjectUnit(pobj^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
+                  pentvarext^.entityunit.setvardesc(vd,'GC_HeadDeviceTemplate','Шаблон головного устройства','GDBString');
+                  pentvarext^.entityunit.InterfaceVariables.createvariable(vd.name,vd);
              end;
 
-             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_HDShortName')<>nil then
-             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_HDShortNameTemplate')=nil then
+             if pentvarext^.entityunit.FindVariable('GC_HDShortName')<>nil then
+             if pentvarext^.entityunit.FindVariable('GC_HDShortNameTemplate')=nil then
              begin
-                  PTObjectUnit(pobj^.ou.Instance)^.setvardesc(vd,'GC_HDShortNameTemplate','Шаблон короткого имени головного устройства','GDBString');
-                  PTObjectUnit(pobj^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
+                  pentvarext^.entityunit.setvardesc(vd,'GC_HDShortNameTemplate','Шаблон короткого имени головного устройства','GDBString');
+                  pentvarext^.entityunit.InterfaceVariables.createvariable(vd.name,vd);
              end;
-             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_Metric')<>nil then
-             if PTObjectUnit(pobj^.ou.Instance)^.FindVariable('GC_InGroup_Metric')=nil then
+             if pentvarext^.entityunit.FindVariable('GC_Metric')<>nil then
+             if pentvarext^.entityunit.FindVariable('GC_InGroup_Metric')=nil then
              begin
-                  PTObjectUnit(pobj^.ou.Instance)^.setvardesc(vd,'GC_InGroup_Metric','Метрика нумерации в группе','GDBString');
-                  PTObjectUnit(pobj^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
+                  pentvarext^.entityunit.setvardesc(vd,'GC_InGroup_Metric','Метрика нумерации в группе','GDBString');
+                  pentvarext^.entityunit.InterfaceVariables.createvariable(vd.name,vd);
              end;
 
 
@@ -305,6 +307,7 @@ objid: GDBInteger;
   additionalunit:TUnit;
   EntInfoData:TEntInfoData;
   DC:TDrawContext;
+  pentvarext,ppostentvarext:PTVariablesExtender;
 begin
   additionalunit.init('temparraryunit');
   additionalunit.InterfaceUses.addnodouble(@SysUnit);
@@ -416,8 +419,11 @@ begin
                                 end;
 
                                  newowner^.AddMi(@postobj);
-                                 if pobj^.ou.Instance<>nil then
-                                 PTObjectUnit(pobj^.ou.Instance)^.CopyTo(PTObjectUnit(PGDBObjEntity(postobj)^.ou.Instance));
+                                 pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+                                 ppostentvarext:=postobj^.GetExtension(typeof(TVariablesExtender));
+                                 //if pobj^.ou.Instance<>nil then
+                                 if (pentvarext<>nil)and(ppostentvarext<>nil) then
+                                 pentvarext^.entityunit.CopyTo(@ppostentvarext^.entityunit);
                                  if foc=0 then
                                               begin
                                                    PGDBObjEntity(postobj)^.BuildGeometry(drawing);

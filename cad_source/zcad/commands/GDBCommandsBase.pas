@@ -21,7 +21,7 @@ unit GDBCommandsBase;
 
 interface
 uses
- gdbdrawcontext,ugdbdrawing,paths,fileformatsmanager,gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbdrawingdef,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ enitiesextendervariables,gdbdrawcontext,ugdbdrawing,paths,fileformatsmanager,gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbdrawingdef,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,FileUtil,Forms,Controls,Clipbrd,lclintf,
   plugins,
   sysinfo,
@@ -124,6 +124,7 @@ var //i: GDBInteger;
     ir,ir2:itrec;
     //etype:integer;
     DC:TDrawContext;
+    pentvarext:PTVariablesExtender;
 begin
       dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
       pvd:=ou.InterfaceVariables.vardescarray.beginiterate(ir2);
@@ -135,10 +136,12 @@ begin
                  pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
                  if pv<>nil then
                  repeat
-                   if pv^.Selected then
-                   if ((pv^.GetObjType=GetObjType)or(GetObjType=0))and(pv^.ou.Instance<>nil) then
+                   if (pv^.Selected)and((pv^.GetObjType=GetObjType)or(GetObjType=0)) then
                    begin
-                        pvdmy:=PTObjectUnit(pv^.ou.Instance)^.InterfaceVariables.findvardesc(pvd^.name);
+                     pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
+                   if pentvarext<>nil then
+                   begin
+                        pvdmy:=pentvarext^.entityunit.InterfaceVariables.findvardesc(pvd^.name);
                         if pvdmy<>nil then
                           if pvd^.data.PTD=pvdmy^.data.PTD then
                           begin
@@ -149,6 +152,7 @@ begin
                                if pvd^.data.PTD.GetValueAsString(pvd^.data.Instance)<>pvdmy^.data.PTD.GetValueAsString(pvdmy^.data.Instance) then
                                pvd.attrib:=pvd.attrib or vda_different;
                           end;
+                   end;
                    end;
                    pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
                  until pv=nil;
@@ -178,7 +182,7 @@ var //i: GDBInteger;
     pvd,pvdmy:pvardesk;
     vd:vardesk;
     ir,ir2:itrec;
-    //etype:integer;
+    pentvarext:PTVariablesExtender;
 begin
      self.SelCount:=0;
      ou.free;
@@ -193,15 +197,16 @@ begin
        if pv^.Selected then
        begin
        inc(self.SelCount);
-       if ((pv^.GetObjType=GetObjType)or(GetObjType=0))and(pv^.ou.Instance<>nil) then
+       pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
+       if ((pv^.GetObjType=GetObjType)or(GetObjType=0))and(pentvarext<>nil) then
        begin
-            pu:=PTObjectUnit(pv^.ou.Instance)^.InterfaceUses.beginiterate(ir2);
+            pu:=pentvarext^.entityunit.InterfaceUses.beginiterate(ir2);
             if pu<>nil then
             repeat
                   ou.InterfaceUses.addnodouble(@pu);
-                  pu:=PTObjectUnit(pv^.ou.Instance)^.InterfaceUses.iterate(ir2)
+                  pu:=pentvarext^.entityunit.InterfaceUses.iterate(ir2)
             until pu=nil;
-            pvd:=PTObjectUnit(pv^.ou.Instance)^.InterfaceVariables.vardescarray.beginiterate(ir2);
+            pvd:=pentvarext^.entityunit.InterfaceVariables.vardescarray.beginiterate(ir2);
             if pvd<>nil then
             repeat
                   pvdmy:=ou.InterfaceVariables.findvardesc(pvd^.name);
@@ -226,7 +231,7 @@ begin
                                            pvdmy.attrib:=vda_different;
                                    end;
 
-                  pvd:=PTObjectUnit(pv^.ou.Instance)^.InterfaceVariables.vardescarray.iterate(ir2)
+                  pvd:=pentvarext^.entityunit.InterfaceVariables.vardescarray.iterate(ir2)
             until pvd=nil;
        end;
        end;
@@ -262,13 +267,15 @@ var
   //inr:TINRect;
   line,saddr:GDBString;
   pvd:pvardesk;
+  pentvarext:PTVariablesExtender;
 begin
      result:=0;
      pp:=gdb.GetCurrentDWG.OnMouseObj.beginiterate(ir);
      if pp<>nil then
                     begin
                          repeat
-                         pvd:=PTObjectUnit(pp.ou.Instance)^.FindVariable('NMO_Name');
+                         pentvarext:=pp^.GetExtension(typeof(TVariablesExtender));
+                         pvd:=pentvarext^.entityunit.FindVariable('NMO_Name');
                          if pvd<>nil then
                                          begin
                                          if Result=20 then
@@ -1006,6 +1013,7 @@ var
    //us:unicodestring;
    u8s:UTF8String;
    astring:ansistring;
+   pentvarext:PTVariablesExtender;
 begin
      pobj:=nil;
      if GDB.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount=1 then
@@ -1022,7 +1030,10 @@ else if length(Operands)>3 then
   then
       begin
            mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
-           PTObjectUnit(pobj^.ou.Instance)^.SaveToMem(mem);
+           pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+           if pentvarext<>nil then
+           begin
+           pentvarext^.entityunit.SaveToMem(mem);
            mem.SaveToFile(sysparam.programpath+'autosave\lastvariableset.pas');
 
            setlength(astring,mem.Count);
@@ -1040,15 +1051,13 @@ else if length(Operands)>3 then
                                      mem.Clear;
                                      mem.AddData(@astring[1],length(astring));
 
-                                     PTObjectUnit(pobj^.ou.Instance)^.free;
-                                     units.parseunit(mem,PTSimpleUnit(@pobj^.OU));
+                                     pentvarext^.entityunit.free;
+                                     units.parseunit(mem,@pentvarext^.entityunit);
                                      if assigned(rebuildproc)then
                                      rebuildproc;
                                      //GDBobjinsp.rebuild;
                                end;
-
-
-           //InfoFormVar.Free;
+           end;
            mem.done;
       end
   else
@@ -1066,6 +1075,7 @@ var
    astring:ansistring;
    counter:integer;
    ir:itrec;
+   pentvarext:PTVariablesExtender;
 begin
       begin
            mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
@@ -1087,8 +1097,9 @@ begin
                                      repeat
                                            if pobj^.Selected then
                                            begin
-                                                PTObjectUnit(pobj^.ou.Instance)^.free;
-                                                units.parseunit(mem,PTSimpleUnit(@pobj^.OU));
+                                                pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+                                                pentvarext^.entityunit.free;
+                                                units.parseunit(mem,@pentvarext^.entityunit);
                                                 mem.Seek(0);
                                                 inc(counter);
                                            end;

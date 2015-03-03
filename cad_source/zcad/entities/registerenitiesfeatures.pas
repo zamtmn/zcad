@@ -288,9 +288,11 @@ end;
 procedure DeviceNameProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
 var
    pvn,pvnt:pvardesk;
+   pentvarext:PTVariablesExtender;
 begin
-     pvn:=PTObjectUnit(pEntity^.ou.Instance)^.FindVariable('NMO_Name');
-     pvnt:=PTObjectUnit(pEntity^.ou.Instance)^.FindVariable('NMO_Template');
+     pentvarext:=pEntity^.GetExtension(typeof(TVariablesExtender));
+     pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');
+     pvnt:=pentvarext^.entityunit.FindVariable('NMO_Template');
 
      if (pvnt<>nil) then
      DeviceNameSubProcess(pvn,pstring(pvnt^.data.Instance)^,pEntity);
@@ -303,14 +305,16 @@ var
    volt:TVoltage;
    calcip:TCalcIP;
    u:gdbdouble;
+   pentvarext:PTVariablesExtender;
 begin
-     pvn:=PTObjectUnit(pEntity^.ou.Instance)^.FindVariable('Device_Type');
+     pentvarext:=pEntity^.GetExtension(typeof(TVariablesExtender));
+     pvn:=pentvarext^.entityunit.FindVariable('Device_Type');
      if pvn<>nil then
      begin
           case PTDeviceType(pvn^.data.Instance)^ of
           TDT_SilaPotr:
           begin
-               pvn:=PTObjectUnit(pEntity^.ou.Instance)^.FindVariable('Voltage');
+               pvn:=pentvarext^.entityunit.FindVariable('Voltage');
                if pvn<>nil then
                begin
                      volt:=PTVoltage(pvn^.data.Instance)^;
@@ -319,13 +323,13 @@ begin
                                  _AC_220V_50Hz:u:=0.22;
                                  _AC_380V_50Hz:u:=0.38;
                      end;{case}
-                     pvn:=PTObjectUnit(pEntity^.ou.Instance)^.FindVariable('CalcIP');
+                     pvn:=pentvarext^.entityunit.FindVariable('CalcIP');
                      if pvn<>nil then
                                      calcip:=PTCalcIP(pvn^.data.Instance)^;
-                     pvp:=PTObjectUnit(pEntity^.ou.Instance)^.FindVariable('Power');
-                     pvi:=PTObjectUnit(pEntity^.ou.Instance)^.FindVariable('Current');
-                     pvcos:=PTObjectUnit(pEntity^.ou.Instance)^.FindVariable('CosPHI');
-                     pvphase:=PTObjectUnit(pEntity^.ou.Instance)^.FindVariable('Phase');
+                     pvp:=pentvarext^.entityunit.FindVariable('Power');
+                     pvi:=pentvarext^.entityunit.FindVariable('Current');
+                     pvcos:=pentvarext^.entityunit.FindVariable('CosPHI');
+                     pvphase:=pentvarext^.entityunit.FindVariable('Phase');
                      if pvn<>nil then
                                      calcip:=PTCalcIP(pvn^.data.Instance)^;
                      if (pvp<>nil)and(pvi<>nil)and(pvcos<>nil)and(pvphase<>nil) then
@@ -366,8 +370,10 @@ var
    s:GDBstring;
    //c:gdbinteger;
    pdev:PGDBObjDevice;
+   pentvarext:PTVariablesExtender;
 begin
-     pvn:=PTObjectUnit(pCable^.ou.Instance)^.FindVariable('NMO_Name');
+     pentvarext:=pCable^.GetExtension(typeof(TVariablesExtender));
+     pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');
      if pvn<>nil then
      if pstring(pvn^.data.Instance)^='@1' then
                                                  s:=s;
@@ -378,8 +384,8 @@ begin
                                            end
                                       else
                                           pdev:=nil;
-     pvn:=PTObjectUnit(pCable^.ou.Instance)^.FindVariable('NMO_Prefix');
-     pvnt:=PTObjectUnit(pCable^.ou.Instance)^.FindVariable('NMO_PrefixTemplate');
+     pvn:=pentvarext^.entityunit.FindVariable('NMO_Prefix');
+     pvnt:=pentvarext^.entityunit.FindVariable('NMO_PrefixTemplate');
      if (pvnt<>nil) then
                         s:=pstring(pvnt^.data.Instance)^
                     else
@@ -393,29 +399,29 @@ begin
                                            end
                                       else
                                           pdev:=nil;
-     pvn:=PTObjectUnit(pCable^.ou.Instance)^.FindVariable('NMO_Suffix');
-     pvnt:=PTObjectUnit(pCable^.ou.Instance)^.FindVariable('NMO_SuffixTemplate');
+     pvn:=pentvarext^.entityunit.FindVariable('NMO_Suffix');
+     pvnt:=pentvarext^.entityunit.FindVariable('NMO_SuffixTemplate');
      if (pvnt<>nil) then
                         s:=pstring(pvnt^.data.Instance)^
                     else
                         s:='';
      DeviceNameSubProcess(pvn,s,pdev);
 
-     pvn:=PTObjectUnit(pCable^.ou.Instance)^.FindVariable('NMO_Name');
-     pvnt:=PTObjectUnit(pCable^.ou.Instance)^.FindVariable('NMO_Template');
+     pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');
+     pvnt:=pentvarext^.entityunit.FindVariable('NMO_Template');
      if (pvnt<>nil) then
      DeviceNameSubProcess(pvn,pstring(pvnt^.data.Instance)^,pCable);
 
-     pvn:=PTObjectUnit(pCable^.ou.Instance)^.FindVariable('GC_HDGroup');
-     pvnt:=PTObjectUnit(pCable^.ou.Instance)^.FindVariable('GC_HDGroupTemplate');
+     pvn:=pentvarext^.entityunit.FindVariable('GC_HDGroup');
+     pvnt:=pentvarext^.entityunit.FindVariable('GC_HDGroupTemplate');
      if (pvnt<>nil) then
                         s:=pstring(pvnt^.data.Instance)^
                     else
                         s:='';
      DeviceNameSubProcess(pvn,s,pCable);
 
-     pvn:=PTObjectUnit(pCable^.ou.Instance)^.FindVariable('GC_HeadDevice');
-     pvnt:=PTObjectUnit(pCable^.ou.Instance)^.FindVariable('GC_HeadDeviceTemplate');
+     pvn:=pentvarext^.entityunit.FindVariable('GC_HeadDevice');
+     pvnt:=pentvarext^.entityunit.FindVariable('GC_HeadDeviceTemplate');
      if (pvnt<>nil) then
                         s:=pstring(pvnt^.data.Instance)^
                     else
@@ -423,8 +429,8 @@ begin
      DeviceNameSubProcess(pvn,s,pCable);
 
 
-     pvn:=PTObjectUnit(pCable^.ou.Instance)^.FindVariable('GC_HDShortName');
-     pvnt:=PTObjectUnit(pCable^.ou.Instance)^.FindVariable('GC_HDShortNameTemplate');
+     pvn:=pentvarext^.entityunit.FindVariable('GC_HDShortName');
+     pvnt:=pentvarext^.entityunit.FindVariable('GC_HDShortNameTemplate');
      if (pvnt<>nil) then
                         s:=pstring(pvnt^.data.Instance)^
                     else
@@ -453,13 +459,15 @@ end;
 procedure GDBObjBlockDefLoadVarsFromFile(pEntity:PGDBObjBlockDef);
 var
   uou:PTObjectUnit;
+  pentvarext:PTVariablesExtender;
 begin
      if pos(DevicePrefix,pEntity^.name)=1 then
      begin
          uou:=pointer(units.findunit(pEntity^.name));
          if uou<>nil then
                          begin
-                               PTObjectUnit(pEntity^.ou.Instance)^.CopyFrom(uou);
+                              pentvarext:=pEntity^.GetExtension(typeof(TVariablesExtender));
+                              pentvarext^.entityunit.CopyFrom(uou);
                          end
                      else
                          begin

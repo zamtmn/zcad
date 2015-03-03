@@ -22,7 +22,7 @@ interface
 uses gdbentity,zcadvariablesutils,gdbfieldprocessor,languade,strproc,sysutils,gdbasetypes,varmandef,GDBase;
 implementation
 uses
-   log,GDBSubordinated;
+   enitiesextendervariables,log,GDBSubordinated;
 procedure var2value(var str:gdbstring;startpos:integer;pobj:PGDBObjGenericWithSubordinated);
 var
   endpos:integer;
@@ -51,13 +51,15 @@ var
   varname:GDBString;
   pv:pvardesk;
   vd:vardesk;
+  pentvarext:PTVariablesExtender;
 begin
   if startpos>0 then
   begin
     endpos:=pos(']',str);
     if endpos<startpos then exit;
     varname:=copy(str,startpos+3,endpos-startpos-3);
-    vd:=evaluate(varname,@PGDBObjGenericWithSubordinated(pobj).OU);
+    pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+    vd:=evaluate(varname,@pentvarext^.entityunit);
     if (assigned(vd.data.ptd))and(assigned(vd.data.Instance)) then
                                                                   str:=copy(str,1,startpos-1)+vd.data.ptd^.GetValueAsString(vd.data.Instance)+copy(str,endpos+1,length(str)-endpos)
                                                               else

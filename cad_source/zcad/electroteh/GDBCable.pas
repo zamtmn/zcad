@@ -55,7 +55,7 @@ GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
 var
     GDBObjCableDXFFeatures:TDXFEntIODataManager;
 implementation
-uses gdbentityfactory,log;
+uses enitiesextendervariables,gdbentityfactory,log;
 function GDBObjCable.Clone;
 var tvo: PGDBObjCable;
     i:GDBInteger;
@@ -75,7 +75,8 @@ begin
       inc(p)
   end;
   result := tvo;
-  PTObjectUnit(ou.Instance)^.CopyTo(PTObjectUnit(tvo.ou.Instance));
+  EntExtensions.RunOnCloneProcedures(@self,tvo);
+  //PTObjectUnit(ou.Instance)^.CopyTo(PTObjectUnit(tvo.ou.Instance));
 end;
 procedure GDBObjCable.SaveToDXFFollow;
 var
@@ -165,6 +166,7 @@ var ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
     pvd,{pvd2,}pvds,pvdal,pvdrt:pvardesk;
     {group,pribor,}count:gdbinteger;
     l:gdbdouble;
+    pentvarext,pentvarextcirrobj:PTVariablesExtender;
 begin
   inherited;
   calcbb;
@@ -309,6 +311,7 @@ begin
                     if ptn^.DevLink<>nil then
                     begin
                     CurrentObj:=pointer(ptn^.DevLink^.bp.ListPos.owner);
+                    pentvarextcirrobj:=CurrentObj^.GetExtension(typeof(TVariablesExtender));
                     {pvd:=CurrentObj.ou.FindVariable('OPS_Pribor');
                     if pvd<>nil then
                     pgdbinteger(pvd^.data.Instance)^:=group;
@@ -321,7 +324,7 @@ begin
                     inc(count);
                     pgdbinteger(pvd^.data.Instance)^:=count;
                     end;}
-                    pvd:=PTObjectUnit(CurrentObj.ou.Instance)^.FindVariable('EL_Cab_AddLength');
+                    pvd:=pentvarextcirrobj.entityunit.FindVariable('EL_Cab_AddLength');
                     if pvd<>nil then
                                     begin
                                          l:=l+pgdbdouble(pvd^.data.Instance)^;
@@ -334,19 +337,20 @@ begin
 
                     ptn:=NodePropArray.iterate(ir_inNodeArray);
                 until ptn=nil;
-  pvd:=PTObjectUnit(ou.Instance)^.FindVariable('CABLE_TotalCD');
+  pentvarext:=GetExtension(typeof(TVariablesExtender));
+  pvd:=pentvarext.entityunit.FindVariable('CABLE_TotalCD');
   if pvd<>nil then
                                   pgdbinteger(pvd^.data.Instance)^:=count;
-  pvd:=PTObjectUnit(ou.Instance)^.FindVariable('AmountD');
-  pvds:=PTObjectUnit(ou.Instance)^.FindVariable('LENGTH_Scale');
-  pvdal:=PTObjectUnit(ou.Instance)^.FindVariable('LENGTH_Add');
-  pvdrt:=PTObjectUnit(ou.Instance)^.FindVariable('LENGTH_RoundTo');
+  pvd:=pentvarext.entityunit.FindVariable('AmountD');
+  pvds:=pentvarext.entityunit.FindVariable('LENGTH_Scale');
+  pvdal:=pentvarext.entityunit.FindVariable('LENGTH_Add');
+  pvdrt:=pentvarext.entityunit.FindVariable('LENGTH_RoundTo');
   if pvds<>nil then
   if pgdbdouble(pvds^.data.Instance)^>0 then
                                              begin
                                              if (pvd<>nil)and(pvds<>nil)and(pvdal<>nil){and(pvdrt<>nil)} then
                                              pgdbdouble(pvd^.data.Instance)^:={roundto(}length*pgdbdouble(pvds^.data.Instance)^+pgdbdouble(pvdal^.data.Instance)^+l{,pgdbinteger(pvdrt^.data.Instance)^)};
-                                             pvds:=PTObjectUnit(ou.Instance)^.FindVariable('LENGTH_KReserve');
+                                             pvds:=pentvarext.entityunit.FindVariable('LENGTH_KReserve');
                                              if pvds<>nil then
                                                               pgdbdouble(pvd^.data.Instance)^:=pgdbdouble(pvd^.data.Instance)^*pgdbdouble(pvds^.data.Instance)^;
                                              if (pvdrt<>nil) then
@@ -412,7 +416,7 @@ begin
   inherited init(own,layeraddres, lw);
   NodePropArray.init({$IFDEF DEBUGBUILD}'{28ED5BF5-7598-4903-A715-C525BC68C116}',{$ENDIF}1000,sizeof(TNodeProp));
   vp.ID := GDBCableID;
-  PTObjectUnit(self.ou.Instance)^.init('cable');
+  //PTObjectUnit(self.ou.Instance)^.init('cable');
   GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
 constructor GDBObjCable.initnul;

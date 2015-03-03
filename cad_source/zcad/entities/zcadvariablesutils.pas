@@ -19,7 +19,7 @@ unit zcadvariablesutils;
 {$INCLUDE def.inc}
 
 interface
-uses sysutils,
+uses enitiesextendervariables,sysutils,
      UGDBOpenArrayOfPV,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,
      gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,
      GDBSubordinated,GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,
@@ -28,10 +28,13 @@ function FindVariableInEnt(PEnt:PGDBObjEntity;varname:gdbstring):pvardesk;
 function FindEntityByVar(arr:GDBObjOpenArrayOfPV;objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;
 implementation
 function FindVariableInEnt(PEnt:PGDBObjEntity;varname:gdbstring):pvardesk;
+var
+   pentvarext:PTVariablesExtender;
 begin
+     pentvarext:=PEnt^.GetExtension(typeof(TVariablesExtender));
      result:=nil;
-     if PEnt^.ou.Instance<>nil then
-     result:=PTObjectUnit(PEnt^.ou.Instance)^.FindVariable(varname);
+     if pentvarext<>nil then
+     result:=pentvarext^.entityunit.FindVariable(varname);
      if result=nil then
      if PEnt^.bp.ListPos.Owner<>nil then
        result:=FindVariableInEnt(pointer(PEnt^.bp.ListPos.Owner),varname);
@@ -41,6 +44,7 @@ var
    pvisible:PGDBObjEntity;
    ir:itrec;
    pvd:pvardesk;
+   pentvarext:PTVariablesExtender;
 begin
      result:=nil;
      begin
@@ -49,7 +53,8 @@ begin
          repeat
                if pvisible.vp.ID=objID then
                begin
-                    pvd:=PTObjectUnit(pvisible^.ou.Instance)^.FindVariable(vname);
+                    pentvarext:=pvisible^.GetExtension(typeof(TVariablesExtender));
+                    pvd:=pentvarext^.entityunit.FindVariable(vname);
                     if pvd<>nil then
                     begin
                          if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then

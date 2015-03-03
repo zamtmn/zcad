@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  ugdbdrawing,gdbpalette,ugdbopenarrayofgdbdouble,texteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,gdbentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  enitiesextendervariables,ugdbdrawing,gdbpalette,ugdbopenarrayofgdbdouble,texteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,gdbentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   commandlinedef,strproc,
   gdbasetypes,commandline,GDBCommandsBase,
   plugins,
@@ -711,6 +711,7 @@ var pb:PGDBObjBlockInsert;
 procedure rb(pb:PGDBObjBlockInsert);
 var
     nb,tb:PGDBObjBlockInsert;
+    pnbvarext,ppbvarext:PTVariablesExtender;
 begin
 
     nb := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID{,gdb.GetCurrentROOT}));
@@ -740,9 +741,11 @@ begin
 
     if BlockReplaceParams.SaveVariables then
     begin
-         PTObjectUnit(nb^.ou.Instance)^.free;
+         pnbvarext:=nb^.GetExtension(typeof(TVariablesExtender));
+         ppbvarext:=pb^.GetExtension(typeof(TVariablesExtender));
+         pnbvarext^.entityunit.free;
          //pb.OU.CopyTo(@nb.OU);
-         PTObjectUnit(nb^.ou.Instance)^.CopyFrom(PTObjectUnit(pb^.ou.Instance));
+         pnbvarext^.entityunit.CopyFrom(@ppbvarext^.entityunit);
     end;
 
     nb^.Formatentity(gdb.GetCurrentDWG^,dc);
@@ -951,6 +954,7 @@ var
     i,count:integer;
     process:boolean;
     DC:TDrawContext;
+    pdevvarext:PTVariablesExtender;
 begin
      mpd:=devcoordarray.Create;
      psd:=gdb.GetCurrentDWG^.SelObjArray.beginiterate(ir);
@@ -1001,10 +1005,12 @@ begin
        begin
             dcoord:=mpd[i];
             pdev:=dcoord.pdev;
+            pdevvarext:=pdev^.GetExtension(typeof(TVariablesExtender));
 
             if NumberingParams.BaseName<>'' then
             begin
-            pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('NMO_BaseName');
+            //pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('NMO_BaseName');
+            pvd:=pdevvarext^.entityunit.FindVariable('NMO_BaseName');
             if pvd<>nil then
             begin
             if uppercase(pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Instance))=
@@ -1023,7 +1029,8 @@ begin
                    process:=true;
             if process then
             begin
-            pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable(NumberingParams.NumberVar);
+            //pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable(NumberingParams.NumberVar);
+            pvd:=pdevvarext^.entityunit.FindVariable(NumberingParams.NumberVar);
             if pvd<>nil then
             begin
                  pvd^.data.PTD^.SetValueFromString(pvd^.data.Instance,inttostr(index));

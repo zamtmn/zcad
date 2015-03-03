@@ -361,6 +361,7 @@ begin
                                 expr:=expr;
           
           GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}rez.data.Instance,GDBStringDescriptorObj.SizeInGDBBytes);
+          ppointer(rez.data.Instance)^:=nil;
           pgdbstring(rez.data.Instance)^ := expr;
           expr:='';
           //GDBPointer(expr) := nil;

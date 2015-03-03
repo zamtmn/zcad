@@ -1,7 +1,7 @@
 unit umainform;
 
 {$mode objfpc}{$H+}
-{$define dxfio}
+{.$define dxfio}
 interface
 
 uses

@@ -40,10 +40,10 @@ begin
   VIEW_CommandLineH:=82;
   VIEW_ObjInspV:=238;
   VIEW_ObjInspSubV:=120;
-  PATH_File0:='J:\nh\Летуновский\итп\АОВ.dxf';
+  PATH_File0:='E:\zcad\cad\\sample\test_dxf\ops.dxf';
   PATH_File1:='E:\zcad\cad\autosave\autosave.dxf';
-  PATH_File2:='E:\valsub\64500-АПС-03-r4.dxf';
-  PATH_File3:='E:\zcad\cad\\sample\test_dxf\ops.dxf';
+  PATH_File2:='J:\nh\Летуновский\итп\АОВ.dxf';
+  PATH_File3:='E:\valsub\64500-АПС-03-r4.dxf';
   PATH_File4:='J:\nh\термоинжиниринг\ПАРКИНГ\ПС.dxf';
   PATH_File5:='J:\nh\Коробова\боровский3\AОВ.dxf';
   PATH_File6:='J:\nh\Коробова\Боровский2\AОВ.dxf';

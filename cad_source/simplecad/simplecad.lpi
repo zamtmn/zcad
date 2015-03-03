@@ -46,9 +46,10 @@
       <Unit0>
         <Filename Value="simplecad.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="12" Y="11"/>
+        <EditorIndex Value="3"/>
+        <CursorPos X="7" Y="11"/>
         <UsageCount Value="201"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
       <Unit1>
@@ -59,8 +60,7 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="umainform"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="552"/>
-        <CursorPos X="74" Y="574"/>
+        <CursorPos X="3" Y="4"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -1298,7 +1298,7 @@
       <Unit175>
         <Filename Value="..\zengine\gdb\GDBManager.pas"/>
         <UnitName Value="GDBManager"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="8"/>
         <TopLine Value="49"/>
         <CursorPos X="62" Y="57"/>
         <UsageCount Value="10"/>
@@ -1351,9 +1351,10 @@
       <Unit181>
         <Filename Value="..\zengine\gdb\drawings\ugdbdescriptor.pas"/>
         <UnitName Value="UGDBDescriptor"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="53"/>
-        <CursorPos X="30" Y="56"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="79"/>
+        <CursorPos X="19" Y="99"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -1361,7 +1362,7 @@
       <Unit182>
         <Filename Value="..\zengine\gdb\drawings\ugdbsimpledrawing.pas"/>
         <UnitName Value="ugdbsimpledrawing"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <TopLine Value="74"/>
         <CursorPos X="83" Y="93"/>
         <UsageCount Value="10"/>
@@ -1371,7 +1372,7 @@
       <Unit183>
         <Filename Value="..\zengine\gdb\gdbdrawcontext.pas"/>
         <UnitName Value="gdbdrawcontext"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <TopLine Value="7"/>
         <CursorPos X="6" Y="18"/>
         <UsageCount Value="10"/>
@@ -1381,16 +1382,15 @@
       <Unit184>
         <Filename Value="..\zengine\fileformats\iodxf.pas"/>
         <UnitName Value="iodxf"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="1621"/>
-        <CursorPos X="85" Y="1636"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="56"/>
+        <CursorPos X="6" Y="75"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit184>
     </Units>
-    <JumpHistory Count="23" HistoryIndex="22">
+    <JumpHistory Count="25" HistoryIndex="24">
       <Position1>
         <Filename Value="..\zengine\gdb\GDBManager.pas"/>
       </Position1>
@@ -1466,20 +1466,28 @@
       </Position19>
       <Position20>
         <Filename Value="umainform.pas"/>
-        <Caret Line="465" Column="20" TopLine="494"/>
+        <Caret Line="4" Column="2"/>
       </Position20>
       <Position21>
         <Filename Value="umainform.pas"/>
-        <Caret Line="4" Column="2"/>
+        <Caret Line="574" Column="74" TopLine="552"/>
       </Position21>
       <Position22>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="574" Column="74" TopLine="552"/>
+        <Filename Value="..\zengine\fileformats\iodxf.pas"/>
+        <Caret Line="1638" Column="40" TopLine="1620"/>
       </Position22>
       <Position23>
         <Filename Value="..\zengine\fileformats\iodxf.pas"/>
-        <Caret Line="1638" Column="40" TopLine="1620"/>
+        <Caret Line="1636" Column="85" TopLine="1621"/>
       </Position23>
+      <Position24>
+        <Filename Value="simplecad.lpr"/>
+        <Caret Line="11" Column="7"/>
+      </Position24>
+      <Position25>
+        <Filename Value="..\zengine\gdb\drawings\ugdbdescriptor.pas"/>
+        <Caret Line="56" Column="30" TopLine="53"/>
+      </Position25>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

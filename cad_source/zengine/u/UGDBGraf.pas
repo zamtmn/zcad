@@ -54,7 +54,7 @@ GDBGraf={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfDa
 {EXPORT-}
 function getlinktype(pv:PGDBObjEntity):TLinktype;
 implementation
-uses GDBLine,math,log;
+uses enitiesextendervariables,GDBLine,math,log;
 procedure GDBGraf.BeginFindPath;
 var
   pgfe: pgrafelement;
@@ -73,10 +73,12 @@ end;
 function getlinktype(pv:PGDBObjEntity):TLinktype;
 var
     pvd:pvardesk;
+    pentvarext:PTVariablesExtender;
 begin
-  if pv^.ou.Instance<>nil then
+  pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
+  if pentvarext<>nil then
   begin
-     pvd:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('LinkType');
+     pvd:=pentvarext.entityunit.FindVariable('LinkType');
      if pvd=nil then
                     result:=LT_Normal
                 else
@@ -88,10 +90,12 @@ end;
 function getlinklength(pv:PGDBObjLine):GDBDouble;
 var
     pvd:pvardesk;
+    pentvarext:PTVariablesExtender;
 begin
-     if pv^.ou.Instance<>nil then
+     pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
+     if pentvarext<>nil then
      begin
-     pvd:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('LengthOverrider');
+     pvd:=pentvarext.entityunit.FindVariable('LengthOverrider');
      if pvd=nil then
                     result:=pv^.Length
                 else

@@ -10,7 +10,7 @@ unit GDBCommandsElectrical;
 
 interface
 uses
-  gdbdrawcontext,ugdbdrawing,zcadvariablesutils,GDBAbstractText,zcadstrconsts,UGDBSelectedObjArray,gdbentityfactory,zcadsysvars,csvdocument,
+  enitiesextendervariables,gdbdrawcontext,ugdbdrawing,zcadvariablesutils,GDBAbstractText,zcadstrconsts,UGDBSelectedObjArray,gdbentityfactory,zcadsysvars,csvdocument,
   UGDBOpenArrayOfPV,GDBBlockInsert,devices,UGDBTree,ugdbdescriptor,gdbasetypes,commandline,GDBCommandsDraw,GDBElLeader,
   plugins,
   commandlinedef,
@@ -149,8 +149,10 @@ var
    {pvn,}pvm,{pvmc,}pvl:pvardesk;
    //line:gdbstring;
    //eq:pvardesk;
+   pentvarext:PTVariablesExtender;
 begin
-                        pvm:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('CableMaterial');
+     pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
+     pvm:=pentvarext^.entityunit.FindVariable('CableMaterial');
                         if pvm<>nil then
                                     begin
                                          pstring(pvm^.data.Instance)^:={Tria_Utf8ToAnsi}( GetCableMaterial(pcd));
@@ -169,7 +171,7 @@ begin
                                         else
                                             pgdbstring(pvm^.data.Instance)^:='Не определен';}
                                     end;
-                       pvl:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('CableLength');
+                       pvl:=pentvarext^.entityunit.FindVariable('CableLength');
                        if pvl<>nil then
                                        pgdbdouble(pvl^.data.Instance)^:=pcd^.length;
 end;
@@ -632,6 +634,7 @@ var
     dna:devnamearray;
     i:integer;
     DC:TDrawContext;
+    pentvarext:PTVariablesExtender;
 begin
      currentcoord:=nulvertex;
      dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
@@ -648,7 +651,9 @@ begin
      repeat
            if psd^.objaddr^.vp.ID=GDBDeviceID then
            begin
-                pvd:=PTObjectUnit(psd^.objaddr^.ou.Instance)^.FindVariable('DESC_MountingSite');
+                pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+                //pvd:=PTObjectUnit(psd^.objaddr^.ou.Instance)^.FindVariable('DESC_MountingSite');
+                pvd:=pentvarext^.entityunit.FindVariable('DESC_MountingSite');
                 if pvd<>nil then
                                 dn.name:=pvd.data.PTD.GetValueAsString(pvd.data.Instance)
                             else
@@ -774,6 +779,7 @@ var
       s:gdbstring;
       TCP:TCodePage;
       DC:TDrawContext;
+      pentvarext,pgroupdevvarext,pcablevarext:PTVariablesExtender;
 begin
     TCP:=CodePage;
     CodePage:=CP_win;
@@ -789,7 +795,9 @@ begin
     if pobj.selected then
     if pobj.vp.ID=GDBDeviceID then
     begin
-         pvd:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('Device_Type');
+         pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+         //pvd:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('Device_Type');
+         pvd:=pentvarext^.entityunit.FindVariable('Device_Type');
          if pvd<>nil then
          if PTDeviceType(pvd^.data.Instance)^=TDT_SilaIst then
          begin
@@ -799,10 +807,10 @@ begin
 
               name:='Без имени';
               //material:='Без имени';
-              pvd:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
+              pvd:=pentvarext^.entityunit.FindVariable('NMO_Name');
               if pvd<>nil then
                               name:=pgdbstring(pvd.data.Instance)^;
-              pvd:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('DB_link');
+              pvd:=pentvarext^.entityunit.FindVariable('DB_link');
               //if pvd<>nil then
               //                material:=pgdbstring(pvd.data.Instance)^;
               historyoutstr('Найден объект источник энергии "'+name+'"');
@@ -810,19 +818,19 @@ begin
               p:=nil;pust:=nil;i:=nil;iust:=nil;cosf:=nil;
               sumpcos:=0;
 
-              pvd:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('Power');
+              pvd:=pentvarext^.entityunit.FindVariable('Power');
               if pvd<>nil then
                               p:=pvd.data.Instance;
-              pvd:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('PowerUst');
+              pvd:=pentvarext^.entityunit.FindVariable('PowerUst');
               if pvd<>nil then
                               pust:=pvd.data.Instance;
-              pvd:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('Current');
+              pvd:=pentvarext^.entityunit.FindVariable('Current');
               if pvd<>nil then
                               i:=pvd.data.Instance;
-              pvd:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('CurrentUst');
+              pvd:=pentvarext^.entityunit.FindVariable('CurrentUst');
               if pvd<>nil then
                               iust:=pvd.data.Instance;
-              pvd:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('CosPHI');
+              pvd:=pentvarext^.entityunit.FindVariable('CosPHI');
               if pvd<>nil then
                               cosf:=pvd.data.Instance;
               if (p<>nil)and(pust<>nil)and(i<>nil)and(iust<>nil) then
@@ -861,14 +869,15 @@ begin
                                     pgroupdev:=pointer(node.bp.ListPos.Owner);
                                     if pgroupdev<>nil then
                                     begin
-                                         pvd:=PTObjectUnit(pgroupdev^.ou.Instance)^.FindVariable('Device_Type');
+                                         pgroupdevvarext:=pgroupdev^.GetExtension(typeof(TVariablesExtender));
+                                         pvd:=pgroupdevvarext^.entityunit.FindVariable('Device_Type');
                                          if pvd<>nil then
                                          begin
                                               case PTDeviceType(pvd^.data.Instance)^ of
                                                    TDT_SilaPotr:
                                                                 begin
                                                                       //potrmaterial:='Без имени';
-                                                                      pvd:=PTObjectUnit(pgroupdev^.ou.Instance)^.FindVariable('NMO_Name');
+                                                                      pvd:=pgroupdevvarext^.entityunit.FindVariable('NMO_Name');
                                                                       if pvd<>nil then
                                                                                       begin
                                                                                            if potrname='' then
@@ -876,27 +885,27 @@ begin
                                                                                                           else
                                                                                                               potrname:=potrname+'+ '+Uni2CP(pgdbstring(pvd.data.Instance)^);
                                                                                       end;
-                                                                      pvd:=PTObjectUnit(pgroupdev^.ou.Instance)^.FindVariable('DB_link');
+                                                                      pvd:=pgroupdevvarext^.entityunit.FindVariable('DB_link');
                                                                       //if pvd<>nil then
                                                                       //                potrmaterial:=pgdbstring(pvd.data.Instance)^;
                                                                       potrpv:=1;
-                                                                      pvd:=PTObjectUnit(pgroupdev^.ou.Instance)^.FindVariable('PV');
+                                                                      pvd:=pgroupdevvarext^.entityunit.FindVariable('PV');
                                                                       if pvd<>nil then
                                                                                       potrpv:=pgdbdouble(pvd.data.Instance)^;
                                                                       potrp:=0;
-                                                                      pvd:=PTObjectUnit(pgroupdev^.ou.Instance)^.FindVariable('Power');
+                                                                      pvd:=pgroupdevvarext^.entityunit.FindVariable('Power');
                                                                       if pvd<>nil then
                                                                                       potrp:=pgdbdouble(pvd.data.Instance)^;
                                                                       potri:=0;
-                                                                      pvd:=PTObjectUnit(pgroupdev^.ou.Instance)^.FindVariable('Current');
+                                                                      pvd:=pgroupdevvarext^.entityunit.FindVariable('Current');
                                                                       if pvd<>nil then
                                                                                       potri:=pgdbdouble(pvd.data.Instance)^;
                                                                       potrks:=1;
-                                                                      pvd:=PTObjectUnit(pgroupdev^.ou.Instance)^.FindVariable('Ks');
+                                                                      pvd:=pgroupdevvarext^.entityunit.FindVariable('Ks');
                                                                       if pvd<>nil then
                                                                                       potrks:=pgdbdouble(pvd.data.Instance)^;
                                                                       potrcos:=1;
-                                                                      pvd:=PTObjectUnit(pgroupdev^.ou.Instance)^.FindVariable('CosPHI');
+                                                                      pvd:=pgroupdevvarext^.entityunit.FindVariable('CosPHI');
                                                                       if pvd<>nil then
                                                                                       potrcos:=pgdbdouble(pvd.data.Instance)^;
 
@@ -970,7 +979,7 @@ begin
                                                    TDT_SilaIst:
                                                                 begin
                                                                       //potrmaterial:='Без имени';
-                                                                      pvd:=PTObjectUnit(pgroupdev^.ou.Instance)^.FindVariable('NMO_Name');
+                                                                      pvd:=pgroupdevvarext^.entityunit.FindVariable('NMO_Name');
                                                                       if pvd<>nil then
                                                                                       begin
                                                                                            if potrname='' then
@@ -978,27 +987,27 @@ begin
                                                                                                           else
                                                                                                               potrname:=potrname+'+ '+Uni2CP(pgdbstring(pvd.data.Instance)^);
                                                                                       end;
-                                                                      pvd:=PTObjectUnit(pgroupdev^.ou.Instance)^.FindVariable('DB_link');
+                                                                      pvd:=pgroupdevvarext^.entityunit.FindVariable('DB_link');
                                                                       //if pvd<>nil then
                                                                       //                potrmaterial:=pgdbstring(pvd.data.Instance)^;
                                                                       potrp:=0;
-                                                                      pvd:=PTObjectUnit(pgroupdev^.ou.Instance)^.FindVariable('PowerUst');
+                                                                      pvd:=pgroupdevvarext^.entityunit.FindVariable('PowerUst');
                                                                       if pvd<>nil then
                                                                                       potrp:=pgdbdouble(pvd.data.Instance)^;
                                                                       potri:=0;
-                                                                      pvd:=PTObjectUnit(pgroupdev^.ou.Instance)^.FindVariable('CurrentUst');
+                                                                      pvd:=pgroupdevvarext^.entityunit.FindVariable('CurrentUst');
                                                                       if pvd<>nil then
                                                                                       potri:=pgdbdouble(pvd.data.Instance)^;
                                                                       potrpr:=0;
-                                                                      pvd:=PTObjectUnit(pgroupdev^.ou.Instance)^.FindVariable('Power');
+                                                                      pvd:=pgroupdevvarext^.entityunit.FindVariable('Power');
                                                                       if pvd<>nil then
                                                                                       potrpr:=pgdbdouble(pvd.data.Instance)^;
                                                                       potrir:=0;
-                                                                      pvd:=PTObjectUnit(pgroupdev^.ou.Instance)^.FindVariable('Current');
+                                                                      pvd:=pgroupdevvarext^.entityunit.FindVariable('Current');
                                                                       if pvd<>nil then
                                                                                       potrir:=pgdbdouble(pvd.data.Instance)^;
                                                                       potrcos:=1;
-                                                                      pvd:=PTObjectUnit(pgroupdev^.ou.Instance)^.FindVariable('CosPHI');
+                                                                      pvd:=pgroupdevvarext^.entityunit.FindVariable('CosPHI');
                                                                       if pvd<>nil then
                                                                                       potrcos:=pgdbdouble(pvd.data.Instance)^;
 
@@ -1057,7 +1066,8 @@ begin
                   s:='';
                   psl.add(@s);
                   s:='qwer';
-                  pvd:=PTObjectUnit(pcabledesk^.StartSegment^.ou.Instance)^.FindVariable('DB_link');
+                  pcablevarext:=pcabledesk^.StartSegment^.GetExtension(typeof(TVariablesExtender));
+                  pvd:=pcablevarext^.entityunit.FindVariable('DB_link');
                   if pvd<>nil then
                                   s:=Uni2CP(pgdbstring(pvd.data.Instance)^);
                   //pvd:=pgroupdev^.ou.FindVariable('DB_link');
@@ -1194,6 +1204,7 @@ var //po:PGDBObjSubordinated;
     nni:gdbinteger;
     Objects:GDBObjOpenArrayOfPV;
     DC:TDrawContext;
+    ptempnetvarext,pfirstownervarext,psecondownervarext:PTVariablesExtender;
 begin
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   New_line^.vp.Layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
@@ -1246,12 +1257,13 @@ begin
                  GDBGetMem({$IFDEF DEBUGBUILD}'{C92353C3-EA26-48A9-A47F-89F7723E3D16}',{$ENDIF}GDBPointer(TempNet),sizeof(GDBObjNet));
                  TempNet^.initnul(nil);
                  gdb.standardization(TempNet,GDBNetID);
-                 PTObjectUnit(TempNet^.ou.Instance)^.copyfrom(units.findunit('trace'));
-                 pvd:=PTObjectUnit(TempNet.ou.Instance)^.FindVariable('NMO_Suffix');
+                 ptempnetvarext:=TempNet^.GetExtension(typeof(TVariablesExtender));
+                 ptempnetvarext^.entityunit.copyfrom(units.findunit('trace'));
+                 pvd:=ptempnetvarext^.entityunit.FindVariable('NMO_Suffix');
                  pstring(pvd^.data.Instance)^:=inttostr(gdb.GetCurrentDWG.numerator.getnumber(UNNAMEDNET,SysVar.DSGN.DSGN_TraceAutoInc^));
-                 pvd:=PTObjectUnit(TempNet.ou.Instance)^.FindVariable('NMO_Prefix');
+                 pvd:=ptempnetvarext^.entityunit.FindVariable('NMO_Prefix');
                  pstring(pvd^.data.Instance)^:='@';
-                 pvd:=PTObjectUnit(TempNet.ou.Instance)^.FindVariable('NMO_BaseName');
+                 pvd:=ptempnetvarext^.entityunit.FindVariable('NMO_BaseName');
                  pstring(pvd^.data.Instance)^:=UNNAMEDNET;
                  //TempNet^.name:=gdb.numerator.getnamenumber(el_unname_prefix);
                  New_line^.bp.ListPos.Owner:=TempNet;
@@ -1278,8 +1290,10 @@ begin
 
                  if nni=1 then
                  begin
-                      PTObjectUnit(FirstOwner^.ou.Instance)^.free;
-                      PTObjectUnit(secondowner.ou.Instance)^.CopyTo(PTObjectUnit(FirstOwner^.ou.Instance));
+                      pfirstownervarext:=FirstOwner^.GetExtension(typeof(TVariablesExtender));
+                      pfirstownervarext^.entityunit.free;
+                      psecondownervarext:=secondowner^.GetExtension(typeof(TVariablesExtender));
+                      psecondownervarext^.entityunit.CopyTo(@pfirstownervarext^.entityunit);
                       //FirstOwner^.Name:=nn;
                  end;
 
@@ -1312,10 +1326,12 @@ begin
 end;
 function GetEntName(pu:PGDBObjGenericWithSubordinated):GDBString;
 var
-   pvn{,pvnt}:pvardesk;
+   pvn:pvardesk;
+   pentvarext:PTVariablesExtender;
 begin
      result:='';
-     pvn:=PTObjectUnit(pu^.ou.Instance)^.FindVariable('NMO_Name');
+     pentvarext:=pu^.GetExtension(typeof(TVariablesExtender));
+     pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');
      if (pvn<>nil) then
                                       begin
                                            result:=pstring(pvn^.data.Instance)^;
@@ -1419,6 +1435,7 @@ var
    pvd:pvardesk;
    domethod,undomethod:tmethod;
    DC:TDrawContext;
+   pcablevarext:PTVariablesExtender;
 begin
   result:=mclick;
   if (button and MZW_LBUTTON)<>0 then
@@ -1433,7 +1450,8 @@ begin
     //p3dpl^.init(@gdb.GetCurrentDWG.ObjRoot,gdb.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^);
 
     //uunitmanager.units.loadunit(expandpath('*blocks\el\cable.pas'),@p3dpl^.ou);
-    PTObjectUnit(p3dpl^.ou.Instance)^.copyfrom(units.findunit('cable'));
+    pcablevarext:=p3dpl^.GetExtension(typeof(TVariablesExtender));
+    pcablevarext^.entityunit.copyfrom(units.findunit('cable'));
     //pvd:=p3dpl^.ou.FindVariable('DB_link');
     //pstring(pvd^.data.Instance)^:='Кабель ??';
 
@@ -1445,7 +1463,7 @@ begin
     //pvd:=p3dpl.ou.FindVariable('NMO_BaseName');
     //pstring(pvd^.data.Instance)^:='@';
 
-    pvd:=PTObjectUnit(p3dpl.ou.Instance)^.FindVariable('NMO_Suffix');
+    pvd:=pcablevarext^.entityunit.FindVariable('NMO_Suffix');
     pstring(pvd^.data.Instance)^:=inttostr(gdb.GetCurrentDWG.numerator.getnumber('CableNum',true));
     //p3dpl^.bp.Owner:=@gdb.GetCurrentDWG.ObjRoot;
     //gdb.GetCurrentDWG.ObjRoot.ObjArray.add(addr(p3dpl));
@@ -1526,6 +1544,7 @@ var //po:PGDBObjSubordinated;
     cablecount:integer;
     //polydata:tpolydata;
     //domethod,undomethod:tmethod;
+    ptcablevarext,pcablevarext:PTVariablesExtender;
 begin
   pointer(l1):=PTrace.GetNearestLine(firstpoint);
   pointer(l2):=PTrace.GetNearestLine(lastpoint);
@@ -1564,10 +1583,11 @@ begin
                            else
                                begin
                                     tcable := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
-
-                                    PTObjectUnit(tcable^.ou.Instance)^.copyfrom(PTObjectUnit(cable.ou.Instance));
+                                    ptcablevarext:=tcable^.GetExtension(typeof(TVariablesExtender));
+                                    pcablevarext:=cable^.GetExtension(typeof(TVariablesExtender));
+                                    ptcablevarext^.entityunit.copyfrom(@pcablevarext^.entityunit);
                                     gdb.standardization(tcable,GDBCableID);
-                                    pvd:=PTObjectUnit(tcable.ou.Instance)^.FindVariable('CABLE_Segment');
+                                    pvd:=ptcablevarext^.entityunit.FindVariable('CABLE_Segment');
                                     if pvd<>nil then
                                     PGDBInteger(pvd^.data.Instance)^:=PGDBInteger(pvd^.data.Instance)^+cablecount;
                                     inc(cablecount);
@@ -1774,6 +1794,7 @@ var //i: GDBInteger;
 
     eq:pvardesk;
     DC:TDrawContext;
+    pstartsegmentvarext:PTVariablesExtender;
 begin
   filename:='';
   if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Сохранить данные...') then
@@ -1798,8 +1819,8 @@ begin
          if cablename='RS' then
                                cablename:=cablename;
 
-
-         pvd:=PTObjectUnit(pv^.StartSegment.ou.Instance)^.FindVariable('DB_link');
+         pstartsegmentvarext:=pv^.StartSegment^.GetExtension(typeof(TVariablesExtender));
+         pvd:=pstartsegmentvarext^.entityunit.FindVariable('DB_link');
          CableMaterial:=pstring(pvd^.data.Instance)^;
 
                                         eq:=DWGDBUnit.FindVariable(CableMaterial);
@@ -1929,6 +1950,7 @@ var //i: GDBInteger;
     cman:TCableManager;
     pcd:PTCableDesctiptor;
     DC:TDrawContext;
+    pcablevarext,pstartsegmentvarext:PTVariablesExtender;
 begin
   filename:='';
   if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Сохранить данные...') then
@@ -1941,13 +1963,15 @@ begin
   if pv<>nil then
   repeat
     if pv^.vp.ID<>GDBCableID then
-    if pv^.ou.Instance<>nil then
     begin
-         pvm:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('DB_link');
+    pcablevarext:=pv^.GetExtension(typeof(TVariablesExtender));
+    if pcablevarext<>nil then
+    begin
+         pvm:=pcablevarext^.entityunit.FindVariable('DB_link');
          if pvm<>nil then
          begin
-              pvad:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('AmountD');
-              pvai:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('AmountI');
+              pvad:=pcablevarext^.entityunit.FindVariable('AmountD');
+              pvai:=pcablevarext^.entityunit.FindVariable('AmountI');
               //if (pvad<>nil)or(pvai<>nil) then
               begin
                    pbomitem:=bom.findorcreate(pstring(pvm^.data.Instance)^);
@@ -1959,7 +1983,7 @@ begin
                                            pbomitem.Amount:=pbomitem.Amount+pgdbinteger(pvai^.data.Instance)^
                    else
                        pbomitem.Amount:=pbomitem.Amount+1;
-                        pvm:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('NMO_Name');
+                        pvm:=pcablevarext^.entityunit.FindVariable('NMO_Name');
                         if (pvm<>nil) then
                                            if pbomitem.Names<>'' then
                                                                      pbomitem.Names:=pbomitem.Names+','+pstring(pvm^.data.Instance)^
@@ -1970,6 +1994,7 @@ begin
                    end;
               end;
          end;
+    end;
     end;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
@@ -1984,7 +2009,8 @@ begin
 
   if pcd.StartSegment<>nil then
   begin
-  pvm:=PTObjectUnit(pcd.StartSegment^.ou.Instance)^.FindVariable('DB_link');
+  pstartsegmentvarext:=pcd.StartSegment^.GetExtension(typeof(TVariablesExtender));
+  pvm:=pstartsegmentvarext^.entityunit.FindVariable('DB_link');
   if pvm<>nil then
   begin
        begin
@@ -2182,6 +2208,7 @@ var pv:pGDBObjEntity;
     name,content:gdbstring;
     VarContents:GDBGDBStringArray;
     ps{,pspred}:pgdbstring;
+    pentvarext:PTVariablesExtender;
 begin
   if operands<>''then
   begin
@@ -2192,7 +2219,8 @@ begin
   repeat
     if pv^.Selected then
     begin
-    pvd:=PTObjectUnit(pv^.ou.Instance)^.FindVariable(name);
+    pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
+    pvd:=pentvarext^.entityunit.FindVariable(name);
     if pvd<>nil then
     begin
          content:=pvd.data.PTD.GetValueAsString(pvd.data.Instance);
@@ -2351,6 +2379,7 @@ var pv,pvlast:pGDBObjEntity;
   {fv1,}{tp,}wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex;
     findvarvalue:gdbboolean;
     DC:TDrawContext;
+    pentvarext:PTVariablesExtender;
 begin
   gdb.GetCurrentDWG.SelObjArray.clearallobjects;
   gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
@@ -2371,10 +2400,12 @@ begin
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   count:=0;
   if pv<>nil then
-  if pv^.ou.Instance<>nil then
+  begin
+  pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
+  if pentvarext<>nil then
   repeat
         findvarvalue:=false;
-        v:=PTObjectUnit(pv^.ou.Instance)^.FindVariable(varname);
+        v:=pentvarext^.entityunit.FindVariable(varname);
         if v<>nil then
         begin
              varvalue:=uppercase(v^.data.PTD.GetValueAsString(v^.data.Instance));
@@ -2410,6 +2441,7 @@ begin
 
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
+  end;
 
 
 
@@ -2462,6 +2494,7 @@ var //i: GDBInteger;
     cman:TCableManager;
     pcd:PTCableDesctiptor;
     DC:TDrawContext;
+    pentvarext:PTVariablesExtender;
 begin
   cman.init;
   cman.build;
@@ -2473,7 +2506,8 @@ begin
          if pv^.vp.ID=GDBDeviceID then
          if pv^.Name='CABLE_MARK' then
          begin
-              pvn:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('CableName');
+              pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
+              pvn:=pentvarext^.entityunit.FindVariable('CableName');
               if (pvn<>nil) then
               begin
                    pcd:=cman.Find(pstring(pvn^.data.Instance)^);
@@ -2598,13 +2632,15 @@ var {i,}len: GDBInteger;
     ir:itrec;
     pvd{,pvn,pvm,pvmc,pvl}:pvardesk;
     name:gdbstring;
+    pentvarext:PTVariablesExtender;
 begin
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
     if pv^.vp.ID=GDBCableID then
     begin
-         pvd:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('NMO_Name');
+         pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
+         pvd:=pentvarext^.entityunit.FindVariable('NMO_Name');
          if pvd<>nil then
                          begin
                               name:=pgdbstring(pvd.data.Instance)^;
@@ -2631,6 +2667,7 @@ var //i,len: GDBInteger;
     ir:itrec;
     pvd{,pvn,pvm,pvmc,pvl}:pvardesk;
     mat:gdbstring;
+    pentvarext:PTVariablesExtender;
 begin
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
@@ -2638,7 +2675,8 @@ begin
     if (pv^.vp.ID=GDBCableID)
     or (pv^.vp.ID=GDBCableID) then
     begin
-         pvd:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('DB_link');
+         pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
+         pvd:=pentvarext^.entityunit.FindVariable('DB_link');
          if pvd<>nil then
                          begin
                               mat:=pgdbstring(pvd.data.Instance)^;
@@ -2680,23 +2718,25 @@ function CreateCable(name,mater:gdbstring):PGDBObjCable;
 var
     //vd,pvn,pvn2: pvardesk;
     pvd{,pvd2}:pvardesk;
+    pentvarext:PTVariablesExtender;
 begin
   result := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
-  PTObjectUnit(result^.ou.Instance)^.copyfrom(units.findunit('cable'));
-  pvd:=PTObjectUnit(result.ou.Instance)^.FindVariable('NMO_Suffix');
+  pentvarext:=result^.GetExtension(typeof(TVariablesExtender));
+  pentvarext^.entityunit.copyfrom(units.findunit('cable'));
+  pvd:=pentvarext^.entityunit.FindVariable('NMO_Suffix');
   pstring(pvd^.data.Instance)^:='';
-  pvd:=PTObjectUnit(result.ou.Instance)^.FindVariable('NMO_Prefix');
+  pvd:=pentvarext^.entityunit.FindVariable('NMO_Prefix');
   pstring(pvd^.data.Instance)^:='';
-  pvd:=PTObjectUnit(result.ou.Instance)^.FindVariable('NMO_BaseName');
+  pvd:=pentvarext^.entityunit.FindVariable('NMO_BaseName');
   pstring(pvd^.data.Instance)^:='';
-  pvd:=PTObjectUnit(result.ou.Instance)^.FindVariable('NMO_Template');
+  pvd:=pentvarext^.entityunit.FindVariable('NMO_Template');
   pstring(pvd^.data.Instance)^:='';
-  pvd:=PTObjectUnit(result.ou.Instance)^.FindVariable('NMO_Name');
+  pvd:=pentvarext^.entityunit.FindVariable('NMO_Name');
   pstring(pvd^.data.Instance)^:=name;
-  pvd:=PTObjectUnit(result.ou.Instance)^.FindVariable('DB_link');
+  pvd:=pentvarext^.entityunit.FindVariable('DB_link');
   pstring(pvd^.data.Instance)^:=mater;
 
-  pvd:=PTObjectUnit(result.ou.Instance)^.FindVariable('CABLE_AutoGen');
+  pvd:=pentvarext^.entityunit.FindVariable('CABLE_AutoGen');
   pgdbboolean(pvd^.data.Instance)^:=true;
 
   gdb.standardization(result,GDBCableID);
@@ -2722,6 +2762,7 @@ var
     segments:GDBOpenArrayOfPObjects;
     supernetsarray:GDBObjOpenArrayOfPV;
     DC:TDrawContext;
+    priservarext,priser2varext,psupernetvarext,pnetvarext,plinevarext:PTVariablesExtender;
 procedure GetStartEndPin(startdevname,enddevname:GDBString);
 begin
   PGDBObjEntity(startdev):=GDB.FindEntityByVar(GDBDeviceID,'NMO_Name',startdevname);
@@ -2904,7 +2945,7 @@ begin
                           net:=netarray.beginiterate(ir_net);
                           if (net<>nil) then
                           repeat
-
+                                pnetvarext:=net^.GetExtension(typeof(TVariablesExtender));
                                 //ir_net2:=ir_net;
                                 //net2:=netarray.iterate(ir_net2);
                                 net2:=netarray.beginiterate(ir_net2);
@@ -2918,13 +2959,15 @@ begin
                                       riser:=net.riserarray.beginiterate(ir_riser);
                                       if (riser<>nil) then
                                       repeat
-
+                                            priservarext:=riser^.GetExtension(typeof(TVariablesExtender));
                                             riser2:=net2.riserarray.beginiterate(ir_riser2);
                                             if (riser2<>nil) then
                                             repeat
-
-                                                  pvd:=PTObjectUnit(riser.ou.Instance)^.FindVariable('RiserName');
-                                                  pvd2:=PTObjectUnit(riser2.ou.Instance)^.FindVariable('RiserName');
+                                                  priser2varext:=riser2^.GetExtension(typeof(TVariablesExtender));
+                                                  //pvd:=PTObjectUnit(riser.ou.Instance)^.FindVariable('RiserName');
+                                                  //pvd2:=PTObjectUnit(riser2.ou.Instance)^.FindVariable('RiserName');
+                                                  pvd:=priservarext^.entityunit.FindVariable('RiserName');
+                                                  pvd2:=priser2varext^.entityunit.FindVariable('RiserName');
                                                   if (pvd<>nil)and(pvd2<>nil) then
                                                   begin
                                                        if pstring(pvd^.data.Instance)^=pstring(pvd2^.data.Instance)^then
@@ -2933,8 +2976,10 @@ begin
                                                             begin
                                                                  gdbgetmem({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}supernet,sizeof(GDBObjNet));
                                                                  supernet.initnul(nil);
-                                                                 //net.objarray.copyto(@supernet.ObjArray);
-                                                                 PTObjectUnit(supernet.ou.Instance)^.copyfrom(PTObjectUnit(net.ou.Instance));
+                                                                 psupernetvarext:=supernet.GetExtension(typeof(TVariablesExtender));
+
+                                                                 //PTObjectUnit(supernet.ou.Instance)^.copyfrom(PTObjectUnit(net.ou.Instance));
+                                                                 psupernetvarext^.entityunit.copyfrom(@pnetvarext.entityunit);
                                                                  //log.LogOut('supernet.initnul(nil); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
                                                             if not processednets.IsObjExist(net) then
@@ -2955,8 +3000,9 @@ begin
 
                                                                 New_line := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,gdb.GetCurrentROOT}));
                                                                 GDBObjLineInit(gdb.GetCurrentROOT,New_line,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,riser.P_insert_in_WCS,riser2.P_insert_in_WCS);
-                                                                PTObjectUnit(New_line^.ou.Instance)^.copyfrom(units.findunit('_riserlink'));
-                                                                vd:=PTObjectUnit(New_line.ou.Instance)^.FindVariable('LengthOverrider');
+                                                                plinevarext:=New_line^.GetExtension(typeof(TVariablesExtender));
+                                                                plinevarext^.entityunit.copyfrom(units.findunit('_riserlink'));
+                                                                vd:=plinevarext^.entityunit.FindVariable('LengthOverrider');
 
                                                                 pvn :=FindVariableInEnt(riser,'Elevation');
                                                                 pvn2:=FindVariableInEnt(riser,'Elevation');
@@ -3103,7 +3149,8 @@ begin
   repeat
     if (pv^.vp.ID=GDBCableID) then
     begin
-         pvd:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('CABLE_AutoGen');
+         //pvd:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('CABLE_AutoGen');
+         pvd:=FindVariableInEnt(pv,'CABLE_AutoGen');
          if pvd<>nil then
                          begin
                               if pgdbboolean(pvd^.data.Instance)^ then

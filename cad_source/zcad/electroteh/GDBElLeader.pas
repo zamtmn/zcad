@@ -8,7 +8,7 @@ unit GDBElLeader;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentityfactory,Varman,gdbdrawcontext,GDBAbstractText,GDBGenericSubEntry,
+uses enitiesextendervariables,gdbentityfactory,Varman,gdbdrawcontext,GDBAbstractText,GDBGenericSubEntry,
      ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,
      strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,GDBCable,GDBTable,
      UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},
@@ -249,6 +249,7 @@ var
    TCP:TCodePage;
 
    Objects:GDBObjOpenArrayOfPV;
+   pentvarext:PTVariablesExtender;
 
 begin
      tbl.ptablestyle:=drawing.GetTableStyleTable^.getAddres('Temp');
@@ -301,7 +302,9 @@ begin
                      if pobj^.VertexArrayInWCS.onpoint(mainline.CoordInWCS.lBegin,false) then
                      begin
                           pcable:=pobj;
-                          pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
+                          pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+                          //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
+                          pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');
                           if pvn<>nil then
                           begin
                                s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
@@ -346,7 +349,9 @@ begin
                             if ptn.DevLink<>nil then
                             if pdev=pointer(ptn.DevLink.bp.ListPos.owner) then
                             begin
-                                  pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
+                                 pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+                                 //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
+                                 pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');
                                   if pvn<>nil then
                                   begin
                                        s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
@@ -452,13 +457,16 @@ begin
      if pdev<>nil then
      begin
           s:='';
-          pvn:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('NMO_Name');
+          pentvarext:=pdev^.GetExtension(typeof(TVariablesExtender));
+          //pvn:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('NMO_Name');
+          pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');
           if pvn<>nil then
           begin
                s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
                //s:=pstring(pvn^.data.Instance)^;
           end;
-          pvn:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('Text');
+          //pvn:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('Text');
+          pvn:=pentvarext^.entityunit.FindVariable('Text');
           if pvn<>nil then
           begin
                s:=s+{pstring(pvn^.data.Instance)^}pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);;

@@ -7,7 +7,7 @@
 unit UCableManager;
 {$INCLUDE def.inc}
 interface
-uses zcadvariablesutils,Varman,strproc,GDBCable,GDBDevice,gdbobjectsconstdef,UGDBOpenArrayOfPObjects{,Varman},languade,UGDBOpenArrayOfObjects{,RegCnownTypes,URegisterObjects},SysUtils{,UBaseTypeDescriptor},gdbasetypes{, shared},gdbase{,UGDBOpenArrayOfByte}, varmandef,sysinfo{,UGDBOpenArrayOfData},log,memman;
+uses enitiesextendervariables,zcadvariablesutils,Varman,strproc,GDBCable,GDBDevice,gdbobjectsconstdef,UGDBOpenArrayOfPObjects{,Varman},languade,UGDBOpenArrayOfObjects{,RegCnownTypes,URegisterObjects},SysUtils{,UBaseTypeDescriptor},gdbasetypes{, shared},gdbase{,UGDBOpenArrayOfByte}, varmandef,sysinfo{,UGDBOpenArrayOfData},log,memman;
 const
      DefCableName='Создан. Не назван';
      UnNamedCable='Имя отсутствует';
@@ -79,13 +79,16 @@ var pobj,pobj2:PGDBObjCable;
     pnp:PTNodeProp;
     sorted:boolean;
     lastadddevice:PGDBObjDevice;
+    pentvarext,pentvarext2:PTVariablesExtender;
 begin
      pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
      if pobj<>nil then
      repeat
            if pobj^.vp.ID=GDBCableID then
            begin
-                pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
+                pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+                //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
+                pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');
                 if pvn<>nil then
                                 sname:=pgdbstring(pvn^.data.Instance)^
                             else
@@ -94,7 +97,8 @@ begin
                                sname:=sname;
                 pcd:=FindOrCreate(sname);
                 pcd^.Segments.AddRef(pobj^);
-                pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('AmountD');
+                //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('AmountD');
+                pvn:=pentvarext^.entityunit.FindVariable('AmountD');
                 if pvn<>nil then
                                 pcd^.length:=pcd^.length+pgdbdouble(pvn^.data.Instance)^;
            end;
@@ -108,13 +112,17 @@ begin
                 repeat
                 itsok:=true;
                 pobj2:=pcd^.Segments.beginiterate(ir);
+                pentvarext2:=pobj2^.GetExtension(typeof(TVariablesExtender));
                 p2:=pointer(ir.itp);
                 pobj:=pcd^.Segments.iterate(ir);
                 p1:=pointer(ir.itp);
                 if pobj<>nil then
                 repeat
-                      pvn :=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('CABLE_Segment');
-                      pvn2:=PTObjectUnit(pobj2^.ou.Instance)^.FindVariable('CABLE_Segment');
+                      pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+                      //pvn :=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('CABLE_Segment');
+                      //pvn2:=PTObjectUnit(pobj2^.ou.Instance)^.FindVariable('CABLE_Segment');
+                      pvn :=pentvarext^.entityunit.FindVariable('CABLE_Segment');
+                      pvn2:=pentvarext2^.entityunit.FindVariable('CABLE_Segment');
                       if pgdbinteger(pvn^.data.Instance)^<
                          pgdbinteger(pvn2^.data.Instance)^ then
                          begin
@@ -124,7 +132,10 @@ begin
                               itsok:=false;
                          end
                             else
+                                begin
                                 pobj2:=pobj;
+                                pentvarext2:=pentvarext;
+                                end;
                       p2:=p1;
                       pobj:=pcd^.Segments.iterate(ir);
                       if pobj<>nil then

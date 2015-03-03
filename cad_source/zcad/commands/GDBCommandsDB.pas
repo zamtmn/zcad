@@ -38,7 +38,7 @@ uses
 procedure DBLinkProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
 
 implementation
-uses sltexteditor,UObjectDescriptor,projecttreewnd,commandline,log,GDBSubordinated;
+uses enitiesextendervariables,sltexteditor,UObjectDescriptor,projecttreewnd,commandline,log,GDBSubordinated;
 
 function DBaseAdd_com(operands:TCommandOperands):TCommandResult;
 var //t:PUserTypeDescriptor;
@@ -102,9 +102,11 @@ var
    pvn,pvnt,pdbv:pvardesk;
    pdbu:ptunit;
    pum:PTUnitManager;
+   pentvarext:PTVariablesExtender;
 begin
-     pvn:=PTObjectUnit(pEntity^.ou.Instance)^.FindVariable('DB_link');
-     pvnt:=PTObjectUnit(pEntity^.ou.Instance)^.FindVariable('DB_MatName');
+     pentvarext:=pEntity^.GetExtension(typeof(TVariablesExtender));
+     pvn:=pentvarext^.entityunit.FindVariable('DB_link');
+     pvnt:=pentvarext^.entityunit.FindVariable('DB_MatName');
      if pvnt<>nil then
      pvnt^.attrib:=pvnt^.attrib or (vda_RO);
      if (pvn<>nil)and(pvnt<>nil) then
@@ -138,6 +140,7 @@ var //t:PUserTypeDescriptor;
     //p:pointer;
     pu:ptunit;
     //vn:GDBString;
+    pentvarext:PTVariablesExtender;
 begin
      if commandmanager.ContextCommandParams<>nil then
      begin
@@ -151,7 +154,8 @@ begin
                  repeat
                       if pv^.Selected then
                                           begin
-                                               pvd:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('DB_link');
+                                               pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
+                                               pvd:=pentvarext^.entityunit.FindVariable('DB_link');
                                                if pvd<>nil then
                                                begin
                                                     PGDBString(pvd^.data.Instance)^:=pdbv^.name;

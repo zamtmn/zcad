@@ -95,7 +95,7 @@ function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):GDBInteger;
 function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
- uses GDBText,GDBDevice,GDBBlockInsert,iodxf, GDBManager,shared,commandline,log;
+ uses enitiesextendervariables,GDBText,GDBDevice,GDBBlockInsert,iodxf, GDBManager,shared,commandline,log;
 function GDBDescriptor.GetDefaultDrawingName:GDBString;
 var
     OldName:GDBString;
@@ -724,6 +724,7 @@ var
    pvisible{,pvisible2,pv}:PGDBObjEntity;
    ir:itrec;
    pvd:pvardesk;
+   pentvarext:PTVariablesExtender;
 begin
      croot:=self.GetCurrentROOT;
      if croot<>nil then
@@ -733,7 +734,8 @@ begin
          repeat
                if pvisible.vp.ID=objID then
                begin
-                    pvd:=PTObjectUnit(pvisible^.ou.Instance)^.FindVariable(vname);
+                    pentvarext:=pvisible^.GetExtension(typeof(TVariablesExtender));
+                    pvd:=pentvarext^.entityunit.FindVariable(vname);
                     if pvd<>nil then
                     begin
                          if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then
@@ -752,6 +754,7 @@ var
    pvisible{,pvisible2,pv}:PGDBObjEntity;
    ir:itrec;
    pvd:pvardesk;
+   pentvarext:PTVariablesExtender;
 begin
      croot:=self.GetCurrentROOT;
      if croot<>nil then
@@ -761,7 +764,8 @@ begin
          repeat
                if pvisible.vp.ID=objID then
                begin
-                    pvd:=PTObjectUnit(pvisible^.ou.Instance)^.FindVariable(vname);
+                    pentvarext:=pvisible^.GetExtension(typeof(TVariablesExtender));
+                    pvd:=pentvarext^.entityunit.FindVariable(vname);
                     if pvd<>nil then
                     begin
                          entarray.Add(@pvisible);
@@ -778,6 +782,7 @@ var
    pvisible{,pvisible2,pv}:PGDBObjEntity;
    ir:itrec;
    pvd:pvardesk;
+   pentvarext:PTVariablesExtender;
 begin
      result:=nil;
      croot:=self.GetCurrentROOT;
@@ -788,7 +793,8 @@ begin
          repeat
                if pvisible.vp.ID=objID then
                begin
-                    pvd:=PTObjectUnit(pvisible^.ou.Instance)^.FindVariable(vname);
+                    pentvarext:=pvisible^.GetExtension(typeof(TVariablesExtender));
+                    pvd:=pentvarext^.entityunit.FindVariable(vname);
                     if pvd<>nil then
                     begin
                          if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then
@@ -809,6 +815,7 @@ var
    ir:itrec;
    pvisible,pvisible2:PGDBObjEntity;
    DC:TDrawContext;
+   psourcevarext,pdestvarext:PTVariablesExtender;
 begin
       if pos(DevicePrefix,_source.Name)=1 then
                                          CopyBlock(_from,_to,_from.BlockDefArray.getblockdef(copy(_source.Name,8,length(_source.Name)-7)));
@@ -818,7 +825,10 @@ begin
      _dest.Base:=_source.Base;
      _dest.BlockDesc:=_source.BlockDesc;
 
-     PTObjectUnit(_source.ou.Instance)^.CopyTo(PTObjectUnit(_dest.ou.Instance));
+     psourcevarext:=_source^.GetExtension(typeof(TVariablesExtender));
+     pdestvarext:=_dest^.GetExtension(typeof(TVariablesExtender));
+     if (psourcevarext<>nil)and(pdestvarext<>nil)then
+     psourcevarext^.entityunit.CopyTo(@pdestvarext^.entityunit);
 
      dc:=_to^.CreateDrawingRC;
 

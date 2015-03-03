@@ -30,7 +30,7 @@ TBaseVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseEntityExtender
   end;
 PTVariablesExtender=^TVariablesExtender;
 TVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseVariablesExtender)
-    entityunit:tunit;
+    entityunit:{tunit}TObjectUnit;
     class function CreateEntVariablesExtender(pEntity:Pointer; out ObjSize:Integer):PTVariablesExtender;static;
     constructor init(pEntity:Pointer);
     destructor Done;virtual;
@@ -58,8 +58,8 @@ begin
      entityunit.InterfaceUses.add(@SysUnit);
      if PFCTTD=nil then
                        PFCTTD:=sysunit.TypeName2PTD('PTObjectUnit');
-     PGDBObjEntity(pEntity).OU.Instance:=@entityunit;
-     PGDBObjEntity(pEntity).OU.PTD:=PFCTTD;
+     //PGDBObjEntity(pEntity).OU.Instance:=@entityunit;
+     //PGDBObjEntity(pEntity).OU.PTD:=PFCTTD;
 end;
 destructor TVariablesExtender.Done;
 begin

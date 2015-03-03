@@ -22,7 +22,7 @@ unit Objinsp;
 interface
 
 uses
-  gdbdrawcontext,math,LMessages,LCLIntf,zcadstrconsts,usupportgui,GDBRoot,UGDBOpenArrayOfUCommands,StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
+  enitiesextendervariables,gdbdrawcontext,math,LMessages,LCLIntf,zcadstrconsts,usupportgui,GDBRoot,UGDBOpenArrayOfUCommands,StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
   Themes,
   {$IFDEF LCLGTK2}
   x,xlib,{x11,}{xutil,}
@@ -1546,6 +1546,7 @@ var
   TED:TEditorDesc;
   editorcontrol:TWinControl;
   tr:TRect;
+  pentvarext:PTVariablesExtender;
 begin
      if pp^.SubNode<>nil then
      begin
@@ -1574,9 +1575,11 @@ begin
             if pobj<>nil then
             repeat
                   if self.GDBobj then
-                  if ((pobj^.GetObjType=pgdbobjentity(pcurrobj)^.GetObjType)or(pgdbobjentity(pcurrobj)^.GetObjType=0))and(pobj.ou.Instance<>nil) then
                   begin
-                       pv:=PTObjectUnit(pobj.ou.Instance)^.FindVariable(pp^.valkey);
+                  pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+                  if ((pobj^.GetObjType=pgdbobjentity(pcurrobj)^.GetObjType)or(pgdbobjentity(pcurrobj)^.GetObjType=0))and({pobj.ou.Instance}pentvarext<>nil) then
+                  begin
+                       pv:={PTObjectUnit(pobj.ou.Instance)}pentvarext^.entityunit.FindVariable(pp^.valkey);
                        if pv<>nil then
                        begin
                             vv:=pv.data.PTD.GetValueAsString(pv.data.Instance);
@@ -1584,6 +1587,7 @@ begin
 
                             vsa.addnodouble(@vv);
                        end;
+                  end;
                   end;
                   pobj:=PTSimpleDrawing(pcurcontext).GetCurrentROOT.ObjArray.iterate(ir);
             until pobj=nil;

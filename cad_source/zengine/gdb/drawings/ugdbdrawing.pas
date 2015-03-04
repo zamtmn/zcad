@@ -20,20 +20,14 @@ unit ugdbdrawing;
 {$INCLUDE def.inc}
 interface
 uses
-paths,ugdbdimstylearray,ugdbabstractdrawing,WindowsSpecific,LResources,zcadsysvars,zcadinterface,zcadstrconsts,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
+paths,ugdbdimstylearray,WindowsSpecific,LResources,zcadsysvars,zcadstrconsts,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,UUnitManager,
 gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,sysinfo,ugdbsimpledrawing,
-GDBGenericSubEntry,
 UGDBLayerArray,
 GDBEntity,
-UGDBSelectedObjArray,
-UGDBTextStyleArray,
 UGDBFontManager,
-ugdbltypearray,
-UGDBOpenArrayOfPV,
-ugdbfont,
-UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,ugdbtrash,UGDBOpenArrayOfByte,oglwindowdef;
+UGDBOpenArrayOfPObjects,ugdbtrash,UGDBOpenArrayOfByte;
 type
 {EXPORT+}
 {TDWGProps=packed record

@@ -87,7 +87,7 @@ var
 function CreateCommandRTEdObjectPlugin(ocs:comfuncwithoper;oce,occ,ocf:comproc;obc,oac:commousefunc;ohgd:comdrawfunc;occont:comproc;name:pansichar;SA,DA:TCStartAttr):pCommandRTEdObjectPlugin;export;
 function CreateCommandFastObjectPlugin(ocs:comfuncwithoper;name:pansichar;SA,DA:TCStartAttr):pCommandFastObjectPlugin;export;
 implementation
-uses {GDBCommandsBase,}UGDBOpenArrayOfUCommands,zcadinterface,varman,log;
+uses zcadinterface,varman,log;
 procedure  TOSModeEditor.Format;
 var
    i,c:integer;

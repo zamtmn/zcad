@@ -3502,7 +3502,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     function GetDefaultDrawingName:GDBString;
                     function FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
               end;
-//Generate on E:\zcad\cad_source\zcad\commands\GDBCommandsBase.pas
+//Generate on E:\zcad\cad_source\zcad\gui\zcobjinspmultiobjects.pas
   TMSType=(
            TMST_All(*'All entities'*),
            TMST_Devices(*'Devices'*),

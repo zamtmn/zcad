@@ -88,18 +88,29 @@ begin
 end;
 procedure GDBObj3DFace.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 var i:GDBInteger;
+    v:GDBVertex;
 begin
       for i:=0 to 3 do
       begin
            PInWCS[I]:=VectorTransform3D(PInOCS[I],{CurrentCS}bp.ListPos.owner^.GetMatrix^);
       end;
-      normal:=normalizevertex(
+      v:=vectordot(
+                   geometry.VertexSub(PInWCS[0],PInWCS[1])
+                   ,
+                   geometry.VertexSub(PInWCS[2],PInWCS[1])
+                  );
+      if IsVectorNul(v) then
+                            normal:=xy_Z_Vertex
+                        else
+                            normal:=normalizevertex(v);
+
+      {normal:=normalizevertex(
                               vectordot(
                                         geometry.VertexSub(PInWCS[0],PInWCS[1])
                                         ,
                                         geometry.VertexSub(PInWCS[2],PInWCS[1])
                                        )
-                             );
+                             );}
      {if geometry.IsVectorNul(normal) then
                                          normal:=normal;}
        if geometry.IsPointEqual(PInOCS[2],PInOCS[3])then

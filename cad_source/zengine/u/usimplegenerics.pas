@@ -20,9 +20,9 @@ unit usimplegenerics;
 {$INCLUDE def.inc}
 
 interface
-uses LCLVersion,gdbase,gdbasetypes,
+uses strproc,LCLVersion,gdbase,gdbasetypes,
      sysutils,
-     gutil,gmap,gvector;
+     gutil,gmap,ghashmap,gvector;
 {$if LCL_FULLVERSION<1030000}{$DEFINE OldIteratorDef}{$ENDIF}
 //{$if LCL_FULLVERSION>=1030000}{$ENDIF}
 type
@@ -42,9 +42,21 @@ end;
 generic GKey2DataMap <TKey, TValue, TCompare> = class(specialize TMap<TKey, TValue, TCompare>)
         procedure RegisterKey(const key:TKey; const Value:TValue);
         function MyGetValue(key:TKey; out Value:TValue):boolean;
+        function MyContans(key:TKey):boolean;
 end;
 generic TMyVector <T> = class(specialize TVector<T>)
 end;
+
+generic TMyHashMap <TKey, TValue, Thash> = class(specialize THashMap<TKey, TValue, Thash>)
+  function MyGetValue(key:TKey; out Value:TValue):boolean;
+end;
+
+GDBStringHash=class
+  class function hash(s:GDBstring; n:longint):SizeUInt;
+end;
+generic TMyGDBStringDictionary <TValue> = class(specialize TMyHashMap<GDBString, TValue, GDBStringHash>)
+end;
+
 
 
 TMapPointerToHandle=specialize TMyMap<pointer,TDWGHandle, LessPointer>;
@@ -61,11 +73,32 @@ TEntUpgradeKey=record
 LessEntUpgradeKey=class
   class function c(a,b:TEntUpgradeKey):boolean;inline;
 end;
+
 {$ENDIF}
 
 implementation
 uses
     log;
+function TMyHashMap.MyGetValue(key:TKey; out Value:TValue):boolean;
+var i,h,bs:longint;
+begin
+  h:=Thash.hash(key,FData.size);
+  bs:=(FData[h]).size;
+  for i:=0 to bs-1 do begin
+    if (((FData[h])[i]).Key=key) then
+                                     begin
+                                          value:=((FData[h])[i]).Value;
+                                          exit(true);
+                                     end;
+  end;
+  exit(false);
+end;
+
+class function GDBStringHash.hash(s:GDBString; n:longint):SizeUInt;
+begin
+     result:=makehash(s) mod n;
+end;
+
 class function LessEntUpgradeKey.c(a,b:TEntUpgradeKey):boolean;inline;
 begin
   //c:=a<b;
@@ -110,6 +143,14 @@ begin
                             Iterator.Destroy;
                             result:=true;
                        end;
+end;
+function GKey2DataMap.MyContans(key:TKey):boolean;
+var Pair:TPair;
+    Node: TMSet.PNode;
+begin
+  Pair.Key:=key;
+  Node := FSet.NFind(Pair);
+  Result := Node <> nil;
 end;
 
 function TMyMap.MyGetValue(key:TKey):TValue;

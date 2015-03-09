@@ -3518,6 +3518,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                 GeometryUnit:TObjectUnit;(*'Geometry'*)
                 SummaryUnit:TObjectUnit;(*'Summary'*)
                 ObjID2Counter:GDBPointer;(*hidden_in_objinsp*)
+                MultiPropertyDictionary:GDBPointer;
                 procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
                 procedure CreateUnit(_GetEntsTypes:boolean=true);virtual;abstract;
                 procedure GetEntsTypes;virtual;abstract;

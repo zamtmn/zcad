@@ -41,7 +41,7 @@ function AnsiNaturalCompare(const str1, str2: string; vCaseSensitive: boolean = 
 
 function ConvertFromDxfString(str:GDBString):GDBString;
 function ConvertToDxfString(str:GDBString):GDBString;
-function MakeHash(const s: GDBString): GDBLongword;
+function MakeHash(const s: GDBString):SizeUInt;
 
 procedure KillString(var str:GDBString);inline;
 procedure RemoveOneRefCount(str:GDBString);inline;
@@ -90,7 +90,7 @@ procedure RemoveOneRefCount(str:GDBString);inline;
 begin
      GDBPointer(str):=nil;
 end;
-function MakeHash(const s: GDBString): GDBLongword;
+function MakeHash(const s: GDBString):SizeUInt;
 var
   I: Integer;
 begin

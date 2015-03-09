@@ -21,7 +21,7 @@ unit zcobjinspmultiobjects;
 
 interface
 uses
- zcadstrconsts,sysutils,gdbentityfactory,enitiesextendervariables,gdbdrawcontext,
+  shared,zcadstrconsts,sysutils,gdbentityfactory,enitiesextendervariables,gdbdrawcontext,
   gdbase,
   UGDBDescriptor,
   varmandef,
@@ -32,6 +32,20 @@ uses
 type
   TObjID2Counter=TMyMapCounter<TObjID,LessObjID>;
   TObjIDVector=TMyVector<TObjID>;
+
+  TMultiPropertyCategory=(MPCGeneral,MPCGeometry,MPCSummary);
+  TMultiPropertyDataForObjects=record
+                               end;
+  TObjID2MultiPropertyProcs=GKey2DataMap <TObjID,TMultiPropertyDataForObjects,LessObjID>;
+  TMultiProperty=class
+                       MPName:GDBString;
+                       MPCategory:TMultiPropertyCategory;
+                       MPObjectsData:TObjID2MultiPropertyProcs;
+                       usecounter:SizeUInt;
+                       constructor create(_name:GDBString;_Category:TMultiPropertyCategory);
+                 end;
+  TMyGDBString2TMultiPropertyDictionary=TMyGDBStringDictionary<TMultiProperty>;
+  TMultiPropertyVector=TMyVector<TMultiProperty>;
 {Export+}
   {TMSType=(
            TMST_All(*'All entities'*),
@@ -48,18 +62,49 @@ type
                 GeometryUnit:TObjectUnit;(*'Geometry'*)
                 SummaryUnit:TObjectUnit;(*'Summary'*)
                 ObjID2Counter:{-}TObjID2Counter{/GDBPointer/};(*hidden_in_objinsp*)
+                MultiPropertyDictionary:{-}TMyGDBString2TMultiPropertyDictionary{/GDBPointer/};
+                MultiPropertyVector:{-}TMultiPropertyVector{/GDBPointer/};
                 procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
                 procedure CreateUnit(_GetEntsTypes:boolean=true);virtual;
                 procedure GetEntsTypes;virtual;
                 function GetObjType:GDBWord;virtual;
                 constructor init;
                 destructor done;virtual;
+
+                procedure RegisterMultiproperty(name:GDBString;category:TMultiPropertyCategory;id:TObjID);
+                procedure CheckMultiPropertyUse;
             end;
 {Export-}
 var
    MSEditor:TMSEditor;
 implementation
 uses UGDBSelectedObjArray;
+constructor TMultiProperty.create;
+begin
+     MPName:=_name;
+     MPCategory:=_category;
+     MPObjectsData:=TObjID2MultiPropertyProcs.create;
+end;
+procedure TMSEditor.RegisterMultiproperty(name:GDBString;category:TMultiPropertyCategory;id:TObjID);
+var
+   mp:TMultiProperty;
+   mpdfo:TMultiPropertyDataForObjects;
+begin
+     if MultiPropertyDictionary.MyGetValue(name,mp) then
+                                                        begin
+                                                             if mp.MPCategory<>category then
+                                                                                            shared.FatalError('Category error in "'+name+'" multiproperty');
+                                                             mp.MPObjectsData.RegisterKey(id,mpdfo);
+                                                        end
+                                                    else
+                                                        begin
+                                                             mp:=TMultiProperty.create(name,category);
+                                                             mp.MPObjectsData.RegisterKey(id,mpdfo);
+                                                             MultiPropertyDictionary.insert(name,mp);
+                                                             MultiPropertyVector.PushBack(mp);
+                                                        end;
+end;
+
 constructor  TMSEditor.init;
 begin
      VariablesUnit.init('VariablesUnit');
@@ -71,6 +116,8 @@ begin
 
      ObjID2Counter:=TObjID2Counter.Create;
      ObjIDVector:=TObjIDVector.create;
+     MultiPropertyDictionary:=TMyGDBString2TMultiPropertyDictionary.create;
+     MultiPropertyVector:=TMultiPropertyVector.Create;
 end;
 destructor  TMSEditor.done;
 begin
@@ -82,6 +129,8 @@ begin
 
      ObjID2Counter.Free;
      ObjIDVector.Free;
+     MultiPropertyDictionary.Free;
+     MultiPropertyVector.Free;
 end;
 procedure  TMSEditor.FormatAfterFielfmod;
 var //i: GDBInteger;
@@ -197,6 +246,37 @@ begin
   until not iterator.Next;
 
 end;
+procedure TMSEditor.CheckMultiPropertyUse;
+var
+    i,j,usablecounter:integer;
+    NeedObjID:TObjID;
+begin
+     for i:=0 to MultiPropertyVector.Size-1 do
+       MultiPropertyVector[i].usecounter:=0;
+     NeedObjID:=GetObjType;
+     if NeedObjID=0 then
+     begin
+          usablecounter:=0;
+          for j:=1 to ObjIDVector.Size-1 do
+          begin
+            for i:=0 to MultiPropertyVector.Size-1 do
+              if (MultiPropertyVector[i].MPObjectsData.MyContans(ObjIDVector[j]))or(MultiPropertyVector[i].MPObjectsData.MyContans(0)) then
+                inc(MultiPropertyVector[i].usecounter);
+            inc(usablecounter);
+          end;
+     end
+     else
+     begin
+          for i:=0 to MultiPropertyVector.Size-1 do
+            if (MultiPropertyVector[i].MPObjectsData.MyContans(NeedObjID))or(MultiPropertyVector[i].MPObjectsData.MyContans(0)) then
+              inc(MultiPropertyVector[i].usecounter);
+          usablecounter:=1;
+     end;
+     for i:=0 to MultiPropertyVector.Size-1 do
+       if MultiPropertyVector[i].usecounter<>usablecounter then
+          MultiPropertyVector[i].usecounter:=0;
+end;
+
 procedure  TMSEditor.createunit;
 var //i: GDBInteger;
     pv:pGDBObjEntity;
@@ -209,7 +289,9 @@ var //i: GDBInteger;
 begin
      if _GetEntsTypes then
                           GetEntsTypes;
-     {self.SelCount:=0;}
+
+     CheckMultiPropertyUse;
+
      VariablesUnit.free;
      //etype:=GetObjType;
      psd:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
@@ -272,6 +354,9 @@ end;
 procedure startup;
 begin
   MSEditor.init;
+  MSEditor.RegisterMultiproperty('GenLayer',MPCGeneral,0);
+  MSEditor.RegisterMultiproperty('GenLayer',MPCGeneral,1);
+  MSEditor.RegisterMultiproperty('GenLayer2',MPCGeneral,1);
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('zcobjinspmultiobjects.initialization');{$ENDIF}

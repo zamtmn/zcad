@@ -22,7 +22,7 @@ unit usimplegenerics;
 interface
 uses LCLVersion,gdbase,gdbasetypes,
      sysutils,
-     gutil,gmap;
+     gutil,gmap,gvector;
 {$if LCL_FULLVERSION<1030000}{$DEFINE OldIteratorDef}{$ENDIF}
 //{$if LCL_FULLVERSION>=1030000}{$ENDIF}
 type
@@ -36,11 +36,15 @@ generic TMyMap <TKey, TValue, TCompare> = class(specialize TMap<TKey, TValue, TC
   function MyGetValue(key:TKey):TValue;inline;
   procedure MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);inline;
 end;
+generic TMyMapCounter <TKey, TCompare> = class(specialize TMyMap<TKey, SizeUInt, TCompare>)
+  procedure CountKey(const key:TKey; const InitialCounter:SizeUInt);inline;
+end;
 generic GKey2DataMap <TKey, TValue, TCompare> = class(specialize TMap<TKey, TValue, TCompare>)
         procedure RegisterKey(const key:TKey; const Value:TValue);
         function MyGetValue(key:TKey; out Value:TValue):boolean;
 end;
-
+generic TMyVector <T> = class(specialize TVector<T>)
+end;
 
 
 TMapPointerToHandle=specialize TMyMap<pointer,TDWGHandle, LessPointer>;
@@ -125,6 +129,26 @@ begin
                             Iterator.Destroy;
                        end;
 end;
+procedure TMyMapCounter.CountKey(const key:TKey; const InitialCounter:SizeUInt);
+var
+   {$IFDEF OldIteratorDef}
+   Iterator:specialize TMap<TKey, SizeUInt, TCompare>.TIterator;
+   {$ELSE}
+   Iterator:TIterator;
+   {$ENDIF}
+begin
+  Iterator:=Find(key);
+  if  Iterator=nil then
+                       begin
+                            Insert(Key, InitialCounter);
+                       end
+                   else
+                       begin
+                            Iterator.SetValue(Iterator.GetValue+1);
+                            Iterator.Destroy;
+                       end;
+end;
+
 procedure TMyMap.MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);
 var
    {$IFDEF OldIteratorDef}

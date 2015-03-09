@@ -3031,12 +3031,12 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                              Rotate:GDBDouble;(*'Rotation angle'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
                            end;
-         TSetVarStyle=packed record
+         {TSetVarStyle=packed record
                             ent:TMSType;(*'Entity'*)
                             CurrentFindBlock:GDBString;(*'**CurrentFind'*)
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
-                           end;
+                           end;}
          PTPrintParams=^TPrintParams;
          TPrintParams=packed record
                             FitToPage:GDBBoolean;(*'Fit to page'*)
@@ -3503,17 +3503,24 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     function FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
               end;
 //Generate on E:\zcad\cad_source\zcad\gui\zcobjinspmultiobjects.pas
-  TMSType=(
+  {TMSType=(
            TMST_All(*'All entities'*),
            TMST_Devices(*'Devices'*),
            TMST_Cables(*'Cables'*)
-          );
+          );}
   TMSEditor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                SelCount:GDBInteger;(*'Selected objects'*)(*oi_readonly*)
-                EntType:TMSType;(*'Process primitives'*)
-                OU:TObjectUnit;(*'Variables'*)
+                {SelCount:GDBInteger;(*'Selected objects'*)(*oi_readonly*)}
+                {EntType:TMSType;(*'Process primitives'*)}
+                TxtEntType:TEnumData;(*'Process primitives'*)
+                ObjIDVector:GDBPointer;(*hidden_in_objinsp*)
+                VariablesUnit:TObjectUnit;(*'Variables'*)
+                GeneralUnit:TObjectUnit;(*'General'*)
+                GeometryUnit:TObjectUnit;(*'Geometry'*)
+                SummaryUnit:TObjectUnit;(*'Summary'*)
+                ObjID2Counter:GDBPointer;(*hidden_in_objinsp*)
                 procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
-                procedure CreateUnit;virtual;abstract;
+                procedure CreateUnit(_GetEntsTypes:boolean=true);virtual;abstract;
+                procedure GetEntsTypes;virtual;abstract;
                 function GetObjType:GDBWord;virtual;abstract;
                 constructor init;
                 destructor done;virtual;abstract;

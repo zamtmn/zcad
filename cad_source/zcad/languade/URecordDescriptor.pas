@@ -359,6 +359,7 @@ var PFD:PFieldDescriptor;
     i:integer;
     category:gdbstring;
     oldppda:PTPropertyDeskriptorArray;
+    recreateunitvars:boolean;
 begin
      {$IFDEF TOTALYLOG}programlog.LogOutStr('RecordDescriptor.CreateProperties('+name+')'+inttostr(bmode),lp_IncPos);{$ENDIF}
 
@@ -398,6 +399,17 @@ begin
      if (self.TypeName='TObjectUnit')or(self.TypeName='TUnit') then
                                         begin
                                         //if (bmode=property_build)then
+                                              if (bmode=property_correct)then
+                                              begin
+                                               if PTPropertyDeskriptorArray(ppd^.SubNode)^.GetRealPropertyDeskriptorsCount<>PTObjectUnit(addr)^.InterfaceVariables.vardescarray.Count then
+                                                  begin
+                                                  PTPropertyDeskriptorArray(ppd^.SubNode)^.cleareraseobj;
+                                                  recreateunitvars:=true;
+                                                  bmode:=property_build;
+                                                  end;
+                                              end
+                                               else
+                                                  recreateunitvars:=false;
                                         begin
                                              pvd:=PTObjectUnit(addr)^.InterfaceVariables.vardescarray.beginiterate(ir2);
                                              if pvd<>nil then
@@ -454,6 +466,8 @@ begin
                                                    pvd:=PTObjectUnit(addr)^.InterfaceVariables.vardescarray.iterate(ir2);
                                              until pvd=nil;
                                         end;
+                                        if recreateunitvars then
+                                                                bmode:=property_correct;
                                         inc(GDBPlatformint(addr),sizeof(TObjectUnit));
                                         end
                                         else

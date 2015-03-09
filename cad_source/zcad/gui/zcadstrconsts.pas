@@ -59,6 +59,9 @@ resourcestring
   rsNewLayerNameFormat='Layer%-3.3d';
   rsNewTextStyleNameFormat='Style%-3.3d';
 
+  rsNameWithCounter='%s (%d)';
+  rsNameAll='All';
+
   {files}
   rsLoadingFile='Loading file "%s"';
   rsFileFormat='%s file format';

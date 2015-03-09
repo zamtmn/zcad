@@ -147,12 +147,12 @@ type
                              Rotate:GDBDouble;(*'Rotation angle'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
                            end;
-         TSetVarStyle=packed record
+         {TSetVarStyle=packed record
                             ent:TMSType;(*'Entity'*)
                             CurrentFindBlock:GDBString;(*'**CurrentFind'*)
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
-                           end;
+                           end;}
          PTPrintParams=^TPrintParams;
          TPrintParams=packed record
                             FitToPage:GDBBoolean;(*'Fit to page'*)

@@ -21,27 +21,36 @@ unit zcobjinspmultiobjects;
 
 interface
 uses
- enitiesextendervariables,gdbdrawcontext,
+ zcadstrconsts,sysutils,gdbentityfactory,enitiesextendervariables,gdbdrawcontext,
   gdbase,
   UGDBDescriptor,
   varmandef,
   gdbobjectsconstdef,
   GDBEntity,
   gdbasetypes,
- Varman;
+ Varman,UGDBStringArray,usimplegenerics;
 type
+  TObjID2Counter=TMyMapCounter<TObjID,LessObjID>;
+  TObjIDVector=TMyVector<TObjID>;
 {Export+}
-  TMSType=(
+  {TMSType=(
            TMST_All(*'All entities'*),
            TMST_Devices(*'Devices'*),
            TMST_Cables(*'Cables'*)
-          );
+          );}
   TMSEditor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                SelCount:GDBInteger;(*'Selected objects'*)(*oi_readonly*)
-                EntType:TMSType;(*'Process primitives'*)
-                OU:TObjectUnit;(*'Variables'*)
+                {SelCount:GDBInteger;(*'Selected objects'*)(*oi_readonly*)}
+                {EntType:TMSType;(*'Process primitives'*)}
+                TxtEntType:TEnumData;(*'Process primitives'*)
+                ObjIDVector:{-}TObjIDVector{/GDBPointer/};(*hidden_in_objinsp*)
+                VariablesUnit:TObjectUnit;(*'Variables'*)
+                GeneralUnit:TObjectUnit;(*'General'*)
+                GeometryUnit:TObjectUnit;(*'Geometry'*)
+                SummaryUnit:TObjectUnit;(*'Summary'*)
+                ObjID2Counter:{-}TObjID2Counter{/GDBPointer/};(*hidden_in_objinsp*)
                 procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
-                procedure CreateUnit;virtual;
+                procedure CreateUnit(_GetEntsTypes:boolean=true);virtual;
+                procedure GetEntsTypes;virtual;
                 function GetObjType:GDBWord;virtual;
                 constructor init;
                 destructor done;virtual;
@@ -53,11 +62,26 @@ implementation
 uses UGDBSelectedObjArray;
 constructor  TMSEditor.init;
 begin
-     ou.init('multiselunit');
+     VariablesUnit.init('VariablesUnit');
+     GeneralUnit.init('GeneralUnit.');
+     GeometryUnit.init('GeometryUnit.');
+     SummaryUnit.init('SummaryUnit');
+     TxtEntType.Enums.init(10);
+     TxtEntType.Selected:=0;
+
+     ObjID2Counter:=TObjID2Counter.Create;
+     ObjIDVector:=TObjIDVector.create;
 end;
 destructor  TMSEditor.done;
 begin
-     ou.done;
+     VariablesUnit.done;
+     GeneralUnit.done;
+     GeometryUnit.done;
+     SummaryUnit.done;
+     TxtEntType.Enums.done;
+
+     ObjID2Counter.Free;
+     ObjIDVector.Free;
 end;
 procedure  TMSEditor.FormatAfterFielfmod;
 var //i: GDBInteger;
@@ -70,8 +94,14 @@ var //i: GDBInteger;
     DC:TDrawContext;
     pentvarext:PTVariablesExtender;
 begin
+      if PFIELD=@self.TxtEntType then
+      begin
+           PFIELD:=@TxtEntType;
+           CreateUnit(false);
+           exit;
+      end;
       dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-      pvd:=ou.InterfaceVariables.vardescarray.beginiterate(ir2);
+      pvd:=VariablesUnit.InterfaceVariables.vardescarray.beginiterate(ir2);
       if pvd<>nil then
       repeat
             if pvd^.data.Instance=PFIELD then
@@ -103,8 +133,8 @@ begin
 
 
             end;
-            //pvdmy:=ou.InterfaceVariables.findvardesc(pvd^.name);
-            pvd:=ou.InterfaceVariables.vardescarray.iterate(ir2)
+            //pvdmy:=VariablesUnit.InterfaceVariables.findvardesc(pvd^.name);
+            pvd:=VariablesUnit.InterfaceVariables.vardescarray.iterate(ir2)
       until pvd=nil;
      //createunit;
      //if assigned(ReBuildProc)then
@@ -112,11 +142,60 @@ begin
 end;
 function TMSEditor.GetObjType:GDBWord;
 begin
-     case EntType of
+     {case EntType of
                     TMST_All:result:=0;
                     TMST_Devices:result:=GDBDeviceID;
                     TMST_Cables:result:=GDBCableID;
-     end;
+     end;}
+     result:=ObjIDVector[TxtEntType.Selected];
+end;
+procedure TMSEditor.GetEntsTypes;
+var
+    ir:itrec;
+    pv:pGDBObjEntity;
+    psd:PSelectedObjDesc;
+    iterator:TObjID2Counter.TIterator;
+    s:GDBString;
+    entinfo:TEntInfoData;
+    counter:integer;
+begin
+  ObjID2Counter.Free;
+  ObjID2Counter:=TObjID2Counter.Create;
+  ObjIDVector.free;
+  ObjIDVector:=TObjIDVector.create;
+  counter:=0;
+
+  psd:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
+  if psd<>nil then
+  repeat
+    pv:=psd^.objaddr;
+    if pv<>nil then
+    if pv^.Selected then
+    begin
+         ObjID2Counter.CountKey(pv^.vp.ID,1);
+         inc(counter);
+    end;
+  psd:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
+  until psd=nil;
+
+  TxtEntType.Enums.free;
+  TxtEntType.Selected:=0;
+  s:=sysutils.format(rsNameWithCounter,[rsNameAll,counter]);
+  TxtEntType.Enums.add(@s);
+  ObjIDVector.PushBack(0);
+
+  iterator:=ObjID2Counter.Min;
+  if assigned(iterator) then
+  repeat
+        if ObjID2EntInfoData.MyGetValue(iterator.GetKey,entinfo) then
+          s:=entinfo.UserName
+        else
+          s:='Not registred';
+        s:=sysutils.format(rsNameWithCounter,[s,iterator.getvalue]);
+        TxtEntType.Enums.add(@s);
+        ObjIDVector.PushBack(iterator.getkey);
+  until not iterator.Next;
+
 end;
 procedure  TMSEditor.createunit;
 var //i: GDBInteger;
@@ -128,8 +207,10 @@ var //i: GDBInteger;
     ir,ir2:itrec;
     pentvarext:PTVariablesExtender;
 begin
-     self.SelCount:=0;
-     ou.free;
+     if _GetEntsTypes then
+                          GetEntsTypes;
+     {self.SelCount:=0;}
+     VariablesUnit.free;
      //etype:=GetObjType;
      psd:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
      //pv:=gdb.GetCurrentDWG.ObjRoot.ObjArray.beginiterate(ir);
@@ -140,20 +221,20 @@ begin
 
        if pv^.Selected then
        begin
-       inc(self.SelCount);
+       {inc(self.SelCount);}
        pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
        if ((pv^.GetObjType=GetObjType)or(GetObjType=0))and(pentvarext<>nil) then
        begin
             pu:=pentvarext^.entityunit.InterfaceUses.beginiterate(ir2);
             if pu<>nil then
             repeat
-                  ou.InterfaceUses.addnodouble(@pu);
+                  VariablesUnit.InterfaceUses.addnodouble(@pu);
                   pu:=pentvarext^.entityunit.InterfaceUses.iterate(ir2)
             until pu=nil;
             pvd:=pentvarext^.entityunit.InterfaceVariables.vardescarray.beginiterate(ir2);
             if pvd<>nil then
             repeat
-                  pvdmy:=ou.InterfaceVariables.findvardesc(pvd^.name);
+                  pvdmy:=VariablesUnit.InterfaceVariables.findvardesc(pvd^.name);
                   if pvdmy=nil then
                                    begin
                                         //if (pvd^.data.PTD^.GetTypeAttributes and TA_COMPOUND)=0 then
@@ -161,7 +242,7 @@ begin
                                         vd:=pvd^;
                                         //vd.attrib:=vda_different;
                                         vd.data.Instance:=nil;
-                                        ou.InterfaceVariables.createvariable(pvd^.name,vd);
+                                        VariablesUnit.InterfaceVariables.createvariable(pvd^.name,vd);
                                         pvd^.data.PTD.CopyInstanceTo(pvd.data.Instance,vd.data.Instance);
                                         end
                                         {   else

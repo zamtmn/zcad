@@ -51,6 +51,7 @@ type tzcpmode=(zcptxt,zcpbin);
 PTPropertyDeskriptorArray=^TPropertyDeskriptorArray;
 TPropertyDeskriptorArray=object(GDBOpenArrayOfGDBPointer)
                                procedure cleareraseobj;virtual;
+                               function GetRealPropertyDeskriptorsCount:integer;virtual;
                                function findcategory(category:GDBString):PPropertyDeskriptor;
                                function findvalkey(valkey:GDBString):integer;
                          end;
@@ -287,6 +288,21 @@ begin
         curr:=iterate(ir);
   until curr=nil;
   count:=0;
+end;
+function TPropertyDeskriptorArray.GetRealPropertyDeskriptorsCount:integer;
+var curr:PPropertyDeskriptor;
+    ir:itrec;
+begin
+  result:=0;
+  curr:=beginiterate(ir);
+  if curr<>nil then
+  repeat
+        if curr^.SubNode<>nil then
+           result:=result+PTPropertyDeskriptorArray(curr^.SubNode)^.GetRealPropertyDeskriptorsCount
+        else
+           inc(result);
+        curr:=iterate(ir);
+  until curr=nil;
 end;
 function TPropertyDeskriptorArray.findcategory(category:GDBString):PPropertyDeskriptor;
 var

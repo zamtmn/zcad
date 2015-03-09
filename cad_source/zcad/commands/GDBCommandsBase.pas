@@ -89,7 +89,7 @@ var
 {$ENDIF}
 begin
      MSEditor.CreateUnit;
-     if MSEditor.SelCount>0 then
+     if {MSEditor.SelCount>0}true then
                                 begin
                                  {$IFDEF TOTALYLOG}
                                  membuf.init({$IFDEF DEBUGBUILD}'{6F6386AC-95B5-4B6D-AEC3-7EE5DD53F8A3}',{$ENDIF}10000);

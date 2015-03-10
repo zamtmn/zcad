@@ -247,7 +247,7 @@ varmanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                  vardescarray:GDBOpenArrayOfData;
                  vararray:GDBOpenArrayOfByte;
                  function findvardesc(varname:GDBString): pvardesk;virtual;abstract;
-                 procedure createvariable(varname:GDBString; var vd:vardesk);virtual;abstract;
+                 function createvariable(varname:GDBString; var vd:vardesk): pvardesk;virtual;abstract;
                  procedure createvariablebytype(varname,vartype:GDBString);virtual;abstract;
                  procedure createbasevaluefromGDBString(varname: GDBString; varvalue: GDBString; var vd: vardesk);virtual;abstract;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: shortString): GDBBoolean;virtual;abstract;

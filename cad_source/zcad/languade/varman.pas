@@ -153,7 +153,7 @@ varmanager={$IFNDEF DELPHI}packed{$ENDIF} object(varmanagerdef)
                  function findvardesc(varname:GDBString): pvardesk;virtual;
                  function findvardescbyinst(varinst:GDBPointer):pvardesk;virtual;
                  function findvardescbytype(pt:PUserTypeDescriptor):pvardesk;virtual;
-                 procedure createvariable(varname:GDBString; var vd:vardesk);virtual;
+                 function createvariable(varname:GDBString; var vd:vardesk): pvardesk;virtual;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: ShortString): GDBBoolean;virtual;
                  destructor done;virtual;
                  procedure free;virtual;
@@ -700,9 +700,10 @@ begin
      //exttype.freewithproc(basetypedescclear);
      {$IFDEF TOTALYLOG}programlog.logoutstr('end;',lp_DecPos);{$ENDIF}
 end;
-procedure varmanager.createvariable(varname: GDBString; var vd: vardesk);
+function varmanager.createvariable(varname: GDBString; var vd: vardesk):pvardesk;
 var
   size: GDBLongword;
+  i:TArrayIndex;
   {$include debugvars.inc}
 begin
        {$IFDEF DEBUGBUILD}debstr:='{3DE4F5CB-D3CB-4F29-B0A4-2BE62E1E98A0} for variable '+varname{$ENDIF};
@@ -716,7 +717,8 @@ begin
        vd.data.PTD.InitInstance(vd.data.Instance);
        vd.attrib:=0;
        //GDBGetMem({$IFDEF DEBUGBUILD}pansichar(debstr),{$ENDIF}vd.pvalue,size);
-       vardescarray.add(@vd);
+       i:=vardescarray.add(@vd);
+       result:=vardescarray.getelement(i);
        KillString(vd.name);
        KillString(vd.username);
 end;

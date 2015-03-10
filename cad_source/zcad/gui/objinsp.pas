@@ -746,7 +746,7 @@ begin
     tempcolor:=canvas.Font.Color;
     //canvas.Font.Color:=clGrayText;
     if fulldraw then
-    if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)) then
+    if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)and((ppd^.Attr and FA_DIFFERENT)=0)) then
                                        ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
                                    else
                                        drawstring(canvas,r,r.Left,r.Top,(ppd^.value),DefaultDetails);
@@ -758,7 +758,7 @@ begin
          if NeedDrawFasteditor(onm) then
          drawfasteditor(ppd,canvas,r);
     if fulldraw then
-    if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)) then
+    if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)and((ppd^.Attr and FA_DIFFERENT)=0)) then
                                                    ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
                                                else
                                                    drawstring(canvas,r,r.Left,r.Top,(ppd^.value),DefaultDetails);

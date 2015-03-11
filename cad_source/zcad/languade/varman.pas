@@ -1553,7 +1553,7 @@ begin
                                                     exit;
                                               end;
           ps:=VarCategory.iterate(ir);
-          inc(GDBPlatformint(result));
+          inc(GDBPlatformuint(result));
      until ps=nil;
      result:=@CategoryUnknownCOllapsed;
      catname:=category;
@@ -1566,7 +1566,7 @@ begin
   ShortDateFormat:='MM.yy';
   VarCategory.init(100);
   //VarCategory.loadfromfile(expandpath('*rtl/VarCategory.cat'));
-  CategoryCollapsed.init({$IFDEF DEBUGBUILD}'{716C3EDB-32A3-416D-A599-B04B1B45D6E4}',{$ENDIF}VarCategory.Count);
+  CategoryCollapsed.init({$IFDEF DEBUGBUILD}'{716C3EDB-32A3-416D-A599-B04B1B45D6E4}',{$ENDIF}VarCategory.Max);
   CategoryCollapsed.CreateArray;
   fillchar(CategoryCollapsed.parray^,CategoryCollapsed.max,byte(true));
   CategoryUnknownCOllapsed:=true;

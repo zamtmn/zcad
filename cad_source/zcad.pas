@@ -97,14 +97,15 @@ uses
   GDBCommandsElectrical,
   GDBCommandsOPS,
   plugins,
-  Objinsp,
+  zcobjectinspector,
   mainwindow,
   shared,
   zcadstrconsts,
   iopalette,
   gdbfieldprocessorimpl,
   registerenitiesfeatures,
-  registerenitiesextenders;
+  registerenitiesextenders,
+  zcregistermultiproperties;
   //RegCnownTypes,URegisterObjects;
 
 //exports HistoryOut,redrawoglwnd,updatevisible,reloadlayer; {shared}

@@ -151,6 +151,7 @@ function SQRdist_Point_to_Segment(const p:GDBVertex;const s0,s1:GDBvertex):gdbdo
 function NearestPointOnSegment(const p:GDBVertex;const s0,s1:GDBvertex):GDBvertex;inline;
 function IsPointEqual(const p1,p2:gdbvertex):boolean;inline;
 function IsVectorNul(const p2:gdbvertex):boolean;inline;
+function IsDoubleNotEqual(const d1,d2:gdbdouble):boolean;inline;
 
 procedure _myGluProject(const objx,objy,objz:GDBdouble;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out winx,winy,winz:GDBdouble);inline;
 procedure _myGluProject2(const objcoord:GDBVertex;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out wincoord:GDBVertex);inline;
@@ -296,6 +297,13 @@ begin
                                           result:=false
                                       else
                                           result:=true;
+end;
+function IsDoubleNotEqual(const d1,d2:gdbdouble):boolean;
+begin
+     if abs(d1-d2)>eps then
+                           result:=true
+                       else
+                           result:=false;
 end;
 function GetMinAndSwap(var position:integer;size:integer;var ca:TLineClipArray):gdbdouble;
 var i,hpos:GDBInteger;

@@ -16,16 +16,15 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit zcobjinspmultiobjects;
+unit zcobjectinspectormultiobjects;
 {$INCLUDE def.inc}
 
 interface
 uses
-  gdbpalette,memman,shared,zcadstrconsts,sysutils,gdbentityfactory,enitiesextendervariables,gdbdrawcontext,
+  intftranslations,gdbpalette,memman,shared,zcadstrconsts,sysutils,gdbentityfactory,enitiesextendervariables,gdbdrawcontext,
   gdbase,
   UGDBDescriptor,
   varmandef,
-  gdbobjectsconstdef,
   GDBEntity,
   gdbasetypes,
  Varman,UGDBStringArray,usimplegenerics;
@@ -44,11 +43,13 @@ type
   TAfterIterateProc=procedure(piteratedata:GDBPointer;mp:TMultiProperty);
   TEntIterateProc=procedure(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean);
   TMultiPropertyDataForObjects=record
+                                     ValueOffset:GDBInteger;
                                      EntIterateProc:TEntIterateProc;
                                end;
   TObjID2MultiPropertyProcs=GKey2DataMap <TObjID,TMultiPropertyDataForObjects,LessObjID>;
   TMultiProperty=class
                        MPName:GDBString;
+                       MPUserName:GDBString;
                        MPType:PUserTypeDescriptor;
                        MPCategory:TMultiPropertyCategory;
                        MPObjectsData:TObjID2MultiPropertyProcs;
@@ -85,7 +86,7 @@ type
                 constructor init;
                 destructor done;virtual;
 
-                procedure RegisterMultiproperty(name:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc);
+                procedure RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;VO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc);
                 procedure CheckMultiPropertyUse;
                 procedure CreateMultiPropertys;
             end;
@@ -103,11 +104,12 @@ begin
      self.BeforeIterateProc:=bip;
      MPObjectsData:=TObjID2MultiPropertyProcs.create;
 end;
-procedure TMSEditor.RegisterMultiproperty(name:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc);
+procedure TMSEditor.RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;VO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc);
 var
    mp:TMultiProperty;
    mpdfo:TMultiPropertyDataForObjects;
 begin
+     username:=InterfaceTranslate('oimultiproperty_'+name+'~',username);
      if MultiPropertyDictionary.MyGetValue(name,mp) then
                                                         begin
                                                              if mp.MPCategory<>category then
@@ -115,12 +117,16 @@ begin
                                                              mp.BeforeIterateProc:=bip;
                                                              mp.AfterIterateProc:=aip;
                                                              mpdfo.EntIterateProc:=eip;
+                                                             mpdfo.ValueOffset:=VO;
+                                                             mp.MPUserName:=username;
                                                              mp.MPObjectsData.RegisterKey(id,mpdfo);
                                                         end
                                                     else
                                                         begin
                                                              mp:=TMultiProperty.create(name,ptm,category,bip,aip,eip);
                                                              mpdfo.EntIterateProc:=eip;
+                                                             mpdfo.ValueOffset:=VO;
+                                                             mp.MPUserName:=username;
                                                              mp.MPObjectsData.RegisterKey(id,mpdfo);
                                                              MultiPropertyDictionary.insert(name,mp);
                                                              MultiPropertyVector.PushBack(mp);
@@ -304,15 +310,15 @@ begin
              if (pv^.vp.ID=NeedObjID)or(NeedObjID=0) then
              if pv^.Selected then
              begin
-                  if MultiPropertyVector[i].MPObjectsData.MyGetValue(NeedObjID,MultiPropertyDataForObjects)then
+                  if MultiPropertyVector[i].MPObjectsData.MyGetValue({NeedObjID}pv^.vp.ID,MultiPropertyDataForObjects)then
                   begin
-                    MultiPropertyDataForObjects.EntIterateProc(MultiPropertyVector[i].PIiterateData,pv,MultiPropertyVector[i],fistrun);
+                    MultiPropertyDataForObjects.EntIterateProc(MultiPropertyVector[i].PIiterateData,Pointer(PtrUInt(pv)+MultiPropertyDataForObjects.ValueOffset),MultiPropertyVector[i],fistrun);
                     fistrun:=false;
                   end
                   else
                       if MultiPropertyVector[i].MPObjectsData.MyGetValue(0,MultiPropertyDataForObjects)then
                       begin
-                        MultiPropertyDataForObjects.EntIterateProc(MultiPropertyVector[i].PIiterateData,pv,MultiPropertyVector[i],fistrun);
+                        MultiPropertyDataForObjects.EntIterateProc(MultiPropertyVector[i].PIiterateData,Pointer(PtrUInt(pv)+MultiPropertyDataForObjects.ValueOffset),MultiPropertyVector[i],fistrun);
                         fistrun:=false;
                       end;
              end;
@@ -439,38 +445,6 @@ begin
      psd:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
      until psd=nil;
 end;
-function GetOneVarData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
-var
-    vd:vardesk;
-begin
-     GDBGetMem(result,sizeof(TOneVarData));
-     PTOneVarData(result).PVarDesc:=pu^.FindVariable(mp.MPName);
-     if PTOneVarData(result).PVarDesc=nil then
-     begin
-          pu^.setvardesc(vd, mp.MPName,'',mp.MPType^.TypeName);
-          PTOneVarData(result).PVarDesc:=pu^.InterfaceVariables.createvariable(mp.MPName,vd);
-     end;
-end;
-procedure FreeOneVarData(piteratedata:GDBPointer;mp:TMultiProperty);
-begin
-     GDBFreeMem(piteratedata);
-end;
-procedure GenLayerEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean);
-begin
-     if fistrun then
-                    mp.MPType.CopyInstanceTo(@PGDBObjEntity(pentity)^.vp.Layer,PTOneVarData(pdata).PVarDesc.data.Instance)
-                else
-                    if PGDBObjEntity(pentity)^.vp.Layer<>ppointer(PTOneVarData(pdata).PVarDesc.data.Instance)^then
-                    PTOneVarData(pdata).PVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_different;
-end;
-procedure GenColorEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean);
-begin
-     if fistrun then
-                    mp.MPType.CopyInstanceTo(@PGDBObjEntity(pentity)^.vp.Color,PTOneVarData(pdata).PVarDesc.data.Instance)
-                else
-                    if PGDBObjEntity(pentity)^.vp.Color<>TGDBPaletteColor(PTOneVarData(pdata).PVarDesc.data.Instance^)then
-                    PTOneVarData(pdata).PVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_different;
-end;
 procedure finalize;
 begin
      MSEditor.done;
@@ -478,18 +452,9 @@ end;
 procedure startup;
 begin
   MSEditor.init;
-  MSEditor.RegisterMultiproperty('GenColor',sysunit.TypeName2PTD('TGDBPaletteColor'),MPCGeneral,0,@GetOneVarData,FreeOneVarData,GenColorEntIterateProc);
-  MSEditor.RegisterMultiproperty('GenLayer',sysunit.TypeName2PTD('PGDBLayerPropObjInsp'),MPCGeneral,0,@GetOneVarData,FreeOneVarData,GenLayerEntIterateProc);
-  MSEditor.RegisterMultiproperty('GeomRadius',sysunit.TypeName2PTD('GDBDouble'),MPCGeometry,GDBCircleID,@GetOneVarData,FreeOneVarData,GenLayerEntIterateProc);
-  MSEditor.RegisterMultiproperty('GeomLineStart_x',sysunit.TypeName2PTD('GDBDouble'),MPCGeometry,GDBLineID,@GetOneVarData,FreeOneVarData,GenLayerEntIterateProc);
-  MSEditor.RegisterMultiproperty('GeomLineStart_y',sysunit.TypeName2PTD('GDBDouble'),MPCGeometry,GDBLineID,@GetOneVarData,FreeOneVarData,GenLayerEntIterateProc);
-  MSEditor.RegisterMultiproperty('GeomLineStart_z',sysunit.TypeName2PTD('GDBDouble'),MPCGeometry,GDBLineID,@GetOneVarData,FreeOneVarData,GenLayerEntIterateProc);
-  MSEditor.RegisterMultiproperty('GeomLineStart_GeomLineEnd',sysunit.TypeName2PTD('GDBVertex'),MPCGeometry,GDBLineID,@GetOneVarData,FreeOneVarData,GenLayerEntIterateProc);
-  //MSEditor.RegisterMultiproperty('GenLayer',MPCGeneral,1);
-  //MSEditor.RegisterMultiproperty('GenLayer2',MPCGeneral,1);
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('zcobjinspmultiobjects.initialization');{$ENDIF}
+  {$IFDEF DEBUGINITSECTION}LogOut('zcobjectinspectormultiobjects.initialization');{$ENDIF}
   startup;
 finalization
   finalize;

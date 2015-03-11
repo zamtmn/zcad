@@ -16,13 +16,13 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit objinspdecorations;
+unit zcobjectinspectordecorations;
 {$INCLUDE def.inc}
 
 interface
 
 uses
-  gdbpalette,UEnumDescriptor,Objinsp,uinfoform,Forms,ugdbltypearray,sysutils,umytreenode,oswnd,gdbcommandsinterface,
+  gdbpalette,UEnumDescriptor,zcobjectinspector,uinfoform,Forms,ugdbltypearray,sysutils,umytreenode,oswnd,gdbcommandsinterface,
   Graphics,LCLType,Themes,types,gdbobjectsconstdef,UGDBNamedObjectsArray,UGDBStringArray,
   varmandef,Varman,colorwnd,UGDBLayerArray,gdbase,lineweightwnd,gdbasetypes,usupportgui,
   StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,strproc,zcadsysvars,commandline,

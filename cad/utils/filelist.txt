@@ -102,7 +102,7 @@ E:\zcad\cad_source\zengine\gdb\drawings\UGDBDrawingdef.pas
 E:\zcad\cad_source\zengine\gdb\drawings\ugdbabstractdrawing.pas
 E:\zcad\cad_source\zengine\gdb\drawings\ugdbsimpledrawing.pas
 E:\zcad\cad_source\zengine\gdb\drawings\UGDBDescriptor.pas
-E:\zcad\cad_source\zcad\gui\zcobjinspmultiobjects.pas
+E:\zcad\cad_source\zcad\gui\odjectinspector\zcobjectinspectormultiobjects.pas
 E:\zcad\cad_source\zcad\electroteh\GDBCommandsOPS.pas
 E:\zcad\cad_source\zcad\electroteh\GDBCommandsElectrical.pas
 E:\zcad\cad_source\zengine\u\UCableManager.pas

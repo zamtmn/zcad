@@ -48,6 +48,7 @@ itrec=packed record
 (*varcategoryforoi EL='El(Устаревшая группа)'*)
 (*varcategoryforoi UNITPARAM='Измеряемый параметр'*)
 (*varcategoryforoi DESC='Описание'*)
+(*varcategoryforoi CENTER='Center'*)
 GDBTypedPointer=packed record
                       Instance:GDBPointer;
                       PTD:GDBPointer;
@@ -1268,7 +1269,7 @@ varmanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                  vardescarray:GDBOpenArrayOfData;
                  vararray:GDBOpenArrayOfByte;
                  function findvardesc(varname:GDBString): pvardesk;virtual;abstract;
-                 procedure createvariable(varname:GDBString; var vd:vardesk);virtual;abstract;
+                 function createvariable(varname:GDBString; var vd:vardesk): pvardesk;virtual;abstract;
                  procedure createvariablebytype(varname,vartype:GDBString);virtual;abstract;
                  procedure createbasevaluefromGDBString(varname: GDBString; varvalue: GDBString; var vd: vardesk);virtual;abstract;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: shortString): GDBBoolean;virtual;abstract;
@@ -1291,7 +1292,7 @@ varmanager={$IFNDEF DELPHI}packed{$ENDIF} object(varmanagerdef)
                  function findvardesc(varname:GDBString): pvardesk;virtual;abstract;
                  function findvardescbyinst(varinst:GDBPointer):pvardesk;virtual;abstract;
                  function findvardescbytype(pt:PUserTypeDescriptor):pvardesk;virtual;abstract;
-                 procedure createvariable(varname:GDBString; var vd:vardesk);virtual;abstract;
+                 function createvariable(varname:GDBString; var vd:vardesk): pvardesk;virtual;abstract;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: ShortString): GDBBoolean;virtual;abstract;
                  destructor done;virtual;abstract;
                  procedure free;virtual;abstract;
@@ -3502,7 +3503,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     function GetDefaultDrawingName:GDBString;
                     function FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
               end;
-//Generate on E:\zcad\cad_source\zcad\gui\zcobjinspmultiobjects.pas
+//Generate on E:\zcad\cad_source\zcad\gui\odjectinspector\zcobjectinspectormultiobjects.pas
   {TMSType=(
            TMST_All(*'All entities'*),
            TMST_Devices(*'Devices'*),
@@ -3519,12 +3520,16 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                 SummaryUnit:TObjectUnit;(*'Summary'*)
                 ObjID2Counter:GDBPointer;(*hidden_in_objinsp*)
                 MultiPropertyDictionary:GDBPointer;
+                MultiPropertyVector:GDBPointer;
                 procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
                 procedure CreateUnit(_GetEntsTypes:boolean=true);virtual;abstract;
                 procedure GetEntsTypes;virtual;abstract;
                 function GetObjType:GDBWord;virtual;abstract;
                 constructor init;
                 destructor done;virtual;abstract;
+                procedure RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;VO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc);
+                procedure CheckMultiPropertyUse;
+                procedure CreateMultiPropertys;
             end;
 //Generate on E:\zcad\cad_source\zcad\electroteh\GDBCommandsOPS.pas
   TInsertType=(

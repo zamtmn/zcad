@@ -41,6 +41,9 @@ TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBIntege
 (*varcategoryforoi EL='El(Устаревшая группа)'*)
 (*varcategoryforoi UNITPARAM='Измеряемый параметр'*)
 (*varcategoryforoi DESC='Описание'*)
+
+(*varcategoryforoi CENTER='Center'*)
+
 GDBTypedPointer=packed record
                       Instance:GDBPointer;
                       PTD:GDBPointer;

@@ -71,7 +71,7 @@ const
                                   ProgramName:'#';
                            UserName:'Object';
                            PFT:@GDBPointerDescriptorOdj;
-                           Attributes:{FA_HIDDEN_IN_OBJ_INSP or }FA_READONLY
+                           Attributes:FA_HIDDEN_IN_OBJ_INSP or FA_READONLY
                            );
                             //FieldName:'#';
                             //UserName:'Объект';

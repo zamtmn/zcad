@@ -804,7 +804,9 @@ begin
         begin
         if ppd^.SubNode<>nil then
                                   begin
-                                     if visible then
+                                     if ppd^.SubNode^.Count>0 then
+                                     begin
+                                     if (visible)and(ppd^.SubNode^.Count>0) then
                                      begin
                                     s:=ppd^.Name;
                                     if not NeedShowSeparator then
@@ -832,6 +834,7 @@ begin
                                     if not ppd^.Collapsed^ then
                                       drawprop(GDBPointer(ppd.SubNode),y,sub,miny,arect);
                                     dec(sub);
+                                     end;
                                   end
         else
         begin
@@ -1094,6 +1097,7 @@ begin
   if curr<>nil then
     repeat
       if curr^.IsVisible then
+      if not((curr^.SubNode<>nil)and(curr^.SubNode.count=0)) then
       begin
         dy:=my-y;
         if (dy<rowh)and(dy>0) then

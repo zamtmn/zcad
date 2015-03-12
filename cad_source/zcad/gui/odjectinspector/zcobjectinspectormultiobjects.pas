@@ -21,64 +21,33 @@ unit zcobjectinspectormultiobjects;
 
 interface
 uses
-  intftranslations,gdbpalette,memman,shared,zcadstrconsts,sysutils,gdbentityfactory,enitiesextendervariables,gdbdrawcontext,
+  zcmultiproperties,zcobjectinspectorwrapper,intftranslations,gdbpalette,memman,
+  shared,zcadstrconsts,sysutils,gdbentityfactory,enitiesextendervariables,gdbdrawcontext,
   gdbase,
   UGDBDescriptor,
   varmandef,
   GDBEntity,
   gdbasetypes,
- Varman,UGDBStringArray,usimplegenerics;
+ Varman,UGDBStringArray;
 type
-  TObjID2Counter=TMyMapCounter<TObjID,LessObjID>;
-  TObjIDVector=TMyVector<TObjID>;
-
   PTOneVarData=^TOneVarData;
   TOneVarData=record
                     PVarDesc:pvardesk;
               end;
-
-  TMultiProperty=class;
-  TMultiPropertyCategory=(MPCGeneral,MPCGeometry,MPCSummary);
-  TBeforeIterateProc=function(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
-  TAfterIterateProc=procedure(piteratedata:GDBPointer;mp:TMultiProperty);
-  TEntIterateProc=procedure(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean);
-  TMultiPropertyDataForObjects=record
-                                     ValueOffset:GDBInteger;
-                                     EntIterateProc:TEntIterateProc;
-                               end;
-  TObjID2MultiPropertyProcs=GKey2DataMap <TObjID,TMultiPropertyDataForObjects,LessObjID>;
-  TMultiProperty=class
-                       MPName:GDBString;
-                       MPUserName:GDBString;
-                       MPType:PUserTypeDescriptor;
-                       MPCategory:TMultiPropertyCategory;
-                       MPObjectsData:TObjID2MultiPropertyProcs;
-                       usecounter:SizeUInt;
-                       BeforeIterateProc:TBeforeIterateProc;
-                       AfterIterateProc:TAfterIterateProc;
-                       PIiterateData:GDBPointer;
-                       constructor create(_name:GDBString;ptm:PUserTypeDescriptor;_Category:TMultiPropertyCategory;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc);
-                 end;
-  TMyGDBString2TMultiPropertyDictionary=TMyGDBStringDictionary<TMultiProperty>;
-  TMultiPropertyVector=TMyVector<TMultiProperty>;
 {Export+}
   {TMSType=(
            TMST_All(*'All entities'*),
            TMST_Devices(*'Devices'*),
            TMST_Cables(*'Cables'*)
           );}
-  TMSEditor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                {SelCount:GDBInteger;(*'Selected objects'*)(*oi_readonly*)}
-                {EntType:TMSType;(*'Process primitives'*)}
+  TMSEditor={$IFNDEF DELPHI}packed{$ENDIF} object(TWrapper2ObjInsp)
                 TxtEntType:TEnumData;(*'Process primitives'*)
-                ObjIDVector:{-}TObjIDVector{/GDBPointer/};(*hidden_in_objinsp*)
                 VariablesUnit:TObjectUnit;(*'Variables'*)
                 GeneralUnit:TObjectUnit;(*'General'*)
                 GeometryUnit:TObjectUnit;(*'Geometry'*)
                 SummaryUnit:TObjectUnit;(*'Summary'*)
+                ObjIDVector:{-}TObjIDVector{/GDBPointer/};(*hidden_in_objinsp*)
                 ObjID2Counter:{-}TObjID2Counter{/GDBPointer/};(*hidden_in_objinsp*)
-                MultiPropertyDictionary:{-}TMyGDBString2TMultiPropertyDictionary{/GDBPointer/};
-                MultiPropertyVector:{-}TMultiPropertyVector{/GDBPointer/};
                 procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
                 procedure CreateUnit(_GetEntsTypes:boolean=true);virtual;
                 procedure GetEntsTypes;virtual;
@@ -86,7 +55,6 @@ type
                 constructor init;
                 destructor done;virtual;
 
-                procedure RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;VO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc);
                 procedure CheckMultiPropertyUse;
                 procedure CreateMultiPropertys;
             end;
@@ -95,44 +63,6 @@ var
    MSEditor:TMSEditor;
 implementation
 uses UGDBSelectedObjArray;
-constructor TMultiProperty.create;
-begin
-     MPName:=_name;
-     MPType:=ptm;
-     MPCategory:=_category;
-     self.AfterIterateProc:=aip;
-     self.BeforeIterateProc:=bip;
-     MPObjectsData:=TObjID2MultiPropertyProcs.create;
-end;
-procedure TMSEditor.RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;VO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc);
-var
-   mp:TMultiProperty;
-   mpdfo:TMultiPropertyDataForObjects;
-begin
-     username:=InterfaceTranslate('oimultiproperty_'+name+'~',username);
-     if MultiPropertyDictionary.MyGetValue(name,mp) then
-                                                        begin
-                                                             if mp.MPCategory<>category then
-                                                                                            shared.FatalError('Category error in "'+name+'" multiproperty');
-                                                             mp.BeforeIterateProc:=bip;
-                                                             mp.AfterIterateProc:=aip;
-                                                             mpdfo.EntIterateProc:=eip;
-                                                             mpdfo.ValueOffset:=VO;
-                                                             mp.MPUserName:=username;
-                                                             mp.MPObjectsData.RegisterKey(id,mpdfo);
-                                                        end
-                                                    else
-                                                        begin
-                                                             mp:=TMultiProperty.create(name,ptm,category,bip,aip,eip);
-                                                             mpdfo.EntIterateProc:=eip;
-                                                             mpdfo.ValueOffset:=VO;
-                                                             mp.MPUserName:=username;
-                                                             mp.MPObjectsData.RegisterKey(id,mpdfo);
-                                                             MultiPropertyDictionary.insert(name,mp);
-                                                             MultiPropertyVector.PushBack(mp);
-                                                        end;
-end;
-
 constructor  TMSEditor.init;
 begin
      VariablesUnit.init('VariablesUnit');
@@ -144,8 +74,6 @@ begin
 
      ObjID2Counter:=TObjID2Counter.Create;
      ObjIDVector:=TObjIDVector.create;
-     MultiPropertyDictionary:=TMyGDBString2TMultiPropertyDictionary.create;
-     MultiPropertyVector:=TMultiPropertyVector.Create;
 end;
 destructor  TMSEditor.done;
 begin
@@ -157,8 +85,6 @@ begin
 
      ObjID2Counter.Free;
      ObjIDVector.Free;
-     MultiPropertyDictionary.Free;
-     MultiPropertyVector.Free;
 end;
 procedure  TMSEditor.FormatAfterFielfmod;
 var //i: GDBInteger;
@@ -256,7 +182,10 @@ begin
   until psd=nil;
 
   TxtEntType.Enums.free;
-  TxtEntType.Selected:=0;
+  if ObjID2Counter.size>1 then
+                   TxtEntType.Selected:=0
+               else
+                   TxtEntType.Selected:=1;
   s:=sysutils.format(rsNameWithCounter,[rsNameAll,counter]);
   TxtEntType.Enums.add(@s);
   ObjIDVector.PushBack(0);
@@ -285,21 +214,21 @@ var
     ir:itrec;
     fistrun:boolean;
 begin
-  for i:=0 to MultiPropertyVector.Size-1 do
-    if MultiPropertyVector[i].usecounter<>0 then
+  for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
+    if MultiPropertiesManager.MultiPropertyVector[i].usecounter<>0 then
     begin
-      case MultiPropertyVector[i].MPCategory of
+      case MultiPropertiesManager.MultiPropertyVector[i].MPCategory of
       MPCGeneral:pu:=@self.GeneralUnit;
       MPCGeometry:pu:=@self.GeometryUnit;
       MPCSummary:pu:=@self.SummaryUnit;
       end;
-      MultiPropertyVector[i].PIiterateData:=MultiPropertyVector[i].BeforeIterateProc(MultiPropertyVector[i],pu);
+      MultiPropertiesManager.MultiPropertyVector[i].PIiterateData:=MultiPropertiesManager.MultiPropertyVector[i].BeforeIterateProc(MultiPropertiesManager.MultiPropertyVector[i],pu);
     end;
 
   NeedObjID:=GetObjType;
   begin
-       for i:=0 to MultiPropertyVector.Size-1 do
-         if MultiPropertyVector[i].usecounter<>0 then
+       for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
+         if MultiPropertiesManager.MultiPropertyVector[i].usecounter<>0 then
          begin
            fistrun:=true;
            psd:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
@@ -310,15 +239,15 @@ begin
              if (pv^.vp.ID=NeedObjID)or(NeedObjID=0) then
              if pv^.Selected then
              begin
-                  if MultiPropertyVector[i].MPObjectsData.MyGetValue({NeedObjID}pv^.vp.ID,MultiPropertyDataForObjects)then
+                  if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue({NeedObjID}pv^.vp.ID,MultiPropertyDataForObjects)then
                   begin
-                    MultiPropertyDataForObjects.EntIterateProc(MultiPropertyVector[i].PIiterateData,Pointer(PtrUInt(pv)+MultiPropertyDataForObjects.ValueOffset),MultiPropertyVector[i],fistrun);
+                    MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,Pointer(PtrUInt(pv)+MultiPropertyDataForObjects.ValueOffset),MultiPropertiesManager.MultiPropertyVector[i],fistrun);
                     fistrun:=false;
                   end
                   else
-                      if MultiPropertyVector[i].MPObjectsData.MyGetValue(0,MultiPropertyDataForObjects)then
+                      if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(0,MultiPropertyDataForObjects)then
                       begin
-                        MultiPropertyDataForObjects.EntIterateProc(MultiPropertyVector[i].PIiterateData,Pointer(PtrUInt(pv)+MultiPropertyDataForObjects.ValueOffset),MultiPropertyVector[i],fistrun);
+                        MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,Pointer(PtrUInt(pv)+MultiPropertyDataForObjects.ValueOffset),MultiPropertiesManager.MultiPropertyVector[i],fistrun);
                         fistrun:=false;
                       end;
              end;
@@ -328,11 +257,11 @@ begin
   end;
 
 
-  for i:=0 to MultiPropertyVector.Size-1 do
-    if MultiPropertyVector[i].usecounter<>0 then
+  for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
+    if MultiPropertiesManager.MultiPropertyVector[i].usecounter<>0 then
     begin
-      MultiPropertyVector[i].AfterIterateProc(MultiPropertyVector[i].PIiterateData,MultiPropertyVector[i]);
-      MultiPropertyVector[i].PIiterateData:=nil;
+      MultiPropertiesManager.MultiPropertyVector[i].AfterIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,MultiPropertiesManager.MultiPropertyVector[i]);
+      MultiPropertiesManager.MultiPropertyVector[i].PIiterateData:=nil;
     end;
 
 end;
@@ -342,30 +271,30 @@ var
     i,j,usablecounter:integer;
     NeedObjID:TObjID;
 begin
-     for i:=0 to MultiPropertyVector.Size-1 do
-       MultiPropertyVector[i].usecounter:=0;
+     for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
+       MultiPropertiesManager.MultiPropertyVector[i].usecounter:=0;
      NeedObjID:=GetObjType;
      if NeedObjID=0 then
      begin
           usablecounter:=0;
           for j:=1 to ObjIDVector.Size-1 do
           begin
-            for i:=0 to MultiPropertyVector.Size-1 do
-              if (MultiPropertyVector[i].MPObjectsData.MyContans(ObjIDVector[j]))or(MultiPropertyVector[i].MPObjectsData.MyContans(0)) then
-                inc(MultiPropertyVector[i].usecounter);
+            for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
+              if (MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyContans(ObjIDVector[j]))or(MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyContans(0)) then
+                inc(MultiPropertiesManager.MultiPropertyVector[i].usecounter);
             inc(usablecounter);
           end;
      end
      else
      begin
-          for i:=0 to MultiPropertyVector.Size-1 do
-            if (MultiPropertyVector[i].MPObjectsData.MyContans(NeedObjID))or(MultiPropertyVector[i].MPObjectsData.MyContans(0)) then
-              inc(MultiPropertyVector[i].usecounter);
+          for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
+            if (MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyContans(NeedObjID))or(MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyContans(0)) then
+              inc(MultiPropertiesManager.MultiPropertyVector[i].usecounter);
           usablecounter:=1;
      end;
-     for i:=0 to MultiPropertyVector.Size-1 do
-       if MultiPropertyVector[i].usecounter<>usablecounter then
-          MultiPropertyVector[i].usecounter:=0;
+     for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
+       if MultiPropertiesManager.MultiPropertyVector[i].usecounter<>usablecounter then
+          MultiPropertiesManager.MultiPropertyVector[i].usecounter:=0;
 end;
 
 procedure  TMSEditor.createunit;

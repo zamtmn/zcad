@@ -2888,7 +2888,7 @@ var
     tn:GDBString;
     ptype:PUserTypeDescriptor;
 begin
-  if Sender.param.SelDesc.Selectedobjcount>1 then
+  if Sender.param.SelDesc.Selectedobjcount>0 then
     begin
        commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',Sender.pdwg,@Sender.param);
     end

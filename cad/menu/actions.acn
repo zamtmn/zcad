@@ -142,3 +142,5 @@ action2variable ACN_SHOWSPLITERINOBJINSP,INTF_ObjInsp_ShowSeparator,#ss,Show spl
 action2variable ACN_SHOWFASTEDITORSINOBJINSP,INTF_ObjInsp_ShowFastEditors,#sfe,Show fast editors in object inspector,,
 action2variable ACN_SHOWONLYHOTFASTEDITORSINOBJINSP,INTF_ObjInsp_ShowOnlyHotFastEditors,#sohfe,Show only hot fast editors in object inspector,,
 action2variable ACN_OVERRIDEROWHEIGHTINOBJINSP,INTF_ObjInsp_RowHeight_OverriderEnable,#orh,Override row height in object inspector,,
+action2variable ACN_ALWAYSUSEMULTISELECTWWRAPPER,INTF_ObjInsp_AlwaysUseMultiSelectWrapper,#aumsw,Always use multi select wrapper in object inspector,,
+action2variable ACN_SHOWEMPTYSECTIONS,INTF_ObjInsp_ShowEmptySections,#ses,Show empty sections in object inspector,,

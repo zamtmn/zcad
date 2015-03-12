@@ -32,6 +32,7 @@ var
   INTF_ObjInsp_ShowOnlyHotFastEditors:GDBBoolean;
   INTF_ObjInsp_RowHeight_OverriderEnable:GDBBoolean;
   INTF_ObjInsp_RowHeight_OverriderValue:GDBInteger;
+  INTF_ObjInsp_AlwaysUseMultiSelectWrapper:GDBBoolean;
   INTF_DefaultEditorFontHeight:GDBInteger;
   VIEW_CommandLineVisible:GDBBoolean;
   VIEW_HistoryLineVisible:GDBBoolean;
@@ -124,6 +125,7 @@ begin
   INTF_ObjInsp_ShowOnlyHotFastEditors:=True;
   INTF_ObjInsp_RowHeight_OverriderEnable:=False;
   INTF_ObjInsp_RowHeight_OverriderValue:=21;
+  INTF_ObjInsp_AlwaysUseMultiSelectWrapper:=true;
   INTF_DefaultEditorFontHeight:=0;
   VIEW_CommandLineVisible:=True;
   VIEW_HistoryLineVisible:=True;

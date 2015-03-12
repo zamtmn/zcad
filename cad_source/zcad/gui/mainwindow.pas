@@ -2887,8 +2887,13 @@ procedure MainForm.waSetObjInsp;
 var
     tn:GDBString;
     ptype:PUserTypeDescriptor;
+    objcount:integer;
 begin
-  if Sender.param.SelDesc.Selectedobjcount>0 then
+  if sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_AlwaysUseMultiSelectWrapper^then
+                                                                                      objcount:=0
+                                                                                  else
+                                                                                      objcount:=1;
+  if Sender.param.SelDesc.Selectedobjcount>objcount then
     begin
        commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',Sender.pdwg,@Sender.param);
     end

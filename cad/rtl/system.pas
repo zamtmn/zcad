@@ -3503,24 +3503,23 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     function GetDefaultDrawingName:GDBString;
                     function FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
               end;
+//Generate on E:\zcad\cad_source\zcad\gui\odjectinspector\zcobjectinspectorwrapper.pas
+  TWrapper2ObjInsp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+  end;
 //Generate on E:\zcad\cad_source\zcad\gui\odjectinspector\zcobjectinspectormultiobjects.pas
   {TMSType=(
            TMST_All(*'All entities'*),
            TMST_Devices(*'Devices'*),
            TMST_Cables(*'Cables'*)
           );}
-  TMSEditor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                {SelCount:GDBInteger;(*'Selected objects'*)(*oi_readonly*)}
-                {EntType:TMSType;(*'Process primitives'*)}
+  TMSEditor={$IFNDEF DELPHI}packed{$ENDIF} object(TWrapper2ObjInsp)
                 TxtEntType:TEnumData;(*'Process primitives'*)
-                ObjIDVector:GDBPointer;(*hidden_in_objinsp*)
                 VariablesUnit:TObjectUnit;(*'Variables'*)
                 GeneralUnit:TObjectUnit;(*'General'*)
                 GeometryUnit:TObjectUnit;(*'Geometry'*)
                 SummaryUnit:TObjectUnit;(*'Summary'*)
+                ObjIDVector:GDBPointer;(*hidden_in_objinsp*)
                 ObjID2Counter:GDBPointer;(*hidden_in_objinsp*)
-                MultiPropertyDictionary:GDBPointer;
-                MultiPropertyVector:GDBPointer;
                 procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
                 procedure CreateUnit(_GetEntsTypes:boolean=true);virtual;abstract;
                 procedure GetEntsTypes;virtual;abstract;

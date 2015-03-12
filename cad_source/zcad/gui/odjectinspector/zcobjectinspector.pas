@@ -804,9 +804,9 @@ begin
         begin
         if ppd^.SubNode<>nil then
                                   begin
-                                     if ppd^.SubNode^.Count>0 then
+                                     if (ppd^.SubNode^.Count>0)or SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowEmptySections^ then
                                      begin
-                                     if (visible)and(ppd^.SubNode^.Count>0) then
+                                     if visible then
                                      begin
                                     s:=ppd^.Name;
                                     if not NeedShowSeparator then
@@ -1097,7 +1097,7 @@ begin
   if curr<>nil then
     repeat
       if curr^.IsVisible then
-      if not((curr^.SubNode<>nil)and(curr^.SubNode.count=0)) then
+      if (not((curr^.SubNode<>nil)and(curr^.SubNode.count=0)))or SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowEmptySections^ then
       begin
         dy:=my-y;
         if (dy<rowh)and(dy>0) then

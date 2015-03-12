@@ -186,6 +186,7 @@ type
                 INTF_ObjInsp_ShowOnlyHotFastEditors:PGDBBoolean;(*'Show only hot fast editors'*)
                 INTF_ObjInsp_RowHeight:TGDBIntegerOverrider;(*'Row height'*)
                 INTF_ObjInsp_AlwaysUseMultiSelectWrapper:PGDBBoolean;(*'Always use multiselect wrapper'*)
+                INTF_ObjInsp_ShowEmptySections:PGDBBoolean;(*'Show empty sections'*)
                end;
   tinterface=packed record
               INTF_ShowScrollBars:PGDBBoolean;(*'Show scroll bars'*)

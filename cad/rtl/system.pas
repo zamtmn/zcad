@@ -49,6 +49,9 @@ itrec=packed record
 (*varcategoryforoi UNITPARAM='Измеряемый параметр'*)
 (*varcategoryforoi DESC='Описание'*)
 (*varcategoryforoi CENTER='Center'*)
+(*varcategoryforoi START='Start'*)
+(*varcategoryforoi END='End'*)
+(*varcategoryforoi DELTA='Delta'*)
 GDBTypedPointer=packed record
                       Instance:GDBPointer;
                       PTD:GDBPointer;

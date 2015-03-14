@@ -169,6 +169,7 @@ TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
                   destructor done;virtual;
                   procedure CreateVariable(varname,vartype:GDBString);virtual;
                   function FindVariable(varname:GDBString):pvardesk;virtual;
+                  function FindVariableByInstance(_Instance:GDBPointer):pvardesk;virtual;
                   function FindValue(varname:GDBString):GDBPointer;virtual;
                   function TypeName2PTD(n: GDBString):PUserTypeDescriptor;virtual;
                   function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
@@ -1328,6 +1329,10 @@ begin
                           result:=temp^.data.Instance
                       else
                           result:=nil;
+end;
+function tsimpleunit.FindVariableByInstance(_Instance:GDBPointer):pvardesk;
+begin
+     result:=InterfaceVariables.findvardescbyinst(_Instance)
 end;
 
 function tsimpleunit.findvariable;

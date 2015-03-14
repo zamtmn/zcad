@@ -31,10 +31,12 @@ type
   TMultiPropertyCategory=(MPCGeneral,MPCGeometry,MPCSummary);
   TBeforeIterateProc=function(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
   TAfterIterateProc=procedure(piteratedata:GDBPointer;mp:TMultiProperty);
-  TEntIterateProc=procedure(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean);
+  TEntChangeProc=procedure(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+  TEntIterateProc=procedure(pvd:pvardesk;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
   TMultiPropertyDataForObjects=record
                                      ValueOffset:GDBInteger;
                                      EntIterateProc:TEntIterateProc;
+                                     EntChangeProc:TEntChangeProc;
                                end;
   TObjID2MultiPropertyProcs=GKey2DataMap <TObjID,TMultiPropertyDataForObjects,LessObjID>;
   TMultiProperty=class
@@ -57,12 +59,12 @@ type
                                MultiPropertyVector:TMultiPropertyVector;
                                constructor create;
                                destructor destroy;override;
-                               procedure RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;VO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc);
+                               procedure RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;VO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
                           end;
 var
   MultiPropertiesManager:TMultiPropertiesManager;
 implementation
-procedure TMultiPropertiesManager.RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;VO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc);
+procedure TMultiPropertiesManager.RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;VO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
 var
    mp:TMultiProperty;
    mpdfo:TMultiPropertyDataForObjects;
@@ -75,6 +77,7 @@ begin
                                                              mp.BeforeIterateProc:=bip;
                                                              mp.AfterIterateProc:=aip;
                                                              mpdfo.EntIterateProc:=eip;
+                                                             mpdfo.EntChangeProc:=ecp;
                                                              mpdfo.ValueOffset:=VO;
                                                              mp.MPUserName:=username;
                                                              mp.MPObjectsData.RegisterKey(id,mpdfo);
@@ -83,6 +86,7 @@ begin
                                                         begin
                                                              mp:=TMultiProperty.create(name,ptm,category,bip,aip,eip);
                                                              mpdfo.EntIterateProc:=eip;
+                                                             mpdfo.EntChangeProc:=ecp;
                                                              mpdfo.ValueOffset:=VO;
                                                              mp.MPUserName:=username;
                                                              mp.MPObjectsData.RegisterKey(id,mpdfo);

@@ -1221,7 +1221,8 @@ begin
                                            end
                                        else
                                         begin
-                                           PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(EDContext.ppropcurrentedit^.valueAddres,self.currobjgdbtype);
+                                           if assigned(EDContext.ppropcurrentedit) then
+                                             PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(EDContext.ppropcurrentedit^.valueAddres,self.currobjgdbtype);
                                         end;
 
                 end;

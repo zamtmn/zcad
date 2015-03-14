@@ -57,6 +57,9 @@ type
 
                 procedure CheckMultiPropertyUse;
                 procedure CreateMultiPropertys;
+
+                procedure SetVariables(PSourceVD:pvardesk;NeededObjType:TObjID);
+                procedure SetMultiProperty(PSourceVD:pvardesk;NeededObjType:TObjID);
             end;
 {Export-}
 var
@@ -86,16 +89,86 @@ begin
      ObjID2Counter.Free;
      ObjIDVector.Free;
 end;
+procedure TMSEditor.SetVariables(PSourceVD:pvardesk;NeededObjType:TObjID);
+var
+  pentvarext: PTVariablesExtender;
+  EntIterator: itrec;
+  PDestVD: pvardesk;
+  pentity: pGDBObjEntity;
+  DC:TDrawContext;
+begin
+  PSourceVD.attrib:=PSourceVD.attrib and (not vda_different);
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+  pentity:=gdb.GetCurrentROOT.ObjArray.beginiterate(EntIterator);
+  if pentity<>nil then
+  repeat
+    if (pentity^.Selected)and((pentity^.GetObjType=NeededObjType)or(NeededObjType=0)) then
+    begin
+      pentvarext:=pentity^.GetExtension(typeof(TVariablesExtender));
+    if pentvarext<>nil then
+    begin
+         PDestVD:=pentvarext^.entityunit.InterfaceVariables.findvardesc(PSourceVD^.name);
+         if PDestVD<>nil then
+           if PSourceVD^.data.PTD=PDestVD^.data.PTD then
+           begin
+                PDestVD.data.PTD.CopyInstanceTo(PSourceVD.data.Instance,PDestVD.data.Instance);
+
+                pentity^.Formatentity(gdb.GetCurrentDWG^,dc);
+
+                if PSourceVD^.data.PTD.GetValueAsString(PSourceVD^.data.Instance)<>PDestVD^.data.PTD.GetValueAsString(PDestVD^.data.Instance) then
+                PSourceVD.attrib:=PSourceVD.attrib or vda_different;
+           end;
+    end;
+    end;
+    pentity:=gdb.GetCurrentROOT.ObjArray.iterate(EntIterator);
+  until pentity=nil;
+end;
+procedure TMSEditor.SetMultiProperty(PSourceVD:pvardesk;NeededObjType:TObjID);
+var
+  pentvarext: PTVariablesExtender;
+  EntIterator: itrec;
+  PDestVD: pvardesk;
+  pentity: pGDBObjEntity;
+  DC:TDrawContext;
+  psd:PSelectedObjDesc;
+  i:integer;
+  MultiPropertyDataForObjects:TMultiPropertyDataForObjects;
+begin
+  PSourceVD.attrib:=PSourceVD.attrib and (not vda_different);
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+  psd:=gdb.GetCurrentDWG.SelObjArray.beginiterate(EntIterator);
+  if psd<>nil then
+  repeat
+    pentity:=psd.objaddr;
+    if (pentity^.Selected)and((pentity^.GetObjType=NeededObjType)or(NeededObjType=0)) then
+    begin
+      for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
+        if MultiPropertiesManager.MultiPropertyVector[i].usecounter<>0 then
+        begin
+             if MultiPropertiesManager.MultiPropertyVector[i].MPName=PSourceVD^.name then
+             begin
+                  if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(pentity^.vp.ID,MultiPropertyDataForObjects)then
+                  begin
+                    MultiPropertyDataForObjects.EntChangeProc(PSourceVD,pentity,Pointer(PtrUInt(pentity)+MultiPropertyDataForObjects.ValueOffset),MultiPropertiesManager.MultiPropertyVector[i]);
+                  end
+                  else
+                      if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(0,MultiPropertyDataForObjects)then
+                      begin
+                        MultiPropertyDataForObjects.EntChangeProc(PSourceVD,pentity,Pointer(PtrUInt(pentity)+MultiPropertyDataForObjects.ValueOffset),MultiPropertiesManager.MultiPropertyVector[i]);
+                      end;
+             end
+        end;
+    end;
+    psd:=gdb.GetCurrentDWG.SelObjArray.iterate(EntIterator);
+  until psd=nil;
+end;
 procedure  TMSEditor.FormatAfterFielfmod;
 var //i: GDBInteger;
-    pv:pGDBObjEntity;
     //pu:pointer;
-    pvd,pvdmy:pvardesk;
+    pvd:pvardesk;
     //vd:vardesk;
-    ir,ir2:itrec;
+    ir2:itrec;
     //etype:integer;
-    DC:TDrawContext;
-    pentvarext:PTVariablesExtender;
 begin
       if PFIELD=@self.TxtEntType then
       begin
@@ -103,45 +176,28 @@ begin
            CreateUnit(false);
            exit;
       end;
-      dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-      pvd:=VariablesUnit.InterfaceVariables.vardescarray.beginiterate(ir2);
+
+      pvd:=VariablesUnit.FindVariableByInstance(PFIELD);
       if pvd<>nil then
-      repeat
-            if pvd^.data.Instance=PFIELD then
-            begin
-                 pvd.attrib:=pvd.attrib and (not vda_different);
-                 pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
-                 if pv<>nil then
-                 repeat
-                   if (pv^.Selected)and((pv^.GetObjType=GetObjType)or(GetObjType=0)) then
-                   begin
-                     pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
-                   if pentvarext<>nil then
-                   begin
-                        pvdmy:=pentvarext^.entityunit.InterfaceVariables.findvardesc(pvd^.name);
-                        if pvdmy<>nil then
-                          if pvd^.data.PTD=pvdmy^.data.PTD then
-                          begin
-                               pvdmy.data.PTD.CopyInstanceTo(pvd.data.Instance,pvdmy.data.Instance);
+      begin
+         SetVariables(pvd,GetObjType);
+         exit;
+      end;
 
-                               pv^.Formatentity(gdb.GetCurrentDWG^,dc);
+      pvd:=GeneralUnit.FindVariableByInstance(PFIELD);
+      if pvd<>nil then
+      begin
+         SetMultiProperty(pvd,GetObjType);
+         exit;
+      end;
 
-                               if pvd^.data.PTD.GetValueAsString(pvd^.data.Instance)<>pvdmy^.data.PTD.GetValueAsString(pvdmy^.data.Instance) then
-                               pvd.attrib:=pvd.attrib or vda_different;
-                          end;
-                   end;
-                   end;
-                   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
-                 until pv=nil;
+      pvd:=GeometryUnit.FindVariableByInstance(PFIELD);
+      if pvd<>nil then
+      begin
+         SetMultiProperty(pvd,GetObjType);
+         exit;
+      end;
 
-
-            end;
-            //pvdmy:=VariablesUnit.InterfaceVariables.findvardesc(pvd^.name);
-            pvd:=VariablesUnit.InterfaceVariables.vardescarray.iterate(ir2)
-      until pvd=nil;
-     //createunit;
-     //if assigned(ReBuildProc)then
-     //                            ReBuildProc;
 end;
 function TMSEditor.GetObjType:GDBWord;
 begin
@@ -241,13 +297,13 @@ begin
              begin
                   if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue({NeedObjID}pv^.vp.ID,MultiPropertyDataForObjects)then
                   begin
-                    MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,Pointer(PtrUInt(pv)+MultiPropertyDataForObjects.ValueOffset),MultiPropertiesManager.MultiPropertyVector[i],fistrun);
+                    MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,Pointer(PtrUInt(pv)+MultiPropertyDataForObjects.ValueOffset),MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc);
                     fistrun:=false;
                   end
                   else
                       if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(0,MultiPropertyDataForObjects)then
                       begin
-                        MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,Pointer(PtrUInt(pv)+MultiPropertyDataForObjects.ValueOffset),MultiPropertiesManager.MultiPropertyVector[i],fistrun);
+                        MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,Pointer(PtrUInt(pv)+MultiPropertyDataForObjects.ValueOffset),MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc);
                         fistrun:=false;
                       end;
              end;

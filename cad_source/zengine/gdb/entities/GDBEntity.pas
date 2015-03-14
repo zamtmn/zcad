@@ -130,7 +130,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     function YouDeleted(const drawing:TDrawingDef):GDBInteger;virtual;
                     procedure YouChanged(const drawing:TDrawingDef);virtual;
                     function GetObjTypeName:GDBString;virtual;
-                    function GetObjType:GDBWord;virtual;
+                    function GetObjType:TObjID;virtual;
                     procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
                     function GetLineWeight:GDBSmallint;inline;
                     function IsSelected:GDBBoolean;virtual;

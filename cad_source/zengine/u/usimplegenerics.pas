@@ -96,7 +96,7 @@ end;
 
 class function GDBStringHash.hash(s:GDBString; n:longint):SizeUInt;
 begin
-     result:=makehash(s) mod n;
+     result:=makehash(s) mod SizeUInt(n);
 end;
 
 class function LessEntUpgradeKey.c(a,b:TEntUpgradeKey):boolean;inline;

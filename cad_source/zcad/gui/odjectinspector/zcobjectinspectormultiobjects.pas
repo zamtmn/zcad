@@ -149,12 +149,14 @@ begin
              begin
                   if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(pentity^.vp.ID,MultiPropertyDataForObjects)then
                   begin
-                    MultiPropertyDataForObjects.EntChangeProc(PSourceVD,pentity,Pointer(PtrUInt(pentity)+MultiPropertyDataForObjects.ValueOffset),MultiPropertiesManager.MultiPropertyVector[i]);
+                    MultiPropertyDataForObjects.EntChangeProc(PSourceVD,pentity,Pointer(PtrUInt(pentity)+MultiPropertyDataForObjects.SetValueOffset),MultiPropertiesManager.MultiPropertyVector[i]);
+                    pentity.FormatEntity(gdb.GetCurrentDWG^,dc);
                   end
                   else
                       if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(0,MultiPropertyDataForObjects)then
                       begin
-                        MultiPropertyDataForObjects.EntChangeProc(PSourceVD,pentity,Pointer(PtrUInt(pentity)+MultiPropertyDataForObjects.ValueOffset),MultiPropertiesManager.MultiPropertyVector[i]);
+                        MultiPropertyDataForObjects.EntChangeProc(PSourceVD,pentity,Pointer(PtrUInt(pentity)+MultiPropertyDataForObjects.SetValueOffset),MultiPropertiesManager.MultiPropertyVector[i]);
+                        pentity.FormatEntity(gdb.GetCurrentDWG^,dc);
                       end;
              end
         end;
@@ -297,13 +299,13 @@ begin
              begin
                   if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue({NeedObjID}pv^.vp.ID,MultiPropertyDataForObjects)then
                   begin
-                    MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,Pointer(PtrUInt(pv)+MultiPropertyDataForObjects.ValueOffset),MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc);
+                    MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,Pointer(PtrUInt(pv)+MultiPropertyDataForObjects.GetValueOffset),MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc);
                     fistrun:=false;
                   end
                   else
                       if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(0,MultiPropertyDataForObjects)then
                       begin
-                        MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,Pointer(PtrUInt(pv)+MultiPropertyDataForObjects.ValueOffset),MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc);
+                        MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,Pointer(PtrUInt(pv)+MultiPropertyDataForObjects.GetValueOffset),MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc);
                         fistrun:=false;
                       end;
              end;

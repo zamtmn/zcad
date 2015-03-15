@@ -34,7 +34,7 @@ type
   TEntChangeProc=procedure(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
   TEntIterateProc=procedure(pvd:pvardesk;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
   TMultiPropertyDataForObjects=record
-                                     ValueOffset:GDBInteger;
+                                     GetValueOffset,SetValueOffset:GDBInteger;
                                      EntIterateProc:TEntIterateProc;
                                      EntChangeProc:TEntChangeProc;
                                end;
@@ -59,12 +59,12 @@ type
                                MultiPropertyVector:TMultiPropertyVector;
                                constructor create;
                                destructor destroy;override;
-                               procedure RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;VO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
+                               procedure RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
                           end;
 var
   MultiPropertiesManager:TMultiPropertiesManager;
 implementation
-procedure TMultiPropertiesManager.RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;VO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
+procedure TMultiPropertiesManager.RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
 var
    mp:TMultiProperty;
    mpdfo:TMultiPropertyDataForObjects;
@@ -78,7 +78,8 @@ begin
                                                              mp.AfterIterateProc:=aip;
                                                              mpdfo.EntIterateProc:=eip;
                                                              mpdfo.EntChangeProc:=ecp;
-                                                             mpdfo.ValueOffset:=VO;
+                                                             mpdfo.GetValueOffset:=GetVO;
+                                                             mpdfo.SetValueOffset:=SetVO;
                                                              mp.MPUserName:=username;
                                                              mp.MPObjectsData.RegisterKey(id,mpdfo);
                                                         end
@@ -87,7 +88,8 @@ begin
                                                              mp:=TMultiProperty.create(name,ptm,category,bip,aip,eip);
                                                              mpdfo.EntIterateProc:=eip;
                                                              mpdfo.EntChangeProc:=ecp;
-                                                             mpdfo.ValueOffset:=VO;
+                                                             mpdfo.GetValueOffset:=GetVO;
+                                                             mpdfo.SetValueOffset:=SetVO;
                                                              mp.MPUserName:=username;
                                                              mp.MPObjectsData.RegisterKey(id,mpdfo);
                                                              MultiPropertiesManager.MultiPropertyDictionary.insert(name,mp);

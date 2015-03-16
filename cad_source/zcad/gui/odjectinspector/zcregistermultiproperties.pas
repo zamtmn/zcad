@@ -268,6 +268,36 @@ begin
      inc(pentitywithoffset,sizeof(GDBVertex));
      PGDBDouble(pentitywithoffset)^:=l1+PGDBDouble(pvardesk(pdata).data.Instance)^;
 end;
+procedure GDBDoubleLengthEntChangeProc(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+var
+    v1,v2:GDBVertex;
+    l1:GDBDouble;
+begin
+     V1:=PGDBVertex(pentitywithoffset)^;
+     inc(pentitywithoffset,sizeof(GDBVertex));
+     V2:=PGDBVertex(pentitywithoffset)^;
+     l1:=PGDBDouble(pvardesk(pdata).data.Instance)^;
+     V2:=VertexSub(V2,V1);
+     V2:=normalizevertex(V2);
+     V2:=VertexMulOnSc(V2,l1);
+     PGDBVertex(pentitywithoffset)^:=VertexAdd(v1,v2);
+end;
+procedure GDBDoubleAngleEntChangeProc(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+var
+    v1,v2:GDBVertex;
+    l1,d:GDBDouble;
+begin
+  V1:=PGDBVertex(pentitywithoffset)^;
+  inc(pentitywithoffset,sizeof(GDBVertex));
+  V2:=PGDBVertex(pentitywithoffset)^;
+  d:=vertexlength(v2,v1);
+  l1:=PGDBDouble(pvardesk(pdata).data.Instance)^*pi/180;
+  V2.x:=cos(l1);
+  V2.y:=sin(l1);
+  V2.z:=0;
+  V2:=VertexMulOnSc(V2,d);
+  PGDBVertex(pentitywithoffset)^:=VertexAdd(v1,v2);
+end;
 
 procedure finalize;
 begin
@@ -310,8 +340,8 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('DELTA_X','Delta X',sysunit.TypeName2PTD('GDBDouble'),MPCGeometry,GDBLineID,integer(@pline^.CoordInWCS.lBegin.x),integer(@pline^.CoordInOCS.lBegin.x),@GetOneVarData,@FreeOneVarData,@GDBDoubleDeltaEntIterateProc,@GDBDoubleDeltaEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('DELTA_Y','Delta Y',sysunit.TypeName2PTD('GDBDouble'),MPCGeometry,GDBLineID,integer(@pline^.CoordInWCS.lBegin.y),integer(@pline^.CoordInOCS.lBegin.y),@GetOneVarData,@FreeOneVarData,@GDBDoubleDeltaEntIterateProc,@GDBDoubleDeltaEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('DELTA_Z','Delta Z',sysunit.TypeName2PTD('GDBDouble'),MPCGeometry,GDBLineID,integer(@pline^.CoordInWCS.lBegin.z),integer(@pline^.CoordInOCS.lBegin.z),@GetOneVarData,@FreeOneVarData,@GDBDoubleDeltaEntIterateProc,@GDBDoubleDeltaEntChangeProc);
-  MultiPropertiesManager.RegisterMultiproperty('Length','Length',sysunit.TypeName2PTD('GDBDouble'),MPCGeometry,GDBLineID,integer(@pline^.CoordInWCS.lBegin),integer(@pline^.CoordInWCS.lBegin),@GetOneVarData,@FreeOneVarData,@GDBDoubleLengthEntIterateProc,nil);
-  MultiPropertiesManager.RegisterMultiproperty('Angle','Angle',sysunit.TypeName2PTD('GDBDouble'),MPCGeometry,GDBLineID,integer(@pline^.CoordInWCS.lBegin),integer(@pline^.CoordInWCS.lBegin),@GetOneVarData,@FreeOneVarData,@GDBDoubleAngleEntIterateProc,nil);
+  MultiPropertiesManager.RegisterMultiproperty('Length','Length',sysunit.TypeName2PTD('GDBDouble'),MPCGeometry,GDBLineID,integer(@pline^.CoordInWCS.lBegin),integer(@pline^.CoordInOCS.lBegin),@GetOneVarData,@FreeOneVarData,@GDBDoubleLengthEntIterateProc,@GDBDoubleLengthEntChangeProc);
+  MultiPropertiesManager.RegisterMultiproperty('Angle','Angle',sysunit.TypeName2PTD('GDBDouble'),MPCGeometry,GDBLineID,integer(@pline^.CoordInWCS.lBegin),integer(@pline^.CoordInOCS.lBegin),@GetOneVarData,@FreeOneVarData,@GDBDoubleAngleEntIterateProc,@GDBDoubleAngleEntChangeProc);
   {--Summary}
   MultiPropertiesManager.RegisterMultiproperty('TotalLength','Total length',sysunit.TypeName2PTD('GDBDouble'),MPCSummary,GDBLineID,integer(@pline^.CoordInWCS.lBegin),integer(@pline^.CoordInWCS.lBegin),@GetOneVarData,@FreeOneVarData,@GDBDoubleSumLengthEntIterateProc,nil);
 

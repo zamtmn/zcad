@@ -113,7 +113,8 @@ begin
            begin
                 PDestVD.data.PTD.CopyInstanceTo(PSourceVD.data.Instance,PDestVD.data.Instance);
 
-                pentity^.Formatentity(gdb.GetCurrentDWG^,dc);
+                //pentity^.Formatentity(gdb.GetCurrentDWG^,dc);
+                pentity^.YouChanged(gdb.GetCurrentDWG^);
 
                 if PSourceVD^.data.PTD.GetValueAsString(PSourceVD^.data.Instance)<>PDestVD^.data.PTD.GetValueAsString(PDestVD^.data.Instance) then
                 PSourceVD.attrib:=PSourceVD.attrib or vda_different;
@@ -150,12 +151,14 @@ begin
                   if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(pentity^.vp.ID,MultiPropertyDataForObjects)then
                   begin
                     MultiPropertyDataForObjects.EntChangeProc(PSourceVD,pentity,Pointer(PtrUInt(pentity)+MultiPropertyDataForObjects.SetValueOffset),MultiPropertiesManager.MultiPropertyVector[i]);
+                    pentity^.YouChanged(gdb.GetCurrentDWG^);
                     pentity.FormatEntity(gdb.GetCurrentDWG^,dc);
                   end
                   else
                       if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(0,MultiPropertyDataForObjects)then
                       begin
                         MultiPropertyDataForObjects.EntChangeProc(PSourceVD,pentity,Pointer(PtrUInt(pentity)+MultiPropertyDataForObjects.SetValueOffset),MultiPropertiesManager.MultiPropertyVector[i]);
+                        pentity^.YouChanged(gdb.GetCurrentDWG^);
                         pentity.FormatEntity(gdb.GetCurrentDWG^,dc);
                       end;
              end
@@ -190,6 +193,7 @@ begin
       if pvd<>nil then
       begin
          SetMultiProperty(pvd,GetObjType);
+         CreateMultiPropertys;
          exit;
       end;
 
@@ -197,6 +201,7 @@ begin
       if pvd<>nil then
       begin
          SetMultiProperty(pvd,GetObjType);
+         CreateMultiPropertys;
          exit;
       end;
 

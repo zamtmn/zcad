@@ -21,7 +21,7 @@ unit UBaseTypeDescriptor;
 interface
 uses
       Graphics,classes,Themes,
-      strproc,log,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,sysutils,UGDBOpenArrayOfByte,gdbasetypes,
+      zcadstrconsts,strproc,log,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,sysutils,UGDBOpenArrayOfByte,gdbasetypes,
       {usupportgui,}varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,math,zcadsysvars,
 
       shared;
@@ -212,7 +212,7 @@ begin
      if (ppd^.Attr and FA_DIFFERENT)=0 then
                                            ppd^.value:=GetDecoratedValueAsString(addr)
                                        else
-                                           ppd^.value:='*Разный*';
+                                           ppd^.value:=rsDifferent;
      if ppd^.value='rp_21' then
                                ppd^.value:=ppd^.value;
      {$IFDEF TOTALYLOG}programlog.LogOutStr(GetValueAsString(addr),lp_OldPos);{$ENDIF}

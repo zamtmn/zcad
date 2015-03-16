@@ -20,7 +20,7 @@ unit UEnumDescriptor;
 {$INCLUDE def.inc}
 interface
 uses types,sysutils,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,TypeDescriptors,gdbasetypes,varmandef,gdbase,
-  UGDBOpenArrayOfData,UGDBStringArray,memman,zcadsysvars;
+  zcadstrconsts,UGDBOpenArrayOfData,UGDBStringArray,memman,zcadsysvars;
 type
 PEnumDescriptor=^EnumDescriptor;
 EnumDescriptor=object(TUserTypeDescriptor)
@@ -106,7 +106,7 @@ begin
                                                                                                            else ppd^.value:='NotFound';
                                            end
                                        else
-                                           ppd^.value:='*Разный*';    
+                                           ppd^.value:=rsDifferent;
      IncAddr(addr);
 end;
 function EnumDescriptor.GetNumberInArrays;

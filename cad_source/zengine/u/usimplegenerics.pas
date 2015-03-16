@@ -82,6 +82,10 @@ uses
 function TMyHashMap.MyGetValue(key:TKey; out Value:TValue):boolean;
 var i,h,bs:longint;
 begin
+  {$IFDEF OldIteratorDef}
+  result:=contains(key);
+  if result then value:=self.GetData(key);
+  {$ELSE}
   h:=Thash.hash(key,FData.size);
   bs:=(FData[h]).size;
   for i:=0 to bs-1 do begin
@@ -92,8 +96,8 @@ begin
                                      end;
   end;
   exit(false);
+  {$ENDIF}
 end;
-
 class function GDBStringHash.hash(s:GDBString; n:longint):SizeUInt;
 begin
      result:=makehash(s) mod SizeUInt(n);
@@ -145,12 +149,28 @@ begin
                        end;
 end;
 function GKey2DataMap.MyContans(key:TKey):boolean;
-var Pair:TPair;
-    Node: TMSet.PNode;
+var
+   {$IFDEF OldIteratorDef}
+   Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
+   {$ELSE}
+   Pair:TPair;
+   Node: TMSet.PNode;
+   {$ENDIF}
 begin
+  {$IFDEF OldIteratorDef}
+  Iterator:=Find(key);
+  if assigned(Iterator)then
+                           begin
+                                result:=true;
+                                Iterator.Destroy;
+                           end
+                       else
+                           result:=false;
+  {$ELSE}
   Pair.Key:=key;
   Node := FSet.NFind(Pair);
   Result := Node <> nil;
+  {$ENDIF}
 end;
 
 function TMyMap.MyGetValue(key:TKey):TValue;

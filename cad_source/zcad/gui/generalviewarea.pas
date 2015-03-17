@@ -211,7 +211,17 @@ begin
                           exit;
   CalcOptimalMatrix;
   dc.drawer.startrender(TRM_ModelSpace,dc.matrixs);
-  if PDWG.GetSelObjArray.Count<>0 then PDWG.GetSelObjArray.drawpoint(dc);
+  if PDWG.GetSelObjArray.Count<>0 then
+                                      begin
+                                        PDWG.GetSelObjArray.drawpoint(dc);
+                                        if param.gluetocp then
+                                        begin
+                                          dc.drawer.SetColor(palette[sysvar.DISP.DISP_HotGripColor^].rgb);
+                                          dc.drawer.SetPointSize(sysvar.DISP.DISP_GripSize^);
+                                          dc.drawer.DrawPoint3DInModelSpace(param.md.mouse3dcoord,dc.matrixs);
+                                          dc.drawer.SetPointSize(1);
+                                        end;
+                                      end;
   dc.drawer.SetColor(255, 255, 255,255);
   {oglsm.myglEnable(GL_COLOR_LOGIC_OP);
   oglsm.myglLogicOp(GL_OR);}

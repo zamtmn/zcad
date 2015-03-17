@@ -204,6 +204,10 @@ type
              DISP_CrosshairSize:PGDBDouble;(*'Crosshair size'*)
              DISP_DrawZAxis:PGDBBoolean;(*'Show Z axis'*)
              DISP_ColorAxis:PGDBBoolean;(*'Colored cursor'*)
+             DISP_GripSize:PGDBInteger;(*'Grip size'*)
+             DISP_UnSelectedGripColor:PTGDBPaletteColor;(*'Unselected grip color'*)
+             DISP_SelectedGripColor:PTGDBPaletteColor;(*'Selected grip color'*)
+             DISP_HotGripColor:PTGDBPaletteColor;(*'Hot grip color'*)
         end;
   pgdbsysvariable=^gdbsysvariable;
   gdbsysvariable=packed record

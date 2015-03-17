@@ -19,7 +19,7 @@
 unit UGDBControlPointArray;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase, geometry,
+uses gdbpalette,zcadsysvars,gdbdrawcontext,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase, geometry,
      memman;
 type
 {Export+}
@@ -62,14 +62,14 @@ begin
        point:=parray;
        for i:=0 to count-1 do
        begin
-            if point^.selected then dc.drawer.SetColor(255, 0, 0,0)
+            if point^.selected then
+                                   dc.drawer.SetColor(palette[sysvar.DISP.DISP_SelectedGripColor^].rgb)
                                else
                                    begin
                                         if point^.pobject<>nil then
-                                                                   dc.drawer.SetColor(0, 255, 50,0)
+                                                                   //dc.drawer.SetColor(0, 255, 50,0)
                                                                else
-                                                                   dc.drawer.SetColor(0, 0, 255,0)
-
+                                                                   dc.drawer.SetColor(palette[sysvar.DISP.DISP_UnSelectedGripColor^].rgb)
                                    end;
             //glvertex2iv(@point^.dispcoord);
             dc.drawer.DrawPoint3DInModelSpace(point^.worldcoord,dc.matrixs);

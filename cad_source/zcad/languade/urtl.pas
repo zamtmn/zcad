@@ -84,6 +84,10 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_ZoomFactor,'DISP_ZoomFactor');
   SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_DrawZAxis,'DISP_DrawZAxis');
   SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_ColorAxis,'DISP_ColorAxis');
+  SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_GripSize,'DISP_GripSize');
+  SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_SelectedGripColor,'DISP_SelectedGripColor');
+  SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_UnSelectedGripColor,'DISP_UnSelectedGripColor');
+  SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_HotGripColor,'DISP_HotGripColor');
 
   //SysVarUnit.AssignToSymbol(SysVar.MISC.PMenuProjType,'PMenuProjType');
   //SysVarUnit.AssignToSymbol(SysVar.MISC.PMenuCommandLine,'PMenuCommandLine');

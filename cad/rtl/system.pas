@@ -1200,6 +1200,10 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
              DISP_CrosshairSize:PGDBDouble;(*'Crosshair size'*)
              DISP_DrawZAxis:PGDBBoolean;(*'Show Z axis'*)
              DISP_ColorAxis:PGDBBoolean;(*'Colored cursor'*)
+             DISP_GripSize:PGDBInteger;(*'Grip size'*)
+             DISP_UnSelectedGripColor:PTGDBPaletteColor;(*'Unselected grip color'*)
+             DISP_SelectedGripColor:PTGDBPaletteColor;(*'Selected grip color'*)
+             DISP_HotGripColor:PTGDBPaletteColor;(*'Hot grip color'*)
         end;
   pgdbsysvariable=^gdbsysvariable;
   gdbsysvariable=packed record
@@ -1313,6 +1317,7 @@ TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
                   destructor done;virtual;abstract;
                   procedure CreateVariable(varname,vartype:GDBString);virtual;abstract;
                   function FindVariable(varname:GDBString):pvardesk;virtual;abstract;
+                  function FindVariableByInstance(_Instance:GDBPointer):pvardesk;virtual;abstract;
                   function FindValue(varname:GDBString):GDBPointer;virtual;abstract;
                   function TypeName2PTD(n: GDBString):PUserTypeDescriptor;virtual;abstract;
                   function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
@@ -1591,7 +1596,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     function YouDeleted(const drawing:TDrawingDef):GDBInteger;virtual;abstract;
                     procedure YouChanged(const drawing:TDrawingDef);virtual;abstract;
                     function GetObjTypeName:GDBString;virtual;abstract;
-                    function GetObjType:GDBWord;virtual;abstract;
+                    function GetObjType:TObjID;virtual;abstract;
                     procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;abstract;
                     function GetLineWeight:GDBSmallint;inline;
                     function IsSelected:GDBBoolean;virtual;abstract;
@@ -3533,6 +3538,8 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                 destructor done;virtual;abstract;
                 procedure CheckMultiPropertyUse;
                 procedure CreateMultiPropertys;
+                procedure SetVariables(PSourceVD:pvardesk;NeededObjType:TObjID);
+                procedure SetMultiProperty(PSourceVD:pvardesk;NeededObjType:TObjID);
             end;
 //Generate on E:\zcad\cad_source\zcad\electroteh\GDBCommandsOPS.pas
   TInsertType=(

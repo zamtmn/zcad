@@ -45,6 +45,10 @@ var
   DISP_OSSize:GDBDouble;
   DISP_DrawZAxis:GDBBoolean;
   DISP_ColorAxis:GDBBoolean;
+  DISP_GripSize:GDBInteger;
+  DISP_UnSelectedGripColor:TGDBPaletteColor;
+  DISP_SelectedGripColor:TGDBPaletteColor;
+  DISP_HotGripColor:TGDBPaletteColor;
   RD_UseStencil:GDBBoolean;
   RD_DrawInsidePaintMessage:TGDB3StateBool;
   RD_RemoveSystemCursorFromWorkArea:GDBBoolean;
@@ -139,6 +143,10 @@ begin
   DISP_OSSize:=10.0;
   DISP_DrawZAxis:=False;
   DISP_ColorAxis:=False;
+  DISP_GripSize:=10;
+  DISP_UnSelectedGripColor:=150;
+  DISP_SelectedGripColor:=12;
+  DISP_HotGripColor:=11;
   RD_UseStencil:=True;
   RD_DrawInsidePaintMessage:=T3SB_Default;
   RD_RemoveSystemCursorFromWorkArea:=True;

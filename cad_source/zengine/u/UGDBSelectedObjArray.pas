@@ -19,7 +19,7 @@
 unit UGDBSelectedObjArray;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,GDBCamera,{GDBWithLocalCS,}GDBWithMatrix,GDBEntity,UGDBControlPointArray,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
+uses zcadsysvars,gdbdrawcontext,GDBCamera,{GDBWithLocalCS,}GDBWithMatrix,GDBEntity,UGDBControlPointArray,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
      gdbasetypes{,varmandef,gdbobjectsconstdef},memman,ugdbdrawingdef;
 type
 {Export+}
@@ -154,7 +154,7 @@ begin
   if count<>0 then
   begin
        tdesc:=parray;
-       dc.drawer.SetPointSize(10);
+       dc.drawer.SetPointSize(sysvar.DISP.DISP_GripSize^);
        for i:=0 to count-1 do
        begin
             if tdesc^.pcontrolpoint<>nil then

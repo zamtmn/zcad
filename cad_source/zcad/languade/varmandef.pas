@@ -156,6 +156,7 @@ UserTypeDescriptor=object(GDBaseObject)
                          function GetUserValueAsString(pinstance:GDBPointer):GDBString;virtual;
                          function GetDecoratedValueAsString(pinstance:GDBPointer):GDBString;virtual;
                          procedure CopyInstanceTo(source,dest:pointer);virtual;
+                         function Compare(pleft,pright:pointer):TCompareResult;virtual;
                          procedure SetValueFromString(PInstance:GDBPointer;_Value:GDBstring);virtual;abstract;
                          procedure InitInstance(PInstance:GDBPointer);virtual;
                          destructor Done;virtual;
@@ -397,6 +398,14 @@ begin
      Move(source^, dest^,SizeInGDBBytes);
      MagicAfterCopyInstance(dest);
 end;
+function UserTypeDescriptor.Compare(pleft,pright:pointer):TCompareResult;
+begin
+     if CompareByte(pleft^,pright^,SizeInGDBBytes)=0 then
+                                                         result:=CREqual
+                                                     else
+                                                         result:=CRNotEqual;
+end;
+
 function UserTypeDescriptor.SerializePreProcess;
 begin
      result:=DupeString(' ',sub)+value;

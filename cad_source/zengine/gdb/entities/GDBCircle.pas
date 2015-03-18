@@ -83,6 +83,8 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  procedure ReCalcFromObjMatrix;virtual;
 
                  function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
+                 procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
+                 function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
 
 
            end;
@@ -90,6 +92,33 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
 implementation
 uses
     log;
+function GDBObjCircle.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
+var
+   m1:DMatrix4D;
+   ppoint:GDBVertex;
+begin
+     m1:=GetMatrix^;
+     MatrixInvert(m1);
+     ppoint:=VectorTransform3D(point,m1);
+     if (abs(ppoint.z)>eps) then
+                                exit(false);
+     if abs(geometry.Vertexlength(point,P_insert_in_WCS)-radius)<bigeps then
+                                                                     begin
+                                                                       result:=true;
+                                                                       objects.AddRef(self);
+                                                                     end
+                                                                   else
+                                                                     result:=false;
+end;
+procedure GDBObjCircle.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
+var tv,dir:gdbvertex;
+begin
+     dir:=VertexSub(P_insert_in_WCS,posr.worldcoord);
+     processaxis(posr,dir);
+     tv:=geometry.vectordot(dir,zwcs);
+     processaxis(posr,tv);
+end;
+
 function GDBObjCircle.GetTangentInPoint(point:GDBVertex):GDBVertex;
 begin
      point:=geometry.VertexSub(self.P_insert_in_WCS,point);

@@ -1854,9 +1854,9 @@ end;
 function IsPointInBB(const point:GDBvertex; var fistbb:GDBBoundingBbox):GDBBoolean;
 begin
   result:=false;
-  if (fistbb.LBN.x<=point.x)and(fistbb.RTF.x>=point.x) then
-  if (fistbb.LBN.y<=point.y)and(fistbb.RTF.y>=point.y) then
-  if (fistbb.LBN.z<=point.z)and(fistbb.RTF.z>=point.z) then result:=true
+  if (fistbb.LBN.x<=point.x+eps)and(fistbb.RTF.x>=point.x-eps) then
+  if (fistbb.LBN.y<=point.y+eps)and(fistbb.RTF.y>=point.y-eps) then
+  if (fistbb.LBN.z<=point.z+eps)and(fistbb.RTF.z>=point.z-eps) then result:=true
 end;
 {function boundingintersect(var bb1,bb2:GDBBoundingBbox):GDBBoolean;
 begin

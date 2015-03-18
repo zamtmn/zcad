@@ -92,6 +92,7 @@ TObjLinkRecord=packed record
                      LinkCount:GDBInteger;(*saved_to_shd*)
                      Mode:TObjLinkRecordMode;(*saved_to_shd*)
                end;
+TCompareResult=(CRLess,CREqual,CRGreater,CRNotEqual);
 PIMatrix4=^IMatrix4;               
 IMatrix4=packed array[0..3]of GDBInteger;
 DVector4D=packed array[0..3]of GDBDouble;

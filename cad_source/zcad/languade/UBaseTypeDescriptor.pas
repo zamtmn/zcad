@@ -21,7 +21,7 @@ unit UBaseTypeDescriptor;
 interface
 uses
       Graphics,classes,Themes,
-      zcadstrconsts,strproc,log,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,sysutils,UGDBOpenArrayOfByte,gdbasetypes,
+      geometry,zcadstrconsts,strproc,log,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,sysutils,UGDBOpenArrayOfByte,gdbasetypes,
       {usupportgui,}varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,math,zcadsysvars,
 
       shared;
@@ -37,46 +37,55 @@ GDBBooleanDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBShortintDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBByteDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBSmallintDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBWordDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBIntegerDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBLongwordDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBQWordDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBDoubleDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBStringDescriptor=object(BaseTypeDescriptor)
                           constructor init;
@@ -88,26 +97,31 @@ GDBStringDescriptor=object(BaseTypeDescriptor)
                           procedure MagicFreeInstance(PInstance:GDBPointer);virtual;
                           procedure MagicAfterCopyInstance(PInstance:GDBPointer);virtual;
                           procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
+                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBAnsiStringDescriptor=object(GDBStringDescriptor)
                           constructor init;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
+                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBFloatDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBPointerDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
+                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBPtrUIntDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 TEnumDataDescriptor=object(BaseTypeDescriptor)
                      constructor init;
@@ -262,6 +276,13 @@ else if uppercase(value)='FALSE' then
 else
     ShowError('GDBBooleanDescriptor.SetValueFromString('+value+') {not false\true}');
 end;
+function GDBBooleanDescriptor.Compare(pleft,pright:pointer):TCompareResult;
+begin
+     if PGDBboolean(pleft)^<>PGDBboolean(pright)^ then
+                                                      result:=CRNotEqual
+                                                  else
+                                                      result:=CREqual;
+end;
 function GDBBooleanDescriptor.GetValueAsString;
 begin
      if PGDBboolean(pinstance)^ then
@@ -289,7 +310,19 @@ begin
      if error=0 then
                     pGDBLongword(pinstance)^:=vGDBLongword;
 end;
-
+function GDBLongwordDescriptor.Compare(pleft,pright:pointer):TCompareResult;
+begin
+     if pGDBLongword(pleft)^<>pGDBLongword(pright)^
+     then
+       begin
+            if pGDBLongword(pleft)^<pGDBLongword(pright)^ then
+                                                          result:=CRLess
+                                                      else
+                                                          result:=CRGreater;
+       end
+     else
+         result:=CREqual;
+end;
 constructor GDBQWordDescriptor.init;
 begin
      inherited init(sizeof(GDBQWord),'GDBQWord',nil);
@@ -311,7 +344,19 @@ begin
                                    PGDBQWord(pinstance)^:=qw;
      {$ENDIF}
 end;
-
+function GDBQWordDescriptor.Compare(pleft,pright:pointer):TCompareResult;
+begin
+     if PGDBQWord(pleft)^<>PGDBQWord(pright)^
+     then
+       begin
+            if PGDBQWord(pleft)^<PGDBQWord(pright)^ then
+                                                          result:=CRLess
+                                                      else
+                                                          result:=CRGreater;
+       end
+     else
+         result:=CREqual;
+end;
 constructor GDBFloatDescriptor.init;
 begin
      inherited init(sizeof(GDBFloat),'GDBFloat',nil);
@@ -334,6 +379,19 @@ begin
      if error=0 then
                     pGDBFloat(pinstance)^:=vGDBFloat;
 end;
+function GDBFloatDescriptor.Compare(pleft,pright:pointer):TCompareResult;
+begin
+     if IsFloatNotEqual(pGDBFloat(pleft)^,pGDBFloat(pright)^)
+     then
+       begin
+            if pGDBFloat(pleft)^<pGDBFloat(pright)^ then
+                                                          result:=CRLess
+                                                      else
+                                                          result:=CRGreater;
+       end
+     else
+         result:=CREqual;
+end;
 constructor GDBPtrUIntDescriptor.init;
 begin
      inherited init(sizeof(GDBPointer),'GDBPtrUInt',nil);
@@ -345,7 +403,7 @@ begin
     UPtrUInt:=PPtrUInt(pinstance)^;
     result := inttostr(UPtrUInt);
 end;
-procedure GDBPtrUIntDescriptor .SetValueFromString;
+procedure GDBPtrUIntDescriptor.SetValueFromString;
 var
      vPtrUInt:PtrUInt;
      error:integer;
@@ -353,6 +411,19 @@ begin
      val(value,vPtrUInt,error);
      if error=0 then
                     PPtrUInt(pinstance)^:=vPtrUInt;
+end;
+function GDBPtrUIntDescriptor.Compare(pleft,pright:pointer):TCompareResult;
+begin
+     if PPtrUInt(pleft)^<>PPtrUInt(pright)^
+     then
+       begin
+            if PPtrUInt(pleft)^<PPtrUInt(pright)^ then
+                                                          result:=CRLess
+                                                      else
+                                                          result:=CRGreater;
+       end
+     else
+         result:=CREqual;
 end;
 constructor GDBDoubleDescriptor.init;
 begin
@@ -382,6 +453,20 @@ begin
      if error=0 then
                     pGDBDouble(pinstance)^:=ugdbdouble;
 end;
+function GDBDoubleDescriptor.Compare(pleft,pright:pointer):TCompareResult;
+begin
+     if IsDoubleNotEqual(PGDBDouble(pleft)^,PGDBDouble(pright)^)
+     then
+       begin
+            if PGDBDouble(pleft)^<PGDBDouble(pright)^ then
+                                                          result:=CRLess
+                                                      else
+                                                          result:=CRGreater;
+       end
+     else
+         result:=CREqual;
+end;
+
 constructor GDBWordDescriptor.init;
 begin
      inherited init(sizeof(GDBWord),'GDBWord',nil);
@@ -401,6 +486,19 @@ begin
      val(value,vGDBWord,error);
      if error=0 then
                     pGDBWord(pinstance)^:=vGDBWord;
+end;
+function GDBWordDescriptor.Compare(pleft,pright:pointer):TCompareResult;
+begin
+     if pGDBWord(pleft)^<>pGDBWord(pright)^
+     then
+       begin
+            if pGDBWord(pleft)^<pGDBWord(pright)^ then
+                                                          result:=CRLess
+                                                      else
+                                                          result:=CRGreater;
+       end
+     else
+         result:=CREqual;
 end;
 constructor GDBIntegerDescriptor.init;
 begin
@@ -422,6 +520,19 @@ begin
      if error=0 then
                     pGDBInteger(pinstance)^:=vGDBInteger;
 end;
+function GDBIntegerDescriptor.Compare(pleft,pright:pointer):TCompareResult;
+begin
+     if pGDBInteger(pleft)^<>pGDBInteger(pright)^
+     then
+       begin
+            if pGDBInteger(pleft)^<pGDBInteger(pright)^ then
+                                                          result:=CRLess
+                                                      else
+                                                          result:=CRGreater;
+       end
+     else
+         result:=CREqual;
+end;
 constructor GDBShortintDescriptor.init;
 begin
      inherited init(sizeof(GDBshortint),'GDBShortint',nil);
@@ -442,6 +553,20 @@ begin
      if error=0 then                           
                     pGDBshortint(pinstance)^:=vGDBshortint;
 end;
+function GDBShortintDescriptor.Compare(pleft,pright:pointer):TCompareResult;
+begin
+     if pGDBshortint(pleft)^<>pGDBshortint(pright)^
+     then
+       begin
+            if pGDBshortint(pleft)^<pGDBshortint(pright)^ then
+                                                          result:=CRLess
+                                                      else
+                                                          result:=CRGreater;
+       end
+     else
+         result:=CREqual;
+end;
+
 constructor GDBByteDescriptor.init;
 begin
      inherited init(sizeof(GDBByte),'GDBByte',nil);
@@ -462,6 +587,19 @@ begin
      if error=0 then
                     pGDBbyte(pinstance)^:=vGDBbyte;
 end;
+function GDBByteDescriptor.Compare(pleft,pright:pointer):TCompareResult;
+begin
+     if pGDBbyte(pleft)^<>pGDBbyte(pright)^
+     then
+       begin
+            if pGDBbyte(pleft)^<pGDBbyte(pright)^ then
+                                                          result:=CRLess
+                                                      else
+                                                          result:=CRGreater;
+       end
+     else
+         result:=CREqual;
+end;
 constructor GDBSmallintDescriptor.init;
 begin
      inherited init(sizeof(GDBSmallint),'GDBSmallint',nil);
@@ -481,6 +619,19 @@ begin
      val(value,vGDBSmallint,error);
      if error=0 then
                     pGDBSmallint(pinstance)^:=vGDBSmallint;
+end;
+function GDBSmallintDescriptor.Compare(pleft,pright:pointer):TCompareResult;
+begin
+     if pGDBSmallint(pleft)^<>pGDBSmallint(pright)^
+     then
+       begin
+            if pGDBSmallint(pleft)^<pGDBSmallint(pright)^ then
+                                                          result:=CRLess
+                                                      else
+                                                          result:=CRGreater;
+       end
+     else
+         result:=CREqual;
 end;
 procedure GDBStringDescriptor.CopyInstanceTo;
 begin
@@ -534,13 +685,27 @@ procedure GDBStringDescriptor.SavePasToMem;
 begin
      membuf.TXTAddGDBStringEOL(prefix+':='''+{pvd.data.PTD.}GetValueAsString(PInstance)+''';');
 end;
+function GDBStringDescriptor.Compare(pleft,pright:pointer):TCompareResult;
+begin
+     if PGDBString(pleft)^<>PGDBString(pright)^
+     then
+       begin
+            if PGDBString(pleft)^<PGDBString(pright)^ then
+                                                          result:=CRLess
+                                                      else
+                                                          result:=CRGreater;
+       end
+     else
+         result:=CREqual;
+end;
+
 function GDBStringDescriptor.DeSerialize;
 var l:gdbword;
 begin
-     pstring(PInstance)^:='';
+     PGDBString(PInstance)^:='';
      membuf.ReadData(@L,sizeof(gdbword));
-     setlength(pstring(PInstance)^,l);
-     membuf.ReadData(@pstring(PInstance)^[1],l)
+     setlength(PGDBString(PInstance)^,l);
+     membuf.ReadData(@PGDBString(PInstance)^[1],l)
 end;
 function GDBPointerDescriptor.GetValueAsString;
 var
@@ -557,6 +722,19 @@ begin
 end;
 procedure GDBPointerDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);
 begin
+end;
+function GDBPointerDescriptor.Compare(pleft,pright:pointer):TCompareResult;
+begin
+     if pGDBPointer(pleft)^<>pGDBPointer(pright)^
+     then
+       begin
+            if pGDBPointer(pleft)^<pGDBPointer(pright)^ then
+                                                          result:=CRLess
+                                                      else
+                                                          result:=CRGreater;
+       end
+     else
+         result:=CREqual;
 end;
 
 function GDBStringDescriptor.GetValueAsString;
@@ -594,6 +772,19 @@ var
 begin
     uGDBString := pGDBString(pinstance)^;
     result := ansi2cp(uGDBString);
+end;
+function GDBAnsiStringDescriptor.Compare(pleft,pright:pointer):TCompareResult;
+begin
+     if PGDBAnsiString(pleft)^<>PGDBAnsiString(pright)^
+     then
+       begin
+            if PGDBAnsiString(pleft)^<PGDBAnsiString(pright)^ then
+                                                          result:=CRLess
+                                                      else
+                                                          result:=CRGreater;
+       end
+     else
+         result:=CREqual;
 end;
 destructor TEnumDataDescriptor.done;
 begin

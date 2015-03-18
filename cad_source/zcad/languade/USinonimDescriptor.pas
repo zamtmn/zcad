@@ -32,6 +32,7 @@ GDBSinonimDescriptor=object(TUserTypeDescriptor)
                      function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                      destructor Done;virtual;
                      function GetFactTypedef:PUserTypeDescriptor;virtual;
+                     function Compare(pleft,pright:pointer):TCompareResult;virtual;
 
                end;
 implementation
@@ -41,6 +42,11 @@ begin
      SinonimName:='';
      inherited;
 end;
+function GDBSinonimDescriptor.Compare(pleft,pright:pointer):TCompareResult;
+begin
+     result:=PSinonimOf^.Compare(pleft,pright);
+end;
+
 function GDBSinonimDescriptor.GetFactTypedef:PUserTypeDescriptor;
 begin
      result:=PSinonimOf^.GetFactTypedef;

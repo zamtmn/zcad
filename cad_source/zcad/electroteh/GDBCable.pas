@@ -65,9 +65,8 @@ begin
   //exit;
   GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjCable));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
+  tvo^.vp:=vp;
   tvo^.vp.id :=GDBCableID;
-  tvo^.vp.layer :=vp.layer;
-  tvo^.bp.ListPos.Owner:=own;
   p:=vertexarrayinocs.PArray;
   for i:=0 to VertexArrayInOCS.Count-1 do
   begin

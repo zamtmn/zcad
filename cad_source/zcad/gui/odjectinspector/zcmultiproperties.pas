@@ -28,7 +28,7 @@ type
   TObjIDVector=TMyVector<TObjID>;
 
   TMultiProperty=class;
-  TMultiPropertyCategory=(MPCGeneral,MPCGeometry,MPCSummary);
+  TMultiPropertyCategory=(MPCGeneral,MPCGeometry,MPCMisc,MPCSummary);
   TBeforeIterateProc=function(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
   TAfterIterateProc=procedure(piteratedata:GDBPointer;mp:TMultiProperty);
   TEntChangeProc=procedure(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);

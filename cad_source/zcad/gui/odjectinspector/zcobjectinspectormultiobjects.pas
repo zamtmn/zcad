@@ -45,6 +45,7 @@ type
                 VariablesUnit:TObjectUnit;(*'Variables'*)
                 GeneralUnit:TObjectUnit;(*'General'*)
                 GeometryUnit:TObjectUnit;(*'Geometry'*)
+                MiscUnit:TObjectUnit;(*'Misc'*)
                 SummaryUnit:TObjectUnit;(*'Summary'*)
                 ObjIDVector:{-}TObjIDVector{/GDBPointer/};(*hidden_in_objinsp*)
                 ObjID2Counter:{-}TObjID2Counter{/GDBPointer/};(*hidden_in_objinsp*)
@@ -71,6 +72,7 @@ begin
      VariablesUnit.init('VariablesUnit');
      GeneralUnit.init('GeneralUnit');
      GeometryUnit.init('GeometryUnit');
+     MiscUnit.init('MiscUnit');
      SummaryUnit.init('SummaryUnit');
      TxtEntType.Enums.init(10);
      TxtEntType.Selected:=0;
@@ -83,6 +85,7 @@ begin
      VariablesUnit.done;
      GeneralUnit.done;
      GeometryUnit.done;
+     MiscUnit.done;
      SummaryUnit.done;
      TxtEntType.Enums.done;
 
@@ -283,6 +286,7 @@ begin
       case MultiPropertiesManager.MultiPropertyVector[i].MPCategory of
       MPCGeneral:pu:=@self.GeneralUnit;
       MPCGeometry:pu:=@self.GeometryUnit;
+      MPCMisc:pu:=@self.MiscUnit;
       MPCSummary:pu:=@self.SummaryUnit;
       end;
       MultiPropertiesManager.MultiPropertyVector[i].PIiterateData:=MultiPropertiesManager.MultiPropertyVector[i].BeforeIterateProc(MultiPropertiesManager.MultiPropertyVector[i],pu);

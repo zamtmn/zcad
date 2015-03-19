@@ -96,6 +96,7 @@ TObjLinkRecord=packed record
                      LinkCount:GDBInteger;(*saved_to_shd*)
                      Mode:TObjLinkRecordMode;(*saved_to_shd*)
                end;
+TCompareResult=(CRLess,CREqual,CRGreater,CRNotEqual);
 PIMatrix4=^IMatrix4;               
 IMatrix4=packed array[0..3]of GDBInteger;
 DVector4D=packed array[0..3]of GDBDouble;
@@ -1844,6 +1845,8 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;abstract;
                  procedure ReCalcFromObjMatrix;virtual;abstract;
                  function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;abstract;
+                 procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
+                 function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;abstract;
            end;
 //Generate on E:\zcad\cad_source\zengine\gdb\entities\GDBArc.pas
 PGDBObjArc=^GDBObjARC;
@@ -3527,6 +3530,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                 VariablesUnit:TObjectUnit;(*'Variables'*)
                 GeneralUnit:TObjectUnit;(*'General'*)
                 GeometryUnit:TObjectUnit;(*'Geometry'*)
+                MiscUnit:TObjectUnit;(*'Misc'*)
                 SummaryUnit:TObjectUnit;(*'Summary'*)
                 ObjIDVector:GDBPointer;(*hidden_in_objinsp*)
                 ObjID2Counter:GDBPointer;(*hidden_in_objinsp*)

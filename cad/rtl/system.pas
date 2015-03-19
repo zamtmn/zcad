@@ -52,6 +52,8 @@ itrec=packed record
 (*varcategoryforoi START='Start'*)
 (*varcategoryforoi END='End'*)
 (*varcategoryforoi DELTA='Delta'*)
+(*varcategoryforoi INSERT='Insert'*)
+(*varcategoryforoi NORMAL='Normal'*)
 GDBTypedPointer=packed record
                       Instance:GDBPointer;
                       PTD:GDBPointer;

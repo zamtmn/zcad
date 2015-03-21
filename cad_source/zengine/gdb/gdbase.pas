@@ -46,6 +46,8 @@ TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBIntege
 (*varcategoryforoi START='Start'*)
 (*varcategoryforoi END='End'*)
 (*varcategoryforoi DELTA='Delta'*)
+(*varcategoryforoi INSERT='Insert'*)
+(*varcategoryforoi NORMAL='Normal'*)
 
 GDBTypedPointer=packed record
                       Instance:GDBPointer;

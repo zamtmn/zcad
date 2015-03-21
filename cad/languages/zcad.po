@@ -3822,6 +3822,15 @@ msgstr ""
 msgid "MText editor"
 msgstr ""
 
+#: zcadstrconsts.rsnameall
+msgctxt "zcadstrconsts.rsnameall"
+msgid "All"
+msgstr ""
+
+#: zcadstrconsts.rsnamewithcounter
+msgid "%s (%d)"
+msgstr ""
+
 #: zcadstrconsts.rsncoglc
 msgctxt "zcadstrconsts.rsncoglc"
 msgid "OpenGL context is not created"

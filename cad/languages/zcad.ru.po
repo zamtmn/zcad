@@ -642,9 +642,17 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
+#: zcadexternal.acn_fakecopyclipbase~caption
+msgid ""
+msgstr ""
+
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
+msgstr ""
+
+#: zcadexternal.acn_fakepaste~caption
+msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -970,6 +978,10 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
+#: zcadexternal.acn_processkz~caption
+msgid ""
+msgstr ""
+
 #: zcadexternal.acn_projecttree~caption
 msgctxt "zcadexternal.acn_projecttree~caption"
 msgid "Project tree"
@@ -999,6 +1011,10 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
+
+#: zcadexternal.acn_remautocables~caption
+msgid ""
+msgstr ""
 
 #: zcadexternal.acn_rotate~caption
 msgctxt "zcadexternal.acn_rotate~caption"
@@ -2849,6 +2865,10 @@ msgstr "Нумеруесая переменная"
 msgid "Save start number"
 msgstr "Сохранять старовое значение"
 
+#: zcadexternal.tnumberingparams~sortmode
+msgid ""
+msgstr ""
+
 #: zcadexternal.tnumberingparams~startnumber
 msgid "Start"
 msgstr "Начальное значение"
@@ -3680,10 +3700,8 @@ msgid "Position"
 msgstr "Позиция"
 
 #: zcadstrconsts.fontnotfoundandreplace
-msgid ""
-"For text style \"%s\" not found font \"%s\", is replaced by an alternative"
-msgstr ""
-"Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
+msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
+msgstr "Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
 
 #: zcadstrconsts.rsaboutwndcaption
 msgctxt "zcadstrconsts.rsaboutwndcaption"
@@ -3769,7 +3787,7 @@ msgstr "В стеке обнаружены следующие данные:"
 
 #: zcadstrconsts.rscmnentitiesprocessed
 msgid "%s entities processed"
-msgstr "Обработвно %s примитивов"
+msgstr "Обработано %s примитивов"
 
 #: zcadstrconsts.rscmnewbasepoint
 msgid "New base point:"
@@ -3863,12 +3881,8 @@ msgstr "Команда не может быть запущена"
 
 #: zcadstrconsts.rscommenteeport
 msgctxt "zcadstrconsts.rscommenteeport"
-msgid ""
-"Registered commands - %d; registered entities - %d; registered DXF entities "
-"- %d"
-msgstr ""
-"Зарегистрированных команд - %d; зарегистрированных примитивов - %d; "
-"зарегистрированных DXF примитивов - %d"
+msgid "Registered commands - %d; registered entities - %d; registered DXF entities - %d"
+msgstr "Зарегистрированных команд - %d; зарегистрированных примитивов - %d; зарегистрированных DXF примитивов - %d"
 
 #: zcadstrconsts.rscompiledtimemsg
 msgctxt "zcadstrconsts.rscompiledtimemsg"
@@ -3944,8 +3958,7 @@ msgid "Expression %s return %s"
 msgstr "Выражение  %s возвращает %s"
 
 #: zcadstrconsts.rsfardeffilenotfounf
-msgid ""
-"File definition of the variables can not be found for the device \"%s\";"
+msgid "File definition of the variables can not be found for the device \"%s\";"
 msgstr "Файл определения переменных не найден для устройства \"%s\";"
 
 #: zcadstrconsts.rsfileformat
@@ -3987,6 +4000,10 @@ msgid "Error loading layout from file"
 msgstr "Ошибка загрузки файла разбивки окон"
 
 #: zcadstrconsts.rslinetypedesk
+#, fuzzy
+#| msgid ""
+#| ";;Pattern length %f\n"
+#| "%s\n"
 msgid ""
 ";;Pattern length %f\n"
 "%s\n"
@@ -4018,6 +4035,16 @@ msgstr "мм"
 #: zcadstrconsts.rsmtexteditor
 msgid "MText editor"
 msgstr "Редактор многострочного текста"
+
+#: zcadstrconsts.rsnameall
+#, fuzzy
+msgctxt "zcadstrconsts.rsnameall"
+msgid "All"
+msgstr "Все"
+
+#: zcadstrconsts.rsnamewithcounter
+msgid "%s (%d)"
+msgstr ""
 
 #: zcadstrconsts.rsncoglc
 msgctxt "zcadstrconsts.rsncoglc"
@@ -4078,20 +4105,15 @@ msgstr "Повторное создание %s!"
 msgid ""
 "-UNDO\\REDO - yet it is better not to use;\n"
 "\n"
-"-If you have problems with rendering or selecting entities, run \"Regen\" "
-"and \"RebuildTree\" in command line;\n"
+"-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
 "\n"
-"-To disable the display of this window comment out line \"About\" in the "
-"file \"components\\autorun.cmd\". Encoding of all configuration files - "
-"UTF8;\n"
+"-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
 msgstr ""
 "-UNDO\\REDO - пока лучше не пользоваться;\n"
 "\n"
-"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" "
-"и \"RebuildTree\" в командной строке;\n"
+"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" и \"RebuildTree\" в командной строке;\n"
 "\n"
-"-Для отключения показа этого окна закоментируйте строку \"About\" в файле "
-"\"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
+"-Для отключения показа этого окна закоментируйте строку \"About\" в файле \"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
 
 #: zcadstrconsts.rsreservefontnotfound
 msgid "Reserve font is not found in the resources"
@@ -4156,8 +4178,7 @@ msgid "Text editor"
 msgstr "Редактор текста"
 
 #: zcadstrconsts.rstextstyleusedin
-msgid ""
-"Text style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
+msgid "Text style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
 msgstr "Стиль текста \"%s\" используется: %d-в модели, %d-в таблице блоков"
 
 #: zcadstrconsts.rstoolbarnotfound
@@ -4242,3 +4263,4 @@ msgstr "Внимание!"
 #: zcadstrconsts.rszcadstarted
 msgid "ZCAD v%s started"
 msgstr "ZCAD v%s запущен"
+

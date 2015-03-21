@@ -708,6 +708,7 @@ var pb:PGDBObjBlockInsert;
     poa:PGDBObjEntityTreeArray;
     selname,newname:GDBString;
     DC:TDrawContext;
+    psdesc:pselectedobjdesc;
 procedure rb(pb:PGDBObjBlockInsert);
 var
     nb,tb:PGDBObjBlockInsert;
@@ -718,6 +719,7 @@ begin
     //PGDBObjBlockInsert(nb)^.initnul;//(@gdb.GetCurrentDWG^.ObjRoot,gdb.LayerTable.GetSystemLayer,0);
     PGDBObjBlockInsert(nb)^.init(gdb.GetCurrentROOT,gdb.GetCurrentDWG^.LayerTable.GetSystemLayer,0);
     nb^.Name:=newname;//'DEVICE_NOC';
+    nb^.vp:=pb^.vp;
     nb^.vp.ID:=GDBBlockInsertID;
     nb^.Local.p_insert:=pb^.Local.P_insert;
     nb^.scale:=pb^.Scale;
@@ -772,8 +774,11 @@ begin
           selname:=TEnumDataDescriptor.GetValueAsString(@BlockReplaceParams.Find);
           selname:=uppercase(selname);
           pb:=poa^.beginiterate(ir);
-          if pb<>nil then
+          psdesc:=gdb.GetCurrentDWG^.SelObjArray.beginiterate(ir);
+          if psdesc<>nil then
           repeat
+                pb:=pointer(psdesc^.objaddr);
+                if pb<>nil then
                 if pb^.Selected then
                 case BlockReplaceParams.Process of
                             BRM_Block:begin
@@ -799,8 +804,8 @@ begin
                                            end;
                                    end;
                 end;
-                pb:=poa^.iterate(ir);
-          until pb=nil;
+                psdesc:=gdb.GetCurrentDWG^.SelObjArray.iterate(ir);
+          until psdesc=nil;
           Prompt(sysutils.format(rscmNEntitiesProcessed,[inttostr(result)]));
           Regen_com('');
           commandmanager.executecommandend;

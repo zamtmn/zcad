@@ -410,7 +410,7 @@ begin
                                               end
                                                else
                                                   recreateunitvars:=false;
-                                             recreateunitvars:=false;
+                                             //recreateunitvars:=false;
                                         begin
                                              pvd:=PTObjectUnit(addr)^.InterfaceVariables.vardescarray.beginiterate(ir2);
                                              if pvd<>nil then

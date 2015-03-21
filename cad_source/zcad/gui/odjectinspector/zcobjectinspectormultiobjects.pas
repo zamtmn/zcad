@@ -208,6 +208,14 @@ begin
          exit;
       end;
 
+      pvd:=MiscUnit.FindVariableByInstance(PFIELD);
+      if pvd<>nil then
+      begin
+         SetMultiProperty(pvd,GetObjType);
+         CreateMultiPropertys;
+         exit;
+      end;
+
 end;
 function TMSEditor.GetObjType:GDBWord;
 begin
@@ -382,12 +390,13 @@ begin
      GeneralUnit.InterfaceUses.addnodouble(@sysunit);
      GeometryUnit.free;
      GeometryUnit.InterfaceUses.addnodouble(@sysunit);
+     MiscUnit.free;
+     MiscUnit.InterfaceUses.addnodouble(@sysunit);
      SummaryUnit.free;
      SummaryUnit.InterfaceUses.addnodouble(@sysunit);
 
      CheckMultiPropertyUse;
      CreateMultiPropertys;
-
      //etype:=GetObjType;
      psd:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
      //pv:=gdb.GetCurrentDWG.ObjRoot.ObjArray.beginiterate(ir);

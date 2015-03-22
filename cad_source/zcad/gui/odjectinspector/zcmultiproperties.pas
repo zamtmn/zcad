@@ -22,7 +22,7 @@ unit zcmultiproperties;
 interface
 uses
   shared,intftranslations,gdbase,gdbasetypes,log,
-  usimplegenerics,varmandef,Varman;
+  usimplegenerics,varmandef,Varman,garrayutils;
 type
   TObjID2Counter=TMyMapCounter<TObjID,LessObjID>;
   TObjIDVector=TMyVector<TObjID>;
@@ -46,25 +46,44 @@ type
                        MPCategory:TMultiPropertyCategory;
                        MPObjectsData:TObjID2MultiPropertyProcs;
                        usecounter:SizeUInt;
+                       sortedid:integer;
                        BeforeIterateProc:TBeforeIterateProc;
                        AfterIterateProc:TAfterIterateProc;
                        PIiterateData:GDBPointer;
-                       constructor create(_name:GDBString;ptm:PUserTypeDescriptor;_Category:TMultiPropertyCategory;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc);
+                       constructor create(_name:GDBString;_sortedid:integer;ptm:PUserTypeDescriptor;_Category:TMultiPropertyCategory;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc);
                  end;
   TMyGDBString2TMultiPropertyDictionary=TMyGDBStringDictionary<TMultiProperty>;
+
+  TMultiPropertyCompare=class
+     class function c(a,b:TMultiProperty):boolean;inline;
+  end;
+
   TMultiPropertyVector=TMyVector<TMultiProperty>;
+  TMultiPropertyVectorSort=TOrderingArrayUtils<TMultiPropertyVector,TMultiProperty,TMultiPropertyCompare> ;
 
   TMultiPropertiesManager=class
                                MultiPropertyDictionary:TMyGDBString2TMultiPropertyDictionary;
                                MultiPropertyVector:TMultiPropertyVector;
                                constructor create;
                                destructor destroy;override;
-                               procedure RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
+                               procedure RegisterMultiproperty(name:GDBString;username:GDBString;sortedid:integer;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
+                               procedure sort;
                           end;
 var
   MultiPropertiesManager:TMultiPropertiesManager;
 implementation
-procedure TMultiPropertiesManager.RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
+class function TMultiPropertyCompare.c(a,b:TMultiProperty):boolean;
+begin
+  c:=a.sortedid<b.sortedid;
+end;
+procedure TMultiPropertiesManager.sort;
+var
+  MultiPropertyVectorSort:TMultiPropertyVectorSort;
+begin
+     MultiPropertyVectorSort:=TMultiPropertyVectorSort.Create;
+     MultiPropertyVectorSort.Sort(MultiPropertyVector,MultiPropertyVector.Size);
+end;
+procedure TMultiPropertiesManager.RegisterMultiproperty(name:GDBString;username:GDBString;sortedid:integer;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
 var
    mp:TMultiProperty;
    mpdfo:TMultiPropertyDataForObjects;
@@ -81,11 +100,12 @@ begin
                                                              mpdfo.GetValueOffset:=GetVO;
                                                              mpdfo.SetValueOffset:=SetVO;
                                                              mp.MPUserName:=username;
+                                                             mp.sortedid:=sortedid;
                                                              mp.MPObjectsData.RegisterKey(id,mpdfo);
                                                         end
                                                     else
                                                         begin
-                                                             mp:=TMultiProperty.create(name,ptm,category,bip,aip,eip);
+                                                             mp:=TMultiProperty.create(name,sortedid,ptm,category,bip,aip,eip);
                                                              mpdfo.EntIterateProc:=eip;
                                                              mpdfo.EntChangeProc:=ecp;
                                                              mpdfo.GetValueOffset:=GetVO;
@@ -101,6 +121,7 @@ begin
      MPName:=_name;
      MPType:=ptm;
      MPCategory:=_category;
+     sortedid:=_sortedid;
      self.AfterIterateProc:=aip;
      self.BeforeIterateProc:=bip;
      MPObjectsData:=TObjID2MultiPropertyProcs.create;

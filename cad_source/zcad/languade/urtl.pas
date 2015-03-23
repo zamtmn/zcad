@@ -235,7 +235,14 @@ initialization;
   SysVar.debug.memdeb.CurrentAllocMB:=@memman.CurrentAllocMB;
 
   if sysunit<>nil then
+  begin
   PRecordDescriptor(sysunit.TypeName2PTD('CommandRTEdObject'))^.FindField('commanddata')^.Collapsed:=false;
+  PRecordDescriptor(sysunit.TypeName2PTD('TMSEditor'))^.FindField('VariablesUnit')^.Collapsed:=false;
+  PRecordDescriptor(sysunit.TypeName2PTD('TMSEditor'))^.FindField('GeneralUnit')^.Collapsed:=false;
+  PRecordDescriptor(sysunit.TypeName2PTD('TMSEditor'))^.FindField('GeometryUnit')^.Collapsed:=false;
+  PRecordDescriptor(sysunit.TypeName2PTD('TMSEditor'))^.FindField('MiscUnit')^.Collapsed:=false;
+  PRecordDescriptor(sysunit.TypeName2PTD('TMSEditor'))^.FindField('SummaryUnit')^.Collapsed:=false;
+  end;
   programlog.logoutstr('urtl.initialization  {end}',lp_DecPos);
 
 finalization;

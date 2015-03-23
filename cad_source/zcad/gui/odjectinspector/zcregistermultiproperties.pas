@@ -29,39 +29,8 @@ uses
   GDBEntity,
   gdbasetypes,
   Varman,
-  GDBCircle,GDBArc,GDBLine,GDBBlockInsert,GDBText,GDBMText,geometry,zcmultiproperties;
+  zcmultipropertiesutil,GDBCircle,GDBArc,GDBLine,GDBBlockInsert,GDBText,GDBMText,geometry,zcmultiproperties;
 implementation
-const
-     firstorder=100;
-     lastorder=1000;
-function GetOneVarData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
-var
-    vd:vardesk;
-begin
-     GDBGetMem(result,sizeof(TOneVarData));
-     PTOneVarData(result).PVarDesc:=pu^.FindVariable(mp.MPName);
-     if PTOneVarData(result).PVarDesc=nil then
-     begin
-          pu^.setvardesc(vd, mp.MPName,mp.MPUserName,mp.MPType^.TypeName);
-          PTOneVarData(result).PVarDesc:=pu^.InterfaceVariables.createvariable(mp.MPName,vd);
-     end;
-end;
-procedure FreeOneVarData(piteratedata:GDBPointer;mp:TMultiProperty);
-begin
-     GDBFreeMem(piteratedata);
-end;
-procedure GeneralEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
-begin
-     if @ecp=nil then PTOneVarData(pdata).PVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_RO;
-     if fistrun then
-                    mp.MPType.CopyInstanceTo(pentity,PTOneVarData(pdata).PVarDesc.data.Instance)
-                else
-                    begin
-                         if mp.MPType.Compare(pentity,PTOneVarData(pdata).PVarDesc.data.Instance)<>CREqual then
-                         //if IsDoubleNotEqual(PGDBDouble(pentity)^,PGDBDouble(PTOneVarData(pdata).PVarDesc.data.Instance)^) then
-                         PTOneVarData(pdata).PVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_different;
-                    end;
-end;
 procedure GDBDouble2SumEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 var
     l1,l2:double;

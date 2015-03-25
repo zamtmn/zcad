@@ -31,7 +31,7 @@ type
   TMultiPropertyCategory=(MPCGeneral,MPCGeometry,MPCMisc,MPCSummary);
   TBeforeIterateProc=function(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
   TAfterIterateProc=procedure(piteratedata:GDBPointer;mp:TMultiProperty);
-  TEntChangeProc=procedure(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+  TEntChangeProc=procedure(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
   TEntIterateProc=procedure(pvd:pvardesk;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
   TMultiPropertyDataForObjects=record
                                      GetValueOffset,SetValueOffset:GDBInteger;

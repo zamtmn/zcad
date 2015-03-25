@@ -155,55 +155,56 @@ begin
      l1:=PGDBDouble(pentity)^*180/pi;
      GeneralEntIterateProc(pdata,@l1,mp,fistrun,ecp);
 end;
-
-
-procedure GeneralFromVarEntChangeProc(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure DummyFromVarEntChangeProc(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+begin
+end;
+procedure GeneralFromVarEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
 begin
      mp.MPType.CopyInstanceTo(pvardesk(pdata).data.Instance,pentitywithoffset);
 end;
-procedure GeneralFromPtrEntChangeProc(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GeneralFromPtrEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
 begin
      mp.MPType.CopyInstanceTo(pdata,pentitywithoffset);
 end;
-procedure GDBDoubleDiv2EntChangeProc(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GDBDoubleDiv2EntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
 var
     l1:GDBDouble;
 begin
      l1:=PGDBDouble(pvardesk(pdata).data.Instance)^/2;
-     GeneralFromPtrEntChangeProc(@l1,pentity,pentitywithoffset,mp);
+     GeneralFromPtrEntChangeProc(pu,@l1,pentity,pentitywithoffset,mp);
 end;
-procedure GDBDoubleCircumference2REntChangeProc(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GDBDoubleCircumference2REntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
 var
     l1:GDBDouble;
 begin
      l1:=PGDBDouble(pvardesk(pdata).data.Instance)^/(2*PI);
-     GeneralFromPtrEntChangeProc(@l1,pentity,pentitywithoffset,mp);
+     GeneralFromPtrEntChangeProc(pu,@l1,pentity,pentitywithoffset,mp);
 end;
-procedure GDBDoubleArcCircumferenceEntChangeProc(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GDBDoubleArcCircumferenceEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
 var
     l1:GDBDouble;
 begin
      l1:=PGDBDouble(pvardesk(pdata).data.Instance)^/PGDBObjArc(pentity).angle;
-     GeneralFromPtrEntChangeProc(@l1,pentity,@PGDBObjArc(pentity)^.R,mp);
+     GeneralFromPtrEntChangeProc(pu,@l1,pentity,@PGDBObjArc(pentity)^.R,mp);
 end;
 
-procedure GDBDoubleArea2REntChangeProc(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GDBDoubleArea2REntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
 var
     l1:GDBDouble;
 begin
      l1:=sqrt(PGDBDouble(pvardesk(pdata).data.Instance)^/PI);
-     GeneralFromPtrEntChangeProc(@l1,pentity,pentitywithoffset,mp);
+     GeneralFromPtrEntChangeProc(pu,@l1,pentity,pentitywithoffset,mp);
 end;
-procedure GDBDoubleDeltaEntChangeProc(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GDBDoubleDeltaEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
 var
     l1:GDBDouble;
 begin
      l1:=PGDBDouble(pentitywithoffset)^;
      inc(pentitywithoffset,sizeof(GDBVertex));
      l1:=l1+PGDBDouble(pvardesk(pdata).data.Instance)^;
-     GeneralFromPtrEntChangeProc(@l1,pentity,pentitywithoffset,mp);
+     GeneralFromPtrEntChangeProc(pu,@l1,pentity,pentitywithoffset,mp);
 end;
-procedure GDBDoubleLengthEntChangeProc(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GDBDoubleLengthEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
 var
     v1,v2:GDBVertex;
     l1:GDBDouble;
@@ -233,14 +234,14 @@ begin
   V2:=VertexMulOnSc(V2,d);
   PGDBVertex(pentitywithoffset)^:=VertexAdd(v1,v2);
 end;
-procedure GDBDoubleDeg2RadEntChangeProc(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GDBDoubleDeg2RadEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
 var
     l1:GDBDouble;
 begin
      l1:=PGDBDouble(pvardesk(pdata).data.Instance)^*pi/180;
-     GeneralFromPtrEntChangeProc(@l1,pentity,pentitywithoffset,mp);
+     GeneralFromPtrEntChangeProc(pu,@l1,pentity,pentitywithoffset,mp);
 end;
-procedure GDBDoubleArcArea2REntChangeProc(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GDBDoubleArcArea2REntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
 var
     l1:GDBDouble;
 begin
@@ -248,7 +249,7 @@ begin
         l1:=sqrt(PGDBDouble(pvardesk(pdata).data.Instance)^/(PGDBObjArc(pentity)^.angle/2-0.5*sin(PGDBObjArc(pentity)^.angle)))
      else
         l1:=sqrt(PGDBDouble(pvardesk(pdata).data.Instance)^/(PGDBObjArc(pentity)^.angle/2+0.5*sin(PGDBObjArc(pentity)^.angle)));
-     GeneralFromPtrEntChangeProc(@l1,pentity,@PGDBObjArc(pentity)^.R,mp);
+     GeneralFromPtrEntChangeProc(pu,@l1,pentity,@PGDBObjArc(pentity)^.R,mp);
 end;
 procedure GDBPolyLineLengthEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 var
@@ -403,7 +404,7 @@ begin
 
   {3DPolyline geometry}
   MultiPropertiesManager.RegisterMultiproperty('VertexCount','Vertex count',firstorder+1,sysunit.TypeName2PTD('TArrayIndex'),MPCGeometry,GDBPolyLineID,integer(@p3dpoly^.VertexArrayInOCS.Count),integer(@p3dpoly^.VertexArrayInOCS.Count),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,nil);
-  MultiPropertiesManager.RegisterMultiproperty('Vertex3DControl_','Vertex control',firstorder+1,sysunit.TypeName2PTD('TArrayIndex'),MPCGeometry,GDBPolyLineID,integer(@p3dpoly^.VertexArrayInWCS),integer(@p3dpoly^.VertexArrayInOCS),@GetVertex3DControlData,@FreeOneVarData,@PolylineVertex3DControlEntIterateProc,nil);
+  MultiPropertiesManager.RegisterMultiproperty('Vertex3DControl_','Vertex control',firstorder+1,sysunit.TypeName2PTD('TArrayIndex'),MPCGeometry,GDBPolyLineID,integer(@p3dpoly^.VertexArrayInWCS),integer(@p3dpoly^.VertexArrayInOCS),@GetVertex3DControlData,@FreeOneVarData,@PolylineVertex3DControlEntIterateProc,@PolylineVertex3DControlFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('Length','Length',firstorder+1,sysunit.TypeName2PTD('GDBDouble'),MPCGeometry,GDBPolyLineID,0,0,@GetOneVarData,@FreeOneVarData,@GDBPolyLineLengthEntIterateProc,nil);
   {--Misc}
   MultiPropertiesManager.RegisterMultiproperty('Closed','Closed',firstorder+1,sysunit.TypeName2PTD('GDBBoolean'),MPCMisc,GDBPolyLineID,integer(@p3dpoly^.Closed),integer(@p3dpoly^.Closed),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);

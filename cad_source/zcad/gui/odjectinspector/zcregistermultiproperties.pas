@@ -29,18 +29,10 @@ uses
   GDBEntity,
   gdbasetypes,
   Varman,
-  zcmultipropertiesutil,GDBCircle,GDBArc,GDBLine,GDBBlockInsert,GDBText,GDBMText,geometry,zcmultiproperties;
+  zcmultipropertiesutil,
+  GDBCircle,GDBArc,GDBLine,GDBBlockInsert,GDBText,GDBMText,GDBPolyLine,
+  geometry,zcmultiproperties;
 implementation
-procedure GDBDouble2SumEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
-var
-    l1,l2:double;
-begin
-     if @ecp=nil then PTOneVarData(pdata).PVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_RO;
-     if fistrun then
-                    mp.MPType.CopyInstanceTo(pentity,PTOneVarData(pdata).PVarDesc.data.Instance)
-                else
-                    PGDBDouble(PTOneVarData(pdata).PVarDesc.data.Instance)^:=PGDBDouble(PTOneVarData(pdata).PVarDesc.data.Instance)^+PGDBDouble(pentity)^;
-end;
 procedure GDBDoubleDeltaEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 var
     l1,l2:GDBDouble;
@@ -258,7 +250,20 @@ begin
         l1:=sqrt(PGDBDouble(pvardesk(pdata).data.Instance)^/(PGDBObjArc(pentity)^.angle/2+0.5*sin(PGDBObjArc(pentity)^.angle)));
      GeneralFromPtrEntChangeProc(@l1,pentity,@PGDBObjArc(pentity)^.R,mp);
 end;
-
+procedure GDBPolyLineLengthEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
+var
+    l1:GDBDouble;
+begin
+     l1:=PGDBObjPolyline(pentity).GetLength;
+     GeneralEntIterateProc(pdata,@l1,mp,fistrun,ecp);
+end;
+procedure GDBPolyLineSumLengthEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
+var
+    l1:GDBDouble;
+begin
+     l1:=PGDBObjPolyline(pentity).GetLength;
+     GDBDouble2SumEntIterateProc(pdata,@l1,mp,fistrun,ecp);
+end;
 
 procedure finalize;
 begin
@@ -272,6 +277,7 @@ const
      pblockinsert:PGDBObjBlockInsert=nil;
      ptext:PGDBObjText=nil;
      pmtext:PGDBObjMText=nil;
+     p3dpoly:PGDBObjPolyline=nil;
 begin
   {General section}
   MultiPropertiesManager.RegisterMultiproperty('Color','Color',firstorder,sysunit.TypeName2PTD('TGDBPaletteColor'),MPCGeneral,0,integer(@pent^.vp.Color),integer(@pent^.vp.Color),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
@@ -394,6 +400,16 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('Size','Size',firstorder+6,sysunit.TypeName2PTD('GDBDouble'),MPCMisc,GDBMTextID,integer(@pmtext^.textprop.size),integer(@pmtext^.textprop.size),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('Width','Width',firstorder+7,sysunit.TypeName2PTD('GDBDouble'),MPCMisc,GDBMTextID,integer(@pmtext^.width),integer(@pmtext^.width),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('LinespaceFactor','Linespace factor',firstorder+8,sysunit.TypeName2PTD('GDBDouble'),MPCMisc,GDBMTextID,integer(@pmtext^.linespacef),integer(@pmtext^.linespacef),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
+
+  {3DPolyline geometry}
+  MultiPropertiesManager.RegisterMultiproperty('VertexCount','Vertex count',firstorder+1,sysunit.TypeName2PTD('TArrayIndex'),MPCGeometry,GDBPolyLineID,integer(@p3dpoly^.VertexArrayInOCS.Count),integer(@p3dpoly^.VertexArrayInOCS.Count),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,nil);
+  MultiPropertiesManager.RegisterMultiproperty('Vertex3DControl_','Vertex control',firstorder+1,sysunit.TypeName2PTD('TArrayIndex'),MPCGeometry,GDBPolyLineID,integer(@p3dpoly^.VertexArrayInWCS),integer(@p3dpoly^.VertexArrayInOCS),@GetVertex3DControlData,@FreeOneVarData,@PolylineVertex3DControlEntIterateProc,nil);
+  MultiPropertiesManager.RegisterMultiproperty('Length','Length',firstorder+1,sysunit.TypeName2PTD('GDBDouble'),MPCGeometry,GDBPolyLineID,0,0,@GetOneVarData,@FreeOneVarData,@GDBPolyLineLengthEntIterateProc,nil);
+  {--Misc}
+  MultiPropertiesManager.RegisterMultiproperty('Closed','Closed',firstorder+1,sysunit.TypeName2PTD('GDBBoolean'),MPCMisc,GDBPolyLineID,integer(@p3dpoly^.Closed),integer(@p3dpoly^.Closed),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
+  {--Summary}
+  MultiPropertiesManager.RegisterMultiproperty('TotalVertexCount','Total vertex count',firstorder+1,sysunit.TypeName2PTD('TArrayIndex'),MPCSummary,GDBPolyLineID,integer(@p3dpoly^.VertexArrayInOCS.Count),integer(@p3dpoly^.VertexArrayInOCS.Count),@GetOneVarData,@FreeOneVarData,@TArrayIndex2SumEntIterateProc,nil);
+  MultiPropertiesManager.RegisterMultiproperty('TotalLength','Total length',firstorder,sysunit.TypeName2PTD('GDBDouble'),MPCSummary,GDBPolyLineID,0,0,@GetOneVarData,@FreeOneVarData,@GDBPolyLineSumLengthEntIterateProc,nil);
 
   MultiPropertiesManager.sort;
 end;

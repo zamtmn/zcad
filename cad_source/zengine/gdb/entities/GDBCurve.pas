@@ -65,6 +65,8 @@ GDBObjCurve={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  procedure InsertVertex(const PolyData:TPolyData);
                  procedure DeleteVertex(const PolyData:TPolyData);
+
+                 function GetLength:GDBDouble;virtual;
            end;
 {Export-}
 procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray;const closed:GDBBoolean);
@@ -346,6 +348,21 @@ begin
 
   snaparray.Shrink;
 end;
+function GDBObjCurve.GetLength:GDBDouble;
+var ptv,ptvprev: pgdbvertex;
+    ir:itrec;
+begin
+  result:=0;
+  ptvprev:=VertexArrayInWCS.beginiterate(ir);
+  ptv:=VertexArrayInWCS.iterate(ir);
+  if ptv<>nil then
+  repeat
+        result:=result+geometry.Vertexlength(ptv^,ptvprev^);
+        ptvprev:=ptv;
+        ptv:=VertexArrayInWCS.iterate(ir);
+  until ptv=nil;
+end;
+
 procedure GDBObjCurve.FormatWithoutSnapArray;
 var //i,j: GDBInteger;
     ptv,ptvprev: pgdbvertex;
@@ -354,7 +371,6 @@ var //i,j: GDBInteger;
         ir:itrec;
 begin
   //snaparray.clear;
-  length:=0;
   VertexArrayInWCS.clear;
   ptv:=VertexArrayInOCS.beginiterate(ir);
   if ptv<>nil then
@@ -364,16 +380,9 @@ begin
         ptv:=vertexarrayinocs.iterate(ir);
   until ptv=nil;
 
-  ptvprev:=VertexArrayInWCS.beginiterate(ir);
-  ptv:=VertexArrayInWCS.iterate(ir);
-  if ptv<>nil then
-  repeat
-        length:=length+geometry.Vertexlength(ptv^,ptvprev^);
-        ptvprev:=ptv;
-        ptv:=VertexArrayInWCS.iterate(ir);
-  until ptv=nil;
   VertexArrayInOCS.Shrink;
   VertexArrayInWCS.Shrink;
+  length:=GetLength;
 end;
 
 procedure GDBObjCurve.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);

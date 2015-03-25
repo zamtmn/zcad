@@ -327,6 +327,7 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
                          major,minor,release,build,revision:GDBInteger;
                          versionstring:GDBstring;
                      end;
+  PTArrayIndex=^TArrayIndex;
   TArrayIndex=GDBInteger;
 
   TPolyData=packed record

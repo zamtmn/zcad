@@ -34,6 +34,14 @@ type
   TOneVarData=record
                     PVarDesc:pvardesk;
               end;
+  PTVertex3DControlVarData=^TVertex3DControlVarData;
+  TVertex3DControlVarData=record
+                            PArrayIndexVarDesc,
+                            PXVarDesc,
+                            PYVarDesc,
+                            PZVarDesc:pvardesk;
+                            PGDBDTypeDesc:PUserTypeDescriptor;
+                          end;
 {Export+}
   {TMSType=(
            TMST_All(*'All entities'*),
@@ -127,6 +135,20 @@ begin
     pentity:=gdb.GetCurrentROOT.ObjArray.iterate(EntIterator);
   until pentity=nil;
 end;
+function ComparePropAndVarNames(pname,vname:GDBString):boolean;
+begin
+     if pname=vname then
+                        result:=true
+                     else
+                        begin
+                         if (pname[length(pname)]='_')and(pos(pname,vname)=1) then
+                                                                                  result:=true
+                                                                              else
+                                                                                  result:=false;
+                        end;
+
+end;
+
 procedure TMSEditor.SetMultiProperty(PSourceVD:pvardesk;NeededObjType:TObjID);
 var
   pentvarext: PTVariablesExtender;
@@ -149,7 +171,7 @@ begin
       for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
         if MultiPropertiesManager.MultiPropertyVector[i].usecounter<>0 then
         begin
-             if MultiPropertiesManager.MultiPropertyVector[i].MPName=PSourceVD^.name then
+             if ComparePropAndVarNames(MultiPropertiesManager.MultiPropertyVector[i].MPName,PSourceVD^.name) then
              begin
                   if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(pentity^.vp.ID,MultiPropertyDataForObjects)then
                   begin

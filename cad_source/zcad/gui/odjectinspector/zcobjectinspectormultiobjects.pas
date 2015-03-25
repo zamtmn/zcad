@@ -68,7 +68,7 @@ type
                 procedure CreateMultiPropertys;
 
                 procedure SetVariables(PSourceVD:pvardesk;NeededObjType:TObjID);
-                procedure SetMultiProperty(PSourceVD:pvardesk;NeededObjType:TObjID);
+                procedure SetMultiProperty(pu:PTObjectUnit;PSourceVD:pvardesk;NeededObjType:TObjID);
             end;
 {Export-}
 var
@@ -149,7 +149,7 @@ begin
 
 end;
 
-procedure TMSEditor.SetMultiProperty(PSourceVD:pvardesk;NeededObjType:TObjID);
+procedure TMSEditor.SetMultiProperty(pu:PTObjectUnit;PSourceVD:pvardesk;NeededObjType:TObjID);
 var
   pentvarext: PTVariablesExtender;
   EntIterator: itrec;
@@ -175,14 +175,14 @@ begin
              begin
                   if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(pentity^.vp.ID,MultiPropertyDataForObjects)then
                   begin
-                    MultiPropertyDataForObjects.EntChangeProc(PSourceVD,pentity,Pointer(PtrUInt(pentity)+MultiPropertyDataForObjects.SetValueOffset),MultiPropertiesManager.MultiPropertyVector[i]);
+                    MultiPropertyDataForObjects.EntChangeProc(pu,PSourceVD,pentity,Pointer(PtrUInt(pentity)+MultiPropertyDataForObjects.SetValueOffset),MultiPropertiesManager.MultiPropertyVector[i]);
                     pentity^.YouChanged(gdb.GetCurrentDWG^);
                     pentity.FormatEntity(gdb.GetCurrentDWG^,dc);
                   end
                   else
                       if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(0,MultiPropertyDataForObjects)then
                       begin
-                        MultiPropertyDataForObjects.EntChangeProc(PSourceVD,pentity,Pointer(PtrUInt(pentity)+MultiPropertyDataForObjects.SetValueOffset),MultiPropertiesManager.MultiPropertyVector[i]);
+                        MultiPropertyDataForObjects.EntChangeProc(pu,PSourceVD,pentity,Pointer(PtrUInt(pentity)+MultiPropertyDataForObjects.SetValueOffset),MultiPropertiesManager.MultiPropertyVector[i]);
                         pentity^.YouChanged(gdb.GetCurrentDWG^);
                         pentity.FormatEntity(gdb.GetCurrentDWG^,dc);
                       end;
@@ -217,7 +217,7 @@ begin
       pvd:=GeneralUnit.FindVariableByInstance(PFIELD);
       if pvd<>nil then
       begin
-         SetMultiProperty(pvd,GetObjType);
+         SetMultiProperty(@GeneralUnit,pvd,GetObjType);
          CreateMultiPropertys;
          exit;
       end;
@@ -225,7 +225,7 @@ begin
       pvd:=GeometryUnit.FindVariableByInstance(PFIELD);
       if pvd<>nil then
       begin
-         SetMultiProperty(pvd,GetObjType);
+         SetMultiProperty(@GeometryUnit,pvd,GetObjType);
          CreateMultiPropertys;
          exit;
       end;
@@ -233,7 +233,7 @@ begin
       pvd:=MiscUnit.FindVariableByInstance(PFIELD);
       if pvd<>nil then
       begin
-         SetMultiProperty(pvd,GetObjType);
+         SetMultiProperty(@MiscUnit,pvd,GetObjType);
          CreateMultiPropertys;
          exit;
       end;

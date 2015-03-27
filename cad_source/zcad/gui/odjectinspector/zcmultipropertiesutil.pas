@@ -38,7 +38,7 @@ function GetVertex3DControlData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 procedure FreeOneVarData(piteratedata:GDBPointer;mp:TMultiProperty);
 procedure GeneralEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 procedure PolylineVertex3DControlEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
-procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;const ChangedData:TChangedData;mp:TMultiProperty);
 procedure GDBDouble2SumEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 procedure TArrayIndex2SumEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 implementation
@@ -128,7 +128,7 @@ begin
                             PTVertex3DControlVarData(pdata).PZVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_different;
                     end;
 end;
-procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;const ChangedData:TChangedData;mp:TMultiProperty);
 var
    tv:PGDBVertex;
    v:GDBVertex;
@@ -140,7 +140,7 @@ begin
      else begin
        PGDBDTypeDesc:=SysUnit.TypeName2PTD('GDBDouble');
        pindex:=pu^.FindValue(mp.MPName);
-       tv:=PGDBObjPolyline(pentity).VertexArrayInWCS.getelement(pindex^);
+       tv:=PGDBObjPolyline(ChangedData.pentity).VertexArrayInWCS.getelement(pindex^);
        v:=tv^;
        if pvardesk(pdata).name=mp.MPName+'x' then
                                                  PGDBDTypeDesc.CopyInstanceTo(pvardesk(pdata).data.Instance,@v.x);
@@ -148,7 +148,7 @@ begin
                                                  PGDBDTypeDesc.CopyInstanceTo(pvardesk(pdata).data.Instance,@v.y);
        if pvardesk(pdata).name=mp.MPName+'z' then
                                                  PGDBDTypeDesc.CopyInstanceTo(pvardesk(pdata).data.Instance,@v.z);
-       tv:=PGDBPoint3dArray(pentitywithoffset).getelement(pindex^);
+       tv:=PGDBPoint3dArray(ChangedData.pentitywithoffset).getelement(pindex^);
        tv^:=v;
      end;
 end;

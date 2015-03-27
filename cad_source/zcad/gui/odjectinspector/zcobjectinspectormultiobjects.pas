@@ -148,6 +148,11 @@ begin
                         end;
 
 end;
+function CreateChangedData(pentity:pointer;GetVO,SetVO:GDBInteger):TChangedData;
+begin
+     result.pentity:=pentity;
+     result.pentitywithoffset:=Pointer(PtrUInt(pentity)+SetVO);
+end;
 
 procedure TMSEditor.SetMultiProperty(pu:PTObjectUnit;PSourceVD:pvardesk;NeededObjType:TObjID);
 var
@@ -159,6 +164,7 @@ var
   psd:PSelectedObjDesc;
   i:integer;
   MultiPropertyDataForObjects:TMultiPropertyDataForObjects;
+  ChangedData:TChangedData;
 begin
   PSourceVD.attrib:=PSourceVD.attrib and (not vda_different);
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
@@ -175,14 +181,16 @@ begin
              begin
                   if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(pentity^.vp.ID,MultiPropertyDataForObjects)then
                   begin
-                    MultiPropertyDataForObjects.EntChangeProc(pu,PSourceVD,pentity,Pointer(PtrUInt(pentity)+MultiPropertyDataForObjects.SetValueOffset),MultiPropertiesManager.MultiPropertyVector[i]);
+                    ChangedData:=CreateChangedData(pentity,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
+                    MultiPropertyDataForObjects.EntChangeProc(pu,PSourceVD,ChangedData,MultiPropertiesManager.MultiPropertyVector[i]);
                     pentity^.YouChanged(gdb.GetCurrentDWG^);
                     pentity.FormatEntity(gdb.GetCurrentDWG^,dc);
                   end
                   else
                       if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(0,MultiPropertyDataForObjects)then
                       begin
-                        MultiPropertyDataForObjects.EntChangeProc(pu,PSourceVD,pentity,Pointer(PtrUInt(pentity)+MultiPropertyDataForObjects.SetValueOffset),MultiPropertiesManager.MultiPropertyVector[i]);
+                        ChangedData:=CreateChangedData(pentity,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
+                        MultiPropertyDataForObjects.EntChangeProc(pu,PSourceVD,ChangedData,MultiPropertiesManager.MultiPropertyVector[i]);
                         pentity^.YouChanged(gdb.GetCurrentDWG^);
                         pentity.FormatEntity(gdb.GetCurrentDWG^,dc);
                       end;

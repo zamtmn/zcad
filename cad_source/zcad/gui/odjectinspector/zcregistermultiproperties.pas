@@ -155,101 +155,113 @@ begin
      l1:=PGDBDouble(pentity)^*180/pi;
      GeneralEntIterateProc(pdata,@l1,mp,fistrun,ecp);
 end;
-procedure DummyFromVarEntChangeProc(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure DummyFromVarEntChangeProc(pdata:GDBPointer;const ChangedData:TChangedData;mp:TMultiProperty);
 begin
 end;
-procedure GeneralFromVarEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GeneralFromVarEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;const ChangedData:TChangedData;mp:TMultiProperty);
 begin
-     mp.MPType.CopyInstanceTo(pvardesk(pdata).data.Instance,pentitywithoffset);
+     mp.MPType.CopyInstanceTo(pvardesk(pdata).data.Instance,ChangedData.pentitywithoffset);
 end;
-procedure GeneralFromPtrEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GeneralFromPtrEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;const ChangedData:TChangedData;mp:TMultiProperty);
 begin
-     mp.MPType.CopyInstanceTo(pdata,pentitywithoffset);
+     mp.MPType.CopyInstanceTo(pdata,ChangedData.pentitywithoffset);
 end;
-procedure GDBDoubleDiv2EntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GDBDoubleDiv2EntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;const ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:GDBDouble;
 begin
      l1:=PGDBDouble(pvardesk(pdata).data.Instance)^/2;
-     GeneralFromPtrEntChangeProc(pu,@l1,pentity,pentitywithoffset,mp);
+     GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
-procedure GDBDoubleCircumference2REntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GDBDoubleCircumference2REntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;const ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:GDBDouble;
 begin
      l1:=PGDBDouble(pvardesk(pdata).data.Instance)^/(2*PI);
-     GeneralFromPtrEntChangeProc(pu,@l1,pentity,pentitywithoffset,mp);
+     GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
-procedure GDBDoubleArcCircumferenceEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GDBDoubleArcCircumferenceEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;const ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:GDBDouble;
+    ChangedData2:TChangedData;
 begin
-     l1:=PGDBDouble(pvardesk(pdata).data.Instance)^/PGDBObjArc(pentity).angle;
-     GeneralFromPtrEntChangeProc(pu,@l1,pentity,@PGDBObjArc(pentity)^.R,mp);
+     l1:=PGDBDouble(pvardesk(pdata).data.Instance)^/PGDBObjArc(ChangedData.pentity).angle;
+     ChangedData2.pentity:=ChangedData.pentity;
+     ChangedData2.pentitywithoffset:=@PGDBObjArc(ChangedData.pentity)^.R;
+     GeneralFromPtrEntChangeProc(pu,@l1,ChangedData2,mp);
 end;
 
-procedure GDBDoubleArea2REntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GDBDoubleArea2REntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;const ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:GDBDouble;
 begin
      l1:=sqrt(PGDBDouble(pvardesk(pdata).data.Instance)^/PI);
-     GeneralFromPtrEntChangeProc(pu,@l1,pentity,pentitywithoffset,mp);
+     GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
-procedure GDBDoubleDeltaEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GDBDoubleDeltaEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;const ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:GDBDouble;
+    ChangedData2:TChangedData;
 begin
-     l1:=PGDBDouble(pentitywithoffset)^;
-     inc(pentitywithoffset,sizeof(GDBVertex));
+     ChangedData2:=ChangedData;
+     l1:=PGDBDouble(ChangedData2.pentitywithoffset)^;
+     inc(ChangedData2.pentitywithoffset,sizeof(GDBVertex));
      l1:=l1+PGDBDouble(pvardesk(pdata).data.Instance)^;
-     GeneralFromPtrEntChangeProc(pu,@l1,pentity,pentitywithoffset,mp);
+     GeneralFromPtrEntChangeProc(pu,@l1,ChangedData2,mp);
 end;
-procedure GDBDoubleLengthEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GDBDoubleLengthEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;const ChangedData:TChangedData;mp:TMultiProperty);
 var
     v1,v2:GDBVertex;
     l1:GDBDouble;
+    ChangedData2:TChangedData;
 begin
-     V1:=PGDBVertex(pentitywithoffset)^;
-     inc(pentitywithoffset,sizeof(GDBVertex));
-     V2:=PGDBVertex(pentitywithoffset)^;
+     ChangedData2:=ChangedData;
+     V1:=PGDBVertex(ChangedData2.pentitywithoffset)^;
+     inc(ChangedData2.pentitywithoffset,sizeof(GDBVertex));
+     V2:=PGDBVertex(ChangedData2.pentitywithoffset)^;
      l1:=PGDBDouble(pvardesk(pdata).data.Instance)^;
      V2:=VertexSub(V2,V1);
      V2:=normalizevertex(V2);
      V2:=VertexMulOnSc(V2,l1);
-     PGDBVertex(pentitywithoffset)^:=VertexAdd(v1,v2);
+     PGDBVertex(ChangedData2.pentitywithoffset)^:=VertexAdd(v1,v2);
 end;
-procedure GDBDoubleAngleEntChangeProc(pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GDBDoubleAngleEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;const ChangedData:TChangedData;mp:TMultiProperty);
 var
     v1,v2:GDBVertex;
     l1,d:GDBDouble;
+    ChangedData2:TChangedData;
 begin
-  V1:=PGDBVertex(pentitywithoffset)^;
-  inc(pentitywithoffset,sizeof(GDBVertex));
-  V2:=PGDBVertex(pentitywithoffset)^;
+  ChangedData2:=ChangedData;
+  V1:=PGDBVertex(ChangedData2.pentitywithoffset)^;
+  inc(ChangedData2.pentitywithoffset,sizeof(GDBVertex));
+  V2:=PGDBVertex(ChangedData2.pentitywithoffset)^;
   d:=vertexlength(v2,v1);
   l1:=PGDBDouble(pvardesk(pdata).data.Instance)^*pi/180;
   V2.x:=cos(l1);
   V2.y:=sin(l1);
   V2.z:=0;
   V2:=VertexMulOnSc(V2,d);
-  PGDBVertex(pentitywithoffset)^:=VertexAdd(v1,v2);
+  PGDBVertex(ChangedData2.pentitywithoffset)^:=VertexAdd(v1,v2);
 end;
-procedure GDBDoubleDeg2RadEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GDBDoubleDeg2RadEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;const ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:GDBDouble;
 begin
      l1:=PGDBDouble(pvardesk(pdata).data.Instance)^*pi/180;
-     GeneralFromPtrEntChangeProc(pu,@l1,pentity,pentitywithoffset,mp);
+     GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
-procedure GDBDoubleArcArea2REntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;pentity,pentitywithoffset:GDBPointer;mp:TMultiProperty);
+procedure GDBDoubleArcArea2REntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;const ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:GDBDouble;
+    ChangedData2:TChangedData;
 begin
-     if PGDBObjArc(pentity)^.angle<pi then
-        l1:=sqrt(PGDBDouble(pvardesk(pdata).data.Instance)^/(PGDBObjArc(pentity)^.angle/2-0.5*sin(PGDBObjArc(pentity)^.angle)))
+     ChangedData2.pentity:=ChangedData.pentity;
+     ChangedData2.pentitywithoffset:=@PGDBObjArc(ChangedData.pentity)^.R;
+     if PGDBObjArc(ChangedData.pentity)^.angle<pi then
+        l1:=sqrt(PGDBDouble(pvardesk(pdata).data.Instance)^/(PGDBObjArc(ChangedData.pentity)^.angle/2-0.5*sin(PGDBObjArc(ChangedData.pentity)^.angle)))
      else
-        l1:=sqrt(PGDBDouble(pvardesk(pdata).data.Instance)^/(PGDBObjArc(pentity)^.angle/2+0.5*sin(PGDBObjArc(pentity)^.angle)));
-     GeneralFromPtrEntChangeProc(pu,@l1,pentity,@PGDBObjArc(pentity)^.R,mp);
+        l1:=sqrt(PGDBDouble(pvardesk(pdata).data.Instance)^/(PGDBObjArc(ChangedData.pentity)^.angle/2+0.5*sin(PGDBObjArc(ChangedData.pentity)^.angle)));
+     GeneralFromPtrEntChangeProc(pu,@l1,ChangedData2,mp);
 end;
 procedure GDBPolyLineLengthEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 var

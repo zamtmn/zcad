@@ -151,7 +151,8 @@ end;
 function CreateChangedData(pentity:pointer;GetVO,SetVO:GDBInteger):TChangedData;
 begin
      result.pentity:=pentity;
-     result.pentitywithoffset:=Pointer(PtrUInt(pentity)+SetVO);
+     result.PGetDataInEtity:=Pointer(PtrUInt(pentity)+GetVO);
+     result.PSetDataInEtity:=Pointer(PtrUInt(pentity)+SetVO);
 end;
 
 procedure TMSEditor.SetMultiProperty(pu:PTObjectUnit;PSourceVD:pvardesk;NeededObjType:TObjID);
@@ -317,6 +318,7 @@ var
     pv:pGDBObjEntity;
     ir:itrec;
     fistrun:boolean;
+    ChangedData:TChangedData;
 begin
   for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
     if MultiPropertiesManager.MultiPropertyVector[i].usecounter<>0 then
@@ -346,13 +348,15 @@ begin
              begin
                   if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue({NeedObjID}pv^.vp.ID,MultiPropertyDataForObjects)then
                   begin
-                    MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,Pointer(PtrUInt(pv)+MultiPropertyDataForObjects.GetValueOffset),MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc);
+                    ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
+                    MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData,MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc);
                     fistrun:=false;
                   end
                   else
                       if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(0,MultiPropertyDataForObjects)then
                       begin
-                        MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,Pointer(PtrUInt(pv)+MultiPropertyDataForObjects.GetValueOffset),MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc);
+                        ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
+                        MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData,MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc);
                         fistrun:=false;
                       end;
              end;

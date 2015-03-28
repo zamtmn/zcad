@@ -36,11 +36,11 @@ const
 function GetOneVarData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 function GetVertex3DControlData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 procedure FreeOneVarData(piteratedata:GDBPointer;mp:TMultiProperty);
-procedure GeneralEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
-procedure PolylineVertex3DControlEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
-procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;const ChangedData:TChangedData;mp:TMultiProperty);
-procedure GDBDouble2SumEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
-procedure TArrayIndex2SumEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
+procedure GeneralEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
+procedure PolylineVertex3DControlEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
+procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty);
+procedure GDBDouble2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
+procedure TArrayIndex2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 implementation
 var
    Vertex3DControl:TArrayIndex=0;
@@ -97,7 +97,7 @@ begin
     GDBFreeMem(piteratedata);
 end;
 
-procedure PolylineVertex3DControlEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
+procedure PolylineVertex3DControlEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 var
    tv:PGDBVertex;
    cc:TArrayIndex;
@@ -108,10 +108,10 @@ begin
                           PTVertex3DControlVarData(pdata).PYVarDesc.attrib:=PTVertex3DControlVarData(pdata).PYVarDesc.attrib or vda_RO;
                           PTVertex3DControlVarData(pdata).PZVarDesc.attrib:=PTVertex3DControlVarData(pdata).PZVarDesc.attrib or vda_RO;
                      end;
-     cc:=PGDBPoint3dArray(pentity).Count-1;
+     cc:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).Count-1;
      if cc<PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^ then //смена индекса находу может вызвать неверный vda_different, начали сравнивать с однимм числом, продолжили с другим
                                                                                                PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^:=cc;
-     tv:=PGDBPoint3dArray(pentity).getelement(PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^);
+     tv:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).getelement(PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^);
      if fistrun then
                     begin
                          PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.x,PTVertex3DControlVarData(pdata).PXVarDesc.data.Instance);
@@ -128,7 +128,7 @@ begin
                             PTVertex3DControlVarData(pdata).PZVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_different;
                     end;
 end;
-procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;const ChangedData:TChangedData;mp:TMultiProperty);
+procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty);
 var
    tv:PGDBVertex;
    v:GDBVertex;
@@ -148,12 +148,12 @@ begin
                                                  PGDBDTypeDesc.CopyInstanceTo(pvardesk(pdata).data.Instance,@v.y);
        if pvardesk(pdata).name=mp.MPName+'z' then
                                                  PGDBDTypeDesc.CopyInstanceTo(pvardesk(pdata).data.Instance,@v.z);
-       tv:=PGDBPoint3dArray(ChangedData.pentitywithoffset).getelement(pindex^);
+       tv:=PGDBPoint3dArray(ChangedData.PSetDataInEtity).getelement(pindex^);
        tv^:=v;
      end;
 end;
 
-procedure GeneralEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
+procedure GeneralEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 {
 общая процедура копирования значения в мультипроперти
 pdata - указатель на структуру созданную GetOneVarData или аналогичной прцедурой
@@ -165,16 +165,16 @@ ecp - указатель на процедуру копирования знач
 begin
      if @ecp=nil then PTOneVarData(pdata).PVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_RO;
      if fistrun then
-                    mp.MPType.CopyInstanceTo(pentity,PTOneVarData(pdata).PVarDesc.data.Instance)
+                    mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PTOneVarData(pdata).PVarDesc.data.Instance)
                 else
                     begin
-                         if mp.MPType.Compare(pentity,PTOneVarData(pdata).PVarDesc.data.Instance)<>CREqual then
+                         if mp.MPType.Compare(ChangedData.PGetDataInEtity,PTOneVarData(pdata).PVarDesc.data.Instance)<>CREqual then
                          //if IsDoubleNotEqual(PGDBDouble(pentity)^,PGDBDouble(PTOneVarData(pdata).PVarDesc.data.Instance)^) then
                          PTOneVarData(pdata).PVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_different;
                     end;
 end;
 
-procedure GDBDouble2SumEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
+procedure GDBDouble2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 {
 процедура суммирования GDBDouble значения в мультипроперти
 pdata - указатель на структуру созданную GetOneVarData или аналогичной прцедурой
@@ -186,11 +186,11 @@ ecp - указатель на процедуру копирования знач
 begin
      if @ecp=nil then PTOneVarData(pdata).PVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_RO;
      if fistrun then
-                    mp.MPType.CopyInstanceTo(pentity,PTOneVarData(pdata).PVarDesc.data.Instance)
+                    mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PTOneVarData(pdata).PVarDesc.data.Instance)
                 else
-                    PGDBDouble(PTOneVarData(pdata).PVarDesc.data.Instance)^:=PGDBDouble(PTOneVarData(pdata).PVarDesc.data.Instance)^+PGDBDouble(pentity)^;
+                    PGDBDouble(PTOneVarData(pdata).PVarDesc.data.Instance)^:=PGDBDouble(PTOneVarData(pdata).PVarDesc.data.Instance)^+PGDBDouble(ChangedData.PGetDataInEtity)^;
 end;
-procedure TArrayIndex2SumEntIterateProc(pdata:GDBPointer;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
+procedure TArrayIndex2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 {
 процедура суммирования TArrayIndex значения в мультипроперти
 pdata - указатель на структуру созданную GetOneVarData или аналогичной прцедурой
@@ -202,9 +202,9 @@ ecp - указатель на процедуру копирования знач
 begin
      if @ecp=nil then PTOneVarData(pdata).PVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_RO;
      if fistrun then
-                    mp.MPType.CopyInstanceTo(pentity,PTOneVarData(pdata).PVarDesc.data.Instance)
+                    mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PTOneVarData(pdata).PVarDesc.data.Instance)
                 else
-                    PTArrayIndex(PTOneVarData(pdata).PVarDesc.data.Instance)^:=PTArrayIndex(PTOneVarData(pdata).PVarDesc.data.Instance)^+PTArrayIndex(pentity)^;
+                    PTArrayIndex(PTOneVarData(pdata).PVarDesc.data.Instance)^:=PTArrayIndex(PTOneVarData(pdata).PVarDesc.data.Instance)^+PTArrayIndex(ChangedData.PGetDataInEtity)^;
 end;
 
 initialization

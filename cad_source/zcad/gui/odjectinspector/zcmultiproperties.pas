@@ -30,13 +30,15 @@ type
   TMultiProperty=class;
   TMultiPropertyCategory=(MPCGeneral,MPCGeometry,MPCMisc,MPCSummary);
   TChangedData=record
-                     pentity,pentitywithoffset:GDBPointer
+                     PEntity,
+                     PGetDataInEtity:GDBPointer;
+                     PSetDataInEtity:GDBPointer;
                end;
 
   TBeforeIterateProc=function(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
   TAfterIterateProc=procedure(piteratedata:GDBPointer;mp:TMultiProperty);
-  TEntChangeProc=procedure(pu:PTObjectUnit;pdata:GDBPointer;const ChangedData:TChangedData;mp:TMultiProperty);
-  TEntIterateProc=procedure(pvd:pvardesk;pentity:GDBPointer;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
+  TEntChangeProc=procedure(pu:PTObjectUnit;pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty);
+  TEntIterateProc=procedure(pvd:pvardesk;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
   TMultiPropertyDataForObjects=record
                                      GetValueOffset,SetValueOffset:GDBInteger;
                                      EntIterateProc:TEntIterateProc;

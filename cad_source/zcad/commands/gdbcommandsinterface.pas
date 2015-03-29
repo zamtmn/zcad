@@ -525,6 +525,8 @@ begin
                                  begin
                                  CWindow.Show;
                                  CWindow.SetFocus;
+                                 CWMemo.SelStart:=Length(CWMemo.Lines.Text)-1;
+                                 //CWMemo.SelLength:=2;
                                  end;
   result:=cmd_ok;
 end;

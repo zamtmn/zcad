@@ -1746,7 +1746,10 @@ begin
                     redrawoglwnd;}
               end;
            GDB.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-     end;
+           historyoutstr(rscmNewBasePoint);
+     end
+       else
+         historyoutstr(rsClipboardIsEmpty);
 (*    res:=OpenClipboard(mainformn.handle);
     if res then
     begin

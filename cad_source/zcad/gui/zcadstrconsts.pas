@@ -112,6 +112,7 @@ resourcestring
   rscmCommandOnlyCTXMenu='The command works only from context menu';
 
   {messages}
+  rsClipboardIsEmpty='Clipboard is empty, there is nothing to paste';
   rsNotYetImplemented='Not yet implemented';
   rsLayerDefpaontsCanNotBePrinted='Layer DEFPOINTS can not be printed';
   rsLayerUsedIn='Layer "%s" used in: %d-model, %d-blockdef table';

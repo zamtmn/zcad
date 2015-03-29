@@ -92,20 +92,19 @@ var p:PGDBPolyVertex3D;
     counter,lines,points:GDBInteger;
     i:GDBInteger;
     v1,v2:gdbvertex;
-    emptycount:GDBInteger;
+    emptycount,fullycount:GDBInteger;
     //d:GDBDouble;
     //ptpv0,ptpv1:PGDBPolyVertex3D;
     subresult:TInRect;
 begin
+  result:=IREmpty;
   if count<2 then
-                 begin
-                      result:=IREmpty;
-                      exit;
-                 end;
+                 exit;
   p:=parray;
   counter:=0;
   points:=-1;
   emptycount:=0;
+  fullycount:=0;
   for i:=0 to count-1 do
   begin
      if counter<=0
@@ -146,11 +145,15 @@ begin
                                        result:=IRPartially;
                                        exit;
                                   end;
-     if (subresult=IRFully)and(emptycount>0) then
-                                  begin
-                                       result:=IRPartially;
-                                       exit;
-                                  end;
+     if (subresult=IRFully)then
+                               begin
+                                  if emptycount>0 then
+                                                      begin
+                                                           result:=IRPartially;
+                                                           exit;
+                                                      end;
+                                  inc(fullycount);
+                               end;
 
 
      if lines=1 then
@@ -166,10 +169,12 @@ begin
                             points:=-1;
                        end;
   end;
-     if emptycount=0 then
-                       result:=IRFully
-                     else
-                       result:=IREmpty;
+     if (fullycount>0)and(emptycount=0) then
+                                            result:=IRFully
+else if (fullycount>0)and(emptycount>0) then
+                                            result:=IRPartially;
+                     {else
+                       result:=IREmpty;}
 end;
 constructor GDBPolyPoint3DArray.init;
 begin

@@ -102,6 +102,9 @@ begin
     HistoryLine.SelStart:=utflen;
     HistoryLine.SelLength:=2;
 
+    CWMemo.SelStart:=utflen;
+    CWMemo.SelLength:=2;
+
     //cline.HistoryLine.Invalidate;
     //application.ProcessMessages;
 

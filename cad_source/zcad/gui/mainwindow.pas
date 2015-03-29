@@ -2306,7 +2306,7 @@ var
 begin
    TMethod(OldFunction).code:=@TForm.IsShortcut;
    TMethod(OldFunction).Data:=self;
-   result:=IsZShortcut(Message,ActiveControl,cmdedit,OldFunction);
+   result:=IsZShortcut(Message,Screen.ActiveControl,cmdedit,OldFunction);
 end;
 
 procedure MainForm.myKeyPress(Sender: TObject; var Key: Word; Shift: TShiftState);

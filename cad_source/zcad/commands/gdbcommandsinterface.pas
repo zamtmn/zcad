@@ -522,7 +522,10 @@ begin
   if CWMemo.IsVisible then
                                  CWindow.Hide
                              else
+                                 begin
                                  CWindow.Show;
+                                 CWindow.SetFocus;
+                                 end;
   result:=cmd_ok;
 end;
 function SetObjInsp_com(operands:TCommandOperands):TCommandResult;

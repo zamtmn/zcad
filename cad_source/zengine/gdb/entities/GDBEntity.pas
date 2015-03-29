@@ -201,6 +201,7 @@ begin
   toObj.vp.LineTypeScale:=vp.LineTypeScale;
   toObj.vp.color:=vp.color;
   toObj.vp.Layer:=vp.Layer;
+  toObj.vp.LineWeight:=vp.LineWeight;
 end;
 
 procedure GDBObjEntity.correctsublayers(var la:GDBLayerArray);

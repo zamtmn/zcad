@@ -550,7 +550,7 @@ begin
           pdwg:=gdb.GetCurrentDWG;
           player:=(Item.Data);
           countlayer(player,inent,inblock);
-          LayerDescLabel.Caption:=Format(rsLayerUsedIn,[player^.Name,inent,inblock]);
+          LayerDescLabel.Caption:=Format(rsLayerUsedIn,[Tria_AnsiToUtf8(player^.Name),inent,inblock]);
      end;
 end;
 

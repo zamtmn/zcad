@@ -731,6 +731,16 @@ begin
      MarkLine.done;
      tbl.done;
 end;
+function AllocElLeader:PGDBObjElLeader;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocElLeader}',{$ENDIF}result,sizeof(GDBObjElLeader));
+end;
+function AllocAndInitElLeader(owner:PGDBObjGenericWithSubordinated):PGDBObjElLeader;
+begin
+  result:=AllocElLeader;
+  result.initnul{(owner)};
+  result.bp.ListPos.Owner:=owner;
+end;
 function UpgradeLine2Leader(ptu:PTUnit;pent:PGDBObjLine;const drawing:TDrawingDef):PGDBObjElLeader;
 var
    pvi:pvardesk;
@@ -762,5 +772,6 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBElLeader.initialization');{$ENDIF}
+  RegisterEntity(GDBElLeaderID,'Leader',@AllocElLeader,@AllocAndInitElLeader);
   RegisterEntityUpgradeInfo(GDBLineID,UD_LineToLeader,@UpgradeLine2Leader);
 end.

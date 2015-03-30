@@ -186,9 +186,12 @@ begin
                    if pvindb<>nil then
                    begin
                         pfd:=PRecordDescriptor(pvindb^.data.PTD)^.FindField('Variants');
+                        if pfd<>nil then
+                        begin
                         pf:=pv.data.Instance+pfd.Offset;
                         pfindb:=pvindb.data.Instance+pfd.Offset;
                         pf^:=pfindb^;
+                        end;
                    end;
               end;
               pv:=pu.InterfaceVariables.vardescarray.iterate(ir);

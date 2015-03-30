@@ -2895,7 +2895,11 @@ begin
                                                                                       objcount:=1;
   if Sender.param.SelDesc.Selectedobjcount>objcount then
     begin
-       commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',Sender.pdwg,@Sender.param);
+       if gdb.GetCurrentDWG.SelObjArray.Count>0 then
+                                                    commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',Sender.pdwg,@Sender.param)
+                                                else
+                                                    If assigned(ReturnToDefaultProc)then
+                                                                                        ReturnToDefaultProc;
     end
   else
   begin

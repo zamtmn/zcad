@@ -174,6 +174,8 @@ begin
      ppd^.ValType:=valtype;
      ppd^.ValKey:=valkey;
      ppd^.PTypeManager:=@self;
+     ppd^.Decorators:=Decorators;
+     ppd^.FastEditor:=FastEditor;
      ppd^.Attr:=ownerattrib;
      ppd^.Collapsed:=PCollapsed;
      ppd^.valueAddres:=addr;

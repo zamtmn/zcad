@@ -43,6 +43,12 @@ type
     END;
 
 procedure DecorateSysTypes;
+procedure AddFastEditorToType(tn:string;GetPrefferedFastEditorSize:TGetPrefferedFastEditorSize;
+                                        DrawFastEditor:TDrawFastEditor;
+                                        RunFastEditor:TRunFastEditor;
+                                        _UndoInsideFastEditor:GDBBoolean=false);
+procedure ButtonHLineDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
+function ButtonGetPrefferedFastEditorSize(PInstance:GDBPointer):TSize;
 implementation
 uses
   mainwindow;

@@ -216,6 +216,7 @@ function ObjOrRecordRead(var f: GDBOpenArrayOfByte; var line,GDBStringtypearray:
 function GetPVarMan: GDBPointer; export;
 //function getpsysvar: GDBPointer; export;
 function FindCategory(category:GDBString;var catname:GDBString):Pointer;
+procedure SetCategoryCollapsed(category:GDBString;value:GDBBoolean);
 function GetBoundsFromSavedUnit(name:string):Trect;
 procedure StoreBoundsToSavedUnit(name:string;tr:Trect);
 procedure SetTypedDataVariable(out TypedTataVariable:TTypedData;pTypedTata:pointer;TypeName:string);
@@ -1541,8 +1542,7 @@ begin
 end;
 function FindCategory(category:GDBString;var catname:GDBString):Pointer;
 var
-   ps{,pspred}:pgdbstring;
-//   s:gdbstring;
+   ps:pgdbstring;
    ir:itrec;
 begin
      result:=CategoryCollapsed.parray;
@@ -1563,6 +1563,16 @@ begin
      result:=@CategoryUnknownCOllapsed;
      catname:=category;
 end;
+procedure SetCategoryCollapsed(category:GDBString;value:GDBBoolean);
+var
+  cn:GDBString;
+  pc:PGDBBoolean;
+begin
+     pc:=FindCategory(category,cn);
+     if pc<>@CategoryUnknownCOllapsed then
+                                          pc^:=value;
+end;
+
 initialization;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('varman.initialization');{$ENDIF}

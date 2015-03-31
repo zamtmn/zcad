@@ -242,6 +242,9 @@ initialization;
   PRecordDescriptor(sysunit.TypeName2PTD('TMSEditor'))^.FindField('GeometryUnit')^.Collapsed:=false;
   PRecordDescriptor(sysunit.TypeName2PTD('TMSEditor'))^.FindField('MiscUnit')^.Collapsed:=false;
   PRecordDescriptor(sysunit.TypeName2PTD('TMSEditor'))^.FindField('SummaryUnit')^.Collapsed:=false;
+  SetCategoryCollapsed('NMO',false);
+  SetCategoryCollapsed('GC',false);
+  SetCategoryCollapsed('CABLE',false);
   end;
   programlog.logoutstr('urtl.initialization  {end}',lp_DecPos);
 

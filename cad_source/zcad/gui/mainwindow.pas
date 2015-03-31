@@ -2904,7 +2904,7 @@ begin
   else
   begin
   if assigned(SysVar.DWG.DWG_SelectedObjToInsp)then
-  if (Sender.param.SelDesc.LastSelectedObject <> nil)and SysVar.DWG.DWG_SelectedObjToInsp^ then
+  if (Sender.param.SelDesc.LastSelectedObject <> nil)and(SysVar.DWG.DWG_SelectedObjToInsp^)and(Sender.param.SelDesc.Selectedobjcount>0) then
   begin
        tn:=PGDBObjEntity(Sender.param.SelDesc.LastSelectedObject)^.GetObjTypeName;
        ptype:=SysUnit.TypeName2PTD(tn);

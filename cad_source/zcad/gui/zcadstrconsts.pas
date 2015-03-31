@@ -97,6 +97,7 @@ resourcestring
   rscmOptions2OI='Options are available in the Object Inspector';
   rscmSelOrSpecEntity='Select or specify the parameters entity!';
   rscmNEntitiesProcessed='%s entities processed';
+  rscmNEntitiesDeselected='%d entities deselected';
 
   rscmNoBlocksOrDevices='No selected blocks or devices';
   rscmNoBlockDefInDWG='No BlockDef "%s" in the drawing';

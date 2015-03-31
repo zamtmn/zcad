@@ -360,6 +360,8 @@ var PFD:PFieldDescriptor;
     category:gdbstring;
     oldppda:PTPropertyDeskriptorArray;
     recreateunitvars:boolean;
+    SaveDecorators:TDecoratedProcs;
+    SaveFastEditor:TFastEditorProcs;
 begin
      {$IFDEF TOTALYLOG}programlog.LogOutStr('RecordDescriptor.CreateProperties('+name+')'+inttostr(bmode),lp_IncPos);{$ENDIF}
 
@@ -483,9 +485,15 @@ begin
                            tname:=pfd^.base.ProgramName;
            if tname='PTDimStyleDXFLoadingData' then
                                    tname:=tname;
-           if (pfd^.base.PFT^.TypeName='TEnumData') then
+           if (pfd^.base.PFT^.GetFactTypedef^.TypeName='TEnumData') then
                        begin
-                            GDBEnumDataDescriptorObj.CreateProperties(PDM_Field,PPDA,{ppd^.Name}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,addr,'','')
+                            SaveDecorators:=GDBEnumDataDescriptorObj.Decorators;
+                            SaveFastEditor:=GDBEnumDataDescriptorObj.FastEditor;
+                            GDBEnumDataDescriptorObj.Decorators:=pfd^.base.PFT^.Decorators;
+                            GDBEnumDataDescriptorObj.FastEditor:=pfd^.base.PFT^.FastEditor;
+                            GDBEnumDataDescriptorObj.CreateProperties(PDM_Field,PPDA,{ppd^.Name}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,addr,'','');
+                            GDBEnumDataDescriptorObj.Decorators:=SaveDecorators;
+                            GDBEnumDataDescriptorObj.FastEditor:=SaveFastEditor;
                        end
                    else
            (*if (pfd^.PFT^.TypeName='TObjectUnit') then
@@ -546,7 +554,7 @@ begin
                                            end
                    else
                    begin
-                   if (pfd^.base.PFT^.TypeName='TTypedData') or
+                   if (pfd^.base.PFT^.GetFactTypedef^.TypeName='TTypedData') or
                       (pfd^.base.PFT^.TypeName='TFaceTypedData') then
                                                           Begin
                                                                tb:={PTTypedData(addr)^.Instance}addr;

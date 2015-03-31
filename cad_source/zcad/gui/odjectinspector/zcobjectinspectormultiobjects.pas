@@ -48,8 +48,9 @@ type
            TMST_Devices(*'Devices'*),
            TMST_Cables(*'Cables'*)
           );}
+  TMSPrimitiveDetector=TEnumData;
   TMSEditor={$IFNDEF DELPHI}packed{$ENDIF} object(TWrapper2ObjInsp)
-                TxtEntType:TEnumData;(*'Process primitives'*)
+                TxtEntType:TMSPrimitiveDetector;(*'Process primitives'*)
                 VariablesUnit:TObjectUnit;(*'Variables'*)
                 GeneralUnit:TObjectUnit;(*'General'*)
                 GeometryUnit:TObjectUnit;(*'Geometry'*)
@@ -60,7 +61,7 @@ type
                 procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
                 procedure CreateUnit(_GetEntsTypes:boolean=true);virtual;
                 procedure GetEntsTypes;virtual;
-                function GetObjType:GDBWord;virtual;
+                function GetObjType:TObjID;virtual;
                 constructor init;
                 destructor done;virtual;
 
@@ -74,7 +75,7 @@ type
 var
    MSEditor:TMSEditor;
 implementation
-uses UGDBSelectedObjArray;
+uses mainwindow,zcobjectinspectordecorations,UGDBSelectedObjArray;
 constructor  TMSEditor.init;
 begin
      VariablesUnit.init('VariablesUnit');
@@ -248,7 +249,7 @@ begin
       end;
 
 end;
-function TMSEditor.GetObjType:GDBWord;
+function TMSEditor.GetObjType:TObjID;
 begin
      {case EntType of
                     TMST_All:result:=0;
@@ -484,6 +485,52 @@ begin
      psd:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
      until psd=nil;
 end;
+procedure DeselectEnts(PInstance:GDBPointer);
+var
+    NeededObjType:TObjID;
+    pv:pGDBObjEntity;
+    ir:itrec;
+    count:integer;
+    psd:PSelectedObjDesc;
+begin
+    NeededObjType:=MSEditor.GetObjType;
+    count:=0;
+    pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+    if pv<>nil then
+    repeat
+      if pv^.Selected then
+      if (NeededObjType=0)or(pv^.vp.ID=NeededObjType)then
+      begin
+           inc(count);
+           pv^.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+      end;
+      pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+    until pv=nil;
+    shared.HistoryOutStr(sysutils.Format(rscmNEntitiesDeselected,[count]));
+    if count>0 then
+                   MainFormN.waSetObjInsp(gdb.GetCurrentDWG.wa);
+
+    {pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+    if pv<>nil then
+    repeat
+      if NeededObjType
+      inc(count);
+    pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+    until pv=nil;
+
+
+    pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+    if pv<>nil then
+    repeat
+          if count>10000 then
+                             pv^.SelectQuik//:=true
+                         else
+                             pv^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+
+    pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+    until pv=nil;}
+end;
+
 procedure finalize;
 begin
      MSEditor.done;
@@ -491,6 +538,7 @@ end;
 procedure startup;
 begin
   MSEditor.init;
+  AddFastEditorToType('TMSPrimitiveDetector',@ButtonGetPrefferedFastEditorSize,@ButtonHLineDrawFastEditor,@DeselectEnts,true);
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('zcobjectinspectormultiobjects.initialization');{$ENDIF}

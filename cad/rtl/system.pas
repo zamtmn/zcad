@@ -331,6 +331,7 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
                          major,minor,release,build,revision:GDBInteger;
                          versionstring:GDBstring;
                      end;
+  PTArrayIndex=^TArrayIndex;
   TArrayIndex=GDBInteger;
   TPolyData=packed record
                   nearestvertex:gdbinteger;
@@ -2596,6 +2597,7 @@ GDBObjCurve={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
                  procedure InsertVertex(const PolyData:TPolyData);
                  procedure DeleteVertex(const PolyData:TPolyData);
+                 function GetLength:GDBDouble;virtual;abstract;
            end;
 //Generate on E:\zcad\cad_source\zengine\gdb\entities\GDBPolyLine.pas
 PGDBObjPolyline=^GDBObjPolyline;
@@ -3528,8 +3530,9 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
            TMST_Devices(*'Devices'*),
            TMST_Cables(*'Cables'*)
           );}
+  TMSPrimitiveDetector=TEnumData;
   TMSEditor={$IFNDEF DELPHI}packed{$ENDIF} object(TWrapper2ObjInsp)
-                TxtEntType:TEnumData;(*'Process primitives'*)
+                TxtEntType:TMSPrimitiveDetector;(*'Process primitives'*)
                 VariablesUnit:TObjectUnit;(*'Variables'*)
                 GeneralUnit:TObjectUnit;(*'General'*)
                 GeometryUnit:TObjectUnit;(*'Geometry'*)
@@ -3546,7 +3549,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                 procedure CheckMultiPropertyUse;
                 procedure CreateMultiPropertys;
                 procedure SetVariables(PSourceVD:pvardesk;NeededObjType:TObjID);
-                procedure SetMultiProperty(PSourceVD:pvardesk;NeededObjType:TObjID);
+                procedure SetMultiProperty(pu:PTObjectUnit;PSourceVD:pvardesk;NeededObjType:TObjID);
             end;
 //Generate on E:\zcad\cad_source\zcad\electroteh\GDBCommandsOPS.pas
   TInsertType=(

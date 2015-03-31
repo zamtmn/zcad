@@ -27,7 +27,7 @@ uses
     LCLIntf,LCLType,Classes,Controls,
     geometry,uzglabstractdrawer,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase,GDBCamera;
 const
-  texturesize=256;
+  texturesize=128;
 type
 TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         myscrbuf:tmyscrbuf;

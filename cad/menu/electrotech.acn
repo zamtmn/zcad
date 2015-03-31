@@ -15,3 +15,5 @@ action ACN_PROCESSKZ,EL_ExternalKZ,autocable.bmp,,,
 action ACN_REMAUTOCABLES,EL_AutoGen_Cable_Remove,removeautocable.bmp,,,
 
 action ACN_KIPCDBUILD,KIP_CDBuild,#CDB,Connection diagram,,
+
+action ACN_REGENZENTS,RegenZEnts,#RZ,Regenerate zcad entities,,

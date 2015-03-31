@@ -10,7 +10,7 @@ unit GDBCommandsElectrical;
 
 interface
 uses
-  enitiesextendervariables,gdbdrawcontext,ugdbdrawing,zcadvariablesutils,GDBAbstractText,zcadstrconsts,UGDBSelectedObjArray,gdbentityfactory,zcadsysvars,csvdocument,
+  UGDBDrawingdef,enitiesextendervariables,gdbdrawcontext,ugdbdrawing,zcadvariablesutils,GDBAbstractText,zcadstrconsts,UGDBSelectedObjArray,gdbentityfactory,zcadsysvars,csvdocument,
   UGDBOpenArrayOfPV,GDBBlockInsert,devices,UGDBTree,ugdbdescriptor,gdbasetypes,commandline,GDBCommandsDraw,GDBElLeader,
   plugins,
   commandlinedef,
@@ -3184,12 +3184,46 @@ begin
      result:=cmd_ok;
 end;
 
+function RegenZEnts_com(operands:TCommandOperands):TCommandResult;
+var
+    pv:pGDBObjEntity;
+        ir:itrec;
+    drawing:PTDrawingDef;
+    DC:TDrawContext;
+begin
+  if assigned(StartLongProcessProc) then StartLongProcessProc(gdb.GetCurrentROOT.ObjArray.count,'Regenerate ZCAD entities');
+  drawing:=gdb.GetCurrentDwg;
+  dc:=gdb.GetCurrentDwg^.CreateDrawingRC;
+  pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pv<>nil then
+  repeat
+    if (pv^.vp.ID>=GDBZCadEntsMinID)and(pv^.vp.ID<=GDBZCadEntsMaxID)then
+                                                                        pv^.FormatEntity(drawing^,dc);
+  pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+  if assigned(ProcessLongProcessProc) then ProcessLongProcessProc(ir.itc);
+  until pv=nil;
+  gdb.GetCurrentROOT.getoutbound;
+  if assigned(EndLongProcessProc) then EndLongProcessProc;
+
+  GDB.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
+  GDB.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
+  GDB.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
+  GDB.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
+  {objinsp.GDBobjinsp.}
+  if assigned(ReturnToDefaultProc)then
+                                      ReturnToDefaultProc;
+  clearcp;
+  //redrawoglwnd;
+  result:=cmd_ok;
+end;
+
 procedure startup;
 //var
   // s:gdbstring;
 begin
   MainSpecContentFormat.init(100);
   MainSpecContentFormat.loadfromfile(FindInSupportPath('main.sf'));
+  CreateCommandFastObjectPlugin(@RegenZEnts_com,'RegenZEnts',CADWG,0);
   Wire.init('El_Wire',0,0);
   commandmanager.CommandRegister(@Wire);
   pcabcom:=CreateCommandRTEdObjectPlugin(@_Cable_com_CommandStart, _Cable_com_CommandEnd,nil,@cabcomformat,@_Cable_com_BeforeClick,@_Cable_com_AfterClick,@_Cable_com_Hd,nil,'EL_Cable',0,0);

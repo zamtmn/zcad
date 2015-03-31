@@ -69,6 +69,8 @@ const {as_normal=0;
   GDBCableID = 102;
   GDBTableID = 103;
   GDBElLeaderID = 104;
+  GDBZCadEntsMinID=GDBNetID;
+  GDBZCadEntsMaxID=GDBElLeaderID;
 
   GDBAlignedDimensionID = 105;
   GDBRotatedDimensionID = 106;

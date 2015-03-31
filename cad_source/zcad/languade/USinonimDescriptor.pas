@@ -33,10 +33,15 @@ GDBSinonimDescriptor=object(TUserTypeDescriptor)
                      destructor Done;virtual;
                      function GetFactTypedef:PUserTypeDescriptor;virtual;
                      function Compare(pleft,pright:pointer):TCompareResult;virtual;
+                     function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
 
                end;
 implementation
 uses {ZBasicVisible,}UUnitManager,log;
+function GDBSinonimDescriptor.GetValueAsString;
+begin
+     result:=GetFactTypedef^.GetValueAsString(pinstance);
+end;
 destructor GDBSinonimDescriptor.done;
 begin
      SinonimName:='';

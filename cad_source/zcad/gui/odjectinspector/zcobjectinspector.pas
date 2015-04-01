@@ -1188,7 +1188,21 @@ begin
                                         EDContext.ppropcurrentedit.FastEditor.OnRunFastEditor(pld);
     if peditor.changed then
                            UpdateObjectInInsp;
-   if (Command=TMNC_RunFastEditor)or(Command=TMNC_EditingDoneLostFocus)or(Command=TMNC_EditingDoneDoNothing) then
+   if (Command=TMNC_RunFastEditor)or(Command=TMNC_EditingDoneLostFocus){or(Command=TMNC_EditingDoneDoNothing)} then
+{
+or(Command=TMNC_EditingDoneDoNothing)
+Revision: 1130
+Author: zamtmn
+Date: 13 декабря 2014 г. 4:59:54
+Message:
+Close selectable editors after selecting in object inspector
+----
+Modified : /trunk/cad_source/gui/objinsp.pas
+Modified : /trunk/cad_source/languade/UBaseTypeDescriptor.pas
+Modified : /trunk/cad_source/languade/varmandef.pas
+
+но помоему оно тут ненужно, т.к. закрывает открываемый едитор
+}
                                       begin
                                            Application.QueueAsyncCall(AsyncFreeEditor,0);
                                       end;

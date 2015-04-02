@@ -30,7 +30,7 @@ uses
   gdbasetypes,
   Varman,
   zcmultipropertiesutil,
-  GDBCircle,GDBArc,GDBLine,GDBBlockInsert,GDBText,GDBMText,GDBPolyLine,GDBElLeader,
+  GDBCircle,GDBArc,GDBLine,GDBBlockInsert,GDBText,GDBMText,GDBPolyLine,GDBElLeader,gdbdimension,
   geometry,zcmultiproperties;
 implementation
 procedure GDBDoubleDeltaEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
@@ -307,6 +307,7 @@ const
      pmtext:PGDBObjMText=nil;
      p3dpoly:PGDBObjPolyline=nil;
      pelleader:PGDBObjElLeader=nil;
+     pdim:PGDBObjDimension=nil;
 var
      order:integer;
 begin
@@ -466,6 +467,22 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('LeaderSize','Size',order,sysunit.TypeName2PTD('GDBInteger'),MPCMisc,GDBElLeaderID,integer(@pelleader^.size),integer(@pelleader^.size),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('Leaderscale','Scale',order,sysunit.TypeName2PTD('GDBDouble'),MPCMisc,GDBElLeaderID,integer(@pelleader^.scale),integer(@pelleader^.scale),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('LeaderWidth','Width',order,sysunit.TypeName2PTD('GDBDouble'),MPCMisc,GDBElLeaderID,integer(@pelleader^.twidth),integer(@pelleader^.twidth),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
+
+  {RotatedDimension misc}
+  MultiPropertiesManager.RegisterMultiproperty('DimStyle','Style',order,sysunit.TypeName2PTD('PGDBDimStyleObjInsp'),MPCMisc,GDBRotatedDimensionID,integer(@pdim^.PDimStyle),integer(@pdim^.PDimStyle),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
+  MultiPropertiesManager.RegisterMultiproperty('DimTextMoved','Text moved',order,sysunit.TypeName2PTD('GDBBoolean'),MPCMisc,GDBRotatedDimensionID,integer(@pdim^.DimData.TextMoved),integer(@pdim^.DimData.TextMoved),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
+
+  {AlignedDimension misc}
+  MultiPropertiesManager.RegisterMultiproperty('DimStyle','Style',order,sysunit.TypeName2PTD('PGDBDimStyleObjInsp'),MPCMisc,GDBAlignedDimensionID,integer(@pdim^.PDimStyle),integer(@pdim^.PDimStyle),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
+  MultiPropertiesManager.RegisterMultiproperty('DimTextMoved','Text moved',order,sysunit.TypeName2PTD('GDBBoolean'),MPCMisc,GDBAlignedDimensionID,integer(@pdim^.DimData.TextMoved),integer(@pdim^.DimData.TextMoved),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
+
+  {DiametricDimensionDimension misc}
+  MultiPropertiesManager.RegisterMultiproperty('DimStyle','Style',order,sysunit.TypeName2PTD('PGDBDimStyleObjInsp'),MPCMisc,GDBDiametricDimensionID,integer(@pdim^.PDimStyle),integer(@pdim^.PDimStyle),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
+  MultiPropertiesManager.RegisterMultiproperty('DimTextMoved','Text moved',order,sysunit.TypeName2PTD('GDBBoolean'),MPCMisc,GDBDiametricDimensionID,integer(@pdim^.DimData.TextMoved),integer(@pdim^.DimData.TextMoved),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
+
+  {RadialDimensionDimension misc}
+  MultiPropertiesManager.RegisterMultiproperty('DimStyle','Style',order,sysunit.TypeName2PTD('PGDBDimStyleObjInsp'),MPCMisc,GDBRadialDimensionID,integer(@pdim^.PDimStyle),integer(@pdim^.PDimStyle),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
+  MultiPropertiesManager.RegisterMultiproperty('DimTextMoved','Text moved',order,sysunit.TypeName2PTD('GDBBoolean'),MPCMisc,GDBRadialDimensionID,integer(@pdim^.DimData.TextMoved),integer(@pdim^.DimData.TextMoved),@GetOneVarData,@FreeOneVarData,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
 
   MultiPropertiesManager.sort;
 end;

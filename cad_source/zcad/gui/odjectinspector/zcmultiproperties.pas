@@ -72,7 +72,9 @@ type
                                MultiPropertyVector:TMultiPropertyVector;
                                constructor create;
                                destructor destroy;override;
-                               procedure RegisterMultiproperty(name:GDBString;username:GDBString;sortedid:integer;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
+                               procedure reorder(oldsortedid,sortedid:integer;id:TObjID);
+                               procedure RegisterMultiproperty(name:GDBString;username:GDBString;var sortedid:integer;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
+                               procedure RegisterFirstMultiproperty(name:GDBString;username:GDBString;var sortedid:integer;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
                                procedure sort;
                           end;
 var
@@ -89,7 +91,24 @@ begin
      MultiPropertyVectorSort:=TMultiPropertyVectorSort.Create;
      MultiPropertyVectorSort.Sort(MultiPropertyVector,MultiPropertyVector.Size);
 end;
-procedure TMultiPropertiesManager.RegisterMultiproperty(name:GDBString;username:GDBString;sortedid:integer;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
+procedure TMultiPropertiesManager.RegisterFirstMultiproperty(name:GDBString;username:GDBString;var sortedid:integer;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
+begin
+     sortedid:=1;
+     RegisterMultiproperty(name,username,sortedid,ptm,category,id,GetVO,SetVO,bip,aip,eip,ECP);
+end;
+procedure TMultiPropertiesManager.reorder(oldsortedid,sortedid:integer;id:TObjID);
+var
+   i,addvalue:integer;
+   mp:TMultiPropertyDataForObjects;
+begin
+     addvalue:=sortedid-oldsortedid;
+     for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
+     if not MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(id,mp)  then
+     if MultiPropertiesManager.MultiPropertyVector[i].sortedid>=oldsortedid then
+                                                                                inc(MultiPropertiesManager.MultiPropertyVector[i].sortedid,addvalue);
+end;
+
+procedure TMultiPropertiesManager.RegisterMultiproperty(name:GDBString;username:GDBString;var sortedid:integer;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
 var
    mp:TMultiProperty;
    mpdfo:TMultiPropertyDataForObjects;
@@ -106,7 +125,13 @@ begin
                                                              mpdfo.GetValueOffset:=GetVO;
                                                              mpdfo.SetValueOffset:=SetVO;
                                                              mp.MPUserName:=username;
-                                                             mp.sortedid:=sortedid;
+                                                             if mp.sortedid>=sortedid then
+                                                                                         sortedid:=mp.sortedid
+                                                                                     else
+                                                                                         begin
+                                                                                          reorder(mp.sortedid,sortedid,id);
+                                                                                          //shared.HistoryOutStr('Something wrong in multipropertys sorting "'+name+'"');
+                                                                                         end;
                                                              mp.MPObjectsData.RegisterKey(id,mpdfo);
                                                         end
                                                     else
@@ -121,6 +146,7 @@ begin
                                                              MultiPropertiesManager.MultiPropertyDictionary.insert(name,mp);
                                                              MultiPropertiesManager.MultiPropertyVector.PushBack(mp);
                                                         end;
+   inc(sortedid);
 end;
 constructor TMultiProperty.create;
 begin

@@ -30,9 +30,6 @@ uses
   gdbasetypes,
   Varman,UGDBPoint3DArray,
   GDBCircle,GDBArc,GDBLine,GDBBlockInsert,GDBText,GDBMText,GDBPolyLine,geometry,zcmultiproperties;
-const
-     firstorder=100;
-     lastorder=1000;
 function GetOneVarData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 function GetVertex3DControlData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 procedure FreeOneVarData(piteratedata:GDBPointer;mp:TMultiProperty);

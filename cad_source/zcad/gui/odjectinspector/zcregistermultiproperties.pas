@@ -281,6 +281,7 @@ var
     l1:GDBDouble;
 begin
      l1:=PGDBObjPolyline(ChangedData.PEntity).GetLength;
+     ChangedData.PGetDataInEtity:=@l1;
      GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp);
 end;
 procedure GDBPolyLineSumLengthEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);

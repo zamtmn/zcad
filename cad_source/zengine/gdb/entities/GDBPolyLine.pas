@@ -43,11 +43,24 @@ GDBObjPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
+                 function GetLength:GDBDouble;virtual;
 
            end;
 {Export-}
 implementation
 uses log;
+function GDBObjPolyline.GetLength:GDBDouble;
+var
+   ptpv0,ptpv1:PGDBVertex;
+begin
+  result:=inherited;
+  if closed then
+  begin
+       ptpv0:=VertexArrayInWCS.parray;
+       ptpv1:=VertexArrayInWCS.getelement(VertexArrayInWCS.Count-1);
+       result:=result+geometry.Vertexlength(ptpv0^,ptpv1^);
+  end;
+end;
 procedure GDBObjPolyline.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 begin
   GDBPoint3dArrayAddOnTrackAxis(VertexArrayInWCS,posr,processaxis,closed);

@@ -169,6 +169,7 @@ begin
   DWGDBUnit:=DWGUnits.findunit(DrawingDeviceBaseUnitName);
 
   pcam:=nil;
+  pvd:=nil;
   pdwgwarsunit:=DWGUnits.findunit('DrawingVars');
   if assigned(pdwgwarsunit) then
                                 pvd:=pdwgwarsunit.InterfaceVariables.findvardesc('camera');

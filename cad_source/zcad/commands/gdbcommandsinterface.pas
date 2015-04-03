@@ -344,9 +344,13 @@ begin
           programlog.logoutstr('load_merge(@s[1],tloload);',0);
           if assigned(ProcessFilehistoryProc) then
            ProcessFilehistoryProc(s);
+          result:=cmd_ok;
      end
                else
-        shared.ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
+               begin
+                    shared.ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
+                    result:=cmd_error;
+               end;
         //shared.ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
 end;
 function layer_cmd:GDBInteger;

@@ -103,6 +103,7 @@ type
                            procedure hidemousecursor;virtual;abstract;
                            Procedure Paint; virtual;abstract;
                            function CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;virtual;abstract;
+                           function CreateFaceRC:TDrawContext;virtual;abstract;
                            function ProjectPoint(pntx,pnty,pntz:gdbdouble;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;virtual;abstract;
                            procedure mouseunproject(X, Y: integer);virtual;abstract;
                            procedure CalcMouseFrustum;virtual;abstract;
@@ -143,7 +144,30 @@ var
    otracktimer: GDBInteger;
 procedure copyospoint(out dest:os_record; source:os_record);
 function correcttogrid(point:GDBVertex):GDBVertex;
+function CreateFaceRC:TDrawContext;
 implementation
+function CreateFaceRC:TDrawContext;
+begin
+  result.Subrender:=0;
+  result.Selected:=false;
+  result.VisibleActualy:=-1;
+  result.InfrustumActualy:=-1;
+  result.DRAWCOUNT:=-1;
+  result.SysLayer:=nil;
+  result.MaxDetail:=false;
+  result.DrawMode:=true;
+  result.OwnerLineWeight:=-3;
+  result.OwnerColor:=7;
+  result.MaxWidth:=1;
+  result.ScrollMode:=true;
+  result.Zoom:=100000000;
+  result.drawer:=nil;
+  result.matrixs.pmodelMatrix:=nil;
+  result.matrixs.pprojMatrix:=nil;
+  result.matrixs.pviewport:=nil;
+  result.pcamera:=nil;
+end;
+
 function TCADControl.DoMouseWheel(Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint): Boolean;
 begin
      inherited;

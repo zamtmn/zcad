@@ -343,7 +343,7 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
   PTLayerControl=^TLayerControl;
   TLayerControl=packed record
                       Enabled:GDBBoolean;(*'Enabled'*)
-                      LayerName:GDBString;(*'Layer name'*)
+                      LayerName:GDBAnsiString;(*'Layer name'*)
                 end;
   TShapeBorder=(SB_Owner,SB_Self,SB_Empty);
   TShapeClass=(SC_Connector,SC_Terminal,SC_Graphix,SC_Unknown);
@@ -2616,6 +2616,7 @@ GDBObjPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;abstract;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
+                 function GetLength:GDBDouble;virtual;abstract;
            end;
 //Generate on E:\zcad\cad_source\zengine\gdb\entities\gdbspline.pas
 PGDBObjSpline=^GDBObjSpline;
@@ -3543,7 +3544,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                 procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
                 procedure CreateUnit(_GetEntsTypes:boolean=true);virtual;abstract;
                 procedure GetEntsTypes;virtual;abstract;
-                function GetObjType:GDBWord;virtual;abstract;
+                function GetObjType:TObjID;virtual;abstract;
                 constructor init;
                 destructor done;virtual;abstract;
                 procedure CheckMultiPropertyUse;

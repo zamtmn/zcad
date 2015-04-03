@@ -38,7 +38,7 @@ type
   TBeforeIterateProc=function(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
   TAfterIterateProc=procedure(piteratedata:GDBPointer;mp:TMultiProperty);
   TEntChangeProc=procedure(pu:PTObjectUnit;pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty);
-  TEntIterateProc=procedure(pvd:pvardesk;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
+  TEntIterateProc=procedure(pvd:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
   TMultiPropertyDataForObjects=record
                                      GetValueOffset,SetValueOffset:GDBInteger;
                                      EntIterateProc:TEntIterateProc;
@@ -73,12 +73,13 @@ type
                                constructor create;
                                destructor destroy;override;
                                procedure reorder(oldsortedid,sortedid:integer;id:TObjID);
-                               procedure RegisterMultiproperty(name:GDBString;username:GDBString;var sortedid:integer;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
-                               procedure RegisterFirstMultiproperty(name:GDBString;username:GDBString;var sortedid:integer;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
+                               procedure RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
+                               procedure RegisterFirstMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
                                procedure sort;
                           end;
 var
   MultiPropertiesManager:TMultiPropertiesManager;
+  sortedid:integer;
 implementation
 class function TMultiPropertyCompare.c(a,b:TMultiProperty):boolean;
 begin
@@ -91,10 +92,10 @@ begin
      MultiPropertyVectorSort:=TMultiPropertyVectorSort.Create;
      MultiPropertyVectorSort.Sort(MultiPropertyVector,MultiPropertyVector.Size);
 end;
-procedure TMultiPropertiesManager.RegisterFirstMultiproperty(name:GDBString;username:GDBString;var sortedid:integer;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
+procedure TMultiPropertiesManager.RegisterFirstMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
 begin
      sortedid:=1;
-     RegisterMultiproperty(name,username,sortedid,ptm,category,id,GetVO,SetVO,bip,aip,eip,ECP);
+     RegisterMultiproperty(name,username,ptm,category,id,GetVO,SetVO,bip,aip,eip,ECP);
 end;
 procedure TMultiPropertiesManager.reorder(oldsortedid,sortedid:integer;id:TObjID);
 var
@@ -108,7 +109,7 @@ begin
                                                                                 inc(MultiPropertiesManager.MultiPropertyVector[i].sortedid,addvalue);
 end;
 
-procedure TMultiPropertiesManager.RegisterMultiproperty(name:GDBString;username:GDBString;var sortedid:integer;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
+procedure TMultiPropertiesManager.RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
 var
    mp:TMultiProperty;
    mpdfo:TMultiPropertyDataForObjects;

@@ -19,7 +19,7 @@
 unit langsystem;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes{,varman},varmandef,memman,UBaseTypeDescriptor;
+uses strproc,gdbasetypes{,varman},varmandef,memman,UBaseTypeDescriptor;
 type
     TTypesArray=array of pointer;
 var
@@ -28,7 +28,7 @@ const
 
   basicoperatorcount = 5;
   basicfunctioncount = 1;
-  basicoperatorparamcount = 26;
+  basicoperatorparamcount = 27;
   basicfunctionparamcount = 1;
   {foneGDBBoolean = #7;
   foneGDBByte = #8;
@@ -88,6 +88,7 @@ function TGDBDouble_div_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function TGDBDouble_let_TGDBDouble(var rez, hrez: vardesk): vardesk;
 function TGDBInteger_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function TGDBString_let_TGDBString(var rez, hrez: vardesk): vardesk;
+function TGDBAnsiString_let_TGDBString(var rez, hrez: vardesk): vardesk;
 function TGDBByte_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function TGDBBoolean_let_TGDBBoolean(var rez, hrez: vardesk): vardesk;
 
@@ -134,11 +135,12 @@ const
     , (name: '*'; param: @GDBIntegerDescriptorObj; hparam: @GDBIntegerDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_mul_TGDBInteger)
     , (name: ':='; param: @GDBDoubleDescriptorObj; hparam: @GDBDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBDouble_let_TGDBDouble)
     , (name: ':='; param: @GDBStringDescriptorObj; hparam: @GDBStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBString_let_TGDBString)
+    , (name: ':='; param: @GDBAnsiStringDescriptorObj; hparam: @GDBStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBAnsiString_let_TGDBString)
     , (name: ':='; param: @GDBIntegerDescriptorObj; hparam: @GDBIntegerDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_let_TGDBInteger)
     , (name: ':='; param: @GDBByteDescriptorObj; hparam: @GDBIntegerDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBByte_let_TGDBInteger)
     , (name: '-'; param: nil; hparam: @GDBDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}Tnothing_minus_TGDBDouble)
     , (name: ':='; param: @GDBBooleanDescriptorOdj; hparam: @GDBBooleanDescriptorOdj; addr: {$IFDEF FPC}@{$ENDIF}TGDBBoolean_let_TGDBBoolean)
-    , (name: ':='; param: @GDBEnumDataDescriptorObj; hparam: @GDBEnumDataDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TEnum_let_TIdentificator)
+    , (name: ':='; param: @GDBEnumDataDescriptorObj; hparam: @GDBEnumDataDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TEnum_let_TIdentificator)//эта шняга захардкожена в findbasicoperator по номеру
     , (name: ':='; param: @GDBDoubleDescriptorObj; hparam: @GDBIntegerDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBDouble_let_TGDBInteger)
     , (name: '/'; param: @GDBIntegerDescriptorObj; hparam: @GDBIntegerDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_div_TGDBInteger)
     , (name: '/'; param: @GDBDoubleDescriptorObj; hparam: @GDBIntegerDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBDouble_div_TGDBInteger)
@@ -340,6 +342,24 @@ begin
   //result := r;
   //GDBPointer(r.data.Instance^):=nil;
 end;
+function TGDBAnsiString_let_TGDBString(var rez, hrez: vardesk): vardesk;
+begin
+  pGDBInteger(result.data.Instance) := nil;
+  result.data.ptd:=@GDBAnsiStringDescriptorObj;
+  result.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}result.data.Instance,GDBStringDescriptorObj.SizeInGDBBytes);
+  ppointer(result.data.Instance)^:=nil;
+  if rez.data.Instance=nil then
+                               begin
+                               GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}rez.data.Instance,GDBStringDescriptorObj.SizeInGDBBytes);
+                               ppointer(rez.data.Instance)^:=nil;
+                               end
+                          else
+                              GDBAnsiString(rez.data.Instance^):='';
+  GDBAnsiString(result.data.Instance^) := Tria_Utf8ToAnsi(GDBString(hrez.data.Instance^));
+  GDBAnsiString(rez.data.Instance^) := Tria_Utf8ToAnsi(GDBString(hrez.data.Instance^));
+end;
+
 function TGDBInteger_minus_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
@@ -592,7 +612,7 @@ begin
        (hrez.data.ptd=nil) and
        (hrez.name<>'') then
                            begin
-                                result:=11;
+                                result:=12;
                                 exit;
                            end;
   begin

@@ -340,7 +340,7 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
   PTLayerControl=^TLayerControl;
   TLayerControl=packed record
                       Enabled:GDBBoolean;(*'Enabled'*)
-                      LayerName:GDBString;(*'Layer name'*)
+                      LayerName:GDBAnsiString;(*'Layer name'*)
                 end;
   TShapeBorder=(SB_Owner,SB_Self,SB_Empty);
   TShapeClass=(SC_Connector,SC_Terminal,SC_Graphix,SC_Unknown);

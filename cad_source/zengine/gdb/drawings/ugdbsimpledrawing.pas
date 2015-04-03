@@ -100,7 +100,7 @@ begin
                      result:=wa.CreateRC(_maxdetail)
   else
   begin
-
+       result:=CreateFaceRC;
   end;
 end;
 

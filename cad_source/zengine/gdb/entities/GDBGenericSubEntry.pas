@@ -173,6 +173,9 @@ var
     pobj:PGDBObjEntity;
     ir:itrec;
 begin
+     plus:=false;
+     minus:=false;
+     result:=false;
      if assigned(Node.pminusnode) then
        if geometry.IsPointInBB(point,Node.pminusnode.BoundingBox) then
        begin

@@ -726,6 +726,10 @@ begin
                                                                                              exit;
                end;
           end;
+          if assigned(FreEditorProc)then
+                                        FreEditorProc;
+          if assigned(ReturnToDefaultProc)then
+                                           ReturnToDefaultProc;
           application.terminate;
      end;
 end;
@@ -823,6 +827,8 @@ begin
        end
        else
            gdb.freedwgvars;
+       if assigned(FreEditorProc)then
+                                     FreEditorProc;
        if assigned(ReturnToDefaultProc)then
                                            ReturnToDefaultProc;
        shared.SBTextOut('Закрыто');

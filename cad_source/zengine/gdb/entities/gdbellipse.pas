@@ -198,14 +198,14 @@ begin
   PProjoutbound:=nil;
   majoraxis:=onevertex;
   inherited initnul(nil);
-  vp.ID := GDBArcID;
+  vp.ID:=GDBEllipseID;
   //r := 1;
   Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{B591E6C2-9BD5-4099-BE5A-5CB3911661B7}',{$ENDIF}100);
 end;
 constructor GDBObjEllipse.init;
 begin
   inherited init(own,layeraddres, lw);
-  vp.ID := GDBArcID;
+  vp.ID:=GDBEllipseID;
   Local.p_insert := p;
   //r := rr;
   startangle := s;
@@ -674,6 +674,7 @@ begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{368BA81A-219B-4DE9-A8E0-64EE16001126}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjEllipse));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, Local.p_insert, {r,}startangle,endangle,majoraxis);
   CopyVPto(tvo^);
+  tvo^.vp.ID:=GDBEllipseID;
   tvo^.Local:=local;
   tvo^.RR:=RR;
   tvo^.MajorAxis:=MajorAxis;
@@ -704,6 +705,6 @@ begin
   result.bp.ListPos.Owner:=owner;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBArc.initialization');{$ENDIF}
+  {$IFDEF DEBUGINITSECTION}LogOut('gdbellipse.initialization');{$ENDIF}
   RegisterDXFEntity(GDBEllipseID,'ELLIPSE','Ellipse',@AllocEllipse,@AllocAndInitEllipse);
 end.

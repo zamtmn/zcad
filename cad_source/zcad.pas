@@ -19,6 +19,13 @@
 program zcad;
 //файл с объявлениями директив компилятора - должен быть подключен во все файлы проекта
 {$INCLUDE def.inc}
+{$IFDEF WINDOWS}
+{$IFDEF FPC}
+{$ifdef cpu32}
+        {$setpeflags $20} //winnt.h:#define IMAGE_FILE_LARGE_ADDRESS_AWARE       0x0020  // App can handle >2gb addresses
+{$endif}
+{$ENDIF}
+{$ENDIF}
 
 {$IFNDEF LINUX}
   {$APPTYPE GUI}

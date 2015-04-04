@@ -156,7 +156,7 @@ begin
      result.PSetDataInEtity:=Pointer(PtrUInt(pentity)+SetVO);
 end;
 
-procedure TMSEditor.SetMultiProperty(pu:PTObjectUnit;PSourceVD:pvardesk;NeededObjType:TObjID);
+procedure TMSEditor.SetMultiProperty(pu:PTObjectUnit;PSourceVD:PVarDesk;NeededObjType:TObjID);
 var
   pentvarext: PTVariablesExtender;
   EntIterator: itrec;
@@ -167,6 +167,29 @@ var
   i:integer;
   MultiPropertyDataForObjects:TMultiPropertyDataForObjects;
   ChangedData:TChangedData;
+  CanChangeValue:Boolean;
+  msg:gdbstring;
+procedure processProperty;
+begin
+     begin
+       ChangedData:=CreateChangedData(pentity,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
+       CanChangeValue:=true;
+       if @MultiPropertyDataForObjects.CheckValue<>nil then
+                                                          CanChangeValue:=MultiPropertyDataForObjects.CheckValue(PSourceVD,msg);
+       if CanChangeValue then
+                             begin
+                               MultiPropertyDataForObjects.EntChangeProc(pu,PSourceVD,ChangedData,MultiPropertiesManager.MultiPropertyVector[i]);
+                               pentity^.YouChanged(gdb.GetCurrentDWG^);
+                               pentity.FormatEntity(gdb.GetCurrentDWG^,dc);
+                             end
+                         else
+                             begin
+                               if msg='' then msg:='Invalid input';
+                               shared.LogError('Property "'+MultiPropertiesManager.MultiPropertyVector[i].MPUserName+'" for entity '+ {MultiPropertyDataForObjects.} msg);
+                             end;
+     end
+
+end;
 begin
   PSourceVD.attrib:=PSourceVD.attrib and (not vda_different);
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
@@ -182,20 +205,10 @@ begin
              if ComparePropAndVarNames(MultiPropertiesManager.MultiPropertyVector[i].MPName,PSourceVD^.name) then
              begin
                   if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(pentity^.vp.ID,MultiPropertyDataForObjects)then
-                  begin
-                    ChangedData:=CreateChangedData(pentity,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
-                    MultiPropertyDataForObjects.EntChangeProc(pu,PSourceVD,ChangedData,MultiPropertiesManager.MultiPropertyVector[i]);
-                    pentity^.YouChanged(gdb.GetCurrentDWG^);
-                    pentity.FormatEntity(gdb.GetCurrentDWG^,dc);
-                  end
+                  processProperty
                   else
                       if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(0,MultiPropertyDataForObjects)then
-                      begin
-                        ChangedData:=CreateChangedData(pentity,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
-                        MultiPropertyDataForObjects.EntChangeProc(pu,PSourceVD,ChangedData,MultiPropertiesManager.MultiPropertyVector[i]);
-                        pentity^.YouChanged(gdb.GetCurrentDWG^);
-                        pentity.FormatEntity(gdb.GetCurrentDWG^,dc);
-                      end;
+                      processProperty;
              end
         end;
     end;

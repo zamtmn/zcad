@@ -37,12 +37,14 @@ type
 
   TBeforeIterateProc=function(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
   TAfterIterateProc=procedure(piteratedata:GDBPointer;mp:TMultiProperty);
-  TEntChangeProc=procedure(pu:PTObjectUnit;pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty);
+  TEntChangeProc=procedure(pu:PTObjectUnit;PSourceVD:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+  TCheckValueFunc=function(PSourceVD:PVarDesk;out message:GDBString):GDBBoolean;
   TEntIterateProc=procedure(pvd:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
   TMultiPropertyDataForObjects=record
                                      GetValueOffset,SetValueOffset:GDBInteger;
                                      EntIterateProc:TEntIterateProc;
                                      EntChangeProc:TEntChangeProc;
+                                     CheckValue:TCheckValueFunc;
                                end;
   TObjID2MultiPropertyProcs=GKey2DataMap <TObjID,TMultiPropertyDataForObjects,LessObjID>;
   TMultiProperty=class
@@ -73,8 +75,8 @@ type
                                constructor create;
                                destructor destroy;override;
                                procedure reorder(oldsortedid,sortedid:integer;id:TObjID);
-                               procedure RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
-                               procedure RegisterFirstMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
+                               procedure RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc;CV:TCheckValueFunc=nil);
+                               procedure RegisterFirstMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc;CV:TCheckValueFunc=nil);
                                procedure sort;
                           end;
 var
@@ -92,7 +94,7 @@ begin
      MultiPropertyVectorSort:=TMultiPropertyVectorSort.Create;
      MultiPropertyVectorSort.Sort(MultiPropertyVector,MultiPropertyVector.Size);
 end;
-procedure TMultiPropertiesManager.RegisterFirstMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
+procedure TMultiPropertiesManager.RegisterFirstMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc;CV:TCheckValueFunc=nil);
 begin
      sortedid:=1;
      RegisterMultiproperty(name,username,ptm,category,id,GetVO,SetVO,bip,aip,eip,ECP);
@@ -109,7 +111,7 @@ begin
                                                                                 inc(MultiPropertiesManager.MultiPropertyVector[i].sortedid,addvalue);
 end;
 
-procedure TMultiPropertiesManager.RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc);
+procedure TMultiPropertiesManager.RegisterMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc;CV:TCheckValueFunc=nil);
 var
    mp:TMultiProperty;
    mpdfo:TMultiPropertyDataForObjects;
@@ -125,6 +127,7 @@ begin
                                                              mpdfo.EntChangeProc:=ecp;
                                                              mpdfo.GetValueOffset:=GetVO;
                                                              mpdfo.SetValueOffset:=SetVO;
+                                                             mpdfo.CheckValue:=CV;
                                                              mp.MPUserName:=username;
                                                              if mp.sortedid>=sortedid then
                                                                                          sortedid:=mp.sortedid
@@ -142,6 +145,7 @@ begin
                                                              mpdfo.EntChangeProc:=ecp;
                                                              mpdfo.GetValueOffset:=GetVO;
                                                              mpdfo.SetValueOffset:=SetVO;
+                                                             mpdfo.CheckValue:=CV;
                                                              mp.MPUserName:=username;
                                                              mp.MPObjectsData.RegisterKey(id,mpdfo);
                                                              MultiPropertiesManager.MultiPropertyDictionary.insert(name,mp);

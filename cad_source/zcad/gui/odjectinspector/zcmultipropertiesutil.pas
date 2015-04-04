@@ -35,7 +35,7 @@ function GetVertex3DControlData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 procedure FreeOneVarData(piteratedata:GDBPointer;mp:TMultiProperty);
 procedure GeneralEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 procedure PolylineVertex3DControlEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
-procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty);
+procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 procedure GDBDouble2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 procedure TArrayIndex2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 implementation
@@ -125,7 +125,7 @@ begin
                             PTVertex3DControlVarData(pdata).PZVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_different;
                     end;
 end;
-procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty);
+procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
    tv:PGDBVertex;
    v:GDBVertex;

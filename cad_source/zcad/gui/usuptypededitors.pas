@@ -99,13 +99,13 @@ begin
      if uppercase(vartype)='TENUMDATA' then
      begin
           typemanager:=@GDBEnumDataDescriptorObj;
-      PEditor:=GDBEnumDataDescriptorObj.CreateEditor(TheOwner,r,@variable,nil,true).Editor;
+      PEditor:=GDBEnumDataDescriptorObj.CreateEditor(TheOwner,r,@variable,nil,true,'').Editor;
       needdropdown:=true;
      end
      else
      begin
           typemanager:=SysUnit^.TypeName2PTD(vartype);
-          PEditor:=typemanager^.CreateEditor(TheOwner,r,@variable,nil,true).Editor;
+          PEditor:=typemanager^.CreateEditor(TheOwner,r,@variable,nil,true,'').Editor;
      end;
      if PEditor.geteditor is TComboBox then
                                            begin

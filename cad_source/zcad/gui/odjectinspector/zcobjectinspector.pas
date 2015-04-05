@@ -1452,7 +1452,7 @@ begin
       //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
       EDContext.ppropcurrentedit:=pp;
     end;
-    PEditor:=pp^.PTypeManager^.CreateEditor(@self,pp.rect,pp^.valueAddres,nil,false).Editor;
+    PEditor:=pp^.PTypeManager^.CreateEditor(@self,pp.rect,pp^.valueAddres,nil,false,'этого не должно тут быть').Editor;
     if PEditor<>nil then
     begin
       //-----------------------------------------------------------------PEditor^.show;
@@ -1566,6 +1566,7 @@ var
   editorcontrol:TWinControl;
   tr:TRect;
   pentvarext:PTVariablesExtender;
+  initialvalue:GDBString;
 begin
      if pp^.SubNode<>nil then
      begin
@@ -1614,11 +1615,15 @@ begin
        end;
        if assigned(pp^.valueAddres) then
        begin
+         if (pp^.Attr and FA_DIFFERENT)<>0 then
+                                               initialvalue:=rsDifferent
+                                           else
+                                               initialvalue:='';
          tr:=pp^.rect;
        if assigned(pp^.Decorators.OnCreateEditor) then
                                                       TED:=pp^.Decorators.OnCreateEditor(self,tr,pp^.valueAddres,@vsa,false,pp^.PTypeManager)
                                                   else
-                                                      TED:=pp^.PTypeManager^.CreateEditor(self,tr,pp^.valueAddres,@vsa,{false}true);
+                                                      TED:=pp^.PTypeManager^.CreateEditor(self,tr,pp^.valueAddres,@vsa,{false}true,initialvalue);
      case ted.Mode of
                      TEM_Integrate:begin
                                        editorcontrol:=TED.Editor.geteditor;

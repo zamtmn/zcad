@@ -36,10 +36,10 @@ type
                          class procedure GetVertexZ(Pinstance:PtrInt);
     end;
     TBaseTypesEditors=class
-                             class function BaseCreateEditor           (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;ptdesc:PUserTypeDescriptor):TEditorDesc;
-                             class function GDBBooleanCreateEditor     (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;ptdesc:PUserTypeDescriptor):TEditorDesc;
-                             class function TEnumDataCreateEditor      (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;ptdesc:PUserTypeDescriptor):TEditorDesc;
-                             class function EnumDescriptorCreateEditor (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;ptdesc:PUserTypeDescriptor):TEditorDesc;
+                             class function BaseCreateEditor           (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;InitialValue:GDBString;ptdesc:PUserTypeDescriptor):TEditorDesc;
+                             class function GDBBooleanCreateEditor     (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;InitialValue:GDBString;ptdesc:PUserTypeDescriptor):TEditorDesc;
+                             class function TEnumDataCreateEditor      (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;InitialValue:GDBString;ptdesc:PUserTypeDescriptor):TEditorDesc;
+                             class function EnumDescriptorCreateEditor (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;InitialValue:GDBString;ptdesc:PUserTypeDescriptor):TEditorDesc;
     END;
 
 procedure DecorateSysTypes;
@@ -70,7 +70,10 @@ class function TBaseTypesEditors.BaseCreateEditor;
 
                                   edit:=TEdit.Create(propeditor);
                                   edit.AutoSize:=false;
-                                  edit.Text:=ptdesc^.GetValueAsString(pinstance);
+                                  if initialvalue='' then
+                                                         edit.Text:=ptdesc^.GetValueAsString(pinstance)
+                                                     else
+                                                         edit.Text:=initialvalue;
                                   edit.OnKeyPress:=propeditor.keyPress;
                                   edit.OnChange:=propeditor.EditingProcess;
                                   edit.OnExit:=propeditor.ExitEdit;
@@ -85,7 +88,10 @@ class function TBaseTypesEditors.BaseCreateEditor;
                                  {$IFNDEF DELPHI}
                                  cbedit.AutoSize:=false;
                                  {$ENDIF}
-                                 cbedit.Text:=ptdesc^.GetValueAsString(pinstance);
+                                 if initialvalue='' then
+                                                        cbedit.Text:=ptdesc^.GetValueAsString(pinstance)
+                                                    else
+                                                        cbedit.Text:=initialvalue;
                                  cbedit.OnKeyPress:=propeditor.keyPress;
                                  cbedit.OnChange:=propeditor.EditingProcess;
                                  cbedit.OnExit:=propeditor.ExitEdit;

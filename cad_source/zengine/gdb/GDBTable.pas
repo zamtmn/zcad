@@ -184,7 +184,8 @@ ConstObjArray.cleareraseobj;
                            pgdbmtext.linespacef:=1;
                            pgdbmtext.linespacef:=PTableStyle^.rowheight/pgdbmtext.textprop.size*3/5;
                            pgdbmtext.width:=pcf^.TextWidth*scale;
-                           pgdbmtext.vp.Layer:=vp.Layer;
+                           //pgdbmtext.vp.Layer:=vp.Layer;
+                           CopyVPto(pgdbmtext^);
                            pgdbmtext.TXTStyleIndex:=drawing.GetTextStyleTable^.getelement(0);
 
                            pgdbmtext.Local.P_insert.y:=(-ccount*PTableStyle^.rowheight-PTableStyle^.rowheight/4)*scale;
@@ -240,7 +241,8 @@ ConstObjArray.cleareraseobj;
            pl^.CoordInOCS.lBegin.y:=-({ccount+}i)*PTableStyle^.rowheight*scale;
            pl^.CoordInOCS.lEnd.x:=xw{*scale};
            pl^.CoordInOCS.lEnd.y:=-({ccount+}i)*PTableStyle^.rowheight*scale;
-           pl^.vp.Layer:=vp.Layer;
+           //pl^.vp.Layer:=vp.Layer;
+           CopyVPto(pl^);
            pl^.FormatEntity(drawing,dc);
            end;
      if xcount<PTableStyle^.tblformat.Count then
@@ -254,7 +256,8 @@ ConstObjArray.cleareraseobj;
            pl^.CoordInOCS.lBegin.y:=0;
            pl^.CoordInOCS.lEnd.x:=x*scale;
            pl^.CoordInOCS.lEnd.y:=-(ccount)*PTableStyle^.rowheight*scale;
-           pl^.vp.Layer:=vp.Layer;
+           //pl^.vp.Layer:=vp.Layer;
+           CopyVPto(pl^);
            pl^.FormatEntity(drawing,dc);
 
 
@@ -271,7 +274,8 @@ ConstObjArray.cleareraseobj;
      pl^.CoordInOCS.lBegin.y:=0;
      pl^.CoordInOCS.lEnd.x:=x*scale;
      pl^.CoordInOCS.lEnd.y:=-(ccount)*PTableStyle^.rowheight*scale;
-     pl^.vp.Layer:=vp.Layer;
+     //pl^.vp.Layer:=vp.Layer;
+     CopyVPto(pl^);
      pl^.FormatEntity(drawing,dc);
 
      h:=(ccount)*PTableStyle^.rowheight*scale;
@@ -285,7 +289,8 @@ ConstObjArray.cleareraseobj;
           pgdbins^.scale.x:=scale;
           pgdbins^.scale.y:=scale;
           pgdbins^.scale.z:=scale;
-          pgdbins^.vp.Layer:=vp.Layer;
+          //pgdbins^.vp.Layer:=vp.Layer;
+          CopyVPto(pgdbins^);
           pgdbins^.BuildGeometry(drawing);
      end;
      BuildGeometry(drawing);

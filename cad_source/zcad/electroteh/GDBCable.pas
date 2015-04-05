@@ -518,7 +518,8 @@ begin
        result^.PExtAttrib:=pent^.PExtAttrib;
        pent^.PExtAttrib:=nil;
      end;
-     result^.vp:=pent^.vp;
+     //result^.vp:=pent^.vp;
+     pent.CopyVPto(result^);
      result^.vp.ID:=GDBCableID;
 
      ptv:=pent^.vertexarrayinocs.beginiterate(ir);

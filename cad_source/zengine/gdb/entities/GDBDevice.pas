@@ -679,8 +679,8 @@ begin
      begin
           result:=AllocAndInitDevice(pent^.bp.ListPos.Owner);
           result^.name:=DevicePrefix+pent^.name;
-
-          result^.vp.Layer:=pent^.vp.Layer;
+          pent.CopyVPto(result^);
+          //result^.vp.Layer:=pent^.vp.Layer;
           result^.Local:=pent^.local;
           result^.scale:=pent^.scale;
           result^.rotate:=pent^.rotate;

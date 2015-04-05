@@ -580,8 +580,9 @@ function UpgradeLine2Net(ptu:PTUnit;pent:PGDBObjLine;const drawing:TDrawingDef):
 begin
    GDBGetMem({$IFDEF DEBUGBUILD}'{2D9DEF3C-7BC8-43F0-AA83-37B5F9517A0D}',{$ENDIF}pointer(result),sizeof(GDBObjNet));
    result^.initnul(pent^.bp.ListPos.Owner);
-   result.vp.Layer:=pent^.vp.Layer;
-   result.vp.LineWeight:=pent^.vp.LineWeight;
+   pent.CopyVPto(result^);
+   //result.vp.Layer:=pent^.vp.Layer;
+   //result.vp.LineWeight:=pent^.vp.LineWeight;
 end;
 class function GDBObjNet.GetDXFIOFeatures:TDXFEntIODataManager;
 begin

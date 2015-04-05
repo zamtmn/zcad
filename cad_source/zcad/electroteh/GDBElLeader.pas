@@ -258,7 +258,8 @@ begin
      pdev:=nil;
      //pobj:=nil;
      sta.init(10);
-     mainline.vp.Layer:=vp.Layer;
+     CopyVPto(mainline);
+     //mainline.vp.Layer:=vp.Layer;
      mainline.FormatEntity(drawing,dc);
 
      pcable:=nil;
@@ -376,7 +377,7 @@ begin
                         end
                     else
                         sta.sort;
-
+     CopyVPto(tbl);
      tbl.tbl.cleareraseobj{clear};
      psl:=pointer(tbl.tbl.CreateObject);
      psl.init(10);
@@ -440,8 +441,9 @@ begin
      else tv:=nulvertex;
      //MarkLine.done;
      //MarkLine.init(@self,vp.Layer,vp.LineWeight,VertexSub(MainLine.CoordInOCS.lBegin,tv),VertexAdd(MainLine.CoordInOCS.lBegin,tv));
-     MarkLine.vp.Layer:=vp.Layer;
-     MarkLine.vp.LineWeight:=vp.LineWeight;
+     CopyVPto(MarkLine);
+     //MarkLine.vp.Layer:=vp.Layer;
+     //MarkLine.vp.LineWeight:=vp.LineWeight;
      MarkLine.CoordInOCS.lBegin:=VertexSub(MainLine.CoordInOCS.lBegin,tv);
      MarkLine.CoordInOCS.lEnd:=VertexAdd(MainLine.CoordInOCS.lBegin,tv);
 
@@ -748,8 +750,9 @@ begin
      GDBGetMem({$IFDEF DEBUGBUILD}'{6E92EE79-96D1-45BB-94CF-5C4C2141D886}',{$ENDIF}pointer(result),sizeof(GDBObjElLeader));
      result^.initnul;
      result^.MainLine.CoordInOCS:=pent^.CoordInOCS;
-     result^.vp.Layer:=pent^.vp.Layer;
-     result^.vp.LineWeight:=pent^.vp.LineWeight;
+     pent.CopyVPto(result^);
+     //result^.vp.Layer:=pent^.vp.Layer;
+     //result^.vp.LineWeight:=pent^.vp.LineWeight;
 
    if ptu<>nil then
    begin

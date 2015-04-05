@@ -53,7 +53,8 @@ begin
                                                PGDBObjRotatedDimension(ResultDim)^.initnul(bp.ListPos.Owner);
                                                PGDBObjRotatedDimension(ResultDim)^.vectorD:=CreateRotatedXVector(a50*pi/180);
                                                PGDBObjRotatedDimension(ResultDim)^.vectorN:=CreateRotatedYVector(a50*pi/180);
-                                               ResultDim.vp.Layer:=vp.Layer;
+                                               //ResultDim.vp.Layer:=vp.Layer;
+                                               CopyVPto(ResultDim^);
                                                ResultDim^.Local:=local;
                                                ResultDim^.P_insert_in_WCS:=P_insert_in_WCS;
                                                PGDBObjRotatedDimension(ResultDim)^.DimData:=DimData;
@@ -64,7 +65,8 @@ begin
                                      GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(ResultDim),sizeof(GDBObjAlignedDimension));
                                      result:=ResultDim;
                                      PGDBObjAlignedDimension(ResultDim)^.initnul(bp.ListPos.Owner);
-                                     ResultDim.vp.Layer:=vp.Layer;
+                                     //ResultDim.vp.Layer:=vp.Layer;
+                                     CopyVPto(ResultDim^);
                                      ResultDim^.Local:=local;
                                      ResultDim^.P_insert_in_WCS:=P_insert_in_WCS;
                                      PGDBObjAlignedDimension(ResultDim)^.DimData:=DimData;
@@ -75,7 +77,8 @@ begin
                                    GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(ResultDim),sizeof(GDBObjDiametricDimension));
                                    result:=ResultDim;
                                    PGDBObjDiametricDimension(ResultDim)^.initnul(bp.ListPos.Owner);
-                                   ResultDim.vp.Layer:=vp.Layer;
+                                   //ResultDim.vp.Layer:=vp.Layer;
+                                   CopyVPto(ResultDim^);
                                    ResultDim^.Local:=local;
                                    ResultDim^.P_insert_in_WCS:=P_insert_in_WCS;
                                    PGDBObjAlignedDimension(ResultDim)^.DimData:=DimData;
@@ -86,7 +89,8 @@ begin
                                      GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(ResultDim),sizeof(GDBObjRadialDimension));
                                      result:=ResultDim;
                                      PGDBObjRadialDimension(ResultDim)^.initnul(bp.ListPos.Owner);
-                                     ResultDim.vp.Layer:=vp.Layer;
+                                     //ResultDim.vp.Layer:=vp.Layer;
+                                     CopyVPto(ResultDim^);
                                      ResultDim^.Local:=local;
                                      ResultDim^.P_insert_in_WCS:=P_insert_in_WCS;
                                      PGDBObjRadialDimension(ResultDim)^.DimData:=DimData;

@@ -24,6 +24,9 @@ resourcestring
   fontnotfoundandreplace='For text style "%s" not found font "%s", is replaced by an alternative';
 
   {errors}
+  rsInvalidInput='Invalid input';
+  rsNotRegistred='Not registred';
+  rsInvalidInputForPropery='Property "%s" for entity "%s": %s';
   rsDivByZero='Divide by zero';
   rsErrorPrefix='ERROR: ';
 

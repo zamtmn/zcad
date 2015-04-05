@@ -42,6 +42,7 @@ end;
 generic GKey2DataMap <TKey, TValue, TCompare> = class(specialize TMap<TKey, TValue, TCompare>)
         procedure RegisterKey(const key:TKey; const Value:TValue);
         function MyGetValue(key:TKey; out Value:TValue):boolean;
+        function MyGetMutableValue(key:TKey; out PValue:PTValue):boolean;
         function MyContans(key:TKey):boolean;
 end;
 generic TMyVector <T> = class(specialize TVector<T>)
@@ -144,6 +145,24 @@ begin
                    else
                        begin
                             Value:=Iterator.GetValue;
+                            Iterator.Destroy;
+                            result:=true;
+                       end;
+end;
+function GKey2DataMap.MyGetMutableValue(key:TKey; out PValue:PTValue):boolean;
+var
+   {$IFDEF OldIteratorDef}
+   Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
+   {$ELSE}
+   Iterator:TIterator;
+   {$ENDIF}
+begin
+  Iterator:=Find(key);
+  if  Iterator=nil then
+                       result:=false
+                   else
+                       begin
+                            PValue:=Iterator.MutableValue;
                             Iterator.Destroy;
                             result:=true;
                        end;

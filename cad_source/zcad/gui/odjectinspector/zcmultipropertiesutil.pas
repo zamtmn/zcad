@@ -21,11 +21,10 @@ unit zcmultipropertiesutil;
 
 interface
 uses
-  math,zcobjectinspectormultiobjects,gdbpalette,memman,shared,sysutils,gdbentityfactory,
+  zcobjectinspectormultiobjects,gdbpalette,memman,shared,sysutils,gdbentityfactory,
   gdbase,
   UGDBDescriptor,
   varmandef,
-  gdbobjectsconstdef,
   GDBEntity,
   gdbasetypes,
   Varman,UGDBPoint3DArray,
@@ -170,7 +169,6 @@ begin
                          PTOneVarData(pdata).PVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_different;
                     end;
 end;
-
 procedure GDBDouble2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 {
 процедура суммирования GDBDouble значения в мультипроперти

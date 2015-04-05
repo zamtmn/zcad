@@ -308,10 +308,12 @@ objid: GDBInteger;
   EntInfoData:TEntInfoData;
   DC:TDrawContext;
   pentvarext,ppostentvarext:PTVariablesExtender;
+  bylayerlt:GDBPointer;
 begin
   additionalunit.init('temparraryunit');
   additionalunit.InterfaceUses.addnodouble(@SysUnit);
   group:=-1;
+  bylayerlt:=drawing.LTypeStyleTable.getAddres('ByLayer');
   while (f.notEOF) and (s <> exitGDBString) do
   begin
     if assigned(ProcessLongProcessProc) then
@@ -332,7 +334,7 @@ begin
         if (PGDBObjEntity(pobj)^.vp.Layer=@DefaultErrorLayer)or(PGDBObjEntity(pobj)^.vp.Layer=nil) then
                                                                  PGDBObjEntity(pobj)^.vp.Layer:=drawing.LayerTable.GetSystemLayer;
         if (PGDBObjEntity(pobj)^.vp.LineType=nil) then
-                                                      PGDBObjEntity(pobj)^.vp.LineType:=drawing.LTypeStyleTable.getAddres('ByLayer');
+                                                      PGDBObjEntity(pobj)^.vp.LineType:={drawing.LTypeStyleTable.getAddres('ByLayer')}bylayerlt;
         correctvariableset(pobj);
         pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd(@additionalunit,drawing);
         trash:=false;

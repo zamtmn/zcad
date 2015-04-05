@@ -173,17 +173,18 @@ procedure GeneralFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData
 begin
      mp.MPType^.CopyInstanceTo(pvardesk(pdata)^.data.Instance,ChangedData.PSetDataInEtity);
 end;
-function GDBDoubleCheck0Exclude1Include(pdata:PVarDesk;out message:GDBString):GDBBoolean;
+function GDBDoubleCheck0Exclude1Include(pdata:PVarDesk;var ErrorRange:GDBBoolean;out message:GDBString):GDBBoolean;
 begin
      if (PGDBDouble(pvardesk(pdata)^.data.Instance)^>1)or(PGDBDouble(pvardesk(pdata)^.data.Instance)^<=0)then
                                                                                                              begin
                                                                                                                result:=false;
                                                                                                                message:='Value must be in (0..1] interval';
+                                                                                                               ErrorRange:=true;
                                                                                                              end
                                                                                                          else
                                                                                                              result:=true;
 end;
-function GDBDoubleCheckGreater0(pdata:PVarDesk;out message:GDBString):GDBBoolean;
+function GDBDoubleCheckGreater0(pdata:PVarDesk;var ErrorRange:GDBBoolean;out message:GDBString):GDBBoolean;
 begin
      if PGDBDouble(pvardesk(pdata)^.data.Instance)^>0then
                                                          result:=true
@@ -191,6 +192,7 @@ begin
                                                          begin
                                                            result:=false;
                                                            message:='Value must be greater than zero';
+                                                           ErrorRange:=true;
                                                          end;
 end;
 procedure GeneralFromPtrEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);

@@ -38,13 +38,15 @@ type
   TBeforeIterateProc=function(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
   TAfterIterateProc=procedure(piteratedata:GDBPointer;mp:TMultiProperty);
   TEntChangeProc=procedure(pu:PTObjectUnit;PSourceVD:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
-  TCheckValueFunc=function(PSourceVD:PVarDesk;out message:GDBString):GDBBoolean;
+  TCheckValueFunc=function(PSourceVD:PVarDesk;var ErrorRange:GDBBoolean;out message:GDBString):GDBBoolean;
   TEntIterateProc=procedure(pvd:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
+  PTMultiPropertyDataForObjects=^TMultiPropertyDataForObjects;
   TMultiPropertyDataForObjects=record
                                      GetValueOffset,SetValueOffset:GDBInteger;
                                      EntIterateProc:TEntIterateProc;
                                      EntChangeProc:TEntChangeProc;
                                      CheckValue:TCheckValueFunc;
+                                     SetValueErrorRange:GDBBoolean;
                                end;
   TObjID2MultiPropertyProcs=GKey2DataMap <TObjID,TMultiPropertyDataForObjects,LessObjID>;
   TMultiProperty=class

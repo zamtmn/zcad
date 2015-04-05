@@ -70,6 +70,8 @@ type
 
                 procedure SetVariables(PSourceVD:pvardesk;NeededObjType:TObjID);
                 procedure SetMultiProperty(pu:PTObjectUnit;PSourceVD:pvardesk;NeededObjType:TObjID);
+                procedure processProperty(const ID:TObjID; const pentity: pGDBObjEntity; const PMultiPropertyDataForObjects:PTMultiPropertyDataForObjects; const pu:PTObjectUnit; const PSourceVD:PVarDesk;const mp:TMultiProperty; var DC:TDrawContext);
+                procedure ClearErrorRange;
             end;
 {Export-}
 var
@@ -155,7 +157,61 @@ begin
      result.PGetDataInEtity:=Pointer(PtrUInt(pentity)+GetVO);
      result.PSetDataInEtity:=Pointer(PtrUInt(pentity)+SetVO);
 end;
+procedure TMSEditor.ClearErrorRange;
+var
+  i:integer;
+  iterator:TObjID2MultiPropertyProcs.TIterator;
+begin
+     for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
+       if MultiPropertiesManager.MultiPropertyVector[i].usecounter<>0 then
+         begin
+              iterator:=MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.Min;
+              if assigned(iterator) then
+              repeat
+                    iterator.MutableValue.SetValueErrorRange:=false;
+              until not iterator.Next;
+         end;
+end;
+procedure TMSEditor.processProperty(const ID:TObjID; const pentity: pGDBObjEntity; const PMultiPropertyDataForObjects:PTMultiPropertyDataForObjects; const pu:PTObjectUnit; const PSourceVD:PVarDesk;const mp:TMultiProperty; var DC:TDrawContext);
+var
+   ChangedData:TChangedData;
+   CanChangeValue:Boolean;
+   msg,entname:gdbstring;
+   entinfo:TEntInfoData;
+begin
+     begin
+       ChangedData:=CreateChangedData(pentity,PMultiPropertyDataForObjects.GetValueOffset,PMultiPropertyDataForObjects.SetValueOffset);
+       CanChangeValue:=true;
+       if @PMultiPropertyDataForObjects.CheckValue<>nil then
+                                                          begin
+                                                               msg:='';
+                                                               CanChangeValue:=PMultiPropertyDataForObjects.CheckValue(PSourceVD,PMultiPropertyDataForObjects.SetValueErrorRange,msg);
+                                                          end;
+       if CanChangeValue then
+                             begin
+                               PMultiPropertyDataForObjects.EntChangeProc(pu,PSourceVD,ChangedData,mp);
+                               pentity^.YouChanged(gdb.GetCurrentDWG^);
+                               pentity.FormatEntity(gdb.GetCurrentDWG^,dc);
+                             end
+                         else
+                             begin
+                               if msg='' then msg:=rsInvalidInput;
+                               if ID=0 then
+                                           entname:=rsNameAll
+                                       else
+                                           if ObjID2EntInfoData.MyGetValue(ID,entinfo) then
+                                                                                           entname:=entinfo.UserName
+                                                                                       else
+                                                                                           entname:=rsNotRegistred;
+                               if PMultiPropertyDataForObjects.SetValueErrorRange
+                               then
+                                shared.ShowError(sysutils.format(rsInvalidInputForPropery,[mp.MPUserName,entname,msg]))
+                               else
+                                shared.LogError(sysutils.format(rsInvalidInputForPropery,[mp.MPUserName,entname,msg]));
+                             end;
+     end
 
+end;
 procedure TMSEditor.SetMultiProperty(pu:PTObjectUnit;PSourceVD:PVarDesk;NeededObjType:TObjID);
 var
   pentvarext: PTVariablesExtender;
@@ -165,32 +221,9 @@ var
   DC:TDrawContext;
   psd:PSelectedObjDesc;
   i:integer;
-  MultiPropertyDataForObjects:TMultiPropertyDataForObjects;
-  ChangedData:TChangedData;
-  CanChangeValue:Boolean;
-  msg:gdbstring;
-procedure processProperty;
+  PMultiPropertyDataForObjects:PTMultiPropertyDataForObjects;
 begin
-     begin
-       ChangedData:=CreateChangedData(pentity,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
-       CanChangeValue:=true;
-       if @MultiPropertyDataForObjects.CheckValue<>nil then
-                                                          CanChangeValue:=MultiPropertyDataForObjects.CheckValue(PSourceVD,msg);
-       if CanChangeValue then
-                             begin
-                               MultiPropertyDataForObjects.EntChangeProc(pu,PSourceVD,ChangedData,MultiPropertiesManager.MultiPropertyVector[i]);
-                               pentity^.YouChanged(gdb.GetCurrentDWG^);
-                               pentity.FormatEntity(gdb.GetCurrentDWG^,dc);
-                             end
-                         else
-                             begin
-                               if msg='' then msg:='Invalid input';
-                               shared.LogError('Property "'+MultiPropertiesManager.MultiPropertyVector[i].MPUserName+'" for entity '+ {MultiPropertyDataForObjects.} msg);
-                             end;
-     end
-
-end;
-begin
+  ClearErrorRange;
   PSourceVD.attrib:=PSourceVD.attrib and (not vda_different);
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   psd:=gdb.GetCurrentDWG.SelObjArray.beginiterate(EntIterator);
@@ -204,11 +237,17 @@ begin
         begin
              if ComparePropAndVarNames(MultiPropertiesManager.MultiPropertyVector[i].MPName,PSourceVD^.name) then
              begin
-                  if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(pentity^.vp.ID,MultiPropertyDataForObjects)then
-                  processProperty
+                  if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetMutableValue(pentity^.vp.ID,PMultiPropertyDataForObjects)then
+                  begin
+                    if not PMultiPropertyDataForObjects^.SetValueErrorRange then
+                      processProperty(pentity^.vp.ID,pentity,PMultiPropertyDataForObjects,pu,PSourceVD,MultiPropertiesManager.MultiPropertyVector[i],DC)
+                  end
                   else
-                      if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(0,MultiPropertyDataForObjects)then
-                      processProperty;
+                      if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetMutableValue(0,PMultiPropertyDataForObjects)then
+                      begin
+                        if not PMultiPropertyDataForObjects^.SetValueErrorRange then
+                          processProperty(0,pentity,PMultiPropertyDataForObjects,pu,PSourceVD,MultiPropertiesManager.MultiPropertyVector[i],DC);
+                      end;
              end
         end;
     end;
@@ -315,7 +354,7 @@ begin
         if ObjID2EntInfoData.MyGetValue(iterator.GetKey,entinfo) then
           s:=entinfo.UserName
         else
-          s:='Not registred';
+          s:=rsNotRegistred;
         s:=sysutils.format(rsNameWithCounter,[s,iterator.getvalue]);
         TxtEntType.Enums.add(@s);
         ObjIDVector.PushBack(iterator.getkey);

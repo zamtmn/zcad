@@ -3001,6 +3001,8 @@ begin
                                                                 New_line := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,gdb.GetCurrentROOT}));
                                                                 GDBObjLineInit(gdb.GetCurrentROOT,New_line,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,riser.P_insert_in_WCS,riser2.P_insert_in_WCS);
                                                                 plinevarext:=New_line^.GetExtension(typeof(TVariablesExtender));
+                                                                if plinevarext=nil then
+                                                                                       plinevarext:=AddVariablesToEntity(New_line);
                                                                 plinevarext^.entityunit.copyfrom(units.findunit('_riserlink'));
                                                                 vd:=plinevarext^.entityunit.FindVariable('LengthOverrider');
 

@@ -33,9 +33,6 @@ type
 PGDBObjCircle=^GDBObjCircle;
 GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  Radius:GDBLength;(*'Radius'*)(*saved_to_shd*)
-                 Diametr:GDBLength;(*'Diametr'*)(*oi_readonly*)
-                 Length:GDBDouble;(*'Length'*)(*oi_readonly*)
-                 Area:GDBDouble;(*'Area'*)(*oi_readonly*)
                  q0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  q1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  q2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
@@ -227,9 +224,6 @@ procedure GDBObjCircle.createfield;
 begin
      inherited;
      Radius:=1;
-     Diametr:=2;
-     Length:=0;
-     Area:=0;
      q0:=nulvertex;
      q1:=nulvertex;
      q2:=nulvertex;
@@ -291,9 +285,6 @@ procedure GDBObjCircle.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContex
 begin
   calcObjMatrix;
   createpoint;
-  Length:=2*pi*Radius;
-  Diametr:=Radius*2;
-  Area:=pi*Radius*Radius;
   q0:=VectorTransform3d(CreateVertex(1,0,0),objMatrix);
   q1:=VectorTransform3d(CreateVertex(0,-1,0),objMatrix);
   q2:=VectorTransform3d(CreateVertex(-1,0,0),objMatrix);

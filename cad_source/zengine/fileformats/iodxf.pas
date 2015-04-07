@@ -630,6 +630,7 @@ begin
                                  psp^.param:=BShapeProp.param;
                                  psp^.Psymbol:=pointer(shapenumber);
                                  psp^.param.PStyle:=pointer(stylehandle);
+                                 psp^.param.PstyleIsHandle:=true;
                                  pltypeprop^.dasharray.Add(@dashinfo);
                              end;
                         end;
@@ -640,6 +641,7 @@ begin
                              ptp^.Text:=txtstr;
                              //ptp^.Style:=;
                              ptp^.param.PStyle:=pointer(stylehandle);
+                             psp^.param.PstyleIsHandle:=true;
                              pltypeprop^.dasharray.Add(@dashinfo);
                         end;
                end;
@@ -867,6 +869,7 @@ begin
                PSP:=pltypeprop^.shapearray.beginiterate(ir2);
                if PSP<>nil then
                repeat
+                     if psp^.param.PstyleIsHandle then
                      if psp^.param.PStyle=pointer(DWGHandle) then
                      begin
                         psp^.param.PStyle:=ptstyle;
@@ -2161,7 +2164,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                              PStroke:=pltp^.strokesarray.iterate(ir3);
                                                              laststrokewrited:=true;
                                                         end;
-                                               TDIShape:begin
+                                               TDIShape:if (PSP^.Psymbol<>nil)and(PSP^.param.PStyle<>nil) then
+                                                        begin
                                                              laststrokewrited:=false;
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(74));
                                                              outstream.TXTAddGDBStringEOL('4');

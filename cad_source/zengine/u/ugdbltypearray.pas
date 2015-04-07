@@ -37,6 +37,7 @@ shxprop=packed record
                 Height,Angle,X,Y:GDBDouble;
                 AD:TAngleDir;
                 PStyle:PGDBTextStyle;
+                PstyleIsHandle:GDBBoolean;
         end;
 
 BasicSHXDashProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -258,7 +259,13 @@ begin
     PSP:=shapearray.beginiterate(ir2);
                                        if PSP<>nil then
                                        repeat
-                                             processH(psp.Psymbol,psp^.param);
+                                             if psp.param.PstyleIsHandle then
+                                                                             begin
+                                                                                  psp.Psymbol:=nil;
+                                                                                  psp.param.PStyle:=nil;
+                                                                             end
+                                                                         else
+                                                                             processH(psp.Psymbol,psp^.param);
                                              PSP:=shapearray.iterate(ir2);
                                        until PSP=nil;
    PTP:=textarray.beginiterate(ir2);

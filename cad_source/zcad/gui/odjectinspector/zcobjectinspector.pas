@@ -83,7 +83,8 @@ type
 
     procedure draw; virtual;
     procedure mypaint(sender:tobject);
-    procedure drawprop(PPA:PTPropertyDeskriptorArray; var y,sub:GDBInteger;miny:GDBInteger;arect:trect);
+    procedure drawprop(PPA:PTPropertyDeskriptorArray;arect:trect);
+    procedure InternalDrawprop(PPA:PTPropertyDeskriptorArray; var y,sub:GDBInteger;miny:GDBInteger;arect:trect;var LastPropAddFreespace:Boolean);
     procedure calctreeh(PPA:PTPropertyDeskriptorArray; var y:GDBInteger);
     function gettreeh:GDBInteger; virtual;
     procedure BeforeInit; virtual;
@@ -158,7 +159,7 @@ var
   GDBobjinsp:TGDBobjinsp;
   typecount:GDBWord;
   proptreeptr:propdeskptr;
-  rowh:integer;
+  rowh,spaceh:integer;
   ty:integer;
   DefaultDetails: TThemedElementDetails;
 
@@ -415,19 +416,23 @@ end;
 procedure TGDBobjinsp.CalcRowHeight;
 begin
   rowh:=21;
+  spaceh:=5;
   if assigned(sysvar.INTF.INTF_DefaultControlHeight) then
                                                          rowh:=sysvar.INTF.INTF_DefaultControlHeight^;
   if assigned(sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Enable) then
   if sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Enable^ then
   if assigned(sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Value) then
   if sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Value^>0 then
-     rowh:=sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Value^
+     rowh:=sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Value^;
+  if assigned(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_SpaceHeight) then
+     spaceh:=SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_SpaceHeight^;
 end;
 
 procedure TGDBobjinsp.AfterConstruction;
 begin
      inherited;
      rowh:=21;
+     spaceh:=5;
      CalcRowHeight;
 
      onresize:=_onresize;
@@ -770,8 +775,20 @@ begin
 end;
 
 end;
+procedure TGDBobjinsp.drawprop(PPA:PTPropertyDeskriptorArray;arect:trect);
+var
+   lpafs:boolean;
+   y,sub:GDBInteger;
+   miny:GDBInteger;
+begin
+     lpafs:=false;
+     y:=HeadersHeight+BorderWidth;
+     sub:=0;
+     miny:=arect.Top+HeadersHeight+1;
+     InternalDrawprop(PPA,y,sub,miny,arect,lpafs);
+end;
 
-procedure TGDBobjinsp.drawprop(PPA:PTPropertyDeskriptorArray; var y,sub:GDBInteger;miny:GDBInteger;arect:TRect);
+procedure TGDBobjinsp.InternalDrawprop(PPA:PTPropertyDeskriptorArray; var y,sub:GDBInteger;miny:GDBInteger;arect:TRect;var LastPropAddFreespace:Boolean);
 var
   s:GDBString;
   ppd:PPropertyDeskriptor;
@@ -787,6 +804,7 @@ begin
   ppd:=ppa^.beginiterate(ir);
   if ppd<>nil then
     repeat
+      LastPropAddFreespace:=false;
       if (ppd^.IsVisible) then
       begin
         OnMouseProp:=(ppd=onmousepp);
@@ -832,7 +850,7 @@ begin
                                     inc(sub);
                                     y:=y+rowh;
                                     if not ppd^.Collapsed^ then
-                                      drawprop(GDBPointer(ppd.SubNode),y,sub,miny,arect);
+                                      InternalDrawprop(GDBPointer(ppd.SubNode),y,sub,miny,arect,LastPropAddFreespace);
                                     dec(sub);
                                      end;
                                   end
@@ -909,8 +927,11 @@ begin
       if self.VertScrollBar.Position+self.ClientHeight<=(y) then
                                                                        system.break;
     until ppd=nil;
-
-    y:=y+rowh;
+    if not LastPropAddFreespace then
+                                    begin
+                                      y:=y+spaceh;
+                                      LastPropAddFreespace:=true;
+                                    end;
 end;
 
 function TGDBobjinsp.gettreeh;
@@ -961,8 +982,6 @@ begin
 end;
 procedure TGDBobjinsp.draw;
 var
-  y:GDBInteger;
-  sub:GDBInteger;
   arect,hrect:trect;
   tc:tcolor;
   {ts:TTextStyle;}
@@ -1006,9 +1025,7 @@ if WindowsVersion>=wvVista then
 InflateRect(hrect, -1, -1);
 
 
-y:=HeadersHeight+BorderWidth;
-sub:=0;
-drawprop(@pda,y,sub,hrect.Top+HeadersHeight+1,{arect}hrect);
+drawprop(@pda,{arect}hrect);
 
 hrect.Bottom:=hrect.Top+HeadersHeight-1{+1};
 {$IFDEF WINDOWS}hrect.Top:=hrect.Top;{$ENDIF}
@@ -1084,8 +1101,7 @@ begin
       curr:=psubtree^.iterate(ir);
     until curr=nil;
 end;
-
-function mousetoprop(psubtree:PTPropertyDeskriptorArray; mx,my:GDBInteger; var y:GDBInteger):PPropertyDeskriptor;
+function InternalMousetoprop(psubtree:PTPropertyDeskriptorArray; mx,my:GDBInteger; var y:GDBInteger;var LastPropAddFreeSpace:boolean):PPropertyDeskriptor;
 var
   curr:PPropertyDeskriptor;
   dy:integer;
@@ -1096,6 +1112,7 @@ begin
   curr:=psubtree^.beginiterate(ir);
   if curr<>nil then
     repeat
+      LastPropAddFreeSpace:=false;
       if curr^.IsVisible then
       if (not((curr^.SubNode<>nil)and(curr^.SubNode.count=0)))or SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowEmptySections^ then
       begin
@@ -1106,12 +1123,23 @@ begin
           exit;
         end;
         inc(y,rowh);
-        if (curr^.SubNode<>nil)and(not curr^.Collapsed^) then result:=mousetoprop(GDBPointer(curr^.SubNode),mx,my,y);
+        if (curr^.SubNode<>nil)and(not curr^.Collapsed^) then result:=InternalMousetoprop(GDBPointer(curr^.SubNode),mx,my,y,LastPropAddFreeSpace);
         if result<>nil then exit;
       end;
       curr:=psubtree^.iterate(ir);
     until curr=nil;
-    y:=y+rowh;
+    if not LastPropAddFreeSpace then
+    begin
+    y:=y+spaceh;
+    LastPropAddFreeSpace:=true;
+    end;
+end;
+function mousetoprop(psubtree:PTPropertyDeskriptorArray; mx,my:GDBInteger; var y:GDBInteger):PPropertyDeskriptor;
+var
+   lpafs:boolean;
+begin
+     lpafs:=false;
+     result:=InternalMousetoprop(psubtree,mx,my,y,lpafs);
 end;
 procedure TGDBobjinsp.ClearEDContext;
 begin

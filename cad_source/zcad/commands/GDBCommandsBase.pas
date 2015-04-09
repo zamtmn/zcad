@@ -118,6 +118,8 @@ begin
                     begin
                          repeat
                          pentvarext:=pp^.GetExtension(typeof(TVariablesExtender));
+                         if pentvarext<>nil then
+                         begin
                          pvd:=pentvarext^.entityunit.FindVariable('NMO_Name');
                          if pvd<>nil then
                                          begin
@@ -136,6 +138,7 @@ begin
                                          //                 result:=result+#13#10+line;
                                          inc(Result);
                                          end;
+                         end;
                                pp:=gdb.GetCurrentDWG.OnMouseObj.iterate(ir);
                          until pp=nil;
                     end;

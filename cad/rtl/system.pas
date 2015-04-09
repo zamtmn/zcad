@@ -1804,9 +1804,6 @@ GDBObjAbstractText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlainWithOX)
 PGDBObjCircle=^GDBObjCircle;
 GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  Radius:GDBLength;(*'Radius'*)(*saved_to_shd*)
-                 Diametr:GDBLength;(*'Diametr'*)(*oi_readonly*)
-                 Length:GDBDouble;(*'Length'*)(*oi_readonly*)
-                 Area:GDBDouble;(*'Area'*)(*oi_readonly*)
                  q0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  q1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  q2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
@@ -3551,6 +3548,8 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                 procedure CreateMultiPropertys;
                 procedure SetVariables(PSourceVD:pvardesk;NeededObjType:TObjID);
                 procedure SetMultiProperty(pu:PTObjectUnit;PSourceVD:pvardesk;NeededObjType:TObjID);
+                procedure processProperty(const ID:TObjID; const pentity: pGDBObjEntity; const PMultiPropertyDataForObjects:PTMultiPropertyDataForObjects; const pu:PTObjectUnit; const PSourceVD:PVarDesk;const mp:TMultiProperty; var DC:TDrawContext);
+                procedure ClearErrorRange;
             end;
 //Generate on E:\zcad\cad_source\zcad\electroteh\GDBCommandsOPS.pas
   TInsertType=(

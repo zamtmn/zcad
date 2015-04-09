@@ -845,6 +845,7 @@ shxprop=packed record
                 Height,Angle,X,Y:GDBDouble;
                 AD:TAngleDir;
                 PStyle:PGDBTextStyle;
+                PstyleIsHandle:GDBBoolean;
         end;
 BasicSHXDashProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 param:shxprop;
@@ -1186,6 +1187,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
                 INTF_ObjInsp_ShowFastEditors:PGDBBoolean;(*'Show fast editors'*)
                 INTF_ObjInsp_ShowOnlyHotFastEditors:PGDBBoolean;(*'Show only hot fast editors'*)
                 INTF_ObjInsp_RowHeight:TGDBIntegerOverrider;(*'Row height'*)
+                INTF_ObjInsp_SpaceHeight:PGDBInteger;(*'Space height'*)
                 INTF_ObjInsp_AlwaysUseMultiSelectWrapper:PGDBBoolean;(*'Always use multiselect wrapper'*)
                 INTF_ObjInsp_ShowEmptySections:PGDBBoolean;(*'Show empty sections'*)
                end;

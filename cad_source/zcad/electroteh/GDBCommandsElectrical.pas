@@ -2400,10 +2400,10 @@ begin
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   count:=0;
   if pv<>nil then
-  begin
-  pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
-  if pentvarext<>nil then
   repeat
+        pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
+        if pentvarext<>nil then
+        begin
         findvarvalue:=false;
         v:=pentvarext^.entityunit.FindVariable(varname);
         if v<>nil then
@@ -2438,10 +2438,10 @@ begin
                   inc(count);
                end;
         end;
+        end;
 
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
-  end;
 
 
 

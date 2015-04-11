@@ -94,7 +94,7 @@ begin
         begin
              if LincedData='TObjLinkRecord' then
                                     LincedData:=LincedData;
-             pld:=pointer(PUserTypeDescriptor(SysUnit.InterfaceTypes.exttype.getelement(SysUnit.InterfaceTypes._TypeName2Index(LincedData))^));
+             pld:=pointer(PUserTypeDescriptor(SysUnit.InterfaceTypes.{exttype.}getelement(SysUnit.InterfaceTypes._TypeName2Index(LincedData))^));
              p:=PGDBOpenArrayOfData(PInstance)^.beginiterate(ir);
              if p<>nil then
              repeat
@@ -113,7 +113,7 @@ begin
                         if objtypename<>ObjN_GDBObjLine then
                                                             objtypename:=objtypename;
                         GDBStringDescriptorObj.Serialize(@objtypename,saveflag,membuf,linkbuf,sub);
-                        pld:=pointer(PUserTypeDescriptor(SysUnit.InterfaceTypes.exttype.getelement(SysUnit.InterfaceTypes._TypeName2Index(objtypename))^));
+                        pld:=pointer(PUserTypeDescriptor(SysUnit.InterfaceTypes.{exttype.}getelement(SysUnit.InterfaceTypes._TypeName2Index(objtypename))^));
                         pld^.Serialize(p,saveflag,membuf,linkbuf,sub);
                    end;
                    p:=PGDBOpenArrayOfGDBPointer(PInstance)^.iterate(ir);
@@ -155,7 +155,7 @@ begin
              while objtypename<>ObjN_ArrayEnd do
              begin
                   p:=PGDBOpenArrayOfData(PInstance)^.getelement(i);
-                  pld:=pointer(PUserTypeDescriptor(SysUnit.InterfaceTypes.exttype.getelement(SysUnit.InterfaceTypes._TypeName2Index(objtypename))^));
+                  pld:=pointer(PUserTypeDescriptor(SysUnit.InterfaceTypes.{exttype.}getelement(SysUnit.InterfaceTypes._TypeName2Index(objtypename))^));
                   gdbgetmem({$IFDEF DEBUGBUILD}'{lsdfgqweqweqwe}',{$ENDIF}pointer(p^),pld^.SizeInGDBBytes);
                   pld^.deSerialize(p^,saveflag,membuf,linkbuf);
 

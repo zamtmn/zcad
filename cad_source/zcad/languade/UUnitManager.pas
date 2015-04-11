@@ -178,8 +178,8 @@ begin
      result:=modeOk;
      if mode=typemode then
      begin
-          if currentunit.InterfaceTypes.exttype.count-1 <> OldTypesCount then
-          for i := OldTypesCount to currentunit.InterfaceTypes.exttype.count - 1 do
+          if currentunit.InterfaceTypes.{exttype.}getcount-1 <> OldTypesCount then
+          for i := OldTypesCount to currentunit.InterfaceTypes.{exttype.}getcount - 1 do
           begin
                currentunit.TypeIndex2PTD(i)^.Format;
           end;
@@ -199,7 +199,7 @@ begin
           if mode=beginmode then result:=modeEnd;
      end;
      if newmode=typemode then
-                             OldTypesCount:=currentunit.InterfaceTypes.exttype.Count;
+                             OldTypesCount:=currentunit.InterfaceTypes.{exttype.}getCount;
      mode:=newmode;
 end;
 function TUnitManager.loadunit;
@@ -620,7 +620,7 @@ if addtype then
         //etd.name := typename;
 
         //p:=@etd;
-        currentunit.InterfaceTypes.exttype.add(@etd);
+        currentunit.InterfaceTypes.{exttype.}AddTypeByPP(@etd);
 
         {$IFDEF TOTALYLOG}programlog.logoutstr('Type "'+typename+'" added',0);{$ENDIF}
         if typename='tdisp' then

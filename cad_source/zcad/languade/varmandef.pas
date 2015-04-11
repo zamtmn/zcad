@@ -29,7 +29,6 @@ uses
   {$ENDIF}
   zcadsysvars,SysUtils,UGDBTree,UGDBStringArray,{gdbobjectsconstdef,}strutils,gdbasetypes,
   UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,gdbase,UGDBOpenArrayOfData,
-  UGDBOpenArrayOfPObjects,
   Classes,Controls,StdCtrls,Graphics,types{$IFNDEF DELPHI},LCLVersion{$ENDIF};
 const
   {Ttypenothing=-1;
@@ -236,12 +235,16 @@ TOSMode=packed record
   end;
 ptypemanagerdef=^typemanagerdef;
 typemanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                  exttype:GDBOpenArrayOfPObjects;
                   procedure readbasetypes;virtual;abstract;
                   procedure readexttypes(fn: GDBString);virtual;abstract;
                   function _TypeName2Index(name: GDBString): GDBInteger;virtual;abstract;
                   function _TypeName2PTD(name: GDBString):PUserTypeDescriptor;virtual;abstract;
                   function _TypeIndex2PTD(ind:integer):PUserTypeDescriptor;virtual;abstract;
+
+                  function getelement(index:TArrayIndex):GDBPointer;virtual;abstract;
+                  function getcount:TArrayIndex;virtual;abstract;
+                  function AddTypeByPP(p:GDBPointer):TArrayIndex;virtual;abstract;
+                  function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;virtual;abstract;
             end;
 pvarmanagerdef=^varmanagerdef;
 varmanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -258,7 +261,7 @@ var
   date:TDateTime;
 implementation
 uses log;
-
+{for hide exttype}
 constructor TPropEditor.Create(AOwner:TComponent;_PInstance:GDBPointer;var _PTD:UserTypeDescriptor;FreeOnLostFocus:boolean);
 begin
      inherited create(AOwner);

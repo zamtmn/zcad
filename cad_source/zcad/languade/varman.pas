@@ -23,6 +23,7 @@ interface
 uses
   uabstractunit,zcadstrconsts,UGDBOpenArrayOfPointer,SysUtils,UBaseTypeDescriptor,
   gdbasetypes, shared,gdbase,UGDBOpenArrayOfByte,UGDBStringArray,varmandef,sysinfo,
+  UGDBOpenArrayOfPObjects,usimplegenerics,
   log,memman,TypeDescriptors,URecordDescriptor,UObjectDescriptor,strproc{$IFNDEF DELPHI},intftranslations{$ENDIF},classes;
 type
     td=record
@@ -135,9 +136,14 @@ const
       );
 
 type
+TNameToIndex=TMyGDBStringDictionary<TArrayIndex>;
 {EXPORT+}
 ptypemanager=^typemanager;
 typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)
+                  protected
+                  exttype:GDBOpenArrayOfPObjects;
+                  n2i:TNameToIndex;
+                  public
                   constructor init;
                   procedure CreateBaseTypes;virtual;
                   function _TypeName2PTD(name: GDBString):PUserTypeDescriptor;virtual;
@@ -146,6 +152,11 @@ typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)
                   destructor done;virtual;
                   destructor systemdone;virtual;
                   procedure free;virtual;
+                  {for hide exttype}
+                  function getelement(index:TArrayIndex):GDBPointer;virtual;
+                  function getcount:TArrayIndex;virtual;
+                  function AddTypeByPP(p:GDBPointer):TArrayIndex;virtual;
+                  function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;virtual;
             end;
 pvarmanager=^varmanager;
 varmanager={$IFNDEF DELPHI}packed{$ENDIF} object(varmanagerdef)
@@ -209,21 +220,16 @@ var
   CategoryCollapsed:GDBOpenArrayOfByte;
   CategoryUnknownCOllapsed:boolean;
 
-//function valuetoGDBString(pvalue: GDBPointer; valuetype:pUserTypeDescriptor): GDBString;
-procedure GDBStringtovalue(s: GDBString; pvalue: GDBPointer; valuetype: GDBByte);
 function getpattern(ptd:ptdarray; max:GDBInteger;var line:GDBString; out typ:GDBInteger):PGDBGDBStringArray;
 function ObjOrRecordRead(var f: GDBOpenArrayOfByte; var line,GDBStringtypearray:GDBString; var fieldoffset: GDBSmallint; ptd:PRecordDescriptor):GDBBoolean;
 function GetPVarMan: GDBPointer; export;
-//function getpsysvar: GDBPointer; export;
 function FindCategory(category:GDBString;var catname:GDBString):Pointer;
 procedure SetCategoryCollapsed(category:GDBString;value:GDBBoolean);
 function GetBoundsFromSavedUnit(name:string):Trect;
 procedure StoreBoundsToSavedUnit(name:string;tr:Trect);
 procedure SetTypedDataVariable(out TypedTataVariable:TTypedData;pTypedTata:pointer;TypeName:string);
-//procedure startup;
-//procedure finalize;
 implementation
-uses {languade,}strmy{,GDBSubordinated};
+uses strmy;
 
 procedure SetTypedDataVariable(out TypedTataVariable:TTypedData;pTypedTata:pointer;TypeName:string);
 var
@@ -432,6 +438,7 @@ begin
      {$IFDEF TOTALYLOG}programlog.logoutstr('TypeManager.done',lp_IncPos);{$ENDIF}
      exttype.cleareraseobj;
      exttype.done;
+     n2i.destroy;
      {$IFDEF TOTALYLOG}programlog.logoutstr('end;',lp_DecPos);{$ENDIF}
 end;
 destructor typemanager.systemdone;
@@ -439,6 +446,7 @@ begin
      {$IFDEF TOTALYLOG}programlog.logoutstr('TypeManager.done',lp_IncPos);{$ENDIF}
      exttype.cleareraseobjfrom(BaseTypesEndIndex-1);
      exttype.done;
+     n2i.destroy;
      {$IFDEF TOTALYLOG}programlog.logoutstr('end;',lp_DecPos);{$ENDIF}
 end;
 
@@ -446,191 +454,63 @@ procedure typemanager.free;
 begin
      exttype.cleareraseobjfrom(BaseTypesEndIndex);
 end;
-{function valuetoGDBString;
-var
-  uGDBInteger: GDBLongword;
-  uGDBByte: GDBByte;
-  uGDBWord: GDBWord;
-  gl_double: GDBDouble;
-begin
-  if Assigned(pvalue) then
-  begin
-  if valuetype=@GDBPointerDescriptorOdj then
-      begin
-        if pvalue=nil then result := 'згим ў гЄ § вҐ«Ґ'
-
-        else if Assigned(pvalue) then
-        begin
-            if assigned(pGDBPointer(pvalue)^) then
-            begin
-            if pGDBPointer(pvalue)^<>nil then
-                                             begin
-                                                  uGDBInteger := pGDBLongword(pvalue)^;
-                                                  result := '$' + inttohex(int64(uGDBInteger), 8);
-                                             end
-                                         else result := 'nil';
-            end;
-        end else result := '$згим';
-        //end;
-      end;
-  if valuetype=@GDBBooleanDescriptorOdj then
-      begin
-        uGDBByte := pGDBByte(pvalue)^;
-        if uGDBByte = 0 then
-          result := 'False'
-        else
-          result := 'True';
-      end;
-  if valuetype=@GDBShortintDescriptorObj then
-      begin
-        uGDBByte := pGDBByte(pvalue)^;
-        result := inttostr(GDBShortint(uGDBByte));
-      end;
-  if valuetype=@GDBByteDescriptorObj then
-      begin
-        uGDBByte := pGDBByte(pvalue)^;
-        result := inttostr(uGDBByte);
-      end;
-  if valuetype=@GDBSmallintDescriptorObj then
-      begin
-        uGDBWord := pGDBWord(pvalue)^;
-        result := inttostr(GDBSmallint(uGDBWord));
-      end;
-  if valuetype=@GDBWordDescriptorObj then
-      begin
-        uGDBWord := pGDBWord(pvalue)^;
-        result := inttostr(uGDBWord);
-      end;
-  if valuetype=@GDBIntegerDescriptorObj then
-      begin
-        uGDBInteger := pGDBLongword(pvalue)^;
-        result := inttostr(GDBInteger(uGDBInteger));
-      end;
-  if valuetype=@GDBLongwordDescriptorObj then
-      begin
-        uGDBInteger := pGDBLongword(pvalue)^;
-        result := inttostr(uGDBInteger);
-      end;
-  if valuetype=@GDBDoubleDescriptorObj then
-      begin
-        gl_double := pdouble(pvalue)^;
-        str(gl_double: 3: 3, result);
-      end;
-  if valuetype=@GDBStringDescriptorObj then
-      begin
-        result := GDBString(pvalue^);
-        //result := '235235';
-      end;
-  end
-  else result := 'nil';
-end;}
-
-procedure GDBStringtovalue(s: GDBString; pvalue: GDBPointer; valuetype: GDBByte);
-var
-  uGDBInteger: GDBLongword;
-  uGDBByte: GDBByte;
-  uGDBWord: GDBWord;
-  gl_double: GDBDouble;
-begin
-  case valuetype of
-    2:
-      begin
-        uGDBInteger := strtoint(s);
-        pGDBLongword(pvalue)^ := uGDBInteger;
-      end;
-    7:
-      begin
-        if s = 'False' then
-          PGDBBoolean(pvalue)^ := False
-        else
-          PGDBBoolean(pvalue)^ := True;
-      end;
-    8:
-      begin
-        uGDBByte := strtoint(s);
-        pGDBByte(pvalue)^ := uGDBByte;
-      end;
-    9:
-      begin
-        uGDBByte := strtoint(s);
-        pGDBByte(pvalue)^ := uGDBByte;
-      end;
-    10:
-      begin
-        uGDBWord := strtoint(s);
-        pGDBWord(pvalue)^ := uGDBWord;
-      end;
-    11:
-      begin
-        uGDBWord := strtoint(s);
-        pGDBWord(pvalue)^ := uGDBWord;
-      end;
-    12:
-      begin
-        //uGDBInteger := strtoint(s);
-        pGDBLongword(pvalue)^ := strtoint(s);
-      end;
-    13:
-      begin
-        //uGDBInteger := strtoint(s);
-        pGDBLongword(pvalue)^ := strtoint(s);
-      end;
-    14:
-      begin
-        gl_double := strtofloat(s);
-        pdouble(pvalue)^ := gl_double;
-      end;
-    15:
-      begin
-        GDBString(pvalue^) := s;
-        //result := '235235';
-      end;
-
-  end;
-end;
 function typemanager._TypeIndex2PTD;
 begin
   result:=PUserTypeDescriptor(exttype.getobject(ind));
 end;
-{unction typemanager.TypeName2Index(name: GDBString): GDBInteger;
-var
-  i: GDBInteger;
-  tp:PUserTypeDescriptor;
+function typemanager.getelement(index:TArrayIndex):GDBPointer;
 begin
-  result := -1;
-  tp:=exttype.beginiterate;
-  if tp<>nil then
-  repeat
-    if tp<>nil then
-    if uppercase(name) = uppercase(tp^.typename) then
-    begin
-      result := exttype.ir.itc;
-      system.Exit;
-    end;
-  tp:=exttype.iterate;
-  until tp=nil;
-end;}
+     result:=exttype.getelement(index);
+end;
+function typemanager.getcount:TArrayIndex;
+begin
+     result:=exttype.count;
+end;
+function typemanager.AddTypeByPP(p:GDBPointer):TArrayIndex;
+var
+  pt:PUserTypeDescriptor;
+begin
+     result:=exttype.add(p);
+     pt:=ppointer(p)^;
+     n2i.insert(uppercase(pt^.TypeName),result);
+end;
+function typemanager.AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;
+var
+   p:pointer;
+begin
+     p:=@_type;
+     result:=AddTypeByPP(@p);
+end;
 function typemanager._TypeName2PTD;
 var
-//  i: GDBInteger;
-  tp:PUserTypeDescriptor;
-      ir:itrec;
-  S:GDBString;
+  {tp:PUserTypeDescriptor;
+  ir:itrec;
+  S:GDBString;}
+  rr:tarrayindex;
 begin
-  result:=nil;
+  if n2i.MyGetValue(uppercase(name),rr) then
+  begin
+       result:=_TypeIndex2PTD(rr);
+  end
+  else
+  begin
+       result:=nil;
+  end;
+  {result:=nil;
+  name:=uppercase(name);
   tp:=exttype.beginiterate(ir);
   if tp<>nil then
   repeat
     if tp<>nil then
     //programlog.logoutstr(tp^.typename,0);
     s:=uppercase(tp^.typename);
-    if uppercase(name) = s then
+    if name = s then
     begin
       result:=tp;
       system.Exit;
     end;
   tp:=exttype.iterate(ir);
-  until tp=nil;
+  until tp=nil;}
 end;
 function typemanager._ObjectTypeName2PTD;
 begin
@@ -639,25 +519,26 @@ end;
 constructor typemanager.init;
 begin
      exttype.init({$IFDEF DEBUGBUILD}'{5C8C5991-F908-4A85-B47E-56EA0ED03084}',{$ENDIF}1000{,sizeof(typedesk)});
+     n2i:=TNameToIndex.create;
      //CreateBaseTypes;
 end;
 procedure typemanager.CreateBaseTypes;
 begin
-     exttype.addref(GDBPointerDescriptorOdj);
-     exttype.addref(GDBBooleanDescriptorOdj);
-     exttype.addref(GDBShortintDescriptorObj);
-     exttype.addref(GDBByteDescriptorObj);
-     exttype.addref(GDBSmallintDescriptorObj);
-     exttype.addref(GDBWordDescriptorObj);
-     exttype.addref(GDBIntegerDescriptorObj);
-     exttype.addref(GDBLongwordDescriptorObj);
-     exttype.addref(GDBQWordDescriptorObj);
-     exttype.addref(GDBDoubleDescriptorObj);
-     exttype.addref(GDBStringDescriptorObj);
-     exttype.addref(GDBAnsiStringDescriptorObj);
-     exttype.addref(GDBFloatDescriptorObj);
-     exttype.addref(GDBEnumDataDescriptorObj);
-     exttype.addref(GDBPtrUIntDescriptorObj);
+     AddTypeByRef(GDBPointerDescriptorOdj);
+     AddTypeByRef(GDBBooleanDescriptorOdj);
+     AddTypeByRef(GDBShortintDescriptorObj);
+     AddTypeByRef(GDBByteDescriptorObj);
+     AddTypeByRef(GDBSmallintDescriptorObj);
+     AddTypeByRef(GDBWordDescriptorObj);
+     AddTypeByRef(GDBIntegerDescriptorObj);
+     AddTypeByRef(GDBLongwordDescriptorObj);
+     AddTypeByRef(GDBQWordDescriptorObj);
+     AddTypeByRef(GDBDoubleDescriptorObj);
+     AddTypeByRef(GDBStringDescriptorObj);
+     AddTypeByRef(GDBAnsiStringDescriptorObj);
+     AddTypeByRef(GDBFloatDescriptorObj);
+     AddTypeByRef(GDBEnumDataDescriptorObj);
+     AddTypeByRef(GDBPtrUIntDescriptorObj);
      BaseTypesEndIndex:=exttype.Count;
 end;
 

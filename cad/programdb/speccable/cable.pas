@@ -26,7 +26,6 @@ type
                                   _2_2_1_5(*'2х2х1.5'*),
                                   _1_2_2_5(*'1х2х2.5'*),
                                   _2_2_2_5(*'2х2х2.5'*));
-
      TSPECCABLE_KPSVEV_WCS=(_1_2_0_5(*'1х2х0.5'*),
                             _2_2_0_5(*'2х2х0.5'*),
                             _4_2_0_5(*'4х2х0.5'*),
@@ -44,6 +43,20 @@ type
                             _2_2_1_5(*'2х2х1.5'*),
                             _1_2_2_5(*'1х2х2.5'*),
                             _2_2_2_5(*'2х2х2.5'*));
+     TSPECCABLE_KPSE_FRHF_WCS=(   _1_2_0_2(*'1х2х0.2'*),
+                                  _2_2_0_2(*'2х2х0.2'*),
+                                  _1_2_0_35(*'1х2х0.35'*),
+                                  _2_2_0_35(*'2х2х0.35'*),
+                                  _1_2_0_5(*'1х2х0.5'*),
+                                  _2_2_0_5(*'2х2х0.5'*),
+                                  _1_2_0_75(*'1х2х0.75'*),
+                                  _2_2_0_75(*'2х2х0.75'*),
+                                  _1_2_1_0(*'1х2х1'*),
+                                  _2_2_1_0(*'2х2х1'*),
+                                  _1_2_1_5(*'1х2х1.5'*),
+                                  _2_2_1_5(*'2х2х1.5'*),
+                                  _1_2_2_5(*'1х2х2.5'*),
+                                  _2_2_2_5(*'2х2х2.5'*));
 
 
     TSPECCABLE_KPSVV_ng_LS=packed object(CableDeviceBaseObject)
@@ -67,6 +80,9 @@ type
     TSPECCABLE_KPSVEVBVM=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPECCABLE_KPSVV_WCS;
            end;
+    TSPECCABLE_KPSEFRHF=packed object(CableDeviceBaseObject)
+                Wire_Count_Section_DESC:TSPECCABLE_KPSE_FRHF_WCS;
+           end;
 var
    _EQ_SPECCABLE_KPSVV_ng_LS:TSPECCABLE_KPSVV_ng_LS;
    _EQ_SPECCABLE_KPSVV:TSPECCABLE_KPSVV;
@@ -76,6 +92,7 @@ var
 
    _EQ_SPECCABLE_KPSVEVKVMN:TSPECCABLE_KPSVEVKVMN;
    _EQ_SPECCABLE_KPSVEVBVM:TSPECCABLE_KPSVEVBVM;
+   _EQ_SPECCABLE_KPSEFRHF:TSPECCABLE_KPSEFRHF;
 
 implementation
 begin
@@ -204,4 +221,20 @@ begin
      _EQ_SPECCABLE_KPSVEVBVM.TreeCoord:='BP_СПЕЦКАБЕЛЬ_Для ОПС_КПСВЭВБВм|BC_Кабельная продукция_Связи_КПСВЭВБВм(СПЕЦКАБЕЛЬ)';
      _EQ_SPECCABLE_KPSVEVBVM.format;
 
+     _EQ_SPECCABLE_KPSEFRHF.initnul;
+     _EQ_SPECCABLE_KPSEFRHF.Category:=_kables;
+     _EQ_SPECCABLE_KPSEFRHF.Group:=_cables_sv;
+     _EQ_SPECCABLE_KPSEFRHF.EdIzm:=_m;
+     _EQ_SPECCABLE_KPSEFRHF.ID:='SPECCABLE_KPSEFRHF';
+     _EQ_SPECCABLE_KPSEFRHF.Standard:='ТУ 16.К99-036-2007';
+     _EQ_SPECCABLE_KPSEFRHF.OKP:='';
+     _EQ_SPECCABLE_KPSEFRHF.Manufacturer:='НПП "Спецкабель" г.Москва';
+     _EQ_SPECCABLE_KPSEFRHF.Description:='';
+     _EQ_SPECCABLE_KPSEFRHF.NameShortTemplate:='КПСЭнг(A)-FRHF %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSEFRHF.NameTemplate:='Кабель симметричный, парной скрутки, огнестойкий, безгалогенный КПСЭнг(A)-FRHF %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSEFRHF.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSEFRHF.NameFullTemplate:='Кабель симметричный, парной скрутки, огнестойкий, безгалогенный КПСЭнг(A)-FRHF %%[Wire_Count_Section_DESC], сечением %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSEFRHF.Wire_Count_Section_DESC:=_1_2_0_5;
+     _EQ_SPECCABLE_KPSEFRHF.TreeCoord:='BP_СПЕЦКАБЕЛЬ_Для ОПС_КПСЭнг(A)-FRHF|BC_Кабельная продукция_Связи_КПСЭнг(A)-FRHF(СПЕЦКАБЕЛЬ)';
+     _EQ_SPECCABLE_KPSEFRHF.format;
 end.

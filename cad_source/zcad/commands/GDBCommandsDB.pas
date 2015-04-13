@@ -32,7 +32,7 @@ uses
   UGDBOpenArrayOfByte,
   gdbEntity,
   shared,
-  devicebaseabstract,UUnitManager,gdbasetypes,strutils,forms,Controls,zcadinterface,UGDBDrawingdef;
+  devicebaseabstract,UUnitManager,gdbasetypes,strutils,forms,Controls,zcadinterface,UGDBDrawingdef,UGDBStringArray,strmy,memman;
 
 procedure DBLinkProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
 
@@ -64,16 +64,13 @@ begin
      result:=cmd_ok;
 end;
 function DBaseRename_com(operands:TCommandOperands):TCommandResult;
-var //t:PUserTypeDescriptor;
-    {pvd,}pdbv:pvardesk;
-    //pu:ptunit;
-    //pv:pGDBObjEntity;
-    //ir:itrec;
-    //c:integer;
-
-    //p:pointer;
+var
+    pdbv:pvardesk;
     pu:ptunit;
-    //vn:GDBString;
+    s,s1:gdbstring;
+    parseresult:PGDBGDBStringArray;
+    parseerror:boolean;
+    renamed:boolean;
 begin
      if commandmanager.ContextCommandParams<>nil then
      begin
@@ -83,13 +80,35 @@ begin
            begin
                  if sltexteditor1=nil then
                                   Application.CreateForm(Tsltexteditor1, sltexteditor1);
-                 sltexteditor1.caption:=('Переименовать вхождение');
+                 sltexteditor1.caption:=('Rename entry');
                  sltexteditor1.helptext.Caption:=' _EQ ';
                  sltexteditor1.EditField.Caption:=copy(pdbv.name,4,length(pdbv.name)-3);
+                 renamed:=false;
+                 repeat
                  if DoShowModal(sltexteditor1)=mrok then
                  begin
-                      pdbv.name:='_EQ'+sltexteditor1.EditField.Caption;
+                      s:='_EQ'+sltexteditor1.EditField.Caption;
+                      s1:=s;
+
+                      if pu^.FindVariable(s)<>nil then
+                                                 begin
+                                                      shared.ShowError(format(rsEntryAlreadyExist,[s]));
+                                                 end
+                      else
+                      begin
+                      parseresult:=runparser('_sym'#0'[{_symordig'#0'}',s1,parseerror);
+                      if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                      if parseerror and (s1='') then
+                                        begin
+                                             shared.HistoryOutStr(format(rsRenamedTo,['Entry',pdbv.name,s]));
+                                             pdbv.name:=s;
+                                             renamed:=true;
+                                        end
+                                           else
+                                               shared.ShowError(format(rsInvalidIdentificator,[s]));
+                      end;
                  end;
+                 until renamed or (sltexteditor1.ModalResult<>mrok);
            end;
      end
         else

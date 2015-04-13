@@ -30,6 +30,10 @@ resourcestring
   rsDivByZero='Divide by zero';
   rsErrorPrefix='ERROR: ';
 
+  rsInvalidIdentificator='"%s" not valid identificator';
+  rsEntryAlreadyExist='Entry "%s" already exist';
+  rsRenamedTo='%s "%s" renamed to "%s"';
+
 
 
 

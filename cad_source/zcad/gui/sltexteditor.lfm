@@ -12,12 +12,12 @@ object sltexteditor1: Tsltexteditor1
   OnKeyDown = KeyDown
   OnShow = shoftedform
   Position = poOwnerFormCenter
-  LCLVersion = '1.1'
+  LCLVersion = '1.5'
   object EditField: TEdit
-    Left = 22
+    Left = 25
     Height = 40
     Top = 0
-    Width = 405
+    Width = 395
     Align = alClient
     AutoSize = False
     Constraints.MinWidth = 300
@@ -27,17 +27,17 @@ object sltexteditor1: Tsltexteditor1
     Left = 0
     Height = 40
     Top = 0
-    Width = 22
+    Width = 25
     Align = alLeft
     Caption = 'Text'
     Layout = tlCenter
     ParentColor = False
   end
   object OkButton: TButton
-    Left = 427
+    Left = 420
     Height = 40
     Top = 0
-    Width = 41
+    Width = 44
     Align = alRight
     AutoSize = True
     Caption = 'Ok'
@@ -45,16 +45,16 @@ object sltexteditor1: Tsltexteditor1
     TabOrder = 1
   end
   object CancelButton: TButton
-    Left = 468
+    Left = 464
     Height = 40
     Top = 0
-    Width = 62
+    Width = 66
     Align = alRight
     AutoSize = True
     Cancel = True
     Caption = 'Cancel'
     Default = True
-    ModalResult = 1
+    ModalResult = 2
     TabOrder = 2
   end
 end

@@ -2634,7 +2634,7 @@ var
 begin
      if (assigned(ProcessBar)and assigned(HintText)) then
      begin
-          pos:=round(clientwidth*(current/ProcessBar.max));
+          pos:=round(clientwidth*(single(current)/single(ProcessBar.max)));
           if pos>oldlongprocess then
           begin
                ProcessBar.position:=current;

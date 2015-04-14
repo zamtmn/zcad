@@ -373,6 +373,7 @@ var
     fistrun:boolean;
     ChangedData:TChangedData;
 begin
+  NeedObjID:=GetObjType;
   for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
     if MultiPropertiesManager.MultiPropertyVector[i].usecounter<>0 then
     begin
@@ -383,40 +384,67 @@ begin
       MPCSummary:pu:=@self.SummaryUnit;
       end;
       MultiPropertiesManager.MultiPropertyVector[i].PIiterateData:=MultiPropertiesManager.MultiPropertyVector[i].BeforeIterateProc(MultiPropertiesManager.MultiPropertyVector[i],pu);
+
+      psd:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
+      if psd<>nil then
+      repeat
+        pv:=psd^.objaddr;
+        if pv<>nil then
+        if (pv^.vp.ID=NeedObjID)or(NeedObjID=0) then
+        if pv^.Selected then
+        begin
+             if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(pv^.vp.ID,MultiPropertyDataForObjects)then
+             begin
+               if @MultiPropertyDataForObjects.EntBeforeIterateProc<>nil then
+               begin
+                 ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
+                 MultiPropertyDataForObjects.EntBeforeIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData);
+               end;
+             end
+             else
+                 if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(0,MultiPropertyDataForObjects)then
+                 begin
+                   if @MultiPropertyDataForObjects.EntBeforeIterateProc<>nil then
+                   begin
+                     ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
+                     MultiPropertyDataForObjects.EntBeforeIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData)
+                   end;
+                 end;
+        end;
+      psd:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
+      until psd=nil;
+
     end;
 
-  NeedObjID:=GetObjType;
-  begin
-       for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
-         if MultiPropertiesManager.MultiPropertyVector[i].usecounter<>0 then
-         begin
-           fistrun:=true;
-           psd:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
-           if psd<>nil then
-           repeat
-             pv:=psd^.objaddr;
-             if pv<>nil then
-             if (pv^.vp.ID=NeedObjID)or(NeedObjID=0) then
-             if pv^.Selected then
-             begin
-                  if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue({NeedObjID}pv^.vp.ID,MultiPropertyDataForObjects)then
-                  begin
-                    ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
-                    MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData,MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc);
-                    fistrun:=false;
-                  end
-                  else
-                      if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(0,MultiPropertyDataForObjects)then
-                      begin
-                        ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
-                        MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData,MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc);
-                        fistrun:=false;
-                      end;
-             end;
-           psd:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
-           until psd=nil;
-         end;
-  end;
+  for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
+   if MultiPropertiesManager.MultiPropertyVector[i].usecounter<>0 then
+   begin
+     fistrun:=true;
+     psd:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
+     if psd<>nil then
+     repeat
+       pv:=psd^.objaddr;
+       if pv<>nil then
+       if (pv^.vp.ID=NeedObjID)or(NeedObjID=0) then
+       if pv^.Selected then
+       begin
+            if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue({NeedObjID}pv^.vp.ID,MultiPropertyDataForObjects)then
+            begin
+              ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
+              MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData,MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc);
+              fistrun:=false;
+            end
+            else
+                if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(0,MultiPropertyDataForObjects)then
+                begin
+                  ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
+                  MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData,MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc);
+                  fistrun:=false;
+                end;
+       end;
+     psd:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
+     until psd=nil;
+   end;
 
 
   for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do

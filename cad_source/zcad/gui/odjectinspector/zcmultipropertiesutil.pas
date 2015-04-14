@@ -37,6 +37,7 @@ procedure PolylineVertex3DControlEntIterateProc(pdata:GDBPointer;ChangedData:TCh
 procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 procedure GDBDouble2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 procedure TArrayIndex2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
+procedure PolylineVertex3DControlBeforeEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData);
 implementation
 var
    Vertex3DControl:TArrayIndex=0;
@@ -92,7 +93,14 @@ procedure FreeOneVarData(piteratedata:GDBPointer;mp:TMultiProperty);
 begin
     GDBFreeMem(piteratedata);
 end;
-
+procedure PolylineVertex3DControlBeforeEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData);
+var
+   cc:TArrayIndex;
+begin
+     cc:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).Count-1;
+     if cc<PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^ then
+                                                                                               PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^:=cc;
+end;
 procedure PolylineVertex3DControlEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 var
    tv:PGDBVertex;
@@ -105,7 +113,7 @@ begin
                           PTVertex3DControlVarData(pdata).PZVarDesc.attrib:=PTVertex3DControlVarData(pdata).PZVarDesc.attrib or vda_RO;
                      end;
      cc:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).Count-1;
-     if cc<PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^ then //смена индекса находу может вызвать неверный vda_different, начали сравнивать с однимм числом, продолжили с другим
+     if cc<PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^ then
                                                                                                PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^:=cc;
      tv:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).getelement(PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^);
      if fistrun then

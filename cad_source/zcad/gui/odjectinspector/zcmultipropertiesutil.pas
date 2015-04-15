@@ -112,6 +112,12 @@ begin
                           PTVertex3DControlVarData(pdata).PYVarDesc.attrib:=PTVertex3DControlVarData(pdata).PYVarDesc.attrib or vda_RO;
                           PTVertex3DControlVarData(pdata).PZVarDesc.attrib:=PTVertex3DControlVarData(pdata).PZVarDesc.attrib or vda_RO;
                      end;
+     if fistrun then
+                     begin
+                          PTVertex3DControlVarData(pdata).PXVarDesc.attrib:=PTVertex3DControlVarData(pdata).PXVarDesc.attrib and (not vda_different);
+                          PTVertex3DControlVarData(pdata).PYVarDesc.attrib:=PTVertex3DControlVarData(pdata).PYVarDesc.attrib and (not vda_different);
+                          PTVertex3DControlVarData(pdata).PZVarDesc.attrib:=PTVertex3DControlVarData(pdata).PZVarDesc.attrib and (not vda_different);
+                     end;
      cc:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).Count-1;
      if cc<PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^ then
                                                                                                PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^:=cc;
@@ -125,11 +131,11 @@ begin
                 else
                     begin
                          if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.x,PTVertex3DControlVarData(pdata).PXVarDesc.data.Instance)<>CREqual then
-                            PTVertex3DControlVarData(pdata).PXVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_different;
+                            PTVertex3DControlVarData(pdata).PXVarDesc.attrib:=PTVertex3DControlVarData(pdata).PXVarDesc.attrib or vda_different;
                          if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.y,PTVertex3DControlVarData(pdata).PYVarDesc.data.Instance)<>CREqual then
-                            PTVertex3DControlVarData(pdata).PYVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_different;
+                            PTVertex3DControlVarData(pdata).PYVarDesc.attrib:=PTVertex3DControlVarData(pdata).PYVarDesc.attrib or vda_different;
                          if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.z,PTVertex3DControlVarData(pdata).PZVarDesc.data.Instance)<>CREqual then
-                            PTVertex3DControlVarData(pdata).PZVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_different;
+                            PTVertex3DControlVarData(pdata).PZVarDesc.attrib:=PTVertex3DControlVarData(pdata).PZVarDesc.attrib or vda_different;
                     end;
 end;
 procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);

@@ -368,6 +368,15 @@ begin
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLTscale,'DWG_CLTScale');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CColor,'DWG_CColor');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CDimStyle,'DWG_CDimStyle');
+
+   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_LUnits,'DWG_LUnits');
+   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_LUPrec,'DWG_LUPrec');
+   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_AUnits,'DWG_AUnits');
+   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_AUPrec,'DWG_AUPrec');
+   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_AngDir,'DWG_AngDir');
+   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_AngBase,'DWG_AngBase');
+   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_UnitMode,'DWG_UnitMode');
+
    if assigned(CurrentDWG.wa)then
    begin
        sysvar.RD.RD_CurrentWAParam.Instance:=CurrentDWG.wa.getParam;
@@ -396,6 +405,15 @@ begin
    SysVar.dwg.DWG_CLTscale:=nil;
    SysVar.dwg.DWG_CColor:=nil;
    SysVar.dwg.DWG_CDimStyle:=nil;
+
+   SysVar.dwg.DWG_LUnits:=nil;
+   SysVar.dwg.DWG_LUPrec:=nil;
+   SysVar.dwg.DWG_AUnits:=nil;
+   SysVar.dwg.DWG_AUPrec:=nil;
+   SysVar.dwg.DWG_AngDir:=nil;
+   SysVar.dwg.DWG_AngBase:=nil;
+   SysVar.dwg.DWG_UnitMode:=nil;
+
    sysvar.RD.RD_CurrentWAParam.Instance:=nil;
    sysvar.RD.RD_CurrentWAParam.PTD:=nil;
 end;

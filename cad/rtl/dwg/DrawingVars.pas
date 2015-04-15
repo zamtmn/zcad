@@ -20,7 +20,15 @@ var
    DWG_Snap:GDBSnap2D;
    DWG_GridSpacing:GDBvertex2D;
 
-  DWG_LTScale:GDBDouble;
+   DWG_LTScale:GDBDouble;
+
+   DWG_LUnits:TLUnits;
+   DWG_LUPrec:TUPrec;
+   DWG_AUnits:TAUnits;
+   DWG_AUPrec:TUPrec;
+   DWG_AngDir:TAngDir;
+   DWG_AngBase:TAngle;
+   DWG_UnitMode:TUnitMode;
 
 
    Developer:GDBString;
@@ -68,6 +76,15 @@ begin
 
      DWG_LTScale:=1;
      DWG_CLTScale:=1;
+
+    DWG_LUnits:=LUDecimal;
+    DWG_LUPrec:=UPrec4;
+    DWG_AUnits:=AUDecimalDegrees;
+    DWG_AUPrec:=UPrec0;
+    DWG_AngDir:=ADCounterClockwise;
+    DWG_AngBase:=0;
+    DWG_UnitMode:=UMWithSpaces;
+
 
      Developer:='Зубарев';
 end.

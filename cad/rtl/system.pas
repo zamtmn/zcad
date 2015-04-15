@@ -387,6 +387,18 @@ TFaceTypedData=packed record
                  Instance: GDBPointer;
                  PTD: GDBPointer;
                 end;
+PTAngle=^TAngle;
+TAngle=GDBDouble;
+PTLUnits=^TLUnits;
+TLUnits=(LUScientific(*'Scientific'*),LUDecimal(*'Decimal'*),LUEngineering(*'Engineering'*),LUArchitectural(*'Architectural'*),LUFractional(*'Fractional'*));
+PTAUnits=^TAUnits;
+TAUnits=(AUDecimalDegrees(*'Decimal degrees'*),AUDegreesMinutesSeconds(*'Degrees minutes seconds'*),AUGradians(*'Gradians'*),AURadians(*'Radians'*),AUSurveyorsUnits(*'Surveyors units'*));
+PTAngDir=^TAngDir;
+TAngDir=(ADCounterClockwise(*'Counterclockwise'*),ADClockwise(*'Clockwise'*));
+PTUPrec=^TUPrec;
+TUPrec=(UPrec0(*'0'*),UPrec1(*'0.0'*),UPrec2(*'0.00'*),UPrec3(*'0.000'*),UPrec4(*'0.0000'*),UPrec5(*'0.00000'*),UPrec6(*'0.000000'*),UPrec7(*'0.0000000'*),UPrec8(*'0.00000000'*));
+PTUnitMode=^TUnitMode;
+TUnitMode=(UMWithSpaces(*'With spaces'*),UMWithoutSpaces(*'Without spaces'*));
 //Generate on E:\zcad\cad_source\zengine\gdb\gdbpalette.pas
   PTRGB=^TRGB;
   TRGB=packed record
@@ -1146,6 +1158,13 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
              DWG_CDimStyle:PPGDBDimStyleObjInsp;(*'Dim style'*)
              DWG_RotateTextInLT:PGDBBoolean;(*'Rotate text in line type'*)
              DWG_CTStyle:PPGDBTextStyleObjInsp;(*'Text style'*)
+             DWG_LUnits:PTLUnits;
+             DWG_LUPrec:PTUPrec;
+             DWG_AUnits:PTAUnits;
+             DWG_AUPrec:PTUPrec;
+             DWG_AngDir:PTAngDir;
+             DWG_AngBase:PTAngle;
+             DWG_UnitMode:PTUnitMode;
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)
              DWG_SystmGeometryDraw:PGDBBoolean;(*'System geometry'*)
@@ -1273,12 +1292,15 @@ TOSMode=packed record
   end;
 ptypemanagerdef=^typemanagerdef;
 typemanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                  exttype:GDBOpenArrayOfPObjects;
                   procedure readbasetypes;virtual;abstract;
                   procedure readexttypes(fn: GDBString);virtual;abstract;
                   function _TypeName2Index(name: GDBString): GDBInteger;virtual;abstract;
                   function _TypeName2PTD(name: GDBString):PUserTypeDescriptor;virtual;abstract;
                   function _TypeIndex2PTD(ind:integer):PUserTypeDescriptor;virtual;abstract;
+                  function getelement(index:TArrayIndex):GDBPointer;virtual;abstract;
+                  function getcount:TArrayIndex;virtual;abstract;
+                  function AddTypeByPP(p:GDBPointer):TArrayIndex;virtual;abstract;
+                  function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;virtual;abstract;
             end;
 pvarmanagerdef=^varmanagerdef;
 varmanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -1293,6 +1315,10 @@ varmanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
 //Generate on E:\zcad\cad_source\zcad\languade\varman.pas
 ptypemanager=^typemanager;
 typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)
+                  protected
+                  exttype:GDBOpenArrayOfPObjects;
+                  n2i:TNameToIndex;
+                  public
                   constructor init;
                   procedure CreateBaseTypes;virtual;abstract;
                   function _TypeName2PTD(name: GDBString):PUserTypeDescriptor;virtual;abstract;
@@ -1301,6 +1327,11 @@ typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)
                   destructor done;virtual;abstract;
                   destructor systemdone;virtual;abstract;
                   procedure free;virtual;abstract;
+                  {for hide exttype}
+                  function getelement(index:TArrayIndex):GDBPointer;virtual;abstract;
+                  function getcount:TArrayIndex;virtual;abstract;
+                  function AddTypeByPP(p:GDBPointer):TArrayIndex;virtual;abstract;
+                  function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;virtual;abstract;
             end;
 pvarmanager=^varmanager;
 varmanager={$IFNDEF DELPHI}packed{$ENDIF} object(varmanagerdef)

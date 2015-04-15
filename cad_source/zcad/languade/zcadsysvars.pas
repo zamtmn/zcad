@@ -143,6 +143,18 @@ type
              DWG_CDimStyle:{-}PGDBPointer{/PPGDBDimStyleObjInsp/};(*'Dim style'*)
              DWG_RotateTextInLT:PGDBBoolean;(*'Rotate text in line type'*)
              DWG_CTStyle:{-}PGDBPointer{/PPGDBTextStyleObjInsp/};(*'Text style'*)
+
+             DWG_LUnits:PTLUnits;
+             DWG_LUPrec:PTUPrec;
+             DWG_AUnits:PTAUnits;
+             DWG_AUPrec:PTUPrec;
+             DWG_AngDir:PTAngDir;
+             DWG_AngBase:PTAngle;
+             DWG_UnitMode:PTUnitMode;
+
+
+
+
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)
              DWG_SystmGeometryDraw:PGDBBoolean;(*'System geometry'*)

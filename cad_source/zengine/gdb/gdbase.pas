@@ -385,6 +385,18 @@ TFaceTypedData=packed record
                  Instance: GDBPointer;
                  PTD: GDBPointer;
                 end;
+PTAngle=^TAngle;
+TAngle=GDBDouble;
+PTLUnits=^TLUnits;
+TLUnits=(LUScientific(*'Scientific'*),LUDecimal(*'Decimal'*),LUEngineering(*'Engineering'*),LUArchitectural(*'Architectural'*),LUFractional(*'Fractional'*));
+PTAUnits=^TAUnits;
+TAUnits=(AUDecimalDegrees(*'Decimal degrees'*),AUDegreesMinutesSeconds(*'Degrees minutes seconds'*),AUGradians(*'Gradians'*),AURadians(*'Radians'*),AUSurveyorsUnits(*'Surveyors units'*));
+PTAngDir=^TAngDir;
+TAngDir=(ADCounterClockwise(*'Counterclockwise'*),ADClockwise(*'Clockwise'*));
+PTUPrec=^TUPrec;
+TUPrec=(UPrec0(*'0'*),UPrec1(*'0.0'*),UPrec2(*'0.00'*),UPrec3(*'0.000'*),UPrec4(*'0.0000'*),UPrec5(*'0.00000'*),UPrec6(*'0.000000'*),UPrec7(*'0.0000000'*),UPrec8(*'0.00000000'*));
+PTUnitMode=^TUnitMode;
+TUnitMode=(UMWithSpaces(*'With spaces'*),UMWithoutSpaces(*'Without spaces'*));
 {EXPORT-}
 const
   empty_GDBString='Empty GDBString';

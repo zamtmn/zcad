@@ -59,6 +59,7 @@ generic TMyGDBStringDictionary <TValue> = class(specialize TMyHashMap<GDBString,
 end;
 
 
+TGDBString2GDBStringDictionary=specialize TMyGDBStringDictionary<GDBString>;
 
 TMapPointerToHandle=specialize TMyMap<pointer,TDWGHandle, LessPointer>;
 

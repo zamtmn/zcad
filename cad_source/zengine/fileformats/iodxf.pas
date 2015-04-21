@@ -130,96 +130,151 @@ begin
   end;
   end;
 end;
-procedure readvariables(var f: GDBOpenArrayOfByte;var ctstyle:GDBstring; var clayer:GDBString;var cltype:GDBString;var cdimstyle:GDBString;LoadMode:TLoadOpt);
+procedure readvariables(var f: GDBOpenArrayOfByte;var ctstyle:GDBstring; var clayer:GDBString;var cltype:GDBString;var cdimstyle:GDBString;LoadMode:TLoadOpt;DWGVarsDict:TGDBString2GDBStringDictionary);
 var
   byt: GDBByte;
   s: GDBString;
   error: GDBInteger;
 begin
-     //gotodxf(f, 0, dxfName_ENDSEC);
+     if LoadMode=TLOLoad then
+     begin
+     DWGVarsDict.mygetvalue('$CLAYER',clayer);
+     DWGVarsDict.mygetvalue('$TEXTSTYLE',ctstyle);
+     DWGVarsDict.mygetvalue('$DIMSTYLE',cdimstyle);
+     DWGVarsDict.mygetvalue('$CELTYPE',cltype);
+     if sysvar.DWG.DWG_CLinew<>nil then
+       if DWGVarsDict.mygetvalue('$CELWEIGHT',s) then
+         sysvar.DWG.DWG_CLinew^:=strtoint(s);
+     if sysvar.DWG.DWG_DrawMode<>nil then
+       if DWGVarsDict.mygetvalue('$LWDISPLAY',s) then
+         case strtoint(s) of
+             1:sysvar.DWG.DWG_DrawMode^ := true;
+             0:sysvar.DWG.DWG_DrawMode^ := false;
+         end;
+     if sysvar.DWG.DWG_LTScale<>nil then
+       if DWGVarsDict.mygetvalue('$LTSCALE',s) then
+         sysvar.DWG.DWG_LTScale^ := strtofloat(s);
+     if sysvar.DWG.DWG_CLTScale<>nil then
+       if DWGVarsDict.mygetvalue('$CELTSCALE',s) then
+         sysvar.DWG.DWG_CLTScale^ := strtofloat(s);
+     if sysvar.DWG.DWG_CColor<>nil then
+       if DWGVarsDict.mygetvalue('$CECOLOR',s) then
+         sysvar.DWG.DWG_CColor^ := strtoint(s);
+     if sysvar.DWG.DWG_LUnits<>nil then
+       if DWGVarsDict.mygetvalue('$LUNITS',s) then
+         sysvar.DWG.DWG_LUnits^ := TLUnits(strtoint(s)-1);
+     if sysvar.DWG.DWG_LUPrec<>nil then
+       if DWGVarsDict.mygetvalue('$LUPREC',s) then
+         sysvar.DWG.DWG_LUPrec^ := TUPrec(strtoint(s));
+     if sysvar.DWG.DWG_AUnits<>nil then
+       if DWGVarsDict.mygetvalue('$AUNITS',s) then
+         sysvar.DWG.DWG_AUnits^ := TAUnits(strtoint(s));
+     if sysvar.DWG.DWG_AUPrec<>nil then
+       if DWGVarsDict.mygetvalue('$AUPREC',s) then
+         sysvar.DWG.DWG_AUPrec^ := TUPrec(strtoint(s));
+     if sysvar.DWG.DWG_AngDir<>nil then
+       if DWGVarsDict.mygetvalue('$ANGDIR',s) then
+         sysvar.DWG.DWG_AngDir^ := TAngDir(strtoint(s));
+     if sysvar.DWG.DWG_AngBase<>nil then
+       if DWGVarsDict.mygetvalue('$ANGBASE',s) then
+         sysvar.DWG.DWG_AngBase^ := strtofloat(s);
+     if sysvar.DWG.DWG_UnitMode<>nil then
+       if DWGVarsDict.mygetvalue('$UNITMODE',s) then
+         sysvar.DWG.DWG_UnitMode^ := TUnitMode(strtoint(s));
+     end;
+end;
+procedure ReadDXFHeader(var f: GDBOpenArrayOfByte; DWGVarsDict:TGDBString2GDBStringDictionary);
+type
+   TDXFHeaderMode=(TDXFHMWaitSection,TDXFHMSection,TDXFHMHeader);
+const
+   maxlines=9;
+var
+  group: GDBByte;
+  s,varname: GDBString;
+  error,varcount: GDBInteger;
+  ParseMode:TDXFHeaderMode;
+  grouppsarray:array[0..maxlines]of integer;
+  valuesarray:array[0..maxlines]of string;
+  currentindex,maxindex:integer;
+
+procedure storevariable;
+begin
+     case currentindex of
+     0:DWGVarsDict.insert(varname,valuesarray[0]);
+     1:DWGVarsDict.insert(varname,valuesarray[0]+'|'+valuesarray[1]);
+     else DWGVarsDict.insert(varname,valuesarray[0]+'|'+valuesarray[1]+'|'+valuesarray[2]);
+     end;
+     currentindex:=-1;
+end;
+procedure processvalue(const group:integer;const value:gdbstring);
+begin
+     inc(currentindex);
+     if currentindex>maxindex then
+                                  maxindex:=currentindex;
+     grouppsarray[currentindex]:=group;
+     valuesarray[currentindex]:=value;
+end;
+procedure freearrays;
+var
+   i:integer;
+begin
+     for i:=0 to maxindex do
+                            valuesarray[i]:='';
+end;
+begin
+  ParseMode:=TDXFHMWaitSection;
+  varcount:=0;
+  currentindex:=-1;
+  maxindex:=currentindex;
+  try
   while f.notEOF do
   begin
     s := f.readGDBString;
-    val(s, byt, error);
+    val(s, group, error);
     if error <> 0 then
-                      s := s{чето тут не так};
+                      shared.ShowError('ReadDXFHeader wrong group code');
     s := f.readGDBString;
-    //programlog.LogOutStrfast(s,0);
-     if (byt = 9) and (s = '$CLAYER') then
+    case ParseMode of
+    TDXFHMWaitSection:begin
+                           if uppercase(s)=dxfName_SECTION then
+                                                             begin
+                                                                  ParseMode:=TDXFHMSection;
+                                                             end
+                                                            else
+                                                             shared.ShowError('ReadDXFHeader error');
+
+                      end;
+        TDXFHMSection:begin
+                           if uppercase(s)=dxfName_HEADER then
+                                                            begin
+                                                              ParseMode:=TDXFHMHeader;
+                                                            end
+                                                          else
+                                                            shared.ShowError('ReadDXFHeader error');
+                      end;
+         TDXFHMHeader:begin
+                           if group=0 then
+                           if uppercase(s)=dxfName_ENDSEC then
+                                                              exit;
+                           if group=9 then
                                           begin
-                                               s := f.readGDBString;
-                                               s:=f.readGDBString;
-                                               if LoadMode=TLOLoad then
-                                                                       clayer := s;
+                                               if varcount>0 then
+                                                                 storevariable;
+                                               varname:=s;
+                                               inc(varcount);
                                           end
-else if (byt = 9) and (s = '$TEXTSTYLE') then
-                                    begin
-                                         s := f.readGDBString;
-                                         s:=f.readGDBString;
-                                         if LoadMode=TLOLoad then
-                                                                 ctstyle := s;
-                                    end
-else if (byt = 9) and (s = '$DIMSTYLE') then
-                                    begin
-                                         s := f.readGDBString;
-                                         s:=f.readGDBString;
-                                         if LoadMode=TLOLoad then
-                                                                 cdimstyle := s;
-                                    end
-else if (byt = 9) and (s = '$CELTYPE') then
-                                     begin
-                                          s := f.readGDBString;
-                                          s:=f.readGDBString;
-                                          if LoadMode=TLOLoad then
-                                                                  cltype := s;
-                                     end
-else if (byt = 9) and (s = '$CELWEIGHT') then
+                                      else
                                           begin
-                                               s := f.readGDBString;
-                                               s := f.readGDBString;
-                                               if LoadMode=TLOLoad then
-                                               if sysvar.DWG.DWG_CLinew<>nil then
-                                               sysvar.DWG.DWG_CLinew^ := strtoint(s);
+                                               processvalue(group,s);
                                           end
-else if (byt = 9) and (s = '$LWDISPLAY') then
-                                          begin
-                                               s := f.readGDBString;
-                                               s := f.readGDBString;
-                                               if LoadMode=TLOLoad then
-                                               if sysvar.DWG.DWG_DrawMode<>nil then
-                                               case strtoint(s) of
-                                                               1:sysvar.DWG.DWG_DrawMode^ := true;
-                                                               0:sysvar.DWG.DWG_DrawMode^ := false;
-                                               end;
-                                          end
-else if (byt = 9) and (s = '$LTSCALE') then
-                                          begin
-                                               s := f.readGDBString;
-                                               s := f.readGDBString;
-                                               if LoadMode=TLOLoad then
-                                               if sysvar.DWG.DWG_LTScale<>nil then
-                                               sysvar.DWG.DWG_LTScale^ := strtofloat(s);
-                                          end
-else if (byt = 9) and (s = '$CELTSCALE') then
-                                          begin
-                                               s := f.readGDBString;
-                                               s := f.readGDBString;
-                                               if LoadMode=TLOLoad then
-                                               if sysvar.DWG.DWG_CLTScale<>nil then
-                                               sysvar.DWG.DWG_CLTScale^ := strtofloat(s);
-                                          end
-else if (byt = 9) and (s = '$CECOLOR') then
-                                          begin
-                                               s := f.readGDBString;
-                                               s := f.readGDBString;
-                                               if LoadMode=TLOLoad then
-                                               if sysvar.DWG.DWG_CColor<>nil then
-                                               sysvar.DWG.DWG_CColor^ := strtoint(s);
-                                          end
-else if (byt = 0) and (s = dxfName_ENDSEC) then
-                                              exit;
+                              end;
+    end;{case}
+    end;
+    finally
+    freearrays;
   end;
 end;
+
 function GoToDXForENDTAB(var f: GDBOpenArrayOfByte; fcode: GDBInteger; fname: GDBString):boolean;
 var
   byt: GDBByte;
@@ -1140,7 +1195,7 @@ begin
 end;
 end;
 
-procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;h2p:TMapHandleToPointer);
+procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;h2p:TMapHandleToPointer;DWGVarsDict:TGDBString2GDBStringDictionary);
 var
   byt: GDBInteger;
   error: GDBInteger;
@@ -1156,7 +1211,7 @@ begin
   {$ENDIF}
   blockload:=false;
   {$IFDEF TOTALYLOG}programlog.logoutstr('AddFromDXF2000',lp_IncPos);{$ENDIF}
-  readvariables(f,ctstyle,clayer,cltype,cdimstyle,LoadMode);
+  readvariables(f,ctstyle,clayer,cltype,cdimstyle,LoadMode,DWGVarsDict);
   repeat
     gotodxf(f, 0, dxfName_SECTION);
     if not f.notEOF then
@@ -1326,27 +1381,22 @@ var
   s,s1,s2: GDBString;
   dxfversion,code:integer;
   h2p:TMapHandleToPointer;
+  DWGVarsDict:TGDBString2GDBStringDictionary;
 begin
   programlog.logoutstr('AddFromDXF',lp_IncPos);
   shared.HistoryOutStr(format(rsLoadingFile,[name]));
   f.InitFromFile(name);
   if f.Count<>0 then
   begin
+     DWGVarsDict:=TGDBString2GDBStringDictionary.create;
+     ReadDXFHeader(f,DWGVarsDict);
      h2p:=TMapHandleToPointer.create;
-     //phandlearray := dxfhandlearraycreate(10000);
-  //f.ReadFromFile(name);
+
   if assigned(StartLongProcessProc)then
     StartLongProcessProc(f.Count,'Load DXF file');
-  while f.notEOF do
-  begin
-    s := f.ReadString2;
-    if s = '$ACADVER' then
-    begin
-      s := f.ReadString2;
-      if s = '1' then
-      begin
-        s := f.ReadString2;
 
+    if DWGVarsDict.mygetvalue('$ACADVER',s) then
+      begin
         s1:=copy(s,3,length(s)-2);
         s2:=copy(s,1,2);
         val(s1,dxfversion,code);
@@ -1361,19 +1411,19 @@ begin
                                     end;
                                1015:begin
                                          shared.HistoryOutStr(format(rsFileFormat,['DXF2000 ('+s+')']));
-                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p)
+                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p,DWGVarsDict)
                                     end;
                                1018:begin
                                          shared.HistoryOutStr(format(rsFileFormat,['DXF2004 ('+s+')']));
-                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p)
+                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p,DWGVarsDict)
                                     end;
                                1021:begin
                                          shared.HistoryOutStr(format(rsFileFormat,['DXF2007 ('+s+')']));
-                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p)
+                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p,DWGVarsDict)
                                     end;
                                1024:begin
                                          shared.HistoryOutStr(format(rsFileFormat,['DXF2010 ('+s+')']));
-                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p)
+                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p,DWGVarsDict)
                                     end;
                                else
                                        begin
@@ -1384,40 +1434,12 @@ begin
              end;
         end
            else ShowError(rsUnknownFileFormat+' $ACADVER='+s);
-        (*
-        if s = 'AC1009' then
-        begin
-          shared.HistoryOutStr(format(rsFileFormat,['DXF12']));
-          //shared.HistoryOutStr('DXF12 fileformat;');
-          //programlog.logout('DXF12 fileformat;',lp_OldPos);
-          gotodxf(f, 0, dxfName_ENDSEC);
-          addfromdxf12(f,'EOF',owner,loadmode);
-        end
-        else if s = 'AC1015' then
-        begin
-          shared.HistoryOutStr(format(rsFileFormat,['DXF2000']));
-          //gotodxf(f, 0, dxfName_ENDSEC);
-          //readvariables(f);
-          addfromdxf2000(f,'EOF',owner,loadmode);
-        end
-        else if s = 'AC1018' then
-        begin
-          shared.HistoryOutStr(format(rsFileFormat,['DXF2004']));
-          addfromdxf2000(f,'EOF',owner,loadmode);
-        end
-        else
-        begin
-             ShowError(rsUnknownFileFormat+' $ACADVER='+s);
-             //ShowError('Uncnown fileformat; $ACADVER='+s);
-             //programlog.logoutstr('ERROR: Uncnown fileformat; $ACADVER='+s,lp_OldPos);
-        end;*)
       end;
-    end;
-  end;
   if assigned(EndLongProcessProc)then
     EndLongProcessProc;
   owner^.calcbb;
   h2p.Destroy;
+  DWGVarsDict.destroy;
   //GDBFreeMem(GDBPointer(phandlearray));
   end
      else
@@ -1476,12 +1498,81 @@ begin
   0
   }
 end;
+procedure MakeVariablesDict(VarsDict:TGDBString2GDBStringDictionary; var drawing:TSimpleDrawing);
+var
+   pcurrtextstyle:PGDBTextStyle;
+   sss:gdbstring;
+   i:integer;
+begin
+    VarsDict.insert('$CLAYER',drawing.LayerTable.GetCurrentLayer^.Name);
+    VarsDict.insert('$CELTYPE',drawing.LTypeStyleTable.GetCurrentLType^.Name);
+
+    pcurrtextstyle:=drawing.TextStyleTable.GetCurrentTextStyle;
+    if pcurrtextstyle<>nil then
+                               VarsDict.insert('$TEXTSTYLE',drawing.TextStyleTable.GetCurrentTextStyle^.Name)
+                           else
+                               VarsDict.insert('$TEXTSTYLE',TSNStandardStyleName);
+    if assigned(drawing.DimStyleTable.GetCurrentDimStyle) then
+
+    VarsDict.insert('DIMSTYLE',drawing.DimStyleTable.GetCurrentDimStyle^.Name)
+  else
+    VarsDict.insert('DIMSTYLE','Standatd');
+
+    if assigned(sysvar.DWG.DWG_CLinew) then
+                                           VarsDict.insert('$CELWEIGHT',inttostr(sysvar.DWG.DWG_CLinew^))
+                                       else
+                                           VarsDict.insert('$CELWEIGHT',inttostr(-1));
+
+    if assigned(sysvar.DWG.DWG_LTScale) then
+                                            VarsDict.insert('$LTSCALE',floattostr(sysvar.DWG.DWG_LTScale^))
+                                        else
+                                            VarsDict.insert('$LTSCALE',floattostr(1.0));
+
+    if assigned(sysvar.DWG.DWG_CLTScale) then
+                                             VarsDict.insert('$CELTSCALE',floattostr(sysvar.DWG.DWG_CLTScale^))
+                                         else
+                                             VarsDict.insert('$CELTSCALE',floattostr(1.0));
+
+    if assigned(sysvar.DWG.DWG_CColor) then
+                                           VarsDict.insert('$CECOLOR',inttostr(sysvar.DWG.DWG_CColor^))
+                                       else
+                                           VarsDict.insert('$CECOLOR',inttostr(256));
+
+
+    if assigned(sysvar.DWG.DWG_DrawMode) then
+                                             begin
+                                                  if sysvar.DWG.DWG_DrawMode^ then
+                                                                                  VarsDict.insert('$LWDISPLAY',inttostr(1))
+                                                                              else
+                                                                                  VarsDict.insert('$LWDISPLAY',inttostr(0));
+                                             end
+                                         else
+                                             VarsDict.insert('$LWDISPLAY',inttostr(0));
+   VarsDict.insert('$HANDSEED','FUCK OFF!');
+
+   if assigned(sysvar.DWG.DWG_LUnits) then
+                                        VarsDict.insert('$LUNITS',inttostr(ord(sysvar.DWG.DWG_LUnits^)+1));
+   if assigned(sysvar.DWG.DWG_LUPrec) then
+                                        VarsDict.insert('$LUPREC',inttostr(ord(sysvar.DWG.DWG_LUPrec^)));
+   if assigned(sysvar.DWG.DWG_AUnits) then
+                                        VarsDict.insert('$AUNITS',inttostr(ord(sysvar.DWG.DWG_AUnits^)));
+   if assigned(sysvar.DWG.DWG_AUPrec) then
+                                        VarsDict.insert('$AUPREC',inttostr(ord(sysvar.DWG.DWG_AUPrec^)));
+   sss:=inttostr(ord(sysvar.DWG.DWG_AngDir^));
+   i:=ord(sysvar.DWG.DWG_AngDir^);
+   if assigned(sysvar.DWG.DWG_AngDir) then
+                                        VarsDict.insert('$ANGDIR',inttostr(ord(sysvar.DWG.DWG_AngDir^)));
+   if assigned(sysvar.DWG.DWG_AngBase) then
+                                        VarsDict.insert('$ANGBASE',floattostr(sysvar.DWG.DWG_AngBase^));
+   if assigned(sysvar.DWG.DWG_UnitMode) then
+                                        VarsDict.insert('$UNITMODE',inttostr(ord(sysvar.DWG.DWG_UnitMode^)));
+end;
 
 function savedxf2000(name: GDBString; var drawing:TSimpleDrawing):boolean;
 var
   templatefile: GDBOpenArrayOfByte;
   outstream: {GDBInteger}GDBOpenArrayOfByte;
-  groups, values, ucvalues: GDBString;
+  groups, values, ucvalues,ts: GDBString;
   groupi, valuei, intable,attr: GDBInteger;
   temphandle,temphandle2,temphandle3,temphandle4,handle,lasthandle,vporttablehandle,plottablefansdle,dimtablehandle: TDWGHandle;
   i: integer;
@@ -1504,56 +1595,16 @@ var
   p:pointer;
   {$IFNDEF DELPHI}
   Handle2pointer:TMapPointerToHandle;
+  VarsDict:TGDBString2GDBStringDictionary;
   {$ENDIF}
   //DWGHandle:TDWGHandle;
   laststrokewrited:boolean;
   pcurrtextstyle:PGDBTextStyle;
-{procedure GetOrCreateHandle(const PDWGObject:pointer; var handle:TDWGHandle; out temphandle:TDWGHandle);
-begin
-    {$IFNDEF DELPHI}
-    HandleIterator:=Handle2pointer.Find(PDWGObject);
-    if  HandleIterator=nil then
-                               begin
-                                    Handle2pointer.Insert(PDWGObject,handle);
-                                    temphandle:=handle;
-                                    inc(handle);
-                               end
-                           else
-                               begin
-                                    temphandle:=HandleIterator.GetValue;
-                                    HandleIterator.Destroy;
-                               end;
-   {$ENDIF}
-end;}
-{procedure GetHandle(const PDWGObject:pointer; out temphandle:TDWGHandle);
-begin
-    {$IFNDEF DELPHI}
-    HandleIterator:=Handle2pointer.Find(PDWGObject);
-    if  HandleIterator=nil then
-                               temphandle:=0
-                           else
-                               begin
-                                    temphandle:=HandleIterator.GetValue;
-                                    HandleIterator.Destroy;
-                               end;
-   {$ENDIF}
-end;}
-{function GetNewHandle(const OldHandle:TDWGHandle):TDWGHandle;
-begin
-    {$IFNDEF DELPHI}
-    OldHandleIterator:=OldHandele2NewHandle.Find(OldHandle);
-    if  OldHandleIterator=nil then
-                               result:=0
-                           else
-                               begin
-                                    result:=OldHandleIterator.GetValue;
-                                    OldHandleIterator.Destroy;
-                               end;
-   {$ENDIF}
-end;}
+  variablenotprocessed:boolean;
 begin
   {$IFNDEF DELPHI}
   Handle2pointer:=TMapPointerToHandle.Create;
+  VarsDict:=TGDBString2GDBStringDictionary.create;
   {$ENDIF}
   DecimalSeparator := '.';
   //standartstylehandle:=0;
@@ -1582,6 +1633,7 @@ begin
   inlttypetable:=false;
   indimstyletable:=false;
   inappidtable:=false;
+  MakeVariablesDict(VarsDict,drawing);
   while templatefile.notEOF do
   begin
     if  (templatefile.count-templatefile.ReadPos)<10
@@ -1591,131 +1643,36 @@ begin
     values := templatefile.readGDBString;
     ucvalues:=uppercase(values);
     groupi := strtoint(groups);
-    if (groupi = 9) and (values = '$HANDSEED') then
+    variablenotprocessed:=true;
+    if (groupi = 9) then
+    begin
+    variablenotprocessed:=false;
+    if VarsDict.mygetvalue(values,ts) then
+    begin
+         outstream.TXTAddGDBStringEOL(groups);
+         outstream.TXTAddGDBStringEOL(values);
+         groups := templatefile.readGDBString;
+         {values := }templatefile.readGDBString;
+         outstream.TXTAddGDBStringEOL(groups);
+         if values='$HANDSEED' then
+                                   handlepos:=outstream.Count;
+         outstream.TXTAddGDBStringEOL(ts);
+    end
+    {else
+    if (values = '$HANDSEED') then
     begin
       outstream.TXTAddGDBStringEOL(groups);
-      //WriteString_EOL(outstream, groups);
       outstream.TXTAddGDBStringEOL('$HANDSEED');
-      //WriteString_EOL(outstream, '$HANDSEED');
       outstream.TXTAddGDBStringEOL('5');
-      //WriteString_EOL(outstream, '5');
       handlepos:=outstream.Count;
-      //handlepos:=FileSeek(outstream,0,1);
       outstream.TXTAddGDBStringEOL('FUCK OFF!');
-      //WriteString_EOL(outstream, 'FUCK OFF');
       groups := templatefile.readGDBString;
       values := templatefile.readGDBString;
       handle := strtoint('$' + values);
-    end
-else if (groupi = 9) and (ucvalues = '$CLAYER') then
-    begin
-      outstream.TXTAddGDBStringEOL(groups);
-      outstream.TXTAddGDBStringEOL('$CLAYER');
-      outstream.TXTAddGDBStringEOL('8');
-      outstream.TXTAddGDBStringEOL(drawing.LayerTable.GetCurrentLayer^.Name);
-      groups := templatefile.readGDBString;
-      values := templatefile.readGDBString;
-    end
-else if (groupi = 9) and (ucvalues = '$CELTYPE') then
-    begin
-      outstream.TXTAddGDBStringEOL(groups);
-      outstream.TXTAddGDBStringEOL('$CELTYPE');
-      outstream.TXTAddGDBStringEOL('6');
-      outstream.TXTAddGDBStringEOL(drawing.LTypeStyleTable.GetCurrentLType^.Name);
-      groups := templatefile.readGDBString;
-      values := templatefile.readGDBString;
-    end
-else if (groupi = 9) and (ucvalues = '$TEXTSTYLE') then
-    begin
-      outstream.TXTAddGDBStringEOL(groups);
-      outstream.TXTAddGDBStringEOL('$TEXTSTYLE');
-      outstream.TXTAddGDBStringEOL('7');
-      pcurrtextstyle:=drawing.TextStyleTable.GetCurrentTextStyle;
-      if pcurrtextstyle<>nil then
-                                 outstream.TXTAddGDBStringEOL(drawing.TextStyleTable.GetCurrentTextStyle^.Name)
-                             else
-                                 outstream.TXTAddGDBStringEOL(TSNStandardStyleName);
-      groups := templatefile.readGDBString;
-      values := templatefile.readGDBString;
-    end
-else if (groupi = 9) and (ucvalues = '$DIMSTYLE') then
-    begin
-      outstream.TXTAddGDBStringEOL(groups);
-      outstream.TXTAddGDBStringEOL('$DIMSTYLE');
-      outstream.TXTAddGDBStringEOL('2');
-      if assigned(drawing.DimStyleTable.GetCurrentDimStyle) then
-        outstream.TXTAddGDBStringEOL(drawing.DimStyleTable.GetCurrentDimStyle^.Name)
-      else
-        outstream.TXTAddGDBStringEOL('Standatd');
-      groups := templatefile.readGDBString;
-      values := templatefile.readGDBString;
-    end
-else if (groupi = 9) and (ucvalues = '$CELWEIGHT') then
-    begin
-      outstream.TXTAddGDBStringEOL(groups);
-      outstream.TXTAddGDBStringEOL('$CELWEIGHT');
-      outstream.TXTAddGDBStringEOL('370');
-      if assigned(sysvar.DWG.DWG_CLinew) then
-                                             outstream.TXTAddGDBStringEOL(inttostr(sysvar.DWG.DWG_CLinew^))
-                                         else
-                                             outstream.TXTAddGDBStringEOL(inttostr(-1));
-      groups := templatefile.readGDBString;
-      values := templatefile.readGDBString;
-    end
-else if (groupi = 9) and (ucvalues = '$LTSCALE') then
-    begin
-      outstream.TXTAddGDBStringEOL(groups);
-      outstream.TXTAddGDBStringEOL('$LTSCALE');
-      outstream.TXTAddGDBStringEOL('40');
-      if assigned(sysvar.DWG.DWG_LTScale) then
-                                             outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_LTScale^))
-                                         else
-                                             outstream.TXTAddGDBStringEOL(floattostr(1.0));
-      groups := templatefile.readGDBString;
-      values := templatefile.readGDBString;
-    end
-else if (groupi = 9) and (ucvalues = '$CELTSCALE') then
-    begin
-      outstream.TXTAddGDBStringEOL(groups);
-      outstream.TXTAddGDBStringEOL('$CELTSCALE');
-      outstream.TXTAddGDBStringEOL('40');
-      if assigned(sysvar.DWG.DWG_CLTScale) then
-                                             outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_CLTScale^))
-                                         else
-                                             outstream.TXTAddGDBStringEOL(floattostr(1.0));
-      groups := templatefile.readGDBString;
-      values := templatefile.readGDBString;
-    end
-else if (groupi = 9) and (ucvalues = '$CECOLOR') then
-    begin
-      outstream.TXTAddGDBStringEOL(groups);
-      outstream.TXTAddGDBStringEOL('$CECOLOR');
-      outstream.TXTAddGDBStringEOL('62');
-      if assigned(sysvar.DWG.DWG_CColor) then
-                                             outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_CColor^))
-                                         else
-                                             outstream.TXTAddGDBStringEOL(floattostr(256));
-      groups := templatefile.readGDBString;
-      values := templatefile.readGDBString;
-    end
-else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
-    begin
-      outstream.TXTAddGDBStringEOL(groups);
-      outstream.TXTAddGDBStringEOL('$LWDISPLAY');
-      outstream.TXTAddGDBStringEOL('290');
-      if assigned(sysvar.DWG.DWG_DrawMode) then
-                                               begin
-                                                    if sysvar.DWG.DWG_DrawMode^ then
-                                                                                    outstream.TXTAddGDBStringEOL(inttostr(1))
-                                                                                else
-                                                                                    outstream.TXTAddGDBStringEOL(inttostr(0));
-                                               end
-                                           else
-                                               outstream.TXTAddGDBStringEOL(inttostr(0));
-      groups := templatefile.readGDBString;
-      values := templatefile.readGDBString;
-    end
-    else
+    end}
+    else variablenotprocessed:=true;
+end
+    {else};if variablenotprocessed then
       if (groupi = 5)
       or (groupi = 320)
       or (groupi = 330)
@@ -2736,7 +2693,10 @@ ENDTAB}
                            then
                                if olddwg<>nil then
                                                   SetCurrentDWGProc(olddwg);
-  {$IFNDEF DELPHI}Handle2pointer.Destroy;{$ENDIF}
+  {$IFNDEF DELPHI}
+  Handle2pointer.Destroy;
+  VarsDict.destroy;
+  {$ENDIF}
   //gdb.SetCurrentDWG(olddwg);
 end;
 procedure SaveZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);

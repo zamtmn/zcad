@@ -30,6 +30,7 @@ const
   dxfName_TABLE='TABLE';
   dxfName_TABLES='TABLES';
   dxfName_SECTION='SECTION';
+  dxfName_HEADER='HEADER';
   dxfName_CLASSES='CLASSES';
   dxfName_APPID='APPID';
   dxfName_DIMSTYLE='DIMSTYLE';

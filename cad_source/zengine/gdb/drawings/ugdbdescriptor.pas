@@ -376,6 +376,8 @@ begin
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_AngDir,'DWG_AngDir');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_AngBase,'DWG_AngBase');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_UnitMode,'DWG_UnitMode');
+   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_InsUnits,'DWG_InsUnits');
+   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_TextSize,'DWG_TextSize');
 
    if assigned(CurrentDWG.wa)then
    begin
@@ -413,6 +415,9 @@ begin
    SysVar.dwg.DWG_AngDir:=nil;
    SysVar.dwg.DWG_AngBase:=nil;
    SysVar.dwg.DWG_UnitMode:=nil;
+   SysVar.dwg.DWG_InsUnits:=nil;
+
+   SysVar.dwg.DWG_TextSize:=nil;
 
    sysvar.RD.RD_CurrentWAParam.Instance:=nil;
    sysvar.RD.RD_CurrentWAParam.PTD:=nil;

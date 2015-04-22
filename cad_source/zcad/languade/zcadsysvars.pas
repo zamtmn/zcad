@@ -151,9 +151,8 @@ type
              DWG_AngDir:PTAngDir;
              DWG_AngBase:PTAngle;
              DWG_UnitMode:PTUnitMode;
-
-
-
+             DWG_InsUnits:PTInsUnits;
+             DWG_TextSize:PGDBDouble;
 
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)

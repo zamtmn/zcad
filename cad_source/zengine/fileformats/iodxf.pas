@@ -181,6 +181,12 @@ begin
      if sysvar.DWG.DWG_UnitMode<>nil then
        if DWGVarsDict.mygetvalue('$UNITMODE',s) then
          sysvar.DWG.DWG_UnitMode^ := TUnitMode(strtoint(s));
+     if sysvar.DWG.DWG_InsUnits<>nil then
+       if DWGVarsDict.mygetvalue('$INSUNITS',s) then
+         sysvar.DWG.DWG_InsUnits^ := TInsUnits(strtoint(s));
+     if sysvar.DWG.DWG_TextSize<>nil then
+       if DWGVarsDict.mygetvalue('$TEXTSIZE',s) then
+         sysvar.DWG.DWG_TextSize^ := strtofloat(s);
      end;
 end;
 procedure ReadDXFHeader(var f: GDBOpenArrayOfByte; DWGVarsDict:TGDBString2GDBStringDictionary);
@@ -1501,8 +1507,6 @@ end;
 procedure MakeVariablesDict(VarsDict:TGDBString2GDBStringDictionary; var drawing:TSimpleDrawing);
 var
    pcurrtextstyle:PGDBTextStyle;
-   sss:gdbstring;
-   i:integer;
 begin
     VarsDict.insert('$CLAYER',drawing.LayerTable.GetCurrentLayer^.Name);
     VarsDict.insert('$CELTYPE',drawing.LTypeStyleTable.GetCurrentLType^.Name);
@@ -1558,14 +1562,16 @@ begin
                                         VarsDict.insert('$AUNITS',inttostr(ord(sysvar.DWG.DWG_AUnits^)));
    if assigned(sysvar.DWG.DWG_AUPrec) then
                                         VarsDict.insert('$AUPREC',inttostr(ord(sysvar.DWG.DWG_AUPrec^)));
-   sss:=inttostr(ord(sysvar.DWG.DWG_AngDir^));
-   i:=ord(sysvar.DWG.DWG_AngDir^);
    if assigned(sysvar.DWG.DWG_AngDir) then
                                         VarsDict.insert('$ANGDIR',inttostr(ord(sysvar.DWG.DWG_AngDir^)));
    if assigned(sysvar.DWG.DWG_AngBase) then
                                         VarsDict.insert('$ANGBASE',floattostr(sysvar.DWG.DWG_AngBase^));
    if assigned(sysvar.DWG.DWG_UnitMode) then
                                         VarsDict.insert('$UNITMODE',inttostr(ord(sysvar.DWG.DWG_UnitMode^)));
+   if assigned(sysvar.DWG.DWG_InsUnits) then
+                                           VarsDict.insert('$INSUNITS',inttostr(ord(sysvar.DWG.DWG_InsUnits^)));
+   if assigned(sysvar.DWG.DWG_TextSize) then
+                                           VarsDict.insert('$TEXTSIZE',floattostr(sysvar.DWG.DWG_TextSize^));
 end;
 
 function savedxf2000(name: GDBString; var drawing:TSimpleDrawing):boolean;
@@ -1601,6 +1607,7 @@ var
   laststrokewrited:boolean;
   pcurrtextstyle:PGDBTextStyle;
   variablenotprocessed:boolean;
+  processedvarscount:integer;
 begin
   {$IFNDEF DELPHI}
   Handle2pointer:=TMapPointerToHandle.Create;
@@ -1634,6 +1641,7 @@ begin
   indimstyletable:=false;
   inappidtable:=false;
   MakeVariablesDict(VarsDict,drawing);
+  processedvarscount:=VarsDict.size;
   while templatefile.notEOF do
   begin
     if  (templatefile.count-templatefile.ReadPos)<10
@@ -1644,34 +1652,23 @@ begin
     ucvalues:=uppercase(values);
     groupi := strtoint(groups);
     variablenotprocessed:=true;
-    if (groupi = 9) then
+    if (groupi = 9)and(processedvarscount>0) then
     begin
-    variablenotprocessed:=false;
-    if VarsDict.mygetvalue(values,ts) then
-    begin
-         outstream.TXTAddGDBStringEOL(groups);
-         outstream.TXTAddGDBStringEOL(values);
-         groups := templatefile.readGDBString;
-         {values := }templatefile.readGDBString;
-         outstream.TXTAddGDBStringEOL(groups);
-         if values='$HANDSEED' then
-                                   handlepos:=outstream.Count;
-         outstream.TXTAddGDBStringEOL(ts);
+      variablenotprocessed:=false;
+      if VarsDict.mygetvalue(values,ts) then
+        begin
+             outstream.TXTAddGDBStringEOL(groups);
+             outstream.TXTAddGDBStringEOL(values);
+             groups := templatefile.readGDBString;
+             {values := }templatefile.readGDBString;
+             outstream.TXTAddGDBStringEOL(groups);
+             if values='$HANDSEED' then
+                                       handlepos:=outstream.Count;
+             outstream.TXTAddGDBStringEOL(ts);
+             dec(processedvarscount);
+        end
+      else variablenotprocessed:=true;
     end
-    {else
-    if (values = '$HANDSEED') then
-    begin
-      outstream.TXTAddGDBStringEOL(groups);
-      outstream.TXTAddGDBStringEOL('$HANDSEED');
-      outstream.TXTAddGDBStringEOL('5');
-      handlepos:=outstream.Count;
-      outstream.TXTAddGDBStringEOL('FUCK OFF!');
-      groups := templatefile.readGDBString;
-      values := templatefile.readGDBString;
-      handle := strtoint('$' + values);
-    end}
-    else variablenotprocessed:=true;
-end
     {else};if variablenotprocessed then
       if (groupi = 5)
       or (groupi = 320)

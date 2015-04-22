@@ -397,6 +397,28 @@ PTUPrec=^TUPrec;
 TUPrec=(UPrec0(*'0'*),UPrec1(*'0.0'*),UPrec2(*'0.00'*),UPrec3(*'0.000'*),UPrec4(*'0.0000'*),UPrec5(*'0.00000'*),UPrec6(*'0.000000'*),UPrec7(*'0.0000000'*),UPrec8(*'0.00000000'*));
 PTUnitMode=^TUnitMode;
 TUnitMode=(UMWithSpaces(*'With spaces'*),UMWithoutSpaces(*'Without spaces'*));
+PTInsUnits=^TInsUnits;
+TInsUnits=(IUUnspecified(*'Unspecified'*),
+           IUInches(*'Inches'*),
+           IUFeet(*'Feet'*),
+           IUMiles(*'Miles'*),
+           IUMillimeters(*'Millimeters'*),
+           IUCentimeters(*'Centimeters'*),
+           IUMeters(*'Meters'*),
+           IUKilometers(*'Kilometers'*),
+           IUMicroinches(*'Microinches'*),
+           IUMils(*'Mils'*),
+           IUYards(*'Yards'*),
+           IUAngstroms(*'Angstroms'*),
+           IUNanometers(*'Nanometers'*),
+           IUMicrons(*'Microns'*),
+           IUDecimeters(*'Decimeters'*),
+           IUDekameters(*'Dekameters'*),
+           IUHectometers(*'Hectometers'*),
+           IUGigameters(*'Gigameters'*),
+           IUAstronomicalUnits(*'Astronomical units'*),
+           IULightYears(*'Light years'*),
+           IUParsecs(*'Parsecs'*));
 {EXPORT-}
 const
   empty_GDBString='Empty GDBString';

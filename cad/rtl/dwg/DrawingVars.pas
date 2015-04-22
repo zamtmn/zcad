@@ -29,6 +29,9 @@ var
    DWG_AngDir:TAngDir;
    DWG_AngBase:TAngle;
    DWG_UnitMode:TUnitMode;
+   DWG_InsUnits:TInsUnits;
+
+   DWG_TextSize:GDBDouble;
 
 
    Developer:GDBString;
@@ -84,7 +87,9 @@ begin
     DWG_AngDir:=ADCounterClockwise;
     DWG_AngBase:=0;
     DWG_UnitMode:=UMWithSpaces;
+    DWG_InsUnits:=IUUnspecified;
 
+    DWG_TextSize:=2.5;
 
-     Developer:='Зубарев';
+    Developer:='Зубарев';
 end.

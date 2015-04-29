@@ -37,7 +37,7 @@ ObjectDescriptor=object(RecordDescriptor)
 
 
                        constructor init(tname:string;pu:pointer);
-                       function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
+                       function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                        procedure CopyTo(RD:PTUserTypeDescriptor);
                        procedure RegisterVMT(pv:GDBPointer);
                        procedure RegisterDefaultConstructor(pv:GDBPointer);
@@ -563,7 +563,7 @@ var
 begin
      baddr:=addr;
      //b2addr:=baddr;
-     ts:=inherited CreateProperties(PDM_Field,PPDA,Name,PCollapsed,ownerattrib,bmode,addr,valkey,valtype);
+     ts:=inherited CreateProperties(f,PDM_Field,PPDA,Name,PCollapsed,ownerattrib,bmode,addr,valkey,valtype);
 
      pp:=Properties.beginiterate(ir);
      if pp<>nil then
@@ -585,7 +585,7 @@ begin
                                        end;
            ObjectDescriptor.SimpleRunMetodWithArg(pp.r,baddr,p);
            //p2:=p;
-           PTUserTypeDescriptor(pp^.base.PFT)^.CreateProperties(PDM_Property,PPDA,propname,@pp^.collapsed,{ppd^.Attr}pp^.base.Attributes or ownerattrib,bmode,p,'','');
+           PTUserTypeDescriptor(pp^.base.PFT)^.CreateProperties(f,PDM_Property,PPDA,propname,@pp^.collapsed,{ppd^.Attr}pp^.base.Attributes or ownerattrib,bmode,p,'','');
 
            pp:=Properties.iterate(ir);
      until pp=nil;
@@ -655,7 +655,7 @@ begin
                    //b2addr:=p;
                    //pcol^:=false;
                    //---------------------------------if bmode=property_build then
-                                               pld^.CreateProperties(PDM_Field,{PPDA}ts,LincedData,pcol{PCollapsed}{field_no_attrib},ownerattrib,bmode,p,'','');
+                                               pld^.CreateProperties(f,PDM_Field,{PPDA}ts,LincedData,pcol{PCollapsed}{field_no_attrib},ownerattrib,bmode,p,'','');
                    //p:=b2addr;
                    pcol:=colarray.iterate(ir2);
                    p:=PGDBOpenArrayOfData(baddr)^.iterate(ir);
@@ -675,7 +675,7 @@ begin
                    objtypename:=PGDBaseObject(P)^.GetObjName{ObjToGDBString('','')};
                    pld:=pointer(SysUnit.TypeName2PTD(PGDBaseObject(P)^.GetObjTypeName));
                    if bmode=property_build then
-                                               pld^.CreateProperties(PDM_Field,{PPDA}ts,objtypename,pcol{PCollapsed}{field_no_attrib},ownerattrib,bmode,p,'','');
+                                               pld^.CreateProperties(f,PDM_Field,{PPDA}ts,objtypename,pcol{PCollapsed}{field_no_attrib},ownerattrib,bmode,p,'','');
                    pcol:=colarray.iterate(ir2);
                    p:=PGDBOpenArrayOfData(baddr)^.iterate(ir);
              until p=nil;

@@ -30,9 +30,11 @@ const
 type
     //Abstract
     TSimpleProcedure=Procedure;
+    TOIReturnToDefaultProcedure=Procedure(const f:TzeUnitsFormat);
     TSimpleMethod=Procedure of object;
     TSimpleLCLMethod=Procedure (sender:TObject) of object;
     TProcedure_Pointer_=Procedure(p:pointer);
+    TOIClearIfItIs_Pointer_=Procedure(const f:TzeUnitsFormat;p:pointer);
     TProcedure_Integer_=Procedure(a:integer);
     TMethod_Integer_=Procedure(a:integer) of object;
     TMethod_PtrInt_=procedure (Data: PtrInt) of object;
@@ -48,8 +50,8 @@ type
 
 
     //ObjInsp
-    TSetGDBObjInsp=procedure(exttype:PUserTypeDescriptor; addr,context:Pointer);
-    TStoreAndSetGDBObjInsp=procedure(exttype:PUserTypeDescriptor; addr,context:Pointer);
+    TSetGDBObjInsp=procedure(const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer);
+    TStoreAndSetGDBObjInsp=procedure(const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer);
 
     //mainwindow
     TMessageBox=function(Text, Caption: PChar; Flags: Longint): Integer of object;
@@ -65,8 +67,8 @@ var
    StoreAndSetGDBObjInspProc:TStoreAndSetGDBObjInsp;
    ReStoreGDBObjInspProc:TFunction__Boolean;
    UpdateObjInspProc:TSimpleProcedure;
-   ReturnToDefaultProc:TSimpleProcedure;
-   ClrarIfItIsProc:TProcedure_Pointer_;
+   ReturnToDefaultProc:TOIReturnToDefaultProcedure;
+   ClrarIfItIsProc:TOIClearIfItIs_Pointer_;
    ReBuildProc:TSimpleProcedure;
    SetCurrentObjDefaultProc:TSimpleProcedure;
    GetCurrentObjProc:TFunction__Pointer;

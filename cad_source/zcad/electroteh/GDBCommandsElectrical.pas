@@ -1316,7 +1316,7 @@ begin
 
     gdb.GetCurrentDWG.OnMouseObj.Clear;
     if assigned(ClrarIfItIsProc)then
-    ClrarIfItIsProc(SecondOwner);
+    ClrarIfItIsProc(gdb.GetUnitsFormat,SecondOwner);
 
     if assigned(redrawoglwndproc) then redrawoglwndproc;
     if mode= 2 then commandmanager.executecommandend
@@ -1406,7 +1406,7 @@ begin
   s:='**Напрямую**';
   cabcomparam.Traces.Enums.add(@s);
   if assigned(SetGDBObjInspProc)then
-  SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),pcabcom,gdb.GetCurrentDWG);
+  SetGDBObjInspProc(gdb.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),pcabcom,gdb.GetCurrentDWG);
 
 
 
@@ -1421,7 +1421,7 @@ begin
   if p3dpl^.VertexArrayInOCS.Count<2 then
                                          begin
                                               if assigned(ReturnToDefaultProc)then
-                                                                                  ReturnToDefaultProc;
+                                                                                  ReturnToDefaultProc(gdb.GetUnitsFormat);
                                               p3dpl^.YouDeleted(gdb.GetCurrentDWG^);
                                               ptdrawing(gdb.GetCurrentDWG).UndoStack.KillLastCommand;
                                          end;
@@ -2350,7 +2350,7 @@ else
   gdb.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
   gdb.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
      if assigned(ReturnToDefaultProc)then
-                                         ReturnToDefaultProc;
+                                         ReturnToDefaultProc(gdb.GetUnitsFormat);
   clearcp;
 
   //redrawoglwnd;
@@ -2362,7 +2362,7 @@ function Find_com(operands:TCommandOperands):TCommandResult;
    // ir:itrec;
 begin
      if assigned(SetGDBObjInspProc)then
-  SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),pfindcom,gdb.GetCurrentDWG);
+  SetGDBObjInspProc(gdb.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),pfindcom,gdb.GetCurrentDWG);
   gdb.GetCurrentDWG.SelObjArray.clearallobjects;
   gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
   result:=cmd_ok;
@@ -2610,7 +2610,7 @@ begin
   GDB.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   sysvar.dwg.DWG_OSMode^:=sysvar.dwg.DWG_OSMode^ or osm_nearest;
   if assigned(SetGDBObjInspProc)then
-  SetGDBObjInspProc(SysUnit.TypeName2PTD('TELLeaderComParam'),@ELLeaderComParam,gdb.GetCurrentDWG);
+  SetGDBObjInspProc(gdb.GetUnitsFormat,SysUnit.TypeName2PTD('TELLeaderComParam'),@ELLeaderComParam,gdb.GetCurrentDWG);
   historyout('Первая точка:');
   result:=cmd_ok;
 end;
@@ -2622,7 +2622,7 @@ begin
         CableManager.init;
         CableManager.build;
         if assigned(SetGDBObjInspProc)then
-        SetGDBObjInspProc(SysUnit.TypeName2PTD('TCableManager'),@CableManager,gdb.GetCurrentDWG);
+        SetGDBObjInspProc(gdb.GetUnitsFormat,SysUnit.TypeName2PTD('TCableManager'),@CableManager,gdb.GetCurrentDWG);
         result:=cmd_ok;
 
 end;
@@ -3169,7 +3169,7 @@ begin
   GDB.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   GDB.GetCurrentDWG.SelObjArray.Clear;
   if assigned(ReturnToDefaultProc)then
-  ReturnToDefaultProc;
+  ReturnToDefaultProc(gdb.GetUnitsFormat);
   clearcp;
   result:=cmd_ok;
 end;
@@ -3213,7 +3213,7 @@ begin
   GDB.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   {objinsp.GDBobjinsp.}
   if assigned(ReturnToDefaultProc)then
-                                      ReturnToDefaultProc;
+                                      ReturnToDefaultProc(gdb.GetUnitsFormat);
   clearcp;
   //redrawoglwnd;
   result:=cmd_ok;

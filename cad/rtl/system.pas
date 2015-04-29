@@ -399,6 +399,11 @@ PTUPrec=^TUPrec;
 TUPrec=(UPrec0(*'0'*),UPrec1(*'0.0'*),UPrec2(*'0.00'*),UPrec3(*'0.000'*),UPrec4(*'0.0000'*),UPrec5(*'0.00000'*),UPrec6(*'0.000000'*),UPrec7(*'0.0000000'*),UPrec8(*'0.00000000'*));
 PTUnitMode=^TUnitMode;
 TUnitMode=(UMWithSpaces(*'With spaces'*),UMWithoutSpaces(*'Without spaces'*));
+TzeUnitsFormat=packed record
+                     uformat:TLUnits;
+                     uprec:TUPrec;
+                     umode:TUnitMode;
+               end;
 PTInsUnits=^TInsUnits;
 TInsUnits=(IUUnspecified(*'Unspecified'*),
            IUInches(*'Inches'*),
@@ -3575,6 +3580,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     //procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
                     function GetDefaultDrawingName:GDBString;
                     function FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
+                    function GetUnitsFormat:TzeUnitsFormat;
               end;
 //Generate on E:\zcad\cad_source\zcad\gui\odjectinspector\zcobjectinspectorwrapper.pas
   TWrapper2ObjInsp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)

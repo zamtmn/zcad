@@ -97,7 +97,7 @@ begin
                                  membuf.SaveToFile('*log\lms.pas');
                                  {$ENDIF}
                                  if assigned(SetGDBObjInspProc)then
-                                                               SetGDBObjInspProc(SysUnit.TypeName2PTD('TMSEditor'),@MSEditor,gdb.GetCurrentDWG);
+                                                               SetGDBObjInspProc(gdb.GetUnitsFormat,SysUnit.TypeName2PTD('TMSEditor'),@MSEditor,gdb.GetCurrentDWG);
                                 end
                             else
                                 commandmanager.executecommandend;
@@ -453,7 +453,7 @@ begin
                                               begin
                                                    prevundo:=0;
                                                    overlay:=false;
-                                                   if assigned(ReturnToDefaultProc) then ReturnToDefaultProc;
+                                                   if assigned(ReturnToDefaultProc) then ReturnToDefaultProc(gdb.GetUnitsFormat);
                                               end;
   ptdrawing(gdb.GetCurrentDWG).UndoStack.undo(prevundo,overlay);
   if assigned(redrawoglwndproc) then redrawoglwndproc;
@@ -994,7 +994,7 @@ begin
   GDB.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   {objinsp.GDBobjinsp.}
   if assigned(ReturnToDefaultProc)then
-                                      ReturnToDefaultProc;
+                                      ReturnToDefaultProc(gdb.GetUnitsFormat);
   clearcp;
   //redrawoglwnd;
   result:=cmd_ok;
@@ -1177,7 +1177,7 @@ begin
   GDB.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
   GDB.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
     if assigned(ReturnToDefaultProc)then
-                                      ReturnToDefaultProc;
+                                      ReturnToDefaultProc(gdb.GetUnitsFormat);
   clearcp;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   depth:=0;
@@ -1474,7 +1474,7 @@ end;
 function SnapProp_com(operands:TCommandOperands):TCommandResult;
 begin
      if assigned(StoreAndSetGDBObjInspProc)then
-      StoreAndSetGDBObjInspProc(dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,gdb.GetCurrentDWG);
+      StoreAndSetGDBObjInspProc(gdb.GetUnitsFormat,dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,gdb.GetCurrentDWG);
       result:=cmd_ok;
 end;
 function UpdatePO_com(operands:TCommandOperands):TCommandResult;

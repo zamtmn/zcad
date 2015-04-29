@@ -813,7 +813,7 @@ var
 begin
     if commandmanager.getentity('Select source entity: ',ps) then
     begin
-         SetGDBObjInspProc( SysUnit^.TypeName2PTD( 'TMatchPropParam'),
+         SetGDBObjInspProc( gdb.GetUnitsFormat,SysUnit^.TypeName2PTD( 'TMatchPropParam'),
                             @MatchPropParam,
                             gdb.GetCurrentDWG );
          dc:=gdb.GetCurrentDWG^.CreateDrawingRC;

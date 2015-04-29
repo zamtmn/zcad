@@ -76,6 +76,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     //procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
                     function GetDefaultDrawingName:GDBString;
                     function FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
+                    function GetUnitsFormat:TzeUnitsFormat;
               end;
 {EXPORT-}
 var GDB: GDBDescriptor;
@@ -121,6 +122,33 @@ begin
   OldName:=result;
   until FindDrawingByName(result)=nil;
 end;
+function CreateDefaultUnitsFormat:TzeUnitsFormat;
+begin
+     result.uformat:=LUDecimal;
+     result.uprec:=UPrec2;
+     result.umode:=UMWithSpaces;
+end;
+function GDBDescriptor.GetUnitsFormat:TzeUnitsFormat;
+begin
+     if CurrentDWG<>nil then
+                            begin
+                                 if Assigned(sysvar.DWG.DWG_LUnits) then
+                                                                        result.uformat:=sysvar.DWG.DWG_LUnits^
+                                                                    else
+                                                                        result.uformat:=LUDecimal;
+                                 if Assigned(sysvar.DWG.DWG_LUPrec) then
+                                                                        result.uprec:=sysvar.DWG.DWG_LUPrec^
+                                                                    else
+                                                                        result.uprec:=UPrec2;
+                                 if Assigned(sysvar.DWG.DWG_UnitMode) then
+                                                                        result.umode:=sysvar.DWG.DWG_UnitMode^
+                                                                    else
+                                                                        result.umode:=UMWithSpaces;
+                            end
+     else
+         result:=CreateDefaultUnitsFormat;
+end;
+
 function GDBDescriptor.FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
 var
   ir:itrec;

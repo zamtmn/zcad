@@ -86,7 +86,7 @@ begin
      if instance<>nil then
                           begin
                                if assigned(SetGDBObjInspProc)then
-                                                                 SetGDBObjInspProc(TypeDesk,Instance,gdb.GetCurrentDWG)
+                                                                 SetGDBObjInspProc(gdb.GetUnitsFormat,TypeDesk,Instance,gdb.GetCurrentDWG)
                           end
                       else
                           shared.ShowError(format(rscmNoBlockDefInDWGCXMenu,[FBlockName]));
@@ -96,7 +96,7 @@ end;
 procedure TEqTreeNode.Select;
 begin
      if assigned(SetGDBObjInspProc)then
-     SetGDBObjInspProc(ptd.PTD,ptd.Instance,gdb.GetCurrentDWG);
+     SetGDBObjInspProc(gdb.GetUnitsFormat,ptd.PTD,ptd.Instance,gdb.GetCurrentDWG);
 end;
 function TEqTreeNode.GetParams;
 begin

@@ -21,14 +21,14 @@ unit UBaseTypeDescriptor;
 interface
 uses
       Graphics,classes,Themes,
-      geometry,zcadstrconsts,strproc,log,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,sysutils,UGDBOpenArrayOfByte,gdbasetypes,
+      zemathutils,geometry,zcadstrconsts,strproc,log,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,sysutils,UGDBOpenArrayOfByte,gdbasetypes,
       {usupportgui,}varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,math,zcadsysvars,
 
       shared;
 type
 PBaseTypeDescriptor=^BaseTypeDescriptor;
 BaseTypeDescriptor=object(TUserTypeDescriptor)
-                         function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
+                         function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                          function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                          function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
@@ -84,6 +84,7 @@ GDBQWordDescriptor=object(BaseTypeDescriptor)
 GDBDoubleDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
+                          function GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
                           function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
@@ -127,7 +128,7 @@ TEnumDataDescriptor=object(BaseTypeDescriptor)
                      constructor init;
                      function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                      procedure SetValueFromString(PInstance:GDBPointer;_Value:GDBstring);virtual;
-                     function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
+                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                      destructor Done;virtual;
                end;
 var
@@ -226,7 +227,7 @@ begin
      ppd^.valueAddres:=addr;
      ppd^.mode:=mode;
      if (ppd^.Attr and FA_DIFFERENT)=0 then
-                                           ppd^.value:=GetDecoratedValueAsString(addr)
+                                           ppd^.value:=GetDecoratedValueAsString(addr,f)
                                        else
                                            ppd^.value:=rsDifferent;
      if ppd^.value='rp_21' then
@@ -446,6 +447,11 @@ begin
                              end;
 
 end;
+function GDBDoubleDescriptor.GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;
+begin
+    result:=zeDoubleToString(PGDBDouble(PInstance)^,f);
+end;
+
 procedure GDBDoubleDescriptor.SetValueFromString;
 var
      uGDBDouble:GDBDouble;

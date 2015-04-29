@@ -549,7 +549,7 @@ begin
                                                   currvalue:=0;
                                                   maxvalue:=0;
                                                   typename:=pGDBString(parseresult^.getelement(0))^;
-                                                  if typename='TRestoreMode' then
+                                                  if typename='TInsUnits' then
                                                                                 typename:=typename;
                                                   repeat
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;

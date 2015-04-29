@@ -729,7 +729,7 @@ begin
           if assigned(FreEditorProc)then
                                         FreEditorProc;
           if assigned(ReturnToDefaultProc)then
-                                           ReturnToDefaultProc;
+                                           ReturnToDefaultProc(gdb.GetUnitsFormat);
           application.terminate;
      end;
 end;
@@ -830,7 +830,7 @@ begin
        if assigned(FreEditorProc)then
                                      FreEditorProc;
        if assigned(ReturnToDefaultProc)then
-                                           ReturnToDefaultProc;
+                                           ReturnToDefaultProc(gdb.GetUnitsFormat);
        shared.SBTextOut('Закрыто');
        if assigned(UpdateVisibleProc) then UpdateVisibleProc;
   end;
@@ -976,7 +976,7 @@ begin
   TempForm.Caption:=rsGDBObjInspWndName;
   TempForm.SetBounds(0,100,200,600);
   if assigned(SetGDBObjInspProc)then
-  SetGDBObjInspProc(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,nil);
+  SetGDBObjInspProc(gdb.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,nil);
   if assigned(SetCurrentObjDefaultProc)then
                                            SetCurrentObjDefaultProc;
   pint:=SavedUnit.FindValue('VIEW_ObjInspV');
@@ -2227,7 +2227,7 @@ begin
                           OGL.GDBActivate;
      OGL.param.firstdraw:=true;
      OGL.draworinvalidate;
-     ReturnToDefaultProc;
+     ReturnToDefaultProc(gdb.GetUnitsFormat);
 end;
 
 destructor MainForm.Destroy;
@@ -2905,7 +2905,7 @@ begin
                                                     commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',Sender.pdwg,@Sender.param)
                                                 else
                                                     If assigned(ReturnToDefaultProc)then
-                                                                                        ReturnToDefaultProc;
+                                                                                        ReturnToDefaultProc(gdb.GetUnitsFormat);
     end
   else
   begin
@@ -2917,13 +2917,13 @@ begin
        if ptype<>nil then
        begin
             If assigned(SetGDBObjInspProc)then
-            SetGDBObjInspProc(ptype,Sender.param.SelDesc.LastSelectedObject,Sender.pdwg);
+            SetGDBObjInspProc(gdb.GetUnitsFormat,ptype,Sender.param.SelDesc.LastSelectedObject,Sender.pdwg);
        end;
   end
   else
   begin
     If assigned(ReturnToDefaultProc)then
-    ReturnToDefaultProc;
+    ReturnToDefaultProc(gdb.GetUnitsFormat);
   end;
   end
 end;

@@ -27,7 +27,7 @@ RecordDescriptor=object(TUserTypeDescriptor)
                        Fields:GDBOpenArrayOfData;
                        Parent:PRecordDescriptor;
                        constructor init(tname:string;pu:pointer);
-                       function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
+                       function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                        procedure AddField(var fd:FieldDescriptor);
                        function FindField(fn:GDBString):PFieldDescriptor;virtual;
                        function SetAttrib(fn:GDBString;SetA,UnSetA:GDBWord):PFieldDescriptor;
@@ -453,12 +453,12 @@ begin
                                                   bmodesave2:=ppda^.findvalkey(pvd^.name);
                                                   if bmodesave2<>0 then
                                                   PTUserTypeDescriptor(pvd^.data.PTD)^.CreateProperties
-                                                  (PDM_Field,PPDA,tname,{pcollapsed}@pvd^.data.PTD^.collapsed,(ownerattrib or tw),bmodesave2,taa,pvd^.name,pvd^.data.ptd.TypeName)
+                                                  (f,PDM_Field,PPDA,tname,{pcollapsed}@pvd^.data.PTD^.collapsed,(ownerattrib or tw),bmodesave2,taa,pvd^.name,pvd^.data.ptd.TypeName)
                                                                    else
                                                                    begin
                                                   bmodetemp:=property_build;
                                                   PTUserTypeDescriptor(pvd^.data.PTD)^.CreateProperties
-                                                  (PDM_Field,PPDA,tname,{pcollapsed}@pvd^.data.PTD^.collapsed,(ownerattrib or tw),{bmode}bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);
+                                                  (f,PDM_Field,PPDA,tname,{pcollapsed}@pvd^.data.PTD^.collapsed,(ownerattrib or tw),{bmode}bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);
 
                                                   if (bmode<>property_build)then
                                                                                 inc(bmode);
@@ -491,7 +491,7 @@ begin
                             SaveFastEditor:=GDBEnumDataDescriptorObj.FastEditor;
                             GDBEnumDataDescriptorObj.Decorators:=pfd^.base.PFT^.Decorators;
                             GDBEnumDataDescriptorObj.FastEditor:=pfd^.base.PFT^.FastEditor;
-                            GDBEnumDataDescriptorObj.CreateProperties(PDM_Field,PPDA,{ppd^.Name}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,addr,'','');
+                            GDBEnumDataDescriptorObj.CreateProperties(f,PDM_Field,PPDA,{ppd^.Name}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,addr,'','');
                             GDBEnumDataDescriptorObj.Decorators:=SaveDecorators;
                             GDBEnumDataDescriptorObj.FastEditor:=SaveFastEditor;
                        end
@@ -560,17 +560,17 @@ begin
                                                                tb:={PTTypedData(addr)^.Instance}addr;
                                                                ta:=PTTypedData(addr)^.ptd;
                                                                if ta<>nil then
-                                                               PTUserTypeDescriptor(ta)^.CreateProperties(PDM_Field,PPDA,{PTTypedData(addr)^.ptd^.TypeName}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,tb,'','')
+                                                               PTUserTypeDescriptor(ta)^.CreateProperties(f,PDM_Field,PPDA,{PTTypedData(addr)^.ptd^.TypeName}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,tb,'','')
                                                                else
                                                                begin
                                                                     //tb:=@EmptyTypedData;
-                                                                    defaultptypehandler.CreateProperties(PDM_Field,PPDA,{PTTypedData(addr)^.ptd^.TypeName}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib or FA_READONLY,bmode,tb,'','');
+                                                                    defaultptypehandler.CreateProperties(f,PDM_Field,PPDA,{PTTypedData(addr)^.ptd^.TypeName}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib or FA_READONLY,bmode,tb,'','');
                                                                end;
                                                                inc(GDBPlatformint(addr),sizeof(TTypedData));
                                                           end
                                                        else
                                                            begin
-                                                                PTUserTypeDescriptor(pfd^.base.PFT)^.CreateProperties(PDM_Field,PPDA,{ppd^.Name}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,addr,'','')
+                                                                PTUserTypeDescriptor(pfd^.base.PFT)^.CreateProperties(f,PDM_Field,PPDA,{ppd^.Name}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,addr,'','')
                                                            end;
                    end;
            end;

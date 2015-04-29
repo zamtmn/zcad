@@ -403,7 +403,7 @@ begin
   and(commanddata.PTD<>nil) then
                                 begin
                                      if assigned(SetGDBObjInspProc)then
-                                                                       SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),@self,gdb.GetCurrentDWG);
+                                                                       SetGDBObjInspProc(gdb.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),@self,gdb.GetCurrentDWG);
                                 end; 
 
 end;

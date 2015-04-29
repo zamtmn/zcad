@@ -90,9 +90,9 @@ type
     procedure BeforeInit; virtual;
     procedure _onresize(sender:tobject);virtual;
     procedure updateeditorBounds;virtual;
-    procedure buildproplist(exttype:PUserTypeDescriptor; bmode:GDBInteger; var addr:GDBPointer);
+    procedure buildproplist(const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; bmode:GDBInteger; var addr:GDBPointer);
     procedure SetCurrentObjDefault;
-    procedure ReturnToDefault;
+    procedure ReturnToDefault(const f:TzeUnitsFormat);
     procedure rebuild;
     procedure Notify(Sender: TObject;Command:TMyNotifyCommand); virtual;
     procedure createpda;
@@ -124,7 +124,7 @@ type
     procedure MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);override;
     procedure UpdateObjectInInsp;
     private
-    procedure setptr(exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+    procedure setptr(const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
     procedure updateinsp;
     protected
     procedure ScrollbarHandler(ScrollKind: TScrollBarKind; OldPosition: Integer);override;
@@ -140,15 +140,15 @@ type
     procedure FormHide(Sender: TObject);
   end;
 
-procedure SetGDBObjInsp(exttype:PUserTypeDescriptor; addr,context:GDBPointer);
-procedure StoreAndSetGDBObjInsp(exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+procedure SetGDBObjInsp(const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+procedure StoreAndSetGDBObjInsp(const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
 function ReStoreGDBObjInsp:GDBBoolean;
 procedure UpdateObjInsp;
-procedure ReturnToDefault;
+procedure ReturnToDefault(const f:TzeUnitsFormat);
 procedure rebuild;
 procedure SetCurrentObjDefault;
 function  GetCurrentObj:Pointer;
-procedure ClrarIfItIs(addr:GDBPointer);
+procedure ClrarIfItIs(const f:TzeUnitsFormat;addr:GDBPointer);
 procedure SetNameColWidth(w:integer);
 function GetNameColWidth:integer;
 function CreateObjInspInstance:TForm;
@@ -162,6 +162,7 @@ var
   rowh,spaceh:integer;
   ty:integer;
   DefaultDetails: TThemedElementDetails;
+  DummyUF:TzeUnitsFormat;
 
 implementation
 
@@ -282,7 +283,7 @@ begin
      if (GDBobjinsp.PStoredObj=nil) then
                                     else
                                     begin
-                                         GDBobjinsp.setptr(GDBobjinsp.StoredObjGDBType,GDBobjinsp.PStoredObj,GDBobjinsp.pStoredContext);
+                                         GDBobjinsp.setptr(dummyuf,GDBobjinsp.StoredObjGDBType,GDBobjinsp.PStoredObj,GDBobjinsp.pStoredContext);
                                          GDBobjinsp.PStoredObj:=nil;
                                          GDBobjinsp.StoredObjGDBType:=nil;
                                          GDBobjinsp.pStoredContext:=nil;
@@ -294,7 +295,7 @@ begin
                                     end;
      end;
 end;
-procedure StoreAndSetGDBObjInsp(exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+procedure StoreAndSetGDBObjInsp(const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
 begin
      if assigned(GDBobjinsp)then
      begin
@@ -304,15 +305,15 @@ begin
                                   GDBobjinsp.StoredObjGDBType:=GDBobjinsp.currobjgdbtype;
                                   GDBobjinsp.pStoredContext:=GDBobjinsp.pcurcontext;
                              end;
-     GDBobjinsp.setptr(exttype,addr,context);
+     GDBobjinsp.setptr(f,exttype,addr,context);
      end;
 end;
 
-procedure SetGDBObjInsp(exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+procedure SetGDBObjInsp(const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
 begin
      if assigned(GDBobjinsp)then
                                 begin
-                                     GDBobjinsp.setptr(exttype,addr,context);
+                                     GDBobjinsp.setptr(f,exttype,addr,context);
                                 end;
 end;
 procedure UpdateObjInsp;
@@ -322,12 +323,12 @@ begin
                                      GDBobjinsp.updateinsp;
                                 end;
 end;
-procedure ClrarIfItIs(addr:GDBPointer);
+procedure ClrarIfItIs(const f:TzeUnitsFormat;addr:GDBPointer);
 begin
        if assigned(GDBobjinsp)then
                                   begin
                                        if GDBobjinsp.pcurrobj=addr then
-                                       GDBobjinsp.ReturnToDefault;
+                                       GDBobjinsp.ReturnToDefault(f);
                                   end;
 end;
 procedure SetNameColWidth(w:integer);
@@ -382,7 +383,7 @@ begin
                                   begin
                                        GDBobjinsp.PStoredObj:=nil;
                                        GDBobjinsp.StoredObjGDBType:=nil;
-                                       GDBobjinsp.ReturnToDefault;
+                                       GDBobjinsp.ReturnToDefault(f);
                                   end;
 end;
 procedure SetCurrentObjDefault;
@@ -465,7 +466,8 @@ begin
                           begin
                           self.StoreAndFreeEditor;
                           end;
-  setptr(defaultobjgdbtype,pdefaultobj,pdefaultcontext);
+  dummyUF:=f;
+  setptr(f,defaultobjgdbtype,pdefaultobj,pdefaultcontext);
 end;
 
 procedure TGDBobjinsp.createpda;
@@ -504,7 +506,7 @@ end;
 procedure TGDBobjinsp.buildproplist;
 begin
   if exttype<>nil then
-  PTUserTypeDescriptor(exttype)^.CreateProperties(PDM_Field,@PDA,'root',field_no_attrib,0,bmode,addr,'','');
+  PTUserTypeDescriptor(exttype)^.CreateProperties(f,PDM_Field,@PDA,'root',field_no_attrib,0,bmode,addr,'','');
 end;
 
 procedure TGDBobjinsp.calctreeh;
@@ -1475,7 +1477,7 @@ begin
     if peditor<>nil then
     begin
       tp:=pcurrobj;
-      GDBobjinsp.buildproplist(currobjgdbtype,property_correct,tp);
+      GDBobjinsp.buildproplist(dummyUF,currobjgdbtype,property_correct,tp);
       //-----------------------------------------------------------------peditor^.done;
       //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
       EDContext.ppropcurrentedit:=pp;
@@ -1613,7 +1615,7 @@ begin
        if peditor<>nil then
        begin
          tp:=pcurrobj;
-         GDBobjinsp.buildproplist(currobjgdbtype,property_correct,tp);
+         GDBobjinsp.buildproplist(DummyUF,currobjgdbtype,property_correct,tp);
          StoreAndFreeEditor;
        end;
        vsa.init(50);
@@ -1789,7 +1791,7 @@ end;
 procedure TGDBobjinsp.updateinsp;
 begin
   //exit;
-  setptr(currobjgdbtype,pcurrobj,pcurcontext);
+  setptr(dummyuf,currobjgdbtype,pcurrobj,pcurcontext);
 end;
 
 
@@ -1809,7 +1811,7 @@ begin
     else
       GDBobj:=false;
     tp:=pcurrobj;
-    GDBobjinsp.buildproplist(currobjgdbtype,property_build,tp);
+    GDBobjinsp.buildproplist(DummyUF,currobjgdbtype,property_build,tp);
     contentheigth:=gettreeh;
     if currobjgdbtype^.OIP.ci=self.Height then
                                                 begin
@@ -1825,6 +1827,7 @@ begin
 end;
 procedure TGDBobjinsp.setptr;
 begin
+  dummyUF:=f;
   if (pcurrobj<>addr)or(currobjgdbtype<>exttype) then
   begin
     {Objinsp.}currpd:=nil;
@@ -1846,7 +1849,7 @@ begin
       GDBobj:=true
     else
       GDBobj:=false;
-    GDBobjinsp.buildproplist(exttype,property_build,addr);
+    GDBobjinsp.buildproplist(f,exttype,property_build,addr);
     contentheigth:=gettreeh;
     createscrollbars;
     if currobjgdbtype^.OIP.ci=self.Height then
@@ -1861,7 +1864,7 @@ begin
   end
   else
   begin
-    GDBobjinsp.buildproplist(exttype,property_correct,addr);
+    GDBobjinsp.buildproplist(dummyuf,exttype,property_correct,addr);
     contentheigth:=gettreeh;
     createscrollbars;
   end;

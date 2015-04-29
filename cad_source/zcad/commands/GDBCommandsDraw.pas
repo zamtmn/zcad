@@ -1898,7 +1898,7 @@ begin
                                                exit;
                                          end;
           if assigned(SetGDBObjInspProc)then
-                                            SetGDBObjInspProc(SysUnit^.TypeName2PTD('TBlockInsert'),@BIProp,gdb.GetCurrentDWG);
+                                            SetGDBObjInspProc(gdb.GetUnitsFormat,SysUnit^.TypeName2PTD('TBlockInsert'),@BIProp,gdb.GetCurrentDWG);
           GDB.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
           historyoutstr(rscmInsertPoint);
      end
@@ -2068,7 +2068,7 @@ begin
   GDB.GetCurrentDWG^.wa.param.seldesc.LastSelectedObject:=nil;
   GDB.GetCurrentDWG^.wa.param.lastonmouseobject:=nil;
   if assigned(ReturnToDefaultProc)then
-                                      ReturnToDefaultProc;
+                                      ReturnToDefaultProc(gdb.GetUnitsFormat);
   clearcp;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
@@ -2923,7 +2923,7 @@ begin
   if p3dpl^.VertexArrayInOCS.Count<2 then
                                          begin
                                                if assigned(ReturnToDefaultProc)then
-                                                                                   ReturnToDefaultProc;
+                                                                                   ReturnToDefaultProc(gdb.GetUnitsFormat);
                                               //p3dpl^.YouDeleted;
                                               cc:=pCommandRTEdObject(_self)^.UndoTop;
                                               ptdrawing(GDB.GetCurrentDWG)^.UndoStack.ClearFrom(cc);
@@ -2965,7 +2965,7 @@ begin
     //gdb.GetCurrentROOT^.ObjArray.ObjTree.{AddObjectToNodeTree(p3dpl)}CorrectNodeTreeBB(p3dpl);   vbnvbn
     //gdb.GetCurrentROOT^.AddObjectToObjArray(addr(p3dpl));
     if assigned(SetGDBObjInspProc)then
-    SetGDBObjInspProc(SysUnit^.TypeName2PTD('GDBObjPolyline'),p3dpl,gdb.GetCurrentDWG);
+    SetGDBObjInspProc(gdb.GetUnitsFormat,SysUnit^.TypeName2PTD('GDBObjPolyline'),p3dpl,gdb.GetCurrentDWG);
     end;
 
   end
@@ -3055,7 +3055,7 @@ begin
                else
                    begin
                         if assigned(SetGDBObjInspProc)then
-                        SetGDBObjInspProc(SysUnit^.TypeName2PTD('TPolyEdit'),@PEProp,gdb.GetCurrentDWG);
+                        SetGDBObjInspProc(gdb.GetUnitsFormat,SysUnit^.TypeName2PTD('TPolyEdit'),@PEProp,gdb.GetCurrentDWG);
                         GDB.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
                         gdb.GetCurrentDWG^.SelObjArray.clearallobjects;
                         //historyout('Поехали:');
@@ -3472,7 +3472,7 @@ else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
                                                exit;
                                          end;
           if assigned(SetGDBObjInspProc)then
-          SetGDBObjInspProc(SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,gdb.GetCurrentDWG);
+          SetGDBObjInspProc(gdb.GetUnitsFormat,SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,gdb.GetCurrentDWG);
           gdb.GetCurrentDWG^.SelObjArray.clearallobjects;
           gdb.GetCurrentROOT^.ObjArray.DeSelect(gdb.GetCurrentDWG^.GetSelObjArray,gdb.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
           result:=cmd_ok;
@@ -3492,7 +3492,7 @@ else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
 
   exit;
   if assigned(SetGDBObjInspProc)then
-  SetGDBObjInspProc(SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,gdb.GetCurrentDWG);
+  SetGDBObjInspProc(gdb.GetUnitsFormat,SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,gdb.GetCurrentDWG);
   gdb.GetCurrentDWG^.SelObjArray.clearallobjects;
   gdb.GetCurrentROOT^.ObjArray.DeSelect(gdb.GetCurrentDWG^.GetSelObjArray,gdb.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
   result:=cmd_ok;

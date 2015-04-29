@@ -152,8 +152,9 @@ UserTypeDescriptor=object(GDBaseObject)
                          function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;abstract;
                          function GetTypeAttributes:TTypeAttr;virtual;
                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
+                         function GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;virtual;
                          function GetUserValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                         function GetDecoratedValueAsString(pinstance:GDBPointer):GDBString;virtual;
+                         function GetDecoratedValueAsString(pinstance:GDBPointer; const f:TzeUnitsFormat):GDBString;virtual;
                          procedure CopyInstanceTo(source,dest:pointer);virtual;
                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                          procedure SetValueFromString(PInstance:GDBPointer;_Value:GDBstring);virtual;abstract;
@@ -454,16 +455,21 @@ function UserTypeDescriptor.GetValueAsString;
 begin
      result:='UserTypeDescriptor.GetValueAsString;';
 end;
+function UserTypeDescriptor.GetFormattedValueAsString(pinstance:GDBPointer; const f:TzeUnitsFormat):GDBString;
+begin
+     result:=GetValueAsString(PInstance);
+end;
+
 function UserTypeDescriptor.GetUserValueAsString;
 begin
      result:=GetValueAsString(pinstance);
 end;
-function UserTypeDescriptor.GetDecoratedValueAsString(pinstance:GDBPointer):GDBString;
+function UserTypeDescriptor.GetDecoratedValueAsString(pinstance:GDBPointer; const f:TzeUnitsFormat):GDBString;
 begin
      if assigned(Decorators.OnGetValueAsString) then
                                          result:=Decorators.OnGetValueAsString(pinstance)
                                      else
-                                         result:=GetValueAsString(pinstance);
+                                         result:=GetFormattedValueAsString(pinstance,f);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('varmandef.initialization');{$ENDIF}

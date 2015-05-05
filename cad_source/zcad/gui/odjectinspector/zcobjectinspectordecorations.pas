@@ -819,6 +819,7 @@ begin
      AddEditorToType('GDBLongword',TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType('GDBQWord',TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType('GDBDouble',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('GDBNonDimensionDouble',TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType('GDBString',TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType('GDBAnsiString',TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType('GDBFloat',TBaseTypesEditors.BaseCreateEditor);

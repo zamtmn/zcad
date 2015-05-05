@@ -144,6 +144,7 @@ UserTypeDescriptor=object(GDBaseObject)
                          FastEditor:TFastEditorProcs;
                          onCreateEditorFunc:TCreateEditorFunc;
                          constructor init(size:GDBInteger;tname:string;pu:pointer);
+                         constructor baseinit(size:GDBInteger;tname:string;pu:pointer);
                          procedure _init(size:GDBInteger;tname:string;pu:pointer);
                          function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;InitialValue:GDBString):TEditorDesc;virtual;
                          procedure ApplyOperator(oper,path:GDBString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;abstract;
@@ -428,9 +429,14 @@ end;
 
 constructor UserTypeDescriptor.init;
 begin
+     baseinit(size,tname,pu);
+end;
+constructor UserTypeDescriptor.baseinit;
+begin
      _init(size,tname,pu);
      Decorators.OnGetValueAsString:=nil;
 end;
+
 destructor UserTypeDescriptor.done;
 begin
      {$IFDEF TOTALYLOG}programlog.logoutstr(self.TypeName,0);{$ENDIF}

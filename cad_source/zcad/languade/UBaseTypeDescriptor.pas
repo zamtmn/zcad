@@ -88,6 +88,9 @@ GDBDoubleDescriptor=object(BaseTypeDescriptor)
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
                           function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
+GDBNonDimensionDoubleDescriptor=object(GDBDoubleDescriptor)
+                          function GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;virtual;
+                    end;
 GDBStringDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
@@ -133,6 +136,7 @@ TEnumDataDescriptor=object(BaseTypeDescriptor)
                end;
 var
 GDBDoubleDescriptorObj:GDBDoubleDescriptor;
+GDBNonDimensionDoubleDescriptorObj:GDBNonDimensionDoubleDescriptor;
 GDBStringDescriptorObj:GDBStringDescriptor;
 GDBAnsiStringDescriptorObj:GDBAnsiStringDescriptor;
 GDBWordDescriptorObj:GDBWordDescriptor;
@@ -449,7 +453,7 @@ begin
 end;
 function GDBDoubleDescriptor.GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;
 begin
-    result:=zeDoubleToString(PGDBDouble(PInstance)^,f);
+    result:=zeDimensionToString(PGDBDouble(PInstance)^,f);
 end;
 
 procedure GDBDoubleDescriptor.SetValueFromString;
@@ -474,7 +478,10 @@ begin
      else
          result:=CREqual;
 end;
-
+function GDBNonDimensionDoubleDescriptor.GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;
+begin
+    result:=zeNonDimensionToString(PGDBNonDimensionDouble(PInstance)^,f);
+end;
 constructor GDBWordDescriptor.init;
 begin
      inherited init(sizeof(GDBWord),'GDBWord',nil);
@@ -840,6 +847,7 @@ begin
        {$IFDEF DEBUGINITSECTION}LogOut('GDBBaseTypeDescriptor.initialization');{$ENDIF}
      //gdbgetmem({$IFDEF DEBUGBUILD}'{2A687C81-843D-4451-8663-384A625BFEBA}',{$ENDIF}pointer(GDBDoubleDescriptorObj),sizeof(GDBDoubleDescriptor));
      GDBDoubleDescriptorObj.init;
+     GDBNonDimensionDoubleDescriptorObj.baseinit(sizeof(GDBNonDimensionDouble),'GDBNonDimensionDouble',nil);
      //gdbgetmem({$IFDEF DEBUGBUILD}'{2A687C81-843D-4451-8663-384A625BFEBA}',{$ENDIF}pointer(GDBStringDescriptorObj),sizeof(GDBStringDescriptor));
      GDBStringDescriptorObj.init;
      GDBAnsiStringDescriptorObj.init;

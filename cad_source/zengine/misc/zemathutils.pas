@@ -21,7 +21,10 @@ unit zemathutils;
 
 interface
 uses gdbase,gdbasetypes,math,sysutils;
-function zeDoubleToString(const value:Double; const f:TzeUnitsFormat):GDBString;
+function zeDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;
+function zeNonDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;
+function zeAbsAngleToString(const value:Double; const f:TzeUnitsFormat):GDBString;
+function zeAngleToString(const value:Double; const f:TzeUnitsFormat):GDBString;
 implementation
 const
   fractions:array [TUPrec] of integer=(1,2,4,8,16,32,64,128,256);
@@ -40,7 +43,46 @@ begin
   else
     SetLength(_value,Q);
 end;
-function zeDoubleToString(const value:Double; const f:TzeUnitsFormat):GDBString;
+function zeNonDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;
+var
+   ff:TzeUnitsFormat;
+begin
+     if f.uformat=LUDecimal then
+                                result:=zeDimensionToString(value,f)
+                            else
+                                begin
+                                     ff:=f;
+                                     ff.uformat:=LUDecimal;
+                                     result:=zeDimensionToString(value,ff);
+                                end;
+end;
+function zeAngleToString(const value:Double; const f:TzeUnitsFormat):GDBString;
+var
+   ff:TzeUnitsFormat;
+begin
+     if f.uformat=LUDecimal then
+                                result:=zeDimensionToString(value,f)
+                            else
+                                begin
+                                     ff:=f;
+                                     ff.uformat:=LUDecimal;
+                                     result:=zeDimensionToString(value,ff);
+                                end;
+end;
+function zeAbsAngleToString(const value:Double; const f:TzeUnitsFormat):GDBString;
+var
+   ff:TzeUnitsFormat;
+begin
+     if f.uformat=LUDecimal then
+                                result:=zeDimensionToString(value,f)
+                            else
+                                begin
+                                     ff:=f;
+                                     ff.uformat:=LUDecimal;
+                                     result:=zeDimensionToString(value,ff);
+                                end;
+end;
+function zeDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;
 var
    _ft,_dft:double;{1}
    absvalue,_in:double;{12*_ft}

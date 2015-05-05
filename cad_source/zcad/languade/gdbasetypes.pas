@@ -29,6 +29,9 @@ PtrUInt={Pointer}Cardinal;
 PGDBDouble=^GDBDouble;
 {-}GDBDouble=double;{//}
 
+PGDBNonDimensionDouble=^GDBNonDimensionDouble;
+{-}GDBNonDimensionDouble=GDBDouble;{//}
+
 PGDBFloat=^GDBFloat;
 {-}GDBFloat=single;{//}
 

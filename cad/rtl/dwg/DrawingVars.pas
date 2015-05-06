@@ -27,7 +27,7 @@ var
    DWG_AUnits:TAUnits;
    DWG_AUPrec:TUPrec;
    DWG_AngDir:TAngDir;
-   DWG_AngBase:TAngle;
+   DWG_AngBase:GDBAngleDegDouble;
    DWG_UnitMode:TUnitMode;
    DWG_InsUnits:TInsUnits;
 

@@ -85,8 +85,8 @@ begin
      v1:=VertexSub(v2,v1);
      v1:=NormalizeVertex(v1);
      l1:=scalardot(v1,_X_yzVertex);
-     l1:=arccos(l1)*180/pi;
-     if v1.y<-eps then l1:=360-l1;
+     l1:=arccos(l1){*180/pi};
+     if v1.y<-eps then l1:={360}2*pi-l1;
      ChangedData.PGetDataInEtity:=@l1;
      GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp);
 end;
@@ -158,14 +158,14 @@ begin
      GDBDouble2SumEntIterateProc(pdata,ChangedData,mp,fistrun,ecp);
 end;
 
-procedure GDBDoubleRad2DegEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
+{procedure GDBDoubleRad2DegEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
 var
     l1:double;
 begin
      l1:=PGDBDouble(ChangedData.PGetDataInEtity)^*180/pi;
      ChangedData.PGetDataInEtity:=@l1;
      GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp);
-end;
+end;}
 procedure DummyFromVarEntChangeProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty);
 begin
 end;
@@ -372,8 +372,8 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('CENTER_Z','Center Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBArcID,integer(@parc^.P_insert_in_WCS.z),integer(@parc^.Local.P_insert.z),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('Radius','Radius',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBArcID,integer(@parc^.R),integer(@parc^.R),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@GDBDoubleCheckGreater0);
   MultiPropertiesManager.RegisterMultiproperty('Diameter','Diameter',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBArcID,integer(@parc^.R),integer(@parc^.R),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleMul2EntIterateProc,@GDBDoubleDiv2EntChangeProc,@GDBDoubleCheckGreater0);
-  MultiPropertiesManager.RegisterMultiproperty('StartAngle','Start angle',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBArcID,integer(@parc^.StartAngle),integer(@parc^.StartAngle),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleRad2DegEntIterateProc,@GDBDoubleDeg2RadEntChangeProc);
-  MultiPropertiesManager.RegisterMultiproperty('EndAngle','End angle',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBArcID,integer(@parc^.EndAngle),integer(@parc^.EndAngle),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleRad2DegEntIterateProc,@GDBDoubleDeg2RadEntChangeProc);
+  MultiPropertiesManager.RegisterMultiproperty('StartAngle','Start angle',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCGeometry,GDBArcID,integer(@parc^.StartAngle),integer(@parc^.StartAngle),@GetOneVarData,@FreeOneVarData,nil,{@GDBDoubleRad2DegEntIterateProc}@GeneralEntIterateProc,@GDBDoubleDeg2RadEntChangeProc);
+  MultiPropertiesManager.RegisterMultiproperty('EndAngle','End angle',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCGeometry,GDBArcID,integer(@parc^.EndAngle),integer(@parc^.EndAngle),@GetOneVarData,@FreeOneVarData,nil,{@GDBDoubleRad2DegEntIterateProc}@GeneralEntIterateProc,@GDBDoubleDeg2RadEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('Circumference','Circumference',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBArcID,0,0,@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleArcCircumferenceEntIterateProc,@GDBDoubleArcCircumferenceEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('Area','Area',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBArcID,0,0,@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleArcAreaEntIterateProc,@GDBDoubleArcArea2REntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('NORMAL_X','Normal X',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBArcID,integer(@parc^.Local.Basis.oz.x),0,@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,nil);
@@ -391,8 +391,8 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('MajorRadius','Major radius',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBEllipseID,integer(@pellipse^.RR),integer(@pellipse^.RR),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@GDBDoubleCheckGreater0);
   MultiPropertiesManager.RegisterMultiproperty('RadiusRatio','Radius ratio',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBEllipseID,integer(@pellipse^.Ratio),integer(@pellipse^.Ratio),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@GDBDoubleCheck0Exclude1Include);
   //MultiPropertiesManager.RegisterMultiproperty('Diameter','Diameter',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBEllipseID,integer(@pellipse^.RR),integer(@pellipse^.RR),@GetOneVarData,@FreeOneVarData,@GDBDoubleMul2EntIterateProc,@GDBDoubleDiv2EntChangeProc);
-  MultiPropertiesManager.RegisterMultiproperty('StartAngle','Start angle',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBEllipseID,integer(@pellipse^.StartAngle),integer(@pellipse^.StartAngle),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleRad2DegEntIterateProc,@GDBDoubleDeg2RadEntChangeProc);
-  MultiPropertiesManager.RegisterMultiproperty('EndAngle','End angle',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBEllipseID,integer(@pellipse^.EndAngle),integer(@pellipse^.EndAngle),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleRad2DegEntIterateProc,@GDBDoubleDeg2RadEntChangeProc);
+  MultiPropertiesManager.RegisterMultiproperty('StartAngle','Start angle',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBEllipseID,integer(@pellipse^.StartAngle),integer(@pellipse^.StartAngle),@GetOneVarData,@FreeOneVarData,nil,{@GDBDoubleRad2DegEntIterateProc}@GeneralEntIterateProc,@GDBDoubleDeg2RadEntChangeProc);
+  MultiPropertiesManager.RegisterMultiproperty('EndAngle','End angle',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBEllipseID,integer(@pellipse^.EndAngle),integer(@pellipse^.EndAngle),@GetOneVarData,@FreeOneVarData,nil,{@GDBDoubleRad2DegEntIterateProc}@GeneralEntIterateProc,@GDBDoubleDeg2RadEntChangeProc);
   //MultiPropertiesManager.RegisterMultiproperty('Circumference','Circumference',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBEllipseID,0,0,@GetOneVarData,@FreeOneVarData,@GDBDoubleArcCircumferenceEntIterateProc,@GDBDoubleArcCircumferenceEntChangeProc);
   //MultiPropertiesManager.RegisterMultiproperty('Area','Area',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBEllipseID,0,0,@GetOneVarData,@FreeOneVarData,@GDBDoubleArcAreaEntIterateProc,@GDBDoubleArcArea2REntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('NORMAL_X','Normal X',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBEllipseID,integer(@pellipse^.Local.Basis.oz.x),0,@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,nil);
@@ -414,7 +414,7 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('DELTA_Y','Delta Y',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBLineID,integer(@pline^.CoordInWCS.lBegin.y),integer(@pline^.CoordInOCS.lBegin.y),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleDeltaEntIterateProc,@GDBDoubleDeltaEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('DELTA_Z','Delta Z',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBLineID,integer(@pline^.CoordInWCS.lBegin.z),integer(@pline^.CoordInOCS.lBegin.z),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleDeltaEntIterateProc,@GDBDoubleDeltaEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('Length','Length',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBLineID,integer(@pline^.CoordInWCS.lBegin),integer(@pline^.CoordInOCS.lBegin),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleLengthEntIterateProc,@GDBDoubleLengthEntChangeProc);
-  MultiPropertiesManager.RegisterMultiproperty('Angle','Angle',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBLineID,integer(@pline^.CoordInWCS.lBegin),integer(@pline^.CoordInOCS.lBegin),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleAngleEntIterateProc,@GDBDoubleAngleEntChangeProc);
+  MultiPropertiesManager.RegisterMultiproperty('Angle','Angle',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCGeometry,GDBLineID,integer(@pline^.CoordInWCS.lBegin),integer(@pline^.CoordInOCS.lBegin),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleAngleEntIterateProc,@GDBDoubleAngleEntChangeProc);
   {--Summary}
   MultiPropertiesManager.RegisterMultiproperty('TotalLength','Total length',sysunit^.TypeName2PTD('GDBDouble'),MPCSummary,GDBLineID,integer(@pline^.CoordInWCS.lBegin),integer(@pline^.CoordInWCS.lBegin),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleSumLengthEntIterateProc,nil);
 
@@ -430,7 +430,7 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('NORMAL_Z','Normal Z',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBBlockInsertID,integer(@pblockinsert^.Local.Basis.oz.z),0,@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,nil);
   {--Misc}
   MultiPropertiesManager.RegisterMultiproperty('Name','Name',sysunit^.TypeName2PTD('GDBAnsiString'),MPCMisc,GDBBlockInsertID,integer(@pblockinsert^.Name),integer(@pblockinsert^.Name),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,nil);
-  MultiPropertiesManager.RegisterMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBDouble'),MPCMisc,GDBBlockInsertID,integer(@pblockinsert^.rotate),integer(@pblockinsert^.rotate),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
+  MultiPropertiesManager.RegisterMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBBlockInsertID,integer(@pblockinsert^.rotate),integer(@pblockinsert^.rotate),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
 
   {Device geometry}
   MultiPropertiesManager.RegisterFirstMultiproperty('INSERT_X','Insert X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBDeviceID,integer(@pblockinsert^.P_insert_in_WCS.x),integer(@pblockinsert^.Local.P_insert.x),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
@@ -444,7 +444,7 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('NORMAL_Z','Normal Z',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBDeviceID,integer(@pblockinsert^.Local.Basis.oz.z),0,@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,nil);
   {--Misc}
   MultiPropertiesManager.RegisterMultiproperty('Name','Name',sysunit^.TypeName2PTD('GDBAnsiString'),MPCMisc,GDBDeviceID,integer(@pblockinsert^.Name),integer(@pent^.vp.Color),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,nil);
-  MultiPropertiesManager.RegisterMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBDouble'),MPCMisc,GDBDeviceID,integer(@pblockinsert^.rotate),integer(@pblockinsert^.rotate),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
+  MultiPropertiesManager.RegisterMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBDeviceID,integer(@pblockinsert^.rotate),integer(@pblockinsert^.rotate),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.sort;
 
   {Text geometry}
@@ -459,7 +459,7 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('TxtTemplate','Template',sysunit^.TypeName2PTD('GDBAnsiString'),MPCMisc,GDBTextID,integer(@ptext^.Template),integer(@ptext^.Template),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('TxtStyle','Style',sysunit^.TypeName2PTD('PGDBTextStyleObjInsp'),MPCMisc,GDBTextID,integer(@ptext^.TXTStyleIndex),integer(@ptext^.TXTStyleIndex),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('TxtJustify','Justify',sysunit^.TypeName2PTD('TTextJustify'),MPCMisc,GDBTextID,integer(@ptext^.textprop.justify),integer(@ptext^.textprop.justify),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
-  MultiPropertiesManager.RegisterMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBDouble'),MPCMisc,GDBTextID,integer(@ptext^.textprop.angle),integer(@ptext^.textprop.angle),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralTextRotateEntChangeProc);
+  MultiPropertiesManager.RegisterMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBTextID,integer(@ptext^.textprop.angle),integer(@ptext^.textprop.angle),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralTextRotateEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('Height','Height',sysunit^.TypeName2PTD('GDBDouble'),MPCMisc,GDBTextID,integer(@ptext^.textprop.size),integer(@ptext^.textprop.size),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@GDBDoubleCheckGreater0);
   MultiPropertiesManager.RegisterMultiproperty('Oblique','Oblique',sysunit^.TypeName2PTD('GDBDouble'),MPCMisc,GDBTextID,integer(@ptext^.textprop.oblique),integer(@ptext^.textprop.oblique),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@GDBDoubleCheckMinus85to85);
   MultiPropertiesManager.RegisterMultiproperty('WidthFactor','Width factor',sysunit^.TypeName2PTD('GDBDouble'),MPCMisc,GDBTextID,integer(@ptext^.textprop.wfactor),integer(@ptext^.textprop.wfactor),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
@@ -479,7 +479,7 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('TxtTemplate','Template',sysunit^.TypeName2PTD('GDBAnsiString'),MPCMisc,GDBMTextID,integer(@pmtext^.Template),integer(@pmtext^.Template),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('TxtStyle','Style',sysunit^.TypeName2PTD('PGDBTextStyleObjInsp'),MPCMisc,GDBMTextID,integer(@pmtext^.TXTStyleIndex),integer(@pmtext^.TXTStyleIndex),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('TxtJustify','Justify',sysunit^.TypeName2PTD('TTextJustify'),MPCMisc,GDBMTextID,integer(@pmtext^.textprop.justify),integer(@pmtext^.textprop.justify),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
-  MultiPropertiesManager.RegisterMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBDouble'),MPCMisc,GDBMTextID,integer(@pmtext^.textprop.angle),integer(@pmtext^.textprop.angle),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralTextRotateEntChangeProc);
+  MultiPropertiesManager.RegisterMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBMTextID,integer(@pmtext^.textprop.angle),integer(@pmtext^.textprop.angle),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralTextRotateEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('Height','Height',sysunit^.TypeName2PTD('GDBDouble'),MPCMisc,GDBMTextID,integer(@pmtext^.textprop.size),integer(@pmtext^.textprop.size),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@GDBDoubleCheckGreater0);
   MultiPropertiesManager.RegisterMultiproperty('Width','Width',sysunit^.TypeName2PTD('GDBDouble'),MPCMisc,GDBMTextID,integer(@pmtext^.width),integer(@pmtext^.width),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('LinespaceFactor','Linespace factor',sysunit^.TypeName2PTD('GDBDouble'),MPCMisc,GDBMTextID,integer(@pmtext^.linespacef),integer(@pmtext^.linespacef),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
@@ -513,7 +513,7 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('DELTA_Y','Delta Y',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBElLeaderID,integer(@pelleader^.MainLine.CoordInWCS.lBegin.y),integer(@pelleader^.MainLine.CoordInOCS.lBegin.y),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleDeltaEntIterateProc,@GDBDoubleDeltaEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('DELTA_Z','Delta Z',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBElLeaderID,integer(@pelleader^.MainLine.CoordInWCS.lBegin.z),integer(@pelleader^.MainLine.CoordInOCS.lBegin.z),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleDeltaEntIterateProc,@GDBDoubleDeltaEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('Length','Length',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBElLeaderID,integer(@pelleader^.MainLine.CoordInWCS.lBegin),integer(@pelleader^.MainLine.CoordInOCS.lBegin),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleLengthEntIterateProc,@GDBDoubleLengthEntChangeProc);
-  MultiPropertiesManager.RegisterMultiproperty('Angle','Angle',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBElLeaderID,integer(@pelleader^.MainLine.CoordInWCS.lBegin),integer(@pelleader^.MainLine.CoordInOCS.lBegin),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleAngleEntIterateProc,@GDBDoubleAngleEntChangeProc);
+  MultiPropertiesManager.RegisterMultiproperty('Angle','Angle',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCGeometry,GDBElLeaderID,integer(@pelleader^.MainLine.CoordInWCS.lBegin),integer(@pelleader^.MainLine.CoordInOCS.lBegin),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleAngleEntIterateProc,@GDBDoubleAngleEntChangeProc);
   {ElLeader misc}
   MultiPropertiesManager.RegisterMultiproperty('LeaderSize','Size',sysunit^.TypeName2PTD('GDBInteger'),MPCMisc,GDBElLeaderID,integer(@pelleader^.size),integer(@pelleader^.size),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('Leaderscale','Scale',sysunit^.TypeName2PTD('GDBDouble'),MPCMisc,GDBElLeaderID,integer(@pelleader^.scale),integer(@pelleader^.scale),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);

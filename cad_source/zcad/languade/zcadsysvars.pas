@@ -149,7 +149,7 @@ type
              DWG_AUnits:PTAUnits;
              DWG_AUPrec:PTUPrec;
              DWG_AngDir:PTAngDir;
-             DWG_AngBase:PTAngle;
+             DWG_AngBase:PGDBAngleDegDouble;
              DWG_UnitMode:PTUnitMode;
              DWG_InsUnits:PTInsUnits;
              DWG_TextSize:PGDBDouble;

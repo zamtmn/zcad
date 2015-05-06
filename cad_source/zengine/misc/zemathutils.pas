@@ -66,6 +66,9 @@ function zeAngleToString(const value:Double; const f:TzeUnitsFormat):GDBString;
 var
    ff:TzeUnitsFormat;
    angle:Double;
+   deg,min,sec:double;
+   _min,_sec:integer;
+   degs,mins,secs:gdbstring;
 begin
      if f.adir=ADCounterClockwise then
                                       angle:=value-f.abase*FromDegToRad
@@ -76,14 +79,76 @@ begin
      if abs(angle-2*pi)<eps then
                                 angle:=0;
      angle:=angle*fromradto[f.aformat];
-     if (f.uformat=LUDecimal)and(f.aprec=f.uprec) then
-                                result:=zeDimensionToString(angle,f)
+     if (f.uformat=LUDecimal)then
+                                 begin
+                                      if f.aprec=f.uprec then
+                                                             result:=zeDimensionToString(angle,f)
+                                                         else
+                                                             begin
+                                                                  ff:=f;
+                                                                  ff.uprec:=f.aprec;
+                                                                  result:=zeDimensionToString(angle,ff);
+                                                             end;
+                                 end
                             else
                                 begin
                                      ff:=f;
                                      ff.uformat:=LUDecimal;
-                                     ff.uprec:=f.aprec;
-                                     result:=zeDimensionToString(angle,ff);
+                                     case f.aformat of
+                               AUDegreesMinutesSeconds:
+                                                       begin
+                                                            case f.aprec of
+                                                                     UPrec0:begin
+                                                                                 ff.uprec:=UPrec0;
+                                                                                 result:=zeDimensionToString(angle,ff);
+                                                                            end;
+                                                              UPrec1,UPrec2:begin
+                                                                                 deg:=floor(angle);
+                                                                                 min:=angle-deg;
+                                                                                 _min:=floor(60*min);
+                                                                                 if _min>59 then
+                                                                                                begin
+                                                                                                     deg:=deg+1;
+                                                                                                     _min:=0;
+                                                                                                end;
+                                                                                 str(deg:0:0,degs);
+                                                                                 mins:=inttostr(_min);
+                                                                                 result:=format('%s%s%s%s',[degs,'d',mins,''''])
+                                                                            end;
+                                                              UPrec3,UPrec4:begin
+                                                                                 deg:=floor(angle);
+                                                                                 min:=angle-deg;
+                                                                                 _min:=floor(60*min);
+                                                                                 sec:=min-_min/60;
+                                                                                 _sec:={floor}round(60*60*sec);
+                                                                                 if _sec>59 then
+                                                                                                begin
+                                                                                                     _min:=_min+1;
+                                                                                                     _sec:=0;
+                                                                                                end;
+                                                                                 if _min>59 then
+                                                                                                begin
+                                                                                                     deg:=deg+1;
+                                                                                                     _min:=0;
+                                                                                                end;
+                                                                                 str(deg:0:0,degs);
+                                                                                 mins:=inttostr(_min);
+                                                                                 secs:=inttostr(_sec);
+                                                                                 result:=format('%s%s%s%s%s%s',[degs,'d',mins,'''',secs,'"'])
+                                                                            end;
+                                                            end;
+
+                                                       end;
+                                  AUGradians,AURadians:begin
+                                                            ff.uprec:=f.aprec;
+                                                            result:=zeDimensionToString(angle,ff);
+                                                            if f.aformat=AUGradians then
+                                                                                        result:=format('%s%s',[result,'g'])
+                                                                                    else
+                                                                                        result:=format('%s%s',[result,'r'])
+                                                       end;
+                                            //AUSurveyorsUnits
+                                     end;
                                 end;
 end;
 function zeAngleDegToString(const value:Double; const f:TzeUnitsFormat):GDBString;
@@ -128,7 +193,8 @@ begin
                   end;
         LUDecimal:begin
                        str(value:0:ord(f.uprec),result);
-                       rtz(result);
+                       if f.uprec<>UPrec0 then
+                                              rtz(result);
                   end;
     LUEngineering:begin
                        absvalue:=abs(value);
@@ -136,11 +202,12 @@ begin
                        _ft:=absvalue-12*_in;
                        if _in<>0 then
                          begin
-                           str(_in:0:ord(f.uprec),_ins);
-                           rtz(_ins);
+                           str(_in:0:0,_ins);
+                           //rtz(_ins);
                          end;
                        str(_ft:0:ord(f.uprec),_fts);
-                       rtz(_fts);
+                       if f.uprec<>UPrec0 then
+                                              rtz(_fts);
                        if _in<>0 then
                                      begin
                                        if f.umode=UMWithSpaces then
@@ -168,13 +235,13 @@ begin
                                      end;
                        if _in<>0 then
                          begin
-                           str(_in:0:ord(f.uprec),_ins);
-                           rtz(_ins);
+                           str(_in:0:0,_ins);
+                           //rtz(_ins);
                          end;
                        if _dft<>0 then
                          begin
-                           str(_dft:0:ord(f.uprec),_dfts);
-                           rtz(_dfts);
+                           str(_dft:0:0,_dfts);
+                           //rtz(_dfts);
                          end;
                        if divide<>0 then
                          begin
@@ -237,8 +304,8 @@ begin
                                       end;
                         if _in<>0 then
                           begin
-                            str(_in:0:ord(f.uprec),_ins);
-                            rtz(_ins);
+                            str(_in:0:0,_ins);
+                            //rtz(_ins);
                           end;
                         if divide<>0 then
                           begin

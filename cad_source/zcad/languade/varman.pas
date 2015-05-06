@@ -535,6 +535,8 @@ begin
      AddTypeByRef(GDBQWordDescriptorObj);
      AddTypeByRef(GDBDoubleDescriptorObj);
      AddTypeByRef(GDBNonDimensionDoubleDescriptorObj);
+     AddTypeByRef(GDBAngleDegDoubleDescriptorObj);
+     AddTypeByRef(GDBAngleDoubleDescriptorObj);
      AddTypeByRef(GDBStringDescriptorObj);
      AddTypeByRef(GDBAnsiStringDescriptorObj);
      AddTypeByRef(GDBFloatDescriptorObj);

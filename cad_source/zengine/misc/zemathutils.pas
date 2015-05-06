@@ -20,14 +20,20 @@ unit zemathutils;
 {$INCLUDE def.inc}
 
 interface
-uses gdbase,gdbasetypes,math,sysutils;
+uses gdbase,gdbasetypes,math,geometry,sysutils;
 function zeDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;
 function zeNonDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;
-function zeAbsAngleToString(const value:Double; const f:TzeUnitsFormat):GDBString;
+function zeAngleDegToString(const value:Double; const f:TzeUnitsFormat):GDBString;
 function zeAngleToString(const value:Double; const f:TzeUnitsFormat):GDBString;
 implementation
 const
+  FromDegToRad=pi/180;
+  FromDegToGrad=200/180;
+  FromRadToDegrees=180/pi;
+  FromRadToGradians=200/pi;
   fractions:array [TUPrec] of integer=(1,2,4,8,16,32,64,128,256);
+  fromradto:array [TAUnits] of double=(FromRadToDegrees,FromRadToDegrees,FromRadToGradians,1,FromRadToDegrees);
+  fromdegto:array [TAUnits] of double=(1,1,FromDegToGrad,FromDegToRad,1);
 procedure rtz(var _value:GDBString);
 var
   Q:Integer;
@@ -59,28 +65,52 @@ end;
 function zeAngleToString(const value:Double; const f:TzeUnitsFormat):GDBString;
 var
    ff:TzeUnitsFormat;
+   angle:Double;
 begin
-     if f.uformat=LUDecimal then
-                                result:=zeDimensionToString(value,f)
+     if f.adir=ADCounterClockwise then
+                                      angle:=value-f.abase*FromDegToRad
+                                  else
+                                      angle:=-value+f.abase*FromDegToRad;
+     if angle<0 then
+                    angle:=2*pi+angle;
+     if abs(angle-2*pi)<eps then
+                                angle:=0;
+     angle:=angle*fromradto[f.aformat];
+     if (f.uformat=LUDecimal)and(f.aprec=f.uprec) then
+                                result:=zeDimensionToString(angle,f)
                             else
                                 begin
                                      ff:=f;
                                      ff.uformat:=LUDecimal;
-                                     result:=zeDimensionToString(value,ff);
+                                     ff.uprec:=f.aprec;
+                                     result:=zeDimensionToString(angle,ff);
                                 end;
 end;
-function zeAbsAngleToString(const value:Double; const f:TzeUnitsFormat):GDBString;
+function zeAngleDegToString(const value:Double; const f:TzeUnitsFormat):GDBString;
 var
    ff:TzeUnitsFormat;
+   angle:Double;
 begin
-     if f.uformat=LUDecimal then
-                                result:=zeDimensionToString(value,f)
-                            else
-                                begin
-                                     ff:=f;
-                                     ff.uformat:=LUDecimal;
-                                     result:=zeDimensionToString(value,ff);
-                                end;
+  {if f.adir=ADCounterClockwise then
+                                   angle:=value
+                               else
+                                   angle:=-value;}
+  if value<0 then
+                 angle:=360+value
+             else
+                 angle:=value;
+  if abs(angle-360)<eps then
+                             angle:=0;
+  angle:=angle*fromdegto[f.aformat];
+  if (f.uformat=LUDecimal)and(f.aprec=f.uprec) then
+                             result:=zeDimensionToString(angle,f)
+                         else
+                             begin
+                                  ff:=f;
+                                  ff.uformat:=LUDecimal;
+                                  ff.uprec:=f.aprec;
+                                  result:=zeDimensionToString(angle,ff);
+                             end;
 end;
 function zeDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;
 var

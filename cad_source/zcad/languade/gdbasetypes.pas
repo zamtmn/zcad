@@ -32,6 +32,12 @@ PGDBDouble=^GDBDouble;
 PGDBNonDimensionDouble=^GDBNonDimensionDouble;
 {-}GDBNonDimensionDouble=GDBDouble;{//}
 
+PGDBAngleDegDouble=^GDBAngleDegDouble;
+{-}GDBAngleDegDouble=GDBDouble;{//}
+
+PGDBAngleDouble=^GDBAngleDouble;
+{-}GDBAngleDouble=GDBDouble;{//}
+
 PGDBFloat=^GDBFloat;
 {-}GDBFloat=single;{//}
 

@@ -385,8 +385,6 @@ TFaceTypedData=packed record
                  Instance: GDBPointer;
                  PTD: GDBPointer;
                 end;
-PTAngle=^TAngle;
-TAngle=GDBDouble;
 PTLUnits=^TLUnits;
 TLUnits=(LUScientific(*'Scientific'*),LUDecimal(*'Decimal'*),LUEngineering(*'Engineering'*),LUArchitectural(*'Architectural'*),LUFractional(*'Fractional'*));
 PTAUnits=^TAUnits;
@@ -398,6 +396,10 @@ TUPrec=(UPrec0(*'0'*),UPrec1(*'0.0'*),UPrec2(*'0.00'*),UPrec3(*'0.000'*),UPrec4(
 PTUnitMode=^TUnitMode;
 TUnitMode=(UMWithSpaces(*'With spaces'*),UMWithoutSpaces(*'Without spaces'*));
 TzeUnitsFormat=packed record
+                     abase:GDBAngleDegDouble;
+                     adir:TAngDir;
+                     aformat:TAUnits;
+                     aprec:TUPrec;
                      uformat:TLUnits;
                      uprec:TUPrec;
                      umode:TUnitMode;

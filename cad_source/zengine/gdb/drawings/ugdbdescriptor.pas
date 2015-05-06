@@ -124,6 +124,10 @@ begin
 end;
 function CreateDefaultUnitsFormat:TzeUnitsFormat;
 begin
+     result.abase:=0;
+     result.adir:=ADCounterClockwise;
+     result.aformat:=AUDecimalDegrees;
+     result.aprec:=UPrec2;
      result.uformat:=LUDecimal;
      result.uprec:=UPrec2;
      result.umode:=UMWithSpaces;
@@ -132,6 +136,22 @@ function GDBDescriptor.GetUnitsFormat:TzeUnitsFormat;
 begin
      if CurrentDWG<>nil then
                             begin
+                                 if Assigned(sysvar.DWG.DWG_AngBase) then
+                                                                        result.abase:=sysvar.DWG.DWG_AngBase^
+                                                                    else
+                                                                        result.abase:=0;
+                                 if Assigned(sysvar.DWG.DWG_AngDir) then
+                                                                        result.adir:=sysvar.DWG.DWG_AngDir^
+                                                                    else
+                                                                        result.adir:=ADCounterClockwise;
+                                 if Assigned(sysvar.DWG.DWG_AUnits) then
+                                                                        result.aformat:=sysvar.DWG.DWG_AUnits^
+                                                                    else
+                                                                        result.aformat:=AUDecimalDegrees;
+                                 if Assigned(sysvar.DWG.DWG_AUPrec) then
+                                                                        result.aprec:=sysvar.DWG.DWG_AUPrec^
+                                                                    else
+                                                                        result.aprec:=UPrec2;
                                  if Assigned(sysvar.DWG.DWG_LUnits) then
                                                                         result.uformat:=sysvar.DWG.DWG_LUnits^
                                                                     else

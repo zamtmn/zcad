@@ -91,6 +91,12 @@ GDBDoubleDescriptor=object(BaseTypeDescriptor)
 GDBNonDimensionDoubleDescriptor=object(GDBDoubleDescriptor)
                           function GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;virtual;
                     end;
+GDBAngleDegDoubleDescriptor=object(GDBDoubleDescriptor)
+                                       function GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;virtual;
+                                 end;
+GDBAngleDoubleDescriptor=object(GDBDoubleDescriptor)
+                               function GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;virtual;
+                         end;
 GDBStringDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
@@ -137,6 +143,8 @@ TEnumDataDescriptor=object(BaseTypeDescriptor)
 var
 GDBDoubleDescriptorObj:GDBDoubleDescriptor;
 GDBNonDimensionDoubleDescriptorObj:GDBNonDimensionDoubleDescriptor;
+GDBAngleDegDoubleDescriptorObj:GDBAngleDegDoubleDescriptor;
+GDBAngleDoubleDescriptorObj:GDBAngleDoubleDescriptor;
 GDBStringDescriptorObj:GDBStringDescriptor;
 GDBAnsiStringDescriptorObj:GDBAnsiStringDescriptor;
 GDBWordDescriptorObj:GDBWordDescriptor;
@@ -481,6 +489,14 @@ end;
 function GDBNonDimensionDoubleDescriptor.GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;
 begin
     result:=zeNonDimensionToString(PGDBNonDimensionDouble(PInstance)^,f);
+end;
+function GDBAngleDegDoubleDescriptor.GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;
+begin
+    result:=zeAngleDegToString(PGDBNonDimensionDouble(PInstance)^,f);
+end;
+function GDBAngleDoubleDescriptor.GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;
+begin
+    result:=zeAngleToString(PGDBNonDimensionDouble(PInstance)^,f);
 end;
 constructor GDBWordDescriptor.init;
 begin
@@ -848,6 +864,8 @@ begin
      //gdbgetmem({$IFDEF DEBUGBUILD}'{2A687C81-843D-4451-8663-384A625BFEBA}',{$ENDIF}pointer(GDBDoubleDescriptorObj),sizeof(GDBDoubleDescriptor));
      GDBDoubleDescriptorObj.init;
      GDBNonDimensionDoubleDescriptorObj.baseinit(sizeof(GDBNonDimensionDouble),'GDBNonDimensionDouble',nil);
+     GDBAngleDegDoubleDescriptorObj.baseinit(sizeof(GDBAngleDegDouble),'GDBAngleDegDouble',nil);
+     GDBAngleDoubleDescriptorObj.baseinit(sizeof(GDBAngleDouble),'GDBAngleDouble',nil);
      //gdbgetmem({$IFDEF DEBUGBUILD}'{2A687C81-843D-4451-8663-384A625BFEBA}',{$ENDIF}pointer(GDBStringDescriptorObj),sizeof(GDBStringDescriptor));
      GDBStringDescriptorObj.init;
      GDBAnsiStringDescriptorObj.init;

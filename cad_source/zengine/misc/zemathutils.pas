@@ -69,6 +69,7 @@ var
    deg,min,sec:double;
    _min,_sec:integer;
    degs,mins,secs:gdbstring;
+   subaprec:TUPrec;
 begin
      if f.adir=ADCounterClockwise then
                                       angle:=value-f.abase*FromDegToRad
@@ -105,7 +106,7 @@ begin
                                                               UPrec1,UPrec2:begin
                                                                                  deg:=floor(angle);
                                                                                  min:=angle-deg;
-                                                                                 _min:=floor(60*min);
+                                                                                 _min:={floor}round(60*min);
                                                                                  if _min>59 then
                                                                                                 begin
                                                                                                      deg:=deg+1;
@@ -115,12 +116,22 @@ begin
                                                                                  mins:=inttostr(_min);
                                                                                  result:=format('%s%s%s%s',[degs,'d',mins,''''])
                                                                             end;
-                                                              UPrec3,UPrec4:begin
+                                                        {UPrec3,UPrec4}else begin
                                                                                  deg:=floor(angle);
                                                                                  min:=angle-deg;
                                                                                  _min:=floor(60*min);
                                                                                  sec:=min-_min/60;
-                                                                                 _sec:={floor}round(60*60*sec);
+                                                                                 sec:=sec*3600;
+                                                                                 if ord(f.aprec)<ord(UPrec5)then
+                                                                                                                begin
+                                                                                                                     _sec:={floor}round({60*60*}sec);
+                                                                                                                     subaprec:=UPrec0;
+                                                                                                                end
+                                                                                                            else
+                                                                                                                begin
+                                                                                                                     _sec:=floor({60*60*}sec);
+                                                                                                                     subaprec:=TUPrec(ord(f.aprec)-ord(UPrec4));
+                                                                                                                end;
                                                                                  if _sec>59 then
                                                                                                 begin
                                                                                                      _min:=_min+1;
@@ -133,8 +144,11 @@ begin
                                                                                                 end;
                                                                                  str(deg:0:0,degs);
                                                                                  mins:=inttostr(_min);
-                                                                                 secs:=inttostr(_sec);
-                                                                                 result:=format('%s%s%s%s%s%s',[degs,'d',mins,'''',secs,'"'])
+                                                                                 str(sec:0:ord(subaprec),secs);
+                                                                                 {if subaprec<>UPrec0 then    //Autocad not remove trailing zeros
+                                                                                                         rtz(secs);}
+                                                                                 //secs:=inttostr(_sec);
+                                                                                 result:=format('%s%s%s%s%s%s',[degs,'d',mins,'''',secs,'"']);
                                                                             end;
                                                             end;
 

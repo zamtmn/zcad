@@ -329,16 +329,16 @@ begin
                   else if (_in<>0)and(_dft<>0)and(divide=0)then
                                                                begin
                                                                  if f.umode=UMWithSpaces then
-                                                                                             result:=format('%s''%s"',[_ins,_dfts])
+                                                                                             result:=format('%s''-%s"',[_ins,_dfts])
                                                                                          else
-                                                                                             result:=format('%s'' %s"',[_ins,_dfts]);
+                                                                                             result:=format('%s''%s"',[_ins,_dfts]);
                                                                end
                   else if (_in<>0)and(_dft=0)and(divide<>0)then
                                                                begin
                                                                  if f.umode=UMWithSpaces then
-                                                                                             result:=format('%s'' %s"',[_ins,_fts])
+                                                                                             result:=format('%s''-0 %s',[_ins,_fts])
                                                                                          else
-                                                                                             result:=format('%s''-%s"',[_ins,_fts]);
+                                                                                             result:=format('%s''0-%s',[_ins,_fts]);
                                                                end
                   else if (_in=0)and(_dft<>0)and(divide<>0)then
                                                                begin

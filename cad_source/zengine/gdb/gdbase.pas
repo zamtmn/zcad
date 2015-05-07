@@ -385,6 +385,8 @@ TFaceTypedData=packed record
                  Instance: GDBPointer;
                  PTD: GDBPointer;
                 end;
+TDimUnit=(DUScientific(*'Scientific'*),DUDecimal(*'Decimal'*),DUEngineering(*'Engineering'*),DUArchitectural(*'Architectural'*),DUFractional(*'Fractional'*),DUSystem(*'System'*));
+TDimDSep=(DDSDot,DDSComma,DDSSpace);
 PTLUnits=^TLUnits;
 TLUnits=(LUScientific(*'Scientific'*),LUDecimal(*'Decimal'*),LUEngineering(*'Engineering'*),LUArchitectural(*'Architectural'*),LUFractional(*'Fractional'*));
 PTAUnits=^TAUnits;

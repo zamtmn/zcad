@@ -19,7 +19,7 @@ unit gdbdimension;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,GDBAbstractText,UGDBTextStyleArray,UGDBXYZWStringArray,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,UGDBOpenArrayOfByte,math,GDBText,geometry,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,
+uses zemathutils,gdbdrawcontext,GDBAbstractText,UGDBTextStyleArray,UGDBXYZWStringArray,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,UGDBOpenArrayOfByte,math,GDBText,geometry,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,
 gdbEntity,varmandef,
 GDBase,gdbobjectsconstdef,memman;
 type
@@ -62,6 +62,7 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 function DrawExtensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef; part:integer):pgdbobjline;
                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
+                function LinearFloatToStr(l:GDBDouble):GDBString;
                 function GetLinearDimStr(l:GDBDouble):GDBString;
                 function GetDimStr:GDBString;virtual;
                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
@@ -467,10 +468,27 @@ begin
           end;
 
 end;
+function GDBObjDimension.LinearFloatToStr(l:GDBDouble):GDBString;
+var
+   ff:TzeUnitsFormat;
+begin
+     case PDimStyle.Units.DIMDSEP of
+                                   DDSDot:WorkingFormatSettings.DecimalSeparator:='.';
+                                 DDSComma:WorkingFormatSettings.DecimalSeparator:=',';
+                                 DDSSpace:WorkingFormatSettings.DecimalSeparator:=' ';
+     end;
+     ff:=gdb.GetUnitsFormat;
+     if PDimStyle.Units.DIMLUNIT<>DUSystem then
+                                               ff.uformat:=TLUnits(PDimStyle.Units.DIMLUNIT);
+     ff.umode:=UMWithSpaces;
+     ff.uprec:=TUPrec(PDimStyle.Units.DIMDEC);
+     result:={floattostr}zeDimensionToString(l,{WorkingFormatSettings}ff);
+end;
 function GDBObjDimension.GetLinearDimStr(l:GDBDouble):GDBString;
 var
    n:double;
    i:integer;
+   str:gdbstring;
 begin
      l:=l*PDimStyle.Units.DIMLFAC;
      if PDimStyle.Units.DIMRND<>0 then
@@ -478,24 +496,20 @@ begin
              n:=l/PDimStyle.Units.DIMRND;
              l:=round(n)*PDimStyle.Units.DIMRND;
         end;
-     case PDimStyle.Units.DIMDSEP of
-                                      DDSDot:WorkingFormatSettings.DecimalSeparator:='.';
-                                    DDSComma:WorkingFormatSettings.DecimalSeparator:=',';
-                                    DDSSpace:WorkingFormatSettings.DecimalSeparator:=' ';
-     end;
-     l:=roundto(l,-PDimStyle.Units.DIMDEC);
+     //l:=roundto(l,-PDimStyle.Units.DIMDEC);
+     str:=LinearFloatToStr(l);
      if PDimStyle.Units.DIMPOST='' then
-                                       result:=floattostr(l,WorkingFormatSettings)
+                                       result:=str
                                    else
                                        begin
                                             result:=PDimStyle.Units.DIMPOST;
                                                  i:=pos('<>',uppercase(result));
                                                  if i>0 then
                                                             begin
-                                                                 result:=copy(result,1,i-1)+floattostr(l,WorkingFormatSettings)+copy(result,i+2,length(result)-i-1)
+                                                                 result:=copy(result,1,i-1)+str+copy(result,i+2,length(result)-i-1)
                                                             end
                                                         else
-                                                            result:=floattostr(l,WorkingFormatSettings)+result;
+                                                            result:=str+result;
                                        end;
 end;
 destructor GDBObjDimension.done;

@@ -63,13 +63,85 @@ begin
                                 end;
 end;
 function zeAngleToString(const value:Double; const f:TzeUnitsFormat):GDBString;
+type
+    TSUDir=(TSUDirN,TSUDirS);
+    TSUSubDir=(TSUDirE,TSUDirW);
 var
    ff:TzeUnitsFormat;
-   angle:Double;
-   deg,min,sec:double;
+   angle,superangle:Double;
+   deg,min,sec,sec2:double;
+   stemp:integer;
    _min,_sec:integer;
    degs,mins,secs:gdbstring;
    subaprec:TUPrec;
+   SUDir:TSUDir;
+   SUSubDir:TSUSubDir;
+function GetAngleDegreesMinutesSeconds:GDBString;
+var
+   i:integer;
+begin
+    case f.aprec of
+             UPrec0:begin
+                         ff.uprec:=UPrec0;
+                         result:=zeDimensionToString(angle,ff);
+                    end;
+      UPrec1,UPrec2:begin
+                         deg:=floor(angle);
+                         min:=angle-deg;
+                         _min:={floor}round(60*min);
+                         if _min>59 then
+                                        begin
+                                             deg:=deg+1;
+                                             _min:=0;
+                                        end;
+                         str(deg:0:0,degs);
+                         mins:=inttostr(_min);
+                         result:=format('%s%s%s%s',[degs,'d',mins,''''])
+                    end;
+{UPrec3,UPrec4}else begin
+                         deg:=floor(angle);
+                         min:=angle-deg;
+                         _min:=floor(60*min);
+                         sec:=min-_min/60;
+                         sec:=sec*3600;
+                         if ord(f.aprec)<ord(UPrec5)then
+                                                        begin
+                                                             _sec:={floor}round({60*60*}sec);
+                                                             subaprec:=UPrec0;
+                                                        end
+                                                    else
+                                                        begin
+                                                             subaprec:=TUPrec(ord(f.aprec)-ord(UPrec4));
+                                                             sec2:=sec;
+                                                             stemp:=60;
+                                                             for i:=0 to ord(subaprec) do
+                                                                begin
+                                                                     stemp:=stemp*10;
+                                                                     sec2:=sec2*10;
+                                                                end;
+                                                             _sec:=round(sec2);
+                                                        end;
+                         if _sec>=stemp then
+                                        begin
+                                             _min:=_min+1;
+                                             _sec:=0;
+                                             sec:=0;
+                                        end;
+                         if _min>59 then
+                                        begin
+                                             deg:=deg+1;
+                                             _min:=0;
+                                        end;
+                         str(deg:0:0,degs);
+                         mins:=inttostr(_min);
+                         str(sec:0:ord(subaprec),secs);
+                         {if subaprec<>UPrec0 then    //Autocad not remove trailing zeros
+                                                 rtz(secs);}
+                         //secs:=inttostr(_sec);
+                         result:=format('%s%s%s%s%s%s',[degs,'d',mins,'''',secs,'"']);
+                    end;
+    end;
+end;
 begin
      if f.adir=ADCounterClockwise then
                                       angle:=value-f.abase*FromDegToRad
@@ -97,62 +169,7 @@ begin
                                      ff.uformat:=LUDecimal;
                                      case f.aformat of
                                AUDegreesMinutesSeconds:
-                                                       begin
-                                                            case f.aprec of
-                                                                     UPrec0:begin
-                                                                                 ff.uprec:=UPrec0;
-                                                                                 result:=zeDimensionToString(angle,ff);
-                                                                            end;
-                                                              UPrec1,UPrec2:begin
-                                                                                 deg:=floor(angle);
-                                                                                 min:=angle-deg;
-                                                                                 _min:={floor}round(60*min);
-                                                                                 if _min>59 then
-                                                                                                begin
-                                                                                                     deg:=deg+1;
-                                                                                                     _min:=0;
-                                                                                                end;
-                                                                                 str(deg:0:0,degs);
-                                                                                 mins:=inttostr(_min);
-                                                                                 result:=format('%s%s%s%s',[degs,'d',mins,''''])
-                                                                            end;
-                                                        {UPrec3,UPrec4}else begin
-                                                                                 deg:=floor(angle);
-                                                                                 min:=angle-deg;
-                                                                                 _min:=floor(60*min);
-                                                                                 sec:=min-_min/60;
-                                                                                 sec:=sec*3600;
-                                                                                 if ord(f.aprec)<ord(UPrec5)then
-                                                                                                                begin
-                                                                                                                     _sec:={floor}round({60*60*}sec);
-                                                                                                                     subaprec:=UPrec0;
-                                                                                                                end
-                                                                                                            else
-                                                                                                                begin
-                                                                                                                     _sec:=floor({60*60*}sec);
-                                                                                                                     subaprec:=TUPrec(ord(f.aprec)-ord(UPrec4));
-                                                                                                                end;
-                                                                                 if _sec>59 then
-                                                                                                begin
-                                                                                                     _min:=_min+1;
-                                                                                                     _sec:=0;
-                                                                                                end;
-                                                                                 if _min>59 then
-                                                                                                begin
-                                                                                                     deg:=deg+1;
-                                                                                                     _min:=0;
-                                                                                                end;
-                                                                                 str(deg:0:0,degs);
-                                                                                 mins:=inttostr(_min);
-                                                                                 str(sec:0:ord(subaprec),secs);
-                                                                                 {if subaprec<>UPrec0 then    //Autocad not remove trailing zeros
-                                                                                                         rtz(secs);}
-                                                                                 //secs:=inttostr(_sec);
-                                                                                 result:=format('%s%s%s%s%s%s',[degs,'d',mins,'''',secs,'"']);
-                                                                            end;
-                                                            end;
-
-                                                       end;
+                                                       result:=GetAngleDegreesMinutesSeconds;
                                   AUGradians,AURadians:begin
                                                             ff.uprec:=f.aprec;
                                                             result:=zeDimensionToString(angle,ff);
@@ -161,8 +178,43 @@ begin
                                                                                     else
                                                                                         result:=format('%s%s',[result,'r'])
                                                        end;
-                                            //AUSurveyorsUnits
-                                     end;
+                                      AUSurveyorsUnits:begin
+                                                            //SUDir:TSUDir;
+                                                            //SUSubDir:TSUSubDir;
+                                                            if abs(angle)<eps then
+                                                                                  result:='E'
+                                                       else if abs(angle-90)<eps then
+                                                                                  result:='N'
+                                                       else if abs(angle-180)<eps then
+                                                                                  result:='W'
+                                                       else if abs(angle-270)<eps then
+                                                                                  result:='S'
+                                                       else begin
+                                                                 superangle:=angle;
+                                                                 if superangle<90 then
+                                                                                        begin
+                                                                                             result:='N%sE';
+                                                                                             angle:=abs(90-superangle);
+                                                                                        end
+                                                            else if superangle<180 then
+                                                                                        begin
+                                                                                             result:='N%sW';
+                                                                                             angle:=abs(superangle-90);
+                                                                                        end
+                                                            else if superangle<270 then
+                                                                                        begin
+                                                                                             result:='S%sW';
+                                                                                             angle:=abs(270-superangle);
+                                                                                        end
+                                                            else if superangle<360 then
+                                                                                        begin
+                                                                                             result:='S%sE';
+                                                                                             angle:=abs(superangle-270);
+                                                                                        end;
+                                                            result:=format(result,[GetAngleDegreesMinutesSeconds])
+                                                            end;
+                                                       end;
+                                end;
                                 end;
 end;
 function zeAngleDegToString(const value:Double; const f:TzeUnitsFormat):GDBString;

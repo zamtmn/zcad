@@ -34,7 +34,45 @@ const
   fractions:array [TUPrec] of integer=(1,2,4,8,16,32,64,128,256);
   fromradto:array [TAUnits] of double=(FromRadToDegrees,FromRadToDegrees,FromRadToGradians,1,FromRadToDegrees);
   fromdegto:array [TAUnits] of double=(1,1,FromDegToGrad,FromDegToRad,1);
-procedure rtz(var _value:GDBString);
+
+  {case PDimStyle.Units.DIMDSEP of
+                                DDSDot:WorkingFormatSettings.DecimalSeparator:='.';
+                              DDSComma:WorkingFormatSettings.DecimalSeparator:=',';
+                              DDSSpace:WorkingFormatSettings.DecimalSeparator:=' ';
+  end;}
+var
+  WorkingFormatSettings:TFormatSettings;
+function MyFloatToStr0(const value:Double):GDBString;
+begin
+     result:=FloatToStrF(value,ffFixed,0,0,WorkingFormatSettings);
+end;
+function MyFloatToStr(const value:Double;Prec:TUPrec;DS:TDimDSep;RTZ:boolean):GDBString;
+var
+  Q:Integer;
+begin
+     case DS of
+          DDSDot:WorkingFormatSettings.DecimalSeparator:='.';
+        DDSComma:WorkingFormatSettings.DecimalSeparator:=',';
+        DDSSpace:WorkingFormatSettings.DecimalSeparator:=' ';
+     end;
+     result:=FloatToStrF(value,ffFixed,0,ord(Prec),WorkingFormatSettings);
+
+     if (Prec<>UPrec0)and RTZ then
+       begin
+           { Remove trailing zeros }
+           Q := Length(result);
+           while (Q > 0) and (result[Q] = '0') do
+             Dec(Q);
+           if result[Q] = WorkingFormatSettings.DecimalSeparator then
+             Dec(Q); { Remove trailing decimal point }
+           if (Q = 0) or ((Q=1) and (result[1] = '-')) then
+             result := '0'
+           else
+             SetLength(result,Q);
+       end;
+end;
+
+(*procedure rtz(var _value:GDBString);
 var
   Q:Integer;
 begin
@@ -48,7 +86,7 @@ begin
     _value := '0'
   else
     SetLength(_value,Q);
-end;
+end;*)
 function zeNonDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;
 var
    ff:TzeUnitsFormat;
@@ -94,7 +132,8 @@ begin
                                              deg:=deg+1;
                                              _min:=0;
                                         end;
-                         str(deg:0:0,degs);
+                         //str(deg:0:0,degs);
+                         degs:=MyFloatToStr0(deg);
                          mins:=inttostr(_min);
                          result:=format('%s%s%s%s',[degs,'d',mins,''''])
                     end;
@@ -132,9 +171,11 @@ begin
                                              deg:=deg+1;
                                              _min:=0;
                                         end;
-                         str(deg:0:0,degs);
+                         //str(deg:0:0,degs);
+                         degs:=MyFloatToStr0(deg);
                          mins:=inttostr(_min);
-                         str(sec:0:ord(subaprec),secs);
+                         //str(sec:0:ord(subaprec),secs);
+                         secs:=MyFloatToStr(sec,subaprec,f.DeciminalSeparator,f.RemoveTrailingZeros);
                          {if subaprec<>UPrec0 then    //Autocad not remove trailing zeros
                                                  rtz(secs);}
                          //secs:=inttostr(_sec);
@@ -258,9 +299,10 @@ begin
                     result:=FloatToStrF(value,ffexponent,ord(f.uprec)+1,2)
                   end;
         LUDecimal:begin
-                       str(value:0:ord(f.uprec),result);
-                       if f.uprec<>UPrec0 then
-                                              rtz(result);
+                       //str(value:0:ord(f.uprec),result);
+                       result:=MyFloatToStr(value,f.uprec,f.DeciminalSeparator,f.RemoveTrailingZeros);
+                       {if f.uprec<>UPrec0 then
+                                              rtz(result);}
                   end;
     LUEngineering:begin
                        absvalue:=abs(value);
@@ -268,12 +310,14 @@ begin
                        _ft:=absvalue-12*_in;
                        if _in<>0 then
                          begin
-                           str(_in:0:0,_ins);
+                           //str(_in:0:0,_ins);
+                           _ins:=MyFloatToStr0(_in);
                            //rtz(_ins);
                          end;
-                       str(_ft:0:ord(f.uprec),_fts);
-                       if f.uprec<>UPrec0 then
-                                              rtz(_fts);
+                       //str(_ft:0:ord(f.uprec),_fts);
+                       _fts:=MyFloatToStr(_ft,f.uprec,f.DeciminalSeparator,f.RemoveTrailingZeros);
+                       {if f.uprec<>UPrec0 then
+                                              rtz(_fts);}
                        if _in<>0 then
                                      begin
                                        if f.umode=UMWithSpaces then
@@ -301,12 +345,14 @@ begin
                                      end;
                        if _in<>0 then
                          begin
-                           str(_in:0:0,_ins);
+                           //str(_in:0:0,_ins);
+                           _ins:=MyFloatToStr0(_in);
                            //rtz(_ins);
                          end;
                        if _dft<>0 then
                          begin
-                           str(_dft:0:0,_dfts);
+                           //str(_dft:0:0,_dfts);
+                           _dfts:=MyFloatToStr0(_dft);
                            //rtz(_dfts);
                          end;
                        if divide<>0 then
@@ -370,7 +416,8 @@ begin
                                       end;
                         if _in<>0 then
                           begin
-                            str(_in:0:0,_ins);
+                            //str(_in:0:0,_ins);
+                            _ins:=MyFloatToStr0(_in);
                             //rtz(_ins);
                           end;
                         if divide<>0 then
@@ -399,5 +446,6 @@ begin
                   end;
   end;
 end;
-
+initialization
+   WorkingFormatSettings:=DefaultFormatSettings;
 end.

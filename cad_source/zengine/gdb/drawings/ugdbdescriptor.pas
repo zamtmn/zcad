@@ -131,9 +131,13 @@ begin
      result.uformat:=LUDecimal;
      result.uprec:=UPrec2;
      result.umode:=UMWithSpaces;
+     result.DeciminalSeparator:=DDSDot;
+     result.RemoveTrailingZeros:=true;
 end;
 function GDBDescriptor.GetUnitsFormat:TzeUnitsFormat;
 begin
+     result.DeciminalSeparator:=DDSDot;
+     result.RemoveTrailingZeros:=true;
      if CurrentDWG<>nil then
                             begin
                                  if Assigned(sysvar.DWG.DWG_AngBase) then

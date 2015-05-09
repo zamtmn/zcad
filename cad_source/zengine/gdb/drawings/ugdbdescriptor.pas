@@ -132,12 +132,11 @@ begin
      result.uprec:=UPrec2;
      result.umode:=UMWithSpaces;
      result.DeciminalSeparator:=DDSDot;
-     result.RemoveTrailingZeros:=true;
+     result.RemoveTrailingZeros:=false;
 end;
 function GDBDescriptor.GetUnitsFormat:TzeUnitsFormat;
 begin
      result.DeciminalSeparator:=DDSDot;
-     result.RemoveTrailingZeros:=true;
      if CurrentDWG<>nil then
                             begin
                                  if Assigned(sysvar.DWG.DWG_AngBase) then
@@ -168,6 +167,10 @@ begin
                                                                         result.umode:=sysvar.DWG.DWG_UnitMode^
                                                                     else
                                                                         result.umode:=UMWithSpaces;
+                                 if result.uformat in [LUDecimal,LUEngineering] then
+                                                                                    result.RemoveTrailingZeros:=false
+                                                                                else
+                                                                                    result.RemoveTrailingZeros:=true;
                             end
      else
          result:=CreateDefaultUnitsFormat;

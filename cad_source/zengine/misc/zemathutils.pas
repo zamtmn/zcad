@@ -193,21 +193,16 @@ begin
      if abs(angle-2*pi)<eps then
                                 angle:=0;
      angle:=angle*fromradto[f.aformat];
-     if (f.uformat=LUDecimal)then
+     ff:=f;
+     ff.RemoveTrailingZeros:=false;
+     ff.uformat:=LUDecimal;
+     if (f.aformat=AUDecimalDegrees)then
                                  begin
-                                      if f.aprec=f.uprec then
-                                                             result:=zeDimensionToString(angle,f)
-                                                         else
-                                                             begin
-                                                                  ff:=f;
-                                                                  ff.uprec:=f.aprec;
-                                                                  result:=zeDimensionToString(angle,ff);
-                                                             end;
+                                      ff.uprec:=f.aprec;
+                                      result:=zeDimensionToString(angle,ff);
                                  end
                             else
                                 begin
-                                     ff:=f;
-                                     ff.uformat:=LUDecimal;
                                      case f.aformat of
                                AUDegreesMinutesSeconds:
                                                        result:=GetAngleDegreesMinutesSeconds;
@@ -274,15 +269,11 @@ begin
   if abs(angle-360)<eps then
                              angle:=0;
   angle:=angle*fromdegto[f.aformat];
-  if (f.uformat=LUDecimal)and(f.aprec=f.uprec) then
-                             result:=zeDimensionToString(angle,f)
-                         else
-                             begin
-                                  ff:=f;
-                                  ff.uformat:=LUDecimal;
-                                  ff.uprec:=f.aprec;
-                                  result:=zeDimensionToString(angle,ff);
-                             end;
+  ff:=f;
+  ff.RemoveTrailingZeros:=false;
+  ff.uformat:=LUDecimal;
+  ff.uprec:=f.aprec;
+  result:=zeDimensionToString(angle,ff);
 end;
 function zeDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;
 var

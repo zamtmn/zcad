@@ -90,8 +90,6 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 destructor done;virtual;
                 end;
 {EXPORT-}
-var
-  WorkingFormatSettings:TFormatSettings;
 implementation
 uses GDBManager,log,UGDBOpenArrayOfPV,UGDBDescriptor,GDBBlockInsert;
 procedure GDBObjDimension.DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;const drawing:TDrawingDef;var DC:TDrawContext);
@@ -472,12 +470,9 @@ function GDBObjDimension.LinearFloatToStr(l:GDBDouble):GDBString;
 var
    ff:TzeUnitsFormat;
 begin
-     case PDimStyle.Units.DIMDSEP of
-                                   DDSDot:WorkingFormatSettings.DecimalSeparator:='.';
-                                 DDSComma:WorkingFormatSettings.DecimalSeparator:=',';
-                                 DDSSpace:WorkingFormatSettings.DecimalSeparator:=' ';
-     end;
      ff:=gdb.GetUnitsFormat;
+     ff.RemoveTrailingZeros:=false;
+     ff.DeciminalSeparator:=PDimStyle.Units.DIMDSEP;
      if PDimStyle.Units.DIMLUNIT<>DUSystem then
                                                ff.uformat:=TLUnits(PDimStyle.Units.DIMLUNIT);
      ff.umode:=UMWithSpaces;
@@ -607,5 +602,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('gdbdimension.initialization');{$ENDIF}
-  WorkingFormatSettings:=DefaultFormatSettings;
 end.

@@ -405,6 +405,8 @@ TzeUnitsFormat=packed record
                      uformat:TLUnits;
                      uprec:TUPrec;
                      umode:TUnitMode;
+                     DeciminalSeparator:TDimDSep;
+                     RemoveTrailingZeros:GDBBoolean;
                end;
 PTInsUnits=^TInsUnits;
 TInsUnits=(IUUnspecified(*'Unspecified'*),

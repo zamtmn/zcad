@@ -176,6 +176,10 @@ type
                             BaseName:GDBString;(*'Base name sorting devices'*)
                             NumberVar:GDBString;(*'Number variable'*)
                       end;
+         PTExportDevWithAxisParams=^TExportDevWithAxisParams;
+         TExportDevWithAxisParams=packed record
+                            AxisDeviceName:GDBString;(*'AxisDeviceName'*)
+                      end;
   PTBEditParam=^TBEditParam;
   TBEditParam=packed record
                     CurrentEditBlock:GDBString;(*'Current block'*)(*oi_readonly*)
@@ -304,7 +308,11 @@ type
                          procedure ShowMenu;virtual;
                          procedure Run(pdata:GDBPlatformint); virtual;
              end;
-
+  ExportDevWithAxis_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
+                         procedure CommandStart(Operands:pansichar); virtual;
+                         procedure ShowMenu;virtual;
+                         procedure Run(pdata:GDBPlatformint); virtual;
+             end;
   Print_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          VS:GDBInteger;
                          p1,p2:GDBVertex;
@@ -322,6 +330,10 @@ type
     procedure Command(Operands:pansichar); virtual;
   end;
 {EXPORT-}
+taxisdesc=record
+              p1,p2:GDBVertex;
+              Name:GDBString;
+        end;
 tdevcoord=record
               coord:GDBVertex;
               pdev:PGDBObjDevice;
@@ -336,6 +348,7 @@ TGDBVertexLess=class
 TGDBNameLess=class
                     class function c(a,b:tdevname):boolean;{inline;}
                end;
+taxisdescarray=specialize TVector<taxisdesc>;
 devcoordarray=specialize TVector<tdevcoord>;
 devnamearray=specialize TVector<tdevname>;
 PointOnCurve3DPropArray=specialize TVector<GDBDouble>;
@@ -384,6 +397,7 @@ var
    ATO:ATO_com;
    CFO:CFO_com;
    NumberCom:Number_com;
+   ExportDevWithAxisCom:ExportDevWithAxis_com;
    SelSimParams:TSelSimParams;
    BlockScaleParams:TBlockScaleParams;
    BlockScale:BlockScale_com;
@@ -392,6 +406,7 @@ var
    Print:Print_com;
 
    NumberingParams:TNumberingParams;
+   ExportDevWithAxisParams:TExportDevWithAxisParams;
 
 //procedure startup;
 //procedure Finalize;
@@ -900,7 +915,139 @@ begin
      powner:=nil;
      Commandmanager.executecommandend;
 end;
+procedure ExportDevWithAxis_com.CommandStart(Operands:pansichar);
+begin
+  self.savemousemode:=GDB.GetCurrentDWG^.wa.param.md.mode;
+  if GDB.GetCurrentDWG^.SelObjArray.Count>0 then
+  begin
+       showmenu;
+       inherited CommandStart('');
+  end
+  else
+  begin
+    historyoutstr(rscmSelEntBeforeComm);
+    Commandmanager.executecommandend;
+  end;
+end;
+procedure ExportDevWithAxis_com.ShowMenu;
+begin
+  commandmanager.DMAddMethod('Export','Экспортировать выбранные устройства с привязкой к осям',@run);
+  commandmanager.DMShow;
+end;
+function GetNearestAxis(axisarray:taxisdescarray;coord:gdbvertex):integer;
+var
+   i:integer;
+   l,maxl:double;
+   tp1,tp2:gdbvertex;
+begin
+  result:=-1;
+  maxl:=Infinity;
+  for i:=0 to axisarray.size-1 do
+  begin
+       tp1:=axisarray[i].p1;
+       tp2:=axisarray[i].p2;
+       l:=distance2piece(coord,tp1,tp2);
+       if l<maxl then
+                     begin
+                          result:=i;
+                          maxl:=l;
+                     end;
+  end;
 
+end;
+
+procedure ExportDevWithAxis_com.Run(pdata:GDBPlatformint);
+var
+   haxis,vaxis:taxisdescarray;
+   pdev:PGDBObjDevice;
+   paxisline:PGDBObjLine;
+   ir,ir2:itrec;
+   axisdevname:GDBString;
+   ALLayer:pointer;
+   pdevvarext:PTVariablesExtender;
+   pvd:pvardesk;
+   dv:gdbvertex;
+   axisdesc:taxisdesc;
+   psd:PSelectedObjDesc;
+   hi,vi:integer;
+begin
+  haxis:=taxisdescarray.Create;
+  vaxis:=taxisdescarray.Create;
+  axisdevname:=uppercase(ExportDevWithAxisParams.AxisDeviceName);
+  ALLayer:=gdb.GetCurrentDWG^.LayerTable.getAddres('EL_AXIS');
+  pdev:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
+  if pdev<>nil then
+  repeat
+        if pdev^.vp.ID=GDBDeviceID then
+        if uppercase(pdev^.Name)=axisdevname then
+        begin
+             paxisline:=pdev^.VarObjArray.beginiterate(ir2);
+             if paxisline<>nil then
+             repeat
+                   if paxisline^.vp.ID=GDBLineID then
+                   if paxisline^.vp.Layer=ALLayer then
+                                                      system.break;
+             paxisline:=pdev^.VarObjArray.iterate(ir2);
+             until paxisline=nil;
+
+             pvd:=nil;
+             pdevvarext:=pdev^.GetExtension(typeof(TVariablesExtender));
+             if pdevvarext<>nil then
+               pvd:=pdevvarext^.entityunit.FindVariable('NMO_Name');
+
+             if (paxisline<>nil)and(pvd<>nil) then
+             begin
+                  axisdesc.Name:=pgdbstring(pvd^.data.Instance)^;
+                  axisdesc.p1:=paxisline^.CoordInWCS.lBegin;
+                  axisdesc.p2:=paxisline^.CoordInWCS.lEnd;
+                  dv:=geometry.VertexSub(paxisline^.CoordInWCS.lEnd,paxisline^.CoordInWCS.lBegin);
+                  if abs(dv.x)>abs(dv.y) then
+                                             begin
+                                                  historyoutstr(sysutils.format('Found horisontal axis "%s"',[pgdbstring(pvd^.data.Instance)^]));
+                                                  haxis.PushBack(axisdesc);
+                                             end
+                                         else
+                                             begin
+                                                  historyoutstr(sysutils.format('Found vertical axis "%s"',[pgdbstring(pvd^.data.Instance)^]));
+                                                  vaxis.PushBack(axisdesc);
+                                             end
+
+             end
+        end;
+  pdev:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
+  until pdev=nil;
+
+  psd:=gdb.GetCurrentDWG^.SelObjArray.beginiterate(ir);
+  if psd<>nil then
+  repeat
+        if psd^.objaddr<>nil then
+        begin
+          pdev:=pointer(psd^.objaddr);
+          if pdev^.vp.ID=GDBDeviceID then
+          if uppercase(pdev^.Name)<>axisdevname then
+          begin
+             pvd:=nil;
+             pdevvarext:=pdev^.GetExtension(typeof(TVariablesExtender));
+             if pdevvarext<>nil then
+             pvd:=pdevvarext^.entityunit.FindVariable('NMO_Name');
+             if pvd<>nil then
+             begin
+                  hi:=GetNearestAxis(haxis,pdev^.P_insert_in_WCS);
+                  vi:=GetNearestAxis(vaxis,pdev^.P_insert_in_WCS);
+                  if (hi>-1)and(vi>-1)then
+                                          historyoutstr(sysutils.format('%s;%s/%s',[pgdbstring(pvd^.data.Instance)^,haxis[hi].Name,vaxis[vi].Name]))
+             else if (hi>-1)then
+                                historyoutstr(sysutils.format('%s;%s',[pgdbstring(pvd^.data.Instance)^,haxis[hi].Name]))
+             else if (vi>-1)then
+                                historyoutstr(sysutils.format('%s;%s',[pgdbstring(pvd^.data.Instance)^,vaxis[vi].Name]));
+
+             end;
+
+          end;
+        end;
+  psd:=gdb.GetCurrentDWG^.SelObjArray.iterate(ir);
+  until psd=nil;
+end;
 procedure Number_com.CommandStart(Operands:pansichar);
 begin
   self.savemousemode:=GDB.GetCurrentDWG^.wa.param.md.mode;
@@ -3835,6 +3982,9 @@ begin
   NumberCom.init('NumDevices',CADWG,0);
   NumberCom.SetCommandParam(@NumberingParams,'PTNumberingParams');
 
+  ExportDevWithAxisParams.AxisDeviceName:='SPDS_AXIS';
+  ExportDevWithAxisCom.init('ExportDevWithAxis',CADWG,0);
+  ExportDevWithAxisCom.SetCommandParam(@ExportDevWithAxisParams,'PTExportDevWithAxisParams');
 
   Print.init('Print',CADWG,0);
   PrintParam.Scale:=1;

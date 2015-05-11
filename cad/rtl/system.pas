@@ -413,6 +413,8 @@ TzeUnitsFormat=packed record
                      uformat:TLUnits;
                      uprec:TUPrec;
                      umode:TUnitMode;
+                     DeciminalSeparator:TDimDSep;
+                     RemoveTrailingZeros:GDBBoolean;
                end;
 PTInsUnits=^TInsUnits;
 TInsUnits=(IUUnspecified(*'Unspecified'*),
@@ -3148,6 +3150,10 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                             BaseName:GDBString;(*'Base name sorting devices'*)
                             NumberVar:GDBString;(*'Number variable'*)
                       end;
+         PTExportDevWithAxisParams=^TExportDevWithAxisParams;
+         TExportDevWithAxisParams=packed record
+                            AxisDeviceName:GDBString;(*'AxisDeviceName'*)
+                      end;
   PTBEditParam=^TBEditParam;
   TBEditParam=packed record
                     CurrentEditBlock:GDBString;(*'Current block'*)(*oi_readonly*)
@@ -3269,6 +3275,11 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                          procedure Run(pdata:GDBPlatformint); virtual;abstract;
           end;
   Number_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
+                         procedure CommandStart(Operands:pansichar); virtual;abstract;
+                         procedure ShowMenu;virtual;abstract;
+                         procedure Run(pdata:GDBPlatformint); virtual;abstract;
+             end;
+  ExportDevWithAxis_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          procedure CommandStart(Operands:pansichar); virtual;abstract;
                          procedure ShowMenu;virtual;abstract;
                          procedure Run(pdata:GDBPlatformint); virtual;abstract;

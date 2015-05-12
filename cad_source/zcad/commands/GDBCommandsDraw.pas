@@ -332,6 +332,7 @@ type
 {EXPORT-}
 taxisdesc=record
               p1,p2:GDBVertex;
+              d0:double;
               Name:GDBString;
         end;
 tdevcoord=record
@@ -347,8 +348,12 @@ TGDBVertexLess=class
                end;
 TGDBNameLess=class
                     class function c(a,b:tdevname):boolean;{inline;}
-               end;
+             end;
+TGDBtaxisdescLess=class
+                    class function c(a,b:taxisdesc):boolean;{inline;}
+             end;
 taxisdescarray=specialize TVector<taxisdesc>;
+taxisdescdsort=specialize TOrderingArrayUtils<taxisdescarray, taxisdesc, TGDBtaxisdescLess>;
 devcoordarray=specialize TVector<tdevcoord>;
 devnamearray=specialize TVector<tdevname>;
 PointOnCurve3DPropArray=specialize TVector<GDBDouble>;
@@ -934,26 +939,68 @@ begin
   commandmanager.DMAddMethod('Export','Экспортировать выбранные устройства с привязкой к осям',@run);
   commandmanager.DMShow;
 end;
-function GetNearestAxis(axisarray:taxisdescarray;coord:gdbvertex):integer;
+procedure GetNearestAxis(axisarray:taxisdescarray;coord:gdbvertex;var nearestaxis,secondaxis:integer);
 var
    i:integer;
-   l,maxl:double;
+   nearestd,nearestd0,secondd,secondd0:double;
    tp1,tp2:gdbvertex;
+   dit,pdit:DistAndt;
 begin
-  result:=-1;
-  maxl:=Infinity;
+  nearestaxis:=-1;
+  secondaxis:=-1;
+  nearestd:=Infinity;
+  secondd:=Infinity;
+  nearestd0:=infinity;
+  secondd0:=infinity;
   for i:=0 to axisarray.size-1 do
   begin
        tp1:=axisarray[i].p1;
        tp2:=axisarray[i].p2;
-       l:=distance2piece(coord,tp1,tp2);
-       if l<maxl then
-                     begin
-                          result:=i;
-                          maxl:=l;
-                     end;
+       pdit:=distance2ray(NulVertex,coord,vertexadd(coord,vertexsub(tp2,tp1)));
+       dit:=distance2ray(coord,tp1,tp2);
+       if (dit.t>=0)and(dit.t<=1)then
+       begin
+       if (dit.d<nearestd)and(axisarray[i].d0<pdit.d) then
+                         begin
+                              nearestaxis:=i;
+                              nearestd:=dit.d;
+                              nearestd0:=axisarray[nearestaxis].d0;
+                              if abs(dit.d)<eps then
+                                                    begin
+                                                         secondaxis:=-1;
+                                                         exit;
+                                                    end;
+                         end;
+  if (dit.d<secondd)and(axisarray[i].d0>pdit.d) then
+                         begin
+                              secondaxis:=i;
+                              secondd:=dit.d;
+                              secondd0:=axisarray[i].d0;
+                              if abs(dit.d)<eps then
+                                                    begin
+                                                         nearestaxis:=-1;
+                                                         exit;
+                                                    end;
+                         end
+       end;
   end;
-
+end;
+function GetAxisName(axisarray:taxisdescarray;hi,hi2:integer):gdbstring;
+var
+   ti:integer;
+begin
+      if hi>hi2 then
+                  begin
+                       ti:=hi2;
+                       hi2:=hi;
+                       hi:=ti;
+                  end;
+      if hi>=0 then
+                  result:=sysutils.format('%s-%s',[axisarray[hi].Name,axisarray[hi2].Name])
+ else if hi2>=0 then
+                  result:=axisarray[hi2].Name
+ else
+      result:='';
 end;
 
 procedure ExportDevWithAxis_com.Run(pdata:GDBPlatformint);
@@ -969,12 +1016,15 @@ var
    dv:gdbvertex;
    axisdesc:taxisdesc;
    psd:PSelectedObjDesc;
-   hi,vi:integer;
+   hi,hi2,vi,vi2,ti,i:integer;
+   hname,vname:gdbstring;
+   dit:DistAndt;
 begin
   haxis:=taxisdescarray.Create;
   vaxis:=taxisdescarray.Create;
   axisdevname:=uppercase(ExportDevWithAxisParams.AxisDeviceName);
   ALLayer:=gdb.GetCurrentDWG^.LayerTable.getAddres('EL_AXIS');
+  historyoutstr('Searh axis.....');
   pdev:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pdev<>nil then
   repeat
@@ -1000,15 +1050,17 @@ begin
                   axisdesc.Name:=pgdbstring(pvd^.data.Instance)^;
                   axisdesc.p1:=paxisline^.CoordInWCS.lBegin;
                   axisdesc.p2:=paxisline^.CoordInWCS.lEnd;
+                  dit:=distance2ray(NulVertex,axisdesc.p1,axisdesc.p2);
+                  axisdesc.d0:=dit.d;
                   dv:=geometry.VertexSub(paxisline^.CoordInWCS.lEnd,paxisline^.CoordInWCS.lBegin);
                   if abs(dv.x)>abs(dv.y) then
                                              begin
-                                                  historyoutstr(sysutils.format('Found horisontal axis "%s"',[pgdbstring(pvd^.data.Instance)^]));
+                                                  historyoutstr(sysutils.format('  Found horisontal axis "%s"',[pgdbstring(pvd^.data.Instance)^]));
                                                   haxis.PushBack(axisdesc);
                                              end
                                          else
                                              begin
-                                                  historyoutstr(sysutils.format('Found vertical axis "%s"',[pgdbstring(pvd^.data.Instance)^]));
+                                                  historyoutstr(sysutils.format('  Found vertical axis "%s"',[pgdbstring(pvd^.data.Instance)^]));
                                                   vaxis.PushBack(axisdesc);
                                              end
 
@@ -1016,7 +1068,20 @@ begin
         end;
   pdev:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
   until pdev=nil;
-
+  if haxis.size>0 then
+  begin
+    historyoutstr('Sorting horisontal axis...');
+    taxisdescdsort.Sort(haxis,haxis.size);
+    for i:=0 to haxis.size-1 do
+    historyoutstr(sysutils.format('  Horisontal axis "%s", d0=%f',[haxis[i].Name,haxis[i].d0]));
+  end;
+  if vaxis.size>0 then
+  begin
+    historyoutstr('Sorting vertical axis...');
+    taxisdescdsort.Sort(vaxis,vaxis.size);
+    for i:=0 to vaxis.size-1 do
+    historyoutstr(sysutils.format('  Vertical axis "%s", d0=%f',[vaxis[i].Name,vaxis[i].d0]));
+  end;
   psd:=gdb.GetCurrentDWG^.SelObjArray.beginiterate(ir);
   if psd<>nil then
   repeat
@@ -1032,14 +1097,16 @@ begin
              pvd:=pdevvarext^.entityunit.FindVariable('NMO_Name');
              if pvd<>nil then
              begin
-                  hi:=GetNearestAxis(haxis,pdev^.P_insert_in_WCS);
-                  vi:=GetNearestAxis(vaxis,pdev^.P_insert_in_WCS);
-                  if (hi>-1)and(vi>-1)then
-                                          historyoutstr(sysutils.format('%s;%s/%s',[pgdbstring(pvd^.data.Instance)^,haxis[hi].Name,vaxis[vi].Name]))
-             else if (hi>-1)then
-                                historyoutstr(sysutils.format('%s;%s',[pgdbstring(pvd^.data.Instance)^,haxis[hi].Name]))
-             else if (vi>-1)then
-                                historyoutstr(sysutils.format('%s;%s',[pgdbstring(pvd^.data.Instance)^,vaxis[vi].Name]));
+                  GetNearestAxis(haxis,pdev^.P_insert_in_WCS,hi,hi2);
+                  hname:=GetAxisName(haxis,hi,hi2);
+                  GetNearestAxis(vaxis,pdev^.P_insert_in_WCS,vi,vi2);
+                  vname:=GetAxisName(vaxis,vi,vi2);
+                  if (hname<>'')and(vname<>'')then
+                                          historyoutstr(sysutils.format('%s;%s/%s',[pgdbstring(pvd^.data.Instance)^,vname,hname]))
+             else if (hname<>'')then
+                                historyoutstr(sysutils.format('%s;%s',[pgdbstring(pvd^.data.Instance)^,hname]))
+             else if (vname<>'')then
+                                historyoutstr(sysutils.format('%s;%s',[pgdbstring(pvd^.data.Instance)^,vname]));
 
              end;
 
@@ -1074,7 +1141,13 @@ begin
                       else
                           result:=false;
 end;
-
+class function TGDBtaxisdescLess.c(a,b:taxisdesc):boolean;
+begin
+     if a.d0<b.d0 then
+                          result:=true
+                      else
+                          result:=false;
+end;
 class function TGDBVertexLess.c(a,b:tdevcoord):boolean;
 begin
      //if a.coord.y<b.coord.y then

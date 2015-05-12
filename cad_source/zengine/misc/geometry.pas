@@ -78,6 +78,9 @@ type Intercept3DProp=record
                            point:gdbvertex;
                            d:GDBDouble;
                     end;
+     DistAndt=record
+                    t,d:GDBDouble;
+              end;
      TCSDir=(TCSDLeft,TCSDRight);
 function CrossVertex(const Vector1, Vector2: GDBVertex): GDBVertex;inline;
 function VertexD2S(const Vector1:GDBVertex): GDBVertex3S;inline;
@@ -133,6 +136,7 @@ function distance2piece_2Dmy(var q:GDBvertex2D; p1,p2:GDBvertex2D): double;inlin
 function distance2piece_2_xy(var q:GDBvertex2DI;const p1,p2:GDBvertex2D):GDBvertex2DI;inline;
 
 function distance2point_2(var p1,p2:GDBvertex2DI):GDBInteger;inline;
+function distance2ray(q:GDBvertex;const p1,p2:GDBvertex):DistAndt;
 function CreateTranslationMatrix(const V:GDBvertex): DMatrix4D;inline;
 function CreateScaleMatrix(const V:GDBvertex): DMatrix4D;inline;
 function CreateReflectionMatrix(plane:DVector4D): DMatrix4D;
@@ -1059,6 +1063,25 @@ begin
   end;
   result{.d}:= sqrt(t);
   //result.point:=
+end;
+function distance2ray(q:GDBvertex;const p1,p2:GDBvertex):DistAndt;
+var w,v:gdbvertex;
+    c1,c2:double;
+begin
+     v:=VertexSub(p2,p1);
+     w:=VertexSub(q,p1);
+     c1:=scalardot(w,v);
+     c2:=scalardot(v,v);
+     if abs(c2)>eps then
+                        begin
+                             result.t:=c1/c2;
+                             result.d:=Vertexlength(q,VertexDmorph(p1,v,result.t));
+                        end
+                    else
+                        begin
+                             result.t:=0;
+                             result.d:=Vertexlength(q,p1);
+                        end;
 end;
 function distance2piece(var q:GDBvertex2DI;var p1,p2:GDBvertex2D): double;
 var t,w,p2x_p1x,p2y_p1y,qx_p1x,qy_p1y,qy_p2y,qx_p2x: double;

@@ -945,6 +945,7 @@ var
    nearestd,nearestd0,secondd,secondd0:double;
    tp1,tp2:gdbvertex;
    dit,pdit:DistAndt;
+   Vertex0:GDBVertex;
 begin
   nearestaxis:=-1;
   secondaxis:=-1;
@@ -952,11 +953,12 @@ begin
   secondd:=Infinity;
   nearestd0:=infinity;
   secondd0:=infinity;
+  Vertex0:=gdb.GetCurrentROOT^.vp.BoundingBox.LBN;
   for i:=0 to axisarray.size-1 do
   begin
        tp1:=axisarray[i].p1;
        tp2:=axisarray[i].p2;
-       pdit:=distance2ray(NulVertex,coord,vertexadd(coord,vertexsub(tp2,tp1)));
+       pdit:=distance2ray(Vertex0,coord,vertexadd(coord,vertexsub(tp2,tp1)));
        dit:=distance2ray(coord,tp1,tp2);
        if (dit.t>=0)and(dit.t<=1)then
        begin
@@ -1012,18 +1014,22 @@ var
    axisdevname:GDBString;
    ALLayer:pointer;
    pdevvarext:PTVariablesExtender;
-   pvd:pvardesk;
+   pvd,pvdv:pvardesk;
    dv:gdbvertex;
    axisdesc:taxisdesc;
    psd:PSelectedObjDesc;
    hi,hi2,vi,vi2,ti,i:integer;
    hname,vname:gdbstring;
    dit:DistAndt;
+   Vertex0:GDBVertex;
+   isAxisVerical:TGDB3StateBool;
+   isVertical:boolean;
 begin
   haxis:=taxisdescarray.Create;
   vaxis:=taxisdescarray.Create;
   axisdevname:=uppercase(ExportDevWithAxisParams.AxisDeviceName);
   ALLayer:=gdb.GetCurrentDWG^.LayerTable.getAddres('EL_AXIS');
+  Vertex0:=gdb.GetCurrentROOT^.vp.BoundingBox.LBN;
   historyoutstr('Searh axis.....');
   pdev:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pdev<>nil then
@@ -1041,28 +1047,42 @@ begin
              until paxisline=nil;
 
              pvd:=nil;
+             pvdv:=nil;
              pdevvarext:=pdev^.GetExtension(typeof(TVariablesExtender));
              if pdevvarext<>nil then
+             begin
                pvd:=pdevvarext^.entityunit.FindVariable('NMO_Name');
-
+               pvdv:=pdevvarext^.entityunit.FindVariable('MISC_Vertical');
+             end;
+             if pvdv<>nil then
+                              isAxisVerical:=PTGDB3StateBool(pvd^.data.Instance)^
+                          else
+                              isAxisVerical:=T3SB_Default;
              if (paxisline<>nil)and(pvd<>nil) then
              begin
                   axisdesc.Name:=pgdbstring(pvd^.data.Instance)^;
                   axisdesc.p1:=paxisline^.CoordInWCS.lBegin;
                   axisdesc.p2:=paxisline^.CoordInWCS.lEnd;
-                  dit:=distance2ray(NulVertex,axisdesc.p1,axisdesc.p2);
+                  dit:=distance2ray(Vertex0,axisdesc.p1,axisdesc.p2);
                   axisdesc.d0:=dit.d;
-                  dv:=geometry.VertexSub(paxisline^.CoordInWCS.lEnd,paxisline^.CoordInWCS.lBegin);
-                  if abs(dv.x)>abs(dv.y) then
-                                             begin
-                                                  historyoutstr(sysutils.format('  Found horisontal axis "%s"',[pgdbstring(pvd^.data.Instance)^]));
-                                                  haxis.PushBack(axisdesc);
-                                             end
-                                         else
-                                             begin
-                                                  historyoutstr(sysutils.format('  Found vertical axis "%s"',[pgdbstring(pvd^.data.Instance)^]));
-                                                  vaxis.PushBack(axisdesc);
-                                             end
+                  case isAxisVerical of
+                             T3SB_Fale:isVertical:=false;
+                             T3SB_True:isVertical:=true;
+                          T3SB_Default:begin
+                                         dv:=geometry.VertexSub(paxisline^.CoordInWCS.lEnd,paxisline^.CoordInWCS.lBegin);
+                                         isVertical:=abs(dv.x)<abs(dv.y);
+                                       end;
+                  end;
+                  if isVertical then
+                                    begin
+                                      historyoutstr(sysutils.format('  Found vertical axis "%s"',[pgdbstring(pvd^.data.Instance)^]));
+                                      vaxis.PushBack(axisdesc);
+                                    end
+                                else
+                                    begin
+                                      historyoutstr(sysutils.format('  Found horisontal axis "%s"',[pgdbstring(pvd^.data.Instance)^]));
+                                      haxis.PushBack(axisdesc);
+                                    end
 
              end
         end;
@@ -1102,7 +1122,7 @@ begin
                   GetNearestAxis(vaxis,pdev^.P_insert_in_WCS,vi,vi2);
                   vname:=GetAxisName(vaxis,vi,vi2);
                   if (hname<>'')and(vname<>'')then
-                                          historyoutstr(sysutils.format('%s;%s/%s',[pgdbstring(pvd^.data.Instance)^,vname,hname]))
+                                          historyoutstr(sysutils.format('%s;%s/%s',[pgdbstring(pvd^.data.Instance)^,hname,vname]))
              else if (hname<>'')then
                                 historyoutstr(sysutils.format('%s;%s',[pgdbstring(pvd^.data.Instance)^,hname]))
              else if (vname<>'')then

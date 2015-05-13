@@ -436,6 +436,9 @@ MainMenuItem Plan;
 MainMenuItem Info;
   {
     action ACN_DIST
+    Separator
+    Command Names of entities,VarReport(NMO_Name),none,none
+    Command Names of devices with axis,ExportDevWithAxis,none,none
   }
 MainMenuItem Model;
   {
@@ -453,7 +456,6 @@ MainMenuItem Model;
     Command Verifying rules,EL_Сheck,none,none
     Command Create cable report,El_Cable_Legend,none,none
     Command Create material report,El_Material_Legend,none,none
-    Command Names of entities,VarReport(NMO_Name),none,none
   }
 MainMenuItem Settings;
   {

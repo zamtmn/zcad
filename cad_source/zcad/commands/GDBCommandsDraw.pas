@@ -962,23 +962,23 @@ begin
        dit:=distance2ray(coord,tp1,tp2);
        if (dit.t>=0)and(dit.t<=1)then
        begin
-       if (dit.d<nearestd)and(axisarray[i].d0<pdit.d) then
+       if (dit.d<nearestd)and(axisarray[i].d0<=(pdit.d+eps)) then
                          begin
                               nearestaxis:=i;
                               nearestd:=dit.d;
                               nearestd0:=axisarray[nearestaxis].d0;
-                              if abs(dit.d)<eps then
+                              if abs(dit.d)<bigeps then
                                                     begin
                                                          secondaxis:=-1;
                                                          exit;
                                                     end;
                          end;
-  if (dit.d<secondd)and(axisarray[i].d0>pdit.d) then
+  if (dit.d<secondd)and(axisarray[i].d0>=(pdit.d-eps)) then
                          begin
                               secondaxis:=i;
                               secondd:=dit.d;
                               secondd0:=axisarray[i].d0;
-                              if abs(dit.d)<eps then
+                              if abs(dit.d)<bigeps then
                                                     begin
                                                          nearestaxis:=-1;
                                                          exit;

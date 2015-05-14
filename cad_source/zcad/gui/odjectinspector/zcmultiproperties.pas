@@ -39,7 +39,7 @@ type
   TAfterIterateProc=procedure(piteratedata:GDBPointer;mp:TMultiProperty);
   TEntChangeProc=procedure(pu:PTObjectUnit;PSourceVD:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
   TCheckValueFunc=function(PSourceVD:PVarDesk;var ErrorRange:GDBBoolean;out message:GDBString):GDBBoolean;
-  TEntIterateProc=procedure(pvd:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc);
+  TEntIterateProc=procedure(pvd:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
   TEntBeforeIterateProc=procedure(pvd:GDBPointer;ChangedData:TChangedData);
   PTMultiPropertyDataForObjects=^TMultiPropertyDataForObjects;
   TMultiPropertyDataForObjects=record

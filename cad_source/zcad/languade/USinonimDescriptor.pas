@@ -34,10 +34,15 @@ GDBSinonimDescriptor=object(TUserTypeDescriptor)
                      function GetFactTypedef:PUserTypeDescriptor;virtual;
                      function Compare(pleft,pright:pointer):TCompareResult;virtual;
                      function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
+                     function GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;virtual;
 
                end;
 implementation
 uses {ZBasicVisible,}UUnitManager,log;
+function GDBSinonimDescriptor.GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;
+begin
+     result:=GetFactTypedef^.GetFormattedValueAsString(pinstance,f);
+end;
 function GDBSinonimDescriptor.GetValueAsString;
 begin
      result:=GetFactTypedef^.GetValueAsString(pinstance);

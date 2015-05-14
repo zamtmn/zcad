@@ -737,11 +737,17 @@ procedure drawvalue(ppd:PPropertyDeskriptor;canvas:tcanvas;fulldraw:boolean;Text
 var
    r:trect;
    tempcolor:TColor;
+   value:gdbstring;
 begin
      if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
      begin
            canvas.Font.Italic:=true;
      end;
+     if (ppd^.Attr and FA_HIGHLIGHTED)<>0 then
+                                              value:='≈'+ppd^.value
+                                          else
+                                              value:=ppd^.value;
+
   r:=ppd.rect;
   if fulldraw then
   drawrect(canvas,r,false,false,false);
@@ -756,7 +762,7 @@ begin
     if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)and((ppd^.Attr and FA_DIFFERENT)=0)) then
                                        ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
                                    else
-                                       drawstring(canvas,r,r.Left,r.Top,(ppd^.value),DefaultDetails);
+                                       drawstring(canvas,r,r.Left,r.Top,(value),DefaultDetails);
     canvas.Font.Color:=tempcolor;
   end
   else
@@ -768,7 +774,7 @@ begin
     if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)and((ppd^.Attr and FA_DIFFERENT)=0)) then
                                                    ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
                                                else
-                                                   drawstring(canvas,r,r.Left,r.Top,(ppd^.value),DefaultDetails);
+                                                   drawstring(canvas,r,r.Left,r.Top,(value),DefaultDetails);
     end;
 
 if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then

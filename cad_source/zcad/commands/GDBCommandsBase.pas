@@ -88,7 +88,7 @@ var
    membuf:GDBOpenArrayOfByte;
 {$ENDIF}
 begin
-     MSEditor.CreateUnit;
+     MSEditor.CreateUnit(GDB.GetUnitsFormat);
      if {MSEditor.SelCount>0}true then
                                 begin
                                  {$IFDEF TOTALYLOG}
@@ -955,7 +955,7 @@ begin
                                            pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
                                      until pobj=nil;
                                      if assigned(GetCurrentObjProc)then
-                                                                       if GetCurrentObjProc=@MSEditor then  MSEditor.CreateUnit;
+                                                                       if GetCurrentObjProc=@MSEditor then  MSEditor.CreateUnit(gdb.GetUnitsFormat);
                                      if assigned(rebuildProc)then
                                                                  rebuildproc;
                                end;

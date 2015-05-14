@@ -57,6 +57,7 @@ const
 
   vda_different=1;
   vda_RO=2;
+  vda_highlighted=4;
 type
 TPropEditorOwner=TWinControl;
 PDMode=(PDM_Field,PDM_Property);

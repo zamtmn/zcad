@@ -32,6 +32,7 @@ uses
 type
   PTOneVarData=^TOneVarData;
   TOneVarData=record
+                    StrValue:GDBString;
                     PVarDesc:pvardesk;
               end;
   PTVertex3DControlVarData=^TVertex3DControlVarData;
@@ -58,15 +59,16 @@ type
                 SummaryUnit:TObjectUnit;(*'Summary'*)
                 ObjIDVector:{-}TObjIDVector{/GDBPointer/};(*hidden_in_objinsp*)
                 ObjID2Counter:{-}TObjID2Counter{/GDBPointer/};(*hidden_in_objinsp*)
+                SavezeUnitsFormat:TzeUnitsFormat;
                 procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
-                procedure CreateUnit(_GetEntsTypes:boolean=true);virtual;
+                procedure CreateUnit(const f:TzeUnitsFormat;_GetEntsTypes:boolean=true);virtual;
                 procedure GetEntsTypes;virtual;
                 function GetObjType:TObjID;virtual;
                 constructor init;
                 destructor done;virtual;
 
                 procedure CheckMultiPropertyUse;
-                procedure CreateMultiPropertys;
+                procedure CreateMultiPropertys(const f:TzeUnitsFormat);
 
                 procedure SetVariables(PSourceVD:pvardesk;NeededObjType:TObjID);
                 procedure SetMultiProperty(pu:PTObjectUnit;PSourceVD:pvardesk;NeededObjType:TObjID);
@@ -265,7 +267,7 @@ begin
       if PFIELD=@self.TxtEntType then
       begin
            PFIELD:=@TxtEntType;
-           CreateUnit(false);
+           CreateUnit(SavezeUnitsFormat,false);
            exit;
       end;
 
@@ -280,7 +282,7 @@ begin
       if pvd<>nil then
       begin
          SetMultiProperty(@GeneralUnit,pvd,GetObjType);
-         CreateMultiPropertys;
+         CreateMultiPropertys(SavezeUnitsFormat);
          exit;
       end;
 
@@ -288,7 +290,7 @@ begin
       if pvd<>nil then
       begin
          SetMultiProperty(@GeometryUnit,pvd,GetObjType);
-         CreateMultiPropertys;
+         CreateMultiPropertys(SavezeUnitsFormat);
          exit;
       end;
 
@@ -296,7 +298,7 @@ begin
       if pvd<>nil then
       begin
          SetMultiProperty(@MiscUnit,pvd,GetObjType);
-         CreateMultiPropertys;
+         CreateMultiPropertys(SavezeUnitsFormat);
          exit;
       end;
 
@@ -373,6 +375,7 @@ var
     fistrun:boolean;
     ChangedData:TChangedData;
 begin
+  SavezeUnitsFormat:=f;
   NeedObjID:=GetObjType;
   for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
     if MultiPropertiesManager.MultiPropertyVector[i].usecounter<>0 then
@@ -431,14 +434,14 @@ begin
             if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue({NeedObjID}pv^.vp.ID,MultiPropertyDataForObjects)then
             begin
               ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
-              MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData,MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc);
+              MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData,MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc,f);
               fistrun:=false;
             end
             else
                 if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(0,MultiPropertyDataForObjects)then
                 begin
                   ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
-                  MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData,MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc);
+                  MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData,MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc,f);
                   fistrun:=false;
                 end;
        end;
@@ -497,6 +500,7 @@ var //i: GDBInteger;
     ir,ir2:itrec;
     pentvarext:PTVariablesExtender;
 begin
+     SavezeUnitsFormat:=f;
      if _GetEntsTypes then
                           GetEntsTypes;
 
@@ -511,7 +515,7 @@ begin
      SummaryUnit.InterfaceUses.addnodouble(@sysunit);
 
      CheckMultiPropertyUse;
-     CreateMultiPropertys;
+     CreateMultiPropertys(f);
      //etype:=GetObjType;
      psd:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
      //pv:=gdb.GetCurrentDWG.ObjRoot.ObjArray.beginiterate(ir);

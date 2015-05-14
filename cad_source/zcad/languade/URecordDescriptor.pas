@@ -430,6 +430,8 @@ begin
                                                                                            tw:=FA_DIFFERENT
                                                                                        else
                                                                                            tw:=0;
+                                                  if (pvd^.attrib and vda_highlighted)>0 then
+                                                                                           tw:=tw or FA_HIGHLIGHTED;
                                                   if (pvd^.attrib and vda_RO)>0 then
                                                                                            tw:=tw or FA_READONLY;
                                                   oldppda:=ppda;

@@ -1122,7 +1122,7 @@ begin
                   GetNearestAxis(vaxis,pdev^.P_insert_in_WCS,vi,vi2);
                   vname:=GetAxisName(vaxis,vi,vi2);
                   if (hname<>'')and(vname<>'')then
-                                          historyoutstr(sysutils.format('%s;%s/%s',[pgdbstring(pvd^.data.Instance)^,hname,vname]))
+                                          historyoutstr(sysutils.format('%s;%s/%s',[pgdbstring(pvd^.data.Instance)^,vname,hname]))
              else if (hname<>'')then
                                 historyoutstr(sysutils.format('%s;%s',[pgdbstring(pvd^.data.Instance)^,hname]))
              else if (vname<>'')then

@@ -1055,7 +1055,7 @@ begin
                pvdv:=pdevvarext^.entityunit.FindVariable('MISC_Vertical');
              end;
              if pvdv<>nil then
-                              isAxisVerical:=PTGDB3StateBool(pvd^.data.Instance)^
+                              isAxisVerical:=PTGDB3StateBool(pvdv^.data.Instance)^
                           else
                               isAxisVerical:=T3SB_Default;
              if (paxisline<>nil)and(pvd<>nil) then

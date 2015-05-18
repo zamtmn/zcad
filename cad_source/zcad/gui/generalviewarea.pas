@@ -20,7 +20,7 @@ unit generalviewarea;
 {$INCLUDE def.inc}
 interface
 uses
-     gdbpalette,GDBHelpObj{нужно убрать},
+     zemathutils,gdbpalette,GDBHelpObj{нужно убрать},
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
      UGDBLayerArray,ugdbdimstylearray,
      oglwindowdef,gdbdrawcontext,varmandef,zcadsysvars,GDBEntity,zcadinterface,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
@@ -1373,6 +1373,7 @@ var
   ux,uy:GDBDouble;
   htext,htext2:gdbstring;
   key: GDBByte;
+  f:TzeUnitsFormat;
 begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.Pre_MouseMove',lp_IncPos);{$ENDIF}
   if assigned(mainmousemove)then
@@ -1571,13 +1572,12 @@ end;
   pdwg.GetSelObjArray.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
   Set3dmouse;
 
-
-
-  htext:=FloatToStrf(param.md.mouse3dcoord.x,ffFixed,10,3)+','+FloatToStrf(param.md.mouse3dcoord.y,ffFixed,10,3)+','+FloatToStrf(param.md.mouse3dcoord.z,ffFixed,10,3);
-  if {mainwindow.OGLwindow1.}param.polarlinetrace = 1 then
+  f:=pdwg^.GetUnitsFormat;
+  htext:=sysutils.Format('%s, %s, %s',[zeDimensionToString(param.md.mouse3dcoord.x,f),zeDimensionToString(param.md.mouse3dcoord.y,f),zeDimensionToString(param.md.mouse3dcoord.z,f)]);
+  if param.polarlinetrace = 1 then
   begin
-       htext2:='L='+FloatToStrf(param.ontrackarray.otrackarray[param.pointnum].tmouse,ffFixed,10,3);
-       htext:=htext+' '+htext2;
+       htext2:=sysutils.Format('L=%s',[zeDimensionToString(param.ontrackarray.otrackarray[param.pointnum].tmouse,f)]);
+       htext:=sysutils.Format('%s (%s)',[htext,htext2]);
        getviewcontrol.Hint:=htext2;
        Application.ActivateHint(getviewcontrol.ClientToScreen(Point(param.md.mouse.x,param.md.mouse.y)));
   end;

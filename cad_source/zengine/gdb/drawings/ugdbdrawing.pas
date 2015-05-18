@@ -64,11 +64,48 @@ TDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
            function CanRedo:boolean;virtual;
            function GetDWGUnits:{PTUnitManager}pointer;virtual;
            procedure AddBlockFromDBIfNeed(name:GDBString);virtual;
+           function GetUnitsFormat:TzeUnitsFormat;virtual;
      end;
 {EXPORT-}
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
  uses UGDBDescriptor,GDBText,GDBDevice,GDBBlockInsert,iodxf, GDBManager,shared,commandline,log;
+function TDrawing.GetUnitsFormat:TzeUnitsFormat;
+begin
+     result.DeciminalSeparator:=DDSDot;
+     if Assigned(sysvar.DWG.DWG_AngBase) then
+                                            result.abase:=sysvar.DWG.DWG_AngBase^
+                                        else
+                                            result.abase:=0;
+     if Assigned(sysvar.DWG.DWG_AngDir) then
+                                            result.adir:=sysvar.DWG.DWG_AngDir^
+                                        else
+                                            result.adir:=ADCounterClockwise;
+     if Assigned(sysvar.DWG.DWG_AUnits) then
+                                            result.aformat:=sysvar.DWG.DWG_AUnits^
+                                        else
+                                            result.aformat:=AUDecimalDegrees;
+     if Assigned(sysvar.DWG.DWG_AUPrec) then
+                                            result.aprec:=sysvar.DWG.DWG_AUPrec^
+                                        else
+                                            result.aprec:=UPrec2;
+     if Assigned(sysvar.DWG.DWG_LUnits) then
+                                            result.uformat:=sysvar.DWG.DWG_LUnits^
+                                        else
+                                            result.uformat:=LUDecimal;
+     if Assigned(sysvar.DWG.DWG_LUPrec) then
+                                            result.uprec:=sysvar.DWG.DWG_LUPrec^
+                                        else
+                                            result.uprec:=UPrec2;
+     if Assigned(sysvar.DWG.DWG_UnitMode) then
+                                            result.umode:=sysvar.DWG.DWG_UnitMode^
+                                        else
+                                            result.umode:=UMWithSpaces;
+     if result.uformat in [LUDecimal,LUEngineering] then
+                                                        result.RemoveTrailingZeros:=false
+                                                    else
+                                                        result.RemoveTrailingZeros:=true;
+end;
 procedure TDrawing.SetCurrentDWG();
 begin
   gdb.SetCurrentDWG(@self);

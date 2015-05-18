@@ -25,6 +25,7 @@ function zeDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBStri
 function zeNonDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;
 function zeAngleDegToString(const value:Double; const f:TzeUnitsFormat):GDBString;
 function zeAngleToString(const value:Double; const f:TzeUnitsFormat):GDBString;
+function CreateDefaultUnitsFormat:TzeUnitsFormat;
 implementation
 const
   FromDegToRad=pi/180;
@@ -42,6 +43,18 @@ const
   end;}
 var
   WorkingFormatSettings:TFormatSettings;
+function CreateDefaultUnitsFormat:TzeUnitsFormat;
+begin
+    result.abase:=0;
+    result.adir:=ADCounterClockwise;
+    result.aformat:=AUDecimalDegrees;
+    result.aprec:=UPrec2;
+    result.uformat:=LUDecimal;
+    result.uprec:=UPrec2;
+    result.umode:=UMWithSpaces;
+    result.DeciminalSeparator:=DDSDot;
+    result.RemoveTrailingZeros:=false;
+end;
 function MyFloatToStr0(const value:Double):GDBString;
 begin
      result:=FloatToStrF(value,ffFixed,0,0,WorkingFormatSettings);

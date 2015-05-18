@@ -3621,14 +3621,15 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                 SummaryUnit:TObjectUnit;(*'Summary'*)
                 ObjIDVector:GDBPointer;(*hidden_in_objinsp*)
                 ObjID2Counter:GDBPointer;(*hidden_in_objinsp*)
+                SavezeUnitsFormat:TzeUnitsFormat;
                 procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
-                procedure CreateUnit(_GetEntsTypes:boolean=true);virtual;abstract;
+                procedure CreateUnit(const f:TzeUnitsFormat;_GetEntsTypes:boolean=true);virtual;abstract;
                 procedure GetEntsTypes;virtual;abstract;
                 function GetObjType:TObjID;virtual;abstract;
                 constructor init;
                 destructor done;virtual;abstract;
                 procedure CheckMultiPropertyUse;
-                procedure CreateMultiPropertys;
+                procedure CreateMultiPropertys(const f:TzeUnitsFormat);
                 procedure SetVariables(PSourceVD:pvardesk;NeededObjType:TObjID);
                 procedure SetMultiProperty(pu:PTObjectUnit;PSourceVD:pvardesk;NeededObjType:TObjID);
                 procedure processProperty(const ID:TObjID; const pentity: pGDBObjEntity; const PMultiPropertyDataForObjects:PTMultiPropertyDataForObjects; const pu:PTObjectUnit; const PSourceVD:PVarDesk;const mp:TMultiProperty; var DC:TDrawContext);

@@ -32,6 +32,7 @@ uses
 function GetOneVarData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 function GetVertex3DControlData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 procedure FreeOneVarData(piteratedata:GDBPointer;mp:TMultiProperty);
+procedure FreeVertex3DControlData(piteratedata:GDBPointer;mp:TMultiProperty);
 procedure GeneralEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
@@ -81,6 +82,9 @@ var
    vd:vardesk;
 begin
     GDBGetMem(result,sizeof(TVertex3DControlVarData));
+    pointer(PTVertex3DControlVarData(result)^.StrValueX):=nil;
+    pointer(PTVertex3DControlVarData(result)^.StrValueY):=nil;
+    pointer(PTVertex3DControlVarData(result)^.StrValueZ):=nil;
     if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTVertex3DControlVarData(result).PArrayIndexVarDesc) then
        mp.MPType.CopyInstanceTo(@Vertex3DControl,PTVertex3DControlVarData(result).PArrayIndexVarDesc.data.Instance);
     FindOrCreateVar(pu,mp.MPName+'x','x','GDBDouble',PTVertex3DControlVarData(result).PXVarDesc);
@@ -93,6 +97,14 @@ procedure FreeOneVarData(piteratedata:GDBPointer;mp:TMultiProperty);
 {уничтожает созданную GetOneVarData структуру}
 begin
     PTOneVarData(piteratedata)^.StrValue:='';
+    GDBFreeMem(piteratedata);
+end;
+procedure FreeVertex3DControlData(piteratedata:GDBPointer;mp:TMultiProperty);
+{уничтожает созданную GetVertex3DControlData структуру}
+begin
+    PTVertex3DControlVarData(piteratedata)^.StrValueX:='';
+    PTVertex3DControlVarData(piteratedata)^.StrValueY:='';
+    PTVertex3DControlVarData(piteratedata)^.StrValueZ:='';
     GDBFreeMem(piteratedata);
 end;
 procedure PolylineVertex3DControlBeforeEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData);
@@ -110,9 +122,9 @@ var
 begin
      if @ecp=nil then
                      begin
-                          PTVertex3DControlVarData(pdata).PXVarDesc.attrib:=PTVertex3DControlVarData(pdata).PXVarDesc.attrib or vda_RO;
-                          PTVertex3DControlVarData(pdata).PYVarDesc.attrib:=PTVertex3DControlVarData(pdata).PYVarDesc.attrib or vda_RO;
-                          PTVertex3DControlVarData(pdata).PZVarDesc.attrib:=PTVertex3DControlVarData(pdata).PZVarDesc.attrib or vda_RO;
+                          ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PXVarDesc.attrib,vda_RO,0);
+                          ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PYVarDesc.attrib,vda_RO,0);
+                          ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PZVarDesc.attrib,vda_RO,0);
                      end;
      cc:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).Count-1;
      if cc<PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^ then
@@ -120,22 +132,33 @@ begin
      tv:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).getelement(PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^);
      if fistrun then
                     begin
-                         PTVertex3DControlVarData(pdata).PXVarDesc.attrib:=PTVertex3DControlVarData(pdata).PXVarDesc.attrib and (not vda_different);
-                         PTVertex3DControlVarData(pdata).PYVarDesc.attrib:=PTVertex3DControlVarData(pdata).PYVarDesc.attrib and (not vda_different);
-                         PTVertex3DControlVarData(pdata).PZVarDesc.attrib:=PTVertex3DControlVarData(pdata).PZVarDesc.attrib and (not vda_different);
+                         ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PXVarDesc.attrib,0,vda_different);
+                         ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PYVarDesc.attrib,0,vda_different);
+                         ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PZVarDesc.attrib,0,vda_different);
 
                          PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.x,PTVertex3DControlVarData(pdata).PXVarDesc.data.Instance);
+                         PTVertex3DControlVarData(pdata).StrValueX:=PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.x,f);
                          PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.y,PTVertex3DControlVarData(pdata).PYVarDesc.data.Instance);
+                         PTVertex3DControlVarData(pdata).StrValueY:=PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.y,f);
                          PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.z,PTVertex3DControlVarData(pdata).PZVarDesc.data.Instance);
+                         PTVertex3DControlVarData(pdata).StrValueZ:=PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.z,f);
                     end
                 else
                     begin
                          if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.x,PTVertex3DControlVarData(pdata).PXVarDesc.data.Instance)<>CREqual then
-                            PTVertex3DControlVarData(pdata).PXVarDesc.attrib:=PTVertex3DControlVarData(pdata).PXVarDesc.attrib or vda_different;
+                            ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PXVarDesc.attrib,vda_approximately,0);
+                         if PTVertex3DControlVarData(pdata).StrValueX<>PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.x,f) then
+                            ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PXVarDesc.attrib,vda_different,vda_approximately);
+
                          if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.y,PTVertex3DControlVarData(pdata).PYVarDesc.data.Instance)<>CREqual then
-                            PTVertex3DControlVarData(pdata).PYVarDesc.attrib:=PTVertex3DControlVarData(pdata).PYVarDesc.attrib or vda_different;
+                            ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PYVarDesc.attrib,vda_approximately,0);
+                         if PTVertex3DControlVarData(pdata).StrValueY<>PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.y,f) then
+                            ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PYVarDesc.attrib,vda_different,vda_approximately);
+
                          if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.z,PTVertex3DControlVarData(pdata).PZVarDesc.data.Instance)<>CREqual then
-                            PTVertex3DControlVarData(pdata).PZVarDesc.attrib:=PTVertex3DControlVarData(pdata).PZVarDesc.attrib or vda_different;
+                            ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PZVarDesc.attrib,vda_approximately,0);
+                         if PTVertex3DControlVarData(pdata).StrValueZ<>PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.z,f) then
+                            ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PZVarDesc.attrib,vda_different,vda_approximately);
                     end;
 end;
 procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
@@ -173,19 +196,19 @@ fistrun - флаг установлен при первой итерации (т
 ecp - указатель на процедуру копирования значения из мультипроперти в примитив, если nil то делаем readonly
 }
 begin
-     if @ecp=nil then PTOneVarData(pdata).PVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_RO;
+     if @ecp=nil then ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,vda_RO,0);
      if fistrun then
                     begin
-                      PTOneVarData(pdata).PVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib and (not vda_different);
+                      ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,0,vda_different);
                       mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PTOneVarData(pdata).PVarDesc.data.Instance);
                       PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f);
                     end
                 else
                     begin
                          if mp.MPType.Compare(ChangedData.PGetDataInEtity,PTOneVarData(pdata).PVarDesc.data.Instance)<>CREqual then
-                            PTOneVarData(pdata).PVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_highlighted;
+                            ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,vda_approximately,0);
                          if PTOneVarData(pdata).StrValue<>mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f) then
-                            PTOneVarData(pdata).PVarDesc.attrib:=(PTOneVarData(pdata).PVarDesc.attrib or vda_different) and not vda_highlighted;
+                            ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,vda_different,vda_approximately);
                     end;
 end;
 procedure GDBDouble2SumEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
@@ -198,7 +221,7 @@ fistrun - флаг установлен при первой итерации (т
 ecp - указатель на процедуру копирования значения из мультипроперти в примитив, если nil то делаем readonly
 }
 begin
-     if @ecp=nil then PTOneVarData(pdata).PVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_RO;
+     if @ecp=nil then ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,vda_RO,0);
      if fistrun then
                     mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PTOneVarData(pdata).PVarDesc.data.Instance)
                 else
@@ -214,7 +237,7 @@ fistrun - флаг установлен при первой итерации (т
 ecp - указатель на процедуру копирования значения из мультипроперти в примитив, если nil то делаем readonly
 }
 begin
-     if @ecp=nil then PTOneVarData(pdata).PVarDesc.attrib:=PTOneVarData(pdata).PVarDesc.attrib or vda_RO;
+     if @ecp=nil then ProcessVariableAttributes(PTOneVarData(pdata).PVarDesc.attrib,vda_RO,0);
      if fistrun then
                     mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PTOneVarData(pdata).PVarDesc.data.Instance)
                 else

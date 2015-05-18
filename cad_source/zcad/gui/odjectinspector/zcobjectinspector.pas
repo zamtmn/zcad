@@ -743,7 +743,7 @@ begin
      begin
            canvas.Font.Italic:=true;
      end;
-     if (ppd^.Attr and FA_HIGHLIGHTED)<>0 then
+     if (ppd^.Attr and FA_APPROXIMATELY)<>0 then
                                               value:='≈'+ppd^.value
                                           else
                                               value:=ppd^.value;

@@ -259,12 +259,12 @@ begin
     PSP:=shapearray.beginiterate(ir2);
                                        if PSP<>nil then
                                        repeat
-                                             if psp.param.PstyleIsHandle then
+                                             {if psp.param.PstyleIsHandle then
                                                                              begin
                                                                                   psp.Psymbol:=nil;
                                                                                   psp.param.PStyle:=nil;
                                                                              end
-                                                                         else
+                                                                         else}
                                                                              processH(psp.Psymbol,psp^.param);
                                              PSP:=shapearray.iterate(ir2);
                                        until PSP=nil;

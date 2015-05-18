@@ -32,15 +32,10 @@ const
   FromDegToGrad=200/180;
   FromRadToDegrees=180/pi;
   FromRadToGradians=200/pi;
-  fractions:array [TUPrec] of integer=(1,2,4,8,16,32,64,128,256);
-  fromradto:array [TAUnits] of double=(FromRadToDegrees,FromRadToDegrees,FromRadToGradians,1,FromRadToDegrees);
-  fromdegto:array [TAUnits] of double=(1,1,FromDegToGrad,FromDegToRad,1);
-
-  {case PDimStyle.Units.DIMDSEP of
-                                DDSDot:WorkingFormatSettings.DecimalSeparator:='.';
-                              DDSComma:WorkingFormatSettings.DecimalSeparator:=',';
-                              DDSSpace:WorkingFormatSettings.DecimalSeparator:=' ';
-  end;}
+  Fractions:array [TUPrec] of integer=(1,2,4,8,16,32,64,128,256);
+  FromRadTo:array [TAUnits] of double=(FromRadToDegrees,FromRadToDegrees,FromRadToGradians,1,FromRadToDegrees);
+  FromDegTo:array [TAUnits] of double=(1,1,FromDegToGrad,FromDegToRad,1);
+  FromDimDSepToChar:array [TDimDSep] of char=('.',',',' ');
 var
   WorkingFormatSettings:TFormatSettings;
 function CreateDefaultUnitsFormat:TzeUnitsFormat;
@@ -63,11 +58,12 @@ function MyFloatToStr(const value:Double;Prec:TUPrec;DS:TDimDSep;RTZ:boolean):GD
 var
   Q:Integer;
 begin
-     case DS of
+     WorkingFormatSettings.DecimalSeparator:=fromDimDSepToChar[DS];
+     {case DS of
           DDSDot:WorkingFormatSettings.DecimalSeparator:='.';
         DDSComma:WorkingFormatSettings.DecimalSeparator:=',';
         DDSSpace:WorkingFormatSettings.DecimalSeparator:=' ';
-     end;
+     end;}
      result:=FloatToStrF(value,ffFixed,0,ord(Prec),WorkingFormatSettings);
 
      if (Prec<>UPrec0)and RTZ then

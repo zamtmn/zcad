@@ -57,7 +57,7 @@ const
 
   vda_different=1;
   vda_RO=2;
-  vda_highlighted=4;
+  vda_approximately=4;
 type
 TPropEditorOwner=TWinControl;
 PDMode=(PDM_Field,PDM_Property);
@@ -230,11 +230,12 @@ TOSMode=packed record
                    Instance: GDBPointer;
                    PTD:{-}PUserTypeDescriptor{/GDBPointer/};
              end;
+  TVariableAttributes=GDBInteger;
   vardesk =packed  record
     name: GDBString;
     username: GDBString;
     data: TTypedData;
-    attrib:GDBInteger;
+    attrib:TVariableAttributes;
   end;
 ptypemanagerdef=^typemanagerdef;
 typemanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -262,9 +263,15 @@ varmanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
 {EXPORT-}
 var
   date:TDateTime;
+procedure ProcessVariableAttributes(var attr:TVariableAttributes; const setattrib,resetattrib:TVariableAttributes);
 implementation
 uses log;
 {for hide exttype}
+procedure ProcessVariableAttributes(var attr:TVariableAttributes; const setattrib,resetattrib:TVariableAttributes);
+begin
+     attr:=(attr or setattrib)and(not resetattrib);
+end;
+
 constructor TPropEditor.Create(AOwner:TComponent;_PInstance:GDBPointer;var _PTD:UserTypeDescriptor;FreeOnLostFocus:boolean);
 begin
      inherited create(AOwner);

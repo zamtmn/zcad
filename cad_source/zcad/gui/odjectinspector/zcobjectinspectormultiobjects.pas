@@ -37,6 +37,7 @@ type
               end;
   PTVertex3DControlVarData=^TVertex3DControlVarData;
   TVertex3DControlVarData=record
+                            StrValueX,StrValueY,StrValueZ:GDBString;
                             PArrayIndexVarDesc,
                             PXVarDesc,
                             PYVarDesc,

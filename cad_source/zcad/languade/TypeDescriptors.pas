@@ -32,7 +32,7 @@ const
      FA_HIDDEN_IN_OBJ_INSP=1;
      FA_READONLY=2;
      FA_DIFFERENT=4;
-     FA_HIGHLIGHTED=8;
+     FA_APPROXIMATELY=8;
      SA_SAVED_TO_SHD=1;
 
      property_correct=1;

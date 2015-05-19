@@ -21,7 +21,11 @@ unit gdbcommandsinterface;
 
 interface
 uses
- paths,fileformatsmanager,backendmanager,abstractviewarea,uzglopengldrawer,uzglabstractdrawer,colorwnd,dswnd,ltwnd,tswnd,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ paths,fileformatsmanager,backendmanager,abstractviewarea,uzglopengldrawer,uzglabstractdrawer,
+ colorwnd,dswnd,ltwnd,tswnd,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,
+ zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,
+ {$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,unitswnd,strproc,umytreenode,menus,
+ {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,
   sysinfo,
@@ -352,6 +356,14 @@ begin
                     result:=cmd_error;
                end;
         //shared.ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
+end;
+function units_cmd:GDBInteger;
+begin
+  UnitsWindow:=TUnitsWindow.Create(nil);
+  //SetHeightControl(UnitsWindow,sysvar.INTF.INTF_DefaultControlHeight^);
+  DOShowModal(UnitsWindow);
+  Freeandnil(UnitsWindow);
+  result:=cmd_ok;
 end;
 function layer_cmd:GDBInteger;
 begin
@@ -782,6 +794,7 @@ begin
   CreateCommandFastObjectPlugin(@Import_com,'Import',0,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@LoadLayout_com,'LoadLayout',0,0);
   CreateCommandFastObjectPlugin(@quit_com,'Quit',0,0);
+  CreateCommandFastObjectPlugin(@units_cmd,'Units',CADWG,0);
   CreateCommandFastObjectPlugin(@layer_cmd,'Layer',CADWG,0);
   CreateCommandFastObjectPlugin(@TextStyles_cmd,'TextStyles',CADWG,0);
   CreateCommandFastObjectPlugin(@DimStyles_cmd,'DimStyles',CADWG,0);

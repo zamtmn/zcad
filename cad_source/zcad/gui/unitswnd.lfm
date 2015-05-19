@@ -1,0 +1,383 @@
+object UnitsWindow: TUnitsWindow
+  Left = 664
+  Height = 436
+  Top = 185
+  Width = 360
+  Caption = 'Form1'
+  ClientHeight = 436
+  ClientWidth = 360
+  Constraints.MinHeight = 360
+  Constraints.MinWidth = 360
+  LCLVersion = '1.5'
+  object GroupBox3: TGroupBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Panel1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 5
+    Height = 85
+    Top = 218
+    Width = 350
+    Anchors = [akTop, akLeft, akRight]
+    AutoSize = True
+    BorderSpacing.Left = 5
+    BorderSpacing.Top = 5
+    BorderSpacing.Right = 5
+    Caption = 'GroupBox3'
+    ClientHeight = 61
+    ClientWidth = 346
+    TabOrder = 0
+    object Label7: TLabel
+      AnchorSideLeft.Control = GroupBox3
+      AnchorSideTop.Control = GroupBox3
+      AnchorSideRight.Control = GroupBox3
+      AnchorSideRight.Side = asrBottom
+      Left = 5
+      Height = 19
+      Top = 5
+      Width = 336
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 5
+      Caption = 'Label7'
+      ParentColor = False
+    end
+    object ComboBox5: TComboBox
+      AnchorSideLeft.Control = GroupBox3
+      AnchorSideTop.Control = Label7
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox3
+      AnchorSideRight.Side = asrBottom
+      Left = 5
+      Height = 27
+      Top = 29
+      Width = 336
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Around = 5
+      ItemHeight = 19
+      Style = csDropDownList
+      TabOrder = 0
+    end
+  end
+  object GroupBox4: TGroupBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = GroupBox3
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 5
+    Height = 89
+    Top = 308
+    Width = 350
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Around = 5
+    Caption = 'GroupBox4'
+    ClientHeight = 65
+    ClientWidth = 346
+    TabOrder = 1
+    object Label1: TLabel
+      AnchorSideLeft.Control = GroupBox4
+      AnchorSideTop.Control = GroupBox4
+      AnchorSideRight.Control = GroupBox4
+      AnchorSideRight.Side = asrBottom
+      Left = 5
+      Height = 19
+      Top = 5
+      Width = 336
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 5
+      Caption = '-'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      AnchorSideLeft.Control = GroupBox4
+      AnchorSideTop.Control = Label1
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox4
+      AnchorSideRight.Side = asrBottom
+      Left = 5
+      Height = 19
+      Top = 29
+      Width = 336
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Around = 5
+      Caption = '-'
+      ParentColor = False
+    end
+  end
+  object Panel1: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 5
+    Height = 208
+    Top = 5
+    Width = 350
+    Anchors = [akTop, akLeft, akRight]
+    AutoSize = True
+    BorderSpacing.Left = 5
+    BorderSpacing.Top = 5
+    BorderSpacing.Right = 5
+    BevelOuter = bvNone
+    ClientHeight = 208
+    ClientWidth = 350
+    TabOrder = 2
+    object Bevel1: TBevel
+      AnchorSideLeft.Control = Panel1
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = Panel1
+      AnchorSideBottom.Control = Panel1
+      AnchorSideBottom.Side = asrBottom
+      Left = 173
+      Height = 208
+      Top = 0
+      Width = 5
+      Anchors = [akTop, akLeft, akBottom]
+      Shape = bsSpacer
+    end
+    object GroupBox1: TGroupBox
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = Panel1
+      AnchorSideRight.Control = Bevel1
+      AnchorSideBottom.Control = Panel1
+      AnchorSideBottom.Side = asrBottom
+      Left = 0
+      Height = 208
+      Top = 0
+      Width = 173
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      AutoSize = True
+      Caption = 'Length'
+      ClientHeight = 184
+      ClientWidth = 169
+      TabOrder = 0
+      object Label3: TLabel
+        AnchorSideLeft.Control = GroupBox1
+        AnchorSideTop.Control = GroupBox1
+        AnchorSideRight.Control = GroupBox1
+        AnchorSideRight.Side = asrBottom
+        Left = 5
+        Height = 19
+        Top = 5
+        Width = 159
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 5
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 5
+        Caption = 'Label3'
+        ParentColor = False
+      end
+      object Label4: TLabel
+        AnchorSideLeft.Control = GroupBox1
+        AnchorSideTop.Control = LUnitsComboBox
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = GroupBox1
+        AnchorSideRight.Side = asrBottom
+        Left = 5
+        Height = 19
+        Top = 61
+        Width = 159
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 5
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 5
+        Caption = 'Label4'
+        ParentColor = False
+      end
+      object LUnitsComboBox: TComboBox
+        AnchorSideLeft.Control = GroupBox1
+        AnchorSideTop.Control = Label3
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = GroupBox1
+        AnchorSideRight.Side = asrBottom
+        Left = 5
+        Height = 27
+        Top = 29
+        Width = 159
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 5
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 5
+        ItemHeight = 19
+        Style = csDropDownList
+        TabOrder = 0
+      end
+      object LUPrecComboBox: TComboBox
+        AnchorSideLeft.Control = GroupBox1
+        AnchorSideTop.Control = Label4
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = GroupBox1
+        AnchorSideRight.Side = asrBottom
+        Left = 5
+        Height = 27
+        Top = 85
+        Width = 160
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 5
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 4
+        ItemHeight = 19
+        Style = csDropDownList
+        TabOrder = 1
+      end
+      object UnitModeCheckBox: TCheckBox
+        AnchorSideLeft.Control = GroupBox1
+        AnchorSideTop.Control = LUPrecComboBox
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = GroupBox1
+        AnchorSideRight.Side = asrBottom
+        Left = 5
+        Height = 23
+        Top = 117
+        Width = 159
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Around = 5
+        Caption = 'UnitModeCheckBox'
+        TabOrder = 2
+      end
+    end
+    object GroupBox2: TGroupBox
+      AnchorSideLeft.Control = Bevel1
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = Panel1
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = Panel1
+      AnchorSideBottom.Side = asrBottom
+      Left = 178
+      Height = 208
+      Top = 0
+      Width = 172
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      AutoSize = True
+      Caption = 'Angle'
+      ClientHeight = 184
+      ClientWidth = 168
+      TabOrder = 1
+      object Label5: TLabel
+        AnchorSideLeft.Control = GroupBox2
+        AnchorSideTop.Control = GroupBox2
+        AnchorSideRight.Control = GroupBox2
+        AnchorSideRight.Side = asrBottom
+        Left = 5
+        Height = 19
+        Top = 5
+        Width = 158
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 5
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 5
+        Caption = 'Label5'
+        ParentColor = False
+      end
+      object Label6: TLabel
+        AnchorSideLeft.Control = GroupBox2
+        AnchorSideTop.Control = AUnitsComboBox
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = GroupBox2
+        AnchorSideRight.Side = asrBottom
+        Left = 5
+        Height = 19
+        Top = 61
+        Width = 158
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 5
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 5
+        Caption = 'Label6'
+        ParentColor = False
+      end
+      object AUnitsComboBox: TComboBox
+        AnchorSideLeft.Control = GroupBox2
+        AnchorSideTop.Control = Label5
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = GroupBox2
+        AnchorSideRight.Side = asrBottom
+        Left = 5
+        Height = 27
+        Top = 29
+        Width = 158
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 5
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 5
+        ItemHeight = 19
+        Style = csDropDownList
+        TabOrder = 0
+      end
+      object AUPrecComboBox: TComboBox
+        AnchorSideLeft.Control = GroupBox2
+        AnchorSideTop.Control = Label6
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = GroupBox2
+        AnchorSideRight.Side = asrBottom
+        Left = 5
+        Height = 27
+        Top = 85
+        Width = 158
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 5
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 5
+        ItemHeight = 19
+        Style = csDropDownList
+        TabOrder = 1
+      end
+      object AngDirCheckBox: TCheckBox
+        AnchorSideLeft.Control = GroupBox2
+        AnchorSideTop.Control = AUPrecComboBox
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = GroupBox2
+        AnchorSideRight.Side = asrBottom
+        Left = 5
+        Height = 23
+        Top = 117
+        Width = 158
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 5
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 5
+        Caption = 'AngDirCheckBox'
+        TabOrder = 2
+      end
+      object AngleDirectionBitBtn: TBitBtn
+        AnchorSideTop.Control = AngDirCheckBox
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = GroupBox2
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Side = asrBottom
+        Left = 82
+        Height = 29
+        Top = 150
+        Width = 81
+        Anchors = [akTop, akRight]
+        AutoSize = True
+        BorderSpacing.Top = 10
+        BorderSpacing.Right = 5
+        BorderSpacing.Bottom = 5
+        Caption = 'Direction'
+        TabOrder = 3
+      end
+    end
+  end
+  object ButtonPanel1: TButtonPanel
+    Left = 6
+    Height = 37
+    Top = 393
+    Width = 348
+    OKButton.Name = 'OKButton'
+    OKButton.DefaultCaption = True
+    HelpButton.Name = 'HelpButton'
+    HelpButton.DefaultCaption = True
+    CloseButton.Name = 'CloseButton'
+    CloseButton.DefaultCaption = True
+    CancelButton.Name = 'CancelButton'
+    CancelButton.DefaultCaption = True
+    TabOrder = 3
+  end
+end

@@ -358,10 +358,19 @@ begin
         //shared.ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
 end;
 function units_cmd:GDBInteger;
+var
+    _UnitsFormat:TzeUnitsFormat;
 begin
   UnitsWindow:=TUnitsWindow.Create(nil);
-  //SetHeightControl(UnitsWindow,sysvar.INTF.INTF_DefaultControlHeight^);
-  DOShowModal(UnitsWindow);
+  SetHeightControl(UnitsWindow,sysvar.INTF.INTF_DefaultControlHeight^);
+
+  _UnitsFormat:=gdb.GetUnitsFormat;
+
+  if assigned(ShowAllCursorsProc) then
+                                      ShowAllCursorsProc;
+  result:=UnitsWindow.runmodal(_UnitsFormat);
+  if assigned(RestoreAllCursorsProc) then
+                                      RestoreAllCursorsProc;
   Freeandnil(UnitsWindow);
   result:=cmd_ok;
 end;

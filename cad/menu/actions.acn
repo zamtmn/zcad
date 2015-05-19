@@ -60,6 +60,7 @@ action ACN_VIEWRD,View(RD),#RD,Rotate camera down,,CTRL+DOWN
 
 action ACN_SNAPRUNTIME,SnapProperties,magnet.bmp,Run time snap editor,,ALT+S
 
+action ACN_UNITS,Units,#0.0,Units format ...,Units format,
 action ACN_LAYER,Layer,layer.bmp,Layers ...,Layers properties manager,
 action ACN_COLORS,Colors,colors.bmp,Colors ...,Select current color,
 action ACN_TSTYLES,TextStyles,textstyles.bmp,Text styles ...,Text styles properties manager,

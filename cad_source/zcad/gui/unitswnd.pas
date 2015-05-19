@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, Buttons, ButtonPanel;
+  StdCtrls, Buttons, ButtonPanel,
+  gdbase;
 
 type
 
@@ -40,6 +41,7 @@ type
     { private declarations }
   public
     { public declarations }
+    function RunModal(var _UnitsFormat:TzeUnitsFormat):Integer; virtual;
   end;
 
 var
@@ -50,8 +52,19 @@ implementation
 {$R *.lfm}
 
 { TUnitsWindow }
-
-
+function TUnitsWindow.RunModal(var _UnitsFormat:TzeUnitsFormat):Integer;
+begin
+     //
+     // тут на основе _UnitsFormat настраиваем комбики
+     //
+     result:=ShowModal;
+     if result=mrOk then
+     begin
+          //
+          // тут на основе комбиков настраиваем _UnitsFormat ее и вернем
+          //
+     end;
+end;
 
 end.
 

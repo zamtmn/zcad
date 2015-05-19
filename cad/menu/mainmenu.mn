@@ -259,6 +259,7 @@ MainMenuItem View;
   }
 MainMenuItem Format;
   {
+    action ACN_UNITS
     Command Layers (objinsp),SetObjInsp(LAYERS),none,none
     action ACN_LAYER
     MenuItem Text;

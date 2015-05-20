@@ -368,7 +368,7 @@ begin
 
   if assigned(ShowAllCursorsProc) then
                                       ShowAllCursorsProc;
-  result:=UnitsWindow.runmodal(_UnitsFormat);
+  result:=UnitsWindow.runmodal(_UnitsFormat,sysvar.DWG.DWG_InsUnits^);
   if assigned(RestoreAllCursorsProc) then
                                       RestoreAllCursorsProc;
   Freeandnil(UnitsWindow);

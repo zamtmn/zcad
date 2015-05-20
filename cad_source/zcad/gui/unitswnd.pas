@@ -39,9 +39,11 @@ type
 
   private
     { private declarations }
+    LocalUnitsFormat:TzeUnitsFormat
   public
     { public declarations }
     function RunModal(var _UnitsFormat:TzeUnitsFormat):Integer; virtual;
+    procedure UpdateSample; //реализация с меня
   end;
 
 var
@@ -52,18 +54,23 @@ implementation
 {$R *.lfm}
 
 { TUnitsWindow }
+procedure TUnitsWindow.UpdateSample;
+begin
+     //реализация с меня
+     //ты вызываешь эту процедуру после изменения комбобокса и синхронного обновления
+     //LocalUnitsFormat, я здесь на основе LocalUnitsFormat обновляю поле примерного вывода
+end;
 function TUnitsWindow.RunModal(var _UnitsFormat:TzeUnitsFormat):Integer;
 begin
+     LocalUnitsFormat:=_UnitsFormat;
      //
-     // тут на основе _UnitsFormat настраиваем комбики
+     // тут на основе LocalUnitsFormat настраиваем комбики
+     // далее внутри окна в обработчиках поддерживаем
+     // LocalUnitsFormat синхронно с изменениями
      //
      result:=ShowModal;
      if result=mrOk then
-     begin
-          //
-          // тут на основе комбиков настраиваем _UnitsFormat ее и вернем
-          //
-     end;
+                        _UnitsFormat:=LocalUnitsFormat;
 end;
 
 end.

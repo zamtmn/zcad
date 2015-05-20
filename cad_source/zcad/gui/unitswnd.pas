@@ -39,7 +39,7 @@ type
 
   private
     { private declarations }
-    LocalUnitsFormat:TzeUnitsFormat
+    LocalUnitsFormat:TzeUnitsFormat;
   public
     { public declarations }
     function RunModal(var _UnitsFormat:TzeUnitsFormat):Integer; virtual;

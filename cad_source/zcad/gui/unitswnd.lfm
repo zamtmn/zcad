@@ -57,6 +57,30 @@ object UnitsWindow: TUnitsWindow
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Around = 5
       ItemHeight = 19
+      Items.Strings = (
+        'Unspecified'
+        'Inches'
+        'Feet'
+        'Miles'
+        'Millimeters'
+        'Centimeters'
+        'Meters'
+        'Kilometers'
+        'Microinches'
+        'Mils'
+        'Yards'
+        'Angstroms'
+        'Nanometers'
+        'Microns'
+        'Decimeters'
+        'Dekameters'
+        'Hectometers'
+        'Gigameters'
+        'Astronomical units'
+        'Light years'
+        'Parsecs'
+      )
+      OnChange = ChangeInInterface
       Style = csDropDownList
       TabOrder = 0
     end
@@ -204,6 +228,14 @@ object UnitsWindow: TUnitsWindow
         BorderSpacing.Top = 5
         BorderSpacing.Right = 5
         ItemHeight = 19
+        Items.Strings = (
+          'Scientific'
+          'Decimal'
+          'Engineering'
+          'Architectural'
+          'Fractional'
+        )
+        OnChange = ChangeInInterface
         Style = csDropDownList
         TabOrder = 0
       end
@@ -222,6 +254,18 @@ object UnitsWindow: TUnitsWindow
         BorderSpacing.Top = 5
         BorderSpacing.Right = 4
         ItemHeight = 19
+        Items.Strings = (
+          '0'
+          '0.0'
+          '0.00'
+          '0.000'
+          '0.0000'
+          '0.00000'
+          '0.000000'
+          '0.0000000'
+          '0.00000000'
+        )
+        OnChange = ChangeInInterface
         Style = csDropDownList
         TabOrder = 1
       end
@@ -238,6 +282,7 @@ object UnitsWindow: TUnitsWindow
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Around = 5
         Caption = 'UnitModeCheckBox'
+        OnChange = ChangeInInterface
         TabOrder = 2
       end
     end
@@ -307,6 +352,14 @@ object UnitsWindow: TUnitsWindow
         BorderSpacing.Top = 5
         BorderSpacing.Right = 5
         ItemHeight = 19
+        Items.Strings = (
+          'Decimal degrees'
+          'Degrees minutes seconds'
+          'Gradians'
+          'Radians'
+          'Surveyors units'
+        )
+        OnChange = ChangeInInterface
         Style = csDropDownList
         TabOrder = 0
       end
@@ -325,6 +378,18 @@ object UnitsWindow: TUnitsWindow
         BorderSpacing.Top = 5
         BorderSpacing.Right = 5
         ItemHeight = 19
+        Items.Strings = (
+          '0'
+          '0.0'
+          '0.00'
+          '0.000'
+          '0.0000'
+          '0.00000'
+          '0.000000'
+          '0.0000000'
+          '0.00000000'
+        )
+        OnChange = ChangeInInterface
         Style = csDropDownList
         TabOrder = 1
       end
@@ -343,6 +408,7 @@ object UnitsWindow: TUnitsWindow
         BorderSpacing.Top = 5
         BorderSpacing.Right = 5
         Caption = 'AngDirCheckBox'
+        OnChange = ChangeInInterface
         TabOrder = 2
       end
       object AngleDirectionBitBtn: TBitBtn

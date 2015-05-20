@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, Buttons, ButtonPanel,
-  gdbase;
+  gdbase,zemathutils;
 
 type
 
@@ -36,14 +36,18 @@ type
     Label6: TLabel;
     Label7: TLabel;
     Panel1: TPanel;
+    procedure ChangeInInterface(Sender: TObject);//Обработчик onChange комбиков
 
   private
     { private declarations }
     LocalUnitsFormat:TzeUnitsFormat;
+    LocalInsUnits:TInsUnits;
   public
     { public declarations }
-    function RunModal(var _UnitsFormat:TzeUnitsFormat):Integer; virtual;
+    function RunModal(var _UnitsFormat:TzeUnitsFormat; var _InsUnits:TInsUnits):Integer; virtual;
     procedure UpdateSample; //реализация с меня
+    procedure LocalUnitsFormat2Intterface; //загоняем всё из LocalUnitsFormat в комбобоксы
+    procedure Intterface2LocalUnitsFormat; //собираем всё в LocalUnitsFormat из комбобоксов
   end;
 
 var
@@ -54,23 +58,75 @@ implementation
 {$R *.lfm}
 
 { TUnitsWindow }
+procedure TUnitsWindow.Intterface2LocalUnitsFormat;
+begin
+     //собираем всё в LocalUnitsFormat из комбобоксов
+     if LUnitsComboBox.ItemIndex<>-1 then
+       LocalUnitsFormat.uformat:=TLUnits(LUnitsComboBox.ItemIndex);
+     if LUPrecComboBox.ItemIndex<>-1 then
+       LocalUnitsFormat.uprec:=TUPrec(LUPrecComboBox.ItemIndex);
+     if AUnitsComboBox.ItemIndex<>-1 then
+       LocalUnitsFormat.aformat:=TAUnits(AUnitsComboBox.ItemIndex);
+     if AUPrecComboBox.ItemIndex<>-1 then
+       LocalUnitsFormat.aprec:=TUPrec(AUPrecComboBox.ItemIndex);
+     if UnitModeCheckBox.Checked then
+                                     LocalUnitsFormat.umode:=UMWithSpaces
+                                 else
+                                     LocalUnitsFormat.umode:=UMWithoutSpaces;
+     if AngDirCheckBox.Checked then
+                                   LocalUnitsFormat.adir:=ADClockwise
+                               else
+                                   LocalUnitsFormat.adir:=ADCounterClockwise;
+     if ComboBox5.ItemIndex<>-1 then
+       LocalInsUnits:=TInsUnits(ComboBox5.ItemIndex);
+end;
+
+procedure TUnitsWindow.LocalUnitsFormat2Intterface;
+begin
+     //загоняем всё из LocalUnitsFormat в комбобоксы
+     LUnitsComboBox.ItemIndex:=ord(LocalUnitsFormat.uformat);
+     LUPrecComboBox.ItemIndex:=ord(LocalUnitsFormat.uprec);
+     AUnitsComboBox.ItemIndex:=ord(LocalUnitsFormat.aformat);
+     AUPrecComboBox.ItemIndex:=ord(LocalUnitsFormat.aprec);
+     if LocalUnitsFormat.umode=UMWithSpaces then
+                                                UnitModeCheckBox.Checked:=true
+                                            else
+                                                UnitModeCheckBox.Checked:=false;
+     if LocalUnitsFormat.adir=ADClockwise then
+                                              AngDirCheckBox.Checked:=true
+                                          else
+                                              AngDirCheckBox.Checked:=false;
+
+     ComboBox5.ItemIndex:=ord(LocalInsUnits);
+end;
 procedure TUnitsWindow.UpdateSample;
 begin
      //реализация с меня
-     //ты вызываешь эту процедуру после изменения комбобокса и синхронного обновления
-     //LocalUnitsFormat, я здесь на основе LocalUnitsFormat обновляю поле примерного вывода
+     //здесь на основе LocalUnitsFormat обновляю поле примерного вывода
+     Label1.Caption:=sysutils.Format('Coord(%s);Coeff(%s);Angle(%s)',
+                                     [zeDimensionToString(123.456781234,LocalUnitsFormat),
+                                      zeNonDimensionToString(123.456781234,LocalUnitsFormat),
+                                      zeAngleToString(pi/2,LocalUnitsFormat)]);
 end;
-function TUnitsWindow.RunModal(var _UnitsFormat:TzeUnitsFormat):Integer;
+
+procedure TUnitsWindow.ChangeInInterface(Sender: TObject);
+begin
+     //Обработчик onChange комбиков
+     Intterface2LocalUnitsFormat;
+     UpdateSample;
+end;
+
+function TUnitsWindow.RunModal(var _UnitsFormat:TzeUnitsFormat; var _InsUnits:TInsUnits):Integer;
 begin
      LocalUnitsFormat:=_UnitsFormat;
-     //
-     // тут на основе LocalUnitsFormat настраиваем комбики
-     // далее внутри окна в обработчиках поддерживаем
-     // LocalUnitsFormat синхронно с изменениями
-     //
+     LocalInsUnits:=_InsUnits;
+     LocalUnitsFormat2Intterface;//загоняем всё из LocalUnitsFormat в комбобоксы;
      result:=ShowModal;
      if result=mrOk then
+                        begin
                         _UnitsFormat:=LocalUnitsFormat;
+                        _InsUnits:=LocalInsUnits;
+                        end;
 end;
 
 end.

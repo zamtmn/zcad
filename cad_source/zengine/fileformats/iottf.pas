@@ -46,6 +46,7 @@ begin
     result:=true;
     pttf^.ftFont.Hinted:=false;
     pttf^.ftFont.Name := name;
+    pttf^.ftFont.TextWidth('');//It's just a guarantee font loading. I do not need to calculate the any width
     pttf^.ftFont.SizeInPoints:={pttf^.ftFont.SizeInPoints*10}10000;
     pf.font.unicode:=true;
     //k:=1;

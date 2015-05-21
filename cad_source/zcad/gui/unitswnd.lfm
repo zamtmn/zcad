@@ -24,7 +24,7 @@ object UnitsWindow: TUnitsWindow
     BorderSpacing.Left = 5
     BorderSpacing.Top = 5
     BorderSpacing.Right = 5
-    Caption = 'GroupBox3'
+    Caption = 'Insertion scale'
     ClientHeight = 61
     ClientWidth = 346
     TabOrder = 0
@@ -41,7 +41,7 @@ object UnitsWindow: TUnitsWindow
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
       BorderSpacing.Right = 5
-      Caption = 'Label7'
+      Caption = 'Units to scale inserted content:'
       ParentColor = False
     end
     object ComboBox5: TComboBox
@@ -97,7 +97,7 @@ object UnitsWindow: TUnitsWindow
     Width = 350
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 5
-    Caption = 'GroupBox4'
+    Caption = 'Sample output'
     ClientHeight = 65
     ClientWidth = 346
     TabOrder = 1
@@ -193,7 +193,7 @@ object UnitsWindow: TUnitsWindow
         BorderSpacing.Left = 5
         BorderSpacing.Top = 5
         BorderSpacing.Right = 5
-        Caption = 'Label3'
+        Caption = 'Type:'
         ParentColor = False
       end
       object Label4: TLabel
@@ -210,7 +210,7 @@ object UnitsWindow: TUnitsWindow
         BorderSpacing.Left = 5
         BorderSpacing.Top = 5
         BorderSpacing.Right = 5
-        Caption = 'Label4'
+        Caption = 'Precision:'
         ParentColor = False
       end
       object LUnitsComboBox: TComboBox
@@ -281,7 +281,7 @@ object UnitsWindow: TUnitsWindow
         Width = 159
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Around = 5
-        Caption = 'UnitModeCheckBox'
+        Caption = 'Unit mode'
         OnChange = ChangeInInterface
         TabOrder = 2
       end
@@ -317,7 +317,7 @@ object UnitsWindow: TUnitsWindow
         BorderSpacing.Left = 5
         BorderSpacing.Top = 5
         BorderSpacing.Right = 5
-        Caption = 'Label5'
+        Caption = 'Type:'
         ParentColor = False
       end
       object Label6: TLabel
@@ -334,7 +334,7 @@ object UnitsWindow: TUnitsWindow
         BorderSpacing.Left = 5
         BorderSpacing.Top = 5
         BorderSpacing.Right = 5
-        Caption = 'Label6'
+        Caption = 'Precision:'
         ParentColor = False
       end
       object AUnitsComboBox: TComboBox
@@ -407,7 +407,7 @@ object UnitsWindow: TUnitsWindow
         BorderSpacing.Left = 5
         BorderSpacing.Top = 5
         BorderSpacing.Right = 5
-        Caption = 'AngDirCheckBox'
+        Caption = 'Clockwise'
         OnChange = ChangeInInterface
         TabOrder = 2
       end
@@ -445,5 +445,6 @@ object UnitsWindow: TUnitsWindow
     CancelButton.Name = 'CancelButton'
     CancelButton.DefaultCaption = True
     TabOrder = 3
+    ShowButtons = [pbOK, pbCancel, pbHelp]
   end
 end

@@ -77,6 +77,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     function GetDefaultDrawingName:GDBString;
                     function FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
                     function GetUnitsFormat:TzeUnitsFormat;
+                    procedure SetUnitsFormat(f:TzeUnitsFormat);
               end;
 {EXPORT-}
 var GDB: GDBDescriptor;
@@ -130,7 +131,11 @@ begin
                         else
                             result:=CreateDefaultUnitsFormat;
 end;
-
+procedure GDBDescriptor.SetUnitsFormat(f:TzeUnitsFormat);
+begin
+     if CurrentDWG<>nil then
+                            CurrentDWG.SetUnitsFormat(f);
+end;
 function GDBDescriptor.FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
 var
   ir:itrec;

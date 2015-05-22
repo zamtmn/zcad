@@ -38,6 +38,7 @@ TAbstractDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TDrawingDef)
                        function StoreOldCamerapPos:Pointer;virtual;abstract;
                        procedure StoreNewCamerapPos(command:Pointer);virtual;abstract;
                        function GetUnitsFormat:TzeUnitsFormat;virtual;abstract;
+                       procedure SetUnitsFormat(f:TzeUnitsFormat);virtual;abstract;
                  end;
 {EXPORT-}
 implementation

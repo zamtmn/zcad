@@ -1,10 +1,10 @@
 object UnitsWindow: TUnitsWindow
   Left = 664
-  Height = 436
+  Height = 476
   Top = 185
   Width = 360
-  Caption = 'Form1'
-  ClientHeight = 436
+  Caption = 'Drawing units'
+  ClientHeight = 476
   ClientWidth = 360
   Constraints.MinHeight = 360
   Constraints.MinWidth = 360
@@ -91,14 +91,15 @@ object UnitsWindow: TUnitsWindow
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = ButtonPanel1
     Left = 5
-    Height = 89
+    Height = 121
     Top = 308
     Width = 350
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 5
     Caption = 'Sample output'
-    ClientHeight = 65
+    ClientHeight = 97
     ClientWidth = 346
     TabOrder = 1
     object Label1: TLabel
@@ -432,10 +433,14 @@ object UnitsWindow: TUnitsWindow
     end
   end
   object ButtonPanel1: TButtonPanel
-    Left = 6
+    AnchorSideTop.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 5
     Height = 37
-    Top = 393
-    Width = 348
+    Top = 434
+    Width = 350
+    BorderSpacing.Around = 5
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     HelpButton.Name = 'HelpButton'

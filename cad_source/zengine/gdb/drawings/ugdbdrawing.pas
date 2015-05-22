@@ -65,6 +65,7 @@ TDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
            function GetDWGUnits:{PTUnitManager}pointer;virtual;
            procedure AddBlockFromDBIfNeed(name:GDBString);virtual;
            function GetUnitsFormat:TzeUnitsFormat;virtual;
+           procedure SetUnitsFormat(f:TzeUnitsFormat);virtual;
      end;
 {EXPORT-}
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
@@ -106,6 +107,24 @@ begin
                                                     else
                                                         result.RemoveTrailingZeros:=true;
 end;
+procedure TDrawing.SetUnitsFormat(f:TzeUnitsFormat);
+begin
+     if Assigned(sysvar.DWG.DWG_AngBase) then
+                                            sysvar.DWG.DWG_AngBase^:=f.abase;
+     if Assigned(sysvar.DWG.DWG_AngDir) then
+                                            sysvar.DWG.DWG_AngDir^:=f.adir;
+     if Assigned(sysvar.DWG.DWG_AUnits) then
+                                            sysvar.DWG.DWG_AUnits^:=f.aformat;
+     if Assigned(sysvar.DWG.DWG_AUPrec) then
+                                            sysvar.DWG.DWG_AUPrec^:=f.aprec;
+     if Assigned(sysvar.DWG.DWG_LUnits) then
+                                            sysvar.DWG.DWG_LUnits^:=f.uformat;
+     if Assigned(sysvar.DWG.DWG_LUPrec) then
+                                            sysvar.DWG.DWG_LUPrec^:=f.uprec;
+     if Assigned(sysvar.DWG.DWG_UnitMode) then
+                                            sysvar.DWG.DWG_UnitMode^:=f.umode;
+end;
+
 procedure TDrawing.SetCurrentDWG();
 begin
   gdb.SetCurrentDWG(@self);

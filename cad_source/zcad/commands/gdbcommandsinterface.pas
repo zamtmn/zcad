@@ -369,6 +369,12 @@ begin
   if assigned(ShowAllCursorsProc) then
                                       ShowAllCursorsProc;
   result:=UnitsWindow.runmodal(_UnitsFormat,sysvar.DWG.DWG_InsUnits^);
+  if result=mrok then
+                     begin
+                       gdb.SetUnitsFormat(_UnitsFormat);
+                       if assigned(ReturnToDefaultProc)then
+                                                           ReturnToDefaultProc(gdb.GetUnitsFormat);
+                     end;
   if assigned(RestoreAllCursorsProc) then
                                       RestoreAllCursorsProc;
   Freeandnil(UnitsWindow);

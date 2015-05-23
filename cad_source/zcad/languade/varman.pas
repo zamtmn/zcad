@@ -178,7 +178,7 @@ TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
                   InterfaceVariables: varmanager;
                   constructor init(nam:GDBString);
                   destructor done;virtual;
-                  procedure CreateVariable(varname,vartype:GDBString);virtual;
+                  function CreateVariable(varname,vartype:GDBString):GDBPointer;virtual;
                   function FindVariable(varname:GDBString):pvardesk;virtual;
                   function FindVariableByInstance(_Instance:GDBPointer):pvardesk;virtual;
                   function FindValue(varname:GDBString):GDBPointer;virtual;
@@ -261,6 +261,7 @@ begin
                                       result:=value;
 end;
 begin
+     result:=rect(0,0,100,100);
      pint:=SavedUnit.FindValue(name+'_Left');
      if assigned(pint)then
                           result.Left:=pint^;
@@ -279,19 +280,28 @@ end;
 procedure StoreBoundsToSavedUnit(name:string;tr:Trect);
 var
    pint:PGDBInteger;
+   vn:gdbstring;
 begin
-     pint:=SavedUnit.FindValue(name+'_Left');
-     if assigned(pint)then
-                          pint^:=tr.Left;
-     pint:=SavedUnit.FindValue(name+'_Top');
-     if assigned(pint)then
-                          pint^:=tr.Top;
-     pint:=SavedUnit.FindValue(name+'_Width');
-     if assigned(pint)then
-                          pint^:=tr.Right-tr.Left;
-     pint:=SavedUnit.FindValue(name+'_Height');
-     if assigned(pint)then
-                          pint^:=tr.Bottom-tr.Top;
+     vn:=name+'_Left';
+     pint:=SavedUnit.FindValue(vn);
+     if not assigned(pint)then
+                              pint:=SavedUnit.CreateVariable(vn,'GDBInteger');
+     pint^:=tr.Left;
+     vn:=name+'_Top';
+     pint:=SavedUnit.FindValue(vn);
+     if not assigned(pint)then
+                              pint:=SavedUnit.CreateVariable(vn,'GDBInteger');
+     pint^:=tr.Top;
+     vn:=name+'_Width';
+     pint:=SavedUnit.FindValue(vn);
+     if not assigned(pint)then
+                              pint:=SavedUnit.CreateVariable(vn,'GDBInteger');
+     pint^:=tr.Right-tr.Left;
+     vn:=name+'_Height';
+     pint:=SavedUnit.FindValue(vn);
+     if not assigned(pint)then
+                              pint:=SavedUnit.CreateVariable(vn,'GDBInteger');
+     pint^:=tr.Bottom-tr.Top;
 end;
 procedure TSimpleUnit.CopyTo;
 var
@@ -1251,7 +1261,7 @@ begin
                             until p=nil;
      end;
 end;
-procedure tsimpleunit.createvariable(varname,vartype:GDBString);
+function tsimpleunit.createvariable(varname,vartype:GDBString):GDBPointer;
 var //t:PUserTypeDescriptor;
     //pvd:pvardesk;
     vd:vardesk;
@@ -1264,6 +1274,7 @@ begin
      vd.ptd:=t;}
      setvardesc(vd, varname,'', vartype);
      InterfaceVariables.createvariable(varname,vd);
+     result:=vd.data.Instance;
 end;
 constructor tunit.init(nam: GDBString);
 begin

@@ -111,14 +111,14 @@ end;
 constructor GDBObjSolid.init;
 begin
   inherited init(own,layeraddres, lw);
-  vp.ID := GDB3DfaceID;
+  vp.ID := GDBSolidID;
   PInOCS[0]:= p;
 end;
 constructor GDBObjSolid.initnul;
 begin
   inherited initnul(owner);
   bp.ListPos.Owner:=owner;
-  vp.ID := GDB3DfaceID;
+  vp.ID := GDBSolidID;
   PInOCS[1]:= NulVertex;
 end;
 

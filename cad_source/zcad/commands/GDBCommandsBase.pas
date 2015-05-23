@@ -972,11 +972,12 @@ function Regen_com(operands:TCommandOperands):TCommandResult;
 var //i: GDBInteger;
     pv:pGDBObjEntity;
         ir:itrec;
-    drawing:PTDrawingDef;
+    drawing:PTSimpleDrawing;
     DC:TDrawContext;
 begin
   if assigned(StartLongProcessProc) then StartLongProcessProc(gdb.GetCurrentROOT.ObjArray.count,'Regenerate drawing');
   drawing:=gdb.GetCurrentDwg;
+  drawing.wa.CalcOptimalMatrix;
   dc:=gdb.GetCurrentDwg^.CreateDrawingRC;
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then

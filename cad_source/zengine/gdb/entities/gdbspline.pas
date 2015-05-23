@@ -203,7 +203,7 @@ begin
   OGLSM.NurbsProperty(nurbsobj,GLU_NURBS_MODE_EXT,GLU_NURBS_TESSELLATOR_EXT);
   OGLSM.NurbsProperty(nurbsobj,GLU_SAMPLING_TOLERANCE,10);
   OGLSM.NurbsProperty(nurbsobj,GLU_DISPLAY_MODE,{GLU_FILL}GLU_POINT);
-  //gluNurbsProperty(nurbsobj,GLU_AUTO_LOAD_MATRIX, GL_TRUE);
+  OGLSM.NurbsProperty(nurbsobj,GLU_AUTO_LOAD_MATRIX, GL_TRUE);
   OGLSM.NurbsCallback(nurbsobj,GLU_NURBS_BEGIN_EXT,@NurbsBeginCallBack);
   OGLSM.NurbsCallback(nurbsobj,GLU_NURBS_END_EXT,@NurbsEndCallBack);
   OGLSM.NurbsCallback(nurbsobj,GLU_NURBS_VERTEX_EXT,@NurbsVertexCallBack);

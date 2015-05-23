@@ -613,12 +613,12 @@ begin
 end;
 procedure TZGLOpenGLDrawer.DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
 begin
-  oglsm.myglbegin(GL_TRIANGLE_STRIP);
+  oglsm.myglbegin({GL_TRIANGLE_STRIP}GL_QUADS);
   oglsm.myglNormal3dV(@normal);
   oglsm.myglVertex3dV(@p1);
   oglsm.myglVertex3dV(@p2);
-  oglsm.myglVertex3dV(@p3);
   oglsm.myglVertex3dV(@p4);
+  oglsm.myglVertex3dV(@p3);
   oglsm.myglend;
 end;
 procedure TZGLOpenGLDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);

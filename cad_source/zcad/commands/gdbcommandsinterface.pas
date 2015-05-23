@@ -361,24 +361,29 @@ function units_cmd:GDBInteger;
 var
     _UnitsFormat:TzeUnitsFormat;
 begin
-  UnitsWindow:=TUnitsWindow.Create(nil);
-  SetHeightControl(UnitsWindow,sysvar.INTF.INTF_DefaultControlHeight^);
+   if not assigned(UnitsWindow)then
+   begin
+       UnitsWindow:=TUnitsWindow.Create(nil);
+       SetHeightControl(UnitsWindow,sysvar.INTF.INTF_DefaultControlHeight^);
+       UnitsWindow.BoundsRect:=GetBoundsFromSavedUnit('UnitsWND')
+   end;
 
-  _UnitsFormat:=gdb.GetUnitsFormat;
+   _UnitsFormat:=gdb.GetUnitsFormat;
 
-  if assigned(ShowAllCursorsProc) then
-                                      ShowAllCursorsProc;
-  result:=UnitsWindow.runmodal(_UnitsFormat,sysvar.DWG.DWG_InsUnits^);
-  if result=mrok then
-                     begin
-                       gdb.SetUnitsFormat(_UnitsFormat);
-                       if assigned(ReturnToDefaultProc)then
-                                                           ReturnToDefaultProc(gdb.GetUnitsFormat);
-                     end;
-  if assigned(RestoreAllCursorsProc) then
-                                      RestoreAllCursorsProc;
-  Freeandnil(UnitsWindow);
-  result:=cmd_ok;
+   if assigned(ShowAllCursorsProc) then
+                                       ShowAllCursorsProc;
+   result:=UnitsWindow.runmodal(_UnitsFormat,sysvar.DWG.DWG_InsUnits^);
+   if result=mrok then
+                      begin
+                        gdb.SetUnitsFormat(_UnitsFormat);
+                        if assigned(ReturnToDefaultProc)then
+                                                            ReturnToDefaultProc(gdb.GetUnitsFormat);
+                      end;
+   if assigned(RestoreAllCursorsProc) then
+                                       RestoreAllCursorsProc;
+   StoreBoundsToSavedUnit('UnitsWND',UnitsWindow.BoundsRect);
+   Freeandnil(UnitsWindow);
+   result:=cmd_ok;
 end;
 function layer_cmd:GDBInteger;
 begin

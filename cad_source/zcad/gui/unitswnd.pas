@@ -125,7 +125,6 @@ type
     GroupBox3: TGroupBox;
     GroupBox4: TGroupBox;
     Label1: TLabel;
-    Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
@@ -231,10 +230,10 @@ procedure TUnitsWindow.UpdateSample;
 begin
      //реализация с меня
      //здесь на основе LocalUnitsFormat обновляю поле примерного вывода
-     Label1.Caption:=sysutils.Format('Coord(%s);Coeff(%s);Angle(%s)',
-                                     [zeDimensionToString(123.456781234,LocalUnitsFormat),
-                                      zeNonDimensionToString(123.456781234,LocalUnitsFormat),
-                                      zeAngleToString(pi/2,LocalUnitsFormat)]);
+     Label1.Caption:=sysutils.Format('Coords: %s,%s,%s'#13#10'Factor: %s'#13#10'Angle: %s',
+                                     [zeDimensionToString(1.5,LocalUnitsFormat),zeDimensionToString(2.00390625,LocalUnitsFormat),zeDimensionToString(0,LocalUnitsFormat),
+                                      zeNonDimensionToString(2.00390625,LocalUnitsFormat),
+                                      zeAngleToString(pi/4,LocalUnitsFormat)]);
 end;
 
 procedure TUnitsWindow.ChangeInInterface(Sender: TObject);
@@ -249,6 +248,8 @@ begin
      LocalUnitsFormat:=_UnitsFormat;
      LocalInsUnits:=_InsUnits;
      LocalUnitsFormat2Intterface;//загоняем всё из LocalUnitsFormat в комбобоксы;
+     SetLUprecFromLUnits;
+     SetAUprecFromAUnits;
      result:=ShowModal;
      if result=mrOk then
                         begin

@@ -74,6 +74,7 @@ uses
    function Regen_com(operands:TCommandOperands):TCommandResult;
    function Load_Merge(Operands:pansichar;LoadMode:TLoadOpt):GDBInteger;
    function Merge_com(operands:TCommandOperands):TCommandResult;
+   procedure ReCreateClipboardDWG;
 const
      ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
 //var DWGPageCxMenu:pzpopupmenu;
@@ -1079,37 +1080,38 @@ begin
 
     //memsubstr.free;
 end;
+procedure ReCreateClipboardDWG;
+begin
+  ClipboardDWG.done;
+  ClipboardDWG:=gdb.CreateDWG('*rtl/dwg/DrawingVars.pas','');
+  //ClipboardDWG.DimStyleTable.AddItem('Standart',pds);
+end;
 function CopyClip_com(operands:TCommandOperands):TCommandResult;
-var //res:longbool;
-    //uFormat:longword;
-
-//    lpszFormatName:string[200];
-//    hData:THANDLE;
-    //pbuf:pchar;
-    //hgBuffer:HGLOBAL;
-
-//    s,suni:gdbstring;
-//    I:gdbinteger;
-      {tv,}pobj: pGDBObjEntity;
-      ir:itrec;
-      DC:TDrawContext;
+var
+   pobj: pGDBObjEntity;
+   ir:itrec;
+   DC:TDrawContext;
+   NeedReCreateClipboardDWG:boolean;
 begin
    ClipboardDWG.pObjRoot.ObjArray.cleareraseobj;
    dc:=gdb.GetCurrentDwg^.CreateDrawingRC;
+   NeedReCreateClipboardDWG:=true;
    pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
    if pobj<>nil then
    repeat
           begin
               if pobj.selected then
               begin
+                   if NeedReCreateClipboardDWG then
+                                                   begin
+                                                        ReCreateClipboardDWG;
+                                                        NeedReCreateClipboardDWG:=false;
+                                                   end;
                 gdb.CopyEnt(gdb.GetCurrentDWG,ClipboardDWG,pobj).Formatentity(gdb.GetCurrentDWG^,dc);
               end;
           end;
           pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
    until pobj=nil;
-
-
-
 
    copytoclipboard;
 

@@ -2064,10 +2064,11 @@ var
     //I:gdbinteger;
       tv,pobj: pGDBObjEntity;
       DC:TDrawContext;
+      NeedReCreateClipboardDWG:boolean;
 begin
 
       //gdb.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
-
+  NeedReCreateClipboardDWG:=true;
   if (button and MZW_LBUTTON)<>0 then
   begin
       ClipboardDWG^.pObjRoot^.ObjArray.cleareraseobj;
@@ -2085,6 +2086,11 @@ begin
           begin
               if pobj^.selected then
               begin
+                if NeedReCreateClipboardDWG then
+                                                 begin
+                                                      ReCreateClipboardDWG;
+                                                      NeedReCreateClipboardDWG:=false;
+                                                 end;
                 tv:=gdb.CopyEnt(gdb.GetCurrentDWG,ClipboardDWG,pobj);
                 if tv^.IsHaveLCS then
                                     PGDBObjWithLocalCS(tv)^.CalcObjMatrix;

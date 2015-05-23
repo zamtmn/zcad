@@ -103,35 +103,20 @@ object UnitsWindow: TUnitsWindow
     ClientWidth = 346
     TabOrder = 1
     object Label1: TLabel
-      AnchorSideLeft.Control = GroupBox4
-      AnchorSideTop.Control = GroupBox4
-      AnchorSideRight.Control = GroupBox4
-      AnchorSideRight.Side = asrBottom
       Left = 5
-      Height = 19
+      Height = 92
       Top = 5
       Width = 336
+      Align = alClient
+      Alignment = taCenter
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
       BorderSpacing.Right = 5
-      Caption = '-'
+      Caption = 'Sample output'
+      Layout = tlCenter
       ParentColor = False
-    end
-    object Label2: TLabel
-      AnchorSideLeft.Control = GroupBox4
-      AnchorSideTop.Control = Label1
-      AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Control = GroupBox4
-      AnchorSideRight.Side = asrBottom
-      Left = 5
-      Height = 19
-      Top = 29
-      Width = 336
-      Anchors = [akTop, akLeft, akRight]
-      BorderSpacing.Around = 5
-      Caption = '-'
-      ParentColor = False
+      WordWrap = True
     end
   end
   object Panel1: TPanel

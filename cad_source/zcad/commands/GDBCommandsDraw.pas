@@ -2405,6 +2405,7 @@ var //oldi, newi, i: GDBInteger;
 begin
   if fixentities then
   gdb.GetCurrentDWG^.SelObjArray.freeclones;
+  gdb.GetCurrentDWG^.wa.CalcOptimalMatrix;
   fixentities:=false;
   if gdb.GetCurrentDWG^.wa.param.startgluepoint<>nil then
   if gdb.GetCurrentDWG^.wa.param.startgluepoint^.pobject<>nil then

@@ -584,7 +584,7 @@ begin
   //shx.DrawNiceGeometry;
   shx.DrawGeometry(rc);
   if Triangles.Count>0 then
-  Triangles.DrawGeometry;
+  Triangles.DrawGeometry(rc);
 end;
 procedure ZGLGeometry.drawNicegeometry;
 begin
@@ -599,7 +599,7 @@ begin
   if shx.Count>0 then
   shx.DrawNiceGeometry;
   if Triangles.Count>0 then
-  Triangles.DrawGeometry;
+  Triangles.DrawGeometry(rc);
 end;
 procedure ZGLGeometry.Clear;
 begin

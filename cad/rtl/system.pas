@@ -1323,11 +1323,12 @@ TOSMode=packed record
                    Instance: GDBPointer;
                    PTD:GDBPointer;
              end;
+  TVariableAttributes=GDBInteger;
   vardesk =packed  record
     name: GDBString;
     username: GDBString;
     data: TTypedData;
-    attrib:GDBInteger;
+    attrib:TVariableAttributes;
   end;
 ptypemanagerdef=^typemanagerdef;
 typemanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -1392,7 +1393,7 @@ TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
                   InterfaceVariables: varmanager;
                   constructor init(nam:GDBString);
                   destructor done;virtual;abstract;
-                  procedure CreateVariable(varname,vartype:GDBString);virtual;abstract;
+                  function CreateVariable(varname,vartype:GDBString):GDBPointer;virtual;abstract;
                   function FindVariable(varname:GDBString):pvardesk;virtual;abstract;
                   function FindVariableByInstance(_Instance:GDBPointer):pvardesk;virtual;abstract;
                   function FindValue(varname:GDBString):GDBPointer;virtual;abstract;
@@ -3501,6 +3502,8 @@ TAbstractDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TDrawingDef)
                        function GetChangeStampt:GDBBoolean;virtual;abstract;
                        function StoreOldCamerapPos:Pointer;virtual;abstract;
                        procedure StoreNewCamerapPos(command:Pointer);virtual;abstract;
+                       function GetUnitsFormat:TzeUnitsFormat;virtual;abstract;
+                       procedure SetUnitsFormat(f:TzeUnitsFormat);virtual;abstract;
                  end;
 //Generate on E:\zcad\cad_source\zengine\gdb\drawings\ugdbsimpledrawing.pas
 PTSimpleDrawing=^TSimpleDrawing;
@@ -3601,6 +3604,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     function GetDefaultDrawingName:GDBString;
                     function FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
                     function GetUnitsFormat:TzeUnitsFormat;
+                    procedure SetUnitsFormat(f:TzeUnitsFormat);
               end;
 //Generate on E:\zcad\cad_source\zcad\gui\odjectinspector\zcobjectinspectorwrapper.pas
   TWrapper2ObjInsp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -3621,7 +3625,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                 SummaryUnit:TObjectUnit;(*'Summary'*)
                 ObjIDVector:GDBPointer;(*hidden_in_objinsp*)
                 ObjID2Counter:GDBPointer;(*hidden_in_objinsp*)
-                SavezeUnitsFormat:TzeUnitsFormat;
+                SavezeUnitsFormat:TzeUnitsFormat;(*hidden_in_objinsp*)
                 procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
                 procedure CreateUnit(const f:TzeUnitsFormat;_GetEntsTypes:boolean=true);virtual;abstract;
                 procedure GetEntsTypes;virtual;abstract;

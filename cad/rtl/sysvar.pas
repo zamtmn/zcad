@@ -173,8 +173,8 @@ begin
   RD_MaxRenderTime:=0;
   RD_Light:=False;
   RD_VSync:=T3SB_Fale;
-  RD_ID_Enabled:=True;
-  RD_ID_MaxDegradationFactor:=15.0;
+  RD_ID_Enabled:=False;
+  RD_ID_MaxDegradationFactor:=0.0;
   RD_ID_PrefferedRenderTime:=20;
   RD_SpatialNodesDepth:=16;
   RD_SpatialNodeCount:=-1;

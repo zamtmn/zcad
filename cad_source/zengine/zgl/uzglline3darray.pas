@@ -19,7 +19,7 @@
 unit uzglline3darray;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
+uses gdbdrawcontext,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
 geometry;
 type
 {Export+}
@@ -29,7 +29,7 @@ ZGLLine3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenAr
                 {function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
                 function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;
                 function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;}
-                procedure DrawGeometry;virtual;
+                procedure DrawGeometry(var rc:TDrawContext);virtual;
                 {procedure DrawGeometry2;virtual;
                 procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;}
              end;

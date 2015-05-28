@@ -51,10 +51,10 @@ GDBObjAbstractText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlainWithOX)
                          textprop:GDBTextProp;(*saved_to_shd*)
                          P_drawInOCS:GDBvertex;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
                          DrawMatrix:DMatrix4D;(*oi_readonly*)(*hidden_in_objinsp*)
-                         Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
+                         //Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
                          procedure CalcObjMatrix;virtual;
                          procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                         procedure SimpleDrawGeometry;virtual;
+                         procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
                          procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                          function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
                          function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
@@ -224,7 +224,7 @@ begin
                                                              exit;
                                                         end;
 
-    if Vertex3D_in_WCS_Array.CalcTrueInFrustum (mf)<>IREmpty
+    if geom.SHX.CalcTrueInFrustum (mf)<>IREmpty
                                                             then
                                                                 result:=true
                                                             else
@@ -340,7 +340,7 @@ begin
       result:=CalcOutBound4VInFrustum(outbound,frustum);
       if result<>IRPartially then
                                  exit;
-      result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum);
+      result:=geom.SHX.CalcTrueInFrustum(frustum);
 end;
 procedure GDBObjAbstractText.Renderfeedback;
 var //pm:DMatrix4D;
@@ -423,15 +423,13 @@ begin
 end;
 procedure GDBObjAbstractText.SimpleDrawGeometry;
 begin
-     Vertex3D_in_WCS_Array.simpledrawgeometry(1);
+     geom.SHX.simpledrawgeometry(dc,1);
 end;
 
 procedure GDBObjAbstractText.DrawGeometry;
 var
    PanObjectDegradation:boolean;
 begin
-  //exit;
-  //oglsm.myglpointsize(1);
   dc.subrender := dc.subrender + 1;
   if assigned(sysvar.RD.RD_PanObjectDegradation)then
                                                     PanObjectDegradation:=sysvar.RD.RD_PanObjectDegradation^
@@ -449,13 +447,13 @@ begin
                                                                                    //Vertex3D_in_WCS_Array.simpledrawgeometry({_lod}3)
                                                                                    //simpledrawgeometry
                                                                                    begin
-                                                                                   Vertex3D_in_WCS_Array.drawgeometry;
+                                                                                   //geom.SHX.drawgeometry;
                                                                                    geom.DrawGeometry(DC);
                                                                                    end
                                                                                else
                                                                                    //Vertex3D_in_WCS_Array.drawgeometry;
                                                                                    //Vertex3D_in_WCS_Array.simpledrawgeometry(_lod);
-                                                                                   simpledrawgeometry;
+                                                                                   simpledrawgeometry(dc);
                                                                                      {begin
                                                                                            myglbegin(gl_line_loop);
                                                                                            myglvertex3dv(@outbound[0]);

@@ -46,7 +46,7 @@ GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
                  function GetObjTypeName:GDBString;virtual;
                  destructor done;virtual;
 
-                 procedure SimpleDrawGeometry;virtual;
+                 procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
                  procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;
 
                  //procedure CalcObjMatrix;virtual;
@@ -71,9 +71,9 @@ end;
 procedure GDBObjMText.SimpleDrawGeometry;
 begin
      if self.text.count=1 then
-                              Vertex3D_in_WCS_Array.simpledrawgeometry(1)
+                              geom.SHX.simpledrawgeometry(dc,1)
                           else
-                              Vertex3D_in_WCS_Array.simpledrawgeometry(2);
+                              geom.SHX.simpledrawgeometry(dc,2);
 end;
 function GDBObjMText.GetObjTypeName;
 begin
@@ -473,6 +473,8 @@ begin
 end;
 procedure GDBObjMText.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 begin
+  Geom.Clear;
+
   formatcontent(drawing);
   calcobjmatrix;
   CalcGabarit(drawing);
@@ -653,7 +655,7 @@ begin
   pfont:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont;
   pl.init({$IFDEF DEBUGBUILD}'{E44FB0DD-3556-4279-8845-5EA005F302DB}',{$ENDIF}10);
   ispl:=false;
-  Vertex3D_in_WCS_Array.clear;
+  geom.SHX.clear;
   Geom.Triangles.clear;
 
   minx:=+infinity;
@@ -738,7 +740,7 @@ begin
     begin
     //matr:=matrixmultiply(matr,objmatrix);
 
-      pfont.CreateSymbol(Vertex3D_in_WCS_Array,self.Geom.Triangles,sym,objmatrix,matr,minx,miny,maxx,maxy,ln);
+      pfont.CreateSymbol(geom.SHX,self.Geom.Triangles,sym,objmatrix,matr,minx,miny,maxx,maxy,ln);
 
       matr:=m1;
       FillChar(m1, sizeof(DMatrix4D), 0);
@@ -807,10 +809,10 @@ begin
 
                              pv3.coord:=plp^;
                              pv3.count:=0;
-                             Vertex3D_in_WCS_Array.add(@pv3);
+                             geom.SHX.add(@pv3);
                              pv3.coord:=plp2^;
                              pv3.count:=0;
-                             Vertex3D_in_WCS_Array.add(@pv3);
+                             geom.SHX.add(@pv3);
 
         plp:=pl.iterate(ir);
         plp2:=pl.iterate(ir);
@@ -820,7 +822,7 @@ begin
 
 
 
-  Vertex3D_in_WCS_Array.Shrink;
+  geom.SHX.Shrink;
   pl.done;
 end;
 {procedure GDBObjMText.CalcObjMatrix;

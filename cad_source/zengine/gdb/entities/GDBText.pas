@@ -98,7 +98,7 @@ begin
   textprop.wfactor := 1;
   textprop.angle := 0;
   textprop.justify := jstl;
-  Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{08E35ED5-B4A7-4210-A3C9-0645E8F27ABA}-GDBText.Vertex3D_in_WCS_Array',{$ENDIF}100);
+  //geom.SHX.init({$IFDEF DEBUGBUILD}'{08E35ED5-B4A7-4210-A3C9-0645E8F27ABA}-GDBText.Vertex3D_in_WCS_Array',{$ENDIF}100);
   //Vertex2D_in_DCS_Array.init({$IFDEF DEBUGBUILD}'{116E3B21-8230-44E8-B7A5-9CEED4B886D2}',{$ENDIF}100);
   PProjoutbound:=nil;
 end;
@@ -115,7 +115,7 @@ begin
   textprop.wfactor := w;
   textprop.angle := a;
   textprop.justify := j;
-  Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{8776360E-8115-4773-917D-83ED1843FF9C}',{$ENDIF}1000);
+  //geom.SHX.init({$IFDEF DEBUGBUILD}'{8776360E-8115-4773-917D-83ED1843FF9C}',{$ENDIF}1000);
   //Vertex2D_in_DCS_Array.init({$IFDEF DEBUGBUILD}'{EDC6D76B-DDFF-41A0-ACCC-48804795A3F5}',{$ENDIF}100);
   PProjoutbound:=nil;
   //format;
@@ -124,6 +124,8 @@ procedure GDBObjText.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext)
 var
       TCP:TCodePage;
 begin
+  Geom.Clear;
+
   TCP:=CodePage;
   CodePage:=CP_win;
      if template='' then
@@ -259,7 +261,7 @@ destructor GDBObjText.done;
 begin
   content:='';
   template:='';
-  Vertex3D_in_WCS_Array.Done;
+  //geom.SHX.Done;
   //Vertex2D_in_DCS_Array.Done;
   inherited done;
 end;
@@ -636,7 +638,7 @@ begin
 
   ispl:=false;
   pl.init({$IFDEF DEBUGBUILD}'{AC324582-5E55-4290-8017-44B8C675198A}',{$ENDIF}10);
-  Vertex3D_in_WCS_Array.clear;
+  geom.SHX.clear;
   Geom.Triangles.clear;
 
   minx:=+infinity;
@@ -669,7 +671,7 @@ begin
     end
     else
     begin
-      pfont^.CreateSymbol(Vertex3D_in_WCS_Array,self.Geom.Triangles,sym,objmatrix,matr,minx,miny,maxx,maxy,{pfont,}ln);
+      pfont^.CreateSymbol(geom.SHX,self.Geom.Triangles,sym,objmatrix,matr,minx,miny,maxx,maxy,{pfont,}ln);
 
     end;
       //FillChar(m1, sizeof(DMatrix4D), 0);
@@ -728,16 +730,16 @@ begin
 
                              pv3.coord:=plp^;
                              pv3.count:=0;
-                             Vertex3D_in_WCS_Array.add(@pv3);
+                             geom.SHX.add(@pv3);
                              pv3.coord:=plp2^;
                              pv3.count:=0;
-                             Vertex3D_in_WCS_Array.add(@pv3);
+                             geom.SHX.add(@pv3);
 
         plp:=pl.iterate(ir);
         plp2:=pl.iterate(ir);
   until plp2=nil;
 
-  Vertex3D_in_WCS_Array.Shrink;
+  geom.SHX.Shrink;
   pl.done;
 end;
 function GDBObjText.getsnap;

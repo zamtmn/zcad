@@ -582,7 +582,7 @@ begin
   //Points.DrawGeometry;
   if shx.Count>0 then
   //shx.DrawNiceGeometry;
-  shx.DrawGeometry;
+  shx.DrawGeometry(rc);
   if Triangles.Count>0 then
   Triangles.DrawGeometry;
 end;

@@ -60,7 +60,7 @@ type
                 SummaryUnit:TObjectUnit;(*'Summary'*)
                 ObjIDVector:{-}TObjIDVector{/GDBPointer/};(*hidden_in_objinsp*)
                 ObjID2Counter:{-}TObjID2Counter{/GDBPointer/};(*hidden_in_objinsp*)
-                SavezeUnitsFormat:TzeUnitsFormat;
+                SavezeUnitsFormat:TzeUnitsFormat;(*hidden_in_objinsp*)
                 procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
                 procedure CreateUnit(const f:TzeUnitsFormat;_GetEntsTypes:boolean=true);virtual;
                 procedure GetEntsTypes;virtual;

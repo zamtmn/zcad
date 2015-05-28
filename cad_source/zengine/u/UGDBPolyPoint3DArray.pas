@@ -19,22 +19,25 @@
 unit UGDBPolyPoint3DArray;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
+uses gdbdrawcontext,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase, geometry,
      {varmandef,}OGLSpecFunc;
 type
 {Export+}
 PGDBPolyPoint3DArray=^GDBPolyPoint3DArray;
 GDBPolyPoint3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                      procedure DrawGeometry;virtual;
+                      procedure DrawGeometry(var rc:TDrawContext);virtual;
                       procedure DrawNiceGeometry;virtual;
-                      procedure SimpleDrawGeometry(const num:integer);virtual;
+                      procedure SimpleDrawGeometry(var rc:TDrawContext; const num:integer);virtual;
                       function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;
                 end;
 {Export-}
 implementation
 uses
     log;
+var
+    DUMMY_oglsmmygllinescounter:integer;
+    DUMMY_vertex:GDBVertex;
 {function GDBPolyPoint3DArray.CalcTrueInFrustum;
 var i,emptycount,counter:GDBInteger;
     d:GDBDouble;
@@ -255,6 +258,23 @@ begin
                        end;
    end;
 end;}
+procedure DUMMY_oglsmmyglbegin;
+begin
+     DUMMY_oglsmmygllinescounter:=0;
+end;
+procedure DUMMY_oglsmmyglVertex3dV(var rc:TDrawContext; const V:PGDBVertex);
+begin
+  if DUMMY_oglsmmygllinescounter=0 then
+                                    begin
+                                       DUMMY_vertex:=V^;
+                                       inc(DUMMY_oglsmmygllinescounter);
+                                    end
+                                   else
+                                     begin
+                                        DUMMY_oglsmmygllinescounter:=0;
+                                        rc.Drawer.DrawLine3DInModelSpace(DUMMY_vertex,V^,rc.matrixs);
+                                     end;
+end;
 procedure GDBPolyPoint3DArray.drawgeometry;
 var p:PGDBPolyVertex3D;
     //counter,lines,points:GDBInteger;
@@ -269,7 +289,9 @@ begin
 
   if count>1 then
   begin
-  oglsm.myglbegin(GL_LINES);
+  //oglsm.myglbegin(GL_LINES);
+  DUMMY_oglsmmyglbegin;
+
   p:=parray;
   for i:=0 to count-1 do
   begin
@@ -278,15 +300,18 @@ begin
      //myglVertex(p.coord.x+random(5)/10,p.coord.y+random(5)/10,p.coord.z+random(5)/10);
           if p^.count<0 then
                             begin
-                            oglsm.myglvertex3dv(pointer(p));
-                            oglsm.myglvertex3dv(pointer(p));
+                            //oglsm.myglvertex3dv(pointer(p));
+                            //oglsm.myglvertex3dv(pointer(p));
+                            DUMMY_oglsmmyglVertex3dV(rc,pointer(p));
+                            DUMMY_oglsmmyglVertex3dV(rc,pointer(p));
                             end
                         else
-                            oglsm.myglvertex3dv(pointer(p));
+                            //oglsm.myglvertex3dv(pointer(p));
+                            DUMMY_oglsmmyglVertex3dV(rc,pointer(p));
                             //myglVertex(p.coord.x+random(5)/10,p.coord.y+random(5)/10,p.coord.z+random(5)/10);
      inc(p);
   end;
-  oglsm.myglend;
+  //oglsm.myglend;
 
   end;
 
@@ -354,7 +379,7 @@ begin
   end;
   myglend;}
 end;
-procedure GDBPolyPoint3DArray.simpledrawgeometry(const num:integer);
+procedure GDBPolyPoint3DArray.simpledrawgeometry(var rc:TDrawContext; const num:integer);
 var p,pp:PGDBPolyVertex3D;
     totalcounter,{counter,lines,points,}linenumber:GDBInteger;
     i:GDBInteger;
@@ -371,14 +396,18 @@ begin
         case num of
         1:
           begin
-                oglsm.myglbegin(GL_LINES);
-                oglsm.myglvertex3dv(self.PArray);
-                oglsm.myglvertex3dv(self.getelement(self.Count-1));
-                oglsm.myglend;
+                //oglsm.myglbegin(GL_LINES);
+                DUMMY_oglsmmyglbegin;
+                DUMMY_oglsmmyglVertex3dV(rc,self.PArray);
+                DUMMY_oglsmmyglVertex3dV(rc,self.getelement(self.Count-1));
+                //oglsm.myglvertex3dv(self.PArray);
+                //oglsm.myglvertex3dv(self.getelement(self.Count-1));
+                //oglsm.myglend;
           end;
         2:
           begin
-                oglsm.myglbegin(GL_LINES);
+                //oglsm.myglbegin(GL_LINES);
+                DUMMY_oglsmmyglbegin;
                 //if count<num then exit;
                 p:=parray;
                 pp:=nil;
@@ -388,16 +417,20 @@ begin
                    if linenumber<>p^.LineNumber then
                    begin
                         if pp<>nil then
-                                       oglsm.myglvertex3dv(@pp^.coord);
-                        oglsm.myglvertex3dv(@p^.coord);
+                                       //oglsm.myglvertex3dv(@pp^.coord);
+                                         DUMMY_oglsmmyglVertex3dV(rc,@pp^.coord);
+                        //oglsm.myglvertex3dv(@p^.coord);
+                        //if pp=nil then
+                                      DUMMY_oglsmmyglVertex3dV(rc,@p^.coord);
                         linenumber:=p^.LineNumber;
                    end;
                    pp:=p;
                    inc(p);
                    inc(totalcounter);
                 end;
-                oglsm.myglvertex3dv(@pp^.coord);
-                oglsm.myglend;
+                //oglsm.myglvertex3dv(@pp^.coord);
+                DUMMY_oglsmmyglVertex3dV(rc,@pp^.coord);
+                //oglsm.myglend;
           end;
         end;
   end;

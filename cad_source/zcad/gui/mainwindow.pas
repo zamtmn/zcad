@@ -83,6 +83,7 @@ type
     SystemTimer: TTimer;
     toolbars:tstringlist;
     updatesbytton,updatescontrols:tlist;
+    procedure ZcadException(Sender: TObject; E: Exception);
     procedure LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
                                State: StdCtrls.TOwnerDrawState);
     procedure ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
@@ -136,6 +137,7 @@ type
 
 
     public
+    FAppProps:TApplicationProperties;
     rt:GDBInteger;
     FileHistory:TFileHistory;
     Drawings:TDrawings;
@@ -1315,8 +1317,58 @@ begin
   TempForm.Align:=alBottom;
   TempForm.Show;
 end;
+
+procedure myDumpAddr(Addr: Pointer;var f:system.text);
+begin
+  // preventing another exception, while dumping stack trace
+  try
+    WriteLn(f,BackTraceStrFunc(Addr));
+  except
+    writeLn(f,SysBackTraceStr(Addr));
+  end;
+end;
+
+
+procedure MyDumpExceptionBackTrace(var f:system.text);
+var
+  FrameCount: integer;
+  Frames: PPointer;
+  FrameNumber:Integer;
+begin
+  DebugLn('  Stack trace:');
+  myDumpAddr(ExceptAddr,f);
+  FrameCount:=ExceptFrameCount;
+  Frames:=ExceptFrames;
+  for FrameNumber := 0 to FrameCount-1 do
+    myDumpAddr(Frames[FrameNumber],f);
+end;
+
+procedure MainForm.ZcadException(Sender: TObject; E: Exception);
+var
+  f:system.text;
+  crashreportfilename:gdbstring;
+begin
+     crashreportfilename:={sysvar.PATH.Template_Path^+}'zcadcrashreport.txt';
+     ShowMessage('1');
+     system.Assign(f,crashreportfilename);
+     ShowMessage('2');
+     system.Rewrite(f);
+     ShowMessage('3');
+     //system.DumpExceptionBackTrace(f);
+     myDumpExceptionBackTrace(f);
+
+     ShowMessage('4');
+     system.close(f);
+     ShowMessage('5');
+     ShowMessage(crashreportfilename);
+end;
+
 procedure MainForm.FormCreate(Sender: TObject);
 begin
+  FAppProps := TApplicationProperties.Create(Self);
+  FAppProps.OnException := ZcadException;
+  FAppProps.CaptureExceptions := True;
+
   UniqueInstanceBase.FIPCServer.OnMessage:=IPCMessage;
    sysvar.INTF.INTF_DefaultControlHeight^:=sysparam.defaultheight;
 
@@ -3112,10 +3164,16 @@ begin
      ShowAnchorDockOptions(DockMaster);
      result:=cmd_ok;
 end;
+function RaiseException_com(Operands:pansichar):GDBInteger;
+begin
+     raise EExternal.Create('Exception test');
+     result:=cmd_ok;
+end;
 initialization
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('mainwindow.initialization');{$ENDIF}
   CreateCommandFastObjectPlugin(pointer($100),'GetAV',0,0);
+  CreateCommandFastObjectPlugin(@RaiseException_com,'RaiseException',0,0);
   CreateCommandFastObjectPlugin(@DockingOptions_com,'DockingOptions',0,0);
 end
 finalization

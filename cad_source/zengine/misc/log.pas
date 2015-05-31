@@ -30,6 +30,8 @@ const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
       lp_OldPos=0;
 
       tsc2ms=2000;
+const
+      MaxLatestLogStrings=99;
 type
 //SplashWnd
 TSplashTextOutProc=procedure (s:string;pm:boolean);
@@ -38,6 +40,7 @@ TMyTimeStamp=record
                    time:TDateTime;
                    rdtsc:int64;
 end;
+TLatestLogStrings=array of GDBSTring;
 
 //PTDateTime=^TDateTime;
 {EXPORT+}
@@ -46,10 +49,13 @@ tlog={$IFNDEF DELPHI}packed{$ENDIF} object
            LogFileName:GDBString;
            FileHandle:cardinal;
            Indent:GDBInteger;
+           LatestLogStrings:TLatestLogStrings;
+           LatestLogStringsCount:GDBInteger;
            constructor init(fn:GDBString);
            destructor done;
            procedure ProcessStr(str:GDBString;IncIndent:GDBInteger;todisk:boolean);virtual;
            procedure LogOutStr(str:GDBString;IncIndent:GDBInteger);virtual;
+           procedure AddStrToLatest(str:GDBString);
            procedure LogOutStrFast(str:GDBString;IncIndent:GDBInteger);virtual;
            procedure WriteToLog(s:GDBString;todisk:boolean;t,dt:TDateTime;tick,dtick:int64;IncIndent:GDBInteger);virtual;
            procedure OpenLog;
@@ -231,12 +237,30 @@ else if IncIndent>0 then
                            dec(timebuf.Count);
                       end;
 end;
+procedure tlog.AddStrToLatest(str:GDBString);
+var
+   i:integer;
+begin
+     if LatestLogStringsCount>High(LatestLogStrings) then
+     begin
+          for i:=0 to High(LatestLogStrings)-1 do
+                                                 LatestLogStrings[i]:=LatestLogStrings[i+1];
+          LatestLogStrings[High(LatestLogStrings)]:=str;
+     end
+     else
+     begin
+          LatestLogStrings[LatestLogStringsCount]:=str;
+          inc(LatestLogStringsCount);
+     end;
+end;
+
 procedure tlog.logoutstr;
 begin
      if (Indent=0) then
                     if assigned(SplashTextOut) then
                                                   SplashTextOut(str,false);
      processstr(str,IncIndent,true);
+     AddStrToLatest('  '+str);
 end;
 procedure tlog.LogOutStrFast;
 begin
@@ -259,6 +283,8 @@ begin
      CreateLog;
      WriteToLog('------------------------Log started------------------------',false,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
      timebuf.Add(@CurrentTime);
+     setlength(LatestLogStrings,MaxLatestLogStrings);
+     LatestLogStringsCount:=0;
 end;
 destructor tlog.done;
 var
@@ -268,6 +294,7 @@ begin
      WriteToLog('-------------------------Log ended-------------------------',true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
      PerfomaneBuf.done;
      TimeBuf.done;
+     setlength(LatestLogStrings,0);
 end;
 initialization
 begin

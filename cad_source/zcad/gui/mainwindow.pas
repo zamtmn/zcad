@@ -1340,7 +1340,7 @@ var
   Frames: PPointer;
   FrameNumber:Integer;
 begin
-  WriteLn(f,'  Stack trace:');
+  WriteLn(f,'Stack trace:');
   myDumpAddr(ExceptAddr,f);
   FrameCount:=ExceptFrameCount;
   Frames:=ExceptFrames;
@@ -1353,6 +1353,7 @@ var
   f:system.text;
   crashreportfilename,errmsg:shortstring;
   ST:TSystemTime;
+  i:integer;
 begin
      crashreportfilename:=sysvar.PATH.Temp_files^+'zcadcrashreport.txt';
      system.Assign(f,crashreportfilename);
@@ -1362,6 +1363,17 @@ begin
                                             system.Rewrite(f);
      myDumpExceptionBackTrace(f);
      system.close(f);
+
+     system.Assign(f,crashreportfilename);
+     system.Append(f);
+     WriteLn(f);
+     WriteLn(f,'Latest log:');
+     for i:=0 to programlog.LatestLogStringsCount-1 do
+       WriteLn(f,pchar(@programlog.LatestLogStrings[i][1]));
+     WriteLn(f,'Log end.');
+     system.close(f);
+
+
      errmsg:=DateTimeToStr(Now);
      system.Assign(f,crashreportfilename);
      system.Append(f);
@@ -1370,9 +1382,8 @@ begin
      WriteLn(f,errmsg);
      WriteLn(f,'______________________________________________________________________________________');
      system.close(f);
-
-     errmsg:='ZCAD raised exception class "'+E.Message+'"'#13#10#13#10'A crash report generated.'#13#10'Please send "'
-             +crashreportfilename+'" file at zamtmn@yandex.ru'#13#10#13#10'Continue running?';
+     errmsg:='ZCAD raised exception class "'+E.Message+'"'#13#10#13#10'A crash report generated (stack trace and latest log).'#13#10'Please send "'
+             +crashreportfilename+'" file at zamtmn@yandex.ru'#13#10#13#10'Attempt to continue running?';
      if MessageDlg(errmsg,mtError,[mbYes, mbAbort],0)=mrAbort then
                                                                   halt(0);
 end;

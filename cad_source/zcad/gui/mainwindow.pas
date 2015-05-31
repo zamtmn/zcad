@@ -1352,6 +1352,7 @@ procedure MainForm.ZcadException(Sender: TObject; E: Exception);
 var
   f:system.text;
   crashreportfilename,errmsg:shortstring;
+  ST:TSystemTime;
 begin
      crashreportfilename:=sysvar.PATH.Temp_files^+'zcadcrashreport.txt';
      system.Assign(f,crashreportfilename);
@@ -1361,11 +1362,19 @@ begin
                                             system.Rewrite(f);
      myDumpExceptionBackTrace(f);
      system.close(f);
+     errmsg:=DateTimeToStr(Now);
+     system.Assign(f,crashreportfilename);
+     system.Append(f);
+     WriteLn(f);
+     WriteLn(f,'Date:');
+     WriteLn(f,errmsg);
+     WriteLn(f,'______________________________________________________________________________________');
+     system.close(f);
+
      errmsg:='ZCAD raised exception class "'+E.Message+'"'#13#10#13#10'A crash report generated.'#13#10'Please send "'
              +crashreportfilename+'" file at zamtmn@yandex.ru'#13#10#13#10'Continue running?';
      if MessageDlg(errmsg,mtError,[mbYes, mbAbort],0)=mrAbort then
                                                                   halt(0);
-
 end;
 
 procedure MainForm.FormCreate(Sender: TObject);

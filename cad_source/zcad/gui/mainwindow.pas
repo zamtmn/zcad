@@ -28,7 +28,7 @@ uses
        menus,graphics,dialogs,XMLPropStorage,Buttons,Themes,
        UniqueInstanceBase,simpleipc,{$ifdef windows}windows,{$endif}
   {FPC}
-       //math,
+       lineinfo,//math,
   {ZCAD BASE}
        ugdbdrawing,UGDBOpenArrayOfPV,ugdbabstractdrawing,gdbpalette,paths,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
        geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,log,
@@ -210,6 +210,7 @@ var
   oldlongprocess:integer;
   OLDColor:integer;
   localpm:TFiletoMenuIteratorData;
+  StoreBackTraceStrFunc:TBackTraceStrFunc;
 const
      LTEditor:pointer=@LTypeBox;//пофиг что, используем только цифру
   function CloseApp:GDBInteger;
@@ -1319,8 +1320,12 @@ begin
 end;
 
 procedure myDumpAddr(Addr: Pointer;var f:system.text);
+var
+  func,source:shortstring;
+  line:longint;
+  FoundLine:boolean;
 begin
-  // preventing another exception, while dumping stack trace
+    BackTraceStrFunc:=StoreBackTraceStrFunc;
   try
     WriteLn(f,BackTraceStrFunc(Addr));
   except
@@ -1335,7 +1340,7 @@ var
   Frames: PPointer;
   FrameNumber:Integer;
 begin
-  DebugLn('  Stack trace:');
+  WriteLn(f,'  Stack trace:');
   myDumpAddr(ExceptAddr,f);
   FrameCount:=ExceptFrameCount;
   Frames:=ExceptFrames;
@@ -1346,25 +1351,27 @@ end;
 procedure MainForm.ZcadException(Sender: TObject; E: Exception);
 var
   f:system.text;
-  crashreportfilename:gdbstring;
+  crashreportfilename,errmsg:shortstring;
 begin
-     crashreportfilename:={sysvar.PATH.Template_Path^+}'zcadcrashreport.txt';
-     ShowMessage('1');
+     crashreportfilename:=sysvar.PATH.Temp_files^+'zcadcrashreport.txt';
      system.Assign(f,crashreportfilename);
-     ShowMessage('2');
-     system.Rewrite(f);
-     ShowMessage('3');
-     //system.DumpExceptionBackTrace(f);
+     if FileExists(crashreportfilename) then
+                                            system.Append(f)
+                                        else
+                                            system.Rewrite(f);
      myDumpExceptionBackTrace(f);
-
-     ShowMessage('4');
      system.close(f);
-     ShowMessage('5');
-     ShowMessage(crashreportfilename);
+     errmsg:='ZCAD raised exception class "'+E.Message+'"'#13#10#13#10'A crash report generated.'#13#10'Please send "'
+             +crashreportfilename+'" file at zamtmn@yandex.ru'#13#10#13#10'Continue running?';
+     if MessageDlg(errmsg,mtError,[mbYes, mbAbort],0)=mrAbort then
+                                                                  halt(0);
+
 end;
 
 procedure MainForm.FormCreate(Sender: TObject);
 begin
+  StoreBackTraceStrFunc:=BackTraceStrFunc;
+  BackTraceStrFunc:=@SysBackTraceStr;
   FAppProps := TApplicationProperties.Create(Self);
   FAppProps.OnException := ZcadException;
   FAppProps.CaptureExceptions := True;

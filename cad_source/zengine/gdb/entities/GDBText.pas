@@ -21,8 +21,8 @@ unit GDBText;
 
 interface
 uses
-gdbdrawcontext,uabstractunit,gdbobjectextender,gdbfieldprocessor,gdbentityfactory,ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,sysutils,ugdbfont,UGDBPoint3DArray,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varmandef,
-GDBase,{UGDBDescriptor,}gdbobjectsconstdef,oglwindowdef,geometry,dxflow,strmy,math,memman,log,GDBSubordinated,UGDBTextStyleArray;
+uzglgeometry,gdbdrawcontext,uabstractunit,gdbobjectextender,gdbfieldprocessor,gdbentityfactory,ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,sysutils,ugdbfont,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varmandef,
+GDBase,{UGDBDescriptor,}gdbobjectsconstdef,oglwindowdef,geometry,dxflow,strmy,memman,log,GDBSubordinated,UGDBTextStyleArray;
 type
 {REGISTEROBJECTTYPE GDBObjText}
 {Export+}
@@ -43,7 +43,7 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  procedure getoutbound;virtual;
                  procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                 procedure createpoint(const drawing:TDrawingDef);virtual;
+                 //procedure createpoint(const drawing:TDrawingDef);virtual;
                  //procedure CreateSymbol(_symbol:GDBInteger;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;pfont:pgdbfont;ln:GDBInteger);
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
@@ -63,7 +63,7 @@ jt: array[0..3, 0..4] of TTextJustify = ((jsbl, jsbc, jsbr, jsbl, jsmc), (jsbtl,
 j2b: array[TTextJustify] of byte=(1,2,3,4,5,6,7,8,9,10,11,12);
 b2j: array[1..12] of TTextJustify=(jstl,jstc,jstr,jsml,jsmc,jsmr,jsbl,jsbc,jsbr,jsbtl,jsbtc,jsbtr);
 GDBObjTextDXFFeatures:TDXFEntIODataManager;
-function getsymbol(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
+//function getsymbol(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
 implementation
 uses shared;
 function acadvjustify(j:TTextJustify): GDBByte;
@@ -201,7 +201,8 @@ begin
     if (content='')and(template='') then content:=str_empty;
     calcobjmatrix;
     //getoutbound;
-    createpoint(drawing);
+    //createpoint(drawing);
+    Geom.DrawTextContent(content,TXTStyleIndex^.pfont,DrawMatrix,objmatrix,textprop.size,Outbound);
     calcbb;
 
     //P_InsertInWCS:=VectorTransform3D(local.P_insert,vp.owner^.GetMatrix^);
@@ -221,7 +222,7 @@ begin
    while i<=length(content) do
   //for i:=1 to length(content) do
   begin
-    sym:=getsymbol(content,i,l,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont^.font.unicode);
+    sym:=getsymbol_fromGDBText(content,i,l,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont^.font.unicode);
     //psyminfo:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(content[i])));
     psyminfo:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(sym,tdinfo);
     obj_width:=obj_width+psyminfo.NextSymX;
@@ -530,218 +531,10 @@ begin
       end;
     end;
   end;*)
-function getsymbol(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
-var
-   ts:gdbstring;
-   code:integer;
+{procedure GDBObjText.createpoint;
 begin
-     if length(s)>=i+6 then
-     if s[i]='\' then
-     if uppercase(s[i+1])='U' then
-     if s[i+2]='+' then
-     begin
-          ts:='$'+copy(s,i+3,4);
-          val(ts,result,code);
-          if code=0 then
-                        begin
-                             l:=7;
-                             exit;
-                        end;
-     end;
-
-     if length(s)>=i+2 then
-     if s[i]='%' then
-     if s[i+1]='%' then
-     begin
-          l:=3;
-          case (s[i+2]) of
-            'D','d':begin
-                     result:={35}176;
-                     exit;
-                end;
-            'P','p':begin
-                     result:={96}177;
-                     exit;
-                end;
-            'C','c':begin
-                     result:={143}8709;
-                     exit;
-                end;
-            'U','u':begin
-                     result:=1;
-                     exit;
-                end;
-            '%':begin
-                     result:=37;
-                     exit;
-                end;
-            '0'..'9'
-                :begin
-                     while (s[i+l] in  ['0'..'9'])and(i+l<=length(s))and(l<5) do
-                     inc(l);
-                     ts:=copy(s,i+2,l-2);
-                     val(ts,result,code);
-                     if code=0 then
-                     begin
-                          //inc(l);
-                          exit;
-                     end;
-                 end;
-
-          end;    ;
-     end;
-
-     if length(s)>=i+1 then
-     if s[i]='\' then
-     begin
-          l:=2;
-          case (s[i+1]) of
-            'L','l':begin
-                     result:=1;
-                     exit;
-                end;
-
-          end;
-     end;
-
-     l:=1;
-     if fontunicode then
-                        result:=ach2uch(ord(s[i]))
-                    else
-                        result:=ord(s[i]);
-end;
-
-procedure GDBObjText.createpoint;
-var
-  //psymbol: GDBPointer;
-  i{, j, k}: GDBInteger;
-  //len: GDBWord;
-  matr,m1: DMatrix4D;
-  v:GDBvertex4D;
-  //pv:GDBPolyVertex2D;
-  pv3:GDBPolyVertex3D;
-
-  minx,miny,maxx,maxy:GDBDouble;
-
-  plp,plp2:pgdbvertex;
-  lp{,tv}:gdbvertex;
-  pl:GDBPoint3DArray;
-  ispl:gdbboolean;
-  ir:itrec;  
-  pfont:pgdbfont;
-  ln,l:GDBInteger;
-  sym:word;
-  TDInfo:TTrianglesDataInfo;
-begin
-  ln:=1;
-  pfont:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont;
-
-  ispl:=false;
-  pl.init({$IFDEF DEBUGBUILD}'{AC324582-5E55-4290-8017-44B8C675198A}',{$ENDIF}10);
-  geom.SHX.clear;
-  Geom.Triangles.clear;
-
-  minx:=+infinity;
-  miny:=+infinity;
-  maxx:=NegInfinity;
-  maxy:=NegInfinity;//-infinity;
-
-  matr:=matrixmultiply(DrawMatrix,objmatrix);
-  matr:=DrawMatrix;
-
-  i := 1;
-  while i <= length(content) do
-  begin
-    sym:=getsymbol(content,i,l,pgdbfont(pfont)^.font.unicode);
-    if {content[i]}sym={#}1 then
-    begin
-         ispl:=not(ispl);
-         if ispl then begin
-                             lp:=pgdbvertex(@matr[3,0])^;
-                             lp.y:=lp.y-0.2*textprop.size;
-                             lp:=VectorTransform3d(lp,objmatrix);
-                             pl.Add(@lp);
-                        end
-                   else begin
-                             lp:=pgdbvertex(@matr[3,0])^;
-                             lp.y:=lp.y-0.2*textprop.size;
-                             lp:=VectorTransform3d(lp,objmatrix);
-                             pl.Add(@lp);
-                        end;
-    end
-    else
-    begin
-      pfont^.CreateSymbol(geom.SHX,self.Geom.Triangles,sym,objmatrix,matr,minx,miny,maxx,maxy,{pfont,}ln);
-
-    end;
-      //FillChar(m1, sizeof(DMatrix4D), 0);
-      m1:=onematrix;
-  {m1[0, 0] := 1;
-  m1[1, 1] := 1;
-  m1[2, 2] := 1;
-  m1[3, 3] := 1;}
-  m1[3, 0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}{(ord(content[i]))}sym,tdinfo).NextSymX;
-  matr:=MatrixMultiply(m1,matr);
-  inc(i,l);
-  end;
-                       if ispl then
-
-                     begin
-                             lp:=pgdbvertex(@matr[3,0])^;
-                             lp.y:=lp.y-0.2*textprop.size;
-                             lp:=VectorTransform3d(lp,objmatrix);
-                             pl.Add(@lp);
-                     end;
-
-       if minx=+infinity then minx:=0;
-       if miny=+infinity then miny:=0;
-       if maxx=NegInfinity then maxx:=1;
-       if maxy=NegInfinity then maxy:=1;
-
-  v.x:=minx;
-  v.y:=maxy;
-  v.z:=0;
-  v.w:=1;
-  v:=VectorTransform(v,objMatrix);
-  outbound[0]:=pgdbvertex(@v)^;
-  v.x:=maxx;
-  v.y:=maxy;
-  v.z:=0;
-  v.w:=1;
-  v:=VectorTransform(v,objMatrix);
-  outbound[1]:=pgdbvertex(@v)^;
-  v.x:=maxx;
-  v.y:=miny;
-  v.z:=0;
-  v.w:=1;
-  v:=VectorTransform(v,objMatrix);
-  outbound[2]:=pgdbvertex(@v)^;
-  v.x:=minx;
-  v.y:=miny;
-  v.z:=0;
-  v.w:=1;
-  v:=VectorTransform(v,objMatrix);
-  outbound[3]:=pgdbvertex(@v)^;
-
-  plp:=pl.beginiterate(ir);
-  plp2:=pl.iterate(ir);
-  if plp2<>nil then
-  repeat
-
-                             pv3.coord:=plp^;
-                             pv3.count:=0;
-                             geom.SHX.add(@pv3);
-                             pv3.coord:=plp2^;
-                             pv3.count:=0;
-                             geom.SHX.add(@pv3);
-
-        plp:=pl.iterate(ir);
-        plp2:=pl.iterate(ir);
-  until plp2=nil;
-
-  geom.SHX.Shrink;
-  pl.done;
-end;
+  Geom.DUMMYcreatepoint(content,TXTStyleIndex^.pfont,DrawMatrix,objmatrix,textprop.size,Outbound);
+end;}
 function GDBObjText.getsnap;
 begin
      if onlygetsnapcount=1 then

@@ -20,7 +20,7 @@ unit GDBMText;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,uabstractunit,gdbfieldprocessor,gdbentityfactory,UGDBDrawingdef,strproc,ugdbfont,GDBAbstractText,UGDBPoint3DArray,UGDBLayerArray,SysUtils,gdbasetypes,gdbEntity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varmandef,
+uses uzglgeometry,gdbdrawcontext,uabstractunit,gdbfieldprocessor,gdbentityfactory,UGDBDrawingdef,strproc,ugdbfont,GDBAbstractText,UGDBPoint3DArray,UGDBLayerArray,SysUtils,gdbasetypes,gdbEntity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varmandef,
 GDBase,{UGDBDescriptor,}GDBText,gdbobjectsconstdef,geometry,dxflow,strmy,math,memman,GDBSubordinated,UGDBTextStyleArray,zcadsysvars;
 const maxdxfmtextlen=250;
 type
@@ -174,7 +174,7 @@ begin
   if content<>'' then
   begin
   repeat
-    sym:=getsymbol(content,currsymbol,l,pgdbfont(pfont)^.font.unicode);
+    sym:=getsymbol_fromGDBText(content,currsymbol,l,pgdbfont(pfont)^.font.unicode);
     psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym,tdinfo);
     if newline then
                    begin
@@ -289,7 +289,7 @@ begin
                                begin
                                  if pswp.str[1]=' ' then
                                                          l:=l;
-                               sym:=getsymbol(pswp.str,1,l,pgdbfont(pfont)^.font.unicode);
+                               sym:=getsymbol_fromGDBText(pswp.str,1,l,pgdbfont(pfont)^.font.unicode);
                                psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym,tdinfo);
                                pswp^.x:= 0-psyminfo.SymMinX{*textprop.size};
                                end
@@ -698,7 +698,7 @@ begin
   while i<=length(pswp^.str) do
   begin
     m1:=matr;
-    sym:=getsymbol(pswp^.str{[i]},i,l,pgdbfont(pfont)^.font.unicode);
+    sym:=getsymbol_fromGDBText(pswp^.str{[i]},i,l,pgdbfont(pfont)^.font.unicode);
     if {pswp^.str[i]}sym={#}1 then
     begin
          ispl:=not(ispl);

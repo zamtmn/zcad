@@ -1369,8 +1369,7 @@ begin
      system.Append(f);
      WriteLn(f);
      WriteLn(f,'Latest log:');
-     for i:=0 to programlog.LatestLogStringsCount-1 do
-       WriteLn(f,pchar(@programlog.LatestLogStrings[i][1]));
+     programlog.WriteLatestToFile(f);
      WriteLn(f,'Log end.');
      system.close(f);
 

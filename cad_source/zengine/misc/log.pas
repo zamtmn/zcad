@@ -50,12 +50,13 @@ tlog={$IFNDEF DELPHI}packed{$ENDIF} object
            FileHandle:cardinal;
            Indent:GDBInteger;
            LatestLogStrings:TLatestLogStrings;
-           LatestLogStringsCount:GDBInteger;
+           LatestLogStringsCount,TotalLogStringsCount:GDBInteger;
            constructor init(fn:GDBString);
            destructor done;
            procedure ProcessStr(str:GDBString;IncIndent:GDBInteger;todisk:boolean);virtual;
            procedure LogOutStr(str:GDBString;IncIndent:GDBInteger);virtual;
            procedure AddStrToLatest(str:GDBString);
+           procedure WriteLatestToFile(var f:system.text);
            procedure LogOutStrFast(str:GDBString;IncIndent:GDBInteger);virtual;
            procedure WriteToLog(s:GDBString;todisk:boolean;t,dt:TDateTime;tick,dtick:int64;IncIndent:GDBInteger);virtual;
            procedure OpenLog;
@@ -237,21 +238,38 @@ else if IncIndent>0 then
                            dec(timebuf.Count);
                       end;
 end;
+procedure tlog.WriteLatestToFile(var f:system.text);
+var
+   currentindex,LatestLogArraySize:integer;
+begin
+     if TotalLogStringsCount=0 then exit;
+     LatestLogArraySize:=Low(LatestLogStrings);
+     LatestLogArraySize:=High(LatestLogStrings);
+     LatestLogArraySize:=High(LatestLogStrings)-Low(LatestLogStrings)+1;
+     if TotalLogStringsCount>LatestLogArraySize then
+                                                    currentindex:=LatestLogStringsCount
+                                                else
+                                                    currentindex:=Low(LatestLogStrings);
+     if TotalLogStringsCount<LatestLogArraySize then
+                                                    LatestLogArraySize:=TotalLogStringsCount;
+     repeat
+       if currentindex>High(LatestLogStrings) then
+                                                  currentindex:=Low(LatestLogStrings);
+       WriteLn(f,pchar(@programlog.LatestLogStrings[currentindex][1]));
+       inc(currentindex);
+       dec(LatestLogArraySize);
+     until LatestLogArraySize=0;
+end;
+
 procedure tlog.AddStrToLatest(str:GDBString);
 var
    i:integer;
 begin
      if LatestLogStringsCount>High(LatestLogStrings) then
-     begin
-          for i:=0 to High(LatestLogStrings)-1 do
-                                                 LatestLogStrings[i]:=LatestLogStrings[i+1];
-          LatestLogStrings[High(LatestLogStrings)]:=str;
-     end
-     else
-     begin
-          LatestLogStrings[LatestLogStringsCount]:=str;
-          inc(LatestLogStringsCount);
-     end;
+                                                         LatestLogStringsCount:=Low(LatestLogStrings);
+     LatestLogStrings[LatestLogStringsCount]:=str;
+     inc(TotalLogStringsCount);
+     inc(LatestLogStringsCount);
 end;
 
 procedure tlog.logoutstr;
@@ -285,6 +303,7 @@ begin
      timebuf.Add(@CurrentTime);
      setlength(LatestLogStrings,MaxLatestLogStrings);
      LatestLogStringsCount:=0;
+     TotalLogStringsCount:=0;
 end;
 destructor tlog.done;
 var

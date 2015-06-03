@@ -19,8 +19,8 @@
 unit uzglgeometry;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,uzglabstractdrawer,uzgprimitivessarray,uzgvertex3sarray,UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzgltriangles3darray,ugdbltypearray,sysutils,gdbase,memman,log,
-     gdbasetypes,strproc;
+uses math,gdbdrawcontext,uzglabstractdrawer,uzgprimitivessarray,uzgvertex3sarray,UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzgltriangles3darray,ugdbltypearray,sysutils,gdbase,memman,log,
+     gdbasetypes,strproc,ugdbfont;
 type
 {Export+}
 PZGLGeometry=^ZGLGeometry;
@@ -67,9 +67,222 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 procedure PlaceOnePattern(var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;TangentScale,NormalScale,length,scale_div_length:GDBDouble);
                 procedure PlaceShape(const StartPatternPoint:GDBVertex; PSP:PShapeProp;scale,angle:GDBDouble);
                 procedure PlaceText(const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
+
+                procedure DrawTextContent(content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
              end;
 {Export-}
+function getsymbol_fromGDBText(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
 implementation
+function getsymbol_fromGDBText(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
+var
+   ts:gdbstring;
+   code:integer;
+begin
+     if length(s)>=i+6 then
+     if s[i]='\' then
+     if uppercase(s[i+1])='U' then
+     if s[i+2]='+' then
+     begin
+          ts:='$'+copy(s,i+3,4);
+          val(ts,result,code);
+          if code=0 then
+                        begin
+                             l:=7;
+                             exit;
+                        end;
+     end;
+
+     if length(s)>=i+2 then
+     if s[i]='%' then
+     if s[i+1]='%' then
+     begin
+          l:=3;
+          case (s[i+2]) of
+            'D','d':begin
+                     result:={35}176;
+                     exit;
+                end;
+            'P','p':begin
+                     result:={96}177;
+                     exit;
+                end;
+            'C','c':begin
+                     result:={143}8709;
+                     exit;
+                end;
+            'U','u':begin
+                     result:=1;
+                     exit;
+                end;
+            '%':begin
+                     result:=37;
+                     exit;
+                end;
+            '0'..'9'
+                :begin
+                     while (s[i+l] in  ['0'..'9'])and(i+l<=length(s))and(l<5) do
+                     inc(l);
+                     ts:=copy(s,i+2,l-2);
+                     val(ts,result,code);
+                     if code=0 then
+                     begin
+                          //inc(l);
+                          exit;
+                     end;
+                 end;
+
+          end;    ;
+     end;
+
+     if length(s)>=i+1 then
+     if s[i]='\' then
+     begin
+          l:=2;
+          case (s[i+1]) of
+            'L','l':begin
+                     result:=1;
+                     exit;
+                end;
+
+          end;
+     end;
+
+     l:=1;
+     if fontunicode then
+                        result:=ach2uch(ord(s[i]))
+                    else
+                        result:=ord(s[i]);
+end;
+
+procedure ZGLGeometry.DrawTextContent(content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
+var
+  i: GDBInteger;
+  matr,m1: DMatrix4D;
+  v:GDBvertex4D;
+  pv3:GDBPolyVertex3D;
+
+  minx,miny,maxx,maxy:GDBDouble;
+
+  plp,plp2:pgdbvertex;
+  lp:gdbvertex;
+  pl:GDBPoint3DArray;
+  ispl:gdbboolean;
+  ir:itrec;
+  pfont:pgdbfont;
+  ln,l:GDBInteger;
+  sym:word;
+  TDInfo:TTrianglesDataInfo;
+begin
+  ln:=1;
+  pfont:=_pfont;
+
+  ispl:=false;
+  pl.init({$IFDEF DEBUGBUILD}'{AC324582-5E55-4290-8017-44B8C675198A}',{$ENDIF}10);
+  //SHX.clear;
+  //Triangles.clear;
+
+  minx:=+infinity;
+  miny:=+infinity;
+  maxx:=NegInfinity;
+  maxy:=NegInfinity;//-infinity;
+
+  matr:=matrixmultiply(DrawMatrix,objmatrix);
+  matr:=DrawMatrix;
+
+  i := 1;
+  while i <= length(content) do
+  begin
+    sym:=getsymbol_fromGDBText(content,i,l,pgdbfont(pfont)^.font.unicode);
+    if {content[i]}sym={#}1 then
+    begin
+         ispl:=not(ispl);
+         if ispl then begin
+                             lp:=pgdbvertex(@matr[3,0])^;
+                             lp.y:=lp.y-0.2*textprop_size;
+                             lp:=VectorTransform3d(lp,objmatrix);
+                             pl.Add(@lp);
+                        end
+                   else begin
+                             lp:=pgdbvertex(@matr[3,0])^;
+                             lp.y:=lp.y-0.2*textprop_size;
+                             lp:=VectorTransform3d(lp,objmatrix);
+                             pl.Add(@lp);
+                        end;
+    end
+    else
+    begin
+      pfont^.CreateSymbol(SHX,Triangles,sym,objmatrix,matr,minx,miny,maxx,maxy,{pfont,}ln);
+
+    end;
+      //FillChar(m1, sizeof(DMatrix4D), 0);
+      m1:=onematrix;
+  {m1[0, 0] := 1;
+  m1[1, 1] := 1;
+  m1[2, 2] := 1;
+  m1[3, 3] := 1;}
+  m1[3, 0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}{(ord(content[i]))}sym,tdinfo).NextSymX;
+  matr:=MatrixMultiply(m1,matr);
+  inc(i,l);
+  end;
+                       if ispl then
+
+                     begin
+                             lp:=pgdbvertex(@matr[3,0])^;
+                             lp.y:=lp.y-0.2*textprop_size;
+                             lp:=VectorTransform3d(lp,objmatrix);
+                             pl.Add(@lp);
+                     end;
+
+       if minx=+infinity then minx:=0;
+       if miny=+infinity then miny:=0;
+       if maxx=NegInfinity then maxx:=1;
+       if maxy=NegInfinity then maxy:=1;
+
+  v.x:=minx;
+  v.y:=maxy;
+  v.z:=0;
+  v.w:=1;
+  v:=VectorTransform(v,objMatrix);
+  outbound[0]:=pgdbvertex(@v)^;
+  v.x:=maxx;
+  v.y:=maxy;
+  v.z:=0;
+  v.w:=1;
+  v:=VectorTransform(v,objMatrix);
+  outbound[1]:=pgdbvertex(@v)^;
+  v.x:=maxx;
+  v.y:=miny;
+  v.z:=0;
+  v.w:=1;
+  v:=VectorTransform(v,objMatrix);
+  outbound[2]:=pgdbvertex(@v)^;
+  v.x:=minx;
+  v.y:=miny;
+  v.z:=0;
+  v.w:=1;
+  v:=VectorTransform(v,objMatrix);
+  outbound[3]:=pgdbvertex(@v)^;
+
+  plp:=pl.beginiterate(ir);
+  plp2:=pl.iterate(ir);
+  if plp2<>nil then
+  repeat
+
+                             pv3.coord:=plp^;
+                             pv3.count:=0;
+                             SHX.add(@pv3);
+                             pv3.coord:=plp2^;
+                             pv3.count:=0;
+                             SHX.add(@pv3);
+
+        plp:=pl.iterate(ir);
+        plp2:=pl.iterate(ir);
+  until plp2=nil;
+
+  SHX.Shrink;
+  pl.done;
+end;
+
 procedure ZGLGeometry.DrawLLPrimitives(drawer:TZGLAbstractDrawer);
 var
    PPrimitive:PTLLPrimitivePrefix;
@@ -616,8 +829,8 @@ Vertex3S.init({$IFDEF DEBUGBUILD}'{28B96AAC-8AD4-4BC8-85CA-78AAA0700CAF}',{$ENDI
 LLprimitives.init({$IFDEF DEBUGBUILD}'{6326CE08-54B5-404E-B567-C50AFEFBABEE}',{$ENDIF}100);
 //Lines.init({$IFDEF DEBUGBUILD}'{261A56E9-FC91-4A6D-A534-695778390843}',{$ENDIF}100);
 //Points.init({$IFDEF DEBUGBUILD}'{AF4B3440-50B5-4482-A2B7-D38DDE4EC731}',{$ENDIF}100);
-SHX.init({$IFDEF DEBUGBUILD}'{93201215-874A-4FC5-8062-103AF05AD930}',{$ENDIF}100);
-Triangles.init({$IFDEF DEBUGBUILD}'{EE569D51-8C1D-4AE3-A80F-BBBC565DA372}',{$ENDIF}100);
+SHX.init({$IFDEF DEBUGBUILD}'{93201215-874A-4FC5-8062-103AF05AD930}-Lines TTF\SHX data',{$ENDIF}100);
+Triangles.init({$IFDEF DEBUGBUILD}'{EE569D51-8C1D-4AE3-A80F-BBBC565DA372}-Triangles TTF data',{$ENDIF}100);
 end;
 destructor ZGLGeometry.done;
 begin

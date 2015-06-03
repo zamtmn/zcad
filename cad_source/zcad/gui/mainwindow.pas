@@ -1361,6 +1361,7 @@ begin
                                             system.Append(f)
                                         else
                                             system.Rewrite(f);
+     WriteLn(f,'');WriteLn(f,'ZCAD crashed((');WriteLn(f,'');
      myDumpExceptionBackTrace(f);
      system.close(f);
 
@@ -1373,6 +1374,22 @@ begin
      WriteLn(f,'Log end.');
      system.close(f);
 
+     system.Assign(f,crashreportfilename);
+     system.Append(f);
+     WriteLn(f);
+     WriteLn(f,'Build and runtime info:');
+     Write(f,'  ZCAD ');WriteLn(f,sysvar.SYS.SYS_Version^);
+     Write(f,'  Build with ');Write(f,sysvar.SYS.SSY_CompileInfo.SYS_Compiler);Write(f,' v');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompilerVer);
+     Write(f,'  Target CPU: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompilerTargetCPU);
+     Write(f,'  Target OS: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompilerTargetOS);
+     Write(f,'  Compile date: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompileDate);
+     Write(f,'  Compile time: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompileTime);
+     Write(f,'  LCL version: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_LCLVersion);
+     Write(f,'  Environment version: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion);
+     Write(f,'  Program  path: ');WriteLn(f,sysvar.PATH.Program_Run^);
+     Write(f,'  Temporary  path: ');WriteLn(f,sysvar.PATH.Temp_files^);
+     WriteLn(f,'end.');
+     system.close(f);
 
      errmsg:=DateTimeToStr(Now);
      system.Assign(f,crashreportfilename);

@@ -66,7 +66,7 @@ pu - модуль в котором будет создана переменна
 var
    vd:vardesk;
 begin
-    GDBGetMem(result,sizeof(TOneVarData));
+    GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}result,sizeof(TOneVarData));
     pointer(PTOneVarData(result)^.StrValue):=nil;
     FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTOneVarData(result).PVarDesc);
 end;
@@ -81,7 +81,7 @@ pu - модуль в котором будет создана переменна
 var
    vd:vardesk;
 begin
-    GDBGetMem(result,sizeof(TVertex3DControlVarData));
+    GDBGetMem({$IFDEF DEBUGBUILD}'{15C8D138-5A5B-44F1-B725-FFFF20869CD9}',{$ENDIF}result,sizeof(TVertex3DControlVarData));
     pointer(PTVertex3DControlVarData(result)^.StrValueX):=nil;
     pointer(PTVertex3DControlVarData(result)^.StrValueY):=nil;
     pointer(PTVertex3DControlVarData(result)^.StrValueZ):=nil;

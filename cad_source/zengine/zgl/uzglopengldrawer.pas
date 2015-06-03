@@ -781,11 +781,20 @@ begin
      isWindowsErrors;
 end;
 procedure TZGLCanvasDrawer.RestoreBuffers;
+//var i:integer;
 begin
      //windows.BitBlt(OffScreedDC,0,0,100,100,SavedDC,0,0,SRCCOPY);
     CorrectScreenInvalidrect(wh.cx,wh.cy);
     //{$IFDEF WINDOWS}windows.{$ENDIF}BitBlt(OffScreedDC,0,0,w,h,SavedDC,0,0,SRCCOPY);
-    {$IFDEF WINDOWS}windows.{$ENDIF}BitBlt(OffScreedDC,ScreenInvalidRect.Left,ScreenInvalidRect.Top,ScreenInvalidRect.Right-ScreenInvalidRect.Left+1,ScreenInvalidRect.bottom-ScreenInvalidRect.top+1,SavedDC,ScreenInvalidRect.Left,ScreenInvalidRect.Top,SRCCOPY);
+    {$IFDEF WINDOWS}windows.{$ENDIF}BitBlt(OffScreedDC,ScreenInvalidRect.Left,ScreenInvalidRect.Top,ScreenInvalidRect.Right-ScreenInvalidRect.Left+1,ScreenInvalidRect.bottom-ScreenInvalidRect.top+1,SavedDC,ScreenInvalidRect.Left,ScreenInvalidRect.Top,SRCCOPY{WHITENESS});
+
+    {StretchBlt experiments}
+    //SetStretchBltMode(OffScreedDC,HALFTONE);
+    //SetBrushOrgEx(OffScreedDC, 1, 1, nil);
+    //for i:=0 to 1000 do
+    //{$IFDEF WINDOWS}windows.{$ENDIF}StretchBlt(OffScreedDC,ScreenInvalidRect.Left-100,ScreenInvalidRect.Top-100,ScreenInvalidRect.Right-ScreenInvalidRect.Left+1+200,ScreenInvalidRect.bottom-ScreenInvalidRect.top+1+200,SavedDC,ScreenInvalidRect.Left,ScreenInvalidRect.Top,ScreenInvalidRect.Right-ScreenInvalidRect.Left+1,ScreenInvalidRect.bottom-ScreenInvalidRect.top+1,SRCCOPY);
+    //{$IFDEF WINDOWS}windows.{$ENDIF}StretchBlt(OffScreedDC,ScreenInvalidRect.Left-100,ScreenInvalidRect.Top-100,ScreenInvalidRect.Right-ScreenInvalidRect.Left+1+200,ScreenInvalidRect.bottom-ScreenInvalidRect.top+1+200,SavedDC,ScreenInvalidRect.Left-350,ScreenInvalidRect.Top-350,ScreenInvalidRect.Right-ScreenInvalidRect.Left+1+700,ScreenInvalidRect.bottom-ScreenInvalidRect.top+1+700,SRCCOPY);
+
     PState:=TPaintState.TPSBufferSaved;
     InitScreenInvalidrect(wh.cx,wh.cy);
      isWindowsErrors;

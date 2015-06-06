@@ -121,6 +121,18 @@ begin
                                                                sysparam.standartinterface:=true;
             if (paramUC='UPDATEPO')then
                                                                sysparam.updatepo:=true;
+            if (paramUC='LM_TRACE')then
+                                       programlog.SetLogMode(LM_Trace);
+            if (paramUC='LM_DEBUG')then
+                                       programlog.SetLogMode(LM_Debug);
+            if (paramUC='LM_INFO')then
+                                       programlog.SetLogMode(LM_Info);
+            if (paramUC='LM_WARNING')then
+                                       programlog.SetLogMode(LM_Warning);
+            if (paramUC='LM_ERROR')then
+                                       programlog.SetLogMode(LM_Error);
+            if (paramUC='LM_FATAL')then
+                                       programlog.SetLogMode(LM_Fatal);
        end;
 end;
 Procedure getsysinfo;

@@ -33,6 +33,14 @@ const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
 const
       MaxLatestLogStrings=99;
 type
+TLogMode=(
+          LM_Trace,  // — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
+          LM_Debug,  // — журналирование моментов вызова «крупных» операций.
+          LM_Info,   // — разовые операции, которые повторяются крайне редко, но не регулярно. (загрузка конфига, плагина, запуск бэкапа)
+          LM_Warning,// — неожиданные параметры вызова, странный формат запроса, использование дефолтных значений в замен не корректных. Вообще все, что может свидетельствовать о не штатном использовании.
+          LM_Error,  // — повод для внимания разработчиков. Тут интересно окружение конкретного места ошибки.
+          LM_Fatal   // — тут и так понятно. Выводим все до чего дотянуться можем, так как дальше приложение работать не будет.
+         );
 //SplashWnd
 TSplashTextOutProc=procedure (s:string;pm:boolean);
 PTMyTimeStamp=^TMyTimeStamp;
@@ -51,10 +59,12 @@ tlog={$IFNDEF DELPHI}packed{$ENDIF} object
            Indent:GDBInteger;
            LatestLogStrings:TLatestLogStrings;
            LatestLogStringsCount,TotalLogStringsCount:GDBInteger;
-           constructor init(fn:GDBString);
+           CurrentLogMode:TLogMode;
+           constructor init(fn:GDBString;LogMode:TLogMode);
+           procedure SetLogMode(LogMode:TLogMode);
            destructor done;
            procedure ProcessStr(str:GDBString;IncIndent:GDBInteger;todisk:boolean);virtual;
-           procedure LogOutStr(str:GDBString;IncIndent:GDBInteger);virtual;
+           procedure LogOutStr(str:GDBString;IncIndent:GDBInteger;LogMode:TLogMode=LM_Info);virtual;
            procedure AddStrToLatest(str:GDBString);
            procedure WriteLatestToFile(var f:system.text);
            procedure LogOutStrFast(str:GDBString;IncIndent:GDBInteger);virtual;
@@ -76,6 +86,19 @@ uses
 var
     PerfomaneBuf:GDBOpenArrayOfByte;
     TimeBuf:GDBOpenArrayOfData;
+    function LogMode2string(LogMode:TLogMode):GDBString;
+    begin
+      case LogMode of
+                     LM_Trace:result:='LM_Trace';
+                     LM_Debug:result:='LM_Debug';
+                     LM_Info:result:='LM_Info';
+                     LM_Warning:result:='LM_Warning';
+                     LM_Error:result:='LM_Error';
+                     LM_Fatal:result:='LM_Fatal';
+                     else
+                         result:='LM_Unknown';
+      end;
+    end;
 procedure LogOut(s:GDBString);
 var
    FileHandle:cardinal;
@@ -274,6 +297,7 @@ end;
 
 procedure tlog.logoutstr;
 begin
+     if LogMode<CurrentLogMode then exit;
      if (Indent=0) then
                     if assigned(SplashTextOut) then
                                                   SplashTextOut(str,false);
@@ -289,10 +313,23 @@ begin
                                 else
                                     processstr(str,IncIndent,true);
 end;
+procedure tlog.SetLogMode(LogMode:TLogMode);
+var
+   CurrentTime:TMyTimeStamp;
+begin
+     if CurrentLogMode<>LogMode then
+                                    begin
+                                         CurrentTime:=mynow();
+                                         CurrentLogMode:=LogMode;
+                                         WriteToLog('Log mode changed to: '+LogMode2string(LogMode),false,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
+                                    end;
+end;
+
 constructor tlog.init;
 var
    CurrentTime:TMyTimeStamp;
 begin
+     CurrentLogMode:=LogMode;
      CurrentTime:=mynow();
      logfilename:=fn;
      PerfomaneBuf.init({$IFDEF DEBUGBUILD}'{39063C66-9D18-4707-8AD3-97DFBCB23185}',{$ENDIF}5*1024);
@@ -300,6 +337,7 @@ begin
      Indent:=1;
      CreateLog;
      WriteToLog('------------------------Log started------------------------',false,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
+     WriteToLog('Log mode: '+LogMode2string(CurrentLogMode),false,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
      timebuf.Add(@CurrentTime);
      setlength(LatestLogStrings,MaxLatestLogStrings);
      LatestLogStringsCount:=0;
@@ -318,7 +356,7 @@ end;
 initialization
 begin
     {$IFDEF DEBUGINITSECTION}LogOut('log.initialization');{$ENDIF}
-    programlog.init(ProgramPath+filelog);
+    programlog.init(ProgramPath+filelog,LM_Info);
 end;
 end.
 

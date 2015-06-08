@@ -115,8 +115,10 @@ begin
      s:=SysVar.PATH.Support_Path^;
      repeat
            GetPartOfPath(ts,s,'|');
-           ts:=ExpandPath(ts)+FileName;
-            if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then
+           ts:=ExpandPath(ts);
+           if programlog.IsNeedToLog(LM_Trace) then programlog.LogOutStr(format('FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]),0,LM_Trace);
+           ts:=ts+FileName;
+           if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then
                                  begin
                                       result:=ts;
                                       programlog.LogOutStr(format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)]),0,LM_Info);

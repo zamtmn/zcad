@@ -32,7 +32,7 @@ var
 {$ENDIF}
 initialization;
      {$IFDEF DEBUGINITSECTION}LogOut('urtl.initialization');{$ENDIF}
-     programlog.logoutstr('urtl.initialization',lp_IncPos);
+     programlog.logoutstr('urtl.initialization',lp_IncPos,LM_Debug);
      //units.init;
      units.loadunit(expandpath('*rtl/system.pas'),nil);
 
@@ -247,7 +247,7 @@ initialization;
   SetCategoryCollapsed('GC',false);
   SetCategoryCollapsed('CABLE',false);
   end;
-  programlog.logoutstr('urtl.initialization  {end}',lp_DecPos);
+  programlog.logoutstr('end; {urtl.initialization}',lp_DecPos,LM_Debug);
 
 finalization;
   //units.FreeAndDone;

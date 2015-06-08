@@ -1462,7 +1462,7 @@ end;
 initialization;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('varman.initialization');{$ENDIF}
-  programlog.logoutstr('Varman.startup',lp_IncPos);
+  programlog.logoutstr('Varman.startup',lp_IncPos,LM_Debug);
   //DecimalSeparator := '.';
   ShortDateFormat:='MM.yy';
   VarCategory.init(100);
@@ -1471,7 +1471,7 @@ begin
   CategoryCollapsed.CreateArray;
   fillchar(CategoryCollapsed.parray^,CategoryCollapsed.max,byte(true));
   CategoryUnknownCOllapsed:=true;
-  programlog.logoutstr('end; {Varman.startup}',lp_DecPos);
+  programlog.logoutstr('end; {Varman.startup}',lp_DecPos,LM_Debug);
 end;
 finalization;
 begin

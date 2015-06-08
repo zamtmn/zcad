@@ -127,6 +127,7 @@ var
   data:TFontLoadProcedureData;
       //ir:itrec;
 begin
+     if programlog.IsNeedToLog(LM_Debug)then programlog.logoutstr(sysutils.Format('GDBFontManager.addFonf(%s)',[FontPathName]),lp_IncPos,LM_Debug);
      result:=nil;
      if FontPathName='' then exit;
      FontExt:=uppercase(ExtractFileExt(FontPathName));
@@ -136,11 +137,12 @@ begin
      case AddItem(FontName,pointer(p)) of
              IsFounded:
                        begin
+                            if programlog.IsNeedToLog(LM_Info) then programlog.LogOutStr(sysutils.format('Font "%s" already loaded',[FontPathName]),lp_OldPos,LM_Info);
                        end;
              IsCreated:
                        begin
                             shared.HistoryOutStr(sysutils.format(rsLoadingFontFile,[FontPathName]));
-                            programlog.logoutstr('Loading font '+FontPathName,lp_IncPos);
+                            if programlog.IsNeedToLog(LM_Info) then programlog.LogOutStr(sysutils.format('Loading font "%s"',[FontPathName]),lp_IncPos,LM_Info);
                             _key:=lowercase(FontExt);
                             if _key<>'' then
                             begin
@@ -156,11 +158,7 @@ begin
                                                   FontLoaded:=createnewfontfromshx(FontPathName,p)}
                       { else if FontExt='.TTF' then
                                                   FontLoaded:=createnewfontfromttf(FontPathName,p);}
-                            if FontLoaded then
-                            begin
-                                 programlog.logoutstr('OK',lp_OldPos)
-                            end
-                            else
+                            if not FontLoaded then
                             begin
                                  shared.ShowError(sysutils.format('Font file "%S" unknown format',[FontPathName]));
                                  //shared.LogError(sysutils.format(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]));
@@ -168,14 +166,16 @@ begin
                                  //p^.Name:='ERROR ON LOAD';
                                  p:=nil;
                             end;
-                            programlog.logoutstr('done..',lp_DecPos);
+                            programlog.LogOutStr('end;{Loading font}',lp_DecPos,LM_Info);
                             //p^.init(FontPathName,Color,LW,oo,ll,pp);
                        end;
              IsError:
                        begin
+                            if programlog.IsNeedToLog(LM_Info) then programlog.LogOutStr(sysutils.format('Font "%s"... something wrong',[FontPathName]),lp_OldPos,LM_Info);
                        end;
      end;
      result:=p;
+     programlog.logoutstr('end;{GDBFontManager.addFonf}',lp_DecPos,LM_Debug);
 end;
 {function GDBFontManager.FindFonf;
 var

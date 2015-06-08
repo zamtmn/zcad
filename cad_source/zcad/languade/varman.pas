@@ -1408,16 +1408,7 @@ begin
                         exit;
      result:=InterfaceTypes._TypeName2PTD(n);
      if result=nil then
-     begin
-     LogError('In unit "'+name+'" not found type "'+n+'"');
-  //programlog.logoutstr('ERROR: In unit "'+name+'" not found type '+n,0);
-  {$IFDEF BREACKPOINTSONERRORS}
-     asm
-        //int 3;
-     end;
-  {$ENDIF}
-                       end;
-
+       programlog.LogOutStr(sysutils.format('In unit "%s" not found type "%s"',[name,n]),0,LM_Warning);
 end;
 function tunit.ObjectTypeName2PTD;
 begin

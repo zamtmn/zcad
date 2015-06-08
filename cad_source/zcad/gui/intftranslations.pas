@@ -176,25 +176,23 @@ begin
                                                end
                                            else
                                                begin
-                                                    log.programlog.LogOutStr('Founf command line swith "UpdatePO". File "zcad.po" not found. STOP!',0);
+                                                    programlog.LogOutStr('Founf command line swith "UpdatePO". File "zcad.po" not found. STOP!',0,LM_Fatal);
                                                     halt(0);
                                                end;
          end;
 end;
 function InterfaceTranslate( const Identifier, OriginalValue: String): String;
+const nontranslatedword='InterfaceTranslate: found not translated word: identifier:"%s" originalValue:"%s"';
 var
   Item: TPOFileItem;
-
 begin
-    if UTF8LowerCase(Identifier)='acn_close~caption' then
-                                Item:=Item;
-    log.programlog.LogOutStr(Identifier+' '+OriginalValue,0);
     if DisableTranslateCount>0 then
                               begin
                                    result:=OriginalValue;
                                    exit;
                               end;
     result:=po.Translate({Identifier}'', OriginalValue);
+    if programlog.IsNeedToLog(LM_Trace) then programlog.LogOutStr(format('InterfaceTranslate: identifier:"%s" originalValue:"%s" translate to "%s"',[Identifier,OriginalValue,result]),0,LM_Trace);
 
     if sysinfo.sysparam.updatepo then
      begin
@@ -204,6 +202,7 @@ begin
                if (pos('**',OriginalValue)>0)or(pos('??',OriginalValue)>0)or(pos('__',OriginalValue)=1)then
                begin
                     inc(_DebugWord);
+                    programlog.LogOutStr(format('InterfaceTranslate: found debug word: identifier:"%s" originalValue:"%s"',[Identifier,OriginalValue]),0,LM_Warning);
                end
                else
                begin
@@ -211,21 +210,24 @@ begin
                   (utf8length(OriginalValue)=length(OriginalValue)) then
                begin
                     if pos(identpref,Identifier)<>1 then
-                    begin
-                    po.Add(identpref+Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
-                    actualypo.Add(identpref+Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
-                    end
+                        begin
+                             programlog.LogOutStr(format(nontranslatedword,[Identifier,OriginalValue]),0,LM_Warning);
+                             po.Add(identpref+Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
+                             actualypo.Add(identpref+Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
+                        end
                     else
-                                       begin
-                                       po.Add(Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
-                                       actualypo.Add(Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
-                                       end;
+                        begin
+                             programlog.LogOutStr(format(nontranslatedword,[Identifier,OriginalValue]),0,LM_Warning);
+                             po.Add(Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
+                             actualypo.Add(Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
+                        end;
                     inc(_UpdatePO);
                     //po.SaveToFile(PODirectory + 'zcad.po');
                end
                   else
                       begin
                       inc(_NotEnlishWord);
+                      programlog.LogOutStr(format('InterfaceTranslate: found non ASCII word: identifier:"%s" originalValue:"%s"',[Identifier,OriginalValue]),0,LM_Warning);
                       //log.LogOut(Identifier+'--------------'+OriginalValue)
                       end;
 

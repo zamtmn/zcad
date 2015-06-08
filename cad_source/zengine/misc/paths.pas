@@ -96,14 +96,18 @@ begin
      result:=part;
 end;
 function FindInSupportPath(FileName:GDBString):GDBString;
+const
+     FindInSupportPath='FindInSupportPath: found file:"%s"';
 var
    s,ts:gdbstring;
 begin
-     log.programlog.LogOutStr({$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName),0);
+     if programlog.IsNeedToLog(LM_Debug) then programlog.LogOutStr(format('FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]),0,LM_Debug);
      FileName:=ExpandPath(FileName);
+     if programlog.IsNeedToLog(LM_Debug) then programlog.LogOutStr(format('FindInSupportPath: file name expand to:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]),0,LM_Debug);
      if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)) then
                                  begin
                                       result:=FileName;
+                                      programlog.LogOutStr(format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]),0,LM_Info);
                                       exit;
                                  end;
      if SysVar.PATH.Support_Path<>nil then
@@ -115,11 +119,13 @@ begin
             if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then
                                  begin
                                       result:=ts;
+                                      programlog.LogOutStr(format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)]),0,LM_Info);
                                       exit;
                                  end;
      until s='';
      end;
      result:='';
+     programlog.LogOutStr(format('FindInSupportPath: file not found:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]),0,LM_Warning);
 end;
 function ExpandPath(path:GDBString):GDBString;
 begin

@@ -39,7 +39,8 @@ TLogMode=(
           LM_Info,   // — разовые операции, которые повторяются крайне редко, но не регулярно. (загрузка конфига, плагина, запуск бэкапа)
           LM_Warning,// — неожиданные параметры вызова, странный формат запроса, использование дефолтных значений в замен не корректных. Вообще все, что может свидетельствовать о не штатном использовании.
           LM_Error,  // — повод для внимания разработчиков. Тут интересно окружение конкретного места ошибки.
-          LM_Fatal   // — тут и так понятно. Выводим все до чего дотянуться можем, так как дальше приложение работать не будет.
+          LM_Fatal,   // — тут и так понятно. Выводим все до чего дотянуться можем, так как дальше приложение работать не будет.
+          LM_Necessarily   // — Вывод в любом случае
          );
 //SplashWnd
 TSplashTextOutProc=procedure (s:string;pm:boolean);
@@ -64,7 +65,8 @@ tlog={$IFNDEF DELPHI}packed{$ENDIF} object
            procedure SetLogMode(LogMode:TLogMode);
            destructor done;
            procedure ProcessStr(str:GDBString;IncIndent:GDBInteger;todisk:boolean);virtual;
-           procedure LogOutStr(str:GDBString;IncIndent:GDBInteger;LogMode:TLogMode=LM_Info);virtual;
+           procedure LogOutStr(str:GDBString;IncIndent:GDBInteger;LogMode:TLogMode=LM_Trace);virtual;
+           function IsNeedToLog(LogMode:TLogMode):boolean;
            procedure AddStrToLatest(str:GDBString);
            procedure WriteLatestToFile(var f:system.text);
            procedure LogOutStrFast(str:GDBString;IncIndent:GDBInteger);virtual;
@@ -294,15 +296,25 @@ begin
      inc(TotalLogStringsCount);
      inc(LatestLogStringsCount);
 end;
+function tlog.IsNeedToLog(LogMode:TLogMode):boolean;
+begin
+     if LogMode<CurrentLogMode then
+                                   result:=false
+                               else
+                                   result:=true;
+end;
 
 procedure tlog.logoutstr;
 begin
-     if LogMode<CurrentLogMode then exit;
+     if IsNeedToLog(LogMode) then
+     begin
+     //if LogMode<CurrentLogMode then exit;
      if (Indent=0) then
                     if assigned(SplashTextOut) then
                                                   SplashTextOut(str,false);
      processstr(str,IncIndent,true);
      AddStrToLatest('  '+str);
+     end;
 end;
 procedure tlog.LogOutStrFast;
 begin
@@ -356,7 +368,7 @@ end;
 initialization
 begin
     {$IFDEF DEBUGINITSECTION}LogOut('log.initialization');{$ENDIF}
-    programlog.init(ProgramPath+filelog,LM_Info);
+    programlog.init(ProgramPath+filelog,LM_Error);
 end;
 end.
 

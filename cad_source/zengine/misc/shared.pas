@@ -132,7 +132,7 @@ begin
           //a:=CLine.HistoryLine.Lines[CLine.HistoryLine.Lines.Count];
      //SendMessageA(cline.HistoryLine.Handle, WM_vSCROLL, SB_PAGEDOWN	, 0);
      end;
-     programlog.logoutstr('HISTORY: '+s,0);
+     programlog.logoutstr('HISTORY: '+s,0,LM_Info);
 end;
 procedure HistoryOutStr(s:GDBString);
 begin
@@ -148,7 +148,7 @@ procedure FatalError(errstr:GDBString);
 var s:GDBString;
 begin
      s:='FATALERROR: '+errstr;
-     programlog.logoutstr(s,0);
+     programlog.logoutstr(s,0,LM_Fatal);
      s:=(s);
      if  assigned(CursorOn) then
                                 CursorOn;
@@ -168,7 +168,7 @@ begin
      HistoryOut(@errstr[1]);
      //SendMessageA(cline.HistoryLine.Handle, WM_vSCROLL, SB_PAGEDOWN	, 0);
      end;
-     programlog.logoutstr(errstr,0);
+     programlog.logoutstr(errstr,0,LM_Error);
 end;
 procedure ShowError(errstr:GDBString); export;
 var
@@ -219,8 +219,8 @@ begin
      //fn:=fn+systoutf8(s);
      *конец попытки*)
 
-     programlog.logoutstr('utf '+fn,0);
-     programlog.logoutstr('sys '+path,0);
+     programlog.logoutstr('utf '+fn,0,LM_Trace);
+     programlog.logoutstr('sys '+path,0,LM_Trace);
      {$IFDEF TOTALYLOG}programlog.logoutstr('Process file '+fn,0);{$ENDIF}
      if @method<>nil then
                          method(fn);

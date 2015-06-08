@@ -688,7 +688,7 @@ if addtype then
                                                    system.break
                                                else
                                                    begin
-                                                        programlog.logoutstr(line,0);
+                                                        programlog.logoutstr(line,0,LM_Trace);
                                                         if copy(line,1,10)='VIEW_ObjIn'
                                                         then
                                                             line:=line;
@@ -726,16 +726,16 @@ procedure TUnitManager.LoadFolder(path: GDBString);
 var
   sr: TSearchRec;
 begin
-  programlog.logoutstr('TUnitManager.LoadFolder("'+path+'")',lp_IncPos);
+  if programlog.IsNeedToLog(LM_Debug)then programlog.logoutstr(sysutils.Format('TUnitManager.LoadFolder(%s)',[path]),lp_IncPos,LM_Debug);
   if FindFirst(path + '*.pas', faAnyFile, sr) = 0 then
   begin
     repeat
-      programlog.logoutstr('Found file '+path + sr.Name,0);
+      if programlog.IsNeedToLog(LM_Info) then programlog.logoutstr(sysutils.Format('Found file "%s"',[path+sr.Name]),lp_OldPos,LM_Info);
       loadunit(path+sr.Name,nil);
     until FindNext(sr) <> 0;
     sysutils.FindClose(sr);
   end;
-  programlog.logoutstr('end; //TUnitManager.LoadFolder',lp_DecPos);
+  programlog.logoutstr('end;{TUnitManager.LoadFolder}',lp_DecPos,LM_Debug);
 end;
 initialization;
      {$IFDEF DEBUGINITSECTION}LogOut('uunitmanager.initialization');{$ENDIF}

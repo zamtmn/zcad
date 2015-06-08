@@ -171,10 +171,10 @@ begin
      programlog.LogOutStr(format('SysParam.TempPath="%s"',[SysParam.TempPath]),lp_OldPos,LM_Necessarily);
      programlog.LogOutStr(format('SysParam.ScreenX=%d',[SysParam.ScreenX]),lp_OldPos,LM_Necessarily);
      programlog.LogOutStr(format('SysParam.ScreenY=%d',[SysParam.ScreenY]),lp_OldPos,LM_Necessarily);
-     programlog.LogOutStr(format('SysParam.NoSplash=%s',[BoolToStr(SysParam.NoSplash)]),lp_OldPos,LM_Necessarily);
-     programlog.LogOutStr(format('SysParam.NoLoadLayout=%s',[BoolToStr(SysParam.NoLoadLayout)]),lp_OldPos,LM_Necessarily);
-     programlog.LogOutStr(format('SysParam.UpdatePO=%s',[BoolToStr(SysParam.UpdatePO)]),lp_OldPos,LM_Necessarily);
-     programlog.LogOutStr(format('SysParam.StandartInterface=%s',[BoolToStr(SysParam.StandartInterface)]),lp_OldPos,LM_Necessarily);
+     programlog.LogOutStr(format('SysParam.NoSplash=%s',[BoolToStr(SysParam.NoSplash,true)]),lp_OldPos,LM_Necessarily);
+     programlog.LogOutStr(format('SysParam.NoLoadLayout=%s',[BoolToStr(SysParam.NoLoadLayout,true)]),lp_OldPos,LM_Necessarily);
+     programlog.LogOutStr(format('SysParam.UpdatePO=%s',[BoolToStr(SysParam.UpdatePO,true)]),lp_OldPos,LM_Necessarily);
+     programlog.LogOutStr(format('SysParam.StandartInterface=%s',[BoolToStr(SysParam.StandartInterface,true)]),lp_OldPos,LM_Necessarily);
      programlog.LogOutStr(format('SysParam.PreloadedFile="%s"',[SysParam.PreloadedFile]),lp_OldPos,LM_Necessarily);
 
      programlog.LogOutStr('end;{GetSysInfo}',lp_DecPos,LM_Necessarily);

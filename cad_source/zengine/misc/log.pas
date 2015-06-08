@@ -333,7 +333,7 @@ begin
                                     begin
                                          CurrentTime:=mynow();
                                          CurrentLogMode:=LogMode;
-                                         WriteToLog('Log mode changed to: '+LogMode2string(LogMode),false,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
+                                         WriteToLog('Log mode changed to: '+LogMode2string(LogMode),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
                                     end;
 end;
 
@@ -348,8 +348,8 @@ begin
      TimeBuf.init({$IFDEF DEBUGBUILD}'{6EE1BC6B-1177-40B0-B4A5-793D66BF8BC8}',{$ENDIF}50,sizeof({TDateTime}TMyTimeStamp));
      Indent:=1;
      CreateLog;
-     WriteToLog('------------------------Log started------------------------',false,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
-     WriteToLog('Log mode: '+LogMode2string(CurrentLogMode),false,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
+     WriteToLog('------------------------Log started------------------------',true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
+     WriteToLog('Log mode: '+LogMode2string(CurrentLogMode),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
      timebuf.Add(@CurrentTime);
      setlength(LatestLogStrings,MaxLatestLogStrings);
      LatestLogStringsCount:=0;

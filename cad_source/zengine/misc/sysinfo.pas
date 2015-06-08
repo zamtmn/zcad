@@ -23,19 +23,19 @@ uses paths,zcadstrconsts,gdbasetypes,Forms,gdbase{$IFNDEF DELPHI},fileutil{$ENDI
 {$INCLUDE revision.inc}
 type
   tsysparam=record
-                     programpath: GDBString;
-                     temppath: GDBString;
-                     screenx,screeny:GDBInteger;
-                     defaultheight:GDBInteger;
-                     ver:TmyFileVersionInfo;
-                     nosplash,noloadlayout,updatepo,standartinterface,otherinstancerun:GDBBoolean;
-                     preloadedfile:GDBString;
+                     ProgramPath: GDBString;
+                     TempPath: GDBString;
+                     ScreenX,ScreenY:GDBInteger;
+                     DefaultHeight:GDBInteger;
+                     Ver:TmyFileVersionInfo;
+                     NoSplash,NoLoadLayout,UpdatePO,StandartInterface,otherinstancerun:GDBBoolean;
+                     PreloadedFile:GDBString;
               end;
 var
-  sysparam: tsysparam;
+  SysParam: tsysparam;
   SysDefaultFormatSettings:TFormatSettings;
 
-Procedure getsysinfo;
+Procedure GetSysInfo;
 implementation
 uses {WindowsSpecific,}log;
 function GetVersion(_file:pchar):TmyFileVersionInfo;
@@ -97,13 +97,14 @@ begin
  end;*)
 end;
 
-procedure ProcessParanstr;
+procedure ProcessParamStr;
 var
    i:integer;
    param,paramUC:GDBString;
 begin
-     sysparam.otherinstancerun:=false;
-     sysparam.preloadedfile:='';
+     programlog.LogOutStr('ProcessParamStr',lp_IncPos,LM_Necessarily);
+     SysParam.otherinstancerun:=false;
+     SysParam.PreloadedFile:='';
      i:=paramcount;
      for i:=1 to paramcount do
        begin
@@ -111,57 +112,73 @@ begin
             {$ifndef windows}param:=paramstr(i);{$endif}
             paramUC:=uppercase(param);
 
+            programlog.LogOutStr(format('Found param command line parameter "%s"',[paramUC]),lp_OldPos,LM_Necessarily);
+
             if fileexists(UTF8toSys(param)) then
-                                     sysparam.preloadedfile:=param;
-            if (paramUC='NOSPLASH')or(paramUC='NS')then
-                                                   sysparam.nosplash:=true;
-            if (paramUC='NOLOADLAYOUT')or(paramUC='NLL')then
-                                                               sysparam.noloadlayout:=true;
-            if (paramUC='STANDARTINTERFACE')or(paramUC='SI')then
-                                                               sysparam.standartinterface:=true;
-            if (paramUC='UPDATEPO')then
-                                                               sysparam.updatepo:=true;
-            if (paramUC='LM_TRACE')then
-                                       programlog.SetLogMode(LM_Trace);
-            if (paramUC='LM_DEBUG')then
-                                       programlog.SetLogMode(LM_Debug);
-            if (paramUC='LM_INFO')then
-                                       programlog.SetLogMode(LM_Info);
-            if (paramUC='LM_WARNING')then
-                                       programlog.SetLogMode(LM_Warning);
-            if (paramUC='LM_ERROR')then
-                                       programlog.SetLogMode(LM_Error);
-            if (paramUC='LM_FATAL')then
-                                       programlog.SetLogMode(LM_Fatal);
+                                     SysParam.PreloadedFile:=param
+       else if (paramUC='NOSPLASH')or(paramUC='NS')then
+                                                   SysParam.NoSplash:=true
+       else if (paramUC='NOLOADLAYOUT')or(paramUC='NLL')then
+                                                               SysParam.NoLoadLayout:=true
+       else if (paramUC='STANDARTINTERFACE')or(paramUC='SI')then
+                                                               SysParam.StandartInterface:=true
+       else if (paramUC='UPDATEPO')then
+                                                               SysParam.UpdatePO:=true
+       else if (paramUC='LM_TRACE')then
+                                       programlog.SetLogMode(LM_Trace)
+       else if (paramUC='LM_DEBUG')then
+                                       programlog.SetLogMode(LM_Debug)
+       else if (paramUC='LM_INFO')then
+                                       programlog.SetLogMode(LM_Info)
+       else if (paramUC='LM_WARNING')then
+                                       programlog.SetLogMode(LM_Warning)
+       else if (paramUC='LM_ERROR')then
+                                       programlog.SetLogMode(LM_Error)
+       else if (paramUC='LM_FATAL')then
+                                       programlog.SetLogMode(LM_Fatal)
        end;
+     programlog.LogOutStr('end;{ProcessParamStr}',lp_DecPos,LM_Necessarily);
 end;
-Procedure getsysinfo;
+Procedure GetSysInfo;
 begin
+     programlog.LogOutStr('GetSysInfo',lp_IncPos,LM_Necessarily);
      SysDefaultFormatSettings:=DefaultFormatSettings;
      {$IFDEF DEBUGINITSECTION}log.LogOut('sysinfo.getsysinfo');{$ENDIF}
-     sysparam.programpath:=programpath;
-     sysparam.screenx:={GetSystemMetrics(SM_CXSCREEN)}Screen.Width;
-     sysparam.screeny:={GetSystemMetrics(SM_CYSCREEN)}Screen.Height;
-     sysparam.temppath:=GetEnvironmentVariable('TEMP');
-     {$IFNDEF DELPHI}sysparam.temppath:=gettempdir;{$ENDIF}
-     if (sysparam.temppath[length(sysparam.temppath)]<>PathDelim)
+     SysParam.ProgramPath:=programpath;
+     SysParam.ScreenX:={GetSystemMetrics(SM_CXSCREEN)}Screen.Width;
+     SysParam.ScreenY:={GetSystemMetrics(SM_CYSCREEN)}Screen.Height;
+     SysParam.TempPath:=GetEnvironmentVariable('TEMP');
+     {$IFNDEF DELPHI}SysParam.TempPath:=gettempdir;{$ENDIF}
+     if (SysParam.TempPath[length(SysParam.TempPath)]<>PathDelim)
       then
-          sysparam.temppath:=sysparam.temppath+PathDelim;
+          SysParam.TempPath:=SysParam.TempPath+PathDelim;
 
 
-     {sysparam.screenx:=800;
-     sysparam.screeny:=800;}
+     {SysParam.ScreenX:=800;
+     SysParam.ScreenY:=800;}
 
 
 
      {$IFDEF FPC}
-                 sysparam.ver:=GetVersion('zcad.exe');
+                 SysParam.Ver:=GetVersion('zcad.exe');
      {$ELSE}
                  sysparam.ver:=GetVersion('ZCAD.exe');
      {$ENDIF}
-     ProcessParanstr;
-     //sysparam.verstr:=Format('%d.%d.%d.%d SVN: %s',[sysparam.ver.major,sysparam.ver.minor,sysparam.ver.release,sysparam.ver.build,RevisionStr]);
+
+     ProcessParamStr;
+     //SysParam.verstr:=Format('%d.%d.%d.%d SVN: %s',[SysParam.Ver.major,SysParam.Ver.minor,SysParam.Ver.release,SysParam.Ver.build,RevisionStr]);
+     programlog.LogOutStr(format('SysParam.ProgramPath="%s"',[SysParam.ProgramPath]),lp_OldPos,LM_Necessarily);
+     programlog.LogOutStr(format('SysParam.TempPath="%s"',[SysParam.TempPath]),lp_OldPos,LM_Necessarily);
+     programlog.LogOutStr(format('SysParam.ScreenX=%d',[SysParam.ScreenX]),lp_OldPos,LM_Necessarily);
+     programlog.LogOutStr(format('SysParam.ScreenY=%d',[SysParam.ScreenY]),lp_OldPos,LM_Necessarily);
+     programlog.LogOutStr(format('SysParam.NoSplash=%s',[BoolToStr(SysParam.NoSplash)]),lp_OldPos,LM_Necessarily);
+     programlog.LogOutStr(format('SysParam.NoLoadLayout=%s',[BoolToStr(SysParam.NoLoadLayout)]),lp_OldPos,LM_Necessarily);
+     programlog.LogOutStr(format('SysParam.UpdatePO=%s',[BoolToStr(SysParam.UpdatePO)]),lp_OldPos,LM_Necessarily);
+     programlog.LogOutStr(format('SysParam.StandartInterface=%s',[BoolToStr(SysParam.StandartInterface)]),lp_OldPos,LM_Necessarily);
+     programlog.LogOutStr(format('SysParam.PreloadedFile="%s"',[SysParam.PreloadedFile]),lp_OldPos,LM_Necessarily);
+
+     programlog.LogOutStr('end;{GetSysInfo}',lp_DecPos,LM_Necessarily);
 end;
 initialization
-getsysinfo;
+GetSysInfo;
 end.

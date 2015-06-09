@@ -127,9 +127,13 @@ var
   data:TFontLoadProcedureData;
       //ir:itrec;
 begin
-     if programlog.IsNeedToLog(LM_Debug)then programlog.logoutstr(sysutils.Format('GDBFontManager.addFonf(%s)',[FontPathName]),lp_IncPos,LM_Debug);
+     programlog.LogOutFormatStr('GDBFontManager.addFonf(%s)',[FontPathName],lp_IncPos,LM_Debug);
      result:=nil;
-     if FontPathName='' then exit;
+     if FontPathName='' then
+                            begin
+                              programlog.logoutstr('Empty fontname',lp_DecPos,LM_Debug);
+                              exit;
+                            end;
      FontExt:=uppercase(ExtractFileExt(FontPathName));
      FontName:=ExtractFileName(FontPathName);
           if FontName='_mipgost.shx' then
@@ -137,12 +141,12 @@ begin
      case AddItem(FontName,pointer(p)) of
              IsFounded:
                        begin
-                            if programlog.IsNeedToLog(LM_Info) then programlog.LogOutStr(sysutils.format('Font "%s" already loaded',[FontPathName]),lp_OldPos,LM_Info);
+                            programlog.LogOutFormatStr('Font "%s" already loaded',[FontPathName],lp_OldPos,LM_Info);
                        end;
              IsCreated:
                        begin
                             shared.HistoryOutStr(sysutils.format(rsLoadingFontFile,[FontPathName]));
-                            if programlog.IsNeedToLog(LM_Info) then programlog.LogOutStr(sysutils.format('Loading font "%s"',[FontPathName]),lp_IncPos,LM_Info);
+                            programlog.LogOutFormatStr('Loading font "%s"',[FontPathName],lp_IncPos,LM_Info);
                             _key:=lowercase(FontExt);
                             if _key<>'' then
                             begin
@@ -171,7 +175,7 @@ begin
                        end;
              IsError:
                        begin
-                            if programlog.IsNeedToLog(LM_Info) then programlog.LogOutStr(sysutils.format('Font "%s"... something wrong',[FontPathName]),lp_OldPos,LM_Info);
+                            programlog.LogOutFormatStr('Font "%s"... something wrong',[FontPathName],lp_OldPos,LM_Info);
                        end;
      end;
      result:=p;

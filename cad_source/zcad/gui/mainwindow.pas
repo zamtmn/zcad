@@ -2028,7 +2028,7 @@ begin
                 line := f.readstring(#$A' ',#$D);
            end;
            toolbars.Add(paneldesk);
-           log.programlog.LogOutStr(paneldesk,0);
+           log.programlog.LogOutStr(paneldesk,0,LM_Info);
       end
       else if uppercase(line) =createmenutoken  then
       begin

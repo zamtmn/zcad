@@ -78,21 +78,21 @@ var
   pv: PluginVersionInfo;
   temp:moduledesc;
 begin
-  programlog.logoutstr('GDBPlugins.LoadPlugins("'+path+'")',lp_IncPos);
+  programlog.logoutstr('GDBPlugins.LoadPlugins("'+path+'")',lp_IncPos,LM_Necessarily);
   if FindFirst(path + '*.dll', faAnyFile, sr) = 0 then
   begin
     repeat
-      programlog.logoutstr('Found file '+path + sr.Name,0);
+      programlog.logoutstr('Found file '+path + sr.Name,0,LM_Necessarily);
       dllhandle := loadlibrary(pchar(path + sr.Name));
       if dllhandle <> 0 then
       begin
-        programlog.logoutstr('File load...Ok',0);
+        programlog.logoutstr('File load...Ok',0,LM_Necessarily);
         @gvp := nil;
         @gvp := GetProcAddress(dllhandle, 'GetVersionInfo');
         if @gvp <> nil then
         begin
           pv := gvp;
-          programlog.logoutstr('Plugin  version '+inttostr(pv.PluginVersion),0);
+          programlog.logoutstr('Plugin  version '+inttostr(pv.PluginVersion),0,LM_Necessarily);
           if pv.PluginVersion = 1 then
           begin
             temp.modulehandle := dllhandle;
@@ -107,26 +107,26 @@ begin
           else
           begin
             freelibrary(dllhandle);
-            programlog.logoutstr('Version incompatible',0);
+            programlog.logoutstr('Version incompatible',0,LM_Necessarily);
           end;
 
         end
         else
           begin
-          programlog.logoutstr('No version info, unload'+inttostr(pv.PluginVersion),0);
+          programlog.logoutstr('No version info, unload'+inttostr(pv.PluginVersion),0,LM_Necessarily);
           freelibrary(dllhandle);
           end;
 
       end
       else
       begin
-      programlog.logoutstr('File load error',0);
+      programlog.logoutstr('File load error',0,LM_Necessarily);
       end;
 
     until FindNext(sr) <> 0;
     sysutils.FindClose(sr);
   end;
-  programlog.logoutstr('end;',lp_DecPos);
+  programlog.logoutstr('end;',lp_DecPos,LM_Necessarily);
 end;
 
 function getpmodule: GDBPointer;

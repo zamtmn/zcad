@@ -112,16 +112,18 @@ var
   p:PGDBObjBlockdef;
       ir:itrec;
 begin
+  programlog.LogOutStr('GDBObjBlockdefArray.FormatEntity;',lp_IncPos,LM_Debug);
   p:=beginiterate(ir);
   if p<>nil then
   repeat
        if strproc.Tria_Utf8ToAnsi(p^.Name)='*D234' then
                             p^.Name:=p^.Name;
-
-       programlog.LogOutStr('GDBObjBlockdefArray.format; '+p^.name,lp_OldPos);
+       programlog.LogOutFormatStr('Formatting blockdef name="%s"',[p^.Name],lp_IncPos,LM_Trace);
        p^.FormatEntity(drawing,dc);
+       programlog.LogOutStr('end;{Formatting}',lp_DecPos,LM_Trace);
        p:=iterate(ir);
   until p=nil;
+  programlog.LogOutStr('end;{GDBObjBlockdefArray.FormatEntity;}',lp_DecPos,LM_Debug);
 end;
 function GDBObjBlockdefArray.getblockdef;
 var

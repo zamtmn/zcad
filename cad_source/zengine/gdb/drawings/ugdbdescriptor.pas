@@ -980,8 +980,5 @@ begin
 end;
 begin
   {$I gewind.lrs}
-  programlog.logoutstr('UGDBDescriptor.startup',lp_IncPos);
-  //UGDBDescriptor.startup;
   {$IFDEF DEBUGINITSECTION}LogOut('GDBDescriptor.initialization');{$ENDIF}
-  programlog.logoutstr('UGDBDescriptor.startup',lp_DecPos);
 end.

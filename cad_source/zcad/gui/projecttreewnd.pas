@@ -328,7 +328,7 @@ begin
         if pvd<>nil then
         if pvd^.data.Instance<>nil then
                                         treepos:=pstring(pvd^.data.Instance)^;
-        log.programlog.LogOutStr(treepos,0);
+        //log.programlog.LogOutStr(treepos,0);
 
 
         BuildBranchN(TmyTreeNode(CurrNode),treepos,BlockCategory);

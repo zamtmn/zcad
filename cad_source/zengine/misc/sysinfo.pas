@@ -167,6 +167,18 @@ begin
 
      ProcessParamStr;
      //SysParam.verstr:=Format('%d.%d.%d.%d SVN: %s',[SysParam.Ver.major,SysParam.Ver.minor,SysParam.Ver.release,SysParam.Ver.build,RevisionStr]);
+     programlog.logoutstr('ZCAD log v'+sysparam.ver.versionstring+' started',0,LM_Necessarily);
+{$IFDEF FPC}                 programlog.logoutstr('Program compiled on Free Pascal Compiler',0,LM_Necessarily); {$ENDIF}
+{$IFDEF DEBUGBUILD}          programlog.LogOutStr('Program compiled with {$DEFINE DEBUGDUILD}',0,LM_Necessarily); {$ENDIF}
+{$IFDEF TOTALYLOG}           programlog.logoutstr('Program compiled with {$DEFINE TOTALYLOG}',0,LM_Necessarily); {$ENDIF}
+{$IFDEF PERFOMANCELOG}       programlog.logoutstr('Program compiled with {$DEFINE PERFOMANCELOG}',0,LM_Necessarily); {$ENDIF}
+{$IFDEF BREACKPOINTSONERRORS}programlog.logoutstr('Program compiled with {$DEFINE BREACKPOINTSONERRORS}',0,LM_Necessarily); {$ENDIF}
+                             {$if FPC_FULlVERSION>=20701}
+                             programlog.logoutstr('DefaultSystemCodePage:='+inttostr(DefaultSystemCodePage),0,LM_Necessarily);
+                             programlog.logoutstr('DefaultUnicodeCodePage:='+inttostr(DefaultUnicodeCodePage),0,LM_Necessarily);
+                             programlog.logoutstr('UTF8CompareLocale:='+inttostr(UTF8CompareLocale),0,LM_Necessarily);
+                             {modeswitch systemcodepage}
+                             {$ENDIF}
      programlog.LogOutStr(format('SysParam.ProgramPath="%s"',[SysParam.ProgramPath]),lp_OldPos,LM_Necessarily);
      programlog.LogOutStr(format('SysParam.TempPath="%s"',[SysParam.TempPath]),lp_OldPos,LM_Necessarily);
      programlog.LogOutStr(format('SysParam.ScreenX=%d',[SysParam.ScreenX]),lp_OldPos,LM_Necessarily);

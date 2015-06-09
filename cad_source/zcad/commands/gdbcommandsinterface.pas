@@ -224,21 +224,21 @@ begin
      wpowner.getviewcontrol.Parent:=myts;
      wpowner.getviewcontrol.Visible:=true;
      wpowner.PDWG:=ptd;
-     programlog.logoutstr('oglwnd.PDWG:=ptd;',0);
+     //programlog.logoutstr('oglwnd.PDWG:=ptd;',0);
      wpowner.getareacaps;
 
      wpowner.WaResize(nil);
-     programlog.logoutstr('wpowner.WaResize(nil);',0);
+     //programlog.logoutstr('wpowner.WaResize(nil);',0);
      oglwnd.show;
-     programlog.logoutstr('oglwnd.show;',0);
+     //programlog.logoutstr('oglwnd.show;',0);
 
 
      MainFormN.PageControl.ActivePage:=myts;
-     programlog.logoutstr('MainFormN.PageControl.ActivePage:=myts;',0);
+     //programlog.logoutstr('MainFormN.PageControl.ActivePage:=myts;',0);
      if assigned(UpdateVisibleProc) then UpdateVisibleProc;
-     programlog.logoutstr('sharedgdb.updatevisible;',0);
+     //programlog.logoutstr('sharedgdb.updatevisible;',0);
      operands:=operands;
-     programlog.logoutstr('operands:=operands;???????????????',0);
+     //programlog.logoutstr('operands:=operands;???????????????',0);
      if not fileexists(operands) then
      begin
      tn:=expandpath(sysvar.PATH.Template_Path^)+sysvar.PATH.Template_File^;
@@ -252,11 +252,11 @@ begin
                                 //создания или загрузки
      redrawoglwnd;
      result:=cmd_ok;
-     programlog.logoutstr('result:=cmd_ok;',0);
+     //programlog.logoutstr('result:=cmd_ok;',0);
      //application.ProcessMessages;
-     programlog.logoutstr(' application.ProcessMessages;',0);
+     //programlog.logoutstr(' application.ProcessMessages;',0);
      //oglwnd._onresize(nil);
-     programlog.logoutstr('oglwnd._onresize(nil);',0);
+     //programlog.logoutstr('oglwnd._onresize(nil);',0);
 
      //GDB.AddBlockFromDBIfNeed(gdb.GetCurrentDWG,'DEVICE_TEST');
      //addblockinsert(gdb.GetCurrentROOT,@gdb.GetCurrentDWG.ConstructObjRoot.ObjArray, nulvertex, 1, 0, 'DEVICE_TEST');
@@ -340,12 +340,12 @@ begin
           newdwg_com(@s[1]);
           //if operands<>'QS' then
                                 gdb.GetCurrentDWG.SetFileName(s);
-          programlog.logoutstr('gdb.GetCurrentDWG.FileName:=s;',0);
+          //programlog.logoutstr('gdb.GetCurrentDWG.FileName:=s;',0);
           load_merge(@s[1],tloload);
           gdb.GetCurrentDWG.wa.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
                                                   //создания или загрузки
           redrawoglwnd;
-          programlog.logoutstr('load_merge(@s[1],tloload);',0);
+          //programlog.logoutstr('load_merge(@s[1],tloload);',0);
           if assigned(ProcessFilehistoryProc) then
            ProcessFilehistoryProc(s);
           result:=cmd_ok;

@@ -192,7 +192,7 @@ begin
                                    exit;
                               end;
     result:=po.Translate({Identifier}'', OriginalValue);
-    if programlog.IsNeedToLog(LM_Trace) then programlog.LogOutStr(format('InterfaceTranslate: identifier:"%s" originalValue:"%s" translate to "%s"',[Identifier,OriginalValue,result]),0,LM_Trace);
+    programlog.LogOutFormatStr('InterfaceTranslate: identifier:"%s" originalValue:"%s" translate to "%s"',[Identifier,OriginalValue,result],0,LM_Trace);
 
     if sysinfo.sysparam.updatepo then
      begin

@@ -279,8 +279,8 @@ begin
   repeat
         if curr^.SubNode<>nil then
                                       PTPropertyDeskriptorArray(curr^.SubNode)^.cleareraseobj;
-        {$IFDEF TOTALYLOG}programlog.LogOutStr(curr^.Name,0);
-        programlog.LogOutStr('='+curr^.Value,0);{$ENDIF}
+        programlog.LogOutStr(curr^.Name,0,LM_Trace);
+        programlog.LogOutStr('='+curr^.Value,0,LM_Trace);
         curr^.Name:='';
         curr^.Value:='';
 

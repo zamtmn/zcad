@@ -152,7 +152,7 @@ end;
 function CommandRTEdObjectDef.MouseMoveCallback;
 begin
   //result:=0;
-  {$IFDEF TOTALYLOG}programlog.logoutstr('CommandRTEdObjectDef.MouseMoveCallback',0);{$ENDIF}
+  programlog.logoutstr('CommandRTEdObjectDef.MouseMoveCallback',0,LM_Trace);
      { if button =1  then
                         begin
                             button:=-button;

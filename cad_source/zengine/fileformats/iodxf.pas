@@ -386,7 +386,7 @@ begin
     begin
     if owner <> nil then
       begin
-        {$IFDEF TOTALYLOG}programlog.logoutstr('AddEntitiesFromDXF.Found primitive '+s,0);{$ENDIF}
+        programlog.LogOutFormatStr('AddEntitiesFromDXF.Found primitive %s',[s],lp_OldPos,LM_Trace);
         {$IFDEF DEBUGBUILD}inc(i2);if i2=4349 then
                                                   i2:=i2;{$ENDIF}
         pobj := EntInfoData.AllocAndInitEntity(nil);
@@ -544,7 +544,7 @@ var
   //phandlearray: pdxfhandlerecopenarray;
   h2p:TMapHandleToPointer;
 begin
-  {$IFDEF TOTALYLOG}programlog.logoutstr('AddFromDXF12',lp_IncPos);{$ENDIF}
+  programlog.LogOutStr('AddFromDXF12',lp_IncPos,LM_Debug);
   //phandlearray := dxfhandlearraycreate(10000);
   h2p:=TMapHandleToPointer.Create;
   while (f.notEOF) and (s <> exitGDBString) do
@@ -555,7 +555,7 @@ begin
     s := f.readGDBString;
     if s = dxfName_Layer then
     begin
-      {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer table',lp_IncPos);{$ENDIF}
+      programlog.LogOutStr('Found layer table',lp_IncPos,LM_Debug);
       repeat
             scode := f.readGDBString;
             sname := f.readGDBString;
@@ -573,14 +573,14 @@ begin
                                62:val(sname,LayerColor,ErrorCode);
               end;{case}
         until GroupCode=0;
-        {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer '+LayerName,0);{$ENDIF}
+        programlog.LogOutFormatStr('Found layer ',[LayerName],lp_OldPos,LM_Debug);
         drawing.LayerTable.addlayer(LayerName,LayerColor,-3,true,false,true,'',TLOLoad);
       until sname=dxfName_ENDTAB;
-      {$IFDEF TOTALYLOG}programlog.logoutstr('end; {layer table}',lp_DecPos);{$ENDIF}
+      programlog.LogOutStr('end; {layer table}',lp_DecPos,LM_Debug);
     end
     else if s = 'BLOCKS' then
     begin
-      {$IFDEF TOTALYLOG}programlog.logoutstr('Found block table',lp_IncPos);{$ENDIF}
+      programlog.LogOutStr('Found block table',lp_IncPos,LM_Debug);
       sname := '';
       repeat
         if sname = '  2' then
@@ -592,25 +592,25 @@ begin
           else
           begin
             tp := drawing.BlockDefArray.create(s);
-            programlog.LogOutFormatStr('Found block "%s"',[s],lp_IncPos,LM_Trace);
+            programlog.LogOutFormatStr('Found block "%s"',[s],lp_IncPos,LM_Debug);
             {addfromdxf12}addentitiesfromdxf(f, 'ENDBLK',tp,drawing,h2p);
-            programlog.LogOutFormatStr('end; {block "%s"}',[s],lp_DecPos,LM_Trace);
+            programlog.LogOutFormatStr('end; {block "%s"}',[s],lp_DecPos,LM_Debug);
           end;
         sname := f.readGDBString;
         s := f.readGDBString;
       until (s = dxfName_ENDSEC);
-      {$IFDEF TOTALYLOG}programlog.logoutstr('end; {block table}',lp_DecPos);{$ENDIF}
+      programlog.LogOutStr('end; {block table}',lp_DecPos,LM_Debug);
     end
     else if s = 'ENTITIES' then
     begin
-         {$IFDEF TOTALYLOG}programlog.logoutstr('Found entities section',lp_IncPos);{$ENDIF}
+         programlog.LogOutStr('Found entities section',lp_IncPos,LM_Debug);
          addentitiesfromdxf(f, 'EOF',owner,drawing,h2p);
-         {$IFDEF TOTALYLOG}programlog.logoutstr('end {entities section}',lp_DecPos);{$ENDIF}
+         programlog.LogOutStr('end {entities section}',lp_DecPos,LM_Debug);
     end;
   end;
   //GDBFreeMem(GDBPointer(phandlearray));
   h2p.Destroy;
-  {$IFDEF TOTALYLOG}programlog.logoutstr('end; {AddFromDXF12}',lp_decPos);{$ENDIF}
+  programlog.LogOutStr('end; {AddFromDXF12}',lp_DecPos,LM_Debug);
 end;
 procedure ReadLTStyles(var s:String;cltype:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var h2p:TMapHandleToPointer);
 var
@@ -777,7 +777,7 @@ begin
       case byt of
         2:
           begin
-            {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer '+s,0);{$ENDIF}
+            programlog.LogOutFormatStr('Found layer  %s',[s],lp_OldPos,LM_Debug);
             lname:=s;
             player:=drawing.LayerTable.MergeItem(s,LoadMode);
             if player<>nil then
@@ -959,7 +959,7 @@ begin
                pltypeprop:=drawing.LTypeStyleTable.iterate(ir);
          until pltypeprop=nil;
     end;
-    {$IFDEF TOTALYLOG}programlog.logoutstr('Found style '+tstyle.Name,0);{$ENDIF}
+    programlog.LogOutFormatStr('Found style  %s',[tstyle.Name],lp_OldPos,LM_Debug);
    if uppercase(tstyle.Name)=uppercase(ctstyle)then
                 if sysvar.DWG.DWG_CTStyle<>nil then
                                                   sysvar.DWG.DWG_CTStyle^:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
@@ -983,9 +983,9 @@ begin
        begin
          s := f.readGDBString;
          byt := strtoint(s);
-         programlog.LogOutFormatStr('Group :"%s"',[s],lp_OldPos,LM_Trace);
+         programlog.LogOutFormatStr('Group :"%s"',[s],lp_OldPos,LM_Debug);
          s := f.readGDBString;
-         programlog.LogOutFormatStr('Value :"%s"',[s],lp_OldPos,LM_Trace);
+         programlog.LogOutFormatStr('Value :"%s"',[s],lp_OldPos,LM_Debug);
          if (byt=0)and(s='VPORT')then
          begin
                byt := -100;
@@ -1218,7 +1218,7 @@ begin
   Handle2BlockName:=TMapBlockHandle_BlockNames.Create;
   {$ENDIF}
   blockload:=false;
-  {$IFDEF TOTALYLOG}programlog.logoutstr('AddFromDXF2000',lp_IncPos);{$ENDIF}
+  programlog.LogOutStr('AddFromDXF2000',lp_IncPos,LM_Debug);
   readvariables(f,ctstyle,clayer,cltype,cdimstyle,LoadMode,DWGVarsDict);
   repeat
     gotodxf(f, 0, dxfName_SECTION);
@@ -1246,33 +1246,33 @@ begin
                                     gotodxf(f, 0, dxfName_ENDTAB);//scip this table
                dxfName_BLOCK_RECORD:
                                     begin
-                                    {$IFDEF TOTALYLOG}programlog.logoutstr('Found BLOCK_RECORD table',lp_IncPos);{$ENDIF}
+                                    programlog.LogOutStr('Found BLOCK_RECORD table',lp_IncPos,LM_Debug);
                                     ReadBlockRecird(Handle2BlockName,s,f,exitGDBString,owner,LoadMode,drawing);
-                                    {$IFDEF TOTALYLOG}programlog.logoutstr('end; {BLOCK_RECORD table}',lp_DecPos);{$ENDIF}
+                                    programlog.LogOutStr('end; {BLOCK_RECORD table}',lp_DecPos,LM_Debug);
                                     end;
                    dxfName_DIMSTYLE:
                                     begin
-                                      {$IFDEF TOTALYLOG}programlog.logoutstr('Found dimstyles table',lp_IncPos);{$ENDIF}
+                                      programlog.LogOutStr('Found dimstyles table',lp_IncPos,LM_Debug);
                                       ReadDimStyles(s,cdimstyle,f,exitGDBString,owner,LoadMode,drawing,h2p);
-                                      {$IFDEF TOTALYLOG}programlog.logoutstr('end; {dimstyles table}',lp_DecPos);{$ENDIF}
+                                      programlog.LogOutStr('end; {dimstyles table}',lp_DecPos,LM_Debug);
                                     end;
                       dxfName_Layer:
                                     begin
-                                      {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer table',lp_IncPos);{$ENDIF}
+                                      programlog.LogOutStr('Found layer table',lp_IncPos,LM_Debug);
                                       ReadLayers(s,clayer,f,exitGDBString,owner,LoadMode,drawing);
-                                      {$IFDEF TOTALYLOG}programlog.logoutstr('end; {layer table}',lp_DecPos);{$ENDIF}
+                                      programlog.LogOutStr('end; {layer table}',lp_DecPos,LM_Debug);
                                     end;
                       dxfName_LType:
                                     begin
-                                      {$IFDEF TOTALYLOG}programlog.logoutstr('Found line types table',lp_IncPos);{$ENDIF}
+                                      programlog.LogOutStr('Found line types table',lp_IncPos,LM_Debug);
                                       ReadLTStyles(s,cltype,f,exitGDBString,owner,LoadMode,drawing,h2p);
-                                      {$IFDEF TOTALYLOG}programlog.logoutstr('end; (line types table)',lp_DecPos);{$ENDIF}
+                                      programlog.LogOutStr('end; (line types table)',lp_DecPos,LM_Debug);
                                     end;
                       dxfName_Style:
                                     begin
-                                      {$IFDEF TOTALYLOG}programlog.logoutstr('Found style table',lp_IncPos);{$ENDIF}
+                                      programlog.LogOutStr('Found style table',lp_IncPos,LM_Debug);
                                       ReadTextstyles(s,ctstyle,f,exitGDBString,owner,LoadMode,drawing,h2p);
-                                      {$IFDEF TOTALYLOG}programlog.logoutstr('end; {style table}',lp_DecPos);{$ENDIF}
+                                      programlog.LogOutStr('end; {style table}',lp_DecPos,LM_Debug);
                                     end;
                               'UCS':
                                     gotodxf(f, 0, dxfName_ENDTAB);//scip this table
@@ -1280,9 +1280,9 @@ begin
                                     gotodxf(f, 0, dxfName_ENDTAB);//scip this table
                             'VPORT':
                                     begin
-                                    {$IFDEF TOTALYLOG}programlog.logoutstr('Found vports table',lp_IncPos);{$ENDIF}
+                                    programlog.LogOutStr('Found vports table',lp_IncPos,LM_Debug);
                                     ReadVport(s,f,exitGDBString,owner,LoadMode,drawing);
-                                    {$IFDEF TOTALYLOG}programlog.logoutstr('end; {vports table}',lp_DecPos);{$ENDIF}
+                                    programlog.LogOutStr('end; {vports table}',lp_DecPos,LM_Debug);
                                     end;
         end;{case}
         s := f.readGDBString;
@@ -1293,18 +1293,18 @@ begin
     else
       if s = 'ENTITIES' then
       begin
-        {$IFDEF TOTALYLOG}programlog.logoutstr('Found entities section',lp_IncPos);{$ENDIF}
+        programlog.LogOutStr('Found entities section',lp_IncPos,LM_Debug);
         //inc(foc);
         {addfromdxf12}addentitiesfromdxf(f, dxfName_ENDSEC,owner,drawing,h2p);
         owner^.ObjArray.pack;
         owner^.correctobjects(nil,0);
         //inc(foc);
-        {$IFDEF TOTALYLOG}programlog.logoutstr('end {entities section}',lp_DecPos);{$ENDIF}
+        programlog.LogOutStr('end; {vports table}',lp_DecPos,LM_Debug);
       end
       else
         if s = 'BLOCKS' then
         begin
-          {$IFDEF TOTALYLOG}programlog.logoutstr('Found block table',lp_IncPos);{$ENDIF}
+          programlog.LogOutStr('Found block table',lp_IncPos,LM_Debug);
           sname := '';
           repeat
             US:=uppercase(s);
@@ -1367,7 +1367,7 @@ begin
             blockload:=false;
             s := f.readGDBString;
           until (s = dxfName_ENDSEC);
-          {$IFDEF TOTALYLOG}programlog.logoutstr('end; {block table}',lp_DecPos);{$ENDIF}
+          programlog.LogOutStr('end; {block table}',lp_DecPos,LM_Debug);
           drawing.BlockDefArray.Format;
           drawing.DimStyleTable.ResolveDXFHandles(Handle2BlockName);
           drawing.DimStyleTable.ResolveLineTypes(drawing.LTypeStyleTable);
@@ -1381,7 +1381,7 @@ begin
   {$IFNDEF DELPHI}
   Handle2BlockName.destroy;
   {$ENDIF}
-  {$IFDEF TOTALYLOG}programlog.logoutstr('end; {AddFromDXF2000}',lp_decPos);{$ENDIF}
+  programlog.LogOutStr('end; {AddFromDXF2000}',lp_DecPos,LM_Debug);
 end;
 
 procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);

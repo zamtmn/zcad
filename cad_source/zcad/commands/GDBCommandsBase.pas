@@ -84,7 +84,7 @@ uses GDBPolyLine,UGDBPolyLine2DArray,GDBLWPolyLine,{mainwindow,}UGDBSelectedObjA
 var
    CopyClipFile:GDBString;
 function MultiSelect2ObjIbsp_com(operands:TCommandOperands):TCommandResult;
-{$IFDEF TOTALYLOG}
+{$IFDEF DEBUGBUILD}
 var
    membuf:GDBOpenArrayOfByte;
 {$ENDIF}
@@ -92,7 +92,7 @@ begin
      MSEditor.CreateUnit(GDB.GetUnitsFormat);
      if {MSEditor.SelCount>0}true then
                                 begin
-                                 {$IFDEF TOTALYLOG}
+                                 {$IFDEF DEBUGBUILD}
                                  membuf.init({$IFDEF DEBUGBUILD}'{6F6386AC-95B5-4B6D-AEC3-7EE5DD53F8A3}',{$ENDIF}10000);
                                  MSEditor.OU.SaveToMem(membuf);
                                  membuf.SaveToFile('*log\lms.pas');
@@ -1128,7 +1128,7 @@ begin
      end;
      s:=s+'(далее в +): '+inttostr(pnode.pluscount);
      s:=s+' (далее в -): '+inttostr(pnode.minuscount);
-     {$IFDEF TOTALYLOG}
+     {$IFDEF DEBUGBUILD}
      shared.HistoryOutStr(dupestring('  ',pnode.nodedepth)+s);
      {$ENDIF}
      if pnode.nodedepth>depth then

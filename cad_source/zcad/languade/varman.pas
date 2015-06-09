@@ -421,9 +421,7 @@ procedure vardeskclear(p:GDBPointer);
 //var
    //s:string;
 begin
-     {$IFDEF TOTALYLOG}
-     log.programlog.logoutstr(pvardesk(p)^.name+';',0);
-     {$ENDIF}
+     programlog.LogOutFormatStr('vardeskclear: "%s"',[pvardesk(p)^.name],lp_OldPos,LM_Trace);
      if pvardesk(p)^.name='_EQ_C2000_KPB' then
      pvardesk(p)^.name:=pvardesk(p)^.name;
 
@@ -445,19 +443,19 @@ begin
 end;
 destructor typemanager.done;
 begin
-     {$IFDEF TOTALYLOG}programlog.logoutstr('TypeManager.done',lp_IncPos);{$ENDIF}
+     programlog.LogOutStr('TypeManager.done',lp_IncPos,LM_Trace);
      exttype.cleareraseobj;
      exttype.done;
      n2i.destroy;
-     {$IFDEF TOTALYLOG}programlog.logoutstr('end;',lp_DecPos);{$ENDIF}
+     programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
 destructor typemanager.systemdone;
 begin
-     {$IFDEF TOTALYLOG}programlog.logoutstr('TypeManager.done',lp_IncPos);{$ENDIF}
+     programlog.LogOutStr('TypeManager.systemdone',lp_IncPos,LM_Trace);
      exttype.cleareraseobjfrom(BaseTypesEndIndex-1);
      exttype.done;
      n2i.destroy;
-     {$IFDEF TOTALYLOG}programlog.logoutstr('end;',lp_DecPos);{$ENDIF}
+     programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
 
 procedure typemanager.free;
@@ -590,11 +588,11 @@ begin
 end;
 destructor varmanager.done;
 begin
-     {$IFDEF TOTALYLOG}programlog.logoutstr('VarManager.done',lp_IncPos);{$ENDIF}
+     programlog.LogOutStr('varmanager.done',lp_IncPos,LM_Trace);
      vardescarray.freewithprocanddone(vardeskclear);
      vararray.done;//TODO:проверить чистятся ли стринги внутри
      //exttype.freewithproc(basetypedescclear);
-     {$IFDEF TOTALYLOG}programlog.logoutstr('end;',lp_DecPos);{$ENDIF}
+     programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
 function varmanager.createvariable(varname: GDBString; var vd: vardesk):pvardesk;
 var

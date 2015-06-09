@@ -118,9 +118,9 @@ begin
   repeat
        if strproc.Tria_Utf8ToAnsi(p^.Name)='*D234' then
                             p^.Name:=p^.Name;
-       programlog.LogOutFormatStr('Formatting blockdef name="%s"',[p^.Name],lp_IncPos,LM_Trace);
+       programlog.LogOutFormatStr('Formatting blockdef name="%s"',[p^.Name],lp_IncPos,LM_Debug);
        p^.FormatEntity(drawing,dc);
-       programlog.LogOutStr('end;{Formatting}',lp_DecPos,LM_Trace);
+       programlog.LogOutStr('end;{Formatting}',lp_DecPos,LM_Debug);
        p:=iterate(ir);
   until p=nil;
   programlog.LogOutStr('end;{GDBObjBlockdefArray.FormatEntity;}',lp_DecPos,LM_Debug);

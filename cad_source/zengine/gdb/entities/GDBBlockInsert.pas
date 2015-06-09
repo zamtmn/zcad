@@ -635,7 +635,7 @@ else if not dxfGDBStringload(f,2,byt,name)then {s := }f.readgdbstring;
       end;}
       if name='EL_LIGHT_SWIITH' then
                                         name:=name;
-      programlog.LogOutFormatStr('BlockInsert name="%s" loaded',[name],lp_OldPos,LM_Trace);
+      programlog.LogOutFormatStr('BlockInsert name="%s" loaded',[name],lp_OldPos,LM_Debug);
       //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
       index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
       //format;

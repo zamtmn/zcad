@@ -130,7 +130,7 @@ begin
      if result=194 then
                      uch:=uch;
      {$ENDIF}
-{$IFDEF TOTALYLOG}programlog.logoutstr(inttohex(uch,4)+'='+inttostr(result),0);{$ENDIF}
+     //{$IFDEF TOTALYLOG}programlog.logoutstr(inttohex(uch,4)+'='+inttostr(result),0);{$ENDIF}
 
 end;
 function ach2uch(ach:byte):word;

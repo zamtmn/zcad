@@ -219,9 +219,7 @@ begin
      //fn:=fn+systoutf8(s);
      *конец попытки*)
 
-     programlog.logoutstr('utf '+fn,0,LM_Trace);
-     programlog.logoutstr('sys '+path,0,LM_Trace);
-     {$IFDEF TOTALYLOG}programlog.logoutstr('Process file '+fn,0);{$ENDIF}
+     programlog.LogOutFormatStr('Process file %s',[fn],lp_OldPos,LM_Trace);
      if @method<>nil then
                          method(fn);
      if @proc<>nil then
@@ -229,7 +227,7 @@ begin
 
 end;
 begin
-  {$IFDEF TOTALYLOG}programlog.logoutstr('FromDirIterator start',lp_IncPos);{$ENDIF}
+  programlog.LogOutStr('FromDirIterator start',lp_IncPos,LM_Debug);
   if firstloadfilename<>'' then
   if fileexists(path+firstloadfilename) then
                                             processfile(firstloadfilename);
@@ -252,7 +250,7 @@ begin
     until FindNext(sr) <> 0;
     FindClose(sr);
   end;
-  {$IFDEF TOTALYLOG}programlog.logoutstr('FromDirIterator....{end}',lp_DecPos);{$ENDIF}
+  programlog.LogOutStr('FromDirIterator....{end}',lp_DecPos,LM_Debug);
 end;
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('shared.initialization');{$ENDIF}

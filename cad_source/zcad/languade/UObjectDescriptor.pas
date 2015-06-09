@@ -504,7 +504,7 @@ var pcmd:PMetodDescriptor;
     pmd:PMetodDescriptor;
         ir:itrec;
 begin
-     if programlog.IsNeedToLog(LM_Debug)then programlog.logoutstr(sysutils.Format('ObjectDescriptor.CopyTo(@%s)',[RD.TypeName]),lp_IncPos,LM_Debug);
+     programlog.LogOutFormatStr('ObjectDescriptor.CopyTo(@%s)',[RD.TypeName],lp_IncPos,LM_Debug);
      if self.TypeName='DeviceDbBaseObject' then
                                                TypeName:=TypeName;
      if rd^.TypeName='DbBaseObject' then

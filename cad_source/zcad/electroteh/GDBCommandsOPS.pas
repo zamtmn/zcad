@@ -820,7 +820,7 @@ begin
              if (pcabledesk.StartDevice<>nil){and(pcabledesk.EndDevice<>nil)} then
              begin
                   shared.HistoryOutStr(pcabledesk.Name);
-                  programlog.logoutstr(pcabledesk.Name,0);
+                  //programlog.logoutstr(pcabledesk.Name,0);
                   currentcoord:=coord;
                   PTCableType(pvd^.data.Instance)^:=TCT_ShleifOPS;
                   lsave:=SysVar.dwg.DWG_CLayer^;

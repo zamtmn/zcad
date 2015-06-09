@@ -136,19 +136,6 @@ begin
        SetHeapTraceOutput('log/memory-heaptrace.txt');
        keepreleased:=true;
 {$ENDIF}
-                             programlog.logoutstr('ZCAD log v'+sysparam.ver.versionstring+' started',0);
-{$IFDEF FPC}                 programlog.logoutstr('Program compiled on Free Pascal Compiler',0); {$ENDIF}
-{$IFDEF DEBUGBUILD}          programlog.LogOutStr('Program compiled with {$DEFINE DEBUGDUILD}',0); {$ENDIF}
-{$IFDEF TOTALYLOG}           programlog.logoutstr('Program compiled with {$DEFINE TOTALYLOG}',0); {$ENDIF}
-{$IFDEF PERFOMANCELOG}       programlog.logoutstr('Program compiled with {$DEFINE PERFOMANCELOG}',0); {$ENDIF}
-{$IFDEF BREACKPOINTSONERRORS}programlog.logoutstr('Program compiled with {$DEFINE BREACKPOINTSONERRORS}',0); {$ENDIF}
-                             {$if FPC_FULlVERSION>=20701}
-                             programlog.logoutstr('DefaultSystemCodePage:='+inttostr(DefaultSystemCodePage),0);
-                             programlog.logoutstr('DefaultUnicodeCodePage:='+inttostr(DefaultUnicodeCodePage),0);
-                             programlog.logoutstr('UTF8CompareLocale:='+inttostr(UTF8CompareLocale),0);
-                             {modeswitch systemcodepage}
-                             {$ENDIF}
-
   //Application_Initialize перемещен в инициализацию splashwnd чтоб показать сплэш пораньше
   //Application.Initialize;
 
@@ -186,7 +173,7 @@ begin
 
   SplashWindow.TXTOut('ugdbdescriptor.finalize;',false);ugdbdescriptor.finalize;
 
-  programlog.logoutstr('END.',0);
+  programlog.logoutstr('END.',0,LM_Necessarily);
   programlog.done;
 end.
 

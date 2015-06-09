@@ -64,8 +64,10 @@ tlog={$IFNDEF DELPHI}packed{$ENDIF} object
            constructor init(fn:GDBString;LogMode:TLogMode);
            procedure SetLogMode(LogMode:TLogMode);
            destructor done;
-           procedure ProcessStr(str:GDBString;IncIndent:GDBInteger;todisk:boolean);virtual;
-           procedure LogOutStr(str:GDBString;IncIndent:GDBInteger;LogMode:TLogMode=LM_Trace);virtual;
+           procedure ProcessStrToLog(str:GDBString;IncIndent:GDBInteger;todisk:boolean);virtual;
+           procedure ProcessStr(str:GDBString;IncIndent:GDBInteger);virtual;
+           procedure LogOutStr(str:GDBString;IncIndent:GDBInteger;LogMode:TLogMode{=LM_Trace});virtual;
+           procedure LogOutFormatStr(Const Fmt:GDBString;const Args :Array of const;IncIndent:GDBInteger;LogMode:TLogMode=LM_Trace);virtual;
            function IsNeedToLog(LogMode:TLogMode):boolean;
            procedure AddStrToLatest(str:GDBString);
            procedure WriteLatestToFile(var f:system.text);
@@ -221,7 +223,7 @@ begin
      result.rdtsc:=a;
 end;
 
-procedure tlog.processstr;
+procedure tlog.processstrtolog;
 var
    CurrentTime:TMyTimeStamp;
    DeltaTime,FromStartTime:TDateTime;
@@ -303,27 +305,32 @@ begin
                                else
                                    result:=true;
 end;
-
-procedure tlog.logoutstr;
+procedure tlog.LogOutFormatStr(Const Fmt:GDBString;const Args :Array of const;IncIndent:GDBInteger;LogMode:TLogMode=LM_Trace);
 begin
      if IsNeedToLog(LogMode) then
-     begin
-     //if LogMode<CurrentLogMode then exit;
+                                 ProcessStr(format(fmt,args),IncIndent);
+end;
+procedure tlog.ProcessStr(str:GDBString;IncIndent:GDBInteger);
+begin
      if (Indent=0) then
                     if assigned(SplashTextOut) then
                                                   SplashTextOut(str,false);
-     processstr(str,IncIndent,true);
+     ProcessStrToLog(str,IncIndent,true);
      AddStrToLatest('  '+str);
-     end;
+end;
+procedure tlog.logoutstr;
+begin
+     if IsNeedToLog(LogMode) then
+                                 ProcessStr(str,IncIndent);
 end;
 procedure tlog.LogOutStrFast;
 begin
      //if (str='TOGLWnd.Pre_MouseMove----{end}')and(Indent=3) then
      //               indent:=3;
      if PerfomaneBuf.Count<1024 then
-                                    processstr(str,IncIndent,false)
+                                    ProcessStrToLog(str,IncIndent,false)
                                 else
-                                    processstr(str,IncIndent,true);
+                                    ProcessStrToLog(str,IncIndent,true);
 end;
 procedure tlog.SetLogMode(LogMode:TLogMode);
 var

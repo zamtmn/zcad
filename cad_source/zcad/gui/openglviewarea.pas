@@ -93,7 +93,7 @@ procedure TOpenGLViewArea.setdeicevariable;
 var a:array [0..1] of GDBDouble;
     p:pansichar;
 begin
-  programlog.logoutstr('TOGLWnd.SetDeiceVariable',lp_IncPos);
+  programlog.logoutstr('TOGLWnd.SetDeiceVariable',lp_IncPos,LM_Debug);
   oglsm.myglGetDoublev(GL_LINE_WIDTH_RANGE,@a);
   if assigned(sysvar.RD.RD_MaxLineWidth) then
   sysvar.RD.RD_MaxLineWidth^:=a[1];
@@ -101,35 +101,35 @@ begin
   if assigned(sysvar.RD.RD_MaxPointSize) then
   sysvar.RD.RD_MaxPointSize^:=a[1];
   GDBPointer(p):=oglsm.myglGetString(GL_VENDOR);
-  programlog.logoutstr('RD_Vendor:='+p,0);
+  programlog.LogOutFormatStr('RD_Vendor:="%s"',[p],0,LM_Info);
   //if assigned(OpenglParam.RD_Vendor) then
   OpenglParam.RD_Vendor:=p;
   GDBPointer(p):=oglsm.myglGetString(GL_RENDERER);
-  programlog.logoutstr('RD_Renderer:='+p,0);
+  programlog.LogOutFormatStr('RD_Renderer:="%s"',[p],0,LM_Info);
   //if assigned(OpenglParam.RD_Renderer) then
   OpenglParam.RD_Renderer:=p;
   GDBPointer(p):=oglsm.myglGetString(GL_VERSION);
-  programlog.logoutstr('RD_Version:='+p,0);
+  programlog.LogOutFormatStr('RD_Version:="%s"',[p],0,LM_Info);
   //if assigned(OpenglParam.RD_Version) then
   OpenglParam.RD_Version:=p;
   GDBPointer(p):=oglsm.mygluGetString(GLU_VERSION);
-  programlog.logoutstr('RD_GLUVersion:='+p,0);
+  programlog.LogOutFormatStr('RD_GLUVersion:="%s"',[p],0,LM_Info);
   if assigned(sysvar.RD.RD_GLUVersion) then
   sysvar.RD.RD_GLUVersion^:=p;
   GDBPointer(p):=oglsm.mygluGetString(GLU_EXTENSIONS);
-  programlog.logoutstr('RD_GLUExtensions:='+p,0);
+  programlog.LogOutFormatStr('RD_GLUExtensions:="%s"',[p],0,LM_Info);
   if assigned(sysvar.RD.RD_GLUExtensions) then
   sysvar.RD.RD_GLUExtensions^:=p;
   GDBPointer(p):=oglsm.myglGetString(GL_EXTENSIONS);
-  programlog.logoutstr('RD_Extensions:='+p,0);
+  programlog.LogOutFormatStr('RD_Extensions:="%s"',[p],0,LM_Info);
   //if assigned(OpenglParam.RD_Extensions) then
   OpenglParam.RD_Extensions:=p;
   if assigned(sysvar.RD.RD_MaxWidth) and assigned(sysvar.RD.RD_MaxLineWidth) then
   begin
   sysvar.RD.RD_MaxWidth^:=round(min(sysvar.RD.RD_MaxPointSize^,sysvar.RD.RD_MaxLineWidth^));
-  programlog.logoutstr('RD_MaxWidth:='+inttostr(round(min(sysvar.RD.RD_MaxPointSize^,sysvar.RD.RD_MaxLineWidth^))),0);
+  programlog.LogOutFormatStr('RD_MaxWidth:="%G"',[min(sysvar.RD.RD_MaxPointSize^,sysvar.RD.RD_MaxLineWidth^)],0,LM_Info);
   end;
-  programlog.logoutstr('end;',lp_DecPos);
+  programlog.logoutstr('end;',lp_DecPos,LM_Debug);
 end;
 
 procedure TOpenGLViewArea.getareacaps;
@@ -138,8 +138,7 @@ var
    Widget:PGtkWidget;
 {$ENDIF}
 begin
-  programlog.logoutstr('TOGLWnd.InitOGL',lp_IncPos);
-
+  programlog.logoutstr('TOGLWnd.InitOGL',lp_IncPos,LM_Debug);
   {$IFDEF LCLGTK2}
   Widget:=PGtkWidget(PtrUInt(OpenGLWindow.Handle));
   gtk_widget_add_events (Widget,GDK_POINTER_MOTION_HINT_MASK);
@@ -171,7 +170,7 @@ begin
                                            end;
   end;
   {$ENDIF}
-  programlog.logoutstr('end;',lp_DecPos)
+  programlog.logoutstr('end;{TOGLWnd.InitOGL}',lp_DecPos,LM_Debug);
 end;
 procedure TOpenGLViewArea.DrawGrid;
 var

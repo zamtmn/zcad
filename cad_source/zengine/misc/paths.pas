@@ -101,9 +101,9 @@ const
 var
    s,ts:gdbstring;
 begin
-     if programlog.IsNeedToLog(LM_Debug) then programlog.LogOutStr(format('FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]),0,LM_Debug);
+     programlog.LogOutFormatStr('FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)],0,LM_Debug);
      FileName:=ExpandPath(FileName);
-     if programlog.IsNeedToLog(LM_Debug) then programlog.LogOutStr(format('FindInSupportPath: file name expand to:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]),0,LM_Debug);
+     programlog.LogOutFormatStr('FindInSupportPath: file name expand to:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)],0,LM_Debug);
      if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)) then
                                  begin
                                       result:=FileName;
@@ -116,7 +116,7 @@ begin
      repeat
            GetPartOfPath(ts,s,'|');
            ts:=ExpandPath(ts);
-           if programlog.IsNeedToLog(LM_Trace) then programlog.LogOutStr(format('FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]),0,LM_Trace);
+           programlog.LogOutFormatStr('FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)],0,LM_Trace);
            ts:=ts+FileName;
            if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then
                                  begin

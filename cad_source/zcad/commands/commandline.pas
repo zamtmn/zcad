@@ -458,7 +458,7 @@ begin
           //lastcommand := command;
 
           if silent then
-                        programlog.logoutstr('GDBCommandManager.ExecuteCommandSilent('+pfoundcommand^.CommandName+');',0)
+                        programlog.LogOutFormatStr('GDBCommandManager.ExecuteCommandSilent(%s)',[pfoundcommand^.CommandName],lp_OldPos,LM_Info)
                     else
                         begin
                         historyoutstr(rsRunCommand+':'+pfoundcommand^.CommandName);

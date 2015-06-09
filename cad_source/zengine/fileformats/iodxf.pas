@@ -592,9 +592,9 @@ begin
           else
           begin
             tp := drawing.BlockDefArray.create(s);
-            programlog.logoutstr('Found block '+s+';',lp_IncPos);
+            programlog.LogOutFormatStr('Found block "%s"',[s],lp_IncPos,LM_Trace);
             {addfromdxf12}addentitiesfromdxf(f, 'ENDBLK',tp,drawing,h2p);
-            programlog.logoutstr('end; {block '+s+'}',lp_DecPos);
+            programlog.LogOutFormatStr('end; {block "%s"}',[s],lp_DecPos,LM_Trace);
           end;
         sname := f.readGDBString;
         s := f.readGDBString;
@@ -973,170 +973,172 @@ var
    active:boolean;
    flags: GDBInteger;
 begin
-                               if GoToDXForENDTAB(f, 0, 'VPORT') then
-                               begin
-                                 byt := -100;
-                                 active:=false;
+     programlog.logoutstr('ReadVport',lp_IncPos,LM_Debug);
+     if GoToDXForENDTAB(f, 0, 'VPORT') then
+     begin
+       byt := -100;
+       active:=false;
 
-                                 while byt <> 0 do
-                                 begin
-                                   s := f.readGDBString;
-                                   programlog.LogOutStr(s,0);
-                                   byt := strtoint(s);
-                                   s := f.readGDBString;
-                                   if (byt=0)and(s='VPORT')then
-                                   begin
-                                         byt := -100;
-                                         active:=false;
-                                   end;
-                                   programlog.LogOutStr(s,0);
-                                   case byt of
-                                     2:
-                                       begin
-                                            if uppercase(s)='*ACTIVE' then
-                                                                          active:=true
-                                                                      else
-                                                                          active:=false;
-                                       end;
-                                     12:
-                                       begin
-                                            if LoadMode=TLOLoad then
-                                            if active then
-                                            if @drawing<>nil then
-                                            if drawing.pcamera<>nil then
-                                            begin
-                                                 drawing.pcamera^.prop.point.x:=-strtofloat(s);
-                                            end;
-                                        end;
-                                     22:
-                                       begin
-                                            if LoadMode=TLOLoad then
-                                            if active then
-                                            if @drawing<>nil then
-                                            if drawing.pcamera<>nil then
-                                            begin
-                                                 drawing.pcamera^.prop.point.y:=-strtofloat(s);
-                                            end;
-                                        end;
-                                     13:
-                                       begin
-                                            if LoadMode=TLOLoad then
-                                            if active then
-                                            if sysvar.DWG.DWG_Snap<>nil then
-                                            begin
-                                                 sysvar.DWG.DWG_Snap^.Base.x:=strtofloat(s);
-                                            end;
-                                        end;
-                                     23:
-                                       begin
-                                            if LoadMode=TLOLoad then
-                                            if active then
-                                            if sysvar.DWG.DWG_Snap<>nil then
-                                            begin
-                                                 sysvar.DWG.DWG_Snap^.Base.y:=strtofloat(s);
-                                            end;
-                                        end;
-                                     14:
-                                       begin
-                                            if LoadMode=TLOLoad then
-                                            if active then
-                                            if sysvar.DWG.DWG_Snap<>nil then
-                                            begin
-                                                 sysvar.DWG.DWG_Snap^.Spacing.x:=strtofloat(s);
-                                            end;
-                                        end;
-                                     24:
-                                       begin
-                                            if LoadMode=TLOLoad then
-                                            if active then
-                                            if sysvar.DWG.DWG_Snap<>nil then
-                                            begin
-                                                 sysvar.DWG.DWG_Snap^.Spacing.y:=strtofloat(s);
-                                            end;
-                                        end;
-                                     15:
-                                       begin
-                                            if LoadMode=TLOLoad then
-                                            if active then
-                                            if sysvar.DWG.DWG_GridSpacing<>nil then
-                                            begin
-                                                 sysvar.DWG.DWG_GridSpacing^.x:=strtofloat(s);
-                                            end;
-                                        end;
-                                     25:
-                                       begin
-                                            if LoadMode=TLOLoad then
-                                            if active then
-                                            if sysvar.DWG.DWG_GridSpacing<>nil then
-                                            begin
-                                                 sysvar.DWG.DWG_GridSpacing^.y:=strtofloat(s);
-                                            end;
-                                        end;
-                                     40:
-                                       begin
-                                            if LoadMode=TLOLoad then
-                                            if active then
-                                            if @drawing<>nil then
-                                            if drawing.pcamera<>nil then
-                                            if drawing.wa.getviewcontrol<>nil then
-                                            begin
-                                                 drawing.pcamera^.prop.zoom:=(strtofloat(s)/drawing.wa.getviewcontrol.ClientHeight);
-                                            end;
-                                        end;
-                                     41:
-                                       begin
-                                            if LoadMode=TLOLoad then
-                                            if active then
-                                            if @drawing<>nil then
-                                            if drawing.pcamera<>nil then
-                                            if drawing.wa.getviewcontrol<>nil then
-                                            begin
-                                                 if drawing.wa.getviewcontrol.ClientHeight*strtofloat(s)>drawing.wa.getviewcontrol.ClientWidth then
-                                                 drawing.pcamera^.prop.zoom:=drawing.pcamera^.prop.zoom*strtofloat(s)*drawing.wa.getviewcontrol.ClientHeight/drawing.wa.getviewcontrol.ClientWidth;
-                                            end;
-                                        end;
-                                     71:
-                                       begin
-                                            if LoadMode=TLOLoad then
-                                            if active then
-                                            if @drawing<>nil then
-                                            if drawing.wa.getviewcontrol<>nil then
-                                            begin
-                                                 flags:=strtoint(s);
-                                                 if (flags and 1)<>0 then
-                                                               drawing.wa.param.projtype:=PROJPerspective
-                                                           else
-                                                               drawing.wa.param.projtype:=PROJParalel;
-                                            end;
-                                       end;
-                                     75:
-                                       begin
-                                            if LoadMode=TLOLoad then
-                                            if active then
-                                            if sysvar.DWG.DWG_SnapGrid<>nil then
-                                            begin
-                                                 if s<>'0' then
-                                                               sysvar.DWG.DWG_SnapGrid^:=true
-                                                           else
-                                                               sysvar.DWG.DWG_SnapGrid^:=false;
-                                            end;
-                                       end;
-                                   76:
-                                     begin
-                                          if LoadMode=TLOLoad then
-                                          if active then
-                                          if sysvar.DWG.DWG_DrawGrid<>nil then
-                                          begin
-                                               if s<>'0' then
-                                                             sysvar.DWG.DWG_DrawGrid^:=true
-                                                         else
-                                                             sysvar.DWG.DWG_DrawGrid^:=false;
-                                          end;
-                                      end;
-                                 end;
+       while byt <> 0 do
+       begin
+         s := f.readGDBString;
+         byt := strtoint(s);
+         programlog.LogOutFormatStr('Group :"%s"',[s],lp_OldPos,LM_Trace);
+         s := f.readGDBString;
+         programlog.LogOutFormatStr('Value :"%s"',[s],lp_OldPos,LM_Trace);
+         if (byt=0)and(s='VPORT')then
+         begin
+               byt := -100;
+               active:=false;
+         end;
+         case byt of
+           2:
+             begin
+                  if uppercase(s)='*ACTIVE' then
+                                                active:=true
+                                            else
+                                                active:=false;
+             end;
+           12:
+             begin
+                  if LoadMode=TLOLoad then
+                  if active then
+                  if @drawing<>nil then
+                  if drawing.pcamera<>nil then
+                  begin
+                       drawing.pcamera^.prop.point.x:=-strtofloat(s);
+                  end;
+              end;
+           22:
+             begin
+                  if LoadMode=TLOLoad then
+                  if active then
+                  if @drawing<>nil then
+                  if drawing.pcamera<>nil then
+                  begin
+                       drawing.pcamera^.prop.point.y:=-strtofloat(s);
+                  end;
+              end;
+           13:
+             begin
+                  if LoadMode=TLOLoad then
+                  if active then
+                  if sysvar.DWG.DWG_Snap<>nil then
+                  begin
+                       sysvar.DWG.DWG_Snap^.Base.x:=strtofloat(s);
+                  end;
+              end;
+           23:
+             begin
+                  if LoadMode=TLOLoad then
+                  if active then
+                  if sysvar.DWG.DWG_Snap<>nil then
+                  begin
+                       sysvar.DWG.DWG_Snap^.Base.y:=strtofloat(s);
+                  end;
+              end;
+           14:
+             begin
+                  if LoadMode=TLOLoad then
+                  if active then
+                  if sysvar.DWG.DWG_Snap<>nil then
+                  begin
+                       sysvar.DWG.DWG_Snap^.Spacing.x:=strtofloat(s);
+                  end;
+              end;
+           24:
+             begin
+                  if LoadMode=TLOLoad then
+                  if active then
+                  if sysvar.DWG.DWG_Snap<>nil then
+                  begin
+                       sysvar.DWG.DWG_Snap^.Spacing.y:=strtofloat(s);
+                  end;
+              end;
+           15:
+             begin
+                  if LoadMode=TLOLoad then
+                  if active then
+                  if sysvar.DWG.DWG_GridSpacing<>nil then
+                  begin
+                       sysvar.DWG.DWG_GridSpacing^.x:=strtofloat(s);
+                  end;
+              end;
+           25:
+             begin
+                  if LoadMode=TLOLoad then
+                  if active then
+                  if sysvar.DWG.DWG_GridSpacing<>nil then
+                  begin
+                       sysvar.DWG.DWG_GridSpacing^.y:=strtofloat(s);
+                  end;
+              end;
+           40:
+             begin
+                  if LoadMode=TLOLoad then
+                  if active then
+                  if @drawing<>nil then
+                  if drawing.pcamera<>nil then
+                  if drawing.wa.getviewcontrol<>nil then
+                  begin
+                       drawing.pcamera^.prop.zoom:=(strtofloat(s)/drawing.wa.getviewcontrol.ClientHeight);
+                  end;
+              end;
+           41:
+             begin
+                  if LoadMode=TLOLoad then
+                  if active then
+                  if @drawing<>nil then
+                  if drawing.pcamera<>nil then
+                  if drawing.wa.getviewcontrol<>nil then
+                  begin
+                       if drawing.wa.getviewcontrol.ClientHeight*strtofloat(s)>drawing.wa.getviewcontrol.ClientWidth then
+                       drawing.pcamera^.prop.zoom:=drawing.pcamera^.prop.zoom*strtofloat(s)*drawing.wa.getviewcontrol.ClientHeight/drawing.wa.getviewcontrol.ClientWidth;
+                  end;
+              end;
+           71:
+             begin
+                  if LoadMode=TLOLoad then
+                  if active then
+                  if @drawing<>nil then
+                  if drawing.wa.getviewcontrol<>nil then
+                  begin
+                       flags:=strtoint(s);
+                       if (flags and 1)<>0 then
+                                     drawing.wa.param.projtype:=PROJPerspective
+                                 else
+                                     drawing.wa.param.projtype:=PROJParalel;
+                  end;
+             end;
+           75:
+             begin
+                  if LoadMode=TLOLoad then
+                  if active then
+                  if sysvar.DWG.DWG_SnapGrid<>nil then
+                  begin
+                       if s<>'0' then
+                                     sysvar.DWG.DWG_SnapGrid^:=true
+                                 else
+                                     sysvar.DWG.DWG_SnapGrid^:=false;
+                  end;
+             end;
+         76:
+           begin
+                if LoadMode=TLOLoad then
+                if active then
+                if sysvar.DWG.DWG_DrawGrid<>nil then
+                begin
+                     if s<>'0' then
+                                   sysvar.DWG.DWG_DrawGrid^:=true
+                               else
+                                   sysvar.DWG.DWG_DrawGrid^:=false;
+                end;
+            end;
+       end;
 
-                               end;
-                               end;
+     end;
+     end;
+     programlog.logoutstr('end;{ReadVport}',lp_DecPos,LM_Debug);
 end;
 procedure ReadDimStyles(var s:string;cdimstyle:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var h2p:TMapHandleToPointer);
 var
@@ -1328,7 +1330,7 @@ begin
                                   s:=s;
 
                 tp := drawing.BlockDefArray.create(s);
-                programlog.logoutstr('Found block '+s+';',lp_IncPos);
+                programlog.LogOutFormatStr('Found blockdef "%s"',[s],lp_IncPos,LM_Info);
                    //addfromdxf12(f, GDBPointer(GDB.pgdbblock^.blockarray[GDB.pgdbblock^.count].ppa),@tp^.Entities, 'ENDBLK');
                 while (s <> ' 30') and (s <> '30') do
                 begin
@@ -1349,6 +1351,7 @@ begin
                 end;
                 s := f.readGDBString;
                 tp^.Base.z := strtofloat(s);
+                programlog.LogOutFormatStr('Base x:%g y:%g z:%g',[tp^.Base.x,tp^.Base.y,tp^.Base.z],lp_OldPos,LM_Info);
                 inc(foc);
                 AddEntitiesFromDXF(f,'ENDBLK',tp,drawing,h2p);
                 dec(foc);
@@ -1356,7 +1359,7 @@ begin
                                                            tp^.name:=tp^.name;
                 tp^.LoadFromDXF(f,nil,drawing);
                 blockload:=true;
-                programlog.logoutstr('end block;',lp_DecPos);
+                programlog.LogOutStr('end block;',lp_DecPos,LM_Info);
                 sname:='##'
               end;
             if not blockload then
@@ -1389,7 +1392,7 @@ var
   h2p:TMapHandleToPointer;
   DWGVarsDict:TGDBString2GDBStringDictionary;
 begin
-  programlog.logoutstr('AddFromDXF',lp_IncPos);
+  programlog.LogOutFormatStr('AddFromDXF("%s")',[name],lp_IncPos,LM_Debug);
   shared.HistoryOutStr(format(rsLoadingFile,[name]));
   f.InitFromFile(name);
   if f.Count<>0 then
@@ -1451,7 +1454,7 @@ begin
      else
          shared.ShowError('IODXF.ADDFromDXF: Не могу открыть файл: '+name);
   f.done;
-  programlog.logoutstr('end; {AddFromDXF}',lp_DecPos);
+  programlog.LogOutStr('end; {AddFromDXF}',lp_DecPos,LM_Debug);
 end;
 procedure saveentitiesdxf2000(pva: PGDBObjEntityOpenArray; var outhandle:{GDBInteger}GDBOpenArrayOfByte; var handle: TDWGHandle;const drawing:TSimpleDrawing);
 var

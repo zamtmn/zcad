@@ -726,11 +726,11 @@ procedure TUnitManager.LoadFolder(path: GDBString);
 var
   sr: TSearchRec;
 begin
-  if programlog.IsNeedToLog(LM_Debug)then programlog.logoutstr(sysutils.Format('TUnitManager.LoadFolder(%s)',[path]),lp_IncPos,LM_Debug);
+  programlog.LogOutFormatStr('TUnitManager.LoadFolder(%s)',[path],lp_IncPos,LM_Debug);
   if FindFirst(path + '*.pas', faAnyFile, sr) = 0 then
   begin
     repeat
-      if programlog.IsNeedToLog(LM_Info) then programlog.logoutstr(sysutils.Format('Found file "%s"',[path+sr.Name]),lp_OldPos,LM_Info);
+      programlog.LogOutFormatStr('Found file "%s"',[path+sr.Name],lp_OldPos,LM_Info);
       loadunit(path+sr.Name,nil);
     until FindNext(sr) <> 0;
     sysutils.FindClose(sr);

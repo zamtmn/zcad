@@ -270,8 +270,7 @@ begin
     line:=readspace(line);
    if line='GDBObjLWPolyline=object(GDBObjWithLocalCS) Closed:GDBBoolean;' then
                   line:=line;
-
-    {$IFDEF TOTALYLOG}programlog.logoutstr(line,0);{$ENDIF}
+    programlog.LogOutFormatStr('%s',[line],lp_OldPos,LM_Trace);
 
     parseresult:=getpattern(@parsemodetemplate,maxparsemodetemplate,line,typ);
     if typ>0 then
@@ -622,7 +621,7 @@ if addtype then
         //p:=@etd;
         currentunit.InterfaceTypes.{exttype.}AddTypeByPP(@etd);
 
-        {$IFDEF TOTALYLOG}programlog.logoutstr('Type "'+typename+'" added',0);{$ENDIF}
+        programlog.LogOutFormatStr('Type "%s" added',[typename],lp_OldPos,LM_Trace);
         if typename='tdisp' then
                                 typename:=typename;
         //GDBPointer(etd.name):=nil;
@@ -631,7 +630,7 @@ if addtype then
         //addtype:=true;
                            end;
                 varmode:begin
-                                {$IFDEF TOTALYLOG}programlog.logoutstr('Varmode string: "'+line,0);{$ENDIF}
+                                programlog.LogOutFormatStr('Varmode string: "%s"',[line],lp_OldPos,LM_Trace);
                                 //parsepos:=1;
                                 parseresult:=runparser('_identifiers_cs'#0'=:_identifier'#0'_softend'#0,line,parseerror);
                                 if line<>'' then
@@ -688,7 +687,7 @@ if addtype then
                                                    system.break
                                                else
                                                    begin
-                                                        programlog.logoutstr(line,0,LM_Trace);
+                                                        programlog.logoutstr(line,0,LM_Debug);
                                                         if copy(line,1,10)='VIEW_ObjIn'
                                                         then
                                                             line:=line;

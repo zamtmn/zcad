@@ -305,7 +305,7 @@ begin
                          p^.vp.ID:=p^.vp.ID;}
        if (p^.infrustum=infrustumactualy)or(p^.Selected) then
                                             begin
-                                                 {$IFDEF TOTALYLOG}programlog.logoutstr(p^.GetObjTypeName+'.renderfeedback',0);{$ENDIF}
+                                                 //{$IFDEF TOTALYLOG}programlog.logoutstr(p^.GetObjTypeName+'.renderfeedback',0);{$ENDIF}
                                                  p^.renderfeedback(pcount,camera,ProjectProc,dc);
                                             end;
        p:=iterate(ir);

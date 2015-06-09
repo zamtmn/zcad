@@ -139,10 +139,7 @@ var pd:PFieldDescriptor;
          ir:itrec;
      {$include debugvars.inc}
 begin
-     {$IFDEF TOTALYLOG}
-     logstr:='Start Serialize for '+self.TypeName;
-     programlog.logoutstr(pansichar(logstr),lp_IncPos);
-     {$ENDIF}
+     programlog.LogOutFormatStr('Start Serialize for "%s"',[self.TypeName],lp_IncPos,LM_Trace);
      fo:=0;
      inc(sub);
      if membuf=nil then
@@ -193,11 +190,8 @@ begin
               fo:=fo+pd^.Size;
               pd:=Fields.iterate(ir);
         until pd=nil;
-     {$IFDEF TOTALYLOG}
-     logstr:='End Serialize for '+self.TypeName;
-     programlog.logoutstr(pansichar(logstr),lp_DecPos);
-     {$ENDIF}
      dec(sub);
+     programlog.LogOutFormatStr('End Serialize for "%s"',[self.TypeName],lp_DecPos,LM_Trace);
 end;
 function RecordDescriptor.DeSerialize;
 var pd:PFieldDescriptor;
@@ -210,10 +204,7 @@ var pd:PFieldDescriptor;
          ir:itrec;
      {$include debugvars.inc}
 begin
-     {$IFDEF TOTALYLOG}
-     logstr:='Start DeSerialize for '+self.TypeName;
-     programlog.logoutstr(logstr,lp_IncPos);
-     {$ENDIF}
+     programlog.LogOutFormatStr('Start DeSerialize for "%s"',[self.TypeName],lp_IncPos,LM_Trace);
      //linkbuf.CreateLinkRecord(PInstance,membuf^.Count,OBT);
      if linkbuf<>nil then
                          begin
@@ -229,7 +220,6 @@ begin
      repeat
               if (pd^.base.Saved and SaveFlag)<>0 then
               begin
-                   {$IFDEF TOTALYLOG}programlog.logoutstr(pd^.base.ProgramName,0);{$ENDIF}
                    p:=PInstance;
                    inc(pbyte(p),pd^.Offset);
                    if pd^.base.ProgramName='TextStyleTable' then
@@ -246,10 +236,7 @@ begin
               //fo:=fo+pd^.Size;
               pd:=Fields.iterate(ir);
         until pd=nil;
-     {$IFDEF TOTALYLOG}
-     logstr:='End DeSerialize for '+self.TypeName;
-     programlog.logoutstr(logstr,lp_DecPos);
-     {$ENDIF}
+     programlog.LogOutFormatStr('End Serialize for "%s"',[self.TypeName],lp_DecPos,LM_Trace);
 end;
 constructor RecordDescriptor.init;
 begin
@@ -363,7 +350,7 @@ var PFD:PFieldDescriptor;
     SaveDecorators:TDecoratedProcs;
     SaveFastEditor:TFastEditorProcs;
 begin
-     {$IFDEF TOTALYLOG}programlog.LogOutStr('RecordDescriptor.CreateProperties('+name+')'+inttostr(bmode),lp_IncPos);{$ENDIF}
+     programlog.LogOutFormatStr('RecordDescriptor.CreateProperties "%s"',[name],lp_IncPos,LM_Trace);
 
      pobj:=addr;
      //programlog.logoutstr(inttohex(cardinal(pobj),10),0);
@@ -419,8 +406,7 @@ begin
                                              repeat
                                                   if pvd^.name='BTY_TreeCoord' then
                                                                                    pvd^.name:=pvd^.name;
-
-                                                  {$IFDEF TOTALYLOG}programlog.logoutstr('process prop:'+pvd^.name,0);{$ENDIF}
+                                                  programlog.LogOutFormatStr('process prop: "%s"',[pvd^.name],lp_OldPos,LM_Trace);
                                                   i:=pos('_',pvd^.name);
                                                   tname:=pvd^.username;
                                                   if tname='' then
@@ -516,7 +502,7 @@ begin
                        end
                    else*)
            if pfd^.base.ProgramName='#' then begin
-                                                {$IFDEF TOTALYLOG}programlog.LogOutStr('Found ##PVMT',lp_OldPos);{$ENDIF}
+                                                programlog.LogOutStr('Found ##PVMT',lp_OldPos,LM_Trace);
                                                 ppd:=GetPPD(ppda,bmode);
                                                 if ppd^._bmode=property_build then
                                                                                   ppd^._bmode:=bmode;
@@ -544,10 +530,7 @@ begin
                                                                                 if assigned(pobj) then
                                                                                                       if assigned(ppointer(pobj)^) then
                                                                                                                                        begin
-                                                                                                                                       {$IFDEF TOTALYLOG}
-                                                                                                                                       programlog.logoutstr(inttohex(GDBPlatformint(pobj),10),0);
-                                                                                                                                       //programlog.logoutstr(inttohex(GDBPlatformint(gdb.GetCurrentDWG.pcamera),10),0);
-                                                                                                                                       {$ENDIF}
+                                                                                                                                       programlog.LogOutFormatStr('%p',[pobj],lp_OldPos,LM_Trace);
                                                                                                                                        ppd^.value:=pobj^.GetObjTypeName;
                                                                                                                                        //pobj^.whoisit;
                                                                                                                                        //pobj^.GetObjTypeName;
@@ -584,7 +567,7 @@ begin
      end;
                if bmodesave<>property_build then
                                       bmode:=bmodesave;
-     {$IFDEF TOTALYLOG}programlog.LogOutStr('RecordDescriptor.CreateProperties('+name+') (end)',lp_DecPos);{$ENDIF}
+     programlog.LogOutFormatStr('end;{RecordDescriptor.CreateProperties "%s"}',[name],lp_DecPos,LM_Trace);
 end;
 
 //procedure MagicAfterCopyInstance(PInstance:GDBPointer);virtual;

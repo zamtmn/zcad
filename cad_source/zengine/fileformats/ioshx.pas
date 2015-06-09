@@ -198,7 +198,7 @@ begin
             xmax:=NegInfinity;
             while pshxdata^<>0 do
               begin
-                {$IFDEF TOTALYLOG}programlog.logoutstr('shx command '+inttohex(pshxdata^,2),0);{$ENDIF}
+                programlog.LogOutFormatStr('shx command %x',[integer(pshxdata^)],lp_OldPos,LM_Trace);
                 case pshxdata^ of
                   001:
                     begin
@@ -220,7 +220,7 @@ begin
                       if onlyver=0 then
                         begin
                           baselen:=baselen/pshxdata^;
-                          {$IFDEF TOTALYLOG}programlog.logoutstr('('+inttostr(pshxdata^)+')',0);{$ENDIF}
+                          programlog.LogOutFormatStr('%d',[integer(pshxdata^)],lp_OldPos,LM_Trace);
                         end;
                     end;
                   004:
@@ -230,7 +230,7 @@ begin
                         begin
                           baselen:=baselen*pshxdata^;
                         end;
-                        {$IFDEF TOTALYLOG}programlog.logoutstr('('+inttostr(pshxdata^)+')',0);{$ENDIF}
+                        programlog.LogOutFormatStr('%d',[integer(pshxdata^)],lp_OldPos,LM_Trace);
                     end;
                   005:
                     begin
@@ -263,7 +263,7 @@ begin
                                      begin
                                           subsymbol:=pshxdata^;
                                      end;
-                      {$IFDEF TOTALYLOG}programlog.logoutstr('('+inttostr(subsymbol)+')',0);{$ENDIF}
+                      programlog.LogOutFormatStr('(%d)',[integer(subsymbol)],lp_OldPos,LM_Trace);
                       psubsyminfo:=pf^.GetOrCreateSymbolInfo(subsymbol);
                       psubsymbol:=PSHXFont(pf^.font).SHXdata.getelement(psubsyminfo.addr);
                       xb:=x;
@@ -381,7 +381,7 @@ begin
                       dx:=pShortint(pshxdata)^;
                       incpshxdata;
                       dy:=pShortint(pshxdata)^;
-                      {$IFDEF TOTALYLOG}programlog.logoutstr('('+inttostr(dx)+','+inttostr(dy)+')',0);{$ENDIF}
+                      programlog.LogOutFormatStr('(%d,%d)',[integer(dx),integer(dy)],lp_OldPos,LM_Trace);
                       if onlyver=0 then
                         begin
                           x1:=x+dx*baselen;
@@ -449,7 +449,7 @@ begin
                             end;
                       while (dx<>0)or(dy<>0) do
                         begin
-                        {$IFDEF TOTALYLOG}programlog.logoutstr('('+inttostr(dx)+','+inttostr(dy)+')',0);{$ENDIF}
+                          programlog.LogOutFormatStr('(%d,%d)',[integer(dx),integer(dy)],lp_OldPos,LM_Trace);
                           if draw then
                             begin
                               PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
@@ -725,7 +725,7 @@ begin
   line:=uppercase(line);
   if (line='AUTOCAD-86 SHAPES 1.0')or(line='AUTOCAD-86 SHAPES 1.1') then
   begin
-    {$IFDEF TOTALYLOG}programlog.logoutstr('AUTOCAD-86 SHAPES 1.0',0);{$ENDIF}
+    programlog.LogOutStr('AUTOCAD-86 SHAPES 1.0',lp_OldPos,LM_Debug);
   initfont(pf,extractfilename(name));
   pf.ItSHX;
   pf^.fontfile:=name;
@@ -767,10 +767,10 @@ begin
                          end
                      else
                          begin
-                              {$IFDEF TOTALYLOG}programlog.logoutstr('symbol '+inttostr(symnum),lp_IncPos);{$ENDIF}
+                              programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
                               dataread:=createsymbol(pf,symnum,memorybuf.GetCurrentReadAddres,{pdata,}datalen+1,false,line);
                               memorybuf.jump({datalen}dataread);
-                              {$IFDEF TOTALYLOG}programlog.logoutstr('end',lp_DecPos);{$ENDIF}
+                              programlog.LogOutStr('end',lp_DecPos,LM_Trace);
                          end;
 
                                               //setlength(sub,datalen);
@@ -788,7 +788,7 @@ begin
   end
 else if line='AUTOCAD-86 UNIFONT 1.0' then
   begin
-       {$IFDEF TOTALYLOG}programlog.logoutstr('AUTOCAD-86 UNIFONT 1.0',0);{$ENDIF}
+       programlog.LogOutStr('AUTOCAD-86 UNIFONT 1.0',lp_OldPos,LM_Debug);
        initfont(pf,extractfilename(name));
        pf.ItSHX;
        pf^.fontfile:=name;
@@ -840,9 +840,9 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
          if test=49 then
                          test:=test;
          //if (*pf^.GetOrCreateSymbolInfo(test)^.{ .symbo linfo[test].}addr=0*)symnum<2560000 then
-         {$IFDEF TOTALYLOG}programlog.logoutstr('symbol '+inttostr(symnum),lp_IncPos);{$ENDIF}
+         programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
          {if symnum<256 then }dataread:=createsymbol(pf,test{symnum},memorybuf.GetCurrentReadAddres,{pdata,}datalen+1,true,line);
-         {$IFDEF TOTALYLOG}programlog.logoutstr('end',lp_DecPos);{$ENDIF}
+         programlog.LogOutStr('end',lp_DecPos,LM_Trace);
          //                                                                 else
          //                                                                     pf:=pf;
          //end;

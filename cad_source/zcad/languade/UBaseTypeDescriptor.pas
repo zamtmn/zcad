@@ -163,7 +163,7 @@ implementation
 function TEnumDataDescriptor.CreateProperties;
 var ppd:PPropertyDeskriptor;
 begin
-     {$IFDEF TOTALYLOG}programlog.LogOutStr('TEnumDataDescriptor.CreateProperties('+name+',ppda='+inttohex(longint(ppda),10)+')',lp_OldPos);{$ENDIF}
+     programlog.LogOutFormatStr('TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda],lp_OldPos,LM_Trace);
      ppd:=GetPPD(ppda,bmode);
      if ppd^._bmode=property_build then
                                        ppd^._bmode:=bmode;
@@ -195,8 +195,6 @@ begin
      ppd^.value:=GetValueAsString(addr);
      if ppd^.value='rp_21' then
                                ppd^.value:=ppd^.value;
-     {$IFDEF TOTALYLOG}programlog.LogOutStr(GetValueAsString(addr),lp_OldPos);{$ENDIF}
-
            if ppd<>nil then
                            begin
                                 //IncAddr(addr);
@@ -208,7 +206,7 @@ end;
 function BaseTypeDescriptor.CreateProperties;
 var ppd:PPropertyDeskriptor;
 begin
-     {$IFDEF TOTALYLOG}programlog.LogOutStr('BaseTypeDescriptor.CreateProperties('+name+',ppda='+inttohex(longint(ppda),10)+')',lp_OldPos);{$ENDIF}
+     programlog.LogOutFormatStr('BaseTypeDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda],lp_OldPos,LM_Trace);
      ppd:=GetPPD(ppda,bmode);
      if ppd^._bmode=property_build then
                                        ppd^._bmode:=bmode;
@@ -244,8 +242,6 @@ begin
                                            ppd^.value:=rsDifferent;
      if ppd^.value='rp_21' then
                                ppd^.value:=ppd^.value;
-     {$IFDEF TOTALYLOG}programlog.LogOutStr(GetValueAsString(addr),lp_OldPos);{$ENDIF}
-
            if ppd<>nil then
                            begin
                                 //IncAddr(addr);

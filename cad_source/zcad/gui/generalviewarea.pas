@@ -20,7 +20,7 @@ unit generalviewarea;
 {$INCLUDE def.inc}
 interface
 uses
-     zemathutils,gdbpalette,GDBHelpObj{нужно убрать},
+     log,zemathutils,gdbpalette,GDBHelpObj{нужно убрать},
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
      UGDBLayerArray,ugdbdimstylearray,
      oglwindowdef,gdbdrawcontext,varmandef,zcadsysvars,GDBEntity,zcadinterface,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
@@ -665,7 +665,7 @@ begin
   if (getviewcontrol.clientwidth=0)or(getviewcontrol.clientheight=0) then exit;
   LPTime:=now;
   needredraw:=param.firstdraw{ or true};
-  {$IFDEF TOTALYLOG}programlog.logoutstr('TOGLWnd.draw',0);{$ENDIF}
+  programlog.logoutstr('TOGLWnd.draw',0,LM_Trace);
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.draw',lp_IncPos);{$ENDIF}
 
   //-----------------------------------MakeCurrent;{не забыть что обычный контекст не делает себя текущим сам!}

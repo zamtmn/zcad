@@ -116,7 +116,7 @@ begin
      repeat
            GetPartOfPath(ts,s,'|');
            ts:=ExpandPath(ts);
-           programlog.LogOutFormatStr('FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)],0,LM_Trace);
+           programlog.LogOutFormatStr('FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)],0,LM_Debug);
            ts:=ts+FileName;
            if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then
                                  begin

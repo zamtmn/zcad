@@ -84,7 +84,7 @@ end;
 function ArrayDescriptor.CreateProperties;
 var ppd:PPropertyDeskriptor;
 begin
-     {$IFDEF TOTALYLOG}programlog.LogOutStr('ArrayDescriptor.CreateProperties('+name+')',lp_OldPos);{$ENDIF}
+     programlog.LogOutFormatStr('ArrayDescriptor.CreateProperties(%s)',[name],lp_OldPos,LM_Trace);
      ppd:=GetPPD(ppda,bmode);
      ppd^.Name:=name;
      ppd^.PTypeManager:=@self;

@@ -447,7 +447,7 @@ end;
 
 destructor UserTypeDescriptor.done;
 begin
-     {$IFDEF TOTALYLOG}programlog.logoutstr(self.TypeName,0);{$ENDIF}
+     programlog.LogOutStr(self.TypeName,lp_OldPos,LM_Trace);
      SizeInGDBBytes:=0;
      typename:='';
 end;

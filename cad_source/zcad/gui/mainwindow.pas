@@ -210,7 +210,7 @@ var
   oldlongprocess:integer;
   OLDColor:integer;
   localpm:TFiletoMenuIteratorData;
-  StoreBackTraceStrFunc:TBackTraceStrFunc;
+  //StoreBackTraceStrFunc:TBackTraceStrFunc;//this unneed after fpc rev 31026 see http://bugs.freepascal.org/view.php?id=13518
 const
      LTEditor:pointer=@LTypeBox;//пофиг что, используем только цифру
   function CloseApp:GDBInteger;
@@ -1325,7 +1325,7 @@ var
   line:longint;
   FoundLine:boolean;
 begin
-    BackTraceStrFunc:=StoreBackTraceStrFunc;
+    //BackTraceStrFunc:=StoreBackTraceStrFunc;//this unneed after fpc rev 31026 see http://bugs.freepascal.org/view.php?id=13518
   try
     WriteLn(f,BackTraceStrFunc(Addr));
   except
@@ -1406,8 +1406,11 @@ end;
 
 procedure MainForm.FormCreate(Sender: TObject);
 begin
+  {
+  //this unneed after fpc rev 31026 see http://bugs.freepascal.org/view.php?id=13518
   StoreBackTraceStrFunc:=BackTraceStrFunc;
   BackTraceStrFunc:=@SysBackTraceStr;
+  }
   FAppProps := TApplicationProperties.Create(Self);
   FAppProps.OnException := ZcadException;
   FAppProps.CaptureExceptions := True;

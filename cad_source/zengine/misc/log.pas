@@ -19,7 +19,7 @@
 unit log;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,paths;
+uses gdbasetypes,paths,LazLoggerBase,LazLogger;
 const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
       {$IFDEF FPC}
                   {$IFDEF LINUX}filelog='log/zcad_linux.log';{$ENDIF}
@@ -76,6 +76,8 @@ tlog={$IFNDEF DELPHI}packed{$ENDIF} object
            procedure OpenLog;
            procedure CloseLog;
            procedure CreateLog;
+
+           procedure ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
     end;
 {EXPORT-}
 function getprogramlog:GDBPointer;export;
@@ -347,6 +349,7 @@ end;
 constructor tlog.init;
 var
    CurrentTime:TMyTimeStamp;
+   lz:TLazLogger;
 begin
      CurrentLogMode:=LogMode;
      CurrentTime:=mynow();
@@ -361,7 +364,19 @@ begin
      setlength(LatestLogStrings,MaxLatestLogStrings);
      LatestLogStringsCount:=0;
      TotalLogStringsCount:=0;
+     lz:=GetDebugLogger;
+     if assigned(lz)then
+       if lz is TLazLoggerFile then
+         begin
+              TLazLoggerFile(lz).OnDebugLn:=ZOnDebugLN;
+              TLazLoggerFile(lz).OnDbgOut:=ZOnDebugLN;
+         end;
 end;
+procedure tlog.ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
+begin
+     LogOutFormatStr('LCL: %s',[S],lp_OldPos,LM_Info);
+end;
+
 destructor tlog.done;
 var
    CurrentTime:TMyTimeStamp;

@@ -25,6 +25,14 @@ var
   PATH_File7:GDBString;
   PATH_File8:GDBString;
   PATH_File9:GDBString;
+  UnitsWND_Left:GDBInteger;
+  UnitsWND_Top:GDBInteger;
+  UnitsWND_Width:GDBInteger;
+  UnitsWND_Height:GDBInteger;
+  TEdWND__Left:GDBInteger;
+  TEdWND__Top:GDBInteger;
+  TEdWND__Width:GDBInteger;
+  TEdWND__Height:GDBInteger;
 implementation
 begin
   DMenuX:=385;
@@ -33,21 +41,29 @@ begin
   TEdWND_Top:=209;
   TEdWND_Width:=695;
   TEdWND_Height:=392;
-  ProjectTreeWND_Left:=655;
-  ProjectTreeWND_Top:=140;
+  ProjectTreeWND_Left:=653;
+  ProjectTreeWND_Top:=83;
   ProjectTreeWND_Width:=871;
   ProjectTreeWND_Height:=587;
   VIEW_CommandLineH:=82;
   VIEW_ObjInspV:=238;
-  VIEW_ObjInspSubV:=120;
-  PATH_File0:='E:\zcad\cad\autosave\autosave.dxf';
+  VIEW_ObjInspSubV:=117;
+  PATH_File0:='J:\nh\АИЖК\ШУПД2-16\ШУ16\=PROJECT\+CABLE_Z\=PROJECT+CABLE_Z_1.dxf';
   PATH_File1:='E:\zcad\cad\\sample\test_dxf\ops.dxf';
-  PATH_File2:='E:\вент_-2 эт блоком.dxf';
-  PATH_File3:='J:\nh\Летуновский\итп\АОВ.dxf';
-  PATH_File4:='E:\valsub\64500-АПС-03-r4.dxf';
-  PATH_File5:='J:\nh\термоинжиниринг\ПАРКИНГ\ПС.dxf';
-  PATH_File6:='J:\nh\Коробова\боровский3\AОВ.dxf';
-  PATH_File7:='J:\nh\Коробова\Боровский2\AОВ.dxf';
-  PATH_File8:='J:\nh\Коробова\Боровский\AОВ.dxf';
-  PATH_File9:='E:\60ktypedarcs.dxf';
+  PATH_File2:='E:\valsub\ДЗ.dxf';
+  PATH_File3:='E:\zcad\cad\autosave\autosave.dxf';
+  PATH_File4:='E:\zcad\cad\\sample\entities.dxf';
+  PATH_File5:='E:\valsub\64500-ППА-06 +клапаны.dxf';
+  PATH_File6:='E:\valsub\CADconv-64500-AP02-05 чистым блоком для cadconv.dxf';
+  PATH_File7:='E:\zcad\cad\..\errors\spline.dxf';
+  PATH_File8:='E:\valsub\CADconv-новые клапаны -1 этаж.dxf';
+  PATH_File9:='E:\valsub\CADconv-новые клапаны 1 этаж.dxf';
+  UnitsWND_Left:=383;
+  UnitsWND_Top:=91;
+  UnitsWND_Width:=360;
+  UnitsWND_Height:=454;
+  TEdWND__Left:=631;
+  TEdWND__Top:=209;
+  TEdWND__Width:=695;
+  TEdWND__Height:=392;
 end.

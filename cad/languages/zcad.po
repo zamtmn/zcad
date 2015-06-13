@@ -3533,6 +3533,10 @@ msgctxt "zcadstrconsts.rsbylayer"
 msgid "ByLayer"
 msgstr ""
 
+#: zcadstrconsts.rsclipboardisempty
+msgid "Clipboard is empty, there is nothing to paste"
+msgstr ""
+
 #: zcadstrconsts.rsclosedwgquery
 msgid "Drawing \"%s\" not saved. Save?"
 msgstr ""
@@ -3575,6 +3579,10 @@ msgstr ""
 
 #: zcadstrconsts.rscminstackdata
 msgid "In stack found following data:"
+msgstr ""
+
+#: zcadstrconsts.rscmnentitiesdeselected
+msgid "%d entities deselected"
 msgstr ""
 
 #: zcadstrconsts.rscmnentitiesprocessed
@@ -3735,6 +3743,10 @@ msgctxt "zcadstrconsts.rsempty"
 msgid "Empty"
 msgstr ""
 
+#: zcadstrconsts.rsentryalreadyexist
+msgid "Entry \"%s\" already exist"
+msgstr ""
+
 #: zcadstrconsts.rsequipment
 msgid "Equipment"
 msgstr ""
@@ -3772,6 +3784,18 @@ msgstr ""
 
 #: zcadstrconsts.rsinitialization
 msgid "Initialization:"
+msgstr ""
+
+#: zcadstrconsts.rsinvalididentificator
+msgid "\"%s\" not valid identificator"
+msgstr ""
+
+#: zcadstrconsts.rsinvalidinput
+msgid "Invalid input"
+msgstr ""
+
+#: zcadstrconsts.rsinvalidinputforpropery
+msgid "Property \"%s\" for entity \"%s\": %s"
 msgstr ""
 
 #: zcadstrconsts.rslayerdefpaontscannotbeprinted
@@ -3844,6 +3868,10 @@ msgstr ""
 msgid "Style%-3.3d"
 msgstr ""
 
+#: zcadstrconsts.rsnotregistred
+msgid "Not registred"
+msgstr ""
+
 #: zcadstrconsts.rsnotyetimplemented
 msgid "Not yet implemented"
 msgstr ""
@@ -3893,6 +3921,10 @@ msgid ""
 "-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
 "\n"
 "-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
+msgstr ""
+
+#: zcadstrconsts.rsrenamedto
+msgid "%s \"%s\" renamed to \"%s\""
 msgstr ""
 
 #: zcadstrconsts.rsreservefontnotfound

@@ -3740,6 +3740,10 @@ msgctxt "zcadstrconsts.rsbylayer"
 msgid "ByLayer"
 msgstr "По Слою"
 
+#: zcadstrconsts.rsclipboardisempty
+msgid "Clipboard is empty, there is nothing to paste"
+msgstr ""
+
 #: zcadstrconsts.rsclosedwgquery
 #| msgid "Drawing \"%s\" not saved. Close?"
 msgid "Drawing \"%s\" not saved. Save?"
@@ -3784,6 +3788,10 @@ msgstr "Точка вставки:"
 #: zcadstrconsts.rscminstackdata
 msgid "In stack found following data:"
 msgstr "В стеке обнаружены следующие данные:"
+
+#: zcadstrconsts.rscmnentitiesdeselected
+msgid "%d entities deselected"
+msgstr ""
 
 #: zcadstrconsts.rscmnentitiesprocessed
 msgid "%s entities processed"
@@ -3943,6 +3951,10 @@ msgctxt "zcadstrconsts.rsempty"
 msgid "Empty"
 msgstr "Пусто"
 
+#: zcadstrconsts.rsentryalreadyexist
+msgid "Entry \"%s\" already exist"
+msgstr ""
+
 #: zcadstrconsts.rsequipment
 msgid "Equipment"
 msgstr "Оборудование"
@@ -3981,6 +3993,18 @@ msgstr ""
 #: zcadstrconsts.rsinitialization
 msgid "Initialization:"
 msgstr "Инициализация:"
+
+#: zcadstrconsts.rsinvalididentificator
+msgid "\"%s\" not valid identificator"
+msgstr ""
+
+#: zcadstrconsts.rsinvalidinput
+msgid "Invalid input"
+msgstr ""
+
+#: zcadstrconsts.rsinvalidinputforpropery
+msgid "Property \"%s\" for entity \"%s\": %s"
+msgstr ""
 
 #: zcadstrconsts.rslayerdefpaontscannotbeprinted
 msgid "Layer DEFPOINTS can not be printed"
@@ -4059,6 +4083,10 @@ msgstr "Слой%-3.3d"
 msgid "Style%-3.3d"
 msgstr "Стиль%-3.3d"
 
+#: zcadstrconsts.rsnotregistred
+msgid "Not registred"
+msgstr ""
+
 #: zcadstrconsts.rsnotyetimplemented
 msgid "Not yet implemented"
 msgstr "Пока не реализовано"
@@ -4114,6 +4142,10 @@ msgstr ""
 "-При проблемах с отображением или выделением примитивов, запустите \"Regen\" и \"RebuildTree\" в командной строке;\n"
 "\n"
 "-Для отключения показа этого окна закоментируйте строку \"About\" в файле \"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
+
+#: zcadstrconsts.rsrenamedto
+msgid "%s \"%s\" renamed to \"%s\""
+msgstr ""
 
 #: zcadstrconsts.rsreservefontnotfound
 msgid "Reserve font is not found in the resources"

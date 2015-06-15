@@ -22,13 +22,20 @@ interface
 uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
 geometry;
 const
+     LLAttrNothing=0;
+     LLAttrNeedSolid=1;
+     LLAttrNeedSimtlify=1;
+
      LLLineId=1;
      LLPointId=2;
      LLSymbolId=3;
      LLPolyLineId=4;
+     LLTriangleId=5;
 type
 {Export+}
 TLLPrimitiveType=GDBInteger;
+TLLPrimitiveAttrib=GDBInteger;
+
 TLLVertexIndex=GDBInteger;
 PTLLPrimitivePrefix=^TLLPrimitivePrefix;
 TLLPrimitivePrefix={$IFNDEF DELPHI}packed{$ENDIF} record
@@ -39,6 +46,11 @@ TLLLine={$IFNDEF DELPHI}packed{$ENDIF} record
               Prefix:TLLPrimitivePrefix;
               P1Index:TLLVertexIndex;{P2Index=P1Index+1}
         end;
+PTLLTriangle=^TLLTriangle;
+TLLTriangle={$IFNDEF DELPHI}packed{$ENDIF} record
+              Prefix:TLLPrimitivePrefix;
+              P1Index:TLLVertexIndex;
+        end;
 PTLLPoint=^TLLPoint;
 TLLPoint={$IFNDEF DELPHI}packed{$ENDIF} record
               Prefix:TLLPrimitivePrefix;
@@ -48,7 +60,7 @@ PTLLSymbol=^TLLSymbol;
 TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} record
               Prefix:TLLPrimitivePrefix;
               SymSize:GDBInteger;
-              PrimitivesCount:GDBInteger;
+              Attrib:TLLPrimitiveAttrib;
               OutBoundIndex:TLLVertexIndex;
         end;
 PTLLPolyLine=^TLLPolyLine;
@@ -60,6 +72,7 @@ TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
                 procedure AddLLPLine(const P1Index:TLLVertexIndex);
+                procedure AddLLTriangle(const P1Index:TLLVertexIndex);
                 procedure AddLLPPoint(const PIndex:TLLVertexIndex);
                 function AddLLPSymbol:TArrayIndex;
                 procedure AddLLPPolyLine(const P1Index,Count:TLLVertexIndex);
@@ -67,6 +80,14 @@ TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
 {Export-}
 implementation
 uses log;
+procedure TLLPrimitivesArray.AddLLTriangle(const P1Index:TLLVertexIndex);
+var
+tt:TLLTriangle;
+begin
+  tt.Prefix.LLPType:=LLTriangleId;
+  tt.P1Index:=P1Index;
+  AddData(@tt,sizeof(tt));
+end;
 procedure TLLPrimitivesArray.AddLLPLine(const P1Index:TLLVertexIndex);
 var
    tl:TLLLine;

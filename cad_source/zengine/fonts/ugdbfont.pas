@@ -76,6 +76,7 @@ var
   LLSymbolIndex:TArrayIndex;
   PLLPsymbol:PTLLSymbol;
   PrimitivesCount:integer;
+  trcount:integer;
 begin
   if _symbol=100 then
                       _symbol:=_symbol;
@@ -83,10 +84,14 @@ begin
                     _symbol:=ach2uch(_symbol);}
   if _symbol=32 then
                       _symbol:=_symbol;
+  LLSymbolIndex:=-1;
+  trcount:=0;
 
   psyminfo:=self.GetOrReplaceSymbolInfo(integer(_symbol),TDInfo);
   if tdinfo.TrianglesSize>0 then
   begin
+       LLSymbolIndex:=geom.LLprimitives.AddLLPSymbol;
+
        PTriangles:=self.font.GetTriangleDataAddr(TDInfo.TrianglesAddr);
        for j:=1 to tdinfo.TrianglesSize do
        begin
@@ -95,15 +100,26 @@ begin
             v3.z:=0;
             v3:=VectorTransform3D(v3,matr);
             v3:=VectorTransform3D(v3,objmatrix);
-            geom.Triangles.Add(@v3);
+            //geom.Triangles.Add(@v3);
+
+            if (j mod 3)=1 then
+                               begin
+                                    geom.LLprimitives.AddLLTriangle(geom.Vertex3S.AddGDBVertex(v3));
+                                    inc(PrimitivesCount);
+                               end
+                           else
+                               geom.Vertex3S.AddGDBVertex(v3);
+
             inc(PTriangles);
+            inc(trcount);
        end;
   end;
   //deb:=psyminfo^;
   psymbol := self.font.GetSymbolDataAddr(psyminfo.addr);
   if {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size <> 0 then
   begin;
-    LLSymbolIndex:=geom.LLprimitives.AddLLPSymbol;
+       if LLSymbolIndex=-1 then
+       LLSymbolIndex:=geom.LLprimitives.AddLLPSymbol;
     PrimitivesCount:=0;
     for j := 1 to {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size do
     begin
@@ -244,25 +260,33 @@ begin
           end;
       end;
     end;
-    PLLPsymbol:=geom.LLprimitives.getelement(LLSymbolIndex);
-    PLLPsymbol^.SymSize:=geom.LLprimitives.Count-LLSymbolIndex;
-    PLLPsymbol^.PrimitivesCount:=PrimitivesCount;
-    v:=createvertex(psyminfo^.SymMinX,psyminfo^.SymMinY,0);
-    v:=VectorTransform3d(v,matr);
-    v:=VectorTransform3d(v,objmatrix);
-    PLLPsymbol^.OutBoundIndex:=geom.Vertex3S.AddGDBVertex(v);
-    v:=createvertex(psyminfo^.SymMinX,psyminfo^.SymMaxy,0);
-    v:=VectorTransform3d(v,matr);
-    v:=VectorTransform3d(v,objmatrix);
-    geom.Vertex3S.AddGDBVertex(v);
-    v:=createvertex(psyminfo^.SymMaxx,psyminfo^.SymMaxy,0);
-    v:=VectorTransform3d(v,matr);
-    v:=VectorTransform3d(v,objmatrix);
-    geom.Vertex3S.AddGDBVertex(v);
-    v:=createvertex(psyminfo^.SymMaxx,psyminfo^.SymMiny,0);
-    v:=VectorTransform3d(v,matr);
-    v:=VectorTransform3d(v,objmatrix);
-    geom.Vertex3S.AddGDBVertex(v);
+  end;
+  if LLSymbolIndex<>-1 then
+  begin
+  PLLPsymbol:=geom.LLprimitives.getelement(LLSymbolIndex);
+  PLLPsymbol^.SymSize:=geom.LLprimitives.Count-LLSymbolIndex;
+  if trcount>0 then
+                   PLLPsymbol^.Attrib:=LLAttrNeedSolid
+               else
+                   PLLPsymbol^.Attrib:=LLAttrNothing;
+  if PrimitivesCount>4 then
+                           PLLPsymbol^.Attrib:=PLLPsymbol^.Attrib or  LLAttrNeedSimtlify;
+  v:=createvertex(psyminfo^.SymMinX,psyminfo^.SymMinY,0);
+  v:=VectorTransform3d(v,matr);
+  v:=VectorTransform3d(v,objmatrix);
+  PLLPsymbol^.OutBoundIndex:=geom.Vertex3S.AddGDBVertex(v);
+  v:=createvertex(psyminfo^.SymMinX,psyminfo^.SymMaxy,0);
+  v:=VectorTransform3d(v,matr);
+  v:=VectorTransform3d(v,objmatrix);
+  geom.Vertex3S.AddGDBVertex(v);
+  v:=createvertex(psyminfo^.SymMaxx,psyminfo^.SymMaxy,0);
+  v:=VectorTransform3d(v,matr);
+  v:=VectorTransform3d(v,objmatrix);
+  geom.Vertex3S.AddGDBVertex(v);
+  v:=createvertex(psyminfo^.SymMaxx,psyminfo^.SymMiny,0);
+  v:=VectorTransform3d(v,matr);
+  v:=VectorTransform3d(v,objmatrix);
+  geom.Vertex3S.AddGDBVertex(v);
   end;
   end;
 constructor GDBfont.initnul;

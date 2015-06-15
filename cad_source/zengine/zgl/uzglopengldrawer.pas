@@ -38,6 +38,8 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);override;
                         procedure endrender;override;
                         procedure DrawLine(const i1:TLLVertexIndex);override;
+                        procedure DrawTriangle(const i1:TLLVertexIndex);override;
+                        procedure DrawQuad(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
                         procedure SetLineWidth(const w:single);override;
                         procedure SetPointSize(const s:single);override;
@@ -105,6 +107,8 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
 
                         function TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
                         procedure DrawLine(const i1:TLLVertexIndex);override;
+                        procedure DrawTriangle(const i1:TLLVertexIndex);override;
+                        procedure DrawQuad(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
 
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
@@ -215,7 +219,23 @@ begin
     oglsm.myglVertex3fV(PVertexBuffer.getelement(i1+1));
     oglsm.myglend;
 end;
-
+procedure TZGLOpenGLDrawer.DrawTriangle(const i1:TLLVertexIndex);
+begin
+    oglsm.myglbegin(GL_TRIANGLES);
+    oglsm.myglVertex3fV(PVertexBuffer.getelement(i1));
+    oglsm.myglVertex3fV(PVertexBuffer.getelement(i1+1));
+    oglsm.myglVertex3fV(PVertexBuffer.getelement(i1+2));
+    oglsm.myglend;
+end;
+procedure TZGLOpenGLDrawer.DrawQuad(const i1:TLLVertexIndex);
+begin
+    oglsm.myglbegin(GL_QUADS);
+    oglsm.myglVertex3fV(PVertexBuffer.getelement(i1));
+    oglsm.myglVertex3fV(PVertexBuffer.getelement(i1+1));
+    oglsm.myglVertex3fV(PVertexBuffer.getelement(i1+2));
+    oglsm.myglVertex3fV(PVertexBuffer.getelement(i1+3));
+    oglsm.myglend;
+end;
 procedure TZGLOpenGLDrawer.DrawPoint(const i:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_points);
@@ -843,6 +863,60 @@ begin
     y:=round(p2.y);
     ProcessScreenInvalidrect(x,y);
     LineTo(OffScreedDC,x,y);
+end;
+procedure TZGLCanvasDrawer.DrawTriangle(const i1:TLLVertexIndex);
+var
+   pv1,pv2,pv3:PGDBVertex3S;
+   p1,p2,p3:GDBVertex3S;
+   x,y:integer;
+   sp:array [1..3]of TPoint;
+begin
+    pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
+    pv2:=PGDBVertex3S(PVertexBuffer.getelement(i1+1));
+    pv3:=PGDBVertex3S(PVertexBuffer.getelement(i1+2));
+    p1:=TranslatePoint(pv1^);
+    p2:=TranslatePoint(pv2^);
+    p3:=TranslatePoint(pv3^);
+
+    sp[1].x:=round(p1.x);
+    sp[1].y:=round(p1.y);
+    ProcessScreenInvalidrect(sp[1].x,sp[1].y);
+    sp[2].x:=round(p2.x);
+    sp[2].y:=round(p2.y);
+    ProcessScreenInvalidrect(sp[2].x,sp[2].y);
+    sp[3].x:=round(p3.x);
+    sp[3].y:=round(p3.y);
+    ProcessScreenInvalidrect(sp[3].x,sp[3].y);
+    PolyGon(OffScreedDC,@sp[1],3,false);
+end;
+procedure TZGLCanvasDrawer.DrawQuad(const i1:TLLVertexIndex);var
+   pv1,pv2,pv3,pv4:PGDBVertex3S;
+   p1,p2,p3,p4:GDBVertex3S;
+   x,y:integer;
+   sp:array [1..4]of TPoint;
+begin
+    pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
+    pv2:=PGDBVertex3S(PVertexBuffer.getelement(i1+1));
+    pv3:=PGDBVertex3S(PVertexBuffer.getelement(i1+2));
+    pv4:=PGDBVertex3S(PVertexBuffer.getelement(i1+3));
+    p1:=TranslatePoint(pv1^);
+    p2:=TranslatePoint(pv2^);
+    p3:=TranslatePoint(pv3^);
+    p4:=TranslatePoint(pv4^);
+
+    sp[1].x:=round(p1.x);
+    sp[1].y:=round(p1.y);
+    ProcessScreenInvalidrect(sp[1].x,sp[1].y);
+    sp[2].x:=round(p2.x);
+    sp[2].y:=round(p2.y);
+    ProcessScreenInvalidrect(sp[2].x,sp[2].y);
+    sp[3].x:=round(p3.x);
+    sp[3].y:=round(p3.y);
+    ProcessScreenInvalidrect(sp[3].x,sp[3].y);
+    sp[4].x:=round(p4.x);
+    sp[4].y:=round(p4.y);
+    ProcessScreenInvalidrect(sp[4].x,sp[4].y);
+    PolyGon(OffScreedDC,@sp[1],4,false);
 end;
 
 procedure TZGLCanvasDrawer.DrawPoint(const i:TLLVertexIndex);

@@ -297,7 +297,8 @@ var
    PPrimitive:PTLLPrimitivePrefix;
    ProcessedSize:TArrayIndex;
    CurrentSize:TArrayIndex;
-   i,index:integer;
+   i,index,minsymbolsize:integer;
+
 begin
      if LLprimitives.count=0 then exit;
      ProcessedSize:=0;
@@ -309,22 +310,33 @@ begin
                                     Drawer.DrawLine(PTLLLine(PPrimitive)^.P1Index);
                                     CurrentSize:=sizeof(TLLLine);
                                end;
+                      LLTriangleId:begin
+                                    Drawer.DrawTriangle(PTLLTriangle(PPrimitive)^.P1Index);
+                                    CurrentSize:=sizeof(TLLTriangle);
+                               end;
                       LLPointId:begin
                                     Drawer.DrawPoint(PTLLPoint(PPrimitive)^.PIndex);
                                     CurrentSize:=sizeof(TLLPoint);
                                end;
                       LLSymbolId:begin
                                     CurrentSize:=sizeof(TLLSymbol);
-                                    if PTLLSymbol(PPrimitive)^.PrimitivesCount>4 then
+                                    if (PTLLSymbol(PPrimitive)^.Attrib and LLAttrNeedSimtlify)>0 then
                                     begin
                                       index:=PTLLSymbol(PPrimitive)^.OutBoundIndex;
-                                      if CanSimplyDrawInOCS(rc,self.Vertex3S.GetLength(index),25) then
+                                      if (PTLLSymbol(PPrimitive)^.Attrib and LLAttrNeedSolid)>0 then
+                                                                                                    minsymbolsize:=100
+                                                                                                else
+                                                                                                    minsymbolsize:=25;
+                                      if CanSimplyDrawInOCS(rc,self.Vertex3S.GetLength(index),minsymbolsize) then
                                       begin
-                                        for i:=1 to 3 do
-                                        begin
-                                           Drawer.DrawLine(index);
-                                           inc(index);
-                                        end;
+                                        if (PTLLSymbol(PPrimitive)^.Attrib and LLAttrNeedSolid)>0 then
+                                                                                                      Drawer.DrawQuad(index)
+                                                                                                  else
+                                                                                                      for i:=1 to 3 do
+                                                                                                      begin
+                                                                                                         Drawer.DrawLine(index);
+                                                                                                         inc(index);
+                                                                                                      end;
                                         CurrentSize:=PTLLSymbol(PPrimitive)^.SymSize;
                                       end
                                     end;

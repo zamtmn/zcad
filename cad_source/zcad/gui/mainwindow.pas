@@ -1539,7 +1539,7 @@ begin
         CanvasDrawer.midline:=midline;
         CanvasDrawer.canvas:=canvas;
         CanvasDrawer.PVertexBuffer:=@geom.Vertex3S;
-        geom.DrawLLPrimitives(CanvasDrawer);
+        //geom.DrawLLPrimitives(CanvasDrawer);
 
         if geom.Triangles.count>0 then
         begin
@@ -1565,7 +1565,7 @@ begin
         end;
         end;
 
-        if geom.SHX.count>1 then
+        {if geom.SHX.count>1 then
         begin
         ppoly:=geom.SHX.parray;
         poldpoly:=nil;
@@ -1592,7 +1592,7 @@ begin
            inc(ppoly);
         end;
         //oglsm.myglend;
-        end;
+        end;}
 
         canvas.Pen.Width:=oldw;
         geom.done;

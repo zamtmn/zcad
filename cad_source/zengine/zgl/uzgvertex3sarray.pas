@@ -27,10 +27,36 @@ ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Open
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
                 procedure DrawGeometry;virtual;
+                function AddGDBVertex(const v:GDBvertex):TArrayIndex;virtual;
+                function GetLength(const i:TArrayIndex):GDBFloat;virtual;
              end;
 {Export-}
 implementation
 uses OGLSpecFunc,log;
+function ZGLVertex3Sarray.GetLength(const i:TArrayIndex):GDBFloat;
+var
+    pv1,pv2:PGDBvertex3S;
+    v:GDBvertex3S;
+begin
+  pv1:=self.getelement(i);
+  pv2:={pv1}self.getelement(i+1);;
+  //inc(pv2);
+  v.x:=pv2.x-pv1.x;
+  v.y:=pv2.y-pv1.y;
+  v.z:=pv2.z-pv1.z;
+  result:=v.x*v.x+v.y*v.y+v.z*v.z;
+end;
+
+function ZGLVertex3Sarray.AddGDBVertex(const v:GDBvertex):TArrayIndex;
+var
+    vs:GDBvertex3S;
+begin
+     vs.x:=v.x;
+     vs.y:=v.y;
+     vs.z:=v.z;
+     result:=add(@vs);
+end;
+
 constructor ZGLVertex3Sarray.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBvertex3S));

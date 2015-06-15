@@ -122,7 +122,7 @@ begin
   end;
   if size=0 then
                 begin
-                     programlog.LogOutStr('ERROR:GDBGetMem(0)',0);
+                     programlog.LogOutStr('ERROR:GDBGetMem(0)',0,LM_Fatal);
                      {$IFDEF BREACKPOINTSONERRORS}
                      asm
                         //int 3;
@@ -138,7 +138,7 @@ begin
   {$IFDEF DEBUGBUILD}
   if p=nil then
                begin
-                    programlog.LogOutStr('ERROR:GDBFreeMem(nil)',0);
+                    programlog.LogOutStr('ERROR:GDBFreeMem(nil)',0,LM_Error);
                     {$IFDEF BREACKPOINTSONERRORS}
                     asm
                        int 3;

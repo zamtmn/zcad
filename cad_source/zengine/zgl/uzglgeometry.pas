@@ -20,7 +20,7 @@ unit uzglgeometry;
 {$INCLUDE def.inc}
 interface
 uses math,gdbdrawcontext,uzglabstractdrawer,uzgprimitivessarray,uzgvertex3sarray,UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzgltriangles3darray,ugdbltypearray,sysutils,gdbase,memman,log,
-     gdbasetypes,strproc,ugdbfont;
+     gdbasetypes,strproc,ugdbfont,uzglvectorobject;
 type
 {Export+}
 PZGLGeometry=^ZGLGeometry;
@@ -42,16 +42,10 @@ ZSegmentator={$IFNDEF DELPHI}packed{$ENDIF}object(GDBOpenArrayOfData)
                                                  procedure normalize(l:GDBDouble);
                                                  procedure draw(length:GDBDouble;paint:boolean);
                                            end;
-ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                                 LLprimitives:TLLPrimitivesArray;
-                                 Vertex3S:ZGLVertex3Sarray;
-                                 {Lines:ZGLLine3DArray;}
-                                 {Points:ZGLpoint3DArray;}
-                                 SHX:GDBPolyPoint3DArray;
-                                 Triangles:ZGLTriangle3DArray;
-                procedure DrawGeometry(rc:TDrawContext);virtual;
-                procedure DrawNiceGeometry(rc:TDrawContext);virtual;
-                procedure DrawLLPrimitives(drawer:TZGLAbstractDrawer);
+ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
+                procedure DrawGeometry(var rc:TDrawContext);virtual;
+                procedure DrawNiceGeometry(var rc:TDrawContext);virtual;
+                procedure DrawLLPrimitives(var rc:TDrawContext;drawer:TZGLAbstractDrawer);
                 procedure Clear;virtual;
                 constructor init;
                 destructor done;virtual;
@@ -69,10 +63,25 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 procedure PlaceText(const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
 
                 procedure DrawTextContent(content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
+                function CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;
              end;
 {Export-}
 function getsymbol_fromGDBText(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
 implementation
+function ZGLGeometry.CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;
+{false - не упрощать, true - упрощать. в GDBObjWithLocalCS.CanSimplyDrawInOCS наоборот}
+var
+   templod:GDBDouble;
+begin
+     if dc.maxdetail then
+                         exit(false);
+     templod:=ParamSize/(dc.zoom*dc.zoom);
+     if templod>TargetSize then
+                               result:=false
+                           else
+                               result:=true;
+end;
+
 function getsymbol_fromGDBText(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
 var
    ts:gdbstring;
@@ -211,7 +220,7 @@ begin
     end
     else
     begin
-      pfont^.CreateSymbol(SHX,Triangles,sym,objmatrix,matr,minx,miny,maxx,maxy,{pfont,}ln);
+      pfont^.CreateSymbol(self,sym,objmatrix,matr,minx,miny,maxx,maxy,{pfont,}ln);
 
     end;
       //FillChar(m1, sizeof(DMatrix4D), 0);
@@ -270,24 +279,25 @@ begin
 
                              pv3.coord:=plp^;
                              pv3.count:=0;
-                             SHX.add(@pv3);
+                             //SHX.add(@pv3);
                              pv3.coord:=plp2^;
                              pv3.count:=0;
-                             SHX.add(@pv3);
+                             //SHX.add(@pv3);
 
         plp:=pl.iterate(ir);
         plp2:=pl.iterate(ir);
   until plp2=nil;
 
-  SHX.Shrink;
+  //SHX.Shrink;
   pl.done;
 end;
 
-procedure ZGLGeometry.DrawLLPrimitives(drawer:TZGLAbstractDrawer);
+procedure ZGLGeometry.DrawLLPrimitives(var rc:TDrawContext;drawer:TZGLAbstractDrawer);
 var
    PPrimitive:PTLLPrimitivePrefix;
    ProcessedSize:TArrayIndex;
    CurrentSize:TArrayIndex;
+   i,index:integer;
 begin
      if LLprimitives.count=0 then exit;
      ProcessedSize:=0;
@@ -303,6 +313,32 @@ begin
                                     Drawer.DrawPoint(PTLLPoint(PPrimitive)^.PIndex);
                                     CurrentSize:=sizeof(TLLPoint);
                                end;
+                      LLSymbolId:begin
+                                    CurrentSize:=sizeof(TLLSymbol);
+                                    if PTLLSymbol(PPrimitive)^.PrimitivesCount>4 then
+                                    begin
+                                      index:=PTLLSymbol(PPrimitive)^.OutBoundIndex;
+                                      if CanSimplyDrawInOCS(rc,self.Vertex3S.GetLength(index),25) then
+                                      begin
+                                        for i:=1 to 3 do
+                                        begin
+                                           Drawer.DrawLine(index);
+                                           inc(index);
+                                        end;
+                                        CurrentSize:=PTLLSymbol(PPrimitive)^.SymSize;
+                                      end
+                                    end;
+
+                                 end;
+                      LLPolyLineId:begin
+                                    index:=PTLLPolyLine(PPrimitive)^.P1Index;
+                                    for i:=1 to PTLLPolyLine(PPrimitive)^.Count do
+                                    begin
+                                       Drawer.DrawLine(index);
+                                       inc(index);
+                                    end;
+                                    CurrentSize:=sizeof(TLLPolyline);
+                                 end;
      end;
      ProcessedSize:=ProcessedSize+CurrentSize;
      inc(pbyte(PPrimitive),CurrentSize);
@@ -536,7 +572,7 @@ objmatrix:=creatematrix(StartPatternPoint,PSP^.param,angle,scale);
 matr:=onematrix;
 minx:=0;miny:=0;maxx:=0;maxy:=0;
 if PSP.Psymbol<> nil then
-                    PSP^.param.PStyle.pfont.CreateSymbol(shx,triangles,PSP.Psymbol.Number,objmatrix,matr,minx,miny,maxx,maxy,1);
+                    PSP^.param.PStyle.pfont.CreateSymbol(self,PSP.Psymbol.Number,objmatrix,matr,minx,miny,maxx,maxy,1);
 end;
 procedure ZGLGeometry.PlaceText(const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
 var
@@ -555,7 +591,7 @@ begin
      sym:=byte(PTP^.Text[j]);
           if ptp.param.PStyle.pfont.font.unicode then
                                                      sym:=ach2uch(sym);
-PTP^.param.PStyle.pfont.CreateSymbol(shx,triangles,sym,objmatrix,matr,minx,miny,maxx,maxy,1);
+PTP^.param.PStyle.pfont.CreateSymbol(self,sym,objmatrix,matr,minx,miny,maxx,maxy,1);
 matr[3,0]:=matr[3,0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]),tdinfo).NextSymX;
 end;
 end;
@@ -728,7 +764,7 @@ begin
            Segmentator.done;
        end;
   end;
-  shx.Shrink;
+  //shx.Shrink;
   Triangles.Shrink;
   Vertex3S.Shrink;
   LLprimitives.Shrink;
@@ -777,7 +813,7 @@ begin
      end;
      //Lines.Shrink;
      //Points.Shrink;
-     shx.Shrink;
+     //shx.Shrink;
      Triangles.Shrink;
      Vertex3S.Shrink;
      LLprimitives.Shrink;
@@ -786,31 +822,25 @@ end;
 procedure ZGLGeometry.drawgeometry;
 begin
   rc.drawer.PVertexBuffer:=@Vertex3S;
-  DrawLLPrimitives(rc.drawer);
-  //if Vertex3S.Count>0 then
-  //Vertex3S.DrawGeometry;
-  //if lines.Count>0 then
-  //Lines.DrawGeometry;
-  //if Points.Count>0 then
-  //Points.DrawGeometry;
-  if shx.Count>0 then
-  //shx.DrawNiceGeometry;
-  shx.DrawGeometry(rc);
+  DrawLLPrimitives(rc,rc.drawer);
+
+  //if shx.Count>0 then
+  //shx.DrawGeometry(rc);
   if Triangles.Count>0 then
   Triangles.DrawGeometry(rc);
 end;
 procedure ZGLGeometry.drawNicegeometry;
 begin
   rc.drawer.PVertexBuffer:=@Vertex3S;
-  DrawLLPrimitives(rc.drawer);
+  DrawLLPrimitives(rc,rc.drawer);
   //if Vertex3S.Count>0 then
   //Vertex3S.DrawGeometry;
   //if lines.Count>0 then
   //Lines.DrawGeometry;
   //if Points.Count>0 then
   //Points.DrawGeometry;
-  if shx.Count>0 then
-  shx.DrawNiceGeometry;
+  //if shx.Count>0 then
+  //shx.DrawNiceGeometry;
   if Triangles.Count>0 then
   Triangles.DrawGeometry(rc);
 end;
@@ -820,26 +850,16 @@ begin
   LLprimitives.Clear;
   //Lines.Clear;
   //Points.Clear;
-  SHX.Clear;
+  //SHX.Clear;
   Triangles.Clear;
 end;
 constructor ZGLGeometry.init;
 begin
-Vertex3S.init({$IFDEF DEBUGBUILD}'{28B96AAC-8AD4-4BC8-85CA-78AAA0700CAF}',{$ENDIF}100);
-LLprimitives.init({$IFDEF DEBUGBUILD}'{6326CE08-54B5-404E-B567-C50AFEFBABEE}',{$ENDIF}100);
-//Lines.init({$IFDEF DEBUGBUILD}'{261A56E9-FC91-4A6D-A534-695778390843}',{$ENDIF}100);
-//Points.init({$IFDEF DEBUGBUILD}'{AF4B3440-50B5-4482-A2B7-D38DDE4EC731}',{$ENDIF}100);
-SHX.init({$IFDEF DEBUGBUILD}'{93201215-874A-4FC5-8062-103AF05AD930}-Lines TTF\SHX data',{$ENDIF}100);
-Triangles.init({$IFDEF DEBUGBUILD}'{EE569D51-8C1D-4AE3-A80F-BBBC565DA372}-Triangles TTF data',{$ENDIF}100);
+  inherited;
 end;
 destructor ZGLGeometry.done;
 begin
-Vertex3S.done;
-LLprimitives.done;
-//Lines.done;
-//Points.done;
-SHX.done;
-Triangles.done;
+  inherited;
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBPoint3DArray.initialization');{$ENDIF}

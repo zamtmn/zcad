@@ -19,9 +19,9 @@
 unit ugdbfont;
 {$INCLUDE def.inc}
 interface
-uses uzgltriangles3darray,ugdbshxfont,ugdbttffont,memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,
+uses uzgprimitivessarray,uzgltriangles3darray,ugdbshxfont,ugdbttffont,memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,
      strproc,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,
-     ugdbbasefont,geometry;
+     ugdbbasefont,geometry,uzglvectorobject;
 type
 {EXPORT+}
 PGDBfont=^GDBfont;
@@ -36,7 +36,7 @@ GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     destructor done;virtual;
     function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
     function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
-    procedure CreateSymbol(var Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;var Triangles:ZGLTriangle3DArray;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
+    procedure CreateSymbol(var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
   end;
 {EXPORT-}
 var
@@ -52,13 +52,13 @@ begin
      //pf.ItSHX;
 end;
 
-procedure GDBfont.CreateSymbol(var Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;var Triangles:ZGLTriangle3DArray;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
+procedure GDBfont.CreateSymbol(var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
 var
   psymbol: GDBPointer;
   {i, }j, k: GDBInteger;
   len: GDBWord;
   //matr,m1: DMatrix4D;
-  v:GDBvertex4D;
+  v:GDBvertex;
   v3:GDBVertex;
   //pv:GDBPolyVertex2D;
   pv3:GDBPolyVertex3D;
@@ -72,6 +72,10 @@ var
   //deb:GDBsymdolinfo;
   TDInfo:TTrianglesDataInfo;
   PTriangles:PGDBFontVertex2D;
+
+  LLSymbolIndex:TArrayIndex;
+  PLLPsymbol:PTLLSymbol;
+  PrimitivesCount:integer;
 begin
   if _symbol=100 then
                       _symbol:=_symbol;
@@ -91,7 +95,7 @@ begin
             v3.z:=0;
             v3:=VectorTransform3D(v3,matr);
             v3:=VectorTransform3D(v3,objmatrix);
-            Triangles.Add(@v3);
+            geom.Triangles.Add(@v3);
             inc(PTriangles);
        end;
   end;
@@ -99,6 +103,8 @@ begin
   psymbol := self.font.GetSymbolDataAddr(psyminfo.addr);
   if {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size <> 0 then
   begin;
+    LLSymbolIndex:=geom.LLprimitives.AddLLPSymbol;
+    PrimitivesCount:=0;
     for j := 1 to {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size do
     begin
       case GDBByte(psymbol^) of
@@ -110,8 +116,8 @@ begin
             PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
             inc(pfontfloat(psymbol));
             v.z:=0;
-            v.w:=1;
-            v:=VectorTransform(v,matr);
+            //v.w:=1;
+            v:=VectorTransform3d(v,matr);
             //pv.coord:=PGDBvertex2D(@v)^;
             //pv.count:=0;
 
@@ -120,15 +126,17 @@ begin
             if v.x>maxx then maxx:=v.x;
             if v.y>maxy then maxy:=v.y;
 
-            v:=VectorTransform(v,objmatrix);
+            v:=VectorTransform3d(v,objmatrix);
 
-            pv3.coord:=PGDBvertex(@v)^;
+            pv3.coord:=v;
+
+            geom.LLprimitives.AddLLPLine(geom.Vertex3S.AddGDBVertex(v));
 
             //tv:=pv3.coord;
             pv3.LineNumber:=ln;
 
             pv3.count:=0;
-            Vertex3D_in_WCS_Array.add(@pv3);
+            //geom.SHX.add(@pv3);
 
             //inc(pGDBByte(psymbol), 2 * sizeof(GDBDouble));
             PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
@@ -136,8 +144,8 @@ begin
             PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
             inc(pfontfloat(psymbol));
             v.z:=0;
-            v.w:=1;
-            v:=VectorTransform(v,matr);
+            //v.w:=1;
+            v:=VectorTransform3d(v,matr);
 
             if v.x<minx then minx:=v.x;
             if v.y<miny then miny:=v.y;
@@ -145,13 +153,17 @@ begin
             if v.y>maxy then maxy:=v.y;
 
 
-            v:=VectorTransform(v,objmatrix);
-            pv3.coord:=PGDBvertex(@v)^;
+            v:=VectorTransform3d(v,objmatrix);
+            pv3.coord:=v;
             pv3.count:=0;
+
+            geom.Vertex3S.AddGDBVertex(v);
 
             pv3.LineNumber:=ln;
 
-            Vertex3D_in_WCS_Array.add(@pv3);
+            inc(PrimitivesCount);
+
+            //geom.SHX.add(@pv3);
 
 
             //pv.coord:=PGDBvertex2D(@v)^;
@@ -168,8 +180,8 @@ begin
             PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
             inc(pfontfloat(psymbol));
             v.z:=0;
-            v.w:=1;
-            v:=VectorTransform(v,matr);
+            //v.w:=1;
+            v:=VectorTransform3d(v,matr);
             //pv.coord:=PGDBvertex2D(@v)^;
             //pv.count:=len;
 
@@ -179,14 +191,16 @@ begin
             if v.y>maxy then maxy:=v.y;
 
 
-            v:=VectorTransform(v,objmatrix);
+            v:=VectorTransform3d(v,objmatrix);
             pv3.coord:=PGDBvertex(@v)^;
             pv3.count:=len;
 
             //tv:=pv3.coord;
             pv3.LineNumber:=ln;
 
-            Vertex3D_in_WCS_Array.add(@pv3);
+            geom.LLprimitives.AddLLPPolyLine(geom.Vertex3S.AddGDBVertex(v),len-1);
+
+            //geom.SHX.add(@pv3);
 
 
             //inc(pGDBByte(psymbol), 2 * sizeof(GDBDouble));
@@ -198,9 +212,9 @@ begin
             PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
             inc(pfontfloat(psymbol));
             v.z:=0;
-            v.w:=1;
+            //v.w:=1;
 
-            v:=VectorTransform(v,matr);
+            v:=VectorTransform3d(v,matr);
 
             if v.x<minx then minx:=v.x;
             if v.y<miny then miny:=v.y;
@@ -208,7 +222,7 @@ begin
             if v.y>maxy then maxy:=v.y;
 
 
-            v:=VectorTransform(v,objmatrix);
+            v:=VectorTransform3d(v,objmatrix);
             //pv.coord:=PGDBvertex2D(@v)^;
             //pv.count:=-1;
 
@@ -218,16 +232,38 @@ begin
             pv3.LineNumber:=ln;
             //tv:=pv3.coord;
 
-            Vertex3D_in_WCS_Array.add(@pv3);
+            //geom.SHX.add(@pv3);
+
+            geom.Vertex3S.AddGDBVertex(v);
 
 
             //inc(pGDBByte(psymbol), 2 * sizeof(GDBDouble));
             inc(k);
+            inc(PrimitivesCount);
             end;
           end;
       end;
     end;
-  end
+    PLLPsymbol:=geom.LLprimitives.getelement(LLSymbolIndex);
+    PLLPsymbol^.SymSize:=geom.LLprimitives.Count-LLSymbolIndex;
+    PLLPsymbol^.PrimitivesCount:=PrimitivesCount;
+    v:=createvertex(psyminfo^.SymMinX,psyminfo^.SymMinY,0);
+    v:=VectorTransform3d(v,matr);
+    v:=VectorTransform3d(v,objmatrix);
+    PLLPsymbol^.OutBoundIndex:=geom.Vertex3S.AddGDBVertex(v);
+    v:=createvertex(psyminfo^.SymMinX,psyminfo^.SymMaxy,0);
+    v:=VectorTransform3d(v,matr);
+    v:=VectorTransform3d(v,objmatrix);
+    geom.Vertex3S.AddGDBVertex(v);
+    v:=createvertex(psyminfo^.SymMaxx,psyminfo^.SymMaxy,0);
+    v:=VectorTransform3d(v,matr);
+    v:=VectorTransform3d(v,objmatrix);
+    geom.Vertex3S.AddGDBVertex(v);
+    v:=createvertex(psyminfo^.SymMaxx,psyminfo^.SymMiny,0);
+    v:=VectorTransform3d(v,matr);
+    v:=VectorTransform3d(v,objmatrix);
+    geom.Vertex3S.AddGDBVertex(v);
+  end;
   end;
 constructor GDBfont.initnul;
 begin

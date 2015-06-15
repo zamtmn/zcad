@@ -70,10 +70,10 @@ begin
 end;
 procedure GDBObjMText.SimpleDrawGeometry;
 begin
-     if self.text.count=1 then
+     {if self.text.count=1 then
                               geom.SHX.simpledrawgeometry(dc,1)
                           else
-                              geom.SHX.simpledrawgeometry(dc,2);
+                              geom.SHX.simpledrawgeometry(dc,2);}
 end;
 function GDBObjMText.GetObjTypeName;
 begin
@@ -655,7 +655,7 @@ begin
   pfont:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont;
   pl.init({$IFDEF DEBUGBUILD}'{E44FB0DD-3556-4279-8845-5EA005F302DB}',{$ENDIF}10);
   ispl:=false;
-  geom.SHX.clear;
+  //geom.SHX.clear;
   Geom.Triangles.clear;
 
   minx:=+infinity;
@@ -740,7 +740,7 @@ begin
     begin
     //matr:=matrixmultiply(matr,objmatrix);
 
-      pfont.CreateSymbol(geom.SHX,self.Geom.Triangles,sym,objmatrix,matr,minx,miny,maxx,maxy,ln);
+      pfont.CreateSymbol(geom,sym,objmatrix,matr,minx,miny,maxx,maxy,ln);
 
       matr:=m1;
       FillChar(m1, sizeof(DMatrix4D), 0);
@@ -809,10 +809,10 @@ begin
 
                              pv3.coord:=plp^;
                              pv3.count:=0;
-                             geom.SHX.add(@pv3);
+                             //geom.SHX.add(@pv3);
                              pv3.coord:=plp2^;
                              pv3.count:=0;
-                             geom.SHX.add(@pv3);
+                             //geom.SHX.add(@pv3);
 
         plp:=pl.iterate(ir);
         plp2:=pl.iterate(ir);
@@ -822,7 +822,7 @@ begin
 
 
 
-  geom.SHX.Shrink;
+  //geom.SHX.Shrink;
   pl.done;
 end;
 {procedure GDBObjMText.CalcObjMatrix;

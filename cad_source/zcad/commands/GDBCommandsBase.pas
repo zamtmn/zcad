@@ -21,6 +21,7 @@ unit GDBCommandsBase;
 
 interface
 uses
+ {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
  zcobjectinspectormultiobjects,enitiesextendervariables,gdbdrawcontext,ugdbdrawing,paths,fileformatsmanager,gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbdrawingdef,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,FileUtil,Forms,Controls,Clipbrd,lclintf,
   plugins,
@@ -94,7 +95,7 @@ begin
                                 begin
                                  {$IFDEF DEBUGBUILD}
                                  membuf.init({$IFDEF DEBUGBUILD}'{6F6386AC-95B5-4B6D-AEC3-7EE5DD53F8A3}',{$ENDIF}10000);
-                                 MSEditor.OU.SaveToMem(membuf);
+                                 MSEditor.VariablesUnit.SaveToMem(membuf);
                                  membuf.SaveToFile('*log\lms.pas');
                                  {$ENDIF}
                                  if assigned(SetGDBObjInspProc)then

@@ -224,11 +224,11 @@ begin
                                                              exit;
                                                         end;
 
-    if geom.SHX.CalcTrueInFrustum (mf)<>IREmpty
+    {if geom.SHX.CalcTrueInFrustum (mf)<>IREmpty
                                                             then
                                                                 result:=true
                                                             else
-                                                                result:=false;
+                                                                result:=false;}
 
    {if Vertex3D_in_WCS_Array.count<2 then exit;
    ptpv0:=Vertex3D_in_WCS_Array.parray;
@@ -340,7 +340,7 @@ begin
       result:=CalcOutBound4VInFrustum(outbound,frustum);
       if result<>IRPartially then
                                  exit;
-      result:=geom.SHX.CalcTrueInFrustum(frustum);
+      //result:=geom.SHX.CalcTrueInFrustum(frustum);
 end;
 procedure GDBObjAbstractText.Renderfeedback;
 var //pm:DMatrix4D;
@@ -423,7 +423,7 @@ begin
 end;
 procedure GDBObjAbstractText.SimpleDrawGeometry;
 begin
-     geom.SHX.simpledrawgeometry(dc,1);
+     //geom.SHX.simpledrawgeometry(dc,1);
 end;
 
 procedure GDBObjAbstractText.DrawGeometry;
@@ -451,9 +451,8 @@ begin
                                                                                    geom.DrawGeometry(DC);
                                                                                    end
                                                                                else
-                                                                                   //Vertex3D_in_WCS_Array.drawgeometry;
-                                                                                   //Vertex3D_in_WCS_Array.simpledrawgeometry(_lod);
-                                                                                   simpledrawgeometry(dc);
+                                                                                   geom.DrawGeometry(DC);
+                                                                                   //simpledrawgeometry(dc);
                                                                                      {begin
                                                                                            myglbegin(gl_line_loop);
                                                                                            myglvertex3dv(@outbound[0]);

@@ -42,6 +42,7 @@ E:\zcad\cad_source\zengine\zgl\uzgvertex3sarray.pas
 E:\zcad\cad_source\zengine\zgl\uzglpoint3darray.pas
 E:\zcad\cad_source\zengine\zgl\uzgltriangles3darray.pas
 E:\zcad\cad_source\zengine\zgl\uzgprimitivessarray.pas
+E:\zcad\cad_source\zengine\zgl\uzglvectorobject.pas
 E:\zcad\cad_source\zengine\zgl\uzglgeometry.pas
 E:\zcad\cad_source\zengine\gdb\entities\GDBSubordinated.pas
 E:\zcad\cad_source\zengine\gdb\gdbvisualprop.pas

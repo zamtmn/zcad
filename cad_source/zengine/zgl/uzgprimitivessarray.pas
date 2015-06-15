@@ -24,6 +24,8 @@ geometry;
 const
      LLLineId=1;
      LLPointId=2;
+     LLSymbolId=3;
+     LLPolyLineId=4;
 type
 {Export+}
 TLLPrimitiveType=GDBInteger;
@@ -42,11 +44,25 @@ TLLPoint={$IFNDEF DELPHI}packed{$ENDIF} record
               Prefix:TLLPrimitivePrefix;
               PIndex:TLLVertexIndex;
         end;
+PTLLSymbol=^TLLSymbol;
+TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} record
+              Prefix:TLLPrimitivePrefix;
+              SymSize:GDBInteger;
+              PrimitivesCount:GDBInteger;
+              OutBoundIndex:TLLVertexIndex;
+        end;
+PTLLPolyLine=^TLLPolyLine;
+TLLPolyLine={$IFNDEF DELPHI}packed{$ENDIF} record
+              Prefix:TLLPrimitivePrefix;
+              P1Index,Count:TLLVertexIndex;
+        end;
 TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBByte*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
                 procedure AddLLPLine(const P1Index:TLLVertexIndex);
                 procedure AddLLPPoint(const PIndex:TLLVertexIndex);
+                function AddLLPSymbol:TArrayIndex;
+                procedure AddLLPPolyLine(const P1Index,Count:TLLVertexIndex);
              end;
 {Export-}
 implementation
@@ -59,6 +75,15 @@ begin
      tl.P1Index:=P1Index;
      AddData(@tl,sizeof(tl));
 end;
+procedure TLLPrimitivesArray.AddLLPPolyLine(const P1Index,Count:TLLVertexIndex);
+var
+   tpl:TLLPolyLine;
+begin
+     tpl.Prefix.LLPType:=LLPolyLineId;
+     tpl.P1Index:=P1Index;
+     tpl.Count:=Count;
+     AddData(@tpl,sizeof(tpl));
+end;
 procedure TLLPrimitivesArray.AddLLPPoint(const PIndex:TLLVertexIndex);
 var
    tp:TLLPoint;
@@ -66,6 +91,13 @@ begin
      tp.Prefix.LLPType:=LLPointId;
      tp.PIndex:=PIndex;
      AddData(@tp,sizeof(tp));
+end;
+function TLLPrimitivesArray.AddLLPSymbol:TArrayIndex;
+var
+   ts:TLLSymbol;
+begin
+     ts.Prefix.LLPType:=LLSymbolId;
+     result:=AddData(@ts,sizeof(ts));
 end;
 constructor TLLPrimitivesArray.init;
 begin

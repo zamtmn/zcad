@@ -63,20 +63,22 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
                 procedure PlaceText(const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
 
                 procedure DrawTextContent(content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
-                function CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;
+                function CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
+                function GetSqrParamSizeInOCS(const DC:TDrawContext;const SqrParamSize:GDBDouble):GDBDouble;
              end;
 {Export-}
 function getsymbol_fromGDBText(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
 implementation
-function ZGLGeometry.CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;
+function ZGLGeometry.GetSqrParamSizeInOCS(const DC:TDrawContext;const SqrParamSize:GDBDouble):GDBDouble;
+begin
+     result:=SqrParamSize/(dc.zoom*dc.zoom);
+end;
+function ZGLGeometry.CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
 {false - не упрощать, true - упрощать. в GDBObjWithLocalCS.CanSimplyDrawInOCS наоборот}
-var
-   templod:GDBDouble;
 begin
      if dc.maxdetail then
                          exit(false);
-     templod:=ParamSize/(dc.zoom*dc.zoom);
-     if templod>TargetSize then
+     if GetSqrParamSizeInOCS(DC,SqrParamSize)>TargetSize then
                                result:=false
                            else
                                result:=true;
@@ -298,47 +300,73 @@ var
    ProcessedSize:TArrayIndex;
    CurrentSize:TArrayIndex;
    i,index,minsymbolsize:integer;
-
+   ignoretriangles:boolean;
+   ignorelines:boolean;
+   sqrparamsize:gdbdouble;
 begin
      if LLprimitives.count=0 then exit;
+     ignoretriangles:=false;
+     ignorelines:=false;
      ProcessedSize:=0;
      PPrimitive:=LLprimitives.parray;
      while ProcessedSize<LLprimitives.count do
      begin
      case PPrimitive.LLPType of
                       LLLineId:begin
-                                    Drawer.DrawLine(PTLLLine(PPrimitive)^.P1Index);
+                                    if not ignorelines then
+                                                           Drawer.DrawLine(PTLLLine(PPrimitive)^.P1Index);
                                     CurrentSize:=sizeof(TLLLine);
                                end;
                       LLTriangleId:begin
-                                    Drawer.DrawTriangle(PTLLTriangle(PPrimitive)^.P1Index);
+                                    if not ignoretriangles then
+                                                               Drawer.DrawTriangle(PTLLTriangle(PPrimitive)^.P1Index);
                                     CurrentSize:=sizeof(TLLTriangle);
                                end;
                       LLPointId:begin
                                     Drawer.DrawPoint(PTLLPoint(PPrimitive)^.PIndex);
                                     CurrentSize:=sizeof(TLLPoint);
                                end;
+                      LLSymbolEndId:begin
+                                    ignoretriangles:=false;
+                                    ignorelines:=false;
+                                    CurrentSize:=sizeof(TLLSymbolEnd);
+                                    end;
                       LLSymbolId:begin
                                     CurrentSize:=sizeof(TLLSymbol);
-                                    if (PTLLSymbol(PPrimitive)^.Attrib and LLAttrNeedSimtlify)>0 then
+                                    index:=PTLLSymbol(PPrimitive)^.OutBoundIndex;
+                                    if not drawer.CheckOutboundInDisplay(index) then
+                                                                                    begin
+                                                                                      CurrentSize:=PTLLSymbol(PPrimitive)^.SymSize;
+                                                                                    end
+
+                               else if (PTLLSymbol(PPrimitive)^.Attrib and LLAttrNeedSimtlify)>0 then
                                     begin
-                                      index:=PTLLSymbol(PPrimitive)^.OutBoundIndex;
                                       if (PTLLSymbol(PPrimitive)^.Attrib and LLAttrNeedSolid)>0 then
-                                                                                                    minsymbolsize:=100
+                                                                                                    begin
+                                                                                                     minsymbolsize:=60;
+                                                                                                     ignorelines:=true;
+                                                                                                    end
                                                                                                 else
-                                                                                                    minsymbolsize:=25;
-                                      if CanSimplyDrawInOCS(rc,self.Vertex3S.GetLength(index),minsymbolsize) then
+                                                                                                    minsymbolsize:=30;
+                                      sqrparamsize:=GetSqrParamSizeInOCS(rc,Vertex3S.GetLength(index));
+                                      if (sqrparamsize<minsymbolsize)and(not rc.maxdetail) then
                                       begin
-                                        if (PTLLSymbol(PPrimitive)^.Attrib and LLAttrNeedSolid)>0 then
-                                                                                                      Drawer.DrawQuad(index)
-                                                                                                  else
+                                        //if (PTLLSymbol(PPrimitive)^.Attrib and LLAttrNeedSolid)>0 then
+                                                                                                      Drawer.DrawQuad(index);
+                                                                                                  {else
                                                                                                       for i:=1 to 3 do
                                                                                                       begin
                                                                                                          Drawer.DrawLine(index);
                                                                                                          inc(index);
-                                                                                                      end;
+                                                                                                      end;}
                                         CurrentSize:=PTLLSymbol(PPrimitive)^.SymSize;
                                       end
+                                       else
+                                      if (sqrparamsize<({minsymbolsize+1000}200))and(not rc.maxdetail) then
+                                      begin
+                                        ignoretriangles:=true;
+                                        ignorelines:=false;
+                                      end;
                                     end;
 
                                  end;

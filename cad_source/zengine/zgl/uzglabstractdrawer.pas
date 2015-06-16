@@ -30,6 +30,7 @@ TZGLAbstractDrawer=class
                         procedure DrawLine(const i1:TLLVertexIndex);virtual;abstract;
                         procedure DrawTriangle(const i1:TLLVertexIndex);virtual;abstract;
                         procedure DrawQuad(const i1:TLLVertexIndex);virtual;abstract;
+                        function CheckOutboundInDisplay(const i1:TLLVertexIndex):boolean;virtual;abstract;
                         procedure DrawPoint(const i:TLLVertexIndex);virtual;abstract;
                         procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);virtual;abstract;
                         procedure endrender;virtual;abstract;

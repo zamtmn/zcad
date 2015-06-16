@@ -287,6 +287,7 @@ begin
   v:=VectorTransform3d(v,matr);
   v:=VectorTransform3d(v,objmatrix);
   geom.Vertex3S.AddGDBVertex(v);
+  geom.LLprimitives.AddLLPSymbolEnd;
   end;
   end;
 constructor GDBfont.initnul;

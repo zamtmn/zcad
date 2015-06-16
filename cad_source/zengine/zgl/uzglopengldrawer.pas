@@ -40,6 +40,7 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawTriangle(const i1:TLLVertexIndex);override;
                         procedure DrawQuad(const i1:TLLVertexIndex);override;
+                        function CheckOutboundInDisplay(const i1:TLLVertexIndex):boolean;override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
                         procedure SetLineWidth(const w:single);override;
                         procedure SetPointSize(const s:single);override;
@@ -109,6 +110,7 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawTriangle(const i1:TLLVertexIndex);override;
                         procedure DrawQuad(const i1:TLLVertexIndex);override;
+                        function CheckOutboundInDisplay(const i1:TLLVertexIndex):boolean;override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
 
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
@@ -236,6 +238,11 @@ begin
     oglsm.myglVertex3fV(PVertexBuffer.getelement(i1+3));
     oglsm.myglend;
 end;
+function TZGLOpenGLDrawer.CheckOutboundInDisplay(const i1:TLLVertexIndex):boolean;
+begin
+    result:=true;
+end;
+
 procedure TZGLOpenGLDrawer.DrawPoint(const i:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_points);
@@ -918,7 +925,49 @@ begin
     ProcessScreenInvalidrect(sp[4].x,sp[4].y);
     PolyGon(OffScreedDC,@sp[1],4,false);
 end;
+function TZGLCanvasDrawer.CheckOutboundInDisplay(const i1:TLLVertexIndex):boolean;
+var
+pv1,pv2,pv3,pv4:PGDBVertex3S;
+p1,p2,p3,p4:GDBVertex3S;
+l,r,t,b:integer;
 
+procedure checkpointoutsidedisplay(const p:GDBVertex3S);
+begin
+     if (p.x<drawrect.Left)then
+                               inc(l);
+     if (p.x>drawrect.Right)then
+                               inc(r);
+     if (p.y<drawrect.Top)then
+                               inc(t);
+     if (p.y>drawrect.Bottom)then
+                               inc(b);
+end;
+
+begin
+ pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
+ pv2:=PGDBVertex3S(PVertexBuffer.getelement(i1+1));
+ pv3:=PGDBVertex3S(PVertexBuffer.getelement(i1+2));
+ pv4:=PGDBVertex3S(PVertexBuffer.getelement(i1+3));
+ p1:=TranslatePoint(pv1^);
+ p2:=TranslatePoint(pv2^);
+ p3:=TranslatePoint(pv3^);
+ p4:=TranslatePoint(pv4^);
+
+ l:=0;
+ r:=0;
+ t:=0;
+ b:=0;
+
+ checkpointoutsidedisplay(p1);
+ checkpointoutsidedisplay(p2);
+ checkpointoutsidedisplay(p3);
+ checkpointoutsidedisplay(p4);
+
+ if (l=4)or(r=4)or(t=4)or(b=4)then
+                                  result:=false
+                              else
+                                  result:=true;
+end;
 procedure TZGLCanvasDrawer.DrawPoint(const i:TLLVertexIndex);
 var
    pv:PGDBVertex3S;

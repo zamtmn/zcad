@@ -24,13 +24,14 @@ geometry;
 const
      LLAttrNothing=0;
      LLAttrNeedSolid=1;
-     LLAttrNeedSimtlify=1;
+     LLAttrNeedSimtlify=2;
 
      LLLineId=1;
      LLPointId=2;
      LLSymbolId=3;
-     LLPolyLineId=4;
-     LLTriangleId=5;
+     LLSymbolEndId=4;
+     LLPolyLineId=5;
+     LLTriangleId=6;
 type
 {Export+}
 TLLPrimitiveType=GDBInteger;
@@ -63,6 +64,9 @@ TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} record
               Attrib:TLLPrimitiveAttrib;
               OutBoundIndex:TLLVertexIndex;
         end;
+TLLSymbolEnd={$IFNDEF DELPHI}packed{$ENDIF} record
+                       Prefix:TLLPrimitivePrefix;
+                   end;
 PTLLPolyLine=^TLLPolyLine;
 TLLPolyLine={$IFNDEF DELPHI}packed{$ENDIF} record
               Prefix:TLLPrimitivePrefix;
@@ -75,6 +79,7 @@ TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
                 procedure AddLLTriangle(const P1Index:TLLVertexIndex);
                 procedure AddLLPPoint(const PIndex:TLLVertexIndex);
                 function AddLLPSymbol:TArrayIndex;
+                procedure AddLLPSymbolEnd;
                 procedure AddLLPPolyLine(const P1Index,Count:TLLVertexIndex);
              end;
 {Export-}
@@ -119,6 +124,13 @@ var
 begin
      ts.Prefix.LLPType:=LLSymbolId;
      result:=AddData(@ts,sizeof(ts));
+end;
+procedure TLLPrimitivesArray.AddLLPSymbolEnd;
+var
+   tse:TLLSymbolEnd;
+begin
+     tse.Prefix.LLPType:=LLSymbolEndId;
+     AddData(@tse,sizeof(tse));
 end;
 constructor TLLPrimitivesArray.init;
 begin

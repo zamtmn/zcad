@@ -46,7 +46,6 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
                 procedure DrawGeometry(var rc:TDrawContext);virtual;
                 procedure DrawNiceGeometry(var rc:TDrawContext);virtual;
                 procedure DrawLLPrimitives(var rc:TDrawContext;drawer:TZGLAbstractDrawer);
-                procedure Clear;virtual;
                 constructor init;
                 destructor done;virtual;
                 procedure DrawLineWithLT(const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);virtual;
@@ -169,8 +168,6 @@ procedure ZGLGeometry.DrawTextContent(content:gdbstring;_pfont: PGDBfont;const D
 var
   i: GDBInteger;
   matr,m1: DMatrix4D;
-  v:GDBvertex4D;
-  pv3:GDBPolyVertex3D;
 
   minx,miny,maxx,maxy:GDBDouble;
 
@@ -189,8 +186,6 @@ begin
 
   ispl:=false;
   pl.init({$IFDEF DEBUGBUILD}'{AC324582-5E55-4290-8017-44B8C675198A}',{$ENDIF}10);
-  //SHX.clear;
-  //Triangles.clear;
 
   minx:=+infinity;
   miny:=+infinity;
@@ -204,18 +199,20 @@ begin
   while i <= length(content) do
   begin
     sym:=getsymbol_fromGDBText(content,i,l,pgdbfont(pfont)^.font.unicode);
-    if {content[i]}sym={#}1 then
+    if sym=1 then
     begin
          ispl:=not(ispl);
          if ispl then begin
                              lp:=pgdbvertex(@matr[3,0])^;
                              lp.y:=lp.y-0.2*textprop_size;
+                             lp.x:=lp.x-0.1*textprop_size;
                              lp:=VectorTransform3d(lp,objmatrix);
                              pl.Add(@lp);
                         end
                    else begin
                              lp:=pgdbvertex(@matr[3,0])^;
                              lp.y:=lp.y-0.2*textprop_size;
+                             lp.x:=lp.x-0.1*textprop_size;
                              lp:=VectorTransform3d(lp,objmatrix);
                              pl.Add(@lp);
                         end;
@@ -225,14 +222,12 @@ begin
       pfont^.CreateSymbol(self,sym,objmatrix,matr,minx,miny,maxx,maxy,{pfont,}ln);
 
     end;
-      //FillChar(m1, sizeof(DMatrix4D), 0);
+    if sym<>1 then
+    begin
       m1:=onematrix;
-  {m1[0, 0] := 1;
-  m1[1, 1] := 1;
-  m1[2, 2] := 1;
-  m1[3, 3] := 1;}
-  m1[3, 0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}{(ord(content[i]))}sym,tdinfo).NextSymX;
-  matr:=MatrixMultiply(m1,matr);
+      m1[3, 0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}{(ord(content[i]))}sym,tdinfo).NextSymX;
+      matr:=MatrixMultiply(m1,matr);
+    end;
   inc(i,l);
   end;
                        if ispl then
@@ -240,6 +235,7 @@ begin
                      begin
                              lp:=pgdbvertex(@matr[3,0])^;
                              lp.y:=lp.y-0.2*textprop_size;
+                             lp.x:=lp.x-0.1*textprop_size;
                              lp:=VectorTransform3d(lp,objmatrix);
                              pl.Add(@lp);
                      end;
@@ -249,48 +245,34 @@ begin
        if maxx=NegInfinity then maxx:=1;
        if maxy=NegInfinity then maxy:=1;
 
-  v.x:=minx;
-  v.y:=maxy;
-  v.z:=0;
-  v.w:=1;
-  v:=VectorTransform(v,objMatrix);
-  outbound[0]:=pgdbvertex(@v)^;
-  v.x:=maxx;
-  v.y:=maxy;
-  v.z:=0;
-  v.w:=1;
-  v:=VectorTransform(v,objMatrix);
-  outbound[1]:=pgdbvertex(@v)^;
-  v.x:=maxx;
-  v.y:=miny;
-  v.z:=0;
-  v.w:=1;
-  v:=VectorTransform(v,objMatrix);
-  outbound[2]:=pgdbvertex(@v)^;
-  v.x:=minx;
-  v.y:=miny;
-  v.z:=0;
-  v.w:=1;
-  v:=VectorTransform(v,objMatrix);
-  outbound[3]:=pgdbvertex(@v)^;
+  outbound[0].x:=minx;
+  outbound[0].y:=maxy;
+  outbound[0].z:=0;
+  outbound[0]:=VectorTransform3D(outbound[0],objMatrix);
+  outbound[1].x:=maxx;
+  outbound[1].y:=maxy;
+  outbound[1].z:=0;
+  outbound[1]:=VectorTransform3D(outbound[1],objMatrix);
+  outbound[2].x:=maxx;
+  outbound[2].y:=miny;
+  outbound[2].z:=0;
+  outbound[2]:=VectorTransform3D(outbound[2],objMatrix);
+  outbound[3].x:=minx;
+  outbound[3].y:=miny;
+  outbound[3].z:=0;
+  outbound[3]:=VectorTransform3D(outbound[3],objMatrix);
 
   plp:=pl.beginiterate(ir);
   plp2:=pl.iterate(ir);
   if plp2<>nil then
   repeat
-
-                             pv3.coord:=plp^;
-                             pv3.count:=0;
-                             //SHX.add(@pv3);
-                             pv3.coord:=plp2^;
-                             pv3.count:=0;
-                             //SHX.add(@pv3);
+        LLprimitives.AddLLPLine(Vertex3S.AddGDBVertex(plp^));
+        Vertex3S.AddGDBVertex(plp2^);
 
         plp:=pl.iterate(ir);
         plp2:=pl.iterate(ir);
   until plp2=nil;
 
-  //SHX.Shrink;
   pl.done;
 end;
 
@@ -804,10 +786,7 @@ begin
            Segmentator.done;
        end;
   end;
-  //shx.Shrink;
-  Triangles.Shrink;
-  Vertex3S.Shrink;
-  LLprimitives.Shrink;
+  Shrink;
 end;
 
 procedure ZGLGeometry.DrawLineWithLT(const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);
@@ -851,47 +830,18 @@ begin
                Segmentator.done;
          end;
      end;
-     //Lines.Shrink;
-     //Points.Shrink;
-     //shx.Shrink;
-     Triangles.Shrink;
-     Vertex3S.Shrink;
-     LLprimitives.Shrink;
+     Shrink;
 end;
 
 procedure ZGLGeometry.drawgeometry;
 begin
   rc.drawer.PVertexBuffer:=@Vertex3S;
   DrawLLPrimitives(rc,rc.drawer);
-
-  //if shx.Count>0 then
-  //shx.DrawGeometry(rc);
-  if Triangles.Count>0 then
-  Triangles.DrawGeometry(rc);
 end;
 procedure ZGLGeometry.drawNicegeometry;
 begin
   rc.drawer.PVertexBuffer:=@Vertex3S;
   DrawLLPrimitives(rc,rc.drawer);
-  //if Vertex3S.Count>0 then
-  //Vertex3S.DrawGeometry;
-  //if lines.Count>0 then
-  //Lines.DrawGeometry;
-  //if Points.Count>0 then
-  //Points.DrawGeometry;
-  //if shx.Count>0 then
-  //shx.DrawNiceGeometry;
-  if Triangles.Count>0 then
-  Triangles.DrawGeometry(rc);
-end;
-procedure ZGLGeometry.Clear;
-begin
-  Vertex3S.Clear;
-  LLprimitives.Clear;
-  //Lines.Clear;
-  //Points.Clear;
-  //SHX.Clear;
-  Triangles.Clear;
 end;
 constructor ZGLGeometry.init;
 begin

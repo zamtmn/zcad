@@ -27,10 +27,10 @@ PZGLVectorObject=^ZGLVectorObject;
 ZGLVectorObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  LLprimitives:TLLPrimitivesArray;
                                  Vertex3S:ZGLVertex3Sarray;
-                                 //SHX:GDBPolyPoint3DArray;
-                                 Triangles:ZGLTriangle3DArray;
                                  constructor init;
                                  destructor done;virtual;
+                                 procedure Clear;virtual;
+                                 procedure Shrink;virtual;
                                end;
 {Export-}
 implementation
@@ -38,15 +38,21 @@ constructor ZGLVectorObject.init;
 begin
   Vertex3S.init({$IFDEF DEBUGBUILD}'{ZGLVectorObject.Vertex3S}',{$ENDIF}100);
   LLprimitives.init({$IFDEF DEBUGBUILD}'{ZGLVectorObject.LLprimitives}',{$ENDIF}100);
-  //SHX.init({$IFDEF DEBUGBUILD}'{93201215-874A-4FC5-8062-103AF05AD930}-Lines TTF\SHX data',{$ENDIF}100);
-  Triangles.init({$IFDEF DEBUGBUILD}'ZGLVectorObject.Triangles',{$ENDIF}100);
 end;
 destructor ZGLVectorObject.done;
 begin
   Vertex3S.done;
   LLprimitives.done;
-  //SHX.done;
-  Triangles.done;
+end;
+procedure ZGLVectorObject.Clear;
+begin
+  Vertex3S.Clear;
+  LLprimitives.Clear;
+end;
+procedure ZGLVectorObject.Shrink;
+begin
+  Vertex3S.Shrink;
+  LLprimitives.Shrink;
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('uzglvectorobject.initialization');{$ENDIF}

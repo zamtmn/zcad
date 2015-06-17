@@ -1541,7 +1541,7 @@ begin
         CanvasDrawer.PVertexBuffer:=@geom.Vertex3S;
         //geom.DrawLLPrimitives(CanvasDrawer);
 
-        if geom.Triangles.count>0 then
+        {if geom.Triangles.count>0 then
         begin
         canvas.Brush.Style:=bsSolid;
         canvas.Brush.Color:=canvas.Pen.Color;
@@ -1563,7 +1563,7 @@ begin
            canvas.Polygon(Points);
            inc(p);
         end;
-        end;
+        end;}
 
         {if geom.SHX.count>1 then
         begin

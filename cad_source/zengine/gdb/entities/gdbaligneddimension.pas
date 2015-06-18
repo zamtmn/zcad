@@ -342,7 +342,11 @@ begin
   pp.P_insertInOCS:=p1;
   pp.FormatEntity(drawing,dc);
 
-  pl:=DrawExtensionLineLinePart(Vertexmorphabs2(p1,p2,PDimStyle.Lines.DIMEXO),Vertexmorphabs(p1,p2,PDimStyle.Lines.DIMEXE),drawing,part);
+  if vertexeq(p1,p2) then
+                         pl:=DrawExtensionLineLinePart(p1,p2,drawing,part)
+                     else
+                         pl:=DrawExtensionLineLinePart(Vertexmorphabs2(p1,p2,PDimStyle.Lines.DIMEXO),Vertexmorphabs(p1,p2,PDimStyle.Lines.DIMEXE),drawing,part);
+  //pl:=DrawExtensionLineLinePart(Vertexmorphabs2(p1,p2,PDimStyle.Lines.DIMEXO),Vertexmorphabs(p1,p2,PDimStyle.Lines.DIMEXE),drawing,part);
   pl.FormatEntity(drawing,dc);
 end;
 procedure GDBObjAlignedDimension.CalcDNVectors;

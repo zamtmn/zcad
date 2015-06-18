@@ -59,7 +59,7 @@ implementation
 uses GDBCable,log;
 var
     parr:PGDBPoint3dArray;
-    ptv0:pgdbvertex;
+    tv0:gdbvertex;
 procedure GDBObjSpline.getoutbound;
 begin
   if AproxPointInWCS.Count>0 then
@@ -105,9 +105,9 @@ procedure NurbsVertexCallBack(const v: PGDBvertex3S);{$IFDEF Windows}stdcall{$EL
 var
     tv: gdbvertex;
 begin
-     tv.x:=v^.x+ptv0^.x;
-     tv.y:=v^.y+ptv0^.y;
-     tv.z:=v^.z+ptv0^.z;
+     tv.x:=v^.x+tv0.x;
+     tv.y:=v^.y+tv0.y;
+     tv.z:=v^.z+tv0.z;
      parr^.add(@tv);
      tv.x:=0;
 end;
@@ -144,7 +144,7 @@ var //i,j: GDBInteger;
         ir:itrec;
     nurbsobj:GLUnurbsObj;
     CP:GDBOpenArrayOfData;
-    tfv:GDBvertex4D;
+    tfv,base:GDBvertex4D;
     tfvs:GDBvertex4S;
     m:DMatrix4D;
 begin
@@ -152,7 +152,7 @@ begin
      FormatWithoutSnapArray;
      CP.init({$IFDEF DEBUGBUILD}'{4FCFE57E-4000-4535-A086-549DEC959CD4}',{$ENDIF}VertexArrayInOCS.count,sizeof(GDBvertex4S));
      ptv:=VertexArrayInOCS.beginiterate(ir);
-     ptv0:=ptv;
+     tv0:=ptv^;
      if bp.ListPos.owner<>nil then
                                          if bp.ListPos.owner^.GetHandle=H_Root then
                                                                                    begin
@@ -162,13 +162,19 @@ begin
                                                                                    begin
                                                                                          m:=bp.ListPos.owner^.GetMatrix^;
                                                                                    end;
+     tv0:=geometry.VectorTransform3d(tv0,m);
   if ptv<>nil then
   repeat
-        tfv.x:=ptv^.x-ptv0^.x;
-        tfv.y:=ptv^.y-ptv0^.y;
-        tfv.z:=ptv^.z-ptv0^.z;
+        tfv.x:=ptv^.x{-ptv0^.x};
+        tfv.y:=ptv^.y{-ptv0^.y};
+        tfv.z:=ptv^.z{-ptv0^.z};
         tfv.w:=1;
         tfv:=geometry.VectorTransform(tfv,m);
+
+        tfv.x:=tfv.x-tv0.x;
+        tfv.y:=tfv.y-tv0.y;
+        tfv.z:=tfv.z-tv0.z;
+
         tfvs.x:=tfv.x;
         tfvs.y:=tfv.y;
         tfvs.z:=tfv.z;
@@ -217,6 +223,7 @@ begin
   OGLSM.DeleteNurbsRenderer(nurbsobj);
 
   CP.done;
+  //programlog.LogOutFormatStr('AproxPointInWCS: count=%d;max=%d;parray=%p',[AproxPointInWCS.Count,AproxPointInWCS.Max,AproxPointInWCS.PArray],lp_OldPos,LM_Trace);
   AproxPointInWCS.Shrink;
 
   Geom.Clear;

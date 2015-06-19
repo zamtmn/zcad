@@ -249,9 +249,9 @@ begin
 end;
 procedure TCanvasViewArea.CreateDrawer;
 begin
-     drawer:=TZGLCanvasDrawer.Create;
-     TZGLCanvasDrawer(drawer).canvas:=TCADControl(getviewcontrol).canvas;
-     TZGLCanvasDrawer(drawer).panel:=TCADControl(getviewcontrol);
+     drawer:=TZGLGDIDrawer.Create;
+     TZGLGDIDrawer(drawer).canvas:=TCADControl(getviewcontrol).canvas;
+     TZGLGDIDrawer(drawer).panel:=TCADControl(getviewcontrol);
 end;
 
 procedure TCanvasViewArea.SetupWorkArea;
@@ -295,7 +295,7 @@ end;
 function TCanvasViewArea.startpaint;
 begin
      if assigned(WorkArea) then
-                                   TZGLCanvasDrawer(drawer).canvas:=WorkArea.canvas;
+                                   TZGLGDIDrawer(drawer).canvas:=WorkArea.canvas;
      result:=inherited;
 end;
 function TCanvasViewArea.NeedDrawInsidePaintEvent:boolean;

@@ -77,7 +77,7 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
                    end;
 TPaintState=(TPSBufferNotSaved,TPSBufferSaved);
-TZGLCanvasDrawer=class(TZGLGeneralDrawer)
+TZGLGDIDrawer=class(TZGLGeneralDrawer)
                         public
                         canvas:tcanvas;
                         panel:TCustomControl;
@@ -145,7 +145,7 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         procedure DrawDebugGeometry;override;
                    end;
 {$IFDEF WINDOWS}
-TZGLGDIPlusDrawer=class(TZGLCanvasDrawer)
+TZGLGDIPlusDrawer=class(TZGLGDIDrawer)
                         graphicsGDIPlus:TGPGraphics;
                         pen: TGPPen;
                         HDC: HDC;
@@ -159,7 +159,7 @@ TZGLGDIPlusDrawer=class(TZGLCanvasDrawer)
 {$ENDIF}
 var
    OGLDrawer:TZGLAbstractDrawer;
-   CanvasDrawer:TZGLCanvasDrawer;
+   CanvasDrawer:TZGLGDIDrawer;
    code:integer;
    {$IFDEF WINDOWS}GDIPlusDrawer:TZGLGDIPlusDrawer;{$ENDIF}
 implementation
@@ -657,7 +657,7 @@ begin
   oglsm.myglVertex3dV(@p4);
   oglsm.myglend;
 end;
-constructor TZGLCanvasDrawer.create;
+constructor TZGLGDIDrawer.create;
 begin
      sx:=0.1;
      sy:=-0.1;
@@ -667,7 +667,7 @@ begin
      penstyle:=TPS_Solid;
      OffScreedDC:=0;
 end;
-procedure TZGLCanvasDrawer.SetPenStyle(const style:TZGLPenStyle);
+procedure TZGLGDIDrawer.SetPenStyle(const style:TZGLPenStyle);
 begin
      if penstyle<>style then
      begin
@@ -675,7 +675,7 @@ begin
           Self._createPen;
      end;
 end;
-procedure TZGLCanvasDrawer.SetDrawMode(const mode:TZGLDrawMode);
+procedure TZGLGDIDrawer.SetDrawMode(const mode:TZGLDrawMode);
 begin
      case mode of
         TDM_Normal:
@@ -692,7 +692,7 @@ begin
                      end;
      end;
 end;
-procedure TZGLCanvasDrawer.startrender;
+procedure TZGLGDIDrawer.startrender;
 var
    m:DMatrix4D;
 begin
@@ -721,7 +721,7 @@ begin
                  end;
      end;
 end;
-procedure TZGLCanvasDrawer.createoffscreendc;
+procedure TZGLGDIDrawer.createoffscreendc;
 begin
      if OffScreedDC=0 then
      begin
@@ -732,7 +732,7 @@ begin
         SelectObject(OffScreedDC, hLinePen);
      end;
 end;
-procedure TZGLCanvasDrawer.deleteoffscreendc;
+procedure TZGLGDIDrawer.deleteoffscreendc;
 begin
      if OffScreedDC<>0 then
      begin
@@ -745,7 +745,7 @@ begin
      end;
 end;
 
-function TZGLCanvasDrawer.startpaint;
+function TZGLGDIDrawer.startpaint;
 begin
      CanvasDC:=0;
      isWindowsErrors;
@@ -758,12 +758,12 @@ begin
      result:=CreateScrbuf;
      PState:=TPaintState.TPSBufferNotSaved;
 end;
-procedure TZGLCanvasDrawer.endpaint;
+procedure TZGLGDIDrawer.endpaint;
 begin
      if not InPaintMessage then
      ReleaseDC(panel.Handle,CanvasDC);
 end;
-function TZGLCanvasDrawer.CreateScrbuf:boolean;
+function TZGLGDIDrawer.CreateScrbuf:boolean;
 begin
      result:=false;
      {$IFNDEF LCLGTK2}if (wh.cx>0)and(wh.cy>0) then{$ENDIF}
@@ -780,7 +780,7 @@ begin
           createoffscreendc;
      end;
 end;
-procedure TZGLCanvasDrawer.delmyscrbuf;
+procedure TZGLGDIDrawer.delmyscrbuf;
 begin
      if SavedBitmap<>0 then
      begin
@@ -793,7 +793,7 @@ begin
      end;
      deleteoffscreendc;
 end;
-procedure TZGLCanvasDrawer.SaveBuffers;
+procedure TZGLGDIDrawer.SaveBuffers;
 begin
     {$IFDEF LCLGTK2}
      if TGtkDeviceContext(SavedDC).drawable=nil
@@ -807,7 +807,7 @@ begin
      InitScreenInvalidrect(wh.cx,wh.cy);
      isWindowsErrors;
 end;
-procedure TZGLCanvasDrawer.RestoreBuffers;
+procedure TZGLGDIDrawer.RestoreBuffers;
 //var i:integer;
 begin
      //windows.BitBlt(OffScreedDC,0,0,100,100,SavedDC,0,0,SRCCOPY);
@@ -826,30 +826,30 @@ begin
     InitScreenInvalidrect(wh.cx,wh.cy);
      isWindowsErrors;
 end;
-procedure TZGLCanvasDrawer.SwapBuffers;
+procedure TZGLGDIDrawer.SwapBuffers;
 begin
      //isWindowsErrors;
      //windows.BitBlt({canvas.Handle}CanvasDC,0,0,100,100,OffScreedDC,0,0,SRCCOPY);
      {$IFDEF WINDOWS}windows.{$ENDIF}BitBlt({canvas.Handle}CanvasDC,0,0,wh.cx,wh.cy,OffScreedDC,0,0,SRCCOPY);
      isWindowsErrors;
 end;
-function TZGLCanvasDrawer.TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
+function TZGLGDIDrawer.TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
 begin
      result.x:=p.x*sx+tx;
      result.y:=p.y*sy+ty;
      result.z:=p.z;
 end;
-procedure TZGLCanvasDrawer.TranslateCoord2D(const tx,ty:single);
+procedure TZGLGDIDrawer.TranslateCoord2D(const tx,ty:single);
 begin
      self.tx:=self.tx+tx;
      self.ty:=self.ty+ty;
 end;
-procedure TZGLCanvasDrawer.ScaleCoord2D(const sx,sy:single);
+procedure TZGLGDIDrawer.ScaleCoord2D(const sx,sy:single);
 begin
   self.sx:=self.sx*sx;
   self.sy:=self.sy*sy;
 end;
-procedure TZGLCanvasDrawer.DrawLine(const i1:TLLVertexIndex);
+procedure TZGLGDIDrawer.DrawLine(const i1:TLLVertexIndex);
 var
    pv1,pv2:PGDBVertex3S;
    p1,p2:GDBVertex3S;
@@ -871,7 +871,7 @@ begin
     ProcessScreenInvalidrect(x,y);
     LineTo(OffScreedDC,x,y);
 end;
-procedure TZGLCanvasDrawer.DrawTriangle(const i1:TLLVertexIndex);
+procedure TZGLGDIDrawer.DrawTriangle(const i1:TLLVertexIndex);
 var
    pv1,pv2,pv3:PGDBVertex3S;
    p1,p2,p3:GDBVertex3S;
@@ -896,7 +896,7 @@ begin
     ProcessScreenInvalidrect(sp[3].x,sp[3].y);
     PolyGon(OffScreedDC,@sp[1],3,false);
 end;
-procedure TZGLCanvasDrawer.DrawQuad(const i1:TLLVertexIndex);var
+procedure TZGLGDIDrawer.DrawQuad(const i1:TLLVertexIndex);var
    pv1,pv2,pv3,pv4:PGDBVertex3S;
    p1,p2,p3,p4:GDBVertex3S;
    x,y:integer;
@@ -925,7 +925,7 @@ begin
     ProcessScreenInvalidrect(sp[4].x,sp[4].y);
     PolyGon(OffScreedDC,@sp[1],4,false);
 end;
-function TZGLCanvasDrawer.CheckOutboundInDisplay(const i1:TLLVertexIndex):boolean;
+function TZGLGDIDrawer.CheckOutboundInDisplay(const i1:TLLVertexIndex):boolean;
 var
 pv1,pv2,pv3,pv4:PGDBVertex3S;
 p1,p2,p3,p4:GDBVertex3S;
@@ -968,7 +968,7 @@ begin
                               else
                                   result:=true;
 end;
-procedure TZGLCanvasDrawer.DrawPoint(const i:TLLVertexIndex);
+procedure TZGLGDIDrawer.DrawPoint(const i:TLLVertexIndex);
 var
    pv:PGDBVertex3S;
    p:GDBVertex3S;
@@ -977,7 +977,7 @@ begin
     p:=TranslatePoint(pv^);
     //Canvas.Pixels[round(pv.x),round(pv.y)]:=canvas.Pen.Color;
 end;
-procedure TZGLCanvasDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLGDIDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);
 var
    pp1,pp2:GDBVertex;
    x,y:integer;
@@ -1003,12 +1003,12 @@ begin
      ProcessScreenInvalidrect(x,y);
      LineTo(OffScreedDC,x,y);
 end;
-procedure TZGLCanvasDrawer.SetPointSize(const s:single);
+procedure TZGLGDIDrawer.SetPointSize(const s:single);
 begin
      PointSize:=s;
 end;
 
-procedure TZGLCanvasDrawer.DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLGDIDrawer.DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);
 var
    pp:GDBVertex;
    ps:integer;
@@ -1030,7 +1030,7 @@ begin
      ProcessScreenInvalidrect(x,y);
      Rectangle(OffScreedDC, x-ps, y-ps, x+ps,y+ps);
 end;
-procedure TZGLCanvasDrawer.DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLGDIDrawer.DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);
 var
    pp1,pp2,pp3:GDBVertex;
    sp:array [1..3]of TPoint;
@@ -1051,7 +1051,7 @@ begin
      ProcessScreenInvalidrect(sp[2].x,sp[2].y);
      ProcessScreenInvalidrect(sp[3].x,sp[3].y);
 end;
-procedure TZGLCanvasDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLGDIDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
 var
    pp1,pp2,pp3,pp4:GDBVertex;
    sp:array [1..4]of TPoint;
@@ -1078,15 +1078,15 @@ begin
      ProcessScreenInvalidrect(sp[3].x,sp[3].y);
      ProcessScreenInvalidrect(sp[4].x,sp[4].y);
 end;
-procedure TZGLCanvasDrawer.DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLGDIDrawer.DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
 begin
      DrawQuad3DInModelSpace(p1,p2,p3,p4,matrixs);
 end;
-procedure TZGLCanvasDrawer.SetClearColor(const red, green, blue, alpha: byte);
+procedure TZGLGDIDrawer.SetClearColor(const red, green, blue, alpha: byte);
 begin
      ClearColor:=RGB(red,green,blue);
 end;
-procedure TZGLCanvasDrawer._createPen;
+procedure TZGLGDIDrawer._createPen;
 var
    ps:integer;
 begin
@@ -1113,7 +1113,7 @@ begin
   SelectObject(OffScreedDC, hBrush);
 end;
 
-procedure TZGLCanvasDrawer.SetColor(const red, green, blue, alpha: byte);
+procedure TZGLGDIDrawer.SetColor(const red, green, blue, alpha: byte);
 var
    oldColor:TColor;
 begin
@@ -1124,7 +1124,7 @@ begin
          _createPen;
      end;
 end;
-procedure TZGLCanvasDrawer.SetLineWidth(const w:single);
+procedure TZGLGDIDrawer.SetLineWidth(const w:single);
 var
    oldlinewidth:integer;
 begin
@@ -1135,11 +1135,11 @@ begin
          _createPen;
      end;
 end;
-procedure TZGLCanvasDrawer.SetColor(const color: TRGB);
+procedure TZGLGDIDrawer.SetColor(const color: TRGB);
 begin
      SetColor(color.r,color.g,color.b,255);
 end;
-procedure TZGLCanvasDrawer.ClearScreen(stencil:boolean);
+procedure TZGLGDIDrawer.ClearScreen(stencil:boolean);
 var
   mRect: TRect;
   ClearBrush: HBRUSH;
@@ -1159,14 +1159,14 @@ begin
      deleteobject(ClearBrush);
      isWindowsErrors;
 end;
-procedure TZGLCanvasDrawer.InitScreenInvalidrect;
+procedure TZGLGDIDrawer.InitScreenInvalidrect;
 begin
      ScreenInvalidRect.Left:=w;
      ScreenInvalidRect.Right:=0;
      ScreenInvalidRect.Top:=h;
      ScreenInvalidRect.Bottom:=0;
 end;
-procedure TZGLCanvasDrawer.CorrectScreenInvalidrect;
+procedure TZGLGDIDrawer.CorrectScreenInvalidrect;
 begin
      if ScreenInvalidRect.Left<0 then ScreenInvalidRect.Left:=0;
      if ScreenInvalidRect.Right>w then ScreenInvalidRect.Right:=w;
@@ -1174,7 +1174,7 @@ begin
      if ScreenInvalidRect.Bottom>h then ScreenInvalidRect.Bottom:=h;
 end;
 
-procedure TZGLCanvasDrawer.ProcessScreenInvalidrect(const x,y:integer);
+procedure TZGLGDIDrawer.ProcessScreenInvalidrect(const x,y:integer);
 begin
      if PState=TPSBufferSaved then
      begin
@@ -1184,14 +1184,14 @@ begin
          if ScreenInvalidRect.Bottom<y then ScreenInvalidRect.Bottom:=y;
      end;
 end;
-procedure TZGLCanvasDrawer.DrawDebugGeometry;
+procedure TZGLGDIDrawer.DrawDebugGeometry;
 begin
      exit;
      CorrectScreenInvalidrect(wh.cx,wh.cy);
      DrawLine2DInDCS(ScreenInvalidRect.Left,ScreenInvalidRect.top,ScreenInvalidRect.right,ScreenInvalidRect.bottom);
      DrawLine2DInDCS(ScreenInvalidRect.right,ScreenInvalidRect.top,ScreenInvalidRect.left,ScreenInvalidRect.bottom);
 end;
-procedure TZGLCanvasDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:integer);
+procedure TZGLGDIDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:integer);
 var
    x,y:integer;
 begin
@@ -1207,7 +1207,7 @@ begin
 
      LineTo(OffScreedDC,x,y);
 end;
-procedure TZGLCanvasDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:single);
+procedure TZGLGDIDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:single);
 var
    x,y:integer;
 begin
@@ -1223,7 +1223,7 @@ begin
 
      LineTo(OffScreedDC,x,y);
 end;
-procedure TZGLCanvasDrawer.DrawClosedPolyLine2DInDCS(const coords:array of single);
+procedure TZGLGDIDrawer.DrawClosedPolyLine2DInDCS(const coords:array of single);
 var
    i:integer;
    x,y:integer;
@@ -1248,7 +1248,7 @@ end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('uzglabstractdrawer.initialization');{$ENDIF}
   OGLDrawer:=TZGLOpenGLDrawer.create;
-  CanvasDrawer:=TZGLCanvasDrawer.create;
+  CanvasDrawer:=TZGLGDIDrawer.create;
   {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
 finalization
 end.

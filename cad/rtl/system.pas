@@ -641,9 +641,9 @@ GDBPolyPoint2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
 PGDBPolyPoint3DArray=^GDBPolyPoint3DArray;
 GDBPolyPoint3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                      procedure DrawGeometry;virtual;abstract;
+                      procedure DrawGeometry(var rc:TDrawContext);virtual;abstract;
                       procedure DrawNiceGeometry;virtual;abstract;
-                      procedure SimpleDrawGeometry(const num:integer);virtual;abstract;
+                      procedure SimpleDrawGeometry(var rc:TDrawContext; const num:integer);virtual;abstract;
                       function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;abstract;
                 end;
 //Generate on E:\zcad\cad_source\zengine\u\UGDBSelectedObjArray.pas
@@ -709,7 +709,7 @@ ZGLLine3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenAr
                 {function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
                 function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;abstract;
                 function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;}abstract;
-                procedure DrawGeometry;virtual;abstract;
+                procedure DrawGeometry(var rc:TDrawContext);virtual;abstract;
                 {procedure DrawGeometry2;virtual;abstract;
                 procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;}abstract;
              end;
@@ -782,7 +782,7 @@ GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     destructor done;virtual;abstract;
     function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
     function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
-    procedure CreateSymbol(var Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;var Triangles:ZGLTriangle3DArray;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
+    procedure CreateSymbol(var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
   end;
 //Generate on E:\zcad\cad_source\zengine\u\UGDBXYZWStringArray.pas
 PGDBXYZWGDBStringArray=^XYZWGDBGDBStringArray;
@@ -1431,7 +1431,7 @@ ZGLLine3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenAr
                 {function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
                 function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;abstract;
                 function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;}abstract;
-                procedure DrawGeometry;virtual;abstract;
+                procedure DrawGeometry(var rc:TDrawContext);virtual;abstract;
                 {procedure DrawGeometry2;virtual;abstract;
                 procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;}abstract;
              end;
@@ -1440,6 +1440,8 @@ ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Open
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
                 procedure DrawGeometry;virtual;abstract;
+                function AddGDBVertex(const v:GDBvertex):TArrayIndex;virtual;abstract;
+                function GetLength(const i:TArrayIndex):GDBFloat;virtual;abstract;
              end;
 //Generate on E:\zcad\cad_source\zengine\zgl\uzglpoint3darray.pas
 ZGLPoint3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLLine3DArray)(*OpenArrayOfData=GDBVertex*)
@@ -1447,10 +1449,11 @@ ZGLPoint3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLLine3DArray)(*OpenArray
              end;
 //Generate on E:\zcad\cad_source\zengine\zgl\uzgltriangles3darray.pas
 ZGLTriangle3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLLine3DArray)(*OpenArrayOfData=GDBVertex*)
-                procedure DrawGeometry;virtual;abstract;
+                procedure DrawGeometry(var rc:TDrawContext);virtual;abstract;
              end;
 //Generate on E:\zcad\cad_source\zengine\zgl\uzgprimitivessarray.pas
 TLLPrimitiveType=GDBInteger;
+TLLPrimitiveAttrib=GDBInteger;
 TLLVertexIndex=GDBInteger;
 PTLLPrimitivePrefix=^TLLPrimitivePrefix;
 TLLPrimitivePrefix={$IFNDEF DELPHI}packed{$ENDIF} record
@@ -1461,17 +1464,51 @@ TLLLine={$IFNDEF DELPHI}packed{$ENDIF} record
               Prefix:TLLPrimitivePrefix;
               P1Index:TLLVertexIndex;{P2Index=P1Index+1}
         end;
+PTLLTriangle=^TLLTriangle;
+TLLTriangle={$IFNDEF DELPHI}packed{$ENDIF} record
+              Prefix:TLLPrimitivePrefix;
+              P1Index:TLLVertexIndex;
+        end;
 PTLLPoint=^TLLPoint;
 TLLPoint={$IFNDEF DELPHI}packed{$ENDIF} record
               Prefix:TLLPrimitivePrefix;
               PIndex:TLLVertexIndex;
         end;
+PTLLSymbol=^TLLSymbol;
+TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} record
+              Prefix:TLLPrimitivePrefix;
+              SymSize:GDBInteger;
+              Attrib:TLLPrimitiveAttrib;
+              OutBoundIndex:TLLVertexIndex;
+        end;
+TLLSymbolEnd={$IFNDEF DELPHI}packed{$ENDIF} record
+                       Prefix:TLLPrimitivePrefix;
+                   end;
+PTLLPolyLine=^TLLPolyLine;
+TLLPolyLine={$IFNDEF DELPHI}packed{$ENDIF} record
+              Prefix:TLLPrimitivePrefix;
+              P1Index,Count:TLLVertexIndex;
+        end;
 TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBByte*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
                 procedure AddLLPLine(const P1Index:TLLVertexIndex);
+                procedure AddLLTriangle(const P1Index:TLLVertexIndex);
                 procedure AddLLPPoint(const PIndex:TLLVertexIndex);
+                function AddLLPSymbol:TArrayIndex;
+                procedure AddLLPSymbolEnd;
+                procedure AddLLPPolyLine(const P1Index,Count:TLLVertexIndex);
              end;
+//Generate on E:\zcad\cad_source\zengine\zgl\uzglvectorobject.pas
+PZGLVectorObject=^ZGLVectorObject;
+ZGLVectorObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+                                 LLprimitives:TLLPrimitivesArray;
+                                 Vertex3S:ZGLVertex3Sarray;
+                                 constructor init;
+                                 destructor done;virtual;abstract;
+                                 procedure Clear;virtual;abstract;
+                                 procedure Shrink;virtual;abstract;
+                               end;
 //Generate on E:\zcad\cad_source\zengine\zgl\uzglgeometry.pas
 PZGLGeometry=^ZGLGeometry;
 PZPolySegmentData=^ZPolySegmentData;
@@ -1492,17 +1529,10 @@ ZSegmentator={$IFNDEF DELPHI}packed{$ENDIF}object(GDBOpenArrayOfData)
                                                  procedure normalize(l:GDBDouble);
                                                  procedure draw(length:GDBDouble;paint:boolean);
                                            end;
-ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                                 LLprimitives:TLLPrimitivesArray;
-                                 Vertex3S:ZGLVertex3Sarray;
-                                 {Lines:ZGLLine3DArray;}
-                                 {Points:ZGLpoint3DArray;}
-                                 SHX:GDBPolyPoint3DArray;
-                                 Triangles:ZGLTriangle3DArray;
-                procedure DrawGeometry(rc:TDrawContext);virtual;abstract;
-                procedure DrawNiceGeometry(rc:TDrawContext);virtual;abstract;
-                procedure DrawLLPrimitives(drawer:TZGLAbstractDrawer);
-                procedure Clear;virtual;abstract;
+ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
+                procedure DrawGeometry(var rc:TDrawContext);virtual;abstract;
+                procedure DrawNiceGeometry(var rc:TDrawContext);virtual;abstract;
+                procedure DrawLLPrimitives(var rc:TDrawContext;drawer:TZGLAbstractDrawer);
                 constructor init;
                 destructor done;virtual;abstract;
                 procedure DrawLineWithLT(const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);virtual;abstract;
@@ -1517,6 +1547,9 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 procedure PlaceOnePattern(var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;TangentScale,NormalScale,length,scale_div_length:GDBDouble);
                 procedure PlaceShape(const StartPatternPoint:GDBVertex; PSP:PShapeProp;scale,angle:GDBDouble);
                 procedure PlaceText(const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
+                procedure DrawTextContent(content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
+                function CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
+                function GetSqrParamSizeInOCS(const DC:TDrawContext;const SqrParamSize:GDBDouble):GDBDouble;
              end;
 //Generate on E:\zcad\cad_source\zengine\gdb\entities\GDBSubordinated.pas
 GDBObjExtendable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -1853,10 +1886,10 @@ GDBObjAbstractText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlainWithOX)
                          textprop:GDBTextProp;(*saved_to_shd*)
                          P_drawInOCS:GDBvertex;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
                          DrawMatrix:DMatrix4D;(*oi_readonly*)(*hidden_in_objinsp*)
-                         Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
+                         //Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
                          procedure CalcObjMatrix;virtual;abstract;
                          procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
-                         procedure SimpleDrawGeometry;virtual;abstract;
+                         procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;abstract;
                          procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;abstract;
                          function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;abstract;
                          function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
@@ -2569,7 +2602,7 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;abstract;
                  procedure getoutbound;virtual;abstract;
                  procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
-                 procedure createpoint(const drawing:TDrawingDef);virtual;abstract;
+                 //procedure createpoint(const drawing:TDrawingDef);virtual;abstract;
                  //procedure CreateSymbol(_symbol:GDBInteger;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;pfont:pgdbfont;ln:GDBInteger);
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                  function GetObjTypeName:GDBString;virtual;abstract;
@@ -2601,7 +2634,7 @@ GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                  function GetObjTypeName:GDBString;virtual;abstract;
                  destructor done;virtual;abstract;
-                 procedure SimpleDrawGeometry;virtual;abstract;
+                 procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;abstract;
                  procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;abstract;
                  //procedure CalcObjMatrix;virtual;abstract;
             end;

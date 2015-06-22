@@ -26,12 +26,12 @@ const
      LLAttrNeedSolid=1;
      LLAttrNeedSimtlify=2;
 
-     LLLineId=1;
+     {LLLineId=1;
      LLPointId=2;
      LLSymbolId=3;
      LLSymbolEndId=4;
      LLPolyLineId=5;
-     LLTriangleId=6;
+     LLTriangleId=6;}
 type
 {Export+}
 ZGLGeomData={$IFNDEF DELPHI}packed{$ENDIF}object(GDBaseObject)
@@ -47,7 +47,6 @@ ZGLOptimizerData={$IFNDEF DELPHI}packed{$ENDIF}record
                                                end;
 PTLLPrimitive=^TLLPrimitive;
 TLLPrimitive={$IFNDEF DELPHI}packed{$ENDIF} object
-                       LLPType:TLLPrimitiveType;
                        function getPrimitiveSize:GDBInteger;virtual;
                        constructor init;
                        destructor done;
@@ -75,6 +74,7 @@ TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               OutBoundIndex:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
         end;
+PTLLSymbolEnd=^TLLSymbolEnd;
 TLLSymbolEnd={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
                    end;
@@ -207,56 +207,51 @@ else if (Attrib and LLAttrNeedSimtlify)>0 then
 end;
 procedure TLLPrimitivesArray.AddLLTriangle(const P1Index:TLLVertexIndex);
 var
-tt:TLLTriangle;
+  ptt:PTLLTriangle;
 begin
-  tt.init;
-  tt.LLPType:=LLTriangleId;
-  tt.P1Index:=P1Index;
-  AddData(@tt,sizeof(tt));
+  ptt:=AllocData(sizeof(TLLTriangle));
+  ptt.init;
+  ptt.P1Index:=P1Index;
 end;
 procedure TLLPrimitivesArray.AddLLPLine(const P1Index:TLLVertexIndex);
 var
-   tl:TLLLine;
+   ptl:PTLLLine;
 begin
-     tl.init;
-     tl.LLPType:=LLLineId;
-     tl.P1Index:=P1Index;
-     AddData(@tl,sizeof(tl));
+     ptl:=AllocData(sizeof(TLLLine));
+     ptl.init;
+     ptl.P1Index:=P1Index;
 end;
 procedure TLLPrimitivesArray.AddLLPPolyLine(const P1Index,Count:TLLVertexIndex);
 var
-   tpl:TLLPolyLine;
+   ptpl:PTLLPolyLine;
 begin
-     tpl.init;
-     tpl.LLPType:=LLPolyLineId;
-     tpl.P1Index:=P1Index;
-     tpl.Count:=Count;
-     AddData(@tpl,sizeof(tpl));
+     ptpl:=AllocData(sizeof(TLLPolyLine));
+     ptpl.init;
+     ptpl.P1Index:=P1Index;
+     ptpl.Count:=Count;
 end;
 procedure TLLPrimitivesArray.AddLLPPoint(const PIndex:TLLVertexIndex);
 var
-   tp:TLLPoint;
+   ptp:PTLLPoint;
 begin
-     tp.init;
-     tp.LLPType:=LLPointId;
-     tp.PIndex:=PIndex;
-     AddData(@tp,sizeof(tp));
+     ptp:=AllocData(sizeof(TLLPoint));
+     ptp.init;
+     ptp.PIndex:=PIndex;
 end;
 function TLLPrimitivesArray.AddLLPSymbol:TArrayIndex;
 var
-   ts:TLLSymbol;
+   pts:PTLLSymbol;
 begin
-     ts.init;
-     ts.LLPType:=LLSymbolId;
-     result:=AddData(@ts,sizeof(ts));
+     result:=count;
+     pts:=AllocData(sizeof(TLLSymbol));
+     pts.init;
 end;
 procedure TLLPrimitivesArray.AddLLPSymbolEnd;
 var
-   tse:TLLSymbolEnd;
+   ptse:PTLLSymbolEnd;
 begin
-     tse.init;
-     tse.LLPType:=LLSymbolEndId;
-     AddData(@tse,sizeof(tse));
+     ptse:=AllocData(sizeof(TLLSymbolEnd));
+     ptse.init;
 end;
 constructor TLLPrimitivesArray.init;
 begin

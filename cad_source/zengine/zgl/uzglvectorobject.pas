@@ -19,14 +19,14 @@
 unit uzglvectorobject;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitivessarray,uzgvertex3sarray,zcadsysvars,geometry,UGDBPolyPoint3DArray,uzglline3darray,uzgltriangles3darray,sysutils,gdbase,memman,log,
+uses uzgprimitivessarray,uzgvertex3sarray,zcadsysvars,geometry,sysutils,gdbase,memman,log,
      strproc;
 type
 {Export+}
 PZGLVectorObject=^ZGLVectorObject;
 ZGLVectorObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  LLprimitives:TLLPrimitivesArray;
-                                 Vertex3S:ZGLVertex3Sarray;
+                                 GeomData:ZGLGeomData;
                                  constructor init;
                                  destructor done;virtual;
                                  procedure Clear;virtual;
@@ -36,22 +36,22 @@ ZGLVectorObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
 implementation
 constructor ZGLVectorObject.init;
 begin
-  Vertex3S.init({$IFDEF DEBUGBUILD}'{ZGLVectorObject.Vertex3S}',{$ENDIF}100);
+  GeomData.init;
   LLprimitives.init({$IFDEF DEBUGBUILD}'{ZGLVectorObject.LLprimitives}',{$ENDIF}100);
 end;
 destructor ZGLVectorObject.done;
 begin
-  Vertex3S.done;
+  GeomData.done;
   LLprimitives.done;
 end;
 procedure ZGLVectorObject.Clear;
 begin
-  Vertex3S.Clear;
+  GeomData.Clear;
   LLprimitives.Clear;
 end;
 procedure ZGLVectorObject.Shrink;
 begin
-  Vertex3S.Shrink;
+  GeomData.Shrink;
   LLprimitives.Shrink;
 end;
 begin

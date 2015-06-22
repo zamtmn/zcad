@@ -25,7 +25,7 @@ uses
      UGDBLayerArray,ugdbdimstylearray,
      oglwindowdef,gdbdrawcontext,varmandef,zcadsysvars,GDBEntity,zcadinterface,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
      gdbobjectsconstdef,shared,zcadstrconsts,UGDBTracePropArray,math,sysutils,commandlinedef,UGDBDrawingdef,strproc,
-     ExtCtrls,Controls,Classes,LCLType,Forms,UGDBOpenArrayOfPV,GDBGenericSubEntry,GDBCamera,UGDBVisibleOpenArray,uzglabstractdrawer,abstractviewarea;
+     ExtCtrls,Controls,Classes,LCLType,Forms,UGDBOpenArrayOfPV,GDBGenericSubEntry,GDBCamera,UGDBVisibleOpenArray,uzglabstractdrawer,uzglgeneraldrawer,abstractviewarea;
 const
   ontracdist=10;
   ontracignoredist=25;

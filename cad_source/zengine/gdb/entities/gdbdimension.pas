@@ -19,7 +19,7 @@ unit gdbdimension;
 {$INCLUDE def.inc}
 
 interface
-uses zemathutils,gdbdrawcontext,GDBAbstractText,UGDBTextStyleArray,UGDBXYZWStringArray,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,UGDBOpenArrayOfByte,math,GDBText,geometry,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,
+uses zemathutils,gdbdrawcontext,GDBAbstractText,UGDBTextStyleArray,UGDBXYZWStringArray,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,UGDBOpenArrayOfByte,GDBText,geometry,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,
 gdbEntity,varmandef,
 GDBase,gdbobjectsconstdef,memman;
 type

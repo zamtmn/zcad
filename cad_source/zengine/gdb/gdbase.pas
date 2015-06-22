@@ -430,6 +430,9 @@ TInsUnits=(IUUnspecified(*'Unspecified'*),
            IUAstronomicalUnits(*'Astronomical units'*),
            IULightYears(*'Light years'*),
            IUParsecs(*'Parsecs'*));
+TLLPrimitiveType=GDBInteger;
+TLLPrimitiveAttrib=GDBInteger;
+TLLVertexIndex=GDBInteger;
 {EXPORT-}
 const
   empty_GDBString='Empty GDBString';

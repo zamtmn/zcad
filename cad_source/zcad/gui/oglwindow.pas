@@ -23,7 +23,7 @@ interface
 
 uses
 
-   uzglabstractdrawer,uzglopengldrawer,zcadsysvars,UGDBLayerArray,
+   uzglopengldrawer,zcadsysvars,UGDBLayerArray,
   {$IFDEF LCLGTK2}
   //x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}

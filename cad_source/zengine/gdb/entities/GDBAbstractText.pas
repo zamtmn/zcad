@@ -19,7 +19,7 @@ unit GDBAbstractText;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,GDBEntity,GDBCamera,zcadsysvars,languade,UGDBOpenArrayOfPObjects,{GDBEntity,}strproc,sysutils,GDBPlainWithOX,gdbasetypes{,GDBWithLocalCS},UGDBSelectedObjArray{,gdbEntity,UGDBOutbound2DIArray,UGDBPolyPoint2DArray,UGDBOpenArrayOfByte},UGDBPolyPoint3DArray{,varman},varmandef,
+uses gdbdrawcontext,GDBEntity,GDBCamera,zcadsysvars,languade,UGDBOpenArrayOfPObjects,{GDBEntity,}strproc,sysutils,GDBPlainWithOX,gdbasetypes{,GDBWithLocalCS},UGDBSelectedObjArray{,gdbEntity,UGDBOutbound2DIArray,UGDBPolyPoint2DArray,UGDBOpenArrayOfByte},varmandef,
 GDBase,gdbobjectsconstdef,{oglwindowdef,}geometry{,dxflow,strmy},math{,GDBPlain}{,GDBGenericSubEntry};
 type
 //jstm(*'TopCenter'*)=2,

@@ -30,7 +30,7 @@ uses
   {FPC}
        lineinfo,//math,
   {ZCAD BASE}
-       ugdbdrawing,UGDBOpenArrayOfPV,ugdbabstractdrawing,gdbpalette,paths,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
+       uzglgdidrawer,ugdbdrawing,UGDBOpenArrayOfPV,ugdbabstractdrawing,gdbpalette,paths,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
        geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,log,
        varmandef, varman,UUnitManager,SysInfo,shared,strmy,UGDBTextStyleArray,ugdbdimstylearray,
   {ZCAD SIMPLE PASCAL SCRIPT}
@@ -44,7 +44,7 @@ uses
        texteditor,zcobjectinspectordecorations,cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,oglwindow,
        colorwnd,imagesmanager,usuptstylecombo,usupportgui,usupdimstylecombo,
   {}
-       gdbdrawcontext,uzglopengldrawer,uzglabstractdrawer,abstractviewarea;
+       gdbdrawcontext,uzglopengldrawer,abstractviewarea;
   {}
 type
   TComboFiller=procedure(cb:TCustomComboBox) of object;
@@ -1538,7 +1538,7 @@ begin
 
         CanvasDrawer.midline:=midline;
         CanvasDrawer.canvas:=canvas;
-        CanvasDrawer.PVertexBuffer:=@geom.Vertex3S;
+        CanvasDrawer.PVertexBuffer:=@geom.GeomData.Vertex3S;
         //geom.DrawLLPrimitives(CanvasDrawer);
 
         {if geom.Triangles.count>0 then

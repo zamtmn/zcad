@@ -293,7 +293,7 @@ var
    middlepoint:GDBVertex;
 implementation
 uses
-    uzglabstractdrawer,geometry;
+    uzglgeneraldrawer,geometry;
 procedure MywglCreateContext(var oglc:TOGLContextDesk);
 begin
      //oglc.hrc := wglCreateContext(oglc.DC);

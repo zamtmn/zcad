@@ -19,7 +19,7 @@
 unit ugdbfont;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitivessarray,uzgltriangles3darray,ugdbshxfont,ugdbttffont,memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,
+uses uzgprimitivessarray,ugdbshxfont,ugdbttffont,memman,gdbobjectsconstdef,
      strproc,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,
      ugdbbasefont,geometry,uzglvectorobject;
 type
@@ -104,11 +104,11 @@ begin
 
             if (j mod 3)=1 then
                                begin
-                                    geom.LLprimitives.AddLLTriangle(geom.Vertex3S.AddGDBVertex(v3));
+                                    geom.LLprimitives.AddLLTriangle(geom.GeomData.Vertex3S.AddGDBVertex(v3));
                                     inc(PrimitivesCount);
                                end
                            else
-                               geom.Vertex3S.AddGDBVertex(v3);
+                               geom.GeomData.Vertex3S.AddGDBVertex(v3);
 
             inc(PTriangles);
             inc(trcount);
@@ -146,7 +146,7 @@ begin
 
             pv3.coord:=v;
 
-            geom.LLprimitives.AddLLPLine(geom.Vertex3S.AddGDBVertex(v));
+            geom.LLprimitives.AddLLPLine(geom.GeomData.Vertex3S.AddGDBVertex(v));
 
             //tv:=pv3.coord;
             pv3.LineNumber:=ln;
@@ -173,7 +173,7 @@ begin
             pv3.coord:=v;
             pv3.count:=0;
 
-            geom.Vertex3S.AddGDBVertex(v);
+            geom.GeomData.Vertex3S.AddGDBVertex(v);
 
             pv3.LineNumber:=ln;
 
@@ -214,7 +214,7 @@ begin
             //tv:=pv3.coord;
             pv3.LineNumber:=ln;
 
-            geom.LLprimitives.AddLLPPolyLine(geom.Vertex3S.AddGDBVertex(v),len-1);
+            geom.LLprimitives.AddLLPPolyLine(geom.GeomData.Vertex3S.AddGDBVertex(v),len-1);
 
             //geom.SHX.add(@pv3);
 
@@ -250,7 +250,7 @@ begin
 
             //geom.SHX.add(@pv3);
 
-            geom.Vertex3S.AddGDBVertex(v);
+            geom.GeomData.Vertex3S.AddGDBVertex(v);
 
 
             //inc(pGDBByte(psymbol), 2 * sizeof(GDBDouble));
@@ -274,19 +274,19 @@ begin
   v:=createvertex(psyminfo^.SymMinX,psyminfo^.SymMinY,0);
   v:=VectorTransform3d(v,matr);
   v:=VectorTransform3d(v,objmatrix);
-  PLLPsymbol^.OutBoundIndex:=geom.Vertex3S.AddGDBVertex(v);
+  PLLPsymbol^.OutBoundIndex:=geom.GeomData.Vertex3S.AddGDBVertex(v);
   v:=createvertex(psyminfo^.SymMinX,psyminfo^.SymMaxy,0);
   v:=VectorTransform3d(v,matr);
   v:=VectorTransform3d(v,objmatrix);
-  geom.Vertex3S.AddGDBVertex(v);
+  geom.GeomData.Vertex3S.AddGDBVertex(v);
   v:=createvertex(psyminfo^.SymMaxx,psyminfo^.SymMaxy,0);
   v:=VectorTransform3d(v,matr);
   v:=VectorTransform3d(v,objmatrix);
-  geom.Vertex3S.AddGDBVertex(v);
+  geom.GeomData.Vertex3S.AddGDBVertex(v);
   v:=createvertex(psyminfo^.SymMaxx,psyminfo^.SymMiny,0);
   v:=VectorTransform3d(v,matr);
   v:=VectorTransform3d(v,objmatrix);
-  geom.Vertex3S.AddGDBVertex(v);
+  geom.GeomData.Vertex3S.AddGDBVertex(v);
   geom.LLprimitives.AddLLPSymbolEnd;
   end;
   end;

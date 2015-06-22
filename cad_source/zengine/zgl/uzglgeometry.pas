@@ -19,7 +19,7 @@
 unit uzglgeometry;
 {$INCLUDE def.inc}
 interface
-uses math,gdbdrawcontext,uzglabstractdrawer,uzgprimitivessarray,uzgvertex3sarray,UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzgltriangles3darray,ugdbltypearray,sysutils,gdbase,memman,log,
+uses math,gdbdrawcontext,uzglabstractdrawer,uzgprimitivessarray,uzgvertex3sarray,UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,ugdbltypearray,sysutils,gdbase,memman,log,
      gdbasetypes,strproc,ugdbfont,uzglvectorobject;
 type
 {Export+}
@@ -62,18 +62,13 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
                 procedure PlaceText(const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
 
                 procedure DrawTextContent(content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
-                function CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
-                function GetSqrParamSizeInOCS(const DC:TDrawContext;const SqrParamSize:GDBDouble):GDBDouble;
+                //function CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
              end;
 {Export-}
 function getsymbol_fromGDBText(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
 implementation
-function ZGLGeometry.GetSqrParamSizeInOCS(const DC:TDrawContext;const SqrParamSize:GDBDouble):GDBDouble;
-begin
-     result:=SqrParamSize/(dc.zoom*dc.zoom);
-end;
-function ZGLGeometry.CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
-{false - не упрощать, true - упрощать. в GDBObjWithLocalCS.CanSimplyDrawInOCS наоборот}
+{function ZGLGeometry.CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
+//false - не упрощать, true - упрощать. в GDBObjWithLocalCS.CanSimplyDrawInOCS наоборот
 begin
      if dc.maxdetail then
                          exit(false);
@@ -81,7 +76,7 @@ begin
                                result:=false
                            else
                                result:=true;
-end;
+end;}
 
 function getsymbol_fromGDBText(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
 var
@@ -266,8 +261,8 @@ begin
   plp2:=pl.iterate(ir);
   if plp2<>nil then
   repeat
-        LLprimitives.AddLLPLine(Vertex3S.AddGDBVertex(plp^));
-        Vertex3S.AddGDBVertex(plp2^);
+        LLprimitives.AddLLPLine(GeomData.Vertex3S.AddGDBVertex(plp^));
+        GeomData.Vertex3S.AddGDBVertex(plp2^);
 
         plp:=pl.iterate(ir);
         plp2:=pl.iterate(ir);
@@ -278,92 +273,23 @@ end;
 
 procedure ZGLGeometry.DrawLLPrimitives(var rc:TDrawContext;drawer:TZGLAbstractDrawer);
 var
-   PPrimitive:PTLLPrimitivePrefix;
+   PPrimitive:PTLLPrimitive;
    ProcessedSize:TArrayIndex;
    CurrentSize:TArrayIndex;
    i,index,minsymbolsize:integer;
-   ignoretriangles:boolean;
-   ignorelines:boolean;
+   OptData:ZGLOptimizerData;
    sqrparamsize:gdbdouble;
 begin
      if LLprimitives.count=0 then exit;
-     ignoretriangles:=false;
-     ignorelines:=false;
+     OptData.ignoretriangles:=false;
+     OptData.ignorelines:=false;
      ProcessedSize:=0;
      PPrimitive:=LLprimitives.parray;
      while ProcessedSize<LLprimitives.count do
      begin
-     case PPrimitive.LLPType of
-                      LLLineId:begin
-                                    if not ignorelines then
-                                                           Drawer.DrawLine(PTLLLine(PPrimitive)^.P1Index);
-                                    CurrentSize:=sizeof(TLLLine);
-                               end;
-                      LLTriangleId:begin
-                                    if not ignoretriangles then
-                                                               Drawer.DrawTriangle(PTLLTriangle(PPrimitive)^.P1Index);
-                                    CurrentSize:=sizeof(TLLTriangle);
-                               end;
-                      LLPointId:begin
-                                    Drawer.DrawPoint(PTLLPoint(PPrimitive)^.PIndex);
-                                    CurrentSize:=sizeof(TLLPoint);
-                               end;
-                      LLSymbolEndId:begin
-                                    ignoretriangles:=false;
-                                    ignorelines:=false;
-                                    CurrentSize:=sizeof(TLLSymbolEnd);
-                                    end;
-                      LLSymbolId:begin
-                                    CurrentSize:=sizeof(TLLSymbol);
-                                    index:=PTLLSymbol(PPrimitive)^.OutBoundIndex;
-                                    if not drawer.CheckOutboundInDisplay(index) then
-                                                                                    begin
-                                                                                      CurrentSize:=PTLLSymbol(PPrimitive)^.SymSize;
-                                                                                    end
-
-                               else if (PTLLSymbol(PPrimitive)^.Attrib and LLAttrNeedSimtlify)>0 then
-                                    begin
-                                      if (PTLLSymbol(PPrimitive)^.Attrib and LLAttrNeedSolid)>0 then
-                                                                                                    begin
-                                                                                                     minsymbolsize:=60;
-                                                                                                     ignorelines:=true;
-                                                                                                    end
-                                                                                                else
-                                                                                                    minsymbolsize:=30;
-                                      sqrparamsize:=GetSqrParamSizeInOCS(rc,Vertex3S.GetLength(index));
-                                      if (sqrparamsize<minsymbolsize)and(not rc.maxdetail) then
-                                      begin
-                                        //if (PTLLSymbol(PPrimitive)^.Attrib and LLAttrNeedSolid)>0 then
-                                                                                                      Drawer.DrawQuad(index);
-                                                                                                  {else
-                                                                                                      for i:=1 to 3 do
-                                                                                                      begin
-                                                                                                         Drawer.DrawLine(index);
-                                                                                                         inc(index);
-                                                                                                      end;}
-                                        CurrentSize:=PTLLSymbol(PPrimitive)^.SymSize;
-                                      end
-                                       else
-                                      if (sqrparamsize<({minsymbolsize+1000}200))and(not rc.maxdetail) then
-                                      begin
-                                        ignoretriangles:=true;
-                                        ignorelines:=false;
-                                      end;
-                                    end;
-
-                                 end;
-                      LLPolyLineId:begin
-                                    index:=PTLLPolyLine(PPrimitive)^.P1Index;
-                                    for i:=1 to PTLLPolyLine(PPrimitive)^.Count do
-                                    begin
-                                       Drawer.DrawLine(index);
-                                       inc(index);
-                                    end;
-                                    CurrentSize:=sizeof(TLLPolyline);
-                                 end;
-     end;
-     ProcessedSize:=ProcessedSize+CurrentSize;
-     inc(pbyte(PPrimitive),CurrentSize);
+          CurrentSize:=PPrimitive.draw(Drawer,rc,GeomData,OptData);
+          ProcessedSize:=ProcessedSize+CurrentSize;
+          inc(pbyte(PPrimitive),CurrentSize);
      end;
 end;
 procedure ZGLGeometry.AddPoint(const p:GDBVertex);
@@ -371,7 +297,7 @@ var
     tv:GDBVertex3S;
 begin
      tv:=VertexD2S(p);
-     LLprimitives.AddLLPPoint(Vertex3S.Add(@tv));
+     LLprimitives.AddLLPPoint(GeomData.Vertex3S.Add(@tv));
 end;
 
 procedure ZGLGeometry.AddLine(const p1,p2:GDBVertex);
@@ -380,8 +306,8 @@ var
 begin
      tv1:=VertexD2S(p1);
      tv2:=VertexD2S(p2);
-     LLprimitives.AddLLPLine(Vertex3S.Add(@tv1));
-     Vertex3S.Add(@tv2);
+     LLprimitives.AddLLPLine(GeomData.Vertex3S.Add(@tv1));
+     GeomData.Vertex3S.Add(@tv2);
 
      //lines.Add(@p1);
      //lines.Add(@p2);
@@ -835,12 +761,12 @@ end;
 
 procedure ZGLGeometry.drawgeometry;
 begin
-  rc.drawer.PVertexBuffer:=@Vertex3S;
+  rc.drawer.PVertexBuffer:=@GeomData.Vertex3S;
   DrawLLPrimitives(rc,rc.drawer);
 end;
 procedure ZGLGeometry.drawNicegeometry;
 begin
-  rc.drawer.PVertexBuffer:=@Vertex3S;
+  rc.drawer.PVertexBuffer:=@GeomData.Vertex3S;
   DrawLLPrimitives(rc,rc.drawer);
 end;
 constructor ZGLGeometry.init;

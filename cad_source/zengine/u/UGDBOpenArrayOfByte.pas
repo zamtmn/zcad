@@ -39,7 +39,6 @@ GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                       function AddFontFloat(PData:GDBPointer):GDBInteger;virtual;
                       procedure TXTAddGDBStringEOL(s:GDBString);virtual;
                       procedure TXTAddGDBString(s:GDBString);virtual;
-                      function AllocData(SData:GDBword):GDBPointer;virtual;
                       function ReadData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
                       function PopData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
                       function ReadString(break, ignore: GDBString): shortString;inline;
@@ -344,16 +343,6 @@ end;
 function GDBOpenArrayOfByte.AddWord(PData:GDBPointer):GDBInteger;
 begin
      result:=adddata(pdata,sizeof(GDBWord));
-end;
-function GDBOpenArrayOfByte.AllocData;
-begin
-  if parray=nil then
-                    createarray;
-  if count+sdata>max then
-                         Grow;
-  result:=pointer(GDBPlatformUInt(parray)+count);
-  fillchar(result^,sdata,0);
-  inc(count,SData);
 end;
 function GDBOpenArrayOfByte.ReadData;
 var addr:GDBPlatformint;

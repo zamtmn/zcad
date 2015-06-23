@@ -39,7 +39,7 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure endrender;override;
                         procedure DrawLine(const i1,i2:TLLVertexIndex);override;
                         procedure DrawTriangle(const i1:TLLVertexIndex);override;
-                        procedure DrawQuad(const i1:TLLVertexIndex);override;
+                        procedure DrawQuad(const i1,i2,i3,i4:TLLVertexIndex);override;
                         function CheckOutboundInDisplay(const i1:TLLVertexIndex):boolean;override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
                         procedure SetLineWidth(const w:single);override;
@@ -96,13 +96,13 @@ begin
     oglsm.myglVertex3fV(PVertexBuffer.getelement(i1+2));
     oglsm.myglend;
 end;
-procedure TZGLOpenGLDrawer.DrawQuad(const i1:TLLVertexIndex);
+procedure TZGLOpenGLDrawer.DrawQuad(const i1,i2,i3,i4:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_QUADS);
     oglsm.myglVertex3fV(PVertexBuffer.getelement(i1));
-    oglsm.myglVertex3fV(PVertexBuffer.getelement(i1+1));
-    oglsm.myglVertex3fV(PVertexBuffer.getelement(i1+2));
-    oglsm.myglVertex3fV(PVertexBuffer.getelement(i1+3));
+    oglsm.myglVertex3fV(PVertexBuffer.getelement(i2));
+    oglsm.myglVertex3fV(PVertexBuffer.getelement(i3));
+    oglsm.myglVertex3fV(PVertexBuffer.getelement(i4));
     oglsm.myglend;
 end;
 function TZGLOpenGLDrawer.CheckOutboundInDisplay(const i1:TLLVertexIndex):boolean;

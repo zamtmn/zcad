@@ -16,45 +16,40 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzglvectorobject;
+unit uzglgeomdata;
 {$INCLUDE def.inc}
 interface
-uses uzglgeomdata,uzgprimitivessarray,uzgvertex3sarray,zcadsysvars,geometry,sysutils,gdbase,memman,log,
-     strproc;
+uses gdbdrawcontext,uzgvertex3sarray,uzglabstractdrawer,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
+geometry;
 type
 {Export+}
-PZGLVectorObject=^ZGLVectorObject;
-ZGLVectorObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                                 LLprimitives:TLLPrimitivesArray;
-                                 GeomData:ZGLGeomData;
-                                 constructor init;
-                                 destructor done;virtual;
-                                 procedure Clear;virtual;
-                                 procedure Shrink;virtual;
-                               end;
+ZGLGeomData={$IFNDEF DELPHI}packed{$ENDIF}object(GDBaseObject)
+                                                Vertex3S:ZGLVertex3Sarray;
+                                                constructor init;
+                                                destructor done;virtual;
+                                                procedure Clear;virtual;
+                                                procedure Shrink;virtual;
+                                          end;
 {Export-}
 implementation
-constructor ZGLVectorObject.init;
+uses log;
+constructor ZGLGeomData.init;
 begin
-  GeomData.init;
-  LLprimitives.init({$IFDEF DEBUGBUILD}'{ZGLVectorObject.LLprimitives}',{$ENDIF}100);
+  Vertex3S.init({$IFDEF DEBUGBUILD}'{ZGLVectorObject.Vertex3S}',{$ENDIF}100);
 end;
-destructor ZGLVectorObject.done;
+destructor ZGLGeomData.done;
 begin
-  GeomData.done;
-  LLprimitives.done;
+  Vertex3S.done;
 end;
-procedure ZGLVectorObject.Clear;
+procedure ZGLGeomData.Clear;
 begin
-  GeomData.Clear;
-  LLprimitives.Clear;
+  Vertex3S.Clear;
 end;
-procedure ZGLVectorObject.Shrink;
+procedure ZGLGeomData.Shrink;
 begin
-  GeomData.Shrink;
-  LLprimitives.Shrink;
+  Vertex3S.Shrink;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('uzglvectorobject.initialization');{$ENDIF}
+  {$IFDEF DEBUGINITSECTION}LogOut('uzglgeomdata.initialization');{$ENDIF}
 end.
 

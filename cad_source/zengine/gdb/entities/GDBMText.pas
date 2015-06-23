@@ -824,6 +824,7 @@ begin
 
   //geom.SHX.Shrink;
   pl.done;
+  geom.Shrink;
 end;
 {procedure GDBObjMText.CalcObjMatrix;
 var rot_matr,oblique_matr,disp_self_matr,disp_matr,size_matr:DMatrix4D;

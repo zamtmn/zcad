@@ -270,6 +270,7 @@ begin
   until plp2=nil;
 
   pl.done;
+  Shrink;
 end;
 
 procedure ZGLGeometry.DrawLLPrimitives(var rc:TDrawContext;drawer:TZGLAbstractDrawer);

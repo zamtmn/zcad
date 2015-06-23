@@ -36,7 +36,7 @@ GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     destructor done;virtual;
     function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
     function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
-    procedure CreateSymbol(var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
+    procedure CreateSymbol(var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;var LLSymbolLineIndex:TArrayIndex);
   end;
 {EXPORT-}
 var
@@ -52,13 +52,14 @@ begin
      //pf.ItSHX;
 end;
 
-procedure GDBfont.CreateSymbol(var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
+procedure GDBfont.CreateSymbol(var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;var LLSymbolLineIndex:TArrayIndex);
 var
   psymbol: GDBPointer;
   {i, }j, k: GDBInteger;
   len: GDBWord;
   //matr,m1: DMatrix4D;
-  v:GDBvertex;
+  v,v0:GDBvertex;
+  sqrsymh:GDBDouble;
   v3:GDBVertex;
   //pv:GDBPolyVertex2D;
   pv3:GDBPolyVertex3D;
@@ -77,6 +78,8 @@ var
   PLLPsymbol:PTLLSymbol;
   PrimitivesCount:integer;
   trcount:integer;
+  LLSymbolLineCreated:boolean;
+  PLLSymbolLine:PTLLSymbolLine;
 begin
   if _symbol=100 then
                       _symbol:=_symbol;
@@ -86,12 +89,17 @@ begin
                       _symbol:=_symbol;
   LLSymbolIndex:=-1;
   trcount:=0;
+  LLSymbolLineCreated:=false;
 
   psyminfo:=self.GetOrReplaceSymbolInfo(integer(_symbol),TDInfo);
   if tdinfo.TrianglesSize>0 then
   begin
+    if LLSymbolLineIndex=-1 then
+                                begin
+                                  LLSymbolLineIndex:=geom.LLprimitives.AddLLPSymbolLine;
+                                  LLSymbolLineCreated:=true;
+                                end;
        LLSymbolIndex:=geom.LLprimitives.AddLLPSymbol;
-
        PTriangles:=self.font.GetTriangleDataAddr(TDInfo.TrianglesAddr);
        for j:=1 to tdinfo.TrianglesSize do
        begin
@@ -118,8 +126,13 @@ begin
   psymbol := self.font.GetSymbolDataAddr(psyminfo.addr);
   if {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size <> 0 then
   begin;
+       if LLSymbolLineIndex=-1 then
+                                   begin
+                                     LLSymbolLineIndex:=geom.LLprimitives.AddLLPSymbolLine;
+                                     LLSymbolLineCreated:=true;
+                                   end;
        if LLSymbolIndex=-1 then
-       LLSymbolIndex:=geom.LLprimitives.AddLLPSymbol;
+                               LLSymbolIndex:=geom.LLprimitives.AddLLPSymbol;
     PrimitivesCount:=0;
     for j := 1 to {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size do
     begin
@@ -149,7 +162,7 @@ begin
             geom.LLprimitives.AddLLPLine(geom.GeomData.Vertex3S.AddGDBVertex(v));
 
             //tv:=pv3.coord;
-            pv3.LineNumber:=ln;
+            pv3.LineNumber:=LLSymbolLineIndex;
 
             pv3.count:=0;
             //geom.SHX.add(@pv3);
@@ -175,7 +188,7 @@ begin
 
             geom.GeomData.Vertex3S.AddGDBVertex(v);
 
-            pv3.LineNumber:=ln;
+            pv3.LineNumber:=LLSymbolLineIndex;
 
             inc(PrimitivesCount);
 
@@ -212,7 +225,7 @@ begin
             pv3.count:=len;
 
             //tv:=pv3.coord;
-            pv3.LineNumber:=ln;
+            pv3.LineNumber:=LLSymbolLineIndex;
 
             geom.LLprimitives.AddLLPPolyLine(geom.GeomData.Vertex3S.AddGDBVertex(v),len-1);
 
@@ -245,7 +258,7 @@ begin
             pv3.coord:=PGDBvertex(@v)^;
             pv3.count:={-1}k-len+1;
 
-            pv3.LineNumber:=ln;
+            pv3.LineNumber:=LLSymbolLineIndex;
             //tv:=pv3.coord;
 
             //geom.SHX.add(@pv3);
@@ -265,20 +278,22 @@ begin
   begin
   PLLPsymbol:=geom.LLprimitives.getelement(LLSymbolIndex);
   PLLPsymbol^.SymSize:=geom.LLprimitives.Count-LLSymbolIndex;
+  PLLPsymbol^.LineIndex:=-1;
   if trcount>0 then
                    PLLPsymbol^.Attrib:=LLAttrNeedSolid
                else
                    PLLPsymbol^.Attrib:=LLAttrNothing;
   if PrimitivesCount>4 then
                            PLLPsymbol^.Attrib:=PLLPsymbol^.Attrib or  LLAttrNeedSimtlify;
-  v:=createvertex(psyminfo^.SymMinX,psyminfo^.SymMinY,0);
-  v:=VectorTransform3d(v,matr);
-  v:=VectorTransform3d(v,objmatrix);
-  PLLPsymbol^.OutBoundIndex:=geom.GeomData.Vertex3S.AddGDBVertex(v);
+  v0:=createvertex(psyminfo^.SymMinX,psyminfo^.SymMinY,0);
+  v0:=VectorTransform3d(v0,matr);
+  v0:=VectorTransform3d(v0,objmatrix);
+  PLLPsymbol^.OutBoundIndex:=geom.GeomData.Vertex3S.AddGDBVertex(v0);
   v:=createvertex(psyminfo^.SymMinX,psyminfo^.SymMaxy,0);
   v:=VectorTransform3d(v,matr);
   v:=VectorTransform3d(v,objmatrix);
   geom.GeomData.Vertex3S.AddGDBVertex(v);
+  sqrsymh:=SqrOneVertexlength(vertexsub(v,v0));
   v:=createvertex(psyminfo^.SymMaxx,psyminfo^.SymMaxy,0);
   v:=VectorTransform3d(v,matr);
   v:=VectorTransform3d(v,objmatrix);
@@ -287,6 +302,17 @@ begin
   v:=VectorTransform3d(v,matr);
   v:=VectorTransform3d(v,objmatrix);
   geom.GeomData.Vertex3S.AddGDBVertex(v);
+  if LLSymbolLineIndex<>-1 then
+  begin
+    PLLPsymbol:=geom.LLprimitives.getelement(LLSymbolIndex);
+    PLLPsymbol^.LineIndex:=LLSymbolLineIndex;
+    PLLSymbolLine:=geom.LLprimitives.getelement(LLSymbolLineIndex);
+    if LLSymbolLineCreated then
+                               PLLSymbolLine^.FirstOutBoundIndex:=PLLPsymbol^.OutBoundIndex;
+    PLLSymbolLine^.LastOutBoundIndex:=PLLPsymbol^.OutBoundIndex;
+    if sqrsymh>PLLSymbolLine.MaxSqrSymH then
+                                         PLLSymbolLine.MaxSqrSymH:=sqrsymh;
+  end;
   geom.LLprimitives.AddLLPSymbolEnd;
   end;
   end;

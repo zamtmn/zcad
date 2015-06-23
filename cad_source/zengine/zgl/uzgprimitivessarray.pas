@@ -50,38 +50,47 @@ TLLPrimitive={$IFNDEF DELPHI}packed{$ENDIF} object
                        function getPrimitiveSize:GDBInteger;virtual;
                        constructor init;
                        destructor done;
-                       function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+                       function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
                    end;
 PTLLLine=^TLLLine;
 TLLLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index:TLLVertexIndex;{P2Index=P1Index+1}
-              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
         end;
 PTLLTriangle=^TLLTriangle;
 TLLTriangle={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index:TLLVertexIndex;
-              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
         end;
 PTLLPoint=^TLLPoint;
 TLLPoint={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               PIndex:TLLVertexIndex;
-              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
         end;
 PTLLSymbol=^TLLSymbol;
 TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               SymSize:GDBInteger;
+              LineIndex:TArrayIndex;
               Attrib:TLLPrimitiveAttrib;
               OutBoundIndex:TLLVertexIndex;
-              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+        end;
+PTLLSymbolLine=^TLLSymbolLine;
+TLLSymbolLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
+              SimplyDrawed:GDBBoolean;
+              MaxSqrSymH:GDBFloat;
+              FirstOutBoundIndex,LastOutBoundIndex:TLLVertexIndex;
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              constructor init;
         end;
 PTLLSymbolEnd=^TLLSymbolEnd;
 TLLSymbolEnd={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
-              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
                    end;
 PTLLPolyLine=^TLLPolyLine;
 TLLPolyLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index,Count:TLLVertexIndex;
-              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
         end;
 TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBByte*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
@@ -90,6 +99,7 @@ TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
                 procedure AddLLTriangle(const P1Index:TLLVertexIndex);
                 procedure AddLLPPoint(const PIndex:TLLVertexIndex);
                 function AddLLPSymbol:TArrayIndex;
+                function AddLLPSymbolLine:TArrayIndex;
                 procedure AddLLPSymbolEnd;
                 procedure AddLLPPolyLine(const P1Index,Count:TLLVertexIndex);
              end;
@@ -123,52 +133,75 @@ end;
 destructor TLLPrimitive.done;
 begin
 end;
-function TLLPrimitive.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var OptData:ZGLOptimizerData):GDBInteger;
+function TLLPrimitive.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 begin
      result:=getPrimitiveSize;
 end;
-function TLLLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var OptData:ZGLOptimizerData):GDBInteger;
+function TLLLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 begin
      if not OptData.ignorelines then
-                                    Drawer.DrawLine(P1Index);
+                                    Drawer.DrawLine(P1Index,P1Index+1);
      result:=inherited;
 end;
-function TLLPoint.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var OptData:ZGLOptimizerData):GDBInteger;
+function TLLPoint.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 begin
      Drawer.DrawPoint(PIndex);
      result:=inherited;
 end;
-function TLLTriangle.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var OptData:ZGLOptimizerData):GDBInteger;
+function TLLTriangle.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 begin
      if not OptData.ignoretriangles then
                                         Drawer.DrawTriangle(P1Index);
      result:=inherited;
 end;
-function TLLPolyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var OptData:ZGLOptimizerData):GDBInteger;
+function TLLPolyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 var
    i,index:integer;
 begin
   index:=P1Index;
   for i:=1 to Count do
   begin
-     Drawer.DrawLine(index);
+     Drawer.DrawLine(index,index+1);
      inc(index);
   end;
   result:=inherited;
 end;
-function TLLSymbolEnd.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var OptData:ZGLOptimizerData):GDBInteger;
+function TLLSymbolEnd.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 begin
      OptData.ignoretriangles:=false;
      OptData.ignorelines:=false;
      result:=inherited;
 end;
-function TLLSymbol.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var OptData:ZGLOptimizerData):GDBInteger;
+constructor TLLSymbolLine.init;
+begin
+     MaxSqrSymH:=0;
+     inherited;
+end;
+
+function TLLSymbolLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
+begin
+  if (MaxSqrSymH/(rc.zoom*rc.zoom)<3)and(not rc.maxdetail) then
+                                                begin
+                                                  Drawer.DrawLine(FirstOutBoundIndex,LastOutBoundIndex+2);
+                                                  self.SimplyDrawed:=true;
+                                                end
+                                            else
+                                                self.SimplyDrawed:=false;
+  result:=inherited;
+end;
+function TLLSymbol.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 var
    i,index,minsymbolsize:integer;
    sqrparamsize:gdbdouble;
 begin
-  result:=inherited;
+  if self.LineIndex<>-1 then
+  if PTLLSymbolLine(LLPArray.getelement(self.LineIndex))^.SimplyDrawed then
+                                                                           begin
+                                                                             result:=SymSize;
+                                                                             exit;
+                                                                          end;
   index:=OutBoundIndex;
+  result:=inherited;
   if not drawer.CheckOutboundInDisplay(index) then
                                                   begin
                                                     result:=SymSize;
@@ -237,6 +270,14 @@ begin
      ptp:=AllocData(sizeof(TLLPoint));
      ptp.init;
      ptp.PIndex:=PIndex;
+end;
+function TLLPrimitivesArray.AddLLPSymbolLine:TArrayIndex;
+var
+   ptsl:PTLLSymbolLine;
+begin
+     result:=count;
+     ptsl:=AllocData(sizeof(TLLSymbolLine));
+     ptsl.init;
 end;
 function TLLPrimitivesArray.AddLLPSymbol:TArrayIndex;
 var

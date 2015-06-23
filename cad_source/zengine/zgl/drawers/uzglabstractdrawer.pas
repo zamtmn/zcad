@@ -27,7 +27,7 @@ TZGLDrawMode=(TDM_OR,TDM_XOR,TDM_Normal);
 TZGLAbstractDrawer=class
                         public
                         PVertexBuffer:PGDBOpenArrayOfData;
-                        procedure DrawLine(const i1:TLLVertexIndex);virtual;abstract;
+                        procedure DrawLine(const i1,i2:TLLVertexIndex);virtual;abstract;
                         procedure DrawTriangle(const i1:TLLVertexIndex);virtual;abstract;
                         procedure DrawQuad(const i1:TLLVertexIndex);virtual;abstract;
                         function CheckOutboundInDisplay(const i1:TLLVertexIndex):boolean;virtual;abstract;

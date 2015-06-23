@@ -25,7 +25,7 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         drawrect:trect;
                         wh:tsize;
                         public
-                        procedure DrawLine(const i1:TLLVertexIndex);override;
+                        procedure DrawLine(const i1,i2:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
                         procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);override;
                         procedure endrender;override;
@@ -75,7 +75,7 @@ var
   notuseLCS:GDBBOOLEAN;
 implementation
 uses log;
-procedure TZGLGeneralDrawer.DrawLine(const i1:TLLVertexIndex);
+procedure TZGLGeneralDrawer.DrawLine(const i1,i2:TLLVertexIndex);
 begin
 end;
 procedure TZGLGeneralDrawer.DrawPoint(const i:TLLVertexIndex);

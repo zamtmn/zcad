@@ -172,11 +172,12 @@ var
   ispl:gdbboolean;
   ir:itrec;
   pfont:pgdbfont;
-  ln,l:GDBInteger;
+  LLSymbolLineIndex:TArrayIndex;
+  symlen:GDBInteger;
   sym:word;
   TDInfo:TTrianglesDataInfo;
 begin
-  ln:=1;
+  LLSymbolLineIndex:=-1;
   pfont:=_pfont;
 
   ispl:=false;
@@ -193,7 +194,7 @@ begin
   i := 1;
   while i <= length(content) do
   begin
-    sym:=getsymbol_fromGDBText(content,i,l,pgdbfont(pfont)^.font.unicode);
+    sym:=getsymbol_fromGDBText(content,i,symlen,pgdbfont(pfont)^.font.unicode);
     if sym=1 then
     begin
          ispl:=not(ispl);
@@ -214,7 +215,7 @@ begin
     end
     else
     begin
-      pfont^.CreateSymbol(self,sym,objmatrix,matr,minx,miny,maxx,maxy,{pfont,}ln);
+      pfont^.CreateSymbol(self,sym,objmatrix,matr,minx,miny,maxx,maxy,LLSymbolLineIndex);
 
     end;
     if sym<>1 then
@@ -223,7 +224,7 @@ begin
       m1[3, 0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}{(ord(content[i]))}sym,tdinfo).NextSymX;
       matr:=MatrixMultiply(m1,matr);
     end;
-  inc(i,l);
+  inc(i,symlen);
   end;
                        if ispl then
 
@@ -287,7 +288,7 @@ begin
      PPrimitive:=LLprimitives.parray;
      while ProcessedSize<LLprimitives.count do
      begin
-          CurrentSize:=PPrimitive.draw(Drawer,rc,GeomData,OptData);
+          CurrentSize:=PPrimitive.draw(Drawer,rc,GeomData,LLprimitives,OptData);
           ProcessedSize:=ProcessedSize+CurrentSize;
           inc(pbyte(PPrimitive),CurrentSize);
      end;
@@ -514,13 +515,15 @@ procedure ZGLGeometry.PlaceShape(const StartPatternPoint:GDBVertex;PSP:PShapePro
 var
     objmatrix,matr:dmatrix4d;
     minx,miny,maxx,maxy:GDBDouble;
+    sli:integer;
 begin
 { TODO : убрать двойное преобразование номера символа }
 objmatrix:=creatematrix(StartPatternPoint,PSP^.param,angle,scale);
 matr:=onematrix;
 minx:=0;miny:=0;maxx:=0;maxy:=0;
+sli:=-1;
 if PSP.Psymbol<> nil then
-                    PSP^.param.PStyle.pfont.CreateSymbol(self,PSP.Psymbol.Number,objmatrix,matr,minx,miny,maxx,maxy,1);
+                    PSP^.param.PStyle.pfont.CreateSymbol(self,PSP.Psymbol.Number,objmatrix,matr,minx,miny,maxx,maxy,sli);
 end;
 procedure ZGLGeometry.PlaceText(const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
 var
@@ -529,17 +532,19 @@ var
     j:integer;
     TDInfo:TTrianglesDataInfo;
     sym:integer;
+    sli:integer;
 begin
 { TODO : убрать двойное преобразование номера символа }
 objmatrix:={creatematrix}CreateReadableMatrix(StartPatternPoint,PTP^.param,angle,scale,PTP.txtL,PTP.txtH);
 matr:=onematrix;
 minx:=0;miny:=0;maxx:=0;maxy:=0;
+sli:=-1;
 for j:=1 to (system.length(PTP^.Text)) do
 begin
      sym:=byte(PTP^.Text[j]);
           if ptp.param.PStyle.pfont.font.unicode then
                                                      sym:=ach2uch(sym);
-PTP^.param.PStyle.pfont.CreateSymbol(self,sym,objmatrix,matr,minx,miny,maxx,maxy,1);
+PTP^.param.PStyle.pfont.CreateSymbol(self,sym,objmatrix,matr,minx,miny,maxx,maxy,sli);
 matr[3,0]:=matr[3,0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]),tdinfo).NextSymX;
 end;
 end;

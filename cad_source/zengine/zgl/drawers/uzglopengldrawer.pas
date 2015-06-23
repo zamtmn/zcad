@@ -37,7 +37,7 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         function startpaint(InPaintMessage:boolean;w,h:integer):boolean;override;
                         procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);override;
                         procedure endrender;override;
-                        procedure DrawLine(const i1:TLLVertexIndex);override;
+                        procedure DrawLine(const i1,i2:TLLVertexIndex);override;
                         procedure DrawTriangle(const i1:TLLVertexIndex);override;
                         procedure DrawQuad(const i1:TLLVertexIndex);override;
                         function CheckOutboundInDisplay(const i1:TLLVertexIndex):boolean;override;
@@ -81,11 +81,11 @@ var
    code:integer;
 implementation
 uses log;
-procedure TZGLOpenGLDrawer.DrawLine(const i1:TLLVertexIndex);
+procedure TZGLOpenGLDrawer.DrawLine(const i1,i2:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_LINES);
     oglsm.myglVertex3fV(PVertexBuffer.getelement(i1));
-    oglsm.myglVertex3fV(PVertexBuffer.getelement(i1+1));
+    oglsm.myglVertex3fV(PVertexBuffer.getelement(i2));
     oglsm.myglend;
 end;
 procedure TZGLOpenGLDrawer.DrawTriangle(const i1:TLLVertexIndex);

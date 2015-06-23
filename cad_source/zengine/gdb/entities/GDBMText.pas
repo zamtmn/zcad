@@ -674,7 +674,7 @@ begin
   //objmatrix:=onematrix;
         if pswp<>nil then
   repeat
-  inc(ln);
+  ln:=-1;
   matr:=DrawMatrix;
   //matr:=matrixmultiply(DrawMatrix,objmatrix);
   m1:=onematrix;

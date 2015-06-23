@@ -58,7 +58,7 @@ TZGLGDIDrawer=class(TZGLGeneralDrawer)
                         procedure endpaint(InPaintMessage:boolean);override;
 
                         function TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
-                        procedure DrawLine(const i1:TLLVertexIndex);override;
+                        procedure DrawLine(const i1,i2:TLLVertexIndex);override;
                         procedure DrawTriangle(const i1:TLLVertexIndex);override;
                         procedure DrawQuad(const i1:TLLVertexIndex);override;
                         function CheckOutboundInDisplay(const i1:TLLVertexIndex):boolean;override;
@@ -104,7 +104,7 @@ TZGLGDIPlusDrawer=class(TZGLGDIDrawer)
                         public
                         procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);override;
                         procedure endrender;override;
-                        procedure DrawLine(const i1:TLLVertexIndex);override;
+                        procedure DrawLine(const i1,i2:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
                    end;
 {$ENDIF}
@@ -148,12 +148,12 @@ begin
      graphicsGDIPlus.Free;
 end;
 
-procedure TZGLGDIPlusDrawer.DrawLine(const i1:TLLVertexIndex);
+procedure TZGLGDIPlusDrawer.DrawLine(const i1,i2:TLLVertexIndex);
 var
    pv1,pv2:PGDBVertex3S;
 begin
     pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
-    pv2:=PGDBVertex3S(PVertexBuffer.getelement(i1+1));
+    pv2:=PGDBVertex3S(PVertexBuffer.getelement(i2));
     graphicsGDIPlus.DrawLine(Pen,pv1.x,midline-pv1.y,pv2.x,midline-pv2.y);
 end;
 
@@ -357,14 +357,14 @@ begin
   self.sx:=self.sx*sx;
   self.sy:=self.sy*sy;
 end;
-procedure TZGLGDIDrawer.DrawLine(const i1:TLLVertexIndex);
+procedure TZGLGDIDrawer.DrawLine(const i1,i2:TLLVertexIndex);
 var
    pv1,pv2:PGDBVertex3S;
    p1,p2:GDBVertex3S;
    x,y:integer;
 begin
     pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
-    pv2:=PGDBVertex3S(PVertexBuffer.getelement(i1+1));
+    pv2:=PGDBVertex3S(PVertexBuffer.getelement(i2));
     p1:=TranslatePoint(pv1^);
     p2:=TranslatePoint(pv2^);
     //canvas.Line(round(p1.x),round(p1.y),round(p2.x),round(p2.y));

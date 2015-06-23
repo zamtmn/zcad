@@ -60,7 +60,7 @@ TZGLGDIDrawer=class(TZGLGeneralDrawer)
                         function TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
                         procedure DrawLine(const i1,i2:TLLVertexIndex);override;
                         procedure DrawTriangle(const i1:TLLVertexIndex);override;
-                        procedure DrawQuad(const i1:TLLVertexIndex);override;
+                        procedure DrawQuad(const i1,i2,i3,i4:TLLVertexIndex);override;
                         function CheckOutboundInDisplay(const i1:TLLVertexIndex):boolean;override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
 
@@ -404,16 +404,16 @@ begin
     ProcessScreenInvalidrect(sp[3].x,sp[3].y);
     PolyGon(OffScreedDC,@sp[1],3,false);
 end;
-procedure TZGLGDIDrawer.DrawQuad(const i1:TLLVertexIndex);var
+procedure TZGLGDIDrawer.DrawQuad(const i1,i2,i3,i4:TLLVertexIndex);var
    pv1,pv2,pv3,pv4:PGDBVertex3S;
    p1,p2,p3,p4:GDBVertex3S;
    x,y:integer;
    sp:array [1..4]of TPoint;
 begin
     pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
-    pv2:=PGDBVertex3S(PVertexBuffer.getelement(i1+1));
-    pv3:=PGDBVertex3S(PVertexBuffer.getelement(i1+2));
-    pv4:=PGDBVertex3S(PVertexBuffer.getelement(i1+3));
+    pv2:=PGDBVertex3S(PVertexBuffer.getelement(i2));
+    pv3:=PGDBVertex3S(PVertexBuffer.getelement(i3));
+    pv4:=PGDBVertex3S(PVertexBuffer.getelement(i4));
     p1:=TranslatePoint(pv1^);
     p2:=TranslatePoint(pv2^);
     p3:=TranslatePoint(pv3^);

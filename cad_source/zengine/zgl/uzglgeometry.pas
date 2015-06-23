@@ -19,7 +19,7 @@
 unit uzglgeometry;
 {$INCLUDE def.inc}
 interface
-uses math,gdbdrawcontext,uzglabstractdrawer,uzgprimitivessarray,uzgvertex3sarray,UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,ugdbltypearray,sysutils,gdbase,memman,log,
+uses uzgprimitives,math,gdbdrawcontext,uzglabstractdrawer,uzgprimitivessarray,uzgvertex3sarray,UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,ugdbltypearray,sysutils,gdbase,memman,log,
      gdbasetypes,strproc,ugdbfont,uzglvectorobject;
 type
 {Export+}

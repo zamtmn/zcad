@@ -19,7 +19,7 @@
 unit uzglgeomdata;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,uzgvertex3sarray,uzglabstractdrawer,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
+uses uzgvertex3sarray,sysutils,gdbase,memman,
 geometry;
 type
 {Export+}

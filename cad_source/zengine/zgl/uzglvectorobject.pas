@@ -19,7 +19,7 @@
 unit uzglvectorobject;
 {$INCLUDE def.inc}
 interface
-uses uzglgeomdata,uzgprimitivessarray,uzgvertex3sarray,zcadsysvars,geometry,sysutils,gdbase,memman,log,
+uses uzglgeomdata,uzgprimitivessarray,zcadsysvars,geometry,sysutils,gdbase,memman,log,
      strproc;
 type
 {Export+}

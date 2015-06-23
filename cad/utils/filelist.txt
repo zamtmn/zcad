@@ -17,7 +17,6 @@ E:\zcad\cad_source\zengine\u\UGDBPolyPoint2DArray.pas
 E:\zcad\cad_source\zengine\u\UGDBPolyPoint3DArray.pas
 E:\zcad\cad_source\zengine\u\UGDBSelectedObjArray.pas
 E:\zcad\cad_source\zengine\u\UGDBStringArray.pas
-E:\zcad\cad_source\zengine\zgl\uzglline3darray.pas
 E:\zcad\cad_source\zengine\u\UGDBOpenArrayOfByte.pas
 E:\zcad\cad_source\zengine\fonts\ugdbbasefont.pas
 E:\zcad\cad_source\zengine\fonts\ugdbshxfont.pas
@@ -37,10 +36,9 @@ E:\zcad\cad_source\zcad\languade\zcadsysvars.pas
 E:\zcad\cad_source\zcad\languade\uabstractunit.pas
 E:\zcad\cad_source\zcad\languade\varmandef.pas
 E:\zcad\cad_source\zcad\languade\varman.pas
-E:\zcad\cad_source\zengine\zgl\uzglline3darray.pas
 E:\zcad\cad_source\zengine\zgl\uzgvertex3sarray.pas
-E:\zcad\cad_source\zengine\zgl\uzglpoint3darray.pas
-E:\zcad\cad_source\zengine\zgl\uzgltriangles3darray.pas
+E:\zcad\cad_source\zengine\zgl\uzglgeomdata.pas
+E:\zcad\cad_source\zengine\zgl\uzgprimitives.pas
 E:\zcad\cad_source\zengine\zgl\uzgprimitivessarray.pas
 E:\zcad\cad_source\zengine\zgl\uzglvectorobject.pas
 E:\zcad\cad_source\zengine\zgl\uzglgeometry.pas

@@ -438,6 +438,9 @@ TInsUnits=(IUUnspecified(*'Unspecified'*),
            IUAstronomicalUnits(*'Astronomical units'*),
            IULightYears(*'Light years'*),
            IUParsecs(*'Parsecs'*));
+TLLPrimitiveType=GDBInteger;
+TLLPrimitiveAttrib=GDBInteger;
+TLLVertexIndex=GDBInteger;
 //Generate on E:\zcad\cad_source\zengine\gdb\gdbpalette.pas
   PTRGB=^TRGB;
   TRGB=packed record
@@ -494,6 +497,7 @@ GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(OpenArray)
                       function copyto(source:PGDBOpenArray):GDBInteger;virtual;abstract;
                       function GetRealCount:GDBInteger;
                       function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
+                      function AllocData(SData:GDBword):GDBPointer;virtual;abstract;
              end;
 //Generate on E:\zcad\cad_source\zengine\u\UGDBOpenArrayOfData.pas
 PGDBOpenArrayOfData=^GDBOpenArrayOfData;
@@ -702,17 +706,6 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                     Selected:GDBInteger;
                     Enums:GDBGDBStringArray;
               end;
-//Generate on E:\zcad\cad_source\zengine\zgl\uzglline3darray.pas
-ZGLLine3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex*)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                constructor initnul;
-                {function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
-                function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;abstract;
-                function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;}abstract;
-                procedure DrawGeometry(var rc:TDrawContext);virtual;abstract;
-                {procedure DrawGeometry2;virtual;abstract;
-                procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;}abstract;
-             end;
 //Generate on E:\zcad\cad_source\zengine\u\UGDBOpenArrayOfByte.pas
 PGDBOpenArrayOfByte=^GDBOpenArrayOfByte;
 GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
@@ -727,7 +720,6 @@ GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                       function AddFontFloat(PData:GDBPointer):GDBInteger;virtual;abstract;
                       procedure TXTAddGDBStringEOL(s:GDBString);virtual;abstract;
                       procedure TXTAddGDBString(s:GDBString);virtual;abstract;
-                      function AllocData(SData:GDBword):GDBPointer;virtual;abstract;
                       function ReadData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
                       function PopData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
                       function ReadString(break, ignore: GDBString): shortString;inline;
@@ -782,7 +774,7 @@ GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     destructor done;virtual;abstract;
     function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
     function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
-    procedure CreateSymbol(var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
+    procedure CreateSymbol(var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;var LLSymbolLineIndex:TArrayIndex);
   end;
 //Generate on E:\zcad\cad_source\zengine\u\UGDBXYZWStringArray.pas
 PGDBXYZWGDBStringArray=^XYZWGDBGDBStringArray;
@@ -1424,17 +1416,6 @@ TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
             destructor done;virtual;abstract;
             procedure free;virtual;abstract;
       end;
-//Generate on E:\zcad\cad_source\zengine\zgl\uzglline3darray.pas
-ZGLLine3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex*)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                constructor initnul;
-                {function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
-                function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;abstract;
-                function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;}abstract;
-                procedure DrawGeometry(var rc:TDrawContext);virtual;abstract;
-                {procedure DrawGeometry2;virtual;abstract;
-                procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;}abstract;
-             end;
 //Generate on E:\zcad\cad_source\zengine\zgl\uzgvertex3sarray.pas
 ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBvertex3S*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
@@ -1443,52 +1424,67 @@ ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Open
                 function AddGDBVertex(const v:GDBvertex):TArrayIndex;virtual;abstract;
                 function GetLength(const i:TArrayIndex):GDBFloat;virtual;abstract;
              end;
-//Generate on E:\zcad\cad_source\zengine\zgl\uzglpoint3darray.pas
-ZGLPoint3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLLine3DArray)(*OpenArrayOfData=GDBVertex*)
-                procedure DrawGeometry;virtual;abstract;
-             end;
-//Generate on E:\zcad\cad_source\zengine\zgl\uzgltriangles3darray.pas
-ZGLTriangle3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLLine3DArray)(*OpenArrayOfData=GDBVertex*)
-                procedure DrawGeometry(var rc:TDrawContext);virtual;abstract;
-             end;
-//Generate on E:\zcad\cad_source\zengine\zgl\uzgprimitivessarray.pas
-TLLPrimitiveType=GDBInteger;
-TLLPrimitiveAttrib=GDBInteger;
-TLLVertexIndex=GDBInteger;
-PTLLPrimitivePrefix=^TLLPrimitivePrefix;
-TLLPrimitivePrefix={$IFNDEF DELPHI}packed{$ENDIF} record
-                       LLPType:TLLPrimitiveType;
+//Generate on E:\zcad\cad_source\zengine\zgl\uzglgeomdata.pas
+ZGLGeomData={$IFNDEF DELPHI}packed{$ENDIF}object(GDBaseObject)
+                                                Vertex3S:ZGLVertex3Sarray;
+                                                constructor init;
+                                                destructor done;virtual;abstract;
+                                                procedure Clear;virtual;abstract;
+                                                procedure Shrink;virtual;abstract;
+                                          end;
+//Generate on E:\zcad\cad_source\zengine\zgl\uzgprimitives.pas
+ZGLOptimizerData={$IFNDEF DELPHI}packed{$ENDIF}record
+                                                     ignoretriangles:boolean;
+                                                     ignorelines:boolean;
+                                               end;
+PTLLPrimitive=^TLLPrimitive;
+TLLPrimitive={$IFNDEF DELPHI}packed{$ENDIF} object
+                       function getPrimitiveSize:GDBInteger;virtual;abstract;
+                       constructor init;
+                       destructor done;
+                       function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
                    end;
 PTLLLine=^TLLLine;
-TLLLine={$IFNDEF DELPHI}packed{$ENDIF} record
-              Prefix:TLLPrimitivePrefix;
+TLLLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index:TLLVertexIndex;{P2Index=P1Index+1}
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
         end;
 PTLLTriangle=^TLLTriangle;
-TLLTriangle={$IFNDEF DELPHI}packed{$ENDIF} record
-              Prefix:TLLPrimitivePrefix;
+TLLTriangle={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index:TLLVertexIndex;
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
         end;
 PTLLPoint=^TLLPoint;
-TLLPoint={$IFNDEF DELPHI}packed{$ENDIF} record
-              Prefix:TLLPrimitivePrefix;
+TLLPoint={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               PIndex:TLLVertexIndex;
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
         end;
 PTLLSymbol=^TLLSymbol;
-TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} record
-              Prefix:TLLPrimitivePrefix;
+TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               SymSize:GDBInteger;
+              LineIndex:TArrayIndex;
               Attrib:TLLPrimitiveAttrib;
               OutBoundIndex:TLLVertexIndex;
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
         end;
-TLLSymbolEnd={$IFNDEF DELPHI}packed{$ENDIF} record
-                       Prefix:TLLPrimitivePrefix;
+PTLLSymbolLine=^TLLSymbolLine;
+TLLSymbolLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
+              SimplyDrawed:GDBBoolean;
+              MaxSqrSymH:GDBFloat;
+              FirstOutBoundIndex,LastOutBoundIndex:TLLVertexIndex;
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              constructor init;
+        end;
+PTLLSymbolEnd=^TLLSymbolEnd;
+TLLSymbolEnd={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
                    end;
 PTLLPolyLine=^TLLPolyLine;
-TLLPolyLine={$IFNDEF DELPHI}packed{$ENDIF} record
-              Prefix:TLLPrimitivePrefix;
+TLLPolyLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index,Count:TLLVertexIndex;
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
         end;
+//Generate on E:\zcad\cad_source\zengine\zgl\uzgprimitivessarray.pas
 TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBByte*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
@@ -1496,6 +1492,7 @@ TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
                 procedure AddLLTriangle(const P1Index:TLLVertexIndex);
                 procedure AddLLPPoint(const PIndex:TLLVertexIndex);
                 function AddLLPSymbol:TArrayIndex;
+                function AddLLPSymbolLine:TArrayIndex;
                 procedure AddLLPSymbolEnd;
                 procedure AddLLPPolyLine(const P1Index,Count:TLLVertexIndex);
              end;
@@ -1503,7 +1500,7 @@ TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
 PZGLVectorObject=^ZGLVectorObject;
 ZGLVectorObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  LLprimitives:TLLPrimitivesArray;
-                                 Vertex3S:ZGLVertex3Sarray;
+                                 GeomData:ZGLGeomData;
                                  constructor init;
                                  destructor done;virtual;abstract;
                                  procedure Clear;virtual;abstract;
@@ -1548,8 +1545,7 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
                 procedure PlaceShape(const StartPatternPoint:GDBVertex; PSP:PShapeProp;scale,angle:GDBDouble);
                 procedure PlaceText(const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
                 procedure DrawTextContent(content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
-                function CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
-                function GetSqrParamSizeInOCS(const DC:TDrawContext;const SqrParamSize:GDBDouble):GDBDouble;
+                //function CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
              end;
 //Generate on E:\zcad\cad_source\zengine\gdb\entities\GDBSubordinated.pas
 GDBObjExtendable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)

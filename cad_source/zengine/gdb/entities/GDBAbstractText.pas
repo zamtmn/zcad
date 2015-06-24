@@ -224,11 +224,10 @@ begin
                                                              exit;
                                                         end;
 
-    {if geom.SHX.CalcTrueInFrustum (mf)<>IREmpty
-                                                            then
-                                                                result:=true
-                                                            else
-                                                                result:=false;}
+    if geom.CalcTrueInFrustum (mf,false)<>IREmpty then
+                                                 result:=true
+                                             else
+                                                 result:=false;
 
    {if Vertex3D_in_WCS_Array.count<2 then exit;
    ptpv0:=Vertex3D_in_WCS_Array.parray;
@@ -340,7 +339,7 @@ begin
       result:=CalcOutBound4VInFrustum(outbound,frustum);
       if result<>IRPartially then
                                  exit;
-      //result:=geom.SHX.CalcTrueInFrustum(frustum);
+      result:=geom.CalcTrueInFrustum(frustum,true);
 end;
 procedure GDBObjAbstractText.Renderfeedback;
 var //pm:DMatrix4D;

@@ -98,7 +98,8 @@ function SqrVertexlength(const Vector1, Vector2: GDBVertex): GDBDouble;inline;ov
 function SqrVertexlength(const Vector1, Vector2: GDBVertex2d): GDBDouble;inline; overload;
 function Vertexmorph(const Vector1, Vector2: GDBVertex; a: GDBDouble): GDBVertex;inline;overload;
 function Vertexmorph(const Vector1, Vector2: GDBVertex2D; a: GDBDouble): GDBVertex2D;inline;overload;
-function VertexDmorph(const Vector1, Vector2: GDBVertex; a: GDBDouble): GDBVertex;inline;
+function VertexDmorph(const Vector1, Vector2: GDBVertex; a: GDBDouble): GDBVertex;overload;inline;
+function VertexDmorph(const Vector1, Vector2: GDBVertex3S; a: GDBDouble): GDBVertex3S;overload;inline;
 function Vertexangle(const Vector1, Vector2: GDBVertex2d): GDBDouble;inline;
 function oneVertexlength(const Vector1: GDBVertex): GDBDouble;inline;
 function SqrOneVertexlength(const Vector1: GDBVertex): GDBDouble;inline;
@@ -108,7 +109,8 @@ function VertexMulOnSc(const Vector1:GDBVertex;sc:GDBDouble): GDBVertex;inline;
 function VertexAdd(const Vector1, Vector2: GDBVertex): GDBVertex;inline;overload;
 function VertexAdd(const Vector1, Vector2: GDBVertex3S): GDBVertex3S;inline;overload;
 function Vertex2DAdd(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;inline;
-function VertexSub(const Vector1, Vector2: GDBVertex): GDBVertex;inline;
+function VertexSub(const Vector1, Vector2: GDBVertex): GDBVertex;overload;inline;
+function VertexSub(const Vector1, Vector2: GDBvertex3S): GDBVertex3S;overload;inline;
 function MinusVertex(const Vector1: GDBVertex): GDBVertex;inline;
 function vertexlen2id(const x1, y1, x2, y2: GDBInteger): GDBDouble;inline;
 function Vertexdmorphabs(const Vector1, Vector2: GDBVertex;a: GDBDouble): GDBVertex;inline;
@@ -173,7 +175,8 @@ function PointOfLinePlaneIntersect(const p1,d:GDBVertex;const plane:DVector4D;ou
 function PlaneFrom3Pont(const P1,P2,P3:GDBVertex):DVector4D;inline;
 procedure NormalizePlane(var plane:DVector4D);{inline;}
 
-function CalcTrueInFrustum (const lbegin,lend:GDBvertex; const frustum:ClipArray):TINRect;//inline;
+function CalcTrueInFrustum (const lbegin,lend:GDBvertex; const frustum:ClipArray):TINRect;overload;//inline;
+function CalcTrueInFrustum (const lbegin,lend:GDBvertex3S; const frustum:ClipArray):TInRect;overload;
 function CalcPointTrueInFrustum (const lbegin:GDBvertex; const frustum:ClipArray):TInRect;
 function CalcOutBound4VInFrustum (const OutBound:OutBound4V; const frustum:ClipArray):TINRect;inline;
 function CalcAABBInFrustum (const AABB:GDBBoundingBbox; const frustum:ClipArray):TINRect;{inline;}
@@ -426,31 +429,6 @@ begin
                                              result:=IRPartially;
                                              exit;
                                         end;
-      {cacount:=0;
-      bit:=1;
-      d:=VertexSub(line.lBegin,line.lEnd);
-      for i:=0 to 5 do
-      begin
-           if((bytebegin and bit)xor(byteend and bit))>0then
-            begin
-                 ca[cacount]:=(
-                                frustum[i][3]
-                               +frustum[i][0]*d.x
-                               +frustum[i][1]*d.y
-                               +frustum[i][2]*d.z
-                               );
-                 ca[cacount]:=(
-                                frustum[i][3]
-                               +frustum[i][0]*line.lbegin.x
-                               +frustum[i][1]*line.lbegin.y
-                               +frustum[i][2]*line.lbegin.z
-                              )
-                              /
-                              (ca[cacount]);
-                 inc(cacount);
-            end;
-           bit:=bit*2;
-      end;}
       if cacount<2 then
                        begin
                             result:=IREmpty;
@@ -479,8 +457,87 @@ begin
                    end;
            d1:=d2;
       end;
+end;
+function CalcTrueInFrustum (const lbegin,lend:GDBvertex3S; const frustum:ClipArray):TInRect;
+var i,j:GDBInteger;
+    d1,d2:gdbdouble;
+    bytebegin,byteend,bit:integer;
+    ca:TLineClipArray;
+    cacount:integer;
+    d,p:gdbvertex3S;
+begin
+      fillchar((@ca)^,sizeof(ca),0);
+      result:=IREmpty;
+      bit:=1;
+      bytebegin:=0;
+      byteend:=0;
+      cacount:=0;
+      for i:=0 to 5 do
+      begin
+      d1:=frustum[i][0] * lbegin.x + frustum[i][1] * lbegin.y + frustum[i][2] * lbegin.z + frustum[i][3];
+      d2:=frustum[i][0] * lend.x +   frustum[i][1] * lend.y +   frustum[i][2] * lend.z +   frustum[i][3];
+       if d1<0 then
+                  bytebegin:=bytebegin or bit;
+        if d2<0 then
+                  byteend:=byteend or bit;
+      if ((bytebegin and bit)and(byteend and bit))>0 then
+                                                         begin
+                                                              result:=IREmpty;
+                                                              exit;
+                                                         end;
+           if((bytebegin and bit)xor(byteend and bit))>0then
+            begin
+                 d1:=abs(d1);
+                 d2:=abs(d2);
+                 ca[cacount]:=d1/(d1+d2);
+                 inc(cacount);
+            end;
+      bit:=bit*2;
+      end;
+      if ((bytebegin)=0)and((byteend)=0) then
+                                           begin
+                                                result:=IRFully;
+                                                exit;
+                                           end;
 
-      //bit:=bit*2;
+      if  (bytebegin)=0 then
+                                        begin
+                                             result:=IRPartially;
+                                             exit;
+                                        end;
+      if  (byteend)=0 then
+                                        begin
+                                             result:=IRPartially;
+                                             exit;
+                                        end;
+      if cacount<2 then
+                       begin
+                            result:=IREmpty;
+                            exit;
+                       end;
+      dec(cacount);
+      d:=VertexSub(lend,lbegin);
+      j:=0;
+      d1:=GetMinAndSwap(j,cacount,ca);
+      while j<=cacount do
+      begin
+           d2:=GetMinAndSwap(j,cacount,ca);
+           d1:=(d1+d2)/2;
+      bit:=0;
+      p:=geometry.VertexDmorph(lbegin,d,d1);
+      for i:=0 to 5 do
+      begin
+            if (frustum[i][0] * p.x + frustum[i][1] * p.y + frustum[i][2] * p.z + frustum[i][3])>=0
+            then
+                inc(bit);
+      end;
+      if bit=6 then
+                   begin
+                        result:=IRPartially;
+                        exit;
+                   end;
+           d1:=d2;
+      end;
 end;
 function CalcPointTrueInFrustum (const lbegin:GDBvertex; const frustum:ClipArray):TInRect;
 var i{,j}:GDBInteger;
@@ -1444,6 +1501,15 @@ begin
   temp.z := vector1.z + (vector2.z) * a;
   result := temp;
 end;
+function VertexDmorph(const Vector1, Vector2: GDBVertex3S; a: GDBDouble): GDBVertex3S;
+var
+  temp: GDBVertex3S;
+begin
+  temp.x := vector1.x + (vector2.x) * a;
+  temp.y := vector1.y + (vector2.y) * a;
+  temp.z := vector1.z + (vector2.z) * a;
+  result := temp;
+end;
 
 function Vertexdmorphabs(const Vector1, Vector2: GDBVertex; a: GDBDouble): GDBVertex;
 var
@@ -1527,6 +1593,12 @@ begin
 end;
 
 function VertexSub(const Vector1, Vector2: GDBVertex): GDBVertex;
+begin
+  Result.X := Vector1.x - Vector2.x;
+  Result.Y := Vector1.y - Vector2.y;
+  Result.Z := Vector1.z - Vector2.z;
+end;
+function VertexSub(const Vector1, Vector2: GDBvertex3S): GDBVertex3S;
 begin
   Result.X := Vector1.x - Vector2.x;
   Result.Y := Vector1.y - Vector2.y;

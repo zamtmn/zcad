@@ -19,7 +19,7 @@
 unit uzglvectorobject;
 {$INCLUDE def.inc}
 interface
-uses uzglgeomdata,uzgprimitivessarray,zcadsysvars,geometry,sysutils,gdbase,memman,log,
+uses uzgprimitives,uzglgeomdata,uzgprimitivessarray,zcadsysvars,geometry,sysutils,gdbase,memman,log,
      strproc;
 type
 {Export+}
@@ -31,9 +31,57 @@ ZGLVectorObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  destructor done;virtual;
                                  procedure Clear;virtual;
                                  procedure Shrink;virtual;
+                                 function CalcTrueInFrustum(frustum:ClipArray; FullCheck:boolean):TInRect;virtual;
                                end;
 {Export-}
 implementation
+function ZGLVectorObject.CalcTrueInFrustum(frustum:ClipArray; FullCheck:boolean):TInRect;
+var
+  subresult:TInRect;
+  PPrimitive:PTLLPrimitive;
+  ProcessedSize:TArrayIndex;
+  CurrentSize:TArrayIndex;
+  InRect:TInRect;
+begin
+  if LLprimitives.count=0 then
+                              begin
+                                result:=IREmpty;
+                                exit;
+                              end;
+  ProcessedSize:=0;
+  PPrimitive:=LLprimitives.parray;
+  if ProcessedSize<LLprimitives.count then
+  begin
+       CurrentSize:=PPrimitive.CalcTrueInFrustum(frustum,GeomData,result);
+       if not FullCheck then
+         if result<>IREmpty then
+           exit;
+       if result=IRPartially then
+                                 exit;
+       ProcessedSize:=ProcessedSize+CurrentSize;
+       inc(pbyte(PPrimitive),CurrentSize);
+  end;
+  while ProcessedSize<LLprimitives.count do
+  begin
+       CurrentSize:=PPrimitive.CalcTrueInFrustum(frustum,GeomData,InRect);
+       case InRect of
+         IREmpty:if result=IRFully then
+                                        result:=IRPartially;
+         IRFully:if result<>IRFully then
+                                        result:=IRPartially;
+         IRPartially:
+                     result:=IRPartially;
+       end;
+       if result=IRPartially then
+                                 exit;
+       if not FullCheck then
+         if result<>IREmpty then
+           exit;
+       ProcessedSize:=ProcessedSize+CurrentSize;
+       inc(pbyte(PPrimitive),CurrentSize);
+  end;
+end;
+
 constructor ZGLVectorObject.init;
 begin
   GeomData.init;

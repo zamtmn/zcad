@@ -44,11 +44,13 @@ TLLPrimitive={$IFNDEF DELPHI}packed{$ENDIF} object
                        constructor init;
                        destructor done;
                        function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+                       function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;virtual;
                    end;
 PTLLLine=^TLLLine;
 TLLLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index:TLLVertexIndex;{P2Index=P1Index+1}
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;virtual;
         end;
 PTLLTriangle=^TLLTriangle;
 TLLTriangle={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
@@ -84,6 +86,7 @@ PTLLPolyLine=^TLLPolyLine;
 TLLPolyLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index,Count:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;virtual;
         end;
 {Export-}
 implementation
@@ -102,11 +105,21 @@ function TLLPrimitive.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var Geo
 begin
      result:=getPrimitiveSize;
 end;
+function TLLPrimitive.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;
+begin
+     InRect:=IREmpty;
+     result:=getPrimitiveSize;
+end;
 function TLLLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 begin
      if not OptData.ignorelines then
                                     Drawer.DrawLine(P1Index,P1Index+1);
      result:=inherited;
+end;
+function TLLLine.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;
+begin
+     InRect:=geometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(self.P1Index))^,PGDBvertex3S(geomdata.Vertex3S.getelement(self.P1Index+1))^,frustum);
+     result:=getPrimitiveSize;
 end;
 function TLLPoint.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 begin
@@ -130,6 +143,32 @@ begin
      inc(index);
   end;
   result:=inherited;
+end;
+function TLLPolyLine.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;
+var
+   i,index:integer;
+   SubRect:TInRect;
+begin
+     InRect:=geometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(P1Index))^,PGDBvertex3S(geomdata.Vertex3S.getelement(P1Index+1))^,frustum);
+     result:=getPrimitiveSize;
+     if InRect=IRPartially then
+                               exit;
+     index:=P1Index+1;
+     for i:=2 to Count do
+     begin
+        SubRect:=geometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(index))^,PGDBvertex3S(geomdata.Vertex3S.getelement(index+1))^,frustum);
+        case SubRect of
+          IREmpty:if InRect=IRFully then
+                                         InRect:=IRPartially;
+          IRFully:if InRect<>IRFully then
+                                         InRect:=IRPartially;
+          IRPartially:
+                      InRect:=IRPartially;
+        end;
+        if InRect=IRPartially then
+                                  exit;
+        inc(index);
+     end;
 end;
 function TLLSymbolEnd.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 begin

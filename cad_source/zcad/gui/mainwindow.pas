@@ -3032,6 +3032,8 @@ var
    BB:GDBBoundingBbox;
    size,min,max,position:integer;
 begin
+  if (MainFormN.HScrollBar.Focused)or(MainFormN.VScrollBar.Focused)then
+                                                                       setnormalfocus(nil);
   pdwg:=gdb.GetCurrentDWG;
   if pdwg<>nil then
   if pdwg.wa<>nil then begin

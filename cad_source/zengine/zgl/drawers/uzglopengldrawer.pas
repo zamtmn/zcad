@@ -405,6 +405,11 @@ begin
                  //isOpenGLError;
                  scrx:=scrx+texturesize;
                  inc(texture);
+                 if texture>high(myscrbuf)then
+                                              begin
+                                                programlog.LogOutStr('TZGLOpenGLDrawer.CreateScrbuf: texture buffer overflow!',lp_OldPos,LM_Error);
+                                                texture:=0;
+                                              end;
            until scrx>wh.cx;
            scrx:=0;
            scry:=scry+texturesize;

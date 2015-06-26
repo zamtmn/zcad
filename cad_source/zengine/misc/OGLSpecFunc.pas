@@ -130,7 +130,7 @@ const ls = $AAAA;
       GLU_AUTO_LOAD_MATRIX={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_AUTO_LOAD_MATRIX;
       GL_TRUE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_TRUE;
 
-      maxmybufer=99;
+      maxmybufer=200;
 type
     tmyscrbuf = array [0..maxmybufer] of GLuint;
     {$IFNDEF DELPHI}

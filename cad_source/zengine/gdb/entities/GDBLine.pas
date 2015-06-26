@@ -280,9 +280,8 @@ begin
       end;
 end;
 function GDBObjLine.CalcTrueInFrustum;
-//var i:GDBInteger;
 begin
-      result:=geometry.CalcTrueInFrustum (CoordInWCS.lBegin,CoordInWCS.lEnd,frustum);
+      result:=geom.CalcTrueInFrustum(frustum,false);
 end;
 function GDBObjLine.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
 begin
@@ -299,7 +298,7 @@ function GDBObjLine.onmouse;
 //var t,tt,xx,yy:GDBDouble;
 //    d:GDBvertex2DI;
 begin
-     if geometry.CalcTrueInFrustum (CoordInWCS.lBegin,CoordInWCS.lEnd,mf)<>IREmpty
+     if {geometry.CalcTrueInFrustum (CoordInWCS.lBegin,CoordInWCS.lEnd,mf)}geom.CalcTrueInFrustum(mf,false)<>IREmpty
                                                                           then
                                                                               result:=true
                                                                           else

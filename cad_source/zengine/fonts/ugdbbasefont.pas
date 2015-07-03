@@ -19,7 +19,7 @@
 unit ugdbbasefont;
 {$INCLUDE def.inc}
 interface
-uses memman,strproc,UGDBOpenArrayOfByte,gdbasetypes,UGDBOpenArrayOfData,sysutils,
+uses uzglvectorobject,memman,strproc,UGDBOpenArrayOfByte,gdbasetypes,UGDBOpenArrayOfData,sysutils,
      gdbase,geometry;
 type
 {EXPORT+}
@@ -29,6 +29,7 @@ BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               symbolinfo:TSymbolInfoArray;
               unisymbolinfo:GDBOpenArrayOfData;
               SHXdata:GDBOpenArrayOfByte;
+              FontData:ZGLVectorObject;
               constructor init;
               destructor done;virtual;
               function GetSymbolDataAddr(offset:integer):pointer;virtual;
@@ -56,6 +57,7 @@ begin
      unicode:=false;
      unisymbolinfo.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1000,sizeof(GDBUNISymbolInfo));
      SHXdata.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1024);
+     FontData.init;
 end;
 destructor BASEFont.done;
 var i:integer;
@@ -76,6 +78,7 @@ begin
      until pobj=nil;
      unisymbolinfo.{FreeAnd}Done;
      SHXdata.done;
+     FontData.done;
 end;
 function BASEFont.GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
 //var

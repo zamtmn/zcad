@@ -35,22 +35,22 @@ uses
     shared;
 function createsymbol(pf:PGDBfont;symbol:GDBInteger;pshxdata:system.pbyte;{var pdata:pbyte;}datalen:integer;unicode:boolean;symname:gdbstring):GDBInteger;
 var
-  {temp,}psubsymbol:PGDBByte;
+  psubsymbol:PGDBByte;
   ppolycount:longint;
-  i,j,{poz,}{code,}sizeshp,sizeshx,stackheap:GDBInteger;
+  i,j,sizeshp,sizeshx,stackheap:GDBInteger;
   baselen,ymin,ymax,xmin,xmax,x,y,x1,y1,xb,yb,r,startangle,angle,normal,hordlen,tgl:fontfloat;
   stack:array[0..4,0..1] of fontfloat;
-  tr:{array[1..3,0..1] of fontfloat}tarcrtmodify;
+  tr:tarcrtmodify;
   hi,lo,byt,byt2,startoffset,endoffset:GDBByte;
   subsymbol:GDBInteger;
   int:GDBInteger;
   dx,dy:GDBShortint;
   draw:GDBBoolean;
-  //ff:GDBInteger;
   onlyver:GDBInteger;
   psyminfo,psubsyminfo:PGDBsymdolinfo;
   inccounter:integer;
   tbool:boolean;
+  GeomDataIndex:integer;
 procedure ProcessMinMax(_x,_y:fontfloat);
 begin
       if _y>ymax then
@@ -73,14 +73,10 @@ var
   ad:TArcData;
   j:integer;
 begin
-     {ine:=f.readworld(breakshp,ignoreshp);
-     dx:=strtoint(line);
-     line:=f.readworld(breakshp,ignoreshp);
-     dy:=strtoint(line);}
-     tr.p1.x{[1,0]}:=x;
-     tr.p1.y{[1,1]}:=y;
-     tr.p3.x{[2,0]}:=x+dx*baselen;
-     tr.p3.y{[2,1]}:=y+dy*baselen;
+     tr.p1.x:=x;
+     tr.p1.y:=y;
+     tr.p3.x:=x+dx*baselen;
+     tr.p3.y:=y+dy*baselen;
      x1:=dx*baselen;
      y1:=dy*baselen;
      hordlen:=sqrt(sqr(x1)+sqr(y1));
@@ -96,90 +92,62 @@ begin
 
      incpshxdata;
      int:=pShortint(pshxdata)^;
-     {line:=f.readworld(breakshp,ignoreshp);
-     int:=strtoint(line);}
      normal:=-int*hordlen/2/127;
-     tr.p2.x{[3,0]}:=x+x1*normal;
-     tr.p2.y{[3,1]}:=y+y1*normal;
+     tr.p2.x:=x+x1*normal;
+     tr.p2.y:=y+y1*normal;
      if draw then
        begin
+           ProcessMinMax(tr.p1.x,tr.p1.y);
+           ProcessMinMax(tr.p2.x,tr.p2.y);
+           ProcessMinMax(tr.p3.x,tr.p3.y);
+           if GetArcParamFrom3Point2D(tr,ad) then
+           begin
+             startangle:=ad.startangle;
+             angle:=ad.endangle-ad.startangle;
+             if angle<0 then angle := 2*pi+angle;
+             PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXPoly);
+             ppolycount:=PSHXFont(pf^.font).SHXdata.Count;
+             PSHXFont(pf^.font).SHXdata.AllocData(sizeof(GDBWord));
+             inc(sizeshx);
 
-                                    begin
-                                         ProcessMinMax(tr.p1.x,tr.p1.y);
-                                         ProcessMinMax(tr.p2.x,tr.p2.y);
-                                         ProcessMinMax(tr.p3.x,tr.p3.y);
-                                         {ProcessMinMax(tr[1,0],tr[1,1]);
-                                         ProcessMinMax(tr[2,0],tr[2,1]);
-                                         ProcessMinMax(tr[3,0],tr[3,1]);}
-                                      {if tr[1,1]>ymax then
-                                        ymax:=tr[1,1];
-                                      if tr[1,1]<ymin then
-                                        ymin:=tr[1,1];
-                                      if tr[3,1]>ymax then
-                                        ymax:=tr[3,1];
-                                      if tr[3,1]<ymin then
-                                        ymin:=tr[3,1];
-                                      if tr[2,1]>ymax then
-                                        ymax:=tr[2,1];
-                                      if tr[2,1]<ymin then
-                                        ymin:=tr[2,1];}
-                                    end;
-         if GetArcParamFrom3Point2D(tr,ad) then
-                 begin
-                 startangle:=ad.startangle;
-                 angle:=ad.endangle-ad.startangle;
-                 if angle<0 then angle := 2*pi+angle;
-                 PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXPoly);
-                 ppolycount:=PSHXFont(pf^.font).SHXdata.Count;
-                 PSHXFont(pf^.font).SHXdata.AllocData(sizeof(GDBWord));
-                 inc(sizeshx);
-                 sizeshp:=0;
-                 {tf:=tr.p1.x;
-                 pf^.SHXdata.AddFontFloat(@tf);
-                 tf:=tr.p1.y;
-                 pf^.SHXdata.AddFontFloat(@tf);}
-                 for j:=0 to arccount do
+             sizeshp:=0;
+             for j:=0 to arccount do
+               begin
+                 x1:=ad.p.x+(ad.r)*cos(startangle+j/arccount*angle);
+                 y1:=ad.p.y+(ad.r)*sin(startangle+j/arccount*angle);
+                 if draw then
                    begin
-                     x1:=ad.p.x+(ad.r)*cos(startangle+j/arccount*angle);
-                     y1:=ad.p.y+(ad.r)*sin(startangle+j/arccount*angle);
-                     if draw then
-                       begin
-                                    ProcessMinMax(x1,y1);
-                         PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
-                         PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
-                         inc(sizeshp);
-                       end;
+                     ProcessMinMax(x1,y1);
+                     PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
+                     PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
+                     inc(sizeshp);
+                     if j=0 then
+                                begin
+                                   GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
+                                   pf^.font.FontData.LLprimitives.AddLLPPolyLine(GeomDataIndex,arccount);
+                                end
+                            else
+                                pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
                    end;
-                   {x:=x1;
-                   y:=y1;}
-                   pGDBWord(PSHXFont(pf^.font).SHXdata.getelement(ppolycount))^:=sizeshp;
-                 end
+               end;
+             pGDBWord(PSHXFont(pf^.font).SHXdata.getelement(ppolycount))^:=sizeshp;
+           end
          else
-         begin
-         PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);
-         tf:=tr.p1.x;
-         PSHXFont(pf^.font).SHXdata.AddFontFloat(@tf);
-         tf:=tr.p1.y;
-         PSHXFont(pf^.font).SHXdata.AddFontFloat(@tf);
-         tf:=tr.p3.x;
-         PSHXFont(pf^.font).SHXdata.AddFontFloat(@tf);
-         tf:=tr.p3.y;
-         PSHXFont(pf^.font).SHXdata.AddFontFloat(@tf);
-         inc(sizeshx);
-         {pf^.SHXdata.AddByteByVal(SHXLine);
-         tf:=tr.p2.x;
-         pf^.SHXdata.AddFontFloat(@tf);
-         tf:=tr.p2.y;
-         pf^.SHXdata.AddFontFloat(@tf);
-         tf:=tr.p3.x;
-         pf^.SHXdata.AddFontFloat(@tf);
-         tf:=tr.p3.y;
-         pf^.SHXdata.AddFontFloat(@tf);
-         inc(sizeshx);}
-         end;
+           begin
+             PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);
+             tf:=tr.p1.x;
+             PSHXFont(pf^.font).SHXdata.AddFontFloat(@tf);
+             tf:=tr.p1.y;
+             PSHXFont(pf^.font).SHXdata.AddFontFloat(@tf);
+             tf:=tr.p3.x;
+             PSHXFont(pf^.font).SHXdata.AddFontFloat(@tf);
+             tf:=tr.p3.y;
+             PSHXFont(pf^.font).SHXdata.AddFontFloat(@tf);
+             inc(sizeshx);
+           end;
        end;
-       x:=tr.p3.x{[2,0]};
-       y:=tr.p3.y{[2,1]};
+       x:=tr.p3.x;
+       y:=tr.p3.y;
 end;
 begin
             inccounter:=0;
@@ -289,26 +257,18 @@ begin
                                     begin
                                          ProcessMinMax(x,y);
                                          ProcessMinMax(x1,y1);
-                                      {if y>ymax then
-                                        ymax:=y;
-                                      if y<ymin then
-                                        ymin:=y;
-                                      if y1>ymax then
-                                        ymax:=y1;
-                                      if y1<ymin then
-                                        ymin:=y1;}
                                     end;
                                                                                                                                                                                                                 //pGDBByte(pdata)^:=SHXLine;
                                                                                                                                                                                                                 //inc(pdata,sizeof(SHXLine));
-                                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);//---------------------pfontfloat(pdata)^:=x1;
-                                  //---------------------inc(pdata,sizeof(fontfloat));
-                                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);//---------------------pfontfloat(pdata)^:=y1;
-                                  //---------------------inc(pdata,sizeof(fontfloat));
-                                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);//---------------------pfontfloat(pdata)^:=x;
-                                  //---------------------inc(pdata,sizeof(fontfloat));
-                                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);//---------------------pfontfloat(pdata)^:=y;
-                                  //---------------------inc(pdata,sizeof(fontfloat));
+                                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
+                                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
+                                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
+                                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
                                   inc(sizeshx);
+
+                                  GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
+                                  pf^.font.FontData.GeomData.Add2DPoint(x,y);
+                                  pf^.font.FontData.LLprimitives.AddLLPLine(GeomDataIndex);
                                                                                                                                                                                                            //end;
                                 end;
                               SHXPoly:
@@ -326,18 +286,13 @@ begin
                                   if draw then
                                     begin
                                          ProcessMinMax(x1,y1);
-                                      {if y1>ymax then
-                                        ymax:=y1;
-                                      if y1<ymin then
-                                        ymin:=y1;}
-                                    end;//if draw then begin
+                                    end;
 
-                                  //PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);//--------------------- pGDBByte(pdata)^:=SHXLine;
-                                  //--------------------- inc(pdata,sizeof(SHXLine));
-                                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);//---------------------pfontfloat(pdata)^:=x1;
-                                  //---------------------inc(pdata,sizeof(fontfloat));
-                                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);//---------------------pfontfloat(pdata)^:=y1;
-                                  //---------------------inc(pdata,sizeof(fontfloat));
+                                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
+                                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
+
+                                  GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
+                                  pf^.font.FontData.LLprimitives.AddLLPPolyLine(GeomDataIndex,sizeshp);
 
                                   j:=1;
                                   while j<>sizeshp do
@@ -350,17 +305,13 @@ begin
                                       if draw then
                                         begin
                                         ProcessMinMax(x,y);
-                                          {if y>ymax then
-                                            ymax:=y;
-                                          if y<ymin then
-                                            ymin:=y;}
-                                        end;//if draw then begin;
+                                        end;
                                                                                                                                                                                                                         //if draw then begin
 
-                                      PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);//---------------------pfontfloat(pdata)^:=x;
-                                      //---------------------inc(pdata,sizeof(fontfloat));
-                                      PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);//---------------------pfontfloat(pdata)^:=y;
-                                      //---------------------inc(pdata,sizeof(fontfloat));
+                                      PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
+                                      PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
+
+                                      pf^.font.FontData.GeomData.Add2DPoint(x,y);
                                                                                                                                                                                                                                        //end;
                                       inc(j);
                                     end;
@@ -388,30 +339,22 @@ begin
                           y1:=y+dy*baselen;
                           if draw then
                             begin
-                              PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);//---------------------pGDBByte(pdata)^:=SHXLine;
-                              //---------------------inc(pdata,sizeof(SHXLine));
-                              PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);//---------------------pfontfloat(pdata)^:=x;
-                              //---------------------inc(pdata,sizeof(fontfloat));
-                              PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);//---------------------pfontfloat(pdata)^:=y;
-                              //---------------------inc(pdata,sizeof(fontfloat));
-                              PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);//---------------------pfontfloat(pdata)^:=x1;
-                              //---------------------inc(pdata,sizeof(fontfloat));
-                              PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);//---------------------pfontfloat(pdata)^:=y1;
-                              //---------------------inc(pdata,sizeof(fontfloat));
+                              PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);
+                              PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
+                              PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
+                              PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
+                              PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
+
+                              GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
+                              pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
+                              pf^.font.FontData.LLprimitives.AddLLPLine(GeomDataIndex);
+
                               inc(sizeshx);
                               if draw then
                                 begin
                                 ProcessMinMax(x,y);
                                 ProcessMinMax(x1,y1);
-                                  {if y>ymax then
-                                    ymax:=y;
-                                  if y<ymin then
-                                    ymin:=y;
-                                  if y1>ymax then
-                                    ymax:=y1;
-                                  if y1<ymin then
-                                    ymin:=y1;}
-                                end//if draw then begin
+                                end
 
                             end;
                           x:=x1;
@@ -446,6 +389,10 @@ begin
                                               sizeshp:=0;
                       PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
                       PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
+
+                      GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
+                      pf^.font.FontData.LLprimitives.AddLLPPolyLine(GeomDataIndex,5{баба ягодка опять, кто считать будет?});
+
                             end;
                       while (dx<>0)or(dy<>0) do
                         begin
@@ -455,14 +402,13 @@ begin
                               PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
                               PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
                               inc(sizeshp);
+
+                              pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
+
                               if onlyver=0 then
                               begin
                                          ProcessMinMax(x1,y1);
-                                {if y1>ymax then
-                                  ymax:=y1;
-                                if y1<ymin then
-                                  ymin:=y1;}
-                              end//if draw then begin
+                              end
 
                             end;
                         if onlyver=0 then
@@ -517,6 +463,10 @@ begin
                       sizeshp:=1;
                       PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
                       PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
+
+                      GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
+                      pf^.font.FontData.LLprimitives.AddLLPPolyLine(GeomDataIndex,arccount);
+
                       x1:=0;
                       y1:=0;
                       for i:=1 to arccount do
@@ -525,9 +475,12 @@ begin
                           y1:=yb+r*sin(startangle+i/arccount*angle);
                           if draw then
                             begin
-                                         ProcessMinMax(x1,y1);
+                              ProcessMinMax(x1,y1);
                               PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
                               PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
+
+                              pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
+
                               inc(sizeshp);
                             end;
                         end;
@@ -568,6 +521,10 @@ begin
                    sizeshp:=1;
                    PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
                    PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
+
+                   GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
+                   pf^.font.FontData.LLprimitives.AddLLPPolyLine(GeomDataIndex,arccount);
+
                    x1:=0;
                    y1:=0;
                    for i:=1 to arccount do
@@ -580,6 +537,9 @@ begin
                               PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
                               PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
                               inc(sizeshp);
+
+                              pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
+
                          end;
                      end;
                    x:=x1;
@@ -643,28 +603,19 @@ begin
                             y1:=y+byt2*y1*baselen;
                             if draw then
                               begin
-                                PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);//---------------------pGDBByte(pdata)^:=SHXLine;
-                                //---------------------inc(pdata,sizeof(SHXLine));
-                                PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);//---------------------pfontfloat(pdata)^:=x;
-                                //---------------------inc(pdata,sizeof(fontfloat));
-                                PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);//---------------------pfontfloat(pdata)^:=y;
-                                //---------------------inc(pdata,sizeof(fontfloat));
-                                PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);//---------------------pfontfloat(pdata)^:=x1;
-                                //---------------------inc(pdata,sizeof(fontfloat));
-                                PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);//---------------------pfontfloat(pdata)^:=y1;
-                                //---------------------inc(pdata,sizeof(fontfloat));
+                                PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);
+                                PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
+                                PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
+                                PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
+                                PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
                                 inc(sizeshx);
+
+                                GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
+                                pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
+                                pf^.font.FontData.LLprimitives.AddLLPLine(GeomDataIndex);
+
                                 ProcessMinMax(x,y);
                                 ProcessMinMax(x1,y1);
-                                {if y>ymax then
-                                  ymax:=y;
-                                if y<ymin then
-                                  ymin:=y;
-                                if y1>ymax then
-                                  ymax:=y1;
-                                if y1<ymin then
-                                  ymin:=y1;}
-
                               end;
                             x:=x1;
                             y:=y1;

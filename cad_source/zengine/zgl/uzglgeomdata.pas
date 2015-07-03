@@ -29,10 +29,20 @@ ZGLGeomData={$IFNDEF DELPHI}packed{$ENDIF}object(GDBaseObject)
                                                 destructor done;virtual;
                                                 procedure Clear;virtual;
                                                 procedure Shrink;virtual;
+                                                function Add2DPoint(const x,y:fontfloat):TArrayIndex;virtual;
                                           end;
 {Export-}
 implementation
 uses log;
+function ZGLGeomData.Add2DPoint(const x,y:fontfloat):TArrayIndex;
+var
+    vs:GDBvertex3S;
+begin
+     vs.x:=x;
+     vs.y:=y;
+     vs.z:=0;
+     result:=Vertex3S.add(@vs);
+end;
 constructor ZGLGeomData.init;
 begin
   Vertex3S.init({$IFDEF DEBUGBUILD}'{ZGLVectorObject.Vertex3S}',{$ENDIF}100);

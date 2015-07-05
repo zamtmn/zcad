@@ -299,7 +299,7 @@ begin
                    PLLPsymbol^.Attrib:=LLAttrNeedSolid
                else
                    PLLPsymbol^.Attrib:=LLAttrNothing;
-  if PrimitivesCount>4 then
+  if {PrimitivesCount>4}(VDCopyResultParam.GeomDataIndexMax-VDCopyResultParam.GeomDataIndexMin)>4 then
                            PLLPsymbol^.Attrib:=PLLPsymbol^.Attrib or  LLAttrNeedSimtlify;
   v0:=createvertex(psyminfo^.SymMinX,psyminfo^.SymMinY,0);
   v0:=VectorTransform3d(v0,matr);

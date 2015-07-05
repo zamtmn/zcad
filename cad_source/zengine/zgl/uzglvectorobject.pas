@@ -114,7 +114,7 @@ begin
      result.GeomDataIndexMin:=dest.GeomData.Vertex3S.Count;
      result.GeomDataIndexMax:=result.GeomDataIndexMin+CopyParam.GeomDataIndexMax-CopyParam.GeomDataIndexMin;
      result.GeomDataSize:=CopyParam.GeomDataSize;
-     result.GeomDataAddr:=dest.GeomData.Vertex3S.AllocData(CopyParam.GeomDataSize);
+     result.GeomDataAddr:=dest.GeomData.Vertex3S.AllocData({CopyParam.GeomDataSize}CopyParam.GeomDataIndexMax-CopyParam.GeomDataIndexMin+1);
      Move(CopyParam.GeomDataAddr^,result.GeomDataAddr^,CopyParam.GeomDataSize);
 end;
 procedure ZGLVectorObject.MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:GDBInteger;const matrix:DMatrix4D);

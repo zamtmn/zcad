@@ -358,8 +358,8 @@ FreeElProc=procedure (p:GDBPointer);
 TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
 PGDBsymdolinfo=^GDBsymdolinfo;
 GDBsymdolinfo=packed record
-    addr: GDBInteger;
-    size: GDBWord;
+    LLPrimitiveStartIndex: GDBInteger;
+    LLPrimitiveCount: GDBInteger;
     NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: GDBDouble;
     Name:GDBString;
     Number:GDBInteger;

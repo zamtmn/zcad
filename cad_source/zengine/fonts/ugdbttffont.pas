@@ -216,19 +216,9 @@ var
    v:GDBFontVertex2D;
    len: GDBWord;
    count:integer;
-begin
-     {v.x:=0;
-     v.y:=0;
-     OGLSM.TessVertex(tesselator,@v,@ttessv);
-     v.x:=1;
-     v.y:=0;
-     OGLSM.TessVertex(tesselator,@v,@ttessv);
-     v.x:=1;
-     v.y:=1;
-     OGLSM.TessVertex(tesselator,@v,@ttessv);
-     v.x:=0;
-     v.y:=1;
-     OGLSM.TessVertex(tesselator,@v,@ttessv);}
+begin//----//
+     exit;
+     {
      bs.EndCountur;
      lastv.x:=Infinity;
      lastv.y:=Infinity;
@@ -284,70 +274,22 @@ begin
              end;
 
            OGLSM.TessBeginContour(tesselator);
-           //si.TrianglesDataInfo.TrianglesAddr:=pttf^.TriangleData.count;
-           //si.TrianglesDataInfo.TrianglesSize:=3;
            for count:=oldtparrayindex to tparrayindex-2 do
-           //for count:=tparrayindex-2 downto oldtparrayindex do
            begin
                 OGLSM.TessVertex(tesselator,@tparray[count],@tparray[count]);
-                //gluTessVertex(tesselator, @tparray[count], @tparray[count]);
-
-                //trp.x:=tparray[count].x;
-                //trp.y:=tparray[count].y;
-                //ptrdata^.Add(@trp);
-                //TessVertexCallBack(@tparray[count],nil);
-
            end;
 
            OGLSM.TessEndContour(tesselator);
+end;
+}
 
-
-           //bs.EndCountur;
-
-           (*
-           gluTessBeginContour(tesselator);
-                   coord[0].x := 0.35337424278259277;
-                   coord[0].y := 0;
-                   coord[0].z := 0;
-                   gluTessVertex(tesselator, @coord[0], @coord[0]);
-                   coord[1].x := 0.35337424278259277;
-                   coord[1].y := 0.85889571905136108;
-                   coord[1].z := 0;
-                   gluTessVertex(tesselator, @coord[1], @coord[1]);
-                   coord[2].x := 0.032719835638999939;
-                   coord[2].y := 0.85889571905136108;
-                   coord[2].z := 0;
-                   gluTessVertex(tesselator, @coord[2], @coord[2]);
-                   coord[3].x := 0.032719835638999939;
-                   coord[3].y := 0.97505110502243042;
-                   coord[3].z := 0;
-
-                   gluTessVertex(tesselator, @coord[3], @coord[3]);
-                   coord[4].x := 0.80490797758102417;
-                   coord[4].y := 0.97505110502243042;
-                   coord[4].z := 0;
-                   gluTessVertex(tesselator, @coord[4], @coord[4]);
-                   coord[5].x := 0.80490797758102417;
-                   coord[5].y := 0.85889571905136108;
-                   coord[5].z := 0;
-                   gluTessVertex(tesselator, @coord[5], @coord[5]);
-                   coord[6].x := 0.48261758685112;
-                   coord[6].y := 0.85889571905136108;
-                   coord[6].z := 0;
-                   gluTessVertex(tesselator, @coord[6], @coord[6]);
-                   coord[7].x := 0.48261758685112;
-                   coord[7].y := 0;
-                   coord[7].z := 0;
-                   gluTessVertex(tesselator, @coord[7], @coord[7]);
-
-                 gluTessEndContour(tesselator);*)
 end;
 begin
   k:=1;
   {$if FPC_FULlVERSION>=20701}
   k:=1/pttf^.ftFont.CapHeight;
   {$ENDIF}
-  BS.shx:=@pttf^.SHXdata;
+  BS.shx:=@pttf^.FontData;//----//
 
   BS.fmode:=TSM_WaitStartCountur;
   glyph:=pttf^.ftFont.Glyph[{i}si.GlyphIndex];
@@ -356,14 +298,14 @@ begin
   //if chcode=56 then
   //                  chcode:=chcode;
   si.PSymbolInfo:=pttf^.GetOrCreateSymbolInfo(chcode);
-  BS.shxsize:=@si.PSymbolInfo.size;
-  si.PSymbolInfo.addr:=pttf.SHXdata.Count;
+  BS.shxsize:=@si.PSymbolInfo.LLPrimitiveCount;
+  //----//si.PSymbolInfo.addr:=pttf.SHXdata.Count;
   si.PSymbolInfo.w:=glyph.Bounds.Right*k/64;
   si.PSymbolInfo.NextSymX:=glyph.Advance*k;
   si.PSymbolInfo.SymMaxX:=si.PSymbolInfo.NextSymX;
   si.PSymbolInfo.SymMinX:=0;
   si.PSymbolInfo.h:=glyph.Bounds.Top*k/64;
-  si.PSymbolInfo.size:=0;
+  si.PSymbolInfo.LLPrimitiveCount:=0;
   si.TrianglesDataInfo.TrianglesAddr:=pttf^.TriangleData.count;
   si.TrianglesDataInfo.TrianglesSize:=pttf^.TriangleData.count;
   ptrdata:=@pttf^.TriangleData;
@@ -401,7 +343,7 @@ begin
                        begin
                             scx:=x1;
                             scy:=y1;
-                            startcounturindex:=pttf.SHXdata.Count;
+                            //----//startcounturindex:=pttf.SHXdata.Count;
                             startcountur:=false;
                        end
   else
@@ -528,7 +470,7 @@ begin
      if symbol<256 then
                        begin
                        result:=@symbolinfo[symbol];
-                       if result^.addr=0 then
+                       if result^.LLPrimitiveStartIndex=-1 then
                                         result:=@symbolinfo[ord('?')];
                        end
                    else
@@ -542,7 +484,7 @@ begin
                                  result:=@symbolinfo[ord('?')];
                                  exit;
                             end;
-                            if result^.addr=0 then
+                            if result^.LLPrimitiveStartIndex=-1 then
                                              result:=@symbolinfo[ord('?')];
 
                        end;

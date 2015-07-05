@@ -41,6 +41,8 @@ ZGLOptimizerData={$IFNDEF DELPHI}packed{$ENDIF}record
 PTLLPrimitive=^TLLPrimitive;
 TLLPrimitive={$IFNDEF DELPHI}packed{$ENDIF} object
                        function getPrimitiveSize:GDBInteger;virtual;
+                       procedure getGeomIndexs(out imin,imax:GDBInteger);virtual;
+                       procedure CorrectIndexes(offset:GDBInteger);virtual;
                        constructor init;
                        destructor done;
                        function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
@@ -51,16 +53,22 @@ TLLLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index:TLLVertexIndex;{P2Index=P1Index+1}
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
               function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;virtual;
+              procedure getGeomIndexs(out imin,imax:GDBInteger);virtual;
+              procedure CorrectIndexes(offset:GDBInteger);virtual;
         end;
 PTLLTriangle=^TLLTriangle;
 TLLTriangle={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              procedure getGeomIndexs(out imin,imax:GDBInteger);virtual;
+              procedure CorrectIndexes(offset:GDBInteger);virtual;
         end;
 PTLLPoint=^TLLPoint;
 TLLPoint={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               PIndex:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              procedure getGeomIndexs(out imin,imax:GDBInteger);virtual;
+              procedure CorrectIndexes(offset:GDBInteger);virtual;
         end;
 PTLLSymbol=^TLLSymbol;
 TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
@@ -87,6 +95,8 @@ TLLPolyLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index,Count:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
               function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;virtual;
+              procedure getGeomIndexs(out imin,imax:GDBInteger);virtual;
+              procedure CorrectIndexes(offset:GDBInteger);virtual;
         end;
 {Export-}
 implementation
@@ -99,6 +109,14 @@ constructor TLLPrimitive.init;
 begin
 end;
 destructor TLLPrimitive.done;
+begin
+end;
+procedure TLLPrimitive.getGeomIndexs(out imin,imax:GDBInteger);
+begin
+     imin:=-1;
+     imax:=-1;
+end;
+procedure TLLPrimitive.CorrectIndexes(offset:GDBInteger);
 begin
 end;
 function TLLPrimitive.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
@@ -121,16 +139,43 @@ begin
      InRect:=geometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(self.P1Index))^,PGDBvertex3S(geomdata.Vertex3S.getelement(self.P1Index+1))^,frustum);
      result:=getPrimitiveSize;
 end;
+procedure TLLLine.getGeomIndexs(out imin,imax:GDBInteger);
+begin
+     imin:=P1Index;
+     imax:=P1Index+1;
+end;
+procedure TLLLine.CorrectIndexes(offset:GDBInteger);
+begin
+     P1Index:=P1Index+offset;
+end;
 function TLLPoint.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 begin
      Drawer.DrawPoint(PIndex);
      result:=inherited;
+end;
+procedure TLLPoint.getGeomIndexs(out imin,imax:GDBInteger);
+begin
+     imin:=PIndex;
+     imax:=PIndex;
+end;
+procedure TLLPoint.CorrectIndexes(offset:GDBInteger);
+begin
+     PIndex:=PIndex+offset;
 end;
 function TLLTriangle.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 begin
      if not OptData.ignoretriangles then
                                         Drawer.DrawTriangle(P1Index);
      result:=inherited;
+end;
+procedure TLLTriangle.getGeomIndexs(out imin,imax:GDBInteger);
+begin
+     imin:=P1Index;
+     imax:=P1Index+2;
+end;
+procedure TLLTriangle.CorrectIndexes(offset:GDBInteger);
+begin
+     P1Index:=P1Index+offset;
 end;
 function TLLPolyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 var
@@ -143,6 +188,15 @@ begin
      inc(index);
   end;
   result:=inherited;
+end;
+procedure TLLPolyLine.getGeomIndexs(out imin,imax:GDBInteger);
+begin
+     imin:=P1Index;
+     imax:=P1Index+Count;
+end;
+procedure TLLPolyLine.CorrectIndexes(offset:GDBInteger);
+begin
+     P1Index:=P1Index+offset;
 end;
 function TLLPolyLine.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;
 var

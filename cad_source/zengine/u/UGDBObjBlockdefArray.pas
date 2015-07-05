@@ -37,7 +37,7 @@ GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*O
                       function create(name:GDBString):PGDBObjBlockdef;virtual;
                       procedure freeelement(p:GDBPointer);virtual;
                       procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                      procedure Grow;virtual;
+                      procedure Grow(newmax:GDBInteger=0);virtual;
                       procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
                     end;
 {Export-}

@@ -36,7 +36,7 @@ GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(OpenArray)
                       function Add(p:GDBPointer):TArrayIndex;virtual;
                       function AddRef(var obj):TArrayIndex;virtual;
                       procedure Shrink;virtual;
-                      procedure Grow;virtual;
+                      procedure Grow(newmax:GDBInteger=0);virtual;
                       procedure setsize(nsize:TArrayIndex);
                       procedure iterategl(proc:GDBITERATEPROC);
                       function getelement(index:TArrayIndex):GDBPointer;
@@ -62,8 +62,8 @@ begin
   if parray=nil then
                     createarray;
   if count+sdata>max then
-                         Grow;
-  result:=pointer(GDBPlatformUInt(parray)+count);
+                         Grow((count+sdata)*2);
+  result:=pointer(GDBPlatformUInt(parray)+count*size);
   {$IFDEF FILL0ALLOCATEDMEMORY}
   fillchar(result^,sdata,0);
   {$ENDIF}
@@ -250,8 +250,10 @@ max:=nsize;
 end;
 procedure GDBOpenArray.Grow;
 begin
-     parray := enlargememblock({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}parray, size * max, 2*size * max);
-     max:=max+max;
+     if newmax<=0 then
+                     newmax:=2*max;
+     parray := enlargememblock({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}parray, size * max, size * newmax);
+     max:=newmax;
 end;
 
 function GDBOpenArray.add;

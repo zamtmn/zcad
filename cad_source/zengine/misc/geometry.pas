@@ -119,7 +119,8 @@ function Vertexmorphabs2(const Vector1, Vector2: GDBVertex;a: GDBDouble): GDBVer
 function MatrixMultiply(const M1, M2: DMatrix4D):DMatrix4D;inline;
 function VectorTransform(const V:GDBVertex4D;const M:DMatrix4D):GDBVertex4D;inline;
 procedure normalize4d(var tv:GDBVertex4d);inline;
-function VectorTransform3D(const V:GDBVertex;const M:DMatrix4D):GDBVertex;inline;
+function VectorTransform3D(const V:GDBVertex;const M:DMatrix4D):GDBVertex;overload;inline;
+function VectorTransform3D(const V:GDBVertex3S;const M:DMatrix4D):GDBVertex3S;overload;inline;
 procedure MatrixTranspose(var M: DMatrix4D);inline;
 procedure MatrixNormalize(var M: DMatrix4D);inline;
 function CreateRotationMatrixX(const Sine, Cosine: GDBDouble): DMatrix4D;inline;
@@ -1415,9 +1416,19 @@ begin
 
   Result := pgdbvertex(@tv)^
 end;
-
-
-
+function VectorTransform3D(const V:GDBVertex3S;const M:DMatrix4D):GDBVertex3S;
+var tv: GDBVertex4D;
+begin
+  tv.x:=v.x;
+  tv.y:=v.y;
+  tv.z:=v.z;
+  tv.w:=1;
+  tv:=VectorTransform(tv,m);
+  normalize4d(tv);
+  result.x:=tv.x;
+  result.y:=tv.y;
+  result.z:=tv.z;
+end;
 function Vertexlength(const Vector1, Vector2: GDBVertex): GDBDouble;
 begin
   result := sqrt(sqr(vector1.x - vector2.x) + sqr(vector1.y - vector2.y) + sqr(vector1.z - vector2.z));

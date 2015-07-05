@@ -80,6 +80,8 @@ var
   trcount:integer;
   LLSymbolLineCreated:boolean;
   PLLSymbolLine:PTLLSymbolLine;
+  VDCopyParam,VDCopyResultParam:TZGLVectorDataCopyParam;
+  symoutbound:GDBBoundingBbox;
 begin
   if _symbol=100 then
                       _symbol:=_symbol;
@@ -122,9 +124,8 @@ begin
             inc(trcount);
        end;
   end;
-  //deb:=psyminfo^;
-  psymbol := self.font.GetSymbolDataAddr(psyminfo.addr);
-  if {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size <> 0 then
+  //psymbol := self.font.GetSymbolDataAddr(psyminfo.addr);
+  if psyminfo.LLPrimitiveCount<>0 then
   begin;
        if LLSymbolLineIndex=-1 then
                                    begin
@@ -133,8 +134,23 @@ begin
                                    end;
        if LLSymbolIndex=-1 then
                                LLSymbolIndex:=geom.LLprimitives.AddLLPSymbol;
+    VDCopyParam:=font.FontData.GetCopyParam(psyminfo.LLPrimitiveStartIndex,psyminfo.LLPrimitiveCount);
+    VDCopyResultParam:=font.FontData.CopyTo(geom,VDCopyParam);
+    geom.CorrectIndexes(VDCopyResultParam.LLPrimitivesDataAddr,psyminfo.LLPrimitiveCount,VDCopyResultParam.GeomDataIndexMin-VDCopyParam.GeomDataIndexMin);
+    geom.MulOnMatrix(VDCopyResultParam.GeomDataIndexMin,VDCopyResultParam.GeomDataIndexMax,matr);
+    symoutbound:=geom.GetBoundingBbox(VDCopyResultParam.GeomDataIndexMin,VDCopyResultParam.GeomDataIndexMax);
+    geom.MulOnMatrix(VDCopyResultParam.GeomDataIndexMin,VDCopyResultParam.GeomDataIndexMax,objmatrix);
+    if minx>symoutbound.LBN.x then
+                                   minx:=symoutbound.LBN.x;
+    if miny>symoutbound.LBN.y then
+                                   miny:=symoutbound.LBN.y;
+    if maxx<symoutbound.RTF.x then
+                                   maxx:=symoutbound.RTF.x;
+    if maxy<symoutbound.RTF.y then
+                                   maxy:=symoutbound.RTF.y;
+
     PrimitivesCount:=0;
-    for j := 1 to {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size do
+    {for j := 1 to psyminfo.size do
     begin
       case GDBByte(psymbol^) of
         SHXLine:
@@ -256,7 +272,7 @@ begin
             //pv.count:=-1;
 
             pv3.coord:=PGDBvertex(@v)^;
-            pv3.count:={-1}k-len+1;
+            pv3.count:=k-len+1;
 
             pv3.LineNumber:=LLSymbolLineIndex;
             //tv:=pv3.coord;
@@ -272,7 +288,7 @@ begin
             end;
           end;
       end;
-    end;
+    end;}
   end;
   if LLSymbolIndex<>-1 then
   begin

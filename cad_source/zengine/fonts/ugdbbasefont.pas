@@ -28,11 +28,11 @@ BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               unicode:GDBBoolean;
               symbolinfo:TSymbolInfoArray;
               unisymbolinfo:GDBOpenArrayOfData;
-              SHXdata:GDBOpenArrayOfByte;
+              //----//SHXdata:GDBOpenArrayOfByte;
               FontData:ZGLVectorObject;
               constructor init;
               destructor done;virtual;
-              function GetSymbolDataAddr(offset:integer):pointer;virtual;
+              //----//function GetSymbolDataAddr(offset:integer):pointer;virtual;
               function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;
 
               function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;virtual;
@@ -50,13 +50,13 @@ begin
      inherited;
      for i:=0 to 255 do
      begin
-      symbolinfo[i].addr:=0;
-      symbolinfo[i].size:=0;
+      symbolinfo[i].LLPrimitiveStartIndex:=-1;
+      symbolinfo[i].LLPrimitiveCount:=0;
       symbolinfo[i].LatestCreate:=false;
      end;
      unicode:=false;
      unisymbolinfo.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1000,sizeof(GDBUNISymbolInfo));
-     SHXdata.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1024);
+     //----//SHXdata.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1024);
      FontData.init;
 end;
 destructor BASEFont.done;
@@ -77,7 +77,7 @@ begin
            pobj:=unisymbolinfo.iterate(ir);
      until pobj=nil;
      unisymbolinfo.{FreeAnd}Done;
-     SHXdata.done;
+     //----//SHXdata.done;
      FontData.done;
 end;
 function BASEFont.GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
@@ -91,7 +91,7 @@ begin
      if symbol<256 then
                        begin
                        result:=@symbolinfo[symbol];
-                       if result^.addr=0 then
+                       if result^.LLPrimitiveStartIndex=-1 then
                                         result:=@symbolinfo[ord('?')];
                        end
                    else
@@ -105,7 +105,7 @@ begin
                                  result:=@symbolinfo[ord('?')];
                                  exit;
                             end;
-                            if result^.addr=0 then
+                            if result^.LLPrimitiveStartIndex=-1 then
                                              result:=@symbolinfo[ord('?')];
 
                        end;
@@ -114,10 +114,10 @@ function BASEFont.GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;
 begin
      result:=nil;
 end;
-function BASEFont.GetSymbolDataAddr(offset:integer):pointer;
-begin
-     result:=SHXdata.getelement(offset);
-end;
+//----//function BASEFont.GetSymbolDataAddr(offset:integer):pointer;
+//----//begin
+//----//     result:=SHXdata.getelement(offset);
+//----//end;
 function BASEFont.GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
 var
    usi:GDBUNISymbolInfo;
@@ -131,11 +131,11 @@ begin
                             if result=nil then
                             begin
                                  usi.symbol:=symbol;
-                                 usi.symbolinfo.addr:=0;
+                                 usi.symbolinfo.LLPrimitiveStartIndex:=-1;
                                  usi.symbolinfo.NextSymX:=0;
                                  usi.symbolinfo.SymMaxY:=0;
                                  usi.symbolinfo.h:=0;
-                                 usi.symbolinfo.size:=0;
+                                 usi.symbolinfo.LLPrimitiveCount:=0;
                                  usi.symbolinfo.w:=0;
                                  usi.symbolinfo.SymMinY:=0;
                                  usi.symbolinfo.LatestCreate:=false;

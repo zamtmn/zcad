@@ -486,7 +486,7 @@ begin
      createfield;
      if owner<>nil then
                        bp.ListPos.owner:=owner;
-     geom.init({$IFDEF DEBUGBUILD}'GDBObjEntity'{$ENDIF});
+     geom.init({$IFDEF DEBUGBUILD}{$IFNDEF SEPARATEMEMUSAGE}'GDBObjEntity'{$ELSE}pchar(GetObjTypeName){$ENDIF}{$ENDIF});
      GetDXFIOFeatures.RunConstructorFeature(@self);
      GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;

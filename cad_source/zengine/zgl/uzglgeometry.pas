@@ -46,7 +46,7 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
                 procedure DrawGeometry(var rc:TDrawContext);virtual;
                 procedure DrawNiceGeometry(var rc:TDrawContext);virtual;
                 procedure DrawLLPrimitives(var rc:TDrawContext;drawer:TZGLAbstractDrawer);
-                constructor init;
+                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar{$ENDIF});
                 destructor done;virtual;
                 procedure DrawLineWithLT(const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);virtual;
                 procedure DrawPolyLineWithLT(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);virtual;

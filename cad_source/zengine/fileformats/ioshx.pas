@@ -21,7 +21,7 @@ unit ioshx;
 interface
 uses UGDBFontManager,ugdbshxfont,geometry,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
      ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,log,sysutils,
-     UGDBOpenArrayOfByte,gdbasetypes,SysInfo,gdbase,memman,gdbobjectsconstdef;
+     UGDBOpenArrayOfByte,gdbasetypes,SysInfo,gdbase,memman,gdbobjectsconstdef,uzgprimitives;
 const
   fontdirect:array[0..$F,0..1] of GDBDouble=
   ((1,0),(1,0.5),(1,1),(0.5,1),(0,1),(-0.5,1),(-1,1),(-1,0.5),(-1,0),(-1,-0.5),(-1,-1),(-0.5,-1),(0,-1),(0.5,-1),(1,-1),(1,-0.5));
@@ -51,6 +51,7 @@ var
   inccounter:integer;
   tbool:boolean;
   GeomDataIndex:integer;
+  LLPolyLineIndexInArray:TArrayIndex;
 procedure ProcessMinMax(_x,_y:fontfloat);
 begin
       if _y>ymax then
@@ -151,6 +152,8 @@ begin
 end;
 begin
             inccounter:=0;
+            if symbol=1055{П}then
+                                 symbol:=symbol;
             psyminfo:=pf^.GetOrCreateSymbolInfo(symbol);
             psyminfo.{addr}LLPrimitiveStartIndex:=PSHXFont(pf^.font).FontData.LLprimitives{SHXdata}.Count;//----//
             onlyver:=0;
@@ -391,7 +394,7 @@ begin
                       //----//PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
 
                       GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
-                      pf^.font.FontData.LLprimitives.AddLLPPolyLine(GeomDataIndex,5{баба ягодка опять, кто считать будет?});
+                      LLPolyLineIndexInArray:=pf^.font.FontData.LLprimitives.AddLLPPolyLine(GeomDataIndex,0{баба ягодка опять, кто считать будет?});
 
                             end;
                       while (dx<>0)or(dy<>0) do
@@ -404,6 +407,7 @@ begin
                               inc(sizeshp);
 
                               pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
+                              inc(PTLLPolyLine(pf^.font.FontData.LLprimitives.getelement(LLPolyLineIndexInArray))^.Count);
 
                               if onlyver=0 then
                               begin

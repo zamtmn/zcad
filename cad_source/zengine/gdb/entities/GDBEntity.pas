@@ -477,7 +477,7 @@ begin
   vp.LineType:={''}nil;
   vp.LineTypeScale:=1;
   bp.ListPos.owner:=own;
-  geom.init;
+  geom.init({$IFDEF DEBUGBUILD}'GDBObjEntity'{$ENDIF});
   GetDXFIOFeatures.RunConstructorFeature(@self);
   GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
@@ -486,7 +486,7 @@ begin
      createfield;
      if owner<>nil then
                        bp.ListPos.owner:=owner;
-     geom.init;
+     geom.init({$IFDEF DEBUGBUILD}'GDBObjEntity'{$ENDIF});
      GetDXFIOFeatures.RunConstructorFeature(@self);
      GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;

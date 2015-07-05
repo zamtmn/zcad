@@ -57,7 +57,7 @@ begin
      unicode:=false;
      unisymbolinfo.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1000,sizeof(GDBUNISymbolInfo));
      //----//SHXdata.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1024);
-     FontData.init;
+     FontData.init({$IFDEF DEBUGBUILD}'BASEFont.init'{$ENDIF});
 end;
 destructor BASEFont.done;
 var i:integer;

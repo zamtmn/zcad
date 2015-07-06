@@ -136,7 +136,7 @@ begin
                                LLSymbolIndex:=geom.LLprimitives.AddLLPSymbol;
     VDCopyParam:=font.FontData.GetCopyParam(psyminfo.LLPrimitiveStartIndex,psyminfo.LLPrimitiveCount);
     VDCopyResultParam:=font.FontData.CopyTo(geom,VDCopyParam);
-    geom.CorrectIndexes(VDCopyResultParam.LLPrimitivesDataAddr,psyminfo.LLPrimitiveCount,VDCopyResultParam.GeomDataIndexMin-VDCopyParam.GeomDataIndexMin);
+    geom.CorrectIndexes(VDCopyResultParam.LLPrimitivesStartIndex,psyminfo.LLPrimitiveCount,VDCopyResultParam.GeomDataIndexMin-VDCopyParam.GeomDataIndexMin);
     geom.MulOnMatrix(VDCopyResultParam.GeomDataIndexMin,VDCopyResultParam.GeomDataIndexMax,matr);
     symoutbound:=geom.GetBoundingBbox(VDCopyResultParam.GeomDataIndexMin,VDCopyResultParam.GeomDataIndexMax);
     geom.MulOnMatrix(VDCopyResultParam.GeomDataIndexMin,VDCopyResultParam.GeomDataIndexMax,objmatrix);

@@ -24,10 +24,10 @@ uses uzgprimitives,uzglgeomdata,uzgprimitivessarray,zcadsysvars,geometry,sysutil
 type
 {Export+}
 TZGLVectorDataCopyParam=packed record
-                             LLPrimitivesDataAddr:GDBPointer;
+                             LLPrimitivesStartIndex:TArrayIndex;
                              LLPrimitivesDataSize:GDBInteger;
-                             GeomDataAddr:GDBPointer;
-                             GeomDataIndexMax,GeomDataIndexMin,GeomDataSize:GDBInteger;
+                             GeomDataIndexMax,GeomDataIndexMin:TArrayIndex;
+                             GeomDataSize:GDBInteger;
                        end;
 
 PZGLVectorObject=^ZGLVectorObject;
@@ -41,17 +41,19 @@ ZGLVectorObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  function CalcTrueInFrustum(frustum:ClipArray; FullCheck:boolean):TInRect;virtual;
                                  function GetCopyParam(LLPStartIndex,LLPCount:GDBInteger):TZGLVectorDataCopyParam;virtual;
                                  function CopyTo(var dest:ZGLVectorObject;CopyParam:TZGLVectorDataCopyParam):TZGLVectorDataCopyParam;virtual;
-                                 procedure CorrectIndexes(PLLPrimitive:PTLLPrimitive;LLPCount,Offset:GDBInteger);virtual;
+                                 procedure CorrectIndexes(LLPrimitivesStartIndex:GDBInteger;LLPCount,Offset:GDBInteger);virtual;
                                  procedure MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:GDBInteger;const matrix:DMatrix4D);virtual;
                                  function GetBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:GDBInteger):GDBBoundingBbox;virtual;
                                end;
 {Export-}
 implementation
-procedure ZGLVectorObject.CorrectIndexes(PLLPrimitive:PTLLPrimitive;LLPCount,Offset:GDBInteger);
+procedure ZGLVectorObject.CorrectIndexes(LLPrimitivesStartIndex:GDBInteger;LLPCount,Offset:GDBInteger);
 var
    i:integer;
    CurrLLPrimitiveSize:GDBInteger;
+   PLLPrimitive:PTLLPrimitive;
 begin
+     PLLPrimitive:=LLprimitives.getelement(LLPrimitivesStartIndex);
      for i:=1 to LLPCount do
      begin
           CurrLLPrimitiveSize:=PLLPrimitive.getPrimitiveSize;
@@ -89,8 +91,8 @@ begin
        end;
 end;
 begin
-     result.LLPrimitivesDataAddr:=LLprimitives.getelement(LLPStartIndex);
-     PLLPrimitive:=result.LLPrimitivesDataAddr;
+     result.LLPrimitivesStartIndex:=LLPStartIndex;
+     PLLPrimitive:=LLprimitives.getelement(LLPStartIndex);
      result.LLPrimitivesDataSize:=0;
      result.GeomDataIndexMin:=-1;
      result.GeomDataIndexMax:=-1;
@@ -102,20 +104,25 @@ begin
           result.LLPrimitivesDataSize:=result.LLPrimitivesDataSize+CurrLLPrimitiveSize;
           inc(pbyte(PLLPrimitive),CurrLLPrimitiveSize);
      end;
-     result.GeomDataAddr:=GeomData.Vertex3S.getelement(result.GeomDataIndexMin);
      result.GeomDataSize:=(result.GeomDataIndexMax-result.GeomDataIndexMin+1)*GeomData.Vertex3S.Size;
 end;
 function ZGLVectorObject.CopyTo(var dest:ZGLVectorObject;CopyParam:TZGLVectorDataCopyParam):TZGLVectorDataCopyParam;
+var
+   LLPrimitivesDestAddr,LLPrimitivesSourceAddr:PTLLPrimitive;
+   DestGeomDataAddr,SourceGeomDataAddr:PGDBvertex3S;
 begin
      result.LLPrimitivesDataSize:=CopyParam.LLPrimitivesDataSize;
-     result.LLPrimitivesDataAddr:=dest.LLprimitives.AllocData(CopyParam.LLPrimitivesDataSize);
-     Move(CopyParam.LLPrimitivesDataAddr^,result.LLPrimitivesDataAddr^,CopyParam.LLPrimitivesDataSize);
+     result.LLPrimitivesStartIndex:=dest.LLprimitives.Count;
+     LLPrimitivesDestAddr:=dest.LLprimitives.AllocData(CopyParam.LLPrimitivesDataSize);
+     LLPrimitivesSourceAddr:=LLprimitives.getelement(CopyParam.LLPrimitivesStartIndex);
+     Move(LLPrimitivesSourceAddr^,LLPrimitivesDestAddr^,CopyParam.LLPrimitivesDataSize);
 
      result.GeomDataIndexMin:=dest.GeomData.Vertex3S.Count;
      result.GeomDataIndexMax:=result.GeomDataIndexMin+CopyParam.GeomDataIndexMax-CopyParam.GeomDataIndexMin;
      result.GeomDataSize:=CopyParam.GeomDataSize;
-     result.GeomDataAddr:=dest.GeomData.Vertex3S.AllocData({CopyParam.GeomDataSize}CopyParam.GeomDataIndexMax-CopyParam.GeomDataIndexMin+1);
-     Move(CopyParam.GeomDataAddr^,result.GeomDataAddr^,CopyParam.GeomDataSize);
+     DestGeomDataAddr:=dest.GeomData.Vertex3S.AllocData(CopyParam.GeomDataIndexMax-CopyParam.GeomDataIndexMin+1);
+     SourceGeomDataAddr:=self.GeomData.Vertex3S.getelement(CopyParam.GeomDataIndexMin);
+     Move(SourceGeomDataAddr^,DestGeomDataAddr^,CopyParam.GeomDataSize);
 end;
 procedure ZGLVectorObject.MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:GDBInteger;const matrix:DMatrix4D);
 var

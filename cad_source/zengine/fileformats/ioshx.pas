@@ -19,7 +19,7 @@
 unit ioshx;
 {$INCLUDE def.inc}
 interface
-uses UGDBFontManager,ugdbshxfont,geometry,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
+uses uzglvectorobject,UGDBFontManager,ugdbshxfont,geometry,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
      ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,log,sysutils,
      UGDBOpenArrayOfByte,gdbasetypes,SysInfo,gdbase,memman,gdbobjectsconstdef,uzgprimitives;
 const
@@ -52,6 +52,7 @@ var
   tbool:boolean;
   GeomDataIndex:integer;
   LLPolyLineIndexInArray:TArrayIndex;
+  VDCopyParam,VDCopyResultParam:TZGLVectorDataCopyParam;
 procedure ProcessMinMax(_x,_y:fontfloat);
 begin
       if _y>ymax then
@@ -224,7 +225,7 @@ begin
                   007:
                     begin
                       incpshxdata;
-                      (*if unicode then
+                      if unicode then
                                      begin
                                           subsymbol:=256*((pshxdata)^);
                                           incpshxdata;
@@ -236,6 +237,13 @@ begin
                                      end;
                       programlog.LogOutFormatStr('(%d)',[integer(subsymbol)],lp_OldPos,LM_Trace);
                       psubsyminfo:=pf^.GetOrCreateSymbolInfo(subsymbol);
+
+                      VDCopyParam:=pf^.font.FontData.GetCopyParam(psubsyminfo.LLPrimitiveStartIndex,psubsyminfo.LLPrimitiveCount);
+                      VDCopyResultParam:=pf^.font.FontData.CopyTo(pf^.font.FontData,VDCopyParam);
+                      //pf^.font.FontData.CorrectIndexes(VDCopyResultParam.LLPrimitivesStartIndex,psyminfo.LLPrimitiveCount,VDCopyResultParam.GeomDataIndexMin-VDCopyParam.GeomDataIndexMin);
+                      //sizeshx:=sizeshx+psubsyminfo.LLPrimitiveCount;
+
+                      (*
                       psubsymbol:=PSHXFont(pf^.font).SHXdata.getelement(psubsyminfo.addr);
                       xb:=x;
                       yb:=y;
@@ -326,7 +334,7 @@ begin
                             end;
                             x:=psubsyminfo.NextSymX+xb;
                             y:=psubsyminfo.SymMinY+yb;
-                          end;
+                          end;*)
                       //dec(pshxdata);*)
                     end;
                   008:

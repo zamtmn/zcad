@@ -53,6 +53,7 @@ var
   GeomDataIndex:integer;
   LLPolyLineIndexInArray:TArrayIndex;
   VDCopyParam,VDCopyResultParam:TZGLVectorDataCopyParam;
+  symoutbound:GDBBoundingBbox;
 procedure ProcessMinMax(_x,_y:fontfloat);
 begin
       if _y>ymax then
@@ -238,10 +239,21 @@ begin
                       programlog.LogOutFormatStr('(%d)',[integer(subsymbol)],lp_OldPos,LM_Trace);
                       psubsyminfo:=pf^.GetOrCreateSymbolInfo(subsymbol);
 
-                      VDCopyParam:=pf^.font.FontData.GetCopyParam(psubsyminfo.LLPrimitiveStartIndex,psubsyminfo.LLPrimitiveCount);
-                      VDCopyResultParam:=pf^.font.FontData.CopyTo(pf^.font.FontData,VDCopyParam);
-                      //pf^.font.FontData.CorrectIndexes(VDCopyResultParam.LLPrimitivesStartIndex,psyminfo.LLPrimitiveCount,VDCopyResultParam.GeomDataIndexMin-VDCopyParam.GeomDataIndexMin);
-                      //sizeshx:=sizeshx+psubsyminfo.LLPrimitiveCount;
+                      if psubsyminfo.LLPrimitiveStartIndex<>-1 then
+                      begin
+                        VDCopyParam:=pf^.font.FontData.GetCopyParam(psubsyminfo.LLPrimitiveStartIndex,psubsyminfo.LLPrimitiveCount);
+                        VDCopyResultParam:=pf^.font.FontData.CopyTo(pf^.font.FontData,VDCopyParam);
+                        pf^.font.FontData.CorrectIndexes(VDCopyResultParam.LLPrimitivesStartIndex,psyminfo.LLPrimitiveCount,VDCopyResultParam.GeomDataIndexMin-VDCopyParam.GeomDataIndexMin);
+                        pf^.font.FontData.MulOnMatrix(VDCopyResultParam.GeomDataIndexMin,VDCopyResultParam.GeomDataIndexMax,MatrixMultiply(CreateScaleMatrix(CreateVertex(baselen*PSHXFont(pf^.font).h,baselen*PSHXFont(pf^.font).h,1)),CreateTranslationMatrix(CreateVertex(x,y,0))));
+                        symoutbound:=pf^.font.FontData.GetBoundingBbox(VDCopyResultParam.GeomDataIndexMin,VDCopyResultParam.GeomDataIndexMax);
+                        ProcessMinMax(symoutbound.LBN.x,symoutbound.LBN.y);
+                        ProcessMinMax(symoutbound.RTF.x,symoutbound.RTF.y);
+                        x:=psubsyminfo.NextSymX+x;
+                        y:=psubsyminfo.SymMinY+y;
+                        sizeshx:=sizeshx+psubsyminfo.LLPrimitiveCount;
+                      end
+                         else
+                           programlog.LogOutFormatStr('IOSHX.CreateSymbol(%d), cannot find subform %d',[integer(symbol),integer(subsymbol)],lp_OldPos,LM_Error);
 
                       (*
                       psubsymbol:=PSHXFont(pf^.font).SHXdata.getelement(psubsyminfo.addr);

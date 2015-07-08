@@ -19,13 +19,13 @@
 unit ugdbttffont;
 {$INCLUDE def.inc}
 interface
-uses ugdbbasefont,beziersolver,math,OGLSpecFunc,uzglfonttriangles2darray,TTTypes,TTObjs,gmap,gutil,EasyLazFreeType,memman,gdbobjectsconstdef,strproc,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
+uses uzglvectorobject,ugdbbasefont,beziersolver,math,OGLSpecFunc,uzglfonttriangles2darray,TTTypes,TTObjs,gmap,gutil,EasyLazFreeType,memman,gdbobjectsconstdef,strproc,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
 type
 PTTTFSymInfo=^TTTFSymInfo;
 TTTFSymInfo=packed record
                       GlyphIndex:Integer;
                       PSymbolInfo:PGDBSymdolInfo;
-                      TrianglesDataInfo:TTrianglesDataInfo;
+                      //-ttf-//TrianglesDataInfo:TTrianglesDataInfo;
                 end;
 {$IFNDEF DELPHI}
 TLessInt={specialize }TLess<integer>;
@@ -37,10 +37,10 @@ TTFFont={$IFNDEF DELPHI}packed{$ENDIF} object({SHXFont}BASEFont)
               ftFont: TFreeTypeFont;
               MapChar:TMapChar;
               MapCharIterator:TMapChar.TIterator;
-              TriangleData:ZGLFontTriangle2DArray;
-              function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;virtual;
-              function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;
-              procedure ProcessTriangleData(ttfsi:TTTFSymInfo);
+              //-ttf-//TriangleData:ZGLFontTriangle2DArray;
+              function GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;virtual;
+              //-ttf-//function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;
+              //-ttf-//procedure ProcessTriangleData(ttfsi:TTTFSymInfo);
               constructor init;
               destructor done;virtual;
         end;
@@ -50,7 +50,7 @@ procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:PTTFFont
 implementation
 uses {math,}log;
 var
-   ptrdata:PZGLFontTriangle2DArray;
+   ptrdata:PZGLVectorObject;
    trmode:Cardinal;
 procedure adddcross(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y:fontfloat);
 const
@@ -146,9 +146,9 @@ begin
                               inc(pointcount);
                               if pointcount=3 then
                                              begin
-                                             ptrdata^.Add(@triangle[0]);
-                                             ptrdata^.Add(@triangle[1]);
-                                             ptrdata^.Add(@triangle[2]);
+                                                  ptrdata^.LLprimitives.AddLLTriangle(ptrdata^.GeomData.Add2DPoint(triangle[0].x,triangle[0].y));
+                                                  ptrdata^.GeomData.Add2DPoint(triangle[1].x,triangle[1].y);
+                                                  ptrdata^.GeomData.Add2DPoint(triangle[2].x,triangle[2].y);
                                              if trmode=GL_TRIANGLES then
                                                                        pointcount:=0;
                                              end;
@@ -159,17 +159,17 @@ begin
                        GL_TRIANGLE_FAN:begin
                                             triangle[1]:=triangle[2];
                                             triangle[2]:=trp;
-                                            ptrdata^.Add(@triangle[0]);
-                                            ptrdata^.Add(@triangle[1]);
-                                            ptrdata^.Add(@triangle[2]);
+                                            ptrdata^.LLprimitives.AddLLTriangle(ptrdata^.GeomData.Add2DPoint(triangle[0].x,triangle[0].y));
+                                            ptrdata^.GeomData.Add2DPoint(triangle[1].x,triangle[1].y);
+                                            ptrdata^.GeomData.Add2DPoint(triangle[2].x,triangle[2].y);
                                        end;
                      GL_TRIANGLE_STRIP:begin
                                             triangle[0]:=triangle[1];
                                             triangle[1]:=triangle[2];
                                             triangle[2]:=trp;
-                                            ptrdata^.Add(@triangle[0]);
-                                            ptrdata^.Add(@triangle[1]);
-                                            ptrdata^.Add(@triangle[2]);
+                                            ptrdata^.LLprimitives.AddLLTriangle(ptrdata^.GeomData.Add2DPoint(triangle[0].x,triangle[0].y));
+                                            ptrdata^.GeomData.Add2DPoint(triangle[1].x,triangle[1].y);
+                                            ptrdata^.GeomData.Add2DPoint(triangle[2].x,triangle[2].y);
                                        end;
                               else begin
                                         triangle[1]:=triangle[1];
@@ -289,7 +289,7 @@ begin
   {$if FPC_FULlVERSION>=20701}
   k:=1/pttf^.ftFont.CapHeight;
   {$ENDIF}
-  BS.shx:=@pttf^.FontData;//----//
+  BS.VectorData:=@pttf^.FontData;//----//
 
   BS.fmode:=TSM_WaitStartCountur;
   glyph:=pttf^.ftFont.Glyph[{i}si.GlyphIndex];
@@ -306,9 +306,9 @@ begin
   si.PSymbolInfo.SymMinX:=0;
   si.PSymbolInfo.h:=glyph.Bounds.Top*k/64;
   si.PSymbolInfo.LLPrimitiveCount:=0;
-  si.TrianglesDataInfo.TrianglesAddr:=pttf^.TriangleData.count;
-  si.TrianglesDataInfo.TrianglesSize:=pttf^.TriangleData.count;
-  ptrdata:=@pttf^.TriangleData;
+  //-ttf-//si.TrianglesDataInfo.TrianglesAddr:=pttf^.TriangleData.count;
+  //-ttf-//si.TrianglesDataInfo.TrianglesSize:=pttf^.TriangleData.count;
+  ptrdata:=@pttf^.FontData;
   tparrayindex:=0;
   if _glyph^.outline.n_contours>0 then
   begin
@@ -385,14 +385,14 @@ begin
   end;
   //EndSymContour;
   OGLSM.TessEndPolygon(tesselator);
-  si.TrianglesDataInfo.TrianglesSize:=pttf^.TriangleData.count-si.TrianglesDataInfo.TrianglesSize;
+  //si.TrianglesDataInfo.TrianglesSize:=pttf^.TriangleData.count-si.TrianglesDataInfo.TrianglesSize;
   OGLSM.DeleteTess(tesselator);
   end;
 end;
 constructor TTFFont.init;
 begin
      inherited;
-     TriangleData.init({$IFDEF DEBUGBUILD}'{4A97D8DA-8B55-41AA-9287-7F0C842AC2D0}',{$ENDIF}200);
+     //-ttf-//TriangleData.init({$IFDEF DEBUGBUILD}'{4A97D8DA-8B55-41AA-9287-7F0C842AC2D0}',{$ENDIF}200);
      ftFont:=TFreeTypeFont.create;
      MapChar:=TMapChar.Create;
      MapCharIterator:=TMapChar.TIterator.Create;
@@ -400,17 +400,17 @@ end;
 destructor TTFFont.done;
 begin
      inherited;
-     TriangleData.done;
+     //-ttf-//TriangleData.done;
      ftFont.Destroy;
      MapCharIterator.Destroy;
      MapChar.Destroy;
 end;
-function TTFFont.GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;
-begin
-     result:=self.TriangleData.getelement(offset);
-end;
-procedure TTFFont.ProcessTriangleData(ttfsi:TTTFSymInfo);
-var
+//-ttf-//function TTFFont.GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;
+//-ttf-//begin
+//-ttf-//     result:=self.TriangleData.getelement(offset);
+//-ttf-//end;
+//-ttf-//procedure TTFFont.ProcessTriangleData(ttfsi:TTTFSymInfo);
+{var
    PTriangles:PGDBFontVertex2D;
    j:integer;
 begin
@@ -426,8 +426,8 @@ begin
           inc(PTriangles);
      end;
 end;
-end;
-function TTFFont.GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
+end;}
+function TTFFont.GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
 var
    CharIterator:TMapChar.TIterator;
    si:TTTFSymInfo;
@@ -441,7 +441,7 @@ begin
                                                           else
                                                               begin
                                                                    cfeatettfsymbol(symbol,si,@self);
-                                                                   ProcessTriangleData(si);
+                                                                   //-ttf-//ProcessTriangleData(si);
                                                                    CharIterator.Value:=si;
                                                                    result:=si.PSymbolInfo;
                                                               end;
@@ -450,7 +450,7 @@ begin
                               begin
                                    if symbol=8709 then
                                                       begin
-                                                           result:=GetOrReplaceSymbolInfo(216,TrianglesDataInfo);
+                                                           result:=GetOrReplaceSymbolInfo(216{//-ttf-//,TrianglesDataInfo});
                                                            exit;
                                                       end
                                                   else
@@ -460,7 +460,7 @@ begin
                                                            result:=si.PSymbolInfo;
                                                       end;
                               end;
-     TrianglesDataInfo:=si.TrianglesDataInfo;
+     //-ttf-//TrianglesDataInfo:=si.TrianglesDataInfo;
      if CharIterator<>nil then
                               CharIterator.Destroy;
      exit;

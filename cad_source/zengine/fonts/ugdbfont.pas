@@ -35,7 +35,7 @@ GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     procedure ItFFT;
     destructor done;virtual;
     function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
-    function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
+    function GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
     procedure CreateSymbol(var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;var LLSymbolLineIndex:TArrayIndex);
   end;
 {EXPORT-}
@@ -71,7 +71,7 @@ var
   //ir:itrec;
   psyminfo:PGDBsymdolinfo;
   //deb:GDBsymdolinfo;
-  TDInfo:TTrianglesDataInfo;
+  //-ttf-//TDInfo:TTrianglesDataInfo;
   PTriangles:PGDBFontVertex2D;
 
   LLSymbolIndex:TArrayIndex;
@@ -93,8 +93,8 @@ begin
   trcount:=0;
   LLSymbolLineCreated:=false;
 
-  psyminfo:=self.GetOrReplaceSymbolInfo(integer(_symbol),TDInfo);
-  if tdinfo.TrianglesSize>0 then
+  psyminfo:=self.GetOrReplaceSymbolInfo(integer(_symbol){//-ttf-//,TDInfo});
+  {//-ttf-//if tdinfo.TrianglesSize>0 then
   begin
     if LLSymbolLineIndex=-1 then
                                 begin
@@ -123,7 +123,7 @@ begin
             inc(PTriangles);
             inc(trcount);
        end;
-  end;
+  end;}
   //psymbol := self.font.GetSymbolDataAddr(psyminfo.addr);
   if psyminfo.LLPrimitiveCount<>0 then
   begin;
@@ -366,11 +366,11 @@ begin
      {GDBGetMem(font,sizeof(SHXFont));
      font^.init;}
 end;
-function GDBfont.GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
+function GDBfont.GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
 //var
    //usi:GDBUNISymbolInfo;
 begin
-     result:=font.GetOrReplaceSymbolInfo(symbol,TrianglesDataInfo);
+     result:=font.GetOrReplaceSymbolInfo(symbol{//-ttf-//,TrianglesDataInfo});
 end;
 function GDBfont.GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
 begin

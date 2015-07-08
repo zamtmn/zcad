@@ -175,7 +175,7 @@ var
   LLSymbolLineIndex:TArrayIndex;
   symlen:GDBInteger;
   sym:word;
-  TDInfo:TTrianglesDataInfo;
+  //-ttf-//TDInfo:TTrianglesDataInfo;
 begin
   LLSymbolLineIndex:=-1;
   pfont:=_pfont;
@@ -221,7 +221,7 @@ begin
     if sym<>1 then
     begin
       m1:=onematrix;
-      m1[3, 0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}{(ord(content[i]))}sym,tdinfo).NextSymX;
+      m1[3, 0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}{(ord(content[i]))}sym{//-ttf-//,tdinfo}).NextSymX;
       matr:=MatrixMultiply(m1,matr);
     end;
   inc(i,symlen);
@@ -531,7 +531,7 @@ var
     objmatrix,matr:dmatrix4d;
     minx,miny,maxx,maxy:GDBDouble;
     j:integer;
-    TDInfo:TTrianglesDataInfo;
+    //-ttf-//TDInfo:TTrianglesDataInfo;
     sym:integer;
     sli:integer;
 begin
@@ -546,7 +546,7 @@ begin
           if ptp.param.PStyle.pfont.font.unicode then
                                                      sym:=ach2uch(sym);
 PTP^.param.PStyle.pfont.CreateSymbol(self,sym,objmatrix,matr,minx,miny,maxx,maxy,sli);
-matr[3,0]:=matr[3,0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]),tdinfo).NextSymX;
+matr[3,0]:=matr[3,0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]){//-ttf-//,tdinfo}).NextSymX;
 end;
 end;
 procedure ZGLGeometry.PlaceOnePattern(var Segmentator:ZSegmentator;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)

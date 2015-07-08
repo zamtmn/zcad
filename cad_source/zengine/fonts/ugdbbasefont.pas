@@ -36,7 +36,7 @@ BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;
 
               function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;virtual;
-              function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;virtual;
+              function GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;virtual;
               function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
               function findunisymbolinfos(symbolname:GDBString):PGDBsymdolinfo;
         end;
@@ -80,12 +80,12 @@ begin
      //----//SHXdata.done;
      FontData.done;
 end;
-function BASEFont.GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
+function BASEFont.GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
 //var
    //usi:GDBUNISymbolInfo;
 begin
-     TrianglesDataInfo.TrianglesAddr:=0;
-     TrianglesDataInfo.TrianglesSize:=0;
+     //-ttf-//TrianglesDataInfo.TrianglesAddr:=0;
+     //-ttf-//TrianglesDataInfo.TrianglesSize:=0;
      if symbol=49 then
                         symbol:=symbol;
      if symbol<256 then

@@ -230,7 +230,7 @@ var
    sh:double;
    i:integer;
    Psymbol:PGDBsymdolinfo;
-   TDInfo:TTrianglesDataInfo;
+   //-ttf-//TDInfo:TTrianglesDataInfo;
    sym:integer;
 procedure processH(Psymbol:PGDBsymdolinfo;param:shxprop);
 begin
@@ -280,7 +280,7 @@ begin
                                                       sym:=byte(PTP^.Text[i]);
                                                       if ptp.param.PStyle.pfont.font.unicode then
                                                                                                  sym:=ach2uch(sym);
-                                                 Psymbol:=PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(sym),TDInfo);
+                                                 Psymbol:=PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(sym){//-ttf-//,TDInfo});
                                                  processH(Psymbol,PTP^.param);
                                                  if PTP.txtH<Psymbol.SymMaxY*PTP.param.Height then
                                                                                                   PTP.txtH:=Psymbol.SymMaxY*PTP.param.Height;

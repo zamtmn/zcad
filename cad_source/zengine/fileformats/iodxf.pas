@@ -847,7 +847,7 @@ var
    ir,ir2:itrec;
    PSP:PShapeProp;
    PTP:PTextProp;
-   TDInfo:TTrianglesDataInfo;
+   //-ttf-//TDInfo:TTrianglesDataInfo;
 begin
   if GoToDXForENDTAB(f, 0, dxfName_Style) then
   while s = dxfName_Style do
@@ -935,7 +935,7 @@ begin
                      begin
                         psp^.param.PStyle:=ptstyle;
                         psp^.FontName:=ptstyle^.dxfname;
-                        psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.Psymbol),tdinfo);
+                        psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.Psymbol){//-ttf-//,tdinfo});
                         psp^.SymbolName:=psp^.Psymbol^.Name;
                      end;
 

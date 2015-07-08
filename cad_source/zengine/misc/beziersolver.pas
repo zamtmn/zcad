@@ -19,7 +19,7 @@
 unit beziersolver;
 {$INCLUDE def.inc}
 interface
-uses OGLSpecFunc,gvector,memman,gdbobjectsconstdef,
+uses uzglvectorobject,OGLSpecFunc,gvector,memman,gdbobjectsconstdef,
      UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,geometry;
 type
 TPointAttr=(TPA_OnCurve,TPA_NotOnCurve);
@@ -29,7 +29,7 @@ TBezierSolver2D=class
                      FArray:TVector2D;
                      FMode:TSolverMode;
                      BOrder:integer;
-                     shx:PGDBOpenArrayOfByte;
+                     VectorData:PZGLVectorObject;
                      shxsize:PGDBWord;
                      scontur,truescontur:GDBvertex2D;
                      sconturpa:TPointAttr;
@@ -49,14 +49,16 @@ implementation
 uses {math,}log;
 var
    trmode:Cardinal;
-procedure addline(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y,x1,y1:fontfloat);
+procedure addline(vectordata:PZGLVectorObject;var size:GDBWord;x,y,x1,y1:fontfloat);
 begin
-    shx.AddByteByVal(SHXLine);
-    shx.AddFontFloat(@x);
-    shx.AddFontFloat(@y);
+    vectordata.LLprimitives.AddLLPLine(vectordata.GeomData.Add2DPoint(x,y));
+    vectordata.GeomData.Add2DPoint(x1,y1);
+    {vectordata.AddByteByVal(SHXLine);
+    vectordata.AddFontFloat(@x);
+    vectordata.AddFontFloat(@y);
 
-    shx.AddFontFloat(@x1);
-    shx.AddFontFloat(@y1);
+    vectordata.AddFontFloat(@x1);
+    vectordata.AddFontFloat(@y1);}
     inc(size);
 end;
 constructor TBezierSolver2D.create;
@@ -184,7 +186,7 @@ begin
      if border<3 then
      begin
           if border=2 then
-          addline(shx,shxsize^,FArray[0].x,FArray[0].y,FArray[1].x,FArray[1].y);
+          addline(VectorData,shxsize^,FArray[0].x,FArray[0].y,FArray[1].x,FArray[1].y);
           exit;
      end;
      size:=round((BOrder+2)*(BOrder-1)/2)+1;
@@ -193,14 +195,14 @@ begin
      for j:=1 to n-1 do
      begin
           p:=getpoint(j/n);
-          //addgcross(shx,shxsize^,p.x,p.y);
+          //addgcross(VectorData,shxsize^,p.x,p.y);
           if j>1 then
-                     addline(shx,shxsize^,prevp.x,prevp.y,p.x,p.y)
+                     addline(VectorData,shxsize^,prevp.x,prevp.y,p.x,p.y)
                  else
-                     addline(shx,shxsize^,FArray[0].x,FArray[0].y,p.x,p.y);
+                     addline(VectorData,shxsize^,FArray[0].x,FArray[0].y,p.x,p.y);
           prevp:=p;
      end;
-          addline(shx,shxsize^,p.x,p.y,FArray[BOrder-1].x,FArray[BOrder-1].y);
+          addline(VectorData,shxsize^,p.x,p.y,FArray[BOrder-1].x,FArray[BOrder-1].y);
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('BezierSolver.initialization');{$ENDIF}

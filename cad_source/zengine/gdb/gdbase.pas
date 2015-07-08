@@ -172,10 +172,10 @@ GDBFontVertex2D=packed record
                 x:FontFloat;(*saved_to_shd*)
                 y:FontFloat;(*saved_to_shd*)
             end;
-TTrianglesDataInfo=packed record
+{//-ttf-//TTrianglesDataInfo=packed record
                TrianglesAddr: GDBInteger;
                TrianglesSize: GDBWord;
-               end;
+               end;}
 PGDBPolyVertex2D=^GDBPolyVertex2D;
 GDBPolyVertex2D=packed record
                       coord:GDBvertex2D;

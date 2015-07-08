@@ -213,7 +213,7 @@ var
   psyminfo:PGDBsymdolinfo;
   l:GDBInteger;
   sym:word;
-  TDInfo:TTrianglesDataInfo;
+  //-ttf-//TDInfo:TTrianglesDataInfo;
 begin
   obj_height:=1;
   obj_width:=0;
@@ -224,7 +224,7 @@ begin
   begin
     sym:=getsymbol_fromGDBText(content,i,l,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont^.font.unicode);
     //psyminfo:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(content[i])));
-    psyminfo:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(sym,tdinfo);
+    psyminfo:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(sym{//-ttf-//,tdinfo});
     obj_width:=obj_width+psyminfo.NextSymX;
     if psyminfo.SymMaxY>obj_height then obj_height:=psyminfo.SymMaxY;
     if psyminfo.SymMinY<obj_y then obj_y:=psyminfo.SymMinY;

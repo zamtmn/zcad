@@ -40,7 +40,7 @@ TTFFont={$IFNDEF DELPHI}packed{$ENDIF} object({SHXFont}BASEFont)
               //-ttf-//TriangleData:ZGLFontTriangle2DArray;
               function GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;virtual;
               //-ttf-//function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;
-              //-ttf-//procedure ProcessTriangleData(ttfsi:TTTFSymInfo);
+              procedure ProcessTriangleData(si:PGDBsymdolinfo);
               constructor init;
               destructor done;virtual;
         end;
@@ -298,6 +298,7 @@ begin
   //if chcode=56 then
   //                  chcode:=chcode;
   si.PSymbolInfo:=pttf^.GetOrCreateSymbolInfo(chcode);
+  si.PSymbolInfo.LLPrimitiveStartIndex:=pttf^.FontData.LLprimitives.Count;
   BS.shxsize:=@si.PSymbolInfo.LLPrimitiveCount;
   //----//si.PSymbolInfo.addr:=pttf.SHXdata.Count;
   si.PSymbolInfo.w:=glyph.Bounds.Right*k/64;
@@ -409,24 +410,21 @@ end;
 //-ttf-//begin
 //-ttf-//     result:=self.TriangleData.getelement(offset);
 //-ttf-//end;
-//-ttf-//procedure TTFFont.ProcessTriangleData(ttfsi:TTTFSymInfo);
-{var
+procedure TTFFont.ProcessTriangleData(si:PGDBsymdolinfo);
+var
    PTriangles:PGDBFontVertex2D;
    j:integer;
+   symoutbound:GDBBoundingBbox;
+   VDCopyParam:TZGLVectorDataCopyParam;
 begin
-if ttfsi.TrianglesDataInfo.TrianglesSize>0 then
-begin
-     PTriangles:=GetTriangleDataAddr(Ttfsi.TrianglesDataInfo.TrianglesAddr);
-     for j:=1 to ttfsi.TrianglesDataInfo.TrianglesSize do
-     begin
-          if ttfsi.PSymbolInfo.SymMaxY<PTriangles.y then
-                                                  ttfsi.PSymbolInfo.SymMaxY:=PTriangles.y;
-          if ttfsi.PSymbolInfo.SymMinY>PTriangles.y then
-                                                  ttfsi.PSymbolInfo.SymMinY:=PTriangles.y;
-          inc(PTriangles);
-     end;
+  if si.LLPrimitiveCount>0 then
+  begin
+       VDCopyParam:=FontData.GetCopyParam(si.LLPrimitiveStartIndex,si.LLPrimitiveCount);
+       symoutbound:=FontData.GetBoundingBbox(VDCopyParam.GeomDataIndexMin,VDCopyParam.GeomDataIndexMax);
+       si.SymMaxY:=symoutbound.RTF.y;
+       si.SymMinY:=symoutbound.LBN.y;
+  end;
 end;
-end;}
 function TTFFont.GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
 var
    CharIterator:TMapChar.TIterator;
@@ -441,7 +439,7 @@ begin
                                                           else
                                                               begin
                                                                    cfeatettfsymbol(symbol,si,@self);
-                                                                   //-ttf-//ProcessTriangleData(si);
+                                                                   ProcessTriangleData(si.PSymbolInfo);
                                                                    CharIterator.Value:=si;
                                                                    result:=si.PSymbolInfo;
                                                               end;

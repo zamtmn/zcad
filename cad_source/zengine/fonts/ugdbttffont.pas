@@ -217,9 +217,9 @@ var
    len: GDBWord;
    count:integer;
 begin//----//
+     bs.EndCountur;
      exit;
      {
-     bs.EndCountur;
      lastv.x:=Infinity;
      lastv.y:=Infinity;
      oldtparrayindex:=tparrayindex;
@@ -388,6 +388,7 @@ begin
   OGLSM.TessEndPolygon(tesselator);
   //si.TrianglesDataInfo.TrianglesSize:=pttf^.TriangleData.count-si.TrianglesDataInfo.TrianglesSize;
   OGLSM.DeleteTess(tesselator);
+  //si.PSymbolInfo.LLPrimitiveCount:=pttf^.FontData.LLprimitives.Count-si.PSymbolInfo.LLPrimitiveStartIndex;
   end;
 end;
 constructor TTFFont.init;

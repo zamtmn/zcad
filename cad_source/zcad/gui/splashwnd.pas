@@ -26,6 +26,7 @@ type
   TSplashWnd = class(TForm)
     txt:tlabel;
     Logo: TImage;
+    cb:TComboBox;
     procedure TXTOut(s:GDBstring;pm:boolean);virtual;
     private
     procedure AfterConstruction; override;
@@ -76,24 +77,23 @@ begin
   txt.Parent := self;
 end;
 procedure createsplash;
-var
-   cb:TComboBox;
 begin
      sysparam.otherinstancerun:=InstanceRunning('zcad unique instance',true,true);
      SplashWindow:=TSplashWnd.CreateNew(nil);
-     cb:=TComboBox.CreateParented(SplashWindow.Handle);
-     cb.hide;
-     sysparam.defaultheight:=cb.Height;
-     cb.free;
+     SplashWindow.cb:=TComboBox.Create{Parented}(SplashWindow{.Handle});
+     SplashWindow.cb.hide;
      if not sysparam.otherinstancerun then
      if not sysparam.nosplash then
                                   SplashWindow.show;
      application.ProcessMessages;
+     sysparam.defaultheight:=SplashWindow.cb.Height;
 end;
 procedure removesplash;
 begin
      if assigned(SplashWindow) then
      begin
+          sysparam.defaultheight:=SplashWindow.cb.Height;
+          SplashWindow.cb.Free;
           SplashWindow.hide;
           SplashWindow.Free;
           SplashWindow:=nil;

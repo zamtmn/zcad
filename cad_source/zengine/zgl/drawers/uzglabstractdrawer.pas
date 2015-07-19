@@ -28,7 +28,7 @@ TZGLAbstractDrawer=class
                         public
                         PVertexBuffer:PGDBOpenArrayOfData;
                         procedure DrawLine(const i1,i2:TLLVertexIndex);virtual;abstract;
-                        procedure DrawTriangle(const i1:TLLVertexIndex);virtual;abstract;
+                        procedure DrawTriangle(const i1,i2,i3:TLLVertexIndex);virtual;abstract;
                         procedure DrawQuad(const i1,i2,i3,i4:TLLVertexIndex);virtual;abstract;
                         function CheckOutboundInDisplay(const i1:TLLVertexIndex):boolean;virtual;abstract;
                         procedure DrawPoint(const i:TLLVertexIndex);virtual;abstract;

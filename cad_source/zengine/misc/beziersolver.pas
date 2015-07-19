@@ -25,7 +25,11 @@ type
 TPointAttr=(TPA_OnCurve,TPA_NotOnCurve);
 TSolverMode=(TSM_WaitStartCountur,TSM_WaitStartPoint,TSM_WaitPoint);
 TVector2D={specialize }TVector<GDBVertex2D>;
-TMyVectorArrayGDBFontVertex2D=TMyVectorArray<GDBFontVertex2D>;
+TDummyData=record
+                 v:GDBFontVertex2D;
+                 index:TArrayIndex;
+           end;
+TMyVectorArrayGDBFontVertex2D=TMyVectorArray<{GDBFontVertex2D}TDummyData>;
 TBezierSolver2D=class
                      FArray:TVector2D;
                      FMode:TSolverMode;
@@ -43,23 +47,24 @@ TBezierSolver2D=class
                      procedure EndCountur;
                      procedure StartCountur;
                      procedure DrawCountur;
+                     procedure ClearConturs;
                      procedure solve;
                      function getpoint(t:gdbdouble):GDBvertex2D;
                      procedure AddPointToContur(var size:GDBWord;x,y,x1,y1:fontfloat);
                 end;
 var
    BS:TBezierSolver2D;
-   triangle:array[0..2] of GDBFontVertex2D;
+   triangle:array[0..2] of integer;
 implementation
 uses {math,}log;
 var
    trmode:Cardinal;
 procedure TBezierSolver2D.AddPointToContur(var size:GDBWord;x,y,x1,y1:fontfloat);
 var
-   tff:GDBFontVertex2D;
+   tff:{GDBFontVertex2D}TDummyData;
 begin
-    tff.x:=x;
-    tff.y:=y;
+    tff.v.x:=x;
+    tff.v.y:=y;
     Conturs.AddDataToCurrentArray(tff);
     //vectordata.LLprimitives.AddLLPLine(vectordata.GeomData.Add2DPoint(x,y));
     //vectordata.GeomData.Add2DPoint(x1,y1);
@@ -164,6 +169,12 @@ procedure TBezierSolver2D.StartCountur;
 begin
      Conturs.SetCurrentArray(Conturs.AddArray);
 end;
+procedure TBezierSolver2D.ClearConturs;
+begin
+  Conturs.destroy;
+  Conturs:=TMyVectorArrayGDBFontVertex2D.Create;
+end;
+
 procedure TBezierSolver2D.DrawCountur;
 var
    i,j:integer;
@@ -175,7 +186,7 @@ begin
           inc(shxsize^);
           for j:=0 to Conturs.VArray[i].Size-1 do
           begin
-               VectorData.GeomData.Add2DPoint(Conturs.VArray[i][j].x,Conturs.VArray[i][j].y);
+               Conturs.VArray[i].mutable[j]^.index:=VectorData.GeomData.Add2DPoint(Conturs.VArray[i][j].v.x,Conturs.VArray[i][j].v.y);
           end;
      end;
 end;

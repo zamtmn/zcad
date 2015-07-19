@@ -51,6 +51,7 @@ implementation
 uses {math,}log;
 var
    ptrdata:PZGLVectorObject;
+   Ptrsize:PInteger;
    trmode:Cardinal;
 procedure adddcross(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y:fontfloat);
 const
@@ -132,23 +133,24 @@ begin
      trmode:=gmode;
 end;
 procedure TessVertexCallBack(const v,v2: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
-var
+{var
    pv:pgdbvertex;
-   trp:GDBFontVertex2D;
+   trp:GDBFontVertex2D;}
 begin
-     if v=nil then exit;
-     pv:=pointer(v);
+     //if v2=nil then exit;
+     {pv:=pointer(v2);
      trp.x:=pv.x;
-     trp.y:=pv.y;
+     trp.y:=pv.y;}
      if pointcount<3 then
                          begin
-                              triangle[pointcount]:=trp;
+                              triangle[pointcount]:=ptruint(v);
                               inc(pointcount);
                               if pointcount=3 then
                                              begin
-                                                  ptrdata^.LLprimitives.AddLLTriangle(ptrdata^.GeomData.Add2DPoint(triangle[0].x,triangle[0].y));
-                                                  ptrdata^.GeomData.Add2DPoint(triangle[1].x,triangle[1].y);
-                                                  ptrdata^.GeomData.Add2DPoint(triangle[2].x,triangle[2].y);
+                                                  ptrdata^.LLprimitives.AddLLFreeTriangle(triangle[0],triangle[1],triangle[2]);
+                                                  inc(ptrsize^);
+                                                  {ptrdata^.GeomData.Add2DPoint(triangle[1].x,triangle[1].y);
+                                                  ptrdata^.GeomData.Add2DPoint(triangle[2].x,triangle[2].y);}
                                              if trmode=GL_TRIANGLES then
                                                                        pointcount:=0;
                                              end;
@@ -158,18 +160,22 @@ begin
                               case trmode of
                        GL_TRIANGLE_FAN:begin
                                             triangle[1]:=triangle[2];
-                                            triangle[2]:=trp;
-                                            ptrdata^.LLprimitives.AddLLTriangle(ptrdata^.GeomData.Add2DPoint(triangle[0].x,triangle[0].y));
-                                            ptrdata^.GeomData.Add2DPoint(triangle[1].x,triangle[1].y);
-                                            ptrdata^.GeomData.Add2DPoint(triangle[2].x,triangle[2].y);
+                                            triangle[2]:=ptruint(v);
+                                            ptrdata^.LLprimitives.AddLLFreeTriangle(triangle[0],triangle[1],triangle[2]);
+                                            inc(ptrsize^);
+                                            //ptrdata^.LLprimitives.AddLLTriangle(ptrdata^.GeomData.Add2DPoint(triangle[0].x,triangle[0].y));
+                                            //ptrdata^.GeomData.Add2DPoint(triangle[1].x,triangle[1].y);
+                                            //ptrdata^.GeomData.Add2DPoint(triangle[2].x,triangle[2].y);
                                        end;
                      GL_TRIANGLE_STRIP:begin
                                             triangle[0]:=triangle[1];
                                             triangle[1]:=triangle[2];
-                                            triangle[2]:=trp;
-                                            ptrdata^.LLprimitives.AddLLTriangle(ptrdata^.GeomData.Add2DPoint(triangle[0].x,triangle[0].y));
-                                            ptrdata^.GeomData.Add2DPoint(triangle[1].x,triangle[1].y);
-                                            ptrdata^.GeomData.Add2DPoint(triangle[2].x,triangle[2].y);
+                                            triangle[2]:=ptruint(v);
+                                            ptrdata^.LLprimitives.AddLLFreeTriangle(triangle[0],triangle[1],triangle[2]);
+                                            inc(ptrsize^);
+                                            //ptrdata^.LLprimitives.AddLLTriangle(ptrdata^.GeomData.Add2DPoint(triangle[0].x,triangle[0].y));
+                                            //ptrdata^.GeomData.Add2DPoint(triangle[1].x,triangle[1].y);
+                                            //ptrdata^.GeomData.Add2DPoint(triangle[2].x,triangle[2].y);
                                        end;
                               else begin
                                         triangle[1]:=triangle[1];
@@ -181,7 +187,7 @@ begin
 end;
 procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:PTTFFont{;var pf:PGDBfont});
 var
-   j:integer;
+   i,j:integer;
    glyph:TFreeTypeGlyph;
    _glyph:PGlyph;
    //psyminfo,psubsyminfo:PGDBsymdolinfo;
@@ -195,6 +201,7 @@ var
    lastv:GDBFontVertex2D;
    tparray:array[0..65535] of gdbvertex;
    tparrayindex,oldtparrayindex:integer;
+   tv:gdbvertex;
 procedure CompareAndTess(v:GDBFontVertex2D);
 begin
      if (abs(lastv.x-v.x)>eps)or(abs(lastv.y-v.y)>eps) then
@@ -310,18 +317,10 @@ begin
   //-ttf-//si.TrianglesDataInfo.TrianglesAddr:=pttf^.TriangleData.count;
   //-ttf-//si.TrianglesDataInfo.TrianglesSize:=pttf^.TriangleData.count;
   ptrdata:=@pttf^.FontData;
+  ptrsize:=@si.PSymbolInfo.LLPrimitiveCount;
   tparrayindex:=0;
   if _glyph^.outline.n_contours>0 then
   begin
-  tesselator:=OGLSM.NewTess;
-  OGLSM.TessCallback(tesselator,GLU_TESS_VERTEX_DATA,@TessVertexCallBack);
-  OGLSM.TessCallback(tesselator,GLU_TESS_BEGIN_DATA,@TessBeginCallBack);
-  OGLSM.TessCallback(tesselator,GLU_TESS_Error_DATA,@TessErrorCallBack);
-  //gluTessProperty(tesselator,GLU_TESS_WINDING_RULE,GLU_TESS_WINDING_ODD);
-  //gluTessProperty(tesselator, GLU_TESS_BOUNDARY_ONLY, GLU_FALSE);
-  //gluTessProperty(tesselator, GLU_TESS_TOLERANCE , 1000.0);
-  OGLSM.TessBeginPolygon(tesselator,nil);
-  //gluTessNormal( tesselator, 0.0, 0.0, -1.0);
   cends:=0;
   lastoncurve:=0;
   startcountur:=true;
@@ -387,12 +386,42 @@ begin
   y:=y1;
   end;
   bs.DrawCountur;
-  bs.Conturs.VArray.clear;
-  //EndSymContour;
+
+  tesselator:=OGLSM.NewTess;
+  OGLSM.TessCallback(tesselator,GLU_TESS_VERTEX_DATA,@TessVertexCallBack);
+  OGLSM.TessCallback(tesselator,GLU_TESS_BEGIN_DATA,@TessBeginCallBack);
+  OGLSM.TessCallback(tesselator,GLU_TESS_Error_DATA,@TessErrorCallBack);
+  //gluTessProperty(tesselator,GLU_TESS_WINDING_RULE,GLU_TESS_WINDING_ODD);
+  //gluTessProperty(tesselator, GLU_TESS_BOUNDARY_ONLY, GLU_FALSE);
+  //gluTessProperty(tesselator, GLU_TESS_TOLERANCE , 1000.0);
+
+  OGLSM.TessBeginPolygon(tesselator,nil);
+  for i:=0 to bs.Conturs.VArray.Size-1 do
+  begin
+       OGLSM.TessBeginContour(tesselator);
+       for j:=0 to bs.Conturs.VArray[i].Size-1 do
+       begin
+            tv.x:=bs.Conturs.VArray[i][j].v.x;
+            tv.y:=bs.Conturs.VArray[i][j].v.y;
+            tv.z:=0;
+            OGLSM.TessVertex(tesselator,@tv,pointer(bs.Conturs.VArray[i][j].index));
+            //VectorData.GeomData.Add2DPoint(Conturs.VArray[i][j].x,Conturs.VArray[i][j].y);
+       end;
+       OGLSM.TessEndContour(tesselator)
+  end;
+  OGLSM.TessEndPolygon(tesselator);
+
+
+  //gluTessNormal( tesselator, 0.0, 0.0, -1.0);
+
   OGLSM.TessEndPolygon(tesselator);
   //si.TrianglesDataInfo.TrianglesSize:=pttf^.TriangleData.count-si.TrianglesDataInfo.TrianglesSize;
   OGLSM.DeleteTess(tesselator);
   //si.PSymbolInfo.LLPrimitiveCount:=pttf^.FontData.LLprimitives.Count-si.PSymbolInfo.LLPrimitiveStartIndex;
+
+
+  bs.ClearConturs;
+  //EndSymContour;
   end;
 end;
 constructor TTFFont.init;

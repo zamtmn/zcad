@@ -80,7 +80,7 @@ procedure createsplash;
 begin
      sysparam.otherinstancerun:=InstanceRunning('zcad unique instance',true,true);
      SplashWindow:=TSplashWnd.CreateNew(nil);
-     SplashWindow.cb:=TComboBox.Create{Parented}(SplashWindow{.Handle});
+     SplashWindow.cb:=TComboBox.CreateParented(SplashWindow.Handle);
      SplashWindow.cb.hide;
      if not sysparam.otherinstancerun then
      if not sysparam.nosplash then

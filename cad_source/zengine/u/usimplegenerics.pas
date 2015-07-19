@@ -48,6 +48,20 @@ end;
 generic TMyVector <T> = class(specialize TVector<T>)
 end;
 
+generic TMyVectorArray <T> = class
+        type
+        TVec=specialize TMyVector <T>;
+        TArrayOfVec=specialize TMyVector <TVec>;
+        var
+        VArray:TArrayOfVec;
+        CurrentArray:SizeInt;
+        constructor create;
+        destructor destroy;virtual;
+        function AddArray:SizeInt;
+        procedure SetCurrentArray(ai:SizeInt);
+        procedure AddDataToCurrentArray(data:T);
+end;
+
 generic TMyHashMap <TKey, TValue, Thash> = class(specialize THashMap<TKey, TValue, Thash>)
   function MyGetValue(key:TKey; out Value:TValue):boolean;
 end;
@@ -81,6 +95,27 @@ end;
 implementation
 uses
     log;
+constructor TMyVectorArray.create;
+begin
+     VArray:=TArrayOfVec.create;
+end;
+destructor TMyVectorArray.destroy;
+begin
+     VArray.destroy;
+end;
+function TMyVectorArray.AddArray:SizeInt;
+begin
+     result:=VArray.size;
+     VArray.PushBack(TVec.create);
+end;
+procedure TMyVectorArray.SetCurrentArray(ai:SizeInt);
+begin
+     CurrentArray:=ai;
+end;
+procedure TMyVectorArray.AddDataToCurrentArray(data:T);
+begin
+     VArray[CurrentArray].PushBack(data);
+end;
 function TMyHashMap.MyGetValue(key:TKey; out Value:TValue):boolean;
 var i,h,bs:longint;
 begin

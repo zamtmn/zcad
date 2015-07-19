@@ -93,6 +93,7 @@ TLLSymbolEnd={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
 PTLLPolyLine=^TLLPolyLine;
 TLLPolyLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index,Count:TLLVertexIndex;
+              Closed:GDBBoolean;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
               function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;virtual;
               procedure getGeomIndexs(out imin,imax:GDBInteger);virtual;
@@ -187,6 +188,8 @@ begin
      Drawer.DrawLine(index,index+1);
      inc(index);
   end;
+  if closed then
+                Drawer.DrawLine(index,P1Index);
   result:=inherited;
 end;
 procedure TLLPolyLine.getGeomIndexs(out imin,imax:GDBInteger);

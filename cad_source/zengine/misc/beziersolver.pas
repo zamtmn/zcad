@@ -19,12 +19,13 @@
 unit beziersolver;
 {$INCLUDE def.inc}
 interface
-uses uzglvectorobject,OGLSpecFunc,gvector,memman,gdbobjectsconstdef,
+uses usimplegenerics,uzglvectorobject,OGLSpecFunc,gvector,memman,gdbobjectsconstdef,
      UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,geometry;
 type
 TPointAttr=(TPA_OnCurve,TPA_NotOnCurve);
 TSolverMode=(TSM_WaitStartCountur,TSM_WaitStartPoint,TSM_WaitPoint);
-TVector2D={specialize }TVector<GDBvertex2D>;
+TVector2D={specialize }TVector<GDBVertex2D>;
+TMyVectorArrayGDBFontVertex2D=TMyVectorArray<GDBFontVertex2D>;
 TBezierSolver2D=class
                      FArray:TVector2D;
                      FMode:TSolverMode;
@@ -33,14 +34,18 @@ TBezierSolver2D=class
                      shxsize:PGDBWord;
                      scontur,truescontur:GDBvertex2D;
                      sconturpa:TPointAttr;
+                     Conturs:TMyVectorArrayGDBFontVertex2D;
                      constructor create;
                      destructor Destroy;overload;
                      procedure AddPoint(x,y:double;pa:TPointAttr);overload;
                      procedure AddPoint(p:GDBvertex2D;pa:TPointAttr);overload;
                      procedure ChangeMode(Mode:TSolverMode);
                      procedure EndCountur;
+                     procedure StartCountur;
+                     procedure DrawCountur;
                      procedure solve;
                      function getpoint(t:gdbdouble):GDBvertex2D;
+                     procedure AddPointToContur(var size:GDBWord;x,y,x1,y1:fontfloat);
                 end;
 var
    BS:TBezierSolver2D;
@@ -49,27 +54,28 @@ implementation
 uses {math,}log;
 var
    trmode:Cardinal;
-procedure addline(vectordata:PZGLVectorObject;var size:GDBWord;x,y,x1,y1:fontfloat);
+procedure TBezierSolver2D.AddPointToContur(var size:GDBWord;x,y,x1,y1:fontfloat);
+var
+   tff:GDBFontVertex2D;
 begin
-    vectordata.LLprimitives.AddLLPLine(vectordata.GeomData.Add2DPoint(x,y));
-    vectordata.GeomData.Add2DPoint(x1,y1);
-    {vectordata.AddByteByVal(SHXLine);
-    vectordata.AddFontFloat(@x);
-    vectordata.AddFontFloat(@y);
-
-    vectordata.AddFontFloat(@x1);
-    vectordata.AddFontFloat(@y1);}
-    inc(size);
+    tff.x:=x;
+    tff.y:=y;
+    Conturs.AddDataToCurrentArray(tff);
+    //vectordata.LLprimitives.AddLLPLine(vectordata.GeomData.Add2DPoint(x,y));
+    //vectordata.GeomData.Add2DPoint(x1,y1);
+    //inc(size);
 end;
 constructor TBezierSolver2D.create;
 begin
      FArray:=TVector2D.Create;
+     Conturs:=TMyVectorArrayGDBFontVertex2D.Create;
      FArray.Reserve(10);
      FMode:=TSM_WaitStartCountur;
 end;
 destructor TBezierSolver2D.Destroy;
 begin
      FArray.Destroy;
+     Conturs.destroy;
      inherited;
 end;
 
@@ -154,6 +160,26 @@ begin
   ChangeMode(TSM_WaitStartCountur);
   farray.Clear;
 end;
+procedure TBezierSolver2D.StartCountur;
+begin
+     Conturs.SetCurrentArray(Conturs.AddArray);
+end;
+procedure TBezierSolver2D.DrawCountur;
+var
+   i,j:integer;
+   polyindex:TArrayIndex;
+begin
+     for i:=0 to Conturs.VArray.Size-1 do
+     begin
+          polyindex:=VectorData.LLprimitives.AddLLPPolyLine(VectorData.GeomData.Vertex3S.Count,Conturs.VArray[i].Size-1,true);
+          inc(shxsize^);
+          for j:=0 to Conturs.VArray[i].Size-1 do
+          begin
+               VectorData.GeomData.Add2DPoint(Conturs.VArray[i][j].x,Conturs.VArray[i][j].y);
+          end;
+     end;
+end;
+
 function TBezierSolver2D.getpoint(t:gdbdouble):GDBvertex2D;
 var
    i,j,k,rindex:integer;
@@ -186,7 +212,7 @@ begin
      if border<3 then
      begin
           if border=2 then
-          addline(VectorData,shxsize^,FArray[0].x,FArray[0].y,FArray[1].x,FArray[1].y);
+          AddPointToContur(shxsize^,FArray[0].x,FArray[0].y,FArray[1].x,FArray[1].y);
           exit;
      end;
      size:=round((BOrder+2)*(BOrder-1)/2)+1;
@@ -197,12 +223,12 @@ begin
           p:=getpoint(j/n);
           //addgcross(VectorData,shxsize^,p.x,p.y);
           if j>1 then
-                     addline(VectorData,shxsize^,prevp.x,prevp.y,p.x,p.y)
+                     AddPointToContur(shxsize^,prevp.x,prevp.y,p.x,p.y)
                  else
-                     addline(VectorData,shxsize^,FArray[0].x,FArray[0].y,p.x,p.y);
+                     AddPointToContur(shxsize^,FArray[0].x,FArray[0].y,p.x,p.y);
           prevp:=p;
      end;
-          addline(VectorData,shxsize^,p.x,p.y,FArray[BOrder-1].x,FArray[BOrder-1].y);
+          AddPointToContur(shxsize^,p.x,p.y,FArray[BOrder-1].x,FArray[BOrder-1].y);
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('BezierSolver.initialization');{$ENDIF}

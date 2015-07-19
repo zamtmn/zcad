@@ -43,7 +43,7 @@ TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
                 function AddLLPSymbol:TArrayIndex;
                 function AddLLPSymbolLine:TArrayIndex;
                 procedure AddLLPSymbolEnd;
-                function AddLLPPolyLine(const P1Index,_Count:TLLVertexIndex):TArrayIndex;
+                function AddLLPPolyLine(const P1Index,_Count:TLLVertexIndex;_closed:GDBBoolean=false):TArrayIndex;
              end;
 {Export-}
 implementation
@@ -64,7 +64,7 @@ begin
      ptl.init;
      ptl.P1Index:=P1Index;
 end;
-function TLLPrimitivesArray.AddLLPPolyLine(const P1Index,_Count:TLLVertexIndex):tarrayindex;
+function TLLPrimitivesArray.AddLLPPolyLine(const P1Index,_Count:TLLVertexIndex;_closed:GDBBoolean=false):tarrayindex;
 var
    ptpl:PTLLPolyLine;
 begin
@@ -73,6 +73,7 @@ begin
      ptpl.init;
      ptpl.P1Index:=P1Index;
      ptpl.Count:=_Count;
+     ptpl.Closed:=_closed;
 end;
 procedure TLLPrimitivesArray.AddLLPPoint(const PIndex:TLLVertexIndex);
 var

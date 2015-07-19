@@ -327,6 +327,8 @@ begin
   startcountur:=true;
   for j:=0 to _glyph^.outline.n_points do
   begin
+       if  startcountur then
+                            bs.StartCountur;
   x1:=_glyph^.outline.points^[j].x*k/64;
   y1:=_glyph^.outline.points^[j].y*k/64;
   //programlog.LogOutStr('TTF x='+floattostr(x1)+' y='+floattostr(y1),0);
@@ -384,6 +386,8 @@ begin
   x:=x1;
   y:=y1;
   end;
+  bs.DrawCountur;
+  bs.Conturs.VArray.clear;
   //EndSymContour;
   OGLSM.TessEndPolygon(tesselator);
   //si.TrianglesDataInfo.TrianglesSize:=pttf^.TriangleData.count-si.TrianglesDataInfo.TrianglesSize;

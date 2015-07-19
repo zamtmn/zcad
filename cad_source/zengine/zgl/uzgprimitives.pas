@@ -19,7 +19,7 @@
 unit uzgprimitives;
 {$INCLUDE def.inc}
 interface
-uses uzglgeomdata,gdbdrawcontext,uzgvertex3sarray,uzglabstractdrawer,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
+uses math,uzglgeomdata,gdbdrawcontext,uzgvertex3sarray,uzglabstractdrawer,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
 geometry;
 const
      LLAttrNothing=0;
@@ -63,6 +63,14 @@ TLLTriangle={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               procedure getGeomIndexs(out imin,imax:GDBInteger);virtual;
               procedure CorrectIndexes(offset:GDBInteger);virtual;
         end;
+PTLLFreeTriangle=^TLLFreeTriangle;
+TLLFreeTriangle={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
+              P1Index,P2Index,P3Index:TLLVertexIndex;
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              procedure getGeomIndexs(out imin,imax:GDBInteger);virtual;
+              procedure CorrectIndexes(offset:GDBInteger);virtual;
+        end;
+
 PTLLPoint=^TLLPoint;
 TLLPoint={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               PIndex:TLLVertexIndex;
@@ -166,7 +174,7 @@ end;
 function TLLTriangle.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 begin
      if not OptData.ignoretriangles then
-                                        Drawer.DrawTriangle(P1Index);
+                                        Drawer.DrawTriangle(P1Index,P1Index+1,P1Index+2);
      result:=inherited;
 end;
 procedure TLLTriangle.getGeomIndexs(out imin,imax:GDBInteger);
@@ -178,6 +186,24 @@ procedure TLLTriangle.CorrectIndexes(offset:GDBInteger);
 begin
      P1Index:=P1Index+offset;
 end;
+function TLLFreeTriangle.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
+begin
+     if not OptData.ignoretriangles then
+                                        Drawer.DrawTriangle(P1Index,P2Index,P3Index);
+     result:=inherited;
+end;
+procedure TLLFreeTriangle.getGeomIndexs(out imin,imax:GDBInteger);
+begin
+     imin:=min(min(P1Index,P2Index),P3Index);
+     imax:=max(max(P1Index,P2Index),P3Index);
+end;
+procedure TLLFreeTriangle.CorrectIndexes(offset:GDBInteger);
+begin
+     P1Index:=P1Index+offset;
+     P2Index:=P2Index+offset;
+     P3Index:=P3Index+offset;
+end;
+
 function TLLPolyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 var
    i,index:integer;

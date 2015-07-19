@@ -252,7 +252,7 @@ type
                            procedure TessEndPolygon(tess:TessObj);
                            procedure TessBeginContour(tess:TessObj);
                            procedure TessEndContour(tess:TessObj);
-                           procedure TessVertex(tess:TessObj; location:PGDBFontVertex2D; data:pointer);
+                           procedure TessVertex(tess:TessObj; location:PGDBVertex; data:pointer);
                            procedure TessCallback(tess:TessObj; which:GLenum; CallBackFunc:_GLUfuncptr);
 
                            function NewNurbsRenderer:GLUnurbsObj;
@@ -379,7 +379,7 @@ begin
      gluTessCallback(tess,which,CallBackFunc);
 end;
 
-procedure TOGLStateManager.TessVertex(tess:TessObj; location:PGDBFontVertex2D; data:pointer);
+procedure TOGLStateManager.TessVertex(tess:TessObj; location:PGDBVertex; data:pointer);
 {type
     PT3darray=^T3darray;}
 var

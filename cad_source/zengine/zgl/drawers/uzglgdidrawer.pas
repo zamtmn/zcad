@@ -59,7 +59,7 @@ TZGLGDIDrawer=class(TZGLGeneralDrawer)
 
                         function TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
                         procedure DrawLine(const i1,i2:TLLVertexIndex);override;
-                        procedure DrawTriangle(const i1:TLLVertexIndex);override;
+                        procedure DrawTriangle(const i1,i2,i3:TLLVertexIndex);override;
                         procedure DrawQuad(const i1,i2,i3,i4:TLLVertexIndex);override;
                         function CheckOutboundInDisplay(const i1:TLLVertexIndex):boolean;override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
@@ -379,7 +379,7 @@ begin
     ProcessScreenInvalidrect(x,y);
     LineTo(OffScreedDC,x,y);
 end;
-procedure TZGLGDIDrawer.DrawTriangle(const i1:TLLVertexIndex);
+procedure TZGLGDIDrawer.DrawTriangle(const i1,i2,i3:TLLVertexIndex);
 var
    pv1,pv2,pv3:PGDBVertex3S;
    p1,p2,p3:GDBVertex3S;
@@ -387,8 +387,8 @@ var
    sp:array [1..3]of TPoint;
 begin
     pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
-    pv2:=PGDBVertex3S(PVertexBuffer.getelement(i1+1));
-    pv3:=PGDBVertex3S(PVertexBuffer.getelement(i1+2));
+    pv2:=PGDBVertex3S(PVertexBuffer.getelement(i2));
+    pv3:=PGDBVertex3S(PVertexBuffer.getelement(i3));
     p1:=TranslatePoint(pv1^);
     p2:=TranslatePoint(pv2^);
     p3:=TranslatePoint(pv3^);

@@ -89,11 +89,25 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        procedure FreeConstructionObjects;virtual;
                        function GetChangeStampt:GDBBoolean;virtual;
                        function CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;virtual;
+                       function GetUnitsFormat:TzeUnitsFormat;virtual;
                  end;
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 implementation
 uses log;
+function TSimpleDrawing.GetUnitsFormat:TzeUnitsFormat;
+begin
+     result.DeciminalSeparator:=DDSDot;
+     result.abase:=0;
+     result.adir:=ADCounterClockwise;
+     result.aformat:=AUDecimalDegrees;
+     result.aprec:=UPrec2;
+     result.uformat:=LUDecimal;
+     result.uprec:=UPrec2;
+     result.umode:=UMWithSpaces;
+     result.RemoveTrailingZeros:=true;
+end;
+
 function TSimpleDrawing.CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;
 begin
   if assigned(wa)then

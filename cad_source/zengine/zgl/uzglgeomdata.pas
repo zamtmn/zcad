@@ -19,12 +19,13 @@
 unit uzglgeomdata;
 {$INCLUDE def.inc}
 interface
-uses uzgvertex3sarray,sysutils,gdbase,gdbasetypes,memman,
+uses uzgindexsarray,uzgvertex3sarray,sysutils,gdbase,gdbasetypes,memman,
 geometry;
 type
 {Export+}
 ZGLGeomData={$IFNDEF DELPHI}packed{$ENDIF}object(GDBaseObject)
                                                 Vertex3S:ZGLVertex3Sarray;
+                                                Indexes:ZGLIndexsArray;
                                                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                                                 destructor done;virtual;
                                                 procedure Clear;virtual;
@@ -46,18 +47,22 @@ end;
 constructor ZGLGeomData.init;
 begin
   Vertex3S.init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m);
+  Indexes.init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m);
 end;
 destructor ZGLGeomData.done;
 begin
   Vertex3S.done;
+  Indexes.done;
 end;
 procedure ZGLGeomData.Clear;
 begin
   Vertex3S.Clear;
+  Indexes.Clear;
 end;
 procedure ZGLGeomData.Shrink;
 begin
   Vertex3S.Shrink;
+  Indexes.Shrink;
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('uzglgeomdata.initialization');{$ENDIF}

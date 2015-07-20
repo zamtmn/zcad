@@ -36,7 +36,6 @@ PZGLVectorObject=^ZGLVectorObject;
 ZGLVectorObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  LLprimitives:TLLPrimitivesArray;
                                  GeomData:ZGLGeomData;
-                                 Indexes:ZGLIndexsArray;
                                  constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar{$ENDIF});
                                  destructor done;virtual;
                                  procedure Clear;virtual;
@@ -216,25 +215,21 @@ constructor ZGLVectorObject.init;
 begin
   GeomData.init({$IFDEF DEBUGBUILD}pchar({$IFDEF SEPARATEMEMUSAGE}ErrGuid+{$ENDIF}'{ZGLVectorObject.GeomData}'),{$ENDIF}100);
   LLprimitives.init({$IFDEF DEBUGBUILD}pchar({$IFDEF SEPARATEMEMUSAGE}ErrGuid+{$ENDIF}'{ZGLVectorObject.LLprimitives}'),{$ENDIF}100);
-  Indexes.init({$IFDEF DEBUGBUILD}pchar({$IFDEF SEPARATEMEMUSAGE}ErrGuid+{$ENDIF}'{ZGLVectorObject.Indexes}'),{$ENDIF}100);
 end;
 destructor ZGLVectorObject.done;
 begin
   GeomData.done;
   LLprimitives.done;
-  Indexes.done;
 end;
 procedure ZGLVectorObject.Clear;
 begin
   GeomData.Clear;
   LLprimitives.Clear;
-  Indexes.Clear;
 end;
 procedure ZGLVectorObject.Shrink;
 begin
   GeomData.Shrink;
   LLprimitives.Shrink;
-  Indexes.Shrink;
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('uzglvectorobject.initialization');{$ENDIF}

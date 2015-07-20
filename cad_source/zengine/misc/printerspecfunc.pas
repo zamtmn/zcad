@@ -21,7 +21,7 @@ unit printerspecfunc;
 
 interface
 uses gdbpalette,gdbasetypes,gdbase,LCLType,Printers,
-     gl,glu,OGLSpecFunc,
+     gl,glu,glstatemanager,
      {$IFDEF SLINUX}glx,{$ENDIF}
      log,sysutils,varmandef,Graphics;
 type

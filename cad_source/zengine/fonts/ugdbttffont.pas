@@ -19,7 +19,9 @@
 unit ugdbttffont;
 {$INCLUDE def.inc}
 interface
-uses uzglvectorobject,ugdbbasefont,beziersolver,math,OGLSpecFunc,TTTypes,TTObjs,gmap,gutil,EasyLazFreeType,memman,gdbobjectsconstdef,strproc,gdbasetypes,sysutils,gdbase,geometry;
+uses uzglvectorobject,ugdbbasefont,beziersolver,math,glstatemanager,gluinterface,TTTypes,TTObjs,
+  gmap,gutil,EasyLazFreeType,memman,gdbobjectsconstdef,strproc,gdbasetypes,sysutils,
+  gdbase,geometry;
 type
 PTTTFSymInfo=^TTTFSymInfo;
 TTTFSymInfo=packed record
@@ -387,36 +389,36 @@ begin
   end;
   bs.DrawCountur;
 
-  tesselator:=OGLSM.NewTess;
-  OGLSM.TessCallback(tesselator,GLU_TESS_VERTEX_DATA,@TessVertexCallBack);
-  OGLSM.TessCallback(tesselator,GLU_TESS_BEGIN_DATA,@TessBeginCallBack);
-  OGLSM.TessCallback(tesselator,GLU_TESS_Error_DATA,@TessErrorCallBack);
+  tesselator:=GLUIntrf.NewTess;
+  GLUIntrf.TessCallback(tesselator,GLU_TESS_VERTEX_DATA,@TessVertexCallBack);
+  GLUIntrf.TessCallback(tesselator,GLU_TESS_BEGIN_DATA,@TessBeginCallBack);
+  GLUIntrf.TessCallback(tesselator,GLU_TESS_Error_DATA,@TessErrorCallBack);
   //gluTessProperty(tesselator,GLU_TESS_WINDING_RULE,GLU_TESS_WINDING_ODD);
   //gluTessProperty(tesselator, GLU_TESS_BOUNDARY_ONLY, GLU_FALSE);
   //gluTessProperty(tesselator, GLU_TESS_TOLERANCE , 1000.0);
 
-  OGLSM.TessBeginPolygon(tesselator,nil);
+  GLUIntrf.TessBeginPolygon(tesselator,nil);
   for i:=0 to bs.Conturs.VArray.Size-1 do
   begin
-       OGLSM.TessBeginContour(tesselator);
+       GLUIntrf.TessBeginContour(tesselator);
        for j:=0 to bs.Conturs.VArray[i].Size-1 do
        begin
             tv.x:=bs.Conturs.VArray[i][j].v.x;
             tv.y:=bs.Conturs.VArray[i][j].v.y;
             tv.z:=0;
-            OGLSM.TessVertex(tesselator,@tv,pointer(bs.Conturs.VArray[i][j].index));
+            GLUIntrf.TessVertex(tesselator,@tv,pointer(bs.Conturs.VArray[i][j].index));
             //VectorData.GeomData.Add2DPoint(Conturs.VArray[i][j].x,Conturs.VArray[i][j].y);
        end;
-       OGLSM.TessEndContour(tesselator)
+       GLUIntrf.TessEndContour(tesselator)
   end;
-  OGLSM.TessEndPolygon(tesselator);
+  GLUIntrf.TessEndPolygon(tesselator);
 
 
   //gluTessNormal( tesselator, 0.0, 0.0, -1.0);
 
-  OGLSM.TessEndPolygon(tesselator);
+  GLUIntrf.TessEndPolygon(tesselator);
   //si.TrianglesDataInfo.TrianglesSize:=pttf^.TriangleData.count-si.TrianglesDataInfo.TrianglesSize;
-  OGLSM.DeleteTess(tesselator);
+  GLUIntrf.DeleteTess(tesselator);
   //si.PSymbolInfo.LLPrimitiveCount:=pttf^.FontData.LLprimitives.Count-si.PSymbolInfo.LLPrimitiveStartIndex;
 
 

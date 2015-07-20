@@ -26,7 +26,7 @@ uses
      {$IFDEF LCLQT}
      qtwidgets,qt4,qtint,
      {$ENDIF}
-     uzglgdidrawer,abstractviewarea,uzglopengldrawer,sysutils,GDBHelpObj,memman,OGLSpecFunc,gdbase,gdbasetypes,
+     gluinterface,uzglgdidrawer,abstractviewarea,uzglopengldrawer,sysutils,GDBHelpObj,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
      oglwindow,oglwindowdef,gdbdrawcontext,varmandef,commandline,zcadsysvars,geometry,shared,LCLType,
      ExtCtrls,classes,Controls,Graphics,generalviewarea,math,log,backendmanager;
@@ -112,11 +112,11 @@ begin
   programlog.LogOutFormatStr('RD_Version:="%s"',[p],0,LM_Info);
   //if assigned(OpenglParam.RD_Version) then
   OpenglParam.RD_Version:=p;
-  GDBPointer(p):=oglsm.mygluGetString(GLU_VERSION);
+  GDBPointer(p):=GLUIntrf.mygluGetString(GLU_VERSION);
   programlog.LogOutFormatStr('RD_GLUVersion:="%s"',[p],0,LM_Info);
   if assigned(sysvar.RD.RD_GLUVersion) then
   sysvar.RD.RD_GLUVersion^:=p;
-  GDBPointer(p):=oglsm.mygluGetString(GLU_EXTENSIONS);
+  GDBPointer(p):=GLUIntrf.mygluGetString(GLU_EXTENSIONS);
   programlog.LogOutFormatStr('RD_GLUExtensions:="%s"',[p],0,LM_Info);
   if assigned(sysvar.RD.RD_GLUExtensions) then
   sysvar.RD.RD_GLUExtensions^:=p;

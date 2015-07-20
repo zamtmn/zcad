@@ -456,7 +456,7 @@ begin
   if si.LLPrimitiveCount>0 then
   begin
        VDCopyParam:=FontData.GetCopyParam(si.LLPrimitiveStartIndex,si.LLPrimitiveCount);
-       symoutbound:=FontData.GetBoundingBbox(VDCopyParam.GeomDataIndexMin,VDCopyParam.GeomDataIndexMax);
+       symoutbound:=FontData.GetBoundingBbox(VDCopyParam.EID.GeomIndexMin,VDCopyParam.EID.GeomIndexMax);
        si.SymMaxY:=symoutbound.RTF.y;
        si.SymMinY:=symoutbound.LBN.y;
   end;

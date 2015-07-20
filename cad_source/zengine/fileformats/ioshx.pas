@@ -243,9 +243,9 @@ begin
                       begin
                         VDCopyParam:=pf^.font.FontData.GetCopyParam(psubsyminfo.LLPrimitiveStartIndex,psubsyminfo.LLPrimitiveCount);
                         VDCopyResultParam:=pf^.font.FontData.CopyTo(pf^.font.FontData,VDCopyParam);
-                        pf^.font.FontData.CorrectIndexes(VDCopyResultParam.LLPrimitivesStartIndex,psyminfo.LLPrimitiveCount,VDCopyResultParam.GeomDataIndexMin-VDCopyParam.GeomDataIndexMin);
-                        pf^.font.FontData.MulOnMatrix(VDCopyResultParam.GeomDataIndexMin,VDCopyResultParam.GeomDataIndexMax,MatrixMultiply(CreateScaleMatrix(CreateVertex(baselen*PSHXFont(pf^.font).h,baselen*PSHXFont(pf^.font).h,1)),CreateTranslationMatrix(CreateVertex(x,y,0))));
-                        symoutbound:=pf^.font.FontData.GetBoundingBbox(VDCopyResultParam.GeomDataIndexMin,VDCopyResultParam.GeomDataIndexMax);
+                        pf^.font.FontData.CorrectIndexes(VDCopyResultParam.LLPrimitivesStartIndex,psyminfo.LLPrimitiveCount,VDCopyResultParam.EID.GeomIndexMin-VDCopyParam.EID.GeomIndexMin);
+                        pf^.font.FontData.MulOnMatrix(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax,MatrixMultiply(CreateScaleMatrix(CreateVertex(baselen*PSHXFont(pf^.font).h,baselen*PSHXFont(pf^.font).h,1)),CreateTranslationMatrix(CreateVertex(x,y,0))));
+                        symoutbound:=pf^.font.FontData.GetBoundingBbox(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax);
                         ProcessMinMax(symoutbound.LBN.x,symoutbound.LBN.y);
                         ProcessMinMax(symoutbound.RTF.x,symoutbound.RTF.y);
                         x:=psubsyminfo.NextSymX+x;

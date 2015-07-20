@@ -38,10 +38,14 @@ ZGLOptimizerData={$IFNDEF DELPHI}packed{$ENDIF}record
                                                      ignoretriangles:boolean;
                                                      ignorelines:boolean;
                                                end;
+TEntIndexesData={$IFNDEF DELPHI}packed{$ENDIF}record
+                                                    GeomIndexMin,GeomIndexMax:GDBInteger;
+                                                    IndexsIndexMin,IndexsIndexMax:GDBInteger;
+                                              end;
 PTLLPrimitive=^TLLPrimitive;
 TLLPrimitive={$IFNDEF DELPHI}packed{$ENDIF} object
                        function getPrimitiveSize:GDBInteger;virtual;
-                       procedure getGeomIndexs(out imin,imax:GDBInteger);virtual;
+                       procedure getEntIndexs(out eid:TEntIndexesData);virtual;
                        procedure CorrectIndexes(offset:GDBInteger);virtual;
                        constructor init;
                        destructor done;
@@ -53,21 +57,21 @@ TLLLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index:TLLVertexIndex;{P2Index=P1Index+1}
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
               function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;virtual;
-              procedure getGeomIndexs(out imin,imax:GDBInteger);virtual;
+              procedure getEntIndexs(out eid:TEntIndexesData);virtual;
               procedure CorrectIndexes(offset:GDBInteger);virtual;
         end;
 PTLLTriangle=^TLLTriangle;
 TLLTriangle={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
-              procedure getGeomIndexs(out imin,imax:GDBInteger);virtual;
+              procedure getEntIndexs(out eid:TEntIndexesData);virtual;
               procedure CorrectIndexes(offset:GDBInteger);virtual;
         end;
 PTLLFreeTriangle=^TLLFreeTriangle;
 TLLFreeTriangle={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index,P2Index,P3Index:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
-              procedure getGeomIndexs(out imin,imax:GDBInteger);virtual;
+              procedure getEntIndexs(out eid:TEntIndexesData);virtual;
               procedure CorrectIndexes(offset:GDBInteger);virtual;
         end;
 
@@ -75,7 +79,7 @@ PTLLPoint=^TLLPoint;
 TLLPoint={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               PIndex:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
-              procedure getGeomIndexs(out imin,imax:GDBInteger);virtual;
+              procedure getEntIndexs(out eid:TEntIndexesData);virtual;
               procedure CorrectIndexes(offset:GDBInteger);virtual;
         end;
 PTLLSymbol=^TLLSymbol;
@@ -104,7 +108,7 @@ TLLPolyLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               Closed:GDBBoolean;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
               function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;virtual;
-              procedure getGeomIndexs(out imin,imax:GDBInteger);virtual;
+              procedure getEntIndexs(out eid:TEntIndexesData);virtual;
               procedure CorrectIndexes(offset:GDBInteger);virtual;
         end;
 {Export-}
@@ -120,10 +124,12 @@ end;
 destructor TLLPrimitive.done;
 begin
 end;
-procedure TLLPrimitive.getGeomIndexs(out imin,imax:GDBInteger);
+procedure TLLPrimitive.getEntIndexs(out eid:TEntIndexesData);
 begin
-     imin:=-1;
-     imax:=-1;
+     eid.GeomIndexMin:=-1;
+     eid.GeomIndexMax:=-1;
+     eid.IndexsIndexMax:=-1;
+     eid.IndexsIndexMax:=-1;
 end;
 procedure TLLPrimitive.CorrectIndexes(offset:GDBInteger);
 begin
@@ -148,10 +154,12 @@ begin
      InRect:=geometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(self.P1Index))^,PGDBvertex3S(geomdata.Vertex3S.getelement(self.P1Index+1))^,frustum);
      result:=getPrimitiveSize;
 end;
-procedure TLLLine.getGeomIndexs(out imin,imax:GDBInteger);
+procedure TLLLine.getEntIndexs(out eid:TEntIndexesData);
 begin
-     imin:=P1Index;
-     imax:=P1Index+1;
+     eid.GeomIndexMin:=P1Index;
+     eid.GeomIndexMax:=P1Index+1;
+     eid.IndexsIndexMax:=-1;
+     eid.IndexsIndexMax:=-1;
 end;
 procedure TLLLine.CorrectIndexes(offset:GDBInteger);
 begin
@@ -162,10 +170,12 @@ begin
      Drawer.DrawPoint(PIndex);
      result:=inherited;
 end;
-procedure TLLPoint.getGeomIndexs(out imin,imax:GDBInteger);
+procedure TLLPoint.getEntIndexs(out eid:TEntIndexesData);
 begin
-     imin:=PIndex;
-     imax:=PIndex;
+     eid.GeomIndexMin:=PIndex;
+     eid.GeomIndexMax:=PIndex;
+     eid.IndexsIndexMax:=-1;
+     eid.IndexsIndexMax:=-1;
 end;
 procedure TLLPoint.CorrectIndexes(offset:GDBInteger);
 begin
@@ -177,10 +187,12 @@ begin
                                         Drawer.DrawTriangle(P1Index,P1Index+1,P1Index+2);
      result:=inherited;
 end;
-procedure TLLTriangle.getGeomIndexs(out imin,imax:GDBInteger);
+procedure TLLTriangle.getEntIndexs(out eid:TEntIndexesData);
 begin
-     imin:=P1Index;
-     imax:=P1Index+2;
+     eid.GeomIndexMin:=P1Index;
+     eid.GeomIndexMax:=P1Index+2;
+     eid.IndexsIndexMax:=-1;
+     eid.IndexsIndexMax:=-1;
 end;
 procedure TLLTriangle.CorrectIndexes(offset:GDBInteger);
 begin
@@ -192,10 +204,12 @@ begin
                                         Drawer.DrawTriangle(P1Index,P2Index,P3Index);
      result:=inherited;
 end;
-procedure TLLFreeTriangle.getGeomIndexs(out imin,imax:GDBInteger);
+procedure TLLFreeTriangle.getEntIndexs(out eid:TEntIndexesData);
 begin
-     imin:=min(min(P1Index,P2Index),P3Index);
-     imax:=max(max(P1Index,P2Index),P3Index);
+     eid.GeomIndexMin:=min(min(P1Index,P2Index),P3Index);
+     eid.GeomIndexMax:=max(max(P1Index,P2Index),P3Index);
+     eid.IndexsIndexMax:=-1;
+     eid.IndexsIndexMax:=-1;
 end;
 procedure TLLFreeTriangle.CorrectIndexes(offset:GDBInteger);
 begin
@@ -218,10 +232,12 @@ begin
                 Drawer.DrawLine(index,P1Index);
   result:=inherited;
 end;
-procedure TLLPolyLine.getGeomIndexs(out imin,imax:GDBInteger);
+procedure TLLPolyLine.getEntIndexs(out eid:TEntIndexesData);
 begin
-     imin:=P1Index;
-     imax:=P1Index+Count;
+     eid.GeomIndexMin:=P1Index;
+     eid.GeomIndexMax:=P1Index+Count;
+     eid.IndexsIndexMax:=-1;
+     eid.IndexsIndexMax:=-1;
 end;
 procedure TLLPolyLine.CorrectIndexes(offset:GDBInteger);
 begin

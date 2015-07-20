@@ -19,7 +19,7 @@
 unit ugdbttffont;
 {$INCLUDE def.inc}
 interface
-uses uzglvectorobject,ugdbbasefont,beziersolver,math,OGLSpecFunc,uzglfonttriangles2darray,TTTypes,TTObjs,gmap,gutil,EasyLazFreeType,memman,gdbobjectsconstdef,strproc,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
+uses uzglvectorobject,ugdbbasefont,beziersolver,math,OGLSpecFunc,TTTypes,TTObjs,gmap,gutil,EasyLazFreeType,memman,gdbobjectsconstdef,strproc,gdbasetypes,sysutils,gdbase,geometry;
 type
 PTTTFSymInfo=^TTTFSymInfo;
 TTTFSymInfo=packed record
@@ -53,7 +53,7 @@ var
    ptrdata:PZGLVectorObject;
    Ptrsize:PInteger;
    trmode:Cardinal;
-procedure adddcross(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y:fontfloat);
+{procedure adddcross(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y:fontfloat);
 const
      s=0.01;
 begin
@@ -120,7 +120,7 @@ begin
     shx.AddFontFloat(@y);
     inc(size);
 
-end;
+end;}
 procedure TessErrorCallBack(error: Cardinal;v2: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
      error:=error;

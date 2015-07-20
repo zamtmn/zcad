@@ -19,7 +19,7 @@
 unit beziersolver;
 {$INCLUDE def.inc}
 interface
-uses usimplegenerics,uzglvectorobject,glstatemanager,gluinterface,gvector,memman,gdbobjectsconstdef,
+uses usimplegenerics,uzglvectorobject,glstatemanager,gluinterface,gvector,memman,
      UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,geometry;
 type
 TPointAttr=(TPA_OnCurve,TPA_NotOnCurve);

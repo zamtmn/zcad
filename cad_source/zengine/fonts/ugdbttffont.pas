@@ -20,7 +20,7 @@ unit ugdbttffont;
 {$INCLUDE def.inc}
 interface
 uses uzglvectorobject,ugdbbasefont,beziersolver,math,glstatemanager,gluinterface,TTTypes,TTObjs,
-  gmap,gutil,EasyLazFreeType,memman,gdbobjectsconstdef,strproc,gdbasetypes,sysutils,
+  gmap,gutil,EasyLazFreeType,memman,strproc,gdbasetypes,sysutils,
   gdbase,geometry;
 type
 PTTTFSymInfo=^TTTFSymInfo;

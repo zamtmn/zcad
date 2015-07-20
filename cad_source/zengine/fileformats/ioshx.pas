@@ -21,7 +21,7 @@ unit ioshx;
 interface
 uses uzglvectorobject,UGDBFontManager,ugdbshxfont,geometry,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
      ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,log,sysutils,
-     UGDBOpenArrayOfByte,gdbasetypes,SysInfo,gdbase,memman,gdbobjectsconstdef,uzgprimitives;
+     UGDBOpenArrayOfByte,gdbasetypes,SysInfo,gdbase,memman,uzgprimitives;
 const
   fontdirect:array[0..$F,0..1] of GDBDouble=
   ((1,0),(1,0.5),(1,1),(0.5,1),(0,1),(-0.5,1),(-1,1),(-1,0.5),(-1,0),(-1,-0.5),(-1,-1),(-0.5,-1),(0,-1),(0.5,-1),(1,-1),(1,-0.5));

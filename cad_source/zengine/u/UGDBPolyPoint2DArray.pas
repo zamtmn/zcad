@@ -20,7 +20,7 @@ unit UGDBPolyPoint2DArray;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
-     {varmandef,}OGLSpecFunc;
+     {varmandef,}glstatemanager;
 type
 {Export+}
 PGDBPolyPoint2DArray=^GDBPolyPoint2DArray;

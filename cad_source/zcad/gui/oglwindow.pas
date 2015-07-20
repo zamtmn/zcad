@@ -37,7 +37,7 @@ uses
   oglwindowdef,
   GDBHelpObj,
   sysinfo,
-  strproc,OGLSpecFunc,memman,
+  strproc,glstatemanager,memman,
   log,abstractviewarea;
 
 type

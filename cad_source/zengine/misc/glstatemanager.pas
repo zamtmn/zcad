@@ -16,17 +16,18 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit OGLSpecFunc;
+unit glstatemanager;
 {$INCLUDE def.inc}
 
 interface
 uses gdbpalette,zcadsysvars,gdbasetypes,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
-     {$IFNDEF DELPHI}gl,glu,glext,{$ELSE}dglOpenGL,windows,{$ENDIF}
+     {$IFNDEF DELPHI}gl,{glu,}glext,{$ELSE}dglOpenGL,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
      {$IFDEF WINDOWS}windows,{$ENDIF}
      log,sysutils,varmandef;
 type
     GLenum={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GLenum;
+    TViewPortArray = array [0..3] of GLint;//ВРЕМЕННО
 const ls = $AAAA;
       ps:array [0..31] of LONGWORD=(
                                    $33333333,$33333333,
@@ -106,28 +107,12 @@ const ls = $AAAA;
       GL_VENDOR={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_VENDOR;
       GL_RENDERER={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_RENDERER;
       GL_VERSION={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_VERSION;
-      GLU_VERSION={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_VERSION;
       GL_LINE_WIDTH_RANGE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_LINE_WIDTH_RANGE;
       GL_point_size_RANGE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_point_size_RANGE;
       GL_PROJECTION_MATRIX={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_PROJECTION_MATRIX;
-      GLU_TESS_VERTEX={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_TESS_VERTEX;
-      GLU_TESS_VERTEX_DATA={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_TESS_VERTEX_DATA;
-      GLU_TESS_BEGIN_DATA={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_TESS_BEGIN_DATA;
-      GLU_TESS_ERROR_DATA={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_TESS_ERROR_DATA;
       GL_EXTENSIONS={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_EXTENSIONS;
-      GLU_EXTENSIONS={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_EXTENSIONS;
-      GLU_NURBS_VERTEX_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_VERTEX_EXT;
       GL_MAP1_VERTEX_4={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_MAP1_VERTEX_4;
       GL_MAP1_VERTEX_3={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_MAP1_VERTEX_3;
-      GLU_NURBS_MODE_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_MODE_EXT;
-      GLU_NURBS_TESSELLATOR_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_TESSELLATOR_EXT;
-      GLU_SAMPLING_TOLERANCE={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_SAMPLING_TOLERANCE;
-      GLU_DISPLAY_MODE={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_DISPLAY_MODE;
-      GLU_POINT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_POINT;
-      GLU_NURBS_BEGIN_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_BEGIN_EXT;
-      GLU_NURBS_END_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_END_EXT;
-      GLU_NURBS_ERROR={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_ERROR;
-      GLU_AUTO_LOAD_MATRIX={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_AUTO_LOAD_MATRIX;
       GL_TRUE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_TRUE;
 
       maxmybufer=200;
@@ -141,7 +126,6 @@ type
     {$IFDEF DELPHI}
     TViewPortArray = {array [0..3] of GLint}TVector4i;
     {$ENDIF}
-    PTViewPortArray=^TViewPortArray;
 
     TessObj=Pointer;
     GLUnurbsObj=Pointer;
@@ -243,28 +227,6 @@ type
                            procedure myglTexParameteri(target: GLenum; pname: GLenum; param: GLint);inline;
                            procedure myglGetDoublev(pname: GLenum; params: PGLdouble);inline;
                            function myglGetString(name: GLenum): PAnsiChar;inline;
-                           function mygluGetString(name: GLenum): PAnsiChar;inline;
-                           procedure mygluPickMatrix(x:GLdouble; y:GLdouble; delX:GLdouble; delY:GLdouble; viewport:PGLint);
-
-                           function NewTess:TessObj;
-                           procedure DeleteTess(ptessobj:TessObj);
-                           procedure TessBeginPolygon(tess:TessObj;data:pointer);
-                           procedure TessEndPolygon(tess:TessObj);
-                           procedure TessBeginContour(tess:TessObj);
-                           procedure TessEndContour(tess:TessObj);
-                           procedure TessVertex(tess:TessObj; location:PGDBVertex; data:pointer);
-                           procedure TessCallback(tess:TessObj; which:GLenum; CallBackFunc:_GLUfuncptr);
-
-                           function NewNurbsRenderer:GLUnurbsObj;
-                           procedure DeleteNurbsRenderer(renderer:GLUnurbsObj);
-                           procedure NurbsCallback(nurb:GLUnurbsObj; which:GLenum; CallBackFunc:_GLUfuncptr);
-                           procedure BeginCurve(renderer:GLUnurbsObj);
-	                   procedure EndCurve(renderer:GLUnurbsObj);
-                           procedure NurbsCurve(nurb:PGLUnurbs; knotCount:GLint; knots:PGLfloat; stride:GLint; control:PGLfloat;
-                                                order:GLint; _type:GLenum);
-                           procedure NurbsProperty(nurb:PGLUnurbs; _property:GLenum; value:GLfloat);
-                           function ErrorString(error:GLenum):PGLubyte;
-
     end;
 
 var
@@ -318,79 +280,6 @@ begin
      //inc(pointcount);
      //middlepoint:=geometry.VertexAdd(middlepoint,point);
 end;
-function TOGLStateManager.NewNurbsRenderer:GLUnurbsObj;
-begin
-     result:=gluNewNurbsRenderer;
-end;
-procedure TOGLStateManager.DeleteNurbsRenderer(renderer:GLUnurbsObj);
-begin
-     gluDeleteNurbsRenderer(renderer)
-end;
-procedure TOGLStateManager.NurbsCallback(nurb:GLUnurbsObj; which:GLenum; CallBackFunc:_GLUfuncptr);
-begin
-     gluNurbsCallback(nurb,which,CallBackFunc);
-end;
-procedure TOGLStateManager.BeginCurve(renderer:GLUnurbsObj);
-begin
-     gluBeginCurve(renderer);
-end;
-procedure TOGLStateManager.EndCurve(renderer:GLUnurbsObj);
-begin
-     gluEndCurve(renderer);
-end;
-procedure TOGLStateManager.NurbsCurve(nurb:PGLUnurbs; knotCount:GLint; knots:PGLfloat; stride:GLint; control:PGLfloat;order:GLint; _type:GLenum);
-begin
-     gluNurbsCurve(nurb,knotCount,knots,stride,control,order,_type);
-end;
-procedure TOGLStateManager.NurbsProperty(nurb:PGLUnurbs; _property:GLenum; value:GLfloat);
-begin
-     gluNurbsProperty(nurb,_property,value);
-end;
-function TOGLStateManager.ErrorString(error:GLenum):PGLubyte;
-begin
-     result:=gluErrorString(error);
-end;
-function TOGLStateManager.NewTess:Pointer;
-begin
-     result:=gluNewTess;
-end;
-procedure TOGLStateManager.DeleteTess(ptessobj:Pointer);
-begin
-     gluDeleteTess(ptessobj);
-end;
-procedure TOGLStateManager.TessBeginPolygon(tess:TessObj;data:pointer);
-begin
-     gluTessBeginPolygon(tess,data);
-end;
-procedure TOGLStateManager.TessEndPolygon(tess:TessObj);
-begin
-     gluTessEndPolygon(tess);
-end;
-procedure TOGLStateManager.TessBeginContour(tess:TessObj);
-begin
-     gluTessBeginContour(tess);
-end;
-procedure TOGLStateManager.TessEndContour(tess:TessObj);
-begin
-     gluTessEndContour(tess);
-end;
-procedure TOGLStateManager.TessCallback(tess:TessObj; which:GLenum; CallBackFunc:_GLUfuncptr);
-begin
-     gluTessCallback(tess,which,CallBackFunc);
-end;
-
-procedure TOGLStateManager.TessVertex(tess:TessObj; location:PGDBVertex; data:pointer);
-{type
-    PT3darray=^T3darray;}
-var
-   tv:gdbvertex;
-begin
-     tv.x:=location.x;
-     tv.y:=location.y;
-     tv.z:=0;
-     gluTessVertex(tess,{PT3darray(@tv)^}pointer(location),data);
-end;
-
 procedure TOGLStateManager.glcolor3ub(const red, green, blue: GLubyte);
 begin
      if (red<>_colour.r)
@@ -912,15 +801,6 @@ function TOGLStateManager.myglGetString(name: GLenum): PAnsiChar;
 begin
      result:=glGetString(name);
 end;
-function TOGLStateManager.mygluGetString(name: GLenum): PAnsiChar;
-begin
-     result:=gluGetString(name);
-end;
-procedure TOGLStateManager.mygluPickMatrix(x:GLdouble; y:GLdouble; delX:GLdouble; delY:GLdouble; viewport:PGLint);
-begin
-     gluPickMatrix(x,y,delX,delY,{$IFNDEF DELPHI}PTViewPortArray(viewport)^{$ELSE}(viewport){$ENDIF});
-end;
-
 procedure TOGLStateManager.myglMatrixMode(const mode: GLenum);
 begin
      if _glMatrixMode<>mode then

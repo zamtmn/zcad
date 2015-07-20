@@ -20,7 +20,7 @@ unit UGDBOutbound2DIArray;
 {$INCLUDE def.inc}
 interface
 uses zcadsysvars,gdbasetypes,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
-     varmandef,OGLSpecFunc;
+     varmandef,glstatemanager;
 type
 {Export+}
 PGDBOOutbound2DIArray=^GDBOOutbound2DIArray;

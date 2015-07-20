@@ -25,7 +25,7 @@ uses
     Gtk2Def,
     {$ENDIF}
     LCLIntf,LCLType,Classes,Controls,
-    geometry,uzglgeneraldrawer,uzglabstractdrawer,OGLSpecFunc,Graphics,gdbase,GDBCamera;
+    geometry,uzglgeneraldrawer,uzglabstractdrawer,glstatemanager,Graphics,gdbase,GDBCamera;
 const
   texturesize=128;
 type

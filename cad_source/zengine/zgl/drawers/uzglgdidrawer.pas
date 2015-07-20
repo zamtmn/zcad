@@ -25,7 +25,7 @@ uses
     Gtk2Def,
     {$ENDIF}
     LCLIntf,LCLType,Classes,Controls,
-    geometry,uzglgeneraldrawer,uzglabstractdrawer,OGLSpecFunc,Graphics,gdbase;
+    geometry,uzglgeneraldrawer,uzglabstractdrawer,glstatemanager,Graphics,gdbase;
 type
 TPaintState=(TPSBufferNotSaved,TPSBufferSaved);
 TZGLGDIDrawer=class(TZGLGeneralDrawer)

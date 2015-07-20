@@ -38,7 +38,7 @@ GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenA
              end;
 {Export-}
 implementation
-uses OGLSpecFunc,log;
+uses glstatemanager,log;
 function GDBPoint3DArray.getoutbound;
 var
     t,b,l,r,n,f:GDBDouble;

@@ -20,7 +20,7 @@ unit gdbspline;
 {$INCLUDE def.inc}
 
 interface
-uses uabstractunit,gdbentityfactory,gdbdrawcontext,OGLSpecFunc,UGDBOpenArrayOfData,UGDBPoint3DArray,UGDBDrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},GDBEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
+uses gluinterface,uabstractunit,gdbentityfactory,gdbdrawcontext,glstatemanager,UGDBOpenArrayOfData,UGDBPoint3DArray,UGDBDrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},GDBEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman;
 type
 {REGISTEROBJECTTYPE GDBObjSpline}
@@ -118,7 +118,7 @@ var
     p:pchar;
 begin
      tv:=v;
-     p:=OGLSM.ErrorString(v);
+     p:=GLUIntrf.ErrorString(v);
      log.LogOut(p);
 end;
 
@@ -204,23 +204,23 @@ begin
   //glLoadIdentity;
   //gluOrtho2D(-5.0, 5.0, -5.0, 5.0);
 
-  nurbsobj:=OGLSM.NewNurbsRenderer;
+  nurbsobj:=GLUIntrf.NewNurbsRenderer;
 
-  OGLSM.NurbsProperty(nurbsobj,GLU_NURBS_MODE_EXT,GLU_NURBS_TESSELLATOR_EXT);
-  OGLSM.NurbsProperty(nurbsobj,GLU_SAMPLING_TOLERANCE,10);
-  OGLSM.NurbsProperty(nurbsobj,GLU_DISPLAY_MODE,{GLU_FILL}GLU_POINT);
-  OGLSM.NurbsProperty(nurbsobj,GLU_AUTO_LOAD_MATRIX, GL_TRUE);
-  OGLSM.NurbsCallback(nurbsobj,GLU_NURBS_BEGIN_EXT,@NurbsBeginCallBack);
-  OGLSM.NurbsCallback(nurbsobj,GLU_NURBS_END_EXT,@NurbsEndCallBack);
-  OGLSM.NurbsCallback(nurbsobj,GLU_NURBS_VERTEX_EXT,@NurbsVertexCallBack);
-  OGLSM.NurbsCallback(nurbsobj,GLU_NURBS_ERROR,@NurbsErrorCallBack);
+  GLUIntrf.NurbsProperty(nurbsobj,GLU_NURBS_MODE_EXT,GLU_NURBS_TESSELLATOR_EXT);
+  GLUIntrf.NurbsProperty(nurbsobj,GLU_SAMPLING_TOLERANCE,10);
+  GLUIntrf.NurbsProperty(nurbsobj,GLU_DISPLAY_MODE,{GLU_FILL}GLU_POINT);
+  GLUIntrf.NurbsProperty(nurbsobj,GLU_AUTO_LOAD_MATRIX, GL_TRUE);
+  GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_BEGIN_EXT,@NurbsBeginCallBack);
+  GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_END_EXT,@NurbsEndCallBack);
+  GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_VERTEX_EXT,@NurbsVertexCallBack);
+  GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_ERROR,@NurbsErrorCallBack);
 
-  OGLSM.BeginCurve(nurbsobj);
-  OGLSM.NurbsCurve (nurbsobj,Knots.Count,Knots.PArray,{CP.Count}4,CP.PArray,degree+1,GL_MAP1_VERTEX_4);
-  OGLSM.EndCurve(nurbsobj);
+  GLUIntrf.BeginCurve(nurbsobj);
+  GLUIntrf.NurbsCurve (nurbsobj,Knots.Count,Knots.PArray,{CP.Count}4,CP.PArray,degree+1,GL_MAP1_VERTEX_4);
+  GLUIntrf.EndCurve(nurbsobj);
 
 
-  OGLSM.DeleteNurbsRenderer(nurbsobj);
+  GLUIntrf.DeleteNurbsRenderer(nurbsobj);
 
   CP.done;
   //programlog.LogOutFormatStr('AproxPointInWCS: count=%d;max=%d;parray=%p',[AproxPointInWCS.Count,AproxPointInWCS.Max,AproxPointInWCS.PArray],lp_OldPos,LM_Trace);

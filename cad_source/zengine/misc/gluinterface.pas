@@ -21,9 +21,8 @@ unit gluinterface;
 
 interface
 uses gdbpalette,zcadsysvars,gdbasetypes,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
-     {$IFNDEF DELPHI}glu,glext,{$ELSE}dglOpenGL,windows,{$ENDIF}
+     {$IFNDEF DELPHI}glu,gl,{$ELSE}dglOpenGL,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
-     {$IFDEF WINDOWS}windows,{$ENDIF}
      log,sysutils,varmandef;
 const
       GLU_VERSION={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_VERSION;
@@ -43,10 +42,6 @@ const
       GLU_NURBS_ERROR={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_ERROR;
       GLU_AUTO_LOAD_MATRIX={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_AUTO_LOAD_MATRIX;
 type
-    GLenum = Cardinal;//ВРЕМЕННО
-    GLint  = Integer;//ВРЕМЕННО
-    GLfloat= Single;//ВРЕМЕННО
-    GLdouble   = Double;//ВРЕМЕННО
     PTViewPortArray=^TViewPortArray;
 
     TessObj=Pointer;
@@ -72,17 +67,17 @@ type
                            procedure NurbsCurve(nurb:PGLUnurbs; knotCount:GLint; knots:PGLfloat; stride:GLint; control:PGLfloat;
                                                 order:GLint; _type:GLenum);
                            procedure NurbsProperty(nurb:PGLUnurbs; _property:GLenum; value:GLfloat);
-                           function ErrorString(error:GLenum):PGLubyte;
+                           function ErrorString(error:GLenum):glu.PGLubyte;
                            function mygluGetString(name: GLenum): PAnsiChar;
                            procedure mygluPickMatrix(x:GLdouble; y:GLdouble; delX:GLdouble; delY:GLdouble; viewport:PGLint);
-
     end;
 
 var
    GLUIntrf:TGLUInterface;
+   GLUVersion,GLUExtensions:String;
 implementation
 uses
-    uzglgeneraldrawer,geometry;
+    geometry;
 function TGLUInterface.mygluGetString(name: GLenum): PAnsiChar;
 begin
      result:=gluGetString(name);
@@ -119,7 +114,7 @@ procedure TGLUInterface.NurbsProperty(nurb:PGLUnurbs; _property:GLenum; value:GL
 begin
      gluNurbsProperty(nurb,_property,value);
 end;
-function TGLUInterface.ErrorString(error:GLenum):PGLubyte;
+function TGLUInterface.ErrorString(error:GLenum):glu.PGLubyte;
 begin
      result:=gluErrorString(error);
 end;
@@ -168,8 +163,15 @@ constructor TGLUInterface.init;
 begin
 
 end;
-
+var
+   p:pchar;
 begin
-     {$IFDEF DEBUGINITSECTION}log.LogOut('oglspecfunc.initialization');{$ENDIF}
+     {$IFDEF DEBUGINITSECTION}log.LogOut('gluinterface.initialization');{$ENDIF}
      GLUIntrf.init;
+     p:=GLUIntrf.mygluGetString(GLU_VERSION);
+     GLUVersion:=p;
+     programlog.LogOutFormatStr('GLU Version:="%s"',[GLUVersion],0,LM_Info);
+     p:=GLUIntrf.mygluGetString(GLU_EXTENSIONS);
+     GLUExtensions:=p;
+     programlog.LogOutFormatStr('GLU Extensions:="%s"',[p],0,LM_Info);
 end.

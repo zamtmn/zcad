@@ -30,7 +30,7 @@ uses
   {FPC}
        lineinfo,//math,
   {ZCAD BASE}
-       uzglgdidrawer,ugdbdrawing,UGDBOpenArrayOfPV,ugdbabstractdrawing,gdbpalette,paths,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
+       gluinterface,uzglgdidrawer,ugdbdrawing,UGDBOpenArrayOfPV,ugdbabstractdrawing,gdbpalette,paths,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
        geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,log,
        varmandef, varman,UUnitManager,SysInfo,shared,strmy,UGDBTextStyleArray,ugdbdimstylearray,
   {ZCAD SIMPLE PASCAL SCRIPT}
@@ -1440,6 +1440,12 @@ begin
                                     CreateStandartInterface
                                 else
                                     CreateAnchorDockingInterface;
+
+  if assigned(sysvar.RD.RD_GLUVersion) then
+  sysvar.RD.RD_GLUVersion^:=GLUVersion;
+
+  if assigned(sysvar.RD.RD_GLUExtensions) then
+  sysvar.RD.RD_GLUExtensions^:=GLUExtensions;
 end;
 
 procedure MainForm.AfterConstruction;

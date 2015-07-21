@@ -57,8 +57,6 @@ var
    triangle:array[0..2] of integer;
 implementation
 uses {math,}log;
-var
-   trmode:Cardinal;
 procedure TBezierSolver2D.AddPointToContur(var size:GDBWord;x,y,x1,y1:fontfloat);
 var
    tff:{GDBFontVertex2D}TDummyData;
@@ -178,11 +176,10 @@ end;
 procedure TBezierSolver2D.DrawCountur;
 var
    i,j:integer;
-   polyindex:TArrayIndex;
 begin
      for i:=0 to Conturs.VArray.Size-1 do
      begin
-          polyindex:=VectorData.LLprimitives.AddLLPPolyLine(VectorData.GeomData.Vertex3S.Count,Conturs.VArray[i].Size-1,true);
+          VectorData.LLprimitives.AddLLPPolyLine(VectorData.GeomData.Vertex3S.Count,Conturs.VArray[i].Size-1,true);
           inc(shxsize^);
           for j:=0 to Conturs.VArray[i].Size-1 do
           begin

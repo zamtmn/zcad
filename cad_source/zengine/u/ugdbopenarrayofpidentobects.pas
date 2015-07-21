@@ -48,12 +48,9 @@ begin
   objsizeof:=_objsizeof;
 end;
 function GDBObjOpenArrayOfPIdentObects.CreateObject;
-var
-   p:pointer;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{6F264155-0BCB-408F-BDA7-F3E8A4540F18}',{$ENDIF}result,objsizeof);
   add(@result);
-  p:=getelement(0);
 end;
 
 begin

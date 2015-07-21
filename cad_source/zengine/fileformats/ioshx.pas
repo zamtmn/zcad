@@ -33,11 +33,9 @@ function createnewfontfromshx(name:GDBString;var pf:PGDBfont):GDBBoolean;
 implementation
 uses
     shared;
-function createsymbol(pf:PGDBfont;symbol:GDBInteger;pshxdata:system.pbyte;{var pdata:pbyte;}datalen:integer;unicode:boolean;symname:gdbstring):GDBInteger;
+function createsymbol(pf:PGDBfont;symbol:GDBInteger;pshxdata:system.pbyte;unicode:boolean;symname:gdbstring):GDBInteger;
 var
-  psubsymbol:PGDBByte;
-  ppolycount:longint;
-  i,j,sizeshp,sizeshx,stackheap:GDBInteger;
+  i,sizeshp,sizeshx,stackheap:GDBInteger;
   baselen,ymin,ymax,xmin,xmax,x,y,x1,y1,xb,yb,r,startangle,angle,normal,hordlen,tgl:fontfloat;
   stack:array[0..4,0..1] of fontfloat;
   tr:tarcrtmodify;
@@ -73,7 +71,6 @@ begin
 end;
 procedure createarc;
 var
-  tf:fontfloat;
   ad:TArcData;
   j:integer;
 begin
@@ -138,7 +135,7 @@ begin
            end
          else
            begin
-             //----//PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);
+             {//----//PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);
              tf:=tr.p1.x;
              //----//PSHXFont(pf^.font).SHXdata.AddFontFloat(@tf);
              tf:=tr.p1.y;
@@ -147,7 +144,7 @@ begin
              //----//PSHXFont(pf^.font).SHXdata.AddFontFloat(@tf);
              tf:=tr.p3.y;
              //----//PSHXFont(pf^.font).SHXdata.AddFontFloat(@tf);
-             inc(sizeshx);
+             inc(sizeshx);}
            end;
        end;
        x:=tr.p3.x;
@@ -746,7 +743,7 @@ begin
                      else
                          begin
                               programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
-                              dataread:=createsymbol(pf,symnum,memorybuf.GetCurrentReadAddres,{pdata,}datalen+1,false,line);
+                              dataread:=createsymbol(pf,symnum,memorybuf.GetCurrentReadAddres,false,line);
                               memorybuf.jump({datalen}dataread);
                               programlog.LogOutStr('end',lp_DecPos,LM_Trace);
                          end;
@@ -820,7 +817,7 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
                          test:=test;
          //if (*pf^.GetOrCreateSymbolInfo(test)^.{ .symbo linfo[test].}addr=0*)symnum<2560000 then
          programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
-         {if symnum<256 then }dataread:=createsymbol(pf,test{symnum},memorybuf.GetCurrentReadAddres,{pdata,}datalen+1,true,line);
+         {if symnum<256 then }dataread:=createsymbol(pf,test{symnum},memorybuf.GetCurrentReadAddres,true,line);
          programlog.LogOutStr('end',lp_DecPos,LM_Trace);
          //                                                                 else
          //                                                                     pf:=pf;

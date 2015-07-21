@@ -194,23 +194,18 @@ var
    _glyph:PGlyph;
    //psyminfo,psubsyminfo:PGDBsymdolinfo;
 
-   x,y,x1,y1,scx,scy:fontfloat;
+   x1,y1:fontfloat;
    cends,lastoncurve:integer;
    startcountur:boolean;
-   startcounturindex:integer;
    k:gdbdouble;
    tesselator:TessObj;
    lastv:GDBFontVertex2D;
-   tparray:array[0..65535] of gdbvertex;
-   tparrayindex,oldtparrayindex:integer;
+   tparrayindex:integer;
    tv:gdbvertex;
 procedure CompareAndTess(v:GDBFontVertex2D);
 begin
      if (abs(lastv.x-v.x)>eps)or(abs(lastv.y-v.y)>eps) then
      begin
-          tparray[tparrayindex].x:=v.x;
-          tparray[tparrayindex].y:=v.y;
-          tparray[tparrayindex].z:=0;
           //OGLSM.TessVertex(tesselator,@tparray[tparrayindex],nil);
           inc(tparrayindex);
           lastv:=v;
@@ -220,11 +215,6 @@ begin
 end;
 
 procedure EndSymContour;
-var
-   psymbol,pendsymbol:GDBPointer;
-   v:GDBFontVertex2D;
-   len: GDBWord;
-   count:integer;
 begin//----//
      bs.EndCountur;
      exit;
@@ -345,8 +335,6 @@ begin
      end;
   if  startcountur then
                        begin
-                            scx:=x1;
-                            scy:=y1;
                             //----//startcounturindex:=pttf.SHXdata.Count;
                             startcountur:=false;
                        end
@@ -384,8 +372,6 @@ begin
                                                  break;
     end;
   end;
-  x:=x1;
-  y:=y1;
   end;
   bs.DrawCountur;
 
@@ -448,8 +434,6 @@ end;
 //-ttf-//end;
 procedure TTFFont.ProcessTriangleData(si:PGDBsymdolinfo);
 var
-   PTriangles:PGDBFontVertex2D;
-   j:integer;
    symoutbound:GDBBoundingBbox;
    VDCopyParam:TZGLVectorDataCopyParam;
 begin

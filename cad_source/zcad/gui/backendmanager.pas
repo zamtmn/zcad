@@ -39,10 +39,13 @@ function GetCurrentBackEnd:TVA;
 begin
      result:=ppointer(Backends.getelement(sysvar.RD.RD_RendererBackEnd.Selected))^;
 end;
-
-begin
+initialization
   sysvar.RD.RD_RendererBackEnd.Enums.init(10);
   sysvar.RD.RD_RendererBackEnd.Selected:=0;
   Backends.init({$IFDEF DEBUGBUILD}'{143AA836-9372-462F-B107-229B50E7A37C}',{$ENDIF}10);
+end
+finalization
+  sysvar.RD.RD_RendererBackEnd.Enums.done;
+  Backends.done;
 end.
 

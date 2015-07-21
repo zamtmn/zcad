@@ -533,5 +533,6 @@ initialization
   {$IFDEF DEBUGINITSECTION}LogOut('uzglopengldrawer.initialization');{$ENDIF}
   OGLDrawer:=TZGLOpenGLDrawer.create;
 finalization
+  OGLDrawer.Destroy;
 end.
 

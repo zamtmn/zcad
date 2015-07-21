@@ -29,7 +29,7 @@ TZGLVectorDataCopyParam=packed record
                              EID:TEntIndexesData;
                              //GeomIndexMin,GeomIndexMax:TArrayIndex;
                              GeomDataSize:GDBInteger;
-                             IndexsDataIndexMax,IndexsDataIndexMin:TArrayIndex;
+                             //IndexsDataIndexMax,IndexsDataIndexMin:TArrayIndex;
                        end;
 
 PZGLVectorObject=^ZGLVectorObject;
@@ -43,16 +43,17 @@ ZGLVectorObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  function CalcTrueInFrustum(frustum:ClipArray; FullCheck:boolean):TInRect;virtual;
                                  function GetCopyParam(LLPStartIndex,LLPCount:GDBInteger):TZGLVectorDataCopyParam;virtual;
                                  function CopyTo(var dest:ZGLVectorObject;CopyParam:TZGLVectorDataCopyParam):TZGLVectorDataCopyParam;virtual;
-                                 procedure CorrectIndexes(LLPrimitivesStartIndex:GDBInteger;LLPCount,Offset:GDBInteger);virtual;
+                                 procedure CorrectIndexes(LLPrimitivesStartIndex:GDBInteger;LLPCount:GDBInteger;IndexesStartIndex:GDBInteger;IndexesCount:GDBInteger;offset:TEntIndexesOffsetData);virtual;
                                  procedure MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:GDBInteger;const matrix:DMatrix4D);virtual;
                                  function GetBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:GDBInteger):GDBBoundingBbox;virtual;
                                end;
 {Export-}
 implementation
-procedure ZGLVectorObject.CorrectIndexes(LLPrimitivesStartIndex:GDBInteger;LLPCount,Offset:GDBInteger);
+procedure ZGLVectorObject.CorrectIndexes(LLPrimitivesStartIndex:GDBInteger;LLPCount:GDBInteger;IndexesStartIndex:GDBInteger;IndexesCount:GDBInteger;offset:TEntIndexesOffsetData);
 var
    i:integer;
    CurrLLPrimitiveSize:GDBInteger;
+   PIndex:PGDBInteger;
    PLLPrimitive:PTLLPrimitive;
 begin
      PLLPrimitive:=LLprimitives.getelement(LLPrimitivesStartIndex);
@@ -61,6 +62,15 @@ begin
           CurrLLPrimitiveSize:=PLLPrimitive.getPrimitiveSize;
           PLLPrimitive.CorrectIndexes(Offset);
           inc(pbyte(PLLPrimitive),CurrLLPrimitiveSize);
+     end;
+     if IndexesStartIndex<>-1 then
+     begin
+       PIndex:=GeomData.Indexes.getelement(IndexesStartIndex);
+       for i:=1 to IndexesCount do
+       begin
+            PIndex^:=PIndex^+offset.GeomIndexOffset;
+            inc(PIndex);
+       end;
      end;
 end;
 
@@ -92,6 +102,26 @@ begin
                                                                                    result.EID.GeomIndexMax:=eid.GeomIndexMax
                                           end;
        end;
+     if eid.IndexsIndexMin>=0 then
+       begin
+         if result.EID.IndexsIndexMin<0 then
+                                          result.EID.IndexsIndexMin:=eid.IndexsIndexMin
+                                      else
+                                          begin
+                                               if result.EID.IndexsIndexMin>eid.IndexsIndexMin then
+                                                                                   result.EID.IndexsIndexMin:=eid.IndexsIndexMin
+                                          end;
+       end;
+     if eid.IndexsIndexMax>=0 then
+       begin
+         if result.EID.IndexsIndexMax<0 then
+                                          result.EID.IndexsIndexMax:=eid.IndexsIndexMax
+                                      else
+                                          begin
+                                               if result.EID.IndexsIndexMax<eid.IndexsIndexMax then
+                                                                                   result.EID.IndexsIndexMax:=eid.IndexsIndexMax
+                                          end;
+       end;
 end;
 begin
      result.LLPrimitivesStartIndex:=LLPStartIndex;
@@ -99,10 +129,12 @@ begin
      result.LLPrimitivesDataSize:=0;
      result.EID.GeomIndexMin:=-1;
      result.EID.GeomIndexMax:=-1;
+     result.EID.IndexsIndexMin:=-1;
+     result.EID.IndexsIndexMax:=-1;
      for i:=1 to LLPCount do
      begin
           CurrLLPrimitiveSize:=PLLPrimitive.getPrimitiveSize;
-          PLLPrimitive.getEntIndexs(eid);
+          PLLPrimitive.getEntIndexs(GeomData,eid);
           ProcessIndexs;
           result.LLPrimitivesDataSize:=result.LLPrimitivesDataSize+CurrLLPrimitiveSize;
           inc(pbyte(PLLPrimitive),CurrLLPrimitiveSize);
@@ -112,7 +144,7 @@ end;
 function ZGLVectorObject.CopyTo(var dest:ZGLVectorObject;CopyParam:TZGLVectorDataCopyParam):TZGLVectorDataCopyParam;
 var
    LLPrimitivesDestAddr,LLPrimitivesSourceAddr:PTLLPrimitive;
-   DestGeomDataAddr,SourceGeomDataAddr:PGDBvertex3S;
+   DestGeomDataAddr,SourceGeomDataAddr,DestIndexsDataAddr,SourceIndexsDataAddr:PGDBvertex3S;
 begin
      result.LLPrimitivesDataSize:=CopyParam.LLPrimitivesDataSize;
      result.LLPrimitivesStartIndex:=dest.LLprimitives.Count;
@@ -126,6 +158,21 @@ begin
      DestGeomDataAddr:=dest.GeomData.Vertex3S.AllocData(CopyParam.EID.GeomIndexMax-CopyParam.EID.GeomIndexMin+1);
      SourceGeomDataAddr:=self.GeomData.Vertex3S.getelement(CopyParam.EID.GeomIndexMin);
      Move(SourceGeomDataAddr^,DestGeomDataAddr^,CopyParam.GeomDataSize);
+
+     if CopyParam.EID.IndexsIndexMin<>-1 then
+       begin
+         result.EID.IndexsIndexMin:=dest.GeomData.Indexes.Count;
+         result.EID.IndexsIndexMax:=result.EID.IndexsIndexMin+CopyParam.EID.IndexsIndexMax-CopyParam.EID.IndexsIndexMin;
+         //result.GeomDataSize:=CopyParam.GeomDataSize;
+         DestIndexsDataAddr:=dest.GeomData.Indexes.AllocData(CopyParam.EID.IndexsIndexMax-CopyParam.EID.IndexsIndexMin+1);
+         SourceIndexsDataAddr:=self.GeomData.Indexes.getelement(CopyParam.EID.IndexsIndexMin);
+         Move(SourceIndexsDataAddr^,DestIndexsDataAddr^,(CopyParam.EID.IndexsIndexMax-CopyParam.EID.IndexsIndexMin+1)*GeomData.Indexes.Size);
+       end
+     else
+       begin
+          result.EID.IndexsIndexMin:=-1;
+          result.EID.IndexsIndexMax:=-1;
+       end;
 end;
 procedure ZGLVectorObject.MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:GDBInteger;const matrix:DMatrix4D);
 var

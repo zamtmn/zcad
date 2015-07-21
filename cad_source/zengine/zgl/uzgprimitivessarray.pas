@@ -19,7 +19,7 @@
 unit uzgprimitivessarray;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitives,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
+uses uzgindexsarray,uzgprimitives,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
 geometry;
 const
      LLAttrNothing=0;
@@ -39,7 +39,7 @@ TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
                 constructor initnul;
                 procedure AddLLPLine(const P1Index:TLLVertexIndex);
                 procedure AddLLTriangle(const P1Index:TLLVertexIndex);
-                procedure AddLLFreeTriangle(const P1Index,P2Index,P3Index:TLLVertexIndex);
+                procedure AddLLFreeTriangle(const P1Index,P2Index,P3Index:TLLVertexIndex; var ia:ZGLIndexsArray);
                 procedure AddLLPPoint(const PIndex:TLLVertexIndex);
                 function AddLLPSymbol:TArrayIndex;
                 function AddLLPSymbolLine:TArrayIndex;
@@ -57,15 +57,18 @@ begin
   ptt.init;
   ptt.P1Index:=P1Index;
 end;
-procedure TLLPrimitivesArray.AddLLFreeTriangle(const P1Index,P2Index,P3Index:TLLVertexIndex);
+procedure TLLPrimitivesArray.AddLLFreeTriangle(const P1Index,P2Index,P3Index:TLLVertexIndex; var ia:ZGLIndexsArray);
 var
   ptt:PTLLFreeTriangle;
 begin
   ptt:=AllocData(sizeof(TLLFreeTriangle));
   ptt.init;
-  ptt.P1Index:=P1Index;
+  ptt.P1IndexInIndexesArray:=ia.Add(@P1Index);
+  ia.Add(@P2Index);
+  ia.Add(@P3Index);
+  {ptt.P1Index:=P1Index;
   ptt.P2Index:=P2Index;
-  ptt.P3Index:=P3Index;
+  ptt.P3Index:=P3Index;}
 end;
 procedure TLLPrimitivesArray.AddLLPLine(const P1Index:TLLVertexIndex);
 var

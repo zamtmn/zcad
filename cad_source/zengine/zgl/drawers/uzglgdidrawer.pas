@@ -758,5 +758,7 @@ initialization
   CanvasDrawer:=TZGLGDIDrawer.create;
   {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
 finalization
+   CanvasDrawer.Destroy;
+  {$IFDEF WINDOWS}GDIPlusDrawer.Destroy;{$ENDIF}
 end.
 

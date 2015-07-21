@@ -63,6 +63,7 @@ type
                        AfterIterateProc:TAfterIterateProc;
                        PIiterateData:GDBPointer;
                        constructor create(_name:GDBString;_sortedid:integer;ptm:PUserTypeDescriptor;_Category:TMultiPropertyCategory;bip:TBeforeIterateProc;aip:TAfterIterateProc;eip:TEntIterateProc);
+                       destructor destroy;override;
                  end;
   TMyGDBString2TMultiPropertyDictionary=TMyGDBStringDictionary<TMultiProperty>;
 
@@ -97,6 +98,7 @@ var
 begin
      MultiPropertyVectorSort:=TMultiPropertyVectorSort.Create;
      MultiPropertyVectorSort.Sort(MultiPropertyVector,MultiPropertyVector.Size);
+     MultiPropertyVectorSort.Destroy;
 end;
 procedure TMultiPropertiesManager.RegisterFirstMultiproperty(name:GDBString;username:GDBString;ptm:PUserTypeDescriptor;category:TMultiPropertyCategory;id:TObjID;GetVO,SetVO:GDBInteger;bip:TBeforeIterateProc;aip:TAfterIterateProc;ebip:TEntBeforeIterateProc;eip:TEntIterateProc;ECP:TEntChangeProc;CV:TCheckValueFunc=nil);
 begin
@@ -159,6 +161,11 @@ begin
                                                         end;
    inc(sortedid);
 end;
+destructor TMultiProperty.destroy;
+begin
+     MPName:='';
+     MPObjectsData.destroy;
+end;
 constructor TMultiProperty.create;
 begin
      MPName:=_name;
@@ -175,13 +182,18 @@ begin
      MultiPropertyVector:=TMultiPropertyVector.Create;
 end;
 destructor TMultiPropertiesManager.destroy;
+var
+   i:integer;
 begin
-     MultiPropertyDictionary.Free;
-     MultiPropertyVector.Free;
+     for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
+       MultiPropertiesManager.MultiPropertyVector[i].destroy;
+     MultiPropertyDictionary.destroy;
+     MultiPropertyVector.destroy;
+     inherited;
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('zcmultiproperties.initialization');{$ENDIF}
   MultiPropertiesManager:=TMultiPropertiesManager.Create;
 finalization
-  MultiPropertiesManager.Free;
+  MultiPropertiesManager.destroy;
 end.

@@ -362,6 +362,8 @@ begin
         TxtEntType.Enums.add(@s);
         ObjIDVector.PushBack(iterator.getkey);
   until not iterator.Next;
+  if assigned(iterator) then
+    iterator.destroy;
 
 end;
 procedure TMSEditor.CreateMultiPropertys;

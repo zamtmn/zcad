@@ -54,30 +54,12 @@ end;
 
 procedure GDBfont.CreateSymbol(var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;var LLSymbolLineIndex:TArrayIndex);
 var
-  psymbol: GDBPointer;
-  {i, }j, k: GDBInteger;
-  len: GDBWord;
-  //matr,m1: DMatrix4D;
   v,v0:GDBvertex;
   sqrsymh:GDBDouble;
-  v3:GDBVertex;
-  //pv:GDBPolyVertex2D;
-  pv3:GDBPolyVertex3D;
-
-  //plp,plp2:pgdbvertex;
-  //lp,tv:gdbvertex;
-  //pl:GDBPoint3DArray;
-  //ispl:gdbboolean;
-  //ir:itrec;
   psyminfo:PGDBsymdolinfo;
-  //deb:GDBsymdolinfo;
-  //-ttf-//TDInfo:TTrianglesDataInfo;
-  PTriangles:PGDBFontVertex2D;
 
   LLSymbolIndex:TArrayIndex;
   PLLPsymbol:PTLLSymbol;
-  PrimitivesCount:integer;
-  trcount:integer;
   LLSymbolLineCreated:boolean;
   PLLSymbolLine:PTLLSymbolLine;
   VDCopyParam,VDCopyResultParam:TZGLVectorDataCopyParam;
@@ -91,7 +73,7 @@ begin
   if _symbol=32 then
                       _symbol:=_symbol;
   LLSymbolIndex:=-1;
-  trcount:=0;
+  //trcount:=0;
   LLSymbolLineCreated:=false;
 
   psyminfo:=self.GetOrReplaceSymbolInfo(integer(_symbol){//-ttf-//,TDInfo});
@@ -152,7 +134,7 @@ begin
     if maxy<symoutbound.RTF.y then
                                    maxy:=symoutbound.RTF.y;
 
-    PrimitivesCount:=0;
+    //PrimitivesCount:=0;
     {for j := 1 to psyminfo.size do
     begin
       case GDBByte(psymbol^) of

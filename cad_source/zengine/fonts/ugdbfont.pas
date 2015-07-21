@@ -82,6 +82,7 @@ var
   PLLSymbolLine:PTLLSymbolLine;
   VDCopyParam,VDCopyResultParam:TZGLVectorDataCopyParam;
   symoutbound:GDBBoundingBbox;
+  offset:TEntIndexesOffsetData;
 begin
   if _symbol=100 then
                       _symbol:=_symbol;
@@ -136,7 +137,9 @@ begin
                                LLSymbolIndex:=geom.LLprimitives.AddLLPSymbol;
     VDCopyParam:=font.FontData.GetCopyParam(psyminfo.LLPrimitiveStartIndex,psyminfo.LLPrimitiveCount);
     VDCopyResultParam:=font.FontData.CopyTo(geom,VDCopyParam);
-    geom.CorrectIndexes(VDCopyResultParam.LLPrimitivesStartIndex,psyminfo.LLPrimitiveCount,VDCopyResultParam.EID.GeomIndexMin-VDCopyParam.EID.GeomIndexMin);
+    offset.GeomIndexOffset:=VDCopyResultParam.EID.GeomIndexMin-VDCopyParam.EID.GeomIndexMin;
+    offset.IndexsIndexOffset:=VDCopyResultParam.EID.IndexsIndexMin-VDCopyParam.EID.IndexsIndexMin;
+    geom.CorrectIndexes(VDCopyResultParam.LLPrimitivesStartIndex,psyminfo.LLPrimitiveCount,VDCopyResultParam.EID.IndexsIndexMin,VDCopyResultParam.EID.IndexsIndexMax-VDCopyResultParam.EID.IndexsIndexMin+1,offset);
     geom.MulOnMatrix(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax,matr);
     symoutbound:=geom.GetBoundingBbox(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax);
     geom.MulOnMatrix(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax,objmatrix);

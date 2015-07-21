@@ -285,6 +285,7 @@ begin
      if LLprimitives.count=0 then exit;
      OptData.ignoretriangles:=false;
      OptData.ignorelines:=false;
+     OptData.symplify:=false;
      ProcessedSize:=0;
      PPrimitive:=LLprimitives.parray;
      while ProcessedSize<LLprimitives.count do

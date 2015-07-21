@@ -298,10 +298,10 @@ begin
   PLLPsymbol:=geom.LLprimitives.getelement(LLSymbolIndex);
   PLLPsymbol^.SymSize:=geom.LLprimitives.Count-LLSymbolIndex;
   PLLPsymbol^.LineIndex:=-1;
-  if trcount>0 then
-                   PLLPsymbol^.Attrib:=LLAttrNeedSolid
-               else
-                   PLLPsymbol^.Attrib:=LLAttrNothing;
+  if VDCopyParam.EID.IndexsIndexMax>0 then
+                                          PLLPsymbol^.Attrib:=LLAttrNeedSolid
+                                      else
+                                          PLLPsymbol^.Attrib:=LLAttrNothing;
   if {PrimitivesCount>4}(VDCopyResultParam.EID.GeomIndexMax-VDCopyResultParam.EID.GeomIndexMin)>4 then
                            PLLPsymbol^.Attrib:=PLLPsymbol^.Attrib or  LLAttrNeedSimtlify;
   v0:=createvertex(psyminfo^.SymMinX,psyminfo^.SymMinY,0);

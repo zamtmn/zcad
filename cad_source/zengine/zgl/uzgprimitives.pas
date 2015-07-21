@@ -37,6 +37,7 @@ type
 ZGLOptimizerData={$IFNDEF DELPHI}packed{$ENDIF}record
                                                      ignoretriangles:boolean;
                                                      ignorelines:boolean;
+                                                     symplify:boolean;
                                                end;
 TEntIndexesData={$IFNDEF DELPHI}packed{$ENDIF}record
                                                     GeomIndexMin,GeomIndexMax:GDBInteger;
@@ -234,16 +235,26 @@ end;
 
 function TLLPolyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 var
-   i,index:integer;
+   i,index,oldindex:integer;
+   step:integer;
 begin
-  index:=P1Index;
-  for i:=1 to Count do
+  if OptData.symplify then
+                          step:=2
+                      else
+                          step:=1;
+  index:=P1Index+step;
+  oldindex:=P1Index;
+  if not OptData.ignorelines then
   begin
-     Drawer.DrawLine(index,index+1);
-     inc(index);
+    for i:=1 to (Count div step) do
+    begin
+       Drawer.DrawLine(oldindex,index);
+       oldindex:=index;
+       inc(index,step);
+    end;
+    if closed then
+                  Drawer.DrawLine(oldindex,P1Index);
   end;
-  if closed then
-                Drawer.DrawLine(index,P1Index);
   result:=inherited;
 end;
 procedure TLLPolyLine.getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);
@@ -287,6 +298,7 @@ function TLLSymbolEnd.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var Geo
 begin
      OptData.ignoretriangles:=false;
      OptData.ignorelines:=false;
+     OptData.symplify:=false;
      result:=inherited;
 end;
 constructor TLLSymbolLine.init;
@@ -352,6 +364,14 @@ else if (Attrib and LLAttrNeedSimtlify)>0 then
                                                                     end;}
       result:=SymSize;
     end
+    else
+   if (sqrparamsize<({minsymbolsize+1000}100))and(not rc.maxdetail) then
+   begin
+     OptData.ignoretriangles:=true;
+     OptData.ignorelines:=false;
+     if (Attrib and LLAttrNeedSolid)>0 then
+                                           OptData.symplify:=true;
+   end
      else
     if (sqrparamsize<({minsymbolsize+1000}200))and(not rc.maxdetail) then
     begin

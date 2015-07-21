@@ -35,6 +35,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        ConstructObjRoot:GDBObjRoot;
                        SelObjArray:GDBSelectedObjArray;
                        pcamera:PGDBObjCamera;
+                       internalcamera:boolean;
                        OnMouseObj:GDBObjOpenArrayOfPV;
 
                        //OGLwindow1:toglwnd;
@@ -529,6 +530,12 @@ begin
      LTypeStyleTable.FreeAndDone;
      DimStyleTable.FreeAndDone;
      //FileName:='';
+     if internalcamera then
+     if assigned(pcamera) then
+                           begin
+                                pcamera^.done;
+                                GDBFreeMem(pcamera);
+                           end;
 end;
 constructor TSimpleDrawing.init;
 var {tp:GDBTextStyleProp;}
@@ -536,10 +543,12 @@ var {tp:GDBTextStyleProp;}
     cs:TGDBTableCellStyle;
 begin
   pcamera:=pcam;
+  internalcamera:=false;
   if pcamera=nil then
                      begin
                      GDBGetMem({$IFDEF DEBUGBUILD}'{4B7A0493-E8D6-4F24-BB70-C9C246A351BA}',{$ENDIF}pointer(pcamera), sizeof(GDBObjCamera));
                      pcamera^.initnul;
+                     internalcamera:=true;
 
                        pcamera.fovy:=35.0;
                        pcamera.prop.point.x:=0.0;

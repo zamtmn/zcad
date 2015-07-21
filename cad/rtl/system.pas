@@ -182,10 +182,10 @@ GDBFontVertex2D=packed record
                 x:FontFloat;(*saved_to_shd*)
                 y:FontFloat;(*saved_to_shd*)
             end;
-TTrianglesDataInfo=packed record
+{//-ttf-//TTrianglesDataInfo=packed record
                TrianglesAddr: GDBInteger;
                TrianglesSize: GDBWord;
-               end;
+               end;}
 PGDBPolyVertex2D=^GDBPolyVertex2D;
 GDBPolyVertex2D=packed record
                       coord:GDBvertex2D;
@@ -366,8 +366,8 @@ FreeElProc=procedure (p:GDBPointer);
 TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
 PGDBsymdolinfo=^GDBsymdolinfo;
 GDBsymdolinfo=packed record
-    addr: GDBInteger;
-    size: GDBWord;
+    LLPrimitiveStartIndex: GDBInteger;
+    LLPrimitiveCount: GDBInteger;
     NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: GDBDouble;
     Name:GDBString;
     Number:GDBInteger;
@@ -482,7 +482,7 @@ GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(OpenArray)
                       function Add(p:GDBPointer):TArrayIndex;virtual;abstract;
                       function AddRef(var obj):TArrayIndex;virtual;abstract;
                       procedure Shrink;virtual;abstract;
-                      procedure Grow;virtual;abstract;
+                      procedure Grow(newmax:GDBInteger=0);virtual;abstract;
                       procedure setsize(nsize:TArrayIndex);
                       procedure iterategl(proc:GDBITERATEPROC);
                       function getelement(index:TArrayIndex):GDBPointer;
@@ -742,13 +742,14 @@ BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               unicode:GDBBoolean;
               symbolinfo:TSymbolInfoArray;
               unisymbolinfo:GDBOpenArrayOfData;
-              SHXdata:GDBOpenArrayOfByte;
+              //----//SHXdata:GDBOpenArrayOfByte;
+              FontData:ZGLVectorObject;
               constructor init;
               destructor done;virtual;abstract;
-              function GetSymbolDataAddr(offset:integer):pointer;virtual;abstract;
+              //----//function GetSymbolDataAddr(offset:integer):pointer;virtual;abstract;
               function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;abstract;
               function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;virtual;abstract;
-              function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;virtual;abstract;
+              function GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;virtual;abstract;
               function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
               function findunisymbolinfos(symbolname:GDBString):PGDBsymdolinfo;
         end;
@@ -773,7 +774,7 @@ GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     procedure ItFFT;
     destructor done;virtual;abstract;
     function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
-    function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
+    function GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
     procedure CreateSymbol(var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;var LLSymbolLineIndex:TArrayIndex);
   end;
 //Generate on E:\zcad\cad_source\zengine\u\UGDBXYZWStringArray.pas
@@ -1424,40 +1425,73 @@ ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Open
                 function AddGDBVertex(const v:GDBvertex):TArrayIndex;virtual;abstract;
                 function GetLength(const i:TArrayIndex):GDBFloat;virtual;abstract;
              end;
+//Generate on E:\zcad\cad_source\zengine\zgl\uzgindexsarray.pas
+ZGLIndexsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=TArrayIndex*)
+                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                constructor initnul;
+             end;
 //Generate on E:\zcad\cad_source\zengine\zgl\uzglgeomdata.pas
 ZGLGeomData={$IFNDEF DELPHI}packed{$ENDIF}object(GDBaseObject)
                                                 Vertex3S:ZGLVertex3Sarray;
-                                                constructor init;
+                                                Indexes:ZGLIndexsArray;
+                                                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                                                 destructor done;virtual;abstract;
                                                 procedure Clear;virtual;abstract;
                                                 procedure Shrink;virtual;abstract;
+                                                function Add2DPoint(const x,y:fontfloat):TArrayIndex;virtual;abstract;
                                           end;
 //Generate on E:\zcad\cad_source\zengine\zgl\uzgprimitives.pas
 ZGLOptimizerData={$IFNDEF DELPHI}packed{$ENDIF}record
                                                      ignoretriangles:boolean;
                                                      ignorelines:boolean;
+                                                     symplify:boolean;
                                                end;
+TEntIndexesData={$IFNDEF DELPHI}packed{$ENDIF}record
+                                                    GeomIndexMin,GeomIndexMax:GDBInteger;
+                                                    IndexsIndexMin,IndexsIndexMax:GDBInteger;
+                                              end;
+TEntIndexesOffsetData={$IFNDEF DELPHI}packed{$ENDIF}record
+                                                    GeomIndexOffset:GDBInteger;
+                                                    IndexsIndexOffset:GDBInteger;
+                                              end;
 PTLLPrimitive=^TLLPrimitive;
 TLLPrimitive={$IFNDEF DELPHI}packed{$ENDIF} object
                        function getPrimitiveSize:GDBInteger;virtual;abstract;
+                       procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;abstract;
+                       procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;abstract;
                        constructor init;
                        destructor done;
                        function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+                       function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;virtual;abstract;
                    end;
 PTLLLine=^TLLLine;
 TLLLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index:TLLVertexIndex;{P2Index=P1Index+1}
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;virtual;abstract;
+              procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;abstract;
+              procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;abstract;
         end;
 PTLLTriangle=^TLLTriangle;
 TLLTriangle={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;abstract;
+              procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;abstract;
+        end;
+PTLLFreeTriangle=^TLLFreeTriangle;
+TLLFreeTriangle={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
+              P1IndexInIndexesArray:TLLVertexIndex;
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;abstract;
+              procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;abstract;
         end;
 PTLLPoint=^TLLPoint;
 TLLPoint={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               PIndex:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;abstract;
+              procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;abstract;
         end;
 PTLLSymbol=^TLLSymbol;
 TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
@@ -1482,7 +1516,11 @@ TLLSymbolEnd={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
 PTLLPolyLine=^TLLPolyLine;
 TLLPolyLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index,Count:TLLVertexIndex;
+              Closed:GDBBoolean;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;virtual;abstract;
+              procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;abstract;
+              procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;abstract;
         end;
 //Generate on E:\zcad\cad_source\zengine\zgl\uzgprimitivessarray.pas
 TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBByte*)
@@ -1490,21 +1528,36 @@ TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
                 constructor initnul;
                 procedure AddLLPLine(const P1Index:TLLVertexIndex);
                 procedure AddLLTriangle(const P1Index:TLLVertexIndex);
+                procedure AddLLFreeTriangle(const P1Index,P2Index,P3Index:TLLVertexIndex; var ia:ZGLIndexsArray);
                 procedure AddLLPPoint(const PIndex:TLLVertexIndex);
                 function AddLLPSymbol:TArrayIndex;
                 function AddLLPSymbolLine:TArrayIndex;
                 procedure AddLLPSymbolEnd;
-                procedure AddLLPPolyLine(const P1Index,Count:TLLVertexIndex);
+                function AddLLPPolyLine(const P1Index,_Count:TLLVertexIndex;_closed:GDBBoolean=false):TArrayIndex;
              end;
 //Generate on E:\zcad\cad_source\zengine\zgl\uzglvectorobject.pas
+TZGLVectorDataCopyParam=packed record
+                             LLPrimitivesStartIndex:TArrayIndex;
+                             LLPrimitivesDataSize:GDBInteger;
+                             EID:TEntIndexesData;
+                             //GeomIndexMin,GeomIndexMax:TArrayIndex;
+                             GeomDataSize:GDBInteger;
+                             //IndexsDataIndexMax,IndexsDataIndexMin:TArrayIndex;
+                       end;
 PZGLVectorObject=^ZGLVectorObject;
 ZGLVectorObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  LLprimitives:TLLPrimitivesArray;
                                  GeomData:ZGLGeomData;
-                                 constructor init;
+                                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar{$ENDIF});
                                  destructor done;virtual;abstract;
                                  procedure Clear;virtual;abstract;
                                  procedure Shrink;virtual;abstract;
+                                 function CalcTrueInFrustum(frustum:ClipArray; FullCheck:boolean):TInRect;virtual;abstract;
+                                 function GetCopyParam(LLPStartIndex,LLPCount:GDBInteger):TZGLVectorDataCopyParam;virtual;abstract;
+                                 function CopyTo(var dest:ZGLVectorObject;CopyParam:TZGLVectorDataCopyParam):TZGLVectorDataCopyParam;virtual;abstract;
+                                 procedure CorrectIndexes(LLPrimitivesStartIndex:GDBInteger;LLPCount:GDBInteger;IndexesStartIndex:GDBInteger;IndexesCount:GDBInteger;offset:TEntIndexesOffsetData);virtual;abstract;
+                                 procedure MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:GDBInteger;const matrix:DMatrix4D);virtual;abstract;
+                                 function GetBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:GDBInteger):GDBBoundingBbox;virtual;abstract;
                                end;
 //Generate on E:\zcad\cad_source\zengine\zgl\uzglgeometry.pas
 PZGLGeometry=^ZGLGeometry;
@@ -1530,7 +1583,7 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
                 procedure DrawGeometry(var rc:TDrawContext);virtual;abstract;
                 procedure DrawNiceGeometry(var rc:TDrawContext);virtual;abstract;
                 procedure DrawLLPrimitives(var rc:TDrawContext;drawer:TZGLAbstractDrawer);
-                constructor init;
+                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar{$ENDIF});
                 destructor done;virtual;abstract;
                 procedure DrawLineWithLT(const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);virtual;abstract;
                 procedure DrawPolyLineWithLT(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);virtual;abstract;
@@ -2177,7 +2230,7 @@ GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*O
                       function create(name:GDBString):PGDBObjBlockdef;virtual;abstract;
                       procedure freeelement(p:GDBPointer);virtual;abstract;
                       procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
-                      procedure Grow;virtual;abstract;
+                      procedure Grow(newmax:GDBInteger=0);virtual;abstract;
                       procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;abstract;
                     end;
 //Generate on E:\zcad\cad_source\zengine\gdb\entities\GDBComplex.pas
@@ -3595,6 +3648,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        procedure FreeConstructionObjects;virtual;abstract;
                        function GetChangeStampt:GDBBoolean;virtual;abstract;
                        function CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;virtual;abstract;
+                       function GetUnitsFormat:TzeUnitsFormat;virtual;abstract;
                  end;
 //Generate on E:\zcad\cad_source\zengine\gdb\drawings\UGDBDescriptor.pas
 TDWGProps=packed record

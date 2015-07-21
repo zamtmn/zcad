@@ -37,6 +37,7 @@ E:\zcad\cad_source\zcad\languade\uabstractunit.pas
 E:\zcad\cad_source\zcad\languade\varmandef.pas
 E:\zcad\cad_source\zcad\languade\varman.pas
 E:\zcad\cad_source\zengine\zgl\uzgvertex3sarray.pas
+E:\zcad\cad_source\zengine\zgl\uzgindexsarray.pas
 E:\zcad\cad_source\zengine\zgl\uzglgeomdata.pas
 E:\zcad\cad_source\zengine\zgl\uzgprimitives.pas
 E:\zcad\cad_source\zengine\zgl\uzgprimitivessarray.pas

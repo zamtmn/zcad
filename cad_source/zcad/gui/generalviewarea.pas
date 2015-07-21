@@ -130,6 +130,7 @@ type
 
 
                            constructor Create(TheOwner: TComponent); override;
+                           destructor Destroy; override;
                            function CreateWorkArea(TheOwner: TComponent):TCADControl; virtual;abstract;
                            procedure CreateDrawer; virtual;abstract;
                            procedure SetupWorkArea; virtual;abstract;
@@ -1645,6 +1646,14 @@ procedure TGeneralViewArea.asyncupdatemouse(Data: PtrInt);
 begin
      WaMouseMove(nil,[],param.md.mouse.x,param.md.mouse.y);
 end;
+destructor TGeneralViewArea.Destroy;
+begin
+     freeandnil(drawer);
+     freeandnil(OTTimer);
+     freeandnil(OHTimer);
+     inherited;
+end;
+
 constructor TGeneralViewArea.Create(TheOwner: TComponent);
 var
   i:integer;
@@ -1652,6 +1661,7 @@ var
 begin
      inherited;
      InsidePaintMessage:=0;
+     drawer:=nil;
 
      WorkArea:=CreateWorkArea(TheOwner);
      CreateDrawer;

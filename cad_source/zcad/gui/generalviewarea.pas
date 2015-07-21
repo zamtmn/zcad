@@ -20,7 +20,7 @@ unit generalviewarea;
 {$INCLUDE def.inc}
 interface
 uses
-     log,zemathutils,gdbpalette,GDBHelpObj{нужно убрать},
+     log,zemathutils,gdbpalette,
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
      UGDBLayerArray,ugdbdimstylearray,
      oglwindowdef,gdbdrawcontext,varmandef,zcadsysvars,GDBEntity,zcadinterface,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
@@ -863,7 +863,17 @@ begin
       end
       else
       if (param.ospoint.ostype = os_center)then
-                                               circlepointoflod[8].DrawGeometry
+                                               begin
+                                                 dc.drawer.DrawClosedPolyLine2DInDCS([-1,     0,
+                                                                                      -0.707, 0.707,
+                                                                                       0,     1,
+                                                                                       0.707, 0.707,
+                                                                                       1,     0,
+                                                                                       0.707,-0.707,
+                                                                                       0,    -1,
+                                                                                      -0.707,-0.707
+                                                                                       ]);
+                                               end
       else
       if (param.ospoint.ostype = os_q0)or(param.ospoint.ostype = os_q1)
        or(param.ospoint.ostype = os_q2)or(param.ospoint.ostype = os_q3) then

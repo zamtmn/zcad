@@ -20,12 +20,10 @@ unit GDBHelpObj;
 {$INCLUDE def.inc}
 interface
 uses UGDBPolyPoint2DArray,gdbase;
-var
-   circlepointoflod:array[0..255] of GDBpolyPoint2DArray;
 const
    CircleLODCount=100;
-{procedure startup;
-procedure finalize;}
+var
+   circlepointoflod:array[0..CircleLODCount] of GDBpolyPoint2DArray;
 implementation
 uses
     log;
@@ -36,8 +34,6 @@ var
 begin
   for j:=0 to CircleLODCount do
   begin
-       //if j=10 then
-       //             i:=i;
        circlepointoflod[j].init({$IFDEF DEBUGBUILD}'{9EFC07BB-AAD4-401E-AA83-9011670A1FF4}',{$ENDIF}j+1);
        pv.coord.x:=1;
        pv.coord.y:=0;
@@ -54,22 +50,13 @@ begin
 end;
 procedure freecircle;
 var
-  {i,}j: longint;
-  //pv:GDBPolyVertex2D;
+  j: longint;
 begin
   for j:=0 to CircleLODCount do
   begin
        circlepointoflod[j].FreeAndDone;
   end;
 end;
-{procedure startup;
-begin
-     createcircle;
-end;
-procedure finalize;
-begin
-     freecircle;
-end;}
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('GDBCHelpObj.initialization');{$ENDIF}
   createcircle;

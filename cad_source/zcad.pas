@@ -79,7 +79,6 @@ uses
 
 
   //varman,
-  GDBHelpObj,
   GDBManager,
   //UGDBDescriptor,
   commandline,

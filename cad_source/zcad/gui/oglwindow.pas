@@ -35,7 +35,6 @@ uses
   {$IFNDEF DELPHI}{GLext,gl,glu,}OpenGLContext,{$ELSE}dglOpenGL,UOpenGLControl,{$ENDIF}
   gdbase,{varmandef,varman,UUnitManager,}
   oglwindowdef,
-  GDBHelpObj,
   sysinfo,
   strproc,glstatemanager,memman,
   log,abstractviewarea;

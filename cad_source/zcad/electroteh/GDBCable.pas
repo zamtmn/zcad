@@ -8,8 +8,8 @@ unit GDBCable;
 {$INCLUDE def.inc}
 
 interface
-uses gdbobjectextender,varman,gdbdrawcontext,GDBGenericSubEntry,ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfByte,UGDBLayerArray{,UGDBObjBlockdefArray},UUnitManager,GDBCurve,geometry,math,UGDBOpenArrayOfData,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,varman},varmandef,
-GDBase{,GDBLINE},GDBHelpObj,{UGDBDescriptor,}gdbobjectsconstdef{,oglwindowdef},dxflow,sysutils,memman,GDBSubordinated,GDBDEvICE;
+uses gdbobjectextender,varman,gdbdrawcontext,GDBGenericSubEntry,ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfByte,UGDBLayerArray,UUnitManager,GDBCurve,geometry,math,UGDBOpenArrayOfData,gdbasetypes,gdbEntity,varmandef,
+GDBase,gdbobjectsconstdef,dxflow,sysutils,memman,GDBSubordinated,GDBDEvICE;
 type
 {Повторное описание типа в Cableы}
   PTCableType=^TCableType;

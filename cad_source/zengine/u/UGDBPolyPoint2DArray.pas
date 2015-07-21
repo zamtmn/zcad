@@ -19,15 +19,15 @@
 unit UGDBPolyPoint2DArray;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
-     {varmandef,}glstatemanager;
+uses gdbasetypes,UGDBOpenArrayOfData, sysutils,gdbase, geometry;
+     //glstatemanager;
 type
 {Export+}
 PGDBPolyPoint2DArray=^GDBPolyPoint2DArray;
 GDBPolyPoint2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 
-                      procedure DrawGeometry;virtual;
+                      //procedure DrawGeometry;virtual;
                       function InRect(Frame1, Frame2: GDBvertex2DI):TInRect;virtual;
                       procedure freeelement(p:GDBPointer);virtual;
                 end;
@@ -41,9 +41,8 @@ constructor GDBPolyPoint2DArray.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBPolyVertex2D));
 end;
-procedure GDBPolyPoint2DArray.drawgeometry;
+(*procedure GDBPolyPoint2DArray.drawgeometry;
 var p:PGDBPolyVertex2D;
-    //counter:GDBInteger;
     i:GDBInteger;
 begin
   if count<2 then exit;
@@ -65,37 +64,7 @@ begin
   oglsm.myglend;
 
   end;
-(*
-  p:=parray;
-  counter:=0;
-  for i:=0 to count-1 do
-  begin
-     if counter<=0
-     then
-         begin
-              if p^.count=0 then
-                                begin
-                                     if counter=0 then
-                                                      oglsm.myglbegin(GL_LINES)
-                                end
-                              else
-                                  begin
-                                       if counter<0 then oglsm.myglend;
-                                       oglsm.myglbegin(GL_LINE_STRIP);
-                                       counter:=p^.count;
-                                  end;
-         end;
-     glvertex2dv(@p^.coord);
-     inc(p);
-     dec(counter);
-     if (counter=0)then
-                       begin
-                            oglsm.myglend;
-                       end;
-  end;
-  //myglend;
-*)
-end;
+end;*)
 function GDBPolyPoint2DArray.inrect;
 var p,pp:PGDBPolyVertex2D;
     counter:GDBInteger;

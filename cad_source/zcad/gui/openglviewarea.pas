@@ -26,7 +26,7 @@ uses
      {$IFDEF LCLQT}
      qtwidgets,qt4,qtint,
      {$ENDIF}
-     uzglgdidrawer,abstractviewarea,uzglopengldrawer,sysutils,GDBHelpObj,memman,glstatemanager,gdbase,gdbasetypes,
+     uzglgdidrawer,abstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
      oglwindow,oglwindowdef,gdbdrawcontext,varmandef,commandline,zcadsysvars,geometry,shared,LCLType,
      ExtCtrls,classes,Controls,Graphics,generalviewarea,math,log,backendmanager;

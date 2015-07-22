@@ -80,7 +80,10 @@ procedure createsplash;
 begin
      sysparam.otherinstancerun:=InstanceRunning('zcad unique instance',true,true);
      SplashWindow:=TSplashWnd.CreateNew(nil);
-     SplashWindow.cb:=TComboBox.CreateParented(SplashWindow.Handle);
+     //SplashWindow.cb:=TComboBox.CreateParented(SplashWindow.Handle);
+     SplashWindow.cb:=TComboBox.Create(NIL);
+     SplashWindow.cb.ParentWindow := SplashWindow.Handle;
+
      SplashWindow.cb.hide;
      if not sysparam.otherinstancerun then
      if not sysparam.nosplash then
@@ -92,8 +95,7 @@ procedure removesplash;
 begin
      if assigned(SplashWindow) then
      begin
-          sysparam.defaultheight:=SplashWindow.cb.Height;
-          SplashWindow.cb.Free;
+          SplashWindow.cb.Destroy;
           SplashWindow.hide;
           SplashWindow.Free;
           SplashWindow:=nil;

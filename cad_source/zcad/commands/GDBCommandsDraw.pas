@@ -259,6 +259,7 @@ type
                        pt:PGDBObjText;
                        //procedure Build(Operands:pansichar); virtual;
                        procedure CommandStart(Operands:pansichar); virtual;
+                       procedure CommandEnd; virtual;
                        procedure Command(Operands:pansichar); virtual;
                        procedure BuildPrimitives; virtual;
                        procedure Format;virtual;
@@ -1801,6 +1802,11 @@ begin
           commandmanager.executecommandend;
      end;
 end;
+procedure TextInsert_com.CommandEnd;
+begin
+
+end;
+
 procedure TextInsert_com.Command(Operands:pansichar);
 var
    s:string;
@@ -1816,7 +1822,8 @@ begin
                                                                                 begin
                                                                                      s:=TextInsertParams.Style.Enums.getGDBString(TextInsertParams.Style.Selected);
                                                                                 end;
-      TextInsertParams.Style.Enums.Clear;
+      //TextInsertParams.Style.Enums.Clear;
+      TextInsertParams.Style.Enums.free;
       i:=GetStyleNames(TextInsertParams.Style.Enums,s);
       if i<0 then
                  TextInsertParams.Style.Selected:=0;
@@ -4129,6 +4136,7 @@ procedure Finalize;
 begin
   BIProp.Blocks.Enums.freeanddone;
   BEditParam.Blocks.Enums.freeanddone;
+  TextInsertParams.Style.Enums.freeanddone;
   freeandnil(psd);
   freeandnil(paged);
 end;

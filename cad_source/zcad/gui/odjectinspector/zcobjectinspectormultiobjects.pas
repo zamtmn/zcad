@@ -173,6 +173,8 @@ begin
               repeat
                     iterator.MutableValue.SetValueErrorRange:=false;
               until not iterator.Next;
+              if assigned(iterator) then
+                                        iterator.destroy;
          end;
 end;
 procedure TMSEditor.processProperty(const ID:TObjID; const pentity: pGDBObjEntity; const PMultiPropertyDataForObjects:PTMultiPropertyDataForObjects; const pu:PTObjectUnit; const PSourceVD:PVarDesk;const mp:TMultiProperty; var DC:TDrawContext);

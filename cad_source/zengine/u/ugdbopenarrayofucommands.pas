@@ -234,7 +234,12 @@ destructor TGMultiObjectProcessCommand.Done;
 begin
      inherited;
      if {not} FreeArray then
-                          ObjArray.freeanddone;
+                          ObjArray.freeanddone
+                        else
+                          begin
+                            ObjArray.clear;
+                            ObjArray.done;
+                          end;
 end;
 
 constructor TGMultiObjectChangeCommand.Assign(const _dodata,_undodata:_T;const objcount:GDBInteger);

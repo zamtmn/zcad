@@ -101,7 +101,7 @@ begin
      GeometryUnit.done;
      MiscUnit.done;
      SummaryUnit.done;
-     TxtEntType.Enums.done;
+     TxtEntType.Enums.FreeAndDone;
 
      ObjID2Counter.Free;
      ObjIDVector.Free;

@@ -19,7 +19,7 @@
 unit beziersolver;
 {$INCLUDE def.inc}
 interface
-uses usimplegenerics,uzglvectorobject,glstatemanager,gluinterface,gvector,memman,
+uses uzgprimitives,math,usimplegenerics,uzglvectorobject,glstatemanager,gluinterface,gvector,memman,
      UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,geometry;
 type
 TPointAttr=(TPA_OnCurve,TPA_NotOnCurve);
@@ -27,6 +27,7 @@ TSolverMode=(TSM_WaitStartCountur,TSM_WaitStartPoint,TSM_WaitPoint);
 TVector2D={specialize }TVector<GDBVertex2D>;
 TDummyData=record
                  v:GDBFontVertex2D;
+                 attr:TPointAttr;
                  index:TArrayIndex;
            end;
 TMyVectorArrayGDBFontVertex2D=TMyVectorArray<{GDBFontVertex2D}TDummyData>;
@@ -39,6 +40,7 @@ TBezierSolver2D=class
                      scontur,truescontur:GDBvertex2D;
                      sconturpa:TPointAttr;
                      Conturs:TMyVectorArrayGDBFontVertex2D;
+                     LastOncurveLineAdded:boolean;
                      constructor create;
                      destructor Destroy;overload;
                      procedure AddPoint(x,y:double;pa:TPointAttr);overload;
@@ -50,23 +52,23 @@ TBezierSolver2D=class
                      procedure ClearConturs;
                      procedure solve;
                      function getpoint(t:gdbdouble):GDBvertex2D;
-                     procedure AddPointToContur(var size:GDBWord;x,y,x1,y1:fontfloat);
+                     procedure AddPointToContur(x,y:fontfloat;attr:TPointAttr);
                 end;
 var
    BS:TBezierSolver2D;
    triangle:array[0..2] of integer;
 implementation
 uses {math,}log;
-procedure TBezierSolver2D.AddPointToContur(var size:GDBWord;x,y,x1,y1:fontfloat);
+procedure TBezierSolver2D.AddPointToContur(x,y:fontfloat;attr:TPointAttr);
 var
-   tff:{GDBFontVertex2D}TDummyData;
+   tff1,tff0,tff:{GDBFontVertex2D}TDummyData;
+   a: GDBDouble;
 begin
+    //if attr=TPA_NotOnCurve then exit;
     tff.v.x:=x;
     tff.v.y:=y;
+    tff.attr:=attr;
     Conturs.AddDataToCurrentArray(tff);
-    //vectordata.LLprimitives.AddLLPLine(vectordata.GeomData.Add2DPoint(x,y));
-    //vectordata.GeomData.Add2DPoint(x1,y1);
-    //inc(size);
 end;
 constructor TBezierSolver2D.create;
 begin
@@ -94,6 +96,7 @@ procedure TBezierSolver2D.AddPoint(p:GDBvertex2D;pa:TPointAttr);
 begin
      case FMode of
      TSM_WaitStartCountur:begin
+                             LastOncurveLineAdded:=false;
                              scontur:=p;
                              sconturpa:=pa;
                              if pa=TPA_OnCurve then
@@ -175,15 +178,22 @@ end;
 
 procedure TBezierSolver2D.DrawCountur;
 var
-   i,j:integer;
+   i,j,simpleindex,polyindex:integer;
+   ptpl:PTLLPolyLine;
 begin
      for i:=0 to Conturs.VArray.Size-1 do
      begin
-          VectorData.LLprimitives.AddLLPPolyLine(VectorData.GeomData.Vertex3S.Count,Conturs.VArray[i].Size-1,true);
+          polyindex:=VectorData.LLprimitives.AddLLPPolyLine(VectorData.GeomData.Vertex3S.Count,Conturs.VArray[i].Size-1,true);
+          ptpl:=VectorData.LLprimitives.getelement(polyindex);
           inc(shxsize^);
           for j:=0 to Conturs.VArray[i].Size-1 do
           begin
                Conturs.VArray[i].mutable[j]^.index:=VectorData.GeomData.Add2DPoint(Conturs.VArray[i][j].v.x,Conturs.VArray[i][j].v.y);
+               if Conturs.VArray[i].mutable[j]^.attr=TPA_OnCurve then
+                                                                     begin
+                                                                          simpleindex:=VectorData.GeomData.Indexes.add(@ Conturs.VArray[i].mutable[j]^.index);
+                                                                          ptpl^.AddSimplifiedIndex(simpleindex);
+                                                                     end;
           end;
      end;
 end;
@@ -220,23 +230,32 @@ begin
      if border<3 then
      begin
           if border=2 then
-          AddPointToContur(shxsize^,FArray[0].x,FArray[0].y,FArray[1].x,FArray[1].y);
+          begin
+          if not LastOncurveLineAdded then
+          AddPointToContur(FArray[0].x,FArray[0].y,TPA_OnCurve);
+          AddPointToContur(FArray[1].x,FArray[1].y,TPA_OnCurve);
+          LastOncurveLineAdded:=true;
+          end;
           exit;
      end;
      size:=round((BOrder+2)*(BOrder-1)/2)+1;
      FArray.Resize(size);
-     n:=BOrder{*2}-1+2;//<----------------------------
+     n:=BOrder;//<----------------------------
      for j:=1 to n-1 do
      begin
           p:=getpoint(j/n);
           //addgcross(VectorData,shxsize^,p.x,p.y);
           if j>1 then
-                     AddPointToContur(shxsize^,prevp.x,prevp.y,p.x,p.y)
+                     AddPointToContur(prevp.x,prevp.y,TPA_NotOnCurve)
                  else
-                     AddPointToContur(shxsize^,FArray[0].x,FArray[0].y,p.x,p.y);
+                     begin
+                       if not LastOncurveLineAdded then;
+                       AddPointToContur(FArray[0].x,FArray[0].y,TPA_OnCurve);
+                     end;
           prevp:=p;
      end;
-          AddPointToContur(shxsize^,p.x,p.y,FArray[BOrder-1].x,FArray[BOrder-1].y);
+          AddPointToContur(p.x,p.y,TPA_NotOnCurve);
+     LastOncurveLineAdded:=false;
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('BezierSolver.initialization');{$ENDIF}

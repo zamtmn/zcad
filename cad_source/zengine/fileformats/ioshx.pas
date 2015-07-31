@@ -414,7 +414,7 @@ begin
                       //----//PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
 
                       GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
-                      LLPolyLineIndexInArray:=pf^.font.FontData.LLprimitives.AddLLPPolyLine(GeomDataIndex,0{баба ягодка опять, кто считать будет?});
+                      LLPolyLineIndexInArray:=pf^.font.FontData.LLprimitives.AddLLPPolyLine(GeomDataIndex,1{баба ягодка опять, кто считать будет?});
 
                             end;
                       while (dx<>0)or(dy<>0) do

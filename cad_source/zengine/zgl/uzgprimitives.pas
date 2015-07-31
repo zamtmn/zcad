@@ -109,12 +109,14 @@ TLLSymbolEnd={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
                    end;
 PTLLPolyLine=^TLLPolyLine;
 TLLPolyLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
-              P1Index,Count:TLLVertexIndex;
+              P1Index,Count,SimplifiedContourIndex,SimplifiedContourSize:TLLVertexIndex;
               Closed:GDBBoolean;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
               function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;virtual;
               procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;
+              procedure AddSimplifiedIndex(Index:TLLVertexIndex);virtual;
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
+              constructor init;
         end;
 {Export-}
 implementation
@@ -232,41 +234,77 @@ procedure TLLFreeTriangle.CorrectIndexes(const offset:TEntIndexesOffsetData);
 begin
      P1IndexInIndexesArray:=P1IndexInIndexesArray+offset.IndexsIndexOffset;
 end;
+procedure TLLPolyLine.AddSimplifiedIndex(Index:TLLVertexIndex);
+begin
+     if SimplifiedContourIndex=-1 then
+                                      SimplifiedContourIndex:=Index;
+     inc(SimplifiedContourSize);
+end;
+constructor TLLPolyLine.init;
+begin
+     P1Index:=-1;
+     Count:=0;
+     SimplifiedContourIndex:=-1;
+     SimplifiedContourSize:=0;
+     Closed:=false;
+end;
 
 function TLLPolyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 var
-   i,index,oldindex:integer;
-   step:integer;
+   i,index,oldindex,sindex:integer;
 begin
-  if OptData.symplify then
-                          step:=2
-                      else
-                          step:=1;
-  index:=P1Index+step;
-  oldindex:=P1Index;
   if not OptData.ignorelines then
   begin
-    for i:=1 to (Count div step) do
+    if (OptData.symplify)and(SimplifiedContourIndex<>-1) then
     begin
-       Drawer.DrawLine(oldindex,index);
-       oldindex:=index;
-       inc(index,step);
+      sindex:=SimplifiedContourIndex;
+      if sindex<0 then sindex:=0;
+      oldindex:=PTArrayIndex(GeomData.Indexes.getelement(sindex))^;
+      inc(sindex);
+      for i:=1 to SimplifiedContourSize-1 do
+      begin
+         index:=PTArrayIndex(GeomData.Indexes.getelement(sindex))^;
+         Drawer.DrawLine(oldindex,index);
+         oldindex:=index;
+         inc(sindex);
+      end;
+    end
+    else
+    begin
+       index:=P1Index+1;
+       oldindex:=P1Index;
+         for i:=1 to Count-1 do
+         begin
+            Drawer.DrawLine(oldindex,index);
+            oldindex:=index;
+            inc(index);
+         end;
     end;
-    if closed then
-                  Drawer.DrawLine(oldindex,P1Index);
+  if closed then
+                       Drawer.DrawLine(oldindex,P1Index);
   end;
   result:=inherited;
 end;
 procedure TLLPolyLine.getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);
 begin
      eid.GeomIndexMin:=P1Index;
-     eid.GeomIndexMax:=P1Index+Count;
+     eid.GeomIndexMax:=P1Index+Count-1;
+     if self.SimplifiedContourIndex=-1 then
+     begin
+     eid.IndexsIndexMin:=-1;
      eid.IndexsIndexMax:=-1;
-     eid.IndexsIndexMin:=-1
+     end
+     else
+     begin
+     eid.IndexsIndexMin:=SimplifiedContourIndex;
+     eid.IndexsIndexMax:=SimplifiedContourIndex+SimplifiedContourSize-1;
+     end
+
 end;
 procedure TLLPolyLine.CorrectIndexes(const offset:TEntIndexesOffsetData);
 begin
      P1Index:=P1Index+offset.GeomIndexOffset;
+     SimplifiedContourIndex:=SimplifiedContourIndex+offset.IndexsIndexOffset;
 end;
 function TLLPolyLine.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;
 var
@@ -346,7 +384,7 @@ else if (Attrib and LLAttrNeedSimtlify)>0 then
   begin
     if (Attrib and LLAttrNeedSolid)>0 then
                                                                   begin
-                                                                   minsymbolsize:=60;
+                                                                   minsymbolsize:=30;
                                                                    OptData.ignorelines:=true;
                                                                   end
                                                               else
@@ -365,18 +403,20 @@ else if (Attrib and LLAttrNeedSimtlify)>0 then
       result:=SymSize;
     end
     else
-   if (sqrparamsize<({minsymbolsize+1000}100))and(not rc.maxdetail) then
+   {if (sqrparamsize<(300))and(not rc.maxdetail) then
    begin
      OptData.ignoretriangles:=true;
      OptData.ignorelines:=false;
      if (Attrib and LLAttrNeedSolid)>0 then
                                            OptData.symplify:=true;
    end
-     else
-    if (sqrparamsize<({minsymbolsize+1000}200))and(not rc.maxdetail) then
+     else}
+    if (sqrparamsize<{(minsymbolsize+1000)}400)and(not rc.maxdetail) then
     begin
       OptData.ignoretriangles:=true;
       OptData.ignorelines:=false;
+      if (Attrib and LLAttrNeedSolid)>0 then
+                                           OptData.symplify:=true;
     end;
   end;
 

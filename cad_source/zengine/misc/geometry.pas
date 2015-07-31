@@ -1487,7 +1487,6 @@ begin
         if (dx > 0) and (dy < 0) then
           result := 2 * pi - temp
 end;
-
 function Vertexmorph(const Vector1, Vector2: GDBVertex; a: GDBDouble): GDBVertex;
 var
   temp: GDBVertex;

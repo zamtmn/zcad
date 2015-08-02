@@ -46,7 +46,7 @@ function MakeHash(const s: GDBString):SizeUInt;
 procedure KillString(var str:GDBString);inline;
 procedure RemoveOneRefCount(str:GDBString);inline;
 
-Function PosWithBracket(c : AnsiChar; Const s : RawByteString) : SizeInt;
+Function PosWithBracket(c : AnsiChar; Const s : {RawByteString}GDBString) : SizeInt;
 
 type
   TCodePage=(CP_utf8,CP_win);
@@ -59,7 +59,7 @@ var
 implementation
 uses
     zcadsysvars,log;
-Function PosWithBracket(c : AnsiChar; Const s : RawByteString) : SizeInt;
+Function PosWithBracket(c : AnsiChar; Const s : {RawByteString}GDBString) : SizeInt;
 var
   i: SizeInt;
   pc : PAnsiChar;

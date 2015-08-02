@@ -23,10 +23,15 @@ interface
 uses strproc,LCLVersion,gdbase,gdbasetypes,
      sysutils,
      gutil,gmap,ghashmap,gvector;
-{$if LCL_FULLVERSION<1030000}{$DEFINE OldIteratorDef}{$ENDIF}
-//{$if LCL_FULLVERSION>=1030000}{$ENDIF}
 type
 {$IFNDEF DELPHI}
+{$if LCL_FULLVERSION<1030000}
+  {$DEFINE OldIteratorDef}
+{$ENDIF}
+{$IF FPC_FULlVERSION<20701}
+  {$DEFINE OldIteratorDef}
+{$ENDIF}
+//{$if LCL_FULLVERSION>=1030000}{$ENDIF}
 LessPointer=specialize TLess<pointer>;
 LessGDBString=specialize TLess<GDBString>;
 LessDWGHandle=specialize TLess<TDWGHandle>;
@@ -114,12 +119,12 @@ begin
 end;
 procedure TMyVectorArray.AddDataToCurrentArray(data:T);
 begin
-     VArray[CurrentArray].PushBack(data);
+     (VArray[CurrentArray]){brackets for 2.6.x compiler version}.PushBack(data);
 end;
 function TMyHashMap.MyGetValue(key:TKey; out Value:TValue):boolean;
 var i,h,bs:longint;
 begin
-  {$IFDEF OldIteratorDef}
+  {$IF FPC_FULlVERSION<=20701}
   result:=contains(key);
   if result then value:=self.GetData(key);
   {$ELSE}
@@ -205,16 +210,20 @@ begin
 end;
 function GKey2DataMap.MyContans(key:TKey):boolean;
 var
+   {$IF FPC_FULlVERSION<=20701}
    {$IFDEF OldIteratorDef}
    Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
+   {$ELSE}
+   Iterator:TIterator;
+   {$ENDIF}
    {$ELSE}
    Pair:TPair;
    Node: TMSet.PNode;
    {$ENDIF}
 begin
-  {$IFDEF OldIteratorDef}
+  {$IF FPC_FULlVERSION<=20701}
   Iterator:=Find(key);
-  if assigned(Iterator)then
+  if Iterator<>nil then
                            begin
                                 result:=true;
                                 Iterator.Destroy;
@@ -278,7 +287,8 @@ begin
                        begin
                             Insert(Key, Value);
                             OutValue:=Value;
-                            inc(Value);
+                            value:=value+1;
+                            //inc(Value);
                        end
                    else
                        begin

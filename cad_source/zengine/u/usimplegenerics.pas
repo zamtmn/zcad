@@ -25,11 +25,11 @@ uses strproc,LCLVersion,gdbase,gdbasetypes,
      gutil,gmap,ghashmap,gvector;
 type
 {$IFNDEF DELPHI}
-{$if LCL_FULLVERSION<1030000}
+{$if LCL_FULLVERSION<1030000}//dumb check for old 2.7.1 fpc releases with problem in generic inheritance
   {$DEFINE OldIteratorDef}
 {$ENDIF}
 {$IF FPC_FULlVERSION<20701}
-  {$DEFINE OldIteratorDef}
+  {$DEFINE OldIteratorDef}  //check for 2.6.x fpc, coment this, or uncoment - generic inheritance not working
 {$ENDIF}
 //{$if LCL_FULLVERSION>=1030000}{$ENDIF}
 LessPointer=specialize TLess<pointer>;
@@ -156,7 +156,8 @@ end;
 procedure GKey2DataMap.RegisterKey(const key:TKey; const Value:TValue);
 var
    {$IFDEF OldIteratorDef}
-   Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
+   TParent:specialize TMap<TKey, TValue, TCompare>;
+   Iterator:TParent.TIterator;
    {$ELSE}
    Iterator:TIterator;
    {$ENDIF}
@@ -175,7 +176,8 @@ end;
 function GKey2DataMap.MyGetValue(key:TKey; out Value:TValue):boolean;
 var
    {$IFDEF OldIteratorDef}
-   Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
+   TParent:specialize TMap<TKey, TValue, TCompare>;
+   Iterator:TParent.TIterator;
    {$ELSE}
    Iterator:TIterator;
    {$ENDIF}
@@ -193,7 +195,8 @@ end;
 function GKey2DataMap.MyGetMutableValue(key:TKey; out PValue:PTValue):boolean;
 var
    {$IFDEF OldIteratorDef}
-   Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
+   TParent:specialize TMap<TKey, TValue, TCompare>;
+   Iterator:TParent.TIterator;
    {$ELSE}
    Iterator:TIterator;
    {$ENDIF}
@@ -212,7 +215,8 @@ function GKey2DataMap.MyContans(key:TKey):boolean;
 var
    {$IF FPC_FULlVERSION<=20701}
    {$IFDEF OldIteratorDef}
-   Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
+   TParent:specialize TMap<TKey, TValue, TCompare>;
+   Iterator:TParent.TIterator;
    {$ELSE}
    Iterator:TIterator;
    {$ENDIF}
@@ -240,7 +244,8 @@ end;
 function TMyMap.MyGetValue(key:TKey):TValue;
 var
    {$IFDEF OldIteratorDef}
-   Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
+   TParent:specialize TMap<TKey, TValue, TCompare>;
+   Iterator:TParent.TIterator;
    {$ELSE}
    Iterator:TIterator;
    {$ENDIF}
@@ -257,7 +262,8 @@ end;
 procedure TMyMapCounter.CountKey(const key:TKey; const InitialCounter:SizeUInt);
 var
    {$IFDEF OldIteratorDef}
-   Iterator:specialize TMap<TKey, SizeUInt, TCompare>.TIterator;
+   TParent:specialize TMap<TKey, TValue, TCompare>;
+   Iterator:TParent.TIterator;
    {$ELSE}
    Iterator:TIterator;
    {$ENDIF}
@@ -277,7 +283,8 @@ end;
 procedure TMyMap.MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);
 var
    {$IFDEF OldIteratorDef}
-   Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
+   TParent:specialize TMap<TKey, TValue, TCompare>;
+   Iterator:TParent.TIterator;
    {$ELSE}
    Iterator:TIterator;
    {$ENDIF}

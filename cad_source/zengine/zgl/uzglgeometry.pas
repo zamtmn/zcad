@@ -768,12 +768,12 @@ end;
 
 procedure ZGLGeometry.drawgeometry;
 begin
-  rc.drawer.PVertexBuffer:=@GeomData.Vertex3S;
+  //rc.drawer.PVertexBuffer:=@GeomData.Vertex3S;
   DrawLLPrimitives(rc,rc.drawer);
 end;
 procedure ZGLGeometry.drawNicegeometry;
 begin
-  rc.drawer.PVertexBuffer:=@GeomData.Vertex3S;
+  //rc.drawer.PVertexBuffer:=@GeomData.Vertex3S;
   DrawLLPrimitives(rc,rc.drawer);
 end;
 constructor ZGLGeometry.init;

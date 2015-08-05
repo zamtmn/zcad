@@ -1544,7 +1544,7 @@ begin
 
         CanvasDrawer.midline:=midline;
         CanvasDrawer.canvas:=canvas;
-        CanvasDrawer.PVertexBuffer:=@geom.GeomData.Vertex3S;
+        //CanvasDrawer.PVertexBuffer:=@geom.GeomData.Vertex3S;
         //geom.DrawLLPrimitives(CanvasDrawer);
 
         {if geom.Triangles.count>0 then

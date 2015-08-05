@@ -79,7 +79,18 @@ TLLFreeTriangle={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
         end;
-
+PTLLTriangleStrip=^TLLTriangleStrip;
+TLLTriangleStrip={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
+              P1IndexInIndexesArray:TLLVertexIndex;
+              IndexInIndexesArraySize:TLLVertexIndex;
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;
+              procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
+              procedure AddIndex(Index:TLLVertexIndex);virtual;
+        end;
+PTLLTriangleFan=^TLLTriangleFan;
+TLLTriangleFan={$IFNDEF DELPHI}packed{$ENDIF} object(TLLTriangleStrip)
+        end;
 PTLLPoint=^TLLPoint;
 TLLPoint={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               PIndex:TLLVertexIndex;
@@ -153,7 +164,7 @@ end;
 function TLLLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 begin
      if not OptData.ignorelines then
-                                    Drawer.DrawLine(P1Index,P1Index+1);
+                                    Drawer.DrawLine(@geomdata.Vertex3S,P1Index,P1Index+1);
      result:=inherited;
 end;
 function TLLLine.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;
@@ -174,7 +185,7 @@ begin
 end;
 function TLLPoint.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 begin
-     Drawer.DrawPoint(PIndex);
+     Drawer.DrawPoint(@geomdata.Vertex3S,PIndex);
      result:=inherited;
 end;
 procedure TLLPoint.getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);
@@ -191,7 +202,7 @@ end;
 function TLLTriangle.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 begin
      if not OptData.ignoretriangles then
-                                        Drawer.DrawTriangle(P1Index,P1Index+1,P1Index+2);
+                                        Drawer.DrawTriangle(@geomdata.Vertex3S,P1Index,P1Index+1,P1Index+2);
      result:=inherited;
 end;
 procedure TLLTriangle.getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);
@@ -214,7 +225,7 @@ begin
                                              P1Index:=GeomData.Indexes.getelement(P1IndexInIndexesArray);
                                              P2Index:=GeomData.Indexes.getelement(P1IndexInIndexesArray+1);
                                              P3Index:=GeomData.Indexes.getelement(P1IndexInIndexesArray+2);
-                                             Drawer.DrawTriangle(P1Index^,P2Index^,P3Index^);
+                                             Drawer.DrawTriangle(@geomdata.Vertex3S,P1Index^,P2Index^,P3Index^);
                                         end;
      result:=inherited;
 end;
@@ -234,7 +245,60 @@ procedure TLLFreeTriangle.CorrectIndexes(const offset:TEntIndexesOffsetData);
 begin
      P1IndexInIndexesArray:=P1IndexInIndexesArray+offset.IndexsIndexOffset;
 end;
-procedure TLLPolyLine.AddSimplifiedIndex(Index:TLLVertexIndex);
+function TLLTriangleStrip.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
+var
+   P1Index,P2Index,P3Index:pinteger;
+begin
+     if not OptData.ignoretriangles then
+                                        begin
+                                             {P1Index:=GeomData.Indexes.getelement(P1IndexInIndexesArray);
+                                             P2Index:=GeomData.Indexes.getelement(P1IndexInIndexesArray+1);
+                                             P3Index:=GeomData.Indexes.getelement(P1IndexInIndexesArray+2);
+                                             Drawer.DrawTriangle(@geomdata.Vertex3S,P1Index^,P2Index^,P3Index^);}
+                                        end;
+     result:=inherited;
+end;
+procedure TLLTriangleStrip.getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);
+var
+   PIndex:pinteger;
+   index:TLLVertexIndex;
+   i:integer;
+begin
+     if P1IndexInIndexesArray<>-1 then
+     begin
+       index:=P1IndexInIndexesArray;
+       PIndex:=GeomData.Indexes.getelement(index);
+       eid.GeomIndexMin:=PIndex^;
+       eid.GeomIndexMax:=PIndex^;
+       inc(index);
+       for i:=2 to IndexInIndexesArraySize do
+       begin
+         PIndex:=GeomData.Indexes.getelement(index);
+         eid.GeomIndexMin:=min(eid.GeomIndexMin,PIndex^);
+         eid.GeomIndexMax:=max(eid.GeomIndexMax,PIndex^);
+         inc(index);
+       end;
+       eid.IndexsIndexMin:=P1IndexInIndexesArray;
+       eid.IndexsIndexMax:=P1IndexInIndexesArray+IndexInIndexesArraySize-1;
+     end
+     else
+     begin
+       eid.GeomIndexMin:=-1;
+       eid.GeomIndexMax:=-1;
+       eid.IndexsIndexMin:=-1;
+       eid.IndexsIndexMax:=-1;
+     end;
+end;
+procedure TLLTriangleStrip.CorrectIndexes(const offset:TEntIndexesOffsetData);
+begin
+     P1IndexInIndexesArray:=P1IndexInIndexesArray+offset.IndexsIndexOffset;
+end;
+procedure TLLTriangleStrip.AddIndex(Index:TLLVertexIndex);
+begin
+     if P1IndexInIndexesArray=-1 then
+                                     P1IndexInIndexesArray:=Index;
+     inc(IndexInIndexesArraySize);
+end;procedure TLLPolyLine.AddSimplifiedIndex(Index:TLLVertexIndex);
 begin
      if SimplifiedContourIndex=-1 then
                                       SimplifiedContourIndex:=Index;
@@ -264,7 +328,7 @@ begin
       for i:=1 to SimplifiedContourSize-1 do
       begin
          index:=PTArrayIndex(GeomData.Indexes.getelement(sindex))^;
-         Drawer.DrawLine(oldindex,index);
+         Drawer.DrawLine(@geomdata.Vertex3S,oldindex,index);
          oldindex:=index;
          inc(sindex);
       end;
@@ -275,13 +339,13 @@ begin
        oldindex:=P1Index;
          for i:=1 to Count-1 do
          begin
-            Drawer.DrawLine(oldindex,index);
+            Drawer.DrawLine(@geomdata.Vertex3S,oldindex,index);
             oldindex:=index;
             inc(index);
          end;
     end;
   if closed then
-                       Drawer.DrawLine(oldindex,P1Index);
+                       Drawer.DrawLine(@geomdata.Vertex3S,oldindex,P1Index);
   end;
   result:=inherited;
 end;
@@ -349,7 +413,7 @@ function TLLSymbolLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var Ge
 begin
   if (MaxSqrSymH/(rc.zoom*rc.zoom)<3)and(not rc.maxdetail) then
                                                 begin
-                                                  Drawer.DrawLine(FirstOutBoundIndex,LastOutBoundIndex+3);
+                                                  Drawer.DrawLine(@geomdata.Vertex3S,FirstOutBoundIndex,LastOutBoundIndex+3);
                                                   //Drawer.DrawLine(FirstOutBoundIndex+1,LastOutBoundIndex+2);
                                                   {Drawer.DrawQuad(FirstOutBoundIndex,FirstOutBoundIndex+1,LastOutBoundIndex+2,LastOutBoundIndex+3);
                                                   Drawer.DrawLine(FirstOutBoundIndex,FirstOutBoundIndex+1);
@@ -375,7 +439,7 @@ begin
                                                                           end;
   index:=OutBoundIndex;
   result:=inherited;
-  if not drawer.CheckOutboundInDisplay(index) then
+  if not drawer.CheckOutboundInDisplay(@geomdata.Vertex3S,index) then
                                                   begin
                                                     result:=SymSize;
                                                   end
@@ -393,7 +457,7 @@ else if (Attrib and LLAttrNeedSimtlify)>0 then
     if (sqrparamsize<minsymbolsize)and(not rc.maxdetail) then
     begin
       //if (PTLLSymbol(PPrimitive)^.Attrib and LLAttrNeedSolid)>0 then
-                                                                    Drawer.DrawQuad(index,index+1,index+2,index+3);
+                                                                    Drawer.DrawQuad(@GeomData.Vertex3S,index,index+1,index+2,index+3);
                                                                 {else
                                                                     for i:=1 to 3 do
                                                                     begin

@@ -19,14 +19,14 @@
 unit uzglgeneraldrawer;
 {$INCLUDE def.inc}
 interface
-uses uzglabstractdrawer,gdbpalette,types,Classes,Graphics,gdbase,gdbasetypes,GDBCamera,geometry;
+uses UGDBOpenArrayOfData,uzglabstractdrawer,gdbpalette,types,Classes,Graphics,gdbase,gdbasetypes,GDBCamera,geometry;
 type
 TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         drawrect:trect;
                         wh:tsize;
                         public
-                        procedure DrawLine(const i1,i2:TLLVertexIndex);override;
-                        procedure DrawPoint(const i:TLLVertexIndex);override;
+                        procedure DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);override;
+                        procedure DrawPoint(const PVertexBuffer:PGDBOpenArrayOfData;const i:TLLVertexIndex);override;
                         procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);override;
                         procedure endrender;override;
                         function startpaint(InPaintMessage:boolean;w,h:integer):boolean;override;
@@ -75,10 +75,10 @@ var
   notuseLCS:GDBBOOLEAN;
 implementation
 uses log;
-procedure TZGLGeneralDrawer.DrawLine(const i1,i2:TLLVertexIndex);
+procedure TZGLGeneralDrawer.DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);
 begin
 end;
-procedure TZGLGeneralDrawer.DrawPoint(const i:TLLVertexIndex);
+procedure TZGLGeneralDrawer.DrawPoint(const PVertexBuffer:PGDBOpenArrayOfData;const i:TLLVertexIndex);
 begin
 end;
 procedure TZGLGeneralDrawer.startrender;

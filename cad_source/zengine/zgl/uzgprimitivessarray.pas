@@ -40,6 +40,8 @@ TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
                 procedure AddLLPLine(const P1Index:TLLVertexIndex);
                 procedure AddLLTriangle(const P1Index:TLLVertexIndex);
                 procedure AddLLFreeTriangle(const P1Index,P2Index,P3Index:TLLVertexIndex; var ia:ZGLIndexsArray);
+                function AddLLTriangleStrip:TArrayIndex;
+                function AddLLTriangleFan:TArrayIndex;
                 procedure AddLLPPoint(const PIndex:TLLVertexIndex);
                 function AddLLPSymbol:TArrayIndex;
                 function AddLLPSymbolLine:TArrayIndex;
@@ -70,6 +72,28 @@ begin
   ptt.P2Index:=P2Index;
   ptt.P3Index:=P3Index;}
 end;
+function TLLPrimitivesArray.AddLLTriangleStrip:TArrayIndex;
+var
+  pts:PTLLTriangleStrip;
+begin
+  result:=count;
+  pts:=AllocData(sizeof(TLLTriangleStrip));
+  pts.init;
+  pts.P1IndexInIndexesArray:=-1;
+  pts.IndexInIndexesArraySize:=0;
+end;
+
+function TLLPrimitivesArray.AddLLTriangleFan:TArrayIndex;
+var
+  ptf:PTLLTriangleFan;
+begin
+  result:=count;
+  ptf:=AllocData(sizeof(TLLTriangleFan));
+  ptf.init;
+  ptf.P1IndexInIndexesArray:=-1;
+  ptf.IndexInIndexesArraySize:=0;
+end;
+
 procedure TLLPrimitivesArray.AddLLPLine(const P1Index:TLLVertexIndex);
 var
    ptl:PTLLLine;

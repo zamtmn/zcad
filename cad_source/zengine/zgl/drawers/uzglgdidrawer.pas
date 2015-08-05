@@ -60,6 +60,8 @@ TZGLGDIDrawer=class(TZGLGeneralDrawer)
                         function TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
                         procedure DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);override;
                         procedure DrawTriangle(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3:TLLVertexIndex);override;
+                        procedure DrawTrianglesFan(const PVertexBuffer,PIndexBuffer:PGDBOpenArrayOfData;const i1,IndexCount:TLLVertexIndex);override;
+                        procedure DrawTrianglesStrip(const PVertexBuffer,PIndexBuffer:PGDBOpenArrayOfData;const i1,IndexCount:TLLVertexIndex);override;
                         procedure DrawQuad(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3,i4:TLLVertexIndex);override;
                         function CheckOutboundInDisplay(const PVertexBuffer:PGDBOpenArrayOfData;const i1:TLLVertexIndex):boolean;override;
                         procedure DrawPoint(const PVertexBuffer:PGDBOpenArrayOfData;const i:TLLVertexIndex);override;
@@ -403,6 +405,115 @@ begin
     sp[3].y:=round(p3.y);
     ProcessScreenInvalidrect(sp[3].x,sp[3].y);
     PolyGon(OffScreedDC,@sp[1],3,false);
+end;
+procedure TZGLGDIDrawer.DrawTrianglesFan(const PVertexBuffer,PIndexBuffer:PGDBOpenArrayOfData;const i1,IndexCount:TLLVertexIndex);
+var
+   i,index:integer;
+   pindex:PTLLVertexIndex;
+
+   pv1,pv2,pv3:PGDBVertex3S;
+   p1,p2,p3:GDBVertex3S;
+   sp:array [1..3]of TPoint;
+begin
+    index:=i1;
+    pindex:=PIndexBuffer.getelement(index);
+    pv1:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+    inc(index);
+    pindex:=PIndexBuffer.getelement(index);
+    pv2:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+    inc(index);
+    pindex:=PIndexBuffer.getelement(index);
+    pv3:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+    inc(index);
+
+    p1:=TranslatePoint(pv1^);
+    p2:=TranslatePoint(pv2^);
+    p3:=TranslatePoint(pv3^);
+
+    sp[1].x:=round(p1.x);
+    sp[1].y:=round(p1.y);
+    ProcessScreenInvalidrect(sp[1].x,sp[1].y);
+    sp[2].x:=round(p2.x);
+    sp[2].y:=round(p2.y);
+    ProcessScreenInvalidrect(sp[2].x,sp[2].y);
+    sp[3].x:=round(p3.x);
+    sp[3].y:=round(p3.y);
+    ProcessScreenInvalidrect(sp[3].x,sp[3].y);
+
+    PolyGon(OffScreedDC,@sp[1],3,false);
+
+
+    for i:=index to i1+IndexCount-1 do
+    begin
+
+        sp[2]:=sp[3];
+        pindex:=PIndexBuffer.getelement(i);
+        pv3:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+
+        p3:=TranslatePoint(pv3^);
+
+        sp[3].x:=round(p3.x);
+        sp[3].y:=round(p3.y);
+        ProcessScreenInvalidrect(sp[3].x,sp[3].y);
+
+        PolyGon(OffScreedDC,@sp[1],3,false);
+
+    end;
+end;
+procedure TZGLGDIDrawer.DrawTrianglesStrip(const PVertexBuffer,PIndexBuffer:PGDBOpenArrayOfData;const i1,IndexCount:TLLVertexIndex);
+var
+   i,index:integer;
+   pindex:PTLLVertexIndex;
+
+   pv1,pv2,pv3:PGDBVertex3S;
+   p1,p2,p3:GDBVertex3S;
+   sp:array [1..3]of TPoint;
+begin
+    index:=i1;
+    pindex:=PIndexBuffer.getelement(index);
+    pv1:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+    inc(index);
+    pindex:=PIndexBuffer.getelement(index);
+    pv2:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+    inc(index);
+    pindex:=PIndexBuffer.getelement(index);
+    pv3:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+    inc(index);
+
+    p1:=TranslatePoint(pv1^);
+    p2:=TranslatePoint(pv2^);
+    p3:=TranslatePoint(pv3^);
+
+    sp[1].x:=round(p1.x);
+    sp[1].y:=round(p1.y);
+    ProcessScreenInvalidrect(sp[1].x,sp[1].y);
+    sp[2].x:=round(p2.x);
+    sp[2].y:=round(p2.y);
+    ProcessScreenInvalidrect(sp[2].x,sp[2].y);
+    sp[3].x:=round(p3.x);
+    sp[3].y:=round(p3.y);
+    ProcessScreenInvalidrect(sp[3].x,sp[3].y);
+
+    PolyGon(OffScreedDC,@sp[1],3,false);
+
+
+    for i:=index to i1+IndexCount-1 do
+    begin
+
+        sp[1]:=sp[2];
+        sp[2]:=sp[3];
+        pindex:=PIndexBuffer.getelement(i);
+        pv3:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+
+        p3:=TranslatePoint(pv3^);
+
+        sp[3].x:=round(p3.x);
+        sp[3].y:=round(p3.y);
+        ProcessScreenInvalidrect(sp[3].x,sp[3].y);
+
+        PolyGon(OffScreedDC,@sp[1],3,false);
+
+    end;
 end;
 procedure TZGLGDIDrawer.DrawQuad(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3,i4:TLLVertexIndex);var
    pv1,pv2,pv3,pv4:PGDBVertex3S;

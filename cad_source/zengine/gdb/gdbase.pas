@@ -432,6 +432,7 @@ TInsUnits=(IUUnspecified(*'Unspecified'*),
            IUParsecs(*'Parsecs'*));
 TLLPrimitiveType=GDBInteger;
 TLLPrimitiveAttrib=GDBInteger;
+PTLLVertexIndex=^TLLVertexIndex;
 TLLVertexIndex=GDBInteger;
 {EXPORT-}
 const

@@ -79,8 +79,6 @@ begin
   result:=count;
   pts:=AllocData(sizeof(TLLTriangleStrip));
   pts.init;
-  pts.P1IndexInIndexesArray:=-1;
-  pts.IndexInIndexesArraySize:=0;
 end;
 
 function TLLPrimitivesArray.AddLLTriangleFan:TArrayIndex;
@@ -90,8 +88,6 @@ begin
   result:=count;
   ptf:=AllocData(sizeof(TLLTriangleFan));
   ptf.init;
-  ptf.P1IndexInIndexesArray:=-1;
-  ptf.IndexInIndexesArraySize:=0;
 end;
 
 procedure TLLPrimitivesArray.AddLLPLine(const P1Index:TLLVertexIndex);

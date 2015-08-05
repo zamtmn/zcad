@@ -507,7 +507,7 @@ begin
 //(*
     //if (mode<>GL_LINES)and(mode<>GL_QUADS) then
     //                          mode:=mode;
-     if (mode<>currentmode)or(currentmode=GL_LINE_STRIP) then
+     if ((mode<>currentmode)or(currentmode=GL_LINE_STRIP)or(currentmode=GL_TRIANGLE_STRIP)or(currentmode=GL_TRIANGLE_FAN)) then
      begin
      if currentmode<>MY_EmptyMode then
                                      begin

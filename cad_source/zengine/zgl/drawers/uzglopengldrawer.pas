@@ -39,6 +39,8 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure endrender;override;
                         procedure DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);override;
                         procedure DrawTriangle(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3:TLLVertexIndex);override;
+                        procedure DrawTrianglesFan(const PVertexBuffer,PIndexBuffer:PGDBOpenArrayOfData;const i1,IndexCount:TLLVertexIndex);override;
+                        procedure DrawTrianglesStrip(const PVertexBuffer,PIndexBuffer:PGDBOpenArrayOfData;const i1,IndexCount:TLLVertexIndex);override;
                         procedure DrawQuad(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3,i4:TLLVertexIndex);override;
                         function CheckOutboundInDisplay(const PVertexBuffer:PGDBOpenArrayOfData;const i1:TLLVertexIndex):boolean;override;
                         procedure DrawPoint(const PVertexBuffer:PGDBOpenArrayOfData;const i:TLLVertexIndex);override;
@@ -95,6 +97,32 @@ begin
     oglsm.myglVertex3fV(PVertexBuffer.getelement(i2));
     oglsm.myglVertex3fV(PVertexBuffer.getelement(i3));
     oglsm.myglend;
+end;
+procedure TZGLOpenGLDrawer.DrawTrianglesFan(const PVertexBuffer,PIndexBuffer:PGDBOpenArrayOfData;const i1,IndexCount:TLLVertexIndex);
+var
+   i,index:integer;
+   pindex:PTLLVertexIndex;
+begin
+    oglsm.myglbegin(GL_TRIANGLE_FAN);
+    for i:=i1 to i1+IndexCount-1 do
+    begin
+    pindex:=PIndexBuffer.getelement(i);
+    oglsm.myglVertex3fV(PVertexBuffer.getelement(pindex^));
+    end;
+    oglsm.myglend{mytotalglend};
+end;
+procedure TZGLOpenGLDrawer.DrawTrianglesStrip(const PVertexBuffer,PIndexBuffer:PGDBOpenArrayOfData;const i1,IndexCount:TLLVertexIndex);
+var
+   i,index:integer;
+   pindex:PTLLVertexIndex;
+begin
+    oglsm.myglbegin(GL_TRIANGLE_STRIP);
+    for i:=i1 to i1+IndexCount-1 do
+    begin
+    pindex:=PIndexBuffer.getelement(i);
+    oglsm.myglVertex3fV(PVertexBuffer.getelement(pindex^));
+    end;
+    oglsm.myglend{mytotalglend};
 end;
 procedure TZGLOpenGLDrawer.DrawQuad(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3,i4:TLLVertexIndex);
 begin

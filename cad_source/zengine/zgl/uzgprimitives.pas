@@ -87,9 +87,11 @@ TLLTriangleStrip={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
               procedure AddIndex(Index:TLLVertexIndex);virtual;
+              constructor init;
         end;
 PTLLTriangleFan=^TLLTriangleFan;
 TLLTriangleFan={$IFNDEF DELPHI}packed{$ENDIF} object(TLLTriangleStrip)
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
         end;
 PTLLPoint=^TLLPoint;
 TLLPoint={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
@@ -245,18 +247,18 @@ procedure TLLFreeTriangle.CorrectIndexes(const offset:TEntIndexesOffsetData);
 begin
      P1IndexInIndexesArray:=P1IndexInIndexesArray+offset.IndexsIndexOffset;
 end;
-function TLLTriangleStrip.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
-var
-   P1Index,P2Index,P3Index:pinteger;
+function TLLTriangleFan.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 begin
      if not OptData.ignoretriangles then
-                                        begin
-                                             {P1Index:=GeomData.Indexes.getelement(P1IndexInIndexesArray);
-                                             P2Index:=GeomData.Indexes.getelement(P1IndexInIndexesArray+1);
-                                             P3Index:=GeomData.Indexes.getelement(P1IndexInIndexesArray+2);
-                                             Drawer.DrawTriangle(@geomdata.Vertex3S,P1Index^,P2Index^,P3Index^);}
-                                        end;
-     result:=inherited;
+                                        Drawer.DrawTrianglesFan(@geomdata.Vertex3S,@geomdata.Indexes,P1IndexInIndexesArray,IndexInIndexesArraySize);
+     result:=getPrimitiveSize;
+end;
+
+function TLLTriangleStrip.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
+begin
+     if not OptData.ignoretriangles then
+                                        Drawer.DrawTrianglesStrip(@geomdata.Vertex3S,@geomdata.Indexes,P1IndexInIndexesArray,IndexInIndexesArraySize);
+     result:=getPrimitiveSize;
 end;
 procedure TLLTriangleStrip.getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);
 var
@@ -298,7 +300,14 @@ begin
      if P1IndexInIndexesArray=-1 then
                                      P1IndexInIndexesArray:=Index;
      inc(IndexInIndexesArraySize);
-end;procedure TLLPolyLine.AddSimplifiedIndex(Index:TLLVertexIndex);
+end;
+constructor TLLTriangleStrip.init;
+begin
+     P1IndexInIndexesArray:=-1;
+     IndexInIndexesArraySize:=0;
+end;
+
+procedure TLLPolyLine.AddSimplifiedIndex(Index:TLLVertexIndex);
 begin
      if SimplifiedContourIndex=-1 then
                                       SimplifiedContourIndex:=Index;

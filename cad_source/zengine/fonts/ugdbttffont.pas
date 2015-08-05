@@ -19,7 +19,7 @@
 unit ugdbttffont;
 {$INCLUDE def.inc}
 interface
-uses uzglvectorobject,ugdbbasefont,beziersolver,math,glstatemanager,gluinterface,TTTypes,TTObjs,
+uses uzgprimitives,uzglvectorobject,ugdbbasefont,beziersolver,math,glstatemanager,gluinterface,TTTypes,TTObjs,
   gmap,gutil,EasyLazFreeType,memman,strproc,gdbasetypes,sysutils,
   gdbase,geometry;
 type
@@ -51,10 +51,13 @@ TTFFont={$IFNDEF DELPHI}packed{$ENDIF} object({SHXFont}BASEFont)
 procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:PTTFFont{;var pf:PGDBfont});
 implementation
 uses {math,}log;
+type
+    TTriangulationMode=(TM_Triangles,TM_TriangleStrip,TM_TriangleFan);
 var
    ptrdata:PZGLVectorObject;
    Ptrsize:PInteger;
-   trmode:Cardinal;
+   trmode:TTriangulationMode;
+   CurrentLLentity:TArrayIndex;
 {procedure adddcross(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y:fontfloat);
 const
      s=0.01;
@@ -129,22 +132,49 @@ begin
 end;
 procedure TessBeginCallBack(gmode: Cardinal;v2: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
+     CurrentLLentity:=-1;
      if gmode=GL_TRIANGLES then
                                gmode:=gmode;
      pointcount:=0;
-     trmode:=gmode;
+     case gmode of
+     GL_TRIANGLES:
+                  begin
+                       trmode:=TM_Triangles;
+                  end;
+  GL_TRIANGLE_FAN:begin
+                       trmode:=TM_TriangleFan;
+                       CurrentLLentity:=ptrdata^.LLprimitives.AddLLTriangleFan;
+                       inc(ptrsize^);
+                  end;
+GL_TRIANGLE_STRIP:begin
+
+                       trmode:=TM_TriangleStrip;
+                       CurrentLLentity:=ptrdata^.LLprimitives.AddLLTriangleStrip;
+                       inc(ptrsize^);
+                  end;
+     else
+         begin
+           programlog.LogOutStr('Wrong triangulation mode!!',lp_OldPos,LM_Fatal);
+           halt(0);
+         end;
+     end;
 end;
 procedure TessVertexCallBack(const v,v2: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
-{var
-   pv:pgdbvertex;
-   trp:GDBFontVertex2D;}
+var
+   pts:PTLLTriangleStrip;
+   index:TLLVertexIndex;
 begin
-     //if v2=nil then exit;
-     {pv:=pointer(v2);
-     trp.x:=pv.x;
-     trp.y:=pv.y;}
      if pointcount<3 then
                          begin
+                              if (trmode=TM_TriangleStrip)or(trmode=TM_TriangleFan) then
+                                                         begin
+                                                              pts:=ptrdata^.LLprimitives.getelement(CurrentLLentity);
+                                                              index:=ptruint(v);
+                                                              index:=ptrdata^.GeomData.Indexes.Add(@index);
+                                                              pts^.AddIndex(index);
+                                                              exit;
+                                                         end;
+
                               triangle[pointcount]:=ptruint(v);
                               inc(pointcount);
                               if pointcount=3 then
@@ -153,14 +183,14 @@ begin
                                                   inc(ptrsize^);
                                                   {ptrdata^.GeomData.Add2DPoint(triangle[1].x,triangle[1].y);
                                                   ptrdata^.GeomData.Add2DPoint(triangle[2].x,triangle[2].y);}
-                                             if trmode=GL_TRIANGLES then
+                                             if trmode=TM_Triangles then
                                                                        pointcount:=0;
                                              end;
                          end
                      else
                          begin
                               case trmode of
-                       GL_TRIANGLE_FAN:begin
+                       TM_TriangleFan:begin
                                             triangle[1]:=triangle[2];
                                             triangle[2]:=ptruint(v);
                                             ptrdata^.LLprimitives.AddLLFreeTriangle(triangle[0],triangle[1],triangle[2],ptrdata^.GeomData.Indexes);
@@ -169,7 +199,7 @@ begin
                                             //ptrdata^.GeomData.Add2DPoint(triangle[1].x,triangle[1].y);
                                             //ptrdata^.GeomData.Add2DPoint(triangle[2].x,triangle[2].y);
                                        end;
-                     GL_TRIANGLE_STRIP:begin
+                     TM_TriangleStrip:begin
                                             triangle[0]:=triangle[1];
                                             triangle[1]:=triangle[2];
                                             triangle[2]:=ptruint(v);

@@ -20,7 +20,7 @@ unit uzglgdidrawer;
 {$INCLUDE def.inc}
 interface
 uses
-    gdbpalette,{$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
+    UGDBOpenArrayOfData,gdbpalette,{$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
@@ -58,11 +58,11 @@ TZGLGDIDrawer=class(TZGLGeneralDrawer)
                         procedure endpaint(InPaintMessage:boolean);override;
 
                         function TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
-                        procedure DrawLine(const i1,i2:TLLVertexIndex);override;
-                        procedure DrawTriangle(const i1,i2,i3:TLLVertexIndex);override;
-                        procedure DrawQuad(const i1,i2,i3,i4:TLLVertexIndex);override;
-                        function CheckOutboundInDisplay(const i1:TLLVertexIndex):boolean;override;
-                        procedure DrawPoint(const i:TLLVertexIndex);override;
+                        procedure DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);override;
+                        procedure DrawTriangle(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3:TLLVertexIndex);override;
+                        procedure DrawQuad(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3,i4:TLLVertexIndex);override;
+                        function CheckOutboundInDisplay(const PVertexBuffer:PGDBOpenArrayOfData;const i1:TLLVertexIndex):boolean;override;
+                        procedure DrawPoint(const PVertexBuffer:PGDBOpenArrayOfData;const i:TLLVertexIndex);override;
 
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
                         procedure DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);override;
@@ -104,8 +104,8 @@ TZGLGDIPlusDrawer=class(TZGLGDIDrawer)
                         public
                         procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);override;
                         procedure endrender;override;
-                        procedure DrawLine(const i1,i2:TLLVertexIndex);override;
-                        procedure DrawPoint(const i:TLLVertexIndex);override;
+                        procedure DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);override;
+                        procedure DrawPoint(const PVertexBuffer:PGDBOpenArrayOfData;const i:TLLVertexIndex);override;
                    end;
 {$ENDIF}
 var
@@ -148,7 +148,7 @@ begin
      graphicsGDIPlus.Free;
 end;
 
-procedure TZGLGDIPlusDrawer.DrawLine(const i1,i2:TLLVertexIndex);
+procedure TZGLGDIPlusDrawer.DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);
 var
    pv1,pv2:PGDBVertex3S;
 begin
@@ -157,7 +157,7 @@ begin
     graphicsGDIPlus.DrawLine(Pen,pv1.x,midline-pv1.y,pv2.x,midline-pv2.y);
 end;
 
-procedure TZGLGDIPlusDrawer.DrawPoint(const i:TLLVertexIndex);
+procedure TZGLGDIPlusDrawer.DrawPoint(const PVertexBuffer:PGDBOpenArrayOfData;const i:TLLVertexIndex);
 var
    pv:PGDBVertex3S;
 begin
@@ -357,7 +357,7 @@ begin
   self.sx:=self.sx*sx;
   self.sy:=self.sy*sy;
 end;
-procedure TZGLGDIDrawer.DrawLine(const i1,i2:TLLVertexIndex);
+procedure TZGLGDIDrawer.DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);
 var
    pv1,pv2:PGDBVertex3S;
    p1,p2:GDBVertex3S;
@@ -379,7 +379,7 @@ begin
     ProcessScreenInvalidrect(x,y);
     LineTo(OffScreedDC,x,y);
 end;
-procedure TZGLGDIDrawer.DrawTriangle(const i1,i2,i3:TLLVertexIndex);
+procedure TZGLGDIDrawer.DrawTriangle(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3:TLLVertexIndex);
 var
    pv1,pv2,pv3:PGDBVertex3S;
    p1,p2,p3:GDBVertex3S;
@@ -404,7 +404,7 @@ begin
     ProcessScreenInvalidrect(sp[3].x,sp[3].y);
     PolyGon(OffScreedDC,@sp[1],3,false);
 end;
-procedure TZGLGDIDrawer.DrawQuad(const i1,i2,i3,i4:TLLVertexIndex);var
+procedure TZGLGDIDrawer.DrawQuad(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3,i4:TLLVertexIndex);var
    pv1,pv2,pv3,pv4:PGDBVertex3S;
    p1,p2,p3,p4:GDBVertex3S;
    x,y:integer;
@@ -433,7 +433,7 @@ begin
     ProcessScreenInvalidrect(sp[4].x,sp[4].y);
     PolyGon(OffScreedDC,@sp[1],4,false);
 end;
-function TZGLGDIDrawer.CheckOutboundInDisplay(const i1:TLLVertexIndex):boolean;
+function TZGLGDIDrawer.CheckOutboundInDisplay(const PVertexBuffer:PGDBOpenArrayOfData;const i1:TLLVertexIndex):boolean;
 var
 pv1,pv2,pv3,pv4:PGDBVertex3S;
 p1,p2,p3,p4:GDBVertex3S;
@@ -476,7 +476,7 @@ begin
                               else
                                   result:=true;
 end;
-procedure TZGLGDIDrawer.DrawPoint(const i:TLLVertexIndex);
+procedure TZGLGDIDrawer.DrawPoint(const PVertexBuffer:PGDBOpenArrayOfData;const i:TLLVertexIndex);
 var
    pv:PGDBVertex3S;
    p:GDBVertex3S;

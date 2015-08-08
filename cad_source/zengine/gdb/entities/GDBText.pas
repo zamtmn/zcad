@@ -31,8 +31,6 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  Content:GDBAnsiString;
                  Template:GDBAnsiString;(*saved_to_shd*)
                  TXTStyleIndex:{-}PGDBTextStyle{/PGDBTextStyleObjInsp/};(*saved_to_shd*)(*'Style'*)
-                 CoordMin:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
-                 CoordMax:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  obj_height:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
                  obj_width:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
                  obj_y:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)

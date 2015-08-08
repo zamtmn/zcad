@@ -30,7 +30,6 @@ GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  EndAngle:GDBDouble;(*saved_to_shd*)
                  angle:GDBDouble;(*oi_readonly*)
                  Vertex3D_in_WCS_Array:GDBPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
-                 length:GDBDouble;(*oi_readonly*)
                  q0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  q1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  q2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
@@ -274,7 +273,6 @@ begin
   calcObjMatrix;
   angle := endangle - startangle;
   if angle < 0 then angle := 2 * pi + angle;
-  length := abs(angle){*pi/180} * r * r;
   v.x:=cos(startangle{*pi/180});
   v.y:=sin(startangle{*pi/180});
   v.z:=0;

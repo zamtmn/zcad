@@ -440,6 +440,7 @@ TInsUnits=(IUUnspecified(*'Unspecified'*),
            IUParsecs(*'Parsecs'*));
 TLLPrimitiveType=GDBInteger;
 TLLPrimitiveAttrib=GDBInteger;
+PTLLVertexIndex=^TLLVertexIndex;
 TLLVertexIndex=GDBInteger;
 //Generate on E:\zcad\cad_source\zengine\gdb\gdbpalette.pas
   PTRGB=^TRGB;
@@ -637,7 +638,7 @@ GDBPolyline2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
 PGDBPolyPoint2DArray=^GDBPolyPoint2DArray;
 GDBPolyPoint2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                      procedure DrawGeometry;virtual;abstract;
+                      //procedure DrawGeometry;virtual;abstract;
                       function InRect(Frame1, Frame2: GDBvertex2DI):TInRect;virtual;abstract;
                       procedure freeelement(p:GDBPointer);virtual;abstract;
                 end;
@@ -1486,6 +1487,20 @@ TLLFreeTriangle={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;abstract;
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;abstract;
         end;
+PTLLTriangleStrip=^TLLTriangleStrip;
+TLLTriangleStrip={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
+              P1IndexInIndexesArray:TLLVertexIndex;
+              IndexInIndexesArraySize:TLLVertexIndex;
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;abstract;
+              procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;abstract;
+              procedure AddIndex(Index:TLLVertexIndex);virtual;abstract;
+              constructor init;
+        end;
+PTLLTriangleFan=^TLLTriangleFan;
+TLLTriangleFan={$IFNDEF DELPHI}packed{$ENDIF} object(TLLTriangleStrip)
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+        end;
 PTLLPoint=^TLLPoint;
 TLLPoint={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               PIndex:TLLVertexIndex;
@@ -1515,12 +1530,14 @@ TLLSymbolEnd={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
                    end;
 PTLLPolyLine=^TLLPolyLine;
 TLLPolyLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
-              P1Index,Count:TLLVertexIndex;
+              P1Index,Count,SimplifiedContourIndex,SimplifiedContourSize:TLLVertexIndex;
               Closed:GDBBoolean;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
               function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInRect):GDBInteger;virtual;abstract;
               procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;abstract;
+              procedure AddSimplifiedIndex(Index:TLLVertexIndex);virtual;abstract;
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;abstract;
+              constructor init;
         end;
 //Generate on E:\zcad\cad_source\zengine\zgl\uzgprimitivessarray.pas
 TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBByte*)
@@ -1529,6 +1546,8 @@ TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
                 procedure AddLLPLine(const P1Index:TLLVertexIndex);
                 procedure AddLLTriangle(const P1Index:TLLVertexIndex);
                 procedure AddLLFreeTriangle(const P1Index,P2Index,P3Index:TLLVertexIndex; var ia:ZGLIndexsArray);
+                function AddLLTriangleStrip:TArrayIndex;
+                function AddLLTriangleFan:TArrayIndex;
                 procedure AddLLPPoint(const PIndex:TLLVertexIndex);
                 function AddLLPSymbol:TArrayIndex;
                 function AddLLPSymbolLine:TArrayIndex;
@@ -2012,7 +2031,6 @@ GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  EndAngle:GDBDouble;(*saved_to_shd*)
                  angle:GDBDouble;(*oi_readonly*)
                  Vertex3D_in_WCS_Array:GDBPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
-                 length:GDBDouble;(*oi_readonly*)
                  q0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  q1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  q2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
@@ -2639,8 +2657,6 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  Content:GDBAnsiString;
                  Template:GDBAnsiString;(*saved_to_shd*)
                  TXTStyleIndex:PGDBTextStyleObjInsp;(*saved_to_shd*)(*'Style'*)
-                 CoordMin:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
-                 CoordMax:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  obj_height:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
                  obj_width:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
                  obj_y:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
@@ -3314,6 +3330,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                        pt:PGDBObjText;
                        //procedure Build(Operands:pansichar); virtual;abstract;
                        procedure CommandStart(Operands:pansichar); virtual;abstract;
+                       procedure CommandEnd; virtual;abstract;
                        procedure Command(Operands:pansichar); virtual;abstract;
                        procedure BuildPrimitives; virtual;abstract;
                        procedure Format;virtual;abstract;
@@ -3596,6 +3613,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        ConstructObjRoot:GDBObjRoot;
                        SelObjArray:GDBSelectedObjArray;
                        pcamera:PGDBObjCamera;
+                       internalcamera:boolean;
                        OnMouseObj:GDBObjOpenArrayOfPV;
                        //OGLwindow1:toglwnd;
                        wa:TAbstractViewArea;

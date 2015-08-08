@@ -367,6 +367,7 @@ begin
 
         pvertex:=circlepointoflod[l].iterate(ir);
   until pvertex=nil;
+  Vertex3D_in_WCS_Array.Shrink;
 end;
 procedure GDBObjCircle.Renderfeedback;
 var //pm:DMatrix4D;

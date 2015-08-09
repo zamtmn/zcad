@@ -19,7 +19,7 @@
 unit ugdbfont;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitives,uzgprimitivessarray,ugdbshxfont,ugdbttffont,memman,
+uses uzgprimitivescreator,uzgprimitives,uzgprimitivessarray,ugdbshxfont,ugdbttffont,memman,
      strproc,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,
      ugdbbasefont,geometry,uzglvectorobject;
 type
@@ -112,11 +112,11 @@ begin
   begin;
        if LLSymbolLineIndex=-1 then
                                    begin
-                                     LLSymbolLineIndex:=geom.LLprimitives.AddLLPSymbolLine;
+                                     LLSymbolLineIndex:={geom.LLprimitives}DefaultLLPCreator.CreateLLSymbolLine(geom.LLprimitives);
                                      LLSymbolLineCreated:=true;
                                    end;
        if LLSymbolIndex=-1 then
-                               LLSymbolIndex:=geom.LLprimitives.AddLLPSymbol;
+                               LLSymbolIndex:={geom.LLprimitives}DefaultLLPCreator.CreateLLSymbol(geom.LLprimitives);
     VDCopyParam:=font.FontData.GetCopyParam(psyminfo.LLPrimitiveStartIndex,psyminfo.LLPrimitiveCount);
     VDCopyResultParam:=font.FontData.CopyTo(geom,VDCopyParam);
     offset.GeomIndexOffset:=VDCopyResultParam.EID.GeomIndexMin-VDCopyParam.EID.GeomIndexMin;
@@ -314,7 +314,7 @@ begin
     if sqrsymh>PLLSymbolLine.MaxSqrSymH then
                                          PLLSymbolLine.MaxSqrSymH:=sqrsymh;
   end;
-  geom.LLprimitives.AddLLPSymbolEnd;
+  {geom.LLprimitives.}DefaultLLPCreator.CreateLLSymbolEnd(geom.LLprimitives);
   end;
   end;
 constructor GDBfont.initnul;

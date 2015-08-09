@@ -227,7 +227,7 @@ begin
   AproxPointInWCS.Shrink;
 
   Geom.Clear;
-  Geom.DrawPolyLineWithLT(AproxPointInWCS,vp,closed,false);
+  Geom.DrawPolyLineWithLT(dc,AproxPointInWCS,vp,closed,false);
   calcbb;
 end;
 

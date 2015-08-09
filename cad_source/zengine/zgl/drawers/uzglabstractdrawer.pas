@@ -19,7 +19,7 @@
 unit uzglabstractdrawer;
 {$INCLUDE def.inc}
 interface
-uses gdbpalette,Classes,UGDBOpenArrayOfData,Graphics,gdbase,gdbasetypes,GDBCamera,geometry;
+uses uzgprimitivescreatorabstract,gdbpalette,Classes,UGDBOpenArrayOfData,Graphics,gdbase,gdbasetypes,GDBCamera,geometry;
 type
 TRenderMode=(TRM_ModelSpace,TRM_DisplaySpace,TRM_WindowSpace);
 TZGLPenStyle=(TPS_Solid,TPS_Dot,TPS_Dash,TPS_Selected);
@@ -27,6 +27,8 @@ TZGLDrawMode=(TDM_OR,TDM_XOR,TDM_Normal);
 TZGLAbstractDrawer=class
                         public
                         //PVertexBuffer:PGDBOpenArrayOfData;
+                        function GetLLPrimitivesCreator:TLLPrimitivesCreatorAbstract;virtual;abstract;
+
                         procedure DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);virtual;abstract;
                         procedure DrawTriangle(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3:TLLVertexIndex);virtual;abstract;
                         procedure DrawTrianglesFan(const PVertexBuffer,PIndexBuffer:PGDBOpenArrayOfData;const i1,IndexCount:TLLVertexIndex);virtual;abstract;

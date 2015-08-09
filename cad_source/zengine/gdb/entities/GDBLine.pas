@@ -255,7 +255,7 @@ begin
   //dir.z:=CoordInWCS.lend.z-CoordInWCS.lbegin.z;
 
   Geom.Clear;
-  Geom.DrawLineWithLT(CoordInWCS.lBegin,CoordInWCS.lEnd,vp);
+  Geom.DrawLineWithLT(dc,CoordInWCS.lBegin,CoordInWCS.lEnd,vp);
 
   //self.RenderFeedbackIFNeed;
 end;

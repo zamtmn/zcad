@@ -430,7 +430,6 @@ TInsUnits=(IUUnspecified(*'Unspecified'*),
            IUAstronomicalUnits(*'Astronomical units'*),
            IULightYears(*'Light years'*),
            IUParsecs(*'Parsecs'*));
-TLLPrimitiveType=GDBInteger;
 TLLPrimitiveAttrib=GDBInteger;
 PTLLVertexIndex=^TLLVertexIndex;
 TLLVertexIndex=GDBInteger;

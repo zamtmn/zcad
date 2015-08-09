@@ -115,7 +115,7 @@ begin
   if closed then
                 Geom.DrawLineWithLT(ptvprev^,ptvfisrt^,vp);
   end;}
-  Geom.DrawPolyLineWithLT(VertexArrayInWCS,vp,closed,false);
+  Geom.DrawPolyLineWithLT(dc,VertexArrayInWCS,vp,closed,false);
   end;
 end;
 

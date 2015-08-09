@@ -200,7 +200,7 @@ begin
     calcobjmatrix;
     //getoutbound;
     //createpoint(drawing);
-    Geom.DrawTextContent(content,TXTStyleIndex^.pfont,DrawMatrix,objmatrix,textprop.size,Outbound);
+    Geom.DrawTextContent(dc.drawer,content,TXTStyleIndex^.pfont,DrawMatrix,objmatrix,textprop.size,Outbound);
     calcbb;
 
     //P_InsertInWCS:=VectorTransform3D(local.P_insert,vp.owner^.GetMatrix^);

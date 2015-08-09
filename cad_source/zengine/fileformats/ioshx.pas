@@ -19,7 +19,7 @@
 unit ioshx;
 {$INCLUDE def.inc}
 interface
-uses uzglvectorobject,UGDBFontManager,ugdbshxfont,geometry,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
+uses uzgprimitivescreator,uzglvectorobject,UGDBFontManager,ugdbshxfont,geometry,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
      ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,log,sysutils,
      UGDBOpenArrayOfByte,gdbasetypes,SysInfo,gdbase,memman,uzgprimitives;
 const
@@ -125,7 +125,7 @@ begin
                      if j=0 then
                                 begin
                                    GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
-                                   pf^.font.FontData.LLprimitives.AddLLPPolyLine(GeomDataIndex,arccount);
+                                   DefaultLLPCreator.CreateLLPolyLine(pf^.font.FontData.LLprimitives,GeomDataIndex,arccount);
                                 end
                             else
                                 pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
@@ -370,7 +370,7 @@ begin
 
                               GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
                               pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
-                              pf^.font.FontData.LLprimitives.AddLLPLine(GeomDataIndex);
+                              DefaultLLPCreator.CreateLLLine(pf^.font.FontData.LLprimitives,GeomDataIndex);
 
                               inc(sizeshx);
                               if draw then
@@ -414,7 +414,7 @@ begin
                       //----//PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
 
                       GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
-                      LLPolyLineIndexInArray:=pf^.font.FontData.LLprimitives.AddLLPPolyLine(GeomDataIndex,1{баба ягодка опять, кто считать будет?});
+                      LLPolyLineIndexInArray:=DefaultLLPCreator.CreateLLPolyLine(pf^.font.FontData.LLprimitives,GeomDataIndex,1{баба ягодка опять, кто считать будет?});
 
                             end;
                       while (dx<>0)or(dy<>0) do
@@ -489,7 +489,7 @@ begin
                       //----//PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
 
                       GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
-                      pf^.font.FontData.LLprimitives.AddLLPPolyLine(GeomDataIndex,arccount);
+                      DefaultLLPCreator.CreateLLPolyLine(pf^.font.FontData.LLprimitives,GeomDataIndex,arccount);
 
                       x1:=0;
                       y1:=0;
@@ -547,7 +547,7 @@ begin
                    //----//PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
 
                    GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
-                   pf^.font.FontData.LLprimitives.AddLLPPolyLine(GeomDataIndex,arccount);
+                   DefaultLLPCreator.CreateLLPolyLine(pf^.font.FontData.LLprimitives,GeomDataIndex,arccount);
 
                    x1:=0;
                    y1:=0;
@@ -636,7 +636,7 @@ begin
 
                                 GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
                                 pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
-                                pf^.font.FontData.LLprimitives.AddLLPLine(GeomDataIndex);
+                                DefaultLLPCreator.CreateLLLine(pf^.font.FontData.LLprimitives,GeomDataIndex);
 
                                 ProcessMinMax(x,y);
                                 ProcessMinMax(x1,y1);

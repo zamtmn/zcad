@@ -19,7 +19,7 @@
 unit beziersolver;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitives,math,usimplegenerics,uzglvectorobject,glstatemanager,gluinterface,gvector,memman,
+uses uzgprimitivescreator,uzgprimitives,math,usimplegenerics,uzglvectorobject,glstatemanager,gluinterface,gvector,memman,
      UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,geometry;
 type
 TPointAttr=(TPA_OnCurve,TPA_NotOnCurve);
@@ -183,7 +183,7 @@ var
 begin
      for i:=0 to Conturs.VArray.Size-1 do
      begin
-          polyindex:=VectorData.LLprimitives.AddLLPPolyLine(VectorData.GeomData.Vertex3S.Count,Conturs.VArray[i].Size-1,true);
+          polyindex:={VectorData.LLprimitives.}DefaultLLPCreator.CreateLLPolyLine(VectorData.LLprimitives,VectorData.GeomData.Vertex3S.Count,Conturs.VArray[i].Size-1,true);
           ptpl:=VectorData.LLprimitives.getelement(polyindex);
           inc(shxsize^);
           for j:=0 to Conturs.VArray[i].Size-1 do

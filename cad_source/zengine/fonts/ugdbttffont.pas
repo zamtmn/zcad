@@ -19,7 +19,7 @@
 unit ugdbttffont;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitives,uzglvectorobject,ugdbbasefont,beziersolver,math,glstatemanager,gluinterface,TTTypes,TTObjs,
+uses uzgprimitivescreator,uzgprimitives,uzglvectorobject,ugdbbasefont,beziersolver,math,glstatemanager,gluinterface,TTTypes,TTObjs,
   gmap,gutil,EasyLazFreeType,memman,strproc,gdbasetypes,sysutils,
   gdbase,geometry;
 type
@@ -143,13 +143,13 @@ begin
                   end;
   GL_TRIANGLE_FAN:begin
                        trmode:=TM_TriangleFan;
-                       CurrentLLentity:=ptrdata^.LLprimitives.AddLLTriangleFan;
+                       CurrentLLentity:={ptrdata^.LLprimitives}DefaultLLPCreator.CreateLLTriangleFan(ptrdata^.LLprimitives);
                        inc(ptrsize^);
                   end;
 GL_TRIANGLE_STRIP:begin
 
                        trmode:=TM_TriangleStrip;
-                       CurrentLLentity:=ptrdata^.LLprimitives.AddLLTriangleStrip;
+                       CurrentLLentity:={ptrdata^.LLprimitives}DefaultLLPCreator.CreateLLTriangleStrip(ptrdata^.LLprimitives);
                        inc(ptrsize^);
                   end;
      else
@@ -179,7 +179,7 @@ begin
                               inc(pointcount);
                               if pointcount=3 then
                                              begin
-                                                  ptrdata^.LLprimitives.AddLLFreeTriangle(triangle[0],triangle[1],triangle[2],ptrdata^.GeomData.Indexes);
+                                                  {ptrdata^.LLprimitives}DefaultLLPCreator.CreateLLFreeTriangle(ptrdata^.LLprimitives,triangle[0],triangle[1],triangle[2],ptrdata^.GeomData.Indexes);
                                                   inc(ptrsize^);
                                                   {ptrdata^.GeomData.Add2DPoint(triangle[1].x,triangle[1].y);
                                                   ptrdata^.GeomData.Add2DPoint(triangle[2].x,triangle[2].y);}
@@ -193,7 +193,7 @@ begin
                        TM_TriangleFan:begin
                                             triangle[1]:=triangle[2];
                                             triangle[2]:=ptruint(v);
-                                            ptrdata^.LLprimitives.AddLLFreeTriangle(triangle[0],triangle[1],triangle[2],ptrdata^.GeomData.Indexes);
+                                            {ptrdata^.LLprimitives}DefaultLLPCreator.CreateLLFreeTriangle(ptrdata^.LLprimitives,triangle[0],triangle[1],triangle[2],ptrdata^.GeomData.Indexes);
                                             inc(ptrsize^);
                                             //ptrdata^.LLprimitives.AddLLTriangle(ptrdata^.GeomData.Add2DPoint(triangle[0].x,triangle[0].y));
                                             //ptrdata^.GeomData.Add2DPoint(triangle[1].x,triangle[1].y);
@@ -203,7 +203,7 @@ begin
                                             triangle[0]:=triangle[1];
                                             triangle[1]:=triangle[2];
                                             triangle[2]:=ptruint(v);
-                                            ptrdata^.LLprimitives.AddLLFreeTriangle(triangle[0],triangle[1],triangle[2],ptrdata^.GeomData.Indexes);
+                                            {ptrdata^.LLprimitives}DefaultLLPCreator.CreateLLFreeTriangle(ptrdata^.LLprimitives,triangle[0],triangle[1],triangle[2],ptrdata^.GeomData.Indexes);
                                             inc(ptrsize^);
                                             //ptrdata^.LLprimitives.AddLLTriangle(ptrdata^.GeomData.Add2DPoint(triangle[0].x,triangle[0].y));
                                             //ptrdata^.GeomData.Add2DPoint(triangle[1].x,triangle[1].y);

@@ -37,109 +37,10 @@ type
 TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBByte*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
-                procedure AddLLPLine(const P1Index:TLLVertexIndex);
-                procedure AddLLTriangle(const P1Index:TLLVertexIndex);
-                procedure AddLLFreeTriangle(const P1Index,P2Index,P3Index:TLLVertexIndex; var ia:ZGLIndexsArray);
-                function AddLLTriangleStrip:TArrayIndex;
-                function AddLLTriangleFan:TArrayIndex;
-                procedure AddLLPPoint(const PIndex:TLLVertexIndex);
-                function AddLLPSymbol:TArrayIndex;
-                function AddLLPSymbolLine:TArrayIndex;
-                procedure AddLLPSymbolEnd;
-                function AddLLPPolyLine(const P1Index,_Count:TLLVertexIndex;_closed:GDBBoolean=false):TArrayIndex;
              end;
 {Export-}
 implementation
 uses log;
-procedure TLLPrimitivesArray.AddLLTriangle(const P1Index:TLLVertexIndex);
-var
-  ptt:PTLLTriangle;
-begin
-  ptt:=AllocData(sizeof(TLLTriangle));
-  ptt.init;
-  ptt.P1Index:=P1Index;
-end;
-procedure TLLPrimitivesArray.AddLLFreeTriangle(const P1Index,P2Index,P3Index:TLLVertexIndex; var ia:ZGLIndexsArray);
-var
-  ptt:PTLLFreeTriangle;
-begin
-  ptt:=AllocData(sizeof(TLLFreeTriangle));
-  ptt.init;
-  ptt.P1IndexInIndexesArray:=ia.Add(@P1Index);
-  ia.Add(@P2Index);
-  ia.Add(@P3Index);
-  {ptt.P1Index:=P1Index;
-  ptt.P2Index:=P2Index;
-  ptt.P3Index:=P3Index;}
-end;
-function TLLPrimitivesArray.AddLLTriangleStrip:TArrayIndex;
-var
-  pts:PTLLTriangleStrip;
-begin
-  result:=count;
-  pts:=AllocData(sizeof(TLLTriangleStrip));
-  pts.init;
-end;
-
-function TLLPrimitivesArray.AddLLTriangleFan:TArrayIndex;
-var
-  ptf:PTLLTriangleFan;
-begin
-  result:=count;
-  ptf:=AllocData(sizeof(TLLTriangleFan));
-  ptf.init;
-end;
-
-procedure TLLPrimitivesArray.AddLLPLine(const P1Index:TLLVertexIndex);
-var
-   ptl:PTLLLine;
-begin
-     ptl:=AllocData(sizeof(TLLLine));
-     ptl.init;
-     ptl.P1Index:=P1Index;
-end;
-function TLLPrimitivesArray.AddLLPPolyLine(const P1Index,_Count:TLLVertexIndex;_closed:GDBBoolean=false):tarrayindex;
-var
-   ptpl:PTLLPolyLine;
-begin
-     result:=count;
-     ptpl:=AllocData(sizeof(TLLPolyLine));
-     ptpl.init;
-     ptpl.P1Index:=P1Index;
-     ptpl.Count:=_Count;
-     ptpl.Closed:=_closed;
-end;
-procedure TLLPrimitivesArray.AddLLPPoint(const PIndex:TLLVertexIndex);
-var
-   ptp:PTLLPoint;
-begin
-     ptp:=AllocData(sizeof(TLLPoint));
-     ptp.init;
-     ptp.PIndex:=PIndex;
-end;
-function TLLPrimitivesArray.AddLLPSymbolLine:TArrayIndex;
-var
-   ptsl:PTLLSymbolLine;
-begin
-     result:=count;
-     ptsl:=AllocData(sizeof(TLLSymbolLine));
-     ptsl.init;
-end;
-function TLLPrimitivesArray.AddLLPSymbol:TArrayIndex;
-var
-   pts:PTLLSymbol;
-begin
-     result:=count;
-     pts:=AllocData(sizeof(TLLSymbol));
-     pts.init;
-end;
-procedure TLLPrimitivesArray.AddLLPSymbolEnd;
-var
-   ptse:PTLLSymbolEnd;
-begin
-     ptse:=AllocData(sizeof(TLLSymbolEnd));
-     ptse.init;
-end;
 constructor TLLPrimitivesArray.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBByte));

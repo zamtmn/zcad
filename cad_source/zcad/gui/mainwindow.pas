@@ -1514,6 +1514,7 @@ var
     Points: array of TPoint;
     ppoly,poldpoly:PGDBPolyVertex3D;
     ll: Integer;
+    DC:TDrawContext;
 const
       txtoffset=5;
 begin
@@ -1535,7 +1536,8 @@ begin
         if plt^.h*vp.LineTypeScale>(ARect.Bottom-ARect.Top)/sysvar.DWG.DWG_LTScale^/2 then
                                                                   n:=( 2+2*(plt^.h*vp.LineTypeScale)/((ARect.Bottom-ARect.Top)/sysvar.DWG.DWG_LTScale^));
         vp.LineTypeScale:=vp.LineTypeScale/n;
-        geom.DrawLineWithLT(p1,p2,vp);
+        dc:=CreateAbstractRC;
+        geom.DrawLineWithLT(dc,p1,p2,vp);
         oldw:=canvas.Pen.Width;
         canvas.Pen.Style:=psSolid;
         canvas.Pen.EndCap:=pecFlat;

@@ -19,12 +19,14 @@
 unit uzglgeneraldrawer;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfData,uzglabstractdrawer,gdbpalette,types,Classes,Graphics,gdbase,gdbasetypes,GDBCamera,geometry;
+uses uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,uzglabstractdrawer,gdbpalette,types,Classes,Graphics,gdbase,gdbasetypes,GDBCamera,geometry;
 type
 TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         drawrect:trect;
                         wh:tsize;
                         public
+                        function GetLLPrimitivesCreator:TLLPrimitivesCreatorAbstract;override;
+
                         procedure DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);override;
                         procedure DrawPoint(const PVertexBuffer:PGDBOpenArrayOfData;const i:TLLVertexIndex);override;
                         procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);override;
@@ -75,6 +77,13 @@ var
   notuseLCS:GDBBOOLEAN;
 implementation
 uses log;
+var
+  DrawerLLPCreator:TLLPrimitivesCreator;
+function TZGLGeneralDrawer.GetLLPrimitivesCreator:TLLPrimitivesCreatorAbstract;
+begin
+     result:=DrawerLLPCreator;
+end;
+
 procedure TZGLGeneralDrawer.DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);
 begin
 end;
@@ -233,5 +242,6 @@ begin
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('uzglabstractdrawer.initialization');{$ENDIF}
+  DrawerLLPCreator:=TLLPrimitivesCreator.create;
 end.
 

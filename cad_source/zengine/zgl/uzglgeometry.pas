@@ -19,7 +19,7 @@
 unit uzglgeometry;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitives,math,gdbdrawcontext,uzglabstractdrawer,uzgprimitivessarray,uzgvertex3sarray,UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,ugdbltypearray,sysutils,gdbase,memman,log,
+uses uzglgeneraldrawer,uzgprimitives,math,gdbdrawcontext,uzglabstractdrawer,uzgvertex3sarray,UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,ugdbltypearray,sysutils,gdbase,memman,log,
      gdbasetypes,strproc,ugdbfont,uzglvectorobject;
 type
 {Export+}
@@ -40,7 +40,7 @@ ZSegmentator={$IFNDEF DELPHI}packed{$ENDIF}object(GDBOpenArrayOfData)
                                                  procedure startdraw;
                                                  procedure nextsegment;
                                                  procedure normalize(l:GDBDouble);
-                                                 procedure draw(length:GDBDouble;paint:boolean);
+                                                 procedure draw(var rc:TDrawContext;length:GDBDouble;paint:boolean);
                                            end;
 ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
                 procedure DrawGeometry(var rc:TDrawContext);virtual;
@@ -48,20 +48,20 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
                 procedure DrawLLPrimitives(var rc:TDrawContext;drawer:TZGLAbstractDrawer);
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar{$ENDIF});
                 destructor done;virtual;
-                procedure DrawLineWithLT(const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);virtual;
-                procedure DrawPolyLineWithLT(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);virtual;
-                procedure DrawLineWithoutLT(const p1,p2:GDBVertex);virtual;
-                procedure DrawPointWithoutLT(const p:GDBVertex);virtual;
+                procedure DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);virtual;
+                procedure DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);virtual;
+                procedure DrawLineWithoutLT(var rc:TDrawContext;const p1,p2:GDBVertex);virtual;
+                procedure DrawPointWithoutLT(var rc:TDrawContext;const p:GDBVertex);virtual;
                 {}
-                procedure AddLine(const p1,p2:GDBVertex);
-                procedure AddPoint(const p:GDBVertex);
+                procedure AddLine(var rc:TDrawContext;const p1,p2:GDBVertex);
+                procedure AddPoint(var rc:TDrawContext;const p:GDBVertex);
                 {Patterns func}
-                procedure PlaceNPatterns(var Segmentator:ZSegmentator;num:integer; const vp:PGDBLtypeProp;TangentScale,NormalScale,length:GDBDouble);
-                procedure PlaceOnePattern(var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;TangentScale,NormalScale,length,scale_div_length:GDBDouble);
+                procedure PlaceNPatterns(var rc:TDrawContext;var Segmentator:ZSegmentator;num:integer; const vp:PGDBLtypeProp;TangentScale,NormalScale,length:GDBDouble);
+                procedure PlaceOnePattern(var rc:TDrawContext;var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;TangentScale,NormalScale,length,scale_div_length:GDBDouble);
                 procedure PlaceShape(const StartPatternPoint:GDBVertex; PSP:PShapeProp;scale,angle:GDBDouble);
                 procedure PlaceText(const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
 
-                procedure DrawTextContent(content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
+                procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
                 //function CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
              end;
 {Export-}
@@ -159,7 +159,7 @@ begin
                         result:=ord(s[i]);
 end;
 
-procedure ZGLGeometry.DrawTextContent(content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
+procedure ZGLGeometry.DrawTextContent(drawer:TZGLAbstractDrawer;content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
 var
   i: GDBInteger;
   matr,m1: DMatrix4D;
@@ -262,7 +262,7 @@ begin
   plp2:=pl.iterate(ir);
   if plp2<>nil then
   repeat
-        LLprimitives.AddLLPLine(GeomData.Vertex3S.AddGDBVertex(plp^));
+        Drawer.GetLLPrimitivesCreator.CreateLLLine(LLprimitives,GeomData.Vertex3S.AddGDBVertex(plp^));
         GeomData.Vertex3S.AddGDBVertex(plp2^);
 
         plp:=pl.iterate(ir);
@@ -295,21 +295,24 @@ begin
           inc(pbyte(PPrimitive),CurrentSize);
      end;
 end;
-procedure ZGLGeometry.AddPoint(const p:GDBVertex);
+procedure ZGLGeometry.AddPoint(var rc:TDrawContext;const p:GDBVertex);
 var
     tv:GDBVertex3S;
 begin
      tv:=VertexD2S(p);
-     LLprimitives.AddLLPPoint(GeomData.Vertex3S.Add(@tv));
+     rc.drawer.GetLLPrimitivesCreator.CreateLLPoint(LLprimitives,GeomData.Vertex3S.Add(@tv));
 end;
 
-procedure ZGLGeometry.AddLine(const p1,p2:GDBVertex);
+procedure ZGLGeometry.AddLine(var rc:TDrawContext;const p1,p2:GDBVertex);
 var
     tv1,tv2:GDBVertex3S;
 begin
      tv1:=VertexD2S(p1);
      tv2:=VertexD2S(p2);
-     LLprimitives.AddLLPLine(GeomData.Vertex3S.Add(@tv1));
+     if rc.drawer<>nil then
+                           rc.drawer.GetLLPrimitivesCreator.CreateLLLine(LLprimitives,GeomData.Vertex3S.Add(@tv1));
+                       {else
+                           DefaultLLPCreator.CreateLLLine(LLprimitives,GeomData.Vertex3S.Add(@tv1));}
      GeomData.Vertex3S.Add(@tv2);
 
      //lines.Add(@p1);
@@ -434,17 +437,17 @@ begin
      cdp:=0;
      cp:=pcurrsegment^.startpoint;
 end;
-procedure ZGLGeometry.DrawLineWithoutLT(const p1,p2:GDBVertex);
+procedure ZGLGeometry.DrawLineWithoutLT(var rc:TDrawContext;const p1,p2:GDBVertex);
 {var
    d,a:GDBDouble;
    tv:GDBVertex;
    i:integer;}
 begin
-     self.AddLine(p1,p2);
+     self.AddLine(rc,p1,p2);
 end;
-procedure ZGLGeometry.DrawPointWithoutLT(const p:GDBVertex);
+procedure ZGLGeometry.DrawPointWithoutLT(var rc:TDrawContext;const p:GDBVertex);
 begin
-     AddPoint(p);
+     AddPoint(rc,p);
      //points.Add(@p);
 end;
 function creatematrix(PInsert:GDBVertex; //Точка вставки
@@ -550,7 +553,7 @@ PTP^.param.PStyle.pfont.CreateSymbol(self,sym,objmatrix,matr,minx,miny,maxx,maxy
 matr[3,0]:=matr[3,0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]){//-ttf-//,tdinfo}).NextSymX;
 end;
 end;
-procedure ZGLGeometry.PlaceOnePattern(var Segmentator:ZSegmentator;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)
+procedure ZGLGeometry.PlaceOnePattern(var rc:TDrawContext;var Segmentator:ZSegmentator;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)
                                      const vp:PGDBLtypeProp;                 //стиль и прочая лабуда
                                      TangentScale,NormalScale,length,scale_div_length:GDBDouble);     //направление, масштаб, длинна
 var
@@ -572,12 +575,12 @@ begin
                      if PStroke^<>0 then
                      begin
                           if PStroke^>0 then
-                                            Segmentator.draw(abs(PStroke^)*scale_div_length,true)
+                                            Segmentator.draw(rc,abs(PStroke^)*scale_div_length,true)
                                         else
-                                            Segmentator.draw(abs(PStroke^)*scale_div_length,false);
+                                            Segmentator.draw(rc,abs(PStroke^)*scale_div_length,false);
                      end
                         else
-                            DrawPointWithoutLT(Segmentator.cp);
+                            DrawPointWithoutLT(rc,Segmentator.cp);
                      //self.DrawLineWithoutLT(nulvertex,Segmentator.cp);
                      PStroke:=vp.strokesarray.iterate(ir3);
                 end;
@@ -595,7 +598,7 @@ begin
 end;
 end;
 
-procedure ZGLGeometry.PlaceNPatterns(var Segmentator:ZSegmentator;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)
+procedure ZGLGeometry.PlaceNPatterns(var rc:TDrawContext;var Segmentator:ZSegmentator;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)
                                      num:integer; //кол-во паттернов
                                      const vp:PGDBLtypeProp;                 //стиль и прочая лабуда
                                      TangentScale,NormalScale,length:GDBDouble);     //направление, масштаб, длинна
@@ -604,9 +607,9 @@ var i:integer;
 begin
   scale_div_length:=TangentScale/length;
   for i:=1 to num do
-  PlaceOnePattern(Segmentator,vp,TangentScale,NormalScale,length,scale_div_length);//рисуем один паттерн
+  PlaceOnePattern(rc,Segmentator,vp,TangentScale,NormalScale,length,scale_div_length);//рисуем один паттерн
 end;
-procedure ZSegmentator.draw(length:GDBDouble;paint:boolean);
+procedure ZSegmentator.draw(var rc:TDrawContext;length:GDBDouble;paint:boolean);
 var
     tcdp:GDBDouble;
     oldcp,tv:gdbvertex;
@@ -627,16 +630,16 @@ begin
                                                tv:=VertexMulOnSc(dir,length/pcurrsegment.nlength);
                                                cp:=vertexadd(cp,tv);
                                                if paint then
-                                                            self.PGeom.DrawLineWithoutLT(oldcp,cp);
+                                                            self.PGeom.DrawLineWithoutLT(rc,oldcp,cp);
                                                cdp:=tcdp;
                                           end
                                       else
                                           begin
                                                if paint then
-                                                            self.PGeom.DrawLineWithoutLT(cp,pcurrsegment^.endpoint);
+                                                            self.PGeom.DrawLineWithoutLT(rc,cp,pcurrsegment^.endpoint);
                                                length:=tcdp-pcurrsegment^.naccumlength;
                                                self.nextsegment;
-                                               draw(length,paint);
+                                               draw(rc,length,paint);
                                                //tcdp:=cdp;
                                           end;
      end
@@ -644,7 +647,7 @@ begin
          cdp:=tcdp;
      end;
 end;
-procedure ZGLGeometry.DrawPolyLineWithLT(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);
+procedure ZGLGeometry.DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);
 var
     ptv,ptvprev,ptvfisrt: pgdbvertex;
     ir:itrec;
@@ -663,10 +666,10 @@ begin
             ptvprev:=ptv;
             ptv:=Points.iterate(ir);
             if ptv<>nil then
-                            DrawLineWithoutLT(ptv^,ptvprev^);
+                            DrawLineWithoutLT(rc,ptv^,ptvprev^);
       until ptv=nil;
       if closed then
-                    DrawLineWithoutLT(ptvprev^,ptvfisrt^);
+                    DrawLineWithoutLT(rc,ptvprev^,ptvfisrt^);
 end;
 begin
   if Points.Count>1 then
@@ -707,14 +710,14 @@ begin
                     begin
                     PStroke:=LT^.strokesarray.beginiterate(ir3);//первый штрих
                     halfStroke:=(TangentScale*abs(PStroke^/2))/polylength;//первый штрих
-                    Segmentator.draw(normalizedD-halfStroke,true);
+                    Segmentator.draw(rc,normalizedD-halfStroke,true);
                     end;
 
 
-                    PlaceNPatterns(Segmentator,NumberOfPatterns,LT,TangentScale,NormalScale,polylength);//рисуем TrueNumberOfPatterns паттернов
+                    PlaceNPatterns(rc,Segmentator,NumberOfPatterns,LT,TangentScale,NormalScale,polylength);//рисуем TrueNumberOfPatterns паттернов
                     dend:=1-Segmentator.cdp;
                     if dend>eps then
-                                    Segmentator.draw(dend,true);//дорисовываем окончание если надо
+                                    Segmentator.draw(rc,dend,true);//дорисовываем окончание если надо
                end;
            Segmentator.done;
        end;
@@ -722,7 +725,7 @@ begin
   Shrink;
 end;
 
-procedure ZGLGeometry.DrawLineWithLT(const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);
+procedure ZGLGeometry.DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);
 var
     scale,length:GDBDouble;
     num,normalizedD,D,halfStroke,dend:GDBDouble;
@@ -734,7 +737,7 @@ begin
      LT:=getLTfromVP(vp);
      if (LT=nil) or (LT.dasharray.Count=0) then
      begin
-          DrawLineWithoutLT(startpoint,endpoint);
+          DrawLineWithoutLT(rc,startpoint,endpoint);
      end
      else
      begin
@@ -743,7 +746,7 @@ begin
           scale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;//фактический масштаб линии
           num:=Length/(scale*LT.len);//количество повторений шаблона
           if (num<1)or(num>SysVar.RD.RD_MaxLTPatternsInEntity^) then
-                                     DrawLineWithoutLT(startpoint,endpoint) //не рисуем шаблон при большом количестве повторений
+                                     DrawLineWithoutLT(rc,startpoint,endpoint) //не рисуем шаблон при большом количестве повторений
           else
           begin
                Segmentator.InitFromLine(startpoint,endpoint,length,@self);//длина линии
@@ -753,13 +756,13 @@ begin
 
                PStroke:=LT^.strokesarray.beginiterate(ir3);//первый штрих
                halfStroke:=(scale*abs(PStroke^/2))/length;//первый штрих
-               Segmentator.draw(normalizedD-halfStroke,true);
+               Segmentator.draw(rc,normalizedD-halfStroke,true);
 
 
-               PlaceNPatterns(Segmentator,trunc(num),LT,scale,scale,length);//рисуем num паттернов
+               PlaceNPatterns(rc,Segmentator,trunc(num),LT,scale,scale,length);//рисуем num паттернов
                dend:=1-Segmentator.cdp;
                if dend>eps then
-                               Segmentator.draw(dend,true);//дорисовываем окончание если надо
+                               Segmentator.draw(rc,dend,true);//дорисовываем окончание если надо
                Segmentator.done;
          end;
      end;

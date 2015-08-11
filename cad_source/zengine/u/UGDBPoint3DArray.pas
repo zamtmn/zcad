@@ -30,11 +30,11 @@ GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenA
                 constructor initnul;
                 function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
                 function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;
-                function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;
+                function CalcTrueInFrustum(frustum:ClipArray):TInBoundingVolume;virtual;
                 procedure DrawGeometry;virtual;
                 procedure DrawGeometry2;virtual;
                 procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;
-                function getoutbound:GDBBoundingBbox;virtual;
+                function getoutbound:TBoundingBox;virtual;
              end;
 {Export-}
 implementation
@@ -148,7 +148,7 @@ function GDBPoint3DArray.CalcTrueInFrustum;
 var i,{counter,}emptycount:GDBInteger;
 //    d:GDBDouble;
     ptpv0,ptpv1:PGDBVertex;
-    subresult:TInRect;
+    subresult:TInBoundingVolume;
 begin
    //result:=IREmpty;
    emptycount:=0;

@@ -248,7 +248,7 @@ procedure MywglCreateContext(var oglc:TOGLContextDesk);
 function wglGetProcAddress(ProcName:LPCSTR):PROC;stdcall; external 'opengl32' name 'wglGetProcAddress';
 {$ENDIF}
 
-Procedure DrawAABB(const BoundingBox:GDBBoundingBbox);
+Procedure DrawAABB(const BoundingBox:TBoundingBox);
 var
    bcount:integer;
    primcount,pointcount,bathcount:GDBInteger;
@@ -874,7 +874,7 @@ begin
                   programlog.logoutstr(pansichar('SetPixelFormat error - '+inttostr(getlasterror)),lp_DecPos);
              end;}
 end;
-Procedure DrawAABB(const BoundingBox:GDBBoundingBbox);
+Procedure DrawAABB(const BoundingBox:TBoundingBox);
 begin
 oglsm.myglbegin(GL_LINES);
    oglsm.myglVertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z);

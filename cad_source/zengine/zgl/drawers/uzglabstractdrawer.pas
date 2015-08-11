@@ -76,7 +76,7 @@ TZGLAbstractDrawer=class
                         procedure DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);virtual;abstract;
                         procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);virtual;abstract;overload;
                         procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);virtual;abstract;overload;
-                        procedure DrawAABB3DInModelSpace(const BoundingBox:GDBBoundingBbox;var matrixs:tmatrixs);virtual;abstract;
+                        procedure DrawAABB3DInModelSpace(const BoundingBox:TBoundingBox;var matrixs:tmatrixs);virtual;abstract;
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);virtual;abstract;
                         procedure DrawDebugGeometry;virtual;abstract;
                    end;

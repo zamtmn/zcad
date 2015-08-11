@@ -33,7 +33,7 @@ GDBOOutbound2DIArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                       procedure addlastgdbvertex(point:GDBvertex);virtual;
                       procedure clear;virtual;
                       function onmouse(mc:GDBvertex2DI):GDBInteger;virtual;
-                      function InRect(Frame1, Frame2: GDBvertex2DI):TInRect;virtual;
+                      function InRect(Frame1, Frame2: GDBvertex2DI):TInBoundingVolume;virtual;
                       function perimetr:GDBDouble;virtual;
                 end;
 {Export-}

@@ -538,7 +538,7 @@ var //i: GDBInteger;
   x,y,w,h:gdbdouble;
   pv:PGDBObjEntity;
   ir:itrec;
-  r:TInRect;
+  r:TInBoundingVolume;
   DC:TDrawContext;
 begin
   result:=mclick;

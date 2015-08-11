@@ -637,7 +637,7 @@ var
   v:GDBvertex4D;
   //pv:GDBPolyVertex2D;
   pv3:GDBPolyVertex3D;
-  minx,miny,maxx,maxy:GDBDouble;
+  Bound:TBoundingRect;
 
   lp{,tv}:gdbvertex;
   plp,plp2:pgdbvertex;
@@ -658,10 +658,10 @@ begin
   //geom.SHX.clear;
   //Geom.Triangles.clear;
 
-  minx:=+infinity;
-  miny:=+infinity;
-  maxx:=NegInfinity;
-  maxy:=NegInfinity;
+  Bound.LB.x:=+infinity;
+  Bound.LB.y:=+infinity;
+  Bound.RT.x:=NegInfinity;
+  Bound.RT.y:=NegInfinity;
   {minx:=+10000000;
   miny:=+10000000;
   maxx:=-10000000;
@@ -740,7 +740,7 @@ begin
     begin
     //matr:=matrixmultiply(matr,objmatrix);
 
-      pfont.CreateSymbol(geom,sym,objmatrix,matr,minx,miny,maxx,maxy,ln);
+      pfont.CreateSymbol(geom,sym,objmatrix,matr,Bound,ln);
 
       matr:=m1;
       FillChar(m1, sizeof(DMatrix4D), 0);
@@ -767,31 +767,31 @@ begin
             pswp:=text.iterate(ir);
         until pswp=nil;
 
-       if minx=+infinity then minx:=0;
-       if miny=+infinity then miny:=0;
-       if maxx=NegInfinity then maxx:=1;
-       if maxy=NegInfinity then maxy:=1;
+       if Bound.LB.x=+infinity then Bound.LB.x:=0;
+       if Bound.LB.y=+infinity then Bound.LB.y:=0;
+       if Bound.RT.x=NegInfinity then Bound.RT.x:=1;
+       if Bound.RT.y=NegInfinity then Bound.RT.y:=1;
 
-  v.x:=minx;
-  v.y:=maxy;
+  v.x:=Bound.LB.x;
+  v.y:=Bound.RT.y;
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
   outbound[0]:=pgdbvertex(@v)^;
-  v.x:=maxx;
-  v.y:=maxy;
+  v.x:=Bound.RT.x;
+  v.y:=Bound.RT.y;
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
   outbound[1]:=pgdbvertex(@v)^;
-  v.x:=maxx;
-  v.y:=miny;
+  v.x:=Bound.RT.x;
+  v.y:=Bound.LB.y;
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
   outbound[2]:=pgdbvertex(@v)^;
-  v.x:=minx;
-  v.y:=miny;
+  v.x:=Bound.LB.x;
+  v.y:=Bound.LB.y;
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);

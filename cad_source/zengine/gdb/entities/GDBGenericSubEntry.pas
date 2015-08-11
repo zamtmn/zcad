@@ -36,7 +36,7 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                             ObjCasheArray:GDBObjOpenArrayOfPV;
                             ObjToConnectedArray:GDBObjOpenArrayOfPV;
                             lstonmouse:PGDBObjEntity;
-                            VisibleOBJBoundingBox:GDBBoundingBbox;
+                            VisibleOBJBoundingBox:TBoundingBox;
                             //ObjTree:TEntTreeNode;
                             function AddObjectToObjArray(p:GDBPointer):GDBInteger;virtual;
                             function GoodAddObjectToObjArray(const obj:GDBObjEntity):GDBInteger;virtual;
@@ -88,7 +88,7 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                               //function FindObjectsInPointDone(const point:GDBVertex):GDBBoolean;virtual;
                               function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                               procedure correctsublayers(var la:GDBLayerArray);virtual;
-                              function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
+                              function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
 
                               procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
 

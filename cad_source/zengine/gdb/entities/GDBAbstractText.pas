@@ -57,7 +57,7 @@ GDBObjAbstractText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlainWithOX)
                          procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
                          procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                          function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
-                         function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
+                         function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                          function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                          //function InRect:TInRect;virtual;
                          procedure addcontrolpoints(tdesc:GDBPointer);virtual;
@@ -202,7 +202,7 @@ function GDBObjAbstractText.onmouse;
 var //i,counter:GDBInteger;
     //d:GDBDouble;
     //ptpv0,ptpv1:PGDBPolyVertex3D;
-    subresult:TINRect;
+    subresult:TInBoundingVolume;
 begin
   result:=false;
   {if pprojoutbound^.count<4 then exit;

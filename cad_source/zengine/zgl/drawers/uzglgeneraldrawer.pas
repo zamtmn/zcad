@@ -57,7 +57,7 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);override;
                         procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
                         procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
-                        procedure DrawAABB3DInModelSpace(const BoundingBox:GDBBoundingBbox;var matrixs:tmatrixs);override;
+                        procedure DrawAABB3DInModelSpace(const BoundingBox:TBoundingBox;var matrixs:tmatrixs);override;
                         procedure WorkAreaResize(rect:trect);override;
                         procedure SaveBuffers;override;
                         procedure RestoreBuffers;override;
@@ -175,7 +175,7 @@ end;
 procedure TZGLGeneralDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
 begin
 end;
-procedure TZGLGeneralDrawer.DrawAABB3DInModelSpace(const BoundingBox:GDBBoundingBbox;var matrixs:tmatrixs);
+procedure TZGLGeneralDrawer.DrawAABB3DInModelSpace(const BoundingBox:TBoundingBox;var matrixs:tmatrixs);
 begin
         DrawLine3DInModelSpace(createvertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),
                                createvertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),matrixs);

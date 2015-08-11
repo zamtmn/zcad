@@ -40,7 +40,7 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                           procedure drawpoint(var DC:TDrawContext);virtual;
                           procedure drawobject(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                           function getnearesttomouse(mx,my:integer):tcontrolpointdist;virtual;
-                          function getonlyoutbound:GDBBoundingBbox;
+                          function getonlyoutbound:TBoundingBox;
                           procedure selectcurrentcontrolpoint(key:GDBByte;mx,my,h:integer);virtual;
                           procedure RenderFeedBack(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                           //destructor done;virtual;
@@ -554,7 +554,7 @@ begin
   end;
 
 end;
-function GDBSelectedObjArray.getonlyoutbound:GDBBoundingBbox;
+function GDBSelectedObjArray.getonlyoutbound:TBoundingBox;
 var
    i: GDBInteger;
    tdesc:pselectedobjdesc;

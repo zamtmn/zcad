@@ -145,12 +145,12 @@ function CreateScaleMatrix(const V:GDBvertex): DMatrix4D;inline;
 function CreateReflectionMatrix(plane:DVector4D): DMatrix4D;
 function CreateVertex(const x,y,z:GDBDouble):GDBVertex;inline;
 function CreateVertex2D(const x,y:GDBDouble):GDBVertex2D;inline;
-function IsPointInBB(const point:GDBvertex; var fistbb:GDBBoundingBbox):GDBBoolean;inline;
-function CreateBBFrom2Point(const p1,p2:GDBvertex):GDBBoundingBbox;
-procedure ConcatBB(var fistbb:GDBBoundingBbox;const secbb:GDBBoundingBbox);inline;
-procedure concatBBandPoint(var fistbb:GDBBoundingBbox;const point:GDBvertex);inline;
-function IsBBNul(const bb:GDBBoundingBbox):boolean;inline;
-function boundingintersect(const bb1,bb2:GDBBoundingBbox):GDBBoolean;inline;
+function IsPointInBB(const point:GDBvertex; var fistbb:TBoundingBox):GDBBoolean;inline;
+function CreateBBFrom2Point(const p1,p2:GDBvertex):TBoundingBox;
+procedure ConcatBB(var fistbb:TBoundingBox;const secbb:TBoundingBox);inline;
+procedure concatBBandPoint(var fistbb:TBoundingBox;const point:GDBvertex);inline;
+function IsBBNul(const bb:TBoundingBox):boolean;inline;
+function boundingintersect(const bb1,bb2:TBoundingBox):GDBBoolean;inline;
 procedure MatrixInvert(var M: DMatrix4D);//inline;
 function vectordot(const v1,v2:GDBVertex):GDBVertex;inline;
 function scalardot(const v1,v2:GDBVertex):GDBDouble;//inline;
@@ -176,11 +176,11 @@ function PointOfLinePlaneIntersect(const p1,d:GDBVertex;const plane:DVector4D;ou
 function PlaneFrom3Pont(const P1,P2,P3:GDBVertex):DVector4D;inline;
 procedure NormalizePlane(var plane:DVector4D);{inline;}
 
-function CalcTrueInFrustum (const lbegin,lend:GDBvertex; const frustum:ClipArray):TINRect;overload;//inline;
-function CalcTrueInFrustum (const lbegin,lend:GDBvertex3S; const frustum:ClipArray):TInRect;overload;
-function CalcPointTrueInFrustum (const lbegin:GDBvertex; const frustum:ClipArray):TInRect;
-function CalcOutBound4VInFrustum (const OutBound:OutBound4V; const frustum:ClipArray):TINRect;inline;
-function CalcAABBInFrustum (const AABB:GDBBoundingBbox; const frustum:ClipArray):TINRect;{inline;}
+function CalcTrueInFrustum (const lbegin,lend:GDBvertex; const frustum:ClipArray):TInBoundingVolume;overload;//inline;
+function CalcTrueInFrustum (const lbegin,lend:GDBvertex3S; const frustum:ClipArray):TInBoundingVolume;overload;
+function CalcPointTrueInFrustum (const lbegin:GDBvertex; const frustum:ClipArray):TInBoundingVolume;
+function CalcOutBound4VInFrustum (const OutBound:OutBound4V; const frustum:ClipArray):TInBoundingVolume;inline;
+function CalcAABBInFrustum (const AABB:TBoundingBox; const frustum:ClipArray):TInBoundingVolume;{inline;}
 
 function GetXfFromZ(oz:GDBVertex):GDBVertex;
 
@@ -348,7 +348,7 @@ begin
        result:=ca[position];
        inc(position);
 end;
-function CalcOutBound4VInFrustum (const OutBound:OutBound4V; const frustum:ClipArray):TINRect;
+function CalcOutBound4VInFrustum (const OutBound:OutBound4V; const frustum:ClipArray):TInBoundingVolume;
 var i,count:GDBInteger;
     d1,d2,d3,d4:gdbdouble;
 begin
@@ -378,7 +378,7 @@ begin
 
       result:=IRPartially;
 end;
-function CalcTrueInFrustum (const lbegin,lend:GDBvertex; const frustum:ClipArray):TInRect;
+function CalcTrueInFrustum (const lbegin,lend:GDBvertex; const frustum:ClipArray):TInBoundingVolume;
 var i,j:GDBInteger;
     d1,d2:gdbdouble;
     bytebegin,byteend,bit:integer;
@@ -459,7 +459,7 @@ begin
            d1:=d2;
       end;
 end;
-function CalcTrueInFrustum (const lbegin,lend:GDBvertex3S; const frustum:ClipArray):TInRect;
+function CalcTrueInFrustum (const lbegin,lend:GDBvertex3S; const frustum:ClipArray):TInBoundingVolume;
 var i,j:GDBInteger;
     d1,d2:gdbdouble;
     bytebegin,byteend,bit:integer;
@@ -540,7 +540,7 @@ begin
            d1:=d2;
       end;
 end;
-function CalcPointTrueInFrustum (const lbegin:GDBvertex; const frustum:ClipArray):TInRect;
+function CalcPointTrueInFrustum (const lbegin:GDBvertex; const frustum:ClipArray):TInBoundingVolume;
 var i{,j}:GDBInteger;
     d1{,d2}:gdbdouble;
     //bytebegin,byteend,bit:integer;
@@ -560,7 +560,7 @@ begin
       result:=IRFully;
 end;
 
-function CalcAABBInFrustum (const AABB:GDBBoundingBbox; const frustum:ClipArray):TINRect;
+function CalcAABBInFrustum (const AABB:TBoundingBox; const frustum:ClipArray):TInBoundingVolume;
 var i,count:GDBInteger;
     p1,p2,p3,p4,p5,p6,p7,p8:Gdbvertex;
     d1,d2,d3,d4,d5,d6,d7,d8:gdbdouble;
@@ -1883,7 +1883,7 @@ begin
      result.y:=y;
 end;
 
-procedure concatBBandPoint(var fistbb:GDBBoundingBbox;const point:GDBvertex);
+procedure concatBBandPoint(var fistbb:TBoundingBox;const point:GDBvertex);
 begin
   if fistbb.LBN.x>point.x then fistbb.LBN.x:=point.x;
   if fistbb.LBN.y>point.y then fistbb.LBN.y:=point.y;
@@ -1894,7 +1894,7 @@ begin
   if fistbb.RTF.z<point.z then fistbb.RTF.z:=point.z;
 
 end;
-function CreateBBFrom2Point(const p1,p2:GDBvertex):GDBBoundingBbox;
+function CreateBBFrom2Point(const p1,p2:GDBvertex):TBoundingBox;
 var
     t,b,l,r,n,f:GDBDouble;
 begin
@@ -1931,7 +1931,7 @@ begin
   result.LBN:=CreateVertex(l,B,n);
   result.RTF:=CreateVertex(r,T,f);
 end;
-procedure ConcatBB(var fistbb:GDBBoundingBbox;const secbb:GDBBoundingBbox);
+procedure ConcatBB(var fistbb:TBoundingBox;const secbb:TBoundingBox);
 begin
      if (fistbb.RTF.x=fistbb.LBN.x)
      and (fistbb.RTF.y=fistbb.LBN.y)
@@ -1956,7 +1956,7 @@ begin
 
            end
 end;
-function IsBBNul(const bb:GDBBoundingBbox):boolean;
+function IsBBNul(const bb:TBoundingBox):boolean;
 begin
      if (abs(bb.LBN.x-bb.RTF.x)<eps)
     and (abs(bb.LBN.y-bb.RTF.y)<eps)
@@ -1965,7 +1965,7 @@ begin
                                      else
                                          result:=false;
 end;
-function IsPointInBB(const point:GDBvertex; var fistbb:GDBBoundingBbox):GDBBoolean;
+function IsPointInBB(const point:GDBvertex; var fistbb:TBoundingBox):GDBBoolean;
 begin
   result:=false;
   if (fistbb.LBN.x<=point.x+eps)and(fistbb.RTF.x>=point.x-eps) then
@@ -1998,7 +1998,7 @@ else if IsPointInBB(CreateVertex(bb2.rtf.x,bb2.rtf.y,bb2.rtf.z),bb1) then begin 
 else if IsPointInBB(CreateVertex(bb2.rtf.x,bb2.lbn.y,bb2.rtf.z),bb1) then begin result:=true; exit end
 
 end;}
-function boundingintersect(const bb1,bb2:GDBBoundingBbox):GDBBoolean;
+function boundingintersect(const bb1,bb2:TBoundingBox):GDBBoolean;
 var
    b1,b2,b1c,b2c,dist:gdbvertex;
    //dist:gdbdouble;

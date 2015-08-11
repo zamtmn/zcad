@@ -51,7 +51,7 @@ var
   GeomDataIndex:integer;
   LLPolyLineIndexInArray:TArrayIndex;
   VDCopyParam,VDCopyResultParam:TZGLVectorDataCopyParam;
-  symoutbound:GDBBoundingBbox;
+  symoutbound:TBoundingBox;
   offset:TEntIndexesOffsetData;
 procedure ProcessMinMax(_x,_y:fontfloat);
 begin

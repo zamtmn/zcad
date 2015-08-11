@@ -36,7 +36,7 @@ GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     destructor done;virtual;
     function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
     function GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
-    procedure CreateSymbol(var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;var LLSymbolLineIndex:TArrayIndex);
+    procedure CreateSymbol(var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
   end;
 {EXPORT-}
 var
@@ -52,7 +52,7 @@ begin
      //pf.ItSHX;
 end;
 
-procedure GDBfont.CreateSymbol(var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;var LLSymbolLineIndex:TArrayIndex);
+procedure GDBfont.CreateSymbol(var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
 var
   v,v0:GDBvertex;
   sqrsymh:GDBDouble;
@@ -63,7 +63,7 @@ var
   LLSymbolLineCreated:boolean;
   PLLSymbolLine:PTLLSymbolLine;
   VDCopyParam,VDCopyResultParam:TZGLVectorDataCopyParam;
-  symoutbound:GDBBoundingBbox;
+  symoutbound:TBoundingBox;
   offset:TEntIndexesOffsetData;
 begin
   if _symbol=100 then
@@ -125,14 +125,14 @@ begin
     geom.MulOnMatrix(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax,matr);
     symoutbound:=geom.GetBoundingBbox(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax);
     geom.MulOnMatrix(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax,objmatrix);
-    if minx>symoutbound.LBN.x then
-                                   minx:=symoutbound.LBN.x;
-    if miny>symoutbound.LBN.y then
-                                   miny:=symoutbound.LBN.y;
-    if maxx<symoutbound.RTF.x then
-                                   maxx:=symoutbound.RTF.x;
-    if maxy<symoutbound.RTF.y then
-                                   maxy:=symoutbound.RTF.y;
+    if Bound.LB.x>symoutbound.LBN.x then
+                                   Bound.LB.x:=symoutbound.LBN.x;
+    if Bound.LB.y>symoutbound.LBN.y then
+                                   Bound.LB.y:=symoutbound.LBN.y;
+    if Bound.RT.x<symoutbound.RTF.x then
+                                   Bound.RT.x:=symoutbound.RTF.x;
+    if Bound.RT.y<symoutbound.RTF.y then
+                                   Bound.RT.y:=symoutbound.RTF.y;
 
     //PrimitivesCount:=0;
     {for j := 1 to psyminfo.size do

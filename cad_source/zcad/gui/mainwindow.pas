@@ -3037,7 +3037,7 @@ end;
 procedure MainForm.correctscrollbars;
 var
    pdwg:PTSimpleDrawing;
-   BB:GDBBoundingBbox;
+   BB:TBoundingBox;
    size,min,max,position:integer;
 begin
   if (MainFormN.HScrollBar.Focused)or(MainFormN.VScrollBar.Focused)then

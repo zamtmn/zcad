@@ -88,7 +88,7 @@ type
                            procedure reprojectaxis;virtual;abstract;
                            procedure Project0Axis;virtual;abstract;
                            procedure create0axis;virtual;abstract;
-                           procedure ZoomToVolume(Volume:GDBBoundingBbox);virtual;abstract;
+                           procedure ZoomToVolume(Volume:TBoundingBox);virtual;abstract;
                            procedure ZoomAll;virtual;abstract;
                            procedure ZoomSel;virtual;abstract;
                            function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;MousePos: TPoint): Boolean;virtual;abstract;

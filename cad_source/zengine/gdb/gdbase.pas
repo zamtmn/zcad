@@ -194,11 +194,18 @@ GDBvertex2S=packed record
 GDBvertex2DI=packed record
                    x,y:GDBInteger;
              end;
-GDBBoundingBbox=packed record
+
+{Bounding volume}
+TBoundingBox=packed record
                       LBN:GDBvertex;(*'Near'*)
                       RTF:GDBvertex;(*'Far'*)
                 end;
-TInRect=(IRFully,IRPartially,IREmpty);
+TBoundingRect=packed record
+                      LB:GDBvertex2D;(*'Near'*)
+                      RT:GDBvertex2D;(*'Far'*)
+                end;
+TInBoundingVolume=(IRFully,IRPartially,IREmpty);
+
 PGDBvertex2DI=^GDBvertex2DI;
 GDBvertex2DIArray=packed array [0..0] of GDBvertex2DI;
 PGDBvertex2DIArray=^GDBvertex2DIArray;

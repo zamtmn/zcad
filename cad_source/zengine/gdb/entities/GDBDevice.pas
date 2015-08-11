@@ -241,7 +241,7 @@ begin
      result:=result or a;
 end;
 procedure GDBObjDevice.getoutbound;
-var tbb:GDBBoundingBbox;
+var tbb:TBoundingBox;
 begin
      inherited;
      tbb:=VarObjArray.{calcbb}getoutbound;

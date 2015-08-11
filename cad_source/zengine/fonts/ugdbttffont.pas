@@ -464,7 +464,7 @@ end;
 //-ttf-//end;
 procedure TTFFont.ProcessTriangleData(si:PGDBsymdolinfo);
 var
-   symoutbound:GDBBoundingBbox;
+   symoutbound:TBoundingBox;
    VDCopyParam:TZGLVectorDataCopyParam;
 begin
   if si.LLPrimitiveCount>0 then

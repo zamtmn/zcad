@@ -42,7 +42,7 @@ TTreeStatistik=record
                             pluscount,minuscount:GDBInteger;
                             point:GDBVertex;
                             plane:DVector4D;
-                            BoundingBox:GDBBoundingBbox;
+                            BoundingBox:TBoundingBox;
                             nul:GDBObjEntityOpenArray;
                             pplusnode,pminusnode:PTEntTreeNode;
 
@@ -75,7 +75,7 @@ TTestTreeArray=array [0..2] of TTestTreeNode;
 //const
   //_InNodeCount=10;
   {_NodeDepth=16;}
-function createtree(var entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
+function createtree(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
 function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
 procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext{subrender:GDBInteger});
 function MakeTreeStatisticRec(treedepth:integer):TTreeStatistik;
@@ -235,7 +235,7 @@ begin
                            result:=500;
 end;
 
-function createtree(var entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
+function createtree(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
 const
      aabbaxisscale=3;
 var pobj:PGDBObjEntity;
@@ -244,7 +244,7 @@ var pobj:PGDBObjEntity;
     d1,d2,d:gdbdouble;
     entcount,dentcount,i,imin:integer;
     ta:TTestTreeArray;
-    plusaabb,minusaabb:GDBBoundingBbox;
+    plusaabb,minusaabb:TBoundingBox;
     tv:gdbvertex;
      _InNodeCount:gdbinteger;
     SpatialNodeCount,SpatialNodesDepth:integer;

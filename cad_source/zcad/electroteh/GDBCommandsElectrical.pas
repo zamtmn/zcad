@@ -223,7 +223,7 @@ begin
               result:=-121.5;
      end;
 end;
-function insertblock(bname,obozn:GDBString;p:gdbVertex):GDBBoundingBbox;
+function insertblock(bname,obozn:GDBString;p:gdbVertex):TBoundingBox;
 var
    pgdbins:pgdbobjblockinsert;
    pbdef:PGDBObjBlockdef;
@@ -299,7 +299,7 @@ begin
      end;
      
 end;
-procedure drawcable(pcabledesk:PTCableDesctiptor;p1,p2:GDBVertex;g1,g2:GDBBoundingBbox;bgm1,bgm2:TBGMode);
+procedure drawcable(pcabledesk:PTCableDesctiptor;p1,p2:GDBVertex;g1,g2:TBoundingBox;bgm1,bgm2:TBGMode);
 //var
 //   pl:pgdbobjline;
 begin

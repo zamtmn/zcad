@@ -140,7 +140,7 @@ type
     ShowDebugFrustum:GDBBoolean;
     debugfrustum:ClipArray;
     ShowDebugBoundingBbox:GDBBoolean;
-    DebugBoundingBbox:GDBBoundingBbox;
+    DebugBoundingBbox:TBoundingBox;
     processObjConstruct:GDBBoolean;
   end;
 {Export-}
@@ -149,4 +149,4 @@ type
 
 implementation
 
-end.
+end.

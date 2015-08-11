@@ -40,12 +40,12 @@ ZGLVectorObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  destructor done;virtual;
                                  procedure Clear;virtual;
                                  procedure Shrink;virtual;
-                                 function CalcTrueInFrustum(frustum:ClipArray; FullCheck:boolean):TInRect;virtual;
+                                 function CalcTrueInFrustum(frustum:ClipArray; FullCheck:boolean):TInBoundingVolume;virtual;
                                  function GetCopyParam(LLPStartIndex,LLPCount:GDBInteger):TZGLVectorDataCopyParam;virtual;
                                  function CopyTo(var dest:ZGLVectorObject;CopyParam:TZGLVectorDataCopyParam):TZGLVectorDataCopyParam;virtual;
                                  procedure CorrectIndexes(LLPrimitivesStartIndex:GDBInteger;LLPCount:GDBInteger;IndexesStartIndex:GDBInteger;IndexesCount:GDBInteger;offset:TEntIndexesOffsetData);virtual;
                                  procedure MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:GDBInteger;const matrix:DMatrix4D);virtual;
-                                 function GetBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:GDBInteger):GDBBoundingBbox;virtual;
+                                 function GetBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:GDBInteger):TBoundingBox;virtual;
                                end;
 {Export-}
 implementation
@@ -186,7 +186,7 @@ begin
        inc(p);
      end;
 end;
-function ZGLVectorObject.GetBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:GDBInteger):GDBBoundingBbox;
+function ZGLVectorObject.GetBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:GDBInteger):TBoundingBox;
 var
    i:integer;
    p:PGDBvertex3S;
@@ -211,13 +211,13 @@ begin
        inc(p);
      end;
 end;
-function ZGLVectorObject.CalcTrueInFrustum(frustum:ClipArray; FullCheck:boolean):TInRect;
+function ZGLVectorObject.CalcTrueInFrustum(frustum:ClipArray; FullCheck:boolean):TInBoundingVolume;
 var
-  subresult:TInRect;
+  subresult:TInBoundingVolume;
   PPrimitive:PTLLPrimitive;
   ProcessedSize:TArrayIndex;
   CurrentSize:TArrayIndex;
-  InRect:TInRect;
+  InRect:TInBoundingVolume;
 begin
   if LLprimitives.count=0 then
                               begin

@@ -61,7 +61,7 @@ type
                            procedure reprojectaxis;override;
                            procedure Project0Axis;override;
                            procedure create0axis;override;
-                           procedure ZoomToVolume(Volume:GDBBoundingBbox);override;
+                           procedure ZoomToVolume(Volume:TBoundingBox);override;
                            procedure ZoomAll;override;
                            procedure ZoomSel;override;
                            procedure RotTo(x0,y0,z0:GDBVertex);override;
@@ -1092,7 +1092,7 @@ begin
                     zoomtovolume(proot.vp.BoundingBox);
 end;
 
-procedure TGeneralViewArea.ZoomToVolume(Volume:GDBBoundingBbox);
+procedure TGeneralViewArea.ZoomToVolume(Volume:TBoundingBox);
   const
        steps=10;
   var
@@ -1104,9 +1104,9 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:GDBBoundingBbox);
   begin
     if param.projtype = PROJPerspective then
                                             begin
-                                                 historyout('Zoom: Пока только для паралельной проекции!');
+                                                 historyout('Zoom: Works only for parallel projection!');
                                             end;
-    historyout('Zoom: Пока корректно только при виде сверху!');
+    historyout('Zoom: Works only for top view!');
 
 
     CalcOptimalMatrix;
@@ -2583,7 +2583,7 @@ var ccsLBN,ccsRTF:GDBVertex;
     tm:DMatrix4D;
     LBN:GDBvertex;(*'ЛевыйНижнийБлижний'*)
     RTF:GDBvertex;
-    tbb,tbb2:GDBBoundingBbox;
+    tbb,tbb2:TBoundingBox;
     //wa.pdwg:PTDrawing;
     proot:PGDBObjGenericSubEntry;
     pcamera:PGDBObjCamera;

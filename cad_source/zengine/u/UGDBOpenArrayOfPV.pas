@@ -34,14 +34,14 @@ GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects
                       procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                       procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                       function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
-                      function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
+                      function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                       function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
                       function CreateObj(t: GDBByte{;owner:GDBPointer}):GDBPointer;virtual;
                       function CreateInitObj(t: GDBByte;owner:GDBPointer):PGDBObjSubordinated;virtual;
-                      function calcbb:GDBBoundingBbox;
-                      function calcvisbb(infrustumactualy:TActulity):GDBBoundingBbox;
-                      function getoutbound:GDBBoundingBbox;
-                      function getonlyoutbound:GDBBoundingBbox;
+                      function calcbb:TBoundingBox;
+                      function calcvisbb(infrustumactualy:TActulity):TBoundingBox;
+                      function getoutbound:TBoundingBox;
+                      function getonlyoutbound:TBoundingBox;
                       procedure Format;virtual;abstract;
                       procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       procedure FormatAfterEdit(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -128,7 +128,7 @@ begin
                result:=IREmpty;
 end;}
 
-function GDBObjOpenArrayOfPV.calcbb:GDBBoundingBbox;
+function GDBObjOpenArrayOfPV.calcbb:TBoundingBox;
 var pobj:pGDBObjEntity;
     ir:itrec;
 begin
@@ -149,7 +149,7 @@ begin
                        until pobj=nil;
                   end;
 end;
-function GDBObjOpenArrayOfPV.calcvisbb(infrustumactualy:TActulity):GDBBoundingBbox;
+function GDBObjOpenArrayOfPV.calcvisbb(infrustumactualy:TActulity):TBoundingBox;
 var pobj:pGDBObjEntity;
     ir:itrec;
 begin
@@ -176,7 +176,7 @@ begin
      until pobj=nil;
 end;
 
-function GDBObjOpenArrayOfPV.getoutbound:GDBBoundingBbox;
+function GDBObjOpenArrayOfPV.getoutbound:TBoundingBox;
 var pobj:pGDBObjEntity;
     ir:itrec;
 begin
@@ -201,7 +201,7 @@ begin
                        until pobj=nil;
                   end;
 end;
-function GDBObjOpenArrayOfPV.getonlyoutbound:GDBBoundingBbox;
+function GDBObjOpenArrayOfPV.getonlyoutbound:TBoundingBox;
 var pobj:pGDBObjEntity;
     ir:itrec;
 begin
@@ -380,7 +380,7 @@ end;
 function GDBObjOpenArrayOfPV.CalcTrueInFrustum;
 var
   p:pGDBObjEntity;
-  q:TInRect;
+  q:TInBoundingVolume;
   ir:itrec;
   emptycount,objcount:integer;
 begin

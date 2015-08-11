@@ -28,7 +28,7 @@ GDBPolyPoint2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 
                       //procedure DrawGeometry;virtual;
-                      function InRect(Frame1, Frame2: GDBvertex2DI):TInRect;virtual;
+                      function InRect(Frame1, Frame2: GDBvertex2DI):TInBoundingVolume;virtual;
                       procedure freeelement(p:GDBPointer);virtual;
                 end;
 {Export-}

@@ -164,7 +164,7 @@ var
   i: GDBInteger;
   matr,m1: DMatrix4D;
 
-  minx,miny,maxx,maxy:GDBDouble;
+  Bound:TBoundingRect;
 
   plp,plp2:pgdbvertex;
   lp:gdbvertex;
@@ -183,10 +183,10 @@ begin
   ispl:=false;
   pl.init({$IFDEF DEBUGBUILD}'{AC324582-5E55-4290-8017-44B8C675198A}',{$ENDIF}10);
 
-  minx:=+infinity;
-  miny:=+infinity;
-  maxx:=NegInfinity;
-  maxy:=NegInfinity;//-infinity;
+  Bound.LB.x:=+infinity;
+  Bound.LB.y:=+infinity;
+  Bound.RT.x:=NegInfinity;
+  Bound.RT.y:=NegInfinity;//-infinity;
 
   matr:=matrixmultiply(DrawMatrix,objmatrix);
   matr:=DrawMatrix;
@@ -215,7 +215,7 @@ begin
     end
     else
     begin
-      pfont^.CreateSymbol(self,sym,objmatrix,matr,minx,miny,maxx,maxy,LLSymbolLineIndex);
+      pfont^.CreateSymbol(self,sym,objmatrix,matr,Bound,LLSymbolLineIndex);
 
     end;
     if sym<>1 then
@@ -236,25 +236,25 @@ begin
                              pl.Add(@lp);
                      end;
 
-       if minx=+infinity then minx:=0;
-       if miny=+infinity then miny:=0;
-       if maxx=NegInfinity then maxx:=1;
-       if maxy=NegInfinity then maxy:=1;
+       if Bound.LB.x=+infinity then Bound.LB.x:=0;
+       if Bound.LB.y=+infinity then Bound.LB.y:=0;
+       if Bound.RT.x=NegInfinity then Bound.RT.x:=1;
+       if Bound.RT.y=NegInfinity then Bound.RT.y:=1;
 
-  outbound[0].x:=minx;
-  outbound[0].y:=maxy;
+  outbound[0].x:=Bound.LB.x;
+  outbound[0].y:=Bound.RT.y;
   outbound[0].z:=0;
   outbound[0]:=VectorTransform3D(outbound[0],objMatrix);
-  outbound[1].x:=maxx;
-  outbound[1].y:=maxy;
+  outbound[1].x:=Bound.RT.x;
+  outbound[1].y:=Bound.RT.y;
   outbound[1].z:=0;
   outbound[1]:=VectorTransform3D(outbound[1],objMatrix);
-  outbound[2].x:=maxx;
-  outbound[2].y:=miny;
+  outbound[2].x:=Bound.RT.x;
+  outbound[2].y:=Bound.LB.y;
   outbound[2].z:=0;
   outbound[2]:=VectorTransform3D(outbound[2],objMatrix);
-  outbound[3].x:=minx;
-  outbound[3].y:=miny;
+  outbound[3].x:=Bound.LB.x;
+  outbound[3].y:=Bound.LB.y;
   outbound[3].z:=0;
   outbound[3]:=VectorTransform3D(outbound[3],objMatrix);
 
@@ -519,21 +519,22 @@ end;
 procedure ZGLGeometry.PlaceShape(const StartPatternPoint:GDBVertex;PSP:PShapeProp;scale,angle:GDBDouble);
 var
     objmatrix,matr:dmatrix4d;
-    minx,miny,maxx,maxy:GDBDouble;
+    Bound:TBoundingRect;
     sli:integer;
 begin
 { TODO : убрать двойное преобразование номера символа }
 objmatrix:=creatematrix(StartPatternPoint,PSP^.param,angle,scale);
 matr:=onematrix;
-minx:=0;miny:=0;maxx:=0;maxy:=0;
+Bound.LB:=NulVertex2D;
+Bound.RT:=NulVertex2D;
 sli:=-1;
 if PSP.Psymbol<> nil then
-                    PSP^.param.PStyle.pfont.CreateSymbol(self,PSP.Psymbol.Number,objmatrix,matr,minx,miny,maxx,maxy,sli);
+                    PSP^.param.PStyle.pfont.CreateSymbol(self,PSP.Psymbol.Number,objmatrix,matr,Bound,sli);
 end;
 procedure ZGLGeometry.PlaceText(const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
 var
     objmatrix,matr:dmatrix4d;
-    minx,miny,maxx,maxy:GDBDouble;
+    Bound:TBoundingRect;
     j:integer;
     //-ttf-//TDInfo:TTrianglesDataInfo;
     sym:integer;
@@ -542,14 +543,15 @@ begin
 { TODO : убрать двойное преобразование номера символа }
 objmatrix:={creatematrix}CreateReadableMatrix(StartPatternPoint,PTP^.param,angle,scale,PTP.txtL,PTP.txtH);
 matr:=onematrix;
-minx:=0;miny:=0;maxx:=0;maxy:=0;
+Bound.LB:=NulVertex2D;
+Bound.RT:=NulVertex2D;
 sli:=-1;
 for j:=1 to (system.length(PTP^.Text)) do
 begin
      sym:=byte(PTP^.Text[j]);
           if ptp.param.PStyle.pfont.font.unicode then
                                                      sym:=ach2uch(sym);
-PTP^.param.PStyle.pfont.CreateSymbol(self,sym,objmatrix,matr,minx,miny,maxx,maxy,sli);
+PTP^.param.PStyle.pfont.CreateSymbol(self,sym,objmatrix,matr,Bound,sli);
 matr[3,0]:=matr[3,0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]){//-ttf-//,tdinfo}).NextSymX;
 end;
 end;

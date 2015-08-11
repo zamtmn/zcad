@@ -32,7 +32,7 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
             procedure getoutbound;virtual;
             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
-            function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
+            function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
             function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
             procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
             procedure addcontrolpoints(tdesc:GDBPointer);virtual;
@@ -241,7 +241,7 @@ var
    pvn:pvardesk;
    sta:GDBGDBStringArray;
    ps:pgdbstring;
-   bb:GDBBoundingBbox;
+   bb:TBoundingBox;
    pdev:PGDBObjDevice;
    ptn:PTNodeProp;
    ptext:PGDBObjText;
@@ -600,7 +600,7 @@ begin
 end;
 function GDBObjElLeader.CalcTrueInFrustum;
 var
-   q1,q2,q3:TInRect;
+   q1,q2,q3:TInBoundingVolume;
 begin
       if ConstObjArray.Count<>0 then
       begin

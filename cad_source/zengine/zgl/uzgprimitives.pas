@@ -455,17 +455,33 @@ function TLLSymbol.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;
 var
    ir1,ir2,ir3,ir4:TInBoundingVolume;
    myfrustum:ClipArray;
+   OutBound:OutBound4V;
+   p:PGDBvertex3S;
 begin
+     p:=geomdata.Vertex3S.getelement(OutBoundIndex);
+     OutBound[0].x:=p^.x;
+     OutBound[0].y:=p^.y;
+     OutBound[0].z:=p^.z;
+     p:=geomdata.Vertex3S.getelement(OutBoundIndex+1);
+     OutBound[1].x:=p^.x;
+     OutBound[1].y:=p^.y;
+     OutBound[1].z:=p^.z;
+     p:=geomdata.Vertex3S.getelement(OutBoundIndex+2);
+     OutBound[2].x:=p^.x;
+     OutBound[2].y:=p^.y;
+     OutBound[2].z:=p^.z;
+     p:=geomdata.Vertex3S.getelement(OutBoundIndex+3);
+     OutBound[3].x:=p^.x;
+     OutBound[3].y:=p^.y;
+     OutBound[3].z:=p^.z;
+
+     InRect:=CalcOutBound4VInFrustum(OutBound,frustum);
+
      result:=getPrimitiveSize;
-     ir1:=geometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(OutBoundIndex))^,PGDBvertex3S(geomdata.Vertex3S.getelement(OutBoundIndex+1))^,frustum);
-     ir2:=geometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(OutBoundIndex+1))^,PGDBvertex3S(geomdata.Vertex3S.getelement(OutBoundIndex+2))^,frustum);
-     ir3:=geometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(OutBoundIndex+2))^,PGDBvertex3S(geomdata.Vertex3S.getelement(OutBoundIndex+3))^,frustum);
-     ir4:=geometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(OutBoundIndex+3))^,PGDBvertex3S(geomdata.Vertex3S.getelement(OutBoundIndex))^,frustum);
-     if (ir1=IRFully)and(ir2=IRFully)and(ir3=IRFully)and(ir4=IRFully) then
-                                                                        begin
-                                                                          InRect:=IRFully;
-                                                                          exit;
-                                                                        end;
+
+     if InRect<>IRPartially then
+                                exit;
+
      myfrustum:=FrustumTransform(frustum,SymMatr);
      InRect:=PZGLVectorObject(PExternalVectorObject).CalcCountedTrueInFrustum(myfrustum,true,ExternalLLPOffset,ExternalLLPCount);
 end;

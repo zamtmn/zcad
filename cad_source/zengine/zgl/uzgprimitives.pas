@@ -112,6 +112,7 @@ TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               SymMatr:DMatrix4D;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
               constructor init;
+              function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInBoundingVolume):GDBInteger;virtual;
         end;
 PTLLSymbolLine=^TLLSymbolLine;
 TLLSymbolLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
@@ -449,6 +450,24 @@ begin
   PExternalVectorObject:=nil;
   ExternalLLPOffset:=-1;
   ExternalLLPCount:=-1;
+end;
+function TLLSymbol.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInBoundingVolume):GDBInteger;
+var
+   ir1,ir2,ir3,ir4:TInBoundingVolume;
+   myfrustum:ClipArray;
+begin
+     result:=getPrimitiveSize;
+     ir1:=geometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(OutBoundIndex))^,PGDBvertex3S(geomdata.Vertex3S.getelement(OutBoundIndex+1))^,frustum);
+     ir2:=geometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(OutBoundIndex+1))^,PGDBvertex3S(geomdata.Vertex3S.getelement(OutBoundIndex+2))^,frustum);
+     ir3:=geometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(OutBoundIndex+2))^,PGDBvertex3S(geomdata.Vertex3S.getelement(OutBoundIndex+3))^,frustum);
+     ir4:=geometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(OutBoundIndex+3))^,PGDBvertex3S(geomdata.Vertex3S.getelement(OutBoundIndex))^,frustum);
+     if (ir1=IRFully)and(ir2=IRFully)and(ir3=IRFully)and(ir4=IRFully) then
+                                                                        begin
+                                                                          InRect:=IRFully;
+                                                                          exit;
+                                                                        end;
+     myfrustum:=FrustumTransform(frustum,SymMatr);
+     InRect:=PZGLVectorObject(PExternalVectorObject).CalcCountedTrueInFrustum(myfrustum,true,ExternalLLPOffset,ExternalLLPCount);
 end;
 
 function TLLSymbol.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;

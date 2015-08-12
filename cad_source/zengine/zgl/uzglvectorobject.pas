@@ -41,6 +41,7 @@ ZGLVectorObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  procedure Clear;virtual;
                                  procedure Shrink;virtual;
                                  function CalcTrueInFrustum(frustum:ClipArray; FullCheck:boolean):TInBoundingVolume;virtual;
+                                 function CalcCountedTrueInFrustum(frustum:ClipArray; FullCheck:boolean;StartOffset,Count:GDBInteger):TInBoundingVolume;virtual;
                                  function GetCopyParam(LLPStartIndex,LLPCount:GDBInteger):TZGLVectorDataCopyParam;virtual;
                                  function CopyTo(var dest:ZGLVectorObject;CopyParam:TZGLVectorDataCopyParam):TZGLVectorDataCopyParam;virtual;
                                  procedure CorrectIndexes(LLPrimitivesStartIndex:GDBInteger;LLPCount:GDBInteger;IndexesStartIndex:GDBInteger;IndexesCount:GDBInteger;offset:TEntIndexesOffsetData);virtual;
@@ -279,6 +280,55 @@ begin
        inc(p);
      end;
 end;
+function ZGLVectorObject.CalcCountedTrueInFrustum(frustum:ClipArray; FullCheck:boolean;StartOffset,Count:GDBInteger):TInBoundingVolume;
+var
+  subresult:TInBoundingVolume;
+  PPrimitive:PTLLPrimitive;
+  ProcessedSize:TArrayIndex;
+  CurrentSize:TArrayIndex;
+  InRect:TInBoundingVolume;
+begin
+  if StartOffset>=LLprimitives.count then
+                                        begin
+                                          result:=IREmpty;
+                                          exit;
+                                        end;
+  ProcessedSize:=0;
+  PPrimitive:=LLprimitives.getelement(StartOffset);
+  if count>0 then
+  begin
+       CurrentSize:=PPrimitive.CalcTrueInFrustum(frustum,GeomData,result);
+       if not FullCheck then
+         if result<>IREmpty then
+           exit;
+       if result=IRPartially then
+                                 exit;
+       ProcessedSize:=ProcessedSize+CurrentSize;
+       inc(pbyte(PPrimitive),CurrentSize);
+       dec(count);
+  end;
+  while count>0 do
+  begin
+       CurrentSize:=PPrimitive.CalcTrueInFrustum(frustum,GeomData,InRect);
+       case InRect of
+         IREmpty:if result=IRFully then
+                                        result:=IRPartially;
+         IRFully:if result<>IRFully then
+                                        result:=IRPartially;
+         IRPartially:
+                     result:=IRPartially;
+       end;
+       if result=IRPartially then
+                                 exit;
+       if not FullCheck then
+         if result<>IREmpty then
+           exit;
+       ProcessedSize:=ProcessedSize+CurrentSize;
+       inc(pbyte(PPrimitive),CurrentSize);
+       dec(count);
+  end;
+end;
+
 function ZGLVectorObject.CalcTrueInFrustum(frustum:ClipArray; FullCheck:boolean):TInBoundingVolume;
 var
   subresult:TInBoundingVolume;

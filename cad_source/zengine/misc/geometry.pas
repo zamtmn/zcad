@@ -121,6 +121,9 @@ function VectorTransform(const V:GDBVertex4D;const M:DMatrix4D):GDBVertex4D;inli
 procedure normalize4d(var tv:GDBVertex4d);inline;
 function VectorTransform3D(const V:GDBVertex;const M:DMatrix4D):GDBVertex;overload;inline;
 function VectorTransform3D(const V:GDBVertex3S;const M:DMatrix4D):GDBVertex3S;overload;inline;
+
+function FrustumTransform(const frustum:ClipArray;const M:DMatrix4D; MatrixAlreadyTransposed:Boolean=false):ClipArray;
+
 procedure MatrixTranspose(var M: DMatrix4D);inline;
 procedure MatrixNormalize(var M: DMatrix4D);inline;
 function CreateRotationMatrixX(const Sine, Cosine: GDBDouble): DMatrix4D;inline;
@@ -1429,6 +1432,33 @@ begin
   result.y:=tv.y;
   result.z:=tv.z;
 end;
+function FrustumTransform(const frustum:ClipArray;const M:DMatrix4D; MatrixAlreadyTransposed:Boolean=false):ClipArray;
+var
+   m1:DMatrix4D;
+begin
+     if MatrixAlreadyTransposed
+      then
+        begin
+          PGDBVertex4D(@result[0])^:=VectorTransform(PGDBVertex4D(@frustum[0])^,M);
+          PGDBVertex4D(@result[1])^:=VectorTransform(PGDBVertex4D(@frustum[1])^,M);
+          PGDBVertex4D(@result[2])^:=VectorTransform(PGDBVertex4D(@frustum[2])^,M);
+          PGDBVertex4D(@result[3])^:=VectorTransform(PGDBVertex4D(@frustum[3])^,M);
+          PGDBVertex4D(@result[4])^:=VectorTransform(PGDBVertex4D(@frustum[4])^,M);
+          PGDBVertex4D(@result[5])^:=VectorTransform(PGDBVertex4D(@frustum[5])^,M);
+        end
+      else
+        begin
+          m1:=M;
+          MatrixTranspose(m1);
+          PGDBVertex4D(@result[0])^:=VectorTransform(PGDBVertex4D(@frustum[0])^,m1);
+          PGDBVertex4D(@result[1])^:=VectorTransform(PGDBVertex4D(@frustum[1])^,m1);
+          PGDBVertex4D(@result[2])^:=VectorTransform(PGDBVertex4D(@frustum[2])^,m1);
+          PGDBVertex4D(@result[3])^:=VectorTransform(PGDBVertex4D(@frustum[3])^,m1);
+          PGDBVertex4D(@result[4])^:=VectorTransform(PGDBVertex4D(@frustum[4])^,m1);
+          PGDBVertex4D(@result[5])^:=VectorTransform(PGDBVertex4D(@frustum[5])^,m1);
+        end;
+end;
+
 function Vertexlength(const Vector1, Vector2: GDBVertex): GDBDouble;
 begin
   result := sqrt(sqr(vector1.x - vector2.x) + sqr(vector1.y - vector2.y) + sqr(vector1.z - vector2.z));

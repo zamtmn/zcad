@@ -106,7 +106,12 @@ TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               LineIndex:TArrayIndex;
               Attrib:TLLPrimitiveAttrib;
               OutBoundIndex:TLLVertexIndex;
+              PExternalVectorObject:pointer;
+              ExternalLLPOffset:TArrayIndex;
+              ExternalLLPCount:TArrayIndex;
+              SymMatr:DMatrix4D;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              constructor init;
         end;
 PTLLSymbolLine=^TLLSymbolLine;
 TLLSymbolLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
@@ -133,7 +138,7 @@ TLLPolyLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
         end;
 {Export-}
 implementation
-uses log;
+uses log,uzglvectorobject;
 function TLLPrimitive.getPrimitiveSize:GDBInteger;
 begin
      result:=sizeof(self);
@@ -435,6 +440,17 @@ begin
                                                 self.SimplyDrawed:=false;
   result:=inherited;
 end;
+constructor TLLSymbol.init;
+begin
+  SymSize:=-1;
+  LineIndex:=-1;
+  Attrib:=0;
+  OutBoundIndex:=-1;
+  PExternalVectorObject:=nil;
+  ExternalLLPOffset:=-1;
+  ExternalLLPCount:=-1;
+end;
+
 function TLLSymbol.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 var
    i,index,minsymbolsize:integer;
@@ -445,7 +461,7 @@ begin
                                                                            begin
                                                                              result:=SymSize;
                                                                              exit;
-                                                                          end;
+                                                                           end;
   index:=OutBoundIndex;
   result:=inherited;
   if not drawer.CheckOutboundInDisplay(@geomdata.Vertex3S,index) then
@@ -490,6 +506,13 @@ else if (Attrib and LLAttrNeedSimtlify)>0 then
       OptData.ignorelines:=false;
       if (Attrib and LLAttrNeedSolid)>0 then
                                            OptData.symplify:=true;
+    end;
+    if result<>SymSize then
+    begin
+      result:=SymSize;
+      drawer.pushMatrixAndSetTransform(SymMatr);
+      PZGLVectorObject(PExternalVectorObject).DrawCountedLLPrimitives(rc,drawer,OptData,ExternalLLPOffset,ExternalLLPCount);
+      drawer.popMatrix;
     end;
   end;
 

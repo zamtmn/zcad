@@ -77,12 +77,25 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         function CreateScrbuf:boolean; override;
                         procedure delmyscrbuf; override;
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
+
+                        {}
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);override;
+                        procedure popMatrix;override;
                    end;
 var
    OGLDrawer:TZGLAbstractDrawer;
    code:integer;
 implementation
 uses log;
+procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D);
+begin
+  oglsm.myglPushMatrix;
+  oglsm.myglMultMatrixD(Transform);
+end;
+procedure TZGLOpenGLDrawer.popMatrix;
+begin
+  oglsm.myglPopMatrix;
+end;
 procedure TZGLOpenGLDrawer.DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_LINES);

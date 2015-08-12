@@ -79,6 +79,9 @@ TZGLAbstractDrawer=class
                         procedure DrawAABB3DInModelSpace(const BoundingBox:TBoundingBox;var matrixs:tmatrixs);virtual;abstract;
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);virtual;abstract;
                         procedure DrawDebugGeometry;virtual;abstract;
+
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);virtual;abstract;
+                        procedure popMatrix;virtual;abstract;
                    end;
 implementation
 uses log;

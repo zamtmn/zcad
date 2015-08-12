@@ -45,7 +45,6 @@ ZSegmentator={$IFNDEF DELPHI}packed{$ENDIF}object(GDBOpenArrayOfData)
 ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
                 procedure DrawGeometry(var rc:TDrawContext);virtual;
                 procedure DrawNiceGeometry(var rc:TDrawContext);virtual;
-                procedure DrawLLPrimitives(var rc:TDrawContext;drawer:TZGLAbstractDrawer);
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar{$ENDIF});
                 destructor done;virtual;
                 procedure DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);virtual;
@@ -273,28 +272,6 @@ begin
   Shrink;
 end;
 
-procedure ZGLGeometry.DrawLLPrimitives(var rc:TDrawContext;drawer:TZGLAbstractDrawer);
-var
-   PPrimitive:PTLLPrimitive;
-   ProcessedSize:TArrayIndex;
-   CurrentSize:TArrayIndex;
-   i,index,minsymbolsize:integer;
-   OptData:ZGLOptimizerData;
-   sqrparamsize:gdbdouble;
-begin
-     if LLprimitives.count=0 then exit;
-     OptData.ignoretriangles:=false;
-     OptData.ignorelines:=false;
-     OptData.symplify:=false;
-     ProcessedSize:=0;
-     PPrimitive:=LLprimitives.parray;
-     while ProcessedSize<LLprimitives.count do
-     begin
-          CurrentSize:=PPrimitive.draw(Drawer,rc,GeomData,LLprimitives,OptData);
-          ProcessedSize:=ProcessedSize+CurrentSize;
-          inc(pbyte(PPrimitive),CurrentSize);
-     end;
-end;
 procedure ZGLGeometry.AddPoint(var rc:TDrawContext;const p:GDBVertex);
 var
     tv:GDBVertex3S;

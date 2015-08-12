@@ -280,6 +280,11 @@ begin
   PLLPsymbol:=geom.LLprimitives.getelement(LLSymbolIndex);
   PLLPsymbol^.SymSize:=geom.LLprimitives.Count-LLSymbolIndex;
   PLLPsymbol^.LineIndex:=-1;
+  PLLPsymbol^.PExternalVectorObject:=@font.FontData;
+  PLLPsymbol^.ExternalLLPOffset:=VDCopyParam.LLPrimitivesStartIndex;
+  PLLPsymbol^.ExternalLLPCount:=psyminfo.LLPrimitiveCount;
+  PLLPsymbol^.SymMatr:=geometry.MatrixMultiply(matr,objmatrix);
+  VDCopyParam:=font.FontData.GetCopyParam(psyminfo.LLPrimitiveStartIndex,psyminfo.LLPrimitiveCount);
   if VDCopyParam.EID.IndexsIndexMax>0 then
                                           PLLPsymbol^.Attrib:=LLAttrNeedSolid
                                       else

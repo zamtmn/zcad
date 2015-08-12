@@ -27,6 +27,7 @@ uses
     LCLIntf,LCLType,Classes,Controls,
     geometry,uzglgeneraldrawer,uzglabstractdrawer,glstatemanager,Graphics,gdbase;
 type
+DMatrix4DStackArray=array[0..10] of DMatrix4D;
 TPaintState=(TPSBufferNotSaved,TPSBufferSaved);
 TZGLGDIDrawer=class(TZGLGeneralDrawer)
                         public
@@ -48,6 +49,9 @@ TZGLGDIDrawer=class(TZGLGeneralDrawer)
                         PState:TPaintState;
                         ScreenInvalidRect:Trect;
                         PointSize:single;
+                        matr:DMatrix4D;
+                        mstack:DMatrix4DStackArray;
+                        mstackindex:integer;
                         constructor create;
 
                         procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);override;
@@ -57,6 +61,7 @@ TZGLGDIDrawer=class(TZGLGeneralDrawer)
                         procedure deleteoffscreendc;
                         procedure endpaint(InPaintMessage:boolean);override;
 
+                        function TranslatePointWithLocalCS(const p:GDBVertex3S):GDBVertex3S;
                         function TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
                         procedure DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);override;
                         procedure DrawTriangle(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3:TLLVertexIndex);override;
@@ -96,6 +101,9 @@ TZGLGDIDrawer=class(TZGLGeneralDrawer)
                         procedure CorrectScreenInvalidrect(w,h:integer);
                         procedure ProcessScreenInvalidrect(const x,y:integer);
                         procedure DrawDebugGeometry;override;
+
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);override;
+                        procedure popMatrix;override;
                    end;
 {$IFDEF WINDOWS}
 TZGLGDIPlusDrawer=class(TZGLGDIDrawer)
@@ -167,6 +175,55 @@ begin
      //graphicsGDIPlus.Drawpoint(Pen,pv.x,midline-pv.y);
 end;
 {$ENDIF}
+function TZGLGDIDrawer.TranslatePointWithLocalCS(const p:GDBVertex3S):GDBVertex3S;
+begin
+     if mstackindex>-1 then
+                           begin
+                               result:=geometry.VectorTransform3D(p,matr);
+                               result.x:=result.x*sx+tx;
+                               result.y:=result.y*sy+ty;
+                               result.z:=result.z;
+                           end
+                       else
+                       begin
+                           result.x:=p.x*sx+tx;
+                           result.y:=p.y*sy+ty;
+                           result.z:=p.z;
+                       end;
+end;
+function TZGLGDIDrawer.TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
+begin
+     result.x:=p.x*sx+tx;
+     result.y:=p.y*sy+ty;
+     result.z:=p.z;
+end;
+procedure TZGLGDIDrawer.TranslateCoord2D(const tx,ty:single);
+begin
+     self.tx:=self.tx+tx;
+     self.ty:=self.ty+ty;
+end;
+procedure TZGLGDIDrawer.ScaleCoord2D(const sx,sy:single);
+begin
+  self.sx:=self.sx*sx;
+  self.sy:=self.sy*sy;
+end;
+
+procedure TZGLGDIDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D);
+begin
+     inc(mstackindex);
+     mstack[mstackindex]:=matr;
+     matr:=MatrixMultiply(matr,Transform);
+end;
+
+procedure TZGLGDIDrawer.popMatrix;
+begin
+     if mstackindex>-1 then
+                           begin
+                                 matr:=mstack[mstackindex];
+                                 dec(mstackindex);
+                           end;
+end;
+
 constructor TZGLGDIDrawer.create;
 begin
      sx:=0.1;
@@ -176,6 +233,8 @@ begin
      SavedBitmap:=0;
      penstyle:=TPS_Solid;
      OffScreedDC:=0;
+     matr:=OneMatrix;
+     mstackindex:=-1;
 end;
 procedure TZGLGDIDrawer.SetPenStyle(const style:TZGLPenStyle);
 begin
@@ -343,22 +402,6 @@ begin
      {$IFDEF WINDOWS}windows.{$ENDIF}BitBlt({canvas.Handle}CanvasDC,0,0,wh.cx,wh.cy,OffScreedDC,0,0,SRCCOPY);
      isWindowsErrors;
 end;
-function TZGLGDIDrawer.TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
-begin
-     result.x:=p.x*sx+tx;
-     result.y:=p.y*sy+ty;
-     result.z:=p.z;
-end;
-procedure TZGLGDIDrawer.TranslateCoord2D(const tx,ty:single);
-begin
-     self.tx:=self.tx+tx;
-     self.ty:=self.ty+ty;
-end;
-procedure TZGLGDIDrawer.ScaleCoord2D(const sx,sy:single);
-begin
-  self.sx:=self.sx*sx;
-  self.sy:=self.sy*sy;
-end;
 procedure TZGLGDIDrawer.DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);
 var
    pv1,pv2:PGDBVertex3S;
@@ -367,8 +410,8 @@ var
 begin
     pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
     pv2:=PGDBVertex3S(PVertexBuffer.getelement(i2));
-    p1:=TranslatePoint(pv1^);
-    p2:=TranslatePoint(pv2^);
+    p1:=TranslatePointWithLocalCS(pv1^);
+    p2:=TranslatePointWithLocalCS(pv2^);
     //canvas.Line(round(p1.x),round(p1.y),round(p2.x),round(p2.y));
     //canvas.Pie(1,1,1,1,
     //              1,1,1,1);
@@ -391,9 +434,9 @@ begin
     pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
     pv2:=PGDBVertex3S(PVertexBuffer.getelement(i2));
     pv3:=PGDBVertex3S(PVertexBuffer.getelement(i3));
-    p1:=TranslatePoint(pv1^);
-    p2:=TranslatePoint(pv2^);
-    p3:=TranslatePoint(pv3^);
+    p1:=TranslatePointWithLocalCS(pv1^);
+    p2:=TranslatePointWithLocalCS(pv2^);
+    p3:=TranslatePointWithLocalCS(pv3^);
 
     sp[1].x:=round(p1.x);
     sp[1].y:=round(p1.y);
@@ -426,9 +469,9 @@ begin
     pv3:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
     inc(index);
 
-    p1:=TranslatePoint(pv1^);
-    p2:=TranslatePoint(pv2^);
-    p3:=TranslatePoint(pv3^);
+    p1:=TranslatePointWithLocalCS(pv1^);
+    p2:=TranslatePointWithLocalCS(pv2^);
+    p3:=TranslatePointWithLocalCS(pv3^);
 
     sp[1].x:=round(p1.x);
     sp[1].y:=round(p1.y);
@@ -450,7 +493,7 @@ begin
         pindex:=PIndexBuffer.getelement(i);
         pv3:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
 
-        p3:=TranslatePoint(pv3^);
+        p3:=TranslatePointWithLocalCS(pv3^);
 
         sp[3].x:=round(p3.x);
         sp[3].y:=round(p3.y);
@@ -480,9 +523,9 @@ begin
     pv3:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
     inc(index);
 
-    p1:=TranslatePoint(pv1^);
-    p2:=TranslatePoint(pv2^);
-    p3:=TranslatePoint(pv3^);
+    p1:=TranslatePointWithLocalCS(pv1^);
+    p2:=TranslatePointWithLocalCS(pv2^);
+    p3:=TranslatePointWithLocalCS(pv3^);
 
     sp[1].x:=round(p1.x);
     sp[1].y:=round(p1.y);
@@ -505,7 +548,7 @@ begin
         pindex:=PIndexBuffer.getelement(i);
         pv3:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
 
-        p3:=TranslatePoint(pv3^);
+        p3:=TranslatePointWithLocalCS(pv3^);
 
         sp[3].x:=round(p3.x);
         sp[3].y:=round(p3.y);
@@ -525,10 +568,10 @@ begin
     pv2:=PGDBVertex3S(PVertexBuffer.getelement(i2));
     pv3:=PGDBVertex3S(PVertexBuffer.getelement(i3));
     pv4:=PGDBVertex3S(PVertexBuffer.getelement(i4));
-    p1:=TranslatePoint(pv1^);
-    p2:=TranslatePoint(pv2^);
-    p3:=TranslatePoint(pv3^);
-    p4:=TranslatePoint(pv4^);
+    p1:=TranslatePointWithLocalCS(pv1^);
+    p2:=TranslatePointWithLocalCS(pv2^);
+    p3:=TranslatePointWithLocalCS(pv3^);
+    p4:=TranslatePointWithLocalCS(pv4^);
 
     sp[1].x:=round(p1.x);
     sp[1].y:=round(p1.y);
@@ -567,10 +610,10 @@ begin
  pv2:=PGDBVertex3S(PVertexBuffer.getelement(i1+1));
  pv3:=PGDBVertex3S(PVertexBuffer.getelement(i1+2));
  pv4:=PGDBVertex3S(PVertexBuffer.getelement(i1+3));
- p1:=TranslatePoint(pv1^);
- p2:=TranslatePoint(pv2^);
- p3:=TranslatePoint(pv3^);
- p4:=TranslatePoint(pv4^);
+ p1:=TranslatePoint{WithLocalCS}(pv1^);
+ p2:=TranslatePoint{WithLocalCS}(pv2^);
+ p3:=TranslatePoint{WithLocalCS}(pv3^);
+ p4:=TranslatePoint{WithLocalCS}(pv4^);
 
  l:=0;
  r:=0;
@@ -593,7 +636,7 @@ var
    p:GDBVertex3S;
 begin
     pv:=PGDBVertex3S(PVertexBuffer.getelement(i));
-    p:=TranslatePoint(pv^);
+    p:=TranslatePointWithLocalCS(pv^);
     //Canvas.Pixels[round(pv.x),round(pv.y)]:=canvas.Pen.Color;
 end;
 procedure TZGLGDIDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);

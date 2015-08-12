@@ -69,6 +69,9 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure DrawQuad2DInDCS(const x1,y1,x2,y2:single);override;
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
                         procedure DrawDebugGeometry;override;
+
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);override;
+                        procedure popMatrix;override;
                    end;
 var
   testrender:TZGLAbstractDrawer;
@@ -79,6 +82,12 @@ implementation
 uses log;
 var
   DrawerLLPCreator:TLLPrimitivesCreator;
+procedure TZGLGeneralDrawer.popMatrix;
+begin
+end;
+procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D);
+begin
+end;
 function TZGLGeneralDrawer.GetLLPrimitivesCreator:TLLPrimitivesCreatorAbstract;
 begin
      result:=DrawerLLPCreator;

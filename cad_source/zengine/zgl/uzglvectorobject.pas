@@ -19,7 +19,7 @@
 unit uzglvectorobject;
 {$INCLUDE def.inc}
 interface
-uses uzgindexsarray,uzgprimitives,uzglgeomdata,uzgprimitivessarray,zcadsysvars,geometry,sysutils,gdbase,memman,log,
+uses uzglabstractdrawer,gdbdrawcontext,uzgindexsarray,uzgprimitives,uzglgeomdata,uzgprimitivessarray,zcadsysvars,geometry,sysutils,gdbase,memman,log,
      strproc,gdbasetypes;
 type
 {Export+}
@@ -46,9 +46,49 @@ ZGLVectorObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  procedure CorrectIndexes(LLPrimitivesStartIndex:GDBInteger;LLPCount:GDBInteger;IndexesStartIndex:GDBInteger;IndexesCount:GDBInteger;offset:TEntIndexesOffsetData);virtual;
                                  procedure MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:GDBInteger;const matrix:DMatrix4D);virtual;
                                  function GetBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:GDBInteger):TBoundingBox;virtual;
+                                 procedure DrawLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer);virtual;
+                                 procedure DrawCountedLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;var OptData:ZGLOptimizerData;StartOffset,Count:GDBInteger);virtual;
                                end;
 {Export-}
 implementation
+procedure ZGLVectorObject.DrawLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer);
+var
+   PPrimitive:PTLLPrimitive;
+   ProcessedSize:TArrayIndex;
+   CurrentSize:TArrayIndex;
+   OptData:ZGLOptimizerData;
+begin
+     if LLprimitives.count=0 then exit;
+     OptData.ignoretriangles:=false;
+     OptData.ignorelines:=false;
+     OptData.symplify:=false;
+     ProcessedSize:=0;
+     PPrimitive:=LLprimitives.parray;
+     while ProcessedSize<LLprimitives.count do
+     begin
+          CurrentSize:=PPrimitive.draw(Drawer,rc,GeomData,LLprimitives,OptData);
+          ProcessedSize:=ProcessedSize+CurrentSize;
+          inc(pbyte(PPrimitive),CurrentSize);
+     end;
+end;
+procedure ZGLVectorObject.DrawCountedLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;var OptData:ZGLOptimizerData;StartOffset,Count:GDBInteger);
+var
+   PPrimitive:PTLLPrimitive;
+   ProcessedSize:TArrayIndex;
+   CurrentSize:TArrayIndex;
+begin
+     if LLprimitives.count<StartOffset+Count then exit;
+     ProcessedSize:=0;
+     PPrimitive:=LLprimitives.getelement(StartOffset);
+     while count>0 do
+     begin
+          CurrentSize:=PPrimitive.draw(Drawer,rc,GeomData,LLprimitives,OptData);
+          ProcessedSize:=ProcessedSize+CurrentSize;
+          inc(pbyte(PPrimitive),CurrentSize);
+          dec(count);
+     end;
+end;
+
 procedure ZGLVectorObject.CorrectIndexes(LLPrimitivesStartIndex:GDBInteger;LLPCount:GDBInteger;IndexesStartIndex:GDBInteger;IndexesCount:GDBInteger;offset:TEntIndexesOffsetData);
 var
    i:integer;

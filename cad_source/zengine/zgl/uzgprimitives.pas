@@ -487,6 +487,7 @@ begin
 end;
 
 function TLLSymbol.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
+{TODO: this need rewrite}
 var
    i,index,minsymbolsize:integer;
    sqrparamsize:gdbdouble;
@@ -551,7 +552,13 @@ else if (Attrib and LLAttrNeedSimtlify)>0 then
       PZGLVectorObject(PExternalVectorObject).DrawCountedLLPrimitives(rc,drawer,OptData,ExternalLLPOffset,ExternalLLPCount);
       drawer.popMatrix;
     end;
-  end;
+  end
+   else
+     begin
+       drawer.pushMatrixAndSetTransform(SymMatr);
+       PZGLVectorObject(PExternalVectorObject).DrawCountedLLPrimitives(rc,drawer,OptData,ExternalLLPOffset,ExternalLLPCount);
+       drawer.popMatrix;
+     end;
 
 end;
 begin

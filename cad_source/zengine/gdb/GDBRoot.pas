@@ -70,38 +70,16 @@ end;
 function GDBObjRoot.CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;
 var
    myfrustum:ClipArray;
-   m1:DMatrix4D;
 begin
-     m1:=ObjMatrix;
-     MatrixTranspose(m1);
-     PGDBVertex4D(@myfrustum[0])^:=VectorTransform(PGDBVertex4D(@frustum[0])^,m1);
-     PGDBVertex4D(@myfrustum[1])^:=VectorTransform(PGDBVertex4D(@frustum[1])^,m1);
-     PGDBVertex4D(@myfrustum[2])^:=VectorTransform(PGDBVertex4D(@frustum[2])^,m1);
-     PGDBVertex4D(@myfrustum[3])^:=VectorTransform(PGDBVertex4D(@frustum[3])^,m1);
-     PGDBVertex4D(@myfrustum[4])^:=VectorTransform(PGDBVertex4D(@frustum[4])^,m1);
-     PGDBVertex4D(@myfrustum[5])^:=VectorTransform(PGDBVertex4D(@frustum[5])^,m1);
-
+     myfrustum:=FrustumTransform(frustum,ObjMatrix);
      ProcessTree(myfrustum,infrustumactualy,visibleactualy,enttree,IRPartially,true,totalobj,infrustumobj,ProjectProc,zoom);
-
      self.VisibleOBJBoundingBox:=ObjArray.calcvisbb({gdb.GetCurrentDWG.pcamera^.POSCOUNT}{visibleactualy}infrustumactualy);
 end;
 function GDBObjRoot.CalcInFrustum;
 var
    myfrustum:ClipArray;
-   m1:DMatrix4D;
-   //tp:PGDBVertex4D;
-   //t1,t2:gdbvertex;
 begin
-     m1:=ObjMatrix;
-     //MatrixInvert(m1);
-     MatrixTranspose(m1);
-     PGDBVertex4D(@myfrustum[0])^:=VectorTransform(PGDBVertex4D(@frustum[0])^,m1);
-     PGDBVertex4D(@myfrustum[1])^:=VectorTransform(PGDBVertex4D(@frustum[1])^,m1);
-     PGDBVertex4D(@myfrustum[2])^:=VectorTransform(PGDBVertex4D(@frustum[2])^,m1);
-     PGDBVertex4D(@myfrustum[3])^:=VectorTransform(PGDBVertex4D(@frustum[3])^,m1);
-     PGDBVertex4D(@myfrustum[4])^:=VectorTransform(PGDBVertex4D(@frustum[4])^,m1);
-     PGDBVertex4D(@myfrustum[5])^:=VectorTransform(PGDBVertex4D(@frustum[5])^,m1);
-
+     myfrustum:=FrustumTransform(frustum,ObjMatrix);
      inherited CalcInFrustum(myfrustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom);
 end;
 procedure GDBObjRoot.DrawWithAttrib;

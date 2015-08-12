@@ -456,6 +456,7 @@ var
    i,index,minsymbolsize:integer;
    sqrparamsize:gdbdouble;
 begin
+  result:=0;
   if self.LineIndex<>-1 then
   if PTLLSymbolLine(LLPArray.getelement(self.LineIndex))^.SimplyDrawed then
                                                                            begin
@@ -490,6 +491,7 @@ else if (Attrib and LLAttrNeedSimtlify)>0 then
                                                                        inc(index);
                                                                     end;}
       result:=SymSize;
+      exit;
     end
     else
    {if (sqrparamsize<(300))and(not rc.maxdetail) then
@@ -507,7 +509,7 @@ else if (Attrib and LLAttrNeedSimtlify)>0 then
       if (Attrib and LLAttrNeedSolid)>0 then
                                            OptData.symplify:=true;
     end;
-    if result<>SymSize then
+    //if result<>SymSize then
     begin
       result:=SymSize;
       drawer.pushMatrixAndSetTransform(SymMatr);

@@ -64,7 +64,7 @@ var
   PLLSymbolLine:PTLLSymbolLine;
   VDCopyParam,VDCopyResultParam:TZGLVectorDataCopyParam;
   symoutbound:TBoundingBox;
-  offset:TEntIndexesOffsetData;
+  //offset:TEntIndexesOffsetData;
 begin
   if _symbol=100 then
                       _symbol:=_symbol;
@@ -118,13 +118,14 @@ begin
        if LLSymbolIndex=-1 then
                                LLSymbolIndex:={geom.LLprimitives}DefaultLLPCreator.CreateLLSymbol(geom.LLprimitives);
     VDCopyParam:=font.FontData.GetCopyParam(psyminfo.LLPrimitiveStartIndex,psyminfo.LLPrimitiveCount);
-    VDCopyResultParam:=font.FontData.CopyTo(geom,VDCopyParam);
-    offset.GeomIndexOffset:=VDCopyResultParam.EID.GeomIndexMin-VDCopyParam.EID.GeomIndexMin;
-    offset.IndexsIndexOffset:=VDCopyResultParam.EID.IndexsIndexMin-VDCopyParam.EID.IndexsIndexMin;
-    geom.CorrectIndexes(VDCopyResultParam.LLPrimitivesStartIndex,psyminfo.LLPrimitiveCount,VDCopyResultParam.EID.IndexsIndexMin,VDCopyResultParam.EID.IndexsIndexMax-VDCopyResultParam.EID.IndexsIndexMin+1,offset);
-    geom.MulOnMatrix(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax,matr);
-    symoutbound:=geom.GetBoundingBbox(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax);
-    geom.MulOnMatrix(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax,objmatrix);
+    //VDCopyResultParam:=font.FontData.CopyTo(geom,VDCopyParam);
+    //offset.GeomIndexOffset:=VDCopyResultParam.EID.GeomIndexMin-VDCopyParam.EID.GeomIndexMin;
+    //offset.IndexsIndexOffset:=VDCopyResultParam.EID.IndexsIndexMin-VDCopyParam.EID.IndexsIndexMin;
+    //geom.CorrectIndexes(VDCopyResultParam.LLPrimitivesStartIndex,psyminfo.LLPrimitiveCount,VDCopyResultParam.EID.IndexsIndexMin,VDCopyResultParam.EID.IndexsIndexMax-VDCopyResultParam.EID.IndexsIndexMin+1,offset);
+    //geom.MulOnMatrix(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax,matr);
+    symoutbound:=font.FontData.GetTransformedBoundingBbox(VDCopyParam.EID.GeomIndexMin,VDCopyParam.EID.GeomIndexMax,matr);
+    ////symoutbound:=geom.GetBoundingBbox(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax);
+    //geom.MulOnMatrix(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax,objmatrix);
     if Bound.LB.x>symoutbound.LBN.x then
                                    Bound.LB.x:=symoutbound.LBN.x;
     if Bound.LB.y>symoutbound.LBN.y then
@@ -289,7 +290,7 @@ begin
                                           PLLPsymbol^.Attrib:=LLAttrNeedSolid
                                       else
                                           PLLPsymbol^.Attrib:=LLAttrNothing;
-  if {PrimitivesCount>4}(VDCopyResultParam.EID.GeomIndexMax-VDCopyResultParam.EID.GeomIndexMin)>4 then
+  if ({VDCopyResultParam}VDCopyParam.EID.GeomIndexMax-{VDCopyResultParam}VDCopyParam.EID.GeomIndexMin)>4 then
                            PLLPsymbol^.Attrib:=PLLPsymbol^.Attrib or  LLAttrNeedSimtlify;
   v0:=createvertex(psyminfo^.SymMinX,psyminfo^.SymMinY,0);
   v0:=VectorTransform3d(v0,matr);

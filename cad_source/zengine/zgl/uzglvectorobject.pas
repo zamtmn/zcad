@@ -46,6 +46,7 @@ ZGLVectorObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  procedure CorrectIndexes(LLPrimitivesStartIndex:GDBInteger;LLPCount:GDBInteger;IndexesStartIndex:GDBInteger;IndexesCount:GDBInteger;offset:TEntIndexesOffsetData);virtual;
                                  procedure MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:GDBInteger;const matrix:DMatrix4D);virtual;
                                  function GetBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:GDBInteger):TBoundingBox;virtual;
+                                 function GetTransformedBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:GDBInteger;const matrix:DMatrix4D):TBoundingBox;virtual;
                                  procedure DrawLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer);virtual;
                                  procedure DrawCountedLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;var OptData:ZGLOptimizerData;StartOffset,Count:GDBInteger);virtual;
                                end;
@@ -248,6 +249,33 @@ begin
                                result.RTF.y:=p.y;
        if result.RTF.z<p.z then
                                result.RTF.z:=p.z;
+       inc(p);
+     end;
+end;
+function ZGLVectorObject.GetTransformedBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:GDBInteger;const matrix:DMatrix4D):TBoundingBox;
+var
+   i:integer;
+   p:PGDBvertex3S;
+   point:GDBvertex3S;
+begin
+     result.LBN:=InfinityVertex;
+     result.RTF:=MinusInfinityVertex;
+     p:=self.GeomData.Vertex3S.getelement(GeomDataIndexMin);
+     for i:=0 to GeomDataIndexMax-GeomDataIndexMin do
+     begin
+       point:=VectorTransform3D(p^,matrix);
+       if result.LBN.x>point.x then
+                               result.LBN.x:=point.x;
+       if result.LBN.y>point.y then
+                               result.LBN.y:=point.y;
+       if result.LBN.z>point.z then
+                               result.LBN.z:=point.z;
+       if result.RTF.x<point.x then
+                               result.RTF.x:=point.x;
+       if result.RTF.y<point.y then
+                               result.RTF.y:=point.y;
+       if result.RTF.z<point.z then
+                               result.RTF.z:=point.z;
        inc(p);
      end;
 end;

@@ -80,7 +80,8 @@ TZGLAbstractDrawer=class
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);virtual;abstract;
                         procedure DrawDebugGeometry;virtual;abstract;
 
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);virtual;abstract;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);virtual;abstract;overload;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F);virtual;abstract;overload;
                         procedure popMatrix;virtual;abstract;
                    end;
 implementation

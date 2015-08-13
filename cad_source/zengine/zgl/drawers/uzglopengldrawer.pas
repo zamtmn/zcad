@@ -79,7 +79,8 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
 
                         {}
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);override;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);override;overload;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F);override;overload;
                         procedure popMatrix;override;
                    end;
 var
@@ -91,6 +92,11 @@ procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D);
 begin
   oglsm.myglPushMatrix;
   oglsm.myglMultMatrixD(Transform);
+end;
+procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F);
+begin
+  oglsm.myglPushMatrix;
+  oglsm.myglMultMatrixF(Transform);
 end;
 procedure TZGLOpenGLDrawer.popMatrix;
 begin

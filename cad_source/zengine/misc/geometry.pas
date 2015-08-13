@@ -116,15 +116,20 @@ function vertexlen2id(const x1, y1, x2, y2: GDBInteger): GDBDouble;inline;
 function Vertexdmorphabs(const Vector1, Vector2: GDBVertex;a: GDBDouble): GDBVertex;inline;
 function Vertexmorphabs(const Vector1, Vector2: GDBVertex;a: GDBDouble): GDBVertex;inline;
 function Vertexmorphabs2(const Vector1, Vector2: GDBVertex;a: GDBDouble): GDBVertex;inline;
-function MatrixMultiply(const M1, M2: DMatrix4D):DMatrix4D;inline;
-function VectorTransform(const V:GDBVertex4D;const M:DMatrix4D):GDBVertex4D;inline;
+function MatrixMultiply(const M1, M2: DMatrix4D):DMatrix4D;overload;inline;
+function MatrixMultiply(const M1: DMatrix4D; M2: DMatrix4F):DMatrix4D;overload;inline;
+function MatrixMultiplyF(const M1, M2: DMatrix4D):DMatrix4F;inline;
+function VectorTransform(const V:GDBVertex4D;const M:DMatrix4D):GDBVertex4D;overload;inline;
+function VectorTransform(const V:GDBVertex4D;const M:DMatrix4F):GDBVertex4D;overload;inline;
 procedure normalize4d(var tv:GDBVertex4d);inline;
 function VectorTransform3D(const V:GDBVertex;const M:DMatrix4D):GDBVertex;overload;inline;
 function VectorTransform3D(const V:GDBVertex3S;const M:DMatrix4D):GDBVertex3S;overload;inline;
 
-function FrustumTransform(const frustum:ClipArray;const M:DMatrix4D; MatrixAlreadyTransposed:Boolean=false):ClipArray;
+function FrustumTransform(const frustum:ClipArray;const M:DMatrix4D; MatrixAlreadyTransposed:Boolean=false):ClipArray;overload;inline;
+function FrustumTransform(const frustum:ClipArray;const M:DMatrix4F; MatrixAlreadyTransposed:Boolean=false):ClipArray;overload;inline;
 
-procedure MatrixTranspose(var M: DMatrix4D);inline;
+procedure MatrixTranspose(var M: DMatrix4D);overload;inline;
+procedure MatrixTranspose(var M: DMatrix4F);overload;inline;
 procedure MatrixNormalize(var M: DMatrix4D);inline;
 function CreateRotationMatrixX(const Sine, Cosine: GDBDouble): DMatrix4D;inline;
 function CreateRotationMatrixY(const Sine, Cosine: GDBDouble): DMatrix4D;inline;
@@ -1372,9 +1377,45 @@ begin
                   M1[I,3] * M2[3,J];
   Result := TM;
 end;
+function MatrixMultiply(const M1: DMatrix4D; M2: DMatrix4F):DMatrix4D;
+
+var I, J: GDBInteger;
+    TM: DMatrix4D;
+
+begin
+  for I := 0 to 3 do
+    for J := 0 to 3 do
+      TM[I, J] := M1[I,0] * M2[0,J] +
+                  M1[I,1] * M2[1,J] +
+                  M1[I,2] * M2[2,J] +
+                  M1[I,3] * M2[3,J];
+  Result := TM;
+end;
+function MatrixMultiplyF(const M1, M2: DMatrix4D):DMatrix4F;
+
+var I, J: GDBInteger;
+    TM: DMatrix4F;
+
+begin
+  for I := 0 to 3 do
+    for J := 0 to 3 do
+      TM[I, J] := M1[I,0] * M2[0,J] +
+                  M1[I,1] * M2[1,J] +
+                  M1[I,2] * M2[2,J] +
+                  M1[I,3] * M2[3,J];
+  Result := TM;
+end;
 procedure MatrixTranspose(var M: DMatrix4D);
 var I, J: GDBInteger;
     TM: DMatrix4D;
+begin
+  for I := 0 to 3 do
+    for J := 0 to 3 do TM[J, I] := M[I, J];
+  M := TM;
+end;
+procedure MatrixTranspose(var M: DMatrix4F);
+var I, J: GDBInteger;
+    TM: DMatrix4F;
 begin
   for I := 0 to 3 do
     for J := 0 to 3 do TM[J, I] := M[I, J];
@@ -1389,6 +1430,16 @@ begin
 end;
 
 function VectorTransform(const V:GDBVertex4D;const M:DMatrix4D):GDBVertex4D;
+var TV: GDBVertex4D;
+begin
+  TV.X := V.X * M[0, 0] + V.y * M[1, 0] + V.z * M[2, 0] + V.w * M[3, 0];
+  TV.Y := V.X * M[0, 1] + V.y * M[1, 1] + V.z * M[2, 1] + V.w * M[3, 1];
+  TV.z := V.x * M[0, 2] + V.y * M[1, 2] + V.z * M[2, 2] + V.w * M[3, 2];
+  TV.W := V.x * M[0, 3] + V.y * M[1, 3] + V.z * M[2, 3] + V.w * M[3, 3];
+
+  Result := TV
+end;
+function VectorTransform(const V:GDBVertex4D;const M:DMatrix4F):GDBVertex4D;
 var TV: GDBVertex4D;
 begin
   TV.X := V.X * M[0, 0] + V.y * M[1, 0] + V.z * M[2, 0] + V.w * M[3, 0];
@@ -1458,7 +1509,32 @@ begin
           PGDBVertex4D(@result[5])^:=VectorTransform(PGDBVertex4D(@frustum[5])^,m1);
         end;
 end;
-
+function FrustumTransform(const frustum:ClipArray;const M:DMatrix4F; MatrixAlreadyTransposed:Boolean=false):ClipArray;
+var
+   m1:DMatrix4F;
+begin
+     if MatrixAlreadyTransposed
+      then
+        begin
+          PGDBVertex4D(@result[0])^:=VectorTransform(PGDBVertex4D(@frustum[0])^,M);
+          PGDBVertex4D(@result[1])^:=VectorTransform(PGDBVertex4D(@frustum[1])^,M);
+          PGDBVertex4D(@result[2])^:=VectorTransform(PGDBVertex4D(@frustum[2])^,M);
+          PGDBVertex4D(@result[3])^:=VectorTransform(PGDBVertex4D(@frustum[3])^,M);
+          PGDBVertex4D(@result[4])^:=VectorTransform(PGDBVertex4D(@frustum[4])^,M);
+          PGDBVertex4D(@result[5])^:=VectorTransform(PGDBVertex4D(@frustum[5])^,M);
+        end
+      else
+        begin
+          m1:=M;
+          MatrixTranspose(m1);
+          PGDBVertex4D(@result[0])^:=VectorTransform(PGDBVertex4D(@frustum[0])^,m1);
+          PGDBVertex4D(@result[1])^:=VectorTransform(PGDBVertex4D(@frustum[1])^,m1);
+          PGDBVertex4D(@result[2])^:=VectorTransform(PGDBVertex4D(@frustum[2])^,m1);
+          PGDBVertex4D(@result[3])^:=VectorTransform(PGDBVertex4D(@frustum[3])^,m1);
+          PGDBVertex4D(@result[4])^:=VectorTransform(PGDBVertex4D(@frustum[4])^,m1);
+          PGDBVertex4D(@result[5])^:=VectorTransform(PGDBVertex4D(@frustum[5])^,m1);
+        end;
+end;
 function Vertexlength(const Vector1, Vector2: GDBVertex): GDBDouble;
 begin
   result := sqrt(sqr(vector1.x - vector2.x) + sqr(vector1.y - vector2.y) + sqr(vector1.z - vector2.z));

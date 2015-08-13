@@ -70,7 +70,8 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
                         procedure DrawDebugGeometry;override;
 
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);override;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);override;overload;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F);override;overload;
                         procedure popMatrix;override;
                    end;
 var
@@ -86,6 +87,9 @@ procedure TZGLGeneralDrawer.popMatrix;
 begin
 end;
 procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D);
+begin
+end;
+procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F);
 begin
 end;
 function TZGLGeneralDrawer.GetLLPrimitivesCreator:TLLPrimitivesCreatorAbstract;

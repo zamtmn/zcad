@@ -170,6 +170,7 @@ type
                            procedure myglPushMatrix;virtual;//inline;
                            procedure myglPopMatrix;virtual;//inline;
                            procedure myglMultMatrixD(const matrix:DMatrix4D);virtual;//inline;
+                           procedure myglMultMatrixF(const matrix:DMatrix4F);virtual;//inline;
                            procedure myglMatrixMode(const mode: GLenum);inline;
                            procedure myglLineStipple(const factor: GLint; const pattern: GLushort);inline;
                            procedure myglPolygonStipple(const ppattern:pointer);inline;
@@ -672,6 +673,10 @@ end;
 procedure TOGLStateManager.myglMultMatrixD(const matrix:DMatrix4D);
 begin
      glmultmatrixd(@matrix);
+end;
+procedure TOGLStateManager.myglMultMatrixF(const matrix:DMatrix4F);
+begin
+     glmultmatrixf(@matrix);
 end;
 procedure TOGLStateManager.myglViewport(const x,y,width,height:GDBInteger);
 begin

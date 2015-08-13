@@ -100,10 +100,14 @@ PIMatrix4=^IMatrix4;
 IMatrix4=packed array[0..3]of GDBInteger;
 DVector4D=packed array[0..3]of GDBDouble;
 DVector3D=packed array[0..2]of GDBDouble;
+DVector4F=packed array[0..3]of GDBFloat;
 PDMatrix4D=^DMatrix4D;
 DMatrix4D=packed array[0..3]of DVector4D;
 DMatrix3D=packed array[0..2]of DVector3D;
 ClipArray=packed array[0..5]of DVector4D;
+PDMatrix4F=^DMatrix4F;
+DMatrix4F=packed array[0..3]of DVector4F;
+
 FontFloat=GDBFloat;
 PFontFloat=^FontFloat;
 PGDBXCoordinate=^GDBXCoordinate;

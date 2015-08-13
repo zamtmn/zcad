@@ -102,7 +102,8 @@ TZGLGDIDrawer=class(TZGLGeneralDrawer)
                         procedure ProcessScreenInvalidrect(const x,y:integer);
                         procedure DrawDebugGeometry;override;
 
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);override;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);override;overload;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F);override;overload;
                         procedure popMatrix;override;
                    end;
 {$IFDEF WINDOWS}
@@ -209,6 +210,13 @@ begin
 end;
 
 procedure TZGLGDIDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D);
+begin
+     inc(mstackindex);
+     mstack[mstackindex]:=matr;
+     matr:=MatrixMultiply(matr,Transform);
+end;
+
+procedure TZGLGDIDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F);
 begin
      inc(mstackindex);
      mstack[mstackindex]:=matr;

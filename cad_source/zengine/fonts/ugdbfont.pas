@@ -284,7 +284,7 @@ begin
   PLLPsymbol^.PExternalVectorObject:=@font.FontData;
   PLLPsymbol^.ExternalLLPOffset:=VDCopyParam.LLPrimitivesStartIndex;
   PLLPsymbol^.ExternalLLPCount:=psyminfo.LLPrimitiveCount;
-  PLLPsymbol^.SymMatr:=geometry.MatrixMultiply(matr,objmatrix);
+  PLLPsymbol^.SymMatr:=geometry.MatrixMultiplyF(matr,objmatrix);
   VDCopyParam:=font.FontData.GetCopyParam(psyminfo.LLPrimitiveStartIndex,psyminfo.LLPrimitiveCount);
   if VDCopyParam.EID.IndexsIndexMax>0 then
                                           PLLPsymbol^.Attrib:=LLAttrNeedSolid

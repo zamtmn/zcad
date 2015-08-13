@@ -109,7 +109,7 @@ TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               PExternalVectorObject:pointer;
               ExternalLLPOffset:TArrayIndex;
               ExternalLLPCount:TArrayIndex;
-              SymMatr:DMatrix4D;
+              SymMatr:DMatrix4F;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
               constructor init;
               function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInBoundingVolume):GDBInteger;virtual;

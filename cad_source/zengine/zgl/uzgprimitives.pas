@@ -111,6 +111,7 @@ TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               ExternalLLPCount:TArrayIndex;
               SymMatr:DMatrix4F;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
+              procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData);virtual;
               constructor init;
               function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInBoundingVolume):GDBInteger;virtual;
         end;
@@ -548,19 +549,23 @@ else if (Attrib and LLAttrNeedSimtlify)>0 then
     //if result<>SymSize then
     begin
       result:=SymSize;
-      drawer.pushMatrixAndSetTransform(SymMatr);
-      PZGLVectorObject(PExternalVectorObject).DrawCountedLLPrimitives(rc,drawer,OptData,ExternalLLPOffset,ExternalLLPCount);
-      drawer.popMatrix;
+      drawSymbol(drawer,rc,GeomData,LLPArray,OptData);
     end;
   end
    else
      begin
-       drawer.pushMatrixAndSetTransform(SymMatr);
-       PZGLVectorObject(PExternalVectorObject).DrawCountedLLPrimitives(rc,drawer,OptData,ExternalLLPOffset,ExternalLLPCount);
-       drawer.popMatrix;
+       drawSymbol(drawer,rc,GeomData,LLPArray,OptData);
      end;
 
 end;
+
+procedure TLLSymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData);
+begin
+     drawer.pushMatrixAndSetTransform(SymMatr);
+     PZGLVectorObject(PExternalVectorObject).DrawCountedLLPrimitives(rc,drawer,OptData,ExternalLLPOffset,ExternalLLPCount);
+     drawer.popMatrix;
+end;
+
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('uzgprimitives.initialization');{$ENDIF}
 end.

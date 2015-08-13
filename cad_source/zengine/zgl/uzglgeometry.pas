@@ -57,8 +57,8 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
                 {Patterns func}
                 procedure PlaceNPatterns(var rc:TDrawContext;var Segmentator:ZSegmentator;num:integer; const vp:PGDBLtypeProp;TangentScale,NormalScale,length:GDBDouble);
                 procedure PlaceOnePattern(var rc:TDrawContext;var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;TangentScale,NormalScale,length,scale_div_length:GDBDouble);
-                procedure PlaceShape(const StartPatternPoint:GDBVertex; PSP:PShapeProp;scale,angle:GDBDouble);
-                procedure PlaceText(const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
+                procedure PlaceShape(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex; PSP:PShapeProp;scale,angle:GDBDouble);
+                procedure PlaceText(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
 
                 procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
                 //function CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
@@ -214,7 +214,7 @@ begin
     end
     else
     begin
-      pfont^.CreateSymbol(self,sym,objmatrix,matr,Bound,LLSymbolLineIndex);
+      pfont^.CreateSymbol(drawer,self,sym,objmatrix,matr,Bound,LLSymbolLineIndex);
 
     end;
     if sym<>1 then
@@ -493,7 +493,7 @@ begin
     result:=MatrixMultiply(result,mentrot);
     result:=MatrixMultiply(result,mtrans);
 end;
-procedure ZGLGeometry.PlaceShape(const StartPatternPoint:GDBVertex;PSP:PShapeProp;scale,angle:GDBDouble);
+procedure ZGLGeometry.PlaceShape(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex;PSP:PShapeProp;scale,angle:GDBDouble);
 var
     objmatrix,matr:dmatrix4d;
     Bound:TBoundingRect;
@@ -506,9 +506,9 @@ Bound.LB:=NulVertex2D;
 Bound.RT:=NulVertex2D;
 sli:=-1;
 if PSP.Psymbol<> nil then
-                    PSP^.param.PStyle.pfont.CreateSymbol(self,PSP.Psymbol.Number,objmatrix,matr,Bound,sli);
+                    PSP^.param.PStyle.pfont.CreateSymbol(drawer,self,PSP.Psymbol.Number,objmatrix,matr,Bound,sli);
 end;
-procedure ZGLGeometry.PlaceText(const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
+procedure ZGLGeometry.PlaceText(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
 var
     objmatrix,matr:dmatrix4d;
     Bound:TBoundingRect;
@@ -528,7 +528,7 @@ begin
      sym:=byte(PTP^.Text[j]);
           if ptp.param.PStyle.pfont.font.unicode then
                                                      sym:=ach2uch(sym);
-PTP^.param.PStyle.pfont.CreateSymbol(self,sym,objmatrix,matr,Bound,sli);
+PTP^.param.PStyle.pfont.CreateSymbol(drawer,self,sym,objmatrix,matr,Bound,sli);
 matr[3,0]:=matr[3,0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]){//-ttf-//,tdinfo}).NextSymX;
 end;
 end;
@@ -564,11 +564,11 @@ begin
                      PStroke:=vp.strokesarray.iterate(ir3);
                 end;
        TDIShape:begin
-                     PlaceShape(Segmentator.cp,PSP,NormalScale,Segmentator.angle);
+                     PlaceShape(rc.drawer,Segmentator.cp,PSP,NormalScale,Segmentator.angle);
                      PSP:=vp.shapearray.iterate(ir4);
                 end;
         TDIText:begin
-                     PlaceText(Segmentator.cp,PTP,NormalScale,Segmentator.angle);
+                     PlaceText(rc.drawer,Segmentator.cp,PTP,NormalScale,Segmentator.angle);
                      PTP:=vp.textarray.iterate(ir5);
                  end;
           end;

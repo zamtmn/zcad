@@ -20,13 +20,21 @@ unit uzglgdidrawer;
 {$INCLUDE def.inc}
 interface
 uses
-    UGDBOpenArrayOfData,gdbpalette,{$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
+    uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,{$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
     LCLIntf,LCLType,Classes,Controls,
     geometry,uzglgeneraldrawer,uzglabstractdrawer,glstatemanager,Graphics,gdbase;
 type
+PTLLGDISymbol=^TLLGDISymbol;
+TLLGDISymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLSymbol)
+              procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData);virtual;
+        end;
+TLLGDIPrimitivesCreator=class(TLLPrimitivesCreator)
+                             function CreateLLSymbol(var pa:GDBOpenArrayOfData):TArrayIndex;override;
+                        end;
+
 DMatrix4DStackArray=array[0..10] of DMatrix4D;
 TPaintState=(TPSBufferNotSaved,TPSBufferSaved);
 TZGLGDIDrawer=class(TZGLGeneralDrawer)
@@ -105,6 +113,8 @@ TZGLGDIDrawer=class(TZGLGeneralDrawer)
                         procedure pushMatrixAndSetTransform(Transform:DMatrix4D);override;overload;
                         procedure pushMatrixAndSetTransform(Transform:DMatrix4F);override;overload;
                         procedure popMatrix;override;
+
+                        function GetLLPrimitivesCreator:TLLPrimitivesCreatorAbstract;override;
                    end;
 {$IFDEF WINDOWS}
 TZGLGDIPlusDrawer=class(TZGLGDIDrawer)
@@ -123,6 +133,7 @@ var
    OGLDrawer:TZGLAbstractDrawer;
    CanvasDrawer:TZGLGDIDrawer;
    code:integer;
+   LLGDIPrimitivesCreator:TLLGDIPrimitivesCreator;
    {$IFDEF WINDOWS}GDIPlusDrawer:TZGLGDIPlusDrawer;{$ENDIF}
 implementation
 uses log;
@@ -215,14 +226,12 @@ begin
      mstack[mstackindex]:=matr;
      matr:=MatrixMultiply(matr,Transform);
 end;
-
 procedure TZGLGDIDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F);
 begin
      inc(mstackindex);
      mstack[mstackindex]:=matr;
      matr:=MatrixMultiply(matr,Transform);
 end;
-
 procedure TZGLGDIDrawer.popMatrix;
 begin
      if mstackindex>-1 then
@@ -914,13 +923,32 @@ begin
      end;
      LineTo(OffScreedDC,round(coords[0]*sx+tx),round(coords[1]*sy+ty));
 end;
+function TZGLGDIDrawer.GetLLPrimitivesCreator:TLLPrimitivesCreatorAbstract;
+begin
+     result:=LLGDIPrimitivesCreator;
+end;
+function TLLGDIPrimitivesCreator.CreateLLSymbol(var pa:GDBOpenArrayOfData):TArrayIndex;
+var
+   pgdisymbol:PTLLGDISymbol;
+begin
+     result:=pa.count;
+     pgdisymbol:=pa.AllocData(sizeof(TLLGDISymbol));
+     pgdisymbol.init;
+end;
+procedure TLLGDISymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData);
+begin
+  inherited;
+  //TextOut(TZGLGDIDrawer(drawer).OffScreedDC, 100, 100, 'h', 1);
+end;
 
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('uzglgdidrawer.initialization');{$ENDIF}
   CanvasDrawer:=TZGLGDIDrawer.create;
+  LLGDIPrimitivesCreator:=TLLGDIPrimitivesCreator.Create;
   {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
 finalization
    CanvasDrawer.Destroy;
+   LLGDIPrimitivesCreator.Destroy;
   {$IFDEF WINDOWS}GDIPlusDrawer.Destroy;{$ENDIF}
 end.
 

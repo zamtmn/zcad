@@ -41,7 +41,7 @@ GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
                  //procedure getoutbound;virtual;
                  procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure FormatContent(const drawing:TDrawingDef);virtual;
-                 procedure createpoint(const drawing:TDrawingDef);virtual;
+                 procedure createpoint(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  destructor done;virtual;
@@ -479,7 +479,7 @@ begin
   calcobjmatrix;
   CalcGabarit(drawing);
   //getoutbound;
-  createpoint(drawing);
+  createpoint(drawing,dc);
   calcbb;
 end;
 
@@ -740,7 +740,7 @@ begin
     begin
     //matr:=matrixmultiply(matr,objmatrix);
 
-      pfont.CreateSymbol(geom,sym,objmatrix,matr,Bound,ln);
+      pfont.CreateSymbol(DC.drawer,geom,sym,objmatrix,matr,Bound,ln);
 
       matr:=m1;
       FillChar(m1, sizeof(DMatrix4D), 0);

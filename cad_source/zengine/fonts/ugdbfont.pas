@@ -19,7 +19,7 @@
 unit ugdbfont;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitivescreator,uzgprimitives,uzgprimitivessarray,ugdbshxfont,ugdbttffont,memman,
+uses uzglabstractdrawer,uzgprimitivescreator,uzgprimitives,uzgprimitivessarray,ugdbshxfont,ugdbttffont,memman,
      strproc,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,
      ugdbbasefont,geometry,uzglvectorobject;
 type
@@ -36,7 +36,7 @@ GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     destructor done;virtual;
     function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
     function GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
-    procedure CreateSymbol(var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
+    procedure CreateSymbol(drawer:TZGLAbstractDrawer;var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
   end;
 {EXPORT-}
 var
@@ -52,7 +52,7 @@ begin
      //pf.ItSHX;
 end;
 
-procedure GDBfont.CreateSymbol(var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
+procedure GDBfont.CreateSymbol(drawer:TZGLAbstractDrawer;var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
 var
   v,v0:GDBvertex;
   sqrsymh:GDBDouble;
@@ -112,11 +112,19 @@ begin
   begin;
        if LLSymbolLineIndex=-1 then
                                    begin
-                                     LLSymbolLineIndex:={geom.LLprimitives}DefaultLLPCreator.CreateLLSymbolLine(geom.LLprimitives);
+                                        if drawer=nil then
+                                                          LLSymbolLineIndex:={geom.LLprimitives}DefaultLLPCreator.CreateLLSymbolLine(geom.LLprimitives)
+                                                      else
+                                                          LLSymbolLineIndex:=drawer.GetLLPrimitivesCreator.CreateLLSymbolLine(geom.LLprimitives);
                                      LLSymbolLineCreated:=true;
                                    end;
        if LLSymbolIndex=-1 then
-                               LLSymbolIndex:={geom.LLprimitives}DefaultLLPCreator.CreateLLSymbol(geom.LLprimitives);
+                               begin
+                                    if drawer=nil then
+                                                      LLSymbolIndex:={geom.LLprimitives}DefaultLLPCreator.CreateLLSymbol(geom.LLprimitives)
+                                                  else
+                                                      LLSymbolIndex:=drawer.GetLLPrimitivesCreator.CreateLLSymbol(geom.LLprimitives);
+                               end;
     VDCopyParam:=font.FontData.GetCopyParam(psyminfo.LLPrimitiveStartIndex,psyminfo.LLPrimitiveCount);
     //VDCopyResultParam:=font.FontData.CopyTo(geom,VDCopyParam);
     //offset.GeomIndexOffset:=VDCopyResultParam.EID.GeomIndexMin-VDCopyParam.EID.GeomIndexMin;

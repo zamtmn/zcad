@@ -121,9 +121,12 @@ function MatrixMultiply(const M1: DMatrix4D; M2: DMatrix4F):DMatrix4D;overload;i
 function MatrixMultiplyF(const M1, M2: DMatrix4D):DMatrix4F;inline;
 function VectorTransform(const V:GDBVertex4D;const M:DMatrix4D):GDBVertex4D;overload;inline;
 function VectorTransform(const V:GDBVertex4D;const M:DMatrix4F):GDBVertex4D;overload;inline;
-procedure normalize4d(var tv:GDBVertex4d);inline;
+function VectorTransform(const V:GDBVertex4F;const M:DMatrix4F):GDBVertex4F;overload;inline;
+procedure normalize4d(var tv:GDBVertex4d);overload;inline;
+procedure normalize4F(var tv:GDBVertex4F);overload;inline;
 function VectorTransform3D(const V:GDBVertex;const M:DMatrix4D):GDBVertex;overload;inline;
 function VectorTransform3D(const V:GDBVertex3S;const M:DMatrix4D):GDBVertex3S;overload;inline;
+function VectorTransform3D(const V:GDBVertex3S;const M:DMatrix4F):GDBVertex3S;overload;inline;
 
 function FrustumTransform(const frustum:ClipArray;const M:DMatrix4D; MatrixAlreadyTransposed:Boolean=false):ClipArray;overload;inline;
 function FrustumTransform(const frustum:ClipArray;const M:DMatrix4F; MatrixAlreadyTransposed:Boolean=false):ClipArray;overload;inline;
@@ -1449,6 +1452,26 @@ begin
 
   Result := TV
 end;
+function VectorTransform(const V:GDBVertex4F;const M:DMatrix4F):GDBVertex4F;
+var TV: GDBVertex4F;
+begin
+  TV.X := V.X * M[0, 0] + V.y * M[1, 0] + V.z * M[2, 0] + V.w * M[3, 0];
+  TV.Y := V.X * M[0, 1] + V.y * M[1, 1] + V.z * M[2, 1] + V.w * M[3, 1];
+  TV.z := V.x * M[0, 2] + V.y * M[1, 2] + V.z * M[2, 2] + V.w * M[3, 2];
+  TV.W := V.x * M[0, 3] + V.y * M[1, 3] + V.z * M[2, 3] + V.w * M[3, 3];
+
+  Result := TV
+end;
+procedure normalize4F(var tv:GDBVertex4F);
+begin
+  if abs(tv.w)>eps then
+  if abs(abs(tv.w)-1)>eps then
+  begin
+  tv.x:=tv.x/tv.w;
+  tv.y:=tv.y/tv.w;
+  tv.z:=tv.z/tv.w;
+  end;
+end;
 procedure normalize4d(var tv:GDBVertex4d);
 begin
   if abs(tv.w)>eps then
@@ -1479,6 +1502,19 @@ begin
   tv.w:=1;
   tv:=VectorTransform(tv,m);
   normalize4d(tv);
+  result.x:=tv.x;
+  result.y:=tv.y;
+  result.z:=tv.z;
+end;
+function VectorTransform3D(const V:GDBVertex3S;const M:DMatrix4F):GDBVertex3S;
+var tv: GDBVertex4F;
+begin
+  tv.x:=v.x;
+  tv.y:=v.y;
+  tv.z:=v.z;
+  tv.w:=1;
+  tv:=VectorTransform(tv,m);
+  normalize4f(tv);
   result.x:=tv.x;
   result.y:=tv.y;
   result.z:=tv.z;

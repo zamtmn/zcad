@@ -20,7 +20,7 @@ unit uzglgdidrawer;
 {$INCLUDE def.inc}
 interface
 uses
-    uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,{$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
+    LazUTF8,uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,{$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
@@ -936,9 +936,36 @@ begin
      pgdisymbol.init;
 end;
 procedure TLLGDISymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData);
+var
+   r:TRect;
+
+   point,spoint:GDBVertex3S;
+   x,y:integer;
+   s:AnsiString;
+const
+  cnvStr:packed array[0..3]of byte=(0,0,0,0);
 begin
-  inherited;
-  //TextOut(TZGLGDIDrawer(drawer).OffScreedDC, 100, 100, 'h', 1);
+  inherited;//там вывод букв треугольниками
+  //exit;
+  point.x:=0;
+  point.y:=0;
+  point.z:=0;
+  point:=VectorTransform3d(point,self.SymMatr);
+  spoint:=TZGLGDIDrawer(drawer).TranslatePoint(point);
+  x:=round(spoint.x);
+  y:=round(spoint.y);
+
+  //r:=rect(x,y,x+50,y+50);
+  SetTextAlign(TZGLGDIDrawer(drawer).OffScreedDC,TA_BOTTOM or TA_LEFT);
+  SetTextColor(TZGLGDIDrawer(drawer).OffScreedDC,TZGLGDIDrawer(drawer).PenColor);
+
+  cnvStr[0]:=lo(word(SymCode));
+  cnvStr[1]:=hi(word(SymCode));
+  s:=UTF16ToUTF8(@cnvStr,1);
+
+  //DrawText(TZGLGDIDrawer(drawer).OffScreedDC,'h',1,r,{Flags: Cardinal}0);
+  //TextOut(TZGLGDIDrawer(drawer).OffScreedDC, x, y, 'h', 1);
+  ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,x,y,{Options: Longint}0,@r,@s[1],-1,nil);
 end;
 
 initialization

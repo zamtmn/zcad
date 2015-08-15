@@ -20,7 +20,7 @@ unit uzglgdidrawer;
 {$INCLUDE def.inc}
 interface
 uses
-    LazUTF8,uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,{$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
+    zcadsysvars,abstractviewarea,LazUTF8,uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,{$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
@@ -39,6 +39,7 @@ DMatrix4DStackArray=array[0..10] of DMatrix4D;
 TPaintState=(TPSBufferNotSaved,TPSBufferSaved);
 TZGLGDIDrawer=class(TZGLGeneralDrawer)
                         public
+                        wa:TAbstractViewArea;
                         canvas:tcanvas;
                         panel:TCustomControl;
                         midline:integer;
@@ -942,11 +943,15 @@ var
    point,spoint:GDBVertex3S;
    x,y:integer;
    s:AnsiString;
+   gdiData:PTGDIData;
 const
   cnvStr:packed array[0..3]of byte=(0,0,0,0);
 begin
-  inherited;//там вывод букв треугольниками
-  //exit;
+  gdiData:=TZGLGDIDrawer(drawer).wa.getParam;
+  if gdiData^.RD_TextRendering<>TRT_System then
+                                               inherited;//там вывод букв треугольниками
+  if gdiData^.RD_TextRendering=TRT_ZGL then
+                                           exit;
   point.x:=0;
   point.y:=0;
   point.z:=0;
@@ -957,6 +962,7 @@ begin
 
   //r:=rect(x,y,x+50,y+50);
   SetTextAlign(TZGLGDIDrawer(drawer).OffScreedDC,TA_BOTTOM or TA_LEFT);
+  SetBkMode(TZGLGDIDrawer(drawer).OffScreedDC,TRANSPARENT);
   SetTextColor(TZGLGDIDrawer(drawer).OffScreedDC,TZGLGDIDrawer(drawer).PenColor);
 
   cnvStr[0]:=lo(word(SymCode));

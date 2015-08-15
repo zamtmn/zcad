@@ -67,7 +67,9 @@ type
                           RD_ID_PrefferedRenderTime:PGDBInteger;(*'Prefered rendertime'*)
                       end;
   PTGDIData=^TGDIData;
+  TTextRenderingType=(TRT_System,TRT_ZGL,TRT_Both);
   TGDIData=packed record
+            RD_TextRendering:TTextRenderingType;
             RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
             RD_Version:GDBString;(*'Version'*)(*oi_readonly*)
       end;

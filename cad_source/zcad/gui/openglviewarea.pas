@@ -243,6 +243,7 @@ end;
 procedure TCanvasViewArea.CreateDrawer;
 begin
      drawer:=TZGLGDIDrawer.Create;
+     TZGLGDIDrawer(drawer).wa:=self;
      TZGLGDIDrawer(drawer).canvas:=TCADControl(getviewcontrol).canvas;
      TZGLGDIDrawer(drawer).panel:=TCADControl(getviewcontrol);
 end;
@@ -256,6 +257,7 @@ begin
 end;
 procedure TCanvasViewArea.setdeicevariable;
 begin
+     GDIData.RD_TextRendering:=TRT_Both;
      {$IFDEF LCLWIN32}
      GDIData.RD_Renderer:='Windows GDI';
      if Win32CSDVersion<>'' then

@@ -19,7 +19,7 @@
 unit ugdbfont;
 {$INCLUDE def.inc}
 interface
-uses uzglabstractdrawer,uzgprimitivescreator,uzgprimitives,uzgprimitivessarray,ugdbshxfont,ugdbttffont,memman,
+uses math,uzglabstractdrawer,uzgprimitivescreator,uzgprimitives,uzgprimitivessarray,ugdbshxfont,ugdbttffont,memman,
      strproc,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,
      ugdbbasefont,geometry,uzglvectorobject;
 type
@@ -28,7 +28,10 @@ PGDBfont=^GDBfont;
 GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     fontfile:GDBString;
     Internalname:GDBString;
-    font:{PSHXFont}PBASEFont;
+    family:GDBString;
+    fullname:GDBString;
+    font:PBASEFont;
+    DummyDrawerHandle:THandle;
     constructor initnul;
     constructor init(n:GDBString);
     procedure ItSHX;
@@ -54,8 +57,8 @@ end;
 
 procedure GDBfont.CreateSymbol(drawer:TZGLAbstractDrawer;var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
 var
-  v,v0:GDBvertex;
-  sqrsymh:GDBDouble;
+  v,v0,true0Y,fact0y:GDBvertex;
+  sqrsymh,CapHeight:GDBDouble;
   psyminfo:PGDBsymdolinfo;
 
   LLSymbolIndex:TArrayIndex;
@@ -113,7 +116,7 @@ begin
        if LLSymbolLineIndex=-1 then
                                    begin
                                         if drawer=nil then
-                                                          LLSymbolLineIndex:={geom.LLprimitives}DefaultLLPCreator.CreateLLSymbolLine(geom.LLprimitives)
+                                                          LLSymbolLineIndex:=DefaultLLPCreator.CreateLLSymbolLine(geom.LLprimitives)
                                                       else
                                                           LLSymbolLineIndex:=drawer.GetLLPrimitivesCreator.CreateLLSymbolLine(geom.LLprimitives);
                                      LLSymbolLineCreated:=true;
@@ -324,23 +327,55 @@ begin
     PLLPsymbol^.LineIndex:=LLSymbolLineIndex;
     PLLSymbolLine:=geom.LLprimitives.getelement(LLSymbolLineIndex);
     if LLSymbolLineCreated then
-                               PLLSymbolLine^.FirstOutBoundIndex:=PLLPsymbol^.OutBoundIndex;
+                               begin
+                                    PLLSymbolLine^.SymbolsParam.IsCanSystemDraw:=font^.IsCanSystemDraw;
+                                    if PLLSymbolLine^.SymbolsParam.IsCanSystemDraw then
+                                    begin
+                                         CapHeight:=PTTFFont(font)^.ftFont.CapHeight;
+                                         //PLLSymbolLine^.SymbolsParam.NeededFontHeight:=psyminfo^.h*psyminfo^.h*sqrsymh/(PTTFFont(font)^.ftFont.DPI / 72)/(PTTFFont(font)^.ftFont.DPI / 72);
+                                         PLLSymbolLine^.SymbolsParam.NeededFontHeight:=oneVertexlength(PGDBVertex(@matr[1])^)*((PTTFFont(font)^.ftFont.Ascent+PTTFFont(font)^.ftFont.Descent)/PTTFFont(font)^.ftFont.CapHeight);
+
+                                         PLLSymbolLine^.SymbolsParam.pfont:=@self;
+                                    end;
+
+                                    PLLSymbolLine^.FirstOutBoundIndex:=PLLPsymbol^.OutBoundIndex;
+                                    PLLSymbolLine^.SymbolsParam.FirstSymMatr:=geometry.MatrixMultiply(matr,objmatrix);
+                                    PLLSymbolLine^.SymbolsParam.Rotate:=Vertexangle(CreateVertex2D(0,0),CreateVertex2D(PLLSymbolLine^.SymbolsParam.FirstSymMatr[0][0],PLLSymbolLine^.SymbolsParam.FirstSymMatr[0][1]));
+
+                                    PLLSymbolLine^.SymbolsParam.sx:=oneVertexlength(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[0])^)/oneVertexlength(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[1])^);
+
+                                    true0Y:=CrossVertex(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[2])^,PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[0])^);
+
+                                    true0Y:=NormalizeVertex(true0Y);
+                                    fact0y:=NormalizeVertex(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[1])^);
+
+                                    PLLSymbolLine^.SymbolsParam.Oblique:=arccos(scalardot(true0Y,fact0y));
+
+                                    PLLSymbolLine^.SymbolsParam.NeededFontHeight:=PLLSymbolLine^.SymbolsParam.NeededFontHeight*cos(PLLSymbolLine^.SymbolsParam.Oblique);
+                                    PLLSymbolLine^.SymbolsParam.sx:=PLLSymbolLine^.SymbolsParam.sx/cos(PLLSymbolLine^.SymbolsParam.Oblique);
+
+                                    if GetCSDirFrom0x0y2D(true0Y,fact0y)=TCSDLeft then
+                                                          PLLSymbolLine^.SymbolsParam.Oblique:=-PLLSymbolLine^.SymbolsParam.Oblique;
+                               end;
     PLLSymbolLine^.LastOutBoundIndex:=PLLPsymbol^.OutBoundIndex;
     if sqrsymh>PLLSymbolLine.MaxSqrSymH then
                                          PLLSymbolLine.MaxSqrSymH:=sqrsymh;
   end;
-  {geom.LLprimitives.}DefaultLLPCreator.CreateLLSymbolEnd(geom.LLprimitives);
+  DefaultLLPCreator.CreateLLSymbolEnd(geom.LLprimitives);
   end;
   end;
 constructor GDBfont.initnul;
 begin
      inherited;
      pointer(fontfile):=nil;
+     DummyDrawerHandle:=0;
 end;
 destructor GDBfont.done;
 begin
      fontfile:='';
      Internalname:='';
+     family:='';
+     fullname:='';
      if font<>nil then
                       begin
                            font.done;

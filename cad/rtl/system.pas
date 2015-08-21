@@ -760,6 +760,7 @@ BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               function GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;virtual;abstract;
               function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
               function findunisymbolinfos(symbolname:GDBString):PGDBsymdolinfo;
+              function IsCanSystemDraw:GDBBoolean;virtual;abstract;
         end;
 //Generate on E:\zcad\cad_source\zengine\fonts\ugdbshxfont.pas
 PSHXFont=^SHXFont;
@@ -775,7 +776,10 @@ PGDBfont=^GDBfont;
 GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     fontfile:GDBString;
     Internalname:GDBString;
-    font:{PSHXFont}PBASEFont;
+    family:GDBString;
+    fullname:GDBString;
+    font:PBASEFont;
+    DummyDrawerHandle:THandle;
     constructor initnul;
     constructor init(n:GDBString);
     procedure ItSHX;
@@ -1517,6 +1521,13 @@ TLLPoint={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;abstract;
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;abstract;
         end;
+PTSymbolSParam=^TSymbolSParam;
+TSymbolSParam=packed record
+                   FirstSymMatr:DMatrix4D;
+                   sx,Rotate,Oblique,NeededFontHeight{,offsety}:GDBFloat;
+                   pfont:pointer;
+                   IsCanSystemDraw:GDBBoolean;
+             end;
 PTLLSymbol=^TLLSymbol;
 TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               SymSize:GDBInteger;
@@ -1529,7 +1540,7 @@ TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               SymMatr:DMatrix4F;
               SymCode:Integer;//unicode symbol code
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
-              procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData);virtual;
+              procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);virtual;
               constructor init;
               function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInBoundingVolume):GDBInteger;virtual;abstract;
         end;
@@ -1537,6 +1548,7 @@ PTLLSymbolLine=^TLLSymbolLine;
 TLLSymbolLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               SimplyDrawed:GDBBoolean;
               MaxSqrSymH:GDBFloat;
+              SymbolsParam:TSymbolSParam;
               FirstOutBoundIndex,LastOutBoundIndex:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
               constructor init;

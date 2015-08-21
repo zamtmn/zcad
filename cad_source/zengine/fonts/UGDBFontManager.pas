@@ -19,7 +19,7 @@
 unit UGDBFontManager;
 {$INCLUDE def.inc}
 interface
-uses zcadstrconsts,shared,zcadsysvars,strproc,ugdbfont,gdbasetypes,SysInfo,memman,
+uses windows,zcadstrconsts,shared,zcadsysvars,strproc,ugdbfont,gdbasetypes,SysInfo,memman,
      sysutils,gdbase, geometry,usimplegenerics,
      UGDBNamedObjectsArray,classes;
 type
@@ -49,6 +49,7 @@ GDBFontManager={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArrayOfData}GDBName
                     {procedure freeelement(p:GDBPointer);virtual;}
               end;
 {Export-}
+function AddFontResourceEx(_para1:LPCSTR; flags:DWORD; reserved:Pointer) : integer; stdcall; external 'gdi32' name 'AddFontResourceExA';
 var
    FontManager:GDBFontManager;
    FontExt2LoadProc:TFontExt2LoadProcMap;
@@ -67,8 +68,11 @@ begin
 end;
 
 procedure GDBFontManager.EnumerateTTFFontFile(filename:GDBString);
+var
+   r:longint;
 begin
      ttffontfiles.Add(filename);
+     r:=AddFontResourceEx(@filename[1],$10,0);
 end;
 procedure GDBFontManager.EnumerateSHXFontFile(filename:GDBString);
 begin

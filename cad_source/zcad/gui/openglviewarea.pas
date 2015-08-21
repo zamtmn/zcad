@@ -257,7 +257,7 @@ begin
 end;
 procedure TCanvasViewArea.setdeicevariable;
 begin
-     GDIData.RD_TextRendering:=TRT_Both;
+     GDIData.RD_TextRendering:=TRT_System;
      {$IFDEF LCLWIN32}
      GDIData.RD_Renderer:='Windows GDI';
      if Win32CSDVersion<>'' then

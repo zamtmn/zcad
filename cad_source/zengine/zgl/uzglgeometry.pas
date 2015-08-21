@@ -277,6 +277,7 @@ var
     tv:GDBVertex3S;
 begin
      tv:=VertexD2S(p);
+     if rc.drawer<>nil then
      rc.drawer.GetLLPrimitivesCreator.CreateLLPoint(LLprimitives,GeomData.Vertex3S.Add(@tv));
 end;
 

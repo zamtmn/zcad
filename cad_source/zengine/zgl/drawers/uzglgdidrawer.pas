@@ -20,16 +20,23 @@ unit uzglgdidrawer;
 {$INCLUDE def.inc}
 interface
 uses
-    zcadsysvars,abstractviewarea,LazUTF8,uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,{$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
+    fileutil,math,UGDBFontManager,ugdbfont,zcadsysvars,abstractviewarea,LazUTF8,uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,{$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
     LCLIntf,LCLType,Classes,Controls,
     geometry,uzglgeneraldrawer,uzglabstractdrawer,glstatemanager,Graphics,gdbase;
 type
+TGDIFontCacheKey=record
+                       RealSizeInPixels:Integer;
+                       PFontRecord:PGDBFontRecord;
+                 end;
+TGDIFontCacheData=record
+                       Handle:HFONT;
+                  end;
 PTLLGDISymbol=^TLLGDISymbol;
 TLLGDISymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLSymbol)
-              procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData);virtual;
+              procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);virtual;
         end;
 TLLGDIPrimitivesCreator=class(TLLPrimitivesCreator)
                              function CreateLLSymbol(var pa:GDBOpenArrayOfData):TArrayIndex;override;
@@ -936,7 +943,7 @@ begin
      pgdisymbol:=pa.AllocData(sizeof(TLLGDISymbol));
      pgdisymbol.init;
 end;
-procedure TLLGDISymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData);
+procedure TLLGDISymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);
 var
    r:TRect;
 
@@ -944,14 +951,55 @@ var
    x,y:integer;
    s:AnsiString;
    gdiData:PTGDIData;
+
+   ResultTransform,transminusM,obliqueM,transplusM,scaleM,rotateM:XFORM;
+   gdiDrawYOffset,txtOblique,txtRotate,txtSx,txtSy:single;
+
+   lfcp:TLogFont;
+
 const
+  deffonth=19;
+  ident:XFORM=(eM11:1;eM12:0;eM21:0;eM22:1;eDx:0;eDy:0);
+  MWT_Mode=MWT_RIGHTMULTIPLY;
   cnvStr:packed array[0..3]of byte=(0,0,0,0);
 begin
+     if not PSymbolsParam^.IsCanSystemDraw then
+                                           begin
+                                                inherited;
+                                                exit;
+                                           end;
+
   gdiData:=TZGLGDIDrawer(drawer).wa.getParam;
   if gdiData^.RD_TextRendering<>TRT_System then
                                                inherited;//там вывод букв треугольниками
   if gdiData^.RD_TextRendering=TRT_ZGL then
                                            exit;
+
+  if PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle=0
+  then
+      begin
+            lfcp.lfHeight:=deffonth;
+            lfcp.lfWidth:=0;
+            lfcp.lfEscapement:=0;
+            lfcp.lfOrientation:=0;
+            lfcp.lfWeight:=FW_NORMAL;
+            lfcp.lfItalic:=0;
+            lfcp.lfUnderline:=0;
+            lfcp.lfStrikeOut:=0;
+            lfcp.lfCharSet:=DEFAULT_CHARSET;
+            lfcp.lfOutPrecision:=0;
+            lfcp.lfClipPrecision:=0;
+            lfcp.lfQuality:=0;
+            lfcp.lfPitchAndFamily:=0;//{DRAFT_QUALITY}CLEARTYPE_NATURAL_QUALITY;
+            lfcp.lfFaceName:=PGDBfont(PSymbolsParam.pfont)^.family;
+           PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle:=CreateFontIndirect(lfcp);
+           SelectObject(TZGLGDIDrawer(drawer).OffScreedDC,PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle);
+      end
+  else
+      begin
+           SelectObject(TZGLGDIDrawer(drawer).OffScreedDC,PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle);
+      end;
+
   point.x:=0;
   point.y:=0;
   point.z:=0;
@@ -960,18 +1008,85 @@ begin
   x:=round(spoint.x);
   y:=round(spoint.y);
 
-  //r:=rect(x,y,x+50,y+50);
-  SetTextAlign(TZGLGDIDrawer(drawer).OffScreedDC,TA_BOTTOM or TA_LEFT);
+  SetTextAlign(TZGLGDIDrawer(drawer).OffScreedDC,{TA_BOTTOM}TA_BASELINE or TA_LEFT);
   SetBkMode(TZGLGDIDrawer(drawer).OffScreedDC,TRANSPARENT);
-  SetTextColor(TZGLGDIDrawer(drawer).OffScreedDC,TZGLGDIDrawer(drawer).PenColor);
+  if gdiData^.RD_TextRendering<>TRT_Both then
+                                            SetTextColor(TZGLGDIDrawer(drawer).OffScreedDC,TZGLGDIDrawer(drawer).PenColor)
+                                        else
+                                            SetTextColor(TZGLGDIDrawer(drawer).OffScreedDC,TZGLGDIDrawer(drawer).ClearColor);
 
   cnvStr[0]:=lo(word(SymCode));
   cnvStr[1]:=hi(word(SymCode));
   s:=UTF16ToUTF8(@cnvStr,1);
 
+
+  txtOblique:=pi/2-PSymbolsParam^.Oblique;
+  //txtOblique:=pi/2-15*pi/180;
+  txtRotate:=PSymbolsParam^.Rotate;
+  //txtRotate:=20*pi/180;
+  txtSy:=PSymbolsParam^.NeededFontHeight/(rc.zoom)/(deffonth);
+  txtSx:=txtSy*PSymbolsParam^.sx;
+
+  transminusM:=ident;
+  transminusM.eDx:=-x;
+  transminusM.eDy:=-y{+gdiDrawYOffset};
+
+  scaleM:=ident;
+  scaleM.eM11:=txtSx;
+  scaleM.eM22:=txtSy;
+
+  obliqueM:=ident;
+  //obliqueM.eM21:=tan(txtOblique);
+  if txtOblique<>0 then
+                          obliqueM.eM21:=-cotan(txtOblique)
+                      else
+                          obliqueM.eM21:=0;
+
+  rotateM:=ident;
+  rotateM.eM11:=cos(txtRotate);
+  rotateM.eM12:=-sin(txtRotate);
+  rotateM.eM21:=sin(txtRotate);
+  rotateM.eM22:=cos(txtRotate);
+
+  transplusM:=ident;
+  transplusM.eDx:=x;
+  transplusM.eDy:=-transminusM.eDy;
+
+
+  SetGraphicsMode(TZGLGDIDrawer(drawer).OffScreedDC, GM_ADVANCED );
+  ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC,transminusM,MWT_Mode);
+  ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC,scaleM,MWT_Mode);
+  ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC,obliqueM,MWT_Mode);
+  ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC,rotateM,MWT_Mode);
+  ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC,transplusM,MWT_Mode);
+
+  {transminusM:=ident;
+  transminusM.eDx:=-x;
+  transminusM.eDy:=-y;
+  transplusM:=ident;
+  transplusM.eDx:=x;
+  transplusM.eDy:=-transminusM.eDy;
+  ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC,transminusM,MWT_Mode);
+  ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC,scaleM,MWT_Mode);
+  ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC,transplusM,MWT_Mode);}
+
+  GetWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC, ResultTransform);
+
+  //gdiDrawYOffset:=PSymbolsParam^.offsety;
+
   //DrawText(TZGLGDIDrawer(drawer).OffScreedDC,'h',1,r,{Flags: Cardinal}0);
   //TextOut(TZGLGDIDrawer(drawer).OffScreedDC, x, y, 'h', 1);
-  ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,x,y,{Options: Longint}0,@r,@s[1],-1,nil);
+  ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,x,y{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],-1,nil);
+
+  {MoveToEx(TZGLGDIDrawer(drawer).OffScreedDC,0,0, nil);
+  LineTo(TZGLGDIDrawer(drawer).OffScreedDC,x,y);
+
+  MoveToEx(TZGLGDIDrawer(drawer).OffScreedDC,0,0, nil);
+  LineTo(TZGLGDIDrawer(drawer).OffScreedDC,x,y+round(gdiDrawYOffset));}
+
+  ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC, {gditransm}transplusM, MWT_IDENTITY);
+  SetGraphicsMode(TZGLGDIDrawer(drawer).OffScreedDC, GM_COMPATIBLE );
+
 end;
 
 initialization

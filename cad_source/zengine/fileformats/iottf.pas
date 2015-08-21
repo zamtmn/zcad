@@ -46,6 +46,24 @@ begin
     result:=true;
     pttf^.ftFont.Hinted:=false;
     pttf^.ftFont.Name := name;
+    //pttf^.ftFont.SmallLinePadding:=false;
+    //pf^.Internalname:=pttf^.ftFont.Information[ftiCopyrightNotice];
+    pf^.family:=pttf^.ftFont.Information[ftiFamily];
+    //pf^.Internalname:=pttf^.ftFont.Information[ftiStyle];
+    //pf^.Internalname:=pttf^.ftFont.Information[ftiIdentifier];
+    pf^.fullname:=pttf^.ftFont.Information[ftiFullName];
+    //pf^.Internalname:=pttf^.ftFont.Information[ftiVersionString];
+    //pf^.Internalname:=pttf^.ftFont.Information[ftiPostscriptName];
+    //pf^.Internalname:=pttf^.ftFont.Information[ftiTrademark];
+    //pf^.Internalname:=pttf^.ftFont.Information[ftiManufacturer];
+    //pf^.Internalname:=pttf^.ftFont.Information[ftiDesigner];
+    //pf^.Internalname:=pttf^.ftFont.Information[ftiVendorURL];
+    //pf^.Internalname:=pttf^.ftFont.Information[ftiDesignerURL];
+    //pf^.Internalname:=pttf^.ftFont.Information[ftiLicenseInfoURL];
+
+    //pf^.Internalname:=pttf^.ftFont.Information[ftiFamily];
+
+
     pttf^.ftFont.TextWidth('');//It's just a guarantee font loading. I do not need to calculate the any width
     pttf^.ftFont.SizeInPoints:={pttf^.ftFont.SizeInPoints*10}10000;
     pf.font.unicode:=true;

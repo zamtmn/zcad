@@ -39,10 +39,16 @@ BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               function GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;virtual;
               function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
               function findunisymbolinfos(symbolname:GDBString):PGDBsymdolinfo;
+              function IsCanSystemDraw:GDBBoolean;virtual;
         end;
 {EXPORT-}
 implementation
 uses log;
+function BASEFont.IsCanSystemDraw:GDBBoolean;
+begin
+     result:=false;
+end;
+
 constructor BASEFont.init;
 var
    i:integer;

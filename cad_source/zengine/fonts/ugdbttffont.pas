@@ -45,6 +45,7 @@ TTFFont={$IFNDEF DELPHI}packed{$ENDIF} object({SHXFont}BASEFont)
               procedure ProcessTriangleData(si:PGDBsymdolinfo);
               constructor init;
               destructor done;virtual;
+              function IsCanSystemDraw:GDBBoolean;virtual;
         end;
 
 {EXPORT-}
@@ -330,11 +331,12 @@ begin
   si.PSymbolInfo.LLPrimitiveStartIndex:=pttf^.FontData.LLprimitives.Count;
   BS.shxsize:=@si.PSymbolInfo.LLPrimitiveCount;
   //----//si.PSymbolInfo.addr:=pttf.SHXdata.Count;
-  si.PSymbolInfo.w:=glyph.Bounds.Right*k/64;
+  si.PSymbolInfo.w:=glyph.Bounds.Right*k;
+  si.PSymbolInfo.NextSymX:=glyph.Bounds.Right*k;
   si.PSymbolInfo.NextSymX:=glyph.Advance*k;
   si.PSymbolInfo.SymMaxX:=si.PSymbolInfo.NextSymX;
   si.PSymbolInfo.SymMinX:=0;
-  si.PSymbolInfo.h:=glyph.Bounds.Top*k/64;
+  si.PSymbolInfo.h:=glyph.Bounds.Top*k;
   si.PSymbolInfo.LLPrimitiveCount:=0;
   //-ttf-//si.TrianglesDataInfo.TrianglesAddr:=pttf^.TriangleData.count;
   //-ttf-//si.TrianglesDataInfo.TrianglesSize:=pttf^.TriangleData.count;
@@ -441,6 +443,10 @@ begin
   bs.ClearConturs;
   //EndSymContour;
   end;
+end;
+function TTFFont.IsCanSystemDraw:GDBBoolean;
+begin
+     result:=true;
 end;
 constructor TTFFont.init;
 begin

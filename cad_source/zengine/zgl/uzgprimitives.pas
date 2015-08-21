@@ -100,6 +100,13 @@ TLLPoint={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
         end;
+PTSymbolSParam=^TSymbolSParam;
+TSymbolSParam=packed record
+                   FirstSymMatr:DMatrix4D;
+                   sx,Rotate,Oblique,NeededFontHeight{,offsety}:GDBFloat;
+                   pfont:pointer;
+                   IsCanSystemDraw:GDBBoolean;
+             end;
 PTLLSymbol=^TLLSymbol;
 TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               SymSize:GDBInteger;
@@ -112,7 +119,7 @@ TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               SymMatr:DMatrix4F;
               SymCode:Integer;//unicode symbol code
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
-              procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData);virtual;
+              procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);virtual;
               constructor init;
               function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInBoundingVolume):GDBInteger;virtual;
         end;
@@ -120,6 +127,7 @@ PTLLSymbolLine=^TLLSymbolLine;
 TLLSymbolLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               SimplyDrawed:GDBBoolean;
               MaxSqrSymH:GDBFloat;
+              SymbolsParam:TSymbolSParam;
               FirstOutBoundIndex,LastOutBoundIndex:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
               constructor init;
@@ -493,14 +501,26 @@ function TLLSymbol.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomDa
 var
    i,index,minsymbolsize:integer;
    sqrparamsize:gdbdouble;
+   PLLSymbolLine:PTLLSymbolLine;
+   PSymbolsParam:PTSymbolSParam;
 begin
   result:=0;
   if self.LineIndex<>-1 then
-  if PTLLSymbolLine(LLPArray.getelement(self.LineIndex))^.SimplyDrawed then
+  begin
+    PLLSymbolLine:=LLPArray.getelement(self.LineIndex);
+    PSymbolsParam:=@PLLSymbolLine^.SymbolsParam;
+  if PLLSymbolLine^.SimplyDrawed then
                                                                            begin
                                                                              result:=SymSize;
                                                                              exit;
                                                                            end;
+  end
+  else
+  begin
+    PLLSymbolLine:=nil;
+    PSymbolsParam:=nil;
+  end;
+
   index:=OutBoundIndex;
   result:=inherited;
   if not drawer.CheckOutboundInDisplay(@geomdata.Vertex3S,index) then
@@ -550,17 +570,17 @@ else if (Attrib and LLAttrNeedSimtlify)>0 then
     //if result<>SymSize then
     begin
       result:=SymSize;
-      drawSymbol(drawer,rc,GeomData,LLPArray,OptData);
+      drawSymbol(drawer,rc,GeomData,LLPArray,OptData,PSymbolSParam);
     end;
   end
    else
      begin
-       drawSymbol(drawer,rc,GeomData,LLPArray,OptData);
+       drawSymbol(drawer,rc,GeomData,LLPArray,OptData,PSymbolSParam);
      end;
 
 end;
 
-procedure TLLSymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData);
+procedure TLLSymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);
 begin
      drawer.pushMatrixAndSetTransform(SymMatr);
      PZGLVectorObject(PExternalVectorObject).DrawCountedLLPrimitives(rc,drawer,OptData,ExternalLLPOffset,ExternalLLPCount);

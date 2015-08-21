@@ -651,7 +651,7 @@ begin
      repeat
            if psd^.objaddr^.vp.ID=GDBDeviceID then
            begin
-                pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+                pentvarext:=psd^.objaddr^.GetExtension(typeof(TVariablesExtender));
                 //pvd:=PTObjectUnit(psd^.objaddr^.ou.Instance)^.FindVariable('DESC_MountingSite');
                 pvd:=pentvarext^.entityunit.FindVariable('DESC_MountingSite');
                 if pvd<>nil then

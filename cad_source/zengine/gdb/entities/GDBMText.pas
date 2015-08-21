@@ -510,7 +510,7 @@ begin
                         obj_height:=text.count * linespace / textprop.size
                         else
                         obj_height:=(text.count) * linespace / textprop.size;}
-  obj_width:=obj_width-1/3;
+  obj_width:=obj_width{-1/3};
 end;
 (*
 procedure GDBObjMText.getoutbound;

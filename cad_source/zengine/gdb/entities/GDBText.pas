@@ -228,7 +228,7 @@ begin
     if psyminfo.SymMinY<obj_y then obj_y:=psyminfo.SymMinY;
     inc(i,l);
   end;
-  obj_width:=obj_width-1/3;
+  //obj_width:=obj_width-1/3;
 end;
 function GDBObjText.Clone;
 var tvo: PGDBObjtext;

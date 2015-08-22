@@ -22,10 +22,12 @@ interface
 
 uses
  {$IFDEF WINDOWS}windows,{$ENDIF}
+ {$IFDEF LCLQT}qtwidgets,qt4,qtint,qtobjects,{$ENDIF}
  LCLType,LCLIntf,gdbase;
 const
      GM_COMPATIBLE=1;
      GM_ADVANCED=2;
+ {$IFNDEF WINDOWS}type winbool=longint;{$ENDIF}
 
 function AddFontResourceFile(FontResourceFileName:string):integer;
 function SetGraphicsMode_(hdc:HDC; iMode:longint):longint;
@@ -58,6 +60,11 @@ function SetWorldTransform_(hdc:HDC; var tm:DMatrix4D):WINBOOL;
   var
     _m:XFORM;
 {$ENDIF}
+{$IFDEF LCLQT}
+  var
+  //QtDC: TQtDeviceContext absolute hdc;
+  matr:QMatrixH;
+{$ENDIF}
 begin
   {$IFDEF WINDOWS}
   _m.eM11:=tm[0,0];
@@ -67,8 +74,12 @@ begin
   _m.eDx:=tm[3,0];
   _m.eDy:=tm[3,1];
   result:=SetWorldTransform(hdc,_m);
-  {$Else}
-    result:=1;
+  {$ENDIF}
+  {$IFDEF LCLQT}
+    //QtDC.pa;
+    matr:=QMatrix_create(tm[0,0],tm[0,1],tm[1,0],tm[1,1],tm[3,0],tm[3,1]);
+    QPainter_setWorldMatrix(TQtDeviceContext(hdc).Widget,matr,false);
+    //setWorldTransform
   {$ENDIF}
 end;
 

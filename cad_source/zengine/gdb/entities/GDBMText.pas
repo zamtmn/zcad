@@ -105,7 +105,7 @@ begin
                                                                     Local.basis.ox:=CrossVertex(YWCS,Local.basis.oz)
                                                                 else
                                                                     Local.basis.ox:=CrossVertex(ZWCS,Local.basis.oz);
-  local.basis.OX:=VectorTransform3D(local.basis.OX,geometry.CreateAffineRotationMatrix(Local.basis.oz,-textprop.angle*pi/180));
+  local.basis.OX:=VectorTransform3D(local.basis.OX,geometry.CreateAffineRotationMatrix(Local.basis.oz,-textprop.angle));
   end;
 
   text.init(10);
@@ -682,7 +682,7 @@ begin
   m1[1, 1] := 1;
   m1[2, 2] := 1;
   m1[3, 3] := 1;
-  m1[3, 0] := pswp^.x-(pswp^.y)*cotan(pi/2-textprop.oblique*pi/180)/textprop.wfactor;
+  m1[3, 0] := pswp^.x-(pswp^.y)*cotan(pi/2-textprop.oblique)/textprop.wfactor;
   m1[3, 1] := pswp^.y;
   matr:=MatrixMultiply(m1,matr);
   i := 1;
@@ -931,7 +931,7 @@ begin
   P_drawInOCS := Local.p_insert;
   linespace := textprop.size * linespacef * 5 / 3;
   if not angleload then
-                       textprop.angle := vertexangle(NulVertex2D,pgdbvertex2d(@ux)^) * 180 / pi;
+                       textprop.angle := vertexangle(NulVertex2D,pgdbvertex2d(@ux)^);
   Local.basis.ox:=ux;
   //ptext := nil;
   //text.init(10);

@@ -607,9 +607,9 @@ begin
     dxfvertexout(outhandle,10,tv);
   end;
   dxfGDBDoubleout(outhandle,40,textprop.size);
-  dxfGDBDoubleout(outhandle,50,textprop.angle);
+  dxfGDBDoubleout(outhandle,50,textprop.angle*180/pi);
   dxfGDBDoubleout(outhandle,41,textprop.wfactor);
-  dxfGDBDoubleout(outhandle,51,textprop.oblique);
+  dxfGDBDoubleout(outhandle,51,textprop.oblique*180/pi);
   dxfGDBIntegerout(outhandle,72,hv);
   bw:=0;
   if textprop.upsidedown then
@@ -657,9 +657,12 @@ begin
 else if not dxfGDBDoubleload(f,40,byt,textprop.size) then
      if not dxfGDBDoubleload(f,41,byt,textprop.wfactor) then
      if dxfGDBDoubleload(f,50,byt,textprop.angle) then
-                                                      angleload := true
+                                                      begin
+                                                      angleload := true;
+                                                      textprop.angle:=textprop.angle*pi/180;
+                                                      end
 else if dxfGDBDoubleload(f,51,byt,textprop.oblique) then
-                                                        textprop.oblique:=textprop.oblique
+                                                        textprop.oblique:=textprop.oblique*pi/180
 else if     dxfGDBStringload(f,7,byt,style)then
                                              begin
                                                   TXTStyleIndex :={drawing.GetTextStyleTable^.getelement}(drawing.GetTextStyleTable^.FindStyle(Style,false));
@@ -698,7 +701,7 @@ else if not dxfGDBIntegerload(f,72,byt,gv)then
                                                                     Local.basis.ox:=CrossVertex(YWCS,Local.basis.oz)
                                                                 else
                                                                     Local.basis.ox:=CrossVertex(ZWCS,Local.basis.oz);
-  local.basis.OX:=VectorTransform3D(local.basis.OX,geometry.CreateAffineRotationMatrix(Local.basis.oz,-textprop.angle*pi/180));
+  local.basis.OX:=VectorTransform3D(local.basis.OX,geometry.CreateAffineRotationMatrix(Local.basis.oz,-textprop.angle));
   end;
   {if not angleload then
   begin

@@ -951,7 +951,7 @@ var
    x,y:integer;
    s:AnsiString;
    gdiData:PTGDIData;
-   _alignM,_transminusM,_obliqueM,_transplusM,_scaleM,_rotateM:DMatrix4D;
+   _transminusM,_obliqueM,_transplusM,_scaleM,_rotateM:DMatrix4D;
    gdiDrawYOffset,txtOblique,txtRotate,txtSx,txtSy:single;
 
    lfcp:TLogFont;
@@ -1005,9 +1005,8 @@ begin
   x:=round(spoint.x);
   y:=round(spoint.y);
 
-  {$IFDEF WINDOWS}
-  SetTextAlign(TZGLGDIDrawer(drawer).OffScreedDC,{TA_BOTTOM}TA_BASELINE or TA_LEFT);
-  {$ENDIF}
+  SetTextAlignToBaseLine(TZGLGDIDrawer(drawer).OffScreedDC);
+
   //{$IFDEF LCLQT}-{$ENDIF}
   SetBkMode(TZGLGDIDrawer(drawer).OffScreedDC,TRANSPARENT);
   if gdiData^.RD_TextRendering<>TRT_Both then
@@ -1025,8 +1024,6 @@ begin
   txtSy:=PSymbolsParam^.NeededFontHeight/(rc.zoom)/(deffonth);
   txtSx:=txtSy*PSymbolsParam^.sx;
 
-  _alignM:=CreateTranslationMatrix(CreateVertex(0,-100,0));
-
   _transminusM:=CreateTranslationMatrix(CreateVertex(-x,-y,0));
   _scaleM:=CreateScaleMatrix(CreateVertex(txtSx,txtSy,1));
   _obliqueM:=OneMatrix;
@@ -1035,7 +1032,6 @@ begin
   _transplusM:=CreateTranslationMatrix(CreateVertex(x,y,0));
   _rotateM:=CreateRotationMatrixZ(sin({$IFDEF LCLQT}-{$ENDIF}txtRotate),cos({$IFDEF LCLQT}-{$ENDIF}txtRotate));
 
-  _transminusM:=MatrixMultiply(_transminusM,_alignM);
   _transminusM:=MatrixMultiply(_transminusM,_scaleM);
   _transminusM:=MatrixMultiply(_transminusM,_obliqueM);
   _transminusM:=MatrixMultiply(_transminusM,_rotateM);

@@ -951,16 +951,19 @@ var
    x,y:integer;
    s:AnsiString;
    gdiData:PTGDIData;
-
+   {$IFDEF WINDOWS}
    ResultTransform,transminusM,obliqueM,transplusM,scaleM,rotateM:XFORM;
+   {$ENDIF}
    gdiDrawYOffset,txtOblique,txtRotate,txtSx,txtSy:single;
 
    lfcp:TLogFont;
 
 const
   deffonth=19;
+  {$IFDEF WINDOWS}
   ident:XFORM=(eM11:1;eM12:0;eM21:0;eM22:1;eDx:0;eDy:0);
   MWT_Mode=MWT_RIGHTMULTIPLY;
+  {$ENDIF}
   cnvStr:packed array[0..3]of byte=(0,0,0,0);
 begin
      if not PSymbolsParam^.IsCanSystemDraw then
@@ -1008,7 +1011,9 @@ begin
   x:=round(spoint.x);
   y:=round(spoint.y);
 
+  {$IFDEF WINDOWS}
   SetTextAlign(TZGLGDIDrawer(drawer).OffScreedDC,{TA_BOTTOM}TA_BASELINE or TA_LEFT);
+  {$ENDIF}
   SetBkMode(TZGLGDIDrawer(drawer).OffScreedDC,TRANSPARENT);
   if gdiData^.RD_TextRendering<>TRT_Both then
                                             SetTextColor(TZGLGDIDrawer(drawer).OffScreedDC,TZGLGDIDrawer(drawer).PenColor)
@@ -1027,6 +1032,7 @@ begin
   txtSy:=PSymbolsParam^.NeededFontHeight/(rc.zoom)/(deffonth);
   txtSx:=txtSy*PSymbolsParam^.sx;
 
+  {$IFDEF WINDOWS}
   transminusM:=ident;
   transminusM.eDx:=-x;
   transminusM.eDy:=-y{+gdiDrawYOffset};
@@ -1036,7 +1042,6 @@ begin
   scaleM.eM22:=txtSy;
 
   obliqueM:=ident;
-  //obliqueM.eM21:=tan(txtOblique);
   if txtOblique<>0 then
                           obliqueM.eM21:=-cotan(txtOblique)
                       else
@@ -1071,6 +1076,7 @@ begin
   ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC,transplusM,MWT_Mode);}
 
   GetWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC, ResultTransform);
+  {$ENDIF}
 
   //gdiDrawYOffset:=PSymbolsParam^.offsety;
 
@@ -1084,9 +1090,10 @@ begin
   MoveToEx(TZGLGDIDrawer(drawer).OffScreedDC,0,0, nil);
   LineTo(TZGLGDIDrawer(drawer).OffScreedDC,x,y+round(gdiDrawYOffset));}
 
+  {$IFDEF WINDOWS}
   ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC, {gditransm}transplusM, MWT_IDENTITY);
   SetGraphicsMode(TZGLGDIDrawer(drawer).OffScreedDC, GM_COMPATIBLE );
-
+  {$ENDIF}
 end;
 
 initialization

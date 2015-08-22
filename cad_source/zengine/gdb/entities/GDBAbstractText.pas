@@ -94,10 +94,10 @@ procedure GDBObjAbstractText.setrot(r:GDBDouble);
 var m1:DMatrix4D;
 begin
 m1:=onematrix;
-m1[0,0]:=cos(r*pi/180);
-m1[1,1]:=cos(r*pi/180);
-m1[1,0]:=-sin(r*pi/180);
-m1[0,1]:=sin(r*pi/180);
+m1[0,0]:=cos(r);
+m1[1,1]:=cos(r);
+m1[1,0]:=-sin(r);
+m1[0,1]:=sin(r);
 objMatrix:=MatrixMultiply(m1,objMatrix);
 end;
 procedure GDBObjAbstractText.FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);
@@ -118,7 +118,7 @@ begin
                                                                                                    else
                                                                                                        ox:=CrossVertex(ZWCS,{PGDBVertex(@m[2])^}Local.basis.oz);
                                         r:=geometry.scalardot({PGDBVertex(@m[0])^}Local.basis.ox,ox);
-                                        r:=arccos(r)*180/pi;
+                                        r:=arccos(r);
                                         setrot(-r);
                                         r:=textprop.angle;
                                         setrot(textprop.angle);
@@ -153,7 +153,7 @@ begin
                                                                     ox:=CrossVertex(ZWCS,Local.basis.oz);
      normalizevertex(ox);
      textprop.angle:=geometry.scalardot(Local.basis.ox,ox);
-     textprop.angle:=arccos(textprop.angle)*180/pi;
+     textprop.angle:=arccos(textprop.angle);
      if local.basis.OX.y<-eps then textprop.angle:=360-textprop.angle;
      //Local.basis.ox:=ox;
 end;
@@ -402,7 +402,7 @@ begin
 
   m1:= OneMatrix;
   //angle:=pi/2 - textprop.oblique*(pi/180);
-  angle:=(90 - textprop.oblique)*(pi/180);
+  angle:=(pi/2 - textprop.oblique);
   if angle<>pi/2 then
                      begin
                           m1[1, 0] :=cotan(angle);//1/tan(angle)

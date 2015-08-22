@@ -951,10 +951,7 @@ var
    x,y:integer;
    s:AnsiString;
    gdiData:PTGDIData;
-   {$IFDEF WINDOWS}
-   //ResultTransform,transminusM,obliqueM,transplusM,scaleM,rotateM:XFORM;
-   {$ENDIF}
-   _transminusM,_obliqueM,_transplusM,_scaleM,_rotateM:DMatrix4D;
+   _alignM,_transminusM,_obliqueM,_transplusM,_scaleM,_rotateM:DMatrix4D;
    gdiDrawYOffset,txtOblique,txtRotate,txtSx,txtSy:single;
 
    lfcp:TLogFont;
@@ -1011,6 +1008,7 @@ begin
   {$IFDEF WINDOWS}
   SetTextAlign(TZGLGDIDrawer(drawer).OffScreedDC,{TA_BOTTOM}TA_BASELINE or TA_LEFT);
   {$ENDIF}
+  //{$IFDEF LCLQT}-{$ENDIF}
   SetBkMode(TZGLGDIDrawer(drawer).OffScreedDC,TRANSPARENT);
   if gdiData^.RD_TextRendering<>TRT_Both then
                                             SetTextColor(TZGLGDIDrawer(drawer).OffScreedDC,TZGLGDIDrawer(drawer).PenColor)
@@ -1027,14 +1025,17 @@ begin
   txtSy:=PSymbolsParam^.NeededFontHeight/(rc.zoom)/(deffonth);
   txtSx:=txtSy*PSymbolsParam^.sx;
 
+  _alignM:=CreateTranslationMatrix(CreateVertex(0,-100,0));
+
   _transminusM:=CreateTranslationMatrix(CreateVertex(-x,-y,0));
   _scaleM:=CreateScaleMatrix(CreateVertex(txtSx,txtSy,1));
   _obliqueM:=OneMatrix;
   if txtOblique<>0 then
                        _obliqueM[1,0]:=-cotan(txtOblique);
   _transplusM:=CreateTranslationMatrix(CreateVertex(x,y,0));
-  _rotateM:=CreateRotationMatrixZ(sin(txtRotate),cos(txtRotate));
+  _rotateM:=CreateRotationMatrixZ(sin({$IFDEF LCLQT}-{$ENDIF}txtRotate),cos({$IFDEF LCLQT}-{$ENDIF}txtRotate));
 
+  _transminusM:=MatrixMultiply(_transminusM,_alignM);
   _transminusM:=MatrixMultiply(_transminusM,_scaleM);
   _transminusM:=MatrixMultiply(_transminusM,_obliqueM);
   _transminusM:=MatrixMultiply(_transminusM,_rotateM);
@@ -1042,7 +1043,7 @@ begin
 
 
 
-  SetGraphicsMode(TZGLGDIDrawer(drawer).OffScreedDC, GM_ADVANCED );
+  SetGraphicsMode_(TZGLGDIDrawer(drawer).OffScreedDC, GM_ADVANCED );
   SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,_transminusM);
 
   //DrawText(TZGLGDIDrawer(drawer).OffScreedDC,'h',1,r,{Flags: Cardinal}0);
@@ -1050,7 +1051,7 @@ begin
   ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,x,y{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],-1,nil);
 
   SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,OneMatrix);
-  SetGraphicsMode(TZGLGDIDrawer(drawer).OffScreedDC, GM_COMPATIBLE );
+  SetGraphicsMode_(TZGLGDIDrawer(drawer).OffScreedDC, GM_COMPATIBLE );
 end;
 
 initialization

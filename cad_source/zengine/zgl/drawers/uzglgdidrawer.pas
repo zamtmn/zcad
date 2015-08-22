@@ -24,6 +24,9 @@ uses
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
+    {$IFDEF LCLQT}
+    qtobjects,
+    {$ENDIF}
     LCLIntf,LCLType,Classes,Controls,
     geometry,uzglgeneraldrawer,uzglabstractdrawer,glstatemanager,Graphics,gdbase;
 type
@@ -951,7 +954,7 @@ var
    x,y:integer;
    s:AnsiString;
    gdiData:PTGDIData;
-   _transminusM,_obliqueM,_transplusM,_scaleM,_rotateM:DMatrix4D;
+   {$IFDEF LCLQT}_transminusM2,{$ENDIF}_transminusM,_obliqueM,_transplusM,_scaleM,_rotateM:DMatrix4D;
    gdiDrawYOffset,txtOblique,txtRotate,txtSx,txtSy:single;
 
    lfcp:TLogFont;
@@ -1005,15 +1008,6 @@ begin
   x:=round(spoint.x);
   y:=round(spoint.y);
 
-  SetTextAlignToBaseLine(TZGLGDIDrawer(drawer).OffScreedDC);
-
-  //{$IFDEF LCLQT}-{$ENDIF}
-  SetBkMode(TZGLGDIDrawer(drawer).OffScreedDC,TRANSPARENT);
-  if gdiData^.RD_TextRendering<>TRT_Both then
-                                            SetTextColor(TZGLGDIDrawer(drawer).OffScreedDC,TZGLGDIDrawer(drawer).PenColor)
-                                        else
-                                            SetTextColor(TZGLGDIDrawer(drawer).OffScreedDC,TZGLGDIDrawer(drawer).ClearColor);
-
   cnvStr[0]:=lo(word(SymCode));
   cnvStr[1]:=hi(word(SymCode));
   s:=UTF16ToUTF8(@cnvStr,1);
@@ -1024,6 +1018,14 @@ begin
   txtSy:=PSymbolsParam^.NeededFontHeight/(rc.zoom)/(deffonth);
   txtSx:=txtSy*PSymbolsParam^.sx;
 
+  SetBkMode(TZGLGDIDrawer(drawer).OffScreedDC,TRANSPARENT);
+  if gdiData^.RD_TextRendering<>TRT_Both then
+                                            SetTextColor(TZGLGDIDrawer(drawer).OffScreedDC,TZGLGDIDrawer(drawer).PenColor)
+                                        else
+                                            SetTextColor(TZGLGDIDrawer(drawer).OffScreedDC,TZGLGDIDrawer(drawer).ClearColor);
+
+  SetTextAlignToBaseLine(TZGLGDIDrawer(drawer).OffScreedDC);
+  {$IFDEF LCLQT}_transminusM2:=CreateTranslationMatrix(CreateVertex(0,-TQtDeviceContext(TZGLGDIDrawer(drawer).OffScreedDC).Metrics.ascent,0));{$ENDIF}
   _transminusM:=CreateTranslationMatrix(CreateVertex(-x,-y,0));
   _scaleM:=CreateScaleMatrix(CreateVertex(txtSx,txtSy,1));
   _obliqueM:=OneMatrix;
@@ -1032,6 +1034,7 @@ begin
   _transplusM:=CreateTranslationMatrix(CreateVertex(x,y,0));
   _rotateM:=CreateRotationMatrixZ(sin({$IFDEF LCLQT}-{$ENDIF}txtRotate),cos({$IFDEF LCLQT}-{$ENDIF}txtRotate));
 
+  {$IFDEF LCLQT}_transminusM:=MatrixMultiply(_transminusM,_transminusM2);{$ENDIF}
   _transminusM:=MatrixMultiply(_transminusM,_scaleM);
   _transminusM:=MatrixMultiply(_transminusM,_obliqueM);
   _transminusM:=MatrixMultiply(_transminusM,_rotateM);

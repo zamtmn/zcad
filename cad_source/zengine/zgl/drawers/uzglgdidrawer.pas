@@ -20,7 +20,7 @@ unit uzglgdidrawer;
 {$INCLUDE def.inc}
 interface
 uses
-    fileutil,math,UGDBFontManager,ugdbfont,zcadsysvars,abstractviewarea,LazUTF8,uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,{$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
+    lclintfex,fileutil,math,UGDBFontManager,ugdbfont,zcadsysvars,abstractviewarea,LazUTF8,uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,{$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
@@ -952,18 +952,15 @@ var
    s:AnsiString;
    gdiData:PTGDIData;
    {$IFDEF WINDOWS}
-   ResultTransform,transminusM,obliqueM,transplusM,scaleM,rotateM:XFORM;
+   //ResultTransform,transminusM,obliqueM,transplusM,scaleM,rotateM:XFORM;
    {$ENDIF}
+   _transminusM,_obliqueM,_transplusM,_scaleM,_rotateM:DMatrix4D;
    gdiDrawYOffset,txtOblique,txtRotate,txtSx,txtSy:single;
 
    lfcp:TLogFont;
 
 const
   deffonth=19;
-  {$IFDEF WINDOWS}
-  ident:XFORM=(eM11:1;eM12:0;eM21:0;eM22:1;eDx:0;eDy:0);
-  MWT_Mode=MWT_RIGHTMULTIPLY;
-  {$ENDIF}
   cnvStr:packed array[0..3]of byte=(0,0,0,0);
 begin
      if not PSymbolsParam^.IsCanSystemDraw then
@@ -1026,74 +1023,34 @@ begin
 
 
   txtOblique:=pi/2-PSymbolsParam^.Oblique;
-  //txtOblique:=pi/2-15*pi/180;
   txtRotate:=PSymbolsParam^.Rotate;
-  //txtRotate:=20*pi/180;
   txtSy:=PSymbolsParam^.NeededFontHeight/(rc.zoom)/(deffonth);
   txtSx:=txtSy*PSymbolsParam^.sx;
 
-  {$IFDEF WINDOWS}
-  transminusM:=ident;
-  transminusM.eDx:=-x;
-  transminusM.eDy:=-y{+gdiDrawYOffset};
-
-  scaleM:=ident;
-  scaleM.eM11:=txtSx;
-  scaleM.eM22:=txtSy;
-
-  obliqueM:=ident;
+  _transminusM:=CreateTranslationMatrix(CreateVertex(-x,-y,0));
+  _scaleM:=CreateScaleMatrix(CreateVertex(txtSx,txtSy,1));
+  _obliqueM:=OneMatrix;
   if txtOblique<>0 then
-                          obliqueM.eM21:=-cotan(txtOblique)
-                      else
-                          obliqueM.eM21:=0;
+                       _obliqueM[1,0]:=-cotan(txtOblique);
+  _transplusM:=CreateTranslationMatrix(CreateVertex(x,y,0));
+  _rotateM:=CreateRotationMatrixZ(sin(txtRotate),cos(txtRotate));
 
-  rotateM:=ident;
-  rotateM.eM11:=cos(txtRotate);
-  rotateM.eM12:=-sin(txtRotate);
-  rotateM.eM21:=sin(txtRotate);
-  rotateM.eM22:=cos(txtRotate);
+  _transminusM:=MatrixMultiply(_transminusM,_scaleM);
+  _transminusM:=MatrixMultiply(_transminusM,_obliqueM);
+  _transminusM:=MatrixMultiply(_transminusM,_rotateM);
+  _transminusM:=MatrixMultiply(_transminusM,_transplusM);
 
-  transplusM:=ident;
-  transplusM.eDx:=x;
-  transplusM.eDy:=-transminusM.eDy;
 
 
   SetGraphicsMode(TZGLGDIDrawer(drawer).OffScreedDC, GM_ADVANCED );
-  ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC,transminusM,MWT_Mode);
-  ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC,scaleM,MWT_Mode);
-  ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC,obliqueM,MWT_Mode);
-  ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC,rotateM,MWT_Mode);
-  ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC,transplusM,MWT_Mode);
-
-  {transminusM:=ident;
-  transminusM.eDx:=-x;
-  transminusM.eDy:=-y;
-  transplusM:=ident;
-  transplusM.eDx:=x;
-  transplusM.eDy:=-transminusM.eDy;
-  ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC,transminusM,MWT_Mode);
-  ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC,scaleM,MWT_Mode);
-  ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC,transplusM,MWT_Mode);}
-
-  GetWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC, ResultTransform);
-  {$ENDIF}
-
-  //gdiDrawYOffset:=PSymbolsParam^.offsety;
+  SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,_transminusM);
 
   //DrawText(TZGLGDIDrawer(drawer).OffScreedDC,'h',1,r,{Flags: Cardinal}0);
   //TextOut(TZGLGDIDrawer(drawer).OffScreedDC, x, y, 'h', 1);
   ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,x,y{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],-1,nil);
 
-  {MoveToEx(TZGLGDIDrawer(drawer).OffScreedDC,0,0, nil);
-  LineTo(TZGLGDIDrawer(drawer).OffScreedDC,x,y);
-
-  MoveToEx(TZGLGDIDrawer(drawer).OffScreedDC,0,0, nil);
-  LineTo(TZGLGDIDrawer(drawer).OffScreedDC,x,y+round(gdiDrawYOffset));}
-
-  {$IFDEF WINDOWS}
-  ModifyWorldTransform(TZGLGDIDrawer(drawer).OffScreedDC, {gditransm}transplusM, MWT_IDENTITY);
+  SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,OneMatrix);
   SetGraphicsMode(TZGLGDIDrawer(drawer).OffScreedDC, GM_COMPATIBLE );
-  {$ENDIF}
 end;
 
 initialization

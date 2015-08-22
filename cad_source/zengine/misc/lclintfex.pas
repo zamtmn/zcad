@@ -45,6 +45,7 @@ begin
     SetTextAlign(hdc,TA_BASELINE{ or TA_LEFT});
   {$ENDIF}
   {$IFDEF LCLQT}
+  TQtDeviceContext(hdc).translate(0,-TQtDeviceContext(hdc).Metrics.ascent)
   {$ENDIF}
 end;
 function AddFontResourceFile(FontResourceFileName:string):integer;

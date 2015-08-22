@@ -32,13 +32,21 @@ const
 function AddFontResourceFile(FontResourceFileName:string):integer;
 function SetGraphicsMode_(hdc:HDC; iMode:longint):longint;
 function SetWorldTransform_(hdc:HDC; var tm:DMatrix4D):WINBOOL;
+function SetTextAlignToBaseLine(hdc:HDC):UINT;
 implementation
 {$IFDEF WINDOWS}
   function __AddFontResourceEx(_para1:LPCSTR; flags:DWORD; reserved:Pointer) : integer; stdcall; external 'gdi32' name 'AddFontResourceExA';
   //function __SetGraphicsMode(hdc:HDC; iMode:longint):longint; external 'gdi32' name 'SetGraphicsMode';
   //function __SetWorldTransform(_para1:HDC; var _para2:XFORM):WINBOOL; external 'gdi32' name 'SetWorldTransform';
 {$ENDIF}
-
+function SetTextAlignToBaseLine(hdc:HDC):UINT;
+begin
+  {$IFDEF WINDOWS}
+    SetTextAlign(hdc,TA_BASELINE{ or TA_LEFT});
+  {$ENDIF}
+  {$IFDEF LCLQT}
+  {$ENDIF}
+end;
 function AddFontResourceFile(FontResourceFileName:string):integer;
 begin
   {$IFDEF WINDOWS}

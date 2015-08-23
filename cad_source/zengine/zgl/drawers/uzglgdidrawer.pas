@@ -960,7 +960,7 @@ var
    lfcp:TLogFont;
 
 const
-  deffonth=19;
+  deffonth={19}100;
   cnvStr:packed array[0..3]of byte=(0,0,0,0);
 begin
      if not PSymbolsParam^.IsCanSystemDraw then
@@ -990,7 +990,7 @@ begin
             lfcp.lfOutPrecision:=0;
             lfcp.lfClipPrecision:=0;
             lfcp.lfQuality:=0;
-            lfcp.lfPitchAndFamily:=0;//{DRAFT_QUALITY}CLEARTYPE_NATURAL_QUALITY;
+            lfcp.lfPitchAndFamily:=0;
             lfcp.lfFaceName:=PGDBfont(PSymbolsParam.pfont)^.family;
            PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle:=CreateFontIndirect(lfcp);
            SelectObject(TZGLGDIDrawer(drawer).OffScreedDC,PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle);
@@ -1015,7 +1015,11 @@ begin
 
   txtOblique:=pi/2-PSymbolsParam^.Oblique;
   txtRotate:=PSymbolsParam^.Rotate;
+  {txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.ascent;
+  txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.descent;
+  txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.height;}
   txtSy:=PSymbolsParam^.NeededFontHeight/(rc.zoom)/(deffonth);
+  {$IFDEF LCLQT}txtSy:=txtSy*(deffonth)/(TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.height-1);{$ENDIF}
   txtSx:=txtSy*PSymbolsParam^.sx;
 
   SetBkMode(TZGLGDIDrawer(drawer).OffScreedDC,TRANSPARENT);
@@ -1032,7 +1036,7 @@ begin
   if txtOblique<>0 then
                        _obliqueM[1,0]:=-cotan(txtOblique);
   _transplusM:=CreateTranslationMatrix(CreateVertex(x,y,0));
-  _rotateM:=CreateRotationMatrixZ(sin({$IFDEF LCLQT}-{$ENDIF}txtRotate),cos({$IFDEF LCLQT}-{$ENDIF}txtRotate));
+  _rotateM:=CreateRotationMatrixZ(sin(txtRotate),cos(txtRotate));
 
   {$IFDEF LCLQT}_transminusM:=MatrixMultiply(_transminusM,_transminusM2);{$ENDIF}
   _transminusM:=MatrixMultiply(_transminusM,_scaleM);

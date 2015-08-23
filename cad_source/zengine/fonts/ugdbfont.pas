@@ -31,7 +31,7 @@ GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     family:GDBString;
     fullname:GDBString;
     font:PBASEFont;
-    DummyDrawerHandle:THandle;
+    DummyDrawerHandle:{THandle}ptruint;
     constructor initnul;
     constructor init(n:GDBString);
     procedure ItSHX;
@@ -333,7 +333,7 @@ begin
                                     begin
                                          CapHeight:=PTTFFont(font)^.ftFont.CapHeight;
                                          //PLLSymbolLine^.SymbolsParam.NeededFontHeight:=psyminfo^.h*psyminfo^.h*sqrsymh/(PTTFFont(font)^.ftFont.DPI / 72)/(PTTFFont(font)^.ftFont.DPI / 72);
-                                         PLLSymbolLine^.SymbolsParam.NeededFontHeight:=oneVertexlength(PGDBVertex(@matr[1])^)*((PTTFFont(font)^.ftFont.Ascent+PTTFFont(font)^.ftFont.Descent)/PTTFFont(font)^.ftFont.CapHeight);
+                                         PLLSymbolLine^.SymbolsParam.NeededFontHeight:=oneVertexlength(PGDBVertex(@matr[1])^)*((PTTFFont(font)^.ftFont.Ascent+PTTFFont(font)^.ftFont.Descent)/(PTTFFont(font)^.ftFont.CapHeight));
 
                                          PLLSymbolLine^.SymbolsParam.pfont:=@self;
                                     end;

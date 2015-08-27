@@ -1036,7 +1036,7 @@ begin
   if txtOblique<>0 then
                        _obliqueM[1,0]:=-cotan(txtOblique);
   _transplusM:=CreateTranslationMatrix(CreateVertex(x,y,0));
-  _rotateM:=CreateRotationMatrixZ(sin(txtRotate),cos(txtRotate));
+  _rotateM:=CreateRotationMatrixZ(sin(-txtRotate),cos(-txtRotate));
 
   {$IFDEF LCLQT}_transminusM:=MatrixMultiply(_transminusM,_transminusM2);{$ENDIF}
   _transminusM:=MatrixMultiply(_transminusM,_scaleM);

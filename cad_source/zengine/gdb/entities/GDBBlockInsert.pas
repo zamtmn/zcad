@@ -272,22 +272,22 @@ begin
      if scale.x<-eps then
                       tv:=geometry.VertexMulOnSc(tv,-1);
      rotate:=geometry.scalardot(tv,ox);
-     rotate:=arccos(rotate)*180/pi;
-     if tv.y<-eps then rotate:=360-rotate;
+     rotate:=arccos(rotate);
+     if tv.y<-eps then rotate:=2*pi-rotate;
 end;
 procedure GDBObjBlockInsert.setrot(r:GDBDouble);
 var m1:DMatrix4D;
 begin
 m1:=onematrix;
-m1[0,0]:=cos(r*pi/180);
-m1[1,1]:=cos(r*pi/180);
-m1[1,0]:=-sin(r*pi/180);
-m1[0,1]:=sin(r*pi/180);
+m1[0,0]:=cos(r);
+m1[1,1]:=cos(r);
+m1[1,0]:=-sin(r);
+m1[0,1]:=sin(r);
 objMatrix:=MatrixMultiply(m1,objMatrix);
 end;
 function GDBObjBlockInsert.getrot:GDBDouble;
 begin
-     result:=arccos((objmatrix[0,0])/geometry.oneVertexlength(PGDBVertex(@objmatrix[0])^))*180/pi
+     result:=arccos((objmatrix[0,0])/geometry.oneVertexlength(PGDBVertex(@objmatrix[0])^))
 end;
 
 procedure GDBObjBlockInsert.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
@@ -504,8 +504,10 @@ begin
      if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
      if not dxfvertexload(f,10,byt,Local.P_insert) then
      if not dxfvertexload1(f,41,byt,scale) then
-     if not dxfGDBDoubleload(f,50,byt,rotate) then
-     if dxfGDBIntegerload(f,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
+     if dxfGDBDoubleload(f,50,byt,rotate) then begin
+                                                    rotate:=rotate*pi/180;
+                                               end
+else if dxfGDBIntegerload(f,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
 else if not dxfGDBStringload(f,2,byt,name)then {s := }f.readgdbstring;
     byt:=readmystrtoint(f);
   end;
@@ -650,7 +652,7 @@ begin
   dxfGDBStringout(outhandle,2,name);
   dxfvertexout(outhandle,10,Local.p_insert);
   dxfvertexout1(outhandle,41,scale);
-  dxfGDBDoubleout(outhandle,50,rotate);
+  dxfGDBDoubleout(outhandle,50,rotate*180/pi);
   SaveToDXFObjPostfix(outhandle);
 end;
 destructor GDBObjBlockInsert.done;

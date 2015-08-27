@@ -22,6 +22,7 @@ unit geometry;
 interface
 uses zcadstrconsts,gdbase,gdbasetypes, math;
 const
+      RightAngle=pi/2;
       EmptyMatrix: DMatrix4D = ((0, 0, 0, 0),
                                 (0, 0, 0, 0),
                                 (0, 0, 0, 0),

@@ -709,7 +709,7 @@ begin
      if name<>'' then
      begin
      pt:=pointer(AllocEnt(GDBMtextID));
-     pt^.init({gdb.GetCurrentROOT}@root,gdb.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,name,tv,2.5,0,0.65,90,jsbc,1,1);
+     pt^.init({gdb.GetCurrentROOT}@root,gdb.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,name,tv,2.5,0,0.65,RightAngle,jsbc,1,1);
      pt^.TXTStyleIndex:=gdb.GetCurrentDWG.GetTextStyleTable^.getelement(0);
      {gdb.GetCurrentROOT}root.ObjArray.add(@pt);
      pt^.Formatentity(gdb.GetCurrentDWG^,dc);
@@ -1040,7 +1040,7 @@ begin
     sdd:=dy/nmin/2;
     //ddd:=dy/nmin;
     if aa then
-              angle:=angle+90;
+              angle:=angle+RightAngle;
 
   end;
   dir.x := line2.lend.x - line2.lbegin.x;

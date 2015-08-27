@@ -248,7 +248,7 @@ begin
           if obozn<>'' then
           begin
           ptext:=pointer(AllocEnt(GDBMtextID));
-          ptext^.init(@gdb.CurrentDWG.ConstructObjRoot,gdb.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,obozn,CreateVertex(p.x+pbdef.vp.BoundingBox.LBN.x-1,p.y,p.z),2.5,0,0.65,90,jsbc,1,1);
+          ptext^.init(@gdb.CurrentDWG.ConstructObjRoot,gdb.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,obozn,CreateVertex(p.x+pbdef.vp.BoundingBox.LBN.x-1,p.y,p.z),2.5,0,0.65,RightAngle,jsbc,1,1);
           gdb.CurrentDWG.ConstructObjRoot.ObjArray.add(@ptext);
           ptext^.FormatEntity(gdb.GetCurrentDWG^,dc);
           end;

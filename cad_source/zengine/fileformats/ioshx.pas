@@ -125,7 +125,7 @@ begin
                      if j=0 then
                                 begin
                                    GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
-                                   DefaultLLPCreator.CreateLLPolyLine(pf^.font.FontData.LLprimitives,GeomDataIndex,arccount);
+                                   DefaultLLPCreator.CreateLLPolyLine(pf^.font.FontData.LLprimitives,GeomDataIndex,arccount+1);
                                 end
                             else
                                 pf^.font.FontData.GeomData.Add2DPoint(x1,y1);

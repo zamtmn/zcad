@@ -405,7 +405,7 @@ begin
      if InRect=IRPartially then
                                exit;
      index:=P1Index+1;
-     for i:=2 to Count do
+     for i:=2 to Count-1 do
      begin
         SubRect:=geometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(index))^,PGDBvertex3S(geomdata.Vertex3S.getelement(index+1))^,frustum);
         case SubRect of

@@ -410,9 +410,7 @@ begin
                                               sizeshp:=1
                                           else
                                               sizeshp:=0;
-                      //----//PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
-                      //----//PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
-
+                      ProcessMinMax(x,y);
                       GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
                       LLPolyLineIndexInArray:=DefaultLLPCreator.CreateLLPolyLine(pf^.font.FontData.LLprimitives,GeomDataIndex,1{баба ягодка опять, кто считать будет?});
 

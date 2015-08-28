@@ -426,6 +426,7 @@ function GetBlockDefNames(var BDefNames:GDBGDBStringArray;selname:GDBString):GDB
 var pb:PGDBObjBlockdef;
     ir:itrec;
     i:gdbinteger;
+    s:gdbstring;
 begin
      result:=-1;
      i:=0;
@@ -435,8 +436,8 @@ begin
      repeat
            if uppercase(pb^.name)=selname then
                                               result:=i;
-
-           BDefNames.add(@pb^.name);
+           s:=Tria_AnsiToUtf8(pb^.name);
+           BDefNames.add(@s);
            pb:=gdb.GetCurrentDWG^.BlockDefArray.iterate(ir);
            inc(i);
      until pb=nil;
@@ -791,8 +792,8 @@ begin
           poa:=@gdb.GetCurrentROOT^.ObjArray;
           result:=0;
           //i:=0;
-          newname:=TEnumDataDescriptor.GetValueAsString(@BlockReplaceParams.Replace);
-          selname:=TEnumDataDescriptor.GetValueAsString(@BlockReplaceParams.Find);
+          newname:=Tria_Utf8ToAnsi(TEnumDataDescriptor.GetValueAsString(@BlockReplaceParams.Replace));
+          selname:=Tria_Utf8ToAnsi(TEnumDataDescriptor.GetValueAsString(@BlockReplaceParams.Find));
           selname:=uppercase(selname);
           pb:=poa^.beginiterate(ir);
           psdesc:=gdb.GetCurrentDWG^.SelObjArray.beginiterate(ir);
@@ -3669,12 +3670,12 @@ procedure bedit_format(_self:pointer);
 var
    nname:gdbstring;
 begin
-     nname:=BEditParam.Blocks.Enums.getGDBString(BEditParam.Blocks.Selected);
+     nname:=(BEditParam.Blocks.Enums.getGDBString(BEditParam.Blocks.Selected));
      if nname<>BEditParam.CurrentEditBlock then
      begin
           BEditParam.CurrentEditBlock:=nname;
           if nname<>modelspacename then
-                                      gdb.GetCurrentDWG^.pObjRoot:=gdb.GetCurrentDWG^.BlockDefArray.getblockdef(nname)
+                                      gdb.GetCurrentDWG^.pObjRoot:=gdb.GetCurrentDWG^.BlockDefArray.getblockdef(Tria_Utf8ToAnsi(nname))
                                   else
                                       gdb.GetCurrentDWG^.pObjRoot:=@gdb.GetCurrentDWG^.mainObjRoot;
           if assigned(UpdateVisibleProc) then UpdateVisibleProc;

@@ -3153,7 +3153,7 @@ begin
                 if @PTDRAWING(poglwnd.wa.PDWG).mainObjRoot=(PTDRAWING(poglwnd.wa.PDWG).pObjRoot) then
                                                                      MainFormN.PageControl.Pages[i].caption:=(name)
                                                                  else
-                                                                     MainFormN.PageControl.Pages[i].caption:='BEdit('+name+':'+PGDBObjBlockdef(PTDRAWING(poglwnd.wa.PDWG).pObjRoot).Name+')';
+                                                                     MainFormN.PageControl.Pages[i].caption:='BEdit('+name+':'+Tria_AnsiToUtf8(PGDBObjBlockdef(PTDRAWING(poglwnd.wa.PDWG).pObjRoot).Name)+')';
 
                 if k<=high(MainFormN.Drawings) then
                 begin

@@ -72,7 +72,6 @@ var
    ReBuildProc:TSimpleProcedure;
    SetCurrentObjDefaultProc:TSimpleProcedure;
    GetCurrentObjProc:TFunction__Pointer;
-   SetNameColWidthProc:TProcedure_Integer_;
    GetNameColWidthProc:TFunction__Integer;
    CreateObjInspInstanceProc:TFunction__TForm;
    GetPeditorProc:TFunction__TComponent;

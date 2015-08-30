@@ -20,7 +20,7 @@ unit cmdline;
 {$INCLUDE def.inc}
 interface
 uses
- paths,Themes,buttons,zcadsysvars,zcadstrconsts,strproc,sysinfo,lclproc,sysutils,gdbasetypes,
+ zcguimanager,paths,Themes,buttons,zcadsysvars,zcadstrconsts,strproc,sysinfo,lclproc,sysutils,gdbasetypes,
  StdCtrls,ExtCtrls,Controls,Classes,menus,Forms,fileutil,graphics,
  gdbase, memman,UGDBDescriptor,math,commandline,varman,languade,
  UGDBTracePropArray,varmandef,
@@ -491,4 +491,5 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('cmdline.initialization');{$ENDIF}
+  ZCADGUIManager.RegisterZCADFormInfo('CommandLine',rsCommandLineWndName,TCLine,rect(200,100,600,100),nil,@CLine);
 end.

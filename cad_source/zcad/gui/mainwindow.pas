@@ -26,7 +26,7 @@ uses
        ActnList,LCLType,LCLProc,intftranslations,toolwin,LMessages,LCLIntf,
        Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,FileUtil,
        menus,graphics,dialogs,XMLPropStorage,Buttons,Themes,
-       UniqueInstanceBase,simpleipc,{$ifdef windows}windows,{$endif}
+       Types,UniqueInstanceBase,simpleipc,{$ifdef windows}windows,{$endif}
   {FPC}
        lineinfo,//math,
   {ZCAD BASE}
@@ -44,7 +44,7 @@ uses
        texteditor,zcobjectinspectordecorations,cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,oglwindow,
        colorwnd,imagesmanager,usuptstylecombo,usupportgui,usupdimstylecombo,
   {}
-       gdbdrawcontext,uzglopengldrawer,abstractviewarea;
+       gdbdrawcontext,uzglopengldrawer,abstractviewarea,zcguimanager;
   {}
 type
   TComboFiller=procedure(cb:TCustomComboBox) of object;
@@ -871,175 +871,6 @@ procedure MainForm.ShowFastMenu(Sender: TObject);
 begin
      ShowFMenu;
 end;
-
-function MainForm.CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
-var
-  pint:PGDBInteger;
-  TB:TToolBar;
-  tbdesk:string;
-  ta:TmyAction;
-  TempForm:TForm;
-begin
-  ta:=tmyaction(self.StandartActions.ActionByName('ACN_Show_'+aname));
-  if ta<>nil then
-                 ta.Checked:=true;
-if aName='PageControl' then
-begin
-MainPanel:=Tform(Tform.NewInstance);
-if DoDisableAlign then
-MainPanel.DisableAlign;
-MainPanel.CreateNew(Application);
-MainPanel.SetBounds(200,200,600,500);
-MainPanel.Caption:=rsDrawingWindowWndName;
-MainPanel.BorderWidth:=0;
-
-DHPanel:=TPanel.Create(MainPanel);
-DHPanel.Align:=albottom;
-DHPanel.BevelInner:=bvNone;
-DHPanel.BevelOuter:=bvNone;
-DHPanel.BevelWidth:=1;
-DHPanel.AutoSize:=true;
-DHPanel.Parent:=MainPanel;
-
-VScrollBar:=TScrollBar.create(MainPanel);
-VScrollBar.Align:=alright;
-VScrollBar.kind:=sbVertical;
-VScrollBar.OnScroll:=_scroll;
-VScrollBar.Enabled:=false;
-VScrollBar.Parent:=MainPanel;
-
-with TMySpeedButton.Create(DHPanel) do
-begin
-     Align:=alRight;
-     Parent:=DHPanel;
-     width:=VScrollBar.Width;
-     onclick:=ShowFastMenu;
-end;
-
-HScrollBar:=TScrollBar.create(DHPanel);
-HScrollBar.Align:=alClient;
-HScrollBar.kind:=sbHorizontal;
-HScrollBar.OnScroll:=_scroll;
-HScrollBar.Enabled:=false;
-HScrollBar.Parent:=DHPanel;
-
-PageControl:=TmyPageControl.Create(MainPanel);
-PageControl.Constraints.MinHeight:=32;
-PageControl.Parent:=MainPanel;
-PageControl.Align:=alClient;
-PageControl.OnChange:=ChangedDWGTabCtrl;
-PageControl.BorderWidth:=0;
-if assigned(SysVar.INTF.INTF_DwgTabsPosition) then
-begin
-     case SysVar.INTF.INTF_DwgTabsPosition^ of
-                                              TATop:PageControl.TabPosition:=tpTop;
-                                              TABottom:PageControl.TabPosition:=tpBottom;
-                                              TALeft:PageControl.TabPosition:=tpLeft;
-                                              TARight:PageControl.TabPosition:=tpRight;
-     end;
-end;
-if assigned(SysVar.INTF.INTF_ShowDwgTabCloseBurron) then
-begin
-     if SysVar.INTF.INTF_ShowDwgTabCloseBurron^ then
-                                                    PageControl.Options:=PageControl.Options+[nboShowCloseButtons]
-                                                else
-                                                    PageControl.Options:=PageControl.Options-[nboShowCloseButtons]
-end
-else
-    PageControl.Options:=[nboShowCloseButtons];
-PageControl.OnCloseTabClicked:=CloseDWGPageInterf;
-PageControl.OnMouseDown:=PageControlMouseDown;
-PageControl.ShowTabs:=SysVar.INTF.INTF_ShowDwgTabs^;
-result:=MainPanel;
-result.Name:=aname;
-end
-else if aName='CommandLine' then
-begin
-CLine:=TCLine(TCLine.NewInstance);
-CLine.FormStyle:=fsStayOnTop;
-if DoDisableAlign then
-CLine.DisableAlign;
-CLine.CreateNew(Application);
-CLine.SetBounds(200,100,600,100);
-CLine.Caption:=rsCommandLineWndName;
-CLine.Align:=alBottom;
-pint:=SavedUnit.FindValue('VIEW_CommandLineH');
-result:=CLine;
-
-result.Name:=aname;
-end
-else if aName='ObjectInspector' then
-begin
-  if assigned(CreateObjInspInstanceProc)then
-  begin
-  TempForm:=CreateObjInspInstanceProc;
-  if DoDisableAlign then
-  TempForm.DisableAlign;
-  TempForm.CreateNew(Application);
-  TempForm.Caption:=rsGDBObjInspWndName;
-  TempForm.SetBounds(0,100,200,600);
-  if assigned(SetGDBObjInspProc)then
-  SetGDBObjInspProc(gdb.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,nil);
-  if assigned(SetCurrentObjDefaultProc)then
-                                           SetCurrentObjDefaultProc;
-  pint:=SavedUnit.FindValue('VIEW_ObjInspV');
-  if assigned(SetNameColWidthProc)then
-                                     SetNameColWidthProc(TempForm.Width div 2);
-  pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
-  if assigned(pint)then
-                       if assigned(SetNameColWidthProc)then
-                       SetNameColWidthProc(pint^);//TempForm.namecol:=pint^;
-  result:=TempForm;
-
-  result.Name:=aname;
-  end;
-end
-else
-begin
-tbdesk:=self.findtoolbatdesk(aName);
-if tbdesk=''then
-          shared.ShowError(format(rsToolBarNotFound,[aName]));
-FToolBar:=TToolButtonForm(TToolButtonForm.NewInstance);
-if DoDisableAlign then
-FToolBar.DisableAlign;
-FToolBar.CreateNew(Application);
-FToolBar.Caption:='';
-FToolBar.SetBounds(100,64,1000,26);
-
-TB:=TToolBar.Create(application);
-TB.ButtonHeight:=sysvar.INTF.INTF_DefaultControlHeight^;
-TB.Align:=alclient;
-TB.Top:=0;
-TB.Left:=0;
-TB.AutoSize:=true;
-if aName<>'Status' then
-TB.EdgeBorders:=[];
-TB.ShowCaptions:=true;
-TB.Parent:=ftoolbar;
-
-if aName='ToolBarR' then
-begin
-//ToolBarR:=tb;
-end;
-if aName='ToolBarU' then
-begin
-//ToolBarU:=tb;
-end;
-if aName='Status' then
-begin
-//ToolBarD:=tb;
-CreateHTPB(tb);
-end;
-CreateToolbarFromDesk(tb,aName,tbdesk);
-
-result:=FToolBar;
-
-result.Name:=aname;
-FToolBar.Caption:='';
-end;
-
-end;
-
 procedure MainForm.DockMasterCreateControl(Sender: TObject; aName: string; var
   AControl: TControl; DoDisableAutoSizing: boolean);
   procedure CreateForm(Caption: string; NewBounds: TRect);
@@ -1403,7 +1234,140 @@ begin
      if MessageDlg(errmsg,mtError,[mbYes, mbAbort],0)=mrAbort then
                                                                   halt(0);
 end;
+function MainForm.CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
+var
+  pint:PGDBInteger;
+  TB:TToolBar;
+  tbdesk:string;
+  ta:TmyAction;
+  TempForm:TForm;
+  PFID:PTFormInfoData;
+begin
+  ta:=tmyaction(self.StandartActions.ActionByName('ACN_Show_'+aname));
+  if ta<>nil then
+                 ta.Checked:=true;
+  if ZCADGUIManager.GetZCADFormInfo(aname,PFID) then
+  begin
+       aname:=aname;
+       result:=Tform(PFID^.FormClass.NewInstance);
+       if DoDisableAlign then
+                             if result is TWinControl then
+                                                          TWinControl(result).DisableAlign;
+       if result is TCustomForm then
+                                    TCustomForm(result).CreateNew(Application);
+       tobject(PFID.PInstanceVariable^):=result;
+       result.Caption:=PFID.FormCaption;
+       result.Name:=aname;
+       if @PFID.SetupProc<>nil then
+                                  PFID.SetupProc(result);
+  end
+else
+begin
+tbdesk:=self.findtoolbatdesk(aName);
+if tbdesk=''then
+          shared.ShowError(format(rsToolBarNotFound,[aName]));
+FToolBar:=TToolButtonForm(TToolButtonForm.NewInstance);
+if DoDisableAlign then
+FToolBar.DisableAlign;
+FToolBar.CreateNew(Application);
+FToolBar.Caption:='';
+FToolBar.SetBounds(100,64,1000,26);
 
+TB:=TToolBar.Create(application);
+TB.ButtonHeight:=sysvar.INTF.INTF_DefaultControlHeight^;
+TB.Align:=alclient;
+TB.Top:=0;
+TB.Left:=0;
+TB.AutoSize:=true;
+if aName<>'Status' then
+TB.EdgeBorders:=[];
+TB.ShowCaptions:=true;
+TB.Parent:=ftoolbar;
+
+if aName='ToolBarR' then
+begin
+//ToolBarR:=tb;
+end;
+if aName='ToolBarU' then
+begin
+//ToolBarU:=tb;
+end;
+if aName='Status' then
+begin
+//ToolBarD:=tb;
+CreateHTPB(tb);
+end;
+CreateToolbarFromDesk(tb,aName,tbdesk);
+
+result:=FToolBar;
+
+result.Name:=aname;
+FToolBar.Caption:='';
+end;
+
+end;
+procedure ZCADMainPanelSetupProc(Form:TControl);
+begin
+  Tform(Form).BorderWidth:=0;
+
+  MainFormN.DHPanel:=TPanel.Create(Tform(Form));
+  MainFormN.DHPanel.Align:=albottom;
+  MainFormN.DHPanel.BevelInner:=bvNone;
+  MainFormN.DHPanel.BevelOuter:=bvNone;
+  MainFormN.DHPanel.BevelWidth:=1;
+  MainFormN.DHPanel.AutoSize:=true;
+  MainFormN.DHPanel.Parent:=MainFormN.MainPanel;
+
+  MainFormN.VScrollBar:=TScrollBar.create(MainFormN.MainPanel);
+  MainFormN.VScrollBar.Align:=alright;
+  MainFormN.VScrollBar.kind:=sbVertical;
+  MainFormN.VScrollBar.OnScroll:=MainFormN._scroll;
+  MainFormN.VScrollBar.Enabled:=false;
+  MainFormN.VScrollBar.Parent:=MainFormN.MainPanel;
+
+  with TMySpeedButton.Create(MainFormN.DHPanel) do
+  begin
+       Align:=alRight;
+       Parent:=MainFormN.DHPanel;
+       width:=MainFormN.VScrollBar.Width;
+       onclick:=MainFormN.ShowFastMenu;
+  end;
+
+  MainFormN.HScrollBar:=TScrollBar.create(MainFormN.DHPanel);
+  MainFormN.HScrollBar.Align:=alClient;
+  MainFormN.HScrollBar.kind:=sbHorizontal;
+  MainFormN.HScrollBar.OnScroll:=MainFormN._scroll;
+  MainFormN.HScrollBar.Enabled:=false;
+  MainFormN.HScrollBar.Parent:=MainFormN.DHPanel;
+
+  MainFormN.PageControl:=TmyPageControl.Create(MainFormN.MainPanel);
+  MainFormN.PageControl.Constraints.MinHeight:=32;
+  MainFormN.PageControl.Parent:=MainFormN.MainPanel;
+  MainFormN.PageControl.Align:=alClient;
+  MainFormN.PageControl.OnChange:=MainFormN.ChangedDWGTabCtrl;
+  MainFormN.PageControl.BorderWidth:=0;
+  if assigned(SysVar.INTF.INTF_DwgTabsPosition) then
+  begin
+       case SysVar.INTF.INTF_DwgTabsPosition^ of
+                                                TATop:MainFormN.PageControl.TabPosition:=tpTop;
+                                                TABottom:MainFormN.PageControl.TabPosition:=tpBottom;
+                                                TALeft:MainFormN.PageControl.TabPosition:=tpLeft;
+                                                TARight:MainFormN.PageControl.TabPosition:=tpRight;
+       end;
+  end;
+  if assigned(SysVar.INTF.INTF_ShowDwgTabCloseBurron) then
+  begin
+       if SysVar.INTF.INTF_ShowDwgTabCloseBurron^ then
+                                                      MainFormN.PageControl.Options:=MainFormN.PageControl.Options+[nboShowCloseButtons]
+                                                  else
+                                                      MainFormN.PageControl.Options:=MainFormN.PageControl.Options-[nboShowCloseButtons]
+  end
+  else
+      MainFormN.PageControl.Options:=[nboShowCloseButtons];
+  MainFormN.PageControl.OnCloseTabClicked:=MainFormN.CloseDWGPageInterf;
+  MainFormN.PageControl.OnMouseDown:=MainFormN.PageControlMouseDown;
+  MainFormN.PageControl.ShowTabs:=SysVar.INTF.INTF_ShowDwgTabs^;
+end;
 procedure MainForm.FormCreate(Sender: TObject);
 begin
   {
@@ -1411,6 +1375,7 @@ begin
   StoreBackTraceStrFunc:=BackTraceStrFunc;
   BackTraceStrFunc:=@SysBackTraceStr;
   }
+  ZCADGUIManager.RegisterZCADFormInfo('PageControl',rsDrawingWindowWndName,Tform,types.rect(200,200,600,500),ZCADMainPanelSetupProc,@MainFormN.MainPanel);
   FAppProps := TApplicationProperties.Create(Self);
   FAppProps.OnException := ZcadException;
   FAppProps.CaptureExceptions := True;

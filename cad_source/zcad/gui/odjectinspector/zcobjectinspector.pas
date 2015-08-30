@@ -1933,7 +1933,6 @@ initialization
   ReBuildProc:=ReBuild;
   SetCurrentObjDefaultProc:=SetCurrentObjDefault;
   GetCurrentObjProc:=GetCurrentObj;
-  SetNameColWidthProc:=SetNameColWidth;
   GetNameColWidthProc:=GetNameColWidth;
   CreateObjInspInstanceProc:=CreateObjInspInstance;
   GetPeditorProc:=GetPeditor;

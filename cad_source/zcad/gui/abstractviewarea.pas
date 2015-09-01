@@ -26,7 +26,7 @@ uses {gdbase,gdbasetypes,
      UGDBOpenArrayOfPV,uzglabstractdrawer,GDBGenericSubEntry,gdbase,gdbasetypes,
      oglwindowdef,gdbdrawcontext,varmandef,{Varman,}UGDBPoint3DArray,UGDBEntTree,geometry,ugdbabstractdrawing,
      shared,sysutils,
-     ExtCtrls,Controls,Classes,LCLType,Forms,zcadsysvars,GDBEntity,LMessages;
+     ExtCtrls,Controls,Classes,LCLType,Forms,zcadsysvars,GDBEntity;
 
 type
     TCADControl=class(TCustomControl)

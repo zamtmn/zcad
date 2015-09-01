@@ -20,7 +20,7 @@ unit gluinterface;
 {$INCLUDE def.inc}
 
 interface
-uses gdbpalette,zcadsysvars,gdbasetypes,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
+uses gdbpalette,zcadsysvars,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
      {$IFNDEF DELPHI}glu,gl,{$ELSE}dglOpenGL,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
      log,sysutils,varmandef;

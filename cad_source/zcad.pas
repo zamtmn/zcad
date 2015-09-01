@@ -112,7 +112,8 @@ uses
   gdbfieldprocessorimpl,
   registerenitiesfeatures,
   registerenitiesextenders,
-  zcregistermultiproperties;
+  zcregistermultiproperties,
+  uzglopenglviewarea,uzglgdiviewarea;
   //RegCnownTypes,URegisterObjects;
 
 //exports HistoryOut,redrawoglwnd,updatevisible,reloadlayer; {shared}

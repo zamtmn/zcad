@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit openglviewarea;
+unit uzglopenglviewarea;
 {$INCLUDE def.inc}
 interface
 uses
@@ -28,7 +28,7 @@ uses
      {$ENDIF}
      uzglgdidrawer,abstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
-     oglwindow,oglwindowdef,gdbdrawcontext,varmandef,commandline,zcadsysvars,geometry,shared,LCLType,
+     oglwindowdef,gdbdrawcontext,varmandef,commandline,zcadsysvars,geometry,shared,LCLType,
      ExtCtrls,classes,Controls,Graphics,generalviewarea,math,log,backendmanager,
      {$IFNDEF DELPHI}OpenGLContext{$ENDIF};
 type
@@ -62,7 +62,7 @@ type
                       function getParamTypeName:GDBString; override;
 
                   end;
-    TCanvasViewArea=class(TGeneralViewArea)
+    TGDIViewArea=class(TGeneralViewArea)
                       public
                       GDIData:TGDIData;
                       function CreateWorkArea(TheOwner: TComponent):TCADControl; override;
@@ -251,13 +251,13 @@ begin
      inherited;
      OpenGLWindow.SwapBuffers;
 end;
-function TCanvasViewArea.CreateWorkArea(TheOwner: TComponent):TCADControl;
+function TGDIViewArea.CreateWorkArea(TheOwner: TComponent):TCADControl;
 begin
      result:=TCADControl(TGDIPanel.Create(TheOwner));
      TCADControl(result).Caption:='123';
      //TGDIPanel(result).DoubleBuffered:=false;
 end;
-procedure TCanvasViewArea.CreateDrawer;
+procedure TGDIViewArea.CreateDrawer;
 begin
      drawer:=TZGLGDIDrawer.Create;
      TZGLGDIDrawer(drawer).wa:=self;
@@ -265,14 +265,14 @@ begin
      TZGLGDIDrawer(drawer).panel:=TCADControl(getviewcontrol);
 end;
 
-procedure TCanvasViewArea.SetupWorkArea;
+procedure TGDIViewArea.SetupWorkArea;
 begin
   //self.getviewcontrol.Color:=clHighlight;
   //TGDIPanel(getviewcontrol).BorderStyle:=bsNone;
   //TGDIPanel(getviewcontrol).BevelWidth:=0;
   TCADControl(getviewcontrol).onpaint:=mypaint;
 end;
-procedure TCanvasViewArea.setdeicevariable;
+procedure TGDIViewArea.setdeicevariable;
 begin
      GDIData.RD_TextRendering:=TRT_System;
      {$IFDEF LCLWIN32}
@@ -291,7 +291,7 @@ begin
      GDIData.RD_Version:=inttostr(gtk_major_version)+'.'+inttostr(gtk_minor_version)+'.'+inttostr(gtk_micro_version);
      {$ENDIF}
 end;
-procedure TCanvasViewArea.getareacaps;
+procedure TGDIViewArea.getareacaps;
 begin
   {$IFDEF LCLQT}
   TQtWidget(getviewcontrol.Handle).setAttribute(QtWA_PaintOutsidePaintEvent);
@@ -301,24 +301,24 @@ begin
   {$ENDIF}
   setdeicevariable;
 end;
-procedure TCanvasViewArea.GDBActivateGLContext;
+procedure TGDIViewArea.GDBActivateGLContext;
 begin
 end;
-function TCanvasViewArea.startpaint;
+function TGDIViewArea.startpaint;
 begin
      if assigned(WorkArea) then
                                    TZGLGDIDrawer(drawer).canvas:=WorkArea.canvas;
      result:=inherited;
 end;
-function TCanvasViewArea.NeedDrawInsidePaintEvent:boolean;
+function TGDIViewArea.NeedDrawInsidePaintEvent:boolean;
 begin
      result:={$IFDEF LCLQT}True{$ELSE}False{$ENDIF};
 end;
-function TCanvasViewArea.getParam:pointer;
+function TGDIViewArea.getParam:pointer;
 begin
      result:=@GDIData;
 end;
-function TCanvasViewArea.getParamTypeName:GDBString;
+function TGDIViewArea.getParamTypeName:GDBString;
 begin
      result:='PTGDIData';
 end;
@@ -382,5 +382,5 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('viewareadef.initialization');{$ENDIF}
   RegisterBackend(TOpenGLViewArea,'OpenGL');
-  RegisterBackend(TCanvasViewArea,'GDI');
+  RegisterBackend(TGDIViewArea,'GDI');
 end.

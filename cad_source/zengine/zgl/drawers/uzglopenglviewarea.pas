@@ -29,7 +29,7 @@ uses
      uzglgdidrawer,abstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
      oglwindowdef,gdbdrawcontext,varmandef,commandline,zcadsysvars,geometry,shared,LCLType,
-     ExtCtrls,classes,Controls,Graphics,generalviewarea,math,log,backendmanager,
+     ExtCtrls,classes,Controls,Graphics,generalviewarea,math,log,backendmanager,LMessages,
      {$IFNDEF DELPHI}OpenGLContext{$ENDIF};
 type
     PTOGLWnd = ^TOGLWnd;
@@ -40,7 +40,11 @@ type
       protected
       procedure EraseBackground(DC: HDC);{$IFNDEF DELPHI}override;{$ENDIF}
     end;
-
+    TGDIPanel=class(TCustomControl)
+                protected
+                procedure WMPaint(var Message: TLMPaint); message LM_PAINT;
+                procedure EraseBackground(DC: HDC); override;
+    end;
     TOpenGLViewArea=class(TGeneralViewArea)
                       public
                       OpenGLWindow:TOGLWnd;
@@ -82,6 +86,21 @@ var
   gridarray:array [0..maxgrid,0..maxgrid] of GDBvertex2S;
 implementation
 //uses mainwindow;
+
+procedure TGDIPanel.EraseBackground(DC: HDC);
+begin
+     // everything is painted, so erasing the background is not needed
+end;
+procedure TGDIPanel.WMPaint(var Message: TLMPaint);
+begin
+     //Include(FControlState, csCustomPaint);
+     //inherited WMPaint(Message);
+     //if assigned(onpaint) then
+     //                         onpaint(nil);
+     inherited WMPaint(Message);
+     //Exclude(FControlState, csCustomPaint);
+end;
+
 procedure TOGLWnd.EraseBackground(DC: HDC);
 begin
      dc:=0;

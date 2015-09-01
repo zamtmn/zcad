@@ -29,12 +29,6 @@ uses {gdbase,gdbasetypes,
      ExtCtrls,Controls,Classes,LCLType,Forms,zcadsysvars,GDBEntity,LMessages;
 
 type
-    TGDIPanel=class(TCustomControl)
-                protected
-                procedure WMPaint(var Message: TLMPaint); message LM_PAINT;
-                procedure EraseBackground(DC: HDC); override;
-    end;
-
     TCADControl=class(TCustomControl)
                 public
                 function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint): Boolean; overload;
@@ -172,20 +166,6 @@ end;
 function TCADControl.DoMouseWheel(Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint): Boolean;
 begin
      inherited;
-end;
-
-procedure TGDIPanel.EraseBackground(DC: HDC);
-begin
-     // everything is painted, so erasing the background is not needed
-end;
-procedure TGDIPanel.WMPaint(var Message: TLMPaint);
-begin
-     //Include(FControlState, csCustomPaint);
-     //inherited WMPaint(Message);
-     //if assigned(onpaint) then
-     //                         onpaint(nil);
-     inherited WMPaint(Message);
-     //Exclude(FControlState, csCustomPaint);
 end;
 function docorrecttogrid(point:GDBVertex;need:GDBBoolean):GDBVertex;
 var

@@ -51,7 +51,7 @@ uses
  ugdbdrawing,
   {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}AboutWnd,HelpWnd,memman,WindowsSpecific,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}log,Varman,UGDBNumerator,cmdline,
- AnchorDocking,dialogs,XMLPropStorage,xmlconf,openglviewarea{,
+ AnchorDocking,dialogs,XMLPropStorage,xmlconf,uzglopenglviewarea{,
    uPSCompiler,
   uPSRuntime,
   uPSC_std,

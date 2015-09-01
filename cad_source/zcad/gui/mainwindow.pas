@@ -41,7 +41,7 @@ uses
   {ZCAD COMMANDS}
        commandlinedef,commanddefinternal,commandline,
   {GUI}
-       texteditor,zcobjectinspectordecorations,cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,oglwindow,
+       texteditor,zcobjectinspectordecorations,cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,
        colorwnd,imagesmanager,usuptstylecombo,usupportgui,usupdimstylecombo,
   {}
        gdbdrawcontext,uzglopengldrawer,abstractviewarea,zcguimanager;
@@ -218,7 +218,7 @@ const
   procedure DrawColor(Canvas:TCanvas; Index: Integer; ARect: TRect);
 
 implementation
-uses enitiesextendervariables,generalviewarea,openglviewarea;
+uses enitiesextendervariables,generalviewarea,uzglopenglviewarea;
 constructor TmyAnchorDockSplitter.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);

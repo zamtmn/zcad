@@ -131,6 +131,7 @@ type
                            procedure asyncupdatemouse(Data: PtrInt);virtual;abstract;
                            function getParam:pointer;virtual;abstract;
                            function getParamTypeName:GDBString;virtual;abstract;
+                           procedure setdeicevariable;virtual;abstract;
                            procedure ZoomIn; virtual;abstract;
                            procedure ZoomOut; virtual;abstract;
                       end;

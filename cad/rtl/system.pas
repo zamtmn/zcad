@@ -779,7 +779,7 @@ GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     family:GDBString;
     fullname:GDBString;
     font:PBASEFont;
-    DummyDrawerHandle:THandle;
+    DummyDrawerHandle:{THandle}ptruint;
     constructor initnul;
     constructor init(n:GDBString);
     procedure ItSHX;
@@ -1124,8 +1124,12 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
                           RD_ID_MaxDegradationFactor:PGDBDouble;(*'Max degradation factor'*)
                           RD_ID_PrefferedRenderTime:PGDBInteger;(*'Prefered rendertime'*)
                       end;
-  PTGDIData=^TGDIData;
   TTextRenderingType=(TRT_System,TRT_ZGL,TRT_Both);
+  PTCanvasData=^TCanvasData;
+  TCanvasData=packed record
+            RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
+      end;
+  PTGDIData=^TGDIData;
   TGDIData=packed record
             RD_TextRendering:TTextRenderingType;
             RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)

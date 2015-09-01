@@ -10,7 +10,7 @@ unit GDBCommandsOPS;
 interface
 uses
 
-  gdbdrawcontext,GDBAbstractText,GDBText,UGDBStringArray,gdbentityfactory,zcadsysvars,strproc,gdbasetypes,commandline,log,UGDBOpenArrayOfPObjects,
+  abstractviewarea,gdbdrawcontext,GDBAbstractText,GDBText,UGDBStringArray,gdbentityfactory,zcadsysvars,strproc,gdbasetypes,commandline,log,UGDBOpenArrayOfPObjects,
   plugins,
   commandlinedef,
   commanddefinternal,
@@ -152,7 +152,7 @@ var
 procedure finalize;}
 
 implementation
-uses enitiesextendervariables,GDBRoot,oglwindow,oglwindowdef, gdbcable,UUnitManager,GDBCommandsElectrical,{UGDBObjBlockdefArray,}URecordDescriptor,TypeDescriptors;
+uses enitiesextendervariables,GDBRoot,oglwindowdef, gdbcable,UUnitManager,GDBCommandsElectrical,{UGDBObjBlockdefArray,}URecordDescriptor,TypeDescriptors;
 procedure place2(pva:PGDBObjEntityOpenArray;basepoint, dir: gdbvertex; count: integer; sd: GDBDouble; name: pansichar;angle:GDBDouble;norm:GDBBoolean;scaleblock:GDBDouble);
 var line2: gdbline;
   i: integer;

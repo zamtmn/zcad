@@ -143,6 +143,7 @@ type
 var
    otracktimer: GDBInteger;
 procedure copyospoint(out dest:os_record; source:os_record);
+function docorrecttogrid(point:GDBVertex;need:GDBBoolean):GDBVertex;
 function correcttogrid(point:GDBVertex):GDBVertex;
 function CreateFaceRC:TDrawContext;
 implementation
@@ -186,7 +187,24 @@ begin
      inherited WMPaint(Message);
      //Exclude(FControlState, csCustomPaint);
 end;
-
+function docorrecttogrid(point:GDBVertex;need:GDBBoolean):GDBVertex;
+var
+   gr:GDBBoolean;
+begin
+     gr:=false;
+     if SysVar.DWG.DWG_SnapGrid<>nil then
+     if SysVar.DWG.DWG_SnapGrid^ then
+                                     gr:=true;
+     if (need and gr) then
+                          begin
+                               result:=correcttogrid(point);
+                               {result.x:=round((point.x-SysVar.DWG.DWG_Snap.Base.x)/SysVar.DWG.DWG_Snap.Spacing.x)*SysVar.DWG.DWG_Snap.Spacing.x+SysVar.DWG.DWG_Snap.Spacing.x;
+                               result.y:=round((point.y-SysVar.DWG.DWG_Snap.Base.y)/SysVar.DWG.DWG_Snap.Spacing.y)*SysVar.DWG.DWG_Snap.Spacing.y+SysVar.DWG.DWG_Snap.Spacing.y;
+                               result.z:=point.z;}
+                          end
+                      else
+                          result:=point;
+end;
 function correcttogrid(point:GDBVertex):GDBVertex;
 begin
   result.x:=round((point.x-SysVar.DWG.DWG_Snap.Base.x)/SysVar.DWG.DWG_Snap.Spacing.x)*SysVar.DWG.DWG_Snap.Spacing.x+SysVar.DWG.DWG_Snap.Base.x;

@@ -218,7 +218,7 @@ const
   procedure DrawColor(Canvas:TCanvas; Index: Integer; ARect: TRect);
 
 implementation
-uses enitiesextendervariables,generalviewarea;
+uses enitiesextendervariables,generalviewarea,openglviewarea;
 constructor TmyAnchorDockSplitter.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);

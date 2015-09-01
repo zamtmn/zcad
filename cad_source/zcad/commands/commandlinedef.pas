@@ -98,7 +98,6 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
                              end;
 {Export-}
 implementation
-//uses oglwindow;
 function CommandObjectDef.IsRTECommand:GDBBoolean;
 begin
      result:=false;

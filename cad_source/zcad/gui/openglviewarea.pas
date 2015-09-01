@@ -29,8 +29,18 @@ uses
      uzglgdidrawer,abstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
      oglwindow,oglwindowdef,gdbdrawcontext,varmandef,commandline,zcadsysvars,geometry,shared,LCLType,
-     ExtCtrls,classes,Controls,Graphics,generalviewarea,math,log,backendmanager;
+     ExtCtrls,classes,Controls,Graphics,generalviewarea,math,log,backendmanager,
+     {$IFNDEF DELPHI}OpenGLContext{$ENDIF};
 type
+    PTOGLWnd = ^TOGLWnd;
+    TOGLWnd = class({TPanel}TOpenGLControl)
+    private
+    public
+      wa:TAbstractViewArea;
+      protected
+      procedure EraseBackground(DC: HDC);{$IFNDEF DELPHI}override;{$ENDIF}
+    end;
+
     TOpenGLViewArea=class(TGeneralViewArea)
                       public
                       OpenGLWindow:TOGLWnd;
@@ -66,9 +76,16 @@ type
                       function getParamTypeName:GDBString; override;
                       procedure setdeicevariable;
                   end;
-
+const
+  maxgrid=100;
+var
+  gridarray:array [0..maxgrid,0..maxgrid] of GDBvertex2S;
 implementation
 //uses mainwindow;
+procedure TOGLWnd.EraseBackground(DC: HDC);
+begin
+     dc:=0;
+end;
 function TOpenGLViewArea.getParam;
 begin
      result:=@OpenGLParam;
@@ -80,7 +97,7 @@ begin
 end;
 procedure TOpenGLViewArea.GDBActivateGLContext;
 begin
-                                      MyglMakeCurrent(OpenGLWindow.OGLContext);
+                                      //MyglMakeCurrent(OpenGLWindow.OGLContext);
                                       OpenGLWindow.MakeCurrent;
                                       isOpenGLError;
 end;
@@ -137,11 +154,11 @@ begin
   gtk_widget_add_events (Widget,GDK_POINTER_MOTION_HINT_MASK);
   {$ENDIF}
 
-  MywglDeleteContext(OpenGLWindow.OGLContext);//wglDeleteContext(hrc);
+  //MywglDeleteContext(OpenGLWindow.OGLContext);//wglDeleteContext(hrc);
 
-  SetDCPixelFormat(OpenGLWindow.OGLContext);//SetDCPixelFormat(dc);
-  MywglCreateContext(OpenGLWindow.OGLContext);//hrc := wglCreateContext(DC);
-  MyglMakeCurrent(OpenGLWindow.OGLContext);//wglMakeCurrent(DC, hrc);
+  //SetDCPixelFormat(OpenGLWindow.OGLContext);//SetDCPixelFormat(dc);
+  //MywglCreateContext(OpenGLWindow.OGLContext);//hrc := wglCreateContext(DC);
+  //MyglMakeCurrent(OpenGLWindow.OGLContext);//wglMakeCurrent(DC, hrc);
   OpenGLWindow.MakeCurrent();
   setdeicevariable;
 

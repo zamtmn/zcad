@@ -20,7 +20,7 @@ unit generalviewarea;
 {$INCLUDE def.inc}
 interface
 uses
-     log,zemathutils,gdbpalette,
+     memman,log,zemathutils,gdbpalette,
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
      UGDBLayerArray,ugdbdimstylearray,
      oglwindowdef,gdbdrawcontext,varmandef,zcadsysvars,GDBEntity,zcadinterface,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
@@ -1647,7 +1647,24 @@ begin
      WaMouseMove(nil,[],param.md.mouse.x,param.md.mouse.y);
 end;
 destructor TGeneralViewArea.Destroy;
+var
+  i:integer;
 begin
+  Drawer.delmyscrbuf;
+  if param.pglscreen <> nil then
+  GDBFreeMem(param.pglscreen);
+
+  PolarAxis.done;
+  param.ospoint.arraydispaxis.done;
+  param.ospoint.arrayworldaxis.done;
+  for i := 0 to {wa.param.ontrackarray.total-1}3 do
+                                           begin
+                                           param.ontrackarray.otrackarray[i].arrayworldaxis.done;
+                                           param.ontrackarray.otrackarray[i].arraydispaxis.done;
+                                           end;
+  {переделать}//inherited done;
+
+
      freeandnil(drawer);
      freeandnil(OTTimer);
      freeandnil(OHTimer);

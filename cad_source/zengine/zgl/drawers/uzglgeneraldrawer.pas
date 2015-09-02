@@ -254,7 +254,7 @@ procedure TZGLGeneralDrawer.DrawDebugGeometry;
 begin
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('uzglabstractdrawer.initialization');{$ENDIF}
+  {$IFDEF DEBUGINITSECTION}LogOut('uzglgeneraldrawer.initialization');{$ENDIF}
   DrawerLLPCreator:=TLLPrimitivesCreator.create;
 end.
 

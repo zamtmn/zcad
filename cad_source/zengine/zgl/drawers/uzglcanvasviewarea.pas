@@ -40,10 +40,6 @@ type
                       function getParamTypeName:GDBString; override;
                       procedure setdeicevariable; override;
                   end;
-const
-  maxgrid=100;
-var
-  gridarray:array [0..maxgrid,0..maxgrid] of GDBvertex2S;
 implementation
 //uses mainwindow;
 procedure TGDIViewArea.CreateDrawer;

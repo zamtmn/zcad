@@ -1509,7 +1509,7 @@ begin
         y:=(ARect.Top+ARect.Bottom)div 2;
         midline:=ARect.Top+ARect.Bottom;
 
-        CanvasDrawer.midline:=midline;
+        //CanvasDrawer.midline:=midline;
         CanvasDrawer.canvas:=canvas;
         //CanvasDrawer.PVertexBuffer:=@geom.GeomData.Vertex3S;
         //geom.DrawLLPrimitives(CanvasDrawer);

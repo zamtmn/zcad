@@ -21,9 +21,11 @@ unit uzglgeneraldrawer;
 interface
 uses uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,uzglabstractdrawer,gdbpalette,types,Classes,Graphics,gdbase,gdbasetypes,GDBCamera,geometry;
 type
+TPaintState=(TPSBufferNotSaved,TPSBufferSaved);
 TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         drawrect:trect;
                         wh:tsize;
+                        PState:TPaintState;
                         public
                         function GetLLPrimitivesCreator:TLLPrimitivesCreatorAbstract;override;
 
@@ -225,12 +227,14 @@ begin
 end;
 procedure TZGLGeneralDrawer.SaveBuffers;
 begin
+     PState:=TPaintState.TPSBufferNotSaved;
 end;
 procedure TZGLGeneralDrawer.RestoreBuffers;
 begin
 end;
 function TZGLGeneralDrawer.CreateScrbuf:boolean;
 begin
+     result:=false;
 end;
 procedure TZGLGeneralDrawer.delmyscrbuf;
 begin

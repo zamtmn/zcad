@@ -1510,7 +1510,7 @@ begin
         midline:=ARect.Top+ARect.Bottom;
 
         //CanvasDrawer.midline:=midline;
-        CanvasDrawer.canvas:=canvas;
+        GDIDrawer.canvas:=canvas;
         //CanvasDrawer.PVertexBuffer:=@geom.GeomData.Vertex3S;
         //geom.DrawLLPrimitives(CanvasDrawer);
 

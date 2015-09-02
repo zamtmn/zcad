@@ -74,7 +74,6 @@ TZGLGDIDrawer=class(TZGLGeneral2DDrawer)
                         procedure RestoreBuffers;override;
                         procedure SwapBuffers;override;
                         procedure SetDrawMode(const mode:TZGLDrawMode);override;
-                        procedure DrawDebugGeometry;override;
                         procedure ClearScreen(stencil:boolean);override;
                         procedure _createPen;override;
 
@@ -95,7 +94,7 @@ TZGLGDIPlusDrawer=class(TZGLGDIDrawer)
 {$ENDIF}
 var
    OGLDrawer:TZGLAbstractDrawer;
-   CanvasDrawer:TZGLGDIDrawer;
+   GDIDrawer:TZGLGDIDrawer;
    code:integer;
    LLGDIPrimitivesCreator:TLLGDIPrimitivesCreator;
    {$IFDEF WINDOWS}GDIPlusDrawer:TZGLGDIPlusDrawer;{$ENDIF}
@@ -400,13 +399,7 @@ begin
      deleteobject(ClearBrush);
      isWindowsErrors;
 end;
-procedure TZGLGDIDrawer.DrawDebugGeometry;
-begin
-     exit;
-     CorrectScreenInvalidrect(wh.cx,wh.cy);
-     DrawLine2DInDCS(ScreenInvalidRect.Left,ScreenInvalidRect.top,ScreenInvalidRect.right,ScreenInvalidRect.bottom);
-     DrawLine2DInDCS(ScreenInvalidRect.right,ScreenInvalidRect.top,ScreenInvalidRect.left,ScreenInvalidRect.bottom);
-end;
+
 function TZGLGDIDrawer.GetLLPrimitivesCreator:TLLPrimitivesCreatorAbstract;
 begin
      result:=LLGDIPrimitivesCreator;
@@ -532,11 +525,11 @@ end;
 
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('uzglgdidrawer.initialization');{$ENDIF}
-  CanvasDrawer:=TZGLGDIDrawer.create;
+  GDIDrawer:=TZGLGDIDrawer.create;
   LLGDIPrimitivesCreator:=TLLGDIPrimitivesCreator.Create;
   {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
 finalization
-   CanvasDrawer.Destroy;
+   GDIDrawer.Destroy;
    LLGDIPrimitivesCreator.Destroy;
   {$IFDEF WINDOWS}GDIPlusDrawer.Destroy;{$ENDIF}
 end.

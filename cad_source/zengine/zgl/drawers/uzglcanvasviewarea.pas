@@ -26,43 +26,46 @@ uses
      {$IFDEF LCLQT}
      qtwidgets,qt4,qtint,
      {$ENDIF}
-     uzglgdidrawer,abstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
+     uzglcanvasdrawer,abstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
      varmandef,commandline,zcadsysvars,geometry,shared,LCLType,
      ExtCtrls,classes,Controls,Graphics,generalviewarea,log,backendmanager,
      {$IFNDEF DELPHI}OpenGLContext{$ENDIF},uzglgeneralcanvasviewarea;
 type
-    TGDIViewArea=class(TGeneralCanvasViewArea)
+    TCanvasViewArea=class(TGeneralCanvasViewArea)
                       public
                       CanvasData:TCanvasData;
                       procedure CreateDrawer; override;
                       function getParam:pointer; override;
                       function getParamTypeName:GDBString; override;
                       procedure setdeicevariable; override;
+                      function NeedDrawInsidePaintEvent:boolean; override;
                   end;
 implementation
-//uses mainwindow;
-procedure TGDIViewArea.CreateDrawer;
+procedure TCanvasViewArea.CreateDrawer;
 begin
-     drawer:=TZGLGDIDrawer.Create;
-     TZGLGDIDrawer(drawer).wa:=self;
-     TZGLGDIDrawer(drawer).canvas:=TCADControl(getviewcontrol).canvas;
-     TZGLGDIDrawer(drawer).panel:=TCADControl(getviewcontrol);
+     drawer:=TZGLCanvasDrawer.Create;
+     TZGLCanvasDrawer(drawer).wa:=self;
+     TZGLCanvasDrawer(drawer).canvas:=TCADControl(getviewcontrol).canvas;
+     TZGLCanvasDrawer(drawer).panel:=TCADControl(getviewcontrol);
 end;
-
-procedure TGDIViewArea.setdeicevariable;
+function TCanvasViewArea.NeedDrawInsidePaintEvent:boolean;
+begin
+     result:=True;
+end;
+procedure TCanvasViewArea.setdeicevariable;
 begin
      CanvasData.RD_Renderer:='LCL Canvas';
 end;
-function TGDIViewArea.getParam:pointer;
+function TCanvasViewArea.getParam:pointer;
 begin
      result:=@CanvasData;
 end;
-function TGDIViewArea.getParamTypeName:GDBString;
+function TCanvasViewArea.getParamTypeName:GDBString;
 begin
      result:='PTCanvasData';
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('uzglcanvasviewarea.initialization');{$ENDIF}
-  RegisterBackend(TGDIViewArea,'LCLCanvas');
+  RegisterBackend(TCanvasViewArea,'LCLCanvas');
 end.

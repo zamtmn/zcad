@@ -20,7 +20,7 @@ unit uzglcanvasdrawer;
 {$INCLUDE def.inc}
 interface
 uses
-    FPCanvas,gdbasetypes,uzglgeneral2ddrawer,lclintfex,fileutil,math,UGDBFontManager,ugdbfont,zcadsysvars,abstractviewarea,LazUTF8,uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,{$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
+    FPCanvas,gdbasetypes,uzglgeneral2ddrawer,zcadsysvars,
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
@@ -38,7 +38,6 @@ TZGLCanvasDrawer=class(TZGLGeneral2DDrawer)
                         constructor create;
 
                         function startpaint(InPaintMessage:boolean;w,h:integer):boolean;override;
-                        procedure endpaint(InPaintMessage:boolean);override;
 
                         procedure InternalDrawLine(const x1,y1,x2,y2:GDBFloat);override;
                         procedure InternalDrawTriangle(const x1,y1,x2,y2,x3,y3:GDBFloat);override;
@@ -79,9 +78,6 @@ begin
      result:=true;
      PState:=TPaintState.TPSBufferNotSaved;
 end;
-procedure TZGLCanvasDrawer.endpaint;
-begin
-end;
 procedure TZGLCanvasDrawer.InternalDrawLine(const x1,y1,x2,y2:GDBFloat);
 var
    _x1,_y1,_x2,_y2:integer;
@@ -91,13 +87,6 @@ begin
      _x2:=round(x2);
      _y2:=round(y2);
      canvas.Line(_x1,_y1,_x2,_y2);
-     {MoveToEx(OffScreedDC,_x1,_y1, nil);
-     LineTo(OffScreedDC,_x2,_y2);
-     if NeedScreenInvalidrect then
-                                  begin
-                                       ProcessScreenInvalidrect(_x1,_y1);
-                                       ProcessScreenInvalidrect(_x2,_y2);
-                                  end;}
 end;
 procedure TZGLCanvasDrawer.InternalDrawPoint(const x,y:GDBFloat);
 var

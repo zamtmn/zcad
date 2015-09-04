@@ -281,7 +281,7 @@ begin
 end;
 function GDBObjLine.CalcTrueInFrustum;
 begin
-      result:=geom.CalcTrueInFrustum(frustum,false);
+      result:=geom.CalcTrueInFrustum(frustum,true);
 end;
 function GDBObjLine.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
 begin

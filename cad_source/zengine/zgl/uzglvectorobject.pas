@@ -349,7 +349,10 @@ begin
        CurrentSize:=PPrimitive.CalcTrueInFrustum(frustum,GeomData,result);
        if not FullCheck then
          if result<>IREmpty then
-           exit;
+                                begin
+                                     result:=IRPartially;
+                                     exit;
+                                end;
        if result=IRPartially then
                                  exit;
        ProcessedSize:=ProcessedSize+CurrentSize;

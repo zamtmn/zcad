@@ -2557,7 +2557,7 @@ ENDTAB}
                     outstream.TXTAddGDBStringEOL(floattostr({drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.prop.wfactor));
 
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(50));
-                    outstream.TXTAddGDBStringEOL(floattostr({drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.prop.oblique));
+                    outstream.TXTAddGDBStringEOL(floattostr({drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.prop.oblique*180/pi));
 
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(71));
                     outstream.TXTAddGDBStringEOL('0');

@@ -84,6 +84,7 @@ procedure TOpenGLViewArea.GDBActivateGLContext;
 begin
                                       //MyglMakeCurrent(OpenGLWindow.OGLContext);
                                       OpenGLWindow.MakeCurrent;
+                                      drawer.delmyscrbuf;
                                       isOpenGLError;
 end;
 function TOpenGLViewArea.NeedDrawInsidePaintEvent:boolean;

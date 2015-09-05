@@ -67,11 +67,15 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
 
+                 procedure higlight(var DC:TDrawContext);virtual;
 
            end;
 {Export-}
 implementation
 uses UGDBSelectedObjArray,log;
+procedure GDBObjLWpolyline.higlight(var DC:TDrawContext);
+begin
+end;
 function GDBObjLWpolyline.GetTangentInPoint(point:GDBVertex):GDBVertex;
 var //tv:gdbvertex;
     ptv,ppredtv:pgdbvertex;

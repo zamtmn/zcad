@@ -1129,9 +1129,19 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
   TCanvasData=packed record
             RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
       end;
+  TGDIPrimitivesCounter=packed record
+            Lines:GDBInteger;
+            Triangles:GDBInteger;
+            Quads:GDBInteger;
+            Points:GDBInteger;
+            ZGLSymbols:GDBInteger;
+            SystemSymbols:GDBInteger;
+      end;
   PTGDIData=^TGDIData;
   TGDIData=packed record
             RD_TextRendering:TTextRenderingType;
+            RD_DrawDebugGeometry:GDBBoolean;
+            DebugCounter:TGDIPrimitivesCounter;
             RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
             RD_Version:GDBString;(*'Version'*)(*oi_readonly*)
       end;

@@ -20,7 +20,7 @@ unit uzglgdidrawer;
 {$INCLUDE def.inc}
 interface
 uses
-    gdbasetypes,uzglgeneral2ddrawer,lclintfex,fileutil,math,UGDBFontManager,ugdbfont,zcadsysvars,abstractviewarea,LazUTF8,uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,{$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
+    sysutils,gdbasetypes,uzglgeneral2ddrawer,lclintfex,fileutil,math,UGDBFontManager,ugdbfont,zcadsysvars,abstractviewarea,LazUTF8,uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,{$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
@@ -55,6 +55,7 @@ TZGLGDIDrawer=class(TZGLGeneral2DDrawer)
                         SavedDC:HDC;
                         hLinePen:HPEN;
                         hBrush:HBRUSH;
+                        CurrentPaintGDIData:PTGDIData;
 
                         constructor create;
 
@@ -78,6 +79,7 @@ TZGLGDIDrawer=class(TZGLGeneral2DDrawer)
                         procedure _createPen;override;
 
                         function GetLLPrimitivesCreator:TLLPrimitivesCreatorAbstract;override;
+                        procedure PostRenderDraw;override;
                    end;
 {$IFDEF WINDOWS}
 TZGLGDIPlusDrawer=class(TZGLGDIDrawer)
@@ -114,7 +116,6 @@ begin
      {$ENDIF}
 
 end;
-
 {$IFDEF WINDOWS}
 procedure TZGLGDIPlusDrawer.startrender;
 begin
@@ -150,6 +151,51 @@ begin
      //graphicsGDIPlus.Drawpoint(Pen,pv.x,midline-pv.y);
 end;
 {$ENDIF}
+procedure TZGLGDIDrawer.PostRenderDraw;
+var
+   s:gdbstring;
+   r:trect;
+   TM: TTextMetric;
+   x,y:integer;
+begin
+     if CurrentPaintGDIData<>nil then
+     if CurrentPaintGDIData^.RD_DrawDebugGeometry then
+     begin
+       SetBkMode(OffScreedDC,{TRANSPARENT}OPAQUE );
+       SetTextColor(OffScreedDC,PenColor);
+       SelectObject(OffScreedDC,GetStockObject(SYSTEM_FONT));
+       GetTextMetrics(OffScreedDC,tm);
+       {$IFDEF WINDOWS}SetTextAlign(OffScreedDC,TA_TOP or TA_LEFT);{$ENDIF}
+       x:=10;y:=10;
+       s:=format('Lines: %d         ',[CurrentPaintGDIData^.DebugCounter.Lines]);
+       TextOut(OffScreedDC,x,y,@s[1],length(s));
+
+       inc(y,tm.tmHeight);
+       s:=format('Triangles: %d         ',[CurrentPaintGDIData^.DebugCounter.Triangles]);
+       TextOut(OffScreedDC,x,y,@s[1],length(s));
+
+       inc(y,tm.tmHeight);
+       s:=format('Quads: %d         ',[CurrentPaintGDIData^.DebugCounter.Quads]);
+       TextOut(OffScreedDC,x,y,@s[1],length(s));
+
+       inc(y,tm.tmHeight);
+       s:=format('Points: %d         ',[CurrentPaintGDIData^.DebugCounter.Points]);
+       TextOut(OffScreedDC,x,y,@s[1],length(s));
+
+       inc(y,tm.tmHeight);
+       s:=format('ZGLSymbols: %d         ',[CurrentPaintGDIData^.DebugCounter.ZGLSymbols]);
+       TextOut(OffScreedDC,x,y,@s[1],length(s));
+
+       inc(y,tm.tmHeight);
+       s:=format('SystemSymbols: %d         ',[CurrentPaintGDIData^.DebugCounter.SystemSymbols]);
+       TextOut(OffScreedDC,x,y,@s[1],length(s));
+
+       CorrectScreenInvalidrect(wh.cx,wh.cy);
+       DrawLine2DInDCS(ScreenInvalidRect.Left,ScreenInvalidRect.top,ScreenInvalidRect.right,ScreenInvalidRect.bottom);
+       DrawLine2DInDCS(ScreenInvalidRect.right,ScreenInvalidRect.top,ScreenInvalidRect.left,ScreenInvalidRect.bottom);
+     end;
+end;
+
 constructor TZGLGDIDrawer.create;
 begin
      inherited;
@@ -199,6 +245,9 @@ end;
 
 function TZGLGDIDrawer.startpaint;
 begin
+     CurrentPaintGDIData:=wa.getParam;
+     if CurrentPaintGDIData<>nil then
+                                     FillChar(CurrentPaintGDIData^.DebugCounter,sizeof(CurrentPaintGDIData^.DebugCounter),0);
      CanvasDC:=0;
      isWindowsErrors;
      if InPaintMessage then
@@ -214,6 +263,7 @@ procedure TZGLGDIDrawer.endpaint;
 begin
      if not InPaintMessage then
      ReleaseDC(panel.Handle,CanvasDC);
+     CurrentPaintGDIData:=nil;
 end;
 function TZGLGDIDrawer.CreateScrbuf:boolean;
 begin
@@ -300,6 +350,8 @@ begin
                                        ProcessScreenInvalidrect(_x1,_y1);
                                        ProcessScreenInvalidrect(_x2,_y2);
                                   end;
+     if CurrentPaintGDIData<>nil then
+                                     inc(CurrentPaintGDIData^.DebugCounter.Lines);
 end;
 procedure TZGLGDIDrawer.InternalDrawPoint(const x,y:GDBFloat);
 var
@@ -312,6 +364,8 @@ begin
                                   begin
                                        ProcessScreenInvalidrect(_x,_y);
                                   end;
+     if CurrentPaintGDIData<>nil then
+                                     inc(CurrentPaintGDIData^.DebugCounter.Points);
 end;
 procedure TZGLGDIDrawer.InternalDrawTriangle(const x1,y1,x2,y2,x3,y3:GDBFloat);
 var
@@ -330,6 +384,8 @@ begin
                                       ProcessScreenInvalidrect(sp[2].x,sp[2].y);
                                       ProcessScreenInvalidrect(sp[3].x,sp[3].y);
                                  end;
+    if CurrentPaintGDIData<>nil then
+                                    inc(CurrentPaintGDIData^.DebugCounter.Triangles);
 end;
 procedure TZGLGDIDrawer.InternalDrawQuad(const x1,y1,x2,y2,x3,y3,x4,y4:GDBFloat);
 var
@@ -351,6 +407,8 @@ begin
                                       ProcessScreenInvalidrect(sp[3].x,sp[3].y);
                                       ProcessScreenInvalidrect(sp[4].x,sp[4].y);
                                  end;
+    if CurrentPaintGDIData<>nil then
+                                    inc(CurrentPaintGDIData^.DebugCounter.Quads);
 end;
 procedure TZGLGDIDrawer._createPen;
 var
@@ -419,7 +477,6 @@ var
    point,spoint:GDBVertex3S;
    x,y:integer;
    s:AnsiString;
-   gdiData:PTGDIData;
    {$IFDEF LCLQT}_transminusM2,{$ENDIF}_transminusM,_obliqueM,_transplusM,_scaleM,_rotateM:DMatrix4D;
    gdiDrawYOffset,txtOblique,txtRotate,txtSx,txtSy:single;
 
@@ -432,14 +489,16 @@ begin
      if not PSymbolsParam^.IsCanSystemDraw then
                                            begin
                                                 inherited;
+                                                inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.ZGLSymbols);
                                                 exit;
                                            end;
-
-  gdiData:=TZGLGDIDrawer(drawer).wa.getParam;
-  if gdiData^.RD_TextRendering<>TRT_System then
-                                               inherited;//там вывод букв треугольниками
-  if gdiData^.RD_TextRendering=TRT_ZGL then
-                                           exit;
+  if TZGLGDIDrawer(drawer).CurrentPaintGDIData^.RD_TextRendering<>TRT_System then
+                                                                                 begin
+                                                                                 inherited;//там вывод букв треугольниками
+                                                                                 inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.ZGLSymbols);
+                                                                                 end;
+  if TZGLGDIDrawer(drawer).CurrentPaintGDIData^.RD_TextRendering=TRT_ZGL then
+                                                                             exit;
 
   if PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle=0
   then
@@ -489,10 +548,10 @@ begin
   txtSx:=txtSy*PSymbolsParam^.sx;
 
   SetBkMode(TZGLGDIDrawer(drawer).OffScreedDC,TRANSPARENT);
-  if gdiData^.RD_TextRendering<>TRT_Both then
-                                            SetTextColor(TZGLGDIDrawer(drawer).OffScreedDC,TZGLGDIDrawer(drawer).PenColor)
-                                        else
-                                            SetTextColor(TZGLGDIDrawer(drawer).OffScreedDC,TZGLGDIDrawer(drawer).ClearColor);
+  if TZGLGDIDrawer(drawer).CurrentPaintGDIData^.RD_TextRendering<>TRT_Both then
+                                                                               SetTextColor(TZGLGDIDrawer(drawer).OffScreedDC,TZGLGDIDrawer(drawer).PenColor)
+                                                                           else
+                                                                               SetTextColor(TZGLGDIDrawer(drawer).OffScreedDC,TZGLGDIDrawer(drawer).ClearColor);
 
   SetTextAlignToBaseLine(TZGLGDIDrawer(drawer).OffScreedDC);
   {$IFDEF LCLQT}_transminusM2:=CreateTranslationMatrix(CreateVertex(0,-TQtDeviceContext(TZGLGDIDrawer(drawer).OffScreedDC).Metrics.ascent,0));{$ENDIF}
@@ -518,6 +577,7 @@ begin
   //DrawText(TZGLGDIDrawer(drawer).OffScreedDC,'h',1,r,{Flags: Cardinal}0);
   //TextOut(TZGLGDIDrawer(drawer).OffScreedDC, x, y, 'h', 1);
   ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,x,y{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],-1,nil);
+  inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.SystemSymbols);
 
   SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,OneMatrix);
   SetGraphicsMode_(TZGLGDIDrawer(drawer).OffScreedDC, GM_COMPATIBLE );

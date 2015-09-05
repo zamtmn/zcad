@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  zcobjectinspectormultiobjects,enitiesextendervariables,ugdbdrawing,gdbpalette,ugdbopenarrayofgdbdouble,texteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,gdbentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,glstatemanager,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  uzglcanvasdrawer,zcobjectinspectormultiobjects,enitiesextendervariables,ugdbdrawing,gdbpalette,ugdbopenarrayofgdbdouble,texteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,gdbentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,glstatemanager,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   commandlinedef,strproc,
   gdbasetypes,commandline,GDBCommandsBase,
   plugins,
@@ -1623,54 +1623,50 @@ begin
 end;
 procedure Print_com.Print(pdata:GDBPlatformint);
  var
-  //Pic: TPicture;
-  //d, pgw,pgh: Integer;
-  //Hin: Integer; // half inch
-  //s: string;
-  prn:TPrinterRasterizer;
-  oldrasterozer:PTOGLStateManager;
+  //prn:TPrinterRasterizer;
   dx,dy,{cx,cy,}sx,sy,scale:gdbdouble;
   tmatrix{,_clip}:DMatrix4D;
   cdwg:PTSimpleDrawing;
   oldForeGround:TRGB;
   DC:TDrawContext;
-  //pr:TPaperRect;
+
+  PrinterDrawer:TZGLCanvasDrawer;
+  pmatrix:DMatrix4D;
 begin
   cdwg:=gdb.GetCurrentDWG;
   oldForeGround:=ForeGround;
   ForeGround.r:=0;
   ForeGround.g:=0;
   ForeGround.b:=0;
-  prn.init;
-  oldrasterozer:=OGLSM;
-  OGLSM:=@prn;
+  //prn.init;
+  //OGLSM:=@prn;
   dx:=p2.x-p1.x;
   if dx=0 then
               dx:=1;
   dy:=p2.y-p1.y;
   if dy=0 then
               dy:=1;
-  //cx:=(p2.x+p1.x)/2;
-  //cy:=(p2.y+p1.y)/2;
-  prn.model:=onematrix;//cdwg^.pcamera^.modelMatrix{LCS};
-  prn.project:=cdwg^.pcamera^.projMatrix{LCS};
-  //prn.w:=Printer.PaperSize.Width;
-  //prn.h:=Printer.PaperSize.Height;
-  //pr:=Printer.PaperSize.PaperRect;
-  prn.w:=Printer.PageWidth;
-  prn.h:=Printer.PageHeight;
-  prn.wmm:=dx;
-  prn.hmm:=dy;
-  prn.project:=ortho(p1.x,p2.x,p1.y,p2.y,-1,1,@onematrix);
+  ////cx:=(p2.x+p1.x)/2;
+  ////cy:=(p2.y+p1.y)/2;
+  //prn.model:=onematrix;//cdwg^.pcamera^.modelMatrix{LCS};
+  //prn.project:=cdwg^.pcamera^.projMatrix{LCS};
+  ////prn.w:=Printer.PaperSize.Width;
+  ////prn.h:=Printer.PaperSize.Height;
+  ////pr:=Printer.PaperSize.PaperRect;
+  //prn.w:=Printer.PageWidth;
+  //prn.h:=Printer.PageHeight;
+  //prn.wmm:=dx;
+  //prn.hmm:=dy;
+  {prn.project}pmatrix:=ortho(p1.x,p2.x,p1.y,p2.y,-1,1,@onematrix);
 
-  prn.scalex:=1;
-  prn.scaley:=dy/dx;
+  //prn.scalex:=1;
+  //prn.scaley:=dy/dx;
 
   if PrintParam.FitToPage then
      begin
-          sx:=((prn.w/Printer.XDPI)*25.4);
-          sx:=((prn.w/Printer.XDPI)*25.4)/dx;
-          sy:=((prn.h/Printer.YDPI)*25.4)/dy;
+          sx:=((Printer.PageWidth/Printer.XDPI)*25.4);
+          sx:=((Printer.PageWidth/Printer.XDPI)*25.4)/dx;
+          sy:=((Printer.PageHeight/Printer.YDPI)*25.4)/dy;
           scale:=sy;
           if sx<sy then
                        scale:=sx;
@@ -1678,16 +1674,15 @@ begin
      end
   else
       scale:=PrintParam.Scale;
-  prn.scalex:=prn.scalex*scale;
-  prn.scaley:=prn.scaley*scale;
+  //prn.scalex:=prn.scalex*scale;
+  //prn.scaley:=prn.scaley*scale;
 
   tmatrix:=gdb.GetCurrentDWG^.pcamera^.projMatrix;
-  gdb.GetCurrentDWG^.pcamera^.projMatrix:=prn.project;
-  gdb.GetCurrentDWG^.pcamera^.modelMatrix:=prn.model;
+  //gdb.GetCurrentDWG^.pcamera^.projMatrix:=prn.project;
+  //gdb.GetCurrentDWG^.pcamera^.modelMatrix:=prn.model;
   try
   Printer.Title := 'zcadprint';
   Printer.BeginDoc;
-  //sharedgdb.redrawoglwnd;
 
   gdb.GetCurrentDWG^.pcamera^.NextPosition;
   inc(cdwg^.pcamera^.DRAWCOUNT);
@@ -1699,52 +1694,19 @@ begin
   //cdwg^.OGLwindow1.param.ShowDebugFrustum:=true;
   dc:=cdwg^.CreateDrawingRC(true);
   dc.DrawMode:=true;
+  PrinterDrawer:=TZGLCanvasDrawer.create;
+  dc.drawer:=PrinterDrawer;
+  PrinterDrawer.pushMatrixAndSetTransform(pmatrix);
+  PrinterDrawer.canvas:=Printer.Canvas;
   gdb.GetCurrentROOT^.CalcVisibleByTree(cdwg^.pcamera^.frustum{calcfrustum(@_clip)},cdwg^.pcamera^.POSCOUNT,cdwg^.pcamera^.VISCOUNT,gdb.GetCurrentROOT^.ObjArray.ObjTree,cdwg^.pcamera^.totalobj,cdwg^.pcamera^.infrustum,@cdwg^.myGluProject2,cdwg^.pcamera^.prop.zoom);
   //gdb.GetCurrentDWG^.OGLwindow1.draw;
-  prn.startrender;
+  //prn.startrender;
   gdb.GetCurrentDWG^.wa.treerender(gdb.GetCurrentROOT^.ObjArray.ObjTree,0,{0}dc);
-  prn.endrender;
+  //prn.endrender;
   inc(cdwg^.pcamera^.DRAWCOUNT);
 
   Printer.EndDoc;
   gdb.GetCurrentDWG^.pcamera^.projMatrix:=tmatrix;
-
-    {// some often used consts
-    pgw := Printer.PageWidth-1;
-    pgh := Printer.PageHeight-1;
-    Hin := Inch(0.5);
-
-    // center title text on page width
-    Printer.Canvas.Font.Size := 12;
-    Printer.Canvas.Font.Color:= clBlue;
-    //CenterText(pgw div 2, CM(0.5), 'This is test for lazarus printer4lazarus package');
-
-    // print margins marks, assumes XRes=YRes
-    Printer.Canvas.Pen.Color:=clBlack;
-    Printer.Canvas.Line(0, HIn, 0, 0);            // top-left
-    Printer.Canvas.Line(0, 0, HIn, 0);
-
-    Printer.Canvas.Brush.Color := clSilver;
-    Printer.Canvas.EllipseC(Hin,Hin,Hin div 2,Hin div 2);
-    //CenterText(Hin, Hin, '1');
-
-    Printer.Canvas.Pen.Color := clRed;
-    Printer.Canvas.Pen.Width := 3;
-    Printer.Canvas.Frame(0,0,pgw,pgh);
-
-    Printer.Canvas.Pen.Color := clBlack;
-    Printer.Canvas.Pen.Width := 3;
-    Printer.Canvas.Line(0, pgh-HIn, 0, pgh);      // bottom-left
-    Printer.Canvas.Line(0, pgh, HIn, pgh);
-    Printer.Canvas.Line(pgw-Hin, pgh, pgw, pgh);  // bottom-right
-    Printer.Canvas.Line(pgw,pgh,pgw,pgh-HIn);
-    Printer.Canvas.Line(pgw-Hin, 0, pgw, 0);      // top-right
-    Printer.Canvas.Line(pgw,0,pgw,HIn);
-
-    Printer.Canvas.Line(0,0,pgw,pgh);
-
-
-    Printer.EndDoc;}
 
   except
     on E:Exception do
@@ -1754,9 +1716,7 @@ begin
     end;
   end;
   ForeGround:=oldForeGround;
-  OGLSM:=oldrasterozer;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
-  //prn.done;
 end;
 
 

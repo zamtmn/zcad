@@ -57,6 +57,7 @@ end;
 procedure TGDIViewArea.setdeicevariable;
 begin
      GDIData.RD_TextRendering:=TRT_System;
+     GDIData.RD_DrawDebugGeometry:=false;
      {$IFDEF LCLWIN32}
      GDIData.RD_Renderer:='Windows GDI';
      if Win32CSDVersion<>'' then

@@ -70,7 +70,7 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure SetDrawMode(const mode:TZGLDrawMode);override;
                         procedure DrawQuad2DInDCS(const x1,y1,x2,y2:single);override;
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
-                        procedure DrawDebugGeometry;override;
+                        procedure PostRenderDraw;override;
 
                         procedure pushMatrixAndSetTransform(Transform:DMatrix4D);override;overload;
                         procedure pushMatrixAndSetTransform(Transform:DMatrix4F);override;overload;
@@ -254,7 +254,7 @@ end;
 procedure TZGLGeneralDrawer.SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);
 begin
 end;
-procedure TZGLGeneralDrawer.DrawDebugGeometry;
+procedure TZGLGeneralDrawer.PostRenderDraw;
 begin
 end;
 initialization

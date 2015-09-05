@@ -86,21 +86,11 @@ TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
                           procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
                           procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
 
-                          procedure DrawDebugGeometry;override;
-
-
                           function CheckOutboundInDisplay(const PVertexBuffer:PGDBOpenArrayOfData;const i1:TLLVertexIndex):boolean;override;
 
                     end;
 implementation
 uses log;
-procedure TZGLGeneral2DDrawer.DrawDebugGeometry;
-begin
-     exit;
-     CorrectScreenInvalidrect(wh.cx,wh.cy);
-     DrawLine2DInDCS(ScreenInvalidRect.Left,ScreenInvalidRect.top,ScreenInvalidRect.right,ScreenInvalidRect.bottom);
-     DrawLine2DInDCS(ScreenInvalidRect.right,ScreenInvalidRect.top,ScreenInvalidRect.left,ScreenInvalidRect.bottom);
-end;
 procedure TZGLGeneral2DDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
 var
    pp1,pp2,pp3,pp4:GDBVertex;

@@ -778,7 +778,6 @@ begin
     dc.drawer.SetPointSize(1);
     showcursor(dc);
     dc.drawer.startrender(TRM_WindowSpace,dc.matrixs);
-    dc.drawer.DrawDebugGeometry;
 
     dec(dc.subrender);
   end;
@@ -795,6 +794,7 @@ begin
 
   //oglsm.mytotalglend;
   dc.drawer.ClearStatesMachine;
+  dc.drawer.PostRenderDraw;
   SwapBuffers(dc);
   endpaint;
 

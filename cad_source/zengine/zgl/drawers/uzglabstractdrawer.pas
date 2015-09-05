@@ -78,7 +78,7 @@ TZGLAbstractDrawer=class
                         procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);virtual;abstract;overload;
                         procedure DrawAABB3DInModelSpace(const BoundingBox:TBoundingBox;var matrixs:tmatrixs);virtual;abstract;
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);virtual;abstract;
-                        procedure DrawDebugGeometry;virtual;abstract;
+                        procedure PostRenderDraw;virtual;abstract;
 
                         procedure pushMatrixAndSetTransform(Transform:DMatrix4D);virtual;abstract;overload;
                         procedure pushMatrixAndSetTransform(Transform:DMatrix4F);virtual;abstract;overload;

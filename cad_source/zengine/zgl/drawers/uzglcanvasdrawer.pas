@@ -153,9 +153,10 @@ begin
               TPS_Dash:
                        ps:=PSDASH;
           TPS_Selected:
-                       ps:=PSDOT;
+                       ps:={PSDOT}PSDASH;
   end;
   //SetBkColor(OffScreedDC,ClearColor);
+  canvas.Pen.Cosmetic:=false;
   canvas.Pen.Style:=ps;
   canvas.Pen.Width:=linewidth;
   canvas.Pen.Color:=PenColor;

@@ -632,6 +632,8 @@ begin
      InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND');
      end;
      InfoForm.caption:=(rsTextEdCaption);
+     if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
+        InfoForm.memo.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
 
      InfoForm.memo.text:=pgdbstring(PInstance)^;
      modalresult:=DOShowModal(InfoForm);
@@ -652,6 +654,8 @@ begin
      InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND');
      end;
      InfoForm.caption:=(rsTextEdCaption);
+     if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
+        InfoForm.memo.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
 
      InfoForm.memo.text:=ConvertFromDxfString(pgdbstring(PInstance)^);
      modalresult:=DOShowModal(InfoForm);

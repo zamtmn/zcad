@@ -3652,6 +3652,8 @@ begin
                 maxv:=b
             else
                 maxv:=u;
+     if sysvar.DWG.DWG_GridSpacing<>nil then
+     begin
      ph:=(maxh/sysvar.DWG.DWG_GridSpacing.y)+1;
      pv:=(maxv/sysvar.DWG.DWG_GridSpacing.x)+1;
      param.md.WPPointUR.z:=1;
@@ -3672,6 +3674,7 @@ begin
 
      param.md.WPPointUR.x:=pv;
      param.md.WPPointUR.y:=ph;
+     end;
 end;
 procedure TGeneralViewArea.SetObjInsp;
 begin

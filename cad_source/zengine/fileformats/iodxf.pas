@@ -1165,9 +1165,12 @@ begin
                          begin
                               psimstyleprop:=drawing.DimStyleTable.MergeItem(s,LoadMode);
                               if psimstyleprop<>nil then
-                                                        psimstyleprop^.init(s);
+                                                        begin
+                                                          psimstyleprop^.init(s);
+                                                          psimstyleprop^.Name:=s;
+                                                        end;
                               if uppercase(s)=uppercase(cdimstyle)then
-                              if (sysvar.DWG.DWG_CTStyle<>nil)and(LoadMode=TLOLoad) then
+                              if (sysvar.DWG.DWG_CDimStyle<>nil)and(LoadMode=TLOLoad) then
                                                                                         sysvar.DWG.DWG_CDimStyle^:=psimstyleprop;
                          end;
      end
@@ -1510,6 +1513,7 @@ end;
 procedure MakeVariablesDict(VarsDict:TGDBString2GDBStringDictionary; var drawing:TSimpleDrawing);
 var
    pcurrtextstyle:PGDBTextStyle;
+   pcurrentdimstyle:PGDBDimStyle;
 begin
     VarsDict.insert('$CLAYER',drawing.LayerTable.GetCurrentLayer^.Name);
     VarsDict.insert('$CELTYPE',drawing.LTypeStyleTable.GetCurrentLType^.Name);
@@ -1519,11 +1523,11 @@ begin
                                VarsDict.insert('$TEXTSTYLE',drawing.TextStyleTable.GetCurrentTextStyle^.Name)
                            else
                                VarsDict.insert('$TEXTSTYLE',TSNStandardStyleName);
-    if assigned(drawing.DimStyleTable.GetCurrentDimStyle) then
-
-    VarsDict.insert('DIMSTYLE',drawing.DimStyleTable.GetCurrentDimStyle^.Name)
-  else
-    VarsDict.insert('DIMSTYLE','Standatd');
+    pcurrentdimstyle:=drawing.DimStyleTable.GetCurrentDimStyle;
+    if pcurrentdimstyle<>nil then
+                                 VarsDict.insert('$DIMSTYLE',pcurrentdimstyle^.Name)
+                             else
+                                 VarsDict.insert('$DIMSTYLE','Standatd');
 
     if assigned(sysvar.DWG.DWG_CLinew) then
                                            VarsDict.insert('$CELWEIGHT',inttostr(sysvar.DWG.DWG_CLinew^))

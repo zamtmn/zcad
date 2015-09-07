@@ -457,13 +457,12 @@ begin
           pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getelement(index);
           if pblockdef.ObjArray.count>0 then
           begin
-
+          dc:=drawing.CreateDrawingRC;
           for i:=0 to pblockdef.ObjArray.count-1 do
           begin
                pvisible:=GDBPointer(pblockdef.ObjArray.getelement(i)^);
                pvisible:=pvisible^.Clone(@self);
                pvisible2:=pgdbobjEntity(pvisible.FromDXFPostProcessBeforeAdd(nil,drawing));
-               dc:=drawing.CreateDrawingRC;
                if pvisible2=nil then
                                      begin
                                           pvisible^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);

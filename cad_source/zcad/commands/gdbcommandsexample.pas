@@ -586,6 +586,7 @@ var
          pd^.DimData.P11InOCS:=p3;
 
          InteractiveDDimManipulator(pd,p3,false);
+         dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
 
          pd^.FormatEntity(gdb.GetCurrentDWG^,dc);
          {gdb.}AddEntToCurrentDrawingWithUndo(pd);

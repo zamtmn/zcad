@@ -440,7 +440,7 @@ begin
      text.DIMTXT:=0.18;
      text.DIMTIH:=true;
      text.DIMTOH:=true;
-     text.DIMTAD:=DTVPAbove;
+     text.DIMTAD:=DTVPCenters;
      text.DIMGAP:=0.625;
      text.DIMTXSTY:=nil;
      text.DIMCLRT:=DIMCLRTDefaultValue;

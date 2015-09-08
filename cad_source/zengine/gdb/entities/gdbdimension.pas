@@ -259,7 +259,7 @@ begin
 end;
 function GDBObjDimension.TextNeedOffset(dimdir:gdbvertex):GDBBoolean;
 begin
-     result:=(textangle<>0)or(abs(dimdir.x)<eps)or(DimData.TextMoved);
+     result:=(((textangle<>0)or(PDimStyle.Text.DIMTAD=DTVPCenters))and(TextInside and not PDimStyle.Text.DIMTIH))or(abs(dimdir.x)<eps)or(DimData.TextMoved);
 end;
 function GDBObjDimension.TextAlwaysMoved:GDBBoolean;
 begin

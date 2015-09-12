@@ -1,18 +1,19 @@
 unit umainform;
 
 {$mode objfpc}{$H+}
-{.$define dxfio}
+{$define dxfio}
 interface
 
 uses
   LCLType,Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, StdCtrls, Spin,
   {From ZCAD}
-  gdbdrawcontext,openglviewarea,abstractviewarea,zcadsysvars, {$ifdef dxfio}iodxf,{$endif}varmandef, UUnitManager,
+  gdbdrawcontext,uzglopenglviewarea,abstractviewarea,zcadsysvars, {$ifdef dxfio}iodxf,{$endif}varmandef, UUnitManager,
   zcadinterface,gdbentityfactory,UGDBLayerArray,geometry, GDBase, GDBasetypes,
   UGDBDescriptor,UGDBTextStyleArray,UGDBEntTree,GDB3DFace,
   GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,ugdbsimpledrawing,
-  GDBEntity,GDBManager,gdbobjectsconstdef,ioshx,gdbpalette;
+  {$ifdef dxfio}GDBMText,gdbgenericdimension,gdbaligneddimension,gdbrotateddimension,{$endif}
+  GDBEntity,GDBManager,gdbobjectsconstdef,ioshx,gdbpalette,uzglgdiviewarea;
 
 type
 
@@ -223,7 +224,7 @@ begin
      end;
 
 
-     wpowner:=TCanvasViewArea.Create(Panel2);
+     wpowner:=TGDIViewArea.Create(Panel2);
      oglwnd:=wpowner.getviewcontrol;
      gdb.GetCurrentDWG^.wa:=wpowner;
      wpowner.PDWG:=ptd;
@@ -548,7 +549,7 @@ begin
     pobj^.textprop.size:=1+random(10);
     pobj^.textprop.justify:=b2j[1+random(11)];
     pobj^.textprop.wfactor:=0.3+random*0.7;
-    pobj^.textprop.oblique:=random(20);
+    pobj^.textprop.oblique:=(random(30)-15)*pi/180;
     angl:=pi*random{*0.5};
     pobj^.textprop.angle:=angl*180/pi;
     pobj^.local.basis.OX:=VectorTransform3D(PGDBObjText(pobj)^.local.basis.OX,geometry.CreateAffineRotationMatrix(PGDBObjText(pobj)^.Local.basis.oz,-angl));

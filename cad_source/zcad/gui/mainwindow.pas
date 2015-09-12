@@ -98,6 +98,7 @@ type
     procedure CreateHTPB(tb:TToolBar);
 
     procedure FormCreate(Sender: TObject);
+    procedure Formresize(Sender: TObject);
     procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
     procedure AfterConstruction; override;
     procedure setnormalfocus(Sender: TObject);
@@ -145,6 +146,8 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction); override;
     destructor Destroy;override;
     procedure CreateAnchorDockingInterface;
+    procedure AdjustHeight(const AWindow: TCustomForm; const AAdjustHeight: Boolean;const ANewHeight: Integer);
+
     procedure CreateStandartInterface;
     procedure CreateInterfaceLists;
     procedure FillColorCombo(cb:TCustomComboBox);
@@ -1061,6 +1064,29 @@ begin
        cb.items.AddObject(s, TObject(lwarray[i]));
   end;
 end;
+procedure MainForm.AdjustHeight(const AWindow: TCustomForm; const AAdjustHeight: Boolean;const ANewHeight: Integer);
+var
+  Site: TAnchorDockHostSite;
+  I: Integer;
+  SiteNewHeight: Integer;
+begin
+  Site := nil;
+  for I := 0 to AWindow.ControlCount-1 do
+  if AWindow.Controls[I] is TAnchorDockHostSite then
+  begin
+    Site := TAnchorDockHostSite(AWindow.Controls[I]);
+    system.Break;
+  end;
+
+  if not Assigned(Site) then
+    Exit;
+
+  Site.BoundSplitter.Enabled:=not AAdjustHeight;
+  Site.BoundSplitter.Visible:=not AAdjustHeight;
+  SiteNewHeight := Site.Parent.ClientHeight - ANewHeight - Site.BoundSplitter.Height;
+  if AAdjustHeight and (Site.Height <> SiteNewHeight) then
+    Site.Height := SiteNewHeight;
+end;
 
 procedure MainForm.CreateAnchorDockingInterface;
 var
@@ -1070,8 +1096,8 @@ begin
   DockMaster.SplitterClass:=TmyAnchorDockSplitter;
   DockMaster.ManagerClass:=TAnchorDockManager;
   DockMaster.OnCreateControl:=DockMasterCreateControl;
-  DockMaster.MakeDockSite(Self, [akTop, akBottom, akLeft, akRight], admrpChild
-    {admrpNone}, {true}false);
+  DockMaster.MakeDockSite(Self, [akBottom], admrpChild
+    {admrpNone}, true{false});
   if DockManager is TAnchorDockManager then
   begin
        DockMaster.OnShowOptions:={@}ShowAnchorDockOptions;
@@ -1411,6 +1437,12 @@ begin
 
   if assigned(sysvar.RD.RD_GLUExtensions) then
   sysvar.RD.RD_GLUExtensions^:=GLUExtensions;
+  self.OnResize:=Formresize;
+end;
+procedure MainForm.Formresize(Sender: TObject);
+var PreferredWidth, PreferredHeight: integer;
+begin
+     AdjustHeight(self,true,ToolBarU.Height);
 end;
 
 procedure MainForm.AfterConstruction;

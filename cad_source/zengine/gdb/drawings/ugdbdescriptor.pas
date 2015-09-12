@@ -552,6 +552,10 @@ begin
      if td=nil then
      begin
           td:=BlockBaseDWG.BlockDefArray.getblockdef(name);
+          if td=nil then
+                        begin
+                          shared.FatalError(sysutils.format('Block "%s" not found! If this dimension arrow block - manually creating block not implemented yet((',[name]));
+                        end;
           CopyBlock(BlockBaseDWG,PTSimpleDrawing(_to),td);
      end;
 end;

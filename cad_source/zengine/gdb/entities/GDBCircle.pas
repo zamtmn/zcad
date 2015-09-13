@@ -790,8 +790,22 @@ begin
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
 end;
+procedure SetCircleGeomProps(Pcircle:PGDBObjCircle;args:array of const);
+var
+   counter:integer;
+begin
+  counter:=low(args);
+  Pcircle.Local.p_insert:=CreateVertexFromArray(counter,args);
+  Pcircle.Radius:=CreateDoubleFromArray(counter,args);
+end;
+function AllocAndCreateCircle(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjCircle;
+begin
+  result:=AllocAndInitCircle(owner);
+  owner^.AddMi(@result);
+  SetCircleGeomProps(result,args);
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBCircle.initialization');{$ENDIF}
-  RegisterDXFEntity(GDBCircleID,'CIRCLE','Circle',@AllocCircle,@AllocAndInitCircle);
+  RegisterDXFEntity(GDBCircleID,'CIRCLE','Circle',@AllocCircle,@AllocAndInitCircle,@SetCircleGeomProps,@AllocAndCreateCircle);
 end.
 

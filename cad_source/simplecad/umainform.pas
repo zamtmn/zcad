@@ -279,7 +279,7 @@ end;}
 procedure TForm1.BtnAddLinesClick(Sender: TObject);
 var
    i:integer;
-   pobj:PGDBObjLine;
+   pobj:{PGDBObjLine}PGDBObjEntity;
    v1,v2:gdbvertex;
    dc:TDrawContext;
 begin
@@ -287,12 +287,15 @@ begin
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   for i:=1 to SpinEdit1.Value do
   begin
-    pobj := PGDBObjLine(CreateInitObjFree(GDBLineID,nil));
     v1:=CreateRandomVertex(1000,500);
     v2:=geometry.VertexAdd(v1,CreateRandomVertex(1000,500));
+
+    pobj := ENTF_CreateLine(gdb.GetCurrentRoot,[v1.x,v1.y,v1.z,v2.x,v2.y,v2.z]);
+
+    {pobj := PGDBObjLine(CreateInitObjFree(GDBLineID,nil));
     pobj^.CoordInOCS.lBegin:=v1;
     pobj^.CoordInOCS.lEnd:=v2;
-    gdb.GetCurrentRoot^.AddMi(@pobj);
+    gdb.GetCurrentRoot^.AddMi(@pobj);}
     processobj(pobj);
     pobj^.BuildGeometry(gdb.GetCurrentDWG^);
     pobj^.formatEntity(gdb.GetCurrentDWG^,dc);

@@ -10,7 +10,7 @@ unit GDBCommandsOPS;
 interface
 uses
 
-  abstractviewarea,gdbdrawcontext,GDBAbstractText,GDBText,UGDBStringArray,gdbentityfactory,zcadsysvars,strproc,gdbasetypes,commandline,log,UGDBOpenArrayOfPObjects,
+  GDBEntity,abstractviewarea,gdbdrawcontext,GDBAbstractText,GDBText,UGDBStringArray,gdbentityfactory,zcadsysvars,strproc,gdbasetypes,commandline,log,UGDBOpenArrayOfPObjects,
   plugins,
   commandlinedef,
   commanddefinternal,
@@ -327,8 +327,12 @@ begin
                                                          end;}
   result:=mclick;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
-  pl := pointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,gdb.GetCurrentROOT}));
-  GDBObjLineInit(gdb.GetCurrentROOT,pl, gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^, t3dp, wc);
+
+  pl := PGDBObjLine(ENTF_CreateLine(@gdb.GetCurrentDWG.ConstructObjRoot,[t3dp.x,t3dp.y,t3dp.z,wc.x,wc.y,wc.z]));
+  GDBObjSetEntityProp(pl,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^);
+
+  //pl := pointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,gdb.GetCurrentROOT}));
+  //GDBObjLineInit(gdb.GetCurrentROOT,pl, gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^, t3dp, wc);
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   pl^.Formatentity(gdb.GetCurrentDWG^,dc);
   if (button and MZW_LBUTTON)=0 then
@@ -1090,8 +1094,12 @@ begin
   //ny:=OrtoDevPlaceParam.NY;
   result:=mclick;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
-  pl := pointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,gdb.GetCurrentROOT}));
-  GDBObjLineInit(gdb.GetCurrentROOT,pl, gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^, t3dp, wc);
+
+
+  pl := PGDBObjLine(ENTF_CreateLine(@gdb.GetCurrentDWG.ConstructObjRoot,[t3dp.x,t3dp.y,t3dp.z,wc.x,wc.y,wc.z]));
+  GDBObjSetEntityProp(pl,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^);
+  //pl := pointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,gdb.GetCurrentROOT}));
+  //GDBObjLineInit(gdb.GetCurrentROOT,pl, gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^, t3dp, wc);
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   pl^.FormatEntity(gdb.GetCurrentDWG^,dc);
 

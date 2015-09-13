@@ -21,10 +21,10 @@ unit GDBManager;
 
 
 interface
-uses gdbdrawcontext,ugdbdrawing,ugdbltypearray,zcadsysvars,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
+uses gdbentityfactory,gdbdrawcontext,ugdbdrawing,ugdbltypearray,zcadsysvars,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
      UGDBDescriptor,varmandef,gdbobjectsconstdef,
      UGDBVisibleOpenArray,GDBGenericSubEntry,gdbEntity,
-     GDBBlockInsert,GDBCircle,GDBLine,
+     GDBBlockInsert,
      memman;
 type
     TSelObjDesk=record
@@ -44,22 +44,50 @@ function getgdb: GDBPointer; export;
 //procedure GDBFreeMemGDBObject(source:PGDBproperty);export;
 //procedure GDBGetMemGDBObject(source:PGDBproperty);export;
 function GetSelOjbj:TSelObjDesk;
-procedure GDBObjSetEntityProp(const pobjent: PGDBObjEntity;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint); export;
 procedure GDBObjSetEntityCurrentProp(const pobjent: PGDBObjEntity); export;
-procedure GDBObjSetLineProp(var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint; p1, p2: GDBvertex); export;
-procedure GDBObjLineInit(own:PGDBObjGenericSubEntry;var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LW: GDBSmallint; p1, p2: GDBvertex); export;
-procedure GDBObjCircleInit(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble); export;
-procedure GDBObjSetCircleProp(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble); export;
+
+{procedure GDBObjSetLineProp(var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint; p1, p2: GDBvertex); export;
+procedure GDBObjLineInit(own:PGDBObjGenericSubEntry;var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LW: GDBSmallint; p1, p2: GDBvertex); export;}
+
+{procedure GDBObjCircleInit(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble); export;
+procedure GDBObjSetCircleProp(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble); export;}
 
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:GDBString;p_insert:GDBVertex;
                         scale:GDBVertex;rotate:GDBDouble;needundo:GDBBoolean=false
                         ):PGDBObjBlockInsert;
 procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
-var a: GDBObjLine;
-  p: gdbvertex;
+
+function ENTF_CreateLine(owner:PGDBObjGenericSubEntry;args:array of const): PGDBObjEntity;
+function ENTF_CreateCircle(owner:PGDBObjGenericSubEntry;args:array of const): PGDBObjEntity;
+var
+   p:gdbvertex;
 implementation
 uses
     log;
+function ENTF_CreateLine(owner:PGDBObjGenericSubEntry;args:array of const): PGDBObjEntity;
+begin
+  if assigned(_StandartLineCreateProcedure)then
+                                               begin
+                                                   result:=_StandartLineCreateProcedure(owner,args);
+                                               end
+                                           else
+                                               begin
+                                                    result:=nil;
+                                                    programlog.LogOutStr('ENTF_CreateLine: Line entity not registred',lp_OldPos,LM_Error);
+                                               end;
+end;
+function ENTF_CreateCircle(owner:PGDBObjGenericSubEntry;args:array of const): PGDBObjEntity;
+begin
+  if assigned(_StandartCircleCreateProcedure)then
+                                               begin
+                                                   result:=_StandartCircleCreateProcedure(owner,args);
+                                               end
+                                           else
+                                               begin
+                                                    result:=nil;
+                                                    programlog.LogOutStr('ENTF_CreateCircle: Circle entity not registred',lp_OldPos,LM_Error);
+                                               end;
+end;
 procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
 var
     domethod,undomethod:tmethod;
@@ -152,15 +180,7 @@ begin
      pobjent^.vp.LineWeight:=sysvar.dwg.DWG_CLinew^;
      pobjent^.vp.color:=sysvar.dwg.DWG_CColor^;
 end;
-procedure GDBObjSetEntityProp(const pobjent: PGDBObjEntity;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint);
-begin
-     pobjent^.vp.Layer:=layeraddres;
-     pobjent^.vp.LineType:=LTAddres;
-     pobjent^.vp.LineWeight:=LW;
-     pobjent^.vp.color:=color;
-end;
-
-procedure GDBObjSetLineProp(var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint; p1, p2: GDBvertex);
+{procedure GDBObjSetLineProp(var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint; p1, p2: GDBvertex);
 begin
   GDBObjSetEntityProp(pobjline,layeraddres,LTAddres,color,LW);
   pobjline.CoordInOCS.lBegin := p1;
@@ -170,8 +190,8 @@ end;
 procedure GDBObjLineInit(own:PGDBObjGenericSubEntry;var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LW: GDBSmallint; p1, p2: GDBvertex); export;
 begin
   pobjline^.init(own,layeraddres, LW, p1, p2);
-end;
-procedure GDBObjSetCircleProp(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble);
+end;}
+{procedure GDBObjSetCircleProp(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble);
 begin
      GDBObjSetEntityProp(pobjcircle,layeraddres,LTAddres,color,LW);
      pobjcircle.Local.p_insert := p;
@@ -181,7 +201,7 @@ end;
 procedure GDBObjCircleInit(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble);
 begin
   pobjcircle^.init(gdb.GetCurrentROOT,layeraddres, LW, p, rr);
-end;
+end;}
 function getgdb: GDBPointer; export;
 begin
   result := @gdb;

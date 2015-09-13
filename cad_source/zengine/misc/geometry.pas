@@ -156,6 +156,8 @@ function CreateTranslationMatrix(const V:GDBvertex): DMatrix4D;inline;
 function CreateScaleMatrix(const V:GDBvertex): DMatrix4D;inline;
 function CreateReflectionMatrix(plane:DVector4D): DMatrix4D;
 function CreateVertex(const x,y,z:GDBDouble):GDBVertex;inline;
+function CreateVertexFromArray(var counter:integer;const args:array of const):GDBVertex;
+function  CreateDoubleFromArray(var counter:integer;const args:array of const):GDBDouble;
 function CreateVertex2D(const x,y:GDBDouble):GDBVertex2D;inline;
 function IsPointInBB(const point:GDBvertex; var fistbb:TBoundingBox):GDBBoolean;inline;
 function CreateBBFrom2Point(const p1,p2:GDBvertex):TBoundingBox;
@@ -2020,6 +2022,33 @@ begin
      result.y:=y;
      result.z:=z;
 end;
+function  CreateDoubleFromArray(var counter:integer;const args:array of const):GDBDouble;
+begin
+     case args[counter].VType of
+                       vtInteger:result:=args[counter].VInteger;
+                      vtExtended:result:=args[counter].VExtended^;
+     end;{case}
+     inc(counter);
+end;
+
+function CreateVertexFromArray(var counter:integer;const args:array of const):GDBVertex;
+var
+  len:integer;
+begin
+     len:=high(args);
+     if (counter+2)<=(high(args)) then
+                                 begin
+                                      result.x:=CreateDoubleFromArray(counter,args);
+                                      result.y:=CreateDoubleFromArray(counter,args);
+                                      result.z:=CreateDoubleFromArray(counter,args);
+                                 end
+                             else
+                                 begin
+                                      shared.ShowError('CreateVertexFromArray: no enough params in args');
+                                 end;
+
+end;
+
 function CreateVertex2D(const x,y:GDBDouble):GDBVertex2D;
 begin
      result.x:=x;

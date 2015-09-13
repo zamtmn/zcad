@@ -844,7 +844,21 @@ begin
   result.initnul(owner);
   result.bp.ListPos.Owner:=owner;
 end;
+procedure SetLineGeomProps(Pline:PGDBObjLine;args:array of const);
+var
+   counter:integer;
+begin
+  counter:=low(args);
+  Pline.CoordInOCS.lBegin:=CreateVertexFromArray(counter,args);
+  Pline.CoordInOCS.lEnd:=CreateVertexFromArray(counter,args);
+end;
+function AllocAndCreateLine(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjLine;
+begin
+  result:=AllocAndInitLine(owner);
+  owner^.AddMi(@result);
+  SetLineGeomProps(result,args);
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBLine.initialization');{$ENDIF}
-  RegisterDXFEntity(GDBlineID,'LINE','Line',@AllocLine,@AllocAndInitLine);
+  RegisterDXFEntity(GDBlineID,'LINE','Line',@AllocLine,@AllocAndInitLine,@SetLineGeomProps,@AllocAndCreateLine);
 end.

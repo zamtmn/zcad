@@ -18,7 +18,7 @@
 unit GDBBlockDef;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,uabstractunit,gdbobjectextender,ugdbdrawingdef,GDBSubordinated,dxflow,UGDBOpenArrayOfByte,
+uses gdbentityfactory,gdbdrawcontext,uabstractunit,gdbobjectextender,ugdbdrawingdef,GDBSubordinated,dxflow,UGDBOpenArrayOfByte,
      gdbasetypes,sysutils,gdbase,memman, geometry,
      UGDBLayerArray,
      varmandef,gdbobjectsconstdef,GDBGenericSubEntry{,varman};
@@ -150,9 +150,32 @@ begin
   if not(result) then
   result:=inherited ProcessFromDXFObjXData(_Name,_Value,ptu,drawing);
 end;
+function AllocBlockDef:PGDBObjBlockDef;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocBlockDef}',{$ENDIF}result,sizeof(GDBObjBlockdef));
+end;
+function AllocAndInitBlockDef(owner:PGDBObjGenericWithSubordinated):PGDBObjBlockDef;
+begin
+  result:=AllocBlockDef;
+  result.initnul(owner);
+end;
+procedure SetLineGeomProps(PBlockdef:PGDBObjBlockDef;args:array of const);
+var
+   counter:integer;
+begin
+  counter:=low(args);
+  PBlockdef.Name:=CreateGDBStringFromArray(counter,args);
+  PBlockdef.Base:=CreateVertexFromArray(counter,args);
+end;
+function AllocAndCreateBlockDef(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjBlockDef;
+begin
+  result:= AllocAndInitBlockDef(owner);
+  SetLineGeomProps(result,args);
+end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('GDBBlockDef.initialization');{$ENDIF}
   GDBObjBlockDefDXFFeatures:=TDXFEntIODataManager.Create;
+  {RegisterDXFEntity}RegisterEntity(GDBBlockDefID,'BlockDef',@AllocBlockDef,@AllocAndInitBlockDef,@SetLineGeomProps,@AllocAndCreateBlockDef);
 finalization
   GDBObjBlockDefDXFFeatures.Destroy;
 end.

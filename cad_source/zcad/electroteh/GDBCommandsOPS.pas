@@ -161,26 +161,26 @@ begin
     1:
        begin
             case OPSPlaceSmokeDetectorOrtoParam.DMC of
-                                            TOPSMDC_1:addblockinsert(gdb.GetCurrentROOT,pva,docorrecttogrid(Vertexdmorph(basepoint, dir, 1 / 4),norm), scaleblock, angle, name);
-                                            TOPSMDC_1_2:addblockinsert(gdb.GetCurrentROOT,pva,docorrecttogrid(Vertexdmorph(basepoint, dir, 1 / 2),norm), scaleblock, angle, name);
+                                            TOPSMDC_1:ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,docorrecttogrid(Vertexdmorph(basepoint, dir, 1 / 4),norm), scaleblock, angle, name);
+                                            TOPSMDC_1_2:ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,docorrecttogrid(Vertexdmorph(basepoint, dir, 1 / 2),norm), scaleblock, angle, name);
             end;
        end;
     2: begin
-        addblockinsert(gdb.GetCurrentROOT,pva, docorrecttogrid(Vertexdmorph(basepoint, dir, 1 / 4),norm), scaleblock, angle, name);
-        addblockinsert(gdb.GetCurrentROOT,pva, docorrecttogrid(Vertexdmorph(basepoint, dir, 3 / 4),norm), scaleblock, angle, name);
+        ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva, docorrecttogrid(Vertexdmorph(basepoint, dir, 1 / 4),norm), scaleblock, angle, name);
+        ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva, docorrecttogrid(Vertexdmorph(basepoint, dir, 3 / 4),norm), scaleblock, angle, name);
       end;
     3: begin
-        addblockinsert(gdb.GetCurrentROOT,pva, docorrecttogrid(Vertexdmorph(basepoint, dir, 1 / 6),norm), scaleblock, angle, name);
-        addblockinsert(gdb.GetCurrentROOT,pva, docorrecttogrid(Vertexdmorph(basepoint, dir, 3 / 6),norm), scaleblock, angle, name);
-        addblockinsert(gdb.GetCurrentROOT,pva, docorrecttogrid(Vertexdmorph(basepoint, dir, 5 / 6),norm), scaleblock, angle, name);
+        ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva, docorrecttogrid(Vertexdmorph(basepoint, dir, 1 / 6),norm), scaleblock, angle, name);
+        ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva, docorrecttogrid(Vertexdmorph(basepoint, dir, 3 / 6),norm), scaleblock, angle, name);
+        ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva, docorrecttogrid(Vertexdmorph(basepoint, dir, 5 / 6),norm), scaleblock, angle, name);
       end
   else begin
-      addblockinsert(gdb.GetCurrentROOT,pva, docorrecttogrid(VertexDmorphabs(basepoint, dir, sd),norm), scaleblock, angle, name);
-      addblockinsert(gdb.GetCurrentROOT,pva, docorrecttogrid(VertexDmorphabs(basepoint, dir, -sd),norm), scaleblock, angle, name);
+      ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva, docorrecttogrid(VertexDmorphabs(basepoint, dir, sd),norm), scaleblock, angle, name);
+      ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva, docorrecttogrid(VertexDmorphabs(basepoint, dir, -sd),norm), scaleblock, angle, name);
       line2.lbegin := VertexDmorphabs(basepoint, dir, sd);
       line2.lend := VertexDmorphabs(basepoint, dir, -sd);
       count := count - 2;
-      for i := 1 to count do addblockinsert(gdb.GetCurrentROOT,pva, docorrecttogrid(Vertexmorph(line2.lbegin, line2.lend, i / (count + 1)),norm), scaleblock, angle, name);
+      for i := 1 to count do ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva, docorrecttogrid(Vertexmorph(line2.lbegin, line2.lend, i / (count + 1)),norm), scaleblock, angle, name);
     end
   end;
 end;
@@ -328,7 +328,7 @@ begin
   result:=mclick;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
 
-  pl := PGDBObjLine(ENTF_CreateLine(@gdb.GetCurrentDWG.ConstructObjRoot,[t3dp.x,t3dp.y,t3dp.z,wc.x,wc.y,wc.z]));
+  pl := PGDBObjLine(ENTF_CreateLine(@gdb.GetCurrentDWG.ConstructObjRoot,@gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray,[t3dp.x,t3dp.y,t3dp.z,wc.x,wc.y,wc.z]));
   GDBObjSetEntityProp(pl,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^);
 
   //pl := pointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,gdb.GetCurrentROOT}));
@@ -693,7 +693,7 @@ begin
           name:=strproc.Tria_Utf8ToAnsi(name);
 
      gdb.AddBlockFromDBIfNeed(gdb.GetCurrentDWG,datname);
-     pointer(pv):=addblockinsert(gdb.GetCurrentROOT,@{gdb.GetCurrentROOT}root.ObjArray,currentcoord, 1, 0,@datname[1]);
+     pointer(pv):=ENTF_CreateBlockInsert(gdb.GetCurrentROOT,@{gdb.GetCurrentROOT}root.ObjArray,currentcoord, 1, 0,@datname[1]);
      dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
      pv^.formatentity(gdb.GetCurrentDWG^,dc);
      pv^.getoutbound;
@@ -831,7 +831,7 @@ begin
                   SysVar.dwg.DWG_CLayer^:=gdb.GetCurrentDWG.LayerTable.GetSystemLayer;
 
                   gdb.AddBlockFromDBIfNeed(gdb.GetCurrentDWG,'DEVICE_CABLE_MARK');
-                  pointer(pv):=addblockinsert(@GDB.GetCurrentDWG.ConstructObjRoot,@{gdb.GetCurrentROOT.ObjArray}GDB.GetCurrentDWG.ConstructObjRoot.ObjArray,currentcoord, 1, 0,'DEVICE_CABLE_MARK');
+                  pointer(pv):=ENTF_CreateBlockInsert(@GDB.GetCurrentDWG.ConstructObjRoot,@{gdb.GetCurrentROOT.ObjArray}GDB.GetCurrentDWG.ConstructObjRoot.ObjArray,currentcoord, 1, 0,'DEVICE_CABLE_MARK');
 
                   SysVar.dwg.DWG_CLayer^:=lsave;
                   ppvvarext:=pv^.GetExtension(typeof(TVariablesExtender));
@@ -1096,7 +1096,7 @@ begin
   gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
 
 
-  pl := PGDBObjLine(ENTF_CreateLine(@gdb.GetCurrentDWG.ConstructObjRoot,[t3dp.x,t3dp.y,t3dp.z,wc.x,wc.y,wc.z]));
+  pl := PGDBObjLine(ENTF_CreateLine(@gdb.GetCurrentDWG.ConstructObjRoot,@gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray,[t3dp.x,t3dp.y,t3dp.z,wc.x,wc.y,wc.z]));
   GDBObjSetEntityProp(pl,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^);
   //pl := pointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,gdb.GetCurrentROOT}));
   //GDBObjLineInit(gdb.GetCurrentROOT,pl, gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^, t3dp, wc);

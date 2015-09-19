@@ -855,7 +855,7 @@ end;
 function AllocAndCreateLine(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjLine;
 begin
   result:=AllocAndInitLine(owner);
-  owner^.AddMi(@result);
+  //owner^.AddMi(@result);
   SetLineGeomProps(result,args);
 end;
 begin

@@ -672,6 +672,12 @@ begin
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
 end;
+function AllocAndCreateDevice(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjBlockInsert;
+begin
+  result:=AllocAndInitDevice(owner);
+  //owner^.AddMi(@result);
+  SetBlockInsertGeomProps(result,args);
+end;
 function UpgradeBlockInsert2Device(ptu:PTAbstractUnit;pent:PGDBObjBlockInsert;const drawing:TDrawingDef):PGDBObjDevice;
 begin
      pent^.index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(pent^.name));
@@ -700,7 +706,7 @@ begin
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('GDBDevice.initialization');{$ENDIF}
-  RegisterEntity(GDBDeviceID,'Device',@AllocDevice,@AllocAndInitDevice);
+  RegisterEntity(GDBDeviceID,'Device',@AllocDevice,@AllocAndInitDevice,@SetBlockInsertGeomProps,@AllocAndCreateDevice);
   RegisterEntityUpgradeInfo(GDBBlockInsertID,1,@UpgradeBlockInsert2Device);
   GDBObjDeviceDXFFeatures:=TDXFEntIODataManager.Create;
 finalization

@@ -55,42 +55,13 @@ function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:GDBString;p_insert:
                         ):PGDBObjBlockInsert;
 procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
 
-function ENTF_CreateLine(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
-function ENTF_CreateCircle(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
 function ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray; point: gdbvertex; scale, angle: GDBDouble; s: pansichar):PGDBObjBlockInsert;
+
 var
    p:gdbvertex;
 implementation
 uses
     log;
-function ENTF_CreateLine(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
-begin
-  if assigned(_StandartLineCreateProcedure)then
-                                               begin
-                                                   result:=_StandartLineCreateProcedure(owner,args);
-                                                   if ownerarray<>nil then
-                                                                          ownerarray^.add(@result);
-                                               end
-                                           else
-                                               begin
-                                                    result:=nil;
-                                                    programlog.LogOutStr('ENTF_CreateLine: Line entity not registred',lp_OldPos,LM_Error);
-                                               end;
-end;
-function ENTF_CreateCircle(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
-begin
-  if assigned(_StandartCircleCreateProcedure)then
-                                               begin
-                                                   result:=_StandartCircleCreateProcedure(owner,args);
-                                                   if ownerarray<>nil then
-                                                                          ownerarray^.add(@result);
-                                               end
-                                           else
-                                               begin
-                                                    result:=nil;
-                                                    programlog.LogOutStr('ENTF_CreateCircle: Circle entity not registred',lp_OldPos,LM_Error);
-                                               end;
-end;
 function ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray; point: gdbvertex; scale, angle: GDBDouble; s: pansichar):pgdbobjblockinsert;
 var
   pb:pgdbobjblockinsert;
@@ -130,6 +101,7 @@ begin
   gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
   result:=pb;
 end;
+
 procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
 var
     domethod,undomethod:tmethod;

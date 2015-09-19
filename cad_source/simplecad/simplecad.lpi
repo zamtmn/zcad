@@ -42,12 +42,12 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="200">
+    <Units Count="201">
       <Unit0>
         <Filename Value="simplecad.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="18"/>
-        <CursorPos X="7" Y="11"/>
+        <EditorIndex Value="15"/>
+        <CursorPos Y="21"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -58,10 +58,9 @@
         <ComponentName Value="Form1"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="273"/>
-        <CursorPos X="42" Y="300"/>
+        <TopLine Value="276"/>
+        <CursorPos X="49" Y="293"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -531,7 +530,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="9"/>
         <CursorPos Y="43"/>
-        <UsageCount Value="99"/>
+        <UsageCount Value="100"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit65>
       <Unit66>
@@ -1233,9 +1232,11 @@
       </Unit162>
       <Unit163>
         <Filename Value="..\zengine\gdb\entities\GDBBlockInsert.pas"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="19"/>
-        <UsageCount Value="8"/>
+        <EditorIndex Value="20"/>
+        <TopLine Value="434"/>
+        <CursorPos Y="459"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit163>
       <Unit164>
@@ -1279,9 +1280,9 @@
       </Unit168>
       <Unit169>
         <Filename Value="..\zengine\gdb\GDBManager.pas"/>
-        <EditorIndex Value="9"/>
-        <TopLine Value="260"/>
-        <CursorPos Y="295"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="41"/>
+        <CursorPos X="10" Y="58"/>
         <UsageCount Value="12"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -1331,16 +1332,17 @@
       <Unit175>
         <Filename Value="..\zengine\gdb\drawings\ugdbdescriptor.pas"/>
         <UnitName Value="UGDBDescriptor"/>
-        <EditorIndex Value="21"/>
-        <TopLine Value="313"/>
-        <CursorPos Y="337"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="18"/>
+        <TopLine Value="537"/>
+        <CursorPos X="84" Y="554"/>
         <UsageCount Value="22"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit175>
       <Unit176>
         <Filename Value="..\zengine\gdb\drawings\ugdbsimpledrawing.pas"/>
-        <EditorIndex Value="28"/>
+        <EditorIndex Value="27"/>
         <TopLine Value="74"/>
         <CursorPos X="83" Y="93"/>
         <UsageCount Value="22"/>
@@ -1349,14 +1351,14 @@
       </Unit176>
       <Unit177>
         <Filename Value="..\zengine\gdb\gdbdrawcontext.pas"/>
-        <EditorIndex Value="22"/>
+        <EditorIndex Value="21"/>
         <UsageCount Value="22"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit177>
       <Unit178>
         <Filename Value="..\zengine\fileformats\iodxf.pas"/>
-        <EditorIndex Value="19"/>
+        <EditorIndex Value="16"/>
         <TopLine Value="1286"/>
         <CursorPos X="41" Y="1318"/>
         <UsageCount Value="22"/>
@@ -1373,7 +1375,7 @@
       </Unit179>
       <Unit180>
         <Filename Value="..\zengine\gdb\drawings\ugdbabstractdrawing.pas"/>
-        <EditorIndex Value="26"/>
+        <EditorIndex Value="25"/>
         <TopLine Value="15"/>
         <CursorPos X="33" Y="40"/>
         <UsageCount Value="22"/>
@@ -1382,7 +1384,7 @@
       </Unit180>
       <Unit181>
         <Filename Value="..\zengine\gdb\drawings\ugdbdrawing.pas"/>
-        <EditorIndex Value="27"/>
+        <EditorIndex Value="26"/>
         <TopLine Value="74"/>
         <CursorPos X="6" Y="76"/>
         <UsageCount Value="22"/>
@@ -1391,14 +1393,14 @@
       </Unit181>
       <Unit182>
         <Filename Value="..\zengine\zgl\drawers\generalviewarea.pas"/>
-        <EditorIndex Value="23"/>
+        <EditorIndex Value="22"/>
         <UsageCount Value="22"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit182>
       <Unit183>
         <Filename Value="..\zengine\zgl\drawers\uzglopenglviewarea.pas"/>
-        <EditorIndex Value="24"/>
+        <EditorIndex Value="23"/>
         <TopLine Value="23"/>
         <CursorPos X="5" Y="43"/>
         <UsageCount Value="22"/>
@@ -1407,7 +1409,7 @@
       </Unit183>
       <Unit184>
         <Filename Value="..\zengine\zgl\drawers\uzglgdiviewarea.pas"/>
-        <EditorIndex Value="25"/>
+        <EditorIndex Value="24"/>
         <CursorPos X="21" Y="19"/>
         <UsageCount Value="22"/>
         <Loaded Value="True"/>
@@ -1415,7 +1417,7 @@
       </Unit184>
       <Unit185>
         <Filename Value="..\zengine\gdb\entities\GDBLine.pas"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="824"/>
         <CursorPos X="23" Y="859"/>
         <UsageCount Value="22"/>
@@ -1424,7 +1426,7 @@
       </Unit185>
       <Unit186>
         <Filename Value="..\zengine\gdb\entities\GDBText.pas"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="4"/>
         <UsageCount Value="22"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -1438,33 +1440,30 @@
       </Unit187>
       <Unit188>
         <Filename Value="..\zengine\gdb\entities\gdbaligneddimension.pas"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="42"/>
         <CursorPos Y="396"/>
         <UsageCount Value="22"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit188>
       <Unit189>
         <Filename Value="..\zengine\gdb\entities\gdbdimension.pas"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="93"/>
         <CursorPos Y="116"/>
         <UsageCount Value="22"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit189>
       <Unit190>
         <Filename Value="..\zengine\gdb\entities\gdbgenericdimension.pas"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="-1"/>
         <CursorPos X="25" Y="18"/>
         <UsageCount Value="22"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit190>
       <Unit191>
         <Filename Value="..\zengine\gdb\gdbentityfactory.pas"/>
-        <EditorIndex Value="15"/>
+        <EditorIndex Value="12"/>
         <TopLine Value="59"/>
         <CursorPos Y="81"/>
         <UsageCount Value="21"/>
@@ -1473,7 +1472,7 @@
       </Unit191>
       <Unit192>
         <Filename Value="..\zengine\gdb\gdbase.pas"/>
-        <EditorIndex Value="17"/>
+        <EditorIndex Value="14"/>
         <TopLine Value="100"/>
         <CursorPos Y="120"/>
         <UsageCount Value="21"/>
@@ -1482,7 +1481,7 @@
       </Unit192>
       <Unit193>
         <Filename Value="E:\ppsrc\rtl\objpas\sysutils\sysstrh.inc"/>
-        <EditorIndex Value="20"/>
+        <EditorIndex Value="17"/>
         <TopLine Value="104"/>
         <CursorPos X="65" Y="124"/>
         <UsageCount Value="21"/>
@@ -1490,7 +1489,7 @@
       </Unit193>
       <Unit194>
         <Filename Value="..\zengine\gdb\gdbobjectsconstdef.pas"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="11"/>
         <CursorPos X="24" Y="19"/>
         <UsageCount Value="19"/>
         <Loaded Value="True"/>
@@ -1498,7 +1497,7 @@
       </Unit194>
       <Unit195>
         <Filename Value="E:\ppsrc\rtl\inc\objpash.inc"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="10"/>
         <TopLine Value="398"/>
         <CursorPos X="21" Y="412"/>
         <UsageCount Value="17"/>
@@ -1506,7 +1505,7 @@
       </Unit195>
       <Unit196>
         <Filename Value="..\zengine\misc\geometry.pas"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="9"/>
         <TopLine Value="2038"/>
         <CursorPos X="104" Y="2047"/>
         <UsageCount Value="14"/>
@@ -1515,7 +1514,7 @@
       </Unit196>
       <Unit197>
         <Filename Value="..\zengine\gdb\entities\GDBEntity.pas"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="7"/>
         <TopLine Value="142"/>
         <CursorPos X="142" Y="166"/>
         <UsageCount Value="11"/>
@@ -1524,7 +1523,7 @@
       </Unit197>
       <Unit198>
         <Filename Value="..\zengine\u\ugdbltypearray.pas"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="8"/>
         <TopLine Value="86"/>
         <CursorPos Y="76"/>
         <UsageCount Value="11"/>
@@ -1533,134 +1532,143 @@
       </Unit198>
       <Unit199>
         <Filename Value="..\zengine\misc\log.pas"/>
-        <EditorIndex Value="16"/>
+        <EditorIndex Value="13"/>
         <TopLine Value="49"/>
         <CursorPos X="94" Y="69"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit199>
+      <Unit200>
+        <Filename Value="..\zengine\gdb\entities\GDBGenericSubEntry.pas"/>
+        <EditorIndex Value="19"/>
+        <TopLine Value="18"/>
+        <CursorPos X="29" Y="35"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit200>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="30" HistoryIndex="28">
       <Position1>
-        <Filename Value="..\zengine\gdb\entities\GDBLine.pas"/>
-        <Caret Line="864" TopLine="825"/>
+        <Filename Value="..\zengine\gdb\gdbentityfactory.pas"/>
+        <Caret Line="79" TopLine="59"/>
       </Position1>
       <Position2>
         <Filename Value="..\zengine\gdb\gdbentityfactory.pas"/>
-        <Caret Line="79" TopLine="63"/>
+        <Caret Line="81" TopLine="59"/>
       </Position2>
       <Position3>
-        <Filename Value="..\zengine\gdb\gdbentityfactory.pas"/>
-        <Caret Line="85" TopLine="63"/>
-      </Position3>
-      <Position4>
-        <Filename Value="..\zengine\gdb\gdbentityfactory.pas"/>
-        <Caret Line="111" Column="30" TopLine="81"/>
-      </Position4>
-      <Position5>
-        <Filename Value="..\zengine\gdb\gdbentityfactory.pas"/>
-        <Caret Line="115" TopLine="83"/>
-      </Position5>
-      <Position6>
-        <Filename Value="..\zengine\gdb\entities\GDBLine.pas"/>
-        <Caret Line="854" Column="22" TopLine="825"/>
-      </Position6>
-      <Position7>
-        <Filename Value="..\zengine\gdb\gdbentityfactory.pas"/>
-        <Caret Line="114" Column="14" TopLine="95"/>
-      </Position7>
-      <Position8>
-        <Filename Value="..\zengine\gdb\gdbentityfactory.pas"/>
-        <Caret Line="24" Column="70"/>
-      </Position8>
-      <Position9>
-        <Filename Value="..\zengine\gdb\gdbentityfactory.pas"/>
-        <Caret Line="114" Column="82" TopLine="95"/>
-      </Position9>
-      <Position10>
-        <Filename Value="..\zengine\gdb\gdbentityfactory.pas"/>
-        <Caret Line="170" TopLine="150"/>
-      </Position10>
-      <Position11>
-        <Filename Value="..\zengine\gdb\entities\GDBLine.pas"/>
-        <Caret Line="864" TopLine="825"/>
-      </Position11>
-      <Position12>
-        <Filename Value="..\zengine\gdb\gdbentityfactory.pas"/>
-        <Caret Line="79" TopLine="59"/>
-      </Position12>
-      <Position13>
-        <Filename Value="..\zengine\gdb\gdbentityfactory.pas"/>
-        <Caret Line="81" TopLine="59"/>
-      </Position13>
-      <Position14>
         <Filename Value="..\zengine\gdb\entities\GDBLine.pas"/>
         <Caret Line="858" TopLine="825"/>
-      </Position14>
-      <Position15>
+      </Position3>
+      <Position4>
         <Filename Value="..\zengine\gdb\entities\GDBLine.pas"/>
         <Caret Line="859" TopLine="825"/>
-      </Position15>
-      <Position16>
+      </Position4>
+      <Position5>
         <Filename Value="..\zengine\gdb\entities\GDBLine.pas"/>
         <Caret Line="860" TopLine="825"/>
+      </Position5>
+      <Position6>
+        <Filename Value="..\zengine\gdb\gdbentityfactory.pas"/>
+        <Caret Line="85" Column="65" TopLine="59"/>
+      </Position6>
+      <Position7>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="297" Column="7" TopLine="279"/>
+      </Position7>
+      <Position8>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="293" Column="13" TopLine="279"/>
+      </Position8>
+      <Position9>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="8" Column="3"/>
+      </Position9>
+      <Position10>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="291" Column="61" TopLine="271"/>
+      </Position10>
+      <Position11>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="300" Column="17" TopLine="273"/>
+      </Position11>
+      <Position12>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="294" Column="38" TopLine="273"/>
+      </Position12>
+      <Position13>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="293" TopLine="273"/>
+      </Position13>
+      <Position14>
+        <Filename Value="..\zengine\gdb\drawings\ugdbdescriptor.pas"/>
+        <Caret Line="333" TopLine="313"/>
+      </Position14>
+      <Position15>
+        <Filename Value="..\zengine\gdb\drawings\ugdbdescriptor.pas"/>
+        <Caret Line="334" TopLine="313"/>
+      </Position15>
+      <Position16>
+        <Filename Value="..\zengine\gdb\drawings\ugdbdescriptor.pas"/>
+        <Caret Line="337" TopLine="313"/>
       </Position16>
       <Position17>
         <Filename Value="..\zengine\gdb\gdbentityfactory.pas"/>
-        <Caret Line="85" Column="65" TopLine="59"/>
+        <Caret Line="79" TopLine="59"/>
       </Position17>
       <Position18>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="297" Column="7" TopLine="279"/>
+        <Filename Value="..\zengine\gdb\gdbentityfactory.pas"/>
+        <Caret Line="81" TopLine="59"/>
       </Position18>
       <Position19>
         <Filename Value="umainform.pas"/>
-        <Caret Line="293" Column="13" TopLine="279"/>
+        <Caret Line="294" Column="7" TopLine="273"/>
       </Position19>
       <Position20>
         <Filename Value="umainform.pas"/>
-        <Caret Line="8" Column="3"/>
+        <Caret Line="300" Column="42" TopLine="273"/>
       </Position20>
       <Position21>
         <Filename Value="umainform.pas"/>
-        <Caret Line="291" Column="61" TopLine="271"/>
+        <Caret Line="293" Column="67" TopLine="276"/>
       </Position21>
       <Position22>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="300" Column="17" TopLine="273"/>
+        <Filename Value="simplecad.lpr"/>
+        <Caret Line="11" Column="7"/>
       </Position22>
       <Position23>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="294" Column="38" TopLine="273"/>
+        <Filename Value="..\zengine\gdb\drawings\ugdbdescriptor.pas"/>
+        <Caret Line="549" Column="3" TopLine="544"/>
       </Position23>
       <Position24>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="293" TopLine="273"/>
+        <Filename Value="..\zengine\gdb\drawings\ugdbdescriptor.pas"/>
+        <Caret Line="571" Column="35" TopLine="544"/>
       </Position24>
       <Position25>
         <Filename Value="..\zengine\gdb\drawings\ugdbdescriptor.pas"/>
-        <Caret Line="333" TopLine="313"/>
+        <Caret Line="570" TopLine="544"/>
       </Position25>
       <Position26>
         <Filename Value="..\zengine\gdb\drawings\ugdbdescriptor.pas"/>
-        <Caret Line="334" TopLine="313"/>
+        <Caret Line="548" TopLine="541"/>
       </Position26>
       <Position27>
         <Filename Value="..\zengine\gdb\drawings\ugdbdescriptor.pas"/>
-        <Caret Line="337" TopLine="313"/>
+        <Caret Line="549" TopLine="541"/>
       </Position27>
       <Position28>
-        <Filename Value="..\zengine\gdb\gdbentityfactory.pas"/>
-        <Caret Line="79" TopLine="59"/>
+        <Filename Value="..\zengine\gdb\drawings\ugdbdescriptor.pas"/>
+        <Caret Line="550" Column="22" TopLine="541"/>
       </Position28>
       <Position29>
-        <Filename Value="..\zengine\gdb\gdbentityfactory.pas"/>
-        <Caret Line="81" TopLine="59"/>
+        <Filename Value="..\zengine\gdb\drawings\ugdbdescriptor.pas"/>
+        <Caret Line="554" Column="31" TopLine="537"/>
       </Position29>
       <Position30>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="294" Column="7" TopLine="273"/>
+        <Filename Value="..\zengine\gdb\GDBManager.pas"/>
+        <Caret Line="58" Column="10" TopLine="41"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>

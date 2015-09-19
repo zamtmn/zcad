@@ -20,7 +20,7 @@ unit UGDBDescriptor;
 {$INCLUDE def.inc}
 interface
 uses
-zemathutils,gdbdrawcontext,ugdbdrawing,ugdbdrawingdef,paths,ugdbdimstylearray,ugdbabstractdrawing,WindowsSpecific,LResources,zcadsysvars,zcadinterface,zcadstrconsts,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
+zedimblocksregister,zeblockdefsfactory,zemathutils,gdbdrawcontext,ugdbdrawing,ugdbdrawingdef,paths,ugdbdimstylearray,ugdbabstractdrawing,WindowsSpecific,LResources,zcadsysvars,zcadinterface,zcadstrconsts,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
 gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,sysinfo,ugdbsimpledrawing,
@@ -552,6 +552,11 @@ begin
      if td=nil then
      begin
           td:=BlockBaseDWG.BlockDefArray.getblockdef(name);
+          if td=nil then
+                        begin
+                             td:=CreateBlockDef(_to,name);
+                             exit;
+                        end;
           if td=nil then
                         begin
                           shared.FatalError(sysutils.format('Block "%s" not found! If this dimension arrow block - manually creating block not implemented yet((',[name]));

@@ -137,9 +137,9 @@ begin
   if not supress1 then
   begin
   if p0inside then
-                  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p1,PDimStyle.Arrows.DIMASZ,ZAngle{*180/pi}-pi,@tbp0.name[1])
+                  pointer(pv):=ENTF_CreateBlockInsert(@self,@self.ConstObjArray,p1,PDimStyle.Arrows.DIMASZ,ZAngle{*180/pi}-pi,@tbp0.name[1])
               else
-                  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p1,PDimStyle.Arrows.DIMASZ,ZAngle{*180/pi},@tbp0.name[1]);
+                  pointer(pv):=ENTF_CreateBlockInsert(@self,@self.ConstObjArray,p1,PDimStyle.Arrows.DIMASZ,ZAngle{*180/pi},@tbp0.name[1]);
   pv^.vp.LineWeight:=PDimStyle.Lines.DIMLWD;
   pv^.vp.Color:=PDimStyle.Lines.DIMCLRD;
   pv^.formatentity(gdb.GetCurrentDWG^,dc);
@@ -147,9 +147,9 @@ begin
   if not supress2 then
   begin
   if p1inside then
-                  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p2,PDimStyle.Arrows.DIMASZ,ZAngle{*180/pi},@tbp1.name[1])
+                  pointer(pv):=ENTF_CreateBlockInsert(@self,@self.ConstObjArray,p2,PDimStyle.Arrows.DIMASZ,ZAngle{*180/pi},@tbp1.name[1])
               else
-                  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p2,PDimStyle.Arrows.DIMASZ,ZAngle{*180/pi}-pi,@tbp1.name[1]);
+                  pointer(pv):=ENTF_CreateBlockInsert(@self,@self.ConstObjArray,p2,PDimStyle.Arrows.DIMASZ,ZAngle{*180/pi}-pi,@tbp1.name[1]);
   pv^.vp.LineWeight:=PDimStyle.Lines.DIMLWD;
   pv^.vp.Color:=PDimStyle.Lines.DIMCLRD;
   end;

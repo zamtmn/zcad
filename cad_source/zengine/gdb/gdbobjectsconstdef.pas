@@ -63,6 +63,7 @@ const {as_normal=0;
   GDBEllipseID = 12;
   GDBSplineID = 13;
   GDBGenericDimensionID = 14;
+  GDBBlockDefID = 15;
 
   GDBNetID = 100;
   GDBDeviceID = 101;

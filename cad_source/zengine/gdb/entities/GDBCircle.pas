@@ -801,7 +801,7 @@ end;
 function AllocAndCreateCircle(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjCircle;
 begin
   result:=AllocAndInitCircle(owner);
-  owner^.AddMi(@result);
+  //owner^.AddMi(@result);
   SetCircleGeomProps(result,args);
 end;
 begin

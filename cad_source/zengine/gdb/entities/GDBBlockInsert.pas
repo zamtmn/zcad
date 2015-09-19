@@ -65,6 +65,7 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      function FromDXFPostProcessBeforeAdd(ptu:PTAbstractUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                   end;
 {Export-}
+procedure SetBlockInsertGeomProps(PBlockInsert:PGDBObjBlockInsert;args:array of const);
 implementation
 uses log;
 (*Procedure QDUDecomposition (const m:DMatrix4D; out kQ:DMatrix3D;out kD,kU:DVector3D);
@@ -669,7 +670,31 @@ begin
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
 end;
+procedure SetBlockInsertGeomProps(PBlockInsert:PGDBObjBlockInsert;args:array of const);
+var
+   counter:integer;
+   r:GDBDouble;
+begin
+  counter:=low(args);
+  PBlockInsert^.Local.P_insert:=CreateVertexFromArray(counter,args);
+  PBlockInsert^.scale.x:=CreateDoubleFromArray(counter,args);
+  PBlockInsert^.scale.y:=PBlockInsert^.scale.x;
+  PBlockInsert^.scale.z:=PBlockInsert^.scale.x;
+  r:=CreateDoubleFromArray(counter,args);
+  PBlockInsert^.name:=CreateGDBStringFromArray(counter,args);
+  PBlockInsert^.index:=-1;
+
+  PBlockInsert^.CalcObjMatrix;
+  PBlockInsert^.setrot(r);
+  PBlockInsert^.rotate:=r;
+end;
+function AllocAndCreateBlockInsert(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjBlockInsert;
+begin
+  result:=AllocAndInitBlockInsert(owner);
+  //owner^.AddMi(@result);
+  SetBlockInsertGeomProps(result,args);
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBBlockInsert.initialization');{$ENDIF}
-  RegisterDXFEntity(GDBBlockInsertID,'INSERT','BlockInsert',@AllocBlockInsert,@AllocAndInitBlockInsert);
+  RegisterDXFEntity(GDBBlockInsertID,'INSERT','BlockInsert',@AllocBlockInsert,@AllocAndInitBlockInsert,@SetBlockInsertGeomProps,@AllocAndCreateBlockInsert);
 end.

@@ -158,6 +158,7 @@ function CreateReflectionMatrix(plane:DVector4D): DMatrix4D;
 function CreateVertex(const x,y,z:GDBDouble):GDBVertex;inline;
 function CreateVertexFromArray(var counter:integer;const args:array of const):GDBVertex;
 function  CreateDoubleFromArray(var counter:integer;const args:array of const):GDBDouble;
+function  CreateGDBStringFromArray(var counter:integer;const args:array of const):GDBString;
 function CreateVertex2D(const x,y:GDBDouble):GDBVertex2D;inline;
 function IsPointInBB(const point:GDBvertex; var fistbb:TBoundingBox):GDBBoolean;inline;
 function CreateBBFrom2Point(const p1,p2:GDBvertex):TBoundingBox;
@@ -2030,7 +2031,15 @@ begin
      end;{case}
      inc(counter);
 end;
-
+function  CreateGDBStringFromArray(var counter:integer;const args:array of const):GDBString;
+begin
+     case args[counter].VType of
+                       vtString:result:=args[counter].VString^;
+                   vtAnsiString:result:=ansistring(args[counter].VAnsiString);
+                //vtUnicodeString:result:=args[counter].VUnicodeString^;
+     end;{case}
+     inc(counter);
+end;
 function CreateVertexFromArray(var counter:integer;const args:array of const):GDBVertex;
 var
   len:integer;

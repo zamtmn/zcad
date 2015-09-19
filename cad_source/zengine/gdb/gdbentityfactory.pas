@@ -21,12 +21,12 @@ unit gdbentityfactory;
 
 
 interface
-uses uabstractunit,usimplegenerics,UGDBDrawingdef,gdbobjectsconstdef,
+uses GDBSubordinated,uabstractunit,usimplegenerics,UGDBDrawingdef,gdbobjectsconstdef,
     memman,zcadsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity;
 type
 TAllocEntFunc=function:GDBPointer;
-TAllocAndInitEntFunc=function (owner:PGDBObjGenericSubEntry): PGDBObjEntity;
-TAllocAndInitAndSetGeomPropsFunc=function (owner:PGDBObjGenericSubEntry;args:array of const): PGDBObjEntity;
+TAllocAndInitEntFunc=function (owner:PGDBObjGenericWithSubordinated): PGDBObjEntity;
+TAllocAndInitAndSetGeomPropsFunc=function (owner:PGDBObjGenericWithSubordinated;args:array of const): PGDBObjEntity;
 TSetGeomPropsFunc=procedure (ent:PGDBObjEntity;args:array of const);
 TEntityUpgradeFunc=function (ptu:PTAbstractUnit;ent:PGDBObjEntity;const drawing:TDrawingDef): PGDBObjEntity;
 TEntInfoData=packed record
@@ -71,6 +71,8 @@ var
 
   _StandartLineCreateProcedure:TAllocAndInitAndSetGeomPropsFunc=nil;
   _StandartCircleCreateProcedure:TAllocAndInitAndSetGeomPropsFunc=nil;
+  _StandartBlockInsertCreateProcedure:TAllocAndInitAndSetGeomPropsFunc=nil;
+  _StandartDeviceCreateProcedure:TAllocAndInitAndSetGeomPropsFunc=nil;
 implementation
 uses
     log;
@@ -101,6 +103,8 @@ begin
      case _EntityID of
              GDBlineID:_StandartLineCreateProcedure:=_AllocAndCreateEntFunc;
            GDBCircleID:_StandartCircleCreateProcedure:=_AllocAndCreateEntFunc;
+      GDBBlockInsertID:_StandartBlockInsertCreateProcedure:=_AllocAndCreateEntFunc;
+           GDBDeviceID:_StandartDeviceCreateProcedure:=_AllocAndCreateEntFunc;
      end;
 
      if dxfent then

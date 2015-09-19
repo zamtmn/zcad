@@ -20,7 +20,7 @@ unit GDBLine;
 {$INCLUDE def.inc}
 
 interface
-uses uabstractunit,gdbentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,
+uses uabstractunit,zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,
      ugdbltypearray,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,
      gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,
      UGDBOpenArrayOfByte,varmandef,GDBase,gdbobjectsconstdef,oglwindowdef,

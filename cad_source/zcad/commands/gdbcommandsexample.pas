@@ -58,7 +58,7 @@ uses
 
 
   shared,
-  gdbentityfactory,   //unit describing a "factory" to create primitives
+  zeentityfactory,    //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
   zcadsysvars,        //system global variables
                       //системные переменные

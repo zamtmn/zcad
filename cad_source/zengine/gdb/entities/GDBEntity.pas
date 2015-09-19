@@ -168,7 +168,7 @@ var onlygetsnapcount:GDBInteger;
     ForeGround:TRGB;
     GDBObjEntityDXFFeatures:TDXFEntIODataManager;
 implementation
-uses usimplegenerics,gdbentityfactory,GDBGenericSubEntry,UGDBSelectedObjArray,log;
+uses usimplegenerics,zeentityfactory,GDBGenericSubEntry,UGDBSelectedObjArray,log;
 procedure GDBObjSetEntityProp(const pobjent: PGDBObjEntity;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint);
 begin
      pobjent^.vp.Layer:=layeraddres;

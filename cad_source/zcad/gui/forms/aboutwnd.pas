@@ -33,7 +33,7 @@ type
 var
   AboutWindow:TAboutWnd;
 implementation
-uses gdbentityfactory,shared,log,commandline;
+uses zeentityfactory,shared,log,commandline;
 procedure TAboutWnd.AfterConstruction;
 begin
   inherited;

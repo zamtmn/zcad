@@ -37,5 +37,23 @@ end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('zedimblocksregister.initialization');{$ENDIF}
   RegisterBlockDefCreateFunc('_ClosedFilled',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_ClosedBlank',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Closed',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Dot',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_ArchTick',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Oblique',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Open',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Origin',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Origin2',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Open90',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Open30',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_DotSmall',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_DotBlank',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Small',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_BoxBlank',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_BoxFilled',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_DatumBlank',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_DatumFilled',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Integral',CreateClosedFilledBlock);
 finalization
 end.

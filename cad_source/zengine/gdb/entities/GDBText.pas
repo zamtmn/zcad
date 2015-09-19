@@ -21,7 +21,7 @@ unit GDBText;
 
 interface
 uses
-uzglgeometry,gdbdrawcontext,uabstractunit,gdbobjectextender,gdbfieldprocessor,gdbentityfactory,ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,sysutils,ugdbfont,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varmandef,
+uzglgeometry,gdbdrawcontext,uabstractunit,gdbobjectextender,gdbfieldprocessor,zeentityfactory,ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,sysutils,ugdbfont,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varmandef,
 GDBase,{UGDBDescriptor,}gdbobjectsconstdef,oglwindowdef,geometry,dxflow,strmy,memman,log,GDBSubordinated,UGDBTextStyleArray;
 type
 {REGISTEROBJECTTYPE GDBObjText}

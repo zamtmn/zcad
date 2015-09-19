@@ -21,7 +21,7 @@ unit zeblockdefsfactory;
 
 
 interface
-uses GDBBlockDef,usimplegenerics,UGDBDrawingdef,
+uses sysutils,GDBBlockDef,usimplegenerics,UGDBDrawingdef,
     memman,zcadsysvars,GDBase,GDBasetypes,gdbEntity;
 type
 TBlockDefCreateFunc=function(dwg:PTDrawingDef;name:GDBString):PGDBObjBlockdef;
@@ -59,7 +59,7 @@ begin
      BlockDefCreateData.BlockDependsOn:=_BlockDependsOn;
      BlockDefCreateData.BlockDeffinedIn:=_BlockDeffinedIn;
      BlockDefCreateData.CreateProc:=_CreateProc;
-     BlockDefName2BlockDefCreateData.RegisterKey(_BlockName,BlockDefCreateData);
+     BlockDefName2BlockDefCreateData.RegisterKey(uppercase(_BlockName),BlockDefCreateData);
 end;
 procedure RegisterBlockDefCreateFunc(const BlockName:GDBString; const BlockDefCreateFunc:TBlockDefCreateFunc);
 begin
@@ -75,7 +75,7 @@ var
 begin
      if not assigned(BlockDefName2BlockDefCreateData) then
                                                           exit(nil);
-     if BlockDefName2BlockDefCreateData.MyGetMutableValue(name,PBlockDefCreateData)then
+     if BlockDefName2BlockDefCreateData.MyGetMutableValue(uppercase(name),PBlockDefCreateData)then
      begin
           if assigned(PBlockDefCreateData.CreateProc) then
           begin

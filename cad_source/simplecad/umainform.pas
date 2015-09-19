@@ -290,7 +290,7 @@ begin
     v1:=CreateRandomVertex(1000,500);
     v2:=geometry.VertexAdd(v1,CreateRandomVertex(1000,500));
 
-    pobj := ENTF_CreateLine(gdb.GetCurrentRoot,[v1.x,v1.y,v1.z,v2.x,v2.y,v2.z]);
+    pobj := ENTF_CreateLine(gdb.GetCurrentRoot,@gdb.GetCurrentRoot^.ObjArray,[v1.x,v1.y,v1.z,v2.x,v2.y,v2.z]);
 
     {pobj := PGDBObjLine(CreateInitObjFree(GDBLineID,nil));
     pobj^.CoordInOCS.lBegin:=v1;

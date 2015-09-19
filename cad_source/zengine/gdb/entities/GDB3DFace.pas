@@ -19,7 +19,7 @@ unit GDB3DFace;
 {$INCLUDE def.inc}
 
 interface
-uses uabstractunit,gdbentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,
+uses uabstractunit,zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,
 GDBase,gdbobjectsconstdef{,oglwindowdef,dxflow},memman;
 type
 {REGISTEROBJECTTYPE GDBObj3DFace}

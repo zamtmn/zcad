@@ -21,7 +21,7 @@ unit zcregistermultiproperties;
 
 interface
 uses
-  math,zcobjectinspectormultiobjects,gdbpalette,memman,shared,sysutils,gdbentityfactory,
+  math,zcobjectinspectormultiobjects,gdbpalette,memman,shared,sysutils,zeentityfactory,
   gdbase,
   UGDBDescriptor,
   varmandef,

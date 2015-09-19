@@ -19,7 +19,7 @@ unit gdbradialdimension;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentityfactory,gdbdiametricdimension,gdbdimension,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,strproc,UGDBOpenArrayOfByte,geometry,gdbasetypes,SysInfo,sysutils,
+uses zeentityfactory,gdbdiametricdimension,gdbdimension,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,strproc,UGDBOpenArrayOfByte,geometry,gdbasetypes,SysInfo,sysutils,
 gdbEntity,varmandef,
 GDBase,gdbobjectsconstdef,dxflow,memman,GDBSubordinated;
 (*

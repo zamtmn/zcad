@@ -44,7 +44,7 @@ begin
 end;
 function ENTF_CreateSolid(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
 begin
-  if assigned(_StandartLineCreateProcedure)then
+  if assigned(_StandartSolidCreateProcedure)then
                                                begin
                                                    result:=_StandartSolidCreateProcedure(owner,args);
                                                    if ownerarray<>nil then

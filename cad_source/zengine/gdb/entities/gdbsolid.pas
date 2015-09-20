@@ -401,7 +401,25 @@ begin
   result.initnul(owner);
   result.bp.ListPos.Owner:=owner;
 end;
+procedure SetSolidGeomProps(PSolid:PGDBObjSolid;args:array of const);
+var
+   counter:integer;
+begin
+  counter:=low(args);
+  PSolid^.PInOCS[0]:=CreateVertexFromArray(counter,args);
+  PSolid^.PInOCS[1]:=CreateVertexFromArray(counter,args);
+  PSolid^.PInOCS[2]:=CreateVertexFromArray(counter,args);
+  if counter>=high(args) then
+                             PSolid^.PInOCS[3]:=PSolid^.PInOCS[2]
+                         else
+                             PSolid^.PInOCS[3]:=CreateVertexFromArray(counter,args)
+end;
+function AllocAndCreateSolid(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjSolid;
+begin
+  result:=AllocAndInitSolid(owner);
+  SetSolidGeomProps(result,args);
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBSolid.initialization');{$ENDIF}
-  RegisterDXFEntity(GDBSolidID,'SOLID','Solid',@AllocSolid,@AllocAndInitSolid);
+  RegisterDXFEntity(GDBSolidID,'SOLID','Solid',@AllocSolid,@AllocAndInitSolid,@SetSolidGeomProps,@AllocAndCreateSolid);
 end.

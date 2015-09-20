@@ -163,24 +163,15 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     class function GetDXFIOFeatures:TDXFEntIODataManager;
               end;
 {Export-}
-procedure GDBObjSetEntityProp(const pobjent: PGDBObjEntity;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint); export;
 var onlygetsnapcount:GDBInteger;
     ForeGround:TRGB;
     GDBObjEntityDXFFeatures:TDXFEntIODataManager;
 implementation
 uses usimplegenerics,zeentityfactory,GDBGenericSubEntry,UGDBSelectedObjArray,log;
-procedure GDBObjSetEntityProp(const pobjent: PGDBObjEntity;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint);
-begin
-     pobjent^.vp.Layer:=layeraddres;
-     pobjent^.vp.LineType:=LTAddres;
-     pobjent^.vp.LineWeight:=LW;
-     pobjent^.vp.color:=color;
-end;
 procedure GDBObjEntity.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
 begin
     proc(@self,PCounted,Counter);
 end;
-
 procedure GDBObjEntity.FormatAfterDXFLoad;
 begin
      //format;

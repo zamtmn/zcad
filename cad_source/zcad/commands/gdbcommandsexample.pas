@@ -55,7 +55,7 @@ uses
   gdbEntity,
 
   geometry,
-
+  zeentitiesmanager,
 
   shared,
   zeentityfactory,    //unit describing a "factory" to create primitives

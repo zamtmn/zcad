@@ -8,11 +8,11 @@ uses
   LCLType,Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, StdCtrls, Spin,
   {From ZCAD}
-  gdbdrawcontext,uzglopenglviewarea,abstractviewarea,zcadsysvars, {$ifdef dxfio}iodxf,{$endif}varmandef, UUnitManager,
-  zcadinterface,gdbentityfactory,UGDBLayerArray,geometry, GDBase, GDBasetypes,
+  zeentitiesmanager,gdbdrawcontext,uzglopenglviewarea,abstractviewarea,zcadsysvars, {$ifdef dxfio}iodxf,{$endif}varmandef, UUnitManager,
+  zcadinterface,zeentityfactory,UGDBLayerArray,geometry, GDBase, GDBasetypes,
   UGDBDescriptor,UGDBTextStyleArray,UGDBEntTree,GDB3DFace,
   GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,ugdbsimpledrawing,
-  {$ifdef dxfio}GDBMText,gdbgenericdimension,gdbaligneddimension,gdbrotateddimension,{$endif}
+  {$ifdef dxfio}GDBMText,gdbgenericdimension,gdbaligneddimension,gdbrotateddimension,gdbsolid,{$endif}
   GDBEntity,GDBManager,gdbobjectsconstdef,ioshx,gdbpalette,uzglgdiviewarea;
 
 type

@@ -73,6 +73,7 @@ var
   _StandartCircleCreateProcedure:TAllocAndInitAndSetGeomPropsFunc=nil;
   _StandartBlockInsertCreateProcedure:TAllocAndInitAndSetGeomPropsFunc=nil;
   _StandartDeviceCreateProcedure:TAllocAndInitAndSetGeomPropsFunc=nil;
+  _StandartSolidCreateProcedure:TAllocAndInitAndSetGeomPropsFunc=nil;
 implementation
 uses
     log;
@@ -105,6 +106,7 @@ begin
            GDBCircleID:_StandartCircleCreateProcedure:=_AllocAndCreateEntFunc;
       GDBBlockInsertID:_StandartBlockInsertCreateProcedure:=_AllocAndCreateEntFunc;
            GDBDeviceID:_StandartDeviceCreateProcedure:=_AllocAndCreateEntFunc;
+            GDBSolidID:_StandartSolidCreateProcedure:=_AllocAndCreateEntFunc;
      end;
 
      if dxfent then

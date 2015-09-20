@@ -21,7 +21,7 @@ unit GDBManager;
 
 
 interface
-uses zeentityfactory,gdbdrawcontext,ugdbdrawing,ugdbltypearray,zcadsysvars,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
+uses zeentitiesmanager,gdbpalette,zeentityfactory,gdbdrawcontext,ugdbdrawing,ugdbltypearray,zcadsysvars,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
      UGDBDescriptor,varmandef,gdbobjectsconstdef,
      UGDBVisibleOpenArray,GDBGenericSubEntry,gdbEntity,
      GDBBlockInsert,
@@ -55,14 +55,18 @@ function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:GDBString;p_insert:
                         ):PGDBObjBlockInsert;
 procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
 
-function ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray; point: gdbvertex; scale, angle: GDBDouble; s: pansichar):PGDBObjBlockInsert;
+function ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
+                                layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
+                                point: gdbvertex; scale, angle: GDBDouble; s: pansichar):PGDBObjBlockInsert;
 
 var
    p:gdbvertex;
 implementation
 uses
     log;
-function ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray; point: gdbvertex; scale, angle: GDBDouble; s: pansichar):pgdbobjblockinsert;
+function ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
+                                layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
+                                point: gdbvertex; scale, angle: GDBDouble; s: pansichar):PGDBObjBlockInsert;
 var
   pb:pgdbobjblockinsert;
   nam:gdbstring;
@@ -83,6 +87,7 @@ begin
   if assigned(CreateProc)then
                            begin
                                PGDBObjEntity(pb):=CreateProc(owner,[point.x,point.y,point.z,scale,angle,nam]);
+                               GDBObjSetEntityProp(pb,layeraddres,LTAddres,color,LW);
                                if ownerarray<>nil then
                                                ownerarray^.add(@pb);
                            end

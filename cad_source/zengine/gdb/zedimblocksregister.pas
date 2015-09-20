@@ -21,7 +21,7 @@ unit zedimblocksregister;
 
 
 interface
-uses zeentitiesmanager,UGDBObjBlockdefArray,zeblockdefsfactory,GDBBlockDef,UGDBDrawingdef,
+uses UGDBLayerArray,ugdbltypearray,gdbobjectsconstdef,zeentitiesmanager,UGDBObjBlockdefArray,zeblockdefsfactory,GDBBlockDef,UGDBDrawingdef,
     memman,zcadsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity;
 implementation
 uses
@@ -29,10 +29,17 @@ uses
 function CreateClosedFilledBlock(dwg:PTDrawingDef;name:GDBString):PGDBObjBlockdef;
 var
    BlockDefArray:PGDBObjBlockdefArray;
+   layertable:PGDBLayerArray;
+   lttable:PGDBLtypeArray;
+   pentity:PGDBObjEntity;
 begin
    BlockDefArray:=dwg^.GetBlockDefArraySimple;
    result:=BlockDefArray.create(name);
-   ENTF_CreateLine(result,@result.ObjArray,[0,0,0,1,1,0]);
+   pentity:=ENTF_CreateSolid(result,@result.ObjArray,[-1,-1/6,0,-1,1/6,0,0,0,0]);
+
+   layertable:=dwg^.GetLayerTable;
+   lttable:=dwg^.GetLTypeTable;
+   GDBObjSetEntityProp(pentity,layertable^.GetSystemLayer,lttable^.GetSystemLT(TLTByLayer),ClByLayer,LnWtByLayer);
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('zedimblocksregister.initialization');{$ENDIF}

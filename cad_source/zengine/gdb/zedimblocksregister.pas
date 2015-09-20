@@ -37,9 +37,12 @@ begin
    result:=BlockDefArray.create(name);
    pentity:=ENTF_CreateSolid(result,@result.ObjArray,[-1,-1/6,0,-1,1/6,0,0,0,0]);
 
-   layertable:=dwg^.GetLayerTable;
-   lttable:=dwg^.GetLTypeTable;
-   GDBObjSetEntityProp(pentity,layertable^.GetSystemLayer,lttable^.GetSystemLT(TLTByLayer),ClByLayer,LnWtByLayer);
+   if pentity<>nil then
+   begin
+     layertable:=dwg^.GetLayerTable;
+     lttable:=dwg^.GetLTypeTable;
+     GDBObjSetEntityProp(pentity,layertable^.GetSystemLayer,lttable^.GetSystemLT(TLTByLayer),ClByLayer,LnWtByLayer);
+   end;
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('zedimblocksregister.initialization');{$ENDIF}

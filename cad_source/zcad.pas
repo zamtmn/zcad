@@ -113,6 +113,7 @@ uses
   registerenitiesfeatures,
   registerenitiesextenders,
   zcregistermultiproperties,
+  zclibraryblocksregister,
   uzglopenglviewarea,uzglgdiviewarea,uzglcanvasviewarea;
   //RegCnownTypes,URegisterObjects;
 

@@ -26,7 +26,7 @@ uses UGDBLayerArray,ugdbltypearray,gdbobjectsconstdef,zeentitiesmanager,UGDBObjB
 implementation
 uses
     log,GDBManager;
-function CreateClosedFilledBlock(dwg:PTDrawingDef;name:GDBString):PGDBObjBlockdef;
+function CreateClosedFilledBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString):PGDBObjBlockdef;
 var
    BlockDefArray:PGDBObjBlockdefArray;
    layertable:PGDBLayerArray;
@@ -34,7 +34,7 @@ var
    pentity:PGDBObjEntity;
 begin
    BlockDefArray:=dwg^.GetBlockDefArraySimple;
-   result:=BlockDefArray.create(name);
+   result:=BlockDefArray.create(BlockName);
    pentity:=ENTF_CreateSolid(result,@result.ObjArray,[-1,-1/6,0,-1,1/6,0,0,0,0]);
 
    if pentity<>nil then
@@ -46,24 +46,24 @@ begin
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('zedimblocksregister.initialization');{$ENDIF}
-  RegisterBlockDefCreateFunc('_ClosedFilled',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_ClosedBlank',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_Closed',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_Dot',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_ArchTick',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_Oblique',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_Open',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_Origin',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_Origin2',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_Open90',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_Open30',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_DotSmall',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_DotBlank',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_Small',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_BoxBlank',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_BoxFilled',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_DatumBlank',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_DatumFilled',CreateClosedFilledBlock);
-  RegisterBlockDefCreateFunc('_Integral',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_ClosedFilled','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_ClosedBlank','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Closed','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Dot','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_ArchTick','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Oblique','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Open','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Origin','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Origin2','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Open90','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Open30','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_DotSmall','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_DotBlank','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Small','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_BoxBlank','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_BoxFilled','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_DatumBlank','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_DatumFilled','','',CreateClosedFilledBlock);
+  RegisterBlockDefCreateFunc('_Integral','','',CreateClosedFilledBlock);
 finalization
 end.

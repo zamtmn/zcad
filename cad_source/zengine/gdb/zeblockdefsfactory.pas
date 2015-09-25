@@ -21,10 +21,10 @@ unit zeblockdefsfactory;
 
 
 interface
-uses sysutils,GDBBlockDef,usimplegenerics,UGDBDrawingdef,
+uses paths,sysutils,GDBBlockDef,usimplegenerics,UGDBDrawingdef,
     memman,zcadsysvars,GDBase,GDBasetypes,gdbEntity;
 type
-TBlockDefCreateFunc=function(dwg:PTDrawingDef;name:GDBString):PGDBObjBlockdef;
+TBlockDefCreateFunc=function(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString):PGDBObjBlockdef;
 PTBlockDefCreateData=^TBlockDefCreateData;
 TBlockDefCreateData=packed record
                           BlockName:GDBString;
@@ -33,8 +33,7 @@ TBlockDefCreateData=packed record
                           CreateProc:TBlockDefCreateFunc;
                      end;
 TBlockDefName2BlockDefCreateData=GKey2DataMap<GDBString,TBlockDefCreateData,LessGDBString>;
-procedure RegisterBlockDefCreateFunc(const BlockName:GDBString; const BlockDefCreateFunc:TBlockDefCreateFunc);
-procedure RegisterBlockDefLibrary(const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString);
+procedure RegisterBlockDefCreateFunc(const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString; const BlockDefCreateFunc:TBlockDefCreateFunc);
 function CreateBlockDef(dwg:PTDrawingDef;name:GDBString):PGDBObjBlockdef;
 var
    BlockDefName2BlockDefCreateData:TBlockDefName2BlockDefCreateData=nil;
@@ -61,9 +60,9 @@ begin
      BlockDefCreateData.CreateProc:=_CreateProc;
      BlockDefName2BlockDefCreateData.RegisterKey(uppercase(_BlockName),BlockDefCreateData);
 end;
-procedure RegisterBlockDefCreateFunc(const BlockName:GDBString; const BlockDefCreateFunc:TBlockDefCreateFunc);
+procedure RegisterBlockDefCreateFunc(const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString; const BlockDefCreateFunc:TBlockDefCreateFunc);
 begin
-     _BlockDefCreateData(BlockName,'','',BlockDefCreateFunc);
+     _BlockDefCreateData(BlockName,BlockDependsOn,BlockDeffinedIn,BlockDefCreateFunc);
 end;
 procedure RegisterBlockDefLibrary(const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString);
 begin
@@ -78,13 +77,7 @@ begin
      if BlockDefName2BlockDefCreateData.MyGetMutableValue(uppercase(name),PBlockDefCreateData)then
      begin
           if assigned(PBlockDefCreateData.CreateProc) then
-          begin
-            result:=PBlockDefCreateData.CreateProc(dwg,name);
-          end
-          else
-          begin
-
-          end;
+            PBlockDefCreateData.CreateProc(dwg,PBlockDefCreateData.BlockName,PBlockDefCreateData.BlockDependsOn,PBlockDefCreateData.BlockDeffinedIn);
      end
      else
          result:=nil;

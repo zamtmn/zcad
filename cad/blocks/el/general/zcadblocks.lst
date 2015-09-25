@@ -1,0 +1,5 @@
+;;Blockname,depends on blocks with '|' separated,deffined in file
+CONNECTOR_SQUARE=,_connector.dxf
+DEVICE_CONNECTOR_SQUARE=CONNECTOR_SQUARE,_connector.dxf
+PS_DAT_SMOKE=,_ops.dxf
+DEVICE_PS_DAT_SMOKE=DEVICE_CONNECTOR_SQUARE|PS_DAT_SMOKE,_ops.dxf

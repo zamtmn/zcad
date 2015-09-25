@@ -2087,12 +2087,13 @@ begin
           pb:=gdb.GetCurrentDWG^.BlockDefArray.getblockdef(operands);
           if pb=nil then
                         begin
-                             pb:=BlockBaseDWG^.BlockDefArray.getblockdef(operands);
+                             GDB.AddBlockFromDBIfNeed(gdb.GetCurrentDWG,operands);
+                             {pb:=BlockBaseDWG^.BlockDefArray.getblockdef(operands);
                              if pb<>nil then
                              begin
                                   gdb.CopyBlock(BlockBaseDWG,gdb.GetCurrentDWG,pb);
                                   //pb^.CloneToGDB({@GDB.GetCurrentDWG^.BlockDefArray});
-                             end;
+                             end;}
                         end;
      end;
 

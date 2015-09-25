@@ -75,6 +75,7 @@ uses
    function Regen_com(operands:TCommandOperands):TCommandResult;
    function Load_Merge(Operands:pansichar;LoadMode:TLoadOpt):GDBInteger;
    function Merge_com(operands:TCommandOperands):TCommandResult;
+   function MergeBlocks_com(operands:TCommandOperands):TCommandResult;
    procedure ReCreateClipboardDWG;
 const
      ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';

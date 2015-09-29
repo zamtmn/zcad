@@ -168,7 +168,7 @@ begin
 
   sysvar.SYS.SYS_RunTime:=nil;
 
-  createsplash;
+  createsplash(false);
 
   //SplashWindow.TXTOut('GDBCommandsOPS.finalize;');GDBCommandsOPS.finalize;
   //SplashWindow.TXTOut('GDBCommandsElectrical.finalize;');GDBCommandsElectrical.finalize;

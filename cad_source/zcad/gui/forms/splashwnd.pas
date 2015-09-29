@@ -34,7 +34,7 @@ type
 var
    SplashWindow:TSplashWnd;
 
-procedure createsplash;
+procedure createsplash(RunUniqueInstance:boolean);
 procedure removesplash;
 procedure SplashTextOutProc(s:string;pm:boolean);
 implementation
@@ -78,7 +78,8 @@ begin
 end;
 procedure createsplash;
 begin
-     sysparam.otherinstancerun:=InstanceRunning('zcad unique instance',true,true);
+     if RunUniqueInstance then
+       sysparam.otherinstancerun:=InstanceRunning('zcad unique instance',true,true);
      SplashWindow:=TSplashWnd.CreateNew(nil);
      //SplashWindow.cb:=TComboBox.CreateParented(SplashWindow.Handle);
      SplashWindow.cb:=TComboBox.Create(NIL);
@@ -105,7 +106,7 @@ initialization
   {$IFDEF DEBUGINITSECTION}LogOut('splashwnd.initialization');{$ENDIF}
   Application.Initialize;
   //RequireDerivedFormResource:=false;
-  createsplash;
+  createsplash(true);
   SplashTextOut:=SplashTextOutProc;
 finalization
   removesplash;

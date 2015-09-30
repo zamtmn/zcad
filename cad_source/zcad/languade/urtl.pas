@@ -34,9 +34,11 @@ initialization;
      {$IFDEF DEBUGINITSECTION}LogOut('urtl.initialization');{$ENDIF}
      programlog.logoutstr('urtl.initialization',lp_IncPos,LM_Debug);
      //units.init;
-     units.loadunit(expandpath('*rtl/system.pas'),nil);
-
-  SysUnit:=units.findunit('System');
+     if SysUnit=nil then
+       begin
+         units.loadunit(expandpath('*rtl/system.pas'),nil);
+         SysUnit:=units.findunit('System');
+       end;
 
   {RegCnownTypes.RegTypes;}
   {URegisterObjects.startup;}
@@ -111,8 +113,8 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowSeparator,'INTF_ObjInsp_ShowSeparator');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowFastEditors,'INTF_ObjInsp_ShowFastEditors');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowOnlyHotFastEditors,'INTF_ObjInsp_ShowOnlyHotFastEditors');
-  SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Enable,'INTF_ObjInsp_RowHeight_OverriderEnable');
-  SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Value,'INTF_ObjInsp_RowHeight_OverriderValue');
+  //SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Enable,'INTF_ObjInsp_RowHeight_OverriderEnable');
+  //SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Value,'INTF_ObjInsp_RowHeight_OverriderValue');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_SpaceHeight,'INTF_ObjInsp_SpaceHeight');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_AlwaysUseMultiSelectWrapper,'INTF_ObjInsp_AlwaysUseMultiSelectWrapper');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowEmptySections,'INTF_ObjInsp_ShowEmptySections');

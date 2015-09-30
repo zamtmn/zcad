@@ -34,12 +34,15 @@ type
                        function parseunit(var f: GDBOpenArrayOfByte; pcreatedunit:PTSimpleUnit):ptunit;virtual;
                        function changeparsemode(newmode:GDBInteger;var mode:GDBInteger):pasparsemode;
                        function findunit(uname:GDBString):ptunit;virtual;
+                       function FindOrCreateEmptyUnit(uname:GDBString):ptunit;virtual;
                        function internalfindunit(uname:GDBString):ptunit;virtual;
                        procedure SetNextManager(PNM:PTUnitManager);
                        procedure LoadFolder(path: GDBString);
 
                        procedure AfterObjectDone(p:PGDBaseObject);virtual;
                        procedure free;virtual;
+
+                       procedure CreateExtenalSystemVariable(varname,vartype:GDBString;pinstance:Pointer);
                  end;
 {EXPORT-}
 var
@@ -80,6 +83,21 @@ const
                             Size:sizeof(GDBPointer);
                             //Attributes:{FA_HIDDEN_IN_OBJ_INSP or }FA_READONLY
                             );
+procedure TUnitManager.CreateExtenalSystemVariable(varname,vartype:GDBString;pinstance:Pointer);
+begin
+  //TODO: убрать такуюже шнягу из urtl, сделать создание SysUnit в одном месте
+  if SysUnit=nil then
+    begin
+      units.loadunit(expandpath('*rtl/system.pas'),nil);
+      SysUnit:=units.findunit('System');
+    end;
+  if SysVarUnit=nil then
+    begin
+      SysVarUnit:=units.FindOrCreateEmptyUnit('sysvar');
+      SysVarUnit.InterfaceUses.addnodouble(@SysUnit);
+    end;
+  SysVarUnit.CreateVariable(varname,vartype,pinstance);
+end;
 procedure TUnitManager.AfterObjectDone;
 begin
      //GDBFreeMem(pointer(p));
@@ -133,6 +151,15 @@ begin
   until p=nil;
   if NextUnitManager<>NIL then
                               result:=NextUnitManager^.findunit(uname);
+end;
+function TUnitManager.FindOrCreateEmptyUnit(uname:GDBString):ptunit;
+begin
+   result:=internalfindunit(uname);
+   if result=nil then
+   begin
+        result:=pointer(CreateObject);
+        result^.init(uname);
+   end;
 end;
 
 function TUnitManager.findunit;
@@ -213,7 +240,7 @@ begin
 end;
 function TUnitManager.parseunit;
 var
-  varname, vartype,vuname, line,oldline{,uline}: GDBString;
+  varname, vartype,vuname, line,oldline,unitname: GDBString;
   vd: vardesk;
   //parsepos:GDBInteger;
   parseresult,subparseresult:PGDBGDBStringArray;
@@ -328,11 +355,14 @@ begin
                               if unitpart=tnothing then
                                                       begin
                               parseresult:=runparser('_identifier'#0'_softend'#0,line,parseerror);
+                              unitname:=parseresult^.getGDBString(0);
+                              if currentunit=nil then
+                                currentunit:=internalfindunit(unitname);
                               if currentunit=nil
                                                then
                                                    begin
                                                    currentunit:=pointer(CreateObject);
-                                                   currentunit^.init(parseresult^.getGDBString(0));
+                                                   currentunit^.init(unitname);
                                                    end;
                                                       end
                                                    else
@@ -667,7 +697,7 @@ if addtype then
                                      for i:=0 to parseresult.Count-2 do
                                      begin
                                      varname:=pGDBString(parseresult^.getelement(i))^;
-                                     if varname='rp_21' then
+                                     if varname='INTF_ObjInsp_WhiteBackground' then
                                                             varname:=varname;
                                      if currentunit^.FindVariable(varname)=nil then
                                      begin

@@ -178,14 +178,14 @@ TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
                   InterfaceVariables: varmanager;
                   constructor init(nam:GDBString);
                   destructor done;virtual;
-                  function CreateVariable(varname,vartype:GDBString):GDBPointer;virtual;
+                  function CreateVariable(varname,vartype:GDBString;_pinstance:pointer=nil):GDBPointer;virtual;
                   function FindVariable(varname:GDBString):pvardesk;virtual;
                   function FindVariableByInstance(_Instance:GDBPointer):pvardesk;virtual;
                   function FindValue(varname:GDBString):GDBPointer;virtual;
                   function TypeName2PTD(n: GDBString):PUserTypeDescriptor;virtual;
                   function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
                   function SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
-                  procedure setvardesc(out vd: vardesk; varname, username, typename: GDBString);
+                  procedure setvardesc(out vd: vardesk; varname, username, typename: GDBString;_pinstance:pointer=nil);
                   procedure free;virtual;abstract;
                   procedure CopyTo(source:PTSimpleUnit);virtual;
                   procedure CopyFrom(source:PTSimpleUnit);virtual;
@@ -213,7 +213,9 @@ TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
 {EXPORT-}
 procedure vardeskclear(p:GDBPointer);
 var
-  SysUnit,SavedUnit,SysVarUnit,DBUnit,DWGDBUnit,DWGUnit:PTUnit;
+  SysUnit:PTUnit=nil;
+  SysVarUnit:PTUnit=nil;
+  SavedUnit,DBUnit,DWGDBUnit,DWGUnit:PTUnit;
   BaseTypesEndIndex:GDBInteger;
   OldTypesCount:GDBInteger;
   VarCategory:GDBGDBStringArray;
@@ -557,14 +559,14 @@ end;
 
 
 
-procedure tsimpleunit.setvardesc(out vd: vardesk; varname, username, typename: GDBString);
+procedure tsimpleunit.setvardesc(out vd: vardesk; varname, username, typename: GDBString;_pinstance:pointer=nil);
 //var
 //  tpe:PUserTypeDescriptor;
 begin
   varname := readspace(varname);
   vd.name := varname;
   vd.username := username;
-  vd.data.Instance := nil;
+  vd.data.Instance := _pinstance;
   vd.data.ptd:={SysUnit.}TypeName2PTD(typename);
 
   if vd.data.ptd=nil then
@@ -607,8 +609,11 @@ begin
                           begin
                                size:=1;
                           end;
-       vd.data.Instance:=vararray.AllocData(size);
-       vd.data.PTD.InitInstance(vd.data.Instance);
+       if vd.data.Instance=nil then
+       begin
+         vd.data.Instance:=vararray.AllocData(size);
+         vd.data.PTD.InitInstance(vd.data.Instance);
+       end;
        vd.attrib:=0;
        //GDBGetMem({$IFDEF DEBUGBUILD}pansichar(debstr),{$ENDIF}vd.pvalue,size);
        i:=vardescarray.add(@vd);
@@ -1259,7 +1264,7 @@ begin
                             until p=nil;
      end;
 end;
-function tsimpleunit.createvariable(varname,vartype:GDBString):GDBPointer;
+function tsimpleunit.createvariable(varname,vartype:GDBString;_pinstance:pointer=nil):GDBPointer;
 var //t:PUserTypeDescriptor;
     //pvd:pvardesk;
     vd:vardesk;
@@ -1270,7 +1275,7 @@ begin
      vd.name:=varname;
      vd.pvalue:=nil;
      vd.ptd:=t;}
-     setvardesc(vd, varname,'', vartype);
+     setvardesc(vd, varname,'', vartype,_pinstance);
      InterfaceVariables.createvariable(varname,vd);
      result:=vd.data.Instance;
 end;

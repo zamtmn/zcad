@@ -20,7 +20,7 @@ unit zcregisterobjectinspector;
 {$INCLUDE def.inc}
 interface
 uses zcobjectinspector,zcguimanager,zcadstrconsts,Types,Controls,
-  UGDBDescriptor,Varman,zcadsysvars,gdbasetypes;
+  UGDBDescriptor,Varman,UUnitManager,zcadsysvars,gdbasetypes,sysinfo;
 implementation
 procedure ZCADFormSetupProc(Form:TControl);
 var
@@ -36,6 +36,16 @@ begin
 end;
 initialization
 {$IFDEF DEBUGINITSECTION}LogOut('zcregisterobjectinspector.initialization');{$ENDIF}
+units.CreateExtenalSystemVariable('INTF_ObjInsp_WhiteBackground','GDBBoolean',@INTFObjInspWhiteBackground);
+units.CreateExtenalSystemVariable('INTF_ObjInsp_ShowHeaders','GDBBoolean',@INTFObjInspShowHeaders);
+units.CreateExtenalSystemVariable('INTF_ObjInsp_ShowSeparator','GDBBoolean',@INTFObjInspShowSeparator);
+units.CreateExtenalSystemVariable('INTF_ObjInsp_OldStyleDraw','GDBBoolean',@INTFObjInspOldStyleDraw);
+units.CreateExtenalSystemVariable('INTF_ObjInsp_ShowFastEditors','GDBBoolean',@INTFObjInspShowFastEditors);
+units.CreateExtenalSystemVariable('INTF_ObjInsp_ShowOnlyHotFastEditors','GDBBoolean',@INTFObjInspShowOnlyHotFastEditors);
+units.CreateExtenalSystemVariable('INTF_ObjInsp_RowHeight_OverriderEnable','GDBBoolean',@INTFObjInspRowHeight.Enable);
+units.CreateExtenalSystemVariable('INTF_ObjInsp_RowHeight_OverriderValue','GDBInteger',@INTFObjInspRowHeight.Value);
+SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight:=@INTFObjInspRowHeight;
+zcobjectinspector.INTFDefaultControlHeight:=sysparam.defaultheight;
 ZCADGUIManager.RegisterZCADFormInfo('ObjectInspector',rsGDBObjinspWndName,TGDBobjinsp,rect(0,100,200,600),ZCADFormSetupProc,@GDBobjinsp);
 finalization
 end.

@@ -200,10 +200,6 @@ type
                VIEW_HistoryLineVisible,
                VIEW_ObjInspVisible:PGDBBoolean;
          end;
-  TGDBIntegerOverrider=packed record
-                        Enable:PGDBBoolean;(*'Enable'*)
-                        Value:PGDBInteger;(*'New value'*)
-                       end;
   tobjinspinterface=packed record
                 INTF_ObjInsp_ShowHeaders:PGDBBoolean;(*'Show headers'*)
                 INTF_ObjInsp_OldStyleDraw:PGDBBoolean;(*'Old style'*)
@@ -211,7 +207,7 @@ type
                 INTF_ObjInsp_ShowSeparator:PGDBBoolean;(*'Show separator'*)
                 INTF_ObjInsp_ShowFastEditors:PGDBBoolean;(*'Show fast editors'*)
                 INTF_ObjInsp_ShowOnlyHotFastEditors:PGDBBoolean;(*'Show only hot fast editors'*)
-                INTF_ObjInsp_RowHeight:TGDBIntegerOverrider;(*'Row height'*)
+                INTF_ObjInsp_RowHeight:PTGDBIntegerOverrider;(*'Row height'*)
                 INTF_ObjInsp_SpaceHeight:PGDBInteger;(*'Space height'*)
                 INTF_ObjInsp_AlwaysUseMultiSelectWrapper:PGDBBoolean;(*'Always use multiselect wrapper'*)
                 INTF_ObjInsp_ShowEmptySections:PGDBBoolean;(*'Show empty sections'*)

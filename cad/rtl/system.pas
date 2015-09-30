@@ -449,6 +449,11 @@ TInsUnits=(IUUnspecified(*'Unspecified'*),
 TLLPrimitiveAttrib=GDBInteger;
 PTLLVertexIndex=^TLLVertexIndex;
 TLLVertexIndex=GDBInteger;
+PTGDBIntegerOverrider=^TGDBIntegerOverrider;
+TGDBIntegerOverrider=packed record
+                      Enable:GDBBoolean;(*'Enable'*)
+                      Value:GDBInteger;(*'New value'*)
+                     end;
 //Generate on E:\zcad\cad_source\zengine\gdb\gdbpalette.pas
   PTRGB=^TRGB;
   TRGB=packed record
@@ -1254,10 +1259,6 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
                VIEW_HistoryLineVisible,
                VIEW_ObjInspVisible:PGDBBoolean;
          end;
-  TGDBIntegerOverrider=packed record
-                        Enable:PGDBBoolean;(*'Enable'*)
-                        Value:PGDBInteger;(*'New value'*)
-                       end;
   tobjinspinterface=packed record
                 INTF_ObjInsp_ShowHeaders:PGDBBoolean;(*'Show headers'*)
                 INTF_ObjInsp_OldStyleDraw:PGDBBoolean;(*'Old style'*)
@@ -1265,7 +1266,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
                 INTF_ObjInsp_ShowSeparator:PGDBBoolean;(*'Show separator'*)
                 INTF_ObjInsp_ShowFastEditors:PGDBBoolean;(*'Show fast editors'*)
                 INTF_ObjInsp_ShowOnlyHotFastEditors:PGDBBoolean;(*'Show only hot fast editors'*)
-                INTF_ObjInsp_RowHeight:TGDBIntegerOverrider;(*'Row height'*)
+                INTF_ObjInsp_RowHeight:PTGDBIntegerOverrider;(*'Row height'*)
                 INTF_ObjInsp_SpaceHeight:PGDBInteger;(*'Space height'*)
                 INTF_ObjInsp_AlwaysUseMultiSelectWrapper:PGDBBoolean;(*'Always use multiselect wrapper'*)
                 INTF_ObjInsp_ShowEmptySections:PGDBBoolean;(*'Show empty sections'*)
@@ -1414,14 +1415,14 @@ TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
                   InterfaceVariables: varmanager;
                   constructor init(nam:GDBString);
                   destructor done;virtual;abstract;
-                  function CreateVariable(varname,vartype:GDBString):GDBPointer;virtual;abstract;
+                  function CreateVariable(varname,vartype:GDBString;_pinstance:pointer=nil):GDBPointer;virtual;abstract;
                   function FindVariable(varname:GDBString):pvardesk;virtual;abstract;
                   function FindVariableByInstance(_Instance:GDBPointer):pvardesk;virtual;abstract;
                   function FindValue(varname:GDBString):GDBPointer;virtual;abstract;
                   function TypeName2PTD(n: GDBString):PUserTypeDescriptor;virtual;abstract;
                   function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
                   function SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
-                  procedure setvardesc(out vd: vardesk; varname, username, typename: GDBString);
+                  procedure setvardesc(out vd: vardesk; varname, username, typename: GDBString;_pinstance:pointer=nil);
                   procedure free;virtual;abstract;
                   procedure CopyTo(source:PTSimpleUnit);virtual;abstract;
                   procedure CopyFrom(source:PTSimpleUnit);virtual;abstract;
@@ -2686,6 +2687,7 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
                  function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;abstract;
+                 procedure higlight(var DC:TDrawContext);virtual;abstract;
            end;
 //Generate on E:\zcad\cad_source\zengine\gdb\entities\GDBtext.pas
 PGDBObjText=^GDBObjText;
@@ -3581,11 +3583,13 @@ type
                        function parseunit(var f: GDBOpenArrayOfByte; pcreatedunit:PTSimpleUnit):ptunit;virtual;abstract;
                        function changeparsemode(newmode:GDBInteger;var mode:GDBInteger):pasparsemode;
                        function findunit(uname:GDBString):ptunit;virtual;abstract;
+                       function FindOrCreateEmptyUnit(uname:GDBString):ptunit;virtual;abstract;
                        function internalfindunit(uname:GDBString):ptunit;virtual;abstract;
                        procedure SetNextManager(PNM:PTUnitManager);
                        procedure LoadFolder(path: GDBString);
                        procedure AfterObjectDone(p:PGDBaseObject);virtual;abstract;
                        procedure free;virtual;abstract;
+                       procedure CreateExtenalSystemVariable(varname,vartype:GDBString;pinstance:Pointer);
                  end;
 //Generate on E:\zcad\cad_source\zengine\u\UGDBNumerator.pas
 PGDBNumItem=^GDBNumItem;

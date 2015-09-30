@@ -41,7 +41,14 @@ uses
   sysinfo,
 
   varman,
-  urtl,
+  //
+  //if need create variables before system.pas loading, place unit bellow
+  //
+  zcregisterobjectinspector,
+  //
+  //next line load system.pas
+  //
+  urtl,//loading rtl/system.pas and setup SysVar
   UUnitManager,
   UGDBFontManager,
   ioshx,iottf,
@@ -103,8 +110,7 @@ uses
   GDBCommandsElectrical,
   GDBCommandsOPS,
   plugins,
-  zcregisterobjectinspector,
-  //zcobjectinspector,
+  //zcregisterobjectinspector,
   mainwindow,
   shared,
   zcadstrconsts,

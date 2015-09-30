@@ -444,6 +444,11 @@ TInsUnits=(IUUnspecified(*'Unspecified'*),
 TLLPrimitiveAttrib=GDBInteger;
 PTLLVertexIndex=^TLLVertexIndex;
 TLLVertexIndex=GDBInteger;
+PTGDBIntegerOverrider=^TGDBIntegerOverrider;
+TGDBIntegerOverrider=packed record
+                      Enable:GDBBoolean;(*'Enable'*)
+                      Value:GDBInteger;(*'New value'*)
+                     end;
 {EXPORT-}
 const
   empty_GDBString='Empty GDBString';

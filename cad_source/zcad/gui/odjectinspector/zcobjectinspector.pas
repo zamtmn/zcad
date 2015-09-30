@@ -164,6 +164,14 @@ var
   DefaultDetails: TThemedElementDetails;
   DummyUF:TzeUnitsFormat;
 
+  INTFObjInspWhiteBackground:boolean=false;
+  INTFObjInspShowHeaders:boolean=true;
+  INTFObjInspShowSeparator:boolean=true;
+  INTFObjInspOldStyleDraw:boolean=false;
+  INTFObjInspShowFastEditors:boolean=true;
+  INTFObjInspShowOnlyHotFastEditors:boolean=true;
+  INTFDefaultControlHeight:integer=21;
+  INTFObjInspRowHeight:TGDBIntegerOverrider;
 implementation
 
 uses UObjectDescriptor,GDBEntity,UGDBStringArray,log;
@@ -200,20 +208,12 @@ begin
 end;
 function IsWgiteBackground:boolean;
 begin
-     if assigned(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_WhiteBackground)
-     then
-         result:=SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_WhiteBackground^
-     else
-         result:=false;
+     result:=INTFObjInspWhiteBackground;
 end;
 
 function TGDBobjinsp.IsHeadersEnabled:boolean;
 begin
-    if assigned(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowHeaders)
-    then
-        result:=SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowHeaders^
-    else
-        result:=true;
+     result:=INTFObjInspShowHeaders;
 end;
 function TGDBobjinsp.HeadersHeight:integer;
 begin
@@ -224,49 +224,26 @@ begin
 end;
 function NeedShowSeparator:boolean;
 begin
-    if assigned(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowSeparator) then
-       begin
-            if assigned(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_OldStyleDraw) then
-               begin
-                 if SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_OldStyleDraw^ then
-                    result:=false
-                 else
-                    result:=SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowSeparator^
-               end
-            else
-               result:=SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowSeparator^
-       end
-    else
-       result:=false;
+     if INTFObjInspOldStyleDraw then
+        result:=false
+     else
+        result:=INTFObjInspShowSeparator;
 end;
 function isOldStyleDraw:boolean;
 begin
-    if assigned(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_OldStyleDraw) then
-       result:=SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_OldStyleDraw^
-    else
-       result:=false;
+       result:=INTFObjInspOldStyleDraw;
 end;
 function NeedDrawFasteditor(OnMouseProp:boolean):boolean;
 begin
-    if assigned(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowFastEditors) then
-    begin
-         if SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowFastEditors^ then
-         begin
-              if assigned(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowOnlyHotFastEditors) then
-              begin
-                   if SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowOnlyHotFastEditors^ then
-                   result:=OnMouseProp
-                   else
-                       result:=true;
-              end
-              else
-                  result:=true;
-         end
+     if INTFObjInspShowFastEditors then
+     begin
+         if INTFObjInspShowOnlyHotFastEditors then
+         result:=OnMouseProp
          else
-             result:=false;
-    end
-    else
-        result:=true;
+             result:=true;
+     end
+     else
+         result:=false;
 end;
 
 procedure TGDBobjinsp.SetBounds(ALeft, ATop, AWidth, AHeight: integer);
@@ -418,15 +395,12 @@ procedure TGDBobjinsp.CalcRowHeight;
 begin
   rowh:=21;
   spaceh:=5;
-  if assigned(sysvar.INTF.INTF_DefaultControlHeight) then
-                                                         rowh:=sysvar.INTF.INTF_DefaultControlHeight^;
-  if assigned(sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Enable) then
-  if sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Enable^ then
-  if assigned(sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Value) then
-  if sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Value^>0 then
-     rowh:=sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Value^;
-  if assigned(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_SpaceHeight) then
-     spaceh:=SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_SpaceHeight^;
+  rowh:=INTFDefaultControlHeight;
+
+  if INTFObjInspRowHeight.Enable then
+  if INTFObjInspRowHeight.Value>0 then
+                                      rowh:=INTFObjInspRowHeight.Value;
+   spaceh:=SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_SpaceHeight^;
 end;
 
 procedure TGDBobjinsp.AfterConstruction;

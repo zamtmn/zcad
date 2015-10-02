@@ -44,9 +44,14 @@ units.CreateExtenalSystemVariable('INTF_ObjInsp_ShowFastEditors','GDBBoolean',@I
 units.CreateExtenalSystemVariable('INTF_ObjInsp_ShowOnlyHotFastEditors','GDBBoolean',@INTFObjInspShowOnlyHotFastEditors);
 units.CreateExtenalSystemVariable('INTF_ObjInsp_RowHeight_OverriderEnable','GDBBoolean',@INTFObjInspRowHeight.Enable);
 units.CreateExtenalSystemVariable('INTF_ObjInsp_RowHeight_OverriderValue','GDBInteger',@INTFObjInspRowHeight.Value);
+units.CreateExtenalSystemVariable('INTF_ObjInsp_SpaceHeight','GDBInteger',@INTFObjInspSpaceHeight);
+units.CreateExtenalSystemVariable('INTF_ObjInsp_ShowEmptySections','GDBBoolean',@INTFObjInspShowEmptySections);
 SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight:=@INTFObjInspRowHeight;
 zcobjectinspector.INTFDefaultControlHeight:=sysparam.defaultheight;
 ZCADGUIManager.RegisterZCADFormInfo('ObjectInspector',rsGDBObjinspWndName,TGDBobjinsp,rect(0,100,200,600),ZCADFormSetupProc,@GDBobjinsp);
+PropertyRowName:=rsProperty;
+ValueRowName:=rsValue;
+DifferentName:=rsDifferent;
 finalization
 end.
 

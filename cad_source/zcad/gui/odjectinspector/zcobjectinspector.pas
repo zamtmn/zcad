@@ -22,17 +22,18 @@ unit zcobjectinspector;
 interface
 
 uses
-  enitiesextendervariables,gdbdrawcontext,math,LMessages,LCLIntf,zcadstrconsts,usupportgui,GDBRoot,UGDBOpenArrayOfUCommands,StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
+  enitiesextendervariables,gdbdrawcontext,math,LMessages,LCLIntf,usupportgui,
+  GDBRoot,UGDBOpenArrayOfUCommands,StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,
   Themes,
   {$IFDEF LCLGTK2}
-  x,xlib,{x11,}{xutil,}
-  gtk2,gdk2,{gdk2x,}
+  x,xlib,
+  gtk2,gdk2,
   {$ENDIF}
   {$IFDEF WINDOWS}win32proc,{$endif}
   strproc,types,graphics,
   ExtCtrls,Controls,Classes,menus,Forms,lcltype,fileutil,
 
-  Varman,gdbasetypes,SysUtils,shared,zcadsysvars,
+  Varman,gdbasetypes,SysUtils,shared,
   gdbase,varmandef,UGDBDrawingdef,
   memman,TypeDescriptors;
 const
@@ -172,6 +173,12 @@ var
   INTFObjInspShowOnlyHotFastEditors:boolean=true;
   INTFDefaultControlHeight:integer=21;
   INTFObjInspRowHeight:TGDBIntegerOverrider;
+  INTFObjInspSpaceHeight:integer=0;
+  INTFObjInspShowEmptySections:boolean=false;
+
+  PropertyRowName:string='Property';
+  ValueRowName:string='Value';
+  DifferentName:string='Different';
 implementation
 
 uses UObjectDescriptor,GDBEntity,UGDBStringArray,log;
@@ -400,7 +407,7 @@ begin
   if INTFObjInspRowHeight.Enable then
   if INTFObjInspRowHeight.Value>0 then
                                       rowh:=INTFObjInspRowHeight.Value;
-   spaceh:=SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_SpaceHeight^;
+   spaceh:=INTFObjInspSpaceHeight;
 end;
 
 procedure TGDBobjinsp.AfterConstruction;
@@ -804,7 +811,7 @@ begin
         begin
         if ppd^.SubNode<>nil then
                                   begin
-                                     if (ppd^.SubNode^.Count>0)or SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowEmptySections^ then
+                                     if (ppd^.SubNode^.Count>0)or INTFObjInspShowEmptySections then
                                      begin
                                      if visible then
                                      begin
@@ -1020,14 +1027,14 @@ begin
 
     DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemNormal);
     ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
-    ThemeServices.DrawText(Canvas,DefaultDetails,rsProperty,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER,0);
+    ThemeServices.DrawText(Canvas,DefaultDetails,PropertyRowName,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER,0);
 
     DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
     hrect.Left:=hrect.right;
     {$IFDEF WINDOWS}hrect.right:=ARect.Right-1;{$ENDIF}
     {$IFNDEF WINDOWS}hrect.right:=ARect.Right-2;{$ENDIF}
     ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
-    ThemeServices.DrawText(Canvas,DefaultDetails,rsValue,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER,0);
+    ThemeServices.DrawText(Canvas,DefaultDetails,ValueRowName,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER,0);
 end;
 if NeedShowSeparator then
 begin
@@ -1096,7 +1103,7 @@ begin
     repeat
       LastPropAddFreeSpace:=false;
       if curr^.IsVisible then
-      if (not((curr^.SubNode<>nil)and(curr^.SubNode.count=0)))or SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowEmptySections^ then
+      if (not((curr^.SubNode<>nil)and(curr^.SubNode.count=0)))or INTFObjInspShowEmptySections then
       begin
         dy:=my-y;
         if (dy<rowh)and(dy>0) then
@@ -1626,7 +1633,7 @@ begin
        if assigned(pp^.valueAddres) then
        begin
          if (pp^.Attr and FA_DIFFERENT)<>0 then
-                                               initialvalue:=rsDifferent
+                                               initialvalue:=DifferentName
                                            else
                                                initialvalue:='';
          tr:=pp^.rect;
@@ -1644,7 +1651,7 @@ begin
                                                                                 editorcontrol.Visible:=false;
                                                                                 {$ENDIF}
                                                                                 editorcontrol.Parent:=self;
-                                                                                SetComboSize(editorcontrol as TCombobox,sysvar.INTF.INTF_DefaultControlHeight^-6);
+                                                                                SetComboSize(editorcontrol as TCombobox,rowh-6);
                                                                                 //(editorcontrol as TCombobox).itemheight:=pp^.rect.Bottom-pp^.rect.Top-6;
                                                                                 if editorcontrol is TCombobox then
                                                                                 if (editorcontrol as TCombobox).ReadOnly then

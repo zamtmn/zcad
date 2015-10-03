@@ -22,15 +22,17 @@ unit zcguimanager;
 
 interface
 uses usimplegenerics,
-    memman,zcadsysvars,GDBase,GDBasetypes,gdbEntity,Types,Controls;
+    memman,zcadsysvars,GDBase,GDBasetypes,gdbEntity,Types,Controls,Forms;
 type
 TZCADFormSetupProc=procedure(Form:TControl);
+TZCADFormCreateProc=function:TForm;
 PTFormInfoData=^TFormInfoData;
 TFormInfoData=packed record
                           FormName,FormCaption:GDBString;
                           DefaultBounds:TRect;
                           FormClass:TClass;
                           SetupProc:TZCADFormSetupProc;
+                          CreateProc:TZCADFormCreateProc;
                           PInstanceVariable:Pointer;
                     end;
 TFormName2FormInfoDataMap=GKey2DataMap<GDBString,TFormInfoData,LessGDBString>;
@@ -38,7 +40,7 @@ TZCADGUIManager=class
                      FormsInfo:TFormName2FormInfoDataMap;
                      constructor Create;
                      destructor Destroy;virtual;
-                     procedure RegisterZCADFormInfo(FormName,FormCaption:GDBString;const FormClass:TClass;const bounds:TRect;SetupProc:TZCADFormSetupProc; PInstanceVariable:pointer);
+                     procedure RegisterZCADFormInfo(FormName,FormCaption:GDBString;const FormClass:TClass;const bounds:TRect;SetupProc:TZCADFormSetupProc;CreateProc:TZCADFormCreateProc;PInstanceVariable:pointer);
                      function GetZCADFormInfo(FormName:GDBString; out PFormInfoData:PTFormInfoData):boolean;
                      function CreateZCADFormInstance(var FormInfo:TFormInfoData):tobject;
                 end;
@@ -57,7 +59,7 @@ begin
      result:=FormsInfo.MyGetMutableValue(FormName,PFormInfoData);
 end;
 
-procedure TZCADGUIManager.RegisterZCADFormInfo(FormName,FormCaption:GDBString;const FormClass:TClass;const bounds:TRect;SetupProc:TZCADFormSetupProc; PInstanceVariable:pointer);
+procedure TZCADGUIManager.RegisterZCADFormInfo(FormName,FormCaption:GDBString;const FormClass:TClass;const bounds:TRect;SetupProc:TZCADFormSetupProc;CreateProc:TZCADFormCreateProc;PInstanceVariable:pointer);
 var
   FID:TFormInfoData;
 begin
@@ -66,6 +68,7 @@ begin
      fid.FormClass:=FormClass;
      fid.DefaultBounds:=bounds;
      fid.SetupProc:=SetupProc;
+     fid.CreateProc:=CreateProc;
      fid.PInstanceVariable:=PInstanceVariable;
      FormsInfo.RegisterKey(FormName,fid);
 end;

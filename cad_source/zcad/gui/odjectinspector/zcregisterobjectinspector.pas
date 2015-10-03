@@ -19,7 +19,7 @@
 unit zcregisterobjectinspector;
 {$INCLUDE def.inc}
 interface
-uses zcadinterface,GDBRoot,gdbase,UGDBDrawingdef,gdbdrawcontext,UGDBStringArray,varmandef,ugdbsimpledrawing,GDBEntity,enitiesextendervariables,zcobjectinspector,zcguimanager,zcadstrconsts,Types,Controls,
+uses Forms,zcadinterface,GDBRoot,gdbase,UGDBDrawingdef,gdbdrawcontext,UGDBStringArray,varmandef,ugdbsimpledrawing,GDBEntity,enitiesextendervariables,zcobjectinspector,zcguimanager,zcadstrconsts,Types,Controls,
   UGDBDescriptor,Varman,UUnitManager,zcadsysvars,gdbasetypes,sysinfo;
 implementation
 procedure ZCADFormSetupProc(Form:TControl);
@@ -33,6 +33,8 @@ begin
   pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
   if assigned(pint)then
                        SetNameColWidth(pint^);
+  GDBobjinsp.Align:=alClient;
+  GDBobjinsp.Parent:=tform(Form);
 end;
 procedure _onNotify(const pcurcontext:gdbpointer);
 begin
@@ -133,7 +135,7 @@ units.CreateExtenalSystemVariable('INTF_ObjInsp_SpaceHeight','GDBInteger',@INTFO
 units.CreateExtenalSystemVariable('INTF_ObjInsp_ShowEmptySections','GDBBoolean',@INTFObjInspShowEmptySections);
 SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight:=@INTFObjInspRowHeight;
 zcobjectinspector.INTFDefaultControlHeight:=sysparam.defaultheight;
-ZCADGUIManager.RegisterZCADFormInfo('ObjectInspector',rsGDBObjinspWndName,TGDBobjinsp,rect(0,100,200,600),ZCADFormSetupProc,@GDBobjinsp);
+ZCADGUIManager.RegisterZCADFormInfo('ObjectInspector',rsGDBObjinspWndName,TGDBobjinsp,rect(0,100,200,600),ZCADFormSetupProc,CreateObjInspInstance,@GDBobjinsp);
 PropertyRowName:=rsProperty;
 ValueRowName:=rsValue;
 DifferentName:=rsDifferent;

@@ -30,7 +30,7 @@ uses
   {$ENDIF}
   {$IFDEF WINDOWS}win32proc,{$endif}
   types,graphics,
-  ExtCtrls,Controls,Classes,menus,Forms,lcltype,fileutil,
+  ExtCtrls,Controls,Classes,menus,Forms,lcltype,
 
   Varman,gdbasetypes,SysUtils,shared,
   gdbase,varmandef,
@@ -62,7 +62,9 @@ type
   TOnUpdateObjectInInsp=procedure(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:gdbpointer;const pcurrobj:GDBPointer;const GDBobj:GDBBoolean);
   TOnNotify=procedure(const pcurcontext:gdbpointer);
 
-  TGDBobjinsp=class({TPanel}tform)
+  TObjInspCustom=TScrollBox;
+
+  TGDBobjinsp=class(TObjInspCustom)
     public
     GDBobj:GDBBoolean;
     EDContext:TEditorContext;
@@ -326,8 +328,9 @@ begin
 end;
 function CreateObjInspInstance:TForm;
 begin
-     GDBobjinsp:=TGDBObjInsp(TGDBObjInsp.NewInstance);
-     result:=GDBobjinsp;
+     GDBobjinsp:=TGDBObjInsp.Create(nil);
+     //result:=GDBobjinsp;
+     result:=tform(TForm.NewInstance);
 end;
 function GetPeditor:TComponent;
 begin
@@ -419,7 +422,7 @@ begin
      CalcRowHeight;
 
      onresize:=_onresize;
-     onhide:=FormHide;
+     //onhide:=FormHide;
      onpaint:=mypaint;
      self.DoubleBuffered:=true;
      self.BorderStyle:=bsnone;

@@ -21,10 +21,10 @@ unit uzglgdiviewarea;
 interface
 uses
      {$IFDEF LCLGTK2}
-     gtk2,gdk2,
+     gtk2,
      {$ENDIF}
      {$IFDEF LCLQT}
-     qtwidgets,qt4,qtint,
+     qt4,qtint,
      {$ENDIF}
      uzglgdidrawer,abstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,

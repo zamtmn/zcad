@@ -20,11 +20,8 @@ unit uzglcanvasviewarea;
 {$INCLUDE def.inc}
 interface
 uses
-     {$IFDEF LCLGTK2}
-     gtk2,gdk2,
-     {$ENDIF}
      {$IFDEF LCLQT}
-     qtwidgets,qt4,qtint,
+     qt4,
      {$ENDIF}
      uzglcanvasdrawer,abstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,

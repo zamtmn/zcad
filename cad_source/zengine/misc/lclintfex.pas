@@ -22,7 +22,7 @@ interface
 
 uses
  {$IFDEF WINDOWS}windows,{$ENDIF}
- {$IFDEF LCLQT}qtwidgets,qt4,qtint,qtobjects,{$ENDIF}
+ {$IFDEF LCLQT}qt4,qtobjects,{$ENDIF}
  LCLType,LCLIntf,gdbase;
 const
      GM_COMPATIBLE=1;

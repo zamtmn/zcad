@@ -24,9 +24,6 @@ uses
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
-    {$IFDEF LCLQT}
-    qtobjects,
-    {$ENDIF}
     LCLIntf,LCLType,Classes,Controls,
     geometry,uzglgeneraldrawer,uzglabstractdrawer,glstatemanager,Graphics,gdbase;
 const

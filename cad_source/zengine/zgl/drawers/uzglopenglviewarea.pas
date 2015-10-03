@@ -24,7 +24,7 @@ uses
      gtk2,gdk2,
      {$ENDIF}
      {$IFDEF LCLQT}
-     qtwidgets,qt4,qtint,
+     qt4,
      {$ENDIF}
      uzglgdidrawer,abstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,

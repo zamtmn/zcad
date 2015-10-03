@@ -22,23 +22,21 @@ unit zcobjectinspector;
 interface
 
 uses
-  enitiesextendervariables,gdbdrawcontext,math,LMessages,LCLIntf,usupportgui,
-  GDBRoot,UGDBOpenArrayOfUCommands,StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,
+  math,LMessages,LCLIntf,usupportgui,
+  UGDBOpenArrayOfUCommands,StdCtrls,strutils,zcadinterface,
   Themes,
   {$IFDEF LCLGTK2}
   x,xlib,
   gtk2,gdk2,
   {$ENDIF}
   {$IFDEF WINDOWS}win32proc,{$endif}
-  strproc,types,graphics,
+  types,graphics,
   ExtCtrls,Controls,Classes,menus,Forms,lcltype,fileutil,
 
   Varman,gdbasetypes,SysUtils,shared,
-  gdbase,varmandef,UGDBDrawingdef,
-  memman,TypeDescriptors;
+  gdbase,varmandef,
+  memman,TypeDescriptors,UGDBStringArray;
 const
-  alligmentall=2;
-  alligmentarrayofarray=64;
   fastEditorOffset={$IFDEF LCLQT}2{$ELSE}2{$ENDIF} ;
   spliterhalfwidth=4;
   subtab=8;
@@ -60,6 +58,10 @@ type
                        UndoStack:PGDBObjOpenArrayOfUCommands;
                        UndoCommand:PTTypedChangeCommand;
                  end;
+
+  TOnGetOtherValues=procedure(var vsa:GDBGDBStringArray;const valkey:GDBString;const pcurcontext:gdbpointer;const pcurrobj:GDBPointer;const GDBobj:GDBBoolean);
+  TOnUpdateObjectInInsp=procedure(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:gdbpointer;const pcurrobj:GDBPointer;const GDBobj:GDBBoolean);
+  TOnNotify=procedure(const pcurcontext:gdbpointer);
 
   TGDBobjinsp=class({TPanel}tform)
     public
@@ -112,7 +114,6 @@ type
 
     procedure createeditor(pp:PPropertyDeskriptor);
     function CurrObjIsEntity:boolean;
-    function IsEntityInCurrentContext:boolean;
 
     function IsHeadersEnabled:boolean;
     function HeadersHeight:integer;
@@ -158,10 +159,8 @@ procedure FreEditor;
 
 var
   GDBobjinsp:TGDBobjinsp;
-  typecount:GDBWord;
-  proptreeptr:propdeskptr;
-  rowh,spaceh:integer;
-  ty:integer;
+  //proptreeptr:propdeskptr;
+  rowh:integer;
   DefaultDetails: TThemedElementDetails;
   DummyUF:TzeUnitsFormat;
 
@@ -179,9 +178,13 @@ var
   PropertyRowName:string='Property';
   ValueRowName:string='Value';
   DifferentName:string='Different';
+
+  onGetOtherValues:TOnGetOtherValues=nil;
+  onUpdateObjectInInsp:TOnUpdateObjectInInsp=nil;
+  onNotify:TOnNotify=nil;
 implementation
 
-uses UObjectDescriptor,GDBEntity,UGDBStringArray,log;
+uses UObjectDescriptor;
 
 function PlusMinusDetail(Collapsed,hot:boolean):TThemedTreeview;
 begin
@@ -193,7 +196,7 @@ begin
 end;
 procedure TGDBobjinsp.FormHide(Sender: TObject);
 begin
-     proptreeptr:=proptreeptr;
+     //proptreeptr:=proptreeptr;
 end;
 
 procedure TGDBobjinsp.DoAllAutoSize;
@@ -400,21 +403,20 @@ begin
 end;
 procedure TGDBobjinsp.CalcRowHeight;
 begin
-  rowh:=21;
-  spaceh:=5;
+  //spaceh:=5;
   rowh:=INTFDefaultControlHeight;
 
   if INTFObjInspRowHeight.Enable then
   if INTFObjInspRowHeight.Value>0 then
                                       rowh:=INTFObjInspRowHeight.Value;
-   spaceh:=INTFObjInspSpaceHeight;
+   //spaceh:=INTFObjInspSpaceHeight;
 end;
 
 procedure TGDBobjinsp.AfterConstruction;
 begin
      inherited;
      rowh:=21;
-     spaceh:=5;
+     //spaceh:=5;
      CalcRowHeight;
 
      onresize:=_onresize;
@@ -918,7 +920,7 @@ begin
     until ppd=nil;
     if not LastPropAddFreespace then
                                     begin
-                                      y:=y+spaceh;
+                                      y:=y+INTFObjInspSpaceHeight;
                                       LastPropAddFreespace:=true;
                                     end;
 end;
@@ -949,6 +951,8 @@ begin
   inherited;
 end;
 procedure TGDBobjinsp.ScrollbarHandler(ScrollKind: TScrollBarKind; OldPosition: Integer);
+var
+  ty:integer;
 begin
     if peditor<>nil then
     begin
@@ -1119,7 +1123,7 @@ begin
     until curr=nil;
     if not LastPropAddFreeSpace then
     begin
-    y:=y+spaceh;
+    y:=y+INTFObjInspSpaceHeight;
     LastPropAddFreeSpace:=true;
     end;
 end;
@@ -1185,10 +1189,8 @@ begin
   if sender=peditor then
   begin
     saveppropcurrentedit:=EDContext.ppropcurrentedit;
-    if pcurcontext<>nil then
-    begin
-         PTDrawingDef(pcurcontext).ChangeStampt(true);
-    end;
+    if assigned(onNotify)then
+                             onNotify(pcurcontext);
 
     if EDContext.UndoCommand<>nil then
                                       begin
@@ -1228,8 +1230,6 @@ Modified : /trunk/cad_source/languade/varmandef.pas
   end;
 end;
 procedure TGDBobjinsp.UpdateObjectInInsp;
-var
-   dc:TDrawContext;
 begin
   if GDBobj then
                 begin
@@ -1240,27 +1240,11 @@ begin
                                                                PObjectDescriptor(currobjgdbtype)^.SimpleRunMetodWithArg(EDContext.ppropcurrentedit^.w,pcurrobj,EDContext.ppropcurrentedit^.valueAddres);
                                                              end;
                     end;
-                     dc:=PTDrawingDef(pcurcontext)^.CreateDrawingRC;
-                    if CurrObjIsEntity then
-                                           begin
-                                               PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^,dc);
-                                               if IsEntityInCurrentContext
-                                               then
-                                                   PGDBObjEntity(pcurrobj).YouChanged(PTDrawingDef(pcurcontext)^)
-                                               else
-                                                   PGDBObjRoot(PTDrawingDef(pcurcontext)^.GetCurrentRootSimple)^.FormatAfterEdit(PTDrawingDef(pcurcontext)^,dc);
-                                           end
-                                       else
-                                        begin
-                                           if assigned(EDContext.ppropcurrentedit) then
-                                             PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(EDContext.ppropcurrentedit^.valueAddres,self.currobjgdbtype);
-                                        end;
-
                 end;
-  if assigned(resetoglwndproc) then resetoglwndproc;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  if assigned(onUpdateObjectInInsp)then
+     onUpdateObjectInInsp(EDContext,currobjgdbtype,pcurcontext,pcurrobj,GDBobj);
+
   self.updateinsp;
-  if assigned(UpdateVisibleProc) then UpdateVisibleProc;
 end;
 procedure TGDBobjinsp.createscrollbars;
 var
@@ -1557,32 +1541,13 @@ result:=false;
             //if PGDBObjEntity(pcurrobj).bp.ListPos.Owner=PTDrawingDef(pcurcontext)^.GetCurrentRootSimple then
                                                      result:=true;
 end;
-function TGDBobjinsp.IsEntityInCurrentContext;
-begin
-     if PGDBObjEntity(pcurrobj).bp.ListPos.Owner=PTDrawingDef(pcurcontext)^.GetCurrentRootSimple
-     then
-         result:=true
-    else
-         result:=false;
-end;
-
 procedure TGDBobjinsp.createeditor(pp:PPropertyDeskriptor);
 var
-  //my:GDBInteger;
-
-  //pedipor:pzbasic;
-//  tb:GDBBoolean;
-//  pb:PGDBBoolean;
   tp:pointer;
-  pobj:pGDBObjEntity;
-  pv:pvardesk;
-  vv:gdbstring;
   vsa:GDBGDBStringArray;
-  ir:itrec;
   TED:TEditorDesc;
   editorcontrol:TWinControl;
   tr:TRect;
-  pentvarext:PTVariablesExtender;
   initialvalue:GDBString;
 begin
      if pp^.SubNode<>nil then
@@ -1606,30 +1571,10 @@ begin
          StoreAndFreeEditor;
        end;
        vsa.init(50);
-       if (pp^.valkey<>'')and(self.pcurcontext<>nil) then
-       begin
-            pobj:=PTSimpleDrawing(pcurcontext).GetCurrentROOT.ObjArray.beginiterate(ir);
-            if pobj<>nil then
-            repeat
-                  if self.GDBobj then
-                  begin
-                  pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
-                  if ((pobj^.GetObjType=pgdbobjentity(pcurrobj)^.GetObjType)or(pgdbobjentity(pcurrobj)^.GetObjType=0))and({pobj.ou.Instance}pentvarext<>nil) then
-                  begin
-                       pv:={PTObjectUnit(pobj.ou.Instance)}pentvarext^.entityunit.FindVariable(pp^.valkey);
-                       if pv<>nil then
-                       begin
-                            vv:=pv.data.PTD.GetValueAsString(pv.data.Instance);
-                            if vv<>'' then
 
-                            vsa.addnodouble(@vv);
-                       end;
-                  end;
-                  end;
-                  pobj:=PTSimpleDrawing(pcurcontext).GetCurrentROOT.ObjArray.iterate(ir);
-            until pobj=nil;
-            vsa.sort;
-       end;
+       if assigned(onGetOtherValues) then
+          onGetOtherValues(vsa,pp^.valkey,pcurcontext,pcurrobj,GDBobj);
+
        if assigned(pp^.valueAddres) then
        begin
          if (pp^.Attr and FA_DIFFERENT)<>0 then
@@ -1903,8 +1848,7 @@ begin
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('zcobjectinspector.initialization');{$ENDIF}
-  proptreeptr:=nil;
-  {Objinsp.}currpd:=nil;
+  currpd:=nil;
   SetGDBObjInspProc:=TSetGDBObjInsp(SetGDBObjInsp);
   StoreAndSetGDBObjInspProc:=TStoreAndSetGDBObjInsp(StoreAndSetGDBObjInsp);
   ReStoreGDBObjInspProc:=ReStoreGDBObjInsp;

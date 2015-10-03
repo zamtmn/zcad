@@ -26,8 +26,7 @@ uses
   UGDBOpenArrayOfUCommands,StdCtrls,strutils,zcadinterface,
   Themes,
   {$IFDEF LCLGTK2}
-  x,xlib,
-  gtk2,gdk2,
+  gtk2,
   {$ENDIF}
   {$IFDEF WINDOWS}win32proc,{$endif}
   types,graphics,

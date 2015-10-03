@@ -491,5 +491,5 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('cmdline.initialization');{$ENDIF}
-  ZCADGUIManager.RegisterZCADFormInfo('CommandLine',rsCommandLineWndName,TCLine,rect(200,100,600,100),nil,@CLine);
+  ZCADGUIManager.RegisterZCADFormInfo('CommandLine',rsCommandLineWndName,TCLine,rect(200,100,600,100),nil,nil,@CLine);
 end.

@@ -1275,13 +1275,19 @@ begin
   if ZCADGUIManager.GetZCADFormInfo(aname,PFID) then
   begin
        aname:=aname;
-       result:=Tform(PFID^.FormClass.NewInstance);
+       if assigned(PFID^.CreateProc)then
+                                       result:=PFID^.CreateProc
+                                   else
+                                       begin
+                                       result:=Tform(PFID^.FormClass.NewInstance);
+                                       tobject(PFID.PInstanceVariable^):=result;
+                                       end;
        if DoDisableAlign then
                              if result is TWinControl then
                                                           TWinControl(result).DisableAlign;
        if result is TCustomForm then
                                     TCustomForm(result).CreateNew(Application);
-       tobject(PFID.PInstanceVariable^):=result;
+       //tobject(PFID.PInstanceVariable^):=result;
        result.Caption:=PFID.FormCaption;
        result.Name:=aname;
        if @PFID.SetupProc<>nil then
@@ -1401,7 +1407,7 @@ begin
   StoreBackTraceStrFunc:=BackTraceStrFunc;
   BackTraceStrFunc:=@SysBackTraceStr;
   }
-  ZCADGUIManager.RegisterZCADFormInfo('PageControl',rsDrawingWindowWndName,Tform,types.rect(200,200,600,500),ZCADMainPanelSetupProc,@MainFormN.MainPanel);
+  ZCADGUIManager.RegisterZCADFormInfo('PageControl',rsDrawingWindowWndName,Tform,types.rect(200,200,600,500),ZCADMainPanelSetupProc,nil,@MainFormN.MainPanel);
   FAppProps := TApplicationProperties.Create(Self);
   FAppProps.OnException := ZcadException;
   FAppProps.CaptureExceptions := True;

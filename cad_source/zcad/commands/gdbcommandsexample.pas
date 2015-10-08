@@ -797,6 +797,34 @@ begin
     end;
     result:=cmd_ok;
 end;
+function DrawLine_com(operands:TCommandOperands):TCommandResult;
+var
+    pline:PGDBObjLine;
+    pe:T3PointCircleModePentity;
+    p1,p2:gdbvertex;
+begin
+    if commandmanager.get3dpoint('Specify first point:',p1) then                //просим первую точку
+    if commandmanager.get3dpoint('Specify first second:',p2) then               //просим вторую точку
+    begin
+      //старый способ
+      {
+      pline := AllocEnt(GDBLineID);                                             //выделяем память
+      pline^.initnul(nil);                                                      //инициализируем
+      pline^.CoordInOCS.lBegin:=p1;                                             //задаем начало
+      pline^.CoordInOCS.lEnd:=p2;                                               //задаем конец
+      }
+      //конец старого способа
+
+
+      //новый способ
+      pline:=pointer(ENTF_CreateLine(nil,nil,[p1.x,p1.y,p1.z,p2.x,p2.y,p2.z])); //создаем примитив с зпданой геометрией, не указывая владельца и список во владельце
+      //конец нового способа
+
+      GDBObjSetEntityCurrentProp(pline);                                        //присваиваем текущие слой, вес и т.п
+      AddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
+    end;
+    result:=cmd_ok;
+end;
 
 function test_com(operands:TCommandOperands):TCommandResult;
 var
@@ -1026,6 +1054,7 @@ initialization
 
      CreateCommandFastObjectPlugin(@DrawArc_com,'Arc',CADWG,0);
      CreateCommandFastObjectPlugin(@DrawCircle_com,'Circle',CADWG,0);
+     CreateCommandFastObjectPlugin(@DrawLine_com,'DrawLine',CADWG,0);
 
      CreateCommandFastObjectPlugin(@test_com,       'ts',         CADWG,0);
      CreateCommandFastObjectPlugin(@GetPoint_com,   'GetPoint',   CADWG,0);

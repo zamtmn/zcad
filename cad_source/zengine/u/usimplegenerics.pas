@@ -36,6 +36,7 @@ LessPointer=specialize TLess<pointer>;
 LessGDBString=specialize TLess<GDBString>;
 LessDWGHandle=specialize TLess<TDWGHandle>;
 LessObjID=specialize TLess<TObjID>;
+LessInteger=specialize TLess<Integer>;
 
 generic TMyMap <TKey, TValue, TCompare> = class(specialize TMap<TKey, TValue, TCompare>)
   function MyGetValue(key:TKey):TValue;inline;

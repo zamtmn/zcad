@@ -19,11 +19,17 @@
 unit UGDBOpenArrayOfUCommands;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,varmandef,zcadinterface,UGDBLayerArray,UGDBTextStyleArray,zcadstrconsts,UGDBOpenArrayOfPV,GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
+uses usimplegenerics,gdbdrawcontext,varmandef,zcadinterface,UGDBLayerArray,UGDBTextStyleArray,zcadstrconsts,UGDBOpenArrayOfPV,GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
      gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman{,GDBSubordinated};
 const BeginUndo:GDBString='BeginUndo';
       EndUndo:GDBString='EndUndo';
 type
+TUndoCommandHandle=Integer;
+TUndoCommandData=record
+                  CreateCommandFunc:pointer;
+                  PushCreateCommandFunc:pointer;
+                 end;
+TUndoCommandHandle2UndoCommandDataMap=specialize GKey2DataMap<TUndoCommandHandle,TUndoCommandData,LessInteger>;
 TTypeCommand=(TTC_MBegin,TTC_MEnd,TTC_MNotUndableIfOverlay,TTC_Command,TTC_ChangeCommand);
 PTElementaryCommand=^TElementaryCommand;
 TElementaryCommand=object(GDBaseObject)
@@ -43,6 +49,7 @@ TMarkerCommand=object(TElementaryCommand)
                      procedure UnDo;virtual;
                      procedure Comit;virtual;
                end;
+PTCustomChangeCommand=^TCustomChangeCommand;
 TCustomChangeCommand=object(TElementaryCommand)
                            Addr:GDBPointer;
                            function GetCommandType:TTypeCommand;virtual;

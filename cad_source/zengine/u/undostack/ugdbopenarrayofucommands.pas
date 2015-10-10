@@ -29,7 +29,7 @@ const BeginUndo:GDBString='BeginUndo';
   {$I TGObjectChangeCommandList.inc}
   {$I TGObjectChangeCommand2List.inc}
   {$I TGMultiObjectChangeCommandList.inc}
-  {$I TGMultiObjectCreateCommand.inc}
+  {//$I TGMultiObjectCreateCommand.inc}
   //{$I TTypedChangeCommandIMPL.inc}
 {$UNDEF INTERFACE}
 type
@@ -58,7 +58,7 @@ GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
                                  {$I TGObjectChangeCommandList.inc}
                                  {$I TGObjectChangeCommand2List.inc}
                                  {$I TGMultiObjectChangeCommandList.inc}
-                                 {$I TGMultiObjectCreateCommand.inc}
+                                 {//$I TGMultiObjectCreateCommand.inc}
                                  //{$I TTypedChangeCommandIMPL.inc}
 
                                  function CreateTTypedChangeCommand(PDataInstance:GDBPointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
@@ -73,7 +73,7 @@ uses UGDBDescriptor,GDBManager;
   {$I TGObjectChangeCommandList.inc}
   {$I TGObjectChangeCommand2List.inc}
   {$I TGMultiObjectChangeCommandList.inc}
-  {$I TGMultiObjectCreateCommand.inc}
+  //{$I TGMultiObjectCreateCommand.inc}
   //{$I TTypedChangeCommandIMPL.inc}
 {$UNDEF IMPLEMENTATION}
 {$MACRO OFF}

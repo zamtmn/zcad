@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  zeentitiesmanager,uzglcanvasdrawer,zcobjectinspectormultiobjects,enitiesextendervariables,ugdbdrawing,gdbpalette,ugdbopenarrayofgdbdouble,texteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,zeentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,glstatemanager,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  zcmultiobjectcreateundocommand,zeentitiesmanager,uzglcanvasdrawer,zcobjectinspectormultiobjects,enitiesextendervariables,ugdbdrawing,gdbpalette,ugdbopenarrayofgdbdouble,texteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,zeentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,glstatemanager,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   commandlinedef,strproc,
   gdbasetypes,commandline,GDBCommandsBase,
   plugins,
@@ -1892,7 +1892,7 @@ begin
                 tv^.YouChanged(gdb.GetCurrentDWG^);
 
                 SetObjCreateManipulator(domethod,undomethod);
-                with ptdrawing(gdb.GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+                with PushMultiObjectCreateCommand(ptdrawing(gdb.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
                 begin
                      AddObject(tv);
                      FreeArray:=false;
@@ -2162,7 +2162,7 @@ begin
     end;
 
     SetObjCreateManipulator(domethod,undomethod);
-    with ptdrawing(gdb.GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+    with PushMultiObjectCreateCommand(ptdrawing(gdb.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
     begin
          AddObject(pb);
          comit;
@@ -2260,7 +2260,7 @@ begin
   if count>0 then
   begin
   SetObjCreateManipulator(undomethod,domethod);
-  with ptdrawing(gdb.GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),count)^ do
+  with PushMultiObjectCreateCommand(ptdrawing(gdb.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),count)^ do
   begin
     pv:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
     if pv<>nil then
@@ -2546,7 +2546,7 @@ begin
   begin
 
          SetObjCreateManipulator(domethod,undomethod);
-         with ptdrawing(gdb.GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+         with PushMultiObjectCreateCommand(ptdrawing(gdb.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
          begin
               AddObject(pc);
               comit;
@@ -2633,7 +2633,7 @@ begin
     PCreatedGDBLine^.bp.ListPos.Owner:=gdb.GetCurrentROOT;
     //gdb.ObjRoot.ObjArray.add(addr(pl));
     SetObjCreateManipulator(domethod,undomethod);
-    with ptdrawing(gdb.GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+    with PushMultiObjectCreateCommand(ptdrawing(gdb.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
     begin
          AddObject(PCreatedGDBLine);
          comit;
@@ -2840,7 +2840,7 @@ begin
   ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushStartMarker(UndoMaker);
   SetObjCreateManipulator(domethod,undomethod);
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-     with ptdrawing(gdb.GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+     with PushMultiObjectCreateCommand(ptdrawing(gdb.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
      begin
      pcd:=pcoa^.beginiterate(ir);
      if pcd<>nil then
@@ -3155,7 +3155,7 @@ begin
                                         ptdrawing(GDB.GetCurrentDWG)^.UndoStack.ClearFrom(cc);
 
                                         SetObjCreateManipulator(domethod,undomethod);
-                                        with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(domethod,undomethod,1)^ do
+                                        with PushMultiObjectCreateCommand(ptdrawing(GDB.GetCurrentDWG)^.UndoStack,domethod,undomethod,1)^ do
                                         begin
                                              AddObject(p3dpl);
                                              comit;

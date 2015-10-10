@@ -21,7 +21,7 @@ unit GDBManager;
 
 
 interface
-uses zeentitiesmanager,gdbpalette,zeentityfactory,gdbdrawcontext,ugdbdrawing,ugdbltypearray,zcadsysvars,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
+uses zcmultiobjectcreateundocommand,zeentitiesmanager,gdbpalette,zeentityfactory,gdbdrawcontext,ugdbdrawing,ugdbltypearray,zcadsysvars,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
      UGDBDescriptor,varmandef,gdbobjectsconstdef,
      UGDBVisibleOpenArray,GDBGenericSubEntry,gdbEntity,
      GDBBlockInsert,
@@ -112,7 +112,7 @@ var
     domethod,undomethod:tmethod;
 begin
      SetObjCreateManipulator(domethod,undomethod);
-     with PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+     with PushMultiObjectCreateCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
      begin
           AddObject(PEnt);
           comit;
@@ -150,7 +150,7 @@ begin
   if needundo then
   begin
       SetObjCreateManipulator(domethod,undomethod);
-      with ptdrawing(gdb.GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+      with PushMultiObjectCreateCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
       begin
            AddObject(result);
            comit;

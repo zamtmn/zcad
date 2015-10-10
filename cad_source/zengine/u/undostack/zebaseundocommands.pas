@@ -123,83 +123,8 @@ generic TGMultiObjectChangeCommand<_T>=object(TCustomChangeCommand)
                                       procedure Comit;virtual;
                                       destructor Done;virtual;
                                   end;
-generic TGMultiObjectProcessCommand<_LT>=object(TCustomChangeCommand)
-                                      DoData,UnDoData:tmethod;
-                                      ObjArray:_LT;
-                                      FreeArray:gdbboolean;
-                                      public
-                                      constructor Assign(const _dodata,_undodata:tmethod;const objcount:GDBInteger);
-                                      //procedure StoreUndoData(var _undodata:_T);virtual;
-                                      procedure AddObject(PObject:PGDBaseObject);virtual;
-
-                                      procedure UnDo;virtual;
-                                      procedure Comit;virtual;
-                                      destructor Done;virtual;
-                                  end;
 implementation
 uses UGDBDescriptor,GDBManager;
-constructor TGMultiObjectProcessCommand.Assign(const _dodata,_undodata:tmethod;const objcount:GDBInteger);
-begin
-     DoData:=_DoData;
-     UnDoData:=_UnDoData;
-     self.ObjArray.init({$IFDEF DEBUGBUILD}'{108FD060-E408-4161-9548-64EEAFC3BEB2}',{$ENDIF}objcount);
-     FreeArray:={false}true;
-end;
-procedure TGMultiObjectProcessCommand.AddObject(PObject:PGDBaseObject);
-var
-   p:pointer;
-begin
-     p:=PObject;
-     objarray.add(@P{Object});
-end;
-procedure TGMultiObjectProcessCommand.UnDo;
-type
-    TCangeMethod=procedure(const data:GDBASEOBJECT)of object;
-    //PTMethod=^TMethod;
-var
-  p:PGDBASEOBJECT;
-  ir:itrec;
-begin
-  p:=ObjArray.beginiterate(ir);
-  if p<>nil then
-  repeat
-        TCangeMethod(UnDoData)(p^);
-        if FreeArray then
-                             PGDBObjEntity(p)^.YouChanged(gdb.GetCurrentDWG^);
-       p:=ObjArray.iterate(ir);
-  until p=nil;
-  FreeArray:=not FreeArray;
-end;
-procedure TGMultiObjectProcessCommand.Comit;
-type
-    TCangeMethod=procedure(const data:GDBASEOBJECT)of object;
-    //PTMethod=^TMethod;
-var
-  p:PGDBASEOBJECT;
-  ir:itrec;
-begin
-  p:=ObjArray.beginiterate(ir);
-  if p<>nil then
-  repeat
-        TCangeMethod(DoData)(p^);
-        if FreeArray then
-                             PGDBObjEntity(p)^.YouChanged(gdb.GetCurrentDWG^);
-       p:=ObjArray.iterate(ir);
-  until p=nil;
-  FreeArray:=not FreeArray;
-end;
-destructor TGMultiObjectProcessCommand.Done;
-begin
-     inherited;
-     if {not} FreeArray then
-                          ObjArray.freeanddone
-                        else
-                          begin
-                            ObjArray.clear;
-                            ObjArray.done;
-                          end;
-end;
-
 constructor TGMultiObjectChangeCommand.Assign(const _dodata,_undodata:_T;const objcount:GDBInteger);
 begin
      DoData:=_DoData;

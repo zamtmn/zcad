@@ -10,7 +10,7 @@ unit GDBCommandsElectrical;
 
 interface
 uses
-  zeentitiesmanager,UGDBDrawingdef,enitiesextendervariables,gdbdrawcontext,ugdbdrawing,zcadvariablesutils,GDBAbstractText,zcadstrconsts,UGDBSelectedObjArray,zeentityfactory,zcadsysvars,csvdocument,
+  zcmultiobjectcreateundocommand,zeentitiesmanager,UGDBDrawingdef,enitiesextendervariables,gdbdrawcontext,ugdbdrawing,zcadvariablesutils,GDBAbstractText,zcadstrconsts,UGDBSelectedObjArray,zeentityfactory,zcadsysvars,csvdocument,
   UGDBOpenArrayOfPV,GDBBlockInsert,devices,UGDBTree,ugdbdescriptor,gdbasetypes,commandline,GDBCommandsDraw,GDBElLeader,
   plugins,
   commandlinedef,
@@ -1475,7 +1475,7 @@ begin
 
     ptdrawing(gdb.GetCurrentDWG).UndoStack.PushStartMarker('Create cable');
     SetObjCreateManipulator(domethod,undomethod);
-    with ptdrawing(gdb.GetCurrentDWG).UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+    with PushMultiObjectCreateCommand(ptdrawing(gdb.GetCurrentDWG).UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
     begin
          AddObject(p3dpl);
          comit;
@@ -2590,7 +2590,7 @@ begin
 
 
   SetObjCreateManipulator(domethod,undomethod);
-  with ptdrawing(gdb.GetCurrentDWG).UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+  with PushMultiObjectCreateCommand(ptdrawing(gdb.GetCurrentDWG).UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
   begin
        AddObject(pleader);
        comit;

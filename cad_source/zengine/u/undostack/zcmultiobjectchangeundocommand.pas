@@ -19,7 +19,7 @@
 unit zcmultiobjectchangeundocommand;
 {$INCLUDE def.inc}
 interface
-uses memman,UGDBOpenArrayOfPV,ugdbopenarrayofucommands,zebaseundocommands,gdbase,gdbasetypes,GDBEntity,UGDBDescriptor;
+uses memman,zeundostack,zebaseundocommands,gdbase,gdbasetypes,GDBEntity,UGDBDescriptor;
 
 {DEFINE TCommand  := TGDBTransformChangeCommand}
 {DEFINE PTCommand := PTGDBTransformChangeCommand}

@@ -16,28 +16,20 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 {$MODE OBJFPC}
-unit ugdbopenarrayofucommands;
+unit zeundostack;
 {$INCLUDE def.inc}
 interface
-uses zebaseundocommands,usimplegenerics,gdbdrawcontext,varmandef,zcadinterface,UGDBLayerArray,UGDBTextStyleArray,zcadstrconsts,UGDBOpenArrayOfPV,GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
-     gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman{,GDBSubordinated};
+uses zebaseundocommands,gdbdrawcontext,varmandef,shared,gdbasetypes,
+     UGDBOpenArrayOfPObjects,sysutils,gdbase,memman;
 const BeginUndo:GDBString='BeginUndo';
       EndUndo:GDBString='EndUndo';
-{$MACRO ON}
-{$DEFINE INTERFACE}
-  {$I TGChangeCommandList.inc}
-  {//$I TGObjectChangeCommandList.inc}
-  {$I TGObjectChangeCommand2List.inc}
-  {//$I TGMultiObjectChangeCommandList.inc}
-  {//$I TGMultiObjectCreateCommand.inc}
-  //{$I TTypedChangeCommandIMPL.inc}
-{$UNDEF INTERFACE}
 type
-{$DEFINE CLASSDECLARATION}
+TUndoRedoResult=(URROk,
+                 URRNoCommandsToUndoInOverlayMode,
+                 URRNoCommandsToUndo,
+                 URRNoCommandsToRedo);
 PGDBObjOpenArrayOfUCommands=^GDBObjOpenArrayOfUCommands;
 GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
-                                 {type
-                                 TCangeMethod=procedure(data:integer)of object;}
                                  public
                                  CurrentCommand:TArrayIndex;
                                  currentcommandstartmarker:TArrayIndex;
@@ -46,37 +38,19 @@ GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
                                  procedure PushEndMarker;
                                  procedure PushStone;
                                  procedure PushChangeCommand(_obj:GDBPointer;_fieldsize:PtrInt);overload;
-                                 //procedure PushTypedChangeCommand(_obj:GDBPointer;_PTypeManager:PUserTypeDescriptor);overload;
-                                 procedure undo(prevheap:TArrayIndex;overlay:GDBBoolean);
+                                 function undo(prevheap:TArrayIndex;overlay:GDBBoolean):TUndoRedoResult;
                                  procedure KillLastCommand;
-                                 procedure redo;
+                                 function redo:TUndoRedoResult;
                                  constructor init;
                                  function Add(p:GDBPointer):TArrayIndex;virtual;
                                  Procedure ClearFrom(cc:TArrayIndex);
-
-                                 {$I TGChangeCommandList.inc}
-                                 {//$I TGObjectChangeCommandList.inc}
-                                 {$I TGObjectChangeCommand2List.inc}
-                                 {//$I TGMultiObjectChangeCommandList.inc}
-                                 {//$I TGMultiObjectCreateCommand.inc}
-                                 //{$I TTypedChangeCommandIMPL.inc}
 
                                  function CreateTTypedChangeCommand(PDataInstance:GDBPointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
                                  function PushCreateTTypedChangeCommand(PDataInstance:GDBPointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
 
                            end;
-{$UNDEF CLASSDECLARATION}
 implementation
-uses UGDBDescriptor,GDBManager;
-{$DEFINE IMPLEMENTATION}
-  {$I TGChangeCommandList.inc}
-  {//$I TGObjectChangeCommandList.inc}
-  {$I TGObjectChangeCommand2List.inc}
-  {//$I TGMultiObjectChangeCommandList.inc}
-  //{$I TGMultiObjectCreateCommand.inc}
-  //{$I TTypedChangeCommandIMPL.inc}
-{$UNDEF IMPLEMENTATION}
-{$MACRO OFF}
+uses UGDBDescriptor;
 
 procedure GDBObjOpenArrayOfUCommands.PushStartMarker(CommandName:GDBString);
 var
@@ -164,12 +138,13 @@ begin
      end;
      count:=self.CurrentCommand;
 end;
-procedure GDBObjOpenArrayOfUCommands.undo(prevheap:TArrayIndex;overlay:GDBBoolean);
+function GDBObjOpenArrayOfUCommands.undo(prevheap:TArrayIndex;overlay:GDBBoolean):TUndoRedoResult;
 var
    pcc:PTChangeCommand;
    mcounter:integer;
    DC:TDrawContext;
 begin
+     result:=URROk;
      if CurrentCommand>prevheap then
      begin
           mcounter:=0;
@@ -185,13 +160,13 @@ begin
                                                 begin
                                                      dec(mcounter);
                                                      if mcounter=0 then
-                                                     shared.HistoryOutStr('Отмена "'+PTMarkerCommand(pcc)^.Name+'"');
+                                                     shared.HistoryOutStr('Undo "'+PTMarkerCommand(pcc)^.Name+'"');
                                                      //pcc^.undo;
                                                 end
      else if pcc^.GetCommandType=TTC_MNotUndableIfOverlay then
                                                 begin
                                                      if overlay then
-                                                     shared.ShowError(rscmNoCTU)
+                                                          result:=URRNoCommandsToUndo;
                                                 end
      else
           pcc^.undo;
@@ -206,14 +181,14 @@ begin
      else
          begin
          if overlay then
-                        shared.ShowError(rscmNoCTU)
+                        result:=URRNoCommandsToUndo
                     else
-                        shared.ShowError(rscmNoCTUSE)
+                        result:=URRNoCommandsToUndoInOverlayMode;
          end;
      DC:=gdb.GetCurrentDWG^.CreateDrawingRC;
      gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
 end;
-procedure GDBObjOpenArrayOfUCommands.redo;
+function GDBObjOpenArrayOfUCommands.redo:TUndoRedoResult;
 var
    pcc:PTChangeCommand;
    mcounter:integer;
@@ -236,16 +211,17 @@ begin
      else if pcc^.GetCommandType=TTC_MBegin then
                                                 begin
                                                      if mcounter=0 then
-                                                     shared.HistoryOutStr('Повтор "'+PTMarkerCommand(pcc)^.Name+'"');
+                                                     shared.HistoryOutStr('Redo "'+PTMarkerCommand(pcc)^.Name+'"');
                                                      dec(mcounter);
                                                      pcc^.undo;
                                                 end
      else pcc^.comit;
           inc(CurrentCommand);
           until mcounter=0;
+          result:=URROk;
      end
      else
-         shared.ShowError(rscmNoCTR);
+         result:=URRNoCommandsToRedo;
      dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
      gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
 end;

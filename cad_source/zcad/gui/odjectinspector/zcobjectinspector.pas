@@ -23,7 +23,7 @@ interface
 
 uses
   math,LMessages,LCLIntf,usupportgui,
-  zebaseundocommands,UGDBOpenArrayOfUCommands,StdCtrls,strutils,zcadinterface,
+  zeundostack,zebaseundocommands,StdCtrls,strutils,zcadinterface,
   Themes,
   {$IFDEF LCLGTK2}
   gtk2,

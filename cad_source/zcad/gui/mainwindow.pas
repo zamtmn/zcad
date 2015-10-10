@@ -34,7 +34,7 @@ uses
        geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,log,
        varmandef, varman,UUnitManager,SysInfo,shared,strmy,UGDBTextStyleArray,ugdbdimstylearray,
   {ZCAD SIMPLE PASCAL SCRIPT}
-       languade,UGDBOpenArrayOfUCommands,
+       languade,
   {ZCAD ENTITIES}
        GDBEntity,UGDBSelectedObjArray,UGDBLayerArray,ugdbsimpledrawing,
        GDBBlockDef,UGDBDescriptor,GDBManager,ugdbltypearray,gdbobjectsconstdef,GDBText,gdbdimension,
@@ -44,7 +44,7 @@ uses
        texteditor,zcobjectinspectordecorations,cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,
        colorwnd,imagesmanager,usuptstylecombo,usupportgui,usupdimstylecombo,
   {}
-       gdbdrawcontext,uzglopengldrawer,abstractviewarea,zcguimanager;
+       zcchangeundocommand,gdbdrawcontext,uzglopengldrawer,abstractviewarea,zcguimanager;
   {}
 type
   TComboFiller=procedure(cb:TCustomComboBox) of object;
@@ -458,7 +458,7 @@ begin
                                           if assigned(sysvar.dwg.DWG_CLayer) then
                                           if sysvar.dwg.DWG_CLayer^<>Player then
                                           begin
-                                               with PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(sysvar.dwg.DWG_CLayer^)^ do
+                                               with PushCreateTGChangeCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CLayer^)^ do
                                                begin
                                                     sysvar.dwg.DWG_CLayer^:=Player;
                                                     ComitFromObj;

@@ -19,7 +19,7 @@
 unit zebaseundocommands;
 {$INCLUDE def.inc}
 interface
-uses usimplegenerics,gdbdrawcontext,varmandef,zcadinterface,UGDBLayerArray,UGDBTextStyleArray,zcadstrconsts,UGDBOpenArrayOfPV,GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
+uses usimplegenerics,gdbdrawcontext,varmandef,zcadinterface,UGDBLayerArray,GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,math}{,UGDBOpenArray, oglwindowdef},sysutils,
      gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman{,GDBSubordinated};
 const BeginUndo:GDBString='BeginUndo';
       EndUndo:GDBString='EndUndo';

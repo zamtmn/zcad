@@ -5,7 +5,7 @@ unit LayerWnd;
 interface
 
 uses
-  ugdbdrawing,gdbpalette,usuptypededitors,LMessages,selectorwnd,ugdbltypearray,ugdbutil,log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
+  zcchangeundocommand,zcobjectchangeundocommand2,ugdbdrawing,gdbpalette,usuptypededitors,LMessages,selectorwnd,ugdbltypearray,ugdbutil,log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 
@@ -163,7 +163,7 @@ function TLayerWindow.LayerLockClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
      CreateUndoStartMarkerNeeded;
-     with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(PGDBLayerProp(Item.Data)^._lock)^ do
+     with PushCreateTGChangeCommand(ptdrawing(GDB.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._lock)^ do
      begin
        PGDBLayerProp(Item.Data)^._lock:=not PGDBLayerProp(Item.Data)^._lock;
        ComitFromObj;
@@ -178,7 +178,7 @@ function TLayerWindow.LayerOnClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
      CreateUndoStartMarkerNeeded;
-     with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(PGDBLayerProp(Item.Data)^._on)^ do
+     with PushCreateTGChangeCommand(ptdrawing(GDB.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._on)^ do
      begin
        PGDBLayerProp(Item.Data)^._on:=not PGDBLayerProp(Item.Data)^._on;
        ComitFromObj;
@@ -198,7 +198,7 @@ function TLayerWindow.LayerPlotClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
      CreateUndoStartMarkerNeeded;
-     with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(PGDBLayerProp(Item.Data)^._print)^ do
+     with PushCreateTGChangeCommand(ptdrawing(GDB.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._print)^ do
      begin
        PGDBLayerProp(Item.Data)^._print:=not PGDBLayerProp(Item.Data)^._print;
        ComitFromObj;
@@ -267,7 +267,7 @@ begin
       if PGDBLayerProp(Item.Data)^.color<>ColorSelectWND.ColorInfex then
         begin
            CreateUndoStartMarkerNeeded;
-           with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(PGDBLayerProp(Item.Data)^.color)^ do
+           with PushCreateTGChangeCommand(ptdrawing(GDB.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^.color)^ do
            begin
              PGDBLayerProp(Item.Data)^.color:=ColorSelectWND.ColorInfex;
              ComitFromObj;
@@ -473,7 +473,7 @@ begin
      if ListView1.CurrentItem<>ListItem then
      begin
        CreateUndoStartMarkerNeeded;
-     with PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(sysvar.dwg.DWG_CLayer^)^ do
+     with PushCreateTGChangeCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CLayer^)^ do
      begin
           SysVar.dwg.DWG_CLayer^:={gdb.GetCurrentDWG^.LayerTable.GetIndexByPointer}(ListItem.Data);
           ComitFromObj;
@@ -581,7 +581,7 @@ begin
 
      domethod:=tmethod(@pdwg^.LayerTable.AddToArray);
      undomethod:=tmethod(@pdwg^.LayerTable.RemoveFromArray);
-     with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGObjectChangeCommand2(pcreatedlayer,tmethod(domethod),tmethod(undomethod))^ do
+     with PushCreateTGObjectChangeCommand2(ptdrawing(GDB.GetCurrentDWG)^.UndoStack,pcreatedlayer,tmethod(domethod),tmethod(undomethod))^ do
      begin
           AfterAction:=false;
           //comit;
@@ -600,7 +600,7 @@ begin
   domethod:=tmethod(@pdwg^.LayerTable.RemoveFromArray);
   undomethod:=tmethod(@pdwg^.LayerTable.AddToArray);
   CreateUndoStartMarkerNeeded;
-  with ptdrawing(pdwg)^.UndoStack.PushCreateTGObjectChangeCommand2(player,tmethod(domethod),tmethod(undomethod))^ do
+  with PushCreateTGObjectChangeCommand2(ptdrawing(pdwg)^.UndoStack,player,tmethod(domethod),tmethod(undomethod))^ do
   begin
        AfterAction:=false;
        comit;

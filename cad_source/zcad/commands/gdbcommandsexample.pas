@@ -79,7 +79,8 @@ uses
                       //разные функции упрощающие создание примитивов, пока их там очень мало
   varmandef,
   Varman,
-  UGDBOpenArrayOfUCommands,
+  {UGDBOpenArrayOfUCommands,}zcchangeundocommand,
+
   log;                //log system
                       //система логирования
 const
@@ -807,17 +808,15 @@ begin
     if commandmanager.get3dpoint('Specify first second:',p2) then               //просим вторую точку
     begin
       //старый способ
-      {
+
       pline := AllocEnt(GDBLineID);                                             //выделяем память
-      pline^.initnul(nil);                                                      //инициализируем
-      pline^.CoordInOCS.lBegin:=p1;                                             //задаем начало
-      pline^.CoordInOCS.lEnd:=p2;                                               //задаем конец
-      }
+      pline^.init(nil,nil,0,p1,p2);                                             //инициализируем
+
       //конец старого способа
 
 
       //новый способ
-      pline:=pointer(ENTF_CreateLine(nil,nil,[p1.x,p1.y,p1.z,p2.x,p2.y,p2.z])); //создаем примитив с зпданой геометрией, не указывая владельца и список во владельце
+      //pline:=pointer(ENTF_CreateLine(nil,nil,[p1.x,p1.y,p1.z,p2.x,p2.y,p2.z])); //создаем примитив с зпданой геометрией, не указывая владельца и список во владельце
       //конец нового способа
 
       GDBObjSetEntityCurrentProp(pline);                                        //присваиваем текущие слой, вес и т.п
@@ -874,7 +873,7 @@ begin
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint('Select point:',p) then
     begin
-         pc:=PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(pgdbvertex(ppointer(vdpvertex.data.Instance)^)^);
+         pc:=PushCreateTGChangeCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,pgdbvertex(ppointer(vdpvertex.data.Instance)^)^);
          pgdbvertex(ppointer(vdpvertex.data.Instance)^)^:=p;
          PTGDBVertexChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
          PTGDBVertexChangeCommand(pc)^.ComitFromObj;
@@ -891,7 +890,7 @@ begin
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint('Select X:',p) then
     begin
-         pc:=PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(PGDBXCoordinate(ppointer(vdpvertex.data.Instance)^)^);
+         pc:=PushCreateTGChangeCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,PGDBXCoordinate(ppointer(vdpvertex.data.Instance)^)^);
          pgdbdouble(ppointer(vdpvertex.data.Instance)^)^:=p.x;
          PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
          PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
@@ -908,7 +907,7 @@ begin
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint('Select Y:',p) then
     begin
-         pc:=PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(PGDBYCoordinate(ppointer(vdpvertex.data.Instance)^)^);
+         pc:=PushCreateTGChangeCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,PGDBYCoordinate(ppointer(vdpvertex.data.Instance)^)^);
          pgdbdouble(ppointer(vdpvertex.data.Instance)^)^:=p.y;
          PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
          PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
@@ -925,7 +924,7 @@ begin
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint('Select Z:',p) then
     begin
-         pc:=PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(PGDBZCoordinate(ppointer(vdpvertex.data.Instance)^)^);
+         pc:=PushCreateTGChangeCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,PGDBZCoordinate(ppointer(vdpvertex.data.Instance)^)^);
          pgdbdouble(ppointer(vdpvertex.data.Instance)^)^:=p.z;
          PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
          PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
@@ -944,7 +943,7 @@ begin
     begin
       if commandmanager.get3dpoint('Select point:',p2) then
       begin
-        pc:=PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(pgdbdouble(ppointer(vdpvertex.data.Instance)^)^);
+        pc:=PushCreateTGChangeCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,pgdbdouble(ppointer(vdpvertex.data.Instance)^)^);
         pgdblength(ppointer(vdpvertex.data.Instance)^)^:=geometry.Vertexlength(p1,p2);
         PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
         PTGDBDoubleChangeCommand(pc)^.ComitFromObj;

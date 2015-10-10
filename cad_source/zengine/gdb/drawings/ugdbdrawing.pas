@@ -20,7 +20,7 @@ unit ugdbdrawing;
 {$INCLUDE def.inc}
 interface
 uses
-zcobjectchangeundocommand,zebaseundocommands,paths,ugdbdimstylearray,WindowsSpecific,LResources,zcadsysvars,zcadstrconsts,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,UUnitManager,
+zeundostack,zcchangeundocommand,zcobjectchangeundocommand,zebaseundocommands,paths,ugdbdimstylearray,WindowsSpecific,LResources,zcadsysvars,zcadstrconsts,strproc,GDBBlockDef,UUnitManager,
 gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,sysinfo,ugdbsimpledrawing,
@@ -131,7 +131,7 @@ begin
 end;
 function TDrawing.StoreOldCamerapPos:Pointer;
 begin
-     result:=UndoStack.PushCreateTGChangeCommand(GetPcamera^.prop)
+     result:=PushCreateTGChangeCommand(UndoStack,GetPcamera^.prop)
 end;
 procedure TDrawing.rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);
 var

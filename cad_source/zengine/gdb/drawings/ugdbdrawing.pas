@@ -20,7 +20,7 @@ unit ugdbdrawing;
 {$INCLUDE def.inc}
 interface
 uses
-zebaseundocommands,paths,ugdbdimstylearray,WindowsSpecific,LResources,zcadsysvars,zcadstrconsts,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,UUnitManager,
+zcobjectchangeundocommand,zebaseundocommands,paths,ugdbdimstylearray,WindowsSpecific,LResources,zcadsysvars,zcadstrconsts,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,UUnitManager,
 gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,sysinfo,ugdbsimpledrawing,
@@ -140,7 +140,7 @@ begin
   tmethod(tum).Code:=pointer(obj.rtmodifyonepoint);
   tmethod(tum).Data:=obj;
   //tum:=tundablemethod(obj^.rtmodifyonepoint);
-  with UndoStack.PushCreateTGObjectChangeCommand(rtmod,tmethod(tum))^ do
+  with PushCreateTGObjectChangeCommand(UndoStack,rtmod,tmethod(tum))^ do
   begin
        comit;
        rtmod.wc:=rtmod.point.worldcoord;

@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  zcmultiobjectcreateundocommand,zeentitiesmanager,uzglcanvasdrawer,zcobjectinspectormultiobjects,enitiesextendervariables,ugdbdrawing,gdbpalette,ugdbopenarrayofgdbdouble,texteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,zeentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,glstatemanager,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  zcmultiobjectchangeundocommand,zcmultiobjectcreateundocommand,zeentitiesmanager,uzglcanvasdrawer,zcobjectinspectormultiobjects,enitiesextendervariables,ugdbdrawing,gdbpalette,ugdbopenarrayofgdbdouble,texteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,zeentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,glstatemanager,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   commandlinedef,strproc,
   gdbasetypes,commandline,GDBCommandsBase,
   plugins,
@@ -2782,7 +2782,7 @@ begin
     geometry.MatrixInvert(im);
     ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushStartMarker(UndoMaker);
     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-    with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGMultiObjectChangeCommand(dispmatr,im,pcoa^.Count)^ do
+    with PushCreateTGMultiObjectChangeCommand(ptdrawing(GDB.GetCurrentDWG)^.UndoStack,dispmatr,im,pcoa^.Count)^ do
     begin
      pcd:=pcoa^.beginiterate(ir);
    if pcd<>nil then
@@ -2962,7 +2962,7 @@ if (button and MZW_LBUTTON)=0 then
                   im:=dispmatr;
                   geometry.MatrixInvert(im);
                   ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushStartMarker('Rotate');
-                  with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGMultiObjectChangeCommand(dispmatr,im,pcoa^.Count)^ do
+                  with PushCreateTGMultiObjectChangeCommand(ptdrawing(GDB.GetCurrentDWG)^.UndoStack,dispmatr,im,pcoa^.Count)^ do
                   begin
                    pcd:=pcoa^.beginiterate(ir);
                   if pcd<>nil then
@@ -3081,7 +3081,7 @@ if (button and MZW_LBUTTON)=0 then
                    im:=dispmatr;
                    geometry.MatrixInvert(im);
                    ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushStartMarker('Scale');
-                   with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGMultiObjectChangeCommand(dispmatr,im,pcoa^.Count)^ do
+                   with PushCreateTGMultiObjectChangeCommand(ptdrawing(GDB.GetCurrentDWG)^.UndoStack,dispmatr,im,pcoa^.Count)^ do
                    begin
                     pcd:=pcoa^.beginiterate(ir);
                    if pcd<>nil then

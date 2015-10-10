@@ -19,7 +19,7 @@
 unit zcmultiobjectcreateundocommand;
 {$INCLUDE def.inc}
 interface
-uses memman,UGDBOpenArrayOfPV,ugdbopenarrayofucommands,zebaseundocommands,gdbase,gdbasetypes,GDBEntity,UGDBDescriptor;
+uses memman,UGDBOpenArrayOfPV,zeundostack,zebaseundocommands,gdbase,gdbasetypes,GDBEntity,UGDBDescriptor;
 
 {DEFINE TCommand  := TGDBMultiCreateCommand}
 {DEFINE PTCommand := PTGDBMultiCreateCommand}

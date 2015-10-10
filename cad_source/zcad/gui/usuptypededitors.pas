@@ -22,7 +22,7 @@ unit usuptypededitors;
 interface
 
 uses
-  zebaseundocommands,UGDBOpenArrayOfUCommands,usupportgui,Varman,UBaseTypeDescriptor,varmandef,StdCtrls,sysutils,Forms,UGDBDescriptor,Controls,Classes,strproc,zcadsysvars,commandline,zcadinterface;
+  zeundostack,zebaseundocommands,usupportgui,Varman,UBaseTypeDescriptor,varmandef,StdCtrls,sysutils,Forms,UGDBDescriptor,Controls,Classes,strproc,zcadsysvars,commandline,zcadinterface;
 
 type
   TUndoContext=record

@@ -22,7 +22,7 @@ unit GDBCommandsBase;
 interface
 uses
  {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
- zcobjectinspectormultiobjects,enitiesextendervariables,gdbdrawcontext,ugdbdrawing,paths,fileformatsmanager,gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ zeundostack,zcchangeundocommand,zcobjectinspectormultiobjects,enitiesextendervariables,gdbdrawcontext,ugdbdrawing,paths,fileformatsmanager,gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,FileUtil,Forms,Controls,Clipbrd,lclintf,
   plugins,
   sysinfo,
@@ -415,7 +415,7 @@ end;
 function Cam_reset_com(operands:TCommandOperands):TCommandResult;
 begin
   ptdrawing(gdb.GetCurrentDWG).UndoStack.PushStartMarker('Камера в начало');
-  with ptdrawing(gdb.GetCurrentDWG).UndoStack.PushCreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
+  with PushCreateTGChangeCommand(ptdrawing(gdb.GetCurrentDWG).UndoStack,gdb.GetCurrentDWG.pcamera^.prop)^ do
   begin
   gdb.GetCurrentDWG.pcamera^.prop.point.x := 0;
   gdb.GetCurrentDWG.pcamera^.prop.point.y := 0;
@@ -458,14 +458,19 @@ begin
                                                    overlay:=false;
                                                    if assigned(ReturnToDefaultProc) then ReturnToDefaultProc(gdb.GetUnitsFormat);
                                               end;
-  ptdrawing(gdb.GetCurrentDWG).UndoStack.undo(prevundo,overlay);
+  case ptdrawing(gdb.GetCurrentDWG).UndoStack.undo(prevundo,overlay) of
+    URRNoCommandsToUndoInOverlayMode:shared.ShowError(rscmNoCTUSE);
+    URRNoCommandsToUndo:shared.ShowError(rscmNoCTU);
+  end;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
 function Redo_com(operands:TCommandOperands):TCommandResult;
 begin
   gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
-  ptdrawing(gdb.GetCurrentDWG).UndoStack.redo;
+  case ptdrawing(gdb.GetCurrentDWG).UndoStack.redo of
+    URRNoCommandsToUndo:shared.ShowError(rscmNoCTR);
+  end;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;

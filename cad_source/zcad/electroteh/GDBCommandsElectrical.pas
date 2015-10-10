@@ -10,7 +10,7 @@ unit GDBCommandsElectrical;
 
 interface
 uses
-  zcmultiobjectcreateundocommand,zeentitiesmanager,UGDBDrawingdef,enitiesextendervariables,gdbdrawcontext,ugdbdrawing,zcadvariablesutils,GDBAbstractText,zcadstrconsts,UGDBSelectedObjArray,zeentityfactory,zcadsysvars,csvdocument,
+  zcobjectchangeundocommand2,zcmultiobjectcreateundocommand,zeentitiesmanager,UGDBDrawingdef,enitiesextendervariables,gdbdrawcontext,ugdbdrawing,zcadvariablesutils,GDBAbstractText,zcadstrconsts,UGDBSelectedObjArray,zeentityfactory,zcadsysvars,csvdocument,
   UGDBOpenArrayOfPV,GDBBlockInsert,devices,UGDBTree,ugdbdescriptor,gdbasetypes,commandline,GDBCommandsDraw,GDBElLeader,
   plugins,
   commandlinedef,
@@ -1637,7 +1637,7 @@ begin
          tmethod(domethod).Data:=p3dpl;
          tmethod(undomethod).Code:=pointer(p3dpl.DeleteVertex);
          tmethod(undomethod).Data:=p3dpl;
-         with ptdrawing(gdb.GetCurrentDWG).UndoStack.PushCreateTGObjectChangeCommand2(polydata,tmethod(domethod),tmethod(undomethod))^ do
+         with PushCreateTGObjectChangeCommand2(ptdrawing(gdb.GetCurrentDWG).UndoStack,polydata,tmethod(domethod),tmethod(undomethod))^ do
          begin
               comit;
          end;

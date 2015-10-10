@@ -20,7 +20,7 @@ unit ugdbdrawing;
 {$INCLUDE def.inc}
 interface
 uses
-zeundostack,zcchangeundocommand,zcobjectchangeundocommand,zebaseundocommands,paths,ugdbdimstylearray,WindowsSpecific,LResources,zcadsysvars,zcadstrconsts,strproc,GDBBlockDef,UUnitManager,
+gdbdrawcontext,zeundostack,zcchangeundocommand,zcobjectchangeundocommand,zebaseundocommands,paths,ugdbdimstylearray,WindowsSpecific,LResources,zcadsysvars,zcadstrconsts,strproc,GDBBlockDef,UUnitManager,
 gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,sysinfo,ugdbsimpledrawing,
@@ -46,6 +46,7 @@ TDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
            constructor init(num:PTUnitManager;preloadedfile1,preloadedfile2:GDBString);
            destructor done;virtual;
            function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
+           procedure onUndoRedo;
 
            procedure SetCurrentDWG;virtual;
            function StoreOldCamerapPos:Pointer;virtual;
@@ -238,11 +239,20 @@ begin
   FileName:=rsHardUnnamed;
   Changed:=False;
   UndoStack.init;
+  UndoStack.onUndoRedo:=self.onUndoRedo;
 
 
   //OGLwindow1.initxywh('oglwnd',nil,200,72,768,596,false);
   //OGLwindow1.show;
 end;
+procedure TDrawing.onUndoRedo;
+var
+   DC:TDrawContext;
+begin
+  DC:=CreateDrawingRC;
+  GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
+end;
+
 destructor TDrawing.done;
 begin
      inherited;

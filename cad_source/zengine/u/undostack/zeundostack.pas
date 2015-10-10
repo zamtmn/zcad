@@ -19,7 +19,7 @@
 unit zeundostack;
 {$INCLUDE def.inc}
 interface
-uses zebaseundocommands,gdbdrawcontext,varmandef,shared,gdbasetypes,
+uses zebaseundocommands,varmandef,shared,gdbasetypes,
      UGDBOpenArrayOfPObjects,sysutils,gdbase,memman;
 const BeginUndo:GDBString='BeginUndo';
       EndUndo:GDBString='EndUndo';
@@ -28,12 +28,14 @@ TUndoRedoResult=(URROk,
                  URRNoCommandsToUndoInOverlayMode,
                  URRNoCommandsToUndo,
                  URRNoCommandsToRedo);
+TOnUndoRedoProc=procedure of object;
 PGDBObjOpenArrayOfUCommands=^GDBObjOpenArrayOfUCommands;
 GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
                                  public
                                  CurrentCommand:TArrayIndex;
                                  currentcommandstartmarker:TArrayIndex;
                                  startmarkercount:GDBInteger;
+                                 onUndoRedo:TOnUndoRedoProc;
                                  procedure PushStartMarker(CommandName:GDBString);
                                  procedure PushEndMarker;
                                  procedure PushStone;
@@ -42,6 +44,7 @@ GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
                                  procedure KillLastCommand;
                                  function redo:TUndoRedoResult;
                                  constructor init;
+                                 procedure doOnUndoRedo;
                                  function Add(p:GDBPointer):TArrayIndex;virtual;
                                  Procedure ClearFrom(cc:TArrayIndex);
 
@@ -50,7 +53,12 @@ GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
 
                            end;
 implementation
-uses UGDBDescriptor;
+
+procedure GDBObjOpenArrayOfUCommands.doOnUndoRedo;
+begin
+  if assigned(onUndoRedo)then
+                             onUndoRedo;
+end;
 
 procedure GDBObjOpenArrayOfUCommands.PushStartMarker(CommandName:GDBString);
 var
@@ -142,7 +150,6 @@ function GDBObjOpenArrayOfUCommands.undo(prevheap:TArrayIndex;overlay:GDBBoolean
 var
    pcc:PTChangeCommand;
    mcounter:integer;
-   DC:TDrawContext;
 begin
      result:=URROk;
      if CurrentCommand>prevheap then
@@ -185,14 +192,14 @@ begin
                     else
                         result:=URRNoCommandsToUndoInOverlayMode;
          end;
-     DC:=gdb.GetCurrentDWG^.CreateDrawingRC;
-     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
+     {DC:=gdb.GetCurrentDWG^.CreateDrawingRC;
+     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);}
+     doOnUndoRedo;
 end;
 function GDBObjOpenArrayOfUCommands.redo:TUndoRedoResult;
 var
    pcc:PTChangeCommand;
    mcounter:integer;
-   DC:TDrawContext;
 begin
      if CurrentCommand<count then
      begin
@@ -222,14 +229,16 @@ begin
      end
      else
          result:=URRNoCommandsToRedo;
-     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
+     {dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);}
+     doOnUndoRedo;
 end;
 
 constructor GDBObjOpenArrayOfUCommands.init;
 begin
      inherited init({$IFDEF DEBUGBUILD}'{EF79AD53-2ECF-4848-8EDA-C498803A4188}',{$ENDIF}1);
      CurrentCommand:=0;
+     onUndoRedo:=nil;;
 end;
 procedure GDBObjOpenArrayOfUCommands.ClearFrom(cc:TArrayIndex);
 begin

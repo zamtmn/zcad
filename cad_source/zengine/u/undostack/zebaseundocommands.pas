@@ -19,15 +19,9 @@
 unit zebaseundocommands;
 {$INCLUDE def.inc}
 interface
-uses usimplegenerics,gdbdrawcontext,varmandef,zcadinterface,UGDBLayerArray,GDBEntity,shared,log,gdbasetypes,sysutils,
+uses varmandef,UGDBLayerArray,shared,log,gdbasetypes,sysutils,
      gdbase, geometry,memman;
 type
-TUndoCommandHandle=Integer;
-TUndoCommandData=record
-                  CreateCommandFunc:pointer;
-                  PushCreateCommandFunc:pointer;
-                 end;
-TUndoCommandHandle2UndoCommandDataMap=specialize GKey2DataMap<TUndoCommandHandle,TUndoCommandData,LessInteger>;
 TTypeCommand=(TTC_MBegin,TTC_MEnd,TTC_MNotUndableIfOverlay,TTC_Command,TTC_ChangeCommand);
 PTElementaryCommand=^TElementaryCommand;
 TElementaryCommand=object(GDBaseObject)
@@ -66,7 +60,7 @@ TTypedChangeCommand=object(TCustomChangeCommand)
                                       public
                                       OldData,NewData:GDBPointer;
                                       PTypeManager:PUserTypeDescriptor;
-                                      PEntity:PGDBObjEntity;
+                                      PDataOwner:{PGDBObjEntity}pointer;//PEntity
                                       constructor Assign(PDataInstance:GDBPointer;PType:PUserTypeDescriptor);
                                       procedure UnDo;virtual;
                                       procedure Comit;virtual;
@@ -75,8 +69,10 @@ TTypedChangeCommand=object(TCustomChangeCommand)
                                       destructor Done;virtual;
                                 end;
 TUndableMethod=procedure of object;
+TOnUndoRedoDataOwner=procedure(PDataOwner:Pointer) of object;
+var
+  onUndoRedoDataOwner:TOnUndoRedoDataOwner;
 implementation
-uses UGDBDescriptor,GDBManager;
 constructor TTypedChangeCommand.Assign(PDataInstance:GDBPointer;PType:PUserTypeDescriptor);
 begin
      Addr:=PDataInstance;
@@ -85,51 +81,55 @@ begin
      GDBGetMem({$IFDEF DEBUGBUILD}'{49289E94-F423-4497-B0B2-32215E6D5D40}',{$ENDIF}NewData,PTypeManager^.SizeInGDBBytes);
      PTypeManager^.CopyInstanceTo(Addr,OldData);
      PTypeManager^.CopyInstanceTo(Addr,NewData);
-     PEntity:=nil;
+     PDataOwner:=nil;
 end;
 procedure TTypedChangeCommand.UnDo;
-var
-  DC:TDrawContext;
+//var
+//  DC:TDrawContext;
 begin
      PTypeManager^.MagicFreeInstance(Addr);
      PTypeManager^.CopyInstanceTo(OldData,Addr);
-     if assigned(PEntity)then
+     if assigned(onUndoRedoDataOwner)then
+                                         onUndoRedoDataOwner(PDataOwner);
+     {if assigned(PDataOwner)then
                              begin
-                                  //PEntity^.YouChanged(gdb.GetCurrentDWG^);
-                                  if PEntity^.bp.ListPos.Owner=gdb.GetCurrentDWG^.GetCurrentRootSimple
+                                  //PDataOwner^.YouChanged(gdb.GetCurrentDWG^);
+                                  if PDataOwner^.bp.ListPos.Owner=gdb.GetCurrentDWG^.GetCurrentRootSimple
                                   then
-                                      PEntity^.YouChanged(gdb.GetCurrentDWG^)
+                                      PDataOwner^.YouChanged(gdb.GetCurrentDWG^)
                                   else
                                       begin
                                            dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-                                           PEntity^.FormatEntity(gdb.GetCurrentDWG^,dc);
+                                           PDataOwner^.FormatEntity(gdb.GetCurrentDWG^,dc);
                                            gdb.GetCurrentDWG^.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
                                       end;
                              end;
      if assigned(SetVisuaProplProc)then
-                                       SetVisuaProplProc;
+                                       SetVisuaProplProc;}
 end;
 procedure TTypedChangeCommand.Comit;
-var
-  DC:TDrawContext;
+//var
+//  DC:TDrawContext;
 begin
      PTypeManager^.MagicFreeInstance(Addr);
      PTypeManager^.CopyInstanceTo(NewData,Addr);
-     if assigned(PEntity)then
+     if assigned(onUndoRedoDataOwner)then
+                                    onUndoRedoDataOwner(PDataOwner);
+     {if assigned(PDataOwner)then
                              begin
-                                  //PEntity^.YouChanged(gdb.GetCurrentDWG^);
-                                  if PEntity^.bp.ListPos.Owner=gdb.GetCurrentDWG^.GetCurrentRootSimple
+                                  //PDataOwner^.YouChanged(gdb.GetCurrentDWG^);
+                                  if PDataOwner^.bp.ListPos.Owner=gdb.GetCurrentDWG^.GetCurrentRootSimple
                                   then
-                                      PEntity^.YouChanged(gdb.GetCurrentDWG^)
+                                      PDataOwner^.YouChanged(gdb.GetCurrentDWG^)
                                   else
                                       begin
                                            dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-                                           PEntity^.FormatEntity(gdb.GetCurrentDWG^,dc);
+                                           PDataOwner^.FormatEntity(gdb.GetCurrentDWG^,dc);
                                            gdb.GetCurrentDWG^.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
                                       end;
                              end;
      if assigned(SetVisuaProplProc)then
-                                       SetVisuaProplProc;
+                                       SetVisuaProplProc;}
 end;
 procedure TTypedChangeCommand.ComitFromObj;
 begin
@@ -191,19 +191,19 @@ begin //TTC_MNotUndableIfOverlay
                           result:=TTC_MBegin;}
 end;
 procedure TMarkerCommand.UnDo;
-var
-  DC:TDrawContext;
+//var
+//  DC:TDrawContext;
 begin
-     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
+//     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+//     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
 end;
 
 procedure TMarkerCommand.Comit;
-var
-  DC:TDrawContext;
+//var
+//  DC:TDrawContext;
 begin
-     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
+//     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+//     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
 end;
 
 constructor TMarkerCommand.init(_name:GDBString;_index:TArrayIndex);
@@ -214,5 +214,6 @@ end;
 
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArrayOfUCommands.initialization');{$ENDIF}
+  onUndoRedoDataOwner:=nil;
 end.
 

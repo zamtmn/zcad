@@ -22,6 +22,17 @@ interface
 uses memman,zeundostack,zebaseundocommands,gdbase,gdbasetypes,GDBEntity,UGDBLayerArray;
 
 type
+generic TGChangeCommand<_T>=object(TCustomChangeCommand)
+                                      public
+                                      OldData,NewData:_T;
+                                      PEntity:PGDBObjEntity;
+                                      constructor Assign(var data:_T);
+
+                                      procedure UnDo;virtual;
+                                      procedure Comit;virtual;
+                                      procedure ComitFromObj;virtual;
+                                      function GetDataTypeSize:PtrInt;virtual;
+                                end;
 {$MACRO ON}
 
 {$DEFINE INTERFACE}
@@ -98,6 +109,40 @@ type
   {$I TGChangeCommandIMPL.inc}
 {$UNDEF CLASSDECLARATION}
 implementation
+uses UGDBDescriptor,zcadinterface;
+constructor TGChangeCommand.Assign(var data:_T);
+begin
+     Addr:=@data;
+     olddata:=data;
+     newdata:=data;
+     PEntity:=nil;
+end;
+procedure TGChangeCommand.UnDo;
+begin
+     _T(addr^):=OldData;
+     if assigned(PEntity)then
+                             PEntity^.YouChanged(gdb.GetCurrentDWG^);
+     if assigned(SetVisuaProplProc)then
+                                       SetVisuaProplProc;
+end;
+procedure TGChangeCommand.Comit;
+begin
+     _T(addr^):=NewData;
+     if assigned(PEntity)then
+                             PEntity^.YouChanged(gdb.GetCurrentDWG^);
+     if assigned(SetVisuaProplProc)then
+                                       SetVisuaProplProc;
+
+end;
+procedure TGChangeCommand.ComitFromObj;
+begin
+     NewData:=_T(addr^);
+end;
+function TGChangeCommand.GetDataTypeSize:PtrInt;
+begin
+     result:=sizeof(_T);
+end;
+
 {$DEFINE IMPLEMENTATION}
 {$DEFINE TCommand  := TGDBVertexChangeCommand}
 {$DEFINE PTCommand := PTGDBVertexChangeCommand}

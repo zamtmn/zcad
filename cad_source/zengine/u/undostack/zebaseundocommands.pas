@@ -19,10 +19,8 @@
 unit zebaseundocommands;
 {$INCLUDE def.inc}
 interface
-uses usimplegenerics,gdbdrawcontext,varmandef,zcadinterface,UGDBLayerArray,GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,math}{,UGDBOpenArray, oglwindowdef},sysutils,
-     gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman{,GDBSubordinated};
-const BeginUndo:GDBString='BeginUndo';
-      EndUndo:GDBString='EndUndo';
+uses usimplegenerics,gdbdrawcontext,varmandef,zcadinterface,UGDBLayerArray,GDBEntity,shared,log,gdbasetypes,sysutils,
+     gdbase, geometry,memman;
 type
 TUndoCommandHandle=Integer;
 TUndoCommandData=record
@@ -76,195 +74,9 @@ TTypedChangeCommand=object(TCustomChangeCommand)
                                       function GetDataTypeSize:PtrInt;virtual;
                                       destructor Done;virtual;
                                 end;
-generic TGChangeCommand<_T>=object(TCustomChangeCommand)
-                                      public
-                                      OldData,NewData:_T;
-                                      PEntity:PGDBObjEntity;
-                                      constructor Assign(var data:_T);
-
-                                      procedure UnDo;virtual;
-                                      procedure Comit;virtual;
-                                      procedure ComitFromObj;virtual;
-                                      function GetDataTypeSize:PtrInt;virtual;
-                                end;
 TUndableMethod=procedure of object;
-generic TGObjectChangeCommand<_T>=object(TCustomChangeCommand)
-                                      {type
-                                          TCangeMethod=procedure(data:_T)of object;}
-                                      private
-                                      DoData,UnDoData:_T;
-                                      method:tmethod;
-                                      public
-                                      constructor Assign(var _dodata:_T;_method:tmethod);
-                                      procedure StoreUndoData(var _undodata:_T);virtual;
-
-                                      procedure UnDo;virtual;
-                                      procedure Comit;virtual;
-                                      //procedure ComitFromObj;virtual;
-                                      //function GetDataTypeSize:PtrInt;virtual;
-                                  end;
-generic TGObjectChangeCommand2<_T>=object(TCustomChangeCommand)
-                                      Data:_T;
-                                      DoMethod,UnDoMethod:tmethod;
-                                      constructor Assign(var _dodata:_T;_domethod,_undomethod:tmethod);
-
-                                      procedure UnDo;virtual;
-                                      procedure Comit;virtual;
-                                  end;
-generic TGMultiObjectChangeCommand<_T>=object(TCustomChangeCommand)
-                                      DoData,UnDoData:_T;
-                                      ObjArray:GDBOpenArrayOfData;
-                                      public
-                                      constructor Assign(const _dodata,_undodata:_T;const objcount:GDBInteger);
-                                      //procedure StoreUndoData(var _undodata:_T);virtual;
-                                      procedure AddMethod(method:tmethod);virtual;
-
-                                      procedure UnDo;virtual;
-                                      procedure Comit;virtual;
-                                      destructor Done;virtual;
-                                  end;
 implementation
 uses UGDBDescriptor,GDBManager;
-constructor TGMultiObjectChangeCommand.Assign(const _dodata,_undodata:_T;const objcount:GDBInteger);
-begin
-     DoData:=_DoData;
-     UnDoData:=_UnDoData;
-     self.ObjArray.init({$IFDEF DEBUGBUILD}'{108FD060-E408-4161-9548-64EEAFC3BEB2}',{$ENDIF}objcount,sizeof(tmethod));
-end;
-procedure TGMultiObjectChangeCommand.AddMethod(method:tmethod);
-begin
-     objarray.add(@method);
-end;
-{procedure TGMultiObjectChangeCommand.StoreUndoData(var _undodata:_T);
-begin
-     UnDoData:=_undodata;
-end;}
-procedure TGMultiObjectChangeCommand.UnDo;
-type
-    TCangeMethod=procedure(const data:_T)of object;
-    PTMethod=^TMethod;
-var
-  p:PTMethod;
-  ir:itrec;
-begin
-  p:=ObjArray.beginiterate(ir);
-  if p<>nil then
-  repeat
-        TCangeMethod(p^)(UnDoData);
-        PGDBObjEntity(p^.Data)^.YouChanged(gdb.GetCurrentDWG^);
-        //PGDBObjSubordinated(p^.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(p^.Data),PGDBObjSubordinated(p^.Data)^.bp.PSelfInOwnerArray);
-
-       p:=ObjArray.iterate(ir);
-  until p=nil;
-end;
-procedure TGMultiObjectChangeCommand.Comit;
-type
-    TCangeMethod=procedure(const data:_T)of object;
-    PTMethod=^TMethod;
-var
-  p:PTMethod;
-  ir:itrec;
-begin
-  p:=ObjArray.beginiterate(ir);
-  if p<>nil then
-  repeat
-        TCangeMethod(p^)(DoData);
-        PGDBObjEntity(p^.Data)^.YouChanged(gdb.GetCurrentDWG^);
-        //PGDBObjSubordinated(p^.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(p^.Data),PGDBObjSubordinated(p^.Data)^.bp.PSelfInOwnerArray);
-
-       p:=ObjArray.iterate(ir);
-  until p=nil;
-end;
-
-destructor TGMultiObjectChangeCommand.Done;
-begin
-     inherited;
-     ObjArray.done;
-end;
-
-
-constructor TGObjectChangeCommand.Assign(var _dodata:_T;_method:tmethod);
-begin
-     DoData:=_DoData;
-     method:=_method;
-end;
-procedure TGObjectChangeCommand.StoreUndoData(var _undodata:_T);
-begin
-     UnDoData:=_undodata;
-end;
-procedure TGObjectChangeCommand.UnDo;
-type
-    TCangeMethod=procedure(const data:_T)of object;
-begin
-     TCangeMethod(method)(UnDoData);
-     PGDBObjEntity(method.Data)^.YouChanged(gdb.GetCurrentDWG^);
-     //PGDBObjSubordinated(method.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(method.Data),PGDBObjSubordinated(method.Data)^.bp.PSelfInOwnerArray);
-end;
-procedure TGObjectChangeCommand.Comit;
-type
-    TCangeMethod=procedure(const data:_T)of object;
-begin
-     TCangeMethod(method)(DoData);
-     PGDBObjEntity(method.Data)^.YouChanged(gdb.GetCurrentDWG^);
-     //PGDBObjSubordinated(method.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(method.Data),PGDBObjSubordinated(method.Data)^.bp.PSelfInOwnerArray);
-end;
-constructor TGObjectChangeCommand2.Assign(var _dodata:_T;_domethod,_undomethod:tmethod);
-begin
-  AutoProcessGDB:=True;
-  AfterAction:=true;
-  Data:=_DoData;
-  domethod:=_domethod;
-  undomethod:=_undomethod;
-end;
-
-procedure TGObjectChangeCommand2.UnDo;
-var
-  DC:TDrawContext;
-type
-    TCangeMethod=procedure(const data:_T)of object;
-begin
-     TCangeMethod(undomethod)(Data);
-     if AfterAction then
-     begin
-     if AutoProcessGDB then
-                           PGDBObjEntity(undomethod.Data)^.YouChanged(gdb.GetCurrentDWG^)
-                       else
-                           begin
-                                dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-                                PGDBObjEntity(undomethod.Data)^.formatEntity(gdb.GetCurrentDWG^,dc);
-                           end;
-     end;
-end;
-
-procedure TGObjectChangeCommand2.Comit;
-var
-  DC:TDrawContext;
-type
-    TCangeMethod=procedure(const data:_T)of object;
-begin
-     TCangeMethod(domethod)(Data);
-     if AfterAction then
-     begin
-     if AutoProcessGDB then
-                           PGDBObjEntity(undomethod.Data)^.YouChanged(gdb.GetCurrentDWG^)
-                       else
-                           begin
-                           dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-                           PGDBObjEntity(undomethod.Data)^.formatEntity(gdb.GetCurrentDWG^,dc);
-                           end;
-     end;
-end;
-{TTypedChangeCommand=object(TCustomChangeCommand)
-                                      public
-                                      OldData,NewData:GDBPointer;
-                                      PTypeManager:PUserTypeDescriptor;
-                                      PEntity:PGDBObjEntity;
-                                      constructor Assign(PDataInstance:GDBPointer;PType:PUserTypeDescriptor);
-                                      procedure UnDo;virtual;
-                                      procedure Comit;virtual;
-                                      procedure ComitFromObj;virtual;
-                                      function GetDataTypeSize:PtrInt;virtual;
-                                end;}
 constructor TTypedChangeCommand.Assign(PDataInstance:GDBPointer;PType:PUserTypeDescriptor);
 begin
      Addr:=PDataInstance;
@@ -335,39 +147,6 @@ begin
      PTypeManager^.MagicFreeInstance(OldData);
      GDBFreeMem(NewData);
      GDBFreeMem(OldData);
-end;
-
-constructor TGChangeCommand.Assign(var data:_T);
-begin
-     Addr:=@data;
-     olddata:=data;
-     newdata:=data;
-     PEntity:=nil;
-end;
-procedure TGChangeCommand.UnDo;
-begin
-     _T(addr^):=OldData;
-     if assigned(PEntity)then
-                             PEntity^.YouChanged(gdb.GetCurrentDWG^);
-     if assigned(SetVisuaProplProc)then
-                                       SetVisuaProplProc;
-end;
-procedure TGChangeCommand.Comit;
-begin
-     _T(addr^):=NewData;
-     if assigned(PEntity)then
-                             PEntity^.YouChanged(gdb.GetCurrentDWG^);
-     if assigned(SetVisuaProplProc)then
-                                       SetVisuaProplProc;
-
-end;
-procedure TGChangeCommand.ComitFromObj;
-begin
-     NewData:=_T(addr^);
-end;
-function TGChangeCommand.GetDataTypeSize:PtrInt;
-begin
-     result:=sizeof(_T);
 end;
 function TElementaryCommand.GetCommandType:TTypeCommand;
 begin

@@ -19,9 +19,20 @@
 unit zcobjectchangeundocommand2;
 {$INCLUDE def.inc}
 interface
-uses memman,zeundostack,zebaseundocommands,gdbase,gdbasetypes,GDBEntity,UGDBLayerArray,UGDBTextStyleArray;
+uses memman,zeundostack,zebaseundocommands,gdbase,gdbasetypes,GDBEntity,UGDBLayerArray,UGDBTextStyleArray,gdbdrawcontext;
 
 type
+
+generic TGObjectChangeCommand2<_T>=object(TCustomChangeCommand)
+                                      Data:_T;
+                                      DoMethod,UnDoMethod:tmethod;
+                                      constructor Assign(var _dodata:_T;_domethod,_undomethod:tmethod);
+
+                                      procedure UnDo;virtual;
+                                      procedure Comit;virtual;
+                                  end;
+
+
 {$MACRO ON}
 
 {$DEFINE INTERFACE}
@@ -54,6 +65,55 @@ type
   {$I TGObjectChangeCommand2IMPL.inc}
 {$UNDEF CLASSDECLARATION}
 implementation
+uses UGDBDescriptor;
+constructor TGObjectChangeCommand2.Assign(var _dodata:_T;_domethod,_undomethod:tmethod);
+begin
+  AutoProcessGDB:=True;
+  AfterAction:=true;
+  Data:=_DoData;
+  domethod:=_domethod;
+  undomethod:=_undomethod;
+end;
+
+procedure TGObjectChangeCommand2.UnDo;
+var
+  DC:TDrawContext;
+type
+    TCangeMethod=procedure(const data:_T)of object;
+begin
+     TCangeMethod(undomethod)(Data);
+     if AfterAction then
+     begin
+     if AutoProcessGDB then
+                           PGDBObjEntity(undomethod.Data)^.YouChanged(gdb.GetCurrentDWG^)
+                       else
+                           begin
+                                dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+                                PGDBObjEntity(undomethod.Data)^.formatEntity(gdb.GetCurrentDWG^,dc);
+                           end;
+     end;
+end;
+
+procedure TGObjectChangeCommand2.Comit;
+var
+  DC:TDrawContext;
+type
+    TCangeMethod=procedure(const data:_T)of object;
+begin
+     TCangeMethod(domethod)(Data);
+     if AfterAction then
+     begin
+     if AutoProcessGDB then
+                           PGDBObjEntity(undomethod.Data)^.YouChanged(gdb.GetCurrentDWG^)
+                       else
+                           begin
+                           dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+                           PGDBObjEntity(undomethod.Data)^.formatEntity(gdb.GetCurrentDWG^,dc);
+                           end;
+     end;
+end;
+
+
 {$DEFINE IMPLEMENTATION}
 {$DEFINE TCommand  := TGDBPolyDataChangeCommand}
 {$DEFINE PTCommand := PTGDBPolyDataChangeCommand}

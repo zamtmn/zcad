@@ -19,9 +19,26 @@
 unit zcobjectchangeundocommand;
 {$INCLUDE def.inc}
 interface
-uses memman,zeundostack,zebaseundocommands,gdbase,gdbasetypes,GDBEntity;
+uses UGDBOpenArrayOfData,memman,zeundostack,zebaseundocommands,gdbase,gdbasetypes,GDBEntity;
 
 type
+
+    generic TGObjectChangeCommand<_T>=object(TCustomChangeCommand)
+                                          {type
+                                              TCangeMethod=procedure(data:_T)of object;}
+                                          private
+                                          DoData,UnDoData:_T;
+                                          method:tmethod;
+                                          public
+                                          constructor Assign(var _dodata:_T;_method:tmethod);
+                                          procedure StoreUndoData(var _undodata:_T);virtual;
+
+                                          procedure UnDo;virtual;
+                                          procedure Comit;virtual;
+                                          //procedure ComitFromObj;virtual;
+                                          //function GetDataTypeSize:PtrInt;virtual;
+                                      end;
+
 PTGDBRTModifyChangeCommand=^TGDBRTModifyChangeCommand;
 TGDBRTModifyChangeCommand=specialize TGObjectChangeCommand<TRTModifyData>;
 
@@ -35,6 +52,34 @@ function PushCreateTGObjectChangeCommand(var us:GDBObjOpenArrayOfUCommands; var 
 
 
 implementation
+uses UGDBDescriptor,zcadinterface;
+
+constructor TGObjectChangeCommand.Assign(var _dodata:_T;_method:tmethod);
+begin
+     DoData:=_DoData;
+     method:=_method;
+end;
+procedure TGObjectChangeCommand.StoreUndoData(var _undodata:_T);
+begin
+     UnDoData:=_undodata;
+end;
+procedure TGObjectChangeCommand.UnDo;
+type
+    TCangeMethod=procedure(const data:_T)of object;
+begin
+     TCangeMethod(method)(UnDoData);
+     PGDBObjEntity(method.Data)^.YouChanged(gdb.GetCurrentDWG^);
+     //PGDBObjSubordinated(method.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(method.Data),PGDBObjSubordinated(method.Data)^.bp.PSelfInOwnerArray);
+end;
+procedure TGObjectChangeCommand.Comit;
+type
+    TCangeMethod=procedure(const data:_T)of object;
+begin
+     TCangeMethod(method)(DoData);
+     PGDBObjEntity(method.Data)^.YouChanged(gdb.GetCurrentDWG^);
+     //PGDBObjSubordinated(method.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(method.Data),PGDBObjSubordinated(method.Data)^.bp.PSelfInOwnerArray);
+end;
+
 
 function {GDBObjOpenArrayOfUCommands.}CreateTGObjectChangeCommand(var data:TRTModifyData;_method:tmethod):PTGDBRTModifyChangeCommand;overload;
 begin

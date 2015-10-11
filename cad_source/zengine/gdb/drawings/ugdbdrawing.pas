@@ -20,7 +20,7 @@ unit ugdbdrawing;
 {$INCLUDE def.inc}
 interface
 uses
-gdbdrawcontext,zeundostack,zcchangeundocommand,zcobjectchangeundocommand,zebaseundocommands,paths,ugdbdimstylearray,WindowsSpecific,LResources,zcadsysvars,zcadstrconsts,strproc,GDBBlockDef,UUnitManager,
+zcadinterface,gdbdrawcontext,zeundostack,zcchangeundocommand,zcobjectchangeundocommand,zebaseundocommands,paths,ugdbdimstylearray,WindowsSpecific,LResources,zcadsysvars,zcadstrconsts,strproc,GDBBlockDef,UUnitManager,
 gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,sysinfo,ugdbsimpledrawing,
@@ -47,6 +47,7 @@ TDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
            destructor done;virtual;
            function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
            procedure onUndoRedo;
+           procedure onUndoRedoDataOwner(PDataOwner:Pointer);
 
            procedure SetCurrentDWG;virtual;
            function StoreOldCamerapPos:Pointer;virtual;
@@ -240,10 +241,31 @@ begin
   Changed:=False;
   UndoStack.init;
   UndoStack.onUndoRedo:=self.onUndoRedo;
+  zebaseundocommands.onUndoRedoDataOwner:=self.onUndoRedoDataOwner;
 
 
   //OGLwindow1.initxywh('oglwnd',nil,200,72,768,596,false);
   //OGLwindow1.show;
+end;
+procedure TDrawing.onUndoRedoDataOwner(PDataOwner:Pointer);
+var
+   DC:TDrawContext;
+begin
+  if assigned(PDataOwner)then
+                          begin
+                               //PDataOwner^.YouChanged(gdb.GetCurrentDWG^);
+                               if PGDBObjEntity(PDataOwner)^.bp.ListPos.Owner=gdb.GetCurrentDWG^.GetCurrentRootSimple
+                               then
+                                   PGDBObjEntity(PDataOwner)^.YouChanged(gdb.GetCurrentDWG^)
+                               else
+                                   begin
+                                        dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+                                        PGDBObjEntity(PDataOwner)^.FormatEntity(gdb.GetCurrentDWG^,dc);
+                                        gdb.GetCurrentDWG^.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
+                                   end;
+                          end;
+  if assigned(SetVisuaProplProc)then
+                                    SetVisuaProplProc;
 end;
 procedure TDrawing.onUndoRedo;
 var

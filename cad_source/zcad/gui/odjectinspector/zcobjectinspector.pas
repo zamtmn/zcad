@@ -1513,7 +1513,7 @@ begin
                                                                                                                                      begin
                                                                                                                                      EDContext.UndoStack:=GetUndoStack;
                                                                                                                                      EDContext.UndoCommand:=EDContext.UndoStack.PushCreateTTypedChangeCommand(pp^.valueAddres,pp^.PTypeManager);
-                                                                                                                                     EDContext.UndoCommand.PEntity:=pcurrobj;
+                                                                                                                                     EDContext.UndoCommand.PDataOwner:=pcurrobj;
 
                                                                                                                                      pp.FastEditor.OnRunFastEditor(pp.valueAddres);
                                                                                                                                      EDContext.UndoCommand.ComitFromObj;
@@ -1620,7 +1620,7 @@ begin
             if CurrObjIsEntity then
             begin
                  EDContext.UndoCommand:=EDContext.UndoStack.PushCreateTTypedChangeCommand(EDContext.ppropcurrentedit^.valueAddres,EDContext.ppropcurrentedit^.PTypeManager);
-                 EDContext.UndoCommand.PEntity:=pcurrobj;
+                 EDContext.UndoCommand.PDataOwner:=pcurrobj;
             end;
 
             peditor.OwnerNotify:=self.Notify;

@@ -183,6 +183,7 @@ begin
      vd.name:=varname;
      //vd.data.Instance:=instance;
      vd.data.PTD:=SysUnit.TypeName2PTD(vartype);
+     vd.data.Instance:=nil;
      varstack.createvariable(varname,vd);
      vd.data.PTD.CopyInstanceTo(instance,vd.data.Instance);
 end;

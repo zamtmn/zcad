@@ -285,7 +285,7 @@ begin
                  else
                  begin
                    s:=ExpandPath(operands);
-                   s:=FindInSupportPath(operands);
+                   s:=FindInSupportPath(SysVar.PATH.Support_Path,operands);
                  end;
   isload:=FileExists(utf8tosys(s));
   if isload then
@@ -329,7 +329,7 @@ begin
                                               s:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^)
                                           else
                                               begin
-                                                   s:=FindInSupportPath(operands);
+                                                   s:=FindInSupportPath(SysVar.PATH.Support_Path,operands);
                                                    if s='' then
                                                                s:=ExpandPath(operands);
                                               end;

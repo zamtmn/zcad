@@ -39,7 +39,7 @@ type
     UndoContext:TUndoContext;
 
     procedure freeeditor;
-    function createeditor(const TheOwner:TPropEditorOwner; const AEditedControl:TObject; const r: TRect; const variable; const vartype:String;UndoPrefixProcedure:TUndoPrefixProcedure; useinternalundo:boolean=true):boolean;
+    function createeditor(const TheOwner:TPropEditorOwner; const AEditedControl:TObject; const r: TRect; const variable; const vartype:String;UndoPrefixProcedure:TUndoPrefixProcedure;preferedHeight:integer; useinternalundo:boolean=true):boolean;
     procedure Notify(Sender: TObject;Command:TMyNotifyCommand); virtual;
     procedure asyncfreeeditor(Data: PtrInt);
     procedure ClearEDContext;
@@ -89,7 +89,7 @@ begin
      undocontext.UndoCommand:=nil;
      undocontext.UndoStack:=nil;
 end;
-function TSupportTypedEditors.createeditor(const TheOwner:TPropEditorOwner; const AEditedControl:TObject; const r: TRect; const variable; const vartype:String;UndoPrefixProcedure:TUndoPrefixProcedure; useinternalundo:boolean=true):boolean;
+function TSupportTypedEditors.createeditor(const TheOwner:TPropEditorOwner; const AEditedControl:TObject; const r: TRect; const variable; const vartype:String;UndoPrefixProcedure:TUndoPrefixProcedure;preferedHeight:integer; useinternalundo:boolean=true):boolean;
 var
   needdropdown:boolean;
   typemanager:PUserTypeDescriptor;
@@ -99,13 +99,13 @@ begin
      if uppercase(vartype)='TENUMDATA' then
      begin
           typemanager:=@GDBEnumDataDescriptorObj;
-      PEditor:=GDBEnumDataDescriptorObj.CreateEditor(TheOwner,r,@variable,nil,true,'').Editor;
+      PEditor:=GDBEnumDataDescriptorObj.CreateEditor(TheOwner,r,@variable,nil,true,'',preferedHeight).Editor;
       needdropdown:=true;
      end
      else
      begin
           typemanager:=SysUnit^.TypeName2PTD(vartype);
-          PEditor:=typemanager^.CreateEditor(TheOwner,r,@variable,nil,true,'').Editor;
+          PEditor:=typemanager^.CreateEditor(TheOwner,r,@variable,nil,true,'',preferedHeight).Editor;
      end;
      if PEditor.geteditor is TComboBox then
                                            begin

@@ -233,10 +233,10 @@ begin
           loadproc(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode,gdb.GetCurrentDWG^);
      if FileExists(utf8tosys(s+'.dbpas')) then
      begin
-           pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(InterfaceTranslate,DrawingDeviceBaseUnitName);
+           pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,DrawingDeviceBaseUnitName);
            mem.InitFromFile(s+'.dbpas');
            //pu^.free;
-           units.parseunit(InterfaceTranslate,mem,PTSimpleUnit(pu));
+           units.parseunit(sysvar.PATH.Support_Path,InterfaceTranslate,mem,PTSimpleUnit(pu));
            remapprjdb(pu);
            mem.done;
      end;
@@ -347,7 +347,7 @@ begin
      GDB.CurrentDWG:=BlockBaseDWG;
 
      if length(operands)>0 then
-     s:=FindInSupportPath(operands);
+     s:=FindInSupportPath(SysVar.PATH.Support_Path,operands);
      result:=Merge_com(@s[1]);
 
 
@@ -914,7 +914,7 @@ else if length(Operands)>3 then
                                      mem.AddData(@astring[1],length(astring));
 
                                      pentvarext^.entityunit.free;
-                                     units.parseunit(InterfaceTranslate,mem,@pentvarext^.entityunit);
+                                     units.parseunit(sysvar.PATH.Support_Path,InterfaceTranslate,mem,@pentvarext^.entityunit);
                                      if assigned(rebuildproc)then
                                      rebuildproc;
                                      //GDBobjinsp.rebuild;
@@ -961,7 +961,7 @@ begin
                                            begin
                                                 pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
                                                 pentvarext^.entityunit.free;
-                                                units.parseunit(InterfaceTranslate,mem,@pentvarext^.entityunit);
+                                                units.parseunit(sysvar.PATH.Support_Path,InterfaceTranslate,mem,@pentvarext^.entityunit);
                                                 mem.Seek(0);
                                                 inc(counter);
                                            end;

@@ -374,7 +374,8 @@ begin
 end;
 procedure tlog.ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
 begin
-     LogOutFormatStr('LCL: %s',[S],lp_OldPos,LM_Info);
+     if IsNeedToLog(LM_Info) then
+      LogOutFormatStr('LCL: %s',[S],lp_OldPos,LM_Info);
 end;
 
 destructor tlog.done;

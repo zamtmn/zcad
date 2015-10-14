@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <PathDelim Value="\"/>
+    <Name Value="zscriptbase"/>
+    <Type Value="RunAndDesignTime"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <PathDelim Value="\"/>
+      <SearchPaths>
+        <OtherUnitFiles Value="."/>
+        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Files Count="2">
+      <Item1>
+        <Filename Value="varmandef.pas"/>
+        <UnitName Value="varmandef"/>
+      </Item1>
+      <Item2>
+        <Filename Value="strmy.pas"/>
+        <UnitName Value="strmy"/>
+      </Item2>
+    </Files>
+    <RequiredPkgs Count="3">
+      <Item1>
+        <PackageName Value="zcontainers"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="zebase"/>
+      </Item2>
+      <Item3>
+        <PackageName Value="FCL"/>
+      </Item3>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>

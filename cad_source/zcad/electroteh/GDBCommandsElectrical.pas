@@ -1260,7 +1260,7 @@ begin
                  TempNet^.initnul(nil);
                  gdb.standardization(TempNet,GDBNetID);
                  ptempnetvarext:=TempNet^.GetExtension(typeof(TVariablesExtender));
-                 ptempnetvarext^.entityunit.copyfrom(units.findunit(InterfaceTranslate,'trace'));
+                 ptempnetvarext^.entityunit.copyfrom(units.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,'trace'));
                  pvd:=ptempnetvarext^.entityunit.FindVariable('NMO_Suffix');
                  pstring(pvd^.data.Instance)^:=inttostr(gdb.GetCurrentDWG.numerator.getnumber(UNNAMEDNET,SysVar.DSGN.DSGN_TraceAutoInc^));
                  pvd:=ptempnetvarext^.entityunit.FindVariable('NMO_Prefix');
@@ -1453,7 +1453,7 @@ begin
 
     //uunitmanager.units.loadunit(expandpath('*blocks\el\cable.pas'),@p3dpl^.ou);
     pcablevarext:=p3dpl^.GetExtension(typeof(TVariablesExtender));
-    pcablevarext^.entityunit.copyfrom(units.findunit(InterfaceTranslate,'cable'));
+    pcablevarext^.entityunit.copyfrom(units.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,'cable'));
     //pvd:=p3dpl^.ou.FindVariable('DB_link');
     //pstring(pvd^.data.Instance)^:='Кабель ??';
 
@@ -2050,7 +2050,7 @@ begin
                      pt^.ptablestyle:=gdb.GetCurrentDWG.TableStyleTable.getAddres('Spec');
                      pt^.tbl.cleareraseobj;
 
-  pdbu:=ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(InterfaceTranslate,DrawingDeviceBaseUnitName);
+  pdbu:=ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,DrawingDeviceBaseUnitName);
   currentgroup:=MainSpecContentFormat.beginiterate(ir_inscf);
   if currentgroup<>nil then
   if length(currentgroup^)>1 then
@@ -2724,7 +2724,7 @@ var
 begin
   result := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
   pentvarext:=result^.GetExtension(typeof(TVariablesExtender));
-  pentvarext^.entityunit.copyfrom(units.findunit(InterfaceTranslate,'cable'));
+  pentvarext^.entityunit.copyfrom(units.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,'cable'));
   pvd:=pentvarext^.entityunit.FindVariable('NMO_Suffix');
   pstring(pvd^.data.Instance)^:='';
   pvd:=pentvarext^.entityunit.FindVariable('NMO_Prefix');
@@ -2831,7 +2831,7 @@ begin
                  begin
                                            begin
                                            s:=ExpandPath(operands);
-                                           s:=FindInSupportPath(operands);
+                                           s:=FindInSupportPath(SysVar.PATH.Support_Path,operands);
                                            end;
                  end;
   isload:=FileExists(utf8tosys(s));
@@ -3007,7 +3007,7 @@ begin
                                                                 plinevarext:=New_line^.GetExtension(typeof(TVariablesExtender));
                                                                 if plinevarext=nil then
                                                                                        plinevarext:=AddVariablesToEntity(New_line);
-                                                                plinevarext^.entityunit.copyfrom(units.findunit(InterfaceTranslate,'_riserlink'));
+                                                                plinevarext^.entityunit.copyfrom(units.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,'_riserlink'));
                                                                 vd:=plinevarext^.entityunit.FindVariable('LengthOverrider');
 
                                                                 pvn :=FindVariableInEnt(riser,'Elevation');
@@ -3228,7 +3228,7 @@ procedure startup;
   // s:gdbstring;
 begin
   MainSpecContentFormat.init(100);
-  MainSpecContentFormat.loadfromfile(FindInSupportPath('main.sf'));
+  MainSpecContentFormat.loadfromfile(FindInSupportPath(SysVar.PATH.Support_Path,'main.sf'));
   CreateCommandFastObjectPlugin(@RegenZEnts_com,'RegenZEnts',CADWG,0);
   Wire.init('El_Wire',0,0);
   commandmanager.CommandRegister(@Wire);

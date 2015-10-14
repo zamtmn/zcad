@@ -46,7 +46,6 @@ const {as_normal=0;
   SHXCounturCCW=$0C;
   SHXCounturCW=$0D;
 
-  GDBBaseObjectID = 30000;
   GDBRootId = 30001;
   GDBcameraID = 0;
   GDBPointID = 1;
@@ -195,7 +194,6 @@ const {as_normal=0;
   MGetSelectObject = 32;
   MGetSelectionFrame = 64;
 
-  ObjN_NotRecognized='NotRecognized';
   ObjN_GDBObjText='GDBObjText';
   ObjN_GDBObjMText='GDBObjMText';
   ObjN_GDBObjLine='GDBObjLine';
@@ -218,7 +216,6 @@ const {as_normal=0;
   ObjN_GDBObjNet='GDBObjNet';
   ObjN_GDBObjCable='GDBObjCable';
   ObjN_GDBObjElLeader='GDBObjElLeader';
-  ObjN_ArrayEnd='ArrayEnd';
 
   DevicePrefix='DEVICE_';
   DrawingDeviceBaseUnitName='drawingdevicebase';

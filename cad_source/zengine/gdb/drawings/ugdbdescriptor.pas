@@ -170,7 +170,7 @@ end;
     allok:boolean;
  begin
       allok:=savedxf2000(s,dwg^);
-      pu:=PTDrawing(dwg).DWGUnits.findunit(InterfaceTranslate,DrawingDeviceBaseUnitName);
+      pu:=PTDrawing(dwg).DWGUnits.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,DrawingDeviceBaseUnitName);
       mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
       pu^.SavePasToMem(mem);
       mem.SaveToFile(expandpath(s+'.dbpas'));
@@ -368,7 +368,7 @@ begin
    { TODO : переделать }
    if typeof(CurrentDWG^)=typeof(TDrawing) then
    begin
-   DWGUnit:=PTDrawing(CurrentDWG).DWGUnits.findunit(InterfaceTranslate,'DrawingVars');
+   DWGUnit:=PTDrawing(CurrentDWG).DWGUnits.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,'DrawingVars');
    DWGUnit.AssignToSymbol(SysVar.DWG.DWG_SnapGrid,'DWG_SnapGrid');
    DWGUnit.AssignToSymbol(SysVar.DWG.DWG_DrawGrid,'DWG_DrawGrid');
    DWGUnit.AssignToSymbol(SysVar.DWG.DWG_Snap,'DWG_Snap');

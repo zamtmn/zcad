@@ -18,7 +18,7 @@
 
 unit memman;
 {$INCLUDE def.inc}
-
+{$MODE DELPHI}
 interface
 uses gdbasetypes,sysutils;
 

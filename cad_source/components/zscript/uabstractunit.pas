@@ -18,7 +18,7 @@
 
 unit uabstractunit;
 {$INCLUDE def.inc}
-
+{$MODE DELPHI}
 interface
 uses
   gdbase;

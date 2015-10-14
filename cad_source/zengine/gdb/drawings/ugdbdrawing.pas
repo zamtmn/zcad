@@ -20,7 +20,7 @@ unit ugdbdrawing;
 {$INCLUDE def.inc}
 interface
 uses
-zcadinterface,gdbdrawcontext,zeundostack,zcchangeundocommand,zcobjectchangeundocommand,zebaseundocommands,paths,ugdbdimstylearray,WindowsSpecific,LResources,zcadsysvars,zcadstrconsts,strproc,GDBBlockDef,UUnitManager,
+intftranslations,zcadinterface,gdbdrawcontext,zeundostack,zcchangeundocommand,zcobjectchangeundocommand,zebaseundocommands,paths,ugdbdimstylearray,WindowsSpecific,LResources,zcadsysvars,zcadstrconsts,strproc,GDBBlockDef,UUnitManager,
 gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,sysinfo,ugdbsimpledrawing,
@@ -221,14 +221,14 @@ begin
   DWGUnits.init;
   DWGUnits.SetNextManager(num);
   if preloadedfile1<>'' then
-  DWGUnits.loadunit(expandpath({'*rtl/dwg/DrawingDeviceBase.pas')}preloadedfile1),nil);
+  DWGUnits.loadunit(InterfaceTranslate,expandpath({'*rtl/dwg/DrawingDeviceBase.pas')}preloadedfile1),nil);
   if preloadedfile2<>'' then
-  DWGUnits.loadunit(expandpath({'*rtl/dwg/DrawingVars.pas'}preloadedfile2),nil);
-  DWGDBUnit:=DWGUnits.findunit(DrawingDeviceBaseUnitName);
+  DWGUnits.loadunit(InterfaceTranslate,expandpath({'*rtl/dwg/DrawingVars.pas'}preloadedfile2),nil);
+  DWGDBUnit:=DWGUnits.findunit(InterfaceTranslate,DrawingDeviceBaseUnitName);
 
   pcam:=nil;
   pvd:=nil;
-  pdwgwarsunit:=DWGUnits.findunit('DrawingVars');
+  pdwgwarsunit:=DWGUnits.findunit(InterfaceTranslate,'DrawingVars');
   if assigned(pdwgwarsunit) then
                                 pvd:=pdwgwarsunit.InterfaceVariables.findvardesc('camera');
   if pvd<>nil then

@@ -97,10 +97,10 @@ begin
                                  {$IFDEF DEBUGBUILD}
                                  membuf.init({$IFDEF DEBUGBUILD}'{6F6386AC-95B5-4B6D-AEC3-7EE5DD53F8A3}',{$ENDIF}10000);
                                  MSEditor.VariablesUnit.SaveToMem(membuf);
-                                 membuf.SaveToFile('*log\lms.pas');
+                                 membuf.SaveToFile(expandpath('*log\lms.pas'));
                                  {$ENDIF}
                                  if assigned(SetGDBObjInspProc)then
-                                                               SetGDBObjInspProc(gdb.GetUnitsFormat,SysUnit.TypeName2PTD('TMSEditor'),@MSEditor,gdb.GetCurrentDWG);
+                                                               SetGDBObjInspProc(gdb.GetUndoStack,gdb.GetUnitsFormat,SysUnit.TypeName2PTD('TMSEditor'),@MSEditor,gdb.GetCurrentDWG);
                                 end
                             else
                                 commandmanager.executecommandend;
@@ -233,10 +233,10 @@ begin
           loadproc(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode,gdb.GetCurrentDWG^);
      if FileExists(utf8tosys(s+'.dbpas')) then
      begin
-           pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
+           pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(InterfaceTranslate,DrawingDeviceBaseUnitName);
            mem.InitFromFile(s+'.dbpas');
            //pu^.free;
-           units.parseunit(mem,PTSimpleUnit(pu));
+           units.parseunit(InterfaceTranslate,mem,PTSimpleUnit(pu));
            remapprjdb(pu);
            mem.done;
      end;
@@ -445,6 +445,7 @@ function Undo_com(operands:TCommandOperands):TCommandResult;
 var
    prevundo:integer;
    overlay:GDBBoolean;
+   msg:string;
 begin
   gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
   if commandmanager.CommandsStack.Count>0 then
@@ -458,19 +459,23 @@ begin
                                                    overlay:=false;
                                                    if assigned(ReturnToDefaultProc) then ReturnToDefaultProc(gdb.GetUnitsFormat);
                                               end;
-  case ptdrawing(gdb.GetCurrentDWG).UndoStack.undo(prevundo,overlay) of
+  case ptdrawing(gdb.GetCurrentDWG).UndoStack.undo(msg,prevundo,overlay) of
     URRNoCommandsToUndoInOverlayMode:shared.ShowError(rscmNoCTUSE);
     URRNoCommandsToUndo:shared.ShowError(rscmNoCTU);
   end;
+  if msg<>'' then shared.HistoryOutStr(msg);
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
 function Redo_com(operands:TCommandOperands):TCommandResult;
+var
+   msg:string;
 begin
   gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
-  case ptdrawing(gdb.GetCurrentDWG).UndoStack.redo of
+  case ptdrawing(gdb.GetCurrentDWG).UndoStack.redo(msg) of
     URRNoCommandsToUndo:shared.ShowError(rscmNoCTR);
   end;
+  if msg<>'' then shared.HistoryOutStr(msg);
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
@@ -891,7 +896,7 @@ else if length(Operands)>3 then
            if pentvarext<>nil then
            begin
            pentvarext^.entityunit.SaveToMem(mem);
-           mem.SaveToFile(sysparam.programpath+'autosave\lastvariableset.pas');
+           mem.SaveToFile(expandpath(sysparam.programpath+'autosave\lastvariableset.pas'));
 
            setlength(astring,mem.Count);
            StrLCopy(@astring[1],mem.PArray,mem.Count);
@@ -909,7 +914,7 @@ else if length(Operands)>3 then
                                      mem.AddData(@astring[1],length(astring));
 
                                      pentvarext^.entityunit.free;
-                                     units.parseunit(mem,@pentvarext^.entityunit);
+                                     units.parseunit(InterfaceTranslate,mem,@pentvarext^.entityunit);
                                      if assigned(rebuildproc)then
                                      rebuildproc;
                                      //GDBobjinsp.rebuild;
@@ -956,7 +961,7 @@ begin
                                            begin
                                                 pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
                                                 pentvarext^.entityunit.free;
-                                                units.parseunit(mem,@pentvarext^.entityunit);
+                                                units.parseunit(InterfaceTranslate,mem,@pentvarext^.entityunit);
                                                 mem.Seek(0);
                                                 inc(counter);
                                            end;
@@ -1484,7 +1489,7 @@ end;
 function SnapProp_com(operands:TCommandOperands):TCommandResult;
 begin
      if assigned(StoreAndSetGDBObjInspProc)then
-      StoreAndSetGDBObjInspProc(gdb.GetUnitsFormat,dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,gdb.GetCurrentDWG);
+      StoreAndSetGDBObjInspProc(nil,gdb.GetUnitsFormat,dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,gdb.GetCurrentDWG);
       result:=cmd_ok;
 end;
 function UpdatePO_com(operands:TCommandOperands):TCommandResult;
@@ -1502,8 +1507,8 @@ begin
                if assigned(messageboxProc) then
                if messageboxProc(@s[1],'UpdatePO',MB_YESNO)=IDNO then
                                                                          exit;
-               po.SaveToFile(PODirectory + 'zcad.po.backup');
-               actualypo.SaveToFile(PODirectory + 'zcad.po');
+               po.SaveToFile(expandpath(PODirectory + 'zcad.po.backup'));
+               actualypo.SaveToFile(expandpath(PODirectory + 'zcad.po'));
                sysinfo.sysparam.updatepo:=false
           end;
      end

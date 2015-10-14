@@ -23,7 +23,7 @@ interface
 
 uses
   math,LMessages,LCLIntf,usupportgui,
-  zeundostack,zebaseundocommands,StdCtrls,strutils,zcadinterface,
+  zeundostack,zebaseundocommands,StdCtrls,strutils,{zcadinterface,}
   Themes,
   {$IFDEF LCLGTK2}
   gtk2,
@@ -32,7 +32,7 @@ uses
   types,graphics,
   ExtCtrls,Controls,Classes,menus,Forms,lcltype,
 
-  Varman,gdbasetypes,SysUtils,shared,
+  Varman,gdbasetypes,SysUtils,//shared,
   gdbase,varmandef,
   memman,TypeDescriptors,UGDBStringArray;
 const
@@ -61,6 +61,7 @@ type
   TOnGetOtherValues=procedure(var vsa:GDBGDBStringArray;const valkey:GDBString;const pcurcontext:gdbpointer;const pcurrobj:GDBPointer;const GDBobj:GDBBoolean);
   TOnUpdateObjectInInsp=procedure(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:gdbpointer;const pcurrobj:GDBPointer;const GDBobj:GDBBoolean);
   TOnNotify=procedure(const pcurcontext:gdbpointer);
+  TMyNotifyEvent=procedure(sender:tobject);
 
   TObjInspCustom=TScrollBox;
 
@@ -71,10 +72,13 @@ type
 
     PStoredObj:GDBPointer;
     StoredObjGDBType:PUserTypeDescriptor;
+    StoredUndoStack:PGDBObjOpenArrayOfUCommands;
     pStoredContext:GDBPointer;
 
     pcurrobj,pdefaultobj:GDBPointer;
     currobjgdbtype,defaultobjgdbtype:PUserTypeDescriptor;
+    DefaultUndoStack:PGDBObjOpenArrayOfUCommands;
+
     pcurcontext,pdefaultcontext:GDBPointer;
     PEditor:TPropEditor;
     PDA:TPropertyDeskriptorArray;
@@ -94,7 +98,7 @@ type
     procedure BeforeInit; virtual;
     procedure _onresize(sender:tobject);virtual;
     procedure updateeditorBounds;virtual;
-    procedure buildproplist(const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; bmode:GDBInteger; var addr:GDBPointer);
+    procedure buildproplist(const UndoStack:PGDBObjOpenArrayOfUCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; bmode:GDBInteger; var addr:GDBPointer);
     procedure SetCurrentObjDefault;
     procedure ReturnToDefault(const f:TzeUnitsFormat);
     procedure rebuild;
@@ -127,7 +131,7 @@ type
     procedure MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);override;
     procedure UpdateObjectInInsp;
     private
-    procedure setptr(const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+    procedure setptr(const UndoStack:PGDBObjOpenArrayOfUCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
     procedure updateinsp;
     protected
     procedure ScrollbarHandler(ScrollKind: TScrollBarKind; OldPosition: Integer);override;
@@ -143,8 +147,8 @@ type
     procedure FormHide(Sender: TObject);
   end;
 
-procedure SetGDBObjInsp(const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
-procedure StoreAndSetGDBObjInsp(const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+procedure SetGDBObjInsp(const UndoStack:PGDBObjOpenArrayOfUCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+procedure StoreAndSetGDBObjInsp(const UndoStack:PGDBObjOpenArrayOfUCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
 function ReStoreGDBObjInsp:GDBBoolean;
 procedure UpdateObjInsp;
 procedure ReturnToDefault(const f:TzeUnitsFormat);
@@ -157,7 +161,7 @@ function GetNameColWidth:integer;
 function CreateObjInspInstance:TForm;
 function GetPeditor:TComponent;
 procedure FreEditor;
-
+procedure StoreAndFreeEditor;
 var
   GDBobjinsp:TGDBobjinsp;
   //proptreeptr:propdeskptr;
@@ -183,6 +187,7 @@ var
   onGetOtherValues:TOnGetOtherValues=nil;
   onUpdateObjectInInsp:TOnUpdateObjectInInsp=nil;
   onNotify:TOnNotify=nil;
+  onAfterFreeEditor:TMyNotifyEvent=nil;
 implementation
 
 uses UObjectDescriptor;
@@ -271,10 +276,11 @@ begin
      if (GDBobjinsp.PStoredObj=nil) then
                                     else
                                     begin
-                                         GDBobjinsp.setptr(dummyuf,GDBobjinsp.StoredObjGDBType,GDBobjinsp.PStoredObj,GDBobjinsp.pStoredContext);
+                                         GDBobjinsp.setptr(GDBobjinsp.StoredUndoStack,dummyuf,GDBobjinsp.StoredObjGDBType,GDBobjinsp.PStoredObj,GDBobjinsp.pStoredContext);
                                          GDBobjinsp.PStoredObj:=nil;
                                          GDBobjinsp.StoredObjGDBType:=nil;
                                          GDBobjinsp.pStoredContext:=nil;
+                                         GDBobjinsp.StoredUndoStack:=nil;
 
                                          {GDBobjinsp.pcurrobj:=GDBobjinsp.PStoredObj;
                                          GDBobjinsp.currobjgdbtype:=GDBobjinsp.StoredObjGDBType;
@@ -283,7 +289,7 @@ begin
                                     end;
      end;
 end;
-procedure StoreAndSetGDBObjInsp(const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+procedure StoreAndSetGDBObjInsp(const UndoStack:PGDBObjOpenArrayOfUCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
 begin
      if assigned(GDBobjinsp)then
      begin
@@ -292,16 +298,17 @@ begin
                                   GDBobjinsp.PStoredObj:=GDBobjinsp.pcurrobj;
                                   GDBobjinsp.StoredObjGDBType:=GDBobjinsp.currobjgdbtype;
                                   GDBobjinsp.pStoredContext:=GDBobjinsp.pcurcontext;
+                                  GDBobjinsp.StoredUndoStack:=GDBobjinsp.EDContext.UndoStack;
                              end;
-     GDBobjinsp.setptr(f,exttype,addr,context);
+     GDBobjinsp.setptr(UndoStack,f,exttype,addr,context);
      end;
 end;
 
-procedure SetGDBObjInsp(const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+procedure SetGDBObjInsp(const UndoStack:PGDBObjOpenArrayOfUCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
 begin
      if assigned(GDBobjinsp)then
                                 begin
-                                     GDBobjinsp.setptr(f,exttype,addr,context);
+                                     GDBobjinsp.setptr(UndoStack,f,exttype,addr,context);
                                 end;
 end;
 procedure UpdateObjInsp;
@@ -443,6 +450,7 @@ begin
   pdefaultobj:=pcurrobj;
   defaultobjgdbtype:=currobjgdbtype;
   pdefaultcontext:=pcurcontext;
+  DefaultUndoStack:=EDContext.UndoStack;
 end;
 
 procedure TGDBobjinsp.ReturnToDefault;
@@ -452,7 +460,7 @@ begin
                           self.StoreAndFreeEditor;
                           end;
   dummyUF:=f;
-  setptr(f,defaultobjgdbtype,pdefaultobj,pdefaultcontext);
+  setptr(DefaultUndoStack,f,defaultobjgdbtype,pdefaultobj,pdefaultcontext);
 end;
 
 procedure TGDBobjinsp.createpda;
@@ -1140,7 +1148,7 @@ procedure TGDBobjinsp.ClearEDContext;
 begin
      EDContext.ppropcurrentedit:=nil;
      EDContext.UndoCommand:=nil;
-     EDContext.UndoStack:=nil;
+     //EDContext.UndoStack:=nil;
 end;
 
 procedure TGDBobjinsp.FreeEditor;
@@ -1157,9 +1165,8 @@ begin
      end;
      freeandnil(peditor);
      invalidate;
-     if assigned(shared.cmdedit) then
-     if shared.cmdedit.IsVisible then
-                                     shared.cmdedit.SetFocus;
+     if assigned(onAfterFreeEditor) then
+                                        onAfterFreeEditor(self);
 end;
 procedure TGDBobjinsp.StoreAndFreeEditor;
 begin
@@ -1450,7 +1457,7 @@ begin
     if peditor<>nil then
     begin
       tp:=pcurrobj;
-      GDBobjinsp.buildproplist(dummyUF,currobjgdbtype,property_correct,tp);
+      GDBobjinsp.buildproplist(EDContext.UndoStack,dummyUF,currobjgdbtype,property_correct,tp);
       //-----------------------------------------------------------------peditor^.done;
       //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
       EDContext.ppropcurrentedit:=pp;
@@ -1511,14 +1518,14 @@ begin
                                                                                                                                      begin
                                                                                                                                      if CurrObjIsEntity then
                                                                                                                                      begin
-                                                                                                                                     EDContext.UndoStack:=GetUndoStack;
+                                                                                                                                     //EDContext.UndoStack:=GetUndoStack;
                                                                                                                                      EDContext.UndoCommand:=EDContext.UndoStack.PushCreateTTypedChangeCommand(pp^.valueAddres,pp^.PTypeManager);
                                                                                                                                      EDContext.UndoCommand.PDataOwner:=pcurrobj;
 
                                                                                                                                      pp.FastEditor.OnRunFastEditor(pp.valueAddres);
                                                                                                                                      EDContext.UndoCommand.ComitFromObj;
 
-                                                                                                                                     EDContext.UndoStack:=nil;
+                                                                                                                                     //EDContext.UndoStack:=nil;
                                                                                                                                      EDContext.UndoCommand:=nil;
                                                                                                                                      end
                                                                                                                                      else
@@ -1569,7 +1576,7 @@ begin
        if peditor<>nil then
        begin
          tp:=pcurrobj;
-         GDBobjinsp.buildproplist(DummyUF,currobjgdbtype,property_correct,tp);
+         GDBobjinsp.buildproplist(EDContext.UndoStack,DummyUF,currobjgdbtype,property_correct,tp);
          StoreAndFreeEditor;
        end;
        vsa.init(50);
@@ -1615,9 +1622,10 @@ begin
        begin
             //GetUndoStack;
             EDContext.ppropcurrentedit:=pp;
-            EDContext.UndoStack:=GetUndoStack;
+            //EDContext.UndoStack:=GetUndoStack;
 
             if CurrObjIsEntity then
+            if EDContext.UndoStack<>nil then
             begin
                  EDContext.UndoCommand:=EDContext.UndoStack.PushCreateTTypedChangeCommand(EDContext.ppropcurrentedit^.valueAddres,EDContext.ppropcurrentedit^.PTypeManager);
                  EDContext.UndoCommand.PDataOwner:=pcurrobj;
@@ -1700,13 +1708,13 @@ begin
                               begin
                                    menu:=nil;
                                    if (clickonheader)or(pp=nil) then
-                                   menu:=TPopupMenu(application.FindComponent(MenuNameModifier+'OBJINSPHEADERCXMENU'))
+                                   menu:=TPopupMenu(application.FindComponent({MenuNameModifier}'MENU_'+'OBJINSPHEADERCXMENU'))
                               else if pp^.valkey<>''then
-                                   menu:=TPopupMenu(application.FindComponent(MenuNameModifier+'OBJINSPVARCXMENU'))
+                                   menu:=TPopupMenu(application.FindComponent({MenuNameModifier}'MENU_'+'OBJINSPVARCXMENU'))
                               else if pp^.Value<>''then
-                                   menu:=TPopupMenu(application.FindComponent(MenuNameModifier+'OBJINSPCXMENU'))
+                                   menu:=TPopupMenu(application.FindComponent({MenuNameModifier}'MENU_'+'OBJINSPCXMENU'))
                               else
-                                   menu:=TPopupMenu(application.FindComponent(MenuNameModifier+'OBJINSPHEADERCXMENU'));
+                                   menu:=TPopupMenu(application.FindComponent({MenuNameModifier}'MENU_'+'OBJINSPHEADERCXMENU'));
                                    if menu<>nil then
                                    begin
                                    currpd:=pp;
@@ -1725,7 +1733,7 @@ end;
 procedure TGDBobjinsp.updateinsp;
 begin
   //exit;
-  setptr(dummyuf,currobjgdbtype,pcurrobj,pcurcontext);
+  setptr(EDContext.UndoStack,dummyuf,currobjgdbtype,pcurrobj,pcurcontext);
 end;
 
 
@@ -1745,7 +1753,7 @@ begin
     else
       GDBobj:=false;
     tp:=pcurrobj;
-    GDBobjinsp.buildproplist(DummyUF,currobjgdbtype,property_build,tp);
+    GDBobjinsp.buildproplist(GDBobjinsp.EDContext.UndoStack,DummyUF,currobjgdbtype,property_build,tp);
     contentheigth:=gettreeh;
     if currobjgdbtype^.OIP.ci=self.Height then
                                                 begin
@@ -1762,6 +1770,7 @@ end;
 procedure TGDBobjinsp.setptr;
 begin
   dummyUF:=f;
+  EDContext.UndoStack:=undostack;
   if (pcurrobj<>addr)or(currobjgdbtype<>exttype) then
   begin
     {Objinsp.}currpd:=nil;
@@ -1783,7 +1792,7 @@ begin
       GDBobj:=true
     else
       GDBobj:=false;
-    GDBobjinsp.buildproplist(f,exttype,property_build,addr);
+    GDBobjinsp.buildproplist(UndoStack,f,exttype,property_build,addr);
     contentheigth:=gettreeh;
     createscrollbars;
     if currobjgdbtype^.OIP.ci=self.Height then
@@ -1798,7 +1807,7 @@ begin
   end
   else
   begin
-    GDBobjinsp.buildproplist(dummyuf,exttype,property_correct,addr);
+    GDBobjinsp.buildproplist(UndoStack,dummyuf,exttype,property_correct,addr);
     contentheigth:=gettreeh;
     createscrollbars;
   end;
@@ -1850,20 +1859,5 @@ begin
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('zcobjectinspector.initialization');{$ENDIF}
-  currpd:=nil;
-  SetGDBObjInspProc:=TSetGDBObjInsp(SetGDBObjInsp);
-  StoreAndSetGDBObjInspProc:=TStoreAndSetGDBObjInsp(StoreAndSetGDBObjInsp);
-  ReStoreGDBObjInspProc:=ReStoreGDBObjInsp;
-  UpdateObjInspProc:=UpdateObjInsp;
-  ReturnToDefaultProc:=ReturnToDefault;
-  ClrarIfItIsProc:=ClrarIfItIs;
-  ReBuildProc:=ReBuild;
-  SetCurrentObjDefaultProc:=SetCurrentObjDefault;
-  GetCurrentObjProc:=GetCurrentObj;
-  GetNameColWidthProc:=GetNameColWidth;
-  CreateObjInspInstanceProc:=CreateObjInspInstance;
-  GetPeditorProc:=GetPeditor;
-  FreEditorProc:=FreEditor;
-  StoreAndFreeEditorProc:=StoreAndFreeEditor;
 end.
 

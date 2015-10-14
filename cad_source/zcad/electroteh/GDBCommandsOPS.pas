@@ -10,7 +10,7 @@ unit GDBCommandsOPS;
 interface
 uses
 
-  zeentitiesmanager,GDBEntity,abstractviewarea,gdbdrawcontext,GDBAbstractText,GDBText,UGDBStringArray,zeentityfactory,zcadsysvars,strproc,gdbasetypes,commandline,log,UGDBOpenArrayOfPObjects,
+  intftranslations,zeentitiesmanager,GDBEntity,abstractviewarea,gdbdrawcontext,GDBAbstractText,GDBText,UGDBStringArray,zeentityfactory,zcadsysvars,strproc,gdbasetypes,commandline,log,UGDBOpenArrayOfPObjects,
   plugins,
   commandlinedef,
   commanddefinternal,
@@ -316,7 +316,7 @@ begin
   GDB.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera));
   historyout('Первый угол:');
   If assigned(SetGDBObjInspProc)then
-  SetGDBObjInspProc(gdb.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),pco,gdb.GetCurrentDWG);
+  SetGDBObjInspProc(nil,gdb.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),pco,gdb.GetCurrentDWG);
   result:=cmd_ok;
 end;
 function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): integer;
@@ -578,7 +578,7 @@ begin
   UManager.init;
 
   defaultunit.init(DefNumMetric);
-  units.loadunit(expandpath('*rtl/objcalc/opsmarkdef.pas'),(@defaultunit));
+  units.loadunit(InterfaceTranslate,expandpath('*rtl/objcalc/opsmarkdef.pas'),(@defaultunit));
   pcabledesk:=cman.beginiterate(ir);
   if pcabledesk<>nil then
   repeat
@@ -655,7 +655,7 @@ begin
                          p:=@pptnownervarext^.entityunit;
                          currentunit.InterfaceUses.addnodouble(@p);
 
-                         units.loadunit(expandpath('*rtl/objcalc/opsmark.pas'),(currentunit));
+                         units.loadunit(InterfaceTranslate,expandpath('*rtl/objcalc/opsmark.pas'),(currentunit));
 
                          ProcessedDevices.Add(@ptn^.bp.ListPos.Owner);
 
@@ -1015,7 +1015,7 @@ else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
   GDB.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera));
   historyout('Первый угол:');
   If assigned(SetGDBObjInspProc)then
-  SetGDBObjInspProc(gdb.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),pco2,gdb.GetCurrentDWG);
+  SetGDBObjInspProc(nil,gdb.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),pco2,gdb.GetCurrentDWG);
   OPSPlaceSmokeDetectorOrtoParam.DMC:=TOPSMDC_1_2;
 end;
 function PlBeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): integer;

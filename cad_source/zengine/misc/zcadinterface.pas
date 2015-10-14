@@ -18,7 +18,7 @@
 unit zcadinterface;
 {$INCLUDE def.inc}
 interface
-uses varmandef,forms,classes{,UGDBDrawingdef},gdbase;
+uses zeundostack,varmandef,forms,classes{,UGDBDrawingdef},gdbase;
 const
      menutoken='MAINMENUITEM';
      popupmenutoken='POPUPMENU';
@@ -50,8 +50,8 @@ type
 
 
     //ObjInsp
-    TSetGDBObjInsp=procedure(const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer);
-    TStoreAndSetGDBObjInsp=procedure(const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer);
+    TSetGDBObjInsp=procedure(const UndoStack:PGDBObjOpenArrayOfUCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer);
+    TStoreAndSetGDBObjInsp=procedure(const UndoStack:PGDBObjOpenArrayOfUCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer);
 
     //mainwindow
     TMessageBox=function(Text, Caption: PChar; Flags: Longint): Integer of object;

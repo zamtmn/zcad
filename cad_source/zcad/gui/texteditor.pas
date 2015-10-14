@@ -20,7 +20,7 @@ unit texteditor;
 {$INCLUDE def.inc}
 interface
 uses
-     zcadsysvars,gdbase,gdbasetypes,
+     zcadsysvars,gdbase,gdbasetypes,sysinfo,
      uinfoform,Varman,zcadinterface,
      UGDBDrawingdef,strproc,GDBText,gdbobjectsconstdef,zcadstrconsts,sltexteditor,
      Controls,Classes,Forms;
@@ -43,7 +43,7 @@ begin
      if not assigned(InfoForm) then
      begin
      InfoForm:=TInfoForm.createnew(application.MainForm);
-     InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND');
+     InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND',SysParam.ScreenX,SysParam.Screeny);
      end;
      //InfoForm.DialogPanel.ShowButtons:=[pbOK, pbCancel{, pbClose, pbHelp}];
      InfoForm.caption:=(rsMTextEditor);

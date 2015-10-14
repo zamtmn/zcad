@@ -2681,7 +2681,7 @@ ENDTAB}
                                 end;
                            end;
 
-  if outstream.SaveToFile(name)<=0 then
+  if outstream.SaveToFile({expandpath}(name))<=0 then
                                        begin
                                        shared.ShowError(format(rsUnableToWriteFile,[name]));
                                        result:=false;

@@ -30,19 +30,19 @@ type
                        currentunit:PTUnit;
                        NextUnitManager:PTUnitManager;
                        constructor init;
-                       function loadunit(fname:GDBString; pcreatedunit:PTSimpleUnit):ptunit;virtual;
-                       function parseunit(var f: GDBOpenArrayOfByte; pcreatedunit:PTSimpleUnit):ptunit;virtual;
-                       function changeparsemode(newmode:GDBInteger;var mode:GDBInteger):pasparsemode;
-                       function findunit(uname:GDBString):ptunit;virtual;
+                       function loadunit(TranslateFunc:TTranslateFunction;fname:GDBString; pcreatedunit:PTSimpleUnit):ptunit;virtual;
+                       function parseunit(TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfByte; pcreatedunit:PTSimpleUnit):ptunit;virtual;
+                       function changeparsemode(TranslateFunc:TTranslateFunction;newmode:GDBInteger;var mode:GDBInteger):pasparsemode;
+                       function findunit(TranslateFunc:TTranslateFunction;uname:GDBString):ptunit;virtual;
                        function FindOrCreateEmptyUnit(uname:GDBString):ptunit;virtual;
                        function internalfindunit(uname:GDBString):ptunit;virtual;
                        procedure SetNextManager(PNM:PTUnitManager);
-                       procedure LoadFolder(path: GDBString);
+                       procedure LoadFolder(TranslateFunc:TTranslateFunction;path: GDBString);
 
                        procedure AfterObjectDone(p:PGDBaseObject);virtual;
                        procedure free;virtual;
 
-                       procedure CreateExtenalSystemVariable(varname,vartype:GDBString;pinstance:Pointer);
+                       procedure CreateExtenalSystemVariable(TranslateFunc:TTranslateFunction;varname,vartype:GDBString;pinstance:Pointer);
                  end;
 {EXPORT-}
 var
@@ -83,13 +83,13 @@ const
                             Size:sizeof(GDBPointer);
                             //Attributes:{FA_HIDDEN_IN_OBJ_INSP or }FA_READONLY
                             );
-procedure TUnitManager.CreateExtenalSystemVariable(varname,vartype:GDBString;pinstance:Pointer);
+procedure TUnitManager.CreateExtenalSystemVariable(TranslateFunc:TTranslateFunction;varname,vartype:GDBString;pinstance:Pointer);
 begin
   //TODO: убрать такуюже шнягу из urtl, сделать создание SysUnit в одном месте
   if SysUnit=nil then
     begin
-      units.loadunit(expandpath('*rtl/system.pas'),nil);
-      SysUnit:=units.findunit('System');
+      units.loadunit(TranslateFunc,expandpath('*rtl/system.pas'),nil);
+      SysUnit:=units.findunit(TranslateFunc,'System');
     end;
   if SysVarUnit=nil then
     begin
@@ -150,7 +150,7 @@ begin
        p:=iterate(ir);
   until p=nil;
   if NextUnitManager<>NIL then
-                              result:=NextUnitManager^.findunit(uname);
+                              result:=NextUnitManager^.internalfindunit(uname);
 end;
 function TUnitManager.FindOrCreateEmptyUnit(uname:GDBString):ptunit;
 begin
@@ -190,13 +190,13 @@ begin
                          if nfn<>'' then
                                         begin
                                              tcurrentunit:=currentunit;
-                                             result:=self.loadunit(nfn,nil);
+                                             result:=self.loadunit(TranslateFunc,nfn,nil);
                                              currentunit:=tcurrentunit;
                                         end;
                     end;                           
   
 end;
-function TUnitManager.changeparsemode(newmode:GDBInteger;var mode:GDBInteger):pasparsemode;
+function TUnitManager.changeparsemode(TranslateFunc:TTranslateFunction;newmode:GDBInteger;var mode:GDBInteger):pasparsemode;
 var i:GDBInteger;
     //line:GDBString;
     //fieldgdbtype: gdbtypedesk;
@@ -215,7 +215,7 @@ begin
      if (CurrentUnit<>nil) then
      if (CurrentUnit.InterfaceUses.Count=0) then
      begin
-       pfu:=findunit('system');
+       pfu:=findunit(TranslateFunc,'system');
        if (pfu<>nil)and(pfu<>CurrentUnit) then
        begin
             CurrentUnit.InterfaceUses.addnodouble(@pfu);
@@ -234,7 +234,7 @@ var
   f: GDBOpenArrayOfByte;
 begin
   f.InitFromFile(fname);
-  result:=parseunit(f,pcreatedunit);
+  result:=parseunit(TranslateFunc,f,pcreatedunit);
   f.done;
   //result:=pointer(pcreatedunit);
 end;
@@ -304,7 +304,7 @@ begin
     begin
          if typ=beginmode then
                               typ:=typ;
-         case changeparsemode(typ,mode) of
+         case changeparsemode(TranslateFunc,typ,mode) of
                                           modeEnd:
                                                   system.break;
          end;{case}
@@ -321,7 +321,7 @@ begin
                                                      p:=parseresult.beginiterate(ir);
                                                      if p<>nil then
                                                      repeat
-                                                           pfu:=findunit(pstring(p)^);
+                                                           pfu:=findunit(TranslateFunc,pstring(p)^);
                                                            if pfu<>nil then
                                                                            begin
                                                                                 CurrentUnit.InterfaceUses.addnodouble(@pfu);
@@ -340,7 +340,7 @@ begin
                                                      if p<>nil then
                                                      repeat
                                                            //tempstring:=(pstring(p)^);
-                                                           pfu:=findunit(pstring(p)^);
+                                                           pfu:=findunit(TranslateFunc,pstring(p)^);
                                                            if pfu<>nil then
                                                                            begin
                                                                                 CurrentUnit.CopyFrom(pfu);  //breakpoint
@@ -375,7 +375,7 @@ begin
                 subunitmode:
                          begin
                               parseresult:=runparser('_identifier'#0'_softend'#0,line,parseerror);
-                              currentunit:=findunit(parseresult^.getGDBString(0));
+                              currentunit:=findunit(TranslateFunc,parseresult^.getGDBString(0));
                               if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
                          end;
                 interf:
@@ -429,7 +429,7 @@ begin
                                                   fieldoffset:=0;
                                                   gdbgetmem({$IFDEF DEBUGBUILD}'{32834740-66CF-48EE-8CFF-58FE55EA293B}',{$ENDIF}GDBPointer(etd),sizeof(RecordDescriptor));
                                                   PRecordDescriptor(etd)^.init(typename,currentunit);
-                                                  ObjOrRecordRead(f,line,GDBStringtypearray,fieldoffset,GDBPointer(etd));
+                                                  ObjOrRecordRead(TranslateFunc,f,line,GDBStringtypearray,fieldoffset,GDBPointer(etd));
                                              end;
                                  objecttype,packedobjecttype:begin
                                                   {FPVMT}
@@ -484,7 +484,7 @@ begin
                                                   end;
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
                                                   //etd.typeobj:=nil;
-                                                  ObjOrRecordRead(f,line,GDBStringtypearray,fieldoffset,GDBPointer(etd));
+                                                  ObjOrRecordRead(TranslateFunc,f,line,GDBStringtypearray,fieldoffset,GDBPointer(etd));
                                                   PObjectDescriptor(etd)^.SimpleMenods.Shrink;
                                              end;
                               proceduraltype:begin
@@ -751,7 +751,7 @@ begin
      inherited init({$IFDEF DEBUGBUILD}'{94D787E9-97EE-4198-8A72-5B904B98F275}',{$ENDIF}500,sizeof(TUnit));
      NextUnitManager:=nil;
 end;
-procedure TUnitManager.LoadFolder(path: GDBString);
+procedure TUnitManager.LoadFolder(TranslateFunc:TTranslateFunction;path: GDBString);
 var
   sr: TSearchRec;
 begin
@@ -760,7 +760,7 @@ begin
   begin
     repeat
       programlog.LogOutFormatStr('Found file "%s"',[path+sr.Name],lp_OldPos,LM_Info);
-      loadunit(path+sr.Name,nil);
+      loadunit(TranslateFunc,path+sr.Name,nil);
     until FindNext(sr) <> 0;
     sysutils.FindClose(sr);
   end;

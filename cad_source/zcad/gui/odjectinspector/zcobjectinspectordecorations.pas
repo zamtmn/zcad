@@ -22,7 +22,7 @@ unit zcobjectinspectordecorations;
 interface
 
 uses
-  gdbpalette,UEnumDescriptor,zcobjectinspector,uinfoform,Forms,ugdbltypearray,sysutils,umytreenode,oswnd,gdbcommandsinterface,
+  sysinfo,gdbpalette,UEnumDescriptor,zcobjectinspector,uinfoform,Forms,ugdbltypearray,sysutils,umytreenode,oswnd,gdbcommandsinterface,
   Graphics,LCLType,Themes,types,gdbobjectsconstdef,UGDBNamedObjectsArray,UGDBStringArray,
   varmandef,Varman,colorwnd,UGDBLayerArray,gdbase,lineweightwnd,gdbasetypes,usupportgui,
   StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,strproc,zcadsysvars,commandline,
@@ -629,7 +629,7 @@ begin
      if not assigned(InfoForm) then
      begin
      InfoForm:=TInfoForm.createnew(application.MainForm);
-     InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND');
+     InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND',SysParam.ScreenX,SysParam.Screeny);
      end;
      InfoForm.caption:=(rsTextEdCaption);
      if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
@@ -651,7 +651,7 @@ begin
      if not assigned(InfoForm) then
      begin
      InfoForm:=TInfoForm.createnew(application.MainForm);
-     InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND');
+     InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND',SysParam.ScreenX,SysParam.Screeny);
      end;
      InfoForm.caption:=(rsTextEdCaption);
      if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then

@@ -225,7 +225,7 @@ var WorldMatrix{,CurrentCS}:DMatrix4D;
 type
     TLineClipArray=array[0..5]of gdbdouble;
 implementation
-uses shared,log;
+uses {shared,}log;
 function myPickMatrix(const x,y,deltax,deltay:gdbdouble;const vp:IMatrix4): DMatrix4D;
 var
   tm,sm: DMatrix4D;
@@ -1720,7 +1720,7 @@ begin
                  end
              else
                  begin
-                 LogError(rsDivByZero);
+                 programlog.LogOutStr(rsDivByZero,lp_OldPos,LM_Error);
                  len:=len+2;
                  end;
 end;
@@ -2053,7 +2053,7 @@ begin
                                  end
                              else
                                  begin
-                                      shared.ShowError('CreateVertexFromArray: no enough params in args');
+                                      programlog.LogOutStr('CreateVertexFromArray: no enough params in args',lp_OldPos,LM_Error);
                                  end;
 
 end;

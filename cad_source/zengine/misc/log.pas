@@ -19,7 +19,7 @@
 unit log;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,paths,LazLoggerBase,LazLogger;
+uses gdbasetypes,LazLoggerBase,LazLogger;
 const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
       {$IFDEF FPC}
                   {$IFDEF LINUX}filelog='log/zcad_linux.log';{$ENDIF}
@@ -390,7 +390,7 @@ end;
 initialization
 begin
     {$IFDEF DEBUGINITSECTION}LogOut('log.initialization');{$ENDIF}
-    programlog.init(ProgramPath+filelog,LM_Error);
+    programlog.init({$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)))+filelog,LM_Error);
 end;
 end.
 

@@ -175,7 +175,7 @@
     </RunParams>
     <RequiredPackages Count="7">
       <Item1>
-        <PackageName Value="zcadcontrols"/>
+        <PackageName Value="zcontrols"/>
       </Item1>
       <Item2>
         <PackageName Value="FCL"/>

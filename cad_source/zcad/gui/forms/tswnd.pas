@@ -192,7 +192,7 @@ begin
 end;
 function TTextStylesWindow.CreateNameEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.Name,'GDBAnsiString',@CreateUndoStartMarkerNeeded)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.Name,'GDBAnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
 end;
 {Font name handle procedures}
 function TTextStylesWindow.GetFontName(Item: TListItem):string;
@@ -204,7 +204,7 @@ begin
   FillFontsSelector(PGDBTextStyle(Item.Data)^.pfont^.fontfile,PGDBTextStyle(Item.Data)^.pfont);
   FontChange:=true;
   FontTypeFilterComboBox.enabled:=false;
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,FontsSelector,'TEnumData',nil,false)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,FontsSelector,'TEnumData',nil,r.Bottom-r.Top,false)
 end;
 {Font path handle procedures}
 function TTextStylesWindow.GetFontPath(Item: TListItem):string;
@@ -218,7 +218,7 @@ begin
 end;
 function TTextStylesWindow.CreateHeightEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.size,'GDBDouble',@CreateUndoStartMarkerNeeded)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.size,'GDBDouble',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
 end;
 {Wfactor handle procedures}
 function TTextStylesWindow.GetWidthFactor(Item: TListItem):string;
@@ -227,7 +227,7 @@ begin
 end;
 function TTextStylesWindow.CreateWidthFactorEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.wfactor,'GDBDouble',@CreateUndoStartMarkerNeeded)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.wfactor,'GDBDouble',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
 end;
 {Oblique handle procedures}
 function TTextStylesWindow.GetOblique(Item: TListItem):string;
@@ -236,7 +236,7 @@ begin
 end;
 function TTextStylesWindow.CreateObliqueEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.oblique,'GDBDouble',@CreateUndoStartMarkerNeeded)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.oblique,'GDBDouble',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
 end;
 procedure TTextStylesWindow.FillFontsSelector(currentitem:string;currentitempfont:PGDBfont);
 var i:integer;

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <PathDelim Value="\"/>
+    <Name Value="zebase"/>
+    <Type Value="RunAndDesignTime"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <PathDelim Value="\"/>
+      <SearchPaths>
+        <IncludeFiles Value="."/>
+        <OtherUnitFiles Value="."/>
+        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Files Count="7">
+      <Item1>
+        <Filename Value="def.inc"/>
+        <Type Value="Include"/>
+      </Item1>
+      <Item2>
+        <Filename Value="gdbasetypes.pas"/>
+        <UnitName Value="gdbasetypes"/>
+      </Item2>
+      <Item3>
+        <Filename Value="gdbase.pas"/>
+        <UnitName Value="gdbase"/>
+      </Item3>
+      <Item4>
+        <Filename Value="memman.pas"/>
+        <UnitName Value="memman"/>
+      </Item4>
+      <Item5>
+        <Filename Value="strproc.pas"/>
+        <UnitName Value="strproc"/>
+      </Item5>
+      <Item6>
+        <Filename Value="usimplegenerics.pas"/>
+        <UnitName Value="usimplegenerics"/>
+      </Item6>
+      <Item7>
+        <Filename Value="paths.pas"/>
+        <UnitName Value="paths"/>
+      </Item7>
+    </Files>
+    <RequiredPkgs Count="2">
+      <Item1>
+        <PackageName Value="LCLBase"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="FCL"/>
+      </Item2>
+    </RequiredPkgs>
+    <UsageOptions>
+      <IncludePath Value="$PkgDir(id)"/>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>

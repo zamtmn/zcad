@@ -36,20 +36,20 @@ initialization;
      //units.init;
      if SysUnit=nil then
        begin
-         units.loadunit(InterfaceTranslate,expandpath('*rtl/system.pas'),nil);
-         SysUnit:=units.findunit(InterfaceTranslate,'System');
+         units.loadunit(sysvar.PATH.Support_Path,InterfaceTranslate,expandpath('*rtl/system.pas'),nil);
+         SysUnit:=units.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,'System');
        end;
 
   {RegCnownTypes.RegTypes;}
   {URegisterObjects.startup;}
 
-  units.loadunit(InterfaceTranslate,expandpath('*rtl/sysvar.pas'),nil);
-  units.loadunit(InterfaceTranslate,expandpath('*rtl/savedvar.pas'),nil);
-  units.loadunit(InterfaceTranslate,expandpath('*rtl/devicebase.pas'),nil);
+  units.loadunit(sysvar.PATH.Support_Path,InterfaceTranslate,expandpath('*rtl/sysvar.pas'),nil);
+  units.loadunit(sysvar.PATH.Support_Path,InterfaceTranslate,expandpath('*rtl/savedvar.pas'),nil);
+  units.loadunit(sysvar.PATH.Support_Path,InterfaceTranslate,expandpath('*rtl/devicebase.pas'),nil);
 
-  SysVarUnit:=units.findunit(InterfaceTranslate,'sysvar');
-  SavedUnit:=units.findunit(InterfaceTranslate,'savedvar');
-  DBUnit:=units.findunit(InterfaceTranslate,'devicebase');
+  SysVarUnit:=units.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,'sysvar');
+  SavedUnit:=units.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,'savedvar');
+  DBUnit:=units.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,'devicebase');
 
   if SysVarUnit<>nil then
   begin
@@ -206,10 +206,10 @@ initialization;
   end;
 
 
-  units.loadunit(InterfaceTranslate,expandpath('*rtl/cables.pas'),nil);
-  units.loadunit(InterfaceTranslate,expandpath('*rtl/devices.pas'),nil);
-  units.loadunit(InterfaceTranslate,expandpath('*rtl/connectors.pas'),nil);
-  units.loadunit(InterfaceTranslate,expandpath('*rtl/styles/styles.pas'),nil);
+  units.loadunit(sysvar.PATH.Support_Path,InterfaceTranslate,expandpath('*rtl/cables.pas'),nil);
+  units.loadunit(sysvar.PATH.Support_Path,InterfaceTranslate,expandpath('*rtl/devices.pas'),nil);
+  units.loadunit(sysvar.PATH.Support_Path,InterfaceTranslate,expandpath('*rtl/connectors.pas'),nil);
+  units.loadunit(sysvar.PATH.Support_Path,InterfaceTranslate,expandpath('*rtl/styles/styles.pas'),nil);
 
   //units.loadunit(expandpath('*rtl\objdefunits\objname.pas'),nil);
   //units.loadunit(expandpath('*rtl\objdefunits\blocktype.pas'),nil);

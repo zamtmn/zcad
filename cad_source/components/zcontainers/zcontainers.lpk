@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <PathDelim Value="\"/>
+    <Name Value="zcontainers"/>
+    <Type Value="RunAndDesignTime"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <PathDelim Value="\"/>
+      <SearchPaths>
+        <IncludeFiles Value="$PkgDir(zebase)"/>
+        <OtherUnitFiles Value="."/>
+        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Files Count="9">
+      <Item1>
+        <Filename Value="UGDBOpenArray.pas"/>
+        <UnitName Value="UGDBOpenArray"/>
+      </Item1>
+      <Item2>
+        <Filename Value="UGDBOpenArrayOfByte.pas"/>
+        <UnitName Value="UGDBOpenArrayOfByte"/>
+      </Item2>
+      <Item3>
+        <Filename Value="UGDBOpenArrayOfData.pas"/>
+        <UnitName Value="UGDBOpenArrayOfData"/>
+      </Item3>
+      <Item4>
+        <Filename Value="UGDBOpenArrayOfObjects.pas"/>
+        <UnitName Value="UGDBOpenArrayOfObjects"/>
+      </Item4>
+      <Item5>
+        <Filename Value="UGDBOpenArrayOfPObjects.pas"/>
+        <UnitName Value="UGDBOpenArrayOfPObjects"/>
+      </Item5>
+      <Item6>
+        <Filename Value="UGDBOpenArrayOfPointer.pas"/>
+        <UnitName Value="UGDBOpenArrayOfPointer"/>
+      </Item6>
+      <Item7>
+        <Filename Value="UGDBOpenArrayOfTObjLinkRecord.pas"/>
+        <UnitName Value="UGDBOpenArrayOfTObjLinkRecord"/>
+      </Item7>
+      <Item8>
+        <Filename Value="UGDBStringArray.pas"/>
+        <UnitName Value="UGDBStringArray"/>
+      </Item8>
+      <Item9>
+        <Filename Value="UGDBTree.pas"/>
+        <UnitName Value="UGDBTree"/>
+      </Item9>
+    </Files>
+    <RequiredPkgs Count="2">
+      <Item1>
+        <PackageName Value="zebase"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="FCL"/>
+      </Item2>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>

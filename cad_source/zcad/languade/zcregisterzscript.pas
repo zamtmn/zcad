@@ -19,12 +19,12 @@
 unit zcregisterzscript;
 {$INCLUDE def.inc}
 interface
-uses intftranslations,UUnitManager,TypeDescriptors;
+uses zcadsysvars,paths,intftranslations,UUnitManager,TypeDescriptors;
 implementation
 
 initialization
 {$IFDEF DEBUGINITSECTION}LogOut('zcregisterzscript.initialization');{$ENDIF}
-units.CreateExtenalSystemVariable(InterfaceTranslate,'ShowHiddenFieldInObjInsp','GDBBoolean',@debugShowHiddenFieldInObjInsp);
+units.CreateExtenalSystemVariable(sysvar.PATH.Support_Path,expandpath('*rtl/system.pas'),InterfaceTranslate,'ShowHiddenFieldInObjInsp','GDBBoolean',@debugShowHiddenFieldInObjInsp);
 finalization
 end.
 

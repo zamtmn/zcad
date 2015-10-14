@@ -20,7 +20,7 @@ unit projecttreewnd;
 {$INCLUDE def.inc}
 interface
 uses
- intftranslations,enitiesextendervariables,ugdbdrawing,paths,UGDBStringArray,gdbobjectsconstdef,zcadstrconsts,ucxmenumgr,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ zcadsysvars,intftranslations,enitiesextendervariables,ugdbdrawing,paths,UGDBStringArray,gdbobjectsconstdef,zcadstrconsts,ucxmenumgr,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}ComCtrls,
  {ZTabControlsGeneric,zmenus,}{DeviceBase}devicebaseabstract,log,SysUtils,{UGDBTree,}gdbase,UGDBDescriptor{,math,commandline},varman,languade{,UGDBTracePropArray},
   {ZEditsWithProcedure,zbasicvisible,}varmandef,shared,sysinfo{,ZTreeViewsGeneric},memman,gdbasetypes,commanddefinternal,commandlinedef;
@@ -135,7 +135,7 @@ begin
                        begin
                             T_ProjectDB.Selected:=nil;
                             self.ProjectEquipmentN.DeleteChildren;
-                            BuildTreeByEQ(ProjectEquipmentN,ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(InterfaceTranslate,DrawingDeviceBaseUnitName),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
+                            BuildTreeByEQ(ProjectEquipmentN,ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,DrawingDeviceBaseUnitName),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
                             (*
                             ProjectEquipmentNodeN.free;
                             gdbgetmem({$IFDEF DEBUGBUILD}'{B941B71E-2BA6-4B5E-B436-633B6C8FC500}',{$ENDIF}pointer(ProjectEquipmentNode.SubNode),sizeof(TGDBTree));
@@ -344,7 +344,7 @@ begin
 
   BuildTreeByEQ(ProgramEquipmentN,DBUnit,{ProgramDBContextMenuN}{}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROGRAMDBCXMENU')){});
   if gdb.GetCurrentDWG<>nil then
-  BuildTreeByEQ(ProjectEquipmentN,ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(InterfaceTranslate,DrawingDeviceBaseUnitName),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
+  BuildTreeByEQ(ProjectEquipmentN,ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,DrawingDeviceBaseUnitName),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
 
 end;
 function ProjectTree_com(Operands:pansichar):GDBInteger;

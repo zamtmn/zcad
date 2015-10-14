@@ -21,7 +21,7 @@ unit GDBCommandsDB;
 
 interface
 uses
-  intftranslations,ugdbdrawing,gdbobjectsconstdef,zcadstrconsts,plugins,
+  zcadsysvars,intftranslations,ugdbdrawing,gdbobjectsconstdef,zcadstrconsts,plugins,
   commandlinedef,
   commanddefinternal,
   gdbase,
@@ -48,7 +48,7 @@ var //t:PUserTypeDescriptor;
 begin
      if commandmanager.ContextCommandParams<>nil then
      begin
-           pu:=ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(InterfaceTranslate,DrawingDeviceBaseUnitName);
+           pu:=ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,DrawingDeviceBaseUnitName);
            pvd:=pu^.FindVariable('DBCounter');
            vn:=inttostr(GDBInteger(pvd.data.Instance^));
            vn:='_EQ'+dupestring('0',6-length(vn))+vn;
@@ -74,7 +74,7 @@ var
 begin
      if commandmanager.ContextCommandParams<>nil then
      begin
-           pu:=ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(InterfaceTranslate,DrawingDeviceBaseUnitName);
+           pu:=ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,DrawingDeviceBaseUnitName);
            pdbv:=pu.InterfaceVariables.findvardescbyinst(PTTypedData(commandmanager.ContextCommandParams)^.Instance);
            if pdbv<>nil then
            begin
@@ -132,7 +132,7 @@ begin
           pum:=drawing.GetDWGUnits;
           if pum<>nil then
           begin
-            pdbu:=pum^.findunit(InterfaceTranslate,DrawingDeviceBaseUnitName);
+            pdbu:=pum^.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,DrawingDeviceBaseUnitName);
             if pdbu<>nil then
             begin
               pdbv:=pdbu^.FindVariable(pstring(pvn.data.Instance)^);
@@ -162,7 +162,7 @@ var //t:PUserTypeDescriptor;
 begin
      if commandmanager.ContextCommandParams<>nil then
      begin
-           pu:=ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(InterfaceTranslate,DrawingDeviceBaseUnitName);
+           pu:=ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,DrawingDeviceBaseUnitName);
            pdbv:=pu.InterfaceVariables.findvardescbyinst(PTTypedData(commandmanager.ContextCommandParams)^.Instance);
            if pdbv<>nil then
            begin

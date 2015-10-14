@@ -19,14 +19,14 @@
 unit zcregisterobjectinspector;
 {$INCLUDE def.inc}
 interface
-uses Forms,zcadinterface,GDBRoot,gdbase,UGDBDrawingdef,gdbdrawcontext,UGDBStringArray,varmandef,ugdbsimpledrawing,GDBEntity,enitiesextendervariables,zcobjectinspector,zcguimanager,zcadstrconsts,Types,Controls,
+uses TypeDescriptors,intftranslations,shared,Forms,zcadinterface,GDBRoot,gdbase,UGDBDrawingdef,gdbdrawcontext,UGDBStringArray,varmandef,ugdbsimpledrawing,GDBEntity,enitiesextendervariables,zcobjectinspector,zcguimanager,zcadstrconsts,Types,Controls,
   UGDBDescriptor,Varman,UUnitManager,zcadsysvars,gdbasetypes,sysinfo;
 implementation
 procedure ZCADFormSetupProc(Form:TControl);
 var
   pint:PGDBInteger;
 begin
-  SetGDBObjInsp(gdb.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,nil);
+  SetGDBObjInsp(nil,gdb.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,nil);
   SetCurrentObjDefault;
   //pint:=SavedUnit.FindValue('VIEW_ObjInspV');
   SetNameColWidth(Form.Width div 2);
@@ -34,6 +34,7 @@ begin
   if assigned(pint)then
                        SetNameColWidth(pint^);
   GDBobjinsp.Align:=alClient;
+  GDBobjinsp.BorderStyle:=bsNone;
   GDBobjinsp.Parent:=tform(Form);
 end;
 procedure _onNotify(const pcurcontext:gdbpointer);
@@ -120,19 +121,25 @@ begin
        vsa.sort;
   end;
 end;
+procedure _onAfterFreeEditor(sender:tobject);
+begin
+  if assigned(shared.cmdedit) then
+       if shared.cmdedit.IsVisible then
+                                       shared.cmdedit.SetFocus;
+end;
 
 initialization
 {$IFDEF DEBUGINITSECTION}LogOut('zcregisterobjectinspector.initialization');{$ENDIF}
-units.CreateExtenalSystemVariable('INTF_ObjInsp_WhiteBackground','GDBBoolean',@INTFObjInspWhiteBackground);
-units.CreateExtenalSystemVariable('INTF_ObjInsp_ShowHeaders','GDBBoolean',@INTFObjInspShowHeaders);
-units.CreateExtenalSystemVariable('INTF_ObjInsp_ShowSeparator','GDBBoolean',@INTFObjInspShowSeparator);
-units.CreateExtenalSystemVariable('INTF_ObjInsp_OldStyleDraw','GDBBoolean',@INTFObjInspOldStyleDraw);
-units.CreateExtenalSystemVariable('INTF_ObjInsp_ShowFastEditors','GDBBoolean',@INTFObjInspShowFastEditors);
-units.CreateExtenalSystemVariable('INTF_ObjInsp_ShowOnlyHotFastEditors','GDBBoolean',@INTFObjInspShowOnlyHotFastEditors);
-units.CreateExtenalSystemVariable('INTF_ObjInsp_RowHeight_OverriderEnable','GDBBoolean',@INTFObjInspRowHeight.Enable);
-units.CreateExtenalSystemVariable('INTF_ObjInsp_RowHeight_OverriderValue','GDBInteger',@INTFObjInspRowHeight.Value);
-units.CreateExtenalSystemVariable('INTF_ObjInsp_SpaceHeight','GDBInteger',@INTFObjInspSpaceHeight);
-units.CreateExtenalSystemVariable('INTF_ObjInsp_ShowEmptySections','GDBBoolean',@INTFObjInspShowEmptySections);
+units.CreateExtenalSystemVariable(InterfaceTranslate,'INTF_ObjInsp_WhiteBackground','GDBBoolean',@INTFObjInspWhiteBackground);
+units.CreateExtenalSystemVariable(InterfaceTranslate,'INTF_ObjInsp_ShowHeaders','GDBBoolean',@INTFObjInspShowHeaders);
+units.CreateExtenalSystemVariable(InterfaceTranslate,'INTF_ObjInsp_ShowSeparator','GDBBoolean',@INTFObjInspShowSeparator);
+units.CreateExtenalSystemVariable(InterfaceTranslate,'INTF_ObjInsp_OldStyleDraw','GDBBoolean',@INTFObjInspOldStyleDraw);
+units.CreateExtenalSystemVariable(InterfaceTranslate,'INTF_ObjInsp_ShowFastEditors','GDBBoolean',@INTFObjInspShowFastEditors);
+units.CreateExtenalSystemVariable(InterfaceTranslate,'INTF_ObjInsp_ShowOnlyHotFastEditors','GDBBoolean',@INTFObjInspShowOnlyHotFastEditors);
+units.CreateExtenalSystemVariable(InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderEnable','GDBBoolean',@INTFObjInspRowHeight.Enable);
+units.CreateExtenalSystemVariable(InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderValue','GDBInteger',@INTFObjInspRowHeight.Value);
+units.CreateExtenalSystemVariable(InterfaceTranslate,'INTF_ObjInsp_SpaceHeight','GDBInteger',@INTFObjInspSpaceHeight);
+units.CreateExtenalSystemVariable(InterfaceTranslate,'INTF_ObjInsp_ShowEmptySections','GDBBoolean',@INTFObjInspShowEmptySections);
 SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight:=@INTFObjInspRowHeight;
 zcobjectinspector.INTFDefaultControlHeight:=sysparam.defaultheight;
 ZCADGUIManager.RegisterZCADFormInfo('ObjectInspector',rsGDBObjinspWndName,TGDBobjinsp,rect(0,100,200,600),ZCADFormSetupProc,CreateObjInspInstance,@GDBobjinsp);
@@ -142,6 +149,24 @@ DifferentName:=rsDifferent;
 onGetOtherValues:=_onGetOtherValues;
 onUpdateObjectInInsp:=_onUpdateObjectInInsp;
 onNotify:=_onNotify;
+onAfterFreeEditor:=_onAfterFreeEditor;
+
+currpd:=nil;
+SetGDBObjInspProc:=TSetGDBObjInsp(SetGDBObjInsp);
+StoreAndSetGDBObjInspProc:=TStoreAndSetGDBObjInsp(StoreAndSetGDBObjInsp);
+ReStoreGDBObjInspProc:=ReStoreGDBObjInsp;
+UpdateObjInspProc:=UpdateObjInsp;
+ReturnToDefaultProc:=ReturnToDefault;
+ClrarIfItIsProc:=ClrarIfItIs;
+ReBuildProc:=ReBuild;
+SetCurrentObjDefaultProc:=SetCurrentObjDefault;
+GetCurrentObjProc:=GetCurrentObj;
+GetNameColWidthProc:=GetNameColWidth;
+CreateObjInspInstanceProc:=CreateObjInspInstance;
+GetPeditorProc:=GetPeditor;
+FreEditorProc:=FreEditor;
+StoreAndFreeEditorProc:=StoreAndFreeEditor;
+
 finalization
 end.
 

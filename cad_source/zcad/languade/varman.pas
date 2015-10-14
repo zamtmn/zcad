@@ -22,9 +22,9 @@ unit Varman;
 interface
 uses
   uabstractunit,zcadstrconsts,UGDBOpenArrayOfPointer,SysUtils,UBaseTypeDescriptor,
-  gdbasetypes, shared,gdbase,UGDBOpenArrayOfByte,UGDBStringArray,varmandef,sysinfo,
+  gdbasetypes,gdbase,UGDBOpenArrayOfByte,UGDBStringArray,varmandef,
   UGDBOpenArrayOfPObjects,usimplegenerics,
-  log,memman,TypeDescriptors,URecordDescriptor,UObjectDescriptor,strproc{$IFNDEF DELPHI},intftranslations{$ENDIF},classes;
+  log,memman,TypeDescriptors,URecordDescriptor,UObjectDescriptor,strproc,classes;
 type
     td=record
              template:GDBString;
@@ -223,11 +223,11 @@ var
   CategoryUnknownCOllapsed:boolean;
 
 function getpattern(ptd:ptdarray; max:GDBInteger;var line:GDBString; out typ:GDBInteger):PGDBGDBStringArray;
-function ObjOrRecordRead(var f: GDBOpenArrayOfByte; var line,GDBStringtypearray:GDBString; var fieldoffset: GDBSmallint; ptd:PRecordDescriptor):GDBBoolean;
+function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfByte; var line,GDBStringtypearray:GDBString; var fieldoffset: GDBSmallint; ptd:PRecordDescriptor):GDBBoolean;
 function GetPVarMan: GDBPointer; export;
 function FindCategory(category:GDBString;var catname:GDBString):Pointer;
 procedure SetCategoryCollapsed(category:GDBString;value:GDBBoolean);
-function GetBoundsFromSavedUnit(name:string):Trect;
+function GetBoundsFromSavedUnit(name:string;w,h:integer):Trect;
 procedure StoreBoundsToSavedUnit(name:string;tr:Trect);
 procedure SetTypedDataVariable(out TypedTataVariable:TTypedData;pTypedTata:pointer;TypeName:string);
 implementation
@@ -252,7 +252,7 @@ begin
               end
 end;
 
-function GetBoundsFromSavedUnit(name:string):Trect;
+function GetBoundsFromSavedUnit(name:string;w,h:integer):Trect;
 var
    pint:PGDBInteger;
 function setfrominterval(value,vmin,vmax:integer):integer;
@@ -267,11 +267,11 @@ begin
      pint:=SavedUnit.FindValue(name+'_Left');
      if assigned(pint)then
                           result.Left:=pint^;
-     result.Left:=setfrominterval(result.Left,0,sysparam.screenx);
+     result.Left:=setfrominterval(result.Left,0,w);
      pint:=SavedUnit.FindValue(name+'_Top');
      if assigned(pint)then
                           result.Top:=pint^;
-     result.Top:=setfrominterval(result.Top,0,sysparam.screeny);
+     result.Top:=setfrominterval(result.Top,0,h);
      pint:=SavedUnit.FindValue(name+'_Width');
      if assigned(pint)then
                           result.Right:=result.Left+pint^;
@@ -570,18 +570,9 @@ begin
   vd.data.ptd:={SysUnit.}TypeName2PTD(typename);
 
   if vd.data.ptd=nil then
-                         shared.ShowError(sysutils.format(rsTypeNotDefinedInModule,[typename,self.Name]));
-  {tpe:=Types.exttype.beginiterate;
-  if tpe<>nil then
-  repeat
-    if tpe<>nil then
-    if uppercase(typename) = uppercase(tpe^.typename) then
-    begin
-      vd.vartypecustom :=Types.exttype.ir.itc ;
-      system.Exit;
-    end;
-  tpe:=Types.exttype.iterate;
-  until tpe=nil;}
+                         begin
+                              programlog.LogOutStr(sysutils.format(rsTypeNotDefinedInModule,[typename,self.Name]),lp_OldPos,LM_Error);
+                         end;
 end;
 constructor varmanager.init;
 begin
@@ -647,7 +638,7 @@ begin
                                                 end;
                    end;
 end;
-function ObjOrRecordRead(var f: GDBOpenArrayOfByte; var line,GDBStringtypearray:GDBString; var fieldoffset: GDBSmallint; ptd:PRecordDescriptor):GDBBoolean;
+function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfByte; var line,GDBStringtypearray:GDBString; var fieldoffset: GDBSmallint; ptd:PRecordDescriptor):GDBBoolean;
 type
     trrstate=(fields,metods);
 var parseerror{,parsesuberror}:GDBBoolean;
@@ -773,19 +764,28 @@ begin
                       if fieldtype='Paths' then
                                           fieldtype:=fieldtype;
                       {$IFNDEF DELPHI}
-                      fieldtype:=InterfaceTranslate(ptd.TypeName+'~'+getlastfirld.ProgramName,fieldtype);
+                      if assigned(TranslateFunc)then
+                        fieldtype:=TranslateFunc(ptd.TypeName+'~'+getlastfirld.ProgramName,fieldtype);
                       {$ENDIF}
                       getlastfirld.username:={parseresult^.getGDBString(0)}fieldtype;
                       //fieldtype:=parseresult^.getGDBString(0);
                     end;
            membermodifier:
                           begin
-                               if state<>metods then FatalError('Syntax error in file '+f.name);
+                               if state<>metods then
+                                                    begin
+                                                         programlog.LogOutStr('Syntax error in file '+f.name,lp_OldPos,LM_Fatal);
+                                                         halt(0);
+                                                    end;
 
                           end;
           propertymember:
           begin
-               if state<>metods then FatalError('Syntax error in file '+f.name);
+               if state<>metods then
+                                    begin
+                                      programlog.LogOutStr('Syntax error in file '+f.name,lp_OldPos,LM_Fatal);
+                                      halt(0);
+                                    end;
                oldline:=line;
                parseresult:=runparser('_softspace'#0'_identifier'#0'_softspace'#0'=:'#0'_softspace'#0'_identifier'#0'_softspace'#0'=r=e=a=d'#0'_softspace'#0'_identifier'#0'_softspace'#0'=w=r=i=t=e'#0'_softspace'#0'_identifier'#0'_softspace'#0'=;',line,parseerror);
                if parseerror then
@@ -812,7 +812,10 @@ begin
                     field:
                           begin
                                if state=metods then
-                                                    FatalError('Syntax error in file '+f.name)
+                                                  begin
+                                                    programlog.LogOutStr('Syntax error in file '+f.name,lp_OldPos,LM_Fatal);
+                                                    halt(0);
+                                                  end
                                                else
                                                    begin
                                                        {if (line='')or(count=5) then

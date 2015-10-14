@@ -706,7 +706,7 @@ begin
 
           mem.init({$IFDEF DEBUGBUILD}'{71D987B4-8C57-4C62-8C12-CFC24A0A9C9A}',{$ENDIF}1024);
           SavedUnit^.SavePasToMem(mem);
-          mem.SaveToFile(sysparam.programpath+'rtl'+PathDelim+'savedvar.pas');
+          mem.SaveToFile(expandpath(sysparam.programpath+'rtl'+PathDelim+'savedvar.pas'));
           mem.done;
           end;
 
@@ -3026,7 +3026,7 @@ begin
        if ptype<>nil then
        begin
             If assigned(SetGDBObjInspProc)then
-            SetGDBObjInspProc(gdb.GetUnitsFormat,ptype,Sender.param.SelDesc.LastSelectedObject,Sender.pdwg);
+            SetGDBObjInspProc(gdb.GetUndoStack,gdb.GetUnitsFormat,ptype,Sender.param.SelDesc.LastSelectedObject,Sender.pdwg);
        end;
   end
   else

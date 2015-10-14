@@ -19,7 +19,7 @@
 unit UObjectDescriptor;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,UGDBOpenArrayOfObjects,log,ugdbopenarray,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
+uses {zcadsysvars,}UGDBOpenArrayOfObjects,log,ugdbopenarray,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
      UBaseTypeDescriptor,gdbobjectsconstdef,UGDBOpenArrayOfTObjLinkRecord,TypeDescriptors,
      UGDBOpenArrayOfPointer,UGDBOpenArrayOfData,gdbasetypes,varmandef,gdbase{,UGDBStringArray},memman,strproc;
 type
@@ -666,8 +666,8 @@ begin
         end;
         if LincedObjects then
         begin
-             if assigned(sysvar.debug.ShowHiddenFieldInObjInsp) then
-             if not sysvar.debug.ShowHiddenFieldInObjInsp^ then
+             //if assigned(sysvar.debug.ShowHiddenFieldInObjInsp) then
+             if not debugShowHiddenFieldInObjInsp{sysvar.debug.ShowHiddenFieldInObjInsp^} then
                                                                 exit;
              p:=PGDBOpenArray(baddr)^.beginiterate(ir);
              pcol:=colarray.beginiterate(ir2);

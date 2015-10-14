@@ -19,8 +19,8 @@
 unit UGDBOpenArrayOfByte;
 {$INCLUDE def.inc}
 interface
-uses zcadstrconsts,gdbasetypes,sysutils,UGDBOpenArray,gdbase,{$IFNDEF DELPHI}fileutil,{$ENDIF}
-     paths,shared;
+uses {zcadstrconsts,}gdbasetypes,sysutils,UGDBOpenArray,gdbase{$IFNDEF DELPHI},fileutil{$ENDIF}
+     {paths};
 const
      breacer=[#13,#10,' '];
   eol: GDBString=#13 + #10;
@@ -286,7 +286,7 @@ begin
      initnul;
      infile:=fileopen({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(FileName),fmShareDenyNone);
      if infile<=0 then
-                      shared.ShowError(sysutils.format(rsUnableToOpenFile,[FileName]))
+                      //shared.ShowError(sysutils.format(rsUnableToOpenFile,[FileName]))
      else
      begin
      pointer(name):=nil;
@@ -304,7 +304,7 @@ end;
 function GDBOpenArrayOfByte.SaveToFile;
 var infile:GDBInteger;
 begin
-     infile:=filecreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(ExpandPath(FileName)));
+     infile:=filecreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}({ExpandPath}(FileName)));
      if infile>0 then
                      begin
                            FileWrite(InFile,parray^,count);

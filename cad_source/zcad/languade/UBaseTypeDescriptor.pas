@@ -22,9 +22,7 @@ interface
 uses
       Graphics,classes,Themes,
       zemathutils,geometry,zcadstrconsts,strproc,log,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,sysutils,UGDBOpenArrayOfByte,gdbasetypes,
-      {usupportgui,}varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,math,zcadsysvars,
-
-      shared;
+      {usupportgui,}varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,math{,shared};
 type
 PBaseTypeDescriptor=^BaseTypeDescriptor;
 BaseTypeDescriptor=object(TUserTypeDescriptor)
@@ -285,7 +283,7 @@ begin
 else if uppercase(value)='FALSE' then
                                      PGDBboolean(pinstance)^:=false
 else
-    ShowError('GDBBooleanDescriptor.SetValueFromString('+value+') {not false\true}');
+    programlog.LogOutStr('GDBBooleanDescriptor.SetValueFromString('+value+') {not false\true}',lp_OldPos,LM_Error);
 end;
 function GDBBooleanDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin

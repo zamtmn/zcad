@@ -19,7 +19,7 @@ unit TypeDescriptors;
 {$INCLUDE def.inc}
 
 interface
-uses zcadsysvars,log,gdbasetypes,varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,
+uses log,gdbasetypes,varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,
       UGDBOpenArrayOfPointer,strproc,sysutils;
 const
      m_procedure=1;
@@ -118,6 +118,7 @@ TUserTypeDescriptor=object(UserTypeDescriptor)
                    end;
 var zcpmode:tzcpmode;
     currpd:PPropertyDeskriptor;
+    debugShowHiddenFieldInObjInsp:boolean=false;
 implementation
 uses varman,strmy;
 destructor MetodDescriptor.Done;
@@ -268,7 +269,7 @@ begin
 end;
 function PropertyDeskriptor.IsVisible;
 begin
-     result:=((Attr and FA_HIDDEN_IN_OBJ_INSP)=0)or(sysvar.debug.ShowHiddenFieldInObjInsp^);
+     result:=((Attr and FA_HIDDEN_IN_OBJ_INSP)=0)or(debugShowHiddenFieldInObjInsp);
 end;
 procedure TPropertyDeskriptorArray.cleareraseobj;
 var curr:PPropertyDeskriptor;

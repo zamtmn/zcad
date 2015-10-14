@@ -16,10 +16,11 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 {$MODE OBJFPC}
+{$H+}
 unit zeundostack;
 {$INCLUDE def.inc}
 interface
-uses zebaseundocommands,varmandef,shared,gdbasetypes,
+uses zebaseundocommands,varmandef,gdbasetypes,
      UGDBOpenArrayOfPObjects,sysutils,gdbase,memman;
 const BeginUndo:GDBString='BeginUndo';
       EndUndo:GDBString='EndUndo';
@@ -40,9 +41,9 @@ GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
                                  procedure PushEndMarker;
                                  procedure PushStone;
                                  procedure PushChangeCommand(_obj:GDBPointer;_fieldsize:PtrInt);overload;
-                                 function undo(prevheap:TArrayIndex;overlay:GDBBoolean):TUndoRedoResult;
+                                 function undo(out msg:string;prevheap:TArrayIndex;overlay:GDBBoolean):TUndoRedoResult;
                                  procedure KillLastCommand;
-                                 function redo:TUndoRedoResult;
+                                 function redo(out msg:string):TUndoRedoResult;
                                  constructor init;
                                  procedure doOnUndoRedo;
                                  function Add(p:GDBPointer):TArrayIndex;virtual;
@@ -146,7 +147,7 @@ begin
      end;
      count:=self.CurrentCommand;
 end;
-function GDBObjOpenArrayOfUCommands.undo(prevheap:TArrayIndex;overlay:GDBBoolean):TUndoRedoResult;
+function GDBObjOpenArrayOfUCommands.undo(out msg:string;prevheap:TArrayIndex;overlay:GDBBoolean):TUndoRedoResult;
 var
    pcc:PTChangeCommand;
    mcounter:integer;
@@ -167,7 +168,7 @@ begin
                                                 begin
                                                      dec(mcounter);
                                                      if mcounter=0 then
-                                                     shared.HistoryOutStr('Undo "'+PTMarkerCommand(pcc)^.Name+'"');
+                                                     {shared.HistoryOutStr}msg:=msg+('Undo "'+PTMarkerCommand(pcc)^.Name+'"');
                                                      //pcc^.undo;
                                                 end
      else if pcc^.GetCommandType=TTC_MNotUndableIfOverlay then
@@ -196,7 +197,7 @@ begin
      gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);}
      doOnUndoRedo;
 end;
-function GDBObjOpenArrayOfUCommands.redo:TUndoRedoResult;
+function GDBObjOpenArrayOfUCommands.redo(out msg:string):TUndoRedoResult;
 var
    pcc:PTChangeCommand;
    mcounter:integer;
@@ -218,7 +219,7 @@ begin
      else if pcc^.GetCommandType=TTC_MBegin then
                                                 begin
                                                      if mcounter=0 then
-                                                     shared.HistoryOutStr('Redo "'+PTMarkerCommand(pcc)^.Name+'"');
+                                                     {shared.HistoryOutStr}msg:=msg+('Redo "'+PTMarkerCommand(pcc)^.Name+'"');
                                                      dec(mcounter);
                                                      pcc^.undo;
                                                 end

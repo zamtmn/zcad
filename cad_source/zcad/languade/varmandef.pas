@@ -21,15 +21,9 @@ unit varmandef;
 
 interface
 uses
-  {$IFDEF LCLGTK2}
-  gtk2,gdk2,
-  {$ENDIF}
-  {$IFDEF LCLQT}
-  qtwidgets,qt4,qtint,
-  {$ENDIF}
-  zcadsysvars,SysUtils,UGDBTree,UGDBStringArray,{gdbobjectsconstdef,}strutils,gdbasetypes,
+  SysUtils,UGDBTree,UGDBStringArray,{gdbobjectsconstdef,}strutils,gdbasetypes,
   UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,gdbase,UGDBOpenArrayOfData,
-  Classes,Controls,StdCtrls,Graphics,types{$IFNDEF DELPHI},LCLVersion{$ENDIF};
+  Classes,Controls,StdCtrls,Graphics,types;
 const
   {Ttypenothing=-1;
   Ttypecustom=1;
@@ -195,6 +189,7 @@ TPropEditor=class(TComponent)
   //pbooleab=^GDBBoolean;
  {TODO:огнегне}
 {EXPORT+}
+TTranslateFunction=function (const Identifier, OriginalValue: String): String;
 TTraceAngle=(
               TTA90(*'90 deg'*),
               TTA45(*'45 deg'*),
@@ -488,33 +483,5 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('varmandef.initialization');{$ENDIF}
   DecimalSeparator := '.';
-
-{$IFNDEF DELPHI}
-
-  SysVar.SYS.SSY_CompileInfo.SYS_Compiler:='Free Pascal Compiler (FPC)';
-  SysVar.SYS.SSY_CompileInfo.SYS_CompilerVer:={$I %FPCVERSION%};
-  SysVar.SYS.SSY_CompileInfo.SYS_CompilerTargetCPU:={$I %FPCTARGETCPU%};
-  SysVar.SYS.SSY_CompileInfo.SYS_CompilerTargetOS:={$I %FPCTARGETOS%};
-  SysVar.SYS.SSY_CompileInfo.SYS_CompileDate:={$I %DATE%};
-  SysVar.SYS.SSY_CompileInfo.SYS_CompileTime:={$I %TIME%};
-  SysVar.SYS.SSY_CompileInfo.SYS_LCLVersion:=lcl_version;
-  SysVar.SYS.SSY_CompileInfo.SYS_LCLFullVersion:=inttostr(lcl_fullversion);
-  {$IFDEF LCLWIN32}
-     SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion:='Windows ';
-     if Win32CSDVersion<>'' then
-                                SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion:=SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion+inttostr(Win32MajorVersion)+'.'+inttostr(Win32MinorVersion)+' build '+inttostr(Win32BuildNumber)+' '+Win32CSDVersion
-                            else
-                                SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion:=SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion+inttostr(Win32MajorVersion)+'.'+inttostr(Win32MinorVersion)+' build '+inttostr(Win32BuildNumber);
-  {$ENDIF}
-  {$IFDEF LCLQt}
-     SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion:='Qt'+inttostr(QtVersionMajor)+'.'+inttostr(QtVersionMinor)+'.'+inttostr(QtVersionMicro);
-  {$ENDIF}
-  {$IFDEF LCLGTK2}
-     SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion:='GTK+'+inttostr(gtk_major_version)+'.'+inttostr(gtk_minor_version)+'.'+inttostr(gtk_micro_version);
-  {$ENDIF}
-
-{$ENDIF}
-  SysVar.debug.languadedeb.NotEnlishWord:=0;
-  SysVar.debug.languadedeb.UpdatePO:=0;
 end.
 

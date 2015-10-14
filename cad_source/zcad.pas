@@ -45,6 +45,7 @@ uses
   //if need create variables before system.pas loading, place unit bellow
   //
   zcregisterobjectinspector,
+  zcregisterzscript,
   //
   //next line load system.pas
   //

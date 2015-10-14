@@ -58,7 +58,7 @@ var
   CodePage:TCodePage;
 implementation
 uses
-    zcadsysvars,log;
+    log;
 Function PosWithBracket(c : AnsiChar; Const s : {RawByteString}GDBString) : SizeInt;
 var
   i: SizeInt;

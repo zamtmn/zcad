@@ -20,7 +20,7 @@ unit UGDBDescriptor;
 {$INCLUDE def.inc}
 interface
 uses
-zedimblocksregister,zeblockdefsfactory,zemathutils,gdbdrawcontext,ugdbdrawing,ugdbdrawingdef,paths,ugdbdimstylearray,ugdbabstractdrawing,WindowsSpecific,LResources,zcadsysvars,zcadinterface,zcadstrconsts,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
+intftranslations,zedimblocksregister,zeblockdefsfactory,zemathutils,gdbdrawcontext,ugdbdrawing,ugdbdrawingdef,paths,ugdbdimstylearray,ugdbabstractdrawing,WindowsSpecific,LResources,zcadsysvars,zcadinterface,zcadstrconsts,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
 gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,sysinfo,ugdbsimpledrawing,
@@ -170,10 +170,10 @@ end;
     allok:boolean;
  begin
       allok:=savedxf2000(s,dwg^);
-      pu:=PTDrawing(dwg).DWGUnits.findunit(DrawingDeviceBaseUnitName);
+      pu:=PTDrawing(dwg).DWGUnits.findunit(InterfaceTranslate,DrawingDeviceBaseUnitName);
       mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
       pu^.SavePasToMem(mem);
-      mem.SaveToFile(s+'.dbpas');
+      mem.SaveToFile(expandpath(s+'.dbpas'));
       mem.done;
       if allok then
                    result:=cmd_ok
@@ -368,7 +368,7 @@ begin
    { TODO : переделать }
    if typeof(CurrentDWG^)=typeof(TDrawing) then
    begin
-   DWGUnit:=PTDrawing(CurrentDWG).DWGUnits.findunit('DrawingVars');
+   DWGUnit:=PTDrawing(CurrentDWG).DWGUnits.findunit(InterfaceTranslate,'DrawingVars');
    DWGUnit.AssignToSymbol(SysVar.DWG.DWG_SnapGrid,'DWG_SnapGrid');
    DWGUnit.AssignToSymbol(SysVar.DWG.DWG_DrawGrid,'DWG_DrawGrid');
    DWGUnit.AssignToSymbol(SysVar.DWG.DWG_Snap,'DWG_Snap');
@@ -945,7 +945,7 @@ begin
                       begin
                            f.init({$IFDEF DEBUGBUILD}'{94091172-3DD7-4038-99B6-90CD8B8E971D}',{$ENDIF}length(r.Value));
                            f.AddData(@r.Value[1],length(r.Value));
-                           f.SaveToFile(sysvar.PATH.Temp_files^+filename);
+                           f.SaveToFile(expandpath(sysvar.PATH.Temp_files^+filename));
                            pbasefont:=FontManager.addFonf(sysvar.PATH.Temp_files^+filename);
                            f.done;
                            if pbasefont=nil then

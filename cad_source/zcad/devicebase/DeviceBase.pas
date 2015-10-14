@@ -189,7 +189,7 @@ begin
 end;
 procedure loaddev(fn:gdbstring);
 begin
-     units.loadunit({utf8tosys}(fn),nil);
+     units.loadunit(InterfaceTranslate,{utf8tosys}(fn),nil);
 end;
 procedure loadvariants(fn:gdbstring);
 var

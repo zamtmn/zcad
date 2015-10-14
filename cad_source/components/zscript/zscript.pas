@@ -7,7 +7,7 @@ unit zscript;
 interface
 
 uses
-  langsystem, languade, TypeDescriptors, uabstractunit, UArrayDescriptor, 
+  langsystem, languade, TypeDescriptors, UArrayDescriptor, 
   UBaseTypeDescriptor, UEnumDescriptor, UObjectDescriptor, UPointerDescriptor, 
   URecordDescriptor, Varman, USinonimDescriptor, UUnitManager, 
   LazarusPackageIntf;

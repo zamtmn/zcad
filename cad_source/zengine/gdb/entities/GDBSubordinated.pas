@@ -22,7 +22,7 @@ unit GDBSubordinated;
 interface
 uses gdbentityextender,gdbfieldprocessor,ugdbdrawingdef,strproc
      {$IFNDEF DELPHI},LCLProc{$ENDIF},UGDBOpenArrayOfByte,
-     gdbase,gdbasetypes,{varman,}varmandef,
+     gdbase,gdbasetypes,{varman,}{varmandef,}
      sysutils,UGDBLayerArray{,strutils};
 type
 //Owner:PGDBObjGenericWithSubordinated;(*'Владелец'*)

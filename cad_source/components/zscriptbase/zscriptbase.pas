@@ -7,7 +7,7 @@ unit zscriptbase;
 interface
 
 uses
-  varmandef, strmy, LazarusPackageIntf;
+  varmandef, strmy, uabstractunit, LazarusPackageIntf;
 
 implementation
 

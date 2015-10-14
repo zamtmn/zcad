@@ -20,7 +20,7 @@ unit UGDBLayerArray;
 {$INCLUDE def.inc}
 interface
 uses zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
-     varmandef,gdbobjectsconstdef,UGDBNamedObjectsArray,StrProc;
+     {varmandef,}gdbobjectsconstdef,UGDBNamedObjectsArray,StrProc;
 type
 {REGISTEROBJECTTYPE GDBLayerArray}
 {EXPORT+}

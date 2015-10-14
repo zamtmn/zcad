@@ -23,7 +23,7 @@ interface
 uses gdbpalette,zcadsysvars,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
      {$IFNDEF DELPHI}glu,gl,{$ELSE}dglOpenGL,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
-     log,sysutils,varmandef;
+     log,sysutils{,varmandef};
 const
       GLU_VERSION={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_VERSION;
       GLU_TESS_VERTEX={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_TESS_VERTEX;

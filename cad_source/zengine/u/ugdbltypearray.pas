@@ -21,7 +21,7 @@ unit ugdbltypearray;
 interface
 uses FileUtil,Classes,UGDBOpenArrayOfData,zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
      UGDBTextStyleArray,UGDBOpenArrayOfObjects,
-     varmandef,{gdbobjectsconstdef,}UGDBNamedObjectsArray,StrProc,shared;
+     {varmandef,}{gdbobjectsconstdef,}UGDBNamedObjectsArray,StrProc,shared;
 const
      DefaultSHXHeight=1;
      DefaultSHXAngle=0;

@@ -12,7 +12,7 @@
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Files Count="13">
+    <Files Count="12">
       <Item1>
         <Filename Value="langsystem.pas"/>
         <UnitName Value="langsystem"/>
@@ -26,45 +26,41 @@
         <UnitName Value="TypeDescriptors"/>
       </Item3>
       <Item4>
-        <Filename Value="uabstractunit.pas"/>
-        <UnitName Value="uabstractunit"/>
-      </Item4>
-      <Item5>
         <Filename Value="UArrayDescriptor.pas"/>
         <UnitName Value="UArrayDescriptor"/>
-      </Item5>
-      <Item6>
+      </Item4>
+      <Item5>
         <Filename Value="UBaseTypeDescriptor.pas"/>
         <UnitName Value="UBaseTypeDescriptor"/>
-      </Item6>
-      <Item7>
+      </Item5>
+      <Item6>
         <Filename Value="UEnumDescriptor.pas"/>
         <UnitName Value="UEnumDescriptor"/>
-      </Item7>
-      <Item8>
+      </Item6>
+      <Item7>
         <Filename Value="UObjectDescriptor.pas"/>
         <UnitName Value="UObjectDescriptor"/>
-      </Item8>
-      <Item9>
+      </Item7>
+      <Item8>
         <Filename Value="UPointerDescriptor.pas"/>
         <UnitName Value="UPointerDescriptor"/>
-      </Item9>
-      <Item10>
+      </Item8>
+      <Item9>
         <Filename Value="URecordDescriptor.pas"/>
         <UnitName Value="URecordDescriptor"/>
-      </Item10>
-      <Item11>
+      </Item9>
+      <Item10>
         <Filename Value="varman.pas"/>
         <UnitName Value="Varman"/>
-      </Item11>
-      <Item12>
+      </Item10>
+      <Item11>
         <Filename Value="USinonimDescriptor.pas"/>
         <UnitName Value="USinonimDescriptor"/>
-      </Item12>
-      <Item13>
+      </Item11>
+      <Item12>
         <Filename Value="UUnitManager.pas"/>
         <UnitName Value="UUnitManager"/>
-      </Item13>
+      </Item12>
     </Files>
     <RequiredPkgs Count="4">
       <Item1>

@@ -12,7 +12,7 @@
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Files Count="2">
+    <Files Count="3">
       <Item1>
         <Filename Value="varmandef.pas"/>
         <UnitName Value="varmandef"/>
@@ -21,6 +21,10 @@
         <Filename Value="strmy.pas"/>
         <UnitName Value="strmy"/>
       </Item2>
+      <Item3>
+        <Filename Value="uabstractunit.pas"/>
+        <UnitName Value="uabstractunit"/>
+      </Item3>
     </Files>
     <RequiredPkgs Count="3">
       <Item1>

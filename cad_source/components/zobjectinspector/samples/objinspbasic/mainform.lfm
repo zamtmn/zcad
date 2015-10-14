@@ -33,7 +33,7 @@ object Form1: TForm1
     Left = 312
     Height = 23
     Top = 120
-    Width = 164
+    Width = 208
     AutoSize = True
     Caption = 'Add otherdata to data by pointer'
     OnClick = AddOtherdata

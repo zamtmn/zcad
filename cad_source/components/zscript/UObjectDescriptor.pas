@@ -19,6 +19,7 @@
 unit UObjectDescriptor;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
+{$ASMMODE intel}
 interface
 uses LCLProc,{zcadsysvars,}UGDBOpenArrayOfObjects,{log,}ugdbopenarray,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
      UBaseTypeDescriptor,{gdbobjectsconstdef,}UGDBOpenArrayOfTObjLinkRecord,TypeDescriptors,

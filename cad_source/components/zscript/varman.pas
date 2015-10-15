@@ -19,6 +19,7 @@
 unit Varman;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
+{$ASMMODE intel}
 
 interface
 uses

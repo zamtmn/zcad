@@ -19,6 +19,7 @@
 unit UBaseTypeDescriptor;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
+{$ASMMODE intel}
 interface
 uses
       LCLProc,Graphics,classes,Themes,

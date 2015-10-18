@@ -41,6 +41,7 @@ object sltexteditor1: Tsltexteditor1
     Align = alRight
     AutoSize = True
     Caption = 'Ok'
+    Default = True
     ModalResult = 1
     TabOrder = 1
   end
@@ -53,7 +54,6 @@ object sltexteditor1: Tsltexteditor1
     AutoSize = True
     Cancel = True
     Caption = 'Cancel'
-    Default = True
     ModalResult = 2
     TabOrder = 2
   end

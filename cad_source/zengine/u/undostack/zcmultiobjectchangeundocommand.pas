@@ -113,7 +113,7 @@ end;
 
 function {GDBObjOpenArrayOfUCommands.}CreateTGMultiObjectChangeCommand(var data,undodata:DMatrix4D;const objcount:Integer):PTGDBTransformChangeCommand;overload;
 begin
-     gdbgetmem({$IFDEF DEBUGBUILD}'{2FFA68C4-3209-4CB4-8DD1-28A818A795D1}',{$ENDIF}result,sizeof(DMatrix4D));
+     gdbgetmem({$IFDEF DEBUGBUILD}'{2FFA68C4-3209-4CB4-8DD1-28A818A795D1}',{$ENDIF}result,sizeof(TGDBTransformChangeCommand));
      result^.Assign(data,undodata,objcount);
 end;
 function {GDBObjOpenArrayOfUCommands.}PushCreateTGMultiObjectChangeCommand(var us:GDBObjOpenArrayOfUCommands; var data,undodata:DMatrix4D;const objcount:Integer):PTGDBTransformChangeCommand;overload;

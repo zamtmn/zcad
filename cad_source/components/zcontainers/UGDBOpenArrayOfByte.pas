@@ -1,4 +1,4 @@
-﻿{
+{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -43,7 +43,7 @@ GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                       function ReadData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
                       function PopData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
                       function ReadString(break, ignore: GDBString): shortString;inline;
-                      function ReadGDBString: {short}String;inline;
+                      function ReadGDBString: GDBString;inline;
                       function ReadString2:GDBString;inline;
                       function GetCurrentReadAddres:GDBPointer;virtual;
                       function Jump(offset:GDBInteger):GDBPointer;virtual;

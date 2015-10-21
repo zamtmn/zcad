@@ -1,4 +1,4 @@
-﻿{
+{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -47,7 +47,7 @@ function InterfaceTranslate(const Identifier, OriginalValue: String): String;
 procedure DisableTranslate;
 procedure EnableTranslate;
 var
-   PODirectory, Lang, FallbackLang: String;
+   PODirectory, Lang, FallbackLang: AnsiString;
    po: TmyPOFile;
    actualypo: TmyPOFile;
    _UpdatePO:integer=0;

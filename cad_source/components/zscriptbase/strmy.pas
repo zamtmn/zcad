@@ -22,6 +22,9 @@ unit strmy;
 
 interface
 uses gdbasetypes,sysutils,UGDBStringArray,memman;
+type
+  TLexema=shortstring;
+  PLexema=^TLexema;
 function pac_lGDBWord_to_GDBString(lw: GDBLongword): GDBString;
 function pac_GDBWord_to_GDBString(w: GDBWord): GDBString;
 function unpac_GDBString_to_GDBWord(s: GDBString): GDBWord;
@@ -30,7 +33,7 @@ function countchar(s: GDBString; ch: ansichar): GDBInteger;
 procedure replaceeqlen(var s: GDBString; substr,newstr: GDBString);
 function replacenull(s:GDBString): GDBString;
 function strtohex(s:GDBString): GDBString;
-function parse(template, str:GDBString; GDBStringarray:PGDBGDBStringArray;mode:GDBBoolean;lexema:pshortString; var position:GDBInteger):GDBBoolean;
+function parse(template, str:GDBString; GDBStringarray:PGDBGDBStringArray;mode:GDBBoolean;lexema:PLexema; var position:GDBInteger):GDBBoolean;
 function runparser(template:GDBString;var str:GDBString; out parsed:GDBBoolean):PGDBGDBStringArray;
 function IsParsed(template:GDBString;var str:GDBString; out strins:PGDBGDBStringArray):boolean;
 const maxlexem=16;
@@ -243,12 +246,12 @@ begin
                                  end;
      result:=GDBStringarray;
 end;
-function parse(template, str:GDBString; GDBStringarray:PGDBGDBStringArray;mode:GDBBoolean;lexema:pshortString; var position:GDBInteger):GDBBoolean;
+function parse(template, str:GDBString; GDBStringarray:PGDBGDBStringArray;mode:GDBBoolean;lexema:PLexema; var position:GDBInteger):GDBBoolean;
 var i,iend{,subpos},subi:GDBInteger;
     subexpr:GDBString;
     {error,}subresult:GDBBoolean;
     command:ansichar;
-    l:shortString;
+    l:TLexema;
     strarr:GDBGDBStringArray;
     //mode:GDBBoolean;
 begin

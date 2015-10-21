@@ -1,4 +1,4 @@
-﻿{
+{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -436,7 +436,7 @@ begin
           if name='' then
                          name:='_error_here';
           //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
-          index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
+          index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex({pansichar(}name{)});
           if index<0 then
                          index:=index;
           assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), 'Неверный индекс блока');

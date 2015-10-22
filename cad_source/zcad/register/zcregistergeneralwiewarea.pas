@@ -33,7 +33,25 @@ units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),Inte
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_SystmGeometryDraw','GDBBoolean',@sysvarDISPSystmGeometryDraw);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_SystmGeometryDraw','GDBBoolean',@sysvarDISPSystmGeometryDraw);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_SystmGeometryColor','TGDBPaletteColor',@sysvarDISPSystmGeometryColor);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_HotGripColor','TGDBPaletteColor',@sysvarDISPHotGripColor);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_OSMode','TGDBOSMode',@sysvarDWGOSMode);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_GripSize','GDBInteger',@sysvarDISPGripSize);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_ColorAxis','GDBBoolean',@sysvarDISPColorAxis);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_DrawZAxis','GDBBoolean',@sysvarDISPDrawZAxis);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_DrawInsidePaintMessage','TGDB3StateBool',@sysvarDrawInsidePaintMessage);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_PolarMode','GDBBoolean',@sysvarDWGPolarMode);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_LineSmooth','GDBBoolean',@SysVarRDLineSmooth);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_UseStencil','GDBBoolean',@sysvarRDUseStencil);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_LastRenderTime','GDBInteger',@sysvarRDLastRenderTime);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_LastUpdateTime','GDBInteger',@sysvarRDLastUpdateTime);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_ID_Enabled','GDBBoolean',@SysVarRDImageDegradationEnabled);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_ID_PrefferedRenderTime','GDBInteger',@SysVarRDImageDegradationPrefferedRenderTime);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_ID_MaxDegradationFactor','GDBDouble',@SysVarRDImageDegradationMaxDegradationFactor);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_RemoveSystemCursorFromWorkArea','GDBBoolean',@SysVarRDRemoveSystemCursorFromWorkArea);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DSGN_SelNew','GDBBoolean',@sysvarDSGNSelNew);
+
+
+
 
 sysvar.DISP.DISP_CursorSize:=@sysvarDISPCursorSize;sysvar.DISP.DISP_OSSize:=@sysvarDISPOSSize;
 sysvar.DISP.DISP_CrosshairSize:=@SysVarDISPCrosshairSize;
@@ -42,8 +60,24 @@ sysvar.RD.RD_MaxRenderTime:=@sysvarRDMaxRenderTime;
 sysvar.DISP.DISP_ZoomFactor:=@sysvarDISPZoomFactor;
 sysvar.DISP.DISP_SystmGeometryDraw:=@sysvarDISPSystmGeometryDraw;
 sysvar.DISP.DISP_SystmGeometryColor:=@sysvarDISPSystmGeometryColor;
+sysvar.DISP.DISP_HotGripColor:=@sysvarDISPHotGripColor;
+sysvar.DISP.DISP_GripSize:=@sysvarDISPGripSize;
+sysvar.DISP.DISP_ColorAxis:=@sysvarDISPColorAxis;
+sysvar.DISP.DISP_DrawZAxis:=@sysvarDISPDrawZAxis;
+sysvar.RD.RD_DrawInsidePaintMessage:=@sysvarDrawInsidePaintMessage;
 
-sysvar.DWG.DWG_OSMode:=@sysvarDWGOSMode
+sysvar.DWG.DWG_OSMode:=@sysvarDWGOSMode;
+sysvar.DWG.DWG_PolarMode:=@sysvarDWGPolarMode;
+sysvar.RD.RD_LineSmooth:=@SysVarRDLineSmooth;
+sysvar.RD.RD_UseStencil:=@sysvarRDUseStencil;
+sysvar.RD.RD_LastRenderTime:=@sysvarRDLastRenderTime;
+sysvar.RD.RD_LastUpdateTime:=@sysvarRDLastUpdateTime;
+SysVar.RD.RD_ImageDegradation.RD_ID_Enabled:=@SysVarRDImageDegradationEnabled;
+SysVar.RD.RD_ImageDegradation.RD_ID_PrefferedRenderTime:=@SysVarRDImageDegradationPrefferedRenderTime;
+SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=@SysVarRDImageDegradationCurrentDegradationFactor;
+SysVar.RD.RD_ImageDegradation.RD_ID_MaxDegradationFactor:=@SysVarRDImageDegradationMaxDegradationFactor;
+
+SysVar.RD.RD_RemoveSystemCursorFromWorkArea:=@SysVarRDRemoveSystemCursorFromWorkArea;
 finalization
 end.
 

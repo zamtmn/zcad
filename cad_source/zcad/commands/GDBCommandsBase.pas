@@ -22,7 +22,7 @@ unit GDBCommandsBase;
 interface
 uses
  {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
- zeundostack,zcchangeundocommand,zcobjectinspectormultiobjects,enitiesextendervariables,gdbdrawcontext,ugdbdrawing,paths,fileformatsmanager,gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ generalviewarea,zeundostack,zcchangeundocommand,zcobjectinspectormultiobjects,enitiesextendervariables,gdbdrawcontext,ugdbdrawing,paths,fileformatsmanager,gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,FileUtil,Forms,Controls,Clipbrd,lclintf,
   plugins,
   sysinfo,
@@ -561,8 +561,8 @@ begin
     begin
       GDB.GetCurrentDWG.wa.param.seldesc.MouseFrameON := false;
 
-         if assigned(sysvar.DSGN.DSGN_SelNew) then
-         if sysvar.DSGN.DSGN_SelNew^ then
+         //if assigned(sysvarDSGNSelNew) then
+         if sysvarDSGNSelNew then
          begin
                GDB.GetCurrentROOT.ObjArray.DeSelect(GDB.GetCurrentDWG.GetSelObjArray,GDB.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
                GDB.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;

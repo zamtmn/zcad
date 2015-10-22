@@ -57,7 +57,7 @@ initialization;
   //SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_OSMode,'DWG_OSMode');
   //SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_CLayer,'DWG_CLayer');
   //SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_CLinew,'DWG_CLinew');
-  SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_PolarMode,'DWG_PolarMode');
+  //SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_PolarMode,'DWG_PolarMode');
   //SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_StepGrid,'DWG_StepGrid');
   //SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_OriginGrid,'DWG_OriginGrid');
 
@@ -76,7 +76,7 @@ initialization;
   SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Net,'DSGN_LCNet');
   SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Cable,'DSGN_LCCable');
   SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Leader,'DSGN_LCLeader');
-  SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_SelNew,'DSGN_SelNew');
+  //SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_SelNew,'DSGN_SelNew');
   SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_SelSameName,'DSGN_SelSameName');
   SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_OTrackTimerInterval,'DSGN_OTrackTimerInterval');
 
@@ -84,12 +84,12 @@ initialization;
   //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_CrosshairSize,'DISP_CrosshairSize');
   //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_OSSize,'DISP_OSSize');
   //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_ZoomFactor,'DISP_ZoomFactor');
-  SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_DrawZAxis,'DISP_DrawZAxis');
-  SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_ColorAxis,'DISP_ColorAxis');
-  SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_GripSize,'DISP_GripSize');
+  //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_DrawZAxis,'DISP_DrawZAxis');
+  //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_ColorAxis,'DISP_ColorAxis');
+  //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_GripSize,'DISP_GripSize');
   SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_SelectedGripColor,'DISP_SelectedGripColor');
   SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_UnSelectedGripColor,'DISP_UnSelectedGripColor');
-  SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_HotGripColor,'DISP_HotGripColor');
+  //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_HotGripColor,'DISP_HotGripColor');
 
   //SysVarUnit.AssignToSymbol(SysVar.MISC.PMenuProjType,'PMenuProjType');
   //SysVarUnit.AssignToSymbol(SysVar.MISC.PMenuCommandLine,'PMenuCommandLine');
@@ -122,8 +122,8 @@ initialization;
 
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_PanObjectDegradation,'RD_PanObjectDegradation');
   //SysVarUnit.AssignToSymbol(SysVar.RD.RD_UseStencil,'RD_UseStencil');
-  SysVarUnit.AssignToSymbol(SysVar.RD.RD_DrawInsidePaintMessage,'RD_DrawInsidePaintMessage');
-  SysVarUnit.AssignToSymbol(SysVar.RD.RD_RemoveSystemCursorFromWorkArea,'RD_RemoveSystemCursorFromWorkArea');
+  //SysVarUnit.AssignToSymbol(SysVar.RD.RD_DrawInsidePaintMessage,'RD_DrawInsidePaintMessage');
+  //SysVarUnit.AssignToSymbol(SysVar.RD.RD_RemoveSystemCursorFromWorkArea,'RD_RemoveSystemCursorFromWorkArea');
   //SysVarUnit.AssignToSymbol(SysVar.RD.RD_VSync,'RD_VSync');
   {$IFNDEF WINDOWS}
   //if SysVar.RD.RD_VSync<>nil then
@@ -133,7 +133,7 @@ initialization;
   //                PRecordDescriptor(ptd).SetAttrib('RD_VSync',FA_READONLY,0);
 
   {$ENDIF}
-  SysVarUnit.AssignToSymbol(SysVar.RD.RD_LineSmooth,'RD_LineSmooth');
+  //SysVarUnit.AssignToSymbol(SysVar.RD.RD_LineSmooth,'RD_LineSmooth');
   //SysVarUnit.AssignToSymbol(SysVar.RD.RD_Restore_Mode,'RD_Restore_Mode');
   //SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxLineWidth,'RD_MaxLineWidth');
   //SysVar.RD.RD_MaxLineWidth^:=-1;
@@ -154,17 +154,17 @@ initialization;
   //SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxWidth,'RD_MaxWidth');
   //SysVar.RD.RD_MaxWidth^:=-1;
   //SysVarUnit.AssignToSymbol(SysVar.RD.RD_BackGroundColor,'RD_BackGroundColor');
-  SysVarUnit.AssignToSymbol(SysVar.RD.RD_LastRenderTime,'RD_LastRenderTime');
-  SysVarUnit.AssignToSymbol(SysVar.RD.RD_LastUpdateTime,'RD_LastUpdateTime');
+  //SysVarUnit.AssignToSymbol(SysVar.RD.RD_LastRenderTime,'RD_LastRenderTime');
+  //SysVarUnit.AssignToSymbol(SysVar.RD.RD_LastUpdateTime,'RD_LastUpdateTime');
   //SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxRenderTime,'RD_MaxRenderTime');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_Light,'RD_Light');
-  SysVarUnit.AssignToSymbol(SysVar.RD.RD_ImageDegradation.RD_ID_Enabled,'RD_ID_Enabled');
-  SysVarUnit.AssignToSymbol(SysVar.RD.RD_ImageDegradation.RD_ID_MaxDegradationFactor,'RD_ID_MaxDegradationFactor');
-  SysVarUnit.AssignToSymbol(SysVar.RD.RD_ImageDegradation.RD_ID_PrefferedRenderTime,'RD_ID_PrefferedRenderTime');
-  if SysVar.RD.RD_ImageDegradation.RD_ID_Enabled^ then
-                                                      SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=0
-                                                  else
-                                                      SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=SysVar.RD.RD_ImageDegradation.RD_ID_MaxDegradationFactor^;
+  //SysVarUnit.AssignToSymbol(SysVar.RD.RD_ImageDegradation.RD_ID_Enabled,'RD_ID_Enabled');
+  //SysVarUnit.AssignToSymbol(SysVar.RD.RD_ImageDegradation.RD_ID_MaxDegradationFactor,'RD_ID_MaxDegradationFactor');
+  //SysVarUnit.AssignToSymbol(SysVar.RD.RD_ImageDegradation.RD_ID_PrefferedRenderTime,'RD_ID_PrefferedRenderTime');
+  //if SysVar.RD.RD_ImageDegradation.RD_ID_Enabled^ then
+  //                                                    SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=0
+  //                                                else
+  //                                                    SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=SysVar.RD.RD_ImageDegradation.RD_ID_MaxDegradationFactor^;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxLTPatternsInEntity,'RD_MaxLTPatternsInEntity');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_SpatialNodesDepth,'RD_SpatialNodesDepth');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_SpatialNodeCount,'RD_SpatialNodeCount');
@@ -199,7 +199,7 @@ initialization;
 
   //SysVarUnit.AssignToSymbol(SysVar.PATH.Fonts_Path,'PATH_Fonts');
 
-  sysvar.RD.RD_LastRenderTime^:=0;
+  //sysvar.RD.RD_LastRenderTime^:=0;
   //sysvar.PATH.Program_Run^:=sysparam.programpath;
   //sysvar.PATH.Temp_files:=@temppath;
   sysvar.SYS.SYS_Version^:=sysparam.ver.versionstring;

@@ -150,7 +150,23 @@ var
    sysvarDISPZoomFactor:double=1.624;
    sysvarDISPSystmGeometryDraw:boolean=false;
    sysvarDISPSystmGeometryColor:TGDBPaletteColor=1;
+   sysvarDISPHotGripColor:TGDBPaletteColor=2;
    sysvarDWGOSMode:TGDBOSMode=0;
+   sysvarDISPGripSize:GDBInteger=5;
+   sysvarDISPColorAxis:boolean=true;
+   sysvarDISPDrawZAxis:boolean=true;
+   sysvarDrawInsidePaintMessage:TGDB3StateBool=T3SB_Default;
+   sysvarDWGPolarMode:GDBBoolean=false;
+   SysVarRDLineSmooth:GDBBoolean=false;
+   sysvarRDUseStencil:GDBBoolean=false;
+   sysvarRDLastRenderTime:integer=0;
+   sysvarRDLastUpdateTime:integer=0;
+   SysVarRDImageDegradationEnabled:boolean=false;
+   SysVarRDImageDegradationPrefferedRenderTime:integer=0;
+   SysVarRDImageDegradationCurrentDegradationFactor:GDBDouble=0;
+   SysVarRDImageDegradationMaxDegradationFactor:GDBDouble=0;
+   SysVarRDRemoveSystemCursorFromWorkArea:GDBBoolean=true;
+   sysvarDSGNSelNew:GDBBoolean=false;
 implementation
 uses
      commandline;
@@ -227,8 +243,8 @@ begin
                                         PDWG.GetSelObjArray.drawpoint(dc);
                                         if param.gluetocp then
                                         begin
-                                          dc.drawer.SetColor(palette[sysvar.DISP.DISP_HotGripColor^].rgb);
-                                          dc.drawer.SetPointSize(sysvar.DISP.DISP_GripSize^);
+                                          dc.drawer.SetColor(palette[sysvarDISPHotGripColor].rgb);
+                                          dc.drawer.SetPointSize(sysvarDISPGripSize);
                                           dc.drawer.DrawPoint3DInModelSpace(param.md.mouse3dcoord,dc.matrixs);
                                           dc.drawer.SetPointSize(1);
                                         end;
@@ -265,8 +281,8 @@ begin
   PointOfLinePlaneIntersect(VertexAdd(param.md.mouseray.lbegin,PDWG.Getpcamera^.CamCSOffset),param.md.mouseray.dir,tempplane,mvertex);
   plx:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,PDWG.Getpcamera^.CamCSOffset),
                       vertexadd(VertexAdd(param.md.mouse3dcoord,xWCS{VertexMulOnSc(xWCS,oneVertexlength(wa.param.md.mouse3dcoord))}),PDWG.Getpcamera^.CamCSOffset));
-  if assigned(sysvar.DISP.DISP_ColorAxis)then
-  if sysvar.DISP.DISP_ColorAxis^ then dc.drawer.SetColor(255, 0, 0,255);
+  //if assigned(sysvar.DISP.DISP_ColorAxis)then
+  if sysvarDISPColorAxis then dc.drawer.SetColor(255, 0, 0,255);
   tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[0],plx,Tempplane);
   tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[1],plx,Tempplane);
   dvertex:=geometry.VertexSub(tv2,tv1);
@@ -277,8 +293,8 @@ begin
 
   ply:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,PDWG.Getpcamera^.CamCSOffset),
                       vertexadd(VertexAdd(param.md.mouse3dcoord,yWCS{VertexMulOnSc(xWCS,oneVertexlength(wa.param.md.mouse3dcoord))}),PDWG.Getpcamera^.CamCSOffset));
-  if assigned(sysvar.DISP.DISP_ColorAxis)then
-  if sysvar.DISP.DISP_ColorAxis^ then dc.drawer.SetColor(0, 255, 0,255);
+  //if assigned(sysvar.DISP.DISP_ColorAxis)then
+  if sysvarDISPColorAxis then dc.drawer.SetColor(0, 255, 0,255);
   tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[2],ply,Tempplane);
   tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[3],ply,Tempplane);
   dvertex:=geometry.VertexSub(tv2,tv1);
@@ -287,13 +303,13 @@ begin
   tv2:=VertexAdd(mvertex,dvertex);
   dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.matrixs);
 
-  if assigned(sysvar.DISP.DISP_DrawZAxis)then
-  if sysvar.DISP.DISP_DrawZAxis^ then
+  //if assigned(sysvar.DISP.DISP_DrawZAxis)then
+  if sysvarDISPDrawZAxis then
   begin
   plz:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,PDWG.Getpcamera^.CamCSOffset),
                       vertexadd(VertexAdd(param.md.mouse3dcoord,zWCS{VertexMulOnSc(xWCS,oneVertexlength(wa.param.md.mouse3dcoord))}),PDWG.Getpcamera^.CamCSOffset));
-  if assigned(sysvar.DISP.DISP_ColorAxis)then
-  if sysvar.DISP.DISP_ColorAxis^ then dc.drawer.SetColor(0, 0, 255,255);
+  //if assigned(sysvar.DISP.DISP_ColorAxis)then
+  if sysvarDISPColorAxis then dc.drawer.SetColor(0, 0, 255,255);
   tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[0],plz,Tempplane);
   tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[1],plz,Tempplane);
   dvertex:=geometry.VertexSub(tv2,tv1);
@@ -398,8 +414,8 @@ begin
 
   if tocommandmcliccount=0 then a:=1
                            else a:=0;
-  if sysvar.DWG.DWG_PolarMode<>nil then
-  if sysvar.DWG.DWG_PolarMode^ then
+  //if sysvar.DWG.DWG_PolarMode<>nil then
+  if sysvarDWGPolarMode then
   if param.ontrackarray.total <> 0 then
   begin
     dc.drawer.SetDrawMode(TDM_XOR);
@@ -645,16 +661,14 @@ procedure TGeneralViewArea.DrawOrInvalidate;
 var
    insidepaint:boolean;
 begin
-     if sysvar.RD.RD_DrawInsidePaintMessage<>nil then
+     //if sysvar.RD.RD_DrawInsidePaintMessage<>nil then
      begin
-          case sysvar.RD.RD_DrawInsidePaintMessage^ of
+          case sysvarDrawInsidePaintMessage of
               T3SB_Fale:insidepaint:=false;
               T3SB_True:insidepaint:=true;
               T3SB_Default:insidepaint:=NeedDrawInsidePaintEvent;
           end;
-     end
-     else
-         insidepaint:=NeedDrawInsidePaintEvent;
+     end;
      if insidepaint then
                         getviewcontrol.Invalidate
                     else
@@ -687,8 +701,8 @@ begin
   dc:=CreateRC;
   needredrawbydrawer:=startpaint;
   needredraw:=needredrawbydrawer or needredraw;
-  if assigned(SysVar.RD.RD_LineSmooth)then
-                                          dc.drawer.SetLineSmooth(SysVar.RD.RD_LineSmooth^);
+  //if assigned(SysVar.RD.RD_LineSmooth)then
+                                          dc.drawer.SetLineSmooth(SysVarRDLineSmooth);
   dc.drawer.SetZTest(true);
   if PDWG<>nil then
   begin
@@ -703,8 +717,8 @@ begin
     dc.drawer.ClearScreen(true);
 
     CalcOptimalMatrix;
-    if sysvar.RD.RD_UseStencil<>nil then
-    if sysvar.RD.RD_UseStencil^ then
+    //if sysvar.RD.RD_UseStencil<>nil then
+    if sysvarRDUseStencil then
     begin
          dc.drawer.SetFillStencilMode;
          dc.drawer.startrender(TRM_ModelSpace,dc.matrixs);
@@ -712,9 +726,9 @@ begin
          dc.drawer.SetDrawWithStencilMode;
     end
        else
-           dc.drawer.DisableStencil
-       else
            dc.drawer.DisableStencil;
+    //   else
+    //       dc.drawer.DisableStencil;
     dc.drawer.SetLineWidth(1);
     dc.drawer.SetPointSize(1);
     dc.drawer.SetPointSmooth(false);
@@ -811,33 +825,33 @@ begin
   tick:=round(lptime*10e7);
   if needredraw then
                     begin
-                         if assigned(sysvar.RD.RD_LastRenderTime)then
-                         sysvar.RD.RD_LastRenderTime^:=tick*msec
+                         //if assigned(sysvarRDLastRenderTime)then
+                         sysvarRDLastRenderTime:=tick*msec
                     end
                 else
                     begin
-                         if assigned(sysvar.RD.RD_LastUpdateTime)then
-                         sysvar.RD.RD_LastUpdateTime^:=tick*msec;
+                         //if assigned(sysvarRDLastUpdateTime)then
+                         sysvarRDLastUpdateTime:=tick*msec;
                     end;
   {$IFDEF PERFOMANCELOG}
                        if needredraw then
-                                              log.programlog.LogOutStrFast('Draw time='+inttostr(sysvar.RD.RD_LastRenderTime^),0)
+                                              log.programlog.LogOutStrFast('Draw time='+inttostr(sysvarRDLastRenderTime),0)
                                           else
-                                              log.programlog.LogOutStrFast('ReDraw time='+inttostr(sysvar.RD.RD_LastUpdateTime^),0);
+                                              log.programlog.LogOutStrFast('ReDraw time='+inttostr(sysvarRDLastUpdateTime),0);
   {$ENDIF}
   if needredraw then
-  if assigned(SysVar.RD.RD_ImageDegradation.RD_ID_Enabled)then
-  if SysVar.RD.RD_ImageDegradation.RD_ID_Enabled^ then
+  //if assigned(SysVarRDImageDegradationEnabled)then
+  if SysVarRDImageDegradationEnabled then
   begin
-  dt:=sysvar.RD.RD_LastRenderTime^-SysVar.RD.RD_ImageDegradation.RD_ID_PrefferedRenderTime^;
+  dt:=sysvarRDLastRenderTime-SysVarRDImageDegradationPrefferedRenderTime;
   if dt<0 then
-                                         SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor+{0.5}dt/5
+                                         SysVarRDImageDegradationCurrentDegradationFactor:=SysVarRDImageDegradationCurrentDegradationFactor+{0.5}dt/5
                                      else
-                                         SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor+{0.5}dt/10;
-  if SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor>SysVar.RD.RD_ImageDegradation.RD_ID_MaxDegradationFactor^ then
-                                                 SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=SysVar.RD.RD_ImageDegradation.RD_ID_MaxDegradationFactor^;
-  if SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor<0 then
-                                                 SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=0;
+                                         SysVarRDImageDegradationCurrentDegradationFactor:=SysVarRDImageDegradationCurrentDegradationFactor+{0.5}dt/10;
+  if SysVarRDImageDegradationCurrentDegradationFactor>SysVarRDImageDegradationMaxDegradationFactor then
+                                                 SysVarRDImageDegradationCurrentDegradationFactor:=SysVarRDImageDegradationMaxDegradationFactor;
+  if SysVarRDImageDegradationCurrentDegradationFactor<0 then
+                                                 SysVarRDImageDegradationCurrentDegradationFactor:=0;
   end;
   param.firstdraw := false;
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.draw---{end}',lp_DecPos);{$ENDIF}
@@ -966,7 +980,7 @@ end;
 procedure TGeneralViewArea.hidemousecursor;
 begin
      if assigned(WorkArea) then
-     RemoveCursorIfNeed(WorkArea,sysvar.RD.RD_RemoveSystemCursorFromWorkArea^);
+     RemoveCursorIfNeed(WorkArea,sysvarRDRemoveSystemCursorFromWorkArea);
 end;
 procedure TGeneralViewArea.RestoreMouse;
 var
@@ -990,9 +1004,9 @@ begin
 
   //param.zoommode := true;
   //param.scrollmode:=true;
-  pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.getpcamera^.frustum,pdwg.getpcamera.POSCOUNT,pdwg.getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
+  pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.getpcamera^.frustum,pdwg.getpcamera.POSCOUNT,pdwg.getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
-  pdwg.GetCurrentROOT.calcvisible(pdwg.getpcamera^.frustum,pdwg.getpcamera.POSCOUNT,pdwg.getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
+  pdwg.GetCurrentROOT.calcvisible(pdwg.getpcamera^.frustum,pdwg.getpcamera.POSCOUNT,pdwg.getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   DC:=self.CreateRC;
   pdwg.GetSelObjArray.RenderFeedBack(pdwg^.GetPcamera^.POSCOUNT,pdwg^.GetPcamera^,pdwg^.myGluProject2,dc);
 
@@ -1045,8 +1059,8 @@ begin
   {}CalcOptimalMatrix;
   mouseunproject(param.md.mouse.x,param.md.mouse.y);
   reprojectaxis;
-  PDWG.GetCurrentROOT.CalcVisibleByTree(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,PDWG.GetCurrentRoot.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
-  PDWG.GetConstructObjRoot.calcvisible(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
+  PDWG.GetCurrentROOT.CalcVisibleByTree(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,PDWG.GetCurrentRoot.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+  PDWG.GetConstructObjRoot.calcvisible(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   WaMouseMove(nil,[],param.md.mouse.x,param.md.mouse.y);
   if i=steps then
     begin
@@ -1064,8 +1078,8 @@ begin
   end;{}
   //----ComitFromObj;
 
-  if sysvar.RD.RD_LastRenderTime^<30 then
-                                        sleep(30-sysvar.RD.RD_LastRenderTime^);
+  if sysvarRDLastRenderTime<30 then
+                                        sleep(30-sysvarRDLastRenderTime);
   end;
   pcam.prop.xdir:=x0;
   pcam.prop.ydir:=y0;
@@ -1179,9 +1193,9 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:TBoundingBox);
     for i:=1 to steps do
     begin
     SetCameraPosZoom(vertexadd(camerapos,geometry.VertexMulOnSc(target,i/steps)),PDWG.Getpcamera^.prop.zoom+tzoom{*i}/steps,i=steps);
-    if assigned(sysvar.RD.RD_LastRenderTime)then
-    if sysvar.RD.RD_LastRenderTime^<30 then
-                                          sleep(30-sysvar.RD.RD_LastRenderTime^);
+    //if assigned(sysvar.RD.RD_LastRenderTime)then
+    if sysvarRDLastRenderTime<30 then
+                                          sleep(30-sysvarRDLastRenderTime);
     end;
     PDWG^.StoreNewCamerapPos(pucommand);
     calcgrid;
@@ -1247,8 +1261,8 @@ begin
     CalcOptimalMatrix;
     mouseunproject(param.md.mouse.x,param.md.mouse.y);
     reprojectaxis;
-    PDWG.GetCurrentROOT.CalcVisibleByTree(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,PDWG.GetCurrentRoot.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
-    PDWG.GetConstructObjRoot.calcvisible(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
+    PDWG.GetCurrentROOT.CalcVisibleByTree(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,PDWG.GetCurrentRoot.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+    PDWG.GetConstructObjRoot.calcvisible(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
 
   if finalcalk then
     begin
@@ -1435,9 +1449,9 @@ begin
       calcgrid;
       //-------------------CalcOptimalMatrix;
 
-      pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
+      pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
       //gdb.GetCurrentROOT.calcalcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT);
-      pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
+      pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
       doCameraChanged;
     end
     else
@@ -1585,11 +1599,11 @@ end;
      //GDBobjinsp23.reread;
   //CalcOptimalMatrix;
   CalcOptimalMatrix;
-  pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
+  pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
 
   //gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.OGLwindow1.wa.param.mousefrustum);
 
-  pdwg.GetSelObjArray.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
+  pdwg.GetSelObjArray.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   Set3dmouse;
 
   f:=pdwg^.GetUnitsFormat;
@@ -1610,21 +1624,21 @@ if PGDBObjEntity(param.SelDesc.OnMouseObject)<>nil then
                                                                   getviewcontrol.Cursor:=crNoDrop
                                                               else
                                                                   begin
-                                                                       if assigned(sysvar.RD.RD_RemoveSystemCursorFromWorkArea)
-                                                                       then
-                                                                           RemoveCursorIfNeed(getviewcontrol,sysvar.RD.RD_RemoveSystemCursorFromWorkArea^)
-                                                                       else
-                                                                           RemoveCursorIfNeed(getviewcontrol,true)
+                                                                       {if assigned(sysvarRDRemoveSystemCursorFromWorkArea)
+                                                                       then}
+                                                                           RemoveCursorIfNeed(getviewcontrol,sysvarRDRemoveSystemCursorFromWorkArea)
+                                                                       {else
+                                                                           RemoveCursorIfNeed(getviewcontrol,true)}
                                                                   end;
                                                        end
                                                    else
                                                        if not param.scrollmode then
                                                                                    begin
-                                                                                        if assigned(sysvar.RD.RD_RemoveSystemCursorFromWorkArea)
-                                                                                        then
-                                                                                            RemoveCursorIfNeed(getviewcontrol,sysvar.RD.RD_RemoveSystemCursorFromWorkArea^)
-                                                                                        else
-                                                                                            RemoveCursorIfNeed(getviewcontrol,true)
+                                                                                        {if assigned(sysvarRDRemoveSystemCursorFromWorkArea)
+                                                                                        then}
+                                                                                            RemoveCursorIfNeed(getviewcontrol,sysvarRDRemoveSystemCursorFromWorkArea)
+                                                                                        {else
+                                                                                            RemoveCursorIfNeed(getviewcontrol,true)}
                                                                                    end;
   //Update objectinspector with mousemove
   //if assigned(GetCurrentObjProc) then
@@ -1852,8 +1866,8 @@ var key: GDBByte;
            if (key and MZW_SHIFT)=0
            then
                begin
-                    if assigned(sysvar.DSGN.DSGN_SelNew)then
-                    if sysvar.DSGN.DSGN_SelNew^ then
+                    //if assigned(sysvar.DSGN.DSGN_SelNew)then
+                    if sysvarDSGNSelNew then
                     begin
                           pdwg.GetCurrentROOT.ObjArray.DeSelect(pdwg.GetSelObjArray,param.SelDesc.Selectedobjcount);
                           param.SelDesc.LastSelectedObject := nil;
@@ -2000,11 +2014,11 @@ begin
   inherited;
   if button = mbMiddle then
   begin
-    if assigned(sysvar.RD.RD_RemoveSystemCursorFromWorkArea)
-    then
-        RemoveCursorIfNeed(WorkArea,sysvar.RD.RD_RemoveSystemCursorFromWorkArea^)
-    else
-        RemoveCursorIfNeed(WorkArea,true);
+    {if assigned(sysvar.RD.RD_RemoveSystemCursorFromWorkArea)
+    then}
+        RemoveCursorIfNeed(WorkArea,sysvarRDRemoveSystemCursorFromWorkArea);
+    {else
+        RemoveCursorIfNeed(WorkArea,true);}
     param.scrollmode:=false;
     param.firstdraw:=true;
     WorkArea.invalidate;
@@ -2195,7 +2209,7 @@ begin
 end;
 procedure TGeneralViewArea.AddOntrackpoint;
 begin
-  if not sysvar.dwg.DWG_PolarMode^ then exit;
+  if not sysvarDWGPolarMode then exit;
   copyospoint(param.ontrackarray.otrackarray[param.ontrackarray.current],param.ospoint);
   param.ontrackarray.otrackarray[param.ontrackarray.current].arrayworldaxis.clear;
   param.ontrackarray.otrackarray[param.ontrackarray.current].arraydispaxis.clear;
@@ -2963,11 +2977,11 @@ begin
        //gdb.GetCurrentDWG.Changed:=true;
        //-------------CalcOptimalMatrix;
        lptime:=now();
-       pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
+       pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
        lptime:=now()-LPTime;
        sysvar.RD.RD_LastCalcVisible:=round(lptime*10e7);
        //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT);
-       pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
+       pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   end;
 
 end;
@@ -2985,7 +2999,7 @@ var
 begin
   PDWG.myGluProject2(param.ospoint.worldcoord,
              param.ospoint.dispcoord);
-  if not sysvar.dwg.DWG_PolarMode^ then exit;
+  if not sysvarDWGPolarMode then exit;
   //param.ospoint.arrayworldaxis.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}4);
   param.ospoint.arrayworldaxis.clear;
   pv:=polaraxis.PArray;
@@ -3072,8 +3086,8 @@ var
 begin
   PDWG.myGluProject2(param.ospoint.worldcoord,
              param.ospoint.dispcoord);
-  if not assigned(sysvar.dwg.DWG_PolarMode) then exit;
-  if not sysvar.dwg.DWG_PolarMode^ then exit;
+  //if not assigned(sysvar.dwg.DWG_PolarMode) then exit;
+  if not sysvarDWGPolarMode then exit;
   //param.ontrackarray.otrackarray[0].arrayworldaxis.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}4);
   param.ontrackarray.otrackarray[0].arrayworldaxis.clear;
   pv:=polaraxis.PArray;
@@ -3180,8 +3194,8 @@ begin
       PDWG.myGluProject2(param.ontrackarray.otrackarray[j].worldcoord,
                  param.ontrackarray.otrackarray[j].dispcoord);
     end;
-    if not assigned(sysvar.dwg.DWG_PolarMode) then exit;
-    if not sysvar.dwg.DWG_PolarMode^ then exit;
+    //if not assigned(sysvar.dwg.DWG_PolarMode) then exit;
+    if not sysvarDWGPolarMode then exit;
   for j := a to param.ontrackarray.total - 1 do
   begin
     {gdb.GetCurrentDWG^.myGluProject2(param.ontrackarray.otrackarray[j].worldcoord,

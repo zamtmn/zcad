@@ -68,12 +68,6 @@ type
                 WND_NewDraw(*'Redraw'*),
                 WND_Texture(*'Texture'*)
                );
-  TImageDegradation=packed record
-                          RD_ID_Enabled:PGDBBoolean;(*'Enabled'*)
-                          RD_ID_CurrentDegradationFactor:GDBDouble;(*'Current degradation factor'*)(*oi_readonly*)
-                          RD_ID_MaxDegradationFactor:PGDBDouble;(*'Max degradation factor'*)
-                          RD_ID_PrefferedRenderTime:PGDBInteger;(*'Prefered rendertime'*)
-                      end;
   TTextRenderingType=(TRT_System,TRT_ZGL,TRT_Both);
   PTCanvasData=^TCanvasData;
   TCanvasData=packed record

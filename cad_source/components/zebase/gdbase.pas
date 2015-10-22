@@ -450,6 +450,12 @@ TGDBIntegerOverrider=packed record
                       Enable:GDBBoolean;(*'Enable'*)
                       Value:GDBInteger;(*'New value'*)
                      end;
+TImageDegradation=packed record
+                        RD_ID_Enabled:PGDBBoolean;(*'Enabled'*)
+                        RD_ID_CurrentDegradationFactor:PGDBDouble;(*'Current degradation factor'*)(*oi_readonly*)
+                        RD_ID_MaxDegradationFactor:PGDBDouble;(*'Max degradation factor'*)
+                        RD_ID_PrefferedRenderTime:PGDBInteger;(*'Prefered rendertime'*)
+                    end;
 {EXPORT-}
 const
   empty_GDBString='Empty GDBString';

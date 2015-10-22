@@ -24,16 +24,26 @@ implementation
 
 initialization
 {$IFDEF DEBUGINITSECTION}LogOut('zcregisterzscript.initialization');{$ENDIF}
-units.CreateExtenalSystemVariable(sysvar.PATH.Support_Path,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_CursorSize','GDBInteger',@sysvarDISPCursorSize);
-units.CreateExtenalSystemVariable(sysvar.PATH.Support_Path,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_OSSize','GDBDouble',@sysvarDISPOSSize);
-units.CreateExtenalSystemVariable(sysvar.PATH.Support_Path,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_CrosshairSize','GDBDouble',@SysVarDISPCrosshairSize);
-units.CreateExtenalSystemVariable(sysvar.PATH.Support_Path,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_BackGroundColor','TRGB',@sysvarDISPBackGroundColor);
-units.CreateExtenalSystemVariable(sysvar.PATH.Support_Path,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_MaxRenderTime','GDBInteger',@sysvarRDMaxRenderTime);
-sysvar.DISP.DISP_CursorSize:=@sysvarDISPCursorSize;
-sysvar.DISP.DISP_OSSize:=@sysvarDISPOSSize;
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_CursorSize','GDBInteger',@sysvarDISPCursorSize);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_OSSize','GDBDouble',@sysvarDISPOSSize);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_CrosshairSize','GDBDouble',@SysVarDISPCrosshairSize);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_BackGroundColor','TRGB',@sysvarDISPBackGroundColor);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_MaxRenderTime','GDBInteger',@sysvarRDMaxRenderTime);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_ZoomFactor','GDBDouble',@sysvarDISPZoomFactor);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_SystmGeometryDraw','GDBBoolean',@sysvarDISPSystmGeometryDraw);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_SystmGeometryDraw','GDBBoolean',@sysvarDISPSystmGeometryDraw);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_SystmGeometryColor','TGDBPaletteColor',@sysvarDISPSystmGeometryColor);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_OSMode','TGDBOSMode',@sysvarDWGOSMode);
+
+sysvar.DISP.DISP_CursorSize:=@sysvarDISPCursorSize;sysvar.DISP.DISP_OSSize:=@sysvarDISPOSSize;
 sysvar.DISP.DISP_CrosshairSize:=@SysVarDISPCrosshairSize;
 sysvar.DISP.DISP_BackGroundColor:=@sysvarDISPBackGroundColor;
 sysvar.RD.RD_MaxRenderTime:=@sysvarRDMaxRenderTime;
+sysvar.DISP.DISP_ZoomFactor:=@sysvarDISPZoomFactor;
+sysvar.DISP.DISP_SystmGeometryDraw:=@sysvarDISPSystmGeometryDraw;
+sysvar.DISP.DISP_SystmGeometryColor:=@sysvarDISPSystmGeometryColor;
+
+sysvar.DWG.DWG_OSMode:=@sysvarDWGOSMode
 finalization
 end.
 

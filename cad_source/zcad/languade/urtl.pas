@@ -36,25 +36,25 @@ initialization;
      //units.init;
      if SysUnit=nil then
        begin
-         units.loadunit(sysvar.PATH.Support_Path,InterfaceTranslate,expandpath('*rtl/system.pas'),nil);
-         SysUnit:=units.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,'System');
+         units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/system.pas'),nil);
+         SysUnit:=units.findunit(SupportPath,InterfaceTranslate,'System');
        end;
 
   {RegCnownTypes.RegTypes;}
   {URegisterObjects.startup;}
 
-  units.loadunit(sysvar.PATH.Support_Path,InterfaceTranslate,expandpath('*rtl/sysvar.pas'),nil);
-  units.loadunit(sysvar.PATH.Support_Path,InterfaceTranslate,expandpath('*rtl/savedvar.pas'),nil);
-  units.loadunit(sysvar.PATH.Support_Path,InterfaceTranslate,expandpath('*rtl/devicebase.pas'),nil);
+  units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/sysvar.pas'),nil);
+  units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/savedvar.pas'),nil);
+  units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/devicebase.pas'),nil);
 
-  SysVarUnit:=units.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,'sysvar');
-  SavedUnit:=units.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,'savedvar');
-  DBUnit:=units.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,'devicebase');
+  SysVarUnit:=units.findunit(SupportPath,InterfaceTranslate,'sysvar');
+  SavedUnit:=units.findunit(SupportPath,InterfaceTranslate,'savedvar');
+  DBUnit:=units.findunit(SupportPath,InterfaceTranslate,'devicebase');
 
   if SysVarUnit<>nil then
   begin
   SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_DrawMode,'DWG_DrawMode');
-  SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_OSMode,'DWG_OSMode');
+  //SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_OSMode,'DWG_OSMode');
   //SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_CLayer,'DWG_CLayer');
   //SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_CLinew,'DWG_CLinew');
   SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_PolarMode,'DWG_PolarMode');
@@ -63,7 +63,7 @@ initialization;
 
   SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_SnapGrid,'DWG_SnapGrid');
   SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_DrawGrid,'DWG_DrawGrid');
-  SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_SystmGeometryDraw,'DWG_SystmGeometryDraw');
+  //SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_SystmGeometryDraw,'DWG_SystmGeometryDraw');
   SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_HelpGeometryDraw,'DWG_HelpGeometryDraw');
   SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_EditInSubEntry,'DWG_EditInSubEntry');
   SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_AdditionalGrips,'DWG_AdditionalGrips');
@@ -83,7 +83,7 @@ initialization;
   //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_CursorSize,'DISP_CursorSize');
   //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_CrosshairSize,'DISP_CrosshairSize');
   //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_OSSize,'DISP_OSSize');
-  SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_ZoomFactor,'DISP_ZoomFactor');
+  //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_ZoomFactor,'DISP_ZoomFactor');
   SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_DrawZAxis,'DISP_DrawZAxis');
   SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_ColorAxis,'DISP_ColorAxis');
   SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_GripSize,'DISP_GripSize');
@@ -178,17 +178,17 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_RunTime,'SYS_RunTime');
   SysVar.SYS.SYS_RunTime^:=0;
   //SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_ActiveMouse,'SYS_ActiveMouse');
-  SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_SystmGeometryColor,'SYS_SystmGeometryColor');
+  //SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_SystmGeometryColor,'SYS_SystmGeometryColor');
   SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_IsHistoryLineCreated,'SYS_IsHistoryLineCreated');
   SysVar.SYS.SYS_IsHistoryLineCreated^:=FALSE;
-  SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_AlternateFont,'SYS_AlternateFont');
+  //SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_AlternateFont,'SYS_AlternateFont');
 
   SysVarUnit.AssignToSymbol(SysVar.PATH.device_library,'PATH_Device_Library');
   s:=SysVar.PATH.device_library^;
-  SysVarUnit.AssignToSymbol(SysVar.PATH.Program_Run,'PATH_Program_Run');
-  s:=SysVar.PATH.Program_Run^;
-  SysVarUnit.AssignToSymbol(SysVar.PATH.Support_Path,'PATH_Support_Path');
-  s:=SysVar.PATH.Support_Path^;
+  //SysVarUnit.AssignToSymbol(SysVar.PATH.Program_Run,'PATH_Program_Run');
+  //s:=SysVar.PATH.Program_Run^;
+  //SysVarUnit.AssignToSymbol(SysVar.PATH.Support_Path,'PATH_Support_Path');
+  //s:=SysVar.PATH.Support_Path^;
 
   SysVarUnit.AssignToSymbol(SysVar.PATH.Template_Path,'PATH_Template_Path');
   s:=SysVar.PATH.Template_Path^;
@@ -197,19 +197,19 @@ initialization;
 
   SysVarUnit.AssignToSymbol(SysVar.PATH.LayoutFile,'PATH_LayoutFile');
 
-  SysVarUnit.AssignToSymbol(SysVar.PATH.Fonts_Path,'PATH_Fonts');
+  //SysVarUnit.AssignToSymbol(SysVar.PATH.Fonts_Path,'PATH_Fonts');
 
   sysvar.RD.RD_LastRenderTime^:=0;
-  sysvar.PATH.Program_Run^:=sysparam.programpath;
-  sysvar.PATH.Temp_files:=@sysparam.temppath;
+  //sysvar.PATH.Program_Run^:=sysparam.programpath;
+  //sysvar.PATH.Temp_files:=@temppath;
   sysvar.SYS.SYS_Version^:=sysparam.ver.versionstring;
   end;
 
 
-  units.loadunit(sysvar.PATH.Support_Path,InterfaceTranslate,expandpath('*rtl/cables.pas'),nil);
-  units.loadunit(sysvar.PATH.Support_Path,InterfaceTranslate,expandpath('*rtl/devices.pas'),nil);
-  units.loadunit(sysvar.PATH.Support_Path,InterfaceTranslate,expandpath('*rtl/connectors.pas'),nil);
-  units.loadunit(sysvar.PATH.Support_Path,InterfaceTranslate,expandpath('*rtl/styles/styles.pas'),nil);
+  units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/cables.pas'),nil);
+  units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/devices.pas'),nil);
+  units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/connectors.pas'),nil);
+  units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/styles/styles.pas'),nil);
 
   //units.loadunit(expandpath('*rtl\objdefunits\objname.pas'),nil);
   //units.loadunit(expandpath('*rtl\objdefunits\blocktype.pas'),nil);

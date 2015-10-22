@@ -258,7 +258,7 @@ procedure TLTWindow._LoadLT(Sender: TObject);
 begin
      LineWeightSelectWindow:=TLineWeightSelectWindow.Create(nil);
      //SetHeightControl(LineWeightSelectWindow,22);
-     if LineWeightSelectWindow.run(FindInSupportPath(SysVar.PATH.Support_Path,'zcad.lin'))=mrok then
+     if LineWeightSelectWindow.run(FindInSupportPath(SupportPath,'zcad.lin'))=mrok then
         Memo1.Text:=LineWeightSelectWindow.text;
      Freeandnil(LineWeightSelectWindow);
 end;

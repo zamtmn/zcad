@@ -18,7 +18,7 @@
 unit gdbellipse;
 {$INCLUDE def.inc}
 interface
-uses uabstractunit,zeentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,zcadsysvars,GDBWithLocalCS,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
+uses uabstractunit,zeentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,GDBWithLocalCS,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain;
 type
 {REGISTEROBJECTTYPE GDBObjEllipse}
@@ -54,7 +54,7 @@ GDBObjEllipse={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure projectpoint;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
-                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                  function beforertmodify:GDBPointer;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;
@@ -553,7 +553,7 @@ begin
      result:=true;
      case onlygetsnapcount of
      0:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_endpoint)<>0
+            if (SnapMode and osm_endpoint)<>0
             then
             begin
             osp.worldcoord:=q0;
@@ -563,7 +563,7 @@ begin
             else osp.ostype:=os_none;
        end;
      1:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_midpoint)<>0
+            if (SnapMode and osm_midpoint)<>0
             then
             begin
             osp.worldcoord:=q1;
@@ -573,7 +573,7 @@ begin
             else osp.ostype:=os_none;
        end;
      2:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_endpoint)<>0
+            if (SnapMode and osm_endpoint)<>0
             then
             begin
             osp.worldcoord:=q2;

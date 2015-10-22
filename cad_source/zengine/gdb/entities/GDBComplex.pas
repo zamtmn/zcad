@@ -20,7 +20,7 @@ unit GDBComplex;
 {$INCLUDE def.inc}
 
 interface
-uses gdbpalette,gdbdrawcontext,ugdbdrawingdef,GDBCamera,{ugdbsimpledrawing,}zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},SysInfo,sysutils,
+uses gdbpalette,gdbdrawcontext,ugdbdrawingdef,GDBCamera,{ugdbsimpledrawing,}UGDBOpenArrayOfPObjects,UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},SysInfo,sysutils,
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray,UGDBVisibleOpenArray,gdbEntity{,varman,varmandef},
 UGDBVisibleTreeArray,UGDBEntTree,
 GDBase,GDBWithLocalCS,gdbobjectsconstdef,{oglwindowdef,}geometry{,dxflow},memman{,GDBSubordinated,UGDBOpenArrayOfByte};
@@ -175,8 +175,8 @@ begin
   inc(dc.subrender);
   //ConstObjArray.DrawWithattrib(dc{infrustumactualy,subrender)}{DrawGeometry(CalculateLineWeight});
   treerender(ConstObjArray.ObjTree,dc);
-      if (sysvar.DWG.DWG_SystmGeometryDraw^) then
-                                               ConstObjArray.ObjTree.draw(dc);
+      if DC.SystmGeometryDraw then
+                                  ConstObjArray.ObjTree.draw(dc);
   dec(dc.subrender);
   dc.OwnerLineWeight:=oldlw;
   dc.ownercolor:=oldColor;

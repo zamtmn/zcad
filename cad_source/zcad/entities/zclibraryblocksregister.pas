@@ -47,7 +47,7 @@ var
   line,block,depends,s:GDBString;
   f:GDBOpenArrayOfByte;
 begin
-  s:=FindInSupportPath(SysVar.PATH.Support_Path,operands);
+  s:=FindInSupportPath(SupportPath,operands);
   f.InitFromFile(s);
   while f.notEOF do
     begin

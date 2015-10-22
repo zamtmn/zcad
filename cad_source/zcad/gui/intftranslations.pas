@@ -20,7 +20,7 @@ unit intftranslations;
 {$INCLUDE def.inc}
 
 interface
-uses LCLVersion,strproc{$IFNDEF DELPHI},LCLProc,gettext,translations,fileutil,LResources{$ENDIF},sysinfo,sysutils,log,forms,Classes, typinfo;
+uses paths,LCLVersion,strproc{$IFNDEF DELPHI},LCLProc,gettext,translations,fileutil,LResources{$ENDIF},sysinfo,sysutils,log,forms,Classes, typinfo;
 
 type
     TmyPOFile = class(TPOFile)
@@ -250,7 +250,7 @@ end;
 procedure initialize;
     begin
       DisableTranslateCount:=0;
-      PODirectory := sysinfo.sysparam.programpath+'languages/';
+      PODirectory := ProgramPath+'languages/';
       GetLanguageIDs(Lang, FallbackLang); // определено в модуле gettext
       createpo;
       LRSTranslator:=TPoTranslator.Create;

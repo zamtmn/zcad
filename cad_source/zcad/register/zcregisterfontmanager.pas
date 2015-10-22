@@ -16,15 +16,18 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit zcregisterzscript;
+unit zcregisterfontmanager;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,paths,intftranslations,UUnitManager,TypeDescriptors;
+uses zcadsysvars,UGDBFontManager,paths,intftranslations,UUnitManager,TypeDescriptors;
 implementation
 
 initialization
 {$IFDEF DEBUGINITSECTION}LogOut('zcregisterzscript.initialization');{$ENDIF}
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'ShowHiddenFieldInObjInsp','GDBBoolean',@debugShowHiddenFieldInObjInsp);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Fonts','GDBString',@sysvarPATHFontsPath);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_AlternateFont','GDBString',@sysvarAlternateFont);
+sysvar.PATH.Fonts_Path:=@sysvarPATHFontsPath;
+sysvar.PATH.Alternate_Font:=@sysvarAlternateFont;
 finalization
 end.
 

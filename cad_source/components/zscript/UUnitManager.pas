@@ -31,19 +31,19 @@ type
                        currentunit:PTUnit;
                        NextUnitManager:PTUnitManager;
                        constructor init;
-                       function loadunit(PPaths:PGDBString;TranslateFunc:TTranslateFunction;fname:GDBString; pcreatedunit:PTSimpleUnit):ptunit;virtual;
-                       function parseunit(PPaths:PGDBString;TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfByte; pcreatedunit:PTSimpleUnit):ptunit;virtual;
-                       function changeparsemode(PPaths:PGDBString;TranslateFunc:TTranslateFunction;newmode:GDBInteger;var mode:GDBInteger):pasparsemode;
-                       function findunit(PPaths:PGDBString;TranslateFunc:TTranslateFunction;uname:GDBString):ptunit;virtual;
+                       function loadunit(PPaths:GDBString;TranslateFunc:TTranslateFunction;fname:GDBString; pcreatedunit:PTSimpleUnit):ptunit;virtual;
+                       function parseunit(PPaths:GDBString;TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfByte; pcreatedunit:PTSimpleUnit):ptunit;virtual;
+                       function changeparsemode(PPaths:GDBString;TranslateFunc:TTranslateFunction;newmode:GDBInteger;var mode:GDBInteger):pasparsemode;
+                       function findunit(PPaths:GDBString;TranslateFunc:TTranslateFunction;uname:GDBString):ptunit;virtual;
                        function FindOrCreateEmptyUnit(uname:GDBString):ptunit;virtual;
                        function internalfindunit(uname:GDBString):ptunit;virtual;
                        procedure SetNextManager(PNM:PTUnitManager);
-                       procedure LoadFolder(PPaths:PGDBString;TranslateFunc:TTranslateFunction;path: GDBString);
+                       procedure LoadFolder(PPaths:GDBString;TranslateFunc:TTranslateFunction;path: GDBString);
 
                        procedure AfterObjectDone(p:PGDBaseObject);virtual;
                        procedure free;virtual;
 
-                       procedure CreateExtenalSystemVariable(PPaths:PGDBString;sysunitname:GDBString;TranslateFunc:TTranslateFunction;varname,vartype:GDBString;pinstance:Pointer);
+                       procedure CreateExtenalSystemVariable(PPaths:GDBString;sysunitname:GDBString;TranslateFunc:TTranslateFunction;varname,vartype:GDBString;pinstance:Pointer);
                  end;
 {EXPORT-}
 var
@@ -84,7 +84,7 @@ const
                             Size:sizeof(GDBPointer);
                             //Attributes:{FA_HIDDEN_IN_OBJ_INSP or }FA_READONLY
                             );
-procedure TUnitManager.CreateExtenalSystemVariable(PPaths:PGDBString;sysunitname:GDBString;TranslateFunc:TTranslateFunction;varname,vartype:GDBString;pinstance:Pointer);
+procedure TUnitManager.CreateExtenalSystemVariable(PPaths:GDBString;sysunitname:GDBString;TranslateFunc:TTranslateFunction;varname,vartype:GDBString;pinstance:Pointer);
 begin
   //TODO: убрать такуюже шнягу из urtl, сделать создание SysUnit в одном месте
   if SysUnit=nil then
@@ -197,7 +197,7 @@ begin
                     end;                           
   
 end;
-function TUnitManager.changeparsemode(PPaths:PGDBString;TranslateFunc:TTranslateFunction;newmode:GDBInteger;var mode:GDBInteger):pasparsemode;
+function TUnitManager.changeparsemode(PPaths:GDBString;TranslateFunc:TTranslateFunction;newmode:GDBInteger;var mode:GDBInteger):pasparsemode;
 var i:GDBInteger;
     //line:GDBString;
     //fieldgdbtype: gdbtypedesk;
@@ -800,7 +800,7 @@ begin
      inherited init({$IFDEF DEBUGBUILD}'{94D787E9-97EE-4198-8A72-5B904B98F275}',{$ENDIF}500,sizeof(TUnit));
      NextUnitManager:=nil;
 end;
-procedure TUnitManager.LoadFolder(PPaths:PGDBString;TranslateFunc:TTranslateFunction;path: GDBString);
+procedure TUnitManager.LoadFolder(PPaths:GDBString;TranslateFunc:TTranslateFunction;path: GDBString);
 var
   sr: TSearchRec;
 begin

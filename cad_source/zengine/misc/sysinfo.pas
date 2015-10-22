@@ -19,12 +19,10 @@
 unit SysInfo;
 {$INCLUDE def.inc}
 interface
-uses paths,zcadstrconsts,gdbasetypes,Forms,gdbase{$IFNDEF DELPHI},fileutil{$ENDIF},zcadsysvars,sysutils;
+uses paths,zcadstrconsts,gdbasetypes,Forms,gdbase{$IFNDEF DELPHI},fileutil{$ENDIF},sysutils;
 {$INCLUDE revision.inc}
 type
   tsysparam=record
-                     ProgramPath: GDBString;
-                     TempPath: GDBString;
                      ScreenX,ScreenY:GDBInteger;
                      DefaultHeight:GDBInteger;
                      Ver:TmyFileVersionInfo;
@@ -144,14 +142,9 @@ begin
      programlog.LogOutStr('GetSysInfo',lp_IncPos,LM_Necessarily);
      SysDefaultFormatSettings:=DefaultFormatSettings;
      {$IFDEF DEBUGINITSECTION}log.LogOut('sysinfo.getsysinfo');{$ENDIF}
-     SysParam.ProgramPath:=programpath;
+     //SysParam.ProgramPath:=programpath;
      SysParam.ScreenX:={GetSystemMetrics(SM_CXSCREEN)}Screen.Width;
      SysParam.ScreenY:={GetSystemMetrics(SM_CYSCREEN)}Screen.Height;
-     SysParam.TempPath:=GetEnvironmentVariable('TEMP');
-     {$IFNDEF DELPHI}SysParam.TempPath:=gettempdir;{$ENDIF}
-     if (SysParam.TempPath[length(SysParam.TempPath)]<>PathDelim)
-      then
-          SysParam.TempPath:=SysParam.TempPath+PathDelim;
 
 
      {SysParam.ScreenX:=800;
@@ -178,8 +171,8 @@ begin
                              programlog.logoutstr('UTF8CompareLocale:='+inttostr(UTF8CompareLocale),0,LM_Necessarily);
                              {modeswitch systemcodepage}
                              {$ENDIF}
-     programlog.LogOutStr(format('SysParam.ProgramPath="%s"',[SysParam.ProgramPath]),lp_OldPos,LM_Necessarily);
-     programlog.LogOutStr(format('SysParam.TempPath="%s"',[SysParam.TempPath]),lp_OldPos,LM_Necessarily);
+     programlog.LogOutStr(format('SysParam.ProgramPath="%s"',[ProgramPath]),lp_OldPos,LM_Necessarily);
+     programlog.LogOutStr(format('SysParam.TempPath="%s"',[TempPath]),lp_OldPos,LM_Necessarily);
      programlog.LogOutStr(format('SysParam.ScreenX=%d',[SysParam.ScreenX]),lp_OldPos,LM_Necessarily);
      programlog.LogOutStr(format('SysParam.ScreenY=%d',[SysParam.ScreenY]),lp_OldPos,LM_Necessarily);
      programlog.LogOutStr(format('SysParam.NoSplash=%s',[BoolToStr(SysParam.NoSplash,true)]),lp_OldPos,LM_Necessarily);

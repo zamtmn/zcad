@@ -19,7 +19,7 @@ unit gdbrotateddimension;
 {$INCLUDE def.inc}
 
 interface
-uses zeentityfactory,gdbaligneddimension,gdbdimension,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,
+uses zeentityfactory,gdbaligneddimension,gdbdimension,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,
 strproc,UGDBOpenArrayOfByte,geometry,
 gdbasetypes,SysInfo,sysutils,
 gdbEntity,varmandef,

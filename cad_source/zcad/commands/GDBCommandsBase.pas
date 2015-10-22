@@ -233,10 +233,10 @@ begin
           loadproc(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode,gdb.GetCurrentDWG^);
      if FileExists(utf8tosys(s+'.dbpas')) then
      begin
-           pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,DrawingDeviceBaseUnitName);
+           pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
            mem.InitFromFile(s+'.dbpas');
            //pu^.free;
-           units.parseunit(sysvar.PATH.Support_Path,InterfaceTranslate,mem,PTSimpleUnit(pu));
+           units.parseunit(SupportPath,InterfaceTranslate,mem,PTSimpleUnit(pu));
            remapprjdb(pu);
            mem.done;
      end;
@@ -347,7 +347,7 @@ begin
      GDB.CurrentDWG:=BlockBaseDWG;
 
      if length(operands)>0 then
-     s:=FindInSupportPath(SysVar.PATH.Support_Path,operands);
+     s:=FindInSupportPath(SupportPath,operands);
      result:=Merge_com(@s[1]);
 
 
@@ -896,7 +896,7 @@ else if length(Operands)>3 then
            if pentvarext<>nil then
            begin
            pentvarext^.entityunit.SaveToMem(mem);
-           mem.SaveToFile(expandpath(sysparam.programpath+'autosave\lastvariableset.pas'));
+           mem.SaveToFile(expandpath(ProgramPath+'autosave\lastvariableset.pas'));
 
            setlength(astring,mem.Count);
            StrLCopy(@astring[1],mem.PArray,mem.Count);
@@ -914,7 +914,7 @@ else if length(Operands)>3 then
                                      mem.AddData(@astring[1],length(astring));
 
                                      pentvarext^.entityunit.free;
-                                     units.parseunit(sysvar.PATH.Support_Path,InterfaceTranslate,mem,@pentvarext^.entityunit);
+                                     units.parseunit(SupportPath,InterfaceTranslate,mem,@pentvarext^.entityunit);
                                      if assigned(rebuildproc)then
                                      rebuildproc;
                                      //GDBobjinsp.rebuild;
@@ -961,7 +961,7 @@ begin
                                            begin
                                                 pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
                                                 pentvarext^.entityunit.free;
-                                                units.parseunit(sysvar.PATH.Support_Path,InterfaceTranslate,mem,@pentvarext^.entityunit);
+                                                units.parseunit(SupportPath,InterfaceTranslate,mem,@pentvarext^.entityunit);
                                                 mem.Seek(0);
                                                 inc(counter);
                                            end;
@@ -1033,7 +1033,7 @@ var //res:longbool;
 begin
      if fileexists(utf8tosys(CopyClipFile)) then
                                     SysUtils.deletefile(CopyClipFile);
-     s:=sysparam.temppath+'Z$C'+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)
+     s:=temppath+'Z$C'+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)
                               +inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)
                               +'.dxf';
      CopyClipFile:=s;

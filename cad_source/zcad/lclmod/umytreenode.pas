@@ -21,7 +21,7 @@ unit umytreenode;
 interface
 
 uses
-  Themes,zcadinterface,commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,{StdCtrls,}Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,{ButtonPanel,}Buttons,
+  paths,Themes,zcadinterface,commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,{StdCtrls,}Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,{ButtonPanel,}Buttons,
   {strutils,}{$IFNDEF DELPHI}intftranslations,{$ENDIF}sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
 type
     TZAction=class(TAction)
@@ -366,7 +366,7 @@ begin
           if img[1]<>'#' then
                               begin
                               action.imgstr:='';
-                              action.ImageIndex:=LoadImage(sysparam.programpath+'menu/BMP/'+img);
+                              action.ImageIndex:=LoadImage(ProgramPath+'menu/BMP/'+img);
                               if action.ImageIndex=-1 then
                                                   begin
                                                        action.ImageIndex:=self.brocenicon;

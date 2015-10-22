@@ -43,6 +43,7 @@ GDBFontManager={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArrayOfData}GDBName
                     destructor done;virtual;
 
                     function addFonf(FontPathName:GDBString):PGDBfont;
+                    procedure EnumerateFontFiles;
                     procedure EnumerateTTFFontFile(filename:GDBString);
                     procedure EnumerateSHXFontFile(filename:GDBString);
                     //function FindFonf(FontName:GDBString):GDBPointer;
@@ -52,6 +53,8 @@ GDBFontManager={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArrayOfData}GDBName
 var
    FontManager:GDBFontManager;
    FontExt2LoadProc:TFontExt2LoadProcMap;
+   sysvarPATHFontsPath:GDBString;
+   sysvarAlternateFont:GDBString='GEWIND.SHX';
 procedure RegisterFontLoadProcedure(const _FontExt,_FontDesk:GDBString;
                                     const _FontLoadProcedure:TFontLoadProcedure);
 implementation
@@ -85,19 +88,19 @@ begin
      if assigned(shxfontfiles)then
        shxfontfiles.Destroy;
 end;
-
+procedure GDBFontManager.EnumerateFontFiles;
+begin
+  ttffontfiles:=TStringList.create;
+  ttffontfiles.Duplicates := dupIgnore;
+  FromDirsIterator(sysvarPATHFontsPath,'*.ttf','',nil,EnumerateTTFFontFile);
+  shxfontfiles:=TStringList.create;
+  shxfontfiles.Duplicates := dupIgnore;
+  FromDirsIterator(sysvarPATHFontsPath,'*.shx','',nil,EnumerateSHXFontFile);
+end;
 constructor GDBFontManager.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof({GDBFontRecord}GDBfont));
-  if assigned(sysvar.PATH.Fonts_Path)then
-  begin
-    ttffontfiles:=TStringList.create;
-    ttffontfiles.Duplicates := dupIgnore;
-    FromDirsIterator(sysvar.PATH.Fonts_Path^,'*.ttf','',nil,EnumerateTTFFontFile);
-    shxfontfiles:=TStringList.create;
-    shxfontfiles.Duplicates := dupIgnore;
-    FromDirsIterator(sysvar.PATH.Fonts_Path^,'*.shx','',nil,EnumerateSHXFontFile);
-  end;
+  //if assigned(sysvar.PATH.Fonts_Path)then
 end;
 {procedure GDBFontManager.freeelement;
 begin
@@ -249,6 +252,7 @@ initialization
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBFontManager.initialization');{$ENDIF}
   FontManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);
   FontExt2LoadProc:=TFontExt2LoadProcMap.Create;
+  sysvarPATHFontsPath:=ExtractFileDir(ParamStr(0));
 finalization
   FontManager.FreeAndDone;
   FontExt2LoadProc.Destroy;

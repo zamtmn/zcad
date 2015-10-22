@@ -147,6 +147,10 @@ var
    SysVarDISPCrosshairSize:double=0.05;
    sysvarDISPBackGroundColor:TRGB=(r:0;g:0;b:0;a:255);
    sysvarRDMaxRenderTime:integer=0;
+   sysvarDISPZoomFactor:double=1.624;
+   sysvarDISPSystmGeometryDraw:boolean=false;
+   sysvarDISPSystmGeometryColor:TGDBPaletteColor=1;
+   sysvarDWGOSMode:TGDBOSMode=0;
 implementation
 uses
      commandline;
@@ -719,9 +723,9 @@ begin
 
     LightOn(dc);
 
-    if (sysvar.DWG.DWG_SystmGeometryDraw^) then
+    if (sysvarDISPSystmGeometryDraw) then
                                                begin
-                                               dc.drawer.setcolor(palette[sysvar.SYS.SYS_SystmGeometryColor^+2].RGB);
+                                               dc.drawer.setcolor(palette[dc.SystmGeometryColor+2].RGB);
                                                PDWG.GetCurrentROOT^.ObjArray.ObjTree.draw(dc);
                                                end;
     begin
@@ -1328,7 +1332,7 @@ var
 
 begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DoMouseWheel',lp_incPos);{$ENDIF}
-  smallwheel:=1+(sysvar.DISP.DISP_ZoomFactor^-1)/10;
+  smallwheel:=1+(sysvarDISPZoomFactor-1)/10;
   //mpoint := point(mousepos.x - clientorigin.X, mousepos.y - clientorigin.y);
   if {mousein(mpoint)}true then
   begin
@@ -1341,7 +1345,7 @@ begin
       begin
         ClearOntrackpoint;
         Create0axis;
-        DISP_ZoomFactor(sysvar.DISP.DISP_ZoomFactor^);
+        DISP_ZoomFactor(sysvarDISPZoomFactor);
       end;
       //handled := true;
     end
@@ -1352,7 +1356,7 @@ begin
       else
       begin
         ClearOntrackpoint;
-        DISP_ZoomFactor(1 / sysvar.DISP.DISP_ZoomFactor^);
+        DISP_ZoomFactor(1 / sysvarDISPZoomFactor);
       end;
       //handled := true;
     end;
@@ -1527,7 +1531,7 @@ end;
                                                       getonmouseobjectbytree(pdwg.GetCurrentROOT.ObjArray.ObjTree);
       getosnappoint({@gdb.GetCurrentROOT.ObjArray,} 0);
       //create0axis;-------------------------------
-    if sysvar.dwg.DWG_OSMode^ <> 0 then
+    if sysvarDWGOSMode <> 0 then
     begin
       if otracktimer = 1 then
       begin
@@ -2149,6 +2153,8 @@ begin
   result.matrixs.pprojMatrix:=@PDWG.GetPcamera.projMatrix;
   result.matrixs.pviewport:=@PDWG.GetPcamera.viewport;
   result.pcamera:=PDWG.GetPcamera;
+  result.SystmGeometryDraw:=sysvarDISPSystmGeometryDraw;
+  result.SystmGeometryColor:=sysvarDISPSystmGeometryColor;
 end;
 procedure TGeneralViewArea.CorrectMouseAfterOS;
 var d,tv1,tv2:GDBVertex;
@@ -2374,7 +2380,7 @@ begin
      repeat
      begin
        pv.startsnap(osp,pdata);
-       while pv.getsnap(osp,pdata,param,pdwg.myGluProject2) do
+       while pv.getsnap(osp,pdata,param,pdwg.myGluProject2,sysvarDWGOSMode) do
        begin
             if osp.ostype<>os_none then
             begin
@@ -2416,7 +2422,7 @@ begin
      pv:=PDWG.GetOnMouseObj.iterate(ir);
      until pv=nil;
      end;
-  if ((sysvar.dwg.DWG_OSMode^ and osm_apparentintersection)<>0)or((sysvar.dwg.DWG_OSMode^ and osm_intersection)<>0)then
+  if ((sysvarDWGOSMode and osm_apparentintersection)<>0)or((sysvarDWGOSMode and osm_intersection)<>0)then
   begin
   if (PDWG.GetOnMouseObj.Count>1)and(PDWG.GetOnMouseObj.Count<10) then
   begin
@@ -2430,7 +2436,7 @@ begin
   if pv<>pv2 then
   begin
        pv.startsnap(osp,pdata);
-       while pv.getintersect(osp,pv2,param,PDWG.myGluProject2) do
+       while pv.getintersect(osp,pv2,param,PDWG.myGluProject2,sysvarDWGOSMode) do
        begin
             if osp.ostype<>os_none then
             begin
@@ -3050,7 +3056,7 @@ begin
      posr.arrayworldaxis.Add(@axis);
 
      if @posr<>@param.ontrackarray.otrackarray[0] then
-     if (SysVar.dwg.DWG_OSMode^ and osm_paralel)<>0 then
+     if (sysvarDWGOSMode and osm_paralel)<>0 then
      begin
           param.ontrackarray.otrackarray[0].arrayworldaxis.Add(@axis);
      end;

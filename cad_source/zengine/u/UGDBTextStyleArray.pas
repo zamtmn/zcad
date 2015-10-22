@@ -130,7 +130,7 @@ begin
   if pos('.',FontFile)=0 then
                              FontFile:=FontFile+'.shx';
 
-  ps.pfont:=FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,FontFile));
+  ps.pfont:=FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,FontFile));
   if not assigned(ps.pfont) then
                                 begin
                                      shared.LogError(sysutils.format(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]));
@@ -160,7 +160,7 @@ begin
   if pos('.',FontFile)=0 then
                              FontFile:=FontFile+'.shx';
 
-  ts.pfont:=FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,FontFile));
+  ts.pfont:=FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,FontFile));
   if not assigned(ts.pfont) then
                                 begin
                                      shared.LogError(sysutils.format(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]));

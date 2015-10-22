@@ -170,7 +170,7 @@ end;
     allok:boolean;
  begin
       allok:=savedxf2000(s,dwg^);
-      pu:=PTDrawing(dwg).DWGUnits.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,DrawingDeviceBaseUnitName);
+      pu:=PTDrawing(dwg).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
       mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
       pu^.SavePasToMem(mem);
       mem.SaveToFile(expandpath(s+'.dbpas'));
@@ -368,7 +368,7 @@ begin
    { TODO : переделать }
    if typeof(CurrentDWG^)=typeof(TDrawing) then
    begin
-   DWGUnit:=PTDrawing(CurrentDWG).DWGUnits.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,'DrawingVars');
+   DWGUnit:=PTDrawing(CurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,'DrawingVars');
    DWGUnit.AssignToSymbol(SysVar.DWG.DWG_SnapGrid,'DWG_SnapGrid');
    DWGUnit.AssignToSymbol(SysVar.DWG.DWG_DrawGrid,'DWG_DrawGrid');
    DWGUnit.AssignToSymbol(SysVar.DWG.DWG_Snap,'DWG_Snap');
@@ -926,7 +926,7 @@ begin
 
   LTypeManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);
 
-  LTypeManager.LoadFromFile(FindInPaths(sysvar.PATH.Support_Path^,'zcad.lin'),TLOLoad);
+  LTypeManager.LoadFromFile(FindInPaths(SupportPath,'zcad.lin'),TLOLoad);
 
   //FontManager.addFonf('C:\Program Files\AutoCAD 2010\Fonts\times.shx');
   //FontManager.addFonf('C:\Program Files\AutoCAD 2010\Fonts\GENISO.SHX');
@@ -934,10 +934,10 @@ begin
 
   //FromDirIterator({sysparam.programpath+'fonts/'}'C:\Program Files\AutoCAD 2010\Fonts\','*.shx','',addf,nil);
 
-  pbasefont:=FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,sysvar.SYS.SYS_AlternateFont^));
+  pbasefont:=FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,sysvarAlternateFont));
   if pbasefont=nil then
   begin
-       shared.LogError(format(rsAlternateFontNotFoundIn,[sysvar.SYS.SYS_AlternateFont^,sysvar.PATH.Fonts_Path^]));
+       shared.LogError(format(rsAlternateFontNotFoundIn,[sysvarAlternateFont,sysvarPATHFontsPath]));
        r := LazarusResources.Find(resname);
        if r = nil then
                       shared.FatalError(rsReserveFontNotFound)
@@ -945,14 +945,14 @@ begin
                       begin
                            f.init({$IFDEF DEBUGBUILD}'{94091172-3DD7-4038-99B6-90CD8B8E971D}',{$ENDIF}length(r.Value));
                            f.AddData(@r.Value[1],length(r.Value));
-                           f.SaveToFile(expandpath(sysvar.PATH.Temp_files^+filename));
-                           pbasefont:=FontManager.addFonf(sysvar.PATH.Temp_files^+filename);
+                           f.SaveToFile(expandpath(TempPath+filename));
+                           pbasefont:=FontManager.addFonf(TempPath+filename);
                            f.done;
                            if pbasefont=nil then
                                                 shared.FatalError(rsReserveFontNotLoad);
                       end;
   end;
-  FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,'ltypeshp.shx'));
+  FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,'ltypeshp.shx'));
 
 
   //pbasefont:=FontManager.getAddres(sysvar.SYS.SYS_AlternateFont^);

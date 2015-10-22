@@ -64,8 +64,8 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                   function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  //procedure feedbackinrect;virtual;
                  //function InRect:TInRect;virtual;
-                  function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
-                  function getintersect(var osp:os_record;pobj:PGDBObjEntity; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
+                  function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
+                  function getintersect(var osp:os_record;pobj:PGDBObjEntity; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                 destructor done;virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                   function beforertmodify:GDBPointer;virtual;
@@ -432,7 +432,7 @@ begin
      dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
      case onlygetsnapcount of
      0:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_endpoint)<>0
+            if (SnapMode and osm_endpoint)<>0
             then
             begin
             osp.worldcoord:=CoordInWCS.lend;
@@ -442,7 +442,7 @@ begin
             else osp.ostype:=os_none;
        end;
      1:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_4)<>0
+            if (SnapMode and osm_4)<>0
             then
             begin
             osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 4);
@@ -452,7 +452,7 @@ begin
             else osp.ostype:=os_none;
        end;
      2:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_3)<>0
+            if (SnapMode and osm_3)<>0
             then
             begin
             osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 3);
@@ -462,7 +462,7 @@ begin
             else osp.ostype:=os_none;
        end;
      3:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_midpoint)<>0
+            if (SnapMode and osm_midpoint)<>0
             then
             begin
             osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2);
@@ -472,7 +472,7 @@ begin
             else osp.ostype:=os_none;
        end;
      4:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_3)<>0
+            if (SnapMode and osm_3)<>0
             then
             begin
             osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 2 / 3);
@@ -482,7 +482,7 @@ begin
             else osp.ostype:=os_none;
        end;
      5:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_4)<>0
+            if (SnapMode and osm_4)<>0
             then
             begin
             osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 3 / 4);
@@ -492,7 +492,7 @@ begin
             else osp.ostype:=os_none;
        end;
      6:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_endpoint)<>0
+            if (SnapMode and osm_endpoint)<>0
             then
             begin
             osp.worldcoord:=CoordInWCS.lbegin;
@@ -502,7 +502,7 @@ begin
             else osp.ostype:=os_none;
        end;
      7:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_perpendicular)<>0
+            if (SnapMode and osm_perpendicular)<>0
             then
             begin
             tv:=vectordot(dir,{GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.dir);
@@ -523,7 +523,7 @@ begin
             else osp.ostype:=os_none;
        end;
      8:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_nearest)<>0
+            if (SnapMode and osm_nearest)<>0
             then
             begin
             tv:=vectordot(dir,{GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.dir);
@@ -596,7 +596,7 @@ begin
      result:=true;
      case onlygetsnapcount of
      0:begin
-            if ((sysvar.dwg.DWG_OSMode^ and osm_apparentintersection)<>0)or((sysvar.dwg.DWG_OSMode^ and osm_intersection)<>0)
+            if ((SnapMode and osm_apparentintersection)<>0)or((SnapMode and osm_intersection)<>0)
             then
             begin
             if not assigned(pgdbobjline(pobj)^.pprojpoint) then
@@ -621,7 +621,7 @@ begin
                      if dist<bigeps
                      then
                          begin
-                              if (sysvar.dwg.DWG_OSMode^ and osm_intersection)<>0
+                              if (SnapMode and osm_intersection)<>0
                               then
                               begin
                               osp.worldcoord:=tv1;
@@ -632,7 +632,7 @@ begin
                          end
                      else
                          begin
-                              if (sysvar.dwg.DWG_OSMode^ and osm_apparentintersection)<>0
+                              if (SnapMode and osm_apparentintersection)<>0
                               then
                               begin
                               osp.worldcoord:=tv1;

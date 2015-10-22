@@ -19,7 +19,7 @@
 unit GDBCircle;
 {$INCLUDE def.inc}
 interface
-uses uabstractunit,zeentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBHelpObj,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray,UGDBPoint3DArray{, UGDBPolyPoint3DArray,UGDBPolyPoint2DArray},UGDBOpenArrayOfByte,
+uses uabstractunit,zeentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBHelpObj,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray,UGDBPoint3DArray{, UGDBPolyPoint3DArray,UGDBPolyPoint2DArray},UGDBOpenArrayOfByte,
 GDBase,GDBWithLocalCS,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman;
 type
 //PProjPoint:PGDBPolyPoint2DArray;
@@ -62,7 +62,7 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  procedure projectpoint;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  //procedure higlight;virtual;
-                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                  //function InRect:TInRect;virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
@@ -587,7 +587,7 @@ begin
      result:=true;
      case onlygetsnapcount of
      0:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_center)<>0
+            if (SnapMode and osm_center)<>0
             then
             begin
             osp.worldcoord:=P_insert_in_WCS;
@@ -597,7 +597,7 @@ begin
             else osp.ostype:=os_none;
        end;
      1:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_quadrant)<>0
+            if (SnapMode and osm_quadrant)<>0
             then
             begin
             osp.worldcoord:=q0;
@@ -607,7 +607,7 @@ begin
             else osp.ostype:=os_none;
        end;
      2:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_quadrant)<>0
+            if (SnapMode and osm_quadrant)<>0
             then
             begin
             osp.worldcoord:=q1;
@@ -617,7 +617,7 @@ begin
             else osp.ostype:=os_none;
        end;
      3:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_quadrant)<>0
+            if (SnapMode and osm_quadrant)<>0
             then
             begin
             osp.worldcoord:=q2;
@@ -627,7 +627,7 @@ begin
             else osp.ostype:=os_none;
        end;
      4:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_quadrant)<>0
+            if (SnapMode and osm_quadrant)<>0
             then
             begin
             osp.worldcoord:=q3;
@@ -636,7 +636,7 @@ begin
             end
        end;
      5:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_nearest)<>0
+            if (SnapMode and osm_nearest)<>0
             then
             begin
             osp.ostype:=os_none;

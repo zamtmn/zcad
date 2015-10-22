@@ -221,14 +221,14 @@ begin
   DWGUnits.init;
   DWGUnits.SetNextManager(num);
   if preloadedfile1<>'' then
-  DWGUnits.loadunit(sysvar.PATH.Support_Path,InterfaceTranslate,expandpath({'*rtl/dwg/DrawingDeviceBase.pas')}preloadedfile1),nil);
+  DWGUnits.loadunit(SupportPath,InterfaceTranslate,expandpath({'*rtl/dwg/DrawingDeviceBase.pas')}preloadedfile1),nil);
   if preloadedfile2<>'' then
-  DWGUnits.loadunit(sysvar.PATH.Support_Path,InterfaceTranslate,expandpath({'*rtl/dwg/DrawingVars.pas'}preloadedfile2),nil);
-  DWGDBUnit:=DWGUnits.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,DrawingDeviceBaseUnitName);
+  DWGUnits.loadunit(SupportPath,InterfaceTranslate,expandpath({'*rtl/dwg/DrawingVars.pas'}preloadedfile2),nil);
+  DWGDBUnit:=DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
 
   pcam:=nil;
   pvd:=nil;
-  pdwgwarsunit:=DWGUnits.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,'DrawingVars');
+  pdwgwarsunit:=DWGUnits.findunit(SupportPath,InterfaceTranslate,'DrawingVars');
   if assigned(pdwgwarsunit) then
                                 pvd:=pdwgwarsunit.InterfaceVariables.findvardesc('camera');
   if pvd<>nil then

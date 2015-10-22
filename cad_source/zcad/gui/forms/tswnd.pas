@@ -164,7 +164,7 @@ var
 begin
      if FontChange then
      begin
-          newfont:=FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,pstring(FontsSelector.Enums.getelement(FontsSelector.Selected))^));
+          newfont:=FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,pstring(FontsSelector.Enums.getelement(FontsSelector.Selected))^));
           if  newfont<>PGDBTextStyle(TListItem(Item).Data)^.pfont then
           begin
                CreateUndoStartMarkerNeeded;

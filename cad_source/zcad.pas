@@ -39,6 +39,7 @@ uses
 
   memman,log,
   sysinfo,
+  paths,
 
   varman,
   //
@@ -47,6 +48,8 @@ uses
   zcregisterobjectinspector,
   zcregisterzscript,
   zcregistergeneralwiewarea,
+  zcregisterfontmanager,
+  zcregisterpaths,
   //
   //next line load system.pas
   //
@@ -150,6 +153,7 @@ begin
   //Application.Initialize;
 
   //инициализация GDB
+  FontManager.EnumerateFontFiles;
   ugdbdescriptor.startup('*rtl/dwg/DrawingVars.pas','');
 
   //создание окна программы
@@ -158,7 +162,7 @@ begin
   {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
                                                   sysvar.SYS.SYS_IsHistoryLineCreated^:=true;}
   historyoutstr(format(rsZCADStarted,[sysvar.SYS.SYS_Version^]));
-  gdbplugins.loadplugins(sysparam.programpath+'PLUGINS\');
+  gdbplugins.loadplugins(ProgramPath+'PLUGINS\');
 
   SplashWindow.TXTOut('Выполнение *components\autorun.cmd',false);commandmanager.executefile('*components/autorun.cmd',gdb.GetCurrentDWG,nil);
   if sysparam.preloadedfile<>'' then

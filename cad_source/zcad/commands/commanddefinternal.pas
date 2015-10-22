@@ -21,7 +21,7 @@ unit commanddefinternal;
 
 
 interface
-uses gdbobjectsconstdef,zcadsysvars,geometry,varmandef,gdbasetypes,gdbase,commandlinedef,commandline,oglwindowdef,UGDBDescriptor
+uses generalviewarea,gdbobjectsconstdef,zcadsysvars,geometry,varmandef,gdbasetypes,gdbase,commandlinedef,commandline,oglwindowdef,UGDBDescriptor
   {,UGDBLayerArray},memman,shared;
 type
   comproc=procedure(_self:pointer);
@@ -94,21 +94,21 @@ var
    v:gdbvertex;
 
 begin
-    SysVar.dwg.DWG_OSMode^:=0;
-    if osm.kosm_inspoint then inc(SysVar.dwg.DWG_OSMode^,osm_inspoint);
-    if osm.kosm_endpoint then inc(SysVar.dwg.DWG_OSMode^,osm_endpoint);
-    if osm.kosm_midpoint then inc(SysVar.dwg.DWG_OSMode^,osm_midpoint);
-    if osm.kosm_3 then inc(SysVar.dwg.DWG_OSMode^,osm_3);
-    if osm.kosm_4 then inc(SysVar.dwg.DWG_OSMode^,osm_4);
-    if osm.kosm_center then inc(SysVar.dwg.DWG_OSMode^,osm_center);
-    if osm.kosm_quadrant then inc(SysVar.dwg.DWG_OSMode^,osm_quadrant);
-    if osm.kosm_point then inc(SysVar.dwg.DWG_OSMode^,osm_point);
-    if osm.kosm_intersection then inc(SysVar.dwg.DWG_OSMode^,osm_intersection);
-    if osm.kosm_perpendicular then inc(SysVar.dwg.DWG_OSMode^,osm_perpendicular);
-    if osm.kosm_tangent then inc(SysVar.dwg.DWG_OSMode^,osm_tangent);
-    if osm.kosm_nearest then inc(SysVar.dwg.DWG_OSMode^,osm_nearest);
-    if osm.kosm_apparentintersection then inc(SysVar.dwg.DWG_OSMode^,osm_apparentintersection);
-    if osm.kosm_paralel then inc(SysVar.dwg.DWG_OSMode^,osm_paralel);
+    sysvarDWGOSMode:=0;
+    if osm.kosm_inspoint then inc(sysvarDWGOSMode,osm_inspoint);
+    if osm.kosm_endpoint then inc(sysvarDWGOSMode,osm_endpoint);
+    if osm.kosm_midpoint then inc(sysvarDWGOSMode,osm_midpoint);
+    if osm.kosm_3 then inc(sysvarDWGOSMode,osm_3);
+    if osm.kosm_4 then inc(sysvarDWGOSMode,osm_4);
+    if osm.kosm_center then inc(sysvarDWGOSMode,osm_center);
+    if osm.kosm_quadrant then inc(sysvarDWGOSMode,osm_quadrant);
+    if osm.kosm_point then inc(sysvarDWGOSMode,osm_point);
+    if osm.kosm_intersection then inc(sysvarDWGOSMode,osm_intersection);
+    if osm.kosm_perpendicular then inc(sysvarDWGOSMode,osm_perpendicular);
+    if osm.kosm_tangent then inc(sysvarDWGOSMode,osm_tangent);
+    if osm.kosm_nearest then inc(sysvarDWGOSMode,osm_nearest);
+    if osm.kosm_apparentintersection then inc(sysvarDWGOSMode,osm_apparentintersection);
+    if osm.kosm_paralel then inc(sysvarDWGOSMode,osm_paralel);
 
     case self.trace.Angle of
          TTA90:c:=2;
@@ -134,59 +134,59 @@ begin
 end;
 procedure TOSModeEditor.GetState;
 begin
-    if (SysVar.dwg.DWG_OSMode^ and osm_inspoint)=0 then
+    if (sysvarDWGOSMode and osm_inspoint)=0 then
                                                        osm.kosm_inspoint:=false
                                                    else
                                                        osm.kosm_inspoint:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_endpoint)=0 then
+    if (sysvarDWGOSMode and osm_endpoint)=0 then
                                                        osm.kosm_endpoint:=false
                                                    else
                                                        osm.kosm_endpoint:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_midpoint)=0 then
+    if (sysvarDWGOSMode and osm_midpoint)=0 then
                                                        osm.kosm_midpoint:=false
                                                    else
                                                        osm.kosm_midpoint:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_3)=0 then
+    if (sysvarDWGOSMode and osm_3)=0 then
                                                        osm.kosm_3:=false
                                                    else
                                                        osm.kosm_3:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_4)=0 then
+    if (sysvarDWGOSMode and osm_4)=0 then
                                                        osm.kosm_4:=false
                                                    else
                                                        osm.kosm_4:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_center)=0 then
+    if (sysvarDWGOSMode and osm_center)=0 then
                                                        osm.kosm_center:=false
                                                    else
                                                        osm.kosm_center:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_quadrant)=0 then
+    if (sysvarDWGOSMode and osm_quadrant)=0 then
                                                        osm.kosm_quadrant:=false
                                                    else
                                                        osm.kosm_quadrant:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_point)=0 then
+    if (sysvarDWGOSMode and osm_point)=0 then
                                                        osm.kosm_point:=false
                                                    else
                                                        osm.kosm_point:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_intersection)=0 then
+    if (sysvarDWGOSMode and osm_intersection)=0 then
                                                        osm.kosm_intersection:=false
                                                    else
                                                        osm.kosm_intersection:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_perpendicular)=0 then
+    if (sysvarDWGOSMode and osm_perpendicular)=0 then
                                                        osm.kosm_perpendicular:=false
                                                    else
                                                        osm.kosm_perpendicular:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_tangent)=0 then
+    if (sysvarDWGOSMode and osm_tangent)=0 then
                                                        osm.kosm_tangent:=false
                                                    else
                                                        osm.kosm_tangent:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_nearest)=0 then
+    if (sysvarDWGOSMode and osm_nearest)=0 then
                                                        osm.kosm_nearest:=false
                                                    else
                                                        osm.kosm_nearest:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_apparentintersection)=0 then
+    if (sysvarDWGOSMode and osm_apparentintersection)=0 then
                                                        osm.kosm_apparentintersection:=false
                                                    else
                                                        osm.kosm_apparentintersection:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_paralel)=0 then
+    if (sysvarDWGOSMode and osm_paralel)=0 then
                                                        osm.kosm_paralel:=false
                                                    else
                                                        osm.kosm_paralel:=true;
@@ -275,7 +275,7 @@ begin
   gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
   end;
   gdb.GetCurrentDWG.wa.SetMouseMode(savemousemode);
-  sysvar.dwg.DWG_OSMode^ := saveosmode;
+  sysvarDWGOSMode := saveosmode;
 
   if commandline.commandmanager.CommandsStack.Count=0 then
                                                            gdb.GetCurrentDWG.wa.setobjinsp;
@@ -395,7 +395,7 @@ end;
 procedure CommandRTEdObject.CommandStart;
 begin
   savemousemode := gdb.GetCurrentDWG.wa.param.md.mode;
-  saveosmode := sysvar.dwg.DWG_OSMode^;
+  saveosmode := sysvarDWGOSMode;
   mouseclic := 0;
   UndoTop:=gdb.GetCurrentDWG.GetUndoTop{UndoStack.CurrentCommand};
 

@@ -285,7 +285,7 @@ begin
                  else
                  begin
                    s:=ExpandPath(operands);
-                   s:=FindInSupportPath(SysVar.PATH.Support_Path,operands);
+                   s:=FindInSupportPath(SupportPath,operands);
                  end;
   isload:=FileExists(utf8tosys(s));
   if isload then
@@ -329,7 +329,7 @@ begin
                                               s:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^)
                                           else
                                               begin
-                                                   s:=FindInSupportPath(SysVar.PATH.Support_Path,operands);
+                                                   s:=FindInSupportPath(SupportPath,operands);
                                                    if s='' then
                                                                s:=ExpandPath(operands);
                                               end;
@@ -471,7 +471,7 @@ var
 begin
   try
     // create a new xml config file
-    filename:=utf8tosys(sysparam.programpath+'components/defaultlayout.xml');
+    filename:=utf8tosys(ProgramPath+'components/defaultlayout.xml');
     SaveLayoutToFile(filename);
     exit;
     XMLConfig:=TXMLConfigStorage.Create(filename,false);
@@ -696,7 +696,7 @@ var
 begin
            mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
            SysVarUnit^.SavePasToMem(mem);
-           mem.SaveToFile(expandpath(sysparam.programpath+'rtl/sysvar.pas'));
+           mem.SaveToFile(expandpath(ProgramPath+'rtl/sysvar.pas'));
            mem.done;
            result:=cmd_ok;
 end;

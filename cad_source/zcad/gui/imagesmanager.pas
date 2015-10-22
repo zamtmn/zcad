@@ -22,7 +22,7 @@ unit imagesmanager;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  paths,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   {StdCtrls,} Buttons, {ColorBox,}{ ButtonPanel,}{ Spin,} ExtCtrls, {ComCtrls,}{math,}
   gdbase,{zcadstrconsts,}zcadsysvars,sysinfo;
 var
@@ -59,21 +59,21 @@ procedure LoadIcons;
 begin
   iconlist:=timagelist.Create(application);
 
-  II_Plus:=loadicon(iconlist, sysparam.programpath+'images/plus.png');
-  II_Minus:=loadicon(iconlist, sysparam.programpath+'images/minus.png');
-  II_Ok:=loadicon(iconlist, sysparam.programpath+'images/ok.png');
-  II_LayerOff:=loadicon(iconlist, sysparam.programpath+'images/off.png');
-  II_LayerOn:=loadicon(iconlist, sysparam.programpath+'images/on.png');
-  II_LayerUnPrint:=loadicon(iconlist, sysparam.programpath+'images/unprint.png');
-  II_LayerPrint:=loadicon(iconlist, sysparam.programpath+'images/print.png');
-  II_LayerUnLock:=loadicon(iconlist, sysparam.programpath+'images/unlock.png');
-  II_LayerLock:=loadicon(iconlist, sysparam.programpath+'images/lock.png');
-  II_LayerFreze:=loadicon(iconlist, sysparam.programpath+'images/freze.png');
-  II_LayerUnFreze:=loadicon(iconlist, sysparam.programpath+'images/unfreze.png');
-  II_Bug:=loadicon(iconlist, sysparam.programpath+'images/bug.png');
-  II_Dxf:=loadicon(iconlist, sysparam.programpath+'images/dxf.png');
-  II_Purge:=loadicon(iconlist, sysparam.programpath+'images/purge.png');
-  II_Refresh:=loadicon(iconlist, sysparam.programpath+'images/refresh.png');
+  II_Plus:=loadicon(iconlist, ProgramPath+'images/plus.png');
+  II_Minus:=loadicon(iconlist, ProgramPath+'images/minus.png');
+  II_Ok:=loadicon(iconlist, ProgramPath+'images/ok.png');
+  II_LayerOff:=loadicon(iconlist, ProgramPath+'images/off.png');
+  II_LayerOn:=loadicon(iconlist, ProgramPath+'images/on.png');
+  II_LayerUnPrint:=loadicon(iconlist, ProgramPath+'images/unprint.png');
+  II_LayerPrint:=loadicon(iconlist, ProgramPath+'images/print.png');
+  II_LayerUnLock:=loadicon(iconlist, ProgramPath+'images/unlock.png');
+  II_LayerLock:=loadicon(iconlist, ProgramPath+'images/lock.png');
+  II_LayerFreze:=loadicon(iconlist, ProgramPath+'images/freze.png');
+  II_LayerUnFreze:=loadicon(iconlist, ProgramPath+'images/unfreze.png');
+  II_Bug:=loadicon(iconlist, ProgramPath+'images/bug.png');
+  II_Dxf:=loadicon(iconlist, ProgramPath+'images/dxf.png');
+  II_Purge:=loadicon(iconlist, ProgramPath+'images/purge.png');
+  II_Refresh:=loadicon(iconlist, ProgramPath+'images/refresh.png');
 end;
 end.
 

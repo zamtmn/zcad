@@ -51,7 +51,6 @@ function PushCreateTGMultiObjectChangeCommand(var us:GDBObjOpenArrayOfUCommands;
 {ENDIF}
 
 implementation
-uses zcadinterface;
 
 constructor TGMultiObjectChangeCommand.Assign(const _dodata,_undodata:_T;const objcount:GDBInteger);
 begin

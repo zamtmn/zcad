@@ -1698,7 +1698,7 @@ begin
   dc.drawer:=PrinterDrawer;
   PrinterDrawer.pushMatrixAndSetTransform(pmatrix);
   PrinterDrawer.canvas:=Printer.Canvas;
-  gdb.GetCurrentROOT^.CalcVisibleByTree(cdwg^.pcamera^.frustum{calcfrustum(@_clip)},cdwg^.pcamera^.POSCOUNT,cdwg^.pcamera^.VISCOUNT,gdb.GetCurrentROOT^.ObjArray.ObjTree,cdwg^.pcamera^.totalobj,cdwg^.pcamera^.infrustum,@cdwg^.myGluProject2,cdwg^.pcamera^.prop.zoom);
+  gdb.GetCurrentROOT^.CalcVisibleByTree(cdwg^.pcamera^.frustum{calcfrustum(@_clip)},cdwg^.pcamera^.POSCOUNT,cdwg^.pcamera^.VISCOUNT,gdb.GetCurrentROOT^.ObjArray.ObjTree,cdwg^.pcamera^.totalobj,cdwg^.pcamera^.infrustum,@cdwg^.myGluProject2,cdwg^.pcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   //gdb.GetCurrentDWG^.OGLwindow1.draw;
   //prn.startrender;
   gdb.GetCurrentDWG^.wa.treerender(gdb.GetCurrentROOT^.ObjArray.ObjTree,0,{0}dc);

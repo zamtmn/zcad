@@ -189,8 +189,8 @@ TPropEditor=class(TComponent)
   {-}{/pGDBPointer=^GDBPointer;/}
   //pbooleab=^GDBBoolean;
  {TODO:огнегне}
-{EXPORT+}
 TTranslateFunction=function (const Identifier, OriginalValue: String): String;
+{EXPORT+}
 TTraceAngle=(
               TTA90(*'90 deg'*),
               TTA45(*'45 deg'*),

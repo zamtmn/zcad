@@ -141,6 +141,12 @@ type
                            procedure ZoomIn;override;
                            procedure ZoomOut;override;
                       end;
+var
+   sysvarDISPCursorSize:integer=10;
+   sysvarDISPOSSize:double=10;
+   SysVarDISPCrosshairSize:double=0.05;
+   sysvarDISPBackGroundColor:TRGB=(r:0;g:0;b:0;a:255);
+   sysvarRDMaxRenderTime:integer=0;
 implementation
 uses
      commandline;
@@ -260,7 +266,7 @@ begin
   tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[0],plx,Tempplane);
   tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[1],plx,Tempplane);
   dvertex:=geometry.VertexSub(tv2,tv1);
-  dvertex:=geometry.VertexMulOnSc(dvertex,SysVar.DISP.DISP_CrosshairSize^);
+  dvertex:=geometry.VertexMulOnSc(dvertex,SysVarDISPCrosshairSize);
   tv1:=VertexSub(mvertex,dvertex);
   tv2:=VertexAdd(mvertex,dvertex);
   dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.matrixs);
@@ -272,7 +278,7 @@ begin
   tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[2],ply,Tempplane);
   tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[3],ply,Tempplane);
   dvertex:=geometry.VertexSub(tv2,tv1);
-  dvertex:=geometry.VertexMulOnSc(dvertex,SysVar.DISP.DISP_CrosshairSize^*{gdb.GetCurrentDWG.OGLwindow1.}getviewcontrol.ClientWidth/{gdb.GetCurrentDWG.OGLwindow1.}getviewcontrol.ClientHeight);
+  dvertex:=geometry.VertexMulOnSc(dvertex,SysVarDISPCrosshairSize*{gdb.GetCurrentDWG.OGLwindow1.}getviewcontrol.ClientWidth/{gdb.GetCurrentDWG.OGLwindow1.}getviewcontrol.ClientHeight);
   tv1:=VertexSub(mvertex,dvertex);
   tv2:=VertexAdd(mvertex,dvertex);
   dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.matrixs);
@@ -287,7 +293,7 @@ begin
   tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[0],plz,Tempplane);
   tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[1],plz,Tempplane);
   dvertex:=geometry.VertexSub(tv2,tv1);
-  dvertex:=geometry.VertexMulOnSc(dvertex,SysVar.DISP.DISP_CrosshairSize^);
+  dvertex:=geometry.VertexMulOnSc(dvertex,SysVarDISPCrosshairSize);
   tv1:=VertexSub(mvertex,dvertex);
   tv2:=VertexAdd(mvertex,dvertex);
   dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.matrixs);
@@ -550,13 +556,12 @@ var
    q1,q2:gdbboolean;
    //currd:PTDrawing;
 begin //currd:=gdb.GetCurrentDWG;
-    if (sysvar.RD.RD_MaxRenderTime^<>0) then
+    if (sysvarRDMaxRenderTime<>0) then
     begin
      currtime:=now;
      decodetime(currtime-StartTime,Hour,Minute,Second,MilliSecond);
-     if assigned(sysvar.RD.RD_MaxRenderTime) then
-     if (sysvar.RD.RD_MaxRenderTime^<>0) then
-     if (sysvar.RD.RD_MaxRenderTime^-MilliSecond)<0 then
+     if (sysvarRDMaxRenderTime<>0) then
+     if (sysvarRDMaxRenderTime-MilliSecond)<0 then
                             begin
                                   result:=true;
                                   exit;
@@ -672,9 +677,9 @@ begin
   //-----------------------------------MakeCurrent;{не забыть что обычный контекст не делает себя текущим сам!}
 
 
-  foreground.r:=not(sysvar.RD.RD_BackGroundColor^.r);
-  foreground.g:=not(sysvar.RD.RD_BackGroundColor^.g);
-  foreground.b:=not(sysvar.RD.RD_BackGroundColor^.b);
+  foreground.r:=not(sysvarDISPBackGroundColor.r);
+  foreground.g:=not(sysvarDISPBackGroundColor.g);
+  foreground.b:=not(sysvarDISPBackGroundColor.b);
   dc:=CreateRC;
   needredrawbydrawer:=startpaint;
   needredraw:=needredrawbydrawer or needredraw;
@@ -690,7 +695,7 @@ begin
     inc(PDWG.Getpcamera^.DRAWCOUNT);
     dc.drawer.ClearStatesMachine;
 
-    dc.drawer.SetClearColor(sysvar.RD.RD_BackGroundColor^.r,sysvar.RD.RD_BackGroundColor^.g,sysvar.RD.RD_BackGroundColor^.b,sysvar.RD.RD_BackGroundColor^.a);
+    dc.drawer.SetClearColor(sysvarDISPBackGroundColor.r,sysvarDISPBackGroundColor.g,sysvarDISPBackGroundColor.b,sysvarDISPBackGroundColor.a);
     dc.drawer.ClearScreen(true);
 
     CalcOptimalMatrix;
@@ -840,7 +845,7 @@ begin
     dc.drawer.SetColor(255,255, 0,255);
     dc.drawer.SetLineWidth(2);
     dc.drawer.TranslateCoord2D(param.ospoint.dispcoord.x, getviewcontrol.clientheight - param.ospoint.dispcoord.y);
-    dc.drawer.ScaleCoord2D(sysvar.DISP.DISP_OSSize^,sysvar.DISP.DISP_OSSize^);
+    dc.drawer.ScaleCoord2D(sysvarDISPOSSize,sysvarDISPOSSize);
       if (param.ospoint.ostype = os_begin)or(param.ospoint.ostype = os_end) then
       begin
            dc.drawer.DrawClosedPolyLine2DInDCS([-1,  1,
@@ -1449,7 +1454,7 @@ end;
   if (param.md.mode and MGetControlpoint) <> 0 then
   begin
     param.nearesttcontrolpoint:=pdwg.GetSelObjArray.getnearesttomouse(param.md.mouse.x,param.height-param.md.mouse.y);
-    if (param.nearesttcontrolpoint.pcontrolpoint = nil) or (param.nearesttcontrolpoint.disttomouse > 2 * sysvar.DISP.DISP_CursorSize^) then
+    if (param.nearesttcontrolpoint.pcontrolpoint = nil) or (param.nearesttcontrolpoint.disttomouse > 2 * sysvarDISPCursorSize) then
     begin
       param.md.mouseglue := param.md.mouse;
       param.gluetocp := false;
@@ -2337,7 +2342,7 @@ var
   pdata:GDBPointer;
   DefaultRadius,DefaultTextRadius:GDBDouble;
 begin
-  DefaultRadius:=sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1;
+  DefaultRadius:=sysvarDISPCursorSize*sysvarDISPCursorSize+1;
   DefaultTextRadius:=(5*5)*DefaultRadius;
   param.ospoint.radius:=DefaultRadius;
   param.ospoint.ostype:=os_none;
@@ -2524,7 +2529,7 @@ var
   tm: DMatrix4D;
   td:gdbdouble;
 begin
-  td:=sysvar.DISP.DISP_CursorSize^*2;
+  td:=sysvarDISPCursorSize*2;
   param.mousefrustum   :=CalcDisplaySubFrustum(param.md.glmouse.x,param.md.glmouse.y,td,td,PDWG.Getpcamera.modelMatrix,PDWG.Getpcamera.projMatrix,PDWG.Getpcamera.viewport);
   param.mousefrustumLCS:=CalcDisplaySubFrustum(param.md.glmouse.x,param.md.glmouse.y,td,td,PDWG.Getpcamera.modelMatrixLCS,PDWG.Getpcamera.projMatrixLCS,PDWG.Getpcamera.viewport);
   exit;
@@ -2547,7 +2552,7 @@ begin
   //--oglsm.myglMatrixMode(GL_Projection);
   //--oglsm.myglpushmatrix;
   //--oglsm.myglLoadIdentity;
-  tm:=myPickMatrix(param.md.glmouse.x, param.md.glmouse.y, sysvar.DISP.DISP_CursorSize^ * 2, sysvar.DISP.DISP_CursorSize^ * 2, PDWG.Getpcamera^.viewport);
+  tm:=myPickMatrix(param.md.glmouse.x, param.md.glmouse.y, sysvarDISPCursorSize * 2, sysvarDISPCursorSize * 2, PDWG.Getpcamera^.viewport);
   //--oglsm.mygluPickMatrix(param.md.glmouse.x, param.md.glmouse.y, sysvar.DISP.DISP_CursorSize^ * 2, sysvar.DISP.DISP_CursorSize^ * 2, (@PDWG.Getpcamera^.viewport));
   //--oglsm.myglGetDoublev(GL_PROJECTION_MATRIX, @tm);
   param.mouseclipmatrix := MatrixMultiply(PDWG.Getpcamera^.projMatrix, tm);
@@ -3352,7 +3357,7 @@ begin
 
                                       currentontracdist:=vertexlen2df(temp.x, temp.y,param.md.glmouse.x,param.md.glmouse.y);
                                       if currentontracdist<lastontracdist then
-                                      if currentontracdist<sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1 then
+                                      if currentontracdist<sysvarDISPCursorSize*sysvarDISPCursorSize+1 then
                                       begin
                                       param.ospoint.worldcoord := ip.interceptcoord;
                                       param.ospoint.dispcoord := temp;

@@ -46,6 +46,7 @@ uses
   //
   zcregisterobjectinspector,
   zcregisterzscript,
+  zcregistergeneralwiewarea,
   //
   //next line load system.pas
   //

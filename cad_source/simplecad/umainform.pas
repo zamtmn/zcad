@@ -88,9 +88,6 @@ var
   pname:string;
   sgdraw:boolean;
   spath,altfont,temppath:gdbstring;
-  bccolor:trgb;
-  maxrendertime,cursorsize:GDBInteger;
-  OSSize,CrosshairSize:GDBDouble;
   OSMode:TGDBOSMode;
   ZoomFactor:GDBDouble;
   //rm:trestoremode;
@@ -159,16 +156,6 @@ begin
      sysvar.DWG.DWG_SystmGeometryDraw:=@sgdraw;//привязка настроек сетки/привязки к потрохам зкада через соответствующий указатель
      sysvar.DWG.DWG_SystmGeometryDraw^:=CheckBox1.Checked;
 
-     sysvar.RD.RD_BackGroundColor:=@bccolor;
-     sysvar.SYS.SYS_SystmGeometryColor:=@bccolor;
-     maxrendertime:=0;
-     sysvar.RD.RD_MaxRenderTime:=@maxrendertime;
-     OSSize:=10;
-     sysvar.DISP.DISP_OSSize:=@OSSize;
-     cursorsize:=10;
-     sysvar.DISP.DISP_CursorSize:=@cursorsize;
-     CrosshairSize:=0.05;
-     SysVar.DISP.DISP_CrosshairSize:=@CrosshairSize;
      ZoomFactor:=1.624;
      sysvar.DISP.DISP_ZoomFactor:=@ZoomFactor;
 

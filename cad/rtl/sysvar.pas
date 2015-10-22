@@ -2,6 +2,14 @@ unit sysvar;
 interface
 uses System;
 var
+  INTF_ObjInsp_WhiteBackground:GDBBoolean;
+  INTF_ObjInsp_ShowHeaders:GDBBoolean;
+  INTF_ObjInsp_ShowSeparator:GDBBoolean;
+  INTF_ObjInsp_OldStyleDraw:GDBBoolean;
+  INTF_ObjInsp_ShowFastEditors:GDBBoolean;
+  INTF_ObjInsp_ShowOnlyHotFastEditors:GDBBoolean;
+  INTF_ObjInsp_RowHeight_OverriderEnable:GDBBoolean;
+  INTF_ObjInsp_RowHeight_OverriderValue:GDBInteger;
   DWG_OSMode:GDBInteger;
   DWG_PolarMode:GDBBoolean;
   DWG_SystmGeometryDraw:GDBBoolean;
@@ -24,14 +32,6 @@ var
   INTF_DwgTabsPosition:TAlign;
   INTF_ShowDwgTabCloseBurron:GDBBoolean;
   INTF_DefaultControlHeight:GDBInteger;
-  INTF_ObjInsp_ShowHeaders:GDBBoolean;
-  INTF_ObjInsp_OldStyleDraw:GDBBoolean;
-  INTF_ObjInsp_WhiteBackground:GDBBoolean;
-  INTF_ObjInsp_ShowSeparator:GDBBoolean;
-  INTF_ObjInsp_ShowFastEditors:GDBBoolean;
-  INTF_ObjInsp_ShowOnlyHotFastEditors:GDBBoolean;
-  INTF_ObjInsp_RowHeight_OverriderEnable:GDBBoolean;
-  INTF_ObjInsp_RowHeight_OverriderValue:GDBInteger;
   INTF_ObjInsp_SpaceHeight:GDBInteger;
   INTF_ObjInsp_AlwaysUseMultiSelectWrapper:GDBBoolean;
   INTF_ObjInsp_ShowEmptySections:GDBBoolean;
@@ -50,6 +50,7 @@ var
   DISP_UnSelectedGripColor:TGDBPaletteColor;
   DISP_SelectedGripColor:TGDBPaletteColor;
   DISP_HotGripColor:TGDBPaletteColor;
+  DISP_BackGroundColor:TRGB;
   RD_UseStencil:GDBBoolean;
   RD_DrawInsidePaintMessage:TGDB3StateBool;
   RD_RemoveSystemCursorFromWorkArea:GDBBoolean;
@@ -64,7 +65,6 @@ var
   RD_GLUVersion:GDBString;
   RD_GLUExtensions:GDBString;
   RD_MaxWidth:GDBInteger;
-  RD_BackGroundColor:TRGB;
   RD_Restore_Mode:TRestoreMode;
   RD_LastRenderTime:GDBInteger;
   RD_LastUpdateTime:GDBInteger;
@@ -98,6 +98,14 @@ var
   pi:GDBDouble;
 implementation
 begin
+  INTF_ObjInsp_WhiteBackground:=False;
+  INTF_ObjInsp_ShowHeaders:=True;
+  INTF_ObjInsp_ShowSeparator:=True;
+  INTF_ObjInsp_OldStyleDraw:=False;
+  INTF_ObjInsp_ShowFastEditors:=True;
+  INTF_ObjInsp_ShowOnlyHotFastEditors:=True;
+  INTF_ObjInsp_RowHeight_OverriderEnable:=False;
+  INTF_ObjInsp_RowHeight_OverriderValue:=21;
   DWG_OSMode:=14311;
   DWG_PolarMode:=True;
   DWG_SystmGeometryDraw:=False;
@@ -123,17 +131,9 @@ begin
   INTF_DwgTabsPosition:=TATop;
   INTF_ShowDwgTabCloseBurron:=True;
   INTF_DefaultControlHeight:=27;
-  INTF_ObjInsp_ShowHeaders:=True;
-  INTF_ObjInsp_OldStyleDraw:=False;
-  INTF_ObjInsp_WhiteBackground:=False;
-  INTF_ObjInsp_ShowSeparator:=True;
-  INTF_ObjInsp_ShowFastEditors:=True;
-  INTF_ObjInsp_ShowOnlyHotFastEditors:=True;
-  INTF_ObjInsp_RowHeight_OverriderEnable:=False;
-  INTF_ObjInsp_RowHeight_OverriderValue:=21;
   INTF_ObjInsp_SpaceHeight:=3;
-  INTF_ObjInsp_AlwaysUseMultiSelectWrapper:=true;
-  INTF_ObjInsp_ShowEmptySections:=false;
+  INTF_ObjInsp_AlwaysUseMultiSelectWrapper:=True;
+  INTF_ObjInsp_ShowEmptySections:=False;
   INTF_DefaultEditorFontHeight:=0;
   VIEW_CommandLineVisible:=True;
   VIEW_HistoryLineVisible:=True;
@@ -160,8 +160,8 @@ begin
   RD_Renderer:='GeForce GTX 460/PCIe/SSE2';
   RD_Extensions:='';
   RD_Version:='4.3.0';
-  RD_GLUVersion:='Контекст OpenGL не создан';
-  RD_GLUExtensions:='Контекст OpenGL не создан';
+  RD_GLUVersion:='1.3';
+  RD_GLUExtensions:='GLU_EXT_nurbs_tessellator GLU_EXT_object_space_tess ';
   RD_MaxWidth:=10;
   RD_BackGroundColor.r:=0;
   RD_BackGroundColor.g:=0;
@@ -180,11 +180,11 @@ begin
   RD_SpatialNodeCount:=-1;
   RD_MaxLTPatternsInEntity:=10000;
   SAVE_Auto_Interval:=300;
-  SAVE_Auto_Current_Interval:=300;
+  SAVE_Auto_Current_Interval:=299;
   SAVE_Auto_FileName:='*autosave/autosave.dxf';
   SAVE_Auto_On:=True;
-  SYS_RunTime:=35;
-  SYS_Version:='0.9.8 Revision SVN:1076';
+  SYS_RunTime:=40;
+  SYS_Version:='0.9.8 Revision SVN:Unknown';
   SYS_SystmGeometryColor:=250;
   SYS_IsHistoryLineCreated:=True;
   SYS_AlternateFont:='GEWIND.SHX';

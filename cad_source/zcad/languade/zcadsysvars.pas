@@ -108,7 +108,6 @@ type
             RD_CurrentWAParam:TFaceTypedData;
             RD_GLUVersion:PGDBString;(*'GLU Version'*)(*oi_readonly*)
             RD_GLUExtensions:PGDBString;(*'GLU Extensions'*)(*oi_readonly*)
-            RD_BackGroundColor:PTRGB;(*'Background color'*)
             RD_UseStencil:PGDBBoolean;(*'Use STENCIL buffer'*)
             RD_MaxWidth:pGDBInteger;(*'Max width'*)(*oi_readonly*)
             RD_MaxLineWidth:PGDBDouble;(*'Max line width'*)(*oi_readonly*)
@@ -236,6 +235,7 @@ type
              DISP_DrawZAxis:PGDBBoolean;(*'Show Z axis'*)
              DISP_ColorAxis:PGDBBoolean;(*'Colored cursor'*)
              DISP_GripSize:PGDBInteger;(*'Grip size'*)
+             DISP_BackGroundColor:PTRGB;(*'Background color'*)
              DISP_UnSelectedGripColor:PTGDBPaletteColor;(*'Unselected grip color'*)
              DISP_SelectedGripColor:PTGDBPaletteColor;(*'Selected grip color'*)
              DISP_HotGripColor:PTGDBPaletteColor;(*'Hot grip color'*)

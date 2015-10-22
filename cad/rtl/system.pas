@@ -2,7 +2,7 @@ unit System;
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
 type
-//Generate on E:\zcad\CAD_SOURCE\zcad\languade\gdbasetypes.pas
+//Generate on E:\zcad\CAD_SOURCE\components\zebase\gdbasetypes.pas
 PGDBDouble=^GDBDouble;
 
 PGDBNonDimensionDouble=^GDBNonDimensionDouble;
@@ -41,7 +41,7 @@ itrec=packed record
             itp:GDBPointer;
             itc:GDBInteger;
       end;
-//Generate on E:\zcad\cad_source\zengine\gdb\gdbase.pas
+//Generate on E:\zcad\cad_source\components\zebase\gdbase.pas
 (*varcategoryforoi SUMMARY='Суммарно'*)
 (*varcategoryforoi CABLE='Параметры кабеля'*)
 (*varcategoryforoi DEVICE='Параметры устройства'*)
@@ -470,7 +470,7 @@ TGDBIntegerOverrider=packed record
   PTGDBPaletteColor=^TGDBPaletteColor;
   TGDBPaletteColor=GDBInteger;
   GDBPalette=packed array[0..255] of TDXFCOLOR;
-//Generate on E:\zcad\cad_source\zengine\u\UOpenArray.pas
+//Generate on E:\zcad\cad_source\components\zcontainers\UOpenArray.pas
 POpenArray=^OpenArray;
 OpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 Deleted:TArrayIndex;(*hidden_in_objinsp*)
@@ -480,7 +480,7 @@ OpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 constructor init(m,s:GDBInteger);
                 function GetElemCount:GDBInteger;
           end;
-//Generate on E:\zcad\cad_source\zengine\u\UGDBOpenArray.pas
+//Generate on E:\zcad\cad_source\components\zcontainers\UGDBOpenArray.pas
 PGDBOpenArray=^GDBOpenArray;
 GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(OpenArray)
                       PArray:GDBPointer;(*hidden_in_objinsp*)
@@ -512,7 +512,7 @@ GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(OpenArray)
                       function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
                       function AllocData(SData:GDBword):GDBPointer;virtual;abstract;
              end;
-//Generate on E:\zcad\cad_source\zengine\u\UGDBOpenArrayOfData.pas
+//Generate on E:\zcad\cad_source\components\zcontainers\UGDBOpenArrayOfData.pas
 PGDBOpenArrayOfData=^GDBOpenArrayOfData;
 GDBOpenArrayOfData={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                     function iterate(var ir:itrec):GDBPointer;virtual;abstract;
@@ -525,7 +525,7 @@ GDBOpenArrayOfData={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                     function InsertElement(index,dir:GDBInteger;p:GDBPointer):GDBPointer;
                     //function copyto(source:PGDBOpenArrayOfData):GDBInteger;virtual;abstract;
               end;
-//Generate on E:\zcad\cad_source\zengine\u\UGDBOpenArrayOfPointer.pas
+//Generate on E:\zcad\cad_source\components\zcontainers\UGDBOpenArrayOfPointer.pas
 PGDBOpenArrayOfGDBPointer=^GDBOpenArrayOfGDBPointer;
 GDBOpenArrayOfGDBPointer={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
@@ -540,7 +540,7 @@ GDBOpenArrayOfGDBPointer={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                       procedure RemoveFromArray(const pdata:GDBPointer);virtual;abstract;
                       procedure AddToArray(const pdata:GDBPointer);virtual;abstract;
              end;
-//Generate on E:\zcad\cad_source\zengine\u\UGDBOpenArrayOfPObjects.pas
+//Generate on E:\zcad\cad_source\components\zcontainers\UGDBOpenArrayOfPObjects.pas
 PGDBOpenArrayOfPObjects=^GDBOpenArrayOfPObjects;
 GDBOpenArrayOfPObjects={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfGDBPointer)
                              procedure cleareraseobj;virtual;abstract;
@@ -551,7 +551,7 @@ GDBOpenArrayOfPObjects={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfGDBPo
                              function GetObject(index:GDBInteger):PGDBaseObject;
                              destructor done;virtual;abstract;
                        end;
-//Generate on E:\zcad\cad_source\zengine\u\UGDBOpenArrayOfObjects.pas
+//Generate on E:\zcad\cad_source\components\zcontainers\UGDBOpenArrayOfObjects.pas
 PGDBOpenArrayOfObjects=^GDBOpenArrayOfObjects;
 GDBOpenArrayOfObjects={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                              procedure cleareraseobj;virtual;abstract;
@@ -695,7 +695,7 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                           function calcvisible(frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;abstract;
                           procedure resprojparam(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
                     end;
-//Generate on E:\zcad\cad_source\zengine\u\UGDBStringArray.pas
+//Generate on E:\zcad\cad_source\components\zcontainers\UGDBStringArray.pas
     PGDBGDBStringArray=^GDBGDBStringArray;
     GDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBString*)
                           constructor init(m:GDBInteger);
@@ -719,7 +719,7 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                     Selected:GDBInteger;
                     Enums:GDBGDBStringArray;
               end;
-//Generate on E:\zcad\cad_source\zengine\u\UGDBOpenArrayOfByte.pas
+//Generate on E:\zcad\cad_source\components\zcontainers\UGDBOpenArrayOfByte.pas
 PGDBOpenArrayOfByte=^GDBOpenArrayOfByte;
 GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                       ReadPos:GDBInteger;
@@ -736,7 +736,7 @@ GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                       function ReadData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
                       function PopData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
                       function ReadString(break, ignore: GDBString): shortString;inline;
-                      function ReadGDBString: {short}String;inline;
+                      function ReadGDBString: GDBString;inline;
                       function ReadString2:GDBString;inline;
                       function GetCurrentReadAddres:GDBPointer;virtual;abstract;
                       function Jump(offset:GDBInteger):GDBPointer;virtual;abstract;
@@ -1164,7 +1164,6 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
             RD_CurrentWAParam:TFaceTypedData;
             RD_GLUVersion:PGDBString;(*'GLU Version'*)(*oi_readonly*)
             RD_GLUExtensions:PGDBString;(*'GLU Extensions'*)(*oi_readonly*)
-            RD_BackGroundColor:PTRGB;(*'Background color'*)
             RD_UseStencil:PGDBBoolean;(*'Use STENCIL buffer'*)
             RD_MaxWidth:pGDBInteger;(*'Max width'*)(*oi_readonly*)
             RD_MaxLineWidth:PGDBDouble;(*'Max line width'*)(*oi_readonly*)
@@ -1288,6 +1287,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
              DISP_DrawZAxis:PGDBBoolean;(*'Show Z axis'*)
              DISP_ColorAxis:PGDBBoolean;(*'Colored cursor'*)
              DISP_GripSize:PGDBInteger;(*'Grip size'*)
+             DISP_BackGroundColor:PTRGB;(*'Background color'*)
              DISP_UnSelectedGripColor:PTGDBPaletteColor;(*'Unselected grip color'*)
              DISP_SelectedGripColor:PTGDBPaletteColor;(*'Selected grip color'*)
              DISP_HotGripColor:PTGDBPaletteColor;(*'Hot grip color'*)
@@ -1305,11 +1305,11 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
     VIEW:tview;(*'View'*)
     debug:tdebug;(*'Debug'*)
   end;
-//Generate on E:\zcad\cad_source\zcad\languade\uabstractunit.pas
+//Generate on E:\zcad\cad_source\components\zscriptbase\uabstractunit.pas
   PTAbstractUnit=^TAbstractUnit;
   TAbstractUnit={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseobject)
             end;
-//Generate on E:\zcad\cad_source\zcad\languade\varmandef.pas
+//Generate on E:\zcad\cad_source\components\zscriptbase\varmandef.pas
 TTraceAngle=(
               TTA90(*'90 deg'*),
               TTA45(*'45 deg'*),
@@ -1374,7 +1374,7 @@ varmanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                  procedure createbasevaluefromGDBString(varname: GDBString; varvalue: GDBString; var vd: vardesk);virtual;abstract;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: shortString): GDBBoolean;virtual;abstract;
            end;
-//Generate on E:\zcad\cad_source\zcad\languade\varman.pas
+//Generate on E:\zcad\cad_source\components\zscript\varman.pas
 ptypemanager=^typemanager;
 typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)
                   protected
@@ -2976,7 +2976,7 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble);virtual;abstract;
             function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;abstract;
             end;
-//Generate on E:\zcad\cad_source\zengine\u\UGDBOpenArrayOfTObjLinkRecord.pas
+//Generate on E:\zcad\cad_source\components\zcontainers\UGDBOpenArrayOfTObjLinkRecord.pas
 TGenLincMode=(EnableGen,DisableGen);
 PGDBOpenArrayOfTObjLinkRecord=^GDBOpenArrayOfTObjLinkRecord;
 GDBOpenArrayOfTObjLinkRecord={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=TObjLinkRecord*)
@@ -3573,23 +3573,23 @@ type
     DebugBoundingBbox:TBoundingBox;
     processObjConstruct:GDBBoolean;
   end;
-//Generate on E:\zcad\cad_source\zcad\languade\UUnitManager.pas
+//Generate on E:\zcad\cad_source\components\zscript\UUnitManager.pas
     PTUnitManager=^TUnitManager;
     TUnitManager={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)
                        currentunit:PTUnit;
                        NextUnitManager:PTUnitManager;
                        constructor init;
-                       function loadunit(fname:GDBString; pcreatedunit:PTSimpleUnit):ptunit;virtual;abstract;
-                       function parseunit(var f: GDBOpenArrayOfByte; pcreatedunit:PTSimpleUnit):ptunit;virtual;abstract;
-                       function changeparsemode(newmode:GDBInteger;var mode:GDBInteger):pasparsemode;
-                       function findunit(uname:GDBString):ptunit;virtual;abstract;
+                       function loadunit(PPaths:PGDBString;TranslateFunc:TTranslateFunction;fname:GDBString; pcreatedunit:PTSimpleUnit):ptunit;virtual;abstract;
+                       function parseunit(PPaths:PGDBString;TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfByte; pcreatedunit:PTSimpleUnit):ptunit;virtual;abstract;
+                       function changeparsemode(PPaths:PGDBString;TranslateFunc:TTranslateFunction;newmode:GDBInteger;var mode:GDBInteger):pasparsemode;
+                       function findunit(PPaths:PGDBString;TranslateFunc:TTranslateFunction;uname:GDBString):ptunit;virtual;abstract;
                        function FindOrCreateEmptyUnit(uname:GDBString):ptunit;virtual;abstract;
                        function internalfindunit(uname:GDBString):ptunit;virtual;abstract;
                        procedure SetNextManager(PNM:PTUnitManager);
-                       procedure LoadFolder(path: GDBString);
+                       procedure LoadFolder(PPaths:PGDBString;TranslateFunc:TTranslateFunction;path: GDBString);
                        procedure AfterObjectDone(p:PGDBaseObject);virtual;abstract;
                        procedure free;virtual;abstract;
-                       procedure CreateExtenalSystemVariable(varname,vartype:GDBString;pinstance:Pointer);
+                       procedure CreateExtenalSystemVariable(PPaths:PGDBString;sysunitname:GDBString;TranslateFunc:TTranslateFunction;varname,vartype:GDBString;pinstance:Pointer);
                  end;
 //Generate on E:\zcad\cad_source\zengine\u\UGDBNumerator.pas
 PGDBNumItem=^GDBNumItem;

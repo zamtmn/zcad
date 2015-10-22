@@ -20,7 +20,7 @@ unit GDBWithLocalCS;
 {$INCLUDE def.inc}
 
 interface
-uses uabstractunit,gdbpalette,gdbdrawcontext,ugdbdrawingdef,GDBCamera,zcadsysvars,gdbasetypes,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varmandef,GDBWithMatrix,
+uses uabstractunit,gdbpalette,gdbdrawcontext,ugdbdrawingdef,GDBCamera,gdbasetypes,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varmandef,GDBWithMatrix,
 GDBase,{gDBDescriptor,gdbobjectsconstdef,oglwindowdef,}geometry,dxflow,sysutils,memman,GDBSubordinated,UGDBLayerArray{,GDBGenericSubEntry};
 type
 //pprojoutbound:{-}PGDBOOutbound2DIArray{/GDBPointer/};
@@ -108,7 +108,7 @@ end;
 procedure GDBObjWithLocalCS.higlight;
 begin
   //oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
-  dc.drawer.SetColor(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
+  dc.drawer.SetColor(palette[dc.SystmGeometryColor].RGB);
   {oglsm.myglbegin(GL_lines);
   oglsm.myglVertex2d(ProjP_insert.x-10,ProjP_insert.y);
   oglsm.myglVertex2d(ProjP_insert.x+10,ProjP_insert.y);

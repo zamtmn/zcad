@@ -27,7 +27,7 @@ Panel Status;
     variable DWG_OSMode,osnap.bmp,Object snap,F3
     variable DWG_PolarMode,polar.bmp,Polar tracking,F10
     variable DWG_HelpGeometryDraw,#AG,Auxiliary graphics (connectivity, direction, etc.)
-    variable DWG_SystmGeometryDraw,#SG,System graphics (size, communication, etc. for debugging)
+    variable DISP_SystmGeometryDraw,#SG,System graphics (size, communication, etc. for debugging)
   }
 Panel ObjectSnap;
   {

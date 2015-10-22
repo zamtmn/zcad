@@ -20,7 +20,7 @@ unit GDBCurve;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBOpenArrayOfByte,UGDBLayerArray,gdbasetypes{,GDBGenericSubEntry},UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBPolyLine2DArray,UGDBPoint3DArray{,UGDBOpenArrayOfByte,varman},varmandef,
+uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,UGDBOpenArrayOfByte,UGDBLayerArray,gdbasetypes{,GDBGenericSubEntry},UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBPolyLine2DArray,UGDBPoint3DArray{,UGDBOpenArrayOfByte,varman},varmandef,
 GDBase,geometry,gdbobjectsconstdef,oglwindowdef,dxflow,sysutils,memman,GDBSubordinated;
 type
 //------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
@@ -47,7 +47,7 @@ GDBObjCurve={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
-                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                  procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
                  procedure endsnap(out osp:os_record; var pdata:GDBPointer);virtual;
 
@@ -70,7 +70,7 @@ GDBObjCurve={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
            end;
 {Export-}
 procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray;const closed:GDBBoolean);
-function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:GDBBoolean; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;
+function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:GDBBoolean; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;
 procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:os_record;const processaxis:taddotrac;const closed:GDBBoolean);
 function GetDirInPoint(const VertexArrayInWCS:GDBPoint3dArray;point:GDBVertex;closed:GDBBoolean):GDBVertex;
 implementation
@@ -596,7 +596,7 @@ begin
 
 end;
 *)
-function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:GDBBoolean; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;
+function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:GDBBoolean; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;
 const pnum=8;
 var t,d,e:GDBDouble;
     tv,n,v,dir:gdbvertex;
@@ -620,7 +620,7 @@ begin
      vertexnum:=onlygetsnapcount div pnum;
      osp.ostype:=os_none;
      case mode of
-              0:if (sysvar.dwg.DWG_OSMode^ and osm_endpoint)<>0
+              0:if (SnapMode and osm_endpoint)<>0
                 then
                 begin
                 osp.worldcoord:=PGDBArrayVertex(VertexArrayInWCS.parray)^[vertexnum];
@@ -628,7 +628,7 @@ begin
                 osp.ostype:=os_begin;
                 end;
              1:begin
-                if ((sysvar.dwg.DWG_OSMode^ and osm_4)<>0)and(vertexnum<>tc)
+                if ((SnapMode and osm_4)<>0)and(vertexnum<>tc)
                 then
                 begin
                 ///PVectotSnap(snaparray.getelement(vertexnum))^
@@ -639,7 +639,7 @@ begin
                 end;
                end;
              2:begin
-                if ((sysvar.dwg.DWG_OSMode^ and osm_3)<>0)and(vertexnum<>tc)
+                if ((SnapMode and osm_3)<>0)and(vertexnum<>tc)
                 then
                 begin
                 ///PVectotSnap(snaparray.getelement(vertexnum))^
@@ -649,7 +649,7 @@ begin
                 osp.ostype:=os_1_3;
                 end;
                end;
-              3:if ((sysvar.dwg.DWG_OSMode^ and osm_midpoint)<>0)and(vertexnum<>tc)
+              3:if ((SnapMode and osm_midpoint)<>0)and(vertexnum<>tc)
                 then
                 begin
                 ///PVectotSnap(snaparray.getelement(vertexnum))^
@@ -659,7 +659,7 @@ begin
                 osp.ostype:=os_midle;
                 end;
              4:begin
-                if ((sysvar.dwg.DWG_OSMode^ and osm_3)<>0)and(vertexnum<>tc)
+                if ((SnapMode and osm_3)<>0)and(vertexnum<>tc)
                 then
                 begin
                 ///PVectotSnap(snaparray.getelement(vertexnum))^
@@ -670,7 +670,7 @@ begin
                 end;
                end;
              5:begin
-                if ((sysvar.dwg.DWG_OSMode^ and osm_4)<>0)and(vertexnum<>tc)
+                if ((SnapMode and osm_4)<>0)and(vertexnum<>tc)
                 then
                 begin
                 ///PVectotSnap(snaparray.getelement(vertexnum))^
@@ -681,7 +681,7 @@ begin
                 end;
                end;
              6:begin
-                    if ((sysvar.dwg.DWG_OSMode^ and osm_perpendicular)<>0)then
+                    if ((SnapMode and osm_perpendicular)<>0)then
                     if ((vertexnum<(tc))){or((vertexnum=tc-1)and closed)}then
                     begin
                         pv1:=VertexArrayInWCS.getelement(vertexnum);
@@ -711,7 +711,7 @@ begin
                     end;
                end;
      7:begin
-            if ((sysvar.dwg.DWG_OSMode^ and osm_nearest)<>0) then
+            if ((SnapMode and osm_nearest)<>0) then
             if ((vertexnum<(tc)))then
             begin
                         pv1:=VertexArrayInWCS.getelement(vertexnum);
@@ -783,7 +783,7 @@ function GDBObjCurve.getsnap;
     //pv1:PGDBVertex;
     //pv2:PGDBVertex;
 begin
-     result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,false,param,ProjectProc);
+     result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,false,param,ProjectProc,snapmode);
 (*
      if onlygetsnapcount=VertexArrayInWCS.count*pnum then
      begin

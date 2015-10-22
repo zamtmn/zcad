@@ -21,7 +21,7 @@ unit GDBPlain;
 
 interface
 uses
- gdbdrawcontext,zcadsysvars,geometry,GDBWithLocalCS,gdbase,gdbasetypes,varmandef;
+ gdbdrawcontext,geometry,GDBWithLocalCS,gdbase,gdbasetypes,varmandef;
 type
 {EXPORT+}
 GDBObjPlain={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
@@ -37,7 +37,7 @@ procedure GDBObjPlain.DrawGeometry;
 var
   p: GDBVertex;
 begin
-  if (sysvar.DWG.DWG_SystmGeometryDraw^){and(POGLWnd.subrender=0)} then
+  if DC.SystmGeometryDraw{and(POGLWnd.subrender=0)} then
   begin
        {oglsm.myglbegin(GL_LINES);
        oglsm.myglvertex3dv(@outbound[0]);

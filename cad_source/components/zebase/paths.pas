@@ -20,12 +20,12 @@ unit paths;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses LCLProc,gdbasetypes,Forms{$IFNDEF DELPHI},fileutil{$ENDIF},sysutils;
+uses LCLProc,gdbasetypes{$IFNDEF DELPHI},fileutil{$ENDIF},sysutils;
 function ExpandPath(path:GDBString):GDBString;
-function FindInSupportPath(PPaths:PGDBString;FileName:GDBString):GDBString;
+function FindInSupportPath(PPaths:GDBString;FileName:GDBString):GDBString;
 function FindInPaths(Paths,FileName:GDBString):GDBString;
 function GetPartOfPath(out part:GDBString;var path:GDBString;const separator:GDBString):GDBString;
-var ProgramPath:string;
+var ProgramPath,SupportPath,TempPath:gdbstring;
 implementation
 //uses log;
 function FindInPaths(Paths,FileName:GDBString):GDBString;
@@ -95,7 +95,7 @@ begin
                        end;
      result:=part;
 end;
-function FindInSupportPath(PPaths:PGDBString;FileName:GDBString):GDBString;
+function FindInSupportPath(PPaths:GDBString;FileName:GDBString):GDBString;
 const
      FindInSupportPath='FindInSupportPath: found file:"%s"';
 var
@@ -119,9 +119,9 @@ begin
                                       {$ENDIF}
                                       exit;
                                  end;
-     if PPaths<>nil then
+     //if PPaths<>nil then
      begin
-     s:=PPaths^;
+     s:=PPaths;
      repeat
            GetPartOfPath(ts,s,'|');
            ts:=ExpandPath(ts);
@@ -163,4 +163,9 @@ if DirectoryExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)) then
 end;
 initialization
   programpath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)));
+  TempPath:=GetEnvironmentVariable('TEMP');
+  {$IFNDEF DELPHI}TempPath:=gettempdir;{$ENDIF}
+  if (TempPath[length(TempPath)]<>PathDelim)
+   then
+       TempPath:=TempPath+PathDelim;
 end.

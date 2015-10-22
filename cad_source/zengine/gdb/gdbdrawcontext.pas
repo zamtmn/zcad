@@ -18,7 +18,7 @@
 unit gdbdrawcontext;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,gdbase,uzglabstractdrawer,gdbobjectsconstdef,geometry;
+uses gdbpalette,gdbasetypes,gdbase,uzglabstractdrawer,gdbobjectsconstdef,geometry;
 type
 TDrawContext=packed record
                    VisibleActualy:TActulity;
@@ -37,6 +37,8 @@ TDrawContext=packed record
                    drawer:TZGLAbstractDrawer;
                    matrixs:tmatrixs;
                    pcamera:PGDBBaseCamera;
+                   SystmGeometryDraw:boolean;
+                   SystmGeometryColor:TGDBPaletteColor;
              end;
 function CreateAbstractRC:TDrawContext;
 implementation
@@ -60,6 +62,8 @@ begin
       result.matrixs.pprojMatrix:=@OneMatrix;
       result.matrixs.pviewport:=@DefaultVP;
       result.pcamera:=nil;
+      result.SystmGeometryDraw:=false;
+      result.SystmGeometryColor:=1;
 end;
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('gdbase.initialization');{$ENDIF}

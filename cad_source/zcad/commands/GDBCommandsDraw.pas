@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,zcmultiobjectcreateundocommand,zeentitiesmanager,uzglcanvasdrawer,zcobjectinspectormultiobjects,enitiesextendervariables,ugdbdrawing,gdbpalette,ugdbopenarrayofgdbdouble,texteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,zeentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,glstatemanager,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  generalviewarea,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,zcmultiobjectcreateundocommand,zeentitiesmanager,uzglcanvasdrawer,zcobjectinspectormultiobjects,enitiesextendervariables,ugdbdrawing,gdbpalette,ugdbopenarrayofgdbdouble,texteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,zeentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,glstatemanager,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   commandlinedef,strproc,
   gdbasetypes,commandline,GDBCommandsBase,
   plugins,
@@ -555,7 +555,7 @@ var //pb:PGDBObjBlockdef;
 begin
      counter:=0;
      savemousemode := gdb.GetCurrentDWG^.wa.param.md.mode;
-     saveosmode := sysvar.dwg.DWG_OSMode^;
+     saveosmode := sysvarDWGOSMode;
 
   pobj:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pobj<>nil then
@@ -623,7 +623,7 @@ var //pb:PGDBObjBlockdef;
 begin
      counter:=0;
      savemousemode := gdb.GetCurrentDWG^.wa.param.md.mode;
-     saveosmode := sysvar.dwg.DWG_OSMode^;
+     saveosmode := sysvarDWGOSMode;
 
   pobj:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pobj<>nil then

@@ -706,7 +706,7 @@ begin
 
           mem.init({$IFDEF DEBUGBUILD}'{71D987B4-8C57-4C62-8C12-CFC24A0A9C9A}',{$ENDIF}1024);
           SavedUnit^.SavePasToMem(mem);
-          mem.SaveToFile(expandpath(sysparam.programpath+'rtl'+PathDelim+'savedvar.pas'));
+          mem.SaveToFile(expandpath(ProgramPath+'rtl'+PathDelim+'savedvar.pas'));
           mem.done;
           end;
 
@@ -941,10 +941,10 @@ begin
                  else
                      begin
                      s:=Operands;
-                     filename:={utf8tosys}(sysparam.programpath+'components/'+s);
+                     filename:={utf8tosys}(ProgramPath+'components/'+s);
                      end;
   if not fileexists(filename) then
-                              filename:={utf8tosys}(sysparam.programpath+'components/defaultlayout.xml');
+                              filename:={utf8tosys}(ProgramPath+'components/defaultlayout.xml');
   LoadLayoutFromFile(Filename);
   exit;
   try
@@ -1003,10 +1003,10 @@ begin
   StandartActions:=TmyActionList.Create(self);
   if not assigned(StandartActions.Images) then
                              StandartActions.Images:=TImageList.Create(StandartActions);
-  StandartActions.brocenicon:=StandartActions.LoadImage(sysparam.programpath+
+  StandartActions.brocenicon:=StandartActions.LoadImage(ProgramPath+
   'menu/BMP/noimage.bmp');
-  StandartActions.LoadFromACNFile(sysparam.programpath+'menu/actions.acn');
-  StandartActions.LoadFromACNFile(sysparam.programpath+'menu/electrotech.acn');
+  StandartActions.LoadFromACNFile(ProgramPath+'menu/actions.acn');
+  StandartActions.LoadFromACNFile(ProgramPath+'menu/electrotech.acn');
   StandartActions.OnUpdate:=ActionUpdate;
 
   for i:=low(FileHistory) to high(FileHistory) do
@@ -1212,7 +1212,7 @@ var
   ST:TSystemTime;
   i:integer;
 begin
-     crashreportfilename:=sysvar.PATH.Temp_files^+'zcadcrashreport.txt';
+     crashreportfilename:=TempPath+'zcadcrashreport.txt';
      system.Assign(f,crashreportfilename);
      if FileExists(crashreportfilename) then
                                             system.Append(f)
@@ -1242,8 +1242,8 @@ begin
      Write(f,'  Compile time: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompileTime);
      Write(f,'  LCL version: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_LCLVersion);
      Write(f,'  Environment version: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion);
-     Write(f,'  Program  path: ');WriteLn(f,sysvar.PATH.Program_Run^);
-     Write(f,'  Temporary  path: ');WriteLn(f,sysvar.PATH.Temp_files^);
+     Write(f,'  Program  path: ');WriteLn(f,ProgramPath);
+     Write(f,'  Temporary  path: ');WriteLn(f,TempPath);
      WriteLn(f,'end.');
      system.close(f);
 
@@ -1431,7 +1431,7 @@ begin
   toolbars:=tstringlist.Create;
   toolbars.Sorted:=true;
   CreateInterfaceLists;
-  loadpanels(sysparam.programpath+'menu/mainmenu.mn');
+  loadpanels(ProgramPath+'menu/mainmenu.mn');
 
   if sysparam.standartinterface then
                                     CreateStandartInterface
@@ -1466,7 +1466,7 @@ begin
      begin
           if img[1]<>'#' then
                               begin
-                              img:={SysToUTF8}(sysparam.programpath)+'menu/BMP/'+img;
+                              img:={SysToUTF8}(ProgramPath)+'menu/BMP/'+img;
                               bmp:=Graphics.TBitmap.create;
                               bmp.LoadFromFile(img);
                               bmp.Transparent:=true;
@@ -1994,7 +1994,7 @@ begin
   LayoutBox:=TComboBox.Create(tb);
   LayoutBox.Style:=csDropDownList;
   LayoutBox.Sorted:=true;
-  FromDirIterator(sysparam.programpath+'components/','*.xml','',addfiletoLayoutbox,nil);
+  FromDirIterator(ProgramPath+'components/','*.xml','',addfiletoLayoutbox,nil);
   LayoutBox.OnChange:=ChangeLayout;
 
   s:=extractfilename(sysvar.PATH.LayoutFile^);
@@ -2005,7 +2005,7 @@ procedure MainForm.ChangeLayout(Sender:Tobject);
 var
     s:string;
 begin
-  s:=sysparam.programpath+'components/'+LayoutBox.text+'.xml';
+  s:=ProgramPath+'components/'+LayoutBox.text+'.xml';
   LoadLayoutFromFile(s);
 end;
 

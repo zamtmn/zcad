@@ -8,7 +8,7 @@ uses
   LCLType,Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, StdCtrls, Spin,
   {From ZCAD}
-  zeentitiesmanager,gdbdrawcontext,uzglopenglviewarea,abstractviewarea,zcadsysvars, {$ifdef dxfio}iodxf,{$endif}varmandef, UUnitManager,
+  generalviewarea,zeentitiesmanager,gdbdrawcontext,uzglopenglviewarea,abstractviewarea,zcadsysvars, {$ifdef dxfio}iodxf,{$endif}varmandef, UUnitManager,
   zcadinterface,zeentityfactory,UGDBLayerArray,geometry, GDBase, GDBasetypes,
   UGDBDescriptor,UGDBTextStyleArray,UGDBEntTree,GDB3DFace,
   GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,ugdbsimpledrawing,
@@ -86,11 +86,6 @@ var
   grid:GDBvertex2D;
   LPTime:Tdatetime;
   pname:string;
-  sgdraw:boolean;
-  spath,altfont,temppath:gdbstring;
-  OSMode:TGDBOSMode;
-  ZoomFactor:GDBDouble;
-  //rm:trestoremode;
 
 implementation
 
@@ -153,22 +148,7 @@ begin
 
      sysvar.DWG.DWG_Snap:=@Snap;//привязка настроек сетки/привязки к потрохам зкада через соответствующий указатель
      sysvar.DWG.DWG_GridSpacing:=@grid;//привязка настроек сетки/привязки к потрохам зкада через соответствующий указатель
-     sysvar.DWG.DWG_SystmGeometryDraw:=@sgdraw;//привязка настроек сетки/привязки к потрохам зкада через соответствующий указатель
-     sysvar.DWG.DWG_SystmGeometryDraw^:=CheckBox1.Checked;
-
-     ZoomFactor:=1.624;
-     sysvar.DISP.DISP_ZoomFactor:=@ZoomFactor;
-
-     spath:='';
-     sysvar.PATH.Fonts_Path:=@spath;
-     sysvar.PATH.Support_Path:=@spath;
-     altfont:='blablabla';
-     sysvar.SYS.SYS_AlternateFont:=@altfont;
-     temppath:=GetTempDir;
-     sysvar.PATH.Temp_files:=@temppath;
-
-     sysvar.dwg.DWG_OSMode:=@OSMode;
-
+     sysvarDISPSystmGeometryDraw:=CheckBox1.Checked;
 
      ugdbdescriptor.startup('','');
 
@@ -654,7 +634,7 @@ end;
 
 procedure TForm1.TreeChange(Sender: TObject);
 begin
-     sysvar.DWG.DWG_SystmGeometryDraw^:=CheckBox1.Checked;
+     sysvarDISPSystmGeometryDraw:=CheckBox1.Checked;
      UGDBDescriptor.redrawoglwnd;
 end;
 

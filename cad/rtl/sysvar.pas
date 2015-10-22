@@ -12,7 +12,6 @@ var
   INTF_ObjInsp_RowHeight_OverriderValue:GDBInteger;
   DWG_OSMode:GDBInteger;
   DWG_PolarMode:GDBBoolean;
-  DWG_SystmGeometryDraw:GDBBoolean;
   DWG_HelpGeometryDraw:GDBBoolean;
   DWG_EditInSubEntry:GDBBoolean;
   DWG_AdditionalGrips:GDBBoolean;
@@ -40,6 +39,8 @@ var
   VIEW_HistoryLineVisible:GDBBoolean;
   VIEW_ObjInspVisible:GDBBoolean;
   StatusPanelVisible:GDBBoolean;
+  DISP_SystmGeometryDraw:GDBBoolean;
+  DISP_SystmGeometryColor:GDBInteger;
   DISP_ZoomFactor:GDBDouble;
   DISP_CursorSize:GDBInteger;
   DISP_CrosshairSize:GDBDouble;
@@ -83,9 +84,8 @@ var
   SAVE_Auto_On:GDBBoolean;
   SYS_RunTime:GDBInteger;
   SYS_Version:GDBString;
-  SYS_SystmGeometryColor:GDBInteger;
   SYS_IsHistoryLineCreated:GDBBoolean;
-  SYS_AlternateFont:GDBString;
+  PATH_AlternateFont:GDBString;
   PATH_Device_Library:GDBString;
   PATH_Template_Path:GDBString;
   PATH_Template_File:GDBString;
@@ -108,7 +108,6 @@ begin
   INTF_ObjInsp_RowHeight_OverriderValue:=21;
   DWG_OSMode:=14311;
   DWG_PolarMode:=True;
-  DWG_SystmGeometryDraw:=False;
   DWG_HelpGeometryDraw:=True;
   DWG_EditInSubEntry:=False;
   DWG_AdditionalGrips:=False;
@@ -139,6 +138,8 @@ begin
   VIEW_HistoryLineVisible:=True;
   VIEW_ObjInspVisible:=True;
   StatusPanelVisible:=False;
+  DISP_SystmGeometryDraw:=False;
+  DISP_SystmGeometryColor:=250;
   DISP_ZoomFactor:=1.624;
   DISP_CursorSize:=6;
   DISP_CrosshairSize:=0.05;
@@ -185,9 +186,8 @@ begin
   SAVE_Auto_On:=True;
   SYS_RunTime:=40;
   SYS_Version:='0.9.8 Revision SVN:Unknown';
-  SYS_SystmGeometryColor:=250;
   SYS_IsHistoryLineCreated:=True;
-  SYS_AlternateFont:='GEWIND.SHX';
+  PATH_AlternateFont:='GEWIND.SHX';
   PATH_Device_Library:='*programdb|c:/zcad/userdb';
   PATH_Template_Path:='*template';
   PATH_Template_File:='default.dxf';

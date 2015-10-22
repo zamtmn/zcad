@@ -1109,6 +1109,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
              Device_Library:PGDBString;(*'Device base'*)
              Support_Path:PGDBString;(*'Support files'*)
              Fonts_Path:PGDBString;(*'Fonts'*)
+             Alternate_Font:PGDBString;(*'Alternate font file'*)
              Template_Path:PGDBString;(*'Templates'*)
              Template_File:PGDBString;(*'Default template'*)
              LayoutFile:PGDBString;(*'Current layout'*)
@@ -1203,9 +1204,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
              SYS_Version:PGDBString;(*'Program version'*)(*oi_readonly*)
              SSY_CompileInfo:tcompileinfo;(*'Build info'*)(*oi_readonly*)
              SYS_RunTime:PGDBInteger;(*'Uptime'*)(*oi_readonly*)
-             SYS_SystmGeometryColor:PTGDBPaletteColor;(*'Help color'*)
              SYS_IsHistoryLineCreated:PGDBBoolean;(*'IsHistoryLineCreated'*)(*oi_readonly*)
-             SYS_AlternateFont:PGDBString;(*'Alternate font file'*)
        end;
   tdwg=packed record
              DWG_DrawMode:PGDBBoolean;(*'Display line weights'*)
@@ -1231,7 +1230,6 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
              DWG_TextSize:PGDBDouble;
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)
-             DWG_SystmGeometryDraw:PGDBBoolean;(*'System geometry'*)
              DWG_HelpGeometryDraw:PGDBBoolean;(*'Help geometry'*)
              DWG_Snap:PGDBSnap2D;(*'Snap settings'*)
              DWG_GridSpacing:PGDBvertex2D;(*'Grid spacing'*)
@@ -1280,6 +1278,8 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
               INTF_OBJINSP_Properties:tobjinspinterface;(*'Object inspector properties'*)
              end;
   tdisp=packed record
+             DISP_SystmGeometryDraw:PGDBBoolean;(*'System geometry'*)
+             DISP_SystmGeometryColor:PTGDBPaletteColor;(*'Help color'*)
              DISP_ZoomFactor:PGDBDouble;(*'Mouse wheel scale factor'*)
              DISP_OSSize:PGDBDouble;(*'Snap aperture size'*)
              DISP_CursorSize:PGDBInteger;(*'Cursor size'*)
@@ -3904,6 +3904,7 @@ GDBFontManager={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArrayOfData}GDBName
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     destructor done;virtual;abstract;
                     function addFonf(FontPathName:GDBString):PGDBfont;
+                    procedure EnumerateFontFiles;
                     procedure EnumerateTTFFontFile(filename:GDBString);
                     procedure EnumerateSHXFontFile(filename:GDBString);
                     //function FindFonf(FontName:GDBString):GDBPointer;

@@ -359,7 +359,7 @@ end;
 procedure GDBObjGenericSubEntry.DrawBB;
 begin
   inherited;
-  if (sysvar.DWG.DWG_SystmGeometryDraw^){and(GDB.GetCurrentDWG.OGLwindow1.param.subrender=0)} then
+  if DC.SystmGeometryDraw{and(GDB.GetCurrentDWG.OGLwindow1.param.subrender=0)} then
   begin
 
   dc.drawer.SetColor(palette[{sysvar.SYS.SYS_SystmGeometryColor^+2}4].RGB);

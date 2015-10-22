@@ -47,7 +47,7 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  function GetObjTypeName:GDBString;virtual;
                  destructor done;virtual;
 
-                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  function IsHaveObjXData:GDBBoolean;virtual;
@@ -543,7 +543,7 @@ begin
      result:=true;
      case onlygetsnapcount of
      0:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_inspoint)<>0
+            if (SnapMode and osm_inspoint)<>0
             then
             begin
             osp.worldcoord:=P_insert_in_WCS;

@@ -19,7 +19,7 @@ unit registerenitiesfeatures;
 {$INCLUDE def.inc}
 
 interface
-uses zcadsysvars,intftranslations,sysutils,
+uses paths,zcadsysvars,intftranslations,sysutils,
      enitiesextendervariables,zcadstrconsts,shared,gdbobjectsconstdef,devices,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,dxflow,
      gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,gdbobjectextender,
      GDBSubordinated,GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,
@@ -64,7 +64,7 @@ var
     vardata:PTVariablesExtender;
 begin
      vardata:=PEnt^.GetExtension(typeof(TVariablesExtender));
-     usedunit:=pointer(units.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,_Value));
+     usedunit:=pointer(units.findunit(SupportPath,InterfaceTranslate,_Value));
      if vardata=nil then
      begin
           vardata:=addvariablestoentity(PEnt);
@@ -463,7 +463,7 @@ var
 begin
      if pos(DevicePrefix,pEntity^.name)=1 then
      begin
-         uou:=pointer(units.findunit(sysvar.PATH.Support_Path,InterfaceTranslate,pEntity^.name));
+         uou:=pointer(units.findunit(SupportPath,InterfaceTranslate,pEntity^.name));
          if uou<>nil then
                          begin
                               pentvarext:=pEntity^.GetExtension(typeof(TVariablesExtender));

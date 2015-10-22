@@ -349,8 +349,8 @@ begin
   dc.subrender := dc.subrender - 1;
   p:=VarObjArray.beginiterate(ir);
   //oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
-  dc.drawer.SetColor(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
-  if sysvar.DWG.DWG_SystmGeometryDraw^ then
+  dc.drawer.SetColor(palette[dc.SystmGeometryColor].RGB);
+  if DC.SystmGeometryDraw then
   begin
   if p<>nil then
   repeat
@@ -379,8 +379,8 @@ begin
   dc.subrender := dc.subrender - 1;
   p:=VarObjArray.beginiterate(ir);
   //oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
-  dc.drawer.SetColor(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
-  if sysvar.DWG.DWG_SystmGeometryDraw^ then
+  dc.drawer.SetColor(palette[dc.SystmGeometryColor].RGB);
+  if DC.SystmGeometryDraw then
   begin
   if p<>nil then
   repeat

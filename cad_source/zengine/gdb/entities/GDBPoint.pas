@@ -20,7 +20,7 @@ unit GDBPoint;
 {$INCLUDE def.inc}
 
 interface
-uses uabstractunit,zeentityfactory,gdbdrawcontext,dxflow,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
+uses uabstractunit,zeentityfactory,gdbdrawcontext,dxflow,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,memman;
 type
 {REGISTEROBJECTTYPE GDBObjPoint}
@@ -39,7 +39,7 @@ GDBObjPoint={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
@@ -191,7 +191,7 @@ begin
      result:=true;
      case onlygetsnapcount of
      0:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_point)<>0
+            if (SnapMode and osm_point)<>0
             then
             begin
             osp.worldcoord:=P_insertInWCS;

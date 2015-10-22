@@ -104,9 +104,9 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
 
                     function isonmouse(var popa:GDBOpenArrayOfPObjects;mousefrustum:ClipArray):GDBBoolean;virtual;
                     procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
-                    function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
+                    function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                     procedure endsnap(out osp:os_record; var pdata:GDBPointer);virtual;
-                    function getintersect(var osp:os_record;pobj:PGDBObjEntity; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
+                    function getintersect(var osp:os_record;pobj:PGDBObjEntity; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                     procedure higlight(var DC:TDrawContext);virtual;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                     function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;virtual;
@@ -307,10 +307,10 @@ begin
 end;
 procedure GDBObjEntity.DrawBB;
 begin
-  if (sysvar.DWG.DWG_SystmGeometryDraw^){and(GDB.GetCurrentDWG.OGLwindow1.param.subrender=0)} then
+  if DC.SystmGeometryDraw{and(GDB.GetCurrentDWG.OGLwindow1.param.subrender=0)} then
   begin
   //oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
-  dc.drawer.SetColor(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
+  dc.drawer.SetColor(palette[dc.SystmGeometryColor].RGB);
   dc.drawer.DrawAABB3DInModelSpace(vp.BoundingBox,dc.matrixs);
   end;
 end;

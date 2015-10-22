@@ -19,7 +19,7 @@
 unit iopalette;
 {$INCLUDE def.inc}
 interface
-uses gdbpalette,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
+uses paths,gdbpalette,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
      strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}log,sysutils,
      UGDBOpenArrayOfByte,gdbasetypes,SysInfo,gdbase;
 procedure readpalette(filename:string);
@@ -32,7 +32,7 @@ var
   line,sub:GDBString;
   f:GDBOpenArrayOfByte;
 begin
-  f.InitFromFile(sysparam.programpath+filename);
+  f.InitFromFile(ProgramPath+filename);
   while f.notEOF do
     begin
       line:=f.readGDBString;

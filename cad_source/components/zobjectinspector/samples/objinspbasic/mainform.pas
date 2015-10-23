@@ -92,7 +92,7 @@ begin
   data.pointerToOtherData:=nil;
 
   dummyAstring:=ExtractFileDir(ParamStr(0)); //get program path
-  RunTimeUnit:=units.loadunit(@dummyAstring,nil,dummyAstring+PathDelim+'runtimeloadeddata.pas',nil); //load runtime file with data types;
+  RunTimeUnit:=units.loadunit(dummyAstring,nil,dummyAstring+PathDelim+'runtimeloadeddata.pas',nil); //load runtime file with data types;
   AddEditorToType('GDBInteger',TBaseTypesEditors.BaseCreateEditor);//register standart editor to integer type
   AddEditorToType('GDBDouble',TBaseTypesEditors.BaseCreateEditor);//register standart editor to double type
   AddEditorToType('GDBString',TBaseTypesEditors.BaseCreateEditor);//register standart editor to string type

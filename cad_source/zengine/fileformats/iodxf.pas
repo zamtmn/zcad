@@ -374,6 +374,7 @@ begin
   additionalunit.init('temparraryunit');
   additionalunit.InterfaceUses.addnodouble(@SysUnit);
   group:=-1;
+  DC:=drawing.CreateDrawingRC;
   bylayerlt:=drawing.LTypeStyleTable.getAddres('ByLayer');
   while (f.notEOF) and (s <> exitGDBString) do
   begin
@@ -441,7 +442,7 @@ begin
                                                  begin
                                                       PGDBObjEntity(pobj)^.BuildGeometry(drawing);
                                                       //PGDBObjEntity(pobj)^.Format;
-                                                      PGDBObjEntity(pobj)^.FormatAfterDXFLoad(drawing);
+                                                      PGDBObjEntity(pobj)^.FormatAfterDXFLoad(drawing,dc);
                                                       PGDBObjEntity(pobj)^.FromDXFPostProcessAfterAdd;
                                                  end;
                                 end
@@ -472,7 +473,6 @@ begin
                                 end;
                                 if newowner=pointer($ffffffff) then
                                                            newowner:=newowner;
-                                DC:=drawing.CreateDrawingRC;
                                 if newowner<>owner then
                                 begin
                                      m4:=PGDBObjEntity(newowner)^.getmatrix^;
@@ -491,7 +491,7 @@ begin
                                               begin
                                                    PGDBObjEntity(postobj)^.BuildGeometry(drawing);
                                                    //PGDBObjEntity(postobj)^.Format;
-                                                   PGDBObjEntity(postobj)^.FormatAfterDXFLoad(drawing);
+                                                   PGDBObjEntity(postobj)^.FormatAfterDXFLoad(drawing,dc);
                                                    PGDBObjEntity(postobj)^.FromDXFPostProcessAfterAdd;
                                               end;
                                 end
@@ -1394,6 +1394,7 @@ var
   dxfversion,code:integer;
   h2p:TMapHandleToPointer;
   DWGVarsDict:TGDBString2GDBStringDictionary;
+  dc:TDrawContext;
 begin
   programlog.LogOutFormatStr('AddFromDXF("%s")',[name],lp_IncPos,LM_Debug);
   shared.HistoryOutStr(format(rsLoadingFile,[name]));
@@ -1449,7 +1450,8 @@ begin
       end;
   if assigned(EndLongProcessProc)then
     EndLongProcessProc;
-  owner^.calcbb;
+  dc:=drawing.CreateDrawingRC;
+  owner^.calcbb(dc);
   h2p.Destroy;
   DWGVarsDict.destroy;
   //GDBFreeMem(GDBPointer(phandlearray));

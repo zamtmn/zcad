@@ -20,11 +20,11 @@ unit GDBLine;
 {$INCLUDE def.inc}
 
 interface
-uses uabstractunit,zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,
-     ugdbltypearray,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,
+uses LCLProc,uabstractunit,zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,
+     UGDBOpenArrayOfPObjects,UGDBLayerArray,
      gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,
      UGDBOpenArrayOfByte,varmandef,GDBase,gdbobjectsconstdef,oglwindowdef,
-     geometry,dxflow,memman,shared;
+     geometry,dxflow,memman{,shared};
 type
                  {l_1_4:GDBvertex;(*hidden_in_objinsp*)
                  l_1_3:GDBvertex;(*hidden_in_objinsp*)
@@ -60,7 +60,7 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
+                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                   function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  //procedure feedbackinrect;virtual;
                  //function InRect:TInRect;virtual;
@@ -79,7 +79,7 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                   function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;
                   function GetObjTypeName:GDBString;virtual;
                   function GetCenterPoint:GDBVertex;virtual;
-                  procedure getoutbound;virtual;
+                  procedure getoutbound(var DC:TDrawContext);virtual;
                   function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                   function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
 
@@ -242,7 +242,7 @@ procedure GDBObjLine.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext)
 //var m:DMatrix4D;
 begin
   calcgeometry;
-  calcbb;
+  calcbb(dc);
   //l_1_4 := Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 4);
   //l_1_3 := Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 3);
   //l_1_2 := Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2);
@@ -295,62 +295,12 @@ begin
 end;
 
 function GDBObjLine.onmouse;
-//var t,tt,xx,yy:GDBDouble;
-//    d:GDBvertex2DI;
 begin
-     if {geometry.CalcTrueInFrustum (CoordInWCS.lBegin,CoordInWCS.lEnd,mf)}geom.CalcTrueInFrustum(mf,false)<>IREmpty
+     if geom.CalcTrueInFrustum(mf,false)<>IREmpty
                                                                           then
                                                                               result:=true
                                                                           else
                                                                               result:=false;
-  {
-  result:=false;
-
-  if pprojpoint=nil then
-                        begin
-                             //logerror('GDBObjLine.onmouse: pprojpoint=nil');
-                             exit;
-                        end;
-  d:=distance2piece_2_xy(poglwnd.md.glmouse,pprojpoint[0],pprojpoint[1]);
-  if (abs(d.x)<sysvar.DISP.DISP_CursorSize^)and
-     (abs(d.y)<sysvar.DISP.DISP_CursorSize^)
-                                               then result:=true;
-  if calcinfrustum(POGLWnd.mousefrustum) then
-                                             result:=true
-                                         else
-                                             result:=false;
-
-   }
-  {
-  tt:=(sqr(pdx)+sqr(pdy));
-  if tt=0 then
-              begin
-                   //logerror('GDBObjLine.onmouse: (sqr(pdx)+sqr(pdy))=0');
-                   exit;
-              end;
-  t:= -((pprojpoint[0].x-poglwnd.md.glmouse.x)*pdx+(pprojpoint[0].y-poglwnd.md.glmouse.y)*pdy)/
-        (tt);
-  if t<=0 then
-             begin
-                  if (abs(pprojpoint[0].x-poglwnd.md.glmouse.x)<sysvar.DISP.DISP_CursorSize^)and
-                     (abs(pprojpoint[0].y-poglwnd.md.glmouse.y)<sysvar.DISP.DISP_CursorSize^)
-                  then result:=true;
-             end
-         else if t>=1 then
-                         begin
-                              if (abs(pprojpoint[1].x-poglwnd.md.glmouse.x)<sysvar.DISP.DISP_CursorSize^)and
-                                 (abs(pprojpoint[1].y-poglwnd.md.glmouse.y)<sysvar.DISP.DISP_CursorSize^)
-                              then result:=true;
-                         end
-                     else
-                         begin
-                              xx:=pprojpoint[0].x+t*pdx;
-                              yy:=pprojpoint[0].y+t*pdy;
-                              if (abs(xx-poglwnd.md.glmouse.x)<sysvar.DISP.DISP_CursorSize^)and
-                                 (abs(yy-poglwnd.md.glmouse.y)<sysvar.DISP.DISP_CursorSize^)
-                              then result:=true;
-                         end;
-    }
 end;
 procedure GDBObjLine.DrawGeometry;
 var
@@ -363,15 +313,15 @@ begin
                      geom.DrawGeometry(DC);
                      exit;
                      end;
-  if vp.LineType<>nil then
+  {if vp.LineType<>nil then
      if vp.LineType.h>0 then
   begin
-  templod:=(vp.LineType.h*vp.LineTypeScale*SysVar.dwg.DWG_LTScale^)/({GDB.GetCurrentDWG.pcamera.prop}dc.zoom);
+  templod:=(vp.LineType.h*vp.LineTypeScale*SysVar.dwg.DWG_LTScale^)/(dc.zoom);
   if templod<3 then
      begin
      DC.Drawer.DrawLine3DInModelSpace(CoordInWCS.lBegin,CoordInWCS.lEnd,DC.matrixs);
      end;
-  end;
+  end;}
   inherited;
   {oglsm.myglbegin(GL_points);
   myglVertex3dV(@CoordInWCS.lBegin);
@@ -602,7 +552,7 @@ begin
             if not assigned(pgdbobjline(pobj)^.pprojpoint) then
                                                                begin
                                                                //pgdbobjline(pobj)^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
-                                                               shared.ShowError('Че за херня? для линии с которой считается пересечение оказывается еще не расчитаны дисплейные координаты...');
+                                                               debugln('Че за херня? для линии с которой считается пересечение оказывается еще не расчитаны дисплейные координаты...');
                                                                osp.ostype:=os_none;
                                                                exit;
                                                                end;

@@ -58,7 +58,7 @@ GDBObjAbstractText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlainWithOX)
                          procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                          function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                          function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
-                         function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
+                         function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                          //function InRect:TInRect;virtual;
                          procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                          procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
@@ -260,61 +260,6 @@ begin
                        end;
    end;}
 end;
-{
-версия в оконных координатах
-function GDBObjAbstractText.onmouse;
-var i,counter:GDBInteger;
-    d:GDBDouble;
-    ptpv0,ptpv1:PGDBPolyVertex2D;
-begin
-  result:=false;
-  if pprojoutbound^.count<4 then exit;
-  i:=pprojoutbound^.onmouse;
-  if i=2 then
-     begin
-          result:=true;
-          exit;
-     end;
-   if Vertex2D_in_DCS_Array.count=0 then
-   begin
-          //result:=true;
-          exit;
-   end;
-
-   if i=0 then
-              exit;
-
-   if Vertex2D_in_DCS_Array.count<2 then exit;
-   ptpv0:=Vertex2D_in_DCS_Array.parray;
-   ptpv1:=ptpv0;
-   inc(ptpv1);
-   counter:=0;
-   i:=0;
-   while i<(Vertex2D_in_DCS_Array.count-1) do
-   begin
-     if counter<=0 then counter:=ptpv0^.count;
-     d:=distance2piece(poglwnd^.md.glmouse,ptpv1^.coord,ptpv0^.coord);
-     if d<2*sysvar.DISP.DISP_CursorSize^ then
-     begin
-          result:=true;
-          exit;
-     end;
-     if counter<=0 then
-                       begin
-                            i:=i+2;
-                            inc(ptpv1,2);
-                            inc(ptpv0,2);
-                       end
-                   else
-                       begin
-                            inc(i);
-                            dec(counter);
-                            inc(ptpv1);
-                            inc(ptpv0);
-                       end;
-   end;
-end;
-}
 function GDBObjAbstractText.CalcInFrustum;
 var i:GDBInteger;
 begin

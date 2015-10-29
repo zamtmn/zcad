@@ -68,11 +68,24 @@ TDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
            procedure AddBlockFromDBIfNeed(name:GDBString);virtual;
            function GetUnitsFormat:TzeUnitsFormat;virtual;
            procedure SetUnitsFormat(f:TzeUnitsFormat);virtual;
+           function CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;virtual;
      end;
 {EXPORT-}
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
  uses UGDBDescriptor,GDBText,GDBDevice,GDBBlockInsert,iodxf, GDBManager,shared,commandline,log;
+function TDrawing.CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;
+var
+  vd:pvardesk;
+begin
+  result:=inherited;
+  vd:=nil;
+  if DWGUnit<>nil then
+    vd:=DWGUnit.InterfaceVariables.findvardesc('DWG_LTScale');
+  if vd<>nil then
+                 result.GlobalLTScale:=result.GlobalLTScale*PGDBDouble(vd^.data.Instance)^;
+end;
+
 function TDrawing.GetUnitsFormat:TzeUnitsFormat;
 begin
      result.DeciminalSeparator:=DDSDot;

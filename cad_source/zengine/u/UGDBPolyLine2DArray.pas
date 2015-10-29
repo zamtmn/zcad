@@ -19,7 +19,7 @@
 unit UGDBPolyLine2DArray;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,gdbasetypes,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
+uses {zcadsysvars,}gdbasetypes,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
      varmandef,glstatemanager;
 type
 {REGISTEROBJECTTYPE GDBPolyline2DArray}
@@ -30,7 +30,7 @@ GDBPolyline2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger;c:GDBBoolean);
                       constructor initnul;
 
-                      function onmouse(mc:GDBvertex2DI):GDBBoolean;virtual;
+                      //function onmouse(mc:GDBvertex2DI):GDBBoolean;virtual;
                       procedure DrawGeometry;virtual;
                       procedure optimize;virtual;
                       function _optimize:GDBBoolean;virtual;
@@ -237,8 +237,8 @@ begin
   end;
   end;
 end;
-function GDBPolyline2DArray.onmouse;
-var i{,counter}:GDBInteger;
+{function GDBPolyline2DArray.onmouse;
+var i:GDBInteger;
     d:GDBDouble;
     ptpv0,ptpv1:PGDBVertex2D;
 begin
@@ -261,7 +261,7 @@ begin
                             inc(ptpv0);
                        end;
    end;
-end;
+end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBPolyLine2DArray.initialization');{$ENDIF}
 end.

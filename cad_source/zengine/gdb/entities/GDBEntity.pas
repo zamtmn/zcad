@@ -20,7 +20,7 @@ unit GDBEntity;
 {$INCLUDE def.inc}
 interface
 uses uabstractunit,gdbpalette,gdbobjectextender,uzglabstractdrawer,gdbdrawcontext,ugdbdrawingdef,GDBCamera,
-     gdbvisualprop,uzglgeometry,ugdbltypearray,zcadsysvars,gdbasetypes,
+     gdbvisualprop,uzglgeometry,ugdbltypearray,{zcadsysvars,}gdbasetypes,
      UGDBControlPointArray,GDBSubordinated,
      {varman,}varmandef,GDBase,gdbobjectsconstdef,
      oglwindowdef,geometry,dxflow,sysutils,memman,UGDBOpenArrayOfByte,
@@ -91,18 +91,19 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                     procedure rtsave(refp:GDBPointer);virtual;
                     procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
-                    procedure getoutbound;virtual;
-                    procedure getonlyoutbound;virtual;
-                    procedure correctbb;virtual;
-                    function GetLTCorrectSize:GDBDouble;virtual;
-                    procedure calcbb;virtual;
+                    procedure getoutbound(var DC:TDrawContext);virtual;
+                    procedure getonlyoutbound(var DC:TDrawContext);virtual;
+                    procedure correctbb(var DC:TDrawContext);virtual;
+                    function GetLTCorrectH(GlobalLTScale:GDBDouble):GDBDouble;virtual;
+                    function GetLTCorrectL(GlobalLTScale:GDBDouble):GDBDouble;virtual;
+                    procedure calcbb(var DC:TDrawContext);virtual;
                     procedure DrawBB(var DC:TDrawContext);
                     function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
 
-                    function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
+                    function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                     function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
 
-                    function isonmouse(var popa:GDBOpenArrayOfPObjects;mousefrustum:ClipArray):GDBBoolean;virtual;
+                    function isonmouse(var popa:GDBOpenArrayOfPObjects;mousefrustum:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                     procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
                     function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                     procedure endsnap(out osp:os_record; var pdata:GDBPointer);virtual;
@@ -125,7 +126,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     function getmatrix:PDMatrix4D;virtual;
                     function getownermatrix:PDMatrix4D;virtual;
                     function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;
-                    function ReturnLastOnMouse:PGDBObjEntity;virtual;
+                    function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
                     function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
                     function YouDeleted(const drawing:TDrawingDef):GDBInteger;virtual;
                     procedure YouChanged(const drawing:TDrawingDef);virtual;
@@ -158,7 +159,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure correctsublayers(var la:GDBLayerArray);virtual;
                     procedure CopyVPto(var toObj:GDBObjEntity);virtual;
                     function CanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;inline;
-                    procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;
+                    procedure FormatAfterDXFLoad(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                     procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
                     class function GetDXFIOFeatures:TDXFEntIODataManager;
               end;
@@ -177,7 +178,7 @@ begin
      //format;
      CalcObjMatrix;
      CalcGeometry;
-     calcbb;
+     calcbb(dc);
 end;
 
 function GDBObjEntity.CanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;
@@ -727,17 +728,27 @@ begin
                            //if lend.z>=0 then CalcZ(lend.z);
                       end;}
 end;
-function GDBObjEntity.GetLTCorrectSize:GDBDouble;
+function GDBObjEntity.GetLTCorrectH(GlobalLTScale:GDBDouble):GDBDouble;
 var
    LT:PGDBLtypeProp;
 begin
       LT:=getLTfromVP(vp);
       if LT<>nil then
       begin
-           if SysVar.dwg.DWG_LTScale<>nil then
-                                              result:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale*LT.h
-                                          else
-                                              result:=vp.LineTypeScale*LT.h;
+           result:=GlobalLTScale*vp.LineTypeScale*LT.h
+      end
+         else
+         result:=0;
+
+end;
+function GDBObjEntity.GetLTCorrectL(GlobalLTScale:GDBDouble):GDBDouble;
+var
+   LT:PGDBLtypeProp;
+begin
+      LT:=getLTfromVP(vp);
+      if LT<>nil then
+      begin
+           result:=GlobalLTScale*vp.LineTypeScale*LT.len
       end
          else
          result:=0;
@@ -756,7 +767,7 @@ begin
      if cv.z<minoffsetstart then
                                 cv.z:=minoffsetstart;}
 
-      if self.vp.LineType<>nil then
+      {if self.vp.LineType<>nil then
       begin
            if SysVar.dwg.DWG_LTScale<>nil then
                                               d:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale*self.vp.LineType.len
@@ -764,11 +775,12 @@ begin
                                               d:=vp.LineTypeScale*self.vp.LineType.len;
       end
          else
-             d:=0;
+             d:=0;}
+     d:=GetLTCorrectL(dc.globalltscale);
      cv:=VertexSUB(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
      if (d>0)and(d*d<cv.x*cv.x+cv.y*cv.y+cv.z*cv.z) then
      begin
-     d:=GetLTCorrectSize;
+     d:=GetLTCorrectH(dc.globalltscale);
      cv:=createvertex(d,d,d);
      vp.BoundingBox.LBN:=VertexSUB(vp.BoundingBox.LBN,cv);
      vp.BoundingBox.RTF:=VertexAdd(vp.BoundingBox.RTF,cv);
@@ -776,15 +788,15 @@ begin
 end;
 procedure GDBObjEntity.calcbb;
 begin
-     getoutbound;
-     correctbb;
+     getoutbound(dc);
+     correctbb(dc);
 end;
 procedure GDBObjEntity.getoutbound;
 begin
 end;
 procedure GDBObjEntity.getonlyoutbound;
 begin
-     getoutbound;
+     getoutbound(dc);
 end;
 function GDBObjEntity.GetOsnapPoint;
 begin
@@ -800,7 +812,7 @@ end;
 function GDBObjEntity.isonmouse;
 begin
      if IsActualy then
-                          result:=onmouse(popa,{GDB.GetCurrentDWG.OGLwindow1.param.}mousefrustum)
+                          result:=onmouse(popa,{GDB.GetCurrentDWG.OGLwindow1.param.}mousefrustum,InSubEntry)
                       else
                           result:=false;
 end;

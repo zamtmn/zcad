@@ -20,7 +20,7 @@ unit GDBGenericSubEntry;
 {$INCLUDE def.inc}
 
 interface
-uses gdbpalette,gdbdrawcontext,UGDBDrawingdef,GDBCamera,zcadsysvars,UGDBLayerArray,UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
+uses gdbpalette,gdbdrawcontext,UGDBDrawingdef,GDBCamera,{zcadsysvars,}UGDBLayerArray,UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
 geometry{,GDB3d},{UGDBVisibleOpenArray,}gdbEntity,gdbobjectsconstdef,varmandef,memman,UGDBEntTree;
 type
 //GDBObjGenericSubEntry=object(GDBObjWithLocalCS)
@@ -45,7 +45,7 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
                             procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
-                            function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
+                            function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                             procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                             procedure FormatAfterEdit(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                             procedure restructure(const drawing:TDrawingDef);virtual;
@@ -61,11 +61,11 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                             {function SubMi(pobj:pGDBObjEntity):GDBInteger;virtual;}
                             function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;
                             function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
-                            function ReturnLastOnMouse:PGDBObjEntity;virtual;
+                            function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
                             procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
                             destructor done;virtual;
-                            procedure getoutbound;virtual;
-                            procedure getonlyoutbound;virtual;
+                            procedure getoutbound(var DC:TDrawContext);virtual;
+                            procedure getonlyoutbound(var DC:TDrawContext);virtual;
 
                             procedure DrawBB(var DC:TDrawContext);
 
@@ -452,8 +452,8 @@ begin
 end;
 function GDBObjGenericSubEntry.ReturnLastOnMouse;
 begin
-     if (sysvar.DWG.DWG_EditInSubEntry)^ then result:=lstonmouse
-                                          else result:=@self;
+     if InSubEntry then result:=lstonmouse
+                   else result:=@self;
 end;
 function GDBObjGenericSubEntry.MigrateTo;
 var p:pGDBObjEntity;
@@ -530,13 +530,13 @@ begin
 end;
 procedure GDBObjGenericSubEntry.getonlyoutbound;
 begin
-     vp.BoundingBox:=ObjArray.getonlyoutbound;
+     vp.BoundingBox:=ObjArray.getonlyoutbound(dc);
 end;
 procedure GDBObjGenericSubEntry.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 begin
   inherited FormatEntity(drawing,dc);
   ObjArray.FormatEntity(drawing,dc);
-  calcbb;
+  calcbb(dc);
   restructure(drawing);
 end;
 procedure GDBObjGenericSubEntry.formatafteredit;
@@ -548,7 +548,7 @@ begin
   ObjCasheArray.Formatafteredit(drawing,dc);
 
   ObjCasheArray.clear;
-  calcbb;
+  calcbb(dc);
   restructure(drawing);
 end;
 procedure GDBObjGenericSubEntry.restructure;
@@ -592,7 +592,7 @@ begin
        p:=pGDBPointer(ObjArray.getelement(i))^;
        if p<>nil then
        begin
-       ot:=p^.onmouse(popa,mf);
+       ot:=p^.onmouse(popa,mf,InSubEntry);
        if ot then
                  begin
                       lstonmouse:=p;

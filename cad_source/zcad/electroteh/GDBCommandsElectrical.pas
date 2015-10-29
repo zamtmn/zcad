@@ -231,8 +231,9 @@ var
    DC:TDrawContext;
 begin
           pbdef:=gdb.CurrentDWG^.BlockDefArray.getblockdef(bname);
+          dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
 
-          pbdef^.getonlyoutbound;
+          pbdef^.getonlyoutbound(dc);
           //pbdef^.calcbb;
           result:=pbdef.vp.BoundingBox;
 
@@ -240,7 +241,6 @@ begin
           pgdbins^.name:=bname;
           pgdbins^.Local.P_insert:=p;
           pgdbins^.BuildGeometry(gdb.GetCurrentDWG^);
-          dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
           pgdbins^.FormatEntity(gdb.GetCurrentDWG^,dc);
 
           //pointer(ptext):=gdb.CurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBMtextID,@gdb.CurrentDWG.ConstructObjRoot);
@@ -1311,7 +1311,7 @@ begin
             end;
     end;
     until mode=-1;
-    gdb.GetCurrentROOT.calcbb;
+    gdb.GetCurrentROOT.calcbb(dc);
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     oldfirstowner:=firstowner;
     gdb.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
@@ -2722,7 +2722,7 @@ var
     pvd{,pvd2}:pvardesk;
     pentvarext:PTVariablesExtender;
 begin
-  result := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
+  result := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateInitObj(GDBCableID,gdb.GetCurrentROOT));
   pentvarext:=result^.GetExtension(typeof(TVariablesExtender));
   pentvarext^.entityunit.copyfrom(units.findunit(SupportPath,InterfaceTranslate,'cable'));
   pvd:=pentvarext^.entityunit.FindVariable('NMO_Suffix');
@@ -3208,7 +3208,7 @@ begin
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   if assigned(ProcessLongProcessProc) then ProcessLongProcessProc(ir.itc);
   until pv=nil;
-  gdb.GetCurrentROOT.getoutbound;
+  gdb.GetCurrentROOT.getoutbound(dc);
   if assigned(EndLongProcessProc) then EndLongProcessProc;
 
   GDB.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;

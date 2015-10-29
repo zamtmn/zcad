@@ -107,7 +107,7 @@ type
                            procedure SetOTrackTimer(Sender: TObject);virtual;abstract;
                            procedure KillOHintTimer(Sender: TObject);virtual;abstract;
                            procedure SetOHintTimer(Sender: TObject);virtual;abstract;
-                           procedure getonmouseobjectbytree(Node:TEntTreeNode);virtual;abstract;
+                           procedure getonmouseobjectbytree(Node:TEntTreeNode;InSubEntry:GDBBoolean);virtual;abstract;
                            procedure getosnappoint(radius: GDBFloat);virtual;abstract;
                            procedure projectaxis;virtual;abstract;
                            procedure AddOntrackpoint;virtual;abstract;

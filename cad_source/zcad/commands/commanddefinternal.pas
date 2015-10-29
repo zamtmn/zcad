@@ -21,7 +21,7 @@ unit commanddefinternal;
 
 
 interface
-uses generalviewarea,gdbobjectsconstdef,zcadsysvars,geometry,varmandef,gdbasetypes,gdbase,commandlinedef,commandline,oglwindowdef,UGDBDescriptor
+uses gdbdrawcontext,generalviewarea,gdbobjectsconstdef,zcadsysvars,geometry,varmandef,gdbasetypes,gdbase,commandlinedef,commandline,oglwindowdef,UGDBDescriptor
   {,UGDBLayerArray},memman,shared;
 type
   comproc=procedure(_self:pointer);
@@ -328,6 +328,7 @@ end;
 
 function CommandRTEdObjectPlugin.AfterClick;
 var a:integer;
+   dc:TDrawContext;
 begin
      if assigned(onAfterClick) then
                                    begin
@@ -336,7 +337,8 @@ begin
 
                                         a:=onAfterClick(wc,mc,button,osp,mouseclic);
                                         mouseclic:=a;
-                                        gdb.GetCurrentROOT.getoutbound;
+                                        dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+                                        gdb.GetCurrentROOT.getoutbound(dc);
                                         result:=a;
                                         if (mouseclic=1)and(commandmanager.pcommandrunning<>nil) then BeforeClick(wc,mc,button,osp);
                                         //if mouseclic=0 then

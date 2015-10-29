@@ -42,7 +42,7 @@ GDBObjCurve={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
+                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
@@ -53,7 +53,7 @@ GDBObjCurve={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
 
                  destructor done;virtual;
                  function GetObjTypeName:GDBString;virtual;
-                 procedure getoutbound;virtual;
+                 procedure getoutbound(var DC:TDrawContext);virtual;
 
                  procedure AddVertex(Vertex:GDBVertex);virtual;
 
@@ -393,7 +393,7 @@ procedure GDBObjCurve.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext
         //ir:itrec;
 begin
   FormatWithoutSnapArray;
-  calcbb;
+  calcbb(dc);
   //------------BuildSnapArray(VertexArrayInWCS,snaparray,false);
 end;
 

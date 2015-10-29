@@ -20,7 +20,7 @@ unit GDBCamera;
 {$INCLUDE def.inc}
 
 interface
-uses zcadstrconsts,gdbase,{ogltypes,}gdbasetypes,geometry;
+uses LCLProc,gdbase,gdbasetypes,geometry;
 
 type
 GDBProjectProc=function (objcoord:GDBVertex; out wincoord:GDBVertex):Integer of object;
@@ -45,7 +45,7 @@ GDBObjCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBBaseCamera)
 {EXPORT-}
 
 implementation
-uses shared,log;
+//uses {shared,}log;
 procedure GDBObjCamera.NextPosition;
 begin
      Inc(POSCOUNT);
@@ -144,7 +144,7 @@ begin
       end;
 
       end else
-              ShowError('GDBObjCamera.MoveInLocalCSXY:'+rsDivByZero);
+              Debugln('GDBObjCamera.MoveInLocalCSXY:'+rsDivByZero);
               //shared.historyoutstr('Divide by zero');
 end;
 

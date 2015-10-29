@@ -39,6 +39,7 @@ TDrawContext=packed record
                    pcamera:PGDBBaseCamera;
                    SystmGeometryDraw:boolean;
                    SystmGeometryColor:TGDBPaletteColor;
+                   GlobalLTScale:GDBDouble;
              end;
 function CreateAbstractRC:TDrawContext;
 implementation
@@ -64,6 +65,7 @@ begin
       result.pcamera:=nil;
       result.SystmGeometryDraw:=false;
       result.SystmGeometryColor:=1;
+      result.GlobalLTScale:=1;
 end;
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('gdbase.initialization');{$ENDIF}

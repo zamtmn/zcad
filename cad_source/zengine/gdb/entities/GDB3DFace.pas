@@ -43,7 +43,7 @@ GDBObj3DFace={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  //function getsnap(var osp:os_record):GDBBoolean;virtual;
-                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
+                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
@@ -51,7 +51,7 @@ GDBObj3DFace={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
                  function GetObjTypeName:GDBString;virtual;
-                 procedure getoutbound;virtual;
+                 procedure getoutbound(var DC:TDrawContext);virtual;
 
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
@@ -117,7 +117,7 @@ begin
                                                         triangle:=true
                                                     else
                                                         triangle:=false;
-  calcbb;
+  calcbb(dc);
      p1.x:=PInWCS[0].x;
      p1.y:=PInWCS[0].y;
      p1.z:=PInWCS[0].z;

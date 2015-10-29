@@ -19,7 +19,7 @@
 unit UGDBControlPointArray;
 {$INCLUDE def.inc}
 interface
-uses gdbpalette,zcadsysvars,gdbdrawcontext,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase, geometry,
+uses gdbpalette,{zcadsysvars,}gdbdrawcontext,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase, geometry,
      memman;
 type
 {Export+}
@@ -29,7 +29,7 @@ GDBControlPointArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                            constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 
                            destructor done;virtual;
-                           procedure draw(var DC:TDrawContext);virtual;
+                           procedure draw(var DC:TDrawContext;const SelColor,UnSelColor:TRGB);virtual;
                            procedure getnearesttomouse(var td:tcontrolpointdist;mx,my:integer);virtual;
                            procedure selectcurrentcontrolpoint(key:GDBByte;mx,my,h:integer);virtual;
                            procedure freeelement(p:GDBPointer);virtual;
@@ -63,13 +63,13 @@ begin
        for i:=0 to count-1 do
        begin
             if point^.selected then
-                                   dc.drawer.SetColor(palette[sysvar.DISP.DISP_SelectedGripColor^].rgb)
+                                   dc.drawer.SetColor(SelColor)
                                else
                                    begin
                                         if point^.pobject<>nil then
                                                                    //dc.drawer.SetColor(0, 255, 50,0)
                                                                else
-                                                                   dc.drawer.SetColor(palette[sysvar.DISP.DISP_UnSelectedGripColor^].rgb)
+                                                                   dc.drawer.SetColor(UnSelColor)
                                    end;
             //glvertex2iv(@point^.dispcoord);
             dc.drawer.DrawPoint3DInModelSpace(point^.worldcoord,dc.matrixs);

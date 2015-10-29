@@ -19,7 +19,7 @@
 unit UGDBOutbound2DIArray;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,gdbasetypes,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
+uses {zcadsysvars,}gdbasetypes,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
      varmandef,glstatemanager;
 type
 {Export+}
@@ -32,7 +32,7 @@ GDBOOutbound2DIArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                       procedure addgdbvertex(point:GDBvertex);virtual;
                       procedure addlastgdbvertex(point:GDBvertex);virtual;
                       procedure clear;virtual;
-                      function onmouse(mc:GDBvertex2DI):GDBInteger;virtual;
+                      //function onmouse(mc:GDBvertex2DI):GDBInteger;virtual;
                       function InRect(Frame1, Frame2: GDBvertex2DI):TInBoundingVolume;virtual;
                       function perimetr:GDBDouble;virtual;
                 end;
@@ -153,9 +153,7 @@ begin
           result:=result+vertexlen2df(PGDBvertex2DIArray(parray)^[i].x, PGDBvertex2DIArray(parray)^[i].y,PGDBvertex2DIArray(parray)^[j].x,PGDBvertex2DIArray(parray)^[j].y);
      end;
 end;
-
-
-function GDBOOutbound2DIArray.onmouse;
+{function GDBOOutbound2DIArray.onmouse;
 var p:PGDBvertex2DI;
     i,j,cm,cp,cc:GDBInteger;
     d,t1,t2:GDBDouble;
@@ -190,12 +188,6 @@ begin
   begin
   if i<>cc then j:=i+1
            else j:=0;
-  {d:=PGDBvertex2DIArray(parray)^[i].x*poglwnd^.md.glmouse.y+
-     poglwnd^.md.glmouse.x*PGDBvertex2DIArray(parray)^[j].y+
-     PGDBvertex2DIArray(parray)^[j].x*PGDBvertex2DIArray(parray)^[i].y-
-     PGDBvertex2DIArray(parray)^[j].x*poglwnd^.md.glmouse.y-poglwnd^.md.glmouse.x*
-     PGDBvertex2DIArray(parray)^[i].y-PGDBvertex2DIArray(parray)^[i].x*
-     PGDBvertex2DIArray(parray)^[j].y;}
   t1:=PGDBvertex2DIArray(parray)^[i].x;
   t2:=mc.y;
   d:=t1*t2;
@@ -228,7 +220,7 @@ begin
    result:=1;
    end;
   end;
-end;
+end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBOutBound2DIArray.initialization');{$ENDIF}
 end.

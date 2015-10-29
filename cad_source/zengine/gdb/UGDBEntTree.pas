@@ -21,7 +21,7 @@ unit UGDBEntTree;
 interface
 uses
     {math,}graphics,
-    gdbdrawcontext,zcadsysvars,geometry,UGDBVisibleOpenArray,GDBEntity,gdbase,gdbasetypes,log,memman;
+    gdbdrawcontext,{zcadsysvars,}geometry,UGDBVisibleOpenArray,GDBEntity,gdbase,gdbasetypes,log,memman;
 const
      IninialNodeDepth=-1;
 type
@@ -72,9 +72,9 @@ TTestTreeNode=Object(GDBaseObject)
                     destructor done;virtual;
               end;
 TTestTreeArray=array [0..2] of TTestTreeNode;
-//const
-  //_InNodeCount=10;
-  {_NodeDepth=16;}
+var
+   SysVarRDSpatialNodeCount:integer=500;
+   SysVarRDSpatialNodesDepth:integer=16;
 function createtree(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
 function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
 procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext{subrender:GDBInteger});
@@ -251,10 +251,10 @@ var pobj:PGDBObjEntity;
 begin
      //_InNodeCount:=entitys.GetRealCount div {_NodeDepth + 1}(nodedepth+2);
      //if _InNodeCount<500 then _InNodeCount:=500;
-     if SysVar.RD.RD_SpatialNodeCount<>nil then
-                                               SpatialNodeCount:=SysVar.RD.RD_SpatialNodeCount^
-                                           else
-                                               SpatialNodeCount:=500;
+     //if SysVar.RD.RD_SpatialNodeCount<>nil then
+                                               SpatialNodeCount:=SysVarRDSpatialNodeCount;
+     //                                      else
+     //                                          SpatialNodeCount:=500;
      _InNodeCount:=GetInNodeCount(SpatialNodeCount);
      inc(nodedepth);
      if PRootNode<>nil then
@@ -272,10 +272,10 @@ begin
      result.minuscount:=0;
      result.Root:=_root;
      result.NodeDir:=dir;
-     if SysVar.RD.RD_SpatialNodesDepth<>nil then
-                                               SpatialNodesDepth:=SysVar.RD.RD_SpatialNodesDepth^
-                                           else
-                                               SpatialNodesDepth:=16;
+     //if SysVar.RD.RD_SpatialNodesDepth<>nil then
+                                               SpatialNodesDepth:=SysVarRDSpatialNodesDepth;
+     //                                      else
+     //                                          SpatialNodesDepth:=16;
      if ((entitys.Count<=_InNodeCount){and(nodedepth>1)})or(nodedepth>=SpatialNodesDepth) then
                                                 begin
                                                      //result.selected:=false;

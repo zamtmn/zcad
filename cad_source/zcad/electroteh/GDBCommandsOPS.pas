@@ -367,7 +367,7 @@ begin
        placedatcic(@gdb.GetCurrentROOT.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, dw, dd,@sdname[1],OPSPlaceSmokeDetectorOrtoParam.NormalizePoint,OPSPlaceSmokeDetectorOrtoParam.ScaleBlock);
        gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
 
-       gdb.GetCurrentROOT.calcbb;
+       gdb.GetCurrentROOT.calcbb(dc);
        if assigned(redrawoglwndproc) then redrawoglwndproc;
        historyout('Первый угол:');
        //commandend;
@@ -718,7 +718,7 @@ begin
                                          currentcoord, 1, 0,@datname[1]);
      dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
      pv^.formatentity(gdb.GetCurrentDWG^,dc);
-     pv^.getoutbound;
+     pv^.getoutbound(dc);
 
      lx:=pv.P_insert_in_WCS.x-pv.vp.BoundingBox.LBN.x;
      //rx:=pv.vp.BoundingBox.RTF.x-pv.P_insert_in_WCS.x;
@@ -867,7 +867,7 @@ begin
                   end;
                   Cable2CableMark(pcabledesk,pv);
                   pv^.formatentity(gdb.GetCurrentDWG^,dc);
-                  pv^.getoutbound;
+                  pv^.getoutbound(dc);
 
                   //lx:=pv.P_insert_in_WCS.x-pv.vp.BoundingBox.LBN.x;
                   //rx:=pv.vp.BoundingBox.RTF.x-pv.P_insert_in_WCS.x;
@@ -1225,7 +1225,7 @@ begin
        placedev(@gdb.GetCurrentROOT.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, NX, NY,@OrtoDevPlaceParam.Name[1],OrtoDevPlaceParam.Angle,OrtoDevPlaceParam.AutoAngle,OrtoDevPlaceParam.NormalizePoint);
        gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
 
-       gdb.GetCurrentROOT.calcbb;
+       gdb.GetCurrentROOT.calcbb(dc);
        if assigned(redrawoglwndproc) then redrawoglwndproc;
        historyout('Первый угол:');
        //commandend;

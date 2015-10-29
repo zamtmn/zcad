@@ -19,7 +19,7 @@
 unit UGDBSelectedObjArray;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,gdbdrawcontext,GDBCamera,{GDBWithLocalCS,}GDBWithMatrix,GDBEntity,UGDBControlPointArray,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
+uses gdbpalette,{zcadsysvars,}gdbdrawcontext,GDBCamera,{GDBWithLocalCS,}GDBWithMatrix,GDBEntity,UGDBControlPointArray,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
      gdbasetypes{,varmandef,gdbobjectsconstdef},memman,ugdbdrawingdef;
 type
 {Export+}
@@ -37,10 +37,10 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                           function addobject(objnum:PGDBObjEntity):pselectedobjdesc;virtual;
                           procedure clearallobjects;virtual;
                           procedure remappoints(pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                          procedure drawpoint(var DC:TDrawContext);virtual;
+                          procedure drawpoint(var DC:TDrawContext;const GripSize:GDBInteger; const SelColor,UnSelColor:TRGB);virtual;
                           procedure drawobject(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                           function getnearesttomouse(mx,my:integer):tcontrolpointdist;virtual;
-                          function getonlyoutbound:TBoundingBox;
+                          function getonlyoutbound(var DC:TDrawContext):TBoundingBox;
                           procedure selectcurrentcontrolpoint(key:GDBByte;mx,my,h:integer);virtual;
                           procedure RenderFeedBack(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                           //destructor done;virtual;
@@ -154,12 +154,12 @@ begin
   if count<>0 then
   begin
        tdesc:=parray;
-       dc.drawer.SetPointSize(sysvar.DISP.DISP_GripSize^);
+       dc.drawer.SetPointSize(GripSize);
        for i:=0 to count-1 do
        begin
             if tdesc^.pcontrolpoint<>nil then
             begin
-                 tdesc^.pcontrolpoint^.draw(dc);
+                 tdesc^.pcontrolpoint^.draw(dc,SelColor,UnSelColor);
             end;
             inc(tdesc);
        end;
@@ -554,7 +554,7 @@ begin
   end;
 
 end;
-function GDBSelectedObjArray.getonlyoutbound:TBoundingBox;
+function GDBSelectedObjArray.getonlyoutbound(var DC:TDrawContext):TBoundingBox;
 var
    i: GDBInteger;
    tdesc:pselectedobjdesc;
@@ -562,14 +562,14 @@ begin
   if count > 0 then
   begin
     tdesc:=parray;
-    tdesc^.objaddr^.getonlyoutbound;
+    tdesc^.objaddr^.getonlyoutbound(dc);
     result:=tdesc^.objaddr^.vp.BoundingBox;
     inc(tdesc);
     for i := 1 to count - 1 do
     begin
       if tdesc^.objaddr<>nil then
                                  begin
-                                   tdesc^.objaddr^.getonlyoutbound;
+                                   tdesc^.objaddr^.getonlyoutbound(dc);
                                    concatbb(result,tdesc^.objaddr^.vp.BoundingBox);
                                  end;
       inc(tdesc);

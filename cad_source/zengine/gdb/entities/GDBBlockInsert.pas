@@ -482,7 +482,7 @@ begin
           ConstObjArray.Shrink;
           end;
           self.BlockDesc:=pblockdef.BlockDesc;
-          self.getoutbound;
+          self.getoutbound(dc);
           inherited;
 end;
 function GDBObjBlockInsert.getosnappoint;

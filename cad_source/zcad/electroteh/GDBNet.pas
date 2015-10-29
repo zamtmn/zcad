@@ -44,7 +44,7 @@ GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
                  procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
 
                  destructor done;virtual;
-                 procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;
+                 procedure FormatAfterDXFLoad(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  function IsHaveGRIPS:GDBBoolean;virtual;
                  class function GetDXFIOFeatures:TDXFEntIODataManager;
            end;

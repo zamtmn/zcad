@@ -20,7 +20,7 @@ unit GDBSubordinated;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentityextender,gdbfieldprocessor,ugdbdrawingdef,strproc
+uses gdbdrawcontext,gdbentityextender,gdbfieldprocessor,ugdbdrawingdef,strproc
      {$IFNDEF DELPHI},LCLProc{$ENDIF},UGDBOpenArrayOfByte,
      gdbase,gdbasetypes,{varman,}{varmandef,}
      sysutils,UGDBLayerArray{,strutils};
@@ -55,7 +55,7 @@ GDBObjGenericWithSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjExtend
                                     function GetHandle:GDBPlatformint;virtual;
                                     function GetType:GDBPlatformint;virtual;
                                     function IsSelected:GDBBoolean;virtual;abstract;
-                                    procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;
+                                    procedure FormatAfterDXFLoad(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                                     procedure CalcGeometry;virtual;
 
                                     procedure Build(const drawing:TDrawingDef);virtual;

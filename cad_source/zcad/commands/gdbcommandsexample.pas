@@ -1021,6 +1021,78 @@ begin
     freeandnil(ArrayInsertFRM);
     result:=cmd_ok;
 end;
+function DrawPramougol_com(operands:TCommandOperands):TCommandResult;
+var
+    //pa:PGDBObjArc;
+    pline,pline1,pline2,pline3,pline4:PGDBObjLine;
+    pe,petemp:T3PointPentity;
+    dc:TDrawContext;
+begin
+    if commandmanager.get3dpoint('Specify first point:',pe.p1) then
+    begin
+         pline := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
+         pline^.CoordInOCS.lBegin:=pe.p1;
+         InteractiveLineEndManipulator(pline,pe.p1,false);
+      if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveLineEndManipulator,pline) then
+      begin
+
+           gdb.GetCurrentDWG^.FreeConstructionObjects;
+
+          {pline1 := GDBPointer(gdb.GetCurrentROOT^.ObjArray.CreateInitObj(GDBLineID,nil));
+          pline2 := GDBPointer(gdb.GetCurrentROOT^.ObjArray.CreateInitObj(GDBLineID,nil));
+          pline3 := GDBPointer(gdb.GetCurrentROOT^.ObjArray.CreateInitObj(GDBLineID,nil));
+          pline4 := GDBPointer(gdb.GetCurrentROOT^.ObjArray.CreateInitObj(GDBLineID,nil));}
+          pline1 := pointer(CreateInitObjFree(GDBLineID,nil));
+          pline2 := pointer(CreateInitObjFree(GDBLineID,nil));
+          pline3 := pointer(CreateInitObjFree(GDBLineID,nil));
+          pline4 := pointer(CreateInitObjFree(GDBLineID,nil));
+          GDBObjSetEntityCurrentProp(pline1);
+          GDBObjSetEntityCurrentProp(pline2);
+          GDBObjSetEntityCurrentProp(pline3);
+          GDBObjSetEntityCurrentProp(pline4);
+
+           pline1^.CoordInOCS.lBegin:=pe.p1;
+           pline2^.CoordInOCS.lBegin:=pe.p1;
+           pline3^.CoordInOCS.lBegin:=pe.p2;
+           pline4^.CoordInOCS.lBegin:=pe.p2;
+           InteractiveLineEndManipulator(pline1,pe.p1,false);
+           InteractiveLineEndManipulator(pline2,pe.p1,false);
+           InteractiveLineEndManipulator(pline3,pe.p2,false);
+           InteractiveLineEndManipulator(pline4,pe.p2,false);
+
+           petemp := pe ;
+           petemp.p1.x := pe.p2.x;
+
+           pline1^.CoordInOCS.lEnd:=petemp.p1;
+
+           petemp := pe ;
+           petemp.p1.y := pe.p2.y;
+           pline2^.CoordInOCS.lEnd:=petemp.p1;
+           petemp := pe;
+           petemp.p2.y := pe.p1.y;
+           pline3^.CoordInOCS.lEnd:=petemp.p2;
+           petemp := pe;
+           petemp.p2.x := pe.p1.x;
+           pline4^.CoordInOCS.lEnd:=petemp.p2;
+
+               dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+
+               pline1^.FormatEntity(gdb.GetCurrentDWG^,dc);
+
+               pline2^.FormatEntity(gdb.GetCurrentDWG^,dc);
+               pline3^.FormatEntity(gdb.GetCurrentDWG^,dc);
+               pline4^.FormatEntity(gdb.GetCurrentDWG^,dc);
+
+               {gdb.}AddEntToCurrentDrawingWithUndo(pline1);
+
+               {gdb.}AddEntToCurrentDrawingWithUndo(pline2);
+               {gdb.}AddEntToCurrentDrawingWithUndo(pline3);
+               {gdb.}AddEntToCurrentDrawingWithUndo(pline4);
+      end;
+    end;
+    result:=cmd_ok;
+end;
+
 
 initialization
 { write to log for the control initialization sequence }
@@ -1063,5 +1135,6 @@ initialization
      CreateCommandFastObjectPlugin(@GetLength_com,  'GetLength',  CADWG,0);
      CreateCommandFastObjectPlugin(@TestInsert1_com,'TestInsert1',CADWG,0);
      CreateCommandFastObjectPlugin(@TestInsert2_com,'TestInsert2',CADWG,0);
+     CreateCommandFastObjectPlugin(@DrawPramougol_com,       'test789',         CADWG,0);
 
 end.

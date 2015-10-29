@@ -47,7 +47,7 @@ GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
                  destructor done;virtual;
 
                  procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
-                 procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;
+                 procedure FormatAfterDXFLoad(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
 
                  //procedure CalcObjMatrix;virtual;
             end;
@@ -66,7 +66,7 @@ begin
 
      CalcGabarit(drawing);
 
-     calcbb;
+     calcbb(dc);
 end;
 procedure GDBObjMText.SimpleDrawGeometry;
 begin
@@ -480,7 +480,7 @@ begin
   CalcGabarit(drawing);
   //getoutbound;
   createpoint(drawing,dc);
-  calcbb;
+  calcbb(dc);
 end;
 
 procedure GDBObjMText.CalcGabarit;

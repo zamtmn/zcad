@@ -41,12 +41,12 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                    procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                    procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                   function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
-                   function ReturnLastOnMouse:PGDBObjEntity;virtual;
+                   function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
+                   function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
                    function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
                    function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
                    //function GetDeviceType:TDeviceType;virtual;
-                   procedure getoutbound;virtual;
+                   procedure getoutbound(var DC:TDrawContext);virtual;
 
                    //function AssignToVariable(pv:pvardesk):GDBInteger;virtual;
                    function GetObjTypeName:GDBString;virtual;
@@ -63,7 +63,7 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
 
                    function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
                    procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
-                   procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;
+                   procedure FormatAfterDXFLoad(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                    class function GetDXFIOFeatures:TDXFEntIODataManager;
              end;
 {EXPORT-}
@@ -244,7 +244,7 @@ procedure GDBObjDevice.getoutbound;
 var tbb:TBoundingBox;
 begin
      inherited;
-     tbb:=VarObjArray.{calcbb}getoutbound;
+     tbb:=VarObjArray.{calcbb}getoutbound(dc);
      if (tbb.LBN.x=tbb.RTF.x)
     and (tbb.LBN.y=tbb.RTF.y)
     and (tbb.LBN.z=tbb.RTF.z) then
@@ -299,7 +299,7 @@ begin
 end;
 function GDBObjDevice.ReturnLastOnMouse;
 begin
-     if (sysvar.DWG.DWG_EditInSubEntry)^ then
+     if (InSubEntry) then
                                               begin
                                                    if lstonmouse<>nil then
                                                                           result:=lstonmouse
@@ -315,14 +315,14 @@ var //t,xx,yy:GDBDouble;
     ot:GDBBoolean;
     ir:itrec;
 begin
-  result:=inherited onmouse(popa,mf);
+  result:=inherited onmouse(popa,mf,InSubEntry);
   p:=VarObjArray.beginiterate(ir);
   if p<>nil then
   repeat
-       ot:=p^.isonmouse(popa,mf);
+       ot:=p^.isonmouse(popa,mf,InSubEntry);
        if ot then
                  begin
-                      lstonmouse:=p^.ReturnLastOnMouse;
+                      lstonmouse:=p^.ReturnLastOnMouse(InSubEntry);
                       {PGDBObjOpenArrayOfPV}(popa).add(addr(p));
                  end;
        result:=result or ot;
@@ -532,14 +532,14 @@ procedure GDBObjDevice.FormatAfterDXFLoad;
 var
     p:pgdbobjEntity;
     ir:itrec;
-    DC:TDrawContext;
+    //DC:TDrawContext;
 begin
   //BuildVarGeometry;
   inherited;
   p:=VarObjArray.beginiterate(ir);
   if p<>nil then
   repeat
-       p^.FormatAfterDXFLoad(drawing);
+       p^.FormatAfterDXFLoad(drawing,dc);
        p:=VarObjArray.iterate(ir);
   until p=nil;
   {index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
@@ -548,10 +548,10 @@ begin
   self.BlockDesc:=pblockdef.BlockDesc;
   calcobjmatrix;
   CreateDeviceNameProcess(@self);}
-  dc:=drawing.createdrawingrc;
+  //dc:=drawing.createdrawingrc;
   ConstObjArray.FormatEntity(drawing,dc);
   VarObjArray.FormatEntity(drawing,dc);
-  calcbb;
+  calcbb(dc);
   //format;
 end;
 constructor GDBObjDevice.init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
@@ -660,7 +660,7 @@ begin
           ConstObjArray.FormatEntity(drawing,dc);
           VarObjArray.FormatEntity(drawing,dc);
      self.lstonmouse:=nil;
-     calcbb;
+     calcbb(dc);
 end;
 function AllocDevice:PGDBObjDevice;
 begin

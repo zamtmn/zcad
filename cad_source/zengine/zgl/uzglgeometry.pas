@@ -19,7 +19,9 @@
 unit uzglgeometry;
 {$INCLUDE def.inc}
 interface
-uses uzglgeneraldrawer,math,gdbdrawcontext,uzglabstractdrawer,uzgvertex3sarray,UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,ugdbltypearray,sysutils,gdbase,memman,log,
+uses uzglgeneraldrawer,math,gdbdrawcontext,uzglabstractdrawer,uzgvertex3sarray,
+     UGDBOpenArrayOfData,UGDBPoint3DArray,{zcadsysvars,}geometry,gdbvisualprop,
+     ugdbltypearray,sysutils,gdbase,memman,log,
      gdbasetypes,strproc,ugdbfont,uzglvectorobject;
 type
 {Export+}
@@ -64,6 +66,9 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
                 //function CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
              end;
 {Export-}
+var
+    sysvarDWGRotateTextInLT:boolean=true;
+    SysVarRDMaxLTPatternsInEntity:integer=1000;
 function getsymbol_fromGDBText(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
 implementation
 {function ZGLGeometry.CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
@@ -476,7 +481,7 @@ begin
     result:=onematrix;
     result:=MatrixMultiply(result,mscale);
 
-    if sysvar.DWG.DWG_RotateTextInLT^ then
+    if sysvarDWGRotateTextInLT then
     if (param.AD<>TACAbs) then
     if isNotReadableAngle(LineAngle) then
     begin
@@ -664,7 +669,7 @@ begin
             //SetPolyUnLTyped;
            polylength:=0;
            Segmentator.InitFromPolyline(points,polylength,closed,@self);
-           TangentScale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;
+           TangentScale:={SysVar.dwg.DWG_LTScale^}rc.GlobalLTScale*vp.LineTypeScale;
            NormalScale:=TangentScale;
            TrueNumberOfPatterns:=polylength/(TangentScale*LT.len);
            if ltgen and closed then
@@ -678,7 +683,7 @@ begin
                         minPatternsCount:=1;
                         NumberOfPatterns:=trunc(TrueNumberOfPatterns);
                         end;
-           if (NumberOfPatterns<minPatternsCount)or(NumberOfPatterns>SysVar.RD.RD_MaxLTPatternsInEntity^) then
+           if (NumberOfPatterns<minPatternsCount)or(NumberOfPatterns>SysVarRDMaxLTPatternsInEntity) then
                                                                                            SetPolyUnLTyped
            else
                begin
@@ -723,9 +728,9 @@ begin
      begin
           //LT:=getLTfromVP(vp);
           length := Vertexlength(startpoint,endpoint);//длина линии
-          scale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;//фактический масштаб линии
+          scale:={SysVar.dwg.DWG_LTScale^}rc.GlobalLTScale*vp.LineTypeScale;//фактический масштаб линии
           num:=Length/(scale*LT.len);//количество повторений шаблона
-          if (num<1)or(num>SysVar.RD.RD_MaxLTPatternsInEntity^) then
+          if (num<1)or(num>SysVarRDMaxLTPatternsInEntity) then
                                      DrawLineWithoutLT(rc,startpoint,endpoint) //не рисуем шаблон при большом количестве повторений
           else
           begin

@@ -169,7 +169,7 @@ var ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
     pentvarext,pentvarextcirrobj:PTVariablesExtender;
 begin
   inherited;
-  calcbb;
+  calcbb(dc);
   psldb:=drawing.GetLayerTable^.{gdb.GetCurrentDWG.LayerTable.}getAddres('SYS_DEVICE_BORDER');
 
   //CreateDeviceNameProcess(@self);
@@ -331,8 +331,8 @@ begin
                                     end;
                     inc(count);
                     CurrentObj^.FormatEntity(drawing,dc);
-                    CurrentObj^.getoutbound;
-                    CurrentObj^.calcbb;
+                    CurrentObj^.getoutbound(dc);
+                    CurrentObj^.calcbb(dc);
                     end;
 
                     ptn:=NodePropArray.iterate(ir_inNodeArray);

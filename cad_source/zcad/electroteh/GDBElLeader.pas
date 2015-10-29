@@ -30,10 +30,10 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
 
             procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
             procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-            procedure getoutbound;virtual;
+            procedure getoutbound(var DC:TDrawContext);virtual;
             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
             function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
-            function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
+            function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
             procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
             procedure addcontrolpoints(tdesc:GDBPointer);virtual;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
@@ -48,7 +48,7 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
             procedure DXFOut(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
             function GetObjTypeName:GDBString;virtual;
-            function ReturnLastOnMouse:PGDBObjEntity;virtual;
+            function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
             function ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
             function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
             procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
@@ -279,7 +279,7 @@ begin
                      if IsPointInBB(mainline.CoordInWCS.lBegin,pobj^.vp.BoundingBox) then
                      //if PGDBObjDevice(pobj).BlockDesc.BBorder=BB_Self then
                      begin
-                     bb:=PGDBObjDevice(pobj)^.ConstObjArray.getoutbound;
+                     bb:=PGDBObjDevice(pobj)^.ConstObjArray.getoutbound(dc);
                      if IsPointInBB(mainline.CoordInWCS.lBegin,bb) then
                      begin
                                pdev:=pointer(pobj);
@@ -323,7 +323,7 @@ begin
                 if IsPointInBB(mainline.CoordInWCS.lBegin,pobj^.vp.BoundingBox) then
                 //if PGDBObjDevice(pobj).BlockDesc.BBorder=BB_Self then
                 begin
-                bb:=PGDBObjDevice(pobj)^.ConstObjArray.getoutbound;
+                bb:=PGDBObjDevice(pobj)^.ConstObjArray.getoutbound(dc);
                 if IsPointInBB(mainline.CoordInWCS.lBegin,bb) then
                 begin
                           pdev:=pointer(pobj);
@@ -578,13 +578,13 @@ var //t,xx,yy:GDBDouble;
     //    ir:itrec;
 begin
   result:=false;
-  ot:=inherited onmouse(popa,mf);
+  ot:=inherited onmouse(popa,mf,InSubEntry);
   result:=result or ot;
-  ot:=MainLine.onmouse(popa,mf);
+  ot:=MainLine.onmouse(popa,mf,InSubEntry);
   result:=result or ot;
-  ot:=Tbl.onmouse(popa,mf);
+  ot:=Tbl.onmouse(popa,mf,InSubEntry);
   result:=result or ot;
-  ot:=MarkLine.onmouse(popa,mf);
+  ot:=MarkLine.onmouse(popa,mf,InSubEntry);
   result:=result or ot;
 end;
 function GDBObjElLeader.CalcInFrustum;

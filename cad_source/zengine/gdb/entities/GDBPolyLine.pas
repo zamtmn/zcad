@@ -40,7 +40,7 @@ GDBObjPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
-                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
+                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  function GetLength:GDBDouble;virtual;
@@ -98,7 +98,7 @@ end;
 procedure GDBObjPolyline.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
 begin
   FormatWithoutSnapArray;
-  calcbb;
+  calcbb(dc);
   //-------------BuildSnapArray(VertexArrayInWCS,snaparray,Closed);
   Geom.Clear;
   if VertexArrayInWCS.Count>1 then

@@ -51,7 +51,7 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                 procedure getoutbound;virtual;
+                 procedure getoutbound(var DC:TDrawContext);virtual;
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
@@ -60,7 +60,7 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  procedure rtsave(refp:GDBPointer);virtual;
                  procedure createpoint;virtual;
                  procedure projectpoint;virtual;
-                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
+                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                  //procedure higlight;virtual;
                  function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                  //function InRect:TInRect;virtual;
@@ -290,7 +290,7 @@ begin
   q2:=VectorTransform3d(CreateVertex(-1,0,0),objMatrix);
   q3:=VectorTransform3d(CreateVertex(0,1,0),objMatrix);
   //getoutbound;
-  calcbb;
+  calcbb(dc);
   Geom.Clear;
   Geom.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,true,true);
 end;
@@ -550,7 +550,7 @@ begin
       result:=true;
       for i:=0 to 5 do
       begin
-      if(frustum[i][0] * P_insert_in_WCS.x + frustum[i][1] * P_insert_in_WCS.y + frustum[i][2] * P_insert_in_WCS.z + frustum[i][3]+radius+GetLTCorrectSize < 0 )
+      if(frustum[i][0] * P_insert_in_WCS.x + frustum[i][1] * P_insert_in_WCS.y + frustum[i][2] * P_insert_in_WCS.z + frustum[i][3]+radius{+GetLTCorrectH} < 0 )
       then
       begin
            result:=false;
@@ -564,7 +564,7 @@ var i{,count}:GDBInteger;
 begin
       for i:=0 to 5 do
       begin
-      if(frustum[i][0] * P_insert_in_WCS.x + frustum[i][1] * P_insert_in_WCS.y + frustum[i][2] * P_insert_in_WCS.z + frustum[i][3]+radius+GetLTCorrectSize < 0 )
+      if(frustum[i][0] * P_insert_in_WCS.x + frustum[i][1] * P_insert_in_WCS.y + frustum[i][2] * P_insert_in_WCS.z + frustum[i][3]+radius{+GetLTCorrectH} < 0 )
       then
       begin
            result:=IREmpty;

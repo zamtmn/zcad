@@ -48,10 +48,10 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  function FromDXFPostProcessBeforeAdd(ptu:PTAbstractUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
-                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
+                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
-                 procedure getoutbound;virtual;
+                 procedure getoutbound(var DC:TDrawContext);virtual;
 
            end;
 {Export-}
@@ -228,7 +228,7 @@ begin
 
   Geom.Clear;
   Geom.DrawPolyLineWithLT(dc,AproxPointInWCS,vp,closed,false);
-  calcbb;
+  calcbb(dc);
 end;
 
 function GDBObjSpline.FromDXFPostProcessBeforeAdd;

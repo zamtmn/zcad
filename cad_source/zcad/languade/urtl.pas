@@ -65,10 +65,10 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_DrawGrid,'DWG_DrawGrid');
   //SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_SystmGeometryDraw,'DWG_SystmGeometryDraw');
   SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_HelpGeometryDraw,'DWG_HelpGeometryDraw');
-  SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_EditInSubEntry,'DWG_EditInSubEntry');
+  //SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_EditInSubEntry,'DWG_EditInSubEntry');
   SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_AdditionalGrips,'DWG_AdditionalGrips');
   SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_SelectedObjToInsp,'DWG_SelectedObjToInsp');
-  SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_RotateTextInLT,'DWG_RotateTextInLT');
+  //SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_RotateTextInLT,'DWG_RotateTextInLT');
 
   SysVarUnit.AssignToSymbol(SysVar.DSGN.DSGN_TraceAutoInc,'DSGN_TraceAutoInc');
   SysVarUnit.AssignToSymbol(SysVar.DSGN.DSGN_LeaderDefaultWidth,'DSGN_LeaderDefaultWidth');
@@ -87,8 +87,8 @@ initialization;
   //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_DrawZAxis,'DISP_DrawZAxis');
   //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_ColorAxis,'DISP_ColorAxis');
   //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_GripSize,'DISP_GripSize');
-  SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_SelectedGripColor,'DISP_SelectedGripColor');
-  SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_UnSelectedGripColor,'DISP_UnSelectedGripColor');
+  //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_SelectedGripColor,'DISP_SelectedGripColor');
+  //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_UnSelectedGripColor,'DISP_UnSelectedGripColor');
   //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_HotGripColor,'DISP_HotGripColor');
 
   //SysVarUnit.AssignToSymbol(SysVar.MISC.PMenuProjType,'PMenuProjType');

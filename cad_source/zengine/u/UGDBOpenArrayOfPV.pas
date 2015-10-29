@@ -40,8 +40,8 @@ GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects
                       function CreateInitObj(t: GDBByte;owner:GDBPointer):PGDBObjSubordinated;virtual;
                       function calcbb:TBoundingBox;
                       function calcvisbb(infrustumactualy:TActulity):TBoundingBox;
-                      function getoutbound:TBoundingBox;
-                      function getonlyoutbound:TBoundingBox;
+                      function getoutbound(var DC:TDrawContext):TBoundingBox;
+                      function getonlyoutbound(var DC:TDrawContext):TBoundingBox;
                       procedure Format;virtual;abstract;
                       procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       procedure FormatAfterEdit(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -176,7 +176,7 @@ begin
      until pobj=nil;
 end;
 
-function GDBObjOpenArrayOfPV.getoutbound:TBoundingBox;
+function GDBObjOpenArrayOfPV.getoutbound(var DC:TDrawContext):TBoundingBox;
 var pobj:pGDBObjEntity;
     ir:itrec;
 begin
@@ -188,20 +188,20 @@ begin
                   end
               else
                   begin
-                       pobj^.getoutbound;
+                       pobj^.getoutbound(DC);
                        result:=pobj.vp.BoundingBox;
-                       pobj^.correctbb;
+                       pobj^.correctbb(dc);
                        pobj:=iterate(ir);
                        if pobj<>nil then
                        repeat
-                             pobj^.getoutbound;
+                             pobj^.getoutbound(dc);
                              concatbb(result,pobj^.vp.BoundingBox);
-                             pobj^.correctbb;
+                             pobj^.correctbb(dc);
                              pobj:=iterate(ir);
                        until pobj=nil;
                   end;
 end;
-function GDBObjOpenArrayOfPV.getonlyoutbound:TBoundingBox;
+function GDBObjOpenArrayOfPV.getonlyoutbound(var DC:TDrawContext):TBoundingBox;
 var pobj:pGDBObjEntity;
     ir:itrec;
 begin
@@ -213,13 +213,13 @@ begin
                   end
               else
                   begin
-                       pobj^.getonlyoutbound;
+                       pobj^.getonlyoutbound(DC);
                        result:=pobj.vp.BoundingBox;
                        //pobj^.correctbb;
                        pobj:=iterate(ir);
                        if pobj<>nil then
                        repeat
-                             pobj^.getonlyoutbound;
+                             pobj^.getonlyoutbound(dc);
                              concatbb(result,pobj^.vp.BoundingBox);
                              //pobj^.correctbb;
                              pobj:=iterate(ir);

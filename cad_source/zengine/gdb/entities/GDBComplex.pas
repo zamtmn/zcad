@@ -31,14 +31,14 @@ GDBObjComplex={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                     ConstObjArray:{GDBObjEntityOpenArray;}GDBObjEntityTreeArray;(*oi_readonly*)(*hidden_in_objinsp*)
                     procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                     procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                    procedure getoutbound;virtual;
-                    procedure getonlyoutbound;virtual;
+                    procedure getoutbound(var DC:TDrawContext);virtual;
+                    procedure getonlyoutbound(var DC:TDrawContext);virtual;
                     destructor done;virtual;
                     constructor initnul;
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                     function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                     function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
-                    function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
+                    function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                     procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
@@ -51,7 +51,7 @@ GDBObjComplex={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                     procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
                     function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                     procedure BuildGeometry(const drawing:TDrawingDef);virtual;
-                    procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;
+                    procedure FormatAfterDXFLoad(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
               end;
 {EXPORT-}
 implementation
@@ -184,11 +184,11 @@ begin
 end;
 procedure GDBObjComplex.getoutbound;
 begin
-     vp.BoundingBox:=ConstObjArray.{calcbb}getoutbound;
+     vp.BoundingBox:=ConstObjArray.{calcbb}getoutbound(dc);
 end;
 procedure GDBObjComplex.getonlyoutbound;
 begin
-     vp.BoundingBox:=ConstObjArray.{calcbb}getonlyoutbound;
+     vp.BoundingBox:=ConstObjArray.{calcbb}getonlyoutbound(dc);
 end;
 constructor GDBObjComplex.initnul;
 begin
@@ -224,7 +224,7 @@ begin
   p:=ConstObjArray.beginiterate(ir);
   if p<>nil then
   repeat
-       p^.FormatAfterDXFLoad(drawing);
+       p^.FormatAfterDXFLoad(drawing,dc);
        p:=ConstObjArray.iterate(ir);
   until p=nil;
   inherited;
@@ -242,7 +242,7 @@ begin
   p:=ConstObjArray.beginiterate(ir);
   if p<>nil then
   repeat
-       ot:=p^.isonmouse(popa,mf);
+       ot:=p^.isonmouse(popa,mf,InSubEntry);
        if ot then
                  begin
                       {PGDBObjOpenArrayOfPV}(popa).add(addr(p));
@@ -308,7 +308,7 @@ procedure GDBObjComplex.FormatEntity(const drawing:TDrawingDef;var DC:TDrawConte
 begin
      calcobjmatrix;
      ConstObjArray.FormatEntity(drawing,dc);
-     calcbb;
+     calcbb(dc);
      self.BuildGeometry(drawing);
 end;
 begin

@@ -20,7 +20,7 @@ unit glstatemanager;
 {$INCLUDE def.inc}
 
 interface
-uses gdbpalette,zcadsysvars,gdbasetypes,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
+uses gdbpalette,{zcadsysvars,}gdbasetypes,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
      {$IFNDEF DELPHI}gl,{glu,}glext,{$ELSE}dglOpenGL,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
      {$IFDEF WINDOWS}windows,{$ENDIF}
@@ -331,11 +331,12 @@ end;
 procedure TOGLStateManager.endrender;
 begin
     //sysvar.debug.renderdeb.middlepoint:=middlepoint;
-    sysvar.debug.renderdeb.pointcount:=pointcount;
+    {sysvar.debug.renderdeb.pointcount:=pointcount;
     sysvar.debug.renderdeb.primcount:=primcount;
     sysvar.debug.renderdeb.bathcount:=bathcount;
     if pointcount<>0 then
                           sysvar.debug.renderdeb.middlepoint:=geometry.VertexMulOnSc(middlepoint,1/pointcount);
+    }
 end;
 {$IFDEF SINGLEPRECISIONGEOMETRY}
 procedure TOGLStateManager.glVertex3dv(const v: PGDBVertex);

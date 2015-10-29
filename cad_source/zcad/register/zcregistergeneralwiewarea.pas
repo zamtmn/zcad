@@ -19,7 +19,7 @@
 unit zcregistergeneralwiewarea;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,generalviewarea,paths,intftranslations,UUnitManager,TypeDescriptors;
+uses uzglgeometry,UGDBEntTree,zcadsysvars,generalviewarea,paths,intftranslations,UUnitManager,TypeDescriptors;
 implementation
 
 initialization
@@ -34,6 +34,8 @@ units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),Inte
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_SystmGeometryDraw','GDBBoolean',@sysvarDISPSystmGeometryDraw);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_SystmGeometryColor','TGDBPaletteColor',@sysvarDISPSystmGeometryColor);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_HotGripColor','TGDBPaletteColor',@sysvarDISPHotGripColor);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_SelectedGripColor','TGDBPaletteColor',@sysvarDISPSelGripColor);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_UnSelectedGripColor','TGDBPaletteColor',@sysvarDISPUnSelGripColor);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_OSMode','TGDBOSMode',@sysvarDWGOSMode);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_GripSize','GDBInteger',@sysvarDISPGripSize);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_ColorAxis','GDBBoolean',@sysvarDISPColorAxis);
@@ -49,11 +51,19 @@ units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),Inte
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_ID_MaxDegradationFactor','GDBDouble',@SysVarRDImageDegradationMaxDegradationFactor);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_RemoveSystemCursorFromWorkArea','GDBBoolean',@SysVarRDRemoveSystemCursorFromWorkArea);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DSGN_SelNew','GDBBoolean',@sysvarDSGNSelNew);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_EditInSubEntry','GDBBoolean',@sysvarDWGEditInSubEntry);
+
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_SpatialNodeCount','GDBInteger',@SysVarRDSpatialNodeCount);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_SpatialNodesDepth','GDBInteger',@SysVarRDSpatialNodesDepth);
+
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_RotateTextInLT','GDBBoolean',@sysvarDWGRotateTextInLT);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_MaxLTPatternsInEntity','GDBInteger',@SysVarRDMaxLTPatternsInEntity);
 
 
 
 
-sysvar.DISP.DISP_CursorSize:=@sysvarDISPCursorSize;sysvar.DISP.DISP_OSSize:=@sysvarDISPOSSize;
+sysvar.DISP.DISP_CursorSize:=@sysvarDISPCursorSize;
+sysvar.DISP.DISP_OSSize:=@sysvarDISPOSSize;
 sysvar.DISP.DISP_CrosshairSize:=@SysVarDISPCrosshairSize;
 sysvar.DISP.DISP_BackGroundColor:=@sysvarDISPBackGroundColor;
 sysvar.RD.RD_MaxRenderTime:=@sysvarRDMaxRenderTime;
@@ -61,6 +71,8 @@ sysvar.DISP.DISP_ZoomFactor:=@sysvarDISPZoomFactor;
 sysvar.DISP.DISP_SystmGeometryDraw:=@sysvarDISPSystmGeometryDraw;
 sysvar.DISP.DISP_SystmGeometryColor:=@sysvarDISPSystmGeometryColor;
 sysvar.DISP.DISP_HotGripColor:=@sysvarDISPHotGripColor;
+sysvar.DISP.DISP_SelectedGripColor:=@sysvarDISPSelGripColor;
+sysvar.DISP.DISP_UnSelectedGripColor:=@sysvarDISPUnSelGripColor;
 sysvar.DISP.DISP_GripSize:=@sysvarDISPGripSize;
 sysvar.DISP.DISP_ColorAxis:=@sysvarDISPColorAxis;
 sysvar.DISP.DISP_DrawZAxis:=@sysvarDISPDrawZAxis;
@@ -78,6 +90,13 @@ SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=@SysVarRDImageDegr
 SysVar.RD.RD_ImageDegradation.RD_ID_MaxDegradationFactor:=@SysVarRDImageDegradationMaxDegradationFactor;
 
 SysVar.RD.RD_RemoveSystemCursorFromWorkArea:=@SysVarRDRemoveSystemCursorFromWorkArea;
+sysvar.DWG.DWG_EditInSubEntry:=@sysvarDWGEditInSubEntry;
+
+SysVar.RD.RD_SpatialNodeCount:=@SysVarRDSpatialNodeCount;
+SysVar.RD.RD_SpatialNodesDepth:=@SysVarRDSpatialNodesDepth;
+
+SysVar.DWG.DWG_RotateTextInLT:=@sysvarDWGRotateTextInLT;
+SysVar.RD.RD_MaxLTPatternsInEntity:=@SysVarRDMaxLTPatternsInEntity;
 finalization
 end.
 

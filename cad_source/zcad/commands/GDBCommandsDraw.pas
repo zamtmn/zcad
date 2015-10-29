@@ -1864,6 +1864,7 @@ var
     ir:itrec;
     tv,pobj: pGDBObjEntity;
     domethod,undomethod:tmethod;
+    dc:TDrawContext;
 begin
 
       //gdb.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
@@ -1904,7 +1905,8 @@ begin
           pobj:=gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.iterate(ir);
    until pobj=nil;
 
-   gdb.GetCurrentROOT^.calcbb;
+   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+   gdb.GetCurrentROOT^.calcbb(dc);
 
    //CopyToClipboard;
 

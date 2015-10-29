@@ -22,7 +22,7 @@ unit zeentityfactory;
 
 interface
 uses GDBSubordinated,uabstractunit,usimplegenerics,UGDBDrawingdef,gdbobjectsconstdef,
-    memman,zcadsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity;
+    memman,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity;
 type
 TAllocEntFunc=function:GDBPointer;
 TAllocAndInitEntFunc=function (owner:PGDBObjGenericWithSubordinated): PGDBObjEntity;

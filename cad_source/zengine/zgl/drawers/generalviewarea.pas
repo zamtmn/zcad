@@ -82,10 +82,10 @@ type
                            procedure KillOHintTimer(Sender: TObject);override;
                            procedure SetOHintTimer(Sender: TObject);override;
                            procedure getosnappoint(radius: GDBFloat);override;
-                           procedure getonmouseobject(pva: PGDBObjEntityOpenArray);virtual;
-                           function findonmobj(pva: PGDBObjEntityOpenArray; var i: GDBInteger): GDBInteger;virtual;
-                           procedure getonmouseobjectbytree(Node:TEntTreeNode);override;
-                           procedure processmousenode(Node:TEntTreeNode;var i:integer);virtual;
+                           procedure getonmouseobject(pva: PGDBObjEntityOpenArray;InSubEntry:GDBBoolean);virtual;
+                           function findonmobj(pva: PGDBObjEntityOpenArray; var i: GDBInteger;InSubEntry:GDBBoolean): GDBInteger;virtual;
+                           procedure getonmouseobjectbytree(Node:TEntTreeNode;InSubEntry:GDBBoolean);override;
+                           procedure processmousenode(Node:TEntTreeNode;var i:integer;InSubEntry:GDBBoolean);virtual;
                            procedure AddOntrackpoint;override;
                            procedure CorrectMouseAfterOS;override;
                            function CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;override;
@@ -142,8 +142,8 @@ type
                            procedure ZoomOut;override;
                       end;
 var
-   sysvarDISPCursorSize:integer=10;
    sysvarDISPOSSize:double=10;
+   sysvarDISPCursorSize:integer=10;
    SysVarDISPCrosshairSize:double=0.05;
    sysvarDISPBackGroundColor:TRGB=(r:0;g:0;b:0;a:255);
    sysvarRDMaxRenderTime:integer=0;
@@ -151,6 +151,8 @@ var
    sysvarDISPSystmGeometryDraw:boolean=false;
    sysvarDISPSystmGeometryColor:TGDBPaletteColor=1;
    sysvarDISPHotGripColor:TGDBPaletteColor=2;
+   sysvarDISPSelGripColor:TGDBPaletteColor=3;
+   sysvarDISPUnSelGripColor:TGDBPaletteColor=4;
    sysvarDWGOSMode:TGDBOSMode=0;
    sysvarDISPGripSize:GDBInteger=5;
    sysvarDISPColorAxis:boolean=true;
@@ -167,6 +169,7 @@ var
    SysVarRDImageDegradationMaxDegradationFactor:GDBDouble=0;
    SysVarRDRemoveSystemCursorFromWorkArea:GDBBoolean=true;
    sysvarDSGNSelNew:GDBBoolean=false;
+   sysvarDWGEditInSubEntry:gdbboolean=false;
 implementation
 uses
      commandline;
@@ -240,7 +243,7 @@ begin
   dc.drawer.startrender(TRM_ModelSpace,dc.matrixs);
   if PDWG.GetSelObjArray.Count<>0 then
                                       begin
-                                        PDWG.GetSelObjArray.drawpoint(dc);
+                                        PDWG.GetSelObjArray.drawpoint(dc,sysvarDISPGripSize,palette[sysvarDISPSelGripColor].RGB,palette[sysvarDISPUnSelGripColor].RGB);
                                         if param.gluetocp then
                                         begin
                                           dc.drawer.SetColor(palette[sysvarDISPHotGripColor].rgb);
@@ -1093,6 +1096,7 @@ end;
 procedure TGeneralViewArea.ZoomSel;
 var
    psa:PGDBSelectedObjArray;
+   dc:TDrawContext;
 begin
      psa:=PDWG^.GetSelObjArray;
      if psa<>nil then
@@ -1102,7 +1106,8 @@ begin
                                    historyout('ZoomSel: Ничего не выбрано?');
                                    exit;
                               end;
-          zoomtovolume(psa^.getonlyoutbound);
+          dc:=pdwg^.CreateDrawingRC;
+          zoomtovolume(psa^.getonlyoutbound(dc));
      end;
 
 end;
@@ -1536,13 +1541,13 @@ end;
 
 
   if (param.md.mode and MGetSelectObject) <> 0 then
-                                                     getonmouseobjectbytree(PDWG.GetCurrentROOT.ObjArray.ObjTree);
+                                                     getonmouseobjectbytree(PDWG.GetCurrentROOT.ObjArray.ObjTree,sysvarDWGEditInSubEntry);
   if (param.md.mode and MGet3DPointWoOP) <> 0 then param.ospoint.ostype := os_none;
   if (param.md.mode and MGet3DPoint) <> 0 then
   begin
 
       if (param.md.mode and MGetSelectObject) = 0 then
-                                                      getonmouseobjectbytree(pdwg.GetCurrentROOT.ObjArray.ObjTree);
+                                                      getonmouseobjectbytree(pdwg.GetCurrentROOT.ObjArray.ObjTree,sysvarDWGEditInSubEntry);
       getosnappoint({@gdb.GetCurrentROOT.ObjArray,} 0);
       //create0axis;-------------------------------
     if sysvarDWGOSMode <> 0 then
@@ -1836,7 +1841,7 @@ var key: GDBByte;
   begin
     result:=false;
     begin
-      getonmouseobjectbytree(PDWG.GetCurrentROOT.ObjArray.ObjTree);
+      getonmouseobjectbytree(PDWG.GetCurrentROOT.ObjArray.ObjTree,sysvarDWGEditInSubEntry);
       //getonmouseobject(@gdb.GetCurrentROOT.ObjArray);
       if (key and MZW_CONTROL)<>0 then
       begin
@@ -2169,6 +2174,7 @@ begin
   result.pcamera:=PDWG.GetPcamera;
   result.SystmGeometryDraw:=sysvarDISPSystmGeometryDraw;
   result.SystmGeometryColor:=sysvarDISPSystmGeometryColor;
+  result.GlobalLTScale:=1;
 end;
 procedure TGeneralViewArea.CorrectMouseAfterOS;
 var d,tv1,tv2:GDBVertex;
@@ -2228,7 +2234,7 @@ begin
   end;
 end;
 
-procedure TGeneralViewArea.processmousenode(Node:TEntTreeNode;var i:integer);
+procedure TGeneralViewArea.processmousenode(Node:TEntTreeNode;var i:integer;InSubEntry:GDBBoolean);
 //var
   //pp:PGDBObjEntity;
   //ir:itrec;
@@ -2236,15 +2242,15 @@ procedure TGeneralViewArea.processmousenode(Node:TEntTreeNode;var i:integer);
 begin
      if CalcAABBInFrustum (Node.BoundingBox,param.mousefrustum)<>IREmpty then
      begin
-          findonmobj(@node.nul, i);
+          findonmobj(@node.nul, i,InSubEntry);
           if assigned(node.pminusnode) then
-                                           processmousenode(node.pminusnode^,i);
+                                           processmousenode(node.pminusnode^,i,InSubEntry);
           if assigned(node.pplusnode) then
-                                           processmousenode(node.pplusnode^,i);
+                                           processmousenode(node.pplusnode^,i,InSubEntry);
      end;
 end;
 
-procedure TGeneralViewArea.getonmouseobjectbytree(Node:TEntTreeNode);
+procedure TGeneralViewArea.getonmouseobjectbytree(Node:TEntTreeNode;InSubEntry:GDBBoolean);
 var
   i: GDBInteger;
   pp:PGDBObjEntity;
@@ -2258,9 +2264,9 @@ begin
   param.SelDesc.OnMouseObject := nil;
 
 
-  processmousenode(Node,i);
+  processmousenode(Node,i,InSubEntry);
   if param.processObjConstruct then
-                                   findonmobj(@PDWG.GetConstructObjRoot.ObjArray,i);
+                                   findonmobj(@PDWG.GetConstructObjRoot.ObjArray,i,InSubEntry);
 
   pp:=PDWG.GetOnMouseObj.beginiterate(ir);
   if pp<>nil then
@@ -2283,7 +2289,7 @@ begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobjectbytree------{end}',lp_DecPos);{$ENDIF}
 end;
 
-function TGeneralViewArea.findonmobj(pva: PGDBObjEntityOpenArray; var i: GDBInteger): GDBInteger;
+function TGeneralViewArea.findonmobj(pva: PGDBObjEntityOpenArray; var i: GDBInteger;InSubEntry:GDBBoolean): GDBInteger;
 var
   pp:PGDBObjEntity;
   ir:itrec;
@@ -2302,11 +2308,11 @@ begin
        if pp^.visible=PDWG.Getpcamera.VISCOUNT then
        begin
        inc(_visible);
-       if pp^.isonmouse(PDWG.GetOnMouseObj^,param.mousefrustum)
+       if pp^.isonmouse(PDWG.GetOnMouseObj^,param.mousefrustum,InSubEntry)
        then
            begin
                 inc(_isonmouse);
-                pp:=pp.ReturnLastOnMouse;
+                pp:=pp.ReturnLastOnMouse(InSubEntry);
                 param.SelDesc.OnMouseObject:=pp;
                 PDWG.GetOnMouseObj.add(addr(pp));
            end;
@@ -2331,7 +2337,7 @@ begin
   i := 0;
   PDWG.GetOnMouseObj.clear;
   param.SelDesc.OnMouseObject := nil;
-  findonmobj(pva, i);
+  findonmobj(pva, i,InSubEntry);
   pp:=PDWG.GetOnMouseObj.beginiterate(ir);
   if pp<>nil then
                  begin
@@ -2426,7 +2432,7 @@ begin
             begin
                  if (osp.radius<DefaultRadius)and(param.ospoint.ostype=os_none) then copyospoint(param.ospoint,osp)
                  else if param.ospoint.ostype=os_nearest then
-                                                            if {(osp.radius<sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1)and}(osp.radius<param.ospoint.radius) then
+                                                            if (osp.radius<param.ospoint.radius) then
                                                                                                    copyospoint(param.ospoint,osp);
             end;
             end;
@@ -2630,6 +2636,7 @@ var ccsLBN,ccsRTF:GDBVertex;
     proot:PGDBObjGenericSubEntry;
     pcamera:PGDBObjCamera;
     td:GDBDouble;
+    dc:TDrawContext;
 begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.CalcOptimalMatrix',lp_IncPos);{$ENDIF}
   {Если нет примитивов выходим}
@@ -2641,6 +2648,7 @@ begin
 
   if (assigned(pdwg))and(assigned(proot))and(assigned(pcamera))then
   begin
+  dc:=CreateRC;
   Pcamera^.modelMatrix:=lookat(Pcamera^.prop.point,
                                                Pcamera^.prop.xdir,
                                                Pcamera^.prop.ydir,
@@ -2691,7 +2699,7 @@ begin
 
   if pdwg.GetConstructObjRoot.ObjArray.Count>0 then
                        begin
-  pdwg.GetConstructObjRoot.calcbb;
+  pdwg.GetConstructObjRoot.calcbb(dc);
   tbb2:=pdwg.GetConstructObjRoot.vp.BoundingBox;
   ConcatBB(tbb,tbb2);
   end;

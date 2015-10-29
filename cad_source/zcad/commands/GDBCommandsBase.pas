@@ -266,13 +266,12 @@ begin
                                                 mem.done;
                                           end;
                                      end;*)
-
-     gdb.GetCurrentROOT.calcbb;
+     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+     gdb.GetCurrentROOT.calcbb(dc);
      //gdb.GetCurrentDWG.ObjRoot.format;//FormatAfterEdit;
      //gdb.GetCurrentROOT.sddf
      //gdb.GetCurrentROOT.format;
      gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
-     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
      gdb.GetCurrentROOT.FormatEntity(gdb.GetCurrentDWG^,dc);
      if assigned(updatevisibleproc) then updatevisibleproc;
      if gdb.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
@@ -999,7 +998,7 @@ begin
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   if assigned(ProcessLongProcessProc) then ProcessLongProcessProc(ir.itc);
   until pv=nil;
-  gdb.GetCurrentROOT.getoutbound;
+  gdb.GetCurrentROOT.getoutbound(dc);
   if assigned(EndLongProcessProc) then EndLongProcessProc;
 
   GDB.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;

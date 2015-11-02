@@ -3000,7 +3000,7 @@ begin
                                                                  //log.LogOut('processednets.AddRef(net2^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
 
-                                                                New_line:=PGDBObjLine(ENTF_CreateLine(gdb.GetCurrentROOT,@gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray,[riser.P_insert_in_WCS.x,riser.P_insert_in_WCS.y,riser.P_insert_in_WCS.z,riser2.P_insert_in_WCS.x,riser2.P_insert_in_WCS.y,riser2.P_insert_in_WCS.z]));
+                                                                New_line:=PGDBObjLine(ENTF_CreateLine(gdb.GetCurrentROOT,{@gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray}nil,[riser.P_insert_in_WCS.x,riser.P_insert_in_WCS.y,riser.P_insert_in_WCS.z,riser2.P_insert_in_WCS.x,riser2.P_insert_in_WCS.y,riser2.P_insert_in_WCS.z]));
                                                                 GDBObjSetEntityProp(New_line,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^);
                                                                 //New_line := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,gdb.GetCurrentROOT}));
                                                                 //GDBObjLineInit(gdb.GetCurrentROOT,New_line,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,riser.P_insert_in_WCS,riser2.P_insert_in_WCS);

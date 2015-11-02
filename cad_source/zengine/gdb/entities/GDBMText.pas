@@ -49,7 +49,7 @@ GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
                  procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
                  procedure FormatAfterDXFLoad(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
 
-                 //procedure CalcObjMatrix;virtual;
+                 function CreateInstance:PGDBObjMText;static;
             end;
 {Export-}
 procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:GDBDouble;content:GDBString;var text:XYZWGDBGDBStringArray);
@@ -1004,6 +1004,10 @@ begin
   result:=AllocMText;
   result.initnul(owner);
   result.bp.ListPos.Owner:=owner;
+end;
+function GDBObjMText.CreateInstance:PGDBObjMText;
+begin
+  result:=AllocAndInitMText(nil);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBMtext.initialization');{$ENDIF}

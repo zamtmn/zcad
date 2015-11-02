@@ -65,6 +65,8 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
                    procedure FormatAfterDXFLoad(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                    class function GetDXFIOFeatures:TDXFEntIODataManager;
+
+                   function CreateInstance:PGDBObjDevice;static;
              end;
 {EXPORT-}
 var
@@ -677,6 +679,10 @@ begin
   result:=AllocAndInitDevice(owner);
   //owner^.AddMi(@result);
   SetBlockInsertGeomProps(result,args);
+end;
+function GDBObjDevice.CreateInstance:PGDBObjDevice;
+begin
+  result:=AllocAndInitDevice(nil);
 end;
 function UpgradeBlockInsert2Device(ptu:PTAbstractUnit;pent:PGDBObjBlockInsert;const drawing:TDrawingDef):PGDBObjDevice;
 begin

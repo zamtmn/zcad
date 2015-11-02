@@ -55,6 +55,8 @@ GDBObj3DFace={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
 
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
+
+                 function CreateInstance:PGDBObj3DFace;static;
            end;
 {Export-}
 
@@ -478,6 +480,10 @@ begin
   result:=Alloc3DFace;
   result.initnul(owner);
   result.bp.ListPos.Owner:=owner;
+end;
+function GDBObj3DFace.CreateInstance:PGDBObj3DFace;
+begin
+  result:=AllocAndInit3DFace(nil);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDB3DFace.initialization');{$ENDIF}

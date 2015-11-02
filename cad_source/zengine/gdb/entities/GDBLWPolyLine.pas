@@ -69,6 +69,8 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
 
                  procedure higlight(var DC:TDrawContext);virtual;
 
+
+                 function CreateInstance:PGDBObjLWPolyline;static;
            end;
 {Export-}
 implementation
@@ -980,6 +982,10 @@ begin
   result:=AllocLWpolyline;
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
+end;
+function GDBObjLWpolyline.CreateInstance:PGDBObjLWpolyline;
+begin
+  result:=AllocAndInitLWpolyline(nil);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBLWPolyline.initialization');{$ENDIF}

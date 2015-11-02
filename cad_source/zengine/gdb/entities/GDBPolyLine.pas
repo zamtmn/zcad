@@ -45,6 +45,7 @@ GDBObjPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  function GetLength:GDBDouble;virtual;
 
+                 function CreateInstance:PGDBObjPolyline;static;
            end;
 {Export-}
 implementation
@@ -286,6 +287,10 @@ begin
   result:=AllocPolyline;
   result.initnul(owner);
   result.bp.ListPos.Owner:=owner;
+end;
+function GDBObjPolyline.CreateInstance:PGDBObjPolyline;
+begin
+  result:=AllocAndInitPolyline(nil);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBPolyline.initialization');{$ENDIF}

@@ -68,6 +68,8 @@ GDBObjEllipse={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  procedure transform(const t_matrix:DMatrix4D);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure ReCalcFromObjMatrix;virtual;
+
+                 function CreateInstance:PGDBObjEllipse;static;
            end;
 {EXPORT-}
 implementation
@@ -703,6 +705,10 @@ begin
   result:=AllocEllipse;
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
+end;
+function GDBObjEllipse.CreateInstance:PGDBObjEllipse;
+begin
+  result:=AllocAndInitEllipse(nil);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('gdbellipse.initialization');{$ENDIF}

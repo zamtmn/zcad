@@ -68,6 +68,8 @@ GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+
+                 function CreateInstance:PGDBObjArc;static;
            end;
 {EXPORT-}
 implementation
@@ -829,6 +831,10 @@ begin
   result:=AllocArc;
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
+end;
+function GDBObjARC.CreateInstance:PGDBObjArc;
+begin
+  result:=AllocAndInitArc(nil);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBArc.initialization');{$ENDIF}

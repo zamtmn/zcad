@@ -1036,16 +1036,11 @@ begin
       if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveLineEndManipulator,pline) then
       begin
 
-           gdb.GetCurrentDWG^.FreeConstructionObjects;
-
-          {pline1 := GDBPointer(gdb.GetCurrentROOT^.ObjArray.CreateInitObj(GDBLineID,nil));
-          pline2 := GDBPointer(gdb.GetCurrentROOT^.ObjArray.CreateInitObj(GDBLineID,nil));
-          pline3 := GDBPointer(gdb.GetCurrentROOT^.ObjArray.CreateInitObj(GDBLineID,nil));
-          pline4 := GDBPointer(gdb.GetCurrentROOT^.ObjArray.CreateInitObj(GDBLineID,nil));}
-          pline1 := pointer(CreateInitObjFree(GDBLineID,nil));
-          pline2 := pointer(CreateInitObjFree(GDBLineID,nil));
-          pline3 := pointer(CreateInitObjFree(GDBLineID,nil));
-          pline4 := pointer(CreateInitObjFree(GDBLineID,nil));
+          GDBObjLine.CreateInstance;
+          pline1 := GDBObjLine.CreateInstance;
+          pline2 := GDBObjLine.CreateInstance;
+          pline3 := GDBObjLine.CreateInstance;
+          pline4 := GDBObjLine.CreateInstance;
           GDBObjSetEntityCurrentProp(pline1);
           GDBObjSetEntityCurrentProp(pline2);
           GDBObjSetEntityCurrentProp(pline3);
@@ -1055,10 +1050,6 @@ begin
            pline2^.CoordInOCS.lBegin:=pe.p1;
            pline3^.CoordInOCS.lBegin:=pe.p2;
            pline4^.CoordInOCS.lBegin:=pe.p2;
-           InteractiveLineEndManipulator(pline1,pe.p1,false);
-           InteractiveLineEndManipulator(pline2,pe.p1,false);
-           InteractiveLineEndManipulator(pline3,pe.p2,false);
-           InteractiveLineEndManipulator(pline4,pe.p2,false);
 
            petemp := pe ;
            petemp.p1.x := pe.p2.x;
@@ -1078,16 +1069,17 @@ begin
                dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
 
                pline1^.FormatEntity(gdb.GetCurrentDWG^,dc);
-
                pline2^.FormatEntity(gdb.GetCurrentDWG^,dc);
                pline3^.FormatEntity(gdb.GetCurrentDWG^,dc);
                pline4^.FormatEntity(gdb.GetCurrentDWG^,dc);
 
-               {gdb.}AddEntToCurrentDrawingWithUndo(pline1);
+               UndoCommandStartMarker('');
+               AddEntToCurrentDrawingWithUndo(pline1);
+               AddEntToCurrentDrawingWithUndo(pline2);
+               AddEntToCurrentDrawingWithUndo(pline3);
+               AddEntToCurrentDrawingWithUndo(pline4);
+               UndoCommandEndMarker;
 
-               {gdb.}AddEntToCurrentDrawingWithUndo(pline2);
-               {gdb.}AddEntToCurrentDrawingWithUndo(pline3);
-               {gdb.}AddEntToCurrentDrawingWithUndo(pline4);
       end;
     end;
     result:=cmd_ok;

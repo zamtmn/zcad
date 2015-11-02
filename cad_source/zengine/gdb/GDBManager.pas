@@ -54,6 +54,8 @@ function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:GDBString;p_insert:
                         scale:GDBVertex;rotate:GDBDouble;needundo:GDBBoolean=false
                         ):PGDBObjBlockInsert;
 procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
+procedure UndoCommandStartMarker(CommandName:GDBString);
+procedure UndoCommandEndMarker;
 
 function ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
@@ -118,7 +120,14 @@ begin
           comit;
      end;
 end;
-
+procedure UndoCommandStartMarker(CommandName:GDBString);
+begin
+     PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushStartMarker(CommandName);
+end;
+procedure UndoCommandEndMarker;
+begin
+     PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushEndMarker;
+end;
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;//владелец
                         BlockName:GDBString;       //имя блока
                         p_insert:GDBVertex;        //точка вставки

@@ -86,6 +86,8 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                   function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                   procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                   function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
+
+                  function CreateInstance:PGDBObjLine;static;
            end;
 {Export-}
 ptlinertmodify=^tlinertmodify;
@@ -807,6 +809,10 @@ begin
   result:=AllocAndInitLine(owner);
   //owner^.AddMi(@result);
   SetLineGeomProps(result,args);
+end;
+function GDBObjLine.CreateInstance:PGDBObjLine;static;
+begin
+  result:=AllocAndInitLine(nil);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBLine.initialization');{$ENDIF}

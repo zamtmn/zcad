@@ -54,7 +54,7 @@ GDBObjSolid={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  function GetObjTypeName:GDBString;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
 
-                 //procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+                 function CreateInstance:PGDBObjSolid;static;
            end;
 {Export-}
 
@@ -418,6 +418,10 @@ function AllocAndCreateSolid(owner:PGDBObjGenericWithSubordinated;args:array of 
 begin
   result:=AllocAndInitSolid(owner);
   SetSolidGeomProps(result,args);
+end;
+function GDBObjSolid.CreateInstance:PGDBObjSolid;
+begin
+  result:=AllocAndInitSolid(nil);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBSolid.initialization');{$ENDIF}

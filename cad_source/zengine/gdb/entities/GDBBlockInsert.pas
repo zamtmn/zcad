@@ -63,6 +63,8 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
 
                      property testrotate:GDBDouble read getrot write setrot;(*'Rotate'*)
                      function FromDXFPostProcessBeforeAdd(ptu:PTAbstractUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
+
+                     function CreateInstance:PGDBObjBlockInsert;static;
                   end;
 {Export-}
 procedure SetBlockInsertGeomProps(PBlockInsert:PGDBObjBlockInsert;args:array of const);
@@ -693,6 +695,10 @@ begin
   result:=AllocAndInitBlockInsert(owner);
   //owner^.AddMi(@result);
   SetBlockInsertGeomProps(result,args);
+end;
+function GDBObjBlockInsert.CreateInstance:PGDBObjBlockInsert;
+begin
+  result:=AllocAndInitBlockInsert(nil);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBBlockInsert.initialization');{$ENDIF}

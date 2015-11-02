@@ -83,7 +83,7 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
 
-
+                 function CreateInstance:PGDBObjCircle;static;
            end;
 {Export-}
 implementation
@@ -803,6 +803,10 @@ begin
   result:=AllocAndInitCircle(owner);
   //owner^.AddMi(@result);
   SetCircleGeomProps(result,args);
+end;
+function GDBObjCircle.CreateInstance:PGDBObjCircle;
+begin
+  result:=AllocAndInitCircle(nil);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBCircle.initialization');{$ENDIF}

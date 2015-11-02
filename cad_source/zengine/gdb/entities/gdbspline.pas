@@ -53,6 +53,7 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
 
+                 function CreateInstance:PGDBObjSpline;static;
            end;
 {Export-}
 implementation
@@ -480,6 +481,10 @@ begin
   result:=AllocSpline;
   result.initnul(owner);
   result.bp.ListPos.Owner:=owner;
+end;
+function GDBObjSpline.CreateInstance:PGDBObjSpline;
+begin
+  result:=AllocAndInitSpline(nil);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBSpline.initialization');{$ENDIF}

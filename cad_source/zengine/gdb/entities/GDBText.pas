@@ -54,6 +54,8 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTAbstractUnit;const drawing:TDrawingDef):GDBBoolean;virtual;
                  class function GetDXFIOFeatures:TDXFEntIODataManager;
+
+                 function CreateInstance:PGDBObjText;static;
            end;
 {Export-}
 var
@@ -720,6 +722,10 @@ begin
   result:=AllocText;
   result.initnul(owner);
   result.bp.ListPos.Owner:=owner;
+end;
+function GDBObjText.CreateInstance:PGDBObjText;
+begin
+  result:=AllocAndInitText(nil);
 end;
 class function GDBObjText.GetDXFIOFeatures:TDXFEntIODataManager;
 begin

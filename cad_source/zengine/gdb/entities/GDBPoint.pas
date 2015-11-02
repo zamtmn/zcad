@@ -51,6 +51,8 @@ GDBObjPoint={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  procedure getoutbound(var DC:TDrawContext);virtual;
 
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+
+                 function CreateInstance:PGDBObjPoint;static;
            end;
 {Export-}
 
@@ -285,6 +287,10 @@ begin
   result:=AllocPoint;
   result.initnul(owner);
   result.bp.ListPos.Owner:=owner;
+end;
+function GDBObjPoint.CreateInstance:PGDBObjPoint;
+begin
+  result:=AllocAndInitPoint(nil);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBPoint.initialization');{$ENDIF}

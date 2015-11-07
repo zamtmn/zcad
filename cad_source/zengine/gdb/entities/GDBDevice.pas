@@ -400,7 +400,7 @@ begin
   inherited;
 end;
 procedure GDBObjDevice.BuildVarGeometry;
-var pblockdef:PGDBObjBlockdef;
+var //pblockdef:PGDBObjBlockdef;
     pvisible,pvisible2:PGDBObjEntity;
     //freelayer:PGDBLayerProp;
     i:GDBInteger;
@@ -458,7 +458,7 @@ begin
           end;
 end;
 procedure GDBObjDevice.BuildGeometry;
-var pblockdef:PGDBObjBlockdef;
+var //pblockdef:PGDBObjBlockdef;
     pvisible,pvisible2:PGDBObjEntity;
     //freelayer:PGDBLayerProp;
     i:GDBInteger;

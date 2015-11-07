@@ -22,8 +22,6 @@ interface
 uses paths,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}Controls,zcadstrconsts,gdbasetypes,strutils,Classes, SysUtils, {$IFNDEF DELPHI}fileutil,{$ENDIF}{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls{$IFNDEF DELPHI},LCLProc{$ENDIF},Masks;
 
 type
-TFromDirIterator=procedure (filename:GDBString);
-TFromDirIteratorObj=procedure (filename:GDBString) of object;
 SimpleProcOfObject=procedure of object;
 
 procedure HistoryOut(s: pansichar); export;
@@ -32,9 +30,7 @@ procedure SBTextOut(s:GDBString);
 procedure FatalError(errstr:GDBString);
 procedure LogError(errstr:GDBString); export;
 procedure ShowError(errstr:GDBString); export;
-procedure OldVersTextReplace(var vv:GDBString);
-procedure FromDirIterator(const path,mask,firstloadfilename:GDBSTring;proc:TFromDirIterator;method:TFromDirIteratorObj);
-procedure FromDirsIterator(const path,mask,firstloadfilename:GDBString;proc:TFromDirIterator;method:TFromDirIteratorObj);
+//procedure OldVersTextReplace(var vv:GDBString);
 procedure DisableCmdLine;
 procedure EnableCmdLine;
 procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
@@ -86,23 +82,6 @@ begin
                                   end;
   if assigned(shared.HintText) then
                                    shared.HintText.Enabled:=true;
-end;
-
-procedure OldVersTextReplace(var vv:GDBString);
-begin
-     vv:=AnsiReplaceStr(vv,'@@[Name]','@@[NMO_Name]');
-     vv:=AnsiReplaceStr(vv,'@@[ShortName]','@@[NMO_BaseName]');
-     vv:=AnsiReplaceStr(vv,'@@[Name_Template]','@@[NMO_Template]');
-     vv:=AnsiReplaceStr(vv,'@@[Material]','@@[DB_link]');
-     vv:=AnsiReplaceStr(vv,'@@[HeadDevice]','@@[GC_HeadDevice]');
-     vv:=AnsiReplaceStr(vv,'@@[HeadDShortName]','@@[GC_HDShortName]');
-     vv:=AnsiReplaceStr(vv,'@@[GroupInHDevice]','@@[GC_HDGroup]');
-     vv:=AnsiReplaceStr(vv,'@@[NumberInSleif]','@@[GC_NumberInGroup]');
-     vv:=AnsiReplaceStr(vv,'@@[RoundTo]','@@[LENGTH_RoundTo]');
-     vv:=AnsiReplaceStr(vv,'@@[Cable_AddLength]','@@[LENGTH_Add]');
-     vv:=AnsiReplaceStr(vv,'@@[Cable_Scale]','@@[LENGTH_Scale]');
-     vv:=AnsiReplaceStr(vv,'@@[TotalConnectedDevice]','@@[CABLE_TotalCD]');
-     vv:=AnsiReplaceStr(vv,'@@[Segment]','@@[CABLE_Segment]');
 end;
 procedure HistoryOut(s: pansichar); export;
 var
@@ -181,76 +160,6 @@ begin
      Application.MessageBox(@ts[1],'',MB_ICONERROR);
      if  assigned(CursorOff) then
                                 CursorOff;
-end;
-procedure FromDirsIterator(const path,mask,firstloadfilename:GDBString;proc:TFromDirIterator;method:TFromDirIteratorObj);
-var
-   s,ts:gdbstring;
-begin
-     s:=path;
-     repeat
-           GetPartOfPath(ts,s,'|');
-           ts:=ExpandPath(ts);
-           FromDirIterator(ts,mask,firstloadfilename,proc,method);
-     until s='';
-end;
-
-procedure FromDirIterator(const path,mask,firstloadfilename:GDBSTring;proc:TFromDirIterator;method:TFromDirIteratorObj);
-var sr: TSearchRec;
-    s:gdbstring;
-procedure processfile(s:gdbstring);
-var
-   fn:gdbstring;
-function IsASCII(const s: string): boolean; inline;
-   var
-     i: Integer;
-   begin
-     for i:=1 to length(s) do if ord(s[i])>127 then exit(false);
-     Result:=true;
-   end;
-begin
-     (*РАботало на xp,lin, перестало на 7х64*)
-     fn:={systoutf8}(systoutf8{Tria_AnsiToUtf8}(path)+systoutf8(s));
-
-     (*попытка закостылить*
-     {$IFNDEF DELPHI}if NeedRTLAnsi and (not IsASCII(path)) then{$ENDIF}
-        fn:=Tria_AnsiToUtf8(path){$IFNDEF DELPHI}+systoutf8(s){$ELSE};{$ENDIF}
-     {$IFNDEF DELPHI}else
-         fn:=path+systoutf8(s);{$ENDIF}
-     //fn:=fn+systoutf8(s);
-     *конец попытки*)
-
-     programlog.LogOutFormatStr('Process file %s',[fn],lp_OldPos,LM_Trace);
-     if @method<>nil then
-                         method(fn);
-     if @proc<>nil then
-                         proc(fn);
-
-end;
-begin
-  programlog.LogOutStr('FromDirIterator start',lp_IncPos,LM_Debug);
-  if firstloadfilename<>'' then
-  if fileexists(path+firstloadfilename) then
-                                            processfile(firstloadfilename);
-  if FindFirst(path + '*', faDirectory, sr) = 0 then
-  begin
-    repeat
-      if (sr.Name <> '.') and (sr.Name <> '..') then
-      begin
-        if DirectoryExists(path + sr.Name) then FromDirIterator(path + sr.Name + '/',mask,firstloadfilename,proc,method)
-        else
-        begin
-          s:=lowercase(sr.Name);
-          if s<>firstloadfilename then
-          if MatchesMask(s,mask) then
-                                        begin
-                                             processfile(sr.Name);
-                                        end;
-        end;
-      end;
-    until FindNext(sr) <> 0;
-    FindClose(sr);
-  end;
-  programlog.LogOutStr('FromDirIterator....{end}',lp_DecPos,LM_Debug);
 end;
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('shared.initialization');{$ENDIF}

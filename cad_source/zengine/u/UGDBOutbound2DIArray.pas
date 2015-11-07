@@ -19,14 +19,14 @@
 unit UGDBOutbound2DIArray;
 {$INCLUDE def.inc}
 interface
-uses {zcadsysvars,}gdbasetypes,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
-     varmandef,glstatemanager;
+uses gdbdrawcontext,{zcadsysvars,}gdbasetypes,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
+     varmandef{,glstatemanager};
 type
 {Export+}
 PGDBOOutbound2DIArray=^GDBOOutbound2DIArray;
 GDBOOutbound2DIArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                      procedure DrawGeometry;virtual;
+                      procedure DrawGeometry(var DC:TDrawContext);virtual;
                       procedure addpoint(point:GDBvertex2DI);virtual;
                       procedure addlastpoint(point:GDBvertex2DI);virtual;
                       procedure addgdbvertex(point:GDBvertex);virtual;
@@ -84,25 +84,31 @@ begin
      addlastpoint(p1);
 end;
 procedure GDBOOutbound2DIArray.drawgeometry;
-var p:PGDBvertex2DI;
+var oldp,p:PGDBvertex2DI;
     i:GDBInteger;
 begin
   case count of
                1:begin
-                      oglsm.myglbegin(GL_POINTS);
-                      oglsm.myglvertex2iv(@PGDBvertex2DIArray(parray)^[0]);
-                      oglsm.myglend;
+                      //oglsm.myglbegin(GL_POINTS);
+                      //oglsm.myglvertex2iv(@PGDBvertex2DIArray(parray)^[0]);
+                      //oglsm.myglend;
                  end;
                else
                begin
+
                     p:=parray;
-                    oglsm.myglbegin(GL_line_loop);
-                    for i:=1 to count do
+                    oldp:=p;
+                    inc(p);
+                    //oglsm.myglbegin(GL_line_loop);
+                    for i:=1 to count-1 do
                     begin
-                      oglsm.myglvertex2iv(@p^);
+                      //oglsm.myglvertex2iv(@p^);
+                      dc.drawer.DrawLine2DInDCS(p^.x,p^.y,oldp^.x,oldp^.y);
+                      oldp:=p;
                       inc(p);
                     end;
-                    oglsm.myglend;
+                    dc.drawer.DrawLine2DInDCS(PGDBvertex2DI(parray)^.x,PGDBvertex2DI(parray)^.y,oldp^.x,oldp^.y);
+                    //oglsm.myglend;
                end;
   end;
 end;

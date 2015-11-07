@@ -21,7 +21,7 @@ unit GDBRoot;
 
 interface
 Uses
-   {Varman,}gdbdrawcontext,ugdbdrawingdef,GDBCamera,glstatemanager,
+   {Varman,}gdbdrawcontext,ugdbdrawingdef,GDBCamera,//glstatemanager,
    UGDBEntTree,{UGDBVisibleTreeArray,UGDBOpenArrayOfPV,}
    gdbase,gdbasetypes,gdbobjectsconstdef,varmandef,GDBEntity,GDBGenericSubEntry{,UGDBOpenArrayOfPV},GDBConnected,GDBSubordinated,geometry{,uunitmanager}{,shared};
 type
@@ -84,10 +84,12 @@ begin
 end;
 procedure GDBObjRoot.DrawWithAttrib;
 begin
-     oglsm.myglpushmatrix;
-     oglsm.myglMultMatrixD(objmatrix);
+     DC.drawer.pushMatrixAndSetTransform(objmatrix);
+     //oglsm.myglpushmatrix;
+     //oglsm.myglMultMatrixD(objmatrix);
      inherited;//self.ObjArray.DrawWithattrib;
-     oglsm.myglpopmatrix;
+     DC.drawer.popMatrix;
+     //oglsm.myglpopmatrix;
 
 end;
 function GDBObjRoot.GetMatrix;

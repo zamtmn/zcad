@@ -117,7 +117,7 @@ begin
   oglsm.myglend;}
   dc.drawer.DrawLine2DInDCS(ProjP_insert.x-10,ProjP_insert.y,ProjP_insert.x+10,ProjP_insert.y);
   dc.drawer.DrawLine2DInDCS(ProjP_insert.x,ProjP_insert.y-10,ProjP_insert.x,ProjP_insert.y+10);
-  if PProjOutBound<>nil then PProjOutBound.DrawGeometry;
+  if PProjOutBound<>nil then PProjOutBound.DrawGeometry(dc);
 
 end;
 procedure GDBObjWithLocalCS.TransformAt;

@@ -58,7 +58,7 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                     end;
 {EXPORT-}
 implementation
-uses ugdbsimpledrawing,GDBGenericSubEntry,log;
+uses ugdbabstractdrawing,GDBGenericSubEntry,log;
 procedure GDBSelectedObjArray.resprojparam;
 var tdesc:pselectedobjdesc;
     i:GDBInteger;
@@ -488,7 +488,7 @@ begin
       if tdesc^.pcontrolpoint<>nil then
         if tdesc^.pcontrolpoint^.SelectedCount<>0 then
         begin
-           {tdesc^.objaddr^}PTSimpleDrawing(@drawing)^{gdb.GetCurrentDWG}.rtmodify(tdesc^.objaddr,tdesc,dist,wc,save);
+           {tdesc^.objaddr^}PTAbstractDrawing(@drawing)^{gdb.GetCurrentDWG}.rtmodify(tdesc^.objaddr,tdesc,dist,wc,save);
         end;
       inc(tdesc);
     end;

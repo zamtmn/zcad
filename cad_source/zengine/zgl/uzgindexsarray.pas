@@ -29,7 +29,7 @@ ZGLIndexsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenAr
              end;
 {Export-}
 implementation
-uses glstatemanager,log;
+uses {glstatemanager,}log;
 constructor ZGLIndexsArray.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(TArrayIndex));

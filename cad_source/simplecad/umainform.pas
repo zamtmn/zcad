@@ -1,14 +1,14 @@
 unit umainform;
 
 {$mode objfpc}{$H+}
-{$define dxfio}
+{define dxfio}
 interface
 
 uses
   LCLType,Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, StdCtrls, Spin,
   {From ZCAD}
-  generalviewarea,zeentitiesmanager,gdbdrawcontext,uzglopenglviewarea,abstractviewarea,zcadsysvars, {$ifdef dxfio}iodxf,{$endif}varmandef, UUnitManager,
+  generalviewarea,zeentitiesmanager,gdbdrawcontext,uzglopenglviewarea,uzglabstractviewarea,zcadsysvars, {$ifdef dxfio}iodxf,{$endif}varmandef, UUnitManager,
   zcadinterface,zeentityfactory,UGDBLayerArray,geometry, GDBase, GDBasetypes,
   UGDBDescriptor,UGDBTextStyleArray,UGDBEntTree,GDB3DFace,
   GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,ugdbsimpledrawing,
@@ -456,9 +456,12 @@ end;
 
 
 procedure TForm1.BtnRebuildClick(Sender: TObject);
+var
+   dc:TDrawContext;
 begin
      _StartLongProcess(0,'Rebuild spatial tree');
-     gdb.GetCurrentDWG^.pObjRoot^.calcbb;
+     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+     gdb.GetCurrentDWG^.pObjRoot^.calcbb(dc);
      gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
      _EndLongProcess;
      UGDBDescriptor.redrawoglwnd;

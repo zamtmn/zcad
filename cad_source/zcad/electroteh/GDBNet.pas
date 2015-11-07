@@ -576,7 +576,7 @@ function GDBObjNet.CanAddGDBObj;
 begin
      result:=true;
 end;
-function UpgradeLine2Net(ptu:PTUnit;pent:PGDBObjLine;const drawing:TDrawingDef):PGDBObjNet;
+function UpgradeLine2Net(ptu:PExtensionData;pent:PGDBObjLine;const drawing:TDrawingDef):PGDBObjNet;
 begin
    GDBGetMem({$IFDEF DEBUGBUILD}'{2D9DEF3C-7BC8-43F0-AA83-37B5F9517A0D}',{$ENDIF}pointer(result),sizeof(GDBObjNet));
    result^.initnul(pent^.bp.ListPos.Owner);

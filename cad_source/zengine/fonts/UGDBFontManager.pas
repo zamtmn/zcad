@@ -19,7 +19,7 @@
 unit UGDBFontManager;
 {$INCLUDE def.inc}
 interface
-uses lclintfex,zcadstrconsts,shared,{zcadsysvars,}strproc,ugdbfont,gdbasetypes,SysInfo,memman,
+uses lclintfex,zcadstrconsts,shared,{zcadsysvars,}strproc,ugdbfont,gdbasetypes,{SysInfo,}memman,
      sysutils,gdbase, geometry,usimplegenerics,
      UGDBNamedObjectsArray,classes;
 type

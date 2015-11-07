@@ -44,7 +44,7 @@ uses
        texteditor,zcobjectinspectordecorations,cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,
        colorwnd,imagesmanager,usuptstylecombo,usupportgui,usupdimstylecombo,
   {}
-       zcchangeundocommand,gdbdrawcontext,uzglopengldrawer,abstractviewarea,zcguimanager;
+       zcchangeundocommand,gdbdrawcontext,uzglopengldrawer,uzglabstractviewarea,zcguimanager;
   {}
 type
   TComboFiller=procedure(cb:TCustomComboBox) of object;

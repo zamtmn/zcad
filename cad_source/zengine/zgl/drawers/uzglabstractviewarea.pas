@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit abstractviewarea;
+unit uzglabstractviewarea;
 {$INCLUDE def.inc}
 interface
 uses {gdbase,gdbasetypes,

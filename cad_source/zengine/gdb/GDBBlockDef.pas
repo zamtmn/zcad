@@ -18,7 +18,7 @@
 unit GDBBlockDef;
 {$INCLUDE def.inc}
 interface
-uses zeentityfactory,gdbdrawcontext,uabstractunit,gdbobjectextender,ugdbdrawingdef,GDBSubordinated,dxflow,UGDBOpenArrayOfByte,
+uses GDBEntity,zeentityfactory,gdbdrawcontext,uabstractunit,gdbobjectextender,ugdbdrawingdef,GDBSubordinated,dxflow,UGDBOpenArrayOfByte,
      gdbasetypes,sysutils,gdbase,memman, geometry,
      UGDBLayerArray,
      varmandef,gdbobjectsconstdef,GDBGenericSubEntry{,varman};
@@ -36,8 +36,8 @@ GDBObjBlockdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                      constructor init(_name:GDBString);
                      procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                      //function FindVariable(varname:GDBString):pvardesk;virtual;
-                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTAbstractUnit;const drawing:TDrawingDef);virtual;
-                     function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTAbstractUnit;const drawing:TDrawingDef):GDBBoolean;virtual;
+                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;const drawing:TDrawingDef);virtual;
+                     function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):GDBBoolean;virtual;
                      destructor done;virtual;
                      function GetMatrix:PDMatrix4D;virtual;
                      function GetHandle:GDBPlatformint;virtual;
@@ -49,7 +49,7 @@ GDBObjBlockdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
 var
    GDBObjBlockDefDXFFeatures:TDXFEntIODataManager;
 implementation
-uses {iodxf,}{UUnitManager,}{shared,}log,GDBEntity;
+uses {iodxf,}{UUnitManager,}{shared,}log;
 function GDBObjBlockdef.GetType:GDBPlatformint;
 begin
      result:=1;

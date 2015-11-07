@@ -20,7 +20,7 @@ unit gdbobjectextender;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentityextender,GDBSubordinated,uabstractunit,UGDBDrawingdef,gdbasetypes,gdbase,usimplegenerics,gvector,UGDBOpenArrayOfByte;
+uses gdbentityextender,GDBSubordinated,{uabstractunit,}UGDBDrawingdef,gdbasetypes,gdbase,usimplegenerics,gvector,UGDBOpenArrayOfByte;
 
 type
 TConstructorFeature=procedure(pEntity:Pointer);
@@ -30,7 +30,7 @@ TCreateEntFeatureData=record
                 destr:TDestructorFeature;
               end;
 TDXFEntSaveFeature=procedure(var outhandle:GDBOpenArrayOfByte;PEnt:Pointer);
-TDXFEntLoadFeature=function(_Name,_Value:GDBString;ptu:PTAbstractUnit;const drawing:TDrawingDef;PEnt:Pointer):boolean;
+TDXFEntLoadFeature=function(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:Pointer):boolean;
 TDXFEntAfterLoadFeature=procedure(pEntity:Pointer);
 TDXFEntFormatFeature=procedure (pEntity:Pointer;const drawing:TDrawingDef);
 TDXFEntLoadData=record

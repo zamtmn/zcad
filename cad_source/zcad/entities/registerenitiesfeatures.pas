@@ -28,7 +28,7 @@ var
    PFCTTD:GDBPointer=nil;
 
 implementation
-function EntIOLoad_OWNERHANDLE(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
+function EntIOLoad_OWNERHANDLE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
 begin
      {$IFNDEF DELPHI}
      if not TryStrToQWord('$'+_value,PEnt^.AddExtAttrib^.OwnerHandle)then
@@ -38,7 +38,7 @@ begin
      end;
      result:=true;
 end;
-function EntIOLoad_HANDLE(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
+function EntIOLoad_HANDLE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
 begin
      {$IFNDEF DELPHI}
      if not TryStrToQWord('$'+_value,PEnt^.AddExtAttrib^.Handle)then
@@ -48,17 +48,17 @@ begin
      end;
      result:=true;
 end;
-function EntIOLoad_UPGRADE(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
+function EntIOLoad_UPGRADE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
 begin
      PEnt^.AddExtAttrib^.Upgrade:=strtoint(_value);
      result:=true;
 end;
-function EntIOLoad_LAYER(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
+function EntIOLoad_LAYER(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
 begin
      PEnt^.vp.Layer:=drawing.getlayertable.getAddres(_value);
      result:=true;
 end;
-function EntIOLoadUSES(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
+function EntIOLoadUSES(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
 var
     usedunit:PTObjectUnit;
     vardata:PTVariablesExtender;
@@ -81,7 +81,7 @@ begin
      PTObjectUnit(PEnt^.ou.Instance)^.InterfaceUses.addnodouble(@usedunit);
      result:=true;}
 end;
-function EntIOLoadDollar(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
+function EntIOLoadDollar(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
 var
     svn,vn,vv:GDBString;
     pvd:pvardesk;
@@ -101,7 +101,7 @@ begin
      PBaseTypeDescriptor(tc)^.SetValueFromString(pointer(offset),vv);
      result:=true;
 end;
-function EntIOLoadAmpersand(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
+function EntIOLoadAmpersand(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
 var
     vn,vt,vun:GDBString;
     vd: vardesk;
@@ -115,18 +115,18 @@ begin
      //PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
      result:=true;
 end;
-function EntIOLoadPercent(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
+function EntIOLoadPercent(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
 var
     vn,vt,vv,vun:GDBString;
     vd: vardesk;
 begin
      extractvarfromdxfstring(_Value,vn,vt,vv,vun);
-     ptu.setvardesc(vd,vn,vun,vt);
-     ptu.InterfaceVariables.createvariable(vd.name,vd);
+     PTUnit(ptu).setvardesc(vd,vn,vun,vt);
+     PTUnit(ptu).InterfaceVariables.createvariable(vd.name,vd);
      PBaseTypeDescriptor(vd.data.PTD)^.SetValueFromString(vd.data.Instance,vv);
      result:=true;
 end;
-function EntIOLoadHash(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
+function EntIOLoadHash(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
 var
     vn,vt,vv,vun:GDBString;
     vd: vardesk;
@@ -213,7 +213,7 @@ begin
 end;
 
 
-function TextIOLoad_TMPL1(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjText):boolean;
+function TextIOLoad_TMPL1(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjText):boolean;
 begin
      pent^.template:=_value;
      result:=true;
@@ -224,7 +224,7 @@ begin
        dxfGDBStringout(outhandle,1000,'_TMPL1='+pent^.template);
 end;
 
-function BlockDefIOLoad_TYPE(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjBlockDef):boolean;
+function BlockDefIOLoad_TYPE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjBlockDef):boolean;
 begin
      if _Value='BT_CONNECTOR' then
                                begin
@@ -237,7 +237,7 @@ else if _Value='BT_UNKNOWN' then
                                 result:=true;
                            end;
 end;
-function BlockDefIOLoad_GROUP(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjBlockDef):boolean;
+function BlockDefIOLoad_GROUP(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjBlockDef):boolean;
 begin
      if _Value='BG_EL_DEVICE' then
                                begin
@@ -250,7 +250,7 @@ else if _Value='BG_UNKNOWN' then
                                 result:=true;
                            end;
 end;
-function BlockDefIOLoad_BORDER(_Name,_Value:GDBString;ptu:PTUnit;const drawing:TDrawingDef;PEnt:PGDBObjBlockDef):boolean;
+function BlockDefIOLoad_BORDER(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjBlockDef):boolean;
 begin
      if _Value='BB_OWNER' then
                            begin

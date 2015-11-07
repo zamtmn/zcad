@@ -21,14 +21,14 @@ unit zeentityfactory;
 
 
 interface
-uses GDBSubordinated,uabstractunit,usimplegenerics,UGDBDrawingdef,gdbobjectsconstdef,
+uses GDBSubordinated,{uabstractunit,}usimplegenerics,UGDBDrawingdef,gdbobjectsconstdef,
     memman,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity;
 type
 TAllocEntFunc=function:GDBPointer;
 TAllocAndInitEntFunc=function (owner:PGDBObjGenericWithSubordinated): PGDBObjEntity;
 TAllocAndInitAndSetGeomPropsFunc=function (owner:PGDBObjGenericWithSubordinated;args:array of const): PGDBObjEntity;
 TSetGeomPropsFunc=procedure (ent:PGDBObjEntity;args:array of const);
-TEntityUpgradeFunc=function (ptu:PTAbstractUnit;ent:PGDBObjEntity;const drawing:TDrawingDef): PGDBObjEntity;
+TEntityUpgradeFunc=function (ptu:PExtensionData;ent:PGDBObjEntity;const drawing:TDrawingDef): PGDBObjEntity;
 TEntInfoData=packed record
                           DXFName,UserName:GDBString;
                           EntityID:TObjID;

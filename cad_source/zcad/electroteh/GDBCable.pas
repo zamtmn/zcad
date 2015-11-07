@@ -506,7 +506,7 @@ begin
   result.initnul(owner);
   result.bp.ListPos.Owner:=owner;
 end;
-function Upgrade3DPolyline2Cable(ptu:PTUnit;pent:PGDBObjCurve;const drawing:TDrawingDef):PGDBObjCable;
+function Upgrade3DPolyline2Cable(ptu:PExtensionData;pent:PGDBObjCurve;const drawing:TDrawingDef):PGDBObjCable;
 var
     ptv:pgdbvertex;
     ir:itrec;

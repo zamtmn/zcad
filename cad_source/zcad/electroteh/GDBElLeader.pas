@@ -743,7 +743,7 @@ begin
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
 end;
-function UpgradeLine2Leader(ptu:PTUnit;pent:PGDBObjLine;const drawing:TDrawingDef):PGDBObjElLeader;
+function UpgradeLine2Leader(ptu:PExtensionData;pent:PGDBObjLine;const drawing:TDrawingDef):PGDBObjElLeader;
 var
    pvi:pvardesk;
 begin
@@ -756,17 +756,17 @@ begin
 
    if ptu<>nil then
    begin
-   pvi:=ptu.FindVariable('size');
+   pvi:=PTUnit(ptu).FindVariable('size');
    if pvi<>nil then
                    begin
                         result^.size:=pgdbinteger(pvi^.data.Instance)^;
                    end;
-   pvi:=ptu.FindVariable('scale');
+   pvi:=PTUnit(ptu).FindVariable('scale');
    if pvi<>nil then
                    begin
                         result^.scale:=pgdbdouble(pvi^.data.Instance)^;
                    end;
-   pvi:=ptu.FindVariable('twidth');
+   pvi:=PTUnit(ptu).FindVariable('twidth');
    if pvi<>nil then
                    begin
                         result^.twidth:=pgdbdouble(pvi^.data.Instance)^;

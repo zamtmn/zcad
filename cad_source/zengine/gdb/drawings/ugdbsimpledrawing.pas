@@ -24,7 +24,7 @@ uses ugdbdimstylearray,GDBWithLocalCS,ugdbabstractdrawing,strproc,
      varmandef,{varman,}sysutils, memman, geometry,gdbasetypes,{sysinfo,}
      GDBGenericSubEntry,UGDBLayerArray,ugdbltypearray,GDBEntity,
      UGDBSelectedObjArray,UGDBTextStyleArray,GDBCamera,UGDBOpenArrayOfPV,
-     GDBRoot,ugdbfont,UGDBOpenArrayOfPObjects,abstractviewarea,gdbdrawcontext;
+     GDBRoot,ugdbfont,UGDBOpenArrayOfPObjects,uzglabstractviewarea,gdbdrawcontext;
 type
 {EXPORT+}
 PTSimpleDrawing=^TSimpleDrawing;

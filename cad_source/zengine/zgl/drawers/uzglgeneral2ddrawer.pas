@@ -19,7 +19,7 @@
 unit uzglgeneral2ddrawer;
 {$INCLUDE def.inc}
 interface
-uses LCLIntf,Controls,abstractviewarea,uzglgeneraldrawer,uzgprimitivescreator,UGDBOpenArrayOfData,uzglabstractdrawer,gdbpalette,Classes,Graphics,gdbase,gdbasetypes,geometry;
+uses LCLIntf,Controls,uzglabstractviewarea,uzglgeneraldrawer,uzgprimitivescreator,UGDBOpenArrayOfData,uzglabstractdrawer,gdbpalette,Classes,Graphics,gdbase,gdbasetypes,geometry;
 type
 DMatrix4DStackArray=array[0..10] of DMatrix4D;
 

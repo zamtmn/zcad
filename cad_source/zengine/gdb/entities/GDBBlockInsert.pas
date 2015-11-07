@@ -32,6 +32,7 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      scale:GDBvertex;(*saved_to_shd*)
                      rotate:GDBDouble;(*saved_to_shd*)
                      index:GDBInteger;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
+                     pblockdef:PGDBObjBlockdef;
                      Name:GDBAnsiString;(*saved_to_shd*)(*oi_readonly*)
                      pattrib:GDBPointer;(*hidden_in_objinsp*)
                      BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
@@ -321,6 +322,12 @@ begin
   m1[1,0]:=-sin(rotate*pi/180);
   m1[0,1]:=sin(rotate*pi/180);
   objMatrix:=MatrixMultiply(m1,objMatrix);}
+
+  if pblockdef<>nil then
+  begin
+  m1:=CreateTranslationMatrix(VertexMulOnSc(pblockdef.Base,-1));
+  objMatrix:=MatrixMultiply(m1,objMatrix);
+  end;
   setrot(rotate);
 
   m1:=OneMatrix;
@@ -358,6 +365,7 @@ constructor GDBObjBlockInsert.init;
 begin
   inherited init(own,layeraddres,LW);
   POINTER(name):=nil;
+  pblockdef:=nil;
   //GDBGetMem(self.varman,sizeof(varmanager));
   bp.ListPos.Owner:=own;
   vp.ID:=GDBBlockInsertID;
@@ -370,6 +378,7 @@ end;
 constructor GDBObjBlockInsert.initnul;
 begin
   inherited initnul;
+  pblockdef:=nil;
   POINTER(name):=nil;
   //GDBGetMem(self.varman,sizeof(varmanager));
   bp.ListPos.Owner:=nil;
@@ -427,7 +436,7 @@ begin
 }
 end;
 procedure GDBObjBlockInsert.BuildGeometry;
-var pblockdef:PGDBObjBlockdef;
+var
     pvisible,pvisible2:PGDBObjEntity;
     //freelayer:PGDBLayerProp;
     i:GDBInteger;

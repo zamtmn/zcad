@@ -20,7 +20,7 @@ unit UGDBTextStyleArray;
 {$INCLUDE def.inc}
 interface
 uses paths,UGDBFontManager,zcadsysvars,gdbasetypes,{SysInfo,}sysutils,gdbase, geometry,
-     strproc,{varmandef,}shared,ugdbfont,zcadstrconsts,UGDBNamedObjectsArray,memman;
+     strproc,{varmandef,}{shared,}ugdbfont,zcadstrconsts,UGDBNamedObjectsArray,memman;
 type
   //ptextstyle = ^textstyle;
 {REGISTEROBJECTTYPE GDBTextStyleArray}
@@ -133,7 +133,8 @@ begin
   ps.pfont:=FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,FontFile));
   if not assigned(ps.pfont) then
                                 begin
-                                     shared.LogError(sysutils.format(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]));
+                                     programlog.LogOutFormatStr(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile],lp_OldPos,LM_Debug);
+                                     //shared.LogError(sysutils.format(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]));
                                      ps.pfont:=pbasefont;
                                 end;
 
@@ -163,7 +164,8 @@ begin
   ts.pfont:=FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,FontFile));
   if not assigned(ts.pfont) then
                                 begin
-                                     shared.LogError(sysutils.format(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]));
+                                     programlog.LogOutFormatStr(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile],lp_OldPos,LM_Debug);
+                                     //shared.LogError(sysutils.format(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]));
                                      ts.pfont:=pbasefont;
                                 end;
 

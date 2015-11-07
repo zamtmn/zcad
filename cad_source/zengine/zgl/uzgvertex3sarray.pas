@@ -26,13 +26,13 @@ type
 ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBvertex3S*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
-                procedure DrawGeometry;virtual;
+                //procedure DrawGeometry;virtual;
                 function AddGDBVertex(const v:GDBvertex):TArrayIndex;virtual;
                 function GetLength(const i:TArrayIndex):GDBFloat;virtual;
              end;
 {Export-}
 implementation
-uses glstatemanager,log;
+uses {glstatemanager,}log;
 function ZGLVertex3Sarray.GetLength(const i:TArrayIndex):GDBFloat;
 var
     pv1,pv2:PGDBvertex3S;
@@ -66,7 +66,7 @@ begin
   inherited initnul;
   size:=sizeof(GDBvertex3S);
 end;
-procedure ZGLVertex3Sarray.drawgeometry;
+(*procedure ZGLVertex3Sarray.drawgeometry;
 var p:PGDBVertex3S;
     i:GDBInteger;
 begin
@@ -82,7 +82,7 @@ begin
   end;
   //oglsm.myglVertex3dV(@p^);
   oglsm.myglend;
-end;
+end;*)
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('uzgvertex3sarray.initialization');{$ENDIF}
 end.

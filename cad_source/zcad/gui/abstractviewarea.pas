@@ -25,7 +25,7 @@ uses {gdbase,gdbasetypes,
      uinfoform,}
      UGDBOpenArrayOfPV,uzglabstractdrawer,GDBGenericSubEntry,gdbase,gdbasetypes,
      oglwindowdef,gdbdrawcontext,varmandef,{Varman,}UGDBPoint3DArray,UGDBEntTree,geometry,ugdbabstractdrawing,
-     shared,sysutils,
+     {shared,}sysutils,
      ExtCtrls,Controls,Classes,LCLType,Forms,zcadsysvars,GDBEntity;
 
 type

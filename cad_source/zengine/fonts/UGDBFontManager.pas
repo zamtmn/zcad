@@ -19,7 +19,7 @@
 unit UGDBFontManager;
 {$INCLUDE def.inc}
 interface
-uses lclintfex,zcadstrconsts,shared,{zcadsysvars,}strproc,ugdbfont,gdbasetypes,{SysInfo,}memman,
+uses paths,lclintfex,zcadstrconsts,{shared,}{zcadsysvars,}strproc,ugdbfont,gdbasetypes,{SysInfo,}memman,
      sysutils,gdbase, geometry,usimplegenerics,
      UGDBNamedObjectsArray,classes;
 type
@@ -151,7 +151,7 @@ begin
                        end;
              IsCreated:
                        begin
-                            shared.HistoryOutStr(sysutils.format(rsLoadingFontFile,[FontPathName]));
+                            //shared.HistoryOutStr(sysutils.format(rsLoadingFontFile,[FontPathName]));
                             programlog.LogOutFormatStr('Loading font "%s"',[FontPathName],lp_IncPos,LM_Info);
                             _key:=lowercase(FontExt);
                             if _key<>'' then
@@ -170,8 +170,8 @@ begin
                                                   FontLoaded:=createnewfontfromttf(FontPathName,p);}
                             if not FontLoaded then
                             begin
-                                 shared.ShowError(sysutils.format('Font file "%S" unknown format',[FontPathName]));
-                                 //shared.LogError(sysutils.format(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]));
+                                 programlog.LogOutFormatStr('Font file "%S" unknown format',[FontPathName],lp_OldPos,LM_Error);
+                                 //shared.ShowError(sysutils.format('Font file "%S" unknown format',[FontPathName]));
                                  dec(self.Count);
                                  //p^.Name:='ERROR ON LOAD';
                                  p:=nil;

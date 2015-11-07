@@ -21,7 +21,7 @@ unit ugdbltypearray;
 interface
 uses FileUtil,Classes,UGDBOpenArrayOfData,zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
      UGDBTextStyleArray,UGDBOpenArrayOfObjects,
-     {varmandef,}{gdbobjectsconstdef,}UGDBNamedObjectsArray,StrProc,shared;
+     {varmandef,}{gdbobjectsconstdef,}UGDBNamedObjectsArray,StrProc{,shared};
 const
      DefaultSHXHeight=1;
      DefaultSHXAngle=0;
@@ -538,7 +538,8 @@ begin
                                  SHXDashProp.param.Angle:=stroke;
                                  SHXDashProp.param.AD:=TACUpRight;
                             end
-  else shared.ShowError('CreateLineTypeFrom: unknow value "'+paramname+'"');
+  else programlog.LogOutStr('CreateLineTypeFrom: unknow value "'+paramname+'"',lp_OldPos,LM_Error);
+       //shared.ShowError('CreateLineTypeFrom: unknow value "'+paramname+'"');
        subelement:=GetPredStr(element,',');
   end;
 end;

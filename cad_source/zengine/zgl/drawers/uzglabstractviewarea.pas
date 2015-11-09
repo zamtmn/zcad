@@ -78,7 +78,7 @@ type
                            procedure Clear0Ontrackpoint;virtual;abstract;
                            procedure SetMouseMode(smode:GDBByte);virtual;abstract;
                            procedure SetObjInsp;virtual;abstract;
-                           procedure sendcoordtocommandTraceOn(coord:GDBVertex;key: GDBByte;pos:pos_record);virtual;abstract;
+                           //procedure sendcoordtocommandTraceOn(coord:GDBVertex;key: GDBByte;pos:pos_record);virtual;abstract;
                            procedure reprojectaxis;virtual;abstract;
                            procedure Project0Axis;virtual;abstract;
                            procedure create0axis;virtual;abstract;
@@ -112,8 +112,8 @@ type
                            procedure projectaxis;virtual;abstract;
                            procedure AddOntrackpoint;virtual;abstract;
                            procedure CorrectMouseAfterOS;virtual;abstract;
-                           procedure sendmousecoordwop(key: GDBByte);virtual;abstract;
-                           procedure sendmousecoord(key: GDBByte);virtual;abstract;
+                           //procedure sendmousecoordwop(key: GDBByte);virtual;abstract;
+                           //procedure sendmousecoord(key: GDBByte);virtual;abstract;
                            function SelectRelatedObjects(pent:PGDBObjEntity):GDBInteger;virtual;abstract;
                            procedure doCameraChanged;virtual;abstract;
                            procedure set3dmouse;virtual;abstract;

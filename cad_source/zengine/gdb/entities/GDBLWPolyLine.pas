@@ -20,7 +20,7 @@ unit GDBLWPolyLine;
 {$INCLUDE def.inc}
 
 interface
-uses uabstractunit,zeentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,oglwindowdef,GDBCurve,UGDBVectorSnapArray,geometry,UGDBLayerArray,GDBEntity,memman,gdbasetypes,UGDBPoint3DArray,UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,varmandef,
+uses zeentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,oglwindowdef,GDBCurve,UGDBVectorSnapArray,geometry,UGDBLayerArray,GDBEntity,memman,gdbasetypes,UGDBPoint3DArray,UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,varmandef,
 GDBase,GDBWithLocalCS,gdbobjectsconstdef,math,dxflow,sysutils,UGDBLineWidthArray;
 type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
@@ -539,7 +539,7 @@ begin
     if Width3D_in_WCS_Array.parray<>nil then
            begin
                 q3d:=Width3D_in_WCS_Array.parray;
-                dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],dc.matrixs);
+                dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],dc.DrawingContext.matrixs);
                 {oglsm.myglbegin(GL_Lines);
                 oglsm.myglVertex3dv(@q3d^[0]);
                 oglsm.myglVertex3dv(@q3d^[1]);
@@ -558,7 +558,7 @@ begin
       begin
         if plw^.hw then
         begin
-        dc.drawer.DrawQuad3DInModelSpace(q3d^[0],q3d^[1],q3d^[2],q3d^[3],dc.matrixs);
+        dc.drawer.DrawQuad3DInModelSpace(q3d^[0],q3d^[1],q3d^[2],q3d^[3],dc.DrawingContext.matrixs);
         {oglsm.myglbegin(GL_QUADS);
         oglsm.myglVertex3dv(@q3d^[0]);
         oglsm.myglVertex3dv(@q3d^[1]);
@@ -577,18 +577,18 @@ begin
     for i := 0 to ie do
     begin
       begin
-        dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],dc.matrixs);
+        dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],dc.DrawingContext.matrixs);
         //oglsm.myglVertex3dv(@q3d^[0]);
         //oglsm.myglVertex3dv(@q3d^[1]);
         if plw^.hw then
         begin
-        dc.drawer.DrawLine3DInModelSpace(q3d^[1],q3d^[2],dc.matrixs);
+        dc.drawer.DrawLine3DInModelSpace(q3d^[1],q3d^[2],dc.DrawingContext.matrixs);
         //oglsm.myglVertex3dv(@q3d^[1]);
         //oglsm.myglVertex3dv(@q3d^[2]);
-        dc.drawer.DrawLine3DInModelSpace(q3d^[2],q3d^[3],dc.matrixs);
+        dc.drawer.DrawLine3DInModelSpace(q3d^[2],q3d^[3],dc.DrawingContext.matrixs);
         //oglsm.myglVertex3dv(@q3d^[2]);
         //oglsm.myglVertex3dv(@q3d^[3]);
-        dc.drawer.DrawLine3DInModelSpace(q3d^[3],q3d^[0],dc.matrixs);
+        dc.drawer.DrawLine3DInModelSpace(q3d^[3],q3d^[0],dc.DrawingContext.matrixs);
         //oglsm.myglVertex3dv(@q3d^[3]);
         //oglsm.myglVertex3dv(@q3d^[0]);
         end;

@@ -57,21 +57,21 @@ begin
        p:=geometry.VertexAdd(Local.P_insert,Local.Basis.ox);
        //oglsm.myglvertex3dv(@Local.P_insert);
        //oglsm.myglvertex3dv(@p);
-       dc.drawer.DrawLine3DInModelSpace(Local.P_insert,p,dc.matrixs);
+       dc.drawer.DrawLine3DInModelSpace(Local.P_insert,p,dc.DrawingContext.matrixs);
 
        //oglsm.glcolor3ub(0,255,0);
        dc.drawer.SetColor(0,255,0,0);
        p:=geometry.VertexAdd(Local.P_insert,Local.Basis.oy);
        //oglsm.myglvertex3dv(@Local.P_insert);
        //oglsm.myglvertex3dv(@p);
-       dc.drawer.DrawLine3DInModelSpace(Local.P_insert,p,dc.matrixs);
+       dc.drawer.DrawLine3DInModelSpace(Local.P_insert,p,dc.DrawingContext.matrixs);
 
        //oglsm.glcolor3ub(0,0,255);
        dc.drawer.SetColor(0,0,255,0);
        p:=geometry.VertexAdd(Local.P_insert,Local.Basis.oz);
        //oglsm.myglvertex3dv(@Local.P_insert);
        //oglsm.myglvertex3dv(@p);
-       dc.drawer.DrawLine3DInModelSpace(Local.P_insert,p,dc.matrixs);
+       dc.drawer.DrawLine3DInModelSpace(Local.P_insert,p,dc.DrawingContext.matrixs);
 
        //oglsm.myglend;
   end;

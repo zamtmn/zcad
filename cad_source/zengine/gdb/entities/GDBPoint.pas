@@ -154,7 +154,7 @@ begin
   //oglsm.myglbegin(GL_points);
   //oglsm.myglVertex3dV(@P_insertInWCS);
   //oglsm.myglend;
-  dc.drawer.DrawPoint3DInModelSpace(P_insertInWCS,dc.matrixs);
+  dc.drawer.DrawPoint3DInModelSpace(P_insertInWCS,dc.DrawingContext.matrixs);
   {oglsm.myglbegin(GL_LINES);
   oglsm.myglVertex(P_insertInWCS.x-0.5,P_insertInWCS.y-0.5,P_insertInWCS.z);
   oglsm.myglVertex(P_insertInWCS.x+0.5,P_insertInWCS.y+0.5,P_insertInWCS.z);

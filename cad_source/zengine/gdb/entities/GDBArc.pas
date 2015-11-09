@@ -18,7 +18,7 @@
 unit GDBArc;
 {$INCLUDE def.inc}
 interface
-uses uabstractunit,zeentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,math,GDBWithLocalCS,GDBCamera,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,
+uses zeentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,math,GDBWithLocalCS,GDBCamera,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,
 GDBase{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain;
 type
 {REGISTEROBJECTTYPE GDBObjArc}
@@ -432,7 +432,7 @@ begin
                   else
                       maxlod:=20;
 
-  l:=r*angle/(dc.zoom*dc.zoom*3);
+  l:=r*angle/(dc.DrawingContext.zoom*dc.DrawingContext.zoom*3);
   if l>maxlod then lod:=maxlod
            else
                begin
@@ -535,8 +535,8 @@ begin
                                        end
                                                         else
                                                             begin
-                                                                 DC.Drawer.DrawLine3DInModelSpace(q0,q1,DC.matrixs);
-                                                                 DC.Drawer.DrawLine3DInModelSpace(q1,q2,DC.matrixs);
+                                                                 DC.Drawer.DrawLine3DInModelSpace(q0,q1,DC.DrawingContext.matrixs);
+                                                                 DC.Drawer.DrawLine3DInModelSpace(q1,q2,DC.DrawingContext.matrixs);
                                                             end;
                      end;
   //myglbegin(gl_points);

@@ -2887,7 +2887,118 @@ else if sender=VScrollBar then
   end;
 end;
 function MainForm.wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer):boolean;
+var
+  key:GDBByte;
+  needredraw:boolean;
+  FreeClick:boolean;
+function ProcessControlpoint:boolean;
 begin
+   begin
+    key := MouseButton2ZKey(shift);
+    result:=false;
+    if Sender.param.gluetocp then
+    begin
+      Sender.PDWG.GetSelObjArray.selectcurrentcontrolpoint(key,Sender.param.md.mouseglue.x,Sender.param.md.mouseglue.y,Sender.param.height);
+      needredraw:=true;
+      result:=true;
+      if (key and MZW_SHIFT) = 0 then
+      begin
+        Sender.param.startgluepoint:=Sender.param.nearesttcontrolpoint.pcontrolpoint;
+        commandmanager.ExecuteCommandSilent('OnDrawingEd',Sender.pdwg,@Sender.param);
+        //wa.param.lastpoint:=wa.param.nearesttcontrolpoint.pcontrolpoint^.worldcoord;
+        //sendmousecoord{wop}(key);  bnmbnm
+        if commandmanager.pcommandrunning <> nil then
+        begin
+          if key=MZW_LBUTTON then
+                                 Sender.param.lastpoint:=Sender.param.nearesttcontrolpoint.pcontrolpoint^.worldcoord;
+          commandmanager.pcommandrunning^.MouseMoveCallback(Sender.param.nearesttcontrolpoint.pcontrolpoint^.worldcoord,
+                                                            Sender.param.md.mouseglue, key,nil)
+        end;
+      end;
+    end;
+  end;
+end;
+function ProcessEntSelect:boolean;
+var
+    RelSelectedObjects:Integer;
+begin
+  result:=false;
+  key := MouseButton2ZKey(shift);
+  begin
+    sender.getonmouseobjectbytree(sender.PDWG.GetCurrentROOT.ObjArray.ObjTree,sysvarDWGEditInSubEntry);
+    //getonmouseobject(@gdb.GetCurrentROOT.ObjArray);
+    if (key and MZW_CONTROL)<>0 then
+    begin
+         commandmanager.ExecuteCommandSilent('SelectOnMouseObjects',sender.pdwg,@sender.param);
+         result:=true;
+    end
+    else
+    begin
+    {//Выделение всех объектов под мышью
+    if gdb.GetCurrentDWG.OnMouseObj.Count >0 then
+    begin
+         pobj:=gdb.GetCurrentDWG.OnMouseObj.beginiterate(ir);
+         if pobj<>nil then
+         repeat
+               pobj^.select;
+               wa.param.SelDesc.LastSelectedObject := pobj;
+               pobj:=gdb.GetCurrentDWG.OnMouseObj.iterate(ir);
+         until pobj=nil;
+      addoneobject;
+      SetObjInsp;
+    end}
+
+    //Выделение одного объекта под мышью
+    if sender.param.SelDesc.OnMouseObject <> nil then
+    begin
+         result:=true;
+         if (key and MZW_SHIFT)=0
+         then
+             begin
+                  //if assigned(sysvar.DSGN.DSGN_SelNew)then
+                  if sysvarDSGNSelNew then
+                  begin
+                        sender.pdwg.GetCurrentROOT.ObjArray.DeSelect(sender.pdwg.GetSelObjArray,sender.param.SelDesc.Selectedobjcount);
+                        sender.param.SelDesc.LastSelectedObject := nil;
+                        //wa.param.SelDesc.OnMouseObject := nil;
+                        sender.param.seldesc.Selectedobjcount:=0;
+                        sender.PDWG^.GetSelObjArray.clearallobjects;
+                  end;
+                  sender.param.SelDesc.LastSelectedObject := sender.param.SelDesc.OnMouseObject;
+                  if assigned(sender.OnWaMouseSelect)then
+                    sender.OnWaMouseSelect(sender,sender.param.SelDesc.LastSelectedObject);
+             end
+         else
+             begin
+                  PGDBObjEntity(sender.param.SelDesc.OnMouseObject)^.DeSelect(sender.PDWG^.GetSelObjArray,sender.param.SelDesc.Selectedobjcount);
+                  sender.param.SelDesc.LastSelectedObject := nil;
+                  //addoneobject;
+                  sender.SetObjInsp;
+                  if assigned(updatevisibleproc) then updatevisibleproc;
+             end;
+             //wa.param.SelDesc.LastSelectedObject := wa.param.SelDesc.OnMouseObject;
+             if commandmanager.pcommandrunning<>nil then
+             if commandmanager.pcommandrunning.IData.GetPointMode=TGPWaitEnt then
+             if sender.param.SelDesc.LastSelectedObject<>nil then
+             begin
+               commandmanager.pcommandrunning^.IData.GetPointMode:=TGPEnt;
+             end;
+         NeedRedraw:=true;
+    end
+
+    else if ((sender.param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0) then
+    begin
+      result:=true;
+    { TODO : Добавить возможность выбора объектов без секрамки во время выполнения команды }
+      commandmanager.ExecuteCommandSilent('SelectFrame',sender.pdwg,@sender.param);
+      sender.sendmousecoord(MZW_LBUTTON);
+    end;
+  end;
+  end;
+end;
+
+begin
+  key := MouseButton2ZKey(shift);
   if ssDouble in shift then
                            begin
                                 if mbLeft=button then
@@ -2902,6 +3013,38 @@ begin
                                   end;
 
                            end;
+
+
+  if (ssLeft in shift) then
+    //---------------------------------------------------------if commandmanager.pcommandrunning = nil then
+    begin
+      if (sender.param.md.mode and MGetControlpoint) <> 0 then
+                                                       FreeClick:=not ProcessControlpoint;
+
+        {else} if FreeClick and((sender.param.md.mode and MGetSelectObject) <> 0) then
+        FreeClick:=not ProcessEntSelect;
+        needredraw:=true;
+    end;
+    //---------------------------------------------------------else
+    begin
+      if FreeClick and((sender.param.md.mode and (MGet3DPoint or MGet3DPointWoOP)) <> 0) then
+      begin
+        //if commandmanager.pcommandrunning <> nil then
+        //                                             FreeClick:=false;
+        sender.sendmousecoordwop(key);
+        //GDBFreeMem(GDB.PObjPropArray^.propertyarray[0].pobject);
+      end;
+       {if FreeClick and(((wa.param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0)) then
+          begin
+            commandmanager.ExecuteCommandSilent('SelectFrame',wa.pdwg,@wa.param);
+            sendmousecoord(MZW_LBUTTON);
+            FreeClick:=false;
+          end;}
+      needredraw:=true;
+    end;
+    If assigned(UpdateObjInspProc)then
+    UpdateObjInspProc;
+
   result:=false;
 end;
 function SelectRelatedObjects(PDWG:PTAbstractDrawing;param:POGLWndtype;pent:PGDBObjEntity):GDBInteger;

@@ -187,7 +187,7 @@ var
 begin
      if dc.maxdetail then
                          exit(true);
-  templod:=(ParamSize)/(dc.zoom);
+  templod:=(ParamSize)/(dc.DrawingContext.zoom);
   if templod>TargetSize then
                             exit(true)
                         else
@@ -268,14 +268,14 @@ begin
 end;
 procedure GDBObjEntity.Draw;
 begin
-  if visible=dc.visibleactualy then
+  if visible=dc.DrawingContext.visibleactualy then
   begin
        DrawGeometry(lw,dc{visibleactualy,subrender});
   end;
 end;
 procedure GDBObjEntity.Drawg;
 begin
-  if visible=dc.visibleactualy then
+  if visible=dc.DrawingContext.visibleactualy then
   begin
        DrawOnlyGeometry(lw,dc{visibleactualy,subrender});
   end;
@@ -312,7 +312,7 @@ begin
   begin
   //oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
   dc.drawer.SetColor(palette[dc.SystmGeometryColor].RGB);
-  dc.drawer.DrawAABB3DInModelSpace(vp.BoundingBox,dc.matrixs);
+  dc.drawer.DrawAABB3DInModelSpace(vp.BoundingBox,dc.DrawingContext.matrixs);
   end;
 end;
 function GDBObjEntity.GetCenterPoint;
@@ -549,7 +549,7 @@ begin
                end;
           end
       else
-          if (vp.layer<>dc.SysLayer) then
+          if (vp.layer<>dc.DrawingContext.SysLayer) then
                                          begin
                                               case vp.color of
                                                               ClByLayer:
@@ -776,11 +776,11 @@ begin
       end
          else
              d:=0;}
-     d:=GetLTCorrectL(dc.globalltscale);
+     d:=GetLTCorrectL(dc.DrawingContext.globalltscale);
      cv:=VertexSUB(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
      if (d>0)and(d*d<cv.x*cv.x+cv.y*cv.y+cv.z*cv.z) then
      begin
-     d:=GetLTCorrectH(dc.globalltscale);
+     d:=GetLTCorrectH(dc.DrawingContext.globalltscale);
      cv:=createvertex(d,d,d);
      vp.BoundingBox.LBN:=VertexSUB(vp.BoundingBox.LBN,cv);
      vp.BoundingBox.RTF:=VertexAdd(vp.BoundingBox.RTF,cv);

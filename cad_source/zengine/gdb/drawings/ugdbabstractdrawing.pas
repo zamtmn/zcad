@@ -18,7 +18,7 @@
 
 unit ugdbabstractdrawing;
 interface
-uses UGDBDrawingdef,gdbase,gdbasetypes,GDBCamera,GDBEntity,GDBGenericSubEntry,GDBRoot,UGDBSelectedObjArray,UGDBLayerArray,UGDBOpenArrayOfPV;
+uses gdbdrawcontext,UGDBDrawingdef,gdbase,gdbasetypes,GDBCamera,GDBEntity,GDBGenericSubEntry,GDBRoot,UGDBSelectedObjArray,UGDBLayerArray,UGDBOpenArrayOfPV;
 type
 {EXPORT+}
 PTAbstractDrawing=^TAbstractDrawing;
@@ -40,6 +40,7 @@ TAbstractDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TDrawingDef)
                        function GetUnitsFormat:TzeUnitsFormat;virtual;abstract;
                        procedure SetUnitsFormat(f:TzeUnitsFormat);virtual;abstract;
                        procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
+                       procedure FillDrawingPartRC(var dc:TDrawContext);virtual;abstract;
                  end;
 {EXPORT-}
 implementation

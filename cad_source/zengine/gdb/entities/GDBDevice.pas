@@ -361,7 +361,7 @@ begin
         oglsm.myglVertex3dV(@self.P_insert_in_WCS);
         oglsm.myglVertex3dV(@v);
         oglsm.myglend;}
-        dc.drawer.DrawLine3DInModelSpace(self.P_insert_in_WCS,v,dc.matrixs);
+        dc.drawer.DrawLine3DInModelSpace(self.P_insert_in_WCS,v,dc.DrawingContext.matrixs);
        p:=VarObjArray.iterate(ir);
   until p=nil;
   end;
@@ -391,7 +391,7 @@ begin
         oglsm.myglVertex3dV(@self.P_insert_in_WCS);
         oglsm.myglVertex3dV(@v);
         oglsm.myglend;}
-        dc.drawer.DrawLine3DInModelSpace(self.P_insert_in_WCS,v,dc.matrixs);
+        dc.drawer.DrawLine3DInModelSpace(self.P_insert_in_WCS,v,dc.DrawingContext.matrixs);
        p:=VarObjArray.iterate(ir);
   until p=nil;
   end;

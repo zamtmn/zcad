@@ -323,7 +323,7 @@ begin
   repeat
        if p^.vp.ID<>0 then
                          //p^.vp.ID:=p^.vp.ID;
-       if p^.infrustum=dc.infrustumactualy then
+       if p^.infrustum=dc.DrawingContext.infrustumactualy then
                            p^.DrawWithAttrib({infrustumactualy,subrender}dc);
        p:=iterate(ir);
   until p=nil;
@@ -340,7 +340,7 @@ begin
   repeat
        if p^.vp.ID<>0 then
                          //p^.vp.ID:=p^.vp.ID;
-       if p^.infrustum=dc.infrustumactualy then
+       if p^.infrustum=dc.DrawingContext.infrustumactualy then
                            p^.DrawGeometry(lw,dc{infrustumactualy,subrender});
        p:=iterate(ir);
   until p=nil;
@@ -357,7 +357,7 @@ begin
   repeat
        if p^.vp.ID<>0 then
                          //p^.vp.ID:=p^.vp.ID;
-       if p^.infrustum=dc.infrustumactualy then
+       if p^.infrustum=dc.DrawingContext.infrustumactualy then
                            p^.DrawOnlyGeometry(lw,dc{infrustumactualy,subrender});
        p:=iterate(ir);
   until p=nil;

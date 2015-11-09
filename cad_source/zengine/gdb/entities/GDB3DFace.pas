@@ -19,7 +19,7 @@ unit GDB3DFace;
 {$INCLUDE def.inc}
 
 interface
-uses uabstractunit,zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,
+uses zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,
 GDBase,gdbobjectsconstdef{,oglwindowdef,dxflow},memman;
 type
 {REGISTEROBJECTTYPE GDBObj3DFace}
@@ -215,7 +215,7 @@ oglsm.myglEnable(GL_COLOR_MATERIAL);
 *)
   if triangle then
   begin
-       dc.drawer.DrawTriangle3DInModelSpace(normal,PInwCS[0],PInwCS[1],PInwCS[2],dc.matrixs);
+       dc.drawer.DrawTriangle3DInModelSpace(normal,PInwCS[0],PInwCS[1],PInwCS[2],dc.DrawingContext.matrixs);
        {oglsm.myglbegin(GL_TRIANGLES);
        oglsm.myglNormal3dV(@normal);
        oglsm.myglVertex3dV(@PInwCS[0]);
@@ -225,7 +225,7 @@ oglsm.myglEnable(GL_COLOR_MATERIAL);
   end
      else
   begin
-    dc.drawer.DrawQuad3DInModelSpace(normal,PInwCS[0],PInwCS[1],PInwCS[2],PInwCS[3],dc.matrixs);
+    dc.drawer.DrawQuad3DInModelSpace(normal,PInwCS[0],PInwCS[1],PInwCS[2],PInwCS[3],dc.DrawingContext.matrixs);
   {oglsm.myglbegin(GL_QUADS);
   oglsm.myglNormal3dV(@normal);
   oglsm.myglVertex3dV(@PInwCS[0]);

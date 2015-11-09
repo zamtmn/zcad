@@ -244,7 +244,7 @@ begin
                              //oglsm.myglbegin(GL_points);
                              //oglsm.myglVertex3dV(@tgf^.point);
                              //oglsm.myglend;
-                             dc.drawer.DrawPoint3DInModelSpace(tgf^.point,dc.matrixs);
+                             dc.drawer.DrawPoint3DInModelSpace(tgf^.point,dc.DrawingContext.matrixs);
                              end;
     (*                         gdb.GetCurrentDWG.OGLwindow1.pushmatrix;
 

@@ -98,29 +98,29 @@ procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext{subrender:GDBInte
    //q1,q2:gdbboolean; {currd:PTSimpleDrawing;}
 begin
   //currd:=gdb.GetCurrentDWG;
-  if (Node.infrustum={currd.pcamera.POSCOUNT}dc.InfrustumActualy) then
+  if (Node.infrustum={currd.pcamera.POSCOUNT}dc.DrawingContext.InfrustumActualy) then
   begin
        if node.FulDraw then
        if (Node.FulDraw)or(Node.nul.count=0) then
        begin
        if assigned(node.pminusnode)then
-                                       if (node.minusdrawpos<>{currd.pcamera}dc.DRAWCOUNT)or(dc.MaxDetail) then
+                                       if (node.minusdrawpos<>{currd.pcamera}dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then
                                        begin
                                             treerender(node.pminusnode^,dc);
-                                            node.minusdrawpos:={currd.pcamera}dc.DRAWCOUNT
+                                            node.minusdrawpos:={currd.pcamera}dc.DrawingContext.DRAWCOUNT
                                        end;
        if assigned(node.pplusnode)then
-                                      if (node.plusdrawpos<>{currd.pcamera}dc.DRAWCOUNT)or(dc.MaxDetail) then
+                                      if (node.plusdrawpos<>{currd.pcamera}dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then
                                       begin
                                        treerender(node.pplusnode^,dc);
-                                           node.plusdrawpos:={currd.pcamera}dc.DRAWCOUNT
+                                           node.plusdrawpos:={currd.pcamera}dc.DrawingContext.DRAWCOUNT
                                       end;
        end;
        //if (node.FulDraw) then
        begin
             if (node.FulDraw)or(dc.MaxDetail) then
         Node.nul.DrawWithattrib(dc{gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender});
-        node.nuldrawpos:={currd.pcamera}dc.DRAWCOUNT;
+        node.nuldrawpos:={currd.pcamera}dc.DrawingContext.DRAWCOUNT;
        end;
   end;
   //Node.drawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT;
@@ -139,7 +139,7 @@ begin
 end;
 procedure TEntTreeNode.drawonlyself;
 begin
-     dc.drawer.DrawAABB3DInModelSpace(BoundingBox,dc.matrixs);
+     dc.drawer.DrawAABB3DInModelSpace(BoundingBox,dc.DrawingContext.matrixs);
      //DrawAABB(BoundingBox);
 end;
 

@@ -90,6 +90,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        procedure FreeConstructionObjects;virtual;
                        function GetChangeStampt:GDBBoolean;virtual;
                        function CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;virtual;
+                       procedure FillDrawingPartRC(var dc:TDrawContext);virtual;
                        function GetUnitsFormat:TzeUnitsFormat;virtual;
                  end;
 {EXPORT-}
@@ -117,6 +118,19 @@ begin
   begin
        result:=CreateFaceRC;
   end;
+end;
+procedure TSimpleDrawing.FillDrawingPartRC(var dc:TDrawContext);
+begin
+  dc.DrawingContext.VisibleActualy:=Getpcamera.POSCOUNT;
+  dc.DrawingContext.InfrustumActualy:=Getpcamera.POSCOUNT;
+  dc.DrawingContext.DRAWCOUNT:=Getpcamera.DRAWCOUNT;
+  dc.DrawingContext.SysLayer:=GetLayerTable.GetSystemLayer;
+  dc.DrawingContext.Zoom:=GetPcamera.prop.zoom;
+  dc.DrawingContext.matrixs.pmodelMatrix:=@GetPcamera.modelMatrix;
+  dc.DrawingContext.matrixs.pprojMatrix:=@GetPcamera.projMatrix;
+  dc.DrawingContext.matrixs.pviewport:=@GetPcamera.viewport;
+  dc.DrawingContext.pcamera:=GetPcamera;
+  dc.DrawingContext.DrawHeplGeometryProc:=nil;
 end;
 
 function TSimpleDrawing.GetChangeStampt:GDBBoolean;

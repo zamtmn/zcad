@@ -669,7 +669,7 @@ begin
             //SetPolyUnLTyped;
            polylength:=0;
            Segmentator.InitFromPolyline(points,polylength,closed,@self);
-           TangentScale:={SysVar.dwg.DWG_LTScale^}rc.GlobalLTScale*vp.LineTypeScale;
+           TangentScale:={SysVar.dwg.DWG_LTScale^}rc.DrawingContext.GlobalLTScale*vp.LineTypeScale;
            NormalScale:=TangentScale;
            TrueNumberOfPatterns:=polylength/(TangentScale*LT.len);
            if ltgen and closed then
@@ -728,7 +728,7 @@ begin
      begin
           //LT:=getLTfromVP(vp);
           length := Vertexlength(startpoint,endpoint);//длина линии
-          scale:={SysVar.dwg.DWG_LTScale^}rc.GlobalLTScale*vp.LineTypeScale;//фактический масштаб линии
+          scale:={SysVar.dwg.DWG_LTScale^}rc.DrawingContext.GlobalLTScale*vp.LineTypeScale;//фактический масштаб линии
           num:=Length/(scale*LT.len);//количество повторений шаблона
           if (num<1)or(num>SysVarRDMaxLTPatternsInEntity) then
                                      DrawLineWithoutLT(rc,startpoint,endpoint) //не рисуем шаблон при большом количестве повторений

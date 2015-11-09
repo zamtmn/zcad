@@ -72,7 +72,7 @@ begin
                                                                    dc.drawer.SetColor(UnSelColor)
                                    end;
             //glvertex2iv(@point^.dispcoord);
-            dc.drawer.DrawPoint3DInModelSpace(point^.worldcoord,dc.matrixs);
+            dc.drawer.DrawPoint3DInModelSpace(point^.worldcoord,dc.DrawingContext.matrixs);
             inc(point);
        end;
   end;

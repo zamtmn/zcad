@@ -382,8 +382,8 @@ begin
           temp.x := gdb.GetCurrentDWG.wa.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.wa.param.pointnum].worldcoord.x + len * tv.x * sign(ptraceprop(gdb.GetCurrentDWG.wa.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getelement(gdb.GetCurrentDWG.wa.param.axisnum)).tmouse);
           temp.y := gdb.GetCurrentDWG.wa.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.wa.param.pointnum].worldcoord.y + len * tv.y * sign(ptraceprop(gdb.GetCurrentDWG.wa.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getelement(gdb.GetCurrentDWG.wa.param.axisnum)).tmouse);
           temp.z := gdb.GetCurrentDWG.wa.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.wa.param.pointnum].worldcoord.z + len * tv.z * sign(ptraceprop(gdb.GetCurrentDWG.wa.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getelement(gdb.GetCurrentDWG.wa.param.axisnum)).tmouse);
-
-          gdb.GetCurrentDWG.wa.sendcoordtocommandTraceOn(temp,MZW_LBUTTON,nil);
+          //временно
+          {gdb.GetCurrentDWG.wa.sendcoordtocommandTraceOn(temp,MZW_LBUTTON,nil);}
           //commandmanager.sendpoint2command(temp, poglwnd.md.mouse, 1,nil);
           //OGLwindow1.param.lastpoint:=temp;
         end
@@ -432,20 +432,22 @@ begin
            historyoutstr(Format(rsExprOutText,[CmdEdit.text,superexpr]));
            if IsParsed('_realnumber'#0'_softspace'#0'=,_realnumber'#0'_softspace'#0'=,_realnumber'#0,superexpr,parseresult)then
            begin
-                 if gdb.GetCurrentDWG<>nil then
+                 //временно
+                 {if gdb.GetCurrentDWG<>nil then
                  if gdb.GetCurrentDWG.wa.getviewcontrol<>nil then
                  gdb.GetCurrentDWG.wa.sendcoordtocommandTraceOn(geometry.CreateVertex(strtodouble(parseresult^.getGDBString(0)),
                                                                                               strtodouble(parseresult^.getGDBString(1)),
-                                                                                              strtodouble(parseresult^.getGDBString(2))),MZW_LBUTTON,nil);
+                                                                                              strtodouble(parseresult^.getGDBString(2))),MZW_LBUTTON,nil);}
                  if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
            end
            else if IsParsed('_realnumber'#0'_softspace'#0'=,_realnumber'#0,superexpr,parseresult)then
            begin
-                 if gdb.GetCurrentDWG<>nil then
+                 //временно
+                 {if gdb.GetCurrentDWG<>nil then
                  if gdb.GetCurrentDWG.wa.getviewcontrol<>nil then
                  gdb.GetCurrentDWG.wa.sendcoordtocommandTraceOn(geometry.CreateVertex(strtodouble(parseresult^.getGDBString(0)),
                                                                                               strtodouble(parseresult^.getGDBString(1)),
-                                                                                              0),MZW_LBUTTON,nil);
+                                                                                              0),MZW_LBUTTON,nil);}
                  if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
            end
            else if IsParsed('_realnumber'#0'_softspace'#0,superexpr,parseresult)then
@@ -460,8 +462,8 @@ begin
                  temp.x := gdb.GetCurrentDWG.wa.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.wa.param.pointnum].worldcoord.x + strtodouble(parseresult^.getGDBString(0)) * tv.x * sign(ptraceprop(gdb.GetCurrentDWG.wa.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getelement(gdb.GetCurrentDWG.wa.param.axisnum)).tmouse);
                  temp.y := gdb.GetCurrentDWG.wa.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.wa.param.pointnum].worldcoord.y + strtodouble(parseresult^.getGDBString(0)) * tv.y * sign(ptraceprop(gdb.GetCurrentDWG.wa.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getelement(gdb.GetCurrentDWG.wa.param.axisnum)).tmouse);
                  temp.z := gdb.GetCurrentDWG.wa.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.wa.param.pointnum].worldcoord.z + strtodouble(parseresult^.getGDBString(0)) * tv.z * sign(ptraceprop(gdb.GetCurrentDWG.wa.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getelement(gdb.GetCurrentDWG.wa.param.axisnum)).tmouse);
-
-                 gdb.GetCurrentDWG.wa.sendcoordtocommandTraceOn(temp,MZW_LBUTTON,nil);
+                 //временно
+                 {gdb.GetCurrentDWG.wa.sendcoordtocommandTraceOn(temp,MZW_LBUTTON,nil);}
                  end;
 
                  if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;

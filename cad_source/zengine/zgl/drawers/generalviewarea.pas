@@ -57,7 +57,7 @@ type
                            procedure ClearOntrackpoint;override;
                            procedure SetMouseMode(smode:GDBByte);override;
                            procedure SetObjInsp;override;
-                           procedure sendcoordtocommandTraceOn(coord:GDBVertex;key: GDBByte;pos:pos_record);override;
+                           //procedure sendcoordtocommandTraceOn(coord:GDBVertex;key: GDBByte;pos:pos_record);override;
                            procedure reprojectaxis;override;
                            procedure Project0Axis;override;
                            procedure create0axis;override;
@@ -89,9 +89,9 @@ type
                            procedure AddOntrackpoint;override;
                            procedure CorrectMouseAfterOS;override;
                            function CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;override;
-                           procedure sendcoordtocommand(coord:GDBVertex;key: GDBByte);virtual;
-                           procedure sendmousecoordwop(key: GDBByte);override;
-                           procedure sendmousecoord(key: GDBByte);override;
+                           //procedure sendcoordtocommand(coord:GDBVertex;key: GDBByte);virtual;
+                           //procedure sendmousecoordwop(key: GDBByte);override;
+                           //procedure sendmousecoord(key: GDBByte);override;
                            procedure asynczoomsel(Data: PtrInt);override;
                            procedure asynczoomall(Data: PtrInt);override;
                            procedure asyncupdatemouse(Data: PtrInt);override;
@@ -172,8 +172,8 @@ var
    sysvarDSGNSelNew:GDBBoolean=false;
    sysvarDWGEditInSubEntry:gdbboolean=false;
 implementation
-uses
-    commandline;
+{uses
+    commandline;}
 procedure TGeneralViewArea.mypaint;
 begin
      //param.firstdraw:=true;
@@ -1578,7 +1578,7 @@ end;
   reprojectaxis;
 
   if (param.md.mode and (MGet3DPoint or MGet3DPointWoOp)) <> 0 then
-     sendmousecoordwop(key);
+     //временно sendmousecoordwop(key);
     {if pcommandrunning <> nil then
     begin
       if param.ospoint.ostype <> os_none then pcommandrunning^.MouseMoveCallback(param.ospoint.worldcoord, param.md.mouse, 0)
@@ -1892,115 +1892,6 @@ begin
                                    UpdateObjInspProc;
   if assigned(zcadinterface.SetNormalFocus)then
                                                zcadinterface.SetNormalFocus(nil);
-end;
-
-procedure TGeneralViewArea.sendmousecoord(key: GDBByte);
-begin
-  if commandmanager.pcommandrunning <> nil then
-    if param.md.mouseonworkplan
-    then
-        begin
-             sendcoordtocommand(param.md.mouseonworkplanecoord,key);
-             //if key=MZW_LBUTTON then wa.param.lastpoint:=wa.param.md.mouseonworkplanecoord;
-             //commandmanager.pcommandrunning^.MouseMoveCallback(wa.param.md.mouseonworkplanecoord, wa.param.md.mouse, key,nil)
-        end
-    else
-        begin
-             sendcoordtocommand(param.md.mouseray.lbegin,key);
-             //if key=MZW_LBUTTON then wa.param.lastpoint:=wa.param.md.mouseray.lbegin;
-             //commandmanager.pcommandrunning^.MouseMoveCallback(wa.param.md.mouseray.lbegin, wa.param.md.mouse, key,nil);
-        end;
-    //if key=MZW_LBUTTON then wa.param.ontrackarray.otrackarray[0].worldcoord:=wa.param.md.mouseonworkplanecoord;
-end;
-procedure TGeneralViewArea.sendmousecoordwop(key: GDBByte);
-var
-   tv:gdbvertex;
-begin
-  if commandmanager.pcommandrunning <> nil then
-    if param.ospoint.ostype <> os_none
-    then
-    begin
-         begin
-              {if (key and MZW_LBUTTON)<>0 then
-                                              shared.HistoryOutStr(floattostr(wa.param.ospoint.ostype));}
-              tv:=param.ospoint.worldcoord;
-              if (key and MZW_SHIFT)<>0 then
-                                            begin
-                                                 key:=key and (not MZW_SHIFT);
-                                                 tv:=Vertexmorphabs(param.lastpoint,param.ospoint.worldcoord,1);
-                                            end;
-              if (key and MZW_CONTROL)<>0 then
-                                            begin
-                                                 key:=key and (not MZW_CONTROL);
-                                                 tv:=Vertexmorphabs(param.lastpoint,param.ospoint.worldcoord,-1);
-                                            end;
-              key:=key and (not MZW_CONTROL);
-              key:=key and (not MZW_SHIFT);
-
-              {if key=MZW_LBUTTON then
-                                     begin
-                                          inc(tocommandmcliccount);
-                                          wa.param.ontrackarray.otrackarray[0].worldcoord:=tv;
-                                     end;
-              if (key and MZW_LBUTTON)<>0 then
-                                              wa.param.lastpoint:=tv;
-              commandmanager.pcommandrunning^.MouseMoveCallback(tv, wa.param.md.mouse, key,@wa.param.ospoint);}
-
-              sendcoordtocommandTraceOn(tv,key,@param.ospoint)
-         end;
-    end
-    else
-    begin
-        {if key=MZW_LBUTTON then
-                               begin
-                               inc(tocommandmcliccount);
-                               wa.param.ontrackarray.otrackarray[0].worldcoord:=wa.param.md.mouseonworkplanecoord;
-                               end;}
-        if param.md.mouseonworkplan
-        then
-            begin
-                 if sysvar.DWG.DWG_SnapGrid<>nil then
-                 if not sysvar.DWG.DWG_SnapGrid^ then
-                 param.ospoint.worldcoord:=param.md.mouseonworkplanecoord;
-                 sendcoordtocommandTraceOn({wa.param.md.mouseonworkplanecoord}param.ospoint.worldcoord,key,nil)
-                 //if key=MZW_LBUTTON then wa.param.lastpoint:=wa.param.md.mouseonworkplanecoord;
-                 //commandmanager.pcommandrunning.MouseMoveCallback(wa.param.md.mouseonworkplanecoord, wa.param.md.mouse, key,nil)
-            end
-        else
-            begin
-                 param.ospoint.worldcoord:=param.md.mouseray.lbegin;
-                 sendcoordtocommandTraceOn(param.md.mouseray.lbegin,key,nil)
-                 //if key=MZW_LBUTTON then wa.param.lastpoint:=wa.param.md.mouseray.lbegin;
-                 //commandmanager.pcommandrunning^.MouseMoveCallback(wa.param.md.mouseray.lbegin, wa.param.md.mouse, key,nil);
-            end;
-    end;
-end;
-
-procedure TGeneralViewArea.sendcoordtocommand(coord:GDBVertex;key: GDBByte);
-begin
-     if key=MZW_LBUTTON then param.lastpoint:=coord;
-     commandmanager.sendpoint2command(coord, param.md.mouse, key,nil,pdwg^);
-end;
-
-procedure TGeneralViewArea.sendcoordtocommandTraceOn(coord:GDBVertex;key: GDBByte;pos:pos_record);
-var
-   cs:integer;
-begin
-     //if commandmanager.pcommandrunning<>nil then
-     //if commandmanager.pcommandrunning.IsRTECommand then
-    cs:=commandmanager.CommandsStack.Count;
-        commandmanager.sendpoint2command(coord,param.md.mouse,key,pos,pdwg^);
-
-     if (key and MZW_LBUTTON)<>0 then
-     if (commandmanager.pcommandrunning<>nil)and(cs=commandmanager.CommandsStack.Count) then
-     begin
-           inc(tocommandmcliccount);
-           param.ontrackarray.otrackarray[0].worldcoord:=coord;
-           param.lastpoint:=coord;
-           create0axis;
-           project0axis;
-     end;
-     //end;
 end;
 function TGeneralViewArea.CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;
 begin
@@ -3274,7 +3165,8 @@ begin
         if not ReStoreGDBObjInspProc then
         begin
         ClearOntrackpoint;
-        if commandmanager.pcommandrunning=nil then
+        //временно
+        {if commandmanager.pcommandrunning=nil then
           begin
           PDWG.GetCurrentROOT.ObjArray.DeSelect(PDWG^.GetSelObjArray,param.SelDesc.Selectedobjcount);
           param.SelDesc.LastSelectedObject := nil;
@@ -3291,7 +3183,7 @@ begin
           begin
                commandmanager.pcommandrunning.CommandCancel;
                commandmanager.executecommandend;
-          end;
+          end;}
         end;
         end;
         Key:=0;
@@ -3316,16 +3208,18 @@ begin
         commandmanager.ExecuteCommand('Erase');
         Key:=00;
       end}
- else if (Key = VK_RETURN)or(Key = VK_SPACE) then
+      //временно
+ {else if (Key = VK_RETURN)or(Key = VK_SPACE) then
       begin
            commandmanager.executelastcommad(pdwg,@param);
            Key:=00;
-      end
- else if (Key=VK_V)and(shift=[ssctrl]) then
+      end}
+      //временно
+ {else if (Key=VK_V)and(shift=[ssctrl]) then
                     begin
                          commandmanager.executecommand('PasteClip',pdwg,@param);
                          key:=00;
-                    end
+                    end}
  (*else if (Key=VK_TAB)and(shift=[ssctrl,ssShift]) then
                           begin
                                //if assigned(MainFormN.PageControl)then

@@ -363,7 +363,7 @@ begin
   begin
 
   dc.drawer.SetColor(palette[{sysvar.SYS.SYS_SystmGeometryColor^+2}4].RGB);
-  dc.drawer.DrawAABB3DInModelSpace(VisibleOBJBoundingBox,dc.matrixs);
+  dc.drawer.DrawAABB3DInModelSpace(VisibleOBJBoundingBox,dc.DrawingContext.matrixs);
   {oglsm.myglbegin(GL_LINE_LOOP);
      oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);
      oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);

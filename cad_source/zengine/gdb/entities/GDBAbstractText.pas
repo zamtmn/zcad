@@ -411,10 +411,10 @@ begin
       end
   else
   begin
-       DC.Drawer.DrawLine3DInModelSpace(outbound[0],outbound[1],DC.matrixs);
-       DC.Drawer.DrawLine3DInModelSpace(outbound[1],outbound[2],DC.matrixs);
-       DC.Drawer.DrawLine3DInModelSpace(outbound[2],outbound[3],DC.matrixs);
-       DC.Drawer.DrawLine3DInModelSpace(outbound[3],outbound[0],DC.matrixs);
+       DC.Drawer.DrawLine3DInModelSpace(outbound[0],outbound[1],DC.DrawingContext.matrixs);
+       DC.Drawer.DrawLine3DInModelSpace(outbound[1],outbound[2],DC.DrawingContext.matrixs);
+       DC.Drawer.DrawLine3DInModelSpace(outbound[2],outbound[3],DC.DrawingContext.matrixs);
+       DC.Drawer.DrawLine3DInModelSpace(outbound[3],outbound[0],DC.DrawingContext.matrixs);
   end;
   dc.subrender := dc.subrender - 1;
   inherited;

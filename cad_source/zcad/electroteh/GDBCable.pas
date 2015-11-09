@@ -444,7 +444,7 @@ begin
   if ptn1<>nil then
   begin
   repeat
-        DC.Drawer.DrawLine3DInModelSpace(ptn2^.Nextp,ptn1^.PrevP,DC.matrixs);
+        DC.Drawer.DrawLine3DInModelSpace(ptn2^.Nextp,ptn1^.PrevP,DC.DrawingContext.matrixs);
         ptn2:=ptn1;
         ptn1:=NodePropArray.iterate(ir_inNodeArray);
   until ptn1=nil;
@@ -489,8 +489,8 @@ begin
   end;}
   if vertexarrayInWCS.Count>1 then
   begin
-       dc.drawer.DrawLine3DInModelSpace(str21,str22,dc.matrixs);
-       dc.drawer.DrawLine3DInModelSpace(str22,str23,dc.matrixs);
+       dc.drawer.DrawLine3DInModelSpace(str21,str22,dc.DrawingContext.matrixs);
+       dc.drawer.DrawLine3DInModelSpace(str22,str23,dc.DrawingContext.matrixs);
   end;
   end;
   //inherited;

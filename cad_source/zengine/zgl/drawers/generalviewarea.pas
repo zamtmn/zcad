@@ -92,8 +92,8 @@ type
                            procedure sendcoordtocommand(coord:GDBVertex;key: GDBByte);virtual;
                            procedure sendmousecoordwop(key: GDBByte);override;
                            procedure sendmousecoord(key: GDBByte);override;
-                           procedure asynczoomsel(Data: PtrInt);
-                           procedure asynczoomall(Data: PtrInt);
+                           procedure asynczoomsel(Data: PtrInt);override;
+                           procedure asynczoomall(Data: PtrInt);override;
                            procedure asyncupdatemouse(Data: PtrInt);override;
                            procedure set3dmouse;override;
                            procedure SetCameraPosZoom(_pos:gdbvertex;_zoom:gdbdouble;finalcalk:gdbboolean);override;
@@ -141,6 +141,7 @@ type
                            procedure ZoomIn;override;
                            procedure ZoomOut;override;
                       end;
+function MouseButton2ZKey(Shift: TShiftState):GDBByte;
 var
    sysvarDISPOSSize:double=10;
    sysvarDISPCursorSize:integer=10;
@@ -172,7 +173,7 @@ var
    sysvarDWGEditInSubEntry:gdbboolean=false;
 implementation
 uses
-     commandline;
+    commandline;
 procedure TGeneralViewArea.mypaint;
 begin
      //param.firstdraw:=true;
@@ -221,10 +222,10 @@ begin
                  oglsm.myglVertex3dv(@tv4);
                  oglsm.myglVertex3dv(@tv1);
   oglsm.myglend;}
-  dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.matrixs);
-  dc.drawer.DrawLine3DInModelSpace(tv2,tv3,dc.matrixs);
-  dc.drawer.DrawLine3DInModelSpace(tv3,tv4,dc.matrixs);
-  dc.drawer.DrawLine3DInModelSpace(tv4,tv1,dc.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.DrawingContext.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(tv2,tv3,dc.DrawingContext.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(tv3,tv4,dc.DrawingContext.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(tv4,tv1,dc.DrawingContext.matrixs);
   end;
 end;
 procedure TGeneralViewArea.showcursor(var DC:TDrawContext);
@@ -240,7 +241,7 @@ begin
   if param.scrollmode then
                           exit;
   CalcOptimalMatrix;
-  dc.drawer.startrender(TRM_ModelSpace,dc.matrixs);
+  dc.drawer.startrender(TRM_ModelSpace,dc.DrawingContext.matrixs);
   if PDWG.GetSelObjArray.Count<>0 then
                                       begin
                                         PDWG.GetSelObjArray.drawpoint(dc,sysvarDISPGripSize,palette[sysvarDISPSelGripColor].RGB,palette[sysvarDISPUnSelGripColor].RGB);
@@ -248,7 +249,7 @@ begin
                                         begin
                                           dc.drawer.SetColor(palette[sysvarDISPHotGripColor].rgb);
                                           dc.drawer.SetPointSize(sysvarDISPGripSize);
-                                          dc.drawer.DrawPoint3DInModelSpace(param.md.mouse3dcoord,dc.matrixs);
+                                          dc.drawer.DrawPoint3DInModelSpace(param.md.mouse3dcoord,dc.DrawingContext.matrixs);
                                           dc.drawer.SetPointSize(1);
                                         end;
                                       end;
@@ -292,7 +293,7 @@ begin
   dvertex:=geometry.VertexMulOnSc(dvertex,SysVarDISPCrosshairSize);
   tv1:=VertexSub(mvertex,dvertex);
   tv2:=VertexAdd(mvertex,dvertex);
-  dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.DrawingContext.matrixs);
 
   ply:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,PDWG.Getpcamera^.CamCSOffset),
                       vertexadd(VertexAdd(param.md.mouse3dcoord,yWCS{VertexMulOnSc(xWCS,oneVertexlength(wa.param.md.mouse3dcoord))}),PDWG.Getpcamera^.CamCSOffset));
@@ -304,7 +305,7 @@ begin
   dvertex:=geometry.VertexMulOnSc(dvertex,SysVarDISPCrosshairSize*{gdb.GetCurrentDWG.OGLwindow1.}getviewcontrol.ClientWidth/{gdb.GetCurrentDWG.OGLwindow1.}getviewcontrol.ClientHeight);
   tv1:=VertexSub(mvertex,dvertex);
   tv2:=VertexAdd(mvertex,dvertex);
-  dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.DrawingContext.matrixs);
 
   //if assigned(sysvar.DISP.DISP_DrawZAxis)then
   if sysvarDISPDrawZAxis then
@@ -319,7 +320,7 @@ begin
   dvertex:=geometry.VertexMulOnSc(dvertex,SysVarDISPCrosshairSize);
   tv1:=VertexSub(mvertex,dvertex);
   tv2:=VertexAdd(mvertex,dvertex);
-  dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.DrawingContext.matrixs);
   end;
   end;
   dc.drawer.SetColor(255, 255, 255,255);
@@ -327,7 +328,7 @@ begin
   d1:=geometry.VertexMulOnSc(d1,0.5);
 
 
-  dc.drawer.startrender(TRM_DisplaySpace,dc.matrixs);
+  dc.drawer.startrender(TRM_DisplaySpace,dc.DrawingContext.matrixs);
   //dc.drawer.SetDisplayCSmode(getviewcontrol.clientwidth, getviewcontrol.clientheight);
   {oglsm.myglMatrixMode(GL_PROJECTION);
   oglsm.myglLoadIdentity;
@@ -358,7 +359,7 @@ begin
   oglsm.myglLoadIdentity;
   *)
   //glColor3ub(255, 255, 255);
-  dc.drawer.startrender(TRM_WindowSpace,dc.matrixs);
+  dc.drawer.startrender(TRM_WindowSpace,dc.DrawingContext.matrixs);
   dc.drawer.SetColor(foreground);
   //oglsm.glColor3ubv(foreground);
 
@@ -537,23 +538,23 @@ begin
   td22:=td2/3;
 
   dc.drawer.SetColor(255, 0, 0,255);
-  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconX,dc.matrixs);
-  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconX,createvertex(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y-td22 , param.CSIcon.CSIconCoord.z),dc.matrixs);
-  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconX,createvertex(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y+td22 , param.CSIcon.CSIconCoord.z),dc.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconX,dc.DrawingContext.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconX,createvertex(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y-td22 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconX,createvertex(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y+td22 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
 
   dc.drawer.SetColor(0, 255, 0,255);
-  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconY,dc.matrixs);
-  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconY,createvertex(param.CSIcon.CSIconCoord.x-td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z),dc.matrixs);
-  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconY,createvertex(param.CSIcon.CSIconCoord.x+td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z),dc.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconY,dc.DrawingContext.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconY,createvertex(param.CSIcon.CSIconCoord.x-td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconY,createvertex(param.CSIcon.CSIconCoord.x+td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
 
   dc.drawer.SetColor(0, 0, 255,255);
-  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconZ,dc.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconZ,dc.DrawingContext.matrixs);
 
   if IsVectorNul(vectordot(pdwg.GetPcamera.prop.look,ZWCS)) then
   begin
       dc.drawer.SetColor(255, 255, 255,255);
-      dc.drawer.DrawLine3DInModelSpace(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y , param.CSIcon.CSIconCoord.z),createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.matrixs);
-      dc.drawer.DrawLine3DInModelSpace(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),createvertex(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.matrixs);
+      dc.drawer.DrawLine3DInModelSpace(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y , param.CSIcon.CSIconCoord.z),createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
+      dc.drawer.DrawLine3DInModelSpace(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),createvertex(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
   end;
   end;
   dc.drawer.ClearStatesMachine;
@@ -724,7 +725,7 @@ begin
     if sysvarRDUseStencil then
     begin
          dc.drawer.SetFillStencilMode;
-         dc.drawer.startrender(TRM_ModelSpace,dc.matrixs);
+         dc.drawer.startrender(TRM_ModelSpace,dc.DrawingContext.matrixs);
          PDWG.GetSelObjArray.drawobject(dc);
          dc.drawer.SetDrawWithStencilMode;
     end
@@ -746,7 +747,7 @@ begin
                                                PDWG.GetCurrentROOT^.ObjArray.ObjTree.draw(dc);
                                                end;
     begin
-    dc.drawer.startrender(TRM_ModelSpace,dc.matrixs);
+    dc.drawer.startrender(TRM_ModelSpace,dc.DrawingContext.matrixs);
     PDWG.Getpcamera.DRAWNOTEND:=treerender(PDWG.GetCurrentROOT^.ObjArray.ObjTree,lptime,dc);
     dc.drawer.endrender;
     end;
@@ -761,8 +762,8 @@ begin
 
     dc.drawer.SetZTest(false);
     inc(dc.subrender);
-    if commandmanager.pcommandrunning<>nil then
-                                               commandmanager.pcommandrunning^.DrawHeplGeometry;
+    if assigned(dc.DrawingContext.DrawHeplGeometryProc) then
+                                               dc.DrawingContext.DrawHeplGeometryProc;
 
     scrollmode:=param.scrollmode;
     param.scrollmode:=true;
@@ -786,11 +787,11 @@ begin
     LightOff(dc);
     drawer.RestoreBuffers;
     inc(dc.subrender);
-    dc.drawer.startrender(TRM_ModelSpace,dc.matrixs);
+    dc.drawer.startrender(TRM_ModelSpace,dc.DrawingContext.matrixs);
     if PDWG.GetConstructObjRoot.ObjArray.Count>0 then
                                                     PDWG.GetConstructObjRoot.ObjArray.Count:=PDWG.GetConstructObjRoot.ObjArray.Count;
-    if commandmanager.pcommandrunning<>nil then
-                                               commandmanager.pcommandrunning^.DrawHeplGeometry;
+    if assigned(dc.DrawingContext.DrawHeplGeometryProc) then
+                                               dc.DrawingContext.DrawHeplGeometryProc;
     scrollmode:=param.scrollmode;
     param.scrollmode:=true;
     render(PDWG.GetConstructObjRoot^,dc);
@@ -803,7 +804,7 @@ begin
     dc.drawer.SetLineWidth(1);
     dc.drawer.SetPointSize(1);
     showcursor(dc);
-    dc.drawer.startrender(TRM_WindowSpace,dc.matrixs);
+    dc.drawer.startrender(TRM_WindowSpace,dc.DrawingContext.matrixs);
 
     dec(dc.subrender);
   end;
@@ -1798,6 +1799,14 @@ begin
      WorkArea.onmouseleave:=WaMouseLeave;
      WorkArea.onresize:=WaResize;
 end;
+function MouseButton2ZKey(Shift: TShiftState):GDBByte;
+begin
+  result := 0;
+  if (ssLeft in shift) then
+                           result := result or MZW_LBUTTON;
+  if (ssShift in shift) then result := result or MZW_SHIFT;
+  if (ssCtrl in shift) then result := result or MZW_CONTROL;
+end;
 function TGeneralViewArea.getviewcontrol:TCADControl;
 begin
      result:=WorkArea;
@@ -1807,112 +1816,6 @@ var key: GDBByte;
     NeedRedraw:boolean;
     //menu:TmyPopupMenu;
     FreeClick:boolean;
-
-  function ProcessControlpoint:boolean;
-  begin
-     begin
-      result:=false;
-      if param.gluetocp then
-      begin
-        PDWG.GetSelObjArray.selectcurrentcontrolpoint(key,param.md.mouseglue.x,param.md.mouseglue.y,param.height);
-        needredraw:=true;
-        result:=true;
-        if (key and MZW_SHIFT) = 0 then
-        begin
-          param.startgluepoint:=param.nearesttcontrolpoint.pcontrolpoint;
-          commandmanager.ExecuteCommandSilent('OnDrawingEd',pdwg,@param);
-          //wa.param.lastpoint:=wa.param.nearesttcontrolpoint.pcontrolpoint^.worldcoord;
-          //sendmousecoord{wop}(key);  bnmbnm
-          if commandmanager.pcommandrunning <> nil then
-          begin
-            if key=MZW_LBUTTON then
-                                   param.lastpoint:=param.nearesttcontrolpoint.pcontrolpoint^.worldcoord;
-            commandmanager.pcommandrunning^.MouseMoveCallback(param.nearesttcontrolpoint.pcontrolpoint^.worldcoord,
-                                                              param.md.mouseglue, key,nil)
-          end;
-        end;
-      end;
-    end;
-  end;
-
-  function ProcessEntSelect:boolean;
-  var
-      RelSelectedObjects:Integer;
-  begin
-    result:=false;
-    begin
-      getonmouseobjectbytree(PDWG.GetCurrentROOT.ObjArray.ObjTree,sysvarDWGEditInSubEntry);
-      //getonmouseobject(@gdb.GetCurrentROOT.ObjArray);
-      if (key and MZW_CONTROL)<>0 then
-      begin
-           commandmanager.ExecuteCommandSilent('SelectOnMouseObjects',pdwg,@param);
-           result:=true;
-      end
-      else
-      begin
-      {//Выделение всех объектов под мышью
-      if gdb.GetCurrentDWG.OnMouseObj.Count >0 then
-      begin
-           pobj:=gdb.GetCurrentDWG.OnMouseObj.beginiterate(ir);
-           if pobj<>nil then
-           repeat
-                 pobj^.select;
-                 wa.param.SelDesc.LastSelectedObject := pobj;
-                 pobj:=gdb.GetCurrentDWG.OnMouseObj.iterate(ir);
-           until pobj=nil;
-        addoneobject;
-        SetObjInsp;
-      end}
-
-      //Выделение одного объекта под мышью
-      if param.SelDesc.OnMouseObject <> nil then
-      begin
-           result:=true;
-           if (key and MZW_SHIFT)=0
-           then
-               begin
-                    //if assigned(sysvar.DSGN.DSGN_SelNew)then
-                    if sysvarDSGNSelNew then
-                    begin
-                          pdwg.GetCurrentROOT.ObjArray.DeSelect(pdwg.GetSelObjArray,param.SelDesc.Selectedobjcount);
-                          param.SelDesc.LastSelectedObject := nil;
-                          //wa.param.SelDesc.OnMouseObject := nil;
-                          param.seldesc.Selectedobjcount:=0;
-                          PDWG^.GetSelObjArray.clearallobjects;
-                    end;
-                    param.SelDesc.LastSelectedObject := param.SelDesc.OnMouseObject;
-                    if assigned(OnWaMouseSelect)then
-                      OnWaMouseSelect(self,param.SelDesc.LastSelectedObject);
-               end
-           else
-               begin
-                    PGDBObjEntity(param.SelDesc.OnMouseObject)^.DeSelect(PDWG^.GetSelObjArray,param.SelDesc.Selectedobjcount);
-                    param.SelDesc.LastSelectedObject := nil;
-                    //addoneobject;
-                    SetObjInsp;
-                    if assigned(updatevisibleproc) then updatevisibleproc;
-               end;
-               //wa.param.SelDesc.LastSelectedObject := wa.param.SelDesc.OnMouseObject;
-               if commandmanager.pcommandrunning<>nil then
-               if commandmanager.pcommandrunning.IData.GetPointMode=TGPWaitEnt then
-               if param.SelDesc.LastSelectedObject<>nil then
-               begin
-                 commandmanager.pcommandrunning^.IData.GetPointMode:=TGPEnt;
-               end;
-           NeedRedraw:=true;
-      end
-
-      else if ((param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0) then
-      begin
-        result:=true;
-      { TODO : Добавить возможность выбора объектов без секрамки во время выполнения команды }
-        commandmanager.ExecuteCommandSilent('SelectFrame',pdwg,@param);
-        sendmousecoord(MZW_LBUTTON);
-      end;
-    end;
-    end;
-  end;
-
 begin
   FreeClick:=true;
   if assigned(zcadinterface.SetNormalFocus)then
@@ -1929,6 +1832,12 @@ begin
   if assigned(OnWaMouseDown) then
   if OnWaMouseDown(self,Button,Shift,X, Y,param.SelDesc.OnMouseObject) then
     exit;
+  if ssRight in shift then
+                           begin
+                                if assigned(ShowCXMenu)then
+                                                           ShowCXMenu;
+                                exit;
+                           end;
   if ssDouble in shift then
                            begin
                                 if mbMiddle=button then
@@ -1939,37 +1848,13 @@ begin
                                                            else
                                                                Application.QueueAsyncCall(asynczoomall, 0);
                                        {$ENDIF}
-                                       //Pre_MBMouseDblClk(Button,Shift,X, Y);
-                                       {exclude(shift,ssdouble);
-                                       exclude(shift,ssMiddle);}
                                        exit;
                                   end;
                            end;
-  if ssRight in shift then
-                           begin
-                                if assigned(ShowCXMenu)then
-                                                           ShowCXMenu;
-                                exit;
-                           end;
-  (*if wa.PDWG<>pointer(gdb.GetCurrentDWG) then
-                                 begin
-                                      //r.handled:=true;
-                                      gdb.SetCurrentDWG(wa.pdwg);
-                                      self.wa.param.firstdraw:=true;
-                                      paint;
-                                      MyglMakeCurrent(OGLContext);//wglMakeCurrent(DC, hrc);//initogl;
-
-                                 end
-                              else*)
-
   begin
   //r.handled:=true;
   if pdwg=nil then exit;
-  key := 0;
-  if (ssLeft in shift) then
-                           key := key or MZW_LBUTTON;
-  if (ssShift in shift) then key := key or MZW_SHIFT;
-  if (ssCtrl in shift) then key := key or MZW_CONTROL;
+  key := MouseButton2ZKey(shift);
   if (ssMiddle in shift) then
   begin
     WorkArea.cursor := crHandPoint;
@@ -1978,35 +1863,7 @@ begin
   end;
   param.md.mouse.x := x;
   param.md.mouse.y := y;
-  if (ssLeft in shift) then
-    //---------------------------------------------------------if commandmanager.pcommandrunning = nil then
-    begin
-      if (param.md.mode and MGetControlpoint) <> 0 then
-                                                       FreeClick:=not ProcessControlpoint;
 
-        {else} if FreeClick and((param.md.mode and MGetSelectObject) <> 0) then
-        FreeClick:=not ProcessEntSelect;
-        needredraw:=true;
-    end;
-    //---------------------------------------------------------else
-    begin
-      if FreeClick and((param.md.mode and (MGet3DPoint or MGet3DPointWoOP)) <> 0) then
-      begin
-        //if commandmanager.pcommandrunning <> nil then
-        //                                             FreeClick:=false;
-        sendmousecoordwop(key);
-        //GDBFreeMem(GDB.PObjPropArray^.propertyarray[0].pobject);
-      end;
-       {if FreeClick and(((wa.param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0)) then
-          begin
-            commandmanager.ExecuteCommandSilent('SelectFrame',wa.pdwg,@wa.param);
-            sendmousecoord(MZW_LBUTTON);
-            FreeClick:=false;
-          end;}
-      needredraw:=true;
-    end;
-    If assigned(UpdateObjInspProc)then
-    UpdateObjInspProc;
   end;
   inherited;
   if needredraw then
@@ -2147,12 +2004,11 @@ begin
 end;
 function TGeneralViewArea.CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;
 begin
+  if PDWG<>nil then
+                   PDWG^.FillDrawingPartRC(result);
+
   result.Subrender:=0;
   result.Selected:=false;
-  result.VisibleActualy:=PDWG.Getpcamera.POSCOUNT;
-  result.InfrustumActualy:=PDWG.Getpcamera.POSCOUNT;
-  result.DRAWCOUNT:=PDWG.Getpcamera.DRAWCOUNT;
-  result.SysLayer:=PDWG.GetLayerTable.GetSystemLayer;
   result.MaxDetail:=_maxdetail;
 
   if sysvar.dwg.DWG_DrawMode<>nil then
@@ -2166,15 +2022,10 @@ begin
                                     else
                                         result.MaxWidth:=20;
   result.ScrollMode:=param.scrollmode;
-  result.Zoom:=PDWG.GetPcamera.prop.zoom;
   result.drawer:=drawer;
-  result.matrixs.pmodelMatrix:=@PDWG.GetPcamera.modelMatrix;
-  result.matrixs.pprojMatrix:=@PDWG.GetPcamera.projMatrix;
-  result.matrixs.pviewport:=@PDWG.GetPcamera.viewport;
-  result.pcamera:=PDWG.GetPcamera;
   result.SystmGeometryDraw:=sysvarDISPSystmGeometryDraw;
   result.SystmGeometryColor:=sysvarDISPSystmGeometryColor;
-  result.GlobalLTScale:=1;
+  result.DrawingContext.GlobalLTScale:=1;
 end;
 procedure TGeneralViewArea.CorrectMouseAfterOS;
 var d,tv1,tv2:GDBVertex;

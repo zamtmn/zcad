@@ -134,6 +134,8 @@ type
                            procedure setdeicevariable;virtual;abstract;
                            procedure ZoomIn; virtual;abstract;
                            procedure ZoomOut; virtual;abstract;
+                           procedure asynczoomsel(Data: PtrInt); virtual;abstract;
+                           procedure asynczoomall(Data: PtrInt); virtual;abstract;
                       end;
 var
    otracktimer: GDBInteger;
@@ -146,22 +148,22 @@ function CreateFaceRC:TDrawContext;
 begin
   result.Subrender:=0;
   result.Selected:=false;
-  result.VisibleActualy:=-1;
-  result.InfrustumActualy:=-1;
-  result.DRAWCOUNT:=-1;
-  result.SysLayer:=nil;
+  result.DrawingContext.VisibleActualy:=-1;
+  result.DrawingContext.InfrustumActualy:=-1;
+  result.DrawingContext.DRAWCOUNT:=-1;
+  result.DrawingContext.SysLayer:=nil;
   result.MaxDetail:=false;
   result.DrawMode:=true;
   result.OwnerLineWeight:=-3;
   result.OwnerColor:=7;
   result.MaxWidth:=1;
   result.ScrollMode:=true;
-  result.Zoom:=100000000;
+  result.DrawingContext.Zoom:=100000000;
   result.drawer:=nil;
-  result.matrixs.pmodelMatrix:=nil;
-  result.matrixs.pprojMatrix:=nil;
-  result.matrixs.pviewport:=nil;
-  result.pcamera:=nil;
+  result.DrawingContext.matrixs.pmodelMatrix:=nil;
+  result.DrawingContext.matrixs.pprojMatrix:=nil;
+  result.DrawingContext.matrixs.pviewport:=nil;
+  result.DrawingContext.pcamera:=nil;
 end;
 
 function TCADControl.DoMouseWheel(Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint): Boolean;

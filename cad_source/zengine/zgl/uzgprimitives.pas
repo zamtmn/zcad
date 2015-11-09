@@ -436,7 +436,7 @@ end;
 
 function TLLSymbolLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 begin
-  if (MaxSqrSymH/(rc.zoom*rc.zoom)<3)and(not rc.maxdetail) then
+  if (MaxSqrSymH/(rc.DrawingContext.zoom*rc.DrawingContext.zoom)<3)and(not rc.maxdetail) then
                                                 begin
                                                   Drawer.DrawLine(@geomdata.Vertex3S,FirstOutBoundIndex,LastOutBoundIndex+3);
                                                   //Drawer.DrawLine(FirstOutBoundIndex+1,LastOutBoundIndex+2);
@@ -537,7 +537,7 @@ else if (Attrib and LLAttrNeedSimtlify)>0 then
                                                                   end
                                                               else
                                                                   minsymbolsize:=30;
-    sqrparamsize:=GeomData.Vertex3S.GetLength(index)/(rc.zoom*rc.zoom);
+    sqrparamsize:=GeomData.Vertex3S.GetLength(index)/(rc.DrawingContext.zoom*rc.DrawingContext.zoom);
     if (sqrparamsize<minsymbolsize)and(not rc.maxdetail) then
     begin
       //if (PTLLSymbol(PPrimitive)^.Attrib and LLAttrNeedSolid)>0 then

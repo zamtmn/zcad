@@ -19,7 +19,7 @@
 unit GDBCircle;
 {$INCLUDE def.inc}
 interface
-uses uabstractunit,zeentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBHelpObj,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray,UGDBPoint3DArray{, UGDBPolyPoint3DArray,UGDBPolyPoint2DArray},UGDBOpenArrayOfByte,
+uses zeentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBHelpObj,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray,UGDBPoint3DArray{, UGDBPolyPoint3DArray,UGDBPolyPoint2DArray},UGDBOpenArrayOfByte,
 GDBase,GDBWithLocalCS,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman;
 type
 //PProjPoint:PGDBPolyPoint2DArray;
@@ -439,10 +439,10 @@ begin
                                                                                   end
                                                          else
                                                              begin
-                                                                  DC.Drawer.DrawLine3DInModelSpace(q0,q1,DC.matrixs);
-                                                                  DC.Drawer.DrawLine3DInModelSpace(q1,q2,DC.matrixs);
-                                                                  DC.Drawer.DrawLine3DInModelSpace(q2,q3,DC.matrixs);
-                                                                  DC.Drawer.DrawLine3DInModelSpace(q3,q0,DC.matrixs);
+                                                                  DC.Drawer.DrawLine3DInModelSpace(q0,q1,DC.DrawingContext.matrixs);
+                                                                  DC.Drawer.DrawLine3DInModelSpace(q1,q2,DC.DrawingContext.matrixs);
+                                                                  DC.Drawer.DrawLine3DInModelSpace(q2,q3,DC.DrawingContext.matrixs);
+                                                                  DC.Drawer.DrawLine3DInModelSpace(q3,q0,DC.DrawingContext.matrixs);
                                                              end;
                               end;
   //Vertex3D_in_WCS_Array.DrawGeometry;

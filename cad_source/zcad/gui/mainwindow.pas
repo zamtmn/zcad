@@ -132,11 +132,9 @@ type
     procedure PageControlMouseDown(Sender: TObject;Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure correctscrollbars;
     function wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer):boolean;
-    procedure sendmousecoord(Sender:TAbstractViewArea;key: GDBByte);
-    procedure sendmousecoordwop(Sender:TAbstractViewArea;key: GDBByte);
-    procedure sendcoordtocommand(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte);
-    procedure sendcoordtocommandTraceOn(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte;pos:pos_record);
+    procedure wamm(Sender:TAbstractViewArea;Shift:TShiftState;X,Y:Integer);
     procedure wams(Sender:TAbstractViewArea;SelectedEntity:GDBPointer);
+    procedure wakp(Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState);
     function GetEntsDesc(ents:PGDBObjOpenArrayOfPV):GDBString;
     procedure waSetObjInsp(Sender:TAbstractViewArea);
 
@@ -2890,112 +2888,11 @@ else if sender=VScrollBar then
      pdwg.wa.draworinvalidate;
   end;
 end;
-procedure MainForm.sendcoordtocommandTraceOn(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte;pos:pos_record);
-var
-   cs:integer;
+procedure MainForm.wamm(Sender:TAbstractViewArea;Shift:TShiftState;X,Y:Integer);
 begin
-     //if commandmanager.pcommandrunning<>nil then
-     //if commandmanager.pcommandrunning.IsRTECommand then
-    cs:=commandmanager.CommandsStack.Count;
-        commandmanager.sendpoint2command(coord,sender.param.md.mouse,key,pos,sender.pdwg^);
-
-     if (key and MZW_LBUTTON)<>0 then
-     if (commandmanager.pcommandrunning<>nil)and(cs=commandmanager.CommandsStack.Count) then
-     begin
-           inc(sender.tocommandmcliccount);
-           sender.param.ontrackarray.otrackarray[0].worldcoord:=coord;
-           sender.param.lastpoint:=coord;
-           sender.create0axis;
-           sender.project0axis;
-     end;
-     //end;
-end;
-
-procedure MainForm.sendcoordtocommand(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte);
-begin
-     if key=MZW_LBUTTON then Sender.param.lastpoint:=coord;
-     commandmanager.sendpoint2command(coord, sender.param.md.mouse, key,nil,sender.pdwg^);
-end;
-procedure MainForm.sendmousecoord(Sender:TAbstractViewArea;key: GDBByte);
-begin
-  if commandmanager.pcommandrunning <> nil then
-    if sender.param.md.mouseonworkplan
-    then
-        begin
-             sendcoordtocommand(sender,sender.param.md.mouseonworkplanecoord,key);
-             //if key=MZW_LBUTTON then wa.param.lastpoint:=wa.param.md.mouseonworkplanecoord;
-             //commandmanager.pcommandrunning^.MouseMoveCallback(wa.param.md.mouseonworkplanecoord, wa.param.md.mouse, key,nil)
-        end
-    else
-        begin
-             sendcoordtocommand(sender,sender.param.md.mouseray.lbegin,key);
-             //if key=MZW_LBUTTON then wa.param.lastpoint:=wa.param.md.mouseray.lbegin;
-             //commandmanager.pcommandrunning^.MouseMoveCallback(wa.param.md.mouseray.lbegin, wa.param.md.mouse, key,nil);
-        end;
-    //if key=MZW_LBUTTON then wa.param.ontrackarray.otrackarray[0].worldcoord:=wa.param.md.mouseonworkplanecoord;
-end;
-procedure MainForm.sendmousecoordwop(Sender:TAbstractViewArea;key: GDBByte);
-var
-   tv:gdbvertex;
-begin
-  if commandmanager.pcommandrunning <> nil then
-    if sender.param.ospoint.ostype <> os_none
-    then
-    begin
-         begin
-              {if (key and MZW_LBUTTON)<>0 then
-                                              shared.HistoryOutStr(floattostr(wa.param.ospoint.ostype));}
-              tv:=sender.param.ospoint.worldcoord;
-              if (key and MZW_SHIFT)<>0 then
-                                            begin
-                                                 key:=key and (not MZW_SHIFT);
-                                                 tv:=Vertexmorphabs(sender.param.lastpoint,sender.param.ospoint.worldcoord,1);
-                                            end;
-              if (key and MZW_CONTROL)<>0 then
-                                            begin
-                                                 key:=key and (not MZW_CONTROL);
-                                                 tv:=Vertexmorphabs(sender.param.lastpoint,sender.param.ospoint.worldcoord,-1);
-                                            end;
-              key:=key and (not MZW_CONTROL);
-              key:=key and (not MZW_SHIFT);
-
-              {if key=MZW_LBUTTON then
-                                     begin
-                                          inc(tocommandmcliccount);
-                                          wa.param.ontrackarray.otrackarray[0].worldcoord:=tv;
-                                     end;
-              if (key and MZW_LBUTTON)<>0 then
-                                              wa.param.lastpoint:=tv;
-              commandmanager.pcommandrunning^.MouseMoveCallback(tv, wa.param.md.mouse, key,@wa.param.ospoint);}
-
-              sendcoordtocommandTraceOn(sender,tv,key,@sender.param.ospoint)
-         end;
-    end
-    else
-    begin
-        {if key=MZW_LBUTTON then
-                               begin
-                               inc(tocommandmcliccount);
-                               wa.param.ontrackarray.otrackarray[0].worldcoord:=wa.param.md.mouseonworkplanecoord;
-                               end;}
-        if sender.param.md.mouseonworkplan
-        then
-            begin
-                 if sysvar.DWG.DWG_SnapGrid<>nil then
-                 if not sysvar.DWG.DWG_SnapGrid^ then
-                 sender.param.ospoint.worldcoord:=sender.param.md.mouseonworkplanecoord;
-                 sendcoordtocommandTraceOn({wa.param.md.mouseonworkplanecoord}sender,sender.param.ospoint.worldcoord,key,nil)
-                 //if key=MZW_LBUTTON then wa.param.lastpoint:=wa.param.md.mouseonworkplanecoord;
-                 //commandmanager.pcommandrunning.MouseMoveCallback(wa.param.md.mouseonworkplanecoord, wa.param.md.mouse, key,nil)
-            end
-        else
-            begin
-                 sender.param.ospoint.worldcoord:=sender.param.md.mouseray.lbegin;
-                 sendcoordtocommandTraceOn(sender,sender.param.md.mouseray.lbegin,key,nil)
-                 //if key=MZW_LBUTTON then wa.param.lastpoint:=wa.param.md.mouseray.lbegin;
-                 //commandmanager.pcommandrunning^.MouseMoveCallback(wa.param.md.mouseray.lbegin, wa.param.md.mouse, key,nil);
-            end;
-    end;
+  exclude(shift,ssLeft);
+     if (Sender.param.md.mode and (MGet3DPoint or MGet3DPointWoOp)) <> 0 then
+     commandmanager.sendmousecoordwop(sender,MouseButton2ZKey(shift));
 end;
 
 function MainForm.wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer):boolean;
@@ -3103,7 +3000,7 @@ begin
       result:=true;
     { TODO : Добавить возможность выбора объектов без секрамки во время выполнения команды }
       commandmanager.ExecuteCommandSilent('SelectFrame',sender.pdwg,@sender.param);
-      sendmousecoord(sender,MZW_LBUTTON);
+      commandmanager.sendmousecoord(sender,MZW_LBUTTON);
     end;
   end;
   end;
@@ -3143,7 +3040,7 @@ begin
       begin
         //if commandmanager.pcommandrunning <> nil then
         //                                             FreeClick:=false;
-        sendmousecoordwop(sender,key);
+        commandmanager.sendmousecoordwop(sender,key);
         //GDBFreeMem(GDB.PObjPropArray^.propertyarray[0].pobject);
       end;
        {if FreeClick and(((wa.param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0)) then
@@ -3198,7 +3095,48 @@ begin
           end;
      end;
 end;
-
+procedure MainForm.wakp(Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState);
+begin
+     if Key=VK_ESCAPE then
+     begin
+       if assigned(ReStoreGDBObjInspProc)then
+       begin
+       if not ReStoreGDBObjInspProc then
+       begin
+       Sender.ClearOntrackpoint;
+       if commandmanager.pcommandrunning=nil then
+         begin
+         Sender.PDWG.GetCurrentROOT.ObjArray.DeSelect(Sender.PDWG^.GetSelObjArray,Sender.param.SelDesc.Selectedobjcount);
+         Sender.param.SelDesc.LastSelectedObject := nil;
+         Sender.param.SelDesc.OnMouseObject := nil;
+         Sender.param.seldesc.Selectedobjcount:=0;
+         Sender.param.firstdraw := TRUE;
+         Sender.PDWG.GetSelObjArray.clearallobjects;
+         Sender.CalcOptimalMatrix;
+         Sender.paint;
+         if assigned(SetVisuaProplProc) then SetVisuaProplProc;
+         Sender.setobjinsp;
+         end
+       else
+         begin
+              commandmanager.pcommandrunning.CommandCancel;
+              commandmanager.executecommandend;
+         end;
+       end;
+       end;
+       Key:=0;
+     end
+     else if (Key = VK_RETURN)or(Key = VK_SPACE) then
+           begin
+                commandmanager.executelastcommad(Sender.pdwg,@Sender.param);
+                Key:=00;
+           end
+     else if (Key=VK_V)and(shift=[ssctrl]) then
+                         begin
+                              commandmanager.executecommand('PasteClip',Sender.pdwg,@Sender.param);
+                              key:=00;
+                         end
+end;
 procedure MainForm.wams(Sender:TAbstractViewArea;SelectedEntity:GDBPointer);
 var
     RelSelectedObjects:Integer;

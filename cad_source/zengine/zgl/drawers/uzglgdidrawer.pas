@@ -20,7 +20,8 @@ unit uzglgdidrawer;
 {$INCLUDE def.inc}
 interface
 uses
-    sysutils,gdbasetypes,uzglgeneral2ddrawer,lclintfex,fileutil,math,UGDBFontManager,ugdbfont,zcadsysvars,uzglabstractviewarea,LazUTF8,uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,{$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
+    sysutils,gdbasetypes,uzglgeneral2ddrawer,lclintfex,fileutil,math,UGDBFontManager,ugdbfont,zcadsysvars,uzglabstractviewarea,LazUTF8,uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,
+    {$IFDEF WINDOWS}{GDIPAPI,GDIPOBJ,}windows,{$ENDIF}
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
@@ -82,7 +83,7 @@ TZGLGDIDrawer=class(TZGLGeneral2DDrawer)
                         procedure PostRenderDraw;override;
                    end;
 {$IFDEF WINDOWS}
-TZGLGDIPlusDrawer=class(TZGLGDIDrawer)
+(*TZGLGDIPlusDrawer=class(TZGLGDIDrawer)
                         graphicsGDIPlus:TGPGraphics;
                         pen: TGPPen;
                         HDC: HDC;
@@ -92,14 +93,14 @@ TZGLGDIPlusDrawer=class(TZGLGDIDrawer)
                         procedure endrender;override;
                         procedure DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);override;
                         procedure DrawPoint(const PVertexBuffer:PGDBOpenArrayOfData;const i:TLLVertexIndex);override;
-                   end;
+                   end;*)
 {$ENDIF}
 var
    OGLDrawer:TZGLAbstractDrawer;
    GDIDrawer:TZGLGDIDrawer;
    code:integer;
    LLGDIPrimitivesCreator:TLLGDIPrimitivesCreator;
-   {$IFDEF WINDOWS}GDIPlusDrawer:TZGLGDIPlusDrawer;{$ENDIF}
+   {$IFDEF WINDOWS}(*GDIPlusDrawer:TZGLGDIPlusDrawer;*){$ENDIF}
 implementation
 uses log;
 procedure isWindowsErrors;
@@ -117,6 +118,7 @@ begin
 
 end;
 {$IFDEF WINDOWS}
+(*
 procedure TZGLGDIPlusDrawer.startrender;
 begin
      canvas:=canvas;
@@ -150,6 +152,7 @@ begin
      pv:=PGDBVertex3S(PVertexBuffer.getelement(i));
      //graphicsGDIPlus.Drawpoint(Pen,pv.x,midline-pv.y);
 end;
+*)
 {$ENDIF}
 procedure TZGLGDIDrawer.PostRenderDraw;
 var
@@ -587,10 +590,10 @@ initialization
   {$IFDEF DEBUGINITSECTION}LogOut('uzglgdidrawer.initialization');{$ENDIF}
   GDIDrawer:=TZGLGDIDrawer.create;
   LLGDIPrimitivesCreator:=TLLGDIPrimitivesCreator.Create;
-  {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
+  {$IFDEF WINDOWS}(*GDIPlusDrawer:=TZGLGDIPlusDrawer.create;*){$ENDIF}
 finalization
    GDIDrawer.Destroy;
    LLGDIPrimitivesCreator.Destroy;
-  {$IFDEF WINDOWS}GDIPlusDrawer.Destroy;{$ENDIF}
+  {$IFDEF WINDOWS}(*GDIPlusDrawer.Destroy;*){$ENDIF}
 end.
 

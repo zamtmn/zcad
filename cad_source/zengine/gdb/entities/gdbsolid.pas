@@ -19,7 +19,7 @@ unit GDBSolid;
 {$INCLUDE def.inc}
 
 interface
-uses uabstractunit,zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,GDBWithLocalCS,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
+uses zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,GDBWithLocalCS,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase,gdbobjectsconstdef{,oglwindowdef,dxflow},memman;
 type
 {REGISTEROBJECTTYPE GDBObjSolid}

@@ -24,7 +24,7 @@ uses
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
      UGDBLayerArray,ugdbdimstylearray,
      oglwindowdef,gdbdrawcontext,varmandef,zcadsysvars,GDBEntity,zcadinterface,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
-     gdbobjectsconstdef,shared,zcadstrconsts,UGDBTracePropArray,math,sysutils,commandlinedef,UGDBDrawingdef,strproc,
+     gdbobjectsconstdef,shared,zcadstrconsts,UGDBTracePropArray,math,sysutils,UGDBDrawingdef,strproc,
      ExtCtrls,Controls,Classes,LCLType,Forms,UGDBOpenArrayOfPV,GDBGenericSubEntry,GDBCamera,UGDBVisibleOpenArray,uzglabstractdrawer,uzglgeneraldrawer,uzglabstractviewarea;
 const
   ontracdist=10;
@@ -1577,8 +1577,8 @@ end;
 
   reprojectaxis;
 
-  if (param.md.mode and (MGet3DPoint or MGet3DPointWoOp)) <> 0 then
-     //временно sendmousecoordwop(key);
+  if assigned(OnWaMouseMove) then
+                                 OnWaMouseMove(self,shift,x,y);
     {if pcommandrunning <> nil then
     begin
       if param.ospoint.ostype <> os_none then pcommandrunning^.MouseMoveCallback(param.ospoint.worldcoord, param.md.mouse, 0)
@@ -3158,36 +3158,10 @@ const
      VK_V=$56;
 {$ENDIF}
 begin
-      if Key=VK_ESCAPE then
-      begin
-        if assigned(ReStoreGDBObjInspProc)then
-        begin
-        if not ReStoreGDBObjInspProc then
-        begin
-        ClearOntrackpoint;
-        //временно
-        {if commandmanager.pcommandrunning=nil then
-          begin
-          PDWG.GetCurrentROOT.ObjArray.DeSelect(PDWG^.GetSelObjArray,param.SelDesc.Selectedobjcount);
-          param.SelDesc.LastSelectedObject := nil;
-          param.SelDesc.OnMouseObject := nil;
-          param.seldesc.Selectedobjcount:=0;
-          param.firstdraw := TRUE;
-          PDWG.GetSelObjArray.clearallobjects;
-          CalcOptimalMatrix;
-          paint;
-          if assigned(SetVisuaProplProc) then SetVisuaProplProc;
-          setobjinsp;
-          end
-        else
-          begin
-               commandmanager.pcommandrunning.CommandCancel;
-               commandmanager.executecommandend;
-          end;}
-        end;
-        end;
-        Key:=0;
-      end
+  if assigned(OnWaKeyPress) then
+                                OnWaKeyPress(self,Key,Shift);
+  if key=0 then
+               exit;
  {else if (Key = VK_A) and (shift=[ssCtrl]) then
       begin
         commandmanager.ExecuteCommand('SelectAll');
@@ -3208,18 +3182,6 @@ begin
         commandmanager.ExecuteCommand('Erase');
         Key:=00;
       end}
-      //временно
- {else if (Key = VK_RETURN)or(Key = VK_SPACE) then
-      begin
-           commandmanager.executelastcommad(pdwg,@param);
-           Key:=00;
-      end}
-      //временно
- {else if (Key=VK_V)and(shift=[ssctrl]) then
-                    begin
-                         commandmanager.executecommand('PasteClip',pdwg,@param);
-                         key:=00;
-                    end}
  (*else if (Key=VK_TAB)and(shift=[ssctrl,ssShift]) then
                           begin
                                //if assigned(MainFormN.PageControl)then

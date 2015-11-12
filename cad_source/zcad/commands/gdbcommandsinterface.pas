@@ -205,6 +205,8 @@ begin
      wpowner:=GetCurrentBackEnd.Create(myts);
      wpowner.onCameraChanged:=MainFormN.correctscrollbars;
      wpowner.OnWaMouseDown:=MainFormN.wamd;
+     wpowner.OnWaMouseMove:=MainFormN.wamm;
+     wpowner.OnWaKeyPress:=MainFormN.wakp;
      wpowner.OnWaMouseSelect:=MainFormN.wams;
      wpowner.OnGetEntsDesc:=MainFormN.GetEntsDesc;
      wpowner.ShowCXMenu:=MainFormN.ShowCXMenu;

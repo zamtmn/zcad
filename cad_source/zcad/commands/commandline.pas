@@ -19,7 +19,7 @@
 unit commandline;
 {$INCLUDE def.inc}
 interface
-uses paths,gdbobjectsconstdef,UDMenuWnd,uinfoform,zcadstrconsts,{umytreenode,}sysinfo,strproc,UGDBOpenArrayOfPointer,
+uses zcadsysvars,geometry,uzglabstractviewarea,paths,gdbobjectsconstdef,UDMenuWnd,uinfoform,zcadstrconsts,{umytreenode,}sysinfo,strproc,UGDBOpenArrayOfPointer,
      gdbasetypes,commandlinedef, sysutils,gdbase,oglwindowdef,
      memman,shared,log,varmandef,varman,ugdbdrawingdef,zcadinterface;
 const
@@ -72,6 +72,11 @@ type
                           function GetEntity(prompt:GDBString;out p:GDBPointer):GDBBoolean;
                           function Get3DPointInteractive(prompt:GDBString;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:GDBPointer):GDBBoolean;
                           function EndGetPoint(newmode:TGetPointMode):GDBBoolean;
+
+                          procedure sendmousecoord(Sender:TAbstractViewArea;key: GDBByte);
+                          procedure sendmousecoordwop(Sender:TAbstractViewArea;key: GDBByte);
+                          procedure sendcoordtocommand(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte);
+                          procedure sendcoordtocommandTraceOn(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte;pos:pos_record);
                     end;
 var commandmanager:GDBcommandmanager;
 function getcommandmanager:GDBPointer;export;
@@ -81,6 +86,114 @@ procedure ParseCommand(comm:string; out command,operands:GDBString);
 procedure finalize;}
 implementation
 uses ugdbsimpledrawing,UGDBStringArray,{cmdline,}{UGDBDescriptor,}forms{,varman};
+
+procedure GDBcommandmanager.sendcoordtocommandTraceOn(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte;pos:pos_record);
+var
+   cs:integer;
+begin
+     //if .pcommandrunning<>nil then
+     //if .pcommandrunning.IsRTECommand then
+    cs:=CommandsStack.Count;
+        sendpoint2command(coord,sender.param.md.mouse,key,pos,sender.pdwg^);
+
+     if (key and MZW_LBUTTON)<>0 then
+     if (pcommandrunning<>nil)and(cs=CommandsStack.Count) then
+     begin
+           inc(sender.tocommandmcliccount);
+           sender.param.ontrackarray.otrackarray[0].worldcoord:=coord;
+           sender.param.lastpoint:=coord;
+           sender.create0axis;
+           sender.project0axis;
+     end;
+     //end;
+end;
+
+procedure GDBcommandmanager.sendcoordtocommand(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte);
+begin
+     if key=MZW_LBUTTON then Sender.param.lastpoint:=coord;
+     sendpoint2command(coord, sender.param.md.mouse, key,nil,sender.pdwg^);
+end;
+procedure GDBcommandmanager.sendmousecoord(Sender:TAbstractViewArea;key: GDBByte);
+begin
+  if pcommandrunning <> nil then
+    if sender.param.md.mouseonworkplan
+    then
+        begin
+             sendcoordtocommand(sender,sender.param.md.mouseonworkplanecoord,key);
+             //if key=MZW_LBUTTON then wa.param.lastpoint:=wa.param.md.mouseonworkplanecoord;
+             //.pcommandrunning^.MouseMoveCallback(wa.param.md.mouseonworkplanecoord, wa.param.md.mouse, key,nil)
+        end
+    else
+        begin
+             sendcoordtocommand(sender,sender.param.md.mouseray.lbegin,key);
+             //if key=MZW_LBUTTON then wa.param.lastpoint:=wa.param.md.mouseray.lbegin;
+             //.pcommandrunning^.MouseMoveCallback(wa.param.md.mouseray.lbegin, wa.param.md.mouse, key,nil);
+        end;
+    //if key=MZW_LBUTTON then wa.param.ontrackarray.otrackarray[0].worldcoord:=wa.param.md.mouseonworkplanecoord;
+end;
+procedure GDBcommandmanager.sendmousecoordwop(Sender:TAbstractViewArea;key: GDBByte);
+var
+   tv:gdbvertex;
+begin
+  if pcommandrunning <> nil then
+    if sender.param.ospoint.ostype <> os_none
+    then
+    begin
+         begin
+              {if (key and MZW_LBUTTON)<>0 then
+                                              shared.HistoryOutStr(floattostr(wa.param.ospoint.ostype));}
+              tv:=sender.param.ospoint.worldcoord;
+              if (key and MZW_SHIFT)<>0 then
+                                            begin
+                                                 key:=key and (not MZW_SHIFT);
+                                                 tv:=Vertexmorphabs(sender.param.lastpoint,sender.param.ospoint.worldcoord,1);
+                                            end;
+              if (key and MZW_CONTROL)<>0 then
+                                            begin
+                                                 key:=key and (not MZW_CONTROL);
+                                                 tv:=Vertexmorphabs(sender.param.lastpoint,sender.param.ospoint.worldcoord,-1);
+                                            end;
+              key:=key and (not MZW_CONTROL);
+              key:=key and (not MZW_SHIFT);
+
+              {if key=MZW_LBUTTON then
+                                     begin
+                                          inc(tocommandmcliccount);
+                                          wa.param.ontrackarray.otrackarray[0].worldcoord:=tv;
+                                     end;
+              if (key and MZW_LBUTTON)<>0 then
+                                              wa.param.lastpoint:=tv;
+              .pcommandrunning^.MouseMoveCallback(tv, wa.param.md.mouse, key,@wa.param.ospoint);}
+
+              sendcoordtocommandTraceOn(sender,tv,key,@sender.param.ospoint)
+         end;
+    end
+    else
+    begin
+        {if key=MZW_LBUTTON then
+                               begin
+                               inc(tocommandmcliccount);
+                               wa.param.ontrackarray.otrackarray[0].worldcoord:=wa.param.md.mouseonworkplanecoord;
+                               end;}
+        if sender.param.md.mouseonworkplan
+        then
+            begin
+                 if sysvar.DWG.DWG_SnapGrid<>nil then
+                 if not sysvar.DWG.DWG_SnapGrid^ then
+                 sender.param.ospoint.worldcoord:=sender.param.md.mouseonworkplanecoord;
+                 sendcoordtocommandTraceOn({wa.param.md.mouseonworkplanecoord}sender,sender.param.ospoint.worldcoord,key,nil)
+                 //if key=MZW_LBUTTON then wa.param.lastpoint:=wa.param.md.mouseonworkplanecoord;
+                 //.pcommandrunning.MouseMoveCallback(wa.param.md.mouseonworkplanecoord, wa.param.md.mouse, key,nil)
+            end
+        else
+            begin
+                 sender.param.ospoint.worldcoord:=sender.param.md.mouseray.lbegin;
+                 sendcoordtocommandTraceOn(sender,sender.param.md.mouseray.lbegin,key,nil)
+                 //if key=MZW_LBUTTON then wa.param.lastpoint:=wa.param.md.mouseray.lbegin;
+                 //.pcommandrunning^.MouseMoveCallback(wa.param.md.mouseray.lbegin, wa.param.md.mouse, key,nil);
+            end;
+    end;
+end;
 function GDBcommandmanager.EndGetPoint(newmode:TGetPointMode):GDBBoolean;
 begin
   if pcommandrunning<>nil then

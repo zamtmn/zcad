@@ -1,11 +1,11 @@
 object Form1: TForm1
-  Left = 385
-  Height = 909
-  Top = 107
-  Width = 1097
+  Left = 185
+  Height = 892
+  Top = 137
+  Width = 1106
   Caption = 'ZCAD engine demo program'
-  ClientHeight = 909
-  ClientWidth = 1097
+  ClientHeight = 892
+  ClientWidth = 1106
   KeyPreview = True
   OnDestroy = _DestroyApp
   OnKeyDown = _KeyDown
@@ -13,12 +13,12 @@ object Form1: TForm1
   LCLVersion = '1.5'
   object Panel1: TPanel
     Left = 0
-    Height = 909
+    Height = 892
     Top = 0
     Width = 824
     Align = alLeft
     BevelOuter = bvNone
-    ClientHeight = 909
+    ClientHeight = 892
     ClientWidth = 824
     TabOrder = 0
     object Splitter2: TSplitter
@@ -53,17 +53,17 @@ object Form1: TForm1
     end
     object GroupBox2: TGroupBox
       Left = 0
-      Height = 499
+      Height = 482
       Top = 410
       Width = 824
       Align = alClient
       Caption = 'GDI:'
-      ClientHeight = 475
+      ClientHeight = 458
       ClientWidth = 820
       TabOrder = 2
       object Panel2: TPanel
         Left = 0
-        Height = 475
+        Height = 458
         Top = 0
         Width = 820
         Align = alClient
@@ -74,7 +74,7 @@ object Form1: TForm1
   end
   object Splitter1: TSplitter
     Left = 824
-    Height = 909
+    Height = 892
     Top = 0
     Width = 10
   end
@@ -86,7 +86,7 @@ object Form1: TForm1
     Left = 834
     Height = 32
     Top = 24
-    Width = 263
+    Width = 272
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Add lines'
     OnClick = BtnAddLinesClick
@@ -100,7 +100,7 @@ object Form1: TForm1
     Left = 834
     Height = 33
     Top = 56
-    Width = 263
+    Width = 272
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Add circles'
     OnClick = BtnAddCirclesClick
@@ -116,7 +116,7 @@ object Form1: TForm1
     Left = 919
     Height = 23
     Top = 614
-    Width = 178
+    Width = 187
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Rebuild tree'
     OnClick = BtnRebuildClick
@@ -142,7 +142,7 @@ object Form1: TForm1
     Left = 992
     Height = 27
     Top = 0
-    Width = 105
+    Width = 114
     Anchors = [akTop, akLeft, akRight]
     MaxValue = 1000000
     MinValue = 1
@@ -157,7 +157,7 @@ object Form1: TForm1
     Left = 834
     Height = 37
     Top = 392
-    Width = 263
+    Width = 272
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Erase Selected'
     OnClick = BtnEraseSelClick
@@ -171,7 +171,7 @@ object Form1: TForm1
     Left = 834
     Height = 32
     Top = 120
-    Width = 263
+    Width = 272
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Add texts'
     OnClick = BtnAddTextsClick
@@ -185,7 +185,7 @@ object Form1: TForm1
     Left = 834
     Height = 28
     Top = 529
-    Width = 263
+    Width = 272
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Open DXF'
     OnClick = BtnOpenDXFClick
@@ -199,7 +199,7 @@ object Form1: TForm1
     Left = 834
     Height = 26
     Top = 561
-    Width = 263
+    Width = 272
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Save DXF'
     OnClick = BtnSaveDXFClick
@@ -213,7 +213,7 @@ object Form1: TForm1
     Left = 834
     Height = 32
     Top = 360
-    Width = 263
+    Width = 272
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Select All'
     OnClick = BtnSelectAllClick
@@ -241,7 +241,7 @@ object Form1: TForm1
     Left = 834
     Height = 31
     Top = 152
-    Width = 263
+    Width = 272
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Add 3DPolyLines'
     OnClick = BtnAdd3DpolyLinesClick
@@ -255,7 +255,7 @@ object Form1: TForm1
     Left = 834
     Height = 31
     Top = 184
-    Width = 263
+    Width = 272
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Add LWPolyLines'
     OnClick = BtnAddLWPolylines1Click
@@ -279,7 +279,7 @@ object Form1: TForm1
     Left = 834
     Height = 32
     Top = 256
-    Width = 263
+    Width = 272
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Process Lines'
     OnClick = BtnProcessObjectsClick
@@ -293,7 +293,7 @@ object Form1: TForm1
     Left = 834
     Height = 32
     Top = 288
-    Width = 263
+    Width = 272
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Off entity layer'
     OnClick = OffEntLayerClick
@@ -307,7 +307,7 @@ object Form1: TForm1
     Left = 834
     Height = 32
     Top = 320
-    Width = 263
+    Width = 272
     Anchors = [akTop, akLeft, akRight]
     Caption = 'On all layer'
     OnClick = OnAllLayerClick
@@ -323,9 +323,9 @@ object Form1: TForm1
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 834
-    Height = 272
+    Height = 255
     Top = 637
-    Width = 263
+    Width = 272
     Anchors = [akTop, akLeft, akRight, akBottom]
     TabOrder = 18
   end
@@ -337,7 +337,7 @@ object Form1: TForm1
     Left = 834
     Height = 31
     Top = 216
-    Width = 263
+    Width = 272
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Add 3DFaces'
     OnClick = BtnAdd3DFaces1Click
@@ -351,11 +351,31 @@ object Form1: TForm1
     Left = 834
     Height = 33
     Top = 88
-    Width = 263
+    Width = 272
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Add arcs'
     OnClick = BtnAddArcsClick
     TabOrder = 20
+  end
+  object ComboBox1: TComboBox
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 834
+    Height = 27
+    Top = 432
+    Width = 272
+    Anchors = [akTop, akLeft, akRight]
+    ItemHeight = 19
+    ItemIndex = 0
+    Items.Strings = (
+      'OpenGL'
+      'GDI'
+    )
+    Style = csDropDownList
+    TabOrder = 21
+    Text = 'OpenGL'
   end
   object OpenDialog1: TOpenDialog
     DefaultExt = '.dxf'

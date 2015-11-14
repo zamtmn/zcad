@@ -62,9 +62,9 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 function DrawExtensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef; part:integer):pgdbobjline;
                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                function LinearFloatToStr(l:GDBDouble):GDBString;
-                function GetLinearDimStr(l:GDBDouble):GDBString;
-                function GetDimStr:GDBString;virtual;
+                function LinearFloatToStr(l:GDBDouble;const drawing:TDrawingDef):GDBString;
+                function GetLinearDimStr(l:GDBDouble;const drawing:TDrawingDef):GDBString;
+                function GetDimStr(const drawing:TDrawingDef):GDBString;virtual;
                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                 function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                 function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
@@ -146,7 +146,7 @@ begin
                                                       p1,PDimStyle.Arrows.DIMASZ,ZAngle{*180/pi},@tbp0.name[1]);
   //pv^.vp.LineWeight:=PDimStyle.Lines.DIMLWD;
   //pv^.vp.Color:=PDimStyle.Lines.DIMCLRD;
-  pv^.formatentity(gdb.GetCurrentDWG^,dc);
+  pv^.formatentity(drawing,dc);
   end;
   if not supress2 then
   begin
@@ -161,7 +161,7 @@ begin
   //pv^.vp.LineWeight:=PDimStyle.Lines.DIMLWD;
   //pv^.vp.Color:=PDimStyle.Lines.DIMCLRD;
   end;
-  pv^.formatentity(gdb.GetCurrentDWG^,dc);
+  pv^.formatentity(drawing,dc);
   if tbp0.width=0 then
                       pp1:=Vertexmorphabs(p2,p1,PDimStyle.Lines.DIMDLE)
                   else
@@ -252,7 +252,7 @@ begin
    TextAngle:=CorrectAngleIfNotReadable(DimAngle);
 end;
 
-function GDBObjDimension.GetDimStr:GDBString;
+function GDBObjDimension.GetDimStr(const drawing:TDrawingDef):GDBString;
 begin
      result:='need GDBObjDimension.GetDimStr override';
 end;
@@ -281,7 +281,7 @@ var
    dimtxtstyle:PGDBTextStyle;
    txtlines:XYZWGDBGDBStringArray;
 begin
-   dimtext:={GetLinearDimStr(abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)))}GetDimStr;
+   dimtext:={GetLinearDimStr(abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)))}GetDimStr(drawing);
    dimtxtstyle:=PDimStyle.Text.DIMTXSTY;//drawing.GetTextStyleTable^.getelement(0);
    txtlines.init(3);
    FormatMtext(dimtxtstyle.pfont,0,PDimStyle.Text.DIMTXT,dimtxtstyle^.prop.wfactor,dimtext,txtlines);
@@ -341,7 +341,7 @@ var
   p2:GDBVertex;
 begin
   //CalcTextParam;
-  dimtext:={GetLinearDimStr(abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)))}GetDimStr;
+  dimtext:={GetLinearDimStr(abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)))}GetDimStr(drawing);
   dimtxtstyle:=PDimStyle.Text.DIMTXSTY;//drawing.GetTextStyleTable^.getelement(0);
   {txtlines.init(3);
   FormatMtext(dimtxtstyle.pfont,0,PDimStyle.Text.DIMTXT,dimtxtstyle^.prop.wfactor,dimtext,txtlines);
@@ -474,11 +474,11 @@ begin
           end;
 
 end;
-function GDBObjDimension.LinearFloatToStr(l:GDBDouble):GDBString;
+function GDBObjDimension.LinearFloatToStr(l:GDBDouble;const drawing:TDrawingDef):GDBString;
 var
    ff:TzeUnitsFormat;
 begin
-     ff:=gdb.GetUnitsFormat;
+     ff:=drawing.GetUnitsFormat;
      ff.RemoveTrailingZeros:=false;
      ff.DeciminalSeparator:=PDimStyle.Units.DIMDSEP;
      if PDimStyle.Units.DIMLUNIT<>DUSystem then
@@ -487,7 +487,7 @@ begin
      ff.uprec:=TUPrec(PDimStyle.Units.DIMDEC);
      result:={floattostr}zeDimensionToString(l,{WorkingFormatSettings}ff);
 end;
-function GDBObjDimension.GetLinearDimStr(l:GDBDouble):GDBString;
+function GDBObjDimension.GetLinearDimStr(l:GDBDouble;const drawing:TDrawingDef):GDBString;
 var
    n:double;
    i:integer;
@@ -500,7 +500,7 @@ begin
              l:=round(n)*PDimStyle.Units.DIMRND;
         end;
      //l:=roundto(l,-PDimStyle.Units.DIMDEC);
-     str:=LinearFloatToStr(l);
+     str:=LinearFloatToStr(l,drawing);
      if PDimStyle.Units.DIMPOST='' then
                                        result:=str
                                    else

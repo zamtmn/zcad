@@ -39,7 +39,7 @@ GDBObjRadialDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDiametricDimen
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
                         function GetObjTypeName:GDBString;virtual;
 
-                        function GetDimStr:GDBString;virtual;
+                        function GetDimStr(const drawing:TDrawingDef):GDBString;virtual;
                         function GetCenterPoint:GDBVertex;virtual;
                         function Clone(own:GDBPointer):PGDBObjEntity;virtual;
 
@@ -126,9 +126,9 @@ begin
      result:=DimData.P10InWCS;
 end;
 
-function GDBObjRadialDimension.GetDimStr:GDBString;
+function GDBObjRadialDimension.GetDimStr(const drawing:TDrawingDef):GDBString;
 begin
-     result:='R'+GetLinearDimStr(Vertexlength(DimData.P10InWCS,DimData.P15InWCS));
+     result:='R'+GetLinearDimStr(Vertexlength(DimData.P10InWCS,DimData.P15InWCS),drawing);
 end;
 constructor GDBObjRadialDimension.initnul;
 begin

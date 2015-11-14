@@ -37,7 +37,6 @@ TAbstractDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TDrawingDef)
                        function GetChangeStampt:GDBBoolean;virtual;abstract;
                        function StoreOldCamerapPos:Pointer;virtual;abstract;
                        procedure StoreNewCamerapPos(command:Pointer);virtual;abstract;
-                       function GetUnitsFormat:TzeUnitsFormat;virtual;abstract;
                        procedure SetUnitsFormat(f:TzeUnitsFormat);virtual;abstract;
                        procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
                        procedure FillDrawingPartRC(var dc:TDrawContext);virtual;abstract;

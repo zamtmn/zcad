@@ -1625,7 +1625,7 @@ begin
   DecimalSeparator := '.';
   //standartstylehandle:=0;
   olddwg:=nil;//@drawing;
-  if @SetCurrentDWGProc<>nil
+  if assigned(SetCurrentDWGProc)
                             then olddwg:=SetCurrentDWGProc(@drawing);
   //gdb.SetCurrentDWG(pdrawing);
   //--------------------------outstream := FileCreate(name);

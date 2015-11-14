@@ -38,6 +38,7 @@ TDrawingDef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseobject)
                        function CanUndo:boolean;virtual;abstract;
                        function CanRedo:boolean;virtual;abstract;
                        function CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;virtual;abstract;
+                       function GetUnitsFormat:TzeUnitsFormat;virtual;abstract;
                  end;
 {EXPORT-}
 implementation

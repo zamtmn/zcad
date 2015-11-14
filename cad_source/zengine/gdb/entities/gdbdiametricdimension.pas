@@ -40,7 +40,7 @@ GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         function GetObjTypeName:GDBString;virtual;
 
                         procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                        function GetDimStr:GDBString;virtual;
+                        function GetDimStr(const drawing:TDrawingDef):GDBString;virtual;
                         function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                         procedure addcontrolpoints(tdesc:GDBPointer);virtual;
 
@@ -185,9 +185,9 @@ begin
   tvo^.PDimStyle:=PDimStyle;
   result := tvo;
 end;
-function GDBObjDiametricDimension.GetDimStr:GDBString;
+function GDBObjDiametricDimension.GetDimStr(const drawing:TDrawingDef):GDBString;
 begin
-     result:='%%C'+GetLinearDimStr(Vertexlength(DimData.P10InWCS,DimData.P15InWCS));
+     result:='%%C'+GetLinearDimStr(Vertexlength(DimData.P10InWCS,DimData.P15InWCS),drawing);
 end;
 function GDBObjDiametricDimension.GetCenterPoint:GDBVertex;
 begin

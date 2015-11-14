@@ -6,5 +6,5 @@ begin
    NMO_Name:='0BIAS0.0';
    NMO_BaseName:='BIAS';
    DB_link:='BIAS';
-   BTY_TreeCoord:='PLAN_OPS_OPSALARM_OPSASOUND_Вариант 1';
+   BTY_TreeCoord:='PLAN_OPS_OPSALARM_OPSASOUND_Вариант 2';
 end.

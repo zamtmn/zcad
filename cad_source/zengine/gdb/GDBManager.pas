@@ -57,7 +57,7 @@ procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
 procedure UndoCommandStartMarker(CommandName:GDBString);
 procedure UndoCommandEndMarker;
 
-function ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
+function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
                                 point: gdbvertex; scale, angle: GDBDouble; s: pansichar):PGDBObjBlockInsert;
 
@@ -66,7 +66,7 @@ var
 implementation
 uses
     log;
-function ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
+function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
                                 point: gdbvertex; scale, angle: GDBDouble; s: pansichar):PGDBObjBlockInsert;
 var
@@ -105,7 +105,7 @@ begin
   pb^.BuildVarGeometry(gdb.GetCurrentDWG^);
   DC:=gdb.GetCurrentDWG^.CreateDrawingRC;
   pb^.formatEntity(gdb.GetCurrentDWG^,dc);
-  gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
+  owner.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
   result:=pb;
 end;
 

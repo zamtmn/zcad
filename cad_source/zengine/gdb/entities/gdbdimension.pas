@@ -91,7 +91,7 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 end;
 {EXPORT-}
 implementation
-uses GDBManager,log,UGDBOpenArrayOfPV,UGDBDescriptor,GDBBlockInsert;
+uses zeentitiesmanager,{GDBManager,}log,UGDBOpenArrayOfPV,{UGDBDescriptor,}GDBBlockInsert;
 procedure GDBObjDimension.DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;const drawing:TDrawingDef;var DC:TDrawContext);
 var
    l:GDBDouble;
@@ -113,8 +113,8 @@ begin
                   tbp1.width:=0
               else
                   tbp1.width:=tbp1.width*PDimStyle.Arrows.DIMASZ;
-  gdb.AddBlockFromDBIfNeed(@drawing,tbp0.name);
-  gdb.AddBlockFromDBIfNeed(@drawing,tbp1.name);
+  drawing.CreateBlockDef(tbp0.name);
+  drawing.CreateBlockDef(tbp1.name);
   if tbp0.width=0 then
                       p0inside:=true
                   else

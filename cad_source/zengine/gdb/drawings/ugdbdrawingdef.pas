@@ -23,6 +23,7 @@ type
 {EXPORT+}
 PTDrawingDef=^TDrawingDef;
 TDrawingDef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseobject)
+                       function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
                        function GetLayerTable:PGDBLayerArray;virtual;abstract;
                        function GetLTypeTable:PGDBLtypeArray;virtual;abstract;
                        function GetTextStyleTable:PGDBTextStyleArray;virtual;abstract;

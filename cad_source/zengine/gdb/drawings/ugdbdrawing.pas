@@ -45,7 +45,6 @@ TDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
 
            constructor init(num:PTUnitManager;preloadedfile1,preloadedfile2:GDBString);
            destructor done;virtual;
-           function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
            procedure onUndoRedo;
            procedure onUndoRedoDataOwner(PDataOwner:Pointer);
 

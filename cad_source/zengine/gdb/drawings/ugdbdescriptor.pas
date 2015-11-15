@@ -506,6 +506,7 @@ begin
        //addfromdxf(sysvar.path.Program_Run^+'sample\test_dxf\teapot.dxf',@CurrentDWG.ObjRoot);
        //addfromdxf(sysvar.path.Program_Run^+'sample\test_dxf\shema_Poly_Line_Text_Circle_Arc.dxf',@CurrentDWG.ObjRoot);
   end;
+  MainBlockCreateProc:=AddBlockFromDBIfNeed;
 end;
 constructor GDBDescriptor.initnul;
 //var tp:GDBTextStyleProp;

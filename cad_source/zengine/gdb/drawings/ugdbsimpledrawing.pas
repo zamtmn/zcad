@@ -19,13 +19,14 @@
 unit ugdbsimpledrawing;
 {$INCLUDE def.inc}
 interface
-uses ugdbdimstylearray,GDBWithLocalCS,ugdbabstractdrawing,strproc,
+uses UGDBDrawingdef,zeblockdefsfactory,ugdbdimstylearray,GDBWithLocalCS,ugdbabstractdrawing,strproc,
      UGDBObjBlockdefArray,UGDBTableStyleArray,{UUnitManager,}UGDBNumerator, gdbase,
      varmandef,{varman,}sysutils, memman, geometry,gdbasetypes,{sysinfo,}
      GDBGenericSubEntry,UGDBLayerArray,ugdbltypearray,GDBEntity,
      UGDBSelectedObjArray,UGDBTextStyleArray,GDBCamera,UGDBOpenArrayOfPV,
      GDBRoot,ugdbfont,UGDBOpenArrayOfPObjects,uzglabstractviewarea,gdbdrawcontext;
 type
+TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:GDBString) of object;
 {EXPORT+}
 PTSimpleDrawing=^TSimpleDrawing;
 TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
@@ -48,7 +49,6 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        LTypeStyleTable:GDBLtypeArray;
                        DimStyleTable:GDBDimStyleArray;
                        function GetLastSelected:PGDBObjEntity;virtual;
-                       function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
                        constructor init(pcam:PGDBObjCamera);
                        destructor done;virtual;
                        function myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex):Integer;virtual;
@@ -92,11 +92,30 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;virtual;
                        procedure FillDrawingPartRC(var dc:TDrawContext);virtual;
                        function GetUnitsFormat:TzeUnitsFormat;virtual;
+                       function CreateBlockDef(name:GDBString):GDBPointer;virtual;
                  end;
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
+var
+    MainBlockCreateProc:TMainBlockCreateProc=nil;
 implementation
 uses log;
+function TSimpleDrawing.CreateBlockDef(name:GDBString):GDBPointer;
+var
+   td:pointer;
+begin
+   td:=BlockDefArray.getblockdef(name);
+   if td=nil then
+   begin
+   td:=zeblockdefsfactory.CreateBlockDef(@self,name);
+   if td=nil then
+                 begin
+                      if assigned(MainBlockCreateProc) then
+                                                           MainBlockCreateProc(@self,name);
+                 end;
+   end;
+end;
+
 function TSimpleDrawing.GetUnitsFormat:TzeUnitsFormat;
 begin
      result.DeciminalSeparator:=DDSDot;

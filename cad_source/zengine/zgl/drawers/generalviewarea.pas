@@ -23,7 +23,7 @@ uses
      memman,log,zemathutils,gdbpalette,
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
      UGDBLayerArray,ugdbdimstylearray,
-     oglwindowdef,gdbdrawcontext,varmandef,zcadsysvars,GDBEntity,zcadinterface,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
+     oglwindowdef,gdbdrawcontext,varmandef,zcadsysvars,GDBEntity,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
      gdbobjectsconstdef,shared,zcadstrconsts,UGDBTracePropArray,math,sysutils,UGDBDrawingdef,strproc,
      ExtCtrls,Controls,Classes,LCLType,Forms,UGDBOpenArrayOfPV,GDBGenericSubEntry,GDBCamera,UGDBVisibleOpenArray,uzglabstractdrawer,uzglgeneraldrawer,uzglabstractviewarea;
 const
@@ -31,6 +31,7 @@ const
   ontracignoredist=25;
 
 type
+    TOnActivateProc=Procedure;
     TCameraChangedNotify=procedure of object;
     TGeneralViewArea=class(TAbstractViewArea)
                            public
@@ -171,6 +172,8 @@ var
    SysVarRDRemoveSystemCursorFromWorkArea:GDBBoolean=true;
    sysvarDSGNSelNew:GDBBoolean=false;
    sysvarDWGEditInSubEntry:gdbboolean=false;
+
+   OnActivateProc:TOnActivateProc=nil;
 implementation
 {uses
     commandline;}
@@ -197,7 +200,8 @@ begin
     GDBActivateGLContext;
     //paint;
     getviewcontrol.invalidate;
-  if assigned(updatevisibleproc) then updatevisibleproc;
+    if assigned(OnActivateProc) then OnActivateProc;
+    //if assigned(updatevisibleproc) then updatevisibleproc;
 end;
 procedure drawfrustustum(frustum:ClipArray;var DC:TDrawContext);
 var
@@ -1790,6 +1794,7 @@ begin
      ShowCXMenu:=nil;
      MainMouseMove:=nil;
      MainMouseDown:=nil;
+     MainMouseUp:=nil;
 
      WorkArea.onmouseup:=WaMouseUp;
      WorkArea.onmousedown:=WaMouseDown;
@@ -1818,15 +1823,11 @@ var key: GDBByte;
     FreeClick:boolean;
 begin
   FreeClick:=true;
-  if assigned(zcadinterface.SetNormalFocus)then
-                                               zcadinterface.SetNormalFocus(nil);
   if assigned(MainmouseDown)then
-  if mainmousedown then
+  if mainmousedown(self) then
                        exit;
   //if (cxmenumgr.ismenupopup)or(ActivePopupMenu<>nil) then
   //                                                       exit;
-  if @SetCurrentDWGProc<>nil then
-                                SetCurrentDWGProc(pdwg);
   //ActivePopupMenu:=ActivePopupMenu;
   NeedRedraw:=false;
   if assigned(OnWaMouseDown) then
@@ -1867,7 +1868,11 @@ begin
   end;
   inherited;
   if needredraw then
-                    if assigned(redrawoglwndproc) then redrawoglwndproc;
+                    begin
+                    param.firstdraw:=true;
+                    DrawOrInvalidate;
+                    //if assigned(redrawoglwndproc) then redrawoglwndproc;
+                    end;
 end;
 
 procedure TGeneralViewArea.WaMouseUp(Sender:TObject;Button: TMouseButton; Shift:TShiftState;X, Y: Integer);
@@ -1886,12 +1891,14 @@ begin
     WorkArea.invalidate;
     //paint;
   end;
-  if assigned(GetCurrentObjProc) then
+  if assigned(MainMouseUp) then
+                               MainMouseUp;
+  {if assigned(GetCurrentObjProc) then
   if GetCurrentObjProc=@sysvar then
   If assigned(UpdateObjInspProc)then
                                    UpdateObjInspProc;
   if assigned(zcadinterface.SetNormalFocus)then
-                                               zcadinterface.SetNormalFocus(nil);
+                                               zcadinterface.SetNormalFocus(nil);}
 end;
 function TGeneralViewArea.CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;
 begin

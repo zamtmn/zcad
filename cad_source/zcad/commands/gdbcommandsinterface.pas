@@ -212,6 +212,7 @@ begin
      wpowner.ShowCXMenu:=MainFormN.ShowCXMenu;
      wpowner.MainMouseMove:=MainFormN.MainMouseMove;
      wpowner.MainMouseDown:=MainFormN.MainMouseDown;
+     wpowner.MainMouseUp:=MainFormN.MainMouseUp;
      wpowner.OnSetObjInsp:=MainFormN.waSetObjInsp;
      oglwnd:=wpowner.getviewcontrol;// TOGLWnd.Create(myts);
 

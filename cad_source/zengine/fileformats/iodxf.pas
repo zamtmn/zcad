@@ -25,7 +25,7 @@ uses paths,strproc,gdbdrawcontext,usimplegenerics,ugdbdimstylearray,zeentityfact
     GDBCircle,GDBArc,oglwindowdef,dxflow,zcadstrconsts,UGDBTextStyleArray,varman,
     geometry,GDBSubordinated,shared,gdbasetypes,log,GDBGenericSubEntry,SysInfo,gdbase,
     sysutils,memman,gdbobjectsconstdef,UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,
-    UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity,TypeDescriptors;
+    UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,TypeDescriptors};
 type
    entnamindex=record
                     entname:GDBString;
@@ -2678,10 +2678,11 @@ var
 //  test:gdbvertex;
   sub:integer;
 begin
+(*
      memorybuf:=nil;
      linkbyf:=nil;
      //s:=NULZCPHeader;
-     zcpmode:=zcptxt;
+     zcpmode:=zcptxt;  lkj
      sub:=0;
      sysunit^.TypeName2PTD('ZCPHeader')^.Serialize(@ZCPHead,SA_SAVED_TO_SHD,memorybuf,linkbyf,sub);
 
@@ -2714,6 +2715,7 @@ begin
      fileclose(outfile);
      memorybuf^.done;
      linkbyf^.done;
+*)
 end;
 procedure LoadZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
 //var

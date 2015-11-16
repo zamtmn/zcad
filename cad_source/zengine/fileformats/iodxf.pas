@@ -19,8 +19,13 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses paths,strproc,gdbdrawcontext,usimplegenerics,ugdbdimstylearray,zeentityfactory,{$IFNDEF DELPHI}dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,{pdfvectorialreader,}GDBCircle,GDBArc,oglwindowdef,dxflow,zcadstrconsts,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, {GDBManager,} {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
-     UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
+uses paths,strproc,gdbdrawcontext,usimplegenerics,ugdbdimstylearray,zeentityfactory,
+    {$IFNDEF DELPHI}dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}
+    UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,
+    GDBCircle,GDBArc,oglwindowdef,dxflow,zcadstrconsts,UGDBTextStyleArray,varman,
+    geometry,GDBSubordinated,shared,gdbasetypes,log,GDBGenericSubEntry,SysInfo,gdbase,
+    sysutils,memman,gdbobjectsconstdef,UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,
+    UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity,TypeDescriptors;
 type
    entnamindex=record
                     entname:GDBString;
@@ -72,7 +77,7 @@ procedure LoadZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawi
 procedure Import(name: GDBString;var drawing:TSimpleDrawing);
 {$ENDIF}
 implementation
-uses enitiesextendervariables,GDBLine,GDBBlockDef,UGDBLayerArray,varmandef,fileformatsmanager;
+uses {enitiesextendervariables,}GDBLine,GDBBlockDef,UGDBLayerArray,varmandef,fileformatsmanager;
 
 function IsIgnoredEntity(name:GDBString):GDBInteger;
 var i:GDBInteger;
@@ -306,53 +311,6 @@ begin
                                          end;
   end;
 end;
-
-procedure correctvariableset(pobj: PGDBObjEntity);
-var vd:vardesk;
-    pentvarext:PTVariablesExtender;
-begin
-     //if (pobj.vp.ID=GDBBlockInsertID)or
-     //   (pobj.vp.ID=GDBCableID) then
-     pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
-     if pentvarext<>nil then
-        begin
-             if pentvarext^.entityunit.FindVariable('GC_HeadDevice')<>nil then
-             if pentvarext^.entityunit.FindVariable('GC_Metric')=nil then
-             begin
-                  pentvarext^.entityunit.setvardesc(vd,'GC_Metric','','GDBString');
-                  pentvarext^.entityunit.InterfaceVariables.createvariable(vd.name,vd);
-             end;
-
-             if pentvarext^.entityunit.FindVariable('GC_HDGroup')<>nil then
-             if pentvarext^.entityunit.FindVariable('GC_HDGroupTemplate')=nil then
-             begin
-                  pentvarext^.entityunit.setvardesc(vd,'GC_HDGroupTemplate','Шаблон группы','GDBString');
-                  pentvarext^.entityunit.InterfaceVariables.createvariable(vd.name,vd);
-             end;
-             if pentvarext^.entityunit.FindVariable('GC_HeadDevice')<>nil then
-             if pentvarext^.entityunit.FindVariable('GC_HeadDeviceTemplate')=nil then
-             begin
-                  pentvarext^.entityunit.setvardesc(vd,'GC_HeadDeviceTemplate','Шаблон головного устройства','GDBString');
-                  pentvarext^.entityunit.InterfaceVariables.createvariable(vd.name,vd);
-             end;
-
-             if pentvarext^.entityunit.FindVariable('GC_HDShortName')<>nil then
-             if pentvarext^.entityunit.FindVariable('GC_HDShortNameTemplate')=nil then
-             begin
-                  pentvarext^.entityunit.setvardesc(vd,'GC_HDShortNameTemplate','Шаблон короткого имени головного устройства','GDBString');
-                  pentvarext^.entityunit.InterfaceVariables.createvariable(vd.name,vd);
-             end;
-             if pentvarext^.entityunit.FindVariable('GC_Metric')<>nil then
-             if pentvarext^.entityunit.FindVariable('GC_InGroup_Metric')=nil then
-             begin
-                  pentvarext^.entityunit.setvardesc(vd,'GC_InGroup_Metric','Метрика нумерации в группе','GDBString');
-                  pentvarext^.entityunit.InterfaceVariables.createvariable(vd.name,vd);
-             end;
-
-
-        end;
-end;
-
 procedure addentitiesfromdxf(var f: GDBOpenArrayOfByte;exitGDBString: GDBString;owner:PGDBObjSubordinated;var drawing:TSimpleDrawing;h2p:TMapHandleToPointer);
 var
 //  byt,LayerColor: GDBInteger;
@@ -368,7 +326,7 @@ objid: GDBInteger;
   additionalunit:TUnit;
   EntInfoData:TEntInfoData;
   DC:TDrawContext;
-  pentvarext,ppostentvarext:PTVariablesExtender;
+  //pentvarext,ppostentvarext:PTVariablesExtender;
   bylayerlt:GDBPointer;
 begin
   additionalunit.init('temparraryunit');
@@ -397,7 +355,8 @@ begin
                                                                  PGDBObjEntity(pobj)^.vp.Layer:=drawing.LayerTable.GetSystemLayer;
         if (PGDBObjEntity(pobj)^.vp.LineType=nil) then
                                                       PGDBObjEntity(pobj)^.vp.LineType:={drawing.LTypeStyleTable.getAddres('ByLayer')}bylayerlt;
-        correctvariableset(pobj);
+        if assigned(PGDBObjEntity(pobj)^.EntExtensions) then
+                                                            PGDBObjEntity(pobj)^.EntExtensions.RunSupportOldVersions(pobj,drawing);
         pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd(@additionalunit,drawing);
         trash:=false;
         if postobj=nil  then
@@ -482,11 +441,13 @@ begin
                                 end;
 
                                  newowner^.AddMi(@postobj);
-                                 pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+                                 if assigned(pobj^.EntExtensions)then
+                                                                     pobj^.EntExtensions.CopyAllExtToEnt(pobj,postobj);
+                                 {pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
                                  ppostentvarext:=postobj^.GetExtension(typeof(TVariablesExtender));
-                                 //if pobj^.ou.Instance<>nil then
                                  if (pentvarext<>nil)and(ppostentvarext<>nil) then
-                                 pentvarext^.entityunit.CopyTo(@ppostentvarext^.entityunit);
+                                 pentvarext^.entityunit.CopyTo(@ppostentvarext^.entityunit);}
+
                                  if foc=0 then
                                               begin
                                                    PGDBObjEntity(postobj)^.BuildGeometry(drawing);

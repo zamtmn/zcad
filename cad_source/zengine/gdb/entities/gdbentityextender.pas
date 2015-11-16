@@ -37,6 +37,9 @@ TBaseEntityExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseObjExtender)
                   procedure onEntityFormat(pEntity:Pointer;const drawing:TDrawingDef);virtual;abstract;
                   procedure onEntityClone(pSourceEntity,pDestEntity:Pointer);virtual;abstract;
                   procedure onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);virtual;abstract;
+                  procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);virtual;abstract;
+
+                  procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);virtual;abstract;
 end;
 TEntityExtenderVector=specialize TVector<PTBaseEntityExtender>;
 TEntityExtenderMap=specialize GKey2DataMap<Pointer,SizeUInt,LessPointer>;
@@ -48,9 +51,11 @@ TEntityExtensions=class
                        destructor destroy;override;
                        function AddExtension(ExtObj:PTBaseEntityExtender;ObjSize:GDBInteger):{PTBaseEntityExtender}pointer;
                        function GetExtension(_ExtType:pointer):{PTBaseEntityExtender}pointer;
+                       procedure CopyAllExtToEnt(pSourceEntity,pDestEntity:pointer);
 
                        procedure RunOnCloneProcedures(source,dest:pointer);
                        procedure RunOnBuildVarGeometryProcedures(pEntity:pointer;const drawing:TDrawingDef);
+                       procedure RunSupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
                   end;
 implementation
 constructor TBaseEntityExtender.init(pEntity:Pointer);
@@ -118,6 +123,22 @@ begin
      if assigned(fEntityExtensions)then
      for i:=0 to fEntityExtensions.Size-1 do
        fEntityExtensions[i]^.onEntityBuildVarGeometry(pEntity,drawing);
+end;
+procedure TEntityExtensions.RunSupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
+var
+  i:integer;
+begin
+     if assigned(fEntityExtensions)then
+     for i:=0 to fEntityExtensions.Size-1 do
+       fEntityExtensions[i]^.onEntitySupportOldVersions(pEntity,drawing);
+end;
+procedure TEntityExtensions.CopyAllExtToEnt(pSourceEntity,pDestEntity:pointer);
+var
+  i:integer;
+begin
+     if assigned(fEntityExtensions)then
+     for i:=0 to fEntityExtensions.Size-1 do
+       fEntityExtensions[i]^.CopyExt2Ent(pSourceEntity,pDestEntity);
 end;
 end.
 

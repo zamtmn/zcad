@@ -37,12 +37,51 @@ TVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseVariablesExtender)
 
     procedure onEntityClone(pSourceEntity,pDestEntity:pointer);virtual;
     procedure onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);virtual;
+    procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);virtual;
+    procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);virtual;
   end;
 
 var
    PFCTTD:GDBPointer=nil;
 function AddVariablesToEntity(PEnt:PGDBObjEntity):PTVariablesExtender;
 implementation
+procedure TVariablesExtender.onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
+var
+   vd:vardesk;
+begin
+                  if entityunit.FindVariable('GC_HeadDevice')<>nil then
+                  if entityunit.FindVariable('GC_Metric')=nil then
+                  begin
+                       entityunit.setvardesc(vd,'GC_Metric','','GDBString');
+                       entityunit.InterfaceVariables.createvariable(vd.name,vd);
+                  end;
+
+                  if entityunit.FindVariable('GC_HDGroup')<>nil then
+                  if entityunit.FindVariable('GC_HDGroupTemplate')=nil then
+                  begin
+                       entityunit.setvardesc(vd,'GC_HDGroupTemplate','Шаблон группы','GDBString');
+                       entityunit.InterfaceVariables.createvariable(vd.name,vd);
+                  end;
+                  if entityunit.FindVariable('GC_HeadDevice')<>nil then
+                  if entityunit.FindVariable('GC_HeadDeviceTemplate')=nil then
+                  begin
+                       entityunit.setvardesc(vd,'GC_HeadDeviceTemplate','Шаблон головного устройства','GDBString');
+                       entityunit.InterfaceVariables.createvariable(vd.name,vd);
+                  end;
+
+                  if entityunit.FindVariable('GC_HDShortName')<>nil then
+                  if entityunit.FindVariable('GC_HDShortNameTemplate')=nil then
+                  begin
+                       entityunit.setvardesc(vd,'GC_HDShortNameTemplate','Шаблон короткого имени головного устройства','GDBString');
+                       entityunit.InterfaceVariables.createvariable(vd.name,vd);
+                  end;
+                  if entityunit.FindVariable('GC_Metric')<>nil then
+                  if entityunit.FindVariable('GC_InGroup_Metric')=nil then
+                  begin
+                       entityunit.setvardesc(vd,'GC_InGroup_Metric','Метрика нумерации в группе','GDBString');
+                       entityunit.InterfaceVariables.createvariable(vd.name,vd);
+                  end;
+end;
 function AddVariablesToEntity(PEnt:PGDBObjEntity):PTVariablesExtender;
 var
     ObjSize:Integer;
@@ -90,6 +129,11 @@ begin
        pbdunit^.entityunit.CopyTo(@self.entityunit);
      //PTObjectUnit(pblockdef^.ou.Instance)^.copyto(PTObjectUnit(ou.Instance));
 end;
+procedure TVariablesExtender.CopyExt2Ent(pSourceEntity,pDestEntity:pointer);
+begin
+     onEntityClone(pSourceEntity,pDestEntity);
+end;
+
 class function TVariablesExtender.CreateEntVariablesExtender(pEntity:Pointer; out ObjSize:Integer):PTVariablesExtender;
 begin
      ObjSize:=sizeof(TVariablesExtender);

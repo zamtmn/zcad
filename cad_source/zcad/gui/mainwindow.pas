@@ -194,7 +194,8 @@ type
     procedure ShowCXMenu;
     procedure ShowFMenu;
     procedure MainMouseMove;
-    function MainMouseDown:GDBBoolean;
+    function MainMouseDown(Sender:TAbstractViewArea):GDBBoolean;
+    procedure MainMouseUp;
     procedure IPCMessage(Sender: TObject);
     procedure SetTop;
                end;
@@ -990,6 +991,7 @@ begin
   AddOneObjectProc:=self.addoneobject;
   SetVisuaProplProc:=self.setvisualprop;
   UpdateVisibleProc:=UpdateVisible;
+  updatevisibleproc:=UpdateVisible;
   ProcessFilehistoryProc:=self.processfilehistory;
   CursorOn:=ShowAllCursors;
   CursorOff:=RestoreCursors;
@@ -2833,14 +2835,26 @@ procedure MainForm.MainMouseMove;
 begin
      cxmenumgr.reset;
 end;
-function MainForm.MainMouseDown:GDBBoolean;
+function MainForm.MainMouseDown(Sender:TAbstractViewArea):GDBBoolean;
 begin
+     if assigned(zcadinterface.SetNormalFocus)then
+                                                 zcadinterface.SetNormalFocus(nil);
+     if @SetCurrentDWGProc<>nil then
+                                     SetCurrentDWGProc(Sender.PDWG);
      if (cxmenumgr.ismenupopup)or(ActivePopupMenu<>nil) then
                                                             result:=true
                                                         else
                                                             result:=false;
 end;
-
+procedure MainForm.MainMouseUp;
+begin
+     if assigned(GetCurrentObjProc) then
+     if GetCurrentObjProc=@sysvar then
+     If assigned(UpdateObjInspProc)then
+                                      UpdateObjInspProc;
+     if assigned(zcadinterface.SetNormalFocus)then
+                                                  zcadinterface.SetNormalFocus(nil);
+end;
 procedure MainForm.ShowCXMenu;
 var
   menu:TmyPopupMenu;

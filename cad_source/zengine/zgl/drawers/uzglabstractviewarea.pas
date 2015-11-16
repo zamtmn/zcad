@@ -60,7 +60,8 @@ type
                            onCameraChanged:TCameraChangedNotify;
                            ShowCXMenu:procedure of object;
                            MainMouseMove:procedure of object;
-                           MainMouseDown:function:boolean of object;
+                           MainMouseDown:function(Sender:TAbstractViewArea):boolean of object;
+                           MainMouseUp:procedure of object;
                            tocommandmcliccount:GDBInteger;
                            currentmousemovesnaptogrid:GDBBoolean;
                            OnWaMouseDown:TOnWaMouseDown;

@@ -18,7 +18,7 @@
 unit zcadinterface;
 {$INCLUDE def.inc}
 interface
-uses zeundostack,varmandef,forms,classes{,UGDBDrawingdef},gdbase;
+uses uzelongprocesssupport,zeundostack,varmandef,forms,classes{,UGDBDrawingdef},gdbase;
 const
      menutoken='MAINMENUITEM';
      popupmenutoken='POPUPMENU';
@@ -28,6 +28,9 @@ const
      MenuNameModifier='MENU_';
 
 type
+    TStartLongProcessProc=Procedure(a:integer;s:string) of object;
+    TProcessLongProcessProc=Procedure(a:integer) of object;
+    TEndLongProcessProc=Procedure of object;
     //Abstract
     TSimpleProcedure=Procedure;
     TOIReturnToDefaultProcedure=Procedure(const f:TzeUnitsFormat);
@@ -80,9 +83,9 @@ var
 
    //mainwindow
    ShowAllCursorsProc,RestoreAllCursorsProc:TSimpleMethod;
-   StartLongProcessProc:TMethod_IntegerString_;
-   ProcessLongProcessProc:TMethod_Integer_;
-   EndLongProcessProc:TSimpleMethod;
+   StartLongProcessProc:TStartLongProcessProc;
+   ProcessLongProcessProc:TProcessLongProcessProc;
+   EndLongProcessProc:TEndLongProcessProc;
    UpdateVisibleProc:TSimpleProcedure;
    MessageBoxProc:TMessageBox;
    ProcessFilehistoryProc:TMethod_String_;

@@ -19,9 +19,9 @@ unit gdbgenericdimension;
 {$INCLUDE def.inc}
 
 interface
-uses zeentityfactory,GDBWithLocalCS,gdbdimension,ugdbdimstylearray,Varman,UGDBLayerArray,
+uses zeentityfactory,GDBWithLocalCS,gdbdimension,ugdbdimstylearray,{Varman,}UGDBLayerArray,
      ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,geometry,gdbasetypes,SysInfo,sysutils,
-gdbEntity,varmandef,
+gdbEntity,//varmandef,
 GDBase,gdbobjectsconstdef,dxflow,memman,GDBSubordinated;
 type
 {REGISTEROBJECTTYPE GDBObjGenericDimension}

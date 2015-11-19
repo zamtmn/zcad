@@ -23,7 +23,7 @@ uses
      memman,log,zemathutils,gdbpalette,
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
      UGDBLayerArray,ugdbdimstylearray,
-     oglwindowdef,gdbdrawcontext,varmandef,zcadsysvars,GDBEntity,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
+     oglwindowdef,gdbdrawcontext,{varmandef,}zcadsysvars,GDBEntity,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
      gdbobjectsconstdef,shared,zcadstrconsts,UGDBTracePropArray,math,sysutils,UGDBDrawingdef,strproc,
      ExtCtrls,Controls,Classes,LCLType,Forms,UGDBOpenArrayOfPV,GDBGenericSubEntry,GDBCamera,UGDBVisibleOpenArray,uzglabstractdrawer,uzglgeneraldrawer,uzglabstractviewarea;
 const

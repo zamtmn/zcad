@@ -56,7 +56,7 @@ GDBObjComplex={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
 {EXPORT-}
 implementation
 uses
-    log,varmandef;
+    log{,varmandef};
 {procedure GDBObjComplex.Draw;
 begin
   if visible then

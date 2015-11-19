@@ -19,8 +19,8 @@
 unit UGDBOutbound2DIArray;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,{zcadsysvars,}gdbasetypes,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
-     varmandef{,glstatemanager};
+uses gdbdrawcontext,{zcadsysvars,}gdbasetypes,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry{,}
+     {varmandef}{,glstatemanager};
 type
 {Export+}
 PGDBOOutbound2DIArray=^GDBOOutbound2DIArray;

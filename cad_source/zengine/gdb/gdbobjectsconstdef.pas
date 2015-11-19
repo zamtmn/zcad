@@ -239,6 +239,9 @@ const {as_normal=0;
   ClDifferent=258;
   ClSelColor=257;
   ClWhite=7;
+
+  str_empty='**EMPTY STRING**';
+
 implementation
 
 end.

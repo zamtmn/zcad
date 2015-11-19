@@ -38,7 +38,7 @@ function runparser(template:GDBString;var str:GDBString; out parsed:GDBBoolean):
 function IsParsed(template:GDBString;var str:GDBString; out strins:PGDBGDBStringArray):boolean;
 const maxlexem=16;
 
-const str_empty='**EMPTY STRING**';
+const
       sym_command=['_','?','|','-'];
       symend=#0;
       lexemarray:array[0..maxlexem,0..1] of GDBString=(

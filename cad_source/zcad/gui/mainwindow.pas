@@ -30,7 +30,7 @@ uses
   {FPC}
        lineinfo,//math,
   {ZCAD BASE}
-       gluinterface,uzglgdidrawer,ugdbdrawing,UGDBOpenArrayOfPV,ugdbabstractdrawing,gdbpalette,paths,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
+       uzelongprocesssupport,gluinterface,uzglgdidrawer,ugdbdrawing,UGDBOpenArrayOfPV,ugdbabstractdrawing,gdbpalette,paths,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
        geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,log,
        varmandef, varman,UUnitManager,SysInfo,shared,strmy,UGDBTextStyleArray,ugdbdimstylearray,
   {ZCAD SIMPLE PASCAL SCRIPT}
@@ -116,9 +116,9 @@ type
     procedure ChangedDWGTabCtrl(Sender: TObject);
     procedure UpdateControls;
 
-    procedure StartLongProcess(total:integer;processname:GDBString);
-    procedure ProcessLongProcess(current:integer);
-    procedure EndLongProcess;
+    procedure StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName);
+    procedure ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
+    procedure EndLongProcess(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
     procedure Say(word:gdbstring);
 
     procedure SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
@@ -984,9 +984,12 @@ procedure MainForm.InitSystemCalls;
 begin
   ShowAllCursorsProc:=self.ShowAllCursors;
   RestoreAllCursorsProc:=self.RestoreCursors;
-  StartLongProcessProc:=self.StartLongProcess;
-  ProcessLongProcessproc:=self.ProcessLongProcess;
-  EndLongProcessProc:=self.EndLongProcess;
+  //StartLongProcessProc:=self.StartLongProcess;
+  lps.AddOnLPStartHandler(StartLongProcess);
+  //ProcessLongProcessproc:=self.ProcessLongProcess;
+  lps.AddOnLPProgressHandler(ProcessLongProcess);
+  //EndLongProcessProc:=EndLongProcess;
+  lps.AddOnLPEndHandler(EndLongProcess);
   messageboxproc:=self.MessageBox;
   AddOneObjectProc:=self.addoneobject;
   SetVisuaProplProc:=self.setvisualprop;
@@ -2727,7 +2730,7 @@ begin
                                            dec(sysvar.SAVE.SAVE_Auto_Current_Interval^);
      end;
 end;
-procedure MainForm.StartLongProcess(total:integer;processname:GDBString);
+procedure MainForm.StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName);
 begin
      LPTime:=now;
      pname:=processname;
@@ -2741,7 +2744,7 @@ begin
   oldlongprocess:=0;
      end;
 end;
-procedure MainForm.ProcessLongProcess(current:integer);
+procedure MainForm.ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
 var
     pos:integer;
 begin

@@ -21,7 +21,7 @@ interface
 uses GDBEntity,zeentityfactory,gdbdrawcontext,gdbobjectextender,ugdbdrawingdef,GDBSubordinated,dxflow,UGDBOpenArrayOfByte,
      gdbasetypes,sysutils,gdbase,memman, geometry,
      UGDBLayerArray,
-     varmandef,gdbobjectsconstdef,GDBGenericSubEntry{,varman};
+     {varmandef,}gdbobjectsconstdef,GDBGenericSubEntry{,varman};
 type
 {REGISTEROBJECTTYPE GDBObjBlockdef}
 {Export+}

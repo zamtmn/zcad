@@ -22,7 +22,7 @@ unit zeentitiesmanager;
 
 interface
 uses gdbobjectsconstdef,gdbpalette,ugdbltypearray,zeentityfactory,zcadsysvars,UGDBLayerArray,sysutils,gdbase,gdbasetypes, {OGLtypes,}
-     varmandef,
+     //varmandef,
      UGDBVisibleOpenArray,GDBGenericSubEntry,gdbEntity,
      //GDBBlockInsert,
      memman;

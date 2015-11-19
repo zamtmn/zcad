@@ -21,15 +21,18 @@ unit iodxf;
 interface
 uses paths,strproc,gdbdrawcontext,usimplegenerics,ugdbdimstylearray,zeentityfactory,
     {$IFNDEF DELPHI}dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}
-    UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,
-    GDBCircle,GDBArc,oglwindowdef,dxflow,zcadstrconsts,UGDBTextStyleArray,varman,
+    UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,uzelongprocesssupport,
+    GDBCircle,GDBArc,oglwindowdef,dxflow,zcadstrconsts,UGDBTextStyleArray,
     geometry,GDBSubordinated,shared,gdbasetypes,log,GDBGenericSubEntry,SysInfo,gdbase,
     sysutils,memman,gdbobjectsconstdef,UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,
-    UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,TypeDescriptors};
+    UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity;
 type
+   TCreateExtLoadData=function:pointer;
+   TProcessExtLoadData=procedure(peld:pointer);
    entnamindex=record
                     entname:GDBString;
               end;
+   TLongProcessIndicator=Procedure(a:integer) of object;
 const
      acadentignoredcol=1;
      ignorenamtable:array[1..acadentignoredcol]of entnamindex=
@@ -69,6 +72,9 @@ const
 var i2:GDBInteger;
 {$ENDIF}
 var FOC:GDBInteger;
+    CreateExtLoadData:TCreateExtLoadData=nil;
+    ClearExtLoadData:TProcessExtLoadData=nil;
+    FreeExtLoadData:TProcessExtLoadData=nil;
 procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 function savedxf2000(name: GDBString; {PDrawing:PTSimpleDrawing}var drawing:TSimpleDrawing):boolean;
 procedure saveZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
@@ -77,7 +83,7 @@ procedure LoadZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawi
 procedure Import(name: GDBString;var drawing:TSimpleDrawing);
 {$ENDIF}
 implementation
-uses {enitiesextendervariables,}GDBLine,GDBBlockDef,UGDBLayerArray,varmandef,fileformatsmanager;
+uses GDBLine,GDBBlockDef,UGDBLayerArray,fileformatsmanager;
 
 function IsIgnoredEntity(name:GDBString):GDBInteger;
 var i:GDBInteger;
@@ -323,21 +329,29 @@ objid: GDBInteger;
   newowner:PGDBObjSubordinated;
   m4:DMatrix4D;
   trash:boolean;
-  additionalunit:TUnit;
+  //additionalunit:TUnit;
+  PExtLoadData:Pointer;
   EntInfoData:TEntInfoData;
   DC:TDrawContext;
   //pentvarext,ppostentvarext:PTVariablesExtender;
   bylayerlt:GDBPointer;
+  lph:TLPSHandle;
 begin
-  additionalunit.init('temparraryunit');
-  additionalunit.InterfaceUses.addnodouble(@SysUnit);
+  lph:=lps.StartLongProcess(f.Count,'addentitiesfromdxf',@f);
+  if Assigned(CreateExtLoadData) then
+                                     PExtLoadData:=CreateExtLoadData()
+                                 else
+                                     PExtLoadData:=nil;
+  {additionalunit.init('temparraryunit');
+  additionalunit.InterfaceUses.addnodouble(@SysUnit);}
   group:=-1;
   DC:=drawing.CreateDrawingRC;
   bylayerlt:=drawing.LTypeStyleTable.getAddres('ByLayer');
   while (f.notEOF) and (s <> exitGDBString) do
   begin
-    if assigned(ProcessLongProcessProc) then
-                                            ProcessLongProcessProc(f.ReadPos);
+    lps.ProgressLongProcess(lph,f.ReadPos);
+    //if assigned(ProcessLongProcessProc) then
+    //                                        ProcessLongProcessProc(f.ReadPos);
     s := f.readGDBString;
     if (group=0)and(DXFName2EntInfoData.MyGetValue(s,EntInfoData)) then
     //objid:=entname2GDBID(s);
@@ -350,14 +364,14 @@ begin
                                                   i2:=i2;{$ENDIF}
         pobj := EntInfoData.AllocAndInitEntity(nil);
         //pobj := {po^.CreateInitObj(objid,owner)}CreateInitObjFree(objid,nil);
-        PGDBObjEntity(pobj)^.LoadFromDXF(f,@additionalunit,drawing);
+        PGDBObjEntity(pobj)^.LoadFromDXF(f,{@additionalunit}PExtLoadData,drawing);
         if (PGDBObjEntity(pobj)^.vp.Layer=@DefaultErrorLayer)or(PGDBObjEntity(pobj)^.vp.Layer=nil) then
                                                                  PGDBObjEntity(pobj)^.vp.Layer:=drawing.LayerTable.GetSystemLayer;
         if (PGDBObjEntity(pobj)^.vp.LineType=nil) then
                                                       PGDBObjEntity(pobj)^.vp.LineType:={drawing.LTypeStyleTable.getAddres('ByLayer')}bylayerlt;
         if assigned(PGDBObjEntity(pobj)^.EntExtensions) then
                                                             PGDBObjEntity(pobj)^.EntExtensions.RunSupportOldVersions(pobj,drawing);
-        pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd(@additionalunit,drawing);
+        pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd({@additionalunit}PExtLoadData,drawing);
         trash:=false;
         if postobj=nil  then
                             begin
@@ -475,7 +489,9 @@ begin
                                    GDBFreeMem(pointer(pobj));
                             end;
       end;
-      additionalunit.free;
+      //additionalunit.free;
+        if Assigned(ClearExtLoadData) then
+                                         ClearExtLoadData(PExtLoadData);
     end
     else
     begin
@@ -491,7 +507,10 @@ begin
                                         group:=-1;
     end;
   end;
-  additionalunit.done;
+  if Assigned(FreeExtLoadData) then
+                                   FreeExtLoadData(PExtLoadData);
+  //additionalunit.done;
+  lps.EndLongProcess(lph);
 end;
 procedure addfromdxf12(var f:GDBOpenArrayOfByte;exitGDBString: GDBString;owner:PGDBObjSubordinated;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
@@ -504,14 +523,17 @@ var
   tp: PGDBObjBlockdef;
   //phandlearray: pdxfhandlerecopenarray;
   h2p:TMapHandleToPointer;
+  lph:TLPSHandle;
 begin
+  lph:=lps.StartLongProcess(f.Count,'addfromdxf12',@f);
   programlog.LogOutStr('AddFromDXF12',lp_IncPos,LM_Debug);
   //phandlearray := dxfhandlearraycreate(10000);
   h2p:=TMapHandleToPointer.Create;
   while (f.notEOF) and (s <> exitGDBString) do
   begin
-  if assigned(ProcessLongProcessProc)then
-  ProcessLongProcessProc(f.ReadPos);
+  lps.ProgressLongProcess(lph,f.ReadPos);
+  //if assigned(ProcessLongProcessProc)then
+  //ProcessLongProcessProc(f.ReadPos);
 
     s := f.readGDBString;
     if s = dxfName_Layer then
@@ -571,6 +593,7 @@ begin
   end;
   //GDBFreeMem(GDBPointer(phandlearray));
   h2p.Destroy;
+  lps.EndLongProcess(lph);
   programlog.LogOutStr('end; {AddFromDXF12}',lp_DecPos,LM_Debug);
 end;
 procedure ReadLTStyles(var s:String;cltype:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var h2p:TMapHandleToPointer);
@@ -1177,7 +1200,9 @@ var
 
   clayer,cdimstyle,cltype,ctstyle:GDBString;
   Handle2BlockName:TMapBlockHandle_BlockNames;
+  lph:TLPSHandle;
 begin
+  lph:=lps.StartLongProcess(f.Count,'addfromdxf2000',@f);
   {$IFNDEF DELPHI}
   Handle2BlockName:=TMapBlockHandle_BlockNames.Create;
   {$ENDIF}
@@ -1339,13 +1364,15 @@ begin
 
     s := s;
 //       if (byt=fcode) and (s=fname) then exit;
-    if assigned(ProcessLongProcessProc)then
-    ProcessLongProcessProc(f.ReadPos);
+    lps.ProgressLongProcess(lph,f.ReadPos);
+    //if assigned(ProcessLongProcessProc)then
+    //ProcessLongProcessProc(f.ReadPos);
   until not f.notEOF;
   {$IFNDEF DELPHI}
   Handle2BlockName.destroy;
   {$ENDIF}
   programlog.LogOutStr('end; {AddFromDXF2000}',lp_DecPos,LM_Debug);
+  lps.EndLongProcess(lph);
 end;
 
 procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
@@ -1356,6 +1383,7 @@ var
   h2p:TMapHandleToPointer;
   DWGVarsDict:TGDBString2GDBStringDictionary;
   dc:TDrawContext;
+  lph:TLPSHandle;
 begin
   programlog.LogOutFormatStr('AddFromDXF("%s")',[name],lp_IncPos,LM_Debug);
   shared.HistoryOutStr(format(rsLoadingFile,[name]));
@@ -1365,9 +1393,9 @@ begin
      DWGVarsDict:=TGDBString2GDBStringDictionary.create;
      ReadDXFHeader(f,DWGVarsDict);
      h2p:=TMapHandleToPointer.create;
-
-  if assigned(StartLongProcessProc)then
-    StartLongProcessProc(f.Count,'Load DXF file');
+  lph:=lps.StartLongProcess(f.Count,'Load DXF file',@f);
+  //if assigned(StartLongProcessProc)then
+  //  StartLongProcessProc(f.Count,'Load DXF file');
 
     if DWGVarsDict.mygetvalue('$ACADVER',s) then
       begin
@@ -1409,8 +1437,9 @@ begin
         end
            else ShowError(rsUnknownFileFormat+' $ACADVER='+s);
       end;
-  if assigned(EndLongProcessProc)then
-    EndLongProcessProc;
+  lps.EndLongProcess(lph);
+  //if assigned(EndLongProcessProc)then
+  //  EndLongProcessProc;
   dc:=drawing.CreateDrawingRC;
   owner^.calcbb(dc);
   h2p.Destroy;
@@ -1427,16 +1456,19 @@ var
 //  i:GDBInteger;
   pv:pgdbobjEntity;
   ir:itrec;
+  lph:TLPSHandle;
 begin
-
+     lph:=lps.StartLongProcess(pva^.Count,'saveentitiesdxf2000',@outhandle);
      pv:=pva^.beginiterate(ir);
      if pv<>nil then
      repeat
-          if assigned(ProcessLongProcessProc)then
-                                                 ProcessLongProcessProc(ir.itc);
+          //if assigned(ProcessLongProcessProc)then
+          //                                       ProcessLongProcessProc(ir.itc);
+          lps.ProgressLongProcess(lph,ir.itc);
           pv^.DXFOut(handle, outhandle,drawing);
      pv:=pva^.iterate(ir);
      until pv=nil;
+     lps.EndLongProcess(lph);
 end;
 
 procedure RegisterAcadAppInDXF(appname:GDBSTRING; outstream: PGDBOpenArrayOfByte;var handle: TDWGHandle);
@@ -1578,6 +1610,7 @@ var
   pcurrtextstyle:PGDBTextStyle;
   variablenotprocessed:boolean;
   processedvarscount:integer;
+  lph:TLPSHandle;
 begin
   {$IFNDEF DELPHI}
   Handle2pointer:=TMapPointerToHandle.Create;
@@ -1586,15 +1619,16 @@ begin
   DecimalSeparator := '.';
   //standartstylehandle:=0;
   olddwg:=nil;//@drawing;
-  if assigned(SetCurrentDWGProc)
-                            then olddwg:=SetCurrentDWGProc(@drawing);
+  (*!!!if assigned(SetCurrentDWGProc)
+                            then olddwg:=SetCurrentDWGProc(@drawing);*)
   //gdb.SetCurrentDWG(pdrawing);
   //--------------------------outstream := FileCreate(name);
   outstream.init({$IFDEF DEBUGBUILD}'{51453949-893A-49C2-9588-42B25346D071}',{$ENDIF}10*1024*1024);
   //--------------------------if outstream>0 then
   begin
-    if assigned(StartLongProcessProc)then
-  StartLongProcessProc({p}drawing.pObjRoot^.ObjArray.Count,'Save DXF file');
+    lph:=lps.StartLongProcess(drawing.pObjRoot^.ObjArray.Count,'Save DXF file',@outstream);
+    {if assigned(StartLongProcessProc)then
+       StartLongProcessProc(drawing.pObjRoot^.ObjArray.Count,'Save DXF file');}
   OldHandele2NewHandle:=TMapHandleToHandle.Create;
   OldHandele2NewHandle.Insert(0,0);
   //phandlea := dxfhandlearraycreate(10000);
@@ -2651,15 +2685,16 @@ ENDTAB}
                                        end
                                    else
                                        result:=true;
-  if assigned(EndLongProcessProc)then
-  EndLongProcessProc;
+  {if assigned(EndLongProcessProc)then
+  EndLongProcessProc;}
+  lps.EndLongProcess(lph);
 
   end;
   outstream.done;
-  if @SetCurrentDWGProc<>nil
+  (*!!!if @SetCurrentDWGProc<>nil
                            then
                                if olddwg<>nil then
-                                                  SetCurrentDWGProc(olddwg);
+                                                  SetCurrentDWGProc(olddwg);*)
   {$IFNDEF DELPHI}
   Handle2pointer.Destroy;
   VarsDict.destroy;

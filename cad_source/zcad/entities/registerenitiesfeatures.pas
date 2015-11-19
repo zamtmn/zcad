@@ -19,13 +19,14 @@ unit registerenitiesfeatures;
 {$INCLUDE def.inc}
 
 interface
-uses paths,zcadsysvars,intftranslations,sysutils,
+uses iodxf,paths,zcadsysvars,intftranslations,sysutils,
      enitiesextendervariables,zcadstrconsts,shared,gdbobjectsconstdef,devices,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,dxflow,
      gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,gdbobjectextender,
      GDBSubordinated,GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,
      URecordDescriptor,UBaseTypeDescriptor,UGDBDrawingdef,memman;
 var
    PFCTTD:GDBPointer=nil;
+   extvarunit:TUnit;
 
 implementation
 function EntIOLoad_OWNERHANDLE(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:PGDBObjEntity):boolean;
@@ -475,7 +476,26 @@ begin
                          end;
      end;
 end;
-
+function CreateExtDxfLoadData:pointer;
+begin
+  //gdbgetmem(result,sizeof(TUnit));
+  //PTUnit(result)^.init('temparraryunit');
+  //PTUnit(result)^.InterfaceUses.addnodouble(@SysUnit);
+     extvarunit.init('temparraryunit');
+     extvarunit.InterfaceUses.addnodouble(@SysUnit);
+     result:=@extvarunit;
+end;
+procedure ClearExtLoadData(peld:pointer);
+begin
+  //PTUnit(peld)^.free;
+  extvarunit.free;
+end;
+procedure FreeExtLoadData(peld:pointer);
+begin
+  //PTUnit(peld)^.done;
+  //gdbfreemem(peld);
+  extvarunit.done;
+end;
 
 begin
   {from GDBObjEntity}
@@ -517,5 +537,9 @@ begin
 
   {test}
   //GDBObjEntity.GetDXFIOFeatures.RegisterEntityExtenderObject(@TTestExtende.CreateTestExtender);
+
+  iodxf.CreateExtLoadData:=CreateExtDxfLoadData;
+  iodxf.ClearExtLoadData:=ClearExtLoadData;
+  iodxf.FreeExtLoadData:=FreeExtLoadData;
 end.
 

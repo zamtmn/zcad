@@ -21,8 +21,7 @@ unit uzelongprocesssupport;
 
 
 interface
-uses sysutils,usimplegenerics,
-    memman,zcadsysvars,GDBase,GDBasetypes,gdbEntity,Types,Controls,Forms;
+uses sysutils,usimplegenerics;
 type
 TLPSHandle=integer;
 TLPSCounter=integer;
@@ -44,29 +43,29 @@ TOnLPProgressProcVector=TMyVector<TOnLPProgressProc>;
 TOnLPEndProcVector=TMyVector<TOnLPEndProc>;
 
 TZELongProcessSupport=class
-                           type
-                               PTLPInfo=TLPInfoVector.PT;
-                           var
+                       private
+                       type
+                         PTLPInfo=TLPInfoVector.PT;
+                       var
+                         LPInfoVector:TLPInfoVector;
+                         OnLPStartProcVector:TOnLPStartProcVector;
+                         OnLPProgressProcVector:TOnLPProgressProcVector;
+                         OnLPEndProcVector:TOnLPEndProcVector;
+                         ActiveProcessCount:Integer;
+                         procedure DoStartLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle);
+                         procedure DoProgressLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle;Current:TLPSCounter);
+                         procedure DoEndLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle);
 
-                           LPInfoVector:TLPInfoVector;
-                           OnLPStartProcVector:TOnLPStartProcVector;
-                           OnLPProgressProcVector:TOnLPProgressProcVector;
-                           OnLPEndProcVector:TOnLPEndProcVector;
-                           ActiveProcessCount:Integer;
-                           function StartLongProcess(Total:TLPSCounter;LPName:TLPName;Context:pointer):TLPSHandle;
-                           procedure ProgressLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
-                           procedure EndLongProcess(LPHandle:TLPSHandle);
+                       public
+                         function StartLongProcess(Total:TLPSCounter;LPName:TLPName;Context:pointer):TLPSHandle;
+                         procedure ProgressLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
+                         procedure EndLongProcess(LPHandle:TLPSHandle);
 
-                           procedure DoStartLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle);
-                           procedure DoProgressLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle;Current:TLPSCounter);
-                           procedure DoEndLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle);
-
-
-                           procedure AddOnLPStartHandler(proc:TOnLPStartProc);
-                           procedure AddOnLPProgressHandler(proc:TOnLPProgressProc);
-                           procedure AddOnLPEndHandler(proc:TOnLPEndProc);
-                           constructor Create;
-                           destructor Destroy;virtual;
+                         procedure AddOnLPStartHandler(proc:TOnLPStartProc);
+                         procedure AddOnLPProgressHandler(proc:TOnLPProgressProc);
+                         procedure AddOnLPEndHandler(proc:TOnLPEndProc);
+                         constructor Create;
+                         destructor Destroy;override;
                        end;
 var
   LPS:TZELongProcessSupport;
@@ -97,6 +96,7 @@ var
   LPI:TLPInfo;
   PLPI:PTLPInfo;
 begin
+  if Context<>nil then
   if LPInfoVector.Size>0 then
   begin
     result:=LPInfoVector.Size-1;
@@ -159,6 +159,7 @@ begin
 end;
 constructor TZELongProcessSupport.Create;
 begin
+  inherited;
   LPInfoVector:=TLPInfoVector.create;
   OnLPStartProcVector:=TOnLPStartProcVector.create;
   OnLPProgressProcVector:=TOnLPProgressProcVector.create;
@@ -171,6 +172,7 @@ begin
   OnLPStartProcVector.destroy;
   OnLPProgressProcVector.destroy;
   OnLPEndProcVector.destroy;
+  inherited;
 end;
 initialization
   LPS:=TZELongProcessSupport.Create;

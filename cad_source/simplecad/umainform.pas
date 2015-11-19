@@ -1,7 +1,7 @@
 unit umainform;
 
 {$mode objfpc}{$H+}
-{define dxfio}
+{$define dxfio}
 interface
 
 uses
@@ -10,11 +10,11 @@ uses
   {From ZCAD}
   generalviewarea,zeentitiesmanager,gdbdrawcontext,uzglopenglviewarea,
   uzglabstractviewarea,zcadsysvars, {$ifdef dxfio}iodxf,{$endif}
-  zcadinterface,zeentityfactory,UGDBLayerArray,geometry,
-  GDBase, GDBasetypes,{UGDBDescriptor,}UGDBTextStyleArray,UGDBEntTree,GDB3DFace,
+  {zcadinterface,}zeentityfactory,UGDBLayerArray,geometry,
+  GDBase, GDBasetypes,UGDBTextStyleArray,UGDBEntTree,GDB3DFace,
   GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,ugdbsimpledrawing,
   {$ifdef dxfio}GDBMText,gdbgenericdimension,gdbaligneddimension,gdbrotateddimension,gdbsolid,{$endif}
-  GDBEntity,{GDBManager,}gdbobjectsconstdef,ioshx,{gdbpalette,}uzglgdiviewarea;
+  GDBEntity,gdbobjectsconstdef,ioshx,uzglgdiviewarea;
 
 type
 
@@ -236,8 +236,8 @@ begin
      GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree:=createtree(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox,@GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
 
 
-     zcadinterface.StartLongProcessProc:=@_StartLongProcess;
-     zcadinterface.EndLongProcessProc:=@_EndLongProcess;
+     //zcadinterface.StartLongProcessProc:=@_StartLongProcess;
+     //zcadinterface.EndLongProcessProc:=@_EndLongProcess;
 end;
 function CreateRandomDouble(len:GDBDouble):GDBDouble;inline;
 begin
@@ -572,11 +572,11 @@ begin
      {$ifdef dxfio}
      if OpenDialog1.Execute then
      begin
-          dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-          addfromdxf(OpenDialog1.FileName,@gdb.GetCurrentDWG^.pObjRoot^,TLOLoad,gdb.GetCurrentDWG^);
-          gdb.GetCurrentDWG^.pObjRoot^.FormatEntity(gdb.GetCurrentDWG^,dc);
-          gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
-          UGDBDescriptor.redrawoglwnd;
+          dc:=GetCurrentDrawing^.CreateDrawingRC;
+          addfromdxf(OpenDialog1.FileName,@GetCurrentDrawing^.pObjRoot^,TLOLoad,GetCurrentDrawing^);
+          GetCurrentDrawing^.pObjRoot^.FormatEntity(GetCurrentDrawing^,dc);
+          GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree:=createtree(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox,@GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
+          redrawoglwnd;
      end;
      {$endif}
 end;
@@ -586,7 +586,7 @@ begin
      {$ifdef dxfio}
      if SaveDialog1.Execute then
      begin
-          savedxf2000(SaveDialog1.FileName, GDB.GetCurrentDWG^);
+          savedxf2000(SaveDialog1.FileName, GetCurrentDrawing^);
      end;
      {$endif}
 end;

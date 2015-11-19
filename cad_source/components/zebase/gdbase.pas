@@ -456,7 +456,7 @@ TImageDegradation=packed record
                         RD_ID_MaxDegradationFactor:PGDBDouble;(*'Max degradation factor'*)
                         RD_ID_PrefferedRenderTime:PGDBInteger;(*'Prefered rendertime'*)
                     end;
-PExtensionData=Pointer;
+PExtensionData=GDBPointer;
 {EXPORT-}
 const
   empty_GDBString='Empty GDBString';

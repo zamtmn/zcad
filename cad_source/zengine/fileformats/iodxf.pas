@@ -20,7 +20,7 @@ unit iodxf;
 {$INCLUDE def.inc}
 interface
 uses paths,strproc,gdbdrawcontext,usimplegenerics,ugdbdimstylearray,zeentityfactory,
-    {$IFNDEF DELPHI}dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}
+    {$IFNDEF DELPHI}fileutil,{$ENDIF}
     UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,uzelongprocesssupport,
     GDBCircle,GDBArc,oglwindowdef,dxflow,zcadstrconsts,UGDBTextStyleArray,
     geometry,GDBSubordinated,shared,gdbasetypes,log,GDBGenericSubEntry,SysInfo,gdbase,
@@ -79,9 +79,6 @@ procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoad
 function savedxf2000(name: GDBString; {PDrawing:PTSimpleDrawing}var drawing:TSimpleDrawing):boolean;
 procedure saveZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
 procedure LoadZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
-{$IFNDEF DELPHI}
-procedure Import(name: GDBString;var drawing:TSimpleDrawing);
-{$ENDIF}
 implementation
 uses GDBLine,GDBBlockDef,UGDBLayerArray,fileformatsmanager;
 
@@ -2804,93 +2801,10 @@ begin
      end;
      fileclose(infile);*)
 end;
-{$IFNDEF DELPHI}
-procedure Import(name: GDBString;var drawing:TSimpleDrawing);
-var
-  Vec: TvVectorialDocument;
-  source:{TvVectorialPage}TvPage;
-  CurEntity: TvEntity;
-  i:integer;
-  pobj:PGDBObjEntity;
-  j{, k}: Integer;
-  CurSegment: TPathSegment;
-  Cur2DSegment: T2DSegment absolute CurSegment;
-  PosX, PosY: Double;
-  DC:TDrawContext;
-begin
-    Vec := TvVectorialDocument.Create;
-     DC:=drawing.CreateDrawingRC;
-  try
-    Vec.ReadFromFile(name);
-    source:=Vec.GetPage(0);
-    for i := 0 to source.GetEntitiesCount - 1 do
-    begin
-      CurEntity := source.GetEntity(i);
-      if CurEntity is TvCircle then
-      begin
-           pobj := CreateInitObjFree(GDBCircleID,nil);
-           pgdbobjCircle(pobj)^.Radius:=TvCircle(CurEntity).Radius;
-           pgdbobjCircle(pobj)^.Local.P_insert.x:=TvCircle(CurEntity).x;
-           pgdbobjCircle(pobj)^.Local.P_insert.y:=TvCircle(CurEntity).y;
-           drawing{gdb}.GetCurrentRoot^.AddMi(@pobj);
-           PGDBObjEntity(pobj)^.BuildGeometry(drawing);
-           PGDBObjEntity(pobj)^.formatEntity(drawing,dc);
-      end
- else if CurEntity is TvCircularArc then
-      begin
-           pobj := CreateInitObjFree(GDBArcID,nil);
-           pgdbobjArc(pobj)^.R:=TvCircularArc(CurEntity).Radius;
-           pgdbobjArc(pobj)^.Local.P_insert.x:=TvCircularArc(CurEntity).x;
-           pgdbobjArc(pobj)^.Local.P_insert.y:=TvCircularArc(CurEntity).y;
-           pgdbobjArc(pobj)^.StartAngle:=TvCircularArc(CurEntity).StartAngle*pi/180;
-           pgdbobjArc(pobj)^.EndAngle:=TvCircularArc(CurEntity).EndAngle*pi/180;
-           drawing{gdb}.GetCurrentRoot^.AddMi(@pobj);
-           PGDBObjEntity(pobj)^.BuildGeometry(drawing);
-           PGDBObjEntity(pobj)^.formatEntity(drawing,dc);
-      end
-  else if CurEntity is fpvectorial.TPath then
-      begin
-      fpvectorial.TPath(CurEntity).PrepareForSequentialReading;
-      for j := 0 to fpvectorial.TPath(CurEntity).Len - 1 do
-      begin
-        CurSegment := TPathSegment(fpvectorial.TPath(CurEntity).Next());
-
-        case CurSegment.SegmentType of
-        stMoveTo:
-        begin
-          PosX := Cur2DSegment.X;
-          PosY := Cur2DSegment.Y;
-        end;
-        st2DLineWithPen,st2DLine, st3DLine:
-        begin
-           pobj := CreateInitObjFree(GDBLineID,nil);
-           PGDBObjLine(pobj)^.CoordInOCS.lBegin:=createvertex(PosX,PosY,0);
-           PosX := Cur2DSegment.X;
-           PosY := Cur2DSegment.Y;
-           PGDBObjLine(pobj)^.CoordInOCS.lEnd:=createvertex(PosX,PosY,0);
-           drawing{gdb}.GetCurrentRoot^.AddMi(@pobj);
-           PGDBObjEntity(pobj)^.BuildGeometry(drawing);
-           PGDBObjEntity(pobj)^.formatEntity(drawing,dc);
-        end;
-        end;
-      end;
-
-      end;
-    end;
-  except
-        on Exception do
-        begin
-             shared.ShowError('Unsupported vector graphics format?');
-        end
-  end;
-  //finally
-    Vec.Free;
-  //end;
-end;
-{$ENDIF}
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('iodxf.initialization');{$ENDIF} 
      i2:=0;
      FOC:=0;
      Ext2LoadProcMap.RegisterExt('dxf','AutoCAD DXF files (*.dxf)',@addfromdxf,true);
+     DecimalSeparator:='.';
 end.

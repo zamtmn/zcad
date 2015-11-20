@@ -142,6 +142,7 @@ uses
 {$R *.res}
 
 begin
+  programlog.logoutstr('<<<<<<<<<<<<<<<End units initialization',0,LM_Debug);
      if sysparam.otherinstancerun then
                                       exit;
 {$IFDEF REPORTMMEMORYLEAKS}printleakedblock:=true;{$ENDIF}
@@ -188,7 +189,7 @@ begin
   SplashWindow.TXTOut('ugdbdescriptor.finalize;',false);ugdbdescriptor.finalize;
 
   programlog.logoutstr('END.',0,LM_Necessarily);
-  programlog.done;
+  programlog.logoutstr('<<<<<<<<<<<<<<<Start units finalization',0,LM_Debug);
 end.
 
 

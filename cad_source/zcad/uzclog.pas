@@ -418,13 +418,15 @@ var
 begin
      CurrentTime:=mynow();
      WriteToLog('-------------------------Log ended-------------------------',true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
-     PerfomaneBuf.done;
      TimeBuf.done;
+     PerfomaneBuf.done;
      setlength(LatestLogStrings,0);
 end;
 initialization
 begin
     programlog.init({$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)))+filelog,LM_Error);
 end;
+finalization
+    programlog.done;
 end.
 

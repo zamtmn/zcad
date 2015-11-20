@@ -165,9 +165,8 @@ implementation
 function TEnumDataDescriptor.CreateProperties;
 var ppd:PPropertyDeskriptor;
 begin
-     {$IFDEF TOTALYLOG}
-     DebugLn('{T}TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
-     {$ENDIF}
+     if VerboseLog then
+       DebugLn('{T}TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
      //programlog.LogOutFormatStr('TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda],lp_OldPos,LM_Trace);
      ppd:=GetPPD(ppda,bmode);
      if ppd^._bmode=property_build then
@@ -211,9 +210,8 @@ end;
 function BaseTypeDescriptor.CreateProperties;
 var ppd:PPropertyDeskriptor;
 begin
-     {$IFDEF TOTALYLOG}
-     DebugLn('{T}BaseTypeDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
-     {$ENDIF}
+     if VerboseLog then
+       DebugLn('{T}BaseTypeDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
      //programlog.LogOutFormatStr('BaseTypeDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda],lp_OldPos,LM_Trace);
      ppd:=GetPPD(ppda,bmode);
      if ppd^._bmode=property_build then
@@ -293,9 +291,7 @@ begin
 else if uppercase(value)='FALSE' then
                                      PGDBboolean(pinstance)^:=false
 else
-    {$IFDEF TOTALYLOG}
     DebugLn('{E}GDBBooleanDescriptor.SetValueFromString('+value+') {not false\true}');
-    {$ENDIF}
     //programlog.LogOutStr('GDBBooleanDescriptor.SetValueFromString('+value+') {not false\true}',lp_OldPos,LM_Error);
 end;
 function GDBBooleanDescriptor.Compare(pleft,pright:pointer):TCompareResult;

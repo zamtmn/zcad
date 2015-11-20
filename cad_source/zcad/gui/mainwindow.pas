@@ -2400,10 +2400,10 @@ begin
 
      _disabled:=false;
      PSimpleDrawing:=gdb.GetCurrentDWG;
+     POGLWndParam:=nil;
      if PSimpleDrawing<>nil then
-                                POGLWndParam:=@PSimpleDrawing.wa.param
-                            else
-                                POGLWndParam:=nil;
+     if PSimpleDrawing.wa<>nil then
+                                POGLWndParam:=@PSimpleDrawing.wa.param;
      if assigned(TmyAction(AAction).pfoundcommand) then
      begin
      if ((GetCommandContext(PSimpleDrawing,POGLWndParam) xor TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)and TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)<>0
@@ -2544,7 +2544,7 @@ begin
      sysvar.debug.languadedeb.NotEnlishWord:=_NotEnlishWord;
      sysvar.debug.languadedeb.DebugWord:=_DebugWord;
      pdwg:=gdb.GetCurrentDWG;
-     if pdwg<>nil then
+     if (pdwg<>nil)and(pdwg.wa<>nil) then
      begin
      if pdwg.wa.getviewcontrol<>nil then
      begin

@@ -119,14 +119,14 @@ begin
   repeat
        if strproc.Tria_Utf8ToAnsi(p^.Name)='*D234' then
                             p^.Name:=p^.Name;
-       {$IFDEF TOTALYLOG}
-       debugln('{D+}Formatting blockdef name="%s"',[p^.Name]);
-       {$ENDIF}
+       if VerboseLog then
+         debugln('{D+}Formatting blockdef name="%s"',[p^.Name]);
+
        //programlog.LogOutFormatStr('Formatting blockdef name="%s"',[p^.Name],lp_IncPos,LM_Debug);
        p^.FormatEntity(drawing,dc);
-       {$IFDEF TOTALYLOG}
-       debugln('{D-}end;{Formatting}');
-       {$ENDIF}
+       if VerboseLog then
+         debugln('{D-}end;{Formatting}');
+
        //programlog.LogOutStr('end;{Formatting}',lp_DecPos,LM_Debug);
        p:=iterate(ir);
   until p=nil;

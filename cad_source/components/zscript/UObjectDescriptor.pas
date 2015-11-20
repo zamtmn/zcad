@@ -505,9 +505,8 @@ var pcmd:PMetodDescriptor;
     pmd:PMetodDescriptor;
         ir:itrec;
 begin
-     {$IFDEF TOTALYLOG}
-     DebugLn('{T+}ObjectDescriptor.CopyTo(@%s)',[RD.TypeName]);
-     {$ENDIF}
+     if VerboseLog then
+       DebugLn('{T+}ObjectDescriptor.CopyTo(@%s)',[RD.TypeName]);
      //programlog.LogOutFormatStr('ObjectDescriptor.CopyTo(@%s)',[RD.TypeName],lp_IncPos,LM_Debug);
      if self.TypeName='DeviceDbBaseObject' then
                                                TypeName:=TypeName;
@@ -534,9 +533,8 @@ begin
      until pmd=nil;
      PObjectDescriptor(rd)^.VMTCurrentOffset:=self.VMTCurrentOffset;
      PObjectDescriptor(rd)^.PVMT:=pvmt;
-     {$IFDEF TOTALYLOG}
-     DebugLn('{T-}end;{ObjectDescriptor.CopyTo}');
-     {$ENDIF}
+     if VerboseLog then
+       DebugLn('{T-}end;{ObjectDescriptor.CopyTo}');
      //programlog.logoutstr('end;{ObjectDescriptor.CopyTo}',lp_DecPos,LM_Debug);
 end;
 function ObjectDescriptor.GetTypeAttributes;

@@ -546,5 +546,4 @@ begin
 end;
 
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBTTFFont.initialization');{$ENDIF}
 end.

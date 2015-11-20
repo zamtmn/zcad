@@ -90,7 +90,7 @@ TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
 
                     end;
 implementation
-uses log;
+//uses log;
 procedure TZGLGeneral2DDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
 var
    pp1,pp2,pp3,pp4:GDBVertex;
@@ -619,6 +619,5 @@ end;
 
 
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('uzglgeneral2ddrawer.initialization');{$ENDIF}
 end.
 

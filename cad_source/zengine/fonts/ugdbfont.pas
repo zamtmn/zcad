@@ -46,7 +46,7 @@ var
    pbasefont: PGDBfont;
 procedure initfont(var pf:pgdbfont;name:gdbstring);
 implementation
-uses {math,}log;
+//uses {math,}log;
 procedure initfont(var pf:pgdbfont;name:gdbstring);
 //var i:integer;
 begin
@@ -412,5 +412,4 @@ begin
      result:=font.GetOrCreateSymbolInfo(symbol);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBFont.initialization');{$ENDIF}
 end.

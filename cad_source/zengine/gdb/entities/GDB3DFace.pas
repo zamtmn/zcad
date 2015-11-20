@@ -61,7 +61,7 @@ GDBObj3DFace={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
 {Export-}
 
 implementation
-uses log;
+//uses log;
 procedure GDBObj3DFace.TransformAt;
 var i:GDBInteger;
 begin
@@ -486,6 +486,5 @@ begin
   result:=AllocAndInit3DFace(nil);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDB3DFace.initialization');{$ENDIF}
   RegisterDXFEntity(GDB3DFaceID,'3DFACE','3DFace',@Alloc3DFace,@AllocAndInit3DFace);
 end.

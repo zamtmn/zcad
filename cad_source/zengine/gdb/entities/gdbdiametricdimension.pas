@@ -19,7 +19,7 @@ unit gdbdiametricdimension;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,zeentityfactory,gdbdimension,ugdbdimstylearray,{Varman,}UGDBLayerArray,ugdbtrash,ugdbdrawingdef,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,
+uses gdbdrawcontext,zeentityfactory,gdbdimension,ugdbdimstylearray,{Varman,}UGDBLayerArray,ugdbtrash,ugdbdrawingdef,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,GDBLine,gdbasetypes,GDBComplex,{SysInfo,}sysutils,
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},//varmandef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
 (*
@@ -61,7 +61,7 @@ GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                    end;
 {EXPORT-}
 implementation
-uses log;
+//uses log;
 procedure GDBObjDiametricDimension.SaveToDXF;
 begin
   SaveToDXFObjPrefix(handle,outhandle,'DIMENSION','AcDbDimension');
@@ -271,6 +271,5 @@ begin
   result.bp.ListPos.Owner:=owner;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('gdbdiametricdimension.initialization');{$ENDIF}
   RegisterEntity(GDBDiametricDimensionID,'DiametricDimension',@AllocDiametricDimension,@AllocAndInitDiametricDimension);
 end.

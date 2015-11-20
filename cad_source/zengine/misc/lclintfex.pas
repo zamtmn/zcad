@@ -93,7 +93,6 @@ begin
 end;
 
 initialization
-{$IFDEF DEBUGINITSECTION}LogOut('lclintfex.initialization');{$ENDIF}
 finalization
 end.
 

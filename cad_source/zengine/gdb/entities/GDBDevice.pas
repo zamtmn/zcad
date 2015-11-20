@@ -72,7 +72,7 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
 var
     GDBObjDeviceDXFFeatures:TDXFEntIODataManager;
 implementation
-uses GDBBlockDef,dxflow,log,UGDBSelectedObjArray,UGDBEntTree;
+uses GDBBlockDef,dxflow,{log,}UGDBSelectedObjArray,UGDBEntTree;
 procedure GDBObjDevice.correctobjects;
 var pobj:PGDBObjEntity;
     ir:itrec;
@@ -711,7 +711,6 @@ begin
   result:=GDBObjDeviceDXFFeatures;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBDevice.initialization');{$ENDIF}
   RegisterEntity(GDBDeviceID,'Device',@AllocDevice,@AllocAndInitDevice,@SetBlockInsertGeomProps,@AllocAndCreateDevice);
   RegisterEntityUpgradeInfo(GDBBlockInsertID,1,@UpgradeBlockInsert2Device);
   GDBObjDeviceDXFFeatures:=TDXFEntIODataManager.Create;

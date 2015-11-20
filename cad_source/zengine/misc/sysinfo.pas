@@ -145,7 +145,6 @@ begin
      //programlog.LogOutStr('GetSysInfo',lp_IncPos,LM_Necessarily);
      debugln('{N+}GetSysInfo');
      SysDefaultFormatSettings:=DefaultFormatSettings;
-     {$IFDEF DEBUGINITSECTION}log.LogOut('sysinfo.getsysinfo');{$ENDIF}
      //SysParam.ProgramPath:=programpath;
      SysParam.ScreenX:={GetSystemMetrics(SM_CXSCREEN)}Screen.Width;
      SysParam.ScreenY:={GetSystemMetrics(SM_CYSCREEN)}Screen.Height;

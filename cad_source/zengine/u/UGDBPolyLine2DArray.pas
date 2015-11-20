@@ -42,7 +42,7 @@ GDBPolyline2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
 {Export-}
 function _intercept2d(const p1,p2,p:GDBVertex2D;const dirx, diry: GDBDouble): GDBBoolean;
 implementation
-uses {UGDBDescriptor,}log;
+//uses {UGDBDescriptor,}log;
 procedure GDBPolyline2DArray.transform(const t_matrix:DMatrix4D);
 var
     pv:PGDBVertex2D;
@@ -263,5 +263,4 @@ begin
    end;
 end;}
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBPolyLine2DArray.initialization');{$ENDIF}
 end.

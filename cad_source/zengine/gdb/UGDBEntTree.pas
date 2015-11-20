@@ -21,7 +21,7 @@ unit UGDBEntTree;
 interface
 uses
     {math,}graphics,
-    gdbdrawcontext,{zcadsysvars,}geometry,UGDBVisibleOpenArray,GDBEntity,gdbase,gdbasetypes,log,memman;
+    gdbdrawcontext,{zcadsysvars,}geometry,UGDBVisibleOpenArray,GDBEntity,gdbase,gdbasetypes,{log,}memman;
 const
      IninialNodeDepth=-1;
 type
@@ -461,5 +461,4 @@ else if (tv.z>=tv.x*aabbaxisscale)and(tv.z>=tv.y*aabbaxisscale) then
      //ta[2].done;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBEntTre.initialization');{$ENDIF}
 end.

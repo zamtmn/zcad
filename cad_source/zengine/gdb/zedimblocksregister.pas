@@ -25,7 +25,7 @@ uses UGDBLayerArray,ugdbltypearray,gdbobjectsconstdef,zeentitiesmanager,UGDBObjB
     memman,zcadsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity;
 implementation
 uses
-    log,GDBManager;
+    {log,}GDBManager;
 function CreateClosedFilledBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString):PGDBObjBlockdef;
 var
    BlockDefArray:PGDBObjBlockdefArray;
@@ -45,7 +45,6 @@ begin
    end;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('zedimblocksregister.initialization');{$ENDIF}
   RegisterBlockDefCreateFunc('_ClosedFilled','','',CreateClosedFilledBlock);
   RegisterBlockDefCreateFunc('_ClosedBlank','','',CreateClosedFilledBlock);
   RegisterBlockDefCreateFunc('_Closed','','',CreateClosedFilledBlock);

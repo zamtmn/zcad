@@ -21,7 +21,7 @@ unit uzglgeometry;
 interface
 uses uzglgeneraldrawer,math,gdbdrawcontext,uzglabstractdrawer,uzgvertex3sarray,
      UGDBOpenArrayOfData,UGDBPoint3DArray,{zcadsysvars,}geometry,gdbvisualprop,
-     ugdbltypearray,sysutils,gdbase,memman,log,
+     ugdbltypearray,sysutils,gdbase,memman,//log,
      gdbasetypes,strproc,ugdbfont,uzglvectorobject;
 type
 {Export+}
@@ -773,6 +773,5 @@ begin
   inherited;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBPoint3DArray.initialization');{$ENDIF}
 end.
 

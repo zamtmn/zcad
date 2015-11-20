@@ -31,7 +31,7 @@ const
 function OpenFileDialog(out FileName:GDBString;const DefFilterIndex:integer; const DefExt, Filter, InitialDir, Title: string):Boolean;
 function SaveFileDialog(var FileName:GDBString;const DefExt, Filter, InitialDir, Title: string):Boolean;
 implementation
-uses log;
+//uses log;
 //var
    //lpCustFilter: array[0..255] of char = '';
    //nFilterIndex: Integer = 0;
@@ -89,5 +89,4 @@ begin
      od.Free;
 end;
 begin
-{$IFDEF DEBUGINITSECTION}log.LogOut('WindowsSpecific.initialization');{$ENDIF}
 end.

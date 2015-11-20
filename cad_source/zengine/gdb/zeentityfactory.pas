@@ -75,8 +75,8 @@ var
   _StandartDeviceCreateProcedure:TAllocAndInitAndSetGeomPropsFunc=nil;
   _StandartSolidCreateProcedure:TAllocAndInitAndSetGeomPropsFunc=nil;
 implementation
-uses
-    log;
+//uses
+//    log;
 procedure _RegisterEntity(const _EntityID:TObjID;
                          const _DXFName,_UserName:GDBString;
                          const _AllocEntity:TAllocEntFunc;
@@ -184,7 +184,6 @@ begin
     result := nil;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('gdbentityfactory.initialization');{$ENDIF}
   if needinit then
   begin
     DXFName2EntInfoData:=TDXFName2EntInfoDataMap.create;

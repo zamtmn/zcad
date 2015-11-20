@@ -49,7 +49,7 @@ GDBObjPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
            end;
 {Export-}
 implementation
-uses log;
+//uses log;
 function GDBObjPolyline.GetLength:GDBDouble;
 var
    ptpv0,ptpv1:PGDBVertex;
@@ -293,6 +293,5 @@ begin
   result:=AllocAndInitPolyline(nil);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBPolyline.initialization');{$ENDIF}
   RegisterDXFEntity(GDBPolylineID,'POLYLINE','3DPolyLine',@AllocPolyline,@AllocAndInitPolyline);
 end.

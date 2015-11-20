@@ -20,8 +20,11 @@ unit gdbspline;
 {$INCLUDE def.inc}
 
 interface
-uses gluinterface,zeentityfactory,gdbdrawcontext,glstatemanager,UGDBOpenArrayOfData,UGDBPoint3DArray,UGDBDrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},GDBEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
-GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman;
+uses LCLProc,gluinterface,zeentityfactory,gdbdrawcontext,glstatemanager,UGDBOpenArrayOfData,
+     UGDBPoint3DArray,UGDBDrawingdef,GDBCamera,UGDBVectorSnapArray,
+     UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes,
+     GDBEntity,UGDBOpenArrayOfByte,varman,GDBase,gdbobjectsconstdef,oglwindowdef,
+     geometry,dxflow,sysutils,memman;
 type
 {REGISTEROBJECTTYPE GDBObjSpline}
 {Export+}
@@ -57,7 +60,6 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
            end;
 {Export-}
 implementation
-uses GDBCable,log;
 var
     parr:PGDBPoint3dArray;
     tv0:gdbvertex;
@@ -120,7 +122,8 @@ var
 begin
      tv:=v;
      p:=GLUIntrf.ErrorString(v);
-     log.LogOut(p);
+     debugln('{E}'+p);
+     //log.LogOut(p);
 end;
 
 procedure NurbsBeginCallBack(const v: GLenum);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
@@ -233,37 +236,8 @@ begin
 end;
 
 function GDBObjSpline.FromDXFPostProcessBeforeAdd;
-var
-    //isdevice:GDBBoolean;
-    tc:PGDBObjCable;
-    ptv:pgdbvertex;
-    ir:itrec;
 begin
      result:=nil;
-     //isdevice:=false;
-     if self.PExtAttrib<>nil then
-     if self.PExtAttrib^.Upgrade>0 then
-     begin
-          GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(tc),sizeof(GDBObjCable));
-          result:=tc;
-          Tc^.initnul(pointer(bp.ListPos.owner));
-{БЛЯДЬ так делать нельзя!!!!}          if PExtAttrib<>nil then
-                                                              begin
-                                                                   Tc^.PExtAttrib:=PExtAttrib;
-                                                                   PExtAttrib:=nil;
-                                                              end;
-          tc^.vp:=vp;
-          tc^.vp.ID:=GDBCableID;
-
-
-
-  ptv:=vertexarrayinocs.beginiterate(ir);
-  if ptv<>nil then
-  repeat
-        tc.AddVertex(ptv^);
-        ptv:=vertexarrayinocs.iterate(ir);
-  until ptv=nil;
-     end;
 end;
 
 function GDBObjSpline.GetObjTypeName;
@@ -487,6 +461,5 @@ begin
   result:=AllocAndInitSpline(nil);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBSpline.initialization');{$ENDIF}
   RegisterDXFEntity(GDBSplineID,'SPLINE','Spline',@AllocSpline,@AllocAndInitSpline);
 end.

@@ -22,8 +22,8 @@ interface
 uses LCLProc,paths,strproc,gdbdrawcontext,usimplegenerics,ugdbdimstylearray,zeentityfactory,
     {$IFNDEF DELPHI}fileutil,{$ENDIF}
     UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,uzelongprocesssupport,
-    GDBCircle,GDBArc,oglwindowdef,dxflow,zcadstrconsts,UGDBTextStyleArray,
-    geometry,GDBSubordinated,shared,gdbasetypes,{log,}GDBGenericSubEntry,SysInfo,gdbase,
+    {GDBCircle,GDBArc,}oglwindowdef,dxflow,zcadstrconsts,UGDBTextStyleArray,
+    geometry,GDBSubordinated,shared,gdbasetypes,{log,}GDBGenericSubEntry,{SysInfo,}gdbase,
     sysutils,memman,gdbobjectsconstdef,UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,
     UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity,GDBBlockDef,UGDBLayerArray,fileformatsmanager;
 type
@@ -2842,7 +2842,6 @@ begin
      fileclose(infile);*)
 end;
 begin
-     {$IFDEF DEBUGINITSECTION}log.LogOut('iodxf.initialization');{$ENDIF} 
      i2:=0;
      FOC:=0;
      Ext2LoadProcMap.RegisterExt('dxf','AutoCAD DXF files (*.dxf)',@addfromdxf,true);

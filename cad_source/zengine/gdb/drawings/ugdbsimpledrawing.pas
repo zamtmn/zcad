@@ -99,7 +99,7 @@ function CreateSimpleDWG:PTSimpleDrawing;
 var
     MainBlockCreateProc:TMainBlockCreateProc=nil;
 implementation
-uses log;
+//uses log;
 function TSimpleDrawing.CreateBlockDef(name:GDBString):GDBPointer;
 var
    td:pointer;

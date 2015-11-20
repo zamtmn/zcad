@@ -59,8 +59,8 @@ var
    DefaultErrorLayer:GDBLayerProp;
 function GetLTName(LT:PGDBLayerProp):GDBString;
 implementation
-uses
-    log;
+//uses
+//    log;
 function GetLTName(LT:PGDBLayerProp):GDBString;
 begin
      if assigned(LT) then
@@ -247,6 +247,5 @@ begin
      result:=p;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBLayerArray.initialization');{$ENDIF}
   DefaultErrorLayer.Initwithparam('DefaultErrorLayer',200,0,true,false,true,'');
 end.

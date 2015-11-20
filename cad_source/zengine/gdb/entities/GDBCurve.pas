@@ -74,8 +74,8 @@ function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PP
 procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:os_record;const processaxis:taddotrac;const closed:GDBBoolean);
 function GetDirInPoint(const VertexArrayInWCS:GDBPoint3dArray;point:GDBVertex;closed:GDBBoolean):GDBVertex;
 implementation
-uses
-    log;
+//uses
+//    log;
 procedure GDBObjCurve.InsertVertex(const PolyData:TPolyData);
 begin
      vertexarrayinocs.InsertElement(PolyData.nearestline,PolyData.dir,@PolyData.wc);
@@ -928,5 +928,4 @@ begin
 end;
 
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBCurve.initialization');{$ENDIF}
 end.

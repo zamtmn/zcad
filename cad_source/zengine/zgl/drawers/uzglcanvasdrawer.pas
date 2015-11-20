@@ -48,7 +48,7 @@ TZGLCanvasDrawer=class(TZGLGeneral2DDrawer)
 var
    CanvasDrawer:TZGLCanvasDrawer;
 implementation
-uses log;
+//uses log;
 constructor TZGLCanvasDrawer.create;
 begin
      inherited;
@@ -187,7 +187,6 @@ begin
      //isWindowsErrors;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('uzglgdidrawer.initialization');{$ENDIF}
   CanvasDrawer:=TZGLCanvasDrawer.create;
 finalization
    CanvasDrawer.Destroy;

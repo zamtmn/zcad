@@ -58,7 +58,7 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                     end;
 {EXPORT-}
 implementation
-uses ugdbabstractdrawing,GDBGenericSubEntry,log;
+uses ugdbabstractdrawing,GDBGenericSubEntry{,log};
 procedure GDBSelectedObjArray.resprojparam;
 var tdesc:pselectedobjdesc;
     i:GDBInteger;
@@ -627,5 +627,4 @@ begin
   GDBFreeMem(PArray);
 end;}
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBSelectedObjArray.initialization');{$ENDIF}
 end.

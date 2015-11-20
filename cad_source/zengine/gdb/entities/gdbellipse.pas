@@ -73,7 +73,7 @@ GDBObjEllipse={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
            end;
 {EXPORT-}
 implementation
-uses log;
+//uses log;
 procedure GDBObjEllipse.TransformAt;
 var
     tv:GDBVertex4D;
@@ -711,6 +711,5 @@ begin
   result:=AllocAndInitEllipse(nil);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('gdbellipse.initialization');{$ENDIF}
   RegisterDXFEntity(GDBEllipseID,'ELLIPSE','Ellipse',@AllocEllipse,@AllocAndInitEllipse);
 end.

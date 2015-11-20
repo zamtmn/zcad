@@ -29,8 +29,8 @@ GDBLineWidthArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Ope
              end;
 {Export-}
 implementation
-uses
-    log;
+//uses
+//    log;
 constructor GDBLineWidthArray.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GLLWWidth));
@@ -41,6 +41,5 @@ begin
   size:=sizeof(GLLWWidth);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBLineWidthArray.initialization');{$ENDIF}
 end.
 

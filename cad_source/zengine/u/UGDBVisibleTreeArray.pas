@@ -36,7 +36,7 @@ GDBObjEntityTreeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntityOpenArra
                       end;
 {Export-}
 implementation
-uses {UGDBDescriptor,}{GDBManager,}log;
+//uses {UGDBDescriptor,}{GDBManager,}log;
 procedure GDBObjEntityTreeArray.RemoveFromTree(p:PGDBObjEntity);
 begin
      PTEntTreeNode(p^.bp.TreePos.Owner).nul.deliteminarray(p^.bp.TreePos.SelfIndex);
@@ -67,6 +67,5 @@ begin
   ObjTree.initnul;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBVisibleTreeArray.initialization');{$ENDIF}
 end.
 

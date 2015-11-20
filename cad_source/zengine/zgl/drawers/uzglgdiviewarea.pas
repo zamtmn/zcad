@@ -29,7 +29,7 @@ uses
      uzglgdidrawer,uzglabstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
      {varmandef,}{commandline,}zcadsysvars,geometry,shared,LCLType,
-     ExtCtrls,classes,Controls,Graphics,generalviewarea,log,backendmanager,uzglgeneralcanvasviewarea;
+     ExtCtrls,classes,Controls,Graphics,generalviewarea,{log,}backendmanager,uzglgeneralcanvasviewarea;
 type
     TGDIViewArea=class(TGeneralCanvasViewArea)
                       public
@@ -82,6 +82,5 @@ begin
      result:='PTGDIData';
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('viewareadef.initialization');{$ENDIF}
   RegisterBackend(TGDIViewArea,'GDI');
 end.

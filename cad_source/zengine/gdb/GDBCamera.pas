@@ -151,5 +151,4 @@ end;
 
 
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBCamera.initialization');{$ENDIF}
 end.

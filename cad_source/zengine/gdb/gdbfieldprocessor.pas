@@ -28,8 +28,8 @@ var
 function textformat(s:GDBString;pobj:GDBPointer):GDBString;
 function convertfromunicode(s:GDBString):GDBString;
 implementation
-uses
-   log;
+//uses
+//   log;
 function convertfromunicode(s:GDBString):GDBString;
 var //i,i2:GDBInteger;
     ps{,varname}:GDBString;
@@ -92,7 +92,6 @@ begin
                         result:=ps;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('gdbfieldprocessor.initialization');{$ENDIF}
   Prefix2ProcessFunc:=TPrefix2ProcessFunc.Create;
 finalization
   Prefix2ProcessFunc.Destroy;

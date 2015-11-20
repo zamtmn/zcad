@@ -20,7 +20,7 @@ unit iottf;
 {$INCLUDE def.inc}
 interface
 uses UGDBFontManager,EasyLazFreeType,ugdbttffont,geometry,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
-    ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}log,sysutils,
+    ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}{log,}sysutils,
     UGDBOpenArrayOfByte,gdbasetypes,SysInfo,gdbase,memman;
 type ptsyminfo=^tsyminfo;
      tsyminfo=packed record
@@ -98,6 +98,5 @@ begin
     end;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('iottf.initialization');{$ENDIF}
   RegisterFontLoadProcedure('ttf','TTF font',@createnewfontfromttf);
 end.

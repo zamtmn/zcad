@@ -40,7 +40,7 @@ TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
              end;
 {Export-}
 implementation
-uses log;
+//uses log;
 constructor TLLPrimitivesArray.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBByte));
@@ -51,6 +51,5 @@ begin
   size:=sizeof(GDBByte);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('uzgprimitivessarray.initialization');{$ENDIF}
 end.
 

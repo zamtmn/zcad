@@ -19,7 +19,9 @@ unit gdbdimension;
 {$INCLUDE def.inc}
 
 interface
-uses zemathutils,gdbdrawcontext,GDBAbstractText,UGDBTextStyleArray,UGDBXYZWStringArray,ugdbdimstylearray,GDBMText,{Varman,}UGDBLayerArray,ugdbtrash,ugdbdrawingdef,GDBCamera,strproc,UGDBOpenArrayOfByte,GDBText,geometry,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,
+uses zemathutils,gdbdrawcontext,GDBAbstractText,UGDBTextStyleArray,UGDBXYZWStringArray,
+ugdbdimstylearray,GDBMText,{Varman,}UGDBLayerArray,ugdbtrash,ugdbdrawingdef,GDBCamera,
+strproc,UGDBOpenArrayOfByte,GDBText,geometry,GDBLine,gdbasetypes,GDBComplex,{SysInfo,}sysutils,
 gdbEntity,//varmandef,
 GDBase,gdbobjectsconstdef,memman;
 type
@@ -91,7 +93,7 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 end;
 {EXPORT-}
 implementation
-uses zeentitiesmanager,{GDBManager,}log,UGDBOpenArrayOfPV,{UGDBDescriptor,}GDBBlockInsert;
+uses zeentitiesmanager,{GDBManager,}{log,}UGDBOpenArrayOfPV,{UGDBDescriptor,}GDBBlockInsert;
 procedure GDBObjDimension.DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;const drawing:TDrawingDef;var DC:TDrawContext);
 var
    l:GDBDouble;
@@ -609,5 +611,4 @@ begin
   result.CoordInOCS.lEnd:=p2;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('gdbdimension.initialization');{$ENDIF}
 end.

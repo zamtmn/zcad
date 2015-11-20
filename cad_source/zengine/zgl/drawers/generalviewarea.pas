@@ -20,7 +20,7 @@ unit generalviewarea;
 {$INCLUDE def.inc}
 interface
 uses
-     LCLProc,memman,log,zemathutils,gdbpalette,
+     LCLProc,memman,{log,}zemathutils,gdbpalette,
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
      UGDBLayerArray,ugdbdimstylearray,
      oglwindowdef,gdbdrawcontext,{varmandef,}zcadsysvars,GDBEntity,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
@@ -3431,5 +3431,4 @@ begin
 end;
 
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('viewareadef.initialization');{$ENDIF}
 end.

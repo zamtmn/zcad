@@ -36,12 +36,11 @@ GDBtracepropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
              end;
 {Export-}
 implementation
-uses
-    log;
+//uses
+//    log;
 constructor GDBtracepropArray.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(traceprop));
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBTracePropArray.initialization');{$ENDIF}
 end.

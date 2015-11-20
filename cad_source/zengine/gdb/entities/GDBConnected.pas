@@ -29,11 +29,10 @@ GDBObjConnected={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                 end;
 {Export-}
 implementation
-uses {UGDBDescriptor,}log;
+//uses {UGDBDescriptor,}log;
 procedure GDBObjConnected.addtoconnect(pobj:pgdbobjEntity;var ConnectedArray:GDBObjOpenArrayOfPV);
 begin
      ConnectedArray.{gdb.GetCurrentROOT.ObjToConnectedArray.}addnodouble(@pobj);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBConnected.initialization');{$ENDIF}
 end.

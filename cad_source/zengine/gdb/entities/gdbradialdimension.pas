@@ -19,7 +19,7 @@ unit gdbradialdimension;
 {$INCLUDE def.inc}
 
 interface
-uses zeentityfactory,gdbdiametricdimension,gdbdimension,ugdbdimstylearray,{Varman,}UGDBLayerArray,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,geometry,gdbasetypes,SysInfo,sysutils,
+uses zeentityfactory,gdbdiametricdimension,gdbdimension,ugdbdimstylearray,{Varman,}UGDBLayerArray,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,geometry,gdbasetypes,{SysInfo,}sysutils,
 gdbEntity,//varmandef,
 GDBase,gdbobjectsconstdef,dxflow,memman,GDBSubordinated;
 (*
@@ -52,7 +52,7 @@ GDBObjRadialDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDiametricDimen
                    end;
 {EXPORT-}
 implementation
-uses log;
+//uses log;
 procedure GDBObjRadialDimension.SaveToDXF;
 begin
   SaveToDXFObjPrefix(handle,outhandle,'DIMENSION','AcDbDimension');
@@ -156,6 +156,5 @@ begin
   result.bp.ListPos.Owner:=owner;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('gdbdiametricdimension.initialization');{$ENDIF}
   RegisterEntity(GDBRadialDimensionID,'RadialDimension',@AllocRadialDimension,@AllocAndInitRadialDimension);
 end.

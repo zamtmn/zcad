@@ -22,7 +22,7 @@ interface
 uses gdbentity,zcadvariablesutils,gdbfieldprocessor,languade,strproc,sysutils,gdbasetypes,varmandef,GDBase;
 implementation
 uses
-   enitiesextendervariables,log,GDBSubordinated;
+   enitiesextendervariables,{log,}GDBSubordinated;
 procedure var2value(var str:gdbstring;startpos:integer;pobj:PGDBObjGenericWithSubordinated);
 var
   endpos:integer;
@@ -68,7 +68,6 @@ begin
 end;
 
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('gdbfieldprocessorimpl.initialization');{$ENDIF}
   Prefix2ProcessFunc.RegisterKey('@@[',@var2value);
   Prefix2ProcessFunc.RegisterKey('##[',@evaluatesubstr);
 end.

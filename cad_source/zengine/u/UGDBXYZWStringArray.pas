@@ -30,8 +30,8 @@ XYZWGDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                        end;
 {EXPORT-}
 implementation
-uses
-    log;
+//uses
+//    log;
 function XYZWGDBGDBStringArray.add(p:GDBPointer):TArrayIndex;
 begin
      GDBOpenArrayOfData.add(p);
@@ -46,5 +46,4 @@ begin
      inherited init({$IFDEF DEBUGBUILD}'{5F615BF3-34BD-4C3E-9019-CE7CB9D2C2E7}',{$ENDIF}m,sizeof(GDBStrWithPoint));
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBXYZWStringArray.initialization');{$ENDIF}
 end.

@@ -50,7 +50,7 @@ GDBObjTable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             end;
 {EXPORT-}
 implementation
-uses GDBBlockInsert,log;
+uses GDBBlockInsert{,log};
 procedure GDBObjTable.ReCalcFromObjMatrix;
 //var
     //ox:gdbvertex;
@@ -328,5 +328,4 @@ begin
      tbl.done;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBTable.initialization');{$ENDIF}
 end.

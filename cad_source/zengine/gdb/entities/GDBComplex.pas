@@ -20,7 +20,7 @@ unit GDBComplex;
 {$INCLUDE def.inc}
 
 interface
-uses gdbpalette,gdbdrawcontext,ugdbdrawingdef,GDBCamera,{ugdbsimpledrawing,}UGDBOpenArrayOfPObjects,UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},SysInfo,sysutils,
+uses gdbpalette,gdbdrawcontext,ugdbdrawingdef,GDBCamera,{ugdbsimpledrawing,}UGDBOpenArrayOfPObjects,UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},{SysInfo,}sysutils,
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray,UGDBVisibleOpenArray,gdbEntity{,varman,varmandef},
 UGDBVisibleTreeArray,UGDBEntTree,
 GDBase,GDBWithLocalCS,gdbobjectsconstdef,{oglwindowdef,}geometry{,dxflow},memman{,GDBSubordinated,UGDBOpenArrayOfByte};
@@ -55,8 +55,8 @@ GDBObjComplex={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
               end;
 {EXPORT-}
 implementation
-uses
-    log{,varmandef};
+//uses
+//    log{,varmandef};
 {procedure GDBObjComplex.Draw;
 begin
   if visible then
@@ -312,5 +312,4 @@ begin
      self.BuildGeometry(drawing);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBComplex.initialization');{$ENDIF}
 end.

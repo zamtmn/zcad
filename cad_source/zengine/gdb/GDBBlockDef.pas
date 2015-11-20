@@ -49,7 +49,7 @@ GDBObjBlockdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
 var
    GDBObjBlockDefDXFFeatures:TDXFEntIODataManager;
 implementation
-uses {iodxf,}{UUnitManager,}{shared,}log;
+//uses {iodxf,}{UUnitManager,}{shared,}log;
 function GDBObjBlockdef.GetType:GDBPlatformint;
 begin
      result:=1;
@@ -173,7 +173,6 @@ begin
   SetLineGeomProps(result,args);
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBBlockDef.initialization');{$ENDIF}
   GDBObjBlockDefDXFFeatures:=TDXFEntIODataManager.Create;
   {RegisterDXFEntity}RegisterEntity(GDBBlockDefID,'BlockDef',@AllocBlockDef,@AllocAndInitBlockDef,@SetLineGeomProps,@AllocAndCreateBlockDef);
 finalization

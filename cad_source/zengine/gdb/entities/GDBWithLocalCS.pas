@@ -60,7 +60,7 @@ GDBObjWithLocalCS={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
          end;
 {EXPORT-}
 implementation
-uses log;
+//uses log;
 function GDBObjWithLocalCS.CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;
 var
    templod:GDBDouble;
@@ -313,6 +313,5 @@ begin
           inherited done;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBWithLocalCS.initialization');{$ENDIF}
 end.
 

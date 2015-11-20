@@ -33,7 +33,7 @@ GDBPolyPoint2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                 end;
 {Export-}
 implementation
-uses {UGDBDescriptor,}log;
+//uses {UGDBDescriptor,}log;
 procedure GDBPolyPoint2DArray.freeelement;
 begin
 end;
@@ -151,5 +151,4 @@ begin
   end;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBPolyPoint2DArray.initialization');{$ENDIF}
 end.

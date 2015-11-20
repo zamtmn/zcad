@@ -24,7 +24,7 @@ gdbase,GDBasetypes,GDBEntity,geometry;
 procedure LayerCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 procedure LTypeCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 implementation
- uses log;
+// uses log;
 procedure LayerCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 begin
      if PCounted=PGDBObjEntity(PInstance)^.vp.Layer then
@@ -36,5 +36,4 @@ begin
                                   inc(Counter);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('ugdbutil.initialization');{$ENDIF}
 end.

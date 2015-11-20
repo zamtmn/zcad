@@ -24,7 +24,7 @@ uses gdbpalette,{zcadsysvars,}gdbasetypes,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF
      {$IFNDEF DELPHI}gl,{glu,}glext,{$ELSE}dglOpenGL,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
      {$IFDEF WINDOWS}windows,{$ENDIF}
-     log,sysutils{,varmandef};
+     {log,}sysutils{,varmandef};
 type
     GLenum={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GLenum;
     TViewPortArray = array [0..3] of GLint;//ВРЕМЕННО
@@ -914,7 +914,6 @@ oglsm.myglbegin(GL_LINES);
 oglsm.myglend();
 end;
 begin
-     {$IFDEF DEBUGINITSECTION}log.LogOut('oglspecfunc.initialization');{$ENDIF}
      bcount:=0;
      GLRasterizer.init;
      //oglsm.init;

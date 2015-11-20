@@ -26,7 +26,7 @@ uses
      uzglgdidrawer,uzglabstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,
      UGDBLayerArray,ugdbdimstylearray,
      {varmandef,}{commandline,}zcadsysvars,geometry,shared,LCLType,
-     ExtCtrls,classes,Controls,Graphics,generalviewarea,log,backendmanager,LMessages;
+     ExtCtrls,classes,Controls,Graphics,generalviewarea,{log,}backendmanager,LMessages;
 type
     TGDIPanel=class(TCustomControl)
                 protected
@@ -95,5 +95,4 @@ begin
      result:={$IFDEF LCLQT}True{$ELSE}False{$ENDIF};
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('uzglgeneralcanvasviewarea.initialization');{$ENDIF}
 end.

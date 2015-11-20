@@ -33,7 +33,7 @@ GDBObjTrash={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)
 var
     GDBTrash:GDBObjTrash;
 implementation
- uses log;
+ //uses log;
 function GDBObjTrash.GetHandle;
 begin
      result:=H_Trash;
@@ -49,5 +49,4 @@ destructor GDBObjTrash.done;
 begin
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('ugdbtrash.initialization');{$ENDIF}
 end.

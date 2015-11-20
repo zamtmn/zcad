@@ -102,7 +102,7 @@ var
    LLGDIPrimitivesCreator:TLLGDIPrimitivesCreator;
    {$IFDEF WINDOWS}(*GDIPlusDrawer:TZGLGDIPlusDrawer;*){$ENDIF}
 implementation
-uses log;
+//uses log;
 procedure isWindowsErrors;
 begin
 
@@ -587,7 +587,6 @@ begin
 end;
 
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('uzglgdidrawer.initialization');{$ENDIF}
   GDIDrawer:=TZGLGDIDrawer.create;
   LLGDIPrimitivesCreator:=TLLGDIPrimitivesCreator.Create;
   {$IFDEF WINDOWS}(*GDIPlusDrawer:=TZGLGDIPlusDrawer.create;*){$ENDIF}

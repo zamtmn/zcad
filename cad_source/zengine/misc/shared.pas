@@ -162,7 +162,7 @@ begin
                                 CursorOff;
 end;
 begin
-{$IFDEF DEBUGINITSECTION}log.LogOut('shared.initialization');{$ENDIF}
 utflen:=0;
 historychanged:=false;
+log.HistoryTextOut:=@HistoryOutStr;
 end.

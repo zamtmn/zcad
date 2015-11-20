@@ -36,8 +36,8 @@ function ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObj
 var
    p:gdbvertex;
 implementation
-uses
-    log;
+//uses
+//    log;
 function ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
                                 point: gdbvertex; scale, angle: GDBDouble; s: pansichar):PGDBObjEntity;
@@ -127,5 +127,4 @@ begin
                                                end;
 end;
 begin
-    {$IFDEF DEBUGINITSECTION}LogOut('zeentitymanager.initialization');{$ENDIF}
 end.

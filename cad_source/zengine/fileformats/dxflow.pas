@@ -62,8 +62,8 @@ function dxfGroupCode(const dxfcod:GDBInteger):GDBString;
 function DXFHandle(sh:string):TDWGHandle;
 
 implementation
-uses
-    log;
+//uses
+//    log;
 function DXFHandle(sh:string):TDWGHandle;
 begin
      result:=StrToQWord('$'+sh);
@@ -237,5 +237,4 @@ begin
 end;
 
 begin
-     {$IFDEF DEBUGINITSECTION}LogOut('dxflow.initialization');{$ENDIF}
 end.

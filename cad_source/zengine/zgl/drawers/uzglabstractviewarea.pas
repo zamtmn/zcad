@@ -210,5 +210,4 @@ begin
        dest.PGDBObject:=source.PGDBObject;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('abstractviewarea.initialization');{$ENDIF}
 end.

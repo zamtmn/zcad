@@ -33,8 +33,8 @@ GDBPolyPoint3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                 end;
 {Export-}
 implementation
-uses
-    log;
+//uses
+//    log;
 var
     DUMMY_oglsmmygllinescounter:integer;
     DUMMY_vertex:GDBVertex;
@@ -515,6 +515,5 @@ begin
   myglend;}
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBPolyPoint3DArray.initialization');{$ENDIF}
 end.
 

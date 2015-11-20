@@ -301,6 +301,5 @@ var
   palette: gdbpalette;
 implementation
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('gdbpalette.initialization');{$ENDIF}
   palette:=acadpalette;
 end.

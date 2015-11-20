@@ -38,8 +38,8 @@ GDBObjWithMatrix={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)
                  end;
 {EXPORT-}
 implementation
-uses
-    log{,zcadsysvars};
+//uses
+//    log{,zcadsysvars};
 procedure GDBObjWithMatrix.ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInBoundingVolume;OwnerFuldraw:GDBBoolean;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);
 var
      ImInFrustum:TInBoundingVolume;
@@ -192,5 +192,4 @@ begin
      CalcObjMatrix;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBWithMatrix.initialization');{$ENDIF}
 end.

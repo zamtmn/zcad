@@ -29,5 +29,4 @@ type
 {Export-}
 implementation
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('zcobjectinspectorwrapper.initialization');{$ENDIF}
 end.

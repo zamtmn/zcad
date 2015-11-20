@@ -122,5 +122,4 @@ begin
                   else result:=nil;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArrayOfData.initialization');{$ENDIF}
 end.

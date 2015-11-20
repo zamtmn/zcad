@@ -301,7 +301,7 @@ begin
    if line='GDBObjLWPolyline=object(GDBObjWithLocalCS) Closed:GDBBoolean;' then
                   line:=line;
    {$IFDEF TOTALYLOG}
-   DebugLn(format('%s',[line]));
+   DebugLn('{T}%s',[line]);
    {$ENDIF}
     //programlog.LogOutFormatStr('%s',[line],lp_OldPos,LM_Trace);
 
@@ -690,7 +690,7 @@ if addtype then
         //p:=@etd;
         currentunit.InterfaceTypes.{exttype.}AddTypeByPP(@etd);
         {$IFDEF TOTALYLOG}
-        DebugLn(format('Type "%s" added',[typename]));
+        DebugLn('{T}Type "%s" added',[typename]);
         {$ENDIF}
         //programlog.LogOutFormatStr('Type "%s" added',[typename],lp_OldPos,LM_Trace);
         if typename='tdisp' then
@@ -702,7 +702,7 @@ if addtype then
                            end;
                 varmode:begin
                                 {$IFDEF TOTALYLOG}
-                                DebugLn(format(''Varmode string: "%s"',[line]'));
+                                DebugLn('{T}Varmode string: "%s"',[line]');
                                 {$ENDIF}
                                 //programlog.LogOutFormatStr('Varmode string: "%s"',[line],lp_OldPos,LM_Trace);
                                 //parsepos:=1;
@@ -764,7 +764,7 @@ if addtype then
                                                else
                                                    begin
                                                         {$IFDEF TOTALYLOG}
-                                                        DebugLn(line);
+                                                        DebugLn('{D}'+line);
                                                         {$ENDIF}
                                                         //programlog.logoutstr(line,0,LM_Debug);
                                                         if copy(line,1,10)='VIEW_ObjIn'
@@ -805,14 +805,14 @@ var
   sr: TSearchRec;
 begin
   {$IFDEF TOTALYLOG}
-  DebugLn(format('TUnitManager.LoadFolder(%s)',[path]));
+  DebugLn('{T+}TUnitManager.LoadFolder(%s)',[path]);
  {$ENDIF}
   //programlog.LogOutFormatStr('TUnitManager.LoadFolder(%s)',[path],lp_IncPos,LM_Debug);
   if FindFirst(path + '*.pas', faAnyFile, sr) = 0 then
   begin
     repeat
       {$IFDEF TOTALYLOG}
-      DebugLn(format('Found file "%s"',[path+sr.Name]));
+      DebugLn('{T}Found file "%s"',[path+sr.Name]);
       {$ENDIF}
       //programlog.LogOutFormatStr('Found file "%s"',[path+sr.Name],lp_OldPos,LM_Info);
       loadunit(PPaths,TranslateFunc,path+sr.Name,nil);
@@ -820,12 +820,11 @@ begin
     sysutils.FindClose(sr);
   end;
   {$IFDEF TOTALYLOG}
-  DebugLn('end;{TUnitManager.LoadFolder}');
+  DebugLn('{T-}end;{TUnitManager.LoadFolder}');
   {$ENDIF}
   //programlog.logoutstr('end;{TUnitManager.LoadFolder}',lp_DecPos,LM_Debug);
 end;
 initialization;
-     {$IFDEF DEBUGINITSECTION}LogOut('uunitmanager.initialization');{$ENDIF}
      units.init;
 finalization;
      if DBUnit<>nil then

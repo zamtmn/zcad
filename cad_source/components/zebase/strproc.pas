@@ -634,6 +634,5 @@ begin
 end;*)
 
 begin
-{$IFDEF DEBUGINITSECTION}log.LogOut('strproc.initialization');{$ENDIF}
 CodePage:=CP_utf8;
 end.

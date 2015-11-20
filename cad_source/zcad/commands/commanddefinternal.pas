@@ -442,6 +442,5 @@ begin
 end;
 
 begin
-     {$IFDEF DEBUGINITSECTION}LogOut('commanddefinternal.initialization');{$ENDIF}
 end.
 

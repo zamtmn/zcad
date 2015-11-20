@@ -171,5 +171,4 @@ begin
                                          end;
 end;
 begin
-     {$IFDEF DEBUGINITSECTION}LogOut('commandlinedef.initialization');{$ENDIF}
 end.

@@ -630,7 +630,6 @@ begin
   AddFastEditorToType('TMSPrimitiveDetector',@ButtonGetPrefferedFastEditorSize,@ButtonHLineDrawFastEditor,@DeselectEnts,true);
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('zcobjectinspectormultiobjects.initialization');{$ENDIF}
   startup;
 finalization
   finalize;

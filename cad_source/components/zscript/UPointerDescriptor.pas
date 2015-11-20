@@ -218,6 +218,5 @@ begin
      result:=TA_COMPOUND;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UPointDescriptor.initialization');{$ENDIF}
   defaultptypehandler.init('','',nil);
 end.

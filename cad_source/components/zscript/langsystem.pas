@@ -642,7 +642,6 @@ end;
 var
   tv,tv1:functiontype;
 begin
-     {$IFDEF DEBUGINITSECTION}log.LogOut('langsystem.initialization');{$ENDIF}
      {if FPC_FULlVERSION>=20701}
      //foneGDBInteger:=TTypesArray.create(@GDBIntegerDescriptorObj);
      {ELSE}

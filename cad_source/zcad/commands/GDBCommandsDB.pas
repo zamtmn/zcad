@@ -218,6 +218,5 @@ begin
   CreateCommandFastObjectPlugin(@DBaseRename_com,'DBaseRename',CADWG,0);
 end;
 begin
-     {$IFDEF DEBUGINITSECTION}LogOut('GDBCommandsDB.initialization');{$ENDIF}
      startup;
 end.

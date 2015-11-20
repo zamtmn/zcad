@@ -116,5 +116,4 @@ begin
      result:='AbstractNode';
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBTree.initialization');{$ENDIF}
 end.

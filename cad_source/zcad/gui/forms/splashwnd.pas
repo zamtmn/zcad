@@ -103,7 +103,6 @@ begin
      end;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('splashwnd.initialization');{$ENDIF}
   Application.Initialize;
   //RequireDerivedFormResource:=false;
   createsplash(true);

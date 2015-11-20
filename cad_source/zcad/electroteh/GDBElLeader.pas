@@ -774,7 +774,6 @@ begin
    end;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBElLeader.initialization');{$ENDIF}
   RegisterEntity(GDBElLeaderID,'Leader',@AllocElLeader,@AllocAndInitElLeader);
   RegisterEntityUpgradeInfo(GDBLineID,UD_LineToLeader,@UpgradeLine2Leader);
 end.

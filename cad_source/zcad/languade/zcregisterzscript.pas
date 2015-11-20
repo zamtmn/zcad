@@ -23,7 +23,6 @@ uses zcadsysvars,paths,intftranslations,UUnitManager,TypeDescriptors;
 implementation
 
 initialization
-{$IFDEF DEBUGINITSECTION}LogOut('zcregisterzscript.initialization');{$ENDIF}
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'ShowHiddenFieldInObjInsp','GDBBoolean',@debugShowHiddenFieldInObjInsp);
 finalization
 end.

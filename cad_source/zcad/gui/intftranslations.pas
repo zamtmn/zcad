@@ -263,7 +263,6 @@ procedure initialize;
     end;
 
 initialization
-{$IFDEF DEBUGINITSECTION}log.LogOut('intftranslations.initialization');{$ENDIF}
 initialize;
 finalization
 if assigned(actualypo) then freeandnil(actualypo);

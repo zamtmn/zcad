@@ -426,7 +426,7 @@ procedure vardeskclear(p:GDBPointer);
    //s:string;
 begin
      {$IFDEF TOTALYLOG}
-     DebugLn(format('vardeskclear: "%s"',[pvardesk(p)^.name]));
+     DebugLn(format('{T}vardeskclear: "%s"',[pvardesk(p)^.name]));
      {$ENDIF}
      //programlog.LogOutFormatStr('vardeskclear: "%s"',[pvardesk(p)^.name],lp_OldPos,LM_Trace);
      if pvardesk(p)^.name='_EQ_C2000_KPB' then
@@ -451,28 +451,28 @@ end;
 destructor typemanager.done;
 begin
      {$IFDEF TOTALYLOG}
-     DebugLn('TypeManager.done');
+     DebugLn('{T+}TypeManager.done');
      {$ENDIF}
      //programlog.LogOutStr('TypeManager.done',lp_IncPos,LM_Trace);
      exttype.cleareraseobj;
      exttype.done;
      n2i.destroy;
      {$IFDEF TOTALYLOG}
-     DebugLn('TypeManager.done;//end');
+     DebugLn('{T-}TypeManager.done;//end');
      {$ENDIF}
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
 destructor typemanager.systemdone;
 begin
      {$IFDEF TOTALYLOG}
-     DebugLn('TypeManager.systemdone;');
+     DebugLn('{T+}TypeManager.systemdone;');
      {$ENDIF}
      //programlog.LogOutStr('TypeManager.systemdone',lp_IncPos,LM_Trace);
      exttype.cleareraseobjfrom(BaseTypesEndIndex-1);
      exttype.done;
      n2i.destroy;
      {$IFDEF TOTALYLOG}
-     DebugLn('TypeManager.systemdone;//end');
+     DebugLn('{T-}TypeManager.systemdone;//end');
      {$ENDIF}
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
@@ -589,7 +589,7 @@ begin
   if vd.data.ptd=nil then
                          begin
                               {$IFDEF TOTALYLOG}
-                              DebugLn(sysutils.format('Type "%S" not defined in unit "%S"',[typename,self.Name]));
+                              DebugLn(sysutils.format('{E}Type "%S" not defined in unit "%S"',[typename,self.Name]));
                               {$ENDIF}
                               //programlog.LogOutStr(sysutils.format('Type "%S" not defined in unit "%S"',[typename,self.Name]),lp_OldPos,LM_Error);
                          end;
@@ -602,14 +602,14 @@ end;
 destructor varmanager.done;
 begin
      {$IFDEF TOTALYLOG}
-     DebugLn('varmanager.done;');
+     DebugLn('{T+}varmanager.done;');
      {$ENDIF}
      //programlog.LogOutStr('varmanager.done',lp_IncPos,LM_Trace);
      vardescarray.freewithprocanddone(vardeskclear);
      vararray.done;//TODO:проверить чистятся ли стринги внутри
      //exttype.freewithproc(basetypedescclear);
      {$IFDEF TOTALYLOG}
-     DebugLn('varmanager.done;//end');
+     DebugLn('{T-}varmanager.done;//end');
      {$ENDIF}
 
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
@@ -800,7 +800,7 @@ begin
                           begin
                                if state<>metods then
                                                     begin
-                                                         DebugLn('Syntax error in file '+f.name);
+                                                         DebugLn('{F}Syntax error in file '+f.name);
                                                          //programlog.LogOutStr('Syntax error in file '+f.name,lp_OldPos,LM_Fatal);
                                                          halt(0);
                                                     end;
@@ -810,7 +810,7 @@ begin
           begin
                if state<>metods then
                                     begin
-                                      DebugLn('Syntax error in file '+f.name);
+                                      DebugLn('{F}Syntax error in file '+f.name);
                                       //programlog.LogOutStr('Syntax error in file '+f.name,lp_OldPos,LM_Fatal);
                                       halt(0);
                                     end;
@@ -841,7 +841,7 @@ begin
                           begin
                                if state=metods then
                                                   begin
-                                                    DebugLn('Syntax error in file '+f.name);
+                                                    DebugLn('{F}Syntax error in file '+f.name);
                                                     //programlog.LogOutStr('Syntax error in file '+f.name,lp_OldPos,LM_Fatal);
                                                     halt(0);
                                                   end
@@ -1444,7 +1444,7 @@ begin
      result:=InterfaceTypes._TypeName2PTD(n);
      {$IFDEF TOTALYLOG}
      if result=nil then
-       DebugLn(sysutils.format('In unit "%s" not found type "%s"',[name,n]));
+       DebugLn('{W}In unit "%s" not found type "%s"',[name,n]);
      {$ENDIF}
       //programlog.LogOutStr(sysutils.format('In unit "%s" not found type "%s"',[name,n]),0,LM_Warning);
 end;
@@ -1499,9 +1499,8 @@ end;
 
 initialization;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('varman.initialization');{$ENDIF}
   {$IFDEF TOTALYLOG}
-  DebugLn('Varman.startup');
+  DebugLn('{D+}Varman.startup');
   {$ENDIF}
   //programlog.logoutstr('Varman.startup',lp_IncPos,LM_Debug);
   //DecimalSeparator := '.';
@@ -1513,7 +1512,7 @@ begin
   fillchar(CategoryCollapsed.parray^,CategoryCollapsed.max,byte(true));
   CategoryUnknownCOllapsed:=true;
   {$IFDEF TOTALYLOG}
-  DebugLn('end; {Varman.startup}');
+  DebugLn('{D-}end; {Varman.startup}');
   {$ENDIF}
   //programlog.logoutstr('end; {Varman.startup}',lp_DecPos,LM_Debug);
 end;

@@ -49,5 +49,4 @@ begin
   Size := s;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UOpenArray.initialization');{$ENDIF}
 end.

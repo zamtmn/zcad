@@ -840,7 +840,6 @@ begin
   Helpwindow:=nil;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('gdbcommandsinterface.initialization');{$ENDIF}
   startup;
 finalization
   finalize;

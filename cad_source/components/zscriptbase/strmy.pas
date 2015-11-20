@@ -404,5 +404,4 @@ begin
      end;
 end;
 begin
-{$IFDEF DEBUGINITSECTION}log.LogOut('strmy.initialization');{$ENDIF}
 end.

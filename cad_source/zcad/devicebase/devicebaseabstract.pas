@@ -49,5 +49,4 @@ begin
      TreeCoord:='';
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDeviceBase.initialization');{$ENDIF}
 end.

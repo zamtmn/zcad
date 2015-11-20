@@ -550,7 +550,6 @@ begin
   MultiPropertiesManager.sort;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('zcregistermultiproperties.initialization');{$ENDIF}
   startup;
 finalization
   finalize;

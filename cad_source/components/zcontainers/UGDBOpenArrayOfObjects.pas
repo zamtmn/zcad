@@ -93,5 +93,4 @@ begin
   clear;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArrayofObjects.initialization');{$ENDIF}
 end.

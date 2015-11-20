@@ -110,7 +110,6 @@ begin
 end;
 
 initialization
-{$IFDEF DEBUGINITSECTION}LogOut('ucxmenumgr.initialization');{$ENDIF}
 cxmenumgr:=tcxmenumgr.Create;
 cxmenumgr.menupopupcount:=0;
 cxmenumgr.notprocessedclosecount:=0;

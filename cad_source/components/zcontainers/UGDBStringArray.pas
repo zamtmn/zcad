@@ -294,6 +294,5 @@ begin
   f.done;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBStringArray.initialization');{$ENDIF}
 end.
 

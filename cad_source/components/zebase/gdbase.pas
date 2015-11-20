@@ -567,6 +567,5 @@ begin
 end;
 
 begin
-{$IFDEF DEBUGINITSECTION}log.LogOut('gdbase.initialization');{$ENDIF}
 end.
 

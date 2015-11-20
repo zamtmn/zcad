@@ -846,7 +846,6 @@ begin
     Result := NodeType.Create(Items);
 end;
 initialization
-{$IFDEF DEBUGINITSECTION}LogOut('umytreenode.initialization');{$ENDIF}
 finalization
 end.
 

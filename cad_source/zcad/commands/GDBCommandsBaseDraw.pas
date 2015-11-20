@@ -152,7 +152,6 @@ procedure Finalize;
 begin
 end;
 initialization
-     {$IFDEF DEBUGINITSECTION}LogOut('GDBCommandsBaseDraw.initialization');{$ENDIF}
      startup;
 finalization
      finalize;

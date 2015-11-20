@@ -355,7 +355,6 @@ begin
 end;
 initialization
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('projecttreewnd.initialization');{$ENDIF}
   ProjectTreeWindow:=nil;
   BlockCategory.init(100);
   EqCategory.init(100);

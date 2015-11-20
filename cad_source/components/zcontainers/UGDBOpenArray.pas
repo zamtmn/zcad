@@ -330,5 +330,4 @@ begin
   result := pGDBString(getelement(index))^;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArray.initialization');{$ENDIF}
 end.

@@ -115,5 +115,4 @@ begin
 end;
 {$ENDIF}
 begin
-     {$IFDEF DEBUGINITSECTION}log.LogOut('uzcimport.initialization');{$ENDIF}
 end.

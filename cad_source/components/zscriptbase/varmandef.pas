@@ -444,7 +444,7 @@ end;
 destructor UserTypeDescriptor.done;
 begin
      {$IFDEF TOTALYLOG}
-     DebugLn(self.TypeName);
+     DebugLn('{T}'+self.TypeName);
      {$ENDIF}
      //programlog.LogOutStr(self.TypeName,lp_OldPos,LM_Trace);
      SizeInGDBBytes:=0;
@@ -485,7 +485,6 @@ begin
                                          result:=GetFormattedValueAsString(pinstance,f);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('varmandef.initialization');{$ENDIF}
   DecimalSeparator := '.';
 end.
 

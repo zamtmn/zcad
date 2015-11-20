@@ -55,5 +55,4 @@ begin
   Memo.Parent := self;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('aboutwnd.initialization');{$ENDIF}
 end.

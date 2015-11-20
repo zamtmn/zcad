@@ -163,5 +163,4 @@ begin
   PArray:=nil;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArrayOfPointers.initialization');{$ENDIF}
 end.

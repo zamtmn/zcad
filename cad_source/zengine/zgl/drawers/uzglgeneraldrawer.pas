@@ -82,7 +82,7 @@ var
   CurrentCamCSOffsetS:GDBvertex3S;
   notuseLCS:GDBBOOLEAN;
 implementation
-uses log;
+//uses log;
 var
   DrawerLLPCreator:TLLPrimitivesCreator;
 procedure TZGLGeneralDrawer.popMatrix;
@@ -258,7 +258,6 @@ procedure TZGLGeneralDrawer.PostRenderDraw;
 begin
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('uzglgeneraldrawer.initialization');{$ENDIF}
   DrawerLLPCreator:=TLLPrimitivesCreator.create;
 end.
 

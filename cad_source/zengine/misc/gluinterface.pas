@@ -20,10 +20,10 @@ unit gluinterface;
 {$INCLUDE def.inc}
 
 interface
-uses gdbpalette,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
+uses LCLProc,gdbpalette,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
      {$IFNDEF DELPHI}glu,gl,{$ELSE}dglOpenGL,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
-     log,sysutils{,varmandef};
+     {log,}sysutils{,varmandef};
 const
       GLU_VERSION={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_VERSION;
       GLU_TESS_VERTEX={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_TESS_VERTEX;
@@ -166,12 +166,13 @@ end;
 var
    p:pchar;
 begin
-     {$IFDEF DEBUGINITSECTION}log.LogOut('gluinterface.initialization');{$ENDIF}
      GLUIntrf.init;
      p:=GLUIntrf.mygluGetString(GLU_VERSION);
      GLUVersion:=p;
-     programlog.LogOutFormatStr('GLU Version:="%s"',[GLUVersion],0,LM_Info);
+     debugln('{I}GLU Version:="%s"',[GLUVersion]);
+     //programlog.LogOutFormatStr('GLU Version:="%s"',[GLUVersion],0,LM_Info);
      p:=GLUIntrf.mygluGetString(GLU_EXTENSIONS);
      GLUExtensions:=p;
-     programlog.LogOutFormatStr('GLU Extensions:="%s"',[p],0,LM_Info);
+     debugln('{I}GLU Extensions:="%s"',[p]);
+     //programlog.LogOutFormatStr('GLU Extensions:="%s"',[p],0,LM_Info);
 end.

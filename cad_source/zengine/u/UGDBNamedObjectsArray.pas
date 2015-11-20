@@ -39,8 +39,8 @@ GDBNamedObjectsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPIde
               end;
 {EXPORT-}
 implementation
-uses
-    log;
+//uses
+//    log;
 procedure GDBNamedObjectsArray.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
 var p:PGDBNamedObject;
     ir:itrec;
@@ -190,5 +190,4 @@ begin
   until pobj=nil;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBNamedObjectArray.initialization');{$ENDIF}
 end.

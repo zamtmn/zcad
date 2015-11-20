@@ -38,7 +38,7 @@ GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenA
              end;
 {Export-}
 implementation
-uses glstatemanager,log;
+uses glstatemanager{,log};
 function GDBPoint3DArray.getoutbound;
 var
     t,b,l,r,n,f:GDBDouble;
@@ -264,6 +264,5 @@ begin
   size:=sizeof(gdbvertex);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBPoint3DArray.initialization');{$ENDIF}
 end.
 

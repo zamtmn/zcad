@@ -26,7 +26,7 @@ uses
      uzglcanvasdrawer,uzglabstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
      varmandef,commandline,zcadsysvars,geometry,shared,LCLType,
-     ExtCtrls,classes,Controls,Graphics,generalviewarea,log,backendmanager,
+     ExtCtrls,classes,Controls,Graphics,generalviewarea,{log,}backendmanager,
      {$IFNDEF DELPHI}OpenGLContext{$ENDIF},uzglgeneralcanvasviewarea;
 type
     TCanvasViewArea=class(TGeneralCanvasViewArea)
@@ -63,6 +63,5 @@ begin
      result:='PTCanvasData';
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('uzglcanvasviewarea.initialization');{$ENDIF}
   RegisterBackend(TCanvasViewArea,'LCLCanvas');
 end.

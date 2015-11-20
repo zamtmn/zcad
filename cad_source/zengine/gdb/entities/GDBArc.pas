@@ -73,7 +73,7 @@ GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
            end;
 {EXPORT-}
 implementation
-uses log;
+//uses log;
 {function GDBObjARC.GetTangentInPoint(point:GDBVertex):GDBVertex;
 var
    m1:DMatrix4D;
@@ -837,6 +837,5 @@ begin
   result:=AllocAndInitArc(nil);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBArc.initialization');{$ENDIF}
   RegisterDXFEntity(GDBArcID,'ARC','Arc',@AllocArc,@AllocAndInitArc);
 end.

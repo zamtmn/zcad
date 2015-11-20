@@ -160,5 +160,4 @@ begin
   addfromdxf(filename,@PBlockdefArray(parray)[bc],tlomerge,PTSimpleDrawing(pdrawing)^);
 end;}
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UObjBlockdefArray.initialization');{$ENDIF}
 end.

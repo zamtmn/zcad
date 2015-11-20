@@ -74,7 +74,7 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
            end;
 {Export-}
 implementation
-uses UGDBSelectedObjArray,log;
+uses UGDBSelectedObjArray{,log};
 procedure GDBObjLWpolyline.higlight(var DC:TDrawContext);
 begin
 end;
@@ -988,6 +988,5 @@ begin
   result:=AllocAndInitLWpolyline(nil);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBLWPolyline.initialization');{$ENDIF}
   RegisterDXFEntity(GDBLWPolylineID,'LWPOLYLINE','LWPolyline',@AllocLWpolyline,@AllocAndInitLWpolyline);
 end.

@@ -19,7 +19,7 @@ unit GDB3d;
 {$INCLUDE def.inc}
 
 interface
-uses GDBEntity,log;
+uses GDBEntity{,log};
 type
 {EXPORT+}
 GDBObj3d={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)
@@ -27,5 +27,4 @@ GDBObj3d={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)
 {EXPORT-}
 implementation
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBObj3D.initialization');{$ENDIF}
 end.

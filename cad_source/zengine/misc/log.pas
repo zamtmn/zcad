@@ -44,6 +44,7 @@ TLogMode=(
          );
 //SplashWnd
 TSplashTextOutProc=procedure (s:string;pm:boolean);
+THistoryTextOutProc=procedure (s:string);
 PTMyTimeStamp=^TMyTimeStamp;
 TMyTimeStamp=record
                    time:TDateTime;
@@ -86,6 +87,7 @@ procedure LogOut(s:GDBString);
 var programlog:tlog;
    //SplashWnd
    SplashTextOut:TSplashTextOutProc;
+   HistoryTextOut:THistoryTextOutProc;
 implementation
 uses
     UGDBOpenArrayOfByte,UGDBOpenArrayOfData,strutils,sysutils{$IFNDEF DELPHI},fileutil{$ENDIF};
@@ -377,9 +379,11 @@ var
    dbgmode:TLogMode;
    _indent:GDBInteger;
    prefixlength:integer;
+   needtohistory:boolean;
 begin
      dbgmode:=LM_Info;
      _indent:=lp_OldPos;
+     needtohistory:=false;
      if s[1]='{' then
      if length(s)>1 then
      begin
@@ -395,11 +399,15 @@ begin
                 'N':dbgmode:=LM_Necessarily;
                 '+':_indent:=lp_IncPos;
                 '-':_indent:=lp_DecPos;
+                'H':needtohistory:=true;
              end;
           inc(prefixlength);
         end;
         s:=copy(s,prefixlength+1,length(s)-prefixlength);
      end;
+     if needtohistory then
+       if assigned(HistoryTextOut) then
+         HistoryTextOut(s);
      if IsNeedToLog(dbgmode) then
       LogOutStr(S,_indent,dbgmode);
 end;
@@ -416,7 +424,6 @@ begin
 end;
 initialization
 begin
-    {$IFDEF DEBUGINITSECTION}LogOut('log.initialization');{$ENDIF}
     programlog.init({$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)))+filelog,LM_Error);
 end;
 end.

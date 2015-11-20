@@ -73,6 +73,5 @@ begin
       result.DrawingContext.GlobalLTScale:=1;
 end;
 begin
-{$IFDEF DEBUGINITSECTION}log.LogOut('gdbase.initialization');{$ENDIF}
 end.
 

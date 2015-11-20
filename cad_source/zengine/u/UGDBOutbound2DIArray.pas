@@ -38,7 +38,7 @@ GDBOOutbound2DIArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                 end;
 {Export-}
 implementation
-uses {UGDBDescriptor,}log;
+//uses {UGDBDescriptor,}log;
 constructor GDBOOutbound2DIArray.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBvertex2DI));
@@ -228,5 +228,4 @@ begin
   end;
 end;}
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBOutBound2DIArray.initialization');{$ENDIF}
 end.

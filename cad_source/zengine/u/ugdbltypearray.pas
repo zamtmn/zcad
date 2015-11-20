@@ -682,5 +682,4 @@ begin
 end;
 
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('ugdbltypearray.initialization');{$ENDIF}
 end.

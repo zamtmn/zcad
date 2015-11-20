@@ -95,7 +95,7 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                       end;
 {Export-}
 implementation
-uses log;
+//uses log;
 {function GDBObjGenericSubEntry.SubMi;
 begin
      //pobj^.bp.PSelfInOwnerArray:=ObjArray.getelement(ObjArray.add(pobj));
@@ -237,7 +237,7 @@ begin
 end;*)
 function GDBObjGenericSubEntry.CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;
 begin
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('GDBObjGenericSubEntry.CalcVisibleByTree',lp_incPos);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('GDBObjGenericSubEntry.CalcVisibleByTree',lp_incPos);{$ENDIF}
   visible:=visibleactualy;
      result:=true;
      //inc(gdb.GetCurrentDWG.pcamera^.totalobj);
@@ -257,7 +257,7 @@ begin
                                visible:=0;
                                result:=false;
                           end;
-     {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('GDBObjGenericSubEntry.CalcVisibleByTree----{end}',lp_decPos);{$ENDIF}
+     //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('GDBObjGenericSubEntry.CalcVisibleByTree----{end}',lp_decPos);{$ENDIF}
 end;
 (*procedure GDBObjGenericSubEntry.ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInRect);
 var
@@ -623,5 +623,4 @@ begin
   end;
 end;*)
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBSubEntry.initialization');{$ENDIF}
 end.

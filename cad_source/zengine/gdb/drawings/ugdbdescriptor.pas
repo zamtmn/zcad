@@ -97,7 +97,7 @@ function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):GDBInteger;
 function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
- uses enitiesextendervariables,GDBText,GDBDevice,GDBBlockInsert,iodxf, GDBManager,shared,commandline,log;
+ uses enitiesextendervariables,GDBText,GDBDevice,GDBBlockInsert,iodxf, GDBManager,shared,commandline{,log};
 function GDBDescriptor.GetDefaultDrawingName:GDBString;
 var
     OldName:GDBString;
@@ -994,5 +994,4 @@ begin
 end;
 begin
   {$I gewind.lrs}
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBDescriptor.initialization');{$ENDIF}
 end.

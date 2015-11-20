@@ -20,7 +20,7 @@ unit ugdbopenarrayofpidentobects;
 {$INCLUDE def.inc}
 interface
 uses UGDBOpenArrayOfPObjects,
-     gdbase,GDBasetypes,memman,log;
+     gdbase,GDBasetypes,memman{,log};
 type
 {Export+}
 PGDBObjOpenArrayOfPIdentObects=^GDBObjOpenArrayOfPIdentObects;
@@ -54,5 +54,4 @@ begin
 end;
 
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('ugdbopenarrayofpidentobects.initialization');{$ENDIF}
 end.

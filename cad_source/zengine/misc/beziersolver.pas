@@ -58,7 +58,7 @@ var
    BS:TBezierSolver2D;
    triangle:array[0..2] of integer;
 implementation
-uses {math,}log;
+//uses {math,}log;
 procedure TBezierSolver2D.AddPointToContur(x,y:fontfloat;attr:TPointAttr);
 var
    tff1,tff0,tff:{GDBFontVertex2D}TDummyData;
@@ -258,7 +258,6 @@ begin
      LastOncurveLineAdded:=false;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('BezierSolver.initialization');{$ENDIF}
   BS:=TBezierSolver2D.create;
 finalization
   bs.Destroy;

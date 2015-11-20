@@ -21,7 +21,7 @@ unit gdbrotateddimension;
 interface
 uses zeentityfactory,gdbaligneddimension,gdbdimension,ugdbdimstylearray,{Varman,}UGDBLayerArray,ugdbtrash,ugdbdrawingdef,
 strproc,UGDBOpenArrayOfByte,geometry,
-gdbasetypes,SysInfo,sysutils,
+gdbasetypes,{SysInfo,}sysutils,
 gdbEntity,//varmandef,
 GDBase,gdbobjectsconstdef,dxflow,memman,GDBSubordinated;
 type
@@ -41,7 +41,7 @@ GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimens
                    end;
 {EXPORT-}
 implementation
-uses log;
+//uses log;
 constructor GDBObjRotatedDimension.initnul;
 begin
   inherited initnul(owner);
@@ -154,6 +154,5 @@ begin
   result.bp.ListPos.Owner:=owner;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('gdbrotateddimension.initialization');{$ENDIF}
   RegisterEntity(GDBRotatedDimensionID,'RotatedDimension',@AllocRotatedDimension,@AllocAndInitRotatedDimension);
 end.

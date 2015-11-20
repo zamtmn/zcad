@@ -32,8 +32,8 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
               end;
 {EXPORT-}
 implementation
-uses
-    log;
+//uses
+//    log;
 function GDBTableArray.copyto(source:PGDBOpenArray):GDBInteger; //PGDBOpenArrayOfData
 var
   p,np:PGDBGDBStringArray;
@@ -112,5 +112,4 @@ begin
      end;*)
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBTable.initialization');{$ENDIF}
 end.

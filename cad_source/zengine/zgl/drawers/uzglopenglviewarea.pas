@@ -304,6 +304,5 @@ begin
      getviewcontrol.Invalidate;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('viewareadef.initialization');{$ENDIF}
   RegisterBackend(TOpenGLViewArea,'OpenGL');
 end.

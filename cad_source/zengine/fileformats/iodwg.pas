@@ -1429,6 +1429,5 @@ begin
   //programlog.logoutstr('end; {AddFromDWG}',lp_DecPos);
 end;
 begin
-     {$IFDEF DEBUGINITSECTION}log.LogOut('iodwg.initialization');{$ENDIF}
      Ext2LoadProcMap.RegisterExt('dwg','AutoCAD DWG files (*.dwg)',@addfromdwg);
 end.

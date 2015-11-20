@@ -31,8 +31,8 @@ GDBObjPlain={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
             end;
 {EXPORT-}
 implementation
-uses
-    log;
+//uses
+//    log;
 procedure GDBObjPlain.DrawGeometry;
 var
   p: GDBVertex;
@@ -79,5 +79,4 @@ begin
 
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBPlain.initialization');{$ENDIF}
 end.

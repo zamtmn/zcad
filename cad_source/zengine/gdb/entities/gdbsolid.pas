@@ -59,7 +59,7 @@ GDBObjSolid={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
 {Export-}
 
 implementation
-uses log;
+//uses log;
 {procedure GDBObjSolid.TransformAt;
 var i:GDBInteger;
 begin
@@ -424,6 +424,5 @@ begin
   result:=AllocAndInitSolid(nil);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBSolid.initialization');{$ENDIF}
   RegisterDXFEntity(GDBSolidID,'SOLID','Solid',@AllocSolid,@AllocAndInitSolid,@SetSolidGeomProps,@AllocAndCreateSolid);
 end.

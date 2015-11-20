@@ -34,7 +34,7 @@ ZGLGeomData={$IFNDEF DELPHI}packed{$ENDIF}object(GDBaseObject)
                                           end;
 {Export-}
 implementation
-uses log;
+//uses log;
 function ZGLGeomData.Add2DPoint(const x,y:fontfloat):TArrayIndex;
 var
     vs:GDBvertex3S;
@@ -65,6 +65,5 @@ begin
   Indexes.Shrink;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('uzglgeomdata.initialization');{$ENDIF}
 end.
 

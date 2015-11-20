@@ -20,7 +20,7 @@ unit iopalette;
 {$INCLUDE def.inc}
 interface
 uses paths,gdbpalette,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
-     strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}log,sysutils,
+     strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}{log,}sysutils,
      UGDBOpenArrayOfByte,gdbasetypes,SysInfo,gdbase;
 procedure readpalette(filename:string);
 implementation
@@ -59,6 +59,5 @@ begin
   f.done;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('iopalette.initialization');{$ENDIF}
   readpalette('components/palette.rgb');
 end.

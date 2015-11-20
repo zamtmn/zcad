@@ -69,8 +69,8 @@ GDBObjAbstractText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlainWithOX)
                    end;
 {EXPORT-}
 implementation
-uses
-   log;
+//uses
+//   log;
 procedure GDBObjAbstractText.transform;
 var tv{,tv2}:GDBVertex;
    m:DMatrix4D;
@@ -420,5 +420,4 @@ begin
   inherited;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBAbstractText.initialization');{$ENDIF}
 end.

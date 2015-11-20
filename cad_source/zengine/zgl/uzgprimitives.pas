@@ -149,7 +149,7 @@ TLLPolyLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
         end;
 {Export-}
 implementation
-uses log,uzglvectorobject;
+uses {log,}uzglvectorobject;
 function TLLPrimitive.getPrimitiveSize:GDBInteger;
 begin
      result:=sizeof(self);
@@ -588,6 +588,5 @@ begin
 end;
 
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('uzgprimitives.initialization');{$ENDIF}
 end.
 

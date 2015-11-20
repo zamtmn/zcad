@@ -31,8 +31,8 @@ GDBObjPlainWithOX={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
          end;
 {EXPORT-}
 implementation
-uses
-    log;
+//uses
+//    log;
 procedure GDBObjPlainWithOX.CalcObjMatrix;
 var rotmatr,dispmatr:DMatrix4D;
 begin
@@ -68,5 +68,4 @@ begin
      P_insert_in_WCS:={PGDBVertex(@dispmatr[3])^;//}VectorTransform3D(nulvertex,objmatrix);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBCPlainWithOX.initialization');{$ENDIF}
 end.

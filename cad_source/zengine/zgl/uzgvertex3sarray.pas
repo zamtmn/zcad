@@ -32,7 +32,7 @@ ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Open
              end;
 {Export-}
 implementation
-uses {glstatemanager,}log;
+//uses {glstatemanager,}log;
 function ZGLVertex3Sarray.GetLength(const i:TArrayIndex):GDBFloat;
 var
     pv1,pv2:PGDBvertex3S;
@@ -84,6 +84,5 @@ begin
   oglsm.myglend;
 end;*)
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('uzgvertex3sarray.initialization');{$ENDIF}
 end.
 

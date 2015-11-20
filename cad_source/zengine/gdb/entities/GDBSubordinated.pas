@@ -90,7 +90,7 @@ procedure extractvarfromdxfstring(_Value:GDBString;out vn,vt,vv,vun:GDBString);
 procedure OldVersVarRename(var vn,vt,vv,vun:GDBString);
 procedure OldVersTextReplace(var vv:GDBString);
 implementation
-uses {shared,}log;
+//uses {shared,}log;
 procedure GDBObjExtendable.AddExtension(ExtObj:PTBaseEntityExtender;ObjSize:GDBInteger);
 begin
      if not assigned(EntExtensions) then
@@ -331,5 +331,4 @@ procedure GDBObjGenericWithSubordinated.DelSelectedSubitem;
 begin
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBSubordinated.initialization');{$ENDIF}
 end.

@@ -37,7 +37,7 @@ TLLPrimitivesCreator=class(TLLPrimitivesCreatorAbstract)
 var
    DefaultLLPCreator:TLLPrimitivesCreator;
 implementation
-uses log;
+//uses log;
 function TLLPrimitivesCreator.CreateLLTriangle(var pa:GDBOpenArrayOfData;const P1Index:TLLVertexIndex):TArrayIndex;
 var
   ptt:PTLLTriangle;
@@ -133,7 +133,6 @@ begin
      ptse.init;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('uzgprimitivescreator.initialization');{$ENDIF}
   DefaultLLPCreator:=TLLPrimitivesCreator.create;
 end.
 

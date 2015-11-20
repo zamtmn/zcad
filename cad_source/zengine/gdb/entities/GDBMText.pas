@@ -57,7 +57,7 @@ function GetLinesH(linespace,size:GDBDouble;var lines:XYZWGDBGDBStringArray):GDB
 function GetLinesW(var lines:XYZWGDBGDBStringArray):GDBDouble;
 function GetLineSpaceFromLineSpaceF(linespacef,size:GDBDouble):GDBDouble;
 implementation
-uses shared,log;
+uses shared{,log};
 procedure GDBObjMText.FormatAfterDXFLoad;
 begin
      formatcontent(drawing);
@@ -1010,6 +1010,5 @@ begin
   result:=AllocAndInitMText(nil);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBMtext.initialization');{$ENDIF}
   RegisterDXFEntity(GDBMTextID,'MTEXT','MText',@AllocMText,@AllocAndInitMText);
 end.

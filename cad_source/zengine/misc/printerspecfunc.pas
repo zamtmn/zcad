@@ -23,7 +23,7 @@ interface
 uses gdbpalette,gdbasetypes,gdbase,LCLType,Printers,
      gl,glu,glstatemanager,
      {$IFDEF SLINUX}glx,{$ENDIF}
-     log,sysutils,varmandef,Graphics;
+     {log,}sysutils,varmandef,Graphics;
 type
     PTPrinterRasterizer=^TPrinterRasterizer;
     TPrinterRasterizer=object(TOGLStateManager)
@@ -215,5 +215,4 @@ begin
     end;
 end;
 begin
-     {$IFDEF DEBUGINITSECTION}log.LogOut('printerspecfunc.initialization');{$ENDIF}
 end.

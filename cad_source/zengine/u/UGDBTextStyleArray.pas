@@ -54,7 +54,7 @@ GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*O
               end;
 {EXPORT-}
 implementation
-uses {UGDBDescriptor,}{io,}log;
+//uses {UGDBDescriptor,}{io,}log;
 destructor GDBTextStyle.Done;
 begin
      inherited;
@@ -244,5 +244,4 @@ begin
      format;}
 //end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBTextStyleArray.initialization');{$ENDIF}
 end.

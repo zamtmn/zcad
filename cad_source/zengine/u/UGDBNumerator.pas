@@ -37,8 +37,8 @@ GDBNumerator={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenAr
                        end;
 {EXPORT-}
 implementation
-uses
-    log;
+//uses
+//    log;
 procedure GDBNumerator.sort;
 var
    p1,p2:PGDBNumItem;
@@ -117,5 +117,4 @@ begin
      inherited init({$IFDEF DEBUGBUILD}'{4249FDF0-86E5-4D42-8538-1402D5B7C55B}',{$ENDIF}m,sizeof(GDBNumItem));
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBNumerator.initialization');{$ENDIF}
 end.

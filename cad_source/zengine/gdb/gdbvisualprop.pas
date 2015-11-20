@@ -19,7 +19,7 @@
 unit gdbvisualprop;
 {$INCLUDE def.inc}
 interface
-uses gdbpalette,log,ugdbltypearray,{zcadsysvars,}gdbasetypes,
+uses gdbpalette,{log,}ugdbltypearray,{zcadsysvars,}gdbasetypes,
      {varman,}//varmandef,
      GDBase,
      geometry,sysutils,memman,UGDBOpenArrayOfByte,UGDBLayerArray;
@@ -47,5 +47,4 @@ begin
                                 result:=vp.Layer.LT;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('gdbvisualprop.initialization');{$ENDIF}
 end.

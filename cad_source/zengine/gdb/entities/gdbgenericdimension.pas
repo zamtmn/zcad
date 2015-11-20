@@ -20,7 +20,7 @@ unit gdbgenericdimension;
 
 interface
 uses zeentityfactory,GDBWithLocalCS,gdbdimension,ugdbdimstylearray,{Varman,}UGDBLayerArray,
-     ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,geometry,gdbasetypes,SysInfo,sysutils,
+     ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,geometry,gdbasetypes,{SysInfo,}sysutils,
 gdbEntity,//varmandef,
 GDBase,gdbobjectsconstdef,dxflow,memman,GDBSubordinated;
 type
@@ -40,7 +40,7 @@ GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                    end;
 {EXPORT-}
 implementation
-uses gdbradialdimension,gdbdiametricdimension,gdbrotateddimension,gdbaligneddimension,log;
+uses gdbradialdimension,gdbdiametricdimension,gdbrotateddimension,gdbaligneddimension{,log};
 var
   WorkingFormatSettings:TFormatSettings;
 function GDBObjGenericDimension.FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;
@@ -184,7 +184,6 @@ begin
   result.bp.ListPos.Owner:=owner;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('gdbgenericdimension.initialization');{$ENDIF}
   WorkingFormatSettings:=DefaultFormatSettings;
   RegisterDXFEntity(GDBGenericDimensionID,'DIMENSION','GenericDimension',@AllocGenericDimension,@AllocAndInitGenericDimension);
 end.

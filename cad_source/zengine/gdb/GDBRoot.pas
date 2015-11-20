@@ -51,8 +51,8 @@ GDBObjRoot={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
 
 {Export-}
 implementation
-uses
-    log;
+//uses
+//    log;
 function GDBObjRoot.GetMainOwner:PGDBObjSubordinated;
 begin
      result:=@self;
@@ -197,6 +197,5 @@ begin
   restructure;}
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBRoot.initialization');{$ENDIF}
 end.
 

@@ -85,8 +85,7 @@ TZGLAbstractDrawer=class
                         procedure popMatrix;virtual;abstract;
                    end;
 implementation
-uses log;
+//uses log;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('uzglgeneraldrawer.initialization');{$ENDIF}
 end.
 

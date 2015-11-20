@@ -219,7 +219,6 @@ begin
 end;
 
 begin
-    {$IFDEF DEBUGINITSECTION}LogOut('GDBmanager.initialization');{$ENDIF}
   p.x := 10;
   p.y := 20;
   p.z := 30;

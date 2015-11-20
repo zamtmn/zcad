@@ -19,7 +19,7 @@
 unit uzglvectorobject;
 {$INCLUDE def.inc}
 interface
-uses uzglabstractdrawer,gdbdrawcontext,uzgprimitives,uzglgeomdata,uzgprimitivessarray,geometry,sysutils,gdbase,memman,log,
+uses uzglabstractdrawer,gdbdrawcontext,uzgprimitives,uzglgeomdata,uzgprimitivessarray,geometry,sysutils,gdbase,memman,//log,
      strproc,gdbasetypes;
 type
 {Export+}
@@ -400,6 +400,5 @@ begin
   LLprimitives.Shrink;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('uzglvectorobject.initialization');{$ENDIF}
 end.
 

@@ -87,8 +87,8 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
            end;
 {Export-}
 implementation
-uses
-    log;
+//uses
+//    log;
 function GDBObjCircle.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
 var
    m1:DMatrix4D;
@@ -809,7 +809,6 @@ begin
   result:=AllocAndInitCircle(nil);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBCircle.initialization');{$ENDIF}
   RegisterDXFEntity(GDBCircleID,'CIRCLE','Circle',@AllocCircle,@AllocAndInitCircle,@SetCircleGeomProps,@AllocAndCreateCircle);
 end.
 

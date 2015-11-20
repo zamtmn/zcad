@@ -38,8 +38,8 @@ function CreateBlockDef(dwg:PTDrawingDef;name:GDBString):PGDBObjBlockdef;
 var
    BlockDefName2BlockDefCreateData:TBlockDefName2BlockDefCreateData=nil;
 implementation
-uses
-    log;
+//uses
+//    log;
 procedure _Init;
 begin
      BlockDefName2BlockDefCreateData:=TBlockDefName2BlockDefCreateData.create;
@@ -84,6 +84,5 @@ begin
 end;
 
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('zeblockdefsfactory.initialization');{$ENDIF}
 finalization
 end.

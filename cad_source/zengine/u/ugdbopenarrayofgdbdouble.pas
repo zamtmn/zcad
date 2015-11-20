@@ -36,8 +36,8 @@ GDBOpenArrayOfGDBDouble={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
              end;
 {Export-}
 implementation
-uses
-    log;
+//uses
+//    log;
 procedure GDBOpenArrayOfGDBDouble.AddToArray(const data:GDBDouble);
 begin
      add(@data);
@@ -96,5 +96,4 @@ begin
   PArray:=nil;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArrayOfPointers.initialization');{$ENDIF}
 end.

@@ -95,7 +95,7 @@ tlinertmodify=record
                     lbegin,lmidle,lend:GDBBoolean;
                 end;
 implementation
-uses log;
+//uses log;
 function GDBObjLine.GetTangentInPoint(point:GDBVertex):GDBVertex;
 begin
      result:=normalizevertex(VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin));
@@ -815,6 +815,5 @@ begin
   result:=AllocAndInitLine(nil);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBLine.initialization');{$ENDIF}
   RegisterDXFEntity(GDBlineID,'LINE','Line',@AllocLine,@AllocAndInitLine,@SetLineGeomProps,@AllocAndCreateLine);
 end.

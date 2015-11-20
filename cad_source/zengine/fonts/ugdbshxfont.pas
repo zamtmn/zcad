@@ -33,7 +33,7 @@ SHXFont={$IFNDEF DELPHI}packed{$ENDIF} object(BASEFont)
         end;
 {EXPORT-}
 implementation
-uses log;
+//uses log;
 constructor SHXFont.init;
 begin
      inherited;
@@ -47,6 +47,5 @@ begin
      //SHXdata.done;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBSHXFont.initialization');{$ENDIF}
 finalization
 end.

@@ -39,8 +39,8 @@ GDBBbillOfMaterial={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
                        end;
 {EXPORT-}
 implementation
-uses
-    log;
+//uses
+//    log;
 {function GDBBbillOfMaterial.getnamenumber;
 var p:PGDBBOMItem;
 begin
@@ -89,5 +89,4 @@ begin
      inherited init({$IFDEF DEBUGBUILD}'{4249FDF0-86E5-4D42-8538-1402D5B7C55B}',{$ENDIF}m,sizeof(GDBBOMItem));
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UBillOfMaterial.initialization');{$ENDIF}
 end.

@@ -168,7 +168,7 @@ var onlygetsnapcount:GDBInteger;
     ForeGround:TRGB;
     GDBObjEntityDXFFeatures:TDXFEntIODataManager;
 implementation
-uses usimplegenerics,zeentityfactory,GDBGenericSubEntry,UGDBSelectedObjArray,log;
+uses usimplegenerics,zeentityfactory,GDBGenericSubEntry,UGDBSelectedObjArray{,log};
 procedure GDBObjEntity.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
 begin
     proc(@self,PCounted,Counter);
@@ -1200,7 +1200,6 @@ begin
 end;
 
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBEntity.initialization');{$ENDIF}
   GDBObjEntityDXFFeatures:=TDXFEntIODataManager.Create;
 finalization
   GDBObjEntityDXFFeatures.Destroy;

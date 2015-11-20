@@ -257,7 +257,6 @@ begin
      format;}
 //end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBFontManager.initialization');{$ENDIF}
   FontManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);
   FontExt2LoadProc:=TFontExt2LoadProcMap.Create;
   sysvarPATHFontsPath:=ExtractFileDir(ParamStr(0));

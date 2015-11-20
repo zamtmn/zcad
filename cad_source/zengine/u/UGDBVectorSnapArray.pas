@@ -34,12 +34,11 @@ GDBVectorSnapArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
              end;
 {Export-}
 implementation
-uses
-    log;
+//uses
+//    log;
 constructor GDBVectorSnapArray.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(VectorSnap));
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBVectorSnapArray.initialization');{$ENDIF}
 end.

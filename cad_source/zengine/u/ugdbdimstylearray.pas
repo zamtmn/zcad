@@ -139,7 +139,7 @@ var
                                     (name:'_ClosedFilled';width:1)
                                     );
 implementation
-uses {UGDBDescriptor,}{io,}log;
+//uses {UGDBDescriptor,}{io,}log;
 destructor GDBDimStyle.Done;
 begin
      units.DIMPOST:='';
@@ -507,5 +507,4 @@ end;
 
 
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('ugdbdimstylearray.initialization');{$ENDIF}
 end.

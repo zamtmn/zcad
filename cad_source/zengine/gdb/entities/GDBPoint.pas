@@ -57,8 +57,8 @@ GDBObjPoint={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
 {Export-}
 
 implementation
-uses
-    log;
+//uses
+//    log;
 procedure GDBObjPoint.TransformAt;
 begin
   P_insertInOCS:=geometry.VectorTransform3D(PGDBObjPoint(p)^.P_insertInOCS,t_matrix^);
@@ -293,6 +293,5 @@ begin
   result:=AllocAndInitPoint(nil);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBPoint.initialization');{$ENDIF}
   RegisterDXFEntity(GDBPointID,'POINT','Point',@AllocPoint,@AllocAndInitPoint)
 end.

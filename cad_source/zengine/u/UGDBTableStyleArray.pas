@@ -55,8 +55,8 @@ GDBTableStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*
 var
   PTempTableStyle:PTGDBTableStyle;
 implementation
-uses
-    log;
+//uses
+//    log;
 constructor GDBTableStyleArray.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(TGDBTableStyle));
@@ -97,5 +97,4 @@ begin
      result:=p;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBTableAtyleArray.initialization');{$ENDIF}
 end.

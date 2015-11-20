@@ -43,7 +43,7 @@ BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
         end;
 {EXPORT-}
 implementation
-uses log;
+//uses log;
 function BASEFont.IsCanSystemDraw:GDBBoolean;
 begin
      result:=false;
@@ -202,6 +202,5 @@ begin
      result:=nil;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBSHXFont.initialization');{$ENDIF}
 finalization
 end.

@@ -25,8 +25,8 @@ const
 var
    circlepointoflod:array[0..CircleLODCount] of GDBpolyPoint2DArray;
 implementation
-uses
-    log;
+//uses
+//    log;
 procedure createcircle;
 var
   i,j: longint;
@@ -58,7 +58,6 @@ begin
   end;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBCHelpObj.initialization');{$ENDIF}
   createcircle;
 finalization
   freecircle;

@@ -35,8 +35,7 @@ TLLPrimitivesCreatorAbstract=class
                 function CreateLLPolyLine(var pa:GDBOpenArrayOfData;const P1Index,_Count:TLLVertexIndex;_closed:GDBBoolean=false):TArrayIndex;virtual;abstract;
              end;
 implementation
-uses log;
+//uses log;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('uzgprimitivescreatorabstract.initialization');{$ENDIF}
 end.
 

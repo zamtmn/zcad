@@ -19,7 +19,7 @@
 unit UGDBFontManager;
 {$INCLUDE def.inc}
 interface
-uses paths,lclintfex,zcadstrconsts,{shared,}{zcadsysvars,}strproc,ugdbfont,gdbasetypes,{SysInfo,}memman,
+uses LCLProc,paths,lclintfex,zcadstrconsts,{shared,}{zcadsysvars,}strproc,ugdbfont,gdbasetypes,{SysInfo,}memman,
      sysutils,gdbase, geometry,usimplegenerics,
      UGDBNamedObjectsArray,classes;
 type
@@ -58,7 +58,7 @@ var
 procedure RegisterFontLoadProcedure(const _FontExt,_FontDesk:GDBString;
                                     const _FontLoadProcedure:TFontLoadProcedure);
 implementation
-uses log;
+//uses log;
 procedure RegisterFontLoadProcedure(const _FontExt,_FontDesk:GDBString;
                                     const _FontLoadProcedure:TFontLoadProcedure);
 var
@@ -133,11 +133,13 @@ var
   data:TFontLoadProcedureData;
       //ir:itrec;
 begin
-     programlog.LogOutFormatStr('GDBFontManager.addFonf(%s)',[FontPathName],lp_IncPos,LM_Debug);
+     debugln('{D+}GDBFontManager.addFonf(%s)',[FontPathName]);
+     //programlog.LogOutFormatStr('GDBFontManager.addFonf(%s)',[FontPathName],lp_IncPos,LM_Debug);
      result:=nil;
      if FontPathName='' then
                             begin
-                              programlog.logoutstr('Empty fontname',lp_DecPos,LM_Debug);
+                              debugln('{D-}Empty fontname');
+                              //programlog.logoutstr('Empty fontname',lp_DecPos,LM_Debug);
                               exit;
                             end;
      FontExt:=uppercase(ExtractFileExt(FontPathName));
@@ -147,12 +149,14 @@ begin
      case AddItem(FontName,pointer(p)) of
              IsFounded:
                        begin
-                            programlog.LogOutFormatStr('Font "%s" already loaded',[FontPathName],lp_OldPos,LM_Info);
+                            debugln('{I}Font "%s" already loaded',[FontPathName]);
+                            //programlog.LogOutFormatStr('Font "%s" already loaded',[FontPathName],lp_OldPos,LM_Info);
                        end;
              IsCreated:
                        begin
                             //shared.HistoryOutStr(sysutils.format(rsLoadingFontFile,[FontPathName]));
-                            programlog.LogOutFormatStr('Loading font "%s"',[FontPathName],lp_IncPos,LM_Info);
+                            debugln('{IH+}Loading font "%s"',[FontPathName]);
+                            //programlog.LogOutFormatStr('Loading font "%s"',[FontPathName],lp_IncPos,LM_Info);
                             _key:=lowercase(FontExt);
                             if _key<>'' then
                             begin
@@ -170,22 +174,26 @@ begin
                                                   FontLoaded:=createnewfontfromttf(FontPathName,p);}
                             if not FontLoaded then
                             begin
-                                 programlog.LogOutFormatStr('Font file "%S" unknown format',[FontPathName],lp_OldPos,LM_Error);
+                                 debugln('{EH}Font file "%S" unknown format',[FontPathName]);
+                                 //programlog.LogOutFormatStr('Font file "%S" unknown format',[FontPathName],lp_OldPos,LM_Error);
                                  //shared.ShowError(sysutils.format('Font file "%S" unknown format',[FontPathName]));
                                  dec(self.Count);
                                  //p^.Name:='ERROR ON LOAD';
                                  p:=nil;
                             end;
-                            programlog.LogOutStr('end;{Loading font}',lp_DecPos,LM_Info);
+                            debugln('{I-}end;{Loading font}');
+                            //programlog.LogOutStr('end;{Loading font}',lp_DecPos,LM_Info);
                             //p^.init(FontPathName,Color,LW,oo,ll,pp);
                        end;
              IsError:
                        begin
-                            programlog.LogOutFormatStr('Font "%s"... something wrong',[FontPathName],lp_OldPos,LM_Info);
+                            debugln('{I}Font "%s"... something wrong',[FontPathName]);
+                            //programlog.LogOutFormatStr('Font "%s"... something wrong',[FontPathName],lp_OldPos,LM_Info);
                        end;
      end;
      result:=p;
-     programlog.logoutstr('end;{GDBFontManager.addFonf}',lp_DecPos,LM_Debug);
+     debugln('{D-}end;{GDBFontManager.addFonf}');
+     //programlog.logoutstr('end;{GDBFontManager.addFonf}',lp_DecPos,LM_Debug);
 end;
 {function GDBFontManager.FindFonf;
 var

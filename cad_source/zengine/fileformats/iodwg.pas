@@ -20,7 +20,9 @@ unit iodwg;
 {$INCLUDE def.inc}
 {$MODE OBJFPC}
 interface
-uses gdbentityfactory,zcadinterface,GDBLine,gdbobjectsconstdef,typinfo,zcadstrconsts,iodxf,fileutil,varman,geometry,shared,gdbasetypes,log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, sysutils, memman, UGDBDescriptor,
+uses LCLIntf,gdbentityfactory,zcadinterface,GDBLine,gdbobjectsconstdef,typinfo,
+     zcadstrconsts,iodxf,fileutil,varman,geometry,shared,gdbasetypes,//log,
+     GDBGenericSubEntry,SysInfo,gdbase, GDBManager, sysutils, memman,UGDBDescriptor,
      UGDBOpenArrayOfByte,GDBEntity,TypeDescriptors,ugdbsimpledrawing;
 procedure addfromdwg(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 implementation
@@ -1399,7 +1401,8 @@ var
   f: GDBOpenArrayOfByte;
   s: GDBString;
 begin
-  programlog.logoutstr('AddFromDWG',lp_IncPos);
+  DebugLn('{D+}AddFromDWG');
+  //programlog.logoutstr('AddFromDWG',lp_IncPos);
   shared.HistoryOutStr(format(rsLoadingFile,[name]));
   f.InitFromFile(name);
   if f.Count<>0 then
@@ -1422,7 +1425,8 @@ begin
      else
          shared.ShowError('IODWG.ADDFromDWG:'+format(rsUnableToOpenFile,[name]));
   f.done;
-  programlog.logoutstr('end; {AddFromDWG}',lp_DecPos);
+  DebugLn('{D-}end; {AddFromDWG}');
+  //programlog.logoutstr('end; {AddFromDWG}',lp_DecPos);
 end;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('iodwg.initialization');{$ENDIF}

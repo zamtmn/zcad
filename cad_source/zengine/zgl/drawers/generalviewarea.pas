@@ -20,7 +20,7 @@ unit generalviewarea;
 {$INCLUDE def.inc}
 interface
 uses
-     memman,log,zemathutils,gdbpalette,
+     LCLProc,memman,log,zemathutils,gdbpalette,
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
      UGDBLayerArray,ugdbdimstylearray,
      oglwindowdef,gdbdrawcontext,{varmandef,}zcadsysvars,GDBEntity,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
@@ -697,8 +697,9 @@ begin
   if (getviewcontrol.clientwidth=0)or(getviewcontrol.clientheight=0) then exit;
   LPTime:=now;
   needredraw:=param.firstdraw{ or true};
-  programlog.logoutstr('TOGLWnd.draw',0,LM_Trace);
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.draw',lp_IncPos);{$ENDIF}
+  debugln('{T}TOGLWnd.draw');
+  //programlog.logoutstr('TOGLWnd.draw',0,LM_Trace);
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.draw',lp_IncPos);{$ENDIF}
 
   //-----------------------------------MakeCurrent;{не забыть что обычный контекст не делает себя текущим сам!}
 
@@ -842,10 +843,10 @@ begin
                          sysvarRDLastUpdateTime:=tick*msec;
                     end;
   {$IFDEF PERFOMANCELOG}
-                       if needredraw then
-                                              log.programlog.LogOutStrFast('Draw time='+inttostr(sysvarRDLastRenderTime),0)
-                                          else
-                                              log.programlog.LogOutStrFast('ReDraw time='+inttostr(sysvarRDLastUpdateTime),0);
+                       //if needredraw then
+                       //                       log.programlog.LogOutStrFast('Draw time='+inttostr(sysvarRDLastRenderTime),0)
+                       //                   else
+                       //                       log.programlog.LogOutStrFast('ReDraw time='+inttostr(sysvarRDLastUpdateTime),0);
   {$ENDIF}
   if needredraw then
   //if assigned(SysVarRDImageDegradationEnabled)then
@@ -862,7 +863,7 @@ begin
                                                  SysVarRDImageDegradationCurrentDegradationFactor:=0;
   end;
   param.firstdraw := false;
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.draw---{end}',lp_DecPos);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.draw---{end}',lp_DecPos);{$ENDIF}
 end;
 procedure TGeneralViewArea.showsnap(var DC:TDrawContext);
 begin
@@ -1220,7 +1221,7 @@ var
   pucommand:pointer;
 //  fv1: GDBVertex;
 begin
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DISP_ZoomFactor',lp_incPos);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DISP_ZoomFactor',lp_incPos);{$ENDIF}
   //gdb.GetCurrentDWG.UndoStack.PushChangeCommand(@gdb.GetCurrentDWG.pcamera^.prop,sizeof(GDBCameraBaseProp));
   //with gdb.GetCurrentDWG.UndoStack.PushCreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
   pucommand:=PDWG^.StoreOldCamerapPos;
@@ -1256,7 +1257,7 @@ begin
         //ComitFromObj;
   end;
   doCameraChanged;
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DISP_ZoomFactor----{end}',lp_decPos);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DISP_ZoomFactor----{end}',lp_decPos);{$ENDIF}
 end;
 
 procedure TGeneralViewArea.SetCameraPosZoom(_pos:gdbvertex;_zoom:gdbdouble;finalcalk:gdbboolean);
@@ -1355,7 +1356,7 @@ var
 //  msg : TMsg;
 
 begin
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DoMouseWheel',lp_incPos);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DoMouseWheel',lp_incPos);{$ENDIF}
   smallwheel:=1+(sysvarDISPZoomFactor-1)/10;
   //mpoint := point(mousepos.x - clientorigin.X, mousepos.y - clientorigin.y);
   if {mousein(mpoint)}true then
@@ -1408,7 +1409,7 @@ begin
   inherited;
   handled:=true;
   WaMouseMove(self,[],param.md.mouse.x,param.md.mouse.y);
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DoMouseWheel----{end}',lp_decPos);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DoMouseWheel----{end}',lp_decPos);{$ENDIF}
 end;
 
 procedure TGeneralViewArea.WaMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);
@@ -1419,7 +1420,7 @@ var
   key: GDBByte;
   f:TzeUnitsFormat;
 begin
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.Pre_MouseMove',lp_IncPos);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.Pre_MouseMove',lp_IncPos);{$ENDIF}
   if assigned(mainmousemove)then
                                 mainmousemove;
   KillOHintTimer(self);
@@ -1665,7 +1666,7 @@ if PGDBObjEntity(param.SelDesc.OnMouseObject)<>nil then
   //inc(sysvar.debug.int1);
   //debugvar(Variables,1);
 
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.Pre_MouseMove----{end}',lp_decPos);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.Pre_MouseMove----{end}',lp_decPos);{$ENDIF}
 end;
 procedure TGeneralViewArea.asynczoomsel(Data: PtrInt);
 begin
@@ -2007,7 +2008,7 @@ var
   //inr:TINRect;
   DC:TDrawContext;
 begin
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobjectbytree',lp_IncPos);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobjectbytree',lp_IncPos);{$ENDIF}
   i := 0;
   PDWG.GetOnMouseObj.clear;
   param.SelDesc.OnMouseObject := nil;
@@ -2035,7 +2036,7 @@ begin
   param.SelDesc.OnMouseObject := nil;
   param.lastonmouseobject:=nil;}
 
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobjectbytree------{end}',lp_DecPos);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobjectbytree------{end}',lp_DecPos);{$ENDIF}
 end;
 
 function TGeneralViewArea.findonmobj(pva: PGDBObjEntityOpenArray; var i: GDBInteger;InSubEntry:GDBBoolean): GDBInteger;
@@ -2044,7 +2045,7 @@ var
   ir:itrec;
   _total,_visible,_isonmouse:integer;
 begin
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.findonmobj',lp_IncPos);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.findonmobj',lp_IncPos);{$ENDIF}
   if not param.scrollmode then
   begin
   _total:=0;
@@ -2069,10 +2070,10 @@ begin
        end;
   pp:=pva^.iterate(ir);
   until pp=nil;
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('Total:='+inttostr(_total)+'; Visible:='+inttostr(_visible)+'; IsOnMouse:='+inttostr(_isonmouse),0);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('Total:='+inttostr(_total)+'; Visible:='+inttostr(_visible)+'; IsOnMouse:='+inttostr(_isonmouse),0);{$ENDIF}
   end
-  else {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('wa.param.scrollmode=true. exit',0);{$ENDIF}
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.findonmobj-----{end}',lp_DecPos);{$ENDIF}
+  else ;//{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('wa.param.scrollmode=true. exit',0);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.findonmobj-----{end}',lp_DecPos);{$ENDIF}
 end;
 
 procedure TGeneralViewArea.getonmouseobject;
@@ -2082,7 +2083,7 @@ var
   ir:itrec;
   DC:TDrawContext;
 begin
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobject',lp_IncPos);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobject',lp_IncPos);{$ENDIF}
   i := 0;
   PDWG.GetOnMouseObj.clear;
   param.SelDesc.OnMouseObject := nil;
@@ -2105,7 +2106,7 @@ begin
   wa.param.SelDesc.OnMouseObject := nil;
   wa.param.lastonmouseobject:=nil;}
 
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobject------{end}',lp_DecPos);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobject------{end}',lp_DecPos);{$ENDIF}
 end;
 procedure TGeneralViewArea.getosnappoint({pva: PGDBObjEntityOpenArray; }radius: GDBFloat);
 var
@@ -2387,7 +2388,7 @@ var ccsLBN,ccsRTF:GDBVertex;
     td:GDBDouble;
     dc:TDrawContext;
 begin
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.CalcOptimalMatrix',lp_IncPos);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.CalcOptimalMatrix',lp_IncPos);{$ENDIF}
   {Если нет примитивов выходим}
   //pdwg:=gdb.GetCurrentDWG;
   //self.MakeCurrent;
@@ -2673,14 +2674,14 @@ begin
   end;
   SetOGLMatrix;
   end;
-    {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.CalcOptimalMatrix----{end}',lp_DecPos);{$ENDIF}
+    //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.CalcOptimalMatrix----{end}',lp_DecPos);{$ENDIF}
   //gdb.GetCurrentDWG.pcamera.getfrustum(@gdb.GetCurrentDWG.pcamera^.modelMatrixLCS,@gdb.GetCurrentDWG.pcamera^.projMatrixLCS,gdb.GetCurrentDWG.pcamera^.clipLCS,gdb.GetCurrentDWG.pcamera^.frustumLCS);
 end;
 procedure TGeneralViewArea.SetOGLMatrix;
 var
     pcam:PGDBObjCamera;
 begin
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SetOGLMatrix',0);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SetOGLMatrix',0);{$ENDIF}
   pcam:=pdwg.GetPcamera;
   pcam^.viewport[0]:=0;
   pcam^.viewport[1]:=0;

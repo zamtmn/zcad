@@ -21,7 +21,7 @@ unit zeentitiesmanager;
 
 
 interface
-uses gdbobjectsconstdef,gdbpalette,ugdbltypearray,zeentityfactory,zcadsysvars,UGDBLayerArray,sysutils,gdbase,gdbasetypes, {OGLtypes,}
+uses LCLProc,gdbobjectsconstdef,gdbpalette,ugdbltypearray,zeentityfactory,zcadsysvars,UGDBLayerArray,sysutils,gdbase,gdbasetypes, {OGLtypes,}
      //varmandef,
      UGDBVisibleOpenArray,GDBGenericSubEntry,gdbEntity,
      //GDBBlockInsert,
@@ -67,7 +67,8 @@ begin
                        else
                            begin
                                 pb:=nil;
-                                programlog.LogOutStr('ENTF_CreateBlockInsert: BlockInsert entity not registred',lp_OldPos,LM_Error);
+                                debugln('{E}ENTF_CreateBlockInsert: BlockInsert entity not registred');
+                                //programlog.LogOutStr('ENTF_CreateBlockInsert: BlockInsert entity not registred',lp_OldPos,LM_Error);
                            end;
   if pb=nil then exit;
   result:=pb;
@@ -91,7 +92,8 @@ begin
                                            else
                                                begin
                                                     result:=nil;
-                                                    programlog.LogOutStr('ENTF_CreateSolid: Solid entity not registred',lp_OldPos,LM_Error);
+                                                    debugln('{E}ENTF_CreateSolid: Solid entity not registred');
+                                                    //programlog.LogOutStr('ENTF_CreateSolid: Solid entity not registred',lp_OldPos,LM_Error);
                                                end;
 end;
 function ENTF_CreateLine(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
@@ -105,7 +107,8 @@ begin
                                            else
                                                begin
                                                     result:=nil;
-                                                    programlog.LogOutStr('ENTF_CreateLine: Line entity not registred',lp_OldPos,LM_Error);
+                                                    debugln('{E}ENTF_CreateLine: Line entity not registred');
+                                                    //programlog.LogOutStr('ENTF_CreateLine: Line entity not registred',lp_OldPos,LM_Error);
                                                end;
 end;
 function ENTF_CreateCircle(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
@@ -119,7 +122,8 @@ begin
                                            else
                                                begin
                                                     result:=nil;
-                                                    programlog.LogOutStr('ENTF_CreateCircle: Circle entity not registred',lp_OldPos,LM_Error);
+                                                    debugln('{E}ENTF_CreateCircle: Circle entity not registred');
+                                                    //programlog.LogOutStr('ENTF_CreateCircle: Circle entity not registred',lp_OldPos,LM_Error);
                                                end;
 end;
 begin

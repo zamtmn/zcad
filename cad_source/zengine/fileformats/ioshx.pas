@@ -20,7 +20,7 @@ unit ioshx;
 {$INCLUDE def.inc}
 interface
 uses uzgprimitivescreator,uzglvectorobject,UGDBFontManager,ugdbshxfont,geometry,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
-     ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,log,sysutils,
+     ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,{log,}sysutils,
      UGDBOpenArrayOfByte,gdbasetypes,SysInfo,gdbase,memman,uzgprimitives;
 const
   fontdirect:array[0..$F,0..1] of GDBDouble=
@@ -169,7 +169,10 @@ begin
             xmax:=NegInfinity;
             while pshxdata^<>0 do
               begin
-                programlog.LogOutFormatStr('shx command %x',[integer(pshxdata^)],lp_OldPos,LM_Trace);
+                {$IFDEF TOTALYLOG}
+                debugln('{T}SHX command %x',[integer(pshxdata^)]);
+                {$ENDIF}
+                //programlog.LogOutFormatStr('shx command %x',[integer(pshxdata^)],lp_OldPos,LM_Trace);
                 case pshxdata^ of
                   001:
                     begin
@@ -191,7 +194,10 @@ begin
                       if onlyver=0 then
                         begin
                           baselen:=baselen/pshxdata^;
-                          programlog.LogOutFormatStr('%d',[integer(pshxdata^)],lp_OldPos,LM_Trace);
+                          {$IFDEF TOTALYLOG}
+                          debugln('{T}%d',[integer(pshxdata^)]);
+                          {$ENDIF}
+                          //programlog.LogOutFormatStr('%d',[integer(pshxdata^)],lp_OldPos,LM_Trace);
                         end;
                     end;
                   004:
@@ -201,7 +207,10 @@ begin
                         begin
                           baselen:=baselen*pshxdata^;
                         end;
-                        programlog.LogOutFormatStr('%d',[integer(pshxdata^)],lp_OldPos,LM_Trace);
+                        {$IFDEF TOTALYLOG}
+                        debugln('{T}%d',[integer(pshxdata^)]);
+                        {$ENDIF}
+                        //programlog.LogOutFormatStr('%d',[integer(pshxdata^)],lp_OldPos,LM_Trace);
                     end;
                   005:
                     begin
@@ -234,7 +243,10 @@ begin
                                      begin
                                           subsymbol:=pshxdata^;
                                      end;
-                      programlog.LogOutFormatStr('(%d)',[integer(subsymbol)],lp_OldPos,LM_Trace);
+                      {$IFDEF TOTALYLOG}
+                      debugln('{T}(%d)',[integer(subsymbol)]);
+                      {$ENDIF}
+                      //programlog.LogOutFormatStr('(%d)',[integer(subsymbol)],lp_OldPos,LM_Trace);
                       psubsyminfo:=pf^.GetOrCreateSymbolInfo(subsymbol);
 
                       if psubsyminfo.LLPrimitiveStartIndex<>-1 then
@@ -253,7 +265,10 @@ begin
                         sizeshx:=sizeshx+psubsyminfo.LLPrimitiveCount;
                       end
                          else
-                           programlog.LogOutFormatStr('IOSHX.CreateSymbol(%d), cannot find subform %d',[integer(symbol),integer(subsymbol)],lp_OldPos,LM_Error);
+                           begin
+                             debugln('{E}IOSHX.CreateSymbol(%d), cannot find subform %d',[integer(symbol),integer(subsymbol)]);
+                             //programlog.LogOutFormatStr('IOSHX.CreateSymbol(%d), cannot find subform %d',[integer(symbol),integer(subsymbol)],lp_OldPos,LM_Error);
+                           end;
 
                       (*
                       psubsymbol:=PSHXFont(pf^.font).SHXdata.getelement(psubsyminfo.addr);
@@ -355,7 +370,10 @@ begin
                       dx:=pShortint(pshxdata)^;
                       incpshxdata;
                       dy:=pShortint(pshxdata)^;
-                      programlog.LogOutFormatStr('(%d,%d)',[integer(dx),integer(dy)],lp_OldPos,LM_Trace);
+                      {$IFDEF TOTALYLOG}
+                      debugln('{T}(%d,%d)',[integer(dx),integer(dy)]);
+                      {$ENDIF}
+                      //programlog.LogOutFormatStr('(%d,%d)',[integer(dx),integer(dy)],lp_OldPos,LM_Trace);
                       if onlyver=0 then
                         begin
                           x1:=x+dx*baselen;
@@ -417,7 +435,10 @@ begin
                             end;
                       while (dx<>0)or(dy<>0) do
                         begin
-                          programlog.LogOutFormatStr('(%d,%d)',[integer(dx),integer(dy)],lp_OldPos,LM_Trace);
+                          {$IFDEF TOTALYLOG}
+                          debugln('{T}(%d,%d)',[integer(dx),integer(dy)]);
+                          {$ENDIF}
+                          //programlog.LogOutFormatStr('(%d,%d)',[integer(dx),integer(dy)],lp_OldPos,LM_Trace);
                           if draw then
                             begin
                               //----//PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
@@ -698,7 +719,8 @@ begin
   line:=uppercase(line);
   if (line='AUTOCAD-86 SHAPES 1.0')or(line='AUTOCAD-86 SHAPES 1.1') then
   begin
-    programlog.LogOutStr('AUTOCAD-86 SHAPES 1.0',lp_OldPos,LM_Debug);
+    debugln('{D}AUTOCAD-86 SHAPES 1.0');
+    //programlog.LogOutStr('AUTOCAD-86 SHAPES 1.0',lp_OldPos,LM_Debug);
   initfont(pf,extractfilename(name));
   pf.ItSHX;
   pf^.fontfile:=name;
@@ -740,10 +762,12 @@ begin
                          end
                      else
                          begin
-                              programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
+                              debugln('{T}symbol %d',[integer(symnum)]);
+                              //programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
                               dataread:=createsymbol(pf,symnum,memorybuf.GetCurrentReadAddres,false,line);
                               memorybuf.jump({datalen}dataread);
-                              programlog.LogOutStr('end',lp_DecPos,LM_Trace);
+                              debugln('{T-}end');
+                              //programlog.LogOutStr('end',lp_DecPos,LM_Trace);
                          end;
 
                                               //setlength(sub,datalen);
@@ -762,7 +786,8 @@ begin
   end
 else if line='AUTOCAD-86 UNIFONT 1.0' then
   begin
-       programlog.LogOutStr('AUTOCAD-86 UNIFONT 1.0',lp_OldPos,LM_Debug);
+       debugln('{D}AUTOCAD-86 UNIFONT 1.0');
+       //programlog.LogOutStr('AUTOCAD-86 UNIFONT 1.0',lp_OldPos,LM_Debug);
        initfont(pf,extractfilename(name));
        pf.ItSHX;
        pf^.fontfile:=name;
@@ -814,9 +839,11 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
          if test=49 then
                          test:=test;
          //if (*pf^.GetOrCreateSymbolInfo(test)^.{ .symbo linfo[test].}addr=0*)symnum<2560000 then
-         programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
+         debugln('{T+}symbol %d',[integer(symnum)]);
+         //programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
          {if symnum<256 then }dataread:=createsymbol(pf,test{symnum},memorybuf.GetCurrentReadAddres,true,line);
-         programlog.LogOutStr('end',lp_DecPos,LM_Trace);
+         debugln('{T-}end');
+         //programlog.LogOutStr('end',lp_DecPos,LM_Trace);
          //                                                                 else
          //                                                                     pf:=pf;
          //end;

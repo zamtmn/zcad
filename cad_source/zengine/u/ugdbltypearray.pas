@@ -19,7 +19,7 @@
 unit ugdbltypearray;
 {$INCLUDE def.inc}
 interface
-uses FileUtil,Classes,UGDBOpenArrayOfData,zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
+uses LCLProc,FileUtil,Classes,UGDBOpenArrayOfData,zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
      UGDBTextStyleArray,UGDBOpenArrayOfObjects,
      {varmandef,}{gdbobjectsconstdef,}UGDBNamedObjectsArray,StrProc{,shared};
 const
@@ -109,8 +109,8 @@ GDBLtypeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
               end;
 {EXPORT-}
 implementation
-uses
-    log;
+//uses
+//    log;
 type
     TSeek=(TSeekInterface,TSeekImplementation);
 procedure GDBLtypeArray.format;
@@ -538,7 +538,9 @@ begin
                                  SHXDashProp.param.Angle:=stroke;
                                  SHXDashProp.param.AD:=TACUpRight;
                             end
-  else programlog.LogOutStr('CreateLineTypeFrom: unknow value "'+paramname+'"',lp_OldPos,LM_Error);
+  else
+      debugln('{EH}CreateLineTypeFrom: unknow value "'+paramname+'"');
+      //programlog.LogOutStr('CreateLineTypeFrom: unknow value "'+paramname+'"',lp_OldPos,LM_Error);
        //shared.ShowError('CreateLineTypeFrom: unknow value "'+paramname+'"');
        subelement:=GetPredStr(element,',');
   end;

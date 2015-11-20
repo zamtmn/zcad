@@ -373,9 +373,35 @@ begin
          end;
 end;
 procedure tlog.ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
+var
+   dbgmode:TLogMode;
+   _indent:GDBInteger;
+   prefixlength:integer;
 begin
-     if IsNeedToLog(LM_Info) then
-      LogOutFormatStr('LCL: %s',[S],lp_OldPos,LM_Info);
+     dbgmode:=LM_Info;
+     _indent:=lp_OldPos;
+     if s[1]='{' then
+     if length(s)>1 then
+     begin
+        prefixlength:=2;
+        while (s[prefixlength]<>'}')and(prefixlength<=length(s)) do
+        begin
+             case s[prefixlength] of
+                'T':dbgmode:=LM_Trace;
+                'D':dbgmode:=LM_Debug;
+                'I':dbgmode:=LM_Info;
+                'W':dbgmode:=LM_Warning;
+                'F':dbgmode:=LM_Fatal;
+                'N':dbgmode:=LM_Necessarily;
+                '+':_indent:=lp_IncPos;
+                '-':_indent:=lp_DecPos;
+             end;
+          inc(prefixlength);
+        end;
+        s:=copy(s,prefixlength+1,length(s)-prefixlength);
+     end;
+     if IsNeedToLog(dbgmode) then
+      LogOutStr(S,_indent,dbgmode);
 end;
 
 destructor tlog.done;

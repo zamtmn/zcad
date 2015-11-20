@@ -211,7 +211,7 @@ begin
 
 end;
 begin
-  DebugLn('FromDirIterator start');
+  DebugLn('{D+}FromDirIterator start');
   //programlog.LogOutStr('FromDirIterator start',lp_IncPos,LM_Debug);
   if firstloadfilename<>'' then
   if fileexists(path+firstloadfilename) then
@@ -235,7 +235,7 @@ begin
     until FindNext(sr) <> 0;
     FindClose(sr);
   end;
-  DebugLn('FromDirIterator....{end}');
+  DebugLn('{D-}end; {FromDirIterator}');
   //programlog.LogOutStr('FromDirIterator....{end}',lp_DecPos,LM_Debug);
 end;
 initialization

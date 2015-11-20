@@ -24,7 +24,7 @@ uses
  StdCtrls,ExtCtrls,Controls,Classes,menus,Forms,fileutil,graphics,
  gdbase, memman,UGDBDescriptor,math,commandline,varman,languade,
  UGDBTracePropArray,varmandef,
- geometry,shared,UGDBStringArray,zcadinterface,umytreenode;
+ geometry,uzcshared,UGDBStringArray,zcadinterface,umytreenode;
 
 const
      cheight=48;
@@ -466,7 +466,7 @@ begin
            end
            end
               else
-                  shared.ShowError('Unable to parse line "'+subexpr+'"');
+                  uzcshared.ShowError('Unable to parse line "'+subexpr+'"');
       end;
     end;
     CmdEdit.text:='';

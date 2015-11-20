@@ -22,7 +22,7 @@ unit commanddefinternal;
 
 interface
 uses gdbdrawcontext,generalviewarea,gdbobjectsconstdef,zcadsysvars,geometry,varmandef,gdbasetypes,gdbase,commandlinedef,commandline,oglwindowdef,UGDBDescriptor
-  {,UGDBLayerArray},memman,shared;
+  {,UGDBLayerArray},memman,uzcshared;
 type
   comproc=procedure(_self:pointer);
   commousefunc=function(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger):GDBInteger;

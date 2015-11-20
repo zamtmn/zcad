@@ -23,7 +23,7 @@ uses
  zcadstrconsts,gettext,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
  strproc,umytreenode,{Classes, SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}
  gdbase,{UGDBDescriptor,math,commandline,varman,}languade{,UGDBTracePropArray},
-  {zforms,ZEditsWithProcedure,zbasicvisible,varmandef,shared,ZGUIsCT,ZStaticsText,}uzcsysinfo,sysutils{,iodxf};
+  {zforms,ZEditsWithProcedure,zbasicvisible,varmandef,uzcshared,ZGUIsCT,ZStaticsText,}uzcsysinfo,sysutils{,iodxf};
 type
   TAboutWnd = class(TFreedForm)
     Memo:TMemo;
@@ -33,7 +33,7 @@ type
 var
   AboutWindow:TAboutWnd;
 implementation
-uses zeentityfactory,shared,uzclog,commandline;
+uses zeentityfactory,uzcshared,uzclog,commandline;
 procedure TAboutWnd.AfterConstruction;
 begin
   inherited;

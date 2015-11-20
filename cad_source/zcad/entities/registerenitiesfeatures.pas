@@ -20,7 +20,7 @@ unit registerenitiesfeatures;
 
 interface
 uses iodxf,paths,zcadsysvars,intftranslations,sysutils,
-     enitiesextendervariables,zcadstrconsts,shared,gdbobjectsconstdef,devices,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,dxflow,
+     enitiesextendervariables,zcadstrconsts,uzcshared,gdbobjectsconstdef,devices,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,dxflow,
      gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,gdbobjectextender,
      GDBSubordinated,GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,
      URecordDescriptor,UBaseTypeDescriptor,UGDBDrawingdef,memman;

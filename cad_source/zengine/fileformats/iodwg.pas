@@ -21,7 +21,7 @@ unit iodwg;
 {$MODE OBJFPC}
 interface
 uses LCLIntf,gdbentityfactory,zcadinterface,GDBLine,gdbobjectsconstdef,typinfo,
-     zcadstrconsts,iodxf,fileutil,varman,geometry,shared,gdbasetypes,//log,
+     zcadstrconsts,iodxf,fileutil,varman,geometry,uzcshared,gdbasetypes,//log,
      GDBGenericSubEntry,SysInfo,gdbase, GDBManager, sysutils, memman,UGDBDescriptor,
      UGDBOpenArrayOfByte,GDBEntity,TypeDescriptors,ugdbsimpledrawing;
 procedure addfromdwg(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
@@ -657,7 +657,7 @@ begin
      _code:=(_code and $f0)shr 4;
      if _size>16 then
                    begin
-                        shared.ShowError('Handle is longer than 4 bytes');
+                        uzcshared.ShowError('Handle is longer than 4 bytes');
                    end
                else
                    begin
@@ -935,7 +935,7 @@ begin
                         opcode1:=bc.BitRead_rc;
        if opcode1 >= $40 then
                begin
-                 //shared.HistoryOutStr('1 '+format('writeln %d bytes',[ptruint(dst)-ptruint(result)]));
+                 //uzcshared.HistoryOutStr('1 '+format('writeln %d bytes',[ptruint(dst)-ptruint(result)]));
                  comp_bytes:=((opcode1 and $F0) shr 4) - 1;
                  opcode2 := bc.BitRead_rc;
                  comp_offset := (opcode2 shl 2) or ((opcode1 and $0C) shr 2);
@@ -948,11 +948,11 @@ begin
                    lit_length := read_literal_length(bc, opcode1);
                  if lit_length=0 then
                                      lit_length:=lit_length;
-                 //shared.HistoryOutStr('  '+format('comp_bytes=%d comp_offset=%d lit_length=%d',[comp_bytes,comp_offset,lit_length]));
+                 //uzcshared.HistoryOutStr('  '+format('comp_bytes=%d comp_offset=%d lit_length=%d',[comp_bytes,comp_offset,lit_length]));
                end
        else if (opcode1 >= $21) and (opcode1 <= $3F) then
          begin
-           //shared.HistoryOutStr('2');
+           //uzcshared.HistoryOutStr('2');
            comp_bytes  := opcode1 - $1E;
            comp_offset := read_two_byte_offset(bc, lit_length);
 
@@ -963,7 +963,7 @@ begin
          end
        else if (opcode1 = $20) then
          begin
-           //shared.HistoryOutStr('3');
+           //uzcshared.HistoryOutStr('3');
            comp_bytes  := read_long_compression_offset(bc) + $21;
            comp_offset := read_two_byte_offset(bc, lit_length);
 
@@ -974,7 +974,7 @@ begin
          end
        else if (opcode1 >= $12) and (opcode1 <= $1F) then
          begin
-           //shared.HistoryOutStr('4');
+           //uzcshared.HistoryOutStr('4');
            comp_bytes  := (opcode1 and $0F) + 2;
            comp_offset := read_two_byte_offset(bc, lit_length) + $3FFF;
 
@@ -985,7 +985,7 @@ begin
          end
        else if (opcode1 = $10) then
          begin
-           //shared.HistoryOutStr('5');
+           //uzcshared.HistoryOutStr('5');
            comp_bytes  := read_long_compression_offset(bc) + 9;
            comp_offset := read_two_byte_offset(bc, lit_length) + $3FFF;
 
@@ -1056,7 +1056,7 @@ begin
            randseed:=randseed * $343fd;
            randseed:=randseed  + $269ec3;
            ptr^:=ptr^ xor (byte(RorDword(randseed,16)));
-           shared.HistoryOutStr(inttohex(byte(RorDword(randseed,16)),4));
+           uzcshared.HistoryOutStr(inttohex(byte(RorDword(randseed,16)),4));
            inc(ptr);
            dec(size);
      until size=0;
@@ -1142,7 +1142,7 @@ begin
      SectionMap:=syssec;
      SectionInfo:=syssec;
      inc(pointer(SectionInfo),SectionMap^.CompSizeData+sizeof(dwg2004systemsection));
-     shared.HistoryOutStr('MAP');
+     uzcshared.HistoryOutStr('MAP');
      USectionMap:=nil;
      decompresssection(pointer(PTRUINT(SectionMap)+sizeof(dwg2004systemsection)),SectionMap^.CompSizeData,SectionMap^.DecompSizeData,decompsize,USectionMap);
      setlength(sarray,fdh.SectionPageArraySize);
@@ -1155,12 +1155,12 @@ begin
                      sarray[i].Offset:=$100
                  else
                      sarray[i].Offset:=sarray[i-1].Offset+sarray[i-1].Size;
-          shared.HistoryOutStr(format('Section %d, size %d, offset %d',[sarray[i].Number,sarray[i].Size,sarray[i].Offset]));
+          uzcshared.HistoryOutStr(format('Section %d, size %d, offset %d',[sarray[i].Number,sarray[i].Size,sarray[i].Offset]));
           inc(sm);
      end;
      SectionInfo:=f.PArray;
      inc(pointer(SectionInfo),FindSectionByID(sarray,fdh.SectionInfoID)^.Offset);
-     shared.HistoryOutStr('INFO');
+     uzcshared.HistoryOutStr('INFO');
      USectionInfo:=nil;
      decompresssection(pointer(PTRUINT(SectionInfo)+sizeof(dwg2004systemsection)),SectionInfo^.CompSizeData,SectionInfo^.DecompSizeData,decompsize,USectionInfo);
 
@@ -1182,8 +1182,8 @@ begin
                                     SectionType:DWGLong;
                                     Encrypted:DWGLong;
                                     SectionName:packed array[1..64]of ansichar;}
-          shared.HistoryOutStr('Section name: '+ pchar(@sd^.SectionName));
-          shared.HistoryOutStr(format(' SizeOfSection: %d, NumberOfSectionsThisType: %d, MaxDecompressedSize: %d, Unknown2: %d, Compressed: %d, SectionType: %d, Encrypted: %d',
+          uzcshared.HistoryOutStr('Section name: '+ pchar(@sd^.SectionName));
+          uzcshared.HistoryOutStr(format(' SizeOfSection: %d, NumberOfSectionsThisType: %d, MaxDecompressedSize: %d, Unknown2: %d, Compressed: %d, SectionType: %d, Encrypted: %d',
                                     [sd^.SizeOfSection,  sd^.NumberOfSectionsThisType,  sd^.MaxDecompressedSize,  sd^.Unknown2,  sd^.Compressed,  sd^.SectionType,  sd^.Encrypted]));
           siarray[i].SizeOfSection:=sd^.SizeOfSection;
           siarray[i].NumberOfSectionsThisType:=sd^.NumberOfSectionsThisType;
@@ -1205,14 +1205,14 @@ begin
                siarray[i].pages[a].section:=FindSectionByID(sarray,pi^.PageNumber);
                if siarray[i].pages[a].section=nil then
                                                       pi:=pi;
-               shared.HistoryOutStr(format(' Page: %d, DataSize: %d, StartOffset: %d,',
+               uzcshared.HistoryOutStr(format(' Page: %d, DataSize: %d, StartOffset: %d,',
                                            [pi^.PageNumber, pi^.DataSize,pi^.StartOffset]));
                PtrUInt(pi):=PtrUInt(pi)+{sizeof(dwg2004pageinfo)}16;
           end;
           sd:=pointer(pi);
           //inc(longword(sd),sizeof({sd^}dwg2004sectiondesc));
      end;
-     shared.HistoryOutStr('Prepare AcDb:AcDbObjects section');
+     uzcshared.HistoryOutStr('Prepare AcDb:AcDbObjects section');
      objinfo:=FindInfoByType(siarray,SECTION_DBOBJECTS);
      GDBGetMem({$IFDEF DEBUGBUILD}'{A87A6634-F384-4414-8C8E-AD03866EE4E8}',{$ENDIF}objsection,objinfo^.MaxDecompressedSize*objinfo^.NumberOfSectionsThisType);
       bc.setto(f.PArray,f.size);
@@ -1228,9 +1228,9 @@ begin
            es.LongData[j]:=es.LongData[j] xor sec_mask;
          objinfo^.pages[i].decompdata:=objsection;
          objsection:=decompresssection(pointer(PtrUInt(bc.chain)+bc.byte),es.field.data_size,  $7400,decompsize,objsection);
-         shared.HistoryOutStr(format(' Page: %d, tag: %d, section_type: %d, data_size: %d, section_size: %d, start_offset: %d',
+         uzcshared.HistoryOutStr(format(' Page: %d, tag: %d, section_type: %d, data_size: %d, section_size: %d, start_offset: %d',
                                              [i, es.field.tag,es.field.section_type,es.field.data_size,es.field.section_size,es.field.start_offset]));
-         shared.HistoryOutStr(format(' Total decompressed size: %d',
+         uzcshared.HistoryOutStr(format(' Total decompressed size: %d',
                                              [decompsize]));
        end;
                FileHandle:=FileCreate('log/objsecmy2');
@@ -1238,16 +1238,16 @@ begin
      fileclose(FileHandle);
 
          objbitreader.init(objinfo^.pages[0].decompdata,objinfo^.MaxDecompressedSize*objinfo^.NumberOfSectionsThisType);
-         shared.HistoryOutStr(format(' 0x0dca: %x',[objbitreader.BitRead_rl]));
+         uzcshared.HistoryOutStr(format(' 0x0dca: %x',[objbitreader.BitRead_rl]));
 
          while objbitreader.byte<objbitreader.size do
          begin
          //18.1  Common non-entity object format
          a:=objbitreader.BitRead_ms;//Size in bytes of object, not including the CRC
-         //shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         //uzcshared.HistoryOutStr(format(' Size in bytes: %d',[a]));
          a:=objbitreader.byte+a;
          ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);//Object type
-         //shared.HistoryOutStr(format(' Object type: %x(%d), Name: %s',[ot,ot,DWGObjectName(ot)]));
+         //uzcshared.HistoryOutStr(format(' Object type: %x(%d), Name: %s',[ot,ot,DWGObjectName(ot)]));
          if ot=DWG_TYPE_LINE then
          begin
          objbitreader.BitRead_rl;//Size of object data in bits (number of bits before the handles), or the “endbit” of the pre-handles section.
@@ -1392,7 +1392,7 @@ begin
 
          objbitreader.byte:=a;
          objbitreader.bit:=0;
-         {shared.HistoryOutStr(format(' CRC: %x',[}objbitreader.BitRead_rs{]))};
+         {uzcshared.HistoryOutStr(format(' CRC: %x',[}objbitreader.BitRead_rs{]))};
          end;
 end;
 
@@ -1403,7 +1403,7 @@ var
 begin
   DebugLn('{D+}AddFromDWG');
   //programlog.logoutstr('AddFromDWG',lp_IncPos);
-  shared.HistoryOutStr(format(rsLoadingFile,[name]));
+  uzcshared.HistoryOutStr(format(rsLoadingFile,[name]));
   f.InitFromFile(name);
   if f.Count<>0 then
   begin
@@ -1412,7 +1412,7 @@ begin
     s := f.ReadString(#0,'');
     if s = 'AC1018' then
         begin
-          shared.HistoryOutStr(format(rsFileFormat,['DWG2004']));
+          uzcshared.HistoryOutStr(format(rsFileFormat,['DWG2004']));
           addfromdwg2004(f,'EOF',owner,loadmode);
         end
         else
@@ -1423,7 +1423,7 @@ begin
                                         EndLongProcessProc;
   end
      else
-         shared.ShowError('IODWG.ADDFromDWG:'+format(rsUnableToOpenFile,[name]));
+         uzcshared.ShowError('IODWG.ADDFromDWG:'+format(rsUnableToOpenFile,[name]));
   f.done;
   DebugLn('{D-}end; {AddFromDWG}');
   //programlog.logoutstr('end; {AddFromDWG}',lp_DecPos);

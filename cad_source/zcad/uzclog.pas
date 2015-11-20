@@ -87,7 +87,7 @@ procedure LogOut(s:GDBString);
 var programlog:tlog;
    //SplashWnd
    SplashTextOut:TSplashTextOutProc;
-   HistoryTextOut:THistoryTextOutProc;
+   HistoryTextOut,MessageBoxTextOut:THistoryTextOutProc;
 implementation
 uses
     UGDBOpenArrayOfByte,UGDBOpenArrayOfData,strutils,sysutils{$IFNDEF DELPHI},fileutil{$ENDIF};
@@ -379,11 +379,12 @@ var
    dbgmode:TLogMode;
    _indent:GDBInteger;
    prefixlength:integer;
-   needtohistory:boolean;
+   NeedToHistory,NeedMessageBox:boolean;
 begin
      dbgmode:=LM_Info;
      _indent:=lp_OldPos;
-     needtohistory:=false;
+     NeedToHistory:=false;
+     NeedMessageBox:=false;
      if s[1]='{' then
      if length(s)>1 then
      begin
@@ -399,15 +400,19 @@ begin
                 'N':dbgmode:=LM_Necessarily;
                 '+':_indent:=lp_IncPos;
                 '-':_indent:=lp_DecPos;
-                'H':needtohistory:=true;
+                'H':NeedToHistory:=true;
+                'M':NeedMessageBox:=true;
              end;
           inc(prefixlength);
         end;
         s:=copy(s,prefixlength+1,length(s)-prefixlength);
      end;
-     if needtohistory then
+     if NeedToHistory then
        if assigned(HistoryTextOut) then
          HistoryTextOut(s);
+     if NeedMessageBox then
+       if assigned(MessageBoxTextOut) then
+         MessageBoxTextOut(s);
      if IsNeedToLog(dbgmode) then
       LogOutStr(S,_indent,dbgmode);
 end;

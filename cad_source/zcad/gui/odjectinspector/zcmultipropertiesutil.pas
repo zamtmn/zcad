@@ -21,7 +21,7 @@ unit zcmultipropertiesutil;
 
 interface
 uses
-  zcobjectinspectormultiobjects,gdbpalette,memman,shared,sysutils,zeentityfactory,
+  zcobjectinspectormultiobjects,gdbpalette,memman,uzcshared,sysutils,zeentityfactory,
   gdbase,
   UGDBDescriptor,
   varmandef,

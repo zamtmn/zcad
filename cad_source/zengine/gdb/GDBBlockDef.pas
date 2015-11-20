@@ -49,7 +49,7 @@ GDBObjBlockdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
 var
    GDBObjBlockDefDXFFeatures:TDXFEntIODataManager;
 implementation
-//uses {iodxf,}{UUnitManager,}{shared,}log;
+//uses {iodxf,}{UUnitManager,}{uzcshared,}log;
 function GDBObjBlockdef.GetType:GDBPlatformint;
 begin
      result:=1;

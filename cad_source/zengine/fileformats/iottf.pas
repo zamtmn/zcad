@@ -29,7 +29,7 @@ type ptsyminfo=^tsyminfo;
 function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
 implementation
 uses
-   shared;
+   uzcshared;
 function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
 var
    i:integer;

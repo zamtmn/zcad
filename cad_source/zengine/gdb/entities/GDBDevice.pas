@@ -21,7 +21,7 @@ unit GDBDevice;
 
 interface
 uses UGDBLayerArray,gdbpalette,gdbobjectextender,uabstractunit,{Varman,}zeentityfactory,gdbdrawcontext,UGDBDrawingdef,GDBCamera,zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
-uunitmanager{,shared},
+uunitmanager{,uzcshared},
 memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,{UGDBOpenArrayOfPV,}gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray{,UGDBDescriptor}{,UGDBLayerArray,oglwindowdef};
 
 type

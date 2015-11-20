@@ -27,7 +27,7 @@ uses
   gdbobjectsconstdef,
   gdbEntity,GDBLine,
   {sysinfo,}GDBNet,
-  shared,GDBSubordinated,GDBCable,varman,WindowsSpecific,uunitmanager,
+  uzcshared,GDBSubordinated,GDBCable,varman,WindowsSpecific,uunitmanager,
   UGDBOpenArrayOfPObjects,UGDBBillOfMaterial,uzccablemanager,GDBDevice,GDBTable,
   paths,UGDBStringArray,math,Masks,uzclog,GDBCommandsBase,strproc;
 type
@@ -2770,20 +2770,20 @@ begin
   PGDBObjEntity(startdev):=GDB.FindEntityByVar(GDBDeviceID,'NMO_Name',startdevname);
   PGDBObjEntity(enddev):=GDB.FindEntityByVar(GDBDeviceID,'NMO_Name',enddevname);
   if startdev=nil then
-                      shared.HistoryOutStr('В строке '+inttostr(row)+' не найдено стартовое устройство '+startdevname)
+                      uzcshared.HistoryOutStr('В строке '+inttostr(row)+' не найдено стартовое устройство '+startdevname)
                   else
                       begin
                       startdev:=findconnector(startdev);
                       if startdev=nil then
-                                          shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+startdevname);
+                                          uzcshared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+startdevname);
                       end;
   if enddev=nil then
-                      shared.HistoryOutStr('В строке '+inttostr(row)+' не найдено конечное устройство '+enddevname)
+                      uzcshared.HistoryOutStr('В строке '+inttostr(row)+' не найдено конечное устройство '+enddevname)
                   else
                       begin
                       enddev:=findconnector(enddev);
                       if enddev=nil then
-                                          shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+enddevname);
+                                          uzcshared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+enddevname);
 
                       end;
 end;
@@ -2867,20 +2867,20 @@ begin
                  {PGDBObjEntity(startdev):=GDB.FindEntityByVar(GDBDeviceID,'NMO_Name',FDoc.Cells[1,row]);
                  PGDBObjEntity(enddev):=GDB.FindEntityByVar(GDBDeviceID,'NMO_Name',FDoc.Cells[2,row]);
                  if startdev=nil then
-                                     shared.HistoryOutStr('В строке '+inttostr(row)+' не найдено стартовое устройство '+FDoc.Cells[1,row])
+                                     uzcshared.HistoryOutStr('В строке '+inttostr(row)+' не найдено стартовое устройство '+FDoc.Cells[1,row])
                                  else
                                      begin
                                      startdev:=findconnector(startdev);
                                      if startdev=nil then
-                                                         shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+FDoc.Cells[1,row]);
+                                                         uzcshared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+FDoc.Cells[1,row]);
                                      end;
                  if enddev=nil then
-                                     shared.HistoryOutStr('В строке '+inttostr(row)+' не найдено конечное устройство '+FDoc.Cells[2,row])
+                                     uzcshared.HistoryOutStr('В строке '+inttostr(row)+' не найдено конечное устройство '+FDoc.Cells[2,row])
                                  else
                                      begin
                                      enddev:=findconnector(enddev);
                                      if enddev=nil then
-                                                         shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+FDoc.Cells[2,row]);
+                                                         uzcshared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+FDoc.Cells[2,row]);
 
                                      end;}
                  if (startdev<>nil)and(enddev<>nil) then
@@ -2889,15 +2889,15 @@ begin
                   PGDBaseObject(net):=netarray.GetObject(0);
                  //PGDBObjEntity(net):=GDB.FindEntityByVar(GDBNetID,'NMO_Name',FDoc.Cells[3,row]);
                  if net=nil then
-                                     shared.HistoryOutStr('В строке '+inttostr(row)+' не найдена трасса '+FDoc.Cells[3,row]);
+                                     uzcshared.HistoryOutStr('В строке '+inttostr(row)+' не найдена трасса '+FDoc.Cells[3,row]);
                  if (net<>nil) then
                  begin
                  //startdev:=findconnector(startdev);
                  //enddev:=findconnector(enddev);
                  //if startdev=nil then
-                 //                    shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+FDoc.Cells[1,row]);
+                 //                    uzcshared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+FDoc.Cells[1,row]);
                  //if enddev=nil then
-                 //                    shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+FDoc.Cells[2,row]);
+                 //                    uzcshared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+FDoc.Cells[2,row]);
                  if (startdev<>nil)and(enddev<>nil) then
                  begin
                  cable:=CreateCable(FDoc.Cells[0,row],FDoc.Cells[4,row]);
@@ -3100,23 +3100,23 @@ begin
                           //gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Clear;
                           end
                           else
-                              shared.ShowError('В строке '+inttostr(row)+' обнаружено несколько не связанных трасс "'+FDoc.Cells[3,row]);
+                              uzcshared.ShowError('В строке '+inttostr(row)+' обнаружено несколько не связанных трасс "'+FDoc.Cells[3,row]);
 
 
 
-                          //shared.ShowError('В строке '+inttostr(row)+' обнаружена множественная трасса "'+FDoc.Cells[3,row]+'". Пока недопилено((');
+                          //uzcshared.ShowError('В строке '+inttostr(row)+' обнаружена множественная трасса "'+FDoc.Cells[3,row]+'". Пока недопилено((');
                           end
                           else
-                              shared.ShowError('В строке '+inttostr(row)+' обнаружена трасса "'+FDoc.Cells[3,row]+'" отсутствующая в чертеже((');
+                              uzcshared.ShowError('В строке '+inttostr(row)+' обнаружена трасса "'+FDoc.Cells[3,row]+'" отсутствующая в чертеже((');
                      end;
 
 
             end
             else
                 begin
-                shared.HistoryOutStr('В строке '+inttostr(row)+'мало параметров');
+                uzcshared.HistoryOutStr('В строке '+inttostr(row)+'мало параметров');
                 for col:=0 to FDoc.ColCount[row] do
-                shared.HistoryOutStr(FDoc.Cells[col,row]);
+                uzcshared.HistoryOutStr(FDoc.Cells[col,row]);
                 end;
        if assigned (ProcessLongProcessProc) then
                                                 ProcessLongProcessProc(row);
@@ -3141,7 +3141,7 @@ begin
                                             EndLongProcessProc
   end
             else
-     shared.ShowError('GDBCommandsElectrical.El_ExternalKZ: Не могу открыть файл: '+s+'('+Operands+')');
+     uzcshared.ShowError('GDBCommandsElectrical.El_ExternalKZ: Не могу открыть файл: '+s+'('+Operands+')');
 end;
 function _AutoGenCableRemove_com(operands:TCommandOperands):TCommandResult;
 var //i,len: GDBInteger;

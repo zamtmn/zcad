@@ -28,7 +28,7 @@ uses
 
   gdbobjectsconstdef,UGDBTextStyleArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,usuptypededitors,
 
-  paths,zcadinterface, zcadstrconsts, uzcsysinfo,strproc, shared, UBaseTypeDescriptor,
+  paths,zcadinterface, zcadstrconsts, uzcsysinfo,strproc, uzcshared, UBaseTypeDescriptor,
   imagesmanager, usupportgui, ZListView,UGDBFontManager,varman,UGDBStringArray,GDBEntity,GDBText;
 
 const
@@ -447,7 +447,7 @@ begin
   stylename:=pdwg^.TextStyleTable.GetFreeName(Tria_Utf8ToAnsi(rsNewTextStyleNameFormat),1);
   if stylename='' then
   begin
-    shared.ShowError(rsUnableSelectFreeTextStylerName);
+    uzcshared.ShowError(rsUnableSelectFreeTextStylerName);
     exit;
   end;
 

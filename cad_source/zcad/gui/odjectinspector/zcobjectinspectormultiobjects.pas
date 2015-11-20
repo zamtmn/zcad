@@ -22,7 +22,7 @@ unit zcobjectinspectormultiobjects;
 interface
 uses
   zcmultiproperties,zcobjectinspectorwrapper,intftranslations,gdbpalette,memman,
-  shared,zcadstrconsts,sysutils,zeentityfactory,enitiesextendervariables,gdbdrawcontext,
+  uzcshared,zcadstrconsts,sysutils,zeentityfactory,enitiesextendervariables,gdbdrawcontext,
   gdbase,
   UGDBDescriptor,
   varmandef,
@@ -210,9 +210,9 @@ begin
                                                                                            entname:=rsNotRegistred;
                                if PMultiPropertyDataForObjects.SetValueErrorRange
                                then
-                                shared.ShowError(sysutils.format(rsInvalidInputForPropery,[mp.MPUserName,entname,msg]))
+                                uzcshared.ShowError(sysutils.format(rsInvalidInputForPropery,[mp.MPUserName,entname,msg]))
                                else
-                                shared.LogError(sysutils.format(rsInvalidInputForPropery,[mp.MPUserName,entname,msg]));
+                                uzcshared.LogError(sysutils.format(rsInvalidInputForPropery,[mp.MPUserName,entname,msg]));
                              end;
      end
 
@@ -595,7 +595,7 @@ begin
       end;
       pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
     until pv=nil;
-    shared.HistoryOutStr(sysutils.Format(rscmNEntitiesDeselected,[count]));
+    uzcshared.HistoryOutStr(sysutils.Format(rscmNEntitiesDeselected,[count]));
     if count>0 then
                    MainFormN.waSetObjInsp(gdb.GetCurrentDWG.wa);
 

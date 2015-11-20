@@ -20,7 +20,7 @@ unit UGDBTextStyleArray;
 {$INCLUDE def.inc}
 interface
 uses LCLProc,paths,UGDBFontManager,zcadsysvars,gdbasetypes,{SysInfo,}sysutils,gdbase, geometry,
-     strproc,{varmandef,}{shared,}ugdbfont,zcadstrconsts,UGDBNamedObjectsArray,memman;
+     strproc,{varmandef,}{uzcshared,}ugdbfont,zcadstrconsts,UGDBNamedObjectsArray,memman;
 type
   //ptextstyle = ^textstyle;
 {REGISTEROBJECTTYPE GDBTextStyleArray}
@@ -135,7 +135,7 @@ begin
                                 begin
                                      debugln('{WH}'+fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]);
                                      //programlog.LogOutFormatStr(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile],lp_OldPos,LM_Debug);
-                                     //shared.LogError(sysutils.format(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]));
+                                     //uzcshared.LogError(sysutils.format(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]));
                                      ps.pfont:=pbasefont;
                                 end;
 
@@ -167,7 +167,7 @@ begin
                                 begin
                                      debugln('{WH}'+fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]);
                                      //programlog.LogOutFormatStr(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile],lp_OldPos,LM_Debug);
-                                     //shared.LogError(sysutils.format(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]));
+                                     //uzcshared.LogError(sysutils.format(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]));
                                      ts.pfont:=pbasefont;
                                 end;
 

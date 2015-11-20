@@ -24,7 +24,7 @@ uses
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
      UGDBLayerArray,ugdbdimstylearray,
      oglwindowdef,gdbdrawcontext,{varmandef,}zcadsysvars,GDBEntity,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
-     gdbobjectsconstdef,shared,zcadstrconsts,UGDBTracePropArray,math,sysutils,UGDBDrawingdef,strproc,
+     gdbobjectsconstdef,{uzcshared,}zcadstrconsts,UGDBTracePropArray,math,sysutils,UGDBDrawingdef,strproc,
      ExtCtrls,Controls,Classes,LCLType,Forms,UGDBOpenArrayOfPV,GDBGenericSubEntry,GDBCamera,UGDBVisibleOpenArray,uzglabstractdrawer,uzglgeneraldrawer,uzglabstractviewarea;
 const
   ontracdist=10;
@@ -143,6 +143,7 @@ type
                            procedure ZoomOut;override;
                       end;
 function MouseButton2ZKey(Shift: TShiftState):GDBByte;
+procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
 var
    sysvarDISPOSSize:double=10;
    sysvarDISPCursorSize:integer=10;
@@ -175,8 +176,13 @@ var
 
    OnActivateProc:TOnActivateProc=nil;
 implementation
-{uses
-    commandline;}
+procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
+begin
+     if RemoveCursor then
+                         acontrol.cursor:=crNone
+                     else
+                         acontrol.cursor:=crDefault;
+end;
 procedure TGeneralViewArea.mypaint;
 begin
      //param.firstdraw:=true;
@@ -1109,7 +1115,8 @@ begin
      begin
           if psa^.Count=0 then
                               begin
-                                   historyout('ZoomSel: Ничего не выбрано?');
+                                   DebugLn('{WH}'+'ZoomSel: Ничего не выбрано?');
+                                   //historyout('ZoomSel: Ничего не выбрано?');
                                    exit;
                               end;
           dc:=pdwg^.CreateDrawingRC;
@@ -1138,9 +1145,11 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:TBoundingBox);
   begin
     if param.projtype = PROJPerspective then
                                             begin
-                                                 historyout('Zoom: Works only for parallel projection!');
+                                                 //historyout('Zoom: Works only for parallel projection!');
+                                                 DebugLn('{WH}'+'Zoom: Works only for parallel projection!');
                                             end;
-    historyout('Zoom: Works only for top view!');
+    //historyout('Zoom: Works only for top view!');
+    DebugLn('{WH}'+'Zoom: Works only for top view!');
 
 
     CalcOptimalMatrix;
@@ -1183,7 +1192,8 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:TBoundingBox);
                                 end;
     if (abs(wcsRTF.x-wcsLBN.x)<eps)and(abs(wcsRTF.y-wcsLBN.y)<eps) then
                                                                       begin
-                                                                           historyout('ZoomToVolume: Пустой чертеж?');
+                                                                           //historyout('ZoomToVolume: Пустой чертеж?');
+                                                                           DebugLn('{WH}'+'ZoomToVolume: Пустой чертеж?');
                                                                            exit;
                                                                       end;
     target:=createvertex(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),-(wcsLBN.z+(wcsRTF.z-wcsLBN.z)/2));
@@ -1617,16 +1627,6 @@ end;
   pdwg.GetSelObjArray.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   Set3dmouse;
 
-  f:=pdwg^.GetUnitsFormat;
-  htext:=sysutils.Format('%s, %s, %s',[zeDimensionToString(param.md.mouse3dcoord.x,f),zeDimensionToString(param.md.mouse3dcoord.y,f),zeDimensionToString(param.md.mouse3dcoord.z,f)]);
-  if param.polarlinetrace = 1 then
-  begin
-       htext2:=sysutils.Format('L=%s',[zeDimensionToString(param.ontrackarray.otrackarray[param.pointnum].tmouse,f)]);
-       htext:=sysutils.Format('%s (%s)',[htext,htext2]);
-       getviewcontrol.Hint:=htext2;
-       Application.ActivateHint(getviewcontrol.ClientToScreen(Point(param.md.mouse.x,param.md.mouse.y)));
-  end;
-
 
 if PGDBObjEntity(param.SelDesc.OnMouseObject)<>nil then
                                                        begin
@@ -1658,7 +1658,6 @@ if PGDBObjEntity(param.SelDesc.OnMouseObject)<>nil then
   //                                 UpdateObjInspProc;
 
 
-  SBTextOut(htext);
   //param.firstdraw:=true;
   //isOpenGLError;
   CorrectMouseAfterOS;
@@ -3409,7 +3408,7 @@ begin
                                                    begin
                                                         if sysvar.DWG.DWG_DrawGrid<>nil then
                                                         if sysvar.DWG.DWG_DrawGrid^ then
-                                                                                        historyoutstr(rsGridTooDensity);
+                                                                                        DebugLn('{WH}'+rsGridTooDensity);
                                                         param.md.WPPointUR.z:=-1;
                                                    end;
      param.md.WPPointLU:=vertexmulonsc(vertexsub(param.md.WPPointLU,param.md.WPPointBL),1/pv);

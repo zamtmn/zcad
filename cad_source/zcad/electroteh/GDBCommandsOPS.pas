@@ -31,7 +31,7 @@ uses
   gdbobjectsconstdef,
   GDBCommandsDraw,
   UGDBVisibleOpenArray,{gdbEntity,}{GDBCircle,}GDBLine,{GDBGenericSubEntry,}
-  paths,shared,{GDBSubordinated,}GDBBlockInsert,{ZWinMan,}{sysinfo,}varman,uzccablemanager,GDBDevice,GDBMText,math;
+  paths,uzcshared,{GDBSubordinated,}GDBBlockInsert,{ZWinMan,}{sysinfo,}varman,uzccablemanager,GDBDevice,GDBMText,math;
 
 type
 {Export+}
@@ -677,7 +677,7 @@ begin
                                         begin
                                              name:='"без имени"';
                                         end;
-                            shared.HistoryOutstr(format('Попытка повторной нумерации устройства %s кабелем (сегментом кабеля) %s',[name,'"'+pcabledesk^.Name+'"']));
+                            uzcshared.HistoryOutstr(format('Попытка повторной нумерации устройства %s кабелем (сегментом кабеля) %s',[name,'"'+pcabledesk^.Name+'"']));
                             end;
                         end;
 
@@ -845,7 +845,7 @@ begin
              //if PTCableType(pvd^.data.Instance)^=TCT_ShleifOPS then
              if (pcabledesk.StartDevice<>nil){and(pcabledesk.EndDevice<>nil)} then
              begin
-                  shared.HistoryOutStr(pcabledesk.Name);
+                  uzcshared.HistoryOutStr(pcabledesk.Name);
                   //programlog.logoutstr(pcabledesk.Name,0);
                   currentcoord:=coord;
                   PTCableType(pvd^.data.Instance)^:=TCT_ShleifOPS;

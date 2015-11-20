@@ -24,7 +24,7 @@ uses LCLProc,{uabstractunit,}zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCa
      UGDBOpenArrayOfPObjects,UGDBLayerArray,
      gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,
      UGDBOpenArrayOfByte,{varmandef,}GDBase,gdbobjectsconstdef,oglwindowdef,
-     geometry,dxflow,memman{,shared};
+     geometry,dxflow,memman{,uzcshared};
 type
                  {l_1_4:GDBvertex;(*hidden_in_objinsp*)
                  l_1_3:GDBvertex;(*hidden_in_objinsp*)

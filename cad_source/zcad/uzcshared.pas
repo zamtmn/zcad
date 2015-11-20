@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit shared;
+unit uzcshared;
 {$INCLUDE def.inc}
 interface
 uses paths,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}Controls,zcadstrconsts,gdbasetypes,Classes, SysUtils, {$IFNDEF DELPHI}fileutil,{$ENDIF}{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls{$IFNDEF DELPHI},LCLProc{$ENDIF};
@@ -33,8 +33,6 @@ procedure ShowError(errstr:GDBString); export;
 //procedure OldVersTextReplace(var vv:GDBString);
 procedure DisableCmdLine;
 procedure EnableCmdLine;
-procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
-
 var
     ProcessBar:TProgressBar;
     HintText:TLabel;
@@ -52,36 +50,28 @@ var
 
 implementation
 uses uzclog;
-procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
-begin
-     if RemoveCursor then
-                         acontrol.cursor:=crNone
-                     else
-                         acontrol.cursor:=crDefault;
-end;
-
 procedure DisableCmdLine;
 begin
   application.MainForm.ActiveControl:=nil;
-  if assigned(shared.cmdedit) then
+  if assigned(uzcshared.cmdedit) then
                                   begin
-                                      shared.cmdedit.Enabled:=false;
+                                      uzcshared.cmdedit.Enabled:=false;
                                   end;
-  if assigned(shared.HintText) then
+  if assigned(uzcshared.HintText) then
                                    begin
-                             shared.HintText.Enabled:=false;
+                             uzcshared.HintText.Enabled:=false;
                                    end;
 end;
 
 procedure EnableCmdLine;
 begin
-  if assigned(shared.cmdedit) then
+  if assigned(uzcshared.cmdedit) then
                                   begin
-                                       shared.cmdedit.Enabled:=true;
-                                       shared.cmdedit.SetFocus;
+                                       uzcshared.cmdedit.Enabled:=true;
+                                       uzcshared.cmdedit.SetFocus;
                                   end;
-  if assigned(shared.HintText) then
-                                   shared.HintText.Enabled:=true;
+  if assigned(uzcshared.HintText) then
+                                   uzcshared.HintText.Enabled:=true;
 end;
 procedure HistoryOut(s: pansichar); export;
 var
@@ -165,4 +155,5 @@ begin
 utflen:=0;
 historychanged:=false;
 uzclog.HistoryTextOut:=@HistoryOutStr;
+uzclog.MessageBoxTextOut:=@ShowError;
 end.

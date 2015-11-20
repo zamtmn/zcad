@@ -30,9 +30,9 @@ uses
   {FPC}
        lineinfo,//math,
   {ZCAD BASE}
-       uzelongprocesssupport,gluinterface,uzglgdidrawer,ugdbdrawing,UGDBOpenArrayOfPV,ugdbabstractdrawing,gdbpalette,paths,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
+       zemathutils,uzelongprocesssupport,gluinterface,uzglgdidrawer,ugdbdrawing,UGDBOpenArrayOfPV,ugdbabstractdrawing,gdbpalette,paths,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
        geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,uzclog,
-       varmandef, varman,UUnitManager,uzcsysinfo,shared,strmy,UGDBTextStyleArray,ugdbdimstylearray,
+       varmandef, varman,UUnitManager,uzcsysinfo,uzcshared,strmy,UGDBTextStyleArray,ugdbdimstylearray,
   {ZCAD SIMPLE PASCAL SCRIPT}
        languade,
   {ZCAD ENTITIES}
@@ -840,7 +840,7 @@ begin
                                      FreEditorProc;
        if assigned(ReturnToDefaultProc)then
                                            ReturnToDefaultProc(gdb.GetUnitsFormat);
-       shared.SBTextOut('Закрыто');
+       uzcshared.SBTextOut('Закрыто');
        if assigned(UpdateVisibleProc) then UpdateVisibleProc;
   end;
 end;
@@ -962,7 +962,7 @@ begin
     end;
   except
     on E: Exception do begin
-                            shared.ShowError(rsLayoutLoad+' '+Filename+':'#13+E.Message);
+                            uzcshared.ShowError(rsLayoutLoad+' '+Filename+':'#13+E.Message);
       //MessageDlg('Error',
       //  'Error loading layout from file '+Filename+':'#13+E.Message,mtError,
       //  [mbCancel],0);
@@ -1304,7 +1304,7 @@ else
 begin
 tbdesk:=self.findtoolbatdesk(aName);
 if tbdesk=''then
-          shared.ShowError(format(rsToolBarNotFound,[aName]));
+          uzcshared.ShowError(format(rsToolBarNotFound,[aName]));
 FToolBar:=TToolButtonForm(TToolButtonForm.NewInstance);
 if DoDisableAlign then
 FToolBar.DisableAlign;
@@ -1969,7 +1969,7 @@ begin
            if (tbname='Status')and(not sysparam.standartinterface) then
                        begin
                             if assigned(LayoutBox) then
-                                                      shared.ShowError(format(rsReCreating,['LAYOUTBOX']));
+                                                      uzcshared.ShowError(format(rsReCreating,['LAYOUTBOX']));
                             CreateLayoutbox(tb);
                             if ts<>''then
                             begin
@@ -2133,7 +2133,7 @@ begin
                                        createdmenu.items.Add(ppopupmenu);
                                   end
                               else
-                                  shared.ShowError(format(rsMenuNotFounf,[ts]));
+                                  uzcshared.ShowError(format(rsMenuNotFounf,[ts]));
            until line='';
 end;
 procedure bugfileiterator(filename:GDBString);
@@ -2805,9 +2805,9 @@ begin
     time:=(now-LPTime)*10e4;
     str(time:3:2,ts);
     if pname='' then
-                     shared.HistoryOutStr(format(rscompiledtimemsg,[ts]))
+                     uzcshared.HistoryOutStr(format(rscompiledtimemsg,[ts]))
                  else
-                     shared.HistoryOutStr(format(rsprocesstimemsg,[pname,ts]));
+                     uzcshared.HistoryOutStr(format(rsprocesstimemsg,[pname,ts]));
     pname:='';
 end;
 procedure MainForm.ReloadLayer(plt: PGDBNamedObjectsArray);
@@ -2906,10 +2906,25 @@ else if sender=VScrollBar then
   end;
 end;
 procedure MainForm.wamm(Sender:TAbstractViewArea;Shift:TShiftState;X,Y:Integer);
+var
+  f:TzeUnitsFormat;
+  htext,htext2:string;
 begin
   exclude(shift,ssLeft);
      if (Sender.param.md.mode and (MGet3DPoint or MGet3DPointWoOp)) <> 0 then
      commandmanager.sendmousecoordwop(sender,MouseButton2ZKey(shift));
+
+     f:=Sender.pdwg^.GetUnitsFormat;
+       htext:=sysutils.Format('%s, %s, %s',[zeDimensionToString(Sender.param.md.mouse3dcoord.x,f),zeDimensionToString(Sender.param.md.mouse3dcoord.y,f),zeDimensionToString(Sender.param.md.mouse3dcoord.z,f)]);
+       if Sender.param.polarlinetrace = 1 then
+       begin
+            htext2:=sysutils.Format('L=%s',[zeDimensionToString(Sender.param.ontrackarray.otrackarray[Sender.param.pointnum].tmouse,f)]);
+            htext:=sysutils.Format('%s (%s)',[htext,htext2]);
+            Sender.getviewcontrol.Hint:=htext2;
+
+            Application.ActivateHint(Sender.getviewcontrol.ClientToScreen(classes.Point(Sender.param.md.mouse.x,Sender.param.md.mouse.y)));
+       end;
+       SBTextOut(htext);
 end;
 
 function MainForm.wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer):boolean;

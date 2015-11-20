@@ -20,7 +20,7 @@ unit enitiesextendervariables;
 
 interface
 uses sysutils,
-     UGDBObjBlockdefArray,UGDBDrawingdef,gdbentityextender,shared,GDBDevice,TypeDescriptors,
+     UGDBObjBlockdefArray,UGDBDrawingdef,gdbentityextender,uzcshared,GDBDevice,TypeDescriptors,
      gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,
      GDBSubordinated,GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,
      URecordDescriptor,UBaseTypeDescriptor,memman;

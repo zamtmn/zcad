@@ -24,7 +24,7 @@ interface
 uses
       LCLProc,Graphics,classes,Themes,
       zemathutils,geometry,{zcadstrconsts,}strproc,{log,}TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,sysutils,UGDBOpenArrayOfByte,gdbasetypes,
-      {usupportgui,}varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,math{,shared};
+      {usupportgui,}varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,math{,uzcshared};
 resourcestring
   rsDifferent='Different';
 type

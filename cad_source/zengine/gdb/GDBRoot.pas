@@ -23,7 +23,7 @@ interface
 Uses
    {Varman,}gdbdrawcontext,ugdbdrawingdef,GDBCamera,//glstatemanager,
    UGDBEntTree,{UGDBVisibleTreeArray,UGDBOpenArrayOfPV,}
-   gdbase,gdbasetypes,gdbobjectsconstdef,{varmandef,}GDBEntity,GDBGenericSubEntry{,UGDBOpenArrayOfPV},GDBConnected,GDBSubordinated,geometry{,uunitmanager}{,shared};
+   gdbase,gdbasetypes,gdbobjectsconstdef,{varmandef,}GDBEntity,GDBGenericSubEntry{,UGDBOpenArrayOfPV},GDBConnected,GDBSubordinated,geometry{,uunitmanager}{,uzcshared};
 type
 {REGISTEROBJECTTYPE GDBObjRoot}
 {Export+}

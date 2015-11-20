@@ -117,7 +117,7 @@ uses
   plugins,
   //zcregisterobjectinspector,
   mainwindow,
-  shared,
+  uzcshared,
   zcadstrconsts,
   iopalette,
   gdbfieldprocessorimpl,
@@ -128,7 +128,7 @@ uses
   uzglopenglviewarea,uzglgdiviewarea,uzglcanvasviewarea;
   //RegCnownTypes,URegisterObjects;
 
-//exports HistoryOut,redrawoglwnd,updatevisible,reloadlayer; {shared}
+//exports HistoryOut,redrawoglwnd,updatevisible,reloadlayer; {uzcshared}
 //exports getoglwndparam; {mygl}
 //exports getcommandmanager; {commandline}
 //exports GDBObjLineInit,GDBObjCircleInit,getgdb,addblockinsert,CreateInitObjFree,CreateObjFree; {GDBManager}

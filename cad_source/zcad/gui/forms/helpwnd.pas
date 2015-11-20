@@ -22,7 +22,7 @@ interface
 uses
  strproc,umytreenode,{Classes, SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}
  gdbase{,UGDBDescriptor,math,commandline,varman},languade{,UGDBTracePropArray},
-  {zforms,ZEditsWithProcedure,zbasicvisible,varmandef,shared,ZGUIsCT,ZStaticsText,sysinfo,}memman{,gdbasetypes};
+  {zforms,ZEditsWithProcedure,zbasicvisible,varmandef,uzcshared,ZGUIsCT,ZStaticsText,sysinfo,}memman{,gdbasetypes};
 type
   THelpWnd = class(TFreedForm)
     Memo:TMemo;
@@ -32,7 +32,7 @@ type
 var
   Helpwindow:THelpWnd;
 implementation
-uses shared,uzclog;
+uses uzcshared,uzclog;
 procedure THelpWnd.AfterConstruction;
 begin
   inherited;

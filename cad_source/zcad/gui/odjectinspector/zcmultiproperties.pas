@@ -21,7 +21,7 @@ unit zcmultiproperties;
 
 interface
 uses
-  shared,intftranslations,gdbase,gdbasetypes,uzclog,
+  uzcshared,intftranslations,gdbase,gdbasetypes,uzclog,
   usimplegenerics,varmandef,Varman,garrayutils;
 type
   TObjID2Counter=TMyMapCounter<TObjID,LessObjID>;
@@ -126,7 +126,7 @@ begin
      if MultiPropertiesManager.MultiPropertyDictionary.MyGetValue(name,mp) then
                                                         begin
                                                              if mp.MPCategory<>category then
-                                                                                            shared.FatalError('Category error in "'+name+'" multiproperty');
+                                                                                            uzcshared.FatalError('Category error in "'+name+'" multiproperty');
                                                              mp.BeforeIterateProc:=bip;
                                                              mp.AfterIterateProc:=aip;
                                                              mpdfo.EntIterateProc:=eip;
@@ -141,7 +141,7 @@ begin
                                                                                      else
                                                                                          begin
                                                                                           reorder(mp.sortedid,sortedid,id);
-                                                                                          //shared.HistoryOutStr('Something wrong in multipropertys sorting "'+name+'"');
+                                                                                          //uzcshared.HistoryOutStr('Something wrong in multipropertys sorting "'+name+'"');
                                                                                          end;
                                                              mp.MPObjectsData.RegisterKey(id,mpdfo);
                                                         end

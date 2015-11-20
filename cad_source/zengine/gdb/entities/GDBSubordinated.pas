@@ -90,7 +90,7 @@ procedure extractvarfromdxfstring(_Value:GDBString;out vn,vt,vv,vun:GDBString);
 procedure OldVersVarRename(var vn,vt,vv,vun:GDBString);
 procedure OldVersTextReplace(var vv:GDBString);
 implementation
-//uses {shared,}log;
+//uses {uzcshared,}log;
 procedure GDBObjExtendable.AddExtension(ExtObj:PTBaseEntityExtender;ObjSize:GDBInteger);
 begin
      if not assigned(EntExtensions) then
@@ -285,7 +285,7 @@ begin
      OldVersTextReplace(vv);
      if nevname<>'' then
                         begin
-                             //shared.HistoryOutStr('Старая переменная '+vn+' обновлена до '+nevname);
+                             //uzcshared.HistoryOutStr('Старая переменная '+vn+' обновлена до '+nevname);
                              vn:=nevname;
                         end;
 

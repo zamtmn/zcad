@@ -31,7 +31,7 @@ uses
   varman,
   UGDBOpenArrayOfByte,
   gdbEntity,
-  shared,
+  uzcshared,
   devicebaseabstract,UUnitManager,gdbasetypes,strutils,forms,Controls,zcadinterface,UGDBDrawingdef,UGDBStringArray,strmy,memman;
 
 procedure DBLinkProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
@@ -92,7 +92,7 @@ begin
 
                       if pu^.FindVariable(s)<>nil then
                                                  begin
-                                                      shared.ShowError(format(rsEntryAlreadyExist,[s]));
+                                                      uzcshared.ShowError(format(rsEntryAlreadyExist,[s]));
                                                  end
                       else
                       begin
@@ -100,12 +100,12 @@ begin
                       if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
                       if parseerror and (s1='') then
                                         begin
-                                             shared.HistoryOutStr(format(rsRenamedTo,['Entry',pdbv.name,s]));
+                                             uzcshared.HistoryOutStr(format(rsRenamedTo,['Entry',pdbv.name,s]));
                                              pdbv.name:=s;
                                              renamed:=true;
                                         end
                                            else
-                                               shared.ShowError(format(rsInvalidIdentificator,[s]));
+                                               uzcshared.ShowError(format(rsInvalidIdentificator,[s]));
                       end;
                  end;
                  until renamed or (sltexteditor1.ModalResult<>mrok);

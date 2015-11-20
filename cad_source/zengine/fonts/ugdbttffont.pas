@@ -375,7 +375,7 @@ begin
   begin
     if (_glyph^.outline.flags[j] and TT_Flag_On_Curve)<>0 then
     begin
-         //shared.HistoryOutStr(inttostr(j-lastoncurve));
+         //uzcshared.HistoryOutStr(inttostr(j-lastoncurve));
          if j-lastoncurve>3 then
                                 lastoncurve:=lastoncurve;
          lastoncurve:=j;

@@ -19,7 +19,7 @@
 unit UGDBObjBlockdefArray;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,ugdbdrawingdef,strproc,GDBBlockDef,UGDBOpenArrayOfData,sysutils,gdbase,memman, geometry,
+uses LCLProc,gdbdrawcontext,ugdbdrawingdef,strproc,GDBBlockDef,UGDBOpenArrayOfData,sysutils,gdbase,memman, geometry,
      gdbasetypes;
 type
 {REGISTEROBJECTTYPE GDBObjBlockdefArray}
@@ -42,7 +42,7 @@ GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*O
                     end;
 {Export-}
 implementation
-uses log;
+//uses log;
 procedure GDBObjBlockdefArray.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
 var p:PGDBObjBlockdef;
     ir:itrec;
@@ -112,18 +112,26 @@ var
   p:PGDBObjBlockdef;
       ir:itrec;
 begin
-  programlog.LogOutStr('GDBObjBlockdefArray.FormatEntity;',lp_IncPos,LM_Debug);
+  //programlog.LogOutStr('GDBObjBlockdefArray.FormatEntity;',lp_IncPos,LM_Debug);
+  debugln('{D+}GDBObjBlockdefArray.FormatEntity;');
   p:=beginiterate(ir);
   if p<>nil then
   repeat
        if strproc.Tria_Utf8ToAnsi(p^.Name)='*D234' then
                             p^.Name:=p^.Name;
-       programlog.LogOutFormatStr('Formatting blockdef name="%s"',[p^.Name],lp_IncPos,LM_Debug);
+       {$IFDEF TOTALYLOG}
+       debugln('{D+}Formatting blockdef name="%s"',[p^.Name]);
+       {$ENDIF}
+       //programlog.LogOutFormatStr('Formatting blockdef name="%s"',[p^.Name],lp_IncPos,LM_Debug);
        p^.FormatEntity(drawing,dc);
-       programlog.LogOutStr('end;{Formatting}',lp_DecPos,LM_Debug);
+       {$IFDEF TOTALYLOG}
+       debugln('{D-}end;{Formatting}');
+       {$ENDIF}
+       //programlog.LogOutStr('end;{Formatting}',lp_DecPos,LM_Debug);
        p:=iterate(ir);
   until p=nil;
-  programlog.LogOutStr('end;{GDBObjBlockdefArray.FormatEntity;}',lp_DecPos,LM_Debug);
+  debugln('{D-}end;{GDBObjBlockdefArray.FormatEntity;}');
+  //programlog.LogOutStr('end;{GDBObjBlockdefArray.FormatEntity;}',lp_DecPos,LM_Debug);
 end;
 function GDBObjBlockdefArray.getblockdef;
 var

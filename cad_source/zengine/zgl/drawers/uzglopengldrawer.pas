@@ -20,7 +20,7 @@ unit uzglopengldrawer;
 {$INCLUDE def.inc}
 interface
 uses
-    UGDBOpenArrayOfData,gdbpalette,
+    LCLProc,UGDBOpenArrayOfData,gdbpalette,
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
@@ -87,7 +87,7 @@ var
    OGLDrawer:TZGLAbstractDrawer;
    code:integer;
 implementation
-uses log;
+//uses log;
 procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D);
 begin
   oglsm.myglPushMatrix;
@@ -348,7 +348,7 @@ procedure TZGLOpenGLDrawer.SaveBuffers;
   var
     scrx,scry,texture{,e}:integer;
 begin
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SaveBuffers',lp_incPos);{$ENDIF};
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SaveBuffers',lp_incPos);{$ENDIF};
   oglsm.myglEnable(GL_TEXTURE_2D);
   //isOpenGLError;
 
@@ -370,14 +370,14 @@ begin
 
 
   oglsm.myglDisable(GL_TEXTURE_2D);
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SaveBuffers----{end}',lp_decPos);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SaveBuffers----{end}',lp_decPos);{$ENDIF}
 end;
 procedure TZGLOpenGLDrawer.RestoreBuffers;
   var
     scrx,scry,texture{,e}:integer;
     _NotUseLCS:boolean;
 begin
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.RestoreBuffers',lp_incPos);{$ENDIF};
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.RestoreBuffers',lp_incPos);{$ENDIF};
   _NotUseLCS:=NotUseLCS;
   NotUseLCS:=true;
   oglsm.myglEnable(GL_TEXTURE_2D);
@@ -423,7 +423,7 @@ begin
        oglsm.myglPopMatrix;
        oglsm.myglMatrixMode(GL_MODELVIEW);
    NotUseLCS:=_NotUseLCS;
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.RestoreBuffers----{end}',lp_decPos);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.RestoreBuffers----{end}',lp_decPos);{$ENDIF}
 end;
 function TZGLOpenGLDrawer.CreateScrbuf{(w,h:integer)}:boolean;
 var scrx,scry,texture{,e}:integer;
@@ -454,7 +454,8 @@ begin
                  inc(texture);
                  if texture>high(myscrbuf)then
                                               begin
-                                                programlog.LogOutStr('TZGLOpenGLDrawer.CreateScrbuf: texture buffer overflow!',lp_OldPos,LM_Error);
+                                                debugln('{E}TZGLOpenGLDrawer.CreateScrbuf: texture buffer overflow!');
+                                                //programlog.LogOutStr('TZGLOpenGLDrawer.CreateScrbuf: texture buffer overflow!',lp_OldPos,LM_Error);
                                                 texture:=0;
                                               end;
            until scrx>wh.cx;

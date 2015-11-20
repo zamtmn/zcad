@@ -19,7 +19,7 @@
 unit ugdbttffont;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitivescreator,uzgprimitives,uzglvectorobject,ugdbbasefont,beziersolver,math,glstatemanager,gluinterface,TTTypes,TTObjs,
+uses LCLProc,uzgprimitivescreator,uzgprimitives,uzglvectorobject,ugdbbasefont,beziersolver,math,glstatemanager,gluinterface,TTTypes,TTObjs,
   gmap,gutil,EasyLazFreeType,memman,strproc,gdbasetypes,sysutils,
   gdbase,geometry;
 type
@@ -51,7 +51,7 @@ TTFFont={$IFNDEF DELPHI}packed{$ENDIF} object({SHXFont}BASEFont)
 {EXPORT-}
 procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:PTTFFont{;var pf:PGDBfont});
 implementation
-uses {math,}log;
+//uses {math,}log;
 type
     TTriangulationMode=(TM_Triangles,TM_TriangleStrip,TM_TriangleFan);
 var
@@ -155,7 +155,8 @@ GL_TRIANGLE_STRIP:begin
                   end;
      else
          begin
-           programlog.LogOutStr('Wrong triangulation mode!!',lp_OldPos,LM_Fatal);
+           debugln('{F}Wrong triangulation mode!!');
+           //programlog.LogOutStr('Wrong triangulation mode!!',lp_OldPos,LM_Fatal);
            halt(0);
          end;
      end;

@@ -21,7 +21,7 @@ unit GDBManager;
 
 
 interface
-uses zcmultiobjectcreateundocommand,zeentitiesmanager,gdbpalette,zeentityfactory,gdbdrawcontext,ugdbdrawing,ugdbltypearray,zcadsysvars,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
+uses LCLProc,zcmultiobjectcreateundocommand,zeentitiesmanager,gdbpalette,zeentityfactory,gdbdrawcontext,ugdbdrawing,ugdbltypearray,zcadsysvars,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
      UGDBDescriptor,varmandef,gdbobjectsconstdef,
      UGDBVisibleOpenArray,GDBGenericSubEntry,gdbEntity,
      GDBBlockInsert,
@@ -64,8 +64,8 @@ function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGD
 var
    p:gdbvertex;
 implementation
-uses
-    log;
+//uses
+//    log;
 function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
                                 point: gdbvertex; scale, angle: GDBDouble; s: pansichar):PGDBObjBlockInsert;
@@ -96,7 +96,8 @@ begin
                        else
                            begin
                                 pb:=nil;
-                                programlog.LogOutStr('ENTF_CreateBlockInsert: BlockInsert entity not registred',lp_OldPos,LM_Error);
+                                debugln('{E}ENTF_CreateBlockInsert: BlockInsert entity not registred');
+                                //programlog.LogOutStr('ENTF_CreateBlockInsert: BlockInsert entity not registred',lp_OldPos,LM_Error);
                            end;
   if pb=nil then exit;
   //setdefaultproperty(pb);

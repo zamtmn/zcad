@@ -25,7 +25,7 @@ uses
      {$ENDIF}
      uzglgdidrawer,uzglabstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,
      UGDBLayerArray,ugdbdimstylearray,
-     {varmandef,}{commandline,}zcadsysvars,geometry,shared,LCLType,
+     {varmandef,}{commandline,}zcadsysvars,geometry,{uzcshared,}LCLType,
      ExtCtrls,classes,Controls,Graphics,generalviewarea,{log,}backendmanager,LMessages;
 type
     TGDIPanel=class(TCustomControl)

@@ -45,7 +45,7 @@ GDBObjCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBBaseCamera)
 {EXPORT-}
 
 implementation
-//uses {shared,}log;
+//uses {uzcshared,}log;
 procedure GDBObjCamera.NextPosition;
 begin
      Inc(POSCOUNT);
@@ -145,7 +145,7 @@ begin
 
       end else
               Debugln('GDBObjCamera.MoveInLocalCSXY:'+rsDivByZero);
-              //shared.historyoutstr('Divide by zero');
+              //uzcshared.historyoutstr('Divide by zero');
 end;
 
 

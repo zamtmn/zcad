@@ -19,7 +19,7 @@
 unit zcregisterobjectinspector;
 {$INCLUDE def.inc}
 interface
-uses paths,TypeDescriptors,intftranslations,shared,Forms,zcadinterface,GDBRoot,gdbase,UGDBDrawingdef,gdbdrawcontext,UGDBStringArray,varmandef,ugdbsimpledrawing,GDBEntity,enitiesextendervariables,zcobjectinspector,zcguimanager,zcadstrconsts,Types,Controls,
+uses paths,TypeDescriptors,intftranslations,uzcshared,Forms,zcadinterface,GDBRoot,gdbase,UGDBDrawingdef,gdbdrawcontext,UGDBStringArray,varmandef,ugdbsimpledrawing,GDBEntity,enitiesextendervariables,zcobjectinspector,zcguimanager,zcadstrconsts,Types,Controls,
   UGDBDescriptor,Varman,UUnitManager,zcadsysvars,gdbasetypes,uzcsysinfo;
 implementation
 procedure ZCADFormSetupProc(Form:TControl);
@@ -123,9 +123,9 @@ begin
 end;
 procedure _onAfterFreeEditor(sender:tobject);
 begin
-  if assigned(shared.cmdedit) then
-       if shared.cmdedit.IsVisible then
-                                       shared.cmdedit.SetFocus;
+  if assigned(uzcshared.cmdedit) then
+       if uzcshared.cmdedit.IsVisible then
+                                       uzcshared.cmdedit.SetFocus;
 end;
 
 initialization

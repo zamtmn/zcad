@@ -11,7 +11,7 @@ uses
 
   gdbobjectsconstdef,UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,
 
-  zcadinterface, zcadstrconsts, strproc, shared, UBaseTypeDescriptor,
+  zcadinterface, zcadstrconsts, strproc, uzcshared, UBaseTypeDescriptor,
   imagesmanager, usupportgui, ZListView;
 
 const
@@ -571,7 +571,7 @@ begin
      layername:=pdwg^.LayerTable.GetFreeName(Tria_Utf8ToAnsi(rsNewLayerNameFormat),1);
      if layername='' then
      begin
-       shared.ShowError(rsUnableSelectFreeLayerName);
+       uzcshared.ShowError(rsUnableSelectFreeLayerName);
        exit;
      end;
 

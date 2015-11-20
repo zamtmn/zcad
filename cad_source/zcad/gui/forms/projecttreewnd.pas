@@ -23,7 +23,7 @@ uses
  zcadsysvars,intftranslations,enitiesextendervariables,ugdbdrawing,paths,UGDBStringArray,gdbobjectsconstdef,zcadstrconsts,ucxmenumgr,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}ComCtrls,
  {ZTabControlsGeneric,zmenus,}{DeviceBase}devicebaseabstract,uzclog,SysUtils,{UGDBTree,}gdbase,UGDBDescriptor{,math,commandline},varman,languade{,UGDBTracePropArray},
-  {ZEditsWithProcedure,zbasicvisible,}varmandef,shared,uzcsysinfo{,ZTreeViewsGeneric},memman,gdbasetypes,commanddefinternal,commandlinedef;
+  {ZEditsWithProcedure,zbasicvisible,}varmandef,uzcshared,uzcsysinfo{,ZTreeViewsGeneric},memman,gdbasetypes,commanddefinternal,commandlinedef;
 const
   uncat='UNCAT';
   uncat_='UNCAT_';
@@ -89,7 +89,7 @@ begin
                                                                  SetGDBObjInspProc(nil,gdb.GetUnitsFormat,TypeDesk,Instance,gdb.GetCurrentDWG)
                           end
                       else
-                          shared.ShowError(format(rscmNoBlockDefInDWGCXMenu,[FBlockName]));
+                          uzcshared.ShowError(format(rscmNoBlockDefInDWGCXMenu,[FBlockName]));
 end;
 
 

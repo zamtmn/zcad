@@ -10,7 +10,7 @@ uses
 
   linetypesloadwnd,zcadsysvars, ugdbsimpledrawing, gdbase, gdbasetypes,
   ugdbltypearray,UGDBDescriptor,imagesmanager,uzcsysinfo,strproc,usupportgui,ugdbutil,
-  paths,zcadstrconsts,shared,UGDBNamedObjectsArray;
+  paths,zcadstrconsts,uzcshared,UGDBNamedObjectsArray;
 
 type
 
@@ -186,7 +186,7 @@ begin
                                                      pltp:=nil;
      if (pltp=nil) then
                      begin
-                          shared.ShowError('Please select non system layer!!!');
+                          uzcshared.ShowError('Please select non system layer!!!');
                           exit;
                      end;
      CurrentLine:=1;
@@ -241,7 +241,7 @@ begin
 
      if (pdwg^.GetLTypeTable.AddItem(LTName,pltp)<>IsCreated) then
                         begin
-                             shared.ShowError('Line type name already exist!!!');
+                             uzcshared.ShowError('Line type name already exist!!!');
                              exit;
                         end;
 

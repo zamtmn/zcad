@@ -20,7 +20,7 @@ unit urtl;
 {$INCLUDE def.inc}
 interface
 uses paths,UUnitManager,zcadsysvars,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,Varman,languade,SysUtils,
-     UBaseTypeDescriptor,shared,gdbase,UGDBOpenArrayOfByte, strmy, varmandef,uzcsysinfo,
+     UBaseTypeDescriptor,uzcshared,gdbase,UGDBOpenArrayOfByte, strmy, varmandef,uzcsysinfo,
      TypeDescriptors,
      URecordDescriptor;
 implementation

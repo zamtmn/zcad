@@ -23,7 +23,7 @@ uses LCLProc,paths,strproc,gdbdrawcontext,usimplegenerics,ugdbdimstylearray,zeen
     {$IFNDEF DELPHI}fileutil,{$ENDIF}
     UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,uzelongprocesssupport,
     {GDBCircle,GDBArc,}oglwindowdef,dxflow,zcadstrconsts,UGDBTextStyleArray,
-    geometry,GDBSubordinated,shared,gdbasetypes,{log,}GDBGenericSubEntry,{SysInfo,}gdbase,
+    geometry,GDBSubordinated,{uzcshared,}gdbasetypes,{log,}GDBGenericSubEntry,{SysInfo,}gdbase,
     sysutils,memman,gdbobjectsconstdef,UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,
     UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity,GDBBlockDef,UGDBLayerArray,fileformatsmanager;
 type
@@ -246,7 +246,7 @@ begin
     s := f.readGDBString;
     val(s, group, error);
     if error <> 0 then
-                      shared.ShowError('ReadDXFHeader wrong group code');
+                      DebugLn('{EM}ReadDXFHeader wrong group code');
     s := f.readGDBString;
     case ParseMode of
     TDXFHMWaitSection:begin
@@ -255,8 +255,7 @@ begin
                                                                   ParseMode:=TDXFHMSection;
                                                              end
                                                             else
-                                                             shared.ShowError('ReadDXFHeader error');
-
+                                                                DebugLn('{EM}ReadDXFHeader error');
                       end;
         TDXFHMSection:begin
                            if uppercase(s)=dxfName_HEADER then
@@ -264,7 +263,7 @@ begin
                                                               ParseMode:=TDXFHMHeader;
                                                             end
                                                           else
-                                                            shared.ShowError('ReadDXFHeader error');
+                                                            DebugLn('{EM}ReadDXFHeader error');
                       end;
          TDXFHMHeader:begin
                            if group=0 then
@@ -389,7 +388,8 @@ begin
                                 end;
                                 if newowner=nil then
                                                     begin
-                                                         historyoutstr('Warning! OwnerHandle $'+inttohex(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle,8)+' not found');
+                                                         DebugLn('{EH}Warning! OwnerHandle $'+inttohex(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle,8)+' not found');
+                                                         //historyoutstr('Warning! OwnerHandle $'+inttohex(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle,8)+' not found');
                                                          newowner:=owner;
                                                     end;
 
@@ -546,7 +546,8 @@ begin
       until GroupCode=0;
       repeat
         if sname=dxfName_ENDTAB then system.break;
-        if sname<>dxfName_Layer then FatalError('''LAYER'' expected but '''+sname+''' found');
+        if sname<>dxfName_Layer then DebugLn('{FM}''LAYER'' expected but '''+sname+''' found');
+        //FatalError('''LAYER'' expected but '''+sname+''' found');
         repeat
               scode := f.readGDBString;
               sname := f.readGDBString;
@@ -1332,14 +1333,16 @@ begin
               if (pos('MODEL_SPACE',US)<>0)or(pos('PAPER_SPACE',US)<>0)or(pos('*A',US)=1)or(pos('*D',US)=1){or(pos('*U',US)=1)}then   //блоки *U игнорировать нестоит, что то связанное с параметризацией
               begin
                 //programlog.logoutstr('Ignored block '+s+';',lp_OldPos);
-                shared.HistoryOutStr(format(rsBlockIgnored,[s]));
+                DebugLn('{IH}'+rsBlockIgnored,[s]);
+                //uzcshared.HistoryOutStr(format(rsBlockIgnored,[s]));
                 while (s <> 'ENDBLK') do
                   s := f.readGDBString;
               end
               else if drawing.BlockDefArray.getindex(s)>=0 then
                                begin
                                     //programlog.logoutstr('Ignored double definition block '+s+';',lp_OldPos);
-                                    shared.HistoryOutStr(format(rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]));
+                                    //uzcshared.HistoryOutStr(format(rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]));
+                                    DebugLn('{IH}'+rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]);
                                     if s='DEVICE_PS_UK-VK'then
                                                s:=s;
                                     while (s <> 'ENDBLK') do
@@ -1422,7 +1425,8 @@ var
 begin
   debugln('{D+}AddFromDXF("%s")',[name]);
   //programlog.LogOutFormatStr('AddFromDXF("%s")',[name],lp_IncPos,LM_Debug);
-  shared.HistoryOutStr(format(rsLoadingFile,[name]));
+  DebugLn('{IH}'+rsLoadingFile,[name]);
+  //uzcshared.HistoryOutStr(format(rsLoadingFile,[name]));
   f.InitFromFile(name);
   if f.Count<>0 then
   begin
@@ -1443,35 +1447,42 @@ begin
         begin
              case dxfversion of
                                1009:begin
-                                         shared.HistoryOutStr(format(rsFileFormat,['DXF12 ('+s+')']));
+                                         //uzcshared.HistoryOutStr(format(rsFileFormat,['DXF12 ('+s+')']));
+                                         DebugLn('{IH}'+rsFileFormat,['DXF12 ('+s+')']);
                                          gotodxf(f, 0, dxfName_ENDSEC);
                                          addfromdxf12(f,'EOF',owner,loadmode,drawing);
                                     end;
                                1015:begin
-                                         shared.HistoryOutStr(format(rsFileFormat,['DXF2000 ('+s+')']));
+                                         //uzcshared.HistoryOutStr(format(rsFileFormat,['DXF2000 ('+s+')']));
+                                         DebugLn('{IH}'+rsFileFormat,['DXF2000 ('+s+')']);
                                          addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p,DWGVarsDict)
                                     end;
                                1018:begin
-                                         shared.HistoryOutStr(format(rsFileFormat,['DXF2004 ('+s+')']));
+                                         //uzcshared.HistoryOutStr(format(rsFileFormat,['DXF2004 ('+s+')']));
+                                         DebugLn('{IH}'+rsFileFormat,['DXF2004 ('+s+')']);
                                          addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p,DWGVarsDict)
                                     end;
                                1021:begin
-                                         shared.HistoryOutStr(format(rsFileFormat,['DXF2007 ('+s+')']));
+                                         //uzcshared.HistoryOutStr(format(rsFileFormat,['DXF2007 ('+s+')']));
+                                         DebugLn('{IH}'+rsFileFormat,['DXF2007 ('+s+')']);
                                          addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p,DWGVarsDict)
                                     end;
                                1024:begin
-                                         shared.HistoryOutStr(format(rsFileFormat,['DXF2010 ('+s+')']));
+                                         //uzcshared.HistoryOutStr(format(rsFileFormat,['DXF2010 ('+s+')']));
+                                         DebugLn('{IH}'+rsFileFormat,['DXF2010 ('+s+')']);
                                          addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p,DWGVarsDict)
                                     end;
                                else
                                        begin
-                                            ShowError(rsUnknownFileFormat+' $ACADVER='+s);
+                                            //ShowError(rsUnknownFileFormat+' $ACADVER='+s);
+                                            DebugLn('{EM}'+rsUnknownFileFormat+' $ACADVER='+s);
                                        end;
 
 
              end;
         end
-           else ShowError(rsUnknownFileFormat+' $ACADVER='+s);
+           else DebugLn('{EM}'+rsUnknownFileFormat+' $ACADVER='+s);
+           //ShowError(rsUnknownFileFormat+' $ACADVER='+s);
       end;
   lps.EndLongProcess(lph);
   //if assigned(EndLongProcessProc)then
@@ -1483,7 +1494,8 @@ begin
   //GDBFreeMem(GDBPointer(phandlearray));
   end
      else
-         shared.ShowError('IODXF.ADDFromDXF: Не могу открыть файл: '+name);
+         DebugLn('{EM}'+'IODXF.ADDFromDXF: Не могу открыть файл: '+name);
+         //uzcshared.ShowError('IODXF.ADDFromDXF: Не могу открыть файл: '+name);
   f.done;
   debugln('{D-}end; {AddFromDXF}');
   //programlog.LogOutStr('end; {AddFromDXF}',lp_DecPos,LM_Debug);
@@ -2711,13 +2723,15 @@ ENDTAB}
                            begin
                                 if (not(deletefile(name+'.bak')) or (not renamefile(name,name+'.bak'))) then
                                 begin
-                                   shared.HistoryOutStr(format(rsUnableRenameFileToBak,[name]));
+                                   DebugLn('{WH}'+rsUnableRenameFileToBak,[name]);
+                                   //uzcshared.HistoryOutStr(format(rsUnableRenameFileToBak,[name]));
                                 end;
                            end;
 
   if outstream.SaveToFile({expandpath}(name))<=0 then
                                        begin
-                                       shared.ShowError(format(rsUnableToWriteFile,[name]));
+                                       //uzcshared.ShowError(format(rsUnableToWriteFile,[name]));
+                                       DebugLn('{EM}'+rsUnableToWriteFile,[name]);
                                        result:=false;
                                        end
                                    else

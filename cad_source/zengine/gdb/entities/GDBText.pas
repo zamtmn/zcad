@@ -65,7 +65,6 @@ b2j: array[1..12] of TTextJustify=(jstl,jstc,jstr,jsml,jsmc,jsmr,jsbl,jsbc,jsbr,
 GDBObjTextDXFFeatures:TDXFEntIODataManager;
 //function getsymbol(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
 implementation
-uses shared;
 function acadvjustify(j:TTextJustify): GDBByte;
 var
   t: GDBByte;

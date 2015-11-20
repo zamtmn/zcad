@@ -23,7 +23,7 @@ uses gdbdrawcontext,zeentityfactory,
     {$IFNDEF DELPHI}dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}
     ugdbsimpledrawing,
     GDBCircle,GDBArc,GDBLine,
-    geometry,shared,gdbasetypes,uzclog,gdbase,
+    geometry,uzcshared,gdbasetypes,uzclog,gdbase,
     sysutils,memman,gdbobjectsconstdef,
     UGDBOpenArrayOfByte,GDBEntity;
 {$IFNDEF DELPHI}
@@ -106,7 +106,7 @@ begin
   except
         on Exception do
         begin
-             shared.ShowError('Unsupported vector graphics format?');
+             uzcshared.ShowError('Unsupported vector graphics format?');
         end
   end;
   //finally

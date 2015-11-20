@@ -1,7 +1,7 @@
 unit DeviceBase;
 {$INCLUDE def.inc}
 interface
-uses paths,intftranslations,gvector,varmandef,CsvDocument,devicebaseabstract,zcadsysvars,fileutil,uzcsysinfo,strmy,gdbasetypes,gdbase,UUnitManager,varman,{varmandef,}sysutils,typedescriptors,URecordDescriptor,UObjectDescriptor,shared;
+uses paths,intftranslations,gvector,varmandef,CsvDocument,devicebaseabstract,zcadsysvars,fileutil,uzcsysinfo,strmy,gdbasetypes,gdbase,UUnitManager,varman,{varmandef,}sysutils,typedescriptors,URecordDescriptor,UObjectDescriptor,uzcshared;
 type
 {REGISTEROBJECTTYPE DeviceDbBaseObject}
 {REGISTEROBJECTTYPE ElDeviceBaseObject}
@@ -213,7 +213,7 @@ begin
                           end;
                      end
                  else
-                     shared.ShowError('');
+                     uzcshared.ShowError('');
 end;
 procedure DeviceManager.loadfromdir(path: GDBString);
 //var sr: TSearchRec;

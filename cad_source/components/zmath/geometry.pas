@@ -228,7 +228,7 @@ var WorldMatrix{,CurrentCS}:DMatrix4D;
 type
     TLineClipArray=array[0..5]of gdbdouble;
 implementation
-//uses {shared,}log;
+//uses {uzcshared,}log;
 function myPickMatrix(const x,y,deltax,deltay:gdbdouble;const vp:IMatrix4): DMatrix4D;
 var
   tm,sm: DMatrix4D;

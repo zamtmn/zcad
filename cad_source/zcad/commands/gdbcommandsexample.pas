@@ -57,7 +57,7 @@ uses
   geometry,
   zeentitiesmanager,
 
-  shared,
+  uzcshared,
   zeentityfactory,    //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
   zcadsysvars,        //system global variables
@@ -557,7 +557,7 @@ begin
                               FinalCreateDDim;
                           end;
                      else begin
-                              shared.ShowError('Please select Arc or Circle');
+                              uzcshared.ShowError('Please select Arc or Circle');
                           end;
               end;
          end;
@@ -618,7 +618,7 @@ begin
                               FinalCreateRDim;
                           end;
                      else begin
-                              shared.ShowError('Please select Arc or Circle');
+                              uzcshared.ShowError('Please select Arc or Circle');
                           end;
               end;
          end;

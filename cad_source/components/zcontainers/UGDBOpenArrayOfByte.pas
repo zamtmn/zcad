@@ -287,7 +287,7 @@ begin
      initnul;
      infile:=fileopen({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(FileName),fmShareDenyNone);
      if infile<=0 then
-                      //shared.ShowError(sysutils.format(rsUnableToOpenFile,[FileName]))
+                      //uzcshared.ShowError(sysutils.format(rsUnableToOpenFile,[FileName]))
      else
      begin
      pointer(name):=nil;

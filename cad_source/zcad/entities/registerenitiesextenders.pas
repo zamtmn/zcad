@@ -20,7 +20,7 @@ unit registerenitiesextenders;
 
 interface
 uses sysutils,
-     enitiesextendervariables,shared,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,
+     enitiesextendervariables,uzcshared,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,
      gdbfieldprocessor,UGDBOpenArrayOfByte,gdbase,gdbobjectextender,
      GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,
      URecordDescriptor,UBaseTypeDescriptor,memman;

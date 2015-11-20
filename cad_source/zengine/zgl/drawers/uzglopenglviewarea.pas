@@ -28,7 +28,7 @@ uses
      {$ENDIF}
      LCLProc,uzglgdidrawer,uzglabstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
-     oglwindowdef,gdbdrawcontext,{varmandef,}{commandline,}zcadsysvars,geometry,shared,LCLType,
+     oglwindowdef,gdbdrawcontext,{varmandef,}{commandline,}zcadsysvars,geometry,{uzcshared,}LCLType,
      ExtCtrls,classes,Controls,Graphics,generalviewarea,math,{log,}backendmanager,
      {$IFNDEF DELPHI}OpenGLContext{$ENDIF};
 type
@@ -170,7 +170,8 @@ begin
                                            end
                                        else
                                            begin
-                                                shared.LogError('wglSwapIntervalEXT not supported by your video driver. Please set the VSync in the defaul');
+                                                //uzcshared.LogError('wglSwapIntervalEXT not supported by your video driver. Please set the VSync in the defaul');
+                                                DebugLn('{EH}wglSwapIntervalEXT not supported by your video driver. Please set the VSync in the defaul');
                                            end;
   end;
   {$ENDIF}

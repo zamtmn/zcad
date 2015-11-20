@@ -72,7 +72,7 @@ TDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
 {EXPORT-}
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
- uses UGDBDescriptor,GDBText,GDBDevice,GDBBlockInsert,iodxf, GDBManager,shared,commandline{,log};
+ uses UGDBDescriptor,GDBText,GDBDevice,GDBBlockInsert,iodxf, GDBManager,uzcshared,commandline{,log};
 procedure TDrawing.FillDrawingPartRC(var dc:TDrawContext);
 var
   vd:pvardesk;

@@ -97,7 +97,7 @@ function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):GDBInteger;
 function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
- uses enitiesextendervariables,GDBText,GDBDevice,GDBBlockInsert,iodxf, GDBManager,shared,commandline{,log};
+ uses enitiesextendervariables,GDBText,GDBDevice,GDBBlockInsert,iodxf, GDBManager,uzcshared,commandline{,log};
 function GDBDescriptor.GetDefaultDrawingName:GDBString;
 var
     OldName:GDBString;
@@ -564,7 +564,7 @@ begin
           if td=nil then
                         begin
                           exit;
-                          shared.FatalError(sysutils.format('Block "%s" not found! If this dimension arrow block - manually creating block not implemented yet((',[name]));
+                          uzcshared.FatalError(sysutils.format('Block "%s" not found! If this dimension arrow block - manually creating block not implemented yet((',[name]));
                         end;
           CopyBlock(BlockBaseDWG,PTSimpleDrawing(_to),td);
      end;
@@ -938,10 +938,10 @@ begin
   pbasefont:=FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,sysvarAlternateFont));
   if pbasefont=nil then
   begin
-       shared.LogError(format(rsAlternateFontNotFoundIn,[sysvarAlternateFont,sysvarPATHFontsPath]));
+       uzcshared.LogError(format(rsAlternateFontNotFoundIn,[sysvarAlternateFont,sysvarPATHFontsPath]));
        r := LazarusResources.Find(resname);
        if r = nil then
-                      shared.FatalError(rsReserveFontNotFound)
+                      uzcshared.FatalError(rsReserveFontNotFound)
                   else
                       begin
                            f.init({$IFDEF DEBUGBUILD}'{94091172-3DD7-4038-99B6-90CD8B8E971D}',{$ENDIF}length(r.Value));
@@ -950,7 +950,7 @@ begin
                            pbasefont:=FontManager.addFonf(TempPath+filename);
                            f.done;
                            if pbasefont=nil then
-                                                shared.FatalError(rsReserveFontNotLoad);
+                                                uzcshared.FatalError(rsReserveFontNotLoad);
                       end;
   end;
   FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,'ltypeshp.shx'));

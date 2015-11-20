@@ -47,7 +47,7 @@ uses
   //UGDBVisibleOpenArray,
   //gdbobjectsconstdef,
   GDBEntity,
- shared,
+ uzcshared,
  ugdbdrawing,
   {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}AboutWnd,HelpWnd,memman,WindowsSpecific,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}uzclog,Varman,UGDBNumerator,cmdline,
@@ -122,7 +122,7 @@ begin
             gdb.CurrentDWG:=poglwnd.PDWG;
             poglwnd.GDBActivate;
        end;
-       shared.SBTextOut('Закрыто');
+       uzcshared.SBTextOut('Закрыто');
        GDBobjinsp.ReturnToDefault;
        sharedgdb.updatevisible;
   end;*)
@@ -248,8 +248,8 @@ begin
      if fileExists(utf8tosys(tn)) then
                            {merge_com(@tn[1])}Load_merge(@tn[1],TLOLoad)
                        else
-                           shared.ShowError(format(rsTemplateNotFound,[tn]));
-                           //shared.ShowError('Не найден файл шаблона "'+tn+'"');
+                           uzcshared.ShowError(format(rsTemplateNotFound,[tn]));
+                           //uzcshared.ShowError('Не найден файл шаблона "'+tn+'"');
      end;
      wpowner.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
                                 //создания или загрузки
@@ -298,8 +298,8 @@ begin
        import(s,gdb.GetCurrentDWG^);
   end
             else
-     shared.ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
-     //shared.ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
+     uzcshared.ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
+     //uzcshared.ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
 end;
 function Load_com(operands:TCommandOperands):TCommandResult;
 var
@@ -355,10 +355,10 @@ begin
      end
                else
                begin
-                    shared.ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
+                    uzcshared.ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
                     result:=cmd_error;
                end;
-        //shared.ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
+        //uzcshared.ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
 end;
 function units_cmd:GDBInteger;
 var
@@ -511,11 +511,11 @@ begin
                                                 If IsValidIdent(Operands) then
                                                                               DockMaster.ShowControl(Operands,true)
                                                                           else
-                                                                              shared.ShowError('Show: invalid identificator!');
+                                                                              uzcshared.ShowError('Show: invalid identificator!');
                                            end;
                       end
                   else
-                      shared.ShowError('Show command must have one operand!');
+                      uzcshared.ShowError('Show command must have one operand!');
   result:=cmd_ok;
 end;
 function quit_com(operands:TCommandOperands):TCommandResult;
@@ -717,7 +717,7 @@ begin
          p:=commandmanager.iterate(ir);
    until p=nil;
    clist.sort;
-   shared.HistoryOutStr(clist.GetTextWithEOL);
+   uzcshared.HistoryOutStr(clist.GetTextWithEOL);
    clist.done;
    result:=cmd_ok;
 end;

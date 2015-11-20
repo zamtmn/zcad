@@ -33,7 +33,7 @@ uses
   types,graphics,
   ExtCtrls,Controls,Classes,menus,Forms,lcltype,
 
-  Varman,gdbasetypes,SysUtils,//shared,
+  Varman,gdbasetypes,SysUtils,//uzcshared,
   gdbase,varmandef,
   memman,TypeDescriptors,UGDBStringArray;
 const

@@ -9,7 +9,7 @@ unit GDBNet;
 
 interface
 Uses gdbobjectextender,zeentityfactory,Varman,gdbdrawcontext,UGDBLayerArray,GDBGenericSubEntry,ugdbdrawingdef,gdbvisualprop,zcadsysvars,UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
-memman,GDBSubordinated,uunitmanager,shared,sysutils,UGDBOpenArrayOfPObjects;
+memman,GDBSubordinated,uunitmanager,uzcshared,sysutils,UGDBOpenArrayOfPObjects;
 const
      UNNAMEDNET='NET';
 type
@@ -400,7 +400,7 @@ begin
                                       system.break;
                                       end
                                          else
-                                         shared.ShowError('Нельзя обьеденить');
+                                         uzcshared.ShowError('Нельзя обьеденить');
                                  end;
 
                            ptestline:=currentnet^.objarray.iterate(ir3);

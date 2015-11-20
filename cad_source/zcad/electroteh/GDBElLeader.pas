@@ -12,7 +12,7 @@ uses enitiesextendervariables,zeentityfactory,Varman,gdbdrawcontext,GDBAbstractT
      ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,
      strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,GDBCable,GDBTable,
      UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},
-     GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
+     GDBComplex,{SysInfo,}sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
 type
@@ -63,7 +63,7 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             end;
 {EXPORT-}
 implementation
-uses UGDBTableStyleArray,log,UGDBOpenArrayOfPV,GDBCurve;
+uses UGDBTableStyleArray,uzclog,UGDBOpenArrayOfPV,GDBCurve;
 function GDBObjElLeader.calcvisible;
 //var i:GDBInteger;
 //    tv,tv1:gdbvertex4d;

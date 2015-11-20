@@ -21,7 +21,7 @@ unit zcobjectinspectorwrapper;
 
 interface
 uses
-  gdbase,log;
+  gdbase,uzclog;
 type
 {Export+}
   TWrapper2ObjInsp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)

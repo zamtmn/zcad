@@ -32,7 +32,7 @@ DbBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                  end;
 {EXPORT-}
 implementation
-uses log;
+uses uzclog;
 constructor DbBaseObject.initnul;
 begin
      Inherited initnul;

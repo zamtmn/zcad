@@ -26,10 +26,10 @@ uses
   memman,
   gdbobjectsconstdef,
   gdbEntity,GDBLine,
-  sysinfo,GDBNet,
+  {sysinfo,}GDBNet,
   shared,GDBSubordinated,GDBCable,varman,WindowsSpecific,uunitmanager,
-  UGDBOpenArrayOfPObjects,UGDBBillOfMaterial,UCableManager,GDBDevice,GDBTable,
-  paths,UGDBStringArray,math,Masks,log,GDBCommandsBase,strproc;
+  UGDBOpenArrayOfPObjects,UGDBBillOfMaterial,uzccablemanager,GDBDevice,GDBTable,
+  paths,UGDBStringArray,math,Masks,uzclog,GDBCommandsBase,strproc;
 type
 {Export+}
   TFindType=(

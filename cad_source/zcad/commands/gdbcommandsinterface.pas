@@ -28,7 +28,7 @@ uses
  {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,
-  sysinfo,
+  uzcsysinfo,
   //commandline,
   commandlinedef,
   commanddefinternal,
@@ -50,7 +50,7 @@ uses
  shared,
  ugdbdrawing,
   {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}AboutWnd,HelpWnd,memman,WindowsSpecific,{txteditwnd,}
- {messages,}UUnitManager,{zguisct,}log,Varman,UGDBNumerator,cmdline,
+ {messages,}UUnitManager,{zguisct,}uzclog,Varman,UGDBNumerator,cmdline,
  AnchorDocking,dialogs,XMLPropStorage,xmlconf,uzglopenglviewarea{,
    uPSCompiler,
   uPSRuntime,

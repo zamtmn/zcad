@@ -31,8 +31,8 @@ uses
        lineinfo,//math,
   {ZCAD BASE}
        uzelongprocesssupport,gluinterface,uzglgdidrawer,ugdbdrawing,UGDBOpenArrayOfPV,ugdbabstractdrawing,gdbpalette,paths,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
-       geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,log,
-       varmandef, varman,UUnitManager,SysInfo,shared,strmy,UGDBTextStyleArray,ugdbdimstylearray,
+       geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,uzclog,
+       varmandef, varman,UUnitManager,uzcsysinfo,shared,strmy,UGDBTextStyleArray,ugdbdimstylearray,
   {ZCAD SIMPLE PASCAL SCRIPT}
        languade,
   {ZCAD ENTITIES}
@@ -2049,7 +2049,7 @@ begin
                 line := f.readstring(#$A' ',#$D);
            end;
            toolbars.Add(paneldesk);
-           log.programlog.LogOutStr(paneldesk,0,LM_Info);
+           uzclog.programlog.LogOutStr(paneldesk,0,LM_Info);
       end
       else if uppercase(line) =createmenutoken  then
       begin

@@ -10,7 +10,7 @@ unit GDBCommandsOPS;
 interface
 uses
 
-  intftranslations,zeentitiesmanager,GDBEntity,uzglabstractviewarea,gdbdrawcontext,GDBAbstractText,GDBText,UGDBStringArray,zeentityfactory,zcadsysvars,strproc,gdbasetypes,commandline,log,UGDBOpenArrayOfPObjects,
+  intftranslations,zeentitiesmanager,GDBEntity,uzglabstractviewarea,gdbdrawcontext,GDBAbstractText,GDBText,UGDBStringArray,zeentityfactory,zcadsysvars,strproc,gdbasetypes,commandline,uzclog,UGDBOpenArrayOfPObjects,
   plugins,
   commandlinedef,
   commanddefinternal,
@@ -31,7 +31,7 @@ uses
   gdbobjectsconstdef,
   GDBCommandsDraw,
   UGDBVisibleOpenArray,{gdbEntity,}{GDBCircle,}GDBLine,{GDBGenericSubEntry,}
-  paths,shared,{GDBSubordinated,}GDBBlockInsert,{ZWinMan,}sysinfo,varman,UCableManager,GDBDevice,GDBMText,math;
+  paths,shared,{GDBSubordinated,}GDBBlockInsert,{ZWinMan,}{sysinfo,}varman,uzccablemanager,GDBDevice,GDBMText,math;
 
 type
 {Export+}

@@ -21,11 +21,9 @@ unit iopalette;
 interface
 uses paths,gdbpalette,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
      strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}{log,}sysutils,
-     UGDBOpenArrayOfByte,gdbasetypes,SysInfo,gdbase;
+     UGDBOpenArrayOfByte,gdbasetypes,gdbase;
 procedure readpalette(filename:string);
 implementation
-uses
-    shared;
 procedure readpalette;
 var
   i,code:GDBInteger;

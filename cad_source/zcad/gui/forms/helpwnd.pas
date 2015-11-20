@@ -32,7 +32,7 @@ type
 var
   Helpwindow:THelpWnd;
 implementation
-uses shared,log;
+uses shared,uzclog;
 procedure THelpWnd.AfterConstruction;
 begin
   inherited;

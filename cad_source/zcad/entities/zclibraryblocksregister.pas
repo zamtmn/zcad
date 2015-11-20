@@ -25,7 +25,7 @@ uses commanddefinternal,strproc,UGDBOpenArrayOfByte,commandlinedef,paths,UGDBLay
     memman,zcadsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity;
 implementation
 uses
-    UGDBDescriptor,GDBCommandsBase,log,GDBManager;
+    UGDBDescriptor,GDBCommandsBase,uzclog,GDBManager;
 function LoadLibraryBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString):PGDBObjBlockdef;
 var
   DependOnBlock,tdp:gdbstring;

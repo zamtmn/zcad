@@ -25,7 +25,7 @@ uses
  generalviewarea,zeundostack,zcchangeundocommand,zcobjectinspectormultiobjects,enitiesextendervariables,gdbdrawcontext,ugdbdrawing,paths,fileformatsmanager,gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,FileUtil,Forms,Controls,Clipbrd,lclintf,
   plugins,
-  sysinfo,
+  uzcsysinfo,
   //commandline,
   commandlinedef,
   commanddefinternal,
@@ -47,7 +47,7 @@ uses
  shared,
  UGDBEntTree,
   {zmenus,}{projecttreewnd,}gdbasetypes,{optionswnd,}{AboutWnd,HelpWnd,}memman,WindowsSpecific,{txteditwnd,}
- {messages,}UUnitManager,{zguisct,}log,Varman,
+ {messages,}UUnitManager,uzclog,Varman,
  {AnchorDocking,}dialogs,uinfoform{,
    uPSCompiler,
   uPSRuntime,
@@ -1496,7 +1496,7 @@ var
    cleaned:integer;
    s:string;
 begin
-     if sysinfo.sysparam.updatepo then
+     if uzcsysinfo.sysparam.updatepo then
      begin
           begin
                cleaned:=po.exportcompileritems(actualypo);
@@ -1508,7 +1508,7 @@ begin
                                                                          exit;
                po.SaveToFile(expandpath(PODirectory + 'zcad.po.backup'));
                actualypo.SaveToFile(expandpath(PODirectory + 'zcad.po'));
-               sysinfo.sysparam.updatepo:=false
+               uzcsysinfo.sysparam.updatepo:=false
           end;
      end
         else showerror('Command line swith "UpdatePO" must be set. (or not the first time running this command)');

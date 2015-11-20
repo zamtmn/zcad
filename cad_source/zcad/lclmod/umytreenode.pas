@@ -22,7 +22,7 @@ interface
 
 uses
   paths,Themes,zcadinterface,commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,{StdCtrls,}Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,{ButtonPanel,}Buttons,
-  {strutils,}{$IFNDEF DELPHI}intftranslations,{$ENDIF}sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
+  {strutils,}{$IFNDEF DELPHI}intftranslations,{$ENDIF}sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,uzcsysinfo,UGDBOpenArrayOfByte;
 type
     TZAction=class(TAction)
                    public
@@ -146,7 +146,7 @@ procedure SetHeightControl(_parent:TWinControl;h:integer);
 //var
 //   ACN_ShowObjInsp:TmyAction=nil;
 implementation
-uses commandline,log,ugdbdescriptor;
+uses commandline,uzclog,ugdbdescriptor;
 function TMySpeedButton.GetDrawDetails: TThemedElementDetails;
 
   function WindowPart: TThemedScrollBar;

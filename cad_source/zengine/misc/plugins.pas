@@ -19,7 +19,7 @@
 unit plugins;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,sysutils, dynlibs, log,memman,UGDBOpenArrayOfData,GDBEntity;
+uses gdbasetypes,sysutils, dynlibs, uzclog,memman,UGDBOpenArrayOfData,GDBEntity;
 type
     {Export+}
   PluginVersionInfo=packed record

@@ -20,7 +20,7 @@ unit intftranslations;
 {$INCLUDE def.inc}
 
 interface
-uses paths,LCLVersion,strproc{$IFNDEF DELPHI},LCLProc,gettext,translations,fileutil,LResources{$ENDIF},sysinfo,sysutils,log,forms,Classes, typinfo;
+uses paths,LCLVersion,strproc{$IFNDEF DELPHI},LCLProc,gettext,translations,fileutil,LResources{$ENDIF},uzcsysinfo,sysutils,uzclog,forms,Classes, typinfo;
 
 type
     TmyPOFile = class(TPOFile)
@@ -142,7 +142,7 @@ procedure createpo;
 var
    AFilename:string;
 begin
-     if not sysinfo.sysparam.updatepo then
+     if not uzcsysinfo.sysparam.updatepo then
      begin
            if Lang<>'' then
                            begin
@@ -194,7 +194,7 @@ begin
     result:=po.Translate({Identifier}'', OriginalValue);
     programlog.LogOutFormatStr('InterfaceTranslate: identifier:"%s" originalValue:"%s" translate to "%s"',[Identifier,OriginalValue,result],0,LM_Debug);
 
-    if sysinfo.sysparam.updatepo then
+    if uzcsysinfo.sysparam.updatepo then
      begin
           Item:=TPOFileItem(po.{FIdentifierToItem}FIdentLowVarToItem{FOriginalToItem}.Data[UTF8LowerCase(Identifier)]);
           if not assigned(item) then
@@ -254,7 +254,7 @@ procedure initialize;
       GetLanguageIDs(Lang, FallbackLang); // определено в модуле gettext
       createpo;
       LRSTranslator:=TPoTranslator.Create;
-      if not sysinfo.sysparam.updatepo then
+      if not uzcsysinfo.sysparam.updatepo then
                                        begin
                                            TranslateResourceStrings(po);
                                            TranslateUnitResourceStrings('anchordockstr', PODirectory + 'anchordockstr.%s.po', Lang, FallbackLang);

@@ -4,10 +4,10 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }  
-unit UCableManager;
+unit uzccablemanager;
 {$INCLUDE def.inc}
 interface
-uses enitiesextendervariables,zcadvariablesutils,Varman,strproc,GDBCable,GDBDevice,gdbobjectsconstdef,UGDBOpenArrayOfPObjects{,Varman},languade,UGDBOpenArrayOfObjects{,RegCnownTypes,URegisterObjects},SysUtils{,UBaseTypeDescriptor},gdbasetypes{, shared},gdbase{,UGDBOpenArrayOfByte}, varmandef,sysinfo{,UGDBOpenArrayOfData},{log,}memman;
+uses enitiesextendervariables,zcadvariablesutils,Varman,strproc,GDBCable,GDBDevice,gdbobjectsconstdef,UGDBOpenArrayOfPObjects{,Varman},languade,UGDBOpenArrayOfObjects{,RegCnownTypes,URegisterObjects},SysUtils{,UBaseTypeDescriptor},gdbasetypes{, shared},gdbase{,UGDBOpenArrayOfByte}, varmandef{,sysinfo}{,UGDBOpenArrayOfData},{log,}memman;
 const
      DefCableName='Создан. Не назван';
      UnNamedCable='Имя отсутствует';

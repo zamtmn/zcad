@@ -22,13 +22,13 @@ unit tswnd;
 interface
 
 uses
-  zcchangeundocommand,zcobjectchangeundocommand2,ugdbdrawing,LMessages,ugdbdimstylearray,ugdbfont,log,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
+  zcchangeundocommand,zcobjectchangeundocommand2,ugdbdrawing,LMessages,ugdbdimstylearray,ugdbfont,uzclog,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 
   gdbobjectsconstdef,UGDBTextStyleArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,usuptypededitors,
 
-  paths,zcadinterface, zcadstrconsts, sysinfo,strproc, shared, UBaseTypeDescriptor,
+  paths,zcadinterface, zcadstrconsts, uzcsysinfo,strproc, shared, UBaseTypeDescriptor,
   imagesmanager, usupportgui, ZListView,UGDBFontManager,varman,UGDBStringArray,GDBEntity,GDBText;
 
 const

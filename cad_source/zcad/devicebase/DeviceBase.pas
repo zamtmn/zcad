@@ -1,7 +1,7 @@
 unit DeviceBase;
 {$INCLUDE def.inc}
 interface
-uses paths,intftranslations,gvector,varmandef,CsvDocument,devicebaseabstract,zcadsysvars,fileutil,sysinfo,strmy,gdbasetypes,gdbase,UUnitManager,varman,{varmandef,}sysutils,typedescriptors,URecordDescriptor,UObjectDescriptor,shared;
+uses paths,intftranslations,gvector,varmandef,CsvDocument,devicebaseabstract,zcadsysvars,fileutil,uzcsysinfo,strmy,gdbasetypes,gdbase,UUnitManager,varman,{varmandef,}sysutils,typedescriptors,URecordDescriptor,UObjectDescriptor,shared;
 type
 {REGISTEROBJECTTYPE DeviceDbBaseObject}
 {REGISTEROBJECTTYPE ElDeviceBaseObject}
@@ -49,7 +49,7 @@ const
      firstfilename='_startup.pas';
 var devman:DeviceManager;
 implementation
-uses log;
+uses uzclog;
 constructor CableDeviceBaseObject.initnul;
 begin
      Inherited initnul;

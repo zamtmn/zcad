@@ -36,7 +36,7 @@ uses
   geometry,
   memman,
   gdbobjectsconstdef,
-  shared,log;
+  shared,uzclog;
 implementation
 uses UBaseTypeDescriptor,Varman,TypeDescriptors;
 var

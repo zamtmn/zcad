@@ -23,7 +23,7 @@ uses gdbdrawcontext,zeentityfactory,
     {$IFNDEF DELPHI}dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}
     ugdbsimpledrawing,
     GDBCircle,GDBArc,GDBLine,
-    geometry,shared,gdbasetypes,log,gdbase,
+    geometry,shared,gdbasetypes,uzclog,gdbase,
     sysutils,memman,gdbobjectsconstdef,
     UGDBOpenArrayOfByte,GDBEntity;
 {$IFNDEF DELPHI}

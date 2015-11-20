@@ -19,7 +19,7 @@
 unit commandlinedef;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,gdbase{,UGDBOpenArrayOfPointer},oglwindowdef,log,UGDBOpenArrayOfPObjects,ugdbdrawingdef;
+uses gdbasetypes,gdbase{,UGDBOpenArrayOfPointer},oglwindowdef,uzclog,UGDBOpenArrayOfPObjects,ugdbdrawingdef;
 const
      CADWG=1;
      CASelEnt=2;

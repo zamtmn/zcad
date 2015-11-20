@@ -147,5 +147,4 @@ begin
   result:=pointer(getelement(index)^);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArrayOfPObjects.initialization');{$ENDIF}
 end.

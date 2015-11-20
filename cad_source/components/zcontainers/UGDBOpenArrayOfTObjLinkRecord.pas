@@ -140,5 +140,4 @@ begin
      end;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArrayOfTObjLinkRecord.initialization');{$ENDIF}
 end.

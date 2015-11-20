@@ -305,5 +305,4 @@ begin
                        end;
 end;
 begin
-     {$IFDEF DEBUGINITSECTION}LogOut('dxftypes.initialization');{$ENDIF}
 end.

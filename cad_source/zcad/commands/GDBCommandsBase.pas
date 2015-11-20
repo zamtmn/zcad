@@ -1911,7 +1911,6 @@ begin
   *)
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBCommandsBase.initialization');{$ENDIF}
   OSModeEditor.initnul;
   OSModeEditor.trace.ZAxis:=false;
   OSModeEditor.trace.Angle:=TTA45;

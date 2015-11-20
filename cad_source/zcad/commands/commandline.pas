@@ -749,7 +749,6 @@ begin
   commandmanager.FreeAndDone;
 end;}
 initialization
-     {$IFDEF DEBUGINITSECTION}LogOut('commandline.initialization');{$ENDIF}
      commandmanager.init(1000);
 finalization
      commandmanager.FreeAndDone;

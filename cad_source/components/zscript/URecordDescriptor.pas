@@ -141,7 +141,7 @@ var pd:PFieldDescriptor;
          ir:itrec;
 begin
      {$IFDEF TOTALYLOG}
-     DebugLn(sysutils.Format('Start Serialize for "%s"',[self.TypeName]));
+     DebugLn('{T+}Start Serialize for "%s"',[self.TypeName]);
      {$ENDIF}
      //programlog.LogOutFormatStr('Start Serialize for "%s"',[self.TypeName],lp_IncPos,LM_Trace);
      fo:=0;
@@ -164,7 +164,7 @@ begin
                                     pd:=pd;
               if (pd^.base.Saved and SaveFlag)<>0 then
               begin
-                   {$IFDEF DEBUGBUILD}programlog.logoutstr(pd^.base.ProgramName,0,LM_Fatal);{$ENDIF}
+                   {$IFDEF DEBUGBUILD}programlog.logoutstr('{F}'+pd^.base.ProgramName,0,LM_Fatal);{$ENDIF}
                    p:=PInstance;
                    if pd^.Offset<>fo then
                                          begin
@@ -196,7 +196,7 @@ begin
         until pd=nil;
      dec(sub);
      {$IFDEF TOTALYLOG}
-     DebugLn(sysutils.Format('End Serialize for "%s"',[self.TypeName]));
+     DebugLn('{T-}End Serialize for "%s"',[self.TypeName]);
      {$ENDIF}
      //programlog.LogOutFormatStr('End Serialize for "%s"',[self.TypeName],lp_DecPos,LM_Trace);
 end;
@@ -211,7 +211,7 @@ var pd:PFieldDescriptor;
          ir:itrec;
 begin
      {$IFDEF TOTALYLOG}
-     DebugLn(sysutils.Format('Start DeSerialize for "%s"',[self.TypeName]));
+     DebugLn('{T+}Start DeSerialize for "%s"',[self.TypeName]);
      {$ENDIF}
      //programlog.LogOutFormatStr('Start DeSerialize for "%s"',[self.TypeName],lp_IncPos,LM_Trace);
      //linkbuf.CreateLinkRecord(PInstance,membuf^.Count,OBT);
@@ -246,7 +246,7 @@ begin
               pd:=Fields.iterate(ir);
         until pd=nil;
      {$IFDEF TOTALYLOG}
-     DebugLn(sysutils.Format('End Serialize for "%s"',[self.TypeName]));
+     DebugLn('{T-}End Serialize for "%s"',[self.TypeName]);
      {$ENDIF}
      //programlog.LogOutFormatStr('End Serialize for "%s"',[self.TypeName],lp_DecPos,LM_Trace);
 end;
@@ -363,12 +363,11 @@ var PFD:PFieldDescriptor;
     SaveFastEditor:TFastEditorProcs;
 begin
      {$IFDEF TOTALYLOG}
-     DebugLn(sysutils.Format('RecordDescriptor.CreateProperties "%s"',[name]));
+     DebugLn('{T+}RecordDescriptor.CreateProperties "%s"',[name]);
      {$ENDIF}
      //programlog.LogOutFormatStr('RecordDescriptor.CreateProperties "%s"',[name],lp_IncPos,LM_Trace);
 
      pobj:=addr;
-     //programlog.logoutstr(inttohex(cardinal(pobj),10),0);
      if bmode<>property_build then
                                   begin
                                        bmode:=bmode;
@@ -422,7 +421,7 @@ begin
                                                   if pvd^.name='BTY_TreeCoord' then
                                                                                    pvd^.name:=pvd^.name;
                                                   {$IFDEF TOTALYLOG}
-                                                  DebugLn(sysutils.Format('process prop: "%s"',[pvd^.name]));
+                                                  DebugLn('{T}process prop: "%s"',[pvd^.name]);
                                                   {$ENDIF}
                                                   //programlog.LogOutFormatStr('process prop: "%s"',[pvd^.name],lp_OldPos,LM_Trace);
                                                   i:=pos('_',pvd^.name);
@@ -521,7 +520,7 @@ begin
                    else*)
            if pfd^.base.ProgramName='#' then begin
                                                 {$IFDEF TOTALYLOG}
-                                                DebugLn('Found ##PVMT');
+                                                DebugLn('{T}Found ##PVMT');
                                                 {$ENDIF}
                                                 //programlog.LogOutStr('Found ##PVMT',lp_OldPos,LM_Trace);
                                                 ppd:=GetPPD(ppda,bmode);
@@ -552,7 +551,7 @@ begin
                                                                                                       if assigned(ppointer(pobj)^) then
                                                                                                                                        begin
                                                                                                                                        {$IFDEF TOTALYLOG}
-                                                                                                                                       DebugLn(sysutils.Format('%p',[pobj]));
+                                                                                                                                       DebugLn('{T}%p',[pobj]);
                                                                                                                                        {$ENDIF}
                                                                                                                                        //programlog.LogOutFormatStr('%p',[pobj],lp_OldPos,LM_Trace);
                                                                                                                                        ppd^.value:=pobj^.GetObjTypeName;
@@ -592,7 +591,7 @@ begin
                if bmodesave<>property_build then
                                       bmode:=bmodesave;
      {$IFDEF TOTALYLOG}
-     DebugLn(sysutils.Format('end;{RecordDescriptor.CreateProperties "%s"}',[name]));
+     DebugLn('{T-}end;{RecordDescriptor.CreateProperties "%s"}',[name]);
      {$ENDIF}
      //programlog.LogOutFormatStr('end;{RecordDescriptor.CreateProperties "%s"}',[name],lp_DecPos,LM_Trace);
 end;
@@ -633,6 +632,5 @@ begin
         until pd=nil;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('URecordDescriptor.initialization');{$ENDIF}
   EmptyTypedData:='Empty';
 end.

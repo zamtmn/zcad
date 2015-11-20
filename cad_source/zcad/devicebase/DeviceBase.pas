@@ -254,6 +254,5 @@ procedure finalize;
 begin
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('GDeviceBase.initialization');{$ENDIF}
   startup;
 end.

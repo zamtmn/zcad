@@ -1864,6 +1864,5 @@ begin
   RegisterComponents('zcadcontrols',[TGDBobjinsp]);
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('zcobjectinspector.initialization');{$ENDIF}
 end.
 

@@ -589,7 +589,6 @@ begin
   result:=GDBObjNetDXFFeatures;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBNet.initialization');{$ENDIF}
   RegisterEntityUpgradeInfo(GDBLineID,UD_LineToNet,@UpgradeLine2Net);
   GDBObjNetDXFFeatures:=TDXFEntIODataManager.Create;
 finalization

@@ -1723,10 +1723,7 @@ begin
                  end
              else
                  begin
-                 {$IFDEF TOTALYLOG}
-                 DebugLn(rsDivByZero);
-                 {$ENDIF}
-                 //programlog.LogOutStr(rsDivByZero,lp_OldPos,LM_Error);
+                 DebugLn('{EH}'+rsDivByZero);
                  len:=len+2;
                  end;
 end;
@@ -2059,9 +2056,7 @@ begin
                                  end
                              else
                                  begin
-                                      {$IFDEF TOTALYLOG}
-                                      DebugLn('CreateVertexFromArray: no enough params in args');
-                                      {$ENDIF}
+                                      DebugLn('{E}CreateVertexFromArray: no enough params in args');
                                       //programlog.LogOutStr('CreateVertexFromArray: no enough params in args',lp_OldPos,LM_Error);
                                  end;
 
@@ -2406,7 +2401,6 @@ end;
 
 
 begin
-     {$IFDEF DEBUGINITSECTION}log.LogOut('geometry.initialization');{$ENDIF}
      WorldMatrix:=oneMatrix;
      //CurrentCS:=OneMatrix;
      //wx:=@CurrentCS[0];

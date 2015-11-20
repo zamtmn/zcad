@@ -3440,7 +3440,6 @@ begin
 end;
 initialization
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('mainwindow.initialization');{$ENDIF}
   CreateCommandFastObjectPlugin(pointer($100),'GetAV',0,0);
   CreateCommandFastObjectPlugin(@RaiseException_com,'RaiseException',0,0);
   CreateCommandFastObjectPlugin(@DockingOptions_com,'DockingOptions',0,0);

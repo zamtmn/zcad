@@ -128,5 +128,4 @@ begin
      AddButton(Text,HText).FMethod:=FMethod;//.onClickMethod:=TonClickMethod(proc);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('udmenuwnd.initialization');{$ENDIF}
 end.

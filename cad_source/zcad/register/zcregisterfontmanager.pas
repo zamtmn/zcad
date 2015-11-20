@@ -23,7 +23,6 @@ uses zcadsysvars,UGDBFontManager,paths,intftranslations,UUnitManager,TypeDescrip
 implementation
 
 initialization
-{$IFDEF DEBUGINITSECTION}LogOut('zcregisterzscript.initialization');{$ENDIF}
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Fonts','GDBString',@sysvarPATHFontsPath);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_AlternateFont','GDBString',@sysvarAlternateFont);
 sysvar.PATH.Fonts_Path:=@sysvarPATHFontsPath;

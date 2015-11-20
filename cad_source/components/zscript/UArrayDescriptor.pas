@@ -86,7 +86,7 @@ function ArrayDescriptor.CreateProperties;
 var ppd:PPropertyDeskriptor;
 begin
      {$IFDEF TOTALYLOG}
-     debugln(sysutils.Format('ArrayDescriptor.CreateProperties(%s)',[name]));
+     debugln(sysutils.Format('{T}ArrayDescriptor.CreateProperties(%s)',[name]));
      {$ENDIF}
      //programlog.LogOutFormatStr('ArrayDescriptor.CreateProperties(%s)',[name],lp_OldPos,LM_Trace);
      ppd:=GetPPD(ppda,bmode);
@@ -106,5 +106,4 @@ begin
      IncAddr(addr);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UArrayDescriptor.initialization');{$ENDIF}
 end.

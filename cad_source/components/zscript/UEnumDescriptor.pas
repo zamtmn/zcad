@@ -201,5 +201,4 @@ begin
                                        end;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UEnumDescriptor.initialization');{$ENDIF}
 end.

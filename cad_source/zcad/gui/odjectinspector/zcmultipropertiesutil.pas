@@ -245,7 +245,6 @@ begin
 end;
 
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('zcmultipropertiesutil.initialization');{$ENDIF}
 finalization
 end.
 

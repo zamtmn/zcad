@@ -213,7 +213,6 @@ begin
 end;
 
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArrayOfUCommands.initialization');{$ENDIF}
   onUndoRedoDataOwner:=nil;
 end.
 

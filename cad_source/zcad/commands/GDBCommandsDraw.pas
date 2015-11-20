@@ -4111,7 +4111,6 @@ begin
   freeandnil(paged);
 end;
 initialization
-     {$IFDEF DEBUGINITSECTION}LogOut('GDBCommandsDraw.initialization');{$ENDIF}
      startup;
 finalization
      finalize;

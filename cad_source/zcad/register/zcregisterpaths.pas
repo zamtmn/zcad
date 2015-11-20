@@ -23,7 +23,6 @@ uses zcadsysvars,paths,intftranslations,UUnitManager,TypeDescriptors;
 implementation
 
 initialization
-{$IFDEF DEBUGINITSECTION}LogOut('zcregisterzscript.initialization');{$ENDIF}
 //units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Program_Run','GDBString',@ProgramPath);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Support_Path','GDBString',@SupportPath);
 sysvar.PATH.Program_Run:=@ProgramPath;

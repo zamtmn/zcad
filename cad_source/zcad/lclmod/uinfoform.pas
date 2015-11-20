@@ -84,7 +84,6 @@ begin
      {$ENDIF}
 end;
 initialization
-{$IFDEF DEBUGINITSECTION}LogOut('uinfoform.initialization');{$ENDIF}
 finalization
 end.
 

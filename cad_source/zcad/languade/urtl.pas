@@ -31,7 +31,6 @@ var
   ptd:PUserTypeDescriptor;
 {$ENDIF}
 initialization;
-     {$IFDEF DEBUGINITSECTION}LogOut('urtl.initialization');{$ENDIF}
      programlog.logoutstr('urtl.initialization',lp_IncPos,LM_Debug);
      //units.init;
      if SysUnit=nil then

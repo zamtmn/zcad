@@ -166,7 +166,7 @@ function TEnumDataDescriptor.CreateProperties;
 var ppd:PPropertyDeskriptor;
 begin
      {$IFDEF TOTALYLOG}
-     DebugLn(sysutils.Format('TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]));
+     DebugLn('{T}TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
      {$ENDIF}
      //programlog.LogOutFormatStr('TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda],lp_OldPos,LM_Trace);
      ppd:=GetPPD(ppda,bmode);
@@ -212,7 +212,7 @@ function BaseTypeDescriptor.CreateProperties;
 var ppd:PPropertyDeskriptor;
 begin
      {$IFDEF TOTALYLOG}
-     DebugLn(sysutils.Format('BaseTypeDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]));
+     DebugLn('{T}BaseTypeDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
      {$ENDIF}
      //programlog.LogOutFormatStr('BaseTypeDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda],lp_OldPos,LM_Trace);
      ppd:=GetPPD(ppda,bmode);
@@ -294,7 +294,7 @@ else if uppercase(value)='FALSE' then
                                      PGDBboolean(pinstance)^:=false
 else
     {$IFDEF TOTALYLOG}
-    DebugLn('GDBBooleanDescriptor.SetValueFromString('+value+') {not false\true}');
+    DebugLn('{E}GDBBooleanDescriptor.SetValueFromString('+value+') {not false\true}');
     {$ENDIF}
     //programlog.LogOutStr('GDBBooleanDescriptor.SetValueFromString('+value+') {not false\true}',lp_OldPos,LM_Error);
 end;
@@ -867,7 +867,6 @@ begin
      result:=UserValue.getGDBString(num)}
 end;
 begin
-       {$IFDEF DEBUGINITSECTION}LogOut('GDBBaseTypeDescriptor.initialization');{$ENDIF}
      //gdbgetmem({$IFDEF DEBUGBUILD}'{2A687C81-843D-4451-8663-384A625BFEBA}',{$ENDIF}pointer(GDBDoubleDescriptorObj),sizeof(GDBDoubleDescriptor));
      GDBDoubleDescriptorObj.init;
      GDBNonDimensionDoubleDescriptorObj.baseinit(sizeof(GDBNonDimensionDouble),'GDBNonDimensionDouble',nil);

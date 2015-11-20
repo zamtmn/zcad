@@ -1087,12 +1087,6 @@ end;
 
 
 initialization
-{ write to log for the control initialization sequence }
-{ пишем в лог для отслеживания последовательности инициализации модулей
-  раньше с последовательностью были проблемы, теперь их нет и писать
-  собственно не обязятельно, но я по привычке пишу }
-{$IFDEF DEBUGINITSECTION}LogOut('gdbcommandsexample.initialization');{$ENDIF}
-
 { тут регистрация функций в интерфейсе зкада}
 
 { function DrawAlignedDim_com will be available by the name of DimAligned,

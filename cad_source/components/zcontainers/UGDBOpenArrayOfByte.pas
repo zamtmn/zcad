@@ -377,5 +377,4 @@ begin
   end;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArrayofByte.initialization');{$ENDIF}
 end.

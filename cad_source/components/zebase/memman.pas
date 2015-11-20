@@ -223,7 +223,6 @@ begin
 end;
 initialization
 begin
-     {$IFDEF DEBUGINITSECTION}log.LogOut('memman.initialization');{$ENDIF}
      memdesktotal:=-1;
      memdeskfree:=0;
      lasti:=-1;

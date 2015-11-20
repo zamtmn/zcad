@@ -506,7 +506,7 @@ var pcmd:PMetodDescriptor;
         ir:itrec;
 begin
      {$IFDEF TOTALYLOG}
-     DebugLn(sysutils.Format('ObjectDescriptor.CopyTo(@%s)',[RD.TypeName]));
+     DebugLn('{T+}ObjectDescriptor.CopyTo(@%s)',[RD.TypeName]);
      {$ENDIF}
      //programlog.LogOutFormatStr('ObjectDescriptor.CopyTo(@%s)',[RD.TypeName],lp_IncPos,LM_Debug);
      if self.TypeName='DeviceDbBaseObject' then
@@ -535,7 +535,7 @@ begin
      PObjectDescriptor(rd)^.VMTCurrentOffset:=self.VMTCurrentOffset;
      PObjectDescriptor(rd)^.PVMT:=pvmt;
      {$IFDEF TOTALYLOG}
-     DebugLn('end;{ObjectDescriptor.CopyTo}');
+     DebugLn('{T-}end;{ObjectDescriptor.CopyTo}');
      {$ENDIF}
      //programlog.logoutstr('end;{ObjectDescriptor.CopyTo}',lp_DecPos,LM_Debug);
 end;
@@ -706,5 +706,4 @@ begin
      end;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UObjectDescriptor.initialization');{$ENDIF}
 end.

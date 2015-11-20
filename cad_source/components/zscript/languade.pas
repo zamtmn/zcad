@@ -504,7 +504,6 @@ begin
   result := rez;
 end;
 begin
-{$IFDEF DEBUGINITSECTION}log.LogOut('languade.initialization');{$ENDIF}
   //s := readspace('1+cxos');
   //s1 := readGDBWord(s);
   //s := readGDBWord(s);

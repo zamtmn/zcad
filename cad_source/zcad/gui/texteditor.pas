@@ -84,5 +84,4 @@ begin
 
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('texteditor.initialization');{$ENDIF}
 end.

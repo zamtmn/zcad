@@ -63,7 +63,6 @@ begin
   f.done;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('zclibraryblocksregister.initialization');{$ENDIF}
   CreateCommandFastObjectPlugin(@ReadBlockLibrary_com,'ReadBlockLibrary',0,0);
 finalization
 end.

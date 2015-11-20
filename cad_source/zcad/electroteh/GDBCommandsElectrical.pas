@@ -3277,7 +3277,6 @@ begin
      MainSpecContentFormat.FreeAndDone;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBCommandsElectrical.initialization');{$ENDIF}
   startup;
 finalization
   finalize;

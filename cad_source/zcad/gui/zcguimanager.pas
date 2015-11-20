@@ -86,7 +86,6 @@ begin
 end;
 
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('zcadguimanager.initialization');{$ENDIF}
   ZCADGUIManager:=TZCADGUIManager.Create;
 finalization
   ZCADGUIManager.destroy;

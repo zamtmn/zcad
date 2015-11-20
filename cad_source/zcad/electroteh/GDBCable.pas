@@ -534,7 +534,6 @@ begin
   result:=GDBObjCableDXFFeatures;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBCable.initialization');{$ENDIF}
   RegisterEntity(GDBCableID,'Cable',@AllocCable,@AllocAndInitCable);
   RegisterEntityUpgradeInfo(GDBPolylineID,1,@Upgrade3DPolyline2Cable);
   GDBObjCableDXFFeatures:=TDXFEntIODataManager.Create;

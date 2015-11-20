@@ -192,7 +192,6 @@ begin
      inherited;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('zcmultiproperties.initialization');{$ENDIF}
   MultiPropertiesManager:=TMultiPropertiesManager.Create;
 finalization
   MultiPropertiesManager.destroy;

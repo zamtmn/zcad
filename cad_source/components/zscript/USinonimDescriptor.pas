@@ -96,5 +96,4 @@ begin
       PTUserTypeDescriptor(PSinonimOf)^.DeSerialize(PInstance,SaveFlag,membuf,linkbuf);
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('USinonimDescriptor.initialization');{$ENDIF}
 end.

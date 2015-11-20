@@ -281,8 +281,7 @@ begin
         if curr^.SubNode<>nil then
                                       PTPropertyDeskriptorArray(curr^.SubNode)^.cleareraseobj;
         {$IFDEF TOTALYLOG}
-        DebugLn(curr^.Name);
-        DebugLn('='+curr^.Value);
+        DebugLn('{T}'curr^.Name,'=',curr^.Value);
         {$ENDIF}
         //programlog.LogOutStr(curr^.Name,0,LM_Trace);
         //programlog.LogOutStr('='+curr^.Value,0,LM_Trace);
@@ -352,6 +351,5 @@ begin
 end;
 
 begin
-       {$IFDEF DEBUGINITSECTION}LogOut('TypeDescriptor.initialization');{$ENDIF}
      zcpmode:=zcpbin;
 end.

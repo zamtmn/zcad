@@ -354,7 +354,6 @@ begin
                           max:=2*max;
                      end;}
   begin
-       //{$IFDEF TOTALYLOG}programlog.logoutstr('Read '+inttostr(SData)+' bytes, offset '+inttostr(ReadPos),0);{$ENDIF}
        GDBPointer(addr) := parray;
        addr := addr + ReadPos;
        Move(GDBPointer(addr)^,PData^,SData);
@@ -366,7 +365,6 @@ function GDBOpenArrayOfByte.PopData;
 var addr:GDBPlatformint;
 begin
   begin
-       //{$IFDEF TOTALYLOG}programlog.logoutstr('Read '+inttostr(SData)+' bytes, offset '+inttostr(ReadPos),0);{$ENDIF}
        GDBPointer(addr) := parray;
        addr := addr + count-SData;
        Move(GDBPointer(addr)^,PData^,SData);

@@ -425,9 +425,8 @@ procedure vardeskclear(p:GDBPointer);
 //var
    //s:string;
 begin
-     {$IFDEF TOTALYLOG}
-     DebugLn(format('{T}vardeskclear: "%s"',[pvardesk(p)^.name]));
-     {$ENDIF}
+     if VerboseLog then
+       DebugLn(format('{T}vardeskclear: "%s"',[pvardesk(p)^.name]));
      //programlog.LogOutFormatStr('vardeskclear: "%s"',[pvardesk(p)^.name],lp_OldPos,LM_Trace);
      if pvardesk(p)^.name='_EQ_C2000_KPB' then
      pvardesk(p)^.name:=pvardesk(p)^.name;
@@ -450,30 +449,26 @@ begin
 end;
 destructor typemanager.done;
 begin
-     {$IFDEF TOTALYLOG}
-     DebugLn('{T+}TypeManager.done');
-     {$ENDIF}
+     if VerboseLog then
+       DebugLn('{T+}TypeManager.done');
      //programlog.LogOutStr('TypeManager.done',lp_IncPos,LM_Trace);
      exttype.cleareraseobj;
      exttype.done;
      n2i.destroy;
-     {$IFDEF TOTALYLOG}
-     DebugLn('{T-}TypeManager.done;//end');
-     {$ENDIF}
+     if VerboseLog then
+       DebugLn('{T-}TypeManager.done;//end');
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
 destructor typemanager.systemdone;
 begin
-     {$IFDEF TOTALYLOG}
-     DebugLn('{T+}TypeManager.systemdone;');
-     {$ENDIF}
+     if VerboseLog then
+       DebugLn('{T+}TypeManager.systemdone;');
      //programlog.LogOutStr('TypeManager.systemdone',lp_IncPos,LM_Trace);
      exttype.cleareraseobjfrom(BaseTypesEndIndex-1);
      exttype.done;
      n2i.destroy;
-     {$IFDEF TOTALYLOG}
-     DebugLn('{T-}TypeManager.systemdone;//end');
-     {$ENDIF}
+     if VerboseLog then
+       DebugLn('{T-}TypeManager.systemdone;//end');
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
 
@@ -588,9 +583,9 @@ begin
 
   if vd.data.ptd=nil then
                          begin
-                              {$IFDEF TOTALYLOG}
-                              DebugLn(sysutils.format('{E}Type "%S" not defined in unit "%S"',[typename,self.Name]));
-                              {$ENDIF}
+                              if VerboseLog then
+                                DebugLn(sysutils.format('{E}Type "%S" not defined in unit "%S"',[typename,self.Name]));
+
                               //programlog.LogOutStr(sysutils.format('Type "%S" not defined in unit "%S"',[typename,self.Name]),lp_OldPos,LM_Error);
                          end;
 end;
@@ -601,16 +596,16 @@ begin
 end;
 destructor varmanager.done;
 begin
-     {$IFDEF TOTALYLOG}
-     DebugLn('{T+}varmanager.done;');
-     {$ENDIF}
+     if VerboseLog then
+       DebugLn('{T+}varmanager.done;');
+
      //programlog.LogOutStr('varmanager.done',lp_IncPos,LM_Trace);
      vardescarray.freewithprocanddone(vardeskclear);
      vararray.done;//TODO:проверить чистятся ли стринги внутри
      //exttype.freewithproc(basetypedescclear);
-     {$IFDEF TOTALYLOG}
-     DebugLn('{T-}varmanager.done;//end');
-     {$ENDIF}
+     if VerboseLog then
+       DebugLn('{T-}varmanager.done;//end');
+
 
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
@@ -1442,10 +1437,10 @@ begin
      if result<>nil then
                         exit;
      result:=InterfaceTypes._TypeName2PTD(n);
-     {$IFDEF TOTALYLOG}
-     if result=nil then
-       DebugLn('{W}In unit "%s" not found type "%s"',[name,n]);
-     {$ENDIF}
+     if VerboseLog then
+       if result=nil then
+         DebugLn('{W}In unit "%s" not found type "%s"',[name,n]);
+
       //programlog.LogOutStr(sysutils.format('In unit "%s" not found type "%s"',[name,n]),0,LM_Warning);
 end;
 function tunit.ObjectTypeName2PTD;
@@ -1499,9 +1494,8 @@ end;
 
 initialization;
 begin
-  {$IFDEF TOTALYLOG}
-  DebugLn('{D+}Varman.startup');
-  {$ENDIF}
+  if VerboseLog then
+    DebugLn('{D+}Varman.startup');
   //programlog.logoutstr('Varman.startup',lp_IncPos,LM_Debug);
   //DecimalSeparator := '.';
   ShortDateFormat:='MM.yy';
@@ -1511,9 +1505,8 @@ begin
   CategoryCollapsed.CreateArray;
   fillchar(CategoryCollapsed.parray^,CategoryCollapsed.max,byte(true));
   CategoryUnknownCOllapsed:=true;
-  {$IFDEF TOTALYLOG}
-  DebugLn('{D-}end; {Varman.startup}');
-  {$ENDIF}
+  if VerboseLog then
+    DebugLn('{D-}end; {Varman.startup}');
   //programlog.logoutstr('end; {Varman.startup}',lp_DecPos,LM_Debug);
 end;
 finalization;

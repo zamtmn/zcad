@@ -170,9 +170,9 @@ begin
             xmax:=NegInfinity;
             while pshxdata^<>0 do
               begin
-                {$IFDEF TOTALYLOG}
-                debugln('{T}SHX command %x',[integer(pshxdata^)]);
-                {$ENDIF}
+                if VerboseLog then
+                  debugln('{T}SHX command %x',[integer(pshxdata^)]);
+
                 //programlog.LogOutFormatStr('shx command %x',[integer(pshxdata^)],lp_OldPos,LM_Trace);
                 case pshxdata^ of
                   001:
@@ -195,9 +195,9 @@ begin
                       if onlyver=0 then
                         begin
                           baselen:=baselen/pshxdata^;
-                          {$IFDEF TOTALYLOG}
-                          debugln('{T}%d',[integer(pshxdata^)]);
-                          {$ENDIF}
+                          if VerboseLog then
+                            debugln('{T}%d',[integer(pshxdata^)]);
+
                           //programlog.LogOutFormatStr('%d',[integer(pshxdata^)],lp_OldPos,LM_Trace);
                         end;
                     end;
@@ -208,9 +208,9 @@ begin
                         begin
                           baselen:=baselen*pshxdata^;
                         end;
-                        {$IFDEF TOTALYLOG}
-                        debugln('{T}%d',[integer(pshxdata^)]);
-                        {$ENDIF}
+                        if VerboseLog then
+                          debugln('{T}%d',[integer(pshxdata^)]);
+
                         //programlog.LogOutFormatStr('%d',[integer(pshxdata^)],lp_OldPos,LM_Trace);
                     end;
                   005:
@@ -244,9 +244,9 @@ begin
                                      begin
                                           subsymbol:=pshxdata^;
                                      end;
-                      {$IFDEF TOTALYLOG}
-                      debugln('{T}(%d)',[integer(subsymbol)]);
-                      {$ENDIF}
+                      if VerboseLog then
+                        debugln('{T}(%d)',[integer(subsymbol)]);
+
                       //programlog.LogOutFormatStr('(%d)',[integer(subsymbol)],lp_OldPos,LM_Trace);
                       psubsyminfo:=pf^.GetOrCreateSymbolInfo(subsymbol);
 
@@ -371,9 +371,9 @@ begin
                       dx:=pShortint(pshxdata)^;
                       incpshxdata;
                       dy:=pShortint(pshxdata)^;
-                      {$IFDEF TOTALYLOG}
-                      debugln('{T}(%d,%d)',[integer(dx),integer(dy)]);
-                      {$ENDIF}
+                      if VerboseLog then
+                        debugln('{T}(%d,%d)',[integer(dx),integer(dy)]);
+
                       //programlog.LogOutFormatStr('(%d,%d)',[integer(dx),integer(dy)],lp_OldPos,LM_Trace);
                       if onlyver=0 then
                         begin
@@ -436,9 +436,9 @@ begin
                             end;
                       while (dx<>0)or(dy<>0) do
                         begin
-                          {$IFDEF TOTALYLOG}
-                          debugln('{T}(%d,%d)',[integer(dx),integer(dy)]);
-                          {$ENDIF}
+                          if VerboseLog then
+                            debugln('{T}(%d,%d)',[integer(dx),integer(dy)]);
+
                           //programlog.LogOutFormatStr('(%d,%d)',[integer(dx),integer(dy)],lp_OldPos,LM_Trace);
                           if draw then
                             begin
@@ -763,7 +763,7 @@ begin
                          end
                      else
                          begin
-                              debugln('{T}symbol %d',[integer(symnum)]);
+                              debugln('{T+}symbol %d',[integer(symnum)]);
                               //programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
                               dataread:=createsymbol(pf,symnum,memorybuf.GetCurrentReadAddres,false,line);
                               memorybuf.jump({datalen}dataread);

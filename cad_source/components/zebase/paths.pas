@@ -20,7 +20,7 @@ unit paths;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses Masks,LCLProc,gdbasetypes{$IFNDEF DELPHI},fileutil{$ENDIF},sysutils;
+uses gdbase,Masks,LCLProc,gdbasetypes{$IFNDEF DELPHI},fileutil{$ENDIF},sysutils;
 type
   TFromDirIterator=procedure (filename:GDBString);
   TFromDirIteratorObj=procedure (filename:GDBString) of object;
@@ -106,22 +106,19 @@ const
 var
    s,ts:gdbstring;
 begin
-     {$IFDEF TOTALYLOG}
-     DebugLn(sysutils.Format('FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
-     {$ENDIF}
+     if VerboseLog then
+       DebugLn(sysutils.Format('FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
      //programlog.LogOutFormatStr('FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)],0,LM_Debug);
      FileName:=ExpandPath(FileName);
-     {$IFDEF TOTALYLOG}
-     DebugLn(sysutils.Format('FindInSupportPath: file name expand to:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
-     {$ENDIF}
+     if VerboseLog then
+       DebugLn(sysutils.Format('FindInSupportPath: file name expand to:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
      //programlog.LogOutFormatStr('FindInSupportPath: file name expand to:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)],0,LM_Debug);
      if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)) then
                                  begin
                                       result:=FileName;
                                       //programlog.LogOutStr(format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]),0,LM_Info);
-                                      {$IFDEF TOTALYLOG}
-                                      DebugLn(sysutils.Format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]));
-                                      {$ENDIF}
+                                      if VerboseLog then
+                                        DebugLn(sysutils.Format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]));
                                       exit;
                                  end;
      //if PPaths<>nil then
@@ -130,26 +127,22 @@ begin
      repeat
            GetPartOfPath(ts,s,'|');
            ts:=ExpandPath(ts);
-           {$IFDEF TOTALYLOG}
-           DebugLn(sysutils.Format('FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]));
-           {$ENDIF}
+           if VerboseLog then
+             DebugLn(sysutils.Format('FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]));
            //programlog.LogOutFormatStr('FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)],0,LM_Debug);
            ts:=ts+FileName;
            if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then
                                  begin
                                       result:=ts;
-                                      {$IFDEF TOTALYLOG}
-                                      DebugLn(sysutils.Format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)]));
-                                      {$ENDIF}
-                                      //programlog.LogOutStr(format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)]),0,LM_Info);
+                                      if VerboseLog then
+                                        DebugLn(sysutils.Format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)]));
                                       exit;
                                  end;
      until s='';
      end;
      result:='';
-     {$IFDEF TOTALYLOG}
-     DebugLn(sysutils.Format('FindInSupportPath: file not found:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
-     {$ENDIF}
+     if VerboseLog then
+       DebugLn(sysutils.Format('FindInSupportPath: file not found:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
      //programlog.LogOutStr(format('FindInSupportPath: file not found:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]),0,LM_Warning);
 end;
 function ExpandPath(path:GDBString):GDBString;

@@ -88,7 +88,6 @@ begin
                           max:=2*max;
                      end;}
   begin
-       //{IFDEF TOTALYLOG}programlog.logoutstr('Write '+inttostr(SData)+' bytes, offset '+inttostr(count),0);{$ENDIF}
        GDBPointer(addr) := parray;
        addr := addr + count;
        Move(PData^, GDBPointer(addr)^,SData);

@@ -443,9 +443,8 @@ end;
 
 destructor UserTypeDescriptor.done;
 begin
-     {$IFDEF TOTALYLOG}
-     DebugLn('{T}'+self.TypeName);
-     {$ENDIF}
+     if VerboseLog then
+       DebugLn('{T}'+self.TypeName);
      //programlog.LogOutStr(self.TypeName,lp_OldPos,LM_Trace);
      SizeInGDBBytes:=0;
      typename:='';

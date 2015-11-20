@@ -300,9 +300,9 @@ begin
     line:=readspace(line);
    if line='GDBObjLWPolyline=object(GDBObjWithLocalCS) Closed:GDBBoolean;' then
                   line:=line;
-   {$IFDEF TOTALYLOG}
-   DebugLn('{T}%s',[line]);
-   {$ENDIF}
+   if VerboseLog then
+     DebugLn('{T}%s',[line]);
+
     //programlog.LogOutFormatStr('%s',[line],lp_OldPos,LM_Trace);
 
     parseresult:=getpattern(@parsemodetemplate,maxparsemodetemplate,line,typ);
@@ -435,9 +435,9 @@ begin
                                                   if typ<>packedrecordtype then
                                                                                begin
                                                                                //ShowError('Record "'+typename+'" not packed');
-                                                                               {$IFDEF TOTALYLOG}
-                                                                               debugln('Record "'+typename+'" not packed');
-                                                                               {$ENDIF}
+                                                                               if VerboseLog then
+                                                                                 debugln('Record "'+typename+'" not packed');
+
                                                                                end;
                                                   if (typename) = 'GDBvertex'
                                                   then
@@ -454,9 +454,9 @@ begin
                                                   if typ<>packedobjecttype then
                                                                                begin
                                                                                //ShowError('Object "'+typename+'" not packed');
-                                                                               {$IFDEF TOTALYLOG}
-                                                                               debugln('Object "'+typename+'" not packed');
-                                                                               {$ENDIF}
+                                                                               if VerboseLog then
+                                                                                 debugln('Object "'+typename+'" not packed');
+
                                                                                end;
                                                   if (typename) = 'GDBObj3DFace'
                                                   then
@@ -518,9 +518,9 @@ begin
                                                   if typ<>packedarraytype then
                                                                               begin
                                                                                //ShowError('Array "'+typename+'" not packed');
-                                                                               {$IFDEF TOTALYLOG}
-                                                                               debugln('Array "'+typename+'" not packed');
-                                                                               {$ENDIF}
+                                                                               if VerboseLog then
+                                                                                 debugln('Array "'+typename+'" not packed');
+
                                                                               end;
                                                   if typename='GDBPalette' then
                                                                               typename:=typename;
@@ -689,9 +689,9 @@ if addtype then
 
         //p:=@etd;
         currentunit.InterfaceTypes.{exttype.}AddTypeByPP(@etd);
-        {$IFDEF TOTALYLOG}
-        DebugLn('{T}Type "%s" added',[typename]);
-        {$ENDIF}
+        if VerboseLog then
+          DebugLn('{T}Type "%s" added',[typename]);
+
         //programlog.LogOutFormatStr('Type "%s" added',[typename],lp_OldPos,LM_Trace);
         if typename='tdisp' then
                                 typename:=typename;
@@ -701,9 +701,9 @@ if addtype then
         //addtype:=true;
                            end;
                 varmode:begin
-                                {$IFDEF TOTALYLOG}
-                                DebugLn('{T}Varmode string: "%s"',[line]');
-                                {$ENDIF}
+                                if VerboseLog then
+                                  DebugLn('{T}Varmode string: "%s"',[line]);
+
                                 //programlog.LogOutFormatStr('Varmode string: "%s"',[line],lp_OldPos,LM_Trace);
                                 //parsepos:=1;
                                 parseresult:=runparser('_identifiers_cs'#0'=:_identifier'#0'_softend'#0,line,parseerror);
@@ -763,9 +763,9 @@ if addtype then
                                                    system.break
                                                else
                                                    begin
-                                                        {$IFDEF TOTALYLOG}
-                                                        DebugLn('{D}'+line);
-                                                        {$ENDIF}
+                                                        if VerboseLog then
+                                                          DebugLn('{D}'+line);
+
                                                         //programlog.logoutstr(line,0,LM_Debug);
                                                         if copy(line,1,10)='VIEW_ObjIn'
                                                         then
@@ -804,24 +804,22 @@ procedure TUnitManager.LoadFolder(PPaths:GDBString;TranslateFunc:TTranslateFunct
 var
   sr: TSearchRec;
 begin
-  {$IFDEF TOTALYLOG}
-  DebugLn('{T+}TUnitManager.LoadFolder(%s)',[path]);
- {$ENDIF}
+  if VerboseLog then
+    DebugLn('{T+}TUnitManager.LoadFolder(%s)',[path]);
+
   //programlog.LogOutFormatStr('TUnitManager.LoadFolder(%s)',[path],lp_IncPos,LM_Debug);
   if FindFirst(path + '*.pas', faAnyFile, sr) = 0 then
   begin
     repeat
-      {$IFDEF TOTALYLOG}
-      DebugLn('{T}Found file "%s"',[path+sr.Name]);
-      {$ENDIF}
+      if VerboseLog then
+        DebugLn('{T}Found file "%s"',[path+sr.Name]);
       //programlog.LogOutFormatStr('Found file "%s"',[path+sr.Name],lp_OldPos,LM_Info);
       loadunit(PPaths,TranslateFunc,path+sr.Name,nil);
     until FindNext(sr) <> 0;
     sysutils.FindClose(sr);
   end;
-  {$IFDEF TOTALYLOG}
-  DebugLn('{T-}end;{TUnitManager.LoadFolder}');
-  {$ENDIF}
+  if VerboseLog then
+    DebugLn('{T-}end;{TUnitManager.LoadFolder}');
   //programlog.logoutstr('end;{TUnitManager.LoadFolder}',lp_DecPos,LM_Debug);
 end;
 initialization;

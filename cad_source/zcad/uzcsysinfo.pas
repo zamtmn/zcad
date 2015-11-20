@@ -118,6 +118,8 @@ begin
                                      SysParam.PreloadedFile:=param
        else if (paramUC='NOSPLASH')or(paramUC='NS')then
                                                    SysParam.NoSplash:=true
+       else if (paramUC='VERBOSELOG')or(paramUC='VL')then
+                                                          gdbase.VerboseLog:=true
        else if (paramUC='NOLOADLAYOUT')or(paramUC='NLL')then
                                                                SysParam.NoLoadLayout:=true
        else if (paramUC='STANDARTINTERFACE')or(paramUC='SI')then
@@ -138,7 +140,7 @@ begin
                                        programlog.SetLogMode(LM_Fatal)
        end;
      debugln('{N-}end;{ProcessParamStr}');
-     programlog.LogOutStr('end;{ProcessParamStr}',lp_DecPos,LM_Necessarily);
+     //programlog.LogOutStr('end;{ProcessParamStr}',lp_DecPos,LM_Necessarily);
 end;
 Procedure GetSysInfo;
 begin

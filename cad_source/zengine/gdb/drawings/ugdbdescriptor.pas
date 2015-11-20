@@ -23,7 +23,7 @@ uses
 generalviewarea,intftranslations,zedimblocksregister,zeblockdefsfactory,zemathutils,gdbdrawcontext,ugdbdrawing,ugdbdrawingdef,paths,ugdbdimstylearray,ugdbabstractdrawing,WindowsSpecific,LResources,zcadsysvars,zcadinterface,zcadstrconsts,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
 gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
-gdbasetypes,sysinfo,ugdbsimpledrawing,
+gdbasetypes,ugdbsimpledrawing,
 GDBGenericSubEntry,
 UGDBLayerArray,
 GDBEntity,

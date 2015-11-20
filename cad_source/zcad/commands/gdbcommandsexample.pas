@@ -81,7 +81,7 @@ uses
   Varman,
   {UGDBOpenArrayOfUCommands,}zcchangeundocommand,
 
-  log;                //log system
+  uzclog;                //log system
                       //система логирования
 const
      rsSpecifyFirstPoint='Specify first point:';

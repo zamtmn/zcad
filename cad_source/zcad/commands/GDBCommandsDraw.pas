@@ -38,7 +38,7 @@ uses
   memman,
   gdbobjectsconstdef,
   GDBEntity,GDBCircle,GDBLine,GDBGenericSubEntry,GDBMText,
-  shared,GDBSubordinated,GDBBlockInsert,GDBPolyLine,log,UGDBOpenArrayOfData,math,GDBTable,UGDBStringArray,printerspecfunc;
+  shared,GDBSubordinated,GDBBlockInsert,GDBPolyLine,uzclog,UGDBOpenArrayOfData,math,GDBTable,UGDBStringArray,printerspecfunc;
 const
      modelspacename:GDBSTring='**Модель**';
 type

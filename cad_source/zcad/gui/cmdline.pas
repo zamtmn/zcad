@@ -20,7 +20,7 @@ unit cmdline;
 {$INCLUDE def.inc}
 interface
 uses
- zcguimanager,paths,Themes,buttons,zcadsysvars,zcadstrconsts,strproc,sysinfo,lclproc,sysutils,gdbasetypes,
+ zcguimanager,paths,Themes,buttons,zcadsysvars,zcadstrconsts,strproc,uzcsysinfo,lclproc,sysutils,gdbasetypes,
  StdCtrls,ExtCtrls,Controls,Classes,menus,Forms,fileutil,graphics,
  gdbase, memman,UGDBDescriptor,math,commandline,varman,languade,
  UGDBTracePropArray,varmandef,
@@ -63,7 +63,7 @@ var
   CLine: TCLine;
   CWindow:TCWindow;
 implementation
-uses oglwindowdef,log,strmy;
+uses oglwindowdef,uzclog,strmy;
 procedure TCWindow.AfterConstruction;
 begin
     inherited;

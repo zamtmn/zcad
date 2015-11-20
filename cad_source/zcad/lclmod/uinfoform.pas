@@ -24,7 +24,7 @@ uses
   zcadinterface,ExtCtrls,
   {$IFNDEF DELPHI}lclproc,{$ENDIF}
   Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,fileutil,ButtonPanel,{$ENDIF}Buttons,
-  {strutils,}{$IFNDEF DELPHI}intftranslations,{$ENDIF}sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
+  {strutils,}{$IFNDEF DELPHI}intftranslations,{$ENDIF}sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,uzcsysinfo,UGDBOpenArrayOfByte;
 type
   TButtonMethod=procedure({Sender:pointer;}pdata:{GDBPointer}GDBPlatformint)of object;
   TButtonProc=procedure(pdata:GDBPointer);
@@ -48,7 +48,7 @@ type
                 protected procedure Click; override;
                 end;
 implementation
-uses log;
+uses uzclog;
 procedure TDialogForm.AfterConstruction;
 begin
      inherited;

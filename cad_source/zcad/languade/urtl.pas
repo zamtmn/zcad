@@ -20,12 +20,12 @@ unit urtl;
 {$INCLUDE def.inc}
 interface
 uses paths,UUnitManager,zcadsysvars,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,Varman,languade,SysUtils,
-     UBaseTypeDescriptor,shared,gdbase,UGDBOpenArrayOfByte, strmy, varmandef,sysinfo,
+     UBaseTypeDescriptor,shared,gdbase,UGDBOpenArrayOfByte, strmy, varmandef,uzcsysinfo,
      TypeDescriptors,
      URecordDescriptor;
 implementation
 uses
-    log,memman;
+    uzclog,memman;
 {$IFNDEF WINDOWS}
 var
   ptd:PUserTypeDescriptor;

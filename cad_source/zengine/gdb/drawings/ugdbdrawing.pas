@@ -23,7 +23,7 @@ uses
 intftranslations,zcadinterface,gdbdrawcontext,zeundostack,zcchangeundocommand,zcobjectchangeundocommand,zebaseundocommands,paths,ugdbdimstylearray,WindowsSpecific,LResources,zcadsysvars,zcadstrconsts,strproc,GDBBlockDef,UUnitManager,
 gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
-gdbasetypes,sysinfo,ugdbsimpledrawing,
+gdbasetypes,{uzcsysinfo,}ugdbsimpledrawing,
 UGDBLayerArray,
 GDBEntity,
 UGDBFontManager,

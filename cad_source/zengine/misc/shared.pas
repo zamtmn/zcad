@@ -51,7 +51,7 @@ var
     CursorOff:SimpleProcOfObject=nil;
 
 implementation
-uses log;
+uses uzclog;
 procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
 begin
      if RemoveCursor then
@@ -164,5 +164,5 @@ end;
 begin
 utflen:=0;
 historychanged:=false;
-log.HistoryTextOut:=@HistoryOutStr;
+uzclog.HistoryTextOut:=@HistoryOutStr;
 end.

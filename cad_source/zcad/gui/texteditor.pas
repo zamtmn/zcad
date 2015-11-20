@@ -20,7 +20,7 @@ unit texteditor;
 {$INCLUDE def.inc}
 interface
 uses
-     zcadsysvars,gdbase,gdbasetypes,sysinfo,
+     zcadsysvars,gdbase,gdbasetypes,uzcsysinfo,
      uinfoform,Varman,zcadinterface,
      UGDBDrawingdef,strproc,GDBText,gdbobjectsconstdef,zcadstrconsts,sltexteditor,
      Controls,Classes,Forms;

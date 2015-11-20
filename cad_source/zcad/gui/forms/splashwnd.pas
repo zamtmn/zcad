@@ -20,8 +20,8 @@ unit splashwnd;
 {$INCLUDE def.inc}
 interface
 uses
- paths,log,uniqueinstanceraw,zcadstrconsts,strproc,Forms, stdctrls, Controls, Graphics,
- ExtCtrls,gdbasetypes,SysInfo,fileutil,sysutils;
+ paths,uzclog,uniqueinstanceraw,zcadstrconsts,strproc,Forms, stdctrls, Controls, Graphics,
+ ExtCtrls,gdbasetypes,uzcsysinfo,fileutil,sysutils;
 type
   TSplashWnd = class(TForm)
     txt:tlabel;

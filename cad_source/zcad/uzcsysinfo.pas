@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit SysInfo;
+unit uzcsysinfo;
 {$INCLUDE def.inc}
 interface
 uses LCLProc,paths,zcadstrconsts,gdbasetypes,Forms,gdbase{$IFNDEF DELPHI},fileutil{$ENDIF},sysutils;
@@ -35,7 +35,7 @@ var
 
 Procedure GetSysInfo;
 implementation
-uses {WindowsSpecific,}log;
+uses uzclog;
 function GetVersion(_file:pchar):TmyFileVersionInfo;
 var
  (*VerInfoSize, Dummy: DWord;

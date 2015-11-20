@@ -41,7 +41,7 @@ type
 var
    cxmenumgr:tcxmenumgr=nil;
 implementation
-uses {commandline,}log{,sharedgdb};
+uses uzclog;
 procedure tcxmenumgr.RegisterLCLMenu(var menu:TPopupMenu);
 begin
      menu.OnClose:=LCLCloseNotify;

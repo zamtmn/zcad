@@ -19,9 +19,9 @@
 unit commandline;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,geometry,uzglabstractviewarea,paths,gdbobjectsconstdef,UDMenuWnd,uinfoform,zcadstrconsts,{umytreenode,}sysinfo,strproc,UGDBOpenArrayOfPointer,
+uses zcadsysvars,geometry,uzglabstractviewarea,paths,gdbobjectsconstdef,UDMenuWnd,uinfoform,zcadstrconsts,{umytreenode,}uzcsysinfo,strproc,UGDBOpenArrayOfPointer,
      gdbasetypes,commandlinedef, sysutils,gdbase,oglwindowdef,
-     memman,shared,log,varmandef,varman,ugdbdrawingdef,zcadinterface;
+     memman,shared,uzclog,varmandef,varman,ugdbdrawingdef,zcadinterface;
 const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit log;
+unit uzclog;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes,LazLoggerBase,LazLogger;

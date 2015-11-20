@@ -48,7 +48,7 @@ var
   ZCADGUIManager:TZCADGUIManager;
 implementation
 uses
-    log;
+    uzclog;
 function TZCADGUIManager.CreateZCADFormInstance(var FormInfo:TFormInfoData):tobject;
 begin
      result:=FormInfo.FormClass.NewInstance;

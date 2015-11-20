@@ -37,8 +37,8 @@ uses
   splashwnd,
   zcadsysvars,
 
-  memman,log,
-  sysinfo,
+  memman,uzclog,
+  uzcsysinfo,
   paths,
 
   varman,

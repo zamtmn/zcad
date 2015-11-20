@@ -21,7 +21,7 @@ unit iottf;
 interface
 uses UGDBFontManager,EasyLazFreeType,ugdbttffont,geometry,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
     ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}{log,}sysutils,
-    UGDBOpenArrayOfByte,gdbasetypes,SysInfo,gdbase,memman;
+    UGDBOpenArrayOfByte,gdbasetypes,gdbase,memman;
 type ptsyminfo=^tsyminfo;
      tsyminfo=packed record
                            number,size:word;

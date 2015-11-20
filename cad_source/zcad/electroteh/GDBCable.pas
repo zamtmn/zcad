@@ -55,7 +55,7 @@ GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
 var
     GDBObjCableDXFFeatures:TDXFEntIODataManager;
 implementation
-uses enitiesextendervariables,zeentityfactory,log;
+uses enitiesextendervariables,zeentityfactory,uzclog;
 function GDBObjCable.Clone;
 var tvo: PGDBObjCable;
     i:GDBInteger;

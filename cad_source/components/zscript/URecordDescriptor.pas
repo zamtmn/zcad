@@ -495,6 +495,19 @@ begin
                             GDBEnumDataDescriptorObj.FastEditor:=SaveFastEditor;
                        end
                    else
+           if (pfd^.base.PFT^.GetFactTypedef^.TypeName='PTEnumData') then
+                       begin
+                            SaveDecorators:=GDBEnumDataDescriptorObj.Decorators;
+                            SaveFastEditor:=GDBEnumDataDescriptorObj.FastEditor;
+                            GDBEnumDataDescriptorObj.Decorators:=PGDBPointerDescriptor(pfd^.base.PFT)^.TypeOf^.Decorators;
+                            GDBEnumDataDescriptorObj.FastEditor:=PGDBPointerDescriptor(pfd^.base.PFT)^.TypeOf^.FastEditor;
+                            ta:=ppointer(addr)^;
+                            GDBEnumDataDescriptorObj.CreateProperties(f,PDM_Field,PPDA,tname,@pfd^.collapsed,pfd^.base.Attributes or ownerattrib,bmode,ta,'','');
+                            GDBEnumDataDescriptorObj.Decorators:=SaveDecorators;
+                            GDBEnumDataDescriptorObj.FastEditor:=SaveFastEditor;
+                            Inc(GDBPlatformint(addr),sizeof(gdbpointer));
+                       end
+                   else
            (*if (pfd^.PFT^.TypeName='TObjectUnit') then
                        begin
                             ppd:=GetPPD(ppda,bmode);

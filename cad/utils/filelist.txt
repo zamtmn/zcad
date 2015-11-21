@@ -106,5 +106,5 @@ E:\zcad\cad_source\zcad\gui\odjectinspector\zcobjectinspectorwrapper.pas
 E:\zcad\cad_source\zcad\gui\odjectinspector\zcobjectinspectormultiobjects.pas
 E:\zcad\cad_source\zcad\electroteh\GDBCommandsOPS.pas
 E:\zcad\cad_source\zcad\electroteh\GDBCommandsElectrical.pas
-E:\zcad\cad_source\zengine\u\UCableManager.pas
+E:\zcad\cad_source\zcad\electroteh\uzccablemanager.pas 
 E:\zcad\cad_source\zengine\fonts\UGDBFontManager.pas

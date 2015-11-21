@@ -1162,7 +1162,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
             RD_VSync:TGDB3StateBool;(*'VSync'*)
       end;
   trd=packed record
-            RD_RendererBackEnd:TEnumData;(*'Render backend'*)
+            RD_RendererBackEnd:PTEnumData;(*'Render backend'*)
             RD_CurrentWAParam:TFaceTypedData;
             RD_GLUVersion:PGDBString;(*'GLU Version'*)(*oi_readonly*)
             RD_GLUExtensions:PGDBString;(*'GLU Extensions'*)(*oi_readonly*)
@@ -3888,7 +3888,7 @@ TBasicFinter=packed record
                         Size:GDBInteger;(*'Size'*)
                         twidth:GDBDouble;(*'Width'*)
                    end;
-//Generate on E:\zcad\cad_source\zengine\u\UCableManager.pas
+//Generate on E:\zcad\cad_source\zcad\electroteh\uzccablemanager.pas 
     PTCableDesctiptor=^TCableDesctiptor;
     TCableDesctiptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                      Name:GDBString;

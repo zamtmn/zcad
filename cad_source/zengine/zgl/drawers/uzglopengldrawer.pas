@@ -25,10 +25,32 @@ uses
     Gtk2Def,
     {$ENDIF}
     LCLIntf,LCLType,Classes,Controls,
-    geometry,uzglgeneraldrawer,uzglabstractdrawer,glstatemanager,Graphics,gdbase,GDBCamera;
+    geometry,uzglgeneraldrawer,uzglabstractdrawer,glstatemanager,Graphics,gdbase,gdbasetypes,GDBCamera;
 const
   texturesize=128;
 type
+{EXPORT+}
+ptrestoremode=^trestoremode;
+TRestoreMode=(
+              WND_AuxBuffer(*'AUX buffer'*),
+              WND_AccumBuffer(*'ACCUM buffer'*),
+              WND_DrawPixels(*'Memory'*),
+              WND_NewDraw(*'Redraw'*),
+              WND_Texture(*'Texture'*)
+             );
+PTOpenglData=^TOpenglData;
+TOpenglData=packed record
+          RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
+          RD_Version:GDBString;(*'Version'*)(*oi_readonly*)
+          RD_Extensions:GDBString;(*'Extensions'*)(*oi_readonly*)
+          RD_Vendor:GDBString;(*'Vendor'*)(*oi_readonly*)
+          RD_Restore_Mode:trestoremode;(*'Restore mode'*)
+          RD_VSync:TGDB3StateBool;(*'VSync'*)
+          RD_MaxWidth:GDBInteger;(*'Max width'*)(*oi_readonly*)
+          RD_MaxLineWidth:GDBDouble;(*'Max line width'*)(*oi_readonly*)
+          RD_MaxPointSize:GDBDouble;(*'Max point size'*)(*oi_readonly*)
+    end;
+{EXPORT-}
 TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         myscrbuf:tmyscrbuf;
                         public

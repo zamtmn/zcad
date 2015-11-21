@@ -20,7 +20,7 @@ unit uzglgdidrawer;
 {$INCLUDE def.inc}
 interface
 uses
-    sysutils,gdbasetypes,uzglgeneral2ddrawer,lclintfex,fileutil,math,UGDBFontManager,ugdbfont,zcadsysvars,uzglabstractviewarea,LazUTF8,uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,
+    sysutils,gdbasetypes,uzglgeneral2ddrawer,lclintfex,fileutil,math,UGDBFontManager,ugdbfont,{zcadsysvars,}uzglabstractviewarea,LazUTF8,uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,
     {$IFDEF WINDOWS}{GDIPAPI,GDIPOBJ,}windows,{$ENDIF}
     {$IFDEF LCLGTK2}
     Gtk2Def,
@@ -33,6 +33,25 @@ uses
 const
   NeedScreenInvalidrect=true;
 type
+{EXPORT+}
+TGDIPrimitivesCounter=packed record
+          Lines:GDBInteger;
+          Triangles:GDBInteger;
+          Quads:GDBInteger;
+          Points:GDBInteger;
+          ZGLSymbols:GDBInteger;
+          SystemSymbols:GDBInteger;
+    end;
+TTextRenderingType=(TRT_System,TRT_ZGL,TRT_Both);
+PTGDIData=^TGDIData;
+TGDIData=packed record
+          RD_TextRendering:TTextRenderingType;
+          RD_DrawDebugGeometry:GDBBoolean;
+          DebugCounter:TGDIPrimitivesCounter;
+          RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
+          RD_Version:GDBString;(*'Version'*)(*oi_readonly*)
+    end;
+{EXPORT-}
 TGDIFontCacheKey=record
                        RealSizeInPixels:Integer;
                        PFontRecord:PGDBFontRecord;

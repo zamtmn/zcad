@@ -1123,43 +1123,9 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
              Program_Run:PGDBString;(*'Program'*)(*oi_readonly*)
              Temp_files:PGDBString;(*'Temporary files'*)(*oi_readonly*)
         end;
-  ptrestoremode=^trestoremode;
-  TRestoreMode=(
-                WND_AuxBuffer(*'AUX buffer'*),
-                WND_AccumBuffer(*'ACCUM buffer'*),
-                WND_DrawPixels(*'Memory'*),
-                WND_NewDraw(*'Redraw'*),
-                WND_Texture(*'Texture'*)
-               );
-  TTextRenderingType=(TRT_System,TRT_ZGL,TRT_Both);
   PTCanvasData=^TCanvasData;
   TCanvasData=packed record
             RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
-      end;
-  TGDIPrimitivesCounter=packed record
-            Lines:GDBInteger;
-            Triangles:GDBInteger;
-            Quads:GDBInteger;
-            Points:GDBInteger;
-            ZGLSymbols:GDBInteger;
-            SystemSymbols:GDBInteger;
-      end;
-  PTGDIData=^TGDIData;
-  TGDIData=packed record
-            RD_TextRendering:TTextRenderingType;
-            RD_DrawDebugGeometry:GDBBoolean;
-            DebugCounter:TGDIPrimitivesCounter;
-            RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
-            RD_Version:GDBString;(*'Version'*)(*oi_readonly*)
-      end;
-  PTOpenglData=^TOpenglData;
-  TOpenglData=packed record
-            RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
-            RD_Version:GDBString;(*'Version'*)(*oi_readonly*)
-            RD_Extensions:GDBString;(*'Extensions'*)(*oi_readonly*)
-            RD_Vendor:GDBString;(*'Vendor'*)(*oi_readonly*)
-            RD_Restore_Mode:trestoremode;(*'Restore mode'*)
-            RD_VSync:TGDB3StateBool;(*'VSync'*)
       end;
   trd=packed record
             RD_RendererBackEnd:PTEnumData;(*'Render backend'*)
@@ -1167,9 +1133,6 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
             RD_GLUVersion:PGDBString;(*'GLU Version'*)(*oi_readonly*)
             RD_GLUExtensions:PGDBString;(*'GLU Extensions'*)(*oi_readonly*)
             RD_UseStencil:PGDBBoolean;(*'Use STENCIL buffer'*)
-            RD_MaxWidth:pGDBInteger;(*'Max width'*)(*oi_readonly*)
-            RD_MaxLineWidth:PGDBDouble;(*'Max line width'*)(*oi_readonly*)
-            RD_MaxPointSize:PGDBDouble;(*'Max point size'*)(*oi_readonly*)
             RD_LastRenderTime:pGDBInteger;(*'Last render time'*)(*oi_readonly*)
             RD_LastUpdateTime:pGDBInteger;(*'Last update time'*)(*oi_readonly*)
             RD_LastCalcVisible:GDBInteger;(*'Last visible calculation time'*)(*oi_readonly*)
@@ -3928,6 +3891,45 @@ GDBFontManager={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArrayOfData}GDBName
                     //function FindFonf(FontName:GDBString):GDBPointer;
                     {procedure freeelement(p:GDBPointer);virtual;}abstract;
               end;
+//Generate on E:\zcad\cad_source\zengine\zgl\drawers\uzglgdidrawer.pas 
+TGDIPrimitivesCounter=packed record
+          Lines:GDBInteger;
+          Triangles:GDBInteger;
+          Quads:GDBInteger;
+          Points:GDBInteger;
+          ZGLSymbols:GDBInteger;
+          SystemSymbols:GDBInteger;
+    end;
+TTextRenderingType=(TRT_System,TRT_ZGL,TRT_Both);
+PTGDIData=^TGDIData;
+TGDIData=packed record
+          RD_TextRendering:TTextRenderingType;
+          RD_DrawDebugGeometry:GDBBoolean;
+          DebugCounter:TGDIPrimitivesCounter;
+          RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
+          RD_Version:GDBString;(*'Version'*)(*oi_readonly*)
+    end;
+//Generate on E:\zcad\cad_source\zengine\zgl\drawers\uzglopengldrawer.pas 
+ptrestoremode=^trestoremode;
+TRestoreMode=(
+              WND_AuxBuffer(*'AUX buffer'*),
+              WND_AccumBuffer(*'ACCUM buffer'*),
+              WND_DrawPixels(*'Memory'*),
+              WND_NewDraw(*'Redraw'*),
+              WND_Texture(*'Texture'*)
+             );
+PTOpenglData=^TOpenglData;
+TOpenglData=packed record
+          RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
+          RD_Version:GDBString;(*'Version'*)(*oi_readonly*)
+          RD_Extensions:GDBString;(*'Extensions'*)(*oi_readonly*)
+          RD_Vendor:GDBString;(*'Vendor'*)(*oi_readonly*)
+          RD_Restore_Mode:trestoremode;(*'Restore mode'*)
+          RD_VSync:TGDB3StateBool;(*'VSync'*)
+          RD_MaxWidth:GDBInteger;(*'Max width'*)(*oi_readonly*)
+          RD_MaxLineWidth:GDBDouble;(*'Max line width'*)(*oi_readonly*)
+          RD_MaxPointSize:GDBDouble;(*'Max point size'*)(*oi_readonly*)
+    end;
 implementation
 begin
 end.

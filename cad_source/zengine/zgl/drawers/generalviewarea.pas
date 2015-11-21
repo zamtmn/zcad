@@ -1916,10 +1916,10 @@ begin
                                       result.DrawMode:=true;
   result.OwnerLineWeight:=-3;
   result.OwnerColor:=ClWhite;
-  if assigned(sysvar.RD.RD_MaxWidth)then
+  {if assigned(sysvar.RD.RD_MaxWidth)then
                                         result.MaxWidth:=sysvar.RD.RD_MaxWidth^
-                                    else
-                                        result.MaxWidth:=20;
+                                    else}
+  result.MaxWidth:=20;
   result.ScrollMode:=param.scrollmode;
   result.drawer:=drawer;
   result.SystmGeometryDraw:=sysvarDISPSystmGeometryDraw;

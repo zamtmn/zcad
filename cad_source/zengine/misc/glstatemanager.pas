@@ -226,7 +226,7 @@ type
                            procedure myglGenTextures(n: GLsizei; textures: PGLuint);inline;
                            procedure myglTexImage2D(target: GLenum; level: GLInt; internalformat: GLEnum; width, height: GLsizei; border: GLint; format, atype: GLenum; const pixels: Pointer);inline;
                            procedure myglTexParameteri(target: GLenum; pname: GLenum; param: GLint);inline;
-                           procedure myglGetDoublev(pname: GLenum; params: PGLdouble);inline;
+                           procedure myglGetDoublev(pname: GLenum; params: PGLdouble);//inline;
                            function myglGetString(name: GLenum): PAnsiChar;inline;
     end;
 

@@ -28,7 +28,7 @@ uses
      {$ENDIF}
      uzglgdidrawer,uzglabstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
-     {varmandef,}{commandline,}zcadsysvars,geometry,{uzcshared,}LCLType,
+     {varmandef,}{commandline,}{zcadsysvars,}geometry,{uzcshared,}LCLType,
      ExtCtrls,classes,Controls,Graphics,generalviewarea,{log,}backendmanager,uzglgeneralcanvasviewarea;
 type
     TGDIViewArea=class(TGeneralCanvasViewArea)

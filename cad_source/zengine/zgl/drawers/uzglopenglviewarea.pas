@@ -59,6 +59,7 @@ type
                       procedure setdeicevariable;
                       function getParam:pointer; override;
                       function getParamTypeName:GDBString; override;
+                      function CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;override;
                   end;
 const
   maxgrid=100;
@@ -66,7 +67,11 @@ var
   gridarray:array [0..maxgrid,0..maxgrid] of GDBvertex2S;
 implementation
 //uses mainwindow;
-
+function TOpenGLViewArea.CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;
+begin
+  result:=inherited CreateRC(_maxdetail);
+  result.MaxWidth:=OpenGLParam.RD_MaxWidth;
+end;
 procedure TOGLWnd.EraseBackground(DC: HDC);
 begin
      dc:=0;
@@ -93,17 +98,17 @@ begin
 end;
 
 procedure TOpenGLViewArea.setdeicevariable;
-var a:array [0..1] of GDBDouble;
+var tarray:array [0..1] of GDBDouble;
     p:pansichar;
 begin
   //programlog.logoutstr('TOGLWnd.SetDeiceVariable',lp_IncPos,LM_Debug);
   debugln('{D+}TOGLWnd.SetDeiceVariable');
-  oglsm.myglGetDoublev(GL_LINE_WIDTH_RANGE,@a);
-  if assigned(sysvar.RD.RD_MaxLineWidth) then
-  sysvar.RD.RD_MaxLineWidth^:=a[1];
-  oglsm.myglGetDoublev(GL_point_size_RANGE,@a);
-  if assigned(sysvar.RD.RD_MaxPointSize) then
-  sysvar.RD.RD_MaxPointSize^:=a[1];
+  oglsm.myglGetDoublev(GL_LINE_WIDTH_RANGE,@tarray[0]);
+  //if assigned(sysvar.RD.RD_MaxLineWidth) then   m,.
+  OpenGLParam.RD_MaxLineWidth:=tarray[1];
+  oglsm.myglGetDoublev(GL_point_size_RANGE,@tarray[0]);
+  //if assigned(sysvar.RD.RD_MaxPointSize) then
+  OpenGLParam.RD_MaxPointSize:=tarray[1];
   GDBPointer(p):=oglsm.myglGetString(GL_VENDOR);
   debugln('{I}RD_Vendor:="%s"',[p]);
   //programlog.LogOutFormatStr('RD_Vendor:="%s"',[p],0,LM_Info);
@@ -125,10 +130,10 @@ begin
   //programlog.LogOutFormatStr('RD_Extensions:="%s"',[p],0,LM_Info);
   //if assigned(OpenglParam.RD_Extensions) then
   OpenglParam.RD_Extensions:=p;
-  if assigned(sysvar.RD.RD_MaxWidth) and assigned(sysvar.RD.RD_MaxLineWidth) then
+  //if assigned(sysvar.RD.RD_MaxWidth) and assigned(sysvar.RD.RD_MaxLineWidth) then
   begin
-  sysvar.RD.RD_MaxWidth^:=round(min(sysvar.RD.RD_MaxPointSize^,sysvar.RD.RD_MaxLineWidth^));
-  debugln('{I}RD_MaxWidth:="%G"',[min(sysvar.RD.RD_MaxPointSize^,sysvar.RD.RD_MaxLineWidth^)]);
+  OpenGLParam.RD_MaxWidth:=round(min(OpenGLParam.RD_MaxPointSize,OpenGLParam.RD_MaxLineWidth));
+  debugln('{I}RD_MaxWidth:="%G"',[min(OpenGLParam.RD_MaxPointSize,OpenGLParam.RD_MaxLineWidth)]);
   //programlog.LogOutFormatStr('RD_MaxWidth:="%G"',[min(sysvar.RD.RD_MaxPointSize^,sysvar.RD.RD_MaxLineWidth^)],0,LM_Info);
   end;
   //programlog.logoutstr('end;',lp_DecPos,LM_Debug);

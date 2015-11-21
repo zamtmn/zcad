@@ -21,31 +21,33 @@ unit backendmanager;
 
 interface
 uses gdbasetypes,
-     gdbase,UGDBStringArray,zcadsysvars,uzglabstractviewarea,UGDBOpenArrayOfPointer;
+     gdbase,UGDBStringArray,{zcadsysvars,}uzglabstractviewarea,UGDBOpenArrayOfPointer;
 const test:GDBSTRING='asdasd';
 type
     TVA=class of TAbstractViewArea;
 var
     Backends:GDBOpenArrayOfGDBPointer;
+    BackendsNames:TEnumData;
 procedure RegisterBackend(BackEndClass:TVA;Name:string);
 function GetCurrentBackEnd:TVA;
 implementation
 procedure RegisterBackend(BackEndClass:TVA;Name:string);
 begin
-     sysvar.RD.RD_RendererBackEnd.Enums.add(@name);
+     //sysvar.RD.RD_RendererBackEnd.Enums.add(@name);
+     BackendsNames.Enums.add(@name);
      Backends.Add(@BackEndClass);
 end;
 function GetCurrentBackEnd:TVA;
 begin
-     result:=ppointer(Backends.getelement(sysvar.RD.RD_RendererBackEnd.Selected))^;
+     result:=ppointer(Backends.getelement(BackendsNames.Selected))^;
 end;
 initialization
-  sysvar.RD.RD_RendererBackEnd.Enums.init(10);
-  sysvar.RD.RD_RendererBackEnd.Selected:=0;
+  BackendsNames.Enums.init(10);
+  BackendsNames.Selected:=0;
   Backends.init({$IFDEF DEBUGBUILD}'{143AA836-9372-462F-B107-229B50E7A37C}',{$ENDIF}10);
 end
 finalization
-  sysvar.RD.RD_RendererBackEnd.Enums.done;
+  BackendsNames.Enums.done;
   Backends.done;
 end.
 

@@ -99,7 +99,7 @@ type
             RD_VSync:TGDB3StateBool;(*'VSync'*)
       end;
   trd=packed record
-            RD_RendererBackEnd:TEnumData;(*'Render backend'*)
+            RD_RendererBackEnd:PTEnumData;(*'Render backend'*)
             RD_CurrentWAParam:TFaceTypedData;
             RD_GLUVersion:PGDBString;(*'GLU Version'*)(*oi_readonly*)
             RD_GLUExtensions:PGDBString;(*'GLU Extensions'*)(*oi_readonly*)
@@ -279,5 +279,6 @@ begin
   {$ENDIF}
     SysVar.debug.languadedeb.NotEnlishWord:=0;
     SysVar.debug.languadedeb.UpdatePO:=0;
+    sysvar.RD.RD_RendererBackEnd:=nil;
 end.
 

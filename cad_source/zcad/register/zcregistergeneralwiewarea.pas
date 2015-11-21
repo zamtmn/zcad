@@ -19,7 +19,7 @@
 unit zcregistergeneralwiewarea;
 {$INCLUDE def.inc}
 interface
-uses uzglgeometry,UGDBEntTree,zcadsysvars,generalviewarea,paths,intftranslations,UUnitManager,TypeDescriptors;
+uses backendmanager,uzglgeometry,UGDBEntTree,zcadsysvars,generalviewarea,paths,intftranslations,UUnitManager,TypeDescriptors;
 implementation
 
 initialization
@@ -57,6 +57,7 @@ units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),Inte
 
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_RotateTextInLT','GDBBoolean',@sysvarDWGRotateTextInLT);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_MaxLTPatternsInEntity','GDBInteger',@SysVarRDMaxLTPatternsInEntity);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_PanObjectDegradation','GDBBoolean',@SysVarRDPanObjectDegradation);
 
 
 
@@ -96,6 +97,8 @@ SysVar.RD.RD_SpatialNodesDepth:=@SysVarRDSpatialNodesDepth;
 
 SysVar.DWG.DWG_RotateTextInLT:=@sysvarDWGRotateTextInLT;
 SysVar.RD.RD_MaxLTPatternsInEntity:=@SysVarRDMaxLTPatternsInEntity;
+SysVar.RD.RD_PanObjectDegradation:=@SysVarRDPanObjectDegradation;
+sysvar.RD.RD_RendererBackEnd:=@BackendsNames;
 finalization
 end.
 

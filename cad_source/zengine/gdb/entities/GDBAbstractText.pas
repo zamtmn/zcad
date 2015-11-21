@@ -19,7 +19,7 @@ unit GDBAbstractText;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,GDBEntity,GDBCamera,zcadsysvars,{languade,}UGDBOpenArrayOfPObjects,{GDBEntity,}strproc,sysutils,GDBPlainWithOX,gdbasetypes{,GDBWithLocalCS},UGDBSelectedObjArray{,gdbEntity,UGDBOutbound2DIArray,UGDBPolyPoint2DArray,UGDBOpenArrayOfByte},{varmandef,}
+uses generalviewarea,gdbdrawcontext,GDBEntity,GDBCamera,{zcadsysvars,}{languade,}UGDBOpenArrayOfPObjects,{GDBEntity,}strproc,sysutils,GDBPlainWithOX,gdbasetypes{,GDBWithLocalCS},UGDBSelectedObjArray{,gdbEntity,UGDBOutbound2DIArray,UGDBPolyPoint2DArray,UGDBOpenArrayOfByte},{varmandef,}
 GDBase,gdbobjectsconstdef,{oglwindowdef,}geometry{,dxflow,strmy},math{,GDBPlain}{,GDBGenericSubEntry};
 type
 //jstm(*'TopCenter'*)=2,
@@ -375,10 +375,7 @@ var
    PanObjectDegradation:boolean;
 begin
   dc.subrender := dc.subrender + 1;
-  if assigned(sysvar.RD.RD_PanObjectDegradation)then
-                                                    PanObjectDegradation:=sysvar.RD.RD_PanObjectDegradation^
-                                                else
-                                                    PanObjectDegradation:=false;
+  PanObjectDegradation:=SysVarRDPanObjectDegradation;
   if {true//}(((not {GDB.GetCurrentDWG.OGLwindow1.param.scrollmode}dc.scrollmode)or(not PanObjectDegradation)) {and (lod=0)})
   then
       begin

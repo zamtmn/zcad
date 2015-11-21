@@ -154,7 +154,7 @@ begin
      normalizevertex(ox);
      textprop.angle:=geometry.scalardot(Local.basis.ox,ox);
      textprop.angle:=arccos(textprop.angle);
-     if local.basis.OX.y<-eps then textprop.angle:=360-textprop.angle;
+     if local.basis.OX.y<-eps then textprop.angle:=2*pi-textprop.angle;
      //Local.basis.ox:=ox;
 end;
 

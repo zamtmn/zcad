@@ -8,8 +8,8 @@ uses
   LCLType,Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, StdCtrls, Spin,
   {From ZCAD}
-  generalviewarea,zeentitiesmanager,gdbdrawcontext,uzglopenglviewarea,
-  uzglabstractviewarea,zcadsysvars, {$ifdef dxfio}iodxf,{$endif}
+  UGDBFontManager,generalviewarea,zeentitiesmanager,gdbdrawcontext,uzglopenglviewarea,
+  uzglabstractviewarea,{zcadsysvars,} {$ifdef dxfio}iodxf,{$endif}
   {zcadinterface,}zeentityfactory,UGDBLayerArray,geometry,
   GDBase, GDBasetypes,UGDBTextStyleArray,UGDBEntTree,GDB3DFace,
   GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,ugdbsimpledrawing,
@@ -85,8 +85,6 @@ type
 
 var
   Form1: TForm1;
-  snap:GDBSnap2D;
-  grid:GDBvertex2D;
   LPTime:Tdatetime;
   pname:string;
 
@@ -169,17 +167,7 @@ var
    i:integer;
    wpowner:TAbstractViewArea;
 begin
-     {Настройка глобальных переменных необходимых для работы}
-     {переменные не все, только минимально необходимые для работы}
-     Snap.Base.x:=0;//смещение начала координат сетки\привязки к сетке
-     Snap.Base.y:=0;
-     Snap.Spacing.x:=1;//шаг привязки к сетке
-     Snap.Spacing.y:=1;
-     grid.x:=2;//шаг сетки
-     grid.y:=2;
-
-     sysvar.DWG.DWG_Snap:=@Snap;//привязка настроек сетки/привязки к потрохам зкада через соответствующий указатель
-     sysvar.DWG.DWG_GridSpacing:=@grid;//привязка настроек сетки/привязки к потрохам зкада через соответствующий указатель
+     FontManager.CreateBaseFont;
      sysvarDISPSystmGeometryDraw:=CheckBox1.Checked;
 
      //ugdbdescriptor.startup('','');

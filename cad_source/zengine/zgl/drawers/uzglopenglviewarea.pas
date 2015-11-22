@@ -28,7 +28,7 @@ uses
      {$ENDIF}
      LCLProc,uzglgdidrawer,uzglabstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
-     oglwindowdef,gdbdrawcontext,{varmandef,}{commandline,}zcadsysvars,geometry,{uzcshared,}LCLType,
+     oglwindowdef,gdbdrawcontext,{varmandef,}{commandline,}{zcadsysvars,}geometry,{uzcshared,}LCLType,
      ExtCtrls,classes,Controls,Graphics,generalviewarea,math,{log,}backendmanager,
      {$IFNDEF DELPHI}OpenGLContext{$ENDIF};
 type
@@ -189,8 +189,8 @@ var
   i,j: GDBInteger;
   v,v1:gdbvertex;
 begin
-  if sysvar.DWG.DWG_DrawGrid<>nil then
-  if (sysvar.DWG.DWG_DrawGrid^)and(param.md.WPPointUR.z=1) then
+  //if sysvar.DWG.DWG_DrawGrid<>nil then
+  if (pdwg^.DrawGrid)and(param.md.WPPointUR.z=1) then
   begin
   v:=param.md.WPPointBL;
   dc.drawer.SetColor(100, 100, 100, 100);
@@ -202,10 +202,10 @@ begin
         for j := 0 to round(param.md.WPPointUR.y) do
         begin
           oglsm.myglVertex3d(v1);
-          v1.y:=v1.y+sysvar.DWG.DWG_GridSpacing.y;
+          v1.y:=v1.y+pdwg^.GridSpacing.y;
           inc(pg);
         end;
-        v.x:=v1.x-sysvar.DWG.DWG_GridSpacing.x;
+        v.x:=v1.x-pdwg^.GridSpacing.x;
   end;
   oglsm.myglend;
   end;
@@ -215,9 +215,9 @@ procedure TOpenGLViewArea.LightOn;
 var
    p:GDBvertex4F;
 begin
-    if assigned(SysVar.RD.RD_Light) then
+    //if assigned(SysVar.RD.RD_Light) then
     begin
-    if SysVar.RD.RD_Light^ then
+    if sysvarRDLight then
     begin
     oglsm.myglEnable(GL_LIGHTING);
     oglsm.myglEnable(GL_LIGHT0);

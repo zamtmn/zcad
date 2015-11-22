@@ -23,6 +23,11 @@ type
 {EXPORT+}
 PTAbstractDrawing=^TAbstractDrawing;
 TAbstractDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TDrawingDef)
+                       LWDisplay:GDBBoolean;
+                       SnapGrid:GDBBoolean;
+                       DrawGrid:GDBBoolean;
+                       GridSpacing:GDBvertex2D;
+                       Snap:GDBSnap2D;
                        function myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex):Integer;virtual;abstract;
                        function myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;virtual;abstract;
                        function GetPcamera:PGDBObjCamera;virtual;abstract;

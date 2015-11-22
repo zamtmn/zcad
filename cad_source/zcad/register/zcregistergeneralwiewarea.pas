@@ -58,9 +58,8 @@ units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),Inte
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DWG_RotateTextInLT','GDBBoolean',@sysvarDWGRotateTextInLT);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_MaxLTPatternsInEntity','GDBInteger',@SysVarRDMaxLTPatternsInEntity);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_PanObjectDegradation','GDBBoolean',@SysVarRDPanObjectDegradation);
-
-
-
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DSGN_OTrackTimerInterval','GDBInteger',@sysvarDSGNOTrackTimerInterval);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_Light','GDBBoolean',@sysvarRDLight);
 
 sysvar.DISP.DISP_CursorSize:=@sysvarDISPCursorSize;
 sysvar.DISP.DISP_OSSize:=@sysvarDISPOSSize;
@@ -99,6 +98,10 @@ SysVar.DWG.DWG_RotateTextInLT:=@sysvarDWGRotateTextInLT;
 SysVar.RD.RD_MaxLTPatternsInEntity:=@SysVarRDMaxLTPatternsInEntity;
 SysVar.RD.RD_PanObjectDegradation:=@SysVarRDPanObjectDegradation;
 sysvar.RD.RD_RendererBackEnd:=@BackendsNames;
+
+sysvar.DSGN.DSGN_OTrackTimerInterval:=@sysvarDSGNOTrackTimerInterval;
+sysvar.RD.RD_LastCalcVisible:=@sysvarRDLastCalcVisible;
+sysvar.RD.RD_Light:=@sysvarRDLight;
 finalization
 end.
 

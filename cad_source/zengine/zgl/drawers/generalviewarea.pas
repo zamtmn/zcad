@@ -23,7 +23,7 @@ uses
      LCLProc,memman,{log,}zemathutils,gdbpalette,
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
      UGDBLayerArray,ugdbdimstylearray,
-     oglwindowdef,gdbdrawcontext,{varmandef,}zcadsysvars,GDBEntity,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
+     oglwindowdef,gdbdrawcontext,{varmandef,}{zcadsysvars,}GDBEntity,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
      gdbobjectsconstdef,{uzcshared,}zcadstrconsts,UGDBTracePropArray,math,sysutils,UGDBDrawingdef,strproc,
      ExtCtrls,Controls,Classes,LCLType,Forms,UGDBOpenArrayOfPV,GDBGenericSubEntry,GDBCamera,UGDBVisibleOpenArray,uzglabstractdrawer,uzglgeneraldrawer,uzglabstractviewarea;
 const
@@ -174,6 +174,9 @@ var
    SysVarRDRemoveSystemCursorFromWorkArea:GDBBoolean=true;
    sysvarDSGNSelNew:GDBBoolean=false;
    sysvarDWGEditInSubEntry:gdbboolean=false;
+   sysvarDSGNOTrackTimerInterval:GDBInteger=500;
+   sysvarRDLastCalcVisible:GDBInteger=0;
+   sysvarRDLight:boolean=false;
 
    OnActivateProc:TOnActivateProc=nil;
 implementation
@@ -1910,10 +1913,10 @@ begin
   result.Selected:=false;
   result.MaxDetail:=_maxdetail;
 
-  if sysvar.dwg.DWG_DrawMode<>nil then
+  {if sysvar.dwg.DWG_DrawMode<>nil then
                                       result.DrawMode:=sysvar.dwg.DWG_DrawMode^
                                   else
-                                      result.DrawMode:=true;
+                                      result.DrawMode:=true;}
   result.OwnerLineWeight:=-3;
   result.OwnerColor:=ClWhite;
   {if assigned(sysvar.RD.RD_MaxWidth)then
@@ -2126,10 +2129,10 @@ begin
       then
           begin
                param.ospoint.worldcoord:=param.md.mouseonworkplanecoord;
-               if SysVar.DWG.DWG_SnapGrid<>nil then
-               if SysVar.DWG.DWG_SnapGrid^ then
+               //if SysVar.DWG.DWG_SnapGrid<>nil then
+               if PDWG^.SnapGrid then
                begin
-                    param.ospoint.worldcoord:=correcttogrid(param.ospoint.worldcoord);
+                    param.ospoint.worldcoord:=correcttogrid(param.ospoint.worldcoord,PDWG^.Snap);
                     //param.ospoint.worldcoord.x:=round((param.md.mouseonworkplanecoord.x-SysVar.DWG.DWG_OriginGrid.x)/SysVar.DWG.DWG_StepGrid.x)*SysVar.DWG.DWG_StepGrid.x+SysVar.DWG.DWG_OriginGrid.x;
                     //param.ospoint.worldcoord.y:=round((param.md.mouseonworkplanecoord.y-SysVar.DWG.DWG_OriginGrid.y)/SysVar.DWG.DWG_StepGrid.y)*SysVar.DWG.DWG_StepGrid.y+SysVar.DWG.DWG_OriginGrid.y;
                     param.ospoint.ostype:=os_snap;
@@ -2260,14 +2263,13 @@ begin
   inc(param.otracktimerwork);
   if param.otracktimerwork > 0 then
                                    begin
-                                        if assigned(sysvar.DSGN.DSGN_OTrackTimerInterval) then
+                                        //if assigned(sysvar.DSGN.DSGN_OTrackTimerInterval) then
                                         begin
-                                             if sysvar.DSGN.DSGN_OTrackTimerInterval^>0 then
-                                                                                            interval:=sysvar.DSGN.DSGN_OTrackTimerInterval^
-                                                                                        else
-                                                                                            interval:=0;
-                                        end
-                                        else interval:=500;
+                                             if sysvarDSGNOTrackTimerInterval>0 then
+                                                                                   interval:=sysvarDSGNOTrackTimerInterval
+                                                                                else
+                                                                                   interval:=0;
+                                        end;
                                         OTTimer.Interval:=interval;
                                         OTTimer.OnTimer:=ProcOTrackTimer;
                                         OTTimer.Enabled:=true;
@@ -2737,7 +2739,7 @@ begin
        lptime:=now();
        pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
        lptime:=now()-LPTime;
-       sysvar.RD.RD_LastCalcVisible:=round(lptime*10e7);
+       sysvarRDLastCalcVisible:=round(lptime*10e7);
        //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT);
        pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   end;
@@ -3400,23 +3402,23 @@ begin
                 maxv:=b
             else
                 maxv:=u;
-     if sysvar.DWG.DWG_GridSpacing<>nil then
+     //if sysvar.DWG.DWG_GridSpacing<>nil then
      begin
-     ph:=(maxh/sysvar.DWG.DWG_GridSpacing.y)+1;
-     pv:=(maxv/sysvar.DWG.DWG_GridSpacing.x)+1;
+     ph:=(maxh/pdwg^.GridSpacing.y)+1;
+     pv:=(maxv/pdwg^.GridSpacing.x)+1;
      param.md.WPPointUR.z:=1;
      if (4*ph>getviewcontrol.clientwidth)or(4*pv>getviewcontrol.clientheight)then
                                                    begin
-                                                        if sysvar.DWG.DWG_DrawGrid<>nil then
-                                                        if sysvar.DWG.DWG_DrawGrid^ then
+                                                        //if sysvar.DWG.DWG_DrawGrid<>nil then
+                                                        if pdwg^.DrawGrid then
                                                                                         DebugLn('{WH}'+rsGridTooDensity);
                                                         param.md.WPPointUR.z:=-1;
                                                    end;
      param.md.WPPointLU:=vertexmulonsc(vertexsub(param.md.WPPointLU,param.md.WPPointBL),1/pv);
      param.md.WPPointRB:=vertexmulonsc(vertexsub(param.md.WPPointRB,param.md.WPPointBL),1/ph);
 
-     param.md.WPPointBL.x:=round((param.md.WPPointBL.x-SysVar.DWG.DWG_Snap.Base.x)/SysVar.DWG.DWG_GridSpacing.x)*SysVar.DWG.DWG_GridSpacing.x+SysVar.DWG.DWG_GridSpacing.x+SysVar.DWG.DWG_Snap.Base.x;
-     param.md.WPPointBL.y:=round((param.md.WPPointBL.y-SysVar.DWG.DWG_Snap.Base.y)/SysVar.DWG.DWG_GridSpacing.y)*SysVar.DWG.DWG_GridSpacing.y-SysVar.DWG.DWG_GridSpacing.y+SysVar.DWG.DWG_Snap.Base.y;
+     param.md.WPPointBL.x:=round((param.md.WPPointBL.x-pdwg^.Snap.Base.x)/pdwg^.GridSpacing.x)*pdwg^.GridSpacing.x+pdwg^.GridSpacing.x+pdwg^.Snap.Base.x;
+     param.md.WPPointBL.y:=round((param.md.WPPointBL.y-pdwg^.Snap.Base.y)/pdwg^.GridSpacing.y)*pdwg^.GridSpacing.y-pdwg^.GridSpacing.y+pdwg^.Snap.Base.y;
 
      param.md.WPPointBL.z:=(-param.md.workplane[3]-param.md.workplane[0]*param.md.WPPointBL.x-param.md.workplane[1]*param.md.WPPointBL.y)/param.md.workplane[2];
 

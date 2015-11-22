@@ -153,6 +153,24 @@ procedure finalize;}
 
 implementation
 uses enitiesextendervariables,GDBRoot,oglwindowdef, gdbcable,UUnitManager,GDBCommandsElectrical,{UGDBObjBlockdefArray,}URecordDescriptor,TypeDescriptors;
+function docorrecttogrid(point:GDBVertex;need:GDBBoolean):GDBVertex;
+var
+   gr:GDBBoolean;
+begin
+     gr:=false;
+     if SysVar.DWG.DWG_SnapGrid<>nil then
+     if SysVar.DWG.DWG_SnapGrid^ then
+                                     gr:=true;
+     if (need and gr) then
+                          begin
+                               result:=correcttogrid(point,SysVar.DWG.DWG_Snap^);
+                               {result.x:=round((point.x-SysVar.DWG.DWG_Snap.Base.x)/SysVar.DWG.DWG_Snap.Spacing.x)*SysVar.DWG.DWG_Snap.Spacing.x+SysVar.DWG.DWG_Snap.Spacing.x;
+                               result.y:=round((point.y-SysVar.DWG.DWG_Snap.Base.y)/SysVar.DWG.DWG_Snap.Spacing.y)*SysVar.DWG.DWG_Snap.Spacing.y+SysVar.DWG.DWG_Snap.Spacing.y;
+                               result.z:=point.z;}
+                          end
+                      else
+                          result:=point;
+end;
 procedure place2(pva:PGDBObjEntityOpenArray;basepoint, dir: gdbvertex; count: integer; sd: GDBDouble; name: pansichar;angle:GDBDouble;norm:GDBBoolean;scaleblock:GDBDouble);
 var line2: gdbline;
   i: integer;

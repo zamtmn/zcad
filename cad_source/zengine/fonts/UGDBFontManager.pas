@@ -19,7 +19,7 @@
 unit UGDBFontManager;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,paths,lclintfex,zcadstrconsts,{uzcshared,}{zcadsysvars,}strproc,ugdbfont,gdbasetypes,{SysInfo,}memman,
+uses UGDBOpenArrayOfByte,LResources,LCLProc,paths,lclintfex,zcadstrconsts,{uzcshared,}{zcadsysvars,}strproc,ugdbfont,gdbasetypes,{SysInfo,}memman,
      sysutils,gdbase, geometry,usimplegenerics,
      UGDBNamedObjectsArray,classes;
 type
@@ -41,6 +41,7 @@ GDBFontManager={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArrayOfData}GDBName
                     shxfontfiles:TStringList;
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     destructor done;virtual;
+                    procedure CreateBaseFont;
 
                     function addFonf(FontPathName:GDBString):PGDBfont;
                     procedure EnumerateFontFiles;
@@ -100,8 +101,39 @@ end;
 constructor GDBFontManager.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof({GDBFontRecord}GDBfont));
-  //if assigned(sysvar.PATH.Fonts_Path)then
 end;
+procedure GDBFontManager.CreateBaseFont;
+var
+   r: TLResource;
+   f:GDBOpenArrayOfByte;
+const
+   resname='GEWIND';
+   filename='GEWIND.SHX';
+begin
+  pbasefont:=addFonf(FindInPaths(sysvarPATHFontsPath,sysvarAlternateFont));
+  if pbasefont=nil then
+  begin
+       DebugLn('{E}'+rsAlternateFontNotFoundIn,[sysvarAlternateFont,sysvarPATHFontsPath]);
+       //uzcshared.LogError(format(rsAlternateFontNotFoundIn,[sysvarAlternateFont,sysvarPATHFontsPath]));
+       r := LazarusResources.Find(resname);
+       if r = nil then
+                      DebugLn('{F}'+rsReserveFontNotFound)
+                      //uzcshared.FatalError(rsReserveFontNotFound)
+                  else
+                      begin
+                           f.init({$IFDEF DEBUGBUILD}'{94091172-3DD7-4038-99B6-90CD8B8E971D}',{$ENDIF}length(r.Value));
+                           f.AddData(@r.Value[1],length(r.Value));
+                           f.SaveToFile(expandpath(TempPath+filename));
+                           pbasefont:=addFonf(TempPath+filename);
+                           f.done;
+                           if pbasefont=nil then
+                                                DebugLn('{F}'+rsReserveFontNotLoad)
+                                                //uzcshared.FatalError(rsReserveFontNotLoad);
+                      end;
+  end;
+  addFonf(FindInPaths(sysvarPATHFontsPath,'ltypeshp.shx'));
+end;
+
 {procedure GDBFontManager.freeelement;
 begin
   PGDBFontRecord(p).Name:='';
@@ -257,6 +289,7 @@ begin
      format;}
 //end;
 initialization
+  {$I gewind.lrs}
   FontManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);
   FontExt2LoadProc:=TFontExt2LoadProcMap.Create;
   sysvarPATHFontsPath:=ExtractFileDir(ParamStr(0));

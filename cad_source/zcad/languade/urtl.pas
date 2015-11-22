@@ -52,7 +52,7 @@ initialization;
 
   if SysVarUnit<>nil then
   begin
-  SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_DrawMode,'DWG_DrawMode');
+  //SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_DrawMode,'DWG_DrawMode');
   //SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_OSMode,'DWG_OSMode');
   //SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_CLayer,'DWG_CLayer');
   //SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_CLinew,'DWG_CLinew');
@@ -60,8 +60,8 @@ initialization;
   //SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_StepGrid,'DWG_StepGrid');
   //SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_OriginGrid,'DWG_OriginGrid');
 
-  SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_SnapGrid,'DWG_SnapGrid');
-  SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_DrawGrid,'DWG_DrawGrid');
+  //SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_SnapGrid,'DWG_SnapGrid');
+  //SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_DrawGrid,'DWG_DrawGrid');
   //SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_SystmGeometryDraw,'DWG_SystmGeometryDraw');
   SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_HelpGeometryDraw,'DWG_HelpGeometryDraw');
   //SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_EditInSubEntry,'DWG_EditInSubEntry');
@@ -77,7 +77,7 @@ initialization;
   SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Leader,'DSGN_LCLeader');
   //SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_SelNew,'DSGN_SelNew');
   SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_SelSameName,'DSGN_SelSameName');
-  SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_OTrackTimerInterval,'DSGN_OTrackTimerInterval');
+  //SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_OTrackTimerInterval,'DSGN_OTrackTimerInterval');
 
   //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_CursorSize,'DISP_CursorSize');
   //SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_CrosshairSize,'DISP_CrosshairSize');

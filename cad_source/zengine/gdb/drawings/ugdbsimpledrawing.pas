@@ -150,6 +150,7 @@ begin
   dc.DrawingContext.matrixs.pviewport:=@GetPcamera.viewport;
   dc.DrawingContext.pcamera:=GetPcamera;
   dc.DrawingContext.DrawHeplGeometryProc:=nil;
+  dc.DrawMode:=LWDisplay;
 end;
 
 function TSimpleDrawing.GetChangeStampt:GDBBoolean;
@@ -575,6 +576,14 @@ var {tp:GDBTextStyleProp;}
     ts:PTGDBTableStyle;
     cs:TGDBTableCellStyle;
 begin
+  LWDisplay:=false;
+  SnapGrid:=false;
+  GridSpacing.x:=0.5;
+  GridSpacing.y:=0.5;
+  snap.Base.x:=0;
+  snap.Base.y:=0;
+  snap.Spacing.x:=0.5;
+  snap.Spacing.y:=0.5;
   pcamera:=pcam;
   internalcamera:=false;
   if pcamera=nil then

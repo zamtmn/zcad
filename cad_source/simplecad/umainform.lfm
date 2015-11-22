@@ -3,6 +3,7 @@ object Form1: TForm1
   Height = 892
   Top = 137
   Width = 1106
+  ActiveControl = BtnAddLines
   Caption = 'ZCAD engine demo program'
   ClientHeight = 892
   ClientWidth = 1106
@@ -11,6 +12,7 @@ object Form1: TForm1
   OnKeyDown = _KeyDown
   OnShow = _FormShow
   LCLVersion = '1.5'
+  Visible = False
   object Panel1: TPanel
     Left = 0
     Height = 892

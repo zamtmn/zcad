@@ -97,12 +97,27 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function GetCurrentLayer:PGDBLayerProp;
                        function GetCurrentLType:PGDBLtypeProp;
                        function GetCurrentTextStyle:PGDBTextStyle;
+                       function GetCurrentDimStyle:PGDBDimStyle;
                  end;
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 var
     MainBlockCreateProc:TMainBlockCreateProc=nil;
 implementation
+function TSimpleDrawing.GetCurrentDimStyle:PGDBDimStyle;
+begin
+  if assigned(sysvar.dwg.DWG_CDimStyle) then
+                                         begin
+                                         if assigned(sysvar.dwg.DWG_CDimStyle^) then
+                                                                                 result:={getelement}(sysvar.dwg.DWG_CDimStyle^)
+                                                                             else
+                                                                                 result:=DimStyleTable.getelement(0);
+
+                                         end
+                                     else
+                                         result:=DimStyleTable.getelement(0);
+end;
+
 function TSimpleDrawing.GetCurrentTextStyle;
 begin
      if assigned(sysvar.dwg.DWG_CTStyle) then

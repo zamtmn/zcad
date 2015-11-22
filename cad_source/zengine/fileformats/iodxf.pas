@@ -1567,7 +1567,7 @@ begin
                                VarsDict.insert('$TEXTSTYLE',drawing.GetCurrentTextStyle^.Name)
                            else
                                VarsDict.insert('$TEXTSTYLE',TSNStandardStyleName);
-    pcurrentdimstyle:=drawing.DimStyleTable.GetCurrentDimStyle;
+    pcurrentdimstyle:=drawing.GetCurrentDimStyle;
     if pcurrentdimstyle<>nil then
                                  VarsDict.insert('$DIMSTYLE',pcurrentdimstyle^.Name)
                              else

@@ -19,8 +19,8 @@
 unit ugdbdimstylearray;
 {$INCLUDE def.inc}
 interface
-uses gdbpalette,gdbobjectsconstdef,ugdbltypearray,UGDBTextStyleArray,usimplegenerics,zcadsysvars,gdbasetypes,{SysInfo,}sysutils,gdbase, geometry,
-     strproc,{varmandef,}{uzcshared,}UGDBNamedObjectsArray,memman;
+uses gdbpalette,gdbobjectsconstdef,ugdbltypearray,UGDBTextStyleArray,usimplegenerics,gdbasetypes,sysutils,gdbase, geometry,
+     strproc,UGDBNamedObjectsArray,memman;
 const
      DIMLWEDefaultValue=LnWtByBlock;
      DIMCLREDefaultValue=ClByBlock;
@@ -111,7 +111,6 @@ GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*Op
                     constructor initnul;
                     procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
                     procedure ResolveLineTypes(const lta:GDBLtypeArray);
-                    function GetCurrentDimStyle:PGDBDimStyle;
               end;
 {EXPORT-}
 TDimArrowBlockArray=array[TArrowStyle] of TDimArrowBlockParam;
@@ -480,21 +479,6 @@ begin
     p:=iterate(ir);
   until p=nil;
 end;
-
-function GDBDimStyleArray.GetCurrentDimStyle:PGDBDimStyle;
-begin
-  if assigned(sysvar.dwg.DWG_CDimStyle) then
-                                         begin
-                                         if assigned(sysvar.dwg.DWG_CDimStyle^) then
-                                                                                 result:={getelement}(sysvar.dwg.DWG_CDimStyle^)
-                                                                             else
-                                                                                 result:=getelement(0);
-
-                                         end
-                                     else
-                                         result:=getelement(0);
-end;
-
 constructor GDBDimStyleArray.initnul;
 begin
   inherited initnul;

@@ -263,7 +263,7 @@ var
    DC:TDrawContext;
 begin
      pl:=pointer(AllocEnt(GDBLineID));
-     pl^.init(@gdb.CurrentDWG.ConstructObjRoot,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,p1,p2);
+     pl^.init(@gdb.CurrentDWG.ConstructObjRoot,gdb.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,p1,p2);
      gdb.CurrentDWG.ConstructObjRoot.ObjArray.add(@pl);
      dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
      pl^.Formatentity(gdb.GetCurrentDWG^,dc);
@@ -1190,7 +1190,7 @@ begin
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
     Prompt('Вторая точка:');
     New_line := PGDBObjLine(ENTF_CreateLine(@gdb.GetCurrentDWG^.ConstructObjRoot,@gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray,[wc.x,wc.y,wc.z,wc.x,wc.y,wc.z]));
-    GDBObjSetEntityProp(New_line,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^);
+    GDBObjSetEntityProp(New_line,gdb.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^);
     //New_line := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,gdb.GetCurrentROOT}));
     //GDBObjLineInit(gdb.GetCurrentROOT,New_line,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,wc,wc);
     New_line^.Formatentity(gdb.GetCurrentDWG^,dc);
@@ -1209,7 +1209,7 @@ var //po:PGDBObjSubordinated;
     ptempnetvarext,pfirstownervarext,psecondownervarext:PTVariablesExtender;
 begin
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-  New_line^.vp.Layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
+  New_line^.vp.Layer :=gdb.GetCurrentDWG.GetCurrentLayer;
   gdb.standardization(New_line,GDBNetID);
   New_line^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
   New_line.CoordInOCS.lEnd:= wc;
@@ -1447,7 +1447,7 @@ begin
       dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
     p3dpl := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBCableID,gdb.GetCurrentROOT));
     //p3dpl := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
-    GDBObjSetEntityProp(p3dpl,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^);
+    GDBObjSetEntityProp(p3dpl,gdb.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^);
     gdb.standardization(p3dpl,GDBCableID);
     //p3dpl^.init(@gdb.GetCurrentDWG.ObjRoot,gdb.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^);
 
@@ -1620,7 +1620,7 @@ var //po:PGDBObjSubordinated;
     DC:TDrawContext;
 begin
   result:=mclick;
-  p3dpl^.vp.Layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
+  p3dpl^.vp.Layer :=gdb.GetCurrentDWG.GetCurrentLayer;
   p3dpl^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
   gdb.standardization(p3dpl,GDBCableID);
   //p3dpl^.CoordInOCS.lEnd:= wc;
@@ -2553,7 +2553,7 @@ var //po:PGDBObjSubordinated;
 begin
   //result:=Line_com_AfterClick(wc,mc,button,osp,mclick);
   result:=mclick;
-  PCreatedGDBLine^.vp.Layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
+  PCreatedGDBLine^.vp.Layer :=gdb.GetCurrentDWG.GetCurrentLayer;
   PCreatedGDBLine^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
   PCreatedGDBLine^.CoordInOCS.lEnd:= wc;
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
@@ -2583,7 +2583,7 @@ begin
   pleader^.scale:=ELLeaderComParam.Scale;
   pleader^.size:=ELLeaderComParam.Size;
   pleader^.twidth:=ELLeaderComParam.twidth;
-  pleader^.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
+  pleader^.vp.Layer:=gdb.GetCurrentDWG.GetCurrentLayer;
   gdb.standardization(pleader,GDBELleaderID);
   pleader.MainLine.CoordInOCS.lBegin:=PCreatedGDBLine^.CoordInOCS.lBegin;
   pleader.MainLine.CoordInOCS.lEnd:=PCreatedGDBLine^.CoordInOCS.lEnd;
@@ -3001,7 +3001,7 @@ begin
                                                             end;
 
                                                                 New_line:=PGDBObjLine(ENTF_CreateLine(gdb.GetCurrentROOT,{@gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray}nil,[riser.P_insert_in_WCS.x,riser.P_insert_in_WCS.y,riser.P_insert_in_WCS.z,riser2.P_insert_in_WCS.x,riser2.P_insert_in_WCS.y,riser2.P_insert_in_WCS.z]));
-                                                                GDBObjSetEntityProp(New_line,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^);
+                                                                GDBObjSetEntityProp(New_line,gdb.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^);
                                                                 //New_line := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,gdb.GetCurrentROOT}));
                                                                 //GDBObjLineInit(gdb.GetCurrentROOT,New_line,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,riser.P_insert_in_WCS,riser2.P_insert_in_WCS);
                                                                 plinevarext:=New_line^.GetExtension(typeof(TVariablesExtender));

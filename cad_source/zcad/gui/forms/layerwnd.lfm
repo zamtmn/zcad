@@ -12,7 +12,8 @@ object LayerWindow: TLayerWindow
   OnCreate = FormCreate
   OnShow = RefreshListItems
   Position = poMainFormCenter
-  LCLVersion = '1.3'
+  LCLVersion = '1.5'
+  Visible = False
   object Bevel1: TBevel
     AnchorSideLeft.Control = ToolBar1
     AnchorSideLeft.Side = asrBottom

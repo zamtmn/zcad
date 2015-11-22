@@ -1559,7 +1559,7 @@ var
    pcurrtextstyle:PGDBTextStyle;
    pcurrentdimstyle:PGDBDimStyle;
 begin
-    VarsDict.insert('$CLAYER',drawing.LayerTable.GetCurrentLayer^.Name);
+    VarsDict.insert('$CLAYER',drawing.GetCurrentLayer^.Name);
     VarsDict.insert('$CELTYPE',drawing.LTypeStyleTable.GetCurrentLType^.Name);
 
     pcurrtextstyle:=drawing.TextStyleTable.GetCurrentTextStyle;

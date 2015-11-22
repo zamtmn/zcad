@@ -381,7 +381,7 @@ begin
             li:=ListView1.Items.Add;
             inc(tscounter);
             li.Data:=plp;
-            ListView1.UpdateItem(li,gdb.GetCurrentDWG^.TextStyleTable.GetCurrentTextStyle);
+            ListView1.UpdateItem(li,gdb.GetCurrentDWG^.GetCurrentTextStyle);
             plp:=pdwg^.TextStyleTable.iterate(ir);
        until plp=nil;
      end;
@@ -442,7 +442,7 @@ begin
   if assigned(ListView1.Selected)then
                                      pstyle:=(ListView1.Selected.Data)
                                  else
-                                     pstyle:=pdwg^.TextStyleTable.GetCurrentTextStyle;
+                                     pstyle:=pdwg^.GetCurrentTextStyle;
 
   stylename:=pdwg^.TextStyleTable.GetFreeName(Tria_Utf8ToAnsi(rsNewTextStyleNameFormat),1);
   if stylename='' then
@@ -464,7 +464,7 @@ begin
        //comit;
   end;
 
-  ListView1.AddCreatedItem(pcreatedstyle,gdb.GetCurrentDWG^.TextStyleTable.GetCurrentTextStyle);
+  ListView1.AddCreatedItem(pcreatedstyle,gdb.GetCurrentDWG^.GetCurrentTextStyle);
 end;
 procedure TTextStylesWindow.doTStyleDelete(ProcessedItem:TListItem);
 var
@@ -497,7 +497,7 @@ begin
                                      begin
                                      pstyle:=(ListView1.Selected.Data);
                                      countstyle(pstyle,inEntities,inBlockTable,indimstyles);
-                                     if ListView1.Selected.Data=pdwg^.TextStyleTable.GetCurrentTextStyle then
+                                     if ListView1.Selected.Data=pdwg^.GetCurrentTextStyle then
                                      begin
                                        ShowError(rsCurrentStyleCannotBeDeleted);
                                        exit;
@@ -535,7 +535,7 @@ var
 begin
      i:=0;
      purgedcounter:=0;
-     PCurrentStyle:=gdb.GetCurrentDWG^.TextStyleTable.GetCurrentTextStyle;
+     PCurrentStyle:=gdb.GetCurrentDWG^.GetCurrentTextStyle;
      if ListView1.Items.Count>0 then
      begin
        repeat

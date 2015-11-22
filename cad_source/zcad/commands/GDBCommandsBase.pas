@@ -805,7 +805,7 @@ begin
   repeat
     if pv^.Selected then
                         begin
-                             pv^.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
+                             pv^.vp.Layer:=gdb.GetCurrentDWG.GetCurrentLayer;
                              pv^.Formatentity(gdb.GetCurrentDWG^,dc);
                         end;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
@@ -816,7 +816,7 @@ begin
        repeat
              if psv.objaddr^.Selected then
                                           begin
-                                               psv.objaddr^.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
+                                               psv.objaddr^.vp.Layer:=gdb.GetCurrentDWG.GetCurrentLayer;
                                                psv.objaddr^.Formatentity(gdb.GetCurrentDWG^,dc);
                                           end;
        psv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
@@ -1423,7 +1423,7 @@ begin
      i:=0;
      p3dpl := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateInitObj(GDBPolylineID,gdb.GetCurrentROOT));
      p3dpl.Closed:=true;
-     p3dpl^.vp.Layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
+     p3dpl^.vp.Layer :=gdb.GetCurrentDWG.GetCurrentLayer;
      p3dpl^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
      dc:=gdb.GetCurrentDwg^.CreateDrawingRC;
      while i<pvr.Count do

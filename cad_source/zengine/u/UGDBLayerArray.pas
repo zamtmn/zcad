@@ -19,8 +19,8 @@
 unit UGDBLayerArray;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
-     {varmandef,}gdbobjectsconstdef,UGDBNamedObjectsArray,StrProc;
+uses gdbasetypes,sysutils,gdbase, geometry,
+     gdbobjectsconstdef,UGDBNamedObjectsArray,StrProc;
 type
 {REGISTEROBJECTTYPE GDBLayerArray}
 {EXPORT+}
@@ -50,7 +50,6 @@ GDBLayerArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
 
                     function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
                     function GetSystemLayer:PGDBLayerProp;
-                    function GetCurrentLayer:PGDBLayerProp;
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
                     function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;
               end;
@@ -201,19 +200,6 @@ end;
 function GDBLayerArray.GetSystemLayer;
 begin
      result:=getAddres(LNSysLayerName);
-end;
-function GDBLayerArray.GetCurrentLayer;
-begin
-     if assigned(sysvar.dwg.DWG_CLayer) then
-                                            begin
-                                            if assigned(sysvar.dwg.DWG_CLayer^) then
-                                                                                    result:={getelement}(sysvar.dwg.DWG_CLayer^)
-                                                                                else
-                                                                                    result:=getsystemlayer;
-
-                                            end
-                                        else
-                                            result:=getsystemlayer;
 end;
 function GDBLayerArray.addlayer;
 var

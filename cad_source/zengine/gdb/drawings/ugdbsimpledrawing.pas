@@ -19,7 +19,7 @@
 unit ugdbsimpledrawing;
 {$INCLUDE def.inc}
 interface
-uses UGDBDrawingdef,zeblockdefsfactory,ugdbdimstylearray,GDBWithLocalCS,ugdbabstractdrawing,strproc,
+uses zcadsysvars,UGDBDrawingdef,zeblockdefsfactory,ugdbdimstylearray,GDBWithLocalCS,ugdbabstractdrawing,strproc,
      UGDBObjBlockdefArray,UGDBTableStyleArray,{UUnitManager,}UGDBNumerator, gdbase,
      {varmandef,}{varman,}sysutils, memman, geometry,gdbasetypes,{sysinfo,}
      GDBGenericSubEntry,UGDBLayerArray,ugdbltypearray,GDBEntity,
@@ -94,12 +94,26 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function GetUnitsFormat:TzeUnitsFormat;virtual;
                        function CreateBlockDef(name:GDBString):GDBPointer;virtual;
                        procedure HardReDraw;
+                       function GetCurrentLayer:PGDBLayerProp;
                  end;
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 var
     MainBlockCreateProc:TMainBlockCreateProc=nil;
 implementation
+function TSimpleDrawing.GetCurrentLayer;
+begin
+     if assigned(sysvar.dwg.DWG_CLayer) then
+                                            begin
+                                            if assigned(sysvar.dwg.DWG_CLayer^) then
+                                                                                    result:={getelement}(sysvar.dwg.DWG_CLayer^)
+                                                                                else
+                                                                                    result:=LayerTable.getsystemlayer;
+
+                                            end
+                                        else
+                                            result:=LayerTable.getsystemlayer;
+end;
 procedure TSimpleDrawing.HardReDraw;
 var
    DC:TDrawContext;

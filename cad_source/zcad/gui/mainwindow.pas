@@ -445,7 +445,7 @@ begin
      case numprop of
                     0:begin
                            PGDBLayerProp(PLayer)^._on:=not(PGDBLayerProp(PLayer)^._on);
-                           if PLayer=cdwg^.LayerTable.GetCurrentLayer then
+                           if PLayer=cdwg^.GetCurrentLayer then
                            if not PGDBLayerProp(PLayer)^._on then
                                                                  MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
 

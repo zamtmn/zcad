@@ -142,7 +142,7 @@ var
   DC:TDrawContext;
 begin
   result := GDBPointer(own.ObjArray.CreateObj(GDBBlockInsertID));
-  result.init(gdb.GetCurrentROOT,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,0);
+  result.init(gdb.GetCurrentROOT,gdb.GetCurrentDWG^.GetCurrentLayer,0);
   result^.Name:=BlockName;
   result^.vp.ID:=GDBBlockInsertID;
   result^.Local.p_insert:=p_insert;
@@ -214,7 +214,7 @@ procedure setdefaultproperty(pvo:pgdbobjEntity);
 begin
   pvo^.selected := false;
   pvo^.Visible:=gdb.GetCurrentDWG.pcamera.VISCOUNT;
-  pvo^.vp.layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
+  pvo^.vp.layer :=gdb.GetCurrentDWG.GetCurrentLayer;
   pvo^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
 end;
 

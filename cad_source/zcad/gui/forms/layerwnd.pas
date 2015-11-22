@@ -519,7 +519,7 @@ begin
 
             li.Data:=plp;
 
-            ListView1.UpdateItem(li,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer);
+            ListView1.UpdateItem(li,gdb.GetCurrentDWG^.GetCurrentLayer);
 
             plp:=pdwg^.LayerTable.iterate(ir);
        until plp=nil;
@@ -566,7 +566,7 @@ begin
      if assigned(ListView1.Selected)then
                                         player:=(ListView1.Selected.Data)
                                     else
-                                        player:=pdwg^.LayerTable.GetCurrentLayer;
+                                        player:=pdwg^.GetCurrentLayer;
 
      layername:=pdwg^.LayerTable.GetFreeName(Tria_Utf8ToAnsi(rsNewLayerNameFormat),1);
      if layername='' then
@@ -587,7 +587,7 @@ begin
           //comit;
      end;
 
-     ListView1.AddCreatedItem(pcreatedlayer,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer);
+     ListView1.AddCreatedItem(pcreatedlayer,gdb.GetCurrentDWG^.GetCurrentLayer);
 end;
 procedure TLayerWindow.doLayerDelete(ProcessedItem:TListItem);
 var
@@ -616,7 +616,7 @@ var
 begin
      i:=0;
      purgedcounter:=0;
-     PCurrentLayer:=gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer;
+     PCurrentLayer:=gdb.GetCurrentDWG^.GetCurrentLayer;
      if ListView1.Items.Count>0 then
      begin
        repeat

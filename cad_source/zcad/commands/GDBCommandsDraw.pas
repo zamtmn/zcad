@@ -1777,7 +1777,7 @@ begin
      begin
      if TextInsertParams.Style.Selected>=TextInsertParams.Style.Enums.Count then
                                                                                 begin
-                                                                                     s:=gdb.GetCurrentDWG^.TextStyleTable.GetCurrentTextStyle^.Name;
+                                                                                     s:=gdb.GetCurrentDWG^.GetCurrentTextStyle^.Name;
                                                                                 end
                                                                             else
                                                                                 begin

@@ -1562,9 +1562,9 @@ begin
     VarsDict.insert('$CLAYER',drawing.GetCurrentLayer^.Name);
     VarsDict.insert('$CELTYPE',drawing.GetCurrentLType^.Name);
 
-    pcurrtextstyle:=drawing.TextStyleTable.GetCurrentTextStyle;
+    pcurrtextstyle:=drawing.GetCurrentTextStyle;
     if pcurrtextstyle<>nil then
-                               VarsDict.insert('$TEXTSTYLE',drawing.TextStyleTable.GetCurrentTextStyle^.Name)
+                               VarsDict.insert('$TEXTSTYLE',drawing.GetCurrentTextStyle^.Name)
                            else
                                VarsDict.insert('$TEXTSTYLE',TSNStandardStyleName);
     pcurrentdimstyle:=drawing.DimStyleTable.GetCurrentDimStyle;

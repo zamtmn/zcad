@@ -19,8 +19,8 @@
 unit UGDBTextStyleArray;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,paths,UGDBFontManager,zcadsysvars,gdbasetypes,{SysInfo,}sysutils,gdbase, geometry,
-     strproc,{varmandef,}{uzcshared,}ugdbfont,zcadstrconsts,UGDBNamedObjectsArray,memman;
+uses LCLProc,paths,UGDBFontManager,gdbasetypes,sysutils,gdbase, geometry,
+     strproc,ugdbfont,zcadstrconsts,UGDBNamedObjectsArray,memman;
 type
   //ptextstyle = ^textstyle;
 {REGISTEROBJECTTYPE GDBTextStyleArray}
@@ -50,7 +50,6 @@ GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*O
                     function setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
                     function FindStyle(StyleName:GDBString;ult:GDBBoolean):PGDBTextStyle;
                     procedure freeelement(p:GDBPointer);virtual;
-                    function GetCurrentTextStyle:PGDBTextStyle;
               end;
 {EXPORT-}
 implementation
@@ -59,20 +58,6 @@ destructor GDBTextStyle.Done;
 begin
      inherited;
      dxfname:='';
-end;
-
-function GDBTextStyleArray.GetCurrentTextStyle;
-begin
-     if assigned(sysvar.dwg.DWG_CTStyle) then
-                                            begin
-                                            if assigned(sysvar.dwg.DWG_CTStyle^) then
-                                                                                    result:={getelement}(sysvar.dwg.DWG_CTStyle^)
-                                                                                else
-                                                                                    result:=getelement(0);
-
-                                            end
-                                        else
-                                            result:=getelement(0);
 end;
 procedure GDBTextStyleArray.freeelement;
 begin

@@ -96,12 +96,26 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        procedure HardReDraw;
                        function GetCurrentLayer:PGDBLayerProp;
                        function GetCurrentLType:PGDBLtypeProp;
+                       function GetCurrentTextStyle:PGDBTextStyle;
                  end;
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 var
     MainBlockCreateProc:TMainBlockCreateProc=nil;
 implementation
+function TSimpleDrawing.GetCurrentTextStyle;
+begin
+     if assigned(sysvar.dwg.DWG_CTStyle) then
+                                            begin
+                                            if assigned(sysvar.dwg.DWG_CTStyle^) then
+                                                                                    result:={getelement}(sysvar.dwg.DWG_CTStyle^)
+                                                                                else
+                                                                                    result:=TextStyleTable.getelement(0);
+
+                                            end
+                                        else
+                                            result:=TextStyleTable.getelement(0);
+end;
 function TSimpleDrawing.GetCurrentLType;
 begin
      if assigned(sysvar.dwg.DWG_CLType) then

@@ -24,7 +24,7 @@ uses UGDBDrawingdef,zeblockdefsfactory,ugdbdimstylearray,GDBWithLocalCS,ugdbabst
      {varmandef,}{varman,}sysutils, memman, geometry,gdbasetypes,{sysinfo,}
      GDBGenericSubEntry,UGDBLayerArray,ugdbltypearray,GDBEntity,
      UGDBSelectedObjArray,UGDBTextStyleArray,GDBCamera,UGDBOpenArrayOfPV,
-     GDBRoot,ugdbfont,UGDBOpenArrayOfPObjects,uzglabstractviewarea,gdbdrawcontext;
+     GDBRoot,ugdbfont,UGDBOpenArrayOfPObjects,uzglabstractviewarea,generalviewarea,gdbdrawcontext;
 type
 TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:GDBString) of object;
 {EXPORT+}
@@ -93,13 +93,29 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        procedure FillDrawingPartRC(var dc:TDrawContext);virtual;
                        function GetUnitsFormat:TzeUnitsFormat;virtual;
                        function CreateBlockDef(name:GDBString):GDBPointer;virtual;
+                       procedure HardReDraw;
                  end;
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 var
     MainBlockCreateProc:TMainBlockCreateProc=nil;
 implementation
-//uses log;
+procedure TSimpleDrawing.HardReDraw;
+var
+   DC:TDrawContext;
+begin
+  DC:=CreateDrawingRC;
+  GetCurrentRoot^.FormatAfterEdit(self,dc);
+  wa.param.firstdraw := TRUE;
+  wa.CalcOptimalMatrix;
+  pcamera^.totalobj:=0;
+  pcamera^.infrustum:=0;
+  GetCurrentRoot^.CalcVisibleByTree(pcamera^.frustum,pcamera^.POSCOUNT,pcamera^.VISCOUNT,GetCurrentROOT^.ObjArray.ObjTree,pcamera^.totalobj,pcamera^.infrustum,myGluProject2,pcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+  //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
+  ConstructObjRoot.calcvisible(pcamera^.frustum,pcamera^.POSCOUNT,pcamera^.VISCOUNT,pcamera^.totalobj,pcamera^.infrustum,myGluProject2,getpcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+  wa.calcgrid;
+  wa.draworinvalidate;
+end;
 function TSimpleDrawing.CreateBlockDef(name:GDBString):GDBPointer;
 var
    td:pointer;

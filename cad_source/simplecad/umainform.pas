@@ -8,13 +8,21 @@ uses
   LCLType,Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, StdCtrls, Spin,
   {From ZCAD}
-  UGDBFontManager,generalviewarea,zeentitiesmanager,gdbdrawcontext,uzglopenglviewarea,
-  uzglabstractviewarea,{zcadsysvars,} {$ifdef dxfio}iodxf,{$endif}
-  {zcadinterface,}zeentityfactory,UGDBLayerArray,geometry,
-  GDBase, GDBasetypes,UGDBTextStyleArray,UGDBEntTree,GDB3DFace,
-  GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,ugdbsimpledrawing,
-  {$ifdef dxfio}GDBMText,gdbgenericdimension,gdbaligneddimension,gdbrotateddimension,gdbsolid,{$endif}
-  GDBEntity,gdbobjectsconstdef,ioshx,uzglgdiviewarea;
+  GDBase, GDBasetypes,                                                          //zcad basetypes
+  geometry,                                                                     //some mathematical and geometrical support
+  UGDBFontManager,ioshx,                                                        //fonts manager and SHX fileformat support
+  uzglabstractviewarea,generalviewarea,gdbdrawcontext,                          //generic view areas support
+  uzglopenglviewarea,uzglgdiviewarea,                                           //gdi and opengl wiewareas
+  GDBEntity,                                                                    //generic entitys objects parent
+  GDB3DFace,GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,         //entitys created by program
+  {$ifdef dxfio}
+  iodxf,                                                                        //dxf fileformat support
+  GDBMText,gdbgenericdimension,gdbaligneddimension,gdbrotateddimension,gdbsolid,//some other entitys can be found in loaded files
+  {$endif}
+  UGDBLayerArray,UGDBTextStyleArray,                                            //layers and text steles support
+  UGDBEntTree,                                                                  //entities spatial binary tree
+  ugdbsimpledrawing,                                                            //drawing
+  gdbobjectsconstdef;                                                           //some consts
 
 type
 
@@ -52,7 +60,6 @@ type
     Splitter1: TSplitter;
     Splitter2: TSplitter;
     procedure BtnAdd3DFaces1Click(Sender: TObject);
-    //procedure FormatEntitysAndRebuildTreeAndRedraw;
     procedure BtnAdd3DpolyLinesClick(Sender: TObject);
     procedure BtnAddArcsClick(Sender: TObject);
     procedure BtnAddLinesClick(Sender: TObject);
@@ -76,7 +83,6 @@ type
     procedure _StartLongProcess(a:integer;n:string);
     procedure _EndLongProcess;
   private
-    oglwnd:TCADControl;
     pdrawing1,pdrawing2:PTSimpleDrawing;
     { private declarations }
   public
@@ -97,29 +103,6 @@ begin
                                         result:=Form1.pdrawing1
                                     else
                                         result:=Form1.pdrawing2;
-end;
-procedure redrawoglwnd;
-var
-   pdwg:PTSimpleDrawing;
-   DC:TDrawContext;
-begin
-  //isOpenGLError;
-  pdwg:=GetCurrentDrawing;
-  if pdwg<>nil then
-  begin
-       DC:=pdwg^.CreateDrawingRC;
-       pdwg^.GetCurrentRoot^.FormatAfterEdit(pdwg^,dc);
-  pdwg^.wa.param.firstdraw := TRUE;
-  pdwg^.wa.CalcOptimalMatrix;
-  pdwg^.pcamera^.totalobj:=0;
-  pdwg^.pcamera^.infrustum:=0;
-  pdwg^.GetCurrentRoot^.CalcVisibleByTree(pdwg^.pcamera^.frustum,pdwg^.pcamera^.POSCOUNT,pdwg^.pcamera^.VISCOUNT,pdwg^.GetCurrentROOT^.ObjArray.ObjTree,pdwg^.pcamera^.totalobj,pdwg^.pcamera^.infrustum,@pdwg^.myGluProject2,pdwg^.pcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
-  //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
-  pdwg^.ConstructObjRoot.calcvisible(GetCurrentDrawing^.pcamera^.frustum,GetCurrentDrawing^.pcamera^.POSCOUNT,GetCurrentDrawing^.pcamera^.VISCOUNT,pdwg^.pcamera^.totalobj,pdwg^.pcamera^.infrustum,@pdwg^.myGluProject2,pdwg^.getpcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
-  pdwg^.wa.calcgrid;
-  pdwg^.wa.draworinvalidate;
-  end;
-  //gdb.GetCurrentDWG.OGLwindow1.repaint;
 end;
 procedure TForm1._StartLongProcess(a:integer;n:string);
 begin
@@ -146,7 +129,7 @@ begin
   begin
        GetCurrentDrawing^.SelObjArray.clearallobjects;
        GetCurrentDrawing^.GetCurrentROOT^.ObjArray.DeSelect(GetCurrentDrawing^.GetSelObjArray,GetCurrentDrawing^.wa.param.SelDesc.Selectedobjcount);
-       redrawoglwnd;
+       GetCurrentDrawing^.HardReDraw;
        Key:=0;
   end;
   if Key=VK_DELETE then
@@ -159,74 +142,63 @@ end;
 procedure TForm1._FormShow(Sender: TObject);
 begin
     _FormCreate(nil);
-    redrawoglwnd;
+    GetCurrentDrawing^.HardReDraw;
 end;
 
 procedure TForm1._FormCreate(Sender: TObject);
 var
    i:integer;
-   wpowner:TAbstractViewArea;
+   ViewArea:TAbstractViewArea;
+   WADrawControl:TCADControl;
 begin
-     FontManager.CreateBaseFont;
-     sysvarDISPSystmGeometryDraw:=CheckBox1.Checked;
+     FontManager.CreateBaseFont;//Load default font
+     sysvarDISPSystmGeometryDraw:=CheckBox1.Checked;//Draw|notdraw help geometry (insert points, bounding boxes...)
 
-     //ugdbdescriptor.startup('','');
+     pdrawing1:=CreateSimpleDWG;//create drawing
 
-     pdrawing1:={gdb.}CreateSimpleDWG;
-     //gdb.AddRef(pdrawing1^);
-     //gdb.SetCurrentDWG(pointer(pdrawing1));
+     //Add 10 random layers
      for i:=1 to 10 do
      begin
           pdrawing1^.LayerTable.addlayer(inttostr(i),random(255),0,true,false,true,'',TLOMerge);
      end;
 
 
-     wpowner:=TOpenGLViewArea.Create(PanelUp);
-     oglwnd:=wpowner.getviewcontrol;
-     pdrawing1^.wa:=wpowner;
-     wpowner.PDWG:=pdrawing1;
-     wpowner.getviewcontrol.align:=alClient;
-     wpowner.getviewcontrol.Parent:=PanelUp;
-     wpowner.getviewcontrol.Visible:=true;
-     wpowner.PDWG:=pdrawing1;
-     wpowner.getareacaps;
-     //wpowner.WaResize(nil);
-     oglwnd.show;
-     wpowner.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
-                                //создания или загрузки
-     wpowner.param.firstdraw:=true;
+     ViewArea:=TOpenGLViewArea.Create(PanelUp);//Create view area (OPENGL)
+     WADrawControl:=ViewArea.getviewcontrol;//Get window which will be drawing
+     pdrawing1^.wa:=ViewArea;//associate drwing with window
+     ViewArea.PDWG:=pdrawing1;//associate window with drawing
 
-     GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree:=createtree(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox,@GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
+     WADrawControl.align:=alClient;
+     WADrawControl.Parent:=PanelUp;
+     WADrawControl.show;
+
+     ViewArea.getareacaps;//setup internal view area params
+     //ViewArea.Drawer.delmyscrbuf;
+     pdrawing1^.HardReDraw;//redraw drawing on view area
 
 
-     pdrawing2:={gdb.}CreateSimpleDWG;
-     //gdb.AddRef(pdrawing2^);
-     //gdb.SetCurrentDWG(pointer(pdrawing2));
+     pdrawing2:=CreateSimpleDWG;//create drawing
+
+     //Add 10 random layers
      for i:=1 to 10 do
      begin
           pdrawing2^.LayerTable.addlayer(inttostr(i),random(255),0,true,false,true,'',TLOMerge);
      end;
 
 
-     wpowner:=TGDIViewArea.Create(Panel2);
-     oglwnd:=wpowner.getviewcontrol;
-     pdrawing2^.wa:=wpowner;
-     wpowner.PDWG:=pdrawing2;
-     wpowner.getviewcontrol.align:=alClient;
-     wpowner.getviewcontrol.Parent:=Panel2;
-     wpowner.getviewcontrol.Visible:=true;
-     wpowner.PDWG:=pdrawing2;
-     wpowner.getareacaps;
-     //oglwnd.show;
-     wpowner.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
-                                //создания или загрузки
-     wpowner.param.firstdraw:=true;
-     GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree:=createtree(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox,@GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
+     ViewArea:=TGDIViewArea.Create(Panel2);//Create view area (GDI)
+     WADrawControl:=ViewArea.getviewcontrol;//Get window which will be drawing
+     pdrawing2^.wa:=ViewArea;//associate drwing with window
+     ViewArea.PDWG:=pdrawing2;//associate window with drawing
 
+     WADrawControl.align:=alClient;
+     WADrawControl.Parent:=Panel2;
+     WADrawControl.show;
 
-     //zcadinterface.StartLongProcessProc:=@_StartLongProcess;
-     //zcadinterface.EndLongProcessProc:=@_EndLongProcess;
+     ViewArea.getareacaps;//setup internal view area params
+     pdrawing2^.HardReDraw;//redraw drawing on view area
 end;
+
 function CreateRandomDouble(len:GDBDouble):GDBDouble;inline;
 begin
      result:=random*len;
@@ -240,7 +212,8 @@ begin
                                else
                                    result.z:=0;
 end;
-procedure processobj(pobj:PGDBObjEntity);
+
+procedure SetEntityLayer(pobj:PGDBObjEntity);
 begin
      pobj^.vp.Layer:=GetCurrentDrawing^.LayerTable.getelement(random(GetCurrentDrawing^.LayerTable.Count));
 end;
@@ -250,78 +223,83 @@ begin
      result.x:=CreateRandomDouble(len)-hanflen;
      result.y:=CreateRandomDouble(len)-hanflen;
 end;
-{procedure TForm1.FormatEntitysAndRebuildTreeAndRedraw;
-begin
-  _StartLongProcess(0,'Format entitys');
-  gdb.GetCurrentDWG^.pObjRoot^.FormatEntity(gdb.GetCurrentDWG^);
-  _EndLongProcess;
-  BtnRebuildClick(self);
-  //gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
-  UGDBDescriptor.redrawoglwnd;
-end;}
 
-procedure TForm1.BtnAddLinesClick(Sender: TObject);
+procedure TForm1.BtnAddLinesClick(Sender: TObject);         //Add lines to drawing
 var
    i:integer;
-   pobj:{PGDBObjLine}PGDBObjEntity;
+   PLineEnt:PGDBObjLine;                                    //pointer to created line
    v1,v2:gdbvertex;
-   dc:TDrawContext;
+   dc:TDrawContext;                                         //drawing context
+   CurrentDrawing:PTSimpleDrawing;                          //pointer to current drawing
 begin
-  _StartLongProcess(0,'Add lines');
-  dc:=GetCurrentDrawing^.CreateDrawingRC;
+  _StartLongProcess(0,'Add lines');                         //just for time interval measure
+
+  CurrentDrawing:=GetCurrentDrawing;                        //get cirrent drawing
+  dc:=CurrentDrawing^.CreateDrawingRC;                      //create drawing context, need for format entity
   for i:=1 to SpinEdit1.Value do
   begin
-    v1:=CreateRandomVertex(1000,500);
-    v2:=geometry.VertexAdd(v1,CreateRandomVertex(1000,500));
+    v1:=CreateRandomVertex(1000,500);                       //line coord
+    v2:=geometry.VertexAdd(v1,CreateRandomVertex(1000,500));//line coord
 
-    pobj := ENTF_CreateLine(GetCurrentDrawing^.GetCurrentRoot,@GetCurrentDrawing^.GetCurrentRoot^.ObjArray,[v1.x,v1.y,v1.z,v2.x,v2.y,v2.z]);
+    PLineEnt:=GDBObjLine.CreateInstance;                    //create line
+    PLineEnt^.CoordInOCS.lBegin:=v1;                        //setup coord
+    PLineEnt^.CoordInOCS.lEnd:=v2;                          //setup coord
+    SetEntityLayer(PLineEnt);                               //Setup line propertues
+    CurrentDrawing^.GetCurrentRoot^.AddMi(@PLineEnt);       //add line to drawing
 
-    {pobj := PGDBObjLine(CreateInitObjFree(GDBLineID,nil));
-    pobj^.CoordInOCS.lBegin:=v1;
-    pobj^.CoordInOCS.lEnd:=v2;
-    gdb.GetCurrentRoot^.AddMi(@pobj);}
-    processobj(pobj);
-    pobj^.BuildGeometry(GetCurrentDrawing^);
-    pobj^.formatEntity(GetCurrentDrawing^,dc);
+    PLineEnt^.BuildGeometry(CurrentDrawing^);               //internal entity proc for create subentities,
+                                                            //for line entity this unneed, but for complex entities
+                                                            //like BlockInsert thes necessarily
+
+    PLineEnt^.formatEntity(CurrentDrawing^,dc);             //internal entity proc for create graphix representation
   end;
-  _EndLongProcess;
-  //FormatEntitysAndRebuildTreeAndRedraw;
-  BtnRebuildClick(self);
+  _EndLongProcess;                                          //end interval measure
+
+  BtnRebuildClick(self);                                    //rebuild drawing spatial tree and redraw
 end;
 
-procedure TForm1.BtnAddLWPolylines1Click(Sender: TObject);
+procedure TForm1.BtnAddLWPolylines1Click(Sender: TObject);         //Add lwpolylines to drawing
 var
    i,j,vcount:integer;
-   pobj:PGDBObjLWPolyline;
-   v1:gdbvertex2d;
-   lw:GLLWWidth;
-   dc:TDrawContext;
+   PLWPolyLineEnt:PGDBObjLWPolyline;                               //pointer to created lwpolyline
+   v1:gdbvertex2d;                                                 //lwpolyline vertex
+   lw:GLLWWidth;                                                   //lwpolyline vertex width props
+   dc:TDrawContext;                                                //drawing context
+   CurrentDrawing:PTSimpleDrawing;                                 //pointer to current drawing
 begin
-  _StartLongProcess(0,'Add lwpolylines');
-  dc:=GetCurrentDrawing^.CreateDrawingRC;
+  _StartLongProcess(0,'Add lwpolylines');                          //just for time interval measure
+
+  CurrentDrawing:=GetCurrentDrawing;                               //get cirrent drawing
+  dc:=CurrentDrawing^.CreateDrawingRC;                             //create drawing context, need for format entity
+
   for i:=1 to SpinEdit1.Value do
   begin
-    pobj := PGDBObjLWPolyline(CreateInitObjFree(GDBLWPolyLineID,nil));
-    vcount:=random(8)+2;
+    PLWPolyLineEnt := GDBObjLWPolyline.CreateInstance;             //create lwpolyline
+
+    vcount:=random(8)+2;                                           //add add random polyline vertexs
     v1:=CreateRandomVertex2D(1000,500);
     for j:=1 to vcount do
     begin
-         pobj^.Vertex2D_in_OCS_Array.Add(@v1);
+         PLWPolyLineEnt^.Vertex2D_in_OCS_Array.Add(@v1);
          lw.endw:=CreateRandomDouble(10);
          lw.startw:=CreateRandomDouble(10);
-         pobj^.Width2D_in_OCS_Array.Add(@lw);
+         PLWPolyLineEnt^.Width2D_in_OCS_Array.Add(@lw);
          v1:=geometry.Vertex2DAdd(v1,CreateRandomVertex2D(100,50));
     end;
     if vcount>2 then
-                    pobj^.closed:=random(10)>5;
-    GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
-    processobj(pobj);
-    pobj^.BuildGeometry(GetCurrentDrawing^);
-    pobj^.formatEntity(GetCurrentDrawing^,dc);
+                    PLWPolyLineEnt^.closed:=random(10)>5;          //random close lwpolyline
+
+    CurrentDrawing^.GetCurrentRoot^.AddMi(@PLWPolyLineEnt);        //add lwpolyline to drawing
+    SetEntityLayer(PLWPolyLineEnt);                                //Setup line propertues
+    PLWPolyLineEnt^.BuildGeometry(CurrentDrawing^);                //internal entity proc for create subentities,
+                                                                   //for line entity this unneed, but for complex entities
+                                                                   //like BlockInsert thes necessarily
+
+    PLWPolyLineEnt^.formatEntity(CurrentDrawing^,dc);              //internal entity proc for create graphix representation
   end;
-  _EndLongProcess;
-  //FormatEntitysAndRebuildTreeAndRedraw;
-  BtnRebuildClick(self);
+  _EndLongProcess;                                                 //end interval measure
+
+  BtnRebuildClick(self);                                           //rebuild drawing spatial tree and redraw
 end;
 procedure TForm1.BtnAdd3DFaces1Click(Sender: TObject);
 var
@@ -335,7 +313,7 @@ begin
   dc:=GetCurrentDrawing^.CreateDrawingRC;
   for i:=1 to SpinEdit1.Value do
   begin
-    pobj := PGDBObj3DFace(CreateInitObjFree(GDB3DFaceID,nil));
+    pobj := GDBObj3DFace.CreateInstance;
     istriangle:=random(10)>5;
     v1:=CreateRandomVertex(1000,500);
     for j:=0 to 2 do
@@ -348,7 +326,7 @@ begin
                   else
                       pobj^.PInOCS[3]:=v1;
     GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
-    processobj(pobj);
+    SetEntityLayer(pobj);
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
   end;
@@ -357,7 +335,7 @@ begin
   BtnRebuildClick(self);
 end;
 procedure TForm1.BtnProcessObjectsClick(Sender: TObject);
-var //i: GDBInteger;
+var
     pv:pGDBObjEntity;
     ir:itrec;
     l,hl:double;
@@ -387,7 +365,7 @@ begin
   until pv=nil;
   _EndLongProcess;
 
-  redrawoglwnd;
+  GetCurrentDrawing^.HardReDraw;
 end;
 
 procedure TForm1.BtnAddCirclesClick(Sender: TObject);
@@ -401,12 +379,12 @@ begin
   dc:=GetCurrentDrawing^.CreateDrawingRC;
   for i:=1 to SpinEdit1.Value do
   begin
-    pobj := PGDBObjCircle(CreateInitObjFree(GDBCircleID,nil));
+    pobj := GDBObjCircle.CreateInstance ;
     v1:=CreateRandomVertex(1000,500);
     pobj^.Local.P_insert:=v1;
     pobj^.Radius:=CreateRandomDouble(9.9)+0.1;
     GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
-    processobj(pobj);
+    SetEntityLayer(pobj);
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
   end;
@@ -426,7 +404,7 @@ begin
   dc:=GetCurrentDrawing^.CreateDrawingRC;
   for i:=1 to SpinEdit1.Value do
   begin
-    pobj := PGDBObjPolyline(CreateInitObjFree(GDBPolyLineID,nil));
+    pobj := GDBObjPolyline.CreateInstance;
     vcount:=random(8)+2;
     v1:=CreateRandomVertex(1000,500);
     for j:=1 to vcount do
@@ -437,7 +415,7 @@ begin
     if vcount>2 then
                     pobj^.closed:=random(10)>5;
     GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
-    processobj(pobj);
+    SetEntityLayer(pobj);
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
   end;
@@ -456,13 +434,13 @@ begin
   dc:=GetCurrentDrawing^.CreateDrawingRC;
   for i:=1 to SpinEdit1.Value do
   begin
-    pobj := PGDBObjArc(CreateInitObjFree(GDBArcID,nil));
+    pobj := GDBObjArc.CreateInstance;
     pobj^.Local.P_insert:=CreateRandomVertex(1000,500);
     pobj^.R:=CreateRandomDouble(10)+0.1;
     pobj^.StartAngle:=CreateRandomDouble(2*pi);
     pobj^.EndAngle:=CreateRandomDouble(2*pi);
     GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
-    processobj(pobj);
+    SetEntityLayer(pobj);
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
   end;
@@ -481,7 +459,7 @@ begin
      GetCurrentDrawing^.pObjRoot^.calcbb(dc);
      GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree:=createtree(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox,@GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
      _EndLongProcess;
-     redrawoglwnd;
+     GetCurrentDrawing^.HardReDraw;
 end;
 
 procedure TForm1.BtnEraseSelClick(Sender: TObject);
@@ -508,7 +486,7 @@ begin
   GetCurrentDrawing^.OnMouseObj.Clear;
   GetCurrentDrawing^.SelObjArray.clearallobjects;
   _EndLongProcess;
-  redrawoglwnd;
+  GetCurrentDrawing^.HardReDraw;
 end;
 procedure TForm1.BtnAddTextsClick(Sender: TObject);
 var
@@ -531,7 +509,7 @@ begin
   dc:=GetCurrentDrawing^.CreateDrawingRC;
   for i:=1 to SpinEdit1.Value do
   begin
-    pGDBObjEntity(pobj):=CreateInitObjFree(GDBTextID,nil);
+    pobj:=GDBObjText.CreateInstance;
     v1:=CreateRandomVertex(1000,500);
     pobj^.Local.P_insert:=v1;
     pobj^.TXTStyleIndex:=ts;
@@ -540,11 +518,11 @@ begin
     pobj^.textprop.justify:=b2j[1+random(11)];
     pobj^.textprop.wfactor:=0.3+random*0.7;
     pobj^.textprop.oblique:=(random(30)-15)*pi/180;
-    angl:=pi*random{*0.5};
-    pobj^.textprop.angle:=angl*180/pi;
+    angl:=pi*random;
+    pobj^.textprop.angle:=angl;
     pobj^.local.basis.OX:=VectorTransform3D(PGDBObjText(pobj)^.local.basis.OX,geometry.CreateAffineRotationMatrix(PGDBObjText(pobj)^.Local.basis.oz,-angl));
     GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
-    processobj(pobj);
+    SetEntityLayer(pobj);
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
   end;
@@ -560,11 +538,13 @@ begin
      {$ifdef dxfio}
      if OpenDialog1.Execute then
      begin
+          _StartLongProcess(0,'Load dxf file');
           dc:=GetCurrentDrawing^.CreateDrawingRC;
           addfromdxf(OpenDialog1.FileName,@GetCurrentDrawing^.pObjRoot^,TLOLoad,GetCurrentDrawing^);
           GetCurrentDrawing^.pObjRoot^.FormatEntity(GetCurrentDrawing^,dc);
           GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree:=createtree(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox,@GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
-          redrawoglwnd;
+          GetCurrentDrawing^.HardReDraw;
+          _EndLongProcess;
      end;
      {$endif}
 end;
@@ -609,7 +589,7 @@ begin
   pv:=GetCurrentDrawing^.GetCurrentROOT^.ObjArray.iterate(ir);
   until pv=nil;
   _EndLongProcess;
-  redrawoglwnd;
+  GetCurrentDrawing^.HardReDraw;
   //if assigned(updatevisibleproc) then updatevisibleproc;
 
 end;
@@ -624,7 +604,7 @@ begin
                  pGDBObjEntity(GetCurrentDrawing^.wa.param.SelDesc.LastSelectedObject)^.vp.Layer^._on:=false;
                  pGDBObjEntity(GetCurrentDrawing^.wa.param.SelDesc.LastSelectedObject)^.DeSelect(GetCurrentDrawing^.GetSelObjArray,GetCurrentDrawing^.wa.param.SelDesc.Selectedobjcount);
             end;
-            redrawoglwnd;
+            GetCurrentDrawing^.HardReDraw;
        end
        else
            application.MessageBox('Must be selected one entity','??',ID_OK);
@@ -646,7 +626,7 @@ begin
         plp^._on:=true;
   plp:=ptd^.LayerTable.iterate(ir);
   until plp=nil;
-  redrawoglwnd;
+  GetCurrentDrawing^.HardReDraw;
   end;
 end;
 
@@ -655,12 +635,11 @@ end;
 procedure TForm1.TreeChange(Sender: TObject);
 begin
      sysvarDISPSystmGeometryDraw:=CheckBox1.Checked;
-     redrawoglwnd;
+     GetCurrentDrawing^.HardReDraw;
 end;
 
 procedure TForm1._DestroyApp(Sender: TObject);
 begin
-     //ugdbdescriptor.finalize;
 end;
 
 

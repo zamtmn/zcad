@@ -369,16 +369,21 @@ begin
    if typeof(CurrentDWG^)=typeof(TDrawing) then
    begin
    DWGUnit:=PTDrawing(CurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,'DrawingVars');
-   DWGUnit.AssignToSymbol(SysVar.DWG.DWG_SnapGrid,'DWG_SnapGrid');
-   DWGUnit.AssignToSymbol(SysVar.DWG.DWG_DrawGrid,'DWG_DrawGrid');
-   DWGUnit.AssignToSymbol(SysVar.DWG.DWG_Snap,'DWG_Snap');
-   DWGUnit.AssignToSymbol(SysVar.DWG.DWG_GridSpacing,'DWG_GridSpacing');
+   //DWGUnit.AssignToSymbol(SysVar.DWG.DWG_SnapGrid,'DWG_SnapGrid');
+   SysVar.dwg.DWG_SnapGrid:=@CurrentDWG.SnapGrid;
+   //DWGUnit.AssignToSymbol(SysVar.DWG.DWG_DrawGrid,'DWG_DrawGrid');
+   SysVar.DWG.DWG_DrawGrid:=@CurrentDWG.DrawGrid;
+   //DWGUnit.AssignToSymbol(SysVar.DWG.DWG_Snap,'DWG_Snap');
+   SysVar.DWG.DWG_Snap:=@CurrentDWG.Snap;
+   //DWGUnit.AssignToSymbol(SysVar.DWG.DWG_GridSpacing,'DWG_GridSpacing');
+   SysVar.DWG.DWG_GridSpacing:=@CurrentDWG.GridSpacing;
 
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLayer,'DWG_CLayer');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLType,'DWG_CLType');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CTStyle,'DWG_CTStyle');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLinew,'DWG_CLinew');
-   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_DrawMode,'DWG_DrawMode');
+   //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_DrawMode,'DWG_DrawMode');
+   SysVar.dwg.DWG_DrawMode:=@CurrentDWG.LWDisplay;
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_LTscale,'DWG_LTScale');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLTscale,'DWG_CLTScale');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CColor,'DWG_CColor');
@@ -935,24 +940,7 @@ begin
 
   //FromDirIterator({sysparam.programpath+'fonts/'}'C:\Program Files\AutoCAD 2010\Fonts\','*.shx','',addf,nil);
 
-  pbasefont:=FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,sysvarAlternateFont));
-  if pbasefont=nil then
-  begin
-       uzcshared.LogError(format(rsAlternateFontNotFoundIn,[sysvarAlternateFont,sysvarPATHFontsPath]));
-       r := LazarusResources.Find(resname);
-       if r = nil then
-                      uzcshared.FatalError(rsReserveFontNotFound)
-                  else
-                      begin
-                           f.init({$IFDEF DEBUGBUILD}'{94091172-3DD7-4038-99B6-90CD8B8E971D}',{$ENDIF}length(r.Value));
-                           f.AddData(@r.Value[1],length(r.Value));
-                           f.SaveToFile(expandpath(TempPath+filename));
-                           pbasefont:=FontManager.addFonf(TempPath+filename);
-                           f.done;
-                           if pbasefont=nil then
-                                                uzcshared.FatalError(rsReserveFontNotLoad);
-                      end;
-  end;
+  FontManager.CreateBaseFont;
   FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,'ltypeshp.shx'));
 
 
@@ -993,5 +981,4 @@ begin
   GDBTrash.done;
 end;
 begin
-  {$I gewind.lrs}
 end.

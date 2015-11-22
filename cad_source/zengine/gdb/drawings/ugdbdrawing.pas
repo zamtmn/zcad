@@ -234,6 +234,14 @@ var {tp:GDBTextStyleProp;}
 begin
   DWGUnits.init;
   DWGUnits.SetNextManager(num);
+  pdwgwarsunit:=pointer(DWGUnits.CreateObject);
+  pdwgwarsunit^.init('DrawingVars');
+  pdwgwarsunit.InterfaceUses.addnodouble(@SysUnit);
+  pdwgwarsunit^.CreateVariable('DWG_DrawMode','GDBBoolean',@LWDisplay);
+  pdwgwarsunit^.CreateVariable('DWG_SnapGrid','GDBBoolean',@SnapGrid);
+  pdwgwarsunit^.CreateVariable('DWG_DrawGrid','GDBBoolean',@DrawGrid);
+  pdwgwarsunit^.CreateVariable('DWG_GridSpacing','GDBvertex2D',@GridSpacing);
+  pdwgwarsunit^.CreateVariable('DWG_Snap','GDBSnap2D',@Snap);
   if preloadedfile1<>'' then
   DWGUnits.loadunit(SupportPath,InterfaceTranslate,expandpath({'*rtl/dwg/DrawingDeviceBase.pas')}preloadedfile1),nil);
   if preloadedfile2<>'' then

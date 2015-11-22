@@ -13,9 +13,9 @@ var
    DWG_CLTScale:GDBDouble;
    DWG_CDimStyle:PGDBDimStyle;
 
-   DWG_DrawGrid:GDBBoolean;
-   DWG_SnapGrid:GDBBoolean;
-   DWG_DrawMode:GDBBoolean;
+   DWG_DrawGrid:GDBBoolean;{определена в коде}
+   DWG_SnapGrid:GDBBoolean;{определена в коде}
+   DWG_DrawMode:GDBBoolean;{определена в коде}
 
    DWG_Snap:GDBSnap2D;
    DWG_GridSpacing:GDBvertex2D;
@@ -38,13 +38,7 @@ var
 
 implementation
 begin
-
-  DWG_StepGrid.x:=0.5;
-  DWG_StepGrid.y:=0.5;
-  DWG_OriginGrid.x:=0.0;
-  DWG_OriginGrid.y:=0.0;
   DWG_DrawMode:=False;
-
 
   DWG_CLayer:=0;
   DWG_CLinew:=-1;

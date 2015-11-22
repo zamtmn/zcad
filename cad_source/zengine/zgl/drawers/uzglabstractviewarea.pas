@@ -26,7 +26,7 @@ uses {gdbase,gdbasetypes,
      UGDBOpenArrayOfPV,uzglabstractdrawer,GDBGenericSubEntry,gdbase,gdbasetypes,
      oglwindowdef,gdbdrawcontext,{varmandef,}{Varman,}UGDBPoint3DArray,UGDBEntTree,geometry,ugdbabstractdrawing,
      {uzcshared,}sysutils,
-     ExtCtrls,Controls,Classes,LCLType,Forms,zcadsysvars,GDBEntity;
+     ExtCtrls,Controls,Classes,LCLType,Forms,{zcadsysvars,}GDBEntity;
 
 type
     TCADControl=class(TCustomControl)
@@ -145,8 +145,7 @@ type
 var
    otracktimer: GDBInteger;
 procedure copyospoint(out dest:os_record; source:os_record);
-function docorrecttogrid(point:GDBVertex;need:GDBBoolean):GDBVertex;
-function correcttogrid(point:GDBVertex):GDBVertex;
+function correcttogrid(point:GDBVertex;const grid:GDBSnap2D):GDBVertex;
 function CreateFaceRC:TDrawContext;
 implementation
 function CreateFaceRC:TDrawContext;
@@ -175,28 +174,10 @@ function TCADControl.DoMouseWheel(Shift: TShiftState; WheelDelta: Integer; Mouse
 begin
      inherited;
 end;
-function docorrecttogrid(point:GDBVertex;need:GDBBoolean):GDBVertex;
-var
-   gr:GDBBoolean;
+function correcttogrid(point:GDBVertex;const grid:GDBSnap2D):GDBVertex;
 begin
-     gr:=false;
-     if SysVar.DWG.DWG_SnapGrid<>nil then
-     if SysVar.DWG.DWG_SnapGrid^ then
-                                     gr:=true;
-     if (need and gr) then
-                          begin
-                               result:=correcttogrid(point);
-                               {result.x:=round((point.x-SysVar.DWG.DWG_Snap.Base.x)/SysVar.DWG.DWG_Snap.Spacing.x)*SysVar.DWG.DWG_Snap.Spacing.x+SysVar.DWG.DWG_Snap.Spacing.x;
-                               result.y:=round((point.y-SysVar.DWG.DWG_Snap.Base.y)/SysVar.DWG.DWG_Snap.Spacing.y)*SysVar.DWG.DWG_Snap.Spacing.y+SysVar.DWG.DWG_Snap.Spacing.y;
-                               result.z:=point.z;}
-                          end
-                      else
-                          result:=point;
-end;
-function correcttogrid(point:GDBVertex):GDBVertex;
-begin
-  result.x:=round((point.x-SysVar.DWG.DWG_Snap.Base.x)/SysVar.DWG.DWG_Snap.Spacing.x)*SysVar.DWG.DWG_Snap.Spacing.x+SysVar.DWG.DWG_Snap.Base.x;
-  result.y:=round((point.y-SysVar.DWG.DWG_Snap.Base.y)/SysVar.DWG.DWG_Snap.Spacing.y)*SysVar.DWG.DWG_Snap.Spacing.y+SysVar.DWG.DWG_Snap.Base.y;
+  result.x:=round((point.x-grid.Base.x)/grid.Spacing.x)*grid.Spacing.x+grid.Base.x;
+  result.y:=round((point.y-grid.Base.y)/grid.Spacing.y)*grid.Spacing.y+grid.Base.y;
   result.z:=point.z;
 end;
 procedure copyospoint(out dest:os_record; source:os_record);

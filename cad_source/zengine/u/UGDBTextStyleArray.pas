@@ -53,7 +53,6 @@ GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*O
               end;
 {EXPORT-}
 implementation
-//uses {UGDBDescriptor,}{io,}log;
 destructor GDBTextStyle.Done;
 begin
      inherited;

@@ -180,44 +180,44 @@ begin
        begin
             case OPSPlaceSmokeDetectorOrtoParam.DMC of
                                             TOPSMDC_1:old_ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,
-                                                                             gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.LTypeStyleTable.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                                                             gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
                                                                              docorrecttogrid(Vertexdmorph(basepoint, dir, 1 / 4),norm), scaleblock, angle, name);
                                             TOPSMDC_1_2:old_ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,
-                                                                               gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.LTypeStyleTable.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                                                               gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
                                                                                docorrecttogrid(Vertexdmorph(basepoint, dir, 1 / 2),norm), scaleblock, angle, name);
             end;
        end;
     2: begin
         old_ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,
-                               gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.LTypeStyleTable.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                               gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
                                docorrecttogrid(Vertexdmorph(basepoint, dir, 1 / 4),norm), scaleblock, angle, name);
         old_ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,
-                               gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.LTypeStyleTable.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                               gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
                                docorrecttogrid(Vertexdmorph(basepoint, dir, 3 / 4),norm), scaleblock, angle, name);
       end;
     3: begin
         old_ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,
-                               gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.LTypeStyleTable.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                               gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
                                docorrecttogrid(Vertexdmorph(basepoint, dir, 1 / 6),norm), scaleblock, angle, name);
         old_ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,
-                               gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.LTypeStyleTable.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                               gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
                                docorrecttogrid(Vertexdmorph(basepoint, dir, 3 / 6),norm), scaleblock, angle, name);
         old_ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,
-                               gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.LTypeStyleTable.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                               gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
                                docorrecttogrid(Vertexdmorph(basepoint, dir, 5 / 6),norm), scaleblock, angle, name);
       end
   else begin
       old_ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,
-                             gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.LTypeStyleTable.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                             gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
                              docorrecttogrid(VertexDmorphabs(basepoint, dir, sd),norm), scaleblock, angle, name);
       old_ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,
-                             gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.LTypeStyleTable.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                             gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
                              docorrecttogrid(VertexDmorphabs(basepoint, dir, -sd),norm), scaleblock, angle, name);
       line2.lbegin := VertexDmorphabs(basepoint, dir, sd);
       line2.lend := VertexDmorphabs(basepoint, dir, -sd);
       count := count - 2;
       for i := 1 to count do old_ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,
-                                                    gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.LTypeStyleTable.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                                    gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
                                                     docorrecttogrid(Vertexmorph(line2.lbegin, line2.lend, i / (count + 1)),norm), scaleblock, angle, name);
     end
   end;
@@ -732,7 +732,7 @@ begin
 
      gdb.AddBlockFromDBIfNeed(gdb.GetCurrentDWG,datname);
      pointer(pv):=old_ENTF_CreateBlockInsert(gdb.GetCurrentROOT,@{gdb.GetCurrentROOT}root.ObjArray,
-                                         gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.LTypeStyleTable.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                         gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
                                          currentcoord, 1, 0,@datname[1]);
      dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
      pv^.formatentity(gdb.GetCurrentDWG^,dc);
@@ -872,7 +872,7 @@ begin
 
                   gdb.AddBlockFromDBIfNeed(gdb.GetCurrentDWG,'DEVICE_CABLE_MARK');
                   pointer(pv):=old_ENTF_CreateBlockInsert(@GDB.GetCurrentDWG.ConstructObjRoot,@{gdb.GetCurrentROOT.ObjArray}GDB.GetCurrentDWG.ConstructObjRoot.ObjArray,
-                                                      gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.LTypeStyleTable.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                                      gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
                                                       currentcoord, 1, 0,'DEVICE_CABLE_MARK');
 
                   SysVar.dwg.DWG_CLayer^:=lsave;

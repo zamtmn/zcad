@@ -95,12 +95,26 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function CreateBlockDef(name:GDBString):GDBPointer;virtual;
                        procedure HardReDraw;
                        function GetCurrentLayer:PGDBLayerProp;
+                       function GetCurrentLType:PGDBLtypeProp;
                  end;
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 var
     MainBlockCreateProc:TMainBlockCreateProc=nil;
 implementation
+function TSimpleDrawing.GetCurrentLType;
+begin
+     if assigned(sysvar.dwg.DWG_CLType) then
+                                            begin
+                                            if assigned(sysvar.dwg.DWG_CLType^) then
+                                                                                    result:={getelement}(sysvar.dwg.DWG_CLType^)
+                                                                                else
+                                                                                    result:=LTypeStyleTable.getelement(0);
+
+                                            end
+                                        else
+                                            result:=LTypeStyleTable.getelement(0);
+end;
 function TSimpleDrawing.GetCurrentLayer;
 begin
      if assigned(sysvar.dwg.DWG_CLayer) then

@@ -19,9 +19,9 @@
 unit ugdbltypearray;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,FileUtil,Classes,UGDBOpenArrayOfData,zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
+uses LCLProc,FileUtil,Classes,UGDBOpenArrayOfData,{zcadsysvars,}gdbasetypes,sysutils,gdbase, geometry,
      UGDBTextStyleArray,UGDBOpenArrayOfObjects,
-     {varmandef,}{gdbobjectsconstdef,}UGDBNamedObjectsArray,StrProc{,uzcshared};
+     UGDBNamedObjectsArray,StrProc;
 const
      DefaultSHXHeight=1;
      DefaultSHXAngle=0;
@@ -98,7 +98,6 @@ GDBLtypeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
                     procedure LoadFromFile(fname:GDBString;lm:TLoadOpt);
                     procedure ParseStrings(const ltd:tstrings; var CurrentLine:integer;out LTName,LTDesk,LTImpl:GDBString);
                     function createltypeifneed(_source:PGDBLtypeProp;var _DestTextStyleTable:GDBTextStyleArray):PGDBLtypeProp;
-                    function GetCurrentLType:PGDBLtypeProp;
                     function GetSystemLT(neededtype:TLTMode):PGDBLtypeProp;
                     procedure format;virtual;
                     {function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
@@ -137,20 +136,6 @@ begin
                                      exit;
     result:=iterate(ir);
   until result=nil;
-end;
-
-function GDBLtypeArray.GetCurrentLType;
-begin
-     if assigned(sysvar.dwg.DWG_CLType) then
-                                            begin
-                                            if assigned(sysvar.dwg.DWG_CLType^) then
-                                                                                    result:={getelement}(sysvar.dwg.DWG_CLType^)
-                                                                                else
-                                                                                    result:=getelement(0);
-
-                                            end
-                                        else
-                                            result:=getelement(0);
 end;
 function getshapestring(PSP:PShapeProp):gdbstring;
 begin

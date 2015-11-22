@@ -75,7 +75,7 @@ begin
      pdwg:=gdb.GetCurrentDWG;
      pltp:=Item.Data;
      Item.SubItems.Clear;
-     if pltp=pdwg^.LTypeStyleTable.GetCurrentLType then
+     if pltp=pdwg^.GetCurrentLType then
                                                              begin
                                                              Item.ImageIndex:=II_Ok;
                                                              CurrentLType:=Item;

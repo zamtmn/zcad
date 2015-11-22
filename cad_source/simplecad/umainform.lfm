@@ -8,6 +8,7 @@ object Form1: TForm1
   ClientHeight = 892
   ClientWidth = 1106
   KeyPreview = True
+  OnCreate = _FormCreate
   OnDestroy = _DestroyApp
   OnKeyDown = _KeyDown
   OnShow = _FormShow

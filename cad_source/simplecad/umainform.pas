@@ -59,29 +59,29 @@ type
     SpinEdit1: TSpinEdit;
     Splitter1: TSplitter;
     Splitter2: TSplitter;
-    procedure BtnAdd3DFaces1Click(Sender: TObject);
-    procedure BtnAdd3DpolyLinesClick(Sender: TObject);
-    procedure BtnAddArcsClick(Sender: TObject);
-    procedure BtnAddLinesClick(Sender: TObject);
-    procedure BtnAddCirclesClick(Sender: TObject);
-    procedure BtnAddLWPolylines1Click(Sender: TObject);
-    procedure BtnProcessObjectsClick(Sender: TObject);
-    procedure BtnRebuildClick(Sender: TObject);
-    procedure BtnEraseSelClick(Sender: TObject);
-    procedure BtnAddTextsClick(Sender: TObject);
-    procedure BtnOpenDXFClick(Sender: TObject);
-    procedure BtnSaveDXFClick(Sender: TObject);
-    procedure BtnSelectAllClick(Sender: TObject);
-    procedure OffEntLayerClick(Sender: TObject);
-    procedure OnAllLayerClick(Sender: TObject);
-    procedure TreeChange(Sender: TObject);
+    procedure BtnAdd3DFaces1Click(Sender: TObject);    //Add 3dfaces to current drawing
+    procedure BtnAdd3DpolyLinesClick(Sender: TObject); //Add 3dpolylines to current drawing
+    procedure BtnAddArcsClick(Sender: TObject);        //Add arcs to current drawing
+    procedure BtnAddLinesClick(Sender: TObject);       //Add lines to current drawing
+    procedure BtnAddCirclesClick(Sender: TObject);     //Add circles to current drawing
+    procedure BtnAddLWPolylines1Click(Sender: TObject);//Add lwpolylines to current drawing
+    procedure BtnProcessObjectsClick(Sender: TObject); //Move lines and circles in current drawing
+    procedure BtnRebuildClick(Sender: TObject);        //Rebuild spatial tree in current drawing
+    procedure BtnEraseSelClick(Sender: TObject);       //Erase selected ents in current drawing
+    procedure BtnAddTextsClick(Sender: TObject);       //Add texts to current drawing
+    procedure BtnOpenDXFClick(Sender: TObject);        //Load dxf file (if set $define dxfio)
+    procedure BtnSaveDXFClick(Sender: TObject);        //Save dxf file (if set $define dxfio)
+    procedure BtnSelectAllClick(Sender: TObject);      //Select all ents in current drawing
+    procedure OffEntLayerClick(Sender: TObject);       //Off layers selected ents in current drawing
+    procedure OnAllLayerClick(Sender: TObject);        //On all layer
+    procedure TreeChange(Sender: TObject);             //"Show tree" checkbox click
     procedure _DestroyApp(Sender: TObject);
     procedure _FormCreate(Sender: TObject);
     procedure _KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure _FormShow(Sender: TObject);
 
-    procedure _StartLongProcess(a:integer;n:string);
-    procedure _EndLongProcess;
+    procedure _StartLongProcess(TotalProgressCount:Integer{unused in this example};ProcessName:string);//proc for start time interval measure
+    procedure _EndLongProcess;//proc for end time interval measure
   private
     pdrawing1,pdrawing2:PTSimpleDrawing;
     { private declarations }
@@ -97,17 +97,17 @@ var
 implementation
 
 {$R *.lfm}
-function GetCurrentDrawing:PTSimpleDrawing;
+function GetCurrentDrawing:PTSimpleDrawing;//get current drawing (OPENGL or GDI) set in ComboBox1
 begin
      if Form1.ComboBox1.ItemIndex=0 then
                                         result:=Form1.pdrawing1
                                     else
                                         result:=Form1.pdrawing2;
 end;
-procedure TForm1._StartLongProcess(a:integer;n:string);
+procedure TForm1._StartLongProcess(TotalProgressCount:integer;ProcessName:string);//get current drawing (OPENGL or GDI) set in ComboBox1
 begin
      LPTime:=now;
-     pname:=n;
+     pname:=ProcessName;
 end;
 procedure TForm1._EndLongProcess;
 var
@@ -123,7 +123,7 @@ begin
   pname:=''
 end;
 
-procedure TForm1._KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+procedure TForm1._KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);//key pressed handle, now unused in this example
 begin
   if Key=VK_ESCAPE then
   begin
@@ -141,17 +141,16 @@ end;
 
 procedure TForm1._FormShow(Sender: TObject);
 begin
-    _FormCreate(nil);
-    GetCurrentDrawing^.HardReDraw;
+    //_FormCreate(nil);
 end;
 
-procedure TForm1._FormCreate(Sender: TObject);
+procedure TForm1._FormCreate(Sender: TObject);//Create drawings and view areas
 var
    i:integer;
    ViewArea:TAbstractViewArea;
    WADrawControl:TCADControl;
 begin
-     FontManager.CreateBaseFont;//Load default font
+     FontManager.CreateBaseFont;//Load default font (gewind.shx - simply vector font in program resources)
      sysvarDISPSystmGeometryDraw:=CheckBox1.Checked;//Draw|notdraw help geometry (insert points, bounding boxes...)
 
      pdrawing1:=CreateSimpleDWG;//create drawing
@@ -159,7 +158,15 @@ begin
      //Add 10 random layers
      for i:=1 to 10 do
      begin
-          pdrawing1^.LayerTable.addlayer(inttostr(i),random(255),0,true,false,true,'',TLOMerge);
+          pdrawing1^.LayerTable.addlayer(inttostr(i),{name}
+                                         random(255),{color index}
+                                         0,          {lineweight}
+                                         true,       {layer on}
+                                         false,      {layer locked}
+                                         true,       {layer printable}
+                                         '',         {layer description}
+                                         TLOMerge    {TLOMerge - if layer already created, ignore new layer properties
+                                                      TLOLoad  - if layer already created, rewrite old layer properties});
      end;
 
 
@@ -199,11 +206,11 @@ begin
      pdrawing2^.HardReDraw;//redraw drawing on view area
 end;
 
-function CreateRandomDouble(len:GDBDouble):GDBDouble;inline;
+function CreateRandomDouble(len:GDBDouble):GDBDouble;inline;//create random double in [0..len] interval
 begin
      result:=random*len;
 end;
-function CreateRandomVertex(len,hanflen:GDBDouble):GDBVertex;
+function CreateRandomVertex(len,hanflen:GDBDouble):GDBVertex;//create random 3DVertex in [-hanflen..hanflen] interval
 begin
      result.x:=CreateRandomDouble(len)-hanflen;
      result.y:=CreateRandomDouble(len)-hanflen;
@@ -213,12 +220,12 @@ begin
                                    result.z:=0;
 end;
 
-procedure SetEntityLayer(pobj:PGDBObjEntity);
+procedure SetEntityLayer(pobj:PGDBObjEntity);//set random layer for entity
 begin
      pobj^.vp.Layer:=GetCurrentDrawing^.LayerTable.getelement(random(GetCurrentDrawing^.LayerTable.Count));
 end;
 
-function CreateRandomVertex2D(len,hanflen:GDBDouble):GDBVertex2D;
+function CreateRandomVertex2D(len,hanflen:GDBDouble):GDBVertex2D;//create random 2DVertex in [-hanflen..hanflen] interval
 begin
      result.x:=CreateRandomDouble(len)-hanflen;
      result.y:=CreateRandomDouble(len)-hanflen;

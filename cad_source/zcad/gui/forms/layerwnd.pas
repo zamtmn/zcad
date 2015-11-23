@@ -5,7 +5,7 @@ unit LayerWnd;
 interface
 
 uses
-  zcchangeundocommand,zcobjectchangeundocommand2,ugdbdrawing,gdbpalette,usuptypededitors,LMessages,selectorwnd,ugdbltypearray,ugdbutil,uzclog,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
+  zcchangeundocommand,zcobjectchangeundocommand2,ugdbdrawing,gdbpalette,usuptypededitors,LMessages,selectorwnd,ugdbltypearray,ugdbutil,uzclog,lineweightwnd,colorwnd,ugdbsimpledrawing,uzcsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 

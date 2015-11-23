@@ -19,7 +19,7 @@
 unit zcregisterfontmanager;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,UGDBFontManager,paths,intftranslations,UUnitManager,TypeDescriptors;
+uses uzcsysvars,UGDBFontManager,paths,intftranslations,UUnitManager,TypeDescriptors;
 implementation
 
 initialization

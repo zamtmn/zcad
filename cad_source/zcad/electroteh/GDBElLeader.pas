@@ -9,7 +9,7 @@ unit GDBElLeader;
 
 interface
 uses enitiesextendervariables,zeentityfactory,Varman,gdbdrawcontext,GDBAbstractText,GDBGenericSubEntry,
-     ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,
+     ugdbtrash,ugdbdrawingdef,GDBCamera,uzcsysvars,UGDBOpenArrayOfPObjects,
      strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,GDBCable,GDBTable,
      UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},
      GDBComplex,{SysInfo,}sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},

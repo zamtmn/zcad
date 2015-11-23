@@ -19,7 +19,7 @@
 unit commandline;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,geometry,uzglabstractviewarea,paths,gdbobjectsconstdef,UDMenuWnd,uinfoform,zcadstrconsts,{umytreenode,}uzcsysinfo,strproc,UGDBOpenArrayOfPointer,
+uses uzcsysvars,geometry,uzglabstractviewarea,paths,gdbobjectsconstdef,UDMenuWnd,uinfoform,zcadstrconsts,{umytreenode,}uzcsysinfo,strproc,UGDBOpenArrayOfPointer,
      gdbasetypes,commandlinedef, sysutils,gdbase,oglwindowdef,
      memman,uzcshared,uzclog,varmandef,varman,ugdbdrawingdef,zcadinterface;
 const

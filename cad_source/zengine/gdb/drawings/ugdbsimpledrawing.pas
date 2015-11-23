@@ -19,7 +19,7 @@
 unit ugdbsimpledrawing;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,UGDBDrawingdef,zeblockdefsfactory,ugdbdimstylearray,GDBWithLocalCS,ugdbabstractdrawing,strproc,
+uses {zcadsysvars,}UGDBDrawingdef,zeblockdefsfactory,ugdbdimstylearray,GDBWithLocalCS,ugdbabstractdrawing,strproc,
      UGDBObjBlockdefArray,UGDBTableStyleArray,{UUnitManager,}UGDBNumerator, gdbase,
      {varmandef,}{varman,}sysutils, memman, geometry,gdbasetypes,{sysinfo,}
      GDBGenericSubEntry,UGDBLayerArray,ugdbltypearray,GDBEntity,
@@ -106,56 +106,32 @@ var
 implementation
 function TSimpleDrawing.GetCurrentDimStyle:PGDBDimStyle;
 begin
-  if assigned(sysvar.dwg.DWG_CDimStyle) then
-                                         begin
-                                         if assigned(sysvar.dwg.DWG_CDimStyle^) then
-                                                                                 result:={getelement}(sysvar.dwg.DWG_CDimStyle^)
-                                                                             else
-                                                                                 result:=DimStyleTable.getelement(0);
-
-                                         end
-                                     else
-                                         result:=DimStyleTable.getelement(0);
+  if CurrentDimStyle<>nil then
+                              result:=CurrentDimStyle
+                          else
+                              result:=DimStyleTable.getelement(0);
 end;
 
 function TSimpleDrawing.GetCurrentTextStyle;
 begin
-     if assigned(sysvar.dwg.DWG_CTStyle) then
-                                            begin
-                                            if assigned(sysvar.dwg.DWG_CTStyle^) then
-                                                                                    result:={getelement}(sysvar.dwg.DWG_CTStyle^)
-                                                                                else
-                                                                                    result:=TextStyleTable.getelement(0);
-
-                                            end
-                                        else
-                                            result:=TextStyleTable.getelement(0);
+     if CurrentTextStyle<>nil then
+                                  result:=CurrentTextStyle
+                              else
+                                  result:=TextStyleTable.getelement(0);
 end;
 function TSimpleDrawing.GetCurrentLType;
 begin
-     if assigned(sysvar.dwg.DWG_CLType) then
-                                            begin
-                                            if assigned(sysvar.dwg.DWG_CLType^) then
-                                                                                    result:={getelement}(sysvar.dwg.DWG_CLType^)
-                                                                                else
-                                                                                    result:=LTypeStyleTable.getelement(0);
-
-                                            end
-                                        else
-                                            result:=LTypeStyleTable.getelement(0);
+     if CurrentLType<>nil then
+                              result:=CurrentLType
+                          else
+                              result:=LTypeStyleTable.getelement(0);
 end;
 function TSimpleDrawing.GetCurrentLayer;
 begin
-     if assigned(sysvar.dwg.DWG_CLayer) then
-                                            begin
-                                            if assigned(sysvar.dwg.DWG_CLayer^) then
-                                                                                    result:={getelement}(sysvar.dwg.DWG_CLayer^)
-                                                                                else
-                                                                                    result:=LayerTable.getsystemlayer;
-
-                                            end
-                                        else
-                                            result:=LayerTable.getsystemlayer;
+     if CurrentLayer<>nil then
+                              result:=CurrentLayer
+                          else
+                              result:=LayerTable.getsystemlayer;
 end;
 procedure TSimpleDrawing.HardReDraw;
 var

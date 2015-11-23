@@ -18,7 +18,7 @@
 
 unit ugdbabstractdrawing;
 interface
-uses gdbdrawcontext,UGDBDrawingdef,gdbase,gdbasetypes,GDBCamera,GDBEntity,GDBGenericSubEntry,GDBRoot,UGDBSelectedObjArray,UGDBLayerArray,UGDBOpenArrayOfPV;
+uses ugdbdimstylearray,UGDBTextStyleArray,ugdbltypearray,gdbdrawcontext,UGDBDrawingdef,gdbase,gdbasetypes,GDBCamera,GDBEntity,GDBGenericSubEntry,GDBRoot,UGDBSelectedObjArray,UGDBLayerArray,UGDBOpenArrayOfPV;
 type
 {EXPORT+}
 PTAbstractDrawing=^TAbstractDrawing;
@@ -28,6 +28,25 @@ TAbstractDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TDrawingDef)
                        DrawGrid:GDBBoolean;
                        GridSpacing:GDBvertex2D;
                        Snap:GDBSnap2D;
+                       CurrentLayer:PGDBLayerProp;
+                       CurrentLType:PGDBLtypeProp;
+                       CurrentTextStyle:PGDBTextStyle;
+                       CurrentDimStyle:PGDBDimStyle;
+                       CurrentLineW:TGDBLineWeight;
+                       LTScale:GDBDouble;
+                       CLTScale:GDBDouble;
+                       CColor:GDBInteger;
+
+                       LUnits:TLUnits;
+                       LUPrec:TUPrec;
+                       AUnits:TAUnits;
+                       AUPrec:TUPrec;
+                       AngDir:TAngDir;
+                       AngBase:GDBAngleDegDouble;
+                       UnitMode:TUnitMode;
+                       InsUnits:TInsUnits;
+                       TextSize:GDBDouble;
+
                        function myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex):Integer;virtual;abstract;
                        function myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;virtual;abstract;
                        function GetPcamera:PGDBObjCamera;virtual;abstract;

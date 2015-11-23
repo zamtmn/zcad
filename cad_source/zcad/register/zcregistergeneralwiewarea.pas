@@ -19,7 +19,7 @@
 unit zcregistergeneralwiewarea;
 {$INCLUDE def.inc}
 interface
-uses backendmanager,uzglgeometry,UGDBEntTree,zcadsysvars,generalviewarea,paths,intftranslations,UUnitManager,TypeDescriptors;
+uses backendmanager,uzglgeometry,UGDBEntTree,uzcsysvars,generalviewarea,paths,intftranslations,UUnitManager,TypeDescriptors;
 implementation
 
 initialization

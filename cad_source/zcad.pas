@@ -35,7 +35,7 @@ uses
   {$IFDEF REPORTMMEMORYLEAKS}heaptrc,{$ENDIF}
   Interfaces,forms, classes,
   splashwnd,
-  zcadsysvars,
+  uzcsysvars,
 
   memman,uzclog,
   uzcsysinfo,

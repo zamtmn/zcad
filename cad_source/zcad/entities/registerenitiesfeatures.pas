@@ -19,7 +19,7 @@ unit registerenitiesfeatures;
 {$INCLUDE def.inc}
 
 interface
-uses iodxf,paths,zcadsysvars,intftranslations,sysutils,
+uses iodxf,paths,uzcsysvars,intftranslations,sysutils,
      enitiesextendervariables,zcadstrconsts,uzcshared,gdbobjectsconstdef,devices,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,dxflow,
      gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,gdbobjectextender,
      GDBSubordinated,GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,

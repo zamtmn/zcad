@@ -16,19 +16,19 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit zcadsysvars;
+unit uzcsysvars;
 {$INCLUDE def.inc}
 
 interface
 uses gdbasetypes,gdbpalette,
-     gdbase,UGDBStringArray,
+     gdbase,UGDBStringArray
 {$IFDEF LCLGTK2}
 gtk2,gdk2,
 {$ENDIF}
 {$IFDEF LCLQT}
 qtwidgets,qt4,qtint,
 {$ENDIF}
-{$IFNDEF DELPHI}LCLVersion,{$ENDIF}sysutils;
+{$IFNDEF DELPHI},LCLVersion{$ENDIF},sysutils;
 type
 {EXPORT+}
   tmemdeb=packed record

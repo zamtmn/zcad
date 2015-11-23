@@ -8,7 +8,7 @@ unit GDBCable;
 {$INCLUDE def.inc}
 
 interface
-uses gdbobjectextender,varman,gdbdrawcontext,GDBGenericSubEntry,ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfByte,UGDBLayerArray,UUnitManager,GDBCurve,geometry,math,UGDBOpenArrayOfData,gdbasetypes,gdbEntity,varmandef,
+uses gdbobjectextender,varman,gdbdrawcontext,GDBGenericSubEntry,ugdbdrawingdef,uzcsysvars,UGDBOpenArrayOfByte,UGDBLayerArray,UUnitManager,GDBCurve,geometry,math,UGDBOpenArrayOfData,gdbasetypes,gdbEntity,varmandef,
 GDBase,gdbobjectsconstdef,dxflow,sysutils,memman,GDBSubordinated,GDBDEvICE;
 type
 {Повторное описание типа в Cableы}

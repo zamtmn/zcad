@@ -21,9 +21,9 @@ unit iodxf;
 interface
 uses LCLProc,paths,strproc,gdbdrawcontext,usimplegenerics,ugdbdimstylearray,zeentityfactory,
     {$IFNDEF DELPHI}fileutil,{$ENDIF}
-    UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,uzelongprocesssupport,
-    {GDBCircle,GDBArc,}oglwindowdef,dxflow,zcadstrconsts,UGDBTextStyleArray,
-    geometry,GDBSubordinated,{uzcshared,}gdbasetypes,{log,}GDBGenericSubEntry,{SysInfo,}gdbase,
+    UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,uzelongprocesssupport,
+    oglwindowdef,dxflow,zcadstrconsts,UGDBTextStyleArray,
+    geometry,GDBSubordinated,gdbasetypes,GDBGenericSubEntry,gdbase,
     sysutils,memman,gdbobjectsconstdef,UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,
     UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity,GDBBlockDef,UGDBLayerArray,fileformatsmanager;
 type
@@ -138,7 +138,7 @@ begin
   end;
   end;
 end;
-procedure readvariables(var f: GDBOpenArrayOfByte;var ctstyle:GDBstring; var clayer:GDBString;var cltype:GDBString;var cdimstyle:GDBString;LoadMode:TLoadOpt;DWGVarsDict:TGDBString2GDBStringDictionary);
+procedure readvariables(var drawing:TSimpleDrawing;var f: GDBOpenArrayOfByte;var ctstyle:GDBstring; var clayer:GDBString;var cltype:GDBString;var cdimstyle:GDBString;LoadMode:TLoadOpt;DWGVarsDict:TGDBString2GDBStringDictionary);
 var
   byt: GDBByte;
   s: GDBString;
@@ -150,51 +150,51 @@ begin
      DWGVarsDict.mygetvalue('$TEXTSTYLE',ctstyle);
      DWGVarsDict.mygetvalue('$DIMSTYLE',cdimstyle);
      DWGVarsDict.mygetvalue('$CELTYPE',cltype);
-     if sysvar.DWG.DWG_CLinew<>nil then
+     //if sysvar.DWG.DWG_CLinew<>nil then
        if DWGVarsDict.mygetvalue('$CELWEIGHT',s) then
-         sysvar.DWG.DWG_CLinew^:=strtoint(s);
-     if sysvar.DWG.DWG_DrawMode<>nil then
+         drawing.CurrentLineW:=strtoint(s);//sysvar.DWG.DWG_CLinew^:=strtoint(s);
+     //if sysvar.DWG.DWG_DrawMode<>nil then
        if DWGVarsDict.mygetvalue('$LWDISPLAY',s) then
          case strtoint(s) of
-             1:sysvar.DWG.DWG_DrawMode^ := true;
-             0:sysvar.DWG.DWG_DrawMode^ := false;
+             1:drawing.LWDisplay:=true;//sysvar.DWG.DWG_DrawMode^ := true;
+             0:drawing.LWDisplay:=false;//sysvar.DWG.DWG_DrawMode^ := false;
          end;
-     if sysvar.DWG.DWG_LTScale<>nil then
+     //if sysvar.DWG.DWG_LTScale<>nil then
        if DWGVarsDict.mygetvalue('$LTSCALE',s) then
-         sysvar.DWG.DWG_LTScale^ := strtofloat(s);
-     if sysvar.DWG.DWG_CLTScale<>nil then
+         drawing.LTScale:=strtofloat(s);//sysvar.DWG.DWG_LTScale^ := strtofloat(s);
+     //if sysvar.DWG.DWG_CLTScale<>nil then
        if DWGVarsDict.mygetvalue('$CELTSCALE',s) then
-         sysvar.DWG.DWG_CLTScale^ := strtofloat(s);
-     if sysvar.DWG.DWG_CColor<>nil then
+         drawing.CLTScale:=strtofloat(s);//sysvar.DWG.DWG_CLTScale^ := strtofloat(s);
+     //if sysvar.DWG.DWG_CColor<>nil then
        if DWGVarsDict.mygetvalue('$CECOLOR',s) then
-         sysvar.DWG.DWG_CColor^ := strtoint(s);
-     if sysvar.DWG.DWG_LUnits<>nil then
+         drawing.CColor:=strtoint(s);//sysvar.DWG.DWG_CColor^ := strtoint(s);
+     //if sysvar.DWG.DWG_LUnits<>nil then
        if DWGVarsDict.mygetvalue('$LUNITS',s) then
-         sysvar.DWG.DWG_LUnits^ := TLUnits(strtoint(s)-1);
-     if sysvar.DWG.DWG_LUPrec<>nil then
+         drawing.LUnits:=TLUnits(strtoint(s)-1);//sysvar.DWG.DWG_LUnits^ := TLUnits(strtoint(s)-1);
+     //if sysvar.DWG.DWG_LUPrec<>nil then
        if DWGVarsDict.mygetvalue('$LUPREC',s) then
-         sysvar.DWG.DWG_LUPrec^ := TUPrec(strtoint(s));
-     if sysvar.DWG.DWG_AUnits<>nil then
+         drawing.LUPrec:=TUPrec(strtoint(s));//sysvar.DWG.DWG_LUPrec^ := TUPrec(strtoint(s));
+     //if sysvar.DWG.DWG_AUnits<>nil then
        if DWGVarsDict.mygetvalue('$AUNITS',s) then
-         sysvar.DWG.DWG_AUnits^ := TAUnits(strtoint(s));
-     if sysvar.DWG.DWG_AUPrec<>nil then
+         drawing.AUnits:=TAUnits(strtoint(s));//sysvar.DWG.DWG_AUnits^ := TAUnits(strtoint(s));
+     //if sysvar.DWG.DWG_AUPrec<>nil then
        if DWGVarsDict.mygetvalue('$AUPREC',s) then
-         sysvar.DWG.DWG_AUPrec^ := TUPrec(strtoint(s));
-     if sysvar.DWG.DWG_AngDir<>nil then
+         drawing.AUPrec:=TUPrec(strtoint(s));//sysvar.DWG.DWG_AUPrec^ := TUPrec(strtoint(s));
+     //if sysvar.DWG.DWG_AngDir<>nil then
        if DWGVarsDict.mygetvalue('$ANGDIR',s) then
-         sysvar.DWG.DWG_AngDir^ := TAngDir(strtoint(s));
-     if sysvar.DWG.DWG_AngBase<>nil then
+         drawing.AngDir:=TAngDir(strtoint(s));//sysvar.DWG.DWG_AngDir^ := TAngDir(strtoint(s));
+     //if sysvar.DWG.DWG_AngBase<>nil then
        if DWGVarsDict.mygetvalue('$ANGBASE',s) then
-         sysvar.DWG.DWG_AngBase^ := strtofloat(s);
-     if sysvar.DWG.DWG_UnitMode<>nil then
+         drawing.AngBase:=strtofloat(s);//sysvar.DWG.DWG_AngBase^ := strtofloat(s);
+     //if sysvar.DWG.DWG_UnitMode<>nil then
        if DWGVarsDict.mygetvalue('$UNITMODE',s) then
-         sysvar.DWG.DWG_UnitMode^ := TUnitMode(strtoint(s));
-     if sysvar.DWG.DWG_InsUnits<>nil then
+         drawing.UnitMode:=TUnitMode(strtoint(s));//sysvar.DWG.DWG_UnitMode^ := TUnitMode(strtoint(s));
+     //if sysvar.DWG.DWG_InsUnits<>nil then
        if DWGVarsDict.mygetvalue('$INSUNITS',s) then
-         sysvar.DWG.DWG_InsUnits^ := TInsUnits(strtoint(s));
-     if sysvar.DWG.DWG_TextSize<>nil then
+         drawing.InsUnits:=TInsUnits(strtoint(s));//sysvar.DWG.DWG_InsUnits^ := TInsUnits(strtoint(s));
+     //if sysvar.DWG.DWG_TextSize<>nil then
        if DWGVarsDict.mygetvalue('$TEXTSIZE',s) then
-         sysvar.DWG.DWG_TextSize^ := strtofloat(s);
+         drawing.TextSize:=strtofloat(s);//sysvar.DWG.DWG_TextSize^ := strtofloat(s);
      end;
 end;
 procedure ReadDXFHeader(var f: GDBOpenArrayOfByte; DWGVarsDict:TGDBString2GDBStringDictionary);
@@ -655,8 +655,8 @@ begin
                                   end;
                 end;
               if uppercase(s)=uppercase(cltype)then
-                                                   if sysvar.DWG.DWG_CLType<>nil then
-                                                                                     sysvar.DWG.DWG_CLType^:=pltypeprop;
+                                                   //if sysvar.DWG.DWG_CLType<>nil then
+                                                   drawing.CurrentLType:=pltypeprop;
 
          end;
        3:
@@ -825,8 +825,8 @@ begin
     end;
 
     if uppercase(lname)=uppercase(clayer)then
-                                             if sysvar.DWG.DWG_CLayer<>nil then
-                                                                               sysvar.DWG.DWG_CLayer^:=player;
+                                             //if sysvar.DWG.DWG_CLayer<>nil then
+                                             drawing.CurrentLayer:=player;
   end;
 end;
 procedure ReadTextstyles(var s:string;ctstyle:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var h2p:TMapHandleToPointer);
@@ -957,8 +957,8 @@ begin
     debugln('{D}Found style  ',tstyle.Name);
     //programlog.LogOutFormatStr('Found style  %s',[tstyle.Name],lp_OldPos,LM_Debug);
    if uppercase(tstyle.Name)=uppercase(ctstyle)then
-                if sysvar.DWG.DWG_CTStyle<>nil then
-                                                  sysvar.DWG.DWG_CTStyle^:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
+                //if sysvar.DWG.DWG_CTStyle<>nil then
+                drawing.CurrentTextStyle:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
     tstyle.Name:='';
   end;
   drawing.LTypeStyleTable.format;
@@ -1022,54 +1022,54 @@ begin
              begin
                   if LoadMode=TLOLoad then
                   if active then
-                  if sysvar.DWG.DWG_Snap<>nil then
+                  //if sysvar.DWG.DWG_Snap<>nil then
                   begin
-                       sysvar.DWG.DWG_Snap^.Base.x:=strtofloat(s);
+                       drawing.Snap.Base.x{sysvar.DWG.DWG_Snap^.Base.x}:=strtofloat(s);
                   end;
               end;
            23:
              begin
                   if LoadMode=TLOLoad then
                   if active then
-                  if sysvar.DWG.DWG_Snap<>nil then
+                  //if sysvar.DWG.DWG_Snap<>nil then
                   begin
-                       sysvar.DWG.DWG_Snap^.Base.y:=strtofloat(s);
+                       drawing.Snap.Base.y{sysvar.DWG.DWG_Snap^.Base.y}:=strtofloat(s);
                   end;
               end;
            14:
              begin
                   if LoadMode=TLOLoad then
                   if active then
-                  if sysvar.DWG.DWG_Snap<>nil then
+                  //if sysvar.DWG.DWG_Snap<>nil then
                   begin
-                       sysvar.DWG.DWG_Snap^.Spacing.x:=strtofloat(s);
+                       drawing.Snap.Spacing.x{sysvar.DWG.DWG_Snap^.Spacing.x}:=strtofloat(s);
                   end;
               end;
            24:
              begin
                   if LoadMode=TLOLoad then
                   if active then
-                  if sysvar.DWG.DWG_Snap<>nil then
+                  //if sysvar.DWG.DWG_Snap<>nil then
                   begin
-                       sysvar.DWG.DWG_Snap^.Spacing.y:=strtofloat(s);
+                       drawing.Snap.Spacing.y{sysvar.DWG.DWG_Snap^.Spacing.y}:=strtofloat(s);
                   end;
               end;
            15:
              begin
                   if LoadMode=TLOLoad then
                   if active then
-                  if sysvar.DWG.DWG_GridSpacing<>nil then
+                  //if sysvar.DWG.DWG_GridSpacing<>nil then
                   begin
-                       sysvar.DWG.DWG_GridSpacing^.x:=strtofloat(s);
+                       drawing.GridSpacing.x{sysvar.DWG.DWG_GridSpacing^.x}:=strtofloat(s);
                   end;
               end;
            25:
              begin
                   if LoadMode=TLOLoad then
                   if active then
-                  if sysvar.DWG.DWG_GridSpacing<>nil then
+                  //if sysvar.DWG.DWG_GridSpacing<>nil then
                   begin
-                       sysvar.DWG.DWG_GridSpacing^.y:=strtofloat(s);
+                       drawing.GridSpacing.y{sysvar.DWG.DWG_GridSpacing^.y}:=strtofloat(s);
                   end;
               end;
            40:
@@ -1113,24 +1113,24 @@ begin
              begin
                   if LoadMode=TLOLoad then
                   if active then
-                  if sysvar.DWG.DWG_SnapGrid<>nil then
+                  //if sysvar.DWG.DWG_SnapGrid<>nil then
                   begin
                        if s<>'0' then
-                                     sysvar.DWG.DWG_SnapGrid^:=true
+                                     drawing.SnapGrid{sysvar.DWG.DWG_SnapGrid^}:=true
                                  else
-                                     sysvar.DWG.DWG_SnapGrid^:=false;
+                                     drawing.SnapGrid{sysvar.DWG.DWG_SnapGrid^}:=false;
                   end;
              end;
          76:
            begin
                 if LoadMode=TLOLoad then
                 if active then
-                if sysvar.DWG.DWG_DrawGrid<>nil then
+                //if sysvar.DWG.DWG_DrawGrid<>nil then
                 begin
                      if s<>'0' then
-                                   sysvar.DWG.DWG_DrawGrid^:=true
+                                   drawing.DrawGrid{sysvar.DWG.DWG_DrawGrid^}:=true
                                else
-                                   sysvar.DWG.DWG_DrawGrid^:=false;
+                                   drawing.DrawGrid{sysvar.DWG.DWG_DrawGrid^}:=false;
                 end;
             end;
        end;
@@ -1170,8 +1170,8 @@ begin
                                                           psimstyleprop^.Name:=s;
                                                         end;
                               if uppercase(s)=uppercase(cdimstyle)then
-                              if (sysvar.DWG.DWG_CDimStyle<>nil)and(LoadMode=TLOLoad) then
-                                                                                        sysvar.DWG.DWG_CDimStyle^:=psimstyleprop;
+                              if {(sysvar.DWG.DWG_CDimStyle<>nil)and}(LoadMode=TLOLoad) then
+                                                                                        drawing.CurrentDimStyle{sysvar.DWG.DWG_CDimStyle^}:=psimstyleprop;
                          end;
      end
      else
@@ -1225,7 +1225,7 @@ begin
   blockload:=false;
   debugln('{D+}AddFromDXF2000');
   //programlog.LogOutStr('AddFromDXF2000',lp_IncPos,LM_Debug);
-  readvariables(f,ctstyle,clayer,cltype,cdimstyle,LoadMode,DWGVarsDict);
+  readvariables(drawing,f,ctstyle,clayer,cltype,cdimstyle,LoadMode,DWGVarsDict);
   repeat
     gotodxf(f, 0, dxfName_SECTION);
     if not f.notEOF then
@@ -1573,56 +1573,56 @@ begin
                              else
                                  VarsDict.insert('$DIMSTYLE','Standatd');
 
-    if assigned(sysvar.DWG.DWG_CLinew) then
-                                           VarsDict.insert('$CELWEIGHT',inttostr(sysvar.DWG.DWG_CLinew^))
-                                       else
-                                           VarsDict.insert('$CELWEIGHT',inttostr(-1));
+    //if assigned(sysvar.DWG.DWG_CLinew) then
+                                           VarsDict.insert('$CELWEIGHT',inttostr({sysvar.DWG.DWG_CLinew^}drawing.CurrentLineW));
+                                       //else
+                                       //    VarsDict.insert('$CELWEIGHT',inttostr(-1));
 
-    if assigned(sysvar.DWG.DWG_LTScale) then
-                                            VarsDict.insert('$LTSCALE',floattostr(sysvar.DWG.DWG_LTScale^))
-                                        else
-                                            VarsDict.insert('$LTSCALE',floattostr(1.0));
+    //if assigned(sysvar.DWG.DWG_LTScale) then
+                                            VarsDict.insert('$LTSCALE',floattostr({sysvar.DWG.DWG_LTScale^}drawing.LTScale));
+                                        //else
+                                        //    VarsDict.insert('$LTSCALE',floattostr(1.0));
 
-    if assigned(sysvar.DWG.DWG_CLTScale) then
-                                             VarsDict.insert('$CELTSCALE',floattostr(sysvar.DWG.DWG_CLTScale^))
-                                         else
-                                             VarsDict.insert('$CELTSCALE',floattostr(1.0));
+    //if assigned(sysvar.DWG.DWG_CLTScale) then
+                                             VarsDict.insert('$CELTSCALE',floattostr({sysvar.DWG.DWG_CLTScale^}drawing.CLTScale));
+                                         //else
+                                         //    VarsDict.insert('$CELTSCALE',floattostr(1.0));
 
-    if assigned(sysvar.DWG.DWG_CColor) then
-                                           VarsDict.insert('$CECOLOR',inttostr(sysvar.DWG.DWG_CColor^))
-                                       else
-                                           VarsDict.insert('$CECOLOR',inttostr(256));
+    //if assigned(sysvar.DWG.DWG_CColor) then
+                                           VarsDict.insert('$CECOLOR',inttostr({sysvar.DWG.DWG_CColor^}drawing.CColor));
+                                       //else
+                                           //VarsDict.insert('$CECOLOR',inttostr(256));
 
 
-    if assigned(sysvar.DWG.DWG_DrawMode) then
+    //if assigned(sysvar.DWG.DWG_DrawMode) then
                                              begin
-                                                  if sysvar.DWG.DWG_DrawMode^ then
+                                                  if {sysvar.DWG.DWG_DrawMode^}drawing.LWDisplay then
                                                                                   VarsDict.insert('$LWDISPLAY',inttostr(1))
                                                                               else
                                                                                   VarsDict.insert('$LWDISPLAY',inttostr(0));
-                                             end
-                                         else
-                                             VarsDict.insert('$LWDISPLAY',inttostr(0));
+                                             end;
+                                         //else
+                                         //    VarsDict.insert('$LWDISPLAY',inttostr(0));
    VarsDict.insert('$HANDSEED','FUCK OFF!');
 
-   if assigned(sysvar.DWG.DWG_LUnits) then
-                                        VarsDict.insert('$LUNITS',inttostr(ord(sysvar.DWG.DWG_LUnits^)+1));
-   if assigned(sysvar.DWG.DWG_LUPrec) then
-                                        VarsDict.insert('$LUPREC',inttostr(ord(sysvar.DWG.DWG_LUPrec^)));
-   if assigned(sysvar.DWG.DWG_AUnits) then
-                                        VarsDict.insert('$AUNITS',inttostr(ord(sysvar.DWG.DWG_AUnits^)));
-   if assigned(sysvar.DWG.DWG_AUPrec) then
-                                        VarsDict.insert('$AUPREC',inttostr(ord(sysvar.DWG.DWG_AUPrec^)));
-   if assigned(sysvar.DWG.DWG_AngDir) then
-                                        VarsDict.insert('$ANGDIR',inttostr(ord(sysvar.DWG.DWG_AngDir^)));
-   if assigned(sysvar.DWG.DWG_AngBase) then
-                                        VarsDict.insert('$ANGBASE',floattostr(sysvar.DWG.DWG_AngBase^));
-   if assigned(sysvar.DWG.DWG_UnitMode) then
-                                        VarsDict.insert('$UNITMODE',inttostr(ord(sysvar.DWG.DWG_UnitMode^)));
-   if assigned(sysvar.DWG.DWG_InsUnits) then
-                                           VarsDict.insert('$INSUNITS',inttostr(ord(sysvar.DWG.DWG_InsUnits^)));
-   if assigned(sysvar.DWG.DWG_TextSize) then
-                                           VarsDict.insert('$TEXTSIZE',floattostr(sysvar.DWG.DWG_TextSize^));
+   //if assigned(sysvar.DWG.DWG_LUnits) then
+                                        VarsDict.insert('$LUNITS',inttostr(ord({sysvar.DWG.DWG_LUnits^}drawing.LUnits)+1));
+   //if assigned(sysvar.DWG.DWG_LUPrec) then
+                                        VarsDict.insert('$LUPREC',inttostr(ord({sysvar.DWG.DWG_LUPrec^}drawing.LUPrec)));
+   //if assigned(sysvar.DWG.DWG_AUnits) then
+                                        VarsDict.insert('$AUNITS',inttostr(ord({sysvar.DWG.DWG_AUnits^}drawing.AUnits)));
+   //if assigned(sysvar.DWG.DWG_AUPrec) then
+                                        VarsDict.insert('$AUPREC',inttostr(ord({sysvar.DWG.DWG_AUPrec^}drawing.AUPrec)));
+   //if assigned(sysvar.DWG.DWG_AngDir) then
+                                        VarsDict.insert('$ANGDIR',inttostr(ord({sysvar.DWG.DWG_AngDir^}drawing.AngDir)));
+   //if assigned(sysvar.DWG.DWG_AngBase) then
+                                        VarsDict.insert('$ANGBASE',floattostr({sysvar.DWG.DWG_AngBase^}drawing.AngBase));
+   //if assigned(sysvar.DWG.DWG_UnitMode) then
+                                        VarsDict.insert('$UNITMODE',inttostr(ord({sysvar.DWG.DWG_UnitMode^}drawing.UnitMode)));
+   //if assigned(sysvar.DWG.DWG_InsUnits) then
+                                           VarsDict.insert('$INSUNITS',inttostr(ord({sysvar.DWG.DWG_InsUnits^}drawing.InsUnits)));
+   //if assigned(sysvar.DWG.DWG_TextSize) then
+                                           VarsDict.insert('$TEXTSIZE',floattostr({sysvar.DWG.DWG_TextSize^}drawing.TextSize));
 end;
 
 function savedxf2000(name: GDBString; var drawing:TSimpleDrawing):boolean;
@@ -1905,17 +1905,17 @@ begin
                                                              outstream.TXTAddGDBStringEOL('0');
                                                         end;
                outstream.TXTAddGDBStringEOL(dxfGroupCode(13));
-               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_Snap^.Base.x));
+               outstream.TXTAddGDBStringEOL(floattostr({sysvar.DWG.DWG_Snap^.Base.x}drawing.Snap.Base.x));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(23));
-               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_Snap^.Base.y));
+               outstream.TXTAddGDBStringEOL(floattostr({sysvar.DWG.DWG_Snap^.Base.y}drawing.Snap.Base.y));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(14));
-               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_Snap^.Spacing.x));
+               outstream.TXTAddGDBStringEOL(floattostr({sysvar.DWG.DWG_Snap^.Spacing.x}drawing.Snap.Spacing.x));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(24));
-               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_Snap^.Spacing.y));
+               outstream.TXTAddGDBStringEOL(floattostr({sysvar.DWG.DWG_Snap^.Spacing.y}drawing.Snap.Spacing.y));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(15));
-               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_GridSpacing^.x));
+               outstream.TXTAddGDBStringEOL(floattostr({sysvar.DWG.DWG_GridSpacing^.x}drawing.GridSpacing.x));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(25));
-               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_GridSpacing^.y));
+               outstream.TXTAddGDBStringEOL(floattostr({sysvar.DWG.DWG_GridSpacing^.y}drawing.GridSpacing.y));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(16));
                outstream.TXTAddGDBStringEOL(floattostr(-drawing.pcamera^.prop.look.x));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(26));
@@ -1957,25 +1957,25 @@ begin
                outstream.TXTAddGDBStringEOL(dxfGroupCode(74));
                outstream.TXTAddGDBStringEOL('3');
                outstream.TXTAddGDBStringEOL(dxfGroupCode(75));
-               if sysvar.DWG.DWG_SnapGrid<>nil then
+               //if sysvar.DWG.DWG_SnapGrid<>nil then
                                                    begin
-                                                        if sysvar.DWG.DWG_SnapGrid^ then
+                                                        if {sysvar.DWG.DWG_SnapGrid^}drawing.SnapGrid then
                                                                                         outstream.TXTAddGDBStringEOL('1')
                                                                                     else
                                                                                         outstream.TXTAddGDBStringEOL('0');
-                                                   end
-                                               else
-                                                   outstream.TXTAddGDBStringEOL('0');
+                                                   end;
+                                               //else
+                                               //    outstream.TXTAddGDBStringEOL('0');
                outstream.TXTAddGDBStringEOL(dxfGroupCode(76));
-               if sysvar.DWG.DWG_DrawGrid<>nil then
+               //if sysvar.DWG.DWG_DrawGrid<>nil then
                                                      begin
-                                                          if sysvar.DWG.DWG_DrawGrid^ then
+                                                          if {sysvar.DWG.DWG_DrawGrid^}drawing.LWDisplay then
                                                                                           outstream.TXTAddGDBStringEOL('1')
                                                                                       else
                                                                                           outstream.TXTAddGDBStringEOL('0');
-                                                     end
-                                                 else
-                                                     outstream.TXTAddGDBStringEOL('0');
+                                                     end;
+                                                 //else
+                                                 //    outstream.TXTAddGDBStringEOL('0');
                outstream.TXTAddGDBStringEOL(dxfGroupCode(77));
                outstream.TXTAddGDBStringEOL('0');
                outstream.TXTAddGDBStringEOL(dxfGroupCode(78));

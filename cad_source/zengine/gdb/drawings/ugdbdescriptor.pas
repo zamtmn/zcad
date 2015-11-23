@@ -20,7 +20,7 @@ unit UGDBDescriptor;
 {$INCLUDE def.inc}
 interface
 uses
-generalviewarea,intftranslations,zedimblocksregister,zeblockdefsfactory,zemathutils,gdbdrawcontext,ugdbdrawing,ugdbdrawingdef,paths,ugdbdimstylearray,ugdbabstractdrawing,WindowsSpecific,LResources,zcadsysvars,zcadinterface,zcadstrconsts,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
+generalviewarea,intftranslations,zedimblocksregister,zeblockdefsfactory,zemathutils,gdbdrawcontext,ugdbdrawing,ugdbdrawingdef,paths,ugdbdimstylearray,ugdbabstractdrawing,WindowsSpecific,LResources,uzcsysvars,zcadinterface,zcadstrconsts,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
 gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,ugdbsimpledrawing,
@@ -378,26 +378,43 @@ begin
    //DWGUnit.AssignToSymbol(SysVar.DWG.DWG_GridSpacing,'DWG_GridSpacing');
    SysVar.DWG.DWG_GridSpacing:=@CurrentDWG.GridSpacing;
 
-   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLayer,'DWG_CLayer');
-   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLType,'DWG_CLType');
-   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CTStyle,'DWG_CTStyle');
-   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLinew,'DWG_CLinew');
+   //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLayer,'DWG_CLayer');
+   SysVar.dwg.DWG_CLayer:=@CurrentDWG.CurrentLayer;
+   //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLType,'DWG_CLType');
+   SysVar.dwg.DWG_CLType:=@CurrentDWG.CurrentLType;
+   //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CTStyle,'DWG_CTStyle');
+   SysVar.dwg.DWG_CTStyle:=@CurrentDWG.CurrentTextStyle;
+   //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLinew,'DWG_CLinew');
+   SysVar.dwg.DWG_CLinew:=@CurrentDWG.CurrentLineW;
    //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_DrawMode,'DWG_DrawMode');
    SysVar.dwg.DWG_DrawMode:=@CurrentDWG.LWDisplay;
-   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_LTscale,'DWG_LTScale');
-   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLTscale,'DWG_CLTScale');
-   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CColor,'DWG_CColor');
-   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CDimStyle,'DWG_CDimStyle');
+   //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_LTscale,'DWG_LTScale');
+   SysVar.dwg.DWG_LTscale:=@CurrentDWG.LTScale;
+   //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLTscale,'DWG_CLTScale');
+   SysVar.dwg.DWG_CLTscale:=@CurrentDWG.CLTScale;
+   //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CColor,'DWG_CColor');
+   SysVar.dwg.DWG_CColor:=@CurrentDWG.CColor;
+   //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CDimStyle,'DWG_CDimStyle');
+   SysVar.dwg.DWG_CDimStyle:=@CurrentDWG.CurrentDimStyle;
 
-   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_LUnits,'DWG_LUnits');
-   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_LUPrec,'DWG_LUPrec');
-   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_AUnits,'DWG_AUnits');
-   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_AUPrec,'DWG_AUPrec');
-   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_AngDir,'DWG_AngDir');
-   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_AngBase,'DWG_AngBase');
-   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_UnitMode,'DWG_UnitMode');
-   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_InsUnits,'DWG_InsUnits');
-   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_TextSize,'DWG_TextSize');
+   //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_LUnits,'DWG_LUnits');
+   SysVar.dwg.DWG_LUnits:=@CurrentDWG.LUnits;
+   //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_LUPrec,'DWG_LUPrec');
+   SysVar.dwg.DWG_LUPrec:=@CurrentDWG.LUPrec;
+   //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_AUnits,'DWG_AUnits');
+   SysVar.dwg.DWG_AUnits:=@CurrentDWG.AUnits;
+   //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_AUPrec,'DWG_AUPrec');
+   SysVar.dwg.DWG_AUPrec:=@CurrentDWG.AUPrec;
+   //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_AngDir,'DWG_AngDir');
+   SysVar.dwg.DWG_AngDir:=@CurrentDWG.AngDir;
+   //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_AngBase,'DWG_AngBase');
+   SysVar.dwg.DWG_AngBase:=@CurrentDWG.AngBase;
+   //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_UnitMode,'DWG_UnitMode');
+   SysVar.dwg.DWG_UnitMode:=@CurrentDWG.UnitMode;
+   //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_InsUnits,'DWG_InsUnits');
+   SysVar.dwg.DWG_InsUnits:=@CurrentDWG.InsUnits;
+   //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_TextSize,'DWG_TextSize');
+   SysVar.dwg.DWG_TextSize:=@CurrentDWG.TextSize;
 
    if assigned(CurrentDWG.wa)then
    begin

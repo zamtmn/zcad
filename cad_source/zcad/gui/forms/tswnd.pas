@@ -22,7 +22,7 @@ unit tswnd;
 interface
 
 uses
-  zcchangeundocommand,zcobjectchangeundocommand2,ugdbdrawing,LMessages,ugdbdimstylearray,ugdbfont,uzclog,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
+  zcchangeundocommand,zcobjectchangeundocommand2,ugdbdrawing,LMessages,ugdbdimstylearray,ugdbfont,uzclog,ugdbsimpledrawing,uzcsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 

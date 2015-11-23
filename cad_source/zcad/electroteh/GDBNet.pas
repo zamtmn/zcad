@@ -8,7 +8,7 @@ unit GDBNet;
 {$INCLUDE def.inc}
 
 interface
-Uses gdbobjectextender,zeentityfactory,Varman,gdbdrawcontext,UGDBLayerArray,GDBGenericSubEntry,ugdbdrawingdef,gdbvisualprop,zcadsysvars,UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
+Uses gdbobjectextender,zeentityfactory,Varman,gdbdrawcontext,UGDBLayerArray,GDBGenericSubEntry,ugdbdrawingdef,gdbvisualprop,uzcsysvars,UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
 memman,GDBSubordinated,uunitmanager,uzcshared,sysutils,UGDBOpenArrayOfPObjects;
 const
      UNNAMEDNET='NET';

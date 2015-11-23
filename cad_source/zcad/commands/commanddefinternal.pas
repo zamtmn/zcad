@@ -21,7 +21,7 @@ unit commanddefinternal;
 
 
 interface
-uses gdbdrawcontext,generalviewarea,gdbobjectsconstdef,zcadsysvars,geometry,varmandef,gdbasetypes,gdbase,commandlinedef,commandline,oglwindowdef,UGDBDescriptor
+uses gdbdrawcontext,generalviewarea,gdbobjectsconstdef,uzcsysvars,geometry,varmandef,gdbasetypes,gdbase,commandlinedef,commandline,oglwindowdef,UGDBDescriptor
   {,UGDBLayerArray},memman,uzcshared;
 type
   comproc=procedure(_self:pointer);

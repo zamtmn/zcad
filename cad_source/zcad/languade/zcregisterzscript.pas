@@ -19,7 +19,7 @@
 unit zcregisterzscript;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,paths,intftranslations,UUnitManager,TypeDescriptors;
+uses uzcsysvars,paths,intftranslations,UUnitManager,TypeDescriptors;
 implementation
 
 initialization

@@ -31,7 +31,7 @@ uses
        lineinfo,//math,
   {ZCAD BASE}
        zemathutils,uzelongprocesssupport,gluinterface,uzglgdidrawer,ugdbdrawing,UGDBOpenArrayOfPV,ugdbabstractdrawing,gdbpalette,paths,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
-       geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,uzclog,
+       geometry,uzcsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,uzclog,
        varmandef, varman,UUnitManager,uzcsysinfo,uzcshared,strmy,UGDBTextStyleArray,ugdbdimstylearray,
   {ZCAD SIMPLE PASCAL SCRIPT}
        languade,

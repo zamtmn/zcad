@@ -60,7 +60,7 @@ uses
   uzcshared,
   zeentityfactory,    //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
-  zcadsysvars,        //system global variables
+  uzcsysvars,        //system global variables
                       //системные переменные
   gdbdrawcontext,
   zcadinterface,

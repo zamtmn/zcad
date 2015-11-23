@@ -22,7 +22,7 @@ unit usuptstylecombo;
 interface
 
 uses
-  gdbasetypes,usupportgui,StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,zcadsysvars,commandline,zcadinterface;
+  gdbasetypes,usupportgui,StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,uzcsysvars,commandline,zcadinterface;
 
 type
   TSupportTStyleCombo = class

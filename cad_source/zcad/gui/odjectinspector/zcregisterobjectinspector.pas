@@ -20,7 +20,7 @@ unit zcregisterobjectinspector;
 {$INCLUDE def.inc}
 interface
 uses paths,TypeDescriptors,intftranslations,uzcshared,Forms,zcadinterface,GDBRoot,gdbase,UGDBDrawingdef,gdbdrawcontext,UGDBStringArray,varmandef,ugdbsimpledrawing,GDBEntity,enitiesextendervariables,zcobjectinspector,zcguimanager,zcadstrconsts,Types,Controls,
-  UGDBDescriptor,Varman,UUnitManager,zcadsysvars,gdbasetypes,uzcsysinfo;
+  UGDBDescriptor,Varman,UUnitManager,uzcsysvars,gdbasetypes,uzcsysinfo;
 implementation
 procedure ZCADFormSetupProc(Form:TControl);
 var

@@ -20,7 +20,7 @@ unit ugdbdrawing;
 {$INCLUDE def.inc}
 interface
 uses
-intftranslations,zcadinterface,gdbdrawcontext,zeundostack,zcchangeundocommand,zcobjectchangeundocommand,zebaseundocommands,paths,ugdbdimstylearray,WindowsSpecific,LResources,zcadsysvars,zcadstrconsts,strproc,GDBBlockDef,UUnitManager,
+intftranslations,zcadinterface,gdbdrawcontext,zeundostack,zcchangeundocommand,zcobjectchangeundocommand,zebaseundocommands,paths,ugdbdimstylearray,WindowsSpecific,LResources,uzcsysvars,zcadstrconsts,strproc,GDBBlockDef,UUnitManager,
 gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,{uzcsysinfo,}ugdbsimpledrawing,
@@ -242,6 +242,25 @@ begin
   pdwgwarsunit^.CreateVariable('DWG_DrawGrid','GDBBoolean',@DrawGrid);
   pdwgwarsunit^.CreateVariable('DWG_GridSpacing','GDBvertex2D',@GridSpacing);
   pdwgwarsunit^.CreateVariable('DWG_Snap','GDBSnap2D',@Snap);
+  pdwgwarsunit^.CreateVariable('DWG_CLayer','PGDBLayerProp',@CurrentLayer);
+  pdwgwarsunit^.CreateVariable('DWG_CLType','PGDBLtypeProp',@CurrentLType);
+  pdwgwarsunit^.CreateVariable('DWG_CTStyle','PGDBTextStyle',@CurrentTextStyle);
+  pdwgwarsunit^.CreateVariable('DWG_CDimStyle','PGDBDimStyle',@CurrentDimStyle);
+  pdwgwarsunit^.CreateVariable('DWG_CLinew','TGDBLineWeight',@CurrentLineW);
+  pdwgwarsunit^.CreateVariable('DWG_CLTScale','GDBDouble',@CLTScale);
+  pdwgwarsunit^.CreateVariable('DWG_CColor','GDBInteger',@CColor);
+
+
+  pdwgwarsunit^.CreateVariable('DWG_LUnits','TLUnits',@LUnits);
+  pdwgwarsunit^.CreateVariable('DWG_LUPrec','TUPrec',@LUPrec);
+  pdwgwarsunit^.CreateVariable('DWG_AUnits','TAUnits',@AUnits);
+  pdwgwarsunit^.CreateVariable('DWG_AUPrec','TUPrec',@AUPrec);
+  pdwgwarsunit^.CreateVariable('DWG_AngDir','TAngDir',@AngDir);
+  pdwgwarsunit^.CreateVariable('DWG_AngBase','GDBAngleDegDouble',@AngBase);
+  pdwgwarsunit^.CreateVariable('DWG_UnitMode','TUnitMode',@UnitMode);
+  pdwgwarsunit^.CreateVariable('DWG_InsUnits','TInsUnits',@InsUnits);
+  pdwgwarsunit^.CreateVariable('DWG_TextSize','GDBDouble',@TextSize);
+
   if preloadedfile1<>'' then
   DWGUnits.loadunit(SupportPath,InterfaceTranslate,expandpath({'*rtl/dwg/DrawingDeviceBase.pas')}preloadedfile1),nil);
   if preloadedfile2<>'' then

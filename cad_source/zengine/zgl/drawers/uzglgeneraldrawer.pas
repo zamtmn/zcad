@@ -259,5 +259,7 @@ begin
 end;
 initialization
   DrawerLLPCreator:=TLLPrimitivesCreator.create;
+finalization
+  DrawerLLPCreator.Destroy;
 end.
 

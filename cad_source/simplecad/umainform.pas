@@ -8,6 +8,7 @@ uses
   LCLType,Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, StdCtrls, Spin,
   {From ZCAD}
+  memman,                                                                       //zcad memorymanager
   GDBase, GDBasetypes,                                                          //zcad basetypes
   geometry,                                                                     //some mathematical and geometrical support
   UGDBFontManager,ioshx,                                                        //fonts manager and SHX fileformat support
@@ -647,6 +648,10 @@ end;
 
 procedure TForm1._DestroyApp(Sender: TObject);
 begin
+ pdrawing1^.done;
+ gdbfreemem(pdrawing1);
+ pdrawing2^.done;
+ gdbfreemem(pdrawing2);
 end;
 
 

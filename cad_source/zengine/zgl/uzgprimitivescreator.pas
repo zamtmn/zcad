@@ -132,7 +132,9 @@ begin
      ptse:=pa.AllocData(sizeof(TLLSymbolEnd));
      ptse.init;
 end;
-begin
+initialization
   DefaultLLPCreator:=TLLPrimitivesCreator.create;
+finalization
+  DefaultLLPCreator.Destroy;
 end.
 

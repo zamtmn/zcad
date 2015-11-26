@@ -55,13 +55,13 @@ TLLPrimitive={$IFNDEF DELPHI}packed{$ENDIF} object
                        constructor init;
                        destructor done;
                        function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
-                       function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInBoundingVolume):GDBInteger;virtual;
+                       function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):GDBInteger;virtual;
                    end;
 PTLLLine=^TLLLine;
 TLLLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index:TLLVertexIndex;{P2Index=P1Index+1}
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
-              function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInBoundingVolume):GDBInteger;virtual;
+              function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):GDBInteger;virtual;
               procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
         end;
@@ -121,7 +121,7 @@ TLLSymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
               procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);virtual;
               constructor init;
-              function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInBoundingVolume):GDBInteger;virtual;
+              function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):GDBInteger;virtual;
         end;
 PTLLSymbolLine=^TLLSymbolLine;
 TLLSymbolLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
@@ -141,7 +141,7 @@ TLLPolyLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
               P1Index,Count,SimplifiedContourIndex,SimplifiedContourSize:TLLVertexIndex;
               Closed:GDBBoolean;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;virtual;
-              function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInBoundingVolume):GDBInteger;virtual;
+              function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):GDBInteger;virtual;
               procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;
               procedure AddSimplifiedIndex(Index:TLLVertexIndex);virtual;
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
@@ -174,7 +174,7 @@ function TLLPrimitive.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var Geo
 begin
      result:=getPrimitiveSize;
 end;
-function TLLPrimitive.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInBoundingVolume):GDBInteger;
+function TLLPrimitive.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):GDBInteger;
 begin
      InRect:=IREmpty;
      result:=getPrimitiveSize;
@@ -185,7 +185,7 @@ begin
                                     Drawer.DrawLine(@geomdata.Vertex3S,P1Index,P1Index+1);
      result:=inherited;
 end;
-function TLLLine.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInBoundingVolume):GDBInteger;
+function TLLLine.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):GDBInteger;
 begin
      InRect:=geometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(self.P1Index))^,PGDBvertex3S(geomdata.Vertex3S.getelement(self.P1Index+1))^,frustum);
      result:=getPrimitiveSize;
@@ -395,7 +395,7 @@ begin
      P1Index:=P1Index+offset.GeomIndexOffset;
      SimplifiedContourIndex:=SimplifiedContourIndex+offset.IndexsIndexOffset;
 end;
-function TLLPolyLine.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInBoundingVolume):GDBInteger;
+function TLLPolyLine.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):GDBInteger;
 var
    i,index:integer;
    SubRect:TInBoundingVolume;
@@ -461,9 +461,9 @@ begin
   ExternalLLPOffset:=-1;
   ExternalLLPCount:=-1;
 end;
-function TLLSymbol.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;var InRect:TInBoundingVolume):GDBInteger;
+function TLLSymbol.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):GDBInteger;
 var
-   ir1,ir2,ir3,ir4:TInBoundingVolume;
+   //ir1,ir2,ir3,ir4:TInBoundingVolume;
    myfrustum:ClipArray;
    OutBound:OutBound4V;
    p:PGDBvertex3S;
@@ -499,7 +499,7 @@ end;
 function TLLSymbol.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData):GDBInteger;
 {TODO: this need rewrite}
 var
-   i,index,minsymbolsize:integer;
+   {i,}index,minsymbolsize:integer;
    sqrparamsize:gdbdouble;
    PLLSymbolLine:PTLLSymbolLine;
    PSymbolsParam:PTSymbolSParam;

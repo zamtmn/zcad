@@ -42,7 +42,7 @@ implementation
 function SetTextAlignToBaseLine(hdc:HDC):UINT;
 begin
   {$IFDEF WINDOWS}
-    SetTextAlign(hdc,TA_BASELINE{ or TA_LEFT});
+    result:=SetTextAlign(hdc,TA_BASELINE{ or TA_LEFT});
   {$ENDIF}
   {$IFDEF LCLQT}
   TQtDeviceContext(hdc).translate(0,-TQtDeviceContext(hdc).Metrics.ascent)
@@ -51,7 +51,7 @@ end;
 function AddFontResourceFile(FontResourceFileName:string):integer;
 begin
   {$IFDEF WINDOWS}
-    result:=__AddFontResourceEx(@FontResourceFileName[1],$10,0);
+    result:=__AddFontResourceEx(@FontResourceFileName[1],$10,nil);
   {$Else}
     result:=1;
   {$ENDIF}

@@ -33,7 +33,7 @@ BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               constructor init;
               destructor done;virtual;
               //----//function GetSymbolDataAddr(offset:integer):pointer;virtual;
-              function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;
+              //function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;
 
               function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;virtual;
               function GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;virtual;
@@ -116,10 +116,10 @@ begin
 
                        end;
 end;
-function BASEFont.GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;
+{function BASEFont.GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;
 begin
      result:=nil;
-end;
+end;}
 //----//function BASEFont.GetSymbolDataAddr(offset:integer):pointer;
 //----//begin
 //----//     result:=SHXdata.getelement(offset);

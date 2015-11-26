@@ -438,11 +438,10 @@ end;
 procedure GDBObjBlockInsert.BuildGeometry;
 var
     pvisible,pvisible2:PGDBObjEntity;
-    //freelayer:PGDBLayerProp;
     i:GDBInteger;
     mainowner:PGDBObjSubordinated;
     dc:TDrawContext;
-    //varobject:gdbboolean;
+    ir:itrec;
 begin
           if name='' then
                          name:='_error_here';
@@ -461,35 +460,36 @@ begin
           mainowner:=getmainowner;
           if mainowner<>nil then
           if mainowner.gettype=1 then
-                                                begin
-                                                exit;
-                                                end;
-
-          //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
+                                   exit;
           pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getelement(index);
           if pblockdef.ObjArray.count>0 then
           begin
           dc:=drawing.CreateDrawingRC;
-          for i:=0 to pblockdef.ObjArray.count-1 do
-          begin
-               pvisible:=GDBPointer(pblockdef.ObjArray.getelement(i)^);
+
+          pvisible:=pblockdef.ObjArray.beginiterate(ir);
+          if pvisible<>nil then
+          repeat
                pvisible:=pvisible^.Clone(@self);
                pvisible2:=pgdbobjEntity(pvisible.FromDXFPostProcessBeforeAdd(nil,drawing));
                if pvisible2=nil then
                                      begin
-                                          pvisible^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
+                                          pvisible^.correctobjects(@self,ir.itc);
                                           pvisible^.FormatEntity(drawing,dc);
                                           pvisible.BuildGeometry(drawing);
                                           ConstObjArray.add(@pvisible);
                                      end
                                  else
                                      begin
-                                          pvisible2^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
+                                          pvisible2^.correctobjects(@self,i);
                                           pvisible2^.FormatEntity(drawing,dc);
                                           pvisible.BuildGeometry(drawing);
                                           ConstObjArray.add(@pvisible2);
                                      end;
-          end;
+          pvisible:=pblockdef.ObjArray.iterate(ir);
+          until pvisible=nil;
+
+
+
           ConstObjArray.Shrink;
           end;
           self.BlockDesc:=pblockdef.BlockDesc;

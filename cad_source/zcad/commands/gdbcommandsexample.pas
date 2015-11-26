@@ -43,6 +43,10 @@ uses
                        //модуль описывающий примитив вставка блока
   gdbLine,             //unit describes line entity
                        //модуль описывающий примитив линия
+
+  GDBLWPolyLine,             //unit describes line entity
+                       //модуль описывающий примитив ПОЛИлиния
+
   gdbAlignedDimension, //unit describes aligned dimensional entity
                        //модуль описывающий выровненный размерный примитив
   gdbRotatedDimension,
@@ -1025,6 +1029,8 @@ function DrawPramougol_com(operands:TCommandOperands):TCommandResult;
 var
     //pa:PGDBObjArc;
     pline,pline1,pline2,pline3,pline4:PGDBObjLine;
+    polyVert:GDBvertex2D;
+    Polly:PGDBObjLWPolyline;
     pe,petemp:T3PointPentity;
     dc:TDrawContext;
 begin
@@ -1037,6 +1043,10 @@ begin
       begin
 
           GDBObjLine.CreateInstance;
+          GDBObjLWPolyline.CreateInstance;
+
+          Polly:=GDBObjLWPolyline.CreateInstance;
+
           pline1 := GDBObjLine.CreateInstance;
           pline2 := GDBObjLine.CreateInstance;
           pline3 := GDBObjLine.CreateInstance;
@@ -1045,6 +1055,10 @@ begin
           GDBObjSetEntityCurrentProp(pline2);
           GDBObjSetEntityCurrentProp(pline3);
           GDBObjSetEntityCurrentProp(pline4);
+
+          GDBObjSetEntityCurrentProp(Polly);
+
+
 
            pline1^.CoordInOCS.lBegin:=pe.p1;
            pline2^.CoordInOCS.lBegin:=pe.p1;
@@ -1066,6 +1080,18 @@ begin
            petemp.p2.x := pe.p1.x;
            pline4^.CoordInOCS.lEnd:=petemp.p2;
 
+
+           polyVert.x:=pe.p1.x;
+           polyVert.y:=pe.p1.y;
+
+           Polly^.Vertex2D_in_OCS_Array.ispointinside(polyVert);
+
+           polyVert.x:=pe.p2.x;
+           polyVert.y:=pe.p2.y;
+
+           Polly^.Vertex2D_in_OCS_Array.ispointinside(polyVert);
+
+
                dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
 
                pline1^.FormatEntity(gdb.GetCurrentDWG^,dc);
@@ -1073,11 +1099,14 @@ begin
                pline3^.FormatEntity(gdb.GetCurrentDWG^,dc);
                pline4^.FormatEntity(gdb.GetCurrentDWG^,dc);
 
+               Polly^.FormatEntity(gdb.GetCurrentDWG^,dc);
+
                UndoCommandStartMarker('');
                AddEntToCurrentDrawingWithUndo(pline1);
                AddEntToCurrentDrawingWithUndo(pline2);
                AddEntToCurrentDrawingWithUndo(pline3);
                AddEntToCurrentDrawingWithUndo(pline4);
+               AddEntToCurrentDrawingWithUndo(Polly);
                UndoCommandEndMarker;
 
       end;

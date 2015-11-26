@@ -1969,7 +1969,7 @@ begin
                outstream.TXTAddGDBStringEOL(dxfGroupCode(76));
                //if sysvar.DWG.DWG_DrawGrid<>nil then
                                                      begin
-                                                          if {sysvar.DWG.DWG_DrawGrid^}drawing.LWDisplay then
+                                                          if {sysvar.DWG.DWG_DrawGrid^}drawing.DrawGrid then
                                                                                           outstream.TXTAddGDBStringEOL('1')
                                                                                       else
                                                                                           outstream.TXTAddGDBStringEOL('0');

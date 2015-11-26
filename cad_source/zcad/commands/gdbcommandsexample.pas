@@ -1031,6 +1031,7 @@ var
     pline,pline1,pline2,pline3,pline4:PGDBObjLine;
     polyVert:GDBvertex2D;
     Polly:PGDBObjLWPolyline;
+    Polywidth:GLLWWidth;
     pe,petemp:T3PointPentity;
     dc:TDrawContext;
 begin
@@ -1084,12 +1085,18 @@ begin
            polyVert.x:=pe.p1.x;
            polyVert.y:=pe.p1.y;
 
-           Polly^.Vertex2D_in_OCS_Array.ispointinside(polyVert);
+           //Polly^.Vertex2D_in_OCS_Array.ispointinside(polyVert);
+           Polywidth.endw:=1;
+           Polywidth.startw:=1;
+           Polly^.Vertex2D_in_OCS_Array.Add(@polyVert);
+           Polly^. Width2D_in_OCS_Array.Add(@Polywidth);
 
            polyVert.x:=pe.p2.x;
            polyVert.y:=pe.p2.y;
 
-           Polly^.Vertex2D_in_OCS_Array.ispointinside(polyVert);
+           //Polly^.Vertex2D_in_OCS_Array.ispointinside(polyVert);
+           Polly^.Vertex2D_in_OCS_Array.Add(@polyVert);
+           Polly^. Width2D_in_OCS_Array.Add(@Polywidth);
 
 
                dc:=gdb.GetCurrentDWG^.CreateDrawingRC;

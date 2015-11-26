@@ -52,7 +52,7 @@
       </Item2>
     </RequiredPkgs>
     <UsageOptions>
-      <IncludePath Value="$PkgDir(id)"/>
+      <IncludePath Value="$(PkgDir)"/>
       <UnitPath Value="$(PkgOutDir)"/>
     </UsageOptions>
     <PublishOptions>

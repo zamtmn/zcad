@@ -282,7 +282,7 @@ begin
 end;
 function ZGLVectorObject.CalcCountedTrueInFrustum(frustum:ClipArray; FullCheck:boolean;StartOffset,Count:GDBInteger):TInBoundingVolume;
 var
-  subresult:TInBoundingVolume;
+  //subresult:TInBoundingVolume;
   PPrimitive:PTLLPrimitive;
   ProcessedSize:TArrayIndex;
   CurrentSize:TArrayIndex;
@@ -331,7 +331,7 @@ end;
 
 function ZGLVectorObject.CalcTrueInFrustum(frustum:ClipArray; FullCheck:boolean):TInBoundingVolume;
 var
-  subresult:TInBoundingVolume;
+  //subresult:TInBoundingVolume;
   PPrimitive:PTLLPrimitive;
   ProcessedSize:TArrayIndex;
   CurrentSize:TArrayIndex;

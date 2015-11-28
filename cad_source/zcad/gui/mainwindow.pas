@@ -273,7 +273,7 @@ var
    msgstring,ts:string;
 begin
      msgstring:=TSimpleIPCServer(Sender).StringMessage;
-     {$ifdef windows}msgstring:=Tria_AnsiToUtf8(msgstring);{$endif}
+     //{ifdef windows}msgstring:=Tria_AnsiToUtf8(msgstring);{endif}
      repeat
            GetPartOfPath(ts,msgstring,'|');
            if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then

@@ -121,6 +121,7 @@ const {as_normal=0;
   LnWtByLayer = -1;
   LnWtByBlock = -2;
   LnWtByLwDefault = -3;
+  LnWtNormalizeOffset = 3;
 
   CGDBWhile = 7;
   CGDBGreen = 3;

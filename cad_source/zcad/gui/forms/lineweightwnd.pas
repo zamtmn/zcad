@@ -135,33 +135,33 @@ begin
                 s:=rsDifferent;}
               else
                   begin
-                       s:=GetLWNameFromLW(index-3);
+                       s:=GetLWNameFromLW(index-LnWtNormalizeOffset);
                        ll:=120;
                   end;
  end;
   ARect.Left:=ARect.Left+2;
-  drawLW(TListBox(Control).canvas,ARect,ll,(index-3) div 10,s);
+  drawLW(TListBox(Control).canvas,ARect,ll,(index-LnWtNormalizeOffset) div 10,s);
 end;
 
 procedure TLineWeightSelectWND._onSelChg(Sender: TObject; User: boolean);
 begin
-     SelectedLW:=integer(ListBox1.items.Objects[ListBox1.ItemIndex])-3;
+     SelectedLW:=integer(ListBox1.items.Objects[ListBox1.ItemIndex])-LnWtNormalizeOffset;
 end;
 function TLineWeightSelectWND.run(clw:integer;showBy:boolean):integer;
 var i:integer;
 begin
      if showBy then
      begin
-     ListBox1.items.AddObject(rsByLayer,TObject(LnWtByLayer));
-     ListBox1.items.AddObject(rsByBlock,TObject(LnWtByBlock));
+     ListBox1.items.AddObject(rsByLayer,TObject(LnWtByLayer+LnWtNormalizeOffset));
+     ListBox1.items.AddObject(rsByBlock,TObject(LnWtByBlock+LnWtNormalizeOffset));
      end;
-     ListBox1.items.AddObject(rsdefault,TObject(LnWtByLwDefault));
+     ListBox1.items.AddObject(rsdefault,TObject(LnWtByLwDefault+LnWtNormalizeOffset));
      for i := low(lwarray) to high(lwarray) do
      begin
-          ListBox1.items.AddObject(GetLWNameFromN(i),TObject(lwarray[i]));
+          ListBox1.items.AddObject(GetLWNameFromN(i),TObject(lwarray[i]+LnWtNormalizeOffset));
      end;
      ListBox1.ItemIndex:=0;
-     clw:=clw+3;
+     clw:=clw+LnWtNormalizeOffset;
      for i := 0 to ListBox1.items.Count-1 do
      begin
           if ListBox1.items.Objects[i]=tobject(clw) then

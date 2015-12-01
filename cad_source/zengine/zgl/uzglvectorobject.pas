@@ -199,7 +199,8 @@ begin
      result.GeomDataSize:=CopyParam.GeomDataSize;
      DestGeomDataAddr:=dest.GeomData.Vertex3S.AllocData(CopyParam.EID.GeomIndexMax-CopyParam.EID.GeomIndexMin+1);
      SourceGeomDataAddr:=self.GeomData.Vertex3S.getelement(CopyParam.EID.GeomIndexMin);
-     Move(SourceGeomDataAddr^,DestGeomDataAddr^,CopyParam.GeomDataSize);
+     if (SourceGeomDataAddr<>nil)and(DestGeomDataAddr<>nil) then
+        Move(SourceGeomDataAddr^,DestGeomDataAddr^,CopyParam.GeomDataSize);
 
      if CopyParam.EID.IndexsIndexMin<>-1 then
        begin

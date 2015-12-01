@@ -275,6 +275,7 @@ begin
      msgstring:=TSimpleIPCServer(Sender).StringMessage;
      {$ifndef windows}application.BringToFront;{$endif}
      {$ifdef windows}settop;{$endif}
+     application.processmessages;
      //{ifdef windows}msgstring:=Tria_AnsiToUtf8(msgstring);{endif}
      repeat
            GetPartOfPath(ts,msgstring,'|');

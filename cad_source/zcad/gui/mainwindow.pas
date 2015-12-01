@@ -273,6 +273,8 @@ var
    msgstring,ts:string;
 begin
      msgstring:=TSimpleIPCServer(Sender).StringMessage;
+     {$ifndef windows}application.BringToFront;{$endif}
+     {$ifdef windows}settop;{$endif}
      //{ifdef windows}msgstring:=Tria_AnsiToUtf8(msgstring);{endif}
      repeat
            GetPartOfPath(ts,msgstring,'|');
@@ -282,8 +284,6 @@ begin
                 commandmanager.executecommand('Load('+ts+')',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
            end;
      until msgstring='';
-     {$ifndef windows}application.BringToFront;{$endif}
-     {$ifdef windows}settop;{$endif}
 end;
 
 procedure MainForm.setvisualprop;

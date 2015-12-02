@@ -16,6 +16,8 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
+{If you use lazarus rev50521 and before please revert zcobjectinspector.pas to rev1588}
+
 unit zcobjectinspector;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
@@ -24,7 +26,7 @@ interface
 
 uses
   math,LMessages,LCLIntf,usupportgui,
-  zeundostack,zebaseundocommands,StdCtrls,strutils,{zcadinterface,}
+  zeundostack,zebaseundocommands,StdCtrls,strutils,
   Themes,
   {$IFDEF LCLGTK2}
   gtk2,
@@ -33,7 +35,7 @@ uses
   types,graphics,
   ExtCtrls,Controls,Classes,menus,Forms,lcltype,
 
-  Varman,gdbasetypes,SysUtils,//uzcshared,
+  Varman,gdbasetypes,SysUtils,
   gdbase,varmandef,
   memman,TypeDescriptors,UGDBStringArray;
 const
@@ -107,6 +109,7 @@ type
     procedure createpda;
     destructor Destroy; Override;
     procedure createscrollbars;virtual;
+    procedure ScrollBy(DeltaX, DeltaY: Integer); override;
     procedure AfterConstruction; override;
     procedure CalcRowHeight;
     procedure EraseBackground(DC: HDC); override;
@@ -135,8 +138,8 @@ type
     procedure updateinsp;
     private
     protected
-    procedure ScrollbarHandler(ScrollKind: TScrollBarKind; OldPosition: Integer);override;
-    procedure WMVScroll(var Message : TLMVScroll); message LM_VScroll;
+    //procedure ScrollbarHandler(ScrollKind: TScrollBarKind; OldPosition: Integer);//override;
+    //procedure WMVScroll(var Message : TLMVScroll); message LM_VScroll;
     public
     procedure SetBounds(ALeft, ATop, AWidth, AHeight: integer); override;
     procedure GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
@@ -942,7 +945,7 @@ begin
   result:=0;
   calctreeh(@pda,result);
 end;
-procedure TGDBobjinsp.WMVScroll(var Message : TLMVScroll);
+{procedure TGDBobjinsp.WMVScroll(var Message : TLMVScroll);
 var
   NewPos: Longint;
 begin
@@ -961,8 +964,8 @@ begin
       end;
   end;
   inherited;
-end;
-procedure TGDBobjinsp.ScrollbarHandler(ScrollKind: TScrollBarKind; OldPosition: Integer);
+end;}
+{procedure TGDBobjinsp.ScrollbarHandler(ScrollKind: TScrollBarKind; OldPosition: Integer);
 var
   ty:integer;
 begin
@@ -979,7 +982,7 @@ begin
      invalidate;
      inherited;
      ty:=VertScrollBar.ScrollPos;
-end;
+end;}
 procedure TGDBobjinsp.mypaint;
 begin
      //inherited;
@@ -1257,11 +1260,40 @@ begin
 
   self.updateinsp;
 end;
+procedure TGDBobjinsp.ScrollBy(DeltaX, DeltaY: Integer);
+var
+   r:trect;
+begin
+     //inherited;
+  r:=ClientRect;
+  r.Top:=r.Bottom;
+  ScrollWindowEx(Handle, DeltaX, DeltaY, nil, {nil}@r, 0, nil, {SW_INVALIDATE or SW_ERASE}SW_SCROLLCHILDREN);
+  if peditor<>nil then
+  begin
+     //peditor.geteditor.SetBounds(namecol+1,EDContext.ppropcurrentedit.rect.Top+DeltaY,clientwidth-namecol-2,EDContext.ppropcurrentedit.rect.Bottom-EDContext.ppropcurrentedit.rect.Top+1);
+     //peditor.geteditor.Invalidate;
+     if (EDContext.ppropcurrentedit.rect.Top<HeadersHeight+VertScrollBar.ScrollPos-1)
+     or (EDContext.ppropcurrentedit.rect.Top>clientheight+VertScrollBar.ScrollPos-1)then
+     begin
+        Application.QueueAsyncCall(AsyncFreeEditor,0);
+        peditor.geteditor.Hide;
+     end;
+  end;
+   {ty:=OldPosition;
+   invalidate;
+   inherited;
+   ty:=VertScrollBar.ScrollPos;}
+   //UpdateScrollbars;
+   invalidate;
+   //draw;
+end;
+
 procedure TGDBobjinsp.createscrollbars;
 var
    changed:boolean;
    ch:integer;
 begin
+
      //ебаный скролинг работает везде по разному, или я туплю... переписывать надо эту хрень
      ch:=contentheigth+HeadersHeight;
      if (VertScrollBar.Range=ch)or(VertScrollBar.Position=0) then
@@ -1276,7 +1308,7 @@ begin
      if ch<height  then
                                  begin
                                       {$IFNDEF LCLQt}
-                                      ScrollBy(0,-VertScrollBar.Position);
+                                      //ScrollBy(0,-VertScrollBar.Position);
                                       {$ENDIF}
                                       VertScrollBar.Position:=0;
                                       self.VertScrollBar.page:=height;
@@ -1284,16 +1316,7 @@ begin
                                       self.VertScrollBar.Tracking:=false;
                                       self.VertScrollBar.Smooth:=false;
                                       self.VertScrollBar.Increment:=200;
-                                      UpdateScrollbars;
                                  end;
-     //Нихуя не понял нахуя это сделано... пока уберу
-     //{$IFNDEF LCLWIN32}
-     //if ((VertScrollBar.Position>0) and (VertScrollBar.Position<contentheigth-height))or changed then
-     //begin
-     //VertScrollBar.Position:=VertScrollBar.Position-1;
-     //VertScrollBar.Position:=VertScrollBar.Position+1;
-     //end;
-     //{$ENDIF}
      UpdateScrollbars;
 end;
 function TGDBobjinsp.IsMouseOnSpliter(pp:PPropertyDeskriptor; X,Y:Integer):GDBBoolean;

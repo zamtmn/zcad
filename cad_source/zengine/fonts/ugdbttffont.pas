@@ -46,6 +46,7 @@ TTFFont={$IFNDEF DELPHI}packed{$ENDIF} object({SHXFont}BASEFont)
               constructor init;
               destructor done;virtual;
               function IsCanSystemDraw:GDBBoolean;virtual;
+              procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);virtual;
         end;
 
 {EXPORT-}
@@ -444,6 +445,14 @@ begin
   bs.ClearConturs;
   //EndSymContour;
   end;
+end;
+procedure TTFFont.SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);
+begin
+  if SymsParam.IsCanSystemDraw then
+                                      begin
+                                           SymsParam.NeededFontHeight:=oneVertexlength(PGDBVertex(@matr[1])^)*((ftFont.Ascent+ftFont.Descent)/(ftFont.CapHeight));
+                                           SymsParam.pfont:=@self;
+                                      end
 end;
 function TTFFont.IsCanSystemDraw:GDBBoolean;
 begin

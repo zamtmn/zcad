@@ -30,6 +30,11 @@ function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
 implementation
 uses
    uzcshared;
+function CreateTTFFontInstance:PTTFFont;
+begin
+     GDBGetMem({$IFDEF DEBUGBUILD}'{638B5484-83D8-4FEA-AE47-918B8B0CBC08}',{$ENDIF}result,sizeof(TTFFont));
+     result^.init;
+end;
 function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
 var
    i:integer;
@@ -41,7 +46,8 @@ var
 begin
     initfont(pf,extractfilename(name));
     pf^.fontfile:=name;
-    pf.ItFFT;
+    pf^.font:=CreateTTFFontInstance;
+    //pf.ItFFT;
     pttf:=pointer(pf^.font);
     result:=true;
     pttf^.ftFont.Hinted:=false;

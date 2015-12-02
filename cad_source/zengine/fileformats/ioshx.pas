@@ -704,6 +704,11 @@ begin
 
             result:=inccounter;
           end;
+function CreateSHXFontInstance:PSHXFont;
+begin
+     GDBGetMem({$IFDEF DEBUGBUILD}'{FB4B76DB-BD4E-449E-A505-9ABF79E7809A}',{$ENDIF}result,sizeof(SHXFont));
+     result^.init;
+end;
 function createnewfontfromshx(name:GDBString;var pf:PGDBfont):GDBBoolean;
 var
    //f:filestream;
@@ -723,7 +728,8 @@ begin
     debugln('{D}AUTOCAD-86 SHAPES 1.0');
     //programlog.LogOutStr('AUTOCAD-86 SHAPES 1.0',lp_OldPos,LM_Debug);
   initfont(pf,extractfilename(name));
-  pf.ItSHX;
+  pf^.font:=CreateSHXFontInstance;
+  //pf.ItSHX;
   pf^.fontfile:=name;
   pf^.font.unicode:=false;
   //----//PSHXFont(pf^.font).SHXdata.AllocData(2);
@@ -790,7 +796,8 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
        debugln('{D}AUTOCAD-86 UNIFONT 1.0');
        //programlog.LogOutStr('AUTOCAD-86 UNIFONT 1.0',lp_OldPos,LM_Debug);
        initfont(pf,extractfilename(name));
-       pf.ItSHX;
+       pf^.font:=CreateSHXFontInstance;
+       //pf.ItSHX;
        pf^.fontfile:=name;
        pf^.font.unicode:=true;
        //----//PSHXFont(pf^.font).SHXdata.AllocData(2);

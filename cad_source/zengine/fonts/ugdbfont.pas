@@ -19,7 +19,7 @@
 unit ugdbfont;
 {$INCLUDE def.inc}
 interface
-uses math,uzglabstractdrawer,uzgprimitivescreator,uzgprimitives,uzgprimitivessarray,ugdbshxfont,ugdbttffont,memman,
+uses math,uzglabstractdrawer,uzgprimitivescreator,uzgprimitives,uzgprimitivessarray,{ugdbshxfont,}{ugdbttffont,}memman,
      strproc,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,
      ugdbbasefont,geometry,uzglvectorobject;
 type
@@ -34,8 +34,8 @@ GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     DummyDrawerHandle:{THandle}ptruint;
     constructor initnul;
     constructor init(n:GDBString);
-    procedure ItSHX;
-    procedure ItFFT;
+    //procedure ItSHX;
+    //procedure ItFFT;
     destructor done;virtual;
     function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
     function GetOrReplaceSymbolInfo(symbol:GDBInteger{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
@@ -58,14 +58,14 @@ end;
 procedure GDBfont.CreateSymbol(drawer:TZGLAbstractDrawer;var geom:ZGLVectorObject;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
 var
   v,v0,true0Y,fact0y:GDBvertex;
-  sqrsymh,CapHeight:GDBDouble;
+  sqrsymh{,CapHeight}:GDBDouble;
   psyminfo:PGDBsymdolinfo;
 
   LLSymbolIndex:TArrayIndex;
   PLLPsymbol:PTLLSymbol;
   LLSymbolLineCreated:boolean;
   PLLSymbolLine:PTLLSymbolLine;
-  VDCopyParam,VDCopyResultParam:TZGLVectorDataCopyParam;
+  VDCopyParam{,VDCopyResultParam}:TZGLVectorDataCopyParam;
   symoutbound:TBoundingBox;
   //offset:TEntIndexesOffsetData;
 begin
@@ -329,14 +329,15 @@ begin
     if LLSymbolLineCreated then
                                begin
                                     PLLSymbolLine^.SymbolsParam.IsCanSystemDraw:=font^.IsCanSystemDraw;
-                                    if PLLSymbolLine^.SymbolsParam.IsCanSystemDraw then
+                                    font^.SetupSymbolLineParams(matr,PLLSymbolLine^.SymbolsParam);
+                                    (*if PLLSymbolLine^.SymbolsParam.IsCanSystemDraw then
                                     begin
-                                         CapHeight:=PTTFFont(font)^.ftFont.CapHeight;
+                                         //CapHeight:=PTTFFont(font)^.ftFont.CapHeight;
                                          //PLLSymbolLine^.SymbolsParam.NeededFontHeight:=psyminfo^.h*psyminfo^.h*sqrsymh/(PTTFFont(font)^.ftFont.DPI / 72)/(PTTFFont(font)^.ftFont.DPI / 72);
                                          PLLSymbolLine^.SymbolsParam.NeededFontHeight:=oneVertexlength(PGDBVertex(@matr[1])^)*((PTTFFont(font)^.ftFont.Ascent+PTTFFont(font)^.ftFont.Descent)/(PTTFFont(font)^.ftFont.CapHeight));
 
                                          PLLSymbolLine^.SymbolsParam.pfont:=@self;
-                                    end;
+                                    end;*)
 
                                     PLLSymbolLine^.FirstOutBoundIndex:=PLLPsymbol^.OutBoundIndex;
                                     PLLSymbolLine^.SymbolsParam.FirstSymMatr:=geometry.MatrixMultiply(matr,objmatrix);
@@ -383,16 +384,16 @@ begin
                       end;
      inherited;
 end;
-procedure GDBfont.ItSHX;
+(*procedure GDBfont.ItSHX;
 begin
      GDBGetMem({$IFDEF DEBUGBUILD}'{FB4B76DB-BD4E-449E-A505-9ABF79E7809A}',{$ENDIF}font,sizeof(SHXFont));
      PSHXFont(font)^.init;
-end;
-procedure GDBfont.ItFFT;
+end;*)
+(*procedure GDBfont.ItFFT;
 begin
      GDBGetMem({$IFDEF DEBUGBUILD}'{638B5484-83D8-4FEA-AE47-918B8B0CBC08}',{$ENDIF}font,sizeof(TTFFont));
      PTTFFont(font)^.init;
-end;
+end;*)
 constructor GDBfont.Init;
 begin
      initnul;

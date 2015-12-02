@@ -19,7 +19,7 @@
 unit ugdbbasefont;
 {$INCLUDE def.inc}
 interface
-uses uzglvectorobject,memman,strproc,UGDBOpenArrayOfByte,gdbasetypes,UGDBOpenArrayOfData,sysutils,
+uses uzgprimitives,uzglvectorobject,memman,strproc,UGDBOpenArrayOfByte,gdbasetypes,UGDBOpenArrayOfData,sysutils,
      gdbase,geometry;
 type
 {EXPORT+}
@@ -40,10 +40,14 @@ BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
               function findunisymbolinfos(symbolname:GDBString):PGDBsymdolinfo;
               function IsCanSystemDraw:GDBBoolean;virtual;
+              procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);virtual;
         end;
 {EXPORT-}
 implementation
 //uses log;
+procedure BASEFont.SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);
+begin
+end;
 function BASEFont.IsCanSystemDraw:GDBBoolean;
 begin
      result:=false;

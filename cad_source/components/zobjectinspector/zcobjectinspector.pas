@@ -1264,10 +1264,10 @@ procedure TGDBobjinsp.ScrollBy(DeltaX, DeltaY: Integer);
 var
    r:trect;
 begin
-  {$IFNDEF LCLWIN}
+  {$IFNDEF WINDOWS}
   inherited;
   {$ENDIF}
-  {$IFDEF LCLWIN}
+  {$IFDEF WINDOWS}
   r:=ClientRect;
   r.Top:=r.Bottom;
   ScrollWindowEx(Handle, DeltaX, DeltaY, nil, {nil}@r, 0, nil, {SW_INVALIDATE or SW_ERASE}SW_SCROLLCHILDREN);

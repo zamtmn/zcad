@@ -1264,10 +1264,14 @@ procedure TGDBobjinsp.ScrollBy(DeltaX, DeltaY: Integer);
 var
    r:trect;
 begin
-     //inherited;
+  {$IFNDEF LCLWIN}
+  inherited;
+  {$ENDIF}
+  {$IFDEF LCLWIN}
   r:=ClientRect;
   r.Top:=r.Bottom;
   ScrollWindowEx(Handle, DeltaX, DeltaY, nil, {nil}@r, 0, nil, {SW_INVALIDATE or SW_ERASE}SW_SCROLLCHILDREN);
+  {$ENDIF}
   if peditor<>nil then
   begin
      //peditor.geteditor.SetBounds(namecol+1,EDContext.ppropcurrentedit.rect.Top+DeltaY,clientwidth-namecol-2,EDContext.ppropcurrentedit.rect.Bottom-EDContext.ppropcurrentedit.rect.Top+1);
@@ -1279,13 +1283,8 @@ begin
         peditor.geteditor.Hide;
      end;
   end;
-   {ty:=OldPosition;
-   invalidate;
-   inherited;
-   ty:=VertScrollBar.ScrollPos;}
    //UpdateScrollbars;
    invalidate;
-   //draw;
 end;
 
 procedure TGDBobjinsp.createscrollbars;

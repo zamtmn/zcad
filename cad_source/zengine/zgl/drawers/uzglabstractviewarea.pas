@@ -48,6 +48,7 @@ type
     TOnWaMouseSelect=procedure (Sender:TAbstractViewArea;SelectedEntity:GDBPointer) of object;
     TOnWaKeyPress=procedure (Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState) of object;
     TOnGetEntsDesc=function (ents:PGDBObjOpenArrayOfPV):GDBString of object;
+    TOnWaShowCursor=procedure (Sender:TAbstractViewArea;var DC:TDrawContext) of object;
     TWAGeneralMethod=procedure (Sender:TAbstractViewArea) of object;
     TAbstractViewArea=class(tcomponent)
                            public
@@ -70,6 +71,7 @@ type
                            OnWaKeyPress:TOnWaKeyPress;
                            OnGetEntsDesc:TOnGetEntsDesc;
                            OnSetObjInsp:TWAGeneralMethod;
+                           OnWaShowCursor:TOnWaShowCursor;
 
                            procedure GDBActivate;virtual;abstract;
                            procedure GDBActivateGLContext;virtual;abstract;

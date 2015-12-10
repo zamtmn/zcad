@@ -165,10 +165,9 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
               end;
 {Export-}
 var onlygetsnapcount:GDBInteger;
-    ForeGround:TRGB;
     GDBObjEntityDXFFeatures:TDXFEntIODataManager;
 implementation
-uses usimplegenerics,zeentityfactory,GDBGenericSubEntry,UGDBSelectedObjArray{,log};
+uses generalviewarea,usimplegenerics,zeentityfactory,GDBGenericSubEntry,UGDBSelectedObjArray{,log};
 procedure GDBObjEntity.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
 begin
     proc(@self,PCounted,Counter);

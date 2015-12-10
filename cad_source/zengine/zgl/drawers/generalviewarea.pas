@@ -20,11 +20,10 @@ unit generalviewarea;
 {$INCLUDE def.inc}
 interface
 uses
-     LCLProc,memman,{log,}zemathutils,gdbpalette,
+     LCLProc,memman,zemathutils,gdbpalette,
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
-     UGDBLayerArray,ugdbdimstylearray,
-     oglwindowdef,gdbdrawcontext,{varmandef,}{zcadsysvars,}GDBEntity,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
-     gdbobjectsconstdef,{uzcshared,}zcadstrconsts,UGDBTracePropArray,math,sysutils,UGDBDrawingdef,strproc,
+     oglwindowdef,gdbdrawcontext,GDBEntity,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
+     gdbobjectsconstdef,zcadstrconsts,UGDBTracePropArray,math,sysutils,UGDBDrawingdef,strproc,
      ExtCtrls,Controls,Classes,LCLType,Forms,UGDBOpenArrayOfPV,GDBGenericSubEntry,GDBCamera,UGDBVisibleOpenArray,uzglabstractdrawer,uzglgeneraldrawer,uzglabstractviewarea;
 const
   ontracdist=10;
@@ -179,6 +178,7 @@ var
    sysvarRDLight:boolean=false;
 
    OnActivateProc:TOnActivateProc=nil;
+   ForeGround:TRGB;
 implementation
 procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
 begin
@@ -353,9 +353,8 @@ begin
   oglsm.myglpushmatrix;
   oglsm.mygltranslated(0, -getviewcontrol.clientheight, 0);}
 
-  if param.lastonmouseobject<>nil then
-                                      pGDBObjEntity(param.lastonmouseobject)^.higlight(dc);
-
+  if assigned(OnWaShowCursor)then
+                                 OnWaShowCursor(self,dc);
   (*oglsm.myglpopmatrix;
   dc.drawer.SetColor(0, 100, 100,255);
   oglsm.myglpushmatrix;
@@ -1031,10 +1030,10 @@ begin
 
   calcmousefrustum;
 
-  if param.lastonmouseobject<>nil then
+  {if param.lastonmouseobject<>nil then
                                       begin
                                            PGDBObjEntity(param.lastonmouseobject)^.RenderFeedBack(pdwg.GetPcamera^.POSCOUNT,pdwg^.GetPcamera^, pdwg^.myGluProject2,dc);
-                                      end;
+                                      end;}
 
   Set3dmouse;
   calcgrid;
@@ -1631,30 +1630,6 @@ end;
   pdwg.GetSelObjArray.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   Set3dmouse;
 
-
-if PGDBObjEntity(param.SelDesc.OnMouseObject)<>nil then
-                                                       begin
-                                                            if PGDBObjEntity(param.SelDesc.OnMouseObject)^.vp.Layer._lock
-                                                              then
-                                                                  getviewcontrol.Cursor:=crNoDrop
-                                                              else
-                                                                  begin
-                                                                       {if assigned(sysvarRDRemoveSystemCursorFromWorkArea)
-                                                                       then}
-                                                                           RemoveCursorIfNeed(getviewcontrol,sysvarRDRemoveSystemCursorFromWorkArea)
-                                                                       {else
-                                                                           RemoveCursorIfNeed(getviewcontrol,true)}
-                                                                  end;
-                                                       end
-                                                   else
-                                                       if not param.scrollmode then
-                                                                                   begin
-                                                                                        {if assigned(sysvarRDRemoveSystemCursorFromWorkArea)
-                                                                                        then}
-                                                                                            RemoveCursorIfNeed(getviewcontrol,sysvarRDRemoveSystemCursorFromWorkArea)
-                                                                                        {else
-                                                                                            RemoveCursorIfNeed(getviewcontrol,true)}
-                                                                                   end;
   //Update objectinspector with mousemove
   //if assigned(GetCurrentObjProc) then
   //if GetCurrentObjProc=@sysvar then
@@ -1842,19 +1817,6 @@ begin
                                 if assigned(ShowCXMenu)then
                                                            ShowCXMenu;
                                 exit;
-                           end;
-  if ssDouble in shift then
-                           begin
-                                if mbMiddle=button then
-                                  begin
-                                       {$IFNDEF DELPHI}
-                                       if ssShift in shift then
-                                                               Application.QueueAsyncCall(asynczoomsel, 0)
-                                                           else
-                                                               Application.QueueAsyncCall(asynczoomall, 0);
-                                       {$ENDIF}
-                                       exit;
-                                  end;
                            end;
   begin
   //r.handled:=true;

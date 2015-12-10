@@ -137,6 +137,7 @@ type
     procedure wakp(Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState);
     function GetEntsDesc(ents:PGDBObjOpenArrayOfPV):GDBString;
     procedure waSetObjInsp(Sender:TAbstractViewArea);
+    procedure WaShowCursor(Sender:TAbstractViewArea;var DC:TDrawContext);
 
 
     public
@@ -2911,6 +2912,29 @@ var
   f:TzeUnitsFormat;
   htext,htext2:string;
 begin
+  if Sender.param.SelDesc.OnMouseObject<>nil then
+                                                         begin
+                                                              if PGDBObjEntity(Sender.param.SelDesc.OnMouseObject)^.vp.Layer._lock
+                                                                then
+                                                                    Sender.getviewcontrol.Cursor:=crNoDrop
+                                                                else
+                                                                    begin
+                                                                         {if assigned(sysvarRDRemoveSystemCursorFromWorkArea)
+                                                                         then}
+                                                                             RemoveCursorIfNeed(Sender.getviewcontrol,sysvarRDRemoveSystemCursorFromWorkArea)
+                                                                         {else
+                                                                             RemoveCursorIfNeed(getviewcontrol,true)}
+                                                                    end;
+                                                         end
+                                                     else
+                                                         if not Sender.param.scrollmode then
+                                                                                     begin
+                                                                                          {if assigned(sysvarRDRemoveSystemCursorFromWorkArea)
+                                                                                          then}
+                                                                                              RemoveCursorIfNeed(Sender.getviewcontrol,sysvarRDRemoveSystemCursorFromWorkArea)
+                                                                                          {else
+                                                                                              RemoveCursorIfNeed(getviewcontrol,true)}
+                                                                                     end;
   exclude(shift,ssLeft);
      if (Sender.param.md.mode and (MGet3DPoint or MGet3DPointWoOp)) <> 0 then
      commandmanager.sendmousecoordwop(sender,MouseButton2ZKey(shift));
@@ -3041,6 +3065,19 @@ end;
 
 begin
   key := MouseButton2ZKey(shift);
+ if ssDouble in shift then
+                          begin
+                               if mbMiddle=button then
+                                 begin
+                                      {$IFNDEF DELPHI}
+                                      if ssShift in shift then
+                                                              Application.QueueAsyncCall(sender.asynczoomsel, 0)
+                                                          else
+                                                              Application.QueueAsyncCall(sender.asynczoomall, 0);
+                                      {$ENDIF}
+                                      exit(true);
+                                 end;
+                          end;
   if ssDouble in shift then
                            begin
                                 if mbLeft=button then
@@ -3223,6 +3260,14 @@ begin
                                pp:=ents.iterate(ir);
                          until pp=nil;
                     end;
+end;
+procedure MainForm.WaShowCursor(Sender:TAbstractViewArea;var DC:TDrawContext);
+begin
+     if sender.param.lastonmouseobject<>nil then
+                                           begin
+                                             PGDBObjEntity(sender.param.lastonmouseobject)^.RenderFeedBack(sender.pdwg.GetPcamera^.POSCOUNT,sender.pdwg^.GetPcamera^, sender.pdwg^.myGluProject2,dc);
+                                             pGDBObjEntity(sender.param.lastonmouseobject)^.higlight(dc);
+                                           end;
 end;
 procedure MainForm.waSetObjInsp;
 var

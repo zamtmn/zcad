@@ -214,6 +214,7 @@ begin
      wpowner.MainMouseDown:=MainFormN.MainMouseDown;
      wpowner.MainMouseUp:=MainFormN.MainMouseUp;
      wpowner.OnSetObjInsp:=MainFormN.waSetObjInsp;
+     wpowner.OnWaShowCursor:=MainFormN.WaShowCursor;
      oglwnd:=wpowner.getviewcontrol;// TOGLWnd.Create(myts);
 
 

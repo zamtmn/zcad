@@ -203,7 +203,7 @@ type
 const
    maxlines=9;
 var
-  group: GDBByte;
+  group: integer;
   s,varname: GDBString;
   error,varcount: GDBInteger;
   ParseMode:TDXFHeaderMode;
@@ -248,6 +248,8 @@ begin
     if error <> 0 then
                       DebugLn('{EM}ReadDXFHeader wrong group code');
     s := f.readGDBString;
+    if group<>999 then
+    begin
     case ParseMode of
     TDXFHMWaitSection:begin
                            if uppercase(s)=dxfName_SECTION then
@@ -282,6 +284,11 @@ begin
                                           end
                               end;
     end;{case}
+    end
+       else
+           begin
+                DebugLn('{IH}Found dxf comment "%s",[s]');
+           end;
     end;
     finally
     freearrays;

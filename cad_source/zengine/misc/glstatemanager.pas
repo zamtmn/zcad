@@ -276,7 +276,7 @@ procedure MyglMakeCurrent(oglc:TOGLContextDesk);
 begin
     //wglMakeCurrent(oglc.DC, oglc.hrc);
 end;
-procedure processpoint(const point:gdbvertex);
+procedure processpoint(const point:gdbvertex3s);
 begin
      //inc(pointcount);
      //middlepoint:=geometry.VertexAdd(middlepoint,point);
@@ -399,7 +399,7 @@ procedure TOGLStateManager.myglVertex3dV;
 var t:gdbvertex;
 begin
      {$IFDEF DEBUGCOUNTGEOMETRY}
-     processpoint(v^);
+     //processpoint(v^);
      inc(pointcount);
      {$ENDIF}
      if notuseLCS then
@@ -463,7 +463,7 @@ procedure TOGLStateManager.myglVertex3d;
 var t:gdbvertex;
 begin
      {$IFDEF DEBUGCOUNTGEOMETRY}
-     processpoint(v);
+     //processpoint(v);
      inc(pointcount);
      {$ENDIF}
      if notuseLCS then
@@ -479,7 +479,7 @@ var t,t1:gdbvertex;
 begin
      t1:=createvertex(x,y,z);
      {$IFDEF DEBUGCOUNTGEOMETRY}
-     processpoint(t1);
+     //processpoint(t1);
      inc(pointcount);
      {$ENDIF}
      if notuseLCS then

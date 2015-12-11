@@ -3181,10 +3181,10 @@ end;
 function _test_com(operands:TCommandOperands):TCommandResult;
 begin
      historyout('Тест производительности. запасаемя терпением');
-     {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('тест производительности - getonmouseobject*10000',lp_IncPos);{$ENDIF}
+     {$IFDEF PERFOMANCELOG}programlog.LogOutStrFast('тест производительности - getonmouseobject*10000',lp_IncPos);{$ENDIF}
      //for i:=0 to 10000 do
      //       gdb.GetCurrentDWG.wa.getonmouseobject(@gdb.GetCurrentROOT.ObjArray);
-     {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('тест производительности',lp_DecPos);{$ENDIF}
+     {$IFDEF PERFOMANCELOG}programlog.LogOutStrFast('тест производительности',lp_DecPos);{$ENDIF}
      historyout('Конец теста. выходим, смотрим результаты в конце лога.');
      //quit_com('');
      result:=cmd_ok;

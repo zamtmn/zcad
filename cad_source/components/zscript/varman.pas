@@ -614,7 +614,6 @@ var
   size: GDBLongword;
   i:TArrayIndex;
 begin
-       {$IFDEF DEBUGBUILD}debstr:='{3DE4F5CB-D3CB-4F29-B0A4-2BE62E1E98A0} for variable '+varname{$ENDIF};
        if vd.data.ptd<>nil then
                           size:=vd.data.ptd^.SizeInGDBBytes
                       else
@@ -627,7 +626,6 @@ begin
          vd.data.PTD.InitInstance(vd.data.Instance);
        end;
        vd.attrib:=0;
-       //GDBGetMem({$IFDEF DEBUGBUILD}pansichar(debstr),{$ENDIF}vd.pvalue,size);
        i:=vardescarray.add(@vd);
        result:=vardescarray.getelement(i);
        KillString(vd.name);

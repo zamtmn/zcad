@@ -163,7 +163,7 @@ begin
                                     pd:=pd;
               if (pd^.base.Saved and SaveFlag)<>0 then
               begin
-                   {$IFDEF DEBUGBUILD}programlog.logoutstr('{F}'+pd^.base.ProgramName,0,LM_Fatal);{$ENDIF}
+                   {$IFDEF DEBUGBUILD}debugln('{F}'+pd^.base.ProgramName);{$ENDIF}
                    p:=PInstance;
                    if pd^.Offset<>fo then
                                          begin

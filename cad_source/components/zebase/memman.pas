@@ -20,7 +20,7 @@ unit memman;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses gdbasetypes,sysutils;
+uses LCLProc,gdbasetypes,sysutils,gvector;
 
 //const firstarraysize=100;
 
@@ -35,7 +35,7 @@ type
     memdesk=record
                   free:GDBBoolean;
                   getmemguid:String;
-                  addr:GDBLongWord;
+                  addr:pointer;
                   size:GDBLongword;
             end;
 var
@@ -58,9 +58,11 @@ implementation
 //uses log;
 {$ENDIF}
 {$IFDEF DEBUGBUILD}
-uses UGDBOpenArrayOfByte,log;
+//uses UGDBOpenArrayOfByte,log;
+type
+    TFreememDesk={GDBOpenArrayOfByte}TVector<integer>;
 var
-   freememdesk:GDBOpenArrayOfByte;
+   freememdesk:TFreememDesk;
 
 {$ENDIF}
 
@@ -78,7 +80,7 @@ begin
   {$IFDEF DEBUGBUILD}
   if memdeskfree>0 then
   begin
-  freememdesk.PopData(@i,sizeof(i));
+  i:=freememdesk.Back;freememdesk.PopBack;//PopData(@i,sizeof(i));
   //for i:=0 to memdesktotal do
   begin
        if memdeskarr[i].free then
@@ -86,7 +88,7 @@ begin
             dec(memdeskfree);
             memdeskarr[i].free:=false;
             memdeskarr[i].getmemguid:=ErrGuid;
-            memdeskarr[i].addr:=GDBLongword(p);
+            memdeskarr[i].addr:=p;
             memdeskarr[i].size:=size;
 
             lastallocated:=longword(p);
@@ -115,14 +117,15 @@ begin
 
        memdeskarr[memdesktotal].free:=false;
        memdeskarr[memdesktotal].getmemguid:=ErrGuid;
-       memdeskarr[memdesktotal].addr:=GDBLongword(p);
+       memdeskarr[memdesktotal].addr:=p;
        memdeskarr[memdesktotal].size:=size;
        lastallocated:=longword(p);
        lasti:=memdesktotal;
   end;
   if size=0 then
                 begin
-                     programlog.LogOutStr('ERROR:GDBGetMem(0)',0,LM_Fatal);
+                     debugln('{F}ERROR:GDBGetMem(0)');
+                     //programlog.LogOutStr('ERROR:GDBGetMem(0)',0,LM_Fatal);
                      {$IFDEF BREACKPOINTSONERRORS}
                      asm
                         //int 3;
@@ -138,7 +141,8 @@ begin
   {$IFDEF DEBUGBUILD}
   if p=nil then
                begin
-                    programlog.LogOutStr('ERROR:GDBFreeMem(nil)',0,LM_Error);
+                    debugln('{F}ERROR:GDBFreeMem(nil)');
+                    //programlog.LogOutStr('ERROR:GDBFreeMem(nil)',0,LM_Error);
                     {$IFDEF BREACKPOINTSONERRORS}
                     asm
                        int 3;
@@ -150,10 +154,11 @@ begin
   begin
   for i:=memdesktotal downto 0 do
   begin
-       if memdeskarr[i].addr=GDBLongword(p) then
+       if memdeskarr[i].addr=p  then
        begin
             if lasti<>-2 then
-            freememdesk.AddData(@i,sizeof(i));
+            freememdesk.PushBack(i);
+            //freememdesk.AddData(@i,sizeof(i));
             memdeskarr[i].free:=true;
             memdeskarr[i].getmemguid:='Освобождено';
             memdeskarr[i].addr:=0;
@@ -180,7 +185,7 @@ begin
                               else
                                   begin
                                   inc(memdeskfree);
-                                  freememdesk.AddData(@lasti,sizeof(lasti));
+                                  freememdesk.PushBack(lasti); //AddData(@lasti,sizeof(lasti));
                                   end;
             lastallocated:=0;
       end;
@@ -227,35 +232,42 @@ begin
      memdeskfree:=0;
      lasti:=-1;
      {$IFDEF DEBUGBUILD}
-     freememdesk.init({$IFDEF DEBUGBUILD}'Нужно для отладки',{$ENDIF}1024*1024*10);
-     freememdesk.CreateArray;
+     freememdesk:=TFreememDesk.create;
+     //freememdesk.init({$IFDEF DEBUGBUILD}'Нужно для отладки',{$ENDIF}1024*1024*10);
+     //freememdesk.CreateArray;
      {$ENDIF}
 end;
 finalization;
 begin
   {$IFDEF DEBUGBUILD}
   lasti:=-2;
-  freememdesk.done;
+  freememdesk.Destroy;
+  //freememdesk.done;
   size:=0;
-  s:='GetMemCount= '+inttostr(GetMemCount);
-  LogOut(s);
-  s:='FreeMemCount='+inttostr(FreeMemCount);
-  LogOut(s);
-  s:='TotalAlloc=  '+inttostr(TotalAlloc);
-  LogOut(s);
+  //s:='GetMemCount= '+inttostr(GetMemCount);
+  //LogOut(s);
+  debugln('{I}GetMemCount=%d',[GetMemCount]);
+  //s:='FreeMemCount='+inttostr(FreeMemCount);
+  //LogOut(s);
+  debugln('{I}FreeMemCount=%d',[FreeMemCount]);
+  //s:='TotalAlloc=  '+inttostr(TotalAlloc);
+  //LogOut(s);
+  debugln('{I}TotalAlloc=%d',[TotalAlloc]);
   for i:=0 to memdesktotal do
   begin
        if not memdeskarr[i].free then
        begin
-            s:='Not freed GDBGetMem with GUID='+memdeskarr[i].getmemguid+' #='+inttostr(i)+' addr='+inttohex(memdeskarr[i].addr,8)+' size='+inttostr(memdeskarr[i].size);
-            LogOut(s);
+            //s:='Not freed GDBGetMem with GUID='+memdeskarr[i].getmemguid+' #='+inttostr(i)+' addr='+inttohex(memdeskarr[i].addr,8)+' size='+inttostr(memdeskarr[i].size);
+            //LogOut(s);
+            debugln('{E}Not freed GDBGetMem with GUID=%s #=%d addr=%p size=%d',[memdeskarr[i].getmemguid,i,memdeskarr[i].addr,memdeskarr[i].size]);
             size:=size+memdeskarr[i].size;
        end;
   end;
   //if size>0 then
   begin
-       s:='Total not freed memory='+inttostr(size);
-       LogOut(s);
+       debugln('{I}Total not freed memory=%d',[size]);
+       //s:='Total not freed memory='+inttostr(size);
+       //LogOut(s);
   end;
   {$ENDIF}
 end;

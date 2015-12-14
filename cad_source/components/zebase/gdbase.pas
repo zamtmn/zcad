@@ -17,7 +17,6 @@
 }
 unit gdbase;
 {$INCLUDE def.inc}
-{$MODE DELPHI}
 interface
 uses gdbasetypes;
      //gdbobjectsconstdef;

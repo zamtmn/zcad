@@ -18,7 +18,6 @@
 
 unit UGDBOpenArray;
 {$INCLUDE def.inc}
-{$MODE DELPHI}
 interface
 uses gdbasetypes,sysutils,UOpenArray,memman,gdbase;
 type

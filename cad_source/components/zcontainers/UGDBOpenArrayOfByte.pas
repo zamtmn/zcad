@@ -18,7 +18,6 @@
 
 unit UGDBOpenArrayOfByte;
 {$INCLUDE def.inc}
-{$MODE DELPHI}
 interface
 uses {zcadstrconsts,}gdbasetypes,sysutils,UGDBOpenArray,gdbase{$IFNDEF DELPHI},fileutil{$ENDIF}
      {paths};

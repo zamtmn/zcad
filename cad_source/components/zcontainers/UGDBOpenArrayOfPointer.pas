@@ -18,7 +18,6 @@
 
 unit UGDBOpenArrayOfPointer;
 {$INCLUDE def.inc}
-{$MODE DELPHI}
 interface
 uses gdbasetypes,sysutils,UGDBOpenArray;
 type

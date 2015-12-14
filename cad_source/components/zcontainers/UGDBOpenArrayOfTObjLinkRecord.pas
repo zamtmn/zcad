@@ -18,7 +18,6 @@
 
 unit UGDBOpenArrayOfTObjLinkRecord;
 {$INCLUDE def.inc}
-{$MODE DELPHI}
 interface
 uses gdbasetypes,sysutils,uGDBOpenArrayofdata,memman,gdbase;
 type

@@ -18,7 +18,6 @@
 
 unit UGDBStringArray;
 {$INCLUDE def.inc}
-{$MODE DELPHI}
 interface
 uses gdbase,gdbasetypes,UGDBOpenArrayOfData,strproc,sysutils,UGDBOpenArray;
 type

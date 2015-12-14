@@ -18,7 +18,6 @@
 
 unit strproc;
 {$INCLUDE def.inc}
-{$MODE DELPHI}
 interface
 uses {$IFNDEF DELPHI}{fileutil,}{$ENDIF}gdbasetypes,sysutils,strutils{$IFNDEF DELPHI},LCLProc{$ENDIF};
 function GetPredStr(var s: GDBString; substr: GDBString): GDBString;

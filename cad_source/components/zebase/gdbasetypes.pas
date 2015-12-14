@@ -18,7 +18,6 @@
 
 unit gdbasetypes;
 {$INCLUDE def.inc}
-{$MODE DELPHI}
 interface
 type
 {$IFDEF DELPHI}

@@ -18,7 +18,6 @@
 
 unit UGDBTree;
 {$INCLUDE def.inc}
-{$MODE DELPHI}
 interface
 uses gdbasetypes,gdbase,UGDBOpenArrayOfPObjects;//,UGDBOpenArrayOfData,sysutils,UGDBVisibleOpenArray,geometry,gdbEntity,UGDBOpenArrayOfPV;
 type

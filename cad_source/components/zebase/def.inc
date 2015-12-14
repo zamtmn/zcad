@@ -23,9 +23,9 @@
             {SMARTLINK+}
             {$Z1}
             {IMPLICITEXCEPTIONS OFF}
-{$IF FPC_FULlVERSION>=20701}
+{IF FPC_FULlVERSION>=20701}
 {$modeswitch systemcodepage-}
-{$ENDIF}
+{ENDIF}
 
 {$ENDIF}
 {DEFINE REPORTMMEMORYLEAKS}

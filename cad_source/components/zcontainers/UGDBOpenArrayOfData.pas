@@ -18,7 +18,6 @@
 
 unit UGDBOpenArrayOfData;
 {$INCLUDE def.inc}
-{$MODE DELPHI}
 interface
 uses gdbasetypes,UGDBOpenArray,gdbase;
 type

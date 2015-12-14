@@ -18,7 +18,6 @@
 
 unit memman;
 {$INCLUDE def.inc}
-{$MODE DELPHI}
 interface
 uses LCLProc,gdbasetypes,sysutils,gvector;
 

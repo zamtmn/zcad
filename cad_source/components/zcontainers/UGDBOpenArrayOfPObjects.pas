@@ -18,7 +18,6 @@
 
 unit UGDBOpenArrayOfPObjects;
 {$INCLUDE def.inc}
-{$MODE DELPHI}
 interface
 uses {log,}gdbasetypes,UGDBOpenArrayOfPointer,
      gdbase,memman;

@@ -18,7 +18,6 @@
 
 unit geometry;
 {$INCLUDE def.inc}
-{$MODE DELPHI}
 
 interface
 uses LCLProc,gdbase,gdbasetypes, math;

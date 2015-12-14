@@ -9,8 +9,13 @@
       <PathDelim Value="\"/>
       <SearchPaths>
         <OtherUnitFiles Value="."/>
-        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)\"/>
+        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
+      <Parsing>
+        <SyntaxOptions>
+          <SyntaxMode Value="Delphi"/>
+        </SyntaxOptions>
+      </Parsing>
     </CompilerOptions>
     <Files Count="2">
       <Item1>

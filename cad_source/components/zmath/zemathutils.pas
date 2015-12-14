@@ -18,7 +18,6 @@
 
 unit zemathutils;
 {$INCLUDE def.inc}
-{$MODE DELPHI}
 interface
 uses gdbase,gdbasetypes,math,geometry,sysutils;
 function zeDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;

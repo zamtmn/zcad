@@ -49,7 +49,7 @@ begin
 end;
 function GDBObjOpenArrayOfPIdentObects.CreateObject;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{6F264155-0BCB-408F-BDA7-F3E8A4540F18}',{$ENDIF}result,objsizeof);
+  GDBGetMem({$IFDEF DEBUGBUILD}'{6F264155-0BCB-408F-BDA7-F3E8A4540F18}',{$ENDIF}pointer(result),objsizeof);
   add(@result);
 end;
 

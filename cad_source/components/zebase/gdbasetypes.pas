@@ -24,6 +24,9 @@ type
 QWord=UInt64;
 PtrInt={Pointer}Integer;
 PtrUInt={Pointer}Cardinal;
+SizeUInt=Cardinal;
+SizeInt=Integer;
+DWord=longword;
 {$ENDIF}
 {EXPORT+}
 PGDBDouble=^GDBDouble;

@@ -199,12 +199,12 @@ var
       lowcase := byte(c);
   end;
 
-  function CorrectedResult(vRes: integer): integer; inline;
+  (*function CorrectedResult(vRes: integer): integer; inline;
   begin
     //to correct the result when we switch vars due for
     //pc1, pe1 need to point at shorter string, always
     Result := sign * vRes;
-  end;
+  end;*)
 
 begin
   l1 := Length(str1);
@@ -255,7 +255,7 @@ begin
       else
         d := lowcase(pc1^) - lowcase(pc2^);//}
 
-      if (d <> 0) then exit(CorrectedResult(d));
+      if (d <> 0) then exit({CorrectedResult}(sign*d));
       sum1 := sum1 + pb1^;
       sum2 := sum2 + pb2^;
     end
@@ -280,9 +280,9 @@ begin
       if d <> 0 then
          exit(CorrectedResult(d))//}
       if n1>n2 then
-        exit(CorrectedResult(1))
+        exit({CorrectedResult}(sign*1))
       else if n1<n2 then
-        exit(CorrectedResult(-1))
+        exit({CorrectedResult}(sign*-1))
       else
       begin
         //Switch to shortest string based of remaining characters
@@ -319,14 +319,14 @@ begin
   begin
   //if strs are naturllay identical then:
   //consider str with longer last numerical section to be bigger (a01bc0001>a001bc1)
-    Result := CorrectedResult(nl1-nl2);
+    Result := {CorrectedResult}(sign*(nl1-nl2));
     if Result = 0 then
     //if strs are naturllay identical and last numerical sections have same length then:
     //consider str with more capital letters smaller (aBc001d>aBC001D)
-      Result := CorrectedResult(sum1-sum2);
+      Result := {CorrectedResult}(sign*(sum1-sum2));
   end
   else
-    Result := CorrectedResult(Result);
+    Result := {CorrectedResult}(sign*Result);
 end;
 function CompareNUMSTR(str1,str2:GDBString):GDBBoolean;
 var

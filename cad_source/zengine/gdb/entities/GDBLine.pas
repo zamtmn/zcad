@@ -20,7 +20,7 @@ unit GDBLine;
 {$INCLUDE def.inc}
 
 interface
-uses {LCLProc,}{uabstractunit,}zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,
+uses LCLProc,{uabstractunit,}zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,
      UGDBOpenArrayOfPObjects,UGDBLayerArray,
      gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,
      UGDBOpenArrayOfByte,{varmandef,}GDBase,gdbobjectsconstdef,oglwindowdef,

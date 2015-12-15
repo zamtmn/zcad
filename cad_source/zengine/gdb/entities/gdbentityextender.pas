@@ -41,8 +41,8 @@ TBaseEntityExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseObjExtender)
 
                   procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);virtual;abstract;
 end;
-TEntityExtenderVector=specialize TVector<PTBaseEntityExtender>;
-TEntityExtenderMap=specialize GKey2DataMap<Pointer,SizeUInt,LessPointer>;
+TEntityExtenderVector= TVector<PTBaseEntityExtender>;
+TEntityExtenderMap= GKey2DataMap<Pointer,SizeUInt,LessPointer>;
 TEntityExtensions=class
                        fEntityExtensions:TEntityExtenderVector;
                        fEntityExtenderToIndex:TEntityExtenderMap;

@@ -18,9 +18,8 @@
 
 unit paths;
 {$INCLUDE def.inc}
-{$MODE DELPHI}
 interface
-uses gdbase,Masks,LCLProc,gdbasetypes{$IFNDEF DELPHI},fileutil{$ENDIF},sysutils;
+uses gdbase,Masks,LCLProc,gdbasetypes,fileutil,sysutils;
 type
   TFromDirIterator=procedure (filename:GDBString);
   TFromDirIteratorObj=procedure (filename:GDBString) of object;

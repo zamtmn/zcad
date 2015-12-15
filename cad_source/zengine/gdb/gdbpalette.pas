@@ -36,11 +36,11 @@ type
       end;
   PTGDBPaletteColor=^TGDBPaletteColor;
   TGDBPaletteColor=GDBInteger;
-  GDBPalette=packed array[0..255] of TDXFCOLOR;
+  TGDBPalette={$IFNDEF DELPHI}packed {$ENDIF}array[0..255] of TDXFCOLOR;
 {EXPORT-}
 const
   NotTransparent=0;
-  acadpalette:GDBPalette=(
+  acadpalette:TGDBPalette=(
   (RGB:(r:0;  g:0;  b:0  ;a:NotTransparent);name:''),
   (RGB:(r:255;g:0;  b:0  ;a:NotTransparent);name:'Red'),
   (RGB:(r:255;g:255;b:0  ;a:NotTransparent);name:'Yellow'),
@@ -299,7 +299,7 @@ const
   (RGB:(r:255;g:255;b:255;a:NotTransparent);name:'')
 );
 var
-  palette: gdbpalette;
+  palette: TGDBPalette;
 implementation
 initialization
   palette:=acadpalette;

@@ -15,49 +15,40 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-{$MODE OBJFPC}
 unit usimplegenerics;
 {$INCLUDE def.inc}
 
 interface
-uses strproc,LCLVersion,gdbase,gdbasetypes,
+uses strproc,gdbase,gdbasetypes,
      sysutils,
      gutil,gmap,ghashmap,gvector;
 type
-{$IFNDEF DELPHI}
-{$if LCL_FULLVERSION<1030000}//dumb check for old 2.7.1 fpc releases with problem in generic inheritance
-  {$DEFINE OldIteratorDef}
-{$ENDIF}
-{$IF FPC_FULlVERSION<20701}
-  {$DEFINE OldIteratorDef}  //check for 2.6.x fpc, coment this, or uncoment - generic inheritance not working
-{$ENDIF}
-//{$if LCL_FULLVERSION>=1030000}{$ENDIF}
-LessPointer=specialize TLess<pointer>;
-LessGDBString=specialize TLess<GDBString>;
-LessDWGHandle=specialize TLess<TDWGHandle>;
-LessObjID=specialize TLess<TObjID>;
-LessInteger=specialize TLess<Integer>;
+LessPointer= TLess<pointer>;
+LessGDBString= TLess<GDBString>;
+LessDWGHandle= TLess<TDWGHandle>;
+LessObjID= TLess<TObjID>;
+LessInteger= TLess<Integer>;
 
-generic TMyMap <TKey, TValue, TCompare> = class(specialize TMap<TKey, TValue, TCompare>)
+TMyMap <TKey, TValue, TCompare> = class( TMap<TKey, TValue, TCompare>)
   function MyGetValue(key:TKey):TValue;inline;
   procedure MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);inline;
 end;
-generic TMyMapCounter <TKey, TCompare> = class(specialize TMyMap<TKey, SizeUInt, TCompare>)
+TMyMapCounter <TKey, TCompare> = class( TMyMap<TKey, SizeUInt, TCompare>)
   procedure CountKey(const key:TKey; const InitialCounter:SizeUInt);inline;
 end;
-generic GKey2DataMap <TKey, TValue, TCompare> = class(specialize TMap<TKey, TValue, TCompare>)
+GKey2DataMap <TKey, TValue, TCompare> = class(TMap<TKey, TValue, TCompare>)
         procedure RegisterKey(const key:TKey; const Value:TValue);
         function MyGetValue(key:TKey; out Value:TValue):boolean;
         function MyGetMutableValue(key:TKey; out PValue:PTValue):boolean;
         function MyContans(key:TKey):boolean;
 end;
-generic TMyVector <T> = class(specialize TVector<T>)
+TMyVector <T> = class(TVector<T>)
 end;
 
-generic TMyVectorArray <T> = class
+TMyVectorArray <T> = class
         type
-        TVec=specialize TMyVector <T>;
-        TArrayOfVec=specialize TMyVector <TVec>;
+        TVec=TMyVector <T>;
+        TArrayOfVec=TMyVector <TVec>;
         var
         VArray:TArrayOfVec;
         CurrentArray:SizeInt;
@@ -68,25 +59,25 @@ generic TMyVectorArray <T> = class
         procedure AddDataToCurrentArray(data:T);
 end;
 
-generic TMyHashMap <TKey, TValue, Thash> = class(specialize THashMap<TKey, TValue, Thash>)
+TMyHashMap <TKey, TValue, Thash> = class(THashMap<TKey, TValue, Thash>)
   function MyGetValue(key:TKey; out Value:TValue):boolean;
 end;
 
 GDBStringHash=class
   class function hash(s:GDBstring; n:longint):SizeUInt;
 end;
-generic TMyGDBStringDictionary <TValue> = class(specialize TMyHashMap<GDBString, TValue, GDBStringHash>)
+TMyGDBStringDictionary <TValue> = class(TMyHashMap<GDBString, TValue, GDBStringHash>)
 end;
 
 
-TGDBString2GDBStringDictionary=specialize TMyGDBStringDictionary<GDBString>;
+TGDBString2GDBStringDictionary=TMyGDBStringDictionary<GDBString>;
 
-TMapPointerToHandle=specialize TMyMap<pointer,TDWGHandle, LessPointer>;
+TMapPointerToHandle=TMyMap<pointer,TDWGHandle, LessPointer>;
 
-TMapHandleToHandle=specialize TMyMap<TDWGHandle,TDWGHandle, LessDWGHandle>;
-TMapHandleToPointer=specialize TMyMap<TDWGHandle,pointer, LessDWGHandle>;
+TMapHandleToHandle=TMyMap<TDWGHandle,TDWGHandle, LessDWGHandle>;
+TMapHandleToPointer=TMyMap<TDWGHandle,pointer, LessDWGHandle>;
 
-TMapBlockHandle_BlockNames=specialize TMap<TDWGHandle,string,LessDWGHandle>;
+TMapBlockHandle_BlockNames=TMap<TDWGHandle,string,LessDWGHandle>;
 
 TEntUpgradeKey=record
                       EntityID:TObjID;
@@ -96,33 +87,31 @@ LessEntUpgradeKey=class
   class function c(a,b:TEntUpgradeKey):boolean;inline;
 end;
 
-{$ENDIF}
-
 implementation
 {uses
     log;}
-constructor TMyVectorArray.create;
+constructor TMyVectorArray<T>.create;
 begin
      VArray:=TArrayOfVec.create;
 end;
-destructor TMyVectorArray.destroy;
+destructor TMyVectorArray<T>.destroy;
 begin
      VArray.destroy;
 end;
-function TMyVectorArray.AddArray:SizeInt;
+function TMyVectorArray<T>.AddArray:SizeInt;
 begin
      result:=VArray.size;
      VArray.PushBack(TVec.create);
 end;
-procedure TMyVectorArray.SetCurrentArray(ai:SizeInt);
+procedure TMyVectorArray<T>.SetCurrentArray(ai:SizeInt);
 begin
      CurrentArray:=ai;
 end;
-procedure TMyVectorArray.AddDataToCurrentArray(data:T);
+procedure TMyVectorArray<T>.AddDataToCurrentArray(data:T);
 begin
      (VArray[CurrentArray]){brackets for 2.6.x compiler version}.PushBack(data);
 end;
-function TMyHashMap.MyGetValue(key:TKey; out Value:TValue):boolean;
+function TMyHashMap<TKey, TValue, Thash>.MyGetValue(key:TKey; out Value:TValue):boolean;
 var i,h,bs:longint;
 begin
   {$IF FPC_FULlVERSION<=20701}
@@ -154,7 +143,7 @@ begin
   else result:=a.UprradeInfo<b.UprradeInfo;
 
 end;
-procedure GKey2DataMap.RegisterKey(const key:TKey; const Value:TValue);
+procedure GKey2DataMap<TKey, TValue, TCompare>.RegisterKey(const key:TKey; const Value:TValue);
 var
    {$IFDEF OldIteratorDef}
    TParent:specialize TMap<TKey, TValue, TCompare>;
@@ -174,7 +163,7 @@ begin
                             Iterator.Destroy;
                        end;
 end;
-function GKey2DataMap.MyGetValue(key:TKey; out Value:TValue):boolean;
+function GKey2DataMap<TKey, TValue, TCompare>.MyGetValue(key:TKey; out Value:TValue):boolean;
 var
    {$IFDEF OldIteratorDef}
    TParent:specialize TMap<TKey, TValue, TCompare>;
@@ -193,7 +182,7 @@ begin
                             result:=true;
                        end;
 end;
-function GKey2DataMap.MyGetMutableValue(key:TKey; out PValue:PTValue):boolean;
+function GKey2DataMap<TKey, TValue, TCompare>.MyGetMutableValue(key:TKey; out PValue:PTValue):boolean;
 var
    {$IFDEF OldIteratorDef}
    TParent:specialize TMap<TKey, TValue, TCompare>;
@@ -212,7 +201,7 @@ begin
                             result:=true;
                        end;
 end;
-function GKey2DataMap.MyContans(key:TKey):boolean;
+function GKey2DataMap<TKey, TValue, TCompare>.MyContans(key:TKey):boolean;
 var
    {$IF FPC_FULlVERSION<=20701}
    {$IFDEF OldIteratorDef}
@@ -242,7 +231,7 @@ begin
   {$ENDIF}
 end;
 
-function TMyMap.MyGetValue(key:TKey):TValue;
+function TMyMap<TKey, TValue, TCompare>.MyGetValue(key:TKey):TValue;
 var
    {$IFDEF OldIteratorDef}
    TParent:specialize TMap<TKey, TValue, TCompare>;
@@ -260,7 +249,7 @@ begin
                             Iterator.Destroy;
                        end;
 end;
-procedure TMyMapCounter.CountKey(const key:TKey; const InitialCounter:SizeUInt);
+procedure TMyMapCounter<TKey, TCompare>.CountKey(const key:TKey; const InitialCounter:SizeUInt);
 var
    {$IFDEF OldIteratorDef}
    TParent:specialize TMap<TKey, TValue, TCompare>;
@@ -281,7 +270,7 @@ begin
                        end;
 end;
 
-procedure TMyMap.MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);
+procedure TMyMap<TKey, TValue, TCompare>.MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);
 var
    {$IFDEF OldIteratorDef}
    TParent:specialize TMap<TKey, TValue, TCompare>;

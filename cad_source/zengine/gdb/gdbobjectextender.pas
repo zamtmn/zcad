@@ -39,12 +39,12 @@ TDXFEntLoadData=record
 TDXFEntSaveData=record
                 DXFEntSaveFeature:TDXFEntSaveFeature;
               end;
-TDXFEntLoadDataMap=specialize GKey2DataMap<GDBString,TDXFEntLoadData,LessGDBString>;
-TDXFEntSaveDataVector=specialize TVector<TDXFEntSaveData>;
-TDXFEntFormatProcsVector=specialize TVector<TDXFEntFormatFeature>;
-TCreateEntFeatureVector=specialize TVector<TCreateEntFeatureData>;
-TDXFEntAfterLoadFeatureVector=specialize TVector<TDXFEntAfterLoadFeature>;
-TEntityCreateExtenderVector=specialize TVector<TCreateThisExtender>;
+TDXFEntLoadDataMap=GKey2DataMap<GDBString,TDXFEntLoadData,LessGDBString>;
+TDXFEntSaveDataVector=TVector<TDXFEntSaveData>;
+TDXFEntFormatProcsVector=TVector<TDXFEntFormatFeature>;
+TCreateEntFeatureVector=TVector<TCreateEntFeatureData>;
+TDXFEntAfterLoadFeatureVector=TVector<TDXFEntAfterLoadFeature>;
+TEntityCreateExtenderVector=TVector<TCreateThisExtender>;
 TDXFEntIODataManager=class
                       fDXFEntLoadDataMapByName:TDXFEntLoadDataMap;
                       fDXFEntLoadDataMapByPrefix:TDXFEntLoadDataMap;

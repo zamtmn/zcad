@@ -521,13 +521,14 @@ begin
                                                       angle:=endangle-startangle
                                                   else
                                                       angle:=2*pi-(startangle-endangle);}
-                           if angle>pi then
+                           {if angle>pi then
                                            begin
-                                               simply:=CanSimplyDrawInOCS(DC,1,5)
+                                               simply:=CanSimplyDrawInOCS(DC,r,20)
                                             end
                                        else begin
-                                               simply:=CanSimplyDrawInOCS(DC,sin(angle/2)*tan(angle/4),5)
-                                            end;
+                                               simply:=CanSimplyDrawInOCS(DC,sin(angle/2)*tan(angle/4)*r,20)
+                                            end;}
+                         simply:=CanSimplyDrawInOCS(DC,angle,10);
                          if simply then
                                        begin
                                            //Vertex3D_in_WCS_Array.drawgeometry

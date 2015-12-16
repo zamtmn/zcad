@@ -32,6 +32,7 @@ type
 TLTMode=(TLTContinous,TLTByLayer,TLTByBlock,TLTLineType);
 PTDashInfo=^TDashInfo;
 TDashInfo=(TDIDash,TDIText,TDIShape);
+TOuterDashInfo=(TODIUnknown,TODIShape,TODIPoint,TODILine,TODIBlank);
 TAngleDir=(TACAbs,TACRel,TACUpRight);
 shxprop=packed record
                 Height,Angle,X,Y:GDBDouble;
@@ -77,6 +78,8 @@ GDBLtypeProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                len:GDBDouble;(*'Length'*)
                h:GDBDouble;(*'Height'*)
                Mode:TLTMode;
+               FirstStroke,LastStroke:TOuterDashInfo;
+               WithoutLines:GDBBoolean;
                dasharray:GDBDashInfoArray;(*'DashInfo array'*)
                strokesarray:GDBDoubleArray;(*'Strokes array'*)
                shapearray:GDBShapePropArray;(*'Shape array'*)
@@ -297,6 +300,9 @@ end;
 constructor GDBLtypeProp.init(n:GDBString);
 begin
      inherited;
+     FirstStroke:=TODIUnknown;
+     LastStroke:=TODIUnknown;
+     WithoutLines:=true;
      Mode:=N2TLTMode(n);
      len:=0;
      pointer(desk):=nil;
@@ -545,8 +551,21 @@ begin
                                     trystrtofloat(element,stroke);
                                     len:=len+abs(stroke);
                                     strokesarray.add(@stroke);
+                                    if stroke>eps then
+                                                      begin
+                                                           LastStroke:=TODILine;
+                                                           WithoutLines:=false;
+                                                      end
+                                    else if stroke<-eps then
+                                                      LastStroke:=TODIBlank
+                                    else LastStroke:=TODIPoint;
+                                    if FirstStroke=TODIUnknown then
+                                                                   FirstStroke:=LastStroke;
                                end;
                        TDIText:begin
+                                    LastStroke:=TODIShape;
+                                    if FirstStroke=TODIUnknown then
+                                                                   FirstStroke:=LastStroke;
                                     j:=pos('"',element);
                                     if j>0 then
                                                begin

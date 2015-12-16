@@ -57,8 +57,8 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
                 procedure AddLine(var rc:TDrawContext;const p1,p2:GDBVertex);
                 procedure AddPoint(var rc:TDrawContext;const p:GDBVertex);
                 {Patterns func}
-                procedure PlaceNPatterns(var rc:TDrawContext;var Segmentator:ZSegmentator;num:integer; const vp:PGDBLtypeProp;TangentScale,NormalScale,length:GDBDouble);
-                procedure PlaceOnePattern(var rc:TDrawContext;var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;TangentScale,NormalScale,length,scale_div_length:GDBDouble);
+                procedure PlaceNPatterns(var rc:TDrawContext;var Segmentator:ZSegmentator;num:integer; const vp:PGDBLtypeProp;TangentScale,NormalScale,length:GDBDouble;SupressFirstDash:boolean=false);
+                procedure PlaceOnePattern(var rc:TDrawContext;var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;TangentScale,NormalScale,length,scale_div_length:GDBDouble;SupressFirstDash:boolean=false);
                 procedure PlaceShape(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex; PSP:PShapeProp;scale,angle:GDBDouble);
                 procedure PlaceText(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
 
@@ -540,7 +540,8 @@ end;
 end;
 procedure ZGLGeometry.PlaceOnePattern(var rc:TDrawContext;var Segmentator:ZSegmentator;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)
                                      const vp:PGDBLtypeProp;                 //стиль и прочая лабуда
-                                     TangentScale,NormalScale,length,scale_div_length:GDBDouble);     //направление, масштаб, длинна
+                                     TangentScale,NormalScale,length,scale_div_length:GDBDouble;//направление, масштаб, длинна
+                                     SupressFirstDash:boolean=false);
 var
     TDI:PTDashInfo;
     PStroke:PGDBDouble;
@@ -565,7 +566,8 @@ begin
                                             Segmentator.draw(rc,abs(PStroke^)*scale_div_length,false);
                      end
                         else
-                            DrawPointWithoutLT(rc,Segmentator.cp);
+                            if not SupressFirstDash then
+                              DrawPointWithoutLT(rc,Segmentator.cp);
                      //self.DrawLineWithoutLT(nulvertex,Segmentator.cp);
                      PStroke:=vp.strokesarray.iterate(ir3);
                 end;
@@ -578,6 +580,7 @@ begin
                      PTP:=vp.textarray.iterate(ir5);
                  end;
           end;
+    SupressFirstDash:=false;;
           TDI:=vp.dasharray.iterate(ir2);
     until TDI=nil;
 end;
@@ -586,12 +589,15 @@ end;
 procedure ZGLGeometry.PlaceNPatterns(var rc:TDrawContext;var Segmentator:ZSegmentator;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)
                                      num:integer; //кол-во паттернов
                                      const vp:PGDBLtypeProp;                 //стиль и прочая лабуда
-                                     TangentScale,NormalScale,length:GDBDouble);     //направление, масштаб, длинна
+                                     TangentScale,NormalScale,length:GDBDouble;//направление, масштаб, длинна
+                                     SupressFirstDash:boolean=false);          //подавить пкрвый штрих (пока используется в случае если он точка)
 var i:integer;
     scale_div_length:GDBDouble;
 begin
+  if num<1 then exit;
   scale_div_length:=TangentScale/length;
-  for i:=1 to num do
+  PlaceOnePattern(rc,Segmentator,vp,TangentScale,NormalScale,length,scale_div_length,SupressFirstDash);//рисуем один паттерн
+  for i:=1 to num-1 do
   PlaceOnePattern(rc,Segmentator,vp,TangentScale,NormalScale,length,scale_div_length);//рисуем один паттерн
 end;
 procedure ZSegmentator.draw(var rc:TDrawContext;length:GDBDouble;paint:boolean);
@@ -642,6 +648,7 @@ var
     PStroke:PGDBDouble;
     ir3:itrec;
     minPatternsCount,NumberOfPatterns:integer;
+    supressfirstdash:boolean;
 procedure SetPolyUnLTyped;
 begin
       ptv:=Points.beginiterate(ir);
@@ -676,14 +683,17 @@ begin
                         begin
                         minPatternsCount:=2;
                         NumberOfPatterns:=round(TrueNumberOfPatterns);
-                        TangentScale:=polyLength/(NumberOfPatterns*LT.len);
+                        if NumberOfPatterns=0 then
+                                                  TangentScale:=NormalScale
+                                              else
+                                                  TangentScale:=polyLength/(NumberOfPatterns*LT.len);
                         end
                     else
                         begin
                         minPatternsCount:=1;
                         NumberOfPatterns:=trunc(TrueNumberOfPatterns);
                         end;
-           if (NumberOfPatterns<minPatternsCount)or(NumberOfPatterns>SysVarRDMaxLTPatternsInEntity) then
+           if ((NumberOfPatterns<minPatternsCount)and(not LT^.WithoutLines))or(NumberOfPatterns>SysVarRDMaxLTPatternsInEntity) then
                                                                                            SetPolyUnLTyped
            else
                begin
@@ -695,14 +705,37 @@ begin
                     begin
                     PStroke:=LT^.strokesarray.beginiterate(ir3);//первый штрих
                     halfStroke:=(TangentScale*abs(PStroke^/2))/polylength;//первый штрих
-                    Segmentator.draw(rc,normalizedD-halfStroke,true);
+                    //Segmentator.draw(rc,normalizedD-halfStroke,true);
+                    supressfirstdash:=false;
+                    dend:=normalizedD-halfStroke;
+                    if dend>eps then
+                    case LT.FirstStroke of
+                                 TODILine:Segmentator.draw(rc,dend,true);
+                                TODIPoint:
+                                          begin
+                                               DrawPointWithoutLT(rc,Segmentator.cp);
+                                               Segmentator.draw(rc,dend,false);
+                                               supressfirstdash:=true;
+                                          end;
+                    end;
                     end;
 
 
-                    PlaceNPatterns(rc,Segmentator,NumberOfPatterns,LT,TangentScale,NormalScale,polylength);//рисуем TrueNumberOfPatterns паттернов
+                    PlaceNPatterns(rc,Segmentator,NumberOfPatterns,LT,TangentScale,NormalScale,polylength,supressfirstdash);//рисуем TrueNumberOfPatterns паттернов
                     dend:=1-Segmentator.cdp;
-                    if dend>eps then
-                                    Segmentator.draw(rc,dend,true);//дорисовываем окончание если надо
+                    if (dend>eps) or (LT.WithoutLines) then
+                                    begin
+                                    //Segmentator.draw(rc,dend,true);
+                                    //дорисовываем окончание если надо
+                                    case LT.FirstStroke of
+                                                 TODILine:Segmentator.draw(rc,dend,true);
+                                                TODIPoint:
+                                                          begin
+                                                               Segmentator.draw(rc,dend,false);
+                                                               DrawPointWithoutLT(rc,Segmentator.cp);
+                                                          end;
+                                    end;
+                                    end;
                end;
            Segmentator.done;
        end;
@@ -718,6 +751,7 @@ var
     PStroke:PGDBDouble;
     lt:PGDBLtypeProp;
     Segmentator:ZSegmentator;
+    supressfirstdash:boolean;
 begin
      LT:=getLTfromVP(vp);
      if (LT=nil) or (LT.dasharray.Count=0) then
@@ -730,7 +764,7 @@ begin
           length := Vertexlength(startpoint,endpoint);//длина линии
           scale:={SysVar.dwg.DWG_LTScale^}rc.DrawingContext.GlobalLTScale*vp.LineTypeScale;//фактический масштаб линии
           num:=Length/(scale*LT.len);//количество повторений шаблона
-          if (num<1)or(num>SysVarRDMaxLTPatternsInEntity) then
+          if ((num<1)and(not LT^.WithoutLines))or(num>SysVarRDMaxLTPatternsInEntity) then
                                      DrawLineWithoutLT(rc,startpoint,endpoint) //не рисуем шаблон при большом количестве повторений
           else
           begin
@@ -741,13 +775,33 @@ begin
 
                PStroke:=LT^.strokesarray.beginiterate(ir3);//первый штрих
                halfStroke:=(scale*abs(PStroke^/2))/length;//первый штрих
-               Segmentator.draw(rc,normalizedD-halfStroke,true);
-
-
-               PlaceNPatterns(rc,Segmentator,trunc(num),LT,scale,scale,length);//рисуем num паттернов
+               supressfirstdash:=false;
+               dend:=normalizedD-halfStroke;
+               if dend>eps then
+               case LT.FirstStroke of
+                            TODILine:Segmentator.draw(rc,dend,true);
+                           TODIPoint:
+                                     begin
+                                          DrawPointWithoutLT(rc,Segmentator.cp);
+                                          Segmentator.draw(rc,dend,false);
+                                          supressfirstdash:=true;
+                                     end;
+               end;
+               PlaceNPatterns(rc,Segmentator,trunc(num),LT,scale,scale,length,supressfirstdash);//рисуем num паттернов
                dend:=1-Segmentator.cdp;
                if dend>eps then
-                               Segmentator.draw(rc,dend,true);//дорисовываем окончание если надо
+                               begin
+                                    //Segmentator.draw(rc,dend,true);
+                                    //дорисовываем окончание если надо
+                                    case LT.FirstStroke of
+                                                 TODILine:Segmentator.draw(rc,dend,true);
+                                                TODIPoint:
+                                                          begin
+                                                               //Segmentator.draw(rc,dend,false);
+                                                               DrawPointWithoutLT(rc,{Segmentator.cp}endpoint);
+                                                          end;
+                                    end;
+                               end;
                Segmentator.done;
          end;
      end;

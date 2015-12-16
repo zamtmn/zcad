@@ -711,6 +711,16 @@ begin
                     TempDouble:=strtofloat(s);
                     pltypeprop^.dasharray.Add(@dashinfo);
                     pltypeprop^.strokesarray.Add(@TempDouble);
+               if TempDouble>eps then
+                                     begin
+                                          pltypeprop^.LastStroke:=TODILine;
+                                          pltypeprop^.WithoutLines:=false;
+                                     end
+               else if TempDouble<-eps then
+                                 pltypeprop^.LastStroke:=TODIBlank
+               else pltypeprop^.LastStroke:=TODIPoint;
+               if pltypeprop^.FirstStroke=TODIUnknown then
+                                              pltypeprop^.FirstStroke:=pltypeprop^.LastStroke;
                end;
           end;
        74:if pltypeprop<>nil then

@@ -451,7 +451,7 @@ begin
   if SymsParam.IsCanSystemDraw then
                                       begin
                                            SymsParam.NeededFontHeight:=oneVertexlength(PGDBVertex(@matr[1])^)*((ftFont.Ascent+ftFont.Descent)/(ftFont.CapHeight));
-                                           SymsParam.pfont:=@self;
+                                           //SymsParam.pfont:=@self;
                                       end
 end;
 function TTFFont.IsCanSystemDraw:GDBBoolean;

@@ -19,6 +19,7 @@ uses
   {$ifdef dxfio}
   iodxf,                                                                        //dxf fileformat support
   GDBMText,gdbgenericdimension,gdbaligneddimension,gdbrotateddimension,gdbsolid,//some other entitys can be found in loaded files
+  gdbspline,
   {$endif}
   UGDBLayerArray,UGDBTextStyleArray,                                            //layers and text steles support
   UGDBEntTree,                                                                  //entities spatial binary tree

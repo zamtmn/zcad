@@ -330,6 +330,7 @@ begin
                                begin
                                     PLLSymbolLine^.SymbolsParam.IsCanSystemDraw:=font^.IsCanSystemDraw;
                                     font^.SetupSymbolLineParams(matr,PLLSymbolLine^.SymbolsParam);
+                                    PLLSymbolLine^.SymbolsParam.pfont:=@self;
                                     (*if PLLSymbolLine^.SymbolsParam.IsCanSystemDraw then
                                     begin
                                          //CapHeight:=PTTFFont(font)^.ftFont.CapHeight;

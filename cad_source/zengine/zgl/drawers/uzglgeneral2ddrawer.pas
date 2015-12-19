@@ -19,7 +19,7 @@
 unit uzglgeneral2ddrawer;
 {$INCLUDE def.inc}
 interface
-uses LCLIntf,Controls,uzglabstractviewarea,uzglgeneraldrawer,uzgprimitivescreator,UGDBOpenArrayOfData,uzglabstractdrawer,gdbpalette,Classes,Graphics,gdbase,gdbasetypes,geometry;
+uses {$IFNDEF DELPHI}LCLIntf,{$ENDIF}{$IFDEF DELPHI}windows,Types,{$ENDIF}Controls,uzglabstractviewarea,uzglgeneraldrawer,uzgprimitivescreator,UGDBOpenArrayOfData,uzglabstractdrawer,gdbpalette,Classes,Graphics,gdbase,gdbasetypes,geometry;
 type
 DMatrix4DStackArray=array[0..10] of DMatrix4D;
 
@@ -54,8 +54,8 @@ TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
                           procedure TranslateCoord2D(const tx,ty:single);override;
                           procedure ScaleCoord2D(const sx,sy:single);override;
 
-                          procedure pushMatrixAndSetTransform(Transform:DMatrix4D);override;overload;
-                          procedure pushMatrixAndSetTransform(Transform:DMatrix4F);override;overload;
+                          procedure pushMatrixAndSetTransform(Transform:DMatrix4D);overload;override;
+                          procedure pushMatrixAndSetTransform(Transform:DMatrix4F);overload;override;
                           procedure popMatrix;override;
                           function TranslatePointWithLocalCS(const p:GDBVertex3S):GDBVertex3S;
                           function TranslatePoint(const p:GDBVertex3S):GDBVertex3S;

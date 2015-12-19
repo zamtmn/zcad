@@ -28,7 +28,7 @@ uses
      {$ENDIF}
      uzglgdidrawer,uzglabstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
-     {varmandef,}{commandline,}{zcadsysvars,}geometry,{uzcshared,}LCLType,
+     {varmandef,}{commandline,}{zcadsysvars,}geometry,{$IFNDEF DELPHI}LCLType,{$ENDIF}{$IFDEF DELPHI}Types,{$ENDIF}
      ExtCtrls,classes,Controls,Graphics,generalviewarea,{log,}backendmanager,uzglgeneralcanvasviewarea;
 type
     TGDIViewArea=class(TGeneralCanvasViewArea)
@@ -50,7 +50,7 @@ begin
      drawer:=TZGLGDIDrawer.Create;
      TZGLGDIDrawer(drawer).wa:=self;
      TZGLGDIDrawer(drawer).canvas:=TCADControl(getviewcontrol).canvas;
-     TZGLGDIDrawer(drawer).panel:=TCADControl(getviewcontrol);
+     tobject(TZGLGDIDrawer(drawer).panel):={TCADControl}tobject(getviewcontrol);
 end;
 
 procedure TGDIViewArea.setdeicevariable;

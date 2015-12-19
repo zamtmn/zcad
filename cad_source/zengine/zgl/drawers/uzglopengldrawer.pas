@@ -24,7 +24,8 @@ uses
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
-    LCLIntf,LCLType,Classes,Controls,
+    {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
+    Classes,Controls,
     geometry,uzglgeneraldrawer,uzglabstractdrawer,glstatemanager,Graphics,gdbase,gdbasetypes,GDBCamera;
 const
   texturesize=128;
@@ -101,8 +102,8 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
 
                         {}
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);override;overload;
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F);override;overload;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);overload;override;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F);overload;override;
                         procedure popMatrix;override;
                    end;
 var

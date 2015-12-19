@@ -20,15 +20,16 @@ unit uzglgdidrawer;
 {$INCLUDE def.inc}
 interface
 uses
-    sysutils,gdbasetypes,uzglgeneral2ddrawer,lclintfex,fileutil,math,UGDBFontManager,ugdbfont,{zcadsysvars,}uzglabstractviewarea,LazUTF8,uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,
-    {$IFDEF WINDOWS}{GDIPAPI,GDIPOBJ,}windows,{$ENDIF}
+    sysutils,gdbasetypes,uzglgeneral2ddrawer,lclintfex,fileutil,math,UGDBFontManager,ugdbfont,{zcadsysvars,}uzglabstractviewarea,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,
+    {$IFDEF WINDOWS}windows,{$ENDIF}{$IFDEF DELPHI}windows,{$ENDIF}
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
     {$IFDEF LCLQT}
     qtobjects,
     {$ENDIF}
-    LCLIntf,LCLType,Classes,Controls,
+    {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
+    Classes,Controls,
     geometry,uzglgeneraldrawer,uzglabstractdrawer,glstatemanager,Graphics,gdbase;
 const
   NeedScreenInvalidrect=true;
@@ -56,9 +57,9 @@ TGDIFontCacheKey=record
                        RealSizeInPixels:Integer;
                        PFontRecord:PGDBFontRecord;
                  end;
-TGDIFontCacheData=record
+{TGDIFontCacheData=record
                        Handle:HFONT;
-                  end;
+                  end;}
 PTLLGDISymbol=^TLLGDISymbol;
 TLLGDISymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLSymbol)
               procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);virtual;
@@ -399,7 +400,7 @@ begin
     sp[2].y:=round(y2);
     sp[3].x:=round(x3);
     sp[3].y:=round(y3);
-    PolyGon(OffScreedDC,@sp[1],3,false);
+    PolyGon(OffScreedDC,{$IFNDEF DELPHI}@{$ENDIF}sp[1],3{$IFNDEF DELPHI},false{$ENDIF});
     if NeedScreenInvalidrect then
                                  begin
                                       ProcessScreenInvalidrect(sp[1].x,sp[1].y);
@@ -421,7 +422,8 @@ begin
     sp[3].y:=round(y3);
     sp[4].x:=round(x4);
     sp[4].y:=round(y4);
-    PolyGon(OffScreedDC,@sp[1],4,false);
+    PolyGon(OffScreedDC,{$IFNDEF DELPHI}@{$ENDIF}sp[1],4{$IFNDEF DELPHI},false{$ENDIF});
+    //PolyGon(OffScreedDC,@sp[1],4,false);
     if NeedScreenInvalidrect then
                                  begin
                                       ProcessScreenInvalidrect(sp[1].x,sp[1].y);
@@ -462,21 +464,21 @@ end;
 procedure TZGLGDIDrawer.ClearScreen(stencil:boolean);
 var
   mRect: TRect;
-  ClearBrush: HBRUSH;
-  LogBrush: TLogBrush;
+  _ClearBrush: {$IFDEF DELPHI}windows.{$ENDIF}HBRUSH;
+  _LogBrush: TLogBrush;
 begin
      mrect:=Rect(0,0,wh.cx,wh.cy);
-     with LogBrush do
+     with _LogBrush do
      begin
        lbStyle := {BS_HATCHED}BS_SOLID;
        lbColor := ClearColor;
        lbHatch := HS_CROSS
      end;
-     ClearBrush:=CreateBrushIndirect(LogBrush);
+     _ClearBrush:=CreateBrushIndirect(_LogBrush);
      isWindowsErrors;
-     FillRect(OffScreedDC,mRect,ClearBrush);
+     FillRect(OffScreedDC,mRect,_ClearBrush);
      isWindowsErrors;
-     deleteobject(ClearBrush);
+     deleteobject(_ClearBrush);
      isWindowsErrors;
 end;
 
@@ -538,7 +540,9 @@ begin
             lfcp.lfClipPrecision:=0;
             lfcp.lfQuality:=0;
             lfcp.lfPitchAndFamily:=0;
+            {$IFNDEF DELPHI}
             lfcp.lfFaceName:=PGDBfont(PSymbolsParam.pfont)^.family;
+            {$ENDIF}
            PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle:=CreateFontIndirect(lfcp);
            SelectObject(TZGLGDIDrawer(drawer).OffScreedDC,PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle);
       end
@@ -554,11 +558,11 @@ begin
   spoint:=TZGLGDIDrawer(drawer).TranslatePoint(point);
   x:=round(spoint.x);
   y:=round(spoint.y);
-
+  {$IFNDEF DELPHI}
   cnvStr[0]:=lo(word(SymCode));
   cnvStr[1]:=hi(word(SymCode));
   s:=UTF16ToUTF8(@cnvStr,1);
-
+  {$ENDIF}
 
   txtOblique:=pi/2-PSymbolsParam^.Oblique;
   txtRotate:=PSymbolsParam^.Rotate;

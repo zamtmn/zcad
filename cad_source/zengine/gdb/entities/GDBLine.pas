@@ -22,7 +22,7 @@ unit GDBLine;
 interface
 uses LCLProc,{uabstractunit,}zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,
      UGDBOpenArrayOfPObjects,UGDBLayerArray,
-     gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,
+     gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,GDBEntity,
      UGDBOpenArrayOfByte,{varmandef,}GDBase,gdbobjectsconstdef,oglwindowdef,
      geometry,dxflow,memman{,uzcshared};
 type
@@ -87,13 +87,14 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                   procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                   function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
 
-                  class function CreateInstance:PGDBObjLine;static;
+                  class function CreateInstance:PGDBObjLine;
            end;
 {Export-}
 ptlinertmodify=^tlinertmodify;
 tlinertmodify=record
                     lbegin,lmidle,lend:GDBBoolean;
                 end;
+function AllocAndInitLine(owner:PGDBObjGenericWithSubordinated):PGDBObjLine;
 implementation
 //uses log;
 function GDBObjLine.GetTangentInPoint(point:GDBVertex):GDBVertex;

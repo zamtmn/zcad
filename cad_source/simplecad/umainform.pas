@@ -212,21 +212,19 @@ function CreateRandomDouble(len:GDBDouble):GDBDouble;inline;//create random doub
 begin
      result:=random*len;
 end;
-function CreateRandomVertex(len,hanflen:GDBDouble):GDBVertex;//create random 3DVertex in [-hanflen..hanflen] interval
+function CreateRandomVertex(len,hanflen:GDBDouble;_3d:boolean):GDBVertex;//create random 3DVertex in [-hanflen..hanflen] interval
 begin
      result.x:=CreateRandomDouble(len)-hanflen;
      result.y:=CreateRandomDouble(len)-hanflen;
-     if Form1.ChkBox3D.Checked then
-                                   result.z:=CreateRandomDouble(len)-hanflen
-                               else
-                                   result.z:=0;
+     if _3d then
+                result.z:=CreateRandomDouble(len)-hanflen
+            else
+                result.z:=0;
 end;
-
-procedure SetEntityLayer(pobj:PGDBObjEntity);//set random layer for entity
+procedure SetEntityLayer(pobj:PGDBObjEntity;CurrentDrawing:PTSimpleDrawing);//set random layer for entity
 begin
-     pobj^.vp.Layer:=GetCurrentDrawing^.LayerTable.getelement(random(GetCurrentDrawing^.LayerTable.Count));
+     pobj^.vp.Layer:=CurrentDrawing^.LayerTable.getelement(random(CurrentDrawing^.LayerTable.Count));
 end;
-
 function CreateRandomVertex2D(len,hanflen:GDBDouble):GDBVertex2D;//create random 2DVertex in [-hanflen..hanflen] interval
 begin
      result.x:=CreateRandomDouble(len)-hanflen;
@@ -240,20 +238,22 @@ var
    v1,v2:gdbvertex;
    dc:TDrawContext;                                         //drawing context
    CurrentDrawing:PTSimpleDrawing;                          //pointer to current drawing
+   _3d:boolean;
 begin
   _StartLongProcess(0,'Add lines');                         //just for time interval measure
 
+  _3d:=Form1.ChkBox3D.Checked;
   CurrentDrawing:=GetCurrentDrawing;                        //get cirrent drawing
   dc:=CurrentDrawing^.CreateDrawingRC;                      //create drawing context, need for format entity
   for i:=1 to SpinEdit1.Value do
   begin
-    v1:=CreateRandomVertex(1000,500);                       //line coord
-    v2:=geometry.VertexAdd(v1,CreateRandomVertex(1000,500));//line coord
+    v1:=CreateRandomVertex(1000,500,_3d);                       //line coord
+    v2:=geometry.VertexAdd(v1,CreateRandomVertex(1000,500,_3d));//line coord
 
     PLineEnt:=GDBObjLine.CreateInstance;                    //create line
     PLineEnt^.CoordInOCS.lBegin:=v1;                        //setup coord
     PLineEnt^.CoordInOCS.lEnd:=v2;                          //setup coord
-    SetEntityLayer(PLineEnt);                               //Setup line propertues
+    SetEntityLayer(PLineEnt,CurrentDrawing);                //Setup line propertues
     CurrentDrawing^.GetCurrentRoot^.AddMi(@PLineEnt);       //add line to drawing
 
     PLineEnt^.BuildGeometry(CurrentDrawing^);               //internal entity proc for create subentities,
@@ -299,7 +299,7 @@ begin
                     PLWPolyLineEnt^.closed:=random(10)>5;          //random close lwpolyline
 
     CurrentDrawing^.GetCurrentRoot^.AddMi(@PLWPolyLineEnt);        //add lwpolyline to drawing
-    SetEntityLayer(PLWPolyLineEnt);                                //Setup line propertues
+    SetEntityLayer(PLWPolyLineEnt,GetCurrentDrawing);              //Setup line propertues
     PLWPolyLineEnt^.BuildGeometry(CurrentDrawing^);                //internal entity proc for create subentities,
                                                                    //for line entity this unneed, but for complex entities
                                                                    //like BlockInsert thes necessarily
@@ -324,18 +324,18 @@ begin
   begin
     pobj := GDBObj3DFace.CreateInstance;
     istriangle:=random(10)>5;
-    v1:=CreateRandomVertex(1000,500);
+    v1:=CreateRandomVertex(1000,500,Form1.ChkBox3D.Checked);
     for j:=0 to 2 do
     begin
          pobj^.PInOCS[j]:=v1;
-         v1:=geometry.VertexAdd(v1,CreateRandomVertex(100,50));
+         v1:=geometry.VertexAdd(v1,CreateRandomVertex(100,50,Form1.ChkBox3D.Checked));
     end;
     if istriangle then
                       pobj^.PInOCS[3]:=pobj^.PInOCS[2]
                   else
                       pobj^.PInOCS[3]:=v1;
     GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
-    SetEntityLayer(pobj);
+    SetEntityLayer(pobj,GetCurrentDrawing);
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
   end;
@@ -357,14 +357,14 @@ begin
         GDBLineID:begin
                        l:=PGDBObjLine(pv)^.Length/10;
                        hl:=l/2;
-                       PGDBObjLine(pv)^.CoordInOCS.lBegin:=geometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lBegin,CreateRandomVertex(l,hl));
-                       PGDBObjLine(pv)^.CoordInOCS.lEnd:=geometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lEnd,CreateRandomVertex(l,hl));
+                       PGDBObjLine(pv)^.CoordInOCS.lBegin:=geometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lBegin,CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked));
+                       PGDBObjLine(pv)^.CoordInOCS.lEnd:=geometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lEnd,CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked));
                        pv^.YouChanged(GetCurrentDrawing^);
                   end;
         GDBCircleID:begin
                        l:=PGDBObjCircle(pv)^.Radius;
                        hl:=l/2;
-                       PGDBObjCircle(pv)^.Local.P_insert:=geometry.VertexAdd(PGDBObjCircle(pv)^.Local.P_insert,CreateRandomVertex(l,hl));
+                       PGDBObjCircle(pv)^.Local.P_insert:=geometry.VertexAdd(PGDBObjCircle(pv)^.Local.P_insert,CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked));
                        PGDBObjCircle(pv)^.Radius:=PGDBObjCircle(pv)^.Radius+CreateRandomDouble(l)-hl;
                        if PGDBObjCircle(pv)^.Radius<=0 then PGDBObjCircle(pv)^.Radius:=CreateRandomDouble(9)+1;
                        pv^.YouChanged(GetCurrentDrawing^);
@@ -389,11 +389,11 @@ begin
   for i:=1 to SpinEdit1.Value do
   begin
     pobj := GDBObjCircle.CreateInstance ;
-    v1:=CreateRandomVertex(1000,500);
+    v1:=CreateRandomVertex(1000,500,Form1.ChkBox3D.Checked);
     pobj^.Local.P_insert:=v1;
     pobj^.Radius:=CreateRandomDouble(9.9)+0.1;
     GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
-    SetEntityLayer(pobj);
+    SetEntityLayer(pobj,GetCurrentDrawing);
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
   end;
@@ -415,16 +415,16 @@ begin
   begin
     pobj := GDBObjPolyline.CreateInstance;
     vcount:=random(8)+2;
-    v1:=CreateRandomVertex(1000,500);
+    v1:=CreateRandomVertex(1000,500,Form1.ChkBox3D.Checked);
     for j:=1 to vcount do
     begin
          pobj^.AddVertex(v1);
-         v1:=geometry.VertexAdd(v1,CreateRandomVertex(100,50));
+         v1:=geometry.VertexAdd(v1,CreateRandomVertex(100,50,Form1.ChkBox3D.Checked));
     end;
     if vcount>2 then
                     pobj^.closed:=random(10)>5;
     GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
-    SetEntityLayer(pobj);
+    SetEntityLayer(pobj,GetCurrentDrawing);
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
   end;
@@ -444,12 +444,12 @@ begin
   for i:=1 to SpinEdit1.Value do
   begin
     pobj := GDBObjArc.CreateInstance;
-    pobj^.Local.P_insert:=CreateRandomVertex(1000,500);
+    pobj^.Local.P_insert:=CreateRandomVertex(1000,500,Form1.ChkBox3D.Checked);
     pobj^.R:=CreateRandomDouble(10)+0.1;
     pobj^.StartAngle:=CreateRandomDouble(2*pi);
     pobj^.EndAngle:=CreateRandomDouble(2*pi);
     GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
-    SetEntityLayer(pobj);
+    SetEntityLayer(pobj,GetCurrentDrawing);
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
   end;
@@ -519,7 +519,7 @@ begin
   for i:=1 to SpinEdit1.Value do
   begin
     pobj:=GDBObjText.CreateInstance;
-    v1:=CreateRandomVertex(1000,500);
+    v1:=CreateRandomVertex(1000,500,Form1.ChkBox3D.Checked);
     pobj^.Local.P_insert:=v1;
     pobj^.TXTStyleIndex:=ts;
     pobj^.Template:='Hello word!';
@@ -531,7 +531,7 @@ begin
     pobj^.textprop.angle:=angl;
     pobj^.local.basis.OX:=VectorTransform3D(PGDBObjText(pobj)^.local.basis.OX,geometry.CreateAffineRotationMatrix(PGDBObjText(pobj)^.Local.basis.oz,-angl));
     GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
-    SetEntityLayer(pobj);
+    SetEntityLayer(pobj,GetCurrentDrawing);
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
   end;

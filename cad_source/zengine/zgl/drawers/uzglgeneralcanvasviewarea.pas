@@ -25,13 +25,13 @@ uses
      {$ENDIF}
      uzglgdidrawer,uzglabstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,
      UGDBLayerArray,ugdbdimstylearray,
-     geometry,LCLType,
-     ExtCtrls,classes,Controls,Graphics,generalviewarea,backendmanager,LMessages;
+     geometry,{$IFNDEF DELPHI}LCLType,LMessages,{$ENDIF}{$IFDEF DELPHI}windows,messages,{$ENDIF}
+     ExtCtrls,classes,Controls,Graphics,generalviewarea,backendmanager;
 type
     TGDIPanel=class(TCustomControl)
                 protected
-                procedure WMPaint(var Message: TLMPaint); message LM_PAINT;
-                procedure EraseBackground(DC: HDC); override;
+                procedure WMPaint(var Message: {$IFNDEF DELPHI}TLMPaint{$ENDIF}{$IFDEF DELPHI}TWMPaint{$ENDIF}); message {$IFNDEF DELPHI}LM_PAINT{$ENDIF}{$IFDEF DELPHI}WM_PAINT{$ENDIF};
+                procedure EraseBackground(DC: HDC); {$IFNDEF DELPHI}override;{$ENDIF}
     end;
     TGeneralCanvasViewArea=class(TGeneralViewArea)
                       public
@@ -48,13 +48,15 @@ procedure TGDIPanel.EraseBackground(DC: HDC);
 begin
      // everything is painted, so erasing the background is not needed
 end;
-procedure TGDIPanel.WMPaint(var Message: TLMPaint);
+procedure TGDIPanel.WMPaint(var Message: {$IFNDEF DELPHI}TLMPaint{$ENDIF}{$IFDEF DELPHI}TWMPaint{$ENDIF});
 begin
      //Include(FControlState, csCustomPaint);
      //inherited WMPaint(Message);
      //if assigned(onpaint) then
      //                         onpaint(nil);
+     {$IFNDEF DELPHI}
      inherited WMPaint(Message);
+     {$ENDIF}
      //Exclude(FControlState, csCustomPaint);
 end;
 procedure TGeneralCanvasViewArea.GDBActivateGLContext;
@@ -64,7 +66,7 @@ end;
 function TGeneralCanvasViewArea.CreateWorkArea(TheOwner: TComponent):TCADControl;
 begin
      result:=TCADControl(TGDIPanel.Create(TheOwner));
-     TCADControl(result).Caption:='123';
+     //TCADControl(result).Caption:='123';
      //TGDIPanel(result).DoubleBuffered:=false;
 end;
 procedure TGeneralCanvasViewArea.SetupWorkArea;

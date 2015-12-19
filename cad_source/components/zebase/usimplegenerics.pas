@@ -52,7 +52,7 @@ end;
         {$IFDEF DELPHI}type PTValue=^TValue;{$ENDIF}
         procedure RegisterKey(const key:TKey; const Value:TValue);
         function MyGetValue(key:TKey; out Value:TValue):boolean;
-        function MyGetMutableValue(key:TKey; out PValue:PTValue):boolean;
+        function MyGetMutableValue(key:TKey; out PValue:{$IFNDEF DELPHI}PTValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
         function MyContans(key:TKey):boolean;
 end;
 {$IFNDEF DELPHI}TMyVector <T> = class(TVector<T>){$ENDIF}
@@ -231,7 +231,7 @@ begin
   result:=TryGetValue(Key,Value);
 {$ENDIF}
 end;
-function GKey2DataMap<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.MyGetMutableValue(key:TKey; out PValue:PTValue):boolean;
+function GKey2DataMap<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.MyGetMutableValue(key:TKey; out PValue:{$IFNDEF DELPHI}PTValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
 {$IFNDEF DELPHI}
 var
    (*

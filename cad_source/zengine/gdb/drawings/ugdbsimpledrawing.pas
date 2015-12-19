@@ -217,7 +217,7 @@ end;
 
 function TSimpleDrawing.GetMouseEditorMode:GDBByte;
 begin
-     if assigned(wa.getviewcontrol) then
+     if wa.getviewcontrol<>nil then
                                  result:=wa.param.md.mode
                              else
                                  result:=0;
@@ -231,7 +231,7 @@ end;
 
 function TSimpleDrawing.SetMouseEditorMode(mode:GDBByte):GDBByte;
 begin
-     if assigned(wa.getviewcontrol) then
+     if wa.getviewcontrol<>nil then
                                  begin
                                       result:=wa.param.md.mode;
                                       wa.param.md.mode:=mode;
@@ -617,7 +617,7 @@ begin
      if assigned(pcamera) then
                            begin
                                 pcamera^.done;
-                                GDBFreeMem(pcamera);
+                                GDBFreeMem(pointer(pcamera));
                            end;
 end;
 constructor TSimpleDrawing.init;

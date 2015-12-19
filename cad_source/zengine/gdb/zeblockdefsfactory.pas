@@ -32,7 +32,7 @@ TBlockDefCreateData=packed record
                           BlockDeffinedIn:GDBString;
                           CreateProc:TBlockDefCreateFunc;
                      end;
-TBlockDefName2BlockDefCreateData=GKey2DataMap<GDBString,TBlockDefCreateData,LessGDBString>;
+TBlockDefName2BlockDefCreateData=GKey2DataMap<GDBString,TBlockDefCreateData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
 procedure RegisterBlockDefCreateFunc(const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString; const BlockDefCreateFunc:TBlockDefCreateFunc);
 function CreateBlockDef(dwg:PTDrawingDef;name:GDBString):PGDBObjBlockdef;
 var
@@ -74,7 +74,7 @@ var
 begin
      if not assigned(BlockDefName2BlockDefCreateData) then
                                                           exit(nil);
-     if BlockDefName2BlockDefCreateData.MyGetMutableValue(uppercase(name),PBlockDefCreateData)then
+     if BlockDefName2BlockDefCreateData.MyGetMutableValue(uppercase(name),pointer(PBlockDefCreateData))then
      begin
           if assigned(PBlockDefCreateData.CreateProc) then
             PBlockDefCreateData.CreateProc(dwg,PBlockDefCreateData.BlockName,PBlockDefCreateData.BlockDependsOn,PBlockDefCreateData.BlockDeffinedIn);

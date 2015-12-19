@@ -45,7 +45,6 @@ initialization
   BackendsNames.Enums.init(10);
   BackendsNames.Selected:=0;
   Backends.init({$IFDEF DEBUGBUILD}'{143AA836-9372-462F-B107-229B50E7A37C}',{$ENDIF}10);
-end
 finalization
   BackendsNames.Enums.done;
   Backends.done;

@@ -152,7 +152,7 @@ begin
 end;
 function AllocBlockDef:PGDBObjBlockDef;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocBlockDef}',{$ENDIF}result,sizeof(GDBObjBlockdef));
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocBlockDef}',{$ENDIF}pointer(result),sizeof(GDBObjBlockdef));
 end;
 function AllocAndInitBlockDef(owner:PGDBObjGenericWithSubordinated):PGDBObjBlockDef;
 begin

@@ -19,7 +19,7 @@
 unit memman;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,gdbasetypes,sysutils,gvector;
+uses LCLProc,gdbasetypes,sysutils;
 
 //const firstarraysize=100;
 

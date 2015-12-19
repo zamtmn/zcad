@@ -37,7 +37,7 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  Square:GDBdouble;(*'Oriented area'*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul;
-                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
@@ -70,7 +70,7 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  procedure higlight(var DC:TDrawContext);virtual;
 
 
-                 function CreateInstance:PGDBObjLWPolyline;static;
+                 class function CreateInstance:PGDBObjLWPolyline;static;
            end;
 {Export-}
 implementation
@@ -975,7 +975,7 @@ begin
 end;
 function AllocLWpolyline:PGDBObjLWpolyline;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocLWpolyline}',{$ENDIF}result,sizeof(GDBObjLWpolyline));
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocLWpolyline}',{$ENDIF}pointer(result),sizeof(GDBObjLWpolyline));
 end;
 function AllocAndInitLWpolyline(owner:PGDBObjGenericWithSubordinated):PGDBObjLWpolyline;
 begin
@@ -983,7 +983,7 @@ begin
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
 end;
-function GDBObjLWpolyline.CreateInstance:PGDBObjLWpolyline;
+class function GDBObjLWpolyline.CreateInstance:PGDBObjLWpolyline;
 begin
   result:=AllocAndInitLWpolyline(nil);
 end;

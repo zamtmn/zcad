@@ -59,6 +59,7 @@ end;
  {$IFDEF DELPHI}TMyVector <T> = class(Generics.Collections.TList<T>)
                                      function Size: SizeUInt; inline;
                                      procedure PushBack(const Value: T); inline;
+                                     function mutable(const i:integer):pointer; inline;
  {$ENDIF}
 end;
 
@@ -115,6 +116,10 @@ end;
 procedure TMyVector<T>.PushBack(const Value: T);
 begin
   Add(value);
+end;
+function TMyVector<T>.mutable(const i:integer):pointer;
+begin
+  result:=@FItems[i];
 end;
 {$ENDIF}
 constructor TMyVectorArray<T>.create;

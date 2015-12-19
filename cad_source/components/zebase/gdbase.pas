@@ -572,7 +572,7 @@ end;
 {$IFDEF DELPHI}
 function StrToQWord(sh:string):UInt64;
 begin
-      result:=strtoint('$'+sh);
+      result:=strtoint(sh);
 end;
 {$ENDIF}
 begin

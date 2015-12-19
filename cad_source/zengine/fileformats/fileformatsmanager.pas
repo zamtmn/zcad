@@ -15,12 +15,12 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{$MODE OBJFPC}
+{MODE OBJFPC}
 unit fileformatsmanager;
 {$INCLUDE def.inc}
 
 interface
-uses gdbasetypes,gdbase,usimplegenerics,GDBGenericSubEntry,ugdbsimpledrawing;
+uses gdbasetypes,gdbase,usimplegenerics,GDBGenericSubEntry,ugdbsimpledrawing,sysutils;
 
 type
 TFileLoadProcedure=procedure(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
@@ -28,7 +28,7 @@ TFileFormatData=packed record
                 FormatDesk:GDBString;
                 FileLoadProcedure:TFileLoadProcedure;
                 end;
-TExt2LoadProcMapGen=specialize GKey2DataMap<GDBString,TFileFormatData,LessGDBString>;
+TExt2LoadProcMapGen=GKey2DataMap<GDBString,TFileFormatData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
 TExt2LoadProcMap=class(TExt2LoadProcMapGen)
                       fDefaultFileExt:GDBString;
                       function GetCurrentFileFilter:GDBString;
@@ -71,6 +71,7 @@ begin
                      fDefaultFileExt:=_Wxt;
 end;
 function TExt2LoadProcMap.GetDefaultFileFilterIndex:integer;
+{$IFNDEF DELPHI}
 var
    iterator:TExt2LoadProcMap.TIterator;
 begin
@@ -83,7 +84,13 @@ begin
          inc(result)
      until not iterator.Next;
 end;
+{$ENDIF}
+{$IFDEF DELPHI}
+begin
+end;
+{$ENDIF}
 function TExt2LoadProcMap.GetCurrentFileFilter:GDBString;
+{$IFNDEF DELPHI}
 var
    iterator:TExt2LoadProcMap.TIterator;
 begin
@@ -101,6 +108,11 @@ begin
      result:=result+'All files (*.*)|*.*'
      //ProjectFileFilter: GDBString = 'DXF files (*.dxf)|*.dxf|AutoCAD DWG files (*.dwg)|*.dwg|ZCAD ZCP files (*.zcp)|*.zcp|All files (*.*)|*.*';
 end;
+{$ENDIF}
+{$IFDEF DELPHI}
+begin
+end;
+{$ENDIF}
 function TExt2LoadProcMap.GetDefaultFileExt:GDBString;
 begin
      result:=fDefaultFileExt;

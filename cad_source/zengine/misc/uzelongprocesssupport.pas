@@ -38,14 +38,15 @@ TLPInfo=record
               LPTime:TDateTime;
         end;
 TLPInfoVector=TMyVector<TLPInfo>;
+PTLPInfo=^TLPInfo;
 TOnLPStartProcVector=TMyVector<TOnLPStartProc>;
 TOnLPProgressProcVector=TMyVector<TOnLPProgressProc>;
 TOnLPEndProcVector=TMyVector<TOnLPEndProc>;
 
 TZELongProcessSupport=class
                        private
-                       type
-                         PTLPInfo=TLPInfoVector.PT;
+                       {type
+                         PTLPInfo=TLPInfoVector.PT;}
                        var
                          LPInfoVector:TLPInfoVector;
                          OnLPStartProcVector:TOnLPStartProcVector;
@@ -100,7 +101,7 @@ begin
   if LPInfoVector.Size>0 then
   begin
     result:=LPInfoVector.Size-1;
-    PLPI:=LPInfoVector.mutable[result];
+    PLPI:=LPInfoVector.mutable{$IFDEF DELPHI}({$ENDIF}{$IFNDEF DELPHI}[{$ENDIF}result{$IFNDEF DELPHI}]{$ENDIF}{$IFDEF DELPHI}){$ENDIF};
     if Context=PLPI^.LPContext then
     begin
       inc(PLPI^.LPUseCounter);
@@ -115,7 +116,7 @@ begin
 
   inc(ActiveProcessCount);
   result:=LPInfoVector.Size-1;
-  PLPI:=LPInfoVector.mutable[result];
+  PLPI:=LPInfoVector.mutable{$IFDEF DELPHI}({$ENDIF}{$IFNDEF DELPHI}[{$ENDIF}result{$IFNDEF DELPHI}]{$ENDIF}{$IFDEF DELPHI}){$ENDIF};
   PLPI^.LPTime:=now;
   DoStartLongProcess(PLPI,result);
 end;
@@ -123,14 +124,14 @@ procedure TZELongProcessSupport.ProgressLongProcess(LPHandle:TLPSHandle;Current:
 var
   PLPI:PTLPInfo;
 begin
-  PLPI:=LPInfoVector.mutable[LPHandle];
+  PLPI:=LPInfoVector.mutable{$IFDEF DELPHI}({$ENDIF}{$IFNDEF DELPHI}[{$ENDIF}LPHandle{$IFNDEF DELPHI}]{$ENDIF}{$IFDEF DELPHI}){$ENDIF};
   DoProgressLongProcess(PLPI,LPHandle,Current);
 end;
 procedure TZELongProcessSupport.EndLongProcess(LPHandle:TLPSHandle);
 var
   PLPI:PTLPInfo;
 begin
-  PLPI:=LPInfoVector.mutable[LPHandle];
+  PLPI:=LPInfoVector.mutable{$IFDEF DELPHI}({$ENDIF}{$IFNDEF DELPHI}[{$ENDIF}LPHandle{$IFNDEF DELPHI}]{$ENDIF}{$IFDEF DELPHI}){$ENDIF};
   if PLPI^.LPUseCounter>0 then
   begin
     dec(PLPI^.LPUseCounter);

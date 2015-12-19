@@ -19,18 +19,23 @@
 unit uzglabstractviewarea;
 {$INCLUDE def.inc}
 interface
-uses {gdbase,gdbasetypes,
-     UGDBLayerArray,ugdbltypearray,UGDBTextStyleArray,ugdbdimstylearray,UGDBPoint3DArray,
-     oglwindowdef,gdbdrawcontext,UGDBEntTree,ugdbabstractdrawing,
-     uinfoform,}
+uses
      UGDBOpenArrayOfPV,uzglabstractdrawer,GDBGenericSubEntry,gdbase,gdbasetypes,
-     oglwindowdef,gdbdrawcontext,{varmandef,}{Varman,}UGDBPoint3DArray,UGDBEntTree,geometry,ugdbabstractdrawing,
+     oglwindowdef,gdbdrawcontext,UGDBPoint3DArray,UGDBEntTree,geometry,ugdbabstractdrawing,
      {uzcshared,}sysutils,
-     ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,{zcadsysvars,}GDBEntity;
+     ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,Messages,Graphics,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,GDBEntity;
 
 type
 {NEEDFIXFORDELPHI}
-    TCADControl=class({$IFNDEF DELPHI}TCustomControl{$ENDIF}{$IFDEF DELPHI}TForm{$ENDIF})
+    TCADControl=class({$IFNDEF DELPHI}TCustomControl{$ENDIF}{$IFDEF DELPHI}{TForm}TCustomControl{$ENDIF})
+                private
+                {$IFDEF DELPHI}
+                FOnPaint: TNotifyEvent;
+                {$ENDIF}
+                protected
+                {$IFDEF DELPHI}
+                procedure WMPaint(var Message: TWMPaint); message WM_PAINT;
+                {$ENDIF}
                 public
                 function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint): Boolean; overload;
                 property OnMouseUp;
@@ -40,7 +45,8 @@ type
                 property onmouseenter;
                 property onmouseleave;
                 property onresize;
-                property onpaint;
+                property OnPaint{$IFDEF DELPHI}:TNotifyEvent read FOnPaint write FOnPaint{$ENDIF};
+                property Canvas;
                 end;
     TCameraChangedNotify=procedure of object;
     TAbstractViewArea=class;
@@ -177,6 +183,15 @@ function TCADControl.DoMouseWheel(Shift: TShiftState; WheelDelta: Integer; Mouse
 begin
      inherited;
 end;
+{$IFDEF DELPHI}
+procedure TCADControl.WMPaint(var Message: TWMPaint);
+begin
+     if assigned(FOnPaint) then
+                               FOnPaint(self)
+                           else
+                               inherited;
+end;
+{$ENDIF}
 function correcttogrid(point:GDBVertex;const grid:GDBSnap2D):GDBVertex;
 begin
   result.x:=round((point.x-grid.Base.x)/grid.Spacing.x)*grid.Spacing.x+grid.Base.x;

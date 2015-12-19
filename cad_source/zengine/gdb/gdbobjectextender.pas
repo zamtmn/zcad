@@ -20,7 +20,7 @@ unit gdbobjectextender;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentityextender,GDBSubordinated,{uabstractunit,}UGDBDrawingdef,gdbasetypes,gdbase,usimplegenerics,gvector,UGDBOpenArrayOfByte;
+uses gdbentityextender,GDBSubordinated,{uabstractunit,}UGDBDrawingdef,gdbasetypes,gdbase,usimplegenerics,UGDBOpenArrayOfByte;
 
 type
 TConstructorFeature=procedure(pEntity:Pointer);
@@ -40,11 +40,11 @@ TDXFEntSaveData=record
                 DXFEntSaveFeature:TDXFEntSaveFeature;
               end;
 TDXFEntLoadDataMap=GKey2DataMap<GDBString,TDXFEntLoadData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
-TDXFEntSaveDataVector=TVector<TDXFEntSaveData>;
-TDXFEntFormatProcsVector=TVector<TDXFEntFormatFeature>;
-TCreateEntFeatureVector=TVector<TCreateEntFeatureData>;
-TDXFEntAfterLoadFeatureVector=TVector<TDXFEntAfterLoadFeature>;
-TEntityCreateExtenderVector=TVector<TCreateThisExtender>;
+TDXFEntSaveDataVector=TmyVector<TDXFEntSaveData>;
+TDXFEntFormatProcsVector=TmyVector<TDXFEntFormatFeature>;
+TCreateEntFeatureVector=TmyVector<TCreateEntFeatureData>;
+TDXFEntAfterLoadFeatureVector=TmyVector<TDXFEntAfterLoadFeature>;
+TEntityCreateExtenderVector=TmyVector<TCreateThisExtender>;
 TDXFEntIODataManager=class
                       fDXFEntLoadDataMapByName:TDXFEntLoadDataMap;
                       fDXFEntLoadDataMapByPrefix:TDXFEntLoadDataMap;

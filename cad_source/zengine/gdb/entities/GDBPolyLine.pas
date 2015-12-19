@@ -30,7 +30,7 @@ GDBObjPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  Closed:GDBBoolean;(*saved_to_shd*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
@@ -45,7 +45,7 @@ GDBObjPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  function GetLength:GDBDouble;virtual;
 
-                 function CreateInstance:PGDBObjPolyline;static;
+                 class function CreateInstance:PGDBObjPolyline;static;
            end;
 {Export-}
 implementation
@@ -280,7 +280,7 @@ begin
 end;}
 function AllocPolyline:PGDBObjPolyline;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocLine}',{$ENDIF}result,sizeof(GDBObjPolyline));
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocLine}',{$ENDIF}pointer(result),sizeof(GDBObjPolyline));
 end;
 function AllocAndInitPolyline(owner:PGDBObjGenericWithSubordinated):PGDBObjPolyline;
 begin
@@ -288,7 +288,7 @@ begin
   result.initnul(owner);
   result.bp.ListPos.Owner:=owner;
 end;
-function GDBObjPolyline.CreateInstance:PGDBObjPolyline;
+class function GDBObjPolyline.CreateInstance:PGDBObjPolyline;
 begin
   result:=AllocAndInitPolyline(nil);
 end;

@@ -35,7 +35,7 @@ GDBObj3DFace={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  //ProjPoint:GDBvertex;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
 
@@ -56,7 +56,7 @@ GDBObj3DFace={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
 
-                 function CreateInstance:PGDBObj3DFace;static;
+                 class function CreateInstance:PGDBObj3DFace;static;
            end;
 {Export-}
 
@@ -473,7 +473,7 @@ begin
 end;
 function Alloc3DFace:PGDBObj3DFace;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{Alloc3DFace}',{$ENDIF}result,sizeof(GDBObj3DFace));
+  GDBGetMem({$IFDEF DEBUGBUILD}'{Alloc3DFace}',{$ENDIF}pointer(result),sizeof(GDBObj3DFace));
 end;
 function AllocAndInit3DFace(owner:PGDBObjGenericWithSubordinated):PGDBObj3DFace;
 begin
@@ -481,7 +481,7 @@ begin
   result.initnul(owner);
   result.bp.ListPos.Owner:=owner;
 end;
-function GDBObj3DFace.CreateInstance:PGDBObj3DFace;
+class function GDBObj3DFace.CreateInstance:PGDBObj3DFace;
 begin
   result:=AllocAndInit3DFace(nil);
 end;

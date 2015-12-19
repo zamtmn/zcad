@@ -35,7 +35,7 @@ GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                       a50,a52:GDBDouble;
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                      procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;const drawing:TDrawingDef);virtual;
+                      procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                       function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                    end;
 {EXPORT-}

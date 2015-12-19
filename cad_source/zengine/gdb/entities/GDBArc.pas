@@ -38,7 +38,7 @@ GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  pq2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;RR,S,E:GDBDouble);
                  constructor initnul;
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
@@ -69,7 +69,7 @@ GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
 
-                 function CreateInstance:PGDBObjArc;static;
+                 class function CreateInstance:PGDBObjArc;static;
            end;
 {EXPORT-}
 implementation
@@ -825,7 +825,7 @@ begin
 end;
 function AllocArc:PGDBObjArc;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocArc}',{$ENDIF}result,sizeof(GDBObjArc));
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocArc}',{$ENDIF}pointer(result),sizeof(GDBObjArc));
 end;
 function AllocAndInitArc(owner:PGDBObjGenericWithSubordinated):PGDBObjArc;
 begin
@@ -833,7 +833,7 @@ begin
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
 end;
-function GDBObjARC.CreateInstance:PGDBObjArc;
+class function GDBObjARC.CreateInstance:PGDBObjArc;
 begin
   result:=AllocAndInitArc(nil);
 end;

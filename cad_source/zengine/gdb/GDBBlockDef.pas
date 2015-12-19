@@ -36,7 +36,7 @@ GDBObjBlockdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                      constructor init(_name:GDBString);
                      procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                      //function FindVariable(varname:GDBString):pvardesk;virtual;
-                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;const drawing:TDrawingDef);virtual;
+                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                      function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PExtensionData;const drawing:TDrawingDef):GDBBoolean;virtual;
                      destructor done;virtual;
                      function GetMatrix:PDMatrix4D;virtual;

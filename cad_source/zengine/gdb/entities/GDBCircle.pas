@@ -45,7 +45,7 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  Vertex3D_in_WCS_Array:GDBPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;RR:GDBDouble);
                  constructor initnul;
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure CalcObjMatrix;virtual;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
@@ -83,7 +83,7 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
 
-                 function CreateInstance:PGDBObjCircle;static;
+                 class function CreateInstance:PGDBObjCircle;static;
            end;
 {Export-}
 implementation
@@ -782,7 +782,7 @@ begin
 end;
 function AllocCircle:PGDBObjCircle;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocCircle}',{$ENDIF}result,sizeof(GDBObjCircle));
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocCircle}',{$ENDIF}pointer(result),sizeof(GDBObjCircle));
 end;
 function AllocAndInitCircle(owner:PGDBObjGenericWithSubordinated):PGDBObjCircle;
 begin
@@ -804,7 +804,7 @@ begin
   //owner^.AddMi(@result);
   SetCircleGeomProps(result,args);
 end;
-function GDBObjCircle.CreateInstance:PGDBObjCircle;
+class function GDBObjCircle.CreateInstance:PGDBObjCircle;
 begin
   result:=AllocAndInitCircle(nil);
 end;

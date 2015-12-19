@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{$MODE OBJFPC}
+{MODE OBJFPC}
 unit iodxf;
 {$INCLUDE def.inc}
 interface
@@ -210,13 +210,12 @@ var
   grouppsarray:array[0..maxlines]of integer;
   valuesarray:array[0..maxlines]of string;
   currentindex,maxindex:integer;
-
 procedure storevariable;
 begin
      case currentindex of
-     0:DWGVarsDict.insert(varname,valuesarray[0]);
-     1:DWGVarsDict.insert(varname,valuesarray[0]+'|'+valuesarray[1]);
-     else DWGVarsDict.insert(varname,valuesarray[0]+'|'+valuesarray[1]+'|'+valuesarray[2]);
+     0:DWGVarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(varname,valuesarray[0]);
+     1:DWGVarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(varname,valuesarray[0]+'|'+valuesarray[1]);
+     else DWGVarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(varname,valuesarray[0]+'|'+valuesarray[1]+'|'+valuesarray[2]);
      end;
      currentindex:=-1;
 end;
@@ -383,7 +382,7 @@ begin
                                 if PGDBObjEntity(pobj)^.PExtAttrib<>nil then
                                 begin
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
-                                                                                      h2p.Insert(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,pobj);
+                                                                                      h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,pobj);
                                                                                       //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,GDBPlatformint(pobj));
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
                                                                                       newowner:=h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle);
@@ -446,7 +445,7 @@ begin
                                 if PGDBObjEntity(pobj)^.PExtAttrib<>nil then
                                 begin
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
-                                                                                      h2p.Insert(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,postobj);
+                                                                                      h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,postobj);
                                                                                       //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,GDBPlatformint(postobj));
                                 end;
                                 if newowner=pointer($ffffffff) then
@@ -613,7 +612,7 @@ begin
   debugln('{D-}end; {AddFromDXF12}');
   //programlog.LogOutStr('end; {AddFromDXF12}',lp_DecPos,LM_Debug);
 end;
-procedure ReadLTStyles(var s:String;cltype:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var h2p:TMapHandleToPointer);
+procedure ReadLTStyles(var s:ansiString;cltype:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var h2p:TMapHandleToPointer);
 var
    pltypeprop:PGDBLtypeProp;
    byt: GDBInteger;
@@ -644,7 +643,7 @@ begin
            case drawing.LTypeStyleTable.AddItem(s,pointer(pltypeprop)) of
                         IsFounded:
                                   begin
-                                       h2p.Insert(DWGHandle,pltypeprop);
+                                       h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(DWGHandle,pltypeprop);
                                        if LoadMode=TLOLoad then
                                        begin
                                        end
@@ -655,7 +654,7 @@ begin
                                   begin
                                        pltypeprop^.init(s);
                                        dashinfo:=TDIDash;
-                                       h2p.Insert(DWGHandle,pltypeprop);
+                                       h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(DWGHandle,pltypeprop);
                                   end;
                         IsError:
                                   begin
@@ -762,7 +761,7 @@ begin
        end;
   end;
 end;
-procedure ReadLayers(var s:string;clayer:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure ReadLayers(var s:ansistring;clayer:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
 byt: GDBInteger;
 lname,desk: String;
@@ -846,7 +845,7 @@ begin
                                              drawing.CurrentLayer:=player;
   end;
 end;
-procedure ReadTextstyles(var s:string;ctstyle:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var h2p:TMapHandleToPointer);
+procedure ReadTextstyles(var s:ansistring;ctstyle:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var h2p:TMapHandleToPointer);
 var
    tstyle:GDBTextStyle;
    ptstyle:PGDBTextStyle;
@@ -934,7 +933,7 @@ begin
         end;
     if ti<>nil then
     begin
-         h2p.Insert(DWGHandle,ti);
+         h2p.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(DWGHandle,ti);
          ptstyle:={drawing.TextStyleTable.getelement}(ti);
          pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
          if pltypeprop<>nil then
@@ -980,7 +979,7 @@ begin
   end;
   drawing.LTypeStyleTable.format;
 end;
-procedure ReadVport(var s:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure ReadVport(var s:ansistring;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
    byt: GDBInteger;
    active:boolean;
@@ -1157,7 +1156,7 @@ begin
      debugln('{D-}end;{ReadVport}');
      //programlog.logoutstr('end;{ReadVport}',lp_DecPos,LM_Debug);
 end;
-procedure ReadDimStyles(var s:string;cdimstyle:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var h2p:TMapHandleToPointer);
+procedure ReadDimStyles(var s:ansistring;cdimstyle:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var h2p:TMapHandleToPointer);
 var
    psimstyleprop:PGDBDimStyle;
    byt:integer;
@@ -1196,7 +1195,7 @@ begin
      end;
 end;
 end;
-procedure ReadBlockRecird(const Handle2BlockName:TMapBlockHandle_BlockNames;var s:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure ReadBlockRecird(const Handle2BlockName:TMapBlockHandle_BlockNames;var s:ansistring;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
    byt:integer;
    bname:string;
@@ -1213,7 +1212,7 @@ begin
      if byt=2 then
                   begin
                        bname:=s;
-                       Handle2BlockName.Insert(bhandle,bname);
+                       Handle2BlockName.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(bhandle,bname);
                   end;
      if byt=5 then
                   begin
@@ -1227,7 +1226,8 @@ procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owne
 var
   byt: GDBInteger;
   error: GDBInteger;
-  s,US, sname: String;
+  US, sname: String;
+  s:ansistring;
   tp: PGDBObjBlockdef;
   blockload:boolean;
 
@@ -1236,9 +1236,7 @@ var
   lph:TLPSHandle;
 begin
   lph:=lps.StartLongProcess(f.Count,'addfromdxf2000',@f);
-  {$IFNDEF DELPHI}
   Handle2BlockName:=TMapBlockHandle_BlockNames.Create;
-  {$ENDIF}
   blockload:=false;
   debugln('{D+}AddFromDXF2000');
   //programlog.LogOutStr('AddFromDXF2000',lp_IncPos,LM_Debug);
@@ -1262,56 +1260,56 @@ begin
         s := f.readGDBString;
         s := f.readGDBString;
 
-        case s of
-                    dxfName_CLASSES:
-                                    gotodxf(f, 0, dxfName_ENDTAB);//scip this table
-                      dxfName_APPID:
-                                    gotodxf(f, 0, dxfName_ENDTAB);//scip this table
-               dxfName_BLOCK_RECORD:
+        //case (s) of
+                    if s = dxfName_CLASSES{:}then
+                                    gotodxf(f, 0, dxfName_ENDTAB)//scip this table
+                    else if s = dxfName_APPID{:}then
+                                    gotodxf(f, 0, dxfName_ENDTAB)//scip this table
+               else if s = dxfName_BLOCK_RECORD{:}then
                                     begin
                                     debugln('{D+}Found BLOCK_RECORD table');
                                     //programlog.LogOutStr('Found BLOCK_RECORD table',lp_IncPos,LM_Debug);
                                     ReadBlockRecird(Handle2BlockName,s,f,exitGDBString,owner,LoadMode,drawing);
                                     debugln('{D-}end; {BLOCK_RECORD table}');
                                     //programlog.LogOutStr('end; {BLOCK_RECORD table}',lp_DecPos,LM_Debug);
-                                    end;
-                   dxfName_DIMSTYLE:
+                                    end
+                   else if s = dxfName_DIMSTYLE{:}then
                                     begin
                                       debugln('{D+}Found dimstyles table');
                                       //programlog.LogOutStr('Found dimstyles table',lp_IncPos,LM_Debug);
                                       ReadDimStyles(s,cdimstyle,f,exitGDBString,owner,LoadMode,drawing,h2p);
                                       debugln('{D-}end; {dimstyles table}');
                                       //programlog.LogOutStr('end; {dimstyles table}',lp_DecPos,LM_Debug);
-                                    end;
-                      dxfName_Layer:
+                                    end
+                      else if s = dxfName_Layer{:}then
                                     begin
                                       debugln('{D+}Found layer table');
                                       //programlog.LogOutStr('Found layer table',lp_IncPos,LM_Debug);
                                       ReadLayers(s,clayer,f,exitGDBString,owner,LoadMode,drawing);
                                       debugln('{D-}end; {layer table}');
                                       //programlog.LogOutStr('end; {layer table}',lp_DecPos,LM_Debug);
-                                    end;
-                      dxfName_LType:
+                                    end
+                      else if s = dxfName_LType{:}then
                                     begin
                                       debugln('{D+}Found line types table');
                                       //programlog.LogOutStr('Found line types table',lp_IncPos,LM_Debug);
                                       ReadLTStyles(s,cltype,f,exitGDBString,owner,LoadMode,drawing,h2p);
                                       debugln('{D-}end; (line types table)');
                                       //programlog.LogOutStr('end; (line types table)',lp_DecPos,LM_Debug);
-                                    end;
-                      dxfName_Style:
+                                    end
+                      else if s = dxfName_Style{:}then
                                     begin
                                       debugln('{D+}Found style table');
                                       //programlog.LogOutStr('Found style table',lp_IncPos,LM_Debug);
                                       ReadTextstyles(s,ctstyle,f,exitGDBString,owner,LoadMode,drawing,h2p);
                                       debugln('{D-}end; {style table}');
                                       //programlog.LogOutStr('end; {style table}',lp_DecPos,LM_Debug);
-                                    end;
-                              'UCS':
-                                    gotodxf(f, 0, dxfName_ENDTAB);//scip this table
-                             'VIEW':
-                                    gotodxf(f, 0, dxfName_ENDTAB);//scip this table
-                            'VPORT':
+                                    end
+                              else if s = 'UCS'{:}then
+                                    gotodxf(f, 0, dxfName_ENDTAB)//scip this table
+                             else if s = 'VIEW'{:}then
+                                    gotodxf(f, 0, dxfName_ENDTAB)//scip this table
+                            else if s = 'VPORT'{:}then
                                     begin
                                     debugln('{D+}Found vports table');
                                     //programlog.LogOutStr('Found vports table',lp_IncPos,LM_Debug);
@@ -1319,7 +1317,7 @@ begin
                                     debugln('{D-}end; {vports table}');
                                     //programlog.LogOutStr('end; {vports table}',lp_DecPos,LM_Debug);
                                     end;
-        end;{case}
+        //end;{case}
         s := f.readGDBString;
         s := f.readGDBString;
       end;
@@ -1576,37 +1574,37 @@ var
    pcurrtextstyle:PGDBTextStyle;
    pcurrentdimstyle:PGDBDimStyle;
 begin
-    VarsDict.insert('$CLAYER',drawing.GetCurrentLayer^.Name);
-    VarsDict.insert('$CELTYPE',drawing.GetCurrentLType^.Name);
+    VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$CLAYER',drawing.GetCurrentLayer^.Name);
+    VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$CELTYPE',drawing.GetCurrentLType^.Name);
 
     pcurrtextstyle:=drawing.GetCurrentTextStyle;
     if pcurrtextstyle<>nil then
-                               VarsDict.insert('$TEXTSTYLE',drawing.GetCurrentTextStyle^.Name)
+                               VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$TEXTSTYLE',drawing.GetCurrentTextStyle^.Name)
                            else
-                               VarsDict.insert('$TEXTSTYLE',TSNStandardStyleName);
+                               VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$TEXTSTYLE',TSNStandardStyleName);
     pcurrentdimstyle:=drawing.GetCurrentDimStyle;
     if pcurrentdimstyle<>nil then
-                                 VarsDict.insert('$DIMSTYLE',pcurrentdimstyle^.Name)
+                                 VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$DIMSTYLE',pcurrentdimstyle^.Name)
                              else
-                                 VarsDict.insert('$DIMSTYLE','Standatd');
+                                 VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$DIMSTYLE','Standatd');
 
     //if assigned(sysvar.DWG.DWG_CLinew) then
-                                           VarsDict.insert('$CELWEIGHT',inttostr({sysvar.DWG.DWG_CLinew^}drawing.CurrentLineW));
+                                           VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$CELWEIGHT',inttostr({sysvar.DWG.DWG_CLinew^}drawing.CurrentLineW));
                                        //else
                                        //    VarsDict.insert('$CELWEIGHT',inttostr(-1));
 
     //if assigned(sysvar.DWG.DWG_LTScale) then
-                                            VarsDict.insert('$LTSCALE',floattostr({sysvar.DWG.DWG_LTScale^}drawing.LTScale));
+                                            VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$LTSCALE',floattostr({sysvar.DWG.DWG_LTScale^}drawing.LTScale));
                                         //else
                                         //    VarsDict.insert('$LTSCALE',floattostr(1.0));
 
     //if assigned(sysvar.DWG.DWG_CLTScale) then
-                                             VarsDict.insert('$CELTSCALE',floattostr({sysvar.DWG.DWG_CLTScale^}drawing.CLTScale));
+                                             VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$CELTSCALE',floattostr({sysvar.DWG.DWG_CLTScale^}drawing.CLTScale));
                                          //else
                                          //    VarsDict.insert('$CELTSCALE',floattostr(1.0));
 
     //if assigned(sysvar.DWG.DWG_CColor) then
-                                           VarsDict.insert('$CECOLOR',inttostr({sysvar.DWG.DWG_CColor^}drawing.CColor));
+                                           VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$CECOLOR',inttostr({sysvar.DWG.DWG_CColor^}drawing.CColor));
                                        //else
                                            //VarsDict.insert('$CECOLOR',inttostr(256));
 
@@ -1614,32 +1612,32 @@ begin
     //if assigned(sysvar.DWG.DWG_DrawMode) then
                                              begin
                                                   if {sysvar.DWG.DWG_DrawMode^}drawing.LWDisplay then
-                                                                                  VarsDict.insert('$LWDISPLAY',inttostr(1))
+                                                                                  VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$LWDISPLAY',inttostr(1))
                                                                               else
-                                                                                  VarsDict.insert('$LWDISPLAY',inttostr(0));
+                                                                                  VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$LWDISPLAY',inttostr(0));
                                              end;
                                          //else
                                          //    VarsDict.insert('$LWDISPLAY',inttostr(0));
-   VarsDict.insert('$HANDSEED','FUCK OFF!');
+   VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$HANDSEED','FUCK OFF!');
 
    //if assigned(sysvar.DWG.DWG_LUnits) then
-                                        VarsDict.insert('$LUNITS',inttostr(ord({sysvar.DWG.DWG_LUnits^}drawing.LUnits)+1));
+                                        VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$LUNITS',inttostr(ord({sysvar.DWG.DWG_LUnits^}drawing.LUnits)+1));
    //if assigned(sysvar.DWG.DWG_LUPrec) then
-                                        VarsDict.insert('$LUPREC',inttostr(ord({sysvar.DWG.DWG_LUPrec^}drawing.LUPrec)));
+                                        VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$LUPREC',inttostr(ord({sysvar.DWG.DWG_LUPrec^}drawing.LUPrec)));
    //if assigned(sysvar.DWG.DWG_AUnits) then
-                                        VarsDict.insert('$AUNITS',inttostr(ord({sysvar.DWG.DWG_AUnits^}drawing.AUnits)));
+                                        VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$AUNITS',inttostr(ord({sysvar.DWG.DWG_AUnits^}drawing.AUnits)));
    //if assigned(sysvar.DWG.DWG_AUPrec) then
-                                        VarsDict.insert('$AUPREC',inttostr(ord({sysvar.DWG.DWG_AUPrec^}drawing.AUPrec)));
+                                        VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$AUPREC',inttostr(ord({sysvar.DWG.DWG_AUPrec^}drawing.AUPrec)));
    //if assigned(sysvar.DWG.DWG_AngDir) then
-                                        VarsDict.insert('$ANGDIR',inttostr(ord({sysvar.DWG.DWG_AngDir^}drawing.AngDir)));
+                                        VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$ANGDIR',inttostr(ord({sysvar.DWG.DWG_AngDir^}drawing.AngDir)));
    //if assigned(sysvar.DWG.DWG_AngBase) then
-                                        VarsDict.insert('$ANGBASE',floattostr({sysvar.DWG.DWG_AngBase^}drawing.AngBase));
+                                        VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$ANGBASE',floattostr({sysvar.DWG.DWG_AngBase^}drawing.AngBase));
    //if assigned(sysvar.DWG.DWG_UnitMode) then
-                                        VarsDict.insert('$UNITMODE',inttostr(ord({sysvar.DWG.DWG_UnitMode^}drawing.UnitMode)));
+                                        VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$UNITMODE',inttostr(ord({sysvar.DWG.DWG_UnitMode^}drawing.UnitMode)));
    //if assigned(sysvar.DWG.DWG_InsUnits) then
-                                           VarsDict.insert('$INSUNITS',inttostr(ord({sysvar.DWG.DWG_InsUnits^}drawing.InsUnits)));
+                                           VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$INSUNITS',inttostr(ord({sysvar.DWG.DWG_InsUnits^}drawing.InsUnits)));
    //if assigned(sysvar.DWG.DWG_TextSize) then
-                                           VarsDict.insert('$TEXTSIZE',floattostr({sysvar.DWG.DWG_TextSize^}drawing.TextSize));
+                                           VarsDict.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}('$TEXTSIZE',floattostr({sysvar.DWG.DWG_TextSize^}drawing.TextSize));
 end;
 
 function savedxf2000(name: GDBString; var drawing:TSimpleDrawing):boolean;
@@ -1667,10 +1665,8 @@ var
   PSP:PShapeProp;
   PTP:PTextProp;
   p:pointer;
-  {$IFNDEF DELPHI}
   Handle2pointer:TMapPointerToHandle;
   VarsDict:TGDBString2GDBStringDictionary;
-  {$ENDIF}
   //DWGHandle:TDWGHandle;
   laststrokewrited:boolean;
   pcurrtextstyle:PGDBTextStyle;
@@ -1678,10 +1674,8 @@ var
   processedvarscount:integer;
   lph:TLPSHandle;
 begin
-  {$IFNDEF DELPHI}
   Handle2pointer:=TMapPointerToHandle.Create;
   VarsDict:=TGDBString2GDBStringDictionary.create;
-  {$ENDIF}
   DecimalSeparator := '.';
   //standartstylehandle:=0;
   olddwg:=nil;//@drawing;
@@ -1696,7 +1690,7 @@ begin
     {if assigned(StartLongProcessProc)then
        StartLongProcessProc(drawing.pObjRoot^.ObjArray.Count,'Save DXF file');}
   OldHandele2NewHandle:=TMapHandleToHandle.Create;
-  OldHandele2NewHandle.Insert(0,0);
+  OldHandele2NewHandle.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(0,0);
   //phandlea := dxfhandlearraycreate(10000);
   //pushhandle(phandlea,0,0);
   templatefile.InitFromFile(ProgramPath + 'components/empty.dxf');
@@ -1711,7 +1705,7 @@ begin
   indimstyletable:=false;
   inappidtable:=false;
   MakeVariablesDict(VarsDict,drawing);
-  processedvarscount:=VarsDict.size;
+  processedvarscount:=VarsDict.{$IFDEF DELPHI}count{$ENDIF}{$IFNDEF DELPHI}size{$ENDIF};
   while templatefile.notEOF do
   begin
     if  (templatefile.count-templatefile.ReadPos)<10
@@ -1771,7 +1765,7 @@ begin
         end
         else
         begin
-          OldHandele2NewHandle.Insert(valuei, handle);
+          OldHandele2NewHandle.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(valuei, handle);
           //pushhandle(phandlea, valuei, handle);
           if not ignoredsource then
           begin

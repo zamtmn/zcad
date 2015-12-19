@@ -26,10 +26,11 @@ uses {gdbase,gdbasetypes,
      UGDBOpenArrayOfPV,uzglabstractdrawer,GDBGenericSubEntry,gdbase,gdbasetypes,
      oglwindowdef,gdbdrawcontext,{varmandef,}{Varman,}UGDBPoint3DArray,UGDBEntTree,geometry,ugdbabstractdrawing,
      {uzcshared,}sysutils,
-     ExtCtrls,Controls,Classes,LCLType,Forms,{zcadsysvars,}GDBEntity;
+     ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,{zcadsysvars,}GDBEntity;
 
 type
-    TCADControl=class(TCustomControl)
+{NEEDFIXFORDELPHI}
+    TCADControl=class({$IFNDEF DELPHI}TCustomControl{$ENDIF}{$IFDEF DELPHI}TForm{$ENDIF})
                 public
                 function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint): Boolean; overload;
                 property OnMouseUp;

@@ -20,7 +20,7 @@ unit ugdbttffont;
 {$INCLUDE def.inc}
 interface
 uses LCLProc,uzgprimitivescreator,uzgprimitives,uzglvectorobject,ugdbbasefont,beziersolver,math,glstatemanager,gluinterface,TTTypes,TTObjs,
-  gmap,gutil,EasyLazFreeType,memman,strproc,gdbasetypes,sysutils,
+  usimplegenerics,EasyLazFreeType,memman,strproc,gdbasetypes,sysutils,
   gdbase,geometry;
 type
 PTTTFSymInfo=^TTTFSymInfo;
@@ -29,10 +29,8 @@ TTTFSymInfo=packed record
                       PSymbolInfo:PGDBSymdolInfo;
                       //-ttf-//TrianglesDataInfo:TTrianglesDataInfo;
                 end;
-{$IFNDEF DELPHI}
-TLessInt={specialize }TLess<integer>;
-TMapChar={specialize }TMap<integer,{integer}TTTFSymInfo,TLessInt>;
-{$ENDIF}
+
+TMapChar=TMyMapGen<integer,TTTFSymInfo{$IFNDEF DELPHI},LessInteger{$ENDIF}>;
 {EXPORT+}
 PTTFFont=^TTFFont;
 TTFFont={$IFNDEF DELPHI}packed{$ENDIF} object({SHXFont}BASEFont)

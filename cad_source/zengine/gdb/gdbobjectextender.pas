@@ -39,7 +39,7 @@ TDXFEntLoadData=record
 TDXFEntSaveData=record
                 DXFEntSaveFeature:TDXFEntSaveFeature;
               end;
-TDXFEntLoadDataMap=GKey2DataMap<GDBString,TDXFEntLoadData,LessGDBString>;
+TDXFEntLoadDataMap=GKey2DataMap<GDBString,TDXFEntLoadData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
 TDXFEntSaveDataVector=TVector<TDXFEntSaveData>;
 TDXFEntFormatProcsVector=TVector<TDXFEntFormatFeature>;
 TCreateEntFeatureVector=TVector<TCreateEntFeatureData>;
@@ -99,10 +99,16 @@ var
   data:TDXFEntLoadData;
 begin
      if fDXFEntLoadDataMapByName.MyGetValue(name,data)then
-                                                        exit(data.DXFEntLoadFeature);
+                                                        begin
+                                                        result:=data.DXFEntLoadFeature;
+                                                        exit;
+                                                        end;
      if length(name)>=1 then
      if fDXFEntLoadDataMapByPrefix.MyGetValue(name[1],data)then
-                                                        exit(data.DXFEntLoadFeature);
+                                                        begin
+                                                        result:=data.DXFEntLoadFeature;
+                                                        exit;
+                                                        end;
      result:=nil;
 end;
 procedure TDXFEntIODataManager.RegisterNamedLoadFeature(name:GDBString;PLoadProc:TDXFEntLoadFeature);

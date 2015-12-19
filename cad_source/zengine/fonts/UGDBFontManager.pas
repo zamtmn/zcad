@@ -28,7 +28,7 @@ TFontLoadProcedureData=packed record
                 FontDesk:GDBString;
                 FontLoadProcedure:TFontLoadProcedure;
                 end;
-TFontExt2LoadProcMap=GKey2DataMap<GDBString,TFontLoadProcedureData,LessGDBString>;
+TFontExt2LoadProcMap=GKey2DataMap<GDBString,TFontLoadProcedureData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
 {Export+}
   PGDBFontRecord=^GDBFontRecord;
   GDBFontRecord = packed record
@@ -103,13 +103,17 @@ begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof({GDBFontRecord}GDBfont));
 end;
 procedure GDBFontManager.CreateBaseFont;
+{NEEDFIXFORDELPHI}
+{$IFNDEF DELPHI}
 var
    r: TLResource;
    f:GDBOpenArrayOfByte;
+{$ENDIF}
 const
    resname='GEWIND';
    filename='GEWIND.SHX';
 begin
+  {$IFNDEF DELPHI}
   pbasefont:=addFonf(FindInPaths(sysvarPATHFontsPath,sysvarAlternateFont));
   if pbasefont=nil then
   begin
@@ -132,6 +136,7 @@ begin
                       end;
   end;
   addFonf(FindInPaths(sysvarPATHFontsPath,'ltypeshp.shx'));
+  {$ENDIF}
 end;
 
 {procedure GDBFontManager.freeelement;
@@ -289,7 +294,10 @@ begin
      format;}
 //end;
 initialization
+{NEEDFIXFORDELPHI}
+{$IFNDEF DELPHI}
   {$I gewind.lrs}
+{$ENDIF}
   FontManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);
   FontExt2LoadProc:=TFontExt2LoadProcMap.Create;
   sysvarPATHFontsPath:=ExtractFileDir(ParamStr(0));

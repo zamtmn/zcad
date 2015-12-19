@@ -124,7 +124,7 @@ type
     {ENDIF}
     {$ENDIF}
     {$IFDEF DELPHI}
-    TViewPortArray = {array [0..3] of GLint}TVector4i;
+    //TViewPortArray = {array [0..3] of GLint}TVector4i;
     {$ENDIF}
 
     TessObj=Pointer;

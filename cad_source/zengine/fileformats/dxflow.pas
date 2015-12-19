@@ -66,8 +66,7 @@ implementation
 //    log;
 function DXFHandle(sh:string):TDWGHandle;
 begin
-     {$IFNDEF DELPHI}result:=StrToQWord('$'+sh);{$ENDIF}
-      {$IFDEF DELPHI}result:=strtoint('$'+sh);{$ENDIF}
+     result:=StrToQWord('$'+sh);
 end;
 function dxfGroupCode(const dxfcod:GDBInteger):GDBString;
 begin

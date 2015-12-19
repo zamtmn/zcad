@@ -87,7 +87,7 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                   procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                   function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
 
-                  function CreateInstance:PGDBObjLine;static;
+                  class function CreateInstance:PGDBObjLine;static;
            end;
 {Export-}
 ptlinertmodify=^tlinertmodify;
@@ -788,7 +788,7 @@ begin
 end;
 function AllocLine:PGDBObjLine;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocLine}',{$ENDIF}result,sizeof(GDBObjLine));
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocLine}',{$ENDIF}pointer(result),sizeof(GDBObjLine));
 end;
 function AllocAndInitLine(owner:PGDBObjGenericWithSubordinated):PGDBObjLine;
 begin
@@ -810,7 +810,7 @@ begin
   //owner^.AddMi(@result);
   SetLineGeomProps(result,args);
 end;
-function GDBObjLine.CreateInstance:PGDBObjLine;static;
+class function GDBObjLine.CreateInstance:PGDBObjLine;
 begin
   result:=AllocAndInitLine(nil);
 end;

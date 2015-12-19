@@ -72,8 +72,8 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
                         procedure PostRenderDraw;override;
 
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);override;overload;
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F);override;overload;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);overload;override;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F);overload;override;
                         procedure popMatrix;override;
                    end;
 var

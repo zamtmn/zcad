@@ -34,7 +34,7 @@ PGDBTextStyleProp=^GDBTextStyleProp;
   PPGDBTextStyleObjInsp=^PGDBTextStyleObjInsp;
   PGDBTextStyleObjInsp=GDBPointer;
   PGDBTextStyle=^GDBTextStyle;
-  GDBTextStyle = packed object(GDBNamedObject)
+  GDBTextStyle = {$IFNDEF DELPHI}packed{$ENDIF}object(GDBNamedObject)
     dxfname: GDBAnsiString;(*saved_to_shd*)
     pfont: PGDBfont;
     prop:GDBTextStyleProp;(*saved_to_shd*)
@@ -137,7 +137,7 @@ var ts:PGDBTextStyle;
     //ff:gdbstring;
     //p:GDBPointer;
 begin
-  GDBGetmem({$IFDEF DEBUGBUILD}'{ED59B789-33EF-487E-9E1D-711F5988A194}',{$ENDIF}ts,sizeof(GDBTextStyle));
+  GDBGetmem({$IFDEF DEBUGBUILD}'{ED59B789-33EF-487E-9E1D-711F5988A194}',{$ENDIF}pointer(ts),sizeof(GDBTextStyle));
   ts.init(stylename);
   //ts.name:=stylename;
   ts.dxfname:=FontFile;

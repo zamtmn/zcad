@@ -19,7 +19,7 @@
 unit uzglabstractdrawer;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitivescreatorabstract,gdbpalette,Classes,UGDBOpenArrayOfData,Graphics,gdbase,GDBCamera,geometry;
+uses {$IFDEF DELPHI}types,{$ENDIF}uzgprimitivescreatorabstract,gdbpalette,Classes,UGDBOpenArrayOfData,Graphics,gdbase,GDBCamera,geometry;
 type
 TRenderMode=(TRM_ModelSpace,TRM_DisplaySpace,TRM_WindowSpace);
 TZGLPenStyle=(TPS_Solid,TPS_Dot,TPS_Dash,TPS_Selected);
@@ -74,14 +74,14 @@ TZGLAbstractDrawer=class
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);virtual;abstract;
                         procedure DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);virtual;abstract;
                         procedure DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);virtual;abstract;
-                        procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);virtual;abstract;overload;
-                        procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);virtual;abstract;overload;
+                        procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);overload;virtual;abstract;
+                        procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);overload;virtual;abstract;
                         procedure DrawAABB3DInModelSpace(const BoundingBox:TBoundingBox;var matrixs:tmatrixs);virtual;abstract;
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);virtual;abstract;
                         procedure PostRenderDraw;virtual;abstract;
 
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);virtual;abstract;overload;
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F);virtual;abstract;overload;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D);overload;virtual;abstract;
+                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F);overload;virtual;abstract;
                         procedure popMatrix;virtual;abstract;
                    end;
 implementation

@@ -17,6 +17,7 @@
 }
 
 unit UGDBDrawingdef;
+{$INCLUDE def.inc}
 interface
 uses gdbdrawcontext,ugdbdimstylearray,gdbase,gdbasetypes,UGDBLayerArray,UGDBTextStyleArray,ugdbltypearray,UGDBTableStyleArray;
 type

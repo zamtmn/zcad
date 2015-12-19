@@ -18,7 +18,7 @@
 unit gdbase;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes;
+uses gdbasetypes,sysutils;
      //gdbobjectsconstdef;
 const
      cmd_ok=-1;
@@ -483,6 +483,9 @@ const
                              +sizeof(ZCPHead.HiVersion)+sizeof(ZCPHead.LoVersion);
 var
   VerboseLog:boolean=false;
+{$IFDEF DELPHI}
+function StrToQWord(sh:string):UInt64;
+{$ENDIF}
 implementation
 //uses
 //     log;
@@ -566,7 +569,12 @@ procedure GDBNamedObject.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteg
 begin
     proc(@self,PCounted,Counter);
 end;
-
+{$IFDEF DELPHI}
+function StrToQWord(sh:string):UInt64;
+begin
+      result:=strtoint('$'+sh);
+end;
+{$ENDIF}
 begin
 end.
 

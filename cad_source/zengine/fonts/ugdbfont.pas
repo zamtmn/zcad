@@ -381,7 +381,7 @@ begin
      if font<>nil then
                       begin
                            font.done;
-                           GDBFreeMem(font);
+                           GDBFreeMem(pointer(font));
                       end;
      inherited;
 end;

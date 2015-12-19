@@ -71,7 +71,7 @@ begin
            Q := Length(result);
            while (Q > 0) and (result[Q] = '0') do
              Dec(Q);
-           if result[Q] = WorkingFormatSettings.DecimalSeparator then
+           if result[Q] = ansichar(WorkingFormatSettings.DecimalSeparator) then
              Dec(Q); { Remove trailing decimal point }
            if (Q = 0) or ((Q=1) and (result[1] = '-')) then
              result := '0'
@@ -446,5 +446,6 @@ begin
   end;
 end;
 initialization
-   WorkingFormatSettings:=DefaultFormatSettings;
+   {$IFDEF DELPHI}WorkingFormatSettings:=FormatSettings;{$ENDIF}
+   {$IFNDEF DELPHI}WorkingFormatSettings:=DefaultFormatSettings;{$ENDIF}
 end.

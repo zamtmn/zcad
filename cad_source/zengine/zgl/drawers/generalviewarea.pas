@@ -24,7 +24,7 @@ uses
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
      oglwindowdef,gdbdrawcontext,GDBEntity,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
      gdbobjectsconstdef,zcadstrconsts,UGDBTracePropArray,math,sysutils,UGDBDrawingdef,strproc,
-     ExtCtrls,Controls,Classes,LCLType,Forms,UGDBOpenArrayOfPV,GDBGenericSubEntry,GDBCamera,UGDBVisibleOpenArray,uzglabstractdrawer,uzglgeneraldrawer,uzglabstractviewarea;
+     ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,UGDBOpenArrayOfPV,GDBGenericSubEntry,GDBCamera,UGDBVisibleOpenArray,uzglabstractdrawer,uzglgeneraldrawer,uzglabstractviewarea;
 const
   ontracdist=10;
   ontracignoredist=25;

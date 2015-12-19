@@ -23,7 +23,9 @@ interface
 uses
  {$IFDEF WINDOWS}windows,{$ENDIF}
  {$IFDEF LCLQT}qt4,qtobjects,{$ENDIF}
- LCLType,LCLIntf,gdbase;
+ {$IFNDEF DELPHI}LCLType,LCLIntf,{$ENDIF}
+ {$IFDEF DELPHI}windows,types,{$ENDIF}
+ gdbase;
 const
      GM_COMPATIBLE=1;
      GM_ADVANCED=2;

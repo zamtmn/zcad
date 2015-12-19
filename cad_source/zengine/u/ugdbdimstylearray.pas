@@ -89,7 +89,7 @@ TGDBDimUnitsProp=packed record
 PPGDBDimStyleObjInsp=^PGDBDimStyleObjInsp;
 PGDBDimStyleObjInsp=GDBPointer;
 PGDBDimStyle=^GDBDimStyle;
-GDBDimStyle = packed object(GDBNamedObject)
+GDBDimStyle = {$IFNDEF DELPHI}packed{$ENDIF}object(GDBNamedObject)
                       Lines:TGDBDimLinesProp;
                       Arrows:TGDBDimArrowsProp;
                       Text:TGDBDimTextProp;
@@ -147,9 +147,13 @@ begin
 end;
 
 procedure GDBDimStyle.ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
+{NEEDFIXFORDELPHI}
+{$IFNDEF DELPHI}
 var Iterator:TMapBlockHandle_BlockNames.TIterator;
     BlockName:string;
+{$ENDIF}
 begin
+{$IFNDEF DELPHI}
      if PDXFLoadingData<>nil then
      begin
           if PDXFLoadingData^.DIMLDRBLKhandle<>0 then
@@ -183,13 +187,14 @@ begin
                                     end;
           end;
      end;
+{$ENDIF}
 end;
 
 procedure GDBDimStyle.CreateLDIfNeed;
 begin
      if PDXFLoadingData=nil then
      begin
-          GDBGetMem({$IFDEF DEBUGBUILD}'{29732718-D406-4A69-A37E-3F9A28E849EF}',{$ENDIF}PDXFLoadingData,SizeOf(PDXFLoadingData^));
+          GDBGetMem({$IFDEF DEBUGBUILD}'{29732718-D406-4A69-A37E-3F9A28E849EF}',{$ENDIF}pointer(PDXFLoadingData),SizeOf(PDXFLoadingData^));
           PDXFLoadingData^.DIMBLK1handle:=0;
           PDXFLoadingData^.DIMBLK2handle:=0;
           PDXFLoadingData^.DIMLDRBLKhandle:=0;
@@ -199,7 +204,7 @@ procedure GDBDimStyle.ReleaseLDIfNeed;
 begin
      if PDXFLoadingData<>nil then
      begin
-          GDBFreeMem(PDXFLoadingData);
+          GDBFreeMem(pointer(PDXFLoadingData));
      end;
 end;
 function GDBDimStyle.GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;

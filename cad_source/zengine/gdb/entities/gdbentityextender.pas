@@ -21,7 +21,7 @@ unit gdbentityextender;
 
 interface
 uses memman,UGDBDrawingdef,gdbasetypes,gdbase,usimplegenerics,
-     gvector,gmap,UGDBOpenArrayOfByte;
+     {gvector,}{gmap,}UGDBOpenArrayOfByte;
 
 type
 TBaseObjExtender={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -41,8 +41,8 @@ TBaseEntityExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseObjExtender)
 
                   procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);virtual;abstract;
 end;
-TEntityExtenderVector= TVector<PTBaseEntityExtender>;
-TEntityExtenderMap= GKey2DataMap<Pointer,SizeUInt,LessPointer>;
+TEntityExtenderVector= TMyVector<PTBaseEntityExtender>;
+TEntityExtenderMap= GKey2DataMap<Pointer,SizeUInt{$IFNDEF DELPHI},LessPointer{$ENDIF}>;
 TEntityExtensions=class
                        fEntityExtensions:TEntityExtenderVector;
                        fEntityExtenderToIndex:TEntityExtenderMap;
@@ -103,7 +103,7 @@ begin
      begin
        p:=fEntityExtensions[i];
        p^.Done;
-       GDBFreeMem(p);
+       GDBFreeMem(pointer(p));
      end;
      fEntityExtensions.Destroy;
      fEntityExtenderToIndex.Destroy;

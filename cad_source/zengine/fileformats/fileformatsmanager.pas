@@ -20,7 +20,7 @@ unit fileformatsmanager;
 {$INCLUDE def.inc}
 
 interface
-uses gmap,gdbasetypes,gdbase,usimplegenerics,GDBGenericSubEntry,ugdbsimpledrawing;
+uses gdbasetypes,gdbase,usimplegenerics,GDBGenericSubEntry,ugdbsimpledrawing;
 
 type
 TFileLoadProcedure=procedure(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);

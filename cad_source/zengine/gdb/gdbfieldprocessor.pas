@@ -22,7 +22,7 @@ interface
 uses sysutils,gdbasetypes,usimplegenerics;
 type
 TStrProcessFunc=procedure(var str:gdbstring;startpos:integer;pobj:pointer);
-TPrefix2ProcessFunc=GKey2DataMap<GDBString,TStrProcessFunc,LessGDBString>;
+TPrefix2ProcessFunc=GKey2DataMap<GDBString,TStrProcessFunc{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
 var
     Prefix2ProcessFunc:TPrefix2ProcessFunc;
 function textformat(s:GDBString;pobj:GDBPointer):GDBString;
@@ -54,7 +54,9 @@ end;
 function textformat;
 var i,i2,counter:GDBInteger;
     ps,s2:GDBString;
+    {$IFNDEF DELPHI}
     iterator:Prefix2ProcessFunc.TIterator;
+    {$ENDIF}
 const
     maxitertations=100;
 begin
@@ -66,6 +68,7 @@ begin
                           ps:=copy(ps,1,i-1)+datetostr(date)+copy(ps,i+6,length(ps)-i-5)
                      end;
      until i<=0;
+     {$IFNDEF DELPHI}
      counter:=0;
      iterator:=Prefix2ProcessFunc.Min;
      if assigned(iterator) then
@@ -89,6 +92,7 @@ begin
      if counter>maxitertations then
                         result:='!!ERR(Loop detected)'
                     else
+    {$ENDIF}
                         result:=ps;
 end;
 initialization

@@ -39,9 +39,9 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  constructor initnul;
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                 procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  function CalcSquare:GDBDouble;virtual;
                  function isPointInside(point:GDBVertex):GDBBoolean;virtual;
                  procedure createpoint;virtual;
@@ -811,7 +811,7 @@ begin
     result:=result/2;
 end;
 
-procedure GDBObjLWpolyline.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjLWpolyline.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
      Vertex2D_in_OCS_Array.Shrink;
      Width2D_in_OCS_Array.Shrink;

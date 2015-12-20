@@ -25,7 +25,7 @@ type
 PGDBObjConnected=^GDBObjConnected;
 GDBObjConnected={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                       procedure addtoconnect(pobj:pgdbobjEntity;var ConnectedArray:GDBObjOpenArrayOfPV);virtual;
-                      procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry;const drawing:TDrawingDef);virtual;abstract;
+                      procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry;var drawing:TDrawingDef);virtual;abstract;
                 end;
 {Export-}
 implementation

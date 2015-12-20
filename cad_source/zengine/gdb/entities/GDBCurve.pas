@@ -33,7 +33,7 @@ GDBObjCurve={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure FormatWithoutSnapArray;virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;
@@ -57,7 +57,7 @@ GDBObjCurve={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
 
                  procedure AddVertex(Vertex:GDBVertex);virtual;
 
-                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
 
@@ -385,7 +385,7 @@ begin
   length:=GetLength;
 end;
 
-procedure GDBObjCurve.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjCurve.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 //var //i,j: GDBInteger;
     //ptv,ptvprev: pgdbvertex;
     //tv:gdbvertex;

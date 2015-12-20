@@ -1515,7 +1515,7 @@ begin
   debugln('{D-}end; {AddFromDXF}');
   //programlog.LogOutStr('end; {AddFromDXF}',lp_DecPos,LM_Debug);
 end;
-procedure saveentitiesdxf2000(pva: PGDBObjEntityOpenArray; var outhandle:{GDBInteger}GDBOpenArrayOfByte; var handle: TDWGHandle;const drawing:TSimpleDrawing);
+procedure saveentitiesdxf2000(pva: PGDBObjEntityOpenArray; var outhandle:{GDBInteger}GDBOpenArrayOfByte; var handle: TDWGHandle;var drawing:TSimpleDrawing);
 var
 //  i:GDBInteger;
   pv:pgdbobjEntity;

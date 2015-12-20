@@ -40,9 +40,9 @@ PGDBObjSubordinated=^GDBObjSubordinated;
 PGDBObjGenericWithSubordinated=^GDBObjGenericWithSubordinated;
 GDBObjGenericWithSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjExtendable)
                                     {OU:TFaceTypedData;(*'Variables'*)}
-                                    function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
+                                    function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
                                     function ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
-                                    procedure DelSelectedSubitem(const drawing:TDrawingDef);virtual;
+                                    procedure DelSelectedSubitem(var drawing:TDrawingDef);virtual;
                                     function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;abstract;
                                     procedure RemoveInArray(pobjinarray:GDBInteger);virtual;abstract;
                                     function CreateOU:GDBInteger;virtual;
@@ -55,10 +55,10 @@ GDBObjGenericWithSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjExtend
                                     function GetHandle:GDBPlatformint;virtual;
                                     function GetType:GDBPlatformint;virtual;
                                     function IsSelected:GDBBoolean;virtual;abstract;
-                                    procedure FormatAfterDXFLoad(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                                    procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                                     procedure CalcGeometry;virtual;
 
-                                    procedure Build(const drawing:TDrawingDef);virtual;
+                                    procedure Build(var drawing:TDrawingDef);virtual;
 
 
 end;

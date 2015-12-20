@@ -43,8 +43,8 @@ GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects
                       function getoutbound(var DC:TDrawContext):TBoundingBox;
                       function getonlyoutbound(var DC:TDrawContext):TBoundingBox;
                       procedure Format;virtual;abstract;
-                      procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                      procedure FormatAfterEdit(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                      procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                      procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       //function InRect:TInRect;virtual;
                       function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                       //function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;virtual;

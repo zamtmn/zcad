@@ -38,11 +38,11 @@ GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function GetObjTypeName:GDBString;virtual;
-                 procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                 procedure FormatFast(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatFast(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
-                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
 
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
 
@@ -153,7 +153,7 @@ begin
      until ptvnext=nil;
 end;
 
-procedure GDBObjCable.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjCable.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 var ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
     currentobj,CurrentSubObj,CurrentSubObj2,ptd:PGDBObjDevice;
     devpoint,{cabpoint,}tp,tp2,tp3,{_XWCS,}_YWCS,_ZWCS:GDBVertex;

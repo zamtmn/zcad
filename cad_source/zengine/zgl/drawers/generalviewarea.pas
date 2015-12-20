@@ -84,7 +84,7 @@ type
                            procedure getosnappoint(radius: GDBFloat);override;
                            procedure getonmouseobject(pva: PGDBObjEntityOpenArray;InSubEntry:GDBBoolean);virtual;
                            function findonmobj(pva: PGDBObjEntityOpenArray; var i: GDBInteger;InSubEntry:GDBBoolean): GDBInteger;virtual;
-                           procedure getonmouseobjectbytree(Node:TEntTreeNode;InSubEntry:GDBBoolean);override;
+                           procedure getonmouseobjectbytree(var Node:TEntTreeNode;InSubEntry:GDBBoolean);override;
                            procedure processmousenode(Node:TEntTreeNode;var i:integer;InSubEntry:GDBBoolean);virtual;
                            procedure AddOntrackpoint;override;
                            procedure CorrectMouseAfterOS;override;
@@ -1965,7 +1965,7 @@ begin
      end;
 end;
 
-procedure TGeneralViewArea.getonmouseobjectbytree(Node:TEntTreeNode;InSubEntry:GDBBoolean);
+procedure TGeneralViewArea.getonmouseobjectbytree(var Node:TEntTreeNode;InSubEntry:GDBBoolean);
 var
   i: GDBInteger;
   pp:PGDBObjEntity;

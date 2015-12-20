@@ -40,12 +40,12 @@ GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  constructor initnul;
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure CalcObjMatrix;virtual;
-                 procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure createpoints(var DC:TDrawContext);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
@@ -268,7 +268,7 @@ begin
   MatrixInvert(m1);
   v:=VectorTransform(v,m1);
 end;
-procedure GDBObjARC.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjARC.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 var
   v:GDBvertex4D;
 begin

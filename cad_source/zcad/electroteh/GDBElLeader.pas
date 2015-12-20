@@ -40,18 +40,18 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
             function beforertmodify:GDBPointer;virtual;
             function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;virtual;
-            procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-            function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
+            procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+            function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
 
             constructor initnul;
             function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-            procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
-            procedure DXFOut(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+            procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+            procedure DXFOut(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
             function GetObjTypeName:GDBString;virtual;
             function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
             function ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
             function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
-            procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+            procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
             //function InRect:TInRect;virtual;
 
             destructor done;virtual;
@@ -230,7 +230,7 @@ begin
      //bp.owner^.ImEdited(@self,bp.PSelfInOwnerArray);
      //ObjCasheArray.addnodouble(@pobj);
 end;
-procedure GDBObjElLeader.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjElLeader.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 var
    pl:pgdbobjline;
    tv,tv2{,tv3}:gdbvertex;

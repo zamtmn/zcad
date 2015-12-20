@@ -41,12 +41,12 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  destructor done;virtual;
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
                  function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
 
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
-                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
@@ -140,7 +140,7 @@ begin
      tv:=1;
 end;
 
-procedure GDBObjSpline.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjSpline.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 var //i,j: GDBInteger;
     ptv: pgdbvertex;
     //tv:gdbvertex;
@@ -337,7 +337,7 @@ begin
 
 end;
 
-procedure GDBObjSpline.SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);
+procedure GDBObjSpline.SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);
 begin
 end;
 

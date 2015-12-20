@@ -44,14 +44,14 @@ GDBObjComplex={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                     procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                    procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                     //procedure feedbackinrect;virtual;
                     //function InRect:TInRect;virtual;
                     //procedure Draw(lw:GDBInteger);virtual;
                     procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
                     function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
-                    procedure BuildGeometry(const drawing:TDrawingDef);virtual;
-                    procedure FormatAfterDXFLoad(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                    procedure BuildGeometry(var drawing:TDrawingDef);virtual;
+                    procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
               end;
 {EXPORT-}
 implementation
@@ -297,7 +297,7 @@ begin
   //pdy:=PProjPoint[1].y-PProjPoint[0].y;
      ConstObjArray.RenderFeedbac(infrustumactualy,pcount,camera,ProjectProc,dc);
 end;
-procedure GDBObjComplex.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjComplex.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 {var pblockdef:PGDBObjBlockdef;
     pvisible,pvisible2:PGDBObjEntity;
     i:GDBInteger;

@@ -43,7 +43,7 @@ GDBGraf={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfDa
                 constructor init(m:GDBInteger);
                 function addge(v:gdbvertex):pgrafelement;
                 procedure clear;virtual;
-                function minimalize(const drawing:TDrawingDef):GDBBoolean;
+                function minimalize(var drawing:TDrawingDef):GDBBoolean;
                 function divide:GDBBoolean;
                 destructor done;virtual;
                 procedure freeelement(p:GDBPointer);virtual;

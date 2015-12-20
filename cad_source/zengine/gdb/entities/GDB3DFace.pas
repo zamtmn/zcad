@@ -36,8 +36,8 @@ GDBObj3DFace={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
-                 procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
 
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
@@ -88,7 +88,7 @@ begin
            concatBBandPoint(vp.BoundingBox,PInWCS[I]);
       end;
 end;
-procedure GDBObj3DFace.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObj3DFace.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 var i:GDBInteger;
     v:GDBVertex;
 begin

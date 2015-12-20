@@ -29,7 +29,7 @@ GDBObjWithMatrix={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)
                        constructor initnul(owner:PGDBObjGenericWithSubordinated);
                        function GetMatrix:PDMatrix4D;virtual;
                        procedure CalcObjMatrix;virtual;
-                       procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                        procedure createfield;virtual;
                        procedure transform(const t_matrix:DMatrix4D);virtual;
                        procedure ReCalcFromObjMatrix;virtual;abstract;
@@ -182,7 +182,7 @@ procedure GDBObjWithMatrix.CalcObjMatrix;
 begin
      ObjMatrix:=OneMatrix;
 end;
-procedure GDBObjWithMatrix.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjWithMatrix.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
      CalcObjMatrix;
 end;

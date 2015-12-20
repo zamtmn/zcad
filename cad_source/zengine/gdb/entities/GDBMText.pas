@@ -36,18 +36,18 @@ GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify;wi,l:GDBDouble);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  //procedure getoutbound;virtual;
-                 procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                 procedure FormatContent(const drawing:TDrawingDef);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatContent(var drawing:TDrawingDef);virtual;
                  procedure createpoint(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  destructor done;virtual;
 
                  procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
-                 procedure FormatAfterDXFLoad(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
 
                  function CreateInstance:PGDBObjMText;static;
             end;
@@ -269,7 +269,7 @@ begin
   //w := width;
 end;
 
-procedure GDBObjMText.FormatContent(const drawing:TDrawingDef);
+procedure GDBObjMText.FormatContent(var drawing:TDrawingDef);
 var
   i: GDBInteger;
   h, angle: GDBDouble;
@@ -470,7 +470,7 @@ begin
     calcbb;
     createpoint(drawing);}
 end;
-procedure GDBObjMText.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjMText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
   Geom.Clear;
 
@@ -955,7 +955,7 @@ begin
                      end;
      until i<=0;
 end;
-procedure GDBObjMText.SaveToDXF(var handle: TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);
+procedure GDBObjMText.SaveToDXF(var handle: TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);
 var
 //  i, j: GDBInteger;
   //bw: GDBByte;

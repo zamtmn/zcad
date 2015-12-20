@@ -44,8 +44,8 @@ GDBObjTable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             constructor initnul;
             destructor done;virtual;
             function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-            procedure Build(const drawing:TDrawingDef);virtual;
-            procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+            procedure Build(var drawing:TDrawingDef);virtual;
+            procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
             procedure ReCalcFromObjMatrix;virtual;
             end;
 {EXPORT-}

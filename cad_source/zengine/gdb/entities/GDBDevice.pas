@@ -36,14 +36,14 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                    destructor done;virtual;
                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
-                   procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                   procedure FormatFeatures(const drawing:TDrawingDef);virtual;
+                   procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                   procedure FormatFeatures(var drawing:TDrawingDef);virtual;
                    procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                    procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                    procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                    function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                    function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
-                   function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
+                   function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
                    function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
                    //function GetDeviceType:TDeviceType;virtual;
                    procedure getoutbound(var DC:TDrawContext);virtual;
@@ -51,19 +51,19 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    //function AssignToVariable(pv:pvardesk):GDBInteger;virtual;
                    function GetObjTypeName:GDBString;virtual;
 
-                   procedure BuildGeometry(const drawing:TDrawingDef);virtual;
-                   procedure BuildVarGeometry(const drawing:TDrawingDef);virtual;
+                   procedure BuildGeometry(var drawing:TDrawingDef);virtual;
+                   procedure BuildVarGeometry(var drawing:TDrawingDef);virtual;
 
-                   procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                   procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
                    procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                    function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;
                    //procedure select;virtual;
                    procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
                    procedure addcontrolpoints(tdesc:GDBPointer);virtual;
 
-                   function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
+                   function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
                    procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
-                   procedure FormatAfterDXFLoad(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                   procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                    class function GetDXFIOFeatures:TDXFEntIODataManager;
 
                    function CreateInstance:PGDBObjDevice;static;
@@ -574,13 +574,13 @@ begin
   //uunitmanager.units.loadunit(expandpath('*blocks\el\device_plan.pas'),@ou);
   GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
-procedure GDBObjDevice.FormatFeatures(const drawing:TDrawingDef);
+procedure GDBObjDevice.FormatFeatures(var drawing:TDrawingDef);
 begin
      inherited;
      GetDXFIOFeatures.RunFormatProcs(drawing,@self);
 end;
 
-procedure GDBObjDevice.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjDevice.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 var pvn,{pvnt,}pvp,pvphase,pvi,pvcos:pvardesk;
     volt:TVoltage;
     calcip:TCalcIP;

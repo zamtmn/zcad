@@ -43,7 +43,7 @@ GDBObjWithLocalCS={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                procedure SaveToDXFObjPostfix(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
                function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PExtensionData;var drawing:TDrawingDef):GDBBoolean;
 
-               procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+               procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                procedure CalcObjMatrix;virtual;
                function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
                procedure transform(const t_matrix:DMatrix4D);virtual;
@@ -192,7 +192,7 @@ begin
   pprojoutbound:=nil;
   //CalcObjMatrix;
 end;
-procedure GDBObjWithLocalCS.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjWithLocalCS.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
      CalcObjMatrix;
 end;

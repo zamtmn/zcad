@@ -51,8 +51,8 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
-                 procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure CalcGeometry;virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
@@ -74,7 +74,7 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
-                  function jointoline(pl:pgdbobjline;const drawing:TDrawingDef):GDBBoolean;virtual;
+                  function jointoline(pl:pgdbobjline;var drawing:TDrawingDef):GDBBoolean;virtual;
 
                   function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;
                   function GetObjTypeName:GDBString;virtual;
@@ -129,7 +129,7 @@ function GDBObjLine.GetObjTypeName;
 begin
      result:=ObjN_GDBObjLine;
 end;
-function GDBObjLine.jointoline(pl:pgdbobjline;const drawing:TDrawingDef):GDBBoolean;
+function GDBObjLine.jointoline(pl:pgdbobjline;var drawing:TDrawingDef):GDBBoolean;
 function online(w,u:gdbvertex):GDBBoolean;
 var ww:GDBDouble;
     l:GDBDouble;
@@ -241,7 +241,7 @@ begin
                                     end;
 end;
 
-procedure GDBObjLine.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjLine.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 //var m:DMatrix4D;
 begin
   calcgeometry;

@@ -37,10 +37,10 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
-                 procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  //procedure createpoint(const drawing:TDrawingDef);virtual;
                  //procedure CreateSymbol(_symbol:GDBInteger;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;pfont:pgdbfont;ln:GDBInteger);
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
@@ -119,7 +119,7 @@ begin
   PProjoutbound:=nil;
   //format;
 end;
-procedure GDBObjText.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 var
       TCP:TCodePage;
 begin
@@ -584,7 +584,7 @@ begin
                      end;
      until i<=0;
 end;
-procedure GDBObjText.SaveToDXF(var handle: TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);
+procedure GDBObjText.SaveToDXF(var handle: TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);
 var
   hv, vv,bw: GDBByte;
   tv:gdbvertex;

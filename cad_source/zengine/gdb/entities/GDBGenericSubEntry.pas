@@ -46,21 +46,21 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                             procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                             function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
-                            procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                            procedure FormatAfterEdit(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                            procedure restructure(const drawing:TDrawingDef);virtual;
+                            procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                            procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                            procedure restructure(var drawing:TDrawingDef);virtual;
                             procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                             //function select:GDBBoolean;virtual;
                             function getowner:PGDBObjSubordinated;virtual;
                             function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;
                             function EubEntryType:GDBInteger;virtual;
                             function MigrateTo(new_sub:PGDBObjGenericSubEntry):GDBInteger;virtual;
-                            function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
+                            function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
                             function RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
                             function GoodRemoveMiFromArray(const obj:GDBObjEntity):GDBInteger;virtual;
                             {function SubMi(pobj:pGDBObjEntity):GDBInteger;virtual;}
                             function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;
-                            function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
+                            function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
                             function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
                             procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
                             destructor done;virtual;
@@ -532,7 +532,7 @@ procedure GDBObjGenericSubEntry.getonlyoutbound;
 begin
      vp.BoundingBox:=ObjArray.getonlyoutbound(dc);
 end;
-procedure GDBObjGenericSubEntry.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjGenericSubEntry.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
   inherited FormatEntity(drawing,dc);
   ObjArray.FormatEntity(drawing,dc);

@@ -22,29 +22,29 @@ GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;
                  function EubEntryType:GDBInteger;virtual;
-                 function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
-                 procedure restructure(const drawing:TDrawingDef);virtual;
+                 function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
+                 procedure restructure(var drawing:TDrawingDef);virtual;
                  function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
-                 function BuildGraf(const drawing:TDrawingDef):GDBInteger;virtual;
+                 function BuildGraf(var drawing:TDrawingDef):GDBInteger;virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                 function EraseMi(pobj:pgdbobjEntity;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
+                 function EraseMi(pobj:pgdbobjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
                  function CalcNewName(Net1,Net2:PGDBObjNet):GDBInteger;
-                 procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry;const drawing:TDrawingDef);virtual;
+                 procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry;var drawing:TDrawingDef);virtual;
                  function GetObjTypeName:GDBString;virtual;
-                 procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                 procedure DelSelectedSubitem(const drawing:TDrawingDef);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure DelSelectedSubitem(var drawing:TDrawingDef);virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
 
                  function GetNearestLine(const point:GDBVertex):PGDBObjEntity;
 
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
                  procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
 
                  destructor done;virtual;
-                 procedure FormatAfterDXFLoad(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  function IsHaveGRIPS:GDBBoolean;virtual;
                  class function GetDXFIOFeatures:TDXFEntIODataManager;
            end;
@@ -152,7 +152,7 @@ begin
           until pl=nil;
      end;
 end;
-procedure GDBObjNet.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjNet.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
      //CreateDeviceNameProcess(@self,drawing);
      GetDXFIOFeatures.RunFormatProcs(drawing,@self);
@@ -189,7 +189,7 @@ begin
      dxfGDBStringout(outhandle,1000,'_HANDLE='+inttohex(GetHandle,10));
      dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToNet));
 end;
-procedure GDBObjNet.SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);
+procedure GDBObjNet.SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);
 var pobj:PGDBObjEntity;
     ir:itrec;
 begin
@@ -279,7 +279,7 @@ begin
      ObjArray.DeSelect(SelObjArray,SelectedObjCount);
 
 end;
-function GDBObjNet.BuildGraf(const drawing:TDrawingDef):GDBInteger;
+function GDBObjNet.BuildGraf(var drawing:TDrawingDef):GDBInteger;
 var pl:pgdbobjline;
     //i:GDBInteger;
     tgf: pgrafelement;

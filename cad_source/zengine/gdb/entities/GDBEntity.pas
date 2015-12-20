@@ -59,16 +59,16 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     function AddExtAttrib:PTExtAttrib;
                     function CopyExtAttrib:PTExtAttrib;
                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;abstract;
-                    procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
-                    procedure DXFOut(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
-                    procedure SaveToDXFfollow(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                    procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                    procedure DXFOut(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                    procedure SaveToDXFfollow(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
                     procedure SaveToDXFPostProcess(var handle:GDBOpenArrayOfByte);
                     procedure SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte);virtual;
                     procedure Format;virtual;abstract;
-                    procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                    procedure FormatFeatures(const drawing:TDrawingDef);virtual;
-                    procedure FormatFast(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                    procedure FormatAfterEdit(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                    procedure FormatFeatures(var drawing:TDrawingDef);virtual;
+                    procedure FormatFast(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                    procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                     procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
 
                     procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
@@ -128,8 +128,8 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;
                     function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
                     function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
-                    function YouDeleted(const drawing:TDrawingDef):GDBInteger;virtual;
-                    procedure YouChanged(const drawing:TDrawingDef);virtual;
+                    function YouDeleted(var drawing:TDrawingDef):GDBInteger;virtual;
+                    procedure YouChanged(var drawing:TDrawingDef);virtual;
                     function GetObjTypeName:GDBString;virtual;
                     function GetObjType:TObjID;virtual;
                     procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
@@ -147,19 +147,19 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                     function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                     function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
-                    procedure BuildGeometry(const drawing:TDrawingDef);virtual;
+                    procedure BuildGeometry(var drawing:TDrawingDef);virtual;
                     procedure AddOnTrackAxis(var posr:os_record; const processaxis:taddotrac);virtual;
 
                     function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
 
-                    function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
+                    function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
                     function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
                     procedure CalcObjMatrix;virtual;
                     procedure ReCalcFromObjMatrix;virtual;
                     procedure correctsublayers(var la:GDBLayerArray);virtual;
                     procedure CopyVPto(var toObj:GDBObjEntity);virtual;
                     function CanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;inline;
-                    procedure FormatAfterDXFLoad(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                    procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                     procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
                     class function GetDXFIOFeatures:TDXFEntIODataManager;
               end;
@@ -223,7 +223,7 @@ procedure GDBObjEntity.CalcObjMatrix;
 begin
 
 end;
-function GDBObjEntity.EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;
+function GDBObjEntity.EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;
 begin
 
 end;
@@ -618,10 +618,10 @@ procedure GDBObjEntity.FormatFast;
 begin
      FormatEntity(drawing,dc);
 end;
-procedure GDBObjEntity.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjEntity.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
 end;
-procedure GDBObjEntity.FormatFeatures(const drawing:TDrawingDef);
+procedure GDBObjEntity.FormatFeatures(var drawing:TDrawingDef);
 begin
      inherited;
      GetDXFIOFeatures.RunFormatProcs(drawing,@self);

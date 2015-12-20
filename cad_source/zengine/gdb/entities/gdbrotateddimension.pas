@@ -35,7 +35,7 @@ GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimens
                         function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         procedure transform(const t_matrix:DMatrix4D);virtual;
                         procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-                        procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                        procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
                         constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
                    end;

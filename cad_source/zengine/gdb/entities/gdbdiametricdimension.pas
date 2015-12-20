@@ -39,15 +39,15 @@ GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
                         function GetObjTypeName:GDBString;virtual;
 
-                        procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                        function GetDimStr(const drawing:TDrawingDef):GDBString;virtual;
+                        procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                        function GetDimStr(var drawing:TDrawingDef):GDBString;virtual;
                         function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                         procedure addcontrolpoints(tdesc:GDBPointer);virtual;
 
                         function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                        procedure DrawCenterMarker(cp:GDBVertex;r:GDBDouble;const drawing:TDrawingDef;var DC:TDrawContext);
+                        procedure DrawCenterMarker(cp:GDBVertex;r:GDBDouble;var drawing:TDrawingDef;var DC:TDrawContext);
                         procedure CalcDNVectors;virtual;
 
                         function TextNeedOffset(dimdir:gdbvertex):GDBBoolean;virtual;
@@ -57,7 +57,7 @@ GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         function GetRadius:GDBDouble;virtual;
                         function GetDIMTMOVE:TDimTextMove;virtual;
 
-                        procedure SaveToDXF(var handle:TDWGHandle;var outhandle:GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                        procedure SaveToDXF(var handle:TDWGHandle;var outhandle:GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
                    end;
 {EXPORT-}
 implementation
@@ -89,7 +89,7 @@ begin
      vectorN:=normalizevertex(vectorN)
 end;
 
-procedure GDBObjDiametricDimension.DrawCenterMarker(cp:GDBVertex;r:GDBDouble;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjDiametricDimension.DrawCenterMarker(cp:GDBVertex;r:GDBDouble;var drawing:TDrawingDef;var DC:TDrawContext);
 var
    ls:GDBDouble;
 begin
@@ -185,7 +185,7 @@ begin
   tvo^.PDimStyle:=PDimStyle;
   result := tvo;
 end;
-function GDBObjDiametricDimension.GetDimStr(const drawing:TDrawingDef):GDBString;
+function GDBObjDiametricDimension.GetDimStr(var drawing:TDrawingDef):GDBString;
 begin
      result:='%%C'+GetLinearDimStr(Vertexlength(DimData.P10InWCS,DimData.P15InWCS),drawing);
 end;
@@ -197,7 +197,7 @@ function GDBObjDiametricDimension.GetRadius:GDBDouble;
 begin
      result:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS)/2;
 end;
-procedure GDBObjDiametricDimension.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjDiametricDimension.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 var
   center:GDBVertex;
   pl:pgdbobjline;

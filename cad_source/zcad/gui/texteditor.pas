@@ -26,11 +26,11 @@ uses
      Controls,Classes,Forms;
 var
     InfoForm:TInfoForm=nil;
-procedure RunTextEditor(Pobj:GDBPointer;const drawing:TDrawingDef);
+procedure RunTextEditor(Pobj:GDBPointer;var drawing:TDrawingDef);
 implementation
 uses
      commandline;
-procedure RunTextEditor(Pobj:GDBPointer;const drawing:TDrawingDef);
+procedure RunTextEditor(Pobj:GDBPointer;var drawing:TDrawingDef);
 var
    modalresult:integer;
    astring:ansistring;

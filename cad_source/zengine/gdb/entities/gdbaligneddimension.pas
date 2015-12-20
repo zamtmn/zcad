@@ -39,11 +39,11 @@ PGDBObjAlignedDimension=^GDBObjAlignedDimension;
 GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                      procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef;var DC:TDrawContext; part:integer);
+                      procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;var drawing:TDrawingDef;var DC:TDrawContext; part:integer);
 
 
 
-                      procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                      procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                       //procedure DrawGeometry;
 
@@ -56,7 +56,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
 
 
                       procedure CalcDNVectors;virtual;
-                      procedure CalcDefaultPlaceText(dlStart,dlEnd:Gdbvertex;const drawing:TDrawingDef);virtual;
+                      procedure CalcDefaultPlaceText(dlStart,dlEnd:Gdbvertex;var drawing:TDrawingDef);virtual;
                       function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       //function P12ChangeTo(tv:GDBVertex):GDBVertex;virtual;
@@ -64,15 +64,15 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       //function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       //function P16ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                       procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
-                       function GetDimStr(const drawing:TDrawingDef):GDBString;virtual;
+                       procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                       function GetDimStr(var drawing:TDrawingDef):GDBString;virtual;
                    end;
 {EXPORT-}
 function CorrectPointLine(q:GDBvertex;p1,p2:GDBvertex;out d:GDBDouble):GDBVertex;
 function GetTFromDirNormalizedPoint(q:GDBvertex;var p1,dirNormalized:GDBvertex):double;
 implementation
 uses {log,}UGDBOpenArrayOfPV;
-function GDBObjAlignedDimension.GetDimStr(const drawing:TDrawingDef):GDBString;
+function GDBObjAlignedDimension.GetDimStr(var drawing:TDrawingDef):GDBString;
 begin
      result:=GetLinearDimStr(abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)),drawing);
 end;
@@ -140,7 +140,7 @@ begin
   dxfvertexout(outhandle,13,DimData.P13InWCS);
   dxfvertexout(outhandle,14,DimData.P14InWCS);
 end;
-procedure GDBObjAlignedDimension.CalcDefaultPlaceText(dlStart,dlEnd:Gdbvertex;const drawing:TDrawingDef);
+procedure GDBObjAlignedDimension.CalcDefaultPlaceText(dlStart,dlEnd:Gdbvertex;var drawing:TDrawingDef);
 begin
   //case PDimStyle.Text.DIMJUST;
   //end;{case}
@@ -331,7 +331,7 @@ begin
   DimData.P14InWCS:= createvertex(300,1,0);
 end;
 
-procedure GDBObjAlignedDimension.DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef;var DC:TDrawContext; part:integer);
+procedure GDBObjAlignedDimension.DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;var drawing:TDrawingDef;var DC:TDrawContext; part:integer);
 var
    pl:pgdbobjline;
    pp:pgdbobjpoint;
@@ -367,7 +367,7 @@ begin
      vectorN:=normalizevertex(vectorN)
 end;
 
-procedure GDBObjAlignedDimension.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjAlignedDimension.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 var
   tv:GDBVertex;
   l:double;

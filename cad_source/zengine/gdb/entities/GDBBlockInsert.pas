@@ -40,7 +40,7 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                      procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                     procedure SaveToDXF(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                     procedure SaveToDXF(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
                      procedure CalcObjMatrix;virtual;
                      function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;
                      function Clone(own:GDBPointer):PGDBObjEntity;virtual;
@@ -49,15 +49,15 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      destructor done;virtual;
                      function GetObjTypeName:GDBString;virtual;
                      procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
-                     procedure BuildGeometry(const drawing:TDrawingDef);virtual;
-                     procedure BuildVarGeometry(const drawing:TDrawingDef);virtual;
+                     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
+                     procedure BuildVarGeometry(var drawing:TDrawingDef);virtual;
 
                      procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                      procedure ReCalcFromObjMatrix;virtual;
                      procedure rtsave(refp:GDBPointer);virtual;
 
                      procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
-                     procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
 
                      function getrot:GDBDouble;virtual;
                      procedure setrot(r:GDBDouble);virtual;
@@ -65,7 +65,7 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      property testrotate:GDBDouble read getrot write setrot;(*'Rotate'*)
                      function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
 
-                     function CreateInstance:PGDBObjBlockInsert;static;
+                     class function CreateInstance:PGDBObjBlockInsert;static;
                   end;
 {Export-}
 procedure SetBlockInsertGeomProps(PBlockInsert:PGDBObjBlockInsert;args:array of const);
@@ -294,7 +294,7 @@ begin
      result:=arccos((objmatrix[0,0])/geometry.oneVertexlength(PGDBVertex(@objmatrix[0])^))
 end;
 
-procedure GDBObjBlockInsert.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjBlockInsert.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
      inherited;
 end;
@@ -653,7 +653,7 @@ else if not dxfGDBStringload(f,2,byt,name)then {s := }f.readgdbstring;
       index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
       //format;
 end;
-procedure GDBObjBlockInsert.SaveToDXF(var handle: TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);
+procedure GDBObjBlockInsert.SaveToDXF(var handle: TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);
 //var
   //i, j: GDBInteger;
   //hv, vv: GDBByte;
@@ -673,7 +673,7 @@ begin
 end;
 function AllocBlockInsert:PGDBObjBlockInsert;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocBlockInsert}',{$ENDIF}result,sizeof(GDBObjBlockInsert));
+  GDBGetMem({$IFDEF DEBUGBUILD}'{AllocBlockInsert}',{$ENDIF}pointer(result),sizeof(GDBObjBlockInsert));
 end;
 function AllocAndInitBlockInsert(owner:PGDBObjGenericWithSubordinated):PGDBObjBlockInsert;
 begin
@@ -705,7 +705,7 @@ begin
   //owner^.AddMi(@result);
   SetBlockInsertGeomProps(result,args);
 end;
-function GDBObjBlockInsert.CreateInstance:PGDBObjBlockInsert;
+class function GDBObjBlockInsert.CreateInstance:PGDBObjBlockInsert;
 begin
   result:=AllocAndInitBlockInsert(nil);
 end;

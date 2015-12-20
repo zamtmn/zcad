@@ -36,8 +36,8 @@ GDBObjSolid={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
-                 procedure FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure createpoint;virtual;
 
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
@@ -78,7 +78,7 @@ begin
            concatBBandPoint(vp.BoundingBox,PInWCS[I]);
       end;
 end;
-procedure GDBObjSolid.FormatEntity(const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjSolid.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 //var i:GDBInteger;
 begin
   calcObjMatrix;

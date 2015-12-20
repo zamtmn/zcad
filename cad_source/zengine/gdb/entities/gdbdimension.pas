@@ -60,13 +60,13 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                       dimtext:GDBString;
 
 
-                function DrawDimensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef):pgdbobjline;
-                function DrawExtensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef; part:integer):pgdbobjline;
+                function DrawDimensionLineLinePart(p1,p2:GDBVertex;var drawing:TDrawingDef):pgdbobjline;
+                function DrawExtensionLineLinePart(p1,p2:GDBVertex;var drawing:TDrawingDef; part:integer):pgdbobjline;
                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                function LinearFloatToStr(l:GDBDouble;const drawing:TDrawingDef):GDBString;
-                function GetLinearDimStr(l:GDBDouble;const drawing:TDrawingDef):GDBString;
-                function GetDimStr(const drawing:TDrawingDef):GDBString;virtual;
+                function LinearFloatToStr(l:GDBDouble;var drawing:TDrawingDef):GDBString;
+                function GetLinearDimStr(l:GDBDouble;var drawing:TDrawingDef):GDBString;
+                function GetDimStr(var drawing:TDrawingDef):GDBString;virtual;
                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                 function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                 function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
@@ -78,8 +78,8 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 procedure transform(const t_matrix:DMatrix4D);virtual;
                 procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
 
-                procedure DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                function GetTextOffset(const drawing:TDrawingDef):GDBVertex;virtual;
+                procedure DrawDimensionText(p:GDBVertex;var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                function GetTextOffset(var drawing:TDrawingDef):GDBVertex;virtual;
                 function TextNeedOffset(dimdir:gdbvertex):GDBBoolean;virtual;
                 function TextAlwaysMoved:GDBBoolean;virtual;
                 function GetPSize:GDBDouble;virtual;
@@ -87,14 +87,14 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 procedure CalcTextAngle;virtual;
                 procedure CalcTextParam(dlStart,dlEnd:Gdbvertex);virtual;
                 procedure CalcTextInside;virtual;
-                procedure DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;const drawing:TDrawingDef;var DC:TDrawContext);
+                procedure DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;var drawing:TDrawingDef;var DC:TDrawContext);
                 function GetDIMTMOVE:TDimTextMove;virtual;
                 destructor done;virtual;
                 end;
 {EXPORT-}
 implementation
 uses zeentitiesmanager,{GDBManager,}{log,}UGDBOpenArrayOfPV,{UGDBDescriptor,}GDBBlockInsert;
-procedure GDBObjDimension.DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjDimension.DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;var drawing:TDrawingDef;var DC:TDrawContext);
 var
    l:GDBDouble;
    pl:pgdbobjline;
@@ -254,7 +254,7 @@ begin
    TextAngle:=CorrectAngleIfNotReadable(DimAngle);
 end;
 
-function GDBObjDimension.GetDimStr(const drawing:TDrawingDef):GDBString;
+function GDBObjDimension.GetDimStr(var drawing:TDrawingDef):GDBString;
 begin
      result:='need GDBObjDimension.GetDimStr override';
 end;
@@ -276,7 +276,7 @@ begin
      result:=false;
 end;
 
-function GDBObjDimension.GetTextOffset(const drawing:TDrawingDef):GDBVertex;
+function GDBObjDimension.GetTextOffset(var drawing:TDrawingDef):GDBVertex;
 var
    l:GDBDouble;
    dimdir:gdbvertex;
@@ -336,7 +336,7 @@ begin
      result:=PDimStyle.Placing.DIMTMOVE;
 end;
 
-procedure GDBObjDimension.DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjDimension.DrawDimensionText(p:GDBVertex;var drawing:TDrawingDef;var DC:TDrawContext);
 var
   ptext:PGDBObjMText;
   dimtxtstyle:PGDBTextStyle;
@@ -476,7 +476,7 @@ begin
           end;
 
 end;
-function GDBObjDimension.LinearFloatToStr(l:GDBDouble;const drawing:TDrawingDef):GDBString;
+function GDBObjDimension.LinearFloatToStr(l:GDBDouble;var drawing:TDrawingDef):GDBString;
 var
    ff:TzeUnitsFormat;
 begin
@@ -489,7 +489,7 @@ begin
      ff.uprec:=TUPrec(PDimStyle.Units.DIMDEC);
      result:={floattostr}zeDimensionToString(l,{WorkingFormatSettings}ff);
 end;
-function GDBObjDimension.GetLinearDimStr(l:GDBDouble;const drawing:TDrawingDef):GDBString;
+function GDBObjDimension.GetLinearDimStr(l:GDBDouble;var drawing:TDrawingDef):GDBString;
 var
    n:double;
    i:integer;
@@ -586,7 +586,7 @@ begin
                     end;
 end;
 
-function GDBObjDimension.DrawDimensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef):pgdbobjline;
+function GDBObjDimension.DrawDimensionLineLinePart(p1,p2:GDBVertex;var drawing:TDrawingDef):pgdbobjline;
 begin
   result:=pointer(ConstObjArray.CreateInitObj(GDBlineID,@self));
   result.vp.Layer:=vp.Layer;
@@ -596,7 +596,7 @@ begin
   result.CoordInOCS.lBegin:=p1;
   result.CoordInOCS.lEnd:=p2;
 end;
-function GDBObjDimension.DrawExtensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef; part:integer):pgdbobjline;
+function GDBObjDimension.DrawExtensionLineLinePart(p1,p2:GDBVertex;var drawing:TDrawingDef; part:integer):pgdbobjline;
 begin
   result:=pointer(ConstObjArray.CreateInitObj(GDBlineID,@self));
   result.vp.Layer:=vp.Layer;

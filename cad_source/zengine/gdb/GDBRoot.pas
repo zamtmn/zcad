@@ -32,14 +32,14 @@ GDBObjRoot={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                  constructor initnul;
                  destructor done;virtual;
                  //function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
-                 procedure FormatAfterEdit(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  function AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer):integer;virtual;
                  function getowner:PGDBObjSubordinated;virtual;
                  function GetMainOwner:PGDBObjSubordinated;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  //function FindVariable(varname:GDBString):pvardesk;virtual;
                  function GetHandle:GDBPlatformint;virtual;
-                 function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
+                 function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
 
                  function GetMatrix:PDMatrix4D;virtual;
                  procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
@@ -96,7 +96,7 @@ function GDBObjRoot.GetMatrix;
 begin
      result:=@self.ObjMatrix{ @OneMatrix};
 end;
-function GDBObjRoot.EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;
+function GDBObjRoot.EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;
 var p:PGDBObjConnected;
     ir:itrec;
 begin

@@ -1222,8 +1222,10 @@ begin
     begin
 
         // pline := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
-         GDBObjLWPolyline.CreateInstance;
+         //создаем только одну полилинию//GDBObjLWPolyline.CreateInstance;
          polyObj:=GDBObjLWPolyline.CreateInstance;
+         //и НЕЗАБЫВЕМ добавить ее в область конструируемых объектов//
+         gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@polyObj);
 
          polyVert.x:=pe.p1.x;
          polyVert.y:=pe.p1.y;
@@ -1247,6 +1249,10 @@ begin
 //      if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractivePolyLineManipulator,pline) then
       if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveRectangleManipulator,polyObj) then
       begin
+          //незабываем вконце добавить всё что наконструировали в чертеж//
+          AddEntToCurrentDrawingWithUndo(polyObj);
+          //так как сейчас у нас объект находится и в чертеже и в конструируемой области, нужно почистить список примитивов конструируемой области, без физического удаления примитивов//
+          gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
 
           //GDBObjLine.CreateInstance;
           //GDBObjLWPolyline.CreateInstance;

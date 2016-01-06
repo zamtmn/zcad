@@ -1025,199 +1025,302 @@ begin
     freeandnil(ArrayInsertFRM);
     result:=cmd_ok;
 end;
+//
+//procedure InteractivePolyLineManipulator( const PInteractiveData : GDBPointer {pointer to the line entity};
+//                                                          Point : GDBVertex  {new end coord};
+//                                                          Click : GDBBoolean {true if lmb presseed});
+//var
+//  ln : PGDBObjLine absolute PInteractiveData;
+//  ln2 : PGDBObjLine absolute PInteractiveData;
+//  Point2 : GDBVertex;
+//  dc:TDrawContext;
+//begin
+//
+//  //ln^.CoordInOCS.lBegin.x:=PT3PointPentity(PInteractiveData)^.p1.x;
+//  //ln^.CoordInOCS.lBegin.y:=PT3PointPentity(PInteractiveData)^.p1.y;
+//  //ln^.CoordInOCS.lBegin.z:=0;
+//  //   PointData.p2.x:=PT3PointPentity(PInteractiveData)^.p2.x;
+//  //   PointData.p2.y:=PT3PointPentity(PInteractiveData)^.p2.y;
+//  // assign general properties from system variables to entity
+//  //присваиваем примитиву общие свойства из системных переменных
+//  GDBObjSetEntityCurrentProp(ln);
+//
+//  GDBObjSetEntityCurrentProp(ln2);
+//  //ln2:=ln;
+//
+//  Point2 := Point;
+//    Point2.x := 0;
+//  Point2.y := 0;
+//
+//  ln2^.CoordInOCS.lBegin:=Point2 ;
+//
+//  // set the new point to the end of the line
+//  // устанавливаем новую точку конца линии
+//  Point2 := Point;
+//  Point2.x += 100;
+//  Point2.y -= 200;
+//
+//  Point.x -=0;
+//  Point.y +=10;
+//
+//  ln^.CoordInOCS.lEnd:=Point;
+//  ln2^.CoordInOCS.lEnd:=Point2 ;
+//
+//
+//  //format entity
+//  //"форматируем" примитив в соответствии с заданными параметрами
+//  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+//  ln^.FormatEntity(gdb.GetCurrentDWG^,dc);
+//  ln2^.FormatEntity(gdb.GetCurrentDWG^,dc);
+//
+//end;
+//procedure InteractivePolyLineManipulator2( const PInteractiveData : GDBPointer;
+//                                                      Point : GDBVertex;
+//                                                      Click : GDBBoolean);
+//var
+//    PointData:TArcrtModify;
+//    ln : PGDBObjLine;
+//    ad:TArcData;
+//    dc:TDrawContext;
+//begin
+//
+//  //GDBObjSetEntityCurrentProp(ln);
+//  //GDBObjLine.CreateInstance;
+//  //
+//  //ln := GDBObjLine.CreateInstance;
+//  //ln^.CoordInOCS.lBegin.x:=PT3PointPentity(PInteractiveData)^.p1.x;
+//  //ln^.CoordInOCS.lBegin.y:=PT3PointPentity(PInteractiveData)^.p1.y;
+//  //ln^.CoordInOCS.lBegin.z:=0;
+//  //ln^.CoordInOCS.lEnd.x:=Point.x;
+//  //ln^.CoordInOCS.lEnd.y:=Point.y;
+//  //ln^.CoordInOCS.lEnd.z:=0;
+//
+//     //PointData.p1.x:=PT3PointPentity(PInteractiveData)^.p1.x;
+//     //PointData.p1.y:=PT3PointPentity(PInteractiveData)^.p1.y;
+//     //PointData.p2.x:=PT3PointPentity(PInteractiveData)^.p2.x;
+//     //PointData.p2.y:=PT3PointPentity(PInteractiveData)^.p2.y;
+//     //PointData.p3.x:=Point.x;
+//     //PointData.p3.y:=Point.y;
+//     //if GetArcParamFrom3Point2D(PointData,ad) then
+//     //begin
+//     //  PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.Local.p_insert.x:=ad.p.x;
+//     //  PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.Local.p_insert.y:=ad.p.y;
+//     //  PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.Local.p_insert.z:=0;
+//     //  PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.startangle:=ad.startangle;
+//     //  PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.endangle:=ad.endangle;
+//     //  PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.r:=ad.r;
+//     //
+//        PGDBObjLine(PT3PointPentity(PInteractiveData)^.pentity)^.CoordInOCS.lBegin.x := PT3PointPentity(PInteractiveData)^.p1.x;
+//        PGDBObjLine(PT3PointPentity(PInteractiveData)^.pentity)^.CoordInOCS.lBegin.y := PT3PointPentity(PInteractiveData)^.p1.y;
+//        PGDBObjLine(PT3PointPentity(PInteractiveData)^.pentity)^.CoordInOCS.lEnd.x := Point.x;
+//        PGDBObjLine(PT3PointPentity(PInteractiveData)^.pentity)^.CoordInOCS.lEnd.y := Point.y;
+//
+//       GDBObjSetEntityProp(PT3PointPentity(PInteractiveData)^.pentity,
+//                           sysvar.dwg.DWG_CLayer^,
+//                           sysvar.dwg.DWG_CLType^,
+//                           sysvar.dwg.DWG_CColor^,
+//                           sysvar.dwg.DWG_CLinew^);
+//       dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+//       PT3PointPentity(PInteractiveData)^.pentity^.FormatEntity(gdb.GetCurrentDWG^,dc);
+//     //end;
+//  // dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+//  //ln^.FormatEntity(gdb.GetCurrentDWG^,dc);
+//end;
 
-procedure InteractivePolyLineManipulator( const PInteractiveData : GDBPointer {pointer to the line entity};
+procedure InteractiveRectangleManipulator( const PInteractiveData : GDBPointer {pointer to the line entity};
                                                           Point : GDBVertex  {new end coord};
                                                           Click : GDBBoolean {true if lmb presseed});
 var
-  ln : PGDBObjLine absolute PInteractiveData;
-  ln2 : PGDBObjLine absolute PInteractiveData;
-  Point2 : GDBVertex;
+  poly : PGDBObjLWPolyline absolute PInteractiveData;
+  stPoint: GDBvertex2D;
+  tempPoint: GDBvertex2D;
   dc:TDrawContext;
+  //s: string;
 begin
 
-  //ln^.CoordInOCS.lBegin.x:=PT3PointPentity(PInteractiveData)^.p1.x;
-  //ln^.CoordInOCS.lBegin.y:=PT3PointPentity(PInteractiveData)^.p1.y;
-  //ln^.CoordInOCS.lBegin.z:=0;
-  //   PointData.p2.x:=PT3PointPentity(PInteractiveData)^.p2.x;
-  //   PointData.p2.y:=PT3PointPentity(PInteractiveData)^.p2.y;
-  // assign general properties from system variables to entity
-  //присваиваем примитиву общие свойства из системных переменных
-  GDBObjSetEntityCurrentProp(ln);
+  GDBObjSetEntityCurrentProp(poly);
 
-  GDBObjSetEntityCurrentProp(ln2);
-  //ln2:=ln;
+  stPoint := GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(0)^);
 
-  Point2 := Point;
-    Point2.x := 0;
-  Point2.y := 0;
+  GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(1)^).x := Point.x;
+  GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(1)^).y := stPoint.y;
 
-  ln2^.CoordInOCS.lBegin:=Point2 ;
+  GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(2)^).x := stPoint.x;
+  GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(2)^).y := stPoint.y;
+
+  GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(3)^).x := stPoint.x;
+  GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(3)^).y := Point.y;
+
+
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+  poly^.FormatEntity(gdb.GetCurrentDWG^,dc);
+
+//  Str(GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(3)^).x, s);
+//  MessageBox(s, 'Hello World!', 0);
+
+  //tempPoint := GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(1)^);
+  //tempPoint.x := Point.x;
+  //tempPoint.y := stPoint.y;
+
+  //tempPoint := GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(2)^;
+  //tempPoint.x := stPoint.x;
+  //tempPoint.y := stPoint.y;
+
+  //tempPoint := GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(3)^);
+  //tempPoint.x := stPoint.x;
+  //tempPoint.y := Point.y;
+
+  //stPoint.x = poly^.Vertex2D_in_OCS_Array.getelement(0).x
+  //stPoint.y = poly^.Vertex2D_in_OCS_Array.getelement(0).y;
+  //stPoint.z = 0;
+  //
+  //poly^.Vertex2D_in_OCS_Array.getelement(1).x = Point.x;
+  //poly^.Vertex2D_in_OCS_Array.getelement(1).y = stPoint.y;
+  //
+  //poly^.Vertex2D_in_OCS_Array.getelement(2).x = Point.x;
+  //poly^.Vertex2D_in_OCS_Array.getelement(2).y = Point.y;
+  //
+  //poly^.Vertex2D_in_OCS_Array.getelement(3).x = stPoint.x;
+  //poly^.Vertex2D_in_OCS_Array.getelement(3).y = Point.y;
+
 
   // set the new point to the end of the line
   // устанавливаем новую точку конца линии
-  Point2 := Point;
-  Point2.x += 100;
-  Point2.y -= 200;
 
-  Point.x -=0;
-  Point.y +=10;
-
-  ln^.CoordInOCS.lEnd:=Point;
-  ln2^.CoordInOCS.lEnd:=Point2 ;
+//
+//  //присваиваем примитиву общие свойства из системных переменных
+//  GDBObjSetEntityCurrentProp(ln);
+//
+//  // set the new point to the end of the line
+//  // устанавливаем новую точку конца линии
+//  ln^.CoordInOCS.lEnd:=Point;
+//  //format entity
+//  //"форматируем" примитив в соответствии с заданными параметрами
+//  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+//  ln^.FormatEntity(gdb.GetCurrentDWG^,dc);
+//
+//end;
 
 
   //format entity
   //"форматируем" примитив в соответствии с заданными параметрами
-  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-  ln^.FormatEntity(gdb.GetCurrentDWG^,dc);
-  ln2^.FormatEntity(gdb.GetCurrentDWG^,dc);
+
 
 end;
-procedure InteractivePolyLineManipulator2( const PInteractiveData : GDBPointer;
-                                                      Point : GDBVertex;
-                                                      Click : GDBBoolean);
+
+
+function DrawRectangle_com(operands:TCommandOperands):TCommandResult;    //< Чертим прямоугольник
 var
-    PointData:TArcrtModify;
-    ln : PGDBObjLine;
-    ad:TArcData;
-    dc:TDrawContext;
-begin
-
-  //GDBObjSetEntityCurrentProp(ln);
-  //GDBObjLine.CreateInstance;
-  //
-  //ln := GDBObjLine.CreateInstance;
-  //ln^.CoordInOCS.lBegin.x:=PT3PointPentity(PInteractiveData)^.p1.x;
-  //ln^.CoordInOCS.lBegin.y:=PT3PointPentity(PInteractiveData)^.p1.y;
-  //ln^.CoordInOCS.lBegin.z:=0;
-  //ln^.CoordInOCS.lEnd.x:=Point.x;
-  //ln^.CoordInOCS.lEnd.y:=Point.y;
-  //ln^.CoordInOCS.lEnd.z:=0;
-
-     //PointData.p1.x:=PT3PointPentity(PInteractiveData)^.p1.x;
-     //PointData.p1.y:=PT3PointPentity(PInteractiveData)^.p1.y;
-     //PointData.p2.x:=PT3PointPentity(PInteractiveData)^.p2.x;
-     //PointData.p2.y:=PT3PointPentity(PInteractiveData)^.p2.y;
-     //PointData.p3.x:=Point.x;
-     //PointData.p3.y:=Point.y;
-     //if GetArcParamFrom3Point2D(PointData,ad) then
-     //begin
-     //  PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.Local.p_insert.x:=ad.p.x;
-     //  PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.Local.p_insert.y:=ad.p.y;
-     //  PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.Local.p_insert.z:=0;
-     //  PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.startangle:=ad.startangle;
-     //  PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.endangle:=ad.endangle;
-     //  PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.r:=ad.r;
-     //
-        PGDBObjLine(PT3PointPentity(PInteractiveData)^.pentity)^.CoordInOCS.lBegin.x := PT3PointPentity(PInteractiveData)^.p1.x;
-        PGDBObjLine(PT3PointPentity(PInteractiveData)^.pentity)^.CoordInOCS.lBegin.y := PT3PointPentity(PInteractiveData)^.p1.y;
-        PGDBObjLine(PT3PointPentity(PInteractiveData)^.pentity)^.CoordInOCS.lEnd.x := Point.x;
-        PGDBObjLine(PT3PointPentity(PInteractiveData)^.pentity)^.CoordInOCS.lEnd.y := Point.y;
-
-       GDBObjSetEntityProp(PT3PointPentity(PInteractiveData)^.pentity,
-                           sysvar.dwg.DWG_CLayer^,
-                           sysvar.dwg.DWG_CLType^,
-                           sysvar.dwg.DWG_CColor^,
-                           sysvar.dwg.DWG_CLinew^);
-       dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-       PT3PointPentity(PInteractiveData)^.pentity^.FormatEntity(gdb.GetCurrentDWG^,dc);
-     //end;
-  // dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-  //ln^.FormatEntity(gdb.GetCurrentDWG^,dc);
-end;
-
-function DrawPramougol_com(operands:TCommandOperands):TCommandResult;
-var
-    //pa:PGDBObjArc;
     pline,pline1,pline2,pline3,pline4:PGDBObjLine;
-    polyVert:GDBvertex2D;
-    Polly:PGDBObjLWPolyline;
-    Polywidth:GLLWWidth;
+    polyVert:GDBvertex2D;               //переменная для добавления вершин в полилинию
+    PolyWidth:GLLWWidth;                //переменная для добавления веса линии в начале и конце пути
+    polyObj:PGDBObjLWPolyline;     //сам прямоугольник
     pe,petemp:T3PointPentity;
     dc:TDrawContext;
 begin
     if commandmanager.get3dpoint('Specify first point:',pe.p1) then
     begin
-         pline := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
-         pline^.CoordInOCS.lBegin:=pe.p1;
-         InteractivePolyLineManipulator(pline,pe.p1,false);
+
+        // pline := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
+         GDBObjLWPolyline.CreateInstance;
+         polyObj:=GDBObjLWPolyline.CreateInstance;
+
+         polyVert.x:=pe.p1.x;
+         polyVert.y:=pe.p1.y;
+         PolyWidth.endw:=1;
+         PolyWidth.startw:=1;
+
+         polyObj^.Vertex2D_in_OCS_Array.Add(@polyVert);
+         polyObj^.Width2D_in_OCS_Array.Add(@PolyWidth);
+
+         polyObj^.Vertex2D_in_OCS_Array.Add(@polyVert);
+         polyObj^.Width2D_in_OCS_Array.Add(@PolyWidth);
+
+         polyObj^.Vertex2D_in_OCS_Array.Add(@polyVert);
+         polyObj^.Width2D_in_OCS_Array.Add(@PolyWidth);
+
+         polyObj^.Vertex2D_in_OCS_Array.Add(@polyVert);
+         polyObj^.Width2D_in_OCS_Array.Add(@PolyWidth);
+
+         //polyObj^.CoordInOCS.lBegin:=pe.p1;
+         InteractiveRectangleManipulator(polyObj,pe.p1,false);
 //      if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractivePolyLineManipulator,pline) then
-      if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractivePolyLineManipulator2,@pe) then
+      if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveRectangleManipulator,polyObj) then
       begin
-          GDBObjLine.CreateInstance;
-          GDBObjLWPolyline.CreateInstance;
 
-          Polly:=GDBObjLWPolyline.CreateInstance;
-
-          pline1 := GDBObjLine.CreateInstance;
-          pline2 := GDBObjLine.CreateInstance;
-          pline3 := GDBObjLine.CreateInstance;
-          pline4 := GDBObjLine.CreateInstance;
-          GDBObjSetEntityCurrentProp(pline1);
-          GDBObjSetEntityCurrentProp(pline2);
-          GDBObjSetEntityCurrentProp(pline3);
-          GDBObjSetEntityCurrentProp(pline4);
-
-          GDBObjSetEntityCurrentProp(Polly);
-
-
-
-           pline1^.CoordInOCS.lBegin:=pe.p1;
-           pline2^.CoordInOCS.lBegin:=pe.p1;
-           pline3^.CoordInOCS.lBegin:=pe.p2;
-           pline4^.CoordInOCS.lBegin:=pe.p2;
-
-           petemp := pe ;
-           petemp.p1.x := pe.p2.x;
-
-           pline1^.CoordInOCS.lEnd:=petemp.p1;
-
-           petemp := pe ;
-           petemp.p1.y := pe.p2.y;
-           pline2^.CoordInOCS.lEnd:=petemp.p1;
-           petemp := pe;
-           petemp.p2.y := pe.p1.y;
-           pline3^.CoordInOCS.lEnd:=petemp.p2;
-           petemp := pe;
-           petemp.p2.x := pe.p1.x;
-           pline4^.CoordInOCS.lEnd:=petemp.p2;
-
-
-           polyVert.x:=pe.p1.x;
-           polyVert.y:=pe.p1.y;
-
-           //Polly^.Vertex2D_in_OCS_Array.ispointinside(polyVert);
-           Polywidth.endw:=1;
-           Polywidth.startw:=1;
-           Polly^.Vertex2D_in_OCS_Array.Add(@polyVert);
-           Polly^. Width2D_in_OCS_Array.Add(@Polywidth);
-
-           polyVert.x:=pe.p2.x;
-           polyVert.y:=pe.p2.y;
-
-           //Polly^.Vertex2D_in_OCS_Array.ispointinside(polyVert);
-           Polly^.Vertex2D_in_OCS_Array.Add(@polyVert);
-           Polly^. Width2D_in_OCS_Array.Add(@Polywidth);
-
-
-               dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-
-               pline1^.FormatEntity(gdb.GetCurrentDWG^,dc);
-               pline2^.FormatEntity(gdb.GetCurrentDWG^,dc);
-               pline3^.FormatEntity(gdb.GetCurrentDWG^,dc);
-               pline4^.FormatEntity(gdb.GetCurrentDWG^,dc);
-
-               Polly^.FormatEntity(gdb.GetCurrentDWG^,dc);
-
-               UndoCommandStartMarker('');
-               AddEntToCurrentDrawingWithUndo(pline1);
-               AddEntToCurrentDrawingWithUndo(pline2);
-               AddEntToCurrentDrawingWithUndo(pline3);
-               AddEntToCurrentDrawingWithUndo(pline4);
-               AddEntToCurrentDrawingWithUndo(Polly);
-               UndoCommandEndMarker;
-
+          //GDBObjLine.CreateInstance;
+          //GDBObjLWPolyline.CreateInstance;
+          //
+          //Polly:=GDBObjLWPolyline.CreateInstance;
+          //
+          //pline1 := GDBObjLine.CreateInstance;
+          //pline2 := GDBObjLine.CreateInstance;
+          //pline3 := GDBObjLine.CreateInstance;
+          //pline4 := GDBObjLine.CreateInstance;
+          //GDBObjSetEntityCurrentProp(pline1);
+          //GDBObjSetEntityCurrentProp(pline2);
+          //GDBObjSetEntityCurrentProp(pline3);
+          //GDBObjSetEntityCurrentProp(pline4);
+          //
+          //GDBObjSetEntityCurrentProp(Polly);
+          //
+          //
+          //
+          // pline1^.CoordInOCS.lBegin:=pe.p1;
+          // pline2^.CoordInOCS.lBegin:=pe.p1;
+          // pline3^.CoordInOCS.lBegin:=pe.p2;
+          // pline4^.CoordInOCS.lBegin:=pe.p2;
+          //
+          // petemp := pe ;
+          // petemp.p1.x := pe.p2.x;
+          //
+          // pline1^.CoordInOCS.lEnd:=petemp.p1;
+          //
+          // petemp := pe ;
+          // petemp.p1.y := pe.p2.y;
+          // pline2^.CoordInOCS.lEnd:=petemp.p1;
+          // petemp := pe;
+          // petemp.p2.y := pe.p1.y;
+          // pline3^.CoordInOCS.lEnd:=petemp.p2;
+          // petemp := pe;
+          // petemp.p2.x := pe.p1.x;
+          // pline4^.CoordInOCS.lEnd:=petemp.p2;
+          //
+          //
+          // polyVert.x:=pe.p1.x;
+          // polyVert.y:=pe.p1.y;
+          //
+          // //Polly^.Vertex2D_in_OCS_Array.ispointinside(polyVert);
+          // Polywidth.endw:=1;
+          // Polywidth.startw:=1;
+          // Polly^.Vertex2D_in_OCS_Array.Add(@polyVert);
+          // Polly^. Width2D_in_OCS_Array.Add(@Polywidth);
+          //
+          // polyVert.x:=pe.p2.x;
+          // polyVert.y:=pe.p2.y;
+          //
+          // //Polly^.Vertex2D_in_OCS_Array.ispointinside(polyVert);
+          // Polly^.Vertex2D_in_OCS_Array.Add(@polyVert);
+          // Polly^. Width2D_in_OCS_Array.Add(@Polywidth);
+          //
+          //
+          //     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+          //
+          //     pline1^.FormatEntity(gdb.GetCurrentDWG^,dc);
+          //     pline2^.FormatEntity(gdb.GetCurrentDWG^,dc);
+          //     pline3^.FormatEntity(gdb.GetCurrentDWG^,dc);
+          //     pline4^.FormatEntity(gdb.GetCurrentDWG^,dc);
+          //
+          //     Polly^.FormatEntity(gdb.GetCurrentDWG^,dc);
+          //
+          //     UndoCommandStartMarker('');
+          //     AddEntToCurrentDrawingWithUndo(pline1);
+          //     AddEntToCurrentDrawingWithUndo(pline2);
+          //     AddEntToCurrentDrawingWithUndo(pline3);
+          //     AddEntToCurrentDrawingWithUndo(pline4);
+          //     AddEntToCurrentDrawingWithUndo(Polly);
+          //     UndoCommandEndMarker;
+          //
       end;
     end;
     result:=cmd_ok;
@@ -1259,6 +1362,6 @@ initialization
      CreateCommandFastObjectPlugin(@GetLength_com,  'GetLength',  CADWG,0);
      CreateCommandFastObjectPlugin(@TestInsert1_com,'TestInsert1',CADWG,0);
      CreateCommandFastObjectPlugin(@TestInsert2_com,'TestInsert2',CADWG,0);
-     CreateCommandFastObjectPlugin(@DrawPramougol_com,       'test789',         CADWG,0);
+     CreateCommandFastObjectPlugin(@DrawRectangle_com,       'test789',         CADWG,0);
 
 end.

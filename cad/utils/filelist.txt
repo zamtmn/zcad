@@ -32,7 +32,7 @@ E:\zcad\cad_source\zengine\u\ugdbltypearray.pas
 E:\zcad\cad_source\zengine\u\ugdbdimstylearray.pas
 E:\zcad\cad_source\zengine\u\UGDBTableStyleArray.pas
 E:\zcad\cad_source\zengine\u\UGDBTable.pas
-E:\zcad\cad_source\zcad\languade\zcadsysvars.pas
+E:\zcad\cad_source\zcad\uzcsysvars.pas
 E:\zcad\cad_source\components\zscriptbase\uabstractunit.pas
 E:\zcad\cad_source\components\zscriptbase\varmandef.pas
 E:\zcad\cad_source\components\zscript\varman.pas

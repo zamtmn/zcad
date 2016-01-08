@@ -45,7 +45,10 @@ uses
                        //модуль описывающий примитив линия
 
   GDBLWPolyLine,             //unit describes line entity
-                       //модуль описывающий примитив ПОЛИлиния
+                       //модуль описывающий примитив двухмерная ПОЛИлиния
+
+  GDBPolyLine,             //unit describes line entity
+                       //модуль описывающий примитив трехмерная ПОЛИлиния
 
   gdbAlignedDimension, //unit describes aligned dimensional entity
                        //модуль описывающий выровненный размерный примитив
@@ -1127,11 +1130,12 @@ end;
 //  //ln^.FormatEntity(gdb.GetCurrentDWG^,dc);
 //end;
 
-procedure InteractiveRectangleManipulator( const PInteractiveData : GDBPointer {pointer to the line entity};
+procedure Interactive2DRectangleManipulator( const PInteractiveData : GDBPointer {pointer to the line entity};
                                                           Point : GDBVertex  {new end coord};
                                                           Click : GDBBoolean {true if lmb presseed});
 var
   poly : PGDBObjLWPolyline absolute PInteractiveData;
+  //poly : PGDBObjPolyline absolute PInteractiveData;
   stPoint: GDBvertex2D;
   tempPoint: GDBvertex2D;
   dc:TDrawContext;
@@ -1145,8 +1149,8 @@ begin
   GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(1)^).x := Point.x;
   GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(1)^).y := stPoint.y;
 
-  GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(2)^).x := stPoint.x;
-  GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(2)^).y := stPoint.y;
+  GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(2)^).x := Point.x;
+  GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(2)^).y := Point.y;
 
   GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(3)^).x := stPoint.x;
   GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(3)^).y := Point.y;
@@ -1155,66 +1159,16 @@ begin
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   poly^.FormatEntity(gdb.GetCurrentDWG^,dc);
 
-//  Str(GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(3)^).x, s);
-//  MessageBox(s, 'Hello World!', 0);
-
-  //tempPoint := GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(1)^);
-  //tempPoint.x := Point.x;
-  //tempPoint.y := stPoint.y;
-
-  //tempPoint := GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(2)^;
-  //tempPoint.x := stPoint.x;
-  //tempPoint.y := stPoint.y;
-
-  //tempPoint := GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(3)^);
-  //tempPoint.x := stPoint.x;
-  //tempPoint.y := Point.y;
-
-  //stPoint.x = poly^.Vertex2D_in_OCS_Array.getelement(0).x
-  //stPoint.y = poly^.Vertex2D_in_OCS_Array.getelement(0).y;
-  //stPoint.z = 0;
-  //
-  //poly^.Vertex2D_in_OCS_Array.getelement(1).x = Point.x;
-  //poly^.Vertex2D_in_OCS_Array.getelement(1).y = stPoint.y;
-  //
-  //poly^.Vertex2D_in_OCS_Array.getelement(2).x = Point.x;
-  //poly^.Vertex2D_in_OCS_Array.getelement(2).y = Point.y;
-  //
-  //poly^.Vertex2D_in_OCS_Array.getelement(3).x = stPoint.x;
-  //poly^.Vertex2D_in_OCS_Array.getelement(3).y = Point.y;
-
-
-  // set the new point to the end of the line
-  // устанавливаем новую точку конца линии
-
-//
-//  //присваиваем примитиву общие свойства из системных переменных
-//  GDBObjSetEntityCurrentProp(ln);
-//
-//  // set the new point to the end of the line
-//  // устанавливаем новую точку конца линии
-//  ln^.CoordInOCS.lEnd:=Point;
-//  //format entity
-//  //"форматируем" примитив в соответствии с заданными параметрами
-//  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-//  ln^.FormatEntity(gdb.GetCurrentDWG^,dc);
-//
-//end;
-
-
-  //format entity
-  //"форматируем" примитив в соответствии с заданными параметрами
-
-
 end;
 
 
-function DrawRectangle_com(operands:TCommandOperands):TCommandResult;    //< Чертим прямоугольник
+function Draw2DRectangle_com(operands:TCommandOperands):TCommandResult;    //< Чертим прямоугольник
 var
     pline,pline1,pline2,pline3,pline4:PGDBObjLine;
     polyVert:GDBvertex2D;               //переменная для добавления вершин в полилинию
     PolyWidth:GLLWWidth;                //переменная для добавления веса линии в начале и конце пути
     polyObj:PGDBObjLWPolyline;     //сам прямоугольник
+    //polyObj:PGDBObjPolyline;     //сам прямоугольник
     pe,petemp:T3PointPentity;
     dc:TDrawContext;
 begin
@@ -1224,13 +1178,15 @@ begin
         // pline := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
          //создаем только одну полилинию//GDBObjLWPolyline.CreateInstance;
          polyObj:=GDBObjLWPolyline.CreateInstance;
+      //polyObj:=GDBObjPolyline.CreateInstance;
+      polyObj^.Closed:=true;
          //и НЕЗАБЫВЕМ добавить ее в область конструируемых объектов//
          gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@polyObj);
 
          polyVert.x:=pe.p1.x;
          polyVert.y:=pe.p1.y;
-         PolyWidth.endw:=1;
-         PolyWidth.startw:=1;
+         PolyWidth.endw:=0;
+         PolyWidth.startw:=0;
 
          polyObj^.Vertex2D_in_OCS_Array.Add(@polyVert);
          polyObj^.Width2D_in_OCS_Array.Add(@PolyWidth);
@@ -1245,9 +1201,9 @@ begin
          polyObj^.Width2D_in_OCS_Array.Add(@PolyWidth);
 
          //polyObj^.CoordInOCS.lBegin:=pe.p1;
-         InteractiveRectangleManipulator(polyObj,pe.p1,false);
+         Interactive2DRectangleManipulator(polyObj,pe.p1,false);
 //      if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractivePolyLineManipulator,pline) then
-      if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveRectangleManipulator,polyObj) then
+      if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@Interactive2DRectangleManipulator,polyObj) then
       begin
           //незабываем вконце добавить всё что наконструировали в чертеж//
           AddEntToCurrentDrawingWithUndo(polyObj);
@@ -1368,6 +1324,6 @@ initialization
      CreateCommandFastObjectPlugin(@GetLength_com,  'GetLength',  CADWG,0);
      CreateCommandFastObjectPlugin(@TestInsert1_com,'TestInsert1',CADWG,0);
      CreateCommandFastObjectPlugin(@TestInsert2_com,'TestInsert2',CADWG,0);
-     CreateCommandFastObjectPlugin(@DrawRectangle_com,       'test789',         CADWG,0);
+     CreateCommandFastObjectPlugin(@Draw2DRectangle_com,       'test789',         CADWG,0);
 
 end.

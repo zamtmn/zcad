@@ -37,6 +37,8 @@ uses
 
   sysutils, math,
 
+  URecordDescriptor,TypeDescriptors,
+
   Forms, blockinsertwnd, arrayinsertwnd,
 
   GDBBlockInsert,      //unit describes blockinsert entity
@@ -1178,12 +1180,28 @@ var
     //polyObj:PGDBObjPolyline;     //сам прямоугольник
     pe,petemp:T3PointPentity;
     dc:TDrawContext;
+    PInternalRTTITypeDesk:PRecordDescriptor;
+    pf:PfieldDescriptor;
 begin
-   SetGDBObjInspProc( nil,gdb.GetUnitsFormat,SysUnit^.TypeName2PTD( 'TRectangParam'),
+   PInternalRTTITypeDesk:=pointer(SysUnit^.TypeName2PTD( 'TRectangParam'));//находим описание типа TRectangParam, мы сразу знаем что это описание записи, поэтому нужно привести тип
+
+   pf:=PInternalRTTITypeDesk^.FindField('ET'); //находим описание поля ET
+   pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
+
+   pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
+   pf^.base.Attributes:=pf^.base.Attributes and (not FA_HIDDEN_IN_OBJ_INSP);//сбрасываем ему флаг cкрытности
+
+   SetGDBObjInspProc( nil,gdb.GetUnitsFormat,PInternalRTTITypeDesk,
                               @RectangParam,
                               gdb.GetCurrentDWG );
     if commandmanager.get3dpoint('Specify first point:',pe.p1) then
     begin
+
+      pf:=PInternalRTTITypeDesk^.FindField('ET');//находим описание поля ET
+      pf^.base.Attributes:=pf^.base.Attributes or FA_READONLY;//устанавливаем ему флаг ридонли
+
+      pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
+      pf^.base.Attributes:=pf^.base.Attributes or FA_HIDDEN_IN_OBJ_INSP;//устанавливаем ему флаг cкрытности
 
         // pline := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
          //создаем только одну полилинию//GDBObjLWPolyline.CreateInstance;

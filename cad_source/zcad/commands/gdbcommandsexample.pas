@@ -107,6 +107,12 @@ type
                        ProcessLineTypeScale:GDBBoolean;(*'Process line type scale'*)
                        ProcessColor:GDBBoolean;(*'Process color'*)
                  end;
+    TRectangEntType=(RET_3DPoly(*'3DPoly'*),RET_LWPoly(*'LWPoly'*));
+    TRectangParam=packed record
+                       ET:TRectangEntType;(*'Entity type'*)
+                       VNum:GDBInteger;(*'Number of vertices'*)
+                       PolyWidth:GDBDouble;(*'Polyline width'*)
+                 end;
 {EXPORT-}
     PT3PointPentity=^T3PointPentity;
     T3PointPentity=record
@@ -131,6 +137,7 @@ type
 implementation
 var
    MatchPropParam:TMatchPropParam;
+   RectangParam:TRectangParam;
 { Интерактивные процедуры используются совместно с Get3DPointInteractive,
   впоследствии будут вынесены в отдельный модуль }
 { Interactive procedures are used together with Get3DPointInteractive,
@@ -1172,6 +1179,9 @@ var
     pe,petemp:T3PointPentity;
     dc:TDrawContext;
 begin
+   SetGDBObjInspProc( nil,gdb.GetUnitsFormat,SysUnit^.TypeName2PTD( 'TRectangParam'),
+                              @RectangParam,
+                              gdb.GetCurrentDWG );
     if commandmanager.get3dpoint('Specify first point:',pe.p1) then
     begin
 
@@ -1325,5 +1335,7 @@ initialization
      CreateCommandFastObjectPlugin(@TestInsert1_com,'TestInsert1',CADWG,0);
      CreateCommandFastObjectPlugin(@TestInsert2_com,'TestInsert2',CADWG,0);
      CreateCommandFastObjectPlugin(@Draw2DRectangle_com,       'test789',         CADWG,0);
-
+     RectangParam.ET:=RET_LWPoly;
+     RectangParam.VNum:=4;
+     RectangParam.PolyWidth:=1;
 end.

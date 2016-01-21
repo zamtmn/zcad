@@ -114,12 +114,31 @@ implementation
 procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D);
 begin
   oglsm.myglPushMatrix;
+  oglsm.myglTranslated(CurrentCamCSOffset.x,CurrentCamCSOffset.y,CurrentCamCSOffset.z);
   oglsm.myglMultMatrixD(Transform);
+  oglsm.myglTranslated(-CurrentCamCSOffset.x,-CurrentCamCSOffset.y,-CurrentCamCSOffset.z);
 end;
 procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F);
+var
+   mp,mm:DMatrix4D;
 begin
-  oglsm.myglPushMatrix;
+  {oglsm.myglPushMatrix;
+  oglsm.myglTranslated(CurrentCamCSOffset.x,CurrentCamCSOffset.y,CurrentCamCSOffset.z);
   oglsm.myglMultMatrixF(Transform);
+  oglsm.myglTranslated(-CurrentCamCSOffset.x,-CurrentCamCSOffset.y,-CurrentCamCSOffset.z);}
+  oglsm.myglPushMatrix;
+
+  mp:=geometry.CreateTranslationMatrix(CurrentCamCSOffset);
+  mm:=geometry.CreateTranslationMatrix(VertexMulOnSc(CurrentCamCSOffset,-1));
+  mm:=MatrixMultiply(mm,Transform);
+  mm:=MatrixMultiply(mm,mp);
+  {CurrentCamCSOffset.x:=CurrentCamCSOffset.x-mm[3][0];
+  CurrentCamCSOffset.y:=CurrentCamCSOffset.y-mm[3][1];
+  CurrentCamCSOffset.z:=CurrentCamCSOffset.z-mm[3][2];
+  mm[3][0]:=0;
+  mm[3][1]:=0;
+  mm[3][2]:=0;}
+  oglsm.myglMultMatrixD(mm);
 end;
 procedure TZGLOpenGLDrawer.popMatrix;
 begin

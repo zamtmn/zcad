@@ -128,6 +128,7 @@ function VectorTransform(const V:GDBVertex4F;const M:DMatrix4F):GDBVertex4F;over
 procedure normalize4d(var tv:GDBVertex4d);overload;inline;
 procedure normalize4F(var tv:GDBVertex4F);overload;inline;
 function VectorTransform3D(const V:GDBVertex;const M:DMatrix4D):GDBVertex;overload;inline;
+function VectorTransform3D(const V:GDBVertex;const M:DMatrix4F):GDBVertex;overload;inline;
 function VectorTransform3D(const V:GDBVertex3S;const M:DMatrix4D):GDBVertex3S;overload;inline;
 function VectorTransform3D(const V:GDBVertex3S;const M:DMatrix4F):GDBVertex3S;overload;inline;
 
@@ -1489,6 +1490,17 @@ begin
   end;
 end;
 function VectorTransform3D(const V:GDBVertex;const M:DMatrix4D):GDBVertex;
+var TV: GDBVertex4D;
+begin
+  pgdbvertex(@tv)^:=v;
+  tv.w:=1;
+  tv:=VectorTransform(tv,m);
+
+  normalize4d(tv);
+
+  Result := pgdbvertex(@tv)^
+end;
+function VectorTransform3D(const V:GDBVertex;const M:DMatrix4F):GDBVertex;
 var TV: GDBVertex4D;
 begin
   pgdbvertex(@tv)^:=v;

@@ -19,7 +19,7 @@
 unit uzglgeneral2ddrawer;
 {$INCLUDE def.inc}
 interface
-uses {$IFNDEF DELPHI}LCLIntf,{$ENDIF}{$IFDEF DELPHI}windows,Types,{$ENDIF}Controls,uzglabstractviewarea,uzglgeneraldrawer,uzgprimitivescreator,UGDBOpenArrayOfData,uzglabstractdrawer,gdbpalette,Classes,Graphics,gdbase,gdbasetypes,geometry;
+uses uzgvertex3sarray,{$IFNDEF DELPHI}LCLIntf,{$ENDIF}{$IFDEF DELPHI}windows,Types,{$ENDIF}Controls,uzglabstractviewarea,uzglgeneraldrawer,uzgprimitivescreator,UGDBOpenArrayOfData,uzglabstractdrawer,gdbpalette,Classes,Graphics,gdbase,gdbasetypes,geometry;
 type
 DMatrix4DStackArray=array[0..10] of DMatrix4D;
 
@@ -57,8 +57,8 @@ TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
                           procedure pushMatrixAndSetTransform(Transform:DMatrix4D);overload;override;
                           procedure pushMatrixAndSetTransform(Transform:DMatrix4F);overload;override;
                           procedure popMatrix;override;
-                          function TranslatePointWithLocalCS(const p:GDBVertex3S):GDBVertex3S;
-                          function TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
+                          function TranslatePointWithLocalCS(const p:ZGLVertex):ZGLVertex;
+                          function TranslatePoint(const p:ZGLVertex):ZGLVertex;
 
                           procedure InitScreenInvalidrect(w,h:integer);
                           procedure CorrectScreenInvalidrect(w,h:integer);
@@ -242,11 +242,11 @@ begin
 end;
 function TZGLGeneral2DDrawer.CheckOutboundInDisplay(const PVertexBuffer:PGDBOpenArrayOfData;const i1:TLLVertexIndex):boolean;
 var
-pv1,pv2,pv3,pv4:PGDBVertex3S;
-p1,p2,p3,p4:GDBVertex3S;
+pv1,pv2,pv3,pv4:PZGLVertex;
+p1,p2,p3,p4:ZGLVertex;
 l,r,t,b:integer;
 
-procedure checkpointoutsidedisplay(const p:GDBVertex3S);
+procedure checkpointoutsidedisplay(const p:ZGLVertex);
 begin
      if (p.x<drawrect.Left)then
                                inc(l);
@@ -259,10 +259,10 @@ begin
 end;
 
 begin
- pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
- pv2:=PGDBVertex3S(PVertexBuffer.getelement(i1+1));
- pv3:=PGDBVertex3S(PVertexBuffer.getelement(i1+2));
- pv4:=PGDBVertex3S(PVertexBuffer.getelement(i1+3));
+ pv1:=PZGLVertex(PVertexBuffer.getelement(i1));
+ pv2:=PZGLVertex(PVertexBuffer.getelement(i1+1));
+ pv3:=PZGLVertex(PVertexBuffer.getelement(i1+2));
+ pv4:=PZGLVertex(PVertexBuffer.getelement(i1+3));
  p1:=TranslatePoint{WithLocalCS}(pv1^);
  p2:=TranslatePoint{WithLocalCS}(pv2^);
  p3:=TranslatePoint{WithLocalCS}(pv3^);
@@ -289,19 +289,19 @@ var
    i,index:integer;
    pindex:PTLLVertexIndex;
 
-   pv1,pv2,pv3:PGDBVertex3S;
-   p1,p2,p3:GDBVertex3S;
+   pv1,pv2,pv3:PZGLVertex;
+   p1,p2,p3:ZGLVertex;
    sp:array [1..3]of TPoint;
 begin
     index:=i1;
     pindex:=PIndexBuffer.getelement(index);
-    pv1:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+    pv1:=PZGLVertex(PVertexBuffer.getelement(pindex^));
     inc(index);
     pindex:=PIndexBuffer.getelement(index);
-    pv2:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+    pv2:=PZGLVertex(PVertexBuffer.getelement(pindex^));
     inc(index);
     pindex:=PIndexBuffer.getelement(index);
-    pv3:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+    pv3:=PZGLVertex(PVertexBuffer.getelement(pindex^));
     inc(index);
 
     p1:=TranslatePointWithLocalCS(pv1^);
@@ -330,7 +330,7 @@ begin
         //sp[1]:=sp[2];
         //sp[2]:=sp[3];
         pindex:=PIndexBuffer.getelement(i);
-        pv3:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+        pv3:=PZGLVertex(PVertexBuffer.getelement(pindex^));
 
         p3:=TranslatePointWithLocalCS(pv3^);
 
@@ -348,19 +348,19 @@ var
    i,index:integer;
    pindex:PTLLVertexIndex;
 
-   pv1,pv2,pv3:PGDBVertex3S;
-   p1,p2,p3:GDBVertex3S;
+   pv1,pv2,pv3:PZGLVertex;
+   p1,p2,p3:ZGLVertex;
    //sp:array [1..3]of TPoint;
 begin
     index:=i1;
     pindex:=PIndexBuffer.getelement(index);
-    pv1:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+    pv1:=PZGLVertex(PVertexBuffer.getelement(pindex^));
     inc(index);
     pindex:=PIndexBuffer.getelement(index);
-    pv2:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+    pv2:=PZGLVertex(PVertexBuffer.getelement(pindex^));
     inc(index);
     pindex:=PIndexBuffer.getelement(index);
-    pv3:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+    pv3:=PZGLVertex(PVertexBuffer.getelement(pindex^));
     inc(index);
 
     p1:=TranslatePointWithLocalCS(pv1^);
@@ -386,7 +386,7 @@ begin
         p2:=p3;
         //sp[2]:=sp[3];
         pindex:=PIndexBuffer.getelement(i);
-        pv3:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+        pv3:=PZGLVertex(PVertexBuffer.getelement(pindex^));
 
         p3:=TranslatePointWithLocalCS(pv3^);
 
@@ -401,21 +401,21 @@ end;
 
 procedure TZGLGeneral2DDrawer.DrawPoint(const PVertexBuffer:PGDBOpenArrayOfData;const i:TLLVertexIndex);
 var
-   pv:PGDBVertex3S;
-   p:GDBVertex3S;
+   pv:PZGLVertex;
+   p:ZGLVertex;
 begin
-    pv:=PGDBVertex3S(PVertexBuffer.getelement(i));
+    pv:=PZGLVertex(PVertexBuffer.getelement(i));
     p:=TranslatePointWithLocalCS(pv^);
     InternalDrawPoint(p.x,p.y);
 end;
 procedure TZGLGeneral2DDrawer.DrawTriangle(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3:TLLVertexIndex);
 var
-   pv1,pv2,pv3:PGDBVertex3S;
-   p1,p2,p3:GDBVertex3S;
+   pv1,pv2,pv3:PZGLVertex;
+   p1,p2,p3:ZGLVertex;
 begin
-    pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
-    pv2:=PGDBVertex3S(PVertexBuffer.getelement(i2));
-    pv3:=PGDBVertex3S(PVertexBuffer.getelement(i3));
+    pv1:=PZGLVertex(PVertexBuffer.getelement(i1));
+    pv2:=PZGLVertex(PVertexBuffer.getelement(i2));
+    pv3:=PZGLVertex(PVertexBuffer.getelement(i3));
     p1:=TranslatePointWithLocalCS(pv1^);
     p2:=TranslatePointWithLocalCS(pv2^);
     p3:=TranslatePointWithLocalCS(pv3^);
@@ -423,15 +423,15 @@ begin
     InternalDrawTriangle(p1.x,p1.y,p2.x,p2.y,p3.x,p3.y);
 end;
 procedure TZGLGeneral2DDrawer.DrawQuad(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3,i4:TLLVertexIndex);var
-   pv1,pv2,pv3,pv4:PGDBVertex3S;
-   p1,p2,p3,p4:GDBVertex3S;
+   pv1,pv2,pv3,pv4:PZGLVertex;
+   p1,p2,p3,p4:ZGLVertex;
    x,y:integer;
    sp:array [1..4]of TPoint;
 begin
-    pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
-    pv2:=PGDBVertex3S(PVertexBuffer.getelement(i2));
-    pv3:=PGDBVertex3S(PVertexBuffer.getelement(i3));
-    pv4:=PGDBVertex3S(PVertexBuffer.getelement(i4));
+    pv1:=PZGLVertex(PVertexBuffer.getelement(i1));
+    pv2:=PZGLVertex(PVertexBuffer.getelement(i2));
+    pv3:=PZGLVertex(PVertexBuffer.getelement(i3));
+    pv4:=PZGLVertex(PVertexBuffer.getelement(i4));
     p1:=TranslatePointWithLocalCS(pv1^);
     p2:=TranslatePointWithLocalCS(pv2^);
     p3:=TranslatePointWithLocalCS(pv3^);
@@ -441,11 +441,11 @@ begin
 end;
 procedure TZGLGeneral2DDrawer.DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);
 var
-   pv1,pv2:PGDBVertex3S;
-   p1,p2:GDBVertex3S;
+   pv1,pv2:PZGLVertex;
+   p1,p2:ZGLVertex;
 begin
-    pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
-    pv2:=PGDBVertex3S(PVertexBuffer.getelement(i2));
+    pv1:=PZGLVertex(PVertexBuffer.getelement(i1));
+    pv2:=PZGLVertex(PVertexBuffer.getelement(i2));
     p1:=TranslatePointWithLocalCS(pv1^);
     p2:=TranslatePointWithLocalCS(pv2^);
 
@@ -478,7 +478,7 @@ begin
      end;
 end;
 
-function TZGLGeneral2DDrawer.TranslatePointWithLocalCS(const p:GDBVertex3S):GDBVertex3S;
+function TZGLGeneral2DDrawer.TranslatePointWithLocalCS(const p:ZGLVertex):ZGLVertex;
 begin
      if mstackindex>-1 then
                            begin
@@ -494,7 +494,7 @@ begin
                            result.z:=p.z;
                        end;
 end;
-function TZGLGeneral2DDrawer.TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
+function TZGLGeneral2DDrawer.TranslatePoint(const p:ZGLVertex):ZGLVertex;
 begin
      result.x:=p.x*sx+tx;
      result.y:=p.y*sy+ty;

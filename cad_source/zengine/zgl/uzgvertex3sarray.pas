@@ -23,7 +23,11 @@ uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
 geometry;
 type
 {Export+}
-ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBvertex3S*)
+ZGLVertex=GDBVertex;
+ZGLFloat=GDBDouble;
+PZGLVertex=^ZGLVertex;
+PZGLFloat=^ZGLFloat;
+ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=ZGLVertex*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
                 //procedure DrawGeometry;virtual;
@@ -31,12 +35,20 @@ ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Open
                 function GetLength(const i:TArrayIndex):GDBFloat;virtual;
              end;
 {Export-}
+function GDBVertex2ZGLVertex(const Vector1:GDBVertex): ZGLVertex;
 implementation
 //uses {glstatemanager,}log;
+function GDBVertex2ZGLVertex(const Vector1:GDBVertex): ZGLVertex;
+begin
+     result.x:=Vector1.x;
+     result.y:=Vector1.y;
+     result.z:=Vector1.z;
+end;
+
 function ZGLVertex3Sarray.GetLength(const i:TArrayIndex):GDBFloat;
 var
-    pv1,pv2:PGDBvertex3S;
-    v:GDBvertex3S;
+    pv1,pv2:PZGLVertex;
+    v:ZGLVertex;
 begin
   pv1:=self.getelement(i);
   pv2:={pv1}self.getelement(i+1);;
@@ -49,7 +61,7 @@ end;
 
 function ZGLVertex3Sarray.AddGDBVertex(const v:GDBvertex):TArrayIndex;
 var
-    vs:GDBvertex3S;
+    vs:ZGLVertex;
 begin
      vs.x:=v.x;
      vs.y:=v.y;
@@ -59,12 +71,12 @@ end;
 
 constructor ZGLVertex3Sarray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBvertex3S));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(ZGLVertex));
 end;
 constructor ZGLVertex3Sarray.initnul;
 begin
   inherited initnul;
-  size:=sizeof(GDBvertex3S);
+  size:=sizeof(ZGLVertex);
 end;
 (*procedure ZGLVertex3Sarray.drawgeometry;
 var p:PGDBVertex3S;

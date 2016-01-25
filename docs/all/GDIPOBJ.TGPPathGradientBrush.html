@@ -1,0 +1,505 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>GDIPOBJ: Class TGPPathGradientBrush</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="TGPPathGradientBrush"></a><h1 class="cio">Class TGPPathGradientBrush</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></td><td>Fields</td><td><a class="section" href="#PasDoc-Methods">Methods</a></td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="GDIPOBJ.html">GDIPOBJ</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TGPPathGradientBrush = class(<a class="normal" href="GDIPOBJ.TGPBrush.html">TGPBrush</a>)</code></p>
+<h2 class="description">Description</h2>
+<div class="nodescription">no description available, TGPBrush description follows</div><div class="nodescription">no description available, TGdiplusBase description follows</div><p>
+***********************************************************************\ * * GDI+ base memory allocation class * \*************************************************************************</p>
+<a name="PasDoc-Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TObject</li>
+<li class="ancestor"><a class="normal" href="GDIPAPI.TGdiplusBase.html">TGdiplusBase</a></li>
+<li class="ancestor"><a class="normal" href="GDIPOBJ.TGPBrush.html">TGPBrush</a></li>
+<li class="thisitem">TGPPathGradientBrush</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#Create">Create</a></b>(points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer; wrapMode: <a  href="GDIPAPI.html#TWrapMode">TWrapMode</a> = WrapModeClamp); reintroduce; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#Create">Create</a></b>(points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer; wrapMode: <a  href="GDIPAPI.html#TWrapMode">TWrapMode</a> = WrapModeClamp); reintroduce; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#Create">Create</a></b>(path: <a  href="GDIPOBJ.TGPGraphicsPath.html">TGPGraphicsPath</a>); reintroduce; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#Create">Create</a></b>; reintroduce; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#GetCenterColor">GetCenterColor</a></b>(out Color: <a  href="GDIPAPI.html#TGPColor">TGPColor</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#SetCenterColor">SetCenterColor</a></b>(color: <a  href="GDIPAPI.html#TGPColor">TGPColor</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#GetPointCount">GetPointCount</a></b>: Integer;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#GetSurroundColorCount">GetSurroundColorCount</a></b>: Integer;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#GetSurroundColors">GetSurroundColors</a></b>(colors: <a  href="GDIPAPI.html#PARGB">PARGB</a>; var count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#SetSurroundColors">SetSurroundColors</a></b>(colors: <a  href="GDIPAPI.html#PARGB">PARGB</a>; var count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#GetGraphicsPath">GetGraphicsPath</a></b>(path: <a  href="GDIPOBJ.TGPGraphicsPath.html">TGPGraphicsPath</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#SetGraphicsPath">SetGraphicsPath</a></b>(path: <a  href="GDIPOBJ.TGPGraphicsPath.html">TGPGraphicsPath</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#GetCenterPoint">GetCenterPoint</a></b>(out point: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#GetCenterPoint">GetCenterPoint</a></b>(out point: <a  href="GDIPAPI.TGPPoint.html">TGPPoint</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#SetCenterPoint">SetCenterPoint</a></b>(point: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#SetCenterPoint">SetCenterPoint</a></b>(point: <a  href="GDIPAPI.TGPPoint.html">TGPPoint</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#GetRectangle">GetRectangle</a></b>(out rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#GetRectangle">GetRectangle</a></b>(out rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#SetGammaCorrection">SetGammaCorrection</a></b>(useGammaCorrection: BOOL): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#GetGammaCorrection">GetGammaCorrection</a></b>: BOOL; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#GetBlendCount">GetBlendCount</a></b>: Integer;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#GetBlend">GetBlend</a></b>(blendFactors, blendPositions: PSingle; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#SetBlend">SetBlend</a></b>(blendFactors, blendPositions: PSingle; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#GetInterpolationColorCount">GetInterpolationColorCount</a></b>: Integer;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#SetInterpolationColors">SetInterpolationColors</a></b>(presetColors: <a  href="GDIPAPI.html#PARGB">PARGB</a>; blendPositions: PSingle; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#GetInterpolationColors">GetInterpolationColors</a></b>(presetColors: <a  href="GDIPAPI.html#PARGB">PARGB</a>; blendPositions: PSingle; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#SetBlendBellShape">SetBlendBellShape</a></b>(focus: Single; scale: Single = 1.0): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#SetBlendTriangularShape">SetBlendTriangularShape</a></b>(focus: Single; scale: Single = 1.0): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#GetTransform">GetTransform</a></b>(matrix: <a  href="GDIPOBJ.TGPMatrix.html">TGPMatrix</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#SetTransform">SetTransform</a></b>(matrix: <a  href="GDIPOBJ.TGPMatrix.html">TGPMatrix</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#ResetTransform">ResetTransform</a></b>: <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#MultiplyTransform">MultiplyTransform</a></b>(matrix: <a  href="GDIPOBJ.TGPMatrix.html">TGPMatrix</a>; order: <a  href="GDIPAPI.html#TMatrixOrder">TMatrixOrder</a> = MatrixOrderPrepend): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#TranslateTransform">TranslateTransform</a></b>(dx, dy: Single; order: <a  href="GDIPAPI.html#TMatrixOrder">TMatrixOrder</a> = MatrixOrderPrepend): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#ScaleTransform">ScaleTransform</a></b>(sx, sy: Single; order: <a  href="GDIPAPI.html#TMatrixOrder">TMatrixOrder</a> = MatrixOrderPrepend): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#RotateTransform">RotateTransform</a></b>(angle: Single; order: <a  href="GDIPAPI.html#TMatrixOrder">TMatrixOrder</a> = MatrixOrderPrepend): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#GetFocusScales">GetFocusScales</a></b>(out xScale, yScale: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#SetFocusScales">SetFocusScales</a></b>(xScale, yScale: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#GetWrapMode">GetWrapMode</a></b>: <a  href="GDIPAPI.html#TWrapMode">TWrapMode</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPPathGradientBrush.html#SetWrapMode">SetWrapMode</a></b>(wrapMode: <a  href="GDIPAPI.html#TWrapMode">TWrapMode</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer; wrapMode: <a  href="GDIPAPI.html#TWrapMode">TWrapMode</a> = WrapModeClamp); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer; wrapMode: <a  href="GDIPAPI.html#TWrapMode">TWrapMode</a> = WrapModeClamp); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(path: <a  href="GDIPOBJ.TGPGraphicsPath.html">TGPGraphicsPath</a>); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>; reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetCenterColor"></a><code>function <b>GetCenterColor</b>(out Color: <a  href="GDIPAPI.html#TGPColor">TGPColor</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetCenterColor"></a><code>function <b>SetCenterColor</b>(color: <a  href="GDIPAPI.html#TGPColor">TGPColor</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetPointCount"></a><code>function <b>GetPointCount</b>: Integer;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetSurroundColorCount"></a><code>function <b>GetSurroundColorCount</b>: Integer;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetSurroundColors"></a><code>function <b>GetSurroundColors</b>(colors: <a  href="GDIPAPI.html#PARGB">PARGB</a>; var count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetSurroundColors"></a><code>function <b>SetSurroundColors</b>(colors: <a  href="GDIPAPI.html#PARGB">PARGB</a>; var count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetGraphicsPath"></a><code>function <b>GetGraphicsPath</b>(path: <a  href="GDIPOBJ.TGPGraphicsPath.html">TGPGraphicsPath</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetGraphicsPath"></a><code>function <b>SetGraphicsPath</b>(path: <a  href="GDIPOBJ.TGPGraphicsPath.html">TGPGraphicsPath</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetCenterPoint"></a><code>function <b>GetCenterPoint</b>(out point: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetCenterPoint"></a><code>function <b>GetCenterPoint</b>(out point: <a  href="GDIPAPI.TGPPoint.html">TGPPoint</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetCenterPoint"></a><code>function <b>SetCenterPoint</b>(point: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetCenterPoint"></a><code>function <b>SetCenterPoint</b>(point: <a  href="GDIPAPI.TGPPoint.html">TGPPoint</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetRectangle"></a><code>function <b>GetRectangle</b>(out rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetRectangle"></a><code>function <b>GetRectangle</b>(out rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetGammaCorrection"></a><code>function <b>SetGammaCorrection</b>(useGammaCorrection: BOOL): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetGammaCorrection"></a><code>function <b>GetGammaCorrection</b>: BOOL; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetBlendCount"></a><code>function <b>GetBlendCount</b>: Integer;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetBlend"></a><code>function <b>GetBlend</b>(blendFactors, blendPositions: PSingle; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetBlend"></a><code>function <b>SetBlend</b>(blendFactors, blendPositions: PSingle; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetInterpolationColorCount"></a><code>function <b>GetInterpolationColorCount</b>: Integer;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetInterpolationColors"></a><code>function <b>SetInterpolationColors</b>(presetColors: <a  href="GDIPAPI.html#PARGB">PARGB</a>; blendPositions: PSingle; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetInterpolationColors"></a><code>function <b>GetInterpolationColors</b>(presetColors: <a  href="GDIPAPI.html#PARGB">PARGB</a>; blendPositions: PSingle; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetBlendBellShape"></a><code>function <b>SetBlendBellShape</b>(focus: Single; scale: Single = 1.0): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetBlendTriangularShape"></a><code>function <b>SetBlendTriangularShape</b>(focus: Single; scale: Single = 1.0): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetTransform"></a><code>function <b>GetTransform</b>(matrix: <a  href="GDIPOBJ.TGPMatrix.html">TGPMatrix</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetTransform"></a><code>function <b>SetTransform</b>(matrix: <a  href="GDIPOBJ.TGPMatrix.html">TGPMatrix</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ResetTransform"></a><code>function <b>ResetTransform</b>: <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MultiplyTransform"></a><code>function <b>MultiplyTransform</b>(matrix: <a  href="GDIPOBJ.TGPMatrix.html">TGPMatrix</a>; order: <a  href="GDIPAPI.html#TMatrixOrder">TMatrixOrder</a> = MatrixOrderPrepend): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TranslateTransform"></a><code>function <b>TranslateTransform</b>(dx, dy: Single; order: <a  href="GDIPAPI.html#TMatrixOrder">TMatrixOrder</a> = MatrixOrderPrepend): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ScaleTransform"></a><code>function <b>ScaleTransform</b>(sx, sy: Single; order: <a  href="GDIPAPI.html#TMatrixOrder">TMatrixOrder</a> = MatrixOrderPrepend): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="RotateTransform"></a><code>function <b>RotateTransform</b>(angle: Single; order: <a  href="GDIPAPI.html#TMatrixOrder">TMatrixOrder</a> = MatrixOrderPrepend): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetFocusScales"></a><code>function <b>GetFocusScales</b>(out xScale, yScale: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetFocusScales"></a><code>function <b>SetFocusScales</b>(xScale, yScale: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetWrapMode"></a><code>function <b>GetWrapMode</b>: <a  href="GDIPAPI.html#TWrapMode">TWrapMode</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetWrapMode"></a><code>function <b>SetWrapMode</b>(wrapMode: <a  href="GDIPAPI.html#TWrapMode">TWrapMode</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

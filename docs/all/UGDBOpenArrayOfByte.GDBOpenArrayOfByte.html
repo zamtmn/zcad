@@ -1,0 +1,352 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>UGDBOpenArrayOfByte: packed Object GDBOpenArrayOfByte</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="GDBOpenArrayOfByte"></a><h1 class="cio">packed Object GDBOpenArrayOfByte</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></td><td><a class="section" href="#PasDoc-Fields">Fields</a></td><td><a class="section" href="#PasDoc-Methods">Methods</a></td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="UGDBOpenArrayOfByte.html">UGDBOpenArrayOfByte</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type GDBOpenArrayOfByte = packed object(<a class="normal" href="UGDBOpenArray.GDBOpenArray.html">GDBOpenArray</a>)</code></p>
+<h2 class="description">Description</h2>
+<div class="nodescription">no description available, GDBOpenArray description follows</div><div class="nodescription">no description available, OpenArray description follows</div><div class="nodescription">no description available, GDBaseObject description follows</div><a name="PasDoc-Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TObject</li>
+<li class="ancestor"><a class="normal" href="gdbase.GDBaseObject.html">GDBaseObject</a></li>
+<li class="ancestor"><a class="normal" href="UOpenArray.OpenArray.html">OpenArray</a></li>
+<li class="ancestor"><a class="normal" href="UGDBOpenArray.GDBOpenArray.html">GDBOpenArray</a></li>
+<li class="thisitem">GDBOpenArrayOfByte</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Fields"></a><h3 class="summary">Fields</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#ReadPos">ReadPos</a></b>:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#name">name</a></b>:<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#init">init</a></b>(m:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#initnul">initnul</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#InitFromFile">InitFromFile</a></b>(FileName:string);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#AddByte">AddByte</a></b>(PData:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#AddByteByVal">AddByteByVal</a></b>(Data:<a  href="gdbasetypes.html#GDBByte">GDBByte</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#AddWord">AddWord</a></b>(PData:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#AddFontFloat">AddFontFloat</a></b>(PData:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#TXTAddGDBStringEOL">TXTAddGDBStringEOL</a></b>(s:<a  href="gdbasetypes.html#GDBString">GDBString</a>); virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#TXTAddGDBString">TXTAddGDBString</a></b>(s:<a  href="gdbasetypes.html#GDBString">GDBString</a>); virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#ReadData">ReadData</a></b>(PData:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;SData:<a  href="gdbasetypes.html#GDBWord">GDBword</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#PopData">PopData</a></b>(PData:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;SData:<a  href="gdbasetypes.html#GDBWord">GDBword</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#ReadString">ReadString</a></b>(break, ignore: <a  href="gdbasetypes.html#GDBString">GDBString</a>): shortString; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#ReadGDBString">ReadGDBString</a></b>: <a  href="gdbasetypes.html#GDBString">GDBString</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#ReadString2">ReadString2</a></b>:<a  href="gdbasetypes.html#GDBString">GDBString</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#GetCurrentReadAddres">GetCurrentReadAddres</a></b>:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#Jump">Jump</a></b>(offset:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>):<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#SaveToFile">SaveToFile</a></b>(FileName:string):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#ReadByte">ReadByte</a></b>: <a  href="gdbasetypes.html#GDBByte">GDBByte</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#ReadWord">ReadWord</a></b>: <a  href="gdbasetypes.html#GDBWord">GDBWord</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#GetChar">GetChar</a></b>(rp:integer): Ansichar;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#Seek">Seek</a></b>(pos:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>):integer;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#notEOF">notEOF</a></b>:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#readtoparser">readtoparser</a></b>(break:<a  href="gdbasetypes.html#GDBString">GDBString</a>): <a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>destructor <b><a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html#done">done</a></b>; virtual;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Fields</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ReadPos"></a><code><b>ReadPos</b>:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="name"></a><code><b>name</b>:<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="init"></a><code>constructor <b>init</b>(m:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="initnul"></a><code>constructor <b>initnul</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="InitFromFile"></a><code>constructor <b>InitFromFile</b>(FileName:string);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="AddByte"></a><code>function <b>AddByte</b>(PData:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="AddByteByVal"></a><code>function <b>AddByteByVal</b>(Data:<a  href="gdbasetypes.html#GDBByte">GDBByte</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="AddWord"></a><code>function <b>AddWord</b>(PData:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="AddFontFloat"></a><code>function <b>AddFontFloat</b>(PData:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TXTAddGDBStringEOL"></a><code>procedure <b>TXTAddGDBStringEOL</b>(s:<a  href="gdbasetypes.html#GDBString">GDBString</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TXTAddGDBString"></a><code>procedure <b>TXTAddGDBString</b>(s:<a  href="gdbasetypes.html#GDBString">GDBString</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ReadData"></a><code>function <b>ReadData</b>(PData:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;SData:<a  href="gdbasetypes.html#GDBWord">GDBword</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="PopData"></a><code>function <b>PopData</b>(PData:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;SData:<a  href="gdbasetypes.html#GDBWord">GDBword</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ReadString"></a><code>function <b>ReadString</b>(break, ignore: <a  href="gdbasetypes.html#GDBString">GDBString</a>): shortString; inline;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ReadGDBString"></a><code>function <b>ReadGDBString</b>: <a  href="gdbasetypes.html#GDBString">GDBString</a>; inline;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ReadString2"></a><code>function <b>ReadString2</b>:<a  href="gdbasetypes.html#GDBString">GDBString</a>; inline;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetCurrentReadAddres"></a><code>function <b>GetCurrentReadAddres</b>:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Jump"></a><code>function <b>Jump</b>(offset:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>):<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SaveToFile"></a><code>function <b>SaveToFile</b>(FileName:string):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ReadByte"></a><code>function <b>ReadByte</b>: <a  href="gdbasetypes.html#GDBByte">GDBByte</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ReadWord"></a><code>function <b>ReadWord</b>: <a  href="gdbasetypes.html#GDBWord">GDBWord</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetChar"></a><code>function <b>GetChar</b>(rp:integer): Ansichar;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Seek"></a><code>function <b>Seek</b>(pos:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>):integer;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="notEOF"></a><code>function <b>notEOF</b>:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="readtoparser"></a><code>function <b>readtoparser</b>(break:<a  href="gdbasetypes.html#GDBString">GDBString</a>): <a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="done"></a><code>destructor <b>done</b>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

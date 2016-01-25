@@ -1,0 +1,243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>uzglopenglviewarea: Class TOpenGLViewArea</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="TOpenGLViewArea"></a><h1 class="cio">Class TOpenGLViewArea</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></td><td><a class="section" href="#PasDoc-Fields">Fields</a></td><td><a class="section" href="#PasDoc-Methods">Methods</a></td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="uzglopenglviewarea.html">uzglopenglviewarea</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TOpenGLViewArea = class(<a class="normal" href="generalviewarea.TGeneralViewArea.html">TGeneralViewArea</a>)</code></p>
+<h2 class="description">Description</h2>
+<div class="nodescription">no description available, TGeneralViewArea description follows</div><div class="nodescription">no description available, TAbstractViewArea description follows</div><a name="PasDoc-Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">tcomponent</li>
+<li class="ancestor"><a class="normal" href="uzglabstractviewarea.TAbstractViewArea.html">TAbstractViewArea</a></li>
+<li class="ancestor"><a class="normal" href="generalviewarea.TGeneralViewArea.html">TGeneralViewArea</a></li>
+<li class="thisitem">TOpenGLViewArea</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Fields"></a><h3 class="summary">Fields</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglopenglviewarea.TOpenGLViewArea.html#OpenGLWindow">OpenGLWindow</a></b>:<a  href="uzglopenglviewarea.TOGLWnd.html">TOGLWnd</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglopenglviewarea.TOpenGLViewArea.html#OpenGLParam">OpenGLParam</a></b>:<a  href="uzglopengldrawer.TOpenglData.html">TOpenglData</a>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="uzglopenglviewarea.TOpenGLViewArea.html#CreateWorkArea">CreateWorkArea</a></b>(TheOwner: TComponent):<a  href="uzglabstractviewarea.TCADControl.html">TCADControl</a>; override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglopenglviewarea.TOpenGLViewArea.html#CreateDrawer">CreateDrawer</a></b>; override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglopenglviewarea.TOpenGLViewArea.html#SetupWorkArea">SetupWorkArea</a></b>; override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglopenglviewarea.TOpenGLViewArea.html#WaResize">WaResize</a></b>(sender:tobject); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglopenglviewarea.TOpenGLViewArea.html#SwapBuffers">SwapBuffers</a></b>(var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglopenglviewarea.TOpenGLViewArea.html#LightOn">LightOn</a></b>(var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglopenglviewarea.TOpenGLViewArea.html#LightOff">LightOff</a></b>(var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglopenglviewarea.TOpenGLViewArea.html#DrawGrid">DrawGrid</a></b>(var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglopenglviewarea.TOpenGLViewArea.html#getareacaps">getareacaps</a></b>; override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglopenglviewarea.TOpenGLViewArea.html#GDBActivateGLContext">GDBActivateGLContext</a></b>; override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="uzglopenglviewarea.TOpenGLViewArea.html#NeedDrawInsidePaintEvent">NeedDrawInsidePaintEvent</a></b>:boolean; override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglopenglviewarea.TOpenGLViewArea.html#setdeicevariable">setdeicevariable</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="uzglopenglviewarea.TOpenGLViewArea.html#getParam">getParam</a></b>:pointer; override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="uzglopenglviewarea.TOpenGLViewArea.html#getParamTypeName">getParamTypeName</a></b>:<a  href="gdbasetypes.html#GDBString">GDBString</a>; override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="uzglopenglviewarea.TOpenGLViewArea.html#CreateRC">CreateRC</a></b>(_maxdetail:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>=false):<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>; override;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Fields</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="OpenGLWindow"></a><code><b>OpenGLWindow</b>:<a  href="uzglopenglviewarea.TOGLWnd.html">TOGLWnd</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="OpenGLParam"></a><code><b>OpenGLParam</b>:<a  href="uzglopengldrawer.TOpenglData.html">TOpenglData</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CreateWorkArea"></a><code>function <b>CreateWorkArea</b>(TheOwner: TComponent):<a  href="uzglabstractviewarea.TCADControl.html">TCADControl</a>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CreateDrawer"></a><code>procedure <b>CreateDrawer</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetupWorkArea"></a><code>procedure <b>SetupWorkArea</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="WaResize"></a><code>procedure <b>WaResize</b>(sender:tobject); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SwapBuffers"></a><code>procedure <b>SwapBuffers</b>(var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="LightOn"></a><code>procedure <b>LightOn</b>(var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="LightOff"></a><code>procedure <b>LightOff</b>(var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawGrid"></a><code>procedure <b>DrawGrid</b>(var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="getareacaps"></a><code>procedure <b>getareacaps</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GDBActivateGLContext"></a><code>procedure <b>GDBActivateGLContext</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="NeedDrawInsidePaintEvent"></a><code>function <b>NeedDrawInsidePaintEvent</b>:boolean; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="setdeicevariable"></a><code>procedure <b>setdeicevariable</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="getParam"></a><code>function <b>getParam</b>:pointer; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="getParamTypeName"></a><code>function <b>getParamTypeName</b>:<a  href="gdbasetypes.html#GDBString">GDBString</a>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CreateRC"></a><code>function <b>CreateRC</b>(_maxdetail:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>=false):<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

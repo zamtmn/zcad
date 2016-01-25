@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>UPointerDescriptor: Object GDBPointerDescriptor</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="GDBPointerDescriptor"></a><h1 class="cio">Object GDBPointerDescriptor</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></td><td><a class="section" href="#PasDoc-Fields">Fields</a></td><td><a class="section" href="#PasDoc-Methods">Methods</a></td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="UPointerDescriptor.html">UPointerDescriptor</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type GDBPointerDescriptor = object(<a class="normal" href="TypeDescriptors.TUserTypeDescriptor.html">TUserTypeDescriptor</a>)</code></p>
+<h2 class="description">Description</h2>
+<div class="nodescription">no description available, TUserTypeDescriptor description follows</div><div class="nodescription">no description available, UserTypeDescriptor description follows</div><div class="nodescription">no description available, GDBaseObject description follows</div><a name="PasDoc-Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TObject</li>
+<li class="ancestor"><a class="normal" href="gdbase.GDBaseObject.html">GDBaseObject</a></li>
+<li class="ancestor"><a class="normal" href="varmandef.UserTypeDescriptor.html">UserTypeDescriptor</a></li>
+<li class="ancestor"><a class="normal" href="TypeDescriptors.TUserTypeDescriptor.html">TUserTypeDescriptor</a></li>
+<li class="thisitem">GDBPointerDescriptor</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Fields"></a><h3 class="summary">Fields</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="UPointerDescriptor.GDBPointerDescriptor.html#TypeOf">TypeOf</a></b>:<a  href="varmandef.html#PUserTypeDescriptor">PUserTypeDescriptor</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="UPointerDescriptor.GDBPointerDescriptor.html#ReferType">ReferType</a></b>:<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="UPointerDescriptor.GDBPointerDescriptor.html#init">init</a></b>(ptype:<a  href="gdbasetypes.html#GDBString">GDBString</a>;tname:string;pu:pointer);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UPointerDescriptor.GDBPointerDescriptor.html#CreateProperties">CreateProperties</a></b>(const f:<a  href="gdbase.TzeUnitsFormat.html">TzeUnitsFormat</a>;mode:<a  href="varmandef.html#PDMode">PDMode</a>;PPDA:<a  href="TypeDescriptors.html#PTPropertyDeskriptorArray">PTPropertyDeskriptorArray</a>;Name:<a  href="gdbasetypes.html#GDBString">GDBString</a>;PCollapsed:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;ownerattrib:<a  href="gdbasetypes.html#GDBWord">GDBWord</a>;var bmode:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;var addr:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;ValKey,ValType:<a  href="gdbasetypes.html#GDBString">GDBString</a>):<a  href="TypeDescriptors.html#PTPropertyDeskriptorArray">PTPropertyDeskriptorArray</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UPointerDescriptor.GDBPointerDescriptor.html#Serialize">Serialize</a></b>(PInstance:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;SaveFlag:<a  href="gdbasetypes.html#GDBWord">GDBWord</a>;var membuf:<a  href="UGDBOpenArrayOfByte.html#PGDBOpenArrayOfByte">PGDBOpenArrayOfByte</a>;var linkbuf:<a  href="UGDBOpenArrayOfTObjLinkRecord.html#PGDBOpenArrayOfTObjLinkRecord">PGDBOpenArrayOfTObjLinkRecord</a>;var sub:integer):integer; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UPointerDescriptor.GDBPointerDescriptor.html#DeSerialize">DeSerialize</a></b>(PInstance:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;SaveFlag:<a  href="gdbasetypes.html#GDBWord">GDBWord</a>;var membuf:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;linkbuf:<a  href="UGDBOpenArrayOfTObjLinkRecord.html#PGDBOpenArrayOfTObjLinkRecord">PGDBOpenArrayOfTObjLinkRecord</a>):integer; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="UPointerDescriptor.GDBPointerDescriptor.html#Format">Format</a></b>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UPointerDescriptor.GDBPointerDescriptor.html#GetTypeAttributes">GetTypeAttributes</a></b>:<a  href="varmandef.html#TTypeAttr">TTypeAttr</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="UPointerDescriptor.GDBPointerDescriptor.html#CreateEditor">CreateEditor</a></b>(TheOwner:<a  href="varmandef.html#TPropEditorOwner">TPropEditorOwner</a>;rect:trect;pinstance:pointer;psa:<a  href="UGDBStringArray.html#PGDBGDBStringArray">PGDBGDBStringArray</a>;FreeOnLostFocus:boolean;InitialValue:<a  href="gdbasetypes.html#GDBString">GDBString</a>;preferedHeight:integer):<a  href="varmandef.TEditorDesc.html">TEditorDesc</a>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="UPointerDescriptor.GDBPointerDescriptor.html#SavePasToMem">SavePasToMem</a></b>(var membuf:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;PInstance:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;prefix:<a  href="gdbasetypes.html#GDBString">GDBString</a>); virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>destructor <b><a  href="UPointerDescriptor.GDBPointerDescriptor.html#Done">Done</a></b>; virtual;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Fields</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TypeOf"></a><code><b>TypeOf</b>:<a  href="varmandef.html#PUserTypeDescriptor">PUserTypeDescriptor</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ReferType"></a><code><b>ReferType</b>:<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="init"></a><code>constructor <b>init</b>(ptype:<a  href="gdbasetypes.html#GDBString">GDBString</a>;tname:string;pu:pointer);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CreateProperties"></a><code>function <b>CreateProperties</b>(const f:<a  href="gdbase.TzeUnitsFormat.html">TzeUnitsFormat</a>;mode:<a  href="varmandef.html#PDMode">PDMode</a>;PPDA:<a  href="TypeDescriptors.html#PTPropertyDeskriptorArray">PTPropertyDeskriptorArray</a>;Name:<a  href="gdbasetypes.html#GDBString">GDBString</a>;PCollapsed:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;ownerattrib:<a  href="gdbasetypes.html#GDBWord">GDBWord</a>;var bmode:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;var addr:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;ValKey,ValType:<a  href="gdbasetypes.html#GDBString">GDBString</a>):<a  href="TypeDescriptors.html#PTPropertyDeskriptorArray">PTPropertyDeskriptorArray</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Serialize"></a><code>function <b>Serialize</b>(PInstance:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;SaveFlag:<a  href="gdbasetypes.html#GDBWord">GDBWord</a>;var membuf:<a  href="UGDBOpenArrayOfByte.html#PGDBOpenArrayOfByte">PGDBOpenArrayOfByte</a>;var linkbuf:<a  href="UGDBOpenArrayOfTObjLinkRecord.html#PGDBOpenArrayOfTObjLinkRecord">PGDBOpenArrayOfTObjLinkRecord</a>;var sub:integer):integer; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DeSerialize"></a><code>function <b>DeSerialize</b>(PInstance:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;SaveFlag:<a  href="gdbasetypes.html#GDBWord">GDBWord</a>;var membuf:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;linkbuf:<a  href="UGDBOpenArrayOfTObjLinkRecord.html#PGDBOpenArrayOfTObjLinkRecord">PGDBOpenArrayOfTObjLinkRecord</a>):integer; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Format"></a><code>procedure <b>Format</b>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetTypeAttributes"></a><code>function <b>GetTypeAttributes</b>:<a  href="varmandef.html#TTypeAttr">TTypeAttr</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CreateEditor"></a><code>function <b>CreateEditor</b>(TheOwner:<a  href="varmandef.html#TPropEditorOwner">TPropEditorOwner</a>;rect:trect;pinstance:pointer;psa:<a  href="UGDBStringArray.html#PGDBGDBStringArray">PGDBGDBStringArray</a>;FreeOnLostFocus:boolean;InitialValue:<a  href="gdbasetypes.html#GDBString">GDBString</a>;preferedHeight:integer):<a  href="varmandef.TEditorDesc.html">TEditorDesc</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SavePasToMem"></a><code>procedure <b>SavePasToMem</b>(var membuf:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;PInstance:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;prefix:<a  href="gdbasetypes.html#GDBString">GDBString</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Done"></a><code>destructor <b>Done</b>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

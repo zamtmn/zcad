@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>GDBCamera: packed Object GDBObjCamera</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="GDBObjCamera"></a><h1 class="cio">packed Object GDBObjCamera</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></td><td><a class="section" href="#PasDoc-Fields">Fields</a></td><td><a class="section" href="#PasDoc-Methods">Methods</a></td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="GDBCamera.html">GDBCamera</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type GDBObjCamera = packed object(<a class="normal" href="gdbase.GDBBaseCamera.html">GDBBaseCamera</a>)</code></p>
+<h2 class="description">Description</h2>
+<div class="nodescription">no description available, GDBBaseCamera description follows</div><div class="nodescription">no description available, GDBaseObject description follows</div><a name="PasDoc-Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TObject</li>
+<li class="ancestor"><a class="normal" href="gdbase.GDBaseObject.html">GDBaseObject</a></li>
+<li class="ancestor"><a class="normal" href="gdbase.GDBBaseCamera.html">GDBBaseCamera</a></li>
+<li class="thisitem">GDBObjCamera</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Fields"></a><h3 class="summary">Fields</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="GDBCamera.GDBObjCamera.html#modelMatrixLCS">modelMatrixLCS</a></b>:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="GDBCamera.GDBObjCamera.html#zminLCS">zminLCS</a></b>:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="GDBCamera.GDBObjCamera.html#zmaxLCS">zmaxLCS</a></b>:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="GDBCamera.GDBObjCamera.html#frustumLCS">frustumLCS</a></b>:<a  href="gdbase.html#ClipArray">ClipArray</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="GDBCamera.GDBObjCamera.html#clipLCS">clipLCS</a></b>:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="GDBCamera.GDBObjCamera.html#projMatrixLCS">projMatrixLCS</a></b>:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="GDBCamera.GDBObjCamera.html#notuseLCS">notuseLCS</a></b>:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBCamera.GDBObjCamera.html#getfrustum">getfrustum</a></b>(mm,pm:<a  href="gdbase.html#PDMatrix4D">PDMatrix4D</a>;var _clip:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;var _frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBCamera.GDBObjCamera.html#RotateInLocalCSXY">RotateInLocalCSXY</a></b>(ux,uy:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBCamera.GDBObjCamera.html#MoveInLocalCSXY">MoveInLocalCSXY</a></b>(oldx,oldy:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;ax:<a  href="gdbase.GDBvertex.html">gdbvertex</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBCamera.GDBObjCamera.html#GetObjTypeName">GetObjTypeName</a></b>:<a  href="gdbasetypes.html#GDBString">GDBString</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDBCamera.GDBObjCamera.html#initnul">initnul</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBCamera.GDBObjCamera.html#NextPosition">NextPosition</a></b>; virtual;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Fields</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="modelMatrixLCS"></a><code><b>modelMatrixLCS</b>:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="zminLCS"></a><code><b>zminLCS</b>:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="zmaxLCS"></a><code><b>zmaxLCS</b>:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="frustumLCS"></a><code><b>frustumLCS</b>:<a  href="gdbase.html#ClipArray">ClipArray</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="clipLCS"></a><code><b>clipLCS</b>:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="projMatrixLCS"></a><code><b>projMatrixLCS</b>:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="notuseLCS"></a><code><b>notuseLCS</b>:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="getfrustum"></a><code>procedure <b>getfrustum</b>(mm,pm:<a  href="gdbase.html#PDMatrix4D">PDMatrix4D</a>;var _clip:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;var _frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="RotateInLocalCSXY"></a><code>procedure <b>RotateInLocalCSXY</b>(ux,uy:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MoveInLocalCSXY"></a><code>procedure <b>MoveInLocalCSXY</b>(oldx,oldy:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;ax:<a  href="gdbase.GDBvertex.html">gdbvertex</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetObjTypeName"></a><code>function <b>GetObjTypeName</b>:<a  href="gdbasetypes.html#GDBString">GDBString</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="initnul"></a><code>constructor <b>initnul</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="NextPosition"></a><code>procedure <b>NextPosition</b>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

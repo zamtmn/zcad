@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>GDBCommandsBase</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<h1 class="unit">Unit GDBCommandsBase</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Uses">Uses</a></td><td>Classes, Interfaces, Objects and Records</td><td><a class="section" href="#PasDoc-FuncsProcs">Functions and Procedures</a></td><td>Types</td><td><a class="section" href="#PasDoc-Constants">Constants</a></td><td><a class="section" href="#PasDoc-Variables">Variables</a></td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="description">Description</h2>
+&nbsp;<a name="PasDoc-Uses"></a><h2 class="uses">Uses</h2>
+<ul class="useslist"><li><a  href="generalviewarea.html">generalviewarea</a></li><li><a  href="zeundostack.html">zeundostack</a></li><li>zcchangeundocommand</li><li><a  href="zcobjectinspectormultiobjects.html">zcobjectinspectormultiobjects</a></li><li><a  href="enitiesextendervariables.html">enitiesextendervariables</a></li><li><a  href="gdbdrawcontext.html">gdbdrawcontext</a></li><li><a  href="ugdbdrawing.html">ugdbdrawing</a></li><li><a  href="paths.html">paths</a></li><li><a  href="fileformatsmanager.html">fileformatsmanager</a></li><li><a  href="gdbdimension.html">gdbdimension</a></li><li><a  href="ugdbdimstylearray.html">ugdbdimstylearray</a></li><li><a  href="UGDBTextStyleArray.html">UGDBTextStyleArray</a></li><li><a  href="GDBText.html">GDBText</a></li><li><a  href="ugdbltypearray.html">ugdbltypearray</a></li><li><a  href="URecordDescriptor.html">URecordDescriptor</a></li><li><a  href="UGDBFontManager.html">ugdbfontmanager</a></li><li><a  href="ugdbsimpledrawing.html">ugdbsimpledrawing</a></li><li><a  href="uzcsysvars.html">uzcsysvars</a></li><li><a  href="commandline.html">commandline</a></li><li><a  href="TypeDescriptors.html">TypeDescriptors</a></li><li><a  href="GDBManager.html">GDBManager</a></li><li><a  href="zcadstrconsts.html">zcadstrconsts</a></li><li><a  href="ucxmenumgr.html">ucxmenumgr</a></li><li><a  href="intftranslations.html">intftranslations</a></li><li><a  href="strproc.html">strproc</a></li><li><a  href="umytreenode.html">umytreenode</a></li><li>menus</li><li>LCLProc</li><li>Classes</li><li>FileUtil</li><li>Forms</li><li>Controls</li><li>Clipbrd</li><li>lclintf</li><li><a  href="plugins.html">plugins</a></li><li><a  href="uzcsysinfo.html">uzcsysinfo</a></li><li><a  href="commandlinedef.html">commandlinedef</a></li><li><a  href="commanddefinternal.html">commanddefinternal</a></li><li><a  href="gdbase.html">gdbase</a></li><li><a  href="UGDBDescriptor.html">UGDBDescriptor</a></li><li>sysutils</li><li><a  href="varmandef.html">varmandef</a></li><li><a  href="oglwindowdef.html">oglwindowdef</a></li><li><a  href="UGDBOpenArrayOfByte.html">UGDBOpenArrayOfByte</a></li><li><a  href="iodxf.html">iodxf</a></li><li><a  href="zcadinterface.html">zcadinterface</a></li><li><a  href="gdbobjectsconstdef.html">gdbobjectsconstdef</a></li><li><a  href="GDBEntity.html">GDBEntity</a></li><li><a  href="uzcshared.html">uzcshared</a></li><li><a  href="UGDBEntTree.html">UGDBEntTree</a></li><li><a  href="gdbasetypes.html">gdbasetypes</a></li><li><a  href="memman.html">memman</a></li><li><a  href="WindowsSpecific.html">WindowsSpecific</a></li><li><a  href="UUnitManager.html">UUnitManager</a></li><li><a  href="uzclog.html">uzclog</a></li><li><a  href="Varman.html">Varman</a></li><li>dialogs</li><li><a  href="uinfoform.html">uinfoform</a></li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-FuncsProcs"></a><h3 class="summary">Functions and Procedures</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="GDBCommandsBase.html#SaveAs_com">SaveAs_com</a></b>(operands:<a  href="commandlinedef.html#TCommandOperands">TCommandOperands</a>):<a  href="commandlinedef.html#TCommandResult">TCommandResult</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="GDBCommandsBase.html#CopyToClipboard">CopyToClipboard</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="GDBCommandsBase.html#CopyClip_com">CopyClip_com</a></b>(operands:<a  href="commandlinedef.html#TCommandOperands">TCommandOperands</a>):<a  href="commandlinedef.html#TCommandResult">TCommandResult</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="GDBCommandsBase.html#Regen_com">Regen_com</a></b>(operands:<a  href="commandlinedef.html#TCommandOperands">TCommandOperands</a>):<a  href="commandlinedef.html#TCommandResult">TCommandResult</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="GDBCommandsBase.html#Load_Merge">Load_Merge</a></b>(Operands:pansichar;LoadMode:<a  href="gdbase.html#TLoadOpt">TLoadOpt</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="GDBCommandsBase.html#Merge_com">Merge_com</a></b>(operands:<a  href="commandlinedef.html#TCommandOperands">TCommandOperands</a>):<a  href="commandlinedef.html#TCommandResult">TCommandResult</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="GDBCommandsBase.html#MergeBlocks_com">MergeBlocks_com</a></b>(operands:<a  href="commandlinedef.html#TCommandOperands">TCommandOperands</a>):<a  href="commandlinedef.html#TCommandResult">TCommandResult</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="GDBCommandsBase.html#ReCreateClipboardDWG">ReCreateClipboardDWG</a></b>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Constants"></a><h3 class="summary">Constants</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="GDBCommandsBase.html#ZCAD_DXF_CLIPBOARD_NAME">ZCAD_DXF_CLIPBOARD_NAME</a></b>='DXF2000@ZCADv0.9';</code></td>
+</tr>
+</table>
+<a name="PasDoc-Variables"></a><h3 class="summary">Variables</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="GDBCommandsBase.html#selframecommand">selframecommand</a></b>:<a  href="commandlinedef.html#PCommandObjectDef">PCommandObjectDef</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="GDBCommandsBase.html#zoomwindowcommand">zoomwindowcommand</a></b>:<a  href="commandlinedef.html#PCommandObjectDef">PCommandObjectDef</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="GDBCommandsBase.html#ms2objinsp">ms2objinsp</a></b>:<a  href="commandlinedef.html#PCommandObjectDef">PCommandObjectDef</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="GDBCommandsBase.html#deselall">deselall</a></b>:<a  href="commanddefinternal.html#PCommandFastObjectPlugin">pCommandFastObjectPlugin</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="GDBCommandsBase.html#selall">selall</a></b>:<a  href="commanddefinternal.html#PCommandFastObjectPlugin">pCommandFastObjectPlugin</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="GDBCommandsBase.html#InfoFormVar">InfoFormVar</a></b>:<a  href="uinfoform.TInfoForm.html">TInfoForm</a>=nil;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="GDBCommandsBase.html#MSelectCXMenu">MSelectCXMenu</a></b>:TPopupMenu=nil;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Functions and Procedures</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="SaveAs_com"></a><code>function <b>SaveAs_com</b>(operands:<a  href="commandlinedef.html#TCommandOperands">TCommandOperands</a>):<a  href="commandlinedef.html#TCommandResult">TCommandResult</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CopyToClipboard"></a><code>procedure <b>CopyToClipboard</b>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CopyClip_com"></a><code>function <b>CopyClip_com</b>(operands:<a  href="commandlinedef.html#TCommandOperands">TCommandOperands</a>):<a  href="commandlinedef.html#TCommandResult">TCommandResult</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="Regen_com"></a><code>function <b>Regen_com</b>(operands:<a  href="commandlinedef.html#TCommandOperands">TCommandOperands</a>):<a  href="commandlinedef.html#TCommandResult">TCommandResult</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="Load_Merge"></a><code>function <b>Load_Merge</b>(Operands:pansichar;LoadMode:<a  href="gdbase.html#TLoadOpt">TLoadOpt</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="Merge_com"></a><code>function <b>Merge_com</b>(operands:<a  href="commandlinedef.html#TCommandOperands">TCommandOperands</a>):<a  href="commandlinedef.html#TCommandResult">TCommandResult</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MergeBlocks_com"></a><code>function <b>MergeBlocks_com</b>(operands:<a  href="commandlinedef.html#TCommandOperands">TCommandOperands</a>):<a  href="commandlinedef.html#TCommandResult">TCommandResult</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="ReCreateClipboardDWG"></a><code>procedure <b>ReCreateClipboardDWG</b>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Constants</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="ZCAD_DXF_CLIPBOARD_NAME"></a><code><b>ZCAD_DXF_CLIPBOARD_NAME</b>='DXF2000@ZCADv0.9';</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Variables</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="selframecommand"></a><code><b>selframecommand</b>:<a  href="commandlinedef.html#PCommandObjectDef">PCommandObjectDef</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="zoomwindowcommand"></a><code><b>zoomwindowcommand</b>:<a  href="commandlinedef.html#PCommandObjectDef">PCommandObjectDef</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="ms2objinsp"></a><code><b>ms2objinsp</b>:<a  href="commandlinedef.html#PCommandObjectDef">PCommandObjectDef</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="deselall"></a><code><b>deselall</b>:<a  href="commanddefinternal.html#PCommandFastObjectPlugin">pCommandFastObjectPlugin</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="selall"></a><code><b>selall</b>:<a  href="commanddefinternal.html#PCommandFastObjectPlugin">pCommandFastObjectPlugin</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="InfoFormVar"></a><code><b>InfoFormVar</b>:<a  href="uinfoform.TInfoForm.html">TInfoForm</a>=nil;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSelectCXMenu"></a><code><b>MSelectCXMenu</b>:TPopupMenu=nil;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

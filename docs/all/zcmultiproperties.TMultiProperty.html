@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>zcmultiproperties: Class TMultiProperty</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="TMultiProperty"></a><h1 class="cio">Class TMultiProperty</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></td><td><a class="section" href="#PasDoc-Fields">Fields</a></td><td><a class="section" href="#PasDoc-Methods">Methods</a></td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="zcmultiproperties.html">zcmultiproperties</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TMultiProperty = class(TObject)</code></p>
+<h2 class="description">Description</h2>
+<a name="PasDoc-Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TObject</li>
+<li class="thisitem">TMultiProperty</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Fields"></a><h3 class="summary">Fields</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcmultiproperties.TMultiProperty.html#MPName">MPName</a></b>:<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcmultiproperties.TMultiProperty.html#MPUserName">MPUserName</a></b>:<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcmultiproperties.TMultiProperty.html#MPType">MPType</a></b>:<a  href="varmandef.html#PUserTypeDescriptor">PUserTypeDescriptor</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcmultiproperties.TMultiProperty.html#MPCategory">MPCategory</a></b>:<a  href="zcmultiproperties.html#TMultiPropertyCategory">TMultiPropertyCategory</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcmultiproperties.TMultiProperty.html#MPObjectsData">MPObjectsData</a></b>:<a  href="zcmultiproperties.html#TObjID2MultiPropertyProcs">TObjID2MultiPropertyProcs</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcmultiproperties.TMultiProperty.html#usecounter">usecounter</a></b>:SizeUInt;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcmultiproperties.TMultiProperty.html#sortedid">sortedid</a></b>:integer;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcmultiproperties.TMultiProperty.html#BeforeIterateProc">BeforeIterateProc</a></b>:<a  href="zcmultiproperties.html#TBeforeIterateProc">TBeforeIterateProc</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcmultiproperties.TMultiProperty.html#AfterIterateProc">AfterIterateProc</a></b>:<a  href="zcmultiproperties.html#TAfterIterateProc">TAfterIterateProc</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcmultiproperties.TMultiProperty.html#PIiterateData">PIiterateData</a></b>:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="zcmultiproperties.TMultiProperty.html#create">create</a></b>(_name:<a  href="gdbasetypes.html#GDBString">GDBString</a>;_sortedid:integer;ptm:<a  href="varmandef.html#PUserTypeDescriptor">PUserTypeDescriptor</a>;_Category:<a  href="zcmultiproperties.html#TMultiPropertyCategory">TMultiPropertyCategory</a>;bip:<a  href="zcmultiproperties.html#TBeforeIterateProc">TBeforeIterateProc</a>;aip:<a  href="zcmultiproperties.html#TAfterIterateProc">TAfterIterateProc</a>;eip:<a  href="zcmultiproperties.html#TEntIterateProc">TEntIterateProc</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>destructor <b><a  href="zcmultiproperties.TMultiProperty.html#destroy">destroy</a></b>; override;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Fields</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MPName"></a><code><b>MPName</b>:<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MPUserName"></a><code><b>MPUserName</b>:<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MPType"></a><code><b>MPType</b>:<a  href="varmandef.html#PUserTypeDescriptor">PUserTypeDescriptor</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MPCategory"></a><code><b>MPCategory</b>:<a  href="zcmultiproperties.html#TMultiPropertyCategory">TMultiPropertyCategory</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MPObjectsData"></a><code><b>MPObjectsData</b>:<a  href="zcmultiproperties.html#TObjID2MultiPropertyProcs">TObjID2MultiPropertyProcs</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="usecounter"></a><code><b>usecounter</b>:SizeUInt;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="sortedid"></a><code><b>sortedid</b>:integer;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="BeforeIterateProc"></a><code><b>BeforeIterateProc</b>:<a  href="zcmultiproperties.html#TBeforeIterateProc">TBeforeIterateProc</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="AfterIterateProc"></a><code><b>AfterIterateProc</b>:<a  href="zcmultiproperties.html#TAfterIterateProc">TAfterIterateProc</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="PIiterateData"></a><code><b>PIiterateData</b>:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="create"></a><code>constructor <b>create</b>(_name:<a  href="gdbasetypes.html#GDBString">GDBString</a>;_sortedid:integer;ptm:<a  href="varmandef.html#PUserTypeDescriptor">PUserTypeDescriptor</a>;_Category:<a  href="zcmultiproperties.html#TMultiPropertyCategory">TMultiPropertyCategory</a>;bip:<a  href="zcmultiproperties.html#TBeforeIterateProc">TBeforeIterateProc</a>;aip:<a  href="zcmultiproperties.html#TAfterIterateProc">TAfterIterateProc</a>;eip:<a  href="zcmultiproperties.html#TEntIterateProc">TEntIterateProc</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="destroy"></a><code>destructor <b>destroy</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

@@ -1,0 +1,265 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>strproc</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<h1 class="unit">Unit strproc</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Uses">Uses</a></td><td>Classes, Interfaces, Objects and Records</td><td><a class="section" href="#PasDoc-FuncsProcs">Functions and Procedures</a></td><td><a class="section" href="#PasDoc-Types">Types</a></td><td><a class="section" href="#PasDoc-Constants">Constants</a></td><td><a class="section" href="#PasDoc-Variables">Variables</a></td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="description">Description</h2>
+&nbsp;<a name="PasDoc-Uses"></a><h2 class="uses">Uses</h2>
+<ul class="useslist"><li><a  href="gdbasetypes.html">gdbasetypes</a></li><li>sysutils</li><li>strutils</li><li>LCLProc</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-FuncsProcs"></a><h3 class="summary">Functions and Procedures</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="strproc.html#GetPredStr">GetPredStr</a></b>(var s: <a  href="gdbasetypes.html#GDBString">GDBString</a>; substr: <a  href="gdbasetypes.html#GDBString">GDBString</a>): <a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="strproc.html#readspace">readspace</a></b>(expr: <a  href="gdbasetypes.html#GDBString">GDBString</a>): <a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="strproc.html#Tria_Utf8ToAnsi">Tria_Utf8ToAnsi</a></b>(const s:string):string;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="strproc.html#Tria_AnsiToUtf8">Tria_AnsiToUtf8</a></b>(const s:string):string;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="strproc.html#Ansi2CP">Ansi2CP</a></b>(astr:<a  href="gdbasetypes.html#GDBAnsiString">GDBAnsiString</a>):<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="strproc.html#Uni2CP">Uni2CP</a></b>(astr:<a  href="gdbasetypes.html#GDBAnsiString">GDBAnsiString</a>):<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="strproc.html#CP2Ansi">CP2Ansi</a></b>(astr:<a  href="gdbasetypes.html#GDBAnsiString">GDBAnsiString</a>):<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="strproc.html#CP2Uni">CP2Uni</a></b>(astr:<a  href="gdbasetypes.html#GDBAnsiString">GDBAnsiString</a>):<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="strproc.html#uch2ach">uch2ach</a></b>(uch:word):byte;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="strproc.html#ach2uch">ach2uch</a></b>(ach:byte):word;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="strproc.html#CompareNUMSTR">CompareNUMSTR</a></b>(str1,str2:<a  href="gdbasetypes.html#GDBString">GDBString</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="strproc.html#AnsiNaturalCompare">AnsiNaturalCompare</a></b>(const str1, str2: string; vCaseSensitive: boolean = False): integer;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="strproc.html#ConvertFromDxfString">ConvertFromDxfString</a></b>(str:<a  href="gdbasetypes.html#GDBString">GDBString</a>):<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="strproc.html#ConvertToDxfString">ConvertToDxfString</a></b>(str:<a  href="gdbasetypes.html#GDBString">GDBString</a>):<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="strproc.html#MakeHash">MakeHash</a></b>(const s: <a  href="gdbasetypes.html#GDBString">GDBString</a>):SizeUInt;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="strproc.html#KillString">KillString</a></b>(var str:<a  href="gdbasetypes.html#GDBString">GDBString</a>); inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>procedure <b><a  href="strproc.html#RemoveOneRefCount">RemoveOneRefCount</a></b>(str:<a  href="gdbasetypes.html#GDBString">GDBString</a>); inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>Function <b><a  href="strproc.html#PosWithBracket">PosWithBracket</a></b>(c : AnsiChar; Const s : <a  href="gdbasetypes.html#GDBString">GDBString</a>) : SizeInt;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Types"></a><h3 class="summary">Types</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="strproc.html#TCodePage">TCodePage</a></b> = (...);</code></td>
+</tr>
+</table>
+<a name="PasDoc-Constants"></a><h3 class="summary">Constants</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="strproc.html#syn_breacer">syn_breacer</a></b>=[#13,#10,' '];</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="strproc.html#lineend">lineend</a></b>:string=#13#10;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Variables"></a><h3 class="summary">Variables</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="strproc.html#CodePage">CodePage</a></b>:<a  href="strproc.html#TCodePage">TCodePage</a>;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Functions and Procedures</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GetPredStr"></a><code>function <b>GetPredStr</b>(var s: <a  href="gdbasetypes.html#GDBString">GDBString</a>; substr: <a  href="gdbasetypes.html#GDBString">GDBString</a>): <a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="readspace"></a><code>function <b>readspace</b>(expr: <a  href="gdbasetypes.html#GDBString">GDBString</a>): <a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="Tria_Utf8ToAnsi"></a><code>function <b>Tria_Utf8ToAnsi</b>(const s:string):string;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="Tria_AnsiToUtf8"></a><code>function <b>Tria_AnsiToUtf8</b>(const s:string):string;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="Ansi2CP"></a><code>function <b>Ansi2CP</b>(astr:<a  href="gdbasetypes.html#GDBAnsiString">GDBAnsiString</a>):<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="Uni2CP"></a><code>function <b>Uni2CP</b>(astr:<a  href="gdbasetypes.html#GDBAnsiString">GDBAnsiString</a>):<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CP2Ansi"></a><code>function <b>CP2Ansi</b>(astr:<a  href="gdbasetypes.html#GDBAnsiString">GDBAnsiString</a>):<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CP2Uni"></a><code>function <b>CP2Uni</b>(astr:<a  href="gdbasetypes.html#GDBAnsiString">GDBAnsiString</a>):<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="uch2ach"></a><code>function <b>uch2ach</b>(uch:word):byte;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="ach2uch"></a><code>function <b>ach2uch</b>(ach:byte):word;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CompareNUMSTR"></a><code>function <b>CompareNUMSTR</b>(str1,str2:<a  href="gdbasetypes.html#GDBString">GDBString</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="AnsiNaturalCompare"></a><code>function <b>AnsiNaturalCompare</b>(const str1, str2: string; vCaseSensitive: boolean = False): integer;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="ConvertFromDxfString"></a><code>function <b>ConvertFromDxfString</b>(str:<a  href="gdbasetypes.html#GDBString">GDBString</a>):<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="ConvertToDxfString"></a><code>function <b>ConvertToDxfString</b>(str:<a  href="gdbasetypes.html#GDBString">GDBString</a>):<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MakeHash"></a><code>function <b>MakeHash</b>(const s: <a  href="gdbasetypes.html#GDBString">GDBString</a>):SizeUInt;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="KillString"></a><code>procedure <b>KillString</b>(var str:<a  href="gdbasetypes.html#GDBString">GDBString</a>); inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="RemoveOneRefCount"></a><code>procedure <b>RemoveOneRefCount</b>(str:<a  href="gdbasetypes.html#GDBString">GDBString</a>); inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="PosWithBracket"></a><code>Function <b>PosWithBracket</b>(c : AnsiChar; Const s : <a  href="gdbasetypes.html#GDBString">GDBString</a>) : SizeInt;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Types</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TCodePage"></a><code><b>TCodePage</b> = (...);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;<h6 class="description_section">Values</h6>
+<ul>
+<li>
+CP_utf8: &nbsp;</li>
+<li>
+CP_win: &nbsp;</li>
+</ul>
+</td></tr>
+</table>
+<h3 class="detail">Constants</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="syn_breacer"></a><code><b>syn_breacer</b>=[#13,#10,' '];</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="lineend"></a><code><b>lineend</b>:string=#13#10;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Variables</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CodePage"></a><code><b>CodePage</b>:<a  href="strproc.html#TCodePage">TCodePage</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

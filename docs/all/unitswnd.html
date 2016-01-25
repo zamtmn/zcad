@@ -1,0 +1,255 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>unitswnd</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<h1 class="unit">Unit unitswnd</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Uses">Uses</a></td><td><a class="section" href="#PasDoc-Classes">Classes, Interfaces, Objects and Records</a></td><td>Functions and Procedures</td><td>Types</td><td><a class="section" href="#PasDoc-Constants">Constants</a></td><td><a class="section" href="#PasDoc-Variables">Variables</a></td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="description">Description</h2>
+&nbsp;<a name="PasDoc-Uses"></a><h2 class="uses">Uses</h2>
+<ul class="useslist"><li>Classes</li><li>SysUtils</li><li>FileUtil</li><li>Forms</li><li>Controls</li><li>Graphics</li><li>Dialogs</li><li>ExtCtrls</li><li>StdCtrls</li><li>Buttons</li><li>ButtonPanel</li><li><a  href="gdbase.html">gdbase</a></li><li><a  href="zemathutils.html">zemathutils</a></li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Classes"></a><h3 class="cio">Classes, Interfaces, Objects and Records</h3>
+<table class="classestable wide_list">
+<tr class="listheader">
+<th class="itemname">Name</th>
+<th class="itemdesc">Description</th>
+</tr>
+<tr class="list">
+<td class="itemname">Class&nbsp;<a class="bold" href="unitswnd.TUnitsWindow.html"><code>TUnitsWindow</code></a></td>
+<td class="itemdesc">&nbsp;</td>
+</tr>
+</table>
+<a name="PasDoc-Constants"></a><h3 class="summary">Constants</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="unitswnd.html#UPrecByLUnits">UPrecByLUnits</a></b>:array[<a  href="gdbase.html#TLUnits">TLUnits</a>,0..8]of string=(
+                                               ('0E+01',
+                                                '0.0E+01',
+                                                '0.00E+01',
+                                                '0.000E+01',
+                                                '0.0000E+01',
+                                                '0.00000E+01',
+                                                '0.000000E+01',
+                                                '0.0000000E+01',
+                                                '0.00000000E+01'),
+                                               ('0',
+                                                '0.0',
+                                                '0.00',
+                                                '0.000',
+                                                '0.0000',
+                                                '0.00000',
+                                                '0.000000',
+                                                '0.0000000',
+                                                '0.00000000'),
+                                               ('0''-0&quot;',
+                                                '0''-0.0&quot;',
+                                                '0''-0.00&quot;',
+                                                '0''-0.000&quot;',
+                                                '0''-0.0000&quot;',
+                                                '0''-0.00000&quot;',
+                                                '0''-0.000000&quot;',
+                                                '0''-0.0000000&quot;',
+                                                '0''-0.00000000&quot;'),
+                                               ('0''-0&quot;',
+                                                '0''-0 1/2&quot;',
+                                                '0''-0 1/4&quot;',
+                                                '0''-0 1/8&quot;',
+                                                '0''-0 1/16&quot;',
+                                                '0''-0 1/32&quot;',
+                                                '0''-0 1/64&quot;',
+                                                '0''-0 1/128&quot;',
+                                                '0''-0 1/256&quot;'),
+                                               ('0',
+                                                '0 1/2',
+                                                '0 1/4',
+                                                '0 1/8',
+                                                '0 1/16',
+                                                '0 1/32',
+                                                '0 1/64',
+                                                '0 1/128',
+                                                '0 1/256')
+                                                );</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="unitswnd.html#UPrecByAUnits">UPrecByAUnits</a></b>:array[<a  href="gdbase.html#TAUnits">TAUnits</a>,0..8]of string=(
+                                               ('0',
+                                                '0.0',
+                                                '0.00',
+                                                '0.000',
+                                                '0.0000',
+                                                '0.00000',
+                                                '0.000000',
+                                                '0.0000000',
+                                                '0.00000000'),
+                                               ('0d',
+                                                '0d00''',
+                                                '0d00''',
+                                                '0d00''00&quot;',
+                                                '0d00''00&quot;',
+                                                '0d00''00.0&quot;',
+                                                '0d00''00.00&quot;',
+                                                '0d00''00.000&quot;',
+                                                '0d00''00.0000&quot;'),
+                                               ('0g',
+                                                '0.0g',
+                                                '0.00g',
+                                                '0.000g',
+                                                '0.0000g',
+                                                '0.00000g',
+                                                '0.000000g',
+                                                '0.0000000g',
+                                                '0.00000000g'),
+                                               ('0r',
+                                                '0.0r',
+                                                '0.00r',
+                                                '0.000r',
+                                                '0.0000r',
+                                                '0.00000r',
+                                                '0.000000r',
+                                                '0.0000000r',
+                                                '0.00000000r'),
+                                               ('N 0d E',
+                                                'N 0d00'' E',
+                                                'N 0d00'' E',
+                                                'N 0d00''00&quot; E',
+                                                'N 0d00''00&quot; E',
+                                                'N 0d00''00.0&quot; E',
+                                                'N 0d00''00.00&quot; E',
+                                                'N 0d00''00.000&quot; E',
+                                                'N 0d00''00.0000&quot; E')
+                                                );</code></td>
+</tr>
+</table>
+<a name="PasDoc-Variables"></a><h3 class="summary">Variables</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="unitswnd.html#UnitsWindow">UnitsWindow</a></b>: <a  href="unitswnd.TUnitsWindow.html">TUnitsWindow</a>;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Constants</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="UPrecByLUnits"></a><code><b>UPrecByLUnits</b>:array[<a  href="gdbase.html#TLUnits">TLUnits</a>,0..8]of string=(
+                                               ('0E+01',
+                                                '0.0E+01',
+                                                '0.00E+01',
+                                                '0.000E+01',
+                                                '0.0000E+01',
+                                                '0.00000E+01',
+                                                '0.000000E+01',
+                                                '0.0000000E+01',
+                                                '0.00000000E+01'),
+                                               ('0',
+                                                '0.0',
+                                                '0.00',
+                                                '0.000',
+                                                '0.0000',
+                                                '0.00000',
+                                                '0.000000',
+                                                '0.0000000',
+                                                '0.00000000'),
+                                               ('0''-0&quot;',
+                                                '0''-0.0&quot;',
+                                                '0''-0.00&quot;',
+                                                '0''-0.000&quot;',
+                                                '0''-0.0000&quot;',
+                                                '0''-0.00000&quot;',
+                                                '0''-0.000000&quot;',
+                                                '0''-0.0000000&quot;',
+                                                '0''-0.00000000&quot;'),
+                                               ('0''-0&quot;',
+                                                '0''-0 1/2&quot;',
+                                                '0''-0 1/4&quot;',
+                                                '0''-0 1/8&quot;',
+                                                '0''-0 1/16&quot;',
+                                                '0''-0 1/32&quot;',
+                                                '0''-0 1/64&quot;',
+                                                '0''-0 1/128&quot;',
+                                                '0''-0 1/256&quot;'),
+                                               ('0',
+                                                '0 1/2',
+                                                '0 1/4',
+                                                '0 1/8',
+                                                '0 1/16',
+                                                '0 1/32',
+                                                '0 1/64',
+                                                '0 1/128',
+                                                '0 1/256')
+                                                );</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="UPrecByAUnits"></a><code><b>UPrecByAUnits</b>:array[<a  href="gdbase.html#TAUnits">TAUnits</a>,0..8]of string=(
+                                               ('0',
+                                                '0.0',
+                                                '0.00',
+                                                '0.000',
+                                                '0.0000',
+                                                '0.00000',
+                                                '0.000000',
+                                                '0.0000000',
+                                                '0.00000000'),
+                                               ('0d',
+                                                '0d00''',
+                                                '0d00''',
+                                                '0d00''00&quot;',
+                                                '0d00''00&quot;',
+                                                '0d00''00.0&quot;',
+                                                '0d00''00.00&quot;',
+                                                '0d00''00.000&quot;',
+                                                '0d00''00.0000&quot;'),
+                                               ('0g',
+                                                '0.0g',
+                                                '0.00g',
+                                                '0.000g',
+                                                '0.0000g',
+                                                '0.00000g',
+                                                '0.000000g',
+                                                '0.0000000g',
+                                                '0.00000000g'),
+                                               ('0r',
+                                                '0.0r',
+                                                '0.00r',
+                                                '0.000r',
+                                                '0.0000r',
+                                                '0.00000r',
+                                                '0.000000r',
+                                                '0.0000000r',
+                                                '0.00000000r'),
+                                               ('N 0d E',
+                                                'N 0d00'' E',
+                                                'N 0d00'' E',
+                                                'N 0d00''00&quot; E',
+                                                'N 0d00''00&quot; E',
+                                                'N 0d00''00.0&quot; E',
+                                                'N 0d00''00.00&quot; E',
+                                                'N 0d00''00.000&quot; E',
+                                                'N 0d00''00.0000&quot; E')
+                                                );</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Variables</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="UnitsWindow"></a><code><b>UnitsWindow</b>: <a  href="unitswnd.TUnitsWindow.html">TUnitsWindow</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

@@ -1,0 +1,385 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>GDIPOBJ: Class TGPBitmap</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="TGPBitmap"></a><h1 class="cio">Class TGPBitmap</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></td><td>Fields</td><td><a class="section" href="#PasDoc-Methods">Methods</a></td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="GDIPOBJ.html">GDIPOBJ</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TGPBitmap = class(<a class="normal" href="GDIPOBJ.TGPImage.html">TGPImage</a>)</code></p>
+<h2 class="description">Description</h2>
+<div class="nodescription">no description available, TGPImage description follows</div><div class="nodescription">no description available, TGdiplusBase description follows</div><p>
+***********************************************************************\ * * GDI+ base memory allocation class * \*************************************************************************</p>
+<a name="PasDoc-Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TObject</li>
+<li class="ancestor"><a class="normal" href="GDIPAPI.TGdiplusBase.html">TGdiplusBase</a></li>
+<li class="ancestor"><a class="normal" href="GDIPOBJ.TGPImage.html">TGPImage</a></li>
+<li class="thisitem">TGPBitmap</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPBitmap.html#Create">Create</a></b>(nativeBitmap: <a  href="GDIPAPI.html#GpBitmap">GpBitmap</a>); reintroduce; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPBitmap.html#Create">Create</a></b>(filename: WideString; useEmbeddedColorManagement: BOOL = FALSE); reintroduce; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPBitmap.html#Create">Create</a></b>(stream: IStream; useEmbeddedColorManagement: BOOL = FALSE); reintroduce; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPBitmap.html#FromFile">FromFile</a></b>(filename: WideString; useEmbeddedColorManagement: BOOL = FALSE): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPBitmap.html#FromStream">FromStream</a></b>(stream: IStream; useEmbeddedColorManagement: BOOL = FALSE): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPBitmap.html#Create">Create</a></b>(width, height, stride: Integer; format: <a  href="GDIPAPI.html#TPixelFormat">TPixelFormat</a>; scan0: PBYTE); reintroduce; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPBitmap.html#Create">Create</a></b>(width, height: Integer; format: <a  href="GDIPAPI.html#TPixelFormat">TPixelFormat</a> = <a  href="GDIPAPI.html#PixelFormat32bppARGB">PixelFormat32bppARGB</a>); reintroduce; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPBitmap.html#Create">Create</a></b>(width, height: Integer; target: <a  href="GDIPOBJ.TGPGraphics.html">TGPGraphics</a>); reintroduce; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPBitmap.html#Clone">Clone</a></b>(rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; format: <a  href="GDIPAPI.html#TPixelFormat">TPixelFormat</a>): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPBitmap.html#Clone">Clone</a></b>(x, y, width, height: Integer; format: <a  href="GDIPAPI.html#TPixelFormat">TPixelFormat</a>): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPBitmap.html#Clone">Clone</a></b>(rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; format: <a  href="GDIPAPI.html#TPixelFormat">TPixelFormat</a>): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPBitmap.html#Clone">Clone</a></b>(x, y, width, height: Single; format: <a  href="GDIPAPI.html#TPixelFormat">TPixelFormat</a>): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPBitmap.html#LockBits">LockBits</a></b>(rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; flags: UINT; format: <a  href="GDIPAPI.html#TPixelFormat">TPixelFormat</a>; out lockedBitmapData: <a  href="GDIPAPI.html#TBitmapData">TBitmapData</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPBitmap.html#UnlockBits">UnlockBits</a></b>(var lockedBitmapData: <a  href="GDIPAPI.html#TBitmapData">TBitmapData</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPBitmap.html#GetPixel">GetPixel</a></b>(x, y: Integer; out color: <a  href="GDIPAPI.html#TGPColor">TGPColor</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPBitmap.html#SetPixel">SetPixel</a></b>(x, y: Integer; color: <a  href="GDIPAPI.html#TGPColor">TGPColor</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPBitmap.html#SetResolution">SetResolution</a></b>(xdpi, ydpi: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPBitmap.html#Create">Create</a></b>(surface: <a  href="DirectDraw.IDirectDrawSurface7.html">IDirectDrawSurface7</a>); reintroduce; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPBitmap.html#Create">Create</a></b>(var gdiBitmapInfo: TBITMAPINFO; gdiBitmapData: Pointer); reintroduce; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPBitmap.html#Create">Create</a></b>(hbm: HBITMAP; hpal: HPALETTE); reintroduce; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPBitmap.html#Create">Create</a></b>(hicon: HICON); reintroduce; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPBitmap.html#Create">Create</a></b>(hInstance: HMODULE; bitmapName: WideString); reintroduce; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPBitmap.html#FromDirectDrawSurface7">FromDirectDrawSurface7</a></b>(surface: <a  href="DirectDraw.IDirectDrawSurface7.html">IDirectDrawSurface7</a>): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPBitmap.html#FromBITMAPINFO">FromBITMAPINFO</a></b>(var gdiBitmapInfo: TBITMAPINFO; gdiBitmapData: Pointer): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPBitmap.html#FromHBITMAP">FromHBITMAP</a></b>(hbm: HBITMAP; hpal: HPALETTE): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPBitmap.html#FromHICON">FromHICON</a></b>(hicon: HICON): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPBitmap.html#FromResource">FromResource</a></b>(hInstance: HMODULE; bitmapName: WideString): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPBitmap.html#GetHBITMAP">GetHBITMAP</a></b>(colorBackground: <a  href="GDIPAPI.html#TGPColor">TGPColor</a>; out hbmReturn: HBITMAP): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPBitmap.html#GetHICON">GetHICON</a></b>(out hicon: HICON): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(nativeBitmap: <a  href="GDIPAPI.html#GpBitmap">GpBitmap</a>); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(filename: WideString; useEmbeddedColorManagement: BOOL = FALSE); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(stream: IStream; useEmbeddedColorManagement: BOOL = FALSE); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FromFile"></a><code>function <b>FromFile</b>(filename: WideString; useEmbeddedColorManagement: BOOL = FALSE): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FromStream"></a><code>function <b>FromStream</b>(stream: IStream; useEmbeddedColorManagement: BOOL = FALSE): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(width, height, stride: Integer; format: <a  href="GDIPAPI.html#TPixelFormat">TPixelFormat</a>; scan0: PBYTE); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(width, height: Integer; format: <a  href="GDIPAPI.html#TPixelFormat">TPixelFormat</a> = <a  href="GDIPAPI.html#PixelFormat32bppARGB">PixelFormat32bppARGB</a>); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(width, height: Integer; target: <a  href="GDIPOBJ.TGPGraphics.html">TGPGraphics</a>); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Clone"></a><code>function <b>Clone</b>(rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; format: <a  href="GDIPAPI.html#TPixelFormat">TPixelFormat</a>): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Clone"></a><code>function <b>Clone</b>(x, y, width, height: Integer; format: <a  href="GDIPAPI.html#TPixelFormat">TPixelFormat</a>): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Clone"></a><code>function <b>Clone</b>(rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; format: <a  href="GDIPAPI.html#TPixelFormat">TPixelFormat</a>): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Clone"></a><code>function <b>Clone</b>(x, y, width, height: Single; format: <a  href="GDIPAPI.html#TPixelFormat">TPixelFormat</a>): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="LockBits"></a><code>function <b>LockBits</b>(rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; flags: UINT; format: <a  href="GDIPAPI.html#TPixelFormat">TPixelFormat</a>; out lockedBitmapData: <a  href="GDIPAPI.html#TBitmapData">TBitmapData</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="UnlockBits"></a><code>function <b>UnlockBits</b>(var lockedBitmapData: <a  href="GDIPAPI.html#TBitmapData">TBitmapData</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetPixel"></a><code>function <b>GetPixel</b>(x, y: Integer; out color: <a  href="GDIPAPI.html#TGPColor">TGPColor</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetPixel"></a><code>function <b>SetPixel</b>(x, y: Integer; color: <a  href="GDIPAPI.html#TGPColor">TGPColor</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetResolution"></a><code>function <b>SetResolution</b>(xdpi, ydpi: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(surface: <a  href="DirectDraw.IDirectDrawSurface7.html">IDirectDrawSurface7</a>); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(var gdiBitmapInfo: TBITMAPINFO; gdiBitmapData: Pointer); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(hbm: HBITMAP; hpal: HPALETTE); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(hicon: HICON); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(hInstance: HMODULE; bitmapName: WideString); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FromDirectDrawSurface7"></a><code>function <b>FromDirectDrawSurface7</b>(surface: <a  href="DirectDraw.IDirectDrawSurface7.html">IDirectDrawSurface7</a>): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FromBITMAPINFO"></a><code>function <b>FromBITMAPINFO</b>(var gdiBitmapInfo: TBITMAPINFO; gdiBitmapData: Pointer): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FromHBITMAP"></a><code>function <b>FromHBITMAP</b>(hbm: HBITMAP; hpal: HPALETTE): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FromHICON"></a><code>function <b>FromHICON</b>(hicon: HICON): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FromResource"></a><code>function <b>FromResource</b>(hInstance: HMODULE; bitmapName: WideString): <a  href="GDIPOBJ.TGPBitmap.html">TGPBitmap</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetHBITMAP"></a><code>function <b>GetHBITMAP</b>(colorBackground: <a  href="GDIPAPI.html#TGPColor">TGPColor</a>; out hbmReturn: HBITMAP): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetHICON"></a><code>function <b>GetHICON</b>(out hicon: HICON): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

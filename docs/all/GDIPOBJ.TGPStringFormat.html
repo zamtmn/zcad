@@ -1,0 +1,400 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>GDIPOBJ: Class TGPStringFormat</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="TGPStringFormat"></a><h1 class="cio">Class TGPStringFormat</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></td><td><a class="section" href="#PasDoc-Fields">Fields</a></td><td><a class="section" href="#PasDoc-Methods">Methods</a></td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="GDIPOBJ.html">GDIPOBJ</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TGPStringFormat = class(<a class="normal" href="GDIPAPI.TGdiplusBase.html">TGdiplusBase</a>)</code></p>
+<h2 class="description">Description</h2>
+<p>
+***********************************************************************\ * * GDI+ StringFormat class * \*************************************************************************</p>
+<a name="PasDoc-Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TObject</li>
+<li class="ancestor"><a class="normal" href="GDIPAPI.TGdiplusBase.html">TGdiplusBase</a></li>
+<li class="thisitem">TGPStringFormat</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Fields"></a><h3 class="summary">Fields</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a  href="GDIPOBJ.TGPStringFormat.html#nativeFormat">nativeFormat</a></b>: <a  href="GDIPAPI.html#GpStringFormat">GpStringFormat</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a  href="GDIPOBJ.TGPStringFormat.html#lastError">lastError</a></b>: <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#SetStatus">SetStatus</a></b>(newStatus: <a  href="GDIPAPI.html#GpStatus">GpStatus</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDIPOBJ.TGPStringFormat.html#Assign">Assign</a></b>(source: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPStringFormat.html#Create">Create</a></b>(clonedStringFormat: <a  href="GDIPAPI.html#GpStringFormat">GpStringFormat</a>; status: <a  href="GDIPAPI.html#TStatus">TStatus</a>); reintroduce; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPStringFormat.html#Create">Create</a></b>(formatFlags: Integer = 0; language: LANGID = LANG_NEUTRAL); reintroduce; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPStringFormat.html#Create">Create</a></b>(format: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>); reintroduce; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>destructor <b><a  href="GDIPOBJ.TGPStringFormat.html#Destroy">Destroy</a></b>; override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>class function <b><a  href="GDIPOBJ.TGPStringFormat.html#GenericDefault">GenericDefault</a></b>: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>class function <b><a  href="GDIPOBJ.TGPStringFormat.html#GenericTypographic">GenericTypographic</a></b>: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#Clone">Clone</a></b>: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#SetFormatFlags">SetFormatFlags</a></b>(flags: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#GetFormatFlags">GetFormatFlags</a></b>: Integer;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#SetAlignment">SetAlignment</a></b>(align: <a  href="GDIPAPI.html#TStringAlignment">TStringAlignment</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#GetAlignment">GetAlignment</a></b>: <a  href="GDIPAPI.html#TStringAlignment">TStringAlignment</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#SetLineAlignment">SetLineAlignment</a></b>(align: <a  href="GDIPAPI.html#TStringAlignment">TStringAlignment</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#GetLineAlignment">GetLineAlignment</a></b>: <a  href="GDIPAPI.html#TStringAlignment">TStringAlignment</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#SetHotkeyPrefix">SetHotkeyPrefix</a></b>(hotkeyPrefix: <a  href="GDIPAPI.html#THotkeyPrefix">THotkeyPrefix</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#GetHotkeyPrefix">GetHotkeyPrefix</a></b>: <a  href="GDIPAPI.html#THotkeyPrefix">THotkeyPrefix</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#SetTabStops">SetTabStops</a></b>(firstTabOffset: Single; count: Integer; tabStops: PSingle): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#GetTabStopCount">GetTabStopCount</a></b>: Integer;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#GetTabStops">GetTabStops</a></b>(count: Integer; firstTabOffset, tabStops: PSingle): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#SetDigitSubstitution">SetDigitSubstitution</a></b>(language: LANGID; substitute: <a  href="GDIPAPI.html#TStringDigitSubstitute">TStringDigitSubstitute</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#GetDigitSubstitutionLanguage">GetDigitSubstitutionLanguage</a></b>: LANGID;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#GetDigitSubstitutionMethod">GetDigitSubstitutionMethod</a></b>: <a  href="GDIPAPI.html#TStringDigitSubstitute">TStringDigitSubstitute</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#SetTrimming">SetTrimming</a></b>(trimming: <a  href="GDIPAPI.html#TStringTrimming">TStringTrimming</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#GetTrimming">GetTrimming</a></b>: <a  href="GDIPAPI.html#TStringTrimming">TStringTrimming</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#SetMeasurableCharacterRanges">SetMeasurableCharacterRanges</a></b>(rangeCount: Integer; ranges: <a  href="GDIPAPI.html#PCharacterRange">PCharacterRange</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#GetMeasurableCharacterRangeCount">GetMeasurableCharacterRangeCount</a></b>: Integer;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPStringFormat.html#GetLastStatus">GetLastStatus</a></b>: <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Fields</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="nativeFormat"></a><code><b>nativeFormat</b>: <a  href="GDIPAPI.html#GpStringFormat">GpStringFormat</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="lastError"></a><code><b>lastError</b>: <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="SetStatus"></a><code>function <b>SetStatus</b>(newStatus: <a  href="GDIPAPI.html#GpStatus">GpStatus</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="Assign"></a><code>procedure <b>Assign</b>(source: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(clonedStringFormat: <a  href="GDIPAPI.html#GpStringFormat">GpStringFormat</a>; status: <a  href="GDIPAPI.html#TStatus">TStatus</a>); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(formatFlags: Integer = 0; language: LANGID = LANG_NEUTRAL); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(format: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Destroy"></a><code>destructor <b>Destroy</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GenericDefault"></a><code>class function <b>GenericDefault</b>: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GenericTypographic"></a><code>class function <b>GenericTypographic</b>: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Clone"></a><code>function <b>Clone</b>: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetFormatFlags"></a><code>function <b>SetFormatFlags</b>(flags: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetFormatFlags"></a><code>function <b>GetFormatFlags</b>: Integer;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetAlignment"></a><code>function <b>SetAlignment</b>(align: <a  href="GDIPAPI.html#TStringAlignment">TStringAlignment</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetAlignment"></a><code>function <b>GetAlignment</b>: <a  href="GDIPAPI.html#TStringAlignment">TStringAlignment</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetLineAlignment"></a><code>function <b>SetLineAlignment</b>(align: <a  href="GDIPAPI.html#TStringAlignment">TStringAlignment</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetLineAlignment"></a><code>function <b>GetLineAlignment</b>: <a  href="GDIPAPI.html#TStringAlignment">TStringAlignment</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetHotkeyPrefix"></a><code>function <b>SetHotkeyPrefix</b>(hotkeyPrefix: <a  href="GDIPAPI.html#THotkeyPrefix">THotkeyPrefix</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetHotkeyPrefix"></a><code>function <b>GetHotkeyPrefix</b>: <a  href="GDIPAPI.html#THotkeyPrefix">THotkeyPrefix</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetTabStops"></a><code>function <b>SetTabStops</b>(firstTabOffset: Single; count: Integer; tabStops: PSingle): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetTabStopCount"></a><code>function <b>GetTabStopCount</b>: Integer;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetTabStops"></a><code>function <b>GetTabStops</b>(count: Integer; firstTabOffset, tabStops: PSingle): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetDigitSubstitution"></a><code>function <b>SetDigitSubstitution</b>(language: LANGID; substitute: <a  href="GDIPAPI.html#TStringDigitSubstitute">TStringDigitSubstitute</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetDigitSubstitutionLanguage"></a><code>function <b>GetDigitSubstitutionLanguage</b>: LANGID;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetDigitSubstitutionMethod"></a><code>function <b>GetDigitSubstitutionMethod</b>: <a  href="GDIPAPI.html#TStringDigitSubstitute">TStringDigitSubstitute</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetTrimming"></a><code>function <b>SetTrimming</b>(trimming: <a  href="GDIPAPI.html#TStringTrimming">TStringTrimming</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetTrimming"></a><code>function <b>GetTrimming</b>: <a  href="GDIPAPI.html#TStringTrimming">TStringTrimming</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetMeasurableCharacterRanges"></a><code>function <b>SetMeasurableCharacterRanges</b>(rangeCount: Integer; ranges: <a  href="GDIPAPI.html#PCharacterRange">PCharacterRange</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetMeasurableCharacterRangeCount"></a><code>function <b>GetMeasurableCharacterRangeCount</b>: Integer;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetLastStatus"></a><code>function <b>GetLastStatus</b>: <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

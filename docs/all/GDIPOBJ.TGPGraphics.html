@@ -1,0 +1,2416 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>GDIPOBJ: Class TGPGraphics</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="TGPGraphics"></a><h1 class="cio">Class TGPGraphics</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></td><td><a class="section" href="#PasDoc-Fields">Fields</a></td><td><a class="section" href="#PasDoc-Methods">Methods</a></td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="GDIPOBJ.html">GDIPOBJ</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TGPGraphics = class(<a class="normal" href="GDIPAPI.TGdiplusBase.html">TGdiplusBase</a>)</code></p>
+<h2 class="description">Description</h2>
+<p>
+***********************************************************************\ * * GDI+ Graphics Object * \*************************************************************************</p>
+<a name="PasDoc-Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TObject</li>
+<li class="ancestor"><a class="normal" href="GDIPAPI.TGdiplusBase.html">TGdiplusBase</a></li>
+<li class="thisitem">TGPGraphics</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Fields"></a><h3 class="summary">Fields</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a  href="GDIPOBJ.TGPGraphics.html#nativeGraphics">nativeGraphics</a></b>: <a  href="GDIPAPI.html#GpGraphics">GpGraphics</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a  href="GDIPOBJ.TGPGraphics.html#lastResult">lastResult</a></b>: <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDIPOBJ.TGPGraphics.html#SetNativeGraphics">SetNativeGraphics</a></b>(graphics: <a  href="GDIPAPI.html#GpGraphics">GpGraphics</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#SetStatus">SetStatus</a></b>(status: <a  href="GDIPAPI.html#TStatus">TStatus</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetNativeGraphics">GetNativeGraphics</a></b>: <a  href="GDIPAPI.html#GpGraphics">GpGraphics</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetNativePen">GetNativePen</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>): <a  href="GDIPAPI.html#GpPen">GpPen</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPGraphics.html#Create">Create</a></b>(graphics: <a  href="GDIPAPI.html#GpGraphics">GpGraphics</a>); reintroduce; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FromHDC">FromHDC</a></b>(hdc: HDC): <a  href="GDIPOBJ.TGPGraphics.html">TGPGraphics</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FromHDC">FromHDC</a></b>(hdc: HDC; hdevice: THANDLE): <a  href="GDIPOBJ.TGPGraphics.html">TGPGraphics</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FromHWND">FromHWND</a></b>(hwnd: HWND; icm: BOOL = FALSE): <a  href="GDIPOBJ.TGPGraphics.html">TGPGraphics</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FromImage">FromImage</a></b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>): <a  href="GDIPOBJ.TGPGraphics.html">TGPGraphics</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPGraphics.html#Create">Create</a></b>(hdc: HDC); reintroduce; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPGraphics.html#Create">Create</a></b>(hdc: HDC; hdevice: THANDLE); reintroduce; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPGraphics.html#Create">Create</a></b>(hwnd: HWND; icm: BOOL ); reintroduce; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDIPOBJ.TGPGraphics.html#Create">Create</a></b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>); reintroduce; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>destructor <b><a  href="GDIPOBJ.TGPGraphics.html#Destroy">Destroy</a></b>; override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDIPOBJ.TGPGraphics.html#Flush">Flush</a></b>(intention: <a  href="GDIPAPI.html#TFlushIntention">TFlushIntention</a> = FlushIntentionFlush);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetHDC">GetHDC</a></b>: HDC;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDIPOBJ.TGPGraphics.html#ReleaseHDC">ReleaseHDC</a></b>(hdc: HDC);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#SetRenderingOrigin">SetRenderingOrigin</a></b>(x, y: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetRenderingOrigin">GetRenderingOrigin</a></b>(out x, y: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#SetCompositingMode">SetCompositingMode</a></b>(compositingMode: <a  href="GDIPAPI.html#TCompositingMode">TCompositingMode</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetCompositingMode">GetCompositingMode</a></b>: <a  href="GDIPAPI.html#TCompositingMode">TCompositingMode</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#SetCompositingQuality">SetCompositingQuality</a></b>(compositingQuality: <a  href="GDIPAPI.html#TCompositingQuality">TCompositingQuality</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetCompositingQuality">GetCompositingQuality</a></b>: <a  href="GDIPAPI.html#TCompositingQuality">TCompositingQuality</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#SetTextRenderingHint">SetTextRenderingHint</a></b>(newMode: <a  href="GDIPAPI.html#TTextRenderingHint">TTextRenderingHint</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetTextRenderingHint">GetTextRenderingHint</a></b>: <a  href="GDIPAPI.html#TTextRenderingHint">TTextRenderingHint</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#SetTextContrast">SetTextContrast</a></b>(contrast: UINT): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetTextContrast">GetTextContrast</a></b>: UINT;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetInterpolationMode">GetInterpolationMode</a></b>: <a  href="GDIPAPI.html#TInterpolationMode">TInterpolationMode</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#SetInterpolationMode">SetInterpolationMode</a></b>(interpolationMode: <a  href="GDIPAPI.html#TInterpolationMode">TInterpolationMode</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetSmoothingMode">GetSmoothingMode</a></b>: <a  href="GDIPAPI.html#TSmoothingMode">TSmoothingMode</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#SetSmoothingMode">SetSmoothingMode</a></b>(smoothingMode: <a  href="GDIPAPI.html#TSmoothingMode">TSmoothingMode</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetPixelOffsetMode">GetPixelOffsetMode</a></b>: <a  href="GDIPAPI.html#TPixelOffsetMode">TPixelOffsetMode</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#SetPixelOffsetMode">SetPixelOffsetMode</a></b>(pixelOffsetMode: <a  href="GDIPAPI.html#TPixelOffsetMode">TPixelOffsetMode</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#SetTransform">SetTransform</a></b>(matrix: <a  href="GDIPOBJ.TGPMatrix.html">TGPMatrix</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#ResetTransform">ResetTransform</a></b>: <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#MultiplyTransform">MultiplyTransform</a></b>(matrix: <a  href="GDIPOBJ.TGPMatrix.html">TGPMatrix</a>; order: <a  href="GDIPAPI.html#TMatrixOrder">TMatrixOrder</a> = MatrixOrderPrepend): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#TranslateTransform">TranslateTransform</a></b>(dx, dy: Single; order: <a  href="GDIPAPI.html#TMatrixOrder">TMatrixOrder</a> = MatrixOrderPrepend): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#ScaleTransform">ScaleTransform</a></b>(sx, sy: Single; order: <a  href="GDIPAPI.html#TMatrixOrder">TMatrixOrder</a> = MatrixOrderPrepend): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#RotateTransform">RotateTransform</a></b>(angle: Single; order: <a  href="GDIPAPI.html#TMatrixOrder">TMatrixOrder</a> = MatrixOrderPrepend): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetTransform">GetTransform</a></b>(matrix: <a  href="GDIPOBJ.TGPMatrix.html">TGPMatrix</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#SetPageUnit">SetPageUnit</a></b>(unit_: <a  href="GDIPAPI.html#TUnit">TUnit</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#SetPageScale">SetPageScale</a></b>(scale: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetPageUnit">GetPageUnit</a></b>: <a  href="GDIPAPI.html#TUnit">TUnit</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetPageScale">GetPageScale</a></b>: Single;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetDpiX">GetDpiX</a></b>: Single;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetDpiY">GetDpiY</a></b>: Single;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#TransformPoints">TransformPoints</a></b>(destSpace: <a  href="GDIPAPI.html#TCoordinateSpace">TCoordinateSpace</a>; srcSpace: <a  href="GDIPAPI.html#TCoordinateSpace">TCoordinateSpace</a>; pts: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#TransformPoints">TransformPoints</a></b>(destSpace: <a  href="GDIPAPI.html#TCoordinateSpace">TCoordinateSpace</a>; srcSpace: <a  href="GDIPAPI.html#TCoordinateSpace">TCoordinateSpace</a>; pts: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetNearestColor">GetNearestColor</a></b>(var color: <a  href="GDIPAPI.html#TGPColor">TGPColor</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawLine">DrawLine</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x1, y1, x2, y2: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawLine">DrawLine</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const pt1, pt2: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawLines">DrawLines</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawLine">DrawLine</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x1, y1, x2, y2: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawLine">DrawLine</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const pt1, pt2: <a  href="GDIPAPI.TGPPoint.html">TGPPoint</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawLines">DrawLines</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawArc">DrawArc</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x, y, width, height, startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawArc">DrawArc</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawArc">DrawArc</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x, y, width, height: Integer; startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawArc">DrawArc</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawBezier">DrawBezier</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x1, y1, x2, y2, x3, y3, x4, y4: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawBezier">DrawBezier</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const pt1, pt2, pt3, pt4: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawBeziers">DrawBeziers</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawBezier">DrawBezier</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x1, y1, x2, y2, x3, y3, x4, y4: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawBezier">DrawBezier</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const pt1, pt2, pt3, pt4: <a  href="GDIPAPI.TGPPoint.html">TGPPoint</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawBeziers">DrawBeziers</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawRectangle">DrawRectangle</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawRectangle">DrawRectangle</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x, y, width, height: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawRectangles">DrawRectangles</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; rects: <a  href="GDIPAPI.html#PGPRectF">PGPRectF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawRectangle">DrawRectangle</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawRectangle">DrawRectangle</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x, y, width, height: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawRectangles">DrawRectangles</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; rects: <a  href="GDIPAPI.html#PGPRect">PGPRect</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawEllipse">DrawEllipse</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawEllipse">DrawEllipse</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x, y, width, height: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawEllipse">DrawEllipse</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawEllipse">DrawEllipse</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x, y, width, height: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawPie">DrawPie</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawPie">DrawPie</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x, y, width, height, startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawPie">DrawPie</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawPie">DrawPie</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x, y, width, height: Integer; startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawPolygon">DrawPolygon</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawPolygon">DrawPolygon</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawPath">DrawPath</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; path: <a  href="GDIPOBJ.TGPGraphicsPath.html">TGPGraphicsPath</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawCurve">DrawCurve</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawCurve">DrawCurve</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer; tension: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawCurve">DrawCurve</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count, offset, numberOfSegments: Integer; tension: Single = 0.5): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawCurve">DrawCurve</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawCurve">DrawCurve</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer; tension: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawCurve">DrawCurve</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count, offset, numberOfSegments: Integer; tension: Single = 0.5): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawClosedCurve">DrawClosedCurve</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawClosedCurve">DrawClosedCurve</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer; tension: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawClosedCurve">DrawClosedCurve</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawClosedCurve">DrawClosedCurve</a></b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer; tension: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#Clear">Clear</a></b>(color: <a  href="GDIPAPI.html#TGPColor">TGPColor</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillRectangle">FillRectangle</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillRectangle">FillRectangle</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; x, y, width, height: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillRectangles">FillRectangles</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; rects: <a  href="GDIPAPI.html#PGPRectF">PGPRectF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillRectangle">FillRectangle</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillRectangle">FillRectangle</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; x, y, width, height: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillRectangles">FillRectangles</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; rects: <a  href="GDIPAPI.html#PGPRect">PGPRect</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillPolygon">FillPolygon</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillPolygon">FillPolygon</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer; fillMode: <a  href="GDIPAPI.html#TFillMode">TFillMode</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillPolygon">FillPolygon</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillPolygon">FillPolygon</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer; fillMode: <a  href="GDIPAPI.html#TFillMode">TFillMode</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillEllipse">FillEllipse</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillEllipse">FillEllipse</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; x, y, width, height: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillEllipse">FillEllipse</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillEllipse">FillEllipse</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; x, y, width, height: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillPie">FillPie</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillPie">FillPie</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; x, y, width, height, startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillPie">FillPie</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillPie">FillPie</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; x, y, width, height: Integer; startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillPath">FillPath</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; path: <a  href="GDIPOBJ.TGPGraphicsPath.html">TGPGraphicsPath</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillClosedCurve">FillClosedCurve</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillClosedCurve">FillClosedCurve</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer; fillMode: <a  href="GDIPAPI.html#TFillMode">TFillMode</a>; tension: Single = 0.5): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillClosedCurve">FillClosedCurve</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillClosedCurve">FillClosedCurve</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer; fillMode: <a  href="GDIPAPI.html#TFillMode">TFillMode</a>; tension: Single = 0.5): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#FillRegion">FillRegion</a></b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; region: <a  href="GDIPOBJ.TGPRegion.html">TGPRegion</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawString">DrawString</a></b>(string_: WideString; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; const layoutRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; stringFormat: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>; brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawString">DrawString</a></b>(string_: WideString; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; const origin: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>; brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawString">DrawString</a></b>(string_: WideString; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; const origin: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>; stringFormat: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>; brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#MeasureString">MeasureString</a></b>(string_: WideString; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; const layoutRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; stringFormat: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>; out boundingBox: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; codepointsFitted: PInteger = nil; linesFilled: PInteger = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#MeasureString">MeasureString</a></b>(string_: WideString; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; const layoutRectSize: <a  href="GDIPAPI.TGPSizeF.html">TGPSizeF</a>; stringFormat: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>; out size: <a  href="GDIPAPI.TGPSizeF.html">TGPSizeF</a>; codepointsFitted: PInteger = nil; linesFilled: PInteger = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#MeasureString">MeasureString</a></b>(string_: WideString; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; const origin: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>; stringFormat: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>; out boundingBox: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#MeasureString">MeasureString</a></b>(string_: WideString; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; const layoutRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; out boundingBox: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#MeasureString">MeasureString</a></b>(string_: WideString; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; const origin: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>; out boundingBox: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#MeasureCharacterRanges">MeasureCharacterRanges</a></b>(string_: WideString; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; const layoutRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; stringFormat: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>; regionCount: Integer; const regions: array of <a  href="GDIPOBJ.TGPRegion.html">TGPRegion</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawDriverString">DrawDriverString</a></b>(text: <a  href="GDIPAPI.html#PUINT16">PUINT16</a>; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; positions: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; flags: Integer; matrix: <a  href="GDIPOBJ.TGPMatrix.html">TGPMatrix</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#MeasureDriverString">MeasureDriverString</a></b>(text: <a  href="GDIPAPI.html#PUINT16">PUINT16</a>; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; positions: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; flags: Integer; matrix: <a  href="GDIPOBJ.TGPMatrix.html">TGPMatrix</a>; out boundingBox: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawCachedBitmap">DrawCachedBitmap</a></b>(cb: <a  href="GDIPOBJ.TGPCachedBitmap.html">TGPCachedBitmap</a>; x, y: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawImage">DrawImage</a></b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; const point: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawImage">DrawImage</a></b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; x, y: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawImage">DrawImage</a></b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawImage">DrawImage</a></b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; x, y, width, height: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawImage">DrawImage</a></b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; const point: <a  href="GDIPAPI.TGPPoint.html">TGPPoint</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawImage">DrawImage</a></b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; x, y: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawImage">DrawImage</a></b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawImage">DrawImage</a></b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; x, y, width, height: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawImage">DrawImage</a></b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; destPoints: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawImage">DrawImage</a></b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; destPoints: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawImage">DrawImage</a></b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; x, y, srcx, srcy, srcwidth, srcheight: Single; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawImage">DrawImage</a></b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; const destRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; srcx, srcy, srcwidth, srcheight: Single; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil; callback: <a  href="GDIPAPI.html#DrawImageAbort">DrawImageAbort</a> = nil; callbackData: Pointer = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawImage">DrawImage</a></b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; destPoints: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer; srcx, srcy, srcwidth, srcheight: Single; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil; callback: <a  href="GDIPAPI.html#DrawImageAbort">DrawImageAbort</a> = nil; callbackData: Pointer = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawImage">DrawImage</a></b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; x, y, srcx, srcy, srcwidth, srcheight: Integer; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawImage">DrawImage</a></b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; const destRect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; srcx, srcy, srcwidth, srcheight: Integer; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil; callback: <a  href="GDIPAPI.html#DrawImageAbort">DrawImageAbort</a> = nil; callbackData: Pointer = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#DrawImage">DrawImage</a></b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; destPoints: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count, srcx, srcy, srcwidth, srcheight: Integer; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil; callback: <a  href="GDIPAPI.html#DrawImageAbort">DrawImageAbort</a> = nil; callbackData: Pointer = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#EnumerateMetafile">EnumerateMetafile</a></b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; const destPoint: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#EnumerateMetafile">EnumerateMetafile</a></b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; const destPoint: <a  href="GDIPAPI.TGPPoint.html">TGPPoint</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#EnumerateMetafile">EnumerateMetafile</a></b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; const destRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#EnumerateMetafile">EnumerateMetafile</a></b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; const destRect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#EnumerateMetafile">EnumerateMetafile</a></b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; destPoints: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#EnumerateMetafile">EnumerateMetafile</a></b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; destPoints: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#EnumerateMetafile">EnumerateMetafile</a></b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; const destPoint: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>; const srcRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil ): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#EnumerateMetafile">EnumerateMetafile</a></b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; const destPoint: <a  href="GDIPAPI.TGPPoint.html">TGPPoint</a>; const srcRect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil ): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#EnumerateMetafile">EnumerateMetafile</a></b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; const destRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; const srcRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#EnumerateMetafile">EnumerateMetafile</a></b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; const destRect, srcRect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#EnumerateMetafile">EnumerateMetafile</a></b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; destPoints: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer; const srcRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#EnumerateMetafile">EnumerateMetafile</a></b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; destPoints: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer; const srcRect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#SetClip">SetClip</a></b>(g: <a  href="GDIPOBJ.TGPGraphics.html">TGPGraphics</a>; combineMode: <a  href="GDIPAPI.html#TCombineMode">TCombineMode</a> = CombineModeReplace): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#SetClip">SetClip</a></b>(rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; combineMode: <a  href="GDIPAPI.html#TCombineMode">TCombineMode</a> = CombineModeReplace): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#SetClip">SetClip</a></b>(rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; combineMode: <a  href="GDIPAPI.html#TCombineMode">TCombineMode</a> = CombineModeReplace): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#SetClip">SetClip</a></b>(path: <a  href="GDIPOBJ.TGPGraphicsPath.html">TGPGraphicsPath</a>; combineMode: <a  href="GDIPAPI.html#TCombineMode">TCombineMode</a> = CombineModeReplace): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#SetClip">SetClip</a></b>(region: <a  href="GDIPOBJ.TGPRegion.html">TGPRegion</a>; combineMode: <a  href="GDIPAPI.html#TCombineMode">TCombineMode</a> = CombineModeReplace): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#SetClip">SetClip</a></b>(hRgn: HRGN; combineMode: <a  href="GDIPAPI.html#TCombineMode">TCombineMode</a> = CombineModeReplace): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#IntersectClip">IntersectClip</a></b>(const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#IntersectClip">IntersectClip</a></b>(const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#IntersectClip">IntersectClip</a></b>(region: <a  href="GDIPOBJ.TGPRegion.html">TGPRegion</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#ExcludeClip">ExcludeClip</a></b>(const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#ExcludeClip">ExcludeClip</a></b>(const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#ExcludeClip">ExcludeClip</a></b>(region: <a  href="GDIPOBJ.TGPRegion.html">TGPRegion</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#ResetClip">ResetClip</a></b>: <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#TranslateClip">TranslateClip</a></b>(dx, dy: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#TranslateClip">TranslateClip</a></b>(dx, dy: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetClip">GetClip</a></b>(region: <a  href="GDIPOBJ.TGPRegion.html">TGPRegion</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetClipBounds">GetClipBounds</a></b>(out rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetClipBounds">GetClipBounds</a></b>(out rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#IsClipEmpty">IsClipEmpty</a></b>: Bool;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetVisibleClipBounds">GetVisibleClipBounds</a></b>(out rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetVisibleClipBounds">GetVisibleClipBounds</a></b>(out rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#IsVisibleClipEmpty">IsVisibleClipEmpty</a></b>: BOOL;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#IsVisible">IsVisible</a></b>(x, y: Integer): BOOL; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#IsVisible">IsVisible</a></b>(const point: <a  href="GDIPAPI.TGPPoint.html">TGPPoint</a>): BOOL; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#IsVisible">IsVisible</a></b>(x, y, width, height: Integer): BOOL; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#IsVisible">IsVisible</a></b>(const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): BOOL; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#IsVisible">IsVisible</a></b>(x, y: Single): BOOL; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#IsVisible">IsVisible</a></b>(const point: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>): BOOL; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#IsVisible">IsVisible</a></b>(x, y, width, height: Single): BOOL; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#IsVisible">IsVisible</a></b>(const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): BOOL; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#Save">Save</a></b>: <a  href="GDIPAPI.html#GraphicsState">GraphicsState</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#Restore">Restore</a></b>(gstate: <a  href="GDIPAPI.html#GraphicsState">GraphicsState</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#BeginContainer">BeginContainer</a></b>(const dstrect, srcrect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; unit_: <a  href="GDIPAPI.html#TUnit">TUnit</a>): <a  href="GDIPAPI.html#GraphicsContainer">GraphicsContainer</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#BeginContainer">BeginContainer</a></b>(const dstrect, srcrect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; unit_: <a  href="GDIPAPI.html#TUnit">TUnit</a>): <a  href="GDIPAPI.html#GraphicsContainer">GraphicsContainer</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#BeginContainer">BeginContainer</a></b>: <a  href="GDIPAPI.html#GraphicsContainer">GraphicsContainer</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#EndContainer">EndContainer</a></b>(state: <a  href="GDIPAPI.html#GraphicsContainer">GraphicsContainer</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#AddMetafileComment">AddMetafileComment</a></b>(data: PBYTE; sizeData: UINT): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetHalftonePalette">GetHalftonePalette</a></b>: HPALETTE;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDIPOBJ.TGPGraphics.html#GetLastStatus">GetLastStatus</a></b>: <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Fields</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="nativeGraphics"></a><code><b>nativeGraphics</b>: <a  href="GDIPAPI.html#GpGraphics">GpGraphics</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="lastResult"></a><code><b>lastResult</b>: <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="SetNativeGraphics"></a><code>procedure <b>SetNativeGraphics</b>(graphics: <a  href="GDIPAPI.html#GpGraphics">GpGraphics</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="SetStatus"></a><code>function <b>SetStatus</b>(status: <a  href="GDIPAPI.html#TStatus">TStatus</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="GetNativeGraphics"></a><code>function <b>GetNativeGraphics</b>: <a  href="GDIPAPI.html#GpGraphics">GpGraphics</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="GetNativePen"></a><code>function <b>GetNativePen</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>): <a  href="GDIPAPI.html#GpPen">GpPen</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(graphics: <a  href="GDIPAPI.html#GpGraphics">GpGraphics</a>); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FromHDC"></a><code>function <b>FromHDC</b>(hdc: HDC): <a  href="GDIPOBJ.TGPGraphics.html">TGPGraphics</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FromHDC"></a><code>function <b>FromHDC</b>(hdc: HDC; hdevice: THANDLE): <a  href="GDIPOBJ.TGPGraphics.html">TGPGraphics</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FromHWND"></a><code>function <b>FromHWND</b>(hwnd: HWND; icm: BOOL = FALSE): <a  href="GDIPOBJ.TGPGraphics.html">TGPGraphics</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FromImage"></a><code>function <b>FromImage</b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>): <a  href="GDIPOBJ.TGPGraphics.html">TGPGraphics</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(hdc: HDC); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(hdc: HDC; hdevice: THANDLE); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(hwnd: HWND; icm: BOOL ); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>); reintroduce; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Destroy"></a><code>destructor <b>Destroy</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Flush"></a><code>procedure <b>Flush</b>(intention: <a  href="GDIPAPI.html#TFlushIntention">TFlushIntention</a> = FlushIntentionFlush);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetHDC"></a><code>function <b>GetHDC</b>: HDC;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ReleaseHDC"></a><code>procedure <b>ReleaseHDC</b>(hdc: HDC);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetRenderingOrigin"></a><code>function <b>SetRenderingOrigin</b>(x, y: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetRenderingOrigin"></a><code>function <b>GetRenderingOrigin</b>(out x, y: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetCompositingMode"></a><code>function <b>SetCompositingMode</b>(compositingMode: <a  href="GDIPAPI.html#TCompositingMode">TCompositingMode</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetCompositingMode"></a><code>function <b>GetCompositingMode</b>: <a  href="GDIPAPI.html#TCompositingMode">TCompositingMode</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetCompositingQuality"></a><code>function <b>SetCompositingQuality</b>(compositingQuality: <a  href="GDIPAPI.html#TCompositingQuality">TCompositingQuality</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetCompositingQuality"></a><code>function <b>GetCompositingQuality</b>: <a  href="GDIPAPI.html#TCompositingQuality">TCompositingQuality</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetTextRenderingHint"></a><code>function <b>SetTextRenderingHint</b>(newMode: <a  href="GDIPAPI.html#TTextRenderingHint">TTextRenderingHint</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetTextRenderingHint"></a><code>function <b>GetTextRenderingHint</b>: <a  href="GDIPAPI.html#TTextRenderingHint">TTextRenderingHint</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetTextContrast"></a><code>function <b>SetTextContrast</b>(contrast: UINT): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetTextContrast"></a><code>function <b>GetTextContrast</b>: UINT;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetInterpolationMode"></a><code>function <b>GetInterpolationMode</b>: <a  href="GDIPAPI.html#TInterpolationMode">TInterpolationMode</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetInterpolationMode"></a><code>function <b>SetInterpolationMode</b>(interpolationMode: <a  href="GDIPAPI.html#TInterpolationMode">TInterpolationMode</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetSmoothingMode"></a><code>function <b>GetSmoothingMode</b>: <a  href="GDIPAPI.html#TSmoothingMode">TSmoothingMode</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetSmoothingMode"></a><code>function <b>SetSmoothingMode</b>(smoothingMode: <a  href="GDIPAPI.html#TSmoothingMode">TSmoothingMode</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetPixelOffsetMode"></a><code>function <b>GetPixelOffsetMode</b>: <a  href="GDIPAPI.html#TPixelOffsetMode">TPixelOffsetMode</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetPixelOffsetMode"></a><code>function <b>SetPixelOffsetMode</b>(pixelOffsetMode: <a  href="GDIPAPI.html#TPixelOffsetMode">TPixelOffsetMode</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetTransform"></a><code>function <b>SetTransform</b>(matrix: <a  href="GDIPOBJ.TGPMatrix.html">TGPMatrix</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ResetTransform"></a><code>function <b>ResetTransform</b>: <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MultiplyTransform"></a><code>function <b>MultiplyTransform</b>(matrix: <a  href="GDIPOBJ.TGPMatrix.html">TGPMatrix</a>; order: <a  href="GDIPAPI.html#TMatrixOrder">TMatrixOrder</a> = MatrixOrderPrepend): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TranslateTransform"></a><code>function <b>TranslateTransform</b>(dx, dy: Single; order: <a  href="GDIPAPI.html#TMatrixOrder">TMatrixOrder</a> = MatrixOrderPrepend): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ScaleTransform"></a><code>function <b>ScaleTransform</b>(sx, sy: Single; order: <a  href="GDIPAPI.html#TMatrixOrder">TMatrixOrder</a> = MatrixOrderPrepend): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="RotateTransform"></a><code>function <b>RotateTransform</b>(angle: Single; order: <a  href="GDIPAPI.html#TMatrixOrder">TMatrixOrder</a> = MatrixOrderPrepend): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetTransform"></a><code>function <b>GetTransform</b>(matrix: <a  href="GDIPOBJ.TGPMatrix.html">TGPMatrix</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetPageUnit"></a><code>function <b>SetPageUnit</b>(unit_: <a  href="GDIPAPI.html#TUnit">TUnit</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetPageScale"></a><code>function <b>SetPageScale</b>(scale: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetPageUnit"></a><code>function <b>GetPageUnit</b>: <a  href="GDIPAPI.html#TUnit">TUnit</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetPageScale"></a><code>function <b>GetPageScale</b>: Single;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetDpiX"></a><code>function <b>GetDpiX</b>: Single;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetDpiY"></a><code>function <b>GetDpiY</b>: Single;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TransformPoints"></a><code>function <b>TransformPoints</b>(destSpace: <a  href="GDIPAPI.html#TCoordinateSpace">TCoordinateSpace</a>; srcSpace: <a  href="GDIPAPI.html#TCoordinateSpace">TCoordinateSpace</a>; pts: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TransformPoints"></a><code>function <b>TransformPoints</b>(destSpace: <a  href="GDIPAPI.html#TCoordinateSpace">TCoordinateSpace</a>; srcSpace: <a  href="GDIPAPI.html#TCoordinateSpace">TCoordinateSpace</a>; pts: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetNearestColor"></a><code>function <b>GetNearestColor</b>(var color: <a  href="GDIPAPI.html#TGPColor">TGPColor</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawLine"></a><code>function <b>DrawLine</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x1, y1, x2, y2: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawLine"></a><code>function <b>DrawLine</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const pt1, pt2: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawLines"></a><code>function <b>DrawLines</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawLine"></a><code>function <b>DrawLine</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x1, y1, x2, y2: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawLine"></a><code>function <b>DrawLine</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const pt1, pt2: <a  href="GDIPAPI.TGPPoint.html">TGPPoint</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawLines"></a><code>function <b>DrawLines</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawArc"></a><code>function <b>DrawArc</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x, y, width, height, startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawArc"></a><code>function <b>DrawArc</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawArc"></a><code>function <b>DrawArc</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x, y, width, height: Integer; startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawArc"></a><code>function <b>DrawArc</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawBezier"></a><code>function <b>DrawBezier</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x1, y1, x2, y2, x3, y3, x4, y4: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawBezier"></a><code>function <b>DrawBezier</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const pt1, pt2, pt3, pt4: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawBeziers"></a><code>function <b>DrawBeziers</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawBezier"></a><code>function <b>DrawBezier</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x1, y1, x2, y2, x3, y3, x4, y4: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawBezier"></a><code>function <b>DrawBezier</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const pt1, pt2, pt3, pt4: <a  href="GDIPAPI.TGPPoint.html">TGPPoint</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawBeziers"></a><code>function <b>DrawBeziers</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawRectangle"></a><code>function <b>DrawRectangle</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawRectangle"></a><code>function <b>DrawRectangle</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x, y, width, height: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawRectangles"></a><code>function <b>DrawRectangles</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; rects: <a  href="GDIPAPI.html#PGPRectF">PGPRectF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawRectangle"></a><code>function <b>DrawRectangle</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawRectangle"></a><code>function <b>DrawRectangle</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x, y, width, height: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawRectangles"></a><code>function <b>DrawRectangles</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; rects: <a  href="GDIPAPI.html#PGPRect">PGPRect</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawEllipse"></a><code>function <b>DrawEllipse</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawEllipse"></a><code>function <b>DrawEllipse</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x, y, width, height: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawEllipse"></a><code>function <b>DrawEllipse</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawEllipse"></a><code>function <b>DrawEllipse</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x, y, width, height: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawPie"></a><code>function <b>DrawPie</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawPie"></a><code>function <b>DrawPie</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x, y, width, height, startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawPie"></a><code>function <b>DrawPie</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawPie"></a><code>function <b>DrawPie</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; x, y, width, height: Integer; startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawPolygon"></a><code>function <b>DrawPolygon</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawPolygon"></a><code>function <b>DrawPolygon</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawPath"></a><code>function <b>DrawPath</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; path: <a  href="GDIPOBJ.TGPGraphicsPath.html">TGPGraphicsPath</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawCurve"></a><code>function <b>DrawCurve</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawCurve"></a><code>function <b>DrawCurve</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer; tension: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawCurve"></a><code>function <b>DrawCurve</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count, offset, numberOfSegments: Integer; tension: Single = 0.5): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawCurve"></a><code>function <b>DrawCurve</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawCurve"></a><code>function <b>DrawCurve</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer; tension: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawCurve"></a><code>function <b>DrawCurve</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count, offset, numberOfSegments: Integer; tension: Single = 0.5): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawClosedCurve"></a><code>function <b>DrawClosedCurve</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawClosedCurve"></a><code>function <b>DrawClosedCurve</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer; tension: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawClosedCurve"></a><code>function <b>DrawClosedCurve</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawClosedCurve"></a><code>function <b>DrawClosedCurve</b>(pen: <a  href="GDIPOBJ.TGPPen.html">TGPPen</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer; tension: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Clear"></a><code>function <b>Clear</b>(color: <a  href="GDIPAPI.html#TGPColor">TGPColor</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillRectangle"></a><code>function <b>FillRectangle</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillRectangle"></a><code>function <b>FillRectangle</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; x, y, width, height: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillRectangles"></a><code>function <b>FillRectangles</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; rects: <a  href="GDIPAPI.html#PGPRectF">PGPRectF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillRectangle"></a><code>function <b>FillRectangle</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillRectangle"></a><code>function <b>FillRectangle</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; x, y, width, height: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillRectangles"></a><code>function <b>FillRectangles</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; rects: <a  href="GDIPAPI.html#PGPRect">PGPRect</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillPolygon"></a><code>function <b>FillPolygon</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillPolygon"></a><code>function <b>FillPolygon</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer; fillMode: <a  href="GDIPAPI.html#TFillMode">TFillMode</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillPolygon"></a><code>function <b>FillPolygon</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillPolygon"></a><code>function <b>FillPolygon</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer; fillMode: <a  href="GDIPAPI.html#TFillMode">TFillMode</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillEllipse"></a><code>function <b>FillEllipse</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillEllipse"></a><code>function <b>FillEllipse</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; x, y, width, height: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillEllipse"></a><code>function <b>FillEllipse</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillEllipse"></a><code>function <b>FillEllipse</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; x, y, width, height: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillPie"></a><code>function <b>FillPie</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillPie"></a><code>function <b>FillPie</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; x, y, width, height, startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillPie"></a><code>function <b>FillPie</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillPie"></a><code>function <b>FillPie</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; x, y, width, height: Integer; startAngle, sweepAngle: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillPath"></a><code>function <b>FillPath</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; path: <a  href="GDIPOBJ.TGPGraphicsPath.html">TGPGraphicsPath</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillClosedCurve"></a><code>function <b>FillClosedCurve</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillClosedCurve"></a><code>function <b>FillClosedCurve</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; points: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer; fillMode: <a  href="GDIPAPI.html#TFillMode">TFillMode</a>; tension: Single = 0.5): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillClosedCurve"></a><code>function <b>FillClosedCurve</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillClosedCurve"></a><code>function <b>FillClosedCurve</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; points: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer; fillMode: <a  href="GDIPAPI.html#TFillMode">TFillMode</a>; tension: Single = 0.5): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillRegion"></a><code>function <b>FillRegion</b>(brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; region: <a  href="GDIPOBJ.TGPRegion.html">TGPRegion</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawString"></a><code>function <b>DrawString</b>(string_: WideString; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; const layoutRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; stringFormat: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>; brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawString"></a><code>function <b>DrawString</b>(string_: WideString; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; const origin: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>; brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawString"></a><code>function <b>DrawString</b>(string_: WideString; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; const origin: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>; stringFormat: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>; brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MeasureString"></a><code>function <b>MeasureString</b>(string_: WideString; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; const layoutRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; stringFormat: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>; out boundingBox: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; codepointsFitted: PInteger = nil; linesFilled: PInteger = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MeasureString"></a><code>function <b>MeasureString</b>(string_: WideString; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; const layoutRectSize: <a  href="GDIPAPI.TGPSizeF.html">TGPSizeF</a>; stringFormat: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>; out size: <a  href="GDIPAPI.TGPSizeF.html">TGPSizeF</a>; codepointsFitted: PInteger = nil; linesFilled: PInteger = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MeasureString"></a><code>function <b>MeasureString</b>(string_: WideString; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; const origin: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>; stringFormat: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>; out boundingBox: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MeasureString"></a><code>function <b>MeasureString</b>(string_: WideString; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; const layoutRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; out boundingBox: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MeasureString"></a><code>function <b>MeasureString</b>(string_: WideString; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; const origin: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>; out boundingBox: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MeasureCharacterRanges"></a><code>function <b>MeasureCharacterRanges</b>(string_: WideString; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; const layoutRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; stringFormat: <a  href="GDIPOBJ.TGPStringFormat.html">TGPStringFormat</a>; regionCount: Integer; const regions: array of <a  href="GDIPOBJ.TGPRegion.html">TGPRegion</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawDriverString"></a><code>function <b>DrawDriverString</b>(text: <a  href="GDIPAPI.html#PUINT16">PUINT16</a>; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; brush: <a  href="GDIPOBJ.TGPBrush.html">TGPBrush</a>; positions: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; flags: Integer; matrix: <a  href="GDIPOBJ.TGPMatrix.html">TGPMatrix</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MeasureDriverString"></a><code>function <b>MeasureDriverString</b>(text: <a  href="GDIPAPI.html#PUINT16">PUINT16</a>; length: Integer; font: <a  href="GDIPOBJ.TGPFont.html">TGPFont</a>; positions: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; flags: Integer; matrix: <a  href="GDIPOBJ.TGPMatrix.html">TGPMatrix</a>; out boundingBox: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawCachedBitmap"></a><code>function <b>DrawCachedBitmap</b>(cb: <a  href="GDIPOBJ.TGPCachedBitmap.html">TGPCachedBitmap</a>; x, y: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawImage"></a><code>function <b>DrawImage</b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; const point: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawImage"></a><code>function <b>DrawImage</b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; x, y: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawImage"></a><code>function <b>DrawImage</b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawImage"></a><code>function <b>DrawImage</b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; x, y, width, height: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawImage"></a><code>function <b>DrawImage</b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; const point: <a  href="GDIPAPI.TGPPoint.html">TGPPoint</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawImage"></a><code>function <b>DrawImage</b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; x, y: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawImage"></a><code>function <b>DrawImage</b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawImage"></a><code>function <b>DrawImage</b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; x, y, width, height: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawImage"></a><code>function <b>DrawImage</b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; destPoints: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawImage"></a><code>function <b>DrawImage</b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; destPoints: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawImage"></a><code>function <b>DrawImage</b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; x, y, srcx, srcy, srcwidth, srcheight: Single; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawImage"></a><code>function <b>DrawImage</b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; const destRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; srcx, srcy, srcwidth, srcheight: Single; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil; callback: <a  href="GDIPAPI.html#DrawImageAbort">DrawImageAbort</a> = nil; callbackData: Pointer = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawImage"></a><code>function <b>DrawImage</b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; destPoints: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer; srcx, srcy, srcwidth, srcheight: Single; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil; callback: <a  href="GDIPAPI.html#DrawImageAbort">DrawImageAbort</a> = nil; callbackData: Pointer = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawImage"></a><code>function <b>DrawImage</b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; x, y, srcx, srcy, srcwidth, srcheight: Integer; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawImage"></a><code>function <b>DrawImage</b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; const destRect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; srcx, srcy, srcwidth, srcheight: Integer; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil; callback: <a  href="GDIPAPI.html#DrawImageAbort">DrawImageAbort</a> = nil; callbackData: Pointer = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawImage"></a><code>function <b>DrawImage</b>(image: <a  href="GDIPOBJ.TGPImage.html">TGPImage</a>; destPoints: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count, srcx, srcy, srcwidth, srcheight: Integer; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil; callback: <a  href="GDIPAPI.html#DrawImageAbort">DrawImageAbort</a> = nil; callbackData: Pointer = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EnumerateMetafile"></a><code>function <b>EnumerateMetafile</b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; const destPoint: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EnumerateMetafile"></a><code>function <b>EnumerateMetafile</b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; const destPoint: <a  href="GDIPAPI.TGPPoint.html">TGPPoint</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EnumerateMetafile"></a><code>function <b>EnumerateMetafile</b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; const destRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EnumerateMetafile"></a><code>function <b>EnumerateMetafile</b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; const destRect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EnumerateMetafile"></a><code>function <b>EnumerateMetafile</b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; destPoints: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EnumerateMetafile"></a><code>function <b>EnumerateMetafile</b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; destPoints: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EnumerateMetafile"></a><code>function <b>EnumerateMetafile</b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; const destPoint: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>; const srcRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil ): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EnumerateMetafile"></a><code>function <b>EnumerateMetafile</b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; const destPoint: <a  href="GDIPAPI.TGPPoint.html">TGPPoint</a>; const srcRect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil ): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EnumerateMetafile"></a><code>function <b>EnumerateMetafile</b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; const destRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; const srcRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EnumerateMetafile"></a><code>function <b>EnumerateMetafile</b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; const destRect, srcRect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EnumerateMetafile"></a><code>function <b>EnumerateMetafile</b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; destPoints: <a  href="GDIPAPI.html#PGPPointF">PGPPointF</a>; count: Integer; const srcRect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EnumerateMetafile"></a><code>function <b>EnumerateMetafile</b>(metafile: <a  href="GDIPOBJ.TGPMetafile.html">TGPMetafile</a>; destPoints: <a  href="GDIPAPI.html#PGPPoint">PGPPoint</a>; count: Integer; const srcRect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; srcUnit: <a  href="GDIPAPI.html#TUnit">TUnit</a>; callback: <a  href="GDIPAPI.html#EnumerateMetafileProc">EnumerateMetafileProc</a>; callbackData: Pointer = nil; imageAttributes: <a  href="GDIPOBJ.TGPImageAttributes.html">TGPImageAttributes</a> = nil): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetClip"></a><code>function <b>SetClip</b>(g: <a  href="GDIPOBJ.TGPGraphics.html">TGPGraphics</a>; combineMode: <a  href="GDIPAPI.html#TCombineMode">TCombineMode</a> = CombineModeReplace): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetClip"></a><code>function <b>SetClip</b>(rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; combineMode: <a  href="GDIPAPI.html#TCombineMode">TCombineMode</a> = CombineModeReplace): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetClip"></a><code>function <b>SetClip</b>(rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; combineMode: <a  href="GDIPAPI.html#TCombineMode">TCombineMode</a> = CombineModeReplace): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetClip"></a><code>function <b>SetClip</b>(path: <a  href="GDIPOBJ.TGPGraphicsPath.html">TGPGraphicsPath</a>; combineMode: <a  href="GDIPAPI.html#TCombineMode">TCombineMode</a> = CombineModeReplace): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetClip"></a><code>function <b>SetClip</b>(region: <a  href="GDIPOBJ.TGPRegion.html">TGPRegion</a>; combineMode: <a  href="GDIPAPI.html#TCombineMode">TCombineMode</a> = CombineModeReplace): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetClip"></a><code>function <b>SetClip</b>(hRgn: HRGN; combineMode: <a  href="GDIPAPI.html#TCombineMode">TCombineMode</a> = CombineModeReplace): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="IntersectClip"></a><code>function <b>IntersectClip</b>(const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="IntersectClip"></a><code>function <b>IntersectClip</b>(const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="IntersectClip"></a><code>function <b>IntersectClip</b>(region: <a  href="GDIPOBJ.TGPRegion.html">TGPRegion</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ExcludeClip"></a><code>function <b>ExcludeClip</b>(const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ExcludeClip"></a><code>function <b>ExcludeClip</b>(const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ExcludeClip"></a><code>function <b>ExcludeClip</b>(region: <a  href="GDIPOBJ.TGPRegion.html">TGPRegion</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ResetClip"></a><code>function <b>ResetClip</b>: <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TranslateClip"></a><code>function <b>TranslateClip</b>(dx, dy: Single): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TranslateClip"></a><code>function <b>TranslateClip</b>(dx, dy: Integer): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetClip"></a><code>function <b>GetClip</b>(region: <a  href="GDIPOBJ.TGPRegion.html">TGPRegion</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetClipBounds"></a><code>function <b>GetClipBounds</b>(out rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetClipBounds"></a><code>function <b>GetClipBounds</b>(out rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="IsClipEmpty"></a><code>function <b>IsClipEmpty</b>: Bool;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetVisibleClipBounds"></a><code>function <b>GetVisibleClipBounds</b>(out rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetVisibleClipBounds"></a><code>function <b>GetVisibleClipBounds</b>(out rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="IsVisibleClipEmpty"></a><code>function <b>IsVisibleClipEmpty</b>: BOOL;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="IsVisible"></a><code>function <b>IsVisible</b>(x, y: Integer): BOOL; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="IsVisible"></a><code>function <b>IsVisible</b>(const point: <a  href="GDIPAPI.TGPPoint.html">TGPPoint</a>): BOOL; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="IsVisible"></a><code>function <b>IsVisible</b>(x, y, width, height: Integer): BOOL; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="IsVisible"></a><code>function <b>IsVisible</b>(const rect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>): BOOL; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="IsVisible"></a><code>function <b>IsVisible</b>(x, y: Single): BOOL; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="IsVisible"></a><code>function <b>IsVisible</b>(const point: <a  href="GDIPAPI.TGPPointF.html">TGPPointF</a>): BOOL; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="IsVisible"></a><code>function <b>IsVisible</b>(x, y, width, height: Single): BOOL; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="IsVisible"></a><code>function <b>IsVisible</b>(const rect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>): BOOL; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Save"></a><code>function <b>Save</b>: <a  href="GDIPAPI.html#GraphicsState">GraphicsState</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Restore"></a><code>function <b>Restore</b>(gstate: <a  href="GDIPAPI.html#GraphicsState">GraphicsState</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="BeginContainer"></a><code>function <b>BeginContainer</b>(const dstrect, srcrect: <a  href="GDIPAPI.TGPRectF.html">TGPRectF</a>; unit_: <a  href="GDIPAPI.html#TUnit">TUnit</a>): <a  href="GDIPAPI.html#GraphicsContainer">GraphicsContainer</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="BeginContainer"></a><code>function <b>BeginContainer</b>(const dstrect, srcrect: <a  href="GDIPAPI.TGPRect.html">TGPRect</a>; unit_: <a  href="GDIPAPI.html#TUnit">TUnit</a>): <a  href="GDIPAPI.html#GraphicsContainer">GraphicsContainer</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="BeginContainer"></a><code>function <b>BeginContainer</b>: <a  href="GDIPAPI.html#GraphicsContainer">GraphicsContainer</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EndContainer"></a><code>function <b>EndContainer</b>(state: <a  href="GDIPAPI.html#GraphicsContainer">GraphicsContainer</a>): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="AddMetafileComment"></a><code>function <b>AddMetafileComment</b>(data: PBYTE; sizeData: UINT): <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetHalftonePalette"></a><code>function <b>GetHalftonePalette</b>: HPALETTE;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetLastStatus"></a><code>function <b>GetLastStatus</b>: <a  href="GDIPAPI.html#TStatus">TStatus</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

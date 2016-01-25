@@ -1,0 +1,559 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>GDBGenericSubEntry: packed Object GDBObjGenericSubEntry</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="GDBObjGenericSubEntry"></a><h1 class="cio">packed Object GDBObjGenericSubEntry</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></td><td><a class="section" href="#PasDoc-Fields">Fields</a></td><td><a class="section" href="#PasDoc-Methods">Methods</a></td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="GDBGenericSubEntry.html">GDBGenericSubEntry</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type GDBObjGenericSubEntry = packed object(<a class="normal" href="GDBWithMatrix.GDBObjWithMatrix.html">GDBObjWithMatrix</a>)</code></p>
+<h2 class="description">Description</h2>
+<div class="nodescription">no description available, GDBObjWithMatrix description follows</div><div class="nodescription">no description available, GDBObjEntity description follows</div><div class="nodescription">no description available, GDBObjSubordinated description follows</div><div class="nodescription">no description available, GDBObjGenericWithSubordinated description follows</div><div class="nodescription">no description available, GDBObjExtendable description follows</div><div class="nodescription">no description available, GDBaseObject description follows</div><a name="PasDoc-Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TObject</li>
+<li class="ancestor"><a class="normal" href="gdbase.GDBaseObject.html">GDBaseObject</a></li>
+<li class="ancestor"><a class="normal" href="GDBSubordinated.GDBObjExtendable.html">GDBObjExtendable</a></li>
+<li class="ancestor"><a class="normal" href="GDBSubordinated.GDBObjGenericWithSubordinated.html">GDBObjGenericWithSubordinated</a></li>
+<li class="ancestor"><a class="normal" href="GDBSubordinated.GDBObjSubordinated.html">GDBObjSubordinated</a></li>
+<li class="ancestor"><a class="normal" href="GDBEntity.GDBObjEntity.html">GDBObjEntity</a></li>
+<li class="ancestor"><a class="normal" href="GDBWithMatrix.GDBObjWithMatrix.html">GDBObjWithMatrix</a></li>
+<li class="thisitem">GDBObjGenericSubEntry</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Fields"></a><h3 class="summary">Fields</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#ObjArray">ObjArray</a></b>:<a  href="UGDBVisibleTreeArray.GDBObjEntityTreeArray.html">GDBObjEntityTreeArray</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#ObjCasheArray">ObjCasheArray</a></b>:<a  href="UGDBOpenArrayOfPV.GDBObjOpenArrayOfPV.html">GDBObjOpenArrayOfPV</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#ObjToConnectedArray">ObjToConnectedArray</a></b>:<a  href="UGDBOpenArrayOfPV.GDBObjOpenArrayOfPV.html">GDBObjOpenArrayOfPV</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#lstonmouse">lstonmouse</a></b>:<a  href="GDBEntity.html#PGDBObjEntity">PGDBObjEntity</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#VisibleOBJBoundingBox">VisibleOBJBoundingBox</a></b>:<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#AddObjectToObjArray">AddObjectToObjArray</a></b>(p:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#GoodAddObjectToObjArray">GoodAddObjectToObjArray</a></b>(const obj:<a  href="GDBEntity.GDBObjEntity.html">GDBObjEntity</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#initnul">initnul</a></b>(owner:<a  href="GDBSubordinated.html#PGDBObjGenericWithSubordinated">PGDBObjGenericWithSubordinated</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#DrawGeometry">DrawGeometry</a></b>(lw:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#CalcInFrustum">CalcInFrustum</a></b>(frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>;infrustumactualy:<a  href="gdbase.html#TActulity">TActulity</a>;visibleactualy:<a  href="gdbase.html#TActulity">TActulity</a>;var totalobj,infrustumobj:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; ProjectProc:<a  href="GDBCamera.html#GDBProjectProc">GDBProjectProc</a>;const zoom,currentdegradationfactor:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#onmouse">onmouse</a></b>(var popa:<a  href="UGDBOpenArrayOfPObjects.GDBOpenArrayOfPObjects.html">GDBOpenArrayOfPObjects</a>;const MF:<a  href="gdbase.html#ClipArray">ClipArray</a>;InSubEntry:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#FormatEntity">FormatEntity</a></b>(var drawing:<a  href="UGDBDrawingdef.TDrawingDef.html">TDrawingDef</a>;var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#FormatAfterEdit">FormatAfterEdit</a></b>(var drawing:<a  href="UGDBDrawingdef.TDrawingDef.html">TDrawingDef</a>;var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#restructure">restructure</a></b>(var drawing:<a  href="UGDBDrawingdef.TDrawingDef.html">TDrawingDef</a>); virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#renderfeedbac">renderfeedbac</a></b>(infrustumactualy:<a  href="gdbase.html#TActulity">TActulity</a>;pcount:<a  href="gdbase.html#TActulity">TActulity</a>;var camera:<a  href="GDBCamera.GDBObjCamera.html">GDBObjCamera</a>; ProjectProc:<a  href="GDBCamera.html#GDBProjectProc">GDBProjectProc</a>;var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#getowner">getowner</a></b>:<a  href="GDBSubordinated.html#PGDBObjSubordinated">PGDBObjSubordinated</a>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#CanAddGDBObj">CanAddGDBObj</a></b>(pobj:<a  href="GDBEntity.html#PGDBObjEntity">PGDBObjEntity</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#EubEntryType">EubEntryType</a></b>:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#MigrateTo">MigrateTo</a></b>(new_sub:<a  href="GDBGenericSubEntry.html#PGDBObjGenericSubEntry">PGDBObjGenericSubEntry</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#EraseMi">EraseMi</a></b>(pobj:<a  href="GDBEntity.html#PGDBObjEntity">pGDBObjEntity</a>;pobjinarray:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;var drawing:<a  href="UGDBDrawingdef.TDrawingDef.html">TDrawingDef</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#RemoveMiFromArray">RemoveMiFromArray</a></b>(pobj:<a  href="GDBEntity.html#PGDBObjEntity">pGDBObjEntity</a>;pobjinarray:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#GoodRemoveMiFromArray">GoodRemoveMiFromArray</a></b>(const obj:<a  href="GDBEntity.GDBObjEntity.html">GDBObjEntity</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#AddMi">AddMi</a></b>(pobj:<a  href="GDBSubordinated.html#PGDBObjSubordinated">PGDBObjSubordinated</a>):<a  href="gdbasetypes.html#PGDBPointer">PGDBpointer</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#ImEdited">ImEdited</a></b>(pobj:<a  href="GDBSubordinated.html#PGDBObjSubordinated">PGDBObjSubordinated</a>;pobjinarray:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;var drawing:<a  href="UGDBDrawingdef.TDrawingDef.html">TDrawingDef</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#ReturnLastOnMouse">ReturnLastOnMouse</a></b>(InSubEntry:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>):<a  href="GDBEntity.html#PGDBObjEntity">PGDBObjEntity</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#correctobjects">correctobjects</a></b>(powner:<a  href="GDBEntity.html#PGDBObjEntity">PGDBObjEntity</a>;pinownerarray:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>); virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>destructor <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#done">done</a></b>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#getoutbound">getoutbound</a></b>(var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#getonlyoutbound">getonlyoutbound</a></b>(var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#DrawBB">DrawBB</a></b>(var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#RemoveInArray">RemoveInArray</a></b>(pobjinarray:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>); virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#DrawWithAttrib">DrawWithAttrib</a></b>(var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#CreatePreCalcData">CreatePreCalcData</a></b>:<a  href="GDBGenericSubEntry.html#PTDrawingPreCalcData">PTDrawingPreCalcData</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#DestroyPreCalcData">DestroyPreCalcData</a></b>(PreCalcData:<a  href="GDBGenericSubEntry.html#PTDrawingPreCalcData">PTDrawingPreCalcData</a>); virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#CalcVisibleByTree">CalcVisibleByTree</a></b>(frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>;infrustumactualy:<a  href="gdbase.html#TActulity">TActulity</a>;visibleactualy:<a  href="gdbase.html#TActulity">TActulity</a>;var enttree:<a  href="UGDBEntTree.TEntTreeNode.html">TEntTreeNode</a>;var totalobj,infrustumobj:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; ProjectProc:<a  href="GDBCamera.html#GDBProjectProc">GDBProjectProc</a>;const zoom,currentdegradationfactor:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#SetInFrustumFromTree">SetInFrustumFromTree</a></b>(const frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>;infrustumactualy:<a  href="gdbase.html#TActulity">TActulity</a>;visibleactualy:<a  href="gdbase.html#TActulity">TActulity</a>;var totalobj,infrustumobj:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; ProjectProc:<a  href="GDBCamera.html#GDBProjectProc">GDBProjectProc</a>;const zoom,currentdegradationfactor:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>); virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#FindObjectsInPoint">FindObjectsInPoint</a></b>(const point:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;var Objects:<a  href="UGDBOpenArrayOfPV.GDBObjOpenArrayOfPV.html">GDBObjOpenArrayOfPV</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#FindObjectsInPointSlow">FindObjectsInPointSlow</a></b>(const point:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;var Objects:<a  href="UGDBOpenArrayOfPV.GDBObjOpenArrayOfPV.html">GDBObjOpenArrayOfPV</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#FindObjectsInPointInNode">FindObjectsInPointInNode</a></b>(const point:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;const Node:<a  href="UGDBEntTree.TEntTreeNode.html">TEntTreeNode</a>;var Objects:<a  href="UGDBOpenArrayOfPV.GDBObjOpenArrayOfPV.html">GDBObjOpenArrayOfPV</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#onpoint">onpoint</a></b>(var objects:<a  href="UGDBOpenArrayOfPObjects.GDBOpenArrayOfPObjects.html">GDBOpenArrayOfPObjects</a>;const point:<a  href="gdbase.GDBvertex.html">GDBVertex</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#correctsublayers">correctsublayers</a></b>(var la:<a  href="UGDBLayerArray.GDBLayerArray.html">GDBLayerArray</a>); virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#CalcTrueInFrustum">CalcTrueInFrustum</a></b>(frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>;visibleactualy:<a  href="gdbase.html#TActulity">TActulity</a>):<a  href="gdbase.html#TInBoundingVolume">TInBoundingVolume</a>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="GDBGenericSubEntry.GDBObjGenericSubEntry.html#IterateCounter">IterateCounter</a></b>(PCounted:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;var Counter:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;proc:<a  href="gdbase.html#TProcCounter">TProcCounter</a>); virtual;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Fields</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ObjArray"></a><code><b>ObjArray</b>:<a  href="UGDBVisibleTreeArray.GDBObjEntityTreeArray.html">GDBObjEntityTreeArray</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ObjCasheArray"></a><code><b>ObjCasheArray</b>:<a  href="UGDBOpenArrayOfPV.GDBObjOpenArrayOfPV.html">GDBObjOpenArrayOfPV</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ObjToConnectedArray"></a><code><b>ObjToConnectedArray</b>:<a  href="UGDBOpenArrayOfPV.GDBObjOpenArrayOfPV.html">GDBObjOpenArrayOfPV</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="lstonmouse"></a><code><b>lstonmouse</b>:<a  href="GDBEntity.html#PGDBObjEntity">PGDBObjEntity</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="VisibleOBJBoundingBox"></a><code><b>VisibleOBJBoundingBox</b>:<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="AddObjectToObjArray"></a><code>function <b>AddObjectToObjArray</b>(p:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GoodAddObjectToObjArray"></a><code>function <b>GoodAddObjectToObjArray</b>(const obj:<a  href="GDBEntity.GDBObjEntity.html">GDBObjEntity</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="initnul"></a><code>constructor <b>initnul</b>(owner:<a  href="GDBSubordinated.html#PGDBObjGenericWithSubordinated">PGDBObjGenericWithSubordinated</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawGeometry"></a><code>procedure <b>DrawGeometry</b>(lw:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CalcInFrustum"></a><code>function <b>CalcInFrustum</b>(frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>;infrustumactualy:<a  href="gdbase.html#TActulity">TActulity</a>;visibleactualy:<a  href="gdbase.html#TActulity">TActulity</a>;var totalobj,infrustumobj:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; ProjectProc:<a  href="GDBCamera.html#GDBProjectProc">GDBProjectProc</a>;const zoom,currentdegradationfactor:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="onmouse"></a><code>function <b>onmouse</b>(var popa:<a  href="UGDBOpenArrayOfPObjects.GDBOpenArrayOfPObjects.html">GDBOpenArrayOfPObjects</a>;const MF:<a  href="gdbase.html#ClipArray">ClipArray</a>;InSubEntry:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FormatEntity"></a><code>procedure <b>FormatEntity</b>(var drawing:<a  href="UGDBDrawingdef.TDrawingDef.html">TDrawingDef</a>;var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FormatAfterEdit"></a><code>procedure <b>FormatAfterEdit</b>(var drawing:<a  href="UGDBDrawingdef.TDrawingDef.html">TDrawingDef</a>;var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="restructure"></a><code>procedure <b>restructure</b>(var drawing:<a  href="UGDBDrawingdef.TDrawingDef.html">TDrawingDef</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="renderfeedbac"></a><code>procedure <b>renderfeedbac</b>(infrustumactualy:<a  href="gdbase.html#TActulity">TActulity</a>;pcount:<a  href="gdbase.html#TActulity">TActulity</a>;var camera:<a  href="GDBCamera.GDBObjCamera.html">GDBObjCamera</a>; ProjectProc:<a  href="GDBCamera.html#GDBProjectProc">GDBProjectProc</a>;var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="getowner"></a><code>function <b>getowner</b>:<a  href="GDBSubordinated.html#PGDBObjSubordinated">PGDBObjSubordinated</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CanAddGDBObj"></a><code>function <b>CanAddGDBObj</b>(pobj:<a  href="GDBEntity.html#PGDBObjEntity">PGDBObjEntity</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EubEntryType"></a><code>function <b>EubEntryType</b>:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MigrateTo"></a><code>function <b>MigrateTo</b>(new_sub:<a  href="GDBGenericSubEntry.html#PGDBObjGenericSubEntry">PGDBObjGenericSubEntry</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EraseMi"></a><code>function <b>EraseMi</b>(pobj:<a  href="GDBEntity.html#PGDBObjEntity">pGDBObjEntity</a>;pobjinarray:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;var drawing:<a  href="UGDBDrawingdef.TDrawingDef.html">TDrawingDef</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="RemoveMiFromArray"></a><code>function <b>RemoveMiFromArray</b>(pobj:<a  href="GDBEntity.html#PGDBObjEntity">pGDBObjEntity</a>;pobjinarray:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GoodRemoveMiFromArray"></a><code>function <b>GoodRemoveMiFromArray</b>(const obj:<a  href="GDBEntity.GDBObjEntity.html">GDBObjEntity</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="AddMi"></a><code>function <b>AddMi</b>(pobj:<a  href="GDBSubordinated.html#PGDBObjSubordinated">PGDBObjSubordinated</a>):<a  href="gdbasetypes.html#PGDBPointer">PGDBpointer</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ImEdited"></a><code>function <b>ImEdited</b>(pobj:<a  href="GDBSubordinated.html#PGDBObjSubordinated">PGDBObjSubordinated</a>;pobjinarray:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;var drawing:<a  href="UGDBDrawingdef.TDrawingDef.html">TDrawingDef</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ReturnLastOnMouse"></a><code>function <b>ReturnLastOnMouse</b>(InSubEntry:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>):<a  href="GDBEntity.html#PGDBObjEntity">PGDBObjEntity</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="correctobjects"></a><code>procedure <b>correctobjects</b>(powner:<a  href="GDBEntity.html#PGDBObjEntity">PGDBObjEntity</a>;pinownerarray:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="done"></a><code>destructor <b>done</b>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="getoutbound"></a><code>procedure <b>getoutbound</b>(var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="getonlyoutbound"></a><code>procedure <b>getonlyoutbound</b>(var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawBB"></a><code>procedure <b>DrawBB</b>(var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="RemoveInArray"></a><code>procedure <b>RemoveInArray</b>(pobjinarray:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawWithAttrib"></a><code>procedure <b>DrawWithAttrib</b>(var DC:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CreatePreCalcData"></a><code>function <b>CreatePreCalcData</b>:<a  href="GDBGenericSubEntry.html#PTDrawingPreCalcData">PTDrawingPreCalcData</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DestroyPreCalcData"></a><code>procedure <b>DestroyPreCalcData</b>(PreCalcData:<a  href="GDBGenericSubEntry.html#PTDrawingPreCalcData">PTDrawingPreCalcData</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CalcVisibleByTree"></a><code>function <b>CalcVisibleByTree</b>(frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>;infrustumactualy:<a  href="gdbase.html#TActulity">TActulity</a>;visibleactualy:<a  href="gdbase.html#TActulity">TActulity</a>;var enttree:<a  href="UGDBEntTree.TEntTreeNode.html">TEntTreeNode</a>;var totalobj,infrustumobj:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; ProjectProc:<a  href="GDBCamera.html#GDBProjectProc">GDBProjectProc</a>;const zoom,currentdegradationfactor:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetInFrustumFromTree"></a><code>procedure <b>SetInFrustumFromTree</b>(const frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>;infrustumactualy:<a  href="gdbase.html#TActulity">TActulity</a>;visibleactualy:<a  href="gdbase.html#TActulity">TActulity</a>;var totalobj,infrustumobj:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; ProjectProc:<a  href="GDBCamera.html#GDBProjectProc">GDBProjectProc</a>;const zoom,currentdegradationfactor:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FindObjectsInPoint"></a><code>function <b>FindObjectsInPoint</b>(const point:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;var Objects:<a  href="UGDBOpenArrayOfPV.GDBObjOpenArrayOfPV.html">GDBObjOpenArrayOfPV</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FindObjectsInPointSlow"></a><code>function <b>FindObjectsInPointSlow</b>(const point:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;var Objects:<a  href="UGDBOpenArrayOfPV.GDBObjOpenArrayOfPV.html">GDBObjOpenArrayOfPV</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FindObjectsInPointInNode"></a><code>function <b>FindObjectsInPointInNode</b>(const point:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;const Node:<a  href="UGDBEntTree.TEntTreeNode.html">TEntTreeNode</a>;var Objects:<a  href="UGDBOpenArrayOfPV.GDBObjOpenArrayOfPV.html">GDBObjOpenArrayOfPV</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="onpoint"></a><code>function <b>onpoint</b>(var objects:<a  href="UGDBOpenArrayOfPObjects.GDBOpenArrayOfPObjects.html">GDBOpenArrayOfPObjects</a>;const point:<a  href="gdbase.GDBvertex.html">GDBVertex</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="correctsublayers"></a><code>procedure <b>correctsublayers</b>(var la:<a  href="UGDBLayerArray.GDBLayerArray.html">GDBLayerArray</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CalcTrueInFrustum"></a><code>function <b>CalcTrueInFrustum</b>(frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>;visibleactualy:<a  href="gdbase.html#TActulity">TActulity</a>):<a  href="gdbase.html#TInBoundingVolume">TInBoundingVolume</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="IterateCounter"></a><code>procedure <b>IterateCounter</b>(PCounted:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;var Counter:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;proc:<a  href="gdbase.html#TProcCounter">TProcCounter</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

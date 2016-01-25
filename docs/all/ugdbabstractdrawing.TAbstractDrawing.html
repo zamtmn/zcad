@@ -1,0 +1,495 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>ugdbabstractdrawing: packed Object TAbstractDrawing</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="TAbstractDrawing"></a><h1 class="cio">packed Object TAbstractDrawing</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></td><td><a class="section" href="#PasDoc-Fields">Fields</a></td><td><a class="section" href="#PasDoc-Methods">Methods</a></td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="ugdbabstractdrawing.html">ugdbabstractdrawing</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TAbstractDrawing = packed object(<a class="normal" href="UGDBDrawingdef.TDrawingDef.html">TDrawingDef</a>)</code></p>
+<h2 class="description">Description</h2>
+<div class="nodescription">no description available, TDrawingDef description follows</div><div class="nodescription">no description available, GDBaseobject description follows</div><a name="PasDoc-Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TObject</li>
+<li class="ancestor"><a class="normal" href="gdbase.GDBaseObject.html">GDBaseObject</a></li>
+<li class="ancestor"><a class="normal" href="UGDBDrawingdef.TDrawingDef.html">TDrawingDef</a></li>
+<li class="thisitem">TAbstractDrawing</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Fields"></a><h3 class="summary">Fields</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#LWDisplay">LWDisplay</a></b>:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#SnapGrid">SnapGrid</a></b>:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#DrawGrid">DrawGrid</a></b>:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#GridSpacing">GridSpacing</a></b>:<a  href="gdbase.GDBvertex2D.html">GDBvertex2D</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#Snap">Snap</a></b>:<a  href="gdbase.GDBSnap2D.html">GDBSnap2D</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#CurrentLayer">CurrentLayer</a></b>:<a  href="UGDBLayerArray.html#PGDBLayerProp">PGDBLayerProp</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#CurrentLType">CurrentLType</a></b>:<a  href="ugdbltypearray.html#PGDBLtypeProp">PGDBLtypeProp</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#CurrentTextStyle">CurrentTextStyle</a></b>:<a  href="UGDBTextStyleArray.html#PGDBTextStyle">PGDBTextStyle</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#CurrentDimStyle">CurrentDimStyle</a></b>:<a  href="ugdbdimstylearray.html#PGDBDimStyle">PGDBDimStyle</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#CurrentLineW">CurrentLineW</a></b>:<a  href="gdbase.html#TGDBLineWeight">TGDBLineWeight</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#LTScale">LTScale</a></b>:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#CLTScale">CLTScale</a></b>:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#CColor">CColor</a></b>:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#LUnits">LUnits</a></b>:<a  href="gdbase.html#TLUnits">TLUnits</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#LUPrec">LUPrec</a></b>:<a  href="gdbase.html#TUPrec">TUPrec</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#AUnits">AUnits</a></b>:<a  href="gdbase.html#TAUnits">TAUnits</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#AUPrec">AUPrec</a></b>:<a  href="gdbase.html#TUPrec">TUPrec</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#AngDir">AngDir</a></b>:<a  href="gdbase.html#TAngDir">TAngDir</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#AngBase">AngBase</a></b>:<a  href="gdbasetypes.html#GDBAngleDegDouble">GDBAngleDegDouble</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#UnitMode">UnitMode</a></b>:<a  href="gdbase.html#TUnitMode">TUnitMode</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#InsUnits">InsUnits</a></b>:<a  href="gdbase.html#TInsUnits">TInsUnits</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#TextSize">TextSize</a></b>:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#myGluProject2">myGluProject2</a></b>(objcoord:<a  href="gdbase.GDBvertex.html">GDBVertex</a>; out wincoord:<a  href="gdbase.GDBvertex.html">GDBVertex</a>):Integer; virtual; abstract;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#myGluUnProject">myGluUnProject</a></b>(win:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;out obj:<a  href="gdbase.GDBvertex.html">GDBvertex</a>):Integer; virtual; abstract;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#GetPcamera">GetPcamera</a></b>:<a  href="GDBCamera.html#PGDBObjCamera">PGDBObjCamera</a>; virtual; abstract;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#GetCurrentROOT">GetCurrentROOT</a></b>:<a  href="GDBGenericSubEntry.html#PGDBObjGenericSubEntry">PGDBObjGenericSubEntry</a>; virtual; abstract;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#GetConstructObjRoot">GetConstructObjRoot</a></b>:<a  href="GDBRoot.html#PGDBObjRoot">PGDBObjRoot</a>; virtual; abstract;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#GetSelObjArray">GetSelObjArray</a></b>:<a  href="UGDBSelectedObjArray.html#PGDBSelectedObjArray">PGDBSelectedObjArray</a>; virtual; abstract;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#GetOnMouseObj">GetOnMouseObj</a></b>:<a  href="UGDBOpenArrayOfPV.html#PGDBObjOpenArrayOfPV">PGDBObjOpenArrayOfPV</a>; virtual; abstract;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#RotateCameraInLocalCSXY">RotateCameraInLocalCSXY</a></b>(ux,uy:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>); virtual; abstract;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#MoveCameraInLocalCSXY">MoveCameraInLocalCSXY</a></b>(oldx,oldy:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;ax:<a  href="gdbase.GDBvertex.html">gdbvertex</a>); virtual; abstract;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#SetCurrentDWG">SetCurrentDWG</a></b>; virtual; abstract;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#GetChangeStampt">GetChangeStampt</a></b>:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; virtual; abstract;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#StoreOldCamerapPos">StoreOldCamerapPos</a></b>:Pointer; virtual; abstract;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#StoreNewCamerapPos">StoreNewCamerapPos</a></b>(command:Pointer); virtual; abstract;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#SetUnitsFormat">SetUnitsFormat</a></b>(f:<a  href="gdbase.TzeUnitsFormat.html">TzeUnitsFormat</a>); virtual; abstract;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#rtmodify">rtmodify</a></b>(obj:<a  href="GDBEntity.html#PGDBObjEntity">PGDBObjEntity</a>;md:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;dist,wc:<a  href="gdbase.GDBvertex.html">gdbvertex</a>;save:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>); virtual; abstract;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbabstractdrawing.TAbstractDrawing.html#FillDrawingPartRC">FillDrawingPartRC</a></b>(var dc:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); virtual; abstract;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Fields</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="LWDisplay"></a><code><b>LWDisplay</b>:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SnapGrid"></a><code><b>SnapGrid</b>:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawGrid"></a><code><b>DrawGrid</b>:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GridSpacing"></a><code><b>GridSpacing</b>:<a  href="gdbase.GDBvertex2D.html">GDBvertex2D</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Snap"></a><code><b>Snap</b>:<a  href="gdbase.GDBSnap2D.html">GDBSnap2D</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CurrentLayer"></a><code><b>CurrentLayer</b>:<a  href="UGDBLayerArray.html#PGDBLayerProp">PGDBLayerProp</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CurrentLType"></a><code><b>CurrentLType</b>:<a  href="ugdbltypearray.html#PGDBLtypeProp">PGDBLtypeProp</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CurrentTextStyle"></a><code><b>CurrentTextStyle</b>:<a  href="UGDBTextStyleArray.html#PGDBTextStyle">PGDBTextStyle</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CurrentDimStyle"></a><code><b>CurrentDimStyle</b>:<a  href="ugdbdimstylearray.html#PGDBDimStyle">PGDBDimStyle</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CurrentLineW"></a><code><b>CurrentLineW</b>:<a  href="gdbase.html#TGDBLineWeight">TGDBLineWeight</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="LTScale"></a><code><b>LTScale</b>:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CLTScale"></a><code><b>CLTScale</b>:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CColor"></a><code><b>CColor</b>:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="LUnits"></a><code><b>LUnits</b>:<a  href="gdbase.html#TLUnits">TLUnits</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="LUPrec"></a><code><b>LUPrec</b>:<a  href="gdbase.html#TUPrec">TUPrec</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="AUnits"></a><code><b>AUnits</b>:<a  href="gdbase.html#TAUnits">TAUnits</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="AUPrec"></a><code><b>AUPrec</b>:<a  href="gdbase.html#TUPrec">TUPrec</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="AngDir"></a><code><b>AngDir</b>:<a  href="gdbase.html#TAngDir">TAngDir</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="AngBase"></a><code><b>AngBase</b>:<a  href="gdbasetypes.html#GDBAngleDegDouble">GDBAngleDegDouble</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="UnitMode"></a><code><b>UnitMode</b>:<a  href="gdbase.html#TUnitMode">TUnitMode</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="InsUnits"></a><code><b>InsUnits</b>:<a  href="gdbase.html#TInsUnits">TInsUnits</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TextSize"></a><code><b>TextSize</b>:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="myGluProject2"></a><code>function <b>myGluProject2</b>(objcoord:<a  href="gdbase.GDBvertex.html">GDBVertex</a>; out wincoord:<a  href="gdbase.GDBvertex.html">GDBVertex</a>):Integer; virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="myGluUnProject"></a><code>function <b>myGluUnProject</b>(win:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;out obj:<a  href="gdbase.GDBvertex.html">GDBvertex</a>):Integer; virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetPcamera"></a><code>function <b>GetPcamera</b>:<a  href="GDBCamera.html#PGDBObjCamera">PGDBObjCamera</a>; virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetCurrentROOT"></a><code>function <b>GetCurrentROOT</b>:<a  href="GDBGenericSubEntry.html#PGDBObjGenericSubEntry">PGDBObjGenericSubEntry</a>; virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetConstructObjRoot"></a><code>function <b>GetConstructObjRoot</b>:<a  href="GDBRoot.html#PGDBObjRoot">PGDBObjRoot</a>; virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetSelObjArray"></a><code>function <b>GetSelObjArray</b>:<a  href="UGDBSelectedObjArray.html#PGDBSelectedObjArray">PGDBSelectedObjArray</a>; virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetOnMouseObj"></a><code>function <b>GetOnMouseObj</b>:<a  href="UGDBOpenArrayOfPV.html#PGDBObjOpenArrayOfPV">PGDBObjOpenArrayOfPV</a>; virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="RotateCameraInLocalCSXY"></a><code>procedure <b>RotateCameraInLocalCSXY</b>(ux,uy:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>); virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MoveCameraInLocalCSXY"></a><code>procedure <b>MoveCameraInLocalCSXY</b>(oldx,oldy:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;ax:<a  href="gdbase.GDBvertex.html">gdbvertex</a>); virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetCurrentDWG"></a><code>procedure <b>SetCurrentDWG</b>; virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetChangeStampt"></a><code>function <b>GetChangeStampt</b>:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="StoreOldCamerapPos"></a><code>function <b>StoreOldCamerapPos</b>:Pointer; virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="StoreNewCamerapPos"></a><code>procedure <b>StoreNewCamerapPos</b>(command:Pointer); virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetUnitsFormat"></a><code>procedure <b>SetUnitsFormat</b>(f:<a  href="gdbase.TzeUnitsFormat.html">TzeUnitsFormat</a>); virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="rtmodify"></a><code>procedure <b>rtmodify</b>(obj:<a  href="GDBEntity.html#PGDBObjEntity">PGDBObjEntity</a>;md:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;dist,wc:<a  href="gdbase.GDBvertex.html">gdbvertex</a>;save:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>); virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillDrawingPartRC"></a><code>procedure <b>FillDrawingPartRC</b>(var dc:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

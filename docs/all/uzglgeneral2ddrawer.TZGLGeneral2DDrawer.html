@@ -1,0 +1,687 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>uzglgeneral2ddrawer: Class TZGLGeneral2DDrawer</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="TZGLGeneral2DDrawer"></a><h1 class="cio">Class TZGLGeneral2DDrawer</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></td><td><a class="section" href="#PasDoc-Fields">Fields</a></td><td><a class="section" href="#PasDoc-Methods">Methods</a></td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="uzglgeneral2ddrawer.html">uzglgeneral2ddrawer</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TZGLGeneral2DDrawer = class(<a class="normal" href="uzglgeneraldrawer.TZGLGeneralDrawer.html">TZGLGeneralDrawer</a>)</code></p>
+<h2 class="description">Description</h2>
+<div class="nodescription">no description available, TZGLGeneralDrawer description follows</div><div class="nodescription">no description available, TZGLAbstractDrawer description follows</div><a name="PasDoc-Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TObject</li>
+<li class="ancestor"><a class="normal" href="uzglabstractdrawer.TZGLAbstractDrawer.html">TZGLAbstractDrawer</a></li>
+<li class="ancestor"><a class="normal" href="uzglgeneraldrawer.TZGLGeneralDrawer.html">TZGLGeneralDrawer</a></li>
+<li class="thisitem">TZGLGeneral2DDrawer</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Fields"></a><h3 class="summary">Fields</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#matr">matr</a></b>:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#mstack">mstack</a></b>:<a  href="uzglgeneral2ddrawer.html#DMatrix4DStackArray">DMatrix4DStackArray</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#mstackindex">mstackindex</a></b>:integer;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#sx">sx</a></b>:single;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#sy">sy</a></b>:single;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#tx">tx</a></b>:single;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#ty">ty</a></b>:single;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#wa">wa</a></b>:<a  href="uzglabstractviewarea.TAbstractViewArea.html">TAbstractViewArea</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#canvas">canvas</a></b>:tcanvas;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#panel">panel</a></b>:TCustomControl;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#ClearColor">ClearColor</a></b>: TColor;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#PenColor">PenColor</a></b>: TColor;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#linewidth">linewidth</a></b>:Integer;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#PointSize">PointSize</a></b>:Single;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#penstyle">penstyle</a></b>:<a  href="uzglabstractdrawer.html#TZGLPenStyle">TZGLPenStyle</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#ScreenInvalidRect">ScreenInvalidRect</a></b>:Trect;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#create">create</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#startrender">startrender</a></b>(const mode:<a  href="uzglabstractdrawer.html#TRenderMode">TRenderMode</a>;var matrixs:<a  href="gdbase.tmatrixs.html">tmatrixs</a>); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#SetClearColor">SetClearColor</a></b>(const red, green, blue, alpha: byte); overload; override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#SetColor">SetColor</a></b>(const red, green, blue, alpha: byte); overload; override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#SetColor">SetColor</a></b>(const color: <a  href="gdbpalette.TRGB.html">TRGB</a>); overload; override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#SetLineWidth">SetLineWidth</a></b>(const w:single); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#SetPointSize">SetPointSize</a></b>(const s:single); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#SetPenStyle">SetPenStyle</a></b>(const style:<a  href="uzglabstractdrawer.html#TZGLPenStyle">TZGLPenStyle</a>); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#_createPen">_createPen</a></b>; virtual; abstract;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#TranslateCoord2D">TranslateCoord2D</a></b>(const tx,ty:single); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#ScaleCoord2D">ScaleCoord2D</a></b>(const sx,sy:single); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#pushMatrixAndSetTransform">pushMatrixAndSetTransform</a></b>(Transform:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>); overload; override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#pushMatrixAndSetTransform">pushMatrixAndSetTransform</a></b>(Transform:<a  href="gdbase.html#DMatrix4F">DMatrix4F</a>); overload; override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#popMatrix">popMatrix</a></b>; override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#TranslatePointWithLocalCS">TranslatePointWithLocalCS</a></b>(const p:<a  href="uzgvertex3sarray.html#ZGLVertex">ZGLVertex</a>):<a  href="uzgvertex3sarray.html#ZGLVertex">ZGLVertex</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#TranslatePoint">TranslatePoint</a></b>(const p:<a  href="uzgvertex3sarray.html#ZGLVertex">ZGLVertex</a>):<a  href="uzgvertex3sarray.html#ZGLVertex">ZGLVertex</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#InitScreenInvalidrect">InitScreenInvalidrect</a></b>(w,h:integer);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#CorrectScreenInvalidrect">CorrectScreenInvalidrect</a></b>(w,h:integer);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#ProcessScreenInvalidrect">ProcessScreenInvalidrect</a></b>(const x,y:integer);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#InternalDrawLine">InternalDrawLine</a></b>(const x1,y1,x2,y2:<a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>); virtual; abstract;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#InternalDrawTriangle">InternalDrawTriangle</a></b>(const x1,y1,x2,y2,x3,y3:<a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>); virtual; abstract;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#InternalDrawQuad">InternalDrawQuad</a></b>(const x1,y1,x2,y2,x3,y3,x4,y4:<a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>); virtual; abstract;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#InternalDrawPoint">InternalDrawPoint</a></b>(const x,y:<a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>); virtual; abstract;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#DrawLine">DrawLine</a></b>(const PVertexBuffer:<a  href="UGDBOpenArrayOfData.html#PGDBOpenArrayOfData">PGDBOpenArrayOfData</a>;const i1,i2:<a  href="gdbase.html#TLLVertexIndex">TLLVertexIndex</a>); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#DrawTriangle">DrawTriangle</a></b>(const PVertexBuffer:<a  href="UGDBOpenArrayOfData.html#PGDBOpenArrayOfData">PGDBOpenArrayOfData</a>;const i1,i2,i3:<a  href="gdbase.html#TLLVertexIndex">TLLVertexIndex</a>); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#DrawQuad">DrawQuad</a></b>(const PVertexBuffer:<a  href="UGDBOpenArrayOfData.html#PGDBOpenArrayOfData">PGDBOpenArrayOfData</a>;const i1,i2,i3,i4:<a  href="gdbase.html#TLLVertexIndex">TLLVertexIndex</a>); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#DrawPoint">DrawPoint</a></b>(const PVertexBuffer:<a  href="UGDBOpenArrayOfData.html#PGDBOpenArrayOfData">PGDBOpenArrayOfData</a>;const i:<a  href="gdbase.html#TLLVertexIndex">TLLVertexIndex</a>); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#DrawTrianglesFan">DrawTrianglesFan</a></b>(const PVertexBuffer,PIndexBuffer:<a  href="UGDBOpenArrayOfData.html#PGDBOpenArrayOfData">PGDBOpenArrayOfData</a>;const i1,IndexCount:<a  href="gdbase.html#TLLVertexIndex">TLLVertexIndex</a>); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#DrawTrianglesStrip">DrawTrianglesStrip</a></b>(const PVertexBuffer,PIndexBuffer:<a  href="UGDBOpenArrayOfData.html#PGDBOpenArrayOfData">PGDBOpenArrayOfData</a>;const i1,IndexCount:<a  href="gdbase.html#TLLVertexIndex">TLLVertexIndex</a>); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#DrawLine2DInDCS">DrawLine2DInDCS</a></b>(const x1,y1,x2,y2:integer); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#DrawLine2DInDCS">DrawLine2DInDCS</a></b>(const x1,y1,x2,y2:single); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#DrawClosedPolyLine2DInDCS">DrawClosedPolyLine2DInDCS</a></b>(const coords:array of single); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#DrawLine3DInModelSpace">DrawLine3DInModelSpace</a></b>(const p1,p2:<a  href="gdbase.GDBvertex.html">gdbvertex</a>;var matrixs:<a  href="gdbase.tmatrixs.html">tmatrixs</a>); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#DrawPoint3DInModelSpace">DrawPoint3DInModelSpace</a></b>(const p:<a  href="gdbase.GDBvertex.html">gdbvertex</a>;var matrixs:<a  href="gdbase.tmatrixs.html">tmatrixs</a>); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#DrawTriangle3DInModelSpace">DrawTriangle3DInModelSpace</a></b>(const normal,p1,p2,p3:<a  href="gdbase.GDBvertex.html">gdbvertex</a>;var matrixs:<a  href="gdbase.tmatrixs.html">tmatrixs</a>); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#DrawQuad3DInModelSpace">DrawQuad3DInModelSpace</a></b>(const normal,p1,p2,p3,p4:<a  href="gdbase.GDBvertex.html">gdbvertex</a>;var matrixs:<a  href="gdbase.tmatrixs.html">tmatrixs</a>); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#DrawQuad3DInModelSpace">DrawQuad3DInModelSpace</a></b>(const p1,p2,p3,p4:<a  href="gdbase.GDBvertex.html">gdbvertex</a>;var matrixs:<a  href="gdbase.tmatrixs.html">tmatrixs</a>); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html#CheckOutboundInDisplay">CheckOutboundInDisplay</a></b>(const PVertexBuffer:<a  href="UGDBOpenArrayOfData.html#PGDBOpenArrayOfData">PGDBOpenArrayOfData</a>;const i1:<a  href="gdbase.html#TLLVertexIndex">TLLVertexIndex</a>):boolean; override;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Fields</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="matr"></a><code><b>matr</b>:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="mstack"></a><code><b>mstack</b>:<a  href="uzglgeneral2ddrawer.html#DMatrix4DStackArray">DMatrix4DStackArray</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="mstackindex"></a><code><b>mstackindex</b>:integer;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="sx"></a><code><b>sx</b>:single;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="sy"></a><code><b>sy</b>:single;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="tx"></a><code><b>tx</b>:single;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ty"></a><code><b>ty</b>:single;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="wa"></a><code><b>wa</b>:<a  href="uzglabstractviewarea.TAbstractViewArea.html">TAbstractViewArea</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="canvas"></a><code><b>canvas</b>:tcanvas;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="panel"></a><code><b>panel</b>:TCustomControl;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ClearColor"></a><code><b>ClearColor</b>: TColor;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="PenColor"></a><code><b>PenColor</b>: TColor;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="linewidth"></a><code><b>linewidth</b>:Integer;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="PointSize"></a><code><b>PointSize</b>:Single;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="penstyle"></a><code><b>penstyle</b>:<a  href="uzglabstractdrawer.html#TZGLPenStyle">TZGLPenStyle</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ScreenInvalidRect"></a><code><b>ScreenInvalidRect</b>:Trect;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="create"></a><code>constructor <b>create</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="startrender"></a><code>procedure <b>startrender</b>(const mode:<a  href="uzglabstractdrawer.html#TRenderMode">TRenderMode</a>;var matrixs:<a  href="gdbase.tmatrixs.html">tmatrixs</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetClearColor"></a><code>procedure <b>SetClearColor</b>(const red, green, blue, alpha: byte); overload; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetColor"></a><code>procedure <b>SetColor</b>(const red, green, blue, alpha: byte); overload; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetColor"></a><code>procedure <b>SetColor</b>(const color: <a  href="gdbpalette.TRGB.html">TRGB</a>); overload; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetLineWidth"></a><code>procedure <b>SetLineWidth</b>(const w:single); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetPointSize"></a><code>procedure <b>SetPointSize</b>(const s:single); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetPenStyle"></a><code>procedure <b>SetPenStyle</b>(const style:<a  href="uzglabstractdrawer.html#TZGLPenStyle">TZGLPenStyle</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="_createPen"></a><code>procedure <b>_createPen</b>; virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TranslateCoord2D"></a><code>procedure <b>TranslateCoord2D</b>(const tx,ty:single); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ScaleCoord2D"></a><code>procedure <b>ScaleCoord2D</b>(const sx,sy:single); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="pushMatrixAndSetTransform"></a><code>procedure <b>pushMatrixAndSetTransform</b>(Transform:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>); overload; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="pushMatrixAndSetTransform"></a><code>procedure <b>pushMatrixAndSetTransform</b>(Transform:<a  href="gdbase.html#DMatrix4F">DMatrix4F</a>); overload; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="popMatrix"></a><code>procedure <b>popMatrix</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TranslatePointWithLocalCS"></a><code>function <b>TranslatePointWithLocalCS</b>(const p:<a  href="uzgvertex3sarray.html#ZGLVertex">ZGLVertex</a>):<a  href="uzgvertex3sarray.html#ZGLVertex">ZGLVertex</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TranslatePoint"></a><code>function <b>TranslatePoint</b>(const p:<a  href="uzgvertex3sarray.html#ZGLVertex">ZGLVertex</a>):<a  href="uzgvertex3sarray.html#ZGLVertex">ZGLVertex</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="InitScreenInvalidrect"></a><code>procedure <b>InitScreenInvalidrect</b>(w,h:integer);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CorrectScreenInvalidrect"></a><code>procedure <b>CorrectScreenInvalidrect</b>(w,h:integer);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ProcessScreenInvalidrect"></a><code>procedure <b>ProcessScreenInvalidrect</b>(const x,y:integer);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="InternalDrawLine"></a><code>procedure <b>InternalDrawLine</b>(const x1,y1,x2,y2:<a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>); virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="InternalDrawTriangle"></a><code>procedure <b>InternalDrawTriangle</b>(const x1,y1,x2,y2,x3,y3:<a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>); virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="InternalDrawQuad"></a><code>procedure <b>InternalDrawQuad</b>(const x1,y1,x2,y2,x3,y3,x4,y4:<a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>); virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="InternalDrawPoint"></a><code>procedure <b>InternalDrawPoint</b>(const x,y:<a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>); virtual; abstract;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawLine"></a><code>procedure <b>DrawLine</b>(const PVertexBuffer:<a  href="UGDBOpenArrayOfData.html#PGDBOpenArrayOfData">PGDBOpenArrayOfData</a>;const i1,i2:<a  href="gdbase.html#TLLVertexIndex">TLLVertexIndex</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawTriangle"></a><code>procedure <b>DrawTriangle</b>(const PVertexBuffer:<a  href="UGDBOpenArrayOfData.html#PGDBOpenArrayOfData">PGDBOpenArrayOfData</a>;const i1,i2,i3:<a  href="gdbase.html#TLLVertexIndex">TLLVertexIndex</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawQuad"></a><code>procedure <b>DrawQuad</b>(const PVertexBuffer:<a  href="UGDBOpenArrayOfData.html#PGDBOpenArrayOfData">PGDBOpenArrayOfData</a>;const i1,i2,i3,i4:<a  href="gdbase.html#TLLVertexIndex">TLLVertexIndex</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawPoint"></a><code>procedure <b>DrawPoint</b>(const PVertexBuffer:<a  href="UGDBOpenArrayOfData.html#PGDBOpenArrayOfData">PGDBOpenArrayOfData</a>;const i:<a  href="gdbase.html#TLLVertexIndex">TLLVertexIndex</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawTrianglesFan"></a><code>procedure <b>DrawTrianglesFan</b>(const PVertexBuffer,PIndexBuffer:<a  href="UGDBOpenArrayOfData.html#PGDBOpenArrayOfData">PGDBOpenArrayOfData</a>;const i1,IndexCount:<a  href="gdbase.html#TLLVertexIndex">TLLVertexIndex</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawTrianglesStrip"></a><code>procedure <b>DrawTrianglesStrip</b>(const PVertexBuffer,PIndexBuffer:<a  href="UGDBOpenArrayOfData.html#PGDBOpenArrayOfData">PGDBOpenArrayOfData</a>;const i1,IndexCount:<a  href="gdbase.html#TLLVertexIndex">TLLVertexIndex</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawLine2DInDCS"></a><code>procedure <b>DrawLine2DInDCS</b>(const x1,y1,x2,y2:integer); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawLine2DInDCS"></a><code>procedure <b>DrawLine2DInDCS</b>(const x1,y1,x2,y2:single); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawClosedPolyLine2DInDCS"></a><code>procedure <b>DrawClosedPolyLine2DInDCS</b>(const coords:array of single); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawLine3DInModelSpace"></a><code>procedure <b>DrawLine3DInModelSpace</b>(const p1,p2:<a  href="gdbase.GDBvertex.html">gdbvertex</a>;var matrixs:<a  href="gdbase.tmatrixs.html">tmatrixs</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawPoint3DInModelSpace"></a><code>procedure <b>DrawPoint3DInModelSpace</b>(const p:<a  href="gdbase.GDBvertex.html">gdbvertex</a>;var matrixs:<a  href="gdbase.tmatrixs.html">tmatrixs</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawTriangle3DInModelSpace"></a><code>procedure <b>DrawTriangle3DInModelSpace</b>(const normal,p1,p2,p3:<a  href="gdbase.GDBvertex.html">gdbvertex</a>;var matrixs:<a  href="gdbase.tmatrixs.html">tmatrixs</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawQuad3DInModelSpace"></a><code>procedure <b>DrawQuad3DInModelSpace</b>(const normal,p1,p2,p3,p4:<a  href="gdbase.GDBvertex.html">gdbvertex</a>;var matrixs:<a  href="gdbase.tmatrixs.html">tmatrixs</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DrawQuad3DInModelSpace"></a><code>procedure <b>DrawQuad3DInModelSpace</b>(const p1,p2,p3,p4:<a  href="gdbase.GDBvertex.html">gdbvertex</a>;var matrixs:<a  href="gdbase.tmatrixs.html">tmatrixs</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CheckOutboundInDisplay"></a><code>function <b>CheckOutboundInDisplay</b>(const PVertexBuffer:<a  href="UGDBOpenArrayOfData.html#PGDBOpenArrayOfData">PGDBOpenArrayOfData</a>;const i1:<a  href="gdbase.html#TLLVertexIndex">TLLVertexIndex</a>):boolean; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

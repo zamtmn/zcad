@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>gluinterface: Object TGLUInterface</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="TGLUInterface"></a><h1 class="cio">Object TGLUInterface</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></td><td>Fields</td><td><a class="section" href="#PasDoc-Methods">Methods</a></td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="gluinterface.html">gluinterface</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TGLUInterface = object(TObject)</code></p>
+<h2 class="description">Description</h2>
+<a name="PasDoc-Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TObject</li>
+<li class="thisitem">TGLUInterface</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="gluinterface.TGLUInterface.html#init">init</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="gluinterface.TGLUInterface.html#NewTess">NewTess</a></b>:<a  href="gluinterface.html#TessObj">TessObj</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="gluinterface.TGLUInterface.html#DeleteTess">DeleteTess</a></b>(ptessobj:<a  href="gluinterface.html#TessObj">TessObj</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="gluinterface.TGLUInterface.html#TessBeginPolygon">TessBeginPolygon</a></b>(tess:<a  href="gluinterface.html#TessObj">TessObj</a>;data:pointer);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="gluinterface.TGLUInterface.html#TessEndPolygon">TessEndPolygon</a></b>(tess:<a  href="gluinterface.html#TessObj">TessObj</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="gluinterface.TGLUInterface.html#TessBeginContour">TessBeginContour</a></b>(tess:<a  href="gluinterface.html#TessObj">TessObj</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="gluinterface.TGLUInterface.html#TessEndContour">TessEndContour</a></b>(tess:<a  href="gluinterface.html#TessObj">TessObj</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="gluinterface.TGLUInterface.html#TessVertex">TessVertex</a></b>(tess:<a  href="gluinterface.html#TessObj">TessObj</a>; location:<a  href="gdbase.html#PGDBvertex">PGDBVertex</a>; data:pointer);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="gluinterface.TGLUInterface.html#TessCallback">TessCallback</a></b>(tess:<a  href="gluinterface.html#TessObj">TessObj</a>; which:<a  href="glstatemanager.html#GLenum">GLenum</a>; CallBackFunc:_GLUfuncptr);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="gluinterface.TGLUInterface.html#NewNurbsRenderer">NewNurbsRenderer</a></b>:<a  href="gluinterface.html#GLUnurbsObj">GLUnurbsObj</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="gluinterface.TGLUInterface.html#DeleteNurbsRenderer">DeleteNurbsRenderer</a></b>(renderer:<a  href="gluinterface.html#GLUnurbsObj">GLUnurbsObj</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="gluinterface.TGLUInterface.html#NurbsCallback">NurbsCallback</a></b>(nurb:<a  href="gluinterface.html#GLUnurbsObj">GLUnurbsObj</a>; which:<a  href="glstatemanager.html#GLenum">GLenum</a>; CallBackFunc:_GLUfuncptr);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="gluinterface.TGLUInterface.html#BeginCurve">BeginCurve</a></b>(renderer:<a  href="gluinterface.html#GLUnurbsObj">GLUnurbsObj</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="gluinterface.TGLUInterface.html#EndCurve">EndCurve</a></b>(renderer:<a  href="gluinterface.html#GLUnurbsObj">GLUnurbsObj</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="gluinterface.TGLUInterface.html#NurbsCurve">NurbsCurve</a></b>(nurb:PGLUnurbs; knotCount:GLint; knots:PGLfloat; stride:GLint; control:PGLfloat; order:GLint; _type:<a  href="glstatemanager.html#GLenum">GLenum</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="gluinterface.TGLUInterface.html#NurbsProperty">NurbsProperty</a></b>(nurb:PGLUnurbs; _property:<a  href="glstatemanager.html#GLenum">GLenum</a>; value:GLfloat);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="gluinterface.TGLUInterface.html#ErrorString">ErrorString</a></b>(error:<a  href="glstatemanager.html#GLenum">GLenum</a>):glu.PGLubyte;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="gluinterface.TGLUInterface.html#mygluGetString">mygluGetString</a></b>(name: <a  href="glstatemanager.html#GLenum">GLenum</a>): PAnsiChar;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="gluinterface.TGLUInterface.html#mygluPickMatrix">mygluPickMatrix</a></b>(x:GLdouble; y:GLdouble; delX:GLdouble; delY:GLdouble; viewport:PGLint);</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="init"></a><code>constructor <b>init</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="NewTess"></a><code>function <b>NewTess</b>:<a  href="gluinterface.html#TessObj">TessObj</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DeleteTess"></a><code>procedure <b>DeleteTess</b>(ptessobj:<a  href="gluinterface.html#TessObj">TessObj</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TessBeginPolygon"></a><code>procedure <b>TessBeginPolygon</b>(tess:<a  href="gluinterface.html#TessObj">TessObj</a>;data:pointer);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TessEndPolygon"></a><code>procedure <b>TessEndPolygon</b>(tess:<a  href="gluinterface.html#TessObj">TessObj</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TessBeginContour"></a><code>procedure <b>TessBeginContour</b>(tess:<a  href="gluinterface.html#TessObj">TessObj</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TessEndContour"></a><code>procedure <b>TessEndContour</b>(tess:<a  href="gluinterface.html#TessObj">TessObj</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TessVertex"></a><code>procedure <b>TessVertex</b>(tess:<a  href="gluinterface.html#TessObj">TessObj</a>; location:<a  href="gdbase.html#PGDBvertex">PGDBVertex</a>; data:pointer);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TessCallback"></a><code>procedure <b>TessCallback</b>(tess:<a  href="gluinterface.html#TessObj">TessObj</a>; which:<a  href="glstatemanager.html#GLenum">GLenum</a>; CallBackFunc:_GLUfuncptr);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="NewNurbsRenderer"></a><code>function <b>NewNurbsRenderer</b>:<a  href="gluinterface.html#GLUnurbsObj">GLUnurbsObj</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DeleteNurbsRenderer"></a><code>procedure <b>DeleteNurbsRenderer</b>(renderer:<a  href="gluinterface.html#GLUnurbsObj">GLUnurbsObj</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="NurbsCallback"></a><code>procedure <b>NurbsCallback</b>(nurb:<a  href="gluinterface.html#GLUnurbsObj">GLUnurbsObj</a>; which:<a  href="glstatemanager.html#GLenum">GLenum</a>; CallBackFunc:_GLUfuncptr);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="BeginCurve"></a><code>procedure <b>BeginCurve</b>(renderer:<a  href="gluinterface.html#GLUnurbsObj">GLUnurbsObj</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EndCurve"></a><code>procedure <b>EndCurve</b>(renderer:<a  href="gluinterface.html#GLUnurbsObj">GLUnurbsObj</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="NurbsCurve"></a><code>procedure <b>NurbsCurve</b>(nurb:PGLUnurbs; knotCount:GLint; knots:PGLfloat; stride:GLint; control:PGLfloat; order:GLint; _type:<a  href="glstatemanager.html#GLenum">GLenum</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="NurbsProperty"></a><code>procedure <b>NurbsProperty</b>(nurb:PGLUnurbs; _property:<a  href="glstatemanager.html#GLenum">GLenum</a>; value:GLfloat);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ErrorString"></a><code>function <b>ErrorString</b>(error:<a  href="glstatemanager.html#GLenum">GLenum</a>):glu.PGLubyte;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="mygluGetString"></a><code>function <b>mygluGetString</b>(name: <a  href="glstatemanager.html#GLenum">GLenum</a>): PAnsiChar;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="mygluPickMatrix"></a><code>procedure <b>mygluPickMatrix</b>(x:GLdouble; y:GLdouble; delX:GLdouble; delY:GLdouble; viewport:PGLint);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>GDBManager</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<h1 class="unit">Unit GDBManager</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Uses">Uses</a></td><td><a class="section" href="#PasDoc-Classes">Classes, Interfaces, Objects and Records</a></td><td><a class="section" href="#PasDoc-FuncsProcs">Functions and Procedures</a></td><td>Types</td><td>Constants</td><td><a class="section" href="#PasDoc-Variables">Variables</a></td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="description">Description</h2>
+&nbsp;<a name="PasDoc-Uses"></a><h2 class="uses">Uses</h2>
+<ul class="useslist"><li>LCLProc</li><li>zcmultiobjectcreateundocommand</li><li><a  href="zeentitiesmanager.html">zeentitiesmanager</a></li><li><a  href="gdbpalette.html">gdbpalette</a></li><li><a  href="zeentityfactory.html">zeentityfactory</a></li><li><a  href="gdbdrawcontext.html">gdbdrawcontext</a></li><li><a  href="ugdbdrawing.html">ugdbdrawing</a></li><li><a  href="ugdbltypearray.html">ugdbltypearray</a></li><li><a  href="uzcsysvars.html">uzcsysvars</a></li><li><a  href="UGDBLayerArray.html">UGDBLayerArray</a></li><li>sysutils</li><li><a  href="gdbasetypes.html">gdbasetypes</a></li><li><a  href="gdbase.html">gdbase</a></li><li><a  href="UGDBDescriptor.html">UGDBDescriptor</a></li><li><a  href="varmandef.html">varmandef</a></li><li><a  href="gdbobjectsconstdef.html">gdbobjectsconstdef</a></li><li><a  href="UGDBVisibleOpenArray.html">UGDBVisibleOpenArray</a></li><li><a  href="GDBGenericSubEntry.html">GDBGenericSubEntry</a></li><li><a  href="GDBEntity.html">gdbEntity</a></li><li><a  href="GDBBlockInsert.html">GDBBlockInsert</a></li><li><a  href="memman.html">memman</a></li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Classes"></a><h3 class="cio">Classes, Interfaces, Objects and Records</h3>
+<table class="classestable wide_list">
+<tr class="listheader">
+<th class="itemname">Name</th>
+<th class="itemdesc">Description</th>
+</tr>
+<tr class="list">
+<td class="itemname">record&nbsp;<a class="bold" href="GDBManager.TSelObjDesk.html"><code>TSelObjDesk</code></a></td>
+<td class="itemdesc">&nbsp;</td>
+</tr>
+</table>
+<a name="PasDoc-FuncsProcs"></a><h3 class="summary">Functions and Procedures</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="GDBManager.html#GetSelOjbj">GetSelOjbj</a></b>:<a  href="GDBManager.TSelObjDesk.html">TSelObjDesk</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="GDBManager.html#GDBObjSetEntityCurrentProp">GDBObjSetEntityCurrentProp</a></b>(const pobjent: <a  href="GDBEntity.html#PGDBObjEntity">PGDBObjEntity</a>); export;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="GDBManager.html#GDBInsertBlock">GDBInsertBlock</a></b>(own:<a  href="GDBGenericSubEntry.html#PGDBObjGenericSubEntry">PGDBObjGenericSubEntry</a>;BlockName:<a  href="gdbasetypes.html#GDBString">GDBString</a>;p_insert:<a  href="gdbase.GDBvertex.html">GDBVertex</a>; scale:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;rotate:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;needundo:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>=false ):<a  href="GDBBlockInsert.html#PGDBObjBlockInsert">PGDBObjBlockInsert</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="GDBManager.html#AddEntToCurrentDrawingWithUndo">AddEntToCurrentDrawingWithUndo</a></b>(PEnt:<a  href="GDBEntity.html#PGDBObjEntity">PGDBObjEntity</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>procedure <b><a  href="GDBManager.html#UndoCommandStartMarker">UndoCommandStartMarker</a></b>(CommandName:<a  href="gdbasetypes.html#GDBString">GDBString</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="GDBManager.html#UndoCommandEndMarker">UndoCommandEndMarker</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="GDBManager.html#old_ENTF_CreateBlockInsert">old_ENTF_CreateBlockInsert</a></b>(owner:<a  href="GDBGenericSubEntry.html#PGDBObjGenericSubEntry">PGDBObjGenericSubEntry</a>;ownerarray: <a  href="UGDBVisibleOpenArray.html#PGDBObjEntityOpenArray">PGDBObjEntityOpenArray</a>; layeraddres:<a  href="UGDBLayerArray.html#PGDBLayerProp">PGDBLayerProp</a>;LTAddres:<a  href="ugdbltypearray.html#PGDBLtypeProp">PGDBLtypeProp</a>;color:<a  href="gdbpalette.html#TGDBPaletteColor">TGDBPaletteColor</a>;LW:<a  href="gdbase.html#TGDBLineWeight">TGDBLineWeight</a>; point: <a  href="gdbase.GDBvertex.html">gdbvertex</a>; scale, angle: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>; s: pansichar):<a  href="GDBBlockInsert.html#PGDBObjBlockInsert">PGDBObjBlockInsert</a>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Variables"></a><h3 class="summary">Variables</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="GDBManager.html#p">p</a></b>:<a  href="gdbase.GDBvertex.html">gdbvertex</a>;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Functions and Procedures</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GetSelOjbj"></a><code>function <b>GetSelOjbj</b>:<a  href="GDBManager.TSelObjDesk.html">TSelObjDesk</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GDBObjSetEntityCurrentProp"></a><code>procedure <b>GDBObjSetEntityCurrentProp</b>(const pobjent: <a  href="GDBEntity.html#PGDBObjEntity">PGDBObjEntity</a>); export;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GDBInsertBlock"></a><code>function <b>GDBInsertBlock</b>(own:<a  href="GDBGenericSubEntry.html#PGDBObjGenericSubEntry">PGDBObjGenericSubEntry</a>;BlockName:<a  href="gdbasetypes.html#GDBString">GDBString</a>;p_insert:<a  href="gdbase.GDBvertex.html">GDBVertex</a>; scale:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;rotate:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;needundo:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>=false ):<a  href="GDBBlockInsert.html#PGDBObjBlockInsert">PGDBObjBlockInsert</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="AddEntToCurrentDrawingWithUndo"></a><code>procedure <b>AddEntToCurrentDrawingWithUndo</b>(PEnt:<a  href="GDBEntity.html#PGDBObjEntity">PGDBObjEntity</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="UndoCommandStartMarker"></a><code>procedure <b>UndoCommandStartMarker</b>(CommandName:<a  href="gdbasetypes.html#GDBString">GDBString</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="UndoCommandEndMarker"></a><code>procedure <b>UndoCommandEndMarker</b>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="old_ENTF_CreateBlockInsert"></a><code>function <b>old_ENTF_CreateBlockInsert</b>(owner:<a  href="GDBGenericSubEntry.html#PGDBObjGenericSubEntry">PGDBObjGenericSubEntry</a>;ownerarray: <a  href="UGDBVisibleOpenArray.html#PGDBObjEntityOpenArray">PGDBObjEntityOpenArray</a>; layeraddres:<a  href="UGDBLayerArray.html#PGDBLayerProp">PGDBLayerProp</a>;LTAddres:<a  href="ugdbltypearray.html#PGDBLtypeProp">PGDBLtypeProp</a>;color:<a  href="gdbpalette.html#TGDBPaletteColor">TGDBPaletteColor</a>;LW:<a  href="gdbase.html#TGDBLineWeight">TGDBLineWeight</a>; point: <a  href="gdbase.GDBvertex.html">gdbvertex</a>; scale, angle: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>; s: pansichar):<a  href="GDBBlockInsert.html#PGDBObjBlockInsert">PGDBObjBlockInsert</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Variables</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="p"></a><code><b>p</b>:<a  href="gdbase.GDBvertex.html">gdbvertex</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

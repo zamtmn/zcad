@@ -1,0 +1,370 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>dxflow</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<h1 class="unit">Unit dxflow</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Uses">Uses</a></td><td>Classes, Interfaces, Objects and Records</td><td><a class="section" href="#PasDoc-FuncsProcs">Functions and Procedures</a></td><td>Types</td><td><a class="section" href="#PasDoc-Constants">Constants</a></td><td>Variables</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="description">Description</h2>
+&nbsp;<a name="PasDoc-Uses"></a><h2 class="uses">Uses</h2>
+<ul class="useslist"><li><a  href="gdbasetypes.html">gdbasetypes</a></li><li><a  href="gdbase.html">gdbase</a></li><li>sysutils</li><li><a  href="UGDBOpenArrayOfByte.html">UGDBOpenArrayOfByte</a></li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-FuncsProcs"></a><h3 class="summary">Functions and Procedures</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code>procedure <b><a  href="dxflow.html#dxfvertexout">dxfvertexout</a></b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcode:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;const v:<a  href="gdbase.GDBvertex.html">gdbvertex</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="dxflow.html#dxfvertexout1">dxfvertexout1</a></b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcode:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;const v:<a  href="gdbase.GDBvertex.html">gdbvertex</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>procedure <b><a  href="dxflow.html#dxfvertex2dout">dxfvertex2dout</a></b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcode:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;const v:<a  href="gdbase.GDBvertex2D.html">gdbvertex2d</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="dxflow.html#dxfGDBDoubleout">dxfGDBDoubleout</a></b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcode:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;const v:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>procedure <b><a  href="dxflow.html#dxfGDBIntegerout">dxfGDBIntegerout</a></b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcode:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;const v:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="dxflow.html#dxfGDBStringout">dxfGDBStringout</a></b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcode:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;const v:<a  href="gdbasetypes.html#GDBString">GDBString</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="dxflow.html#mystrtoint">mystrtoint</a></b>(s:<a  href="gdbasetypes.html#GDBString">GDBString</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="dxflow.html#readmystrtoint">readmystrtoint</a></b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="dxflow.html#readmystrtodouble">readmystrtodouble</a></b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>):<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="dxflow.html#readmystr">readmystr</a></b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>):<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="dxflow.html#dxfvertexload">dxfvertexload</a></b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcod,currentdxfcod:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; out v:<a  href="gdbase.GDBvertex.html">gdbvertex</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="dxflow.html#dxfvertexload1">dxfvertexload1</a></b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcod,currentdxfcod:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; out v:<a  href="gdbase.GDBvertex.html">gdbvertex</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="dxflow.html#dxfGDBDoubleload">dxfGDBDoubleload</a></b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcod,currentdxfcod:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; out v:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="dxflow.html#dxfGDBFloatload">dxfGDBFloatload</a></b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcod,currentdxfcod:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; out v:<a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="dxflow.html#dxfGDBIntegerload">dxfGDBIntegerload</a></b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcod,currentdxfcod:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; out v:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="dxflow.html#dxfGDBStringload">dxfGDBStringload</a></b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcod,currentdxfcod:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; var v:<a  href="gdbasetypes.html#GDBString">GDBString</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="dxflow.html#dxfGroupCode">dxfGroupCode</a></b>(const dxfcod:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>):<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="dxflow.html#DXFHandle">DXFHandle</a></b>(sh:string):<a  href="gdbase.html#TDWGHandle">TDWGHandle</a>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Constants"></a><h3 class="summary">Constants</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="dxflow.html#dxfName_AcDbEntity">dxfName_AcDbEntity</a></b>='AcDbEntity';</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="dxflow.html#dxfName_AcDbSymbolTableRecord">dxfName_AcDbSymbolTableRecord</a></b>='AcDbSymbolTableRecord';</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="dxflow.html#dxfName_BLOCK_RECORD">dxfName_BLOCK_RECORD</a></b>='BLOCK_RECORD';</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="dxflow.html#dxfName_ENDTAB">dxfName_ENDTAB</a></b>='ENDTAB';</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="dxflow.html#dxfName_TABLE">dxfName_TABLE</a></b>='TABLE';</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="dxflow.html#dxfName_TABLES">dxfName_TABLES</a></b>='TABLES';</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="dxflow.html#dxfName_SECTION">dxfName_SECTION</a></b>='SECTION';</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="dxflow.html#dxfName_HEADER">dxfName_HEADER</a></b>='HEADER';</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="dxflow.html#dxfName_CLASSES">dxfName_CLASSES</a></b>='CLASSES';</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="dxflow.html#dxfName_APPID">dxfName_APPID</a></b>='APPID';</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="dxflow.html#dxfName_DIMSTYLE">dxfName_DIMSTYLE</a></b>='DIMSTYLE';</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="dxflow.html#dxfName_BLOCKRECORD">dxfName_BLOCKRECORD</a></b>='BLOCK_RECORD';</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="dxflow.html#dxfName_ENDSEC">dxfName_ENDSEC</a></b>='ENDSEC';</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="dxflow.html#dxfName_Layer">dxfName_Layer</a></b>='LAYER';</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="dxflow.html#dxfName_Style">dxfName_Style</a></b>='STYLE';</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="dxflow.html#dxfName_LType">dxfName_LType</a></b>='LTYPE';</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Functions and Procedures</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfvertexout"></a><code>procedure <b>dxfvertexout</b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcode:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;const v:<a  href="gdbase.GDBvertex.html">gdbvertex</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfvertexout1"></a><code>procedure <b>dxfvertexout1</b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcode:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;const v:<a  href="gdbase.GDBvertex.html">gdbvertex</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfvertex2dout"></a><code>procedure <b>dxfvertex2dout</b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcode:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;const v:<a  href="gdbase.GDBvertex2D.html">gdbvertex2d</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfGDBDoubleout"></a><code>procedure <b>dxfGDBDoubleout</b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcode:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;const v:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfGDBIntegerout"></a><code>procedure <b>dxfGDBIntegerout</b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcode:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;const v:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfGDBStringout"></a><code>procedure <b>dxfGDBStringout</b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcode:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;const v:<a  href="gdbasetypes.html#GDBString">GDBString</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="mystrtoint"></a><code>function <b>mystrtoint</b>(s:<a  href="gdbasetypes.html#GDBString">GDBString</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="readmystrtoint"></a><code>function <b>readmystrtoint</b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="readmystrtodouble"></a><code>function <b>readmystrtodouble</b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>):<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="readmystr"></a><code>function <b>readmystr</b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>):<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfvertexload"></a><code>function <b>dxfvertexload</b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcod,currentdxfcod:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; out v:<a  href="gdbase.GDBvertex.html">gdbvertex</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfvertexload1"></a><code>function <b>dxfvertexload1</b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcod,currentdxfcod:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; out v:<a  href="gdbase.GDBvertex.html">gdbvertex</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfGDBDoubleload"></a><code>function <b>dxfGDBDoubleload</b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcod,currentdxfcod:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; out v:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfGDBFloatload"></a><code>function <b>dxfGDBFloatload</b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcod,currentdxfcod:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; out v:<a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfGDBIntegerload"></a><code>function <b>dxfGDBIntegerload</b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcod,currentdxfcod:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; out v:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfGDBStringload"></a><code>function <b>dxfGDBStringload</b>(var f:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;dxfcod,currentdxfcod:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; var v:<a  href="gdbasetypes.html#GDBString">GDBString</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfGroupCode"></a><code>function <b>dxfGroupCode</b>(const dxfcod:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>):<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="DXFHandle"></a><code>function <b>DXFHandle</b>(sh:string):<a  href="gdbase.html#TDWGHandle">TDWGHandle</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Constants</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfName_AcDbEntity"></a><code><b>dxfName_AcDbEntity</b>='AcDbEntity';</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfName_AcDbSymbolTableRecord"></a><code><b>dxfName_AcDbSymbolTableRecord</b>='AcDbSymbolTableRecord';</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfName_BLOCK_RECORD"></a><code><b>dxfName_BLOCK_RECORD</b>='BLOCK_RECORD';</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfName_ENDTAB"></a><code><b>dxfName_ENDTAB</b>='ENDTAB';</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfName_TABLE"></a><code><b>dxfName_TABLE</b>='TABLE';</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfName_TABLES"></a><code><b>dxfName_TABLES</b>='TABLES';</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfName_SECTION"></a><code><b>dxfName_SECTION</b>='SECTION';</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfName_HEADER"></a><code><b>dxfName_HEADER</b>='HEADER';</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfName_CLASSES"></a><code><b>dxfName_CLASSES</b>='CLASSES';</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfName_APPID"></a><code><b>dxfName_APPID</b>='APPID';</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfName_DIMSTYLE"></a><code><b>dxfName_DIMSTYLE</b>='DIMSTYLE';</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfName_BLOCKRECORD"></a><code><b>dxfName_BLOCKRECORD</b>='BLOCK_RECORD';</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfName_ENDSEC"></a><code><b>dxfName_ENDSEC</b>='ENDSEC';</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfName_Layer"></a><code><b>dxfName_Layer</b>='LAYER';</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfName_Style"></a><code><b>dxfName_Style</b>='STYLE';</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="dxfName_LType"></a><code><b>dxfName_LType</b>='LTYPE';</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

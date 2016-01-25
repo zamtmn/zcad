@@ -1,0 +1,1688 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>geometry</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<h1 class="unit">Unit geometry</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Uses">Uses</a></td><td><a class="section" href="#PasDoc-Classes">Classes, Interfaces, Objects and Records</a></td><td><a class="section" href="#PasDoc-FuncsProcs">Functions and Procedures</a></td><td><a class="section" href="#PasDoc-Types">Types</a></td><td><a class="section" href="#PasDoc-Constants">Constants</a></td><td><a class="section" href="#PasDoc-Variables">Variables</a></td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="description">Description</h2>
+&nbsp;<a name="PasDoc-Uses"></a><h2 class="uses">Uses</h2>
+<ul class="useslist"><li>LCLProc</li><li><a  href="gdbase.html">gdbase</a></li><li><a  href="gdbasetypes.html">gdbasetypes</a></li><li>math</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Classes"></a><h3 class="cio">Classes, Interfaces, Objects and Records</h3>
+<table class="classestable wide_list">
+<tr class="listheader">
+<th class="itemname">Name</th>
+<th class="itemdesc">Description</th>
+</tr>
+<tr class="list">
+<td class="itemname">record&nbsp;<a class="bold" href="geometry.Intercept3DProp.html"><code>Intercept3DProp</code></a></td>
+<td class="itemdesc">&nbsp;</td>
+</tr>
+<tr class="list2">
+<td class="itemname">record&nbsp;<a class="bold" href="geometry.Intercept2DProp.html"><code>Intercept2DProp</code></a></td>
+<td class="itemdesc">&nbsp;</td>
+</tr>
+<tr class="list">
+<td class="itemname">record&nbsp;<a class="bold" href="geometry.DistAndPoint.html"><code>DistAndPoint</code></a></td>
+<td class="itemdesc">&nbsp;</td>
+</tr>
+<tr class="list2">
+<td class="itemname">record&nbsp;<a class="bold" href="geometry.DistAndt.html"><code>DistAndt</code></a></td>
+<td class="itemdesc">&nbsp;</td>
+</tr>
+</table>
+<a name="PasDoc-FuncsProcs"></a><h3 class="summary">Functions and Procedures</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CrossVertex">CrossVertex</a></b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#VertexD2S">VertexD2S</a></b>(const Vector1:<a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#intercept2d">intercept2d</a></b>(const x1, y1, x2, y2, x3, y3, x4, y4: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#intercept2d2">intercept2d2</a></b>(const x11, y11, x12, y12, x21, y21, x22, y22: <a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>): <a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#intercept2dmy">intercept2dmy</a></b>(const l1begin,l1end,l2begin,l2end:<a  href="gdbase.GDBvertex2D.html">gdbvertex2d</a>):<a  href="geometry.Intercept2DProp.html">intercept2dprop</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#intercept3dmy">intercept3dmy</a></b>(const l1begin,l1end,l2begin,l2end:<a  href="gdbase.GDBvertex.html">gdbvertex</a>):<a  href="geometry.Intercept3DProp.html">intercept3dprop</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#intercept3dmy2">intercept3dmy2</a></b>(const l1begin,l1end,l2begin,l2end:<a  href="gdbase.GDBvertex.html">gdbvertex</a>):<a  href="geometry.Intercept3DProp.html">intercept3dprop</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#intercept3d">intercept3d</a></b>(const l1begin,l1end,l2begin,l2end:<a  href="gdbase.GDBvertex.html">gdbvertex</a>):<a  href="geometry.Intercept3DProp.html">intercept3dprop</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#pointinquad2d">pointinquad2d</a></b>(const x1, y1, x2, y2, xp, yp: <a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>): <a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#Vertexlength">Vertexlength</a></b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#SqrVertexlength">SqrVertexlength</a></b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>; inline; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#SqrVertexlength">SqrVertexlength</a></b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex2D.html">GDBVertex2d</a>): <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>; inline; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#Vertexmorph">Vertexmorph</a></b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>; a: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#Vertexmorph">Vertexmorph</a></b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex2D.html">GDBVertex2D</a>; a: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.GDBvertex2D.html">GDBVertex2D</a>; inline; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#VertexDmorph">VertexDmorph</a></b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>; a: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; overload; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#VertexDmorph">VertexDmorph</a></b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>; a: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>; overload; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#Vertexangle">Vertexangle</a></b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex2D.html">GDBVertex2d</a>): <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#oneVertexlength">oneVertexlength</a></b>(const Vector1: <a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#SqrOneVertexlength">SqrOneVertexlength</a></b>(const Vector1: <a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#vertexlen2df">vertexlen2df</a></b>(const x1, y1, x2, y2: <a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>): <a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#NormalizeVertex">NormalizeVertex</a></b>(const Vector1: <a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#VertexMulOnSc">VertexMulOnSc</a></b>(const Vector1:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;sc:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#VertexAdd">VertexAdd</a></b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#VertexAdd">VertexAdd</a></b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>): <a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>; inline; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#Vertex2DAdd">Vertex2DAdd</a></b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex2D.html">GDBVertex2D</a>): <a  href="gdbase.GDBvertex2D.html">GDBVertex2D</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#VertexSub">VertexSub</a></b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; overload; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#VertexSub">VertexSub</a></b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex3S.html">GDBvertex3S</a>): <a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>; overload; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#MinusVertex">MinusVertex</a></b>(const Vector1: <a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#vertexlen2id">vertexlen2id</a></b>(const x1, y1, x2, y2: <a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>): <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#Vertexdmorphabs">Vertexdmorphabs</a></b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>;a: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#Vertexmorphabs">Vertexmorphabs</a></b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>;a: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#Vertexmorphabs2">Vertexmorphabs2</a></b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>;a: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#MatrixMultiply">MatrixMultiply</a></b>(const M1, M2: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>):<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; overload; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#MatrixMultiply">MatrixMultiply</a></b>(const M1: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; M2: <a  href="gdbase.html#DMatrix4F">DMatrix4F</a>):<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; overload; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#MatrixMultiplyF">MatrixMultiplyF</a></b>(const M1, M2: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>):<a  href="gdbase.html#DMatrix4F">DMatrix4F</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#VectorTransform">VectorTransform</a></b>(const V:<a  href="gdbase.GDBvertex4D.html">GDBVertex4D</a>;const M:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>):<a  href="gdbase.GDBvertex4D.html">GDBVertex4D</a>; overload; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#VectorTransform">VectorTransform</a></b>(const V:<a  href="gdbase.GDBvertex4D.html">GDBVertex4D</a>;const M:<a  href="gdbase.html#DMatrix4F">DMatrix4F</a>):<a  href="gdbase.GDBvertex4D.html">GDBVertex4D</a>; overload; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#VectorTransform">VectorTransform</a></b>(const V:<a  href="gdbase.GDBvertex4F.html">GDBVertex4F</a>;const M:<a  href="gdbase.html#DMatrix4F">DMatrix4F</a>):<a  href="gdbase.GDBvertex4F.html">GDBVertex4F</a>; overload; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>procedure <b><a  href="geometry.html#normalize4d">normalize4d</a></b>(var tv:<a  href="gdbase.GDBvertex4D.html">GDBVertex4d</a>); overload; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="geometry.html#normalize4F">normalize4F</a></b>(var tv:<a  href="gdbase.GDBvertex4F.html">GDBVertex4F</a>); overload; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#VectorTransform3D">VectorTransform3D</a></b>(const V:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;const M:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>):<a  href="gdbase.GDBvertex.html">GDBVertex</a>; overload; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#VectorTransform3D">VectorTransform3D</a></b>(const V:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;const M:<a  href="gdbase.html#DMatrix4F">DMatrix4F</a>):<a  href="gdbase.GDBvertex.html">GDBVertex</a>; overload; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#VectorTransform3D">VectorTransform3D</a></b>(const V:<a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>;const M:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>):<a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>; overload; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#VectorTransform3D">VectorTransform3D</a></b>(const V:<a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>;const M:<a  href="gdbase.html#DMatrix4F">DMatrix4F</a>):<a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>; overload; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#FrustumTransform">FrustumTransform</a></b>(const frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>;const M:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; MatrixAlreadyTransposed:Boolean=false):<a  href="gdbase.html#ClipArray">ClipArray</a>; overload; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#FrustumTransform">FrustumTransform</a></b>(const frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>;const M:<a  href="gdbase.html#DMatrix4F">DMatrix4F</a>; MatrixAlreadyTransposed:Boolean=false):<a  href="gdbase.html#ClipArray">ClipArray</a>; overload; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>procedure <b><a  href="geometry.html#MatrixTranspose">MatrixTranspose</a></b>(var M: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>); overload; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="geometry.html#MatrixTranspose">MatrixTranspose</a></b>(var M: <a  href="gdbase.html#DMatrix4F">DMatrix4F</a>); overload; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>procedure <b><a  href="geometry.html#MatrixNormalize">MatrixNormalize</a></b>(var M: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>); inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CreateRotationMatrixX">CreateRotationMatrixX</a></b>(const Sine, Cosine: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CreateRotationMatrixY">CreateRotationMatrixY</a></b>(const Sine, Cosine: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CreateRotationMatrixZ">CreateRotationMatrixZ</a></b>(const Sine, Cosine: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CreateRotatedXVector">CreateRotatedXVector</a></b>(const angle: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>):<a  href="gdbase.GDBvertex.html">GDBVertex</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CreateRotatedYVector">CreateRotatedYVector</a></b>(const angle: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>):<a  href="gdbase.GDBvertex.html">GDBVertex</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CreateAffineRotationMatrix">CreateAffineRotationMatrix</a></b>(const anAxis: <a  href="gdbase.GDBvertex.html">GDBvertex</a>; angle: double):<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#distance2piece">distance2piece</a></b>(var q:<a  href="gdbase.GDBvertex2DI.html">GDBvertex2DI</a>;var p1,p2:<a  href="gdbase.GDBvertex2D.html">GDBvertex2D</a>): double; overload; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#distance2piece">distance2piece</a></b>(q:<a  href="gdbase.GDBvertex.html">GDBvertex</a>;var p1,p2:<a  href="gdbase.GDBvertex.html">GDBvertex</a>): double; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#distance2piece_2">distance2piece_2</a></b>(var q:<a  href="gdbase.GDBvertex2DI.html">GDBvertex2DI</a>; p1,p2:<a  href="gdbase.GDBvertex2D.html">GDBvertex2D</a>): double; overload; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#distance2piece_2">distance2piece_2</a></b>(var q:<a  href="gdbase.GDBvertex2DI.html">GDBvertex2DI</a>; p1,p2:<a  href="gdbase.GDBvertex2DI.html">GDBvertex2DI</a>): double; overload; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#distance2piece_2Dmy">distance2piece_2Dmy</a></b>(var q:<a  href="gdbase.GDBvertex2D.html">GDBvertex2D</a>; p1,p2:<a  href="gdbase.GDBvertex2D.html">GDBvertex2D</a>): double; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#distance2piece_2_xy">distance2piece_2_xy</a></b>(var q:<a  href="gdbase.GDBvertex2DI.html">GDBvertex2DI</a>;const p1,p2:<a  href="gdbase.GDBvertex2D.html">GDBvertex2D</a>):<a  href="gdbase.GDBvertex2DI.html">GDBvertex2DI</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#distance2point_2">distance2point_2</a></b>(var p1,p2:<a  href="gdbase.GDBvertex2DI.html">GDBvertex2DI</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#distance2ray">distance2ray</a></b>(q:<a  href="gdbase.GDBvertex.html">GDBvertex</a>;const p1,p2:<a  href="gdbase.GDBvertex.html">GDBvertex</a>):<a  href="geometry.DistAndt.html">DistAndt</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CreateTranslationMatrix">CreateTranslationMatrix</a></b>(const V:<a  href="gdbase.GDBvertex.html">GDBvertex</a>): <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CreateScaleMatrix">CreateScaleMatrix</a></b>(const V:<a  href="gdbase.GDBvertex.html">GDBvertex</a>): <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CreateReflectionMatrix">CreateReflectionMatrix</a></b>(plane:<a  href="gdbase.html#DVector4D">DVector4D</a>): <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CreateVertex">CreateVertex</a></b>(const x,y,z:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>):<a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CreateVertexFromArray">CreateVertexFromArray</a></b>(var counter:integer;const args:array of const):<a  href="gdbase.GDBvertex.html">GDBVertex</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CreateDoubleFromArray">CreateDoubleFromArray</a></b>(var counter:integer;const args:array of const):<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CreateGDBStringFromArray">CreateGDBStringFromArray</a></b>(var counter:integer;const args:array of const):<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CreateVertex2D">CreateVertex2D</a></b>(const x,y:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>):<a  href="gdbase.GDBvertex2D.html">GDBVertex2D</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#IsPointInBB">IsPointInBB</a></b>(const point:<a  href="gdbase.GDBvertex.html">GDBvertex</a>; var fistbb:<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CreateBBFrom2Point">CreateBBFrom2Point</a></b>(const p1,p2:<a  href="gdbase.GDBvertex.html">GDBvertex</a>):<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="geometry.html#ConcatBB">ConcatBB</a></b>(var fistbb:<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>;const secbb:<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>); inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>procedure <b><a  href="geometry.html#concatBBandPoint">concatBBandPoint</a></b>(var fistbb:<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>;const point:<a  href="gdbase.GDBvertex.html">GDBvertex</a>); inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#IsBBNul">IsBBNul</a></b>(const bb:<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>):boolean; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#boundingintersect">boundingintersect</a></b>(const bb1,bb2:<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="geometry.html#MatrixInvert">MatrixInvert</a></b>(var M: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#vectordot">vectordot</a></b>(const v1,v2:<a  href="gdbase.GDBvertex.html">GDBVertex</a>):<a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#scalardot">scalardot</a></b>(const v1,v2:<a  href="gdbase.GDBvertex.html">GDBVertex</a>):<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#vertexeq">vertexeq</a></b>(const v1,v2:<a  href="gdbase.GDBvertex.html">gdbvertex</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#SQRdist_Point_to_Segment">SQRdist_Point_to_Segment</a></b>(const p:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;const s0,s1:<a  href="gdbase.GDBvertex.html">GDBvertex</a>):<a  href="gdbasetypes.html#GDBDouble">gdbdouble</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#NearestPointOnSegment">NearestPointOnSegment</a></b>(const p:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;const s0,s1:<a  href="gdbase.GDBvertex.html">GDBvertex</a>):<a  href="gdbase.GDBvertex.html">GDBvertex</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#IsPointEqual">IsPointEqual</a></b>(const p1,p2:<a  href="gdbase.GDBvertex.html">gdbvertex</a>):boolean; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#IsVectorNul">IsVectorNul</a></b>(const p2:<a  href="gdbase.GDBvertex.html">gdbvertex</a>):boolean; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#IsDoubleNotEqual">IsDoubleNotEqual</a></b>(const d1,d2:<a  href="gdbasetypes.html#GDBDouble">gdbdouble</a>):boolean; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#IsFloatNotEqual">IsFloatNotEqual</a></b>(const d1,d2:<a  href="gdbasetypes.html#GDBFloat">gdbfloat</a>):boolean; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="geometry.html#_myGluProject">_myGluProject</a></b>(const objx,objy,objz:<a  href="gdbasetypes.html#GDBDouble">GDBdouble</a>;const modelMatrix,projMatrix:<a  href="gdbase.html#PDMatrix4D">PDMatrix4D</a>;const viewport:<a  href="gdbase.html#PIMatrix4">PIMatrix4</a>; out winx,winy,winz:<a  href="gdbasetypes.html#GDBDouble">GDBdouble</a>); inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>procedure <b><a  href="geometry.html#_myGluProject2">_myGluProject2</a></b>(const objcoord:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;const modelMatrix,projMatrix:<a  href="gdbase.html#PDMatrix4D">PDMatrix4D</a>;const viewport:<a  href="gdbase.html#PIMatrix4">PIMatrix4</a>; out wincoord:<a  href="gdbase.GDBvertex.html">GDBVertex</a>); inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="geometry.html#_myGluUnProject">_myGluUnProject</a></b>(const winx,winy,winz:<a  href="gdbasetypes.html#GDBDouble">GDBdouble</a>;const modelMatrix,projMatrix:<a  href="gdbase.html#PDMatrix4D">PDMatrix4D</a>;const viewport:<a  href="gdbase.html#PIMatrix4">PIMatrix4</a>;out objx,objy,objz:<a  href="gdbasetypes.html#GDBDouble">GDBdouble</a>); inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#ortho">ortho</a></b>(const xmin,xmax,ymin,ymax,zmin,zmax:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;const matrix:<a  href="gdbase.html#PDMatrix4D">PDMatrix4D</a>):<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#Perspective">Perspective</a></b>(const fovy,W_H,zmin,zmax:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;const matrix:<a  href="gdbase.html#PDMatrix4D">PDMatrix4D</a>):<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#LookAt">LookAt</a></b>(point,ex,ey,ez:<a  href="gdbase.GDBvertex.html">GDBvertex</a>;const matrix:<a  href="gdbase.html#PDMatrix4D">PDMatrix4D</a>):<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#calcfrustum">calcfrustum</a></b>(const clip:<a  href="gdbase.html#PDMatrix4D">PDMatrix4D</a>):<a  href="gdbase.html#ClipArray">cliparray</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#PointOf3PlaneIntersect">PointOf3PlaneIntersect</a></b>(const P1,P2,P3:<a  href="gdbase.html#DVector4D">DVector4D</a>):<a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#PointOfLinePlaneIntersect">PointOfLinePlaneIntersect</a></b>(const p1,d:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;const plane:<a  href="gdbase.html#DVector4D">DVector4D</a>;out point :<a  href="gdbase.GDBvertex.html">GDBVertex</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#PlaneFrom3Pont">PlaneFrom3Pont</a></b>(const P1,P2,P3:<a  href="gdbase.GDBvertex.html">GDBVertex</a>):<a  href="gdbase.html#DVector4D">DVector4D</a>; inline;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="geometry.html#NormalizePlane">NormalizePlane</a></b>(var plane:<a  href="gdbase.html#DVector4D">DVector4D</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CalcTrueInFrustum">CalcTrueInFrustum</a></b> (const lbegin,lend:<a  href="gdbase.GDBvertex.html">GDBvertex</a>; const frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>):<a  href="gdbase.html#TInBoundingVolume">TInBoundingVolume</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CalcTrueInFrustum">CalcTrueInFrustum</a></b> (const lbegin,lend:<a  href="gdbase.GDBvertex3S.html">GDBvertex3S</a>; const frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>):<a  href="gdbase.html#TInBoundingVolume">TInBoundingVolume</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CalcPointTrueInFrustum">CalcPointTrueInFrustum</a></b> (const lbegin:<a  href="gdbase.GDBvertex.html">GDBvertex</a>; const frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>):<a  href="gdbase.html#TInBoundingVolume">TInBoundingVolume</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CalcOutBound4VInFrustum">CalcOutBound4VInFrustum</a></b> (const OutBound:<a  href="gdbase.html#OutBound4V">OutBound4V</a>; const frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>):<a  href="gdbase.html#TInBoundingVolume">TInBoundingVolume</a>; inline;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CalcAABBInFrustum">CalcAABBInFrustum</a></b> (const AABB:<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>; const frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>):<a  href="gdbase.html#TInBoundingVolume">TInBoundingVolume</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#GetXfFromZ">GetXfFromZ</a></b>(oz:<a  href="gdbase.GDBvertex.html">GDBVertex</a>):<a  href="gdbase.GDBvertex.html">GDBVertex</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#MatrixDeterminant">MatrixDeterminant</a></b>(M: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>): <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CreateMatrixFromBasis">CreateMatrixFromBasis</a></b>(const ox,oy,oz:<a  href="gdbase.GDBvertex.html">GDBVertex</a>):<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>procedure <b><a  href="geometry.html#CreateBasisFromMatrix">CreateBasisFromMatrix</a></b>(const m:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;out ox,oy,oz:<a  href="gdbase.GDBvertex.html">GDBVertex</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#QuaternionFromMatrix">QuaternionFromMatrix</a></b>(const mat : <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>) : <a  href="gdbase.GDBQuaternion.html">GDBQuaternion</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#QuaternionSlerp">QuaternionSlerp</a></b>(const source, dest: <a  href="gdbase.GDBQuaternion.html">GDBQuaternion</a>; const t: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.GDBQuaternion.html">GDBQuaternion</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#QuaternionToMatrix">QuaternionToMatrix</a></b>(quat : <a  href="gdbase.GDBQuaternion.html">GDBQuaternion</a>) : <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#GetArcParamFrom3Point2D">GetArcParamFrom3Point2D</a></b>(Const PointData:<a  href="gdbase.tarcrtmodify.html">tarcrtmodify</a>;out ad:<a  href="gdbase.TArcData.html">TArcData</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#isNotReadableAngle">isNotReadableAngle</a></b>(Angle:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CorrectAngleIfNotReadable">CorrectAngleIfNotReadable</a></b>(Angle:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>):<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#GetCSDirFrom0x0y2D">GetCSDirFrom0x0y2D</a></b>(const ox,oy:<a  href="gdbase.GDBvertex.html">GDBVertex</a>):<a  href="geometry.html#TCSDir">TCSDir</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a  href="geometry.html#CalcDisplaySubFrustum">CalcDisplaySubFrustum</a></b>(const x,y,w,h:<a  href="gdbasetypes.html#GDBDouble">gdbdouble</a>;const mm,pm:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;const vp:<a  href="gdbase.html#IMatrix4">IMatrix4</a>):<a  href="gdbase.html#ClipArray">ClipArray</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="geometry.html#myPickMatrix">myPickMatrix</a></b>(const x,y,deltax,deltay:<a  href="gdbasetypes.html#GDBDouble">gdbdouble</a>;const vp:<a  href="gdbase.html#IMatrix4">IMatrix4</a>): <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Types"></a><h3 class="summary">Types</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#TCSDir">TCSDir</a></b> = (...);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#TLineClipArray">TLineClipArray</a></b>=array[0..5]of <a  href="gdbasetypes.html#GDBDouble">gdbdouble</a>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Constants"></a><h3 class="summary">Constants</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#rsDivByZero">rsDivByZero</a></b>='Divide by zero';</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#RightAngle">RightAngle</a></b>=pi/2;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#EmptyMatrix">EmptyMatrix</a></b>: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a> = ((0, 0, 0, 0),
+                                (0, 0, 0, 0),
+                                (0, 0, 0, 0),
+                                (0, 0, 0, 0));</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#OneMatrix">OneMatrix</a></b>: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a> = ((1, 0, 0, 0),
+                                (0, 1, 0, 0),
+                                (0, 0, 1, 0),
+                                (0, 0, 0, 1));</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#TwoMatrix">TwoMatrix</a></b>: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a> = ((2, 0, 0, 0),
+                                (0, 2, 0, 0),
+                                (0, 0, 2, 0),
+                                (0, 0, 0, 2));</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#DefaultVP">DefaultVP</a></b>:<a  href="gdbase.html#IMatrix4">IMatrix4</a>=(0,0,
+                            100,100);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#IdentityQuaternion">IdentityQuaternion</a></b>: <a  href="gdbase.GDBQuaternion.html">GDBQuaternion</a> = (ImagPart:(<a  href="geometry.html#x">x</a>:0;y:0;z:0); RealPart: 1);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#EPSILON">EPSILON</a></b>  : Single = 1e-40;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#EPSILON2">EPSILON2</a></b> : Single = 1e-30;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#eps">eps</a></b>=1e-14;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#floateps">floateps</a></b>=1e-6;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#sqreps">sqreps</a></b>=1e-7;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#bigeps">bigeps</a></b>=1e-10;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#x">x</a></b>=0;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#y">y</a></b>=1;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#z">z</a></b>=2;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#w">w</a></b>=3;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#ScaleOne">ScaleOne</a></b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:1;y:1;z:1);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#OneVertex">OneVertex</a></b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:1;y:1;z:1);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#xy_Z_Vertex">xy_Z_Vertex</a></b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:0;y:0;z:1);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#x_Y_zVertex">x_Y_zVertex</a></b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:0;y:1;z:0);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#_X_yzVertex">_X_yzVertex</a></b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:1;y:0;z:0);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#MinusOneVertex">MinusOneVertex</a></b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:-1;y:-1;z:-1);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#MinusInfinityVertex">MinusInfinityVertex</a></b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:NegInfinity;y:NegInfinity;z:NegInfinity);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#InfinityVertex">InfinityVertex</a></b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:Infinity;y:Infinity;z:Infinity);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#NulVertex4D">NulVertex4D</a></b>:<a  href="gdbase.GDBvertex4D.html">GDBVertex4d</a>=(<a  href="geometry.html#x">x</a>:0;y:0;z:0;w:1);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#NulVector4D">NulVector4D</a></b>:<a  href="gdbase.html#DVector4D">DVector4D</a>=(0,0,0,0);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#NulVector4D2">NulVector4D2</a></b>:<a  href="gdbase.html#DVector4D">DVector4D</a>=(0,0,0,1);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#NulVertex">NulVertex</a></b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:0;y:0;z:0);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#XWCS">XWCS</a></b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:1;y:0;z:0);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#YWCS">YWCS</a></b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:0;y:1;z:0);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#ZWCS">ZWCS</a></b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:0;y:0;z:1);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#XWCS4D">XWCS4D</a></b>:<a  href="gdbase.html#DVector4D">DVector4D</a>=(1,0,0,1);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#YWCS4D">YWCS4D</a></b>:<a  href="gdbase.html#DVector4D">DVector4D</a>=(0,1,0,1);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#ZWCS4D">ZWCS4D</a></b>:<a  href="gdbase.html#DVector4D">DVector4D</a>=(0,0,1,1);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#NulVertex2D">NulVertex2D</a></b>:<a  href="gdbase.GDBvertex2D.html">GDBVertex2D</a>=(<a  href="geometry.html#x">x</a>:0;y:0);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#XWCS2D2D">XWCS2D2D</a></b>:<a  href="gdbase.GDBvertex2D.html">GDBVertex2D</a>=(<a  href="geometry.html#x">x</a>:1;y:0);</code></td>
+</tr>
+</table>
+<a name="PasDoc-Variables"></a><h3 class="summary">Variables</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#WorldMatrix">WorldMatrix</a></b>:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#wx">wx</a></b>:<a  href="gdbase.html#PGDBvertex">PGDBVertex</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#wy">wy</a></b>:<a  href="gdbase.html#PGDBvertex">PGDBVertex</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="geometry.html#wz">wz</a></b>:<a  href="gdbase.html#PGDBvertex">PGDBVertex</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="geometry.html#w0">w0</a></b>:<a  href="gdbase.html#PGDBvertex">PGDBVertex</a>;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Functions and Procedures</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CrossVertex"></a><code>function <b>CrossVertex</b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="VertexD2S"></a><code>function <b>VertexD2S</b>(const Vector1:<a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="intercept2d"></a><code>function <b>intercept2d</b>(const x1, y1, x2, y2, x3, y3, x4, y4: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="intercept2d2"></a><code>function <b>intercept2d2</b>(const x11, y11, x12, y12, x21, y21, x22, y22: <a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>): <a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="intercept2dmy"></a><code>function <b>intercept2dmy</b>(const l1begin,l1end,l2begin,l2end:<a  href="gdbase.GDBvertex2D.html">gdbvertex2d</a>):<a  href="geometry.Intercept2DProp.html">intercept2dprop</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="intercept3dmy"></a><code>function <b>intercept3dmy</b>(const l1begin,l1end,l2begin,l2end:<a  href="gdbase.GDBvertex.html">gdbvertex</a>):<a  href="geometry.Intercept3DProp.html">intercept3dprop</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="intercept3dmy2"></a><code>function <b>intercept3dmy2</b>(const l1begin,l1end,l2begin,l2end:<a  href="gdbase.GDBvertex.html">gdbvertex</a>):<a  href="geometry.Intercept3DProp.html">intercept3dprop</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="intercept3d"></a><code>function <b>intercept3d</b>(const l1begin,l1end,l2begin,l2end:<a  href="gdbase.GDBvertex.html">gdbvertex</a>):<a  href="geometry.Intercept3DProp.html">intercept3dprop</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="pointinquad2d"></a><code>function <b>pointinquad2d</b>(const x1, y1, x2, y2, xp, yp: <a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>): <a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="Vertexlength"></a><code>function <b>Vertexlength</b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="SqrVertexlength"></a><code>function <b>SqrVertexlength</b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>; inline; overload;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="SqrVertexlength"></a><code>function <b>SqrVertexlength</b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex2D.html">GDBVertex2d</a>): <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>; inline; overload;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="Vertexmorph"></a><code>function <b>Vertexmorph</b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>; a: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline; overload;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="Vertexmorph"></a><code>function <b>Vertexmorph</b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex2D.html">GDBVertex2D</a>; a: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.GDBvertex2D.html">GDBVertex2D</a>; inline; overload;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="VertexDmorph"></a><code>function <b>VertexDmorph</b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>; a: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="VertexDmorph"></a><code>function <b>VertexDmorph</b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>; a: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>; overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="Vertexangle"></a><code>function <b>Vertexangle</b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex2D.html">GDBVertex2d</a>): <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="oneVertexlength"></a><code>function <b>oneVertexlength</b>(const Vector1: <a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="SqrOneVertexlength"></a><code>function <b>SqrOneVertexlength</b>(const Vector1: <a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="vertexlen2df"></a><code>function <b>vertexlen2df</b>(const x1, y1, x2, y2: <a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>): <a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="NormalizeVertex"></a><code>function <b>NormalizeVertex</b>(const Vector1: <a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="VertexMulOnSc"></a><code>function <b>VertexMulOnSc</b>(const Vector1:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;sc:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="VertexAdd"></a><code>function <b>VertexAdd</b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline; overload;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="VertexAdd"></a><code>function <b>VertexAdd</b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>): <a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>; inline; overload;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="Vertex2DAdd"></a><code>function <b>Vertex2DAdd</b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex2D.html">GDBVertex2D</a>): <a  href="gdbase.GDBvertex2D.html">GDBVertex2D</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="VertexSub"></a><code>function <b>VertexSub</b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="VertexSub"></a><code>function <b>VertexSub</b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex3S.html">GDBvertex3S</a>): <a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>; overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MinusVertex"></a><code>function <b>MinusVertex</b>(const Vector1: <a  href="gdbase.GDBvertex.html">GDBVertex</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="vertexlen2id"></a><code>function <b>vertexlen2id</b>(const x1, y1, x2, y2: <a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>): <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="Vertexdmorphabs"></a><code>function <b>Vertexdmorphabs</b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>;a: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="Vertexmorphabs"></a><code>function <b>Vertexmorphabs</b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>;a: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="Vertexmorphabs2"></a><code>function <b>Vertexmorphabs2</b>(const Vector1, Vector2: <a  href="gdbase.GDBvertex.html">GDBVertex</a>;a: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MatrixMultiply"></a><code>function <b>MatrixMultiply</b>(const M1, M2: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>):<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MatrixMultiply"></a><code>function <b>MatrixMultiply</b>(const M1: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; M2: <a  href="gdbase.html#DMatrix4F">DMatrix4F</a>):<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MatrixMultiplyF"></a><code>function <b>MatrixMultiplyF</b>(const M1, M2: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>):<a  href="gdbase.html#DMatrix4F">DMatrix4F</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="VectorTransform"></a><code>function <b>VectorTransform</b>(const V:<a  href="gdbase.GDBvertex4D.html">GDBVertex4D</a>;const M:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>):<a  href="gdbase.GDBvertex4D.html">GDBVertex4D</a>; overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="VectorTransform"></a><code>function <b>VectorTransform</b>(const V:<a  href="gdbase.GDBvertex4D.html">GDBVertex4D</a>;const M:<a  href="gdbase.html#DMatrix4F">DMatrix4F</a>):<a  href="gdbase.GDBvertex4D.html">GDBVertex4D</a>; overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="VectorTransform"></a><code>function <b>VectorTransform</b>(const V:<a  href="gdbase.GDBvertex4F.html">GDBVertex4F</a>;const M:<a  href="gdbase.html#DMatrix4F">DMatrix4F</a>):<a  href="gdbase.GDBvertex4F.html">GDBVertex4F</a>; overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="normalize4d"></a><code>procedure <b>normalize4d</b>(var tv:<a  href="gdbase.GDBvertex4D.html">GDBVertex4d</a>); overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="normalize4F"></a><code>procedure <b>normalize4F</b>(var tv:<a  href="gdbase.GDBvertex4F.html">GDBVertex4F</a>); overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="VectorTransform3D"></a><code>function <b>VectorTransform3D</b>(const V:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;const M:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>):<a  href="gdbase.GDBvertex.html">GDBVertex</a>; overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="VectorTransform3D"></a><code>function <b>VectorTransform3D</b>(const V:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;const M:<a  href="gdbase.html#DMatrix4F">DMatrix4F</a>):<a  href="gdbase.GDBvertex.html">GDBVertex</a>; overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="VectorTransform3D"></a><code>function <b>VectorTransform3D</b>(const V:<a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>;const M:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>):<a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>; overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="VectorTransform3D"></a><code>function <b>VectorTransform3D</b>(const V:<a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>;const M:<a  href="gdbase.html#DMatrix4F">DMatrix4F</a>):<a  href="gdbase.GDBvertex3S.html">GDBVertex3S</a>; overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="FrustumTransform"></a><code>function <b>FrustumTransform</b>(const frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>;const M:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; MatrixAlreadyTransposed:Boolean=false):<a  href="gdbase.html#ClipArray">ClipArray</a>; overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="FrustumTransform"></a><code>function <b>FrustumTransform</b>(const frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>;const M:<a  href="gdbase.html#DMatrix4F">DMatrix4F</a>; MatrixAlreadyTransposed:Boolean=false):<a  href="gdbase.html#ClipArray">ClipArray</a>; overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MatrixTranspose"></a><code>procedure <b>MatrixTranspose</b>(var M: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>); overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MatrixTranspose"></a><code>procedure <b>MatrixTranspose</b>(var M: <a  href="gdbase.html#DMatrix4F">DMatrix4F</a>); overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MatrixNormalize"></a><code>procedure <b>MatrixNormalize</b>(var M: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>); inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CreateRotationMatrixX"></a><code>function <b>CreateRotationMatrixX</b>(const Sine, Cosine: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CreateRotationMatrixY"></a><code>function <b>CreateRotationMatrixY</b>(const Sine, Cosine: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CreateRotationMatrixZ"></a><code>function <b>CreateRotationMatrixZ</b>(const Sine, Cosine: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CreateRotatedXVector"></a><code>function <b>CreateRotatedXVector</b>(const angle: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>):<a  href="gdbase.GDBvertex.html">GDBVertex</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CreateRotatedYVector"></a><code>function <b>CreateRotatedYVector</b>(const angle: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>):<a  href="gdbase.GDBvertex.html">GDBVertex</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CreateAffineRotationMatrix"></a><code>function <b>CreateAffineRotationMatrix</b>(const anAxis: <a  href="gdbase.GDBvertex.html">GDBvertex</a>; angle: double):<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="distance2piece"></a><code>function <b>distance2piece</b>(var q:<a  href="gdbase.GDBvertex2DI.html">GDBvertex2DI</a>;var p1,p2:<a  href="gdbase.GDBvertex2D.html">GDBvertex2D</a>): double; overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="distance2piece"></a><code>function <b>distance2piece</b>(q:<a  href="gdbase.GDBvertex.html">GDBvertex</a>;var p1,p2:<a  href="gdbase.GDBvertex.html">GDBvertex</a>): double; overload;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="distance2piece_2"></a><code>function <b>distance2piece_2</b>(var q:<a  href="gdbase.GDBvertex2DI.html">GDBvertex2DI</a>; p1,p2:<a  href="gdbase.GDBvertex2D.html">GDBvertex2D</a>): double; overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="distance2piece_2"></a><code>function <b>distance2piece_2</b>(var q:<a  href="gdbase.GDBvertex2DI.html">GDBvertex2DI</a>; p1,p2:<a  href="gdbase.GDBvertex2DI.html">GDBvertex2DI</a>): double; overload; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="distance2piece_2Dmy"></a><code>function <b>distance2piece_2Dmy</b>(var q:<a  href="gdbase.GDBvertex2D.html">GDBvertex2D</a>; p1,p2:<a  href="gdbase.GDBvertex2D.html">GDBvertex2D</a>): double; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="distance2piece_2_xy"></a><code>function <b>distance2piece_2_xy</b>(var q:<a  href="gdbase.GDBvertex2DI.html">GDBvertex2DI</a>;const p1,p2:<a  href="gdbase.GDBvertex2D.html">GDBvertex2D</a>):<a  href="gdbase.GDBvertex2DI.html">GDBvertex2DI</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="distance2point_2"></a><code>function <b>distance2point_2</b>(var p1,p2:<a  href="gdbase.GDBvertex2DI.html">GDBvertex2DI</a>):<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="distance2ray"></a><code>function <b>distance2ray</b>(q:<a  href="gdbase.GDBvertex.html">GDBvertex</a>;const p1,p2:<a  href="gdbase.GDBvertex.html">GDBvertex</a>):<a  href="geometry.DistAndt.html">DistAndt</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CreateTranslationMatrix"></a><code>function <b>CreateTranslationMatrix</b>(const V:<a  href="gdbase.GDBvertex.html">GDBvertex</a>): <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CreateScaleMatrix"></a><code>function <b>CreateScaleMatrix</b>(const V:<a  href="gdbase.GDBvertex.html">GDBvertex</a>): <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CreateReflectionMatrix"></a><code>function <b>CreateReflectionMatrix</b>(plane:<a  href="gdbase.html#DVector4D">DVector4D</a>): <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CreateVertex"></a><code>function <b>CreateVertex</b>(const x,y,z:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>):<a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CreateVertexFromArray"></a><code>function <b>CreateVertexFromArray</b>(var counter:integer;const args:array of const):<a  href="gdbase.GDBvertex.html">GDBVertex</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CreateDoubleFromArray"></a><code>function <b>CreateDoubleFromArray</b>(var counter:integer;const args:array of const):<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CreateGDBStringFromArray"></a><code>function <b>CreateGDBStringFromArray</b>(var counter:integer;const args:array of const):<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CreateVertex2D"></a><code>function <b>CreateVertex2D</b>(const x,y:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>):<a  href="gdbase.GDBvertex2D.html">GDBVertex2D</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="IsPointInBB"></a><code>function <b>IsPointInBB</b>(const point:<a  href="gdbase.GDBvertex.html">GDBvertex</a>; var fistbb:<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CreateBBFrom2Point"></a><code>function <b>CreateBBFrom2Point</b>(const p1,p2:<a  href="gdbase.GDBvertex.html">GDBvertex</a>):<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="ConcatBB"></a><code>procedure <b>ConcatBB</b>(var fistbb:<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>;const secbb:<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>); inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="concatBBandPoint"></a><code>procedure <b>concatBBandPoint</b>(var fistbb:<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>;const point:<a  href="gdbase.GDBvertex.html">GDBvertex</a>); inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="IsBBNul"></a><code>function <b>IsBBNul</b>(const bb:<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>):boolean; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="boundingintersect"></a><code>function <b>boundingintersect</b>(const bb1,bb2:<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MatrixInvert"></a><code>procedure <b>MatrixInvert</b>(var M: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="vectordot"></a><code>function <b>vectordot</b>(const v1,v2:<a  href="gdbase.GDBvertex.html">GDBVertex</a>):<a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="scalardot"></a><code>function <b>scalardot</b>(const v1,v2:<a  href="gdbase.GDBvertex.html">GDBVertex</a>):<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="vertexeq"></a><code>function <b>vertexeq</b>(const v1,v2:<a  href="gdbase.GDBvertex.html">gdbvertex</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="SQRdist_Point_to_Segment"></a><code>function <b>SQRdist_Point_to_Segment</b>(const p:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;const s0,s1:<a  href="gdbase.GDBvertex.html">GDBvertex</a>):<a  href="gdbasetypes.html#GDBDouble">gdbdouble</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="NearestPointOnSegment"></a><code>function <b>NearestPointOnSegment</b>(const p:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;const s0,s1:<a  href="gdbase.GDBvertex.html">GDBvertex</a>):<a  href="gdbase.GDBvertex.html">GDBvertex</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="IsPointEqual"></a><code>function <b>IsPointEqual</b>(const p1,p2:<a  href="gdbase.GDBvertex.html">gdbvertex</a>):boolean; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="IsVectorNul"></a><code>function <b>IsVectorNul</b>(const p2:<a  href="gdbase.GDBvertex.html">gdbvertex</a>):boolean; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="IsDoubleNotEqual"></a><code>function <b>IsDoubleNotEqual</b>(const d1,d2:<a  href="gdbasetypes.html#GDBDouble">gdbdouble</a>):boolean; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="IsFloatNotEqual"></a><code>function <b>IsFloatNotEqual</b>(const d1,d2:<a  href="gdbasetypes.html#GDBFloat">gdbfloat</a>):boolean; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="_myGluProject"></a><code>procedure <b>_myGluProject</b>(const objx,objy,objz:<a  href="gdbasetypes.html#GDBDouble">GDBdouble</a>;const modelMatrix,projMatrix:<a  href="gdbase.html#PDMatrix4D">PDMatrix4D</a>;const viewport:<a  href="gdbase.html#PIMatrix4">PIMatrix4</a>; out winx,winy,winz:<a  href="gdbasetypes.html#GDBDouble">GDBdouble</a>); inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="_myGluProject2"></a><code>procedure <b>_myGluProject2</b>(const objcoord:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;const modelMatrix,projMatrix:<a  href="gdbase.html#PDMatrix4D">PDMatrix4D</a>;const viewport:<a  href="gdbase.html#PIMatrix4">PIMatrix4</a>; out wincoord:<a  href="gdbase.GDBvertex.html">GDBVertex</a>); inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="_myGluUnProject"></a><code>procedure <b>_myGluUnProject</b>(const winx,winy,winz:<a  href="gdbasetypes.html#GDBDouble">GDBdouble</a>;const modelMatrix,projMatrix:<a  href="gdbase.html#PDMatrix4D">PDMatrix4D</a>;const viewport:<a  href="gdbase.html#PIMatrix4">PIMatrix4</a>;out objx,objy,objz:<a  href="gdbasetypes.html#GDBDouble">GDBdouble</a>); inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="ortho"></a><code>function <b>ortho</b>(const xmin,xmax,ymin,ymax,zmin,zmax:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;const matrix:<a  href="gdbase.html#PDMatrix4D">PDMatrix4D</a>):<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="Perspective"></a><code>function <b>Perspective</b>(const fovy,W_H,zmin,zmax:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;const matrix:<a  href="gdbase.html#PDMatrix4D">PDMatrix4D</a>):<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="LookAt"></a><code>function <b>LookAt</b>(point,ex,ey,ez:<a  href="gdbase.GDBvertex.html">GDBvertex</a>;const matrix:<a  href="gdbase.html#PDMatrix4D">PDMatrix4D</a>):<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="calcfrustum"></a><code>function <b>calcfrustum</b>(const clip:<a  href="gdbase.html#PDMatrix4D">PDMatrix4D</a>):<a  href="gdbase.html#ClipArray">cliparray</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="PointOf3PlaneIntersect"></a><code>function <b>PointOf3PlaneIntersect</b>(const P1,P2,P3:<a  href="gdbase.html#DVector4D">DVector4D</a>):<a  href="gdbase.GDBvertex.html">GDBVertex</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="PointOfLinePlaneIntersect"></a><code>function <b>PointOfLinePlaneIntersect</b>(const p1,d:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;const plane:<a  href="gdbase.html#DVector4D">DVector4D</a>;out point :<a  href="gdbase.GDBvertex.html">GDBVertex</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="PlaneFrom3Pont"></a><code>function <b>PlaneFrom3Pont</b>(const P1,P2,P3:<a  href="gdbase.GDBvertex.html">GDBVertex</a>):<a  href="gdbase.html#DVector4D">DVector4D</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="NormalizePlane"></a><code>procedure <b>NormalizePlane</b>(var plane:<a  href="gdbase.html#DVector4D">DVector4D</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CalcTrueInFrustum"></a><code>function <b>CalcTrueInFrustum</b> (const lbegin,lend:<a  href="gdbase.GDBvertex.html">GDBvertex</a>; const frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>):<a  href="gdbase.html#TInBoundingVolume">TInBoundingVolume</a>; overload;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CalcTrueInFrustum"></a><code>function <b>CalcTrueInFrustum</b> (const lbegin,lend:<a  href="gdbase.GDBvertex3S.html">GDBvertex3S</a>; const frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>):<a  href="gdbase.html#TInBoundingVolume">TInBoundingVolume</a>; overload;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CalcPointTrueInFrustum"></a><code>function <b>CalcPointTrueInFrustum</b> (const lbegin:<a  href="gdbase.GDBvertex.html">GDBvertex</a>; const frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>):<a  href="gdbase.html#TInBoundingVolume">TInBoundingVolume</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CalcOutBound4VInFrustum"></a><code>function <b>CalcOutBound4VInFrustum</b> (const OutBound:<a  href="gdbase.html#OutBound4V">OutBound4V</a>; const frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>):<a  href="gdbase.html#TInBoundingVolume">TInBoundingVolume</a>; inline;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CalcAABBInFrustum"></a><code>function <b>CalcAABBInFrustum</b> (const AABB:<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>; const frustum:<a  href="gdbase.html#ClipArray">ClipArray</a>):<a  href="gdbase.html#TInBoundingVolume">TInBoundingVolume</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GetXfFromZ"></a><code>function <b>GetXfFromZ</b>(oz:<a  href="gdbase.GDBvertex.html">GDBVertex</a>):<a  href="gdbase.GDBvertex.html">GDBVertex</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MatrixDeterminant"></a><code>function <b>MatrixDeterminant</b>(M: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>): <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CreateMatrixFromBasis"></a><code>function <b>CreateMatrixFromBasis</b>(const ox,oy,oz:<a  href="gdbase.GDBvertex.html">GDBVertex</a>):<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CreateBasisFromMatrix"></a><code>procedure <b>CreateBasisFromMatrix</b>(const m:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;out ox,oy,oz:<a  href="gdbase.GDBvertex.html">GDBVertex</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="QuaternionFromMatrix"></a><code>function <b>QuaternionFromMatrix</b>(const mat : <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>) : <a  href="gdbase.GDBQuaternion.html">GDBQuaternion</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="QuaternionSlerp"></a><code>function <b>QuaternionSlerp</b>(const source, dest: <a  href="gdbase.GDBQuaternion.html">GDBQuaternion</a>; const t: <a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>): <a  href="gdbase.GDBQuaternion.html">GDBQuaternion</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="QuaternionToMatrix"></a><code>function <b>QuaternionToMatrix</b>(quat : <a  href="gdbase.GDBQuaternion.html">GDBQuaternion</a>) : <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GetArcParamFrom3Point2D"></a><code>function <b>GetArcParamFrom3Point2D</b>(Const PointData:<a  href="gdbase.tarcrtmodify.html">tarcrtmodify</a>;out ad:<a  href="gdbase.TArcData.html">TArcData</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="isNotReadableAngle"></a><code>function <b>isNotReadableAngle</b>(Angle:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CorrectAngleIfNotReadable"></a><code>function <b>CorrectAngleIfNotReadable</b>(Angle:<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>):<a  href="gdbasetypes.html#GDBDouble">GDBDouble</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GetCSDirFrom0x0y2D"></a><code>function <b>GetCSDirFrom0x0y2D</b>(const ox,oy:<a  href="gdbase.GDBvertex.html">GDBVertex</a>):<a  href="geometry.html#TCSDir">TCSDir</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CalcDisplaySubFrustum"></a><code>function <b>CalcDisplaySubFrustum</b>(const x,y,w,h:<a  href="gdbasetypes.html#GDBDouble">gdbdouble</a>;const mm,pm:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;const vp:<a  href="gdbase.html#IMatrix4">IMatrix4</a>):<a  href="gdbase.html#ClipArray">ClipArray</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="myPickMatrix"></a><code>function <b>myPickMatrix</b>(const x,y,deltax,deltay:<a  href="gdbasetypes.html#GDBDouble">gdbdouble</a>;const vp:<a  href="gdbase.html#IMatrix4">IMatrix4</a>): <a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Types</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TCSDir"></a><code><b>TCSDir</b> = (...);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;<h6 class="description_section">Values</h6>
+<ul>
+<li>
+TCSDLeft: &nbsp;</li>
+<li>
+TCSDRight: &nbsp;</li>
+</ul>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TLineClipArray"></a><code><b>TLineClipArray</b>=array[0..5]of <a  href="gdbasetypes.html#GDBDouble">gdbdouble</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Constants</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="rsDivByZero"></a><code><b>rsDivByZero</b>='Divide by zero';</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="RightAngle"></a><code><b>RightAngle</b>=pi/2;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="EmptyMatrix"></a><code><b>EmptyMatrix</b>: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a> = ((0, 0, 0, 0),
+                                (0, 0, 0, 0),
+                                (0, 0, 0, 0),
+                                (0, 0, 0, 0));</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="OneMatrix"></a><code><b>OneMatrix</b>: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a> = ((1, 0, 0, 0),
+                                (0, 1, 0, 0),
+                                (0, 0, 1, 0),
+                                (0, 0, 0, 1));</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TwoMatrix"></a><code><b>TwoMatrix</b>: <a  href="gdbase.html#DMatrix4D">DMatrix4D</a> = ((2, 0, 0, 0),
+                                (0, 2, 0, 0),
+                                (0, 0, 2, 0),
+                                (0, 0, 0, 2));</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="DefaultVP"></a><code><b>DefaultVP</b>:<a  href="gdbase.html#IMatrix4">IMatrix4</a>=(0,0,
+                            100,100);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="IdentityQuaternion"></a><code><b>IdentityQuaternion</b>: <a  href="gdbase.GDBQuaternion.html">GDBQuaternion</a> = (ImagPart:(<a  href="geometry.html#x">x</a>:0;y:0;z:0); RealPart: 1);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="EPSILON"></a><code><b>EPSILON</b>  : Single = 1e-40;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="EPSILON2"></a><code><b>EPSILON2</b> : Single = 1e-30;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="eps"></a><code><b>eps</b>=1e-14;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="floateps"></a><code><b>floateps</b>=1e-6;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="sqreps"></a><code><b>sqreps</b>=1e-7;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="bigeps"></a><code><b>bigeps</b>=1e-10;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="x"></a><code><b>x</b>=0;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="y"></a><code><b>y</b>=1;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="z"></a><code><b>z</b>=2;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="w"></a><code><b>w</b>=3;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="ScaleOne"></a><code><b>ScaleOne</b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:1;y:1;z:1);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="OneVertex"></a><code><b>OneVertex</b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:1;y:1;z:1);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="xy_Z_Vertex"></a><code><b>xy_Z_Vertex</b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:0;y:0;z:1);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="x_Y_zVertex"></a><code><b>x_Y_zVertex</b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:0;y:1;z:0);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="_X_yzVertex"></a><code><b>_X_yzVertex</b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:1;y:0;z:0);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MinusOneVertex"></a><code><b>MinusOneVertex</b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:-1;y:-1;z:-1);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MinusInfinityVertex"></a><code><b>MinusInfinityVertex</b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:NegInfinity;y:NegInfinity;z:NegInfinity);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="InfinityVertex"></a><code><b>InfinityVertex</b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:Infinity;y:Infinity;z:Infinity);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="NulVertex4D"></a><code><b>NulVertex4D</b>:<a  href="gdbase.GDBvertex4D.html">GDBVertex4d</a>=(<a  href="geometry.html#x">x</a>:0;y:0;z:0;w:1);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="NulVector4D"></a><code><b>NulVector4D</b>:<a  href="gdbase.html#DVector4D">DVector4D</a>=(0,0,0,0);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="NulVector4D2"></a><code><b>NulVector4D2</b>:<a  href="gdbase.html#DVector4D">DVector4D</a>=(0,0,0,1);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="NulVertex"></a><code><b>NulVertex</b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:0;y:0;z:0);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="XWCS"></a><code><b>XWCS</b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:1;y:0;z:0);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="YWCS"></a><code><b>YWCS</b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:0;y:1;z:0);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="ZWCS"></a><code><b>ZWCS</b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>=(<a  href="geometry.html#x">x</a>:0;y:0;z:1);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="XWCS4D"></a><code><b>XWCS4D</b>:<a  href="gdbase.html#DVector4D">DVector4D</a>=(1,0,0,1);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="YWCS4D"></a><code><b>YWCS4D</b>:<a  href="gdbase.html#DVector4D">DVector4D</a>=(0,1,0,1);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="ZWCS4D"></a><code><b>ZWCS4D</b>:<a  href="gdbase.html#DVector4D">DVector4D</a>=(0,0,1,1);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="NulVertex2D"></a><code><b>NulVertex2D</b>:<a  href="gdbase.GDBvertex2D.html">GDBVertex2D</a>=(<a  href="geometry.html#x">x</a>:0;y:0);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="XWCS2D2D"></a><code><b>XWCS2D2D</b>:<a  href="gdbase.GDBvertex2D.html">GDBVertex2D</a>=(<a  href="geometry.html#x">x</a>:1;y:0);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Variables</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="WorldMatrix"></a><code><b>WorldMatrix</b>:<a  href="gdbase.html#DMatrix4D">DMatrix4D</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="wx"></a><code><b>wx</b>:<a  href="gdbase.html#PGDBvertex">PGDBVertex</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="wy"></a><code><b>wy</b>:<a  href="gdbase.html#PGDBvertex">PGDBVertex</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="wz"></a><code><b>wz</b>:<a  href="gdbase.html#PGDBvertex">PGDBVertex</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="w0"></a><code><b>w0</b>:<a  href="gdbase.html#PGDBvertex">PGDBVertex</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

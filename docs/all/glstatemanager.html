@@ -1,0 +1,977 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>glstatemanager</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<h1 class="unit">Unit glstatemanager</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Uses">Uses</a></td><td><a class="section" href="#PasDoc-Classes">Classes, Interfaces, Objects and Records</a></td><td><a class="section" href="#PasDoc-FuncsProcs">Functions and Procedures</a></td><td><a class="section" href="#PasDoc-Types">Types</a></td><td><a class="section" href="#PasDoc-Constants">Constants</a></td><td><a class="section" href="#PasDoc-Variables">Variables</a></td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="description">Description</h2>
+&nbsp;<a name="PasDoc-Uses"></a><h2 class="uses">Uses</h2>
+<ul class="useslist"><li><a  href="gdbpalette.html">gdbpalette</a></li><li><a  href="gdbasetypes.html">gdbasetypes</a></li><li><a  href="gdbase.html">gdbase</a></li><li>LCLType</li><li>gl</li><li>glext</li><li>sysutils</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Classes"></a><h3 class="cio">Classes, Interfaces, Objects and Records</h3>
+<table class="classestable wide_list">
+<tr class="listheader">
+<th class="itemname">Name</th>
+<th class="itemdesc">Description</th>
+</tr>
+<tr class="list">
+<td class="itemname">record&nbsp;<a class="bold" href="glstatemanager.TOGLContextDesk.html"><code>TOGLContextDesk</code></a></td>
+<td class="itemdesc">&nbsp;</td>
+</tr>
+<tr class="list2">
+<td class="itemname">Object&nbsp;<a class="bold" href="glstatemanager.TOGLStateManager.html"><code>TOGLStateManager</code></a></td>
+<td class="itemdesc">&nbsp;</td>
+</tr>
+</table>
+<a name="PasDoc-FuncsProcs"></a><h3 class="summary">Functions and Procedures</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code>procedure <b><a  href="glstatemanager.html#SetDCPixelFormat">SetDCPixelFormat</a></b>(oglc:<a  href="glstatemanager.TOGLContextDesk.html">TOGLContextDesk</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a  href="glstatemanager.html#isOpenGLError">isOpenGLError</a></b>:<a  href="glstatemanager.html#GLenum">GLenum</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>procedure <b><a  href="glstatemanager.html#MyglMakeCurrent">MyglMakeCurrent</a></b>(oglc:<a  href="glstatemanager.TOGLContextDesk.html">TOGLContextDesk</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="glstatemanager.html#MySwapBuffers">MySwapBuffers</a></b>(oglc:<a  href="glstatemanager.TOGLContextDesk.html">TOGLContextDesk</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>procedure <b><a  href="glstatemanager.html#MywglDeleteContext">MywglDeleteContext</a></b>(oglc:<a  href="glstatemanager.TOGLContextDesk.html">TOGLContextDesk</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="glstatemanager.html#MywglCreateContext">MywglCreateContext</a></b>(var oglc:<a  href="glstatemanager.TOGLContextDesk.html">TOGLContextDesk</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>Procedure <b><a  href="glstatemanager.html#DrawAABB">DrawAABB</a></b>(const BoundingBox:<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>);</code></td>
+</tr>
+</table>
+<a name="PasDoc-Types"></a><h3 class="summary">Types</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GLenum">GLenum</a></b>=gl.GLenum;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#TViewPortArray">TViewPortArray</a></b> = array [0..3] of GLint;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#tmyscrbuf">tmyscrbuf</a></b> = array [0..<a  href="glstatemanager.html#maxmybufer">maxmybufer</a>] of GLuint;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#TessObj">TessObj</a></b>=Pointer;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GLUnurbsObj">GLUnurbsObj</a></b>=Pointer;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#PTOGLStateManager">PTOGLStateManager</a></b>=&circ;<a  href="glstatemanager.TOGLStateManager.html">TOGLStateManager</a>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Constants"></a><h3 class="summary">Constants</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#ls">ls</a></b> = $AAAA;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#ps">ps</a></b>:array [0..31] of LONGWORD=(
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC
+                                  );</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_lines">GL_lines</a></b>=gl.GL_lines;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_LINE_STRIP">GL_LINE_STRIP</a></b>=gl.GL_LINE_STRIP;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_line_loop">GL_line_loop</a></b>=gl.GL_line_loop;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_POINT_SMOOTH">GL_POINT_SMOOTH</a></b>=gl.GL_POINT_SMOOTH;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_LINE_SMOOTH">GL_LINE_SMOOTH</a></b>=gl.GL_LINE_SMOOTH;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_points">GL_points</a></b>=gl.GL_points;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_QUADS">GL_QUADS</a></b>=gl.GL_QUADS;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_ALWAYS">GL_ALWAYS</a></b>=gl.GL_ALWAYS;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_LINE_STIPPLE">GL_LINE_STIPPLE</a></b>=gl.GL_LINE_STIPPLE;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_POLYGON_STIPPLE">GL_POLYGON_STIPPLE</a></b>=gl.GL_POLYGON_STIPPLE;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_TRIANGLES">GL_TRIANGLES</a></b>=gl.GL_TRIANGLES;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_TRIANGLE_FAN">GL_TRIANGLE_FAN</a></b>=gl.GL_TRIANGLE_FAN;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_TRIANGLE_STRIP">GL_TRIANGLE_STRIP</a></b>=gl.GL_TRIANGLE_STRIP;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_PROJECTION">GL_PROJECTION</a></b>=gl.GL_PROJECTION;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_MODELVIEW">GL_MODELVIEW</a></b>=gl.GL_MODELVIEW;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_VIEWPORT">GL_VIEWPORT</a></b>=gl.GL_VIEWPORT;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_LIGHTING">GL_LIGHTING</a></b>=gl.GL_LIGHTING;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_LIGHT0">GL_LIGHT0</a></b>=gl.GL_LIGHT0;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_COLOR_MATERIAL">GL_COLOR_MATERIAL</a></b>=gl.GL_COLOR_MATERIAL;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_POSITION">GL_POSITION</a></b>=gl.GL_POSITION;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_FRONT_AND_BACK">GL_FRONT_AND_BACK</a></b>=gl.GL_FRONT_AND_BACK;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_SHININESS">GL_SHININESS</a></b>=gl.GL_SHININESS;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_SPECULAR">GL_SPECULAR</a></b>=gl.GL_SPECULAR;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_LIGHT_MODEL_TWO_SIDE">GL_LIGHT_MODEL_TWO_SIDE</a></b>=gl.GL_LIGHT_MODEL_TWO_SIDE;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_AMBIENT_AND_DIFFUSE">GL_AMBIENT_AND_DIFFUSE</a></b>=gl.GL_AMBIENT_AND_DIFFUSE;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_COLOR_LOGIC_OP">GL_COLOR_LOGIC_OP</a></b>=gl.GL_COLOR_LOGIC_OP;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_OR">GL_OR</a></b>=gl.GL_OR;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_XOR">GL_XOR</a></b>=gl.GL_XOR;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_TEXTURE_2D">GL_TEXTURE_2D</a></b>=gl.GL_TEXTURE_2D;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_DEPTH_TEST">GL_DEPTH_TEST</a></b>=gl.GL_DEPTH_TEST;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_STENCIL_TEST">GL_STENCIL_TEST</a></b>=gl.GL_STENCIL_TEST;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_BLEND">GL_BLEND</a></b>=gl.GL_BLEND;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_SRC_ALPHA">GL_SRC_ALPHA</a></b>=gl.GL_SRC_ALPHA;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_ONE_MINUS_SRC_ALPHA">GL_ONE_MINUS_SRC_ALPHA</a></b>=gl.GL_ONE_MINUS_SRC_ALPHA;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_LINE_SMOOTH_HINT">GL_LINE_SMOOTH_HINT</a></b>=gl.GL_LINE_SMOOTH_HINT;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_NICEST">GL_NICEST</a></b>=gl.GL_NICEST;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_KEEP">GL_KEEP</a></b>=gl.GL_KEEP;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_COLOR_BUFFER_BIT">GL_COLOR_BUFFER_BIT</a></b>=gl.GL_COLOR_BUFFER_BIT;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_DEPTH_BUFFER_BIT">GL_DEPTH_BUFFER_BIT</a></b>=gl.GL_DEPTH_BUFFER_BIT;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_STENCIL_BUFFER_BIT">GL_STENCIL_BUFFER_BIT</a></b>=gl.GL_STENCIL_BUFFER_BIT;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_LOAD">GL_LOAD</a></b>=gl.GL_LOAD;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_return">GL_return</a></b>=gl.GL_return;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_AUX0">GL_AUX0</a></b>=gl.GL_AUX0;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_BACK">GL_BACK</a></b>=gl.GL_BACK;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_COLOR">GL_COLOR</a></b>=gl.GL_COLOR;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_BGRA_EXT">GL_BGRA_EXT</a></b>=glext.GL_BGRA_EXT;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_NEVER">GL_NEVER</a></b>=gl.GL_NEVER;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_REPLACE">GL_REPLACE</a></b>=gl.GL_REPLACE;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_UNSIGNED_BYTE">GL_UNSIGNED_BYTE</a></b>=gl.GL_UNSIGNED_BYTE;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_EQUAL">GL_EQUAL</a></b>=gl.GL_EQUAL;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_TEXTURE_MIN_FILTER">GL_TEXTURE_MIN_FILTER</a></b>=gl.GL_TEXTURE_MIN_FILTER;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_RGB">GL_RGB</a></b>=gl.GL_RGB;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_NEAREST">GL_NEAREST</a></b>=gl.GL_NEAREST;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_TEXTURE_MAG_FILTER">GL_TEXTURE_MAG_FILTER</a></b>=gl.GL_TEXTURE_MAG_FILTER;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_VENDOR">GL_VENDOR</a></b>=gl.GL_VENDOR;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_RENDERER">GL_RENDERER</a></b>=gl.GL_RENDERER;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_VERSION">GL_VERSION</a></b>=gl.GL_VERSION;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_LINE_WIDTH_RANGE">GL_LINE_WIDTH_RANGE</a></b>=gl.GL_LINE_WIDTH_RANGE;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_point_size_RANGE">GL_point_size_RANGE</a></b>=gl.GL_point_size_RANGE;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_PROJECTION_MATRIX">GL_PROJECTION_MATRIX</a></b>=gl.GL_PROJECTION_MATRIX;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_EXTENSIONS">GL_EXTENSIONS</a></b>=gl.GL_EXTENSIONS;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_MAP1_VERTEX_4">GL_MAP1_VERTEX_4</a></b>=gl.GL_MAP1_VERTEX_4;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_MAP1_VERTEX_3">GL_MAP1_VERTEX_3</a></b>=gl.GL_MAP1_VERTEX_3;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GL_TRUE">GL_TRUE</a></b>=gl.GL_TRUE;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#maxmybufer">maxmybufer</a></b>=200;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#MY_EmptyMode">MY_EmptyMode</a></b>=1000000;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Variables"></a><h3 class="summary">Variables</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#GLRasterizer">GLRasterizer</a></b>:<a  href="glstatemanager.TOGLStateManager.html">TOGLStateManager</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#OGLSM">OGLSM</a></b>:<a  href="glstatemanager.html#PTOGLStateManager">PTOGLStateManager</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#wglSwapIntervalEXT">wglSwapIntervalEXT</a></b>: function(interval: GLint): BOOL; cdecl;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#bcount">bcount</a></b>:integer;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#primcount">primcount</a></b>:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#pointcount">pointcount</a></b>:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#bathcount">bathcount</a></b>:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="glstatemanager.html#middlepoint">middlepoint</a></b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Functions and Procedures</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="SetDCPixelFormat"></a><code>procedure <b>SetDCPixelFormat</b>(oglc:<a  href="glstatemanager.TOGLContextDesk.html">TOGLContextDesk</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="isOpenGLError"></a><code>function <b>isOpenGLError</b>:<a  href="glstatemanager.html#GLenum">GLenum</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MyglMakeCurrent"></a><code>procedure <b>MyglMakeCurrent</b>(oglc:<a  href="glstatemanager.TOGLContextDesk.html">TOGLContextDesk</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MySwapBuffers"></a><code>procedure <b>MySwapBuffers</b>(oglc:<a  href="glstatemanager.TOGLContextDesk.html">TOGLContextDesk</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MywglDeleteContext"></a><code>procedure <b>MywglDeleteContext</b>(oglc:<a  href="glstatemanager.TOGLContextDesk.html">TOGLContextDesk</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MywglCreateContext"></a><code>procedure <b>MywglCreateContext</b>(var oglc:<a  href="glstatemanager.TOGLContextDesk.html">TOGLContextDesk</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="DrawAABB"></a><code>Procedure <b>DrawAABB</b>(const BoundingBox:<a  href="gdbase.TBoundingBox.html">TBoundingBox</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Types</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GLenum"></a><code><b>GLenum</b>=gl.GLenum;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TViewPortArray"></a><code><b>TViewPortArray</b> = array [0..3] of GLint;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="tmyscrbuf"></a><code><b>tmyscrbuf</b> = array [0..<a  href="glstatemanager.html#maxmybufer">maxmybufer</a>] of GLuint;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TessObj"></a><code><b>TessObj</b>=Pointer;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GLUnurbsObj"></a><code><b>GLUnurbsObj</b>=Pointer;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="PTOGLStateManager"></a><code><b>PTOGLStateManager</b>=&circ;<a  href="glstatemanager.TOGLStateManager.html">TOGLStateManager</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Constants</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="ls"></a><code><b>ls</b> = $AAAA;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="ps"></a><code><b>ps</b>:array [0..31] of LONGWORD=(
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC
+                                  );</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_lines"></a><code><b>GL_lines</b>=gl.GL_lines;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_LINE_STRIP"></a><code><b>GL_LINE_STRIP</b>=gl.GL_LINE_STRIP;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_line_loop"></a><code><b>GL_line_loop</b>=gl.GL_line_loop;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_POINT_SMOOTH"></a><code><b>GL_POINT_SMOOTH</b>=gl.GL_POINT_SMOOTH;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_LINE_SMOOTH"></a><code><b>GL_LINE_SMOOTH</b>=gl.GL_LINE_SMOOTH;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_points"></a><code><b>GL_points</b>=gl.GL_points;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_QUADS"></a><code><b>GL_QUADS</b>=gl.GL_QUADS;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_ALWAYS"></a><code><b>GL_ALWAYS</b>=gl.GL_ALWAYS;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_LINE_STIPPLE"></a><code><b>GL_LINE_STIPPLE</b>=gl.GL_LINE_STIPPLE;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_POLYGON_STIPPLE"></a><code><b>GL_POLYGON_STIPPLE</b>=gl.GL_POLYGON_STIPPLE;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_TRIANGLES"></a><code><b>GL_TRIANGLES</b>=gl.GL_TRIANGLES;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_TRIANGLE_FAN"></a><code><b>GL_TRIANGLE_FAN</b>=gl.GL_TRIANGLE_FAN;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_TRIANGLE_STRIP"></a><code><b>GL_TRIANGLE_STRIP</b>=gl.GL_TRIANGLE_STRIP;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_PROJECTION"></a><code><b>GL_PROJECTION</b>=gl.GL_PROJECTION;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_MODELVIEW"></a><code><b>GL_MODELVIEW</b>=gl.GL_MODELVIEW;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_VIEWPORT"></a><code><b>GL_VIEWPORT</b>=gl.GL_VIEWPORT;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_LIGHTING"></a><code><b>GL_LIGHTING</b>=gl.GL_LIGHTING;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_LIGHT0"></a><code><b>GL_LIGHT0</b>=gl.GL_LIGHT0;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_COLOR_MATERIAL"></a><code><b>GL_COLOR_MATERIAL</b>=gl.GL_COLOR_MATERIAL;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_POSITION"></a><code><b>GL_POSITION</b>=gl.GL_POSITION;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_FRONT_AND_BACK"></a><code><b>GL_FRONT_AND_BACK</b>=gl.GL_FRONT_AND_BACK;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_SHININESS"></a><code><b>GL_SHININESS</b>=gl.GL_SHININESS;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_SPECULAR"></a><code><b>GL_SPECULAR</b>=gl.GL_SPECULAR;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_LIGHT_MODEL_TWO_SIDE"></a><code><b>GL_LIGHT_MODEL_TWO_SIDE</b>=gl.GL_LIGHT_MODEL_TWO_SIDE;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_AMBIENT_AND_DIFFUSE"></a><code><b>GL_AMBIENT_AND_DIFFUSE</b>=gl.GL_AMBIENT_AND_DIFFUSE;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_COLOR_LOGIC_OP"></a><code><b>GL_COLOR_LOGIC_OP</b>=gl.GL_COLOR_LOGIC_OP;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_OR"></a><code><b>GL_OR</b>=gl.GL_OR;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_XOR"></a><code><b>GL_XOR</b>=gl.GL_XOR;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_TEXTURE_2D"></a><code><b>GL_TEXTURE_2D</b>=gl.GL_TEXTURE_2D;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_DEPTH_TEST"></a><code><b>GL_DEPTH_TEST</b>=gl.GL_DEPTH_TEST;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_STENCIL_TEST"></a><code><b>GL_STENCIL_TEST</b>=gl.GL_STENCIL_TEST;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_BLEND"></a><code><b>GL_BLEND</b>=gl.GL_BLEND;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_SRC_ALPHA"></a><code><b>GL_SRC_ALPHA</b>=gl.GL_SRC_ALPHA;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_ONE_MINUS_SRC_ALPHA"></a><code><b>GL_ONE_MINUS_SRC_ALPHA</b>=gl.GL_ONE_MINUS_SRC_ALPHA;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_LINE_SMOOTH_HINT"></a><code><b>GL_LINE_SMOOTH_HINT</b>=gl.GL_LINE_SMOOTH_HINT;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_NICEST"></a><code><b>GL_NICEST</b>=gl.GL_NICEST;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_KEEP"></a><code><b>GL_KEEP</b>=gl.GL_KEEP;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_COLOR_BUFFER_BIT"></a><code><b>GL_COLOR_BUFFER_BIT</b>=gl.GL_COLOR_BUFFER_BIT;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_DEPTH_BUFFER_BIT"></a><code><b>GL_DEPTH_BUFFER_BIT</b>=gl.GL_DEPTH_BUFFER_BIT;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_STENCIL_BUFFER_BIT"></a><code><b>GL_STENCIL_BUFFER_BIT</b>=gl.GL_STENCIL_BUFFER_BIT;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_LOAD"></a><code><b>GL_LOAD</b>=gl.GL_LOAD;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_return"></a><code><b>GL_return</b>=gl.GL_return;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_AUX0"></a><code><b>GL_AUX0</b>=gl.GL_AUX0;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_BACK"></a><code><b>GL_BACK</b>=gl.GL_BACK;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_COLOR"></a><code><b>GL_COLOR</b>=gl.GL_COLOR;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_BGRA_EXT"></a><code><b>GL_BGRA_EXT</b>=glext.GL_BGRA_EXT;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_NEVER"></a><code><b>GL_NEVER</b>=gl.GL_NEVER;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_REPLACE"></a><code><b>GL_REPLACE</b>=gl.GL_REPLACE;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_UNSIGNED_BYTE"></a><code><b>GL_UNSIGNED_BYTE</b>=gl.GL_UNSIGNED_BYTE;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_EQUAL"></a><code><b>GL_EQUAL</b>=gl.GL_EQUAL;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_TEXTURE_MIN_FILTER"></a><code><b>GL_TEXTURE_MIN_FILTER</b>=gl.GL_TEXTURE_MIN_FILTER;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_RGB"></a><code><b>GL_RGB</b>=gl.GL_RGB;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_NEAREST"></a><code><b>GL_NEAREST</b>=gl.GL_NEAREST;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_TEXTURE_MAG_FILTER"></a><code><b>GL_TEXTURE_MAG_FILTER</b>=gl.GL_TEXTURE_MAG_FILTER;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_VENDOR"></a><code><b>GL_VENDOR</b>=gl.GL_VENDOR;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_RENDERER"></a><code><b>GL_RENDERER</b>=gl.GL_RENDERER;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_VERSION"></a><code><b>GL_VERSION</b>=gl.GL_VERSION;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_LINE_WIDTH_RANGE"></a><code><b>GL_LINE_WIDTH_RANGE</b>=gl.GL_LINE_WIDTH_RANGE;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_point_size_RANGE"></a><code><b>GL_point_size_RANGE</b>=gl.GL_point_size_RANGE;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_PROJECTION_MATRIX"></a><code><b>GL_PROJECTION_MATRIX</b>=gl.GL_PROJECTION_MATRIX;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_EXTENSIONS"></a><code><b>GL_EXTENSIONS</b>=gl.GL_EXTENSIONS;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_MAP1_VERTEX_4"></a><code><b>GL_MAP1_VERTEX_4</b>=gl.GL_MAP1_VERTEX_4;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_MAP1_VERTEX_3"></a><code><b>GL_MAP1_VERTEX_3</b>=gl.GL_MAP1_VERTEX_3;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GL_TRUE"></a><code><b>GL_TRUE</b>=gl.GL_TRUE;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="maxmybufer"></a><code><b>maxmybufer</b>=200;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MY_EmptyMode"></a><code><b>MY_EmptyMode</b>=1000000;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Variables</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="GLRasterizer"></a><code><b>GLRasterizer</b>:<a  href="glstatemanager.TOGLStateManager.html">TOGLStateManager</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="OGLSM"></a><code><b>OGLSM</b>:<a  href="glstatemanager.html#PTOGLStateManager">PTOGLStateManager</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="wglSwapIntervalEXT"></a><code><b>wglSwapIntervalEXT</b>: function(interval: GLint): BOOL; cdecl;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="bcount"></a><code><b>bcount</b>:integer;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="primcount"></a><code><b>primcount</b>:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="pointcount"></a><code><b>pointcount</b>:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="bathcount"></a><code><b>bathcount</b>:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="middlepoint"></a><code><b>middlepoint</b>:<a  href="gdbase.GDBvertex.html">GDBVertex</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

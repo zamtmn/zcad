@@ -1,0 +1,377 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>ugdbdrawing: packed Object TDrawing</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="TDrawing"></a><h1 class="cio">packed Object TDrawing</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></td><td><a class="section" href="#PasDoc-Fields">Fields</a></td><td><a class="section" href="#PasDoc-Methods">Methods</a></td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="ugdbdrawing.html">ugdbdrawing</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TDrawing = packed object(<a class="normal" href="ugdbsimpledrawing.TSimpleDrawing.html">TSimpleDrawing</a>)</code></p>
+<h2 class="description">Description</h2>
+<div class="nodescription">no description available, TSimpleDrawing description follows</div><div class="nodescription">no description available, TAbstractDrawing description follows</div><div class="nodescription">no description available, TDrawingDef description follows</div><div class="nodescription">no description available, GDBaseobject description follows</div><a name="PasDoc-Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TObject</li>
+<li class="ancestor"><a class="normal" href="gdbase.GDBaseObject.html">GDBaseObject</a></li>
+<li class="ancestor"><a class="normal" href="UGDBDrawingdef.TDrawingDef.html">TDrawingDef</a></li>
+<li class="ancestor"><a class="normal" href="ugdbabstractdrawing.TAbstractDrawing.html">TAbstractDrawing</a></li>
+<li class="ancestor"><a class="normal" href="ugdbsimpledrawing.TSimpleDrawing.html">TSimpleDrawing</a></li>
+<li class="thisitem">TDrawing</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Fields"></a><h3 class="summary">Fields</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbdrawing.TDrawing.html#FileName">FileName</a></b>:<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbdrawing.TDrawing.html#Changed">Changed</a></b>:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbdrawing.TDrawing.html#attrib">attrib</a></b>:<a  href="gdbasetypes.html#GDBLongword">GDBLongword</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbdrawing.TDrawing.html#UndoStack">UndoStack</a></b>:<a  href="zeundostack.GDBObjOpenArrayOfUCommands.html">GDBObjOpenArrayOfUCommands</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbdrawing.TDrawing.html#DWGUnits">DWGUnits</a></b>:<a  href="UUnitManager.TUnitManager.html">TUnitManager</a>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="ugdbdrawing.TDrawing.html#init">init</a></b>(num:<a  href="UUnitManager.html#PTUnitManager">PTUnitManager</a>;preloadedfile1,preloadedfile2:<a  href="gdbasetypes.html#GDBString">GDBString</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>destructor <b><a  href="ugdbdrawing.TDrawing.html#done">done</a></b>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbdrawing.TDrawing.html#onUndoRedo">onUndoRedo</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbdrawing.TDrawing.html#onUndoRedoDataOwner">onUndoRedoDataOwner</a></b>(PDataOwner:Pointer);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbdrawing.TDrawing.html#SetCurrentDWG">SetCurrentDWG</a></b>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbdrawing.TDrawing.html#StoreOldCamerapPos">StoreOldCamerapPos</a></b>:Pointer; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbdrawing.TDrawing.html#StoreNewCamerapPos">StoreNewCamerapPos</a></b>(command:Pointer); virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbdrawing.TDrawing.html#rtmodifyonepoint">rtmodifyonepoint</a></b>(obj:<a  href="GDBEntity.html#PGDBObjEntity">PGDBObjEntity</a>;rtmod:<a  href="gdbase.TRTModifyData.html">TRTModifyData</a>;wc:<a  href="gdbase.GDBvertex.html">gdbvertex</a>); virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbdrawing.TDrawing.html#PushStartMarker">PushStartMarker</a></b>(CommandName:<a  href="gdbasetypes.html#GDBString">GDBString</a>); virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbdrawing.TDrawing.html#PushEndMarker">PushEndMarker</a></b>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbdrawing.TDrawing.html#SetFileName">SetFileName</a></b>(NewName:<a  href="gdbasetypes.html#GDBString">GDBString</a>); virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbdrawing.TDrawing.html#GetFileName">GetFileName</a></b>:<a  href="gdbasetypes.html#GDBString">GDBString</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbdrawing.TDrawing.html#ChangeStampt">ChangeStampt</a></b>(st:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>); virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbdrawing.TDrawing.html#GetChangeStampt">GetChangeStampt</a></b>:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbdrawing.TDrawing.html#GetUndoTop">GetUndoTop</a></b>:<a  href="gdbase.html#TArrayIndex">TArrayIndex</a>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbdrawing.TDrawing.html#GetUndoStack">GetUndoStack</a></b>:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbdrawing.TDrawing.html#CanUndo">CanUndo</a></b>:boolean; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbdrawing.TDrawing.html#CanRedo">CanRedo</a></b>:boolean; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbdrawing.TDrawing.html#GetDWGUnits">GetDWGUnits</a></b>:pointer; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbdrawing.TDrawing.html#AddBlockFromDBIfNeed">AddBlockFromDBIfNeed</a></b>(name:<a  href="gdbasetypes.html#GDBString">GDBString</a>); virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbdrawing.TDrawing.html#GetUnitsFormat">GetUnitsFormat</a></b>:<a  href="gdbase.TzeUnitsFormat.html">TzeUnitsFormat</a>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbdrawing.TDrawing.html#SetUnitsFormat">SetUnitsFormat</a></b>(f:<a  href="gdbase.TzeUnitsFormat.html">TzeUnitsFormat</a>); virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbdrawing.TDrawing.html#FillDrawingPartRC">FillDrawingPartRC</a></b>(var dc:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); virtual;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Fields</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FileName"></a><code><b>FileName</b>:<a  href="gdbasetypes.html#GDBString">GDBString</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Changed"></a><code><b>Changed</b>:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="attrib"></a><code><b>attrib</b>:<a  href="gdbasetypes.html#GDBLongword">GDBLongword</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="UndoStack"></a><code><b>UndoStack</b>:<a  href="zeundostack.GDBObjOpenArrayOfUCommands.html">GDBObjOpenArrayOfUCommands</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DWGUnits"></a><code><b>DWGUnits</b>:<a  href="UUnitManager.TUnitManager.html">TUnitManager</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="init"></a><code>constructor <b>init</b>(num:<a  href="UUnitManager.html#PTUnitManager">PTUnitManager</a>;preloadedfile1,preloadedfile2:<a  href="gdbasetypes.html#GDBString">GDBString</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="done"></a><code>destructor <b>done</b>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="onUndoRedo"></a><code>procedure <b>onUndoRedo</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="onUndoRedoDataOwner"></a><code>procedure <b>onUndoRedoDataOwner</b>(PDataOwner:Pointer);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetCurrentDWG"></a><code>procedure <b>SetCurrentDWG</b>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="StoreOldCamerapPos"></a><code>function <b>StoreOldCamerapPos</b>:Pointer; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="StoreNewCamerapPos"></a><code>procedure <b>StoreNewCamerapPos</b>(command:Pointer); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="rtmodifyonepoint"></a><code>procedure <b>rtmodifyonepoint</b>(obj:<a  href="GDBEntity.html#PGDBObjEntity">PGDBObjEntity</a>;rtmod:<a  href="gdbase.TRTModifyData.html">TRTModifyData</a>;wc:<a  href="gdbase.GDBvertex.html">gdbvertex</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="PushStartMarker"></a><code>procedure <b>PushStartMarker</b>(CommandName:<a  href="gdbasetypes.html#GDBString">GDBString</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="PushEndMarker"></a><code>procedure <b>PushEndMarker</b>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetFileName"></a><code>procedure <b>SetFileName</b>(NewName:<a  href="gdbasetypes.html#GDBString">GDBString</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetFileName"></a><code>function <b>GetFileName</b>:<a  href="gdbasetypes.html#GDBString">GDBString</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ChangeStampt"></a><code>procedure <b>ChangeStampt</b>(st:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetChangeStampt"></a><code>function <b>GetChangeStampt</b>:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetUndoTop"></a><code>function <b>GetUndoTop</b>:<a  href="gdbase.html#TArrayIndex">TArrayIndex</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetUndoStack"></a><code>function <b>GetUndoStack</b>:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CanUndo"></a><code>function <b>CanUndo</b>:boolean; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CanRedo"></a><code>function <b>CanRedo</b>:boolean; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetDWGUnits"></a><code>function <b>GetDWGUnits</b>:pointer; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="AddBlockFromDBIfNeed"></a><code>procedure <b>AddBlockFromDBIfNeed</b>(name:<a  href="gdbasetypes.html#GDBString">GDBString</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetUnitsFormat"></a><code>function <b>GetUnitsFormat</b>:<a  href="gdbase.TzeUnitsFormat.html">TzeUnitsFormat</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetUnitsFormat"></a><code>procedure <b>SetUnitsFormat</b>(f:<a  href="gdbase.TzeUnitsFormat.html">TzeUnitsFormat</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FillDrawingPartRC"></a><code>procedure <b>FillDrawingPartRC</b>(var dc:<a  href="gdbdrawcontext.TDrawContext.html">TDrawContext</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

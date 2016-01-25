@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>ugdbdimstylearray: packed Object GDBDimStyle</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="GDBDimStyle"></a><h1 class="cio">packed Object GDBDimStyle</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></td><td><a class="section" href="#PasDoc-Fields">Fields</a></td><td><a class="section" href="#PasDoc-Methods">Methods</a></td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="ugdbdimstylearray.html">ugdbdimstylearray</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type GDBDimStyle = packed object(<a class="normal" href="gdbase.GDBNamedObject.html">GDBNamedObject</a>)</code></p>
+<h2 class="description">Description</h2>
+<div class="nodescription">no description available, GDBNamedObject description follows</div><div class="nodescription">no description available, GDBaseObject description follows</div><a name="PasDoc-Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TObject</li>
+<li class="ancestor"><a class="normal" href="gdbase.GDBaseObject.html">GDBaseObject</a></li>
+<li class="ancestor"><a class="normal" href="gdbase.GDBNamedObject.html">GDBNamedObject</a></li>
+<li class="thisitem">GDBDimStyle</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Fields"></a><h3 class="summary">Fields</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbdimstylearray.GDBDimStyle.html#Lines">Lines</a></b>:<a  href="ugdbdimstylearray.TGDBDimLinesProp.html">TGDBDimLinesProp</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbdimstylearray.GDBDimStyle.html#Arrows">Arrows</a></b>:<a  href="ugdbdimstylearray.TGDBDimArrowsProp.html">TGDBDimArrowsProp</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbdimstylearray.GDBDimStyle.html#Text">Text</a></b>:<a  href="ugdbdimstylearray.TGDBDimTextProp.html">TGDBDimTextProp</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbdimstylearray.GDBDimStyle.html#Placing">Placing</a></b>:<a  href="ugdbdimstylearray.TGDBDimPlacingProp.html">TGDBDimPlacingProp</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbdimstylearray.GDBDimStyle.html#Units">Units</a></b>:<a  href="ugdbdimstylearray.TGDBDimUnitsProp.html">TGDBDimUnitsProp</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="ugdbdimstylearray.GDBDimStyle.html#PDXFLoadingData">PDXFLoadingData</a></b>:<a  href="ugdbdimstylearray.html#PTDimStyleDXFLoadingData">PTDimStyleDXFLoadingData</a>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbdimstylearray.GDBDimStyle.html#SetDefaultValues">SetDefaultValues</a></b>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbdimstylearray.GDBDimStyle.html#SetValueFromDxf">SetValueFromDxf</a></b>(var mode:<a  href="ugdbdimstylearray.html#TDimStyleReadMode">TDimStyleReadMode</a>;group:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;value:<a  href="gdbasetypes.html#GDBString">GDBString</a>;var h2p:<a  href="usimplegenerics.html#TMapHandleToPointer">TMapHandleToPointer</a>); virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbdimstylearray.GDBDimStyle.html#GetDimBlockParam">GetDimBlockParam</a></b>(nline:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>):<a  href="ugdbdimstylearray.TDimArrowBlockParam.html">TDimArrowBlockParam</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="ugdbdimstylearray.GDBDimStyle.html#GetDimBlockTypeByName">GetDimBlockTypeByName</a></b>(bname:String):<a  href="ugdbdimstylearray.html#TArrowStyle">TArrowStyle</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbdimstylearray.GDBDimStyle.html#CreateLDIfNeed">CreateLDIfNeed</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbdimstylearray.GDBDimStyle.html#ReleaseLDIfNeed">ReleaseLDIfNeed</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="ugdbdimstylearray.GDBDimStyle.html#ResolveDXFHandles">ResolveDXFHandles</a></b>(const Handle2BlockName:<a  href="usimplegenerics.html#TMapBlockHandle_BlockNames">TMapBlockHandle_BlockNames</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>destructor <b><a  href="ugdbdimstylearray.GDBDimStyle.html#Done">Done</a></b>; virtual;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Fields</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Lines"></a><code><b>Lines</b>:<a  href="ugdbdimstylearray.TGDBDimLinesProp.html">TGDBDimLinesProp</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Arrows"></a><code><b>Arrows</b>:<a  href="ugdbdimstylearray.TGDBDimArrowsProp.html">TGDBDimArrowsProp</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Text"></a><code><b>Text</b>:<a  href="ugdbdimstylearray.TGDBDimTextProp.html">TGDBDimTextProp</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Placing"></a><code><b>Placing</b>:<a  href="ugdbdimstylearray.TGDBDimPlacingProp.html">TGDBDimPlacingProp</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Units"></a><code><b>Units</b>:<a  href="ugdbdimstylearray.TGDBDimUnitsProp.html">TGDBDimUnitsProp</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="PDXFLoadingData"></a><code><b>PDXFLoadingData</b>:<a  href="ugdbdimstylearray.html#PTDimStyleDXFLoadingData">PTDimStyleDXFLoadingData</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetDefaultValues"></a><code>procedure <b>SetDefaultValues</b>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetValueFromDxf"></a><code>procedure <b>SetValueFromDxf</b>(var mode:<a  href="ugdbdimstylearray.html#TDimStyleReadMode">TDimStyleReadMode</a>;group:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;value:<a  href="gdbasetypes.html#GDBString">GDBString</a>;var h2p:<a  href="usimplegenerics.html#TMapHandleToPointer">TMapHandleToPointer</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetDimBlockParam"></a><code>function <b>GetDimBlockParam</b>(nline:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>):<a  href="ugdbdimstylearray.TDimArrowBlockParam.html">TDimArrowBlockParam</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetDimBlockTypeByName"></a><code>function <b>GetDimBlockTypeByName</b>(bname:String):<a  href="ugdbdimstylearray.html#TArrowStyle">TArrowStyle</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CreateLDIfNeed"></a><code>procedure <b>CreateLDIfNeed</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ReleaseLDIfNeed"></a><code>procedure <b>ReleaseLDIfNeed</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ResolveDXFHandles"></a><code>procedure <b>ResolveDXFHandles</b>(const Handle2BlockName:<a  href="usimplegenerics.html#TMapBlockHandle_BlockNames">TMapBlockHandle_BlockNames</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Done"></a><code>destructor <b>Done</b>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

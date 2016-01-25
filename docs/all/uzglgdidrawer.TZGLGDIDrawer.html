@@ -1,0 +1,364 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>uzglgdidrawer: Class TZGLGDIDrawer</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="TZGLGDIDrawer"></a><h1 class="cio">Class TZGLGDIDrawer</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></td><td><a class="section" href="#PasDoc-Fields">Fields</a></td><td><a class="section" href="#PasDoc-Methods">Methods</a></td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="uzglgdidrawer.html">uzglgdidrawer</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TZGLGDIDrawer = class(<a class="normal" href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html">TZGLGeneral2DDrawer</a>)</code></p>
+<h2 class="description">Description</h2>
+<div class="nodescription">no description available, TZGLGeneral2DDrawer description follows</div><div class="nodescription">no description available, TZGLGeneralDrawer description follows</div><div class="nodescription">no description available, TZGLAbstractDrawer description follows</div><a name="PasDoc-Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TObject</li>
+<li class="ancestor"><a class="normal" href="uzglabstractdrawer.TZGLAbstractDrawer.html">TZGLAbstractDrawer</a></li>
+<li class="ancestor"><a class="normal" href="uzglgeneraldrawer.TZGLGeneralDrawer.html">TZGLGeneralDrawer</a></li>
+<li class="ancestor"><a class="normal" href="uzglgeneral2ddrawer.TZGLGeneral2DDrawer.html">TZGLGeneral2DDrawer</a></li>
+<li class="thisitem">TZGLGDIDrawer</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Fields"></a><h3 class="summary">Fields</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#OffScreedDC">OffScreedDC</a></b>:HDC;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#CanvasDC">CanvasDC</a></b>:HDC;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#OffscreenBitmap">OffscreenBitmap</a></b>:HBITMAP;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#SavedBitmap">SavedBitmap</a></b>:HBITMAP;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#SavedDC">SavedDC</a></b>:HDC;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#hLinePen">hLinePen</a></b>:HPEN;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#hBrush">hBrush</a></b>:<a  href="uzglgdidrawer.TZGLGDIDrawer.html#hBrush">HBRUSH</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#CurrentPaintGDIData">CurrentPaintGDIData</a></b>:<a  href="uzglgdidrawer.html#PTGDIData">PTGDIData</a>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#create">create</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#startpaint">startpaint</a></b>(InPaintMessage:boolean;w,h:integer):boolean; override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#createoffscreendc">createoffscreendc</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#deleteoffscreendc">deleteoffscreendc</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#endpaint">endpaint</a></b>(InPaintMessage:boolean); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#InternalDrawLine">InternalDrawLine</a></b>(const x1,y1,x2,y2:<a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#InternalDrawTriangle">InternalDrawTriangle</a></b>(const x1,y1,x2,y2,x3,y3:<a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#InternalDrawQuad">InternalDrawQuad</a></b>(const x1,y1,x2,y2,x3,y3,x4,y4:<a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#InternalDrawPoint">InternalDrawPoint</a></b>(const x,y:<a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#CreateScrbuf">CreateScrbuf</a></b>:boolean; override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#delmyscrbuf">delmyscrbuf</a></b>; override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#SaveBuffers">SaveBuffers</a></b>; override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#RestoreBuffers">RestoreBuffers</a></b>; override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#SwapBuffers">SwapBuffers</a></b>; override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#SetDrawMode">SetDrawMode</a></b>(const mode:<a  href="uzglabstractdrawer.html#TZGLDrawMode">TZGLDrawMode</a>); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#ClearScreen">ClearScreen</a></b>(stencil:boolean); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#_createPen">_createPen</a></b>; override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#GetLLPrimitivesCreator">GetLLPrimitivesCreator</a></b>:<a  href="uzgprimitivescreatorabstract.TLLPrimitivesCreatorAbstract.html">TLLPrimitivesCreatorAbstract</a>; override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="uzglgdidrawer.TZGLGDIDrawer.html#PostRenderDraw">PostRenderDraw</a></b>; override;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Fields</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="OffScreedDC"></a><code><b>OffScreedDC</b>:HDC;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CanvasDC"></a><code><b>CanvasDC</b>:HDC;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="OffscreenBitmap"></a><code><b>OffscreenBitmap</b>:HBITMAP;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SavedBitmap"></a><code><b>SavedBitmap</b>:HBITMAP;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SavedDC"></a><code><b>SavedDC</b>:HDC;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="hLinePen"></a><code><b>hLinePen</b>:HPEN;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="hBrush"></a><code><b>hBrush</b>:<a  href="uzglgdidrawer.TZGLGDIDrawer.html#hBrush">HBRUSH</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CurrentPaintGDIData"></a><code><b>CurrentPaintGDIData</b>:<a  href="uzglgdidrawer.html#PTGDIData">PTGDIData</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="create"></a><code>constructor <b>create</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="startpaint"></a><code>function <b>startpaint</b>(InPaintMessage:boolean;w,h:integer):boolean; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="createoffscreendc"></a><code>procedure <b>createoffscreendc</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="deleteoffscreendc"></a><code>procedure <b>deleteoffscreendc</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="endpaint"></a><code>procedure <b>endpaint</b>(InPaintMessage:boolean); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="InternalDrawLine"></a><code>procedure <b>InternalDrawLine</b>(const x1,y1,x2,y2:<a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="InternalDrawTriangle"></a><code>procedure <b>InternalDrawTriangle</b>(const x1,y1,x2,y2,x3,y3:<a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="InternalDrawQuad"></a><code>procedure <b>InternalDrawQuad</b>(const x1,y1,x2,y2,x3,y3,x4,y4:<a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="InternalDrawPoint"></a><code>procedure <b>InternalDrawPoint</b>(const x,y:<a  href="gdbasetypes.html#GDBFloat">GDBFloat</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CreateScrbuf"></a><code>function <b>CreateScrbuf</b>:boolean; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="delmyscrbuf"></a><code>procedure <b>delmyscrbuf</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SaveBuffers"></a><code>procedure <b>SaveBuffers</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="RestoreBuffers"></a><code>procedure <b>RestoreBuffers</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SwapBuffers"></a><code>procedure <b>SwapBuffers</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetDrawMode"></a><code>procedure <b>SetDrawMode</b>(const mode:<a  href="uzglabstractdrawer.html#TZGLDrawMode">TZGLDrawMode</a>); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ClearScreen"></a><code>procedure <b>ClearScreen</b>(stencil:boolean); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="_createPen"></a><code>procedure <b>_createPen</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetLLPrimitivesCreator"></a><code>function <b>GetLLPrimitivesCreator</b>:<a  href="uzgprimitivescreatorabstract.TLLPrimitivesCreatorAbstract.html">TLLPrimitivesCreatorAbstract</a>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="PostRenderDraw"></a><code>procedure <b>PostRenderDraw</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>gdbobjectextender</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<h1 class="unit">Unit gdbobjectextender</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Uses">Uses</a></td><td><a class="section" href="#PasDoc-Classes">Classes, Interfaces, Objects and Records</a></td><td>Functions and Procedures</td><td><a class="section" href="#PasDoc-Types">Types</a></td><td>Constants</td><td>Variables</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="description">Description</h2>
+&nbsp;<a name="PasDoc-Uses"></a><h2 class="uses">Uses</h2>
+<ul class="useslist"><li><a  href="gdbentityextender.html">gdbentityextender</a></li><li><a  href="GDBSubordinated.html">GDBSubordinated</a></li><li><a  href="UGDBDrawingdef.html">UGDBDrawingdef</a></li><li><a  href="gdbasetypes.html">gdbasetypes</a></li><li><a  href="gdbase.html">gdbase</a></li><li><a  href="usimplegenerics.html">usimplegenerics</a></li><li><a  href="UGDBOpenArrayOfByte.html">UGDBOpenArrayOfByte</a></li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Classes"></a><h3 class="cio">Classes, Interfaces, Objects and Records</h3>
+<table class="classestable wide_list">
+<tr class="listheader">
+<th class="itemname">Name</th>
+<th class="itemdesc">Description</th>
+</tr>
+<tr class="list">
+<td class="itemname">record&nbsp;<a class="bold" href="gdbobjectextender.TCreateEntFeatureData.html"><code>TCreateEntFeatureData</code></a></td>
+<td class="itemdesc">&nbsp;</td>
+</tr>
+<tr class="list2">
+<td class="itemname">record&nbsp;<a class="bold" href="gdbobjectextender.TDXFEntLoadData.html"><code>TDXFEntLoadData</code></a></td>
+<td class="itemdesc">&nbsp;</td>
+</tr>
+<tr class="list">
+<td class="itemname">record&nbsp;<a class="bold" href="gdbobjectextender.TDXFEntSaveData.html"><code>TDXFEntSaveData</code></a></td>
+<td class="itemdesc">&nbsp;</td>
+</tr>
+<tr class="list2">
+<td class="itemname">Class&nbsp;<a class="bold" href="gdbobjectextender.TDXFEntIODataManager.html"><code>TDXFEntIODataManager</code></a></td>
+<td class="itemdesc">&nbsp;</td>
+</tr>
+</table>
+<a name="PasDoc-Types"></a><h3 class="summary">Types</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="gdbobjectextender.html#TConstructorFeature">TConstructorFeature</a></b> = procedure(pEntity:Pointer);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="gdbobjectextender.html#TDestructorFeature">TDestructorFeature</a></b> = procedure(pEntity:Pointer);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="gdbobjectextender.html#TDXFEntSaveFeature">TDXFEntSaveFeature</a></b> = procedure(var outhandle:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;PEnt:Pointer);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="gdbobjectextender.html#TDXFEntLoadFeature">TDXFEntLoadFeature</a></b> = function(_Name,_Value:<a  href="gdbasetypes.html#GDBString">GDBString</a>;ptu:<a  href="gdbase.html#PExtensionData">PExtensionData</a>;const drawing:<a  href="UGDBDrawingdef.TDrawingDef.html">TDrawingDef</a>;PEnt:Pointer):boolean;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="gdbobjectextender.html#TDXFEntAfterLoadFeature">TDXFEntAfterLoadFeature</a></b> = procedure(pEntity:Pointer);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="gdbobjectextender.html#TDXFEntFormatFeature">TDXFEntFormatFeature</a></b> = procedure (pEntity:Pointer;const drawing:<a  href="UGDBDrawingdef.TDrawingDef.html">TDrawingDef</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="gdbobjectextender.html#TDXFEntLoadDataMap">TDXFEntLoadDataMap</a></b>=<a  href="usimplegenerics.GKey2DataMap.html">GKey2DataMap</a>&lt;<a  href="gdbasetypes.html#GDBString">GDBString</a>,<a  href="gdbobjectextender.TDXFEntLoadData.html">TDXFEntLoadData</a>,<a  href="usimplegenerics.html#LessGDBString">LessGDBString</a>&gt;;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="gdbobjectextender.html#TDXFEntSaveDataVector">TDXFEntSaveDataVector</a></b>=<a  href="usimplegenerics.TMyVector.html">TmyVector</a>&lt;<a  href="gdbobjectextender.TDXFEntSaveData.html">TDXFEntSaveData</a>&gt;;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="gdbobjectextender.html#TDXFEntFormatProcsVector">TDXFEntFormatProcsVector</a></b>=<a  href="usimplegenerics.TMyVector.html">TmyVector</a>&lt;<a  href="gdbobjectextender.html#TDXFEntFormatFeature">TDXFEntFormatFeature</a>&gt;;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="gdbobjectextender.html#TCreateEntFeatureVector">TCreateEntFeatureVector</a></b>=<a  href="usimplegenerics.TMyVector.html">TmyVector</a>&lt;<a  href="gdbobjectextender.TCreateEntFeatureData.html">TCreateEntFeatureData</a>&gt;;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="gdbobjectextender.html#TDXFEntAfterLoadFeatureVector">TDXFEntAfterLoadFeatureVector</a></b>=<a  href="usimplegenerics.TMyVector.html">TmyVector</a>&lt;<a  href="gdbobjectextender.html#TDXFEntAfterLoadFeature">TDXFEntAfterLoadFeature</a>&gt;;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="gdbobjectextender.html#TEntityCreateExtenderVector">TEntityCreateExtenderVector</a></b>=<a  href="usimplegenerics.TMyVector.html">TmyVector</a>&lt;<a  href="gdbentityextender.html#TCreateThisExtender">TCreateThisExtender</a>&gt;;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Types</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TConstructorFeature"></a><code><b>TConstructorFeature</b> = procedure(pEntity:Pointer);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TDestructorFeature"></a><code><b>TDestructorFeature</b> = procedure(pEntity:Pointer);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TDXFEntSaveFeature"></a><code><b>TDXFEntSaveFeature</b> = procedure(var outhandle:<a  href="UGDBOpenArrayOfByte.GDBOpenArrayOfByte.html">GDBOpenArrayOfByte</a>;PEnt:Pointer);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TDXFEntLoadFeature"></a><code><b>TDXFEntLoadFeature</b> = function(_Name,_Value:<a  href="gdbasetypes.html#GDBString">GDBString</a>;ptu:<a  href="gdbase.html#PExtensionData">PExtensionData</a>;const drawing:<a  href="UGDBDrawingdef.TDrawingDef.html">TDrawingDef</a>;PEnt:Pointer):boolean;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TDXFEntAfterLoadFeature"></a><code><b>TDXFEntAfterLoadFeature</b> = procedure(pEntity:Pointer);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TDXFEntFormatFeature"></a><code><b>TDXFEntFormatFeature</b> = procedure (pEntity:Pointer;const drawing:<a  href="UGDBDrawingdef.TDrawingDef.html">TDrawingDef</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TDXFEntLoadDataMap"></a><code><b>TDXFEntLoadDataMap</b>=<a  href="usimplegenerics.GKey2DataMap.html">GKey2DataMap</a>&lt;<a  href="gdbasetypes.html#GDBString">GDBString</a>,<a  href="gdbobjectextender.TDXFEntLoadData.html">TDXFEntLoadData</a>,<a  href="usimplegenerics.html#LessGDBString">LessGDBString</a>&gt;;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TDXFEntSaveDataVector"></a><code><b>TDXFEntSaveDataVector</b>=<a  href="usimplegenerics.TMyVector.html">TmyVector</a>&lt;<a  href="gdbobjectextender.TDXFEntSaveData.html">TDXFEntSaveData</a>&gt;;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TDXFEntFormatProcsVector"></a><code><b>TDXFEntFormatProcsVector</b>=<a  href="usimplegenerics.TMyVector.html">TmyVector</a>&lt;<a  href="gdbobjectextender.html#TDXFEntFormatFeature">TDXFEntFormatFeature</a>&gt;;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TCreateEntFeatureVector"></a><code><b>TCreateEntFeatureVector</b>=<a  href="usimplegenerics.TMyVector.html">TmyVector</a>&lt;<a  href="gdbobjectextender.TCreateEntFeatureData.html">TCreateEntFeatureData</a>&gt;;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TDXFEntAfterLoadFeatureVector"></a><code><b>TDXFEntAfterLoadFeatureVector</b>=<a  href="usimplegenerics.TMyVector.html">TmyVector</a>&lt;<a  href="gdbobjectextender.html#TDXFEntAfterLoadFeature">TDXFEntAfterLoadFeature</a>&gt;;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TEntityCreateExtenderVector"></a><code><b>TEntityCreateExtenderVector</b>=<a  href="usimplegenerics.TMyVector.html">TmyVector</a>&lt;<a  href="gdbentityextender.html#TCreateThisExtender">TCreateThisExtender</a>&gt;;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

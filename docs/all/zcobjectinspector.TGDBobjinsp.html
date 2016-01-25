@@ -1,0 +1,792 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>zcobjectinspector: Class TGDBobjinsp</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="TGDBobjinsp"></a><h1 class="cio">Class TGDBobjinsp</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></td><td><a class="section" href="#PasDoc-Fields">Fields</a></td><td><a class="section" href="#PasDoc-Methods">Methods</a></td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="zcobjectinspector.html">zcobjectinspector</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TGDBobjinsp = class(<a class="normal" href="zcobjectinspector.html#TObjInspCustom">TObjInspCustom</a>)</code></p>
+<h2 class="description">Description</h2>
+<div class="nodescription">no description available, TObjInspCustom description follows</div>&nbsp;<a name="PasDoc-Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="thisitem">TGDBobjinsp</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Fields"></a><h3 class="summary">Fields</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#GDBobj">GDBobj</a></b>:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#EDContext">EDContext</a></b>:<a  href="zcobjectinspector.TEditorContext.html">TEditorContext</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#PStoredObj">PStoredObj</a></b>:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#StoredObjGDBType">StoredObjGDBType</a></b>:<a  href="varmandef.html#PUserTypeDescriptor">PUserTypeDescriptor</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#StoredUndoStack">StoredUndoStack</a></b>:<a  href="zeundostack.html#PGDBObjOpenArrayOfUCommands">PGDBObjOpenArrayOfUCommands</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#pStoredContext">pStoredContext</a></b>:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#pcurrobj">pcurrobj</a></b>:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#pdefaultobj">pdefaultobj</a></b>:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#currobjgdbtype">currobjgdbtype</a></b>:<a  href="varmandef.html#PUserTypeDescriptor">PUserTypeDescriptor</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#defaultobjgdbtype">defaultobjgdbtype</a></b>:<a  href="varmandef.html#PUserTypeDescriptor">PUserTypeDescriptor</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#DefaultUndoStack">DefaultUndoStack</a></b>:<a  href="zeundostack.html#PGDBObjOpenArrayOfUCommands">PGDBObjOpenArrayOfUCommands</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#pcurcontext">pcurcontext</a></b>:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#pdefaultcontext">pdefaultcontext</a></b>:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#PEditor">PEditor</a></b>:<a  href="varmandef.TPropEditor.html">TPropEditor</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#PDA">PDA</a></b>:<a  href="TypeDescriptors.TPropertyDeskriptorArray.html">TPropertyDeskriptorArray</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#namecol">namecol</a></b>:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#contentheigth">contentheigth</a></b>:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#OLDPP">OLDPP</a></b>:<a  href="TypeDescriptors.html#PPropertyDeskriptor">PPropertyDeskriptor</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#OnMousePP">OnMousePP</a></b>:<a  href="TypeDescriptors.html#PPropertyDeskriptor">PPropertyDeskriptor</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a  href="zcobjectinspector.TGDBobjinsp.html#MResplit">MResplit</a></b>:boolean;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#draw">draw</a></b>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#mypaint">mypaint</a></b>(sender:tobject);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#drawprop">drawprop</a></b>(PPA:<a  href="TypeDescriptors.html#PTPropertyDeskriptorArray">PTPropertyDeskriptorArray</a>;arect:trect);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#InternalDrawprop">InternalDrawprop</a></b>(PPA:<a  href="TypeDescriptors.html#PTPropertyDeskriptorArray">PTPropertyDeskriptorArray</a>; var y,sub:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;miny:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;arect:trect;var LastPropAddFreespace:Boolean);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#calctreeh">calctreeh</a></b>(PPA:<a  href="TypeDescriptors.html#PTPropertyDeskriptorArray">PTPropertyDeskriptorArray</a>; var y:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="zcobjectinspector.TGDBobjinsp.html#gettreeh">gettreeh</a></b>:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#BeforeInit">BeforeInit</a></b>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#_onresize">_onresize</a></b>(sender:tobject); virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#updateeditorBounds">updateeditorBounds</a></b>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#buildproplist">buildproplist</a></b>(const UndoStack:<a  href="zeundostack.html#PGDBObjOpenArrayOfUCommands">PGDBObjOpenArrayOfUCommands</a>;const f:<a  href="gdbase.TzeUnitsFormat.html">TzeUnitsFormat</a>;exttype:<a  href="varmandef.html#PUserTypeDescriptor">PUserTypeDescriptor</a>; bmode:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; var addr:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#SetCurrentObjDefault">SetCurrentObjDefault</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#ReturnToDefault">ReturnToDefault</a></b>(const f:<a  href="gdbase.TzeUnitsFormat.html">TzeUnitsFormat</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#rebuild">rebuild</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#Notify">Notify</a></b>(Sender: TObject;Command:<a  href="varmandef.html#TMyNotifyCommand">TMyNotifyCommand</a>); virtual;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#createpda">createpda</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>destructor <b><a  href="zcobjectinspector.TGDBobjinsp.html#Destroy">Destroy</a></b>; Override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#createscrollbars">createscrollbars</a></b>; virtual;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#ScrollBy">ScrollBy</a></b>(DeltaX, DeltaY: Integer); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#AfterConstruction">AfterConstruction</a></b>; override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#CalcRowHeight">CalcRowHeight</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#EraseBackground">EraseBackground</a></b>(DC: HDC); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#FreeEditor">FreeEditor</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#StoreAndFreeEditor">StoreAndFreeEditor</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#ClearEDContext">ClearEDContext</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#AsyncFreeEditorAndSelectNext">AsyncFreeEditorAndSelectNext</a></b>(Data: PtrInt);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#AsyncFreeEditor">AsyncFreeEditor</a></b>(Data: PtrInt);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="zcobjectinspector.TGDBobjinsp.html#IsMouseOnSpliter">IsMouseOnSpliter</a></b>(pp:<a  href="TypeDescriptors.html#PPropertyDeskriptor">PPropertyDeskriptor</a>; X,Y:Integer):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#createeditor">createeditor</a></b>(pp:<a  href="TypeDescriptors.html#PPropertyDeskriptor">PPropertyDeskriptor</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="zcobjectinspector.TGDBobjinsp.html#CurrObjIsEntity">CurrObjIsEntity</a></b>:boolean;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="zcobjectinspector.TGDBobjinsp.html#IsHeadersEnabled">IsHeadersEnabled</a></b>:boolean;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="zcobjectinspector.TGDBobjinsp.html#HeadersHeight">HeadersHeight</a></b>:integer;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#MouseMove">MouseMove</a></b>(Shift: TShiftState; X, Y: Integer); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#MouseLeave">MouseLeave</a></b>; override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#MouseDown">MouseDown</a></b>(Button: TMouseButton; Shift: TShiftState;X, Y: Integer); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#MouseUp">MouseUp</a></b>(Button: TMouseButton; Shift:TShiftState; X,Y:Integer); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#UpdateObjectInInsp">UpdateObjectInInsp</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#setptr">setptr</a></b>(const UndoStack:<a  href="zeundostack.html#PGDBObjOpenArrayOfUCommands">PGDBObjOpenArrayOfUCommands</a>;const f:<a  href="gdbase.TzeUnitsFormat.html">TzeUnitsFormat</a>;exttype:<a  href="varmandef.html#PUserTypeDescriptor">PUserTypeDescriptor</a>; addr,context:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#updateinsp">updateinsp</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#SetBounds">SetBounds</a></b>(ALeft, ATop, AWidth, AHeight: integer); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#GetPreferredSize">GetPreferredSize</a></b>(var PreferredWidth, PreferredHeight: integer; Raw: boolean = false; WithThemeSpace: boolean = true); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#DoSendBoundsToInterface">DoSendBoundsToInterface</a></b>; override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#DoAllAutoSize">DoAllAutoSize</a></b>; override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a  href="zcobjectinspector.TGDBobjinsp.html#FormHide">FormHide</a></b>(Sender: TObject);</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Fields</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GDBobj"></a><code><b>GDBobj</b>:<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EDContext"></a><code><b>EDContext</b>:<a  href="zcobjectinspector.TEditorContext.html">TEditorContext</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="PStoredObj"></a><code><b>PStoredObj</b>:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="StoredObjGDBType"></a><code><b>StoredObjGDBType</b>:<a  href="varmandef.html#PUserTypeDescriptor">PUserTypeDescriptor</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="StoredUndoStack"></a><code><b>StoredUndoStack</b>:<a  href="zeundostack.html#PGDBObjOpenArrayOfUCommands">PGDBObjOpenArrayOfUCommands</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="pStoredContext"></a><code><b>pStoredContext</b>:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="pcurrobj"></a><code><b>pcurrobj</b>:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="pdefaultobj"></a><code><b>pdefaultobj</b>:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="currobjgdbtype"></a><code><b>currobjgdbtype</b>:<a  href="varmandef.html#PUserTypeDescriptor">PUserTypeDescriptor</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="defaultobjgdbtype"></a><code><b>defaultobjgdbtype</b>:<a  href="varmandef.html#PUserTypeDescriptor">PUserTypeDescriptor</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DefaultUndoStack"></a><code><b>DefaultUndoStack</b>:<a  href="zeundostack.html#PGDBObjOpenArrayOfUCommands">PGDBObjOpenArrayOfUCommands</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="pcurcontext"></a><code><b>pcurcontext</b>:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="pdefaultcontext"></a><code><b>pdefaultcontext</b>:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="PEditor"></a><code><b>PEditor</b>:<a  href="varmandef.TPropEditor.html">TPropEditor</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="PDA"></a><code><b>PDA</b>:<a  href="TypeDescriptors.TPropertyDeskriptorArray.html">TPropertyDeskriptorArray</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="namecol"></a><code><b>namecol</b>:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="contentheigth"></a><code><b>contentheigth</b>:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="OLDPP"></a><code><b>OLDPP</b>:<a  href="TypeDescriptors.html#PPropertyDeskriptor">PPropertyDeskriptor</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="OnMousePP"></a><code><b>OnMousePP</b>:<a  href="TypeDescriptors.html#PPropertyDeskriptor">PPropertyDeskriptor</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MResplit"></a><code><b>MResplit</b>:boolean;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="draw"></a><code>procedure <b>draw</b>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="mypaint"></a><code>procedure <b>mypaint</b>(sender:tobject);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="drawprop"></a><code>procedure <b>drawprop</b>(PPA:<a  href="TypeDescriptors.html#PTPropertyDeskriptorArray">PTPropertyDeskriptorArray</a>;arect:trect);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="InternalDrawprop"></a><code>procedure <b>InternalDrawprop</b>(PPA:<a  href="TypeDescriptors.html#PTPropertyDeskriptorArray">PTPropertyDeskriptorArray</a>; var y,sub:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;miny:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;arect:trect;var LastPropAddFreespace:Boolean);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="calctreeh"></a><code>procedure <b>calctreeh</b>(PPA:<a  href="TypeDescriptors.html#PTPropertyDeskriptorArray">PTPropertyDeskriptorArray</a>; var y:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="gettreeh"></a><code>function <b>gettreeh</b>:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="BeforeInit"></a><code>procedure <b>BeforeInit</b>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="_onresize"></a><code>procedure <b>_onresize</b>(sender:tobject); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="updateeditorBounds"></a><code>procedure <b>updateeditorBounds</b>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="buildproplist"></a><code>procedure <b>buildproplist</b>(const UndoStack:<a  href="zeundostack.html#PGDBObjOpenArrayOfUCommands">PGDBObjOpenArrayOfUCommands</a>;const f:<a  href="gdbase.TzeUnitsFormat.html">TzeUnitsFormat</a>;exttype:<a  href="varmandef.html#PUserTypeDescriptor">PUserTypeDescriptor</a>; bmode:<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>; var addr:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetCurrentObjDefault"></a><code>procedure <b>SetCurrentObjDefault</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ReturnToDefault"></a><code>procedure <b>ReturnToDefault</b>(const f:<a  href="gdbase.TzeUnitsFormat.html">TzeUnitsFormat</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="rebuild"></a><code>procedure <b>rebuild</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Notify"></a><code>procedure <b>Notify</b>(Sender: TObject;Command:<a  href="varmandef.html#TMyNotifyCommand">TMyNotifyCommand</a>); virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="createpda"></a><code>procedure <b>createpda</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Destroy"></a><code>destructor <b>Destroy</b>; Override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="createscrollbars"></a><code>procedure <b>createscrollbars</b>; virtual;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ScrollBy"></a><code>procedure <b>ScrollBy</b>(DeltaX, DeltaY: Integer); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="AfterConstruction"></a><code>procedure <b>AfterConstruction</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CalcRowHeight"></a><code>procedure <b>CalcRowHeight</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EraseBackground"></a><code>procedure <b>EraseBackground</b>(DC: HDC); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FreeEditor"></a><code>procedure <b>FreeEditor</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="StoreAndFreeEditor"></a><code>procedure <b>StoreAndFreeEditor</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ClearEDContext"></a><code>procedure <b>ClearEDContext</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="AsyncFreeEditorAndSelectNext"></a><code>procedure <b>AsyncFreeEditorAndSelectNext</b>(Data: PtrInt);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="AsyncFreeEditor"></a><code>procedure <b>AsyncFreeEditor</b>(Data: PtrInt);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="IsMouseOnSpliter"></a><code>function <b>IsMouseOnSpliter</b>(pp:<a  href="TypeDescriptors.html#PPropertyDeskriptor">PPropertyDeskriptor</a>; X,Y:Integer):<a  href="gdbasetypes.html#GDBBoolean">GDBBoolean</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="createeditor"></a><code>procedure <b>createeditor</b>(pp:<a  href="TypeDescriptors.html#PPropertyDeskriptor">PPropertyDeskriptor</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CurrObjIsEntity"></a><code>function <b>CurrObjIsEntity</b>:boolean;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="IsHeadersEnabled"></a><code>function <b>IsHeadersEnabled</b>:boolean;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="HeadersHeight"></a><code>function <b>HeadersHeight</b>:integer;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MouseMove"></a><code>procedure <b>MouseMove</b>(Shift: TShiftState; X, Y: Integer); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MouseLeave"></a><code>procedure <b>MouseLeave</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MouseDown"></a><code>procedure <b>MouseDown</b>(Button: TMouseButton; Shift: TShiftState;X, Y: Integer); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="MouseUp"></a><code>procedure <b>MouseUp</b>(Button: TMouseButton; Shift:TShiftState; X,Y:Integer); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="UpdateObjectInInsp"></a><code>procedure <b>UpdateObjectInInsp</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="setptr"></a><code>procedure <b>setptr</b>(const UndoStack:<a  href="zeundostack.html#PGDBObjOpenArrayOfUCommands">PGDBObjOpenArrayOfUCommands</a>;const f:<a  href="gdbase.TzeUnitsFormat.html">TzeUnitsFormat</a>;exttype:<a  href="varmandef.html#PUserTypeDescriptor">PUserTypeDescriptor</a>; addr,context:<a  href="gdbasetypes.html#GDBPointer">GDBPointer</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="updateinsp"></a><code>procedure <b>updateinsp</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetBounds"></a><code>procedure <b>SetBounds</b>(ALeft, ATop, AWidth, AHeight: integer); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetPreferredSize"></a><code>procedure <b>GetPreferredSize</b>(var PreferredWidth, PreferredHeight: integer; Raw: boolean = false; WithThemeSpace: boolean = true); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DoSendBoundsToInterface"></a><code>procedure <b>DoSendBoundsToInterface</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DoAllAutoSize"></a><code>procedure <b>DoAllAutoSize</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FormHide"></a><code>procedure <b>FormHide</b>(Sender: TObject);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

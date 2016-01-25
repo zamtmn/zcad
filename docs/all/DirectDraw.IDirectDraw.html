@@ -1,0 +1,282 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>DirectDraw: Interface IDirectDraw</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<a name="IDirectDraw"></a><h1 class="cio">Interface IDirectDraw</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></td><td>Fields</td><td><a class="section" href="#PasDoc-Methods">Methods</a></td><td>Properties</td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a  href="DirectDraw.html">DirectDraw</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type IDirectDraw = interface(IUnknown)</code></p>
+<h2 class="description">Description</h2>
+<h6 class="description_section">Attributes</h6>
+<dl class="attributes">
+  <dt>GUID['{6C14DB80-A733-11CE-A521-0020AF0BE560}']</dt>
+  <dd></dd>
+</dl>
+<a name="PasDoc-Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">IUnknown</li>
+<li class="thisitem">IDirectDraw</li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#Compact">Compact</a></b>: HResult; stdcall;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#CreateClipper">CreateClipper</a></b>(dwFlags: DWORD; out lplpDDClipper: <a  href="DirectDraw.IDirectDrawClipper.html">IDirectDrawClipper</a>; pUnkOuter: IUnknown): HResult; stdcall;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#CreatePalette">CreatePalette</a></b>(dwFlags: DWORD; lpColorTable: Pointer; out lplpDDPalette: <a  href="DirectDraw.IDirectDrawPalette.html">IDirectDrawPalette</a>; pUnkOuter: IUnknown): HResult; stdcall;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#CreateSurface">CreateSurface</a></b>(var lpDDSurfaceDesc: <a  href="DirectDraw.html#TDDSurfaceDesc">TDDSurfaceDesc</a>; out lplpDDSurface: <a  href="DirectDraw.IDirectDrawSurface.html">IDirectDrawSurface</a>; pUnkOuter: IUnknown): HResult; stdcall;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#DuplicateSurface">DuplicateSurface</a></b>(lpDDSurface: <a  href="DirectDraw.IDirectDrawSurface.html">IDirectDrawSurface</a>; out lplpDupDDSurface: <a  href="DirectDraw.IDirectDrawSurface.html">IDirectDrawSurface</a>): HResult; stdcall;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#EnumDisplayModes">EnumDisplayModes</a></b>(dwFlags: DWORD; lpDDSurfaceDesc: <a  href="DirectDraw.html#PDDSurfaceDesc">PDDSurfaceDesc</a>; lpContext: Pointer; lpEnumModesCallback: <a  href="DirectDraw.html#TDDEnumModesCallback">TDDEnumModesCallback</a>): HResult; stdcall;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#EnumSurfaces">EnumSurfaces</a></b>(dwFlags: DWORD; const lpDDSD: <a  href="DirectDraw.html#TDDSurfaceDesc">TDDSurfaceDesc</a>; lpContext: Pointer; lpEnumCallback: <a  href="DirectDraw.html#TDDEnumSurfacesCallback">TDDEnumSurfacesCallback</a>) : HResult; stdcall;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#FlipToGDISurface">FlipToGDISurface</a></b>: HResult; stdcall;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#GetCaps">GetCaps</a></b>(lpDDDriverCaps: <a  href="DirectDraw.html#PDDCaps">PDDCaps</a>; lpDDHELCaps: <a  href="DirectDraw.html#PDDCaps">PDDCaps</a>): HResult; stdcall;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#GetDisplayMode">GetDisplayMode</a></b>(out lpDDSurfaceDesc: <a  href="DirectDraw.html#TDDSurfaceDesc">TDDSurfaceDesc</a>): HResult; stdcall;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#GetFourCCCodes">GetFourCCCodes</a></b>(var lpNumCodes: DWORD; lpCodes: PDWORD): HResult; stdcall;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#GetGDISurface">GetGDISurface</a></b>(out lplpGDIDDSSurface: <a  href="DirectDraw.IDirectDrawSurface.html">IDirectDrawSurface</a>): HResult; stdcall;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#GetMonitorFrequency">GetMonitorFrequency</a></b>(out lpdwFrequency: DWORD): HResult; stdcall;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#GetScanLine">GetScanLine</a></b>(out lpdwScanLine: DWORD): HResult; stdcall;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#GetVerticalBlankStatus">GetVerticalBlankStatus</a></b>(out lpbIsInVB: BOOL): HResult; stdcall;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#Initialize">Initialize</a></b>(lpGUID: PGUID): HResult; stdcall;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#RestoreDisplayMode">RestoreDisplayMode</a></b>: HResult; stdcall;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#SetCooperativeLevel">SetCooperativeLevel</a></b>(hWnd: HWND; dwFlags: DWORD): HResult; stdcall;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#SetDisplayMode">SetDisplayMode</a></b>(dwWidth: DWORD; dwHeight: DWORD; dwBpp: DWORD): HResult; stdcall;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a  href="DirectDraw.IDirectDraw.html#WaitForVerticalBlank">WaitForVerticalBlank</a></b>(dwFlags: DWORD; hEvent: THandle): HResult; stdcall;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Compact"></a><code>function <b>Compact</b>: HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+IDirectDraw methods **</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CreateClipper"></a><code>function <b>CreateClipper</b>(dwFlags: DWORD; out lplpDDClipper: <a  href="DirectDraw.IDirectDrawClipper.html">IDirectDrawClipper</a>; pUnkOuter: IUnknown): HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CreatePalette"></a><code>function <b>CreatePalette</b>(dwFlags: DWORD; lpColorTable: Pointer; out lplpDDPalette: <a  href="DirectDraw.IDirectDrawPalette.html">IDirectDrawPalette</a>; pUnkOuter: IUnknown): HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CreateSurface"></a><code>function <b>CreateSurface</b>(var lpDDSurfaceDesc: <a  href="DirectDraw.html#TDDSurfaceDesc">TDDSurfaceDesc</a>; out lplpDDSurface: <a  href="DirectDraw.IDirectDrawSurface.html">IDirectDrawSurface</a>; pUnkOuter: IUnknown): HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="DuplicateSurface"></a><code>function <b>DuplicateSurface</b>(lpDDSurface: <a  href="DirectDraw.IDirectDrawSurface.html">IDirectDrawSurface</a>; out lplpDupDDSurface: <a  href="DirectDraw.IDirectDrawSurface.html">IDirectDrawSurface</a>): HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EnumDisplayModes"></a><code>function <b>EnumDisplayModes</b>(dwFlags: DWORD; lpDDSurfaceDesc: <a  href="DirectDraw.html#PDDSurfaceDesc">PDDSurfaceDesc</a>; lpContext: Pointer; lpEnumModesCallback: <a  href="DirectDraw.html#TDDEnumModesCallback">TDDEnumModesCallback</a>): HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EnumSurfaces"></a><code>function <b>EnumSurfaces</b>(dwFlags: DWORD; const lpDDSD: <a  href="DirectDraw.html#TDDSurfaceDesc">TDDSurfaceDesc</a>; lpContext: Pointer; lpEnumCallback: <a  href="DirectDraw.html#TDDEnumSurfacesCallback">TDDEnumSurfacesCallback</a>) : HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FlipToGDISurface"></a><code>function <b>FlipToGDISurface</b>: HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetCaps"></a><code>function <b>GetCaps</b>(lpDDDriverCaps: <a  href="DirectDraw.html#PDDCaps">PDDCaps</a>; lpDDHELCaps: <a  href="DirectDraw.html#PDDCaps">PDDCaps</a>): HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetDisplayMode"></a><code>function <b>GetDisplayMode</b>(out lpDDSurfaceDesc: <a  href="DirectDraw.html#TDDSurfaceDesc">TDDSurfaceDesc</a>): HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetFourCCCodes"></a><code>function <b>GetFourCCCodes</b>(var lpNumCodes: DWORD; lpCodes: PDWORD): HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetGDISurface"></a><code>function <b>GetGDISurface</b>(out lplpGDIDDSSurface: <a  href="DirectDraw.IDirectDrawSurface.html">IDirectDrawSurface</a>): HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetMonitorFrequency"></a><code>function <b>GetMonitorFrequency</b>(out lpdwFrequency: DWORD): HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetScanLine"></a><code>function <b>GetScanLine</b>(out lpdwScanLine: DWORD): HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetVerticalBlankStatus"></a><code>function <b>GetVerticalBlankStatus</b>(out lpbIsInVB: BOOL): HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Initialize"></a><code>function <b>Initialize</b>(lpGUID: PGUID): HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="RestoreDisplayMode"></a><code>function <b>RestoreDisplayMode</b>: HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetCooperativeLevel"></a><code>function <b>SetCooperativeLevel</b>(hWnd: HWND; dwFlags: DWORD): HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SetDisplayMode"></a><code>function <b>SetDisplayMode</b>(dwWidth: DWORD; dwHeight: DWORD; dwBpp: DWORD): HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Warning! SetDisplayMode differs between DirectDraw 1 and DirectDraw 2 **</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a  href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="WaitForVerticalBlank"></a><code>function <b>WaitForVerticalBlank</b>(dwFlags: DWORD; hEvent: THandle): HResult; stdcall;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

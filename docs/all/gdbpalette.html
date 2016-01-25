@@ -1,0 +1,643 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>gdbpalette</title>
+<meta name="generator" content="PasDoc 0.14.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<table class="container"><tr><td class="navigation">
+<p><a href="AllUnits.html" class="navigation">Units</a></p><p><a href="ClassHierarchy.html" class="navigation">Class Hierarchy</a></p><p><a href="AllClasses.html" class="navigation">Classes, Interfaces, Objects and Records</a></p><p><a href="AllTypes.html" class="navigation">Types</a></p><p><a href="AllVariables.html" class="navigation">Variables</a></p><p><a href="AllConstants.html" class="navigation">Constants</a></p><p><a href="AllFunctions.html" class="navigation">Functions and Procedures</a></p><p><a href="AllIdentifiers.html" class="navigation">Identifiers</a></p></td><td class="content">
+<h1 class="unit">Unit gdbpalette</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section" href="#PasDoc-Description">Description</a></td><td><a class="section" href="#PasDoc-Uses">Uses</a></td><td><a class="section" href="#PasDoc-Classes">Classes, Interfaces, Objects and Records</a></td><td>Functions and Procedures</td><td><a class="section" href="#PasDoc-Types">Types</a></td><td><a class="section" href="#PasDoc-Constants">Constants</a></td><td><a class="section" href="#PasDoc-Variables">Variables</a></td></tr></table>
+<a name="PasDoc-Description"></a><h2 class="description">Description</h2>
+&nbsp;<a name="PasDoc-Uses"></a><h2 class="uses">Uses</h2>
+<ul class="useslist"><li><a  href="gdbasetypes.html">gdbasetypes</a></li></ul><h2 class="overview">Overview</h2>
+<a name="PasDoc-Classes"></a><h3 class="cio">Classes, Interfaces, Objects and Records</h3>
+<table class="classestable wide_list">
+<tr class="listheader">
+<th class="itemname">Name</th>
+<th class="itemdesc">Description</th>
+</tr>
+<tr class="list">
+<td class="itemname">packed record&nbsp;<a class="bold" href="gdbpalette.TRGB.html"><code>TRGB</code></a></td>
+<td class="itemdesc">&nbsp;</td>
+</tr>
+<tr class="list2">
+<td class="itemname">packed record&nbsp;<a class="bold" href="gdbpalette.TDXFCOLOR.html"><code>TDXFCOLOR</code></a></td>
+<td class="itemdesc">&nbsp;</td>
+</tr>
+</table>
+<a name="PasDoc-Types"></a><h3 class="summary">Types</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="gdbpalette.html#PTRGB">PTRGB</a></b>=&circ;<a  href="gdbpalette.TRGB.html">TRGB</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="gdbpalette.html#PTDXFCOLOR">PTDXFCOLOR</a></b>=&circ;<a  href="gdbpalette.TDXFCOLOR.html">TDXFCOLOR</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="gdbpalette.html#PTGDBPaletteColor">PTGDBPaletteColor</a></b>=&circ;<a  href="gdbpalette.html#TGDBPaletteColor">TGDBPaletteColor</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="gdbpalette.html#TGDBPaletteColor">TGDBPaletteColor</a></b>=<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="gdbpalette.html#TGDBPalette">TGDBPalette</a></b>=packed array[0..255] of <a  href="gdbpalette.TDXFCOLOR.html">TDXFCOLOR</a>;</code></td>
+</tr>
+</table>
+<a name="PasDoc-Constants"></a><h3 class="summary">Constants</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="gdbpalette.html#NotTransparent">NotTransparent</a></b>=0;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="gdbpalette.html#acadpalette">acadpalette</a></b>:<a  href="gdbpalette.html#TGDBPalette">TGDBPalette</a>=(
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:0;  b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:0;  b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:'Red'),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:255;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:'Yellow'),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:255;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:'Green'),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:255;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:'Cyan'),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:0;  b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:'Blue'),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:0;  b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:'Magenta'),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:255;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:'White'),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:128;g:128;b:128;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:192;g:192;b:192;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:0;  b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:127;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:0;  b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:102;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:0;  b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:76; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:0;  b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:63; b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:0;  b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:38; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:63; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:159;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:51; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:127;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:38; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:95; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:31; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:79; b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:19; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:47; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:127;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:191;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:102;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:153;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:76; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:114;b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:63; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:95; b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:38; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:57; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:191;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:223;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:153;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:178;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:114;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:133;b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:95; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:111;b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:57; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:66; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:255;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:255;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:204;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:204;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:153;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:153;b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:127;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:127;b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:76; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:76; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:191;g:255;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:223;g:255;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:204;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:178;g:204;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:114;g:153;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:133;g:153;b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:95; g:127;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:111;g:127;b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:57; g:76; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:66; g:76; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:255;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:191;g:255;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:204;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:204;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:153;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:114;g:153;b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:127;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:95; g:127;b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:76; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:57; g:76; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:255;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:159;g:255;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:51; g:204;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:204;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:153;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:95; g:153;b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:31; g:127;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:79; g:127;b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:19; g:76; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:47; g:76; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:255;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:255;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:204;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:204;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:153;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:153;b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:127;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:127;b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:76; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:76; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:255;b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:255;b:159;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:204;b:51 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:204;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:153;b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:153;b:95 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:127;b:31 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:127;b:79 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:76; b:19 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:76; b:47 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:255;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:255;b:191;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:204;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:204;b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:153;b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:153;b:114;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:127;b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:127;b:95 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:76; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:76; b:57 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:255;b:191;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:255;b:223;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:204;b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:204;b:178;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:153;b:114;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:153;b:133;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:127;b:95 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:127;b:111;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:76; b:57 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:76; b:66 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:255;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:255;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:204;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:204;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:153;b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:153;b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:127;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:127;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:76; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:76; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:191;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:223;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:153;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:178;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:114;b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:133;b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:95; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:111;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:57; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:66; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:127;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:191;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:102;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:153;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:76; b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:114;b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:63; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:95; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:38; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:57; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:63; b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:159;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:51; b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:127;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:38; b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:95; b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:31; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:79; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:19; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:47; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:0;  b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:127;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:0;  b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:102;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:0;  b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:76; b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:0;  b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:63; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:0;  b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:38; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:0;  b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:159;g:127;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:51; g:0;  b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:102;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:0;  b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:95; g:76; b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:31; g:0;  b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:79; g:63; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:19; g:0;  b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:47; g:38; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:0;  b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:191;g:127;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:0;  b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:102;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:0;  b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:114;g:76; b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:0;  b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:95; g:63; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:0;  b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:57; g:38; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:191;g:0;  b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:223;g:127;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:0;  b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:178;g:102;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:114;g:0;  b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:133;g:76; b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:95; g:0;  b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:111;g:63; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:57; g:0;  b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:66; g:38; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:0;  b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:127;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:0;  b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:102;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:0;  b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:76; b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:0;  b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:63; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:0;  b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:38; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:0;  b:191;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:127;b:223;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:0;  b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:102;b:178;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:0;  b:114;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:76; b:133;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:0;  b:95 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:63; b:111;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:0;  b:57 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:38; b:66 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:0;  b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:127;b:191;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:0;  b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:102;b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:0;  b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:76; b:114;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:0;  b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:63; b:95 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:0;  b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:38; b:57 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:0;  b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:127;b:159;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:0;  b:51 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:102;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:0;  b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:76; b:95 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:0;  b:31 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:63; b:79 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:0;  b:19 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:38; b:47 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:51; g:51; b:51 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:91; g:91; b:91 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:132;g:132;b:132;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:173;g:173;b:173;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:214;g:214;b:214;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:255;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:'')
+);</code></td>
+</tr>
+</table>
+<a name="PasDoc-Variables"></a><h3 class="summary">Variables</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a  href="gdbpalette.html#palette">palette</a></b>: <a  href="gdbpalette.html#TGDBPalette">TGDBPalette</a>;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Types</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="PTRGB"></a><code><b>PTRGB</b>=&circ;<a  href="gdbpalette.TRGB.html">TRGB</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="PTDXFCOLOR"></a><code><b>PTDXFCOLOR</b>=&circ;<a  href="gdbpalette.TDXFCOLOR.html">TDXFCOLOR</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="PTGDBPaletteColor"></a><code><b>PTGDBPaletteColor</b>=&circ;<a  href="gdbpalette.html#TGDBPaletteColor">TGDBPaletteColor</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TGDBPaletteColor"></a><code><b>TGDBPaletteColor</b>=<a  href="gdbasetypes.html#GDBInteger">GDBInteger</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TGDBPalette"></a><code><b>TGDBPalette</b>=packed array[0..255] of <a  href="gdbpalette.TDXFCOLOR.html">TDXFCOLOR</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Constants</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="NotTransparent"></a><code><b>NotTransparent</b>=0;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="acadpalette"></a><code><b>acadpalette</b>:<a  href="gdbpalette.html#TGDBPalette">TGDBPalette</a>=(
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:0;  b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:0;  b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:'Red'),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:255;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:'Yellow'),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:255;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:'Green'),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:255;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:'Cyan'),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:0;  b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:'Blue'),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:0;  b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:'Magenta'),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:255;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:'White'),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:128;g:128;b:128;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:192;g:192;b:192;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:0;  b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:127;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:0;  b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:102;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:0;  b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:76; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:0;  b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:63; b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:0;  b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:38; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:63; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:159;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:51; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:127;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:38; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:95; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:31; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:79; b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:19; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:47; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:127;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:191;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:102;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:153;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:76; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:114;b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:63; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:95; b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:38; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:57; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:191;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:223;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:153;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:178;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:114;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:133;b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:95; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:111;b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:57; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:66; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:255;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:255;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:204;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:204;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:153;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:153;b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:127;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:127;b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:76; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:76; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:191;g:255;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:223;g:255;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:204;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:178;g:204;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:114;g:153;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:133;g:153;b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:95; g:127;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:111;g:127;b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:57; g:76; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:66; g:76; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:255;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:191;g:255;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:204;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:204;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:153;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:114;g:153;b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:127;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:95; g:127;b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:76; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:57; g:76; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:255;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:159;g:255;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:51; g:204;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:204;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:153;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:95; g:153;b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:31; g:127;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:79; g:127;b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:19; g:76; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:47; g:76; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:255;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:255;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:204;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:204;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:153;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:153;b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:127;b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:127;b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:76; b:0  ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:76; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:255;b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:255;b:159;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:204;b:51 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:204;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:153;b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:153;b:95 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:127;b:31 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:127;b:79 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:76; b:19 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:76; b:47 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:255;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:255;b:191;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:204;b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:204;b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:153;b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:153;b:114;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:127;b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:127;b:95 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:76; b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:76; b:57 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:255;b:191;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:255;b:223;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:204;b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:204;b:178;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:153;b:114;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:153;b:133;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:127;b:95 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:127;b:111;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:76; b:57 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:76; b:66 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:255;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:255;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:204;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:204;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:153;b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:153;b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:127;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:127;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:76; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:76; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:191;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:223;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:153;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:178;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:114;b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:133;b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:95; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:111;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:57; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:66; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:127;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:191;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:102;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:153;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:76; b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:114;b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:63; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:95; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:38; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:57; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:63; b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:159;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:51; b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:127;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:38; b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:95; b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:31; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:79; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:19; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:47; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:0;  b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:127;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:0;  b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:102;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:0;  b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:76; b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:0;  b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:63; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:0;  g:0;  b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:38; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:0;  b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:159;g:127;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:51; g:0;  b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:102;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:0;  b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:95; g:76; b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:31; g:0;  b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:79; g:63; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:19; g:0;  b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:47; g:38; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:0;  b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:191;g:127;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:102;g:0;  b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:102;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:0;  b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:114;g:76; b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:63; g:0;  b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:95; g:63; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:38; g:0;  b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:57; g:38; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:191;g:0;  b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:223;g:127;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:0;  b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:178;g:102;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:114;g:0;  b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:133;g:76; b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:95; g:0;  b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:111;g:63; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:57; g:0;  b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:66; g:38; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:0;  b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:127;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:0;  b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:102;b:204;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:0;  b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:76; b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:0;  b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:63; b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:0;  b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:38; b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:0;  b:191;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:127;b:223;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:0;  b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:102;b:178;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:0;  b:114;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:76; b:133;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:0;  b:95 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:63; b:111;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:0;  b:57 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:38; b:66 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:0;  b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:127;b:191;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:0;  b:102;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:102;b:153;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:0;  b:76 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:76; b:114;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:0;  b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:63; b:95 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:0;  b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:38; b:57 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:0;  b:63 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:127;b:159;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:0;  b:51 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:204;g:102;b:127;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:0;  b:38 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:153;g:76; b:95 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:0;  b:31 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:127;g:63; b:79 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:0;  b:19 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:76; g:38; b:47 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:51; g:51; b:51 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:91; g:91; b:91 ;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:132;g:132;b:132;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:173;g:173;b:173;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:214;g:214;b:214;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:''),
+  (<a  href="GDBObjAbstractTypes.RGB.html">RGB</a>:(r:255;g:255;b:255;a:<a  href="gdbpalette.html#NotTransparent">NotTransparent</a>);name:'')
+);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Variables</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="palette"></a><code><b>palette</b>: <a  href="gdbpalette.html#TGDBPalette">TGDBPalette</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  href="http://pasdoc.sourceforge.net/">PasDoc 0.14.0</a>. </em>
+</span>
+</td></tr></table></body></html>

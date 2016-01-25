@@ -17,6 +17,7 @@
 }
 {$mode objfpc}
 
+{**Модуль реализации чертежных команд (линия, круг, размеры и т.д.)}
 unit gdbcommandsexample;
 
 { file def.inc is necessary to include at the beginning of each module zcad
@@ -91,7 +92,7 @@ uses
   {UGDBOpenArrayOfUCommands,}zcchangeundocommand,
 
   uzclog;                //log system
-                      //система логирования
+                      //<**система логирования
 const
      rsSpecifyFirstPoint='Specify first point:';
      rsSpecifySecondPoint='Specify second point:';
@@ -109,11 +110,13 @@ type
                        ProcessLineTypeScale:GDBBoolean;(*'Process line type scale'*)
                        ProcessColor:GDBBoolean;(*'Process color'*)
                  end;
+    //** Создание выподающего меню в инспекторе (3Dolyline или LWPolyline)
     TRectangEntType=(RET_3DPoly(*'3DPoly'*),RET_LWPoly(*'LWPoly'*));
+    //** Добавление панели упр многоугольниками в инспекторе
     TRectangParam=packed record
-                       ET:TRectangEntType;(*'Entity type'*)
-                       VNum:GDBInteger;(*'Number of vertices'*)
-                       PolyWidth:GDBDouble;(*'Polyline width'*)
+                       ET:TRectangEntType;(*'Entity type'*)      //**< Выбор типа объекта 3Dolyline или LWPolyline
+                       VNum:GDBInteger;(*'Number of vertices'*)  //**< Определение количества вершин
+                       PolyWidth:GDBDouble;(*'Polyline width'*)  //**< Вес линий
                  end;
 {EXPORT-}
     PT3PointPentity=^T3PointPentity;
@@ -1181,11 +1184,16 @@ var
     pe,petemp:T3PointPentity;
     dc:TDrawContext;
     PInternalRTTITypeDesk:PRecordDescriptor;
+    PUser:PUserTypeDescriptor;
+    setUserParam:TRectangParam;
     pf:PfieldDescriptor;
 begin
    PInternalRTTITypeDesk:=pointer(SysUnit^.TypeName2PTD( 'TRectangParam'));//находим описание типа TRectangParam, мы сразу знаем что это описание записи, поэтому нужно привести тип
 
    pf:=PInternalRTTITypeDesk^.FindField('ET'); //находим описание поля ET
+   pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
+
+   pf:=PInternalRTTITypeDesk^.FindField('PolyWidth'); //находим описание поля ET
    pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
 
    pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
@@ -1194,14 +1202,23 @@ begin
    SetGDBObjInspProc( nil,gdb.GetUnitsFormat,PInternalRTTITypeDesk,
                               @RectangParam,
                               gdb.GetCurrentDWG );
+
+
     if commandmanager.get3dpoint('Specify first point:',pe.p1) then
     begin
 
-      pf:=PInternalRTTITypeDesk^.FindField('ET');//находим описание поля ET
-      pf^.base.Attributes:=pf^.base.Attributes or FA_READONLY;//устанавливаем ему флаг ридонли
+      pf:=PInternalRTTITypeDesk^.FindField('PolyWidth');
+      PolyWidth.endw:=pf^.base.Attributes;
+      PolyWidth.startw:=1;
+
+
+
 
       pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
       pf^.base.Attributes:=pf^.base.Attributes or FA_HIDDEN_IN_OBJ_INSP;//устанавливаем ему флаг cкрытности
+
+      pf:=PInternalRTTITypeDesk^.FindField('ET');//находим описание поля ET
+      pf^.base.Attributes:=pf^.base.Attributes or FA_READONLY;//устанавливаем ему флаг ридонли
 
         // pline := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
          //создаем только одну полилинию//GDBObjLWPolyline.CreateInstance;
@@ -1213,8 +1230,7 @@ begin
 
          polyVert.x:=pe.p1.x;
          polyVert.y:=pe.p1.y;
-         PolyWidth.endw:=0;
-         PolyWidth.startw:=0;
+
 
          polyObj^.Vertex2D_in_OCS_Array.Add(@polyVert);
          polyObj^.Width2D_in_OCS_Array.Add(@PolyWidth);
@@ -1230,8 +1246,12 @@ begin
 
          //polyObj^.CoordInOCS.lBegin:=pe.p1;
          Interactive2DRectangleManipulator(polyObj,pe.p1,false);
+              //pf^.
+         //PUser:= pf^.base.PFT;
+         //PUser^.
+         //PUser^.TypeName;
 //      if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractivePolyLineManipulator,pline) then
-      if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@Interactive2DRectangleManipulator,polyObj) then
+      if commandmanager.Get3DPointInteractive(PUser^.TypeName,pe.p2,@Interactive2DRectangleManipulator,polyObj) then
       begin
           //незабываем вконце добавить всё что наконструировали в чертеж//
           AddEntToCurrentDrawingWithUndo(polyObj);

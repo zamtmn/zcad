@@ -59,6 +59,7 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                             function RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
                             function GoodRemoveMiFromArray(const obj:GDBObjEntity):GDBInteger;virtual;
                             {function SubMi(pobj:pGDBObjEntity):GDBInteger;virtual;}
+                            //** Добавляет объект в область ConstructObjRoot или mainObjRoot или итд. Пример добавления gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@sampleObj);
                             function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;
                             function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
                             function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;

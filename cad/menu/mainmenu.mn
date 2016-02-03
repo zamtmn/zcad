@@ -136,6 +136,7 @@ Panel Draw;
     action ACN_LINE
     action ACN_3DPOLY
     action ACN_CIRCLE
+	action ACN_RECTANGLE
     action ACN_BInsert
     action ACN_TEXT
   }
@@ -287,6 +288,7 @@ MainMenuItem Draw;
         action ACN_CIRCLE2P
         action ACN_CIRCLE3P
       }
+	action ACN_RECTANGLE
     action ACN_ARC
     action ACN_BInsert
     action ACN_TEXT

@@ -87,6 +87,7 @@ action ACN_MULTIOBJVARMAN,MultiObjVarMan,mvarman.bmp,Multi object variables mana
 
 action ACN_LINE,Line,line.bmp,Draw line,,
 action ACN_3DPOLY,3DPoly,pline.bmp,Draw 3Dpolyline,,
+action ACN_RECTANGLE,Rectangle,rectangle.bmp,Draw rectangle,,
 action ACN_CIRCLE,Circle,circle.bmp,Center; radius,,
 action ACN_CIRCLECD,Circle(cd),circlecd.bmp,Center; diameter,,
 action ACN_CIRCLE2P,Circle(2p),circle2p.bmp,2 points,,

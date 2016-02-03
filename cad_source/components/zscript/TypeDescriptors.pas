@@ -63,9 +63,19 @@ PFieldDescriptor=^FieldDescriptor;
 pBaseDescriptor=^BaseDescriptor;
 BaseDescriptor=record
                       ProgramName:GDBString;
+
                       UserName:GDBString;
+
                       PFT:PUserTypeDescriptor;
+
+                      {** Сделать строку только для чтения/редактр или скрыть/открыть итд.
+                       Пример:
+                       samplef:=sampleInternalRTTITypeDesk^.FindField('VNum'); находим описание поля VNum
+                       samplef^.base.Attributes:=samplef^.base.Attributes and (not FA_HIDDEN_IN_OBJ_INSP); сбрасываем ему флаг cкрытности
+                       samplef^.base.Attributes:=samplef^.base.Attributes or FA_HIDDEN_IN_OBJ_INSP; устанавливаем ему флаг cкрытности
+                       }
                       Attributes:GDBWord;
+
                       Saved:GDBWord;
                end;
 

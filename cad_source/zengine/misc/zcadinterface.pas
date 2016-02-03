@@ -66,7 +66,19 @@ type
     TSetCommandLineMode=procedure(m:TCLineMode) of object;
 var
    //Objinsp
+   {**Позволяет в инспектор вывести то что тебе нужно
+    Пример:
+    SetGDBObjInspProc( nil,gdb.GetUnitsFormat,sampleInternalRTTITypeDesk,
+                       @sampleParam,
+                        gdb.GetCurrentDWG );
+    nil - нужно для работы с УНДО/РЕДО;
+    gdb.GetUnitsFormat - так надо всегда (наверное :) )
+    sampleInternalRTTITypeDesk - что будет помещено в инспектор (определение в коде sampleInternalRTTITypeDesk:=pointer(SysUnit^.TypeName2PTD( 'TSampleParam'));)
+    @sampleParam - адресс на созданную запись, которая помещается в инспектор
+    gdb.GetCurrentDWG  - так надо всегда!
+    }
    SetGDBObjInspProc:TSetGDBObjInsp;
+
    StoreAndSetGDBObjInspProc:TStoreAndSetGDBObjInsp;
    ReStoreGDBObjInspProc:TFunction__Boolean;
    UpdateObjInspProc:TSimpleProcedure;

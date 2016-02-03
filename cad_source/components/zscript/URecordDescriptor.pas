@@ -24,6 +24,7 @@ interface
 uses LCLProc,UPointerDescriptor,strproc,{log,}UGDBOpenArrayOfByte,sysutils,UBaseTypeDescriptor,UGDBOpenArrayOfTObjLinkRecord,
   TypeDescriptors{,UGDBOpenArrayOfPointer},UGDBOpenArrayOfData,gdbasetypes,varmandef,gdbase{,UGDBStringArray},memman;
 type
+{** Для работы с инспектором.}
 PRecordDescriptor=^RecordDescriptor;
 RecordDescriptor=object(TUserTypeDescriptor)
                        Fields:GDBOpenArrayOfData;
@@ -31,7 +32,7 @@ RecordDescriptor=object(TUserTypeDescriptor)
                        constructor init(tname:string;pu:pointer);
                        function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                        procedure AddField(var fd:FieldDescriptor);
-                       function FindField(fn:GDBString):PFieldDescriptor;virtual;
+                       function FindField(fn:GDBString):PFieldDescriptor;virtual; //**< Найти требуемое поля. Пример : sampleRTTITypeDesk^.FindField('PolyWidth')
                        function SetAttrib(fn:GDBString;SetA,UnSetA:GDBWord):PFieldDescriptor;
                        procedure ApplyOperator(oper,path:GDBString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;
                        procedure AddConstField(const fd:FieldDescriptor);

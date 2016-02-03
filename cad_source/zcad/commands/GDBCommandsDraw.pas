@@ -3126,7 +3126,7 @@ begin
       scale(a,button);
       result:=cmd_ok;
 end;
-function _3DPoly_com_CommandStart(operands:TCommandOperands):TCommandResult;
+function _3DPoly_com_CommandStart(operands:TCommandOperands):TCommandResult; //< Команда построитель полилинии начало
 begin
   p3dpl:=nil;
   GDB.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));

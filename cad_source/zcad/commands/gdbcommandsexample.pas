@@ -1142,43 +1142,153 @@ end;
 //  //ln^.FormatEntity(gdb.GetCurrentDWG^,dc);
 //end;
 
-procedure Interactive2DRectangleManipulator( const PInteractiveData : GDBPointer {pointer to the line entity};
+procedure InteractiveLWRectangleManipulator( const PInteractiveData : GDBPointer {pointer to the line entity};
                                                           Point : GDBVertex  {new end coord};
                                                           Click : GDBBoolean {true if lmb presseed});
 var
-  poly : PGDBObjLWPolyline absolute PInteractiveData;
-  //poly : PGDBObjPolyline absolute PInteractiveData;
+  polyLWObj : PGDBObjLWPolyline absolute PInteractiveData;
   stPoint: GDBvertex2D;
-  tempPoint: GDBvertex2D;
   dc:TDrawContext;
-  //s: string;
 begin
 
-  GDBObjSetEntityCurrentProp(poly);
+  GDBObjSetEntityCurrentProp(polyLWObj);
 
-  stPoint := GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(0)^);
+  stPoint := GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(0)^);
 
-  GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(1)^).x := Point.x;
-  GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(1)^).y := stPoint.y;
+  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(1)^).x := Point.x;
+  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(1)^).y := stPoint.y;
 
-  GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(2)^).x := Point.x;
-  GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(2)^).y := Point.y;
+  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(2)^).x := Point.x;
+  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(2)^).y := Point.y;
 
-  GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(3)^).x := stPoint.x;
-  GDBvertex2D(poly^.Vertex2D_in_OCS_Array.getelement(3)^).y := Point.y;
-
+  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(3)^).x := stPoint.x;
+  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(3)^).y := Point.y;
 
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-  poly^.FormatEntity(gdb.GetCurrentDWG^,dc);
+
+  polyLWObj^.FormatEntity(gdb.GetCurrentDWG^,dc);
 
 end;
 
 
-function Draw2DRectangle_com(operands:TCommandOperands):TCommandResult;    //< Чертим прямоугольник
+procedure InteractiveRectangleManipulator( const PInteractiveData : GDBPointer {pointer to the line entity};
+                                                          Point : GDBVertex  {new end coord};
+                                                          Click : GDBBoolean {true if lmb presseed});
+var
+  polyObj : PGDBObjPolyline absolute PInteractiveData;
+  stPoint: GDBvertex;
+  dc:TDrawContext;
+begin
+
+  GDBObjSetEntityCurrentProp(polyObj);
+
+  stPoint := GDBvertex(polyObj^.VertexArrayInOCS.getelement(0)^);
+
+  GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(1)^).x := Point.x;
+  GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(1)^).y := stPoint.y;
+
+  GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(2)^).x := Point.x;
+  GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(2)^).y := Point.y;
+
+  GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(3)^).x := stPoint.x;
+  GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(3)^).y := Point.y;
+
+  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+
+  polyObj^.FormatEntity(gdb.GetCurrentDWG^,dc);
+
+end;
+
+function DrawRectangle_com(operands:TCommandOperands):TCommandResult;    //< Чертим прямоугольник
+var
+    vertexLWObj:GDBvertex2D;               //переменная для добавления вершин в полилинию
+    vertexObj:GDBvertex;
+    widthObj:GLLWWidth;                    //переменная для добавления веса линии в начале и конце пути
+    polyLWObj:PGDBObjLWPolyline;
+    polyObj:PGDBObjPolyline;
+    pe:T3PointPentity;
+    PInternalRTTITypeDesk:PRecordDescriptor; //**< Доступ к панели упр в инспекторе
+    pf:PfieldDescriptor;  //**< Управление нашей панелью в инспекторе
+
+begin
+   PInternalRTTITypeDesk:=pointer(SysUnit^.TypeName2PTD( 'TRectangParam'));//находим описание типа TRectangParam, мы сразу знаем что это описание записи, поэтому нужно привести тип
+   pf:=PInternalRTTITypeDesk^.FindField('ET'); //находим описание поля ET
+   pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
+   pf:=PInternalRTTITypeDesk^.FindField('PolyWidth'); //находим описание поля ET
+   pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
+   pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
+   pf^.base.Attributes:=pf^.base.Attributes or FA_HIDDEN_IN_OBJ_INSP;//устанавливаем ему флаг cкрытности
+   SetGDBObjInspProc( nil,gdb.GetUnitsFormat,PInternalRTTITypeDesk,
+                              @RectangParam,
+                              gdb.GetCurrentDWG );
+
+   if commandmanager.get3dpoint('Specify first point:',pe.p1) then
+   begin
+      pf:=PInternalRTTITypeDesk^.FindField('ET');//находим описание поля ET
+      pf^.base.Attributes:=pf^.base.Attributes or FA_READONLY;//устанавливаем ему флаг ридонли
+      pf:=PInternalRTTITypeDesk^.FindField('PolyWidth');//находим описание поля ET
+      pf^.base.Attributes:=pf^.base.Attributes or FA_READONLY;//устанавливаем ему флаг ридонли
+
+     //Создаем сразу 4-е точки прямоугольника, что бы в манипуляторе только управльть их координатами
+      widthObj.endw:=RectangParam.PolyWidth;
+      widthObj.startw:=RectangParam.PolyWidth;
+      if RectangParam.ET = RET_LWPoly then
+        begin
+             polyLWObj:=GDBObjLWPolyline.CreateInstance;
+             polyLWObj^.Closed:=true;
+             gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@polyLWObj);
+             vertexLWObj.x:=pe.p1.x;
+             vertexLWObj.y:=pe.p1.y;
+             polyLWObj^.Vertex2D_in_OCS_Array.Add(@vertexLWObj);
+             polyLWObj^.Width2D_in_OCS_Array.Add(@widthObj);
+
+             polyLWObj^.Vertex2D_in_OCS_Array.Add(@vertexLWObj);
+             polyLWObj^.Width2D_in_OCS_Array.Add(@widthObj);
+
+             polyLWObj^.Vertex2D_in_OCS_Array.Add(@vertexLWObj);
+             polyLWObj^.Width2D_in_OCS_Array.Add(@widthObj);
+
+             polyLWObj^.Vertex2D_in_OCS_Array.Add(@vertexLWObj);
+             polyLWObj^.Width2D_in_OCS_Array.Add(@widthObj);
+
+             InteractiveLWRectangleManipulator(polyLWObj,pe.p1,false);
+             if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveLWRectangleManipulator,polyLWObj) then
+             begin
+                AddEntToCurrentDrawingWithUndo(polyLWObj); //Добавить объект из конструкторской области в чертеж через ундо//
+                {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
+                нужно почистить список примитивов конструируемой области, без физического удаления примитивов}
+                gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
+             end
+        end
+        else begin
+             polyObj:=GDBObjPolyline.CreateInstance;
+             polyObj^.Closed:=true;
+             gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@polyObj);
+             vertexObj:=pe.p1;
+             polyObj^.VertexArrayInOCS.Add(@vertexObj);
+             polyObj^.VertexArrayInOCS.Add(@vertexObj);
+             polyObj^.VertexArrayInOCS.Add(@vertexObj);
+             polyObj^.VertexArrayInOCS.Add(@vertexObj);
+             InteractiveRectangleManipulator(polyObj,pe.p1,false);
+             if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveRectangleManipulator,polyObj) then
+             begin
+                AddEntToCurrentDrawingWithUndo(polyObj); //Добавить объект из конструкторской области в чертеж через ундо//
+                {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
+                нужно почистить список примитивов конструируемой области, без физического удаления примитивов}
+                gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
+             end
+        end;
+    end;
+    ReturnToDefaultProc(gdb.GetUnitsFormat); //< Возвращает инспектор в значение по умолчанию
+    result:=cmd_ok;
+end;
+
+// Пока не удалять я здесь тесты юзал попозже сам уничтожу, этот треш))
+function VEBTrashNotDeletePlease_com(operands:TCommandOperands):TCommandResult;    //< Чертим прямоугольник
 var
     pline,pline1,pline2,pline3,pline4:PGDBObjLine;
     polyVert:GDBvertex2D;               //переменная для добавления вершин в полилинию
-    PolyWidth:GLLWWidth;                //переменная для добавления веса линии в начале и конце пути
+    PollyWidth:GLLWWidth;                //переменная для добавления веса линии в начале и конце пути
     polyObj:PGDBObjLWPolyline;     //сам прямоугольник
     //polyObj:PGDBObjPolyline;     //сам прямоугольник
     pe,petemp:T3PointPentity;
@@ -1186,7 +1296,8 @@ var
     PInternalRTTITypeDesk:PRecordDescriptor;
     PUser:PUserTypeDescriptor;
     setUserParam:TRectangParam;
-    pf:PfieldDescriptor;
+    pf:PfieldDescriptor;  //**< dfgdfgdfgd
+    testDoubl:GDBDouble;
 begin
    PInternalRTTITypeDesk:=pointer(SysUnit^.TypeName2PTD( 'TRectangParam'));//находим описание типа TRectangParam, мы сразу знаем что это описание записи, поэтому нужно привести тип
 
@@ -1203,13 +1314,16 @@ begin
                               @RectangParam,
                               gdb.GetCurrentDWG );
 
-
     if commandmanager.get3dpoint('Specify first point:',pe.p1) then
     begin
 
-      pf:=PInternalRTTITypeDesk^.FindField('PolyWidth');
-      PolyWidth.endw:=pf^.base.Attributes;
-      PolyWidth.startw:=1;
+     // pf:=PInternalRTTITypeDesk^.FindField('PolyWidth');
+    //  PUser:= pf^.base.PFT^.;
+      //testDoubl:=GDBDouble(pf^.base.PFT^.GetTypeAttributes);
+      //           PInternalRTTITypeDesk^.Fields.getelement(1);
+      //setUserParam:=TRectangParam(PInternalRTTITypeDesk^.PUnit^);
+      PollyWidth.endw:=RectangParam.PolyWidth;
+      PollyWidth.startw:=RectangParam.PolyWidth;
 
 
 
@@ -1233,25 +1347,26 @@ begin
 
 
          polyObj^.Vertex2D_in_OCS_Array.Add(@polyVert);
-         polyObj^.Width2D_in_OCS_Array.Add(@PolyWidth);
+         polyObj^.Width2D_in_OCS_Array.Add(@PollyWidth);
 
          polyObj^.Vertex2D_in_OCS_Array.Add(@polyVert);
-         polyObj^.Width2D_in_OCS_Array.Add(@PolyWidth);
+         polyObj^.Width2D_in_OCS_Array.Add(@PollyWidth);
 
          polyObj^.Vertex2D_in_OCS_Array.Add(@polyVert);
-         polyObj^.Width2D_in_OCS_Array.Add(@PolyWidth);
+         polyObj^.Width2D_in_OCS_Array.Add(@PollyWidth);
 
          polyObj^.Vertex2D_in_OCS_Array.Add(@polyVert);
-         polyObj^.Width2D_in_OCS_Array.Add(@PolyWidth);
+         polyObj^.Width2D_in_OCS_Array.Add(@PollyWidth);
 
          //polyObj^.CoordInOCS.lBegin:=pe.p1;
-         Interactive2DRectangleManipulator(polyObj,pe.p1,false);
+         InteractiveLWRectangleManipulator(polyObj,pe.p1,false);
               //pf^.
          //PUser:= pf^.base.PFT;
          //PUser^.
          //PUser^.TypeName;
-//      if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractivePolyLineManipulator,pline) then
-      if commandmanager.Get3DPointInteractive(PUser^.TypeName,pe.p2,@Interactive2DRectangleManipulator,polyObj) then
+   //   if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractivePolyLineManipulator,pline) then
+      if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveLWRectangleManipulator,polyObj) then
+//      if commandmanager.Get3DPointInteractive(PUser^.TypeName,pe.p2,@Interactive2DRectangleManipulator,polyObj) then
       begin
           //незабываем вконце добавить всё что наконструировали в чертеж//
           AddEntToCurrentDrawingWithUndo(polyObj);
@@ -1332,9 +1447,11 @@ begin
           //     UndoCommandEndMarker;
           //
       end;
+      ReturnToDefaultProc(gdb.GetUnitsFormat);
     end;
     result:=cmd_ok;
 end;
+
 
 
 initialization
@@ -1363,6 +1480,7 @@ initialization
      CreateCommandFastObjectPlugin(@DrawArc_com,'Arc',CADWG,0);
      CreateCommandFastObjectPlugin(@DrawCircle_com,'Circle',CADWG,0);
      CreateCommandFastObjectPlugin(@DrawLine_com,'DrawLine',CADWG,0);
+     CreateCommandFastObjectPlugin(@DrawRectangle_com,'Rectangle',CADWG,0);
 
      CreateCommandFastObjectPlugin(@test_com,       'ts',         CADWG,0);
      CreateCommandFastObjectPlugin(@GetPoint_com,   'GetPoint',   CADWG,0);
@@ -1372,8 +1490,9 @@ initialization
      CreateCommandFastObjectPlugin(@GetLength_com,  'GetLength',  CADWG,0);
      CreateCommandFastObjectPlugin(@TestInsert1_com,'TestInsert1',CADWG,0);
      CreateCommandFastObjectPlugin(@TestInsert2_com,'TestInsert2',CADWG,0);
-     CreateCommandFastObjectPlugin(@Draw2DRectangle_com,       'test789',         CADWG,0);
-     RectangParam.ET:=RET_LWPoly;
+    // CreateCommandFastObjectPlugin(@Draw2DRectangle_com,       'test789',         CADWG,0);
+    // CreateCommandFastObjectPlugin(@DrawRectangle_com,       'test7890',         CADWG,0);
+     RectangParam.ET:=RET_3DPoly;
      RectangParam.VNum:=4;
-     RectangParam.PolyWidth:=1;
+     RectangParam.PolyWidth:=0;
 end.

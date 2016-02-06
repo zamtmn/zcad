@@ -1,18 +1,20 @@
 
 unit iolow;
-{$INCLUDE def.inc}
+{INCLUDE def.inc}
 
 interface
-uses gdbasetypes,sysutils;
+uses {gdbasetypes,}sysutils;
+type
+  TMyString=AnsiString;
 const
-  eol: GDBString=#13 + #10;
+  eol: TMyString=#13 + #10;
   syn_breacer=[#13,#10,' '];
 type
   popenarrayc = ^openarrayc;
   openarrayc = array[0..0] of ansichar;
 {EXPORT+}
   filestream = {$IFNDEF DELPHI}packed{$ENDIF} object
-    name:GDBString;
+    name:TMyString;
     bufer:{-}popenarrayc{/GDBPointer/};
     filesize,
       filepos,
@@ -21,32 +23,32 @@ type
       filehandle,
       bufersize,
       buferread,
-      buferpos: GDBInteger;
-    constructor init(bsize: GDBInteger);
-    constructor ReadFromFile(filename:gdbstring);
-    procedure assign(const fname: GDBString; mode: GDBLongword);
+      buferpos: {GDB}Integer;
+    constructor init(bsize: {GDB}Integer);
+    constructor ReadFromFile(filename:TMyString);
+    procedure assign(const fname: TMyString; mode: {GDB}Longword);
     procedure close;
     procedure readtobufer;
-    procedure continuebufer(symbolcount:GDBInteger);
-    function readGDBString: GDBString;
-    function ReadString: GDBString;
-    function ReadByte: GDBByte;
-    function ReadWord: GDBWord;
-    function readworld(break, ignore: GDBString): shortString;
-    function readtoparser(break:GDBString): GDBString;
+    procedure continuebufer(symbolcount:{GDB}Integer);
+    function readGDBString: TMyString;
+    function ReadString: TMyString;
+    function ReadByte: {GDB}Byte;
+    function ReadWord: {GDB}Word;
+    function readworld(break, ignore: TMyString): shortString;
+    function readtoparser(break:TMyString): TMyString;
     destructor done;
     destructor CloseAndDone;
   end;
 {EXPORT-}
-procedure WriteString_EOL(h: GDBInteger; s: GDBString);
+procedure WriteString_EOL(h: {GDB}Integer; s: TMyString);
 implementation
-constructor filestream.init(bsize: GDBInteger);
+constructor filestream.init(bsize: {GDB}Integer);
 begin
   bufer := nil;
-  GetMem(GDBPointer(bufer), bsize);
+  GetMem({GDB}Pointer(bufer), bsize);
   bufersize := bsize;
 end;
-constructor filestream.ReadFromFile(filename:gdbstring);
+constructor filestream.ReadFromFile(filename:TMyString);
 begin
      Init(1024*1024);
      Assign(filename, fmShareDenyNone);
@@ -54,14 +56,14 @@ end;
 
 destructor filestream.done;
 begin
-  FreeMem(GDBPointer(bufer));
+  FreeMem({GDB}Pointer(bufer));
 end;
 destructor filestream.closeanddone;
 begin
   close;
   done;
 end;
-procedure filestream.assign(const fname: GDBString; mode: GDBLongword);
+procedure filestream.assign(const fname: TMyString; mode: {GDB}Longword);
 begin
   filehandle := fileopen(fname, mode);
   if filehandle > 0 then
@@ -99,8 +101,8 @@ begin
   filepos := filepos + buferread;
   buferpos := 0;
 end;
-procedure filestream.continuebufer(symbolcount:GDBInteger);
-var oldbr:GDBInteger;
+procedure filestream.continuebufer(symbolcount:{GDB}Integer);
+var oldbr:{GDB}Integer;
 begin
   oldbr:=buferread;
   Move(bufer^[oldbr-symbolcount],bufer^,symbolcount);
@@ -109,9 +111,9 @@ begin
   buferread:=buferread+symbolcount;
   buferpos := 0;
 end;
-function readspace(expr: GDBString): GDBString;
+function readspace(expr: TMyString): TMyString;
 var
-  i: GDBInteger;
+  i: {GDB}Integer;
 begin
   i := 1;
   while not (expr[i] in ['a'..'z', 'A'..'Z', '0'..'9', '$', '(', ')', '+', '-', '*', '/', ':', '=','_', '''']) do
@@ -123,11 +125,11 @@ begin
   result := copy(expr, i, length(expr) - i + 1);
   expr:=expr;
 end;
-function filestream.ReadString: GDBString;
+function filestream.ReadString: TMyString;
 begin
      result:=readspace(readGDBString)
 end;
-function filestream.readbyte: GDBByte;
+function filestream.readbyte: {GDB}Byte;
 begin
      if buferread = 0 then
                           readtobufer;
@@ -136,15 +138,15 @@ begin
      inc(currentpos);
 
 end;
-function filestream.readword: GDBWord;
+function filestream.readword: {GDB}Word;
 begin
      result:=readbyte+256*readbyte;
 end;
-function filestream.readGDBString: GDBString;
+function filestream.readGDBString: TMyString;
 var
-  s: {shortGDBString}GDBString {[100]};
-  cr: GDBBoolean;
-  var i:GDBInteger;
+  s: {shortGDBString}TMyString {[100]};
+  cr: {GDB}Boolean;
+  var i:{GDB}Integer;
 begin
   cr := false;
   //setlength(s,255);
@@ -186,11 +188,11 @@ begin
   readGDBString := s;
 end;
 
-function filestream.readworld(break, ignore: GDBString): shortString;
+function filestream.readworld(break, ignore: TMyString): shortString;
 var
-  s: {short}GDBString;
-  i:GDBInteger;
-  lastbreak:GDBBoolean;
+  s: {short}TMyString;
+  i:{GDB}Integer;
+  lastbreak:{GDB}Boolean;
 begin
   s := '';
   lastbreak:=false;
@@ -244,13 +246,13 @@ begin
   //setlength(s,i-1);
   result := s;
 end;
-function filestream.readtoparser(break:GDBString): GDBString;
+function filestream.readtoparser(break:TMyString): TMyString;
 var
-  s: {short}GDBString;
-  i:GDBInteger;
-  scobcacount:GDBInteger;
+  s: {short}TMyString;
+  i:{GDB}Integer;
+  scobcacount:{GDB}Integer;
   mode:(parse,commenttoendline,commenttouncomment);
-  lastbreak:GDBBoolean;
+  lastbreak:{GDB}Boolean;
 begin
   lastbreak:=false;
   scobcacount:=0;
@@ -341,7 +343,7 @@ begin
   //setlength(s,i-1);
   result := s;
 end;
-procedure WriteString_EOL(h: GDBInteger; s: GDBString);
+procedure WriteString_EOL(h: {GDB}Integer; s: TMyString);
 begin
   s := s + eol;
      //writeln(s);

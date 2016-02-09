@@ -23,8 +23,8 @@ uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
 geometry;
 type
 {Export+}
-ZGLVertex=GDBVertex;
-ZGLFloat=GDBDouble;
+ZGLVertex=GDBvertex3S;
+ZGLFloat={GDBDouble}GDBFloat;
 PZGLVertex=^ZGLVertex;
 PZGLFloat=^ZGLFloat;
 ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=ZGLVertex*)

@@ -58,7 +58,8 @@ TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
                           procedure pushMatrixAndSetTransform(Transform:DMatrix4F);overload;override;
                           procedure popMatrix;override;
                           function TranslatePointWithLocalCS(const p:ZGLVertex):ZGLVertex;
-                          function TranslatePoint(const p:ZGLVertex):ZGLVertex;
+                          function TranslatePoint(const p:ZGLVertex):ZGLVertex;overload;
+                          function TranslatePoint(const p:GDBVertex):GDBVertex;overload;
 
                           procedure InitScreenInvalidrect(w,h:integer);
                           procedure CorrectScreenInvalidrect(w,h:integer);
@@ -495,6 +496,12 @@ begin
                        end;
 end;
 function TZGLGeneral2DDrawer.TranslatePoint(const p:ZGLVertex):ZGLVertex;
+begin
+     result.x:=p.x*sx+tx;
+     result.y:=p.y*sy+ty;
+     result.z:=p.z;
+end;
+function TZGLGeneral2DDrawer.TranslatePoint(const p:GDBVertex):GDBVertex;
 begin
      result.x:=p.x*sx+tx;
      result.y:=p.y*sy+ty;

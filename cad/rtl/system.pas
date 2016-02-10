@@ -1411,11 +1411,7 @@ TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
             procedure free;virtual;abstract;
       end;
 //Generate on E:/zcad/cad_source/zengine/zgl/uzgvertex3sarray.pas
-ZGLVertex=GDBVertex;
-ZGLFloat=GDBDouble;
-PZGLVertex=^ZGLVertex;
-PZGLFloat=^ZGLFloat;
-ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=ZGLVertex*)
+ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBvertex3S*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
                 //procedure DrawGeometry;virtual;abstract;
@@ -3832,6 +3828,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                                         Height:TEnumData;(*'Height of installation'*)
                                         NDD:GDBDouble;(*'Sensor-Sensor(standard)'*)
                                         NDW:GDBDouble;(*'Sensor-Wall(standard)'*)
+                                        FixQuaadIfTwo:GDBBoolean;(*'Place 1/4 3/4 (if 2 sensors)'*)
                                         FDD:GDBDouble;(*'Sensor-Sensor(fact)'*)(*oi_readonly*)
                                         FDW:GDBDouble;(*'Sensor-Wall(fact)'*)(*oi_readonly*)
                                         NormalizePoint:GDBBoolean;(*'Normalize to grid (if enabled)'*)

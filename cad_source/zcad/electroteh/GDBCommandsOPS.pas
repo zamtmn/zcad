@@ -65,6 +65,7 @@ type
                                         Height:TEnumData;(*'Height of installation'*)
                                         NDD:GDBDouble;(*'Sensor-Sensor(standard)'*)
                                         NDW:GDBDouble;(*'Sensor-Wall(standard)'*)
+                                        FixQuaadIfTwo:GDBBoolean;(*'Place 1/4 3/4 (if 2 sensors)'*)
                                         FDD:GDBDouble;(*'Sensor-Sensor(fact)'*)(*oi_readonly*)
                                         FDW:GDBDouble;(*'Sensor-Wall(fact)'*)(*oi_readonly*)
                                         NormalizePoint:GDBBoolean;(*'Normalize to grid (if enabled)'*)
@@ -171,7 +172,7 @@ begin
                       else
                           result:=point;
 end;
-procedure place2(pva:PGDBObjEntityOpenArray;basepoint, dir: gdbvertex; count: integer; sd: GDBDouble; name: pansichar;angle:GDBDouble;norm:GDBBoolean;scaleblock:GDBDouble);
+procedure place2(pva:PGDBObjEntityOpenArray;basepoint, dir: gdbvertex; count: integer; sd: GDBDouble; name: pansichar;angle:GDBDouble;norm:GDBBoolean;scaleblock:GDBDouble;quad:GDBBoolean);
 var line2: gdbline;
   i: integer;
 begin
@@ -188,12 +189,24 @@ begin
             end;
        end;
     2: begin
-        old_ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,
-                               gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
-                               docorrecttogrid(Vertexdmorph(basepoint, dir, 1 / 4),norm), scaleblock, angle, name);
-        old_ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,
-                               gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
-                               docorrecttogrid(Vertexdmorph(basepoint, dir, 3 / 4),norm), scaleblock, angle, name);
+         if quad then
+         begin
+          old_ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,
+                                 gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                 docorrecttogrid(Vertexdmorph(basepoint, dir, 1 / 4),norm), scaleblock, angle, name);
+          old_ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,
+                                 gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                 docorrecttogrid(Vertexdmorph(basepoint, dir, 3 / 4),norm), scaleblock, angle, name);
+         end
+         else
+         begin
+          old_ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,
+                                 gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                 docorrecttogrid(VertexDmorphabs(basepoint, dir, sd),norm), scaleblock, angle, name);
+          old_ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,
+                                 gdb.GetCurrentDWG.GetCurrentLayer,gdb.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CColor^,sysvar.DWG.DWG_CLinew^,
+                                 docorrecttogrid(VertexDmorphabs(basepoint, dir, -sd),norm), scaleblock, angle, name);
+         end
       end;
     3: begin
         old_ENTF_CreateBlockInsert(gdb.GetCurrentROOT,pva,
@@ -230,7 +243,7 @@ begin
       line2.lend := VertexDmorph(basepoint, dir, 1);
       for i := 1 to count do addblockinsert(pva, Vertexmorph(line2.lbegin, line2.lend, i / (count + 1)), 1, 0, name);
 end;}
-procedure placedatcic(pva:PGDBObjEntityOpenArray;p1, p2: gdbvertex; sd, dd: GDBDouble; name: pansichar;norm:GDBBoolean;scaleblock: GDBDouble);
+procedure placedatcic(pva:PGDBObjEntityOpenArray;p1, p2: gdbvertex; sd, dd: GDBDouble; name: pansichar;norm:GDBBoolean;scaleblock: GDBDouble;quad:GDBBoolean);
 var dx, dy: GDBDouble;
   line1, line2: gdbline;
   l1, l2, i: integer;
@@ -297,18 +310,18 @@ begin
 
   case l1 of
     1: begin
-        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 0.5), dir, l2, sd, name,0,norm,scaleblock);
+        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 0.5), dir, l2, sd, name,0,norm,scaleblock,quad);
        end;
     2: begin
-        if (Vertexlength(line1.lbegin, line1.lend) - 2 * sd)<dd then
+        if ((Vertexlength(line1.lbegin, line1.lend) - 2 * sd)<dd)and quad then
         begin
-        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 1 / 4), dir, l2, sd, name,0,norm,scaleblock);
-        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 3 / 4), dir, l2, sd, name,0,norm,scaleblock);
+        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 1 / 4), dir, l2, sd, name,0,norm,scaleblock,quad);
+        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 3 / 4), dir, l2, sd, name,0,norm,scaleblock,quad);
         end
         else
         begin
-        place2(pva,Vertexmorphabs(line1.lbegin, line1.lend, sd), dir, l2, sd, name,0,norm,scaleblock);
-        place2(pva,Vertexmorphabs(line1.lbegin, line1.lend, -sd), dir, l2, sd, name,0,norm,scaleblock);
+        place2(pva,Vertexmorphabs2(line1.lbegin, line1.lend, sd), dir, l2, sd, name,0,norm,scaleblock,quad);
+        place2(pva,Vertexmorphabs2(line1.lbegin, line1.lend, -sd), dir, l2, sd, name,0,norm,scaleblock,quad);
         end
        end{;
     3: begin
@@ -317,12 +330,12 @@ begin
         place2(pva,Vertexmorph(line1.lbegin, line1.lend, 5 / 6), dir, l2, sd, name);
       end}
   else begin
-      place2(pva,Vertexmorphabs2(line1.lbegin, line1.lend, sd), dir, l2, sd, name,0,norm,scaleblock);
-      place2(pva,Vertexmorphabs2(line1.lbegin, line1.lend, -sd), dir, l2, sd, name,0,norm,scaleblock);
+      place2(pva,Vertexmorphabs2(line1.lbegin, line1.lend, sd), dir, l2, sd, name,0,norm,scaleblock,quad);
+      place2(pva,Vertexmorphabs2(line1.lbegin, line1.lend, -sd), dir, l2, sd, name,0,norm,scaleblock,quad);
       line2.lbegin := Vertexmorphabs2(line1.lbegin, line1.lend, sd);
       line2.lend := Vertexmorphabs2(line1.lbegin, line1.lend, -sd);
       l1:=l1-2;
-      for i := 1 to l1 do place2(pva,Vertexmorph(line2.lbegin, line2.lend, i / (l1 + 1)), dir, l2, sd, name,0,norm,scaleblock);
+      for i := 1 to l1 do place2(pva,Vertexmorph(line2.lbegin, line2.lend, i / (l1 + 1)), dir, l2, sd, name,0,norm,scaleblock,quad);
       //for i := 1 to l2 do place3(pva,Vertexmorph(line2.lbegin, line2.lend, i / (l2 )), dir, l1, dd, name);
        end
   end;
@@ -375,14 +388,14 @@ begin
   pl^.Formatentity(gdb.GetCurrentDWG^,dc);
   if (button and MZW_LBUTTON)=0 then
   begin
-       placedatcic(@gdb.GetCurrentDWG.ConstructObjRoot.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, dw, dd,@sdname[1],OPSPlaceSmokeDetectorOrtoParam.NormalizePoint,OPSPlaceSmokeDetectorOrtoParam.ScaleBlock);
+       placedatcic(@gdb.GetCurrentDWG.ConstructObjRoot.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, dw, dd,@sdname[1],OPSPlaceSmokeDetectorOrtoParam.NormalizePoint,OPSPlaceSmokeDetectorOrtoParam.ScaleBlock,OPSPlaceSmokeDetectorOrtoParam.FixQuaadIfTwo);
   end
   else
   begin
        result:=-1;
        //pco^.mouseclic:=-1;
        //gdb.GetCurrentDWG.ConstructObjRoot.cleareraseobj;
-       placedatcic(@gdb.GetCurrentROOT.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, dw, dd,@sdname[1],OPSPlaceSmokeDetectorOrtoParam.NormalizePoint,OPSPlaceSmokeDetectorOrtoParam.ScaleBlock);
+       placedatcic(@gdb.GetCurrentROOT.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, dw, dd,@sdname[1],OPSPlaceSmokeDetectorOrtoParam.NormalizePoint,OPSPlaceSmokeDetectorOrtoParam.ScaleBlock,OPSPlaceSmokeDetectorOrtoParam.FixQuaadIfTwo);
        gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
 
        gdb.GetCurrentROOT.calcbb(dc);
@@ -1097,13 +1110,13 @@ begin
   l2:=nmax;
   case l1 of
     1: begin
-        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 0.5), dir, l2, sd, name,angle,norm,OrtoDevPlaceParam.ScaleBlock);
+        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 0.5), dir, l2, sd, name,angle,norm,OrtoDevPlaceParam.ScaleBlock,true);
        end;
     2: begin
         //if (Vertexlength(line1.lbegin, line1.lend) - 2 * sd)<dd then
         begin
-        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 1 / 4), dir, l2, sd, name,angle,norm,OrtoDevPlaceParam.ScaleBlock);
-        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 3 / 4), dir, l2, sd, name,angle,norm,OrtoDevPlaceParam.ScaleBlock);
+        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 1 / 4), dir, l2, sd, name,angle,norm,OrtoDevPlaceParam.ScaleBlock,true);
+        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 3 / 4), dir, l2, sd, name,angle,norm,OrtoDevPlaceParam.ScaleBlock,true);
         end
         {else
         begin
@@ -1112,12 +1125,12 @@ begin
         end}
        end
   else begin
-      place2(pva,Vertexmorphabs2(line1.lbegin, line1.lend, sdd{}), dir, l2, sd, name,angle,norm,OrtoDevPlaceParam.ScaleBlock);
-      place2(pva,Vertexmorphabs2(line1.lbegin, line1.lend, -sdd{}), dir, l2, sd, name,angle,norm,OrtoDevPlaceParam.ScaleBlock);
+      place2(pva,Vertexmorphabs2(line1.lbegin, line1.lend, sdd{}), dir, l2, sd, name,angle,norm,OrtoDevPlaceParam.ScaleBlock,true);
+      place2(pva,Vertexmorphabs2(line1.lbegin, line1.lend, -sdd{}), dir, l2, sd, name,angle,norm,OrtoDevPlaceParam.ScaleBlock,true);
       line2.lbegin := Vertexmorphabs2(line1.lbegin, line1.lend, sdd);
       line2.lend := Vertexmorphabs2(line1.lbegin, line1.lend, -sdd);
       l1:=l1-2;
-      for i := 1 to l1 do place2(pva,Vertexmorph(line2.lbegin, line2.lend, i / (l1 + 1)), dir, l2, sd, name,angle,norm,OrtoDevPlaceParam.ScaleBlock);
+      for i := 1 to l1 do place2(pva,Vertexmorph(line2.lbegin, line2.lend, i / (l1 + 1)), dir, l2, sd, name,angle,norm,OrtoDevPlaceParam.ScaleBlock,true);
       //for i := 1 to l2 do place3(pva,Vertexmorph(line2.lbegin, line2.lend, i / (l2 )), dir, l1, dd, name);
        end
   end;
@@ -1277,6 +1290,7 @@ begin
   OPSPlaceSmokeDetectorOrtoParam.oldsh:=0;
   OPSPlaceSmokeDetectorOrtoParam.olddt:=TOPSDT_Termo;
   OPSPlaceSmokeDetectorOrtoParam.NormalizePoint:=True;
+  OPSPlaceSmokeDetectorOrtoParam.FixQuaadIfTwo:=True;
   commformat;
 
   pco2:=CreateCommandRTEdObjectPlugin(@PlCommandStart,nil,nil,@commformat2,@PlBeforeClick,@PlAfterClick,nil,nil,'OrtoDevPlace',0,0);

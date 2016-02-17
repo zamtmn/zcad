@@ -19,7 +19,7 @@
 unit uzglvectorobject;
 {$INCLUDE def.inc}
 interface
-uses uzgvertex3sarray,uzglabstractdrawer,gdbdrawcontext,uzgprimitives,uzglgeomdata,uzgprimitivessarray,geometry,sysutils,gdbase,memman,//log,
+uses uzglabstractdrawer,gdbdrawcontext,uzgprimitives,uzglgeomdata,uzgprimitivessarray,geometry,sysutils,gdbase,memman,//log,
      strproc,gdbasetypes;
 type
 {Export+}
@@ -257,8 +257,8 @@ end;
 function ZGLVectorObject.GetTransformedBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:GDBInteger;const matrix:DMatrix4D):TBoundingBox;
 var
    i:integer;
-   p:PZGLVertex;
-   point:ZGLVertex;
+   p:PGDBvertex3S;
+   point:GDBvertex3S;
 begin
      result.LBN:=InfinityVertex;
      result.RTF:=MinusInfinityVertex;

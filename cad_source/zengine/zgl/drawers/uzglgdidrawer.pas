@@ -20,7 +20,7 @@ unit uzglgdidrawer;
 {$INCLUDE def.inc}
 interface
 uses
-    uzgvertex3sarray,sysutils,gdbasetypes,uzglgeneral2ddrawer,lclintfex,fileutil,math,UGDBFontManager,ugdbfont,{zcadsysvars,}uzglabstractviewarea,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,
+    sysutils,gdbasetypes,uzglgeneral2ddrawer,lclintfex,fileutil,math,UGDBFontManager,ugdbfont,{zcadsysvars,}uzglabstractviewarea,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,
     {$IFDEF WINDOWS}windows,{$ENDIF}{$IFDEF DELPHI}windows,{$ENDIF}
     {$IFDEF LCLGTK2}
     Gtk2Def,
@@ -498,7 +498,7 @@ procedure TLLGDISymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;
 var
    r:TRect;
 
-   point,spoint:GDBVertex;
+   point,spoint:GDBVertex3S;
    x,y:integer;
    s:AnsiString;
    {$IFDEF LCLQT}_transminusM2,{$ENDIF}_transminusM,_obliqueM,_transplusM,_scaleM,_rotateM:DMatrix4D;

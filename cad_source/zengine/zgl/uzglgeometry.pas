@@ -279,19 +279,19 @@ end;
 
 procedure ZGLGeometry.AddPoint(var rc:TDrawContext;const p:GDBVertex);
 var
-    tv:ZGLVertex;
+    tv:GDBVertex3S;
 begin
-     tv:=GDBVertex2ZGLVertex(p);
+     tv:=VertexD2S(p);
      if rc.drawer<>nil then
      rc.drawer.GetLLPrimitivesCreator.CreateLLPoint(LLprimitives,GeomData.Vertex3S.Add(@tv));
 end;
 
 procedure ZGLGeometry.AddLine(var rc:TDrawContext;const p1,p2:GDBVertex);
 var
-    tv1,tv2:ZGLVertex;
+    tv1,tv2:GDBVertex3S;
 begin
-     tv1:=GDBVertex2ZGLVertex(p1);
-     tv2:=GDBVertex2ZGLVertex(p2);
+     tv1:=VertexD2S(p1);
+     tv2:=VertexD2S(p2);
      if rc.drawer<>nil then
                            rc.drawer.GetLLPrimitivesCreator.CreateLLLine(LLprimitives,GeomData.Vertex3S.Add(@tv1));
                        {else

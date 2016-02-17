@@ -267,10 +267,10 @@ begin
                                           dc.drawer.SetPointSize(1);
                                         end;
                                       end;
-  dc.drawer.SetColor(255, 255, 255,255);
+  dc.drawer.SetColor(foreground);
   {oglsm.myglEnable(GL_COLOR_LOGIC_OP);
   oglsm.myglLogicOp(GL_OR);}
-  dc.drawer.SetDrawMode(TDM_OR);
+  dc.drawer.SetDrawMode({TDM_OR}TDM_Normal);
   if param.ShowDebugFrustum then
                           drawfrustustum(param.debugfrustum,dc);
   {if param.ShowDebugBoundingBbox then
@@ -337,7 +337,8 @@ begin
   dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.DrawingContext.matrixs);
   end;
   end;
-  dc.drawer.SetColor(255, 255, 255,255);
+  dc.drawer.SetColor(foreground);
+  //dc.drawer.SetColor(255, 255, 255,255);
   d1:=geometry.VertexAdd(param.md.mouseray.lbegin,param.md.mouseray.lend);
   d1:=geometry.VertexMulOnSc(d1,0.5);
 
@@ -378,10 +379,10 @@ begin
 
   if param.seldesc.MouseFrameON then
   begin
+    dc.drawer.SetDrawMode(TDM_Normal);
     if param.seldesc.MouseFrameInverse then
     begin
     {oglsm.myglLogicOp(GL_XOR);}
-    dc.drawer.SetDrawMode(TDM_XOR);
     dc.drawer.SetPenStyle(TPS_Dash);
     //dc.drawer.SetColor(255,0,0,0);
     {oglsm.myglLineStipple(1, $F0F0);
@@ -414,6 +415,7 @@ begin
                                            dc.drawer.SetColor(0,40,0,10)
                                        else
                                            dc.drawer.SetColor(0,0,40,10);
+    dc.drawer.SetDrawMode(TDM_XOR);
     dc.drawer.DrawQuad2DInDCS(param.seldesc.Frame1.x,param.seldesc.Frame1.y,param.seldesc.Frame2.x,param.seldesc.Frame2.y);
     {oglsm.myglbegin(GL_QUADS);
     oglsm.myglVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame1.y);

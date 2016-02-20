@@ -64,6 +64,9 @@ uses
   gdbCircle,
   gdbEntity,
 
+  gdbCable,
+  UGDBOpenArrayOfPV,
+
   geometry,
   zeentitiesmanager,
 
@@ -1452,6 +1455,56 @@ begin
     result:=cmd_ok;
 end;
 
+procedure RecurseSearhCable(pc:PGDBObjCable);
+var
+    pc2:PGDBObjCable;               //указатель на найденый кабель
+    LastPoint,FirstPoint:GDBVertex; //точки в конце кабеля PC и начале кабеля PC2
+    NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
+    ir:itrec;
+begin
+  LastPoint:=PGDBVertex(pc^.VertexArrayInWCS.getelement(pc^.VertexArrayInWCS.Count-1))^;//получаем точку в конце кабеля
+  NearObjects.init(100);//инициализируем список
+  if gdb.GetCurrentROOT^.FindObjectsInPoint(LastPoint,NearObjects)then //ищем примитивы оболочка которых включает нашу точку
+  begin
+       //тут если такие примитивы нашлись, они лежат в списке
+
+       //пробегаем по списку
+       pc2:=NearObjects.beginiterate(ir);//получаем первый примитив из списка
+       if pc2<>nil then                  //если он есть то
+       repeat
+             if pc2^.vp.ID=GDBCableID then//если он кабель то
+             begin
+                  FirstPoint:=PGDBVertex(pc2^.VertexArrayInWCS.getelement(0))^;//получаем точку в начале найденного кабеля
+                  if geometry.Vertexlength(LastPoint,FirstPoint)<1 then        //если конец кабеля совпадает с началом с погрешностью, то
+                  begin
+                       pc2^.SelectQuik;            //выделяем
+                       RecurseSearhCable(pc2);     //рекурсивно ищем на конце найденного кабеля
+                  end;
+             end;
+
+             pc2:=NearObjects.iterate(ir);//получаем следующий примитив из списка
+       until pc2=nil;                     //выходим когда список кончился
+  end;
+  NearObjects.ClearAndDone;//убиваем список
+end;
+
+function TemplateForVeb_com(operands:TCommandOperands):TCommandResult;
+var
+    pc,pc2:PGDBObjCable;                //указатель на кабель
+    LastPoint:GDBVertex;            //точка в конце кабеля
+    NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
+    ir:itrec;
+
+begin
+    if commandmanager.getentity('Select Cable: ',pc) then  //просим выбрать примитив
+    begin
+         if pc^.vp.ID=GDBCableID then                      //проверяем, кабель это или нет
+                                     RecurseSearhCable(pc) //осуществляем поиск ветвей
+                                 else
+                                     HistoryOutStr('Fuck! You must select Cable'); //не кабель - посылаем
+    end;
+    result:=cmd_ok;
+end;
 
 
 initialization
@@ -1481,6 +1534,7 @@ initialization
      CreateCommandFastObjectPlugin(@DrawCircle_com,'Circle',CADWG,0);
      CreateCommandFastObjectPlugin(@DrawLine_com,'DrawLine',CADWG,0);
      CreateCommandFastObjectPlugin(@DrawRectangle_com,'Rectangle',CADWG,0);
+     CreateCommandFastObjectPlugin(@TemplateForVeb_com,'Trrree',CADWG,0);
 
      CreateCommandFastObjectPlugin(@test_com,       'ts',         CADWG,0);
      CreateCommandFastObjectPlugin(@GetPoint_com,   'GetPoint',   CADWG,0);

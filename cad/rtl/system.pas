@@ -3807,7 +3807,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                TOPSDT_Smoke(*'Smoke'*)
               );
   TOPSMinDatCount=(
-                   TOPSMDC_1(*'1 in the quarter'*),
+                   TOPSMDC_1_4(*'1 in the quarter'*),
                    TOPSMDC_1_2(*'1 in the middle'*),
                    TOPSMDC_2(*'2'*),
                    TOPSMDC_3(*'3'*),
@@ -3817,6 +3817,12 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                    TODPCT_by_Count(*'by number'*),
                    TODPCT_by_XY(*'by width/height'*)
                  );
+  TPlaceSensorsStrategy=(
+                  TPSS_Proportional,
+                  TPSS_FixDD,
+                  TPSS_FixDW,
+                  TPSS_ByNum
+                  );
   PTOPSPlaceSmokeDetectorOrtoParam=^TOPSPlaceSmokeDetectorOrtoParam;
   TOPSPlaceSmokeDetectorOrtoParam=packed record
                                         InsertType:TInsertType;(*'Insert'*)
@@ -3828,7 +3834,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                                         Height:TEnumData;(*'Height of installation'*)
                                         NDD:GDBDouble;(*'Sensor-Sensor(standard)'*)
                                         NDW:GDBDouble;(*'Sensor-Wall(standard)'*)
-                                        FixQuaadIfTwo:GDBBoolean;(*'Place 1/4 3/4 (if 2 sensors)'*)
+                                        PlaceStrategy:TPlaceSensorsStrategy;
                                         FDD:GDBDouble;(*'Sensor-Sensor(fact)'*)(*oi_readonly*)
                                         FDW:GDBDouble;(*'Sensor-Wall(fact)'*)(*oi_readonly*)
                                         NormalizePoint:GDBBoolean;(*'Normalize to grid (if enabled)'*)

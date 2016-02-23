@@ -62,15 +62,15 @@ type
                    TODPCT_by_XY(*'by width/height'*)
                  );
   TPlaceSensorsStrategy=(
-                  TPSS_Proportional,
-                  TPSS_FixDD,
-                  TPSS_FixDW,
-                  TPSS_ByNum
+                  TPSS_Proportional(*'Proportional'*),
+                  TPSS_FixDD(*'Sensor-Sensor distance fix'*),
+                  TPSS_FixDW(*'Sensor-Wall distance fix'*),
+                  TPSS_ByNum(*'By number'*)
                   );
-  TAxisReduceDistanceMode=(TARDM_Nothing,
-                           TARDM_LongAxis,
-                           TARDM_ShortAxis,
-                           TARDM_AllAxis);
+  TAxisReduceDistanceMode=(TARDM_Nothing(*'Nothing'*),
+                           TARDM_LongAxis(*'Long axis'*),
+                           TARDM_ShortAxis(*'Short axis'*),
+                           TARDM_AllAxis(*'All xxis'*));
   PTOPSPlaceSmokeDetectorOrtoParam=^TOPSPlaceSmokeDetectorOrtoParam;
   TOPSPlaceSmokeDetectorOrtoParam=packed record
                                         InsertType:TInsertType;(*'Insert'*)
@@ -472,7 +472,29 @@ begin
 end;
 procedure commformat;
 var s:GDBString;
+    pcfd:PRecordDescriptor;
+    pf:PfieldDescriptor;
 begin
+  pcfd:=pointer(SysUnit.TypeName2PTD('TOPSPlaceSmokeDetectorOrtoParam'));
+  if pcfd<>nil then
+  begin
+  pf:=pcfd^.FindField('SensorSensorDistance');
+  if pf<>nil then
+                 begin
+                    if OPSPlaceSmokeDetectorOrtoParam.StartAuto then
+                                                                    pf^.base.Attributes:=pf.base.Attributes and (not FA_READONLY)
+                                                                else
+                                                                    pf^.base.Attributes:=pf.base.Attributes or FA_READONLY;
+                 end;
+  pf:=pcfd^.FindField('SensorWallDistance');
+  if pf<>nil then
+                 begin
+                    if OPSPlaceSmokeDetectorOrtoParam.StartAuto then
+                                                                    pf^.base.Attributes:=pf.base.Attributes and (not FA_READONLY)
+                                                                else
+                                                                    pf^.base.Attributes:=pf.base.Attributes or FA_READONLY;
+                 end;
+  end;
      sdname:=sdname;
      if OPSPlaceSmokeDetectorOrtoParam.DatType<>OPSPlaceSmokeDetectorOrtoParam.olddt then
      begin

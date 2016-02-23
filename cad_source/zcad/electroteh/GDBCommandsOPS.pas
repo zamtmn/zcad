@@ -67,15 +67,22 @@ type
                   TPSS_FixDW,
                   TPSS_ByNum
                   );
+  TAxisReduceDistanceMode=(TARDM_Nothing,
+                           TARDM_LongAxis,
+                           TARDM_ShortAxis,
+                           TARDM_AllAxis);
   PTOPSPlaceSmokeDetectorOrtoParam=^TOPSPlaceSmokeDetectorOrtoParam;
   TOPSPlaceSmokeDetectorOrtoParam=packed record
                                         InsertType:TInsertType;(*'Insert'*)
                                         Scale:GDBDouble;(*'Plan scale'*)
                                         ScaleBlock:GDBDouble;(*'Blocks scale'*)
                                         StartAuto:GDBBoolean;(*'"Start" signal'*)
+                                        SensorSensorDistance:TAxisReduceDistanceMode;(*'Sensor-sensor distance reduction'*)
+                                        SensorWallDistance:TAxisReduceDistanceMode;(*'Sensor-wall distance reduction'*)
                                         DatType:TOPSDatType;(*'Sensor type'*)
                                         DMC:TOPSMinDatCount;(*'Min. number of sensors'*)
                                         Height:TEnumData;(*'Height of installation'*)
+                                        ReductionFactor:GDBDouble;(*'Reduction factor'*)
                                         NDD:GDBDouble;(*'Sensor-Sensor(standard)'*)
                                         NDW:GDBDouble;(*'Sensor-Wall(standard)'*)
                                         PlaceStrategy:TPlaceSensorsStrategy;
@@ -250,7 +257,7 @@ begin
          end;
      end;
 end;
-procedure placedatcic(pva:PGDBObjEntityOpenArray;p1, p2: gdbvertex; sd, dd: GDBDouble; name: pansichar;norm:GDBBoolean;scaleblock: GDBDouble;ps:TPlaceSensorsStrategy);
+procedure placedatcic(pva:PGDBObjEntityOpenArray;p1, p2: gdbvertex; InitialSD, InitialDD: GDBDouble; name: pansichar;norm:GDBBoolean;scaleblock: GDBDouble;ps:TPlaceSensorsStrategy);
 var dx, dy: GDBDouble;
   FirstLine, SecondLine: gdbline;
   FirstCount, SecondCount, i: integer;
@@ -258,6 +265,8 @@ var dx, dy: GDBDouble;
   mincount:integer;
   FirstLineLength,SecondLineLength:double;
   d: TPlaceParam;
+  LongSD,LongDD: GDBDouble;
+  ShortSD,ShortDD: GDBDouble;
 begin
   dx := p2.x - p1.x;
   dy := p2.y - p1.y;
@@ -286,9 +295,33 @@ begin
   dir.x := SecondLine.lend.x - SecondLine.lbegin.x;
   dir.y := SecondLine.lend.y - SecondLine.lbegin.y;
   dir.z := SecondLine.lend.z - SecondLine.lbegin.z;
-  if (Vertexlength(FirstLine.lbegin, FirstLine.lend) - 2 * sd)>0 then FirstCount := round(abs(Vertexlength(FirstLine.lbegin, FirstLine.lend) - 2 * sd) / dd- eps + 1.5)
+
+  LongSD:=InitialSD;
+  LongDD:=InitialDD;
+  ShortSD:=InitialSD;
+  ShortDD:=InitialDD;
+  if OPSPlaceSmokeDetectorOrtoParam.StartAuto then
+  begin
+  case OPSPlaceSmokeDetectorOrtoParam.SensorSensorDistance of
+                                            TARDM_LongAxis:LongDD:=LongDD/2;
+                                           TARDM_ShortAxis:ShortDD:=ShortDD/2;
+                                             TARDM_AllAxis:begin
+                                                            LongDD:=LongDD/2;
+                                                            ShortDD:=ShortDD/2;
+                                                           end;
+  end;
+  case OPSPlaceSmokeDetectorOrtoParam.SensorWallDistance of
+                                            TARDM_LongAxis:LongSD:=LongSD/2;
+                                           TARDM_ShortAxis:ShortSD:=ShortSD/2;
+                                             TARDM_AllAxis:begin
+                                                            LongSD:=LongSD/2;
+                                                            ShortSD:=ShortSD/2;
+                                                           end;
+  end;
+  end;
+  if (Vertexlength(FirstLine.lbegin, FirstLine.lend) - 2 * ShortSD)>0 then FirstCount := round(abs(Vertexlength(FirstLine.lbegin, FirstLine.lend) - 2 * ShortSD) / ShortDD- eps + 1.5)
                                                          else FirstCount := 1;
-  if (Vertexlength(SecondLine.lbegin, SecondLine.lend) - 2 * sd)>0 then SecondCount := round(abs(Vertexlength(SecondLine.lbegin, SecondLine.lend) - 2 * sd) / dd-eps + 1.5)
+  if (Vertexlength(SecondLine.lbegin, SecondLine.lend) - 2 * LongSD)>0 then SecondCount := round(abs(Vertexlength(SecondLine.lbegin, SecondLine.lend) - 2 * LongSD) / LongDD-eps + 1.5)
                                                          else SecondCount := 1;
   mincount:=2;
   case OPSPlaceSmokeDetectorOrtoParam.DMC of
@@ -314,15 +347,15 @@ begin
   SecondLineLength:=oneVertexlength(dir);
   FirstLineLength:=Vertexlength(FirstLine.lbegin, FirstLine.lend);
 
-  d:=GetPlaceParam(FirstCount,FirstLineLength,sd,dd,TOPSMDC_1_2,ps);
+  d:=GetPlaceParam(FirstCount,FirstLineLength,ShortSD,ShortDD,TOPSMDC_1_2,ps);
 
   if d.PlaceFirst then
   begin
-       place2(pva,Vertexmorph(FirstLine.lbegin, FirstLine.lend,d.PlaceFirstOffset), dir, SecondCount, SecondLineLength,sd,dd, name,0,norm,scaleblock,ps);
+       place2(pva,Vertexmorph(FirstLine.lbegin, FirstLine.lend,d.PlaceFirstOffset), dir, SecondCount, SecondLineLength,LongSD,LongDD, name,0,norm,scaleblock,ps);
   end;
   if d.PlaceLast then
   begin
-       place2(pva,Vertexmorph(FirstLine.lbegin, FirstLine.lend,d.PlaceLastOffset), dir, SecondCount, SecondLineLength,sd,dd, name,0,norm,scaleblock,ps);
+       place2(pva,Vertexmorph(FirstLine.lbegin, FirstLine.lend,d.PlaceLastOffset), dir, SecondCount, SecondLineLength,LongSD,LongDD, name,0,norm,scaleblock,ps);
   end;
   if FirstCount>2 then
   begin
@@ -330,33 +363,33 @@ begin
        for i := 1 to FirstCount do
        begin
            d.PlaceFirstOffset:=d.PlaceFirstOffset+d.OtherStep;
-           place2(pva,Vertexmorph(FirstLine.lbegin, FirstLine.lend,d.PlaceFirstOffset), dir, SecondCount, SecondLineLength,sd,dd, name,0,norm,scaleblock,ps);
+           place2(pva,Vertexmorph(FirstLine.lbegin, FirstLine.lend,d.PlaceFirstOffset), dir, SecondCount, SecondLineLength,LongSD,LongDD, name,0,norm,scaleblock,ps);
        end;
   end;
 
   {case FirstCount of
     1: begin
-          place2(pva,Vertexmorph(FirstLine.lbegin, FirstLine.lend, 0.5), dir, SecondCount, SecondLineLength,sd,dd, name,0,norm,scaleblock,ps);
+          place2(pva,Vertexmorph(FirstLine.lbegin, FirstLine.lend, 0.5), dir, SecondCount, SecondLineLength,LongSD,LongDD, name,0,norm,scaleblock,ps);
        end;
     2: begin
-        if ((Vertexlength(FirstLine.lbegin, FirstLine.lend) - 2 * sd)<dd) then
+        if ((Vertexlength(FirstLine.lbegin, FirstLine.lend) - 2 * LongSD)<LongDD) then
         begin
-          place2(pva,Vertexmorph(FirstLine.lbegin, FirstLine.lend, 1 / 4), dir, SecondCount, SecondLineLength,sd,dd, name,0,norm,scaleblock,ps);
-          place2(pva,Vertexmorph(FirstLine.lbegin, FirstLine.lend, 3 / 4), dir, SecondCount, SecondLineLength,sd,dd, name,0,norm,scaleblock,ps);
+          place2(pva,Vertexmorph(FirstLine.lbegin, FirstLine.lend, 1 / 4), dir, SecondCount, SecondLineLength,LongSD,LongDD, name,0,norm,scaleblock,ps);
+          place2(pva,Vertexmorph(FirstLine.lbegin, FirstLine.lend, 3 / 4), dir, SecondCount, SecondLineLength,LongSD,LongDD, name,0,norm,scaleblock,ps);
         end
         else
           begin
-          place2(pva,Vertexmorphabs2(FirstLine.lbegin, FirstLine.lend, sd), dir, SecondCount, SecondLineLength,sd,dd, name,0,norm,scaleblock,ps);
-          place2(pva,Vertexmorphabs2(FirstLine.lbegin, FirstLine.lend, -sd), dir, SecondCount, SecondLineLength,sd,dd, name,0,norm,scaleblock,ps);
+          place2(pva,Vertexmorphabs2(FirstLine.lbegin, FirstLine.lend, LongSD), dir, SecondCount, SecondLineLength,LongSD,LongDD, name,0,norm,scaleblock,ps);
+          place2(pva,Vertexmorphabs2(FirstLine.lbegin, FirstLine.lend, -LongSD), dir, SecondCount, SecondLineLength,LongSD,LongDD, name,0,norm,scaleblock,ps);
         end
        end
   else begin
-          place2(pva,Vertexmorphabs2(FirstLine.lbegin, FirstLine.lend, sd), dir, SecondCount, SecondLineLength,sd,dd, name,0,norm,scaleblock,OPSPlaceSmokeDetectorOrtoParam.PlaceStrategy);
-          place2(pva,Vertexmorphabs2(FirstLine.lbegin, FirstLine.lend, -sd), dir, SecondCount, SecondLineLength,sd,dd, name,0,norm,scaleblock,OPSPlaceSmokeDetectorOrtoParam.PlaceStrategy);
-          SecondLine.lbegin := Vertexmorphabs2(FirstLine.lbegin, FirstLine.lend, sd);
-          SecondLine.lend := Vertexmorphabs2(FirstLine.lbegin, FirstLine.lend, -sd);
+          place2(pva,Vertexmorphabs2(FirstLine.lbegin, FirstLine.lend, LongSD), dir, SecondCount, SecondLineLength,LongSD,LongDD, name,0,norm,scaleblock,OPSPlaceSmokeDetectorOrtoParam.PlaceStrategy);
+          place2(pva,Vertexmorphabs2(FirstLine.lbegin, FirstLine.lend, -LongSD), dir, SecondCount, SecondLineLength,LongSD,LongDD, name,0,norm,scaleblock,OPSPlaceSmokeDetectorOrtoParam.PlaceStrategy);
+          SecondLine.lbegin := Vertexmorphabs2(FirstLine.lbegin, FirstLine.lend, LongSD);
+          SecondLine.lend := Vertexmorphabs2(FirstLine.lbegin, FirstLine.lend, -LongSD);
           FirstCount:=FirstCount-2;
-          for i := 1 to FirstCount do place2(pva,Vertexmorph(SecondLine.lbegin, SecondLine.lend, i / (FirstCount + 1)), dir, SecondCount, SecondLineLength,sd,dd, name,0,norm,scaleblock,OPSPlaceSmokeDetectorOrtoParam.PlaceStrategy);
+          for i := 1 to FirstCount do place2(pva,Vertexmorph(SecondLine.lbegin, SecondLine.lend, i / (FirstCount + 1)), dir, SecondCount, SecondLineLength,LongSD,LongDD, name,0,norm,scaleblock,OPSPlaceSmokeDetectorOrtoParam.PlaceStrategy);
        end
   end;}
 end;
@@ -391,6 +424,11 @@ begin
 
   dw:=OPSPlaceSmokeDetectorOrtoParam.NDW/OPSPlaceSmokeDetectorOrtoParam.Scale;
   dd:=OPSPlaceSmokeDetectorOrtoParam.NDD/OPSPlaceSmokeDetectorOrtoParam.Scale;
+  if OPSPlaceSmokeDetectorOrtoParam.ReductionFactor<>0 then
+  begin
+       dw:=dw*OPSPlaceSmokeDetectorOrtoParam.ReductionFactor;
+       dd:=dd*OPSPlaceSmokeDetectorOrtoParam.ReductionFactor;
+  end;
   {if gdb.GetCurrentDWG.BlockDefArray.getindex(@sdname[1])<0 then
                                                          begin
                                                               sdname:=sdname;
@@ -489,12 +527,11 @@ begin
                                       OPSPlaceSmokeDetectorOrtoParam.NDD:=7500;
                                  end;
                            end;
-                               if (OPSPlaceSmokeDetectorOrtoParam.Height.Selected<>4)and OPSPlaceSmokeDetectorOrtoParam.StartAuto then
+                               {if (OPSPlaceSmokeDetectorOrtoParam.Height.Selected<>4)and OPSPlaceSmokeDetectorOrtoParam.StartAuto then
                                begin
                                     OPSPlaceSmokeDetectorOrtoParam.NDW:=OPSPlaceSmokeDetectorOrtoParam.NDW/2;
                                     OPSPlaceSmokeDetectorOrtoParam.NDD:=OPSPlaceSmokeDetectorOrtoParam.NDD/2;
-                               end;
-                           //sdname:={'PS_DAT_SMOKE'}'SS_BIAS';
+                               end;}
                            sdname:='PS_DAT_SMOKE';
                      end;
           TOPSDT_Termo:begin
@@ -512,11 +549,11 @@ begin
                                       OPSPlaceSmokeDetectorOrtoParam.NDD:=4000;
                                  end;
                end;
-                               if (OPSPlaceSmokeDetectorOrtoParam.Height.Selected<>3)and OPSPlaceSmokeDetectorOrtoParam.StartAuto then
+                               {if (OPSPlaceSmokeDetectorOrtoParam.Height.Selected<>3)and OPSPlaceSmokeDetectorOrtoParam.StartAuto then
                                begin
                                     OPSPlaceSmokeDetectorOrtoParam.NDW:=OPSPlaceSmokeDetectorOrtoParam.NDW/2;
                                     OPSPlaceSmokeDetectorOrtoParam.NDD:=OPSPlaceSmokeDetectorOrtoParam.NDD/2;
-                               end;
+                               end;}
                sdname:='PS_DAT_TERMO';
                             end;
      end;
@@ -1313,6 +1350,9 @@ begin
   OPSPlaceSmokeDetectorOrtoParam.olddt:=TOPSDT_Termo;
   OPSPlaceSmokeDetectorOrtoParam.NormalizePoint:=True;
   OPSPlaceSmokeDetectorOrtoParam.PlaceStrategy:=TPSS_Proportional;
+  OPSPlaceSmokeDetectorOrtoParam.ReductionFactor:=1;
+  OPSPlaceSmokeDetectorOrtoParam.SensorSensorDistance:=TARDM_LongAxis;
+  OPSPlaceSmokeDetectorOrtoParam.SensorWallDistance:=TARDM_Nothing;
   commformat;
 
   pco2:=CreateCommandRTEdObjectPlugin(@PlCommandStart,nil,nil,@commformat2,@PlBeforeClick,@PlAfterClick,nil,nil,'OrtoDevPlace',0,0);

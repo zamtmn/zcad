@@ -3818,15 +3818,15 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                    TODPCT_by_XY(*'by width/height'*)
                  );
   TPlaceSensorsStrategy=(
-                  TPSS_Proportional,
-                  TPSS_FixDD,
-                  TPSS_FixDW,
-                  TPSS_ByNum
+                  TPSS_Proportional(*'Proportional'*),
+                  TPSS_FixDD(*'Sensor-Sensor distance fix'*),
+                  TPSS_FixDW(*'Sensor-Wall distance fix'*),
+                  TPSS_ByNum(*'By number'*)
                   );
-  TAxisReduceDistanceMode=(TARDM_Nothing,
-                           TARDM_LongAxis,
-                           TARDM_ShortAxis,
-                           TARDM_AllAxis);
+  TAxisReduceDistanceMode=(TARDM_Nothing(*'Nothing'*),
+                           TARDM_LongAxis(*'Long axis'*),
+                           TARDM_ShortAxis(*'Short axis'*),
+                           TARDM_AllAxis(*'All xxis'*));
   PTOPSPlaceSmokeDetectorOrtoParam=^TOPSPlaceSmokeDetectorOrtoParam;
   TOPSPlaceSmokeDetectorOrtoParam=packed record
                                         InsertType:TInsertType;(*'Insert'*)

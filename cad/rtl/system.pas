@@ -3823,15 +3823,22 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                   TPSS_FixDW,
                   TPSS_ByNum
                   );
+  TAxisReduceDistanceMode=(TARDM_Nothing,
+                           TARDM_LongAxis,
+                           TARDM_ShortAxis,
+                           TARDM_AllAxis);
   PTOPSPlaceSmokeDetectorOrtoParam=^TOPSPlaceSmokeDetectorOrtoParam;
   TOPSPlaceSmokeDetectorOrtoParam=packed record
                                         InsertType:TInsertType;(*'Insert'*)
                                         Scale:GDBDouble;(*'Plan scale'*)
                                         ScaleBlock:GDBDouble;(*'Blocks scale'*)
                                         StartAuto:GDBBoolean;(*'"Start" signal'*)
+                                        SensorSensorDistance:TAxisReduceDistanceMode;(*'Sensor-sensor distance reduction'*)
+                                        SensorWallDistance:TAxisReduceDistanceMode;(*'Sensor-wall distance reduction'*)
                                         DatType:TOPSDatType;(*'Sensor type'*)
                                         DMC:TOPSMinDatCount;(*'Min. number of sensors'*)
                                         Height:TEnumData;(*'Height of installation'*)
+                                        ReductionFactor:GDBDouble;(*'Reduction factor'*)
                                         NDD:GDBDouble;(*'Sensor-Sensor(standard)'*)
                                         NDW:GDBDouble;(*'Sensor-Wall(standard)'*)
                                         PlaceStrategy:TPlaceSensorsStrategy;

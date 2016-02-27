@@ -864,7 +864,7 @@ begin
   InfoFormVar.caption:=('ОСТОРОЖНО! Проверки синтаксиса пока нет. При нажатии "ОК" объект обновится. При ошибке - ВЫЛЕТ!');
   end;
 end;
-function EditUnit(var entityunit:TObjectUnit):boolean;
+function EditUnit(var entityunit:TSimpleUnit):boolean;
 var
    mem:GDBOpenArrayOfByte;
    pobj:PGDBObjEntity;
@@ -956,6 +956,26 @@ else if length(Operands)>0 then
       end
   else
       historyoutstr(rscmSelOrSpecEntity);
+  result:=cmd_ok;
+end;
+function UnitsMan_com(operands:TCommandOperands):TCommandResult;
+var
+   PUnit:ptunit;
+   op:gdbstring;
+   pentvarext:PTVariablesExtender;
+begin
+    if length(Operands)>0 then
+                               begin
+                                  PUnit:=units.findunit(SupportPath,InterfaceTranslate,operands);
+                                  if PUnit<>nil then
+                                                    begin
+                                                      EditUnit(PUnit^);
+                                                    end
+                                                 else
+                                                    historyoutstr('unit not found!');
+                               end
+                          else
+                              historyoutstr('Specify unit name!');
   result:=cmd_ok;
 end;
 function MultiObjVarMan_com(operands:TCommandOperands):TCommandResult;
@@ -1889,7 +1909,8 @@ begin
   CreateCommandFastObjectPlugin(@Cam_reset_com,'Cam_Reset',CADWG,0);
   CreateCommandFastObjectPlugin(@ObjVarMan_com,'ObjVarMan',CADWG or CASelEnt,0);
   CreateCommandFastObjectPlugin(@BlockDefVarMan_com,'BlockDefVarMan',CADWG,0);
-  CreateCommandFastObjectPlugin(@MultiObjVarMan_com,'MultiObjVarMan',CADWG or CASelEnts,0);
+  CreateCommandFastObjectPlugin(@BlockDefVarMan_com,'BlockDefVarMan',CADWG,0);
+  CreateCommandFastObjectPlugin(@UnitsMan_com,'UnitsMan',0,0);
   CreateCommandFastObjectPlugin(@Regen_com,'Regen',CADWG,0);
   CreateCommandFastObjectPlugin(@Copyclip_com,'CopyClip',CADWG or CASelEnts,0);
   CreateCommandFastObjectPlugin(@ChangeProjType_com,'ChangeProjType',CADWG,0);

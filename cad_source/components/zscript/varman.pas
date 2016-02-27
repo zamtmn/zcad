@@ -185,7 +185,7 @@ TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
                   function FindVariableByInstance(_Instance:GDBPointer):pvardesk;virtual;
                   function FindValue(varname:GDBString):GDBPointer;virtual;
                   function TypeName2PTD(n: GDBString):PUserTypeDescriptor;virtual;
-                  function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
+                  function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;
                   function SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
                   procedure setvardesc(out vd: vardesk; varname, username, typename: GDBString;_pinstance:pointer=nil);
                   procedure free;virtual;abstract;
@@ -194,7 +194,7 @@ TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
             end;
 PTObjectUnit=^TObjectUnit;
 TObjectUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
-                  function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;
+                  //function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;
                   procedure free;virtual;
             end;
 TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
@@ -359,13 +359,14 @@ begin
      self.InterfaceVariables.vardescarray.Freewithproc(@vardeskclear);
      self.InterfaceVariables.vararray.Clear;
 end;
-function TObjectUnit.SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;
+function TSimpleUnit.SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;
 var
    pu:PTUnit;
    pv:pvardesk;
    ir:itrec;
    value:gdbstring;
 begin
+     membuf.TXTAddGDBStringEOL('unit '+Name+';');
      membuf.TXTAddGDBStringEOL('interface');
      if InterfaceUses.Count<>0 then
         begin

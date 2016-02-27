@@ -125,7 +125,9 @@ uses
   registerenitiesextenders,
   zcregistermultiproperties,
   zclibraryblocksregister,
-  uzglopenglviewarea,uzglgdiviewarea,uzglcanvasviewarea;
+  uzglopenglviewarea,uzglgdiviewarea,uzglcanvasviewarea,
+
+  dbgappexplorercommand;
   //RegCnownTypes,URegisterObjects;
 
 //exports HistoryOut,redrawoglwnd,updatevisible,reloadlayer; {uzcshared}

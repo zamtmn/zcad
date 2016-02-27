@@ -369,7 +369,11 @@ begin
                               parseresult:=runparser('_identifier'#0'_softend'#0,line,parseerror);
                               unitname:=parseresult^.getGDBString(0);
                               if currentunit=nil then
+                                begin
                                 currentunit:=internalfindunit(unitname);
+                                if currentunit<>nil then
+                                   DebugLn('{W}Unit "%s" already exists',[unitname]);
+                                end;
                               if currentunit=nil
                                                then
                                                    begin

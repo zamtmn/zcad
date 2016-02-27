@@ -864,62 +864,95 @@ begin
   InfoFormVar.caption:=('ОСТОРОЖНО! Проверки синтаксиса пока нет. При нажатии "ОК" объект обновится. При ошибке - ВЫЛЕТ!');
   end;
 end;
-
-function ObjVarMan_com(operands:TCommandOperands):TCommandResult;
+function EditUnit(var entityunit:TObjectUnit):boolean;
 var
    mem:GDBOpenArrayOfByte;
    pobj:PGDBObjEntity;
    op:gdbstring;
-   {size,}modalresult:integer;
-   //us:unicodestring;
+   modalresult:integer;
    u8s:UTF8String;
    astring:ansistring;
+begin
+     mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
+     entityunit.SaveToMem(mem);
+     //mem.SaveToFile(expandpath(ProgramPath+'autosave\lastvariableset.pas'));
+     setlength(astring,mem.Count);
+     StrLCopy(@astring[1],mem.PArray,mem.Count);
+     u8s:=(astring);
+
+     createInfoFormVar;
+
+     InfoFormVar.memo.text:=u8s;
+     modalresult:=DOShowModal(InfoFormVar);
+     if modalresult=MrOk then
+                         begin
+                               u8s:=InfoFormVar.memo.text;
+                               astring:={utf8tosys}(u8s);
+                               mem.Clear;
+                               mem.AddData(@astring[1],length(astring));
+
+                               entityunit.free;
+                               units.parseunit(SupportPath,InterfaceTranslate,mem,@entityunit);
+                               result:=true;
+                         end
+                         else
+                             result:=false;
+     mem.done;
+end;
+
+function ObjVarMan_com(operands:TCommandOperands):TCommandResult;
+var
+   pobj:PGDBObjEntity;
+   op:gdbstring;
+   pentvarext:PTVariablesExtender;
+begin
+  if GDB.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount=1 then
+                                                               pobj:=PGDBObjEntity(GDB.GetCurrentDWG.GetLastSelected)
+                                                           else
+                                                               pobj:=nil;
+  if pobj<>nil
+  then
+      begin
+           pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+           if pentvarext<>nil then
+           begin
+            if EditUnit(pentvarext^.entityunit) then
+                                                    if assigned(rebuildproc)then
+                                                                             rebuildproc;
+           end;
+      end
+  else
+      historyoutstr(rscmSelEntBeforeComm);
+  result:=cmd_ok;
+end;
+function BlockDefVarMan_com(operands:TCommandOperands):TCommandResult;
+var
+   pobj:PGDBObjEntity;
+   op:gdbstring;
    pentvarext:PTVariablesExtender;
 begin
      pobj:=nil;
      if GDB.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount=1 then
-                                                pobj:=PGDBObjEntity(GDB.GetCurrentDWG.GetLastSelected)
-else if length(Operands)>3 then
+                                                                  begin
+                                                                       op:=PGDBObjEntity(GDB.GetCurrentDWG.GetLastSelected)^.GetNameInBlockTable;
+                                                                       if op<>'' then
+                                                                                     pobj:=gdb.GetCurrentDWG.BlockDefArray.getblockdef(op)
+                                                                  end
+else if length(Operands)>0 then
                                begin
-                                    if pos('BD:',operands)=1 then
-                                                                 begin
-                                                                      op:=copy(operands,4,length(operands)-3);
-                                                                      pobj:=gdb.GetCurrentDWG.BlockDefArray.getblockdef(op)
-                                                                 end;
+                                  op:=Operands;
+                                  pobj:=gdb.GetCurrentDWG.BlockDefArray.getblockdef(op)
                                end;
   if pobj<>nil
   then
       begin
-           mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
            pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
            if pentvarext<>nil then
            begin
-           pentvarext^.entityunit.SaveToMem(mem);
-           mem.SaveToFile(expandpath(ProgramPath+'autosave\lastvariableset.pas'));
-
-           setlength(astring,mem.Count);
-           StrLCopy(@astring[1],mem.PArray,mem.Count);
-           u8s:=(astring);
-
-           createInfoFormVar;
-
-           InfoFormVar.memo.text:=u8s;
-           modalresult:=DOShowModal(InfoFormVar);
-           if modalresult=MrOk then
-                               begin
-                                     u8s:=InfoFormVar.memo.text;
-                                     astring:={utf8tosys}(u8s);
-                                     mem.Clear;
-                                     mem.AddData(@astring[1],length(astring));
-
-                                     pentvarext^.entityunit.free;
-                                     units.parseunit(SupportPath,InterfaceTranslate,mem,@pentvarext^.entityunit);
-                                     if assigned(rebuildproc)then
-                                     rebuildproc;
-                                     //GDBobjinsp.rebuild;
-                               end;
+            if EditUnit(pentvarext^.entityunit) then
+                                                    if assigned(rebuildproc)then
+                                                                             rebuildproc;
            end;
-           mem.done;
       end
   else
       historyoutstr(rscmSelOrSpecEntity);
@@ -1855,6 +1888,7 @@ begin
   CreateCommandFastObjectPlugin(@SaveAs_com,'SaveAs',CADWG,0);
   CreateCommandFastObjectPlugin(@Cam_reset_com,'Cam_Reset',CADWG,0);
   CreateCommandFastObjectPlugin(@ObjVarMan_com,'ObjVarMan',CADWG or CASelEnt,0);
+  CreateCommandFastObjectPlugin(@BlockDefVarMan_com,'BlockDefVarMan',CADWG,0);
   CreateCommandFastObjectPlugin(@MultiObjVarMan_com,'MultiObjVarMan',CADWG or CASelEnts,0);
   CreateCommandFastObjectPlugin(@Regen_com,'Regen',CADWG,0);
   CreateCommandFastObjectPlugin(@Copyclip_com,'CopyClip',CADWG or CASelEnts,0);

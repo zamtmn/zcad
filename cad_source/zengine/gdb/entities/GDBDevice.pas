@@ -67,12 +67,17 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    class function GetDXFIOFeatures:TDXFEntIODataManager;
 
                    function CreateInstance:PGDBObjDevice;static;
+                   function GetNameInBlockTable:GDBString;virtual;
              end;
 {EXPORT-}
 var
     GDBObjDeviceDXFFeatures:TDXFEntIODataManager;
 implementation
 uses GDBBlockDef,dxflow,{log,}UGDBSelectedObjArray,UGDBEntTree;
+function GDBObjDevice.GetNameInBlockTable:GDBString;
+begin
+  result:=DevicePrefix+name;
+end;
 procedure GDBObjDevice.correctobjects;
 var pobj:PGDBObjEntity;
     ir:itrec;

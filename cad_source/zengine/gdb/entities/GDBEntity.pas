@@ -162,6 +162,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                     procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
                     class function GetDXFIOFeatures:TDXFEntIODataManager;
+                    function GetNameInBlockTable:GDBString;virtual;
               end;
 {Export-}
 var onlygetsnapcount:GDBInteger;
@@ -171,6 +172,10 @@ uses generalviewarea,usimplegenerics,zeentityfactory,GDBGenericSubEntry,UGDBSele
 procedure GDBObjEntity.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
 begin
     proc(@self,PCounted,Counter);
+end;
+function GDBObjEntity.GetNameInBlockTable:GDBString;
+begin
+    result:='';
 end;
 procedure GDBObjEntity.FormatAfterDXFLoad;
 begin

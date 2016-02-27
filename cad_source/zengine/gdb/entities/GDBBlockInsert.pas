@@ -66,6 +66,7 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
 
                      class function CreateInstance:PGDBObjBlockInsert;static;
+                     function GetNameInBlockTable:GDBString;virtual;
                   end;
 {Export-}
 procedure SetBlockInsertGeomProps(PBlockInsert:PGDBObjBlockInsert;args:array of const);
@@ -180,6 +181,11 @@ begin
         kU[1] := kR[0][2]*fInvD0;
         kU[2] := kR[1][2]/kD[1];
 end;*)
+function GDBObjBlockInsert.GetNameInBlockTable:GDBString;
+begin
+  result:=name;
+end;
+
 function GDBObjBlockInsert.FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;
 begin
   if pos(DevicePrefix,Name)=1 then

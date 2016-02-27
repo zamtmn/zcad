@@ -21,12 +21,12 @@ unit dbgappexplorercommand;
 
 interface
 uses
- commanddefinternal,commandlinedef,AppExploreFrm;
+ commanddefinternal,commandlinedef,gdbase,AppExploreFrm;
 implementation
 function DbgAppExplorer_com(operands:TCommandOperands):TCommandResult;
 begin
   ShowAppExplorer;
-  //result:=cmd_
+  result:=cmd_ok;
 end;
 
 begin

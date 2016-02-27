@@ -1,4 +1,4 @@
-unit DEVICE_PS_BIAS;
+unit DEVICE_PS_BIAD_RUPOR;
 interface
 usescopy firesensor;
 implementation

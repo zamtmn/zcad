@@ -1,4 +1,4 @@
-unit DEVICE_PS_DAT_SMOKE;
+unit DEVICE_PS_ET;
 interface
 usescopy firesensor;
 implementation

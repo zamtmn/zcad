@@ -1,4 +1,4 @@
-unit DEVICE_OS_KNOPKA;
+unit DEVICE_KIP_DEVICE;
 interface
 uses system,devices;
 usescopy objname;

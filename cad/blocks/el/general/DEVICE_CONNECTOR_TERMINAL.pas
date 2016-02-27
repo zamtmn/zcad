@@ -1,4 +1,4 @@
-unit DEVICE_CONNECTOR_POINT;
+unit DEVICE_CONNECTOR_TERMINAL;
 interface
 uses system;
 var

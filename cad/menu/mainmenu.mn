@@ -513,6 +513,7 @@ MainMenuItem Debug;
         Command **GDB,SetObjInsp(GDBDescriptor),none,none
         Command **OGLWND (отладка),SetObjInsp(OGLWND_DEBUG),none,none
       }
+    Command AppExplorer,DbgAppExplorer,none,none
   }
 MainMenuItem DB;
   {

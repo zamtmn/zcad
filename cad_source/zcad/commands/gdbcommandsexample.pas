@@ -1456,12 +1456,49 @@ begin
 end;
 
 procedure RecurseSearhCable(pc:PGDBObjCable);
+type TMySuperData=record
+                        a,b,c:integer;
+                  end;
+     TMySuperDataArray1=array[0..36] of TMySuperData;//первый вариант
+     TMySuperDataOpenArray2=array of TMySuperData;//второй вариант
 var
     pc2:PGDBObjCable;               //указатель на найденый кабель
     LastPoint,FirstPoint:GDBVertex; //точки в конце кабеля PC и начале кабеля PC2
     NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
     ir:itrec;
+  //////////////////////////////////////////////////
+    i:integer;
+    DataArray1:TMySuperDataArray1;
+    DataOpenArray2:TMySuperDataOpenArray2;
 begin
+  for i:=0 to 36 do
+                   begin
+                        DataArray1[i].a:=100;
+                        DataArray1[i].b:=100;
+                        DataArray1[i].c:=100;
+                   end;
+  //////////////////////////////////////////////////
+  setlength(DataOpenArray2,100);
+  for i:=0 to 100 do
+                   begin
+                        DataOpenArray2[i].a:=100;
+                        DataOpenArray2[i].b:=100;
+                        DataOpenArray2[i].c:=100;
+                   end;
+   setlength(DataOpenArray2,0);
+   //////////////////////////////////////////////////
+   for i:=0 to 100 do
+                    begin
+                         setlength(DataOpenArray2,length(DataOpenArray2)+1);
+                         DataOpenArray2[i].a:=100;
+                         DataOpenArray2[i].b:=100;
+                         DataOpenArray2[i].c:=100;
+                    end
+   setlength(DataOpenArray2,0);
+   //////////////////////////////////////////////////
+
+
+
   LastPoint:=PGDBVertex(pc^.VertexArrayInWCS.getelement(pc^.VertexArrayInWCS.Count-1))^;//получаем точку в конце кабеля
   NearObjects.init(100);//инициализируем список
   if gdb.GetCurrentROOT^.FindObjectsInPoint(LastPoint,NearObjects)then //ищем примитивы оболочка которых включает нашу точку

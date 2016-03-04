@@ -100,6 +100,7 @@ SysVar.RD.RD_PanObjectDegradation:=@SysVarRDPanObjectDegradation;
 sysvar.RD.RD_RendererBackEnd:=@BackendsNames;
 
 sysvar.DSGN.DSGN_OTrackTimerInterval:=@sysvarDSGNOTrackTimerInterval;
+sysvar.DSGN.DSGN_SelNew:=@sysvarDSGNSelNew;
 sysvar.RD.RD_LastCalcVisible:=@sysvarRDLastCalcVisible;
 sysvar.RD.RD_Light:=@sysvarRDLight;
 finalization

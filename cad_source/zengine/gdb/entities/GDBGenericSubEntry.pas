@@ -83,9 +83,11 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                               procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
 
                               //function FindObjectsInPointStart(const point:GDBVertex;out Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;
+                              function FindObjectsInVolume(const Volume:TBoundingBox;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;
                               function FindObjectsInPoint(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;
                               function FindObjectsInPointSlow(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
                               function FindObjectsInPointInNode(const point:GDBVertex;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
+                              function FindObjectsInVolumeInNode(const Volume:TBoundingBox;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
                               //function FindObjectsInPointDone(const point:GDBVertex):GDBBoolean;virtual;
                               function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                               procedure correctsublayers(var la:GDBLayerArray);virtual;
@@ -203,12 +205,55 @@ begin
      result:=result or (plus or minus);
      //self.ObjArray.ObjTree.BoundingBox;
 end;
+function GDBObjGenericSubEntry.FindObjectsInVolumeInNode(const Volume:TBoundingBox;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
+var
+    minus:gdbboolean{$IFNDEF DELPHI}=false{$ENDIF};
+    plus:gdbboolean{$IFNDEF DELPHI}=false{$ENDIF};
+    pobj:PGDBObjEntity;
+    ir:itrec;
+begin
+     plus:=false;
+     minus:=false;
+     result:=false;
+     if assigned(Node.pminusnode) then
+       if geometry.boundingintersect(Volume,Node.pminusnode.BoundingBox) then
+       begin
+            minus:=FindObjectsInVolumeInNode(Volume,Node.pminusnode^,Objects);
+       end;
+     if assigned(Node.pplusnode) then
+       if geometry.boundingintersect(Volume,Node.pplusnode.BoundingBox) then
+       begin
+            plus:=FindObjectsInVolumeInNode(Volume,Node.pplusnode^,Objects);
+       end;
 
+       pobj:=Node.nul.beginiterate(ir);
+     if pobj<>nil then
+     repeat
+           if  boundingintersect(Volume,pobj^.vp.BoundingBox) then
+           begin
+                result:=true;
+                Objects.Add(@pobj);
+           end;
+
+           pobj:=Node.nul.iterate(ir);
+     until pobj=nil;
+
+     result:=result or (plus or minus);
+end;
 function GDBObjGenericSubEntry.FindObjectsInPoint(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
 begin
      if geometry.IsPointInBB(point,self.ObjArray.ObjTree.BoundingBox) then
      begin
           result:=FindObjectsInPointInNode(point,ObjArray.ObjTree,Objects);
+     end
+     else
+         result:=false;
+end;
+function GDBObjGenericSubEntry.FindObjectsInVolume(const Volume:TBoundingBox;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
+begin
+     if geometry.boundingintersect(Volume,self.ObjArray.ObjTree.BoundingBox) then
+     begin
+          result:=FindObjectsInVolumeInNode(Volume,ObjArray.ObjTree,Objects);
      end
      else
          result:=false;

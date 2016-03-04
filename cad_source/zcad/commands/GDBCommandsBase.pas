@@ -1884,6 +1884,10 @@ begin
    end;
    result:=cmd_ok;
 end;
+function Cancel_com(operands:TCommandOperands):TCommandResult;
+begin
+   result:=cmd_ok;
+end;
 procedure startup;
 //var
    //pmenuitem:pzmenuitem;
@@ -1940,6 +1944,7 @@ begin
 
   CreateCommandFastObjectPlugin(@StoreFrustum_com,'StoreFrustum',CADWG,0).overlay:=true;
   CreateCommandFastObjectPlugin(@TestScript_com,'TestScript',0,0).overlay:=true;
+  CreateCommandFastObjectPlugin(@Cancel_com,'Cancel',0,0);
 
   zoomwindowcommand:=CreateCommandRTEdObjectPlugin(@FrameEdit_com_CommandStart,@FrameEdit_com_Command_End,nil,nil,@FrameEdit_com_BeforeClick,@ShowWindow_com_AfterClick,nil,nil,'ZoomWindow',0,0);
   zoomwindowcommand^.overlay:=true;

@@ -1,3 +1,5 @@
+action ACN_CANCEL,Cancel,#C,Cancel,Cancel,
+
 action ACN_LOAD,Load,load.bmp,Open ...,Open drawing,CTRL+O
 action ACN_IMPORT,Import,#Import,Import ...,Import drawing,
 action ACN_LOADQS,Load(QS),#QL,Open (Autosave),Open last autosave,

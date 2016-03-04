@@ -1456,54 +1456,26 @@ begin
 end;
 
 procedure RecurseSearhCable(pc:PGDBObjCable);
-type TMySuperData=record
-                        a,b,c:integer;
-                  end;
-     TMySuperDataArray1=array[0..36] of TMySuperData;//первый вариант
-     TMySuperDataOpenArray2=array of TMySuperData;//второй вариант
+const
+     MyEPSILON=0.05;//погрешность с которой ищем - половина стороны куба в котором будет осуществлен поиск
 var
     pc2:PGDBObjCable;               //указатель на найденый кабель
     LastPoint,FirstPoint:GDBVertex; //точки в конце кабеля PC и начале кабеля PC2
+    Volume:TBoundingBox;            //Ограничивающий объем, обычно в графике его называют AABB - axis aligned bounding box
+                                    //куб со сторонами паралелльными осям, определяется 2мя диагональными точками
+                                    //левая-нижняя-ближняя и правая-верхняя-дальняя
+
     NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
-    ir:itrec;
-  //////////////////////////////////////////////////
-    i:integer;
-    DataArray1:TMySuperDataArray1;
-    DataOpenArray2:TMySuperDataOpenArray2;
+    ir:itrec;                       //переменная для пробежки по массивам zcad`а, можно сказать аналог i в цикле for
 begin
-  for i:=0 to 36 do
-                   begin
-                        DataArray1[i].a:=100;
-                        DataArray1[i].b:=100;
-                        DataArray1[i].c:=100;
-                   end;
-  //////////////////////////////////////////////////
-  setlength(DataOpenArray2,100);
-  for i:=0 to 100 do
-                   begin
-                        DataOpenArray2[i].a:=100;
-                        DataOpenArray2[i].b:=100;
-                        DataOpenArray2[i].c:=100;
-                   end;
-   setlength(DataOpenArray2,0);
-   //////////////////////////////////////////////////
-   for i:=0 to 100 do
-                    begin
-                         setlength(DataOpenArray2,length(DataOpenArray2)+1);
-                         DataOpenArray2[i].a:=100;
-                         DataOpenArray2[i].b:=100;
-                         DataOpenArray2[i].c:=100;
-                    end
-   setlength(DataOpenArray2,0);
-   //////////////////////////////////////////////////
-
-
-
   LastPoint:=PGDBVertex(pc^.VertexArrayInWCS.getelement(pc^.VertexArrayInWCS.Count-1))^;//получаем точку в конце кабеля
+
+  volume.LBN:=createvertex(LastPoint.x-MyEPSILON,LastPoint.y-MyEPSILON,LastPoint.z-MyEPSILON);//считаем левую\нижнюю\ближнюю точку объема
+  volume.RTF:=createvertex(LastPoint.x+MyEPSILON,LastPoint.y+MyEPSILON,LastPoint.z+MyEPSILON);//считаем правую\верхнюю\дальнюю точку объема
   NearObjects.init(100);//инициализируем список
-  if gdb.GetCurrentROOT^.FindObjectsInPoint(LastPoint,NearObjects)then //ищем примитивы оболочка которых включает нашу точку
+  if gdb.GetCurrentROOT^.FindObjectsInVolume(volume,NearObjects)then //ищем примитивы оболочка которых пересекается с volume
   begin
-       //тут если такие примитивы нашлись, они лежат в списке
+       //тут если такие примитивы нашлись, они лежат в списке NearObjects
 
        //пробегаем по списку
        pc2:=NearObjects.beginiterate(ir);//получаем первый примитив из списка
@@ -1512,7 +1484,7 @@ begin
              if pc2^.vp.ID=GDBCableID then//если он кабель то
              begin
                   FirstPoint:=PGDBVertex(pc2^.VertexArrayInWCS.getelement(0))^;//получаем точку в начале найденного кабеля
-                  if geometry.Vertexlength(LastPoint,FirstPoint)<1 then        //если конец кабеля совпадает с началом с погрешностью, то
+                  if geometry.Vertexlength(LastPoint,FirstPoint)<MyEPSILON then//если конец кабеля совпадает с началом с погрешностью, то
                   begin
                        pc2^.SelectQuik;            //выделяем
                        RecurseSearhCable(pc2);     //рекурсивно ищем на конце найденного кабеля

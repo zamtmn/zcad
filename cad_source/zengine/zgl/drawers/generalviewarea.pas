@@ -1611,6 +1611,9 @@ end;
      //glGetDoublev(GL_MODELVIEW_MATRIX,@modelMatrix);
   //mouseunproject(param.md.mouse.x, param.md.mouse.y);
   //reprojectaxis;
+
+
+  (* убрано в FrameEdit_com_AfterClick
   if param.seldesc.MouseFrameON then
   begin
     pdwg^.myGluProject2(param.seldesc.Frame13d,
@@ -1621,7 +1624,9 @@ end;
     else if param.seldesc.Frame1.x > (getviewcontrol.clientwidth - 1) then param.seldesc.Frame1.x := getviewcontrol.clientwidth - 1;
     if param.seldesc.Frame1.y < 0 then param.seldesc.Frame1.y := 1
     else if param.seldesc.Frame1.y > (getviewcontrol.clientheight - 1) then param.seldesc.Frame1.y := getviewcontrol.clientheight - 1;
-  end;
+  end;*)
+
+
      //GDBobjinsp23.reread;
   //CalcOptimalMatrix;
   CalcOptimalMatrix;

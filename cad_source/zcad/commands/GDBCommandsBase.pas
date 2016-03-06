@@ -504,7 +504,7 @@ end;
 procedure FrameEdit_com_CommandStart(Operands:pansichar);
 begin
   //inherited CommandStart;
-  GDB.GetCurrentDWG.wa.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera) or (MRotateCamera));
+  GDB.GetCurrentDWG.wa.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera) {or (MRotateCamera)});
   historyoutstr(rscmFirstPoint);
 end;
 function ShowWindow_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
@@ -543,15 +543,34 @@ begin
   end
 end;
 function FrameEdit_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
-var //i: GDBInteger;
+var
   ti: GDBInteger;
   x,y,w,h:gdbdouble;
   pv:PGDBObjEntity;
   ir:itrec;
   r:TInBoundingVolume;
   DC:TDrawContext;
+  glmcoord1:gdbpiece;
+  OnlyOnScreenSelect:boolean;
 begin
   result:=mclick;
+  OnlyOnScreenSelect:=(button and MZW_CONTROL)=0;
+  if GDB.GetCurrentDWG.wa.param.seldesc.MouseFrameON then
+    begin
+      glmcoord1:= GDB.GetCurrentDWG.wa.param.md.mouseraywithoutos;
+      GDB.GetCurrentDWG^.myGluProject2(GDB.GetCurrentDWG.wa.param.seldesc.Frame13d,
+                                       glmcoord1.lbegin);
+      GDB.GetCurrentDWG.wa.param.seldesc.Frame1.x := round(glmcoord1.lbegin.x);
+      GDB.GetCurrentDWG.wa.param.seldesc.Frame1.y := GDB.GetCurrentDWG.wa.getviewcontrol.clientheight - round(glmcoord1.lbegin.y);
+      if OnlyOnScreenSelect then
+      begin
+      if GDB.GetCurrentDWG.wa.param.seldesc.Frame1.x < 0 then GDB.GetCurrentDWG.wa.param.seldesc.Frame1.x := 0
+      else if GDB.GetCurrentDWG.wa.param.seldesc.Frame1.x > (GDB.GetCurrentDWG.wa.getviewcontrol.clientwidth - 1) then GDB.GetCurrentDWG.wa.param.seldesc.Frame1.x := GDB.GetCurrentDWG.wa.getviewcontrol.clientwidth - 1;
+      if GDB.GetCurrentDWG.wa.param.seldesc.Frame1.y < 0 then GDB.GetCurrentDWG.wa.param.seldesc.Frame1.y := 1
+      else if GDB.GetCurrentDWG.wa.param.seldesc.Frame1.y > (GDB.GetCurrentDWG.wa.getviewcontrol.clientheight - 1) then GDB.GetCurrentDWG.wa.param.seldesc.Frame1.y := GDB.GetCurrentDWG.wa.getviewcontrol.clientheight - 1;
+      end;
+    end;
+
   GDB.GetCurrentDWG.wa.param.seldesc.Frame2 := mc;
   GDB.GetCurrentDWG.wa.param.seldesc.Frame23d := wc;
   dc:=GDB.GetCurrentDWG^.CreateDrawingRC;
@@ -605,8 +624,8 @@ begin
       pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
       if pv<>nil then
       repeat
-            if pv^.Visible=gdb.GetCurrentDWG.pcamera.VISCOUNT then
-            if pv^.infrustum=gdb.GetCurrentDWG.pcamera.POSCOUNT then
+            if (pv^.Visible=gdb.GetCurrentDWG.pcamera.VISCOUNT)or(not OnlyOnScreenSelect) then
+            if (pv^.infrustum=gdb.GetCurrentDWG.pcamera.POSCOUNT)or(not OnlyOnScreenSelect) then
             begin
                  r:=pv^.CalcTrueInFrustum(GDB.GetCurrentDWG.wa.param.seldesc.BigMouseFrustum,gdb.GetCurrentDWG.pcamera.VISCOUNT);
 

@@ -3,7 +3,7 @@ unit lineweightwnd;
 interface
 
 uses
-  gdbpalette,gdbobjectsconstdef,gdbase,zcadstrconsts,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  gdbpalette,gdbobjectsconstdef,gdbase,uzcstrconsts,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ButtonPanel, StdCtrls, types, lclintf,lcltype;
 
 type

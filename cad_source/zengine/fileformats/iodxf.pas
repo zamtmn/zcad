@@ -20,9 +20,9 @@ unit iodxf;
 {$INCLUDE def.inc}
 interface
 uses LCLProc,paths,strproc,gdbdrawcontext,usimplegenerics,ugdbdimstylearray,zeentityfactory,
-    {$IFNDEF DELPHI}fileutil,{$ENDIF}
+    {$IFNDEF DELPHI}{fileutil,}LazUTF8,{$ENDIF}
     UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,uzelongprocesssupport,
-    oglwindowdef,dxflow,zcadstrconsts,UGDBTextStyleArray,
+    oglwindowdef,dxflow,uzcstrconsts,UGDBTextStyleArray,
     geometry,GDBSubordinated,gdbasetypes,GDBGenericSubEntry,gdbase,
     sysutils,memman,gdbobjectsconstdef,UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,
     UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity,GDBBlockDef,UGDBLayerArray,fileformatsmanager;

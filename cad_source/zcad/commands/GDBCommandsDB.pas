@@ -21,7 +21,7 @@ unit GDBCommandsDB;
 
 interface
 uses
-  paths,uzcsysvars,intftranslations,ugdbdrawing,gdbobjectsconstdef,zcadstrconsts,plugins,
+  paths,uzcsysvars,intftranslations,ugdbdrawing,gdbobjectsconstdef,uzcstrconsts,plugins,
   commandlinedef,
   commanddefinternal,
   gdbase,

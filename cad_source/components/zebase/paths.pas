@@ -19,7 +19,7 @@
 unit paths;
 {$INCLUDE def.inc}
 interface
-uses gdbase,Masks,LCLProc,gdbasetypes,fileutil,sysutils;
+uses gdbase,Masks,LCLProc,gdbasetypes,{fileutil}LazUTF8,sysutils;
 type
   TFromDirIterator=procedure (filename:GDBString);
   TFromDirIteratorObj=procedure (filename:GDBString) of object;

@@ -19,7 +19,7 @@
 unit uzcsysinfo;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,paths,zcadstrconsts,gdbasetypes,Forms,gdbase{$IFNDEF DELPHI},fileutil{$ENDIF},sysutils;
+uses LCLProc,paths,uzcstrconsts,gdbasetypes,Forms,gdbase{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF},sysutils;
 {$INCLUDE revision.inc}
 type
   tsysparam=record

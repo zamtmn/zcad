@@ -24,14 +24,14 @@ uses
   {LCL}
        AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
        ActnList,LCLType,LCLProc,intftranslations,toolwin,LMessages,LCLIntf,
-       Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,FileUtil,
+       Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,{fileutil}LazUTF8,
        menus,graphics,dialogs,XMLPropStorage,Buttons,Themes,
        Types,UniqueInstanceBase,simpleipc,{$ifdef windows}windows,{$endif}
   {FPC}
        lineinfo,//math,
   {ZCAD BASE}
        zemathutils,uzelongprocesssupport,gluinterface,uzglgdidrawer,ugdbdrawing,UGDBOpenArrayOfPV,ugdbabstractdrawing,gdbpalette,paths,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
-       geometry,uzcsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,uzclog,
+       geometry,uzcsysvars,uzcstrconsts,strproc,UGDBNamedObjectsArray,uzclog,
        varmandef, varman,UUnitManager,uzcsysinfo,uzcshared,strmy,UGDBTextStyleArray,ugdbdimstylearray,
   {ZCAD SIMPLE PASCAL SCRIPT}
        languade,

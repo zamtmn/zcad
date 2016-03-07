@@ -22,8 +22,13 @@ unit GDBCommandsBase;
 interface
 uses
  {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
- generalviewarea,zeundostack,zcchangeundocommand,zcobjectinspectormultiobjects,enitiesextendervariables,gdbdrawcontext,ugdbdrawing,paths,fileformatsmanager,gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbsimpledrawing,uzcsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
- LCLProc,Classes,FileUtil,Forms,Controls,Clipbrd,lclintf,
+ generalviewarea,zeundostack,zcchangeundocommand,zcobjectinspectormultiobjects,
+ enitiesextendervariables,gdbdrawcontext,ugdbdrawing,paths,fileformatsmanager,
+ gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,
+ URecordDescriptor,ugdbfontmanager,ugdbsimpledrawing,uzcsysvars,commandline,
+ TypeDescriptors,GDBManager,uzcstrconsts,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
+ strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ LCLProc,Classes,LazUTF8,Forms,Controls,Clipbrd,lclintf,
   plugins,
   uzcsysinfo,
   commandlinedef,

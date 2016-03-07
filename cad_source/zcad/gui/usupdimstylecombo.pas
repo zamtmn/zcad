@@ -22,7 +22,7 @@ unit usupdimstylecombo;
 interface
 
 uses
-  usupportgui,StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,ugdbdimstylearray,strproc,uzcsysvars,commandline,zcadinterface;
+  usupportgui,StdCtrls,UGDBDescriptor,uzcstrconsts,Controls,Classes,ugdbdimstylearray,strproc,uzcsysvars,commandline,zcadinterface;
 
 type
   TSupportDimStyleCombo = class

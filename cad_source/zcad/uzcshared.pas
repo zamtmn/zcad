@@ -19,7 +19,7 @@
 unit uzcshared;
 {$INCLUDE def.inc}
 interface
-uses paths,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}Controls,zcadstrconsts,gdbasetypes,Classes, SysUtils, {$IFNDEF DELPHI}fileutil,{$ENDIF}{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls{$IFNDEF DELPHI},LCLProc{$ENDIF};
+uses paths,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}Controls,uzcstrconsts,gdbasetypes,Classes, SysUtils, {$IFNDEF DELPHI}fileutil,{$ENDIF}{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls{$IFNDEF DELPHI},LCLProc{$ENDIF};
 
 type
 SimpleProcOfObject=procedure of object;

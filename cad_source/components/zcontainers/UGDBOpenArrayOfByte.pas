@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfByte;
 {$INCLUDE def.inc}
 interface
-uses {zcadstrconsts,}gdbasetypes,sysutils,UGDBOpenArray,gdbase{$IFNDEF DELPHI},fileutil{$ENDIF}
+uses {zcadstrconsts,}gdbasetypes,sysutils,UGDBOpenArray,gdbase{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF}
      {paths};
 const
      breacer=[#13,#10,' '];

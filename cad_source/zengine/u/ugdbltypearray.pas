@@ -19,7 +19,7 @@
 unit ugdbltypearray;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,FileUtil,Classes,UGDBOpenArrayOfData,{zcadsysvars,}gdbasetypes,sysutils,gdbase, geometry,
+uses LCLProc,{FileUtil}LazUTF8,Classes,UGDBOpenArrayOfData,{zcadsysvars,}gdbasetypes,sysutils,gdbase, geometry,
      UGDBTextStyleArray,UGDBOpenArrayOfObjects,
      UGDBNamedObjectsArray,StrProc;
 const

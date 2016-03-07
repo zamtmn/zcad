@@ -26,7 +26,6 @@ uses
  LCLProc,Classes,FileUtil,Forms,Controls,Clipbrd,lclintf,
   plugins,
   uzcsysinfo,
-  //commandline,
   commandlinedef,
   commanddefinternal,
   gdbase,
@@ -34,32 +33,16 @@ uses
   sysutils,
   varmandef,
   oglwindowdef,
-  //OGLtypes,
   UGDBOpenArrayOfByte,
-  iodxf,{iodwg,}
-  //optionswnd,
-  {objinsp,}
-   zcadinterface,
-  //cmdline,
-  //UGDBVisibleOpenArray,
+  iodxf,
+  zcadinterface,
   gdbobjectsconstdef,
   GDBEntity,
  uzcshared,
  UGDBEntTree,
-  {zmenus,}{projecttreewnd,}gdbasetypes,{optionswnd,}{AboutWnd,HelpWnd,}memman,WindowsSpecific,{txteditwnd,}
- {messages,}UUnitManager,uzclog,Varman,
- {AnchorDocking,}dialogs,uinfoform{,
-   uPSCompiler,
-  uPSRuntime,
-  uPSC_std,
-  uPSC_controls,
-  uPSC_stdctrls,
-  uPSC_forms,
-  uPSR_std,
-  uPSR_controls,
-  uPSR_stdctrls,
-  uPSR_forms,
-  uPSUtils};
+ gdbasetypes,memman,WindowsSpecific,
+ UUnitManager,uzclog,Varman,
+ dialogs,uinfoform;
    var selframecommand:PCommandObjectDef;
        zoomwindowcommand:PCommandObjectDef;
        ms2objinsp:PCommandObjectDef;
@@ -79,9 +62,8 @@ uses
    procedure ReCreateClipboardDWG;
 const
      ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
-//var DWGPageCxMenu:pzpopupmenu;
 implementation
-uses GDBPolyLine,UGDBPolyLine2DArray,GDBLWPolyLine,{mainwindow,}UGDBSelectedObjArray,
+uses GDBPolyLine,UGDBPolyLine2DArray,GDBLWPolyLine,UGDBSelectedObjArray,
      geometry;
 var
    CopyClipFile:GDBString;
@@ -240,32 +222,6 @@ begin
            remapprjdb(pu);
            mem.done;
      end;
-          (*if fileext='.ZCP' then LoadZCP(s, {@GDB}gdb.GetCurrentDWG^)
-     else if fileext='.DXF' then
-                                begin
-                                     addfromdxf(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode,gdb.GetCurrentDWG^);
-                                     if FileExists(utf8tosys(s+'.dbpas')) then
-                                     begin
-                                           pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
-                                           mem.InitFromFile(s+'.dbpas');
-                                           //pu^.free;
-                                           units.parseunit(mem,PTSimpleUnit(pu));
-                                           remapprjdb(pu);
-                                           mem.done;
-                                     end;
-                                end
-          else if fileext='.DWG' then
-                                     begin
-                                          addfromdwg(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode,gdb.GetCurrentDWG^);
-                                          if FileExists(utf8tosys(s+'.dbpas')) then
-                                          begin
-                                                pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
-                                                mem.InitFromFile(s+'.dbpas');
-                                                //pu^.free;
-                                                units.parseunit(mem,PTSimpleUnit(pu));
-                                                mem.done;
-                                          end;
-                                     end;*)
      dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
      gdb.GetCurrentROOT.calcbb(dc);
      //gdb.GetCurrentDWG.ObjRoot.format;//FormatAfterEdit;
@@ -287,24 +243,17 @@ begin
         uzcshared.ShowError('MERGE:'+format(rsUnableToOpenFile,[s]));
 end;
 function Merge_com(operands:TCommandOperands):TCommandResult;
-//var
-   //s: GDBString;
-   //fileext:GDBString;
-   //isload:boolean;
-   //mem:GDBOpenArrayOfByte;
-   //pu:ptunit;
 begin
      result:=Load_merge(operands,TLOMerge);
 end;
 function DeSelectAll_com(operands:TCommandOperands):TCommandResult;
 begin
-     //redrawoglwnd;
      if assigned(updatevisibleproc) then updatevisibleproc;
      result:=cmd_ok;
 end;
 
 function SelectAll_com(operands:TCommandOperands):TCommandResult;
-var //i: GDBInteger;
+var
     pv:pGDBObjEntity;
     ir:itrec;
     count:integer;
@@ -333,7 +282,6 @@ begin
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
 
-  //redrawoglwnd;
   if assigned(updatevisibleproc) then updatevisibleproc;
   result:=cmd_ok;
 end;
@@ -480,30 +428,21 @@ begin
 end;
 
 function ChangeProjType_com(operands:TCommandOperands):TCommandResult;
-//var
-//   ta:TmyAction;
 begin
-     //ta:=tmyaction(MainFormN.StandartActions.ActionByName('ACN_PERSPECTIVE'));
   if GDB.GetCurrentDWG.wa.param.projtype = projparalel then
   begin
     GDB.GetCurrentDWG.wa.param.projtype := projperspective;
-    //if ta<>nil then
-    //               ta.Checked:=true;
-
   end
   else
     if GDB.GetCurrentDWG.wa.param.projtype = projPerspective then
     begin
     GDB.GetCurrentDWG.wa.param.projtype := projparalel;
-      //if ta<>nil then
-      //               ta.Checked:=false;
     end;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
 procedure FrameEdit_com_CommandStart(Operands:pansichar);
 begin
-  //inherited CommandStart;
   GDB.GetCurrentDWG.wa.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera) {or (MRotateCamera)});
   historyoutstr(rscmFirstPoint);
 end;
@@ -1969,25 +1908,6 @@ begin
   zoomwindowcommand^.overlay:=true;
   zoomwindowcommand.CEndActionAttr:=0;
 
-  //Optionswindow.initxywh('',@mainformn,500,300,400,100,false);
-  //Aboutwindow:=TAboutWnd.create(Application);{.initxywh('',@mainform,500,200,200,180,false);}
-  //Application.CreateForm(TAboutWnd,Aboutwindow);
-  //THelpWnd.create(Application);{Helpwindow.initxywh('',@mainform,500,290,400,150,false);}
-  //Aboutwindow.show;
-  //Helpwindow.show;
-  //Application.mainform:=
-
-(*  GDBGetMem({$IFDEF DEBUGBUILD}'{7A89C3DC-00FB-49E9-B938-030C79A09A37}',{$ENDIF}GDBPointer(DWGPageCxMenu),sizeof(zpopupmenu));
-  DWGPageCxMenu.init('DWGPageMenu');
-  GDBGetMem({$IFDEF DEBUGBUILD}'{19CBFAC7-4671-4F40-A34F-3F69CE37DA65}',{$ENDIF}GDBPointer(pmenuitem),sizeof(zmenuitem));
-  pmenuitem.init('Создать вкладку');
-  pmenuitem.command:='newdwg';
-  pmenuitem.addto(DWGPageCxMenu);
-  GDBGetMem({$IFDEF DEBUGBUILD}'{19CBFAC7-4671-4F40-A34F-3F69CE37DA65}',{$ENDIF}GDBPointer(pmenuitem),sizeof(zmenuitem));
-  pmenuitem.init('Закрыть вкладку');
-  pmenuitem.command:='closedwgonmouse';
-  pmenuitem.addto(DWGPageCxMenu);
-  *)
 end;
 initialization
   OSModeEditor.initnul;

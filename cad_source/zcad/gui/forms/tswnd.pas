@@ -28,7 +28,7 @@ uses
 
   gdbobjectsconstdef,UGDBTextStyleArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,usuptypededitors,
 
-  paths,zcadinterface, zcadstrconsts, uzcsysinfo,strproc, uzcshared, UBaseTypeDescriptor,
+  paths,zcadinterface, uzcstrconsts, uzcsysinfo,strproc, uzcshared, UBaseTypeDescriptor,
   imagesmanager, usupportgui, ZListView,UGDBFontManager,varman,UGDBStringArray,GDBEntity,GDBText;
 
 const

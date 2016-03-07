@@ -118,7 +118,7 @@ uses
   //zcregisterobjectinspector,
   mainwindow,
   uzcshared,
-  zcadstrconsts,
+  uzcstrconsts,
   iopalette,
   gdbfieldprocessorimpl,
   registerenitiesfeatures,

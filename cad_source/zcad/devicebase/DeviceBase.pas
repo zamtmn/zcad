@@ -1,7 +1,9 @@
 unit DeviceBase;
 {$INCLUDE def.inc}
 interface
-uses paths,intftranslations,gvector,varmandef,CsvDocument,devicebaseabstract,uzcsysvars,fileutil,uzcsysinfo,strmy,gdbasetypes,gdbase,UUnitManager,varman,{varmandef,}sysutils,typedescriptors,URecordDescriptor,UObjectDescriptor,uzcshared;
+uses paths,intftranslations,gvector,varmandef,CsvDocument,devicebaseabstract,uzcsysvars,
+  LazUTF8,uzcsysinfo,strmy,gdbasetypes,gdbase,UUnitManager,varman,{varmandef,}sysutils,
+  typedescriptors,URecordDescriptor,UObjectDescriptor,uzcshared;
 type
 {REGISTEROBJECTTYPE DeviceDbBaseObject}
 {REGISTEROBJECTTYPE ElDeviceBaseObject}

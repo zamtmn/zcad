@@ -20,7 +20,7 @@ unit UGDBTextStyleArray;
 {$INCLUDE def.inc}
 interface
 uses LCLProc,paths,UGDBFontManager,gdbasetypes,sysutils,gdbase, geometry,
-     strproc,ugdbfont,zcadstrconsts,UGDBNamedObjectsArray,memman;
+     strproc,ugdbfont,uzcstrconsts,UGDBNamedObjectsArray,memman;
 type
   //ptextstyle = ^textstyle;
 {REGISTEROBJECTTYPE GDBTextStyleArray}

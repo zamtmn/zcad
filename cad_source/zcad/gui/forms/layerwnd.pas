@@ -11,7 +11,7 @@ uses
 
   gdbobjectsconstdef,UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,
 
-  zcadinterface, zcadstrconsts, strproc, uzcshared, UBaseTypeDescriptor,
+  zcadinterface, uzcstrconsts, strproc, uzcshared, UBaseTypeDescriptor,
   imagesmanager, usupportgui, ZListView;
 
 const

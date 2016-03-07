@@ -147,7 +147,7 @@ begin
            if Lang<>'' then
                            begin
                                 AFilename:=Format(PODirectory + 'zcad.%s.po',[Lang]);
-                                if FileExistsUTF8(AFilename) then
+                                if FileExists{UTF8}(AFilename) then
                                                                  begin
                                                                       po:=TmyPOFile.Create(AFilename);
                                                                  end;
@@ -155,7 +155,7 @@ begin
            if (FallbackLang<>'')and(not assigned(po)) then
                            begin
                                 AFilename:=Format(PODirectory + 'zcad.%s.po',[FallbackLang]);
-                                if FileExistsUTF8(AFilename) then
+                                if FileExists{UTF8}(AFilename) then
                                                                  begin
                                                                       po:=TmyPOFile.Create(AFilename);
                                                                  end;
@@ -169,7 +169,7 @@ begin
      else
          begin
               AFilename:=(PODirectory + 'zcad.po');
-              if FileExistsUTF8(AFilename) then
+              if FileExists{UTF8}(AFilename) then
                                                begin
                                                     po:=TmyPOFile.Create(AFilename,true);
                                                     actualypo:=TmyPOFile.Create;

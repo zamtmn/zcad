@@ -22,7 +22,7 @@ interface
 uses
      uzcsysvars,gdbase,gdbasetypes,uzcsysinfo,
      uinfoform,Varman,zcadinterface,
-     UGDBDrawingdef,strproc,GDBText,gdbobjectsconstdef,zcadstrconsts,sltexteditor,
+     UGDBDrawingdef,strproc,GDBText,gdbobjectsconstdef,uzcstrconsts,sltexteditor,
      Controls,Classes,Forms;
 var
     InfoForm:TInfoForm=nil;

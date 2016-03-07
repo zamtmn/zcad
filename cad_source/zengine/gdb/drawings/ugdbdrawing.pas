@@ -20,7 +20,7 @@ unit ugdbdrawing;
 {$INCLUDE def.inc}
 interface
 uses
-intftranslations,zcadinterface,gdbdrawcontext,zeundostack,zcchangeundocommand,zcobjectchangeundocommand,zebaseundocommands,paths,ugdbdimstylearray,WindowsSpecific,LResources,uzcsysvars,zcadstrconsts,strproc,GDBBlockDef,UUnitManager,
+intftranslations,zcadinterface,gdbdrawcontext,zeundostack,zcchangeundocommand,zcobjectchangeundocommand,zebaseundocommands,paths,ugdbdimstylearray,WindowsSpecific,LResources,uzcsysvars,uzcstrconsts,strproc,GDBBlockDef,UUnitManager,
 gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,{uzcsysinfo,}ugdbsimpledrawing,

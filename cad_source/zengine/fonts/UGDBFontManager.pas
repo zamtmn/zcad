@@ -19,7 +19,7 @@
 unit UGDBFontManager;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfByte,{$IFNDEF DELPHI}LResources,{$ENDIF}LCLProc,paths,lclintfex,zcadstrconsts,{uzcshared,}{zcadsysvars,}strproc,ugdbfont,gdbasetypes,{SysInfo,}memman,
+uses UGDBOpenArrayOfByte,{$IFNDEF DELPHI}LResources,{$ENDIF}LCLProc,paths,lclintfex,uzcstrconsts,{uzcshared,}{zcadsysvars,}strproc,ugdbfont,gdbasetypes,{SysInfo,}memman,
      sysutils,gdbase, geometry,usimplegenerics,
      UGDBNamedObjectsArray,classes;
 type

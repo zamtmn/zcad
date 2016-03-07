@@ -10,7 +10,7 @@ uses
 
   linetypesloadwnd,uzcsysvars, ugdbsimpledrawing, gdbase, gdbasetypes,
   ugdbltypearray,UGDBDescriptor,imagesmanager,uzcsysinfo,strproc,usupportgui,ugdbutil,
-  paths,zcadstrconsts,uzcshared,UGDBNamedObjectsArray;
+  paths,uzcstrconsts,uzcshared,UGDBNamedObjectsArray;
 
 type
 

@@ -21,7 +21,14 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  generalviewarea,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,zcmultiobjectcreateundocommand,zeentitiesmanager,uzglcanvasdrawer,zcobjectinspectormultiobjects,enitiesextendervariables,ugdbdrawing,gdbpalette,ugdbopenarrayofgdbdouble,texteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,zeentityfactory,ugdbsimpledrawing,uzcsysvars,zcadstrconsts,GDBCommandsBaseDraw,glstatemanager,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  generalviewarea,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,
+  zcmultiobjectcreateundocommand,zeentitiesmanager,uzglcanvasdrawer,
+  zcobjectinspectormultiobjects,enitiesextendervariables,ugdbdrawing,gdbpalette,
+  ugdbopenarrayofgdbdouble,texteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,
+  GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,zeentityfactory,
+  ugdbsimpledrawing,uzcsysvars,uzcstrconsts,GDBCommandsBaseDraw,glstatemanager,
+  PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,
+  {fileutil}LazUTF8,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   commandlinedef,strproc,
   gdbasetypes,commandline,GDBCommandsBase,
   plugins,

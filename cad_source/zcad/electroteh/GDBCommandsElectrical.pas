@@ -10,15 +10,20 @@ unit GDBCommandsElectrical;
 
 interface
 uses
-  generalviewarea,intftranslations,zcobjectchangeundocommand2,zcmultiobjectcreateundocommand,zeentitiesmanager,UGDBDrawingdef,enitiesextendervariables,gdbdrawcontext,ugdbdrawing,zcadvariablesutils,GDBAbstractText,zcadstrconsts,UGDBSelectedObjArray,zeentityfactory,uzcsysvars,csvdocument,
-  UGDBOpenArrayOfPV,GDBBlockInsert,devices,UGDBTree,ugdbdescriptor,gdbasetypes,commandline,GDBCommandsDraw,GDBElLeader,
+  generalviewarea,intftranslations,zcobjectchangeundocommand2,
+  zcmultiobjectcreateundocommand,zeentitiesmanager,UGDBDrawingdef,
+  enitiesextendervariables,gdbdrawcontext,ugdbdrawing,zcadvariablesutils,
+  GDBAbstractText,uzcstrconsts,UGDBSelectedObjArray,zeentityfactory,uzcsysvars,
+  csvdocument,
+  UGDBOpenArrayOfPV,GDBBlockInsert,devices,UGDBTree,ugdbdescriptor,gdbasetypes,
+  commandline,GDBCommandsDraw,GDBElLeader,
   plugins,
   commandlinedef,
   commanddefinternal,
   gdbase,
   GDBManager,
   sysutils,
-  fileutil,
+  {fileutil}LazUTF8,
   varmandef,
   oglwindowdef,
   zcadinterface,

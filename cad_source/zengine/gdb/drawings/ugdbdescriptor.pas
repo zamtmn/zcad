@@ -20,7 +20,7 @@ unit UGDBDescriptor;
 {$INCLUDE def.inc}
 interface
 uses
-generalviewarea,intftranslations,zedimblocksregister,zeblockdefsfactory,zemathutils,gdbdrawcontext,ugdbdrawing,ugdbdrawingdef,paths,ugdbdimstylearray,ugdbabstractdrawing,WindowsSpecific,LResources,uzcsysvars,zcadinterface,zcadstrconsts,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
+generalviewarea,intftranslations,zedimblocksregister,zeblockdefsfactory,zemathutils,gdbdrawcontext,ugdbdrawing,ugdbdrawingdef,paths,ugdbdimstylearray,ugdbabstractdrawing,WindowsSpecific,LResources,uzcsysvars,zcadinterface,uzcstrconsts,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
 gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,ugdbsimpledrawing,

@@ -21,7 +21,7 @@ unit GDBCommandsBaseDraw;
 
 interface
 uses
-  zcadstrconsts,GL,printers,graphics,fileutil,Clipbrd,LCLType,classes,
+  uzcstrconsts,GL,printers,graphics,fileutil,Clipbrd,LCLType,classes,
   commandlinedef,
   gdbasetypes,commandline,GDBCommandsBase,
   plugins,

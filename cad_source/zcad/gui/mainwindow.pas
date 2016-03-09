@@ -24,11 +24,11 @@ uses
   {LCL}
        AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
        ActnList,LCLType,LCLProc,intftranslations,toolwin,LMessages,LCLIntf,
-       Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,{fileutil}LazUTF8,
+       Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,LazUTF8,
        menus,graphics,dialogs,XMLPropStorage,Buttons,Themes,
        Types,UniqueInstanceBase,simpleipc,{$ifdef windows}windows,{$endif}
   {FPC}
-       lineinfo,//math,
+       lineinfo,
   {ZCAD BASE}
        zemathutils,uzelongprocesssupport,gluinterface,uzglgdidrawer,ugdbdrawing,UGDBOpenArrayOfPV,ugdbabstractdrawing,gdbpalette,paths,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
        geometry,uzcsysvars,uzcstrconsts,strproc,UGDBNamedObjectsArray,uzclog,
@@ -68,7 +68,7 @@ type
   PTDummyMyActionsArray=^TDummyMyActionsArray;
   TDummyMyActionsArray=Array [0..0] of TmyAction;
   TFileHistory=Array [0..9] of TmyAction;
-  TDrawings=Array [0..9] of TmyAction;
+  TOpenedDrawings=Array [0..9] of TmyAction;
   TCommandHistory=Array [0..9] of TmyAction;
 
 
@@ -97,13 +97,9 @@ type
     function CreateCBox(CBName:GDBString;owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
     procedure CreateHTPB(tb:TToolBar);
 
-    procedure FormCreate(Sender: TObject);
-    procedure Formresize(Sender: TObject);
     procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
     procedure AfterConstruction; override;
     procedure setnormalfocus(Sender: TObject);
-
-    procedure draw;
 
     procedure loadpanels(pf:GDBString);
     procedure CreateLayoutbox(tb:TToolBar);
@@ -116,9 +112,6 @@ type
     procedure ChangedDWGTabCtrl(Sender: TObject);
     procedure UpdateControls;
 
-    procedure StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName);
-    procedure ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
-    procedure EndLongProcess(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
     procedure Say(word:gdbstring);
 
     procedure SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
@@ -139,12 +132,20 @@ type
     procedure waSetObjInsp(Sender:TAbstractViewArea);
     procedure WaShowCursor(Sender:TAbstractViewArea;var DC:TDrawContext);
 
+    //onXxxxx handlers
+    procedure _onCreate(Sender: TObject);
+    procedure _onResize(Sender: TObject);
+
+    //Long process support - draw progressbar. See uzelongprocesssupport unit
+    procedure StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName);
+    procedure ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
+    procedure EndLongProcess(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
 
     public
     FAppProps:TApplicationProperties;
     rt:GDBInteger;
     FileHistory:TFileHistory;
-    Drawings:TDrawings;
+    OpenedDrawings:TOpenedDrawings;
     CommandsHistory:TCommandHistory;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction); override;
     destructor Destroy;override;
@@ -198,7 +199,7 @@ type
     function MainMouseDown(Sender:TAbstractViewArea):GDBBoolean;
     procedure MainMouseUp;
     procedure IPCMessage(Sender: TObject);
-    procedure SetTop;
+    {$ifdef windows}procedure SetTop;{$endif}
                end;
 procedure UpdateVisible;
 function getoglwndparam: GDBPointer; export;
@@ -240,15 +241,13 @@ begin
      lp.Name:=Tria_AnsiToUtf8(player.Name);
      lp.PLayer:=player;;
 end;
-procedure MainForm.SetTop;
 {$ifdef windows}
+procedure MainForm.SetTop;
 var
   hWnd, hCurWnd, dwThreadID, dwCurThreadID: THandle;
   OldTimeOut: Cardinal;
   AResult: Boolean;
-{$endif}
 begin
-  {$ifdef windows}
   if GetActiveWindow=Application.MainForm.Handle then Exit;
      Application.Restore;
      hWnd := {Application.Handle}Application.MainForm.Handle;
@@ -267,8 +266,8 @@ begin
      end;
      SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE or SWP_NOSIZE);
      SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, Pointer(OldTimeOut), 0);
-   {$endif}
 end;
+{$endif}
 procedure MainForm.IPCMessage(Sender: TObject);
 var
    msgstring,ts:string;
@@ -756,10 +755,6 @@ begin
                                            Application.QueueAsyncCall(asynccloseapp, 0);
 end;
 
-procedure MainForm.draw;
-begin
-     update;
-end;
 function ShowAnchorDockOptions(ADockMaster: TAnchorDockMaster): TModalResult;
 var
   Dlg: TForm;
@@ -1022,10 +1017,10 @@ begin
   begin
        FileHistory[i]:=TmyAction.Create(self);
   end;
-  for i:=low(Drawings) to high(Drawings) do
+  for i:=low(OpenedDrawings) to high(OpenedDrawings) do
   begin
-       Drawings[i]:=TmyAction.Create(self);
-       Drawings[i].visible:=false;
+       OpenedDrawings[i]:=TmyAction.Create(self);
+       OpenedDrawings[i].visible:=false;
   end;
   for i:=low(CommandsHistory) to high(CommandsHistory) do
   begin
@@ -1409,7 +1404,7 @@ begin
   MainFormN.PageControl.OnMouseDown:=MainFormN.PageControlMouseDown;
   MainFormN.PageControl.ShowTabs:=SysVar.INTF.INTF_ShowDwgTabs^;
 end;
-procedure MainForm.FormCreate(Sender: TObject);
+procedure MainForm._onCreate(Sender: TObject);
 begin
   {
   //this unneed after fpc rev 31026 see http://bugs.freepascal.org/view.php?id=13518
@@ -1452,9 +1447,9 @@ begin
 
   if assigned(sysvar.RD.RD_GLUExtensions) then
   sysvar.RD.RD_GLUExtensions^:=GLUExtensions;
-  self.OnResize:=Formresize;
+  OnResize:=_onResize;
 end;
-procedure MainForm.Formresize(Sender: TObject);
+procedure MainForm._onResize(Sender: TObject);
 var PreferredWidth, PreferredHeight: integer;
 begin
      AdjustHeight(self,true,ToolBarU.Height);
@@ -1464,7 +1459,7 @@ procedure MainForm.AfterConstruction;
 
 begin
     name:='MainForm';
-    oncreate:=FormCreate;
+    OnCreate:=_onCreate;
     inherited;
 end;
 procedure MainForm.SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
@@ -2243,10 +2238,10 @@ begin
                                                       end
                 else if uppercase(line)='DRAWINGS' then
                                                       begin
-                                                           for i:=low(Drawings) to high(Drawings) do
+                                                           for i:=low(OpenedDrawings) to high(OpenedDrawings) do
                                                            begin
                                                                 pm1:=TMenuItem.Create(pm);
-                                                                pm1.Action:=Drawings[i];
+                                                                pm1.Action:=OpenedDrawings[i];
                                                                 pm.Add(pm1);
                                                            end;
                                                            line := f.readstring(#$A' ',#$D);
@@ -3430,29 +3425,29 @@ begin
                                                                  else
                                                                      MainFormN.PageControl.Pages[i].caption:='BEdit('+name+':'+Tria_AnsiToUtf8(PGDBObjBlockdef(PTDRAWING(poglwnd.wa.PDWG).pObjRoot).Name)+')';
 
-                if k<=high(MainFormN.Drawings) then
+                if k<=high(MainFormN.OpenedDrawings) then
                 begin
-                MainFormN.Drawings[k].Caption:=MainFormN.PageControl.Pages[i].caption;
-                MainFormN.Drawings[k].visible:=true;
-                MainFormN.Drawings[k].command:='ShowPage';
-                MainFormN.Drawings[k].options:=inttostr(i);
+                MainFormN.OpenedDrawings[k].Caption:=MainFormN.PageControl.Pages[i].caption;
+                MainFormN.OpenedDrawings[k].visible:=true;
+                MainFormN.OpenedDrawings[k].command:='ShowPage';
+                MainFormN.OpenedDrawings[k].options:=inttostr(i);
                 inc(k);
                 end;
                 end;
 
             end;
-  for i:=k to high(MainFormN.Drawings) do
+  for i:=k to high(MainFormN.OpenedDrawings) do
   begin
-       MainFormN.Drawings[i].visible:=false;
+       MainFormN.OpenedDrawings[i].visible:=false;
   end;
   end
   else
       begin
-           for i:=low(MainFormN.Drawings) to high(MainFormN.Drawings) do
+           for i:=low(MainFormN.OpenedDrawings) to high(MainFormN.OpenedDrawings) do
              begin
-                         MainFormN.Drawings[i].Caption:='';
-                         MainFormN.Drawings[i].visible:=false;
-                         MainFormN.Drawings[i].command:='';
+                         MainFormN.OpenedDrawings[i].Caption:='';
+                         MainFormN.OpenedDrawings[i].visible:=false;
+                         MainFormN.OpenedDrawings[i].command:='';
              end;
            mainformn.Caption:=('ZCad v'+sysvar.SYS.SYS_Version^);
            if assigned(mainwindow.LayerBox)then

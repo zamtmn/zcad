@@ -4516,11 +4516,11 @@ msgstr ""
 
 #: zcadexternal.trectangparam~et
 msgid "Entity type"
-msgstr ""
+msgstr "Тип примитива"
 
 #: zcadexternal.trectangparam~polywidth
 msgid "Polyline width"
-msgstr ""
+msgstr "Ширина полилинии"
 
 #: zcadexternal.trectangparam~vnum
 msgid "Number of vertices"

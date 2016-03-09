@@ -183,11 +183,12 @@ msgstr ""
 
 #: toswindow.label1.caption
 msgid "Object Snap Editor: Not yet implemented"
-msgstr ""
+msgstr "Редактор привязок. Пока не реализовано"
 
 #: tsltexteditor1.cancelbutton.caption
+msgctxt "tsltexteditor1.cancelbutton.caption"
 msgid "Cancel"
-msgstr ""
+msgstr "Отмена"
 
 #: tsltexteditor1.caption
 msgctxt "tsltexteditor1.caption"
@@ -209,7 +210,7 @@ msgstr ""
 
 #: ttextstyleswindow.addstyle.hint
 msgid "Add text style"
-msgstr ""
+msgstr "Добавить стиль текста"
 
 #: ttextstyleswindow.buttonapplyclose.caption
 msgctxt "ttextstyleswindow.buttonapplyclose.caption"
@@ -227,7 +228,7 @@ msgstr ""
 
 #: ttextstyleswindow.delstyle.hint
 msgid "Delete text style"
-msgstr ""
+msgstr "Удалить стиль текста"
 
 #: ttextstyleswindow.fonttypefiltercombobox.text
 msgctxt "ttextstyleswindow.fonttypefiltercombobox.text"
@@ -321,6 +322,611 @@ msgctxt "uunitmanager.noglc"
 msgid "OpenGL context is not created"
 msgstr "Контекст OpenGL не создан"
 
+#: uzcstrconsts.fontnotfoundandreplace
+msgid ""
+"For text style \"%s\" not found font \"%s\", is replaced by an alternative"
+msgstr ""
+"Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
+
+#: uzcstrconsts.rsaboutwndcaption
+msgctxt "uzcstrconsts.rsaboutwndcaption"
+msgid "About ZCAD"
+msgstr "О программе ZCAD"
+
+#: uzcstrconsts.rsalternatefontnotfoundin
+msgid "Alternate font \"%s\" is not found in \"%s\""
+msgstr "Альтернативный фонт \"%s\" не найден в  \"%s\""
+
+#: uzcstrconsts.rsauthor
+msgid "Writeln by Andrey M. Zubarev"
+msgstr "Автор: Зубарев А.М."
+
+#: uzcstrconsts.rsautosave
+msgctxt "uzcstrconsts.rsautosave"
+msgid "Autosave"
+msgstr "Автосохранение"
+
+#: uzcstrconsts.rsblockignored
+msgid "Ignored block \"%s\""
+msgstr "Игнорирован блок \"%s\""
+
+#: uzcstrconsts.rsblocks
+msgctxt "uzcstrconsts.rsblocks"
+msgid "Blocks"
+msgstr "Блоки"
+
+#: uzcstrconsts.rsbyblock
+msgctxt "uzcstrconsts.rsbyblock"
+msgid "ByBlock"
+msgstr "По Блоку"
+
+#: uzcstrconsts.rsbylayer
+msgctxt "uzcstrconsts.rsbylayer"
+msgid "ByLayer"
+msgstr "По Слою"
+
+#: uzcstrconsts.rsclipboardisempty
+msgid "Clipboard is empty, there is nothing to paste"
+msgstr ""
+
+#: uzcstrconsts.rsclosedwgquery
+#| msgid "Drawing \"%s\" not saved. Close?"
+msgid "Drawing \"%s\" not saved. Save?"
+msgstr "Чертеж \"%s\" не сохранен. Сохранить?"
+
+#: uzcstrconsts.rscm2vnotremove
+msgid "Only 2 vertex there is nothing to remove"
+msgstr "Всего 2 вершины, нечего удалять тут"
+
+#: uzcstrconsts.rscmbasepoint
+msgid "Base point:"
+msgstr "Базовая точка:"
+
+#: uzcstrconsts.rscmcantgetblocktoreplace
+msgid "Unable get block name to replace"
+msgstr "Не возможно получить имя блока для замены"
+
+#: uzcstrconsts.rscmcenterpointcircle
+msgid "Center point for circle:"
+msgstr "Центр окружности:"
+
+#: uzcstrconsts.rscmcommandonlyctxmenu
+msgid "The command works only from context menu"
+msgstr "Команда работает только из контекстного меню"
+
+#: uzcstrconsts.rscmfirstpoint
+msgid "First point:"
+msgstr "Первая точка:"
+
+#: uzcstrconsts.rscmindwgblockdefnotdeffined
+msgid "In drawing not defined any BlockDefs!"
+msgstr "В чертеже отсутствуют определения блоков"
+
+#: uzcstrconsts.rscmindwgtxtstylenotdeffined
+msgid "In drawing not defined any textstyle!"
+msgstr "В чертеже не определено ниодного стиля текста"
+
+#: uzcstrconsts.rscminsertpoint
+msgid "Insert point:"
+msgstr "Точка вставки:"
+
+#: uzcstrconsts.rscminstackdata
+msgid "In stack found following data:"
+msgstr "В стеке обнаружены следующие данные:"
+
+#: uzcstrconsts.rscmnentitiesdeselected
+msgid "%d entities deselected"
+msgstr "С %d примитивов выбор снят"
+
+#: uzcstrconsts.rscmnentitiesprocessed
+msgid "%s entities processed"
+msgstr "Обработано %s примитивов"
+
+#: uzcstrconsts.rscmnewbasepoint
+msgid "New base point:"
+msgstr "Новая базовая точка:"
+
+#: uzcstrconsts.rscmnoblockdefindwg
+msgid "No BlockDef \"%s\" in the drawing"
+msgstr "В чертеже отсутствует определение блока \"%s\""
+
+#: uzcstrconsts.rscmnoblockdefindwgcxmenu
+msgid "No BlockDef \"%s\" in the drawing. Use context menu"
+msgstr "Нет определения блока \"%s\" в чертеже. Используйте контекстное меню"
+
+#: uzcstrconsts.rscmnoblocksordevices
+msgid "No selected blocks or devices"
+msgstr "Не выбрано блоков или устройств"
+
+#: uzcstrconsts.rscmnoctr
+msgid "No comands to redo"
+msgstr "Нет команд для повтора"
+
+#: uzcstrconsts.rscmnoctu
+msgid "No comands to undo. Complete the current command"
+msgstr "Невозможно отменить. Завершите текущую команду"
+
+#: uzcstrconsts.rscmnoctuse
+msgid "No comands to undo. UNDO stack is empty"
+msgstr "Невозможно отменить. Стек отмен пуст"
+
+#: uzcstrconsts.rscmnotcuthere
+msgid "Do not cut off here"
+msgstr "Нельзя резать здесь"
+
+#: uzcstrconsts.rscmoptions2oi
+msgid "Options are available in the Object Inspector"
+msgstr "Настройки доступны в инспекторе обьектов"
+
+#: uzcstrconsts.rscmpickorenterangle
+msgid "Pick or enter angle:"
+msgstr "Укажите мышью или введите угол:"
+
+#: uzcstrconsts.rscmpickorenterscale
+msgid "Pick or enter scale:"
+msgstr "Укажите мышью или введите масштаб:"
+
+#: uzcstrconsts.rscmpoint
+msgid "Point:"
+msgstr "Точка:"
+
+#: uzcstrconsts.rscmpointoncircle
+msgid "Point on a circle:"
+msgstr "Точка на окружности:"
+
+#: uzcstrconsts.rscmpolynotsel
+msgid "Poly entities not selected"
+msgstr "Poly объект не выбран"
+
+#: uzcstrconsts.rscmsecondpoint
+msgid "Second point:"
+msgstr "Вторая точка:"
+
+#: uzcstrconsts.rscmseldevbeforecomm
+msgid "Device must be selected before run the command"
+msgstr "Устройство должно быть выбрано до запуска команды"
+
+#: uzcstrconsts.rscmseldevsbeforecomm
+msgid "Devices must be selected before run the command"
+msgstr "Устройства должны быть выбраны до запуска команды"
+
+#: uzcstrconsts.rscmselentbeforecomm
+msgid "Entities must be selected before run the command"
+msgstr "Примитивы должны быть выбраны до запуска команды"
+
+#: uzcstrconsts.rscmselorspecentity
+msgid "Select or specify the parameters entity!"
+msgstr "Выбери или укажи в параметрах примитив"
+
+#: uzcstrconsts.rscolornum
+msgid "Color %d"
+msgstr "Цвет %d"
+
+#: uzcstrconsts.rscommandlinewndname
+msgctxt "uzcstrconsts.rscommandlinewndname"
+msgid "Command line"
+msgstr "Командная строка"
+
+#: uzcstrconsts.rscommandnrinc
+msgctxt "uzcstrconsts.rscommandnrinc"
+msgid "Command can not run"
+msgstr "Команда не может быть запущена"
+
+#: uzcstrconsts.rscommenteeport
+msgctxt "uzcstrconsts.rscommenteeport"
+msgid ""
+"Registered commands - %d; registered entities - %d; registered DXF entities "
+"- %d"
+msgstr ""
+"Зарегистрированных команд - %d; зарегистрированных примитивов - %d; "
+"зарегистрированных DXF примитивов - %d"
+
+#: uzcstrconsts.rscompiledtimemsg
+msgctxt "uzcstrconsts.rscompiledtimemsg"
+msgid "Done.  %s second"
+msgstr "Выполнено за  %s сек."
+
+#: uzcstrconsts.rscounttstylesfound
+msgid "%d Text styles found"
+msgstr "%d Стилей текста найдено"
+
+#: uzcstrconsts.rscounttstylespurged
+msgid "%d Text styles purged"
+msgstr "%d Стилей текста очищено"
+
+#: uzcstrconsts.rscurrentlayeroff
+msgid "The current layer is turned off"
+msgstr "Текущий слой выключен"
+
+#: uzcstrconsts.rscurrentstylecannotbedeleted
+msgid "Current style cannot be deleted"
+msgstr "Текущий стиль не может быть удален"
+
+#: uzcstrconsts.rsdefault
+msgctxt "uzcstrconsts.rsdefault"
+msgid "Default"
+msgstr "Обычный"
+
+#: uzcstrconsts.rsdefaultpromot
+msgctxt "uzcstrconsts.rsdefaultpromot"
+msgid "Command"
+msgstr "Команда"
+
+#: uzcstrconsts.rsdevices
+msgctxt "uzcstrconsts.rsdevices"
+msgid "Devices"
+msgstr "Устройства"
+
+#: uzcstrconsts.rsdifferent
+msgctxt "uzcstrconsts.rsdifferent"
+msgid "Different"
+msgstr "Разный"
+
+#: uzcstrconsts.rsdivbyzero
+msgid "Divide by zero"
+msgstr "Деление на ноль"
+
+#: uzcstrconsts.rsdoubleblockignored
+msgid "Ignored double definition block \"%s\""
+msgstr "Игнорировано повторное определение блока \"%s\""
+
+#: uzcstrconsts.rsdrawingwindowwndname
+msgctxt "uzcstrconsts.rsdrawingwindowwndname"
+msgid "Drawings window"
+msgstr "Окно чертежей"
+
+#: uzcstrconsts.rsempty
+msgctxt "uzcstrconsts.rsempty"
+msgid "Empty"
+msgstr "Пусто"
+
+#: uzcstrconsts.rsentryalreadyexist
+msgid "Entry \"%s\" already exist"
+msgstr ""
+
+#: uzcstrconsts.rsequipment
+msgid "Equipment"
+msgstr "Оборудование"
+
+#: uzcstrconsts.rserrorprefix
+msgctxt "uzcstrconsts.rserrorprefix"
+msgid "ERROR: "
+msgstr "ОШИБКА: "
+
+#: uzcstrconsts.rsexprouttext
+msgctxt "uzcstrconsts.rsexprouttext"
+msgid "Expression %s return %s"
+msgstr "Выражение  %s возвращает %s"
+
+#: uzcstrconsts.rsfardeffilenotfounf
+msgid ""
+"File definition of the variables can not be found for the device \"%s\";"
+msgstr "Файл определения переменных не найден для устройства \"%s\";"
+
+#: uzcstrconsts.rsfileformat
+msgid "%s file format"
+msgstr "Формат файла %s"
+
+#: uzcstrconsts.rsgdbobjinspwndname
+msgctxt "uzcstrconsts.rsgdbobjinspwndname"
+msgid "Object inspector"
+msgstr "Инспектор объектов"
+
+#: uzcstrconsts.rsgridtoodensity
+msgid "Grid too density"
+msgstr "Сетка слишком мелкая"
+
+#: uzcstrconsts.rshardunnamed
+msgid "Unnamed"
+msgstr ""
+
+#: uzcstrconsts.rsinitialization
+msgid "Initialization:"
+msgstr "Инициализация:"
+
+#: uzcstrconsts.rsinvalididentificator
+msgid "\"%s\" not valid identificator"
+msgstr "\"%s\" неверный идентификатор"
+
+#: uzcstrconsts.rsinvalidinput
+msgid "Invalid input"
+msgstr "Неверный ввод"
+
+#: uzcstrconsts.rsinvalidinputforpropery
+msgid "Property \"%s\" for entity \"%s\": %s"
+msgstr ""
+
+#: uzcstrconsts.rslayerdefpaontscannotbeprinted
+msgid "Layer DEFPOINTS can not be printed"
+msgstr "Слой DEFPOINTS не может быть печатным"
+
+#: uzcstrconsts.rslayermustbeselected
+msgid "Layer must be selected"
+msgstr "Слой должен быть выбран"
+
+#: uzcstrconsts.rslayerusedin
+msgid "Layer \"%s\" used in: %d-model, %d-blockdef table"
+msgstr "Слой  \"%s\" используется: %d-в модели, %d-в таблице блоков"
+
+#: uzcstrconsts.rslayoutload
+msgctxt "uzcstrconsts.rslayoutload"
+msgid "Error loading layout from file"
+msgstr "Ошибка загрузки файла разбивки окон"
+
+#: uzcstrconsts.rslinetypedesk
+msgid ""
+";;Pattern length %f\n"
+"%s\n"
+msgstr ""
+";;Длина шаблона %f\n"
+"%s\n"
+
+#: uzcstrconsts.rslinetypeusedin
+msgid "Line type \"%s\" used in: %d-model, %d-blockdef table"
+msgstr "Тип линии  \"%s\" используется: %d-в модели, %d-в таблице блоков"
+
+#: uzcstrconsts.rsloadingfile
+msgid "Loading file \"%s\""
+msgstr "Загрузка файла  \"%s\""
+
+#: uzcstrconsts.rsloadingfontfile
+msgid "Loading font file \"%S\""
+msgstr "Загрузка файла шрифтов \"%S\""
+
+#: uzcstrconsts.rsmenunotfounf
+msgid "Menu \"%s\" not found"
+msgstr "Меню \"%s\" не найдено"
+
+#: uzcstrconsts.rsmm
+msgctxt "uzcstrconsts.rsmm"
+msgid "mm"
+msgstr "мм"
+
+#: uzcstrconsts.rsmtexteditor
+msgid "MText editor"
+msgstr "Редактор многострочного текста"
+
+#: uzcstrconsts.rsnameall
+msgctxt "uzcstrconsts.rsnameall"
+msgid "All"
+msgstr "Все"
+
+#: uzcstrconsts.rsnamewithcounter
+msgid "%s (%d)"
+msgstr ""
+
+#: uzcstrconsts.rsncoglc
+msgctxt "uzcstrconsts.rsncoglc"
+msgid "OpenGL context is not created"
+msgstr "Контекст OpenGL не создан"
+
+#: uzcstrconsts.rsnewlayernameformat
+msgid "Layer%-3.3d"
+msgstr "Слой%-3.3d"
+
+#: uzcstrconsts.rsnewtextstylenameformat
+msgid "Style%-3.3d"
+msgstr "Стиль%-3.3d"
+
+#: uzcstrconsts.rsnotregistred
+msgid "Not registred"
+msgstr ""
+
+#: uzcstrconsts.rsnotyetimplemented
+msgid "Not yet implemented"
+msgstr "Пока не реализовано"
+
+#: uzcstrconsts.rsopenfile
+msgid "Open file..."
+msgstr "Открыть файл..."
+
+#: uzcstrconsts.rsprocesstimemsg
+msgid "%s:  %s second"
+msgstr "%s:  %s секунд"
+
+#: uzcstrconsts.rsprogramdb
+msgid "Program DB"
+msgstr "БД программы"
+
+#: uzcstrconsts.rsprojectdb
+msgid "Project DB"
+msgstr "БД чертежа"
+
+#: uzcstrconsts.rsprojecttree
+msgid "Project Tree"
+msgstr "Дерево проекта"
+
+#: uzcstrconsts.rsproperty
+msgid "Property"
+msgstr "Свойство"
+
+#: uzcstrconsts.rsquitcaption
+msgctxt "uzcstrconsts.rsquitcaption"
+msgid "Quit"
+msgstr "Выход"
+
+#: uzcstrconsts.rsquitquery
+msgid "Do yo want to quit ZCAD?"
+msgstr "Закрыть ZCAD"
+
+#: uzcstrconsts.rsrecreating
+msgctxt "uzcstrconsts.rsrecreating"
+msgid "Re-creating %s!"
+msgstr "Повторное создание %s!"
+
+#: uzcstrconsts.rsreleasenotes
+msgid ""
+"-UNDO\\REDO - yet it is better not to use;\n"
+"\n"
+"-If you have problems with rendering or selecting entities, run \"Regen\" "
+"and \"RebuildTree\" in command line;\n"
+"\n"
+"-To disable the display of this window comment out line \"About\" in the "
+"file \"components\\autorun.cmd\". Encoding of all configuration files - "
+"UTF8;\n"
+msgstr ""
+"-UNDO\\REDO - пока лучше не пользоваться;\n"
+"\n"
+"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" "
+"и \"RebuildTree\" в командной строке;\n"
+"\n"
+"-Для отключения показа этого окна закоментируйте строку \"About\" в файле "
+"\"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
+
+#: uzcstrconsts.rsrenamedto
+msgid "%s \"%s\" renamed to \"%s\""
+msgstr ""
+
+#: uzcstrconsts.rsreservefontnotfound
+msgid "Reserve font is not found in the resources"
+msgstr "Резервный фонт не найден в расурсах программы"
+
+#: uzcstrconsts.rsreservefontnotload
+msgctxt "uzcstrconsts.rsreservefontnotload"
+msgid "Can not load reserve font"
+msgstr "Невозможно загрузить резервный фонт"
+
+#: uzcstrconsts.rsrevstr
+msgctxt "uzcstrconsts.rsrevstr"
+msgid "Revision SVN:"
+msgstr "Ревизия SVN:"
+
+#: uzcstrconsts.rsruncommand
+msgctxt "uzcstrconsts.rsruncommand"
+msgid "Running command"
+msgstr "Запущена команда"
+
+#: uzcstrconsts.rsrunscript
+msgctxt "uzcstrconsts.rsrunscript"
+msgid "Running script \"%s\";"
+msgstr "Выполняется скрипт \"%s\";"
+
+#: uzcstrconsts.rssaveemptydwg
+msgid "Drawing is empty. Sure?"
+msgstr "Чертеж не сохранен. Уверен?"
+
+#: uzcstrconsts.rssavefile
+msgid "Save file..."
+msgstr "Сохранить файл..."
+
+#: uzcstrconsts.rsselectcolor
+msgid "Select color..."
+msgstr "Выбор цвета..."
+
+#: uzcstrconsts.rsselectlt
+msgid "Select line type..."
+msgstr "Выбор типа линий"
+
+#: uzcstrconsts.rsstylemustbeselected
+msgid "Style must be selected"
+msgstr "Стиль должен быть выбран"
+
+#: uzcstrconsts.rssyslinetypewarning
+msgctxt "uzcstrconsts.rssyslinetypewarning"
+msgid "This is system line type!"
+msgstr "Это системный тип линии"
+
+#: uzcstrconsts.rstemplatenotfound
+msgid "Template file \"%s\" not found"
+msgstr "Файл шаблона \"%s\" не найден"
+
+#: uzcstrconsts.rstextedcaption
+msgid " TEXT: "
+msgstr " ТЕКСТ: "
+
+#: uzcstrconsts.rstexteditor
+msgctxt "uzcstrconsts.rstexteditor"
+msgid "Text editor"
+msgstr "Редактор текста"
+
+#: uzcstrconsts.rstextstyleusedin
+msgid ""
+"Text style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
+msgstr "Стиль текста \"%s\" используется: %d-в модели, %d-в таблице блоков"
+
+#: uzcstrconsts.rstoolbarnotfound
+msgctxt "uzcstrconsts.rstoolbarnotfound"
+msgid "Toolbar \"%s\" is not found! Create a blank window"
+msgstr "Панель инструментов \"%s\" не найдена! Создано пусте окно"
+
+#: uzcstrconsts.rstypenotdefinedinmodule
+msgid "Type \"%S\" not defined in unit \"%S\""
+msgstr "Тип \"%S\" не задан в модуле \"%S\""
+
+#: uzcstrconsts.rsunabledelusedlayer
+msgid "Unable to delete, layer is used"
+msgstr "Нельзя удалить, слой используется"
+
+#: uzcstrconsts.rsunabledelusedstyle
+msgid "Unable to delete, Style is used"
+msgstr "Нельзя удалить, стиль используется"
+
+#: uzcstrconsts.rsunablerenamefiletobak
+msgid "Could not rename file \"%s\" into \"*.bak\""
+msgstr "Не могу переименовать файл \"%s\" в \"*.bak\""
+
+#: uzcstrconsts.rsunableselectfreelayername
+msgid "Unable select free layer name"
+msgstr "Не могу выбрать свободное имя слоя"
+
+#: uzcstrconsts.rsunableselectfreetextstylername
+msgid "Unable select free text style name"
+msgstr "Не могу выбрать свободное имя стиля"
+
+#: uzcstrconsts.rsunabletofindfile
+msgid "Unable to find file \"%s\""
+msgstr "Не могу найти файл \"%s\""
+
+#: uzcstrconsts.rsunabletoopenfile
+msgid "Unable to open file \"%s\""
+msgstr "Не могу открыть файл \"%s\""
+
+#: uzcstrconsts.rsunabletowritefile
+msgid "Unable to write file \"%s\""
+msgstr "Не могу записать файл \"%s\""
+
+#: uzcstrconsts.rsunassigned
+msgid "Unassigned"
+msgstr "Не связано"
+
+#: uzcstrconsts.rsuncategorized
+msgid "Uncategorized"
+msgstr "Без категории"
+
+#: uzcstrconsts.rsunknowncommand
+msgctxt "uzcstrconsts.rsunknowncommand"
+msgid "Unknown command"
+msgstr "Неизвестная команда"
+
+#: uzcstrconsts.rsunknownfileext
+msgid "Unknown file format \"%s\". Saving failed."
+msgstr "Неизвестный формат файла \"%s\". Сохранение не произведено"
+
+#: uzcstrconsts.rsunknownfileformat
+msgid "Unknown file format"
+msgstr "Неизвестный формат файла"
+
+#: uzcstrconsts.rsunnamedwindowtitle
+msgctxt "uzcstrconsts.rsunnamedwindowtitle"
+msgid "Unnamed%-3.3d"
+msgstr "Без имени%-3.3d"
+
+#: uzcstrconsts.rsvalue
+msgid "Value"
+msgstr "Значение"
+
+#: uzcstrconsts.rsvinfotext
+msgid "Unstable version"
+msgstr "Нестабильная версия"
+
+#: uzcstrconsts.rswarningcaption
+msgid "Warning!"
+msgstr "Внимание!"
+
+#: uzcstrconsts.rszcadstarted
+msgid "ZCAD v%s started"
+msgstr "ZCAD v%s запущен"
+
 #: windowsspecific.revstr
 msgctxt "windowsspecific.revstr"
 msgid "Revision SVN:"
@@ -339,6 +945,14 @@ msgstr "О программе"
 #: zcadexternal.acn_addtoowner~caption
 msgctxt "zcadexternal.acn_addtoowner~caption"
 msgid "Add to owner"
+msgstr ""
+
+#: zcadexternal.acn_alwaysusemultiselectwwrapper~caption
+msgid "Always use multi select wrapper in object inspector"
+msgstr ""
+
+#: zcadexternal.acn_alwaysusemultiselectwwrapper~textimage
+msgid "aumsw"
 msgstr ""
 
 #: zcadexternal.acn_arc~caption
@@ -446,6 +1060,21 @@ msgstr "Чертить кабель"
 msgctxt "zcadexternal.acn_cable~hint"
 msgid "Draw cable"
 msgstr "Чертить кабель"
+
+#: zcadexternal.acn_cancel~caption
+msgctxt "zcadexternal.acn_cancel~caption"
+msgid "Cancel"
+msgstr ""
+
+#: zcadexternal.acn_cancel~hint
+msgctxt "zcadexternal.acn_cancel~hint"
+msgid "Cancel"
+msgstr ""
+
+#: zcadexternal.acn_cancel~textimage
+msgctxt "zcadexternal.acn_cancel~textimage"
+msgid "C"
+msgstr ""
 
 #: zcadexternal.acn_circle2p~caption
 msgid "2 points"
@@ -642,17 +1271,9 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
-#: zcadexternal.acn_fakecopyclipbase~caption
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
-msgstr ""
-
-#: zcadexternal.acn_fakepaste~caption
-msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -978,10 +1599,6 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
-#: zcadexternal.acn_processkz~caption
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_projecttree~caption
 msgctxt "zcadexternal.acn_projecttree~caption"
 msgid "Project tree"
@@ -1002,19 +1619,27 @@ msgctxt "zcadexternal.acn_quit~caption"
 msgid "Quit"
 msgstr "Выход"
 
+#: zcadexternal.acn_rectangle~caption
+msgid "Draw rectangle"
+msgstr ""
+
 #: zcadexternal.acn_redo~caption
 msgctxt "zcadexternal.acn_redo~caption"
 msgid "Redo"
 msgstr "Повторить"
 
+#: zcadexternal.acn_regenzents~caption
+msgid "Regenerate zcad entities"
+msgstr ""
+
+#: zcadexternal.acn_regenzents~textimage
+msgid "RZ"
+msgstr ""
+
 #: zcadexternal.acn_regen~caption
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
-
-#: zcadexternal.acn_remautocables~caption
-msgid ""
-msgstr ""
 
 #: zcadexternal.acn_rotate~caption
 msgctxt "zcadexternal.acn_rotate~caption"
@@ -1109,6 +1734,14 @@ msgstr "Нумерация извещателей на плане"
 #: zcadexternal.acn_sensormark~textimage
 msgctxt "zcadexternal.acn_sensormark~textimage"
 msgid "++"
+msgstr ""
+
+#: zcadexternal.acn_showemptysections~caption
+msgid "Show empty sections in object inspector"
+msgstr ""
+
+#: zcadexternal.acn_showemptysections~textimage
+msgid "ses"
 msgstr ""
 
 #: zcadexternal.acn_showfasteditorsinobjinsp~caption
@@ -1213,6 +1846,19 @@ msgstr "Менеджер стилей текста"
 msgctxt "zcadexternal.acn_undo~caption"
 msgid "Undo"
 msgstr "Отменить"
+
+#: zcadexternal.acn_units~caption
+msgid "Units format ..."
+msgstr ""
+
+#: zcadexternal.acn_units~hint
+msgid "Units format"
+msgstr ""
+
+#: zcadexternal.acn_units~textimage
+msgctxt "zcadexternal.acn_units~textimage"
+msgid "0.0"
+msgstr ""
 
 #: zcadexternal.acn_viewdown~caption
 msgid "View bottom"
@@ -1360,6 +2006,11 @@ msgctxt "zcadexternal.button_command~setobjinsp(current)"
 msgid "FIX"
 msgstr ""
 
+#: zcadexternal.button_variable~disp_systmgeometrydraw
+msgctxt "zcadexternal.button_variable~disp_systmgeometrydraw"
+msgid "SG"
+msgstr ""
+
 #: zcadexternal.button_variable~dsgn_selsamename
 msgid "SN"
 msgstr ""
@@ -1372,11 +2023,6 @@ msgstr ""
 #: zcadexternal.button_variable~dwg_helpgeometrydraw
 msgctxt "zcadexternal.button_variable~dwg_helpgeometrydraw"
 msgid "AG"
-msgstr ""
-
-#: zcadexternal.button_variable~dwg_systmgeometrydraw
-msgctxt "zcadexternal.button_variable~dwg_systmgeometrydraw"
-msgid "SG"
 msgstr ""
 
 #: zcadexternal.combo~colorcombobox
@@ -1419,14 +2065,6 @@ msgstr "Ось OY"
 msgctxt "zcadexternal.gdbbasis~oz"
 msgid "OZ Axis"
 msgstr "Ось OZ"
-
-#: zcadexternal.gdbboundingbbox~lbn
-msgid "Near"
-msgstr "Ближний"
-
-#: zcadexternal.gdbboundingbbox~rtf
-msgid "Far"
-msgstr "Дальний"
 
 #: zcadexternal.gdblayerprop~color
 msgctxt "zcadexternal.gdblayerprop~color"
@@ -1558,21 +2196,6 @@ msgctxt "zcadexternal.gdbobjblockinsert~testrotate"
 msgid "Rotate"
 msgstr ""
 
-#: zcadexternal.gdbobjcircle~area
-msgctxt "zcadexternal.gdbobjcircle~area"
-msgid "Area"
-msgstr "Площадь"
-
-#: zcadexternal.gdbobjcircle~diametr
-msgctxt "zcadexternal.gdbobjcircle~diametr"
-msgid "Diametr"
-msgstr "Диаметр"
-
-#: zcadexternal.gdbobjcircle~length
-msgctxt "zcadexternal.gdbobjcircle~length"
-msgid "Length"
-msgstr "Длина"
-
 #: zcadexternal.gdbobjcircle~radius
 msgctxt "zcadexternal.gdbobjcircle~radius"
 msgid "Radius"
@@ -1597,11 +2220,6 @@ msgstr "Видимый"
 msgctxt "zcadexternal.gdbobjentity~vp"
 msgid "General"
 msgstr "Общие"
-
-#: zcadexternal.gdbobjgenericwithsubordinated~ou
-msgctxt "zcadexternal.gdbobjgenericwithsubordinated~ou"
-msgid "Variables"
-msgstr "Переменные"
 
 #: zcadexternal.gdbobjline~coordinocs
 msgctxt "zcadexternal.gdbobjline~coordinocs"
@@ -1775,6 +2393,11 @@ msgctxt "zcadexternal.gdbsysvariable~view"
 msgid "View"
 msgstr "Вид"
 
+#: zcadexternal.hint_panel~disp_systmgeometrydraw
+msgctxt "zcadexternal.hint_panel~disp_systmgeometrydraw"
+msgid "System graphics (size, communication, etc. for debugging)"
+msgstr "Системная графика (габариты, связи и т.п. для отладки)"
+
 #: zcadexternal.hint_panel~dsgn_selnew
 msgctxt "zcadexternal.hint_panel~dsgn_selnew"
 msgid "New selection set"
@@ -1827,11 +2450,6 @@ msgctxt "zcadexternal.hint_panel~dwg_snapgrid"
 msgid "Snap"
 msgstr "Шаг"
 
-#: zcadexternal.hint_panel~dwg_systmgeometrydraw
-msgctxt "zcadexternal.hint_panel~dwg_systmgeometrydraw"
-msgid "System graphics (size, communication, etc. for debugging)"
-msgstr "Системная графика (габариты, связи и т.п. для отладки)"
-
 #: zcadexternal.hint_panel~layercombobox
 msgctxt "zcadexternal.hint_panel~layercombobox"
 msgid "Layer selection"
@@ -1870,6 +2488,10 @@ msgstr "Добавить в БД чертежа"
 msgid "linked to entity"
 msgstr ""
 
+#: zcadexternal.menucommand~dbgappexplorer
+msgid "AppExplorer"
+msgstr ""
+
 #: zcadexternal.menucommand~debclip
 msgid "Check clipboard"
 msgstr "Проверить клипбоард"
@@ -1897,6 +2519,10 @@ msgstr "Найти устройство/кабель"
 #: zcadexternal.menucommand~el_material_legend
 msgid "Create material report"
 msgstr "Создать ведомость оборудования"
+
+#: zcadexternal.menucommand~exportdevwithaxis
+msgid "Names of devices with axis"
+msgstr ""
 
 #: zcadexternal.menucommand~findallintersections
 msgid "Find all intersections (lines only)"
@@ -2115,6 +2741,264 @@ msgctxt "zcadexternal.menu~window"
 msgid "Window"
 msgstr "Окно"
 
+#: zcadexternal.oimultiproperty_angle~
+msgctxt "zcadexternal.oimultiproperty_angle~"
+msgid "Angle"
+msgstr "Угол"
+
+#: zcadexternal.oimultiproperty_area~
+msgctxt "zcadexternal.oimultiproperty_area~"
+msgid "Area"
+msgstr "Площадь"
+
+#: zcadexternal.oimultiproperty_backward~
+msgid "Backward"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_center_x~
+msgid "Center X"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_center_y~
+msgid "Center Y"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_center_z~
+msgid "Center Z"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_circumference~
+msgid "Circumference"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_closed~
+msgid "Closed"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_color~
+msgctxt "zcadexternal.oimultiproperty_color~"
+msgid "Color"
+msgstr "Цвет"
+
+#: zcadexternal.oimultiproperty_delta_x~
+msgid "Delta X"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_delta_y~
+msgid "Delta Y"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_delta_z~
+msgid "Delta Z"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_diameter~
+msgid "Diameter"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_dimstyle~
+msgctxt "zcadexternal.oimultiproperty_dimstyle~"
+msgid "Style"
+msgstr "Стиль"
+
+#: zcadexternal.oimultiproperty_dimtextmoved~
+msgid "Text moved"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_endangle~
+msgid "End angle"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_end_x~
+msgid "End X"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_end_y~
+msgid "End Y"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_end_z~
+msgid "End Z"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_height~
+msgctxt "zcadexternal.oimultiproperty_height~"
+msgid "Height"
+msgstr "Высота"
+
+#: zcadexternal.oimultiproperty_insert_x~
+msgid "Insert X"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_insert_y~
+msgid "Insert Y"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_insert_z~
+msgid "Insert Z"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_layer~
+msgctxt "zcadexternal.oimultiproperty_layer~"
+msgid "Layer"
+msgstr "Слой"
+
+#: zcadexternal.oimultiproperty_leaderscale~
+msgctxt "zcadexternal.oimultiproperty_leaderscale~"
+msgid "Scale"
+msgstr "Масштабировать"
+
+#: zcadexternal.oimultiproperty_leadersize~
+msgctxt "zcadexternal.oimultiproperty_leadersize~"
+msgid "Size"
+msgstr "Размер"
+
+#: zcadexternal.oimultiproperty_leaderwidth~
+msgctxt "zcadexternal.oimultiproperty_leaderwidth~"
+msgid "Width"
+msgstr "Ширина"
+
+#: zcadexternal.oimultiproperty_length~
+msgctxt "zcadexternal.oimultiproperty_length~"
+msgid "Length"
+msgstr "Длина"
+
+#: zcadexternal.oimultiproperty_linespacefactor~
+msgid "Linespace factor"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_linetypescale~
+msgid "Linetype scale"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_linetype~
+msgid "Linetype"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_lineweight~
+msgid "Lineweight"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_majorradius~
+msgid "Major radius"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_name~
+msgctxt "zcadexternal.oimultiproperty_name~"
+msgid "Name"
+msgstr "Имя"
+
+#: zcadexternal.oimultiproperty_normal_x~
+msgid "Normal X"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_normal_y~
+msgid "Normal Y"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_normal_z~
+msgid "Normal Z"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_oblique~
+msgctxt "zcadexternal.oimultiproperty_oblique~"
+msgid "Oblique"
+msgstr "Наклон"
+
+#: zcadexternal.oimultiproperty_radiusratio~
+msgid "Radius ratio"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_radius~
+msgctxt "zcadexternal.oimultiproperty_radius~"
+msgid "Radius"
+msgstr "Радиус"
+
+#: zcadexternal.oimultiproperty_rotation~
+msgctxt "zcadexternal.oimultiproperty_rotation~"
+msgid "Rotation"
+msgstr "Поворот"
+
+#: zcadexternal.oimultiproperty_scale_x~
+msgid "Scale X"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_scale_y~
+msgid "Scale Y"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_scale_z~
+msgid "Scale Z"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_startangle~
+msgid "Start angle"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_start_x~
+msgid "Start X"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_start_y~
+msgid "Start Y"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_start_z~
+msgid "Start Z"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_totalarea~
+msgid "Total area"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_totallength~
+msgid "Total length"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_totalvertexcount~
+msgid "Total vertex count"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_txtcontent~
+msgid "Content"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_txtjustify~
+msgctxt "zcadexternal.oimultiproperty_txtjustify~"
+msgid "Justify"
+msgstr "Выравнивание"
+
+#: zcadexternal.oimultiproperty_txtstyle~
+msgctxt "zcadexternal.oimultiproperty_txtstyle~"
+msgid "Style"
+msgstr "Стиль"
+
+#: zcadexternal.oimultiproperty_txttemplate~
+msgid "Template"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_upsidedown~
+msgid "Upside down"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_vertex3dcontrol_~
+msgid "Vertex control"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_vertexcount~
+msgid "Vertex count"
+msgstr ""
+
+#: zcadexternal.oimultiproperty_widthfactor~
+msgctxt "zcadexternal.oimultiproperty_widthfactor~"
+msgid "Width factor"
+msgstr "Фактор ширины"
+
+#: zcadexternal.oimultiproperty_width~
+msgctxt "zcadexternal.oimultiproperty_width~"
+msgid "Width"
+msgstr "Ширина"
+
 #: zcadexternal.rgbcolorname~blue
 msgctxt "zcadexternal.rgbcolorname~blue"
 msgid "Blue"
@@ -2255,6 +3139,50 @@ msgstr "Вид"
 msgid "Zoom"
 msgstr "Масштаб"
 
+#: zcadexternal.tangdir~adclockwise
+msgid "Clockwise"
+msgstr ""
+
+#: zcadexternal.tangdir~adcounterclockwise
+msgid "Counterclockwise"
+msgstr ""
+
+#: zcadexternal.taunits~audecimaldegrees
+msgid "Decimal degrees"
+msgstr ""
+
+#: zcadexternal.taunits~audegreesminutesseconds
+msgid "Degrees minutes seconds"
+msgstr ""
+
+#: zcadexternal.taunits~augradians
+msgid "Gradians"
+msgstr ""
+
+#: zcadexternal.taunits~auradians
+msgid "Radians"
+msgstr ""
+
+#: zcadexternal.taunits~ausurveyorsunits
+msgid "Surveyors units"
+msgstr ""
+
+#: zcadexternal.taxisreducedistancemode~tardm_allaxis
+msgid "All xxis"
+msgstr ""
+
+#: zcadexternal.taxisreducedistancemode~tardm_longaxis
+msgid "Long axis"
+msgstr ""
+
+#: zcadexternal.taxisreducedistancemode~tardm_nothing
+msgid "Nothing"
+msgstr ""
+
+#: zcadexternal.taxisreducedistancemode~tardm_shortaxis
+msgid "Short axis"
+msgstr ""
+
 #: zcadexternal.tbasicfinter~excludecable
 msgid "Exclude filter"
 msgstr "Фильтр исключения"
@@ -2348,6 +3276,26 @@ msgctxt "zcadexternal.tblockscaleparams~scale"
 msgid "New scale"
 msgstr "Новый масштаб"
 
+#: zcadexternal.tboundingbox~lbn
+msgctxt "zcadexternal.tboundingbox~lbn"
+msgid "Near"
+msgstr "Ближний"
+
+#: zcadexternal.tboundingbox~rtf
+msgctxt "zcadexternal.tboundingbox~rtf"
+msgid "Far"
+msgstr "Дальний"
+
+#: zcadexternal.tboundingrect~lb
+msgctxt "zcadexternal.tboundingrect~lb"
+msgid "Near"
+msgstr "Ближний"
+
+#: zcadexternal.tboundingrect~rt
+msgctxt "zcadexternal.tboundingrect~rt"
+msgid "Far"
+msgstr "Дальний"
+
 #: zcadexternal.tcalcip~_icos_from_p
 msgctxt "zcadexternal.tcalcip~_icos_from_p"
 msgid "I,Cos=F(P)"
@@ -2362,6 +3310,11 @@ msgstr ""
 msgctxt "zcadexternal.tcalcip~_p_from_i"
 msgid "P=F(I,Cos)"
 msgstr ""
+
+#: zcadexternal.tcanvasdata~rd_renderer
+msgctxt "zcadexternal.tcanvasdata~rd_renderer"
+msgid "Device"
+msgstr "Устройство"
 
 #: zcadexternal.tcompileinfo~sys_compiledate
 msgctxt "zcadexternal.tcompileinfo~sys_compiledate"
@@ -2454,6 +3407,41 @@ msgctxt "zcadexternal.tdiff~td_notdiff"
 msgid "Not Diff"
 msgstr "Не различать"
 
+#: zcadexternal.tdimunit~duarchitectural
+msgctxt "zcadexternal.tdimunit~duarchitectural"
+msgid "Architectural"
+msgstr ""
+
+#: zcadexternal.tdimunit~dudecimal
+msgctxt "zcadexternal.tdimunit~dudecimal"
+msgid "Decimal"
+msgstr ""
+
+#: zcadexternal.tdimunit~duengineering
+msgctxt "zcadexternal.tdimunit~duengineering"
+msgid "Engineering"
+msgstr ""
+
+#: zcadexternal.tdimunit~dufractional
+msgctxt "zcadexternal.tdimunit~dufractional"
+msgid "Fractional"
+msgstr ""
+
+#: zcadexternal.tdimunit~duscientific
+msgctxt "zcadexternal.tdimunit~duscientific"
+msgid "Scientific"
+msgstr ""
+
+#: zcadexternal.tdimunit~dusystem
+msgctxt "zcadexternal.tdimunit~dusystem"
+msgid "System"
+msgstr "Система"
+
+#: zcadexternal.tdisp~disp_backgroundcolor
+msgctxt "zcadexternal.tdisp~disp_backgroundcolor"
+msgid "Background color"
+msgstr "Цвет фона"
+
 #: zcadexternal.tdisp~disp_coloraxis
 msgctxt "zcadexternal.tdisp~disp_coloraxis"
 msgid "Colored cursor"
@@ -2474,10 +3462,36 @@ msgctxt "zcadexternal.tdisp~disp_drawzaxis"
 msgid "Show Z axis"
 msgstr "Показывать ось Z"
 
+#: zcadexternal.tdisp~disp_gripsize
+msgid "Grip size"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_hotgripcolor
+msgid "Hot grip color"
+msgstr ""
+
 #: zcadexternal.tdisp~disp_ossize
 msgctxt "zcadexternal.tdisp~disp_ossize"
 msgid "Snap aperture size"
 msgstr "Размер апертуры привязки"
+
+#: zcadexternal.tdisp~disp_selectedgripcolor
+msgid "Selected grip color"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_systmgeometrycolor
+msgctxt "zcadexternal.tdisp~disp_systmgeometrycolor"
+msgid "Help color"
+msgstr "Цвет вспомогательной геометрии"
+
+#: zcadexternal.tdisp~disp_systmgeometrydraw
+msgctxt "zcadexternal.tdisp~disp_systmgeometrydraw"
+msgid "System geometry"
+msgstr "Системная геометрия"
+
+#: zcadexternal.tdisp~disp_unselectedgripcolor
+msgid "Unselected grip color"
+msgstr ""
 
 #: zcadexternal.tdisp~disp_zoomfactor
 msgctxt "zcadexternal.tdisp~disp_zoomfactor"
@@ -2578,10 +3592,6 @@ msgctxt "zcadexternal.tdwg~dwg_snapgrid"
 msgid "Snap"
 msgstr "Шаг"
 
-#: zcadexternal.tdwg~dwg_systmgeometrydraw
-msgid "System geometry"
-msgstr "Системная геометрия"
-
 #: zcadexternal.tdxfcolor~name
 msgctxt "zcadexternal.tdxfcolor~name"
 msgid "Name"
@@ -2611,6 +3621,7 @@ msgid "Scale"
 msgstr "Масштабировать"
 
 #: zcadexternal.telleadercomparam~size
+msgctxt "zcadexternal.telleadercomparam~size"
 msgid "Size"
 msgstr "Размер"
 
@@ -2637,6 +3648,10 @@ msgstr "Стереть"
 #: zcadexternal.tentityprocess~tep_leave
 msgid "Leave"
 msgstr "Оставить"
+
+#: zcadexternal.texportdevwithaxisparams~axisdevicename
+msgid "AxisDeviceName"
+msgstr ""
 
 #: zcadexternal.tfinddeviceparam~findmethod
 msgid "Use symbols *, ?"
@@ -2734,6 +3749,90 @@ msgctxt "zcadexternal.tinserttype~tit_device"
 msgid "Device"
 msgstr "Устройство"
 
+#: zcadexternal.tinsunits~iuangstroms
+msgid "Angstroms"
+msgstr ""
+
+#: zcadexternal.tinsunits~iuastronomicalunits
+msgid "Astronomical units"
+msgstr ""
+
+#: zcadexternal.tinsunits~iucentimeters
+msgid "Centimeters"
+msgstr ""
+
+#: zcadexternal.tinsunits~iudecimeters
+msgid "Decimeters"
+msgstr ""
+
+#: zcadexternal.tinsunits~iudekameters
+msgid "Dekameters"
+msgstr ""
+
+#: zcadexternal.tinsunits~iufeet
+msgid "Feet"
+msgstr ""
+
+#: zcadexternal.tinsunits~iugigameters
+msgid "Gigameters"
+msgstr ""
+
+#: zcadexternal.tinsunits~iuhectometers
+msgid "Hectometers"
+msgstr ""
+
+#: zcadexternal.tinsunits~iuinches
+msgid "Inches"
+msgstr ""
+
+#: zcadexternal.tinsunits~iukilometers
+msgid "Kilometers"
+msgstr ""
+
+#: zcadexternal.tinsunits~iulightyears
+msgid "Light years"
+msgstr ""
+
+#: zcadexternal.tinsunits~iumeters
+msgid "Meters"
+msgstr ""
+
+#: zcadexternal.tinsunits~iumicroinches
+msgid "Microinches"
+msgstr ""
+
+#: zcadexternal.tinsunits~iumicrons
+msgid "Microns"
+msgstr ""
+
+#: zcadexternal.tinsunits~iumiles
+msgid "Miles"
+msgstr ""
+
+#: zcadexternal.tinsunits~iumillimeters
+msgid "Millimeters"
+msgstr ""
+
+#: zcadexternal.tinsunits~iumils
+msgid "Mils"
+msgstr ""
+
+#: zcadexternal.tinsunits~iunanometers
+msgid "Nanometers"
+msgstr ""
+
+#: zcadexternal.tinsunits~iuparsecs
+msgid "Parsecs"
+msgstr ""
+
+#: zcadexternal.tinsunits~iuunspecified
+msgid "Unspecified"
+msgstr ""
+
+#: zcadexternal.tinsunits~iuyards
+msgid "Yards"
+msgstr ""
+
 #: zcadexternal.tinterface~intf_defaultcontrolheight
 msgid "Default control height"
 msgstr ""
@@ -2786,6 +3885,31 @@ msgstr "Включено"
 msgid "Layer name"
 msgstr "Слой"
 
+#: zcadexternal.tlunits~luarchitectural
+msgctxt "zcadexternal.tlunits~luarchitectural"
+msgid "Architectural"
+msgstr ""
+
+#: zcadexternal.tlunits~ludecimal
+msgctxt "zcadexternal.tlunits~ludecimal"
+msgid "Decimal"
+msgstr ""
+
+#: zcadexternal.tlunits~luengineering
+msgctxt "zcadexternal.tlunits~luengineering"
+msgid "Engineering"
+msgstr ""
+
+#: zcadexternal.tlunits~lufractional
+msgctxt "zcadexternal.tlunits~lufractional"
+msgid "Fractional"
+msgstr ""
+
+#: zcadexternal.tlunits~luscientific
+msgctxt "zcadexternal.tlunits~luscientific"
+msgid "Scientific"
+msgstr ""
+
 #: zcadexternal.tmatchpropparam~processcolor
 msgid "Process color"
 msgstr ""
@@ -2810,32 +3934,32 @@ msgstr ""
 msgid "Source entities"
 msgstr "Исходные примитивы"
 
-#: zcadexternal.tmseditor~enttype
+#: zcadexternal.tmseditor~generalunit
+msgctxt "zcadexternal.tmseditor~generalunit"
+msgid "General"
+msgstr "Общие"
+
+#: zcadexternal.tmseditor~geometryunit
+msgid "Geometry"
+msgstr ""
+
+#: zcadexternal.tmseditor~miscunit
+msgid "Misc"
+msgstr ""
+
+#: zcadexternal.tmseditor~summaryunit
+msgid "Summary"
+msgstr ""
+
+#: zcadexternal.tmseditor~txtenttype
+msgctxt "zcadexternal.tmseditor~txtenttype"
 msgid "Process primitives"
 msgstr "Обрабатывать примитивы"
 
-#: zcadexternal.tmseditor~ou
-msgctxt "zcadexternal.tmseditor~ou"
+#: zcadexternal.tmseditor~variablesunit
+msgctxt "zcadexternal.tmseditor~variablesunit"
 msgid "Variables"
 msgstr "Переменные"
-
-#: zcadexternal.tmseditor~selcount
-msgid "Selected objects"
-msgstr "Выбрано обьектов"
-
-#: zcadexternal.tmstype~tmst_all
-msgid "All entities"
-msgstr "Все примитивы"
-
-#: zcadexternal.tmstype~tmst_cables
-msgctxt "zcadexternal.tmstype~tmst_cables"
-msgid "Cables"
-msgstr "Кабели"
-
-#: zcadexternal.tmstype~tmst_devices
-msgctxt "zcadexternal.tmstype~tmst_devices"
-msgid "Devices"
-msgstr "Устройства"
 
 #: zcadexternal.tnumberingparams~basename
 msgid "Base name sorting devices"
@@ -2865,13 +3989,13 @@ msgstr "Нумеруесая переменная"
 msgid "Save start number"
 msgstr "Сохранять старовое значение"
 
-#: zcadexternal.tnumberingparams~sortmode
-msgid ""
-msgstr ""
-
 #: zcadexternal.tnumberingparams~startnumber
 msgid "Start"
 msgstr "Начальное значение"
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_alwaysusemultiselectwrapper
+msgid "Always use multiselect wrapper"
+msgstr ""
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_oldstyledraw
 msgctxt "zcadexternal.tobjinspinterface~intf_objinsp_oldstyledraw"
@@ -2881,6 +4005,10 @@ msgstr "Старый стиль отображения"
 #: zcadexternal.tobjinspinterface~intf_objinsp_rowheight
 msgid "Row height"
 msgstr "Высота строки"
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_showemptysections
+msgid "Show empty sections"
+msgstr ""
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_showfasteditors
 msgid "Show fast editors"
@@ -2897,6 +4025,10 @@ msgstr "Показывать кнопки редакторов при навед
 #: zcadexternal.tobjinspinterface~intf_objinsp_showseparator
 msgid "Show separator"
 msgstr "показывать разделитель"
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_spaceheight
+msgid "Space height"
+msgstr ""
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_whitebackground
 msgid "White background"
@@ -2929,6 +4061,21 @@ msgstr "по ширине/длине"
 msgctxt "zcadexternal.topengldata~rd_extensions"
 msgid "Extensions"
 msgstr "Расширения"
+
+#: zcadexternal.topengldata~rd_maxlinewidth
+msgctxt "zcadexternal.topengldata~rd_maxlinewidth"
+msgid "Max line width"
+msgstr "Макс. ширина линий"
+
+#: zcadexternal.topengldata~rd_maxpointsize
+msgctxt "zcadexternal.topengldata~rd_maxpointsize"
+msgid "Max point size"
+msgstr "Макс. размер точек"
+
+#: zcadexternal.topengldata~rd_maxwidth
+msgctxt "zcadexternal.topengldata~rd_maxwidth"
+msgid "Max width"
+msgstr "Максимальная ширина"
 
 #: zcadexternal.topengldata~rd_renderer
 msgctxt "zcadexternal.topengldata~rd_renderer"
@@ -2963,13 +4110,14 @@ msgstr "Дымовой"
 msgid "Termo"
 msgstr "Тепловой"
 
-#: zcadexternal.topsmindatcount~topsmdc_1
-msgid "1 in the quarter"
-msgstr "1 в четверти"
-
 #: zcadexternal.topsmindatcount~topsmdc_1_2
 msgid "1 in the middle"
 msgstr "1 в середине"
+
+#: zcadexternal.topsmindatcount~topsmdc_1_4
+msgctxt "zcadexternal.topsmindatcount~topsmdc_1_4"
+msgid "1 in the quarter"
+msgstr "1 в четверти"
 
 #: zcadexternal.topsmindatcount~topsmdc_2
 msgctxt "zcadexternal.topsmindatcount~topsmdc_2"
@@ -3023,6 +4171,10 @@ msgctxt "zcadexternal.topsplacesmokedetectorortoparam~normalizepoint"
 msgid "Normalize to grid (if enabled)"
 msgstr "Нормализовать по сетке"
 
+#: zcadexternal.topsplacesmokedetectorortoparam~reductionfactor
+msgid "Reduction factor"
+msgstr ""
+
 #: zcadexternal.topsplacesmokedetectorortoparam~scale
 msgid "Plan scale"
 msgstr "Масштаб плана"
@@ -3031,6 +4183,14 @@ msgstr "Масштаб плана"
 msgctxt "zcadexternal.topsplacesmokedetectorortoparam~scaleblock"
 msgid "Blocks scale"
 msgstr "Масштаб блоков"
+
+#: zcadexternal.topsplacesmokedetectorortoparam~sensorsensordistance
+msgid "Sensor-sensor distance reduction"
+msgstr ""
+
+#: zcadexternal.topsplacesmokedetectorortoparam~sensorwalldistance
+msgid "Sensor-wall distance reduction"
+msgstr ""
 
 #: zcadexternal.topsplacesmokedetectorortoparam~startauto
 msgid "\"Start\" signal"
@@ -3156,6 +4316,11 @@ msgctxt "zcadexternal.tosmode~kosm_tangent"
 msgid "Tangent"
 msgstr "Касательная"
 
+#: zcadexternal.tpath~alternate_font
+msgctxt "zcadexternal.tpath~alternate_font"
+msgid "Alternate font file"
+msgstr "Файл альтернативного шрифта"
+
 #: zcadexternal.tpath~device_library
 msgctxt "zcadexternal.tpath~device_library"
 msgid "Device base"
@@ -3216,6 +4381,22 @@ msgctxt "zcadexternal.tphase~_c"
 msgid "C"
 msgstr ""
 
+#: zcadexternal.tplacesensorsstrategy~tpss_bynum
+msgid "By number"
+msgstr ""
+
+#: zcadexternal.tplacesensorsstrategy~tpss_fixdd
+msgid "Sensor-Sensor distance fix"
+msgstr ""
+
+#: zcadexternal.tplacesensorsstrategy~tpss_fixdw
+msgid "Sensor-Wall distance fix"
+msgstr ""
+
+#: zcadexternal.tplacesensorsstrategy~tpss_proportional
+msgid "Proportional"
+msgstr ""
+
 #: zcadexternal.tpolyeditmode~tpem_nearest
 msgid "Paste in nearest segment"
 msgstr "Вставлять в ближайший сегмент"
@@ -3246,11 +4427,6 @@ msgstr "Вписать в страницу"
 msgctxt "zcadexternal.tprintparams~scale"
 msgid "Scale"
 msgstr "Масштабировать"
-
-#: zcadexternal.trd~rd_backgroundcolor
-msgctxt "zcadexternal.trd~rd_backgroundcolor"
-msgid "Background color"
-msgstr "Цвет фона"
 
 #: zcadexternal.trd~rd_drawinsidepaintmessage
 msgid "Draw inside paint message"
@@ -3295,29 +4471,14 @@ msgctxt "zcadexternal.trd~rd_linesmooth"
 msgid "Line smoothing"
 msgstr "Сглаживание линий"
 
-#: zcadexternal.trd~rd_maxlinewidth
-msgctxt "zcadexternal.trd~rd_maxlinewidth"
-msgid "Max line width"
-msgstr "Макс. ширина линий"
-
 #: zcadexternal.trd~rd_maxltpatternsinentity
 msgid "Max LT patterns in entity"
 msgstr "Максимально шаблонов типа в линии"
-
-#: zcadexternal.trd~rd_maxpointsize
-msgctxt "zcadexternal.trd~rd_maxpointsize"
-msgid "Max point size"
-msgstr "Макс. размер точек"
 
 #: zcadexternal.trd~rd_maxrendertime
 msgctxt "zcadexternal.trd~rd_maxrendertime"
 msgid "Maximum single pass time"
 msgstr "Макс. время одного прохода рендера"
-
-#: zcadexternal.trd~rd_maxwidth
-msgctxt "zcadexternal.trd~rd_maxwidth"
-msgid "Max width"
-msgstr "Максимальная ширина"
 
 #: zcadexternal.trd~rd_panobjectdegradation
 msgctxt "zcadexternal.trd~rd_panobjectdegradation"
@@ -3344,6 +4505,26 @@ msgstr ""
 msgctxt "zcadexternal.trd~rd_usestencil"
 msgid "Use STENCIL buffer"
 msgstr "Использовать STENCIL буфер"
+
+#: zcadexternal.trectangenttype~ret_3dpoly
+msgid "3DPoly"
+msgstr ""
+
+#: zcadexternal.trectangenttype~ret_lwpoly
+msgid "LWPoly"
+msgstr ""
+
+#: zcadexternal.trectangparam~et
+msgid "Entity type"
+msgstr ""
+
+#: zcadexternal.trectangparam~polywidth
+msgid "Polyline width"
+msgstr ""
+
+#: zcadexternal.trectangparam~vnum
+msgid "Number of vertices"
+msgstr ""
 
 #: zcadexternal.trestoremode~wnd_accumbuffer
 msgctxt "zcadexternal.trestoremode~wnd_accumbuffer"
@@ -3473,21 +4654,6 @@ msgctxt "zcadexternal.tseltextparams~sametemplate"
 msgid "Same template"
 msgstr "Совпатает шаблон"
 
-#: zcadexternal.tsetvarstyle~absolytly
-msgctxt "zcadexternal.tsetvarstyle~absolytly"
-msgid "Absolytly"
-msgstr "Абсолютно"
-
-#: zcadexternal.tsetvarstyle~ent
-msgctxt "zcadexternal.tsetvarstyle~ent"
-msgid "Entity"
-msgstr "Примитив"
-
-#: zcadexternal.tsetvarstyle~scale
-msgctxt "zcadexternal.tsetvarstyle~scale"
-msgid "New scale"
-msgstr "Новый масштаб"
-
 #: zcadexternal.tst~tst_unsorted
 msgid "Unsorted"
 msgstr "Без сортировки"
@@ -3517,11 +4683,6 @@ msgctxt "zcadexternal.tsys~ssy_compileinfo"
 msgid "Build info"
 msgstr "Информация о сборке"
 
-#: zcadexternal.tsys~sys_alternatefont
-msgctxt "zcadexternal.tsys~sys_alternatefont"
-msgid "Alternate font file"
-msgstr "Файл альтернативного шрифта"
-
 #: zcadexternal.tsys~sys_ishistorylinecreated
 msgctxt "zcadexternal.tsys~sys_ishistorylinecreated"
 msgid "IsHistoryLineCreated"
@@ -3531,11 +4692,6 @@ msgstr ""
 msgctxt "zcadexternal.tsys~sys_runtime"
 msgid "Uptime"
 msgstr "Время работы"
-
-#: zcadexternal.tsys~sys_systmgeometrycolor
-msgctxt "zcadexternal.tsys~sys_systmgeometrycolor"
-msgid "Help color"
-msgstr "Цвет вспомогательной геометрии"
 
 #: zcadexternal.tsys~sys_version
 msgctxt "zcadexternal.tsys~sys_version"
@@ -3699,600 +4855,47 @@ msgctxt "zcadexternal.ttreeadress~selfindex"
 msgid "Position"
 msgstr "Позиция"
 
-#: zcadstrconsts.fontnotfoundandreplace
-msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
-msgstr "Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
-
-#: zcadstrconsts.rsaboutwndcaption
-msgctxt "zcadstrconsts.rsaboutwndcaption"
-msgid "About ZCAD"
-msgstr "О программе ZCAD"
-
-#: zcadstrconsts.rsalternatefontnotfoundin
-msgid "Alternate font \"%s\" is not found in \"%s\""
-msgstr "Альтернативный фонт \"%s\" не найден в  \"%s\""
-
-#: zcadstrconsts.rsauthor
-msgid "Writeln by Andrey M. Zubarev"
-msgstr "Автор: Зубарев А.М."
-
-#: zcadstrconsts.rsautosave
-msgctxt "zcadstrconsts.rsautosave"
-msgid "Autosave"
-msgstr "Автосохранение"
-
-#: zcadstrconsts.rsblockignored
-msgid "Ignored block \"%s\""
-msgstr "Игнорирован блок \"%s\""
-
-#: zcadstrconsts.rsblocks
-msgctxt "zcadstrconsts.rsblocks"
-msgid "Blocks"
-msgstr "Блоки"
-
-#: zcadstrconsts.rsbyblock
-msgctxt "zcadstrconsts.rsbyblock"
-msgid "ByBlock"
-msgstr "По Блоку"
-
-#: zcadstrconsts.rsbylayer
-msgctxt "zcadstrconsts.rsbylayer"
-msgid "ByLayer"
-msgstr "По Слою"
-
-#: zcadstrconsts.rsclipboardisempty
-msgid "Clipboard is empty, there is nothing to paste"
+#: zcadexternal.tunitmode~umwithoutspaces
+msgid "Without spaces"
 msgstr ""
 
-#: zcadstrconsts.rsclosedwgquery
-#| msgid "Drawing \"%s\" not saved. Close?"
-msgid "Drawing \"%s\" not saved. Save?"
-msgstr "Чертеж \"%s\" не сохранен. Сохранить?"
-
-#: zcadstrconsts.rscm2vnotremove
-msgid "Only 2 vertex there is nothing to remove"
-msgstr "Всего 2 вершины, нечего удалять тут"
-
-#: zcadstrconsts.rscmbasepoint
-msgid "Base point:"
-msgstr "Базовая точка:"
-
-#: zcadstrconsts.rscmcantgetblocktoreplace
-msgid "Unable get block name to replace"
-msgstr "Не возможно получить имя блока для замены"
-
-#: zcadstrconsts.rscmcenterpointcircle
-msgid "Center point for circle:"
-msgstr "Центр окружности:"
-
-#: zcadstrconsts.rscmcommandonlyctxmenu
-msgid "The command works only from context menu"
-msgstr "Команда работает только из контекстного меню"
-
-#: zcadstrconsts.rscmfirstpoint
-msgid "First point:"
-msgstr "Первая точка:"
-
-#: zcadstrconsts.rscmindwgblockdefnotdeffined
-msgid "In drawing not defined any BlockDefs!"
-msgstr "В чертеже отсутствуют определения блоков"
-
-#: zcadstrconsts.rscmindwgtxtstylenotdeffined
-msgid "In drawing not defined any textstyle!"
-msgstr "В чертеже не определено ниодного стиля текста"
-
-#: zcadstrconsts.rscminsertpoint
-msgid "Insert point:"
-msgstr "Точка вставки:"
-
-#: zcadstrconsts.rscminstackdata
-msgid "In stack found following data:"
-msgstr "В стеке обнаружены следующие данные:"
-
-#: zcadstrconsts.rscmnentitiesdeselected
-msgid "%d entities deselected"
+#: zcadexternal.tunitmode~umwithspaces
+msgid "With spaces"
 msgstr ""
 
-#: zcadstrconsts.rscmnentitiesprocessed
-msgid "%s entities processed"
-msgstr "Обработано %s примитивов"
-
-#: zcadstrconsts.rscmnewbasepoint
-msgid "New base point:"
-msgstr "Новая базовая точка:"
-
-#: zcadstrconsts.rscmnoblockdefindwg
-msgid "No BlockDef \"%s\" in the drawing"
-msgstr "В чертеже отсутствует определение блока \"%s\""
-
-#: zcadstrconsts.rscmnoblockdefindwgcxmenu
-msgid "No BlockDef \"%s\" in the drawing. Use context menu"
-msgstr "Нет определения блока \"%s\" в чертеже. Используйте контекстное меню"
-
-#: zcadstrconsts.rscmnoblocksordevices
-msgid "No selected blocks or devices"
-msgstr "Не выбрано блоков или устройств"
-
-#: zcadstrconsts.rscmnoctr
-msgid "No comands to redo"
-msgstr "Нет команд для повтора"
-
-#: zcadstrconsts.rscmnoctu
-msgid "No comands to undo. Complete the current command"
-msgstr "Невозможно отменить. Завершите текущую команду"
-
-#: zcadstrconsts.rscmnoctuse
-msgid "No comands to undo. UNDO stack is empty"
-msgstr "Невозможно отменить. Стек отмен пуст"
-
-#: zcadstrconsts.rscmnotcuthere
-msgid "Do not cut off here"
-msgstr "Нельзя резать здесь"
-
-#: zcadstrconsts.rscmoptions2oi
-msgid "Options are available in the Object Inspector"
-msgstr "Настройки доступны в инспекторе обьектов"
-
-#: zcadstrconsts.rscmpickorenterangle
-msgid "Pick or enter angle:"
-msgstr "Укажите мышью или введите угол:"
-
-#: zcadstrconsts.rscmpickorenterscale
-msgid "Pick or enter scale:"
-msgstr "Укажите мышью или введите масштаб:"
-
-#: zcadstrconsts.rscmpoint
-msgid "Point:"
-msgstr "Точка:"
-
-#: zcadstrconsts.rscmpointoncircle
-msgid "Point on a circle:"
-msgstr "Точка на окружности:"
-
-#: zcadstrconsts.rscmpolynotsel
-msgid "Poly entities not selected"
-msgstr "Poly объект не выбран"
-
-#: zcadstrconsts.rscmsecondpoint
-msgid "Second point:"
-msgstr "Вторая точка:"
-
-#: zcadstrconsts.rscmseldevbeforecomm
-msgid "Device must be selected before run the command"
-msgstr "Устройство должно быть выбрано до запуска команды"
-
-#: zcadstrconsts.rscmseldevsbeforecomm
-msgid "Devices must be selected before run the command"
-msgstr "Устройства должны быть выбраны до запуска команды"
-
-#: zcadstrconsts.rscmselentbeforecomm
-msgid "Entities must be selected before run the command"
-msgstr "Примитивы должны быть выбраны до запуска команды"
-
-#: zcadstrconsts.rscmselorspecentity
-msgid "Select or specify the parameters entity!"
-msgstr "Выбери или укажи в параметрах примитив"
-
-#: zcadstrconsts.rscolornum
-msgid "Color %d"
-msgstr "Цвет %d"
-
-#: zcadstrconsts.rscommandlinewndname
-msgctxt "zcadstrconsts.rscommandlinewndname"
-msgid "Command line"
-msgstr "Командная строка"
-
-#: zcadstrconsts.rscommandnrinc
-msgctxt "zcadstrconsts.rscommandnrinc"
-msgid "Command can not run"
-msgstr "Команда не может быть запущена"
-
-#: zcadstrconsts.rscommenteeport
-msgctxt "zcadstrconsts.rscommenteeport"
-msgid "Registered commands - %d; registered entities - %d; registered DXF entities - %d"
-msgstr "Зарегистрированных команд - %d; зарегистрированных примитивов - %d; зарегистрированных DXF примитивов - %d"
-
-#: zcadstrconsts.rscompiledtimemsg
-msgctxt "zcadstrconsts.rscompiledtimemsg"
-msgid "Done.  %s second"
-msgstr "Выполнено за  %s сек."
-
-#: zcadstrconsts.rscounttstylesfound
-msgid "%d Text styles found"
+#: zcadexternal.tuprec~uprec0
+msgid "0"
 msgstr ""
 
-#: zcadstrconsts.rscounttstylespurged
-msgid "%d Text styles purged"
+#: zcadexternal.tuprec~uprec1
+msgctxt "zcadexternal.tuprec~uprec1"
+msgid "0.0"
 msgstr ""
 
-#: zcadstrconsts.rscurrentlayeroff
-msgid "The current layer is turned off"
-msgstr "Текущий слой выключен"
-
-#: zcadstrconsts.rscurrentstylecannotbedeleted
-msgid "Current style cannot be deleted"
+#: zcadexternal.tuprec~uprec2
+msgid "0.00"
 msgstr ""
 
-#: zcadstrconsts.rsdefault
-msgctxt "zcadstrconsts.rsdefault"
-msgid "Default"
-msgstr "Обычный"
-
-#: zcadstrconsts.rsdefaultpromot
-msgctxt "zcadstrconsts.rsdefaultpromot"
-msgid "Command"
-msgstr "Команда"
-
-#: zcadstrconsts.rsdevices
-msgctxt "zcadstrconsts.rsdevices"
-msgid "Devices"
-msgstr "Устройства"
-
-#: zcadstrconsts.rsdifferent
-msgctxt "zcadstrconsts.rsdifferent"
-msgid "Different"
-msgstr "Разный"
-
-#: zcadstrconsts.rsdivbyzero
-msgid "Divide by zero"
-msgstr "Деление на ноль"
-
-#: zcadstrconsts.rsdoubleblockignored
-msgid "Ignored double definition block \"%s\""
-msgstr "Игнорировано повторное определение блока \"%s\""
-
-#: zcadstrconsts.rsdrawingwindowwndname
-msgctxt "zcadstrconsts.rsdrawingwindowwndname"
-msgid "Drawings window"
-msgstr "Окно чертежей"
-
-#: zcadstrconsts.rsempty
-msgctxt "zcadstrconsts.rsempty"
-msgid "Empty"
-msgstr "Пусто"
-
-#: zcadstrconsts.rsentryalreadyexist
-msgid "Entry \"%s\" already exist"
+#: zcadexternal.tuprec~uprec3
+msgid "0.000"
 msgstr ""
 
-#: zcadstrconsts.rsequipment
-msgid "Equipment"
-msgstr "Оборудование"
-
-#: zcadstrconsts.rserrorprefix
-msgctxt "zcadstrconsts.rserrorprefix"
-msgid "ERROR: "
-msgstr "ОШИБКА: "
-
-#: zcadstrconsts.rsexprouttext
-msgctxt "zcadstrconsts.rsexprouttext"
-msgid "Expression %s return %s"
-msgstr "Выражение  %s возвращает %s"
-
-#: zcadstrconsts.rsfardeffilenotfounf
-msgid "File definition of the variables can not be found for the device \"%s\";"
-msgstr "Файл определения переменных не найден для устройства \"%s\";"
-
-#: zcadstrconsts.rsfileformat
-msgid "%s file format"
-msgstr "Формат файла %s"
-
-#: zcadstrconsts.rsgdbobjinspwndname
-msgctxt "zcadstrconsts.rsgdbobjinspwndname"
-msgid "Object inspector"
-msgstr "Инспектор объектов"
-
-#: zcadstrconsts.rsgridtoodensity
-msgid "Grid too density"
-msgstr "Сетка слишком мелкая"
-
-#: zcadstrconsts.rshardunnamed
-msgid "Unnamed"
+#: zcadexternal.tuprec~uprec4
+msgid "0.0000"
 msgstr ""
 
-#: zcadstrconsts.rsinitialization
-msgid "Initialization:"
-msgstr "Инициализация:"
-
-#: zcadstrconsts.rsinvalididentificator
-msgid "\"%s\" not valid identificator"
+#: zcadexternal.tuprec~uprec5
+msgid "0.00000"
 msgstr ""
 
-#: zcadstrconsts.rsinvalidinput
-msgid "Invalid input"
+#: zcadexternal.tuprec~uprec6
+msgid "0.000000"
 msgstr ""
 
-#: zcadstrconsts.rsinvalidinputforpropery
-msgid "Property \"%s\" for entity \"%s\": %s"
+#: zcadexternal.tuprec~uprec7
+msgid "0.0000000"
 msgstr ""
 
-#: zcadstrconsts.rslayerdefpaontscannotbeprinted
-msgid "Layer DEFPOINTS can not be printed"
-msgstr "Слой DEFPOINTS не может быть печатным"
-
-#: zcadstrconsts.rslayermustbeselected
-msgid "Layer must be selected"
-msgstr "Слой должен быть выбран"
-
-#: zcadstrconsts.rslayerusedin
-msgid "Layer \"%s\" used in: %d-model, %d-blockdef table"
-msgstr "Слой  \"%s\" используется: %d-в модели, %d-в таблице блоков"
-
-#: zcadstrconsts.rslayoutload
-msgctxt "zcadstrconsts.rslayoutload"
-msgid "Error loading layout from file"
-msgstr "Ошибка загрузки файла разбивки окон"
-
-#: zcadstrconsts.rslinetypedesk
-#, fuzzy
-#| msgid ""
-#| ";;Pattern length %f\n"
-#| "%s\n"
-msgid ""
-";;Pattern length %f\n"
-"%s\n"
+#: zcadexternal.tuprec~uprec8
+msgid "0.00000000"
 msgstr ""
-";;Длина шаблона %f\n"
-"%s\n"
-
-#: zcadstrconsts.rslinetypeusedin
-msgid "Line type \"%s\" used in: %d-model, %d-blockdef table"
-msgstr "Тип линии  \"%s\" используется: %d-в модели, %d-в таблице блоков"
-
-#: zcadstrconsts.rsloadingfile
-msgid "Loading file \"%s\""
-msgstr "Загрузка файла  \"%s\""
-
-#: zcadstrconsts.rsloadingfontfile
-msgid "Loading font file \"%S\""
-msgstr "Загрузка файла шрифтов \"%S\""
-
-#: zcadstrconsts.rsmenunotfounf
-msgid "Menu \"%s\" not found"
-msgstr "Меню \"%s\" не найдено"
-
-#: zcadstrconsts.rsmm
-msgctxt "zcadstrconsts.rsmm"
-msgid "mm"
-msgstr "мм"
-
-#: zcadstrconsts.rsmtexteditor
-msgid "MText editor"
-msgstr "Редактор многострочного текста"
-
-#: zcadstrconsts.rsnameall
-#, fuzzy
-msgctxt "zcadstrconsts.rsnameall"
-msgid "All"
-msgstr "Все"
-
-#: zcadstrconsts.rsnamewithcounter
-msgid "%s (%d)"
-msgstr ""
-
-#: zcadstrconsts.rsncoglc
-msgctxt "zcadstrconsts.rsncoglc"
-msgid "OpenGL context is not created"
-msgstr "Контекст OpenGL не создан"
-
-#: zcadstrconsts.rsnewlayernameformat
-msgid "Layer%-3.3d"
-msgstr "Слой%-3.3d"
-
-#: zcadstrconsts.rsnewtextstylenameformat
-msgid "Style%-3.3d"
-msgstr "Стиль%-3.3d"
-
-#: zcadstrconsts.rsnotregistred
-msgid "Not registred"
-msgstr ""
-
-#: zcadstrconsts.rsnotyetimplemented
-msgid "Not yet implemented"
-msgstr "Пока не реализовано"
-
-#: zcadstrconsts.rsopenfile
-msgid "Open file..."
-msgstr "Открыть файл..."
-
-#: zcadstrconsts.rsprocesstimemsg
-msgid "%s:  %s second"
-msgstr "%s:  %s секунд"
-
-#: zcadstrconsts.rsprogramdb
-msgid "Program DB"
-msgstr "БД программы"
-
-#: zcadstrconsts.rsprojectdb
-msgid "Project DB"
-msgstr "БД чертежа"
-
-#: zcadstrconsts.rsprojecttree
-msgid "Project Tree"
-msgstr "Дерево проекта"
-
-#: zcadstrconsts.rsproperty
-msgid "Property"
-msgstr "Свойство"
-
-#: zcadstrconsts.rsquitcaption
-msgctxt "zcadstrconsts.rsquitcaption"
-msgid "Quit"
-msgstr "Выход"
-
-#: zcadstrconsts.rsquitquery
-msgid "Do yo want to quit ZCAD?"
-msgstr "Закрыть ZCAD"
-
-#: zcadstrconsts.rsrecreating
-msgctxt "zcadstrconsts.rsrecreating"
-msgid "Re-creating %s!"
-msgstr "Повторное создание %s!"
-
-#: zcadstrconsts.rsreleasenotes
-msgid ""
-"-UNDO\\REDO - yet it is better not to use;\n"
-"\n"
-"-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
-"\n"
-"-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
-msgstr ""
-"-UNDO\\REDO - пока лучше не пользоваться;\n"
-"\n"
-"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" и \"RebuildTree\" в командной строке;\n"
-"\n"
-"-Для отключения показа этого окна закоментируйте строку \"About\" в файле \"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
-
-#: zcadstrconsts.rsrenamedto
-msgid "%s \"%s\" renamed to \"%s\""
-msgstr ""
-
-#: zcadstrconsts.rsreservefontnotfound
-msgid "Reserve font is not found in the resources"
-msgstr "Резервный фонт не найден в расурсах программы"
-
-#: zcadstrconsts.rsreservefontnotload
-msgctxt "zcadstrconsts.rsreservefontnotload"
-msgid "Can not load reserve font"
-msgstr "Невозможно загрузить резервный фонт"
-
-#: zcadstrconsts.rsrevstr
-msgctxt "zcadstrconsts.rsrevstr"
-msgid "Revision SVN:"
-msgstr "Ревизия SVN:"
-
-#: zcadstrconsts.rsruncommand
-msgctxt "zcadstrconsts.rsruncommand"
-msgid "Running command"
-msgstr "Запущена команда"
-
-#: zcadstrconsts.rsrunscript
-msgctxt "zcadstrconsts.rsrunscript"
-msgid "Running script \"%s\";"
-msgstr "Выполняется скрипт \"%s\";"
-
-#: zcadstrconsts.rssaveemptydwg
-msgid "Drawing is empty. Sure?"
-msgstr "Чертеж не сохранен. Уверен?"
-
-#: zcadstrconsts.rssavefile
-msgid "Save file..."
-msgstr "Сохранить файл..."
-
-#: zcadstrconsts.rsselectcolor
-msgid "Select color..."
-msgstr "Выбор цвета..."
-
-#: zcadstrconsts.rsselectlt
-msgid "Select line type..."
-msgstr "Выбор типа линий"
-
-#: zcadstrconsts.rsstylemustbeselected
-msgid "Style must be selected"
-msgstr "Стиль должен быть выбран"
-
-#: zcadstrconsts.rssyslinetypewarning
-msgctxt "zcadstrconsts.rssyslinetypewarning"
-msgid "This is system line type!"
-msgstr "Это системный тип линии"
-
-#: zcadstrconsts.rstemplatenotfound
-msgid "Template file \"%s\" not found"
-msgstr "Файл шаблона \"%s\" не найден"
-
-#: zcadstrconsts.rstextedcaption
-msgid " TEXT: "
-msgstr " ТЕКСТ: "
-
-#: zcadstrconsts.rstexteditor
-msgctxt "zcadstrconsts.rstexteditor"
-msgid "Text editor"
-msgstr "Редактор текста"
-
-#: zcadstrconsts.rstextstyleusedin
-msgid "Text style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
-msgstr "Стиль текста \"%s\" используется: %d-в модели, %d-в таблице блоков"
-
-#: zcadstrconsts.rstoolbarnotfound
-msgctxt "zcadstrconsts.rstoolbarnotfound"
-msgid "Toolbar \"%s\" is not found! Create a blank window"
-msgstr "Панель инструментов \"%s\" не найдена! Создано пусте окно"
-
-#: zcadstrconsts.rstypenotdefinedinmodule
-msgid "Type \"%S\" not defined in unit \"%S\""
-msgstr "Тип \"%S\" не задан в модуле \"%S\""
-
-#: zcadstrconsts.rsunabledelusedlayer
-msgid "Unable to delete, layer is used"
-msgstr "Нельзя удалить, слой используется"
-
-#: zcadstrconsts.rsunabledelusedstyle
-msgid "Unable to delete, Style is used"
-msgstr "Нельзя удалить, стиль используется"
-
-#: zcadstrconsts.rsunablerenamefiletobak
-msgid "Could not rename file \"%s\" into \"*.bak\""
-msgstr "Не могу переименовать файл \"%s\" в \"*.bak\""
-
-#: zcadstrconsts.rsunableselectfreelayername
-msgid "Unable select free layer name"
-msgstr "Не могу выбрать свободное имя слоя"
-
-#: zcadstrconsts.rsunableselectfreetextstylername
-msgid "Unable select free text style name"
-msgstr "Не могу выбрать свободное имя стиля"
-
-#: zcadstrconsts.rsunabletofindfile
-msgid "Unable to find file \"%s\""
-msgstr "Не могу найти файл \"%s\""
-
-#: zcadstrconsts.rsunabletoopenfile
-msgid "Unable to open file \"%s\""
-msgstr "Не могу открыть файл \"%s\""
-
-#: zcadstrconsts.rsunabletowritefile
-msgid "Unable to write file \"%s\""
-msgstr "Не могу записать файл \"%s\""
-
-#: zcadstrconsts.rsunassigned
-msgid "Unassigned"
-msgstr "Не связано"
-
-#: zcadstrconsts.rsuncategorized
-msgid "Uncategorized"
-msgstr "Без категории"
-
-#: zcadstrconsts.rsunknowncommand
-msgctxt "zcadstrconsts.rsunknowncommand"
-msgid "Unknown command"
-msgstr "Неизвестная команда"
-
-#: zcadstrconsts.rsunknownfileext
-msgid "Unknown file format \"%s\". Saving failed."
-msgstr "Неизвестный формат файла \"%s\". Сохранение не произведено"
-
-#: zcadstrconsts.rsunknownfileformat
-msgid "Unknown file format"
-msgstr "Неизвестный формат файла"
-
-#: zcadstrconsts.rsunnamedwindowtitle
-msgctxt "zcadstrconsts.rsunnamedwindowtitle"
-msgid "Unnamed%-3.3d"
-msgstr "Без имени%-3.3d"
-
-#: zcadstrconsts.rsvalue
-msgid "Value"
-msgstr "Значение"
-
-#: zcadstrconsts.rsvinfotext
-msgid "Unstable version"
-msgstr "Нестабильная версия"
-
-#: zcadstrconsts.rswarningcaption
-msgid "Warning!"
-msgstr "Внимание!"
-
-#: zcadstrconsts.rszcadstarted
-msgid "ZCAD v%s started"
-msgstr "ZCAD v%s запущен"
-

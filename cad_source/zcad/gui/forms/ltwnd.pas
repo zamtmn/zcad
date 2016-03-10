@@ -62,7 +62,7 @@ var
 
 implementation
 
-uses mainwindow;
+uses uzcgui2linetypes;
 {$R *.lfm}
 
 { TLTWindow }

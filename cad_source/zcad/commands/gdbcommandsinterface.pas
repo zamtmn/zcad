@@ -86,7 +86,7 @@ uses
    //function Regen_com(Operands:pansichar):GDBInteger;
 //var DWGPageCxMenu:pzpopupmenu;
 implementation
-uses mainwindow,
+uses uzcmainwindow,
      geometry;
 function CloseDWG_com(operands:TCommandOperands):TCommandResult;
 var

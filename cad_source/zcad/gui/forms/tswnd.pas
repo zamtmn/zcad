@@ -124,8 +124,6 @@ var
   TSWindow: TTextStylesWindow;
   FontsFilter:TFTFilter;
 implementation
-uses
-    mainwindow;
 {$R *.lfm}
 function TTextStylesWindow.IsShortcut(var Message: TLMKey): boolean;
 var

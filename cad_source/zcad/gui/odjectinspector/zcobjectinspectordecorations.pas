@@ -44,7 +44,7 @@ procedure ButtonHLineDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;
 function ButtonGetPrefferedFastEditorSize(PInstance:GDBPointer):TSize;
 implementation
 uses
-  mainwindow;
+  uzcmainwindow,uzcgui2linetypes;
 var
    count:integer;
 function LWDecorator(PInstance:GDBPointer):GDBString;

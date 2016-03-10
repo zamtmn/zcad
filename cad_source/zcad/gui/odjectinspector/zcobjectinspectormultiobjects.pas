@@ -80,7 +80,7 @@ type
 var
    MSEditor:TMSEditor;
 implementation
-uses mainwindow,zcobjectinspectordecorations,UGDBSelectedObjArray;
+uses uzcmainwindow,zcobjectinspectordecorations,UGDBSelectedObjArray;
 constructor  TMSEditor.init;
 begin
      VariablesUnit.init('VariablesUnit');

@@ -116,7 +116,7 @@ var
   LayerWindow: TLayerWindow;
 implementation
 uses
-    mainwindow;
+    uzcgui2linetypes;
 {$R *.lfm}
 procedure TLayerWindow.CreateUndoStartMarkerNeeded;
 begin

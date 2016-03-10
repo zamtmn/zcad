@@ -151,7 +151,6 @@ var
 //function GetPZWinManager:PTZWinManager; external 'cad.exe';
 //procedure GDBObjLineInit(own:PGDBObjGenericSubEntry;var pobjline: PGDBObjLine; layerindex, LW: smallint; p1, p2: GDBvertex); external 'cad.exe';
 
-//function getoglwndparam: pointer; external 'cad.exe';
 //function GetPVarMan: pointer; external 'cad.exe';
 
 

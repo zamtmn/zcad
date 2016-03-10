@@ -131,7 +131,6 @@ uses
   //RegCnownTypes,URegisterObjects;
 
 //exports HistoryOut,redrawoglwnd,updatevisible,reloadlayer; {uzcshared}
-//exports getoglwndparam; {mygl}
 //exports getcommandmanager; {commandline}
 //exports GDBObjLineInit,GDBObjCircleInit,getgdb,addblockinsert,CreateInitObjFree,CreateObjFree; {GDBManager}
 //exports getpsysvar,GetPVarMan; {varman}
@@ -160,8 +159,8 @@ begin
   ugdbdescriptor.startup('*rtl/dwg/DrawingVars.pas','');
 
   //создание окна программы
-  Application.CreateForm(MainForm, MainFormN);
-  MainFormN.show;
+  Application.CreateForm(TZCADMainWindow,ZCADMainWindow);
+  ZCADMainWindow.show;
   {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
                                                   sysvar.SYS.SYS_IsHistoryLineCreated^:=true;}
   historyoutstr(format(rsZCADStarted,[sysvar.SYS.SYS_Version^]));

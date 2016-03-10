@@ -597,7 +597,7 @@ begin
     until pv=nil;
     uzcshared.HistoryOutStr(sysutils.Format(rscmNEntitiesDeselected,[count]));
     if count>0 then
-                   MainFormN.waSetObjInsp(gdb.GetCurrentDWG.wa);
+                   ZCADMainWindow.waSetObjInsp(gdb.GetCurrentDWG.wa);
 
     {pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pv<>nil then

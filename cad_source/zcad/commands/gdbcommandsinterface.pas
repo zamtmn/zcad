@@ -95,7 +95,7 @@ var
 begin
   application.ProcessMessages;
   CurrentDWG:=PTDrawing(gdb.GetCurrentDWG);
-  _CloseDWGPage(CurrentDWG,mainformn.PageControl.ActivePage);
+  _CloseDWGPage(CurrentDWG,ZCADMainWindow.PageControl.ActivePage);
   result:=cmd_ok;
   (*if CurrentDWG<>nil then
   begin
@@ -131,14 +131,14 @@ function NextDrawint_com(operands:TCommandOperands):TCommandResult;
 var
    i:integer;
 begin
-     if assigned(MainFormN.PageControl)then
-     if MainFormN.PageControl.PageCount>1 then
+     if assigned(ZCADMainWindow.PageControl)then
+     if ZCADMainWindow.PageControl.PageCount>1 then
      begin
-          i:=MainFormN.PageControl.ActivePageIndex+1;
-          if i=MainFormN.PageControl.PageCount
+          i:=ZCADMainWindow.PageControl.ActivePageIndex+1;
+          if i=ZCADMainWindow.PageControl.PageCount
                                               then
                                                   i:=0;
-             MainFormN.PageControl.ActivePageIndex:=i;
+             ZCADMainWindow.PageControl.ActivePageIndex:=i;
      end;
      result:=cmd_ok;
 end;
@@ -146,14 +146,14 @@ function PrevDrawint_com(operands:TCommandOperands):TCommandResult;
 var
    i:integer;
 begin
-     if assigned(MainFormN.PageControl)then
-     if MainFormN.PageControl.PageCount>1 then
+     if assigned(ZCADMainWindow.PageControl)then
+     if ZCADMainWindow.PageControl.PageCount>1 then
      begin
-          i:=MainFormN.PageControl.ActivePageIndex-1;
+          i:=ZCADMainWindow.PageControl.ActivePageIndex-1;
           if i<0
                                             then
-                                                  i:=MainFormN.PageControl.PageCount-1;
-             MainFormN.PageControl.ActivePageIndex:=i;
+                                                  i:=ZCADMainWindow.PageControl.PageCount-1;
+             ZCADMainWindow.PageControl.ActivePageIndex:=i;
      end;
      result:=cmd_ok;
 end;
@@ -185,17 +185,17 @@ begin
 
      myts:=nil;
 
-     if not assigned(MainFormN.PageControl)then
+     if not assigned(ZCADMainWindow.PageControl)then
      begin
           DockMaster.ShowControl('PageControl',true);
           //DockMaster.ShowControl('PageControl',true);
      end;
 
 
-     myts:=TTabSheet.create(MainFormN.PageControl);
+     myts:=TTabSheet.create(ZCADMainWindow.PageControl);
      myts.Caption:=(Operands);
      //mainformn.DisableAutoSizing;
-     myts.Parent:=MainFormN.PageControl;
+     myts.Parent:=ZCADMainWindow.PageControl;
      //mainformn.EnableAutoSizing;
 
      //tf.align:=al_client;
@@ -203,18 +203,18 @@ begin
      //wpowner:=TOpenGLViewArea{TCanvasViewArea}.Create(myts);
      //wpowner:={TOpenGLViewArea}TCanvasViewArea.Create(myts);
      wpowner:=GetCurrentBackEnd.Create(myts);
-     wpowner.onCameraChanged:=MainFormN.correctscrollbars;
-     wpowner.OnWaMouseDown:=MainFormN.wamd;
-     wpowner.OnWaMouseMove:=MainFormN.wamm;
-     wpowner.OnWaKeyPress:=MainFormN.wakp;
-     wpowner.OnWaMouseSelect:=MainFormN.wams;
-     wpowner.OnGetEntsDesc:=MainFormN.GetEntsDesc;
-     wpowner.ShowCXMenu:=MainFormN.ShowCXMenu;
-     wpowner.MainMouseMove:=MainFormN.MainMouseMove;
-     wpowner.MainMouseDown:=MainFormN.MainMouseDown;
-     wpowner.MainMouseUp:=MainFormN.MainMouseUp;
-     wpowner.OnSetObjInsp:=MainFormN.waSetObjInsp;
-     wpowner.OnWaShowCursor:=MainFormN.WaShowCursor;
+     wpowner.onCameraChanged:=ZCADMainWindow.correctscrollbars;
+     wpowner.OnWaMouseDown:=ZCADMainWindow.wamd;
+     wpowner.OnWaMouseMove:=ZCADMainWindow.wamm;
+     wpowner.OnWaKeyPress:=ZCADMainWindow.wakp;
+     wpowner.OnWaMouseSelect:=ZCADMainWindow.wams;
+     wpowner.OnGetEntsDesc:=ZCADMainWindow.GetEntsDesc;
+     wpowner.ShowCXMenu:=ZCADMainWindow.ShowCXMenu;
+     wpowner.MainMouseMove:=ZCADMainWindow.MainMouseMove;
+     wpowner.MainMouseDown:=ZCADMainWindow.MainMouseDown;
+     wpowner.MainMouseUp:=ZCADMainWindow.MainMouseUp;
+     wpowner.OnSetObjInsp:=ZCADMainWindow.waSetObjInsp;
+     wpowner.OnWaShowCursor:=ZCADMainWindow.WaShowCursor;
      oglwnd:=wpowner.getviewcontrol;// TOGLWnd.Create(myts);
 
 
@@ -237,7 +237,7 @@ begin
      //programlog.logoutstr('oglwnd.show;',0);
 
 
-     MainFormN.PageControl.ActivePage:=myts;
+     ZCADMainWindow.PageControl.ActivePage:=myts;
      //programlog.logoutstr('MainFormN.PageControl.ActivePage:=myts;',0);
      if assigned(UpdateVisibleProc) then UpdateVisibleProc;
      //programlog.logoutstr('sharedgdb.updatevisible;',0);
@@ -548,11 +548,11 @@ begin
           pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i));
           if assigned(pstr) then
           pstr^:='';
-          if assigned(MainFormN.FileHistory[i]) then
+          if assigned(ZCADMainWindow.FileHistory[i]) then
           begin
-              MainFormN.FileHistory[i].Caption:='';
-              MainFormN.FileHistory[i].command:='';
-              MainFormN.FileHistory[i].Visible:=false;
+              ZCADMainWindow.FileHistory[i].Caption:='';
+              ZCADMainWindow.FileHistory[i].command:='';
+              ZCADMainWindow.FileHistory[i].Visible:=false;
           end;
      end;
      result:=cmd_ok;
@@ -803,9 +803,9 @@ begin
 end;
 function ShowPage_com(operands:TCommandOperands):TCommandResult;
 begin
-  if assigned(mainformn)then
-  if assigned(mainformn.PageControl)then
-  mainformn.PageControl.ActivePageIndex:=strtoint(Operands);
+  if assigned(ZCADMainWindow)then
+  if assigned(ZCADMainWindow.PageControl)then
+  ZCADMainWindow.PageControl.ActivePageIndex:=strtoint(Operands);
   result:=cmd_ok;
 end;
 procedure startup;

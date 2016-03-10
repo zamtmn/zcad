@@ -72,7 +72,7 @@ type
   TCommandHistory=Array [0..9] of TmyAction;
 
 
-  MainForm = class(TFreedForm)
+  TZCADMainWindow = class(TFreedForm)
     ToolBarU:TToolBar;
     MainPanel:TForm;
     FToolBar:TToolButtonForm;
@@ -194,13 +194,12 @@ type
     {$ifdef windows}procedure SetTop;{$endif}
                end;
 procedure UpdateVisible;
-function getoglwndparam: GDBPointer; export;
 function LoadLayout_com(Operands:pansichar):GDBInteger;
 function _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject):Integer;
 
 var
   IVars:TInterfaceVars;
-  MainFormN: MainForm;
+  ZCADMainWindow: TZCADMainWindow;
   LayerBox:TZCADLayerComboBox;
   LineWBox,ColorBox,LTypeBox,TStyleBox,DimStyleBox:TComboBox;
   LayoutBox:TComboBox;
@@ -232,7 +231,7 @@ begin
      lp.PLayer:=player;;
 end;
 {$ifdef windows}
-procedure MainForm.SetTop;
+procedure TZCADMainWindow.SetTop;
 var
   hWnd, hCurWnd, dwThreadID, dwCurThreadID: THandle;
   OldTimeOut: Cardinal;
@@ -258,7 +257,7 @@ begin
      SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, Pointer(OldTimeOut), 0);
 end;
 {$endif}
-procedure MainForm.IPCMessage(Sender: TObject);
+procedure TZCADMainWindow.IPCMessage(Sender: TObject);
 var
    msgstring,ts:string;
 begin
@@ -277,7 +276,7 @@ begin
      until msgstring='';
 end;
 
-procedure MainForm.setvisualprop;
+procedure TZCADMainWindow.setvisualprop;
 const IntEmpty=-1000;
       IntDifferent=-10001;
       PEmpty=pointer(0);
@@ -393,7 +392,7 @@ begin
       end;
       UpdateControls;
 end;
-procedure MainForm.addoneobject;
+procedure TZCADMainWindow.addoneobject;
 var lw:GDBInteger;
 begin
   exit;
@@ -426,7 +425,7 @@ begin
       end;
 end;
 
-function MainForm.ClickOnLayerProp(PLayer:Pointer;NumProp:integer;var newlp:TLayerPropRecord):boolean;
+function TZCADMainWindow.ClickOnLayerProp(PLayer:Pointer;NumProp:integer;var newlp:TLayerPropRecord):boolean;
 var
    cdwg:PTSimpleDrawing;
    tcl:PGDBLayerProp;
@@ -482,7 +481,7 @@ begin
                        end;
 end;
 
-function MainForm.GetLayersArray(var la:TLayerArray):boolean;
+function TZCADMainWindow.GetLayersArray(var la:TLayerArray):boolean;
 var
    cdwg:PTSimpleDrawing;
    pcl:PGDBLayerProp;
@@ -510,7 +509,7 @@ begin
          end;
      end;
 end;
-function MainForm.GetLayerProp(PLayer:Pointer;var lp:TLayerPropRecord):boolean;
+function TZCADMainWindow.GetLayerProp(PLayer:Pointer;var lp:TLayerPropRecord):boolean;
 var
    cdwg:PTSimpleDrawing;
 begin
@@ -541,7 +540,7 @@ begin
 
 end;
 
-function MainForm.findtoolbatdesk(tbn:string):string;
+function TZCADMainWindow.findtoolbatdesk(tbn:string):string;
 var i:integer;
     debs:string;
 begin
@@ -603,7 +602,7 @@ begin
                       else
                           taa[0].SetCommand(rsEmpty,'','');
 end;
-procedure MainForm.processfilehistory(filename:GDBString);
+procedure TZCADMainWindow.processfilehistory(filename:GDBString);
 var i,j,k:integer;
     pstr,pstrnext:PGDBString;
 begin
@@ -627,7 +626,7 @@ begin
      SetArrayTop(@FileHistory,FileName,'Load',FileName);
      CheckArray(@FileHistory,low(filehistory),high(filehistory));
 end;
-procedure  MainForm.processcommandhistory(Command:GDBString);
+procedure  TZCADMainWindow.processcommandhistory(Command:GDBString);
 var
    k:integer;
 begin
@@ -646,11 +645,11 @@ var
    poglwnd:TOGLWnd;
 begin
      result:=false;
-     if MainFormN.PageControl<>nil then
+     if ZCADMainWindow.PageControl<>nil then
      begin
-          for i:=0 to MainFormN.PageControl.PageCount-1 do
+          for i:=0 to ZCADMainWindow.PageControl.PageCount-1 do
           begin
-               TControl(poglwnd):=FindControlByType(TTabSheet(MainFormN.PageControl.Pages[i]),TOGLWnd);
+               TControl(poglwnd):=FindControlByType(TTabSheet(ZCADMainWindow.PageControl.Pages[i]),TOGLWnd);
                if poglwnd<>nil then
                                    begin
                                         if poglwnd.wa.PDWG.GetChangeStampt then
@@ -666,7 +665,7 @@ begin
      if not result then
                        begin
                        if gdb.GetCurrentDWG<>nil then
-                                                     i:=MainFormN.messagebox(@rsQuitQuery[1],@rsQuitCaption[1],MB_YESNO or MB_ICONQUESTION)
+                                                     i:=ZCADMainWindow.messagebox(@rsQuitQuery[1],@rsQuitCaption[1],MB_YESNO or MB_ICONQUESTION)
                                                  else
                                                      i:=IDYES;
                        end
@@ -718,11 +717,11 @@ begin
      result:=0;
      if IsRealyQuit then
      begin
-          if MainFormN.PageControl<>nil then
+          if ZCADMainWindow.PageControl<>nil then
           begin
-               while MainFormN.PageControl.ActivePage<>nil do
+               while ZCADMainWindow.PageControl.ActivePage<>nil do
                begin
-                    if MainFormN.CloseDWGPage(MainFormN.PageControl.ActivePage)=IDCANCEL then
+                    if ZCADMainWindow.CloseDWGPage(ZCADMainWindow.PageControl.ActivePage)=IDCANCEL then
                                                                                              exit;
                end;
           end;
@@ -733,12 +732,12 @@ begin
           application.terminate;
      end;
 end;
-procedure MainForm.asynccloseapp(Data: PtrInt);
+procedure TZCADMainWindow.asynccloseapp(Data: PtrInt);
 begin
       CloseApp;
 end;
 
-procedure MainForm.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+procedure TZCADMainWindow.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
      CloseAction:=caNone;
      if not commandmanager.EndGetPoint(TGPCloseApp) then
@@ -773,7 +772,7 @@ begin
     Dlg.Free;
   end;
 end;
-procedure MainForm.GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
+procedure TZCADMainWindow.GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
                                Raw: boolean = false;
                                WithThemeSpace: boolean = true);
 begin
@@ -793,7 +792,7 @@ begin
                                  begin
                                       repeat
                                       s:=format(rsCloseDWGQuery,[ClosedDWG.FileName]);
-                                      result:=MainFormN.MessageBox(@s[1],@rsWarningCaption[1],MB_YESNOCANCEL);
+                                      result:=ZCADMainWindow.MessageBox(@s[1],@rsWarningCaption[1],MB_YESNOCANCEL);
                                       if result=IDCANCEL then exit;
                                       if result=IDNO then system.break;
                                       if result=IDYES then
@@ -813,7 +812,7 @@ begin
        viewcontrol.free;
 
        lincedcontrol.Free;
-       tobject(viewcontrol):=mainformn.PageControl.ActivePage;
+       tobject(viewcontrol):=ZCADMainWindow.PageControl.ActivePage;
 
        if viewcontrol<>nil then
        begin
@@ -831,12 +830,12 @@ begin
        if assigned(UpdateVisibleProc) then UpdateVisibleProc;
   end;
 end;
-procedure MainForm.CloseDWGPageInterf(Sender: TObject);
+procedure TZCADMainWindow.CloseDWGPageInterf(Sender: TObject);
 begin
      CloseDWGPage(Sender);
 end;
 
-function MainForm.CloseDWGPage(Sender: TObject):integer;
+function TZCADMainWindow.CloseDWGPage(Sender: TObject):integer;
 var
    wa:TGeneralViewArea;
    ClosedDWG:PTDrawing;
@@ -849,7 +848,7 @@ begin
   result:=_CloseDWGPage(ClosedDWG,Sender);
 
 end;
-procedure MainForm.PageControlMouseDown(Sender: TObject;
+procedure TZCADMainWindow.PageControlMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
    i: integer;
@@ -860,11 +859,11 @@ begin
   if (Sender is TPageControl) then
                                   CloseDWGPage((Sender as TPageControl).Pages[I]);
 end;
-procedure MainForm.ShowFastMenu(Sender: TObject);
+procedure TZCADMainWindow.ShowFastMenu(Sender: TObject);
 begin
      ShowFMenu;
 end;
-procedure MainForm.DockMasterCreateControl(Sender: TObject; aName: string; var
+procedure TZCADMainWindow.DockMasterCreateControl(Sender: TObject; aName: string; var
   AControl: TControl; DoDisableAutoSizing: boolean);
   procedure CreateForm(Caption: string; NewBounds: TRect);
   begin
@@ -957,7 +956,7 @@ begin
   end;
   result:=cmd_ok;
 end;
-procedure MainForm.setnormalfocus(Sender: TObject);
+procedure TZCADMainWindow.setnormalfocus(Sender: TObject);
 begin
      if assigned(cmdedit) then
      if cmdedit.Enabled then
@@ -967,7 +966,7 @@ begin
           cmdedit.SetFocus;
      end;
 end;
-procedure MainForm.InitSystemCalls;
+procedure TZCADMainWindow.InitSystemCalls;
 begin
   ShowAllCursorsProc:=self.ShowAllCursors;
   RestoreAllCursorsProc:=self.RestoreCursors;
@@ -990,7 +989,7 @@ begin
   zcadinterface.SetNormalFocus:=self.setnormalfocus;
 end;
 
-procedure MainForm.LoadActions;
+procedure TZCADMainWindow.LoadActions;
 var
    i:integer;
 begin
@@ -1019,13 +1018,13 @@ begin
   end;
 end;
 
-procedure MainForm.CreateInterfaceLists;
+procedure TZCADMainWindow.CreateInterfaceLists;
 begin
   updatesbytton:=tlist.Create;
   updatescontrols:=tlist.Create;
 end;
 
-procedure MainForm.FillColorCombo(cb:TCustomComboBox);
+procedure TZCADMainWindow.FillColorCombo(cb:TCustomComboBox);
 var
    i:integer;
    ts:string;
@@ -1040,12 +1039,12 @@ begin
   cb.items.AddObject(rsSelectColor, TObject(ClSelColor));
 end;
 
-procedure MainForm.FillLTCombo(cb:TCustomComboBox);
+procedure TZCADMainWindow.FillLTCombo(cb:TCustomComboBox);
 begin
   cb.items.AddObject(rsByBlock, TObject(0));
 end;
 
-procedure MainForm.FillLWCombo(cb:TCustomComboBox);
+procedure TZCADMainWindow.FillLWCombo(cb:TCustomComboBox);
 var
    i:integer;
 begin
@@ -1058,7 +1057,7 @@ begin
        cb.items.AddObject(s, TObject(lwarray[i]));
   end;
 end;
-procedure MainForm.AdjustHeight(const AWindow: TCustomForm; const AAdjustHeight: Boolean;const ANewHeight: Integer);
+procedure TZCADMainWindow.AdjustHeight(const AWindow: TCustomForm; const AAdjustHeight: Boolean;const ANewHeight: Integer);
 var
   Site: TAnchorDockHostSite;
   I: Integer;
@@ -1082,7 +1081,7 @@ begin
     Site.Height := SiteNewHeight;
 end;
 
-procedure MainForm.CreateAnchorDockingInterface;
+procedure TZCADMainWindow.CreateAnchorDockingInterface;
 var
   action: tmyaction;
 begin
@@ -1128,7 +1127,7 @@ begin
 end;
 
 
-procedure MainForm.CreateStandartInterface;
+procedure TZCADMainWindow.CreateStandartInterface;
 var
   TempForm:TForm;
 begin
@@ -1199,7 +1198,7 @@ begin
     myDumpAddr(Frames[FrameNumber],f);
 end;
 
-procedure MainForm.ZcadException(Sender: TObject; E: Exception);
+procedure TZCADMainWindow.ZcadException(Sender: TObject; E: Exception);
 var
   f:system.text;
   crashreportfilename,errmsg:shortstring;
@@ -1254,7 +1253,7 @@ begin
      if MessageDlg(errmsg,mtError,[mbYes, mbAbort],0)=mrAbort then
                                                                   halt(0);
 end;
-function MainForm.CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
+function TZCADMainWindow.CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
 var
   pint:PGDBInteger;
   TB:TToolBar;
@@ -1336,72 +1335,72 @@ procedure ZCADMainPanelSetupProc(Form:TControl);
 begin
   Tform(Form).BorderWidth:=0;
 
-  MainFormN.DHPanel:=TPanel.Create(Tform(Form));
-  MainFormN.DHPanel.Align:=albottom;
-  MainFormN.DHPanel.BevelInner:=bvNone;
-  MainFormN.DHPanel.BevelOuter:=bvNone;
-  MainFormN.DHPanel.BevelWidth:=1;
-  MainFormN.DHPanel.AutoSize:=true;
-  MainFormN.DHPanel.Parent:=MainFormN.MainPanel;
+  ZCADMainWindow.DHPanel:=TPanel.Create(Tform(Form));
+  ZCADMainWindow.DHPanel.Align:=albottom;
+  ZCADMainWindow.DHPanel.BevelInner:=bvNone;
+  ZCADMainWindow.DHPanel.BevelOuter:=bvNone;
+  ZCADMainWindow.DHPanel.BevelWidth:=1;
+  ZCADMainWindow.DHPanel.AutoSize:=true;
+  ZCADMainWindow.DHPanel.Parent:=ZCADMainWindow.MainPanel;
 
-  MainFormN.VScrollBar:=TScrollBar.create(MainFormN.MainPanel);
-  MainFormN.VScrollBar.Align:=alright;
-  MainFormN.VScrollBar.kind:=sbVertical;
-  MainFormN.VScrollBar.OnScroll:=MainFormN._scroll;
-  MainFormN.VScrollBar.Enabled:=false;
-  MainFormN.VScrollBar.Parent:=MainFormN.MainPanel;
+  ZCADMainWindow.VScrollBar:=TScrollBar.create(ZCADMainWindow.MainPanel);
+  ZCADMainWindow.VScrollBar.Align:=alright;
+  ZCADMainWindow.VScrollBar.kind:=sbVertical;
+  ZCADMainWindow.VScrollBar.OnScroll:=ZCADMainWindow._scroll;
+  ZCADMainWindow.VScrollBar.Enabled:=false;
+  ZCADMainWindow.VScrollBar.Parent:=ZCADMainWindow.MainPanel;
 
-  with TMySpeedButton.Create(MainFormN.DHPanel) do
+  with TMySpeedButton.Create(ZCADMainWindow.DHPanel) do
   begin
        Align:=alRight;
-       Parent:=MainFormN.DHPanel;
-       width:=MainFormN.VScrollBar.Width;
-       onclick:=MainFormN.ShowFastMenu;
+       Parent:=ZCADMainWindow.DHPanel;
+       width:=ZCADMainWindow.VScrollBar.Width;
+       onclick:=ZCADMainWindow.ShowFastMenu;
   end;
 
-  MainFormN.HScrollBar:=TScrollBar.create(MainFormN.DHPanel);
-  MainFormN.HScrollBar.Align:=alClient;
-  MainFormN.HScrollBar.kind:=sbHorizontal;
-  MainFormN.HScrollBar.OnScroll:=MainFormN._scroll;
-  MainFormN.HScrollBar.Enabled:=false;
-  MainFormN.HScrollBar.Parent:=MainFormN.DHPanel;
+  ZCADMainWindow.HScrollBar:=TScrollBar.create(ZCADMainWindow.DHPanel);
+  ZCADMainWindow.HScrollBar.Align:=alClient;
+  ZCADMainWindow.HScrollBar.kind:=sbHorizontal;
+  ZCADMainWindow.HScrollBar.OnScroll:=ZCADMainWindow._scroll;
+  ZCADMainWindow.HScrollBar.Enabled:=false;
+  ZCADMainWindow.HScrollBar.Parent:=ZCADMainWindow.DHPanel;
 
-  MainFormN.PageControl:=TmyPageControl.Create(MainFormN.MainPanel);
-  MainFormN.PageControl.Constraints.MinHeight:=32;
-  MainFormN.PageControl.Parent:=MainFormN.MainPanel;
-  MainFormN.PageControl.Align:=alClient;
-  MainFormN.PageControl.OnChange:=MainFormN.ChangedDWGTabCtrl;
-  MainFormN.PageControl.BorderWidth:=0;
+  ZCADMainWindow.PageControl:=TmyPageControl.Create(ZCADMainWindow.MainPanel);
+  ZCADMainWindow.PageControl.Constraints.MinHeight:=32;
+  ZCADMainWindow.PageControl.Parent:=ZCADMainWindow.MainPanel;
+  ZCADMainWindow.PageControl.Align:=alClient;
+  ZCADMainWindow.PageControl.OnChange:=ZCADMainWindow.ChangedDWGTabCtrl;
+  ZCADMainWindow.PageControl.BorderWidth:=0;
   if assigned(SysVar.INTF.INTF_DwgTabsPosition) then
   begin
        case SysVar.INTF.INTF_DwgTabsPosition^ of
-                                                TATop:MainFormN.PageControl.TabPosition:=tpTop;
-                                                TABottom:MainFormN.PageControl.TabPosition:=tpBottom;
-                                                TALeft:MainFormN.PageControl.TabPosition:=tpLeft;
-                                                TARight:MainFormN.PageControl.TabPosition:=tpRight;
+                                                TATop:ZCADMainWindow.PageControl.TabPosition:=tpTop;
+                                                TABottom:ZCADMainWindow.PageControl.TabPosition:=tpBottom;
+                                                TALeft:ZCADMainWindow.PageControl.TabPosition:=tpLeft;
+                                                TARight:ZCADMainWindow.PageControl.TabPosition:=tpRight;
        end;
   end;
   if assigned(SysVar.INTF.INTF_ShowDwgTabCloseBurron) then
   begin
        if SysVar.INTF.INTF_ShowDwgTabCloseBurron^ then
-                                                      MainFormN.PageControl.Options:=MainFormN.PageControl.Options+[nboShowCloseButtons]
+                                                      ZCADMainWindow.PageControl.Options:=ZCADMainWindow.PageControl.Options+[nboShowCloseButtons]
                                                   else
-                                                      MainFormN.PageControl.Options:=MainFormN.PageControl.Options-[nboShowCloseButtons]
+                                                      ZCADMainWindow.PageControl.Options:=ZCADMainWindow.PageControl.Options-[nboShowCloseButtons]
   end
   else
-      MainFormN.PageControl.Options:=[nboShowCloseButtons];
-  MainFormN.PageControl.OnCloseTabClicked:=MainFormN.CloseDWGPageInterf;
-  MainFormN.PageControl.OnMouseDown:=MainFormN.PageControlMouseDown;
-  MainFormN.PageControl.ShowTabs:=SysVar.INTF.INTF_ShowDwgTabs^;
+      ZCADMainWindow.PageControl.Options:=[nboShowCloseButtons];
+  ZCADMainWindow.PageControl.OnCloseTabClicked:=ZCADMainWindow.CloseDWGPageInterf;
+  ZCADMainWindow.PageControl.OnMouseDown:=ZCADMainWindow.PageControlMouseDown;
+  ZCADMainWindow.PageControl.ShowTabs:=SysVar.INTF.INTF_ShowDwgTabs^;
 end;
-procedure MainForm._onCreate(Sender: TObject);
+procedure TZCADMainWindow._onCreate(Sender: TObject);
 begin
   {
   //this unneed after fpc rev 31026 see http://bugs.freepascal.org/view.php?id=13518
   StoreBackTraceStrFunc:=BackTraceStrFunc;
   BackTraceStrFunc:=@SysBackTraceStr;
   }
-  ZCADGUIManager.RegisterZCADFormInfo('PageControl',rsDrawingWindowWndName,Tform,types.rect(200,200,600,500),ZCADMainPanelSetupProc,nil,@MainFormN.MainPanel);
+  ZCADGUIManager.RegisterZCADFormInfo('PageControl',rsDrawingWindowWndName,Tform,types.rect(200,200,600,500),ZCADMainPanelSetupProc,nil,@ZCADMainWindow.MainPanel);
   FAppProps := TApplicationProperties.Create(Self);
   FAppProps.OnException := ZcadException;
   FAppProps.CaptureExceptions := True;
@@ -1439,20 +1438,20 @@ begin
   sysvar.RD.RD_GLUExtensions^:=GLUExtensions;
   OnResize:=_onResize;
 end;
-procedure MainForm._onResize(Sender: TObject);
+procedure TZCADMainWindow._onResize(Sender: TObject);
 var PreferredWidth, PreferredHeight: integer;
 begin
      AdjustHeight(self,true,ToolBarU.Height);
 end;
 
-procedure MainForm.AfterConstruction;
+procedure TZCADMainWindow.AfterConstruction;
 
 begin
     name:='MainForm';
     OnCreate:=_onCreate;
     inherited;
 end;
-procedure MainForm.SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
+procedure TZCADMainWindow.SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
 var
     bmp:Graphics.TBitmap;
 begin
@@ -1497,7 +1496,7 @@ begin
                                                    end;
     b.Parent:=tb;
 end;
-function MainForm.CreateCBox(CBName:GDBString;owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
+function TZCADMainWindow.CreateCBox(CBName:GDBString;owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
 begin
   result:=TComboBox.Create(owner);
   result.Style:=csOwnerDrawFixed;
@@ -1528,7 +1527,7 @@ begin
   updatescontrols.Add(result);
 end;
 
-procedure MainForm.CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
+procedure TZCADMainWindow.CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
 var
     f:GDBOpenArrayOfByte;
     line,ts,ts2,bc,masks:GDBString;
@@ -1748,7 +1747,7 @@ begin
      s:=ExtractFileName(filename);
      LayoutBox.AddItem(copy(s,1,length(s)-4),nil);
 end;
-procedure MainForm.CreateLayoutbox(tb:TToolBar);
+procedure TZCADMainWindow.CreateLayoutbox(tb:TToolBar);
 var
     s:string;
 begin
@@ -1762,7 +1761,7 @@ begin
   LayoutBox.ItemIndex:=LayoutBox.Items.IndexOf(copy(s,1,length(s)-4));
 
 end;
-procedure MainForm.ChangeLayout(Sender:Tobject);
+procedure TZCADMainWindow.ChangeLayout(Sender:Tobject);
 var
     s:string;
 begin
@@ -1770,7 +1769,7 @@ begin
   LoadLayoutFromFile(s);
 end;
 
-procedure MainForm.loadpanels(pf:GDBString);
+procedure TZCADMainWindow.loadpanels(pf:GDBString);
 var
     f:GDBOpenArrayOfByte;
     line:GDBString;
@@ -1829,7 +1828,7 @@ begin
   end;
   f.done;
 end;
-procedure MainForm.loadmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
+procedure TZCADMainWindow.loadmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
 var
     ppopupmenu:TMenuItem;
 begin
@@ -1844,7 +1843,7 @@ begin
            loadsubmenu(f,ppopupmenu,line);
 
 end;
-procedure MainForm.loadpopupmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
+procedure TZCADMainWindow.loadpopupmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
 var
     ppopupmenu:TPopupMenu;
 begin
@@ -1857,7 +1856,7 @@ begin
            loadsubmenu(f,TMenuItem(ppopupmenu),line);
            cxmenumgr.RegisterLCLMenu(ppopupmenu)
 end;
-procedure MainForm.setmainmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
+procedure TZCADMainWindow.setmainmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
 var
     pmenu:TMainMenu;
 begin
@@ -1866,7 +1865,7 @@ begin
      self.Menu:=pmenu;
 end;
 
-procedure MainForm.createmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
+procedure TZCADMainWindow.createmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
 var
     ppopupmenu:TMenuItem;
     ts:GDBString;
@@ -1899,7 +1898,7 @@ begin
   myitem.ImageIndex:=localpm.ImageIndex;
   localpm.localpm.Add(myitem);
 end;
-procedure MainForm.loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
+procedure TZCADMainWindow.loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
 var
     pmenuitem:TmyMenuItem;
     pm1:TMenuItem;
@@ -2072,7 +2071,7 @@ begin
                 end;
            end;
 end;
-procedure MainForm.UpdateControls;
+procedure TZCADMainWindow.UpdateControls;
 var
     i:integer;
 begin
@@ -2088,7 +2087,7 @@ begin
      end;
 end;
 
-procedure  MainForm.ChangedDWGTabCtrl(Sender: TObject);
+procedure  TZCADMainWindow.ChangedDWGTabCtrl(Sender: TObject);
 var
    ogl:TAbstractViewArea;
 begin
@@ -2100,7 +2099,7 @@ begin
      ReturnToDefaultProc(gdb.GetUnitsFormat);
 end;
 
-destructor MainForm.Destroy;
+destructor TZCADMainWindow.Destroy;
 begin
     if DockMaster<>nil then
     DockMaster.CloseAll;
@@ -2109,7 +2108,7 @@ begin
     freeandnil(updatescontrols);
     inherited;
 end;
-procedure MainForm.ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
+procedure TZCADMainWindow.ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
 var
    _disabled:boolean;
    ctrl:TControl;
@@ -2125,9 +2124,9 @@ begin
           if uppercase(TmyAction(AAction).command)='SHOWPAGE' then
           if uppercase(TmyAction(AAction).options)<>'' then
           begin
-               if assigned(mainformn)then
-               if assigned(mainformn.PageControl)then
-               if mainformn.PageControl.ActivePageIndex=strtoint(TmyAction(AAction).options) then
+               if assigned(ZCADMainWindow)then
+               if assigned(ZCADMainWindow.PageControl)then
+               if ZCADMainWindow.PageControl.ActivePageIndex=strtoint(TmyAction(AAction).options) then
                                                                                TmyAction(AAction).Checked:=true
                                                                            else
                                                                                TmyAction(AAction).Checked:=false;
@@ -2176,7 +2175,7 @@ else if AAction is TmyVariableAction then
      end;
 end;
 
-function MainForm.IsShortcut(var Message: TLMKey): boolean;
+function TZCADMainWindow.IsShortcut(var Message: TLMKey): boolean;
 var
    OldFunction:TIsShortcutFunc;
 begin
@@ -2185,7 +2184,7 @@ begin
    result:=IsZShortcut(Message,Screen.ActiveControl,cmdedit,OldFunction);
 end;
 
-procedure MainForm.myKeyPress(Sender: TObject; var Key: Word; Shift: TShiftState);
+procedure TZCADMainWindow.myKeyPress(Sender: TObject; var Key: Word; Shift: TShiftState);
 var
    tempkey:word;
    comtext:string;
@@ -2262,7 +2261,7 @@ begin
                       key:=0;
 end;
 
-procedure MainForm.CreateHTPB(tb:TToolBar);
+procedure TZCADMainWindow.CreateHTPB(tb:TToolBar);
 begin
   ProcessBar:=TProgressBar.create(tb);
   ProcessBar.Hide;
@@ -2285,7 +2284,7 @@ begin
   HintText.Alignment:=taCenter;
   HintText.Parent:=tb;
 end;
-procedure MainForm.idle(Sender: TObject; var Done: Boolean);
+procedure TZCADMainWindow.idle(Sender: TObject; var Done: Boolean);
 var
    pdwg:PTSimpleDrawing;
    rc:TDrawContext;
@@ -2345,17 +2344,17 @@ begin
                                       exit;
      cb.items.InsertObject(cb.items.Count-1,name,obj);
 end;
-procedure MainForm.DropDownColor(Sender:Tobject);
+procedure TZCADMainWindow.DropDownColor(Sender:Tobject);
 begin
      OldColor:=tcombobox(Sender).ItemIndex;
      tcombobox(Sender).ItemIndex:=-1;
 end;
-procedure MainForm.DropUpLType(Sender:Tobject);
+procedure TZCADMainWindow.DropUpLType(Sender:Tobject);
 begin
      tcombobox(Sender).ItemIndex:=0;
 end;
 
-procedure MainForm.DropDownLType(Sender:Tobject);
+procedure TZCADMainWindow.DropDownLType(Sender:Tobject);
 var
    i:integer;
 begin
@@ -2366,12 +2365,12 @@ begin
      end;
      tcombobox(Sender).Items.Objects[gdb.GetCurrentDWG.LTypeStyleTable.Count]:=LTEditor;
 end;
-procedure MainForm.DropUpColor(Sender:Tobject);
+procedure TZCADMainWindow.DropUpColor(Sender:Tobject);
 begin
      if tcombobox(Sender).ItemIndex=-1 then
                                            tcombobox(Sender).ItemIndex:=OldColor;
 end;
-procedure MainForm.ChangeLType(Sender:Tobject);
+procedure TZCADMainWindow.ChangeLType(Sender:Tobject);
 var
    LTIndex,index:Integer;
    CLTSave,plt:PGDBLtypeProp;
@@ -2404,7 +2403,7 @@ begin
      setnormalfocus(nil);
 end;
 
-procedure  MainForm.ChangeCColor(Sender:Tobject);
+procedure  TZCADMainWindow.ChangeCColor(Sender:Tobject);
 var
    ColorIndex,CColorSave,index:Integer;
    mr:integer;
@@ -2452,7 +2451,7 @@ begin
      setnormalfocus(nil);
 end;
 
-procedure  MainForm.ChangeCLineW(Sender:Tobject);
+procedure  TZCADMainWindow.ChangeCLineW(Sender:Tobject);
 var tcl,index:GDBInteger;
 begin
   index:=tcombobox(Sender).ItemIndex;
@@ -2475,7 +2474,7 @@ begin
   setnormalfocus(nil);
 end;
 
-procedure MainForm.GeneralTick(Sender: TObject);
+procedure TZCADMainWindow.GeneralTick(Sender: TObject);
 begin
      if sysvar.SYS.SYS_RunTime<>nil then
      begin
@@ -2484,7 +2483,7 @@ begin
                                            dec(sysvar.SAVE.SAVE_Auto_Current_Interval^);
      end;
 end;
-procedure MainForm.StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName);
+procedure TZCADMainWindow.StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName);
 begin
      LPTime:=now;
      pname:=processname;
@@ -2498,7 +2497,7 @@ begin
   oldlongprocess:=0;
      end;
 end;
-procedure MainForm.ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
+procedure TZCADMainWindow.ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
 var
     pos:integer;
 begin
@@ -2513,25 +2512,25 @@ begin
           end;
      end;
 end;
-function MainForm.MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
+function TZCADMainWindow.MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
 begin
      ShowAllCursors;
      result:=application.MessageBox(Text, Caption,Flags);
      RestoreCursors;
 end;
-procedure MainForm.ShowAllCursors;
+procedure TZCADMainWindow.ShowAllCursors;
 begin
      if gdb.GetCurrentDWG<>nil then
      gdb.GetCurrentDWG.wa.showmousecursor;
 end;
 
-procedure MainForm.RestoreCursors;
+procedure TZCADMainWindow.RestoreCursors;
 begin
      if gdb.GetCurrentDWG<>nil then
      gdb.GetCurrentDWG.wa.hidemousecursor;
 end;
 
-procedure MainForm.Say(word:gdbstring);
+procedure TZCADMainWindow.Say(word:gdbstring);
 begin
      if sysvar.SYS.SYS_IsHistoryLineCreated^ then
      begin
@@ -2542,7 +2541,7 @@ begin
           end;
      end;
 end;
-procedure MainForm.EndLongProcess;
+procedure TZCADMainWindow.EndLongProcess;
 var
    Time:Tdatetime;
    ts:GDBSTRING;
@@ -2564,7 +2563,7 @@ begin
                      uzcshared.HistoryOutStr(format(rsprocesstimemsg,[pname,ts]));
     pname:='';
 end;
-procedure MainForm.ReloadLayer(plt: PGDBNamedObjectsArray);
+procedure TZCADMainWindow.ReloadLayer(plt: PGDBNamedObjectsArray);
 begin
   (*
   {layerbox.ClearText;}
@@ -2588,11 +2587,11 @@ begin
   *)
 end;
 
-procedure MainForm.MainMouseMove;
+procedure TZCADMainWindow.MainMouseMove;
 begin
      cxmenumgr.reset;
 end;
-function MainForm.MainMouseDown(Sender:TAbstractViewArea):GDBBoolean;
+function TZCADMainWindow.MainMouseDown(Sender:TAbstractViewArea):GDBBoolean;
 begin
      if assigned(zcadinterface.SetNormalFocus)then
                                                  zcadinterface.SetNormalFocus(nil);
@@ -2603,7 +2602,7 @@ begin
                                                         else
                                                             result:=false;
 end;
-procedure MainForm.MainMouseUp;
+procedure TZCADMainWindow.MainMouseUp;
 begin
      if assigned(GetCurrentObjProc) then
      if GetCurrentObjProc=@sysvar then
@@ -2612,7 +2611,7 @@ begin
      if assigned(zcadinterface.SetNormalFocus)then
                                                   zcadinterface.SetNormalFocus(nil);
 end;
-procedure MainForm.ShowCXMenu;
+procedure TZCADMainWindow.ShowCXMenu;
 var
   menu:TmyPopupMenu;
 begin
@@ -2626,7 +2625,7 @@ begin
                                        menu.PopUp;
                                   end;
 end;
-procedure MainForm.ShowFMenu;
+procedure TZCADMainWindow.ShowFMenu;
 var
   menu:TmyPopupMenu;
 begin
@@ -2638,7 +2637,7 @@ begin
 end;
 
 
-procedure MainForm._scroll(Sender: TObject; ScrollCode: TScrollCode;var ScrollPos: Integer);
+procedure TZCADMainWindow._scroll(Sender: TObject; ScrollCode: TScrollCode;var ScrollPos: Integer);
 var
    pdwg:PTSimpleDrawing;
    nevpos:gdbvertex;
@@ -2659,7 +2658,7 @@ else if sender=VScrollBar then
      pdwg.wa.draworinvalidate;
   end;
 end;
-procedure MainForm.wamm(Sender:TAbstractViewArea;Shift:TShiftState;X,Y:Integer);
+procedure TZCADMainWindow.wamm(Sender:TAbstractViewArea;Shift:TShiftState;X,Y:Integer);
 var
   f:TzeUnitsFormat;
   htext,htext2:string;
@@ -2704,7 +2703,7 @@ begin
        SBTextOut(htext);
 end;
 
-function MainForm.wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer):boolean;
+function TZCADMainWindow.wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer):boolean;
 var
   key:GDBByte;
   needredraw:boolean;
@@ -2918,7 +2917,7 @@ begin
           end;
      end;
 end;
-procedure MainForm.wakp(Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState);
+procedure TZCADMainWindow.wakp(Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState);
 begin
      if Key=VK_ESCAPE then
      begin
@@ -2960,7 +2959,7 @@ begin
                               key:=00;
                          end
 end;
-procedure MainForm.wams(Sender:TAbstractViewArea;SelectedEntity:GDBPointer);
+procedure TZCADMainWindow.wams(Sender:TAbstractViewArea;SelectedEntity:GDBPointer);
 var
     RelSelectedObjects:Integer;
 begin
@@ -2975,7 +2974,7 @@ begin
     end;
   end;
 end;
-function MainForm.GetEntsDesc(ents:PGDBObjOpenArrayOfPV):GDBString;
+function TZCADMainWindow.GetEntsDesc(ents:PGDBObjOpenArrayOfPV):GDBString;
 var
   i: GDBInteger;
   pp:PGDBObjEntity;
@@ -3014,7 +3013,7 @@ begin
                          until pp=nil;
                     end;
 end;
-procedure MainForm.WaShowCursor(Sender:TAbstractViewArea;var DC:TDrawContext);
+procedure TZCADMainWindow.WaShowCursor(Sender:TAbstractViewArea;var DC:TDrawContext);
 begin
      if sender.param.lastonmouseobject<>nil then
                                            begin
@@ -3022,7 +3021,7 @@ begin
                                              pGDBObjEntity(sender.param.lastonmouseobject)^.higlight(dc);
                                            end;
 end;
-procedure MainForm.waSetObjInsp;
+procedure TZCADMainWindow.waSetObjInsp;
 var
     tn:GDBString;
     ptype:PUserTypeDescriptor;
@@ -3061,13 +3060,13 @@ begin
   end
 end;
 
-procedure MainForm.correctscrollbars;
+procedure TZCADMainWindow.correctscrollbars;
 var
    pdwg:PTSimpleDrawing;
    BB:TBoundingBox;
    size,min,max,position:integer;
 begin
-  if (MainFormN.HScrollBar.Focused)or(MainFormN.VScrollBar.Focused)then
+  if (ZCADMainWindow.HScrollBar.Focused)or(ZCADMainWindow.VScrollBar.Focused)then
                                                                        setnormalfocus(nil);
   pdwg:=gdb.GetCurrentDWG;
   if pdwg<>nil then
@@ -3078,20 +3077,15 @@ begin
   min:=round(bb.LBN.x+size/2);
   max:=round(bb.RTF.x+{$IFDEF LINUX}-{$ENDIF}size/2);
   if max<min then max:=min;
-  MainFormN.HScrollBar.SetParams(position,min,max,size);
+  ZCADMainWindow.HScrollBar.SetParams(position,min,max,size);
 
   size:=round(pdwg.wa.getviewcontrol.ClientHeight*pdwg.GetPcamera^.prop.zoom);
   min:=round(bb.LBN.y+size/2);
   max:=round(bb.RTF.y+{$IFDEF LINUX}-{$ENDIF}size/2);
   if max<min then max:=min;
   position:=round((bb.LBN.y+bb.RTF.y+pdwg.GetPcamera^.prop.point.y));
-  MainFormN.VScrollBar.SetParams(position,min,max,size);
+  ZCADMainWindow.VScrollBar.SetParams(position,min,max,size);
   end;
-end;
-
-function getoglwndparam: GDBPointer; export;
-begin
-  result := addr(gdb.GetCurrentDWG.wa.param);
 end;
 procedure updatevisible; export;
 var
@@ -3102,15 +3096,15 @@ var
 begin
 
    pdwg:=gdb.GetCurrentDWG;
-   if assigned(mainformn)then
+   if assigned(ZCADMainWindow)then
    begin
-   MainFormN.UpdateControls;
-   MainFormN.correctscrollbars;
+   ZCADMainWindow.UpdateControls;
+   ZCADMainWindow.correctscrollbars;
    k:=0;
   if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
   begin
-  mainformn.setvisualprop;
-  mainformn.Caption:='ZCad v'+sysvar.SYS.SYS_Version^+' - ['+gdb.GetCurrentDWG.GetFileName+']';
+  ZCADMainWindow.setvisualprop;
+  ZCADMainWindow.Caption:='ZCad v'+sysvar.SYS.SYS_Version^+' - ['+gdb.GetCurrentDWG.GetFileName+']';
 
   if assigned(LayerBox) then
   LayerBox.enabled:=true;
@@ -3126,87 +3120,87 @@ begin
   DimStyleBox.enabled:=true;
 
 
-  if assigned(MainFormN.PageControl) then
+  if assigned(ZCADMainWindow.PageControl) then
   if assigned(SysVar.INTF.INTF_ShowDwgTabs) then
   if sysvar.INTF.INTF_ShowDwgTabs^ then
-                                       MainFormN.PageControl.ShowTabs:=true
+                                       ZCADMainWindow.PageControl.ShowTabs:=true
                                    else
-                                       MainFormN.PageControl.ShowTabs:=false;
+                                       ZCADMainWindow.PageControl.ShowTabs:=false;
   if assigned(SysVar.INTF.INTF_DwgTabsPosition) then
   begin
        case SysVar.INTF.INTF_DwgTabsPosition^ of
-                                                TATop:MainFormN.PageControl.TabPosition:=tpTop;
-                                                TABottom:MainFormN.PageControl.TabPosition:=tpBottom;
-                                                TALeft:MainFormN.PageControl.TabPosition:=tpLeft;
-                                                TARight:MainFormN.PageControl.TabPosition:=tpRight;
+                                                TATop:ZCADMainWindow.PageControl.TabPosition:=tpTop;
+                                                TABottom:ZCADMainWindow.PageControl.TabPosition:=tpBottom;
+                                                TALeft:ZCADMainWindow.PageControl.TabPosition:=tpLeft;
+                                                TARight:ZCADMainWindow.PageControl.TabPosition:=tpRight;
        end;
   end;
-  if assigned(MainFormN.PageControl) then
+  if assigned(ZCADMainWindow.PageControl) then
   if assigned(SysVar.INTF.INTF_ShowDwgTabCloseBurron) then
   begin
        if SysVar.INTF.INTF_ShowDwgTabCloseBurron^ then
-                                                      MainFormN.PageControl.Options:=MainFormN.PageControl.Options+[nboShowCloseButtons]
+                                                      ZCADMainWindow.PageControl.Options:=ZCADMainWindow.PageControl.Options+[nboShowCloseButtons]
                                                   else
-                                                      MainFormN.PageControl.Options:=MainFormN.PageControl.Options-[nboShowCloseButtons];
+                                                      ZCADMainWindow.PageControl.Options:=ZCADMainWindow.PageControl.Options-[nboShowCloseButtons];
   end;
 
-  if assigned(MainFormN.HScrollBar) then
+  if assigned(ZCADMainWindow.HScrollBar) then
   begin
-  MainFormN.HScrollBar.enabled:=true;
-  MainFormN.correctscrollbars;
+  ZCADMainWindow.HScrollBar.enabled:=true;
+  ZCADMainWindow.correctscrollbars;
   if assigned(sysvar.INTF.INTF_ShowScrollBars) then
   if sysvar.INTF.INTF_ShowScrollBars^ then
-                                       MainFormN.HScrollBar.Show
+                                       ZCADMainWindow.HScrollBar.Show
                                    else
-                                       MainFormN.HScrollBar.Hide;
+                                       ZCADMainWindow.HScrollBar.Hide;
   end;
 
-  if assigned(MainFormN.VScrollBar) then
+  if assigned(ZCADMainWindow.VScrollBar) then
   begin
-  MainFormN.VScrollBar.enabled:=true;
+  ZCADMainWindow.VScrollBar.enabled:=true;
   if assigned(sysvar.INTF.INTF_ShowScrollBars) then
   if sysvar.INTF.INTF_ShowScrollBars^ then
-                                       MainFormN.VScrollBar.Show
+                                       ZCADMainWindow.VScrollBar.Show
                                    else
-                                       MainFormN.VScrollBar.Hide;
+                                       ZCADMainWindow.VScrollBar.Hide;
   end;
-  for i:=0 to MainFormN.PageControl.PageCount-1 do
+  for i:=0 to ZCADMainWindow.PageControl.PageCount-1 do
     begin
-         tobject(poglwnd):=FindControlByType(MainFormN.PageControl.Pages[i]{.PageControl},TOGLwnd);
+         tobject(poglwnd):=FindControlByType(ZCADMainWindow.PageControl.Pages[i]{.PageControl},TOGLwnd);
            if assigned(poglwnd) then
             if poglwnd.wa.PDWG<>nil then
             begin
                 name:=extractfilename(PTDrawing(poglwnd.wa.PDWG)^.FileName);
                 if @PTDRAWING(poglwnd.wa.PDWG).mainObjRoot=(PTDRAWING(poglwnd.wa.PDWG).pObjRoot) then
-                                                                     MainFormN.PageControl.Pages[i].caption:=(name)
+                                                                     ZCADMainWindow.PageControl.Pages[i].caption:=(name)
                                                                  else
-                                                                     MainFormN.PageControl.Pages[i].caption:='BEdit('+name+':'+Tria_AnsiToUtf8(PGDBObjBlockdef(PTDRAWING(poglwnd.wa.PDWG).pObjRoot).Name)+')';
+                                                                     ZCADMainWindow.PageControl.Pages[i].caption:='BEdit('+name+':'+Tria_AnsiToUtf8(PGDBObjBlockdef(PTDRAWING(poglwnd.wa.PDWG).pObjRoot).Name)+')';
 
-                if k<=high(MainFormN.OpenedDrawings) then
+                if k<=high(ZCADMainWindow.OpenedDrawings) then
                 begin
-                MainFormN.OpenedDrawings[k].Caption:=MainFormN.PageControl.Pages[i].caption;
-                MainFormN.OpenedDrawings[k].visible:=true;
-                MainFormN.OpenedDrawings[k].command:='ShowPage';
-                MainFormN.OpenedDrawings[k].options:=inttostr(i);
+                ZCADMainWindow.OpenedDrawings[k].Caption:=ZCADMainWindow.PageControl.Pages[i].caption;
+                ZCADMainWindow.OpenedDrawings[k].visible:=true;
+                ZCADMainWindow.OpenedDrawings[k].command:='ShowPage';
+                ZCADMainWindow.OpenedDrawings[k].options:=inttostr(i);
                 inc(k);
                 end;
                 end;
 
             end;
-  for i:=k to high(MainFormN.OpenedDrawings) do
+  for i:=k to high(ZCADMainWindow.OpenedDrawings) do
   begin
-       MainFormN.OpenedDrawings[i].visible:=false;
+       ZCADMainWindow.OpenedDrawings[i].visible:=false;
   end;
   end
   else
       begin
-           for i:=low(MainFormN.OpenedDrawings) to high(MainFormN.OpenedDrawings) do
+           for i:=low(ZCADMainWindow.OpenedDrawings) to high(ZCADMainWindow.OpenedDrawings) do
              begin
-                         MainFormN.OpenedDrawings[i].Caption:='';
-                         MainFormN.OpenedDrawings[i].visible:=false;
-                         MainFormN.OpenedDrawings[i].command:='';
+                         ZCADMainWindow.OpenedDrawings[i].Caption:='';
+                         ZCADMainWindow.OpenedDrawings[i].visible:=false;
+                         ZCADMainWindow.OpenedDrawings[i].command:='';
              end;
-           mainformn.Caption:=('ZCad v'+sysvar.SYS.SYS_Version^);
+           ZCADMainWindow.Caption:=('ZCad v'+sysvar.SYS.SYS_Version^);
            if assigned(LayerBox)then
            LayerBox.enabled:=false;
            if assigned(LineWBox)then
@@ -3219,25 +3213,25 @@ begin
            DimStyleBox.enabled:=false;
            if assigned(LTypeBox) then
            LTypeBox.enabled:=false;
-           if assigned(MainFormN.HScrollBar) then
+           if assigned(ZCADMainWindow.HScrollBar) then
            begin
-           MainFormN.HScrollBar.enabled:=false;
+           ZCADMainWindow.HScrollBar.enabled:=false;
            if assigned(sysvar.INTF.INTF_ShowScrollBars) then
            if sysvar.INTF.INTF_ShowScrollBars^ then
 
-                                       MainFormN.HScrollBar.Show
+                                       ZCADMainWindow.HScrollBar.Show
                                    else
-                                       MainFormN.HScrollBar.Hide;
+                                       ZCADMainWindow.HScrollBar.Hide;
 
            end;
-           if assigned(MainFormN.VScrollBar) then
+           if assigned(ZCADMainWindow.VScrollBar) then
            begin
-           MainFormN.VScrollBar.enabled:=false;
+           ZCADMainWindow.VScrollBar.enabled:=false;
            if assigned(sysvar.INTF.INTF_ShowScrollBars) then
            if sysvar.INTF.INTF_ShowScrollBars^ then
-                                       MainFormN.VScrollBar.Show
+                                       ZCADMainWindow.VScrollBar.Show
                                    else
-                                       MainFormN.VScrollBar.Hide;
+                                       ZCADMainWindow.VScrollBar.Hide;
            end;
       end;
   end;

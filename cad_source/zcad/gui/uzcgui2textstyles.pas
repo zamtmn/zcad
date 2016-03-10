@@ -22,7 +22,8 @@ unit uzcgui2textstyles;
 interface
 
 uses
-  gdbasetypes,usupportgui,StdCtrls,UGDBDescriptor,uzcstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,uzcsysvars,commandline,zcadinterface;
+  gdbasetypes,usupportgui,StdCtrls,UGDBDescriptor,uzcstrconsts,Controls,Classes,
+  UGDBTextStyleArray,strproc,uzcsysvars,commandline,zcadinterface;
 
 type
   TSupportTStyleCombo = class

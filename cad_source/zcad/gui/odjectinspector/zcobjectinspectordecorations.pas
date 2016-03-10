@@ -44,7 +44,7 @@ procedure ButtonHLineDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;
 function ButtonGetPrefferedFastEditorSize(PInstance:GDBPointer):TSize;
 implementation
 uses
-  uzcmainwindow,uzcgui2linetypes;
+  uzcgui2color,uzcgui2linewidth,uzcgui2linetypes;
 var
    count:integer;
 function LWDecorator(PInstance:GDBPointer):GDBString;
@@ -116,7 +116,7 @@ begin
      CreateComboPropEditor(TheOwner,pinstance,FreeOnLostFocus,PTD,result.editor,cbedit);
      SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6);
      cbedit.Style:=csOwnerDrawFixed;
-     cbedit.OnDrawItem:=MainFormN.LineWBoxDrawItem;
+     cbedit.OnDrawItem:=TSupportLineWidthCombo.LineWBoxDrawItem;
 
      currLW:=PTGDBLineWeight(pinstance)^;
      seli:=0;
@@ -143,7 +143,7 @@ begin
      cbedit:=TComboBox(result.Editor.geteditor);
      SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6);
      cbedit.Style:=csOwnerDrawFixed;
-     cbedit.OnDrawItem:=MainFormN.LTypeBoxDrawItem;
+     cbedit.OnDrawItem:=TSupportLineTypeCombo.LTypeBoxDrawItem;
 end;
 function TextStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 begin
@@ -429,7 +429,7 @@ begin
      CreateComboPropEditor(TheOwner,pinstance,FreeOnLostFocus,PTD,result.editor,cbedit);
      SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6);
      cbedit.Style:=csOwnerDrawFixed;
-     cbedit.OnDrawItem:=MainFormN.ColorDrawItem;
+     cbedit.OnDrawItem:=TSupportColorCombo.ColorDrawItem;
 
      currColor:=PTGDBPaletteColor(pinstance)^;
      seli:=-1;

@@ -22,11 +22,62 @@ unit uzcgui2linetypes;
 interface
 
 uses
-  uzglgdidrawer,geometry, gdbdrawcontext, gdbvisualprop, gdbase, uzglgeometry, ugdbltypearray, graphics,gdbasetypes,usupportgui,StdCtrls,UGDBDescriptor,uzcstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,uzcsysvars,commandline,zcadinterface;
+  uzglgdidrawer,geometry, gdbdrawcontext, gdbvisualprop, gdbase, uzglgeometry,
+  ugdbltypearray, graphics,gdbasetypes,usupportgui,StdCtrls,UGDBDescriptor,
+  uzcstrconsts,Controls,Classes,strproc,uzcsysvars,commandline;
+
+type
+  TSupportLineTypeCombo = class
+                             class procedure LTypeBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+                                                              State: StdCtrls.TOwnerDrawState);
+  end;
 
 procedure drawLT(const canvas:TCanvas;const ARect: TRect;const s:string;const plt:PGDBLtypeProp);safecall;
 
 implementation
+uses
+    uzcmainwindow;
+class procedure TSupportLineTypeCombo.LTypeBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+                                               State: StdCtrls.TOwnerDrawState);
+var
+   plt:PGDBLtypeProp;
+   ll:integer;
+   s:string;
+begin
+    if gdb.GetCurrentDWG=nil then
+                                 exit;
+    if gdb.GetCurrentDWG.LTypeStyleTable.Count=0 then
+                                 exit;
+    ComboBoxDrawItem(Control,ARect,State);
+    if not TComboBox(Control).DroppedDown then
+                                      begin
+                                           plt:=IVars.CLType;
+                                      end
+                                 else
+                                     plt:=PGDBLtypeProp(tcombobox(Control).items.Objects[Index]);
+   if plt=LTEditor then
+                       begin
+                       s:=rsSelectLT;
+                       plt:=nil;
+                       ll:=0;
+                       end
+else if plt<>nil then
+                   begin
+                        s:=Tria_AnsiToUtf8(plt^.Name);
+                        ll:=30;
+                   end
+               else
+                   begin
+                       s:=rsDifferent;
+                       if gdb.GetCurrentDWG.LTypeStyleTable.Count=0 then
+                                 exit;
+                       ll:=0;
+                   end;
+
+    ARect.Left:=ARect.Left+2;
+    drawLT(TComboBox(Control).canvas,ARect,{ll,}s,plt);
+end;
+
 procedure drawLT(const canvas:TCanvas;const ARect: TRect;const s:string;const plt:PGDBLtypeProp);
 var
   y:integer;

@@ -30,7 +30,7 @@ uses
   {FPC}
        lineinfo,
   {ZCAD BASE}
-       uzcgui2linetypes,zemathutils,uzelongprocesssupport,gluinterface,uzglgdidrawer,ugdbdrawing,UGDBOpenArrayOfPV,ugdbabstractdrawing,gdbpalette,paths,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
+       uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,zemathutils,uzelongprocesssupport,gluinterface,uzglgdidrawer,ugdbdrawing,UGDBOpenArrayOfPV,ugdbabstractdrawing,gdbpalette,paths,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
        geometry,uzcsysvars,uzcstrconsts,strproc,UGDBNamedObjectsArray,uzclog,
        varmandef, varman,UUnitManager,uzcsysinfo,uzcshared,strmy,UGDBTextStyleArray,ugdbdimstylearray,
   {ZCAD SIMPLE PASCAL SCRIPT}
@@ -84,14 +84,6 @@ type
     toolbars:tstringlist;
     updatesbytton,updatescontrols:tlist;
     procedure ZcadException(Sender: TObject; E: Exception);
-    procedure LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-                               State: StdCtrls.TOwnerDrawState);
-    procedure ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-                                                   State: StdCtrls.TOwnerDrawState);
-    procedure ColorDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-                                                   State: StdCtrls.TOwnerDrawState);
-    procedure LTypeBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-                                                   State: StdCtrls.TOwnerDrawState);
     function findtoolbatdesk(tbn:string):string;
     procedure CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
     function CreateCBox(CBName:GDBString;owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
@@ -222,7 +214,6 @@ const
      LTEditor:pointer=@LTypeBox;//пофиг что, используем только цифру
   function CloseApp:GDBInteger;
   function IsRealyQuit:GDBBoolean;
-  procedure DrawColor(Canvas:TCanvas; Index: Integer; ARect: TRect);
 
 implementation
 uses enitiesextendervariables,generalviewarea,uzglopenglviewarea;
@@ -1506,131 +1497,6 @@ begin
                                                    end;
     b.Parent:=tb;
 end;
-procedure MainForm.LTypeBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-                                               State: StdCtrls.TOwnerDrawState);
-var
-   plt:PGDBLtypeProp;
-   ll:integer;
-begin
-    if gdb.GetCurrentDWG=nil then
-                                 exit;
-    if gdb.GetCurrentDWG.LTypeStyleTable.Count=0 then
-                                 exit;
-    ComboBoxDrawItem(Control,ARect,State);
-    if not TComboBox(Control).DroppedDown then
-                                      begin
-                                           plt:=IVars.CLType;
-                                      end
-                                 else
-                                     plt:=PGDBLtypeProp(tcombobox(Control).items.Objects[Index]);
-   if plt=LTEditor then
-                       begin
-                       s:=rsSelectLT;
-                       plt:=nil;
-                       ll:=0;
-                       end
-else if plt<>nil then
-                   begin
-                        s:=Tria_AnsiToUtf8(plt^.Name);
-                        ll:=30;
-                   end
-               else
-                   begin
-                       s:=rsDifferent;
-                       if gdb.GetCurrentDWG.LTypeStyleTable.Count=0 then
-                                 exit;
-                       ll:=0;
-                   end;
-
-    ARect.Left:=ARect.Left+2;
-    drawLT(TComboBox(Control).canvas,ARect,{ll,}s,plt);
-end;
-
-procedure MainForm.LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-  State: StdCtrls.TOwnerDrawState);
-var
-   ll:integer;
-begin
-    if gdb.GetCurrentDWG=nil then
-                                 exit;
-    ComboBoxDrawItem(Control,ARect,State);
-    if not TComboBox(Control).DroppedDown then
-                                      begin
-                                           index:=IVars.CLWeight;
-                                      end
-                                 else
-                                     index:=integer(tcombobox(Control).items.Objects[Index]);
-   s:=GetLWNameFromLW(index);
-   if (index<4)or(index=ClDifferent) then
-              ll:=0
-          else
-              ll:=30;
-    ARect.Left:=ARect.Left+2;
-    drawLW(TComboBox(Control).canvas,ARect,ll,(index) div 10,s);
-end;
-procedure DrawColor(Canvas:TCanvas; Index: Integer; ARect: TRect);
-var
-   s:string;
-   textrect: TRect;
-   y:integer;
-   SaveBrushColor:TColor;
-const
-     cellsize=11;
-     textoffset=cellsize+5;
-begin
-  s:=GetColorNameFromIndex(index);
-  ARect.Left:=ARect.Left+2;
-  textrect:=ARect;
-  SaveBrushColor:=canvas.Brush.Color;
-  if index<ClSelColor then
-   begin
-        textrect.Left:=textrect.Left+textoffset;
-        canvas.TextRect(ARect,textrect.Left,(ARect.Top+ARect.Bottom-canvas.TextHeight(s)) div 2,s);
-        if index in [1..255] then
-                       begin
-                            canvas.Brush.Color:=RGBToColor(palette[index].RGB.r,palette[index].RGB.g,palette[index].RGB.b);
-                       end
-                   else
-                       canvas.Brush.Color:=clWhite;
-        y:=(ARect.Top+ARect.Bottom-cellsize)div 2;
-        canvas.Rectangle(ARect.Left,y,ARect.Left+cellsize,y+cellsize);
-        if index=7 then
-                       begin
-                            canvas.Brush.Color:=clBlack;
-                            canvas.Polygon([classes.point(ARect.Left,y),classes.point(ARect.Left+cellsize-1,y),classes.point(ARect.Left+cellsize-1,y+cellsize-1)]);
-                        end
-   end
-  else
-  begin
-       canvas.TextRect(ARect,ARect.Left,(ARect.Top+ARect.Bottom-canvas.TextHeight(s)) div 2,s);
-  end;
-  canvas.Brush.Color:=SaveBrushColor;
-end;
-procedure MainForm.ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-  State: StdCtrls.TOwnerDrawState);
-begin
-    if (gdb.GetCurrentDWG=nil)or(sysvar.DWG.DWG_CColor=nil) then
-    exit;
-    begin
-    ComboBoxDrawItem(Control,ARect,State);
-    if not TComboBox(Control).DroppedDown then
-                                      begin
-                                           index:=IVars.CColor;
-                                      end
-                                 else
-                                     index:=integer(tcombobox(Control).items.Objects[Index]);
-    DrawColor(TComboBox(Control).canvas,Index,ARect);
-    end;
-end;
-procedure MainForm.ColorDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-  State: StdCtrls.TOwnerDrawState);
-begin
-    begin
-    ComboBoxDrawItem(Control,ARect,State);
-    index:=integer(tcombobox(Control).items.Objects[Index]);
-    DrawColor(TComboBox(Control).canvas,Index,ARect);
-    end;
-end;
 function MainForm.CreateCBox(CBName:GDBString;owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
 begin
   result:=TComboBox.Create(owner);
@@ -1820,17 +1686,17 @@ begin
                      if uppercase(line)='LINEWCOMBOBOX' then
                      begin
                           ReadComboSubParam(bc,ts,w);
-                          LineWBox:=CreateCBox(line,tb,LineWBoxDrawItem,ChangeCLineW,DropDownColor,DropUpColor,FillLWCombo,w,ts);
+                          LineWBox:=CreateCBox(line,tb,TSupportLineWidthCombo.LineWBoxDrawItem,ChangeCLineW,DropDownColor,DropUpColor,FillLWCombo,w,ts);
                      end;
                      if uppercase(line)='COLORCOMBOBOX' then
                      begin
                           ReadComboSubParam(bc,ts,w);
-                          ColorBox:=CreateCBox(line,tb,ColorBoxDrawItem,ChangeCColor,DropDownColor,DropUpColor,FillColorCombo,w,ts);
+                          ColorBox:=CreateCBox(line,tb,TSupportColorCombo.ColorBoxDrawItem,ChangeCColor,DropDownColor,DropUpColor,FillColorCombo,w,ts);
                      end;
                      if uppercase(line)='LTYPECOMBOBOX' then
                      begin
                           ReadComboSubParam(bc,ts,w);
-                          LTypeBox:=CreateCBox(line,tb,LTypeBoxDrawItem,ChangeLType,DropDownLType,DropUpLType,FillLTCombo,w,ts);
+                          LTypeBox:=CreateCBox(line,tb,TSupportLineTypeCombo.LTypeBoxDrawItem,ChangeLType,DropDownLType,DropUpLType,FillLTCombo,w,ts);
                      end;
                      if uppercase(line)='TSTYLECOMBOBOX' then
                      begin

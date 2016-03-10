@@ -116,7 +116,7 @@ uses
   GDBCommandsOPS,
   plugins,
   //zcregisterobjectinspector,
-  mainwindow,
+  uzcmainwindow,
   uzcshared,
   uzcstrconsts,
   iopalette,

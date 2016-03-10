@@ -16,16 +16,16 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit usuptstylecombo;
+unit uzcgui2dimstyles;
 {$INCLUDE def.inc}
 
 interface
 
 uses
-  gdbasetypes,usupportgui,StdCtrls,UGDBDescriptor,uzcstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,uzcsysvars,commandline,zcadinterface;
+  usupportgui,StdCtrls,UGDBDescriptor,uzcstrconsts,Controls,Classes,ugdbdimstylearray,strproc,uzcsysvars,commandline,zcadinterface;
 
 type
-  TSupportTStyleCombo = class
+  TSupportDimStyleCombo = class
                              class procedure DropDownTStyle(Sender:Tobject);
                              class procedure CloseUpTStyle(Sender:Tobject);
                              class procedure FillLTStyle(cb:TCustomComboBox);
@@ -36,42 +36,37 @@ type
 
 implementation
 uses
-  mainwindow;
-class procedure TSupportTStyleCombo.DropDownTStyle(Sender:Tobject);
+  uzcmainwindow;
+class procedure TSupportDimStyleCombo.DropDownTStyle(Sender:Tobject);
 var
-  tStyleCounter:integer;
-  ptt:PGDBTextStyleArray;
-  pts:PGDBTextStyle;
-  ir:itrec;
+  i:integer;
+  PDimStyleArray:PGDBDimStyleArray;
+  PDimStyle:PGDBDimStyle;
 begin
   //Correct items count
-  ptt:=@gdb.GetCurrentDWG.TextStyleTable;
-  SetcomboItemsCount(tcombobox(Sender),ptt.GetRealCount);
+  PDimStyleArray:=@gdb.GetCurrentDWG.DimStyleTable;
+  SetcomboItemsCount(tcombobox(Sender),PDimStyleArray.Count);
 
   //Correct items
-  tStyleCounter:=0;
-  pts:=ptt.beginiterate(ir);
-  if pts<>nil then
-  repeat
-       tcombobox(Sender).Items.Objects[tStyleCounter]:=tobject(pts);
-       pts:=ptt.iterate(ir);
-       inc(tStyleCounter);
-  until pts=nil;
+  for i:=0 to PDimStyleArray.Count-1 do
+  begin
+       PDimStyle:=gdb.GetCurrentDWG.DimStyleTable.getelement(i);
+       tcombobox(Sender).Items.Objects[i]:=tobject(PDimStyle);
+  end;
   tcombobox(Sender).ItemIndex:=-1;
 end;
-class procedure TSupportTStyleCombo.CloseUpTStyle(Sender:Tobject);
+class procedure TSupportDimStyleCombo.CloseUpTStyle(Sender:Tobject);
 begin
      tcombobox(Sender).ItemIndex:=0;
 end;
-class procedure TSupportTStyleCombo.FillLTStyle(cb:TCustomComboBox);
+class procedure TSupportDimStyleCombo.FillLTStyle(cb:TCustomComboBox);
 begin
   cb.items.AddObject('', TObject(0));
 end;
-class procedure TSupportTStyleCombo.DrawItemTStyle(Control: TWinControl; Index: Integer; ARect: TRect;
+class procedure TSupportDimStyleCombo.DrawItemTStyle(Control: TWinControl; Index: Integer; ARect: TRect;
                                                      State: TOwnerDrawState);
 var
-  pts:PGDBTextStyle;
-   ll:integer;
+  pts:PGDBDimStyle;
    s:string;
 begin
     if gdb.GetCurrentDWG=nil then
@@ -81,30 +76,28 @@ begin
     ComboBoxDrawItem(Control,ARect,State);
 
     if TComboBox(Control).DroppedDown then
-                                          pts:=PGDBTextStyle(tcombobox(Control).items.Objects[Index])
+                                          pts:=PGDBDimStyle(tcombobox(Control).items.Objects[Index])
                                       else
-                                          pts:=IVars.CTStyle;
+                                          pts:=IVars.CDimStyle;
     if pts<>nil then
                    begin
                         s:=Tria_AnsiToUtf8(pts^.Name);
-                        ll:=0;
                    end
                else
                    begin
                        s:=rsDifferent;
-                       ll:=0;
                    end;
 
     ARect.Left:=ARect.Left+2;
     TComboBox(Control).Canvas.TextRect(ARect,ARect.Left,(ARect.Top+ARect.Bottom-TComboBox(Control).Canvas.TextHeight(s)) div 2,s);
 end;
-class procedure TSupportTStyleCombo.ChangeLType(Sender:Tobject);
+class procedure TSupportDimStyleCombo.ChangeLType(Sender:Tobject);
 var
    index:Integer;
-   CLTSave,pts:PGDBTextStyle;
+   CLTSave,pts:PGDBDimStyle;
 begin
      index:=tcombobox(Sender).ItemIndex;
-     pts:=PGDBTextStyle(tcombobox(Sender).items.Objects[index]);
+     pts:=PGDBDimStyle(tcombobox(Sender).items.Objects[index]);
      if pts=nil then
                          exit;
 
@@ -112,14 +105,14 @@ begin
      if gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
      then
      begin
-          SysVar.dwg.DWG_CTStyle^:=pts;
+          SysVar.dwg.DWG_CDimStyle^:=pts;
      end
      else
      begin
-          CLTSave:=SysVar.dwg.DWG_CTStyle^;
-          SysVar.dwg.DWG_CTStyle^:={TSIndex}pts;
-          commandmanager.ExecuteCommand('SelObjChangeTstyleToCurrent',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
-          SysVar.dwg.DWG_CTStyle^:=CLTSave;
+          CLTSave:=SysVar.dwg.DWG_CDimStyle^;
+          SysVar.dwg.DWG_CDimStyle^:={TSIndex}pts;
+          commandmanager.ExecuteCommand('SelObjChangeDimStyleToCurrent',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+          SysVar.dwg.DWG_CDimStyle^:=CLTSave;
      end;
      if assigned(SetVisuaProplProc) then SetVisuaProplProc;
      //setnormalfocus(nil);

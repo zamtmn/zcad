@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit urtl;
+unit uzcregother;
 {$INCLUDE def.inc}
 interface
 uses paths,UUnitManager,uzcsysvars,uzcstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,Varman,languade,SysUtils,

@@ -46,10 +46,10 @@ uses
   //if need create variables before system.pas loading, place unit bellow
   //
   uzcoiregister,
-  zcregisterzscript,
-  zcregistergeneralwiewarea,
-  zcregisterfontmanager,
-  zcregisterpaths,
+  uzcregzscript,
+  uzcreggeneralwiewarea,
+  uzcregfontmanager,
+  uzcregpaths,
   //
   //next line load system.pas
   //

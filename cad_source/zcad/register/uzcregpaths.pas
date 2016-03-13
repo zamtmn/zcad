@@ -16,14 +16,18 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit zcregisterzscript;
+unit uzcregpaths;
 {$INCLUDE def.inc}
 interface
 uses uzcsysvars,paths,intftranslations,UUnitManager,TypeDescriptors;
 implementation
 
 initialization
-units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'ShowHiddenFieldInObjInsp','GDBBoolean',@debugShowHiddenFieldInObjInsp);
+//units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Program_Run','GDBString',@ProgramPath);
+units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Support_Path','GDBString',@SupportPath);
+sysvar.PATH.Program_Run:=@ProgramPath;
+sysvar.PATH.Support_Path:=@SupportPath;
+sysvar.PATH.Temp_files:=@TempPath;
 finalization
 end.
 

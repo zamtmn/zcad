@@ -215,31 +215,30 @@ procedure TOpenGLViewArea.LightOn;
 var
    p:GDBvertex4F;
 begin
-    //if assigned(SysVar.RD.RD_Light) then
-    begin
-    if sysvarRDLight then
-    begin
-    oglsm.myglEnable(GL_LIGHTING);
-    oglsm.myglEnable(GL_LIGHT0);
-    oglsm.myglEnable (GL_COLOR_MATERIAL);
+    if sysvarRDLight
+    then
+      begin
+        oglsm.myglEnable(GL_LIGHTING);
+        oglsm.myglEnable(GL_LIGHT0);
+        oglsm.myglEnable (GL_COLOR_MATERIAL);
 
-    p.x:=PDWG.Getpcamera^.prop.point.x;
-    p.y:=PDWG.Getpcamera^.prop.point.y;
-    p.z:=PDWG.Getpcamera^.prop.point.z;
-    p.w:=0;
-    oglsm.myglLightfv(GL_LIGHT0,GL_POSITION,@p) ;
-    oglsm.myglMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,50.000000);
-    p.x:=0;
-    p.y:=0;
-    p.z:=0;
-    p.w:=1;
-  oglsm.myglMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,@p);
-  oglsm.myglLightModeli(GL_LIGHT_MODEL_TWO_SIDE,1);
-  oglsm.myglColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
-  oglsm.myglEnable(GL_COLOR_MATERIAL);
-    end
-       else LightOff(dc);
-    end;
+        p.x:=PDWG.Getpcamera^.prop.point.x;
+        p.y:=PDWG.Getpcamera^.prop.point.y;
+        p.z:=PDWG.Getpcamera^.prop.point.z;
+        p.w:=0;
+        oglsm.myglLightfv(GL_LIGHT0,GL_POSITION,@p) ;
+        oglsm.myglMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,50.000000);
+        p.x:=0;
+        p.y:=0;
+        p.z:=0;
+        p.w:=1;
+        oglsm.myglMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,@p);
+        oglsm.myglLightModeli(GL_LIGHT_MODEL_TWO_SIDE,1);
+        oglsm.myglColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
+        oglsm.myglEnable(GL_COLOR_MATERIAL);
+      end
+    else
+        LightOff(dc);
 end;
 procedure TOpenGLViewArea.LightOff;
 begin

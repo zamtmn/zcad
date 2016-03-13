@@ -53,7 +53,7 @@ uses
   //
   //next line load system.pas
   //
-  urtl,//loading rtl/system.pas and setup SysVar
+  uzcregother,//loading rtl/system.pas and setup SysVar
   UUnitManager,
   UGDBFontManager,
   ioshx,iottf,

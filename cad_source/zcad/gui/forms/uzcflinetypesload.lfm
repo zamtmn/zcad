@@ -1,13 +1,15 @@
-object LineWeightSelectWindow: TLineWeightSelectWindow
+object LineTypesLoadForm: TLineTypesLoadForm
   Left = 586
   Height = 536
   Top = 251
   Width = 426
+  ActiveControl = ButtonPanel1.OKButton
   Caption = 'Form1'
   ClientHeight = 536
   ClientWidth = 426
   OnCreate = _oncreate
-  LCLVersion = '1.3'
+  LCLVersion = '1.7'
+  Visible = False
   object ButtonPanel1: TButtonPanel
     Left = 6
     Height = 37
@@ -37,7 +39,7 @@ object LineWeightSelectWindow: TLineWeightSelectWindow
       item
         AutoSize = True
         Caption = 'Name'
-        Width = 554
+        Width = 512
       end    
       item
         AutoSize = True

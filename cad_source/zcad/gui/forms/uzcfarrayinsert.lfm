@@ -1,4 +1,4 @@
-object ArrayInsertFRM: TArrayInsertFRM
+object ArrayInsertForm: TArrayInsertForm
   Left = 914
   Height = 268
   Top = 388
@@ -7,7 +7,8 @@ object ArrayInsertFRM: TArrayInsertFRM
   Caption = 'Массив'
   ClientHeight = 268
   ClientWidth = 486
-  LCLVersion = '1.3'
+  LCLVersion = '1.7'
+  Visible = False
   object SpeedButton1: TSpeedButton
     Left = 288
     Height = 32

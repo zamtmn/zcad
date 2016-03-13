@@ -16,14 +16,14 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit splashwnd;
+unit uzcfsplash;
 {$INCLUDE def.inc}
 interface
 uses
  paths,uzclog,uniqueinstanceraw,uzcstrconsts,strproc,Forms, stdctrls, Controls, Graphics,
  ExtCtrls,gdbasetypes,uzcsysinfo,{fileutil}LazUTF8,sysutils;
 type
-  TSplashWnd = class(TForm)
+  TSplashForm = class(TForm)
     txt:tlabel;
     Logo: TImage;
     cb:TComboBox;
@@ -32,7 +32,7 @@ type
     procedure AfterConstruction; override;
   end;
 var
-   SplashWindow:TSplashWnd;
+   SplashForm:TSplashForm;
 
 procedure createsplash(RunUniqueInstance:boolean);
 procedure removesplash;
@@ -40,11 +40,11 @@ procedure SplashTextOutProc(s:string;pm:boolean);
 implementation
 procedure SplashTextOutProc(s:string;pm:boolean);
 begin
-     if assigned(SplashWindow) then
-                                   SplashWindow.TXTOut(s,true);
+     if assigned(SplashForm) then
+                                   SplashForm.TXTOut(s,true);
 end;
 
-procedure TSplashWnd.TXTOut;
+procedure TSplashForm.TXTOut;
 begin
      self.txt.Caption:=rsVinfotext+#13#10+rsInitialization+#13#10+s;
      if pm then
@@ -52,7 +52,7 @@ begin
            else
                self.txt.repaint;
 end;
-procedure TSplashWnd.AfterConstruction;
+procedure TSplashForm.AfterConstruction;
 begin
   inherited;
   self.DoubleBuffered:=true;
@@ -80,26 +80,26 @@ procedure createsplash;
 begin
      if RunUniqueInstance then
        sysparam.otherinstancerun:=InstanceRunning('zcad unique instance',true,true);
-     SplashWindow:=TSplashWnd.CreateNew(nil);
-     //SplashWindow.cb:=TComboBox.CreateParented(SplashWindow.Handle);
-     SplashWindow.cb:=TComboBox.Create(NIL);
-     SplashWindow.cb.ParentWindow := SplashWindow.Handle;
+     SplashForm:=TSplashForm.CreateNew(nil);
+     //SplashForm.cb:=TComboBox.CreateParented(SplashForm.Handle);
+     SplashForm.cb:=TComboBox.Create(NIL);
+     SplashForm.cb.ParentWindow := SplashForm.Handle;
 
-     SplashWindow.cb.hide;
+     SplashForm.cb.hide;
      if not sysparam.otherinstancerun then
      if not sysparam.nosplash then
-                                  SplashWindow.show;
+                                  SplashForm.show;
      application.ProcessMessages;
-     sysparam.defaultheight:=SplashWindow.cb.Height;
+     sysparam.defaultheight:=SplashForm.cb.Height;
 end;
 procedure removesplash;
 begin
-     if assigned(SplashWindow) then
+     if assigned(SplashForm) then
      begin
-          SplashWindow.cb.Destroy;
-          SplashWindow.hide;
-          SplashWindow.Free;
-          SplashWindow:=nil;
+          SplashForm.cb.Destroy;
+          SplashForm.hide;
+          SplashForm.Free;
+          SplashForm:=nil;
      end;
 end;
 initialization

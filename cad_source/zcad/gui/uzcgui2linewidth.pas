@@ -22,7 +22,7 @@ unit uzcgui2linewidth;
 interface
 
 uses
-  gdbobjectsconstdef,lineweightwnd,usupportgui,StdCtrls,UGDBDescriptor,
+  gdbobjectsconstdef,uzcflineweights,usupportgui,StdCtrls,UGDBDescriptor,
   Controls,Classes,ugdbdimstylearray,strproc,uzcsysvars,commandline;
 
 type

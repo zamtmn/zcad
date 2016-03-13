@@ -1,4 +1,4 @@
-unit sltexteditor;
+unit uzcfsinglelinetexteditor;
 {$INCLUDE def.inc}
 
 interface
@@ -11,9 +11,9 @@ uses
 
 type
 
-  { Tsltexteditor1 }
+  { TSingleLineTextEditorForm }
 
-  Tsltexteditor1 = class(TForm)
+  TSingleLineTextEditorForm = class(TForm)
     OkButton: TButton;
     EditField: TEdit;
     helptext: TLabel;
@@ -26,23 +26,23 @@ type
   end; 
 
 var
-  sltexteditor1: Tsltexteditor1;
+  SingleLineTextEditorForm: TSingleLineTextEditorForm;
 
 implementation
 {$IFNDEF DELPHI}
 {$R *.lfm}
 {$ENDIF}
 
-{ Tsltexteditor1 }
+{ TSingleLineTextEditorForm }
 
-procedure Tsltexteditor1.shoftedform(Sender: TObject);
+procedure TSingleLineTextEditorForm.shoftedform(Sender: TObject);
 begin
      EditField.SelectAll;
      Constraints.MaxHeight:=Height;
      Constraints.MinHeight:=Height;
 end;
 
-procedure Tsltexteditor1.KeyDown(Sender: TObject; var Key: Word;
+procedure TSingleLineTextEditorForm.KeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
 {$IFNDEF DELPHI}

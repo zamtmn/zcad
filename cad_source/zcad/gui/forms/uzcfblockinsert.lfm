@@ -1,4 +1,4 @@
-object BlockInsertFRM: TBlockInsertFRM
+object BlockInsertForm: TBlockInsertForm
   Left = 602
   Height = 320
   Top = 376
@@ -11,12 +11,13 @@ object BlockInsertFRM: TBlockInsertFRM
   Constraints.MinHeight = 320
   Constraints.MinWidth = 480
   OnCreate = FormCreate
-  LCLVersion = '1.1'
+  LCLVersion = '1.7'
+  Visible = False
   object Label1: TLabel
     Left = 8
-    Height = 15
+    Height = 19
     Top = 40
-    Width = 30
+    Width = 34
     Caption = 'Имя: '
     ParentColor = False
   end
@@ -26,12 +27,12 @@ object BlockInsertFRM: TBlockInsertFRM
     Top = 72
     Width = 130
     Caption = 'Точка вставки'
-    ClientHeight = 158
+    ClientHeight = 152
     ClientWidth = 126
     TabOrder = 0
     object Edit2: TEdit
       Left = 32
-      Height = 23
+      Height = 27
       Top = 80
       Width = 80
       TabOrder = 0
@@ -39,7 +40,7 @@ object BlockInsertFRM: TBlockInsertFRM
     end
     object Edit3: TEdit
       Left = 32
-      Height = 23
+      Height = 27
       Top = 120
       Width = 80
       TabOrder = 1
@@ -47,7 +48,7 @@ object BlockInsertFRM: TBlockInsertFRM
     end
     object Edit1: TEdit
       Left = 32
-      Height = 23
+      Height = 27
       Top = 40
       Width = 80
       TabOrder = 2
@@ -55,33 +56,33 @@ object BlockInsertFRM: TBlockInsertFRM
     end
     object Label2: TLabel
       Left = 8
-      Height = 15
+      Height = 19
       Top = 40
-      Width = 13
+      Width = 15
       Caption = 'X: '
       ParentColor = False
     end
     object Label3: TLabel
       Left = 8
-      Height = 15
+      Height = 19
       Top = 72
-      Width = 13
+      Width = 15
       Caption = 'Y: '
       ParentColor = False
     end
     object Label4: TLabel
       Left = 8
-      Height = 15
+      Height = 19
       Top = 120
-      Width = 13
+      Width = 15
       Caption = 'Z: '
       ParentColor = False
     end
     object CheckBox4: TCheckBox
       Left = 8
-      Height = 19
+      Height = 23
       Top = 8
-      Width = 118
+      Width = 138
       Caption = 'Указать на экране'
       OnChange = CheckBox4Change
       TabOrder = 3
@@ -93,12 +94,12 @@ object BlockInsertFRM: TBlockInsertFRM
     Top = 72
     Width = 152
     Caption = 'Масштаб'
-    ClientHeight = 177
+    ClientHeight = 171
     ClientWidth = 148
     TabOrder = 1
     object Edit5: TEdit
       Left = 30
-      Height = 23
+      Height = 27
       Top = 80
       Width = 80
       TabOrder = 0
@@ -106,7 +107,7 @@ object BlockInsertFRM: TBlockInsertFRM
     end
     object Edit6: TEdit
       Left = 30
-      Height = 23
+      Height = 27
       Top = 120
       Width = 80
       TabOrder = 1
@@ -114,7 +115,7 @@ object BlockInsertFRM: TBlockInsertFRM
     end
     object Edit4: TEdit
       Left = 30
-      Height = 23
+      Height = 27
       Top = 40
       Width = 80
       TabOrder = 2
@@ -122,42 +123,42 @@ object BlockInsertFRM: TBlockInsertFRM
     end
     object Label5: TLabel
       Left = 6
-      Height = 15
+      Height = 19
       Top = 40
-      Width = 13
+      Width = 15
       Caption = 'X: '
       ParentColor = False
     end
     object Label6: TLabel
       Left = 6
-      Height = 15
+      Height = 19
       Top = 120
-      Width = 13
+      Width = 15
       Caption = 'Z: '
       ParentColor = False
     end
     object Label7: TLabel
       Left = 6
-      Height = 15
+      Height = 19
       Top = 80
-      Width = 13
+      Width = 15
       Caption = 'Y: '
       ParentColor = False
     end
     object CheckBox3: TCheckBox
       Left = 6
-      Height = 19
+      Height = 23
       Top = 8
-      Width = 118
+      Width = 138
       Caption = 'Указать на экране'
       OnChange = CheckBox3Change
       TabOrder = 3
     end
     object CheckBox5: TCheckBox
       Left = 6
-      Height = 19
+      Height = 23
       Top = 152
-      Width = 123
+      Width = 140
       Caption = 'Равные масштабы'
       OnChange = CheckBox5Change
       TabOrder = 4
@@ -169,12 +170,12 @@ object BlockInsertFRM: TBlockInsertFRM
     Top = 72
     Width = 210
     Caption = 'Угол поворота'
-    ClientHeight = 70
+    ClientHeight = 64
     ClientWidth = 206
     TabOrder = 2
     object Edit7: TEdit
       Left = 78
-      Height = 23
+      Height = 27
       Top = 32
       Width = 88
       TabOrder = 0
@@ -182,17 +183,17 @@ object BlockInsertFRM: TBlockInsertFRM
     end
     object Label8: TLabel
       Left = 14
-      Height = 15
+      Height = 19
       Top = 32
-      Width = 32
+      Width = 35
       Caption = 'Угол: '
       ParentColor = False
     end
     object CheckBox2: TCheckBox
       Left = 14
-      Height = 19
+      Height = 23
       Top = 8
-      Width = 118
+      Width = 138
       Caption = 'Указать на экране'
       OnChange = CheckBox2Change
       TabOrder = 1
@@ -200,9 +201,9 @@ object BlockInsertFRM: TBlockInsertFRM
   end
   object CheckBox1: TCheckBox
     Left = 16
-    Height = 19
+    Height = 23
     Top = 248
-    Width = 84
+    Width = 96
     Caption = 'Расчленить'
     TabOrder = 3
   end
@@ -212,12 +213,12 @@ object BlockInsertFRM: TBlockInsertFRM
     Top = 176
     Width = 210
     Caption = 'Единицы измерений блока'
-    ClientHeight = 73
+    ClientHeight = 67
     ClientWidth = 206
     TabOrder = 4
     object Edit9: TEdit
       Left = 142
-      Height = 23
+      Height = 27
       Top = 40
       Width = 56
       Enabled = False
@@ -226,7 +227,7 @@ object BlockInsertFRM: TBlockInsertFRM
     end
     object Edit8: TEdit
       Left = 62
-      Height = 23
+      Height = 27
       Top = 8
       Width = 136
       Enabled = False
@@ -235,25 +236,25 @@ object BlockInsertFRM: TBlockInsertFRM
     end
     object Label9: TLabel
       Left = 6
-      Height = 15
+      Height = 19
       Top = 8
-      Width = 55
+      Width = 64
       Caption = 'Единицы: '
       ParentColor = False
     end
     object Label10: TLabel
       Left = 6
-      Height = 15
+      Height = 19
       Top = 40
-      Width = 83
+      Width = 94
       Caption = 'Коэффициент: '
       ParentColor = False
     end
   end
   object ButtonPanel1: TButtonPanel
     Left = 6
-    Height = 34
-    Top = 280
+    Height = 37
+    Top = 277
     Width = 508
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
@@ -271,32 +272,32 @@ object BlockInsertFRM: TBlockInsertFRM
     AnchorSideLeft.Side = asrBottom
     AnchorSideRight.Control = Edit10
     AnchorSideRight.Side = asrCenter
-    Left = 43
-    Height = 23
+    Left = 47
+    Height = 27
     Top = 40
-    Width = 437
+    Width = 436
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 5
     BorderSpacing.Right = 5
-    ItemHeight = 15
+    ItemHeight = 19
     TabOrder = 6
     Text = 'ComboBox1'
   end
   object Label11: TLabel
     Left = 6
-    Height = 15
+    Height = 19
     Top = 8
-    Width = 32
+    Width = 37
     Caption = 'Путь: '
     ParentColor = False
   end
   object Edit10: TFileNameEdit
     AnchorSideLeft.Control = Label11
     AnchorSideLeft.Side = asrBottom
-    Left = 43
-    Height = 23
+    Left = 48
+    Height = 27
     Top = 8
-    Width = 439
+    Width = 434
     Filter = 'Drawing Xchange Format|*.dxf|ZCad Drawing|*.dwg'
     FilterIndex = 0
     HideDirectories = False

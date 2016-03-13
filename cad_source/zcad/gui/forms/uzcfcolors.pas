@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 
-unit colorwnd;
+unit uzcfcolors;
 
 {$mode delphi}
 
@@ -32,9 +32,9 @@ type
                       startx,starty,dx,dy:integer
                 end;
 
-  { TColorSelectWND }
+  { TColorSelectForm }
 
-  TColorSelectWND = class(TForm)
+  TColorSelectForm = class(TForm)
     ByBlock: TBitBtn;
     ByLayer: TBitBtn;
     ButtonPanel1: TButtonPanel;
@@ -76,7 +76,7 @@ type
   end;
 
 var
-  ColorSelectWND: TColorSelectWND=nil;
+  ColorSelectForm: TColorSelectForm=nil;
 
 const
   xsize=50;
@@ -87,7 +87,7 @@ implementation
 
 {$R *.lfm}
 
-{ TColorSelectWND }
+{ TColorSelectForm }
 function ColorIndex2Name(ColorInfex:Integer):string;
 begin
      Case ColorInfex of
@@ -100,7 +100,7 @@ begin
      end;
 end;
 
-procedure TColorSelectWND.testsetcolor(Sender: TObject);
+procedure TColorSelectForm.testsetcolor(Sender: TObject);
 var
   s:string;
 begin
@@ -122,12 +122,12 @@ begin
      label3.Caption:=s;
 end;
 
-procedure TColorSelectWND._onCreate(Sender: TObject);
+procedure TColorSelectForm._onCreate(Sender: TObject);
 begin
      ByBlock.Caption:=rsByBlock;
      ByLayer.Caption:=rsByLayer;
 end;
-function TColorSelectWND.run(ci:integer;showBy:boolean):integer;
+function TColorSelectForm.run(ci:integer;showBy:boolean):integer;
 begin
      SpinEdit1.Value:=ci;
      if showBy then
@@ -146,7 +146,7 @@ begin
                    end;
      result:=showmodal;
 end;
-procedure TColorSelectWND.PalettePainter(canvas:Tcanvas; StartIndex,IncIndex,startx,starty,dx,dy,cx,cy:integer);
+procedure TColorSelectForm.PalettePainter(canvas:Tcanvas; StartIndex,IncIndex,startx,starty,dx,dy,cx,cy:integer);
 var
   x,y,xcoord,ycoord,cindex:integer;
 begin
@@ -173,12 +173,12 @@ begin
      end;
 end;
 
-procedure TColorSelectWND.OddPalettePaint(Sender: TObject);
+procedure TColorSelectForm.OddPalettePaint(Sender: TObject);
 begin
      PalettePainter(TPaintBox(sender).Canvas,11,2,OddGeometry.startx,OddGeometry.starty,OddGeometry.dx,OddGeometry.dy,24,5);
 end;
 
-procedure TColorSelectWND.resize(Sender: TObject);
+procedure TColorSelectForm.resize(Sender: TObject);
 var
   h,hone:integer;
 const
@@ -227,17 +227,17 @@ begin
      //caption:=inttostr(clientwidth)+' '+inttostr(clientheight);
 end;
 
-procedure TColorSelectWND.EvenPalettePaint(Sender: TObject);
+procedure TColorSelectForm.EvenPalettePaint(Sender: TObject);
 begin
      PalettePainter(TPaintBox(sender).Canvas,10,2,EvenGeometry.startx,EvenGeometry.starty,EvenGeometry.dx,EvenGeometry.dy,24,5);
 end;
 
-procedure TColorSelectWND.GrayGeometryPaint(Sender: TObject);
+procedure TColorSelectForm.GrayGeometryPaint(Sender: TObject);
 begin
      PalettePainter(TPaintBox(sender).Canvas,250,1,GrayGeometry.startx,GrayGeometry.starty,GrayGeometry.dx,GrayGeometry.dy,6,1);
 end;
 
-procedure TColorSelectWND.MainPalettePaint(Sender: TObject);
+procedure TColorSelectForm.MainPalettePaint(Sender: TObject);
 begin
      PalettePainter(TPaintBox(sender).Canvas,1,1,MainGeometry.startx,MainGeometry.starty,MainGeometry.dx,MainGeometry.dy,9,1);
 end;
@@ -249,41 +249,41 @@ begin
      result:=result+IncIndex*(y div abs(Geom.dy));
 end;
 
-procedure TColorSelectWND.OddMDown(Sender: TObject; Button: TMouseButton;
+procedure TColorSelectForm.OddMDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
      SpinEdit1.Value:=getImdexByXY(x,y,11,2,24,5,oddGeometry);
      //testsetcolor(nil);
 end;
-procedure TColorSelectWND.EvenMDown(Sender: TObject; Button: TMouseButton;
+procedure TColorSelectForm.EvenMDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
      SpinEdit1.Value:=getImdexByXY(x,y,10,2,24,5,evenGeometry);
 end;
 
-procedure TColorSelectWND.ByBlockCLC(Sender: TObject);
+procedure TColorSelectForm.ByBlockCLC(Sender: TObject);
 begin
      SpinEdit1.Value:=0
 end;
 
-procedure TColorSelectWND.ByLayerCLC(Sender: TObject);
+procedure TColorSelectForm.ByLayerCLC(Sender: TObject);
 begin
      SpinEdit1.Value:=256
 end;
 
-procedure TColorSelectWND.mainMdown(Sender: TObject; Button: TMouseButton;
+procedure TColorSelectForm.mainMdown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
      SpinEdit1.Value:=getImdexByXY(x,y,1,1,9,1,mainGeometry);
 end;
 
-procedure TColorSelectWND.grayMDown(Sender: TObject; Button: TMouseButton;
+procedure TColorSelectForm.grayMDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
      SpinEdit1.Value:=getImdexByXY(x,y,250,1,6,1,grayGeometry);
 end;
 
-procedure TColorSelectWND._onshow(Sender: TObject);
+procedure TColorSelectForm._onshow(Sender: TObject);
 begin
      testsetcolor(nil);
      SpinEdit1.SetFocus;

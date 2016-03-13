@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="3">
+    <Units Count="24">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -224,9 +224,132 @@
         <IsPartOfProject Value="True"/>
       </Unit1>
       <Unit2>
-        <Filename Value="zcad/gui/forms/uzcmainwindow.pas"/>
+        <Filename Value="zcad/uzclog.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit2>
+      <Unit3>
+        <Filename Value="zcad/uzcshared.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="zcad/uzcsysinfo.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="zcad/uzcsysvars.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="zcad/gui/forms/uzcflinetypesload.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="LineTypesLoadForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="zcad/gui/forms/uzcflinetypes.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="LineTypesForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="zcad/gui/forms/uzcfunits.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="UnitsForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="zcad/gui/forms/uzcftextstyles.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="TextStylesForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="zcad/gui/forms/uzcflayers.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="LayersForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="zcad/gui/forms/uzcfcolors.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ColorSelectForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="zcad/gui/forms/uzcfsplash.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="zcad/gui/forms/uzcfselector.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="SelectorForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="zcad/gui/forms/uzcfsinglelinetexteditor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="SingleLineTextEditorForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="zcad/gui/forms/uzcflineweights.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="LineWeightSelectForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="zcad/gui/forms/uzcfabout.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="zcad/gui/forms/uzcfhelp.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="zcad/gui/forms/uzcfprojecttree.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="zcad/gui/forms/uzcfsnapeditor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="SnapEditorForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="zcad/gui/forms/uzcfdimstyles.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="DSWindow"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit20>
+      <Unit21>
+        <Filename Value="zcad/gui/forms/uzcfblockinsert.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="BlockInsertForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="zcad/gui/forms/uzcfarrayinsert.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ArrayInsertForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit22>
+      <Unit23>
+        <Filename Value="zcad/gui/uzcmainwindow.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit23>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

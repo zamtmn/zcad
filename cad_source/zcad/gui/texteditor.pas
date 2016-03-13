@@ -22,7 +22,7 @@ interface
 uses
      uzcsysvars,gdbase,gdbasetypes,uzcsysinfo,
      uinfoform,Varman,zcadinterface,
-     UGDBDrawingdef,strproc,GDBText,gdbobjectsconstdef,uzcstrconsts,sltexteditor,
+     UGDBDrawingdef,strproc,GDBText,gdbobjectsconstdef,uzcstrconsts,uzcfsinglelinetexteditor,
      Controls,Classes,Forms;
 var
     InfoForm:TInfoForm=nil;
@@ -60,20 +60,20 @@ begin
      end
      else
      begin
-     if not assigned(sltexteditor1) then
-     Application.CreateForm(Tsltexteditor1, sltexteditor1);
-     sltexteditor1.caption:=(rsTextEditor);
+     if not assigned(SingleLineTextEditorForm) then
+     Application.CreateForm(TSingleLineTextEditorForm, SingleLineTextEditorForm);
+     SingleLineTextEditorForm.caption:=(rsTextEditor);
 
-     sltexteditor1.helptext.Caption:=rsTextEdCaption;
-     sltexteditor1.EditField.TEXT:=astring;
+     SingleLineTextEditorForm.helptext.Caption:=rsTextEdCaption;
+     SingleLineTextEditorForm.EditField.TEXT:=astring;
      if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
-        sltexteditor1.EditField.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
+        SingleLineTextEditorForm.EditField.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
 
-     modalresult:=DOShowModal(sltexteditor1);
+     modalresult:=DOShowModal(SingleLineTextEditorForm);
 
      if modalresult=MrOk then
                          begin
-                              PGDBObjText(pobj)^.Template:=ConvertToDxfString(sltexteditor1.EditField.text);
+                              PGDBObjText(pobj)^.Template:=ConvertToDxfString(SingleLineTextEditorForm.EditField.text);
                          end;
      end;
      if modalresult=MrOk then

@@ -1,8 +1,9 @@
-object LayerWindow: TLayerWindow
+object LayersForm: TLayersForm
   Left = 643
   Height = 590
   Top = 222
   Width = 1051
+  ActiveControl = ButtonApplyClose
   Caption = 'Layers'
   ClientHeight = 590
   ClientWidth = 1051
@@ -12,7 +13,7 @@ object LayerWindow: TLayerWindow
   OnCreate = FormCreate
   OnShow = RefreshListItems
   Position = poMainFormCenter
-  LCLVersion = '1.5'
+  LCLVersion = '1.7'
   Visible = False
   object Bevel1: TBevel
     AnchorSideLeft.Control = ToolBar1
@@ -207,30 +208,35 @@ object LayerWindow: TLayerWindow
     top = 260
     object AddLayer: TAction
       Caption = 'AddLayer'
+      Enabled = False
       Hint = 'Add layer'
       OnExecute = LayerAdd
       ShortCut = 45
     end
     object DelLayer: TAction
       Caption = 'DelLayer'
+      Enabled = False
       Hint = 'Delete layer'
       OnExecute = LayerDelete
       ShortCut = 46
     end
     object MkCurrentLayer: TAction
       Caption = 'MkCurrentLayer'
+      Enabled = False
       Hint = 'Make selected layer current'
       OnExecute = MkCurrent
       ShortCut = 32
     end
     object PurgeLayers: TAction
       Caption = 'PurgeLayers'
+      Enabled = False
       Hint = 'Purge layers'
       OnExecute = _PurgeLayers
       ShortCut = 8238
     end
     object RefreshLayers: TAction
       Caption = 'RefreshLayers'
+      Enabled = False
       Hint = 'Refresh layers'
       OnExecute = RefreshListItems
       ShortCut = 115

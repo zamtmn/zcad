@@ -41,8 +41,8 @@ uses
   {ZCAD COMMANDS}
        commandlinedef,commanddefinternal,commandline,
   {GUI}
-       texteditor,zcobjectinspectordecorations,cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,
-       colorwnd,imagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,
+       texteditor,zcobjectinspectordecorations,cmdline,umytreenode,uzcflineweights,layercombobox,ucxmenumgr,
+       uzcfcolors,imagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,
   {}
        zcchangeundocommand,gdbdrawcontext,uzglopengldrawer,uzglabstractviewarea,zcguimanager;
   {}
@@ -2412,13 +2412,13 @@ begin
      ColorIndex:=integer(tcombobox(Sender).items.Objects[index]);
      if ColorIndex=ClSelColor then
                            begin
-                               if not assigned(ColorSelectWND)then
-                               Application.CreateForm(TColorSelectWND, ColorSelectWND);
+                               if not assigned(ColorSelectForm)then
+                               Application.CreateForm(TColorSelectForm, ColorSelectForm);
                                ShowAllCursors;
-                               mr:=ColorSelectWND.run(SysVar.dwg.DWG_CColor^,true){showmodal};
+                               mr:=ColorSelectForm.run(SysVar.dwg.DWG_CColor^,true){showmodal};
                                if mr=mrOk then
                                               begin
-                                              ColorIndex:=ColorSelectWND.ColorInfex;
+                                              ColorIndex:=ColorSelectForm.ColorInfex;
                                               if assigned(Sender)then
                                               begin
                                               AddToComboIfNeed(tcombobox(Sender),palette[ColorIndex].name,TObject(ColorIndex));
@@ -2431,7 +2431,7 @@ begin
                                                    ColorIndex:=-1;
                                               end;
                                RestoreCursors;
-                               freeandnil(ColorSelectWND);
+                               freeandnil(ColorSelectForm);
                            end;
      if colorindex<0 then
                          exit;

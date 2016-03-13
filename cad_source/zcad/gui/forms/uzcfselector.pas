@@ -1,4 +1,4 @@
-unit selectorwnd;
+unit uzcfselector;
 {$INCLUDE def.inc}
 interface
 
@@ -8,9 +8,9 @@ uses
 
 type
 
-  { TSelectorWindow }
+  { TSelectorForm }
 
-  TSelectorWindow = class(TForm)
+  TSelectorForm = class(TForm)
     ButtonPanel1: TButtonPanel;
     ListView1: TListView;
     procedure _oncreate(Sender: TObject);
@@ -28,21 +28,21 @@ type
   end;
 
 var
-  SelectorWindow: TSelectorWindow=nil;
+  SelectorForm: TSelectorForm=nil;
 implementation
 
 {$R *.lfm}
 
-{ TSelectorWindow }
-procedure TSelectorWindow.StartAddItems;
+{ TSelectorForm }
+procedure TSelectorForm.StartAddItems;
 begin
      ListView1.BeginUpdate;
 end;
-procedure TSelectorWindow.EndAddItems;
+procedure TSelectorForm.EndAddItems;
 begin
      ListView1.EndUpdate;
 end;
-procedure TSelectorWindow.AddItem(Name,Desc:string;data:Pointer);
+procedure TSelectorForm.AddItem(Name,Desc:string;data:Pointer);
 var
    li:TListItem;
 begin
@@ -52,7 +52,7 @@ begin
      li.SubItems.Add(Desc);
 end;
 
-procedure TSelectorWindow._onShow(Sender: TObject);
+procedure TSelectorForm._onShow(Sender: TObject);
 var
    textrect:TRect;
    hh,ih,c:integer;
@@ -68,7 +68,7 @@ begin
      //ListView1.Width:=ListView1.Column[0].Width+ListView1.Column[1].Width;
 end;
 
-procedure TSelectorWindow._onSelect(Sender: TObject; Item: TListItem;
+procedure TSelectorForm._onSelect(Sender: TObject; Item: TListItem;
   Selected: Boolean);
 begin
   if selected then
@@ -77,13 +77,13 @@ begin
   end
 end;
 
-procedure TSelectorWindow._oncreate(Sender: TObject);
+procedure TSelectorForm._oncreate(Sender: TObject);
 begin
      data:=nil;
 end;
 
 
-function TSelectorWindow.run():integer;
+function TSelectorForm.run():integer;
 begin
     result:=showmodal;
     if data=nil then

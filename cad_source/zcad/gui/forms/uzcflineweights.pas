@@ -1,4 +1,4 @@
-unit lineweightwnd;
+unit uzcflineweights;
 {$INCLUDE def.inc}
 interface
 
@@ -8,9 +8,9 @@ uses
 
 type
 
-  { TLineWeightSelectWND }
+  { TLineWeightSelectForm }
 
-  TLineWeightSelectWND = class(TForm)
+  TLineWeightSelectForm = class(TForm)
     ButtonPanel1: TButtonPanel;
     ListBox1: TListBox;
     procedure _oncreate(Sender: TObject);
@@ -28,7 +28,7 @@ const
   lwarray:array [1..24] of TGDBLineWeight=(LnWt000,LnWt005,LnWt009,LnWt013,LnWt015,LnWt018,LnWt020,LnWt025,LnWt030,LnWt035,LnWt040,LnWt050,LnWt053,LnWt060,LnWt070,LnWt080,LnWt090,
                                            LnWt100,LnWt106,LnWt120,LnWt140,LnWt158,LnWt200,LnWt211);
 var
-  LineWeightSelectWND: TLineWeightSelectWND=nil;
+  LineWeightSelectForm: TLineWeightSelectForm=nil;
   function GetLWNameFromN(num:integer):String;
   function GetLWNameFromLW(lw:TGDBLineWeight):String;
   function GetColorNameFromIndex(index:integer):String;
@@ -74,9 +74,9 @@ case index of
 end;
 end;
 
-{ TLineWeightSelectWND }
+{ TLineWeightSelectForm }
 
-procedure TLineWeightSelectWND._oncreate(Sender: TObject);
+procedure TLineWeightSelectForm._oncreate(Sender: TObject);
 //var i:integer;
 begin
      {ListBox1.items.AddObject(rsByLayer,TObject(2));
@@ -111,7 +111,7 @@ begin
   //DrawText(canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_SINGLELINE or DT_VCENTER)
 end;
 
-procedure TLineWeightSelectWND._onDrawItem(Control: TWinControl;
+procedure TLineWeightSelectForm._onDrawItem(Control: TWinControl;
   Index: Integer; ARect: TRect; State: TOwnerDrawState);
 var
   s:string;
@@ -143,11 +143,11 @@ begin
   drawLW(TListBox(Control).canvas,ARect,ll,(index-LnWtNormalizeOffset) div 10,s);
 end;
 
-procedure TLineWeightSelectWND._onSelChg(Sender: TObject; User: boolean);
+procedure TLineWeightSelectForm._onSelChg(Sender: TObject; User: boolean);
 begin
      SelectedLW:=integer(ListBox1.items.Objects[ListBox1.ItemIndex])-LnWtNormalizeOffset;
 end;
-function TLineWeightSelectWND.run(clw:integer;showBy:boolean):integer;
+function TLineWeightSelectForm.run(clw:integer;showBy:boolean):integer;
 var i:integer;
 begin
      if showBy then

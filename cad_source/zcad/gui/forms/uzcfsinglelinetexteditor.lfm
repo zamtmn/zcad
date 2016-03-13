@@ -1,4 +1,4 @@
-object sltexteditor1: Tsltexteditor1
+object SingleLineTextEditorForm: TSingleLineTextEditorForm
   Left = 384
   Height = 40
   Top = 224
@@ -12,7 +12,8 @@ object sltexteditor1: Tsltexteditor1
   OnKeyDown = KeyDown
   OnShow = shoftedform
   Position = poOwnerFormCenter
-  LCLVersion = '1.5'
+  LCLVersion = '1.7'
+  Visible = False
   object EditField: TEdit
     Left = 25
     Height = 40

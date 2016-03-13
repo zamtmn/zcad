@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit helpwnd;
+unit uzcfhelp;
 {$INCLUDE def.inc}
 interface
 uses
@@ -24,16 +24,16 @@ uses
  gdbase{,UGDBDescriptor,math,commandline,varman},languade{,UGDBTracePropArray},
   {zforms,ZEditsWithProcedure,zbasicvisible,varmandef,uzcshared,ZGUIsCT,ZStaticsText,sysinfo,}memman{,gdbasetypes};
 type
-  THelpWnd = class(TFreedForm)
+  THelpForm = class(TFreedForm)
     Memo:TMemo;
     private
     procedure AfterConstruction; override;
   end;
 var
-  Helpwindow:THelpWnd;
+  HelpForm:THelpForm;
 implementation
 uses uzcshared,uzclog;
-procedure THelpWnd.AfterConstruction;
+procedure THelpForm.AfterConstruction;
 begin
   inherited;
   self.Position:=poScreenCenter;

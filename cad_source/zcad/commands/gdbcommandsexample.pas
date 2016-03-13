@@ -40,7 +40,7 @@ uses
 
   URecordDescriptor,TypeDescriptors,
 
-  Forms, blockinsertwnd, arrayinsertwnd,
+  Forms, uzcfblockinsert, arrayinsertwnd,
 
   GDBBlockInsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока
@@ -979,10 +979,10 @@ var
    CreatedData:TEntityModifyData_Point_Scale_Rotation;
    vertex:gdbvertex;
 begin
-  if not assigned(BlockInsertFRM)then                              //если форма несоздана -
-    Application.CreateForm(TBlockInsertFRM, BlockInsertFRM);       //создаем ее
+  if not assigned(BlockInsertForm)then                              //если форма несоздана -
+    Application.CreateForm(TBlockInsertForm, BlockInsertForm);       //создаем ее
 
-  mr:=BlockInsertFRM.run(@gdb.GetCurrentDWG^.BlockDefArray,'_ArchTick');//вызов гуя с передачей адреса таблицы описаний
+  mr:=BlockInsertForm.run(@gdb.GetCurrentDWG^.BlockDefArray,'_ArchTick');//вызов гуя с передачей адреса таблицы описаний
                                                                         //блоков, и делаем вид что в предидущем сеансе команды
                                                                         //мы вставляли блок _dot, гуй его болжен сам выбрать в
                                                                         //комбобоксе, этот параметр нужно сохранять в чертеже
@@ -1030,7 +1030,7 @@ begin
     end;
   end;
 
-  freeandnil(BlockInsertFRM);                                      //убиваем форму
+  freeandnil(BlockInsertForm);                                      //убиваем форму
   result:=cmd_ok;
 end;
 function TestInsert2_com(operands:TCommandOperands):TCommandResult;

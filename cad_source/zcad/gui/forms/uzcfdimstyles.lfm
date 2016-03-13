@@ -7,12 +7,13 @@ object DSWindow: TDSWindow
   ClientHeight = 240
   ClientWidth = 320
   Position = poMainFormCenter
-  LCLVersion = '1.3'
+  LCLVersion = '1.7'
+  Visible = False
   object Label1: TLabel
     Left = 136
-    Height = 15
+    Height = 19
     Top = 16
-    Width = 185
+    Width = 214
     Caption = 'Dim styles wnd not Implemed yet(('
     ParentColor = False
   end

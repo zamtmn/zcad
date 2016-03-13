@@ -22,9 +22,9 @@ unit gdbcommandsinterface;
 interface
 uses
  uzcimport,paths,fileformatsmanager,backendmanager,uzglabstractviewarea,uzglopengldrawer,
- colorwnd,dswnd,ltwnd,tswnd,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,
+ uzcfcolors,uzcfdimstyles,uzcflinetypes,uzcftextstyles,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,
  uzcsysvars,commandline,TypeDescriptors,GDBManager,uzcstrconsts,UGDBStringArray,ucxmenumgr,
- {$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,unitswnd,strproc,umytreenode,menus,
+ {$IFNDEF DELPHI}intftranslations,{$ENDIF}uzcflayers,uzcfunits,strproc,umytreenode,menus,
  {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} {fileutil}LazUTF8,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,
@@ -49,7 +49,7 @@ uses
   GDBEntity,
  uzcshared,
  ugdbdrawing,
-  {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}AboutWnd,HelpWnd,memman,WindowsSpecific,{txteditwnd,}
+  {zmenus,}uzcfprojecttree,gdbasetypes,{optionswnd,}uzcfabout,uzcfhelp,memman,WindowsSpecific,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}uzclog,Varman,UGDBNumerator,cmdline,
  AnchorDocking,dialogs,XMLPropStorage,xmlconf,uzglopenglviewarea{,
    uPSCompiler,
@@ -365,18 +365,18 @@ function units_cmd:GDBInteger;
 var
     _UnitsFormat:TzeUnitsFormat;
 begin
-   if not assigned(UnitsWindow)then
+   if not assigned(UnitsForm)then
    begin
-       UnitsWindow:=TUnitsWindow.Create(nil);
-       SetHeightControl(UnitsWindow,sysvar.INTF.INTF_DefaultControlHeight^);
-       UnitsWindow.BoundsRect:=GetBoundsFromSavedUnit('UnitsWND',SysParam.ScreenX,SysParam.Screeny)
+       UnitsForm:=TUnitsForm.Create(nil);
+       SetHeightControl(UnitsForm,sysvar.INTF.INTF_DefaultControlHeight^);
+       UnitsForm.BoundsRect:=GetBoundsFromSavedUnit('UnitsWND',SysParam.ScreenX,SysParam.Screeny)
    end;
 
    _UnitsFormat:=gdb.GetUnitsFormat;
 
    if assigned(ShowAllCursorsProc) then
                                        ShowAllCursorsProc;
-   result:=UnitsWindow.runmodal(_UnitsFormat,sysvar.DWG.DWG_InsUnits^);
+   result:=UnitsForm.runmodal(_UnitsFormat,sysvar.DWG.DWG_InsUnits^);
    if result=mrok then
                       begin
                         gdb.SetUnitsFormat(_UnitsFormat);
@@ -385,59 +385,59 @@ begin
                       end;
    if assigned(RestoreAllCursorsProc) then
                                        RestoreAllCursorsProc;
-   StoreBoundsToSavedUnit('UnitsWND',UnitsWindow.BoundsRect);
-   Freeandnil(UnitsWindow);
+   StoreBoundsToSavedUnit('UnitsWND',UnitsForm.BoundsRect);
+   Freeandnil(UnitsForm);
    result:=cmd_ok;
 end;
 function layer_cmd:GDBInteger;
 begin
-  LayerWindow:=TLayerWindow.Create(nil);
-  SetHeightControl(LayerWindow,sysvar.INTF.INTF_DefaultControlHeight^);
-  DOShowModal(LayerWindow);
-  Freeandnil(LayerWindow);
+  LayersForm:=TLayersForm.Create(nil);
+  SetHeightControl(LayersForm,sysvar.INTF.INTF_DefaultControlHeight^);
+  DOShowModal(LayersForm);
+  Freeandnil(LayersForm);
   result:=cmd_ok;
 end;
 function TextStyles_cmd:GDBInteger;
 begin
-  TSWindow:=TTextStylesWindow.Create(nil);
-  SetHeightControl(TSWindow,sysvar.INTF.INTF_DefaultControlHeight^);
-  DOShowModal(TSWindow);
-  Freeandnil(TSWindow);
+  TextStylesForm:=TTextStylesForm.Create(nil);
+  SetHeightControl(TextStylesForm,sysvar.INTF.INTF_DefaultControlHeight^);
+  DOShowModal(TextStylesForm);
+  Freeandnil(TextStylesForm);
   result:=cmd_ok;
 end;
 function DimStyles_cmd:GDBInteger;
 begin
-  DSWindow:=TDSWindow.Create(nil);
-  SetHeightControl(DSWindow,sysvar.INTF.INTF_DefaultControlHeight^);
-  DOShowModal(DSWindow);
-  Freeandnil(DSWindow);
+  DimStylesForm:=TDimStylesForm.Create(nil);
+  SetHeightControl(DimStylesForm,sysvar.INTF.INTF_DefaultControlHeight^);
+  DOShowModal(DimStylesForm);
+  Freeandnil(DimStylesForm);
   result:=cmd_ok;
 end;
  function LineTypes_cmd:GDBInteger;
 begin
-  LTWindow:=TLTWindow.Create(nil);
-  SetHeightControl(LTWindow,sysvar.INTF.INTF_DefaultControlHeight^);
-  DOShowModal(LTWindow);
-  Freeandnil(LTWindow);
+  LineTypesForm:=TLineTypesForm.Create(nil);
+  SetHeightControl(LineTypesForm,sysvar.INTF.INTF_DefaultControlHeight^);
+  DOShowModal(LineTypesForm);
+  Freeandnil(LineTypesForm);
   result:=cmd_ok;
 end;
 function Colors_cmd:GDBInteger;
 var
    mr:integer;
 begin
-     if not assigned(ColorSelectWND)then
-     Application.CreateForm(TColorSelectWND, ColorSelectWND);
-     SetHeightControl(ColorSelectWND,sysvar.INTF.INTF_DefaultControlHeight^);
+     if not assigned(ColorSelectForm)then
+     Application.CreateForm(TColorSelectForm, ColorSelectForm);
+     SetHeightControl(ColorSelectForm,sysvar.INTF.INTF_DefaultControlHeight^);
      if assigned(ShowAllCursorsProc) then
                                          ShowAllCursorsProc;
-     mr:=ColorSelectWND.run(SysVar.dwg.DWG_CColor^,true){showmodal};
+     mr:=ColorSelectForm.run(SysVar.dwg.DWG_CColor^,true){showmodal};
      if mr=mrOk then
                     begin
-                    SysVar.dwg.DWG_CColor^:=ColorSelectWND.ColorInfex;
+                    SysVar.dwg.DWG_CColor^:=ColorSelectForm.ColorInfex;
                     end;
      if assigned(RestoreAllCursorsProc) then
                                             RestoreAllCursorsProc;
-     freeandnil(ColorSelectWND);
+     freeandnil(ColorSelectForm);
      result:=cmd_ok;
 end;
 
@@ -527,16 +527,16 @@ begin
 end;
 function About_com(operands:TCommandOperands):TCommandResult;
 begin
-  if not assigned(Aboutwindow) then
-                                  Aboutwindow:=TAboutWnd.mycreate(Application,@Aboutwindow);
-  DOShowModal(Aboutwindow);
+  if not assigned(AboutForm) then
+                                  AboutForm:=TAboutForm.mycreate(Application,@AboutForm);
+  DOShowModal(AboutForm);
   result:=cmd_ok;
 end;
 function Help_com(operands:TCommandOperands):TCommandResult;
 begin
-  if not assigned(Helpwindow) then
-                                  Helpwindow:=THelpWnd.mycreate(Application,@Helpwindow);
-  DOShowModal(Helpwindow);
+  if not assigned(HelpForm) then
+                                  HelpForm:=THelpForm.mycreate(Application,@HelpForm);
+  DOShowModal(HelpForm);
   result:=cmd_ok;
 end;
 function ClearFileHistory_com(operands:TCommandOperands):TCommandResult;
@@ -837,8 +837,8 @@ begin
   CreateCommandFastObjectPlugin(@DebClip_com,'DebClip',0,0);
   CreateCommandFastObjectPlugin(@MemSummary_com,'MeMSummary',0,0);
   CreateCommandFastObjectPlugin(@ShowPage_com,'ShowPage',0,0);
-  Aboutwindow:=nil;
-  Helpwindow:=nil;
+  AboutForm:=nil;
+  HelpForm:=nil;
 end;
 initialization
   startup;

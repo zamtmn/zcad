@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-unit oswnd;
+unit uzcfsnapeditor;
 
 {$mode delphi}
 
@@ -26,9 +26,9 @@ uses
 
 type
 
-  { TOSWindow }
+  { TSnapEditorForm }
 
-  TOSWindow = class(TForm)
+  TSnapEditorForm = class(TForm)
     Label1: TLabel;
   private
     { private declarations }
@@ -37,7 +37,7 @@ type
   end;
 
 var
-  OSWindow: TOSWindow;
+  SnapEditorForm: TSnapEditorForm;
 
 implementation
 

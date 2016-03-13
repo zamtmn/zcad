@@ -1,4 +1,4 @@
-object UnitsWindow: TUnitsWindow
+object UnitsForm: TUnitsForm
   Left = 664
   Height = 476
   Top = 185
@@ -8,7 +8,8 @@ object UnitsWindow: TUnitsWindow
   ClientWidth = 360
   Constraints.MinHeight = 360
   Constraints.MinWidth = 360
-  LCLVersion = '1.5'
+  LCLVersion = '1.7'
+  Visible = False
   object GroupBox3: TGroupBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Panel1

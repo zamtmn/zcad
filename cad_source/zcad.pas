@@ -34,7 +34,7 @@ program zcad;
 uses
   {$IFDEF REPORTMMEMORYLEAKS}heaptrc,{$ENDIF}
   Interfaces,forms, classes,
-  splashwnd,
+  uzcfsplash,
   uzcsysvars,
 
   memman,uzclog,
@@ -98,7 +98,7 @@ uses
   URecordDescriptor,
   //gdbase,
   //splashwnd,
-  projecttreewnd,
+  uzcfprojecttree,
   //ugdbabstractdrawing,
   sysutils,
 
@@ -151,7 +151,7 @@ begin
        SetHeapTraceOutput('log/memory-heaptrace.txt');
        keepreleased:=true;
 {$ENDIF}
-  //Application_Initialize перемещен в инициализацию splashwnd чтоб показать сплэш пораньше
+  //Application_Initialize перемещен в инициализацию uzcfsplash чтоб показать сплэш пораньше
   //Application.Initialize;
 
   //инициализация GDB
@@ -166,7 +166,7 @@ begin
   historyoutstr(format(rsZCADStarted,[sysvar.SYS.SYS_Version^]));
   gdbplugins.loadplugins(ProgramPath+'PLUGINS\');
 
-  SplashWindow.TXTOut('Выполнение *components\autorun.cmd',false);commandmanager.executefile('*components/autorun.cmd',gdb.GetCurrentDWG,nil);
+  SplashForm.TXTOut('Выполнение *components\autorun.cmd',false);commandmanager.executefile('*components/autorun.cmd',gdb.GetCurrentDWG,nil);
   if sysparam.preloadedfile<>'' then
                                     begin
                                          commandmanager.executecommand('Load('+sysparam.preloadedfile+')',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
@@ -187,7 +187,7 @@ begin
   //SplashWindow.TXTOut('GDBCommandsOPS.finalize;');GDBCommandsOPS.finalize;
   //SplashWindow.TXTOut('GDBCommandsElectrical.finalize;');GDBCommandsElectrical.finalize;
 
-  SplashWindow.TXTOut('ugdbdescriptor.finalize;',false);ugdbdescriptor.finalize;
+  SplashForm.TXTOut('ugdbdescriptor.finalize;',false);ugdbdescriptor.finalize;
 
   programlog.logoutstr('END.',0,LM_Necessarily);
   programlog.logoutstr('<<<<<<<<<<<<<<<Start units finalization',0,LM_Debug);

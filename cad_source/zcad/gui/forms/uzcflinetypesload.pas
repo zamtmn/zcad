@@ -1,4 +1,4 @@
-unit linetypesloadwnd;
+unit uzcflinetypesload;
 {$INCLUDE def.inc}
 interface
 
@@ -8,9 +8,9 @@ uses
 
 type
 
-  { TLineWeightSelectWindow }
+  { TLineTypesLoadForm }
 
-  TLineWeightSelectWindow = class(TForm)
+  TLineTypesLoadForm = class(TForm)
     ButtonPanel1: TButtonPanel;
     FileNameEdit1: TFileNameEdit;
     ListView1: TListView;
@@ -27,13 +27,13 @@ type
   end;
 
 var
-  LineWeightSelectWindow: TLineWeightSelectWindow=nil;
+  LineTypesLoadForm: TLineTypesLoadForm=nil;
 implementation
 
 {$R *.lfm}
 
-{ TLineWeightSelectWindow }
-procedure TLineWeightSelectWindow.LoadFromFile(filename:string);
+{ TLineTypesLoadForm }
+procedure TLineTypesLoadForm.LoadFromFile(filename:string);
 var
    li:TListItem;
    ltd:TStringList;
@@ -65,7 +65,7 @@ begin
      ListView1.EndUpdate;
 end;
 
-procedure TLineWeightSelectWindow._onSelect(Sender: TObject; Item: TListItem;
+procedure TLineTypesLoadForm._onSelect(Sender: TObject; Item: TListItem;
   Selected: Boolean);
 begin
   if selected then
@@ -74,7 +74,7 @@ begin
   end
 end;
 
-procedure TLineWeightSelectWindow._oncreate(Sender: TObject);
+procedure TLineTypesLoadForm._oncreate(Sender: TObject);
 //var i:integer;
 begin
      {ListBox1.items.AddObject(rsByLayer,TObject(2));
@@ -87,13 +87,13 @@ begin
      ListBox1.ItemIndex:=0;}
 end;
 
-procedure TLineWeightSelectWindow._changefile(Sender: TObject);
+procedure TLineTypesLoadForm._changefile(Sender: TObject);
 begin
      text:='';
      LoadFromFile(FileNameEdit1.FileName);
 end;
 
-function TLineWeightSelectWindow.run(filename:string):integer;
+function TLineTypesLoadForm.run(filename:string):integer;
 begin
      LoadFromFile(filename);
      FileNameEdit1.FileName:=filename;

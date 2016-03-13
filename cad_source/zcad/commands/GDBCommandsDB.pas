@@ -37,7 +37,7 @@ uses
 procedure DBLinkProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
 
 implementation
-uses enitiesextendervariables,sltexteditor,UObjectDescriptor,projecttreewnd,commandline,uzclog,GDBSubordinated;
+uses enitiesextendervariables,uzcfsinglelinetexteditor,UObjectDescriptor,uzcfprojecttree,commandline,uzclog,GDBSubordinated;
 
 function DBaseAdd_com(operands:TCommandOperands):TCommandResult;
 var //t:PUserTypeDescriptor;
@@ -78,16 +78,16 @@ begin
            pdbv:=pu.InterfaceVariables.findvardescbyinst(PTTypedData(commandmanager.ContextCommandParams)^.Instance);
            if pdbv<>nil then
            begin
-                 if sltexteditor1=nil then
-                                  Application.CreateForm(Tsltexteditor1, sltexteditor1);
-                 sltexteditor1.caption:=('Rename entry');
-                 sltexteditor1.helptext.Caption:=' _EQ ';
-                 sltexteditor1.EditField.Caption:=copy(pdbv.name,4,length(pdbv.name)-3);
+                 if SingleLineTextEditorForm=nil then
+                                  Application.CreateForm(TSingleLineTextEditorForm, SingleLineTextEditorForm);
+                 SingleLineTextEditorForm.caption:=('Rename entry');
+                 SingleLineTextEditorForm.helptext.Caption:=' _EQ ';
+                 SingleLineTextEditorForm.EditField.Caption:=copy(pdbv.name,4,length(pdbv.name)-3);
                  renamed:=false;
                  repeat
-                 if DoShowModal(sltexteditor1)=mrok then
+                 if DoShowModal(SingleLineTextEditorForm)=mrok then
                  begin
-                      s:='_EQ'+sltexteditor1.EditField.Caption;
+                      s:='_EQ'+SingleLineTextEditorForm.EditField.Caption;
                       s1:=s;
 
                       if pu^.FindVariable(s)<>nil then
@@ -108,7 +108,7 @@ begin
                                                uzcshared.ShowError(format(rsInvalidIdentificator,[s]));
                       end;
                  end;
-                 until renamed or (sltexteditor1.ModalResult<>mrok);
+                 until renamed or (SingleLineTextEditorForm.ModalResult<>mrok);
            end;
      end
         else

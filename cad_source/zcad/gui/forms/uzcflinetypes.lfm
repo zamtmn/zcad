@@ -1,4 +1,4 @@
-object LTWindow: TLTWindow
+object LineTypesForm: TLineTypesForm
   Left = 226
   Height = 616
   Top = 131
@@ -10,7 +10,7 @@ object LTWindow: TLTWindow
   OnClose = _close
   OnCreate = _onCreate
   Position = poMainFormCenter
-  LCLVersion = '1.5'
+  LCLVersion = '1.7'
   Visible = False
   object ButtonPanel1: TButtonPanel
     Left = 1

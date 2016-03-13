@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-unit dswnd;
+unit uzcfdimstyles;
 
 {$mode delphi}
 
@@ -26,9 +26,9 @@ uses
 
 type
 
-  { TDSWindow }
+  { TDimStylesForm }
 
-  TDSWindow = class(TForm)
+  TDimStylesForm = class(TForm)
     Label1: TLabel;
   private
     { private declarations }
@@ -37,7 +37,7 @@ type
   end;
 
 var
-  DSWindow: TDSWindow;
+  DimStylesForm: TDimStylesForm;
 
 implementation
 

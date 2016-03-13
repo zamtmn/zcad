@@ -16,7 +16,7 @@
 Project tree form
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-unit projecttreewnd;
+unit uzcfprojecttree;
 {$INCLUDE def.inc}
 interface
 uses
@@ -47,7 +47,7 @@ type
 
   {**@abstract(Project tree class)
       Project tree class desk}
-  TProjectTreeWnd = class(TFreedForm)
+  TProjectTreeForm = class(TFreedForm)
     PT_PageControl:TmyPageControl;{**<??}
     PT_P_ProgramDB:TTabSheet;{**<Чтото там для описания}
     PT_P_ProjectDB:TTabSheet;
@@ -64,7 +64,7 @@ type
     procedure ChangePage(Sender: TObject);
   end;
 var
-  ProjectTreeWindow:TProjectTreeWnd;{<Дерево проекта}
+  ProjectTreeForm:TProjectTreeForm;{<Дерево проекта}
   BlockCategory,EqCategory:GDBGDBStringArray;
 
   //ProgramDBContextMenuN,ProjectDBContextMenuN,ProgramDEVContextMenuN:TmyPopupMenu;
@@ -128,7 +128,7 @@ begin
      result:=category;
 end;
 
-procedure TProjectTreeWnd.ChangePage;
+procedure TProjectTreeForm.ChangePage;
 begin
      if sender is TmyPageControl then
      if TmyPageControl(sender).ActivePageIndex=1 then
@@ -171,7 +171,7 @@ begin
      i:=pos('_',treepos);
      until (i=0)or(category=uncat);
 end;
-procedure TProjectTreeWnd.BuildTreeByEQ(var BuildNode:TmyTreeNode;PDBUNIT:PTUnit;pcm:TmyPopupMenu);
+procedure TProjectTreeForm.BuildTreeByEQ(var BuildNode:TmyTreeNode;PDBUNIT:PTUnit;pcm:TmyPopupMenu);
 var
    pvdeq:pvardesk;
    ir:itrec;
@@ -245,14 +245,14 @@ begin
         pvdeq:=PDBUNIT^.InterfaceVariables.vardescarray.iterate(ir);
   until pvdeq=nil;
 end;
-procedure TProjectTreeWnd.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+procedure TProjectTreeForm.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   inherited;
   if CloseAction=caFree then
                             StoreBoundsToSavedUnit('ProjectTreeWND',self.BoundsRect);
 end;
 
-procedure TProjectTreeWnd.AfterConstruction;
+procedure TProjectTreeForm.AfterConstruction;
 var
    //tnode:TTreeNode;
    pb:PGDBObjBlockdef;
@@ -349,13 +349,13 @@ begin
 end;
 function ProjectTree_com(Operands:pansichar):GDBInteger;
 begin
-  if not assigned(ProjectTreeWindow) then
-                                  ProjectTreeWindow:=TProjectTreeWnd.mycreate(Application,@ProjectTreeWindow);
-  ProjectTreeWindow.Show;
+  if not assigned(ProjectTreeForm) then
+                                  ProjectTreeForm:=TProjectTreeForm.mycreate(Application,@ProjectTreeForm);
+  ProjectTreeForm.Show;
 end;
 initialization
 begin
-  ProjectTreeWindow:=nil;
+  ProjectTreeForm:=nil;
   BlockCategory.init(100);
   EqCategory.init(100);
   BlockCategory.loadfromfile(expandpath('*rtl/BlockCategory.cat'));

@@ -1,11 +1,11 @@
-unit LayerWnd;
+unit uzcflayers;
 {$INCLUDE def.inc}
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  zcchangeundocommand,zcobjectchangeundocommand2,ugdbdrawing,gdbpalette,usuptypededitors,LMessages,selectorwnd,ugdbltypearray,ugdbutil,uzclog,lineweightwnd,colorwnd,ugdbsimpledrawing,uzcsysvars,Classes, SysUtils,
+  zcchangeundocommand,zcobjectchangeundocommand2,ugdbdrawing,gdbpalette,usuptypededitors,LMessages,uzcfselector,ugdbltypearray,ugdbutil,uzclog,uzcflineweights,uzcfcolors,ugdbsimpledrawing,uzcsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 
@@ -31,9 +31,9 @@ type
 
   { TTextStylesWindow }
 
-  { TLayerWindow }
+  { TLayersForm }
 
-  TLayerWindow = class(TForm)
+  TLayersForm = class(TForm)
     RefreshLayers: TAction;
     AddLayer: TAction;
     DelLayer: TAction;
@@ -113,12 +113,12 @@ type
   end;
 
 var
-  LayerWindow: TLayerWindow;
+  LayersForm: TLayersForm;
 implementation
 uses
     uzcgui2linetypes;
 {$R *.lfm}
-procedure TLayerWindow.CreateUndoStartMarkerNeeded;
+procedure TLayersForm.CreateUndoStartMarkerNeeded;
 begin
   if not IsUndoEndMarkerCreated then
    begin
@@ -126,7 +126,7 @@ begin
     ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushStartMarker('Change layers');
    end;
 end;
-procedure TLayerWindow.CreateUndoEndMarkerNeeded;
+procedure TLayersForm.CreateUndoEndMarkerNeeded;
 begin
   if IsUndoEndMarkerCreated then
    begin
@@ -135,7 +135,7 @@ begin
    end;
 end;
 
-function TLayerWindow.IsShortcut(var Message: TLMKey): boolean;
+function TLayersForm.IsShortcut(var Message: TLMKey): boolean;
 var
    OldFunction:TIsShortcutFunc;
 begin
@@ -145,21 +145,21 @@ begin
 end;
 
 {layer name handle procedures}
-function TLayerWindow.createnameeditor(Item: TListItem;r: TRect):boolean;
+function TLayersForm.createnameeditor(Item: TListItem;r: TRect):boolean;
 begin
   //createeditor(Item,r,@PGDBLayerProp(Item.Data)^.Name);
   result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBLayerProp(Item.Data)^.Name,'GDBAnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top);
 end;
-function TLayerWindow.GetLayerName(Item: TListItem):string;
+function TLayersForm.GetLayerName(Item: TListItem):string;
 begin
   result:=Tria_AnsiToUtf8(PGDBLayerProp(Item.Data)^.Name);
 end;
 {layer lock handle procedures}
-function TLayerWindow.IsLayerLock(Item: TListItem):boolean;
+function TLayersForm.IsLayerLock(Item: TListItem):boolean;
 begin
      result:=PGDBLayerProp(Item.Data)^._lock;
 end;
-function TLayerWindow.LayerLockClick(Item: TListItem;r: TRect):boolean;
+function TLayersForm.LayerLockClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
      CreateUndoStartMarkerNeeded;
@@ -170,11 +170,11 @@ begin
      end;
 end;
 {layer on handle procedures}
-function TLayerWindow.IsLayerOn(Item: TListItem):boolean;
+function TLayersForm.IsLayerOn(Item: TListItem):boolean;
 begin
      result:=PGDBLayerProp(Item.Data)^._on;
 end;
-function TLayerWindow.LayerOnClick(Item: TListItem;r: TRect):boolean;
+function TLayersForm.LayerOnClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
      CreateUndoStartMarkerNeeded;
@@ -185,16 +185,16 @@ begin
      end;
 end;
 {layer freze handle procedures}
-function TLayerWindow.IsLayerFreze(Item: TListItem):boolean;
+function TLayersForm.IsLayerFreze(Item: TListItem):boolean;
 begin
      result:=false;
 end;
 {layer plot handle procedures}
-function TLayerWindow.IsLayerPlot(Item: TListItem):boolean;
+function TLayersForm.IsLayerPlot(Item: TListItem):boolean;
 begin
      result:=PGDBLayerProp(Item.Data)^._print;
 end;
-function TLayerWindow.LayerPlotClick(Item: TListItem;r: TRect):boolean;
+function TLayersForm.LayerPlotClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
      CreateUndoStartMarkerNeeded;
@@ -205,7 +205,7 @@ begin
      end;
 end;
 {layer color handle procedures}
-procedure TLayerWindow.ColorSubitemDraw(aCanvas:TCanvas; Item: TListItem; SubItem:Integer; State: TCustomDrawState);
+procedure TLayersForm.ColorSubitemDraw(aCanvas:TCanvas; Item: TListItem; SubItem:Integer; State: TCustomDrawState);
 var
    colorindex:integer;
    s:string;
@@ -246,40 +246,40 @@ begin
   else
    DrawText(aCanvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_SINGLELINE or DT_VCENTER);
 end;
-function TLayerWindow.GetColorName(Item: TListItem):string;
+function TLayersForm.GetColorName(Item: TListItem):string;
 begin
      result:=GetColorNameFromIndex(PGDBLayerProp(Item.Data)^.color);
 end;
 
-function TLayerWindow.LayerColorClick(Item: TListItem;r: TRect):boolean;
+function TLayersForm.LayerColorClick(Item: TListItem;r: TRect):boolean;
 var
    mr:integer;
 begin
-  if not assigned(ColorSelectWND)then
-    Application.CreateForm(TColorSelectWND, ColorSelectWND);
+  if not assigned(ColorSelectForm)then
+    Application.CreateForm(TColorSelectForm, ColorSelectForm);
   if assigned(ShowAllCursorsProc) then
     ShowAllCursorsProc;
-  mr:=ColorSelectWND.run(PGDBLayerProp(Item.Data)^.color,false);
+  mr:=ColorSelectForm.run(PGDBLayerProp(Item.Data)^.color,false);
   if assigned(RestoreAllCursorsProc) then
     RestoreAllCursorsProc;
   if mr=mrOk then
     begin
-      if PGDBLayerProp(Item.Data)^.color<>ColorSelectWND.ColorInfex then
+      if PGDBLayerProp(Item.Data)^.color<>ColorSelectForm.ColorInfex then
         begin
            CreateUndoStartMarkerNeeded;
            with PushCreateTGChangeCommand(ptdrawing(GDB.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^.color)^ do
            begin
-             PGDBLayerProp(Item.Data)^.color:=ColorSelectWND.ColorInfex;
+             PGDBLayerProp(Item.Data)^.color:=ColorSelectForm.ColorInfex;
              ComitFromObj;
            end;
-          //Item.SubItems[4]:=GetColorNameFromIndex(ColorSelectWND.ColorInfex);
+          //Item.SubItems[4]:=GetColorNameFromIndex(ColorSelectForm.ColorInfex);
           result:=true;
         end;
     end;
-  freeandnil(ColorSelectWND);
+  freeandnil(ColorSelectForm);
 end;
 {layer LineType handle procedures}
-procedure TLayerWindow.LtSubitemDraw(aCanvas:TCanvas; Item: TListItem; SubItem:Integer; State: TCustomDrawState);
+procedure TLayersForm.LtSubitemDraw(aCanvas:TCanvas; Item: TListItem; SubItem:Integer; State: TCustomDrawState);
 var
    colorindex:integer;
    s:string;
@@ -293,7 +293,7 @@ ARect := Item.DisplayRectSubItem( SubItem,drLabel);
 s:=strproc.Tria_AnsiToUtf8(GetLTName(PGDBLayerProp(Item.Data)^.LT));
 drawLT(aCanvas,ARect,s,PGDBLayerProp(Item.Data)^.LT);
 end;
-procedure FillSelector(SelectorWindow: TSelectorWindow);
+procedure FillSelector(SelectorWindow: TSelectorForm);
 var
    pdwg:PTSimpleDrawing;
    ir:itrec;
@@ -314,32 +314,32 @@ begin
      end;
      SelectorWindow.EndAddItems;
 end;
-function TLayerWindow.GetLineTypeName(Item: TListItem):string;
+function TLayersForm.GetLineTypeName(Item: TListItem):string;
 begin
      result:=strproc.Tria_AnsiToUtf8(GetLTName(PGDBLayerProp(Item.Data)^.LT));
 end;
 
-function TLayerWindow.LayerLTClick(Item: TListItem;r: TRect):boolean;
+function TLayersForm.LayerLTClick(Item: TListItem;r: TRect):boolean;
 var
    mr:integer;
 begin
-  if not assigned(SelectorWindow)then
-  Application.CreateForm(TSelectorWindow, SelectorWindow);
-  FillSelector(SelectorWindow);
+  if not assigned(SelectorForm)then
+  Application.CreateForm(TSelectorForm, SelectorForm);
+  FillSelector(SelectorForm);
   if assigned(ShowAllCursorsProc) then
                                       ShowAllCursorsProc;
-  mr:=SelectorWindow.run;
+  mr:=SelectorForm.run;
   if assigned(RestoreAllCursorsProc) then
                                       RestoreAllCursorsProc;
   if mr=mrOk then
                  begin
-                      PGDBLayerProp(Item.Data)^.LT:=SelectorWindow.data;
+                      PGDBLayerProp(Item.Data)^.LT:=SelectorForm.data;
                       result:=true;
                  end;
-  freeandnil(SelectorWindow);
+  freeandnil(SelectorForm);
 end;
 {layer LineWidth handle procedures}
-procedure TLayerWindow.LWSubitemDraw(aCanvas:TCanvas; Item: TListItem; SubItem:Integer; State: TCustomDrawState);
+procedure TLayersForm.LWSubitemDraw(aCanvas:TCanvas; Item: TListItem; SubItem:Integer; State: TCustomDrawState);
 var
    colorindex,ll:integer;
    s:string;
@@ -357,43 +357,43 @@ begin
              ll:=30;
    drawLW(aCanvas,ARect,ll,(colorindex) div 10,s);
 end;
-function TLayerWindow.GetLineWeightName(Item: TListItem):string;
+function TLayersForm.GetLineWeightName(Item: TListItem):string;
 begin
      result:=GetLWNameFromLW(PGDBLayerProp(Item.Data)^.lineweight);
 end;
 
-function TLayerWindow.LayerLWClick(Item: TListItem;r: TRect):boolean;
+function TLayersForm.LayerLWClick(Item: TListItem;r: TRect):boolean;
 var
    mr:integer;
 begin
-  if not assigned(LineWeightSelectWND)then
-  Application.CreateForm(TLineWeightSelectWND, LineWeightSelectWND);
+  if not assigned(LineWeightSelectForm)then
+  Application.CreateForm(TLineWeightSelectForm, LineWeightSelectForm);
   if assigned(ShowAllCursorsProc) then
                                       ShowAllCursorsProc;
-  mr:=LineWeightSelectWND.run(PGDBLayerProp(Item.Data)^.lineweight,false);
+  mr:=LineWeightSelectForm.run(PGDBLayerProp(Item.Data)^.lineweight,false);
   if assigned(RestoreAllCursorsProc) then
                                       RestoreAllCursorsProc;
   if mr=mrOk then
                  begin
-                      PGDBLayerProp(Item.Data)^.lineweight:=LineWeightSelectWND.SelectedLW;
-                      Item.SubItems[6]:=GetLWNameFromLW(LineWeightSelectWND.SelectedLW);
+                      PGDBLayerProp(Item.Data)^.lineweight:=LineWeightSelectForm.SelectedLW;
+                      Item.SubItems[6]:=GetLWNameFromLW(LineWeightSelectForm.SelectedLW);
                       result:=true;
                  end;
-  freeandnil(LineWeightSelectWND);
+  freeandnil(LineWeightSelectForm);
 end;
 {layer description handle procedures}
-function TLayerWindow.createdesceditor(Item: TListItem;r: TRect):boolean;
+function TLayersForm.createdesceditor(Item: TListItem;r: TRect):boolean;
 begin
   result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBLayerProp(Item.Data)^.desk,'GDBAnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top);
 end;
-function TLayerWindow.GetDescName(Item: TListItem):string;
+function TLayersForm.GetDescName(Item: TListItem):string;
 begin
      result:=PGDBLayerProp(Item.Data)^.desk;
 end;
 
 
 
-procedure TLayerWindow.FormCreate(Sender: TObject);
+procedure TLayersForm.FormCreate(Sender: TObject);
 begin
   ActionList1.Images:=IconList;
   ToolBar1.Images:=IconList;
@@ -468,7 +468,7 @@ begin
      OnGetName:=@GetDescName;
 end;
 end;
-procedure TLayerWindow.MaceItemCurrent(ListItem:TListItem);
+procedure TLayersForm.MaceItemCurrent(ListItem:TListItem);
 begin
      if ListView1.CurrentItem<>ListItem then
      begin
@@ -486,7 +486,7 @@ begin
      //invalidate;
      end;
 end;
-procedure TLayerWindow.MkCurrent(Sender: TObject);
+procedure TLayersForm.MkCurrent(Sender: TObject);
 begin
   if assigned(ListView1.Selected)then
                                      begin
@@ -500,7 +500,7 @@ begin
                                  else
                                      MessageBox(@rsLayerMustBeSelected[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
 end;
-procedure TLayerWindow.RefreshListItems(Sender: TObject);
+procedure TLayersForm.RefreshListItems(Sender: TObject);
 var
    pdwg:PTSimpleDrawing;
    ir:itrec;
@@ -528,7 +528,7 @@ begin
      ListView1.SetFocus;
      ListView1.EndUpdate;
 end;
-procedure TLayerWindow.countlayer(player:PGDBLayerProp;out e,b:GDBInteger);
+procedure TLayersForm.countlayer(player:PGDBLayerProp;out e,b:GDBInteger);
 var
    pdwg:PTSimpleDrawing;
 begin
@@ -539,7 +539,7 @@ begin
   pdwg^.BlockDefArray.IterateCounter(player,b,@LayerCounter);
 end;
 
-procedure TLayerWindow.ListView1SelectItem(Sender: TObject; Item: TListItem;Selected: Boolean);
+procedure TLayersForm.ListView1SelectItem(Sender: TObject; Item: TListItem;Selected: Boolean);
 var
    player:PGDBLayerProp;
    pdwg:PTSimpleDrawing;
@@ -554,7 +554,7 @@ begin
      end;
 end;
 
-procedure TLayerWindow.LayerAdd(Sender: TObject); // Процедура добавления слоя
+procedure TLayersForm.LayerAdd(Sender: TObject); // Процедура добавления слоя
 var
    player,pcreatedlayer:PGDBLayerProp;
    pdwg:PTSimpleDrawing;
@@ -589,7 +589,7 @@ begin
 
      ListView1.AddCreatedItem(pcreatedlayer,gdb.GetCurrentDWG^.GetCurrentLayer);
 end;
-procedure TLayerWindow.doLayerDelete(ProcessedItem:TListItem);
+procedure TLayersForm.doLayerDelete(ProcessedItem:TListItem);
 var
    domethod,undomethod:tmethod;
    player:PGDBLayerProp;
@@ -607,7 +607,7 @@ begin
   end;
   ListView1.Items.Delete(ListView1.Items.IndexOf(ProcessedItem));
 end;
-procedure TLayerWindow._PurgeLayers(Sender: TObject);
+procedure TLayersForm._PurgeLayers(Sender: TObject);
 var
    i,purgedcounter:integer;
    ProcessedItem:TListItem;
@@ -634,7 +634,7 @@ begin
      LayerDescLabel.Caption:=Format(rsCountTStylesPurged,[purgedcounter]);
 end;
 
-procedure TLayerWindow.LayerDelete(Sender: TObject); // Процедура удаления слоя
+procedure TLayersForm.LayerDelete(Sender: TObject); // Процедура удаления слоя
 var
    player:PGDBLayerProp;
    pdwg:PTSimpleDrawing;
@@ -661,12 +661,12 @@ begin
                                      ShowError(rsLayerMustBeSelected);
 end;
 
-procedure TLayerWindow.AplyClose(Sender: TObject);
+procedure TLayersForm.AplyClose(Sender: TObject);
 begin
      close;
 end;
 
-procedure TLayerWindow.Aply(Sender: TObject) ;
+procedure TLayersForm.Aply(Sender: TObject) ;
 begin
      if changedstamp then
      begin
@@ -676,7 +676,7 @@ begin
      end;
 end;
 
-procedure TLayerWindow.FormClose(Sender: TObject; var CloseAction: TCloseAction
+procedure TLayersForm.FormClose(Sender: TObject; var CloseAction: TCloseAction
   );
 begin
      Aply(nil);

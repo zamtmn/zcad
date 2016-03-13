@@ -1,4 +1,4 @@
-unit unitswnd;
+unit uzcfunits;
 
 {$mode objfpc}{$H+}
 
@@ -107,9 +107,9 @@ const
 
 type
 
-  { TUnitsWindow }
+  { TUnitsForm }
 
-  TUnitsWindow = class(TForm)
+  TUnitsForm = class(TForm)
     Bevel1: TBevel;
     AngleDirectionBitBtn: TBitBtn;
     AngDirCheckBox: TCheckBox;
@@ -148,14 +148,14 @@ type
   end;
 
 var
-  UnitsWindow: TUnitsWindow;
+  UnitsForm: TUnitsForm;
 
 implementation
 
 {$R *.lfm}
 
-{ TUnitsWindow }
-procedure TUnitsWindow.Intterface2LocalUnitsFormat(Sender: TObject);
+{ TUnitsForm }
+procedure TUnitsForm.Intterface2LocalUnitsFormat(Sender: TObject);
 begin
      //собираем всё в LocalUnitsFormat из комбобоксов
      if (sender=LUnitsComboBox)or(sender=nil)then
@@ -190,7 +190,7 @@ begin
      if ComboBox5.ItemIndex<>-1 then
        LocalInsUnits:=TInsUnits(ComboBox5.ItemIndex);
 end;
-procedure TUnitsWindow.SetLUprecFromLUnits;
+procedure TUnitsForm.SetLUprecFromLUnits;
 var
   i,curr:integer;
 begin
@@ -199,7 +199,7 @@ begin
       LUPrecComboBox.Items[i]:=UPrecByLUnits[LocalUnitsFormat.uformat,i];
      LUPrecComboBox.ItemIndex:=curr;
 end;
-procedure TUnitsWindow.SetAUprecFromAUnits;
+procedure TUnitsForm.SetAUprecFromAUnits;
 var
   i,curr:integer;
 begin
@@ -208,7 +208,7 @@ begin
       AUPrecComboBox.Items[i]:=UPrecByAUnits[LocalUnitsFormat.aformat,i];
      AUPrecComboBox.ItemIndex:=curr;
 end;
-procedure TUnitsWindow.LocalUnitsFormat2Intterface;
+procedure TUnitsForm.LocalUnitsFormat2Intterface;
 begin
      //загоняем всё из LocalUnitsFormat в комбобоксы
      LUnitsComboBox.ItemIndex:=ord(LocalUnitsFormat.uformat);
@@ -226,7 +226,7 @@ begin
 
      ComboBox5.ItemIndex:=ord(LocalInsUnits);
 end;
-procedure TUnitsWindow.UpdateSample;
+procedure TUnitsForm.UpdateSample;
 begin
      //реализация с меня
      //здесь на основе LocalUnitsFormat обновляю поле примерного вывода
@@ -236,14 +236,14 @@ begin
                                       zeAngleToString(pi/4,LocalUnitsFormat)]);
 end;
 
-procedure TUnitsWindow.ChangeInInterface(Sender: TObject);
+procedure TUnitsForm.ChangeInInterface(Sender: TObject);
 begin
      //Обработчик onChange комбиков
      Intterface2LocalUnitsFormat(sender);
      UpdateSample;
 end;
 
-function TUnitsWindow.RunModal(var _UnitsFormat:TzeUnitsFormat; var _InsUnits:TInsUnits):Integer;
+function TUnitsForm.RunModal(var _UnitsFormat:TzeUnitsFormat; var _InsUnits:TInsUnits):Integer;
 begin
      LocalUnitsFormat:=_UnitsFormat;
      LocalInsUnits:=_InsUnits;

@@ -22,9 +22,9 @@ unit zcobjectinspectordecorations;
 interface
 
 uses
-  zcobjectinspectoreditors,uzcsysinfo,gdbpalette,UEnumDescriptor,zcobjectinspector,uinfoform,Forms,ugdbltypearray,sysutils,umytreenode,oswnd,gdbcommandsinterface,
+  zcobjectinspectoreditors,uzcsysinfo,gdbpalette,UEnumDescriptor,zcobjectinspector,uinfoform,Forms,ugdbltypearray,sysutils,umytreenode,uzcfsnapeditor,gdbcommandsinterface,
   Graphics,LCLType,Themes,types,gdbobjectsconstdef,UGDBNamedObjectsArray,UGDBStringArray,
-  varmandef,Varman,colorwnd,UGDBLayerArray,gdbase,lineweightwnd,gdbasetypes,usupportgui,
+  varmandef,Varman,uzcfcolors,UGDBLayerArray,gdbase,uzcflineweights,gdbasetypes,usupportgui,
   StdCtrls,UGDBDescriptor,uzcstrconsts,Controls,Classes,strproc,uzcsysvars,commandline,
   zcadinterface;
 type
@@ -347,19 +347,19 @@ procedure runcolorswnd(PInstance:GDBPointer);
 var
    mr:integer;
 begin
-     if not assigned(ColorSelectWND)then
-     Application.CreateForm(TColorSelectWND, ColorSelectWND);
-     SetHeightControl(ColorSelectWND,sysvar.INTF.INTF_DefaultControlHeight^);
+     if not assigned(ColorSelectForm)then
+     Application.CreateForm(TColorSelectForm, ColorSelectForm);
+     SetHeightControl(ColorSelectForm,sysvar.INTF.INTF_DefaultControlHeight^);
      if assigned(ShowAllCursorsProc) then
                                          ShowAllCursorsProc;
-     mr:=ColorSelectWND.run(PTGDBPaletteColor(PInstance)^,true){showmodal};
+     mr:=ColorSelectForm.run(PTGDBPaletteColor(PInstance)^,true){showmodal};
      if mr=mrOk then
                     begin
-                    PTGDBPaletteColor(PInstance)^:=ColorSelectWND.ColorInfex;
+                    PTGDBPaletteColor(PInstance)^:=ColorSelectForm.ColorInfex;
                     end;
      if assigned(RestoreAllCursorsProc) then
                                             RestoreAllCursorsProc;
-     freeandnil(ColorSelectWND);
+     freeandnil(ColorSelectForm);
 end;
 
 procedure AddFastEditorToType(tn:string;GetPrefferedFastEditorSize:TGetPrefferedFastEditorSize;
@@ -408,10 +408,10 @@ begin
 end;
 procedure runOSwnd(PInstance:GDBPointer);
 begin
-  OSWindow:=TOSWindow.Create(nil);
-  SetHeightControl(OSWindow,sysvar.INTF.INTF_DefaultControlHeight^);
-  DOShowModal(OSWindow);
-  Freeandnil(OSWindow);
+  SnapEditorForm:=TSnapEditorForm.Create(nil);
+  SetHeightControl(SnapEditorForm,sysvar.INTF.INTF_DefaultControlHeight^);
+  DOShowModal(SnapEditorForm);
+  Freeandnil(SnapEditorForm);
 end;
 function ColorDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 var

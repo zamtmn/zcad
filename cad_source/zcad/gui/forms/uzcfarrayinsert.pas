@@ -1,4 +1,4 @@
-unit arrayinsertwnd;
+unit uzcfarrayinsert;
 
 {$mode objfpc}{$H+}
 
@@ -10,9 +10,9 @@ uses
 
 type
 
-  { TArrayInsertFRM }
+  { TArrayInsertForm }
 
-  TArrayInsertFRM = class(TForm)
+  TArrayInsertForm = class(TForm)
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
@@ -45,7 +45,7 @@ type
   end; 
 
 var
-  ArrayInsertFRM: TArrayInsertFRM;
+  ArrayInsertForm: TArrayInsertForm;
 
 implementation
 {$R *.lfm}

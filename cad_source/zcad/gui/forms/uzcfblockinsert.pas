@@ -1,4 +1,4 @@
-unit blockinsertwnd;
+unit uzcfblockinsert;
 
 {$mode objfpc}
 
@@ -16,9 +16,9 @@ uses
 
 type
 
-  { TBlockInsertFRM }
+  { TBlockInsertForm }
 
-  TBlockInsertFRM = class(TForm)
+  TBlockInsertForm = class(TForm)
     ButtonPanel1: TButtonPanel;
     CheckBox1: TCheckBox;
     CheckBox2: TCheckBox;
@@ -64,17 +64,17 @@ type
   end;
 
 var
-  BlockInsertFRM: TBlockInsertFRM;
+  BlockInsertForm: TBlockInsertForm;
 
 implementation
 {$R *.lfm}
 
-procedure TBlockInsertFRM.FormCreate(Sender: TObject);
+procedure TBlockInsertForm.FormCreate(Sender: TObject);
 begin
 
 end;
 
-procedure TBlockInsertFRM.CheckBox4Change(Sender: TObject);
+procedure TBlockInsertForm.CheckBox4Change(Sender: TObject);
 begin
   if Checkbox4.Checked = True then
      begin
@@ -91,7 +91,7 @@ begin
 
 end;
 
-procedure TBlockInsertFRM.CheckBox5Change(Sender: TObject);
+procedure TBlockInsertForm.CheckBox5Change(Sender: TObject);
 begin
    if Checkbox3.Checked = False then
      begin
@@ -101,7 +101,7 @@ begin
    end;
  end;
 
-procedure TBlockInsertFRM.CheckBox2Change(Sender: TObject);
+procedure TBlockInsertForm.CheckBox2Change(Sender: TObject);
 begin
   if CheckBox2.Checked = True then
     begin
@@ -114,7 +114,7 @@ begin
 
 end;
 
-procedure TBlockInsertFRM.CheckBox3Change(Sender: TObject);
+procedure TBlockInsertForm.CheckBox3Change(Sender: TObject);
 begin
   if Checkbox3.Checked = True then
     begin
@@ -139,7 +139,7 @@ begin
   end;
 end;
 
-function TBlockInsertFRM.Run(
+function TBlockInsertForm.Run(
                              PBlockDefs:PGDBObjBlockdefArray; //указатель на таблицу описаний блоков
                              LastInsertedBlockName:GDBString  //имя последнего (например в предидущем сеансе команды) вставленного блока, чтобы его выбрать "по умолчанию"
                                                               //его нужно сохранять гденить в чертеже

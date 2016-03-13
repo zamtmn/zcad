@@ -1,8 +1,9 @@
-object TextStylesWindow: TTextStylesWindow
+object TextStylesForm: TTextStylesForm
   Left = 542
   Height = 590
   Top = 242
   Width = 977
+  ActiveControl = ButtonApplyClose
   Caption = 'Text styles'
   ClientHeight = 590
   ClientWidth = 977
@@ -12,7 +13,6 @@ object TextStylesWindow: TTextStylesWindow
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.5'
   Visible = False
   object Bevel1: TBevel
     AnchorSideLeft.Control = ToolBar1
@@ -24,7 +24,7 @@ object TextStylesWindow: TTextStylesWindow
     Left = 130
     Height = 27
     Top = 1
-    Width = 665
+    Width = 719
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
     BorderSpacing.Top = 1
@@ -40,7 +40,7 @@ object TextStylesWindow: TTextStylesWindow
     Left = 131
     Height = 25
     Top = 2
-    Width = 663
+    Width = 717
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 1
     Layout = tlCenter
@@ -51,9 +51,9 @@ object TextStylesWindow: TTextStylesWindow
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 822
+    Left = 876
     Height = 30
-    Top = 559
+    Top = 647
     Width = 154
     Anchors = [akRight, akBottom]
     BorderSpacing.Right = 1
@@ -70,9 +70,9 @@ object TextStylesWindow: TTextStylesWindow
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonApplyClose
     Left = 1
-    Height = 527
+    Height = 615
     Top = 30
-    Width = 975
+    Width = 1029
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 1
     BorderSpacing.Top = 2
@@ -84,7 +84,7 @@ object TextStylesWindow: TTextStylesWindow
       end    
       item
         Caption = 'Name'
-        Width = 415
+        Width = 469
       end    
       item
         Caption = 'FontName'
@@ -122,7 +122,7 @@ object TextStylesWindow: TTextStylesWindow
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 904
+    Left = 958
     Height = 27
     Top = 1
     Width = 72
@@ -147,7 +147,7 @@ object TextStylesWindow: TTextStylesWindow
     AnchorSideRight.Control = FontTypeFilterComboBox
     AnchorSideBottom.Control = FontTypeFilterComboBox
     AnchorSideBottom.Side = asrBottom
-    Left = 797
+    Left = 851
     Height = 27
     Top = 1
     Width = 105
@@ -214,6 +214,7 @@ object TextStylesWindow: TTextStylesWindow
     top = 312
     object AddStyle: TAction
       Caption = 'AddStyle'
+      Enabled = False
       Hint = 'Add text style'
       ImageIndex = 1
       OnExecute = StyleAdd
@@ -221,24 +222,28 @@ object TextStylesWindow: TTextStylesWindow
     end
     object DelStyle: TAction
       Caption = 'DelStyle'
+      Enabled = False
       Hint = 'Delete text style'
       OnExecute = DeleteItem
       ShortCut = 46
     end
     object MkCurrentStyle: TAction
       Caption = 'MkCurrentStyle'
+      Enabled = False
       Hint = 'Make selected style curretn'
       OnExecute = MkCurrent
       ShortCut = 32
     end
     object PurgeStyles: TAction
       Caption = 'PurgeStyles'
+      Enabled = False
       Hint = 'Purge not used styles'
       OnExecute = PurgeTStyles
       ShortCut = 8238
     end
     object RefreshStyles: TAction
       Caption = 'RefreshStyles'
+      Enabled = False
       Hint = 'Refresh styles list'
       OnExecute = RefreshListitems
       ShortCut = 115

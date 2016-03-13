@@ -102,8 +102,8 @@ zengine/gdb/drawings/UGDBDrawingdef.pas
 zengine/gdb/drawings/ugdbabstractdrawing.pas
 zengine/gdb/drawings/ugdbsimpledrawing.pas
 zengine/gdb/drawings/UGDBDescriptor.pas
-zcad/gui/odjectinspector/zcobjectinspectorwrapper.pas
-zcad/gui/odjectinspector/zcobjectinspectormultiobjects.pas
+zcad/gui/odjectinspector/uzcoiwrapper.pas
+zcad/gui/odjectinspector/uzcoimultiobjects.pas
 zcad/electroteh/GDBCommandsOPS.pas
 zcad/electroteh/GDBCommandsElectrical.pas
 zcad/electroteh/uzccablemanager.pas 

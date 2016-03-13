@@ -1215,11 +1215,6 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
              DSGN_SelSameName:PGDBBoolean;(*'Auto select devices with same name'*)
              DSGN_OTrackTimerInterval:PGDBInteger;(*'Object track timer interval'*)
        end;
-  tview=packed record
-               VIEW_CommandLineVisible,
-               VIEW_HistoryLineVisible,
-               VIEW_ObjInspVisible:PGDBBoolean;
-         end;
   tobjinspinterface=packed record
                 INTF_ObjInsp_ShowHeaders:PGDBBoolean;(*'Show headers'*)
                 INTF_ObjInsp_OldStyleDraw:PGDBBoolean;(*'Old style'*)
@@ -1266,7 +1261,6 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
     DWG:tdwg;(*'Drawing'*)
     DSGN:tdesigning;(*'Design'*)
     INTF:tinterface;(*'Interface'*)
-    VIEW:tview;(*'View'*)
     debug:tdebug;(*'Debug'*)
   end;
 //Generate on E:/zcad/cad_source/components/zscriptbase/uabstractunit.pas
@@ -1393,7 +1387,7 @@ TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
             end;
 PTObjectUnit=^TObjectUnit;
 TObjectUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
-                  function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
+                  //function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
                   procedure free;virtual;abstract;
             end;
 TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
@@ -1806,6 +1800,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
                     procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;abstract;
                     class function GetDXFIOFeatures:TDXFEntIODataManager;
+                    function GetNameInBlockTable:GDBString;virtual;abstract;
               end;
 //Generate on E:/zcad/cad_source/zengine/gdb/entities/GDB3d.pas
 GDBObj3d={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)
@@ -2212,9 +2207,11 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                               //function CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;virtual;abstract;
                               procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;abstract;
                               //function FindObjectsInPointStart(const point:GDBVertex;out Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;abstract;
+                              function FindObjectsInVolume(const Volume:TBoundingBox;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;abstract;
                               function FindObjectsInPoint(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;abstract;
                               function FindObjectsInPointSlow(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
                               function FindObjectsInPointInNode(const point:GDBVertex;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
+                              function FindObjectsInVolumeInNode(const Volume:TBoundingBox;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
                               //function FindObjectsInPointDone(const point:GDBVertex):GDBBoolean;virtual;abstract;
                               function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;abstract;
                               procedure correctsublayers(var la:GDBLayerArray);virtual;abstract;
@@ -2470,6 +2467,7 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      property testrotate:GDBDouble read getrot write setrot;(*'Rotate'*)
                      function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;abstract;
                      class function CreateInstance:PGDBObjBlockInsert;static;
+                     function GetNameInBlockTable:GDBString;virtual;abstract;
                   end;
 //Generate on E:/zcad/cad_source/zengine/gdb/entities/GDBDevice.pas
 PGDBObjDevice=^GDBObjDevice;
@@ -2507,6 +2505,7 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
                    class function GetDXFIOFeatures:TDXFEntIODataManager;
                    function CreateInstance:PGDBObjDevice;static;
+                   function GetNameInBlockTable:GDBString;virtual;abstract;
              end;
 //Generate on E:/zcad/cad_source/zengine/gdb/entities/GDBconnected.pas
 PGDBObjConnected=^GDBObjConnected;
@@ -3764,10 +3763,10 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     function GetUnitsFormat:TzeUnitsFormat;
                     procedure SetUnitsFormat(f:TzeUnitsFormat);
               end;
-//Generate on E:/zcad/cad_source/zcad/gui/odjectinspector/zcobjectinspectorwrapper.pas
+//Generate on E:/zcad/cad_source/zcad/gui/odjectinspector/uzcoiwrapper.pas
   TWrapper2ObjInsp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
   end;
-//Generate on E:/zcad/cad_source/zcad/gui/odjectinspector/zcobjectinspectormultiobjects.pas
+//Generate on E:/zcad/cad_source/zcad/gui/odjectinspector/uzcoimultiobjects.pas
   {TMSType=(
            TMST_All(*'All entities'*),
            TMST_Devices(*'Devices'*),

@@ -15,11 +15,11 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-unit zcadvariablesutils;
+unit uzcvariablesutils;
 {$INCLUDE def.inc}
 
 interface
-uses enitiesextendervariables,sysutils,
+uses uzcenitiesvariablesextender,sysutils,
      UGDBOpenArrayOfPV,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,
      gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,
      GDBSubordinated,GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,

@@ -54,7 +54,7 @@ GDBGraf={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfDa
 {EXPORT-}
 function getlinktype(pv:PGDBObjEntity):TLinktype;
 implementation
-uses enitiesextendervariables,GDBLine,math{,log};
+uses uzcenitiesvariablesextender,GDBLine,math;
 procedure GDBGraf.BeginFindPath;
 var
   pgfe: pgrafelement;

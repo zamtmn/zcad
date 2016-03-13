@@ -40,7 +40,7 @@ uses
 
   URecordDescriptor,TypeDescriptors,
 
-  Forms, uzcfblockinsert, arrayinsertwnd,
+  Forms, uzcfblockinsert, uzcfarrayinsert,
 
   GDBBlockInsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока
@@ -1037,10 +1037,10 @@ function TestInsert2_com(operands:TCommandOperands):TCommandResult;
 var
    mr:integer;
 begin
-    if not assigned(ArrayInsertFRM)then
-    Application.CreateForm(TArrayInsertFRM, ArrayInsertFRM);
-    mr:=ArrayInsertFRM.showmodal;
-    freeandnil(ArrayInsertFRM);
+    if not assigned(ArrayInsertForm)then
+    Application.CreateForm(TArrayInsertForm, ArrayInsertForm);
+    mr:=ArrayInsertForm.showmodal;
+    freeandnil(ArrayInsertForm);
     result:=cmd_ok;
 end;
 //

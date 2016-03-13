@@ -121,10 +121,10 @@ uses
   uzcstrconsts,
   iopalette,
   gdbfieldprocessorimpl,
-  registerenitiesfeatures,
-  registerenitiesextenders,
+  uzcregisterenitiesfeatures,
+  uzcregisterenitiesextenders,
   zcregistermultiproperties,
-  zclibraryblocksregister,
+  uzclibraryblocksregister,
   uzglopenglviewarea,uzglgdiviewarea,uzglcanvasviewarea,
 
   dbgappexplorercommand;

@@ -15,12 +15,12 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-unit registerenitiesextenders;
+unit uzcregisterenitiesextenders;
 {$INCLUDE def.inc}
 
 interface
 uses sysutils,
-     enitiesextendervariables,uzcshared,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,
+     uzcenitiesvariablesextender,uzcshared,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,
      gdbfieldprocessor,UGDBOpenArrayOfByte,gdbase,gdbobjectextender,
      GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,
      URecordDescriptor,UBaseTypeDescriptor,memman;

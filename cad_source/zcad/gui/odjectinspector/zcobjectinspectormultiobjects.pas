@@ -22,7 +22,7 @@ unit zcobjectinspectormultiobjects;
 interface
 uses
   zcmultiproperties,zcobjectinspectorwrapper,intftranslations,gdbpalette,memman,
-  uzcshared,uzcstrconsts,sysutils,zeentityfactory,enitiesextendervariables,gdbdrawcontext,
+  uzcshared,uzcstrconsts,sysutils,zeentityfactory,uzcenitiesvariablesextender,gdbdrawcontext,
   gdbase,
   UGDBDescriptor,
   varmandef,

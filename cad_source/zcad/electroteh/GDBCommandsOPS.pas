@@ -163,7 +163,7 @@ var
 procedure finalize;}
 
 implementation
-uses enitiesextendervariables,GDBRoot,oglwindowdef, gdbcable,UUnitManager,GDBCommandsElectrical,{UGDBObjBlockdefArray,}URecordDescriptor,TypeDescriptors;
+uses uzcenitiesvariablesextender,GDBRoot,oglwindowdef, gdbcable,UUnitManager,GDBCommandsElectrical,{UGDBObjBlockdefArray,}URecordDescriptor,TypeDescriptors;
 function docorrecttogrid(point:GDBVertex;need:GDBBoolean):GDBVertex;
 var
    gr:GDBBoolean;

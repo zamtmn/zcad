@@ -1096,7 +1096,7 @@ begin
        DockMaster.OnShowOptions:={@}ShowAnchorDockOptions;
   end;
    if not sysparam.noloadlayout then
-                                    LoadLayout_com('');
+                                    LoadLayout_com(EmptyCommandOperands);
   if sysparam.noloadlayout then
   begin
        DockMaster.ShowControl('CommandLine', true);

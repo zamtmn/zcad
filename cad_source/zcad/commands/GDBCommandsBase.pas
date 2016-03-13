@@ -328,7 +328,7 @@ begin
                                //if gdb.GetCurrentDWG.GetFileName=rsUnnamedWindowTitle then
                                  if extractfilepath(gdb.GetCurrentDWG.GetFileName)='' then
                                                                       begin
-                                                                           SaveAs_com('');
+                                                                           SaveAs_com(EmptyCommandOperands);
                                                                            exit;
                                                                       end;
                                s1:=gdb.GetCurrentDWG.GetFileName;

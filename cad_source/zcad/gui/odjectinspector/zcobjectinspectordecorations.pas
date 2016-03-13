@@ -22,7 +22,7 @@ unit zcobjectinspectordecorations;
 interface
 
 uses
-  zcobjectinspectoreditors,uzcsysinfo,gdbpalette,UEnumDescriptor,zcobjectinspector,uinfoform,Forms,ugdbltypearray,sysutils,umytreenode,uzcfsnapeditor,gdbcommandsinterface,
+  commandlinedef,zcobjectinspectoreditors,uzcsysinfo,gdbpalette,UEnumDescriptor,zcobjectinspector,uinfoform,Forms,ugdbltypearray,sysutils,umytreenode,uzcfsnapeditor,gdbcommandsinterface,
   Graphics,LCLType,Themes,types,gdbobjectsconstdef,UGDBNamedObjectsArray,UGDBStringArray,
   varmandef,Varman,uzcfcolors,UGDBLayerArray,gdbase,uzcflineweights,gdbasetypes,usupportgui,
   StdCtrls,UGDBDescriptor,uzcstrconsts,Controls,Classes,strproc,uzcsysvars,commandline,
@@ -341,7 +341,7 @@ end;
 
 procedure runlayerswnd(PInstance:GDBPointer);
 begin
-     layer_cmd;
+     layer_cmd(EmptyCommandOperands);
 end;
 procedure runcolorswnd(PInstance:GDBPointer);
 var

@@ -31,6 +31,7 @@ const
 
      CEDeSelect=1;
      CEDWGNChanged=2;
+     EmptyCommandOperands='';
 type
 TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
 {Export+}

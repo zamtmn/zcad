@@ -16,19 +16,19 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit zcmultipropertiesutil;
+unit uzcoimultipropertiesutil;
 {$INCLUDE def.inc}
 
 interface
 uses
-  zcobjectinspectormultiobjects,gdbpalette,memman,uzcshared,sysutils,zeentityfactory,
+  uzcoimultiobjects,gdbpalette,memman,uzcshared,sysutils,zeentityfactory,
   gdbase,
   UGDBDescriptor,
   varmandef,
   GDBEntity,
   gdbasetypes,
   Varman,UGDBPoint3DArray,
-  GDBCircle,GDBArc,GDBLine,GDBBlockInsert,GDBText,GDBMText,GDBPolyLine,geometry,zcmultiproperties;
+  GDBCircle,GDBArc,GDBLine,GDBBlockInsert,GDBText,GDBMText,GDBPolyLine,geometry,uzcoimultiproperties;
 function GetOneVarData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 function GetVertex3DControlData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 procedure FreeOneVarData(piteratedata:GDBPointer;mp:TMultiProperty);

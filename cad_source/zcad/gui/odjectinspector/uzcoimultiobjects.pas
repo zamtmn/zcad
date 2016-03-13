@@ -16,12 +16,12 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit zcobjectinspectormultiobjects;
+unit uzcoimultiobjects;
 {$INCLUDE def.inc}
 
 interface
 uses
-  zcmultiproperties,zcobjectinspectorwrapper,intftranslations,gdbpalette,memman,
+  uzcoimultiproperties,uzcoiwrapper,intftranslations,gdbpalette,memman,
   uzcshared,uzcstrconsts,sysutils,zeentityfactory,uzcenitiesvariablesextender,gdbdrawcontext,
   gdbase,
   UGDBDescriptor,
@@ -80,7 +80,7 @@ type
 var
    MSEditor:TMSEditor;
 implementation
-uses uzcmainwindow,zcobjectinspectordecorations,UGDBSelectedObjArray;
+uses uzcmainwindow,uzcoidecorations,UGDBSelectedObjArray;
 constructor  TMSEditor.init;
 begin
      VariablesUnit.init('VariablesUnit');

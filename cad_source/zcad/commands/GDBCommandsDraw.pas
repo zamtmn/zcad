@@ -23,7 +23,7 @@ interface
 uses
   generalviewarea,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,
   zcmultiobjectcreateundocommand,zeentitiesmanager,uzglcanvasdrawer,
-  zcobjectinspectormultiobjects,uzcenitiesvariablesextender,ugdbdrawing,gdbpalette,
+  uzcoimultiobjects,uzcenitiesvariablesextender,ugdbdrawing,gdbpalette,
   ugdbopenarrayofgdbdouble,texteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,
   GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,zeentityfactory,
   ugdbsimpledrawing,uzcsysvars,uzcstrconsts,GDBCommandsBaseDraw,glstatemanager,

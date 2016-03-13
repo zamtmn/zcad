@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit zcregisterobjectinspector;
+unit uzcoiregister;
 {$INCLUDE def.inc}
 interface
 uses paths,TypeDescriptors,intftranslations,uzcshared,Forms,zcadinterface,GDBRoot,gdbase,UGDBDrawingdef,gdbdrawcontext,UGDBStringArray,varmandef,ugdbsimpledrawing,GDBEntity,uzcenitiesvariablesextender,zcobjectinspector,zcguimanager,uzcstrconsts,Types,Controls,

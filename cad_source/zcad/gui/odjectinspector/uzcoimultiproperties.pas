@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit zcmultiproperties;
+unit uzcoimultiproperties;
 {$INCLUDE def.inc}
 
 interface

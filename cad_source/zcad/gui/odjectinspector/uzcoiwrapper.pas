@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit zcobjectinspectorwrapper;
+unit uzcoiwrapper;
 {$INCLUDE def.inc}
 
 interface

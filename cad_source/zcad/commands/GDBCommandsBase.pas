@@ -22,7 +22,7 @@ unit GDBCommandsBase;
 interface
 uses
  {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
- generalviewarea,zeundostack,zcchangeundocommand,zcobjectinspectormultiobjects,
+ generalviewarea,zeundostack,zcchangeundocommand,uzcoimultiobjects,
  uzcenitiesvariablesextender,gdbdrawcontext,ugdbdrawing,paths,fileformatsmanager,
  gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,
  URecordDescriptor,ugdbfontmanager,ugdbsimpledrawing,uzcsysvars,commandline,

@@ -45,7 +45,7 @@ uses
   //
   //if need create variables before system.pas loading, place unit bellow
   //
-  zcregisterobjectinspector,
+  uzcoiregister,
   zcregisterzscript,
   zcregistergeneralwiewarea,
   zcregisterfontmanager,
@@ -123,7 +123,7 @@ uses
   gdbfieldprocessorimpl,
   uzcregisterenitiesfeatures,
   uzcregisterenitiesextenders,
-  zcregistermultiproperties,
+  uzcoiregistermultiproperties,
   uzclibraryblocksregister,
   uzglopenglviewarea,uzglgdiviewarea,uzglcanvasviewarea,
 

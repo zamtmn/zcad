@@ -16,12 +16,12 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 {$MODE OBJFPC}
-unit zcregistermultiproperties;
+unit uzcoiregistermultiproperties;
 {$INCLUDE def.inc}
 
 interface
 uses
-  math,zcobjectinspectormultiobjects,gdbpalette,memman,uzcshared,sysutils,zeentityfactory,
+  math,uzcoimultiobjects,gdbpalette,memman,uzcshared,sysutils,zeentityfactory,
   gdbase,
   UGDBDescriptor,
   varmandef,
@@ -29,9 +29,9 @@ uses
   GDBEntity,
   gdbasetypes,
   Varman,
-  zcmultipropertiesutil,
+  uzcoimultipropertiesutil,
   GDBCircle,GDBArc,GDBLine,GDBBlockInsert,GDBText,GDBMText,GDBPolyLine,GDBElLeader,gdbdimension,gdbellipse,
-  geometry,zcmultiproperties;
+  geometry,uzcoimultiproperties;
 implementation
 procedure GDBDoubleDeltaEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var

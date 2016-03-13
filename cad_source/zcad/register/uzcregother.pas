@@ -96,10 +96,6 @@ initialization;
   //SysVarUnit.AssignToSymbol(SysVar.MISC.PMenuDebugObjInsp,'PMenuDebugObjInsp');
   SysVarUnit.AssignToSymbol(SysVar.debug.ShowHiddenFieldInObjInsp,'ShowHiddenFieldInObjInsp');
 
-  SysVarUnit.AssignToSymbol(SysVar.VIEW.VIEW_CommandLineVisible,'VIEW_CommandLineVisible');
-  SysVarUnit.AssignToSymbol(SysVar.VIEW.VIEW_HistoryLineVisible,'VIEW_HistoryLineVisible');
-  SysVarUnit.AssignToSymbol(SysVar.VIEW.VIEW_ObjInspVisible,'VIEW_ObjInspVisible');
-
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ShowScrollBars,'INTF_ShowScrollBars');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ShowDwgTabs,'INTF_ShowDwgTabs');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_DwgTabsPosition,'INTF_DwgTabsPosition');

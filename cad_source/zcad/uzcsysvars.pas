@@ -156,11 +156,6 @@ type
              DSGN_SelSameName:PGDBBoolean;(*'Auto select devices with same name'*)
              DSGN_OTrackTimerInterval:PGDBInteger;(*'Object track timer interval'*)
        end;
-  tview=packed record
-               VIEW_CommandLineVisible,
-               VIEW_HistoryLineVisible,
-               VIEW_ObjInspVisible:PGDBBoolean;
-         end;
   tobjinspinterface=packed record
                 INTF_ObjInsp_ShowHeaders:PGDBBoolean;(*'Show headers'*)
                 INTF_ObjInsp_OldStyleDraw:PGDBBoolean;(*'Old style'*)
@@ -207,7 +202,6 @@ type
     DWG:tdwg;(*'Drawing'*)
     DSGN:tdesigning;(*'Design'*)
     INTF:tinterface;(*'Interface'*)
-    VIEW:tview;(*'View'*)
     debug:tdebug;(*'Debug'*)
   end;
 {EXPORT-}

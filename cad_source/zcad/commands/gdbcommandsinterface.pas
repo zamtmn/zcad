@@ -81,8 +81,8 @@ uses
    function SaveAs_com(Operands:pansichar):GDBInteger;
    procedure CopyToClipboard;}
    function quit_com(operands:TCommandOperands):TCommandResult;
-   function layer_cmd:GDBInteger;
-   function Colors_cmd:GDBInteger;
+   function layer_cmd(operands:TCommandOperands):TCommandResult;
+   function Colors_cmd(operands:TCommandOperands):TCommandResult;
    //function Regen_com(Operands:pansichar):GDBInteger;
 //var DWGPageCxMenu:pzpopupmenu;
 implementation
@@ -361,7 +361,7 @@ begin
                end;
         //uzcshared.ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
 end;
-function units_cmd:GDBInteger;
+function units_cmd(operands:TCommandOperands):TCommandResult;
 var
     _UnitsFormat:TzeUnitsFormat;
 begin
@@ -389,7 +389,7 @@ begin
    Freeandnil(UnitsForm);
    result:=cmd_ok;
 end;
-function layer_cmd:GDBInteger;
+function layer_cmd(operands:TCommandOperands):TCommandResult;
 begin
   LayersForm:=TLayersForm.Create(nil);
   SetHeightControl(LayersForm,sysvar.INTF.INTF_DefaultControlHeight^);
@@ -397,7 +397,7 @@ begin
   Freeandnil(LayersForm);
   result:=cmd_ok;
 end;
-function TextStyles_cmd:GDBInteger;
+function TextStyles_cmd(operands:TCommandOperands):TCommandResult;
 begin
   TextStylesForm:=TTextStylesForm.Create(nil);
   SetHeightControl(TextStylesForm,sysvar.INTF.INTF_DefaultControlHeight^);
@@ -405,7 +405,7 @@ begin
   Freeandnil(TextStylesForm);
   result:=cmd_ok;
 end;
-function DimStyles_cmd:GDBInteger;
+function DimStyles_cmd(operands:TCommandOperands):TCommandResult;
 begin
   DimStylesForm:=TDimStylesForm.Create(nil);
   SetHeightControl(DimStylesForm,sysvar.INTF.INTF_DefaultControlHeight^);
@@ -413,7 +413,7 @@ begin
   Freeandnil(DimStylesForm);
   result:=cmd_ok;
 end;
- function LineTypes_cmd:GDBInteger;
+ function LineTypes_cmd(operands:TCommandOperands):TCommandResult;
 begin
   LineTypesForm:=TLineTypesForm.Create(nil);
   SetHeightControl(LineTypesForm,sysvar.INTF.INTF_DefaultControlHeight^);
@@ -421,7 +421,7 @@ begin
   Freeandnil(LineTypesForm);
   result:=cmd_ok;
 end;
-function Colors_cmd:GDBInteger;
+function Colors_cmd(operands:TCommandOperands):TCommandResult;
 var
    mr:integer;
 begin

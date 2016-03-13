@@ -616,7 +616,7 @@ begin
                 pb:=poa^.iterate(ir);
           until pb=nil;
           Prompt(sysutils.format(rscmNEntitiesProcessed,[inttostr(result)]));
-          Regen_com('');
+          Regen_com(EmptyCommandOperands);
           commandmanager.executecommandend;
      end;
 end;
@@ -689,7 +689,7 @@ begin
                 pb:=poa^.iterate(ir);
           until pb=nil;
           Prompt(sysutils.format(rscmNEntitiesProcessed,[inttostr(result)]));
-          Regen_com('');
+          Regen_com(EmptyCommandOperands);
           commandmanager.executecommandend;
      end;
 end;
@@ -836,7 +836,7 @@ begin
                 psdesc:=gdb.GetCurrentDWG^.SelObjArray.iterate(ir);
           until psdesc=nil;
           Prompt(sysutils.format(rscmNEntitiesProcessed,[inttostr(result)]));
-          Regen_com('');
+          Regen_com(EmptyCommandOperands);
           commandmanager.executecommandend;
      end;
 end;
@@ -2299,8 +2299,8 @@ begin
 end;
 function CutClip_com(operands:TCommandOperands):TCommandResult;
 begin
-   copyclip_com('');
-   Erase_com('');
+   copyclip_com(EmptyCommandOperands);
+   Erase_com(EmptyCommandOperands);
    result:=cmd_ok;
 end;
 function InverseSelected_com(operands:TCommandOperands):TCommandResult;

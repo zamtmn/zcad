@@ -19,10 +19,10 @@ unit gdbfieldprocessorimpl;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentity,zcadvariablesutils,gdbfieldprocessor,languade,strproc,sysutils,gdbasetypes,varmandef,GDBase;
+uses gdbentity,uzcvariablesutils,gdbfieldprocessor,languade,strproc,sysutils,gdbasetypes,varmandef,GDBase;
 implementation
 uses
-   enitiesextendervariables,{log,}GDBSubordinated;
+   uzcenitiesvariablesextender,GDBSubordinated;
 procedure var2value(var str:gdbstring;startpos:integer;pobj:PGDBObjGenericWithSubordinated);
 var
   endpos:integer;

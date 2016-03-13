@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="24">
+    <Units Count="29">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -350,6 +350,26 @@
         <Filename Value="zcad/gui/uzcmainwindow.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit23>
+      <Unit24>
+        <Filename Value="zcad/entities/uzcenitiesvariablesextender.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit24>
+      <Unit25>
+        <Filename Value="zcad/entities/uzcvariablesutils.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit25>
+      <Unit26>
+        <Filename Value="zcad/entities/uzcregisterenitiesfeatures.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit26>
+      <Unit27>
+        <Filename Value="zcad/entities/uzcregisterenitiesextenders.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit27>
+      <Unit28>
+        <Filename Value="zcad/entities/uzclibraryblocksregister.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit28>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

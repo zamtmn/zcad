@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-unit enitiesextendervariables;
+unit uzcenitiesvariablesextender;
 {$INCLUDE def.inc}
 
 interface

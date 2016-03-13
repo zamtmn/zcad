@@ -8,7 +8,7 @@ unit GDBElLeader;
 {$INCLUDE def.inc}
 
 interface
-uses enitiesextendervariables,zeentityfactory,Varman,gdbdrawcontext,GDBAbstractText,GDBGenericSubEntry,
+uses uzcenitiesvariablesextender,zeentityfactory,Varman,gdbdrawcontext,GDBAbstractText,GDBGenericSubEntry,
      ugdbtrash,ugdbdrawingdef,GDBCamera,uzcsysvars,UGDBOpenArrayOfPObjects,
      strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,GDBCable,GDBTable,
      UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},

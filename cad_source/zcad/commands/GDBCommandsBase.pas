@@ -23,7 +23,7 @@ interface
 uses
  {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
  generalviewarea,zeundostack,zcchangeundocommand,zcobjectinspectormultiobjects,
- enitiesextendervariables,gdbdrawcontext,ugdbdrawing,paths,fileformatsmanager,
+ uzcenitiesvariablesextender,gdbdrawcontext,ugdbdrawing,paths,fileformatsmanager,
  gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,
  URecordDescriptor,ugdbfontmanager,ugdbsimpledrawing,uzcsysvars,commandline,
  TypeDescriptors,GDBManager,uzcstrconsts,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}

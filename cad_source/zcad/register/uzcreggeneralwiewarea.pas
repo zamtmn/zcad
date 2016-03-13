@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit zcregistergeneralwiewarea;
+unit uzcreggeneralwiewarea;
 {$INCLUDE def.inc}
 interface
 uses backendmanager,uzglgeometry,UGDBEntTree,uzcsysvars,generalviewarea,paths,intftranslations,UUnitManager,TypeDescriptors;

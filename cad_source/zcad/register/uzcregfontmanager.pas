@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit zcregisterfontmanager;
+unit uzcregfontmanager;
 {$INCLUDE def.inc}
 interface
 uses uzcsysvars,UGDBFontManager,paths,intftranslations,UUnitManager,TypeDescriptors;

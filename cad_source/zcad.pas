@@ -109,6 +109,7 @@ uses
   uzccombase,
   uzccomdb,
   uzccomdraw,
+  uzvcom,
   uzccomexample,
   uzccominterface,
 

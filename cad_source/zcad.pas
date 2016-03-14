@@ -107,7 +107,7 @@ uses
   //commandline,
 
   uzccombase,
-  GDBCommandsDB,
+  uzccomdb,
   uzccomdraw,
   gdbcommandsexample,
   uzccominterface,

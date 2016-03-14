@@ -16,7 +16,7 @@ uses
   GDBAbstractText,uzcstrconsts,UGDBSelectedObjArray,zeentityfactory,uzcsysvars,
   csvdocument,
   UGDBOpenArrayOfPV,GDBBlockInsert,devices,UGDBTree,ugdbdescriptor,gdbasetypes,
-  commandline,GDBCommandsDraw,GDBElLeader,
+  commandline,uzccomdraw,GDBElLeader,
   plugins,
   commandlinedef,
   commanddefinternal,

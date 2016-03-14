@@ -20,7 +20,7 @@ unit uzcregisterenitiesfeatures;
 
 interface
 uses iodxf,paths,uzcsysvars,intftranslations,sysutils,
-     uzcenitiesvariablesextender,uzcstrconsts,uzcshared,gdbobjectsconstdef,devices,GDBCommandsDB,GDBCable,GDBNet,GDBDevice,TypeDescriptors,dxflow,
+     uzcenitiesvariablesextender,uzcstrconsts,uzcshared,gdbobjectsconstdef,devices,uzccomdb,GDBCable,GDBNet,GDBDevice,TypeDescriptors,dxflow,
      gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,gdbobjectextender,
      GDBSubordinated,GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,
      URecordDescriptor,UBaseTypeDescriptor,UGDBDrawingdef,memman;

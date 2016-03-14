@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit GDBCommandsBaseDraw;
+unit uzccomdrawdase;
 {$INCLUDE def.inc}
 
 interface

@@ -95,15 +95,11 @@ uses
   Varman,
   {UGDBOpenArrayOfUCommands,}zcchangeundocommand,
 
+  uzcstrconsts,       //resouce strings
+
   uzclog;                //log system
                       //<**система логирования
-const
-     rsSpecifyFirstPoint='Specify first point:';
-     rsSpecifySecondPoint='Specify second point:';
-     rsSpecifyThirdPoint='Specify third point:';
-     rsSpecifyInsertPoint='Specify insert point:';
-     rsSpecifyScale='Specify scale:';
-     rsSpecifyRotate='Specify rotate:';
+
 type
 {EXPORT+}
     PTMatchPropParam=^TMatchPropParam;
@@ -403,13 +399,13 @@ var
     dc:TDrawContext;
 begin
     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-    if GetInteractiveLine(rsSpecifyfirstPoint,rsSpecifySecondPoint,p1,p2) then
+    if GetInteractiveLine(rscmSpecifyfirstPoint,rscmSpecifySecondPoint,p1,p2) then
     begin
          pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBRotatedDimensionID,gdb.GetCurrentROOT));
          pd^.DimData.P13InWCS:=p1;
          pd^.DimData.P14InWCS:=p2;
          InteractiveRDimManipulator(pd,p2,false);
-         if commandmanager.Get3DPointInteractive( rsSpecifyThirdPoint,
+         if commandmanager.Get3DPointInteractive( rscmSpecifyThirdPoint,
                                                   p3,
                                                   @InteractiveRDimManipulator,
                                                   pd)
@@ -536,7 +532,7 @@ var
       pd^.DimData.P10InWCS:=p1;
       pd^.DimData.P15InWCS:=p2;
       InteractiveDDimManipulator(pd,p2,false);
-      if commandmanager.Get3DPointInteractive(rsSpecifyThirdPoint,p3,@InteractiveDDimManipulator,pd) then
+      if commandmanager.Get3DPointInteractive(rscmSpecifyThirdPoint,p3,@InteractiveDDimManipulator,pd) then
       begin
           gdb.GetCurrentDWG^.FreeConstructionObjects;
           pd := AllocEnt(GDBDiametricDimensionID);
@@ -556,7 +552,7 @@ var
 begin
     if operands<>'' then
     begin
-    if GetInteractiveLine(rsSpecifyfirstPoint,rsSpecifySecondPoint,p1,p2) then
+    if GetInteractiveLine(rscmSpecifyfirstPoint,rscmSpecifySecondPoint,p1,p2) then
     begin
          FinalCreateDDim;
     end;
@@ -599,7 +595,7 @@ var
          pd^.DimData.P10InWCS:=p1;
          pd^.DimData.P15InWCS:=p2;
          InteractiveDDimManipulator(pd,p2,false);
-    if commandmanager.Get3DPointInteractive(rsSpecifyThirdPoint,p3,@InteractiveDDimManipulator,pd) then
+    if commandmanager.Get3DPointInteractive(rscmSpecifyThirdPoint,p3,@InteractiveDDimManipulator,pd) then
     begin
          gdb.GetCurrentDWG^.FreeConstructionObjects;
          pd := AllocEnt(GDBRadialDimensionID);
@@ -620,7 +616,7 @@ var
 begin
     if operands<>'' then
     begin
-    if GetInteractiveLine(rsSpecifyfirstPoint,rsSpecifySecondPoint,p1,p2) then
+    if GetInteractiveLine(rscmSpecifyfirstPoint,rscmSpecifySecondPoint,p1,p2) then
     begin
          FinalCreateRDim;
     end;
@@ -998,7 +994,7 @@ begin
                                       //needundo не указан, поумолчанию - false
                                       );
   {запрашиваем точку вставки таская блок на мышке}
-  if commandmanager.Get3DPointInteractive(rsSpecifyInsertPoint,//текст запроса
+  if commandmanager.Get3DPointInteractive(rscmSpecifyInsertPoint,//текст запроса
                                           CreatedData.PInsert, //сюда будут возвращены координаты указанные пользователем
                                           @InteractiveBlockInsertManipulator,//"интерактивная" процедура таскающая блок за мышкой
                                           CreatedData.PEntity)//параметр который будет передаваться "интерактивной" процедуре (указатель на временный блок)
@@ -1007,7 +1003,7 @@ begin
     {точка была указана, еск пользователь не жал}
     {запрашиваем масштаб, растягивая блок на точке}
     {commandmanager.Get3DPointInteractive тут пока временно, будет организован commandmanager.GeScaleInteractive:GDBDouble возвращающая масштаб а не точку}
-    if commandmanager.Get3DPointInteractive(rsSpecifyScale,//текст запроса
+    if commandmanager.Get3DPointInteractive(rscmSpecifyScale,//текст запроса
                                             vertex,//сюда будут возвращены координаты указанные пользователем, далее не используется
                                             @InteractiveBlockScaleManipulator,//"интерактивная" процедура масштабирующая блок на точке
                                             @CreatedData)//параметр который будет передаваться "интерактивной" процедуре (указатель на временный блок)
@@ -1016,7 +1012,7 @@ begin
       {масштаб была указан, еск пользователь не жал}
       {запрашиваем поворот, крутя блок на точке}
       {commandmanager.Get3DPointInteractive тут пока временно, будет организован commandmanager.GeRotateInteractive:GDBDouble возвращающая угол а не точку}
-      if commandmanager.Get3DPointInteractive(rsSpecifyRotate,vertex,@InteractiveBlockRotateManipulator,@CreatedData) then
+      if commandmanager.Get3DPointInteractive(rscmSpecifyRotate,vertex,@InteractiveBlockRotateManipulator,@CreatedData) then
       begin
            {поворот была указан, еск пользователь не жал}
            {создаем постоянный блок в в чертеже, с ундо}

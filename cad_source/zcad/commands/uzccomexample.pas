@@ -18,7 +18,7 @@
 {$mode objfpc}
 
 {**Модуль реализации чертежных команд (линия, круг, размеры и т.д.)}
-unit gdbcommandsexample;
+unit uzccomexample;
 
 { file def.inc is necessary to include at the beginning of each module zcad
   it contains a centralized compilation parameters settings }

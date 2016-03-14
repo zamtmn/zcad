@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 {$MODE OBJFPC}
-unit uzcimport;
+unit uzccomimport;
 {$INCLUDE def.inc}
 interface
 uses gdbdrawcontext,zeentityfactory,

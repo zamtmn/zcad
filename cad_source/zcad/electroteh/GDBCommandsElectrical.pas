@@ -34,7 +34,7 @@ uses
   {sysinfo,}GDBNet,
   uzcshared,GDBSubordinated,GDBCable,varman,WindowsSpecific,uunitmanager,
   UGDBOpenArrayOfPObjects,UGDBBillOfMaterial,uzccablemanager,GDBDevice,GDBTable,
-  paths,UGDBStringArray,math,Masks,uzclog,GDBCommandsBase,strproc;
+  paths,UGDBStringArray,math,Masks,uzclog,uzccombase,strproc;
 type
 {Export+}
   TFindType=(

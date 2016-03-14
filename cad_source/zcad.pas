@@ -106,7 +106,7 @@ uses
 
   //commandline,
 
-  GDBCommandsBase,
+  uzccombase,
   GDBCommandsDB,
   GDBCommandsDraw,
   gdbcommandsexample,

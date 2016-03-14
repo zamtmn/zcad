@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="44">
+    <Units Count="45">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -430,6 +430,10 @@
         <Filename Value="zcad/commands/uzccomdbgappexplorer.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit43>
+      <Unit44>
+        <Filename Value="zcad/commands/uzccombase.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit44>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -87,16 +87,6 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     function IsRTECommand:GDBBoolean;virtual;
   end;
-  pGDBcommandmanagerDef=^GDBcommandmanagerDef;
-  GDBcommandmanagerDef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
-                                  lastcommand:GDBString;
-                                  pcommandrunning:PCommandRTEdObjectDef;
-                                  function executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;abstract;
-                                  procedure executecommandend;virtual;abstract;
-                                  function executelastcommad(pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;abstract;
-                                  procedure sendpoint2command(p3d:gdbvertex; p2d:gdbvertex2di; mode:GDBByte;osp:pos_record;const drawing:TDrawingDef);virtual;abstract;
-                                  procedure CommandRegister(pc:PCommandObjectDef);virtual;abstract;
-                             end;
 {Export-}
 implementation
 function CommandObjectDef.IsRTECommand:GDBBoolean;

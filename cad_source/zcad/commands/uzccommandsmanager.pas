@@ -19,7 +19,7 @@
 unit uzccommandsmanager;
 {$INCLUDE def.inc}
 interface
-uses uzcsysvars,geometry,uzglabstractviewarea,paths,gdbobjectsconstdef,UDMenuWnd,uinfoform,uzcstrconsts,{umytreenode,}uzcsysinfo,strproc,UGDBOpenArrayOfPointer,
+uses UGDBOpenArrayOfPObjects,uzcsysvars,geometry,uzglabstractviewarea,paths,gdbobjectsconstdef,UDMenuWnd,uinfoform,uzcstrconsts,{umytreenode,}uzcsysinfo,strproc,UGDBOpenArrayOfPointer,
      gdbasetypes,commandlinedef, sysutils,gdbase,oglwindowdef,
      memman,uzcshared,uzclog,varmandef,varman,ugdbdrawingdef,zcadinterface;
 const
@@ -30,7 +30,11 @@ type
             end;
   TOnCommandRun=procedure(command:string) of object;
 
-  GDBcommandmanager=object(GDBcommandmanagerDef)
+  GDBcommandmanager=object(GDBOpenArrayOfPObjects)
+
+                          lastcommand:GDBString;
+                          pcommandrunning:PCommandRTEdObjectDef;
+
                           LatestRunPC:PCommandObjectDef;
                           LatestRunOperands:GDBString;
                           LatestRunPDrawing:PTDrawingDef;

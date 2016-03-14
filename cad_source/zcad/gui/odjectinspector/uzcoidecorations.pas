@@ -25,7 +25,7 @@ uses
   commandlinedef,zcobjectinspectoreditors,uzcsysinfo,gdbpalette,UEnumDescriptor,zcobjectinspector,uinfoform,Forms,ugdbltypearray,sysutils,umytreenode,uzcfsnapeditor,uzccominterface,
   Graphics,LCLType,Themes,types,gdbobjectsconstdef,UGDBNamedObjectsArray,UGDBStringArray,
   varmandef,Varman,uzcfcolors,UGDBLayerArray,gdbase,uzcflineweights,gdbasetypes,usupportgui,
-  StdCtrls,UGDBDescriptor,uzcstrconsts,Controls,Classes,strproc,uzcsysvars,commandline,
+  StdCtrls,UGDBDescriptor,uzcstrconsts,Controls,Classes,strproc,uzcsysvars,uzccommandsmanager,
   zcadinterface;
 type
     AsyncCommHelper=class

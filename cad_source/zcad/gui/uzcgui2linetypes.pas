@@ -24,7 +24,7 @@ interface
 uses
   uzglgdidrawer,geometry, gdbdrawcontext, gdbvisualprop, gdbase, uzglgeometry,
   ugdbltypearray, graphics,gdbasetypes,usupportgui,StdCtrls,UGDBDescriptor,
-  uzcstrconsts,Controls,Classes,strproc,uzcsysvars,commandline;
+  uzcstrconsts,Controls,Classes,strproc,uzcsysvars,uzccommandsmanager;
 
 type
   TSupportLineTypeCombo = class

@@ -10,7 +10,7 @@ unit GDBCommandsOPS;
 interface
 uses
 
-  intftranslations,zeentitiesmanager,GDBEntity,uzglabstractviewarea,gdbdrawcontext,GDBAbstractText,GDBText,UGDBStringArray,zeentityfactory,uzcsysvars,strproc,gdbasetypes,commandline,uzclog,UGDBOpenArrayOfPObjects,
+  intftranslations,zeentitiesmanager,GDBEntity,uzglabstractviewarea,gdbdrawcontext,GDBAbstractText,GDBText,UGDBStringArray,zeentityfactory,uzcsysvars,strproc,gdbasetypes,uzccommandsmanager,uzclog,UGDBOpenArrayOfPObjects,
   plugins,
   commandlinedef,
   commanddefinternal,

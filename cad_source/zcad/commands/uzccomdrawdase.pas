@@ -23,7 +23,7 @@ interface
 uses
   uzcstrconsts,GL,printers,graphics,fileutil,Clipbrd,LCLType,classes,
   commandlinedef,
-  gdbasetypes,commandline,uzccombase,
+  gdbasetypes,uzccommandsmanager,uzccombase,
   plugins,
   commanddefinternal,
   gdbase,

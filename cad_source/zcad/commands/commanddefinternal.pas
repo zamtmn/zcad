@@ -21,7 +21,7 @@ unit commanddefinternal;
 
 
 interface
-uses gdbdrawcontext,generalviewarea,gdbobjectsconstdef,uzcsysvars,geometry,varmandef,gdbasetypes,gdbase,commandlinedef,commandline,oglwindowdef,UGDBDescriptor
+uses gdbdrawcontext,generalviewarea,gdbobjectsconstdef,uzcsysvars,geometry,varmandef,gdbasetypes,gdbase,commandlinedef,uzccommandsmanager,oglwindowdef,UGDBDescriptor
   {,UGDBLayerArray},memman,uzcshared;
 type
   comproc=procedure(_self:pointer);
@@ -266,7 +266,7 @@ begin
     end;
   gdb.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   gdb.GetCurrentDWG.OnMouseObj.Clear;
-  if commandline.commandmanager.CommandsStack.Count=0 then
+  if uzccommandsmanager.commandmanager.CommandsStack.Count=0 then
   begin
   gdb.GetCurrentDWG.wa.Clear0Ontrackpoint;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
@@ -277,7 +277,7 @@ begin
   gdb.GetCurrentDWG.wa.SetMouseMode(savemousemode);
   sysvarDWGOSMode := saveosmode;
 
-  if commandline.commandmanager.CommandsStack.Count=0 then
+  if uzccommandsmanager.commandmanager.CommandsStack.Count=0 then
                                                            gdb.GetCurrentDWG.wa.setobjinsp;
   //-------------------------------gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   OSModeEditor.GetState;

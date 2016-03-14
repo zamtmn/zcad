@@ -33,7 +33,7 @@ type
 var
   AboutForm:TAboutForm;
 implementation
-uses zeentityfactory,uzcshared,uzclog,commandline;
+uses zeentityfactory,uzcshared,uzclog,uzccommandsmanager;
 procedure TAboutForm.AfterConstruction;
 begin
   inherited;
@@ -51,7 +51,7 @@ begin
                        +rsVinfotext+#13#10+
                        rsReleaseNotes
                        +#13#10
-                       +format(rsCommEntEeport,[commandline.commandmanager.Count,ObjID2EntInfoData.Size,DXFName2EntInfoData.Size]));
+                       +format(rsCommEntEeport,[uzccommandsmanager.commandmanager.Count,ObjID2EntInfoData.Size,DXFName2EntInfoData.Size]));
   Memo.Parent := self;
 end;
 begin

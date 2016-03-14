@@ -29,7 +29,7 @@ var
 procedure RunTextEditor(Pobj:GDBPointer;var drawing:TDrawingDef);
 implementation
 uses
-     commandline;
+    uzccommandsmanager;
 procedure RunTextEditor(Pobj:GDBPointer;var drawing:TDrawingDef);
 var
    modalresult:integer;

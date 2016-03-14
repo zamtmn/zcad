@@ -22,7 +22,7 @@ interface
 uses
  zcguimanager,paths,Themes,buttons,uzcsysvars,uzcstrconsts,strproc,uzcsysinfo,lclproc,sysutils,gdbasetypes,
  StdCtrls,ExtCtrls,Controls,Classes,menus,Forms,fileutil,graphics,
- gdbase, memman,UGDBDescriptor,math,commandline,varman,languade,
+ gdbase, memman,UGDBDescriptor,math,uzccommandsmanager,varman,languade,
  UGDBTracePropArray,varmandef,
  geometry,uzcshared,UGDBStringArray,zcadinterface,umytreenode;
 

@@ -82,7 +82,7 @@ uses
                       //описания базовых типов
   gdbobjectsconstdef, //base constants
                       //описания базовых констант
-  commandline,
+  uzccommandsmanager,
   commandlinedef,
   commanddefinternal, //Commands manager and related objects
                       //менеджер команд и объекты связанные с ним

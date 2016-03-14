@@ -148,7 +148,7 @@ procedure SetHeightControl(_parent:TWinControl;h:integer);
 //var
 //   ACN_ShowObjInsp:TmyAction=nil;
 implementation
-uses commandline,uzclog,ugdbdescriptor;
+uses uzccommandsmanager,uzclog,ugdbdescriptor;
 function TMySpeedButton.GetDrawDetails: TThemedElementDetails;
 
   function WindowPart: TThemedScrollBar;

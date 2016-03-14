@@ -30,7 +30,7 @@ uses
   PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,
   {fileutil}LazUTF8,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   commandlinedef,strproc,
-  gdbasetypes,commandline,uzccombase,
+  gdbasetypes,uzccommandsmanager,uzccombase,
   plugins,
   commanddefinternal,
   gdbase,

@@ -109,7 +109,7 @@ uses
   uzccombase,
   uzccomdb,
   uzccomdraw,
-  gdbcommandsexample,
+  uzccomexample,
   uzccominterface,
 
   GDBCommandsElectrical,

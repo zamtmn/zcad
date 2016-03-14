@@ -3133,7 +3133,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
               procedure Format;virtual;abstract;
               procedure GetState;
              end;
-//Generate on E:/zcad/cad_source/zcad/commands/GDBCommandsDraw.pas
+//Generate on E:/zcad/cad_source/zcad/commands/uzccomdraw.pas
          TEntityProcess=(
                        TEP_Erase(*'Erase'*),
                        TEP_leave(*'Leave'*)

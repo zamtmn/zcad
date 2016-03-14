@@ -92,7 +92,7 @@ zcad/DeviceBase/devicebaseabstract.pas
 zcad/DeviceBase/DeviceBase.pas
 zcad/commands/commandlinedef.pas
 zcad/commands/commanddefinternal.pas
-zcad/commands/GDBCommandsDraw.pas
+zcad/commands/uzccomdraw.pas
 zcad/commands/gdbcommandsexample.pas
 zengine/u/UGDBTracePropArray.pas
 zcad/gui/oglwindowdef.pas

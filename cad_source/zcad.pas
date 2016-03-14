@@ -110,7 +110,7 @@ uses
   GDBCommandsDB,
   GDBCommandsDraw,
   gdbcommandsexample,
-  gdbcommandsinterface,
+  uzccominterface,
 
   GDBCommandsElectrical,
   GDBCommandsOPS,
@@ -127,7 +127,7 @@ uses
   uzclibraryblocksregister,
   uzglopenglviewarea,uzglgdiviewarea,uzglcanvasviewarea,
 
-  dbgappexplorercommand;
+  uzccomdbgappexplorer;
   //RegCnownTypes,URegisterObjects;
 
 //exports HistoryOut,redrawoglwnd,updatevisible,reloadlayer; {uzcshared}

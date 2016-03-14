@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit dbgappexplorercommand;
+unit uzccomdbgappexplorer;
 {$INCLUDE def.inc}
 
 interface

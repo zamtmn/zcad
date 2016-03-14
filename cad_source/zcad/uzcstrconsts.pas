@@ -83,6 +83,13 @@ resourcestring
   rsAlternateFontNotFoundIn='Alternate font "%s" is not found in "%s"';
 
   {commands messages}
+  rscmSpecifyFirstPoint='Specify first point:';
+  rscmSpecifySecondPoint='Specify second point:';
+  rscmSpecifyThirdPoint='Specify third point:';
+  rscmSpecifyInsertPoint='Specify insert point:';
+  rscmSpecifyScale='Specify scale:';
+  rscmSpecifyRotate='Specify rotate:';
+
   rscmCantGetBlockToReplace='Unable get block name to replace';
   rscmInDwgTxtStyleNotDeffined='In drawing not defined any textstyle!';
   rscmNotCutHere='Do not cut off here';

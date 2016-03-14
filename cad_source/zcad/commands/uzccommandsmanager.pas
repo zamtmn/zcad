@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit commandline;
+unit uzccommandsmanager;
 {$INCLUDE def.inc}
 interface
 uses uzcsysvars,geometry,uzglabstractviewarea,paths,gdbobjectsconstdef,UDMenuWnd,uinfoform,uzcstrconsts,{umytreenode,}uzcsysinfo,strproc,UGDBOpenArrayOfPointer,

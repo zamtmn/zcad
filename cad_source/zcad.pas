@@ -93,7 +93,7 @@ uses
   //varman,
   GDBManager,
   //UGDBDescriptor,
-  commandline,
+  uzccommandsmanager,
   DeviceBase,
   URecordDescriptor,
   //gdbase,

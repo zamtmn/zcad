@@ -23,7 +23,7 @@ interface
 
 uses
   gdbobjectsconstdef,uzcflineweights,usupportgui,StdCtrls,UGDBDescriptor,
-  Controls,Classes,ugdbdimstylearray,strproc,uzcsysvars,commandline;
+  Controls,Classes,ugdbdimstylearray,strproc,uzcsysvars,uzccommandsmanager;
 
 type
   TSupportLineWidthCombo = class

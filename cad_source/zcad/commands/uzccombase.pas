@@ -25,7 +25,7 @@ uses
  generalviewarea,zeundostack,zcchangeundocommand,uzcoimultiobjects,
  uzcenitiesvariablesextender,gdbdrawcontext,ugdbdrawing,paths,fileformatsmanager,
  gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,
- URecordDescriptor,ugdbfontmanager,ugdbsimpledrawing,uzcsysvars,commandline,
+ URecordDescriptor,ugdbfontmanager,ugdbsimpledrawing,uzcsysvars,uzccommandsmanager,
  TypeDescriptors,GDBManager,uzcstrconsts,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
  strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,LazUTF8,Forms,Controls,Clipbrd,lclintf,

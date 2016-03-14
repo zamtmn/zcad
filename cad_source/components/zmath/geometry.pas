@@ -68,9 +68,9 @@ const
       NulVertex2D:GDBVertex2D=(x:0;y:0);
       XWCS2D2D:GDBVertex2D=(x:1;y:0);
 type Intercept3DProp=record
-                           isintercept:GDBBoolean;
-                           interceptcoord:gdbvertex;
-                           t1,t2:GDBDouble;
+                           isintercept:GDBBoolean;   //**< Есть это пересение или нет
+                           interceptcoord:gdbvertex; //**< Точка пересечения X,Y,Z
+                           t1,t2:GDBDouble;          //**< позиция на линии 1 и 2 в виде относительных цифр от 0 до 1
                      end;
     Intercept2DProp=record
                            isintercept:GDBBoolean;
@@ -93,7 +93,9 @@ function intercept2dmy(const l1begin,l1end,l2begin,l2end:gdbvertex2d):intercept2
 function intercept3dmy(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;inline;
 function intercept3dmy2(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;//inline;
 
+//** Функция позволяет найти пересечение по 2-м координатам одной линии и другой
 function intercept3d(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;//inline;
+
 
 function pointinquad2d(const x1, y1, x2, y2, xp, yp: GDBFloat): GDBBoolean;inline;
 function Vertexlength(const Vector1, Vector2: GDBVertex): GDBDouble;{inline;}

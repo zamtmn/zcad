@@ -21,7 +21,7 @@ unit gdbcommandsinterface;
 
 interface
 uses
- uzcimport,paths,fileformatsmanager,backendmanager,uzglabstractviewarea,uzglopengldrawer,
+ uzccomimport,paths,fileformatsmanager,backendmanager,uzglabstractviewarea,uzglopengldrawer,
  uzcfcolors,uzcfdimstyles,uzcflinetypes,uzcftextstyles,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,
  uzcsysvars,commandline,TypeDescriptors,GDBManager,uzcstrconsts,UGDBStringArray,ucxmenumgr,
  {$IFNDEF DELPHI}intftranslations,{$ENDIF}uzcflayers,uzcfunits,strproc,umytreenode,menus,

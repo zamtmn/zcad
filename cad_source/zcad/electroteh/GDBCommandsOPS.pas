@@ -29,7 +29,7 @@ uses
   geometry,
   memman,
   gdbobjectsconstdef,
-  GDBCommandsDraw,
+  uzccomdraw,
   UGDBVisibleOpenArray,{gdbEntity,}{GDBCircle,}GDBLine,{GDBGenericSubEntry,}
   paths,uzcshared,{GDBSubordinated,}GDBBlockInsert,{ZWinMan,}{sysinfo,}varman,uzccablemanager,GDBDevice,GDBMText,math;
 

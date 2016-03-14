@@ -108,7 +108,7 @@ uses
 
   uzccombase,
   GDBCommandsDB,
-  GDBCommandsDraw,
+  uzccomdraw,
   gdbcommandsexample,
   uzccominterface,
 

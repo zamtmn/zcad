@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit gdbcommandsinterface;
+unit uzccominterface;
 {$INCLUDE def.inc}
 
 interface

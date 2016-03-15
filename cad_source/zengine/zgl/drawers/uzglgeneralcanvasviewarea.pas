@@ -26,7 +26,7 @@ uses
      uzglgdidrawer,uzglabstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,
      UGDBLayerArray,ugdbdimstylearray,
      geometry,{$IFNDEF DELPHI}LCLType,LMessages,{$ENDIF}{$IFDEF DELPHI}windows,messages,{$ENDIF}
-     ExtCtrls,classes,Controls,Graphics,generalviewarea,backendmanager;
+     ExtCtrls,classes,Controls,Graphics,generalviewarea,uzglbackendmanager;
 type
     TGDIPanel=class({TCustomControl}TCADControl)
                 protected

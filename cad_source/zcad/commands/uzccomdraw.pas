@@ -24,7 +24,7 @@ uses
   generalviewarea,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,
   zcmultiobjectcreateundocommand,zeentitiesmanager,uzglcanvasdrawer,
   uzcoimultiobjects,uzcenitiesvariablesextender,ugdbdrawing,gdbpalette,
-  ugdbopenarrayofgdbdouble,texteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,
+  ugdbopenarrayofgdbdouble,uzctextenteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,
   GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,zeentityfactory,
   ugdbsimpledrawing,uzcsysvars,uzcstrconsts,uzccomdrawdase,glstatemanager,
   PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,

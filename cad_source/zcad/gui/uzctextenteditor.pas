@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit texteditor;
+unit uzctextenteditor;
 {$INCLUDE def.inc}
 interface
 uses

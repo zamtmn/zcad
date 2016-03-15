@@ -24,7 +24,7 @@ uses
  uzccomimport,paths,fileformatsmanager,uzglbackendmanager,uzglabstractviewarea,uzglopengldrawer,
  uzcfcolors,uzcfdimstyles,uzcflinetypes,uzcftextstyles,uinfoform,UGDBFontManager,ugdbsimpledrawing,uzccombase,
  uzcsysvars,uzccommandsmanager,TypeDescriptors,GDBManager,uzcstrconsts,UGDBStringArray,ucxmenumgr,
- {$IFNDEF DELPHI}intftranslations,{$ENDIF}uzcflayers,uzcfunits,strproc,umytreenode,menus,
+ {$IFNDEF DELPHI}uzctranslations,{$ENDIF}uzcflayers,uzcfunits,strproc,umytreenode,menus,
  {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} {fileutil}LazUTF8,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,

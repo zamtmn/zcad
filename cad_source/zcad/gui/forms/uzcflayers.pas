@@ -12,7 +12,7 @@ uses
   gdbobjectsconstdef,UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,
 
   zcadinterface, uzcstrconsts, strproc, uzcshared, UBaseTypeDescriptor,
-  imagesmanager, usupportgui, ZListView;
+  uzcimagesmanager, usupportgui, ZListView;
 
 const
      NameColumn=0;

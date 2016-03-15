@@ -29,7 +29,7 @@ uses
   gdbobjectsconstdef,UGDBTextStyleArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,usuptypededitors,
 
   paths,zcadinterface, uzcstrconsts, uzcsysinfo,strproc, uzcshared, UBaseTypeDescriptor,
-  imagesmanager, usupportgui, ZListView,UGDBFontManager,varman,UGDBStringArray,GDBEntity,GDBText;
+  uzcimagesmanager, usupportgui, ZListView,UGDBFontManager,varman,UGDBStringArray,GDBEntity,GDBText;
 
 const
      NameColumn=0;

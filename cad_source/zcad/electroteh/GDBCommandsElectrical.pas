@@ -10,7 +10,7 @@ unit GDBCommandsElectrical;
 
 interface
 uses
-  generalviewarea,intftranslations,zcobjectchangeundocommand2,
+  generalviewarea,uzctranslations,zcobjectchangeundocommand2,
   zcmultiobjectcreateundocommand,zeentitiesmanager,UGDBDrawingdef,
   uzcenitiesvariablesextender,gdbdrawcontext,ugdbdrawing,uzcvariablesutils,
   GDBAbstractText,uzcstrconsts,UGDBSelectedObjArray,zeentityfactory,uzcsysvars,

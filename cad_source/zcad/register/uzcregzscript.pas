@@ -19,7 +19,7 @@
 unit uzcregzscript;
 {$INCLUDE def.inc}
 interface
-uses uzcsysvars,paths,intftranslations,UUnitManager,TypeDescriptors;
+uses uzcsysvars,paths,uzctranslations,UUnitManager,TypeDescriptors;
 implementation
 
 initialization

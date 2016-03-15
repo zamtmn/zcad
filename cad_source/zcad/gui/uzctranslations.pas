@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit intftranslations;
+unit uzctranslations;
 {$INCLUDE def.inc}
 
 interface

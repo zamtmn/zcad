@@ -73,7 +73,7 @@ zengine/gdb/entities/GDBBlockInsert.pas
 zengine/gdb/entities/GDBDevice.pas
 zengine/gdb/entities/GDBconnected.pas
 zengine/u/UGDBGraf.pas
-zcad/electrotech/GDBNet.pas
+zcad/electrotech/uzcentnet.pas
 zengine/gdb/entities/GDBLine.pas
 zengine/gdb/entities/GDBLWPolyLine.pas
 zengine/gdb/entities/GDBtext.pas
@@ -82,11 +82,11 @@ zengine/gdb/entities/GDBPoint.pas
 zengine/gdb/entities/GDBCurve.pas
 zengine/gdb/entities/GDBPolyLine.pas
 zengine/gdb/entities/gdbspline.pas
-zcad/electrotech/GDBCable.pas
+zcad/electrotech/uzcentcable.pas
 zengine/gdb/GDBRoot.pas
 zengine/gdb/GDBCamera.pas
 zengine/gdb/GDBTable.pas
-zcad/electrotech/GDBElLeader.pas
+zcad/electrotech/uzcentelleader.pas
 components/zcontainers/UGDBOpenArrayOfTObjLinkRecord.pas
 zcad/DeviceBase/uzcdevicebaseabstract.pas
 zcad/DeviceBase/uzcdevicebase.pas
@@ -104,8 +104,8 @@ zengine/gdb/drawings/ugdbsimpledrawing.pas
 zengine/gdb/drawings/UGDBDescriptor.pas
 zcad/gui/odjectinspector/uzcoiwrapper.pas
 zcad/gui/odjectinspector/uzcoimultiobjects.pas
-zcad/electrotech/GDBCommandsOPS.pas
-zcad/electrotech/GDBCommandsElectrical.pas
+zcad/electrotech/uzccomops.pas
+zcad/electrotech/uzccomelectrical.pas
 zcad/electrotech/uzccablemanager.pas 
 zengine/fonts/UGDBFontManager.pas
 zengine/zgl/drawers/uzglgdidrawer.pas 

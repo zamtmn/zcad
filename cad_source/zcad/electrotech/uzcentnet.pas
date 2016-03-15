@@ -4,7 +4,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }  
-unit GDBNet;
+unit uzcentnet;
 {$INCLUDE def.inc}
 
 interface

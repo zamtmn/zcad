@@ -5,7 +5,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit GDBCommandsElectrical;
+unit uzccomelectrical;
 {$INCLUDE def.inc}
 
 interface
@@ -16,7 +16,7 @@ uses
   GDBAbstractText,uzcstrconsts,UGDBSelectedObjArray,zeentityfactory,uzcsysvars,
   csvdocument,
   UGDBOpenArrayOfPV,GDBBlockInsert,devices,UGDBTree,ugdbdescriptor,gdbasetypes,
-  uzccommandsmanager,uzccomdraw,GDBElLeader,
+  uzccommandsmanager,uzccomdraw,uzcentelleader,
   plugins,
   uzccommandsabstract,
   uzccommandsimpl,
@@ -31,8 +31,8 @@ uses
   memman,
   gdbobjectsconstdef,
   gdbEntity,GDBLine,
-  {sysinfo,}GDBNet,
-  uzcshared,GDBSubordinated,GDBCable,varman,WindowsSpecific,uunitmanager,
+  uzcentnet,
+  uzcshared,GDBSubordinated,uzcentcable,varman,WindowsSpecific,uunitmanager,
   UGDBOpenArrayOfPObjects,UGDBBillOfMaterial,uzccablemanager,GDBDevice,GDBTable,
   paths,UGDBStringArray,math,Masks,uzclog,uzccombase,strproc;
 type

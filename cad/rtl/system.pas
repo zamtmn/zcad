@@ -2541,7 +2541,7 @@ GDBGraf={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfDa
                 procedure BeginFindPath;
                 procedure FindPath(point1,point2:gdbvertex;l1,l2:pgdbobjEntity;var pa:GDBPoint3dArray);
              end;
-//Generate on E:/zcad/cad_source/zcad/electrotech/GDBNet.pas
+//Generate on E:/zcad/cad_source/zcad/electrotech/uzcentnet.pas
 PGDBObjNet=^GDBObjNet;
 GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
                  graf:GDBGraf;
@@ -2830,7 +2830,7 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  procedure getoutbound(var DC:TDrawContext);virtual;abstract;
                  function CreateInstance:PGDBObjSpline;static;
            end;
-//Generate on E:/zcad/cad_source/zcad/electrotech/GDBCable.pas
+//Generate on E:/zcad/cad_source/zcad/electrotech/uzcentcable.pas
 PTNodeProp=^TNodeProp;
 TNodeProp=packed record
                 PrevP,NextP:GDBVertex;
@@ -2915,7 +2915,7 @@ GDBObjTable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;abstract;
             procedure ReCalcFromObjMatrix;virtual;abstract;
             end;
-//Generate on E:/zcad/cad_source/zcad/electrotech/GDBElLeader.pas
+//Generate on E:/zcad/cad_source/zcad/electrotech/uzcentelleader.pas
 PGDBObjElLeader=^GDBObjElLeader;
 GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             MainLine:GDBObjLine;
@@ -3786,7 +3786,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                 procedure processProperty(const ID:TObjID; const pentity: pGDBObjEntity; const PMultiPropertyDataForObjects:PTMultiPropertyDataForObjects; const pu:PTObjectUnit; const PSourceVD:PVarDesk;const mp:TMultiProperty; var DC:TDrawContext);
                 procedure ClearErrorRange;
             end;
-//Generate on E:/zcad/cad_source/zcad/electrotech/GDBCommandsOPS.pas
+//Generate on E:/zcad/cad_source/zcad/electrotech/uzccomops.pas
   TInsertType=(
                TIT_Block(*'Block'*),
                TIT_Device(*'Device'*)
@@ -3856,7 +3856,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
   OPS_SPBuild={$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
     procedure Command(Operands:pansichar); virtual;abstract;
   end;
-//Generate on E:/zcad/cad_source/zcad/electrotech/GDBCommandsElectrical.pas
+//Generate on E:/zcad/cad_source/zcad/electrotech/uzccomelectrical.pas
   TFindType=(
                TFT_Obozn(*'**обозначении'*),
                TFT_DBLink(*'**материале'*),

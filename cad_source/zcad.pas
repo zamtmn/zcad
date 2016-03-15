@@ -113,8 +113,8 @@ uses
   uzccomexample,
   uzccominterface,
 
-  GDBCommandsElectrical,
-  GDBCommandsOPS,
+  uzccomelectrical,
+  uzccomops,
   plugins,
   //zcregisterobjectinspector,
   uzcmainwindow,

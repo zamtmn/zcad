@@ -66,7 +66,7 @@ uses
 
   gvector,garrayutils, // Подключение Generics и модуля для работы с ним
 
-  gdbCable,
+  uzcentcable,
   GDBDevice,
   UGDBOpenArrayOfPV,
 

@@ -20,7 +20,7 @@ unit uzcregisterenitiesextenders;
 
 interface
 uses sysutils,
-     uzcenitiesvariablesextender,uzcshared,uzccomdb,GDBCable,GDBNet,GDBDevice,TypeDescriptors,
+     uzcenitiesvariablesextender,uzcshared,uzccomdb,uzcentcable,uzcentnet,GDBDevice,TypeDescriptors,
      gdbfieldprocessor,UGDBOpenArrayOfByte,gdbase,gdbobjectextender,
      GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,
      URecordDescriptor,UBaseTypeDescriptor,memman;

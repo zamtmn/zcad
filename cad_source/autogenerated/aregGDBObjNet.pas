@@ -2,7 +2,7 @@ unit aregGDBObjNet;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,GDBNet;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzcentnet;
 implementation
 var
 pt:PObjectDescriptor;

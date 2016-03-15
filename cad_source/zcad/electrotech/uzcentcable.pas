@@ -4,7 +4,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }   
-unit GDBCable;
+unit uzcentcable;
 {$INCLUDE def.inc}
 
 interface

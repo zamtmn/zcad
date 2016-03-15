@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="67">
+    <Units Count="72">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -522,6 +522,26 @@
         <Filename Value="zcad/electrotech/uzvcom.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit66>
+      <Unit67>
+        <Filename Value="zcad/electrotech/uzccomelectrical.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit67>
+      <Unit68>
+        <Filename Value="zcad/electrotech/uzccomops.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit68>
+      <Unit69>
+        <Filename Value="zcad/electrotech/uzcentcable.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit69>
+      <Unit70>
+        <Filename Value="zcad/electrotech/uzcentelleader.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit70>
+      <Unit71>
+        <Filename Value="zcad/electrotech/uzcentnet.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit71>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

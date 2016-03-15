@@ -64,7 +64,7 @@ uses
   gdbCircle,
   gdbEntity,
 
-  gdbCable,
+  uzcentcable,
   GDBDevice,
   UGDBOpenArrayOfPV,
 

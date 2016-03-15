@@ -16,12 +16,12 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit commanddefinternal;
+unit uzccommandsimpl;
 {$INCLUDE def.inc}
 
 
 interface
-uses gdbdrawcontext,generalviewarea,gdbobjectsconstdef,uzcsysvars,geometry,varmandef,gdbasetypes,gdbase,commandlinedef,uzccommandsmanager,oglwindowdef,UGDBDescriptor
+uses gdbdrawcontext,generalviewarea,gdbobjectsconstdef,uzcsysvars,geometry,varmandef,gdbasetypes,gdbase,uzccommandsabstract,uzccommandsmanager,oglwindowdef,UGDBDescriptor
   {,UGDBLayerArray},memman,uzcshared;
 type
   comproc=procedure(_self:pointer);

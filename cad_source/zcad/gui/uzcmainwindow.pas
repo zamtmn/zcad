@@ -39,7 +39,7 @@ uses
        GDBEntity,UGDBSelectedObjArray,UGDBLayerArray,ugdbsimpledrawing,
        GDBBlockDef,UGDBDescriptor,GDBManager,ugdbltypearray,gdbobjectsconstdef,GDBText,gdbdimension,
   {ZCAD COMMANDS}
-       commandlinedef,commanddefinternal,uzccommandsmanager,
+       uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
   {GUI}
        texteditor,uzcoidecorations,cmdline,umytreenode,uzcflineweights,layercombobox,ucxmenumgr,
        uzcfcolors,imagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,

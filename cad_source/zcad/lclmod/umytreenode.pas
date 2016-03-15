@@ -21,7 +21,7 @@ unit umytreenode;
 interface
 
 uses
-  paths,Themes,zcadinterface,commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,
+  paths,Themes,zcadinterface,uzccommandsabstract,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,
   Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}LazUTF8,Buttons,
   {$IFNDEF DELPHI}intftranslations,{$ENDIF}sysutils,strproc,varmandef,
   Varman,UBaseTypeDescriptor,gdbasetypes,uzcshared,uzcsysinfo,UGDBOpenArrayOfByte;

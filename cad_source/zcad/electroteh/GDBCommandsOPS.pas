@@ -12,8 +12,8 @@ uses
 
   intftranslations,zeentitiesmanager,GDBEntity,uzglabstractviewarea,gdbdrawcontext,GDBAbstractText,GDBText,UGDBStringArray,zeentityfactory,uzcsysvars,strproc,gdbasetypes,uzccommandsmanager,uzclog,UGDBOpenArrayOfPObjects,
   plugins,
-  commandlinedef,
-  commanddefinternal,
+  uzccommandsabstract,
+  uzccommandsimpl,
   gdbase,
   UGDBDescriptor,
   GDBManager,

@@ -3018,7 +3018,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                                    OuterDiameter:GDBDouble;(*'**Наружный диаметр'*)
                                    constructor initnul;
                              end;
-//Generate on E:/zcad/cad_source/zcad/commands/commandlinedef.pas
+//Generate on E:/zcad/cad_source/zcad/commands/uzccommandsabstract.pas
     TGetPointMode=(TGPWait{point},TGPWaitEnt,TGPEnt,TGPPoint,TGPCancel,TGPOtherCommand, TGPCloseDWG,TGPCloseApp);
     TInteractiveData=packed record
                        GetPointMode:TGetPointMode;(*hidden_in_objinsp*)
@@ -3071,17 +3071,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
     function IsRTECommand:GDBBoolean;virtual;abstract;
   end;
-  pGDBcommandmanagerDef=^GDBcommandmanagerDef;
-  GDBcommandmanagerDef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
-                                  lastcommand:GDBString;
-                                  pcommandrunning:PCommandRTEdObjectDef;
-                                  function executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;abstract;
-                                  procedure executecommandend;virtual;abstract;
-                                  function executelastcommad(pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;abstract;
-                                  procedure sendpoint2command(p3d:gdbvertex; p2d:gdbvertex2di; mode:GDBByte;osp:pos_record;const drawing:TDrawingDef);virtual;abstract;
-                                  procedure CommandRegister(pc:PCommandObjectDef);virtual;abstract;
-                             end;
-//Generate on E:/zcad/cad_source/zcad/commands/commanddefinternal.pas
+//Generate on E:/zcad/cad_source/zcad/commands/uzccommandsimpl.pas
   CommandFastObject = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandFastObjectDef)
     procedure CommandInit; virtual;abstract;
     procedure CommandEnd; virtual;abstract;
@@ -3414,7 +3404,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
   ITT_com = {$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
     procedure Command(Operands:pansichar); virtual;abstract;
   end;
-//Generate on E:/zcad/cad_source/zcad/commands/gdbcommandsexample.pas
+//Generate on E:/zcad/cad_source/zcad/commands/uzccomexample.pas
     PTMatchPropParam=^TMatchPropParam;
     TMatchPropParam=packed record
                        ProcessLayer:GDBBoolean;(*'Process layer'*)

@@ -85,8 +85,8 @@ uses
   gdbobjectsconstdef, //base constants
                       //описания базовых констант
   uzccommandsmanager,
-  commandlinedef,
-  commanddefinternal, //Commands manager and related objects
+  uzccommandsabstract,
+  uzccommandsimpl, //Commands manager and related objects
                       //менеджер команд и объекты связанные с ним
   ugdbdrawing,
   UGDBDescriptor,     //Drawings manager, all open drawings are processed him

@@ -90,10 +90,10 @@ zcad/electroteh/GDBElLeader.pas
 components/zcontainers/UGDBOpenArrayOfTObjLinkRecord.pas
 zcad/DeviceBase/devicebaseabstract.pas
 zcad/DeviceBase/DeviceBase.pas
-zcad/commands/commandlinedef.pas
-zcad/commands/commanddefinternal.pas
+zcad/commands/uzccommandsabstract.pas
+zcad/commands/uzccommandsimpl.pas
 zcad/commands/uzccomdraw.pas
-zcad/commands/gdbcommandsexample.pas
+zcad/commands/uzccomexample.pas
 zengine/u/UGDBTracePropArray.pas
 zcad/gui/oglwindowdef.pas
 components/zscript/UUnitManager.pas

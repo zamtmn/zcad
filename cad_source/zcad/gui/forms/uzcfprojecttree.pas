@@ -20,7 +20,7 @@ unit uzcfprojecttree;
 {$INCLUDE def.inc}
 interface
 uses
- uzcsysvars,uzctranslations,uzcenitiesvariablesextender,ugdbdrawing,paths,UGDBStringArray,gdbobjectsconstdef,uzcstrconsts,uzcctrlcontextmenu,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ uzcsysvars,uzctranslations,uzcenitiesvariablesextender,ugdbdrawing,paths,UGDBStringArray,gdbobjectsconstdef,uzcstrconsts,uzcctrlcontextmenu,strproc,uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}ComCtrls,
  {ZTabControlsGeneric,zmenus,}{DeviceBase}devicebaseabstract,uzclog,SysUtils,{UGDBTree,}gdbase,UGDBDescriptor{,math,commandline},varman,languade{,UGDBTracePropArray},
   {ZEditsWithProcedure,zbasicvisible,}varmandef,uzcshared,uzcsysinfo{,ZTreeViewsGeneric},memman,gdbasetypes,uzccommandsimpl,uzccommandsabstract;

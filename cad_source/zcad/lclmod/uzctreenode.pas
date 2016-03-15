@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit umytreenode;
+unit uzctreenode;
 {$INCLUDE def.inc}
 interface
 

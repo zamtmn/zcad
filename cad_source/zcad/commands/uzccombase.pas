@@ -27,7 +27,7 @@ uses
  gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,
  URecordDescriptor,ugdbfontmanager,ugdbsimpledrawing,uzcsysvars,uzccommandsmanager,
  TypeDescriptors,GDBManager,uzcstrconsts,uzcctrlcontextmenu,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
- strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ strproc,uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,LazUTF8,Forms,Controls,Clipbrd,lclintf,
   plugins,
   uzcsysinfo,
@@ -47,7 +47,7 @@ uses
  UGDBEntTree,
  gdbasetypes,memman,WindowsSpecific,
  UUnitManager,uzclog,Varman,
- dialogs,uinfoform;
+ dialogs,uzcinfoform;
    var selframecommand:PCommandObjectDef;
        zoomwindowcommand:PCommandObjectDef;
        ms2objinsp:PCommandObjectDef;

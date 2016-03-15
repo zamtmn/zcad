@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="62">
+    <Units Count="64">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -475,33 +475,41 @@
         <IsPartOfProject Value="True"/>
       </Unit54>
       <Unit55>
-        <Filename Value="zcad/gui/uzcctrlcontextmenu.pas"/>
+        <Filename Value="zcad/lclmod/uzcinfoform.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit55>
       <Unit56>
-        <Filename Value="zcad/gui/uzcctrllayercombobox.pas"/>
+        <Filename Value="zcad/gui/uzcctrlcontextmenu.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit56>
       <Unit57>
-        <Filename Value="zcad/gui/forms/uzcfcommandline.pas"/>
+        <Filename Value="zcad/lclmod/uzctreenode.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit57>
       <Unit58>
-        <Filename Value="zcad/gui/uzcctrldynamiccommandmenu.pas"/>
+        <Filename Value="zcad/gui/uzcctrllayercombobox.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit58>
       <Unit59>
-        <Filename Value="zcad/gui/uzcguimanager.pas"/>
+        <Filename Value="zcad/gui/forms/uzcfcommandline.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit59>
       <Unit60>
-        <Filename Value="zengine/zgl/drawers/uzglviewareadata.pas"/>
+        <Filename Value="zcad/gui/uzcctrldynamiccommandmenu.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit60>
       <Unit61>
-        <Filename Value="zcad/gui/uzcsuptypededitors.pas"/>
+        <Filename Value="zcad/gui/uzcguimanager.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit61>
+      <Unit62>
+        <Filename Value="zengine/zgl/drawers/uzglviewareadata.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit62>
+      <Unit63>
+        <Filename Value="zcad/gui/uzcsuptypededitors.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit63>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

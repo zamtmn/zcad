@@ -28,8 +28,8 @@ uses
      {$ENDIF}
      LCLProc,uzglgdidrawer,uzglabstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
-     oglwindowdef,gdbdrawcontext,{varmandef,}{commandline,}{zcadsysvars,}geometry,{uzcshared,}LCLType,
-     ExtCtrls,classes,Controls,Graphics,generalviewarea,math,{log,}backendmanager,
+     oglwindowdef,gdbdrawcontext,geometry,LCLType,
+     ExtCtrls,classes,Controls,Graphics,generalviewarea,math,uzglbackendmanager,
      {$IFNDEF DELPHI}OpenGLContext{$ENDIF};
 type
     PTOGLWnd = ^TOGLWnd;

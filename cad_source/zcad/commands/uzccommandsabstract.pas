@@ -16,10 +16,10 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit commandlinedef;
+unit uzccommandsabstract;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,gdbase{,UGDBOpenArrayOfPointer},oglwindowdef,uzclog,UGDBOpenArrayOfPObjects,ugdbdrawingdef;
+uses gdbasetypes,gdbase{,UGDBOpenArrayOfPointer},oglwindowdef,uzclog;
 const
      CADWG=1;
      CASelEnt=2;

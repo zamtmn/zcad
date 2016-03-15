@@ -22,10 +22,10 @@ unit uzccomdrawdase;
 interface
 uses
   uzcstrconsts,GL,printers,graphics,fileutil,Clipbrd,LCLType,classes,
-  commandlinedef,
+  uzccommandsabstract,
   gdbasetypes,uzccommandsmanager,uzccombase,
   plugins,
-  commanddefinternal,
+  uzccommandsimpl,
   gdbase,
   UGDBDescriptor,
   GDBManager,

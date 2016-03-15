@@ -21,7 +21,7 @@ unit uzclibraryblocksregister;
 
 
 interface
-uses commanddefinternal,strproc,UGDBOpenArrayOfByte,commandlinedef,paths,UGDBLayerArray,ugdbltypearray,gdbobjectsconstdef,zeentitiesmanager,UGDBObjBlockdefArray,zeblockdefsfactory,GDBBlockDef,UGDBDrawingdef,
+uses uzccommandsimpl,strproc,UGDBOpenArrayOfByte,uzccommandsabstract,paths,UGDBLayerArray,ugdbltypearray,gdbobjectsconstdef,zeentitiesmanager,UGDBObjBlockdefArray,zeblockdefsfactory,GDBBlockDef,UGDBDrawingdef,
     memman,uzcsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity;
 implementation
 uses

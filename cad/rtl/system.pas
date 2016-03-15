@@ -2967,7 +2967,7 @@ GDBOpenArrayOfTObjLinkRecord={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayO
                       function SetGenMode(Mode:TGenLincMode):TGenLincMode;
                       procedure Minimize;
                    end;
-//Generate on E:/zcad/cad_source/zcad/DeviceBase/devicebaseabstract.pas
+//Generate on E:/zcad/cad_source/zcad/DeviceBase/uzcdevicebaseabstract.pas
 TOborudCategory=(_misc(*'**Разное'*),
                  _elapp(*'**Электроаппараты'*),
                  _ppkop(*'**Приборы приемноконтрольные ОПС'*),
@@ -2993,7 +2993,7 @@ DbBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                        PartNumber:GDBString;(*'**Каталожный номер'*)(*oi_readonly*)
                        constructor initnul;
                  end;
-//Generate on E:/zcad/cad_source/zcad/DeviceBase/DeviceBase.pas
+//Generate on E:/zcad/cad_source/zcad/DeviceBase/uzcdevicebase.pas
 PDeviceDbBaseObject=^DeviceDbBaseObject;
 DeviceDbBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DbBaseObject)
                        UID:GDBString;(*'**Уникальный идентификатор'*)(*oi_readonly*)
@@ -3435,7 +3435,7 @@ type
 GDBtracepropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
              end;
-//Generate on E:/zcad/cad_source/zcad/gui/oglwindowdef.pas
+//Generate on E:/zcad/cad_source/zengine\zgl\drawers\uzglviewareadata.pas 
   pmousedesc = ^mousedesc;
   mousedesc = packed record
     mode: GDBByte;

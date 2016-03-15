@@ -88,14 +88,14 @@ zengine/gdb/GDBCamera.pas
 zengine/gdb/GDBTable.pas
 zcad/electroteh/GDBElLeader.pas
 components/zcontainers/UGDBOpenArrayOfTObjLinkRecord.pas
-zcad/DeviceBase/devicebaseabstract.pas
-zcad/DeviceBase/DeviceBase.pas
+zcad/DeviceBase/uzcdevicebaseabstract.pas
+zcad/DeviceBase/uzcdevicebase.pas
 zcad/commands/uzccommandsabstract.pas
 zcad/commands/uzccommandsimpl.pas
 zcad/commands/uzccomdraw.pas
 zcad/commands/uzccomexample.pas
 zengine/u/UGDBTracePropArray.pas
-zcad/gui/oglwindowdef.pas
+zengine\zgl\drawers\uzglviewareadata.pas 
 components/zscript/UUnitManager.pas
 zengine/u/UGDBNumerator.pas
 zengine/gdb/drawings/UGDBDrawingdef.pas

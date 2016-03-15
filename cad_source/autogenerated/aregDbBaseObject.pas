@@ -2,7 +2,7 @@ unit aregDbBaseObject;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,devicebaseabstract;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzcdevicebaseabstract;
 implementation
 var
 pt:PObjectDescriptor;

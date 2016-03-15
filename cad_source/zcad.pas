@@ -94,7 +94,7 @@ uses
   GDBManager,
   //UGDBDescriptor,
   uzccommandsmanager,
-  DeviceBase,
+  uzcdevicebase,
   URecordDescriptor,
   //gdbase,
   //splashwnd,

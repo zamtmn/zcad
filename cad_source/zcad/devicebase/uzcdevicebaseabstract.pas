@@ -1,4 +1,4 @@
-unit devicebaseabstract;
+unit uzcdevicebaseabstract;
 {$INCLUDE def.inc}
 interface
 uses uzcsysvars,{$IFNDEF DELPHI}fileutil,{$ENDIF}strproc,strmy,gdbasetypes,gdbase,UUnitManager,varman,sysutils,typedescriptors,uzcshared;

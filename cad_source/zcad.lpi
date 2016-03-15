@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="66">
+    <Units Count="67">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -443,81 +443,85 @@
         <IsPartOfProject Value="True"/>
       </Unit46>
       <Unit47>
-        <Filename Value="zcad/electroteh/uzvcom.pas"/>
+        <Filename Value="zcad/commands/uzccomexample.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit47>
       <Unit48>
-        <Filename Value="zcad/commands/uzccomexample.pas"/>
+        <Filename Value="zcad/commands/uzccommandsmanager.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit48>
       <Unit49>
-        <Filename Value="zcad/commands/uzccommandsmanager.pas"/>
+        <Filename Value="zcad/commands/uzccommandsimpl.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit49>
       <Unit50>
-        <Filename Value="zcad/commands/uzccommandsimpl.pas"/>
+        <Filename Value="zcad/commands/uzccommandsabstract.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit50>
       <Unit51>
-        <Filename Value="zcad/commands/uzccommandsabstract.pas"/>
+        <Filename Value="zcad/gui/uzctextenteditor.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit51>
       <Unit52>
-        <Filename Value="zcad/gui/uzctextenteditor.pas"/>
+        <Filename Value="zcad/gui/uzcimagesmanager.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit52>
       <Unit53>
-        <Filename Value="zcad/gui/uzcimagesmanager.pas"/>
+        <Filename Value="zcad/gui/uzctranslations.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit53>
       <Unit54>
-        <Filename Value="zcad/gui/uzctranslations.pas"/>
+        <Filename Value="zcad/lclmod/uzcinfoform.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit54>
       <Unit55>
-        <Filename Value="zcad/lclmod/uzcinfoform.pas"/>
+        <Filename Value="zcad/devicebase/uzcdevicebase.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit55>
       <Unit56>
-        <Filename Value="zcad/devicebase/uzcdevicebase.pas"/>
+        <Filename Value="zcad/gui/uzcctrlcontextmenu.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit56>
       <Unit57>
-        <Filename Value="zcad/gui/uzcctrlcontextmenu.pas"/>
+        <Filename Value="zcad/lclmod/uzctreenode.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit57>
       <Unit58>
-        <Filename Value="zcad/lclmod/uzctreenode.pas"/>
+        <Filename Value="zcad/gui/uzcctrllayercombobox.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit58>
       <Unit59>
-        <Filename Value="zcad/gui/uzcctrllayercombobox.pas"/>
+        <Filename Value="zcad/gui/forms/uzcfcommandline.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit59>
       <Unit60>
-        <Filename Value="zcad/gui/forms/uzcfcommandline.pas"/>
+        <Filename Value="zcad/gui/uzcctrldynamiccommandmenu.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit60>
       <Unit61>
-        <Filename Value="zcad/gui/uzcctrldynamiccommandmenu.pas"/>
+        <Filename Value="zcad/gui/uzcguimanager.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit61>
       <Unit62>
-        <Filename Value="zcad/gui/uzcguimanager.pas"/>
+        <Filename Value="zengine/zgl/drawers/uzglviewareadata.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit62>
       <Unit63>
-        <Filename Value="zengine/zgl/drawers/uzglviewareadata.pas"/>
+        <Filename Value="zcad/gui/uzcsuptypededitors.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit63>
       <Unit64>
-        <Filename Value="zcad/gui/uzcsuptypededitors.pas"/>
+        <Filename Value="zcad/devicebase/uzcdevicebaseabstract.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit64>
       <Unit65>
-        <Filename Value="zcad/devicebase/uzcdevicebaseabstract.pas"/>
+        <Filename Value="zcad/electrotech/uzccablemanager.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit65>
+      <Unit66>
+        <Filename Value="zcad/electrotech/uzvcom.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit66>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

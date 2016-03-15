@@ -28,7 +28,7 @@ uses
      {$ENDIF}
      LCLProc,uzglgdidrawer,uzglabstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
-     oglwindowdef,gdbdrawcontext,geometry,LCLType,
+     uzglviewareadata,gdbdrawcontext,geometry,LCLType,
      ExtCtrls,classes,Controls,Graphics,generalviewarea,math,uzglbackendmanager,
      {$IFNDEF DELPHI}OpenGLContext{$ENDIF};
 type

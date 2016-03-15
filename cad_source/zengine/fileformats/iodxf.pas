@@ -22,7 +22,7 @@ interface
 uses LCLProc,paths,strproc,gdbdrawcontext,usimplegenerics,ugdbdimstylearray,zeentityfactory,
     {$IFNDEF DELPHI}{fileutil,}LazUTF8,{$ENDIF}
     UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,uzelongprocesssupport,
-    oglwindowdef,dxflow,uzcstrconsts,UGDBTextStyleArray,
+    uzglviewareadata,dxflow,uzcstrconsts,UGDBTextStyleArray,
     geometry,GDBSubordinated,gdbasetypes,GDBGenericSubEntry,gdbase,
     sysutils,memman,gdbobjectsconstdef,UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,
     UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity,GDBBlockDef,UGDBLayerArray,fileformatsmanager;

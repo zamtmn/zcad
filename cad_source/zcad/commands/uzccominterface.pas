@@ -23,7 +23,7 @@ interface
 uses
  uzccomimport,paths,fileformatsmanager,uzglbackendmanager,uzglabstractviewarea,uzglopengldrawer,
  uzcfcolors,uzcfdimstyles,uzcflinetypes,uzcftextstyles,uinfoform,UGDBFontManager,ugdbsimpledrawing,uzccombase,
- uzcsysvars,uzccommandsmanager,TypeDescriptors,GDBManager,uzcstrconsts,UGDBStringArray,ucxmenumgr,
+ uzcsysvars,uzccommandsmanager,TypeDescriptors,GDBManager,uzcstrconsts,UGDBStringArray,uzcctrlcontextmenu,
  {$IFNDEF DELPHI}uzctranslations,{$ENDIF}uzcflayers,uzcfunits,strproc,umytreenode,menus,
  {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} {fileutil}LazUTF8,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
@@ -50,7 +50,7 @@ uses
  uzcshared,
  ugdbdrawing,
   {zmenus,}uzcfprojecttree,gdbasetypes,{optionswnd,}uzcfabout,uzcfhelp,memman,WindowsSpecific,{txteditwnd,}
- {messages,}UUnitManager,{zguisct,}uzclog,Varman,UGDBNumerator,cmdline,
+ {messages,}UUnitManager,{zguisct,}uzclog,Varman,UGDBNumerator,uzcfcommandline,
  AnchorDocking,dialogs,XMLPropStorage,xmlconf,uzglopenglviewarea{,
    uPSCompiler,
   uPSRuntime,

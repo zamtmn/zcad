@@ -19,7 +19,7 @@
 unit uzccommandsabstract;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,gdbase{,UGDBOpenArrayOfPointer},oglwindowdef,uzclog;
+uses gdbasetypes,gdbase{,UGDBOpenArrayOfPointer},uzglviewareadata,uzclog;
 const
      CADWG=1;
      CASelEnt=2;

@@ -23,7 +23,7 @@ uses {uabstractunit,}gdbpalette,gdbobjectextender,uzglabstractdrawer,gdbdrawcont
      gdbvisualprop,uzglgeometry,ugdbltypearray,{zcadsysvars,}gdbasetypes,
      UGDBControlPointArray,GDBSubordinated,
      {varman,}{varmandef,}GDBase,gdbobjectsconstdef,
-     oglwindowdef,geometry,dxflow,sysutils,memman,UGDBOpenArrayOfByte,
+     uzglviewareadata,geometry,dxflow,sysutils,memman,UGDBOpenArrayOfByte,
      UGDBLayerArray,UGDBOpenArrayOfPObjects;
 type
 //Owner:{-}PGDBObjEntity{/GDBPointer/};(*'Владелец'*)

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit UDMenuWnd;
+unit uzcctrldynamiccommandmenu;
 {$INCLUDE def.inc}
 interface
 uses

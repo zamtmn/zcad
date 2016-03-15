@@ -26,7 +26,7 @@ uses
  uzcenitiesvariablesextender,gdbdrawcontext,ugdbdrawing,paths,fileformatsmanager,
  gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,
  URecordDescriptor,ugdbfontmanager,ugdbsimpledrawing,uzcsysvars,uzccommandsmanager,
- TypeDescriptors,GDBManager,uzcstrconsts,ucxmenumgr,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
+ TypeDescriptors,GDBManager,uzcstrconsts,uzcctrlcontextmenu,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
  strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,LazUTF8,Forms,Controls,Clipbrd,lclintf,
   plugins,
@@ -37,7 +37,7 @@ uses
   UGDBDescriptor,
   sysutils,
   varmandef,
-  oglwindowdef,
+  uzglviewareadata,
   UGDBOpenArrayOfByte,
   iodxf,
   zcadinterface,

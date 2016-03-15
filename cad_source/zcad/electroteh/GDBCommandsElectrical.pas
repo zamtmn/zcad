@@ -25,7 +25,7 @@ uses
   sysutils,
   {fileutil}LazUTF8,
   varmandef,
-  oglwindowdef,
+  uzglviewareadata,
   zcadinterface,
   geometry,
   memman,

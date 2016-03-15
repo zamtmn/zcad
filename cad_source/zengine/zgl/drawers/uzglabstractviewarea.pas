@@ -21,7 +21,7 @@ unit uzglabstractviewarea;
 interface
 uses
      UGDBOpenArrayOfPV,uzglabstractdrawer,GDBGenericSubEntry,gdbase,gdbasetypes,
-     oglwindowdef,gdbdrawcontext,UGDBPoint3DArray,UGDBEntTree,geometry,ugdbabstractdrawing,
+     uzglviewareadata,gdbdrawcontext,UGDBPoint3DArray,UGDBEntTree,geometry,ugdbabstractdrawing,
      {uzcshared,}sysutils,
      ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,Messages,Graphics,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,GDBEntity;
 

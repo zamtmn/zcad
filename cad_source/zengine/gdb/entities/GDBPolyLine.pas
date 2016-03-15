@@ -21,7 +21,7 @@ unit GDBPolyLine;
 
 interface
 uses zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte{,varmandef},
-GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman;
+GDBase,gdbobjectsconstdef,uzglviewareadata,geometry,dxflow,sysutils,memman;
 type
 {REGISTEROBJECTTYPE GDBObjPolyline}
 {Export+}

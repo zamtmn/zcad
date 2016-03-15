@@ -19,8 +19,8 @@
 unit uzccommandsmanager;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfPObjects,uzcsysvars,geometry,uzglabstractviewarea,paths,gdbobjectsconstdef,UDMenuWnd,uinfoform,uzcstrconsts,{umytreenode,}uzcsysinfo,strproc,UGDBOpenArrayOfPointer,
-     gdbasetypes,uzccommandsabstract, sysutils,gdbase,oglwindowdef,
+uses UGDBOpenArrayOfPObjects,uzcsysvars,geometry,uzglabstractviewarea,paths,gdbobjectsconstdef,uzcctrldynamiccommandmenu,uinfoform,uzcstrconsts,{umytreenode,}uzcsysinfo,strproc,UGDBOpenArrayOfPointer,
+     gdbasetypes,uzccommandsabstract, sysutils,gdbase,uzglviewareadata,
      memman,uzcshared,uzclog,varmandef,varman,ugdbdrawingdef,zcadinterface;
 const
      tm:tmethod=(Code:nil;Data:nil);

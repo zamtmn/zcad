@@ -15,7 +15,7 @@
 {
 @author(Dimitriy P.S. (Моего тут осталось 40 - 50 %))
 }
-unit layercombobox;
+unit uzcctrllayercombobox;
 
 {$mode objfpc}{$H+}
 

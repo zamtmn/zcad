@@ -33,7 +33,7 @@ UGDBFontManager,
 ugdbltypearray,
 UGDBOpenArrayOfPV,
 ugdbfont,
-UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,ugdbtrash,UGDBOpenArrayOfByte,oglwindowdef;
+UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,ugdbtrash,UGDBOpenArrayOfByte,uzglviewareadata;
 type
 {REGISTEROBJECTTYPE GDBDescriptor}
 {EXPORT+}

@@ -31,7 +31,7 @@ uses
   GDBManager,
   sysutils,
   varmandef,
-  oglwindowdef,
+  uzglviewareadata,
   iodxf,
   geometry,
   memman,

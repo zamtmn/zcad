@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit ucxmenumgr;
+unit uzcctrlcontextmenu;
 {$INCLUDE def.inc}
 interface
 

@@ -21,7 +21,7 @@ unit uzccommandsimpl;
 
 
 interface
-uses gdbdrawcontext,generalviewarea,gdbobjectsconstdef,uzcsysvars,geometry,varmandef,gdbasetypes,gdbase,uzccommandsabstract,uzccommandsmanager,oglwindowdef,UGDBDescriptor
+uses gdbdrawcontext,generalviewarea,gdbobjectsconstdef,uzcsysvars,geometry,varmandef,gdbasetypes,gdbase,uzccommandsabstract,uzccommandsmanager,uzglviewareadata,UGDBDescriptor
   {,UGDBLayerArray},memman,uzcshared;
 type
   comproc=procedure(_self:pointer);

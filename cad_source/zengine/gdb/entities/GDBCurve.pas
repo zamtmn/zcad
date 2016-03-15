@@ -21,7 +21,7 @@ unit GDBCurve;
 
 interface
 uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,UGDBOpenArrayOfByte,UGDBLayerArray,gdbasetypes{,GDBGenericSubEntry},UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBPolyLine2DArray,UGDBPoint3DArray{,UGDBOpenArrayOfByte,varman},{varmandef,}
-GDBase,geometry,gdbobjectsconstdef,oglwindowdef,dxflow,sysutils,memman,GDBSubordinated;
+GDBase,geometry,gdbobjectsconstdef,uzglviewareadata,dxflow,sysutils,memman,GDBSubordinated;
 type
 //------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {Export+}

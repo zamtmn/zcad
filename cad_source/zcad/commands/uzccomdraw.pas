@@ -38,7 +38,7 @@ uses
   GDBManager,
   sysutils,
   varmandef,
-  oglwindowdef,
+  uzglviewareadata,
   iodxf,
   zcadinterface,
   geometry,

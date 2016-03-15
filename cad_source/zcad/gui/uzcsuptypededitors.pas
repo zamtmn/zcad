@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit usuptypededitors;
+unit uzcsuptypededitors;
 {$INCLUDE def.inc}
 
 interface

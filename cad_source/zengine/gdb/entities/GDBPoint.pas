@@ -21,7 +21,7 @@ unit GDBPoint;
 
 interface
 uses zeentityfactory,gdbdrawcontext,dxflow,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,{varman,}//varmandef,
-GDBase,gdbobjectsconstdef,oglwindowdef,geometry,memman;
+GDBase,gdbobjectsconstdef,uzglviewareadata,geometry,memman;
 type
 {REGISTEROBJECTTYPE GDBObjPoint}
 {Export+}

@@ -22,7 +22,7 @@ interface
 uses GDBEntity,gdbdrawcontext,zeentityfactory,ugdbdrawingdef,UGDBLayerArray{,UGDBLayerArray},math,gdbasetypes,GDBComplex,{GDBGenericSubEntry,}{SysInfo,}sysutils,
 {UGDBOpenArrayOfPV,}UGDBObjBlockdefArray{,UGDBSelectedObjArray,UGDBVisibleOpenArray},
 GDBBlockDef,
-GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBSubordinated,UGDBOpenArrayOfByte;
+GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,uzglviewareadata,geometry,dxflow,memman,GDBSubordinated,UGDBOpenArrayOfByte;
 const zcadmetric='!!ZMODIFIER:';
 type
 {REGISTEROBJECTTYPE GDBObjBlockInsert}

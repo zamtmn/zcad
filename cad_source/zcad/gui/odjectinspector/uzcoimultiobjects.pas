@@ -21,7 +21,7 @@ unit uzcoimultiobjects;
 
 interface
 uses
-  uzcoimultiproperties,uzcoiwrapper,intftranslations,gdbpalette,memman,
+  uzcoimultiproperties,uzcoiwrapper,uzctranslations,gdbpalette,memman,
   uzcshared,uzcstrconsts,sysutils,zeentityfactory,uzcenitiesvariablesextender,gdbdrawcontext,
   gdbase,
   UGDBDescriptor,

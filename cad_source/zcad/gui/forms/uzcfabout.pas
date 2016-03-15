@@ -20,7 +20,7 @@ unit uzcfabout;
 {$INCLUDE def.inc}
 interface
 uses
- uzcstrconsts,gettext,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
+ uzcstrconsts,gettext,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
  strproc,umytreenode,{Classes, SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}
  gdbase,{UGDBDescriptor,math,commandline,varman,}languade{,UGDBTracePropArray},
   {zforms,ZEditsWithProcedure,zbasicvisible,varmandef,uzcshared,ZGUIsCT,ZStaticsText,}uzcsysinfo,sysutils{,iodxf};

@@ -19,8 +19,8 @@
 unit iottf;
 {$INCLUDE def.inc}
 interface
-uses UGDBFontManager,EasyLazFreeType,ugdbttffont,geometry,{$IFNDEF DELPHI}intftranslations,{$ENDIF}
-    ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}{log,}sysutils,
+uses UGDBFontManager,EasyLazFreeType,ugdbttffont,geometry,
+    ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,
     UGDBOpenArrayOfByte,gdbasetypes,gdbase,memman;
 type ptsyminfo=^tsyminfo;
      tsyminfo=packed record

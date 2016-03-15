@@ -23,7 +23,7 @@ interface
 uses
   {LCL}
        AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
-       ActnList,LCLType,LCLProc,intftranslations,toolwin,LMessages,LCLIntf,
+       ActnList,LCLType,LCLProc,uzctranslations,toolwin,LMessages,LCLIntf,
        Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,LazUTF8,
        menus,graphics,dialogs,XMLPropStorage,Buttons,Themes,
        Types,UniqueInstanceBase,simpleipc,{$ifdef windows}windows,{$endif}
@@ -42,7 +42,7 @@ uses
        uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
   {GUI}
        uzctextenteditor,uzcoidecorations,cmdline,umytreenode,uzcflineweights,layercombobox,ucxmenumgr,
-       uzcfcolors,imagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,
+       uzcfcolors,uzcimagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,
   {}
        zcchangeundocommand,gdbdrawcontext,uzglopengldrawer,uzglabstractviewarea,zcguimanager;
   {}

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 
-unit imagesmanager;
+unit uzcimagesmanager;
 {$INCLUDE def.inc}
 
 interface

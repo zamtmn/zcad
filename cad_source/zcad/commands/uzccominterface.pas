@@ -22,9 +22,9 @@ unit uzccominterface;
 interface
 uses
  uzccomimport,paths,fileformatsmanager,uzglbackendmanager,uzglabstractviewarea,uzglopengldrawer,
- uzcfcolors,uzcfdimstyles,uzcflinetypes,uzcftextstyles,uinfoform,UGDBFontManager,ugdbsimpledrawing,uzccombase,
+ uzcfcolors,uzcfdimstyles,uzcflinetypes,uzcftextstyles,uzcinfoform,UGDBFontManager,ugdbsimpledrawing,uzccombase,
  uzcsysvars,uzccommandsmanager,TypeDescriptors,GDBManager,uzcstrconsts,UGDBStringArray,uzcctrlcontextmenu,
- {$IFNDEF DELPHI}uzctranslations,{$ENDIF}uzcflayers,uzcfunits,strproc,umytreenode,menus,
+ {$IFNDEF DELPHI}uzctranslations,{$ENDIF}uzcflayers,uzcfunits,strproc,uzctreenode,menus,
  {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} {fileutil}LazUTF8,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,

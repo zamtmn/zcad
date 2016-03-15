@@ -41,7 +41,7 @@ uses
   {ZCAD COMMANDS}
        uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
   {GUI}
-       uzctextenteditor,uzcoidecorations,uzcfcommandline,umytreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
+       uzctextenteditor,uzcoidecorations,uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
        uzcfcolors,uzcimagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,
   {}
        zcchangeundocommand,gdbdrawcontext,uzglopengldrawer,uzglabstractviewarea,uzcguimanager;

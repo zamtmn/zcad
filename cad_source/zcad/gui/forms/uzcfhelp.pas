@@ -20,7 +20,7 @@ unit uzcfhelp;
 {$INCLUDE def.inc}
 interface
 uses
- strproc,umytreenode,{Classes, SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}
+ strproc,uzctreenode,{Classes, SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}
  gdbase{,UGDBDescriptor,math,commandline,varman},languade{,UGDBTracePropArray},
   {zforms,ZEditsWithProcedure,zbasicvisible,varmandef,uzcshared,ZGUIsCT,ZStaticsText,sysinfo,}memman{,gdbasetypes};
 type

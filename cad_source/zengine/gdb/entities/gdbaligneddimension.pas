@@ -19,7 +19,7 @@ unit gdbaligneddimension;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,zeentityfactory,gdbdimension,GDBPoint,ugdbdimstylearray,{Varman,}UGDBLayerArray,ugdbtrash,ugdbdrawingdef,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,GDBLine,gdbasetypes,GDBComplex,{SysInfo,}sysutils,
+uses gdbdrawcontext,zeentityfactory,gdbdimension,GDBPoint,ugdbdimstylearray,{Varman,}UGDBLayerArray,ugdbtrash,ugdbdrawingdef,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,uzeentline,gdbasetypes,GDBComplex,{SysInfo,}sysutils,
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},//varmandef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
 (*

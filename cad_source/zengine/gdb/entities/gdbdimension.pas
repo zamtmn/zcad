@@ -21,7 +21,7 @@ unit gdbdimension;
 interface
 uses zemathutils,gdbdrawcontext,GDBAbstractText,UGDBTextStyleArray,UGDBXYZWStringArray,
 ugdbdimstylearray,GDBMText,{Varman,}UGDBLayerArray,ugdbtrash,ugdbdrawingdef,GDBCamera,
-strproc,UGDBOpenArrayOfByte,GDBText,geometry,GDBLine,gdbasetypes,GDBComplex,{SysInfo,}sysutils,
+strproc,UGDBOpenArrayOfByte,GDBText,geometry,uzeentline,gdbasetypes,GDBComplex,{SysInfo,}sysutils,
 gdbEntity,//varmandef,
 GDBase,gdbobjectsconstdef,memman;
 type

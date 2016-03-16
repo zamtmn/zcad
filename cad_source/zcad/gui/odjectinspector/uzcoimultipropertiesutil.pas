@@ -28,7 +28,7 @@ uses
   GDBEntity,
   gdbasetypes,
   Varman,UGDBPoint3DArray,
-  GDBCircle,GDBArc,GDBLine,GDBBlockInsert,GDBText,GDBMText,GDBPolyLine,geometry,uzcoimultiproperties;
+  GDBCircle,GDBArc,uzeentline,GDBBlockInsert,GDBText,GDBMText,GDBPolyLine,geometry,uzcoimultiproperties;
 function GetOneVarData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 function GetVertex3DControlData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;
 procedure FreeOneVarData(piteratedata:GDBPointer;mp:TMultiProperty);

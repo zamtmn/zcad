@@ -19,12 +19,12 @@
 unit ugdbsimpledrawing;
 {$INCLUDE def.inc}
 interface
-uses {zcadsysvars,}UGDBDrawingdef,zeblockdefsfactory,ugdbdimstylearray,GDBWithLocalCS,ugdbabstractdrawing,strproc,
-     UGDBObjBlockdefArray,UGDBTableStyleArray,{UUnitManager,}UGDBNumerator, gdbase,
-     {varmandef,}{varman,}sysutils, memman, geometry,gdbasetypes,{sysinfo,}
-     GDBGenericSubEntry,UGDBLayerArray,ugdbltypearray,uzeentity,
-     UGDBSelectedObjArray,UGDBTextStyleArray,GDBCamera,UGDBOpenArrayOfPV,
-     GDBRoot,ugdbfont,UGDBOpenArrayOfPObjects,uzglabstractviewarea,generalviewarea,gdbdrawcontext;
+uses UGDBDrawingdef,zeblockdefsfactory,ugdbdimstylearray,uzeentwithlocalcs,
+     ugdbabstractdrawing,strproc,UGDBObjBlockdefArray,UGDBTableStyleArray,
+     UGDBNumerator, gdbase,sysutils, memman,geometry,gdbasetypes,GDBGenericSubEntry,
+     UGDBLayerArray,ugdbltypearray,uzeentity,UGDBSelectedObjArray,UGDBTextStyleArray,
+     GDBCamera,UGDBOpenArrayOfPV, GDBRoot,ugdbfont,UGDBOpenArrayOfPObjects,
+     uzglabstractviewarea,generalviewarea,gdbdrawcontext;
 type
 TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:GDBString) of object;
 {EXPORT+}

@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="86">
+    <Units Count="89">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -598,6 +598,18 @@
         <Filename Value="zengine/gdb/entities/uzeentlwpolyline.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit85>
+      <Unit86>
+        <Filename Value="zengine/gdb/entities/uzeentity.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit86>
+      <Unit87>
+        <Filename Value="zengine/gdb/entities/uzeentwithmatrix.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit87>
+      <Unit88>
+        <Filename Value="zengine/gdb/entities/uzeentwithlocalcs.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit88>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

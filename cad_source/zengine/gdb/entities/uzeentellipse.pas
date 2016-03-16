@@ -20,7 +20,7 @@ unit uzeentellipse;
 interface
 uses
     zeentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,
-    GDBWithLocalCS,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,
+    uzeentwithlocalcs,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,
     UGDBSelectedObjArray,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,
     UGDBOpenArrayOfByte,varman,varmandef,GDBase,gdbobjectsconstdef,
     uzglviewareadata,geometry,dxflow,memman,GDBPlain;

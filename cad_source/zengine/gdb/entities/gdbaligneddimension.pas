@@ -19,9 +19,11 @@ unit gdbaligneddimension;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,zeentityfactory,gdbdimension,uzeentpoint,ugdbdimstylearray,{Varman,}UGDBLayerArray,ugdbtrash,ugdbdrawingdef,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,uzeentline,gdbasetypes,GDBComplex,{SysInfo,}sysutils,
-{UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},//varmandef,
-GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
+uses gdbdrawcontext,zeentityfactory,gdbdimension,uzeentpoint,ugdbdimstylearray,
+     UGDBLayerArray,ugdbtrash,ugdbdrawingdef,UGDBOpenArrayOfPObjects,strproc,
+     UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,uzeentline,gdbasetypes,
+     GDBComplex,sysutils,UGDBSelectedObjArray,uzeentity,GDBase,gdbobjectsconstdef,
+     dxflow,memman,GDBSubordinated;
 (*
 Alligned dimension structure in DXF
 

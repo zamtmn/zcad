@@ -19,7 +19,7 @@ unit GDB3d;
 {$INCLUDE def.inc}
 
 interface
-uses GDBEntity{,log};
+uses uzeentity;
 type
 {EXPORT+}
 GDBObj3d={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)

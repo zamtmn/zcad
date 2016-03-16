@@ -8,13 +8,13 @@ unit uzcentelleader;
 {$INCLUDE def.inc}
 
 interface
-uses uzcenitiesvariablesextender,zeentityfactory,Varman,gdbdrawcontext,GDBAbstractText,GDBGenericSubEntry,
-     ugdbtrash,ugdbdrawingdef,GDBCamera,uzcsysvars,UGDBOpenArrayOfPObjects,
-     strproc,UGDBOpenArrayOfByte,math,uzeenttext,uzeentdevice,uzcentcable,GDBTable,
-     UGDBControlPointArray,geometry,uzeentline{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},
-     GDBComplex,{SysInfo,}sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
-{UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
-GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
+uses uzcenitiesvariablesextender,zeentityfactory,Varman,gdbdrawcontext,
+     GDBAbstractText,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,
+     uzcsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,
+     uzeenttext,uzeentdevice,uzcentcable,GDBTable,UGDBControlPointArray,geometry,
+     uzeentline,gdbasetypes,GDBComplex,sysutils,UGDBStringArray,
+     UGDBSelectedObjArray,uzeentity,varmandef,GDBase,gdbobjectsconstdef,dxflow,
+     memman,GDBSubordinated;
 type
 {EXPORT+}
 PGDBObjElLeader=^GDBObjElLeader;

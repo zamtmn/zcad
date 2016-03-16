@@ -20,9 +20,11 @@ unit uzeentdevice;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBLayerArray,gdbpalette,gdbobjectextender,uabstractunit,{Varman,}zeentityfactory,gdbdrawcontext,UGDBDrawingdef,GDBCamera,uzcsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
-uunitmanager{,uzcshared},
-memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,{UGDBOpenArrayOfPV,}gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray{,UGDBDescriptor}{,UGDBLayerArray,oglwindowdef};
+uses UGDBLayerArray,gdbpalette,gdbobjectextender,uabstractunit,zeentityfactory,
+     gdbdrawcontext,UGDBDrawingdef,GDBCamera,uzcsysvars,sysutils,devices,
+     UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,uunitmanager,memman,geometry,
+     gdbobjectsconstdef,uzeentity,GDBSubordinated,varmandef,gdbasetypes,
+     GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray;
 
 type
 {REGISTEROBJECTTYPE GDBObjDevice}

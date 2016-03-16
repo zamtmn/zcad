@@ -21,7 +21,7 @@ unit UGDBEntTree;
 interface
 uses
     {math,}graphics,
-    gdbdrawcontext,{zcadsysvars,}geometry,UGDBVisibleOpenArray,GDBEntity,gdbase,gdbasetypes,{log,}memman;
+    gdbdrawcontext,{zcadsysvars,}geometry,UGDBVisibleOpenArray,uzeentity,gdbase,gdbasetypes,{log,}memman;
 const
      IninialNodeDepth=-1;
 type

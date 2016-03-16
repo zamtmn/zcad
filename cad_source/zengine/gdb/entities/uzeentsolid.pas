@@ -19,8 +19,11 @@ unit uzeentsolid;
 {$INCLUDE def.inc}
 
 interface
-uses zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,GDBWithLocalCS,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,gdbEntity,sysutils,UGDBOpenArrayOfByte,{varman,}//varmandef,
-GDBase,gdbobjectsconstdef{,oglwindowdef,dxflow},memman;
+uses
+    zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,GDBWithLocalCS,
+    UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,
+    UGDBSelectedObjArray,GDBSubordinated,uzeentity,sysutils,UGDBOpenArrayOfByte,
+    GDBase,gdbobjectsconstdef,memman;
 type
 {REGISTEROBJECTTYPE GDBObjSolid}
 {Export+}

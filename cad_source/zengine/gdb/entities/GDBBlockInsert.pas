@@ -19,10 +19,10 @@ unit GDBBlockInsert;
 {$INCLUDE def.inc}
 
 interface
-uses GDBEntity,gdbdrawcontext,zeentityfactory,ugdbdrawingdef,UGDBLayerArray{,UGDBLayerArray},math,gdbasetypes,GDBComplex,{GDBGenericSubEntry,}{SysInfo,}sysutils,
-{UGDBOpenArrayOfPV,}UGDBObjBlockdefArray{,UGDBSelectedObjArray,UGDBVisibleOpenArray},
-GDBBlockDef,
-GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,uzglviewareadata,geometry,dxflow,memman,GDBSubordinated,UGDBOpenArrayOfByte;
+uses uzeentity,gdbdrawcontext,zeentityfactory,ugdbdrawingdef,UGDBLayerArray,math,
+     gdbasetypes,GDBComplex,sysutils,UGDBObjBlockdefArray,GDBBlockDef,GDBase,
+     gdbobjectsconstdef,uzglviewareadata,geometry,dxflow,memman,GDBSubordinated,
+     UGDBOpenArrayOfByte;
 const zcadmetric='!!ZMODIFIER:';
 type
 {REGISTEROBJECTTYPE GDBObjBlockInsert}

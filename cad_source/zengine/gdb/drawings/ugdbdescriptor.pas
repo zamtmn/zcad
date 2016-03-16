@@ -20,20 +20,15 @@ unit UGDBDescriptor;
 {$INCLUDE def.inc}
 interface
 uses
-generalviewarea,uzctranslations,zedimblocksregister,zeblockdefsfactory,zemathutils,gdbdrawcontext,ugdbdrawing,ugdbdrawingdef,paths,ugdbdimstylearray,ugdbabstractdrawing,WindowsSpecific,LResources,uzcsysvars,zcadinterface,uzcstrconsts,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
-gdbase,varmandef,varman,
-sysutils, memman, geometry, gdbobjectsconstdef,
-gdbasetypes,ugdbsimpledrawing,
-GDBGenericSubEntry,
-UGDBLayerArray,
-GDBEntity,
-UGDBSelectedObjArray,
-UGDBTextStyleArray,
-UGDBFontManager,
-ugdbltypearray,
-UGDBOpenArrayOfPV,
-ugdbfont,
-UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,ugdbtrash,UGDBOpenArrayOfByte,uzglviewareadata;
+    generalviewarea,uzctranslations,zedimblocksregister,zeblockdefsfactory,
+    zemathutils,gdbdrawcontext,ugdbdrawing,ugdbdrawingdef,paths,ugdbdimstylearray,
+    ugdbabstractdrawing,WindowsSpecific,LResources,uzcsysvars,zcadinterface,
+    uzcstrconsts,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
+    gdbase,varmandef,varman,sysutils, memman, geometry, gdbobjectsconstdef,
+    gdbasetypes,ugdbsimpledrawing,GDBGenericSubEntry,UGDBLayerArray,uzeentity,
+    UGDBSelectedObjArray,UGDBTextStyleArray,UGDBFontManager,ugdbltypearray,
+    UGDBOpenArrayOfPV,ugdbfont,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,
+    ugdbtrash,UGDBOpenArrayOfByte,uzglviewareadata;
 type
 {REGISTEROBJECTTYPE GDBDescriptor}
 {EXPORT+}

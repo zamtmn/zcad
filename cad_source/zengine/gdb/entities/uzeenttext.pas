@@ -21,8 +21,11 @@ unit uzeenttext;
 
 interface
 uses
-uzglgeometry,gdbdrawcontext,gdbobjectextender,gdbfieldprocessor,zeentityfactory,ugdbdrawingdef,GDBCamera,{zcadsysvars,}strproc,sysutils,ugdbfont,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,{varmandef,}
-GDBase,{UGDBDescriptor,}gdbobjectsconstdef,uzglviewareadata,geometry,dxflow,{strmy,}memman,{log,}GDBSubordinated,UGDBTextStyleArray;
+    uzglgeometry,gdbdrawcontext,gdbobjectextender,gdbfieldprocessor,zeentityfactory,
+    ugdbdrawingdef,GDBCamera,strproc,sysutils,ugdbfont,UGDBLayerArray,gdbasetypes,
+    GDBAbstractText,uzeentity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,GDBase,
+    gdbobjectsconstdef,uzglviewareadata,geometry,dxflow,memman,GDBSubordinated,
+    UGDBTextStyleArray;
 type
 {REGISTEROBJECTTYPE GDBObjText}
 {Export+}

@@ -20,8 +20,10 @@ unit uzeentpoint;
 {$INCLUDE def.inc}
 
 interface
-uses zeentityfactory,gdbdrawcontext,dxflow,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,{varman,}//varmandef,
-GDBase,gdbobjectsconstdef,uzglviewareadata,geometry,memman;
+uses zeentityfactory,gdbdrawcontext,dxflow,ugdbdrawingdef,GDBCamera,
+     UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,
+     GDBSubordinated,GDB3d,uzeentity,sysutils,UGDBOpenArrayOfByte,
+     GDBase,gdbobjectsconstdef,uzglviewareadata,geometry,memman;
 type
 {REGISTEROBJECTTYPE GDBObjPoint}
 {Export+}

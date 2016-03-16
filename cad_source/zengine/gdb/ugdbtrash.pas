@@ -20,7 +20,7 @@ unit ugdbtrash;
 {$INCLUDE def.inc}
 interface
 uses
-gdbase,GDBasetypes,GDBEntity,gdbobjectsconstdef,geometry;
+gdbase,GDBasetypes,uzeentity,gdbobjectsconstdef,geometry;
 type
 {EXPORT+}
 GDBObjTrash={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)

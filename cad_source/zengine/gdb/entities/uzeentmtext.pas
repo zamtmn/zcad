@@ -20,8 +20,12 @@ unit uzeentmtext;
 {$INCLUDE def.inc}
 
 interface
-uses uzglgeometry,gdbdrawcontext,gdbfieldprocessor,zeentityfactory,UGDBDrawingdef,strproc,ugdbfont,GDBAbstractText,UGDBPoint3DArray,UGDBLayerArray,SysUtils,gdbasetypes,gdbEntity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,{varmandef,}
-GDBase,uzeenttext,gdbobjectsconstdef,geometry,dxflow,{strmy,}math,memman,GDBSubordinated,UGDBTextStyleArray{,zcadsysvars};
+uses
+    uzglgeometry,gdbdrawcontext,gdbfieldprocessor,zeentityfactory,UGDBDrawingdef,
+    strproc,ugdbfont,GDBAbstractText,UGDBPoint3DArray,UGDBLayerArray,SysUtils,
+    gdbasetypes,uzeentity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,
+    GDBase,uzeenttext,gdbobjectsconstdef,geometry,dxflow,math,memman,GDBSubordinated,
+    UGDBTextStyleArray;
 const maxdxfmtextlen=250;
 type
 //procedure CalcObjMatrix;virtual;

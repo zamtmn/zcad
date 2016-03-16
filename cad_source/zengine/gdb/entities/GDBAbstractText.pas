@@ -19,8 +19,9 @@ unit GDBAbstractText;
 {$INCLUDE def.inc}
 
 interface
-uses generalviewarea,gdbdrawcontext,GDBEntity,GDBCamera,{zcadsysvars,}{languade,}UGDBOpenArrayOfPObjects,{GDBEntity,}strproc,sysutils,GDBPlainWithOX,gdbasetypes{,GDBWithLocalCS},UGDBSelectedObjArray{,gdbEntity,UGDBOutbound2DIArray,UGDBPolyPoint2DArray,UGDBOpenArrayOfByte},{varmandef,}
-GDBase,gdbobjectsconstdef,{oglwindowdef,}geometry{,dxflow,strmy},math{,GDBPlain}{,GDBGenericSubEntry};
+uses generalviewarea,gdbdrawcontext,uzeentity,GDBCamera,UGDBOpenArrayOfPObjects,
+     strproc,sysutils,GDBPlainWithOX,gdbasetypes,UGDBSelectedObjArray,GDBase,
+     gdbobjectsconstdef,geometry,math;
 type
 //jstm(*'TopCenter'*)=2,
 {EXPORT+}

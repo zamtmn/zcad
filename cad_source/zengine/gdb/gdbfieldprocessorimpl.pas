@@ -19,7 +19,8 @@ unit gdbfieldprocessorimpl;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentity,uzcvariablesutils,gdbfieldprocessor,languade,strproc,sysutils,gdbasetypes,varmandef,GDBase;
+uses uzeentity,uzcvariablesutils,gdbfieldprocessor,languade,strproc,sysutils,
+     gdbasetypes,varmandef,GDBase;
 implementation
 uses
    uzcenitiesvariablesextender,GDBSubordinated;

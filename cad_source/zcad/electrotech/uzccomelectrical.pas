@@ -30,7 +30,7 @@ uses
   geometry,
   memman,
   gdbobjectsconstdef,
-  gdbEntity,uzeentline,
+  uzeentity,uzeentline,
   uzcentnet,
   uzcshared,GDBSubordinated,uzcentcable,varman,WindowsSpecific,uunitmanager,
   UGDBOpenArrayOfPObjects,UGDBBillOfMaterial,uzccablemanager,uzeentdevice,GDBTable,

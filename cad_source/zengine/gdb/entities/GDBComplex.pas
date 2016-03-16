@@ -20,10 +20,10 @@ unit GDBComplex;
 {$INCLUDE def.inc}
 
 interface
-uses gdbpalette,gdbdrawcontext,ugdbdrawingdef,GDBCamera,{ugdbsimpledrawing,}UGDBOpenArrayOfPObjects,UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},{SysInfo,}sysutils,
-{UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray,UGDBVisibleOpenArray,gdbEntity{,varman,varmandef},
-UGDBVisibleTreeArray,UGDBEntTree,
-GDBase,GDBWithLocalCS,gdbobjectsconstdef,{oglwindowdef,}geometry{,dxflow},memman{,GDBSubordinated,UGDBOpenArrayOfByte};
+uses gdbpalette,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,
+     UGDBLayerArray,gdbasetypes,sysutils,UGDBSelectedObjArray,UGDBVisibleOpenArray,
+     uzeentity,UGDBVisibleTreeArray,UGDBEntTree,GDBase,GDBWithLocalCS,
+     gdbobjectsconstdef,geometry,memman;
 type
 {EXPORT+}
 PGDBObjComplex=^GDBObjComplex;

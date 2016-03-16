@@ -20,8 +20,10 @@ unit uzeentpolyline;
 {$INCLUDE def.inc}
 
 interface
-uses zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte{,varmandef},
-GDBase,gdbobjectsconstdef,uzglviewareadata,geometry,dxflow,sysutils,memman;
+uses zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBVectorSnapArray,
+     UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes,
+     uzeentity,UGDBOpenArrayOfByte,GDBase,gdbobjectsconstdef,uzglviewareadata,
+     geometry,dxflow,sysutils,memman;
 type
 {REGISTEROBJECTTYPE GDBObjPolyline}
 {Export+}

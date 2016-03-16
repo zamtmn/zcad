@@ -26,7 +26,7 @@ uses
   UGDBDescriptor,
   varmandef,
   gdbobjectsconstdef,
-  GDBEntity,
+  uzeentity,
   gdbasetypes,
   Varman,
   uzcoimultipropertiesutil,

@@ -23,7 +23,7 @@ uses
      UGDBOpenArrayOfPV,uzglabstractdrawer,GDBGenericSubEntry,gdbase,gdbasetypes,
      uzglviewareadata,gdbdrawcontext,UGDBPoint3DArray,UGDBEntTree,geometry,ugdbabstractdrawing,
      {uzcshared,}sysutils,
-     ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,Messages,Graphics,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,GDBEntity;
+     ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,Messages,Graphics,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,uzeentity;
 
 type
 {NEEDFIXFORDELPHI}

@@ -19,7 +19,7 @@ unit gdbgenericdimension;
 {$INCLUDE def.inc}
 
 interface
-uses zeentityfactory,GDBWithLocalCS,gdbdimension,ugdbdimstylearray,UGDBLayerArray,
+uses zeentityfactory,uzeentwithlocalcs,gdbdimension,ugdbdimstylearray,UGDBLayerArray,
      ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,geometry,gdbasetypes,
      sysutils,uzeentity,GDBase,gdbobjectsconstdef,dxflow,memman,GDBSubordinated;
 type

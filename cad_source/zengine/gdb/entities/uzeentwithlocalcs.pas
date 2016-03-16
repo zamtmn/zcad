@@ -16,12 +16,12 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit GDBWithLocalCS;
+unit uzeentwithlocalcs;
 {$INCLUDE def.inc}
 
 interface
 uses gdbpalette,gdbdrawcontext,ugdbdrawingdef,GDBCamera,gdbasetypes,uzeentity,
-     UGDBOutbound2DIArray,UGDBOpenArrayOfByte,GDBWithMatrix,GDBase,
+     UGDBOutbound2DIArray,UGDBOpenArrayOfByte,uzeentwithmatrix,GDBase,
      geometry,dxflow,sysutils,memman,GDBSubordinated,UGDBLayerArray;
 type
 //pprojoutbound:{-}PGDBOOutbound2DIArray{/GDBPointer/};

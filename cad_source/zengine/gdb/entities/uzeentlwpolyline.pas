@@ -23,7 +23,7 @@ interface
 uses zeentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,
      UGDBOpenArrayOfPObjects,uzglviewareadata,GDBCurve,UGDBVectorSnapArray,
      geometry,UGDBLayerArray,uzeentity,memman,gdbasetypes,UGDBPoint3DArray,
-     UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,GDBase,GDBWithLocalCS,
+     UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,GDBase,uzeentwithlocalcs,
      gdbobjectsconstdef,math,dxflow,sysutils,UGDBLineWidthArray;
 type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)

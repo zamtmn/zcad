@@ -19,8 +19,8 @@
 unit UGDBSelectedObjArray;
 {$INCLUDE def.inc}
 interface
-uses gdbpalette,gdbdrawcontext,GDBCamera,GDBWithMatrix,uzeentity,UGDBControlPointArray,
-     UGDBOpenArrayOfData,sysutils,gdbase, geometry,
+uses gdbpalette,gdbdrawcontext,GDBCamera,uzeentwithmatrix,uzeentity,
+     UGDBControlPointArray,UGDBOpenArrayOfData,sysutils,gdbase, geometry,
      gdbasetypes,memman,ugdbdrawingdef;
 type
 {Export+}

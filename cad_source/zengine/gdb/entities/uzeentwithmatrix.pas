@@ -20,7 +20,8 @@ unit uzeentwithmatrix;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,ugdbdrawingdef, GDBCamera, uzeentity,gdbase,gdbasetypes,geometry,GDBSubordinated,UGDBEntTree;
+uses gdbdrawcontext,ugdbdrawingdef, GDBCamera, uzeentity,gdbase,gdbasetypes,geometry,
+     uzeentsubordinated,UGDBEntTree;
 type
 {EXPORT+}
 PGDBObjWithMatrix=^GDBObjWithMatrix;

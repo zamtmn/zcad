@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit GDBSubordinated;
+unit uzeentsubordinated;
 {$INCLUDE def.inc}
 
 interface

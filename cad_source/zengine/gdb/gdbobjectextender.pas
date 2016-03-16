@@ -20,7 +20,8 @@ unit gdbobjectextender;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentityextender,GDBSubordinated,{uabstractunit,}UGDBDrawingdef,gdbasetypes,gdbase,usimplegenerics,UGDBOpenArrayOfByte;
+uses gdbentityextender,uzeentsubordinated,UGDBDrawingdef,gdbasetypes,gdbase,
+     usimplegenerics,UGDBOpenArrayOfByte;
 
 type
 TConstructorFeature=procedure(pEntity:Pointer);

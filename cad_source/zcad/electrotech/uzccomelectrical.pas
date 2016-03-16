@@ -32,7 +32,7 @@ uses
   gdbobjectsconstdef,
   uzeentity,uzeentline,
   uzcentnet,
-  uzcshared,GDBSubordinated,uzcentcable,varman,WindowsSpecific,uunitmanager,
+  uzcshared,uzeentsubordinated,uzcentcable,varman,WindowsSpecific,uunitmanager,
   UGDBOpenArrayOfPObjects,UGDBBillOfMaterial,uzccablemanager,uzeentdevice,GDBTable,
   paths,UGDBStringArray,math,Masks,uzclog,uzccombase,strproc;
 type

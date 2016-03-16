@@ -37,7 +37,7 @@ uses
 procedure DBLinkProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
 
 implementation
-uses uzcenitiesvariablesextender,uzcfsinglelinetexteditor,UObjectDescriptor,uzcfprojecttree,uzccommandsmanager,uzclog,GDBSubordinated;
+uses uzcenitiesvariablesextender,uzcfsinglelinetexteditor,UObjectDescriptor,uzcfprojecttree,uzccommandsmanager,uzclog,uzeentsubordinated;
 
 function DBaseAdd_com(operands:TCommandOperands):TCommandResult;
 var //t:PUserTypeDescriptor;

@@ -14,7 +14,7 @@ uses uzcenitiesvariablesextender,zeentityfactory,Varman,gdbdrawcontext,
      uzeenttext,uzeentdevice,uzcentcable,GDBTable,UGDBControlPointArray,geometry,
      uzeentline,gdbasetypes,GDBComplex,sysutils,UGDBStringArray,
      UGDBSelectedObjArray,uzeentity,varmandef,GDBase,gdbobjectsconstdef,dxflow,
-     memman,GDBSubordinated;
+     memman,uzeentsubordinated;
 type
 {EXPORT+}
 PGDBObjElLeader=^GDBObjElLeader;

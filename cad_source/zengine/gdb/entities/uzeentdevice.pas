@@ -23,7 +23,7 @@ interface
 uses UGDBLayerArray,gdbpalette,gdbobjectextender,uabstractunit,zeentityfactory,
      gdbdrawcontext,UGDBDrawingdef,GDBCamera,uzcsysvars,sysutils,devices,
      UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,uunitmanager,memman,geometry,
-     gdbobjectsconstdef,uzeentity,GDBSubordinated,varmandef,gdbasetypes,
+     gdbobjectsconstdef,uzeentity,uzeentsubordinated,varmandef,gdbasetypes,
      GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray;
 
 type

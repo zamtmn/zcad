@@ -23,7 +23,7 @@ uses gdbdrawcontext,zeentityfactory,gdbdimension,ugdbdimstylearray,UGDBLayerArra
      ugdbtrash,ugdbdrawingdef,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,
      UGDBControlPointArray,geometry,uzeentline,gdbasetypes,GDBComplex,sysutils,
      UGDBSelectedObjArray,uzeentity,GDBase,gdbobjectsconstdef,dxflow,memman,
-     GDBSubordinated;
+     uzeentsubordinated;
 (*
 
 Diametric dimension structure in DXF

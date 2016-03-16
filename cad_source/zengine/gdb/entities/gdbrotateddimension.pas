@@ -22,7 +22,7 @@ interface
 uses zeentityfactory,gdbaligneddimension,gdbdimension,ugdbdimstylearray,
      UGDBLayerArray,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,
      geometry,gdbasetypes,sysutils,uzeentity,GDBase,gdbobjectsconstdef,dxflow,
-     memman,GDBSubordinated;
+     memman,uzeentsubordinated;
 type
 {EXPORT+}
 PGDBObjRotatedDimension=^GDBObjRotatedDimension;

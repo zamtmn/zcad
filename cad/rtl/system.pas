@@ -1968,7 +1968,7 @@ GDBObjAbstractText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlainWithOX)
                          procedure setrot(r:GDBDouble);
                          procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                    end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/GDBCircle.pas
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentcircle.pas
   ptcirclertmodify=^tcirclertmodify;
   tcirclertmodify=packed record
                         r,p_insert:GDBBoolean;
@@ -2022,7 +2022,7 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;abstract;
                  class function CreateInstance:PGDBObjCircle;static;
            end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/GDBArc.pas
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentarc.pas
 PGDBObjArc=^GDBObjARC;
 GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  R:GDBDouble;(*saved_to_shd*)
@@ -2572,7 +2572,7 @@ GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
                  function IsHaveGRIPS:GDBBoolean;virtual;abstract;
                  class function GetDXFIOFeatures:TDXFEntIODataManager;
            end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/GDBLine.pas
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentline.pas
 PGDBObjLine=^GDBObjLine;
 GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  CoordInOCS:GDBLineProp;(*'Coordinates OCS'*)(*saved_to_shd*)
@@ -2663,7 +2663,7 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  procedure higlight(var DC:TDrawContext);virtual;abstract;
                  class function CreateInstance:PGDBObjLWPolyline;static;
            end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/GDBtext.pas
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeenttext.pas
 PGDBObjText=^GDBObjText;
 GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  Content:GDBAnsiString;
@@ -2716,7 +2716,7 @@ GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
                  procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
                  function CreateInstance:PGDBObjMText;static;
             end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/GDBPoint.pas
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentpoint.pas
 PGDBObjPoint=^GDBObjPoint;
 GDBObjPoint={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  P_insertInOCS:GDBvertex;(*'Coordinates OCS'*)(*saved_to_shd*)
@@ -2782,7 +2782,7 @@ GDBObjCurve={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  procedure DeleteVertex(const PolyData:TPolyData);
                  function GetLength:GDBDouble;virtual;abstract;
            end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/GDBPolyLine.pas
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentpolyline.pas
 PGDBObjPolyline=^GDBObjPolyline;
 GDBObjPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  Closed:GDBBoolean;(*saved_to_shd*)

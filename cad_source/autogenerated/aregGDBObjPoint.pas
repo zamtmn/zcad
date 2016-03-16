@@ -2,7 +2,7 @@ unit aregGDBObjPoint;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,GDBPoint;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzeentpoint;
 implementation
 var
 pt:PObjectDescriptor;

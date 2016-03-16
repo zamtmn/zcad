@@ -45,7 +45,7 @@ begin
   ProjectTreeWND_Top:=222;
   ProjectTreeWND_Width:=1176;
   ProjectTreeWND_Height:=778;
-  VIEW_CommandLineH:=79;
+  VIEW_CommandLineH:=82;
   VIEW_ObjInspV:=238;
   VIEW_ObjInspSubV:=83;
   PATH_File0:='e:\zcad\cad\\sample\test_dxf\ops.dxf';

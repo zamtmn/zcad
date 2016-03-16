@@ -2,7 +2,7 @@ unit aregGDBObjSpline;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,gdbspline;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzeentspline;
 implementation
 var
 pt:PObjectDescriptor;

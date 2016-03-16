@@ -2,7 +2,7 @@ unit aregGDBObjMText;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,GDBMText;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzeentmtext;
 implementation
 var
 pt:PObjectDescriptor;

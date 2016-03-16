@@ -20,7 +20,7 @@ unit GDBTable;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,GDBAbstractText,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,UGDBTableStyleArray,uzeentline,gdbasetypes,GDBComplex,sysutils,UGDBTable,UGDBStringArray,GDBMText,
+uses gdbdrawcontext,GDBAbstractText,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,UGDBTableStyleArray,uzeentline,gdbasetypes,GDBComplex,sysutils,UGDBTable,UGDBStringArray,uzeentmtext,
 gdbEntity,
 GDBase,gdbobjectsconstdef,geometry,memman;
 //jcm(*'TopMiddle'*),

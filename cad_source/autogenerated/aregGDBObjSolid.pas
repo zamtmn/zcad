@@ -2,7 +2,7 @@ unit aregGDBObjSolid;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,GDBSolid;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzeentsolid;
 implementation
 var
 pt:PObjectDescriptor;

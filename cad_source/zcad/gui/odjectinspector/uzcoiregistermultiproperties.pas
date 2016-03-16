@@ -30,7 +30,7 @@ uses
   gdbasetypes,
   Varman,
   uzcoimultipropertiesutil,
-  uzeentcircle,uzeentarc,uzeentline,GDBBlockInsert,uzeenttext,GDBMText,uzeentpolyline,uzcentelleader,gdbdimension,gdbellipse,
+  uzeentcircle,uzeentarc,uzeentline,GDBBlockInsert,uzeenttext,uzeentmtext,uzeentpolyline,uzcentelleader,gdbdimension,uzeentellipse,
   geometry,uzcoimultiproperties;
 implementation
 procedure GDBDoubleDeltaEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);

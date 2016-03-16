@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit GDBLWPolyLine;
+unit uzeentlwpolyline;
 {$INCLUDE def.inc}
 
 interface

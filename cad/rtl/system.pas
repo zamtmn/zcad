@@ -1805,7 +1805,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
 //Generate on E:/zcad/cad_source/zengine/gdb/entities/GDB3d.pas
 GDBObj3d={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)
          end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/GDB3DFace.pas
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeent3dface.pas
 PGDBObj3DFace=^GDBObj3DFace;
 GDBObj3DFace={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  PInOCS:OutBound4V;(*'Coordinates OCS'*)(*saved_to_shd*)
@@ -1883,7 +1883,7 @@ GDBObjWithLocalCS={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                function IsHaveLCS:GDBBoolean;virtual;abstract;
                function CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;inline;
          end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/GDBSolid.pas
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentsolid.pas
 PGDBObjSolid=^GDBObjSolid;
 GDBObjSolid={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  PInOCS:OutBound4V;(*'Coordinates OCS'*)(*saved_to_shd*)
@@ -2069,7 +2069,7 @@ GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
                  class function CreateInstance:PGDBObjArc;static;
            end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/GDBEllipse.pas
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentellipse.pas
   ptEllipsertmodify=^tEllipsertmodify;
   tEllipsertmodify=packed record
                         p1,p2,p3:GDBVertex2d;
@@ -2469,7 +2469,7 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      class function CreateInstance:PGDBObjBlockInsert;static;
                      function GetNameInBlockTable:GDBString;virtual;abstract;
                   end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/GDBDevice.pas
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentdevice.pas
 PGDBObjDevice=^GDBObjDevice;
 GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    VarObjArray:GDBObjEntityOpenArray;(*oi_readonly*)(*hidden_in_objinsp*)
@@ -2620,7 +2620,7 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                   function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;abstract;
                   class function CreateInstance:PGDBObjLine;static;
            end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/GDBLWPolyLine.pas
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentlwpolyline.pas
 PGDBObjLWPolyline=^GDBObjLWpolyline;
 GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  Closed:GDBBoolean;(*saved_to_shd*)
@@ -2663,6 +2663,29 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  procedure higlight(var DC:TDrawContext);virtual;abstract;
                  class function CreateInstance:PGDBObjLWPolyline;static;
            end;
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentmtext.pas
+PGDBObjMText=^GDBObjMText;
+GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
+                 width:GDBDouble;(*saved_to_shd*)
+                 linespace:GDBDouble;(*saved_to_shd*)(*oi_readonly*)
+                 linespacef:GDBDouble;(*saved_to_shd*)
+                 text:XYZWGDBGDBStringArray;(*oi_readonly*)(*hidden_in_objinsp*)
+                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify;wi,l:GDBDouble);
+                 constructor initnul(owner:PGDBObjGenericWithSubordinated);
+                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;abstract;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;abstract;
+                 procedure CalcGabarit(const drawing:TDrawingDef);virtual;abstract;
+                 //procedure getoutbound;virtual;abstract;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
+                 procedure FormatContent(var drawing:TDrawingDef);virtual;abstract;
+                 procedure createpoint(const drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
+                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
+                 function GetObjTypeName:GDBString;virtual;abstract;
+                 destructor done;virtual;abstract;
+                 procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;abstract;
+                 procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
+                 function CreateInstance:PGDBObjMText;static;
+            end;
 //Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeenttext.pas
 PGDBObjText=^GDBObjText;
 GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
@@ -2693,29 +2716,6 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  class function GetDXFIOFeatures:TDXFEntIODataManager;
                  function CreateInstance:PGDBObjText;static;
            end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/GDBMText.pas
-PGDBObjMText=^GDBObjMText;
-GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
-                 width:GDBDouble;(*saved_to_shd*)
-                 linespace:GDBDouble;(*saved_to_shd*)(*oi_readonly*)
-                 linespacef:GDBDouble;(*saved_to_shd*)
-                 text:XYZWGDBGDBStringArray;(*oi_readonly*)(*hidden_in_objinsp*)
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify;wi,l:GDBDouble);
-                 constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;abstract;
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;abstract;
-                 procedure CalcGabarit(const drawing:TDrawingDef);virtual;abstract;
-                 //procedure getoutbound;virtual;abstract;
-                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
-                 procedure FormatContent(var drawing:TDrawingDef);virtual;abstract;
-                 procedure createpoint(const drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
-                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
-                 function GetObjTypeName:GDBString;virtual;abstract;
-                 destructor done;virtual;abstract;
-                 procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;abstract;
-                 procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
-                 function CreateInstance:PGDBObjMText;static;
-            end;
 //Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentpoint.pas
 PGDBObjPoint=^GDBObjPoint;
 GDBObjPoint={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
@@ -2802,7 +2802,7 @@ GDBObjPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  function GetLength:GDBDouble;virtual;abstract;
                  class function CreateInstance:PGDBObjPolyline;static;
            end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/gdbspline.pas
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentspline.pas
 PGDBObjSpline=^GDBObjSpline;
 GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  ControlArrayInOCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
@@ -3435,7 +3435,7 @@ type
 GDBtracepropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
              end;
-//Generate on E:/zcad/cad_source/zengine\zgl\drawers\uzglviewareadata.pas 
+//Generate on E:/zcad/cad_source/zengine/zgl/drawers/uzglviewareadata.pas 
   pmousedesc = ^mousedesc;
   mousedesc = packed record
     mode: GDBByte;

@@ -47,7 +47,7 @@ uses
   uzeentline,             //unit describes line entity
                        //модуль описывающий примитив линия
 
-  GDBLWPolyLine,             //unit describes line entity
+  uzeentlwpolyline,             //unit describes line entity
                        //модуль описывающий примитив двухмерная ПОЛИлиния
 
   uzeentpolyline,             //unit describes line entity
@@ -65,7 +65,7 @@ uses
   gdbEntity,
 
   uzcentcable,
-  GDBDevice,
+  uzeentdevice,
   UGDBOpenArrayOfPV,
 
   geometry,

@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 } 
-unit GDB3DFace;
+unit uzeent3dface;
 {$INCLUDE def.inc}
 
 interface

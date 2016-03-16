@@ -22,7 +22,7 @@ interface
 uses sysutils,
      uzcenitiesvariablesextender,uzcshared,uzccomdb,uzcentcable,uzcentnet,GDBDevice,TypeDescriptors,
      gdbfieldprocessor,UGDBOpenArrayOfByte,gdbase,gdbobjectextender,
-     GDBEntity,GDBText,GDBBlockDef,varmandef,Varman,UUnitManager,
+     GDBEntity,uzeenttext,GDBBlockDef,varmandef,Varman,UUnitManager,
      URecordDescriptor,UBaseTypeDescriptor,memman;
 implementation
 begin

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit GDBPoint;
+unit uzeentpoint;
 {$INCLUDE def.inc}
 
 interface

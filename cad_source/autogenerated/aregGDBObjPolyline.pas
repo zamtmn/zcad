@@ -2,7 +2,7 @@ unit aregGDBObjPolyline;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,GDBPolyLine;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzeentpolyline;
 implementation
 var
 pt:PObjectDescriptor;

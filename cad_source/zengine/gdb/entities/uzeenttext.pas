@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit GDBText;
+unit uzeenttext;
 {$INCLUDE def.inc}
 
 interface

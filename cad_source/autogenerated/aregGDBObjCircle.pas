@@ -2,7 +2,7 @@ unit aregGDBObjCircle;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,GDBCircle;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzeentcircle;
 implementation
 var
 pt:PObjectDescriptor;

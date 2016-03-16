@@ -22,7 +22,7 @@ interface
 uses gdbdrawcontext,zeentityfactory,
     {$IFNDEF DELPHI}dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}
     ugdbsimpledrawing,
-    GDBCircle,GDBArc,uzeentline,
+    uzeentcircle,uzeentarc,uzeentline,
     geometry,uzcshared,gdbasetypes,uzclog,gdbase,
     sysutils,memman,gdbobjectsconstdef,
     UGDBOpenArrayOfByte,GDBEntity;

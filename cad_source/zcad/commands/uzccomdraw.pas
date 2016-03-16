@@ -25,10 +25,10 @@ uses
   zcmultiobjectcreateundocommand,zeentitiesmanager,uzglcanvasdrawer,
   uzcoimultiobjects,uzcenitiesvariablesextender,ugdbdrawing,gdbpalette,
   ugdbopenarrayofgdbdouble,uzctextenteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,
-  GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,zeentityfactory,
+  uzeentpoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,zeentityfactory,
   ugdbsimpledrawing,uzcsysvars,uzcstrconsts,uzccomdrawdase,glstatemanager,
   PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,
-  {fileutil}LazUTF8,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  {fileutil}LazUTF8,Clipbrd,LCLType,classes,uzeenttext,GDBAbstractText,UGDBTextStyleArray,
   uzccommandsabstract,strproc,
   gdbasetypes,uzccommandsmanager,uzccombase,
   plugins,
@@ -44,8 +44,8 @@ uses
   geometry,
   memman,
   gdbobjectsconstdef,
-  GDBEntity,GDBCircle,uzeentline,GDBGenericSubEntry,GDBMText,
-  uzcshared,GDBSubordinated,GDBBlockInsert,GDBPolyLine,uzclog,UGDBOpenArrayOfData,math,GDBTable,UGDBStringArray,printerspecfunc;
+  GDBEntity,uzeentcircle,uzeentline,GDBGenericSubEntry,GDBMText,
+  uzcshared,GDBSubordinated,GDBBlockInsert,uzeentpolyline,uzclog,UGDBOpenArrayOfData,math,GDBTable,UGDBStringArray,printerspecfunc;
 const
      modelspacename:GDBSTring='**Модель**';
 type

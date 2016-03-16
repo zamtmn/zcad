@@ -50,7 +50,7 @@ uses
   GDBLWPolyLine,             //unit describes line entity
                        //модуль описывающий примитив двухмерная ПОЛИлиния
 
-  GDBPolyLine,             //unit describes line entity
+  uzeentpolyline,             //unit describes line entity
                        //модуль описывающий примитив трехмерная ПОЛИлиния
 
   gdbAlignedDimension, //unit describes aligned dimensional entity
@@ -60,8 +60,8 @@ uses
   gdbDiametricDimension,
 
   gdbRadialDimension,
-  gdbArc,
-  gdbCircle,
+  uzeentarc,
+  uzeentcircle,
   gdbEntity,
 
   uzcentcable,

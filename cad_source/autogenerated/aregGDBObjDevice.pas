@@ -2,7 +2,7 @@ unit aregGDBObjDevice;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,GDBDevice;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzeentdevice;
 implementation
 var
 pt:PObjectDescriptor;

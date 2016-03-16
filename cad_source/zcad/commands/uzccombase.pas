@@ -68,7 +68,7 @@ uses
 const
      ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
 implementation
-uses uzeentpolyline,UGDBPolyLine2DArray,GDBLWPolyLine,UGDBSelectedObjArray,
+uses uzeentpolyline,UGDBPolyLine2DArray,uzeentlwpolyline,UGDBSelectedObjArray,
      geometry;
 var
    CopyClipFile:GDBString;

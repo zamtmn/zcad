@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit GDBDevice;
+unit uzeentdevice;
 {$INCLUDE def.inc}
 
 interface

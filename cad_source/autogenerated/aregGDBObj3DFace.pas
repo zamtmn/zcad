@@ -2,7 +2,7 @@ unit aregGDBObj3DFace;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,GDB3DFace;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzeent3dface;
 implementation
 var
 pt:PObjectDescriptor;

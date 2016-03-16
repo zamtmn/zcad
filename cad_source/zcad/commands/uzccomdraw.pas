@@ -27,7 +27,7 @@ uses
   ugdbopenarrayofgdbdouble,uzctextenteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,
   uzeentpoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,zeentityfactory,
   ugdbsimpledrawing,uzcsysvars,uzcstrconsts,uzccomdrawdase,glstatemanager,
-  PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,
+  PrintersDlgs,printers,graphics,uzeentdevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,
   {fileutil}LazUTF8,Clipbrd,LCLType,classes,uzeenttext,GDBAbstractText,UGDBTextStyleArray,
   uzccommandsabstract,strproc,
   gdbasetypes,uzccommandsmanager,uzccombase,
@@ -44,7 +44,7 @@ uses
   geometry,
   memman,
   gdbobjectsconstdef,
-  GDBEntity,uzeentcircle,uzeentline,GDBGenericSubEntry,GDBMText,
+  GDBEntity,uzeentcircle,uzeentline,GDBGenericSubEntry,uzeentmtext,
   uzcshared,GDBSubordinated,GDBBlockInsert,uzeentpolyline,uzclog,UGDBOpenArrayOfData,math,GDBTable,UGDBStringArray,printerspecfunc;
 const
      modelspacename:GDBSTring='**Модель**';
@@ -428,7 +428,7 @@ procedure Line_com_CommandEnd(_self:pointer);
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 implementation
-uses GDBCurve,GDBLWPolyLine,UBaseTypeDescriptor,GDBBlockDef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
+uses GDBCurve,uzeentlwpolyline,UBaseTypeDescriptor,GDBBlockDef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
 function GetBlockDefNames(var BDefNames:GDBGDBStringArray;selname:GDBString):GDBInteger;
 var pb:PGDBObjBlockdef;
     ir:itrec;

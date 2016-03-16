@@ -2,7 +2,7 @@ unit aregGDBObjEllipse;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,GDBEllipse;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzeentellipse;
 implementation
 var
 pt:PObjectDescriptor;

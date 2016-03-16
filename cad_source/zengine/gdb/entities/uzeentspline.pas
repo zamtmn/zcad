@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit gdbspline;
+unit uzeentspline;
 {$INCLUDE def.inc}
 
 interface

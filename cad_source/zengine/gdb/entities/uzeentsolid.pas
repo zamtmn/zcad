@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 } 
-unit GDBSolid;
+unit uzeentsolid;
 {$INCLUDE def.inc}
 
 interface

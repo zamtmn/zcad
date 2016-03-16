@@ -30,7 +30,7 @@ uses
   memman,
   gdbobjectsconstdef,
   uzccomdraw,
-  UGDBVisibleOpenArray,{gdbEntity,}{GDBCircle,}GDBLine,{GDBGenericSubEntry,}
+  UGDBVisibleOpenArray,{gdbEntity,}{GDBCircle,}uzeentline,{GDBGenericSubEntry,}
   paths,uzcshared,{GDBSubordinated,}GDBBlockInsert,{ZWinMan,}{sysinfo,}varman,uzccablemanager,GDBDevice,GDBMText,math;
 
 type

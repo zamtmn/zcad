@@ -2,7 +2,7 @@ unit aregGDBObjLine;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,GDBLine;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzeentline;
 implementation
 var
 pt:PObjectDescriptor;

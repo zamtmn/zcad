@@ -44,7 +44,7 @@ uses
 
   GDBBlockInsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока
-  gdbLine,             //unit describes line entity
+  uzeentline,             //unit describes line entity
                        //модуль описывающий примитив линия
 
   GDBLWPolyLine,             //unit describes line entity

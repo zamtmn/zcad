@@ -20,9 +20,10 @@ unit GDBTable;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,GDBAbstractText,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,UGDBTableStyleArray,uzeentline,gdbasetypes,GDBComplex,sysutils,UGDBTable,UGDBStringArray,uzeentmtext,
-gdbEntity,
-GDBase,gdbobjectsconstdef,geometry,memman;
+uses gdbdrawcontext,GDBAbstractText,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,
+     UGDBTableStyleArray,uzeentline,gdbasetypes,GDBComplex,sysutils,UGDBTable,
+     UGDBStringArray,uzeentmtext,uzeentity,GDBase,gdbobjectsconstdef,geometry,
+     memman;
 //jcm(*'TopMiddle'*),
 type
 {TTableCellJustify=(jcl(*'TopLeft'*),

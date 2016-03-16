@@ -19,7 +19,8 @@
 unit UGDBGraf;
 {$INCLUDE def.inc}
 interface
-uses varman,ugdbdrawingdef,varmandef,UGDBPoint3DArray,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry,gdbEntity,UGDBOpenArrayOfPV;
+uses varman,ugdbdrawingdef,varmandef,UGDBPoint3DArray,gdbasetypes,UGDBOpenArrayOfData,
+     sysutils,gdbase,geometry,uzeentity,UGDBOpenArrayOfPV;
 type
 {EXPORT+}
 PTLinkType=^TLinkType;

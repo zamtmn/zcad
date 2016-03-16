@@ -30,7 +30,7 @@ uses
   varmandef,
   varman,
   UGDBOpenArrayOfByte,
-  gdbEntity,
+  uzeentity,
   uzcshared,
   uzcdevicebaseabstract,UUnitManager,gdbasetypes,strutils,forms,Controls,zcadinterface,UGDBDrawingdef,UGDBStringArray,strmy,memman;
 

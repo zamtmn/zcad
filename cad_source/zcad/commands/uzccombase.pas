@@ -42,7 +42,7 @@ uses
   iodxf,
   zcadinterface,
   gdbobjectsconstdef,
-  GDBEntity,
+  uzeentity,
  uzcshared,
  UGDBEntTree,
  gdbasetypes,memman,WindowsSpecific,

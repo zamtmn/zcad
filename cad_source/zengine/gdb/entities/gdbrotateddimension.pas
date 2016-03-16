@@ -19,11 +19,10 @@ unit gdbrotateddimension;
 {$INCLUDE def.inc}
 
 interface
-uses zeentityfactory,gdbaligneddimension,gdbdimension,ugdbdimstylearray,{Varman,}UGDBLayerArray,ugdbtrash,ugdbdrawingdef,
-strproc,UGDBOpenArrayOfByte,geometry,
-gdbasetypes,{SysInfo,}sysutils,
-gdbEntity,//varmandef,
-GDBase,gdbobjectsconstdef,dxflow,memman,GDBSubordinated;
+uses zeentityfactory,gdbaligneddimension,gdbdimension,ugdbdimstylearray,
+     UGDBLayerArray,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,
+     geometry,gdbasetypes,sysutils,uzeentity,GDBase,gdbobjectsconstdef,dxflow,
+     memman,GDBSubordinated;
 type
 {EXPORT+}
 PGDBObjRotatedDimension=^GDBObjRotatedDimension;

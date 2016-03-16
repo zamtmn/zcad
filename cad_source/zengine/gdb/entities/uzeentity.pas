@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit GDBEntity;
+unit uzeentity;
 {$INCLUDE def.inc}
 interface
 uses {uabstractunit,}gdbpalette,gdbobjectextender,uzglabstractdrawer,gdbdrawcontext,ugdbdrawingdef,GDBCamera,

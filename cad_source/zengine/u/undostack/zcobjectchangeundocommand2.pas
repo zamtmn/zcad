@@ -19,7 +19,8 @@
 unit zcobjectchangeundocommand2;
 {$INCLUDE def.inc}
 interface
-uses memman,zeundostack,zebaseundocommands,gdbase,gdbasetypes,GDBEntity,UGDBLayerArray,UGDBTextStyleArray,gdbdrawcontext;
+uses memman,zeundostack,zebaseundocommands,gdbase,gdbasetypes,uzeentity,
+     UGDBLayerArray,UGDBTextStyleArray,gdbdrawcontext;
 
 type
 

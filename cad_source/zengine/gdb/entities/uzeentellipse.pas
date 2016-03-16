@@ -18,8 +18,12 @@
 unit uzeentellipse;
 {$INCLUDE def.inc}
 interface
-uses zeentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,GDBWithLocalCS,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
-GDBase{,GDBWithLocalCS},gdbobjectsconstdef,uzglviewareadata,geometry,dxflow,memman,GDBPlain;
+uses
+    zeentityfactory,GDBSubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,
+    GDBWithLocalCS,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,
+    UGDBSelectedObjArray,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,
+    UGDBOpenArrayOfByte,varman,varmandef,GDBase,gdbobjectsconstdef,
+    uzglviewareadata,geometry,dxflow,memman,GDBPlain;
 type
 {REGISTEROBJECTTYPE GDBObjEllipse}
 {Export+}

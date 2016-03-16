@@ -20,8 +20,9 @@ unit GDBGenericSubEntry;
 {$INCLUDE def.inc}
 
 interface
-uses gdbpalette,gdbdrawcontext,UGDBDrawingdef,GDBCamera,{zcadsysvars,}UGDBLayerArray,UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
-geometry{,GDB3d},{UGDBVisibleOpenArray,}gdbEntity,gdbobjectsconstdef,{varmandef,}memman,UGDBEntTree;
+uses gdbpalette,gdbdrawcontext,UGDBDrawingdef,GDBCamera,UGDBLayerArray,UGDBOpenArrayOfPObjects,
+     UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,GDBWithMatrix,GDBSubordinated,gdbase,
+     geometry,uzeentity,gdbobjectsconstdef,memman,UGDBEntTree;
 type
 //GDBObjGenericSubEntry=object(GDBObjWithLocalCS)
 //GDBObjGenericSubEntry=object(GDBObj3d)

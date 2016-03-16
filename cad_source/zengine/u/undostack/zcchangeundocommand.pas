@@ -19,7 +19,7 @@
 unit zcchangeundocommand;
 {$INCLUDE def.inc}
 interface
-uses memman,zeundostack,zebaseundocommands,gdbase,gdbasetypes,GDBEntity,UGDBLayerArray;
+uses memman,zeundostack,zebaseundocommands,gdbase,gdbasetypes,uzeentity,UGDBLayerArray;
 
 type
 generic TGChangeCommand<_T>=object(TCustomChangeCommand)

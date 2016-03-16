@@ -19,8 +19,10 @@ unit uzeent3dface;
 {$INCLUDE def.inc}
 
 interface
-uses zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,
-GDBase,gdbobjectsconstdef{,oglwindowdef,dxflow},memman;
+uses
+    zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,
+    geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,
+    GDB3d,uzeentity,sysutils,UGDBOpenArrayOfByte,GDBase,gdbobjectsconstdef,memman;
 type
 {REGISTEROBJECTTYPE GDBObj3DFace}
 {Export+}

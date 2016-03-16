@@ -46,7 +46,7 @@ uses
   //cmdline,
   //UGDBVisibleOpenArray,
   //gdbobjectsconstdef,
-  GDBEntity,
+  uzeentity,
  uzcshared,
  ugdbdrawing,
   {zmenus,}uzcfprojecttree,gdbasetypes,{optionswnd,}uzcfabout,uzcfhelp,memman,WindowsSpecific,{txteditwnd,}

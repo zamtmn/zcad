@@ -62,7 +62,7 @@ uses
   gdbRadialDimension,
   uzeentarc,
   uzeentcircle,
-  gdbEntity,
+  uzeentity,
 
   uzcentcable,
   uzeentdevice,

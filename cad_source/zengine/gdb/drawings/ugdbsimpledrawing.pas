@@ -22,7 +22,7 @@ interface
 uses {zcadsysvars,}UGDBDrawingdef,zeblockdefsfactory,ugdbdimstylearray,GDBWithLocalCS,ugdbabstractdrawing,strproc,
      UGDBObjBlockdefArray,UGDBTableStyleArray,{UUnitManager,}UGDBNumerator, gdbase,
      {varmandef,}{varman,}sysutils, memman, geometry,gdbasetypes,{sysinfo,}
-     GDBGenericSubEntry,UGDBLayerArray,ugdbltypearray,GDBEntity,
+     GDBGenericSubEntry,UGDBLayerArray,ugdbltypearray,uzeentity,
      UGDBSelectedObjArray,UGDBTextStyleArray,GDBCamera,UGDBOpenArrayOfPV,
      GDBRoot,ugdbfont,UGDBOpenArrayOfPObjects,uzglabstractviewarea,generalviewarea,gdbdrawcontext;
 type

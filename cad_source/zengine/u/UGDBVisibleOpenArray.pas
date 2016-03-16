@@ -37,7 +37,7 @@ GDBObjEntityOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPV)
                 end;
 {Export-}
 implementation
-uses {UGDBDescriptor,}{GDBManager,}{log,}GDBEntity;
+uses uzeentity;
 type
 //objvizarray = array[0..0] of PGDBObjEntity;
 //pobjvizarray = ^objvizarray;

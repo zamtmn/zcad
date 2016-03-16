@@ -20,14 +20,12 @@ unit ugdbdrawing;
 {$INCLUDE def.inc}
 interface
 uses
-uzctranslations,zcadinterface,gdbdrawcontext,zeundostack,zcchangeundocommand,zcobjectchangeundocommand,zebaseundocommands,paths,ugdbdimstylearray,WindowsSpecific,LResources,uzcsysvars,uzcstrconsts,strproc,GDBBlockDef,UUnitManager,
-gdbase,varmandef,varman,
-sysutils, memman, geometry, gdbobjectsconstdef,
-gdbasetypes,{uzcsysinfo,}ugdbsimpledrawing,
-UGDBLayerArray,
-GDBEntity,
-UGDBFontManager,
-UGDBOpenArrayOfPObjects,ugdbtrash,UGDBOpenArrayOfByte;
+    uzctranslations,zcadinterface,gdbdrawcontext,zeundostack,zcchangeundocommand,
+    zcobjectchangeundocommand,zebaseundocommands,paths,ugdbdimstylearray,
+    WindowsSpecific,LResources,uzcsysvars,uzcstrconsts,strproc,GDBBlockDef,UUnitManager,
+    gdbase,varmandef,varman,sysutils, memman, geometry, gdbobjectsconstdef,
+    gdbasetypes,ugdbsimpledrawing,UGDBLayerArray,uzeentity,UGDBFontManager,
+    UGDBOpenArrayOfPObjects,ugdbtrash,UGDBOpenArrayOfByte;
 type
 {EXPORT+}
 {TDWGProps=packed record

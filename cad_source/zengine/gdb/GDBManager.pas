@@ -21,11 +21,11 @@ unit GDBManager;
 
 
 interface
-uses LCLProc,zcmultiobjectcreateundocommand,zeentitiesmanager,gdbpalette,zeentityfactory,gdbdrawcontext,ugdbdrawing,ugdbltypearray,uzcsysvars,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
-     UGDBDescriptor,varmandef,gdbobjectsconstdef,
-     UGDBVisibleOpenArray,GDBGenericSubEntry,gdbEntity,
-     GDBBlockInsert,
-     memman;
+uses LCLProc,zcmultiobjectcreateundocommand,zeentitiesmanager,gdbpalette,
+     zeentityfactory,gdbdrawcontext,ugdbdrawing,ugdbltypearray,uzcsysvars,
+     UGDBLayerArray,sysutils,gdbasetypes,gdbase,UGDBDescriptor,varmandef,
+     gdbobjectsconstdef,UGDBVisibleOpenArray,GDBGenericSubEntry,uzeentity,
+     GDBBlockInsert,memman;
 type
     TSelObjDesk=record
                       PFirstObj:PGDBObjEntity;

@@ -19,9 +19,11 @@ unit gdbdiametricdimension;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,zeentityfactory,gdbdimension,ugdbdimstylearray,{Varman,}UGDBLayerArray,ugdbtrash,ugdbdrawingdef,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,uzeentline,gdbasetypes,GDBComplex,{SysInfo,}sysutils,
-{UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},//varmandef,
-GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
+uses gdbdrawcontext,zeentityfactory,gdbdimension,ugdbdimstylearray,UGDBLayerArray,
+     ugdbtrash,ugdbdrawingdef,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,
+     UGDBControlPointArray,geometry,uzeentline,gdbasetypes,GDBComplex,sysutils,
+     UGDBSelectedObjArray,uzeentity,GDBase,gdbobjectsconstdef,dxflow,memman,
+     GDBSubordinated;
 (*
 
 Diametric dimension structure in DXF

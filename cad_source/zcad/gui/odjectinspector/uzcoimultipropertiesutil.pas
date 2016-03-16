@@ -25,7 +25,7 @@ uses
   gdbase,
   UGDBDescriptor,
   varmandef,
-  GDBEntity,
+  uzeentity,
   gdbasetypes,
   Varman,UGDBPoint3DArray,
   uzeentcircle,uzeentarc,uzeentline,GDBBlockInsert,uzeenttext,uzeentmtext,uzeentpolyline,geometry,uzcoimultiproperties;

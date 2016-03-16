@@ -8,8 +8,11 @@ unit uzcentnet;
 {$INCLUDE def.inc}
 
 interface
-Uses gdbobjectextender,zeentityfactory,Varman,gdbdrawcontext,UGDBLayerArray,GDBGenericSubEntry,ugdbdrawingdef,gdbvisualprop,uzcsysvars,UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
-memman,GDBSubordinated,uunitmanager,uzcshared,sysutils,UGDBOpenArrayOfPObjects;
+uses gdbobjectextender,zeentityfactory,Varman,gdbdrawcontext,UGDBLayerArray,
+     GDBGenericSubEntry,ugdbdrawingdef,gdbvisualprop,uzcsysvars,UGDBOpenArrayOfByte,
+     gdbasetypes,uzeentity,UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,
+     varmandef,geometry,gdbase,UGDBGraf,memman,GDBSubordinated,uunitmanager,
+     uzcshared,sysutils,UGDBOpenArrayOfPObjects;
 const
      UNNAMEDNET='NET';
 type

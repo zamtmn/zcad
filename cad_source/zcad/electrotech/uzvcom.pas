@@ -62,7 +62,7 @@ uses
   gdbRadialDimension,
   uzeentarc,
   uzeentcircle,
-  gdbEntity,
+  uzeentity,
 
   gvector,garrayutils, // Подключение Generics и модуля для работы с ним
 

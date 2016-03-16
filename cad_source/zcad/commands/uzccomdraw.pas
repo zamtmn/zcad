@@ -44,7 +44,7 @@ uses
   geometry,
   memman,
   gdbobjectsconstdef,
-  GDBEntity,uzeentcircle,uzeentline,GDBGenericSubEntry,uzeentmtext,
+  uzeentity,uzeentcircle,uzeentline,GDBGenericSubEntry,uzeentmtext,
   uzcshared,GDBSubordinated,GDBBlockInsert,uzeentpolyline,uzclog,UGDBOpenArrayOfData,math,GDBTable,UGDBStringArray,printerspecfunc;
 const
      modelspacename:GDBSTring='**Модель**';

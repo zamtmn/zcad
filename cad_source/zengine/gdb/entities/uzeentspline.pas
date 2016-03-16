@@ -23,7 +23,7 @@ interface
 uses LCLProc,gluinterface,zeentityfactory,gdbdrawcontext,glstatemanager,UGDBOpenArrayOfData,
      UGDBPoint3DArray,UGDBDrawingdef,GDBCamera,UGDBVectorSnapArray,
      UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes,
-     GDBEntity,UGDBOpenArrayOfByte,GDBase,gdbobjectsconstdef,uzglviewareadata,
+     uzeentity,UGDBOpenArrayOfByte,GDBase,gdbobjectsconstdef,uzglviewareadata,
      geometry,dxflow,sysutils,memman;
 type
 {REGISTEROBJECTTYPE GDBObjSpline}

@@ -45,7 +45,7 @@
         <PackageName Value="LCL"/>
       </Item5>
     </RequiredPackages>
-    <Units Count="308">
+    <Units Count="309">
       <Unit0>
         <Filename Value="simplecad.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -61,7 +61,6 @@
         <ComponentName Value="Form1"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
         <TopLine Value="543"/>
         <CursorPos X="6" Y="547"/>
@@ -1801,11 +1800,10 @@
       </Unit229>
       <Unit230>
         <Filename Value="..\zengine\fileformats\iodxf.pas"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="1258"/>
         <CursorPos X="66" Y="1270"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit230>
       <Unit231>
@@ -1882,10 +1880,12 @@
       </Unit239>
       <Unit240>
         <Filename Value="..\zengine\fonts\UGDBFontManager.pas"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="25"/>
-        <CursorPos X="21" Y="19"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="14"/>
+        <CursorPos X="98" Y="22"/>
         <UsageCount Value="15"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit240>
       <Unit241>
@@ -2417,8 +2417,15 @@
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit307>
+      <Unit308>
+        <Filename Value="..\zcad\uzcstrconsts.pas"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="18" Y="19"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit308>
     </Units>
-    <JumpHistory Count="18" HistoryIndex="17">
+    <JumpHistory Count="9" HistoryIndex="8">
       <Position1>
         <Filename Value="..\zengine\zgl\drawers\uzglgeneralcanvasviewarea.pas"/>
         <Caret Line="31" Column="29" TopLine="20"/>
@@ -2439,56 +2446,21 @@
         <Filename Value="..\zengine\fileformats\fileformatsmanager.pas"/>
       </Position5>
       <Position6>
-        <Filename Value="..\zengine\fileformats\iodxf.pas"/>
-        <Caret Line="19" Column="11"/>
+        <Filename Value="..\zengine\fonts\UGDBFontManager.pas"/>
+        <Caret Line="19" Column="21" TopLine="25"/>
       </Position6>
       <Position7>
-        <Filename Value="..\zengine\fileformats\iodxf.pas"/>
-        <Caret Line="1265" Column="16" TopLine="1252"/>
+        <Filename Value="..\zengine\fonts\UGDBFontManager.pas"/>
+        <Caret Line="22" Column="100" TopLine="8"/>
       </Position7>
       <Position8>
-        <Filename Value="..\zengine\fileformats\iodxf.pas"/>
-        <Caret Line="1230" Column="3" TopLine="1216"/>
+        <Filename Value="..\zengine\fonts\UGDBFontManager.pas"/>
+        <Caret Line="120" Column="22" TopLine="116"/>
       </Position8>
       <Position9>
-        <Filename Value="..\zengine\fileformats\iodxf.pas"/>
-        <Caret Line="1265" Column="16" TopLine="1257"/>
+        <Filename Value="..\zengine\fonts\UGDBFontManager.pas"/>
+        <Caret Line="134" Column="63" TopLine="121"/>
       </Position9>
-      <Position10>
-        <Filename Value="..\zengine\fileformats\iodxf.pas"/>
-        <Caret Line="1270" Column="30" TopLine="1253"/>
-      </Position10>
-      <Position11>
-        <Filename Value="..\zengine\fileformats\iodxf.pas"/>
-        <Caret Line="1231" Column="10" TopLine="1216"/>
-      </Position11>
-      <Position12>
-        <Filename Value="..\zengine\fileformats\iodxf.pas"/>
-        <Caret Line="1266" Column="16" TopLine="1252"/>
-      </Position12>
-      <Position13>
-        <Filename Value="..\zengine\fileformats\iodxf.pas"/>
-        <Caret Line="1267" Column="36" TopLine="1254"/>
-      </Position13>
-      <Position14>
-        <Filename Value="..\zengine\fileformats\iodxf.pas"/>
-        <Caret Line="1266" Column="20" TopLine="1253"/>
-      </Position14>
-      <Position15>
-        <Filename Value="..\zengine\fileformats\iodxf.pas"/>
-      </Position15>
-      <Position16>
-        <Filename Value="..\zengine\fileformats\iodxf.pas"/>
-        <Caret Line="1266" Column="18" TopLine="1253"/>
-      </Position16>
-      <Position17>
-        <Filename Value="..\zengine\fileformats\iodxf.pas"/>
-        <Caret Line="1267" Column="46" TopLine="1256"/>
-      </Position17>
-      <Position18>
-        <Filename Value="..\zengine\fileformats\iodxf.pas"/>
-        <Caret Line="1278" Column="40" TopLine="1257"/>
-      </Position18>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -2499,7 +2471,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\zengine\u;..\zengine\gdb;..\zengine\gdb\entities;..\zcad\gui;..\zengine\zgl;..\zengine\zgl\drawers;..\zengine\misc;..\zengine\fileformats;..\zengine\fonts;..\zengine\gdb\drawings"/>
+      <OtherUnitFiles Value="..\zengine\u;..\zengine\gdb;..\zengine\gdb\entities;..\zcad\gui;..\zcad;..\zengine\zgl;..\zengine\zgl\drawers;..\zengine\misc;..\zengine\fileformats;..\zengine\fonts;..\zengine\gdb\drawings"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

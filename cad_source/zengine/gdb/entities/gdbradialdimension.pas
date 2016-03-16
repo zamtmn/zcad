@@ -22,7 +22,7 @@ interface
 uses zeentityfactory,gdbdiametricdimension,gdbdimension,ugdbdimstylearray,
      UGDBLayerArray,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,
      geometry,gdbasetypes,sysutils,uzeentity,GDBase,gdbobjectsconstdef,dxflow,
-     memman,GDBSubordinated;
+     memman,uzeentsubordinated;
 (*
 
 Diametric dimension structure in DXF

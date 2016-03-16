@@ -20,8 +20,7 @@ unit GDBPlainWithOX;
 {$INCLUDE def.inc}
 
 interface
-uses GDBPlain{,gdbasetypes,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte}{,varmandef,GDBWithMatrix},
-GDBase,{gDBDescriptor,gdbobjectsconstdef,oglwindowdef,}geometry{,dxflow},sysutils,memman{,GDBSubordinated};
+uses uzeentplain,GDBase,geometry,sysutils,memman;
 type
 //pprojoutbound:{-}PGDBOOutbound2DIArray{/GDBPointer/};
 {EXPORT+}

@@ -18,10 +18,9 @@
 unit GDBBlockDef;
 {$INCLUDE def.inc}
 interface
-uses uzeentity,zeentityfactory,gdbdrawcontext,gdbobjectextender,ugdbdrawingdef,GDBSubordinated,dxflow,UGDBOpenArrayOfByte,
-     gdbasetypes,sysutils,gdbase,memman, geometry,
-     UGDBLayerArray,
-     {varmandef,}gdbobjectsconstdef,GDBGenericSubEntry{,varman};
+uses uzeentity,zeentityfactory,gdbdrawcontext,gdbobjectextender,ugdbdrawingdef,
+     uzeentsubordinated,dxflow,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,
+     memman, geometry,UGDBLayerArray,gdbobjectsconstdef,GDBGenericSubEntry;
 type
 {REGISTEROBJECTTYPE GDBObjBlockdef}
 {Export+}

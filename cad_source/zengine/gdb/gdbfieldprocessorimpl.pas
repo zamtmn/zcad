@@ -23,7 +23,7 @@ uses uzeentity,uzcvariablesutils,gdbfieldprocessor,languade,strproc,sysutils,
      gdbasetypes,varmandef,GDBase;
 implementation
 uses
-   uzcenitiesvariablesextender,GDBSubordinated;
+   uzcenitiesvariablesextender,uzeentsubordinated;
 procedure var2value(var str:gdbstring;startpos:integer;pobj:PGDBObjGenericWithSubordinated);
 var
   endpos:integer;

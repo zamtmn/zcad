@@ -24,7 +24,7 @@ uses
     uzglgeometry,gdbdrawcontext,gdbfieldprocessor,zeentityfactory,UGDBDrawingdef,
     strproc,ugdbfont,GDBAbstractText,UGDBPoint3DArray,UGDBLayerArray,SysUtils,
     gdbasetypes,uzeentity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,
-    GDBase,uzeenttext,gdbobjectsconstdef,geometry,dxflow,math,memman,GDBSubordinated,
+    GDBase,uzeenttext,gdbobjectsconstdef,geometry,dxflow,math,memman,uzeentsubordinated,
     UGDBTextStyleArray;
 const maxdxfmtextlen=250;
 type

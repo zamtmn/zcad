@@ -24,7 +24,7 @@ uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,
      UGDBOpenArrayOfByte,UGDBLayerArray,gdbasetypes,UGDBVectorSnapArray,
      UGDBSelectedObjArray,GDB3d,uzeentity,UGDBPolyLine2DArray,UGDBPoint3DArray,
      GDBase,geometry,gdbobjectsconstdef,uzglviewareadata,dxflow,sysutils,memman,
-     GDBSubordinated;
+     uzeentsubordinated;
 type
 //------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {Export+}

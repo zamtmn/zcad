@@ -45,7 +45,7 @@ uses
   memman,
   gdbobjectsconstdef,
   uzeentity,uzeentcircle,uzeentline,GDBGenericSubEntry,uzeentmtext,
-  uzcshared,GDBSubordinated,GDBBlockInsert,uzeentpolyline,uzclog,UGDBOpenArrayOfData,math,GDBTable,UGDBStringArray,printerspecfunc;
+  uzcshared,uzeentsubordinated,GDBBlockInsert,uzeentpolyline,uzclog,UGDBOpenArrayOfData,math,GDBTable,UGDBStringArray,printerspecfunc;
 const
      modelspacename:GDBSTring='**Модель**';
 type

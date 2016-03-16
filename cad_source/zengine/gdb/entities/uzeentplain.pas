@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit GDBPlain;
+unit uzeentplain;
 {$INCLUDE def.inc}
 
 interface

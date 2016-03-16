@@ -22,7 +22,7 @@ interface
 uses iodxf,paths,uzcsysvars,uzctranslations,sysutils,
      uzcenitiesvariablesextender,uzcstrconsts,uzcshared,gdbobjectsconstdef,devices,uzccomdb,uzcentcable,uzcentnet,uzeentdevice,TypeDescriptors,dxflow,
      gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,gdbobjectextender,
-     GDBSubordinated,uzeentity,uzeenttext,GDBBlockDef,varmandef,Varman,UUnitManager,
+     uzeentsubordinated,uzeentity,uzeenttext,GDBBlockDef,varmandef,Varman,UUnitManager,
      URecordDescriptor,UBaseTypeDescriptor,UGDBDrawingdef,memman;
 var
    PFCTTD:GDBPointer=nil;

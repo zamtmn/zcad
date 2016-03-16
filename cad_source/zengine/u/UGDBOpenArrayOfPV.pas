@@ -19,8 +19,8 @@
 unit UGDBOpenArrayOfPV;
 {$INCLUDE def.inc}
 interface
-uses {varman,}gdbdrawcontext,UGDBDrawingdef,uzeentity,GDBCamera,{log,}gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
-     gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman,GDBSubordinated;
+uses gdbdrawcontext,UGDBDrawingdef,uzeentity,GDBCamera,gdbasetypes,
+     UGDBOpenArrayOfPObjects,sysutils,gdbase, geometry,memman,uzeentsubordinated;
 type
 {PGDBObjEntityArray=^GDBObjEntityArray;
 objvizarray = array[0..0] of PGDBObjEntity;

@@ -19,11 +19,10 @@ unit uzcenitiesvariablesextender;
 {$INCLUDE def.inc}
 
 interface
-uses sysutils,
-     UGDBObjBlockdefArray,UGDBDrawingdef,gdbentityextender,uzcshared,uzeentdevice,TypeDescriptors,
-     gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,
-     GDBSubordinated,uzeentity,uzeenttext,GDBBlockDef,varmandef,Varman,UUnitManager,
-     URecordDescriptor,UBaseTypeDescriptor,memman;
+uses sysutils,UGDBObjBlockdefArray,UGDBDrawingdef,gdbentityextender,uzcshared,
+     uzeentdevice,TypeDescriptors,gdbfieldprocessor,UGDBOpenArrayOfByte,
+     gdbasetypes,gdbase,uzeentsubordinated,uzeentity,uzeenttext,GDBBlockDef,
+     varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,memman;
 
 type
 TBaseVariablesExtender={$IFNDEF DELPHI}packed{$ENDIF} object(TBaseEntityExtender)

@@ -19,10 +19,9 @@
 unit uzeentity;
 {$INCLUDE def.inc}
 interface
-uses {uabstractunit,}gdbpalette,gdbobjectextender,uzglabstractdrawer,gdbdrawcontext,ugdbdrawingdef,GDBCamera,
-     gdbvisualprop,uzglgeometry,ugdbltypearray,{zcadsysvars,}gdbasetypes,
-     UGDBControlPointArray,GDBSubordinated,
-     {varman,}{varmandef,}GDBase,gdbobjectsconstdef,
+uses gdbpalette,gdbobjectextender,uzglabstractdrawer,gdbdrawcontext,ugdbdrawingdef,
+     GDBCamera,gdbvisualprop,uzglgeometry,ugdbltypearray,gdbasetypes,
+     UGDBControlPointArray,uzeentsubordinated,GDBase,gdbobjectsconstdef,
      uzglviewareadata,geometry,dxflow,sysutils,memman,UGDBOpenArrayOfByte,
      UGDBLayerArray,UGDBOpenArrayOfPObjects;
 type

@@ -20,7 +20,7 @@ unit uzcvariablesutils;
 
 interface
 uses uzcenitiesvariablesextender,sysutils,UGDBOpenArrayOfPV,gdbasetypes,gdbase,
-     uzeentity,varmandef,GDBSubordinated;
+     uzeentity,varmandef,uzeentsubordinated;
 function FindVariableInEnt(PEnt:PGDBObjEntity;varname:gdbstring):pvardesk;
 function FindEntityByVar(arr:GDBObjOpenArrayOfPV;objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;
 implementation

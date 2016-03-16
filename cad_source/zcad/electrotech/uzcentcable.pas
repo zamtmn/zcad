@@ -8,8 +8,10 @@ unit uzcentcable;
 {$INCLUDE def.inc}
 
 interface
-uses gdbobjectextender,varman,gdbdrawcontext,GDBGenericSubEntry,ugdbdrawingdef,uzcsysvars,UGDBOpenArrayOfByte,UGDBLayerArray,UUnitManager,GDBCurve,geometry,math,UGDBOpenArrayOfData,gdbasetypes,uzeentity,varmandef,
-GDBase,gdbobjectsconstdef,dxflow,sysutils,memman,GDBSubordinated,uzeentdevice;
+uses gdbobjectextender,varman,gdbdrawcontext,GDBGenericSubEntry,ugdbdrawingdef,
+     uzcsysvars,UGDBOpenArrayOfByte,UGDBLayerArray,UUnitManager,GDBCurve,geometry,
+     math,UGDBOpenArrayOfData,gdbasetypes,uzeentity,varmandef,GDBase,
+     gdbobjectsconstdef,dxflow,sysutils,memman,uzeentsubordinated,uzeentdevice;
 type
 {Повторное описание типа в Cableы}
   PTCableType=^TCableType;

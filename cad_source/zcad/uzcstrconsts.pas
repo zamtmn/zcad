@@ -21,8 +21,6 @@ unit uzcstrconsts;
 
 interface
 resourcestring
-  fontnotfoundandreplace='For text style "%s" not found font "%s", is replaced by an alternative';
-
   {errors}
   rsInvalidInput='Invalid input';
   rsNotRegistred='Not registred';
@@ -70,17 +68,9 @@ resourcestring
   rsNameAll='All';
 
   {files}
-  rsLoadingFile='Loading file "%s"';
-  rsFileFormat='%s file format';
-  rsUnknownFileFormat='Unknown file format';
   rsUnableToOpenFile='Unable to open file "%s"';
-  rsUnableToWriteFile='Unable to write file "%s"';
-  rsUnableRenameFileToBak='Could not rename file "%s" into "*.bak"';
   rsUnableToFindFile='Unable to find file "%s"';
   rsTemplateNotFound='Template file "%s" not found';
-  rsReserveFontNotLoad='Can not load reserve font';
-  rsReserveFontNotFound='Reserve font is not found in the resources';
-  rsAlternateFontNotFoundIn='Alternate font "%s" is not found in "%s"';
 
   {commands messages}
   rscmSpecifyFirstPoint='Specify first point:';
@@ -149,10 +139,7 @@ resourcestring
   rsCurrentStyleCannotBeDeleted='Current style cannot be deleted';
 
   rsSaveEmptyDWG='Drawing is empty. Sure?';
-  rsBlockIgnored='Ignored block "%s"';
-  rsDoubleBlockIgnored='Ignored double definition block "%s"';
   rsZCADStarted='ZCAD v%s started';
-  rsGridTooDensity='Grid too density';
   rsLoadingFontFile='Loading font file "%S"';
   rsTypeNotDefinedInModule='Type "%S" not defined in unit "%S"';
   rsUnableSelectFreeLayerName='Unable select free layer name';

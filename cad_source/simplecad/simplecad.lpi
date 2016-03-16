@@ -49,10 +49,9 @@
       <Unit0>
         <Filename Value="simplecad.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="-1"/>
         <CursorPos X="7" Y="11"/>
         <UsageCount Value="201"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
       <Unit1>
@@ -61,8 +60,7 @@
         <ComponentName Value="Form1"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="543"/>
+        <IsVisibleTab Value="True"/>
         <CursorPos X="6" Y="547"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
@@ -1155,8 +1153,8 @@
       <Unit148>
         <Filename Value="..\zengine\zgl\drawers\generalviewarea.pas"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="22"/>
-        <CursorPos X="21" Y="19"/>
+        <TopLine Value="12"/>
+        <CursorPos X="28" Y="26"/>
         <UsageCount Value="41"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit148>
@@ -1392,9 +1390,9 @@
       <Unit178>
         <Filename Value="..\zengine\u\UGDBTextStyleArray.pas"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="149"/>
-        <CursorPos Y="166"/>
-        <UsageCount Value="8"/>
+        <TopLine Value="9"/>
+        <CursorPos X="26" Y="23"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit178>
       <Unit179>
@@ -1519,19 +1517,18 @@
       </Unit193>
       <Unit194>
         <Filename Value="..\zengine\zgl\drawers\uzglabstractviewarea.pas"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="25"/>
         <CursorPos X="75" Y="40"/>
-        <UsageCount Value="21"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="22"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit194>
       <Unit195>
         <Filename Value="..\zengine\zgl\drawers\uzglgeneralcanvasviewarea.pas"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="20"/>
         <CursorPos Y="33"/>
-        <UsageCount Value="21"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="22"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit195>
       <Unit196>
@@ -1801,8 +1798,8 @@
       <Unit230>
         <Filename Value="..\zengine\fileformats\iodxf.pas"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="1258"/>
-        <CursorPos X="66" Y="1270"/>
+        <TopLine Value="12"/>
+        <CursorPos X="32" Y="25"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit230>
@@ -1816,11 +1813,10 @@
       </Unit231>
       <Unit232>
         <Filename Value="..\zengine\fileformats\dxflow.pas"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="21"/>
         <CursorPos X="18" Y="34"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="11"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit232>
       <Unit233>
@@ -1880,12 +1876,10 @@
       </Unit239>
       <Unit240>
         <Filename Value="..\zengine\fonts\UGDBFontManager.pas"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="14"/>
-        <CursorPos X="98" Y="22"/>
-        <UsageCount Value="15"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="8"/>
+        <CursorPos X="85" Y="22"/>
+        <UsageCount Value="16"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit240>
       <Unit241>
@@ -2402,19 +2396,17 @@
       <Unit306>
         <Filename Value="E:\lazarus\lcl\controls.pp"/>
         <UnitName Value="Controls"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="2236"/>
         <CursorPos X="28" Y="2251"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="11"/>
       </Unit306>
       <Unit307>
         <Filename Value="..\zengine\fileformats\fileformatsmanager.pas"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="17"/>
         <CursorPos X="21" Y="31"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="11"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit307>
       <Unit308>
@@ -2425,42 +2417,11 @@
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit308>
     </Units>
-    <JumpHistory Count="9" HistoryIndex="8">
+    <JumpHistory Count="1">
       <Position1>
-        <Filename Value="..\zengine\zgl\drawers\uzglgeneralcanvasviewarea.pas"/>
-        <Caret Line="31" Column="29" TopLine="20"/>
-      </Position1>
-      <Position2>
-        <Filename Value="E:\lazarus\lcl\controls.pp"/>
-        <Caret Line="2269" Column="50" TopLine="2251"/>
-      </Position2>
-      <Position3>
-        <Filename Value="simplecad.lpr"/>
-        <Caret Line="11" Column="7"/>
-      </Position3>
-      <Position4>
         <Filename Value="umainform.pas"/>
         <Caret Line="547" Column="6" TopLine="543"/>
-      </Position4>
-      <Position5>
-        <Filename Value="..\zengine\fileformats\fileformatsmanager.pas"/>
-      </Position5>
-      <Position6>
-        <Filename Value="..\zengine\fonts\UGDBFontManager.pas"/>
-        <Caret Line="19" Column="21" TopLine="25"/>
-      </Position6>
-      <Position7>
-        <Filename Value="..\zengine\fonts\UGDBFontManager.pas"/>
-        <Caret Line="22" Column="100" TopLine="8"/>
-      </Position7>
-      <Position8>
-        <Filename Value="..\zengine\fonts\UGDBFontManager.pas"/>
-        <Caret Line="120" Column="22" TopLine="116"/>
-      </Position8>
-      <Position9>
-        <Filename Value="..\zengine\fonts\UGDBFontManager.pas"/>
-        <Caret Line="134" Column="63" TopLine="121"/>
-      </Position9>
+      </Position1>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -2471,7 +2432,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\zengine\u;..\zengine\gdb;..\zengine\gdb\entities;..\zcad\gui;..\zcad;..\zengine\zgl;..\zengine\zgl\drawers;..\zengine\misc;..\zengine\fileformats;..\zengine\fonts;..\zengine\gdb\drawings"/>
+      <OtherUnitFiles Value="..\zengine\u;..\zengine;..\zengine\gdb;..\zengine\gdb\entities;..\zengine\zgl;..\zengine\zgl\drawers;..\zengine\misc;..\zengine\fileformats;..\zengine\fonts;..\zengine\gdb\drawings"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

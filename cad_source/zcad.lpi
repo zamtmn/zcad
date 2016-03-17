@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="104">
+    <Units Count="106">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -625,7 +625,6 @@
       <Unit92>
         <Filename Value="zengine/gdb/entities/uzeentcurve.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GDBCurve"/>
       </Unit92>
       <Unit93>
         <Filename Value="zengine/gdb/entities/uzeentcomplex.pas"/>
@@ -658,7 +657,6 @@
       <Unit100>
         <Filename Value="zengine/gdb/entities/uzeentdimdiametric.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="gdbdiametricdimension"/>
       </Unit100>
       <Unit101>
         <Filename Value="zengine/gdb/entities/uzeentdimrotated.pas"/>
@@ -671,8 +669,15 @@
       <Unit103>
         <Filename Value="zengine/gdb/entities/uzeentdimensiongeneric.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="gdbgenericdimension"/>
       </Unit103>
+      <Unit104>
+        <Filename Value="zengine/gdb/entities/uzeent3d.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit104>
+      <Unit105>
+        <Filename Value="zengine/gdb/entities/uzeentsubordinated.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit105>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

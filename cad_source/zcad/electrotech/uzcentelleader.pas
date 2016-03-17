@@ -9,10 +9,10 @@ unit uzcentelleader;
 
 interface
 uses uzcenitiesvariablesextender,zeentityfactory,Varman,gdbdrawcontext,
-     GDBAbstractText,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,
+     uzeentabstracttext,uzeentgenericsubentry,ugdbtrash,ugdbdrawingdef,GDBCamera,
      uzcsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,
      uzeenttext,uzeentdevice,uzcentcable,GDBTable,UGDBControlPointArray,geometry,
-     uzeentline,gdbasetypes,GDBComplex,sysutils,UGDBStringArray,
+     uzeentline,gdbasetypes,uzeentcomplex,sysutils,UGDBStringArray,
      UGDBSelectedObjArray,uzeentity,varmandef,GDBase,gdbobjectsconstdef,dxflow,
      memman,uzeentsubordinated;
 type
@@ -63,7 +63,7 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             end;
 {EXPORT-}
 implementation
-uses UGDBTableStyleArray,uzclog,UGDBOpenArrayOfPV,GDBCurve;
+uses UGDBTableStyleArray,uzclog,UGDBOpenArrayOfPV,uzeentcurve;
 function GDBObjElLeader.calcvisible;
 //var i:GDBInteger;
 //    tv,tv1:gdbvertex4d;

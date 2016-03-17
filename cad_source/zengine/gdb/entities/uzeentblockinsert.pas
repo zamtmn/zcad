@@ -15,12 +15,12 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 } 
-unit GDBBlockInsert;
+unit uzeentblockinsert;
 {$INCLUDE def.inc}
 
 interface
 uses uzeentity,gdbdrawcontext,zeentityfactory,ugdbdrawingdef,UGDBLayerArray,math,
-     gdbasetypes,GDBComplex,sysutils,UGDBObjBlockdefArray,GDBBlockDef,GDBase,
+     gdbasetypes,uzeentcomplex,sysutils,UGDBObjBlockdefArray,GDBBlockDef,GDBase,
      gdbobjectsconstdef,uzglviewareadata,geometry,dxflow,memman,uzeentsubordinated,
      UGDBOpenArrayOfByte;
 const zcadmetric='!!ZMODIFIER:';

@@ -24,8 +24,8 @@ interface
 uses LCLProc,zcmultiobjectcreateundocommand,zeentitiesmanager,gdbpalette,
      zeentityfactory,gdbdrawcontext,ugdbdrawing,ugdbltypearray,uzcsysvars,
      UGDBLayerArray,sysutils,gdbasetypes,gdbase,UGDBDescriptor,varmandef,
-     gdbobjectsconstdef,UGDBVisibleOpenArray,GDBGenericSubEntry,uzeentity,
-     GDBBlockInsert,memman;
+     gdbobjectsconstdef,UGDBVisibleOpenArray,uzeentgenericsubentry,uzeentity,
+     uzeentblockinsert,memman;
 type
     TSelObjDesk=record
                       PFirstObj:PGDBObjEntity;

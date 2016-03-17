@@ -22,7 +22,7 @@ interface
 uses gdbdrawcontext,zeentityfactory,gdbdimension,uzeentpoint,ugdbdimstylearray,
      UGDBLayerArray,ugdbtrash,ugdbdrawingdef,UGDBOpenArrayOfPObjects,strproc,
      UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,uzeentline,gdbasetypes,
-     GDBComplex,sysutils,UGDBSelectedObjArray,uzeentity,GDBase,gdbobjectsconstdef,
+     uzeentcomplex,sysutils,UGDBSelectedObjArray,uzeentity,GDBase,gdbobjectsconstdef,
      dxflow,memman,uzeentsubordinated;
 (*
 Alligned dimension structure in DXF

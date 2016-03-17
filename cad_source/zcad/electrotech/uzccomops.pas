@@ -10,28 +10,13 @@ unit uzccomops;
 interface
 uses
 
-  uzctranslations,zeentitiesmanager,uzeentity,uzglabstractviewarea,gdbdrawcontext,GDBAbstractText,uzeenttext,UGDBStringArray,zeentityfactory,uzcsysvars,strproc,gdbasetypes,uzccommandsmanager,uzclog,UGDBOpenArrayOfPObjects,
-  plugins,
-  uzccommandsabstract,
-  uzccommandsimpl,
-  gdbase,
-  UGDBDescriptor,
-  GDBManager,
-  sysutils,
-  varmandef,
-  //oglwindowdef,
-  //OGLtypes,
-  UGDBOpenArrayOfByte,
-  iodxf,
-  //optionswnd,
-  //objinsp,
-  zcadinterface,
-  geometry,
-  memman,
-  gdbobjectsconstdef,
-  uzccomdraw,
-  UGDBVisibleOpenArray,{gdbEntity,}{GDBCircle,}uzeentline,{GDBGenericSubEntry,}
-  paths,uzcshared,{GDBSubordinated,}GDBBlockInsert,{ZWinMan,}{sysinfo,}varman,uzccablemanager,uzeentdevice,uzeentmtext,math;
+  uzctranslations,zeentitiesmanager,uzeentity,uzglabstractviewarea,gdbdrawcontext,
+  uzeentabstracttext,uzeenttext,UGDBStringArray,zeentityfactory,uzcsysvars,strproc,
+  gdbasetypes,uzccommandsmanager,uzclog,UGDBOpenArrayOfPObjects,plugins,
+  uzccommandsabstract,uzccommandsimpl,gdbase,UGDBDescriptor,GDBManager,sysutils,
+  varmandef,UGDBOpenArrayOfByte,iodxf,zcadinterface,geometry,memman,gdbobjectsconstdef,
+  uzccomdraw,UGDBVisibleOpenArray,uzeentline,paths,uzcshared,uzeentblockinsert,
+  varman,uzccablemanager,uzeentdevice,uzeentmtext,math;
 
 type
   TPlaceParam=record

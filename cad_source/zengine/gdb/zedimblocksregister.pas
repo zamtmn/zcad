@@ -23,7 +23,7 @@ unit zedimblocksregister;
 interface
 uses UGDBLayerArray,ugdbltypearray,gdbobjectsconstdef,zeentitiesmanager,
      UGDBObjBlockdefArray,zeblockdefsfactory,GDBBlockDef,UGDBDrawingdef,
-     memman,uzcsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,uzeentity;
+     memman,uzcsysvars,GDBase,GDBasetypes,uzeentgenericsubentry,uzeentity;
 implementation
 uses
     {log,}GDBManager;

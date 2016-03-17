@@ -19,9 +19,9 @@ unit gdbdimension;
 {$INCLUDE def.inc}
 
 interface
-uses zemathutils,gdbdrawcontext,GDBAbstractText,UGDBTextStyleArray,UGDBXYZWStringArray,
+uses zemathutils,gdbdrawcontext,uzeentabstracttext,UGDBTextStyleArray,UGDBXYZWStringArray,
      ugdbdimstylearray,uzeentmtext,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,GDBCamera,
-     strproc,UGDBOpenArrayOfByte,uzeenttext,geometry,uzeentline,gdbasetypes,GDBComplex,
+     strproc,UGDBOpenArrayOfByte,uzeenttext,geometry,uzeentline,gdbasetypes,uzeentcomplex,
      sysutils,uzeentity,GDBase,gdbobjectsconstdef,memman;
 type
 {EXPORT+}
@@ -92,7 +92,7 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 end;
 {EXPORT-}
 implementation
-uses zeentitiesmanager,{GDBManager,}{log,}UGDBOpenArrayOfPV,{UGDBDescriptor,}GDBBlockInsert;
+uses zeentitiesmanager,UGDBOpenArrayOfPV,uzeentblockinsert;
 procedure GDBObjDimension.DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;var drawing:TDrawingDef;var DC:TDrawContext);
 var
    l:GDBDouble;

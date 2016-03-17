@@ -42,7 +42,7 @@ uses
 
   Forms, uzcfblockinsert, uzcfarrayinsert,
 
-  GDBBlockInsert,      //unit describes blockinsert entity
+  uzeentblockinsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока
   uzeentline,             //unit describes line entity
                        //модуль описывающий примитив линия

@@ -9,8 +9,8 @@ unit uzcentnet;
 
 interface
 uses gdbobjectextender,zeentityfactory,Varman,gdbdrawcontext,UGDBLayerArray,
-     GDBGenericSubEntry,ugdbdrawingdef,gdbvisualprop,uzcsysvars,UGDBOpenArrayOfByte,
-     gdbasetypes,uzeentity,UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,
+     uzeentgenericsubentry,ugdbdrawingdef,gdbvisualprop,uzcsysvars,UGDBOpenArrayOfByte,
+     gdbasetypes,uzeentity,UGDBOpenArrayOfPV,uzeentconnected,gdbobjectsconstdef,
      varmandef,geometry,gdbase,UGDBGraf,memman,uzeentsubordinated,uunitmanager,
      uzcshared,sysutils,UGDBOpenArrayOfPObjects;
 const

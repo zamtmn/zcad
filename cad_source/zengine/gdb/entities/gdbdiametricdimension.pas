@@ -21,7 +21,7 @@ unit gdbdiametricdimension;
 interface
 uses gdbdrawcontext,zeentityfactory,gdbdimension,ugdbdimstylearray,UGDBLayerArray,
      ugdbtrash,ugdbdrawingdef,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,
-     UGDBControlPointArray,geometry,uzeentline,gdbasetypes,GDBComplex,sysutils,
+     UGDBControlPointArray,geometry,uzeentline,gdbasetypes,uzeentcomplex,sysutils,
      UGDBSelectedObjArray,uzeentity,GDBase,gdbobjectsconstdef,dxflow,memman,
      uzeentsubordinated;
 (*

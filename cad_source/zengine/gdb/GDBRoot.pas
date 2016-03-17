@@ -22,7 +22,7 @@ unit GDBRoot;
 interface
 Uses
    gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBEntTree,gdbase,gdbasetypes,
-   gdbobjectsconstdef,uzeentity,GDBGenericSubEntry,GDBConnected,uzeentsubordinated,
+   gdbobjectsconstdef,uzeentity,uzeentgenericsubentry,uzeentconnected,uzeentsubordinated,
    geometry;
 type
 {REGISTEROBJECTTYPE GDBObjRoot}

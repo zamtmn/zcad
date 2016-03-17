@@ -16,13 +16,13 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit GDBCurve;
+unit uzeentcurve;
 {$INCLUDE def.inc}
 
 interface
 uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,
      UGDBOpenArrayOfByte,UGDBLayerArray,gdbasetypes,UGDBVectorSnapArray,
-     UGDBSelectedObjArray,GDB3d,uzeentity,UGDBPolyLine2DArray,UGDBPoint3DArray,
+     UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBPolyLine2DArray,UGDBPoint3DArray,
      GDBase,geometry,gdbobjectsconstdef,uzglviewareadata,dxflow,sysutils,memman,
      uzeentsubordinated;
 type

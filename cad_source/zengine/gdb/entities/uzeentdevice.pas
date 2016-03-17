@@ -24,7 +24,7 @@ uses UGDBLayerArray,gdbpalette,gdbobjectextender,uabstractunit,zeentityfactory,
      gdbdrawcontext,UGDBDrawingdef,GDBCamera,uzcsysvars,sysutils,devices,
      UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,uunitmanager,memman,geometry,
      gdbobjectsconstdef,uzeentity,uzeentsubordinated,varmandef,gdbasetypes,
-     GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray;
+     uzeentblockinsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray;
 
 type
 {REGISTEROBJECTTYPE GDBObjDevice}

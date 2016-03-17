@@ -16,10 +16,10 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit GDBConnected;
+unit uzeentconnected;
 {$INCLUDE def.inc}
 interface
-Uses uzeentity,GDBGenericSubEntry,UGDBOpenArrayOfPV,ugdbdrawingdef;
+Uses uzeentity,uzeentgenericsubentry,UGDBOpenArrayOfPV,ugdbdrawingdef;
 type
 {Export+}
 PGDBObjConnected=^GDBObjConnected;

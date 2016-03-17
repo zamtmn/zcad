@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit GDBGenericSubEntry;
+unit uzeentgenericsubentry;
 {$INCLUDE def.inc}
 
 interface

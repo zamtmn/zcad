@@ -76,8 +76,8 @@ zengine/u/UGDBGraf.pas
 zcad/electrotech/uzcentnet.pas
 zengine/gdb/entities/uzeentline.pas
 zengine/gdb/entities/uzeentlwpolyline.pas
-zengine/gdb/entities/uzeentmtext.pas
 zengine/gdb/entities/uzeenttext.pas
+zengine/gdb/entities/uzeentmtext.pas
 zengine/gdb/entities/uzeentpoint.pas
 zengine/gdb/entities/uzeentcurve.pas
 zengine/gdb/entities/uzeentpolyline.pas

@@ -2663,29 +2663,6 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  procedure higlight(var DC:TDrawContext);virtual;abstract;
                  class function CreateInstance:PGDBObjLWPolyline;static;
            end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentmtext.pas
-PGDBObjMText=^GDBObjMText;
-GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
-                 width:GDBDouble;(*saved_to_shd*)
-                 linespace:GDBDouble;(*saved_to_shd*)(*oi_readonly*)
-                 linespacef:GDBDouble;(*saved_to_shd*)
-                 text:XYZWGDBGDBStringArray;(*oi_readonly*)(*hidden_in_objinsp*)
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify;wi,l:GDBDouble);
-                 constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;abstract;
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;abstract;
-                 procedure CalcGabarit(const drawing:TDrawingDef);virtual;abstract;
-                 //procedure getoutbound;virtual;abstract;
-                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
-                 procedure FormatContent(var drawing:TDrawingDef);virtual;abstract;
-                 procedure createpoint(const drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
-                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
-                 function GetObjTypeName:GDBString;virtual;abstract;
-                 destructor done;virtual;abstract;
-                 procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;abstract;
-                 procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
-                 function CreateInstance:PGDBObjMText;static;
-            end;
 //Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeenttext.pas
 PGDBObjText=^GDBObjText;
 GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
@@ -2716,6 +2693,29 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  class function GetDXFIOFeatures:TDXFEntIODataManager;
                  function CreateInstance:PGDBObjText;static;
            end;
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentmtext.pas
+PGDBObjMText=^GDBObjMText;
+GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
+                 width:GDBDouble;(*saved_to_shd*)
+                 linespace:GDBDouble;(*saved_to_shd*)(*oi_readonly*)
+                 linespacef:GDBDouble;(*saved_to_shd*)
+                 text:XYZWGDBGDBStringArray;(*oi_readonly*)(*hidden_in_objinsp*)
+                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify;wi,l:GDBDouble);
+                 constructor initnul(owner:PGDBObjGenericWithSubordinated);
+                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;abstract;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;abstract;
+                 procedure CalcGabarit(const drawing:TDrawingDef);virtual;abstract;
+                 //procedure getoutbound;virtual;abstract;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
+                 procedure FormatContent(var drawing:TDrawingDef);virtual;abstract;
+                 procedure createpoint(const drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
+                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
+                 function GetObjTypeName:GDBString;virtual;abstract;
+                 destructor done;virtual;abstract;
+                 procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;abstract;
+                 procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
+                 function CreateInstance:PGDBObjMText;static;
+            end;
 //Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentpoint.pas
 PGDBObjPoint=^GDBObjPoint;
 GDBObjPoint={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)

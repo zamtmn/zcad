@@ -14,12 +14,12 @@ uses
   UGDBFontManager,ioshx,                                                        //fonts manager and SHX fileformat support
   uzglabstractviewarea,generalviewarea,gdbdrawcontext,                          //generic view areas support
   uzglopenglviewarea,uzglgdiviewarea,                                           //gdi and opengl wiewareas
-  GDBEntity,                                                                    //generic entitys objects parent
-  GDB3DFace,GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,         //entitys created by program
+  uzeentity,                                                                    //generic entitys objects parent
+  uzeent3Dface,uzeentlwpolyline,uzeentpolyline,uzeenttext,uzeentline,uzeentcircle,uzeentarc,         //entitys created by program
   {$ifdef dxfio}
   iodxf,                                                                        //dxf fileformat support
-  GDBMText,gdbgenericdimension,gdbaligneddimension,gdbrotateddimension,gdbsolid,//some other entitys can be found in loaded files
-  gdbspline,
+  uzeentmtext,uzeentdimensiongeneric,uzeentdimaligned,uzeentdimrotated,uzeentsolid,//some other entitys can be found in loaded files
+  uzeentspline,
   {$endif}
   UGDBLayerArray,UGDBTextStyleArray,                                            //layers and text steles support
   UGDBEntTree,                                                                  //entities spatial binary tree

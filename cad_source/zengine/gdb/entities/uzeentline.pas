@@ -22,7 +22,7 @@ unit uzeentline;
 interface
 uses LCLProc,zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,
      UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,uzeentsubordinated,
-     UGDBSelectedObjArray,GDB3d,uzeentity,UGDBOpenArrayOfByte,GDBase,gdbobjectsconstdef,
+     UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBOpenArrayOfByte,GDBase,gdbobjectsconstdef,
      uzglviewareadata,geometry,dxflow,memman;
 type
                  {l_1_4:GDBvertex;(*hidden_in_objinsp*)

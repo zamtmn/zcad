@@ -24,7 +24,7 @@ interface
 uses uzccommandsimpl,strproc,UGDBOpenArrayOfByte,uzccommandsabstract,paths,
      UGDBLayerArray,ugdbltypearray,gdbobjectsconstdef,zeentitiesmanager,
      UGDBObjBlockdefArray,zeblockdefsfactory,GDBBlockDef,UGDBDrawingdef,
-     memman,uzcsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,uzeentity;
+     memman,uzcsysvars,GDBase,GDBasetypes,uzeentgenericsubentry,uzeentity;
 implementation
 uses
     UGDBDescriptor,uzccombase,uzclog,GDBManager;

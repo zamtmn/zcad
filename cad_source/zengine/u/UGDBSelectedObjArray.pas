@@ -59,7 +59,7 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                     end;
 {EXPORT-}
 implementation
-uses ugdbabstractdrawing,GDBGenericSubEntry{,log};
+uses ugdbabstractdrawing,uzeentgenericsubentry;
 procedure GDBSelectedObjArray.resprojparam;
 var tdesc:pselectedobjdesc;
     i:GDBInteger;

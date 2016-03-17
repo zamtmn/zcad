@@ -28,7 +28,7 @@ uses
   uzeentpoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,zeentityfactory,
   ugdbsimpledrawing,uzcsysvars,uzcstrconsts,uzccomdrawdase,glstatemanager,
   PrintersDlgs,printers,graphics,uzeentdevice,uzeentwithlocalcs,UGDBOpenArrayOfPointer,
-  LazUTF8,Clipbrd,LCLType,classes,uzeenttext,GDBAbstractText,UGDBTextStyleArray,
+  LazUTF8,Clipbrd,LCLType,classes,uzeenttext,uzeentabstracttext,UGDBTextStyleArray,
   uzccommandsabstract,strproc,
   gdbasetypes,uzccommandsmanager,uzccombase,
   plugins,
@@ -44,8 +44,8 @@ uses
   geometry,
   memman,
   gdbobjectsconstdef,
-  uzeentity,uzeentcircle,uzeentline,GDBGenericSubEntry,uzeentmtext,
-  uzcshared,uzeentsubordinated,GDBBlockInsert,uzeentpolyline,uzclog,UGDBOpenArrayOfData,math,GDBTable,UGDBStringArray,printerspecfunc;
+  uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
+  uzcshared,uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,UGDBOpenArrayOfData,math,GDBTable,UGDBStringArray,printerspecfunc;
 const
      modelspacename:GDBSTring='**Модель**';
 type
@@ -428,7 +428,7 @@ procedure Line_com_CommandEnd(_self:pointer);
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 implementation
-uses GDBCurve,uzeentlwpolyline,UBaseTypeDescriptor,GDBBlockDef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
+uses uzeentcurve,uzeentlwpolyline,UBaseTypeDescriptor,GDBBlockDef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
 function GetBlockDefNames(var BDefNames:GDBGDBStringArray;selname:GDBString):GDBInteger;
 var pb:PGDBObjBlockdef;
     ir:itrec;
@@ -4024,7 +4024,7 @@ begin
   TextInsertParams.h:=2.5;
   TextInsertParams.Oblique:=0;
   TextInsertParams.WidthFactor:=1;
-  TextInsertParams.justify:=GDBAbstractText.jstl;
+  TextInsertParams.justify:=uzeentabstracttext.jstl;
   TextInsertParams.text:='text';
   TextInsertParams.runtexteditor:=false;
   TextInsertParams.Width:=100;

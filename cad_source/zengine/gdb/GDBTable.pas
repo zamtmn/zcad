@@ -20,8 +20,8 @@ unit GDBTable;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,GDBAbstractText,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,
-     UGDBTableStyleArray,uzeentline,gdbasetypes,GDBComplex,sysutils,UGDBTable,
+uses gdbdrawcontext,uzeentabstracttext,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,
+     UGDBTableStyleArray,uzeentline,gdbasetypes,uzeentcomplex,sysutils,UGDBTable,
      UGDBStringArray,uzeentmtext,uzeentity,GDBase,gdbobjectsconstdef,geometry,
      memman;
 //jcm(*'TopMiddle'*),
@@ -51,7 +51,7 @@ GDBObjTable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             end;
 {EXPORT-}
 implementation
-uses GDBBlockInsert;
+uses uzeentblockinsert;
 procedure GDBObjTable.ReCalcFromObjMatrix;
 //var
     //ox:gdbvertex;

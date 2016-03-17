@@ -23,7 +23,7 @@ interface
 uses
     uzglgeometry,gdbdrawcontext,gdbobjectextender,gdbfieldprocessor,zeentityfactory,
     ugdbdrawingdef,GDBCamera,strproc,sysutils,ugdbfont,UGDBLayerArray,gdbasetypes,
-    GDBAbstractText,uzeentity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,GDBase,
+    uzeentabstracttext,uzeentity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,GDBase,
     gdbobjectsconstdef,uzglviewareadata,geometry,dxflow,memman,uzeentsubordinated,
     UGDBTextStyleArray;
 type

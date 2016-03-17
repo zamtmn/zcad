@@ -15,12 +15,12 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 } 
-unit GDBAbstractText;
+unit uzeentabstracttext;
 {$INCLUDE def.inc}
 
 interface
 uses generalviewarea,gdbdrawcontext,uzeentity,GDBCamera,UGDBOpenArrayOfPObjects,
-     strproc,sysutils,GDBPlainWithOX,gdbasetypes,UGDBSelectedObjArray,GDBase,
+     strproc,sysutils,uzeentplainwithox,gdbasetypes,UGDBSelectedObjArray,GDBase,
      gdbobjectsconstdef,geometry,math;
 type
 //jstm(*'TopCenter'*)=2,

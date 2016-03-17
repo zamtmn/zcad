@@ -21,7 +21,7 @@ unit ugdbsimpledrawing;
 interface
 uses UGDBDrawingdef,zeblockdefsfactory,ugdbdimstylearray,uzeentwithlocalcs,
      ugdbabstractdrawing,strproc,UGDBObjBlockdefArray,UGDBTableStyleArray,
-     UGDBNumerator, gdbase,sysutils, memman,geometry,gdbasetypes,GDBGenericSubEntry,
+     UGDBNumerator, gdbase,sysutils, memman,geometry,gdbasetypes,uzeentgenericsubentry,
      UGDBLayerArray,ugdbltypearray,uzeentity,UGDBSelectedObjArray,UGDBTextStyleArray,
      GDBCamera,UGDBOpenArrayOfPV, GDBRoot,ugdbfont,UGDBOpenArrayOfPObjects,
      uzglabstractviewarea,generalviewarea,gdbdrawcontext;

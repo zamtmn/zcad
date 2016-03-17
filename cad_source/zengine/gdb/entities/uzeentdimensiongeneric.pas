@@ -15,11 +15,11 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-unit gdbgenericdimension;
+unit uzeentdimensiongeneric;
 {$INCLUDE def.inc}
 
 interface
-uses zeentityfactory,uzeentwithlocalcs,gdbdimension,ugdbdimstylearray,UGDBLayerArray,
+uses zeentityfactory,uzeentwithlocalcs,uzeentdimension,ugdbdimstylearray,UGDBLayerArray,
      ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,geometry,gdbasetypes,
      sysutils,uzeentity,GDBase,gdbobjectsconstdef,dxflow,memman,uzeentsubordinated;
 type
@@ -39,7 +39,7 @@ GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                    end;
 {EXPORT-}
 implementation
-uses gdbradialdimension,gdbdiametricdimension,gdbrotateddimension,gdbaligneddimension{,log};
+uses uzeentdimradial,uzeentdimdiametric,uzeentdimrotated,uzeentdimaligned;
 var
   WorkingFormatSettings:TFormatSettings;
 function GDBObjGenericDimension.FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;

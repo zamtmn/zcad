@@ -2,7 +2,7 @@ unit aregGDBObjGenericDimension;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,gdbgenericdimension;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzeentdimensiongeneric;
 implementation
 var
 pt:PObjectDescriptor;

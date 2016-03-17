@@ -53,13 +53,13 @@ uses
   uzeentpolyline,             //unit describes line entity
                        //модуль описывающий примитив трехмерная ПОЛИлиния
 
-  gdbAlignedDimension, //unit describes aligned dimensional entity
+  uzeentdimaligned, //unit describes aligned dimensional entity
                        //модуль описывающий выровненный размерный примитив
-  gdbRotatedDimension,
+  uzeentdimrotated,
 
-  gdbDiametricDimension,
+  uzeentdimdiametric,
 
-  gdbRadialDimension,
+  uzeentdimradial,
   uzeentarc,
   uzeentcircle,
   uzeentity,

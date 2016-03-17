@@ -2283,7 +2283,7 @@ GDBObjComplex={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                     procedure BuildGeometry(var drawing:TDrawingDef);virtual;abstract;
                     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
               end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/gdbdimension.pas
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentdimension.pas
 PTDXFDimData2D=^TDXFDimData2D;
 TDXFDimData2D=packed record
   P10:GDBVertex2D;
@@ -2345,7 +2345,7 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 function GetDIMTMOVE:TDimTextMove;virtual;abstract;
                 destructor done;virtual;abstract;
                 end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/gdbgenericdimension.pas
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentdimensiongeneric.pas
 TDimType=(DTRotated,DTAligned,DTAngular,DTDiameter,DTRadius,DTAngular3P,DTOrdinate);
 PGDBObjGenericDimension=^GDBObjGenericDimension;
 GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
@@ -2358,7 +2358,7 @@ GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                       procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;abstract;
                       function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;abstract;
                    end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/gdbaligneddimension.pas
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentdimaligned.pas
 PGDBObjAlignedDimension=^GDBObjAlignedDimension;
 GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
@@ -2381,7 +2381,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                        procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;abstract;
                        function GetDimStr(var drawing:TDrawingDef):GDBString;virtual;abstract;
                    end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/gdbrotateddimension.pas
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentdimrotated.pas
 PGDBObjRotatedDimension=^GDBObjRotatedDimension;
 GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimension)
                         function GetObjTypeName:GDBString;virtual;abstract;
@@ -2395,7 +2395,7 @@ GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimens
                         constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
                    end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/gdbdiametricdimension.pas
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentdimdiametric.pas
 PGDBObjDiametricDimension=^GDBObjDiametricDimension;
 GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
@@ -2418,7 +2418,7 @@ GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         function GetDIMTMOVE:TDimTextMove;virtual;abstract;
                         procedure SaveToDXF(var handle:TDWGHandle;var outhandle:GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;abstract;
                    end;
-//Generate on E:/zcad/cad_source/zengine/gdb/entities/gdbradialdimension.pas
+//Generate on E:/zcad/cad_source/zengine/gdb/entities/uzeentdimradial.pas
 PGDBObjRadialDimension=^GDBObjRadialDimension;
 GDBObjRadialDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDiametricDimension)
                         constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);

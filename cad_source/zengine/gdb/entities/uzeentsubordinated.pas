@@ -20,7 +20,7 @@ unit uzeentsubordinated;
 {$INCLUDE def.inc}
 
 interface
-uses strutils,gdbdrawcontext,gdbentityextender,gdbfieldprocessor,ugdbdrawingdef,strproc
+uses strutils,gdbdrawcontext,uzeentityextender,gdbfieldprocessor,ugdbdrawingdef,strproc
      {$IFNDEF DELPHI},LCLProc{$ENDIF},UGDBOpenArrayOfByte,
      gdbase,gdbasetypes,{varman,}{varmandef,}
      sysutils,UGDBLayerArray{,strutils};

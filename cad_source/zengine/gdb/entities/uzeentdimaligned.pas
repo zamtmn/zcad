@@ -15,11 +15,11 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-unit gdbaligneddimension;
+unit uzeentdimaligned;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,zeentityfactory,gdbdimension,uzeentpoint,ugdbdimstylearray,
+uses gdbdrawcontext,zeentityfactory,uzeentdimension,uzeentpoint,ugdbdimstylearray,
      UGDBLayerArray,ugdbtrash,ugdbdrawingdef,UGDBOpenArrayOfPObjects,strproc,
      UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,uzeentline,gdbasetypes,
      uzeentcomplex,sysutils,UGDBSelectedObjArray,uzeentity,GDBase,gdbobjectsconstdef,

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 {MODE OBJFPC}
-unit gdbentityextender;
+unit uzeentityextender;
 {$INCLUDE def.inc}
 
 interface

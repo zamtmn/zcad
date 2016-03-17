@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-unit gdbdimension;
+unit uzeentdimension;
 {$INCLUDE def.inc}
 
 interface

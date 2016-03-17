@@ -20,7 +20,7 @@ unit gdbobjectextender;
 {$INCLUDE def.inc}
 
 interface
-uses gdbentityextender,uzeentsubordinated,UGDBDrawingdef,gdbasetypes,gdbase,
+uses uzeentityextender,uzeentsubordinated,UGDBDrawingdef,gdbasetypes,gdbase,
      usimplegenerics,UGDBOpenArrayOfByte;
 
 type

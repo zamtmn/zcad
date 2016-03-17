@@ -15,11 +15,11 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-unit gdbradialdimension;
+unit uzeentdimradial;
 {$INCLUDE def.inc}
 
 interface
-uses zeentityfactory,gdbdiametricdimension,gdbdimension,ugdbdimstylearray,
+uses zeentityfactory,uzeentdimdiametric,uzeentdimension,ugdbdimstylearray,
      UGDBLayerArray,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,
      geometry,gdbasetypes,sysutils,uzeentity,GDBase,gdbobjectsconstdef,dxflow,
      memman,uzeentsubordinated;

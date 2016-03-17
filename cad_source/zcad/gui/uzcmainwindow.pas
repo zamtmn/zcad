@@ -37,7 +37,7 @@ uses
        languade,
   {ZCAD ENTITIES}
        uzeentity,UGDBSelectedObjArray,UGDBLayerArray,ugdbsimpledrawing,
-       GDBBlockDef,UGDBDescriptor,GDBManager,ugdbltypearray,gdbobjectsconstdef,uzeenttext,gdbdimension,
+       GDBBlockDef,UGDBDescriptor,GDBManager,ugdbltypearray,gdbobjectsconstdef,uzeenttext,uzeentdimension,
   {ZCAD COMMANDS}
        uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
   {GUI}

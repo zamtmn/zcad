@@ -15,11 +15,11 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-unit gdbrotateddimension;
+unit uzeentdimrotated;
 {$INCLUDE def.inc}
 
 interface
-uses zeentityfactory,gdbaligneddimension,gdbdimension,ugdbdimstylearray,
+uses zeentityfactory,uzeentdimaligned,uzeentdimension,ugdbdimstylearray,
      UGDBLayerArray,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,
      geometry,gdbasetypes,sysutils,uzeentity,GDBase,gdbobjectsconstdef,dxflow,
      memman,uzeentsubordinated;

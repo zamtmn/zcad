@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit ugdbdimstylearray;
+unit uzestylesdim;
 {$INCLUDE def.inc}
 interface
 uses gdbpalette,gdbobjectsconstdef,ugdbltypearray,UGDBTextStyleArray,usimplegenerics,gdbasetypes,sysutils,gdbase, geometry,

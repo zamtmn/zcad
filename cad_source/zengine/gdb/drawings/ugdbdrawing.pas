@@ -21,7 +21,7 @@ unit ugdbdrawing;
 interface
 uses
     uzctranslations,zcadinterface,gdbdrawcontext,zeundostack,zcchangeundocommand,
-    zcobjectchangeundocommand,zebaseundocommands,paths,ugdbdimstylearray,
+    zcobjectchangeundocommand,zebaseundocommands,paths,uzestylesdim,
     WindowsSpecific,LResources,uzcsysvars,uzcstrconsts,strproc,GDBBlockDef,UUnitManager,
     gdbase,varmandef,varman,sysutils, memman, geometry, gdbobjectsconstdef,
     gdbasetypes,ugdbsimpledrawing,UGDBLayerArray,uzeentity,UGDBFontManager,

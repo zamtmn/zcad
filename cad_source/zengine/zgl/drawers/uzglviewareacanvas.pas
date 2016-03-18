@@ -24,7 +24,7 @@ uses
      qt4,
      {$ENDIF}
      uzgldrawercanvas,uzglviewareaabstract,sysutils,memman,
-     glstatemanager,gdbase,gdbasetypes,UGDBLayerArray,ugdbdimstylearray,
+     glstatemanager,gdbase,gdbasetypes,UGDBLayerArray,
      varmandef,uzccommandsmanager,uzcsysvars,geometry,uzcshared,LCLType,
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,uzglbackendmanager,
      {$IFNDEF DELPHI}OpenGLContext{$ENDIF},uzglviewareacanvasgeneral;

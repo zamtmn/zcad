@@ -19,7 +19,7 @@ unit uzeentdimrotated;
 {$INCLUDE def.inc}
 
 interface
-uses zeentityfactory,uzeentdimaligned,uzeentdimension,ugdbdimstylearray,
+uses zeentityfactory,uzeentdimaligned,uzeentdimension,uzestylesdim,
      UGDBLayerArray,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,
      geometry,gdbasetypes,sysutils,uzeentity,GDBase,gdbobjectsconstdef,dxflow,
      memman,uzeentsubordinated;

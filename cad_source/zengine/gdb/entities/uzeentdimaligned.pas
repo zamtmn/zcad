@@ -19,7 +19,7 @@ unit uzeentdimaligned;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,zeentityfactory,uzeentdimension,uzeentpoint,ugdbdimstylearray,
+uses gdbdrawcontext,zeentityfactory,uzeentdimension,uzeentpoint,uzestylesdim,
      UGDBLayerArray,ugdbtrash,ugdbdrawingdef,UGDBOpenArrayOfPObjects,strproc,
      UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,uzeentline,gdbasetypes,
      uzeentcomplex,sysutils,UGDBSelectedObjArray,uzeentity,GDBase,gdbobjectsconstdef,

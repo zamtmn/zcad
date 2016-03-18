@@ -22,7 +22,7 @@ unit uzcftextstyles;
 interface
 
 uses
-  zcchangeundocommand,zcobjectchangeundocommand2,ugdbdrawing,LMessages,ugdbdimstylearray,ugdbfont,uzclog,ugdbsimpledrawing,uzcsysvars,Classes, SysUtils,
+  zcchangeundocommand,zcobjectchangeundocommand2,ugdbdrawing,LMessages,ugdbfont,uzclog,ugdbsimpledrawing,uzcsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 
@@ -397,8 +397,8 @@ begin
 end;
 procedure TextStyleCounterInDimStyles(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 begin
-     if PCounted=PGDBDimStyle(PInstance)^.Text.DIMTXSTY then
-                                                           inc(Counter);
+     //if PCounted=PGDBDimStyle(PInstance)^.Text.DIMTXSTY then
+     //                                                      inc(Counter);
 end;
 procedure TTextStylesForm.countstyle(ptextstyle:PGDBTextStyle;out e,b,inDimStyles:GDBInteger);
 var

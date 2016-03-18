@@ -22,7 +22,7 @@ unit uzccombase;
 interface
 uses
  {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
- generalviewarea,zeundostack,zcchangeundocommand,uzcoimultiobjects,
+ uzglviewareageneral,zeundostack,zcchangeundocommand,uzcoimultiobjects,
  uzcenitiesvariablesextender,gdbdrawcontext,ugdbdrawing,paths,fileformatsmanager,
  uzeentdimension,ugdbdimstylearray,UGDBTextStyleArray,uzeenttext,ugdbltypearray,
  URecordDescriptor,ugdbfontmanager,ugdbsimpledrawing,uzcsysvars,uzccommandsmanager,

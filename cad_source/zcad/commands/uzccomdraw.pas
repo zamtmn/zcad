@@ -21,7 +21,7 @@ unit uzccomdraw;
 
 interface
 uses
-  generalviewarea,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,
+  uzglviewareageneral,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,
   zcmultiobjectcreateundocommand,zeentitiesmanager,uzglcanvasdrawer,
   uzcoimultiobjects,uzcenitiesvariablesextender,ugdbdrawing,gdbpalette,
   ugdbopenarrayofgdbdouble,uzctextenteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,

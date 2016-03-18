@@ -26,7 +26,7 @@ uses
      uzglcanvasdrawer,uzglabstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
      varmandef,uzccommandsmanager,uzcsysvars,geometry,uzcshared,LCLType,
-     ExtCtrls,classes,Controls,Graphics,generalviewarea,uzglbackendmanager,
+     ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,uzglbackendmanager,
      {$IFNDEF DELPHI}OpenGLContext{$ENDIF},uzglgeneralcanvasviewarea;
 type
     TCanvasViewArea=class(TGeneralCanvasViewArea)

@@ -19,7 +19,7 @@
 unit uzeentity;
 {$INCLUDE def.inc}
 interface
-uses gdbpalette,gdbobjectextender,uzglabstractdrawer,gdbdrawcontext,ugdbdrawingdef,
+uses gdbpalette,gdbobjectextender,uzgldrawerabstract,gdbdrawcontext,ugdbdrawingdef,
      GDBCamera,gdbvisualprop,uzglgeometry,ugdbltypearray,gdbasetypes,
      UGDBControlPointArray,uzeentsubordinated,GDBase,gdbobjectsconstdef,
      uzglviewareadata,geometry,dxflow,sysutils,memman,UGDBOpenArrayOfByte,

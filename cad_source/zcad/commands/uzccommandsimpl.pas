@@ -21,8 +21,9 @@ unit uzccommandsimpl;
 
 
 interface
-uses gdbdrawcontext,generalviewarea,gdbobjectsconstdef,uzcsysvars,geometry,varmandef,gdbasetypes,gdbase,uzccommandsabstract,uzccommandsmanager,uzglviewareadata,UGDBDescriptor
-  {,UGDBLayerArray},memman,uzcshared;
+uses gdbdrawcontext,uzglviewareageneral,gdbobjectsconstdef,uzcsysvars,geometry,
+     varmandef,gdbasetypes,gdbase,uzccommandsabstract,uzccommandsmanager,
+     uzglviewareadata,UGDBDescriptor,memman,uzcshared;
 type
   comproc=procedure(_self:pointer);
   commousefunc=function(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger):GDBInteger;

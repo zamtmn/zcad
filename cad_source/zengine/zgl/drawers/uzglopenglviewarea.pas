@@ -29,7 +29,7 @@ uses
      LCLProc,uzglgdidrawer,uzglabstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
      uzglviewareadata,gdbdrawcontext,geometry,LCLType,
-     ExtCtrls,classes,Controls,Graphics,generalviewarea,math,uzglbackendmanager,
+     ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,math,uzglbackendmanager,
      {$IFNDEF DELPHI}OpenGLContext{$ENDIF};
 type
     PTOGLWnd = ^TOGLWnd;

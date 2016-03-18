@@ -19,7 +19,8 @@
 unit uzcreggeneralwiewarea;
 {$INCLUDE def.inc}
 interface
-uses uzglbackendmanager,uzglgeometry,UGDBEntTree,uzcsysvars,generalviewarea,paths,uzctranslations,UUnitManager,TypeDescriptors;
+uses uzglbackendmanager,uzglgeometry,UGDBEntTree,uzcsysvars,uzglviewareageneral,
+     paths,uzctranslations,UUnitManager,TypeDescriptors;
 implementation
 
 initialization

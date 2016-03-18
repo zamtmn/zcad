@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit generalviewarea;
+unit uzglviewareageneral;
 {$INCLUDE def.inc}
 interface
 uses

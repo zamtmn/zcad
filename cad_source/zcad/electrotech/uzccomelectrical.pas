@@ -10,7 +10,7 @@ unit uzccomelectrical;
 
 interface
 uses
-  generalviewarea,uzctranslations,zcobjectchangeundocommand2,
+  uzglviewareageneral,uzctranslations,zcobjectchangeundocommand2,
   zcmultiobjectcreateundocommand,zeentitiesmanager,UGDBDrawingdef,
   uzcenitiesvariablesextender,gdbdrawcontext,ugdbdrawing,uzcvariablesutils,
   uzeentabstracttext,uzcstrconsts,UGDBSelectedObjArray,zeentityfactory,uzcsysvars,

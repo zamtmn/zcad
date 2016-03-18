@@ -215,7 +215,7 @@ const
   function IsRealyQuit:GDBBoolean;
 
 implementation
-uses uzcenitiesvariablesextender,generalviewarea,uzglopenglviewarea;
+uses uzcenitiesvariablesextender,uzglviewareageneral,uzglopenglviewarea;
 constructor TmyAnchorDockSplitter.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);

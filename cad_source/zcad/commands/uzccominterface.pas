@@ -21,7 +21,7 @@ unit uzccominterface;
 
 interface
 uses
- uzccomimport,paths,fileformatsmanager,uzglbackendmanager,uzglviewareaabstract,uzglopengldrawer,
+ uzccomimport,paths,fileformatsmanager,uzglbackendmanager,uzglviewareaabstract,uzgldrawerogl,
  uzcfcolors,uzcfdimstyles,uzcflinetypes,uzcftextstyles,uzcinfoform,UGDBFontManager,ugdbsimpledrawing,uzccombase,
  uzcsysvars,uzccommandsmanager,TypeDescriptors,GDBManager,uzcstrconsts,UGDBStringArray,uzcctrlcontextmenu,
  {$IFNDEF DELPHI}uzctranslations,{$ENDIF}uzcflayers,uzcfunits,strproc,uzctreenode,menus,

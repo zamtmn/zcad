@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzglcanvasdrawer;
+unit uzgldrawercanvas;
 {$INCLUDE def.inc}
 interface
 uses

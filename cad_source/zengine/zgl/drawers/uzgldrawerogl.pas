@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzglopengldrawer;
+unit uzgldrawerogl;
 {$INCLUDE def.inc}
 interface
 uses

@@ -108,5 +108,5 @@ zcad/electrotech/uzccomops.pas
 zcad/electrotech/uzccomelectrical.pas
 zcad/electrotech/uzccablemanager.pas 
 zengine/fonts/UGDBFontManager.pas
-zengine/zgl/drawers/uzglgdidrawer.pas 
-zengine/zgl/drawers/uzglopengldrawer.pas 
+zengine/zgl/drawers/uzgldrawergdi.pas 
+zengine/zgl/drawers/uzgldrawerogl.pas 

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzglgeneral2ddrawer;
+unit uzgldrawergeneral2d;
 {$INCLUDE def.inc}
 interface
 uses {$IFNDEF DELPHI}LCLIntf,{$ENDIF}{$IFDEF DELPHI}windows,Types,{$ENDIF}Controls,uzglviewareaabstract,uzgldrawergeneral,uzgprimitivescreator,UGDBOpenArrayOfData,uzgldrawerabstract,gdbpalette,Classes,Graphics,gdbase,gdbasetypes,geometry;

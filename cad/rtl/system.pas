@@ -3931,7 +3931,7 @@ GDBFontManager={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArrayOfData}GDBName
                     //function FindFonf(FontName:GDBString):GDBPointer;
                     {procedure freeelement(p:GDBPointer);virtual;}abstract;
               end;
-//Generate on E:/zcad/cad_source/zengine/zgl/drawers/uzglgdidrawer.pas 
+//Generate on E:/zcad/cad_source/zengine/zgl/drawers/uzgldrawergdi.pas 
 TGDIPrimitivesCounter=packed record
           Lines:GDBInteger;
           Triangles:GDBInteger;
@@ -3949,7 +3949,7 @@ TGDIData=packed record
           RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
           RD_Version:GDBString;(*'Version'*)(*oi_readonly*)
     end;
-//Generate on E:/zcad/cad_source/zengine/zgl/drawers/uzglopengldrawer.pas 
+//Generate on E:/zcad/cad_source/zengine/zgl/drawers/uzgldrawerogl.pas 
 ptrestoremode=^trestoremode;
 TRestoreMode=(
               WND_AuxBuffer(*'AUX buffer'*),

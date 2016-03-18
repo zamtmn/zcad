@@ -19,7 +19,7 @@
 unit ugdbfont;
 {$INCLUDE def.inc}
 interface
-uses math,uzglabstractdrawer,uzgprimitivescreator,uzgprimitives,uzgprimitivessarray,{ugdbshxfont,}{ugdbttffont,}memman,
+uses math,uzgldrawerabstract,uzgprimitivescreator,uzgprimitives,uzgprimitivessarray,{ugdbshxfont,}{ugdbttffont,}memman,
      strproc,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,
      ugdbbasefont,geometry,uzglvectorobject;
 type

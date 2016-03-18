@@ -30,7 +30,7 @@ uses
     {$ENDIF}
     {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
     Classes,Controls,
-    geometry,uzgldrawergeneral,uzglabstractdrawer,glstatemanager,Graphics,gdbase;
+    geometry,uzgldrawergeneral,uzgldrawerabstract,glstatemanager,Graphics,gdbase;
 const
   NeedScreenInvalidrect=true;
 type

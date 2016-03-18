@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzglabstractdrawer;
+unit uzgldrawerabstract;
 {$INCLUDE def.inc}
 interface
 uses {$IFDEF DELPHI}types,{$ENDIF}uzgprimitivescreatorabstract,gdbpalette,Classes,UGDBOpenArrayOfData,Graphics,gdbase,GDBCamera,geometry;

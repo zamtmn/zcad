@@ -26,11 +26,11 @@ zengine/u/UGDBVectorSnapArray.pas
 zengine/u/UGDBLineWidthArray.pas
 zengine/u/ugdbopenarrayofpidentobects.pas
 zengine/u/UGDBNamedObjectsArray.pas
-zengine/u/UGDBTextStyleArray.pas
-zengine/u/UGDBLayerArray.pas
-zengine/u/ugdbltypearray.pas
-zengine/u/ugdbdimstylearray.pas
-zengine/u/UGDBTableStyleArray.pas
+zengine/styles/UGDBTextStyleArray.pas
+zengine/styles/UGDBLayerArray.pas
+zengine/styles/ugdbltypearray.pas
+zengine/styles/uzestylesdim.pas
+zengine/styles/UGDBTableStyleArray.pas
 zengine/u/UGDBTable.pas
 zcad/uzcsysvars.pas
 components/zscriptbase/uabstractunit.pas

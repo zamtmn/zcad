@@ -19,7 +19,7 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,paths,strproc,gdbdrawcontext,usimplegenerics,ugdbdimstylearray,zeentityfactory,
+uses LCLProc,paths,strproc,gdbdrawcontext,usimplegenerics,uzestylesdim,zeentityfactory,
     {$IFNDEF DELPHI}LazUTF8,{$ENDIF}
     UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,uzelongprocesssupport,
     uzglviewareadata,dxflow,uzestrconsts,UGDBTextStyleArray,

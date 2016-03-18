@@ -848,7 +848,7 @@ GDBNamedObjectsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPIde
                     function GetFreeName(NameFormat:GDBString;firstindex:integer):GDBString;
                     procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;abstract;
               end;
-//Generate on E:/zcad/cad_source/zengine/u/UGDBTextStyleArray.pas
+//Generate on E:/zcad/cad_source/zengine/styles/UGDBTextStyleArray.pas
 PGDBTextStyleProp=^GDBTextStyleProp;
   GDBTextStyleProp=packed record
                     size:GDBDouble;(*saved_to_shd*)
@@ -874,7 +874,7 @@ GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*O
                     function FindStyle(StyleName:GDBString;ult:GDBBoolean):PGDBTextStyle;
                     procedure freeelement(p:GDBPointer);virtual;abstract;
               end;
-//Generate on E:/zcad/cad_source/zengine/u/UGDBLayerArray.pas
+//Generate on E:/zcad/cad_source/zengine/styles/UGDBLayerArray.pas
 PPGDBLayerPropObjInsp=^PGDBLayerPropObjInsp;
 PGDBLayerPropObjInsp={GDBPtrUInt}GDBPointer;
 PGDBLayerProp=^GDBLayerProp;
@@ -903,7 +903,7 @@ GDBLayerArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
                     function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;
               end;
-//Generate on E:/zcad/cad_source/zengine/u/ugdbltypearray.pas
+//Generate on E:/zcad/cad_source/zengine/styles/ugdbltypearray.pas
 TLTMode=(TLTContinous,TLTByLayer,TLTByBlock,TLTLineType);
 PTDashInfo=^TDashInfo;
 TDashInfo=(TDIDash,TDIText,TDIShape);
@@ -983,7 +983,7 @@ GDBLtypeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
                     function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;}
               end;
-//Generate on E:/zcad/cad_source/zengine/u/ugdbdimstylearray.pas
+//Generate on E:/zcad/cad_source/zengine/styles/uzestylesdim.pas
 TDimTextVertPosition=(DTVPCenters,DTVPAbove,DTVPOutside,DTVPJIS,DTVPBellov);
 TArrowStyle=(TSClosedFilled,TSClosedBlank,TSClosed,TSDot,TSArchitecturalTick,TSOblique,TSOpen,TSOriginIndicator,TSOriginIndicator2,
             TSRightAngle,TSOpen30,TSDotSmall,TSDotBlank,TSDotSmallBlank,TSBox,TSBoxFilled,TSDatumTriangle,TSDatumtTriangleFilled,TSIntegral,TSUserDef);
@@ -1059,7 +1059,7 @@ GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*Op
                     procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
                     procedure ResolveLineTypes(const lta:GDBLtypeArray);
               end;
-//Generate on E:/zcad/cad_source/zengine/u/UGDBTableStyleArray.pas
+//Generate on E:/zcad/cad_source/zengine/styles/UGDBTableStyleArray.pas
 TTableCellJustify=(jcl(*'TopLeft'*),
               jcc(*'TopCenter'*),
               jcr(*'TopRight'*));

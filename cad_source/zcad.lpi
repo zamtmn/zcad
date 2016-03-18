@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="117">
+    <Units Count="118">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -722,6 +722,10 @@
         <Filename Value="zengine/zgl/drawers/uzgldrawergeneral2d.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit116>
+      <Unit117>
+        <Filename Value="zengine/styles/uzestylesdim.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit117>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

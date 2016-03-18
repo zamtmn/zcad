@@ -21,7 +21,7 @@ unit UGDBDescriptor;
 interface
 uses
     uzglviewareageneral,uzctranslations,zedimblocksregister,zeblockdefsfactory,
-    zemathutils,gdbdrawcontext,ugdbdrawing,ugdbdrawingdef,paths,ugdbdimstylearray,
+    zemathutils,gdbdrawcontext,ugdbdrawing,ugdbdrawingdef,paths,uzestylesdim,
     ugdbabstractdrawing,WindowsSpecific,LResources,uzcsysvars,zcadinterface,
     uzcstrconsts,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
     gdbase,varmandef,varman,sysutils, memman, geometry, gdbobjectsconstdef,

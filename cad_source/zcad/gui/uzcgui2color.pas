@@ -22,7 +22,7 @@ unit uzcgui2color;
 interface
 
 uses
-  gdbpalette,gdbobjectsconstdef,uzcflineweights,uzglgdidrawer,geometry,
+  gdbpalette,gdbobjectsconstdef,uzcflineweights,uzgldrawergdi,geometry,
   gdbase,graphics,  usupportgui,StdCtrls,UGDBDescriptor,Controls,Classes,
   strproc,uzcsysvars,uzccommandsmanager;
 

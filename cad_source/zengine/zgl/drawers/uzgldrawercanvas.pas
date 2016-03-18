@@ -20,7 +20,7 @@ unit uzgldrawercanvas;
 {$INCLUDE def.inc}
 interface
 uses
-    FPCanvas,gdbasetypes,uzglgeneral2ddrawer,uzcsysvars,
+    FPCanvas,gdbasetypes,uzgldrawergeneral2d,uzcsysvars,
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}

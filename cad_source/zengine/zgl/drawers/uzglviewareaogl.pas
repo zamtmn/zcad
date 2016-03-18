@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzglopenglviewarea;
+unit uzglviewareaogl;
 {$INCLUDE def.inc}
 interface
 uses
@@ -26,7 +26,7 @@ uses
      {$IFDEF LCLQT}
      qt4,
      {$ENDIF}
-     LCLProc,uzglgdidrawer,uzglabstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
+     LCLProc,uzglgdidrawer,uzglviewareaabstract,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
      uzglviewareadata,gdbdrawcontext,geometry,LCLType,
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,math,uzglbackendmanager,

@@ -44,7 +44,7 @@ uses
        uzctextenteditor,uzcoidecorations,uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
        uzcfcolors,uzcimagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,
   {}
-       zcchangeundocommand,gdbdrawcontext,uzglopengldrawer,uzglabstractviewarea,uzcguimanager;
+       zcchangeundocommand,gdbdrawcontext,uzglopengldrawer,uzglviewareaabstract,uzcguimanager;
   {}
 type
   TComboFiller=procedure(cb:TCustomComboBox) of object;
@@ -215,7 +215,7 @@ const
   function IsRealyQuit:GDBBoolean;
 
 implementation
-uses uzcenitiesvariablesextender,uzglviewareageneral,uzglopenglviewarea;
+uses uzcenitiesvariablesextender,uzglviewareageneral,uzglviewareaogl;
 constructor TmyAnchorDockSplitter.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzglabstractviewarea;
+unit uzglviewareaabstract;
 {$INCLUDE def.inc}
 interface
 uses

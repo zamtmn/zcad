@@ -16,18 +16,18 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzglcanvasviewarea;
+unit uzglviewareacanvas;
 {$INCLUDE def.inc}
 interface
 uses
      {$IFDEF LCLQT}
      qt4,
      {$ENDIF}
-     uzglcanvasdrawer,uzglabstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
-     UGDBLayerArray,ugdbdimstylearray,
+     uzglcanvasdrawer,uzglviewareaabstract,uzglopengldrawer,sysutils,memman,
+     glstatemanager,gdbase,gdbasetypes,UGDBLayerArray,ugdbdimstylearray,
      varmandef,uzccommandsmanager,uzcsysvars,geometry,uzcshared,LCLType,
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,uzglbackendmanager,
-     {$IFNDEF DELPHI}OpenGLContext{$ENDIF},uzglgeneralcanvasviewarea;
+     {$IFNDEF DELPHI}OpenGLContext{$ENDIF},uzglviewareacanvasgeneral;
 type
     TCanvasViewArea=class(TGeneralCanvasViewArea)
                       public

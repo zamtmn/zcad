@@ -21,7 +21,7 @@ unit uzccominterface;
 
 interface
 uses
- uzccomimport,paths,fileformatsmanager,uzglbackendmanager,uzglabstractviewarea,uzglopengldrawer,
+ uzccomimport,paths,fileformatsmanager,uzglbackendmanager,uzglviewareaabstract,uzglopengldrawer,
  uzcfcolors,uzcfdimstyles,uzcflinetypes,uzcftextstyles,uzcinfoform,UGDBFontManager,ugdbsimpledrawing,uzccombase,
  uzcsysvars,uzccommandsmanager,TypeDescriptors,GDBManager,uzcstrconsts,UGDBStringArray,uzcctrlcontextmenu,
  {$IFNDEF DELPHI}uzctranslations,{$ENDIF}uzcflayers,uzcfunits,strproc,uzctreenode,menus,
@@ -51,8 +51,8 @@ uses
  ugdbdrawing,
   {zmenus,}uzcfprojecttree,gdbasetypes,{optionswnd,}uzcfabout,uzcfhelp,memman,WindowsSpecific,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}uzclog,Varman,UGDBNumerator,uzcfcommandline,
- AnchorDocking,dialogs,XMLPropStorage,xmlconf,uzglopenglviewarea{,
-   uPSCompiler,
+ AnchorDocking,dialogs,XMLPropStorage,xmlconf,uzglviewareaogl
+ {,uPSCompiler,
   uPSRuntime,
   uPSC_std,
   uPSC_controls,

@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="107">
+    <Units Count="110">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -682,6 +682,18 @@
         <Filename Value="zengine/zgl/drawers/uzglviewareageneral.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit106>
+      <Unit107>
+        <Filename Value="zengine/zgl/drawers/uzglviewareaogl.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit107>
+      <Unit108>
+        <Filename Value="zengine/zgl/drawers/uzglviewareacanvasgeneral.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit108>
+      <Unit109>
+        <Filename Value="zengine/zgl/drawers/uzglviewareaabstract.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit109>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

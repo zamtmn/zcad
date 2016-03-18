@@ -21,7 +21,7 @@ unit uzglbackendmanager;
 
 interface
 uses gdbasetypes,
-     gdbase,UGDBStringArray,uzglabstractviewarea,UGDBOpenArrayOfPointer;
+     gdbase,UGDBStringArray,uzglviewareaabstract,UGDBOpenArrayOfPointer;
 const test:GDBSTRING='asdasd';
 type
     TVA=class of TAbstractViewArea;

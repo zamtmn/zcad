@@ -26,7 +26,7 @@ uses
      gdbobjectsconstdef,uzestrconsts,UGDBTracePropArray,math,sysutils,UGDBDrawingdef,strproc,
      ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,
      UGDBOpenArrayOfPV,uzeentgenericsubentry,GDBCamera,UGDBVisibleOpenArray,uzglabstractdrawer,
-     uzglgeneraldrawer,uzglabstractviewarea;
+     uzglgeneraldrawer,uzglviewareaabstract;
 const
   ontracdist=10;
   ontracignoredist=25;

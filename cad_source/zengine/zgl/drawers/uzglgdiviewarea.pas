@@ -26,10 +26,10 @@ uses
      {$IFDEF LCLQT}
      qt4,qtint,
      {$ENDIF}
-     uzglgdidrawer,uzglabstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
+     uzglgdidrawer,uzglviewareaabstract,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
      geometry,{$IFNDEF DELPHI}LCLType,{$ENDIF}{$IFDEF DELPHI}Types,{$ENDIF}
-     ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,uzglbackendmanager,uzglgeneralcanvasviewarea;
+     ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,uzglbackendmanager,uzglviewareacanvasgeneral;
 type
     TGDIViewArea=class(TGeneralCanvasViewArea)
                       public

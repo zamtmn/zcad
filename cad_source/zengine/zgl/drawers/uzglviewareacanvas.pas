@@ -23,7 +23,7 @@ uses
      {$IFDEF LCLQT}
      qt4,
      {$ENDIF}
-     uzglcanvasdrawer,uzglviewareaabstract,uzglopengldrawer,sysutils,memman,
+     uzgldrawercanvas,uzglviewareaabstract,sysutils,memman,
      glstatemanager,gdbase,gdbasetypes,UGDBLayerArray,ugdbdimstylearray,
      varmandef,uzccommandsmanager,uzcsysvars,geometry,uzcshared,LCLType,
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,uzglbackendmanager,

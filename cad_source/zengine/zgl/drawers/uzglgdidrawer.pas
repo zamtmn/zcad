@@ -20,7 +20,7 @@ unit uzglgdidrawer;
 {$INCLUDE def.inc}
 interface
 uses
-    sysutils,gdbasetypes,uzglgeneral2ddrawer,lclintfex,fileutil,math,UGDBFontManager,ugdbfont,{zcadsysvars,}uzglabstractviewarea,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,
+    sysutils,gdbasetypes,uzglgeneral2ddrawer,lclintfex,fileutil,math,UGDBFontManager,ugdbfont,{zcadsysvars,}uzglviewareaabstract,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}uzglgeomdata,gdbdrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,gdbpalette,
     {$IFDEF WINDOWS}windows,{$ENDIF}{$IFDEF DELPHI}windows,{$ENDIF}
     {$IFDEF LCLGTK2}
     Gtk2Def,

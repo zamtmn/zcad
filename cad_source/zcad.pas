@@ -126,7 +126,7 @@ uses
   uzcregisterenitiesextenders,
   uzcoiregistermultiproperties,
   uzclibraryblocksregister,
-  uzglopenglviewarea,uzglgdiviewarea,uzglcanvasviewarea,
+  uzglviewareaogl,uzglgdiviewarea,uzglviewareacanvas,
 
   uzccomdbgappexplorer;
   //RegCnownTypes,URegisterObjects;

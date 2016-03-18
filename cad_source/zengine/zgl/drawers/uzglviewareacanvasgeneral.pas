@@ -16,14 +16,14 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzglgeneralcanvasviewarea;
+unit uzglviewareacanvasgeneral;
 {$INCLUDE def.inc}
 interface
 uses
      {$IFDEF LCLQT}
      qtwidgets,qt4,
      {$ENDIF}
-     uzglgdidrawer,uzglabstractviewarea,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,
+     uzglgdidrawer,uzglviewareaabstract,uzglopengldrawer,sysutils,memman,glstatemanager,gdbase,
      UGDBLayerArray,ugdbdimstylearray,
      geometry,{$IFNDEF DELPHI}LCLType,LMessages,{$ENDIF}{$IFDEF DELPHI}windows,messages,{$ENDIF}
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,uzglbackendmanager;

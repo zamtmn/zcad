@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzglgdiviewarea;
+unit uzglviewareagdi;
 {$INCLUDE def.inc}
 interface
 uses

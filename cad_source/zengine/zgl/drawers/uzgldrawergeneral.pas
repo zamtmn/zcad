@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzglgeneraldrawer;
+unit uzgldrawergeneral;
 {$INCLUDE def.inc}
 interface
 uses uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,uzglabstractdrawer,gdbpalette,types,Classes,Graphics,gdbase,gdbasetypes,GDBCamera,geometry;

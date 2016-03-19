@@ -22,7 +22,7 @@ interface
 uses uzgldrawergeneral,math,gdbdrawcontext,uzgldrawerabstract,uzgvertex3sarray,
      UGDBOpenArrayOfData,UGDBPoint3DArray,{zcadsysvars,}geometry,gdbvisualprop,
      uzestyleslinetypes,sysutils,gdbase,memman,//log,
-     gdbasetypes,strproc,ugdbfont,uzglvectorobject;
+     gdbasetypes,strproc,uzefont,uzglvectorobject;
 type
 {Export+}
 PZGLGeometry=^ZGLGeometry;

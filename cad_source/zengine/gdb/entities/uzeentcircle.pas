@@ -23,7 +23,7 @@ uses
     zeentityfactory,uzeentsubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,
     UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,GDBHelpObj,UGDBSelectedObjArray,
     uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,
-    GDBase,uzeentwithlocalcs,gdbobjectsconstdef,uzglviewareadata,geometry,dxflow,memman;
+    GDBase,uzeentwithlocalcs,gdbobjectsconstdef,uzglviewareadata,geometry,uzeffdxfsupport,memman;
 type
 //PProjPoint:PGDBPolyPoint2DArray;
 //PProjPoint:{-}PGDBPolyPoint2DArray{/GDBPointer/};

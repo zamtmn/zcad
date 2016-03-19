@@ -22,9 +22,9 @@ unit uzeentmtext;
 interface
 uses
     uzglgeometry,gdbdrawcontext,gdbfieldprocessor,zeentityfactory,UGDBDrawingdef,
-    strproc,ugdbfont,uzeentabstracttext,UGDBPoint3DArray,uzestyleslayers,SysUtils,
+    strproc,uzefont,uzeentabstracttext,UGDBPoint3DArray,uzestyleslayers,SysUtils,
     gdbasetypes,uzeentity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,
-    GDBase,uzeenttext,gdbobjectsconstdef,geometry,dxflow,math,memman,uzeentsubordinated,
+    GDBase,uzeenttext,gdbobjectsconstdef,geometry,uzeffdxfsupport,math,memman,uzeentsubordinated,
     uzestylestexts;
 const maxdxfmtextlen=250;
 type

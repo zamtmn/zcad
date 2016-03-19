@@ -20,7 +20,7 @@ unit uzeentpoint;
 {$INCLUDE def.inc}
 
 interface
-uses zeentityfactory,gdbdrawcontext,dxflow,ugdbdrawingdef,GDBCamera,
+uses zeentityfactory,gdbdrawcontext,uzeffdxfsupport,ugdbdrawingdef,GDBCamera,
      UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,UGDBSelectedObjArray,
      uzeentsubordinated,uzeent3d,uzeentity,sysutils,UGDBOpenArrayOfByte,
      GDBase,gdbobjectsconstdef,uzglviewareadata,geometry,memman;

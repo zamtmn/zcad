@@ -19,8 +19,8 @@ unit uzcregisterenitiesfeatures;
 {$INCLUDE def.inc}
 
 interface
-uses iodxf,paths,uzcsysvars,uzctranslations,sysutils,
-     uzcenitiesvariablesextender,uzcstrconsts,uzcshared,gdbobjectsconstdef,devices,uzccomdb,uzcentcable,uzcentnet,uzeentdevice,TypeDescriptors,dxflow,
+uses uzeffdxf,paths,uzcsysvars,uzctranslations,sysutils,
+     uzcenitiesvariablesextender,uzcstrconsts,uzcshared,gdbobjectsconstdef,devices,uzccomdb,uzcentcable,uzcentnet,uzeentdevice,TypeDescriptors,uzeffdxfsupport,
      gdbfieldprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,gdbobjectextender,
      uzeentsubordinated,uzeentity,uzeenttext,GDBBlockDef,varmandef,Varman,UUnitManager,
      URecordDescriptor,UBaseTypeDescriptor,UGDBDrawingdef,memman;
@@ -538,8 +538,8 @@ begin
   {test}
   //GDBObjEntity.GetDXFIOFeatures.RegisterEntityExtenderObject(@TTestExtende.CreateTestExtender);
 
-  iodxf.CreateExtLoadData:=CreateExtDxfLoadData;
-  iodxf.ClearExtLoadData:=ClearExtLoadData;
-  iodxf.FreeExtLoadData:=FreeExtLoadData;
+  uzeffdxf.CreateExtLoadData:=CreateExtDxfLoadData;
+  uzeffdxf.ClearExtLoadData:=ClearExtLoadData;
+  uzeffdxf.FreeExtLoadData:=FreeExtLoadData;
 end.
 

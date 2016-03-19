@@ -16,10 +16,10 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit ugdbshxfont;
+unit uzefontshx;
 {$INCLUDE def.inc}
 interface
-uses ugdbbasefont,memman,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,
+uses uzefontbase,memman,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,
      geometry;
 type
 {EXPORT+}

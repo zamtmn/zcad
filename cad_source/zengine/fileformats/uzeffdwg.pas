@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit iodwg;
+unit uzeffdwg;
 {$INCLUDE def.inc}
 {$MODE OBJFPC}
 interface

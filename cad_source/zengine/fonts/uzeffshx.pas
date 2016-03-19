@@ -16,12 +16,12 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit ioshx;
+unit uzeffshx;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitivescreator,uzglvectorobject,UGDBFontManager,ugdbshxfont,geometry,
+uses uzgprimitivescreator,uzglvectorobject,uzefontmanager,uzefontshx,geometry,
      {$IFNDEF DELPHI}{intftranslations,}{$ENDIF}
-     ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,{log,}sysutils,
+     uzefont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,{log,}sysutils,
      UGDBOpenArrayOfByte,gdbasetypes,{SysInfo,}gdbase,memman,uzgprimitives;
 const
   fontdirect:array[0..$F,0..1] of GDBDouble=

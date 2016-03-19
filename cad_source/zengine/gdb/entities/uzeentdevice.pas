@@ -75,7 +75,7 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
 var
     GDBObjDeviceDXFFeatures:TDXFEntIODataManager;
 implementation
-uses GDBBlockDef,dxflow,{log,}UGDBSelectedObjArray,UGDBEntTree;
+uses GDBBlockDef,uzeffdxfsupport,{log,}UGDBSelectedObjArray,UGDBEntTree;
 function GDBObjDevice.GetNameInBlockTable:GDBString;
 begin
   result:=DevicePrefix+name;

@@ -39,7 +39,7 @@ uses
   sysutils,
   varmandef,
   uzglviewareadata,
-  iodxf,
+  uzeffdxf,
   zcadinterface,
   geometry,
   memman,

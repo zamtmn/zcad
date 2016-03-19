@@ -21,8 +21,8 @@ unit uzccominterface;
 
 interface
 uses
- uzccomimport,paths,fileformatsmanager,uzglbackendmanager,uzglviewareaabstract,uzgldrawerogl,
- uzcfcolors,uzcfdimstyles,uzcflinetypes,uzcftextstyles,uzcinfoform,UGDBFontManager,ugdbsimpledrawing,uzccombase,
+ uzccomimport,paths,uzeffmanager,uzglbackendmanager,uzglviewareaabstract,uzgldrawerogl,
+ uzcfcolors,uzcfdimstyles,uzcflinetypes,uzcftextstyles,uzcinfoform,uzefontmanager,ugdbsimpledrawing,uzccombase,
  uzcsysvars,uzccommandsmanager,TypeDescriptors,GDBManager,uzcstrconsts,UGDBStringArray,uzcctrlcontextmenu,
  {$IFNDEF DELPHI}uzctranslations,{$ENDIF}uzcflayers,uzcfunits,strproc,uzctreenode,menus,
  {$IFDEF FPC}lcltype,{$ENDIF}
@@ -39,7 +39,7 @@ uses
   //oglwindowdef,
   //OGLtypes,
   UGDBOpenArrayOfByte,
-  iodxf,
+  uzeffdxf,
   //optionswnd,
   {objinsp,}
    zcadinterface,

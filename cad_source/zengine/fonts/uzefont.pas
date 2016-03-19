@@ -16,12 +16,12 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit ugdbfont;
+unit uzefont;
 {$INCLUDE def.inc}
 interface
 uses math,uzgldrawerabstract,uzgprimitivescreator,uzgprimitives,uzgprimitivessarray,{ugdbshxfont,}{ugdbttffont,}memman,
      strproc,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,
-     ugdbbasefont,geometry,uzglvectorobject;
+     uzefontbase,geometry,uzglvectorobject;
 type
 {EXPORT+}
 PGDBfont=^GDBfont;

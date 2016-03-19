@@ -16,16 +16,16 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 {MODE OBJFPC}
-unit iodxf;
+unit uzeffdxf;
 {$INCLUDE def.inc}
 interface
 uses LCLProc,paths,strproc,gdbdrawcontext,usimplegenerics,uzestylesdim,zeentityfactory,
     {$IFNDEF DELPHI}LazUTF8,{$ENDIF}
     UGDBNamedObjectsArray,uzestyleslinetypes,ugdbsimpledrawing,uzelongprocesssupport,
-    uzglviewareadata,dxflow,uzestrconsts,uzestylestexts,
+    uzglviewareadata,uzeffdxfsupport,uzestrconsts,uzestylestexts,
     geometry,uzeentsubordinated,gdbasetypes,uzeentgenericsubentry,gdbase,
     sysutils,memman,gdbobjectsconstdef,UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,
-    UGDBOpenArrayOfByte,UGDBVisibleOpenArray,uzeentity,GDBBlockDef,uzestyleslayers,fileformatsmanager;
+    UGDBOpenArrayOfByte,UGDBVisibleOpenArray,uzeentity,GDBBlockDef,uzestyleslayers,uzeffmanager;
 type
    TCreateExtLoadData=function:pointer;
    TProcessExtLoadData=procedure(peld:pointer);

@@ -22,7 +22,7 @@ interface
 uses gdbpalette,gdbobjectextender,uzgldrawerabstract,gdbdrawcontext,ugdbdrawingdef,
      GDBCamera,gdbvisualprop,uzglgeometry,uzestyleslinetypes,gdbasetypes,
      UGDBControlPointArray,uzeentsubordinated,GDBase,gdbobjectsconstdef,
-     uzglviewareadata,geometry,dxflow,sysutils,memman,UGDBOpenArrayOfByte,
+     uzglviewareadata,geometry,uzeffdxfsupport,sysutils,memman,UGDBOpenArrayOfByte,
      uzestyleslayers,UGDBOpenArrayOfPObjects;
 type
 //Owner:{-}PGDBObjEntity{/GDBPointer/};(*'Владелец'*)

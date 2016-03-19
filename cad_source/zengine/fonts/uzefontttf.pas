@@ -16,10 +16,10 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit ugdbttffont;
+unit uzefontttf;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,uzgprimitivescreator,uzgprimitives,uzglvectorobject,ugdbbasefont,beziersolver,math,glstatemanager,gluinterface,TTTypes,TTObjs,
+uses LCLProc,uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzefontbase,beziersolver,math,glstatemanager,gluinterface,TTTypes,TTObjs,
   usimplegenerics,EasyLazFreeType,memman,strproc,gdbasetypes,sysutils,
   gdbase,geometry;
 type

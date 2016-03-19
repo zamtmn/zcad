@@ -55,8 +55,8 @@ uses
   //
   uzcregother,//loading rtl/system.pas and setup SysVar
   UUnitManager,
-  UGDBFontManager,
-  ioshx,iottf,
+  uzefontmanager,
+  uzeffshx,uzeffttf,
 
   {$INCLUDE allgeneratedfiles.inc}
 

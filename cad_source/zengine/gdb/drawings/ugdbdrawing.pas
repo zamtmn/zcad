@@ -24,7 +24,7 @@ uses
     zcobjectchangeundocommand,zebaseundocommands,paths,uzestylesdim,
     WindowsSpecific,LResources,uzcsysvars,uzcstrconsts,strproc,GDBBlockDef,UUnitManager,
     gdbase,varmandef,varman,sysutils, memman, geometry, gdbobjectsconstdef,
-    gdbasetypes,ugdbsimpledrawing,uzestyleslayers,uzeentity,UGDBFontManager,
+    gdbasetypes,ugdbsimpledrawing,uzestyleslayers,uzeentity,uzefontmanager,
     UGDBOpenArrayOfPObjects,ugdbtrash,UGDBOpenArrayOfByte;
 type
 {EXPORT+}
@@ -70,7 +70,7 @@ TDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
 {EXPORT-}
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
- uses UGDBDescriptor,uzeenttext,uzeentdevice,uzeentblockinsert,iodxf, GDBManager,uzcshared,uzccommandsmanager;
+ uses UGDBDescriptor,uzeenttext,uzeentdevice,uzeentblockinsert,uzeffdxf, GDBManager,uzcshared,uzccommandsmanager;
 procedure TDrawing.FillDrawingPartRC(var dc:TDrawContext);
 var
   vd:pvardesk;

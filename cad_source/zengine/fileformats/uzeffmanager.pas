@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 {MODE OBJFPC}
-unit fileformatsmanager;
+unit uzeffmanager;
 {$INCLUDE def.inc}
 
 interface

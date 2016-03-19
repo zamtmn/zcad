@@ -24,7 +24,7 @@ uses zeentityfactory,uzeentsubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,
      UGDBOpenArrayOfPObjects,uzglviewareadata,uzeentcurve,UGDBVectorSnapArray,
      geometry,uzestyleslayers,uzeentity,memman,gdbasetypes,UGDBPoint3DArray,
      UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,GDBase,uzeentwithlocalcs,
-     gdbobjectsconstdef,math,dxflow,sysutils,UGDBLineWidthArray;
+     gdbobjectsconstdef,math,uzeffdxfsupport,sysutils,UGDBLineWidthArray;
 type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {REGISTEROBJECTTYPE GDBObjLWPolyline}

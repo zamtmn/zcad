@@ -22,7 +22,7 @@ interface
 uses gdbdrawcontext,zeentityfactory,uzeentdimension,uzestylesdim,uzestyleslayers,
      ugdbtrash,ugdbdrawingdef,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,
      UGDBControlPointArray,geometry,uzeentline,gdbasetypes,uzeentcomplex,sysutils,
-     UGDBSelectedObjArray,uzeentity,GDBase,gdbobjectsconstdef,dxflow,memman,
+     UGDBSelectedObjArray,uzeentity,GDBase,gdbobjectsconstdef,uzeffdxfsupport,memman,
      uzeentsubordinated;
 (*
 

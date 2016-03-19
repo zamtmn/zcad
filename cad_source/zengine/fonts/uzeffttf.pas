@@ -16,11 +16,11 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit iottf;
+unit uzeffttf;
 {$INCLUDE def.inc}
 interface
-uses UGDBFontManager,EasyLazFreeType,ugdbttffont,geometry,
-    ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,
+uses uzefontmanager,EasyLazFreeType,uzefontttf,geometry,
+    uzefont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,
     UGDBOpenArrayOfByte,gdbasetypes,gdbase,memman;
 type ptsyminfo=^tsyminfo;
      tsyminfo=packed record

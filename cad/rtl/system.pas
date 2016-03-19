@@ -756,7 +756,7 @@ GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                       function readtoparser(break:GDBString): GDBString;
                       destructor done;virtual;abstract;
                    end;
-//Generate on E:/zcad/cad_source/zengine/fonts/ugdbbasefont.pas
+//Generate on E:/zcad/cad_source/zengine/fonts/uzefontbase.pas
 PBASEFont=^BASEFont;
 BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               unicode:GDBBoolean;
@@ -775,7 +775,7 @@ BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               function IsCanSystemDraw:GDBBoolean;virtual;abstract;
               procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);virtual;abstract;
         end;
-//Generate on E:/zcad/cad_source/zengine/fonts/ugdbshxfont.pas
+//Generate on E:/zcad/cad_source/zengine/fonts/uzefontshx.pas
 PSHXFont=^SHXFont;
 SHXFont={$IFNDEF DELPHI}packed{$ENDIF} object(BASEFont)
               //compiledsize:GDBInteger;
@@ -784,7 +784,7 @@ SHXFont={$IFNDEF DELPHI}packed{$ENDIF} object(BASEFont)
               constructor init;
               destructor done;virtual;abstract;
         end;
-//Generate on E:/zcad/cad_source/zengine/fonts/ugdbfont.pas
+//Generate on E:/zcad/cad_source/zengine/fonts/uzefont.pas
 PGDBfont=^GDBfont;
 GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     fontfile:GDBString;
@@ -3911,7 +3911,7 @@ TBasicFinter=packed record
                        function FindOrCreate(sname:gdbstring):PTCableDesctiptor;virtual;abstract;
                        function Find(sname:gdbstring):PTCableDesctiptor;virtual;abstract;
                  end;
-//Generate on E:/zcad/cad_source/zengine/fonts/UGDBFontManager.pas
+//Generate on E:/zcad/cad_source/zengine/fonts/uzefontmanager.pas
   PGDBFontRecord=^GDBFontRecord;
   GDBFontRecord = packed record
     Name: GDBString;

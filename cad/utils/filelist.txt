@@ -18,9 +18,9 @@ zengine/u/UGDBPolyPoint3DArray.pas
 zengine/u/UGDBSelectedObjArray.pas
 components/zcontainers/UGDBStringArray.pas
 components/zcontainers/UGDBOpenArrayOfByte.pas
-zengine/fonts/ugdbbasefont.pas
-zengine/fonts/ugdbshxfont.pas
-zengine/fonts/ugdbfont.pas
+zengine/fonts/uzefontbase.pas
+zengine/fonts/uzefontshx.pas
+zengine/fonts/uzefont.pas
 zengine/u/UGDBXYZWStringArray.pas
 zengine/u/UGDBVectorSnapArray.pas
 zengine/u/UGDBLineWidthArray.pas
@@ -107,6 +107,6 @@ zcad/gui/odjectinspector/uzcoimultiobjects.pas
 zcad/electrotech/uzccomops.pas
 zcad/electrotech/uzccomelectrical.pas
 zcad/electrotech/uzccablemanager.pas 
-zengine/fonts/UGDBFontManager.pas
+zengine/fonts/uzefontmanager.pas
 zengine/zgl/drawers/uzgldrawergdi.pas 
 zengine/zgl/drawers/uzgldrawerogl.pas 

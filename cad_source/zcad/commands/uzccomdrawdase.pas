@@ -32,7 +32,7 @@ uses
   sysutils,
   varmandef,
   uzglviewareadata,
-  iodxf,
+  uzeffdxf,
   geometry,
   memman,
   gdbobjectsconstdef,

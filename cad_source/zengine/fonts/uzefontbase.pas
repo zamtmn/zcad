@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit ugdbbasefont;
+unit uzefontbase;
 {$INCLUDE def.inc}
 interface
 uses uzgprimitives,uzglvectorobject,memman,strproc,UGDBOpenArrayOfByte,gdbasetypes,UGDBOpenArrayOfData,sysutils,

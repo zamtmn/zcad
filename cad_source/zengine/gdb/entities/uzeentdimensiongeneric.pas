@@ -21,7 +21,7 @@ unit uzeentdimensiongeneric;
 interface
 uses zeentityfactory,uzeentwithlocalcs,uzeentdimension,uzestylesdim,uzestyleslayers,
      ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,geometry,gdbasetypes,
-     sysutils,uzeentity,GDBase,gdbobjectsconstdef,dxflow,memman,uzeentsubordinated;
+     sysutils,uzeentity,GDBase,gdbobjectsconstdef,uzeffdxfsupport,memman,uzeentsubordinated;
 type
 {REGISTEROBJECTTYPE GDBObjGenericDimension}
 {EXPORT+}

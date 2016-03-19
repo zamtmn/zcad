@@ -24,7 +24,7 @@ uses LCLProc,gluinterface,zeentityfactory,gdbdrawcontext,glstatemanager,UGDBOpen
      UGDBPoint3DArray,UGDBDrawingdef,GDBCamera,UGDBVectorSnapArray,
      UGDBOpenArrayOfPObjects,uzestyleslayers,uzeentsubordinated,uzeentcurve,gdbasetypes,
      uzeentity,UGDBOpenArrayOfByte,GDBase,gdbobjectsconstdef,uzglviewareadata,
-     geometry,dxflow,sysutils,memman;
+     geometry,uzeffdxfsupport,sysutils,memman;
 type
 {REGISTEROBJECTTYPE GDBObjSpline}
 {Export+}

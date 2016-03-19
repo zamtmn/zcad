@@ -55,7 +55,7 @@ GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
 var
     GDBObjNetDXFFeatures:TDXFEntIODataManager;
 implementation
-uses uzcenitiesvariablesextender,uzeentline,dxflow,math,uzclog;
+uses uzcenitiesvariablesextender,uzeentline,uzeffdxfsupport,math,uzclog;
 function GDBObjNet.IsHaveGRIPS:GDBBoolean;
 begin
      result:=false;

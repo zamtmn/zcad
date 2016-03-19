@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="122">
+    <Units Count="131">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -742,6 +742,42 @@
         <Filename Value="zengine/styles/uzestylestables.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit121>
+      <Unit122>
+        <Filename Value="zengine/fonts/uzefontshx.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit122>
+      <Unit123>
+        <Filename Value="zengine/fonts/uzefontttf.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit123>
+      <Unit124>
+        <Filename Value="zengine/fonts/uzefontmanager.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit124>
+      <Unit125>
+        <Filename Value="zengine/fonts/uzefont.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit125>
+      <Unit126>
+        <Filename Value="zengine/fonts/uzefontbase.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit126>
+      <Unit127>
+        <Filename Value="zengine/fonts/uzeffshx.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit127>
+      <Unit128>
+        <Filename Value="zengine/fonts/uzeffttf.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit128>
+      <Unit129>
+        <Filename Value="zengine/fileformats/uzeffdxf.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit129>
+      <Unit130>
+        <Filename Value="zengine/fileformats/uzeffmanager.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit130>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

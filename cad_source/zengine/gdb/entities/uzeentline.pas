@@ -23,7 +23,7 @@ interface
 uses LCLProc,zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,
      UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,uzeentsubordinated,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBOpenArrayOfByte,GDBase,gdbobjectsconstdef,
-     uzglviewareadata,geometry,dxflow,memman;
+     uzglviewareadata,geometry,uzeffdxfsupport,memman;
 type
                  {l_1_4:GDBvertex;(*hidden_in_objinsp*)
                  l_1_3:GDBvertex;(*hidden_in_objinsp*)

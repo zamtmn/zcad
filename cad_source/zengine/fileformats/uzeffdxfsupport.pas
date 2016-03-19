@@ -16,11 +16,11 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 
-unit dxflow;
+unit uzeffdxfsupport;
 {$INCLUDE def.inc}
 
 interface
-uses gdbasetypes,gdbase,sysutils,UGDBOpenArrayOfByte{,ogltypes};
+uses gdbasetypes,gdbase,sysutils,UGDBOpenArrayOfByte;
 
 const
   dxfName_AcDbEntity='AcDbEntity';

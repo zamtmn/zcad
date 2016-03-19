@@ -23,7 +23,7 @@ interface
 uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,
      UGDBOpenArrayOfByte,uzestyleslayers,gdbasetypes,UGDBVectorSnapArray,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBPolyLine2DArray,UGDBPoint3DArray,
-     GDBase,geometry,gdbobjectsconstdef,uzglviewareadata,dxflow,sysutils,memman,
+     GDBase,geometry,gdbobjectsconstdef,uzglviewareadata,uzeffdxfsupport,sysutils,memman,
      uzeentsubordinated;
 type
 //------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)

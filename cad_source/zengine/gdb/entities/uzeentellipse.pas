@@ -23,7 +23,7 @@ uses
     uzeentwithlocalcs,UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,
     UGDBSelectedObjArray,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,
     UGDBOpenArrayOfByte,varman,varmandef,GDBase,gdbobjectsconstdef,
-    uzglviewareadata,geometry,dxflow,memman,uzeentplain;
+    uzglviewareadata,geometry,uzeffdxfsupport,memman,uzeentplain;
 type
 {REGISTEROBJECTTYPE GDBObjEllipse}
 {Export+}

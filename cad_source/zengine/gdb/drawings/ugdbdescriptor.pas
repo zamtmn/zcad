@@ -26,8 +26,8 @@ uses
     uzcstrconsts,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
     gdbase,varmandef,varman,sysutils, memman, geometry, gdbobjectsconstdef,
     gdbasetypes,ugdbsimpledrawing,uzeentgenericsubentry,uzestyleslayers,uzeentity,
-    UGDBSelectedObjArray,uzestylestexts,UGDBFontManager,uzestyleslinetypes,
-    UGDBOpenArrayOfPV,ugdbfont,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,
+    UGDBSelectedObjArray,uzestylestexts,uzefontmanager,uzestyleslinetypes,
+    UGDBOpenArrayOfPV,uzefont,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,
     ugdbtrash,UGDBOpenArrayOfByte,uzglviewareadata;
 type
 {REGISTEROBJECTTYPE GDBDescriptor}
@@ -92,7 +92,7 @@ function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):GDBInteger;
 function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
- uses uzcenitiesvariablesextender,uzeenttext,uzeentdevice,uzeentblockinsert,iodxf, GDBManager,uzcshared,uzccommandsmanager;
+ uses uzcenitiesvariablesextender,uzeenttext,uzeentdevice,uzeentblockinsert,uzeffdxf, GDBManager,uzcshared,uzccommandsmanager;
 function GDBDescriptor.GetDefaultDrawingName:GDBString;
 var
     OldName:GDBString;

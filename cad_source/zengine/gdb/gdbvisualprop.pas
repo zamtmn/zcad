@@ -19,7 +19,7 @@
 unit gdbvisualprop;
 {$INCLUDE def.inc}
 interface
-uses gdbpalette,ugdbltypearray,gdbasetypes,GDBase,geometry,sysutils,memman,
+uses gdbpalette,uzestyleslinetypes,gdbasetypes,GDBase,geometry,sysutils,memman,
      UGDBOpenArrayOfByte,uzestyleslayers;
 type
 {Export+}

@@ -16,12 +16,12 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit ugdbltypearray;
+unit uzestyleslinetypes;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,{FileUtil}LazUTF8,Classes,UGDBOpenArrayOfData,{zcadsysvars,}gdbasetypes,sysutils,gdbase, geometry,
-     UGDBTextStyleArray,UGDBOpenArrayOfObjects,
-     UGDBNamedObjectsArray,StrProc;
+uses LCLProc,LazUTF8,Classes,UGDBOpenArrayOfData,gdbasetypes,sysutils,gdbase,
+     geometry,UGDBTextStyleArray,UGDBOpenArrayOfObjects,UGDBNamedObjectsArray,
+     StrProc;
 const
      DefaultSHXHeight=1;
      DefaultSHXAngle=0;

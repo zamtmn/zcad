@@ -9,7 +9,7 @@ unit uzcentelleader;
 
 interface
 uses uzcenitiesvariablesextender,zeentityfactory,Varman,gdbdrawcontext,
-     uzeentabstracttext,uzeentgenericsubentry,ugdbtrash,ugdbdrawingdef,GDBCamera,
+     uzeentabstracttext,uzeentgenericsubentry,ugdbtrash,uzedrawingdef,GDBCamera,
      uzcsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,
      uzeenttext,uzeentdevice,uzcentcable,GDBTable,UGDBControlPointArray,geometry,
      uzeentline,gdbasetypes,uzeentcomplex,sysutils,UGDBStringArray,

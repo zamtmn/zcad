@@ -21,7 +21,7 @@ unit GDBRoot;
 
 interface
 Uses
-   gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBEntTree,gdbase,gdbasetypes,
+   gdbdrawcontext,uzedrawingdef,GDBCamera,UGDBEntTree,gdbase,gdbasetypes,
    gdbobjectsconstdef,uzeentity,uzeentgenericsubentry,uzeentconnected,uzeentsubordinated,
    geometry;
 type

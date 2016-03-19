@@ -20,7 +20,7 @@ unit uzeffmanager;
 {$INCLUDE def.inc}
 
 interface
-uses gdbasetypes,gdbase,usimplegenerics,uzeentgenericsubentry,ugdbsimpledrawing,sysutils;
+uses gdbasetypes,gdbase,usimplegenerics,uzeentgenericsubentry,uzedrawingsimple,sysutils;
 
 type
 TFileLoadProcedure=procedure(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);

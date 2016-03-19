@@ -20,7 +20,7 @@ unit uzeentityextender;
 {$INCLUDE def.inc}
 
 interface
-uses memman,UGDBDrawingdef,gdbasetypes,gdbase,usimplegenerics,
+uses memman,uzedrawingdef,gdbasetypes,gdbase,usimplegenerics,
      {gvector,}{gmap,}UGDBOpenArrayOfByte;
 
 type

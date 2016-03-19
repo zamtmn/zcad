@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit UGDBDrawingdef;
+unit uzedrawingdef;
 {$INCLUDE def.inc}
 interface
 uses gdbdrawcontext,uzestylesdim,gdbase,gdbasetypes,uzestyleslayers,uzestylestexts,

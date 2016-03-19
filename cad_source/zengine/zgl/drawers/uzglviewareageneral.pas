@@ -22,8 +22,8 @@ interface
 uses
      LCLProc,memman,zemathutils,gdbpalette,
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
-     uzglviewareadata,gdbdrawcontext,uzeentity,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
-     gdbobjectsconstdef,uzestrconsts,UGDBTracePropArray,math,sysutils,UGDBDrawingdef,strproc,
+     uzglviewareadata,gdbdrawcontext,uzeentity,uzedrawingabstract,UGDBPoint3DArray,UGDBEntTree,
+     gdbobjectsconstdef,uzestrconsts,UGDBTracePropArray,math,sysutils,uzedrawingdef,strproc,
      ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,
      UGDBOpenArrayOfPV,uzeentgenericsubentry,GDBCamera,UGDBVisibleOpenArray,uzgldrawerabstract,
      uzgldrawergeneral,uzglviewareaabstract;

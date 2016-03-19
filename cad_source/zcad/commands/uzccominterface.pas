@@ -22,7 +22,7 @@ unit uzccominterface;
 interface
 uses
  uzccomimport,paths,uzeffmanager,uzglbackendmanager,uzglviewareaabstract,uzgldrawerogl,
- uzcfcolors,uzcfdimstyles,uzcflinetypes,uzcftextstyles,uzcinfoform,uzefontmanager,ugdbsimpledrawing,uzccombase,
+ uzcfcolors,uzcfdimstyles,uzcflinetypes,uzcftextstyles,uzcinfoform,uzefontmanager,uzedrawingsimple,uzccombase,
  uzcsysvars,uzccommandsmanager,TypeDescriptors,GDBManager,uzcstrconsts,UGDBStringArray,uzcctrlcontextmenu,
  {$IFNDEF DELPHI}uzctranslations,{$ENDIF}uzcflayers,uzcfunits,strproc,uzctreenode,menus,
  {$IFDEF FPC}lcltype,{$ENDIF}
@@ -48,7 +48,7 @@ uses
   //gdbobjectsconstdef,
   uzeentity,
  uzcshared,
- ugdbdrawing,
+ uzedrawing,
   {zmenus,}uzcfprojecttree,gdbasetypes,{optionswnd,}uzcfabout,uzcfhelp,memman,WindowsSpecific,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}uzclog,Varman,UGDBNumerator,uzcfcommandline,
  AnchorDocking,dialogs,XMLPropStorage,xmlconf,uzglviewareaogl

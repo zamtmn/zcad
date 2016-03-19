@@ -4,7 +4,7 @@ interface
 
 uses
   strproc,UGDBDescriptor,gdbase,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ButtonPanel, lclintf,lcltype, EditBtn, ComCtrls,ugdbsimpledrawing;
+  ButtonPanel, lclintf,lcltype, EditBtn, ComCtrls,uzedrawingsimple;
 
 type
 

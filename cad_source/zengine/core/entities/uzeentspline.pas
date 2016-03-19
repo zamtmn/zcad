@@ -21,7 +21,7 @@ unit uzeentspline;
 
 interface
 uses LCLProc,gluinterface,zeentityfactory,gdbdrawcontext,glstatemanager,UGDBOpenArrayOfData,
-     UGDBPoint3DArray,UGDBDrawingdef,GDBCamera,UGDBVectorSnapArray,
+     UGDBPoint3DArray,uzedrawingdef,GDBCamera,UGDBVectorSnapArray,
      UGDBOpenArrayOfPObjects,uzestyleslayers,uzeentsubordinated,uzeentcurve,gdbasetypes,
      uzeentity,UGDBOpenArrayOfByte,GDBase,gdbobjectsconstdef,uzglviewareadata,
      geometry,uzeffdxfsupport,sysutils,memman;

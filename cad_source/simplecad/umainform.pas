@@ -11,19 +11,19 @@ uses
   memman,                                                                       //zcad memorymanager
   GDBase, GDBasetypes,                                                          //zcad basetypes
   geometry,                                                                     //some mathematical and geometrical support
-  UGDBFontManager,ioshx,                                                        //fonts manager and SHX fileformat support
-  uzglabstractviewarea,generalviewarea,gdbdrawcontext,                          //generic view areas support
-  uzglopenglviewarea,uzglgdiviewarea,                                           //gdi and opengl wiewareas
+  uzefontmanager,uzeffshx,                                                        //fonts manager and SHX fileformat support
+  uzglviewareaabstract,uzglviewareageneral,gdbdrawcontext,                          //generic view areas support
+  uzglviewareaogl,uzglviewareagdi,                                           //gdi and opengl wiewareas
   uzeentity,                                                                    //generic entitys objects parent
   uzeent3Dface,uzeentlwpolyline,uzeentpolyline,uzeenttext,uzeentline,uzeentcircle,uzeentarc,         //entitys created by program
   {$ifdef dxfio}
-  iodxf,                                                                        //dxf fileformat support
+  uzeffdxf,                                                                        //dxf fileformat support
   uzeentmtext,uzeentdimensiongeneric,uzeentdimaligned,uzeentdimrotated,uzeentsolid,//some other entitys can be found in loaded files
   uzeentspline,
   {$endif}
-  UGDBLayerArray,UGDBTextStyleArray,                                            //layers and text steles support
+  uzestyleslayers,uzestylestexts,                                            //layers and text steles support
   UGDBEntTree,                                                                  //entities spatial binary tree
-  ugdbsimpledrawing,                                                            //drawing
+  uzedrawingsimple,                                                            //drawing
   gdbobjectsconstdef;                                                           //some consts
 
 type

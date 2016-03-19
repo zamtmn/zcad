@@ -16,11 +16,11 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit ugdbabstractdrawing;
+unit uzedrawingabstract;
 {$INCLUDE def.inc}
 interface
 uses
-    uzestylesdim,uzestylestexts,uzestyleslinetypes,gdbdrawcontext,UGDBDrawingdef,
+    uzestylesdim,uzestylestexts,uzestyleslinetypes,gdbdrawcontext,uzedrawingdef,
     gdbase,gdbasetypes,GDBCamera,uzeentity,uzeentgenericsubentry,GDBRoot,
     UGDBSelectedObjArray,uzestyleslayers,UGDBOpenArrayOfPV;
 type

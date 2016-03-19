@@ -23,10 +23,10 @@ interface
 uses
   uzglviewareageneral,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,
   zcmultiobjectcreateundocommand,zeentitiesmanager,uzgldrawercanvas,
-  uzcoimultiobjects,uzcenitiesvariablesextender,ugdbdrawing,gdbpalette,
+  uzcoimultiobjects,uzcenitiesvariablesextender,uzedrawing,gdbpalette,
   ugdbopenarrayofgdbdouble,uzctextenteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,
   uzeentpoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,zeentityfactory,
-  ugdbsimpledrawing,uzcsysvars,uzcstrconsts,uzccomdrawdase,glstatemanager,
+  uzedrawingsimple,uzcsysvars,uzcstrconsts,uzccomdrawdase,glstatemanager,
   PrintersDlgs,printers,graphics,uzeentdevice,uzeentwithlocalcs,UGDBOpenArrayOfPointer,
   LazUTF8,Clipbrd,LCLType,classes,uzeenttext,uzeentabstracttext,uzestylestexts,
   uzccommandsabstract,strproc,

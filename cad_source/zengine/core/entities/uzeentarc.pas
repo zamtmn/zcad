@@ -19,7 +19,7 @@ unit uzeentarc;
 {$INCLUDE def.inc}
 interface
 uses
-    zeentityfactory,uzeentsubordinated,gdbdrawcontext,ugdbdrawingdef,math,uzeentwithlocalcs,
+    zeentityfactory,uzeentsubordinated,gdbdrawcontext,uzedrawingdef,math,uzeentwithlocalcs,
     GDBCamera,UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,UGDBSelectedObjArray,
     uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,GDBase,
     gdbobjectsconstdef,uzglviewareadata,geometry,uzeffdxfsupport,memman,uzeentplain;

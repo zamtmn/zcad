@@ -19,7 +19,7 @@
 unit uzeentconnected;
 {$INCLUDE def.inc}
 interface
-Uses uzeentity,uzeentgenericsubentry,UGDBOpenArrayOfPV,ugdbdrawingdef;
+Uses uzeentity,uzeentgenericsubentry,UGDBOpenArrayOfPV,uzedrawingdef;
 type
 {Export+}
 PGDBObjConnected=^GDBObjConnected;

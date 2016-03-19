@@ -20,7 +20,7 @@ unit uzeentgenericsubentry;
 {$INCLUDE def.inc}
 
 interface
-uses gdbpalette,gdbdrawcontext,UGDBDrawingdef,GDBCamera,UGDBLayerArray,
+uses gdbpalette,gdbdrawcontext,UGDBDrawingdef,GDBCamera,uzestyleslayers,
      UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,
      uzeentwithmatrix,uzeentsubordinated,gdbase,geometry,uzeentity,
      gdbobjectsconstdef,memman,UGDBEntTree;

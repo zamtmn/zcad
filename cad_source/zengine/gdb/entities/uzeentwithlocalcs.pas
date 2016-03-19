@@ -22,7 +22,7 @@ unit uzeentwithlocalcs;
 interface
 uses gdbpalette,gdbdrawcontext,ugdbdrawingdef,GDBCamera,gdbasetypes,uzeentity,
      UGDBOutbound2DIArray,UGDBOpenArrayOfByte,uzeentwithmatrix,GDBase,
-     geometry,dxflow,sysutils,memman,uzeentsubordinated,UGDBLayerArray;
+     geometry,dxflow,sysutils,memman,uzeentsubordinated,uzestyleslayers;
 type
 //pprojoutbound:{-}PGDBOOutbound2DIArray{/GDBPointer/};
 {EXPORT+}

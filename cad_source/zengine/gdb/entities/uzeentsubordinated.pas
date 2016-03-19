@@ -22,8 +22,7 @@ unit uzeentsubordinated;
 interface
 uses strutils,gdbdrawcontext,uzeentityextender,gdbfieldprocessor,ugdbdrawingdef,strproc
      {$IFNDEF DELPHI},LCLProc{$ENDIF},UGDBOpenArrayOfByte,
-     gdbase,gdbasetypes,{varman,}{varmandef,}
-     sysutils,UGDBLayerArray{,strutils};
+     gdbase,gdbasetypes,sysutils,uzestyleslayers;
 type
 //Owner:PGDBObjGenericWithSubordinated;(*'Владелец'*)
 //PSelfInOwnerArray:TArrayIndex;(*'Индекс у владельца'*)

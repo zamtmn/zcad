@@ -21,7 +21,7 @@ unit uzeentcurve;
 
 interface
 uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,
-     UGDBOpenArrayOfByte,UGDBLayerArray,gdbasetypes,UGDBVectorSnapArray,
+     UGDBOpenArrayOfByte,uzestyleslayers,gdbasetypes,UGDBVectorSnapArray,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBPolyLine2DArray,UGDBPoint3DArray,
      GDBase,geometry,gdbobjectsconstdef,uzglviewareadata,dxflow,sysutils,memman,
      uzeentsubordinated;

@@ -21,7 +21,7 @@ unit uzeentcircle;
 interface
 uses
     zeentityfactory,uzeentsubordinated,gdbdrawcontext,ugdbdrawingdef,GDBCamera,
-    UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBHelpObj,UGDBSelectedObjArray,
+    UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,GDBHelpObj,UGDBSelectedObjArray,
     uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,
     GDBase,uzeentwithlocalcs,gdbobjectsconstdef,uzglviewareadata,geometry,dxflow,memman;
 type

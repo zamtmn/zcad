@@ -874,7 +874,7 @@ GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*O
                     function FindStyle(StyleName:GDBString;ult:GDBBoolean):PGDBTextStyle;
                     procedure freeelement(p:GDBPointer);virtual;abstract;
               end;
-//Generate on E:/zcad/cad_source/zengine/styles/UGDBLayerArray.pas
+//Generate on E:/zcad/cad_source/zengine/styles/uzestyleslayers.pas
 PPGDBLayerPropObjInsp=^PGDBLayerPropObjInsp;
 PGDBLayerPropObjInsp={GDBPtrUInt}GDBPointer;
 PGDBLayerProp=^GDBLayerProp;

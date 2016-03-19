@@ -22,7 +22,7 @@ unit zeentitiesmanager;
 
 interface
 uses LCLProc,gdbobjectsconstdef,gdbpalette,ugdbltypearray,zeentityfactory,
-     UGDBLayerArray,sysutils,gdbase,gdbasetypes,UGDBVisibleOpenArray,
+     uzestyleslayers,sysutils,gdbase,gdbasetypes,UGDBVisibleOpenArray,
      uzeentgenericsubentry,uzeentity,memman;
 procedure GDBObjSetEntityProp(const pobjent: PGDBObjEntity;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight);
 function ENTF_CreateLine(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;

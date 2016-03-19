@@ -22,7 +22,7 @@ unit uzeenttext;
 interface
 uses
     uzglgeometry,gdbdrawcontext,gdbobjectextender,gdbfieldprocessor,zeentityfactory,
-    ugdbdrawingdef,GDBCamera,strproc,sysutils,ugdbfont,UGDBLayerArray,gdbasetypes,
+    ugdbdrawingdef,GDBCamera,strproc,sysutils,ugdbfont,uzestyleslayers,gdbasetypes,
     uzeentabstracttext,uzeentity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,GDBase,
     gdbobjectsconstdef,uzglviewareadata,geometry,dxflow,memman,uzeentsubordinated,
     UGDBTextStyleArray;

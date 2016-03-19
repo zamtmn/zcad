@@ -21,7 +21,7 @@ unit uzeentcomplex;
 
 interface
 uses gdbpalette,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,
-     UGDBLayerArray,gdbasetypes,sysutils,UGDBSelectedObjArray,UGDBVisibleOpenArray,
+     uzestyleslayers,gdbasetypes,sysutils,UGDBSelectedObjArray,UGDBVisibleOpenArray,
      uzeentity,UGDBVisibleTreeArray,UGDBEntTree,GDBase,uzeentwithlocalcs,
      gdbobjectsconstdef,geometry,memman;
 type

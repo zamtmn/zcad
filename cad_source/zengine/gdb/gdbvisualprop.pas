@@ -19,10 +19,8 @@
 unit gdbvisualprop;
 {$INCLUDE def.inc}
 interface
-uses gdbpalette,{log,}ugdbltypearray,{zcadsysvars,}gdbasetypes,
-     {varman,}//varmandef,
-     GDBase,
-     geometry,sysutils,memman,UGDBOpenArrayOfByte,UGDBLayerArray;
+uses gdbpalette,ugdbltypearray,gdbasetypes,GDBase,geometry,sysutils,memman,
+     UGDBOpenArrayOfByte,uzestyleslayers;
 type
 {Export+}
 PGDBObjVisualProp=^GDBObjVisualProp;

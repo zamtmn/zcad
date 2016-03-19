@@ -2,7 +2,7 @@ unit aregGDBLayerArray;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,UGDBLayerArray;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzestyleslayers;
 implementation
 var
 pt:PObjectDescriptor;

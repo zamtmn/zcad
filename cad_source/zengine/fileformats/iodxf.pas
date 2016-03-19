@@ -25,7 +25,7 @@ uses LCLProc,paths,strproc,gdbdrawcontext,usimplegenerics,uzestylesdim,zeentityf
     uzglviewareadata,dxflow,uzestrconsts,UGDBTextStyleArray,
     geometry,uzeentsubordinated,gdbasetypes,uzeentgenericsubentry,gdbase,
     sysutils,memman,gdbobjectsconstdef,UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,
-    UGDBOpenArrayOfByte,UGDBVisibleOpenArray,uzeentity,GDBBlockDef,UGDBLayerArray,fileformatsmanager;
+    UGDBOpenArrayOfByte,UGDBVisibleOpenArray,uzeentity,GDBBlockDef,uzestyleslayers,fileformatsmanager;
 type
    TCreateExtLoadData=function:pointer;
    TProcessExtLoadData=procedure(peld:pointer);

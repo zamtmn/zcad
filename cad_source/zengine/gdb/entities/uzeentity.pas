@@ -23,7 +23,7 @@ uses gdbpalette,gdbobjectextender,uzgldrawerabstract,gdbdrawcontext,ugdbdrawingd
      GDBCamera,gdbvisualprop,uzglgeometry,ugdbltypearray,gdbasetypes,
      UGDBControlPointArray,uzeentsubordinated,GDBase,gdbobjectsconstdef,
      uzglviewareadata,geometry,dxflow,sysutils,memman,UGDBOpenArrayOfByte,
-     UGDBLayerArray,UGDBOpenArrayOfPObjects;
+     uzestyleslayers,UGDBOpenArrayOfPObjects;
 type
 //Owner:{-}PGDBObjEntity{/GDBPointer/};(*'Владелец'*)
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;

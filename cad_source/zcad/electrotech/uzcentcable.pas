@@ -9,7 +9,7 @@ unit uzcentcable;
 
 interface
 uses gdbobjectextender,varman,gdbdrawcontext,uzeentgenericsubentry,ugdbdrawingdef,
-     uzcsysvars,UGDBOpenArrayOfByte,UGDBLayerArray,UUnitManager,uzeentcurve,geometry,
+     uzcsysvars,UGDBOpenArrayOfByte,uzestyleslayers,UUnitManager,uzeentcurve,geometry,
      math,UGDBOpenArrayOfData,gdbasetypes,uzeentity,varmandef,GDBase,
      gdbobjectsconstdef,dxflow,sysutils,memman,uzeentsubordinated,uzeentdevice;
 type

@@ -25,7 +25,7 @@ uses
     ugdbabstractdrawing,WindowsSpecific,LResources,uzcsysvars,zcadinterface,
     uzcstrconsts,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
     gdbase,varmandef,varman,sysutils, memman, geometry, gdbobjectsconstdef,
-    gdbasetypes,ugdbsimpledrawing,uzeentgenericsubentry,UGDBLayerArray,uzeentity,
+    gdbasetypes,ugdbsimpledrawing,uzeentgenericsubentry,uzestyleslayers,uzeentity,
     UGDBSelectedObjArray,UGDBTextStyleArray,UGDBFontManager,ugdbltypearray,
     UGDBOpenArrayOfPV,ugdbfont,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,
     ugdbtrash,UGDBOpenArrayOfByte,uzglviewareadata;

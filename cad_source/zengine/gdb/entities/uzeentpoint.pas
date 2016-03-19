@@ -21,7 +21,7 @@ unit uzeentpoint;
 
 interface
 uses zeentityfactory,gdbdrawcontext,dxflow,ugdbdrawingdef,GDBCamera,
-     UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,
+     UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,UGDBSelectedObjArray,
      uzeentsubordinated,uzeent3d,uzeentity,sysutils,UGDBOpenArrayOfByte,
      GDBase,gdbobjectsconstdef,uzglviewareadata,geometry,memman;
 type

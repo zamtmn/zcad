@@ -24,7 +24,7 @@ uses
     zcobjectchangeundocommand,zebaseundocommands,paths,uzestylesdim,
     WindowsSpecific,LResources,uzcsysvars,uzcstrconsts,strproc,GDBBlockDef,UUnitManager,
     gdbase,varmandef,varman,sysutils, memman, geometry, gdbobjectsconstdef,
-    gdbasetypes,ugdbsimpledrawing,UGDBLayerArray,uzeentity,UGDBFontManager,
+    gdbasetypes,ugdbsimpledrawing,uzestyleslayers,uzeentity,UGDBFontManager,
     UGDBOpenArrayOfPObjects,ugdbtrash,UGDBOpenArrayOfByte;
 type
 {EXPORT+}

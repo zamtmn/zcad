@@ -36,7 +36,7 @@ uses
   {ZCAD SIMPLE PASCAL SCRIPT}
        languade,
   {ZCAD ENTITIES}
-       uzeentity,UGDBSelectedObjArray,UGDBLayerArray,ugdbsimpledrawing,
+       uzeentity,UGDBSelectedObjArray,uzestyleslayers,ugdbsimpledrawing,
        GDBBlockDef,UGDBDescriptor,GDBManager,ugdbltypearray,gdbobjectsconstdef,uzeenttext,uzeentdimension,
   {ZCAD COMMANDS}
        uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,

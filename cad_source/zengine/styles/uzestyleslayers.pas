@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit UGDBLayerArray;
+unit uzestyleslayers;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes,sysutils,gdbase, geometry,

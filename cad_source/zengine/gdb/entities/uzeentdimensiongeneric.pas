@@ -19,7 +19,7 @@ unit uzeentdimensiongeneric;
 {$INCLUDE def.inc}
 
 interface
-uses zeentityfactory,uzeentwithlocalcs,uzeentdimension,uzestylesdim,UGDBLayerArray,
+uses zeentityfactory,uzeentwithlocalcs,uzeentdimension,uzestylesdim,uzestyleslayers,
      ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,geometry,gdbasetypes,
      sysutils,uzeentity,GDBase,gdbobjectsconstdef,dxflow,memman,uzeentsubordinated;
 type

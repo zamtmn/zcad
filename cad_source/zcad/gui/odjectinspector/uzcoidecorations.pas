@@ -24,7 +24,7 @@ interface
 uses
   uzccommandsabstract,zcobjectinspectoreditors,uzcsysinfo,gdbpalette,UEnumDescriptor,zcobjectinspector,uzcinfoform,Forms,ugdbltypearray,sysutils,uzctreenode,uzcfsnapeditor,uzccominterface,
   Graphics,LCLType,Themes,types,gdbobjectsconstdef,UGDBNamedObjectsArray,UGDBStringArray,
-  varmandef,Varman,uzcfcolors,UGDBLayerArray,gdbase,uzcflineweights,gdbasetypes,usupportgui,
+  varmandef,Varman,uzcfcolors,uzestyleslayers,gdbase,uzcflineweights,gdbasetypes,usupportgui,
   StdCtrls,UGDBDescriptor,uzcstrconsts,Controls,Classes,strproc,uzcsysvars,uzccommandsmanager,
   zcadinterface;
 type

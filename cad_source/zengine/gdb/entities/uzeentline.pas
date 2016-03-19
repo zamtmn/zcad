@@ -21,7 +21,7 @@ unit uzeentline;
 
 interface
 uses LCLProc,zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,
-     UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,uzeentsubordinated,
+     UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,uzeentsubordinated,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBOpenArrayOfByte,GDBase,gdbobjectsconstdef,
      uzglviewareadata,geometry,dxflow,memman;
 type

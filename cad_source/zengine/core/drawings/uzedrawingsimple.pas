@@ -16,11 +16,11 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit ugdbsimpledrawing;
+unit uzedrawingsimple;
 {$INCLUDE def.inc}
 interface
-uses UGDBDrawingdef,zeblockdefsfactory,uzestylesdim,uzeentwithlocalcs,
-     ugdbabstractdrawing,strproc,UGDBObjBlockdefArray,uzestylestables,
+uses uzedrawingdef,zeblockdefsfactory,uzestylesdim,uzeentwithlocalcs,
+     uzedrawingabstract,strproc,UGDBObjBlockdefArray,uzestylestables,
      UGDBNumerator, gdbase,sysutils, memman,geometry,gdbasetypes,uzeentgenericsubentry,
      uzestyleslayers,uzestyleslinetypes,uzeentity,UGDBSelectedObjArray,uzestylestexts,
      GDBCamera,UGDBOpenArrayOfPV, GDBRoot,uzefont,UGDBOpenArrayOfPObjects,

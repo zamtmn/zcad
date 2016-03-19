@@ -20,7 +20,7 @@ unit uzcoiregister;
 {$INCLUDE def.inc}
 interface
 uses paths,TypeDescriptors,uzctranslations,uzcshared,Forms,zcadinterface,GDBRoot,
-     gdbase,UGDBDrawingdef,gdbdrawcontext,UGDBStringArray,varmandef,ugdbsimpledrawing,
+     gdbase,uzedrawingdef,gdbdrawcontext,UGDBStringArray,varmandef,uzedrawingsimple,
      uzeentity,uzcenitiesvariablesextender,zcobjectinspector,uzcguimanager,uzcstrconsts,
      Types,Controls,UGDBDescriptor,Varman,UUnitManager,uzcsysvars,gdbasetypes,uzcsysinfo;
 implementation

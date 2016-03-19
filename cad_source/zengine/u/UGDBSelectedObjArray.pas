@@ -21,7 +21,7 @@ unit UGDBSelectedObjArray;
 interface
 uses gdbpalette,gdbdrawcontext,GDBCamera,uzeentwithmatrix,uzeentity,
      UGDBControlPointArray,UGDBOpenArrayOfData,sysutils,gdbase, geometry,
-     gdbasetypes,memman,ugdbdrawingdef;
+     gdbasetypes,memman,uzedrawingdef;
 type
 {Export+}
 PSelectedObjDesc=^SelectedObjDesc;
@@ -59,7 +59,7 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                     end;
 {EXPORT-}
 implementation
-uses ugdbabstractdrawing,uzeentgenericsubentry;
+uses uzedrawingabstract,uzeentgenericsubentry;
 procedure GDBSelectedObjArray.resprojparam;
 var tdesc:pselectedobjdesc;
     i:GDBInteger;

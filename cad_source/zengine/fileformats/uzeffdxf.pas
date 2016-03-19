@@ -21,7 +21,7 @@ unit uzeffdxf;
 interface
 uses LCLProc,paths,strproc,gdbdrawcontext,usimplegenerics,uzestylesdim,zeentityfactory,
     {$IFNDEF DELPHI}LazUTF8,{$ENDIF}
-    UGDBNamedObjectsArray,uzestyleslinetypes,ugdbsimpledrawing,uzelongprocesssupport,
+    UGDBNamedObjectsArray,uzestyleslinetypes,uzedrawingsimple,uzelongprocesssupport,
     uzglviewareadata,uzeffdxfsupport,uzestrconsts,uzestylestexts,
     geometry,uzeentsubordinated,gdbasetypes,uzeentgenericsubentry,gdbase,
     sysutils,memman,gdbobjectsconstdef,UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,

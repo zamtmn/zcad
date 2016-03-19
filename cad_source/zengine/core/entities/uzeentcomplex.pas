@@ -20,7 +20,7 @@ unit uzeentcomplex;
 {$INCLUDE def.inc}
 
 interface
-uses gdbpalette,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,
+uses gdbpalette,gdbdrawcontext,uzedrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,
      uzestyleslayers,gdbasetypes,sysutils,UGDBSelectedObjArray,UGDBVisibleOpenArray,
      uzeentity,UGDBVisibleTreeArray,UGDBEntTree,GDBase,uzeentwithlocalcs,
      gdbobjectsconstdef,geometry,memman;

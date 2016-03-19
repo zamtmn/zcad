@@ -21,7 +21,7 @@ unit uzccomimport;
 interface
 uses gdbdrawcontext,zeentityfactory,
     {$IFNDEF DELPHI}dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}
-    ugdbsimpledrawing,
+    uzedrawingsimple,
     uzeentcircle,uzeentarc,uzeentline,
     geometry,uzcshared,gdbasetypes,uzclog,gdbase,
     sysutils,memman,gdbobjectsconstdef,

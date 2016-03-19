@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="133">
+    <Units Count="137">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -786,6 +786,23 @@
         <Filename Value="zengine/core/entities/uzeentwithmatrix.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit132>
+      <Unit133>
+        <Filename Value="zengine/core/drawings/uzedrawing.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit133>
+      <Unit134>
+        <Filename Value="zengine/core/drawings/uzedrawingdef.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit134>
+      <Unit135>
+        <Filename Value="zengine/core/drawings/uzedrawingsimple.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit135>
+      <Unit136>
+        <Filename Value="zengine/core/drawings/uzedrawingabstract.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ugdbabstractdrawing"/>
+      </Unit136>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

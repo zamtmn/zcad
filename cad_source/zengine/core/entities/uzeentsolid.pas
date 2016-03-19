@@ -20,7 +20,7 @@ unit uzeentsolid;
 
 interface
 uses
-    zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzeentwithlocalcs,
+    zeentityfactory,gdbdrawcontext,uzedrawingdef,GDBCamera,uzeentwithlocalcs,
     UGDBOpenArrayOfPObjects,geometry,uzeffdxfsupport,uzestyleslayers,gdbasetypes,
     UGDBSelectedObjArray,uzeentsubordinated,uzeentity,sysutils,UGDBOpenArrayOfByte,
     GDBase,gdbobjectsconstdef,memman;

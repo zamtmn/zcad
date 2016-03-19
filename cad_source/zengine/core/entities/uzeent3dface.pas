@@ -20,7 +20,7 @@ unit uzeent3dface;
 
 interface
 uses
-    zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,
+    zeentityfactory,gdbdrawcontext,uzedrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,
     geometry,uzeffdxfsupport,uzestyleslayers,gdbasetypes,UGDBSelectedObjArray,uzeentsubordinated,
     uzeent3d,uzeentity,sysutils,UGDBOpenArrayOfByte,GDBase,gdbobjectsconstdef,memman;
 type

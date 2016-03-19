@@ -20,7 +20,7 @@ unit uzeentline;
 {$INCLUDE def.inc}
 
 interface
-uses LCLProc,zeentityfactory,gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,
+uses LCLProc,zeentityfactory,gdbdrawcontext,uzedrawingdef,GDBCamera,uzglgeometry,
      UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,uzeentsubordinated,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBOpenArrayOfByte,GDBase,gdbobjectsconstdef,
      uzglviewareadata,geometry,uzeffdxfsupport,memman;

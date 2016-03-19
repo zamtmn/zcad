@@ -21,7 +21,7 @@ unit uzccommandsmanager;
 interface
 uses UGDBOpenArrayOfPObjects,uzcsysvars,geometry,uzglviewareaabstract,paths,gdbobjectsconstdef,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,{umytreenode,}uzcsysinfo,strproc,UGDBOpenArrayOfPointer,
      gdbasetypes,uzccommandsabstract, sysutils,gdbase,uzglviewareadata,
-     memman,uzcshared,uzclog,varmandef,varman,ugdbdrawingdef,zcadinterface;
+     memman,uzcshared,uzclog,varmandef,varman,uzedrawingdef,zcadinterface;
 const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;
@@ -89,7 +89,7 @@ procedure ParseCommand(comm:string; out command,operands:GDBString);
 {procedure startup;
 procedure finalize;}
 implementation
-uses ugdbsimpledrawing,UGDBStringArray,{cmdline,}{UGDBDescriptor,}forms{,varman};
+uses uzedrawingsimple,UGDBStringArray,forms;
 
 procedure GDBcommandmanager.sendcoordtocommandTraceOn(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte;pos:pos_record);
 var

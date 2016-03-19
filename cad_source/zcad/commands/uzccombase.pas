@@ -23,9 +23,9 @@ interface
 uses
  {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
  uzglviewareageneral,zeundostack,zcchangeundocommand,uzcoimultiobjects,
- uzcenitiesvariablesextender,gdbdrawcontext,ugdbdrawing,paths,uzeffmanager,
+ uzcenitiesvariablesextender,gdbdrawcontext,uzedrawing,paths,uzeffmanager,
  uzeentdimension,uzestylesdim,uzestylestexts,uzeenttext,uzestyleslinetypes,
- URecordDescriptor,uzefontmanager,ugdbsimpledrawing,uzcsysvars,uzccommandsmanager,
+ URecordDescriptor,uzefontmanager,uzedrawingsimple,uzcsysvars,uzccommandsmanager,
  TypeDescriptors,GDBManager,uzcstrconsts,uzcctrlcontextmenu,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
  strproc,uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,LazUTF8,Forms,Controls,Clipbrd,lclintf,

@@ -21,7 +21,7 @@ unit uzeentdevice;
 
 interface
 uses uzestyleslayers,gdbpalette,gdbobjectextender,uabstractunit,zeentityfactory,
-     gdbdrawcontext,UGDBDrawingdef,GDBCamera,uzcsysvars,sysutils,devices,
+     gdbdrawcontext,uzedrawingdef,GDBCamera,uzcsysvars,sysutils,devices,
      UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,uunitmanager,memman,geometry,
      gdbobjectsconstdef,uzeentity,uzeentsubordinated,varmandef,gdbasetypes,
      uzeentblockinsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray;

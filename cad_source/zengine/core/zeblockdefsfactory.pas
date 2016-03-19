@@ -21,7 +21,7 @@ unit zeblockdefsfactory;
 
 
 interface
-uses paths,sysutils,GDBBlockDef,usimplegenerics,UGDBDrawingdef,
+uses paths,sysutils,GDBBlockDef,usimplegenerics,uzedrawingdef,
     memman,GDBase,GDBasetypes,uzeentity;
 type
 TBlockDefCreateFunc=function(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString):PGDBObjBlockdef;

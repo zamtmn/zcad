@@ -2,7 +2,7 @@ unit aregGDBTextStyleArray;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,UGDBTextStyleArray;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzestylestexts;
 implementation
 var
 pt:PObjectDescriptor;

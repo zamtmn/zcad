@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit UGDBTextStyleArray;
+unit uzestylestexts;
 {$INCLUDE def.inc}
 interface
 uses LCLProc,paths,UGDBFontManager,gdbasetypes,sysutils,gdbase, geometry,

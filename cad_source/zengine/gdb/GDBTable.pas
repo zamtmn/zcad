@@ -21,7 +21,7 @@ unit GDBTable;
 
 interface
 uses gdbdrawcontext,uzeentabstracttext,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,
-     UGDBTableStyleArray,uzeentline,gdbasetypes,uzeentcomplex,sysutils,UGDBTable,
+     uzestylestables,uzeentline,gdbasetypes,uzeentcomplex,sysutils,UGDBTable,
      UGDBStringArray,uzeentmtext,uzeentity,GDBase,gdbobjectsconstdef,geometry,
      memman;
 //jcm(*'TopMiddle'*),

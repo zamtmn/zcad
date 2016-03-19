@@ -20,9 +20,9 @@ unit ugdbsimpledrawing;
 {$INCLUDE def.inc}
 interface
 uses UGDBDrawingdef,zeblockdefsfactory,uzestylesdim,uzeentwithlocalcs,
-     ugdbabstractdrawing,strproc,UGDBObjBlockdefArray,UGDBTableStyleArray,
+     ugdbabstractdrawing,strproc,UGDBObjBlockdefArray,uzestylestables,
      UGDBNumerator, gdbase,sysutils, memman,geometry,gdbasetypes,uzeentgenericsubentry,
-     uzestyleslayers,uzestyleslinetypes,uzeentity,UGDBSelectedObjArray,UGDBTextStyleArray,
+     uzestyleslayers,uzestyleslinetypes,uzeentity,UGDBSelectedObjArray,uzestylestexts,
      GDBCamera,UGDBOpenArrayOfPV, GDBRoot,ugdbfont,UGDBOpenArrayOfPObjects,
      uzglviewareaabstract,uzglviewareageneral,gdbdrawcontext;
 type

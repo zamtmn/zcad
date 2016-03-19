@@ -20,7 +20,7 @@ unit ugdbabstractdrawing;
 {$INCLUDE def.inc}
 interface
 uses
-    uzestylesdim,UGDBTextStyleArray,uzestyleslinetypes,gdbdrawcontext,UGDBDrawingdef,
+    uzestylesdim,uzestylestexts,uzestyleslinetypes,gdbdrawcontext,UGDBDrawingdef,
     gdbase,gdbasetypes,GDBCamera,uzeentity,uzeentgenericsubentry,GDBRoot,
     UGDBSelectedObjArray,uzestyleslayers,UGDBOpenArrayOfPV;
 type

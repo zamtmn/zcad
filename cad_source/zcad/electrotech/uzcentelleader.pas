@@ -63,7 +63,7 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             end;
 {EXPORT-}
 implementation
-uses UGDBTableStyleArray,uzclog,UGDBOpenArrayOfPV,uzeentcurve;
+uses uzestylestables,uzclog,UGDBOpenArrayOfPV,uzeentcurve;
 function GDBObjElLeader.calcvisible;
 //var i:GDBInteger;
 //    tv,tv1:gdbvertex4d;

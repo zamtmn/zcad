@@ -848,7 +848,7 @@ GDBNamedObjectsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPIde
                     function GetFreeName(NameFormat:GDBString;firstindex:integer):GDBString;
                     procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;abstract;
               end;
-//Generate on E:/zcad/cad_source/zengine/styles/UGDBTextStyleArray.pas
+//Generate on E:/zcad/cad_source/zengine/styles/uzestylestexts.pas
 PGDBTextStyleProp=^GDBTextStyleProp;
   GDBTextStyleProp=packed record
                     size:GDBDouble;(*saved_to_shd*)
@@ -1059,7 +1059,7 @@ GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*Op
                     procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
                     procedure ResolveLineTypes(const lta:GDBLtypeArray);
               end;
-//Generate on E:/zcad/cad_source/zengine/styles/UGDBTableStyleArray.pas
+//Generate on E:/zcad/cad_source/zengine/styles/uzestylestables.pas
 TTableCellJustify=(jcl(*'TopLeft'*),
               jcc(*'TopCenter'*),
               jcr(*'TopRight'*));

@@ -26,7 +26,7 @@ uses
     uzcstrconsts,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
     gdbase,varmandef,varman,sysutils, memman, geometry, gdbobjectsconstdef,
     gdbasetypes,ugdbsimpledrawing,uzeentgenericsubentry,uzestyleslayers,uzeentity,
-    UGDBSelectedObjArray,UGDBTextStyleArray,UGDBFontManager,uzestyleslinetypes,
+    UGDBSelectedObjArray,uzestylestexts,UGDBFontManager,uzestyleslinetypes,
     UGDBOpenArrayOfPV,ugdbfont,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,
     ugdbtrash,UGDBOpenArrayOfByte,uzglviewareadata;
 type

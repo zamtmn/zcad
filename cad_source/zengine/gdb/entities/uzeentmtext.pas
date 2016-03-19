@@ -25,7 +25,7 @@ uses
     strproc,ugdbfont,uzeentabstracttext,UGDBPoint3DArray,uzestyleslayers,SysUtils,
     gdbasetypes,uzeentity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,
     GDBase,uzeenttext,gdbobjectsconstdef,geometry,dxflow,math,memman,uzeentsubordinated,
-    UGDBTextStyleArray;
+    uzestylestexts;
 const maxdxfmtextlen=250;
 type
 //procedure CalcObjMatrix;virtual;

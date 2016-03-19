@@ -28,7 +28,7 @@ uses
   uzeentpoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,zeentityfactory,
   ugdbsimpledrawing,uzcsysvars,uzcstrconsts,uzccomdrawdase,glstatemanager,
   PrintersDlgs,printers,graphics,uzeentdevice,uzeentwithlocalcs,UGDBOpenArrayOfPointer,
-  LazUTF8,Clipbrd,LCLType,classes,uzeenttext,uzeentabstracttext,UGDBTextStyleArray,
+  LazUTF8,Clipbrd,LCLType,classes,uzeenttext,uzeentabstracttext,uzestylestexts,
   uzccommandsabstract,strproc,
   gdbasetypes,uzccommandsmanager,uzccombase,
   plugins,

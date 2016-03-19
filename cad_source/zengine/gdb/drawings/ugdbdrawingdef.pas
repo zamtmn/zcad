@@ -19,7 +19,8 @@
 unit UGDBDrawingdef;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,uzestylesdim,gdbase,gdbasetypes,uzestyleslayers,UGDBTextStyleArray,uzestyleslinetypes,UGDBTableStyleArray;
+uses gdbdrawcontext,uzestylesdim,gdbase,gdbasetypes,uzestyleslayers,uzestylestexts,
+     uzestyleslinetypes,uzestylestables;
 type
 {EXPORT+}
 PTDrawingDef=^TDrawingDef;

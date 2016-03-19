@@ -21,7 +21,7 @@ unit iodxf;
 interface
 uses LCLProc,paths,strproc,gdbdrawcontext,usimplegenerics,uzestylesdim,zeentityfactory,
     {$IFNDEF DELPHI}LazUTF8,{$ENDIF}
-    UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,uzelongprocesssupport,
+    UGDBNamedObjectsArray,uzestyleslinetypes,ugdbsimpledrawing,uzelongprocesssupport,
     uzglviewareadata,dxflow,uzestrconsts,UGDBTextStyleArray,
     geometry,uzeentsubordinated,gdbasetypes,uzeentgenericsubentry,gdbase,
     sysutils,memman,gdbobjectsconstdef,UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,

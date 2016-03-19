@@ -28,7 +28,7 @@ zengine/u/ugdbopenarrayofpidentobects.pas
 zengine/u/UGDBNamedObjectsArray.pas
 zengine/styles/UGDBTextStyleArray.pas
 zengine/styles/uzestyleslayers.pas
-zengine/styles/ugdbltypearray.pas
+zengine/styles/uzestyleslinetypes.pas
 zengine/styles/uzestylesdim.pas
 zengine/styles/UGDBTableStyleArray.pas
 zengine/u/UGDBTable.pas

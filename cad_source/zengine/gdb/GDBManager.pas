@@ -22,7 +22,7 @@ unit GDBManager;
 
 interface
 uses LCLProc,zcmultiobjectcreateundocommand,zeentitiesmanager,gdbpalette,
-     zeentityfactory,gdbdrawcontext,ugdbdrawing,ugdbltypearray,uzcsysvars,
+     zeentityfactory,gdbdrawcontext,ugdbdrawing,uzestyleslinetypes,uzcsysvars,
      uzestyleslayers,sysutils,gdbasetypes,gdbase,UGDBDescriptor,varmandef,
      gdbobjectsconstdef,UGDBVisibleOpenArray,uzeentgenericsubentry,uzeentity,
      uzeentblockinsert,memman;

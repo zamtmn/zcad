@@ -903,7 +903,7 @@ GDBLayerArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
                     function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;
               end;
-//Generate on E:/zcad/cad_source/zengine/styles/ugdbltypearray.pas
+//Generate on E:/zcad/cad_source/zengine/styles/uzestyleslinetypes.pas
 TLTMode=(TLTContinous,TLTByLayer,TLTByBlock,TLTLineType);
 PTDashInfo=^TDashInfo;
 TDashInfo=(TDIDash,TDIText,TDIShape);

@@ -24,7 +24,7 @@ uses
  {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
  uzglviewareageneral,zeundostack,zcchangeundocommand,uzcoimultiobjects,
  uzcenitiesvariablesextender,gdbdrawcontext,ugdbdrawing,paths,fileformatsmanager,
- uzeentdimension,uzestylesdim,UGDBTextStyleArray,uzeenttext,ugdbltypearray,
+ uzeentdimension,uzestylesdim,UGDBTextStyleArray,uzeenttext,uzestyleslinetypes,
  URecordDescriptor,ugdbfontmanager,ugdbsimpledrawing,uzcsysvars,uzccommandsmanager,
  TypeDescriptors,GDBManager,uzcstrconsts,uzcctrlcontextmenu,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
  strproc,uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}

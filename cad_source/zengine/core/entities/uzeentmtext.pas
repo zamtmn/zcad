@@ -21,7 +21,7 @@ unit uzeentmtext;
 
 interface
 uses
-    uzglgeometry,uzgldrawcontext,gdbfieldprocessor,zeentityfactory,uzedrawingdef,
+    uzglgeometry,uzgldrawcontext,uzetextpreprocessor,zeentityfactory,uzedrawingdef,
     strproc,uzefont,uzeentabstracttext,UGDBPoint3DArray,uzestyleslayers,SysUtils,
     gdbasetypes,uzeentity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,
     GDBase,uzeenttext,gdbobjectsconstdef,geometry,uzeffdxfsupport,math,memman,uzeentsubordinated,

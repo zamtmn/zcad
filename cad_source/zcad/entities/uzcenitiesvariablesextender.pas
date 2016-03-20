@@ -20,7 +20,7 @@ unit uzcenitiesvariablesextender;
 
 interface
 uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,uzcshared,
-     uzeentdevice,TypeDescriptors,gdbfieldprocessor,UGDBOpenArrayOfByte,
+     uzeentdevice,TypeDescriptors,uzetextpreprocessor,UGDBOpenArrayOfByte,
      gdbasetypes,gdbase,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,memman;
 

@@ -21,7 +21,7 @@ uses
   uzccommandsabstract,
   uzccommandsimpl,
   gdbase,
-  GDBManager,
+  uzcutils,
   sysutils,
   {fileutil}LazUTF8,
   varmandef,

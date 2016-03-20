@@ -89,7 +89,7 @@ uses
   uzedrawing,
   uzcdrawings,     //Drawings manager, all open drawings are processed him
                       //"Менеджер" чертежей
-  GDBManager,         //different functions simplify the creation entities, while there are very few
+  uzcutils,         //different functions simplify the creation entities, while there are very few
                       //разные функции упрощающие создание примитивов, пока их там очень мало
   varmandef,
   Varman,

@@ -23,7 +23,7 @@ interface
 uses
  uzccomimport,paths,uzeffmanager,uzglbackendmanager,uzglviewareaabstract,uzgldrawerogl,
  uzcfcolors,uzcfdimstyles,uzcflinetypes,uzcftextstyles,uzcinfoform,uzefontmanager,uzedrawingsimple,uzccombase,
- uzcsysvars,uzccommandsmanager,TypeDescriptors,GDBManager,uzcstrconsts,UGDBStringArray,uzcctrlcontextmenu,
+ uzcsysvars,uzccommandsmanager,TypeDescriptors,uzcutils,uzcstrconsts,UGDBStringArray,uzcctrlcontextmenu,
  {$IFNDEF DELPHI}uzctranslations,{$ENDIF}uzcflayers,uzcfunits,strproc,uzctreenode,menus,
  {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} {fileutil}LazUTF8,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,

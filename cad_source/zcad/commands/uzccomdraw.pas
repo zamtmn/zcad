@@ -35,7 +35,7 @@ uses
   uzccommandsimpl,
   gdbase,
   uzcdrawings,
-  GDBManager,
+  uzcutils,
   sysutils,
   varmandef,
   uzglviewareadata,

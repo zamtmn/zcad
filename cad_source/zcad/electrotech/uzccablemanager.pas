@@ -36,7 +36,7 @@ type
                  end;
 {EXPORT-}
 implementation
-uses UGDBDescriptor;
+uses uzcdrawings;
 function TCableDesctiptor.GetObjTypeName;
 begin
      result:='TCableDesctiptor';

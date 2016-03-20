@@ -109,7 +109,7 @@ generic TGChangeCommand<_T>=object(TCustomChangeCommand)
   {$I TGChangeCommandIMPL.inc}
 {$UNDEF CLASSDECLARATION}
 implementation
-uses UGDBDescriptor,zcadinterface;
+uses uzcdrawings,zcadinterface;
 constructor TGChangeCommand.Assign(var data:_T);
 begin
      Addr:=@data;

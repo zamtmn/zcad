@@ -22,7 +22,7 @@ unit uzcsuptypededitors;
 interface
 
 uses
-  zeundostack,zebaseundocommands,usupportgui,Varman,UBaseTypeDescriptor,varmandef,StdCtrls,sysutils,Forms,UGDBDescriptor,Controls,Classes,strproc,uzcsysvars,uzccommandsmanager,zcadinterface;
+  zeundostack,zebaseundocommands,usupportgui,Varman,UBaseTypeDescriptor,varmandef,StdCtrls,sysutils,Forms,uzcdrawings,Controls,Classes,strproc,uzcsysvars,uzccommandsmanager,zcadinterface;
 
 type
   TUndoContext=record

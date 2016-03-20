@@ -22,14 +22,17 @@ unit uzcftextstyles;
 interface
 
 uses
-  zcchangeundocommand,zcobjectchangeundocommand2,uzedrawing,LMessages,uzefont,uzclog,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
+  zcchangeundocommand,zcobjectchangeundocommand2,uzedrawing,LMessages,uzefont,
+  uzclog,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 
-  gdbobjectsconstdef,uzestylestexts,UGDBDescriptor,gdbase,gdbasetypes,varmandef,uzcsuptypededitors,
+  gdbobjectsconstdef,uzestylestexts,uzcdrawings,gdbase,gdbasetypes,varmandef,
+  uzcsuptypededitors,
 
-  paths,zcadinterface, uzcstrconsts, uzcsysinfo,strproc, uzcshared, UBaseTypeDescriptor,
-  uzcimagesmanager, usupportgui, ZListView,uzefontmanager,varman,UGDBStringArray,uzeentity,uzeenttext;
+  paths,zcadinterface, uzcstrconsts, uzcsysinfo,strproc, uzcshared,UBaseTypeDescriptor,
+  uzcimagesmanager, usupportgui, ZListView,uzefontmanager,varman,UGDBStringArray,
+  uzeentity,uzeenttext;
 
 const
      NameColumn=0;

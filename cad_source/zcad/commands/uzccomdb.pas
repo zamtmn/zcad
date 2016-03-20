@@ -25,7 +25,7 @@ uses
   uzccommandsabstract,
   uzccommandsimpl,
   gdbase,
-  UGDBDescriptor,
+  uzcdrawings,
   sysutils,
   varmandef,
   varman,

@@ -2,7 +2,7 @@ unit aregGDBDescriptor;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,UGDBDescriptor;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzcdrawings;
 implementation
 var
 pt:PObjectDescriptor;

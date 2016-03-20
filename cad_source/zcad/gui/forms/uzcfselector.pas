@@ -3,7 +3,7 @@ unit uzcfselector;
 interface
 
 uses
-  strproc,UGDBDescriptor,gdbase,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  strproc,uzcdrawings,gdbase,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ButtonPanel, types, lclintf,lcltype, ComCtrls;
 
 type

@@ -23,7 +23,7 @@ interface
 
 uses
   gdbpalette,gdbobjectsconstdef,uzcflineweights,uzgldrawergdi,geometry,
-  gdbase,graphics,  usupportgui,StdCtrls,UGDBDescriptor,Controls,Classes,
+  gdbase,graphics,  usupportgui,StdCtrls,uzcdrawings,Controls,Classes,
   strproc,uzcsysvars,uzccommandsmanager;
 
 procedure DrawColor(Canvas:TCanvas; Index: Integer; ARect: TRect);

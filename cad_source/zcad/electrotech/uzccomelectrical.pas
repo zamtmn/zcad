@@ -15,7 +15,7 @@ uses
   uzcenitiesvariablesextender,gdbdrawcontext,uzedrawing,uzcvariablesutils,
   uzeentabstracttext,uzcstrconsts,UGDBSelectedObjArray,zeentityfactory,uzcsysvars,
   csvdocument,
-  UGDBOpenArrayOfPV,uzeentblockinsert,devices,UGDBTree,ugdbdescriptor,gdbasetypes,
+  UGDBOpenArrayOfPV,uzeentblockinsert,devices,UGDBTree,uzcdrawings,gdbasetypes,
   uzccommandsmanager,uzccomdraw,uzcentelleader,
   plugins,
   uzccommandsabstract,

@@ -27,7 +27,7 @@ uses
   plugins,
   uzccommandsimpl,
   gdbase,
-  UGDBDescriptor,
+  uzcdrawings,
   GDBManager,
   sysutils,
   varmandef,

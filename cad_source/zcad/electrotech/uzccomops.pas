@@ -13,7 +13,7 @@ uses
   uzctranslations,zeentitiesmanager,uzeentity,uzglviewareaabstract,gdbdrawcontext,
   uzeentabstracttext,uzeenttext,UGDBStringArray,zeentityfactory,uzcsysvars,strproc,
   gdbasetypes,uzccommandsmanager,uzclog,UGDBOpenArrayOfPObjects,plugins,
-  uzccommandsabstract,uzccommandsimpl,gdbase,UGDBDescriptor,GDBManager,sysutils,
+  uzccommandsabstract,uzccommandsimpl,gdbase,uzcdrawings,GDBManager,sysutils,
   varmandef,UGDBOpenArrayOfByte,uzeffdxf,zcadinterface,geometry,memman,gdbobjectsconstdef,
   uzccomdraw,UGDBVisibleOpenArray,uzeentline,paths,uzcshared,uzeentblockinsert,
   varman,uzccablemanager,uzeentdevice,uzeentmtext,math;

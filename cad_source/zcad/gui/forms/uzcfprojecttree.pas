@@ -20,10 +20,12 @@ unit uzcfprojecttree;
 {$INCLUDE def.inc}
 interface
 uses
- uzcsysvars,uzctranslations,uzcenitiesvariablesextender,uzedrawing,paths,UGDBStringArray,gdbobjectsconstdef,uzcstrconsts,uzcctrlcontextmenu,strproc,uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
- Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}ComCtrls,
- uzcdevicebaseabstract,uzclog,SysUtils,{UGDBTree,}gdbase,UGDBDescriptor{,math,commandline},varman,languade{,UGDBTracePropArray},
-  {ZEditsWithProcedure,zbasicvisible,}varmandef,uzcshared,uzcsysinfo{,ZTreeViewsGeneric},memman,gdbasetypes,uzccommandsimpl,uzccommandsabstract;
+ uzcsysvars,uzctranslations,uzcenitiesvariablesextender,uzedrawing,paths,
+ UGDBStringArray,gdbobjectsconstdef,uzcstrconsts,uzcctrlcontextmenu,strproc,
+ uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ Classes,FileUtil,Forms,stdctrls,Controls,ComCtrls,
+ uzcdevicebaseabstract,uzclog,SysUtils,gdbase,uzcdrawings,varman,languade,
+ varmandef,uzcshared,uzcsysinfo,memman,gdbasetypes,uzccommandsimpl,uzccommandsabstract;
 const
   uncat='UNCAT';
   uncat_='UNCAT_';

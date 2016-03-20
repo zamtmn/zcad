@@ -20,7 +20,7 @@ unit glstatemanager;
 {$INCLUDE def.inc}
 
 interface
-uses gdbpalette,{zcadsysvars,}gdbasetypes,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
+uses uzepalette,{zcadsysvars,}gdbasetypes,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
      {$IFNDEF DELPHI}gl,{glu,}glext,{$ELSE}dglOpenGL,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
      {$IFDEF WINDOWS}windows,{$ENDIF}
@@ -155,7 +155,7 @@ type
                            _LineStipplepattern: GLushort;
                            _ppolygonpattern:pointer;
 
-                           _colour:gdbpalette.TRGB;
+                           _colour:uzepalette.TRGB;
 
                            procedure myglbegin(mode:GLenum);inline;
                            procedure myglend;inline;

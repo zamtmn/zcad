@@ -19,9 +19,8 @@
 unit UGDBVisibleTreeArray;
 {$INCLUDE def.inc}
 interface
-uses UGDBEntTree,UGDBVisibleOpenArray,{UGDBOpenArrayOfPV,}
-     gdbasetypes,gdbase,
-     sysutils,geometry,memman,uzeentity;
+uses uzeentitiestree,UGDBVisibleOpenArray,gdbasetypes,gdbase,sysutils,geometry,
+     memman,uzeentity;
 type
 {Export+}
 PGDBObjEntityTreeArray=^GDBObjEntityTreeArray;

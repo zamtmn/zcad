@@ -20,7 +20,7 @@ unit uzeentdimension;
 
 interface
 uses zemathutils,uzgldrawcontext,uzeentabstracttext,uzestylestexts,UGDBXYZWStringArray,
-     uzestylesdim,uzeentmtext,uzestyleslayers,ugdbtrash,uzedrawingdef,GDBCamera,
+     uzestylesdim,uzeentmtext,uzestyleslayers,uzedrawingdef,uzecamera,
      strproc,UGDBOpenArrayOfByte,uzeenttext,geometry,uzeentline,gdbasetypes,uzeentcomplex,
      sysutils,uzeentity,GDBase,gdbobjectsconstdef,memman;
 type

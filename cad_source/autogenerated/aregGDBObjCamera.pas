@@ -2,7 +2,7 @@ unit aregGDBObjCamera;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,GDBCamera;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzecamera;
 implementation
 var
 pt:PObjectDescriptor;

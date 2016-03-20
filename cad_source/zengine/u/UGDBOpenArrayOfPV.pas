@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfPV;
 {$INCLUDE def.inc}
 interface
-uses uzgldrawcontext,uzedrawingdef,uzeentity,GDBCamera,gdbasetypes,
+uses uzgldrawcontext,uzedrawingdef,uzeentity,uzecamera,gdbasetypes,
      UGDBOpenArrayOfPObjects,sysutils,gdbase, geometry,memman,uzeentsubordinated;
 type
 {PGDBObjEntityArray=^GDBObjEntityArray;

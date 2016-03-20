@@ -21,7 +21,7 @@ unit uzcoimultipropertiesutil;
 
 interface
 uses
-  uzcoimultiobjects,gdbpalette,memman,uzcshared,sysutils,zeentityfactory,
+  uzcoimultiobjects,uzepalette,memman,uzcshared,sysutils,zeentityfactory,
   gdbase,
   uzcdrawings,
   varmandef,

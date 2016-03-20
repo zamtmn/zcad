@@ -20,12 +20,12 @@ unit uzglviewareageneral;
 {$INCLUDE def.inc}
 interface
 uses
-     LCLProc,memman,zemathutils,gdbpalette,
+     LCLProc,memman,zemathutils,uzepalette,
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
-     uzglviewareadata,uzgldrawcontext,uzeentity,uzedrawingabstract,UGDBPoint3DArray,UGDBEntTree,
+     uzglviewareadata,uzgldrawcontext,uzeentity,uzedrawingabstract,UGDBPoint3DArray,uzeentitiestree,
      gdbobjectsconstdef,uzestrconsts,UGDBTracePropArray,math,sysutils,uzedrawingdef,strproc,
      ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,
-     UGDBOpenArrayOfPV,uzeentgenericsubentry,GDBCamera,UGDBVisibleOpenArray,uzgldrawerabstract,
+     UGDBOpenArrayOfPV,uzeentgenericsubentry,uzecamera,UGDBVisibleOpenArray,uzgldrawerabstract,
      uzgldrawergeneral,uzglviewareaabstract;
 const
   ontracdist=10;

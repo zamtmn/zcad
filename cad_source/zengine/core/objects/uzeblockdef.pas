@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 } 
-unit GDBBlockDef;
+unit uzeblockdef;
 {$INCLUDE def.inc}
 interface
 uses uzeentity,zeentityfactory,uzgldrawcontext,gdbobjectextender,uzedrawingdef,

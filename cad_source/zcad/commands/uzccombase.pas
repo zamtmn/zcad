@@ -44,7 +44,7 @@ uses
   gdbobjectsconstdef,
   uzeentity,
  uzcshared,
- UGDBEntTree,
+ uzeentitiestree,
  gdbasetypes,memman,WindowsSpecific,
  UUnitManager,uzclog,Varman,
  dialogs,uzcinfoform;

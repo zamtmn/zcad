@@ -20,13 +20,13 @@ unit uzgldrawerogl;
 {$INCLUDE def.inc}
 interface
 uses
-    LCLProc,UGDBOpenArrayOfData,gdbpalette,
+    LCLProc,UGDBOpenArrayOfData,uzepalette,
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
     {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
     Classes,Controls,
-    geometry,uzgldrawergeneral,uzgldrawerabstract,glstatemanager,Graphics,gdbase,gdbasetypes,GDBCamera;
+    geometry,uzgldrawergeneral,uzgldrawerabstract,glstatemanager,Graphics,gdbase,gdbasetypes,uzecamera;
 const
   texturesize=128;
 type

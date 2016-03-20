@@ -20,10 +20,10 @@ unit uzeentgenericsubentry;
 {$INCLUDE def.inc}
 
 interface
-uses gdbpalette,uzgldrawcontext,uzedrawingdef,GDBCamera,uzestyleslayers,
+uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzestyleslayers,
      UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,
      uzeentwithmatrix,uzeentsubordinated,gdbase,geometry,uzeentity,
-     gdbobjectsconstdef,memman,UGDBEntTree;
+     gdbobjectsconstdef,memman,uzeentitiestree;
 type
 //GDBObjGenericSubEntry=object(GDBObjWithLocalCS)
 //GDBObjGenericSubEntry=object(GDBObj3d)

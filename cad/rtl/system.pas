@@ -461,7 +461,7 @@ TImageDegradation=packed record
                         RD_ID_PrefferedRenderTime:PGDBInteger;(*'Prefered rendertime'*)
                     end;
 PExtensionData=GDBPointer;
-//Generate on E:/zcad/cad_source/zengine/core/gdbpalette.pas
+//Generate on E:/zcad/cad_source/zengine/core/objects/uzepalette.pas
   PTRGB=^TRGB;
   TRGB=packed record
             r:GDBByte;(*'Red'*)
@@ -1664,7 +1664,7 @@ GDBObjSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericWithSubord
                          //function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;abstract;
                          destructor done;virtual;abstract;
          end;
-//Generate on E:/zcad/cad_source/zengine/core/gdbvisualprop.pas
+//Generate on E:/zcad/cad_source/zengine/core/entities/gdbvisualprop.pas
 PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=packed record
                       Layer:PGDBLayerPropObjInsp;(*'Layer'*)(*saved_to_shd*)
@@ -2116,7 +2116,7 @@ GDBObjEllipse={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  procedure ReCalcFromObjMatrix;virtual;abstract;
                  function CreateInstance:PGDBObjEllipse;static;
            end;
-//Generate on E:/zcad/cad_source/zengine/core/UGDBEntTree.pas
+//Generate on E:/zcad/cad_source/zengine/core/objects/uzeentitiestree.pas
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);
          PTEntTreeNode=^TEntTreeNode;
          TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -2218,7 +2218,7 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                               function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;abstract;
                               procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;abstract;
                       end;
-//Generate on E:/zcad/cad_source/zengine/core/GDBBlockdef.pas
+//Generate on E:/zcad/cad_source/zengine/core/objects/uzeblockdef.pas
 PGDBObjBlockdef=^GDBObjBlockdef;
 GDBObjBlockdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                      Name:GDBString;(*saved_to_shd*)
@@ -2859,7 +2859,7 @@ GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  class function GetDXFIOFeatures:TDXFEntIODataManager;
                  //function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
            end;
-//Generate on E:/zcad/cad_source/zengine/core/GDBRoot.pas
+//Generate on E:/zcad/cad_source/zengine/core/objects/uzeroot.pas
 PGDBObjRoot=^GDBObjRoot;
 GDBObjRoot={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                  constructor initnul;
@@ -2880,7 +2880,7 @@ GDBObjRoot={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                  procedure calcbb(var DC:TDrawContext);virtual;abstract;
                  //function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;abstract;
            end;
-//Generate on E:/zcad/cad_source/zengine/core/GDBCamera.pas
+//Generate on E:/zcad/cad_source/zengine/core/objects/uzecamera.pas
 PGDBObjCamera=^GDBObjCamera;
 GDBObjCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBBaseCamera)
                    modelMatrixLCS:DMatrix4D;

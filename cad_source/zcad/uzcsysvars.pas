@@ -20,7 +20,7 @@ unit uzcsysvars;
 {$INCLUDE def.inc}
 
 interface
-uses gdbasetypes,gdbpalette,
+uses gdbasetypes,uzepalette,
      gdbase,UGDBStringArray,
 {$IFDEF LCLGTK2}
 gtk2,gdk2,

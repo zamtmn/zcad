@@ -1,6 +1,6 @@
 components/zebase/gdbasetypes.pas
 components/zebase/gdbase.pas
-zengine/core/gdbpalette.pas
+zengine/core/objects/uzepalette.pas
 components/zcontainers/UOpenArray.pas
 components/zcontainers/UGDBOpenArray.pas
 components/zcontainers/UGDBOpenArrayOfData.pas
@@ -44,7 +44,7 @@ zengine/zgl/uzgprimitivessarray.pas
 zengine/zgl/uzglvectorobject.pas
 zengine/zgl/uzglgeometry.pas
 zengine/core/entities/uzeentsubordinated.pas
-zengine/core/gdbvisualprop.pas
+zengine/core/entities/gdbvisualprop.pas
 zengine/core/entities/uzeentity.pas
 zengine/core/entities/uzeent3d.pas
 zengine/core/entities/uzeent3dface.pas
@@ -57,10 +57,10 @@ zengine/core/entities/uzeentabstracttext.pas
 zengine/core/entities/uzeentcircle.pas
 zengine/core/entities/uzeentarc.pas
 zengine/core/entities/uzeentellipse.pas
-zengine/core/UGDBEntTree.pas
+zengine/core/objects/uzeentitiestree.pas
 zengine/u/UGDBVisibleTreeArray.pas
 zengine/core/entities/uzeentgenericsubentry.pas
-zengine/core/GDBBlockdef.pas
+zengine/core/objects/uzeblockdef.pas
 zengine/u/UGDBObjBlockdefArray.pas
 zengine/core/entities/uzeentcomplex.pas
 zengine/core/entities/uzeentdimension.pas
@@ -83,8 +83,8 @@ zengine/core/entities/uzeentcurve.pas
 zengine/core/entities/uzeentpolyline.pas
 zengine/core/entities/uzeentspline.pas
 zcad/electrotech/uzcentcable.pas
-zengine/core/GDBRoot.pas
-zengine/core/GDBCamera.pas
+zengine/core/objects/uzeroot.pas
+zengine/core/objects/uzecamera.pas
 zengine/core/GDBTable.pas
 zcad/electrotech/uzcentelleader.pas
 components/zcontainers/UGDBOpenArrayOfTObjLinkRecord.pas

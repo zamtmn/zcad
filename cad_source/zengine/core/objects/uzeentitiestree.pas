@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit UGDBEntTree;
+unit uzeentitiestree;
 {$INCLUDE def.inc}
 interface
 uses

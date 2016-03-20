@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit gdbpalette;
+unit uzepalette;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes;

@@ -20,7 +20,7 @@ unit uzeentblockinsert;
 
 interface
 uses uzeentity,uzgldrawcontext,zeentityfactory,uzedrawingdef,uzestyleslayers,math,
-     gdbasetypes,uzeentcomplex,sysutils,UGDBObjBlockdefArray,GDBBlockDef,GDBase,
+     gdbasetypes,uzeentcomplex,sysutils,UGDBObjBlockdefArray,uzeblockdef,GDBase,
      gdbobjectsconstdef,uzglviewareadata,geometry,uzeffdxfsupport,memman,uzeentsubordinated,
      UGDBOpenArrayOfByte;
 const zcadmetric='!!ZMODIFIER:';

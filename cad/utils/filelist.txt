@@ -44,7 +44,7 @@ zengine/zgl/uzgprimitivessarray.pas
 zengine/zgl/uzglvectorobject.pas
 zengine/zgl/uzglgeometry.pas
 zengine/core/entities/uzeentsubordinated.pas
-zengine/core/entities/gdbvisualprop.pas
+zengine/core/entities/uzeentitiesprop.pas
 zengine/core/entities/uzeentity.pas
 zengine/core/entities/uzeent3d.pas
 zengine/core/entities/uzeent3dface.pas

@@ -1664,7 +1664,7 @@ GDBObjSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericWithSubord
                          //function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;abstract;
                          destructor done;virtual;abstract;
          end;
-//Generate on E:/zcad/cad_source/zengine/core/entities/gdbvisualprop.pas
+//Generate on E:/zcad/cad_source/zengine/core/entities/uzeentitiesprop.pas
 PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=packed record
                       Layer:PGDBLayerPropObjInsp;(*'Layer'*)(*saved_to_shd*)

@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 } 
-unit gdbfieldprocessorimpl;
+unit uzctextpreprocessorimpl;
 {$INCLUDE def.inc}
 
 interface

@@ -121,7 +121,7 @@ uses
   uzcshared,
   uzcstrconsts,
   iopalette,
-  gdbfieldprocessorimpl,
+  uzctextpreprocessorimpl,
   uzcregisterenitiesfeatures,
   uzcregisterenitiesextenders,
   uzcoiregistermultiproperties,

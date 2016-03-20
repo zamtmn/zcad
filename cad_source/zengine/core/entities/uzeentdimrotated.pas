@@ -21,7 +21,7 @@ unit uzeentdimrotated;
 interface
 uses zeentityfactory,uzeentdimaligned,uzeentdimension,uzestylesdim,
      uzestyleslayers,uzedrawingdef,strproc,UGDBOpenArrayOfByte,
-     geometry,gdbasetypes,sysutils,uzeentity,GDBase,uzectsconsts,uzeffdxfsupport,
+     geometry,gdbasetypes,sysutils,uzeentity,GDBase,uzeconsts,uzeffdxfsupport,
      memman,uzeentsubordinated;
 type
 {EXPORT+}

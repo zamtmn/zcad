@@ -80,7 +80,7 @@ uses
   zcadinterface,
   gdbase,gdbasetypes, //base types
                       //описания базовых типов
-  uzectsconsts, //base constants
+  uzeconsts, //base constants
                       //описания базовых констант
   uzccommandsmanager,
   uzccommandsabstract,

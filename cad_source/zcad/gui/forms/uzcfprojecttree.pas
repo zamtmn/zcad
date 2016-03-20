@@ -21,7 +21,7 @@ unit uzcfprojecttree;
 interface
 uses
  uzcsysvars,uzctranslations,uzcenitiesvariablesextender,uzedrawing,paths,
- UGDBStringArray,uzectsconsts,uzcstrconsts,uzcctrlcontextmenu,strproc,
+ UGDBStringArray,uzeconsts,uzcstrconsts,uzcctrlcontextmenu,strproc,
  uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  Classes,FileUtil,Forms,stdctrls,Controls,ComCtrls,
  uzcdevicebaseabstract,uzclog,SysUtils,gdbase,uzcdrawings,varman,languade,

@@ -22,7 +22,7 @@ interface
 uses
     zeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,UGDBOpenArrayOfPObjects,
     geometry,uzeffdxfsupport,uzestyleslayers,gdbasetypes,UGDBSelectedObjArray,uzeentsubordinated,
-    uzeent3d,uzeentity,sysutils,UGDBOpenArrayOfByte,GDBase,uzectsconsts,memman;
+    uzeent3d,uzeentity,sysutils,UGDBOpenArrayOfByte,GDBase,uzeconsts,memman;
 type
 {REGISTEROBJECTTYPE GDBObj3DFace}
 {Export+}

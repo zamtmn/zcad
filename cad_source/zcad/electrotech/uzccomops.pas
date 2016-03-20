@@ -14,7 +14,7 @@ uses
   uzeentabstracttext,uzeenttext,UGDBStringArray,zeentityfactory,uzcsysvars,strproc,
   gdbasetypes,uzccommandsmanager,uzclog,UGDBOpenArrayOfPObjects,plugins,
   uzccommandsabstract,uzccommandsimpl,gdbase,uzcdrawings,uzcutils,sysutils,
-  varmandef,UGDBOpenArrayOfByte,uzeffdxf,zcadinterface,geometry,memman,uzectsconsts,
+  varmandef,UGDBOpenArrayOfByte,uzeffdxf,zcadinterface,geometry,memman,uzeconsts,
   uzccomdraw,UGDBVisibleOpenArray,uzeentline,paths,uzcshared,uzeentblockinsert,
   varman,uzccablemanager,uzeentdevice,uzeentmtext,math;
 

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzectsconsts;
+unit uzeconsts;
 {$INCLUDE def.inc}
 
 interface

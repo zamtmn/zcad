@@ -24,7 +24,7 @@ uses LCLProc,paths,strproc,uzgldrawcontext,usimplegenerics,uzestylesdim,zeentity
     UGDBNamedObjectsArray,uzestyleslinetypes,uzedrawingsimple,uzelongprocesssupport,
     uzglviewareadata,uzeffdxfsupport,uzestrconsts,uzestylestexts,
     geometry,uzeentsubordinated,gdbasetypes,uzeentgenericsubentry,gdbase,
-    sysutils,memman,uzectsconsts,UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,
+    sysutils,memman,uzeconsts,UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,
     UGDBOpenArrayOfByte,UGDBVisibleOpenArray,uzeentity,uzeblockdef,uzestyleslayers,uzeffmanager;
 type
    TCreateExtLoadData=function:pointer;

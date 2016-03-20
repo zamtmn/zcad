@@ -23,7 +23,7 @@ uses
     zeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentwithlocalcs,
     UGDBOpenArrayOfPObjects,geometry,uzeffdxfsupport,uzestyleslayers,gdbasetypes,
     UGDBSelectedObjArray,uzeentsubordinated,uzeentity,sysutils,UGDBOpenArrayOfByte,
-    GDBase,uzectsconsts,memman;
+    GDBase,uzeconsts,memman;
 type
 {REGISTEROBJECTTYPE GDBObjSolid}
 {Export+}

@@ -41,7 +41,7 @@ uses
   UGDBOpenArrayOfByte,
   uzeffdxf,
   zcadinterface,
-  uzectsconsts,
+  uzeconsts,
   uzeentity,
  uzcshared,
  uzeentitiestree,

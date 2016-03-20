@@ -25,7 +25,7 @@ uses
   gdbase,
   uzcdrawings,
   varmandef,
-  uzectsconsts,
+  uzeconsts,
   uzeentity,
   gdbasetypes,
   Varman,

@@ -22,7 +22,7 @@ unit uzcgui2linewidth;
 interface
 
 uses
-  uzectsconsts,uzcflineweights,usupportgui,StdCtrls,uzcdrawings,
+  uzeconsts,uzcflineweights,usupportgui,StdCtrls,uzcdrawings,
   Controls,Classes,strproc,uzcsysvars,uzccommandsmanager;
 
 type

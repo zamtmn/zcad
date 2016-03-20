@@ -43,7 +43,7 @@ uses
   zcadinterface,
   geometry,
   memman,
-  uzectsconsts,
+  uzeconsts,
   uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
   uzcshared,uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,UGDBOpenArrayOfData,math,uzeenttable,UGDBStringArray,printerspecfunc;
 const

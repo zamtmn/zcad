@@ -22,7 +22,7 @@ interface
 uses zemathutils,uzgldrawcontext,uzeentabstracttext,uzestylestexts,UGDBXYZWStringArray,
      uzestylesdim,uzeentmtext,uzestyleslayers,uzedrawingdef,uzecamera,
      strproc,UGDBOpenArrayOfByte,uzeenttext,geometry,uzeentline,gdbasetypes,uzeentcomplex,
-     sysutils,uzeentity,GDBase,uzectsconsts,memman;
+     sysutils,uzeentity,GDBase,uzeconsts,memman;
 type
 {EXPORT+}
 PTDXFDimData2D=^TDXFDimData2D;

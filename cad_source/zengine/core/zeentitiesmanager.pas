@@ -21,7 +21,7 @@ unit zeentitiesmanager;
 
 
 interface
-uses LCLProc,uzectsconsts,uzepalette,uzestyleslinetypes,zeentityfactory,
+uses LCLProc,uzeconsts,uzepalette,uzestyleslinetypes,zeentityfactory,
      uzestyleslayers,sysutils,gdbase,gdbasetypes,UGDBVisibleOpenArray,
      uzeentgenericsubentry,uzeentity,memman;
 procedure GDBObjSetEntityProp(const pobjent: PGDBObjEntity;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight);

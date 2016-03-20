@@ -855,11 +855,11 @@
         <IsPartOfProject Value="True"/>
       </Unit149>
       <Unit150>
-        <Filename Value="zengine/core/uzectsconsts.pas"/>
+        <Filename Value="zengine/core/entities/uzeenttable.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit150>
       <Unit151>
-        <Filename Value="zengine/core/entities/uzeenttable.pas"/>
+        <Filename Value="zengine/core/uzeconsts.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit151>
     </Units>

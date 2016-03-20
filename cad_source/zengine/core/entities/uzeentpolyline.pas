@@ -22,7 +22,7 @@ unit uzeentpolyline;
 interface
 uses zeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
      UGDBOpenArrayOfPObjects,uzestyleslayers,uzeentsubordinated,uzeentcurve,gdbasetypes,
-     uzeentity,UGDBOpenArrayOfByte,GDBase,uzectsconsts,uzglviewareadata,
+     uzeentity,UGDBOpenArrayOfByte,GDBase,uzeconsts,uzglviewareadata,
      geometry,uzeffdxfsupport,sysutils,memman;
 type
 {REGISTEROBJECTTYPE GDBObjPolyline}

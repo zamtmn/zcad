@@ -9,7 +9,7 @@ uses
   ButtonPanel, Buttons, ExtCtrls, ComCtrls, Spin,
 
   uzcflinetypesload,uzcsysvars, uzedrawingsimple, gdbase, gdbasetypes,
-  uzestyleslinetypes,uzcdrawings,uzcimagesmanager,uzcsysinfo,strproc,usupportgui,ugdbutil,
+  uzestyleslinetypes,uzcdrawings,uzcimagesmanager,uzcsysinfo,strproc,usupportgui,uzeutils,
   paths,uzcstrconsts,uzcshared,UGDBNamedObjectsArray;
 
 type

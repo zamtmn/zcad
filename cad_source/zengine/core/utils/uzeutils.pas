@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit ugdbutil;
+unit uzeutils;
 {$INCLUDE def.inc}
 interface
 uses

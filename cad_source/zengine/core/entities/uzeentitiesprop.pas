@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit gdbvisualprop;
+unit uzeentitiesprop;
 {$INCLUDE def.inc}
 interface
 uses uzepalette,uzestyleslinetypes,gdbasetypes,GDBase,geometry,sysutils,memman,

@@ -20,7 +20,7 @@ unit GDBTable;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,uzeentabstracttext,ugdbtrash,uzedrawingdef,strproc,UGDBOpenArrayOfByte,
+uses uzgldrawcontext,uzeentabstracttext,ugdbtrash,uzedrawingdef,strproc,UGDBOpenArrayOfByte,
      uzestylestables,uzeentline,gdbasetypes,uzeentcomplex,sysutils,UGDBTable,
      UGDBStringArray,uzeentmtext,uzeentity,GDBase,gdbobjectsconstdef,geometry,
      memman;

@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-unit gdbdrawcontext;
+unit uzgldrawcontext;
 {$INCLUDE def.inc}
 interface
 uses gdbpalette,gdbasetypes,gdbase,uzgldrawerabstract,gdbobjectsconstdef,geometry;

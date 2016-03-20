@@ -20,7 +20,7 @@ unit uzeentspline;
 {$INCLUDE def.inc}
 
 interface
-uses LCLProc,gluinterface,zeentityfactory,gdbdrawcontext,glstatemanager,UGDBOpenArrayOfData,
+uses LCLProc,gluinterface,zeentityfactory,uzgldrawcontext,glstatemanager,UGDBOpenArrayOfData,
      UGDBPoint3DArray,uzedrawingdef,GDBCamera,UGDBVectorSnapArray,
      UGDBOpenArrayOfPObjects,uzestyleslayers,uzeentsubordinated,uzeentcurve,gdbasetypes,
      uzeentity,UGDBOpenArrayOfByte,GDBase,gdbobjectsconstdef,uzglviewareadata,

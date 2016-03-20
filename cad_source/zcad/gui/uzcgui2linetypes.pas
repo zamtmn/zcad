@@ -22,7 +22,7 @@ unit uzcgui2linetypes;
 interface
 
 uses
-  uzgldrawergdi,geometry, gdbdrawcontext, gdbvisualprop, gdbase, uzglgeometry,
+  uzgldrawergdi,geometry,uzgldrawcontext,gdbvisualprop,gdbase,uzglgeometry,
   uzestyleslinetypes,graphics,gdbasetypes,usupportgui,StdCtrls,uzcdrawings,
   uzcstrconsts,Controls,Classes,strproc,uzcsysvars,uzccommandsmanager;
 

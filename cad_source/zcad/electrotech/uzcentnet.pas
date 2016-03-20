@@ -8,7 +8,7 @@ unit uzcentnet;
 {$INCLUDE def.inc}
 
 interface
-uses gdbobjectextender,zeentityfactory,Varman,gdbdrawcontext,uzestyleslayers,
+uses gdbobjectextender,zeentityfactory,Varman,uzgldrawcontext,uzestyleslayers,
      uzeentgenericsubentry,uzedrawingdef,gdbvisualprop,uzcsysvars,UGDBOpenArrayOfByte,
      gdbasetypes,uzeentity,UGDBOpenArrayOfPV,uzeentconnected,gdbobjectsconstdef,
      varmandef,geometry,gdbase,UGDBGraf,memman,uzeentsubordinated,uunitmanager,

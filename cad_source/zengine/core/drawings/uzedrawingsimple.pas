@@ -24,7 +24,7 @@ uses uzedrawingdef,zeblockdefsfactory,uzestylesdim,uzeentwithlocalcs,
      UGDBNumerator, gdbase,sysutils, memman,geometry,gdbasetypes,uzeentgenericsubentry,
      uzestyleslayers,uzestyleslinetypes,uzeentity,UGDBSelectedObjArray,uzestylestexts,
      GDBCamera,UGDBOpenArrayOfPV, GDBRoot,uzefont,UGDBOpenArrayOfPObjects,
-     uzglviewareaabstract,uzglviewareageneral,gdbdrawcontext;
+     uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext;
 type
 TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:GDBString) of object;
 {EXPORT+}

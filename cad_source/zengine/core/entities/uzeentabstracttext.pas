@@ -19,7 +19,7 @@ unit uzeentabstracttext;
 {$INCLUDE def.inc}
 
 interface
-uses uzglviewareageneral,gdbdrawcontext,uzeentity,GDBCamera,UGDBOpenArrayOfPObjects,
+uses uzglviewareageneral,uzgldrawcontext,uzeentity,GDBCamera,UGDBOpenArrayOfPObjects,
      strproc,sysutils,uzeentplainwithox,gdbasetypes,UGDBSelectedObjArray,GDBase,
      gdbobjectsconstdef,geometry,math;
 type

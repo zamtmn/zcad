@@ -76,7 +76,7 @@ uses
                       //модуль описывающий "фабрику" для создания примитивов
   uzcsysvars,        //system global variables
                       //системные переменные
-  gdbdrawcontext,
+  uzgldrawcontext,
   zcadinterface,
   gdbase,gdbasetypes, //base types
                       //описания базовых типов

@@ -20,8 +20,8 @@ unit UGDBEntTree;
 {$INCLUDE def.inc}
 interface
 uses
-    {math,}graphics,
-    gdbdrawcontext,{zcadsysvars,}geometry,UGDBVisibleOpenArray,uzeentity,gdbase,gdbasetypes,{log,}memman;
+    graphics,
+    uzgldrawcontext,geometry,UGDBVisibleOpenArray,uzeentity,gdbase,gdbasetypes,{log,}memman;
 const
      IninialNodeDepth=-1;
 type

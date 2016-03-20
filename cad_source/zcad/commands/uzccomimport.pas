@@ -19,13 +19,13 @@
 unit uzccomimport;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,zeentityfactory,
-    {$IFNDEF DELPHI}dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}
-    uzedrawingsimple,
-    uzeentcircle,uzeentarc,uzeentline,
-    geometry,uzcshared,gdbasetypes,uzclog,gdbase,
-    sysutils,memman,gdbobjectsconstdef,
-    UGDBOpenArrayOfByte,uzeentity;
+uses uzgldrawcontext,zeentityfactory,
+     {$IFNDEF DELPHI}dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}
+     uzedrawingsimple,
+     uzeentcircle,uzeentarc,uzeentline,
+     geometry,uzcshared,gdbasetypes,uzclog,gdbase,
+     sysutils,memman,gdbobjectsconstdef,
+     UGDBOpenArrayOfByte,uzeentity;
 {$IFNDEF DELPHI}
 procedure Import(name: GDBString;var drawing:TSimpleDrawing);
 {$ENDIF}

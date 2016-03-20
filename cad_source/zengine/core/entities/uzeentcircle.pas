@@ -20,7 +20,7 @@ unit uzeentcircle;
 {$INCLUDE def.inc}
 interface
 uses
-    zeentityfactory,uzeentsubordinated,gdbdrawcontext,uzedrawingdef,GDBCamera,
+    zeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,GDBCamera,
     UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,GDBHelpObj,UGDBSelectedObjArray,
     uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,
     GDBase,uzeentwithlocalcs,gdbobjectsconstdef,uzglviewareadata,geometry,uzeffdxfsupport,memman;

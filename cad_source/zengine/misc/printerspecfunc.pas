@@ -46,7 +46,7 @@ type
     end;
 implementation
 uses
-    UGDBDescriptor,geometry;
+    uzcdrawings,geometry;
 procedure TPrinterRasterizer.myglPointSize(const size: GLfloat);
 begin
      myglLineWidth(size);

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit UGDBDescriptor;
+unit uzcdrawings;
 {$INCLUDE def.inc}
 interface
 uses

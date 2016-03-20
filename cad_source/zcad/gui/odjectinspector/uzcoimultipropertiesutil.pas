@@ -23,7 +23,7 @@ interface
 uses
   uzcoimultiobjects,gdbpalette,memman,uzcshared,sysutils,zeentityfactory,
   gdbase,
-  UGDBDescriptor,
+  uzcdrawings,
   varmandef,
   uzeentity,
   gdbasetypes,

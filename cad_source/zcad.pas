@@ -60,7 +60,7 @@ uses
 
   {$INCLUDE allgeneratedfiles.inc}
 
-  UGDBDescriptor,
+  uzcdrawings,
 
   (*            //все нужные файлы перечислены в allgeneratedfiles.inc
   {DXF entities}
@@ -157,7 +157,7 @@ begin
 
   //инициализация GDB
   FontManager.EnumerateFontFiles;
-  ugdbdescriptor.startup('*rtl/dwg/DrawingVars.pas','');
+  uzcdrawings.startup('*rtl/dwg/DrawingVars.pas','');
 
   //создание окна программы
   Application.CreateForm(TZCADMainWindow,ZCADMainWindow);
@@ -188,7 +188,7 @@ begin
   //SplashWindow.TXTOut('GDBCommandsOPS.finalize;');GDBCommandsOPS.finalize;
   //SplashWindow.TXTOut('GDBCommandsElectrical.finalize;');GDBCommandsElectrical.finalize;
 
-  SplashForm.TXTOut('ugdbdescriptor.finalize;',false);ugdbdescriptor.finalize;
+  SplashForm.TXTOut('ugdbdescriptor.finalize;',false);uzcdrawings.finalize;
 
   programlog.logoutstr('END.',0,LM_Necessarily);
   programlog.logoutstr('<<<<<<<<<<<<<<<Start units finalization',0,LM_Debug);

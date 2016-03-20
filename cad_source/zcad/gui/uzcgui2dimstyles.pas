@@ -22,7 +22,7 @@ unit uzcgui2dimstyles;
 interface
 
 uses
-  usupportgui,StdCtrls,UGDBDescriptor,uzcstrconsts,Controls,Classes,uzestylesdim,
+  usupportgui,StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,uzestylesdim,
   strproc,uzcsysvars,uzccommandsmanager,zcadinterface;
 
 type

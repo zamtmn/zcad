@@ -66,7 +66,7 @@ generic TGObjectChangeCommand2<_T>=object(TCustomChangeCommand)
   {$I TGObjectChangeCommand2IMPL.inc}
 {$UNDEF CLASSDECLARATION}
 implementation
-uses UGDBDescriptor;
+uses uzcdrawings;
 constructor TGObjectChangeCommand2.Assign(var _dodata:_T;_domethod,_undomethod:tmethod);
 begin
   AutoProcessGDB:=True;

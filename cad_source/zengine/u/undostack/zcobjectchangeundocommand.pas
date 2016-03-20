@@ -52,7 +52,7 @@ function PushCreateTGObjectChangeCommand(var us:GDBObjOpenArrayOfUCommands; var 
 
 
 implementation
-uses UGDBDescriptor;
+uses uzcdrawings;
 
 constructor TGObjectChangeCommand.Assign(var _dodata:_T;_method:tmethod);
 begin

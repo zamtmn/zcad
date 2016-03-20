@@ -22,7 +22,7 @@ interface
 uses paths,TypeDescriptors,uzctranslations,uzcshared,Forms,zcadinterface,GDBRoot,
      gdbase,uzedrawingdef,gdbdrawcontext,UGDBStringArray,varmandef,uzedrawingsimple,
      uzeentity,uzcenitiesvariablesextender,zcobjectinspector,uzcguimanager,uzcstrconsts,
-     Types,Controls,UGDBDescriptor,Varman,UUnitManager,uzcsysvars,gdbasetypes,uzcsysinfo;
+     Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,gdbasetypes,uzcsysinfo;
 implementation
 procedure ZCADFormSetupProc(Form:TControl);
 var

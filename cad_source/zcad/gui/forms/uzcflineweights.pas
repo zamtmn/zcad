@@ -3,7 +3,7 @@ unit uzcflineweights;
 interface
 
 uses
-  uzepalette,gdbobjectsconstdef,gdbase,uzcstrconsts,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  uzepalette,uzectsconsts,gdbase,uzcstrconsts,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ButtonPanel, StdCtrls, types, lclintf,lcltype;
 
 type

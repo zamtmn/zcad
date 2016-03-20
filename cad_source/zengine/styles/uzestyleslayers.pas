@@ -20,7 +20,7 @@ unit uzestyleslayers;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes,sysutils,gdbase, geometry,
-     gdbobjectsconstdef,UGDBNamedObjectsArray,StrProc;
+     uzectsconsts,UGDBNamedObjectsArray,StrProc;
 type
 {REGISTEROBJECTTYPE GDBLayerArray}
 {EXPORT+}

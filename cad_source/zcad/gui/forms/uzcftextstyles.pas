@@ -27,7 +27,7 @@ uses
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 
-  gdbobjectsconstdef,uzestylestexts,uzcdrawings,gdbase,gdbasetypes,varmandef,
+  uzectsconsts,uzestylestexts,uzcdrawings,gdbase,gdbasetypes,varmandef,
   uzcsuptypededitors,
 
   paths,zcadinterface, uzcstrconsts, uzcsysinfo,strproc, uzcshared,UBaseTypeDescriptor,

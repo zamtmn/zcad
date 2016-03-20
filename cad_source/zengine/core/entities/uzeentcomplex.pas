@@ -23,7 +23,7 @@ interface
 uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,UGDBOpenArrayOfPObjects,
      uzestyleslayers,gdbasetypes,sysutils,UGDBSelectedObjArray,UGDBVisibleOpenArray,
      uzeentity,UGDBVisibleTreeArray,uzeentitiestree,GDBase,uzeentwithlocalcs,
-     gdbobjectsconstdef,geometry,memman;
+     uzectsconsts,geometry,memman;
 type
 {EXPORT+}
 PGDBObjComplex=^GDBObjComplex;

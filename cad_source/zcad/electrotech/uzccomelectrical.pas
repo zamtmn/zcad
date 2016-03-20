@@ -29,7 +29,7 @@ uses
   zcadinterface,
   geometry,
   memman,
-  gdbobjectsconstdef,
+  uzectsconsts,
   uzeentity,uzeentline,
   uzcentnet,
   uzcshared,uzeentsubordinated,uzcentcable,varman,WindowsSpecific,uunitmanager,

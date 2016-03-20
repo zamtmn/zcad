@@ -24,7 +24,7 @@ uses
     uzglgeometry,uzgldrawcontext,gdbobjectextender,uzetextpreprocessor,zeentityfactory,
     uzedrawingdef,uzecamera,strproc,sysutils,uzefont,uzestyleslayers,gdbasetypes,
     uzeentabstracttext,uzeentity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,GDBase,
-    gdbobjectsconstdef,uzglviewareadata,geometry,uzeffdxfsupport,memman,uzeentsubordinated,
+    uzectsconsts,uzglviewareadata,geometry,uzeffdxfsupport,memman,uzeentsubordinated,
     uzestylestexts;
 type
 {REGISTEROBJECTTYPE GDBObjText}

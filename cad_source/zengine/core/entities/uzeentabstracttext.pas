@@ -21,7 +21,7 @@ unit uzeentabstracttext;
 interface
 uses uzglviewareageneral,uzgldrawcontext,uzeentity,uzecamera,UGDBOpenArrayOfPObjects,
      strproc,sysutils,uzeentplainwithox,gdbasetypes,UGDBSelectedObjArray,GDBase,
-     gdbobjectsconstdef,geometry,math;
+     uzectsconsts,geometry,math;
 type
 //jstm(*'TopCenter'*)=2,
 {EXPORT+}

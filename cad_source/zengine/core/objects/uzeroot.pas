@@ -22,7 +22,7 @@ unit uzeroot;
 interface
 Uses
    uzgldrawcontext,uzedrawingdef,uzecamera,uzeentitiestree,gdbase,gdbasetypes,
-   gdbobjectsconstdef,uzeentity,uzeentgenericsubentry,uzeentconnected,uzeentsubordinated,
+   uzectsconsts,uzeentity,uzeentgenericsubentry,uzeentconnected,uzeentsubordinated,
    geometry;
 type
 {REGISTEROBJECTTYPE GDBObjRoot}

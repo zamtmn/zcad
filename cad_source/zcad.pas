@@ -91,7 +91,7 @@ uses
 
 
   //varman,
-  GDBManager,
+  uzcutils,
   //UGDBDescriptor,
   uzccommandsmanager,
   uzcdevicebase,

@@ -26,7 +26,7 @@ uses uzestyleslayers,uzestyleslinetypes,gdbobjectsconstdef,zeentitiesmanager,
      memman,uzcsysvars,GDBase,GDBasetypes,uzeentgenericsubentry,uzeentity;
 implementation
 uses
-    {log,}GDBManager;
+    uzcutils;
 function CreateClosedFilledBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString):PGDBObjBlockdef;
 var
    BlockDefArray:PGDBObjBlockdefArray;

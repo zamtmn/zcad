@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit GDBManager;
+unit uzcutils;
 {$INCLUDE def.inc}
 
 

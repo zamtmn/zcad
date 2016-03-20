@@ -27,7 +27,7 @@ uses uzccommandsimpl,strproc,UGDBOpenArrayOfByte,uzccommandsabstract,paths,
      memman,uzcsysvars,GDBase,GDBasetypes,uzeentgenericsubentry,uzeentity;
 implementation
 uses
-    uzcdrawings,uzccombase,uzclog,GDBManager;
+    uzcdrawings,uzccombase,uzclog,uzcutils;
 function LoadLibraryBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString):PGDBObjBlockdef;
 var
   DependOnBlock,tdp:gdbstring;

@@ -24,7 +24,7 @@ uses
     zemathutils,uzgldrawcontext,uzedrawing,uzedrawingdef,paths,uzestylesdim,
     uzedrawingabstract,WindowsSpecific,LResources,uzcsysvars,zcadinterface,
     uzcstrconsts,strproc,uzeblockdef,UGDBObjBlockdefArray,UUnitManager,
-    gdbase,varmandef,varman,sysutils, memman, geometry, gdbobjectsconstdef,
+    gdbase,varmandef,varman,sysutils,memman,geometry,uzectsconsts,
     gdbasetypes,uzedrawingsimple,uzeentgenericsubentry,uzestyleslayers,uzeentity,
     UGDBSelectedObjArray,uzestylestexts,uzefontmanager,uzestyleslinetypes,
     UGDBOpenArrayOfPV,uzefont,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,

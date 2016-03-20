@@ -82,7 +82,7 @@ uses
   zcadinterface,
   gdbase,gdbasetypes, //base types
                       //описания базовых типов
-  gdbobjectsconstdef, //base constants
+  uzectsconsts, //base constants
                       //описания базовых констант
   uzccommandsmanager,
   uzccommandsabstract,

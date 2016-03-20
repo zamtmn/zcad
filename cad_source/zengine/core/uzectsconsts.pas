@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit gdbobjectsconstdef;
+unit uzectsconsts;
 {$INCLUDE def.inc}
 
 interface

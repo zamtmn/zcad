@@ -23,7 +23,7 @@ interface
 uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzestyleslayers,
      UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,
      uzeentwithmatrix,uzeentsubordinated,gdbase,geometry,uzeentity,
-     gdbobjectsconstdef,memman,uzeentitiestree;
+     uzectsconsts,memman,uzeentitiestree;
 type
 //GDBObjGenericSubEntry=object(GDBObjWithLocalCS)
 //GDBObjGenericSubEntry=object(GDBObj3d)

@@ -14,12 +14,13 @@ object ColorSelectForm: TColorSelectForm
   OnResize = resize
   OnShow = _onshow
   Position = poMainFormCenter
+  LCLVersion = '1.7'
   Visible = False
   object ButtonPanel1: TButtonPanel
     Left = 1
     Height = 37
-    Top = 608
-    Width = 720
+    Top = 432
+    Width = 630
     BorderSpacing.Around = 1
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
@@ -34,17 +35,17 @@ object ColorSelectForm: TColorSelectForm
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 607
+    Height = 431
     Top = 0
-    Width = 722
+    Width = 632
     ActivePage = TabSheet1
     Align = alClient
     TabIndex = 0
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Color index'
-      ClientHeight = 575
-      ClientWidth = 714
+      ClientHeight = 399
+      ClientWidth = 624
       object oddpalette: TPaintBox
         AnchorSideLeft.Control = TabSheet1
         AnchorSideTop.Control = Owner
@@ -53,7 +54,7 @@ object ColorSelectForm: TColorSelectForm
         Left = 0
         Height = 152
         Top = 0
-        Width = 714
+        Width = 624
         Anchors = [akTop, akLeft, akRight]
         OnMouseDown = OddMDown
         OnPaint = OddPalettePaint
@@ -65,8 +66,8 @@ object ColorSelectForm: TColorSelectForm
         AnchorSideRight.Side = asrBottom
         Left = 0
         Height = 78
-        Top = 258
-        Width = 714
+        Top = 167
+        Width = 624
         Anchors = [akLeft, akRight]
         BorderSpacing.Top = 10
         BorderSpacing.Bottom = 10
@@ -77,7 +78,7 @@ object ColorSelectForm: TColorSelectForm
         AnchorSideLeft.Control = TabSheet1
         Left = 0
         Height = 58
-        Top = 375
+        Top = 251
         Width = 452
         Anchors = [akLeft]
         OnMouseDown = mainMdown
@@ -87,7 +88,7 @@ object ColorSelectForm: TColorSelectForm
         AnchorSideLeft.Control = TabSheet1
         Left = 0
         Height = 48
-        Top = 478
+        Top = 324
         Width = 452
         Anchors = [akLeft]
         OnMouseDown = grayMDown
@@ -101,7 +102,7 @@ object ColorSelectForm: TColorSelectForm
         AnchorSideBottom.Side = asrCenter
         Left = 0
         Height = 25
-        Top = 548
+        Top = 372
         Width = 116
         Alignment = taRightJustify
         Anchors = [akTop, akLeft, akBottom]
@@ -116,9 +117,9 @@ object ColorSelectForm: TColorSelectForm
         AnchorSideRight.Control = SpinEdit1
         AnchorSideBottom.Control = SpinEdit1
         AnchorSideBottom.Side = asrCenter
-        Left = 572
+        Left = 482
         Height = 25
-        Top = 548
+        Top = 372
         Width = 88
         Alignment = taRightJustify
         Anchors = [akTop, akRight, akBottom]
@@ -131,9 +132,9 @@ object ColorSelectForm: TColorSelectForm
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = TabSheet1
         AnchorSideBottom.Side = asrBottom
-        Left = 660
+        Left = 570
         Height = 27
-        Top = 548
+        Top = 372
         Width = 54
         Anchors = [akRight, akBottom]
         MaxValue = 256
@@ -149,8 +150,8 @@ object ColorSelectForm: TColorSelectForm
         AnchorSideRight.Side = asrBottom
         Left = 502
         Height = 32
-        Top = 375
-        Width = 212
+        Top = 251
+        Width = 122
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 50
         Caption = '??ByBlock'
@@ -166,8 +167,8 @@ object ColorSelectForm: TColorSelectForm
         AnchorSideBottom.Side = asrCenter
         Left = 502
         Height = 32
-        Top = 407
-        Width = 212
+        Top = 283
+        Width = 122
         Anchors = [akTop, akLeft, akRight]
         Caption = '??ByLayer'
         OnClick = ByLayerCLC

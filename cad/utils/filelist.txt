@@ -85,7 +85,7 @@ zengine/core/entities/uzeentspline.pas
 zcad/electrotech/uzcentcable.pas
 zengine/core/objects/uzeroot.pas
 zengine/core/objects/uzecamera.pas
-zengine/core/GDBTable.pas
+zengine/core/entities/uzeenttable.pas
 zcad/electrotech/uzcentelleader.pas
 components/zcontainers/UGDBOpenArrayOfTObjLinkRecord.pas
 zcad/DeviceBase/uzcdevicebaseabstract.pas

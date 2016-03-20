@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit GDBTable;
+unit uzeenttable;
 {$INCLUDE def.inc}
 
 interface

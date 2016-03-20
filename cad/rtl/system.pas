@@ -2896,7 +2896,7 @@ GDBObjCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBBaseCamera)
                    constructor initnul;
                    procedure NextPosition;virtual;abstract;
              end;
-//Generate on E:/zcad/cad_source/zengine/core/GDBTable.pas
+//Generate on E:/zcad/cad_source/zengine/core/entities/uzeenttable.pas
 PTGDBTableItemFormat=^TGDBTableItemFormat;
 TGDBTableItemFormat=packed record
                  Width,TextWidth:GDBDouble;

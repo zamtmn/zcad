@@ -11,7 +11,7 @@ interface
 uses uzcenitiesvariablesextender,zeentityfactory,Varman,uzgldrawcontext,
      uzeentabstracttext,uzeentgenericsubentry,uzetrash,uzedrawingdef,uzecamera,
      uzcsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,
-     uzeenttext,uzeentdevice,uzcentcable,GDBTable,UGDBControlPointArray,geometry,
+     uzeenttext,uzeentdevice,uzcentcable,uzeenttable,UGDBControlPointArray,geometry,
      uzeentline,gdbasetypes,uzeentcomplex,sysutils,UGDBStringArray,
      UGDBSelectedObjArray,uzeentity,varmandef,GDBase,uzectsconsts,uzeffdxfsupport,
      memman,uzeentsubordinated;

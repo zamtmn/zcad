@@ -13,7 +13,7 @@ uses uzcenitiesvariablesextender,zeentityfactory,Varman,uzgldrawcontext,
      uzcsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,
      uzeenttext,uzeentdevice,uzcentcable,uzeenttable,UGDBControlPointArray,geometry,
      uzeentline,gdbasetypes,uzeentcomplex,sysutils,UGDBStringArray,
-     UGDBSelectedObjArray,uzeentity,varmandef,GDBase,uzectsconsts,uzeffdxfsupport,
+     UGDBSelectedObjArray,uzeentity,varmandef,GDBase,uzeconsts,uzeffdxfsupport,
      memman,uzeentsubordinated;
 type
 {EXPORT+}

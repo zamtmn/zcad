@@ -12,7 +12,7 @@ uses
   GDBase, GDBasetypes,                                                          //zcad basetypes
   geometry,                                                                     //some mathematical and geometrical support
   uzefontmanager,uzeffshx,                                                        //fonts manager and SHX fileformat support
-  uzglviewareaabstract,uzglviewareageneral,gdbdrawcontext,                          //generic view areas support
+  uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,                          //generic view areas support
   uzglviewareaogl,uzglviewareagdi,                                           //gdi and opengl wiewareas
   uzeentity,                                                                    //generic entitys objects parent
   uzeent3Dface,uzeentlwpolyline,uzeentpolyline,uzeenttext,uzeentline,uzeentcircle,uzeentarc,         //entitys created by program
@@ -22,9 +22,9 @@ uses
   uzeentspline,
   {$endif}
   uzestyleslayers,uzestylestexts,                                            //layers and text steles support
-  UGDBEntTree,                                                                  //entities spatial binary tree
+  uzeentitiestree,                                                                  //entities spatial binary tree
   uzedrawingsimple,                                                            //drawing
-  gdbobjectsconstdef;                                                           //some consts
+  uzeconsts;                                                           //some consts
 
 type
 

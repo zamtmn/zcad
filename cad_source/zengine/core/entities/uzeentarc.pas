@@ -22,7 +22,7 @@ uses
     zeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,math,uzeentwithlocalcs,
     uzecamera,UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,UGDBSelectedObjArray,
     uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,GDBase,
-    uzectsconsts,uzglviewareadata,geometry,uzeffdxfsupport,memman,uzeentplain;
+    uzeconsts,uzglviewareadata,geometry,uzeffdxfsupport,memman,uzeentplain;
 type
 {REGISTEROBJECTTYPE GDBObjArc}
 {Export+}

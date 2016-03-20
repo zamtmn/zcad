@@ -11,7 +11,7 @@ interface
 uses gdbobjectextender,varman,uzgldrawcontext,uzeentgenericsubentry,uzedrawingdef,
      uzcsysvars,UGDBOpenArrayOfByte,uzestyleslayers,UUnitManager,uzeentcurve,geometry,
      math,UGDBOpenArrayOfData,gdbasetypes,uzeentity,varmandef,GDBase,
-     uzectsconsts,uzeffdxfsupport,sysutils,memman,uzeentsubordinated,uzeentdevice;
+     uzeconsts,uzeffdxfsupport,sysutils,memman,uzeentsubordinated,uzeentdevice;
 type
 {Повторное описание типа в Cableы}
   PTCableType=^TCableType;

@@ -23,7 +23,7 @@ uses
      LCLProc,memman,zemathutils,uzepalette,
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
      uzglviewareadata,uzgldrawcontext,uzeentity,uzedrawingabstract,UGDBPoint3DArray,uzeentitiestree,
-     uzectsconsts,uzestrconsts,UGDBTracePropArray,math,sysutils,uzedrawingdef,strproc,
+     uzeconsts,uzestrconsts,UGDBTracePropArray,math,sysutils,uzedrawingdef,strproc,
      ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,
      UGDBOpenArrayOfPV,uzeentgenericsubentry,uzecamera,UGDBVisibleOpenArray,uzgldrawerabstract,
      uzgldrawergeneral,uzglviewareaabstract;

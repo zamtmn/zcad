@@ -61,8 +61,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="7"/>
-        <CursorPos X="19" Y="26"/>
+        <TopLine Value="8"/>
+        <CursorPos X="15" Y="27"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -2431,10 +2431,11 @@
       </Unit310>
       <Unit311>
         <Filename Value="..\zengine\zgl\drawers\uzgldrawerabstract.pas"/>
-        <EditorIndex Value="-1"/>
+        <EditorIndex Value="1"/>
         <TopLine Value="3"/>
         <CursorPos X="64" Y="22"/>
         <UsageCount Value="10"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit311>
       <Unit312>
@@ -2446,7 +2447,7 @@
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit312>
     </Units>
-    <JumpHistory Count="10" HistoryIndex="9">
+    <JumpHistory Count="14" HistoryIndex="13">
       <Position1>
         <Filename Value="umainform.pas"/>
         <Caret Line="547" Column="6"/>
@@ -2487,6 +2488,22 @@
         <Filename Value="umainform.pas"/>
         <Caret Line="24" Column="33" TopLine="5"/>
       </Position10>
+      <Position11>
+        <Filename Value="..\zengine\zgl\drawers\uzgldrawerabstract.pas"/>
+        <Caret Line="22" Column="64" TopLine="3"/>
+      </Position11>
+      <Position12>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="26" Column="19" TopLine="7"/>
+      </Position12>
+      <Position13>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="15" Column="59"/>
+      </Position13>
+      <Position14>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="25" Column="14" TopLine="6"/>
+      </Position14>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -2497,7 +2514,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\zengine\u;..\zengine;..\zengine\core;..\zengine\core\entities;..\zengine\zgl;..\zengine\styles;..\zengine\zgl\drawers;..\zengine\misc;..\zengine\fileformats;..\zengine\fonts;..\zengine\core\drawings"/>
+      <OtherUnitFiles Value="..\zengine\u;..\zengine;..\zengine\core;..\zengine\core\objects;..\zengine\core\entities;..\zengine\zgl;..\zengine\styles;..\zengine\zgl\drawers;..\zengine\misc;..\zengine\fileformats;..\zengine\fonts;..\zengine\core\drawings"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

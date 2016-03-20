@@ -21,7 +21,7 @@ unit zeentityfactory;
 
 
 interface
-uses uzeentsubordinated,usimplegenerics,uzedrawingdef,uzectsconsts,
+uses uzeentsubordinated,usimplegenerics,uzedrawingdef,uzeconsts,
     memman,GDBase,GDBasetypes,uzeentgenericsubentry,uzeentity;
 type
 TAllocEntFunc=function:GDBPointer;

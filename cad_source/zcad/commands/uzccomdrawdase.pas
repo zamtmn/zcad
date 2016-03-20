@@ -35,7 +35,7 @@ uses
   uzeffdxf,
   geometry,
   memman,
-  uzectsconsts,
+  uzeconsts,
   uzcshared,uzclog;
 implementation
 uses UBaseTypeDescriptor,Varman,TypeDescriptors;

@@ -18,7 +18,7 @@
 unit uzgldrawcontext;
 {$INCLUDE def.inc}
 interface
-uses uzepalette,gdbasetypes,gdbase,uzgldrawerabstract,uzectsconsts,geometry;
+uses uzepalette,gdbasetypes,gdbase,uzgldrawerabstract,uzeconsts,geometry;
 type
 TDrawHeplGeometry=procedure  of object;
 TDrawingContext=packed record

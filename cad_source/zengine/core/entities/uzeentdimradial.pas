@@ -21,7 +21,7 @@ unit uzeentdimradial;
 interface
 uses zeentityfactory,uzeentdimdiametric,uzeentdimension,uzestylesdim,
      uzestyleslayers,uzedrawingdef,strproc,UGDBOpenArrayOfByte,
-     geometry,gdbasetypes,sysutils,uzeentity,GDBase,uzectsconsts,uzeffdxfsupport,
+     geometry,gdbasetypes,sysutils,uzeentity,GDBase,uzeconsts,uzeffdxfsupport,
      memman,uzeentsubordinated;
 (*
 

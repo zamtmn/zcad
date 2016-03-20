@@ -19,7 +19,7 @@ unit uzctextpreprocessorimpl;
 {$INCLUDE def.inc}
 
 interface
-uses uzeentity,uzcvariablesutils,gdbfieldprocessor,languade,strproc,sysutils,
+uses uzeentity,uzcvariablesutils,uzetextpreprocessor,languade,strproc,sysutils,
      gdbasetypes,varmandef,GDBase;
 implementation
 uses

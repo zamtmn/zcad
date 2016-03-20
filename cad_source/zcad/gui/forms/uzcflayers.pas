@@ -5,7 +5,7 @@ unit uzcflayers;
 interface
 
 uses
-  zcchangeundocommand,zcobjectchangeundocommand2,uzedrawing,gdbpalette,uzcsuptypededitors,LMessages,uzcfselector,uzestyleslinetypes,ugdbutil,uzclog,uzcflineweights,uzcfcolors,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
+  zcchangeundocommand,zcobjectchangeundocommand2,uzedrawing,gdbpalette,uzcsuptypededitors,LMessages,uzcfselector,uzestyleslinetypes,uzeutils,uzclog,uzcflineweights,uzcfcolors,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 

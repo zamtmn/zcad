@@ -2,7 +2,7 @@ unit aregGDBObjRoot;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,GDBRoot;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzeroot;
 implementation
 var
 pt:PObjectDescriptor;

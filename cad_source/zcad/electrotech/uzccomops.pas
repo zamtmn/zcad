@@ -148,7 +148,8 @@ var
 procedure finalize;}
 
 implementation
-uses uzcenitiesvariablesextender,GDBRoot,uzglviewareadata, uzcentcable,UUnitManager,uzccomelectrical,URecordDescriptor,TypeDescriptors;
+uses uzcenitiesvariablesextender,uzeroot,uzglviewareadata,uzcentcable,UUnitManager,
+     uzccomelectrical,URecordDescriptor,TypeDescriptors;
 function docorrecttogrid(point:GDBVertex;need:GDBBoolean):GDBVertex;
 var
    gr:GDBBoolean;

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit GDBCamera;
+unit uzecamera;
 {$INCLUDE def.inc}
 
 interface

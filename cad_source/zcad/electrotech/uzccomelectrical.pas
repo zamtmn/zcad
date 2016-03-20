@@ -127,7 +127,7 @@ var
 procedure finalize;}
 procedure Cable2CableMark(pcd:PTCableDesctiptor;pv:pGDBObjDevice);
 implementation
-uses uzeentmtext,GDBBlockDef,UGDBPoint3DArray,uzcdevicebaseabstract;
+uses uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract;
 function GetCableMaterial(pcd:PTCableDesctiptor):GDBString;
 var
    {pvn,}{pvm,}pvmc{,pvl}:pvardesk;

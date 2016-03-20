@@ -22,7 +22,7 @@ unit uzcoidecorations;
 interface
 
 uses
-  uzccommandsabstract,zcobjectinspectoreditors,uzcsysinfo,gdbpalette,UEnumDescriptor,zcobjectinspector,uzcinfoform,Forms,uzestyleslinetypes,sysutils,uzctreenode,uzcfsnapeditor,uzccominterface,
+  uzccommandsabstract,zcobjectinspectoreditors,uzcsysinfo,uzepalette,UEnumDescriptor,zcobjectinspector,uzcinfoform,Forms,uzestyleslinetypes,sysutils,uzctreenode,uzcfsnapeditor,uzccominterface,
   Graphics,LCLType,Themes,types,gdbobjectsconstdef,UGDBNamedObjectsArray,UGDBStringArray,
   varmandef,Varman,uzcfcolors,uzestyleslayers,gdbase,uzcflineweights,gdbasetypes,usupportgui,
   StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,strproc,uzcsysvars,uzccommandsmanager,

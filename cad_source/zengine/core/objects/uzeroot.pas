@@ -16,12 +16,12 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit GDBRoot;
+unit uzeroot;
 {$INCLUDE def.inc}
 
 interface
 Uses
-   uzgldrawcontext,uzedrawingdef,GDBCamera,UGDBEntTree,gdbase,gdbasetypes,
+   uzgldrawcontext,uzedrawingdef,uzecamera,uzeentitiestree,gdbase,gdbasetypes,
    gdbobjectsconstdef,uzeentity,uzeentgenericsubentry,uzeentconnected,uzeentsubordinated,
    geometry;
 type

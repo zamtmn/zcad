@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit ugdbtrash;
+unit uzetrash;
 {$INCLUDE def.inc}
 interface
 uses

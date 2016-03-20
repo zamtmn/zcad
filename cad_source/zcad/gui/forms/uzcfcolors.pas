@@ -23,7 +23,7 @@ unit uzcfcolors;
 interface
 
 uses
-  gdbpalette,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  uzepalette,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, Buttons, {ColorBox,} ButtonPanel, Spin, ExtCtrls, ComCtrls,math,
   gdbobjectsconstdef,gdbase,uzcstrconsts;
 

@@ -20,7 +20,7 @@ unit uzeentwithlocalcs;
 {$INCLUDE def.inc}
 
 interface
-uses gdbpalette,uzgldrawcontext,uzedrawingdef,GDBCamera,gdbasetypes,uzeentity,
+uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,gdbasetypes,uzeentity,
      UGDBOutbound2DIArray,UGDBOpenArrayOfByte,uzeentwithmatrix,GDBase,
      geometry,uzeffdxfsupport,sysutils,memman,uzeentsubordinated,uzestyleslayers;
 type

@@ -20,8 +20,8 @@ unit uzeentdevice;
 {$INCLUDE def.inc}
 
 interface
-uses uzestyleslayers,gdbpalette,gdbobjectextender,uabstractunit,zeentityfactory,
-     uzgldrawcontext,uzedrawingdef,GDBCamera,uzcsysvars,sysutils,devices,
+uses uzestyleslayers,uzepalette,gdbobjectextender,uabstractunit,zeentityfactory,
+     uzgldrawcontext,uzedrawingdef,uzecamera,uzcsysvars,sysutils,devices,
      UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,uunitmanager,memman,geometry,
      gdbobjectsconstdef,uzeentity,uzeentsubordinated,varmandef,gdbasetypes,
      uzeentblockinsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray;
@@ -75,7 +75,7 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
 var
     GDBObjDeviceDXFFeatures:TDXFEntIODataManager;
 implementation
-uses GDBBlockDef,uzeffdxfsupport,{log,}UGDBSelectedObjArray,UGDBEntTree;
+uses uzeblockdef,uzeffdxfsupport,UGDBSelectedObjArray,uzeentitiestree;
 function GDBObjDevice.GetNameInBlockTable:GDBString;
 begin
   result:=DevicePrefix+name;

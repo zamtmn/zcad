@@ -23,12 +23,12 @@ uses
     uzglviewareageneral,uzctranslations,zedimblocksregister,zeblockdefsfactory,
     zemathutils,uzgldrawcontext,uzedrawing,uzedrawingdef,paths,uzestylesdim,
     uzedrawingabstract,WindowsSpecific,LResources,uzcsysvars,zcadinterface,
-    uzcstrconsts,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
+    uzcstrconsts,strproc,uzeblockdef,UGDBObjBlockdefArray,UUnitManager,
     gdbase,varmandef,varman,sysutils, memman, geometry, gdbobjectsconstdef,
     gdbasetypes,uzedrawingsimple,uzeentgenericsubentry,uzestyleslayers,uzeentity,
     UGDBSelectedObjArray,uzestylestexts,uzefontmanager,uzestyleslinetypes,
     UGDBOpenArrayOfPV,uzefont,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,
-    ugdbtrash,UGDBOpenArrayOfByte,uzglviewareadata;
+    uzetrash,UGDBOpenArrayOfByte,uzglviewareadata;
 type
 {REGISTEROBJECTTYPE GDBDescriptor}
 {EXPORT+}

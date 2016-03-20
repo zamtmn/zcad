@@ -20,7 +20,7 @@ unit uzeentarc;
 interface
 uses
     zeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,math,uzeentwithlocalcs,
-    GDBCamera,UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,UGDBSelectedObjArray,
+    uzecamera,UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,UGDBSelectedObjArray,
     uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,GDBase,
     gdbobjectsconstdef,uzglviewareadata,geometry,uzeffdxfsupport,memman,uzeentplain;
 type

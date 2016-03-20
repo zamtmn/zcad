@@ -22,7 +22,7 @@ unit zedimblocksregister;
 
 interface
 uses uzestyleslayers,uzestyleslinetypes,gdbobjectsconstdef,zeentitiesmanager,
-     UGDBObjBlockdefArray,zeblockdefsfactory,GDBBlockDef,uzedrawingdef,
+     UGDBObjBlockdefArray,zeblockdefsfactory,uzeblockdef,uzedrawingdef,
      memman,uzcsysvars,GDBase,GDBasetypes,uzeentgenericsubentry,uzeentity;
 implementation
 uses

@@ -19,7 +19,7 @@
 unit UGDBControlPointArray;
 {$INCLUDE def.inc}
 interface
-uses gdbpalette,uzgldrawcontext,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase, geometry,
+uses uzepalette,uzgldrawcontext,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase, geometry,
      memman;
 type
 {Export+}

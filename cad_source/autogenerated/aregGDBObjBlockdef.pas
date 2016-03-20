@@ -2,7 +2,7 @@ unit aregGDBObjBlockdef;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
-uses UObjectDescriptor,Varman,TypeDescriptors,GDBBlockdef;
+uses UObjectDescriptor,Varman,TypeDescriptors,uzeblockdef;
 implementation
 var
 pt:PObjectDescriptor;

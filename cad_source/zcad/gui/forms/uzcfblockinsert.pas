@@ -9,7 +9,7 @@ uses
   StdCtrls, EditBtn, ButtonPanel,
 
   UGDBObjBlockdefArray, //описание таблицы блоков
-  GDBBlockDef,          //описания блоков
+  uzeblockdef,          //описания блоков
   gdbasetypes,          //базовые типы
   strproc               //билеберда для работы со стрингами
   ;

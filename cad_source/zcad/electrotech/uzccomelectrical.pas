@@ -12,7 +12,7 @@ interface
 uses
   uzglviewareageneral,uzctranslations,zcobjectchangeundocommand2,
   zcmultiobjectcreateundocommand,zeentitiesmanager,uzedrawingdef,
-  uzcenitiesvariablesextender,gdbdrawcontext,uzedrawing,uzcvariablesutils,
+  uzcenitiesvariablesextender,uzgldrawcontext,uzedrawing,uzcvariablesutils,
   uzeentabstracttext,uzcstrconsts,UGDBSelectedObjArray,zeentityfactory,uzcsysvars,
   csvdocument,
   UGDBOpenArrayOfPV,uzeentblockinsert,devices,UGDBTree,uzcdrawings,gdbasetypes,

@@ -21,7 +21,7 @@ unit uzcdrawings;
 interface
 uses
     uzglviewareageneral,uzctranslations,zedimblocksregister,zeblockdefsfactory,
-    zemathutils,gdbdrawcontext,uzedrawing,uzedrawingdef,paths,uzestylesdim,
+    zemathutils,uzgldrawcontext,uzedrawing,uzedrawingdef,paths,uzestylesdim,
     uzedrawingabstract,WindowsSpecific,LResources,uzcsysvars,zcadinterface,
     uzcstrconsts,strproc,GDBBlockDef,UGDBObjBlockdefArray,UUnitManager,
     gdbase,varmandef,varman,sysutils, memman, geometry, gdbobjectsconstdef,

@@ -19,7 +19,7 @@ unit uzeentdimdiametric;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,zeentityfactory,uzeentdimension,uzestylesdim,uzestyleslayers,
+uses uzgldrawcontext,zeentityfactory,uzeentdimension,uzestylesdim,uzestyleslayers,
      ugdbtrash,uzedrawingdef,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,
      UGDBControlPointArray,geometry,uzeentline,gdbasetypes,uzeentcomplex,sysutils,
      UGDBSelectedObjArray,uzeentity,GDBase,gdbobjectsconstdef,uzeffdxfsupport,memman,

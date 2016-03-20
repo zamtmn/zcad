@@ -20,7 +20,7 @@ unit uzedrawing;
 {$INCLUDE def.inc}
 interface
 uses
-    uzctranslations,zcadinterface,gdbdrawcontext,zeundostack,zcchangeundocommand,
+    uzctranslations,zcadinterface,uzgldrawcontext,zeundostack,zcchangeundocommand,
     zcobjectchangeundocommand,zebaseundocommands,paths,uzestylesdim,
     WindowsSpecific,LResources,uzcsysvars,uzcstrconsts,strproc,GDBBlockDef,UUnitManager,
     gdbase,varmandef,varman,sysutils, memman, geometry, gdbobjectsconstdef,

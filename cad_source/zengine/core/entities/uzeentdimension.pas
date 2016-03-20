@@ -19,7 +19,7 @@ unit uzeentdimension;
 {$INCLUDE def.inc}
 
 interface
-uses zemathutils,gdbdrawcontext,uzeentabstracttext,uzestylestexts,UGDBXYZWStringArray,
+uses zemathutils,uzgldrawcontext,uzeentabstracttext,uzestylestexts,UGDBXYZWStringArray,
      uzestylesdim,uzeentmtext,uzestyleslayers,ugdbtrash,uzedrawingdef,GDBCamera,
      strproc,UGDBOpenArrayOfByte,uzeenttext,geometry,uzeentline,gdbasetypes,uzeentcomplex,
      sysutils,uzeentity,GDBase,gdbobjectsconstdef,memman;

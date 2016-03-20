@@ -8,7 +8,7 @@ unit uzcentcable;
 {$INCLUDE def.inc}
 
 interface
-uses gdbobjectextender,varman,gdbdrawcontext,uzeentgenericsubentry,uzedrawingdef,
+uses gdbobjectextender,varman,uzgldrawcontext,uzeentgenericsubentry,uzedrawingdef,
      uzcsysvars,UGDBOpenArrayOfByte,uzestyleslayers,UUnitManager,uzeentcurve,geometry,
      math,UGDBOpenArrayOfData,gdbasetypes,uzeentity,varmandef,GDBase,
      gdbobjectsconstdef,uzeffdxfsupport,sysutils,memman,uzeentsubordinated,uzeentdevice;

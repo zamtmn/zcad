@@ -19,7 +19,7 @@
 unit uzedrawingdef;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,uzestylesdim,gdbase,gdbasetypes,uzestyleslayers,uzestylestexts,
+uses uzgldrawcontext,uzestylesdim,gdbase,gdbasetypes,uzestyleslayers,uzestylestexts,
      uzestyleslinetypes,uzestylestables;
 type
 {EXPORT+}

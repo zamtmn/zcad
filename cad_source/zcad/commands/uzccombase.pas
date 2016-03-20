@@ -23,7 +23,7 @@ interface
 uses
  {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
  uzglviewareageneral,zeundostack,zcchangeundocommand,uzcoimultiobjects,
- uzcenitiesvariablesextender,gdbdrawcontext,uzedrawing,paths,uzeffmanager,
+ uzcenitiesvariablesextender,uzgldrawcontext,uzedrawing,paths,uzeffmanager,
  uzeentdimension,uzestylesdim,uzestylestexts,uzeenttext,uzestyleslinetypes,
  URecordDescriptor,uzefontmanager,uzedrawingsimple,uzcsysvars,uzccommandsmanager,
  TypeDescriptors,uzcutils,uzcstrconsts,uzcctrlcontextmenu,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}

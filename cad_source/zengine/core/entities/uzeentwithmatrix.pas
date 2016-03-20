@@ -20,7 +20,7 @@ unit uzeentwithmatrix;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,uzedrawingdef, GDBCamera, uzeentity,gdbase,gdbasetypes,geometry,
+uses uzgldrawcontext,uzedrawingdef, GDBCamera, uzeentity,gdbase,gdbasetypes,geometry,
      uzeentsubordinated,UGDBEntTree;
 type
 {EXPORT+}

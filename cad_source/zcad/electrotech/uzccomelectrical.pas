@@ -33,7 +33,7 @@ uses
   uzeentity,uzeentline,
   uzcentnet,
   uzcshared,uzeentsubordinated,uzcentcable,varman,WindowsSpecific,uunitmanager,
-  UGDBOpenArrayOfPObjects,UGDBBillOfMaterial,uzccablemanager,uzeentdevice,GDBTable,
+  UGDBOpenArrayOfPObjects,UGDBBillOfMaterial,uzccablemanager,uzeentdevice,uzeenttable,
   paths,UGDBStringArray,math,Masks,uzclog,uzccombase,strproc;
 type
 {Export+}

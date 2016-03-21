@@ -21,7 +21,7 @@ unit uzccommandsmanager;
 interface
 uses UGDBOpenArrayOfPObjects,uzcsysvars,geometry,uzglviewareaabstract,paths,uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,{umytreenode,}uzcsysinfo,strproc,UGDBOpenArrayOfPointer,
      gdbasetypes,uzccommandsabstract, sysutils,gdbase,uzglviewareadata,
-     memman,uzcshared,uzclog,varmandef,varman,uzedrawingdef,zcadinterface;
+     memman,uzcshared,uzclog,varmandef,varman,uzedrawingdef,uzcinterface;
 const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;

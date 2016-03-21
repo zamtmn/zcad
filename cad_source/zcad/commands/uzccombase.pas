@@ -39,7 +39,7 @@ uses
   uzglviewareadata,
   UGDBOpenArrayOfByte,
   uzeffdxf,
-  zcadinterface,
+  uzcinterface,
   uzeconsts,
   uzeentity,
  uzcshared,

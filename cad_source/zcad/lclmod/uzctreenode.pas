@@ -21,7 +21,7 @@ unit uzctreenode;
 interface
 
 uses
-  paths,Themes,zcadinterface,uzccommandsabstract,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,
+  paths,Themes,uzcinterface,uzccommandsabstract,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,
   Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}LazUTF8,Buttons,
   {$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils,strproc,varmandef,
   Varman,UBaseTypeDescriptor,gdbasetypes,uzcshared,uzcsysinfo,UGDBOpenArrayOfByte;
@@ -331,8 +331,8 @@ begin
      {if assigned(pfoundcommand)then
 
                                else}
-                                   if assigned(zcadinterface.SetNormalFocus)then
-                                                                                zcadinterface.SetNormalFocus(nil);
+                                   if assigned(uzcinterface.SetNormalFocus)then
+                                                                                uzcinterface.SetNormalFocus(nil);
                                    commandmanager.executecommand(s,gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
      result:=true;
 end;

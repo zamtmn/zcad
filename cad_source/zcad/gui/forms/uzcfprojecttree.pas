@@ -72,7 +72,7 @@ var
   //ProgramDBContextMenuN,ProjectDBContextMenuN,ProgramDEVContextMenuN:TmyPopupMenu;
 
 implementation
-uses uzeblockdef,UBaseTypeDescriptor,zcadinterface,UUnitManager;
+uses uzeblockdef,UBaseTypeDescriptor,uzcinterface,UUnitManager;
 function TBlockTreeNode.GetParams;
 begin
      result:=@FBlockName;

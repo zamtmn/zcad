@@ -30,7 +30,7 @@ uses
   {FPC}
        lineinfo,
   {ZCAD BASE}
-       uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,zemathutils,uzelongprocesssupport,gluinterface,uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,uzepalette,paths,uzglviewareadata,uzeentitiesprop,uzglgeometry,zcadinterface,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
+       uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,zemathutils,uzelongprocesssupport,gluinterface,uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,uzepalette,paths,uzglviewareadata,uzeentitiesprop,uzglgeometry,uzcinterface,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
        geometry,uzcsysvars,uzcstrconsts,strproc,UGDBNamedObjectsArray,uzclog,
        varmandef, varman,UUnitManager,uzcsysinfo,uzcshared,strmy,uzestylestexts,uzestylesdim,
   {ZCAD SIMPLE PASCAL SCRIPT}
@@ -986,7 +986,7 @@ begin
   CursorOff:=RestoreCursors;
   commandmanager.OnCommandRun:=processcommandhistory;
   AppCloseProc:=asynccloseapp;
-  zcadinterface.SetNormalFocus:=self.setnormalfocus;
+  uzcinterface.SetNormalFocus:=self.setnormalfocus;
 end;
 
 procedure TZCADMainWindow.LoadActions;
@@ -2593,8 +2593,8 @@ begin
 end;
 function TZCADMainWindow.MainMouseDown(Sender:TAbstractViewArea):GDBBoolean;
 begin
-     if assigned(zcadinterface.SetNormalFocus)then
-                                                 zcadinterface.SetNormalFocus(nil);
+     if assigned(uzcinterface.SetNormalFocus)then
+                                                 uzcinterface.SetNormalFocus(nil);
      if @SetCurrentDWGProc<>nil then
                                      SetCurrentDWGProc(Sender.PDWG);
      if (cxmenumgr.ismenupopup)or(ActivePopupMenu<>nil) then
@@ -2608,8 +2608,8 @@ begin
      if GetCurrentObjProc=@sysvar then
      If assigned(UpdateObjInspProc)then
                                       UpdateObjInspProc;
-     if assigned(zcadinterface.SetNormalFocus)then
-                                                  zcadinterface.SetNormalFocus(nil);
+     if assigned(uzcinterface.SetNormalFocus)then
+                                                  uzcinterface.SetNormalFocus(nil);
 end;
 procedure TZCADMainWindow.ShowCXMenu;
 var

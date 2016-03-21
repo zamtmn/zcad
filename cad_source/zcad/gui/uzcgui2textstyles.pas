@@ -23,7 +23,7 @@ interface
 
 uses
   gdbasetypes,usupportgui,StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,
-  uzestylestexts,strproc,uzcsysvars,uzccommandsmanager,zcadinterface;
+  uzestylestexts,strproc,uzcsysvars,uzccommandsmanager,uzcinterface;
 
 type
   TSupportTStyleCombo = class

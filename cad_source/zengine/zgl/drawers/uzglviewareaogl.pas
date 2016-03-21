@@ -26,7 +26,7 @@ uses
      {$IFDEF LCLQT}
      qt4,
      {$ENDIF}
-     LCLProc,uzgldrawergdi,uzglviewareaabstract,uzgldrawerogl,sysutils,memman,glstatemanager,gdbase,gdbasetypes,
+     LCLProc,uzgldrawergdi,uzglviewareaabstract,uzgldrawerogl,sysutils,memman,uzgloglstatemanager,gdbase,gdbasetypes,
      uzglviewareadata,uzgldrawcontext,geometry,LCLType,
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,math,uzglbackendmanager,
      {$IFNDEF DELPHI}OpenGLContext{$ENDIF};

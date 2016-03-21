@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="153">
+    <Units Count="154">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -787,85 +787,89 @@
         <IsPartOfProject Value="True"/>
       </Unit132>
       <Unit133>
-        <Filename Value="zengine/core/drawings/uzedrawing.pas"/>
+        <Filename Value="zengine/core/drawings/uzedrawingdef.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit133>
       <Unit134>
-        <Filename Value="zengine/core/drawings/uzedrawingdef.pas"/>
+        <Filename Value="zengine/core/drawings/uzedrawingsimple.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit134>
       <Unit135>
-        <Filename Value="zengine/core/drawings/uzedrawingsimple.pas"/>
+        <Filename Value="zengine/core/drawings/uzedrawingabstract.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit135>
       <Unit136>
-        <Filename Value="zengine/core/drawings/uzedrawingabstract.pas"/>
+        <Filename Value="zcad/core/drawings/uzcdrawings.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit136>
       <Unit137>
-        <Filename Value="zcad/core/drawings/uzcdrawings.pas"/>
+        <Filename Value="zengine/core/utils/uzeutils.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit137>
       <Unit138>
-        <Filename Value="zengine/core/utils/uzeutils.pas"/>
+        <Filename Value="zcad/core/utils/uzcutils.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit138>
       <Unit139>
-        <Filename Value="zcad/core/utils/uzcutils.pas"/>
+        <Filename Value="zengine/zgl/drawers/uzgldrawcontext.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit139>
       <Unit140>
-        <Filename Value="zengine/zgl/drawers/uzgldrawcontext.pas"/>
+        <Filename Value="zengine/core/objects/uzeblockdef.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit140>
       <Unit141>
-        <Filename Value="zengine/core/objects/uzeblockdef.pas"/>
+        <Filename Value="zengine/core/objects/uzepalette.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit141>
       <Unit142>
-        <Filename Value="zengine/core/objects/uzepalette.pas"/>
+        <Filename Value="zengine/core/objects/uzetrash.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit142>
       <Unit143>
-        <Filename Value="zengine/core/objects/uzetrash.pas"/>
+        <Filename Value="zengine/core/objects/uzeroot.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit143>
       <Unit144>
-        <Filename Value="zengine/core/objects/uzeroot.pas"/>
+        <Filename Value="zengine/core/objects/uzecamera.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit144>
       <Unit145>
-        <Filename Value="zengine/core/objects/uzecamera.pas"/>
+        <Filename Value="zengine/core/objects/uzeentitiestree.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit145>
       <Unit146>
-        <Filename Value="zengine/core/objects/uzeentitiestree.pas"/>
+        <Filename Value="zengine/core/entities/uzeentitiesprop.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit146>
       <Unit147>
-        <Filename Value="zengine/core/entities/uzeentitiesprop.pas"/>
+        <Filename Value="zengine/core/uzetextpreprocessor.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit147>
       <Unit148>
-        <Filename Value="zengine/core/uzetextpreprocessor.pas"/>
+        <Filename Value="zengine/core/entities/uzeenttable.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit148>
       <Unit149>
-        <Filename Value="zengine/core/entities/uzeenttable.pas"/>
+        <Filename Value="zengine/core/uzeconsts.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit149>
       <Unit150>
-        <Filename Value="zengine/core/uzeconsts.pas"/>
+        <Filename Value="zengine/core/uzeblockdefsfactory.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit150>
       <Unit151>
-        <Filename Value="zengine/core/uzeblockdefsfactory.pas"/>
+        <Filename Value="zengine/core/uzedimblocksregister.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit151>
       <Unit152>
-        <Filename Value="zengine/core/uzedimblocksregister.pas"/>
+        <Filename Value="zengine/core/uzehelpobj.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit152>
+      <Unit153>
+        <Filename Value="zcad/core/drawings/uzcdrawing.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit153>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

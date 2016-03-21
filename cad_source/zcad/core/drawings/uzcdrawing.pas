@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzedrawing;
+unit uzcdrawing;
 {$INCLUDE def.inc}
 interface
 uses

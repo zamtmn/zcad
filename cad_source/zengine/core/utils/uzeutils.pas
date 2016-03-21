@@ -24,7 +24,6 @@ gdbase,GDBasetypes,uzeentity,geometry;
 procedure LayerCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 procedure LTypeCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 implementation
-// uses log;
 procedure LayerCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 begin
      if PCounted=PGDBObjEntity(PInstance)^.vp.Layer then

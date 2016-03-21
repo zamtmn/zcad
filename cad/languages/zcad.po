@@ -1,11 +1,38 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
+#: tcolorselectform.byblock.caption
+msgctxt "TCOLORSELECTFORM.BYBLOCK.CAPTION"
+msgid "??ByBlock"
+msgstr ""
+
+#: tcolorselectform.bylayer.caption
+msgctxt "TCOLORSELECTFORM.BYLAYER.CAPTION"
+msgid "??ByLayer"
+msgstr ""
+
+#: tcolorselectform.label2.caption
+msgctxt "TCOLORSELECTFORM.LABEL2.CAPTION"
+msgid "Color number:"
+msgstr ""
+
+#: tcolorselectform.label3.caption
+msgctxt "TCOLORSELECTFORM.LABEL3.CAPTION"
+msgid "??Color description"
+msgstr ""
+
+#: tcolorselectform.tabsheet1.caption
+msgctxt "TCOLORSELECTFORM.TABSHEET1.CAPTION"
+msgid "Color index"
+msgstr ""
+
 #: tcolorselectwnd.byblock.caption
+msgctxt "tcolorselectwnd.byblock.caption"
 msgid "??ByBlock"
 msgstr ""
 
 #: tcolorselectwnd.bylayer.caption
+msgctxt "tcolorselectwnd.bylayer.caption"
 msgid "??ByLayer"
 msgstr ""
 
@@ -25,7 +52,117 @@ msgid "??Color description"
 msgstr ""
 
 #: tcolorselectwnd.tabsheet1.caption
+msgctxt "tcolorselectwnd.tabsheet1.caption"
 msgid "Color index"
+msgstr ""
+
+#: tlayersform.addlayer.caption
+msgid "AddLayer"
+msgstr ""
+
+#: tlayersform.addlayer.hint
+msgid "Add layer"
+msgstr ""
+
+#: tlayersform.buttonapplyclose.caption
+msgctxt "TLAYERSFORM.BUTTONAPPLYCLOSE.CAPTION"
+msgid "Apply and close"
+msgstr ""
+
+#: tlayersform.button_apply.caption
+msgctxt "TLAYERSFORM.BUTTON_APPLY.CAPTION"
+msgid "Apply"
+msgstr ""
+
+#: tlayersform.dellayer.caption
+msgid "DelLayer"
+msgstr ""
+
+#: tlayersform.dellayer.hint
+msgid "Delete layer"
+msgstr ""
+
+#: tlayersform.listview1.columns[0].caption
+msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[0].CAPTION"
+msgid "Status"
+msgstr ""
+
+#: tlayersform.listview1.columns[1].caption
+msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[1].CAPTION"
+msgid "Name"
+msgstr ""
+
+#: tlayersform.listview1.columns[2].caption
+msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[2].CAPTION"
+msgid "On"
+msgstr ""
+
+#: tlayersform.listview1.columns[3].caption
+msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[3].CAPTION"
+msgid "Freze"
+msgstr ""
+
+#: tlayersform.listview1.columns[4].caption
+msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[4].CAPTION"
+msgid "Lock"
+msgstr ""
+
+#: tlayersform.listview1.columns[5].caption
+msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[5].CAPTION"
+msgid "Color"
+msgstr ""
+
+#: tlayersform.listview1.columns[6].caption
+msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[6].CAPTION"
+msgid "Line type"
+msgstr ""
+
+#: tlayersform.listview1.columns[7].caption
+msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[7].CAPTION"
+msgid "Line weight"
+msgstr ""
+
+#: tlayersform.listview1.columns[8].caption
+msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[8].CAPTION"
+msgid "Plot"
+msgstr ""
+
+#: tlayersform.listview1.columns[9].caption
+msgctxt "TLAYERSFORM.LISTVIEW1.COLUMNS[9].CAPTION"
+msgid "Description"
+msgstr ""
+
+#: tlayersform.mkcurrentlayer.caption
+msgid "MkCurrentLayer"
+msgstr ""
+
+#: tlayersform.mkcurrentlayer.hint
+msgid "Make selected layer current"
+msgstr ""
+
+#: tlayersform.purgelayers.caption
+msgid "PurgeLayers"
+msgstr ""
+
+#: tlayersform.purgelayers.hint
+msgid "Purge layers"
+msgstr ""
+
+#: tlayersform.refreshlayers.caption
+msgid "RefreshLayers"
+msgstr ""
+
+#: tlayersform.refreshlayers.hint
+msgid "Refresh layers"
+msgstr ""
+
+#: tlayersform.toolbar1.caption
+msgctxt "TLAYERSFORM.TOOLBAR1.CAPTION"
+msgid "ToolBar1"
+msgstr ""
+
+#: tlayersform.toolbutton4.caption
+msgid "ToolButton4"
 msgstr ""
 
 #: tlayerwindow.buttonapplyclose.caption
@@ -193,11 +330,123 @@ msgstr ""
 msgid "Ok"
 msgstr ""
 
+#: ttextstylesform.addstyle.caption
+msgctxt "TTEXTSTYLESFORM.ADDSTYLE.CAPTION"
+msgid "AddStyle"
+msgstr ""
+
+#: ttextstylesform.addstyle.hint
+msgctxt "TTEXTSTYLESFORM.ADDSTYLE.HINT"
+msgid "Add text style"
+msgstr ""
+
+#: ttextstylesform.buttonapplyclose.caption
+msgctxt "TTEXTSTYLESFORM.BUTTONAPPLYCLOSE.CAPTION"
+msgid "Apply and close"
+msgstr ""
+
+#: ttextstylesform.delstyle.caption
+msgctxt "TTEXTSTYLESFORM.DELSTYLE.CAPTION"
+msgid "DelStyle"
+msgstr ""
+
+#: ttextstylesform.delstyle.hint
+msgctxt "TTEXTSTYLESFORM.DELSTYLE.HINT"
+msgid "Delete text style"
+msgstr ""
+
+#: ttextstylesform.fonttypefiltercombobox.text
+msgctxt "TTEXTSTYLESFORM.FONTTYPEFILTERCOMBOBOX.TEXT"
+msgid "All"
+msgstr ""
+
+#: ttextstylesform.fonttypefilterdesc.caption
+msgctxt "TTEXTSTYLESFORM.FONTTYPEFILTERDESC.CAPTION"
+msgid "Fonts types filter:"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[0].caption
+msgctxt "TTEXTSTYLESFORM.LISTVIEW1.COLUMNS[0].CAPTION"
+msgid "Status"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[1].caption
+msgctxt "TTEXTSTYLESFORM.LISTVIEW1.COLUMNS[1].CAPTION"
+msgid "Name"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[2].caption
+msgctxt "TTEXTSTYLESFORM.LISTVIEW1.COLUMNS[2].CAPTION"
+msgid "FontName"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[3].caption
+msgctxt "TTEXTSTYLESFORM.LISTVIEW1.COLUMNS[3].CAPTION"
+msgid "FontPath"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[4].caption
+msgctxt "TTEXTSTYLESFORM.LISTVIEW1.COLUMNS[4].CAPTION"
+msgid "Height"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[5].caption
+msgctxt "TTEXTSTYLESFORM.LISTVIEW1.COLUMNS[5].CAPTION"
+msgid "Width factor"
+msgstr ""
+
+#: ttextstylesform.listview1.columns[6].caption
+msgctxt "TTEXTSTYLESFORM.LISTVIEW1.COLUMNS[6].CAPTION"
+msgid "Oblique"
+msgstr ""
+
+#: ttextstylesform.mkcurrentstyle.caption
+msgctxt "TTEXTSTYLESFORM.MKCURRENTSTYLE.CAPTION"
+msgid "MkCurrentStyle"
+msgstr ""
+
+#: ttextstylesform.mkcurrentstyle.hint
+msgctxt "TTEXTSTYLESFORM.MKCURRENTSTYLE.HINT"
+msgid "Make selected style curretn"
+msgstr ""
+
+#: ttextstylesform.purgestyles.caption
+msgctxt "TTEXTSTYLESFORM.PURGESTYLES.CAPTION"
+msgid "PurgeStyles"
+msgstr ""
+
+#: ttextstylesform.purgestyles.hint
+msgctxt "TTEXTSTYLESFORM.PURGESTYLES.HINT"
+msgid "Purge not used styles"
+msgstr ""
+
+#: ttextstylesform.refreshstyles.caption
+msgctxt "TTEXTSTYLESFORM.REFRESHSTYLES.CAPTION"
+msgid "RefreshStyles"
+msgstr ""
+
+#: ttextstylesform.refreshstyles.hint
+msgctxt "TTEXTSTYLESFORM.REFRESHSTYLES.HINT"
+msgid "Refresh styles list"
+msgstr ""
+
+#: ttextstylesform.separator1.caption
+msgctxt "TTEXTSTYLESFORM.SEPARATOR1.CAPTION"
+msgid "Separator1"
+msgstr ""
+
+#: ttextstylesform.toolbar1.caption
+msgctxt "TTEXTSTYLESFORM.TOOLBAR1.CAPTION"
+msgid "ToolBar1"
+msgstr ""
+
 #: ttextstyleswindow.addstyle.caption
+msgctxt "ttextstyleswindow.addstyle.caption"
 msgid "AddStyle"
 msgstr ""
 
 #: ttextstyleswindow.addstyle.hint
+msgctxt "ttextstyleswindow.addstyle.hint"
 msgid "Add text style"
 msgstr ""
 
@@ -212,10 +461,12 @@ msgid "Text styles"
 msgstr ""
 
 #: ttextstyleswindow.delstyle.caption
+msgctxt "ttextstyleswindow.delstyle.caption"
 msgid "DelStyle"
 msgstr ""
 
 #: ttextstyleswindow.delstyle.hint
+msgctxt "ttextstyleswindow.delstyle.hint"
 msgid "Delete text style"
 msgstr ""
 
@@ -265,34 +516,42 @@ msgid "Oblique"
 msgstr ""
 
 #: ttextstyleswindow.mkcurrentstyle.caption
+msgctxt "ttextstyleswindow.mkcurrentstyle.caption"
 msgid "MkCurrentStyle"
 msgstr ""
 
 #: ttextstyleswindow.mkcurrentstyle.hint
+msgctxt "ttextstyleswindow.mkcurrentstyle.hint"
 msgid "Make selected style curretn"
 msgstr ""
 
 #: ttextstyleswindow.purgestyles.caption
+msgctxt "ttextstyleswindow.purgestyles.caption"
 msgid "PurgeStyles"
 msgstr ""
 
 #: ttextstyleswindow.purgestyles.hint
+msgctxt "ttextstyleswindow.purgestyles.hint"
 msgid "Purge not used styles"
 msgstr ""
 
 #: ttextstyleswindow.refreshstyles.caption
+msgctxt "ttextstyleswindow.refreshstyles.caption"
 msgid "RefreshStyles"
 msgstr ""
 
 #: ttextstyleswindow.refreshstyles.hint
+msgctxt "ttextstyleswindow.refreshstyles.hint"
 msgid "Refresh styles list"
 msgstr ""
 
 #: ttextstyleswindow.separator1.caption
+msgctxt "ttextstyleswindow.separator1.caption"
 msgid "Separator1"
 msgstr ""
 
 #: ttextstyleswindow.toolbar1.caption
+msgctxt "ttextstyleswindow.toolbar1.caption"
 msgid "ToolBar1"
 msgstr ""
 
@@ -311,17 +570,9 @@ msgctxt "uunitmanager.noglc"
 msgid "OpenGL context is not created"
 msgstr ""
 
-#: uzcstrconsts.fontnotfoundandreplace
-msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
-msgstr ""
-
 #: uzcstrconsts.rsaboutwndcaption
 msgctxt "uzcstrconsts.rsaboutwndcaption"
 msgid "About ZCAD"
-msgstr ""
-
-#: uzcstrconsts.rsalternatefontnotfoundin
-msgid "Alternate font \"%s\" is not found in \"%s\""
 msgstr ""
 
 #: uzcstrconsts.rsauthor
@@ -331,10 +582,6 @@ msgstr ""
 #: uzcstrconsts.rsautosave
 msgctxt "uzcstrconsts.rsautosave"
 msgid "Autosave"
-msgstr ""
-
-#: uzcstrconsts.rsblockignored
-msgid "Ignored block \"%s\""
 msgstr ""
 
 #: uzcstrconsts.rsblocks
@@ -484,6 +731,30 @@ msgstr ""
 msgid "Select or specify the parameters entity!"
 msgstr ""
 
+#: uzcstrconsts.rscmspecifyfirstpoint
+msgid "Specify first point:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifyinsertpoint
+msgid "Specify insert point:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifyrotate
+msgid "Specify rotate:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifyscale
+msgid "Specify scale:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifysecondpoint
+msgid "Specify second point:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifythirdpoint
+msgid "Specify third point:"
+msgstr ""
+
 #: uzcstrconsts.rscolornum
 msgid "Color %d"
 msgstr ""
@@ -548,10 +819,6 @@ msgstr ""
 msgid "Divide by zero"
 msgstr ""
 
-#: uzcstrconsts.rsdoubleblockignored
-msgid "Ignored double definition block \"%s\""
-msgstr ""
-
 #: uzcstrconsts.rsdrawingwindowwndname
 msgctxt "uzcstrconsts.rsdrawingwindowwndname"
 msgid "Drawings window"
@@ -584,17 +851,9 @@ msgstr ""
 msgid "File definition of the variables can not be found for the device \"%s\";"
 msgstr ""
 
-#: uzcstrconsts.rsfileformat
-msgid "%s file format"
-msgstr ""
-
 #: uzcstrconsts.rsgdbobjinspwndname
 msgctxt "uzcstrconsts.rsgdbobjinspwndname"
 msgid "Object inspector"
-msgstr ""
-
-#: uzcstrconsts.rsgridtoodensity
-msgid "Grid too density"
 msgstr ""
 
 #: uzcstrconsts.rshardunnamed
@@ -642,10 +901,6 @@ msgstr ""
 
 #: uzcstrconsts.rslinetypeusedin
 msgid "Line type \"%s\" used in: %d-model, %d-blockdef table"
-msgstr ""
-
-#: uzcstrconsts.rsloadingfile
-msgid "Loading file \"%s\""
 msgstr ""
 
 #: uzcstrconsts.rsloadingfontfile
@@ -746,15 +1001,6 @@ msgstr ""
 msgid "%s \"%s\" renamed to \"%s\""
 msgstr ""
 
-#: uzcstrconsts.rsreservefontnotfound
-msgid "Reserve font is not found in the resources"
-msgstr ""
-
-#: uzcstrconsts.rsreservefontnotload
-msgctxt "uzcstrconsts.rsreservefontnotload"
-msgid "Can not load reserve font"
-msgstr ""
-
 #: uzcstrconsts.rsrevstr
 msgctxt "uzcstrconsts.rsrevstr"
 msgid "Revision SVN:"
@@ -829,10 +1075,6 @@ msgstr ""
 msgid "Unable to delete, Style is used"
 msgstr ""
 
-#: uzcstrconsts.rsunablerenamefiletobak
-msgid "Could not rename file \"%s\" into \"*.bak\""
-msgstr ""
-
 #: uzcstrconsts.rsunableselectfreelayername
 msgid "Unable select free layer name"
 msgstr ""
@@ -847,10 +1089,6 @@ msgstr ""
 
 #: uzcstrconsts.rsunabletoopenfile
 msgid "Unable to open file \"%s\""
-msgstr ""
-
-#: uzcstrconsts.rsunabletowritefile
-msgid "Unable to write file \"%s\""
 msgstr ""
 
 #: uzcstrconsts.rsunassigned
@@ -868,10 +1106,6 @@ msgstr ""
 
 #: uzcstrconsts.rsunknownfileext
 msgid "Unknown file format \"%s\". Saving failed."
-msgstr ""
-
-#: uzcstrconsts.rsunknownfileformat
-msgid "Unknown file format"
 msgstr ""
 
 #: uzcstrconsts.rsunnamedwindowtitle
@@ -893,6 +1127,54 @@ msgstr ""
 
 #: uzcstrconsts.rszcadstarted
 msgid "ZCAD v%s started"
+msgstr ""
+
+#: uzestrconsts.fontnotfoundandreplace
+msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
+msgstr ""
+
+#: uzestrconsts.rsalternatefontnotfoundin
+msgid "Alternate font \"%s\" is not found in \"%s\""
+msgstr ""
+
+#: uzestrconsts.rsblockignored
+msgid "Ignored block \"%s\""
+msgstr ""
+
+#: uzestrconsts.rsdoubleblockignored
+msgid "Ignored double definition block \"%s\""
+msgstr ""
+
+#: uzestrconsts.rsfileformat
+msgid "%s file format"
+msgstr ""
+
+#: uzestrconsts.rsgridtoodensity
+msgid "Grid too density"
+msgstr ""
+
+#: uzestrconsts.rsloadingfile
+msgid "Loading file \"%s\""
+msgstr ""
+
+#: uzestrconsts.rsreservefontnotfound
+msgid "Reserve font is not found in the resources"
+msgstr ""
+
+#: uzestrconsts.rsreservefontnotload
+msgid "Can not load reserve font"
+msgstr ""
+
+#: uzestrconsts.rsunablerenamefiletobak
+msgid "Could not rename file \"%s\" into \"*.bak\""
+msgstr ""
+
+#: uzestrconsts.rsunabletowritefile
+msgid "Unable to write file \"%s\""
+msgstr ""
+
+#: uzestrconsts.rsunknownfileformat
+msgid "Unknown file format"
 msgstr ""
 
 #: windowsspecific.revstr

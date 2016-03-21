@@ -120,7 +120,7 @@ uses
   uzcmainwindow,
   uzcshared,
   uzcstrconsts,
-  iopalette,
+  uzeiopalette,
   uzctextpreprocessorimpl,
   uzcregisterenitiesfeatures,
   uzcregisterenitiesextenders,

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit gluinterface;
+unit uzegluinterface;
 {$INCLUDE def.inc}
 
 interface

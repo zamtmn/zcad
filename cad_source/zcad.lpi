@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="159">
+    <Units Count="160">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -892,6 +892,11 @@
         <Filename Value="zcad/uzcinterface.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit158>
+      <Unit159>
+        <Filename Value="zengine/misc/uzelclintfex.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="lclintfex"/>
+      </Unit159>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

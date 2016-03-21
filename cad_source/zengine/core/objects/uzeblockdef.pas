@@ -18,7 +18,7 @@
 unit uzeblockdef;
 {$INCLUDE def.inc}
 interface
-uses uzeentity,zeentityfactory,uzgldrawcontext,uzeobjectextender,uzedrawingdef,
+uses uzeentity,uzeentityfactory,uzgldrawcontext,uzeobjectextender,uzedrawingdef,
      uzeentsubordinated,uzeffdxfsupport,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,
      memman,geometry,uzestyleslayers,uzeconsts,uzeentgenericsubentry;
 type

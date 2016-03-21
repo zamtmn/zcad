@@ -22,7 +22,7 @@ unit uzcutils;
 
 interface
 uses LCLProc,zcmultiobjectcreateundocommand,uzeentitiesmanager,uzepalette,
-     zeentityfactory,uzgldrawcontext,uzcdrawing,uzestyleslinetypes,uzcsysvars,
+     uzeentityfactory,uzgldrawcontext,uzcdrawing,uzestyleslinetypes,uzcsysvars,
      uzestyleslayers,sysutils,gdbasetypes,gdbase,uzcdrawings,varmandef,
      uzeconsts,UGDBVisibleOpenArray,uzeentgenericsubentry,uzeentity,
      uzeentblockinsert,memman;

@@ -19,7 +19,7 @@ unit uzeentellipse;
 {$INCLUDE def.inc}
 interface
 uses
-    zeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzecamera,
+    uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzecamera,
     uzeentwithlocalcs,UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,
     UGDBSelectedObjArray,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,
     UGDBOpenArrayOfByte,varman,varmandef,GDBase,uzeconsts,

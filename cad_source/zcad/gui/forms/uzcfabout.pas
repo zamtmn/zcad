@@ -33,7 +33,7 @@ type
 var
   AboutForm:TAboutForm;
 implementation
-uses zeentityfactory,uzcshared,uzclog,uzccommandsmanager;
+uses uzeentityfactory,uzcshared,uzclog,uzccommandsmanager;
 procedure TAboutForm.AfterConstruction;
 begin
   inherited;

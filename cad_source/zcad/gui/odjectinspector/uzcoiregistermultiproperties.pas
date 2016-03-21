@@ -21,7 +21,7 @@ unit uzcoiregistermultiproperties;
 
 interface
 uses
-  math,uzcoimultiobjects,uzepalette,memman,uzcshared,sysutils,zeentityfactory,
+  math,uzcoimultiobjects,uzepalette,memman,uzcshared,sysutils,uzeentityfactory,
   gdbase,
   uzcdrawings,
   varmandef,

@@ -19,7 +19,7 @@
 unit uzccomimport;
 {$INCLUDE def.inc}
 interface
-uses uzgldrawcontext,zeentityfactory,
+uses uzgldrawcontext,uzeentityfactory,
      {$IFNDEF DELPHI}dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}
      uzedrawingsimple,
      uzeentcircle,uzeentarc,uzeentline,

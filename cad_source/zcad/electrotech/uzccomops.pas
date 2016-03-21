@@ -12,7 +12,7 @@ uses
 
   uzctranslations,uzeentitiesmanager,uzeentity,uzglviewareaabstract,uzgldrawcontext,
   uzeentabstracttext,uzeenttext,UGDBStringArray,zeentityfactory,uzcsysvars,strproc,
-  gdbasetypes,uzccommandsmanager,uzclog,UGDBOpenArrayOfPObjects,plugins,
+  gdbasetypes,uzccommandsmanager,uzclog,UGDBOpenArrayOfPObjects,
   uzccommandsabstract,uzccommandsimpl,gdbase,uzcdrawings,uzcutils,sysutils,
   varmandef,UGDBOpenArrayOfByte,uzeffdxf,zcadinterface,geometry,memman,uzeconsts,
   uzccomdraw,UGDBVisibleOpenArray,uzeentline,paths,uzcshared,uzeentblockinsert,
@@ -106,7 +106,6 @@ var
    t3dp: gdbvertex;
    //pgdbinplugin: PGDBDescriptor;
    //psysvarinplugin: pgdbsysvariable;
-   pluginspath:string;
    pvarman:pvarmanagerdef;
    pdw,pdd,pdtw,pdtd:PGDBDouble;
    pdt:pinteger;

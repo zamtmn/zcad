@@ -17,7 +17,6 @@ uses
   csvdocument,
   UGDBOpenArrayOfPV,uzeentblockinsert,devices,UGDBTree,uzcdrawings,gdbasetypes,
   uzccommandsmanager,uzccomdraw,uzcentelleader,
-  plugins,
   uzccommandsabstract,
   uzccommandsimpl,
   gdbase,

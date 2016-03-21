@@ -45,7 +45,7 @@ uses
   uzeentity,
  uzcshared,
  uzeentitiestree,
- gdbasetypes,memman,WindowsSpecific,
+ gdbasetypes,memman,uzcdialogsfiles,
  UUnitManager,uzclog,Varman,
  dialogs,uzcinfoform;
    var selframecommand:PCommandObjectDef;

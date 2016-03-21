@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="156">
+    <Units Count="157">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -879,6 +879,10 @@
         <Filename Value="zengine/zgl/drawers/uzgloglstatemanager.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit155>
+      <Unit156>
+        <Filename Value="zcad/gui/uzcdialogsfiles.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit156>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

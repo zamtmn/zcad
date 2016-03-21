@@ -32,7 +32,7 @@ uses
   uzeconsts,
   uzeentity,uzeentline,
   uzcentnet,
-  uzcshared,uzeentsubordinated,uzcentcable,varman,WindowsSpecific,uunitmanager,
+  uzcshared,uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
   UGDBOpenArrayOfPObjects,uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
   paths,UGDBStringArray,math,Masks,uzclog,uzccombase,strproc;
 type

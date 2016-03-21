@@ -1,1 +1,1 @@
-..\cad_source\zcad\commands\gdbcommandsexample.pas
+..\cad_source\zcad\commands\uzccomexample.pas

@@ -48,7 +48,7 @@ uses
   //gdbobjectsconstdef,
   uzeentity,
  uzcshared,
- uzedrawing,
+ uzcdrawing,
   {zmenus,}uzcfprojecttree,gdbasetypes,{optionswnd,}uzcfabout,uzcfhelp,memman,WindowsSpecific,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}uzclog,Varman,UGDBNumerator,uzcfcommandline,
  AnchorDocking,dialogs,XMLPropStorage,xmlconf,uzglviewareaogl

@@ -88,7 +88,7 @@ uses
   uzccommandsabstract,
   uzccommandsimpl, //Commands manager and related objects
                       //менеджер команд и объекты связанные с ним
-  uzedrawing,
+  uzcdrawing,
   uzcdrawings,     //Drawings manager, all open drawings are processed him
                       //"Менеджер" чертежей
   uzcutils,         //different functions simplify the creation entities, while there are very few

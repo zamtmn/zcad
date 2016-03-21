@@ -22,7 +22,7 @@ unit uzcftextstyles;
 interface
 
 uses
-  zcchangeundocommand,zcobjectchangeundocommand2,uzedrawing,LMessages,uzefont,
+  zcchangeundocommand,zcobjectchangeundocommand2,uzcdrawing,LMessages,uzefont,
   uzclog,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,

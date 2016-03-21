@@ -20,7 +20,7 @@ unit uzcfprojecttree;
 {$INCLUDE def.inc}
 interface
 uses
- uzcsysvars,uzctranslations,uzcenitiesvariablesextender,uzedrawing,paths,
+ uzcsysvars,uzctranslations,uzcenitiesvariablesextender,uzcdrawing,paths,
  UGDBStringArray,uzeconsts,uzcstrconsts,uzcctrlcontextmenu,strproc,
  uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  Classes,FileUtil,Forms,stdctrls,Controls,ComCtrls,

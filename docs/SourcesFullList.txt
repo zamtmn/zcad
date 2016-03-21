@@ -25,3 +25,4 @@
 ..\cad_source\zcad\core\utils\*.pas
 ..\cad_source\zengine\core\objects\*.pas
 ..\cad_source\zcad\core\*.pas
+..\cad_source\zcad\misc\*.pas

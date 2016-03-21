@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit printerspecfunc;
+unit uzcprinterspecfunc;
 {$INCLUDE def.inc}
 
 interface

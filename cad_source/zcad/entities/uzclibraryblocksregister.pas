@@ -22,8 +22,8 @@ unit uzclibraryblocksregister;
 
 interface
 uses uzccommandsimpl,strproc,UGDBOpenArrayOfByte,uzccommandsabstract,paths,
-     uzestyleslayers,uzestyleslinetypes,uzeconsts,zeentitiesmanager,
-     UGDBObjBlockdefArray,zeblockdefsfactory,uzeblockdef,uzedrawingdef,
+     uzestyleslayers,uzestyleslinetypes,uzeconsts,uzeentitiesmanager,
+     UGDBObjBlockdefArray,uzeblockdefsfactory,uzeblockdef,uzedrawingdef,
      memman,uzcsysvars,GDBase,GDBasetypes,uzeentgenericsubentry,uzeentity;
 implementation
 uses

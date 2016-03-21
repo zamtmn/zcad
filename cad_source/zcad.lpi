@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="151">
+    <Units Count="153">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -858,6 +858,14 @@
         <Filename Value="zengine/core/uzeconsts.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit150>
+      <Unit151>
+        <Filename Value="zengine/core/uzeblockdefsfactory.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit151>
+      <Unit152>
+        <Filename Value="zengine/core/uzedimblocksregister.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit152>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit zeblockdefsfactory;
+unit uzeblockdefsfactory;
 {$INCLUDE def.inc}
 
 

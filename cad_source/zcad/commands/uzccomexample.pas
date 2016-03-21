@@ -69,7 +69,7 @@ uses
   UGDBOpenArrayOfPV,
 
   geometry,
-  zeentitiesmanager,
+  uzeentitiesmanager,
 
   uzcshared,
   zeentityfactory,    //unit describing a "factory" to create primitives

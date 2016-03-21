@@ -9,6 +9,7 @@
 ..\cad_source\zengine\zgl\drawers\*.pas
 ..\cad_source\zengine\misc\*.pas
 ..\cad_source\zengine\fileformats\*.pas
+..\cad_source\zengine\core\utils\*.pas
 ..\cad_source\zcad\electrotech\*.pas
 ..\cad_source\zcad\lclmod\*.pas
 ..\cad_source\zcad\commands\*.pas
@@ -18,10 +19,9 @@
 ..\cad_source\zcad\entities\*.pas
 ..\cad_source\zcad\*.pas
 ..\cad_source\zcad\gui\odjectinspector\*.pas
-..\cad_source\zengine\u\undostack\*.pas
+..\cad_source\zcad\core\undostack\*.pas
 ..\cad_source\zcad\register\*.pas
 ..\cad_source\zcad\core\drawings\*.pas
-..\cad_source\zengine\core\utils\*.pas
 ..\cad_source\zcad\core\utils\*.pas
 ..\cad_source\zengine\core\objects\*.pas
 ..\cad_source\zcad\core\*.pas

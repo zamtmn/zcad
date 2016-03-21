@@ -30,7 +30,7 @@ uses
   uzeconsts,uzestylestexts,uzcdrawings,gdbase,gdbasetypes,varmandef,
   uzcsuptypededitors,
 
-  paths,zcadinterface, uzcstrconsts, uzcsysinfo,strproc, uzcshared,UBaseTypeDescriptor,
+  paths,uzcinterface, uzcstrconsts, uzcsysinfo,strproc, uzcshared,UBaseTypeDescriptor,
   uzcimagesmanager, usupportgui, ZListView,uzefontmanager,varman,UGDBStringArray,
   uzeentity,uzeenttext;
 

@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="157">
+    <Units Count="159">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -883,6 +883,15 @@
         <Filename Value="zcad/gui/uzcdialogsfiles.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit156>
+      <Unit157>
+        <Filename Value="zcad/uzcplugins.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="plugins"/>
+      </Unit157>
+      <Unit158>
+        <Filename Value="zcad/uzcinterface.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit158>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

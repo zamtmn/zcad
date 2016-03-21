@@ -26,7 +26,7 @@ uses
   Graphics,LCLType,Themes,types,uzeconsts,UGDBNamedObjectsArray,UGDBStringArray,
   varmandef,Varman,uzcfcolors,uzestyleslayers,gdbase,uzcflineweights,gdbasetypes,usupportgui,
   StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,strproc,uzcsysvars,uzccommandsmanager,
-  zcadinterface;
+  uzcinterface;
 type
     AsyncCommHelper=class
                          class procedure GetVertex(Pinstance:PtrInt);

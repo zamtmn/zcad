@@ -25,7 +25,7 @@ uses
   {fileutil}LazUTF8,
   varmandef,
   uzglviewareadata,
-  zcadinterface,
+  uzcinterface,
   geometry,
   memman,
   uzeconsts,

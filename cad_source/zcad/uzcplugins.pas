@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit plugins;
+unit uzcplugins;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes,sysutils, dynlibs, uzclog,memman,UGDBOpenArrayOfData,uzeentity;

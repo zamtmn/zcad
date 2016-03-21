@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-unit zcadinterface;
+unit uzcinterface;
 {$INCLUDE def.inc}
 interface
 uses uzelongprocesssupport,zeundostack,varmandef,forms,classes{,UGDBDrawingdef},gdbase;

@@ -21,7 +21,7 @@ unit uzcinfoform;
 interface
 
 uses
-  zcadinterface,ExtCtrls,
+  uzcinterface,ExtCtrls,
   {$IFNDEF DELPHI}lclproc,{$ENDIF}
   Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,fileutil,ButtonPanel,{$ENDIF}Buttons,
   {strutils,}{$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,uzcshared,uzcsysinfo,UGDBOpenArrayOfByte;

@@ -79,7 +79,7 @@ uses
   uzcsysvars,        //system global variables
                       //системные переменные
   uzgldrawcontext,
-  zcadinterface,
+  uzcinterface,
   gdbase,gdbasetypes, //base types
                       //описания базовых типов
   uzeconsts, //base constants

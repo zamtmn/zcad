@@ -21,7 +21,7 @@ unit uzctextenteditor;
 interface
 uses
      uzcsysvars,gdbase,gdbasetypes,uzcsysinfo,
-     uzcinfoform,Varman,zcadinterface,
+     uzcinfoform,Varman,uzcinterface,
      uzedrawingdef,strproc,uzeenttext,uzeconsts,uzcstrconsts,uzcfsinglelinetexteditor,
      Controls,Classes,Forms;
 var

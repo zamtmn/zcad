@@ -11,7 +11,7 @@ uses
 
   uzeconsts,uzestyleslayers,uzcdrawings,gdbase,gdbasetypes,varmandef,
 
-  zcadinterface, uzcstrconsts, strproc, uzcshared, UBaseTypeDescriptor,
+  uzcinterface, uzcstrconsts, strproc, uzcshared, UBaseTypeDescriptor,
   uzcimagesmanager, usupportgui, ZListView;
 
 const

@@ -39,7 +39,7 @@ uses
   varmandef,
   uzglviewareadata,
   uzeffdxf,
-  zcadinterface,
+  uzcinterface,
   geometry,
   memman,
   uzeconsts,

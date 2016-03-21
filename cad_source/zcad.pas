@@ -115,7 +115,7 @@ uses
 
   uzccomelectrical,
   uzccomops,
-  plugins,
+  uzcplugins,
   //zcregisterobjectinspector,
   uzcmainwindow,
   uzcshared,

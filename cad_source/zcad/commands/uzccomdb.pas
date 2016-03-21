@@ -32,7 +32,7 @@ uses
   UGDBOpenArrayOfByte,
   uzeentity,
   uzcshared,
-  uzcdevicebaseabstract,UUnitManager,gdbasetypes,strutils,forms,Controls,zcadinterface,uzedrawingdef,UGDBStringArray,strmy,memman;
+  uzcdevicebaseabstract,UUnitManager,gdbasetypes,strutils,forms,Controls,uzcinterface,uzedrawingdef,UGDBStringArray,strmy,memman;
 
 procedure DBLinkProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
 

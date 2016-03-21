@@ -41,7 +41,7 @@ uses
   uzeffdxf,
   //optionswnd,
   {objinsp,}
-   zcadinterface,
+   uzcinterface,
   //cmdline,
   //UGDBVisibleOpenArray,
   //gdbobjectsconstdef,

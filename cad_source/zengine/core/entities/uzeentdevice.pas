@@ -20,7 +20,7 @@ unit uzeentdevice;
 {$INCLUDE def.inc}
 
 interface
-uses uzestyleslayers,uzepalette,gdbobjectextender,uabstractunit,zeentityfactory,
+uses uzestyleslayers,uzepalette,uzeobjectextender,uabstractunit,zeentityfactory,
      uzgldrawcontext,uzedrawingdef,uzecamera,uzcsysvars,sysutils,devices,
      UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,uunitmanager,memman,geometry,
      uzeconsts,uzeentity,uzeentsubordinated,varmandef,gdbasetypes,

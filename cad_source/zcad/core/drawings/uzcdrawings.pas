@@ -20,7 +20,7 @@ unit uzcdrawings;
 {$INCLUDE def.inc}
 interface
 uses
-    uzglviewareageneral,uzctranslations,zedimblocksregister,zeblockdefsfactory,
+    uzglviewareageneral,uzctranslations,uzedimblocksregister,uzeblockdefsfactory,
     zemathutils,uzgldrawcontext,uzedrawing,uzedrawingdef,paths,uzestylesdim,
     uzedrawingabstract,WindowsSpecific,LResources,uzcsysvars,zcadinterface,
     uzcstrconsts,strproc,uzeblockdef,UGDBObjBlockdefArray,UUnitManager,

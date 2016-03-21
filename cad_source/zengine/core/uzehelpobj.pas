@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit GDBHelpObj;
+unit uzehelpobj;
 {$INCLUDE def.inc}
 interface
 uses UGDBPolyPoint2DArray,gdbase;

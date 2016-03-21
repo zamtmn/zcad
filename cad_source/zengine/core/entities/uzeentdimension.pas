@@ -92,7 +92,7 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 end;
 {EXPORT-}
 implementation
-uses zeentitiesmanager,UGDBOpenArrayOfPV,uzeentblockinsert;
+uses uzeentitiesmanager,UGDBOpenArrayOfPV,uzeentblockinsert;
 procedure GDBObjDimension.DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;var drawing:TDrawingDef;var DC:TDrawContext);
 var
    l:GDBDouble;

@@ -11,7 +11,7 @@ unit uzccomelectrical;
 interface
 uses
   uzglviewareageneral,uzctranslations,zcobjectchangeundocommand2,
-  zcmultiobjectcreateundocommand,zeentitiesmanager,uzedrawingdef,
+  zcmultiobjectcreateundocommand,uzeentitiesmanager,uzedrawingdef,
   uzcenitiesvariablesextender,uzgldrawcontext,uzedrawing,uzcvariablesutils,
   uzeentabstracttext,uzcstrconsts,UGDBSelectedObjArray,zeentityfactory,uzcsysvars,
   csvdocument,

@@ -16,13 +16,13 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit zedimblocksregister;
+unit uzedimblocksregister;
 {$INCLUDE def.inc}
 
 
 interface
-uses uzestyleslayers,uzestyleslinetypes,uzeconsts,zeentitiesmanager,
-     UGDBObjBlockdefArray,zeblockdefsfactory,uzeblockdef,uzedrawingdef,
+uses uzestyleslayers,uzestyleslinetypes,uzeconsts,uzeentitiesmanager,
+     UGDBObjBlockdefArray,uzeblockdefsfactory,uzeblockdef,uzedrawingdef,
      memman,uzcsysvars,GDBase,GDBasetypes,uzeentgenericsubentry,uzeentity;
 implementation
 uses

@@ -19,7 +19,7 @@
 unit uzedrawingsimple;
 {$INCLUDE def.inc}
 interface
-uses uzedrawingdef,zeblockdefsfactory,uzestylesdim,uzeentwithlocalcs,
+uses uzedrawingdef,uzeblockdefsfactory,uzestylesdim,uzeentwithlocalcs,
      uzedrawingabstract,strproc,UGDBObjBlockdefArray,uzestylestables,
      UGDBNumerator, gdbase,sysutils, memman,geometry,gdbasetypes,uzeentgenericsubentry,
      uzestyleslayers,uzestyleslinetypes,uzeentity,UGDBSelectedObjArray,uzestylestexts,
@@ -156,7 +156,7 @@ begin
    td:=BlockDefArray.getblockdef(name);
    if td=nil then
    begin
-   td:=zeblockdefsfactory.CreateBlockDef(@self,name);
+   td:=uzeblockdefsfactory.CreateBlockDef(@self,name);
    if td=nil then
                  begin
                       if assigned(MainBlockCreateProc) then

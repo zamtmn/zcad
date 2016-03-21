@@ -31,16 +31,6 @@ type
                       PFirstObj:PGDBObjEntity;
                       Count:GDBInteger;
                 end;
-//procedure addtext(popa: PGDBOpenArrayProperty_GDBWord; point: gdbvertex; h, angle: GDBDouble; s: pansichar; js: GDBByte); export;
-//procedure addarc(popa: PGDBOpenArrayProperty_GDBWord; point: gdbvertex; startangle, endangle, r: GDBDouble); export;
-//procedure setdefaultproperty(pprop: PGDBProperty);
-//procedure reformatmtext(pm: pgdbmtext);
-//procedure reformattext(pt: pgdbtext);
-//procedure reformatlwpolyline(pp: pgdblwpolyline);
-//procedure reformat(obj:PGDBproperty); export;
-//procedure CopyGDBObject(dest,source:PGDBproperty);export;
-//procedure GDBFreeMemGDBObject(source:PGDBproperty);export;
-//procedure GDBGetMemGDBObject(source:PGDBproperty);export;
 function GetSelOjbj:TSelObjDesk;
 procedure GDBObjSetEntityCurrentProp(const pobjent: PGDBObjEntity); export;
 
@@ -60,12 +50,7 @@ procedure UndoCommandEndMarker;
 function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
                                 point: gdbvertex; scale, angle: GDBDouble; s: pansichar):PGDBObjBlockInsert;
-
-var
-   p:gdbvertex;
 implementation
-//uses
-//    log;
 function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
                                 point: gdbvertex; scale, angle: GDBDouble; s: pansichar):PGDBObjBlockInsert;
@@ -219,9 +204,4 @@ begin
 end;
 
 begin
-  p.x := 10;
-  p.y := 20;
-  p.z := 30;
-  //a.init(nil,0, 10, p, p);
-  //a.init(nil,0, 10, p, p);
 end.

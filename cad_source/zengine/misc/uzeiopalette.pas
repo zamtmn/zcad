@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit iopalette;
+unit uzeiopalette;
 {$INCLUDE def.inc}
 interface
 uses paths,uzepalette,uzcstrconsts,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}

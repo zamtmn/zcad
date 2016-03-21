@@ -16,10 +16,10 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit beziersolver;
+unit uzebeziersolver;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitivescreator,uzgprimitives,usimplegenerics,uzglvectorobject,{glstatemanager,}gluinterface,gvector,memman,
+uses uzgprimitivescreator,uzgprimitives,usimplegenerics,uzglvectorobject,{glstatemanager,}uzegluinterface,gvector,memman,
      UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,geometry;
 type
 TPointAttr=(TPA_OnCurve,TPA_NotOnCurve);

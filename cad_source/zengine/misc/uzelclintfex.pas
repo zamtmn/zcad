@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit lclintfex;
+unit uzelclintfex;
 {$INCLUDE def.inc}
 interface
 

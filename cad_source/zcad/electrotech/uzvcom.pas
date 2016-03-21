@@ -74,7 +74,7 @@ uses
   uzeentitiesmanager,
 
   uzcshared,
-  zeentityfactory,    //unit describing a "factory" to create primitives
+  uzeentityfactory,    //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
   uzcsysvars,        //system global variables
                       //системные переменные

@@ -51,7 +51,7 @@ GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects
                 end;
 {Export-}
 implementation
-uses {UGDBDescriptor,}{GDBManager,}{GDBEntity,}zeentityfactory{,varmandef};
+uses uzeentityfactory;
 {function GDBObjOpenArrayOfPV.FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;
 var
    pvisible:PGDBObjEntity;

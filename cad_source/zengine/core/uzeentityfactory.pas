@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit zeentityfactory;
+unit uzeentityfactory;
 {$INCLUDE def.inc}
 
 

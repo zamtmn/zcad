@@ -19,7 +19,7 @@ unit uzeentdimradial;
 {$INCLUDE def.inc}
 
 interface
-uses zeentityfactory,uzeentdimdiametric,uzeentdimension,uzestylesdim,
+uses uzeentityfactory,uzeentdimdiametric,uzeentdimension,uzestylesdim,
      uzestyleslayers,uzedrawingdef,strproc,UGDBOpenArrayOfByte,
      geometry,gdbasetypes,sysutils,uzeentity,GDBase,uzeconsts,uzeffdxfsupport,
      memman,uzeentsubordinated;

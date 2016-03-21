@@ -19,7 +19,7 @@
 unit uzeffdxf;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,paths,strproc,uzgldrawcontext,usimplegenerics,uzestylesdim,zeentityfactory,
+uses LCLProc,paths,strproc,uzgldrawcontext,usimplegenerics,uzestylesdim,uzeentityfactory,
     {$IFNDEF DELPHI}LazUTF8,{$ENDIF}
     UGDBNamedObjectsArray,uzestyleslinetypes,uzedrawingsimple,uzelongprocesssupport,
     uzglviewareadata,uzeffdxfsupport,uzestrconsts,uzestylestexts,

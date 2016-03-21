@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="160">
+    <Units Count="161">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -897,6 +897,10 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="lclintfex"/>
       </Unit159>
+      <Unit160>
+        <Filename Value="zengine/core/uzeentityfactory.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit160>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

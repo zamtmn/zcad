@@ -11,7 +11,7 @@ interface
 uses
 
   uzctranslations,uzeentitiesmanager,uzeentity,uzglviewareaabstract,uzgldrawcontext,
-  uzeentabstracttext,uzeenttext,UGDBStringArray,zeentityfactory,uzcsysvars,strproc,
+  uzeentabstracttext,uzeenttext,UGDBStringArray,uzeentityfactory,uzcsysvars,strproc,
   gdbasetypes,uzccommandsmanager,uzclog,UGDBOpenArrayOfPObjects,
   uzccommandsabstract,uzccommandsimpl,gdbase,uzcdrawings,uzcutils,sysutils,
   varmandef,UGDBOpenArrayOfByte,uzeffdxf,uzcinterface,geometry,memman,uzeconsts,

@@ -20,7 +20,7 @@ unit uzeentlwpolyline;
 {$INCLUDE def.inc}
 
 interface
-uses zeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzecamera,
+uses uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzecamera,
      UGDBOpenArrayOfPObjects,uzglviewareadata,uzeentcurve,UGDBVectorSnapArray,
      geometry,uzestyleslayers,uzeentity,memman,gdbasetypes,UGDBPoint3DArray,
      UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,GDBase,uzeentwithlocalcs,

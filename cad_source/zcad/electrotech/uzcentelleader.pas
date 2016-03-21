@@ -8,7 +8,7 @@ unit uzcentelleader;
 {$INCLUDE def.inc}
 
 interface
-uses uzcenitiesvariablesextender,zeentityfactory,Varman,uzgldrawcontext,
+uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      uzeentabstracttext,uzeentgenericsubentry,uzetrash,uzedrawingdef,uzecamera,
      uzcsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,
      uzeenttext,uzeentdevice,uzcentcable,uzeenttable,UGDBControlPointArray,geometry,

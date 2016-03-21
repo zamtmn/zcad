@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit WindowsSpecific;
+unit uzcdialogsfiles;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes, gdbase,sysutils,strproc,
@@ -27,7 +27,6 @@ const
     CSVFileFilter: GDBString ='CSV files (*.csv)|*.csv|All files (*.*)|*.*';
     //ProjectFileFilter: GDBString = 'DXF files (*.dxf)'#0'*.dxf'#0'DWG files (*.dwg)'#0'*.dwg'#0'ZCP files (*.zcp)'#0'*.zcp'#0'All files (*.*)'#0'*.*'#0#0;
     //CSVFileFilter: GDBString ='CSV files (*.csv)'#0'*.csv'#0'All files (*.*)'#0'*.*'#0#0;
-    {$INCLUDE revision.inc}
 function OpenFileDialog(out FileName:GDBString;const DefFilterIndex:integer; const DefExt, Filter, InitialDir, Title: string):Boolean;
 function SaveFileDialog(var FileName:GDBString;const DefExt, Filter, InitialDir, Title: string):Boolean;
 implementation

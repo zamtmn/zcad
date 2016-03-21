@@ -49,7 +49,7 @@ uses
   uzeentity,
  uzcshared,
  uzcdrawing,
-  {zmenus,}uzcfprojecttree,gdbasetypes,{optionswnd,}uzcfabout,uzcfhelp,memman,WindowsSpecific,{txteditwnd,}
+  {zmenus,}uzcfprojecttree,gdbasetypes,{optionswnd,}uzcfabout,uzcfhelp,memman,uzcdialogsfiles,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}uzclog,Varman,UGDBNumerator,uzcfcommandline,
  AnchorDocking,dialogs,XMLPropStorage,xmlconf,uzglviewareaogl
  {,uPSCompiler,

@@ -22,7 +22,7 @@ interface
 uses
     uzglviewareageneral,uzctranslations,uzedimblocksregister,uzeblockdefsfactory,
     zemathutils,uzgldrawcontext,uzcdrawing,uzedrawingdef,paths,uzestylesdim,
-    uzedrawingabstract,WindowsSpecific,LResources,uzcsysvars,zcadinterface,
+    uzedrawingabstract,uzcdialogsfiles,LResources,uzcsysvars,zcadinterface,
     uzcstrconsts,strproc,uzeblockdef,UGDBObjBlockdefArray,UUnitManager,
     gdbase,varmandef,varman,sysutils,memman,geometry,uzeconsts,
     gdbasetypes,uzedrawingsimple,uzeentgenericsubentry,uzestyleslayers,uzeentity,

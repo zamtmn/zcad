@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit glstatemanager;
+unit uzgloglstatemanager;
 {$INCLUDE def.inc}
 
 interface

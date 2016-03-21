@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="155">
+    <Units Count="156">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -875,6 +875,10 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="UGDBBillOfMaterial"/>
       </Unit154>
+      <Unit155>
+        <Filename Value="zengine/zgl/drawers/uzgloglstatemanager.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit155>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

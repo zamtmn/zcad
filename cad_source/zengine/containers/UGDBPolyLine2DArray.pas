@@ -19,8 +19,7 @@
 unit UGDBPolyLine2DArray;
 {$INCLUDE def.inc}
 interface
-uses {zcadsysvars,}gdbasetypes,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
-     {varmandef,}glstatemanager;
+uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase, geometry,uzgloglstatemanager;
 type
 {REGISTEROBJECTTYPE GDBPolyline2DArray}
 {Export+}

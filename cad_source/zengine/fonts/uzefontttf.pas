@@ -19,7 +19,7 @@
 unit uzefontttf;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzefontbase,beziersolver,math,glstatemanager,gluinterface,TTTypes,TTObjs,
+uses LCLProc,uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzefontbase,beziersolver,math,uzgloglstatemanager,gluinterface,TTTypes,TTObjs,
   usimplegenerics,EasyLazFreeType,memman,strproc,gdbasetypes,sysutils,
   gdbase,geometry;
 type

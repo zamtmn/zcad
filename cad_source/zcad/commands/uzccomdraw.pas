@@ -26,7 +26,7 @@ uses
   uzcoimultiobjects,uzcenitiesvariablesextender,uzcdrawing,uzepalette,
   ugdbopenarrayofgdbdouble,uzctextenteditor,uzgldrawcontext,usimplegenerics,UGDBPoint3DArray,
   uzeentpoint,uzeentitiestree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,zeentityfactory,
-  uzedrawingsimple,uzcsysvars,uzcstrconsts,uzccomdrawdase,glstatemanager,
+  uzedrawingsimple,uzcsysvars,uzcstrconsts,uzccomdrawdase,
   PrintersDlgs,printers,graphics,uzeentdevice,uzeentwithlocalcs,UGDBOpenArrayOfPointer,
   LazUTF8,Clipbrd,LCLType,classes,uzeenttext,uzeentabstracttext,uzestylestexts,
   uzccommandsabstract,strproc,

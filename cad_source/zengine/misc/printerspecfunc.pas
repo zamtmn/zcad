@@ -21,9 +21,9 @@ unit printerspecfunc;
 
 interface
 uses uzepalette,gdbasetypes,gdbase,LCLType,Printers,
-     gl,glu,glstatemanager,
+     gl,glu,uzgloglstatemanager,
      {$IFDEF SLINUX}glx,{$ENDIF}
-     {log,}sysutils,varmandef,Graphics;
+     sysutils,varmandef,Graphics;
 type
     PTPrinterRasterizer=^TPrinterRasterizer;
     TPrinterRasterizer=object(TOGLStateManager)

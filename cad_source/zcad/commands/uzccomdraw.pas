@@ -31,7 +31,6 @@ uses
   LazUTF8,Clipbrd,LCLType,classes,uzeenttext,uzeentabstracttext,uzestylestexts,
   uzccommandsabstract,strproc,
   gdbasetypes,uzccommandsmanager,uzccombase,
-  plugins,
   uzccommandsimpl,
   gdbase,
   uzcdrawings,

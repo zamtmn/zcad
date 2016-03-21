@@ -24,7 +24,6 @@ uses
   uzcstrconsts,GL,printers,graphics,fileutil,Clipbrd,LCLType,classes,
   uzccommandsabstract,
   gdbasetypes,uzccommandsmanager,uzccombase,
-  plugins,
   uzccommandsimpl,
   gdbase,
   uzcdrawings,

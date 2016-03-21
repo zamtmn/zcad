@@ -29,7 +29,6 @@ uses
  TypeDescriptors,uzcutils,uzcstrconsts,uzcctrlcontextmenu,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
  strproc,uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,LazUTF8,Forms,Controls,Clipbrd,lclintf,
-  plugins,
   uzcsysinfo,
   uzccommandsabstract,
   uzccommandsimpl,

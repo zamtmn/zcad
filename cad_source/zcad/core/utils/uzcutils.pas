@@ -40,19 +40,27 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzeentitiesmanager,uzepalet
     @return(Указатель на первый выбранный примитив и общее количество выбраных примитивов)}
   function zcGetSelEntsDeskInCurrentRoot:TSelEntsDesk;
 
-procedure GDBObjSetEntityCurrentProp(const pobjent: PGDBObjEntity); export;
+  {**Выставление общих свойств примитива в соответствии с настройками текущего чертежа
+     Слой, Тип линии, Вес линии, Цвет
 
-{procedure GDBObjSetLineProp(var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint; p1, p2: GDBvertex); export;
-procedure GDBObjLineInit(own:PGDBObjGenericSubEntry;var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LW: GDBSmallint; p1, p2: GDBvertex); export;}
+     Надо приделать еще масштаб типа линии
+    @param(PEnt Указатель на примитив)}
+  procedure zcSetEntPropFromCurrentDrawingProp(const PEnt: PGDBObjEntity);
 
-{procedure GDBObjCircleInit(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble); export;
-procedure GDBObjSetCircleProp(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble); export;}
+  {**Помещение в стек undo маркера начала команды. Используется для группировки
+     операций отмены. Допускаются вложеные команды. Количество маркеров начала и
+     конца должно совпадать
+    @param(CommandName Имя команды. Будет показано в окне истории при отмене\повторе)}
+  procedure zcStartUndoCommand(CommandName:GDBString);
+
+  {**Помещение в стек undo маркера конца команды. Используется для группировки
+     операций отмены. Допускаются вложеные команды. Количество маркеров начала и
+     конца должно совпадать}
+  procedure zcEndUndoCommand;
 
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:GDBString;p_insert:GDBVertex;
                         scale:GDBVertex;rotate:GDBDouble;needundo:GDBBoolean=false
                         ):PGDBObjBlockInsert;
-procedure UndoCommandStartMarker(CommandName:GDBString);
-procedure UndoCommandEndMarker;
 
 function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight;
@@ -116,11 +124,11 @@ procedure zcAddEntToCurrentDrawingWithUndo(const PEnt:PGDBObjEntity);
 begin
      zcAddEntToDrawingWithUndo(PEnt,PTDrawing(gdb.GetCurrentDWG)^);
 end;
-procedure UndoCommandStartMarker(CommandName:GDBString);
+procedure zcStartUndoCommand(CommandName:GDBString);
 begin
      PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushStartMarker(CommandName);
 end;
-procedure UndoCommandEndMarker;
+procedure zcEndUndoCommand;
 begin
      PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushEndMarker;
 end;
@@ -179,12 +187,12 @@ function zcGetSelEntsDeskInCurrentRoot:TSelEntsDesk;
 begin
   result:=zeGetSelEntsDeskInRoot(gdb.GetCurrentROOT^);
 end;
-procedure GDBObjSetEntityCurrentProp(const pobjent: PGDBObjEntity);
+procedure zcSetEntPropFromCurrentDrawingProp(const PEnt: PGDBObjEntity);
 begin
-     pobjent^.vp.Layer:=sysvar.dwg.DWG_CLayer^;
-     pobjent^.vp.LineType:=sysvar.dwg.DWG_CLType^;
-     pobjent^.vp.LineWeight:=sysvar.dwg.DWG_CLinew^;
-     pobjent^.vp.color:=sysvar.dwg.DWG_CColor^;
+     PEnt^.vp.Layer:=sysvar.dwg.DWG_CLayer^;
+     PEnt^.vp.LineType:=sysvar.dwg.DWG_CLType^;
+     PEnt^.vp.LineWeight:=sysvar.dwg.DWG_CLinew^;
+     PEnt^.vp.color:=sysvar.dwg.DWG_CColor^;
 end;
 
 procedure setdefaultproperty(pvo:pgdbobjEntity);

@@ -34,7 +34,7 @@ uses
   uzccommandsimpl,
   gdbase,
   uzcdrawings,
-  uzcutils,
+  uzeutils,uzcutils,
   sysutils,
   varmandef,
   uzglviewareadata,
@@ -3660,20 +3660,20 @@ end;
 function bedit_com(operands:TCommandOperands):TCommandResult;
 var
    i:integer;
-   sd:TSelObjDesk;
+   sd:TSelEntsDesk;
    tn:gdbstring;
 begin
      tn:=operands;
-     sd:=GetSelOjbj;
-     if (sd.PFirstObj<>nil)and(sd.count=1) then
+     sd:=zcGetSelEntsDeskInCurrentRoot;
+     if (sd.PFirstSelectedEnt<>nil)and(sd.SelectedEntsCount=1) then
      begin
-    if (sd.PFirstObj^.vp.ID=GDBBlockInsertID) then
+    if (sd.PFirstSelectedEnt^.vp.ID=GDBBlockInsertID) then
     begin
-         tn:=PGDBObjBlockInsert(sd.PFirstObj)^.name;
+         tn:=PGDBObjBlockInsert(sd.PFirstSelectedEnt)^.name;
     end
-else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
+else if (sd.PFirstSelectedEnt^.vp.ID=GDBDeviceID) then
     begin
-         tn:=DevicePrefix+PGDBObjBlockInsert(sd.PFirstObj)^.name;
+         tn:=DevicePrefix+PGDBObjBlockInsert(sd.PFirstSelectedEnt)^.name;
     end;
      end;
 

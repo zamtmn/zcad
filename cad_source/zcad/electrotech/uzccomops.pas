@@ -13,7 +13,7 @@ uses
   uzctranslations,uzeentitiesmanager,uzeentity,uzglviewareaabstract,uzgldrawcontext,
   uzeentabstracttext,uzeenttext,UGDBStringArray,uzeentityfactory,uzcsysvars,strproc,
   gdbasetypes,uzccommandsmanager,uzclog,UGDBOpenArrayOfPObjects,
-  uzccommandsabstract,uzccommandsimpl,gdbase,uzcdrawings,uzcutils,sysutils,
+  uzccommandsabstract,uzccommandsimpl,gdbase,uzcdrawings,uzeutils,uzcutils,sysutils,
   varmandef,UGDBOpenArrayOfByte,uzeffdxf,uzcinterface,geometry,memman,uzeconsts,
   uzccomdraw,UGDBVisibleOpenArray,uzeentline,paths,uzcshared,uzeentblockinsert,
   varman,uzccablemanager,uzeentdevice,uzeentmtext,math;
@@ -1083,21 +1083,21 @@ begin
 end;
 function PlCommandStart(operands:pansichar):GDBInteger;
 var //i: GDBInteger;
-    sd:TSelObjDesk;
+    sd:TSelEntsDesk;
 begin
   OrtoDevPlaceParam.Name:='';
-  sd:=GetSelOjbj;
-    if sd.PFirstObj<>nil then
-    if (sd.PFirstObj^.vp.ID=GDBBlockInsertID) then
+  sd:=zcGetSelEntsDeskInCurrentRoot;
+    if sd.PFirstSelectedEnt<>nil then
+    if (sd.PFirstSelectedEnt^.vp.ID=GDBBlockInsertID) then
     begin
-         OrtoDevPlaceParam.Name:=PGDBObjBlockInsert(sd.PFirstObj)^.name;
+         OrtoDevPlaceParam.Name:=PGDBObjBlockInsert(sd.PFirstSelectedEnt)^.name;
     end
-else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
+else if (sd.PFirstSelectedEnt^.vp.ID=GDBDeviceID) then
     begin
-         OrtoDevPlaceParam.Name:=DevicePrefix+PGDBObjBlockInsert(sd.PFirstObj)^.name;
+         OrtoDevPlaceParam.Name:=DevicePrefix+PGDBObjBlockInsert(sd.PFirstSelectedEnt)^.name;
     end;
 
-  if (OrtoDevPlaceParam.Name='')or(sd.Count=0)or(sd.Count>1) then
+  if (OrtoDevPlaceParam.Name='')or(sd.SelectedEntsCount=0)or(sd.SelectedEntsCount>1) then
                                    begin
                                         historyout('Должен быть выбран только один блок или устройство!');
                                         commandmanager.executecommandend;

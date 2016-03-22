@@ -365,7 +365,7 @@ begin
                pd^.FormatEntity(gdb.GetCurrentDWG^,dc);//format entity
                                                     //"форматируем" примитив в соответствии с заданными параметрами
 
-               {gdb.}AddEntToCurrentDrawingWithUndo(pd);//Add entity to drawing considering tying to undo-redo
+               {gdb.}zcAddEntToCurrentDrawingWithUndo(pd);//Add entity to drawing considering tying to undo-redo
                                                       //Добавляем примитив в чертеж с учетом обвязки для undo-redo
           end;
       end;
@@ -428,7 +428,7 @@ begin
               InteractiveRDimManipulator(pd,p3,false);
 
               pd^.FormatEntity(gdb.GetCurrentDWG^,dc);
-              {gdb.}AddEntToCurrentDrawingWithUndo(pd);
+              {gdb.}zcAddEntToCurrentDrawingWithUndo(pd);
          end;
     end;
     result:=cmd_ok;
@@ -545,7 +545,7 @@ var
           InteractiveDDimManipulator(pd,p3,false);
 
           pd^.FormatEntity(gdb.GetCurrentDWG^,dc);
-          {gdb.}AddEntToCurrentDrawingWithUndo(pd);
+          {gdb.}zcAddEntToCurrentDrawingWithUndo(pd);
       end;
   end;
 
@@ -609,7 +609,7 @@ var
          dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
 
          pd^.FormatEntity(gdb.GetCurrentDWG^,dc);
-         {gdb.}AddEntToCurrentDrawingWithUndo(pd);
+         {gdb.}zcAddEntToCurrentDrawingWithUndo(pd);
     end;
   end;
 
@@ -704,7 +704,7 @@ begin
                dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
                pa^.FormatEntity(gdb.GetCurrentDWG^,dc);
 
-               {gdb.}AddEntToCurrentDrawingWithUndo(pa);
+               {gdb.}zcAddEntToCurrentDrawingWithUndo(pa);
           end;
       end;
     end;
@@ -801,7 +801,7 @@ begin
                      pe.pentity:=pcircle;
                      pcircle^.initnul;
                      InteractiveSmartCircleManipulator(@pe,pe.p3,false);
-                     {gdb.}AddEntToCurrentDrawingWithUndo(pcircle);
+                     {gdb.}zcAddEntToCurrentDrawingWithUndo(pcircle);
                 end;
            end
            else
@@ -811,7 +811,7 @@ begin
                pe.pentity:=pcircle;
                pcircle^.initnul;
                InteractiveSmartCircleManipulator(@pe,pe.p2,false);
-               {gdb.}AddEntToCurrentDrawingWithUndo(pcircle);
+               {gdb.}zcAddEntToCurrentDrawingWithUndo(pcircle);
            end;
       end;
     end;
@@ -839,7 +839,7 @@ begin
       //конец нового способа
 
       GDBObjSetEntityCurrentProp(pline);                                        //присваиваем текущие слой, вес и т.п
-      AddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
+      zcAddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
     end;
     result:=cmd_ok;
 end;
@@ -1254,7 +1254,7 @@ begin
              InteractiveLWRectangleManipulator(polyLWObj,pe.p1,false);
              if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveLWRectangleManipulator,polyLWObj) then
              begin
-                AddEntToCurrentDrawingWithUndo(polyLWObj); //Добавить объект из конструкторской области в чертеж через ундо//
+                zcAddEntToCurrentDrawingWithUndo(polyLWObj); //Добавить объект из конструкторской области в чертеж через ундо//
                 {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
                 нужно почистить список примитивов конструируемой области, без физического удаления примитивов}
                 gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
@@ -1272,7 +1272,7 @@ begin
              InteractiveRectangleManipulator(polyObj,pe.p1,false);
              if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveRectangleManipulator,polyObj) then
              begin
-                AddEntToCurrentDrawingWithUndo(polyObj); //Добавить объект из конструкторской области в чертеж через ундо//
+                zcAddEntToCurrentDrawingWithUndo(polyObj); //Добавить объект из конструкторской области в чертеж через ундо//
                 {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
                 нужно почистить список примитивов конструируемой области, без физического удаления примитивов}
                 gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
@@ -1369,7 +1369,7 @@ begin
 //      if commandmanager.Get3DPointInteractive(PUser^.TypeName,pe.p2,@Interactive2DRectangleManipulator,polyObj) then
       begin
           //незабываем вконце добавить всё что наконструировали в чертеж//
-          AddEntToCurrentDrawingWithUndo(polyObj);
+          zcAddEntToCurrentDrawingWithUndo(polyObj);
           //так как сейчас у нас объект находится и в чертеже и в конструируемой области, нужно почистить список примитивов конструируемой области, без физического удаления примитивов//
           gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
 
@@ -1439,11 +1439,11 @@ begin
           //     Polly^.FormatEntity(gdb.GetCurrentDWG^,dc);
           //
           //     UndoCommandStartMarker('');
-          //     AddEntToCurrentDrawingWithUndo(pline1);
-          //     AddEntToCurrentDrawingWithUndo(pline2);
-          //     AddEntToCurrentDrawingWithUndo(pline3);
-          //     AddEntToCurrentDrawingWithUndo(pline4);
-          //     AddEntToCurrentDrawingWithUndo(Polly);
+          //     zcAddEntToCurrentDrawingWithUndo(pline1);
+          //     zcAddEntToCurrentDrawingWithUndo(pline2);
+          //     zcAddEntToCurrentDrawingWithUndo(pline3);
+          //     zcAddEntToCurrentDrawingWithUndo(pline4);
+          //     zcAddEntToCurrentDrawingWithUndo(Polly);
           //     UndoCommandEndMarker;
           //
       end;

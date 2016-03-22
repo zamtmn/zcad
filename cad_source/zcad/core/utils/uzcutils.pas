@@ -12,7 +12,7 @@
 *                                                                           *
 *****************************************************************************
 }
-{
+{**
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
@@ -21,17 +21,25 @@ unit uzcutils;
 
 
 interface
-uses LCLProc,zcmultiobjectcreateundocommand,uzeentitiesmanager,uzepalette,
+uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzeentitiesmanager,uzepalette,
      uzeentityfactory,uzgldrawcontext,uzcdrawing,uzestyleslinetypes,uzcsysvars,
      uzestyleslayers,sysutils,gdbasetypes,gdbase,uzcdrawings,varmandef,
      uzeconsts,UGDBVisibleOpenArray,uzeentgenericsubentry,uzeentity,
      uzeentblockinsert,memman;
-type
-    TSelObjDesk=record
-                      PFirstObj:PGDBObjEntity;
-                      Count:GDBInteger;
-                end;
-function GetSelOjbj:TSelObjDesk;
+
+  {**Добавление в чертеж примитива с обвязкой undo
+    @param(PEnt Указатель на добавляемый примитив)
+    @param(Drawing Чертеж куда будет добавлен примитив)}
+  procedure zcAddEntToDrawingWithUndo(const PEnt:PGDBObjEntity;var Drawing:TDrawing);
+
+  {**Добавление в текущий чертеж примитива с обвязкой undo
+    @param(PEnt Указатель на добавляемый примитив)}
+  procedure zcAddEntToCurrentDrawingWithUndo(const PEnt:PGDBObjEntity);
+
+  {**Получение "описателя" выбраных примитивов в текущем "корне" текущего чертежа
+    @return(Указатель на первый выбранный примитив и общее количество выбраных примитивов)}
+  function zcGetSelEntsDeskInCurrentRoot:TSelEntsDesk;
+
 procedure GDBObjSetEntityCurrentProp(const pobjent: PGDBObjEntity); export;
 
 {procedure GDBObjSetLineProp(var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint; p1, p2: GDBvertex); export;
@@ -43,7 +51,6 @@ procedure GDBObjSetCircleProp(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLaye
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:GDBString;p_insert:GDBVertex;
                         scale:GDBVertex;rotate:GDBDouble;needundo:GDBBoolean=false
                         ):PGDBObjBlockInsert;
-procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
 procedure UndoCommandStartMarker(CommandName:GDBString);
 procedure UndoCommandEndMarker;
 
@@ -94,17 +101,20 @@ begin
   owner.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
   result:=pb;
 end;
-
-procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
+procedure zcAddEntToDrawingWithUndo(const PEnt:PGDBObjEntity;var Drawing:TDrawing);
 var
     domethod,undomethod:tmethod;
 begin
      SetObjCreateManipulator(domethod,undomethod);
-     with PushMultiObjectCreateCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
+     with PushMultiObjectCreateCommand(Drawing.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
      begin
           AddObject(PEnt);
           comit;
      end;
+end;
+procedure zcAddEntToCurrentDrawingWithUndo(const PEnt:PGDBObjEntity);
+begin
+     zcAddEntToDrawingWithUndo(PEnt,PTDrawing(gdb.GetCurrentDWG)^);
 end;
 procedure UndoCommandStartMarker(CommandName:GDBString);
 begin
@@ -165,27 +175,9 @@ begin
   result^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,gdb.GetCurrentDWG^.myGluProject2,dc);
   end;
 end;
-
-function GetSelOjbj:TSelObjDesk;
-var
-    pv:pGDBObjEntity;
-    ir:itrec;
+function zcGetSelEntsDeskInCurrentRoot:TSelEntsDesk;
 begin
-     result.PFirstObj:=nil;
-     result.Count:=0;
-
-     pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
-
-  if pv<>nil then
-  repeat
-    if pv^.Selected then
-    begin
-         if result.Count=0 then
-                                result.PFirstObj:=pv;
-         inc(result.count);
-    end;
-  pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
-  until pv=nil;
+  result:=zeGetSelEntsDeskInRoot(gdb.GetCurrentROOT^);
 end;
 procedure GDBObjSetEntityCurrentProp(const pobjent: PGDBObjEntity);
 begin

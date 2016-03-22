@@ -160,7 +160,7 @@ begin
 
   // assign general properties from system variables to entity
   //присваиваем примитиву общие свойства из системных переменных
-  GDBObjSetEntityCurrentProp(ln);
+  zcSetEntPropFromCurrentDrawingProp(ln);
 
   // set the new point to the end of the line
   // устанавливаем новую точку конца линии
@@ -184,7 +184,7 @@ begin
 
   // assign general properties from system variables to entity
   // присваиваем примитиву общие свойства из системных переменных
-  GDBObjSetEntityCurrentProp(ad);
+  zcSetEntPropFromCurrentDrawingProp(ad);
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   with ad^ do
    begin
@@ -249,7 +249,7 @@ var
   dc:TDrawContext;
 begin
 
-  GDBObjSetEntityCurrentProp(rd);
+  zcSetEntPropFromCurrentDrawingProp(rd);
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   with rd^ do
    begin
@@ -349,7 +349,7 @@ begin
                                                           //выделяем вамять под примитив
                pd^.initnul(gdb.GetCurrentROOT);//инициализируем примитив, указываем его владельца
                                                //initialize the primitive, specify its owner
-               GDBObjSetEntityCurrentProp(pd);//assign general properties from system variables to entity
+               zcSetEntPropFromCurrentDrawingProp(pd);//assign general properties from system variables to entity
                                               //присваиваем примитиву общие свойства из системных переменных
 
                pd^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;//specify the dimension style
@@ -416,7 +416,7 @@ begin
               gdb.GetCurrentDWG^.FreeConstructionObjects;
               pd := AllocEnt(GDBRotatedDimensionID);
               pd^.initnul(gdb.GetCurrentROOT);
-              GDBObjSetEntityCurrentProp(pd);
+              zcSetEntPropFromCurrentDrawingProp(pd);
 
               pd^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
               pd^.DimData.P13InWCS:=p1;
@@ -442,7 +442,7 @@ var
     dc:TDrawContext;
 begin
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-  GDBObjSetEntityCurrentProp(dd);
+  zcSetEntPropFromCurrentDrawingProp(dd);
   with dd^ do
    begin
     PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
@@ -460,7 +460,7 @@ var
     dc:TDrawContext;
 begin
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-  GDBObjSetEntityCurrentProp(PBlockInsert);
+  zcSetEntPropFromCurrentDrawingProp(PBlockInsert);
   with PBlockInsert^ do
    begin
     PBlockInsert^.Local.P_insert:=Point;
@@ -487,7 +487,7 @@ begin
   PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Scale.z:=rscale;
 
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-  GDBObjSetEntityCurrentProp(PBlockInsert);
+  zcSetEntPropFromCurrentDrawingProp(PBlockInsert);
   with PBlockInsert^ do
    begin
     PBlockInsert^.scale:=PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Scale;
@@ -512,7 +512,7 @@ begin
   PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Rotate:=rRotate;
 
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-  GDBObjSetEntityCurrentProp(PBlockInsert);
+  zcSetEntPropFromCurrentDrawingProp(PBlockInsert);
   with PBlockInsert^ do
    begin
     PBlockInsert^.rotate:=rRotate;
@@ -719,7 +719,7 @@ var
     ad:TArcData;
     dc:TDrawContext;
 begin
-  GDBObjSetEntityCurrentProp(PT3PointCircleModePentity(PInteractiveData)^.pentity);
+  zcSetEntPropFromCurrentDrawingProp(PT3PointCircleModePentity(PInteractiveData)^.pentity);
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
   case PT3PointCircleModePentity(PInteractiveData)^.npoint of
      0:begin
@@ -838,7 +838,7 @@ begin
       //pline:=pointer(ENTF_CreateLine(nil,nil,[p1.x,p1.y,p1.z,p2.x,p2.y,p2.z])); //создаем примитив с зпданой геометрией, не указывая владельца и список во владельце
       //конец нового способа
 
-      GDBObjSetEntityCurrentProp(pline);                                        //присваиваем текущие слой, вес и т.п
+      zcSetEntPropFromCurrentDrawingProp(pline);                                        //присваиваем текущие слой, вес и т.п
       zcAddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
     end;
     result:=cmd_ok;
@@ -1058,9 +1058,9 @@ end;
 //  //   PointData.p2.y:=PT3PointPentity(PInteractiveData)^.p2.y;
 //  // assign general properties from system variables to entity
 //  //присваиваем примитиву общие свойства из системных переменных
-//  GDBObjSetEntityCurrentProp(ln);
+//  zcSetEntPropFromCurrentDrawingProp(ln);
 //
-//  GDBObjSetEntityCurrentProp(ln2);
+//  zcSetEntPropFromCurrentDrawingProp(ln2);
 //  //ln2:=ln;
 //
 //  Point2 := Point;
@@ -1099,7 +1099,7 @@ end;
 //    dc:TDrawContext;
 //begin
 //
-//  //GDBObjSetEntityCurrentProp(ln);
+//  //zcSetEntPropFromCurrentDrawingProp(ln);
 //  //GDBObjLine.CreateInstance;
 //  //
 //  //ln := GDBObjLine.CreateInstance;
@@ -1151,7 +1151,7 @@ var
   dc:TDrawContext;
 begin
 
-  GDBObjSetEntityCurrentProp(polyLWObj);
+  zcSetEntPropFromCurrentDrawingProp(polyLWObj);
 
   stPoint := GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(0)^);
 
@@ -1180,7 +1180,7 @@ var
   dc:TDrawContext;
 begin
 
-  GDBObjSetEntityCurrentProp(polyObj);
+  zcSetEntPropFromCurrentDrawingProp(polyObj);
 
   stPoint := GDBvertex(polyObj^.VertexArrayInOCS.getelement(0)^);
 
@@ -1382,12 +1382,12 @@ begin
           //pline2 := GDBObjLine.CreateInstance;
           //pline3 := GDBObjLine.CreateInstance;
           //pline4 := GDBObjLine.CreateInstance;
-          //GDBObjSetEntityCurrentProp(pline1);
-          //GDBObjSetEntityCurrentProp(pline2);
-          //GDBObjSetEntityCurrentProp(pline3);
-          //GDBObjSetEntityCurrentProp(pline4);
+          //zcSetEntPropFromCurrentDrawingProp(pline1);
+          //zcSetEntPropFromCurrentDrawingProp(pline2);
+          //zcSetEntPropFromCurrentDrawingProp(pline3);
+          //zcSetEntPropFromCurrentDrawingProp(pline4);
           //
-          //GDBObjSetEntityCurrentProp(Polly);
+          //zcSetEntPropFromCurrentDrawingProp(Polly);
           //
           //
           //
@@ -1438,13 +1438,13 @@ begin
           //
           //     Polly^.FormatEntity(gdb.GetCurrentDWG^,dc);
           //
-          //     UndoCommandStartMarker('');
+          //     zcStartUndoCommand('');
           //     zcAddEntToCurrentDrawingWithUndo(pline1);
           //     zcAddEntToCurrentDrawingWithUndo(pline2);
           //     zcAddEntToCurrentDrawingWithUndo(pline3);
           //     zcAddEntToCurrentDrawingWithUndo(pline4);
           //     zcAddEntToCurrentDrawingWithUndo(Polly);
-          //     UndoCommandEndMarker;
+          //     zcEndUndoCommand;
           //
       end;
       ReturnToDefaultProc(gdb.GetUnitsFormat);

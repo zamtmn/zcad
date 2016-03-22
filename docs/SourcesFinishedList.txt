@@ -1,1 +1,3 @@
+..\cad_source\zengine\core\utils\uzeutils.pas
+..\cad_source\zcad\core\utils\uzcutils.pas
 ..\cad_source\zcad\commands\uzccomexample.pas

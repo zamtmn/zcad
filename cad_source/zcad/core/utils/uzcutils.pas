@@ -40,10 +40,8 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzeentitiesmanager,uzepalet
     @return(Указатель на первый выбранный примитив и общее количество выбраных примитивов)}
   function zcGetSelEntsDeskInCurrentRoot:TSelEntsDesk;
 
-  {**Выставление общих свойств примитива в соответствии с настройками текущего чертежа
-     Слой, Тип линии, Вес линии, Цвет
-
-     Надо приделать еще масштаб типа линии
+  {**Выставление общих свойств примитива в соответствии с настройками текущего чертежа.
+     Слой, Тип линии, Вес линии, Цвет, Масштаб типа линии
     @param(PEnt Указатель на примитив)}
   procedure zcSetEntPropFromCurrentDrawingProp(const PEnt: PGDBObjEntity);
 
@@ -89,7 +87,7 @@ begin
   if assigned(CreateProc)then
                            begin
                                PGDBObjEntity(pb):=CreateProc(owner,[point.x,point.y,point.z,scale,angle,nam]);
-                               GDBObjSetEntityProp(pb,layeraddres,LTAddres,color,LW);
+                               zeSetEntityProp(pb,layeraddres,LTAddres,color,LW);
                                if ownerarray<>nil then
                                                ownerarray^.add(@pb);
                            end
@@ -189,10 +187,7 @@ begin
 end;
 procedure zcSetEntPropFromCurrentDrawingProp(const PEnt: PGDBObjEntity);
 begin
-     PEnt^.vp.Layer:=sysvar.dwg.DWG_CLayer^;
-     PEnt^.vp.LineType:=sysvar.dwg.DWG_CLType^;
-     PEnt^.vp.LineWeight:=sysvar.dwg.DWG_CLinew^;
-     PEnt^.vp.color:=sysvar.dwg.DWG_CColor^;
+     zeSetEntPropFromDrawingProp(PEnt,gdb.GetCurrentDWG^)
 end;
 
 procedure setdefaultproperty(pvo:pgdbobjEntity);

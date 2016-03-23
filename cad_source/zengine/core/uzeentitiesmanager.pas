@@ -22,9 +22,8 @@ unit uzeentitiesmanager;
 
 interface
 uses LCLProc,uzeconsts,uzepalette,uzestyleslinetypes,uzeentityfactory,
-     uzestyleslayers,sysutils,gdbase,gdbasetypes,UGDBVisibleOpenArray,
+     uzeutils,uzestyleslayers,sysutils,gdbase,gdbasetypes,UGDBVisibleOpenArray,
      uzeentgenericsubentry,uzeentity,memman;
-procedure GDBObjSetEntityProp(const pobjent: PGDBObjEntity;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight);
 function ENTF_CreateLine(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
 function ENTF_CreateCircle(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
 function ENTF_CreateSolid(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
@@ -58,7 +57,7 @@ begin
   if assigned(CreateProc)then
                            begin
                                PGDBObjEntity(pb):=CreateProc(owner,[point.x,point.y,point.z,scale,angle,nam]);
-                               GDBObjSetEntityProp(pb,layeraddres,LTAddres,color,LW);
+                               zeSetEntityProp(pb,layeraddres,LTAddres,color,LW);
                                if ownerarray<>nil then
                                                ownerarray^.add(@pb);
                            end
@@ -72,13 +71,6 @@ begin
   result:=pb;
 end;
 
-procedure GDBObjSetEntityProp(const pobjent: PGDBObjEntity;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:TGDBPaletteColor;LW:TGDBLineWeight);
-begin
-     pobjent^.vp.Layer:=layeraddres;
-     pobjent^.vp.LineType:=LTAddres;
-     pobjent^.vp.LineWeight:=LW;
-     pobjent^.vp.color:=color;
-end;
 function ENTF_CreateSolid(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;args:array of const): PGDBObjEntity;
 begin
   if assigned(_StandartSolidCreateProcedure)then

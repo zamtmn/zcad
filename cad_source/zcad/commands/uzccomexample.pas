@@ -42,6 +42,8 @@ uses
 
   Forms, uzcfblockinsert, uzcfarrayinsert,
 
+  uzeutils,
+
   uzeentblockinsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока
   uzeentline,             //unit describes line entity
@@ -668,7 +670,7 @@ begin
        PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.endangle:=ad.endangle;
        PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.r:=ad.r;
 
-       GDBObjSetEntityProp(PT3PointPentity(PInteractiveData)^.pentity,
+       zeSetEntityProp(PT3PointPentity(PInteractiveData)^.pentity,
                            sysvar.dwg.DWG_CLayer^,
                            sysvar.dwg.DWG_CLType^,
                            sysvar.dwg.DWG_CColor^,

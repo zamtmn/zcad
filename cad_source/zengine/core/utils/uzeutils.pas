@@ -51,6 +51,8 @@ type
     @param(LW Вес линий)}
   procedure zeSetEntityProp(const PEnt:PGDBObjEntity;const PLayer:PGDBLayerProp;const PLT:PGDBLtypeProp;const Color:TGDBPaletteColor;const LW:TGDBLineWeight);
 
+  procedure zeAddEntToRoot(const PEnt: PGDBObjEntity; var Root:GDBObjGenericSubEntry);
+
   {**Процедура счетчик, если слой примитива PInstance равен PCounted, то Counter инкрементируется.
      используется для подсчета количества ссылок на слой в примитивах}
   procedure LayerCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
@@ -60,6 +62,10 @@ type
   procedure LTypeCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 
 implementation
+procedure zeAddEntToRoot(const PEnt: PGDBObjEntity; var Root:GDBObjGenericSubEntry);
+begin
+  Root.AddMi(@PEnt);
+end;
 function zeGetSelEntsDeskInRoot(var Root:GDBObjGenericSubEntry):TSelEntsDesk;
 var
     pv:pGDBObjEntity;

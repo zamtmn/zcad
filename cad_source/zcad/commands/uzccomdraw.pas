@@ -2545,8 +2545,7 @@ var
 begin
   result:=mclick;
   dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-  pc^.vp.Layer := gdb.GetCurrentDWG^.GetCurrentLayer;
-  pc^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
+  zcSetEntPropFromCurrentDrawingProp(pc);
   pc^.Radius := Vertexlength(pc^.local.P_insert, wc);
   pc^.Formatentity(gdb.GetCurrentDWG^,dc);
   pc^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2,dc);
@@ -2560,7 +2559,6 @@ begin
               comit;
          end;
 
-    //gdb.GetCurrentROOT^.AddObjectToObjArray(addr(pc));
     gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
     commandmanager.executecommandend;
   end;

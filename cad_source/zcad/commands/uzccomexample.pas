@@ -1213,7 +1213,7 @@ var
     pf:PfieldDescriptor;  //**< Управление нашей панелью в инспекторе
 
 begin
-   PInternalRTTITypeDesk:=pointer(SysUnit^.TypeName2PTD( 'TRectangParam'));//находим описание типа TRectangParam, мы сразу знаем что это описание записи, поэтому нужно привести тип
+   PInternalRTTITypeDesk:=pointer(SysUnit^.TypeName2PTD('TRectangParam'));//находим описание типа TRectangParam, мы сразу знаем что это описание записи, поэтому нужно привести тип
    pf:=PInternalRTTITypeDesk^.FindField('ET'); //находим описание поля ET
    pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
    pf:=PInternalRTTITypeDesk^.FindField('PolyWidth'); //находим описание поля ET
@@ -1224,7 +1224,7 @@ begin
                               @RectangParam,
                               gdb.GetCurrentDWG );
 
-   if commandmanager.get3dpoint('Specify first point:',pe.p1) then
+   if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1) then
    begin
       pf:=PInternalRTTITypeDesk^.FindField('ET');//находим описание поля ET
       pf^.base.Attributes:=pf^.base.Attributes or FA_READONLY;//устанавливаем ему флаг ридонли
@@ -1238,7 +1238,8 @@ begin
         begin
              polyLWObj:=GDBObjLWPolyline.CreateInstance;
              polyLWObj^.Closed:=true;
-             gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@polyLWObj);
+             //gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@polyLWObj);//было, теперь стало, не @указатель, а просто указатель
+             zcAddEntToCurrentDrawingConstructRoot(polyLWObj);
              vertexLWObj.x:=pe.p1.x;
              vertexLWObj.y:=pe.p1.y;
              polyLWObj^.Vertex2D_in_OCS_Array.Add(@vertexLWObj);
@@ -1254,30 +1255,33 @@ begin
              polyLWObj^.Width2D_in_OCS_Array.Add(@widthObj);
 
              InteractiveLWRectangleManipulator(polyLWObj,pe.p1,false);
-             if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveLWRectangleManipulator,polyLWObj) then
+             if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractiveLWRectangleManipulator,polyLWObj) then
              begin
                 zcAddEntToCurrentDrawingWithUndo(polyLWObj); //Добавить объект из конструкторской области в чертеж через ундо//
                 {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
                 нужно почистить список примитивов конструируемой области, без физического удаления примитивов}
-                gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
+                //gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
+                zcClearCurrentDrawingConstructRoot;
              end
         end
         else begin
              polyObj:=GDBObjPolyline.CreateInstance;
              polyObj^.Closed:=true;
-             gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@polyObj);
+             //gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@polyObj);
+             zcAddEntToCurrentDrawingConstructRoot(polyObj);
              vertexObj:=pe.p1;
              polyObj^.VertexArrayInOCS.Add(@vertexObj);
              polyObj^.VertexArrayInOCS.Add(@vertexObj);
              polyObj^.VertexArrayInOCS.Add(@vertexObj);
              polyObj^.VertexArrayInOCS.Add(@vertexObj);
              InteractiveRectangleManipulator(polyObj,pe.p1,false);
-             if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveRectangleManipulator,polyObj) then
+             if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractiveRectangleManipulator,polyObj) then
              begin
                 zcAddEntToCurrentDrawingWithUndo(polyObj); //Добавить объект из конструкторской области в чертеж через ундо//
                 {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
                 нужно почистить список примитивов конструируемой области, без физического удаления примитивов}
-                gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
+                //gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
+                zcClearCurrentDrawingConstructRoot;
              end
         end;
     end;
@@ -1373,7 +1377,8 @@ begin
           //незабываем вконце добавить всё что наконструировали в чертеж//
           zcAddEntToCurrentDrawingWithUndo(polyObj);
           //так как сейчас у нас объект находится и в чертеже и в конструируемой области, нужно почистить список примитивов конструируемой области, без физического удаления примитивов//
-          gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
+          //gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
+          zcClearCurrentDrawingConstructRoot;
 
           //GDBObjLine.CreateInstance;
           //GDBObjLWPolyline.CreateInstance;

@@ -36,6 +36,10 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzeentitiesmanager,uzepalet
     @param(PEnt Указатель на добавляемый примитив)}
   procedure zcAddEntToCurrentDrawingWithUndo(const PEnt:PGDBObjEntity);
 
+  procedure zcAddEntToCurrentDrawingConstructRoot(const PEnt: PGDBObjEntity);
+
+  procedure zcClearCurrentDrawingConstructRoot;
+
   {**Получение "описателя" выбраных примитивов в текущем "корне" текущего чертежа
     @return(Указатель на первый выбранный примитив и общее количество выбраных примитивов)}
   function zcGetSelEntsDeskInCurrentRoot:TSelEntsDesk;
@@ -125,6 +129,14 @@ end;
 procedure zcStartUndoCommand(CommandName:GDBString);
 begin
      PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushStartMarker(CommandName);
+end;
+procedure zcAddEntToCurrentDrawingConstructRoot(const PEnt: PGDBObjEntity);
+begin
+  zeAddEntToRoot(PEnt,gdb.GetCurrentDWG^.ConstructObjRoot);
+end;
+procedure zcClearCurrentDrawingConstructRoot;
+begin
+  gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
 end;
 procedure zcEndUndoCommand;
 begin

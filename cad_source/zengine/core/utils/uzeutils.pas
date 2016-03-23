@@ -20,7 +20,7 @@ unit uzeutils;
 {$INCLUDE def.inc}
 interface
 uses
-gdbase,GDBasetypes,uzeentity,geometry,uzeentgenericsubentry;
+  uzepalette,uzestyleslinetypes,uzestyleslayers,uzedrawingsimple,gdbase,GDBasetypes,uzeentity,geometry,uzeentgenericsubentry;
 type
   {**Структура описатель выбраных примитивов
     @member(PFirstSelectedEnt Указатель на первый выбраный примитив в чертеже)
@@ -35,11 +35,27 @@ type
     @return(Указатель на первый выбранный примитив и общее количество выбраных примитивов)}
   function zeGetSelEntsDeskInRoot(var Root:GDBObjGenericSubEntry):TSelEntsDesk;
 
-  {**Процедура счетчик, если слой примитива PInstance равен PCounted, то Counter инкрементируется
+  {**Выставление общих свойств примитива в соответствии с настройками чертежа.
+     Слой, Тип линии, Вес линии, Цвет, Масштаб типа линии
+    @param(PEnt Указатель на примитив)
+    @param(Drawing Чертеж откуда будут взяты настройки)}
+  procedure zeSetEntPropFromDrawingProp(const PEnt: PGDBObjEntity; var Drawing:TSimpleDrawing);
+
+  {**Выставление общих свойств примитива
+     Слой, Тип линии, Вес линии, Цвет
+     надо сюда добавить масштаб типа линии
+    @param(PEnt Указатель на примитив)
+    @param(PLayer Указатель на слой)
+    @param(PLT Указатель на тип линий)
+    @param(Color Цвет)
+    @param(LW Вес линий)}
+  procedure zeSetEntityProp(const PEnt:PGDBObjEntity;const PLayer:PGDBLayerProp;const PLT:PGDBLtypeProp;const Color:TGDBPaletteColor;const LW:TGDBLineWeight);
+
+  {**Процедура счетчик, если слой примитива PInstance равен PCounted, то Counter инкрементируется.
      используется для подсчета количества ссылок на слой в примитивах}
   procedure LayerCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 
-  {**Процедура счетчик, если тип линии примитива PInstance равен PCounted, то Counter инкрементируется
+  {**Процедура счетчик, если тип линии примитива PInstance равен PCounted, то Counter инкрементируется.
      используется для подсчета количества ссылок на тип линии в примитивах}
   procedure LTypeCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 
@@ -63,6 +79,21 @@ begin
     end;
   pv:=Root.ObjArray.iterate(ir);
   until pv=nil;
+end;
+procedure zeSetEntPropFromDrawingProp(const PEnt: PGDBObjEntity; var Drawing:TSimpleDrawing);
+begin
+     PEnt^.vp.Layer:=Drawing.currentLayer;
+     PEnt^.vp.LineType:=Drawing.CurrentLType;
+     PEnt^.vp.LineWeight:=Drawing.CurrentLineW;
+     PEnt^.vp.color:=Drawing.CColor;
+     PEnt^.vp.LineTypeScale:=Drawing.CLTScale;
+end;
+procedure zeSetEntityProp(const PEnt:PGDBObjEntity;const PLayer:PGDBLayerProp;const PLT:PGDBLtypeProp;const Color:TGDBPaletteColor;const LW:TGDBLineWeight);
+begin
+     PEnt^.vp.Layer:=PLayer;
+     PEnt^.vp.LineType:=PLT;
+     PEnt^.vp.LineWeight:=LW;
+     PEnt^.vp.color:=Color;
 end;
 procedure LayerCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 begin

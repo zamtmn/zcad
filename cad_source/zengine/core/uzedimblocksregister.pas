@@ -21,7 +21,7 @@ unit uzedimblocksregister;
 
 
 interface
-uses uzestyleslayers,uzestyleslinetypes,uzeconsts,uzeentitiesmanager,
+uses uzeutils,uzestyleslayers,uzestyleslinetypes,uzeconsts,uzeentitiesmanager,
      UGDBObjBlockdefArray,uzeblockdefsfactory,uzeblockdef,uzedrawingdef,
      memman,uzcsysvars,GDBase,GDBasetypes,uzeentgenericsubentry,uzeentity;
 implementation
@@ -42,7 +42,7 @@ begin
    begin
      layertable:=dwg^.GetLayerTable;
      lttable:=dwg^.GetLTypeTable;
-     GDBObjSetEntityProp(pentity,layertable^.GetSystemLayer,lttable^.GetSystemLT(TLTByLayer),ClByLayer,LnWtByLayer);
+     zeSetEntityProp(pentity,layertable^.GetSystemLayer,lttable^.GetSystemLT(TLTByLayer),ClByLayer,LnWtByLayer);
    end;
 end;
 initialization

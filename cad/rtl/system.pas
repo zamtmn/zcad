@@ -3715,10 +3715,6 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function GetCurrentDimStyle:PGDBDimStyle;
                  end;
 //Generate on E:/zcad/cad_source/zcad/core/drawings/uzcdrawings.pas
-TDWGProps=packed record
-                Name:GDBString;
-                Number:GDBInteger;
-          end;
 PTZCADDrawingsManager=^TZCADDrawingsManager;
 TZCADDrawingsManager={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     CurrentDWG:{PTZCADDrawing}PTSimpleDrawing;

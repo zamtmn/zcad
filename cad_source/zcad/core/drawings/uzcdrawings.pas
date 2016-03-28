@@ -30,12 +30,12 @@ uses
     UGDBOpenArrayOfPV,uzefont,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,
     uzetrash,UGDBOpenArrayOfByte,uzglviewareadata;
 type
-{REGISTEROBJECTTYPE GDBDescriptor}
-{EXPORT+}
-TDWGProps=packed record
+{TDWGProps=packed record
                 Name:GDBString;
                 Number:GDBInteger;
-          end;
+          end;}
+{REGISTEROBJECTTYPE TZCADDrawingsManager}
+{EXPORT+}
 PTZCADDrawingsManager=^TZCADDrawingsManager;
 TZCADDrawingsManager={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     CurrentDWG:{PTZCADDrawing}PTSimpleDrawing;

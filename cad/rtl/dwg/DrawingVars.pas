@@ -3,7 +3,7 @@ uses system;
 interface
 var
    camera:GDBObjCamera;
-   DWGProps:TDWGProps;
+   //DWGProps:TDWGProps;
 
    DWG_CLayer:PGDBLayerProp;
    DWG_CLinew:TGDBLineWeight;

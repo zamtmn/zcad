@@ -64,6 +64,7 @@ uses
   uzeentcircle,
   uzeentity,
 
+
   gvector,garrayutils, // Подключение Generics и модуля для работы с ним
 
   uzcentcable,
@@ -106,8 +107,10 @@ type
       PTStructCableLine=^TStructCableLine;
       TStructCableLine=record
                          cableEnt:PGDBObjCable;
-                         fPoint:GDBVertex;
-                         lPoint:GDBVertex;
+                         stPoint:GDBVertex;
+                         edPoint:GDBVertex;
+                         stIndex:Integer; //незнаю нужне ли он будет ну пускай пока будет
+                         edIndex:Integer; //незнаю нужне ли он будет ну пускай пока будет
       end;
       TListCableLine=specialize TVector<TStructCableLine>;
 
@@ -115,11 +118,17 @@ type
       PTStructDeviceLine=^TStructDeviceLine;
       TStructDeviceLine=record
                          deviceEnt:PGDBObjDevice;
-                         //fPoint:GDBVertex;
+                         centerPoint:GDBVertex;
                          //lPoint:GDBVertex;
       end;
       TListDeviceLine=specialize TVector<TStructDeviceLine>;
 
+      //Применяется для функции возврата удлиненной линии
+      PTextendedLine=^TextendedLine;
+      TextendedLine=record
+                         stPoint:GDBVertex;
+                         edPoint:GDBVertex;
+      end;
 
 implementation
 
@@ -190,6 +199,23 @@ begin
   NearObjects.ClearAndDone;//убиваем список
 end;
 
+function compareVertex(p1:GDBVertex;p2:GDBVertex;inaccuracy:GDBDouble):Boolean;
+begin
+    result:=false;
+    if ((p1.x >= p2.x-inaccuracy) and (p1.x <= p2.x+inaccuracy) and (p2.y >= p2.y-inaccuracy) and (p2.y <= p2.y+inaccuracy)) then
+       result:=true;
+end;
+
+function dublicateVertex(listVertex:TListDeviceLine;addVertex:GDBVertex;inaccuracy:GDBDouble):Boolean;
+var
+    i:integer;
+begin
+    result:=false;
+    for i:=0 to listVertex.Size-1 do
+        if ((addVertex.x >= listVertex[i].centerPoint.x-inaccuracy) and (addVertex.x <= listVertex[i].centerPoint.x+inaccuracy) and (addVertex.y >= listVertex[i].centerPoint.y-inaccuracy) and (addVertex.y <= listVertex[i].centerPoint.y+inaccuracy)) then
+           result:=true;
+end;
+
 function TemplateForVeb_com(operands:TCommandOperands):TCommandResult;
 var
     pc,pc2:PGDBObjCable;                //указатель на кабель
@@ -204,7 +230,7 @@ begin
     begin
 
          //поис пересечения
-         l1begin.x := 353;
+         l1begin.x := 350;
          l1begin.y := 80;
          l1begin.z := 0;
 
@@ -212,9 +238,12 @@ begin
          l1end.y := 50;
          l1end.z := 0;
 
-         l2begin.x := 390;
-         l2begin.y := 65;
+         l2begin.x := 350;
+         l2begin.y := 80;
          l2begin.z := 0;
+
+         if  compareVertex(l1begin,l2begin,10) then
+            HistoryOutStr('rrrrrrrrrrrrrrrrrrrrrrrrrr');
 
          l2end.x := 350;
          l2end.y := 60;
@@ -232,12 +261,135 @@ begin
     result:=cmd_ok;
 end;
 
+//function testTempDrawCicle(prompt1,prompt2:GDBString;var p1,p2:GDBVertex):TCommandResult;
+function testTempDrawLine(p1:GDBVertex;p2:GDBVertex):TCommandResult;
+var
+    pline:PGDBObjLine;
+   // pe:T3PointCircleModePentity;
+   // p1,p2:gdbvertex;
+begin
+    begin
+      //старый способ
+
+      pline := AllocEnt(GDBLineID);                                             //выделяем память
+      pline^.init(nil,nil,0,p1,p2);                                             //инициализируем и сразу создаем
+
+      //конец старого способа
+
+
+      //новый способ
+      //pline:=pointer(ENTF_CreateLine(nil,nil,[p1.x,p1.y,p1.z,p2.x,p2.y,p2.z])); //создаем примитив с зпданой геометрией, не указывая владельца и список во владельце
+      //конец нового способа
+
+      zcSetEntPropFromCurrentDrawingProp(pline);                                        //присваиваем текущие слой, вес и т.п
+      zcAddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
+    end;
+    result:=cmd_ok;
+end;
+function testTempDrawCircle(p1:GDBVertex;rr:GDBDouble):TCommandResult;
+var
+    pcircle:PGDBObjCircle;
+   // pe:T3PointCircleModePentity;
+   // p1,p2:gdbvertex;
+begin
+    begin
+      //старый способ
+
+      pcircle := AllocEnt(GDBCircleID);                                             //выделяем память
+      pcircle^.init(nil,nil,0,p1,rr);                                             //инициализируем и сразу создаем
+
+      //конец старого способа
+
+
+      //новый способ
+      //pline:=pointer(ENTF_CreateLine(nil,nil,[p1.x,p1.y,p1.z,p2.x,p2.y,p2.z])); //создаем примитив с зпданой геометрией, не указывая владельца и список во владельце
+      //конец нового способа
+
+      zcSetEntPropFromCurrentDrawingProp(pcircle);                                        //присваиваем текущие слой, вес и т.п
+      zcAddEntToCurrentDrawingWithUndo(pcircle);                                    //добавляем в чертеж
+    end;
+    result:=cmd_ok;
+end;
+
+
+function extendedLineFunc(point1:GDBVertex;point2:GDBVertex;extendedAbsolut:double;volume:boolean):TextendedLine;
+var
+   xline,yline,xyline,xylinenew,xlinenew,ylinenew,xdiffline,ydiffline:double;
+   pt1new,pt2new:GDBVertex;
+   newextendedLine:TextendedLine;
+begin
+     xline:=abs(point2.x - point1.x);
+     yline:=abs(point2.y - point1.y);
+     xyline:=sqrt(sqr(xline) + sqr(yline));
+     xylinenew:=xyline + extendedAbsolut;
+     xlinenew:=(xline*xylinenew)/xyline;
+     ylinenew:=(yline*xylinenew)/xyline;
+     xdiffline:= xlinenew - xline;
+     ydiffline:= ylinenew - yline;
+     if volume then begin
+       if point1.x > point2.x then
+            begin
+              pt1new.x := point1.x + extendedAbsolut;
+              pt2new.x := point2.x - extendedAbsolut;
+            end
+            else
+            begin
+              pt1new.x := point1.x - extendedAbsolut;
+              pt2new.x := point2.x + extendedAbsolut;
+            end;
+       if point1.y > point2.y then
+            begin
+              pt1new.y := point1.y + extendedAbsolut;
+              pt2new.y := point2.y - extendedAbsolut;
+            end
+            else
+            begin
+              pt1new.y := point1.y - extendedAbsolut;
+              pt2new.y := point2.y + extendedAbsolut;
+            end;
+     end
+     else begin
+          if point1.x > point2.x then
+            begin
+              pt1new.x := point1.x + xdiffline;
+              pt2new.x := point2.x - xdiffline;
+            end
+            else
+            begin
+              pt1new.x := point1.x - xdiffline;
+              pt2new.x := point2.x + xdiffline;
+            end;
+       if point1.y > point2.y then
+            begin
+              pt1new.y := point1.y + ydiffline;
+              pt2new.y := point2.y - ydiffline;
+            end
+            else
+            begin
+              pt1new.y := point1.y - ydiffline;
+              pt2new.y := point2.y + ydiffline;
+            end;
+     end;
+
+     // не стал вводит 3-ю ось, может позже.
+     pt1new.z:=0;
+     pt2new.z:=0;
+     newextendedLine.stPoint:=pt1new;
+     newextendedLine.edPoint:=pt2new;
+     extendedLineFunc:= newextendedLine;
+
+end;
+
 //** Базовая функция запуска алгоритма анализа кабеля на плане, подключенных устройств, их нумерация и.т.д
 function NumLengthOtherCable_com(operands:TCommandOperands):TCommandResult;
+const
+     Epsilon=5;   //ПОГРЕШНОСТЬ при черчении
 var
     //список всех кабелей на чертеже в произвольном порядке
-    listCable:TListCableLine;   //сам список
+    listCable:TListCableLine;   //список реальных и виртуальных линий
     infoCable:TStructCableLine; //инфо по объекта списка
+
+    //vertexLines:
 
 
     //список всех устройств на из выделеных на чертеже в произвольном порядке
@@ -245,14 +397,28 @@ var
     infoDevice:TStructDeviceLine; //инфо по объекта списка
 
     pobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
-    pc:PGDBObjCable;
 
-    ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
+    pc,ptest:PGDBObjCable;
+    pline:PGDBObjLine;
+    ppolyline:PGDBObjPolyLine;
+    pd,pObjDevice,currentSubObj:PGDBObjDevice;
 
-    counter:integer; //счетчик
-    i:integer;
+    ir,ir_inDevice:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
+    NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
 
 
+    extMainLine,extNextLine,volumeLine:TextendedLine;
+
+    counter,counter1,counter2:integer; //счетчики
+    i,j:integer;
+
+    Volume:TBoundingBox;            //Ограничивающий объем, обычно в графике его называют AABB - axis aligned bounding box
+                                    //куб со сторонами паралелльными осям, определяется 2мя диагональными точками
+                                    //левая-нижняя-ближняя и правая-верхняя-дальня
+    interceptVertex:GDBVertex;
+    tempStPointLineComparison, tempEdPointLineComparison:GDBVertex;
+
+    psldb:pointer;
 
 
     //PinfoCable:PTStructCableLine;
@@ -270,21 +436,39 @@ begin
    listDevice := TListDeviceLine.Create;  // инициализация списка устройств
 
    counter:=0; //обнуляем счетчик
+   counter1:=0;
+   counter2:=0;
 
-  //+++Выбираем зону в которой будет происходить анализ кабельной продукции+++//
+  //+++Выбираем зону в которой будет происходить анализ кабельной продукции.Создаем два списка, список всех отрезков кабелей и список всех девайсов+++//
   pobj:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
   if pobj<>nil then
     repeat
       if pobj^.selected then
         begin
-             HistoryOutStr(pobj^.GetObjTypeName);
+         //    HistoryOutStr(pobj^.GetObjTypeName);
              if pobj^.vp.ID=GDBCableID then
                begin
-               pc:=PGDBObjCable(pobj);
-               infoCable.cableEnt:=pc;
-               infoCable.fPoint:=PGDBVertex(pc^.VertexArrayInOCS.getelement(0))^;
-               infoCable.lPoint:=PGDBVertex(pc^.VertexArrayInOCS.getelement(1))^;
-               listCable.PushBack(infoCable);
+                 pc:=PGDBObjCable(pobj);
+                 infoCable.cableEnt:=pc;
+                // HistoryOutStr('число ребер в кабеле = ' + IntToStr(pc^.VertexArrayInOCS.GetRealCount));
+                 for i:=1 to pc^.VertexArrayInOCS.GetRealCount-1 do
+                     begin
+
+                       infoCable.stPoint:=PGDBVertex(pc^.VertexArrayInOCS.getelement(i-1))^;
+                       infoCable.edPoint:=PGDBVertex(pc^.VertexArrayInOCS.getelement(i))^;
+                       infoCable.stIndex:=i-1;
+                       infoCable.edIndex:=i;
+                       listCable.PushBack(infoCable); //добавляем к списку реальные кабели
+                       inc(counter1);
+                     end;
+               end;
+             if pobj^.vp.ID=GDBDeviceID then
+               begin
+                 pd:=PGDBObjDevice(pobj);
+                 infoDevice.deviceEnt:=pd;
+                 infoDevice.centerPoint:=pd^.GetCenterPoint;
+                 listDevice.PushBack(infoDevice);
+                 inc(counter2);
                end;
              //GDBObjDevice
         inc(counter);
@@ -293,17 +477,116 @@ begin
     until pobj=nil;
 
   HistoryOutStr('Кол-во ввыбранных элементов = ' + IntToStr(counter));
+  HistoryOutStr('Список кусков кабельных линий состоит из = ' + IntToStr(counter1));
+  HistoryOutStr('Список устройств состоит из = ' + IntToStr(counter2));
+
+ // ptest := listCable[0].cableEnt;
+
+  ///***+++Ищем пересечения каждого кабеля либо друг с другом либо с граними девайсов+++***///
+  psldb:=drawing.GetLayerTable^.{gdb.GetCurrentDWG.LayerTable.}getAddres('SYS_DEVICE_BORDER');
 
   for i:=0 to listCable.Size-1 do
   begin
-    //PinfoCable:=listCable.Mutable[i];
-    HistoryOutStr(listCable[i].cableEnt^.GetObjTypeName);
-  //  //writeln(myArray[i].a,' --> ',myArray[i].b);
-  end;
-  if counter>0 then
+    extMainLine:= extendedLineFunc(listCable[i].stPoint,listCable[i].edPoint,Epsilon,false) ; // увиличиваем длину кабеля для исключения погрешности
+    volumeLine:= extendedLineFunc(listCable[i].stPoint,listCable[i].edPoint,Epsilon,true) ; // находим зону в которой будет находится наш  удлиненый кабель и кабель который его будет пересекать
+    testTempDrawLine(extMainLine.stPoint,extMainLine.edPoint); // визуализация
+    testTempDrawCircle(volumeLine.stPoint,1); // визуализация
+    testTempDrawCircle(volumeLine.edPoint,2); // визуализация
+    //FindObjectsInVolume
+    volume.LBN:=volumeLine.stPoint;
+    volume.RTF:=volumeLine.edPoint;
+    NearObjects.init(100); //инициализируем список
+    if gdb.GetCurrentROOT^.FindObjectsInVolume(volume,NearObjects)then //ищем примитивы оболочка которых пересекается с volume
     begin
-         HistoryOutStr('1');
+       pobj:=NearObjects.beginiterate(ir);//получаем первый примитив из списка
+       counter:=0;
+       if pobj<>nil then                  //если он есть то
+       repeat
+             inc(counter);
+             if pobj^.vp.ID=GDBCableID then//если он кабель то
+             begin
+                 pc:=PGDBObjCable(pobj);
+                // infoCable.cableEnt:=pc;
+                // HistoryOutStr('число ребер в кабеле = ' + IntToStr(pc^.VertexArrayInOCS.GetRealCount));
+                 for j:=1 to pc^.VertexArrayInOCS.GetRealCount-1 do
+                     begin
+                       // Опеделяем выбраный програмой учаток трассы тот же что и выбранный перебором, как то так
+                     //  tempStPointLineComparison:= PGDBVertex(pc^.VertexArrayInOCS.getelement(j-1))^;
+                     //  tempEdPointLineComparison:= PGDBVertex(pc^.VertexArrayInOCS.getelement(j))^;
+                     //if ((listCable[i].stPoint.x = tempStPointLineComparison.x) AND
+                     //    (listCable[i].stPoint.y = tempStPointLineComparison.y) AND
+                     //    (listCable[i].edPoint.x = tempEdPointLineComparison.x) AND
+                     //    (listCable[i].edPoint.y = tempEdPointLineComparison.y)) or
+                     //    ((listCable[i].edPoint.x = tempStPointLineComparison.x) AND
+                     //     (listCable[i].edPoint.y = tempStPointLineComparison.y) AND
+                     //     (listCable[i].stPoint.x = tempEdPointLineComparison.x) AND
+                     //     (listCable[i].stPoint.y = tempEdPointLineComparison.y)
+                     //    ) then
+                     //       HistoryOutStr('Оно самое')    // странно почему то ничего не находит :) наверное условие написано не правильно. Но все работает как должно
+                     //    else
+                     //      begin
+                              //удлиняем каждую проверяемую линиию, для исключения погрешностей
+                              extNextLine:= extendedLineFunc(PGDBVertex(pc^.VertexArrayInOCS.getelement(j-1))^,PGDBVertex(pc^.VertexArrayInOCS.getelement(j))^,Epsilon,false) ;
+                              //Производим сравнение основной линии с перебираемой линией
+                              if geometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).isintercept then
+                              begin
+                                interceptVertex:=geometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).interceptcoord;
+                                //выполнить проверку на есть ли уже такая вершина
+                                 if dublicateVertex(listDevice,interceptVertex,Epsilon) = false then begin
+                                  infoDevice.deviceEnt:=nil;
+                                  infoDevice.centerPoint:=interceptVertex;
+                                  listDevice.PushBack(infoDevice);
+                                  testTempDrawCircle(interceptVertex,Epsilon);
+                                end;
+                              end;
 
+                     //      end;
+                     end;
+               end;
+             if pobj^.vp.ID=GDBDeviceID then
+               begin
+                 //POBJ^.
+                pObjDevice:= PGDBObjDevice(pobj); // передача объекта в девайсы
+                currentSubObj:=pObjDevice^.VarObjArray.beginiterate(ir_inDevice);
+                if (currentSubObj<>nil) then
+                repeat
+                    begin
+                      if currentSubObj^.GetLayer=psldb then BEGIN
+                        if currentSubObj^.vp.ID=GDBLineID then begin
+
+                        end;
+                        if currentSubObj^.vp.ID=GDBPolyLineID then begin
+
+                        end;
+                      end;
+                    currentSubObj:=pObjDevice^.VarObjArray.iterate(ir_inDevice2);
+                until currentSubObj=nil;
+
+
+               end;
+             pobj:=NearObjects.iterate(ir);//получаем следующий примитив из списка
+       until pobj=nil;
+       HistoryOutStr('сколько было обследовано элементов = ' + IntToStr(counter));   //выходим когда список кончился
+    end;
+  NearObjects.ClearAndDone;//убиваем список
+
+  end;
+
+
+
+                  //  for j:=0 to listCable.Size-1 do
+  //2   begin
+  //     if i <> j then
+  //       begin
+  //         HistoryOutStr(IntToStr(i)+'плохо'+IntToStr(j));
+  //       end;
+  //   end;
+    //PinfoCable:=listCable.Mutable[i];
+    //if listCable[i].cableEnt = ptest then
+    //    HistoryOutStr(listCable[i].cableEnt^.GetObjTypeName)
+    //else
+    //    HistoryOutStr('плохо');
+  //  //writeln(myArray[i].a,' --> ',myArray[i].b);
   //Получаем список всех кабельных линий в выбранной нами зоне их адресс, и все координаты
    //if pobj^.vp.ID=GDBCableID then                      //проверяем, кабель это или нет
    //begin
@@ -347,8 +630,6 @@ begin
                                  else
                                      HistoryOutStr('Fuck! You must select Cable'); //не кабель - посылаем
     end; }
-
-     end;
     result:=cmd_ok;
   end;
 

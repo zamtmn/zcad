@@ -86,7 +86,7 @@ uses
 //var DWGPageCxMenu:pzpopupmenu;
 implementation
 uses uzcmainwindow,
-     geometry;
+     uzegeometry;
 function CloseDWG_com(operands:TCommandOperands):TCommandResult;
 var
    //poglwnd:toglwnd;

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit geometry;
+unit uzegeometry;
 {$INCLUDE def.inc}
 
 interface
@@ -235,10 +235,10 @@ function myPickMatrix(const x,y,deltax,deltay:gdbdouble;const vp:IMatrix4): DMat
 var
   tm,sm: DMatrix4D;
 begin
-    tm:=geometry.CreateTranslationMatrix(createvertex((vp[2]-2*(x-vp[0]))/deltax,
+    tm:=CreateTranslationMatrix(createvertex((vp[2]-2*(x-vp[0]))/deltax,
 	                                              (vp[3]-2*(y-vp[1]))/deltay, 0));
-    sm:=geometry.CreateScaleMatrix(createvertex(vp[2]/deltax,vp[3]/deltay, 1.0));
-    result:=geometry.MatrixMultiply(sm,tm);
+    sm:=CreateScaleMatrix(createvertex(vp[2]/deltax,vp[3]/deltay, 1.0));
+    result:=MatrixMultiply(sm,tm);
 end;
 
 (*
@@ -464,7 +464,7 @@ begin
            d2:=GetMinAndSwap(j,cacount,ca);
            d1:=(d1+d2)/2;
       bit:=0;
-      p:=geometry.VertexDmorph(lbegin,d,d1);
+      p:=VertexDmorph(lbegin,d,d1);
       for i:=0 to 5 do
       begin
             if (frustum[i][0] * p.x + frustum[i][1] * p.y + frustum[i][2] * p.z + frustum[i][3])>=0
@@ -545,7 +545,7 @@ begin
            d2:=GetMinAndSwap(j,cacount,ca);
            d1:=(d1+d2)/2;
       bit:=0;
-      p:=geometry.VertexDmorph(lbegin,d,d1);
+      p:=VertexDmorph(lbegin,d,d1);
       for i:=0 to 5 do
       begin
             if (frustum[i][0] * p.x + frustum[i][1] * p.y + frustum[i][2] * p.z + frustum[i][3])>=0
@@ -644,9 +644,9 @@ begin
      n1:=createvertex(p1[0],p1[1],p1[2]);
      n2:=createvertex(p2[0],p2[1],p2[2]);
      n3:=createvertex(p3[0],p3[1],p3[2]);
-     n12:=geometry.vectordot(n1,n2);
-     n23:=geometry.vectordot(n2,n3);
-     n31:=geometry.vectordot(n3,n1);
+     n12:=vectordot(n1,n2);
+     n23:=vectordot(n2,n3);
+     n31:=vectordot(n3,n1);
 
      a1:=VertexMulOnSc(n23,p1[3]);
      a2:=VertexMulOnSc(n31,p2[3]);
@@ -799,7 +799,7 @@ begin
 
      m[3,3]:=xmaxminusxmin;
 
-     result:=geometry.MatrixMultiply(m,matrix^);
+     result:=MatrixMultiply(m,matrix^);
      //glMultMatrixd(@m);
 end;
 {function Perspective;
@@ -816,7 +816,7 @@ begin
      m[3,2]:=2*zmin*zmax/zmaxminuszmin;
      m[2,3]:=-1;
 
-     result:=geometry.MatrixMultiply(m,matrix^);
+     result:=uzegeometry.MatrixMultiply(m,matrix^);
      //glMultMatrixd(@m);
 end;}
 
@@ -846,7 +846,7 @@ begin
     m[3,2] := -2 * zmin * zmax / deltaZ;
     m[3,3] := 0;
 
-    result:=geometry.MatrixMultiply(m,matrix^);
+    result:=MatrixMultiply(m,matrix^);
 end;
 
 (*
@@ -900,7 +900,7 @@ begin
 
      m:=MatrixMultiply(M2,M);
 
-     result:=geometry.MatrixMultiply(m,matrix^);
+     result:=MatrixMultiply(m,matrix^);
      //glMultMatrixd(@m);
 
 end;
@@ -909,8 +909,8 @@ var
    _in,_out:GDBVertex4D;
    finalMatrix:DMatrix4D;
 begin
-     finalMatrix:=geometry.MatrixMultiply(modelMatrix^,projMatrix^);
-     geometry.MatrixInvert(finalMatrix);
+     finalMatrix:=MatrixMultiply(modelMatrix^,projMatrix^);
+     MatrixInvert(finalMatrix);
 
      _in.x:=winx;
      _in.y:=winy;
@@ -925,7 +925,7 @@ begin
      _in.y:= _in.y * 2 - 1;
      _in.z:= _in.z * 2 - 1;
 
-      _out:=geometry.VectorTransform(_in,finalMatrix);
+      _out:=VectorTransform(_in,finalMatrix);
 
     _out.x:=_out.x/_out.w;
     _out.y:=_out.y/_out.w;
@@ -946,8 +946,8 @@ begin
     _in.y:=objy;
     _in.z:=objz;
     _in.w:=1.0;
-    _out:=geometry.VectorTransform(_in,modelMatrix^);
-    _in:=geometry.VectorTransform(_out,projMatrix^);
+    _out:=VectorTransform(_in,modelMatrix^);
+    _in:=VectorTransform(_out,projMatrix^);
 
     _in.x:=_in.x/_in.w;
     _in.y:=_in.y/_in.w;

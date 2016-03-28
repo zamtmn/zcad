@@ -68,7 +68,7 @@ const
      ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
 implementation
 uses uzeentpolyline,UGDBPolyLine2DArray,uzeentlwpolyline,UGDBSelectedObjArray,
-     geometry;
+     uzegeometry;
 var
    CopyClipFile:GDBString;
 function MultiSelect2ObjIbsp_com(operands:TCommandOperands):TCommandResult;
@@ -1446,7 +1446,7 @@ begin
           wc.x:=PGDBVertex2D(pvr.getelement(i))^.x;
           wc.y:=PGDBVertex2D(pvr.getelement(i))^.y;
           wc.z:=0;
-          wc:=geometry.VectorTransform3D(wc,m);
+          wc:=uzegeometry.VectorTransform3D(wc,m);
           p3dpl^.AddVertex(wc);
 
           if ((i+1) mod 4)=0 then
@@ -1557,7 +1557,7 @@ begin
      s:=uppercase(operands);
      ox:=createvertex(-1,0,0);
      oy:=createvertex(0,1,0);
-     oz:=geometry.CrossVertex(ox,oy);
+     oz:=uzegeometry.CrossVertex(ox,oy);
      recognized:=true;
      if s='TOP' then
                     begin
@@ -1587,7 +1587,7 @@ else if s='NEISO' then
                       begin
                            ox:=createvertex(1,0,0);
                            oy:=createvertex(0,1,0);
-                           m:=geometry.MatrixMultiply(CreateRotationMatrixX(sin(pi/2+pi/6),cos(pi/2+pi/6)),
+                           m:=uzegeometry.MatrixMultiply(CreateRotationMatrixX(sin(pi/2+pi/6),cos(pi/2+pi/6)),
                                                       CreateRotationMatrixZ(sin(-pi/4),cos(-pi/4)));
                            ox:=VectorTransform3D(ox,m);
                            oy:=VectorTransform3D(oy,m);
@@ -1597,7 +1597,7 @@ else if s='SEISO' then
                            ox:=createvertex(1,0,0);
                            oy:=createvertex(0,1,0);
 
-                           m:=geometry.MatrixMultiply(CreateRotationMatrixX(sin(pi/2+pi/6),cos(pi/2+pi/6)),
+                           m:=uzegeometry.MatrixMultiply(CreateRotationMatrixX(sin(pi/2+pi/6),cos(pi/2+pi/6)),
                                                       CreateRotationMatrixZ(sin(pi+pi/4),cos(pi+pi/4)));
                            ox:=VectorTransform3D(ox,m);
                            oy:=VectorTransform3D(oy,m);
@@ -1607,7 +1607,7 @@ else if s='NWISO' then
                            ox:=createvertex(1,0,0);
                            oy:=createvertex(0,1,0);
 
-                           m:=geometry.MatrixMultiply(CreateRotationMatrixX(sin(pi/2+pi/6),cos(pi/2+pi/6)),
+                           m:=uzegeometry.MatrixMultiply(CreateRotationMatrixX(sin(pi/2+pi/6),cos(pi/2+pi/6)),
                                                       CreateRotationMatrixZ(sin({pi+}pi/4),cos({pi+}pi/4)));
                            ox:=VectorTransform3D(ox,m);
                            oy:=VectorTransform3D(oy,m);
@@ -1617,7 +1617,7 @@ else if s='SWISO' then
                            ox:=createvertex(1,0,0);
                            oy:=createvertex(0,1,0);
 
-                           m:=geometry.MatrixMultiply(CreateRotationMatrixX(sin(pi/2+pi/6),cos(pi/2+pi/6)),
+                           m:=uzegeometry.MatrixMultiply(CreateRotationMatrixX(sin(pi/2+pi/6),cos(pi/2+pi/6)),
                                                       CreateRotationMatrixZ(sin(pi-pi/4),cos(pi-pi/4)));
                            ox:=VectorTransform3D(ox,m);
                            oy:=VectorTransform3D(oy,m);
@@ -1658,7 +1658,7 @@ else if s='RD' then
 else recognized:=false;
 if recognized then
                    begin
-                        oz:=geometry.CrossVertex(ox,oy);
+                        oz:=uzegeometry.CrossVertex(ox,oy);
                         drawings.GetCurrentDWG.wa.RotTo(ox,oy,oz);
                    end;
      result:=cmd_ok;

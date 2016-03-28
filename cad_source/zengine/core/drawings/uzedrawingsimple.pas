@@ -21,7 +21,7 @@ unit uzedrawingsimple;
 interface
 uses uzedrawingdef,uzeblockdefsfactory,uzestylesdim,uzeentwithlocalcs,
      uzedrawingabstract,strproc,UGDBObjBlockdefArray,uzestylestables,
-     UGDBNumerator, gdbase,sysutils, memman,geometry,gdbasetypes,uzeentgenericsubentry,
+     UGDBNumerator, gdbase,sysutils, memman,uzegeometry,gdbasetypes,uzeentgenericsubentry,
      uzestyleslayers,uzestyleslinetypes,uzeentity,UGDBSelectedObjArray,uzestylestexts,
      uzecamera,UGDBOpenArrayOfPV,uzeroot,uzefont,UGDBOpenArrayOfPObjects,
      uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext;
@@ -397,7 +397,7 @@ begin
                if PSelectedObjDesc(md).objaddr^.IsHaveLCS then
                begin
                m2:=PGDBObjWithLocalCS(PSelectedObjDesc(md).objaddr)^.CalcObjMatrixWithoutOwner;
-               //PGDBVertex(@m)^:=geometry.NulVertex;
+               //PGDBVertex(@m)^:=uzegeometry.NulVertex;
                MatrixInvert(m2);
                t:=VectorTransform3D({dist}t,m2);
 

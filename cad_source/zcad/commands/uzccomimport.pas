@@ -23,7 +23,7 @@ uses uzgldrawcontext,uzeentityfactory,
      {$IFNDEF DELPHI}dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}
      uzedrawingsimple,
      uzeentcircle,uzeentarc,uzeentline,
-     geometry,uzcshared,gdbasetypes,uzclog,gdbase,
+     uzegeometry,uzcshared,gdbasetypes,uzclog,gdbase,
      sysutils,memman,uzeconsts,
      UGDBOpenArrayOfByte,uzeentity;
 {$IFNDEF DELPHI}

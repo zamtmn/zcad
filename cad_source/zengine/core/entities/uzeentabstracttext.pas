@@ -21,7 +21,7 @@ unit uzeentabstracttext;
 interface
 uses uzglviewareageneral,uzgldrawcontext,uzeentity,uzecamera,UGDBOpenArrayOfPObjects,
      strproc,sysutils,uzeentplainwithox,gdbasetypes,UGDBSelectedObjArray,GDBase,
-     uzeconsts,geometry,math;
+     uzeconsts,uzegeometry,math;
 type
 //jstm(*'TopCenter'*)=2,
 {EXPORT+}
@@ -79,14 +79,14 @@ begin
 
   {m:=onematrix;
   m[0,0]:=textprop.size;
-  m:=geometry.MatrixMultiply(m,t_matrix);}
+  m:=uzegeometry.MatrixMultiply(m,t_matrix);}
   tv:=NulVertex;
   tv.x:=textprop.size;
   m:=t_matrix;
   PGDBVertex(@m[3])^:=NulVertex;
 
   tv:=VectorTransform3d(tv,m);
-  textprop.size:=geometry.oneVertexlength(tv);
+  textprop.size:=oneVertexlength(tv);
   {textprop.size:=m[0,0];}
 
   inherited;
@@ -118,7 +118,7 @@ begin
                                                                                                        ox:=CrossVertex(YWCS,{PGDBVertex(@m[2])^}Local.basis.oz)
                                                                                                    else
                                                                                                        ox:=CrossVertex(ZWCS,{PGDBVertex(@m[2])^}Local.basis.oz);
-                                        r:=geometry.scalardot({PGDBVertex(@m[0])^}Local.basis.ox,ox);
+                                        r:=scalardot({PGDBVertex(@m[0])^}Local.basis.ox,ox);
                                         r:=arccos(r);
                                         setrot(-r);
                                         r:=textprop.angle;
@@ -153,7 +153,7 @@ begin
                                                                 else
                                                                     ox:=CrossVertex(ZWCS,Local.basis.oz);
      normalizevertex(ox);
-     textprop.angle:=geometry.scalardot(Local.basis.ox,ox);
+     textprop.angle:=scalardot(Local.basis.ox,ox);
      textprop.angle:=arccos(textprop.angle);
      if local.basis.OX.y<-eps then textprop.angle:=2*pi-textprop.angle;
      //Local.basis.ox:=ox;
@@ -239,7 +239,7 @@ begin
    while i<(Vertex3D_in_WCS_Array.count-1) do
    begin
      if counter<=0 then counter:=ptpv0^.count;
-     if geometry.CalcTrueInFrustum (ptpv1^.coord,ptpv0^.coord,mf)<>IREmpty
+     if uzegeometry.CalcTrueInFrustum (ptpv1^.coord,ptpv0^.coord,mf)<>IREmpty
                                                                           then
                                                                               result:=true
                                                                           else

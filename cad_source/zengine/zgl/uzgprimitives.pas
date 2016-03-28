@@ -20,7 +20,7 @@ unit uzgprimitives;
 {$INCLUDE def.inc}
 interface
 uses math,uzglgeomdata,uzgldrawcontext,uzgvertex3sarray,uzgldrawerabstract,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
-geometry;
+     uzegeometry;
 const
      LLAttrNothing=0;
      LLAttrNeedSolid=1;
@@ -187,7 +187,7 @@ begin
 end;
 function TLLLine.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):GDBInteger;
 begin
-     InRect:=geometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(self.P1Index))^,PGDBvertex3S(geomdata.Vertex3S.getelement(self.P1Index+1))^,frustum);
+     InRect:=uzegeometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(self.P1Index))^,PGDBvertex3S(geomdata.Vertex3S.getelement(self.P1Index+1))^,frustum);
      result:=getPrimitiveSize;
 end;
 procedure TLLLine.getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);
@@ -400,14 +400,14 @@ var
    i,index:integer;
    SubRect:TInBoundingVolume;
 begin
-     InRect:=geometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(P1Index))^,PGDBvertex3S(geomdata.Vertex3S.getelement(P1Index+1))^,frustum);
+     InRect:=uzegeometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(P1Index))^,PGDBvertex3S(geomdata.Vertex3S.getelement(P1Index+1))^,frustum);
      result:=getPrimitiveSize;
      if InRect=IRPartially then
                                exit;
      index:=P1Index+1;
      for i:=2 to Count-1 do
      begin
-        SubRect:=geometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(index))^,PGDBvertex3S(geomdata.Vertex3S.getelement(index+1))^,frustum);
+        SubRect:=uzegeometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(index))^,PGDBvertex3S(geomdata.Vertex3S.getelement(index+1))^,frustum);
         case SubRect of
           IREmpty:if InRect=IRFully then
                                          InRect:=IRPartially;

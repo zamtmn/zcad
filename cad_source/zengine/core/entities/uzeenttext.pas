@@ -24,7 +24,7 @@ uses
     uzglgeometry,uzgldrawcontext,uzeobjectextender,uzetextpreprocessor,uzeentityfactory,
     uzedrawingdef,uzecamera,strproc,sysutils,uzefont,uzestyleslayers,gdbasetypes,
     uzeentabstracttext,uzeentity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,GDBase,
-    uzeconsts,uzglviewareadata,geometry,uzeffdxfsupport,memman,uzeentsubordinated,
+    uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,memman,uzeentsubordinated,
     uzestylestexts;
 type
 {REGISTEROBJECTTYPE GDBObjText}
@@ -310,10 +310,10 @@ begin
                          inc(ptpv);
                     end;
 
-                    {outbound[0]:=geometry.CreateVertex(l,t,n);
-                    outbound[1]:=geometry.CreateVertex(r,t,n);
-                    outbound[2]:=geometry.CreateVertex(r,b,n);
-                    outbound[3]:=geometry.CreateVertex(l,b,n);}*)
+                    {outbound[0]:=uzegeometry.CreateVertex(l,t,n);
+                    outbound[1]:=uzegeometry.CreateVertex(r,t,n);
+                    outbound[2]:=uzegeometry.CreateVertex(r,b,n);
+                    outbound[3]:=uzegeometry.CreateVertex(l,b,n);}*)
 
 
   (*
@@ -710,7 +710,7 @@ else if not dxfGDBIntegerload(f,72,byt,gv)then
                                                                     Local.basis.ox:=CrossVertex(YWCS,Local.basis.oz)
                                                                 else
                                                                     Local.basis.ox:=CrossVertex(ZWCS,Local.basis.oz);
-  local.basis.OX:=VectorTransform3D(local.basis.OX,geometry.CreateAffineRotationMatrix(Local.basis.oz,-textprop.angle));
+  local.basis.OX:=VectorTransform3D(local.basis.OX,CreateAffineRotationMatrix(Local.basis.oz,-textprop.angle));
   end;
   {if not angleload then
   begin

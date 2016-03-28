@@ -21,7 +21,7 @@ unit uzeentdimaligned;
 interface
 uses uzgldrawcontext,uzeentityfactory,uzeentdimension,uzeentpoint,uzestylesdim,
      uzestyleslayers,uzedrawingdef,UGDBOpenArrayOfPObjects,strproc,
-     UGDBOpenArrayOfByte,UGDBControlPointArray,geometry,uzeentline,gdbasetypes,
+     UGDBOpenArrayOfByte,UGDBControlPointArray,uzegeometry,uzeentline,gdbasetypes,
      uzeentcomplex,sysutils,UGDBSelectedObjArray,uzeentity,GDBase,uzeconsts,
      uzeffdxfsupport,memman,uzeentsubordinated;
 (*
@@ -99,7 +99,7 @@ begin
      d:=Vertexlength(q,p1);
      if d>eps then
                   begin
-                       q:=geometry.Vertexmorphabs2(p1,q,d);
+                       q:=uzegeometry.Vertexmorphabs2(p1,q,d);
                        result:=VertexAdd(p2,VertexSub(q,p1));
                   end
               else
@@ -113,7 +113,7 @@ begin
      l:=VertexSub(p2,p1);
      dist:=scalardot(w,l)/scalardot(l,l);
      p1:=Vertexmorph(p1,p2,dist);
-     result:=geometry.Vertexmorphabs2(p1,q,d);
+     result:=uzegeometry.Vertexmorphabs2(p1,q,d);
      //result:=VertexAdd(p2,VertexSub(q,p1));
 end;
 function GetTFromLinePoint(q:GDBvertex;var p1,p2:GDBvertex):double;
@@ -156,7 +156,7 @@ var
     t,tl:GDBDouble;
     temp:GDBVertex;
 begin
-     if geometry.sqrVertexlength(tv,DimData.P14InWCS)>sqreps then
+     if uzegeometry.sqrVertexlength(tv,DimData.P14InWCS)>sqreps then
      begin
            tl:=scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD);
            temp:=VertexDmorph(DimData.P13InWCS,self.vectorD,tl);
@@ -185,7 +185,7 @@ begin
      temp:=VertexDmorph(DimData.P13InWCS,self.vectorD,tl);
 
      t:=GettFromLinePoint(tv,DimData.P13InWCS,{DimData.P14InWCS}temp);
-     tvertex:=geometry.Vertexmorph(DimData.P13InWCS,{DimData.P14InWCS}temp,t);
+     tvertex:=uzegeometry.Vertexmorph(DimData.P13InWCS,{DimData.P14InWCS}temp,t);
      tvertex:=vertexsub(tv,tvertex);
      DimData.P10InWCS:=VertexAdd({DimData.P14InWCS}temp,tvertex);
      end;
@@ -210,7 +210,7 @@ begin
      if (self.DimData.TextMoved)and(PDimStyle.Placing.DIMTMOVE=DTMMoveDimLine) then
                                    begin
                                        t:=GettFromLinePoint(DimData.P11InOCS,tv,DimData.P14InWCS);
-                                       tvertex:=geometry.Vertexmorph(tv,DimData.P14InWCS,t);
+                                       tvertex:=uzegeometry.Vertexmorph(tv,DimData.P14InWCS,t);
                                        tvertex:=vertexsub(DimData.P11InOCS,tvertex);
                                        DimData.P10InWCS:=VertexAdd(DimData.P14InWCS,tvertex);
                                    end
@@ -226,11 +226,11 @@ begin
                                         //if vertexlength(tv,DimData.P14InWCS)>eps then
                                                   begin
                                                   tvertex:=vertexsub(DimData.P14InWCS,tv);
-                                                  tvertex:=geometry.vectordot(tvertex,self.Local.Basis.oz);
+                                                  tvertex:=uzegeometry.vectordot(tvertex,self.Local.Basis.oz);
                                                   tvertex:=normalizevertex(tvertex);
                                                   end
                                            //else
-                                           //    tvertex:=geometry.VertexMulOnSc(geometry.x_Y_zVertex,dir);
+                                           //    tvertex:=uzegeometry.VertexMulOnSc(uzegeometry.x_Y_zVertex,dir);
 
                                        ;tvertex:=VertexMulOnSc(tvertex,t);
                                        DimData.P10InWCS:=VertexAdd(DimData.P14InWCS,tvertex);
@@ -247,7 +247,7 @@ begin
      if (self.DimData.TextMoved)and(PDimStyle.Placing.DIMTMOVE=DTMMoveDimLine) then
                                    begin
                                          t:=GettFromLinePoint(DimData.P11InOCS,DimData.P13InWCS,tv);
-                                         tvertex:=geometry.Vertexmorph(DimData.P13InWCS,tv,t);
+                                         tvertex:=uzegeometry.Vertexmorph(DimData.P13InWCS,tv,t);
                                          tvertex:=vertexsub(DimData.P11InOCS,tvertex);
                                          DimData.P10InWCS:=VertexAdd(tv,tvertex);
                                    end
@@ -263,11 +263,11 @@ begin
                                          //if vertexlength(DimData.P13InWCS,tv)>eps then
                                                  begin
                                                        tvertex:=vertexsub(tv,DimData.P13InWCS);
-                                                       tvertex:=geometry.vectordot(tvertex,self.Local.Basis.oz);
+                                                       tvertex:=uzegeometry.vectordot(tvertex,self.Local.Basis.oz);
                                                        tvertex:=normalizevertex(tvertex);
                                                  end
                                             //else
-                                                //tvertex:=geometry.VertexMulOnSc(geometry.x_Y_zVertex,dir);
+                                                //tvertex:=uzegeometry.VertexMulOnSc(uzegeometry.x_Y_zVertex,dir);
 
                                           ;tvertex:=VertexMulOnSc(tvertex,t);
                                           DimData.P10InWCS:=VertexAdd(tv,tvertex);
@@ -360,7 +360,7 @@ begin
      vectorD:=vertexsub(DimData.P14InWCS,DimData.P13InWCS);
      vectorD:=normalizevertex(vectorD);
 
-     if geometry.sqrVertexlength(DimData.P10InWCS,DimData.P14InWCS)>sqreps then
+     if uzegeometry.sqrVertexlength(DimData.P10InWCS,DimData.P14InWCS)>sqreps then
                                                   begin
                                                   vectorN:=vertexsub(DimData.P10InWCS,DimData.P14InWCS);
                                                   end
@@ -385,8 +385,8 @@ begin
           //DrawExtensionLine(DimData.P14InWCS,DimData.P10InWCS,0,drawing);
           DrawExtensionLine(DimData.P14InWCS,VertexDmorph(DimData.P14InWCS,self.vectorN,l),0,drawing,dc,1);
 
-          //tv:=geometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
-          //tv:=geometry.VertexAdd(DimData.P13InWCS,tv);
+          //tv:=uzegeometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
+          //tv:=uzegeometry.VertexAdd(DimData.P13InWCS,tv);
           //DrawExtensionLine(DimData.P13InWCS,tv,1,drawing);
           l:=GetTFromDirNormalizedPoint(DimData.P10InWCS,DimData.P13InWCS,vectorN);
           tv:=VertexDmorph(DimData.P13InWCS,self.vectorN,l);

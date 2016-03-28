@@ -19,7 +19,7 @@
 unit uzestyleslayers;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,sysutils,gdbase, geometry,
+uses gdbasetypes,sysutils,gdbase,uzegeometry,
      uzeconsts,UGDBNamedObjectsArray,StrProc;
 type
 {REGISTEROBJECTTYPE GDBLayerArray}

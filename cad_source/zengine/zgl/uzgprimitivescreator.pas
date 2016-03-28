@@ -20,7 +20,7 @@ unit uzgprimitivescreator;
 {$INCLUDE def.inc}
 interface
 uses UGDBOpenArrayOfData,uzgprimitivescreatorabstract,uzgindexsarray,uzgprimitives,gdbasetypes,sysutils,gdbase,memman,
-geometry;
+     uzegeometry;
 type
 TLLPrimitivesCreator=class(TLLPrimitivesCreatorAbstract)
                 function CreateLLLine(var pa:GDBOpenArrayOfData;const P1Index:TLLVertexIndex):TArrayIndex;override;

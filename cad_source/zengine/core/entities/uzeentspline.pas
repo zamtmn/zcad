@@ -24,7 +24,7 @@ uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanage
      UGDBPoint3DArray,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
      UGDBOpenArrayOfPObjects,uzestyleslayers,uzeentsubordinated,uzeentcurve,gdbasetypes,
      uzeentity,UGDBOpenArrayOfByte,GDBase,uzeconsts,uzglviewareadata,
-     geometry,uzeffdxfsupport,sysutils,memman;
+     uzegeometry,uzeffdxfsupport,sysutils,memman;
 type
 {REGISTEROBJECTTYPE GDBObjSpline}
 {Export+}
@@ -167,14 +167,14 @@ begin
                                                                                    begin
                                                                                          m:=bp.ListPos.owner^.GetMatrix^;
                                                                                    end;
-     tv0:=geometry.VectorTransform3d(tv0,m);
+     tv0:=uzegeometry.VectorTransform3d(tv0,m);
   if ptv<>nil then
   repeat
         tfv.x:=ptv^.x{-ptv0^.x};
         tfv.y:=ptv^.y{-ptv0^.y};
         tfv.z:=ptv^.z{-ptv0^.z};
         tfv.w:=1;
-        tfv:=geometry.VectorTransform(tfv,m);
+        tfv:=uzegeometry.VectorTransform(tfv,m);
 
         tfv.x:=tfv.x-tv0.x;
         tfv.y:=tfv.y-tv0.y;

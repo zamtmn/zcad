@@ -16,10 +16,10 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit zemathutils;
+unit uzemathutils;
 {$INCLUDE def.inc}
 interface
-uses gdbase,gdbasetypes,math,geometry,sysutils;
+uses gdbase,gdbasetypes,math,uzegeometry,sysutils;
 function zeDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;
 function zeNonDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;
 function zeAngleDegToString(const value:Double; const f:TzeUnitsFormat):GDBString;

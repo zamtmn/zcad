@@ -77,7 +77,7 @@ var
    GLUVersion,GLUExtensions:String;
 implementation
 uses
-    geometry;
+    uzegeometry;
 function TGLUInterface.mygluGetString(name: GLenum): PAnsiChar;
 begin
      result:=gluGetString(name);

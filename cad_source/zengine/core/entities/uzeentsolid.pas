@@ -21,7 +21,7 @@ unit uzeentsolid;
 interface
 uses
     uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentwithlocalcs,
-    UGDBOpenArrayOfPObjects,geometry,uzeffdxfsupport,uzestyleslayers,gdbasetypes,
+    UGDBOpenArrayOfPObjects,uzegeometry,uzeffdxfsupport,uzestyleslayers,gdbasetypes,
     UGDBSelectedObjArray,uzeentsubordinated,uzeentity,sysutils,UGDBOpenArrayOfByte,
     GDBase,uzeconsts,memman;
 type
@@ -69,7 +69,7 @@ var i:GDBInteger;
 begin
       for i:=0 to 3 do
       begin
-           PInOCS[I]:=geometry.VectorTransform3D(PGDBObj3DFace(p)^.PInOCS[I],t_matrix^);
+           PInOCS[I]:=uzegeometry.VectorTransform3D(PGDBObj3DFace(p)^.PInOCS[I],t_matrix^);
       end;
 end;}
 procedure GDBObjSolid.getoutbound;
@@ -89,12 +89,12 @@ begin
   createpoint;
   normal:=normalizevertex(
                           vectordot(
-                                    geometry.VertexSub(PInWCS[0],PInWCS[1])
+                                    uzegeometry.VertexSub(PInWCS[0],PInWCS[1])
                                     ,
-                                    geometry.VertexSub(PInWCS[2],PInWCS[1])
+                                    uzegeometry.VertexSub(PInWCS[2],PInWCS[1])
                                    )
                          );
-   if geometry.IsPointEqual(PInOCS[2],PInOCS[3])then
+   if uzegeometry.IsPointEqual(PInOCS[2],PInOCS[3])then
                                                     triangle:=true
                                                 else
                                                     triangle:=false;
@@ -357,7 +357,7 @@ begin
      m[3][1]:=0;
      m[3][2]:=0;}
 
-     geometry.MatrixInvert(m);
+     uzegeometry.MatrixInvert(m);
 
 
      tv:=rtmod.dist;
@@ -365,8 +365,8 @@ begin
 
      wwc:=VertexAdd(wwc,tv);
 
-     //tv:=geometry.VectorTransform3D(tv,m);
-     wwc:=geometry.VectorTransform3D(wwc,m);
+     //tv:=uzegeometry.VectorTransform3D(tv,m);
+     wwc:=uzegeometry.VectorTransform3D(wwc,m);
 
 
      PInOCS[vertexnumber]:=wwc{VertexAdd(wwc,tv)};
@@ -375,7 +375,7 @@ begin
 {
 vertexnumber:=abs(rtmod.point.pointtype-os_polymin);
 tv:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
-geometry.VectorTransform3D(tv,self.ObjMatrix);
+uzegeometry.VectorTransform3D(tv,self.ObjMatrix);
 PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=tv.x;
 PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=tv.y;
 }

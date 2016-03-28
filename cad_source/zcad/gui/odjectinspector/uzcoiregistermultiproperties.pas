@@ -31,7 +31,7 @@ uses
   Varman,
   uzcoimultipropertiesutil,
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,uzeentmtext,uzeentpolyline,uzcentelleader,uzeentdimension,uzeentellipse,
-  geometry,uzcoimultiproperties;
+  uzegeometry,uzcoimultiproperties;
 implementation
 procedure GDBDoubleDeltaEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
@@ -318,7 +318,7 @@ begin
                                                                     PGDBObjText(ChangedData.PEntity)^.Local.basis.ox:=CrossVertex(YWCS,PGDBObjText(ChangedData.PEntity)^.Local.basis.oz)
                                                                 else
                                                                     PGDBObjText(ChangedData.PEntity)^.Local.basis.ox:=CrossVertex(ZWCS,PGDBObjText(ChangedData.PEntity)^.Local.basis.oz);
-     PGDBObjText(ChangedData.PEntity)^.local.basis.OX:=VectorTransform3D(PGDBObjText(ChangedData.PEntity)^.local.basis.OX,geometry.CreateAffineRotationMatrix(PGDBObjText(ChangedData.PEntity)^.Local.basis.oz,-PGDBObjText(ChangedData.PEntity)^.textprop.angle*pi/180));
+     PGDBObjText(ChangedData.PEntity)^.local.basis.OX:=VectorTransform3D(PGDBObjText(ChangedData.PEntity)^.local.basis.OX,uzegeometry.CreateAffineRotationMatrix(PGDBObjText(ChangedData.PEntity)^.Local.basis.oz,-PGDBObjText(ChangedData.PEntity)^.textprop.angle*pi/180));
 end;
 
 procedure GDBPolyLineLengthEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
@@ -362,7 +362,7 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('LineTypeScale','Linetype scale',sysunit^.TypeName2PTD('GDBNonDimensionDouble'),MPCGeneral,0,integer(@pent^.vp.LineTypeScale),integer(@pent^.vp.LineTypeScale),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('LineWeight','Lineweight',sysunit^.TypeName2PTD('TGDBLineWeight'),MPCGeneral,0,integer(@pent^.vp.LineWeight),integer(@pent^.vp.LineWeight),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc{TGDBLineWeightEntIterateProc},@GeneralFromVarEntChangeProc);
 
-  {Circle geometry}
+  {Circle uzegeometry}
   MultiPropertiesManager.RegisterFirstMultiproperty('CENTER_X','Center X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBCircleID,integer(@pcircle^.P_insert_in_WCS.x),integer(@pcircle^.Local.P_insert.x),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('CENTER_Y','Center Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBCircleID,integer(@pcircle^.P_insert_in_WCS.y),integer(@pcircle^.Local.P_insert.y),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('CENTER_Z','Center Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBCircleID,integer(@pcircle^.P_insert_in_WCS.z),integer(@pcircle^.Local.P_insert.z),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
@@ -377,7 +377,7 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('TotalLength','Total length',sysunit^.TypeName2PTD('GDBDouble'),MPCSummary,GDBCircleID,integer(@pcircle^.Radius),integer(@pcircle^.Radius),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleR2SumCircumferenceEntIterateProc,nil);
   MultiPropertiesManager.RegisterMultiproperty('TotalArea','Total area',sysunit^.TypeName2PTD('GDBDouble'),MPCSummary,GDBCircleID,integer(@pcircle^.Radius),integer(@pcircle^.Radius),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleR2SumAreaEntIterateProc,nil);
 
-  {Arc geometry}
+  {Arc uzegeometry}
   MultiPropertiesManager.RegisterFirstMultiproperty('CENTER_X','Center X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBArcID,integer(@parc^.P_insert_in_WCS.x),integer(@parc^.Local.P_insert.x),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('CENTER_Y','Center Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBArcID,integer(@parc^.P_insert_in_WCS.y),integer(@parc^.Local.P_insert.y),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('CENTER_Z','Center Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBArcID,integer(@parc^.P_insert_in_WCS.z),integer(@parc^.Local.P_insert.z),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
@@ -395,7 +395,7 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('TotalLength','Total length',sysunit^.TypeName2PTD('GDBDouble'),MPCSummary,GDBArcID,integer(@parc^.R),integer(@parc^.R),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleR2SumCircumferenceEntIterateProc,nil);
   MultiPropertiesManager.RegisterMultiproperty('TotalArea','Total area',sysunit^.TypeName2PTD('GDBDouble'),MPCSummary,GDBArcID,integer(@parc^.R),integer(@parc^.R),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleR2SumAreaEntIterateProc,nil);
 
-  {Ellipse geometry}
+  {Ellipse uzegeometry}
   MultiPropertiesManager.RegisterFirstMultiproperty('CENTER_X','Center X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBEllipseID,integer(@pellipse^.P_insert_in_WCS.x),integer(@pellipse^.Local.P_insert.x),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('CENTER_Y','Center Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBEllipseID,integer(@pellipse^.P_insert_in_WCS.y),integer(@pellipse^.Local.P_insert.y),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('CENTER_Z','Center Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBEllipseID,integer(@pellipse^.P_insert_in_WCS.z),integer(@pellipse^.Local.P_insert.z),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
@@ -414,7 +414,7 @@ begin
   //MultiPropertiesManager.RegisterMultiproperty('TotalLength','Total length',sysunit^.TypeName2PTD('GDBDouble'),MPCSummary,GDBEllipseID,integer(@pellipse^.RR),integer(@pellipse^.RR),@GetOneVarData,@FreeOneVarData,@GDBDoubleR2SumCircumferenceEntIterateProc,nil);
   //MultiPropertiesManager.RegisterMultiproperty('TotalArea','Total area',sysunit^.TypeName2PTD('GDBDouble'),MPCSummary,GDBEllipseID,integer(@pellipse^.RR),integer(@pellipse^.RR),@GetOneVarData,@FreeOneVarData,@GDBDoubleR2SumAreaEntIterateProc,nil);
 
-  {Line geometry}
+  {Line uzegeometry}
   MultiPropertiesManager.RegisterFirstMultiproperty('START_X','Start X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBLineID,integer(@pline^.CoordInWCS.lBegin.x),integer(@pline^.CoordInOCS.lBegin.x),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('START_Y','Start Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBLineID,integer(@pline^.CoordInWCS.lBegin.y),integer(@pline^.CoordInOCS.lBegin.y),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('START_Z','Start Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBLineID,integer(@pline^.CoordInWCS.lBegin.z),integer(@pline^.CoordInOCS.lBegin.z),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
@@ -429,7 +429,7 @@ begin
   {--Summary}
   MultiPropertiesManager.RegisterMultiproperty('TotalLength','Total length',sysunit^.TypeName2PTD('GDBDouble'),MPCSummary,GDBLineID,integer(@pline^.CoordInWCS.lBegin),integer(@pline^.CoordInWCS.lBegin),@GetOneVarData,@FreeOneVarData,nil,@GDBDoubleSumLengthEntIterateProc,nil);
 
-  {BlockInsert geometry}
+  {BlockInsert uzegeometry}
   MultiPropertiesManager.RegisterFirstMultiproperty('INSERT_X','Insert X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBBlockInsertID,integer(@pblockinsert^.P_insert_in_WCS.x),integer(@pcircle^.Local.P_insert.x),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('INSERT_Y','Insert Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBBlockInsertID,integer(@pblockinsert^.P_insert_in_WCS.y),integer(@pcircle^.Local.P_insert.y),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('INSERT_Z','Insert Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBBlockInsertID,integer(@pblockinsert^.P_insert_in_WCS.z),integer(@pcircle^.Local.P_insert.z),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
@@ -443,7 +443,7 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('Name','Name',sysunit^.TypeName2PTD('GDBAnsiString'),MPCMisc,GDBBlockInsertID,integer(@pblockinsert^.Name),integer(@pblockinsert^.Name),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,nil);
   MultiPropertiesManager.RegisterMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBBlockInsertID,integer(@pblockinsert^.rotate),integer(@pblockinsert^.rotate),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
 
-  {Device geometry}
+  {Device uzegeometry}
   MultiPropertiesManager.RegisterFirstMultiproperty('INSERT_X','Insert X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBDeviceID,integer(@pblockinsert^.P_insert_in_WCS.x),integer(@pblockinsert^.Local.P_insert.x),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('INSERT_Y','Insert Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBDeviceID,integer(@pblockinsert^.P_insert_in_WCS.y),integer(@pblockinsert^.Local.P_insert.y),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('INSERT_Z','Insert Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBDeviceID,integer(@pblockinsert^.P_insert_in_WCS.z),integer(@pblockinsert^.Local.P_insert.z),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
@@ -458,7 +458,7 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBDeviceID,integer(@pblockinsert^.rotate),integer(@pblockinsert^.rotate),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.sort;
 
-  {Text geometry}
+  {Text uzegeometry}
   MultiPropertiesManager.RegisterFirstMultiproperty('INSERT_X','Insert X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBTextID,integer(@ptext^.P_insert_in_WCS.x),integer(@pblockinsert^.Local.P_insert.x),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('INSERT_Y','Insert Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBTextID,integer(@ptext^.P_insert_in_WCS.y),integer(@pblockinsert^.Local.P_insert.y),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('INSERT_Z','Insert Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBTextID,integer(@ptext^.P_insert_in_WCS.z),integer(@pblockinsert^.Local.P_insert.z),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
@@ -478,7 +478,7 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('Backward','Backward',sysunit^.TypeName2PTD('GDBBoolean'),MPCMisc,GDBTextID,integer(@ptext^.textprop.backward),integer(@ptext^.textprop.backward),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.sort;
 
-  {MText geometry}
+  {MText uzegeometry}
   MultiPropertiesManager.RegisterFirstMultiproperty('INSERT_X','Insert X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBMTextID,integer(@pmtext^.P_insert_in_WCS.x),integer(@pblockinsert^.Local.P_insert.x),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('INSERT_Y','Insert Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBMTextID,integer(@pmtext^.P_insert_in_WCS.y),integer(@pblockinsert^.Local.P_insert.y),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('INSERT_Z','Insert Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBMTextID,integer(@pmtext^.P_insert_in_WCS.z),integer(@pblockinsert^.Local.P_insert.z),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
@@ -495,7 +495,7 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('Width','Width',sysunit^.TypeName2PTD('GDBDouble'),MPCMisc,GDBMTextID,integer(@pmtext^.width),integer(@pmtext^.width),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('LinespaceFactor','Linespace factor',sysunit^.TypeName2PTD('GDBDouble'),MPCMisc,GDBMTextID,integer(@pmtext^.linespacef),integer(@pmtext^.linespacef),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
 
-  {3DPolyline geometry}
+  {3DPolyline uzegeometry}
   MultiPropertiesManager.RegisterFirstMultiproperty('VertexCount','Vertex count',sysunit^.TypeName2PTD('TArrayIndex'),MPCGeometry,GDBPolyLineID,integer(@p3dpoly^.VertexArrayInOCS.Count),integer(@p3dpoly^.VertexArrayInOCS.Count),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,nil);
   MultiPropertiesManager.RegisterMultiproperty('Vertex3DControl_','Vertex control',sysunit^.TypeName2PTD('TArrayIndex'),MPCGeometry,GDBPolyLineID,integer(@p3dpoly^.VertexArrayInWCS),integer(@p3dpoly^.VertexArrayInOCS),@GetVertex3DControlData,@FreeVertex3DControlData,@PolylineVertex3DControlBeforeEntIterateProc,@PolylineVertex3DControlEntIterateProc,@PolylineVertex3DControlFromVarEntChangeProc);
 
@@ -506,7 +506,7 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('TotalVertexCount','Total vertex count',sysunit^.TypeName2PTD('TArrayIndex'),MPCSummary,GDBPolyLineID,integer(@p3dpoly^.VertexArrayInOCS.Count),integer(@p3dpoly^.VertexArrayInOCS.Count),@GetOneVarData,@FreeOneVarData,nil,@TArrayIndex2SumEntIterateProc,nil);
   MultiPropertiesManager.RegisterMultiproperty('TotalLength','Total length',sysunit^.TypeName2PTD('GDBDouble'),MPCSummary,GDBPolyLineID,0,0,@GetOneVarData,@FreeOneVarData,nil,@GDBPolyLineSumLengthEntIterateProc,nil);
 
-  {Cable geometry}
+  {Cable uzegeometry}
   MultiPropertiesManager.RegisterFirstMultiproperty('VertexCount','Vertex count',sysunit^.TypeName2PTD('TArrayIndex'),MPCGeometry,GDBCableID,integer(@p3dpoly^.VertexArrayInOCS.Count),integer(@p3dpoly^.VertexArrayInOCS.Count),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,nil);
   MultiPropertiesManager.RegisterMultiproperty('Vertex3DControl_','Vertex control',sysunit^.TypeName2PTD('TArrayIndex'),MPCGeometry,GDBCableID,integer(@p3dpoly^.VertexArrayInWCS),integer(@p3dpoly^.VertexArrayInOCS),@GetVertex3DControlData,@FreeVertex3DControlData,nil,@PolylineVertex3DControlEntIterateProc,@PolylineVertex3DControlFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('Length','Length',sysunit^.TypeName2PTD('GDBDouble'),MPCGeometry,GDBCableID,0,0,@GetOneVarData,@FreeOneVarData,nil,@GDBPolyLineLengthEntIterateProc,nil);
@@ -514,7 +514,7 @@ begin
   MultiPropertiesManager.RegisterMultiproperty('TotalVertexCount','Total vertex count',sysunit^.TypeName2PTD('TArrayIndex'),MPCSummary,GDBCableID,integer(@p3dpoly^.VertexArrayInOCS.Count),integer(@p3dpoly^.VertexArrayInOCS.Count),@GetOneVarData,@FreeOneVarData,nil,@TArrayIndex2SumEntIterateProc,nil);
   MultiPropertiesManager.RegisterMultiproperty('TotalLength','Total length',sysunit^.TypeName2PTD('GDBDouble'),MPCSummary,GDBCableID,0,0,@GetOneVarData,@FreeOneVarData,nil,@GDBPolyLineSumLengthEntIterateProc,nil);
 
-  {ElLeader geometry}
+  {ElLeader uzegeometry}
   MultiPropertiesManager.RegisterFirstMultiproperty('START_X','Start X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBElLeaderID,integer(@pelleader^.MainLine.CoordInWCS.lBegin.x),integer(@pelleader^.MainLine.CoordInOCS.lBegin.x),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('START_Y','Start Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBElLeaderID,integer(@pelleader^.MainLine.CoordInWCS.lBegin.y),integer(@pelleader^.MainLine.CoordInOCS.lBegin.y),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);
   MultiPropertiesManager.RegisterMultiproperty('START_Z','Start Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBElLeaderID,integer(@pelleader^.MainLine.CoordInWCS.lBegin.z),integer(@pelleader^.MainLine.CoordInOCS.lBegin.z),@GetOneVarData,@FreeOneVarData,nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc);

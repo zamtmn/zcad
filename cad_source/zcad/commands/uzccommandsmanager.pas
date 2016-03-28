@@ -19,7 +19,7 @@
 unit uzccommandsmanager;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfPObjects,uzcsysvars,geometry,uzglviewareaabstract,paths,uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,{umytreenode,}uzcsysinfo,strproc,UGDBOpenArrayOfPointer,
+uses UGDBOpenArrayOfPObjects,uzcsysvars,uzegeometry,uzglviewareaabstract,paths,uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,{umytreenode,}uzcsysinfo,strproc,UGDBOpenArrayOfPointer,
      gdbasetypes,uzccommandsabstract, sysutils,gdbase,uzglviewareadata,
      memman,uzcshared,uzclog,varmandef,varman,uzedrawingdef,uzcinterface;
 const

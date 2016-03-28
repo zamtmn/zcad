@@ -11,7 +11,7 @@ interface
 uses uzeobjectextender,uzeentityfactory,Varman,uzgldrawcontext,uzestyleslayers,
      uzeentgenericsubentry,uzedrawingdef,uzeentitiesprop,uzcsysvars,UGDBOpenArrayOfByte,
      gdbasetypes,uzeentity,UGDBOpenArrayOfPV,uzeentconnected,uzeconsts,
-     varmandef,geometry,gdbase,UGDBGraf,memman,uzeentsubordinated,uunitmanager,
+     varmandef,uzegeometry,gdbase,UGDBGraf,memman,uzeentsubordinated,uunitmanager,
      uzcshared,sysutils,UGDBOpenArrayOfPObjects;
 const
      UNNAMEDNET='NET';
@@ -295,7 +295,7 @@ begin
      if pl<>nil then
      begin
           repeat
-                if not geometry.vertexeq(pl^.CoordInOCS.lbegin,pl^.CoordInOCS.lend) then
+                if not uzegeometry.vertexeq(pl^.CoordInOCS.lbegin,pl^.CoordInOCS.lend) then
                 begin
 
                 tgf:=graf.addge(pl^.CoordInOCS.lbegin);

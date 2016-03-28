@@ -20,7 +20,7 @@ unit uzglgeometry;
 {$INCLUDE def.inc}
 interface
 uses uzgldrawergeneral,math,uzgldrawcontext,uzgldrawerabstract,uzgvertex3sarray,
-     UGDBOpenArrayOfData,UGDBPoint3DArray,geometry,uzeentitiesprop,
+     UGDBOpenArrayOfData,UGDBPoint3DArray,uzegeometry,uzeentitiesprop,
      uzestyleslinetypes,sysutils,gdbase,memman,
      gdbasetypes,strproc,uzefont,uzglvectorobject;
 type
@@ -301,13 +301,13 @@ begin
      //lines.Add(@p1);
      //lines.Add(@p2);
 
-     {d:=geometry.Vertexlength(p1,p2)/30;
+     {d:=uzegeometry.Vertexlength(p1,p2)/30;
      a:=d/2;
      for i:=0 to 2 do
      begin
-          tv:=geometry.VertexAdd(p1,createvertex(random*d-a,random*d-a,0));
+          tv:=uzegeometry.VertexAdd(p1,createvertex(random*d-a,random*d-a,0));
           lines.Add(@tv);
-          tv:=geometry.VertexAdd(p2,createvertex(random*d-a,random*d-a,0));
+          tv:=uzegeometry.VertexAdd(p2,createvertex(random*d-a,random*d-a,0));
           lines.Add(@tv);
      end;}
 end;
@@ -315,8 +315,8 @@ function CalcSegment(const startpoint,endpoint:GDBVertex;var segment:ZPolySegmen
 begin
      segment.startpoint:=startpoint;
      segment.endpoint:=endpoint;
-     segment.dir:=geometry.VertexSub(endpoint,startpoint);
-     segment.length:=geometry.Vertexlength(startpoint,endpoint);
+     segment.dir:=VertexSub(endpoint,startpoint);
+     segment.length:=Vertexlength(startpoint,endpoint);
      segment.accumlength:=prevlength+segment.length;
      segment.naccumlength:=segment.accumlength;
      result:=segment.accumlength;
@@ -451,9 +451,9 @@ begin
                            mentrot:=CreateRotationMatrixZ(Sin(LineAngle), Cos(LineAngle))
                        else
                            mentrot:=onematrix;
-    madd:=geometry.CreateTranslationMatrix(createvertex(param.x*Scale,param.y*Scale,0));
+    madd:=CreateTranslationMatrix(createvertex(param.x*Scale,param.y*Scale,0));
     mtrans:=CreateTranslationMatrix(createvertex(PInsert.x,PInsert.y,PInsert.z));
-    mscale:=CreateScaleMatrix(geometry.createvertex(param.Height*Scale,param.Height*Scale,param.Height*Scale));
+    mscale:=CreateScaleMatrix(createvertex(param.Height*Scale,param.Height*Scale,param.Height*Scale));
     result:=onematrix;
     result:=MatrixMultiply(result,mscale);
     result:=MatrixMultiply(result,mrot);
@@ -475,9 +475,9 @@ begin
                            mentrot:=CreateRotationMatrixZ(Sin(LineAngle), Cos(LineAngle))
                        else
                            mentrot:=onematrix;
-    madd:=geometry.CreateTranslationMatrix(createvertex(param.x*Scale,param.y*Scale,0));
+    madd:=CreateTranslationMatrix(createvertex(param.x*Scale,param.y*Scale,0));
     mtrans:=CreateTranslationMatrix(createvertex(PInsert.x,PInsert.y,PInsert.z));
-    mscale:=CreateScaleMatrix(geometry.createvertex(param.Height*Scale,param.Height*Scale,param.Height*Scale));
+    mscale:=CreateScaleMatrix(createvertex(param.Height*Scale,param.Height*Scale,param.Height*Scale));
     result:=onematrix;
     result:=MatrixMultiply(result,mscale);
 
@@ -485,8 +485,8 @@ begin
     if (param.AD<>TACAbs) then
     if isNotReadableAngle(LineAngle) then
     begin
-    madd2:=geometry.CreateTranslationMatrix(createvertex(dx*Scale,dy*Scale,0));
-    madd3:=geometry.CreateTranslationMatrix(createvertex(-dx*Scale,-dy*Scale,0));
+    madd2:=CreateTranslationMatrix(createvertex(dx*Scale,dy*Scale,0));
+    madd3:=CreateTranslationMatrix(createvertex(-dx*Scale,-dy*Scale,0));
     mrot2:=CreateRotationMatrixZ(Sin(pi), Cos(pi));
     result:=MatrixMultiply(result,madd3);
     result:=MatrixMultiply(result,mrot2);

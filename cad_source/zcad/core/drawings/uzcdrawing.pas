@@ -23,7 +23,7 @@ uses
     uzctranslations,uzcinterface,uzgldrawcontext,zeundostack,zcchangeundocommand,
     zcobjectchangeundocommand,zebaseundocommands,paths,uzestylesdim,
     uzcdialogsfiles,LResources,uzcsysvars,uzcstrconsts,strproc,uzeblockdef,UUnitManager,
-    gdbase,varmandef,varman,sysutils, memman, geometry, uzeconsts,
+    gdbase,varmandef,varman,sysutils, memman,uzegeometry, uzeconsts,
     gdbasetypes,uzedrawingsimple,uzestyleslayers,uzeentity,uzefontmanager,
     UGDBOpenArrayOfPObjects,UGDBOpenArrayOfByte;
 type

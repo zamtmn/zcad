@@ -134,7 +134,7 @@ type
 
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)
-             DWG_HelpGeometryDraw:PGDBBoolean;(*'Help geometry'*)
+             DWG_HelpGeometryDraw:PGDBBoolean;(*'Help uzegeometry'*)
              DWG_Snap:PGDBSnap2D;(*'Snap settings'*)
              DWG_GridSpacing:PGDBvertex2D;(*'Grid spacing'*)
              DWG_DrawGrid:PGDBBoolean;(*'Display grid'*)
@@ -178,7 +178,7 @@ type
               INTF_OBJINSP_Properties:tobjinspinterface;(*'Object inspector properties'*)
              end;
   tdisp=packed record
-             DISP_SystmGeometryDraw:PGDBBoolean;(*'System geometry'*)
+             DISP_SystmGeometryDraw:PGDBBoolean;(*'System uzegeometry'*)
              DISP_SystmGeometryColor:PTGDBPaletteColor;(*'Help color'*)
              DISP_ZoomFactor:PGDBDouble;(*'Mouse wheel scale factor'*)
              DISP_OSSize:PGDBDouble;(*'Snap aperture size'*)

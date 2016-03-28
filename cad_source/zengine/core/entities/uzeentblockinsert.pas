@@ -21,7 +21,7 @@ unit uzeentblockinsert;
 interface
 uses uzeentity,uzgldrawcontext,uzeentityfactory,uzedrawingdef,uzestyleslayers,math,
      gdbasetypes,uzeentcomplex,sysutils,UGDBObjBlockdefArray,uzeblockdef,GDBase,
-     uzeconsts,uzglviewareadata,geometry,uzeffdxfsupport,memman,uzeentsubordinated,
+     uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,memman,uzeentsubordinated,
      UGDBOpenArrayOfByte;
 const zcadmetric='!!ZMODIFIER:';
 type
@@ -217,9 +217,9 @@ begin
 
      Local.P_insert:=PGDBVertex(@objmatrix[3])^;
 
-     scale.x:=geometry.oneVertexlength(PGDBVertex(@objmatrix[0])^)*sign(scale.x);
-     scale.y:=geometry.oneVertexlength(PGDBVertex(@objmatrix[1])^)*sign(scale.y);
-     scale.z:=geometry.oneVertexlength(PGDBVertex(@objmatrix[2])^)*sign(scale.z);
+     scale.x:=oneVertexlength(PGDBVertex(@objmatrix[0])^)*sign(scale.x);
+     scale.y:=oneVertexlength(PGDBVertex(@objmatrix[1])^)*sign(scale.y);
+     scale.z:=oneVertexlength(PGDBVertex(@objmatrix[2])^)*sign(scale.z);
 
      {m1:=objmatrix;
      PGDBVertex(@m1[0])^.x:=(PGDBVertex(@m1[0])^.x/scale.x);
@@ -227,8 +227,8 @@ begin
      PGDBVertex(@m1[2])^.z:=(PGDBVertex(@m1[2])^.z/scale.z);
      PGDBVertex(@m1[3])^:=nulvertex;
      m2:=m1;
-     geometry.MatrixTranspose(m2);
-     m1:=geometry.MatrixMultiply(m1,m2);}
+     uzegeometry.MatrixTranspose(m2);
+     m1:=uzegeometry.MatrixMultiply(m1,m2);}
 
      //mmm[0,0]:=objmatrix[0,0];mmm[0,1]:=objmatrix[0,1];mmm[0,2]:=objmatrix[0,2];mmm[0,3]:=objmatrix[0,3];
      //mmm[1,0]:=objmatrix[1,0];mmm[1,1]:=objmatrix[1,1];mmm[1,2]:=objmatrix[1,2];mmm[1,3]:=objmatrix[1,3];
@@ -244,17 +244,17 @@ begin
      //MatrixDecompose(mmm,Tran);
      //QDUDecomposition (objmatrix,kQ,kD,kU);
 
-     {tv:=geometry.vectordot(PGDBVertex(@objmatrix[1])^,PGDBVertex(@objmatrix[2])^);
+     {tv:=uzegeometry.vectordot(PGDBVertex(@objmatrix[1])^,PGDBVertex(@objmatrix[2])^);
      tv:=normalizevertex(tv);
      if not IsPointEqual(tv,normalizevertex(PGDBVertex(@objmatrix[0])^)) then
                                                                              scale.x:=-scale.x;
 
-     tv:=geometry.vectordot(PGDBVertex(@objmatrix[2])^,PGDBVertex(@objmatrix[0])^);
+     tv:=uzegeometry.vectordot(PGDBVertex(@objmatrix[2])^,PGDBVertex(@objmatrix[0])^);
      tv:=normalizevertex(tv);
      if IsPointEqual(tv,normalizevertex(PGDBVertex(@objmatrix[1])^)) then
                                                                              scale.y:=-scale.y;
 
-     tv:=geometry.vectordot(PGDBVertex(@objmatrix[0])^,PGDBVertex(@objmatrix[1])^);
+     tv:=uzegeometry.vectordot(PGDBVertex(@objmatrix[0])^,PGDBVertex(@objmatrix[1])^);
      tv:=normalizevertex(tv);
      if IsPointEqual(tv,normalizevertex(PGDBVertex(@objmatrix[2])^)) then
                                                                              scale.z:=-scale.z;}
@@ -281,8 +281,8 @@ begin
      normalizevertex(ox);
      tv:=Local.basis.ox;
      if scale.x<-eps then
-                      tv:=geometry.VertexMulOnSc(tv,-1);
-     rotate:=geometry.scalardot(tv,ox);
+                      tv:=VertexMulOnSc(tv,-1);
+     rotate:=scalardot(tv,ox);
      rotate:=arccos(rotate);
      if tv.y<-eps then rotate:=2*pi-rotate;
 end;
@@ -298,7 +298,7 @@ objMatrix:=MatrixMultiply(m1,objMatrix);
 end;
 function GDBObjBlockInsert.getrot:GDBDouble;
 begin
-     result:=arccos((objmatrix[0,0])/geometry.oneVertexlength(PGDBVertex(@objmatrix[0])^))
+     result:=arccos((objmatrix[0,0])/oneVertexlength(PGDBVertex(@objmatrix[0])^))
 end;
 
 procedure GDBObjBlockInsert.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);

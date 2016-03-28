@@ -22,7 +22,7 @@ uses
     uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,math,uzeentwithlocalcs,
     uzecamera,UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,UGDBSelectedObjArray,
     uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,GDBase,
-    uzeconsts,uzglviewareadata,geometry,uzeffdxfsupport,memman,uzeentplain;
+    uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,memman,uzeentplain;
 type
 {REGISTEROBJECTTYPE GDBObjArc}
 {Export+}
@@ -94,7 +94,7 @@ procedure GDBObjARC.TransformAt;
 var
     tv:GDBVertex4D;
 begin
-    objmatrix:=geometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
+    objmatrix:=uzegeometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
 
     tv:=PGDBVertex4D(@t_matrix[3])^;
     PGDBVertex4D(@t_matrix[3])^:=NulVertex4D;
@@ -128,7 +128,7 @@ begin
 
      processaxis(posr,dir);
      //posr.arrayworldaxis.Add(@dir);
-     tv:=geometry.vectordot(dir,zwcs);
+     tv:=uzegeometry.vectordot(dir,zwcs);
      processaxis(posr,tv);
      //posr.arrayworldaxis.Add(@tv);
 
@@ -151,9 +151,9 @@ begin
   //tv2:=VectorTransform3D(tv2,objmatrix);
   tv2:=VectorTransform3D(tv2,t_matrix);
 
-  startangle:=startangle+arccos(scalardot(PGDBVertex(@t_matrix[0])^,XWCS)/(geometry.oneVertexlength(PGDBVertex(@t_matrix[0])^)));
+  startangle:=startangle+arccos(scalardot(PGDBVertex(@t_matrix[0])^,XWCS)/(uzegeometry.oneVertexlength(PGDBVertex(@t_matrix[0])^)));
 
-  endangle:=endangle+arccos(scalardot(PGDBVertex(@t_matrix[0])^,XWCS)/(geometry.oneVertexlength(PGDBVertex(@t_matrix[0])^)));}
+  endangle:=endangle+arccos(scalardot(PGDBVertex(@t_matrix[0])^,XWCS)/(uzegeometry.oneVertexlength(PGDBVertex(@t_matrix[0])^)));}
 
 
   {inherited;}

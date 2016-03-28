@@ -24,7 +24,7 @@ uses
     uzglgeometry,uzgldrawcontext,uzetextpreprocessor,uzeentityfactory,uzedrawingdef,
     strproc,uzefont,uzeentabstracttext,UGDBPoint3DArray,uzestyleslayers,SysUtils,
     gdbasetypes,uzeentity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,
-    GDBase,uzeenttext,uzeconsts,geometry,uzeffdxfsupport,math,memman,uzeentsubordinated,
+    GDBase,uzeenttext,uzeconsts,uzegeometry,uzeffdxfsupport,math,memman,uzeentsubordinated,
     uzestylestexts;
 const maxdxfmtextlen=250;
 type
@@ -109,7 +109,7 @@ begin
                                                                     Local.basis.ox:=CrossVertex(YWCS,Local.basis.oz)
                                                                 else
                                                                     Local.basis.ox:=CrossVertex(ZWCS,Local.basis.oz);
-  local.basis.OX:=VectorTransform3D(local.basis.OX,geometry.CreateAffineRotationMatrix(Local.basis.oz,-textprop.angle));
+  local.basis.OX:=VectorTransform3D(local.basis.OX,uzegeometry.CreateAffineRotationMatrix(Local.basis.oz,-textprop.angle));
   end;
 
   text.init(10);

@@ -40,7 +40,7 @@ uses
   uzglviewareadata,
   uzeffdxf,
   uzcinterface,
-  geometry,
+  uzegeometry,
   memman,
   uzeconsts,
   uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
@@ -1077,7 +1077,7 @@ begin
                              T3SB_Fale:isVertical:=false;
                              T3SB_True:isVertical:=true;
                           T3SB_Default:begin
-                                         dv:=geometry.VertexSub(paxisline^.CoordInWCS.lEnd,paxisline^.CoordInWCS.lBegin);
+                                         dv:=uzegeometry.VertexSub(paxisline^.CoordInWCS.lEnd,paxisline^.CoordInWCS.lBegin);
                                          isVertical:=abs(dv.x)<abs(dv.y);
                                        end;
                   end;
@@ -2415,15 +2415,15 @@ begin
 
            //xdir:=GetDirInPoint(pgdbobjlwPolyline(osp^.PGDBObject).Vertex3D_in_WCS_Array,wc,pgdbobjlwPolyline(osp^.PGDBObject).closed);
            xdir:=pgdbobjentity(osp^.PGDBObject)^.GetTangentInPoint(wc);// GetDirInPoint(pgdbobjlwPolyline(osp^.PGDBObject).Vertex3D_in_WCS_Array,wc,pgdbobjlwPolyline(osp^.PGDBObject).closed);
-           if not geometry.IsVectorNul(xdir) then
+           if not uzegeometry.IsVectorNul(xdir) then
            begin
            if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
-                                                           ydir:=normalizevertex(geometry.vectordot(pgdbobjlwPolyline(osp^.PGDBObject)^.Local.basis.OZ,xdir))
+                                                           ydir:=normalizevertex(uzegeometry.vectordot(pgdbobjlwPolyline(osp^.PGDBObject)^.Local.basis.OZ,xdir))
                                                        else
-                                                           ydir:=normalizevertex(geometry.vectordot(ZWCS,xdir));
+                                                           ydir:=normalizevertex(uzegeometry.vectordot(ZWCS,xdir));
            tv:=wc;
            //tv:=vertexadd(wc,drawings.GetCurrentDWG^.OGLwindow1.param.startgluepoint.dcoord);
-           dispmatr:=geometry.CreateTranslationMatrix(createvertex(-tv.x,-tv.y,-tv.z));
+           dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(-tv.x,-tv.y,-tv.z));
 
            rotmatr:=onematrix;
            PGDBVertex(@rotmatr[0])^:=xdir;
@@ -2431,10 +2431,10 @@ begin
            if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
                                                            PGDBVertex(@rotmatr[2])^:=pgdbobjlwPolyline(osp^.PGDBObject)^.Local.basis.OZ
                                                        else
-                                                           PGDBVertex(@rotmatr[2])^:={ZWCS}normalizevertex(geometry.vectordot(ydir,xdir));
-           //rotmatr:=geometry.MatrixMultiply(dispmatr,rotmatr);
-           dispmatr2:=geometry.CreateTranslationMatrix(createvertex(tv.x,tv.y,tv.z));
-           //dispmatr:=geometry.MatrixMultiply(rotmatr,dispmatr2);
+                                                           PGDBVertex(@rotmatr[2])^:={ZWCS}normalizevertex(uzegeometry.vectordot(ydir,xdir));
+           //rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
+           dispmatr2:=uzegeometry.CreateTranslationMatrix(createvertex(tv.x,tv.y,tv.z));
+           //dispmatr:=uzegeometry.MatrixMultiply(rotmatr,dispmatr2);
 
            //drawings.GetCurrentDWG^.SelObjArray.TransformObj(dispmatr);
            drawings.GetCurrentDWG^.SelObjArray.SetRotateObj(dispmatr,dispmatr2,rotmatr,PGDBVertex(@rotmatr[0])^,PGDBVertex(@rotmatr[1])^,PGDBVertex(@rotmatr[2])^);
@@ -2460,16 +2460,16 @@ begin
 
            //xdir:=GetDirInPoint(pgdbobjlwPolyline(osp^.PGDBObject).Vertex3D_in_WCS_Array,wc,pgdbobjlwPolyline(osp^.PGDBObject).closed);
            xdir:=pgdbobjentity(osp^.PGDBObject)^.GetTangentInPoint(wc);// GetDirInPoint(pgdbobjlwPolyline(osp^.PGDBObject).Vertex3D_in_WCS_Array,wc,pgdbobjlwPolyline(osp^.PGDBObject).closed);
-           if not geometry.IsVectorNul(xdir) then
+           if not uzegeometry.IsVectorNul(xdir) then
            begin
            if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
-                                                           ydir:=normalizevertex(geometry.vectordot(pgdbobjlwPolyline(osp^.PGDBObject)^.Local.basis.OZ,xdir))
+                                                           ydir:=normalizevertex(uzegeometry.vectordot(pgdbobjlwPolyline(osp^.PGDBObject)^.Local.basis.OZ,xdir))
                                                        else
-                                                           ydir:=normalizevertex(geometry.vectordot(ZWCS,xdir));
+                                                           ydir:=normalizevertex(uzegeometry.vectordot(ZWCS,xdir));
 
            tv:=wc;
            //tv:=vertexadd(wc,drawings.GetCurrentDWG^.OGLwindow1.param.startgluepoint.dcoord);
-           dispmatr:=geometry.CreateTranslationMatrix(createvertex(-tv.x,-tv.y,-tv.z));
+           dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(-tv.x,-tv.y,-tv.z));
 
            rotmatr:=onematrix;
            PGDBVertex(@rotmatr[0])^:=xdir;
@@ -2477,21 +2477,21 @@ begin
            if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
                                                            PGDBVertex(@rotmatr[2])^:=pgdbobjlwPolyline(osp^.PGDBObject)^.Local.basis.OZ
                                                        else
-                                                           PGDBVertex(@rotmatr[2])^:={ZWCS}normalizevertex(geometry.vectordot(ydir,xdir));;
+                                                           PGDBVertex(@rotmatr[2])^:={ZWCS}normalizevertex(uzegeometry.vectordot(ydir,xdir));;
            {xdir:=normalizevertex(xdir);
-           ydir:=geometry.vectordot(pgdbobjlwPolyline(osp^.PGDBObject).Local.OZ,xdir);
+           ydir:=uzegeometry.vectordot(pgdbobjlwPolyline(osp^.PGDBObject).Local.OZ,xdir);
 
 
-           dispmatr:=geometry.CreateTranslationMatrix(createvertex(-wc.x,-wc.y,-wc.z));
+           dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(-wc.x,-wc.y,-wc.z));
 
            rotmatr:=onematrix;
            PGDBVertex(@rotmatr[0])^:=xdir;
            PGDBVertex(@rotmatr[1])^:=ydir;
            PGDBVertex(@rotmatr[2])^:=pgdbobjlwPolyline(osp^.PGDBObject).Local.OZ;}
 
-           //rotmatr:=geometry.MatrixMultiply(dispmatr,rotmatr);
-           dispmatr2:=geometry.CreateTranslationMatrix(createvertex(tv.x,tv.y,tv.z));
-           //dispmatr:=geometry.MatrixMultiply(rotmatr,dispmatr2);
+           //rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
+           dispmatr2:=uzegeometry.CreateTranslationMatrix(createvertex(tv.x,tv.y,tv.z));
+           //dispmatr:=uzegeometry.MatrixMultiply(rotmatr,dispmatr2);
 
 
            //drawings.GetCurrentDWG^.SelObjArray.Transform(dispmatr);
@@ -2772,8 +2772,8 @@ function Move_com.CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D;
 var
     dist:gdbvertex;
 begin
-        dist:=geometry.VertexSub(p2,p1);
-        result:=geometry.CreateTranslationMatrix(dist);
+        dist:=uzegeometry.VertexSub(p2,p1);
+        result:=uzegeometry.CreateTranslationMatrix(dist);
 end;
 function Move_com.Move(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
 var
@@ -2785,7 +2785,7 @@ var
     dc:TDrawContext;
 begin
     im:=dispmatr;
-    geometry.MatrixInvert(im);
+    uzegeometry.MatrixInvert(im);
     PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker(UndoMaker);
     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
     with PushCreateTGMultiObjectChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,dispmatr,im,pcoa^.Count)^ do
@@ -2889,10 +2889,10 @@ var
     d:GDBDouble;
     plane:DVector4D;
 begin
-        dist:=geometry.VertexSub(p2,p1);
-        d:=geometry.oneVertexlength(dist);
-        p3:=geometry.VertexMulOnSc(ZWCS,d);
-        p3:=geometry.VertexAdd(p3,t3dp);
+        dist:=uzegeometry.VertexSub(p2,p1);
+        d:=uzegeometry.oneVertexlength(dist);
+        p3:=uzegeometry.VertexMulOnSc(ZWCS,d);
+        p3:=uzegeometry.VertexAdd(p3,t3dp);
 
         plane:=PlaneFrom3Pont(p1,p2,p3);
         normalizeplane(plane);
@@ -2944,11 +2944,11 @@ var
     m:tmethod;
     dc:TDrawContext;
 begin
-  dispmatr:=geometry.CreateTranslationMatrix(createvertex(-t3dp.x,-t3dp.y,-t3dp.z));
-  rotmatr:=geometry.CreateRotationMatrixZ(sin(a),cos(a));
-  rotmatr:=geometry.MatrixMultiply(dispmatr,rotmatr);
-  dispmatr:=geometry.CreateTranslationMatrix(createvertex(t3dp.x,t3dp.y,t3dp.z));
-  dispmatr:=geometry.MatrixMultiply(rotmatr,dispmatr);
+  dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(-t3dp.x,-t3dp.y,-t3dp.z));
+  rotmatr:=uzegeometry.CreateRotationMatrixZ(sin(a),cos(a));
+  rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
+  dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(t3dp.x,t3dp.y,t3dp.z));
+  dispmatr:=uzegeometry.MatrixMultiply(rotmatr,dispmatr);
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 
 if (button and MZW_LBUTTON)=0 then
@@ -2966,7 +2966,7 @@ if (button and MZW_LBUTTON)=0 then
             else
                 begin
                   im:=dispmatr;
-                  geometry.MatrixInvert(im);
+                  uzegeometry.MatrixInvert(im);
                   PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker('Rotate');
                   with PushCreateTGMultiObjectChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,dispmatr,im,pcoa^.Count)^ do
                   begin
@@ -3010,7 +3010,7 @@ begin
       v2.y:=wc.y;
       v1.x:=t3dp.x;
       v1.y:=t3dp.y;
-      a:=geometry.Vertexangle(v1,v2);
+      a:=uzegeometry.Vertexangle(v1,v2);
 
       rot(a,button);
 
@@ -3047,16 +3047,16 @@ var
 begin
 if a<eps then a:=1;
 
-dispmatr:=geometry.CreateTranslationMatrix(createvertex(-t3dp.x,-t3dp.y,-t3dp.z));
+dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(-t3dp.x,-t3dp.y,-t3dp.z));
 
 rotmatr:=onematrix;
 rotmatr[0][0]:=a;
 rotmatr[1][1]:=a;
 rotmatr[2][2]:=a;
 
-rotmatr:=geometry.MatrixMultiply(dispmatr,rotmatr);
-dispmatr:=geometry.CreateTranslationMatrix(createvertex(t3dp.x,t3dp.y,t3dp.z));
-dispmatr:=geometry.MatrixMultiply(rotmatr,dispmatr);
+rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
+dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(t3dp.x,t3dp.y,t3dp.z));
+dispmatr:=uzegeometry.MatrixMultiply(rotmatr,dispmatr);
 dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 {pcd:=pcoa^.beginiterate(ir);
 if pcd<>nil then
@@ -3085,7 +3085,7 @@ if (button and MZW_LBUTTON)=0 then
              else
                  begin
                    im:=dispmatr;
-                   geometry.MatrixInvert(im);
+                   uzegeometry.MatrixInvert(im);
                    PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker('Scale');
                    with PushCreateTGMultiObjectChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,dispmatr,im,pcoa^.Count)^ do
                    begin
@@ -3125,8 +3125,8 @@ var
     //v:GDBVertex;
     //m:tmethod;
 begin
-      //v:=geometry.VertexSub(t3dp,wc);
-      a:=geometry.Vertexlength(t3dp,wc);
+      //v:=uzegeometry.VertexSub(t3dp,wc);
+      a:=uzegeometry.Vertexlength(t3dp,wc);
       scale(a,button);
       result:=cmd_ok;
 end;
@@ -3906,13 +3906,13 @@ begin
                  pl:=lineiterator.key;
                  PointOnCurve3DPropArraySort.Sort(arr,arr.size);
                  lc:=pl^.CoordInOCS;
-                 point:=geometry.Vertexmorph(lc.lBegin,lc.lEnd,arr[0]);
+                 point:=uzegeometry.Vertexmorph(lc.lBegin,lc.lEnd,arr[0]);
                  pl^.CoordInOCS.lend:=point;
                  pl^.FormatEntity(drawings.GetCurrentDWG^,dc);
                  inc(lm);
                  for i:=1 to arr.size-1 do
                  begin
-                      point2:=geometry.Vertexmorph(lc.lBegin,lc.lEnd,arr[i]);
+                      point2:=uzegeometry.Vertexmorph(lc.lBegin,lc.lEnd,arr[i]);
 
                       begin
                           PCreatedGDBLine := GDBPointer(drawings.GetCurrentDWG^.mainObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
@@ -3992,7 +3992,7 @@ end;
 procedure startup;
 begin
   BIProp.Blocks.Enums.init(100);
-  BIProp.Scale:=geometry.OneVertex;
+  BIProp.Scale:=uzegeometry.OneVertex;
   BIProp.Rotation:=0;
   PEProp.Action:=TSPE_Insert;
 
@@ -4087,7 +4087,7 @@ begin
 
   BlockScale.init('BlockScale',0,0);
   BlockScale.CEndActionAttr:=0;
-  BlockScaleParams.Scale:=geometry.CreateVertex(1,1,1);
+  BlockScaleParams.Scale:=uzegeometry.CreateVertex(1,1,1);
   BlockScaleParams.Absolytly:=true;
   BlockScale.SetCommandParam(@BlockScaleParams,'PTBlockScaleParams');
 

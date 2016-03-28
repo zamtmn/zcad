@@ -19,7 +19,7 @@
 unit uzestylestables;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
+uses gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase,uzegeometry,
      {varmandef,gdbobjectsconstdef,}UGDBNamedObjectsArray,UGDBOpenArrayOfData;
 type
 {TCellJustify=(jcl(*'ВерхЛево'*),

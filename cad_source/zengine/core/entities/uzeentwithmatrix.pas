@@ -21,7 +21,7 @@ unit uzeentwithmatrix;
 
 interface
 uses uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,gdbase,gdbasetypes,
-     geometry,uzeentsubordinated,uzeentitiestree;
+     uzegeometry,uzeentsubordinated,uzeentitiestree;
 type
 {EXPORT+}
 PGDBObjWithMatrix=^GDBObjWithMatrix;
@@ -90,8 +90,8 @@ begin
                                             end
                                          else
                                              enttree.FulDraw:=true;}
-     v1:=geometry.VertexSub(enttree.BoundingBox.RTF,enttree.BoundingBox.LBN);
-     tx:=geometry.oneVertexlength(v1);
+     v1:=uzegeometry.VertexSub(enttree.BoundingBox.RTF,enttree.BoundingBox.LBN);
+     tx:=uzegeometry.oneVertexlength(v1);
      if tx/zoom<currentdegradationfactor then
                                                                                         enttree.FulDraw:=false
                                                                                     else
@@ -168,7 +168,7 @@ end;
 
 procedure GDBObjWithMatrix.transform(const t_matrix:DMatrix4D);
 begin
-     ObjMatrix:=geometry.MatrixMultiply(ObjMatrix,t_matrix);
+     ObjMatrix:=uzegeometry.MatrixMultiply(ObjMatrix,t_matrix);
 end;
 procedure GDBObjWithMatrix.createfield;
 begin

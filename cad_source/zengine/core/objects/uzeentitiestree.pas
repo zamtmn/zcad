@@ -21,7 +21,7 @@ unit uzeentitiestree;
 interface
 uses
     graphics,
-    uzgldrawcontext,geometry,UGDBVisibleOpenArray,uzeentity,gdbase,gdbasetypes,{log,}memman;
+    uzgldrawcontext,uzegeometry,UGDBVisibleOpenArray,uzeentity,gdbase,gdbasetypes,{log,}memman;
 const
      IninialNodeDepth=-1;
 type
@@ -283,7 +283,7 @@ begin
                                                                        if PGDBObjEntity(entitys.beginiterate(ir))^.Selected then
                                                                            result.selected:=true;}
 
-                                                     result.plane:=geometry.NulVector4D;
+                                                     result.plane:=uzegeometry.NulVector4D;
                                                      result.pminusnode:=nil;
                                                      result.pplusnode:=nil;
                                                      if prootnode<>nil then
@@ -318,21 +318,21 @@ begin
      until pobj=nil;
 
      if entcount<>0 then
-                        midlepoint:=geometry.VertexMulOnSc(midlepoint,1/entcount);
+                        midlepoint:=uzegeometry.VertexMulOnSc(midlepoint,1/entcount);
 
      d:=sqrt(sqr(midlepoint.x) + sqr(midlepoint.y) + sqr(midlepoint.z));
      ta[0].initnul(entitys.GetRealCount);
-     ta[0].plane:=geometry.PlaneFrom3Pont(midlepoint,
+     ta[0].plane:=uzegeometry.PlaneFrom3Pont(midlepoint,
                                           vertexadd(midlepoint,VertexMulOnSc(x_Y_zVertex,d)),
                                           vertexadd(midlepoint,VertexMulOnSc(xy_Z_Vertex,d))
                                           );
      ta[1].initnul(entitys.GetRealCount);
-     ta[1].plane:=geometry.PlaneFrom3Pont(midlepoint,
+     ta[1].plane:=uzegeometry.PlaneFrom3Pont(midlepoint,
                                           vertexadd(midlepoint,VertexMulOnSc(_X_yzVertex,d)),
                                           vertexadd(midlepoint,VertexMulOnSc(xy_Z_Vertex,d))
                                           );
      ta[2].initnul(entitys.GetRealCount);
-     ta[2].plane:=geometry.PlaneFrom3Pont(midlepoint,
+     ta[2].plane:=uzegeometry.PlaneFrom3Pont(midlepoint,
                                           vertexadd(midlepoint,VertexMulOnSc(_X_yzVertex,d)),
                                           vertexadd(midlepoint,VertexMulOnSc(x_Y_ZVertex,d))
                                           );

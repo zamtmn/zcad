@@ -22,7 +22,7 @@ unit uzeentgenericsubentry;
 interface
 uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzestyleslayers,
      UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,
-     uzeentwithmatrix,uzeentsubordinated,gdbase,geometry,uzeentity,
+     uzeentwithmatrix,uzeentsubordinated,gdbase,uzegeometry,uzeentity,
      uzeconsts,memman,uzeentitiestree;
 type
 //GDBObjGenericSubEntry=object(GDBObjWithLocalCS)
@@ -182,12 +182,12 @@ begin
      minus:=false;
      result:=false;
      if assigned(Node.pminusnode) then
-       if geometry.IsPointInBB(point,Node.pminusnode.BoundingBox) then
+       if uzegeometry.IsPointInBB(point,Node.pminusnode.BoundingBox) then
        begin
             minus:=FindObjectsInPointInNode(point,Node.pminusnode^,Objects);
        end;
      if assigned(Node.pplusnode) then
-       if geometry.IsPointInBB(point,Node.pplusnode.BoundingBox) then
+       if uzegeometry.IsPointInBB(point,Node.pplusnode.BoundingBox) then
        begin
             plus:=FindObjectsInPointInNode(point,Node.pplusnode^,Objects);
        end;
@@ -218,12 +218,12 @@ begin
      minus:=false;
      result:=false;
      if assigned(Node.pminusnode) then
-       if geometry.boundingintersect(Volume,Node.pminusnode.BoundingBox) then
+       if uzegeometry.boundingintersect(Volume,Node.pminusnode.BoundingBox) then
        begin
             minus:=FindObjectsInVolumeInNode(Volume,Node.pminusnode^,Objects);
        end;
      if assigned(Node.pplusnode) then
-       if geometry.boundingintersect(Volume,Node.pplusnode.BoundingBox) then
+       if uzegeometry.boundingintersect(Volume,Node.pplusnode.BoundingBox) then
        begin
             plus:=FindObjectsInVolumeInNode(Volume,Node.pplusnode^,Objects);
        end;
@@ -244,7 +244,7 @@ begin
 end;
 function GDBObjGenericSubEntry.FindObjectsInPoint(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
 begin
-     if geometry.IsPointInBB(point,self.ObjArray.ObjTree.BoundingBox) then
+     if uzegeometry.IsPointInBB(point,self.ObjArray.ObjTree.BoundingBox) then
      begin
           result:=FindObjectsInPointInNode(point,ObjArray.ObjTree,Objects);
      end
@@ -253,7 +253,7 @@ begin
 end;
 function GDBObjGenericSubEntry.FindObjectsInVolume(const Volume:TBoundingBox;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
 begin
-     if geometry.boundingintersect(Volume,self.ObjArray.ObjTree.BoundingBox) then
+     if uzegeometry.boundingintersect(Volume,self.ObjArray.ObjTree.BoundingBox) then
      begin
           result:=FindObjectsInVolumeInNode(Volume,ObjArray.ObjTree,Objects);
      end
@@ -386,7 +386,7 @@ function GDBObjGenericSubEntry.CreatePreCalcData:PTDrawingPreCalcData;
 begin
      GDBGetMem({$IFDEF DEBUGBUILD}'{1F00FCF0-E9C6-4A6B-8B98-FFCC5D163190}',{$ENDIF}GDBPointer(result),sizeof(TDrawingPreCalcData));
      result.InverseObjMatrix:=objmatrix;
-     geometry.MatrixInvert(result.InverseObjMatrix);
+     uzegeometry.MatrixInvert(result.InverseObjMatrix);
 end;
 procedure GDBObjGenericSubEntry.DestroyPreCalcData(PreCalcData:PTDrawingPreCalcData);
 begin

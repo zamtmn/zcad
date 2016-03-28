@@ -26,7 +26,7 @@ uses
   varmandef,
   uzglviewareadata,
   uzcinterface,
-  geometry,
+  uzegeometry,
   memman,
   uzeconsts,
   uzeentity,uzeentline,
@@ -284,7 +284,7 @@ begin
                                {a:=v.x;
                                v.x:=v.y;
                                v.y:=a;}
-                               v:=geometry.VertexMulOnSc(v,-1);
+                               v:=uzegeometry.VertexMulOnSc(v,-1);
                                a:=vertexangle(PGDBVertex2d(@p1)^,PGDBVertex2d(@p2)^)*180/pi;
                           end
                           else
@@ -675,7 +675,7 @@ begin
      else
      begin
      devnamesort.Sort(dna,dna.Size);
-     t_matrix:=geometry.CreateTranslationMatrix(createvertex(0,15,0));
+     t_matrix:=uzegeometry.CreateTranslationMatrix(createvertex(0,15,0));
 
 
      for i:=0 to dna.Size-1 do
@@ -2315,27 +2315,27 @@ begin
   pv21:=pc2.VertexArrayInWCS.getelement(0);
   pv22:=pc2.VertexArrayInWCS.getelement(pc2.VertexArrayInWCS.Count-1);
 
-     if geometry.Vertexlength(pv11^,pv21^)<eps then
+     if uzegeometry.Vertexlength(pv11^,pv21^)<eps then
                                                    begin
                                                         pc1.VertexArrayInOCS.Invert;
                                                         pc2.VertexArrayInOCS.deleteelement(0);
                                                         pc2.VertexArrayInOCS.copyto(@pc1.VertexArrayInOCS);
                                                         pc2.YouDeleted(drawings.GetCurrentDWG^);
                                                    end
-else if geometry.Vertexlength(pv12^,pv21^)<eps then
+else if uzegeometry.Vertexlength(pv12^,pv21^)<eps then
                                                    begin
                                                         pc2.VertexArrayInOCS.deleteelement(0);
                                                         pc2.VertexArrayInOCS.copyto(@pc1.VertexArrayInOCS);
                                                         pc2.YouDeleted(drawings.GetCurrentDWG^);
                                                    end
-else if geometry.Vertexlength(pv11^,pv22^)<eps then
+else if uzegeometry.Vertexlength(pv11^,pv22^)<eps then
                                                    begin
                                                         pc1.VertexArrayInOCS.deleteelement(0);
                                                         pc1.VertexArrayInOCS.copyto(@pc2.VertexArrayInOCS);
                                                         pc1.YouDeleted(drawings.GetCurrentDWG^);
                                                         pc1:=pc2
                                                    end
-else if geometry.Vertexlength(pv12^,pv22^)<eps then
+else if uzegeometry.Vertexlength(pv12^,pv22^)<eps then
                                                    begin
                                                         pc2.VertexArrayInOCS.Invert;
                                                         pc2.VertexArrayInOCS.deleteelement(0);

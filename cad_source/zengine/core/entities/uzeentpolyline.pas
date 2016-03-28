@@ -23,7 +23,7 @@ interface
 uses uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
      UGDBOpenArrayOfPObjects,uzestyleslayers,uzeentsubordinated,uzeentcurve,gdbasetypes,
      uzeentity,UGDBOpenArrayOfByte,GDBase,uzeconsts,uzglviewareadata,
-     geometry,uzeffdxfsupport,sysutils,memman;
+     uzegeometry,uzeffdxfsupport,sysutils,memman;
 type
 {REGISTEROBJECTTYPE GDBObjPolyline}
 {Export+}
@@ -62,7 +62,7 @@ begin
   begin
        ptpv0:=VertexArrayInWCS.parray;
        ptpv1:=VertexArrayInWCS.getelement(VertexArrayInWCS.Count-1);
-       result:=result+geometry.Vertexlength(ptpv0^,ptpv1^);
+       result:=result+uzegeometry.Vertexlength(ptpv0^,ptpv1^);
   end;
 end;
 procedure GDBObjPolyline.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
@@ -178,7 +178,7 @@ procedure GDBObjPolyline.SaveToDXF;
 begin
   SaveToDXFObjPrefix(handle,outhandle,'POLYLINE','AcDb3dPolyline');
   dxfGDBIntegerout(outhandle,66,1);
-  dxfvertexout(outhandle,10,geometry.NulVertex);
+  dxfvertexout(outhandle,10,uzegeometry.NulVertex);
   if closed then
                 dxfGDBIntegerout(outhandle,70,9)
             else

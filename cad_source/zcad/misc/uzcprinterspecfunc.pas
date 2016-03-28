@@ -46,7 +46,7 @@ type
     end;
 implementation
 uses
-    uzcdrawings,geometry;
+    uzcdrawings,uzegeometry;
 procedure TPrinterRasterizer.myglPointSize(const size: GLfloat);
 begin
      myglLineWidth(size);
@@ -107,11 +107,11 @@ begin
     //scalex:={w}scalex*1000;
     //scaley:={h}scaley*1000;
      inherited;
-     RM:=geometry.MatrixMultiply(model,project);
-     RM:=geometry.MatrixMultiply(RM,geometry.CreateTranslationMatrix(createvertex(1,1,0)));
-     RM:=geometry.MatrixMultiply(RM,geometry.CreateScaleMatrix(createvertex(0.5,-0.5,1)));
-     RM:=geometry.MatrixMultiply(RM,geometry.CreateScaleMatrix(createvertex(wmm*scalex*600/25.4,hmm*scalex*600/25.4,1)));
-     RM:=geometry.MatrixMultiply(RM,geometry.CreateTranslationMatrix(createvertex(0,h,0)));
+     RM:=uzegeometry.MatrixMultiply(model,project);
+     RM:=uzegeometry.MatrixMultiply(RM,uzegeometry.CreateTranslationMatrix(createvertex(1,1,0)));
+     RM:=uzegeometry.MatrixMultiply(RM,uzegeometry.CreateScaleMatrix(createvertex(0.5,-0.5,1)));
+     RM:=uzegeometry.MatrixMultiply(RM,uzegeometry.CreateScaleMatrix(createvertex(wmm*scalex*600/25.4,hmm*scalex*600/25.4,1)));
+     RM:=uzegeometry.MatrixMultiply(RM,uzegeometry.CreateTranslationMatrix(createvertex(0,h,0)));
 end;
 procedure TPrinterRasterizer.myglVertex3dV;
 var t:gdbvertex;
@@ -130,7 +130,7 @@ begin
                       end;
     *)
     inc(pointcount);
-    t:=geometry.VectorTransform3D(v^,RM);
+    t:=uzegeometry.VectorTransform3D(v^,RM);
     if currentmode=GL_lines then
     begin
     if pointcount=2 then
@@ -163,7 +163,7 @@ begin
                       end;
      *)
     inc(pointcount);
-    t:=geometry.VectorTransform3D(v,RM);
+    t:=uzegeometry.VectorTransform3D(v,RM);
     if currentmode=GL_lines then
     begin
     if pointcount=2 then
@@ -198,7 +198,7 @@ begin
                       end;
      *)
     inc(pointcount);
-    t:=geometry.VectorTransform3D(createvertex(x,y,z),RM);
+    t:=uzegeometry.VectorTransform3D(createvertex(x,y,z),RM);
     if currentmode=GL_lines then
     begin
     if pointcount=2 then

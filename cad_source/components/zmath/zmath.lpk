@@ -19,12 +19,12 @@
     </CompilerOptions>
     <Files Count="2">
       <Item1>
-        <Filename Value="geometry.pas"/>
-        <UnitName Value="geometry"/>
+        <Filename Value="uzegeometry.pas"/>
+        <UnitName Value="uzegeometry"/>
       </Item1>
       <Item2>
-        <Filename Value="zemathutils.pas"/>
-        <UnitName Value="zemathutils"/>
+        <Filename Value="uzemathutils.pas"/>
+        <UnitName Value="uzemathutils"/>
       </Item2>
     </Files>
     <RequiredPkgs Count="2">

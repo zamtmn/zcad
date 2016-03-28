@@ -19,7 +19,7 @@
 unit uzglvectorobject;
 {$INCLUDE def.inc}
 interface
-uses uzgldrawerabstract,uzgldrawcontext,uzgprimitives,uzglgeomdata,uzgprimitivessarray,geometry,sysutils,gdbase,memman,//log,
+uses uzgldrawerabstract,uzgldrawcontext,uzgprimitives,uzglgeomdata,uzgprimitivessarray,uzegeometry,sysutils,gdbase,memman,//log,
      strproc,gdbasetypes;
 type
 {Export+}
@@ -225,7 +225,7 @@ begin
      p:=self.GeomData.Vertex3S.getelement(GeomDataIndexMin);
      for i:=0 to GeomDataIndexMax-GeomDataIndexMin do
      begin
-       p^:=geometry.VectorTransform3D(p^,matrix);
+       p^:=VectorTransform3D(p^,matrix);
        inc(p);
      end;
 end;

@@ -20,7 +20,7 @@ unit uzeentplainwithox;
 {$INCLUDE def.inc}
 
 interface
-uses uzeentplain,GDBase,geometry,sysutils,memman;
+uses uzeentplain,GDBase,uzegeometry,sysutils,memman;
 type
 //pprojoutbound:{-}PGDBOOutbound2DIArray{/GDBPointer/};
 {EXPORT+}

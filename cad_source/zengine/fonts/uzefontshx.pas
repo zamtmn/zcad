@@ -20,7 +20,7 @@ unit uzefontshx;
 {$INCLUDE def.inc}
 interface
 uses uzefontbase,memman,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,
-     geometry;
+     uzegeometry;
 type
 {EXPORT+}
 PSHXFont=^SHXFont;

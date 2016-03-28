@@ -20,7 +20,7 @@ unit UGDBSelectedObjArray;
 {$INCLUDE def.inc}
 interface
 uses uzepalette,uzgldrawcontext,uzecamera,uzeentwithmatrix,uzeentity,
-     UGDBControlPointArray,UGDBOpenArrayOfData,sysutils,gdbase, geometry,
+     UGDBControlPointArray,UGDBOpenArrayOfData,sysutils,gdbase,uzegeometry,
      gdbasetypes,memman,uzedrawingdef;
 type
 {Export+}
@@ -255,9 +255,9 @@ begin
   //и вторую, для сдвига обратно - plus.Умножаем М на матрицу сдвига в начало системы
   m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
   P_insert_in_OCS:=PGDBVertex(@m[3])^;
-  ominus:=geometry.CreateTranslationMatrix(geometry.MinusVertex(P_insert_in_OCS));
-  oplus:=geometry.CreateTranslationMatrix(P_insert_in_OCS);
-  m:=geometry.MatrixMultiply(m,ominus);
+  ominus:=uzegeometry.CreateTranslationMatrix(uzegeometry.MinusVertex(P_insert_in_OCS));
+  oplus:=uzegeometry.CreateTranslationMatrix(P_insert_in_OCS);
+  m:=uzegeometry.MatrixMultiply(m,ominus);
 
   //3) Выравниваем оси по глобальной СКО. Берем матрицу из объекта Mobj и удаляем
   //у нее элементы сдвига, потом инвертируем (или транспонируем, для матриц
@@ -265,14 +265,14 @@ begin
   m2:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
   PGDBVertex(@m2[3])^:=nulvertex;
   matrixinvert(m2);
-  m:=geometry.MatrixMultiply(m,m2);
+  m:=uzegeometry.MatrixMultiply(m,m2);
 
   //4) Выравниваем оси по СКО приемника. Выдираем матрицу из приемника - Mdest,
   //обнуляем ей элементы сдвига и умножаем на M: M = M*Mdest
-  m:=geometry.MatrixMultiply(m,rm);
+  m:=uzegeometry.MatrixMultiply(m,rm);
 
   //5) Двигаем объект обратно. M = M*plus
-  m:=geometry.MatrixMultiply(m,oplus);
+  m:=uzegeometry.MatrixMultiply(m,oplus);
 
 
   //6) Двигаем объект в точку крепежа на приемнике. Составляем матрицу сдвига
@@ -349,8 +349,8 @@ begin
   {pobj^.Transform(minusd);
   m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
   tv:=vectortransform3d(nulvertex,m);
-  oplus:=geometry.CreateTranslationMatrix(tv);
-  ominus:=geometry.CreateTranslationMatrix(createvertex(-tv.x,-tv.y,-tv.z));
+  oplus:=uzegeometry.CreateTranslationMatrix(tv);
+  ominus:=uzegeometry.CreateTranslationMatrix(createvertex(-tv.x,-tv.y,-tv.z));
   PGDBVertex(@m[3])^:=nulvertex;
   matrixinvert(m);
   PGDBObjWithMatrix(pobj)^.ObjMatrix:=onematrix;

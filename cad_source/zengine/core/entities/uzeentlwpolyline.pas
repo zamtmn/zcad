@@ -22,7 +22,7 @@ unit uzeentlwpolyline;
 interface
 uses uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzecamera,
      UGDBOpenArrayOfPObjects,uzglviewareadata,uzeentcurve,UGDBVectorSnapArray,
-     geometry,uzestyleslayers,uzeentity,memman,gdbasetypes,UGDBPoint3DArray,
+     uzegeometry,uzestyleslayers,uzeentity,memman,gdbasetypes,UGDBPoint3DArray,
      UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,GDBase,uzeentwithlocalcs,
      uzeconsts,math,uzeffdxfsupport,sysutils,UGDBLineWidthArray;
 type
@@ -118,10 +118,10 @@ begin
         if found>0 then
                        begin
                             result:=vertexsub(ptv^,ppredtv^);
-                            result:=geometry.NormalizeVertex(result);
+                            result:=uzegeometry.NormalizeVertex(result);
                             exit;
                             //processaxis(posr,result);
-                            //result:=geometry.CrossVertex(tv,zwcs);
+                            //result:=uzegeometry.CrossVertex(tv,zwcs);
                             //processaxis(posr,result);
                             dec(found);
                        end;
@@ -232,28 +232,28 @@ begin
                                     end
      else if subresult=IRPartially then
                                         begin
-                                             if geometry.CalcTrueInFrustum (q3d^[0],q3d^[1],mf)<>irempty then
+                                             if uzegeometry.CalcTrueInFrustum (q3d^[0],q3d^[1],mf)<>irempty then
                                                                                           begin
                                                                                                result:=true;
                                                                                                exit;
                                                                                           end;
-                                             if geometry.CalcTrueInFrustum (q3d^[1],q3d^[2],mf)<>irempty then
+                                             if uzegeometry.CalcTrueInFrustum (q3d^[1],q3d^[2],mf)<>irempty then
                                                                                           begin
                                                                                                result:=true;
                                                                                                exit;
                                                                                           end;
-                                             if geometry.CalcTrueInFrustum (q3d^[2],q3d^[3],mf)<>irempty then
+                                             if uzegeometry.CalcTrueInFrustum (q3d^[2],q3d^[3],mf)<>irempty then
                                                                                           begin
                                                                                                result:=true;
                                                                                                exit;
                                                                                           end;
-                                             if geometry.CalcTrueInFrustum (q3d^[3],q3d^[0],mf)<>irempty then
+                                             if uzegeometry.CalcTrueInFrustum (q3d^[3],q3d^[0],mf)<>irempty then
                                                                                           begin
                                                                                                result:=true;
                                                                                                exit;
                                                                                           end;
                                         end;
-          if geometry.CalcTrueInFrustum (p3d^,p3dold^,mf)<>irempty then
+          if uzegeometry.CalcTrueInFrustum (p3d^,p3dold^,mf)<>irempty then
                                                        begin
                                                             result:=true;
                                                             exit;
@@ -291,7 +291,7 @@ begin
                                           begin
                                                pv1:=Vertex3D_in_WCS_Array.getelement(0);
                                                pv2:=Vertex3D_in_WCS_Array.getelement(Vertex3D_in_WCS_Array.Count-1);
-                                               result:=geometry.CalcTrueInFrustum(pv1^,pv2^,frustum);
+                                               result:=uzegeometry.CalcTrueInFrustum(pv1^,pv2^,frustum);
                                           end;
 end;
 procedure GDBObjLWpolyline.getoutbound;
@@ -363,7 +363,7 @@ begin
   m[3][1]:=0;
   m[3][2]:=0;}
 
-  geometry.MatrixInvert(m);
+  uzegeometry.MatrixInvert(m);
 
 
   tv:=rtmod.dist;
@@ -371,8 +371,8 @@ begin
 
   wwc:=VertexAdd(wwc,tv);
 
-  //tv:=geometry.VectorTransform3D(tv,m);
-  wwc:=geometry.VectorTransform3D(wwc,m);
+  //tv:=uzegeometry.VectorTransform3D(tv,m);
+  wwc:=uzegeometry.VectorTransform3D(wwc,m);
 
 
   PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=wwc.x{VertexAdd(wwc,tv)};
@@ -380,7 +380,7 @@ begin
   //PInOCS[vertexnumber].z:=0;
      {vertexnumber:=abs(rtmod.point.pointtype-os_polymin);
      tv:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
-     geometry.VectorTransform3D(tv,self.ObjMatrix);
+     uzegeometry.VectorTransform3D(tv,self.ObjMatrix);
      PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=tv.x;
      PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=tv.y;}
 end;
@@ -541,9 +541,9 @@ begin
               else myglbegin(GL_LINE_STRIP);
     Vertex3D_in_WCS_Array.iterategl(@myglVertex3dv);
     myglend();}
-    v:=geometry.VertexSub(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
+    v:=uzegeometry.VertexSub(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
 
-    if not CanSimplyDrawInWCS(DC,geometry.oneVertexlength(v),5) then
+    if not CanSimplyDrawInWCS(DC,uzegeometry.oneVertexlength(v),5) then
     if Width3D_in_WCS_Array.parray<>nil then
            begin
                 q3d:=Width3D_in_WCS_Array.parray;
@@ -776,7 +776,7 @@ begin
        tv.x:=PGDBArrayVertex2D(Vertex2D_in_OCS_Array.PArray)^[j].x;
        tv.y:=PGDBArrayVertex2D(Vertex2D_in_OCS_Array.PArray)^[j].y;
        tv.z:=0;
-       //tv:=geometry.VectorTransform3D(tv,m);
+       //tv:=uzegeometry.VectorTransform3D(tv,m);
     dxfvertex2dout(outhandle,10,PGDBVertex2D(@tv)^);
     //dxfvertex2dout(outhandle,10,PGDBArrayVertex2D(Vertex2D_in_OCS_Array.PArray)^[j]);
     dxfGDBDoubleout(outhandle,40,PGLLWWidth(Width2D_in_OCS_Array.getelement(j)).startw);
@@ -789,7 +789,7 @@ var m: DMatrix4D;
     p:GDBVertex2D;
 begin
      m:=self.getmatrix^;
-     geometry.MatrixInvert(m);
+     uzegeometry.MatrixInvert(m);
      point:=VectorTransform3D(point,m);
      p.x:=point.x;
      p.y:=point.y;

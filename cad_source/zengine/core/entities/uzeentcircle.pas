@@ -87,6 +87,7 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
 
                  class function CreateInstance:PGDBObjCircle;static;
+                 function GetObjType:TObjID;virtual;
            end;
 {Export-}
 implementation
@@ -256,7 +257,7 @@ end;
 constructor GDBObjCircle.initnul;
 begin
   inherited initnul(nil);
-  vp.ID := GDBCircleID;
+  //vp.ID := GDBCircleID;
   Radius := 1;
   PProjoutbound:=nil;
   Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{A9E5DE52-33D2-4658-A53E-986711DFBD14}',{$ENDIF}100);
@@ -264,7 +265,7 @@ end;
 constructor GDBObjCircle.init;
 begin
   inherited init(own,layeraddres, lw);
-  vp.ID := GDBCircleID;
+  //vp.ID := GDBCircleID;
   Local.p_insert := p;
   Local.basis.ox:=XWCS;
   Local.basis.oy:=YWCS;
@@ -275,7 +276,10 @@ begin
   Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{B3C847F9-E9DE-4B69-883A-B6D322142B0B}',{$ENDIF}100);
   //format;
 end;
-
+function GDBObjCircle.GetObjType;
+begin
+     result:=GDBCircleID;
+end;
 procedure GDBObjCircle.SaveToDXF;
 begin
   SaveToDXFObjPrefix(handle,outhandle,'CIRCLE','AcDbCircle');

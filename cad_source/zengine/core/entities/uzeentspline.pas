@@ -57,6 +57,7 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  procedure getoutbound(var DC:TDrawContext);virtual;
 
                  function CreateInstance:PGDBObjSpline;static;
+                 function GetObjType:TObjID;virtual;
            end;
 {Export-}
 implementation
@@ -252,7 +253,7 @@ begin
   ControlArrayInOCS.init({$IFDEF DEBUGBUILD}'{F4681C13-46C9-4831-A614-7039A7EB205B}',{$ENDIF}1000);
   Knots.init({$IFDEF DEBUGBUILD}'{BF696899-F624-47EA-8E03-2086912119AE}',{$ENDIF}1000,sizeof(GDBFloat));
   AproxPointInWCS.init({$IFDEF DEBUGBUILD}'{D9ECB710-37F2-414F-9CB2-7DE7DBDCD5AE}',{$ENDIF}1000);
-  vp.ID := GDBSplineID;
+  //vp.ID := GDBSplineID;
 end;
 constructor GDBObjSpline.initnul;
 begin
@@ -261,7 +262,11 @@ begin
   ControlArrayInOCS.init({$IFDEF DEBUGBUILD}'{892EA1AE-FB34-47B5-A2D1-18FA6B51A163}',{$ENDIF}1000);
   Knots.init({$IFDEF DEBUGBUILD}'{BF696899-F624-47EA-8E03-2086912119AE}',{$ENDIF}1000,sizeof(GDBFloat));
   AproxPointInWCS.init({$IFDEF DEBUGBUILD}'{84E195AD-72EC-43D1-8C37-F6EDDC84E325}',{$ENDIF}1000);
-  vp.ID := GDBSplineID;
+  //vp.ID := GDBSplineID;
+end;
+function GDBObjSpline.GetObjType;
+begin
+     result:=GDBSplineID;
 end;
 destructor GDBObjSpline.done;
 begin

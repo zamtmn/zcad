@@ -52,6 +52,7 @@ GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  class function GetDXFIOFeatures:TDXFEntIODataManager;
 
                  //function Clone(own:GDBPointer):PGDBObjEntity;virtual;
+                 function GetObjType:TObjID;virtual;
            end;
 {Export-}
 var
@@ -68,7 +69,7 @@ begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjCable));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   //tvo^.vp:=vp;
-  //tvo^.vp.id :=GDBCableID;
+  //tvo^.GetObjType :=GDBCableID;
   CopyVPto(tvo^);
   p:=vertexarrayinocs.PArray;
   for i:=0 to VertexArrayInOCS.Count-1 do
@@ -207,7 +208,7 @@ begin
   CurrentObj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}ObjArray.beginiterate(ir_inGDB);
   if (CurrentObj<>nil) then
      repeat
-           if (CurrentObj<>@self)and(CurrentObj^.vp.ID=GDBDeviceID) then
+           if (CurrentObj<>@self)and(CurrentObj^.GetObjType=GDBDeviceID) then
            begin
                 if boundingintersect(vp.BoundingBox,CurrentObj^.vp.BoundingBox)
                    and true{CurrentObj^.GetDeviceType=DT_Connector} then
@@ -215,7 +216,7 @@ begin
                      CurrentSubObj:=CurrentObj^.VarObjArray.beginiterate(ir_inDevice);
                      if (CurrentSubObj<>nil) then
                      repeat
-                           if (CurrentSubObj^.vp.ID=GDBDeviceID) then
+                           if (CurrentSubObj^.GetObjType=GDBDeviceID) then
                            begin
                            if CurrentSubObj^.BlockDesc.BType=BT_Connector then
                            begin
@@ -417,7 +418,7 @@ constructor GDBObjCable.init;
 begin
   inherited init(own,layeraddres, lw);
   NodePropArray.init({$IFDEF DEBUGBUILD}'{28ED5BF5-7598-4903-A715-C525BC68C116}',{$ENDIF}1000,sizeof(TNodeProp));
-  vp.ID := GDBCableID;
+  //vp.ID := GDBCableID;
   //PTObjectUnit(self.ou.Instance)^.init('cable');
   GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
@@ -425,10 +426,14 @@ constructor GDBObjCable.initnul;
 begin
   inherited initnul(owner);
   NodePropArray.init({$IFDEF DEBUGBUILD}'{28ED5BF5-7598-4903-A715-C525BC68C116}',{$ENDIF}1000,sizeof(TNodeProp));
-  vp.ID := GDBCableID;
+  //vp.id := GDBCableID;
   GetDXFIOFeatures.AddExtendersToEntity(@self);
   //OU.done;
   //OU.init('cable');
+end;
+function GDBObjCable.GetObjType;
+begin
+     result:=GDBCableID;
 end;
 destructor GDBObjCable.done;
 begin
@@ -522,7 +527,7 @@ begin
      end;
      //result^.vp:=pent^.vp;
      pent.CopyVPto(result^);
-     result^.vp.ID:=GDBCableID;
+     //result^.vp.id:=GDBCableID;
 
      ptv:=pent^.vertexarrayinocs.beginiterate(ir);
      if ptv<>nil then

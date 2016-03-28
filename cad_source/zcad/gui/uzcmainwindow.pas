@@ -332,12 +332,12 @@ begin
                                         else if color<> pv^.objaddr^.vp.color then color:=IntDifferent;
                          if ltype=PEmpty then ltype:=pv^.objaddr^.vp.LineType
                                         else if ltype<> pv^.objaddr^.vp.LineType then ltype:=PDifferent;
-                         if (pv^.objaddr^.vp.ID=GDBMTextID)or(pv^.objaddr^.vp.ID=GDBTextID) then
+                         if (pv^.objaddr^.GetObjType=GDBMTextID)or(pv^.objaddr^.GetObjType=GDBTextID) then
                          begin
                          if tstyle=PEmpty then tstyle:=PGDBObjText(pv^.objaddr)^.TXTStyleIndex
                                            else if tstyle<> PGDBObjText(pv^.objaddr)^.TXTStyleIndex then tstyle:=PDifferent;
                          end;
-                         if (pv^.objaddr^.vp.ID=GDBAlignedDimensionID)or(pv^.objaddr^.vp.ID=GDBRotatedDimensionID)or(pv^.objaddr^.vp.ID=GDBDiametricDimensionID) then
+                         if (pv^.objaddr^.GetObjType=GDBAlignedDimensionID)or(pv^.objaddr^.GetObjType=GDBRotatedDimensionID)or(pv^.objaddr^.GetObjType=GDBDiametricDimensionID) then
                          begin
                          if dimstyle=PEmpty then dimstyle:=PGDBObjDimension(pv^.objaddr)^.PDimStyle
                                             else if dimstyle<>PGDBObjDimension(pv^.objaddr)^.PDimStyle then dimstyle:=PDifferent;
@@ -2835,8 +2835,8 @@ begin
                                 if mbLeft=button then
                                   begin
                                        if assigned(OnMouseObject) then
-                                         if (PGDBObjEntity(OnMouseObject).vp.ID=GDBtextID)
-                                         or (PGDBObjEntity(OnMouseObject).vp.ID=GDBMTextID) then
+                                         if (PGDBObjEntity(OnMouseObject).GetObjType=GDBtextID)
+                                         or (PGDBObjEntity(OnMouseObject).GetObjType=GDBMTextID) then
                                            begin
                                                  RunTextEditor(OnMouseObject,Sender.PDWG^);
                                            end;
@@ -2891,7 +2891,7 @@ begin
      if assigned(sysvar.DSGN.DSGN_SelSameName)then
      if sysvar.DSGN.DSGN_SelSameName^ then
      begin
-          if (pent^.vp.ID=GDBDeviceID)or(pent^.vp.ID=GDBCableID)or(pent^.vp.ID=GDBNetID)then
+          if (pent^.GetObjType=GDBDeviceID)or(pent^.GetObjType=GDBCableID)or(pent^.GetObjType=GDBNetID)then
           begin
                pentvarext:=pent^.GetExtension(typeof(TVariablesExtender));
                pvname:=pentvarext^.entityunit.FindVariable('NMO_Name');
@@ -2900,7 +2900,7 @@ begin
                    pobj:=pdwg.GetCurrentROOT.ObjArray.beginiterate(ir);
                    if pobj<>nil then
                    repeat
-                         if (pobj<>pent)and((pobj^.vp.ID=GDBDeviceID)or(pobj^.vp.ID=GDBCableID)or(pobj^.vp.ID=GDBNetID)) then
+                         if (pobj<>pent)and((pobj^.GetObjType=GDBDeviceID)or(pobj^.GetObjType=GDBCableID)or(pobj^.GetObjType=GDBNetID)) then
                          begin
                               pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
                               pvname2:=pentvarext^.entityunit.FindVariable('NMO_Name');

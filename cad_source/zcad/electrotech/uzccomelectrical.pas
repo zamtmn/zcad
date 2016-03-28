@@ -581,7 +581,7 @@ commandmanager.DMShow;
   begin
   repeat
     if pobj.selected then
-    if pobj.vp.ID=GDBDeviceID then
+    if pobj.GetObjType=GDBDeviceID then
     begin
          pvd:=pobj^.ou.FindVariable('Device_Type');
          if pvd<>nil then
@@ -653,7 +653,7 @@ begin
      psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
      if psd<>nil then
      repeat
-           if psd^.objaddr^.vp.ID=GDBDeviceID then
+           if psd^.objaddr^.GetObjType=GDBDeviceID then
            begin
                 pentvarext:=psd^.objaddr^.GetExtension(typeof(TVariablesExtender));
                 //pvd:=PTObjectUnit(psd^.objaddr^.ou.Instance)^.FindVariable('DESC_MountingSite');
@@ -720,7 +720,7 @@ begin
      {psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
      if psd<>nil then
      repeat
-           if psd^.objaddr^.vp.ID=GDBDeviceID then
+           if psd^.objaddr^.GetObjType=GDBDeviceID then
            begin
                 pointer(pnevdev):=psd^.objaddr^.Clone(@drawings.GetCurrentDWG.ConstructObjRoot);
 
@@ -797,7 +797,7 @@ begin
   begin
   repeat
     if pobj.selected then
-    if pobj.vp.ID=GDBDeviceID then
+    if pobj.GetObjType=GDBDeviceID then
     begin
          pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
          //pvd:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('Device_Type');
@@ -1355,7 +1355,7 @@ begin
   CurrentObj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir_inGDB);
   if (CurrentObj<>nil) then
      repeat
-           if CurrentObj^.vp.ID=GDBNetID then
+           if CurrentObj^.GetObjType=GDBNetID then
            begin
                 s:=getentname(CurrentObj);
                 if s<>'' then
@@ -1389,7 +1389,7 @@ begin
   CurrentObj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir_inGDB);
   if (CurrentObj<>nil) then
      repeat
-           if CurrentObj^.vp.ID=GDBNetID then
+           if CurrentObj^.GetObjType=GDBNetID then
            begin
                 s:=getentname(CurrentObj);
                 if s<>'' then
@@ -1724,7 +1724,7 @@ end;
 //  if pv<>nil then
 //  repeat
 //    //if pv^.Selected then
-//    if pv^.vp.ID=GDBCableID then
+//    if pv^.GetObjType=GDBCableID then
 //    begin
 //         line:='';
 //         pvd:=pv^.ou.FindVariable('NMO_Name');
@@ -1968,7 +1968,7 @@ begin
   pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
-    if pv^.vp.ID<>GDBCableID then
+    if pv^.GetObjType<>GDBCableID then
     begin
     pcablevarext:=pv^.GetExtension(typeof(TVariablesExtender));
     if pcablevarext<>nil then
@@ -2155,7 +2155,7 @@ begin
   if pv<>nil then
   repeat
     if pv^.Selected then
-    if pv^.vp.ID=GDBCableID then
+    if pv^.GetObjType=GDBCableID then
     begin
              ptn:=PGDBObjCable(pv)^.NodePropArray.beginiterate(irnpa);
              if ptn<>nil then
@@ -2186,7 +2186,7 @@ begin
   pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
-    if pv^.vp.ID=GDBCableID then
+    if pv^.GetObjType=GDBCableID then
     begin
          pvd:=pv^.ou.FindVariable('NMO_Name');
          if pvd<>nil then
@@ -2267,7 +2267,7 @@ begin
   if pv<>nil then
   repeat
     if pv^.Selected then
-    if pv^.vp.ID=GDBCableID then
+    if pv^.GetObjType=GDBCableID then
     begin
          PGDBObjCable(pv)^.VertexArrayInOCS.invert;
          pv^.Formatentity(drawings.GetCurrentDWG^,dc);
@@ -2292,7 +2292,7 @@ begin
   if pv<>nil then
   repeat
     if pv^.Selected then
-    if pv^.vp.ID=GDBCableID then
+    if pv^.GetObjType=GDBCableID then
     begin
          if pc1=nil then
                         pc1:=pointer(pv)
@@ -2509,7 +2509,7 @@ begin
   if pv<>nil then
   repeat
     begin
-         if pv^.vp.ID=GDBDeviceID then
+         if pv^.GetObjType=GDBDeviceID then
          if pv^.Name='CABLE_MARK' then
          begin
               pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
@@ -2643,7 +2643,7 @@ begin
   pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
-    if pv^.vp.ID=GDBCableID then
+    if pv^.GetObjType=GDBCableID then
     begin
          pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
          pvd:=pentvarext^.entityunit.FindVariable('NMO_Name');
@@ -2678,8 +2678,8 @@ begin
   pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
-    if (pv^.vp.ID=GDBCableID)
-    or (pv^.vp.ID=GDBCableID) then
+    if (pv^.GetObjType=GDBCableID)
+    or (pv^.GetObjType=GDBCableID) then
     begin
          pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
          pvd:=pentvarext^.entityunit.FindVariable('DB_link');
@@ -2709,7 +2709,7 @@ begin
 CurrentSubObj:=CurrentObj^.VarObjArray.beginiterate(ir_inDevice);
 if (CurrentSubObj<>nil) then
 repeat
-      if (CurrentSubObj^.vp.ID=GDBDeviceID) then
+      if (CurrentSubObj^.GetObjType=GDBDeviceID) then
       begin
       if CurrentSubObj^.BlockDesc.BType=BT_Connector then
                                                          begin
@@ -3157,7 +3157,7 @@ begin
   pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
-    if (pv^.vp.ID=GDBCableID) then
+    if (pv^.GetObjType=GDBCableID) then
     begin
          //pvd:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('CABLE_AutoGen');
          pvd:=FindVariableInEnt(pv,'CABLE_AutoGen');
@@ -3207,7 +3207,7 @@ begin
   pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
-    if (pv^.vp.ID>=GDBZCadEntsMinID)and(pv^.vp.ID<=GDBZCadEntsMaxID)then
+    if (pv^.GetObjType>=GDBZCadEntsMinID)and(pv^.GetObjType<=GDBZCadEntsMaxID)then
                                                                         pv^.FormatEntity(drawing^,dc);
   pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
   if assigned(ProcessLongProcessProc) then ProcessLongProcessProc(ir.itc);

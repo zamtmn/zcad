@@ -70,6 +70,7 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
 
                    function CreateInstance:PGDBObjDevice;static;
                    function GetNameInBlockTable:GDBString;virtual;
+                   function GetObjType:TObjID;virtual;
              end;
 {EXPORT-}
 var
@@ -138,7 +139,7 @@ begin
           pv:=VarObjArray.beginiterate(ir);
           if pv<>nil then
           repeat
-               if (pv^.vp.ID=GDBDeviceID)or(pv^.vp.ID=GDBBlockInsertID) then
+               if (pv^.GetObjType=GDBDeviceID)or(pv^.GetObjType=GDBBlockInsertID) then
                if PGDBObjDevice(pv).Name='FIX' then
                begin
                pdesc.pointtype:=os_point;
@@ -188,7 +189,7 @@ begin
      repeat
          pvc:=pv^.Clone(@self{.bp.Owner});
          //historyoutstr(pv^.ObjToGDBString('','')+'  cloned obj='+pvc^.ObjToGDBString('',''));
-         if pvc^.vp.ID=GDBTextID then
+         if pvc^.GetObjType=GDBTextID then
             pvc:=pvc;
 
          pvc^.bp.ListPos.Owner:=@self;
@@ -267,7 +268,7 @@ begin
   //exit;
   GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjDevice));
   tvo^.init({bp.owner}own,vp.Layer, vp.LineWeight);
-  tvo^.vp.id :=GDBDeviceID;
+  //tvo^.vp.id :=GDBDeviceID;
   //tvo^.vp.layer :=vp.layer;
   CopyVPto(tvo^);
   GDBPointer(tvo^.name) := nil;
@@ -434,7 +435,7 @@ begin
                                           pvisible^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
                                           pvisible^.formatEntity(drawing,dc);
                                           pvisible.BuildGeometry(drawing);
-                                          if pvisible^.vp.ID=GDBDeviceID then
+                                          if pvisible^.GetObjType=GDBDeviceID then
                                           begin
                                                                              PGDBObjDevice(pvisible)^.BuildVarGeometry(drawing);
                                                                              //debp:=PGDBObjDevice(pvisible)^.ConstObjArray.PArray;
@@ -448,7 +449,7 @@ begin
                                           pvisible2^.FromDXFPostProcessBeforeAdd(nil,drawing);
                                           pvisible2^.formatEntity(drawing,dc);
                                           pvisible2.BuildGeometry(drawing);
-                                          if pvisible2^.vp.ID=GDBDeviceID then
+                                          if pvisible2^.GetObjType=GDBDeviceID then
                                           begin
                                                                               PGDBObjDevice(pvisible2)^.BuildVarGeometry(drawing);
                                                                               //debp:=PGDBObjDevice(pvisible)^.ConstObjArray.PArray;
@@ -566,14 +567,18 @@ end;
 constructor GDBObjDevice.init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
 begin
   inherited init(own,layeraddres,LW);
-  vp.ID:=GDBDeviceID;
+  //vp.ID:=GDBDeviceID;
   VarObjArray.init({$IFDEF DEBUGBUILD}'{1C49F5F6-5AA4-493D-90FF-A86D9EA666CE}',{$ENDIF}100);
   GetDXFIOFeatures.AddExtendersToEntity(@self);
+end;
+function GDBObjDevice.GetObjType;
+begin
+     result:=GDBDeviceID;
 end;
 constructor GDBObjDevice.initnul;
 begin
   inherited initnul;
-  vp.ID:=GDBDeviceID;
+  //vp.ID:=GDBDeviceID;
   VarObjArray.init({$IFDEF DEBUGBUILD}'{1C49F5F6-5AA4-493D-90FF-A86D9EA666CE}',{$ENDIF}100);
   //DType:=DT_Unknown;
   //DBorder:=DB_Empty;

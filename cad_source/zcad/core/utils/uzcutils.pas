@@ -157,7 +157,7 @@ begin
   result := GDBPointer(own.ObjArray.CreateObj(GDBBlockInsertID));
   result.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
   result^.Name:=BlockName;
-  result^.vp.ID:=GDBBlockInsertID;
+  //result^.vp.ID:=GDBBlockInsertID;
   result^.Local.p_insert:=p_insert;
   result^.scale:=scale;
   result^.CalcObjMatrix;

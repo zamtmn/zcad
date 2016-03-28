@@ -22,6 +22,7 @@ interface
 uses uzepalette,uzestyleslinetypes,gdbasetypes,GDBase,geometry,sysutils,memman,
      UGDBOpenArrayOfByte,uzestyleslayers;
 type
+//ID:TObjID;(*'Object type'*)(*oi_readonly*)(*hidden_in_objinsp*)
 {Export+}
 PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=packed record
@@ -29,7 +30,6 @@ GDBObjVisualProp=packed record
                       LineWeight:TGDBLineWeight;(*'Line weight'*)(*saved_to_shd*)
                       LineType:{-}PGDBLtypeProp{/PGDBLtypePropObjInsp/};(*'Line type'*)(*saved_to_shd*)
                       LineTypeScale:GDBNonDimensionDouble;(*'Line type scale'*)(*saved_to_shd*)
-                      ID:TObjID;(*'Object type'*)(*oi_readonly*)(*hidden_in_objinsp*)
                       BoundingBox:TBoundingBox;(*'Bounding box'*)(*oi_readonly*)(*hidden_in_objinsp*)
                       LastCameraPos:TActulity;(*oi_readonly*)(*hidden_in_objinsp*)
                       Color:TGDBPaletteColor;

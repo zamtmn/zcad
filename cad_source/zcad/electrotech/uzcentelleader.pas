@@ -60,6 +60,7 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
             procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
             function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+            function GetObjType:TObjID;virtual;
             end;
 {EXPORT-}
 implementation
@@ -199,7 +200,7 @@ begin
      repeat
          pvc:=pv^.Clone(@self{.bp.Owner});
          //historyoutstr(pv^.ObjToGDBString('','')+'  cloned obj='+pvc^.ObjToGDBString('',''));
-         if pvc^.vp.ID=GDBDeviceID then
+         if pvc^.GetObjType=GDBDeviceID then
             pvc:=pvc;
 
          pvc^.bp.ListPos.Owner:=@gdbtrash;
@@ -272,7 +273,7 @@ begin
           if pobj<>nil then
           repeat
                 pobj:=pointer(pobj.bp.ListPos.Owner);
-                if pobj^.vp.ID=GDBDeviceID then
+                if pobj^.GetObjType=GDBDeviceID then
                 begin
                 begin
                      if PGDBObjDevice(pobj).BlockDesc.BGroup=BG_El_Device then
@@ -296,7 +297,7 @@ begin
      pobj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}ObjArray{objects}.beginiterate(ir);
      if pobj<>nil then
      repeat
-           if pobj^.vp.ID=GDBCableID then
+           if pobj^.GetObjType=GDBCableID then
            begin
                 if IsPointInBB(mainline.CoordInWCS.lBegin,pobj^.vp.BoundingBox) then
                 begin
@@ -317,7 +318,7 @@ begin
 
                 end;
            end
-      else if pobj^.vp.ID=GDBDeviceID then
+      else if pobj^.GetObjType=GDBDeviceID then
            begin
                 if PGDBObjDevice(pobj).BlockDesc.BGroup=BG_El_Device then
                 if IsPointInBB(mainline.CoordInWCS.lBegin,pobj^.vp.BoundingBox) then
@@ -341,7 +342,7 @@ begin
            pobj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}ObjArray.beginiterate(ir);
            if pobj<>nil then
            repeat
-                 if pobj^.vp.ID=GDBCableID then
+                 if pobj^.GetObjType=GDBCableID then
                  begin
                       ptn:=pobj^.NodePropArray.beginiterate(ir2);
                       if ptn<>nil then
@@ -688,7 +689,7 @@ begin
   tvo^.MainLine.CoordInOCS:=mainline.CoordInOCS;
   //tvo^.MainLine:=mainline;
   tvo^.MainLine.bp.ListPos.Owner:=tvo;
-  tvo^.vp.id := GDBElLeaderID;
+  //tvo^.vp.id := GDBElLeaderID;
   tvo^.vp.layer :=vp.layer;
   tvo^.Local.p_insert := Local.p_insert;
   tvo^.Local := Local;
@@ -708,7 +709,7 @@ begin
      size:=0;
      scale:=1;
      twidth:=0;
-     vp.ID:=GDBElLeaderID;
+     //vp.ID:=GDBElLeaderID;
      MainLine.init(@self,vp.Layer,vp.LineWeight,geometry.VertexMulOnSc(onevertex,-10),nulvertex);
      //MainLine.Format;
      tv:=geometry.vectordot(geometry.VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin) ,Local.basis.OZ);
@@ -725,6 +726,10 @@ begin
                      PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=SysVar.DSGN.DSGN_LeaderDefaultWidth^;}
      tbl.bp.ListPos.Owner:=@self;
      //tbl.Format;
+end;
+function GDBObjElLeader.GetObjType;
+begin
+     result:=GDBElLeaderID;
 end;
 destructor GDBObjElLeader.done;
 begin

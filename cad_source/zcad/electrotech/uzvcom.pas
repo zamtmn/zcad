@@ -184,7 +184,7 @@ begin
        pc2:=NearObjects.beginiterate(ir);//получаем первый примитив из списка
        if pc2<>nil then                  //если он есть то
        repeat
-             if pc2^.vp.ID=GDBCableID then//если он кабель то
+             if pc2^.GetObjType=GDBCableID then//если он кабель то
              begin
                   FirstPoint:=PGDBVertex(pc2^.VertexArrayInWCS.getelement(0))^;//получаем точку в начале найденного кабеля
                   if geometry.Vertexlength(LastPoint,FirstPoint)<MyEPSILON then//если конец кабеля совпадает с началом с погрешностью, то
@@ -252,7 +252,7 @@ begin
 
          l222 := geometry.intercept3d(l1begin,l1end,l2begin,l2end).interceptcoord;
 
-         if pc^.vp.ID=GDBCableID then                      //проверяем, кабель это или нет
+         if pc^.GetObjType=GDBCableID then                      //проверяем, кабель это или нет
 
 
                                      RecurseSearhCable(pc) //осуществляем поиск ветвей
@@ -449,7 +449,7 @@ begin
       if pobj^.selected then
         begin
          //    HistoryOutStr(pobj^.GetObjTypeName);
-             if pobj^.vp.ID=GDBCableID then
+             if pobj^.GetObjType=GDBCableID then
                begin
                  pc:=PGDBObjCable(pobj);
                  infoCable.cableEnt:=pc;
@@ -465,7 +465,7 @@ begin
                        inc(counter1);
                      end;
                end;
-             if pobj^.vp.ID=GDBDeviceID then
+             if pobj^.GetObjType=GDBDeviceID then
                begin
                  pd:=PGDBObjDevice(pobj);
                  infoDevice.deviceEnt:=pd;
@@ -507,7 +507,7 @@ begin
        if pobj<>nil then                  //если он есть то
        repeat
              inc(counter);
-             if pobj^.vp.ID=GDBCableID then//если он кабель то
+             if pobj^.GetObjType=GDBCableID then//если он кабель то
              begin
                  pc:=PGDBObjCable(pobj);
                 // infoCable.cableEnt:=pc;
@@ -547,7 +547,7 @@ begin
                      //      end;
                      end;
                end;
-             if pobj^.vp.ID=GDBDeviceID then
+             if pobj^.GetObjType=GDBDeviceID then
                begin
                  //POBJ^.
                 pObjDevice:= PGDBObjDevice(pobj); // передача объекта в девайсы
@@ -555,10 +555,10 @@ begin
                 if (currentSubObj<>nil) then
                 repeat
                       if currentSubObj^.GetLayer=psldb then BEGIN
-                        if currentSubObj^.vp.ID=GDBLineID then begin
+                        if currentSubObj^.GetObjType=GDBLineID then begin
 
                         end;
-                        if currentSubObj^.vp.ID=GDBPolyLineID then begin
+                        if currentSubObj^.GetObjType=GDBPolyLineID then begin
 
                         end;
                       end;
@@ -591,7 +591,7 @@ begin
     //    HistoryOutStr('плохо');
   //  //writeln(myArray[i].a,' --> ',myArray[i].b);
   //Получаем список всех кабельных линий в выбранной нами зоне их адресс, и все координаты
-   //if pobj^.vp.ID=GDBCableID then                      //проверяем, кабель это или нет
+   //if pobj^.GetObjType=GDBCableID then                      //проверяем, кабель это или нет
    //begin
    //    HistoryOutStr('1');
    //end;
@@ -626,7 +626,7 @@ begin
 
          l222 := geometry.intercept3d(l1begin,l1end,l2begin,l2end).interceptcoord;
 
-         if pc^.vp.ID=GDBCableID then                      //проверяем, кабель это или нет
+         if pc^.GetObjType=GDBCableID then                      //проверяем, кабель это или нет
 
 
                                     // RecurseSearhCable(pc) //осуществляем поиск ветвей

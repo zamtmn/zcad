@@ -307,14 +307,14 @@ begin
      result:=entities.beginiterate(ir);
      if result<>nil then
      repeat
-           if result.vp.ID=objID then
+           if result.GetObjType=objID then
                                       exit;
            if inowner then
                           begin
                                result:=pointer(result.bp.ListPos.Owner);
                                while (result<>nil) do
                                begin
-                                    if result.vp.ID=objID then
+                                    if result.GetObjType=objID then
                                                               exit;
                                     result:=pointer(result.bp.ListPos.Owner);
                                end;
@@ -617,8 +617,8 @@ procedure createtstyleifneed(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEnti
    //{pvisible,}pvisible2:PGDBObjEntity;
    //pl:PGDBLayerProp;
 begin
-               if (_source^.vp.ID=GDBTextID)
-               or (_source^.vp.ID=GDBMtextID) then
+               if (_source^.GetObjType=GDBTextID)
+               or (_source^.GetObjType=GDBMtextID) then
                begin
                     PGDBObjText(_dest)^.TXTStyleIndex:=createtstylebyindex(_from,_to,PGDBObjText(_source)^.TXTStyleIndex);
                     {oldti:=PGDBObjText(_source)^.TXTStyleIndex;
@@ -659,7 +659,7 @@ begin
                             pvisible2:=td.ObjArray.iterate(ir);
                       until pvisible2=nil;
                       end;
-                      if (_source^.vp.ID=GDBDeviceID) then
+                      if (_source^.GetObjType=GDBDeviceID) then
                       begin
                       pvisible2:=PGDBObjDevice(_source)^.VarObjArray.beginiterate(ir);
                       if pvisible2<>nil then
@@ -678,12 +678,12 @@ begin
 end;
 
 begin
-               if (_source^.vp.ID=GDBBlockInsertID)
-               or (_source^.vp.ID=GDBDeviceID) then
+               if (_source^.GetObjType=GDBBlockInsertID)
+               or (_source^.GetObjType=GDBDeviceID) then
                begin
                     tn:=PGDBObjBlockInsert(_source)^.name;
                     processblock;
-                    if (_source^.vp.ID=GDBDeviceID) then
+                    if (_source^.GetObjType=GDBDeviceID) then
                     begin
                          tn:=DevicePrefix+tn;
                          processblock;
@@ -757,7 +757,7 @@ procedure RemapAll(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
 begin
   RemapLayer(_from,_to,_source,_dest);
   RemapLStyle(_from,_to,_source,_dest);
-  case _source.vp.ID of
+  case _source.GetObjType of
                         GDBElLeaderID,gdbtableid:begin
                                            createtstylebyindex(_from,_to,_from.TextStyleTable.getAddres(TSNStandardStyleName));
                                              end;
@@ -801,7 +801,7 @@ begin
          pvisible:=croot.ObjArray.beginiterate(ir);
          if pvisible<>nil then
          repeat
-               if pvisible.vp.ID=objID then
+               if pvisible.GetObjType=objID then
                begin
                     pentvarext:=pvisible^.GetExtension(typeof(TVariablesExtender));
                     pvd:=pentvarext^.entityunit.FindVariable(vname);
@@ -831,7 +831,7 @@ begin
          pvisible:=croot.ObjArray.beginiterate(ir);
          if pvisible<>nil then
          repeat
-               if pvisible.vp.ID=objID then
+               if pvisible.GetObjType=objID then
                begin
                     pentvarext:=pvisible^.GetExtension(typeof(TVariablesExtender));
                     pvd:=pentvarext^.entityunit.FindVariable(vname);
@@ -860,7 +860,7 @@ begin
          pvisible:=croot.ObjArray.beginiterate(ir);
          if pvisible<>nil then
          repeat
-               if pvisible.vp.ID=objID then
+               if pvisible.GetObjType=objID then
                begin
                     pentvarext:=pvisible^.GetExtension(typeof(TVariablesExtender));
                     pvd:=pentvarext^.entityunit.FindVariable(vname);

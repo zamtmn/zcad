@@ -47,6 +47,7 @@ GDBObjRoot={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                  function CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                  procedure calcbb(var DC:TDrawContext);virtual;
                  //function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
+                 function GetObjType:TObjID;virtual;
            end;
 
 {Export-}
@@ -148,7 +149,7 @@ constructor GDBObjRoot.initnul;
 begin
      inherited initnul(nil);
      bp.ListPos.owner:=nil;
-     vp.ID:=GDBRootId;
+     //vp.ID:=GDBRootId;
      //bp.PSelfInOwnerArray:=nil;
      bp.ListPos.SelfIndex:=-1;
      ObjToConnectedArray.init({$IFDEF DEBUGBUILD}'{0AD3CD18-E887-4038-BADA-7616D9F52963}',{$ENDIF}100);
@@ -156,6 +157,10 @@ begin
      if prootonit<>nil then
                            PTObjectUnit(ou.Instance)^.copyfrom(units.findunit('objroot'));}
      //uunitmanager.units.loadunit(expandpath('*blocks\objroot.pas'),@ou);
+end;
+function GDBObjRoot.GetObjType;
+begin
+     result:=GDBRootId;
 end;
 procedure GDBObjRoot.formatafteredit;
 var pobj:PGDBObjConnected;

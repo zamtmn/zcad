@@ -464,7 +464,7 @@ begin
            if pb^.Selected then
            case mode of
                        BRM_Block:begin
-                                      if pb^.vp.ID=GDBBlockInsertID then
+                                      if pb^.GetObjType=GDBBlockInsertID then
                                       begin
                                            BDefNames.addnodouble(@pb^.name);
                                            inc(i);
@@ -474,7 +474,7 @@ begin
                                       end;
                                  end;
                        BRM_Device:begin
-                                      if pb^.vp.ID=GDBDeviceID then
+                                      if pb^.GetObjType=GDBDeviceID then
                                       begin
                                            BDefNames.addnodouble(@pb^.name);
                                            inc(i);
@@ -484,8 +484,8 @@ begin
                                       end;
                                  end;
                        BRM_BD:begin
-                                      if (pb^.vp.ID=GDBBlockInsertID)or
-                                         (pb^.vp.ID=GDBDeviceID)then
+                                      if (pb^.GetObjType=GDBBlockInsertID)or
+                                         (pb^.GetObjType=GDBDeviceID)then
                                       begin
                                            BDefNames.addnodouble(@pb^.name);
                                            inc(i);
@@ -567,7 +567,7 @@ begin
   if pobj<>nil then
   repeat
     if pobj^.selected then
-    if (pobj^.vp.ID=GDBDeviceID)or(pobj^.vp.ID=GDBBlockInsertID) then
+    if (pobj^.GetObjType=GDBDeviceID)or(pobj^.GetObjType=GDBBlockInsertID) then
     inc(counter);
   pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
   until pobj=nil;
@@ -600,7 +600,7 @@ begin
           pb:=poa^.beginiterate(ir);
           if pb<>nil then
           repeat
-                if (pb^.Selected)and((pb^.vp.ID=GDBDeviceID)or(pb^.vp.ID=GDBBlockInsertID)) then
+                if (pb^.Selected)and((pb^.GetObjType=GDBDeviceID)or(pb^.GetObjType=GDBBlockInsertID)) then
                 begin
                 case BlockRotateParams.Absolytly of
                             true:begin
@@ -635,7 +635,7 @@ begin
   if pobj<>nil then
   repeat
     if pobj^.selected then
-    if (pobj^.vp.ID=GDBDeviceID)or(pobj^.vp.ID=GDBBlockInsertID) then
+    if (pobj^.GetObjType=GDBDeviceID)or(pobj^.GetObjType=GDBBlockInsertID) then
     inc(counter);
   pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
   until pobj=nil;
@@ -670,7 +670,7 @@ begin
           pb:=poa^.beginiterate(ir);
           if pb<>nil then
           repeat
-                if (pb^.Selected)and((pb^.vp.ID=GDBDeviceID)or(pb^.vp.ID=GDBBlockInsertID)) then
+                if (pb^.Selected)and((pb^.GetObjType=GDBDeviceID)or(pb^.GetObjType=GDBBlockInsertID)) then
                 begin
                 case BlockScaleParams.Absolytly of
                             true:begin
@@ -748,7 +748,7 @@ begin
     PGDBObjBlockInsert(nb)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.LayerTable.GetSystemLayer,0);
     nb^.Name:=newname;//'DEVICE_NOC';
     nb^.vp:=pb^.vp;
-    nb^.vp.ID:=GDBBlockInsertID;
+    //nb^.vp.id:=GDBBlockInsertID;
     nb^.Local.p_insert:=pb^.Local.P_insert;
     nb^.scale:=pb^.Scale;
     //nb^.rotate:=pb.rotate;
@@ -810,22 +810,22 @@ begin
                 if pb^.Selected then
                 case BlockReplaceParams.Process of
                             BRM_Block:begin
-                                           if pb^.vp.ID=GDBBlockInsertID then
+                                           if pb^.GetObjType=GDBBlockInsertID then
                                            if uppercase(pb^.name)=selname then
                                            begin
                                                 rb(pb);
                                            end;
                                       end;
                             BRM_Device:begin
-                                           if pb^.vp.ID=GDBDeviceID then
+                                           if pb^.GetObjType=GDBDeviceID then
                                            if uppercase(pb^.name)=selname then
                                            begin
                                                 rb(pb);
                                            end;
                                        end;
                             BRM_BD:begin
-                                           if (pb^.vp.ID=GDBBlockInsertID)or
-                                              (pb^.vp.ID=GDBDeviceID)then
+                                           if (pb^.GetObjType=GDBBlockInsertID)or
+                                              (pb^.GetObjType=GDBDeviceID)then
                                            if uppercase(pb^.name)=selname then
                                            begin
                                                 rb(pb);
@@ -896,7 +896,7 @@ begin
      repeat
            if pobj^.Selected then
            if pobj<>pointer(powner) then
-           if pobj^.vp.ID=GDBDeviceID then
+           if pobj^.GetObjType=GDBDeviceID then
            begin
                 psubobj:=pobj^.VarObjArray.beginiterate(ir2);
                 if psubobj<>nil then
@@ -1042,13 +1042,13 @@ begin
   pdev:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pdev<>nil then
   repeat
-        if pdev^.vp.ID=GDBDeviceID then
+        if pdev^.GetObjType=GDBDeviceID then
         if uppercase(pdev^.Name)=axisdevname then
         begin
              paxisline:=pdev^.VarObjArray.beginiterate(ir2);
              if paxisline<>nil then
              repeat
-                   if paxisline^.vp.ID=GDBLineID then
+                   if paxisline^.GetObjType=GDBLineID then
                    if paxisline^.vp.Layer=ALLayer then
                                                       system.break;
              paxisline:=pdev^.VarObjArray.iterate(ir2);
@@ -1116,7 +1116,7 @@ begin
         if psd^.objaddr<>nil then
         begin
           pdev:=pointer(psd^.objaddr);
-          if pdev^.vp.ID=GDBDeviceID then
+          if pdev^.GetObjType=GDBDeviceID then
           if uppercase(pdev^.Name)<>axisdevname then
           begin
              pvd:=nil;
@@ -1215,7 +1215,7 @@ begin
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
      if psd<>nil then
      repeat
-           if psd^.objaddr^.vp.ID=GDBDeviceID then
+           if psd^.objaddr^.GetObjType=GDBDeviceID then
            begin
                 case NumberingParams.SortMode of
                                                 TST_YX,TST_UNSORTED:
@@ -1321,7 +1321,7 @@ begin
   test:=false;
   if (GetSelCount=1) then
   if drawings.GetCurrentDWG^.wa.param.seldesc.LastSelectedObject<>nil then
-  if PGDBObjEntity(drawings.GetCurrentDWG^.wa.param.seldesc.LastSelectedObject)^.vp.ID=GDBDeviceID then
+  if PGDBObjEntity(drawings.GetCurrentDWG^.wa.param.seldesc.LastSelectedObject)^.GetObjType=GDBDeviceID then
   test:=true;
   if test then
   begin
@@ -1431,7 +1431,7 @@ begin
          tp:=pointer(pobj^.vp.LineWeight);
          weights.addnodouble(@tp);
 
-         tp:=pointer(pobj^.vp.ID);
+         tp:=pointer(pobj^.GetObjType);
 
          if (GDBPlatformUInt(tp)=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
                                 GDBPlatformUInt(tp):=GDBBlockInsertID;
@@ -1489,7 +1489,7 @@ begin
            tp:=pointer(pobj^.vp.LineWeight);
            isweght:=weights.IsObjExist(tp);
 
-           tp:=pointer(pobj^.vp.ID);
+           tp:=pointer(pobj^.GetObjType);
            if (GDBPlatformUInt(tp)=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
                                   GDBPlatformUInt(tp):=GDBBlockInsertID;
            if (GDBPlatformUInt(tp)=GDBMtextID)and(SelSimParams.Texts.DiffTextMText=TD_NotDiff) then
@@ -1816,8 +1816,8 @@ procedure TextInsert_com.Format;
 var
    DC:TDrawContext;
 begin
-     if ((pt^.vp.ID=GDBTextID)and(TextInsertParams.mode=TIM_MText))
-     or ((pt^.vp.ID=GDBMTextID)and(TextInsertParams.mode=TIM_Text)) then
+     if ((pt^.GetObjType=GDBTextID)and(TextInsertParams.mode=TIM_MText))
+     or ((pt^.GetObjType=GDBMTextID)and(TextInsertParams.mode=TIM_Text)) then
                                                                         BuildPrimitives;
      pt^.vp.Layer:=drawings.GetCurrentDWG^.GetCurrentLayer;
      pt^.vp.LineWeight:=sysvar.dwg.DWG_CLinew^;
@@ -2152,7 +2152,7 @@ begin
     //PGDBObjBlockInsert(pb)^.initnul;//(@drawings.GetCurrentDWG^.ObjRoot,drawings.LayerTable.GetSystemLayer,0);
     PGDBObjBlockInsert(pb)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
     pb^.Name:=PGDBObjBlockdef(drawings.GetCurrentDWG^.BlockDefArray.getelement(BIProp.Blocks.Selected))^.Name;//'DEVICE_NOC';
-    pb^.vp.ID:=GDBBlockInsertID;
+    //pb^.vp.ID:=GDBBlockInsertID;
     pb^.Local.p_insert:=wc;
     pb^.scale:=BIProp.Scale;
     pb^.CalcObjMatrix;
@@ -2208,7 +2208,7 @@ begin
     //PGDBObjBlockInsert(pb)^.initnul;//(@drawings.GetCurrentDWG^.ObjRoot,drawings.LayerTable.GetSystemLayer,0);
     PGDBObjBlockInsert(pb)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
     pb^.Name:=PGDBObjBlockdef(drawings.GetCurrentDWG^.BlockDefArray.getelement(BIProp.Blocks.Selected))^.Name;//'NOC';//'TESTBLOCK';
-    pb^.vp.ID:=GDBBlockInsertID;
+    //pb^.vp.ID:=GDBBlockInsertID;
     pb^.Local.p_insert:=wc;
 
     pb^.Local.p_insert:=wc;
@@ -2394,7 +2394,7 @@ begin
   if drawings.GetCurrentDWG^.wa.param.startgluepoint^.pobject<>nil then
   if osp<>nil then
   if osp^.PGDBObject<>nil then
-  //if pgdbobjentity(osp^.PGDBObject).vp.ID=GDBlwPolylineID then
+  //if pgdbobjentity(osp^.PGDBObject).GetObjType=GDBlwPolylineID then
     fixentities:=true;
   dist.x := wc.x - t3dp.x;
   dist.y := wc.y - t3dp.y;
@@ -3262,8 +3262,8 @@ begin
           begin
               if pobj^.selected
               and (
-                   (pobj^.vp.ID=GDBPolylineID)
-                 or(pobj^.vp.ID=GDBCableID)
+                   (pobj^.GetObjType=GDBPolylineID)
+                 or(pobj^.GetObjType=GDBCableID)
                    )
               then
                   begin
@@ -3665,11 +3665,11 @@ begin
      sd:=zcGetSelEntsDeskInCurrentRoot;
      if (sd.PFirstSelectedEnt<>nil)and(sd.SelectedEntsCount=1) then
      begin
-    if (sd.PFirstSelectedEnt^.vp.ID=GDBBlockInsertID) then
+    if (sd.PFirstSelectedEnt^.GetObjType=GDBBlockInsertID) then
     begin
          tn:=PGDBObjBlockInsert(sd.PFirstSelectedEnt)^.name;
     end
-else if (sd.PFirstSelectedEnt^.vp.ID=GDBDeviceID) then
+else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
     begin
          tn:=DevicePrefix+PGDBObjBlockInsert(sd.PFirstSelectedEnt)^.name;
     end;

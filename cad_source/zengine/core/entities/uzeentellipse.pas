@@ -74,6 +74,7 @@ GDBObjEllipse={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  procedure ReCalcFromObjMatrix;virtual;
 
                  function CreateInstance:PGDBObjEllipse;static;
+                 function GetObjType:TObjID;virtual;
            end;
 {EXPORT-}
 implementation
@@ -204,14 +205,14 @@ begin
   PProjoutbound:=nil;
   majoraxis:=onevertex;
   inherited initnul(nil);
-  vp.ID:=GDBEllipseID;
+  //vp.ID:=GDBEllipseID;
   //r := 1;
   Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{B591E6C2-9BD5-4099-BE5A-5CB3911661B7}',{$ENDIF}100);
 end;
 constructor GDBObjEllipse.init;
 begin
   inherited init(own,layeraddres, lw);
-  vp.ID:=GDBEllipseID;
+  //vp.ID:=GDBEllipseID;
   Local.p_insert := p;
   //r := rr;
   startangle := s;
@@ -220,6 +221,10 @@ begin
   PProjoutbound:=nil;
   Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{AEF4273C-4EE8-4520-B23A-04C3AD6DABE3}',{$ENDIF}100);
   //format;
+end;
+function GDBObjEllipse.GetObjType;
+begin
+     result:=GDBEllipseID;
 end;
 procedure GDBObjEllipse.CalcObjMatrix;
 var m1:DMatrix4D;
@@ -680,7 +685,7 @@ begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{368BA81A-219B-4DE9-A8E0-64EE16001126}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjEllipse));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, Local.p_insert, {r,}startangle,endangle,majoraxis);
   CopyVPto(tvo^);
-  tvo^.vp.ID:=GDBEllipseID;
+  //tvo^.vp.ID:=GDBEllipseID;
   tvo^.Local:=local;
   tvo^.RR:=RR;
   tvo^.MajorAxis:=MajorAxis;

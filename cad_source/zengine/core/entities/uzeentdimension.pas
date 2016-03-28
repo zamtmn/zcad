@@ -89,6 +89,7 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 procedure DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;var drawing:TDrawingDef;var DC:TDrawContext);
                 function GetDIMTMOVE:TDimTextMove;virtual;
                 destructor done;virtual;
+                //function GetObjType:TObjID;virtual;
                 end;
 {EXPORT-}
 implementation

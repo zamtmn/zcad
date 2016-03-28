@@ -54,10 +54,11 @@ GDBTypedPointer=packed record
                       Instance:GDBPointer;
                       PTD:GDBPointer;
                 end;
+TObjID=GDBWord;
 PGDBaseObject=^GDBaseObject;
 GDBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object
     function ObjToGDBString(prefix,sufix:GDBString):GDBString; virtual;
-    function GetObjType:GDBWord;virtual;
+    function GetObjType:TObjID;virtual;
     procedure Format;virtual;
     procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
     function AfterSerialize(SaveFlag:GDBWord; membuf:GDBPointer):GDBInteger;virtual;
@@ -251,7 +252,6 @@ tmatrixs=packed record
                    pviewport:PIMatrix4;
 end;
 TActulity=GDBInteger;
-TObjID=GDBWord;
 TEntUpgradeInfo=GDBLongword;
 PGDBBaseCamera=^GDBBaseCamera;
 GDBBaseCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)

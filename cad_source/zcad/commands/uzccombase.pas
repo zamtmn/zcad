@@ -692,7 +692,7 @@ begin
   if pv<>nil then
   repeat
     if pv^.Selected then
-    if (pv^.vp.ID=GDBMTextID)or(pv^.vp.ID=GDBTextID) then
+    if (pv^.GetObjType=GDBMTextID)or(pv^.GetObjType=GDBTextID) then
                         begin
                              pv^.TXTStyleIndex:=prs;
                              pv^.Formatentity(drawings.GetCurrentDWG^,dc);
@@ -704,7 +704,7 @@ begin
   begin
        repeat
              if psv.objaddr^.Selected then
-             if (psv.objaddr^.vp.ID=GDBMTextID)or(psv.objaddr^.vp.ID=GDBTextID) then
+             if (psv.objaddr^.GetObjType=GDBMTextID)or(psv.objaddr^.GetObjType=GDBTextID) then
                                           begin
                                                PGDBObjText(psv.objaddr)^.TXTStyleIndex:=prs;
                                                psv.objaddr^.Formatentity(drawings.GetCurrentDWG^,dc);
@@ -731,7 +731,7 @@ begin
   if pv<>nil then
   repeat
     if pv^.Selected then
-    if (pv^.vp.ID=GDBAlignedDimensionID)or(pv^.vp.ID=GDBRotatedDimensionID)or(pv^.vp.ID=GDBDiametricDimensionID) then
+    if (pv^.GetObjType=GDBAlignedDimensionID)or(pv^.GetObjType=GDBRotatedDimensionID)or(pv^.GetObjType=GDBDiametricDimensionID) then
                         begin
                              pv^.PDimStyle:=prs;
                              pv^.Formatentity(drawings.GetCurrentDWG^,dc);
@@ -743,7 +743,7 @@ begin
   begin
        repeat
              if psv.objaddr^.Selected then
-             if (psv.objaddr^.vp.ID=GDBAlignedDimensionID)or(psv.objaddr^.vp.ID=GDBRotatedDimensionID)or(psv.objaddr^.vp.ID=GDBDiametricDimensionID) then
+             if (psv.objaddr^.GetObjType=GDBAlignedDimensionID)or(psv.objaddr^.GetObjType=GDBRotatedDimensionID)or(psv.objaddr^.GetObjType=GDBDiametricDimensionID) then
                                           begin
                                                PGDBObjDimension(psv.objaddr)^.PDimStyle:=prs;
                                                psv.objaddr^.Formatentity(drawings.GetCurrentDWG^,dc);
@@ -1239,7 +1239,7 @@ end;
 procedure polytest_com_CommandStart(Operands:pansichar);
 begin
   if drawings.GetCurrentDWG.GetLastSelected<>nil then
-  if drawings.GetCurrentDWG.GetLastSelected.vp.ID=GDBlwPolylineID then
+  if drawings.GetCurrentDWG.GetLastSelected.GetObjType=GDBlwPolylineID then
   begin
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera) or (MRotateCamera) or (MGet3DPoint));
   //drawings.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := true;
@@ -1471,7 +1471,7 @@ procedure polydiv_com(Operands:pansichar);
 var pva,pvr:GDBPolyline2DArray;
 begin
   if drawings.GetCurrentDWG.GetLastSelected<>nil then
-  if drawings.GetCurrentDWG.GetLastSelected.vp.ID=GDBlwPolylineID then
+  if drawings.GetCurrentDWG.GetLastSelected.GetObjType=GDBlwPolylineID then
   begin
        pva.init({$IFDEF DEBUGBUILD}'{9372BADE-74EE-4101-8FA4-FC696054CD4F}',{$ENDIF}pgdbobjlwpolyline(drawings.GetCurrentDWG.GetLastSelected).Vertex2D_in_OCS_Array.count,true);
        pvr.init({$IFDEF DEBUGBUILD}'{9372BADE-74EE-4101-8FA4-FC696054CD4F}',{$ENDIF}pgdbobjlwpolyline(drawings.GetCurrentDWG.GetLastSelected).Vertex2D_in_OCS_Array.count,true);

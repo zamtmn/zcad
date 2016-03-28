@@ -50,6 +50,7 @@ GDBObjRadialDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDiametricDimen
                         function GetRadius:GDBDouble;virtual;
 
                         procedure SaveToDXF(var handle:TDWGHandle;var outhandle:GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                        function GetObjType:TObjID;virtual;
                    end;
 {EXPORT-}
 implementation
@@ -134,13 +135,17 @@ end;
 constructor GDBObjRadialDimension.initnul;
 begin
   inherited initnul(owner);
-  vp.ID := GDBRadialDimensionID;
+  //vp.ID := GDBRadialDimensionID;
 end;
 constructor GDBObjRadialDimension.init;
 begin
   inherited init(own,layeraddres, lw);
   PProjPoint:=nil;
-  vp.ID := GDBRadialDimensionID;
+  //vp.ID := GDBRadialDimensionID;
+end;
+function GDBObjRadialDimension.GetObjType;
+begin
+     result:=GDBRadialDimensionID;
 end;
 function GDBObjRadialDimension.GetObjTypeName;
 begin

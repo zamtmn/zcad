@@ -48,6 +48,7 @@ GDBObjTable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             procedure Build(var drawing:TDrawingDef);virtual;
             procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
             procedure ReCalcFromObjMatrix;virtual;
+            function GetObjType:TObjID;virtual;
             end;
 {EXPORT-}
 implementation
@@ -89,7 +90,7 @@ begin
      repeat
          pvc:=pv^.Clone(@self{.bp.Owner});
          //historyoutstr(pv^.ObjToGDBString('','')+'  cloned obj='+pvc^.ObjToGDBString('',''));
-         if pvc^.vp.ID=GDBDeviceID then
+         if pvc^.GetObjType=GDBDeviceID then
             pvc:=pvc;
 
          pvc^.bp.ListPos.Owner:=@self;
@@ -131,7 +132,7 @@ begin
   tvo^.w:=w;
   tvo^.h:=h;
 
-  tvo^.vp.id := GDBTableID;
+  //tvo^.vp.id := GDBTableID;
   //tvo^.vp.layer :=vp.layer;
   CopyVPto(tvo^);
   tvo^.Local.p_insert := Local.p_insert;
@@ -310,7 +311,7 @@ constructor GDBObjTable.initnul;
    //xcount,xcurrcount,ycount,ycurrcount,ccount:integer;
 begin
      inherited;
-     vp.ID:=GDBTableID;
+     //vp.ID:=GDBTableID;
 
      tbl.init({$IFDEF DEBUGBUILD}'{C6EE9076-623F-4D7A-A355-122C6271B9ED}',{$ENDIF}9,20);
      //ptablestyle:=gdb.GetCurrentDWG.TableStyleTable.getAddres('Standart');{проверить}
@@ -321,6 +322,10 @@ begin
 
      //tblformat.init({$IFDEF DEBUGBUILD}'{9616C423-CF78-45A4-9244-62F2821332D2}',{$ENDIF}25,sizeof(TGDBTableItemFormat));
 
+end;
+function GDBObjTable.GetObjType;
+begin
+     result:=GDBTableID;
 end;
 destructor GDBObjTable.done;
 begin

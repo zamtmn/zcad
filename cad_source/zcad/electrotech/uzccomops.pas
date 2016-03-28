@@ -587,7 +587,7 @@ begin
   pcable:=gdb.GetCurrentDWG.ObjRoot.ObjArray.beginiterate(ir);
   if pcable<>nil then
   repeat
-        if pcable^.vp.ID=GDBCableID then
+        if pcable^.GetObjType=GDBCableID then
         begin
              pvd:=currentunit.FindVariable('CDC_temp');
              pgdbinteger(pvd.data.Instance)^:=0;
@@ -1088,11 +1088,11 @@ begin
   OrtoDevPlaceParam.Name:='';
   sd:=zcGetSelEntsDeskInCurrentRoot;
     if sd.PFirstSelectedEnt<>nil then
-    if (sd.PFirstSelectedEnt^.vp.ID=GDBBlockInsertID) then
+    if (sd.PFirstSelectedEnt^.GetObjType=GDBBlockInsertID) then
     begin
          OrtoDevPlaceParam.Name:=PGDBObjBlockInsert(sd.PFirstSelectedEnt)^.name;
     end
-else if (sd.PFirstSelectedEnt^.vp.ID=GDBDeviceID) then
+else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
     begin
          OrtoDevPlaceParam.Name:=DevicePrefix+PGDBObjBlockInsert(sd.PFirstSelectedEnt)^.name;
     end;

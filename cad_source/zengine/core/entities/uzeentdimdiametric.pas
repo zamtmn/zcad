@@ -60,6 +60,7 @@ GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         function GetDIMTMOVE:TDimTextMove;virtual;
 
                         procedure SaveToDXF(var handle:TDWGHandle;var outhandle:GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
+                        function GetObjType:TObjID;virtual;
                    end;
 {EXPORT-}
 implementation
@@ -246,7 +247,7 @@ begin
   inherited initnul;
   PProjPoint:=nil;
   bp.ListPos.Owner:=owner;
-  vp.ID := GDBDiametricDimensionID;
+  //vp.ID := GDBDiametricDimensionID;
   DimData.P13InWCS := createvertex(1,1,0);
   DimData.P14InWCS:= createvertex(300,1,0);
 end;
@@ -254,9 +255,13 @@ constructor GDBObjDiametricDimension.init;
 begin
   inherited init(own,layeraddres, lw);
   PProjPoint:=nil;
-  vp.ID := GDBDiametricDimensionID;
+  //vp.ID := GDBDiametricDimensionID;
   DimData.P13InWCS := createvertex(1,1,0);
   DimData.P14InWCS:= createvertex(300,1,0);
+end;
+function GDBObjDiametricDimension.GetObjType;
+begin
+     result:=GDBDiametricDimensionID;
 end;
 function GDBObjDiametricDimension.GetObjTypeName;
 begin

@@ -334,7 +334,7 @@ begin
      if self.PExtAttrib<>nil then
      if self.PExtAttrib^.Upgrade>0 then
      begin
-       EntUpgradeKey.EntityID:=vp.ID;
+       EntUpgradeKey.EntityID:={vp.ID}GetObjType;
        EntUpgradeKey.UprradeInfo:=self.PExtAttrib^.Upgrade;
        if EntUpgradeKey2EntUpgradeData.MyGetValue(EntUpgradeKey,EntUpgradeData) then
        if assigned(EntUpgradeData.EntityUpgradeFunc) then
@@ -395,7 +395,7 @@ begin
 end;
 function GDBObjEntity.GetObjType;
 begin
-     result:=vp.ID;
+     result:={vp.ID}0;
 end;
 function GDBObjEntity.YouDeleted;
 begin

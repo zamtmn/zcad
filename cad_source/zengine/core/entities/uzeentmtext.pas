@@ -54,6 +54,7 @@ GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
                  procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
 
                  function CreateInstance:PGDBObjMText;static;
+                 function GetObjType:TObjID;virtual;
             end;
 {Export-}
 procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:GDBDouble;content:GDBString;var text:XYZWGDBGDBStringArray);
@@ -90,7 +91,7 @@ end;
 constructor GDBObjMText.initnul;
 begin
   inherited initnul(owner);
-  vp.ID := GDBMtextID;
+  //vp.ID := GDBMtextID;
   width := 0;
   linespace := 1;
   text.init(10);
@@ -98,7 +99,7 @@ end;
 constructor GDBObjMText.init;
 begin
   inherited init(own,layeraddres, lw, c, p, s, o, w, a, j);
-  vp.ID := GDBMtextID;
+  //vp.ID := GDBMtextID;
   width := wi;
   linespacef := l;
 
@@ -113,6 +114,10 @@ begin
 
   text.init(10);
   //format;
+end;
+function GDBObjMText.GetObjType;
+begin
+     result:=GDBMtextID;
 end;
 function GetLineSpaceFromLineSpaceF(linespacef,size:GDBDouble):GDBDouble;
 begin

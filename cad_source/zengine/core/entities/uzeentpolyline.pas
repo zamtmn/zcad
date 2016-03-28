@@ -48,6 +48,7 @@ GDBObjPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  function GetLength:GDBDouble;virtual;
 
                  class function CreateInstance:PGDBObjPolyline;static;
+                 function GetObjType:TObjID;virtual;
            end;
 {Export-}
 implementation
@@ -128,16 +129,19 @@ begin
 end;
 constructor GDBObjPolyline.init;
 begin
-  vp.ID := GDBPolylineID;
+  //vp.ID := GDBPolylineID;
   closed := c;
   inherited init(own,layeraddres, lw);
 end;
 constructor GDBObjPolyline.initnul;
 begin
   inherited initnul(owner);
-  vp.ID := GDBPolylineID;
+  //vp.ID := GDBPolylineID;
 end;
-
+function GDBObjPolyline.GetObjType;
+begin
+     result:=GDBPolylineID;
+end;
 procedure GDBObjPolyline.DrawGeometry;
 begin
      //vertexarrayInWCS.DrawGeometryWClosed(closed);

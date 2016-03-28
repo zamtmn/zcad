@@ -564,7 +564,7 @@ begin
          if commandmanager.GetEntity('Select circle or arc',pcircle) then
          begin
               dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-              case pcircle^.vp.ID of
+              case pcircle^.GetObjType of
               GDBCircleID:begin
                               p1:=pcircle^.q1;
                               p2:=pcircle^.q3;
@@ -627,7 +627,7 @@ begin
     begin
          if commandmanager.GetEntity('Select circle or arc',pcircle) then
          begin
-              case pcircle^.vp.ID of
+              case pcircle^.GetObjType of
               GDBCircleID:begin
                               p1:=pcircle^.Local.P_insert;
                               p2:=pcircle^.q1;

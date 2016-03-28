@@ -1400,6 +1400,9 @@ begin
   StoreBackTraceStrFunc:=BackTraceStrFunc;
   BackTraceStrFunc:=@SysBackTraceStr;
   }
+  {$if FPC_FULlVERSION>=30101}
+  AllowReuseOfLineInfoData:=false;
+  {$endif}
   ZCADGUIManager.RegisterZCADFormInfo('PageControl',rsDrawingWindowWndName,Tform,types.rect(200,200,600,500),ZCADMainPanelSetupProc,nil,@ZCADMainWindow.MainPanel);
   FAppProps := TApplicationProperties.Create(Self);
   FAppProps.OnException := ZcadException;

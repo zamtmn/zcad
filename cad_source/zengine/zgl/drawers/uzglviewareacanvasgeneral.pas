@@ -24,7 +24,7 @@ uses
      qtwidgets,qt4,
      {$ENDIF}
      uzgldrawergdi,uzglviewareaabstract,sysutils,memman,gdbase,
-     geometry,{$IFNDEF DELPHI}LCLType,LMessages,{$ENDIF}{$IFDEF DELPHI}windows,messages,{$ENDIF}
+     uzegeometry,{$IFNDEF DELPHI}LCLType,LMessages,{$ENDIF}{$IFDEF DELPHI}windows,messages,{$ENDIF}
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,uzglbackendmanager;
 type
     TGDIPanel=class({TCustomControl}TCADControl)

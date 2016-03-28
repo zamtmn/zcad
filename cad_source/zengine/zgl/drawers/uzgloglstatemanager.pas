@@ -256,7 +256,7 @@ var
    middlepoint:GDBVertex;
 implementation
 uses
-    uzgldrawergeneral,geometry;
+    uzgldrawergeneral,uzegeometry;
 procedure MywglCreateContext(var oglc:TOGLContextDesk);
 begin
      //oglc.hrc := wglCreateContext(oglc.DC);
@@ -279,7 +279,7 @@ end;
 procedure processpoint(const point:gdbvertex3s);
 begin
      //inc(pointcount);
-     //middlepoint:=geometry.VertexAdd(middlepoint,point);
+     //middlepoint:=uzegeometry.VertexAdd(middlepoint,point);
 end;
 procedure TOGLStateManager.glcolor3ub(const red, green, blue: GLubyte);
 begin
@@ -335,7 +335,7 @@ begin
     sysvar.debug.renderdeb.primcount:=primcount;
     sysvar.debug.renderdeb.bathcount:=bathcount;
     if pointcount<>0 then
-                          sysvar.debug.renderdeb.middlepoint:=geometry.VertexMulOnSc(middlepoint,1/pointcount);
+                          sysvar.debug.renderdeb.middlepoint:=uzegeometry.VertexMulOnSc(middlepoint,1/pointcount);
     }
 end;
 {$IFDEF SINGLEPRECISIONGEOMETRY}

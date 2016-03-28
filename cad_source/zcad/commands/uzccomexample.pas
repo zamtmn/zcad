@@ -70,7 +70,7 @@ uses
   uzeentdevice,
   UGDBOpenArrayOfPV,
 
-  geometry,
+  uzegeometry,
   uzeentitiesmanager,
 
   uzcshared,
@@ -482,7 +482,7 @@ begin
   PBlockInsert:=pointer(PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.PEntity);
   PInsert:=PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.PInsert;
 
-  vscale:=geometry.VertexSub(point,PInsert);
+  vscale:=uzegeometry.VertexSub(point,PInsert);
   rscale:=oneVertexlength(vscale);
   PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Scale.x:=rscale;
   PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Scale.y:=rscale;
@@ -509,7 +509,7 @@ begin
   PBlockInsert:=pointer(PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.PEntity);
   PInsert:=PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.PInsert;
 
-  AngleVector:=geometry.VertexSub(point,PInsert);
+  AngleVector:=uzegeometry.VertexSub(point,PInsert);
   rRotate:=Vertexangle(CreateVertex2D(1,0),CreateVertex2D(AngleVector.x,AngleVector.y))*180/pi;
   PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Rotate:=rRotate;
 
@@ -732,15 +732,15 @@ begin
              PT3PointCircleModePentity(PInteractiveData)^.cdm of
              TCDM_CR:begin
                        PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert:=PT3PointCircleModePentity(PInteractiveData)^.p1;
-                       PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Radius:=geometry.Vertexlength(PT3PointCircleModePentity(PInteractiveData)^.p1,point);
+                       PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Radius:=uzegeometry.Vertexlength(PT3PointCircleModePentity(PInteractiveData)^.p1,point);
                      end;
              TCDM_CD:begin
                        PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert:=PT3PointCircleModePentity(PInteractiveData)^.p1;
-                       PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Radius:=geometry.Vertexlength(PT3PointCircleModePentity(PInteractiveData)^.p1,point)/2;
+                       PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Radius:=uzegeometry.Vertexlength(PT3PointCircleModePentity(PInteractiveData)^.p1,point)/2;
                      end;
              TCDM_2P,TCDM_3P:begin
                        PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert:=VertexMulOnSc(VertexAdd(PT3PointCircleModePentity(PInteractiveData)^.p1,point),0.5);
-                       PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Radius:=geometry.Vertexlength(PT3PointCircleModePentity(PInteractiveData)^.p1,point)/2;
+                       PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Radius:=uzegeometry.Vertexlength(PT3PointCircleModePentity(PInteractiveData)^.p1,point)/2;
                      end;
 
          end;
@@ -965,7 +965,7 @@ begin
       if commandmanager.get3dpoint('Select point:',p2) then
       begin
         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pgdbdouble(ppointer(vdpvertex.data.Instance)^)^);
-        pgdblength(ppointer(vdpvertex.data.Instance)^)^:=geometry.Vertexlength(p1,p2);
+        pgdblength(ppointer(vdpvertex.data.Instance)^)^:=uzegeometry.Vertexlength(p1,p2);
         PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
         PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
       end;

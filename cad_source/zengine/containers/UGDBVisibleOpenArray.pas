@@ -19,7 +19,7 @@
 unit UGDBVisibleOpenArray;
 {$INCLUDE def.inc}
 interface
-uses uzecamera,gdbasetypes,UGDBOpenArrayOfPV,sysutils,gdbase, geometry,memman;
+uses uzecamera,gdbasetypes,UGDBOpenArrayOfPV,sysutils,gdbase,uzegeometry,memman;
 type
 {REGISTEROBJECTTYPE GDBObjEntityOpenArray}
 {Export+}

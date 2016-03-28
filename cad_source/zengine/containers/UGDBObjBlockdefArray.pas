@@ -19,7 +19,7 @@
 unit UGDBObjBlockdefArray;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,uzgldrawcontext,uzedrawingdef,strproc,uzeblockdef,UGDBOpenArrayOfData,sysutils,gdbase,memman, geometry,
+uses LCLProc,uzgldrawcontext,uzedrawingdef,strproc,uzeblockdef,UGDBOpenArrayOfData,sysutils,gdbase,memman,uzegeometry,
      gdbasetypes;
 type
 {REGISTEROBJECTTYPE GDBObjBlockdefArray}

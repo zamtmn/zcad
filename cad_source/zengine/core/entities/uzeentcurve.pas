@@ -23,7 +23,7 @@ interface
 uses uzgldrawcontext,uzedrawingdef,uzecamera,UGDBOpenArrayOfPObjects,
      UGDBOpenArrayOfByte,uzestyleslayers,gdbasetypes,UGDBVectorSnapArray,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBPolyLine2DArray,UGDBPoint3DArray,
-     GDBase,geometry,uzeconsts,uzglviewareadata,uzeffdxfsupport,sysutils,memman,
+     GDBase,uzegeometry,uzeconsts,uzglviewareadata,uzeffdxfsupport,sysutils,memman,
      uzeentsubordinated;
 type
 //------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
@@ -124,10 +124,10 @@ begin
         if found>0 then
                        begin
                             result:=vertexsub(ptv^,ppredtv^);
-                            result:=geometry.NormalizeVertex(result);
+                            result:=uzegeometry.NormalizeVertex(result);
                             exit;
                             //processaxis(posr,result);
-                            //result:=geometry.CrossVertex(tv,zwcs);
+                            //result:=uzegeometry.CrossVertex(tv,zwcs);
                             //processaxis(posr,result);
                             dec(found);
                        end;
@@ -172,10 +172,10 @@ begin
         if found>0 then
                        begin
                             tv:=vertexsub(ptv^,ppredtv^);
-                            tv:=geometry.NormalizeVertex(tv);
+                            tv:=uzegeometry.NormalizeVertex(tv);
                             //posr.arrayworldaxis.Add(@tv);
                             processaxis(posr,tv);
-                            tv:=geometry.CrossVertex(tv,zwcs);
+                            tv:=uzegeometry.CrossVertex(tv,zwcs);
                             //posr.arrayworldaxis.Add(@tv);
                             processaxis(posr,tv);
                             dec(found);
@@ -360,7 +360,7 @@ begin
   ptv:=VertexArrayInWCS.iterate(ir);
   if ptv<>nil then
   repeat
-        result:=result+geometry.Vertexlength(ptv^,ptvprev^);
+        result:=result+uzegeometry.Vertexlength(ptv^,ptvprev^);
         ptvprev:=ptv;
         ptv:=VertexArrayInWCS.iterate(ir);
   until ptv=nil;
@@ -696,7 +696,7 @@ begin
                                                                  exit;
                                                pv2:=VertexArrayInWCS.getelement(0);
                                           end;
-                        dir:=geometry.VertexSub(pv2^,pv1^);
+                        dir:=uzegeometry.VertexSub(pv2^,pv1^);
                         tv:=vectordot(dir,{GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.dir);
                         t:= -((pv1.x-{GDB.GetCurrentDWG.OGLwindow1.}param.lastpoint.x)*dir.x+(pv1.y-{GDB.GetCurrentDWG.OGLwindow1.}param.lastpoint.y)*dir.y+(pv1.z-{GDB.GetCurrentDWG.OGLwindow1.}param.lastpoint.z)*dir.z)/
                              ({sqr(dir.x)+sqr(dir.y)+sqr(dir.z)}SqrVertexlength(pv2^,pv1^));
@@ -726,7 +726,7 @@ begin
                                                                  exit;
                                                pv2:=VertexArrayInWCS.getelement(0);
                                           end;
-            dir:=geometry.VertexSub(pv2^,pv1^);
+            dir:=uzegeometry.VertexSub(pv2^,pv1^);
             tv:=vectordot(dir,{GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.dir);
             n:=vectordot({GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.dir,tv);
             n:=NormalizeVertex(n);
@@ -869,7 +869,7 @@ begin
                     begin
                     pv1:=VertexArrayInWCS.getelement(vertexnum);
                     pv2:=VertexArrayInWCS.getelement(vertexnum+1);
-                    dir:=geometry.VertexSub(pv2^,pv1^);
+                    dir:=uzegeometry.VertexSub(pv2^,pv1^);
                     tv:=vectordot(dir,GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.dir);
                     t:= -((pv1.x-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.x)*dir.x+(pv1.y-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.y)*dir.y+(pv1.z-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.z)*dir.z)/
                          ({sqr(dir.x)+sqr(dir.y)+sqr(dir.z)}SqrVertexlength(pv2^,pv1^));
@@ -893,7 +893,7 @@ begin
             begin
             pv1:=VertexArrayInWCS.getelement(vertexnum);
             pv2:=VertexArrayInWCS.getelement(vertexnum+1);
-            dir:=geometry.VertexSub(pv2^,pv1^);
+            dir:=uzegeometry.VertexSub(pv2^,pv1^);
             tv:=vectordot(dir,GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.dir);
             n:=vectordot(GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.dir,tv);
             n:=NormalizeVertex(n);

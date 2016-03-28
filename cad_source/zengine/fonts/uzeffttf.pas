@@ -19,7 +19,7 @@
 unit uzeffttf;
 {$INCLUDE def.inc}
 interface
-uses uzefontmanager,EasyLazFreeType,uzefontttf,geometry,
+uses uzefontmanager,EasyLazFreeType,uzefontttf,uzegeometry,
     uzefont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,
     UGDBOpenArrayOfByte,gdbasetypes,gdbase,memman;
 type ptsyminfo=^tsyminfo;

@@ -19,9 +19,9 @@ unit uzeentdimension;
 {$INCLUDE def.inc}
 
 interface
-uses zemathutils,uzgldrawcontext,uzeentabstracttext,uzestylestexts,UGDBXYZWStringArray,
+uses uzemathutils,uzgldrawcontext,uzeentabstracttext,uzestylestexts,UGDBXYZWStringArray,
      uzestylesdim,uzeentmtext,uzestyleslayers,uzedrawingdef,uzecamera,
-     strproc,UGDBOpenArrayOfByte,uzeenttext,geometry,uzeentline,gdbasetypes,uzeentcomplex,
+     strproc,UGDBOpenArrayOfByte,uzeenttext,uzegeometry,uzeentline,gdbasetypes,uzeentcomplex,
      sysutils,uzeentity,GDBase,uzeconsts,memman;
 type
 {EXPORT+}
@@ -104,7 +104,7 @@ var
    pp1,pp2:GDBVertex;
    zangle:gdbdouble;
 begin
-  l:=geometry.Vertexlength(p1,p2);
+  l:=uzegeometry.Vertexlength(p1,p2);
   tbp0:=PDimStyle.GetDimBlockParam(0);
   tbp1:=PDimStyle.GetDimBlockParam(1);
   if supress1 then
@@ -230,10 +230,10 @@ var
 begin
   CalcTextAngle;
 
-  ip:=geometry.intercept3dmy2({DimData.P13InWCS,DimData.P14InWCS}dlStart,dlEnd,DimData.P11InOCS,vertexadd(DimData.P11InOCS,self.vectorN));
+  ip:=uzegeometry.intercept3dmy2({DimData.P13InWCS,DimData.P14InWCS}dlStart,dlEnd,DimData.P11InOCS,vertexadd(DimData.P11InOCS,self.vectorN));
   TextTParam:=ip.t1;//GettFromLinePoint(DimData.P11InOCS,DimData.P13InWCS,DimData.P14InWCS);
   CalcTextInside;
-  ip:=geometry.intercept3dmy2({DimData.P13InWCS,DimData.P14InWCS}dlStart,dlEnd,DimData.P11InOCS,vertexadd(DimData.P11InOCS,self.vectorN));
+  ip:=uzegeometry.intercept3dmy2({DimData.P13InWCS,DimData.P14InWCS}dlStart,dlEnd,DimData.P11InOCS,vertexadd(DimData.P11InOCS,self.vectorN));
   if TextInside then
                     begin
                          if PDimStyle.Text.DIMTIH then
@@ -291,20 +291,20 @@ begin
    dimtextw:=GetLinesW(txtlines)*PDimStyle.Text.DIMTXT;
    txtlines.freeanddone;
 
-     {dimdir:=geometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
+     {dimdir:=uzegeometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
      dimdir:=normalizevertex(dimdir);}
      if GetCSDirFrom0x0y2D(vectorD,vectorN)=TCSDLeft then
-                                                          dimdir:=geometry.VertexMulOnSc(vectorN,-1)
+                                                          dimdir:=uzegeometry.VertexMulOnSc(vectorN,-1)
                                                       else
                                                           dimdir:=self.vectorN;
      if PDimStyle.Text.DIMTAD<>DTVPBellov then
      begin
      if dimdir.x>0 then
-                       dimdir:=geometry.VertexMulOnSc(dimdir,-1);
+                       dimdir:=uzegeometry.VertexMulOnSc(dimdir,-1);
      end
      else
      if dimdir.x<0 then
-                       dimdir:=geometry.VertexMulOnSc(dimdir,-1);
+                       dimdir:=uzegeometry.VertexMulOnSc(dimdir,-1);
 
      if (textangle=0)and((DimData.TextMoved)or TextAlwaysMoved) then
                         dimdir:=x_Y_zVertex;
@@ -318,15 +318,15 @@ begin
                                   DTVPCenters:dimdir:=nulvertex;
                                   DTVPAbove:begin
                                                  if dimdir.y<-eps then
-                                                                      dimdir:=geometry.VertexMulOnSc(dimdir,-1);
+                                                                      dimdir:=uzegeometry.VertexMulOnSc(dimdir,-1);
                                             end;
                                   DTVPJIS:dimdir:=nulvertex;
                                   DTVPBellov:begin
                                                  if dimdir.y>eps then
-                                                                      dimdir:=geometry.VertexMulOnSc(dimdir,-1);
+                                                                      dimdir:=uzegeometry.VertexMulOnSc(dimdir,-1);
                                             end;
      end;
-     result:=geometry.VertexMulOnSc(dimdir,l);
+     result:=uzegeometry.VertexMulOnSc(dimdir,l);
      end
         else
             result:=nulvertex;
@@ -382,19 +382,19 @@ begin
 
   if PDimStyle.Text.DIMGAP<0 then
   begin
-  p:=geometry.VertexDmorph(p,ptext.Local.basis.ox,-dimtextw/2);
-  p:=geometry.VertexDmorph(p,ptext.Local.basis.oy,dimtexth/2);
+  p:=uzegeometry.VertexDmorph(p,ptext.Local.basis.ox,-dimtextw/2);
+  p:=uzegeometry.VertexDmorph(p,ptext.Local.basis.oy,dimtexth/2);
 
-  p2:=geometry.VertexDmorph(p,ptext.Local.basis.ox,dimtextw);
+  p2:=uzegeometry.VertexDmorph(p,ptext.Local.basis.ox,dimtextw);
   DrawDimensionLineLinePart(p,p2,drawing).FormatEntity(drawing,dc);
 
-  p:=geometry.VertexDmorph(p2,ptext.Local.basis.oy,-dimtexth);
+  p:=uzegeometry.VertexDmorph(p2,ptext.Local.basis.oy,-dimtexth);
   DrawDimensionLineLinePart(p2,p,drawing).FormatEntity(drawing,dc);
 
-  p2:=geometry.VertexDmorph(p,ptext.Local.basis.ox,-dimtextw);
+  p2:=uzegeometry.VertexDmorph(p,ptext.Local.basis.ox,-dimtextw);
   DrawDimensionLineLinePart(p,p2,drawing).FormatEntity(drawing,dc);
 
-  p:=geometry.VertexDmorph(p2,ptext.Local.basis.oy,dimtexth);
+  p:=uzegeometry.VertexDmorph(p2,ptext.Local.basis.oy,dimtexth);
   DrawDimensionLineLinePart(p2,p,drawing).FormatEntity(drawing,dc);
   end;
 

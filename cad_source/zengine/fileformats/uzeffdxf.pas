@@ -23,7 +23,7 @@ uses LCLProc,paths,strproc,uzgldrawcontext,usimplegenerics,uzestylesdim,uzeentit
     {$IFNDEF DELPHI}LazUTF8,{$ENDIF}
     UGDBNamedObjectsArray,uzestyleslinetypes,uzedrawingsimple,uzelongprocesssupport,
     uzglviewareadata,uzeffdxfsupport,uzestrconsts,uzestylestexts,
-    geometry,uzeentsubordinated,gdbasetypes,uzeentgenericsubentry,gdbase,
+    uzegeometry,uzeentsubordinated,gdbasetypes,uzeentgenericsubentry,gdbase,
     sysutils,memman,uzeconsts,UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,
     UGDBOpenArrayOfByte,UGDBVisibleOpenArray,uzeentity,uzeblockdef,uzestyleslayers,uzeffmanager;
 type

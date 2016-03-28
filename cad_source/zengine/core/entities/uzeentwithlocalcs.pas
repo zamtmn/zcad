@@ -22,7 +22,7 @@ unit uzeentwithlocalcs;
 interface
 uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,gdbasetypes,uzeentity,
      UGDBOutbound2DIArray,UGDBOpenArrayOfByte,uzeentwithmatrix,GDBase,
-     geometry,uzeffdxfsupport,sysutils,memman,uzeentsubordinated,uzestyleslayers;
+     uzegeometry,uzeffdxfsupport,sysutils,memman,uzeentsubordinated,uzestyleslayers;
 type
 //pprojoutbound:{-}PGDBOOutbound2DIArray{/GDBPointer/};
 {EXPORT+}
@@ -101,7 +101,7 @@ begin
                                                                 else
                                                                     ox:=CrossVertex(ZWCS,Local.oz);
      normalizevertex(ox);
-     rotate:=geometry.scalardot(Local.ox,ox);
+     rotate:=uzegeometry.scalardot(Local.ox,ox);
      rotate:=arccos(rotate)*180/pi;
      if local.OX.y<-eps then rotate:=360-rotate;}
 end;
@@ -123,7 +123,7 @@ begin
 end;
 procedure GDBObjWithLocalCS.TransformAt;
 begin
-    objmatrix:=geometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
+    objmatrix:=uzegeometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
 
      {Local.oz:=PGDBVertex(@objmatrix[2])^;
 

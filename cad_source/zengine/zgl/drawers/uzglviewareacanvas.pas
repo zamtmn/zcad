@@ -25,7 +25,7 @@ uses
      {$ENDIF}
      uzgldrawercanvas,uzglviewareaabstract,sysutils,memman,
      gdbase,gdbasetypes,
-     varmandef,uzccommandsmanager,uzcsysvars,geometry,uzcshared,LCLType,
+     varmandef,uzccommandsmanager,uzcsysvars,uzegeometry,uzcshared,LCLType,
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,uzglbackendmanager,
      {$IFNDEF DELPHI}OpenGLContext{$ENDIF},uzglviewareacanvasgeneral;
 type

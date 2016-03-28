@@ -23,7 +23,7 @@ uses
     uzeentwithlocalcs,UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,
     UGDBSelectedObjArray,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,
     UGDBOpenArrayOfByte,varman,varmandef,GDBase,uzeconsts,
-    uzglviewareadata,geometry,uzeffdxfsupport,memman,uzeentplain;
+    uzglviewareadata,uzegeometry,uzeffdxfsupport,memman,uzeentplain;
 type
 {REGISTEROBJECTTYPE GDBObjEllipse}
 {Export+}
@@ -83,7 +83,7 @@ procedure GDBObjEllipse.TransformAt;
 var
     tv:GDBVertex4D;
 begin
-    objmatrix:=geometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
+    objmatrix:=uzegeometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
 
     tv:=PGDBVertex4D(@t_matrix[3])^;
     PGDBVertex4D(@t_matrix[3])^:=NulVertex4D;
@@ -121,16 +121,16 @@ begin
      Local.P_insert:=PGDBVertex(@objmatrix[3])^;
 
 
-     //scale.x:=geometry.oneVertexlength(PGDBVertex(@objmatrix[0])^);
-     //scale.y:=geometry.oneVertexlength(PGDBVertex(@objmatrix[1])^);
-     //scale.z:=geometry.oneVertexlength(PGDBVertex(@objmatrix[2])^);
+     //scale.x:=uzegeometry.oneVertexlength(PGDBVertex(@objmatrix[0])^);
+     //scale.y:=uzegeometry.oneVertexlength(PGDBVertex(@objmatrix[1])^);
+     //scale.z:=uzegeometry.oneVertexlength(PGDBVertex(@objmatrix[2])^);
 
      {if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
                                                                     ox:=CrossVertex(YWCS,Local.basis.oz)
                                                                 else
                                                                     ox:=CrossVertex(ZWCS,Local.basis.oz);}
      //normalizevertex(ox);
-     //rotate:=geometry.scalardot(Local.basis.ox,ox);
+     //rotate:=uzegeometry.scalardot(Local.basis.ox,ox);
     // rotate:=arccos(rotate)*180/pi;
      //if local.basis.OX.y<-eps then rotate:=360-rotate;
 end;
@@ -249,9 +249,9 @@ var
   v:GDBvertex4D;
 begin
   if self.Ratio<=1 then
-                      rr:=geometry.oneVertexlength(majoraxis)
+                      rr:=uzegeometry.oneVertexlength(majoraxis)
                    else
-                      rr:=geometry.oneVertexlength(majoraxis)*ratio;
+                      rr:=uzegeometry.oneVertexlength(majoraxis)*ratio;
 
   calcObjMatrix;
   angle := endangle - startangle;

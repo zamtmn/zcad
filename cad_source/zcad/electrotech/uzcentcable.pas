@@ -9,7 +9,7 @@ unit uzcentcable;
 
 interface
 uses uzeobjectextender,varman,uzgldrawcontext,uzeentgenericsubentry,uzedrawingdef,
-     uzcsysvars,UGDBOpenArrayOfByte,uzestyleslayers,UUnitManager,uzeentcurve,geometry,
+     uzcsysvars,UGDBOpenArrayOfByte,uzestyleslayers,UUnitManager,uzeentcurve,uzegeometry,
      math,UGDBOpenArrayOfData,gdbasetypes,uzeentity,varmandef,GDBase,
      uzeconsts,uzeffdxfsupport,sysutils,memman,uzeentsubordinated,uzeentdevice;
 type
@@ -132,7 +132,7 @@ begin
 
   SaveToDXFObjPrefix(handle,outhandle,'POLYLINE','AcDb3dPolyline');
   dxfGDBIntegerout(outhandle,66,1);
-  dxfvertexout(outhandle,10,geometry.NulVertex);
+  dxfvertexout(outhandle,10,uzegeometry.NulVertex);
   dxfGDBIntegerout(outhandle,70,8);
 
   vp.Layer:=pl;
@@ -371,7 +371,7 @@ begin
   ptnlast2:=NodePropArray.getelement(vertexarrayInWCS.Count-2);
 
   tp:=vertexsub(ptnlast^.PrevP,ptnlast2^.NextP);
-  if geometry.SqrOneVertexlength(tp)>sqreps then
+  if uzegeometry.SqrOneVertexlength(tp)>sqreps then
   begin
   _YWCS:=YWCS;//gdb.GetCurrentDWG.pcamera.ydir;
   _ZWCS:=ZWCS;//gdb.GetCurrentDWG.pcamera.look;
@@ -381,7 +381,7 @@ begin
                                                  else
                                                      tp2:=CrossVertex(_ZWCS,tp);
   tp3:=CrossVertex(tp2,tp);
-  //tp3:=geometry.VertexMulOnSc(tp3,-1);
+  //tp3:=uzegeometry.VertexMulOnSc(tp3,-1);
   tp3:=NormalizeVertex(tp3);
   tp2:=NormalizeVertex(tp2);
   tp:=NormalizeVertex(tp);
@@ -397,8 +397,8 @@ begin
    m:=MatrixMultiply(rotmatr,m);
 
   str22:=ptnlast.PrevP;
-  str21:=VectorTransform3D(geometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
-  str23:=VectorTransform3D(geometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,-0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
+  str21:=VectorTransform3D(uzegeometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
+  str23:=VectorTransform3D(uzegeometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,-0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
   end
   else begin
             str22:=ptnlast.PrevP;

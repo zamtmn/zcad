@@ -19,7 +19,7 @@
 unit UGDBPolyPoint3DArray;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase, geometry,
+uses gdbdrawcontext,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase, uzegeometry,
      {varmandef,}OGLSpecFunc;
 type
 {Export+}
@@ -56,7 +56,7 @@ begin
    begin
      if counter<=0 then counter:=ptpv0^.count;
 
-     subresult:=geometry.CalcTrueInFrustum (ptpv1^.coord,ptpv0^.coord,frustum);
+     subresult:=uzegeometry.CalcTrueInFrustum (ptpv1^.coord,ptpv0^.coord,frustum);
     if subresult=IREmpty then
                             begin
                                  inc(emptycount);
@@ -138,7 +138,7 @@ begin
      if points>=2 then
      begin
 
-     subresult:=geometry.CalcTrueInFrustum (v1,v2,frustum);
+     subresult:=uzegeometry.CalcTrueInFrustum (v1,v2,frustum);
     if subresult=IREmpty then
                             begin
                                  inc(emptycount);
@@ -239,7 +239,7 @@ begin
      myglbegin(GL_LINEs);
      glvertex3dv(@ptpv1^.coord);
      glvertex3dv(@ptpv0^.coord);
-     //subresult:=geometry.CalcTrueInFrustum (ptpv1^.coord,ptpv0^.coord,frustum);
+     //subresult:=uzegeometry.CalcTrueInFrustum (ptpv1^.coord,ptpv0^.coord,frustum);
      myglend;
      if counter<=0 then
                        begin

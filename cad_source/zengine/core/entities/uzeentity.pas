@@ -22,7 +22,7 @@ interface
 uses uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingdef,
      uzecamera,uzeentitiesprop,uzglgeometry,uzestyleslinetypes,gdbasetypes,
      UGDBControlPointArray,uzeentsubordinated,GDBase,uzeconsts,
-     uzglviewareadata,geometry,uzeffdxfsupport,sysutils,memman,UGDBOpenArrayOfByte,
+     uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,memman,UGDBOpenArrayOfByte,
      uzestyleslayers,UGDBOpenArrayOfPObjects;
 type
 //Owner:{-}PGDBObjEntity{/GDBPointer/};(*'Владелец'*)
@@ -1019,7 +1019,7 @@ begin
 
 
 
-               //geometry.NormalizeVertex(tt)
+               //uzegeometry.NormalizeVertex(tt)
 
                t:=VectorTransform3D(dist,m);
                if save then

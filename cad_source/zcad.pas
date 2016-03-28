@@ -135,7 +135,7 @@ uses
 //exports getcommandmanager; {commandline}
 //exports GDBObjLineInit,GDBObjCircleInit,getgdb,addblockinsert,CreateInitObjFree,CreateObjFree; {GDBManager}
 //exports getpsysvar,GetPVarMan; {varman}
-//exports Vertexmorph,Vertexlength,Vertexangle,VertexAdd,VertexDmorph,Vertexdmorphabs,Vertexmorphabs,intercept2d2,pointinquad2d; {geometry}
+//exports Vertexmorph,Vertexlength,Vertexangle,VertexAdd,VertexDmorph,Vertexdmorphabs,Vertexmorphabs,intercept2d2,pointinquad2d; {uzegeometry}
 //exports CreateCommandRTEdObjectPlugin,CreateCommandFastObjectPlugin; {commanddefinternal}
 //exports getprogramlog; {log}
 //exports GDBGetMem,GDBFreeMem; {memman}

@@ -19,7 +19,7 @@
 unit UGDBTree;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,gdbase,UGDBOpenArrayOfPObjects;//,UGDBOpenArrayOfData,sysutils,UGDBVisibleOpenArray,geometry,gdbEntity,UGDBOpenArrayOfPV;
+uses gdbasetypes,gdbase,UGDBOpenArrayOfPObjects;//,UGDBOpenArrayOfData,sysutils,UGDBVisibleOpenArray,uzegeometry,gdbEntity,UGDBOpenArrayOfPV;
 type
 PGDBBaseNode=^GDBBaseNode;
 PIterateCmpareFunc=function(pnode:PGDBBaseNode;PExpr:GDBPointer):GDBBoolean;

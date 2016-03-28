@@ -20,7 +20,7 @@ unit UGDBPoint3DArray;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,math,
-geometry;
+     uzegeometry;
 type
 {REGISTEROBJECTTYPE GDBPoint3dArray}
 {Export+}
@@ -158,7 +158,7 @@ begin
    i:=0;
    while i<(count-1) do
    begin
-     subresult:=geometry.CalcTrueInFrustum (ptpv0^,ptpv1^,frustum);
+     subresult:=uzegeometry.CalcTrueInFrustum (ptpv0^,ptpv1^,frustum);
     if subresult=IREmpty then
                             begin
                                  inc(emptycount);
@@ -195,7 +195,7 @@ begin
    i:=0;
    while i<(count-1) do
    begin
-     if geometry.CalcTrueInFrustum (ptpv0^,ptpv1^,mf)<>IREmpty
+     if uzegeometry.CalcTrueInFrustum (ptpv0^,ptpv1^,mf)<>IREmpty
                                                                           then
                                                                               result:=true
                                                                           else
@@ -213,7 +213,7 @@ begin
    if closed then
    begin
         ptpv1:=parray;
-   if geometry.CalcTrueInFrustum (ptpv0^,ptpv1^,mf)<>IREmpty
+   if uzegeometry.CalcTrueInFrustum (ptpv0^,ptpv1^,mf)<>IREmpty
                                                                         then
                                                                             result:=true
                                                                         else

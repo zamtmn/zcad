@@ -21,7 +21,7 @@ unit uzeent3dface;
 interface
 uses
     uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,UGDBOpenArrayOfPObjects,
-    geometry,uzeffdxfsupport,uzestyleslayers,gdbasetypes,UGDBSelectedObjArray,uzeentsubordinated,
+    uzegeometry,uzeffdxfsupport,uzestyleslayers,gdbasetypes,UGDBSelectedObjArray,uzeentsubordinated,
     uzeent3d,uzeentity,sysutils,UGDBOpenArrayOfByte,GDBase,uzeconsts,memman;
 type
 {REGISTEROBJECTTYPE GDBObj3DFace}
@@ -70,7 +70,7 @@ var i:GDBInteger;
 begin
       for i:=0 to 3 do
       begin
-           PInOCS[I]:=geometry.VectorTransform3D(PGDBObj3DFace(p)^.PInOCS[I],t_matrix^);
+           PInOCS[I]:=VectorTransform3D(PGDBObj3DFace(p)^.PInOCS[I],t_matrix^);
       end;
 end;
 procedure GDBObj3DFace.transform(const t_matrix:DMatrix4D);
@@ -78,7 +78,7 @@ var i:GDBInteger;
 begin
       for i:=0 to 3 do
       begin
-           PInOCS[I]:=geometry.VectorTransform3D(PInOCS[I],t_matrix);
+           PInOCS[I]:=VectorTransform3D(PInOCS[I],t_matrix);
       end;
 end;
 procedure GDBObj3DFace.getoutbound;
@@ -100,9 +100,9 @@ begin
            PInWCS[I]:=VectorTransform3D(PInOCS[I],{CurrentCS}bp.ListPos.owner^.GetMatrix^);
       end;
       v:=vectordot(
-                   geometry.VertexSub(PInWCS[0],PInWCS[1])
+                   VertexSub(PInWCS[0],PInWCS[1])
                    ,
-                   geometry.VertexSub(PInWCS[2],PInWCS[1])
+                   VertexSub(PInWCS[2],PInWCS[1])
                   );
       if IsVectorNul(v) then
                             normal:=xy_Z_Vertex
@@ -111,14 +111,14 @@ begin
 
       {normal:=normalizevertex(
                               vectordot(
-                                        geometry.VertexSub(PInWCS[0],PInWCS[1])
+                                        uzegeometry.VertexSub(PInWCS[0],PInWCS[1])
                                         ,
-                                        geometry.VertexSub(PInWCS[2],PInWCS[1])
+                                        uzegeometry.VertexSub(PInWCS[2],PInWCS[1])
                                        )
                              );}
-     {if geometry.IsVectorNul(normal) then
+     {if uzegeometry.IsVectorNul(normal) then
                                          normal:=normal;}
-       if geometry.IsPointEqual(PInOCS[2],PInOCS[3])then
+       if IsPointEqual(PInOCS[2],PInOCS[3])then
                                                         triangle:=true
                                                     else
                                                         triangle:=false;
@@ -313,13 +313,13 @@ begin
                                                              result:=true;
                                                              exit;
                                                         end;
-    if geometry.CalcTrueInFrustum (PInwCS[0],PInwCS[1],mf)<>IREmpty
+    if uzegeometry.CalcTrueInFrustum (PInwCS[0],PInwCS[1],mf)<>IREmpty
                                                                 then
                                                                     begin
                                                                          result:=true;
                                                                          exit;
                                                                     end;
-    if geometry.CalcTrueInFrustum (PInwCS[1],PInwCS[2],mf)<>IREmpty
+    if uzegeometry.CalcTrueInFrustum (PInwCS[1],PInwCS[2],mf)<>IREmpty
                                                                 then
                                                                     begin
                                                                          result:=true;
@@ -327,7 +327,7 @@ begin
                                                                     end;
    if triangle then
                    begin
-                          if geometry.CalcTrueInFrustum (PInwCS[2],PInwCS[0],mf)<>IREmpty
+                          if uzegeometry.CalcTrueInFrustum (PInwCS[2],PInwCS[0],mf)<>IREmpty
                                                                                       then
                                                                                           begin
                                                                                                result:=true;
@@ -336,13 +336,13 @@ begin
                    end
                else
                    begin
-                         if geometry.CalcTrueInFrustum (PInwCS[2],PInwCS[3],mf)<>IREmpty
+                         if uzegeometry.CalcTrueInFrustum (PInwCS[2],PInwCS[3],mf)<>IREmpty
                                                                                      then
                                                                                          begin
                                                                                               result:=true;
                                                                                               exit;
                                                                                          end;
-                         if geometry.CalcTrueInFrustum (PInwCS[3],PInwCS[0],mf)<>IREmpty
+                         if uzegeometry.CalcTrueInFrustum (PInwCS[3],PInwCS[0],mf)<>IREmpty
                                                                                      then
                                                                                          begin
                                                                                               result:=true;
@@ -358,24 +358,24 @@ begin
       if result<>IRPartially then
                                  exit;
       i:=0;
-      if geometry.CalcPointTrueInFrustum (PInwCS[0],frustum)<>IREmpty
+      if uzegeometry.CalcPointTrueInFrustum (PInwCS[0],frustum)<>IREmpty
                                                                   then
                                                                       begin
                                                                            inc(i);
                                                                       end;
-      if geometry.CalcPointTrueInFrustum (PInwCS[1],frustum)<>IREmpty
+      if uzegeometry.CalcPointTrueInFrustum (PInwCS[1],frustum)<>IREmpty
                                                                   then
                                                                       begin
                                                                            inc(i);
                                                                       end;
-      if geometry.CalcPointTrueInFrustum (PInwCS[2],frustum)<>IREmpty
+      if uzegeometry.CalcPointTrueInFrustum (PInwCS[2],frustum)<>IREmpty
                                                                   then
                                                                       begin
                                                                            inc(i);
                                                                       end;
      if not triangle then
                      begin
-                           if geometry.CalcPointTrueInFrustum (PInwCS[3],frustum)<>IREmpty
+                           if uzegeometry.CalcPointTrueInFrustum (PInwCS[3],frustum)<>IREmpty
                                                                                        then
                                                                                            begin
                                                                                                 inc(i);
@@ -395,19 +395,19 @@ begin
                                       end;
 
                      end;
-     if geometry.CalcTrueInFrustum (PInwCS[0],PInwCS[1],frustum)<>IREmpty
+     if uzegeometry.CalcTrueInFrustum (PInwCS[0],PInwCS[1],frustum)<>IREmpty
                                                                  then
                                                                      begin
                                                                           exit;
                                                                      end;
-     if geometry.CalcTrueInFrustum (PInwCS[1],PInwCS[2],frustum)<>IREmpty
+     if uzegeometry.CalcTrueInFrustum (PInwCS[1],PInwCS[2],frustum)<>IREmpty
                                                                  then
                                                                      begin
                                                                           exit;
                                                                      end;
     if triangle then
                     begin
-                           if geometry.CalcTrueInFrustum (PInwCS[2],PInwCS[0],frustum)<>IREmpty
+                           if uzegeometry.CalcTrueInFrustum (PInwCS[2],PInwCS[0],frustum)<>IREmpty
                                                                                        then
                                                                                            begin
                                                                                                 exit;
@@ -415,12 +415,12 @@ begin
                     end
                 else
                     begin
-                          if geometry.CalcTrueInFrustum (PInwCS[2],PInwCS[3],frustum)<>IREmpty
+                          if uzegeometry.CalcTrueInFrustum (PInwCS[2],PInwCS[3],frustum)<>IREmpty
                                                                                       then
                                                                                           begin
                                                                                                exit;
                                                                                           end;
-                          if geometry.CalcTrueInFrustum (PInwCS[3],PInwCS[0],frustum)<>IREmpty
+                          if uzegeometry.CalcTrueInFrustum (PInwCS[3],PInwCS[0],frustum)<>IREmpty
                                                                                       then
                                                                                           begin
                                                                                                exit;

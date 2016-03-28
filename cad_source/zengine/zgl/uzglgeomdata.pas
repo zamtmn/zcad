@@ -20,7 +20,7 @@ unit uzglgeomdata;
 {$INCLUDE def.inc}
 interface
 uses uzgindexsarray,uzgvertex3sarray,sysutils,gdbase,gdbasetypes,memman,
-geometry;
+     uzegeometry;
 type
 {Export+}
 ZGLGeomData={$IFNDEF DELPHI}packed{$ENDIF}object(GDBaseObject)

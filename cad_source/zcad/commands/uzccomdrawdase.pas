@@ -32,7 +32,7 @@ uses
   varmandef,
   uzglviewareadata,
   uzeffdxf,
-  geometry,
+  uzegeometry,
   memman,
   uzeconsts,
   uzcshared,uzclog;
@@ -131,7 +131,7 @@ begin
      c1:=commandmanager.GetValueHeap;
      if c2<>-1 then
                    begin
-                        len:=geometry.Vertexlength(point,oldpoint);
+                        len:=uzegeometry.Vertexlength(point,oldpoint);
                         distlen:=distlen+len;
                         HistoryOutStr('Длина отрезка: '+floattostr(len)+' Суммарная длина: '+floattostr(distlen))
                    end;

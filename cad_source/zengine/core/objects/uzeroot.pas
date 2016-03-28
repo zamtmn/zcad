@@ -23,7 +23,7 @@ interface
 Uses
    uzgldrawcontext,uzedrawingdef,uzecamera,uzeentitiestree,gdbase,gdbasetypes,
    uzeconsts,uzeentity,uzeentgenericsubentry,uzeentconnected,uzeentsubordinated,
-   geometry;
+   uzegeometry;
 type
 {REGISTEROBJECTTYPE GDBObjRoot}
 {Export+}
@@ -121,8 +121,8 @@ begin
 end;}
 procedure GDBObjRoot.getoutbound;
 begin
-     vp.BoundingBox.LBN:=geometry.NulVertex;
-     vp.BoundingBox.RTF:=geometry.NulVertex;
+     vp.BoundingBox.LBN:=NulVertex;
+     vp.BoundingBox.RTF:=NulVertex;
      inherited;
 end;
 function GDBObjRoot.getowner;

@@ -21,7 +21,7 @@ unit uzefont;
 interface
 uses math,uzgldrawerabstract,uzgprimitivescreator,uzgprimitives,uzgprimitivessarray,{ugdbshxfont,}{ugdbttffont,}memman,
      strproc,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,
-     uzefontbase,geometry,uzglvectorobject;
+     uzefontbase,uzegeometry,uzglvectorobject;
 type
 {EXPORT+}
 PGDBfont=^GDBfont;
@@ -296,7 +296,7 @@ begin
   PLLPsymbol^.ExternalLLPOffset:=VDCopyParam.LLPrimitivesStartIndex;
   PLLPsymbol^.ExternalLLPCount:=psyminfo.LLPrimitiveCount;
   PLLPsymbol^.SymCode:=_symbol;
-  PLLPsymbol^.SymMatr:=geometry.MatrixMultiplyF(matr,objmatrix);
+  PLLPsymbol^.SymMatr:=uzegeometry.MatrixMultiplyF(matr,objmatrix);
   VDCopyParam:=font.FontData.GetCopyParam(psyminfo.LLPrimitiveStartIndex,psyminfo.LLPrimitiveCount);
   if VDCopyParam.EID.IndexsIndexMax>0 then
                                           PLLPsymbol^.Attrib:=LLAttrNeedSolid
@@ -341,7 +341,7 @@ begin
                                     end;*)
 
                                     PLLSymbolLine^.FirstOutBoundIndex:=PLLPsymbol^.OutBoundIndex;
-                                    PLLSymbolLine^.SymbolsParam.FirstSymMatr:=geometry.MatrixMultiply(matr,objmatrix);
+                                    PLLSymbolLine^.SymbolsParam.FirstSymMatr:=uzegeometry.MatrixMultiply(matr,objmatrix);
                                     PLLSymbolLine^.SymbolsParam.Rotate:=Vertexangle(CreateVertex2D(0,0),CreateVertex2D(PLLSymbolLine^.SymbolsParam.FirstSymMatr[0][0],PLLSymbolLine^.SymbolsParam.FirstSymMatr[0][1]));
 
                                     PLLSymbolLine^.SymbolsParam.sx:=oneVertexlength(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[0])^)/oneVertexlength(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr[1])^);

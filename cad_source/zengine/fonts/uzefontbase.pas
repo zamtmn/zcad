@@ -20,7 +20,7 @@ unit uzefontbase;
 {$INCLUDE def.inc}
 interface
 uses uzgprimitives,uzglvectorobject,memman,strproc,UGDBOpenArrayOfByte,gdbasetypes,UGDBOpenArrayOfData,sysutils,
-     gdbase,geometry;
+     gdbase,uzegeometry;
 type
 {EXPORT+}
 PBASEFont=^BASEFont;

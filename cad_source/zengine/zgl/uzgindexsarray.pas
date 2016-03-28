@@ -20,7 +20,7 @@ unit uzgindexsarray;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
-geometry;
+     uzegeometry;
 type
 {Export+}
 ZGLIndexsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=TArrayIndex*)

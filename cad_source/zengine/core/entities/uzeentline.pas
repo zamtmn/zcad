@@ -23,7 +23,7 @@ interface
 uses LCLProc,uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,uzglgeometry,
      UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,uzeentsubordinated,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBOpenArrayOfByte,GDBase,uzeconsts,
-     uzglviewareadata,geometry,uzeffdxfsupport,memman;
+     uzglviewareadata,uzegeometry,uzeffdxfsupport,memman;
 type
                  {l_1_4:GDBvertex;(*hidden_in_objinsp*)
                  l_1_3:GDBvertex;(*hidden_in_objinsp*)
@@ -107,7 +107,7 @@ begin
      dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
      processaxis(posr,dir);
      //posr.arrayworldaxis.Add(@dir);
-     tv:=geometry.vectordot(dir,zwcs);
+     tv:=uzegeometry.vectordot(dir,zwcs);
      processaxis(posr,tv);
      //posr.arrayworldaxis.Add(@tv);
 end;
@@ -649,7 +649,7 @@ begin
 end;
 procedure GDBObjLine.TransformAt;
 begin
-  CoordInOCS.lbegin:=geometry.VectorTransform3D(pgdbobjline(p)^.CoordInOCS.lBegin,t_matrix^);
+  CoordInOCS.lbegin:=uzegeometry.VectorTransform3D(pgdbobjline(p)^.CoordInOCS.lBegin,t_matrix^);
   CoordInOCS.lend:=VectorTransform3D(pgdbobjline(p)^.CoordInOCS.lend,t_matrix^);
 end;
 function GDBObjLine.beforertmodify;
@@ -698,8 +698,8 @@ begin
                            CoordInOCS.lend:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
                       end;
                os_midle:begin
-                             tv:=geometry.VertexSub(CoordInOCS.lend,CoordInOCS.lbegin);
-                             tv:=geometry.VertexMulOnSc(tv,0.5);
+                             tv:=uzegeometry.VertexSub(CoordInOCS.lend,CoordInOCS.lbegin);
+                             tv:=uzegeometry.VertexMulOnSc(tv,0.5);
                              tv2:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
                              CoordInOCS.lbegin:=VertexSub(tv2, tv);
                              CoordInOCS.lend:=VertexAdd(tv2,tv);

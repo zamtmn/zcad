@@ -10,7 +10,7 @@ uses
   {From ZCAD}
   memman,                                                                       //zcad memorymanager
   GDBase, GDBasetypes,                                                          //zcad basetypes
-  geometry,                                                                     //some mathematical and geometrical support
+  uzegeometry,                                                                     //some mathematical and geometrical support
   uzefontmanager,uzeffshx,                                                        //fonts manager and SHX fileformat support
   uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,                          //generic view areas support
   uzglviewareaogl,uzglviewareagdi,                                           //gdi and opengl wiewareas
@@ -153,7 +153,7 @@ var
    WADrawControl:TCADControl;
 begin
      FontManager.CreateBaseFont;//Load default font (gewind.shx - simply vector font in program resources)
-     sysvarDISPSystmGeometryDraw:=CheckBox1.Checked;//Draw|notdraw help geometry (insert points, bounding boxes...)
+     sysvarDISPSystmGeometryDraw:=CheckBox1.Checked;//Draw|notdraw help uzegeometry (insert points, bounding boxes...)
 
      pdrawing1:=CreateSimpleDWG;//create drawing
 
@@ -248,7 +248,7 @@ begin
   for i:=1 to SpinEdit1.Value do
   begin
     v1:=CreateRandomVertex(1000,500,_3d);                       //line coord
-    v2:=geometry.VertexAdd(v1,CreateRandomVertex(1000,500,_3d));//line coord
+    v2:=uzegeometry.VertexAdd(v1,CreateRandomVertex(1000,500,_3d));//line coord
 
     PLineEnt:=GDBObjLine.CreateInstance;                    //create line
     PLineEnt^.CoordInOCS.lBegin:=v1;                        //setup coord
@@ -293,7 +293,7 @@ begin
          lw.endw:=CreateRandomDouble(10);
          lw.startw:=CreateRandomDouble(10);
          PLWPolyLineEnt^.Width2D_in_OCS_Array.Add(@lw);
-         v1:=geometry.Vertex2DAdd(v1,CreateRandomVertex2D(100,50));
+         v1:=uzegeometry.Vertex2DAdd(v1,CreateRandomVertex2D(100,50));
     end;
     if vcount>2 then
                     PLWPolyLineEnt^.closed:=random(10)>5;          //random close lwpolyline
@@ -328,7 +328,7 @@ begin
     for j:=0 to 2 do
     begin
          pobj^.PInOCS[j]:=v1;
-         v1:=geometry.VertexAdd(v1,CreateRandomVertex(100,50,Form1.ChkBox3D.Checked));
+         v1:=uzegeometry.VertexAdd(v1,CreateRandomVertex(100,50,Form1.ChkBox3D.Checked));
     end;
     if istriangle then
                       pobj^.PInOCS[3]:=pobj^.PInOCS[2]
@@ -357,14 +357,14 @@ begin
         GDBLineID:begin
                        l:=PGDBObjLine(pv)^.Length/10;
                        hl:=l/2;
-                       PGDBObjLine(pv)^.CoordInOCS.lBegin:=geometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lBegin,CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked));
-                       PGDBObjLine(pv)^.CoordInOCS.lEnd:=geometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lEnd,CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked));
+                       PGDBObjLine(pv)^.CoordInOCS.lBegin:=uzegeometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lBegin,CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked));
+                       PGDBObjLine(pv)^.CoordInOCS.lEnd:=uzegeometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lEnd,CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked));
                        pv^.YouChanged(GetCurrentDrawing^);
                   end;
         GDBCircleID:begin
                        l:=PGDBObjCircle(pv)^.Radius;
                        hl:=l/2;
-                       PGDBObjCircle(pv)^.Local.P_insert:=geometry.VertexAdd(PGDBObjCircle(pv)^.Local.P_insert,CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked));
+                       PGDBObjCircle(pv)^.Local.P_insert:=uzegeometry.VertexAdd(PGDBObjCircle(pv)^.Local.P_insert,CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked));
                        PGDBObjCircle(pv)^.Radius:=PGDBObjCircle(pv)^.Radius+CreateRandomDouble(l)-hl;
                        if PGDBObjCircle(pv)^.Radius<=0 then PGDBObjCircle(pv)^.Radius:=CreateRandomDouble(9)+1;
                        pv^.YouChanged(GetCurrentDrawing^);
@@ -419,7 +419,7 @@ begin
     for j:=1 to vcount do
     begin
          pobj^.AddVertex(v1);
-         v1:=geometry.VertexAdd(v1,CreateRandomVertex(100,50,Form1.ChkBox3D.Checked));
+         v1:=uzegeometry.VertexAdd(v1,CreateRandomVertex(100,50,Form1.ChkBox3D.Checked));
     end;
     if vcount>2 then
                     pobj^.closed:=random(10)>5;
@@ -529,7 +529,7 @@ begin
     pobj^.textprop.oblique:=(random(30)-15)*pi/180;
     angl:=pi*random;
     pobj^.textprop.angle:=angl;
-    pobj^.local.basis.OX:=VectorTransform3D(PGDBObjText(pobj)^.local.basis.OX,geometry.CreateAffineRotationMatrix(PGDBObjText(pobj)^.Local.basis.oz,-angl));
+    pobj^.local.basis.OX:=VectorTransform3D(PGDBObjText(pobj)^.local.basis.OX,uzegeometry.CreateAffineRotationMatrix(PGDBObjText(pobj)^.Local.basis.oz,-angl));
     GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
     SetEntityLayer(pobj,GetCurrentDrawing);
     pobj^.BuildGeometry(GetCurrentDrawing^);

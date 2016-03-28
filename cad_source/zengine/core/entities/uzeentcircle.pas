@@ -23,7 +23,7 @@ uses
     uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzecamera,
     UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,uzehelpobj,UGDBSelectedObjArray,
     uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,
-    GDBase,uzeentwithlocalcs,uzeconsts,uzglviewareadata,geometry,uzeffdxfsupport,memman;
+    GDBase,uzeentwithlocalcs,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,memman;
 type
 //PProjPoint:PGDBPolyPoint2DArray;
 //PProjPoint:{-}PGDBPolyPoint2DArray{/GDBPointer/};
@@ -103,7 +103,7 @@ begin
      ppoint:=VectorTransform3D(point,m1);
      if (abs(ppoint.z)>eps) then
                                 exit(false);
-     if abs(geometry.Vertexlength(point,P_insert_in_WCS)-radius)<bigeps then
+     if abs(uzegeometry.Vertexlength(point,P_insert_in_WCS)-radius)<bigeps then
                                                                      begin
                                                                        result:=true;
                                                                        objects.AddRef(self);
@@ -116,14 +116,14 @@ var tv,dir:gdbvertex;
 begin
      dir:=VertexSub(P_insert_in_WCS,posr.worldcoord);
      processaxis(posr,dir);
-     tv:=geometry.vectordot(dir,zwcs);
+     tv:=uzegeometry.vectordot(dir,zwcs);
      processaxis(posr,tv);
 end;
 
 function GDBObjCircle.GetTangentInPoint(point:GDBVertex):GDBVertex;
 begin
-     point:=geometry.VertexSub(self.P_insert_in_WCS,point);
-     result:=normalizevertex(geometry.vectordot(point,self.Local.basis.oz));
+     point:=uzegeometry.VertexSub(self.P_insert_in_WCS,point);
+     result:=normalizevertex(uzegeometry.vectordot(point,self.Local.basis.oz));
 end;
 procedure GDBObjCircle.ReCalcFromObjMatrix;
 //var
@@ -140,7 +140,7 @@ begin
                                                                 else
                                                                     ox:=CrossVertex(ZWCS,Local.oz);
      normalizevertex(ox);
-     rotate:=geometry.scalardot(Local.ox,ox);
+     rotate:=uzegeometry.scalardot(Local.ox,ox);
      rotate:=arccos(rotate)*180/pi;
      if local.OX.y<-eps then rotate:=360-rotate;}
 end;
@@ -655,10 +655,10 @@ begin
                                       plane,tv)
             then
             begin
-                 n:=geometry.VertexSub(tv,P_insert_in_WCS);
-                 n:=geometry.NormalizeVertex(n);
-                 n:=geometry.VertexMulOnSc(n,radius);
-                 osp.worldcoord:=geometry.VertexAdd(P_insert_in_WCS,n);
+                 n:=uzegeometry.VertexSub(tv,P_insert_in_WCS);
+                 n:=uzegeometry.NormalizeVertex(n);
+                 n:=uzegeometry.VertexMulOnSc(n,radius);
+                 osp.worldcoord:=uzegeometry.VertexAdd(P_insert_in_WCS,n);
                  {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,tv);
                  osp.dispcoord:=tv;
                  osp.ostype:=os_nearest;

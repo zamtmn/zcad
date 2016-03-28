@@ -19,7 +19,7 @@
 unit UGDBPolyLine2DArray;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase, geometry,uzgloglstatemanager;
+uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase, uzegeometry,uzgloglstatemanager;
 type
 {REGISTEROBJECTTYPE GDBPolyline2DArray}
 {Export+}
@@ -55,7 +55,7 @@ begin
          tv.x:=pv^.x;
          tv.y:=pv^.y;
          tv.z:=0;
-         tv:=geometry.VectorTransform3D(tv,t_matrix);
+         tv:=VectorTransform3D(tv,t_matrix);
          pv^.x:=tv.x;
          pv^.y:=tv.y;
        inc(pv);
@@ -112,7 +112,7 @@ begin
        v2.y:=pvnext.y-pv.y;
        v2.z:=0;
 
-       if geometry.IsVectorNul(geometry.vectordot(v1,v2))then
+       if IsVectorNul(vectordot(v1,v2))then
        begin
             result:=true;
             self.deleteelement(i);

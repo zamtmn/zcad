@@ -20,7 +20,7 @@ unit uzgvertex3sarray;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
-geometry;
+     uzegeometry;
 type
 {Export+}
 ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBvertex3S*)

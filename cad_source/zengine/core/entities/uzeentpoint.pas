@@ -23,7 +23,7 @@ interface
 uses uzeentityfactory,uzgldrawcontext,uzeffdxfsupport,uzedrawingdef,uzecamera,
      UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,UGDBSelectedObjArray,
      uzeentsubordinated,uzeent3d,uzeentity,sysutils,UGDBOpenArrayOfByte,
-     GDBase,uzeconsts,uzglviewareadata,geometry,memman;
+     GDBase,uzeconsts,uzglviewareadata,uzegeometry,memman;
 type
 {REGISTEROBJECTTYPE GDBObjPoint}
 {Export+}
@@ -64,7 +64,7 @@ implementation
 //    log;
 procedure GDBObjPoint.TransformAt;
 begin
-  P_insertInOCS:=geometry.VectorTransform3D(PGDBObjPoint(p)^.P_insertInOCS,t_matrix^);
+  P_insertInOCS:=uzegeometry.VectorTransform3D(PGDBObjPoint(p)^.P_insertInOCS,t_matrix^);
   //format;
 end;
 procedure GDBObjPoint.getoutbound;

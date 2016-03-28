@@ -21,7 +21,7 @@ unit uzeentdimdiametric;
 interface
 uses uzgldrawcontext,uzeentityfactory,uzeentdimension,uzestylesdim,uzestyleslayers,
      uzedrawingdef,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,
-     UGDBControlPointArray,geometry,uzeentline,gdbasetypes,uzeentcomplex,sysutils,
+     UGDBControlPointArray,uzegeometry,uzeentline,gdbasetypes,uzeentcomplex,sysutils,
      UGDBSelectedObjArray,uzeentity,GDBase,uzeconsts,uzeffdxfsupport,memman,
      uzeentsubordinated;
 (*
@@ -223,7 +223,7 @@ begin
                                  end
                              else
                                  begin
-                                      DrawDimensionLine{LinePart}(geometry.VertexDmorph(DimData.P11InOCS,vectord, Self.dimtextw),DimData.P15InWCS,true,false,false,drawing,dc)
+                                      DrawDimensionLine{LinePart}(uzegeometry.VertexDmorph(DimData.P11InOCS,vectord, Self.dimtextw),DimData.P15InWCS,true,false,false,drawing,dc)
                                  end;
    inherited;
 end;

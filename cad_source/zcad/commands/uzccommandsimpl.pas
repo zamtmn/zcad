@@ -21,7 +21,7 @@ unit uzccommandsimpl;
 
 
 interface
-uses uzgldrawcontext,uzglviewareageneral,uzeconsts,uzcsysvars,geometry,
+uses uzgldrawcontext,uzglviewareageneral,uzeconsts,uzcsysvars,uzegeometry,
      varmandef,gdbasetypes,gdbase,uzccommandsabstract,uzccommandsmanager,
      uzglviewareadata,uzcdrawings,memman,uzcshared;
 type

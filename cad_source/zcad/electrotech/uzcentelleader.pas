@@ -11,7 +11,7 @@ interface
 uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      uzeentabstracttext,uzeentgenericsubentry,uzetrash,uzedrawingdef,uzecamera,
      uzcsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,
-     uzeenttext,uzeentdevice,uzcentcable,uzeenttable,UGDBControlPointArray,geometry,
+     uzeenttext,uzeentdevice,uzcentcable,uzeenttable,UGDBControlPointArray,uzegeometry,
      uzeentline,gdbasetypes,uzeentcomplex,sysutils,UGDBStringArray,
      UGDBSelectedObjArray,uzeentity,varmandef,GDBase,uzeconsts,uzeffdxfsupport,
      memman,uzeentsubordinated;
@@ -100,7 +100,7 @@ begin
 end;
 procedure GDBObjElLeader.TransformAt;
 begin
-  MainLine.CoordInOCS.lbegin:=geometry.VectorTransform3D(PGDBObjElLeader(p)^.mainline .CoordInOCS.lBegin,t_matrix^);
+  MainLine.CoordInOCS.lbegin:=uzegeometry.VectorTransform3D(PGDBObjElLeader(p)^.mainline .CoordInOCS.lBegin,t_matrix^);
   MainLine.CoordInOCS.lend:=VectorTransform3D(PGDBObjElLeader(p)^.mainline.CoordInOCS.lend,t_matrix^);
 end;
 procedure GDBObjElLeader.transform;
@@ -415,25 +415,25 @@ begin
 
      if pdev=nil then
      begin
-     tv:=geometry.vectordot(VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin),Local.basis.OZ);
-     tv:=geometry.NormalizeVertex(tv);
-     tv:=geometry.VertexMulOnSc(tv,scale);
+     tv:=uzegeometry.vectordot(VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin),Local.basis.OZ);
+     tv:=uzegeometry.NormalizeVertex(tv);
+     tv:=uzegeometry.VertexMulOnSc(tv,scale);
 
      if pcable<>nil then
                         begin
                              tv2:=GetDirInPoint(pcable^.VertexArrayInWCS,mainline.CoordInWCS.lBegin,false);
-                             //tv3:=geometry.vectordot(tv2,VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin));
+                             //tv3:=uzegeometry.vectordot(tv2,VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin));
                              if {tv3.z}scalardot(tv2,VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin))>0 then
-                                            tv2:=geometry.vectordot(tv2,Local.basis.OZ)
+                                            tv2:=uzegeometry.vectordot(tv2,Local.basis.OZ)
                                         else
-                                            tv2:=geometry.vectordot(Local.basis.OZ,tv2);
-                             //tv2:=geometry.vectordot(tv2,Local.OZ);
-                             tv2:=geometry.NormalizeVertex(tv2);
-                             tv2:=geometry.VertexMulOnSc(tv2,scale);
+                                            tv2:=uzegeometry.vectordot(Local.basis.OZ,tv2);
+                             //tv2:=uzegeometry.vectordot(tv2,Local.OZ);
+                             tv2:=uzegeometry.NormalizeVertex(tv2);
+                             tv2:=uzegeometry.VertexMulOnSc(tv2,scale);
 
                              tv:=vertexadd(tv2,tv);
-                             tv:=geometry.NormalizeVertex(tv);
-                             tv:=geometry.VertexMulOnSc(tv,scale);
+                             tv:=uzegeometry.NormalizeVertex(tv);
+                             tv:=uzegeometry.VertexMulOnSc(tv,scale);
 
                              //tv:=tv2;
                         end;
@@ -710,11 +710,11 @@ begin
      scale:=1;
      twidth:=0;
      //vp.ID:=GDBElLeaderID;
-     MainLine.init(@self,vp.Layer,vp.LineWeight,geometry.VertexMulOnSc(onevertex,-10),nulvertex);
+     MainLine.init(@self,vp.Layer,vp.LineWeight,uzegeometry.VertexMulOnSc(onevertex,-10),nulvertex);
      //MainLine.Format;
-     tv:=geometry.vectordot(geometry.VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin) ,Local.basis.OZ);
+     tv:=uzegeometry.vectordot(uzegeometry.VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin) ,Local.basis.OZ);
      if not IsVectorNul(tv) then
-                                tv:=geometry.NormalizeVertex(tv);
+                                tv:=uzegeometry.NormalizeVertex(tv);
      MarkLine.init(@self,vp.Layer,vp.LineWeight,VertexSub(MainLine.CoordInOCS.lBegin,tv),VertexAdd(MainLine.CoordInOCS.lBegin,tv));
      //MarkLine.Format;
 

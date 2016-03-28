@@ -14,7 +14,7 @@ uses
   uzeentabstracttext,uzeenttext,UGDBStringArray,uzeentityfactory,uzcsysvars,strproc,
   gdbasetypes,uzccommandsmanager,uzclog,UGDBOpenArrayOfPObjects,
   uzccommandsabstract,uzccommandsimpl,gdbase,uzcdrawings,uzeutils,uzcutils,sysutils,
-  varmandef,UGDBOpenArrayOfByte,uzeffdxf,uzcinterface,geometry,memman,uzeconsts,
+  varmandef,UGDBOpenArrayOfByte,uzeffdxf,uzcinterface,uzegeometry,memman,uzeconsts,
   uzccomdraw,UGDBVisibleOpenArray,uzeentline,paths,uzcshared,uzeentblockinsert,
   varman,uzccablemanager,uzeentdevice,uzeentmtext,math;
 
@@ -922,7 +922,7 @@ begin
 
          drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
 
-  coord:=geometry.NulVertex;
+  coord:=uzegeometry.NulVertex;
   coord.y:=0;
   coord.x:=0;
   prevname:='';

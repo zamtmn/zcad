@@ -19,7 +19,7 @@
 unit UGDBPolyPoint2DArray;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,UGDBOpenArrayOfData, sysutils,gdbase, geometry;
+uses gdbasetypes,UGDBOpenArrayOfData, sysutils,gdbase, uzegeometry;
      //glstatemanager;
 type
 {Export+}

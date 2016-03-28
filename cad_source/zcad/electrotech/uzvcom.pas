@@ -71,7 +71,7 @@ uses
   uzeentdevice,
   UGDBOpenArrayOfPV,
 
-  geometry,
+  uzegeometry,
   uzeentitiesmanager,
 
   uzcshared,
@@ -187,7 +187,7 @@ begin
              if pc2^.GetObjType=GDBCableID then//если он кабель то
              begin
                   FirstPoint:=PGDBVertex(pc2^.VertexArrayInWCS.getelement(0))^;//получаем точку в начале найденного кабеля
-                  if geometry.Vertexlength(LastPoint,FirstPoint)<MyEPSILON then//если конец кабеля совпадает с началом с погрешностью, то
+                  if uzegeometry.Vertexlength(LastPoint,FirstPoint)<MyEPSILON then//если конец кабеля совпадает с началом с погрешностью, то
                   begin
                        pc2^.SelectQuik;            //выделяем
                        RecurseSearhCable(pc2);     //рекурсивно ищем на конце найденного кабеля
@@ -250,7 +250,7 @@ begin
          l2end.y := 60;
          l2end.z := 0;
 
-         l222 := geometry.intercept3d(l1begin,l1end,l2begin,l2end).interceptcoord;
+         l222 := uzegeometry.intercept3d(l1begin,l1end,l2begin,l2end).interceptcoord;
 
          if pc^.GetObjType=GDBCableID then                      //проверяем, кабель это или нет
 
@@ -532,9 +532,9 @@ begin
                               //удлиняем каждую проверяемую линиию, для исключения погрешностей
                               extNextLine:= extendedLineFunc(PGDBVertex(pc^.VertexArrayInOCS.getelement(j-1))^,PGDBVertex(pc^.VertexArrayInOCS.getelement(j))^,Epsilon,false) ;
                               //Производим сравнение основной линии с перебираемой линией
-                              if geometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).isintercept then
+                              if uzegeometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).isintercept then
                               begin
-                                interceptVertex:=geometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).interceptcoord;
+                                interceptVertex:=uzegeometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).interceptcoord;
                                 //выполнить проверку на есть ли уже такая вершина
                                  if dublicateVertex(listDevice,interceptVertex,Epsilon) = false then begin
                                   infoDevice.deviceEnt:=nil;
@@ -624,7 +624,7 @@ begin
          l2end.y := 60;
          l2end.z := 0;
 
-         l222 := geometry.intercept3d(l1begin,l1end,l2begin,l2end).interceptcoord;
+         l222 := uzegeometry.intercept3d(l1begin,l1end,l2begin,l2end).interceptcoord;
 
          if pc^.GetObjType=GDBCableID then                      //проверяем, кабель это или нет
 

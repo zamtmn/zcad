@@ -19,7 +19,7 @@
 unit uzeffshx;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitivescreator,uzglvectorobject,uzefontmanager,uzefontshx,geometry,
+uses uzgprimitivescreator,uzglvectorobject,uzefontmanager,uzefontshx,uzegeometry,
      {$IFNDEF DELPHI}{intftranslations,}{$ENDIF}
      uzefont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,{log,}sysutils,
      UGDBOpenArrayOfByte,gdbasetypes,{SysInfo,}gdbase,memman,uzgprimitives;

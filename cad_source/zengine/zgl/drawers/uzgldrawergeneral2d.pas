@@ -19,7 +19,7 @@
 unit uzgldrawergeneral2d;
 {$INCLUDE def.inc}
 interface
-uses {$IFNDEF DELPHI}LCLIntf,{$ENDIF}{$IFDEF DELPHI}windows,Types,{$ENDIF}Controls,uzglviewareaabstract,uzgldrawergeneral,uzgprimitivescreator,UGDBOpenArrayOfData,uzgldrawerabstract,uzepalette,Classes,Graphics,gdbase,gdbasetypes,geometry;
+uses {$IFNDEF DELPHI}LCLIntf,{$ENDIF}{$IFDEF DELPHI}windows,Types,{$ENDIF}Controls,uzglviewareaabstract,uzgldrawergeneral,uzgprimitivescreator,UGDBOpenArrayOfData,uzgldrawerabstract,uzepalette,Classes,Graphics,gdbase,gdbasetypes,uzegeometry;
 type
 DMatrix4DStackArray=array[0..10] of DMatrix4D;
 
@@ -482,7 +482,7 @@ function TZGLGeneral2DDrawer.TranslatePointWithLocalCS(const p:GDBVertex3S):GDBV
 begin
      if mstackindex>-1 then
                            begin
-                               result:=geometry.VectorTransform3D(p,matr);
+                               result:=uzegeometry.VectorTransform3D(p,matr);
                                result.x:=result.x*sx+tx;
                                result.y:=result.y*sy+ty;
                                result.z:=result.z;
@@ -507,7 +507,7 @@ begin
      case mode of
                  TRM_ModelSpace:
                  begin
-                      m:=geometry.MatrixMultiply(matrixs.pmodelMatrix^,matrixs.pprojMatrix^);
+                      m:=uzegeometry.MatrixMultiply(matrixs.pmodelMatrix^,matrixs.pprojMatrix^);
                       sx:=(m[0][0]/m[3][3]*0.5)*matrixs.pviewport[2] ;
                       sy:=-(m[1][1]/m[3][3]*0.5)*matrixs.pviewport[3] ;
                       tx:=(m[3][0]/m[3][3]*0.5+0.5)*matrixs.pviewport[2];

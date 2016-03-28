@@ -24,7 +24,7 @@ uses
  StdCtrls,ExtCtrls,Controls,Classes,menus,Forms,fileutil,graphics,
  gdbase, memman,uzcdrawings,math,uzccommandsmanager,varman,languade,
  UGDBTracePropArray,varmandef,
- geometry,uzcshared,UGDBStringArray,uzcinterface,uzctreenode;
+ uzegeometry,uzcshared,UGDBStringArray,uzcinterface,uzctreenode;
 
 const
      cheight=48;
@@ -378,7 +378,7 @@ begin
         if (drawings.GetCurrentDWG.wa.param.polarlinetrace = 1)and commandmanager.CurrentCommandNotUseCommandLine then
         begin
           tv:=pgdbvertex(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arrayworldaxis.getelement(drawings.GetCurrentDWG.wa.param.axisnum))^;
-          tv:=geometry.normalizevertex(tv);
+          tv:=uzegeometry.normalizevertex(tv);
           temp.x := drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].worldcoord.x + len * tv.x * sign(ptraceprop(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getelement(drawings.GetCurrentDWG.wa.param.axisnum)).tmouse);
           temp.y := drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].worldcoord.y + len * tv.y * sign(ptraceprop(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getelement(drawings.GetCurrentDWG.wa.param.axisnum)).tmouse);
           temp.z := drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].worldcoord.z + len * tv.z * sign(ptraceprop(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getelement(drawings.GetCurrentDWG.wa.param.axisnum)).tmouse);
@@ -433,7 +433,7 @@ begin
            begin
                  if drawings.GetCurrentDWG<>nil then
                  if drawings.GetCurrentDWG.wa.getviewcontrol<>nil then
-                 commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,geometry.CreateVertex(strtodouble(parseresult^.getGDBString(0)),
+                 commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,uzegeometry.CreateVertex(strtodouble(parseresult^.getGDBString(0)),
                                                                                               strtodouble(parseresult^.getGDBString(1)),
                                                                                               strtodouble(parseresult^.getGDBString(2))),MZW_LBUTTON,nil);
                  if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
@@ -442,7 +442,7 @@ begin
            begin
                  if drawings.GetCurrentDWG<>nil then
                  if drawings.GetCurrentDWG.wa.getviewcontrol<>nil then
-                 commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,geometry.CreateVertex(strtodouble(parseresult^.getGDBString(0)),
+                 commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,uzegeometry.CreateVertex(strtodouble(parseresult^.getGDBString(0)),
                                                                                               strtodouble(parseresult^.getGDBString(1)),
                                                                                               0),MZW_LBUTTON,nil);
                  if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
@@ -455,7 +455,7 @@ begin
                  begin
 
                  tv:=pgdbvertex(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arrayworldaxis.getelement(drawings.GetCurrentDWG.wa.param.axisnum))^;
-                 tv:=geometry.normalizevertex(tv);
+                 tv:=uzegeometry.normalizevertex(tv);
                  temp.x := drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].worldcoord.x + strtodouble(parseresult^.getGDBString(0)) * tv.x * sign(ptraceprop(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getelement(drawings.GetCurrentDWG.wa.param.axisnum)).tmouse);
                  temp.y := drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].worldcoord.y + strtodouble(parseresult^.getGDBString(0)) * tv.y * sign(ptraceprop(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getelement(drawings.GetCurrentDWG.wa.param.axisnum)).tmouse);
                  temp.z := drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].worldcoord.z + strtodouble(parseresult^.getGDBString(0)) * tv.z * sign(ptraceprop(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getelement(drawings.GetCurrentDWG.wa.param.axisnum)).tmouse);

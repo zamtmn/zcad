@@ -554,7 +554,6 @@ begin
                 currentSubObj:=pObjDevice^.VarObjArray.beginiterate(ir_inDevice);
                 if (currentSubObj<>nil) then
                 repeat
-                    begin
                       if currentSubObj^.GetLayer=psldb then BEGIN
                         if currentSubObj^.vp.ID=GDBLineID then begin
 
@@ -563,7 +562,7 @@ begin
 
                         end;
                       end;
-                    currentSubObj:=pObjDevice^.VarObjArray.iterate(ir_inDevice2);
+                    currentSubObj:=pObjDevice^.VarObjArray.iterate(ir_inDevice);
                 until currentSubObj=nil;
 
 

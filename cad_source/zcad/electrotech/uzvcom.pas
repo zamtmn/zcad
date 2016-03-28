@@ -90,6 +90,7 @@ uses
   uzccommandsimpl, //Commands manager and related objects
                       //менеджер команд и объекты связанные с ним
   uzcdrawing,
+  uzedrawingsimple,
   uzcdrawings,     //Drawings manager, all open drawings are processed him
                       //"Менеджер" чертежей
   uzcutils,         //different functions simplify the creation entities, while there are very few
@@ -420,6 +421,8 @@ var
 
     psldb:pointer;
 
+    drawing:TSimpleDrawing;
+
 
     //PinfoCable:PTStructCableLine;
 
@@ -483,6 +486,7 @@ begin
  // ptest := listCable[0].cableEnt;
 
   ///***+++Ищем пересечения каждого кабеля либо друг с другом либо с граними девайсов+++***///
+  drawing:=gdb.GetCurrentDWG^;
   psldb:=drawing.GetLayerTable^.{gdb.GetCurrentDWG.LayerTable.}getAddres('SYS_DEVICE_BORDER');
 
   for i:=0 to listCable.Size-1 do

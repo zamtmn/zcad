@@ -421,7 +421,7 @@ var
 
     psldb:pointer;
 
-    drawing:TSimpleDrawing;
+    drawing:PTSimpleDrawing;
 
 
     //PinfoCable:PTStructCableLine;
@@ -486,8 +486,8 @@ begin
  // ptest := listCable[0].cableEnt;
 
   ///***+++Ищем пересечения каждого кабеля либо друг с другом либо с граними девайсов+++***///
-  drawing:=gdb.GetCurrentDWG^;
-  psldb:=drawing.GetLayerTable^.{gdb.GetCurrentDWG.LayerTable.}getAddres('SYS_DEVICE_BORDER');
+  drawing:=gdb.GetCurrentDWG;
+  psldb:=drawing^.GetLayerTable^.{gdb.GetCurrentDWG.LayerTable.}getAddres('SYS_DEVICE_BORDER');
 
   for i:=0 to listCable.Size-1 do
   begin

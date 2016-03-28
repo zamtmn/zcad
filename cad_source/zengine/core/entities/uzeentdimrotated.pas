@@ -37,6 +37,7 @@ GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimens
                         procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
                         constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
+                        function GetObjType:TObjID;virtual;
                    end;
 {EXPORT-}
 implementation
@@ -44,16 +45,20 @@ implementation
 constructor GDBObjRotatedDimension.initnul;
 begin
   inherited initnul(owner);
-  vp.ID := GDBRotatedDimensionID;
+  //vp.ID := GDBRotatedDimensionID;
   vectorD:=XWCS;
   vectorN:=YWCS;
 end;
 constructor GDBObjRotatedDimension.init;
 begin
   inherited init(own,layeraddres, lw);
-  vp.ID := GDBRotatedDimensionID;
+  //vp.ID := GDBRotatedDimensionID;
   vectorD:=XWCS;
   vectorN:=YWCS;
+end;
+function GDBObjRotatedDimension.GetObjType;
+begin
+     result:=GDBRotatedDimensionID;
 end;
 procedure GDBObjRotatedDimension.SaveToDXF;
 begin
@@ -135,7 +140,7 @@ begin
   tvo^.PDimStyle:=PDimStyle;
   tvo^.vectorD:=vectorD;
   tvo^.vectorN:=vectorN;
-  tvo^.vp.ID := GDBRotatedDimensionID;
+  //tvo^.vp.ID := GDBRotatedDimensionID;
   result := tvo;
 end;
 function GDBObjRotatedDimension.GetObjTypeName;

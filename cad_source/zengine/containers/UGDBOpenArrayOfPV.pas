@@ -63,7 +63,7 @@ begin
          pvisible:=beginiterate(ir);
          if pvisible<>nil then
          repeat
-               if pvisible.vp.ID=objID then
+               if pvisible.GetObjType=objID then
                begin
                     pvd:=PTObjectUnit(pvisible^.ou.Instance)^.FindVariable(vname);
                     if pvd<>nil then
@@ -301,7 +301,7 @@ begin
   if ir.itc=12 then
                          count:=count;
 
-  {if p^.vp.ID=0 then
+  {if p^.GetObjType=0 then
                          p^.vp.ID:=p^.vp.ID;}
        if (p^.infrustum=infrustumactualy)or(p^.Selected) then
                                             begin
@@ -320,7 +320,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       if p^.vp.ID<>0 then
+       //if p^.vp.ID<>0 then
                          //p^.vp.ID:=p^.vp.ID;
        if p^.infrustum=dc.DrawingContext.infrustumactualy then
                            p^.DrawWithAttrib({infrustumactualy,subrender}dc);
@@ -337,7 +337,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       if p^.vp.ID<>0 then
+       //if p^.vp.ID<>0 then
                          //p^.vp.ID:=p^.vp.ID;
        if p^.infrustum=dc.DrawingContext.infrustumactualy then
                            p^.DrawGeometry(lw,dc{infrustumactualy,subrender});
@@ -354,7 +354,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       if p^.vp.ID<>0 then
+       //if p^.vp.ID<>0 then
                          //p^.vp.ID:=p^.vp.ID;
        if p^.infrustum=dc.DrawingContext.infrustumactualy then
                            p^.DrawOnlyGeometry(lw,dc{infrustumactualy,subrender});

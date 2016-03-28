@@ -67,6 +67,7 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
 
                      class function CreateInstance:PGDBObjBlockInsert;static;
                      function GetNameInBlockTable:GDBString;virtual;
+                     function GetObjType:TObjID;virtual;
                   end;
 {Export-}
 procedure SetBlockInsertGeomProps(PBlockInsert:PGDBObjBlockInsert;args:array of const);
@@ -374,7 +375,7 @@ begin
   pblockdef:=nil;
   //GDBGetMem(self.varman,sizeof(varmanager));
   bp.ListPos.Owner:=own;
-  vp.ID:=GDBBlockInsertID;
+  //vp.ID:=GDBBlockInsertID;
   scale:=ScaleOne;
   rotate:=0;
   index:=-1;
@@ -388,7 +389,7 @@ begin
   POINTER(name):=nil;
   //GDBGetMem(self.varman,sizeof(varmanager));
   bp.ListPos.Owner:=nil;
-  vp.ID:=GDBBlockInsertID;
+  //vp.ID:=GDBBlockInsertID;
   scale:=ScaleOne;
   rotate:=0;
   index:=-1;
@@ -399,6 +400,10 @@ begin
   //varman.mergefromfile(programpath+'components\defaultblockvar.ini');
   pprojoutbound:=nil;
 end;
+function GDBObjBlockInsert.GetObjType;
+begin
+     result:=GDBBlockInsertID;
+end;
 function GDBObjBlockInsert.Clone;
 var tvo: PGDBObjBlockInsert;
 begin
@@ -406,7 +411,7 @@ begin
   //tvo^.ObjMatrix:=objmatrix;;
   tvo^.init({bp.owner}own,vp.Layer, vp.LineWeight);
   tvo^.scale:=scale;
-  tvo^.vp.id := GDBBlockInsertID;
+  //tvo^.vp.id := GDBBlockInsertID;
   //tvo^.vp.layer :=vp.layer;
   CopyVPto(tvo^);
   GDBPointer(tvo^.name) := nil;

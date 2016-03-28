@@ -74,6 +74,7 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
 
 
                  class function CreateInstance:PGDBObjLWPolyline;static;
+                 function GetObjType:TObjID;virtual;
            end;
 {Export-}
 implementation
@@ -459,7 +460,7 @@ end;
 constructor GDBObjLWpolyline.init;
 begin
   inherited init(own,layeraddres, lw);
-  vp.id:=GDBLWPolylineID;
+  //vp.id:=GDBLWPolylineID;
   closed := c;
   Vertex2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{B8E62148-AC02-4BDF-9F48-B9D3307013A1}',{$ENDIF}1000,c);
   Width2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{EFDA3BB3-E3AD-4D5C-97D2-FECD92A7276E}',{$ENDIF}1000);
@@ -471,7 +472,7 @@ end;
 constructor GDBObjLWpolyline.initnul;
 begin
   inherited initnul(nil);
-  vp.id:=GDBLWPolylineID;
+  //vp.id:=GDBLWPolylineID;
   {убрать в афтердесериализе}
   Vertex2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{E04F78DD-94C2-416D-A006-5050A8F52015}',{$ENDIF}1000,false);
   Width2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{BFB21020-CF58-474B-8E84-D510B269092B}',{$ENDIF}1000);
@@ -479,6 +480,10 @@ begin
   Width3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{798E46E0-01F0-42BB-9426-0F018A9F1C74}',{$ENDIF}1000, sizeof(GDBQuad3d));
   //----------------snaparray.init({$IFDEF DEBUGBUILD}'{556C3123-58FC-41AA-BA5C-C453F025ACF6}',{$ENDIF}1000);
   PProjPoint:=nil;
+end;
+function GDBObjLWpolyline.GetObjType;
+begin
+     result:=GDBLWPolylineID;
 end;
 procedure GDBObjLWpolyline.DrawGeometry;
 var i,ie: GDBInteger;
@@ -620,7 +625,7 @@ begin
   //inherited init(nil,0, -1);
   hlGDBWord:=0;
   numv:=0;
-  vp.id:=GDBLWPolylineID;
+  //vp.id:=GDBLWPolylineID;
   //bp.ListPos.owner:=@drawing;
   if bp.ListPos.owner<>nil then
                                local.p_insert:={w0^}PGDBVertex(@bp.ListPos.owner^.GetMatrix^[3])^

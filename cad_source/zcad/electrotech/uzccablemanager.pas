@@ -84,7 +84,7 @@ begin
      pobj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
      if pobj<>nil then
      repeat
-           if pobj^.vp.ID=GDBCableID then
+           if pobj^.GetObjType=GDBCableID then
            begin
                 pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
                 //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');

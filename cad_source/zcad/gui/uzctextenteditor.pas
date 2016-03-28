@@ -38,7 +38,7 @@ begin
      astring:=ConvertFromDxfString(PGDBObjText(pobj)^.Template);
 
 
-     if PGDBObjText(pobj)^.vp.ID=GDBMTextID then
+     if PGDBObjText(pobj)^.GetObjType=GDBMTextID then
      begin
      if not assigned(InfoForm) then
      begin

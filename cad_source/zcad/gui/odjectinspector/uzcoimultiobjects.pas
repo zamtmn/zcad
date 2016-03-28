@@ -237,10 +237,10 @@ begin
         begin
              if ComparePropAndVarNames(MultiPropertiesManager.MultiPropertyVector[i].MPName,PSourceVD^.name) then
              begin
-                  if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetMutableValue(pentity^.vp.ID,PMultiPropertyDataForObjects)then
+                  if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetMutableValue(pentity^.GetObjType,PMultiPropertyDataForObjects)then
                   begin
                     if not PMultiPropertyDataForObjects^.SetValueErrorRange then
-                      processProperty(pentity^.vp.ID,pentity,PMultiPropertyDataForObjects,pu,PSourceVD,MultiPropertiesManager.MultiPropertyVector[i],DC)
+                      processProperty(pentity^.GetObjType,pentity,PMultiPropertyDataForObjects,pu,PSourceVD,MultiPropertiesManager.MultiPropertyVector[i],DC)
                   end
                   else
                       if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetMutableValue(0,PMultiPropertyDataForObjects)then
@@ -333,7 +333,7 @@ begin
     if pv<>nil then
     if pv^.Selected then
     begin
-         ObjID2Counter.CountKey(pv^.vp.ID,1);
+         ObjID2Counter.CountKey(pv^.GetObjType,1);
          inc(counter);
     end;
   psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
@@ -393,10 +393,10 @@ begin
       repeat
         pv:=psd^.objaddr;
         if pv<>nil then
-        if (pv^.vp.ID=NeedObjID)or(NeedObjID=0) then
+        if (pv^.GetObjType=NeedObjID)or(NeedObjID=0) then
         if pv^.Selected then
         begin
-             if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(pv^.vp.ID,MultiPropertyDataForObjects)then
+             if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(pv^.GetObjType,MultiPropertyDataForObjects)then
              begin
                if @MultiPropertyDataForObjects.EntBeforeIterateProc<>nil then
                begin
@@ -428,10 +428,10 @@ begin
      repeat
        pv:=psd^.objaddr;
        if pv<>nil then
-       if (pv^.vp.ID=NeedObjID)or(NeedObjID=0) then
+       if (pv^.GetObjType=NeedObjID)or(NeedObjID=0) then
        if pv^.Selected then
        begin
-            if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue({NeedObjID}pv^.vp.ID,MultiPropertyDataForObjects)then
+            if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue({NeedObjID}pv^.GetObjType,MultiPropertyDataForObjects)then
             begin
               ChangedData:=CreateChangedData(pv,MultiPropertyDataForObjects.GetValueOffset,MultiPropertyDataForObjects.SetValueOffset);
               MultiPropertyDataForObjects.EntIterateProc(MultiPropertiesManager.MultiPropertyVector[i].PIiterateData,ChangedData,MultiPropertiesManager.MultiPropertyVector[i],fistrun,MultiPropertyDataForObjects.EntChangeProc,f);
@@ -583,7 +583,7 @@ begin
     if pv<>nil then
     repeat
       if pv^.Selected then
-      if (NeededObjType=0)or(pv^.vp.ID=NeededObjType)then
+      if (NeededObjType=0)or(pv^.GetObjType=NeededObjType)then
       begin
            inc(count);
            pv^.DeSelect(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);

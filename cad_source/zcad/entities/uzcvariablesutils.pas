@@ -48,7 +48,7 @@ begin
          pvisible:=arr.beginiterate(ir);
          if pvisible<>nil then
          repeat
-               if pvisible.vp.ID=objID then
+               if pvisible.GetObjType=objID then
                begin
                     pentvarext:=pvisible^.GetExtension(typeof(TVariablesExtender));
                     pvd:=pentvarext^.entityunit.FindVariable(vname);

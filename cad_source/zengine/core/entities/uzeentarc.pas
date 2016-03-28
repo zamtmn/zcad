@@ -73,6 +73,7 @@ GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
 
                  class function CreateInstance:PGDBObjArc;static;
+                 function GetObjType:TObjID;virtual;
            end;
 {EXPORT-}
 implementation
@@ -220,7 +221,7 @@ end;
 constructor GDBObjARC.initnul;
 begin
   inherited initnul(nil);
-  vp.ID := GDBArcID;
+  //vp.ID := GDBArcID;
   r := 1;
   startangle := 0;
   endangle := pi/2;
@@ -230,7 +231,7 @@ end;
 constructor GDBObjARC.init;
 begin
   inherited init(own,layeraddres, lw);
-  vp.ID := GDBArcID;
+  //vp.ID := GDBArcID;
   Local.p_insert := p;
   r := rr;
   startangle := s;
@@ -238,6 +239,10 @@ begin
   PProjoutbound:=nil;
   Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{AEF4273C-4EE8-4520-B23A-04C3AD6DABE3}',{$ENDIF}100);
   //format;
+end;
+function GDBObjArc.GetObjType;
+begin
+     result:=GDBArcID;
 end;
 procedure GDBObjArc.SaveToDXF;
 begin

@@ -87,6 +87,7 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                   function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
 
                   class function CreateInstance:PGDBObjLine;static;
+                  function GetObjType:TObjID;virtual;
            end;
 {Export-}
 ptlinertmodify=^tlinertmodify;
@@ -183,7 +184,7 @@ constructor GDBObjLine.initnul;
 begin
   inherited initnul(owner);
   bp.ListPos.Owner:=owner;
-  vp.ID := GDBlineID;
+  //vp.ID := GDBlineID;
   CoordInOCS.lBegin := NulVertex;
   CoordInOCS.lEnd := NulVertex;
   PProjPoint:=nil;
@@ -191,11 +192,15 @@ end;
 constructor GDBObjLine.init;
 begin
   inherited init(own,layeraddres, lw);
-  vp.ID := GDBlineID;
+  //vp.ID := GDBlineID;
   CoordInOCS.lBegin := p1;
   CoordInOCS.lEnd := p2;
   PProjPoint:=nil;
   //format;
+end;
+function GDBObjLine.GetObjType;
+begin
+     result:=GDBlineID;
 end;
 procedure GDBObjLine.LoadFromDXF;
 var //s: GDBString;
@@ -540,7 +545,7 @@ function GDBObjLine.getintersect;
 var t1,t2,dist:GDBDouble;
     tv1,tv2,dir,dir2{,e}:gdbvertex;
 begin
-     if (onlygetsnapcount=1)or(pobj^.vp.id<>gdblineid) then
+     if (onlygetsnapcount=1)or(pobj^.{vp.id}getobjtype<>gdblineid) then
      begin
           result:=false;
           exit;

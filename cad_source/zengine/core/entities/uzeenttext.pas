@@ -59,6 +59,7 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  class function GetDXFIOFeatures:TDXFEntIODataManager;
 
                  function CreateInstance:PGDBObjText;static;
+                 function GetObjType:TObjID;virtual;
            end;
 {Export-}
 var
@@ -92,7 +93,7 @@ end;
 constructor GDBObjText.initnul;
 begin
   inherited initnul(owner);
-  vp.ID := GDBtextID;
+  //vp.ID := GDBtextID;
   GDBPointer(content) := nil;
   GDBPointer(template) := nil;
   textprop.size := 1;
@@ -107,7 +108,7 @@ end;
 constructor GDBObjText.init;
 begin
   inherited init(own,layeraddres, lw);
-  vp.ID := GDBtextID;
+  //vp.ID := GDBtextID;
   GDBPointer(content) := nil;
   GDBPointer(template) := nil;
   content := c;
@@ -121,6 +122,10 @@ begin
   //Vertex2D_in_DCS_Array.init({$IFDEF DEBUGBUILD}'{EDC6D76B-DDFF-41A0-ACCC-48804795A3F5}',{$ENDIF}100);
   PProjoutbound:=nil;
   //format;
+end;
+function GDBObjText.GetObjType;
+begin
+     result:=GDBtextID;
 end;
 procedure GDBObjText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 var

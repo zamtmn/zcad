@@ -353,7 +353,7 @@ begin
   pv:=GetCurrentDrawing^.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
-        case pv^.vp.ID of
+        case pv^.GetObjType of
         GDBLineID:begin
                        l:=PGDBObjLine(pv)^.Length/10;
                        hl:=l/2;

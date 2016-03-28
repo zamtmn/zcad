@@ -50,6 +50,7 @@ GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
                  procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  function IsHaveGRIPS:GDBBoolean;virtual;
                  class function GetDXFIOFeatures:TDXFEntIODataManager;
+                 function GetObjType:TObjID;virtual;
            end;
 {Export-}
 var
@@ -102,7 +103,7 @@ begin
   tvo^.initnul(bp.ListPos.owner);
   tvo^.vp.Layer:=vp.Layer;
   tvo^.vp.LineWeight:=vp.LineWeight;
-  tvo^.vp.id :=GDBNetID;
+  //tvo^.vp.id :=GDBNetID;
   tvo.ObjArray.init({$IFDEF DEBUGBUILD}'{E9005274-601F-4A3F-BDB8-E311E59D558C}',{$ENDIF}ObjArray.Count);
   ObjArray.CloneEntityTo(@tvo.ObjArray,tvo);
   tvo^.bp.ListPos.Owner:=own;
@@ -373,7 +374,7 @@ begin
            //p:=@self;
            //p:=currentnet;
            if (currentnet<>@self) then
-           if {(currentnet<>@self) and }(currentnet^.vp.ID=GDBNetID) then
+           if {(currentnet<>@self) and }(currentnet^.GetObjType=GDBNetID) then
            begin
                 if boundingintersect(vp.BoundingBox,currentnet^.vp.BoundingBox) then
                 begin
@@ -565,11 +566,15 @@ begin
      inherited initnul(owner);
      //GDBPointer(name):=nil;
      self.vp.layer:=@DefaultErrorLayer;// gdb.GetCurrentDWG.LayerTable.GetCurrentLayer {getaddres('EL_WIRES')};
-     vp.ID := GDBNetID;
+     //vp.ID := GDBNetID;
      graf.init(10000);
      riserarray.init({$IFDEF DEBUGBUILD}'{6D2E18F8-2C19-45B8-A12A-025849ABCDC2}',{$ENDIF}100);
      GetDXFIOFeatures.AddExtendersToEntity(@self);
      //uunitmanager.units.loadunit(expandpath('*CAD\rtl\objdefunits\elwire.pas'),@ou);
+end;
+function GDBObjNet.GetObjType;
+begin
+     result:=GDBNetID;
 end;
 function GDBObjNet.EubEntryType;
 begin

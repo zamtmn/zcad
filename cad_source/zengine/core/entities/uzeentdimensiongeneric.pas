@@ -36,6 +36,7 @@ GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
                       procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                       function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
+                      function GetObjType:TObjID;virtual;
                    end;
 {EXPORT-}
 implementation
@@ -157,7 +158,7 @@ constructor GDBObjGenericDimension.initnul;
 begin
   inherited initnul(owner);
   bp.ListPos.Owner:=owner;
-  vp.ID := GDBGenericDimensionID;
+  //vp.ID := GDBGenericDimensionID;
   DimData.P13InWCS := createvertex(1,1,0);
   DimData.P14InWCS:= createvertex(300,1,0);
   DimType:=TDimType.DTRotated;
@@ -166,11 +167,15 @@ end;
 constructor GDBObjGenericDimension.init;
 begin
   inherited init(own,layeraddres, lw);
-  vp.ID := GDBGenericDimensionID;
+  //vp.ID := GDBGenericDimensionID;
   DimData.P13InWCS := createvertex(1,1,0);
   DimData.P14InWCS:= createvertex(300,1,0);
   DimType:=TDimType.DTRotated;
   DimData.TextMoved:=false;
+end;
+function GDBObjGenericDimension.GetObjType;
+begin
+     result:=GDBGenericDimensionID;
 end;
 function AllocGenericDimension:PGDBObjGenericDimension;
 begin

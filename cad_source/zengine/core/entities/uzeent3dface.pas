@@ -59,6 +59,7 @@ GDBObj3DFace={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  procedure transform(const t_matrix:DMatrix4D);virtual;
 
                  class function CreateInstance:PGDBObj3DFace;static;
+                 function GetObjType:TObjID;virtual;
            end;
 {Export-}
 
@@ -146,17 +147,20 @@ end;
 constructor GDBObj3DFace.init;
 begin
   inherited init(own,layeraddres, lw);
-  vp.ID := GDB3DfaceID;
+  //vp.ID := GDB3DfaceID;
   PInOCS[0]:= p;
 end;
 constructor GDBObj3DFace.initnul;
 begin
   inherited initnul(owner);
   bp.ListPos.Owner:=owner;
-  vp.ID := GDB3DfaceID;
+  //vp.ID := GDB3DfaceID;
   PInOCS[1]:= NulVertex;
 end;
-
+function GDBObj3DFace.GetObjType;
+begin
+     result:=GDB3DfaceID;
+end;
 procedure GDBObj3DFace.LoadFromDXF;
 var //s: GDBString;
   byt: GDBInteger;

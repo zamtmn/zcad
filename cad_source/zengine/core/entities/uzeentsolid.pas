@@ -58,6 +58,7 @@ GDBObjSolid={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  procedure getoutbound(var DC:TDrawContext);virtual;
 
                  function CreateInstance:PGDBObjSolid;static;
+                 function GetObjType:TObjID;virtual;
            end;
 {Export-}
 
@@ -114,17 +115,20 @@ end;
 constructor GDBObjSolid.init;
 begin
   inherited init(own,layeraddres, lw);
-  vp.ID := GDBSolidID;
+  //vp.ID := GDBSolidID;
   PInOCS[0]:= p;
 end;
 constructor GDBObjSolid.initnul;
 begin
   inherited initnul(owner);
   bp.ListPos.Owner:=owner;
-  vp.ID := GDBSolidID;
+  //vp.ID := GDBSolidID;
   PInOCS[1]:= NulVertex;
 end;
-
+function GDBObjSolid.GetObjType;
+begin
+     result:=GDBSolidID;
+end;
 procedure GDBObjSolid.LoadFromDXF;
 var //s: GDBString;
   byt: GDBInteger;

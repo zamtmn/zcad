@@ -68,6 +68,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       //function P16ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                        procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
                        function GetDimStr(var drawing:TDrawingDef):GDBString;virtual;
+                       function GetObjType:TObjID;virtual;
                    end;
 {EXPORT-}
 function CorrectPointLine(q:GDBvertex;p1,p2:GDBvertex;out d:GDBDouble):GDBVertex;
@@ -320,7 +321,7 @@ begin
   inherited initnul;
   PProjPoint:=nil;
   bp.ListPos.Owner:=owner;
-  vp.ID := GDBAlignedDimensionID;
+  //vp.ID := GDBAlignedDimensionID;
   DimData.P13InWCS := createvertex(1,1,0);
   DimData.P14InWCS:= createvertex(300,1,0);
 end;
@@ -328,11 +329,14 @@ constructor GDBObjAlignedDimension.init;
 begin
   inherited init(own,layeraddres, lw);
   PProjPoint:=nil;
-  vp.ID := GDBAlignedDimensionID;
+  //vp.ID := GDBAlignedDimensionID;
   DimData.P13InWCS := createvertex(1,1,0);
   DimData.P14InWCS:= createvertex(300,1,0);
 end;
-
+function GDBObjAlignedDimension.GetObjType;
+begin
+     result:=GDBAlignedDimensionID;
+end;
 procedure GDBObjAlignedDimension.DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;var drawing:TDrawingDef;var DC:TDrawContext; part:integer);
 var
    pl:pgdbobjline;

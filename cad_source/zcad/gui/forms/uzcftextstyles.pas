@@ -394,7 +394,7 @@ end;
 
 procedure TextStyleCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 begin
-     if (PGDBObjEntity(PInstance)^.vp.ID=GDBMTextID)or(PGDBObjEntity(PInstance)^.vp.ID=GDBTextID) then
+     if (PGDBObjEntity(PInstance)^.GetObjType=GDBMTextID)or(PGDBObjEntity(PInstance)^.GetObjType=GDBTextID) then
      if PCounted=PGDBObjText(PInstance)^.TXTStyleIndex then
                                                            inc(Counter);
 end;

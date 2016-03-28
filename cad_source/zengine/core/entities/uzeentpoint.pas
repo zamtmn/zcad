@@ -55,6 +55,7 @@ GDBObjPoint={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
 
                  function CreateInstance:PGDBObjPoint;static;
+                 function GetObjType:TObjID;virtual;
            end;
 {Export-}
 
@@ -89,15 +90,19 @@ end;
 constructor GDBObjPoint.init;
 begin
   inherited init(own,layeraddres, lw);
-  vp.ID := GDBPointID;
+  //vp.ID := GDBPointID;
   P_insertInOCS := p;
 end;
 constructor GDBObjPoint.initnul;
 begin
   inherited initnul(owner);
   bp.ListPos.Owner:=owner;
-  vp.ID := GDBPointID;
+  //vp.ID := GDBPointID;
   P_insertInOCS := NulVertex;
+end;
+function GDBObjPoint.GetObjType;
+begin
+     result:=GDBPointID;
 end;
 procedure GDBObjPoint.SaveToDXF;
 begin
@@ -109,7 +114,7 @@ var s, layername: GDBString;
   byt, code: GDBInteger;
 begin
   //inherited init(nil,0, 10);
-  vp.ID := GDBPointID;
+  //vp.ID := GDBPointID;
   P_insertInOCS:=NulVertex;
   s := f.readgdbstring;
   val(s, byt, code);

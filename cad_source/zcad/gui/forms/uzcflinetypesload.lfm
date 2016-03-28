@@ -39,7 +39,7 @@ object LineTypesLoadForm: TLineTypesLoadForm
       item
         AutoSize = True
         Caption = 'Name'
-        Width = 512
+        Width = 422
       end    
       item
         AutoSize = True

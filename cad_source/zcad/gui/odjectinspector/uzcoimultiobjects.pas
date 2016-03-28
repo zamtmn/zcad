@@ -110,8 +110,8 @@ var
   DC:TDrawContext;
 begin
   PSourceVD.attrib:=PSourceVD.attrib and (not vda_different);
-  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-  pentity:=gdb.GetCurrentROOT.ObjArray.beginiterate(EntIterator);
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  pentity:=drawings.GetCurrentROOT.ObjArray.beginiterate(EntIterator);
   if pentity<>nil then
   repeat
     if (pentity^.Selected)and((pentity^.GetObjType=NeededObjType)or(NeededObjType=0)) then
@@ -125,15 +125,15 @@ begin
            begin
                 PDestVD.data.PTD.CopyInstanceTo(PSourceVD.data.Instance,PDestVD.data.Instance);
 
-                //pentity^.Formatentity(gdb.GetCurrentDWG^,dc);
-                pentity^.YouChanged(gdb.GetCurrentDWG^);
+                //pentity^.Formatentity(drawings.GetCurrentDWG^,dc);
+                pentity^.YouChanged(drawings.GetCurrentDWG^);
 
                 if PSourceVD^.data.PTD.GetValueAsString(PSourceVD^.data.Instance)<>PDestVD^.data.PTD.GetValueAsString(PDestVD^.data.Instance) then
                 PSourceVD.attrib:=PSourceVD.attrib or vda_different;
            end;
     end;
     end;
-    pentity:=gdb.GetCurrentROOT.ObjArray.iterate(EntIterator);
+    pentity:=drawings.GetCurrentROOT.ObjArray.iterate(EntIterator);
   until pentity=nil;
 end;
 function ComparePropAndVarNames(pname,vname:GDBString):boolean;
@@ -190,8 +190,8 @@ begin
        if CanChangeValue then
                              begin
                                PMultiPropertyDataForObjects.EntChangeProc(pu,PSourceVD,ChangedData,mp);
-                               pentity^.YouChanged(gdb.GetCurrentDWG^);
-                               pentity.FormatEntity(gdb.GetCurrentDWG^,dc);
+                               pentity^.YouChanged(drawings.GetCurrentDWG^);
+                               pentity.FormatEntity(drawings.GetCurrentDWG^,dc);
                              end
                          else
                              begin
@@ -225,8 +225,8 @@ var
 begin
   ClearErrorRange;
   PSourceVD.attrib:=PSourceVD.attrib and (not vda_different);
-  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-  psd:=gdb.GetCurrentDWG.SelObjArray.beginiterate(EntIterator);
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(EntIterator);
   if psd<>nil then
   repeat
     pentity:=psd.objaddr;
@@ -251,7 +251,7 @@ begin
              end
         end;
     end;
-    psd:=gdb.GetCurrentDWG.SelObjArray.iterate(EntIterator);
+    psd:=drawings.GetCurrentDWG.SelObjArray.iterate(EntIterator);
   until psd=nil;
 end;
 procedure  TMSEditor.FormatAfterFielfmod;
@@ -326,7 +326,7 @@ begin
   ObjIDVector:=TObjIDVector.create;
   counter:=0;
 
-  psd:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
+  psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
   if psd<>nil then
   repeat
     pv:=psd^.objaddr;
@@ -336,7 +336,7 @@ begin
          ObjID2Counter.CountKey(pv^.vp.ID,1);
          inc(counter);
     end;
-  psd:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
+  psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
   until psd=nil;
 
   TxtEntType.Enums.free;
@@ -388,7 +388,7 @@ begin
       end;
       MultiPropertiesManager.MultiPropertyVector[i].PIiterateData:=MultiPropertiesManager.MultiPropertyVector[i].BeforeIterateProc(MultiPropertiesManager.MultiPropertyVector[i],pu);
 
-      psd:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
+      psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
       if psd<>nil then
       repeat
         pv:=psd^.objaddr;
@@ -414,7 +414,7 @@ begin
                    end;
                  end;
         end;
-      psd:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
+      psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
       until psd=nil;
 
     end;
@@ -423,7 +423,7 @@ begin
    if MultiPropertiesManager.MultiPropertyVector[i].usecounter<>0 then
    begin
      fistrun:=true;
-     psd:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
+     psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
      if psd<>nil then
      repeat
        pv:=psd^.objaddr;
@@ -445,7 +445,7 @@ begin
                   fistrun:=false;
                 end;
        end;
-     psd:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
+     psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
      until psd=nil;
    end;
 
@@ -517,8 +517,8 @@ begin
      CheckMultiPropertyUse;
      CreateMultiPropertys(f);
      //etype:=GetObjType;
-     psd:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
-     //pv:=gdb.GetCurrentDWG.ObjRoot.ObjArray.beginiterate(ir);
+     psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
+     //pv:=drawings.GetCurrentDWG.ObjRoot.ObjArray.beginiterate(ir);
      if psd<>nil then
      repeat
        pv:=psd^.objaddr;
@@ -565,8 +565,8 @@ begin
             until pvd=nil;
        end;
        end;
-     //pv:=gdb.GetCurrentDWG.ObjRoot.ObjArray.iterate(ir);
-     psd:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
+     //pv:=drawings.GetCurrentDWG.ObjRoot.ObjArray.iterate(ir);
+     psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
      until psd=nil;
 end;
 procedure DeselectEnts(PInstance:GDBPointer);
@@ -579,39 +579,39 @@ var
 begin
     NeededObjType:=MSEditor.GetObjType;
     count:=0;
-    pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+    pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pv<>nil then
     repeat
       if pv^.Selected then
       if (NeededObjType=0)or(pv^.vp.ID=NeededObjType)then
       begin
            inc(count);
-           pv^.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+           pv^.DeSelect(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
       end;
-      pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+      pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
     until pv=nil;
     uzcshared.HistoryOutStr(sysutils.Format(rscmNEntitiesDeselected,[count]));
     if count>0 then
-                   ZCADMainWindow.waSetObjInsp(gdb.GetCurrentDWG.wa);
+                   ZCADMainWindow.waSetObjInsp(drawings.GetCurrentDWG.wa);
 
-    {pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+    {pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pv<>nil then
     repeat
       if NeededObjType
       inc(count);
-    pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+    pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
     until pv=nil;
 
 
-    pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+    pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pv<>nil then
     repeat
           if count>10000 then
                              pv^.SelectQuik//:=true
                          else
-                             pv^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+                             pv^.select(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
 
-    pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+    pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
     until pv=nil;}
 end;
 

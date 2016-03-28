@@ -44,7 +44,7 @@ var
    oldpoint,point:gdbvertex;
 function Line_com_CommandStart(operands:TCommandOperands):TCommandResult;
 begin
-  GDB.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
+  drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   if operands='' then
                      historyoutstr(rscmPoint)
                  else
@@ -65,7 +65,7 @@ function Rect_com_CommandStart(operands:TCommandOperands):TCommandResult;
 begin
      c1:=commandmanager.GetValueHeap;
      c2:=-1;
-     commandmanager.executecommandsilent('Get3DPoint(Первая точка:)',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+     commandmanager.executecommandsilent('Get3DPoint(Первая точка:)',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
      result:=cmd_ok;
 end;
 procedure Rect_com_CommandCont;
@@ -80,7 +80,7 @@ begin
      if c1=c2 then
                   commandmanager.executecommandend
               else
-                  commandmanager.executecommandsilent('Get3DPoint_DrawRect(Вторая точка:)',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                  commandmanager.executecommandsilent('Get3DPoint_DrawRect(Вторая точка:)',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
 end;
 function DrawRect(mclick:GDBInteger):GDBInteger;
 var
@@ -94,14 +94,14 @@ begin
      p2:=createvertex(p1.x,point.y,p1.z);
      p4:=createvertex(point.x,p1.y,point.z);
 
-     matrixs.pmodelMatrix:=@gdb.GetCurrentDWG.GetPcamera.modelMatrix;
-     matrixs.pprojMatrix:=@gdb.GetCurrentDWG.GetPcamera.projMatrix;
-     matrixs.pviewport:=@gdb.GetCurrentDWG.GetPcamera.viewport;
+     matrixs.pmodelMatrix:=@drawings.GetCurrentDWG.GetPcamera.modelMatrix;
+     matrixs.pprojMatrix:=@drawings.GetCurrentDWG.GetPcamera.projMatrix;
+     matrixs.pviewport:=@drawings.GetCurrentDWG.GetPcamera.viewport;
 
-     gdb.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(p1,p2,matrixs);
-     gdb.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(p2,point,matrixs);
-     gdb.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(point,p4,matrixs);
-     gdb.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(p4,p1,matrixs);
+     drawings.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(p1,p2,matrixs);
+     drawings.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(p2,point,matrixs);
+     drawings.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(point,p4,matrixs);
+     drawings.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(p4,p1,matrixs);
      result:=cmd_ok;
 end;
 
@@ -109,7 +109,7 @@ function Dist_com_CommandStart(operands:TCommandOperands):TCommandResult;
 begin
      c1:=commandmanager.GetValueHeap;
      c2:=-1;
-     commandmanager.executecommandsilent('Get3DPoint(Первая точка:)',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+     commandmanager.executecommandsilent('Get3DPoint(Первая точка:)',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
      distlen:=0;
      result:=cmd_ok;
 end;
@@ -137,7 +137,7 @@ begin
                    end;
      c2:=cs;
      oldpoint:=point;
-     commandmanager.executecommandsilent('Get3DPoint(Следующая точка:)',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+     commandmanager.executecommandsilent('Get3DPoint(Следующая точка:)',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
 end;
 procedure startup;
 begin

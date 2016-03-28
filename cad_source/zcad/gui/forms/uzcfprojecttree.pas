@@ -84,11 +84,11 @@ var
 
 begin
      TypeDesk:=sysunit.TypeName2PTD('GDBObjBlockdef');
-     Instance:=gdb.GetCurrentDWG.BlockDefArray.getblockdef(FBlockName);
+     Instance:=drawings.GetCurrentDWG.BlockDefArray.getblockdef(FBlockName);
      if instance<>nil then
                           begin
                                if assigned(SetGDBObjInspProc)then
-                                                                 SetGDBObjInspProc(nil,gdb.GetUnitsFormat,TypeDesk,Instance,gdb.GetCurrentDWG)
+                                                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,TypeDesk,Instance,drawings.GetCurrentDWG)
                           end
                       else
                           uzcshared.ShowError(format(rscmNoBlockDefInDWGCXMenu,[FBlockName]));
@@ -98,7 +98,7 @@ end;
 procedure TEqTreeNode.Select;
 begin
      if assigned(SetGDBObjInspProc)then
-     SetGDBObjInspProc(nil,gdb.GetUnitsFormat,ptd.PTD,ptd.Instance,gdb.GetCurrentDWG);
+     SetGDBObjInspProc(nil,drawings.GetUnitsFormat,ptd.PTD,ptd.Instance,drawings.GetCurrentDWG);
 end;
 function TEqTreeNode.GetParams;
 begin
@@ -137,12 +137,12 @@ begin
                        begin
                             T_ProjectDB.Selected:=nil;
                             self.ProjectEquipmentN.DeleteChildren;
-                            BuildTreeByEQ(ProjectEquipmentN,ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
+                            BuildTreeByEQ(ProjectEquipmentN,PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
                             (*
                             ProjectEquipmentNodeN.free;
                             gdbgetmem({$IFDEF DEBUGBUILD}'{B941B71E-2BA6-4B5E-B436-633B6C8FC500}',{$ENDIF}pointer(ProjectEquipmentNode.SubNode),sizeof(TGDBTree));
                             ProjectEquipmentNode.SubNode.init({$IFDEF DEBUGBUILD}'{CE1105DB-7CAD-4353-922A-5A31956421C4}',{$ENDIF}10);
-                            BuildTreeByEQ(ProjectEquipmentNode,gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName),ProjectDBContextMenu);
+                            BuildTreeByEQ(ProjectEquipmentNode,drawings.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName),ProjectDBContextMenu);
                             ProjectDB.Sync;
                             *)
                        end;
@@ -345,8 +345,8 @@ begin
   end;
 
   BuildTreeByEQ(ProgramEquipmentN,DBUnit,{ProgramDBContextMenuN}{}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROGRAMDBCXMENU')){});
-  if gdb.GetCurrentDWG<>nil then
-  BuildTreeByEQ(ProjectEquipmentN,ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
+  if drawings.GetCurrentDWG<>nil then
+  BuildTreeByEQ(ProjectEquipmentN,PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
 
 end;
 function ProjectTree_com(Operands:pansichar):GDBInteger;

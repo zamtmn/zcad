@@ -36,9 +36,9 @@ TDWGProps=packed record
                 Name:GDBString;
                 Number:GDBInteger;
           end;
-PGDBDescriptor=^GDBDescriptor;
-GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
-                    CurrentDWG:{PTDrawing}PTSimpleDrawing;
+PTZCADDrawingsManager=^TZCADDrawingsManager;
+TZCADDrawingsManager={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
+                    CurrentDWG:{PTZCADDrawing}PTSimpleDrawing;
                     ProjectUnits:TUnitManager;
                     FileNameCounter:integer;
                     constructor init;
@@ -48,14 +48,14 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
 
                     function GetCurrentROOT:PGDBObjGenericSubEntry;
 
-                    function GetCurrentDWG:{PTDrawing}PTSimpleDrawing;
+                    function GetCurrentDWG:{PTZCADDrawing}PTSimpleDrawing;
                     function GetCurrentOGLWParam:POGLWndtype;
                     function GetUndoStack:GDBPointer;
                     procedure asociatedwgvars;
                     procedure freedwgvars;
                     procedure SetCurrentDWG(PDWG:PTAbstractDrawing);
 
-                    function CreateDWG(preloadedfile1,preloadedfile2:GDBString):PTDrawing;
+                    function CreateDWG(preloadedfile1,preloadedfile2:GDBString):PTZCADDrawing;
                     //function CreateSimpleDWG:PTSimpleDrawing;virtual;
                     procedure eraseobj(ObjAddr:PGDBaseObject);virtual;
 
@@ -75,9 +75,9 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     procedure SetUnitsFormat(f:TzeUnitsFormat);
               end;
 {EXPORT-}
-var GDB: GDBDescriptor;
-    BlockBaseDWG:{PTDrawing}PTSimpleDrawing=nil;
-    ClipboardDWG:{PTDrawing}PTSimpleDrawing=nil;
+var drawings: TZCADDrawingsManager;
+    BlockBaseDWG:{PTZCADDrawing}PTSimpleDrawing=nil;
+    ClipboardDWG:{PTZCADDrawing}PTSimpleDrawing=nil;
     //GDBTrash:GDBObjTrash;
     LtypeManager:GDBLtypeArray;
 procedure CalcZ(z:GDBDouble);
@@ -93,7 +93,7 @@ function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
  uses uzcenitiesvariablesextender,uzeenttext,uzeentdevice,uzeentblockinsert,uzeffdxf, uzcutils,uzcshared,uzccommandsmanager;
-function GDBDescriptor.GetDefaultDrawingName:GDBString;
+function TZCADDrawingsManager.GetDefaultDrawingName:GDBString;
 var
     OldName:GDBString;
     LoopCounter:Integer;
@@ -118,7 +118,7 @@ begin
   OldName:=result;
   until FindDrawingByName(result)=nil;
 end;
-function GDBDescriptor.GetUnitsFormat:TzeUnitsFormat;
+function TZCADDrawingsManager.GetUnitsFormat:TzeUnitsFormat;
 begin
      result.DeciminalSeparator:=DDSDot;
      if CurrentDWG<>nil then
@@ -126,12 +126,12 @@ begin
                         else
                             result:=CreateDefaultUnitsFormat;
 end;
-procedure GDBDescriptor.SetUnitsFormat(f:TzeUnitsFormat);
+procedure TZCADDrawingsManager.SetUnitsFormat(f:TzeUnitsFormat);
 begin
      if CurrentDWG<>nil then
                             CurrentDWG.SetUnitsFormat(f);
 end;
-function GDBDescriptor.FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
+function TZCADDrawingsManager.FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
 var
   ir:itrec;
 begin
@@ -146,12 +146,12 @@ begin
        result:=iterate(ir);
   until result=nil;
 end;
- {procedure GDBDescriptor.AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
+ {procedure TZCADDrawingsManager.AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
  var
      domethod,undomethod:tmethod;
  begin
       SetObjCreateManipulator(domethod,undomethod);
-      with PTDrawing(GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+      with PTZCADDrawing(GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
       begin
            AddObject(PEnt);
            comit;
@@ -165,7 +165,7 @@ end;
     allok:boolean;
  begin
       allok:=savedxf2000(s,dwg^);
-      pu:=PTDrawing(dwg).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
+      pu:=PTZCADDrawing(dwg).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
       mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
       pu^.SavePasToMem(mem);
       mem.SaveToFile(expandpath(s+'.dbpas'));
@@ -189,15 +189,15 @@ end;
                 end;
            end
            else
-               s1:=gdb.GetCurrentDWG.GetFileName;
+               s1:=drawings.GetCurrentDWG.GetFileName;
       end;
       result:=dwgSaveDXFDPAS(s1,dwg);
  end;
 function SetCurrentDWG(PDWG:pointer):pointer;
 begin
-     result:=gdb.GetCurrentDWG;
+     result:=drawings.GetCurrentDWG;
      if result<>pdwg then
-                         gdb.SetCurrentDWG(pdwg);
+                         drawings.SetCurrentDWG(pdwg);
 end;
 
 procedure redrawoglwnd;
@@ -206,29 +206,29 @@ var
    DC:TDrawContext;
 begin
   //isOpenGLError;
-  pdwg:=gdb.GetCurrentDWG;
+  pdwg:=drawings.GetCurrentDWG;
   if pdwg<>nil then
   begin
        DC:=pdwg^.CreateDrawingRC;
-       gdb.GetCurrentRoot.FormatAfterEdit(pdwg^,dc);
+       drawings.GetCurrentRoot.FormatAfterEdit(pdwg^,dc);
   pdwg.wa.param.firstdraw := TRUE;
   pdwg.wa.CalcOptimalMatrix;
   pdwg.pcamera^.totalobj:=0;
   pdwg.pcamera^.infrustum:=0;
-  gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentROOT.ObjArray.ObjTree,pdwg.pcamera^.totalobj,pdwg.pcamera^.infrustum,pdwg^.myGluProject2,pdwg.pcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
-  //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
-  pdwg.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,pdwg.pcamera^.totalobj,pdwg.pcamera^.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+  drawings.GetCurrentROOT.CalcVisibleByTree(drawings.GetCurrentDWG.pcamera^.frustum,drawings.GetCurrentDWG.pcamera.POSCOUNT,drawings.GetCurrentDWG.pcamera.VISCOUNT,drawings.GetCurrentROOT.ObjArray.ObjTree,pdwg.pcamera^.totalobj,pdwg.pcamera^.infrustum,pdwg^.myGluProject2,pdwg.pcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+  //drawings.GetCurrentROOT.calcvisible(drawings.GetCurrentDWG.pcamera^.frustum,drawings.GetCurrentDWG.pcamera.POSCOUNT,drawings.GetCurrentDWG.pcamera.VISCOUNT);
+  pdwg.ConstructObjRoot.calcvisible(drawings.GetCurrentDWG.pcamera^.frustum,drawings.GetCurrentDWG.pcamera.POSCOUNT,drawings.GetCurrentDWG.pcamera.VISCOUNT,pdwg.pcamera^.totalobj,pdwg.pcamera^.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   pdwg.wa.calcgrid;
   pdwg.wa.draworinvalidate;
   end;
-  //gdb.GetCurrentDWG.OGLwindow1.repaint;
+  //drawings.GetCurrentDWG.OGLwindow1.repaint;
 end;
 
 procedure resetoglwnd;
 var
    pdwg:PTSimpleDrawing;
 begin
-  pdwg:=gdb.GetCurrentDWG;
+  pdwg:=drawings.GetCurrentDWG;
   if pdwg<>nil then
   begin
        pdwg.wa.param.lastonmouseobject:=nil;
@@ -238,16 +238,16 @@ end;
 
 procedure clearotrack;
 begin
-     gdb.GetCurrentDWG.wa.param.ontrackarray.current:=0;
-     gdb.GetCurrentDWG.wa.param.ontrackarray.total:=0;
+     drawings.GetCurrentDWG.wa.param.ontrackarray.current:=0;
+     drawings.GetCurrentDWG.wa.param.ontrackarray.total:=0;
 end;
 procedure clearcp;
 begin
-     gdb.GetCurrentDWG.SelObjArray.clearallobjects;
-     //gdb.SelObjArray.clear;
+     drawings.GetCurrentDWG.SelObjArray.clearallobjects;
+     //drawings.SelObjArray.clear;
 end;
 
-procedure GDBDescriptor.standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
+procedure TZCADDrawingsManager.standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 var
     pproglayer:PGDBLayerProp;
     pnevlayer:PGDBLayerProp;
@@ -294,12 +294,12 @@ begin
 end;
  procedure SetObjCreateManipulator(out domethod,undomethod:tmethod);
  begin
-      domethod.Code:=pointer(gdb.GetCurrentROOT^.GoodAddObjectToObjArray);
-      domethod.Data:=gdb.GetCurrentROOT;
-      undomethod.Code:=pointer(gdb.GetCurrentROOT^.GoodRemoveMiFromArray);
-      undomethod.Data:=gdb.GetCurrentROOT;
+      domethod.Code:=pointer(drawings.GetCurrentROOT^.GoodAddObjectToObjArray);
+      domethod.Data:=drawings.GetCurrentROOT;
+      undomethod.Code:=pointer(drawings.GetCurrentROOT^.GoodRemoveMiFromArray);
+      undomethod.Data:=drawings.GetCurrentROOT;
  end;
-function GDBDescriptor.FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
+function TZCADDrawingsManager.FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
 var
    //pobj:pGDBObjEntity;
    ir:itrec;
@@ -323,14 +323,14 @@ begin
            result:=entities.iterate(ir);
      until result=nil;
 end;
-function GDBDescriptor.GetCurrentROOT;
+function TZCADDrawingsManager.GetCurrentROOT;
 begin
      if CurrentDWG<>nil then
                             result:=CurrentDWG.{pObjRoot}GetCurrentROOT
                         else
                             result:=nil;
 end;
-function GDBDescriptor.GetCurrentOGLWParam:POGLWndtype;
+function TZCADDrawingsManager.GetCurrentOGLWParam:POGLWndtype;
 begin
      if currentdwg<>nil then
                             begin
@@ -343,11 +343,11 @@ begin
                             result:=nil;
 end;
 
-function GDBDescriptor.GetCurrentDWG;
+function TZCADDrawingsManager.GetCurrentDWG;
 begin
  result:=CurrentDWG;
 end;
-function GDBDescriptor.GetUndoStack:GDBPointer;
+function TZCADDrawingsManager.GetUndoStack:GDBPointer;
 var
    pdwg:PTSimpleDrawing;
 begin
@@ -358,12 +358,12 @@ begin
                       result:=nil;
 end;
 
-procedure GDBDescriptor.asociatedwgvars;
+procedure TZCADDrawingsManager.asociatedwgvars;
 begin
    { TODO : переделать }
-   if typeof(CurrentDWG^)=typeof(TDrawing) then
+   if typeof(CurrentDWG^)=typeof(TZCADDrawing) then
    begin
-   DWGUnit:=PTDrawing(CurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,'DrawingVars');
+   DWGUnit:=PTZCADDrawing(CurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,'DrawingVars');
    //DWGUnit.AssignToSymbol(SysVar.DWG.DWG_SnapGrid,'DWG_SnapGrid');
    SysVar.dwg.DWG_SnapGrid:=@CurrentDWG.SnapGrid;
    //DWGUnit.AssignToSymbol(SysVar.DWG.DWG_DrawGrid,'DWG_DrawGrid');
@@ -423,7 +423,7 @@ begin
    end;
    end;
 end;
-procedure GDBDescriptor.freedwgvars;
+procedure TZCADDrawingsManager.freedwgvars;
 begin
    SysVar.DWG.DWG_SnapGrid:=nil;
    SysVar.DWG.DWG_DrawGrid:=nil;
@@ -455,20 +455,20 @@ begin
    sysvar.RD.RD_CurrentWAParam.PTD:=nil;
 end;
 
-procedure GDBDescriptor.SetCurrentDWG(PDWG:PTAbstractDrawing);
+procedure TZCADDrawingsManager.SetCurrentDWG(PDWG:PTAbstractDrawing);
 begin
  commandmanager.executecommandend;
- CurrentDWG:=PTDrawing(PDWG);
+ CurrentDWG:=PTZCADDrawing(PDWG);
  asociatedwgvars;
 end;
 procedure CalcZ(z:GDBDouble);
 begin
-     if z<gdb.GetCurrentDWG.pcamera^.obj_zmax then
-     gdb.GetCurrentDWG.pcamera^.obj_zmax:=z;
-     if z>gdb.GetCurrentDWG.pcamera^.obj_zmin then
-     gdb.GetCurrentDWG.pcamera^.obj_zmin:=z;
+     if z<drawings.GetCurrentDWG.pcamera^.obj_zmax then
+     drawings.GetCurrentDWG.pcamera^.obj_zmax:=z;
+     if z>drawings.GetCurrentDWG.pcamera^.obj_zmin then
+     drawings.GetCurrentDWG.pcamera^.obj_zmin:=z;
 end;
-procedure GDBDescriptor.eraseobj(ObjAddr:PGDBaseObject);
+procedure TZCADDrawingsManager.eraseobj(ObjAddr:PGDBaseObject);
 begin
      inherited eraseobj(objaddr);
      if objaddr=pointer(CurrentDWG) then
@@ -478,18 +478,18 @@ begin
                                         end;
 
 end;
-function GDBDescriptor.CreateDWG(preloadedfile1,preloadedfile2:GDBString):PTDrawing;
+function TZCADDrawingsManager.CreateDWG(preloadedfile1,preloadedfile2:GDBString):PTZCADDrawing;
 var
    ptd:PTsimpleDrawing;
 begin
-     gdBGetMem({$IFDEF DEBUGBUILD}'{2A28BFB9-661F-4331-955A-C6F18DE67A19}',{$ENDIF}GDBPointer(result),sizeof(TDrawing));
+     gdBGetMem({$IFDEF DEBUGBUILD}'{2A28BFB9-661F-4331-955A-C6F18DE67A19}',{$ENDIF}GDBPointer(result),sizeof(TZCADDrawing));
      ptd:=currentdwg;
      currentdwg:=result;
      result^.init(@units,preloadedfile1,preloadedfile2);
      //self.AddRef(result^);
      currentdwg:=ptd;
 end;
-(*function GDBDescriptor.CreateSimpleDWG:PTSimpleDrawing;
+(*function TZCADDrawingsManager.CreateSimpleDWG:PTSimpleDrawing;
 var
    ptd:PTSimpleDrawing;
 begin
@@ -501,7 +501,7 @@ begin
      currentdwg:=pointer(ptd);
 end;*)
 
-constructor GDBDescriptor.init;
+constructor TZCADDrawingsManager.init;
 var
    DC:TDrawContext;
 begin
@@ -511,7 +511,7 @@ begin
   ProjectUnits.SetNextManager(@units);
 
   CurrentDWG:=nil;
-  //gdBGetMem({$IFDEF DEBUGBUILD}'{E197C531-C543-4FAF-AF4A-37B8F278E8A2}',{$ENDIF}GDBPointer(CurrentDWG),sizeof(TDrawing));
+  //gdBGetMem({$IFDEF DEBUGBUILD}'{E197C531-C543-4FAF-AF4A-37B8F278E8A2}',{$ENDIF}GDBPointer(CurrentDWG),sizeof(TZCADDrawing));
   if CurrentDWG<>nil then
   begin
        CurrentDWG.init(@ProjectUnits);
@@ -525,21 +525,21 @@ begin
   end;
   MainBlockCreateProc:=AddBlockFromDBIfNeed;
 end;
-constructor GDBDescriptor.initnul;
+constructor TZCADDrawingsManager.initnul;
 //var tp:GDBTextStyleProp;
 begin
   //Pointer(FileName):=nil;
   //Changed:=True;
   { TODO : переделать }
   FileNameCounter:=0;
-  if typeof(CurrentDWG^)=typeof(TDrawing) then
+  if typeof(CurrentDWG^)=typeof(TZCADDrawing) then
   begin
-  PTDrawing(CurrentDWG).DWGUnits.init;
+  PTZCADDrawing(CurrentDWG).DWGUnits.init;
   end;
   //CurrentDWG.DWGUnits.init;
   inherited initnul;
 end;
-(*function GDBDescriptor.AfterDeSerialize;
+(*function TZCADDrawingsManager.AfterDeSerialize;
 begin
      CurrentDWG.pcamera:=SysUnit.InterfaceVariables.findvardesc('camera').data.Instance;
      //CurrentDWG.ConstructObjRoot.init({$IFDEF DEBUGBUILD}'{B1036F20-56klhj2D-4B17-A33A-61CF3F5F2A90}',{$ENDIF}65535);
@@ -548,17 +548,17 @@ begin
      CurrentDWG.OnMouseObj.init({$IFDEF DEBUGBUILD}'{85654C90-FF49-427длро2-B429-4D134913BC26}',{$ENDIF}100);
      //BlockDefArray.init({$IFDEF DEBUGBUILD}'{E5CE9274-01D8-fgjhfgh9-AF2E-D1AB116B5737}',{$ENDIF}1000);
 end;*)
-//procedure TDrawing.SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);
+//procedure TZCADDrawing.SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);
 //begin
 //end;
-destructor GDBDescriptor.done;
+destructor TZCADDrawingsManager.done;
 begin
     CurrentDWG:=nil;
     inherited;
     // gdbfreemem(pointer(currentdwg));
      ProjectUnits.done;
 end;
-procedure GDBDescriptor.AddBlockFromDBIfNeed(_to:{PTSimpleDrawing}PTDrawingDef;name:GDBString);
+procedure TZCADDrawingsManager.AddBlockFromDBIfNeed(_to:{PTSimpleDrawing}PTDrawingDef;name:GDBString);
 var
    {_dest,}td:PGDBObjBlockdef;
    //tn:gdbstring;
@@ -673,7 +673,7 @@ begin
 
 
                       if td<>nil then
-                                     gdb.CopyBlock(_from,_to,td);
+                                     drawings.CopyBlock(_from,_to,td);
                  end;
 end;
 
@@ -691,7 +691,7 @@ begin
 
                end;
 end;
-{function createlayerifneed(_from,_to:PTDrawing;_source:PGDBLayerProp):PGDBLayerProp;
+{function createlayerifneed(_from,_to:PTZCADDrawing;_source:PGDBLayerProp):PGDBLayerProp;
 begin
            result:=_to.LayerTable.getAddres(_source.Name);
            if result=nil then
@@ -773,7 +773,7 @@ begin
                                     end;
                     end;
 end;
-function GDBDescriptor.CopyEnt(_from,_to:PTSimpleDrawing;_source:PGDBObjEntity):PGDBObjEntity;
+function TZCADDrawingsManager.CopyEnt(_from,_to:PTSimpleDrawing;_source:PGDBObjEntity):PGDBObjEntity;
 var
    tv: pGDBObjEntity;
 begin
@@ -787,7 +787,7 @@ begin
     end;
     result:=tv;
 end;
-procedure GDBDescriptor.FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:GDBOpenArrayOfPObjects);
+procedure TZCADDrawingsManager.FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:GDBOpenArrayOfPObjects);
 var
    croot:PGDBObjGenericSubEntry;
    pvisible{,pvisible2,pv}:PGDBObjEntity;
@@ -817,7 +817,7 @@ begin
          until pvisible=nil;
      end;
 end;
-procedure GDBDescriptor.FindMultiEntityByVar2(objID:GDBWord;vname:GDBString;var entarray:GDBOpenArrayOfPObjects);
+procedure TZCADDrawingsManager.FindMultiEntityByVar2(objID:GDBWord;vname:GDBString;var entarray:GDBOpenArrayOfPObjects);
 var
    croot:PGDBObjGenericSubEntry;
    pvisible{,pvisible2,pv}:PGDBObjEntity;
@@ -845,7 +845,7 @@ begin
      end;
 end;
 
-function GDBDescriptor.FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
+function TZCADDrawingsManager.FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
 var
    croot:PGDBObjGenericSubEntry;
    pvisible{,pvisible2,pv}:PGDBObjEntity;
@@ -878,7 +878,7 @@ begin
      end;
 end;
 
-procedure GDBDescriptor.CopyBlock(_from,_to:PTSimpleDrawing;_source:PGDBObjBlockdef);
+procedure TZCADDrawingsManager.CopyBlock(_from,_to:PTSimpleDrawing;_source:PGDBObjBlockdef);
 var
    _dest:PGDBObjBlockdef;
    ir:itrec;
@@ -965,19 +965,19 @@ begin
   //pbasefont:=FontManager.getAddres('gewind.shx');
   //pbasefont:=FontManager.{FindFonf}getAddres('amgdt.shx');
   //pbasefont:=FontManager.getAddres('gothice.shx');
-  gdb.init;
+  drawings.init;
   SetCurrentDWGProc:=SetCurrentDWG;
-  BlockBaseDWG:=gdb.CreateDWG('','');
-  _GetUndoStack:=gdb.GetUndoStack;
-  ClipboardDWG:=gdb.CreateDWG(preloadedfile1,preloadedfile2);
+  BlockBaseDWG:=drawings.CreateDWG('','');
+  _GetUndoStack:=drawings.GetUndoStack;
+  ClipboardDWG:=drawings.CreateDWG(preloadedfile1,preloadedfile2);
   ClipboardDWG.DimStyleTable.AddItem('Standart',pds);
   pds.init('Standart');
-  //gdb.currentdwg:=BlockBaseDWG;
+  //drawings.currentdwg:=BlockBaseDWG;
   GDBTrash.initnul;
 end;
 procedure finalize;
 begin
-  gdb.done;
+  drawings.done;
   if BlockBaseDWG<>nil then
   begin
   BlockBaseDWG.done;

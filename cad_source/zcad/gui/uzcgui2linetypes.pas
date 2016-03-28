@@ -44,9 +44,9 @@ var
    ll:integer;
    s:string;
 begin
-    if gdb.GetCurrentDWG=nil then
+    if drawings.GetCurrentDWG=nil then
                                  exit;
-    if gdb.GetCurrentDWG.LTypeStyleTable.Count=0 then
+    if drawings.GetCurrentDWG.LTypeStyleTable.Count=0 then
                                  exit;
     ComboBoxDrawItem(Control,ARect,State);
     if not TComboBox(Control).DroppedDown then
@@ -69,7 +69,7 @@ else if plt<>nil then
                else
                    begin
                        s:=rsDifferent;
-                       if gdb.GetCurrentDWG.LTypeStyleTable.Count=0 then
+                       if drawings.GetCurrentDWG.LTypeStyleTable.Count=0 then
                                  exit;
                        ll:=0;
                    end;

@@ -78,7 +78,7 @@ begin
   repeat
         TCangeMethod(UnDoData)(p^);
         if FreeArray then
-                             PGDBObjEntity(p)^.YouChanged(gdb.GetCurrentDWG^);
+                             PGDBObjEntity(p)^.YouChanged(drawings.GetCurrentDWG^);
        p:=ObjArray.iterate(ir);
   until p=nil;
   FreeArray:=not FreeArray;
@@ -96,7 +96,7 @@ begin
   repeat
         TCangeMethod(DoData)(p^);
         if FreeArray then
-                             PGDBObjEntity(p)^.YouChanged(gdb.GetCurrentDWG^);
+                             PGDBObjEntity(p)^.YouChanged(drawings.GetCurrentDWG^);
        p:=ObjArray.iterate(ir);
   until p=nil;
   FreeArray:=not FreeArray;

@@ -123,7 +123,7 @@ begin
   if not IsUndoEndMarkerCreated then
    begin
     IsUndoEndMarkerCreated:=true;
-    ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushStartMarker('Change layers');
+    PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker('Change layers');
    end;
 end;
 procedure TLayersForm.CreateUndoEndMarkerNeeded;
@@ -131,7 +131,7 @@ begin
   if IsUndoEndMarkerCreated then
    begin
     IsUndoEndMarkerCreated:=false;
-    ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushEndMarker;
+    PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
    end;
 end;
 
@@ -163,7 +163,7 @@ function TLayersForm.LayerLockClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
      CreateUndoStartMarkerNeeded;
-     with PushCreateTGChangeCommand(ptdrawing(GDB.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._lock)^ do
+     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._lock)^ do
      begin
        PGDBLayerProp(Item.Data)^._lock:=not PGDBLayerProp(Item.Data)^._lock;
        ComitFromObj;
@@ -178,7 +178,7 @@ function TLayersForm.LayerOnClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
      CreateUndoStartMarkerNeeded;
-     with PushCreateTGChangeCommand(ptdrawing(GDB.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._on)^ do
+     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._on)^ do
      begin
        PGDBLayerProp(Item.Data)^._on:=not PGDBLayerProp(Item.Data)^._on;
        ComitFromObj;
@@ -198,7 +198,7 @@ function TLayersForm.LayerPlotClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
      CreateUndoStartMarkerNeeded;
-     with PushCreateTGChangeCommand(ptdrawing(GDB.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._print)^ do
+     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._print)^ do
      begin
        PGDBLayerProp(Item.Data)^._print:=not PGDBLayerProp(Item.Data)^._print;
        ComitFromObj;
@@ -267,7 +267,7 @@ begin
       if PGDBLayerProp(Item.Data)^.color<>ColorSelectForm.ColorInfex then
         begin
            CreateUndoStartMarkerNeeded;
-           with PushCreateTGChangeCommand(ptdrawing(GDB.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^.color)^ do
+           with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^.color)^ do
            begin
              PGDBLayerProp(Item.Data)^.color:=ColorSelectForm.ColorInfex;
              ComitFromObj;
@@ -300,7 +300,7 @@ var
    pltp:PGDBLtypeProp;
 begin
      SelectorWindow.StartAddItems;
-     pdwg:=gdb.GetCurrentDWG;
+     pdwg:=drawings.GetCurrentDWG;
      if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
      begin
        pltp:=pdwg^.LTypeStyleTable.beginiterate(ir);
@@ -473,9 +473,9 @@ begin
      if ListView1.CurrentItem<>ListItem then
      begin
        CreateUndoStartMarkerNeeded;
-     with PushCreateTGChangeCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CLayer^)^ do
+     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CLayer^)^ do
      begin
-          SysVar.dwg.DWG_CLayer^:={gdb.GetCurrentDWG^.LayerTable.GetIndexByPointer}(ListItem.Data);
+          SysVar.dwg.DWG_CLayer^:={drawings.GetCurrentDWG^.LayerTable.GetIndexByPointer}(ListItem.Data);
           ComitFromObj;
      end;
      //ListItem.ImageIndex:=II_Ok;
@@ -509,7 +509,7 @@ var
 begin
      ListView1.BeginUpdate;
      ListView1.Clear;
-     pdwg:=gdb.GetCurrentDWG;
+     pdwg:=drawings.GetCurrentDWG;
      if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
      begin
        plp:=pdwg^.LayerTable.beginiterate(ir);
@@ -519,7 +519,7 @@ begin
 
             li.Data:=plp;
 
-            ListView1.UpdateItem(li,gdb.GetCurrentDWG^.GetCurrentLayer);
+            ListView1.UpdateItem(li,drawings.GetCurrentDWG^.GetCurrentLayer);
 
             plp:=pdwg^.LayerTable.iterate(ir);
        until plp=nil;
@@ -532,7 +532,7 @@ procedure TLayersForm.countlayer(player:PGDBLayerProp;out e,b:GDBInteger);
 var
    pdwg:PTSimpleDrawing;
 begin
-  pdwg:=gdb.GetCurrentDWG;
+  pdwg:=drawings.GetCurrentDWG;
   e:=0;
   pdwg^.mainObjRoot.IterateCounter(player,e,@LayerCounter);
   b:=0;
@@ -547,7 +547,7 @@ var
 begin
      if selected then
      begin
-          pdwg:=gdb.GetCurrentDWG;
+          pdwg:=drawings.GetCurrentDWG;
           player:=(Item.Data);
           countlayer(player,inent,inblock);
           LayerDescLabel.Caption:=Format(rsLayerUsedIn,[Tria_AnsiToUtf8(player^.Name),inent,inblock]);
@@ -562,7 +562,7 @@ var
    li:TListItem;
    domethod,undomethod:tmethod;
 begin
-     pdwg:=gdb.GetCurrentDWG;
+     pdwg:=drawings.GetCurrentDWG;
      if assigned(ListView1.Selected)then
                                         player:=(ListView1.Selected.Data)
                                     else
@@ -581,13 +581,13 @@ begin
 
      domethod:=tmethod(@pdwg^.LayerTable.AddToArray);
      undomethod:=tmethod(@pdwg^.LayerTable.RemoveFromArray);
-     with PushCreateTGObjectChangeCommand2(ptdrawing(GDB.GetCurrentDWG)^.UndoStack,pcreatedlayer,tmethod(domethod),tmethod(undomethod))^ do
+     with PushCreateTGObjectChangeCommand2(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pcreatedlayer,tmethod(domethod),tmethod(undomethod))^ do
      begin
           AfterAction:=false;
           //comit;
      end;
 
-     ListView1.AddCreatedItem(pcreatedlayer,gdb.GetCurrentDWG^.GetCurrentLayer);
+     ListView1.AddCreatedItem(pcreatedlayer,drawings.GetCurrentDWG^.GetCurrentLayer);
 end;
 procedure TLayersForm.doLayerDelete(ProcessedItem:TListItem);
 var
@@ -595,12 +595,12 @@ var
    player:PGDBLayerProp;
    pdwg:PTSimpleDrawing;
 begin
-  pdwg:=gdb.GetCurrentDWG;
+  pdwg:=drawings.GetCurrentDWG;
   player:=(ProcessedItem.Data);
   domethod:=tmethod(@pdwg^.LayerTable.RemoveFromArray);
   undomethod:=tmethod(@pdwg^.LayerTable.AddToArray);
   CreateUndoStartMarkerNeeded;
-  with PushCreateTGObjectChangeCommand2(ptdrawing(pdwg)^.UndoStack,player,tmethod(domethod),tmethod(undomethod))^ do
+  with PushCreateTGObjectChangeCommand2(PTZCADDrawing(pdwg)^.UndoStack,player,tmethod(domethod),tmethod(undomethod))^ do
   begin
        AfterAction:=false;
        comit;
@@ -616,7 +616,7 @@ var
 begin
      i:=0;
      purgedcounter:=0;
-     PCurrentLayer:=gdb.GetCurrentDWG^.GetCurrentLayer;
+     PCurrentLayer:=drawings.GetCurrentDWG^.GetCurrentLayer;
      if ListView1.Items.Count>0 then
      begin
        repeat
@@ -642,7 +642,7 @@ var
    domethod,undomethod:tmethod;
 begin
   //ShowError(rsNotYetImplemented);
-  pdwg:=gdb.GetCurrentDWG;
+  pdwg:=drawings.GetCurrentDWG;
   if assigned(ListView1.Selected)then
                                      begin
                                      player:=(ListView1.Selected.Data);

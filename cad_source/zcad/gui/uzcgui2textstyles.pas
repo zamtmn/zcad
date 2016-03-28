@@ -46,7 +46,7 @@ var
   ir:itrec;
 begin
   //Correct items count
-  ptt:=@gdb.GetCurrentDWG.TextStyleTable;
+  ptt:=@drawings.GetCurrentDWG.TextStyleTable;
   SetcomboItemsCount(tcombobox(Sender),ptt.GetRealCount);
 
   //Correct items
@@ -75,9 +75,9 @@ var
    ll:integer;
    s:string;
 begin
-    if gdb.GetCurrentDWG=nil then
+    if drawings.GetCurrentDWG=nil then
                                  exit;
-    if gdb.GetCurrentDWG.LTypeStyleTable.Count=0 then
+    if drawings.GetCurrentDWG.LTypeStyleTable.Count=0 then
                                  exit;
     ComboBoxDrawItem(Control,ARect,State);
 
@@ -110,7 +110,7 @@ begin
                          exit;
 
 
-     if gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
+     if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
      then
      begin
           SysVar.dwg.DWG_CTStyle^:=pts;
@@ -119,7 +119,7 @@ begin
      begin
           CLTSave:=SysVar.dwg.DWG_CTStyle^;
           SysVar.dwg.DWG_CTStyle^:={TSIndex}pts;
-          commandmanager.ExecuteCommand('SelObjChangeTstyleToCurrent',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+          commandmanager.ExecuteCommand('SelObjChangeTstyleToCurrent',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
           SysVar.dwg.DWG_CTStyle^:=CLTSave;
      end;
      if assigned(SetVisuaProplProc) then SetVisuaProplProc;

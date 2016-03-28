@@ -68,7 +68,7 @@ type
     TCangeMethod=procedure(const data:_T)of object;
 begin
      TCangeMethod(method)(UnDoData);
-     PGDBObjEntity(method.Data)^.YouChanged(gdb.GetCurrentDWG^);
+     PGDBObjEntity(method.Data)^.YouChanged(drawings.GetCurrentDWG^);
      //PGDBObjSubordinated(method.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(method.Data),PGDBObjSubordinated(method.Data)^.bp.PSelfInOwnerArray);
 end;
 procedure TGObjectChangeCommand.Comit;
@@ -76,7 +76,7 @@ type
     TCangeMethod=procedure(const data:_T)of object;
 begin
      TCangeMethod(method)(DoData);
-     PGDBObjEntity(method.Data)^.YouChanged(gdb.GetCurrentDWG^);
+     PGDBObjEntity(method.Data)^.YouChanged(drawings.GetCurrentDWG^);
      //PGDBObjSubordinated(method.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(method.Data),PGDBObjSubordinated(method.Data)^.bp.PSelfInOwnerArray);
 end;
 

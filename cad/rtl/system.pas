@@ -3719,9 +3719,9 @@ TDWGProps=packed record
                 Name:GDBString;
                 Number:GDBInteger;
           end;
-PGDBDescriptor=^GDBDescriptor;
-GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
-                    CurrentDWG:{PTDrawing}PTSimpleDrawing;
+PTZCADDrawingsManager=^TZCADDrawingsManager;
+TZCADDrawingsManager={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
+                    CurrentDWG:{PTZCADDrawing}PTSimpleDrawing;
                     ProjectUnits:TUnitManager;
                     FileNameCounter:integer;
                     constructor init;
@@ -3729,13 +3729,13 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     destructor done;virtual;abstract;
                     //function AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer):integer;virtual;abstract;
                     function GetCurrentROOT:PGDBObjGenericSubEntry;
-                    function GetCurrentDWG:{PTDrawing}PTSimpleDrawing;
+                    function GetCurrentDWG:{PTZCADDrawing}PTSimpleDrawing;
                     function GetCurrentOGLWParam:POGLWndtype;
                     function GetUndoStack:GDBPointer;
                     procedure asociatedwgvars;
                     procedure freedwgvars;
                     procedure SetCurrentDWG(PDWG:PTAbstractDrawing);
-                    function CreateDWG(preloadedfile1,preloadedfile2:GDBString):PTDrawing;
+                    function CreateDWG(preloadedfile1,preloadedfile2:GDBString):PTZCADDrawing;
                     //function CreateSimpleDWG:PTSimpleDrawing;virtual;abstract;
                     procedure eraseobj(ObjAddr:PGDBaseObject);virtual;abstract;
                     procedure CopyBlock(_from,_to:PTSimpleDrawing;_source:PGDBObjBlockdef);

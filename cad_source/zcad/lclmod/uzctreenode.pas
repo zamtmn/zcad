@@ -333,7 +333,7 @@ begin
                                else}
                                    if assigned(uzcinterface.SetNormalFocus)then
                                                                                 uzcinterface.SetNormalFocus(nil);
-                                   commandmanager.executecommand(s,gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                                   commandmanager.executecommand(s,drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
      result:=true;
 end;
 procedure TmyActionList.AddMyAction(Action:TZAction);
@@ -713,16 +713,16 @@ end;
 procedure TmyCommandToolButton.click;
 begin
      if action=nil then
-                       commandmanager.executecommand(Fcommand,gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                       commandmanager.executecommand(Fcommand,drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
      inherited;
 end;
 
 procedure TmyMenuItem.Click;
 begin
      if fsilent then
-                    commandmanager.executecommandsilent(@Fcommand[1],gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam)
+                    commandmanager.executecommandsilent(@Fcommand[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam)
                 else
-                    commandmanager.executecommand(Fcommand,gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                    commandmanager.executecommand(Fcommand,drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
      inherited;
 end;
 procedure TmyMenuItem.SetCommand(_Caption,_Command:TTranslateString);

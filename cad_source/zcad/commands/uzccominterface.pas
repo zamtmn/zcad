@@ -90,10 +90,10 @@ uses uzcmainwindow,
 function CloseDWG_com(operands:TCommandOperands):TCommandResult;
 var
    //poglwnd:toglwnd;
-   CurrentDWG:PTDrawing;
+   CurrentDWG:PTZCADDrawing;
 begin
   application.ProcessMessages;
-  CurrentDWG:=PTDrawing(gdb.GetCurrentDWG);
+  CurrentDWG:=PTZCADDrawing(drawings.GetCurrentDWG);
   _CloseDWGPage(CurrentDWG,ZCADMainWindow.PageControl.ActivePage);
   result:=cmd_ok;
   (*if CurrentDWG<>nil then
@@ -104,10 +104,10 @@ begin
                                  end;
        poglwnd:=CurrentDWG.OGLwindow1;
        //mainform.PageControl.delpage(mainform.PageControl.onmouse);
-       gdb.eraseobj(CurrentDWG);
-       gdb.pack;
+       drawings.eraseobj(CurrentDWG);
+       drawings.pack;
        poglwnd.PDWG:=nil;
-       gdb.CurrentDWG:=nil;
+       drawings.CurrentDWG:=nil;
 
        poglwnd.free;
 
@@ -118,7 +118,7 @@ begin
        begin
             tobject(poglwnd):=FindControlByType(poglwnd,TOGLWnd);
             //pointer(poglwnd):=poglwnd^.FindKidsByType(typeof(TOGLWnd));
-            gdb.CurrentDWG:=poglwnd.PDWG;
+            drawings.CurrentDWG:=poglwnd.PDWG;
             poglwnd.GDBActivate;
        end;
        uzcshared.SBTextOut('Закрыто');
@@ -158,20 +158,20 @@ begin
 end;
 function newdwg_com(operands:TCommandOperands):TCommandResult;
 var
-   ptd:PTDrawing;
+   ptd:PTZCADDrawing;
    myts:TTabSheet;
    oglwnd:TCADControl;
    wpowner:{TOpenGLViewArea}{TGeneralViewArea}TAbstractViewArea;
    tn:GDBString;
    dwgname:GDBString;
 begin
-     ptd:=gdb.CreateDWG('*rtl/dwg/DrawingDeviceBase.pas','*rtl/dwg/DrawingVars.pas');
+     ptd:=drawings.CreateDWG('*rtl/dwg/DrawingDeviceBase.pas','*rtl/dwg/DrawingVars.pas');
 
-     gdb.AddRef(ptd^);
+     drawings.AddRef(ptd^);
 
      if length(operands)=0 then
                                begin
-                                    dwgname:=gdb.GetDefaultDrawingName;
+                                    dwgname:=drawings.GetDefaultDrawingName;
                                     operands:=@dwgname[1];
                                     ptd^.FileName:=dwgname;
                                end
@@ -221,7 +221,7 @@ begin
 
      //--------------------------------------------------------------oglwnd.BevelOuter:=bvnone;
      ptd.wa:=wpowner;
-     gdb.SetCurrentDWG(ptd);
+     drawings.SetCurrentDWG(ptd);
  wpowner.PDWG:=ptd;
      wpowner.getviewcontrol.align:=alClient;
      wpowner.getviewcontrol.Parent:=myts;
@@ -261,9 +261,9 @@ begin
      //oglwnd._onresize(nil);
      //programlog.logoutstr('oglwnd._onresize(nil);',0);
 
-     //GDB.AddBlockFromDBIfNeed(gdb.GetCurrentDWG,'DEVICE_TEST');
-     //addblockinsert(gdb.GetCurrentROOT,@gdb.GetCurrentDWG.ConstructObjRoot.ObjArray, nulvertex, 1, 0, 'DEVICE_TEST');
-     //gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+     //drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_TEST');
+     //addblockinsert(drawings.GetCurrentROOT,@drawings.GetCurrentDWG.ConstructObjRoot.ObjArray, nulvertex, 1, 0, 'DEVICE_TEST');
+     //drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
 end;
 function Import_com(operands:TCommandOperands):TCommandResult;
 var
@@ -294,8 +294,8 @@ begin
   if isload then
   begin
        newdwg_com(@s[1]);
-       gdb.GetCurrentDWG.SetFileName(s);
-       import(s,gdb.GetCurrentDWG^);
+       drawings.GetCurrentDWG.SetFileName(s);
+       import(s,drawings.GetCurrentDWG^);
   end
             else
      uzcshared.ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
@@ -342,10 +342,10 @@ begin
      begin
           newdwg_com(@s[1]);
           //if operands<>'QS' then
-                                gdb.GetCurrentDWG.SetFileName(s);
+                                drawings.GetCurrentDWG.SetFileName(s);
           //programlog.logoutstr('gdb.GetCurrentDWG.FileName:=s;',0);
           load_merge(@s[1],tloload);
-          gdb.GetCurrentDWG.wa.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
+          drawings.GetCurrentDWG.wa.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
                                                   //создания или загрузки
           redrawoglwnd;
           //programlog.logoutstr('load_merge(@s[1],tloload);',0);
@@ -371,16 +371,16 @@ begin
        UnitsForm.BoundsRect:=GetBoundsFromSavedUnit('UnitsWND',SysParam.ScreenX,SysParam.Screeny)
    end;
 
-   _UnitsFormat:=gdb.GetUnitsFormat;
+   _UnitsFormat:=drawings.GetUnitsFormat;
 
    if assigned(ShowAllCursorsProc) then
                                        ShowAllCursorsProc;
    result:=UnitsForm.runmodal(_UnitsFormat,sysvar.DWG.DWG_InsUnits^);
    if result=mrok then
                       begin
-                        gdb.SetUnitsFormat(_UnitsFormat);
+                        drawings.SetUnitsFormat(_UnitsFormat);
                         if assigned(ReturnToDefaultProc)then
-                                                            ReturnToDefaultProc(gdb.GetUnitsFormat);
+                                                            ReturnToDefaultProc(drawings.GetUnitsFormat);
                       end;
    if assigned(RestoreAllCursorsProc) then
                                        RestoreAllCursorsProc;
@@ -579,23 +579,23 @@ begin
      if Operands='VARS' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,gdb.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,gdb.GetCurrentDWG);
+                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,drawings.GetCurrentDWG);
                             end
 else if Operands='CAMERA' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,gdb.GetUnitsFormat,SysUnit.TypeName2PTD('GDBObjCamera'),gdb.GetCurrentDWG.pcamera,gdb.GetCurrentDWG);
+                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBObjCamera'),drawings.GetCurrentDWG.pcamera,drawings.GetCurrentDWG);
                             end
 else if Operands='CURRENT' then
                             begin
 
-                                 if (GDB.GetCurrentDWG.GetLastSelected <> nil)
+                                 if (drawings.GetCurrentDWG.GetLastSelected <> nil)
                                  then
                                      begin
-                                          obj:=pGDBObjEntity(GDB.GetCurrentDWG.GetLastSelected)^.GetObjTypeName;
+                                          obj:=pGDBObjEntity(drawings.GetCurrentDWG.GetLastSelected)^.GetObjTypeName;
                                           objt:=SysUnit.TypeName2PTD(obj);
                                           If assigned(SetGDBObjInspProc)then
-                                          SetGDBObjInspProc(gdb.GetUndoStack,gdb.GetUnitsFormat,objt,GDB.GetCurrentDWG.GetLastSelected,gdb.GetCurrentDWG);
+                                          SetGDBObjInspProc(drawings.GetUndoStack,drawings.GetUnitsFormat,objt,drawings.GetCurrentDWG.GetLastSelected,drawings.GetCurrentDWG);
                                      end
                                  else
                                      begin
@@ -607,7 +607,7 @@ else if Operands='SELECTED' then
                             begin
                                      begin
                                           //ShowError('ugdbdescriptor.poglwnd^.SelDesc.LastSelectedObject=NIL, try find selected in DRAWING...');
-                                          pp:=gdb.GetCurrentROOT.objarray.beginiterate(ir);
+                                          pp:=drawings.GetCurrentROOT.objarray.beginiterate(ir);
                                           if pp<>nil then
                                          begin
                                               repeat
@@ -616,10 +616,10 @@ else if Operands='SELECTED' then
                                                                    obj:=pp^.GetObjTypeName;
                                                                    objt:=SysUnit.TypeName2PTD(obj);
                                                                    If assigned(SetGDBObjInspProc)then
-                                                                   SetGDBObjInspProc(gdb.GetUndoStack,gdb.GetUnitsFormat,objt,pp,gdb.GetCurrentDWG);
+                                                                   SetGDBObjInspProc(drawings.GetUndoStack,drawings.GetUnitsFormat,objt,pp,drawings.GetCurrentDWG);
                                                                    exit;
                                                               end;
-                                              pp:=gdb.GetCurrentROOT.objarray.iterate(ir);
+                                              pp:=drawings.GetCurrentROOT.objarray.iterate(ir);
                                               until pp=nil;
                                          end;
                                      end;
@@ -628,57 +628,57 @@ else if Operands='SELECTED' then
 else if Operands='OGLWND_DEBUG' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,gdb.GetUnitsFormat,SysUnit.TypeName2PTD('OGLWndtype'),@gdb.GetCurrentDWG.wa.param,gdb.GetCurrentDWG);
+                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('OGLWndtype'),@drawings.GetCurrentDWG.wa.param,drawings.GetCurrentDWG);
                             end
 else if Operands='GDBDescriptor' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,gdb.GetUnitsFormat,SysUnit.TypeName2PTD('GDBDescriptor'),@gdb,gdb.GetCurrentDWG);
+                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBDescriptor'),@drawings,drawings.GetCurrentDWG);
                             end
 else if Operands='RELE_DEBUG' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,gdb.GetUnitsFormat,dbunit.TypeName2PTD('vardesk'),dbunit.FindVariable('SEVCABLEkvvg'),gdb.GetCurrentDWG);
+                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('vardesk'),dbunit.FindVariable('SEVCABLEkvvg'),drawings.GetCurrentDWG);
                             end
 else if Operands='LAYERS' then
                             begin
-                                 SetGDBObjInspProc(nil,gdb.GetUnitsFormat,dbunit.TypeName2PTD('GDBLayerArray'),@gdb.GetCurrentDWG.LayerTable,gdb.GetCurrentDWG);
+                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('GDBLayerArray'),@drawings.GetCurrentDWG.LayerTable,drawings.GetCurrentDWG);
                             end
 else if Operands='TSTYLES' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,gdb.GetUnitsFormat,dbunit.TypeName2PTD('GDBTextStyleArray'),@gdb.GetCurrentDWG.TextStyleTable,gdb.GetCurrentDWG);
+                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('GDBTextStyleArray'),@drawings.GetCurrentDWG.TextStyleTable,drawings.GetCurrentDWG);
                             end
 else if Operands='FONTS' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,gdb.GetUnitsFormat,dbunit.TypeName2PTD('GDBFontManager'),@FontManager,gdb.GetCurrentDWG);
+                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('GDBFontManager'),@FontManager,drawings.GetCurrentDWG);
                             end
 else if Operands='OSMODE' then
                             begin
                                  OSModeEditor.GetState;
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,gdb.GetUnitsFormat,dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,gdb.GetCurrentDWG);
+                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,drawings.GetCurrentDWG);
                             end
 else if Operands='NUMERATORS' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,gdb.GetUnitsFormat,SysUnit.TypeName2PTD('GDBNumerator'),@gdb.GetCurrentDWG.Numerator,gdb.GetCurrentDWG);
+                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBNumerator'),@drawings.GetCurrentDWG.Numerator,drawings.GetCurrentDWG);
                             end
 else if Operands='LINETYPESTYLES' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,gdb.GetUnitsFormat,SysUnit.TypeName2PTD('GDBLtypeArray'),@gdb.GetCurrentDWG.LTypeStyleTable,gdb.GetCurrentDWG);
+                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBLtypeArray'),@drawings.GetCurrentDWG.LTypeStyleTable,drawings.GetCurrentDWG);
                             end
 else if Operands='TABLESTYLES' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,gdb.GetUnitsFormat,SysUnit.TypeName2PTD('GDBTableStyleArray'),@gdb.GetCurrentDWG.TableStyleTable,gdb.GetCurrentDWG);
+                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBTableStyleArray'),@drawings.GetCurrentDWG.TableStyleTable,drawings.GetCurrentDWG);
                             end
 else if Operands='DIMSTYLES' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(nil,gdb.GetUnitsFormat,SysUnit.TypeName2PTD('GDBDimStyleArray'),@gdb.GetCurrentDWG.DimStyleTable,gdb.GetCurrentDWG);
+                                 SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBDimStyleArray'),@drawings.GetCurrentDWG.DimStyleTable,drawings.GetCurrentDWG);
                             end
                             ;
      If assigned(SetCurrentObjDefaultProc)then
@@ -689,7 +689,7 @@ end;
 function Options_com(operands:TCommandOperands):TCommandResult;
 begin
   if assigned(SetGDBObjInspProc)then
-                                    SetGDBObjInspProc(nil,gdb.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,gdb.GetCurrentDWG);
+                                    SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,drawings.GetCurrentDWG);
   historyoutstr(rscmOptions2OI);
   result:=cmd_ok;
 end;

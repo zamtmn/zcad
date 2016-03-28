@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="162">
+    <Units Count="169">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -905,6 +905,34 @@
         <Filename Value="zengine/core/uzeentitiesmanager.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit161>
+      <Unit162>
+        <Filename Value="zcad/core/undostack/zcmultiobjectcreateundocommand.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit162>
+      <Unit163>
+        <Filename Value="zcad/gui/uzcgui2textstyles.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit163>
+      <Unit164>
+        <Filename Value="zcad/gui/uzcgui2linetypes.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit164>
+      <Unit165>
+        <Filename Value="zcad/gui/uzcgui2linewidth.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit165>
+      <Unit166>
+        <Filename Value="zcad/gui/uzcgui2color.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit166>
+      <Unit167>
+        <Filename Value="zcad/core/undostack/zcmultiobjectchangeundocommand.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit167>
+      <Unit168>
+        <Filename Value="zcad/commands/uzccomdrawdase.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit168>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -40,7 +40,7 @@ var
    ll:integer;
    s:string;
 begin
-    if gdb.GetCurrentDWG=nil then
+    if drawings.GetCurrentDWG=nil then
                                  exit;
     ComboBoxDrawItem(Control,ARect,State);
     if not TComboBox(Control).DroppedDown then

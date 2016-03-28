@@ -155,7 +155,7 @@ begin
   //Application_Initialize перемещен в инициализацию uzcfsplash чтоб показать сплэш пораньше
   //Application.Initialize;
 
-  //инициализация GDB
+  //инициализация drawings
   FontManager.EnumerateFontFiles;
   uzcdrawings.startup('*rtl/dwg/DrawingVars.pas','');
 
@@ -167,10 +167,10 @@ begin
   historyoutstr(format(rsZCADStarted,[sysvar.SYS.SYS_Version^]));
   gdbplugins.loadplugins(ProgramPath+'PLUGINS\');
 
-  SplashForm.TXTOut('Выполнение *components\autorun.cmd',false);commandmanager.executefile('*components/autorun.cmd',gdb.GetCurrentDWG,nil);
+  SplashForm.TXTOut('Выполнение *components\autorun.cmd',false);commandmanager.executefile('*components/autorun.cmd',drawings.GetCurrentDWG,nil);
   if sysparam.preloadedfile<>'' then
                                     begin
-                                         commandmanager.executecommand('Load('+sysparam.preloadedfile+')',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                                         commandmanager.executecommand('Load('+sysparam.preloadedfile+')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
                                          sysparam.preloadedfile:='';
                                     end;
   //убираем срлэш

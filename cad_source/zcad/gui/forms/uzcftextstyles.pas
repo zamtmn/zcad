@@ -147,7 +147,7 @@ begin
   if not IsUndoEndMarkerCreated then
    begin
     IsUndoEndMarkerCreated:=true;
-    ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushStartMarker('Change text styles');
+    PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker('Change text styles');
    end;
 end;
 procedure TTextStylesForm.CreateUndoEndMarkerNeeded;
@@ -155,7 +155,7 @@ begin
   if IsUndoEndMarkerCreated then
    begin
     IsUndoEndMarkerCreated:=false;
-    ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushEndMarker;
+    PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
    end;
 end;
 
@@ -169,12 +169,12 @@ begin
           if  newfont<>PGDBTextStyle(TListItem(Item).Data)^.pfont then
           begin
                CreateUndoStartMarkerNeeded;
-               with PushCreateTGChangeCommand(ptdrawing(GDB.GetCurrentDWG)^.UndoStack,pointer(PGDBTextStyle(TListItem(Item).Data)^.pfont))^ do
+               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBTextStyle(TListItem(Item).Data)^.pfont))^ do
                begin
                PGDBTextStyle(TListItem(Item).Data)^.pfont:=newfont;
                ComitFromObj;
                end;
-               with PushCreateTGChangeCommand(ptdrawing(GDB.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.dxfname)^ do
+               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBTextStyle(TListItem(Item).Data)^.dxfname)^ do
                begin
                PGDBTextStyle(TListItem(Item).Data)^.dxfname:=PGDBTextStyle(TListItem(Item).Data)^.pfont^.Name;
                ComitFromObj;
@@ -336,7 +336,7 @@ begin
      if ListView1.CurrentItem<>ListItem then
      begin
      CreateUndoStartMarkerNeeded;
-     with PushCreateTGChangeCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CTStyle^)^ do
+     with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CTStyle^)^ do
      begin
           SysVar.dwg.DWG_CTStyle^:=ListItem.Data;
           ComitFromObj;
@@ -372,7 +372,7 @@ var
 begin
      ListView1.BeginUpdate;
      ListView1.Clear;
-     pdwg:=gdb.GetCurrentDWG;
+     pdwg:=drawings.GetCurrentDWG;
      tscounter:=0;
      if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
      begin
@@ -382,7 +382,7 @@ begin
             li:=ListView1.Items.Add;
             inc(tscounter);
             li.Data:=plp;
-            ListView1.UpdateItem(li,gdb.GetCurrentDWG^.GetCurrentTextStyle);
+            ListView1.UpdateItem(li,drawings.GetCurrentDWG^.GetCurrentTextStyle);
             plp:=pdwg^.TextStyleTable.iterate(ir);
        until plp=nil;
      end;
@@ -407,7 +407,7 @@ procedure TTextStylesForm.countstyle(ptextstyle:PGDBTextStyle;out e,b,inDimStyle
 var
    pdwg:PTSimpleDrawing;
 begin
-  pdwg:=gdb.GetCurrentDWG;
+  pdwg:=drawings.GetCurrentDWG;
   e:=0;
   pdwg^.mainObjRoot.IterateCounter(ptextstyle,e,@TextStyleCounter);
   b:=0;
@@ -423,7 +423,7 @@ var
 begin
      if selected then
      begin
-          pdwg:=gdb.GetCurrentDWG;
+          pdwg:=drawings.GetCurrentDWG;
           pstyle:=(Item.Data);
           countstyle(pstyle,inent,inblock,indimstyles);
           DescLabel.Caption:=Format(rsTextStyleUsedIn,[pstyle^.Name,inent,inblock,indimstyles]);
@@ -439,7 +439,7 @@ var
    li:TListItem;
    domethod,undomethod:tmethod;
 begin
-  pdwg:=gdb.GetCurrentDWG;
+  pdwg:=drawings.GetCurrentDWG;
   if assigned(ListView1.Selected)then
                                      pstyle:=(ListView1.Selected.Data)
                                  else
@@ -459,13 +459,13 @@ begin
   domethod:=tmethod(@pdwg^.TextStyleTable.AddToArray);
   undomethod:=tmethod(@pdwg^.TextStyleTable.RemoveFromArray);
   CreateUndoStartMarkerNeeded;
-  with PushCreateTGObjectChangeCommand2(ptdrawing(GDB.GetCurrentDWG)^.UndoStack,pcreatedstyle,tmethod(domethod),tmethod(undomethod))^ do
+  with PushCreateTGObjectChangeCommand2(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pcreatedstyle,tmethod(domethod),tmethod(undomethod))^ do
   begin
        AfterAction:=false;
        //comit;
   end;
 
-  ListView1.AddCreatedItem(pcreatedstyle,gdb.GetCurrentDWG^.GetCurrentTextStyle);
+  ListView1.AddCreatedItem(pcreatedstyle,drawings.GetCurrentDWG^.GetCurrentTextStyle);
 end;
 procedure TTextStylesForm.doTStyleDelete(ProcessedItem:TListItem);
 var
@@ -473,12 +473,12 @@ var
    pstyle:PGDBTextStyle;
    pdwg:PTSimpleDrawing;
 begin
-  pdwg:=gdb.GetCurrentDWG;
+  pdwg:=drawings.GetCurrentDWG;
   pstyle:=(ProcessedItem.Data);
   domethod:=tmethod(@pdwg^.TextStyleTable.RemoveFromArray);
   undomethod:=tmethod(@pdwg^.TextStyleTable.AddToArray);
   CreateUndoStartMarkerNeeded;
-  with PushCreateTGObjectChangeCommand2(ptdrawing(pdwg)^.UndoStack,pstyle,tmethod(domethod),tmethod(undomethod))^ do
+  with PushCreateTGObjectChangeCommand2(PTZCADDrawing(pdwg)^.UndoStack,pstyle,tmethod(domethod),tmethod(undomethod))^ do
   begin
        AfterAction:=false;
        comit;
@@ -493,7 +493,7 @@ var
    inEntities,inBlockTable,indimstyles:GDBInteger;
    domethod,undomethod:tmethod;
 begin
-  pdwg:=gdb.GetCurrentDWG;
+  pdwg:=drawings.GetCurrentDWG;
   if assigned(ListView1.Selected)then
                                      begin
                                      pstyle:=(ListView1.Selected.Data);
@@ -536,7 +536,7 @@ var
 begin
      i:=0;
      purgedcounter:=0;
-     PCurrentStyle:=gdb.GetCurrentDWG^.GetCurrentTextStyle;
+     PCurrentStyle:=drawings.GetCurrentDWG^.GetCurrentTextStyle;
      if ListView1.Items.Count>0 then
      begin
        repeat

@@ -28,10 +28,6 @@ uses
     UGDBOpenArrayOfPObjects,UGDBOpenArrayOfByte;
 type
 {EXPORT+}
-{TDWGProps=packed record
-                Name:GDBString;
-                Number:GDBInteger;
-          end;}
 PTZCADDrawing=^TZCADDrawing;
 TZCADDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
 

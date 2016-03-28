@@ -45,13 +45,13 @@ var
   PDimStyle:PGDBDimStyle;
 begin
   //Correct items count
-  PDimStyleArray:=@gdb.GetCurrentDWG.DimStyleTable;
+  PDimStyleArray:=@drawings.GetCurrentDWG.DimStyleTable;
   SetcomboItemsCount(tcombobox(Sender),PDimStyleArray.Count);
 
   //Correct items
   for i:=0 to PDimStyleArray.Count-1 do
   begin
-       PDimStyle:=gdb.GetCurrentDWG.DimStyleTable.getelement(i);
+       PDimStyle:=drawings.GetCurrentDWG.DimStyleTable.getelement(i);
        tcombobox(Sender).Items.Objects[i]:=tobject(PDimStyle);
   end;
   tcombobox(Sender).ItemIndex:=-1;
@@ -70,9 +70,9 @@ var
   pts:PGDBDimStyle;
    s:string;
 begin
-    if gdb.GetCurrentDWG=nil then
+    if drawings.GetCurrentDWG=nil then
                                  exit;
-    if gdb.GetCurrentDWG.LTypeStyleTable.Count=0 then
+    if drawings.GetCurrentDWG.LTypeStyleTable.Count=0 then
                                  exit;
     ComboBoxDrawItem(Control,ARect,State);
 
@@ -103,7 +103,7 @@ begin
                          exit;
 
 
-     if gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
+     if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
      then
      begin
           SysVar.dwg.DWG_CDimStyle^:=pts;
@@ -112,7 +112,7 @@ begin
      begin
           CLTSave:=SysVar.dwg.DWG_CDimStyle^;
           SysVar.dwg.DWG_CDimStyle^:={TSIndex}pts;
-          commandmanager.ExecuteCommand('SelObjChangeDimStyleToCurrent',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+          commandmanager.ExecuteCommand('SelObjChangeDimStyleToCurrent',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
           SysVar.dwg.DWG_CDimStyle^:=CLTSave;
      end;
      if assigned(SetVisuaProplProc) then SetVisuaProplProc;

@@ -72,7 +72,7 @@ var
    pdwg:PTSimpleDrawing;
    pltp:PGDBLtypeProp;
 begin
-     pdwg:=gdb.GetCurrentDWG;
+     pdwg:=drawings.GetCurrentDWG;
      pltp:=Item.Data;
      Item.SubItems.Clear;
      if pltp=pdwg^.GetCurrentLType then
@@ -94,7 +94,7 @@ var
 begin
      LV.BeginUpdate;
      LV.Clear;
-     pdwg:=gdb.GetCurrentDWG;
+     pdwg:=drawings.GetCurrentDWG;
      if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
      begin
        pltp:=pdwg^.LTypeStyleTable.beginiterate(ir);
@@ -157,7 +157,7 @@ procedure TLineTypesForm.countlt(plt:PGDBLtypeProp;out e,b:GDBInteger);
 var
    pdwg:PTSimpleDrawing;
 begin
-  pdwg:=gdb.GetCurrentDWG;
+  pdwg:=drawings.GetCurrentDWG;
   e:=0;
   pdwg^.mainObjRoot.IterateCounter(plt,e,@LTypeCounter);
   b:=0;
@@ -176,7 +176,7 @@ begin
      li:=ListView1.Selected;
      ltd:=tstringlist.Create;
      ltd.Text:=self.Memo1.Text;
-     pdwg:=gdb.GetCurrentDWG;
+     pdwg:=drawings.GetCurrentDWG;
      if li<>nil then
                     pltp:=li.Data
                 else
@@ -211,7 +211,7 @@ var
 begin
      if selected then
      begin
-          pdwg:=gdb.GetCurrentDWG;
+          pdwg:=drawings.GetCurrentDWG;
           pltp:=(Item.Data);
           countlt(pltp,inent,inblock);
           LTDescLabel.Caption:=Format(rsLineTypeUsedIn,[Tria_AnsiToUtf8(pltp^.Name),inent,inblock]);
@@ -230,7 +230,7 @@ var
    CurrentLine:integer;
    LTName,LTDesk,LTImpl:GDBString;
 begin
-     pdwg:=gdb.GetCurrentDWG;
+     pdwg:=drawings.GetCurrentDWG;
      CurrentLine:=1;
      ltd:=tstringlist.Create;
      ltd.Text:=self.Memo1.Text;

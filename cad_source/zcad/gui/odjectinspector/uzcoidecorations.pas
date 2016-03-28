@@ -133,13 +133,13 @@ begin
 end;
 function LayersDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 begin
-     result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.LayerTable);
+     result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@drawings.GetCurrentDWG.LayerTable);
 end;
 function LTypeDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 var
     cbedit:TComboBox;
 begin
-     result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.LTypeStyleTable);
+     result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@drawings.GetCurrentDWG.LTypeStyleTable);
      cbedit:=TComboBox(result.Editor.geteditor);
      SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6);
      cbedit.Style:=csOwnerDrawFixed;
@@ -147,11 +147,11 @@ begin
 end;
 function TextStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 begin
-     result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.TextStyleTable);
+     result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@drawings.GetCurrentDWG.TextStyleTable);
 end;
 function DimStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 begin
-     result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.DimStyleTable);
+     result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@drawings.GetCurrentDWG.DimStyleTable);
 end;
 procedure DecorateType(tn:string;getvalueasstring:TOnGetValueAsString;CreateEditor:TOnCreateEditor;DrawProperty:TOnDrawProperty);
 var
@@ -462,7 +462,7 @@ begin
                     else
                         begin
                             s:=rsDifferent;
-                            if gdb.GetCurrentDWG.LTypeStyleTable.Count=0 then
+                            if drawings.GetCurrentDWG.LTypeStyleTable.Count=0 then
                                       exit;
                         end;
 
@@ -532,7 +532,7 @@ begin
                                                        p:=nil;
                                                        commandmanager.PushValue('','PGDBObjEntity',@p)
                                                   end;
-                         commandmanager.executecommand('GetPoint',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                         commandmanager.executecommand('GetPoint',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
                          GDBobjinsp.UpdateObjectInInsp;
                     end;
 end;
@@ -561,7 +561,7 @@ begin
                                                        p:=nil;
                                                        commandmanager.PushValue('','PGDBObjEntity',@p)
                                                   end;
-                         commandmanager.executecommand('GetLength',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                         commandmanager.executecommand('GetLength',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
                          GDBobjinsp.UpdateObjectInInsp;
                     end;
 end;
@@ -584,7 +584,7 @@ begin
                                                        p:=nil;
                                                        commandmanager.PushValue('','PGDBObjEntity',@p)
                                                   end;
-                         commandmanager.executecommand('GetVertexX',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                         commandmanager.executecommand('GetVertexX',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
                          GDBobjinsp.UpdateObjectInInsp;
                     end;
 end;
@@ -607,7 +607,7 @@ begin
                                                        p:=nil;
                                                        commandmanager.PushValue('','PGDBObjEntity',@p)
                                                   end;
-                         commandmanager.executecommand('GetVertexY',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                         commandmanager.executecommand('GetVertexY',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
                          GDBobjinsp.UpdateObjectInInsp;
                     end;
 end;
@@ -630,7 +630,7 @@ begin
                                                        p:=nil;
                                                        commandmanager.PushValue('','PGDBObjEntity',@p)
                                                   end;
-                         commandmanager.executecommand('GetVertexZ',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                         commandmanager.executecommand('GetVertexZ',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
                          GDBobjinsp.UpdateObjectInInsp;
                     end;
 end;

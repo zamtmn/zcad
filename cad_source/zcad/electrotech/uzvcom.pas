@@ -176,7 +176,7 @@ begin
   volume.LBN:=createvertex(LastPoint.x-MyEPSILON,LastPoint.y-MyEPSILON,LastPoint.z-MyEPSILON);//считаем левую\нижнюю\ближнюю точку объема
   volume.RTF:=createvertex(LastPoint.x+MyEPSILON,LastPoint.y+MyEPSILON,LastPoint.z+MyEPSILON);//считаем правую\верхнюю\дальнюю точку объема
   NearObjects.init(100); //инициализируем список
-  if gdb.GetCurrentROOT^.FindObjectsInVolume(volume,NearObjects)then //ищем примитивы оболочка которых пересекается с volume
+  if drawings.GetCurrentROOT^.FindObjectsInVolume(volume,NearObjects)then //ищем примитивы оболочка которых пересекается с volume
   begin
        //тут если такие примитивы нашлись, они лежат в списке NearObjects
 
@@ -443,7 +443,7 @@ begin
    counter2:=0;
 
   //+++Выбираем зону в которой будет происходить анализ кабельной продукции.Создаем два списка, список всех отрезков кабелей и список всех девайсов+++//
-  pobj:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
+  pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
   if pobj<>nil then
     repeat
       if pobj^.selected then
@@ -476,7 +476,7 @@ begin
              //GDBObjDevice
         inc(counter);
         end;
-      pobj:=gdb.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
+      pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
     until pobj=nil;
 
   HistoryOutStr('Кол-во ввыбранных элементов = ' + IntToStr(counter));
@@ -486,8 +486,8 @@ begin
  // ptest := listCable[0].cableEnt;
 
   ///***+++Ищем пересечения каждого кабеля либо друг с другом либо с граними девайсов+++***///
-  drawing:=gdb.GetCurrentDWG;
-  psldb:=drawing^.GetLayerTable^.{gdb.GetCurrentDWG.LayerTable.}getAddres('SYS_DEVICE_BORDER');
+  drawing:=drawings.GetCurrentDWG;
+  psldb:=drawing^.GetLayerTable^.{drawings.GetCurrentDWG.LayerTable.}getAddres('SYS_DEVICE_BORDER');
 
   for i:=0 to listCable.Size-1 do
   begin
@@ -500,7 +500,7 @@ begin
     volume.LBN:=volumeLine.stPoint;
     volume.RTF:=volumeLine.edPoint;
     NearObjects.init(100); //инициализируем список
-    if gdb.GetCurrentROOT^.FindObjectsInVolume(volume,NearObjects)then //ищем примитивы оболочка которых пересекается с volume
+    if drawings.GetCurrentROOT^.FindObjectsInVolume(volume,NearObjects)then //ищем примитивы оболочка которых пересекается с volume
     begin
        pobj:=NearObjects.beginiterate(ir);//получаем первый примитив из списка
        counter:=0;

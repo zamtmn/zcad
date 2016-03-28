@@ -37,7 +37,7 @@ begin
     if tdp<>'' then
     repeat
           GetPartOfPath(DependOnBlock,tdp,'|');
-          gdb.AddBlockFromDBIfNeed(dwg,DependOnBlock);
+          drawings.AddBlockFromDBIfNeed(dwg,DependOnBlock);
     until tdp='';
     BlockDefArray:=BlockBaseDWG^.GetBlockDefArraySimple;
     if BlockDefArray.getblockdef(BlockName)=nil then

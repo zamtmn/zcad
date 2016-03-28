@@ -79,7 +79,7 @@ begin
   if p<>nil then
   repeat
         TCangeMethod(p^)(UnDoData);
-        PGDBObjEntity(p^.Data)^.YouChanged(gdb.GetCurrentDWG^);
+        PGDBObjEntity(p^.Data)^.YouChanged(drawings.GetCurrentDWG^);
         //PGDBObjSubordinated(p^.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(p^.Data),PGDBObjSubordinated(p^.Data)^.bp.PSelfInOwnerArray);
 
        p:=ObjArray.iterate(ir);
@@ -97,7 +97,7 @@ begin
   if p<>nil then
   repeat
         TCangeMethod(p^)(DoData);
-        PGDBObjEntity(p^.Data)^.YouChanged(gdb.GetCurrentDWG^);
+        PGDBObjEntity(p^.Data)^.YouChanged(drawings.GetCurrentDWG^);
         //PGDBObjSubordinated(p^.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(p^.Data),PGDBObjSubordinated(p^.Data)^.bp.PSelfInOwnerArray);
 
        p:=ObjArray.iterate(ir);

@@ -169,8 +169,8 @@ begin
   ln^.CoordInOCS.lEnd:=Point;
   //format entity
   //"форматируем" примитив в соответствии с заданными параметрами
-  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-  ln^.FormatEntity(gdb.GetCurrentDWG^,dc);
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  ln^.FormatEntity(drawings.GetCurrentDWG^,dc);
 
 end;
 
@@ -187,7 +187,7 @@ begin
   // assign general properties from system variables to entity
   // присваиваем примитиву общие свойства из системных переменных
   zcSetEntPropFromCurrentDrawingProp(ad);
-  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   with ad^ do
    begin
      //specify the dimension style
@@ -212,7 +212,7 @@ begin
 
      //format entity
      //"форматируем" примитив в соответствии с заданными параметрами
-     FormatEntity(gdb.GetCurrentDWG^,dc);
+     FormatEntity(drawings.GetCurrentDWG^,dc);
 
    end;
 end;
@@ -252,7 +252,7 @@ var
 begin
 
   zcSetEntPropFromCurrentDrawingProp(rd);
-  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   with rd^ do
    begin
     PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
@@ -272,7 +272,7 @@ begin
     end;
     DimData.P10InWCS :=Point;
     DimData.P10InWCS := P10ChangeTo(Point);
-    FormatEntity(gdb.GetCurrentDWG^,dc);
+    FormatEntity(drawings.GetCurrentDWG^,dc);
    end;
 end;
 
@@ -298,14 +298,14 @@ var
                                // 3 точки которые будут получены от пользователя
     dc:TDrawContext;
 begin
-  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   // try to get from the user first point
   // пытаемся получить от пользователя первую точку
   if commandmanager.get3dpoint('Specify first point:',p1) then
     begin
       // Create a "temporary" line in the constructing entities list
       // Создаем "временную" линию в списке конструируемых примитивов
-      pline := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
+      pline := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
 
       // set the beginning of the line
       // устанавливаем начало линии
@@ -321,11 +321,11 @@ begin
       begin
         // clear the constructed objects list (temporary line will be removed)
         // очищаем список конструируемых объектов (временная линия будет удалена)
-        gdb.GetCurrentDWG^.FreeConstructionObjects;
+        drawings.GetCurrentDWG^.FreeConstructionObjects;
 
         //create dimensional entity in the list of constructing
         //создаем размерный примитив в списке конструируемых
-        pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBAlignedDimensionID,gdb.GetCurrentROOT));
+        pd := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBAlignedDimensionID,drawings.GetCurrentROOT));
 
         //assign the obtained point to the appropriate location primitive
         //присваиваем полученые точки в соответствующие места примитиву
@@ -349,7 +349,7 @@ begin
                 //если все 3 точки получены - строим примитив в списке примитивов
                pd := AllocEnt(GDBAlignedDimensionID);//allocate memory for the primitive
                                                           //выделяем вамять под примитив
-               pd^.initnul(gdb.GetCurrentROOT);//инициализируем примитив, указываем его владельца
+               pd^.initnul(drawings.GetCurrentROOT);//инициализируем примитив, указываем его владельца
                                                //initialize the primitive, specify its owner
                zcSetEntPropFromCurrentDrawingProp(pd);//assign general properties from system variables to entity
                                               //присваиваем примитиву общие свойства из системных переменных
@@ -364,10 +364,10 @@ begin
                InteractiveADimManipulator(pd,p3,false);//use the interactive function for final configuration entity
                                                        //используем интерактивную функцию для окончательной настройки примитива
 
-               pd^.FormatEntity(gdb.GetCurrentDWG^,dc);//format entity
+               pd^.FormatEntity(drawings.GetCurrentDWG^,dc);//format entity
                                                     //"форматируем" примитив в соответствии с заданными параметрами
 
-               {gdb.}zcAddEntToCurrentDrawingWithUndo(pd);//Add entity to drawing considering tying to undo-redo
+               {drawings.}zcAddEntToCurrentDrawingWithUndo(pd);//Add entity to drawing considering tying to undo-redo
                                                       //Добавляем примитив в чертеж с учетом обвязки для undo-redo
           end;
       end;
@@ -383,7 +383,7 @@ begin
     result:=false;
     if commandmanager.get3dpoint(prompt1,p1) then
     begin
-         pline := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
+         pline := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
          pline^.CoordInOCS.lBegin:=p1;
          InteractiveLineEndManipulator(pline,p1,false);
       if commandmanager.Get3DPointInteractive(prompt2,p2,@InteractiveLineEndManipulator,pline) then
@@ -391,7 +391,7 @@ begin
            result:=true;
       end;
     end;
-    gdb.GetCurrentDWG^.FreeConstructionObjects;
+    drawings.GetCurrentDWG^.FreeConstructionObjects;
 end;
 
 function DrawRotatedDim_com(operands:TCommandOperands):TCommandResult;
@@ -400,10 +400,10 @@ var
     p1,p2,p3,vd,vn:gdbvertex;
     dc:TDrawContext;
 begin
-    dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+    dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
     if GetInteractiveLine(rscmSpecifyfirstPoint,rscmSpecifySecondPoint,p1,p2) then
     begin
-         pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBRotatedDimensionID,gdb.GetCurrentROOT));
+         pd := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBRotatedDimensionID,drawings.GetCurrentROOT));
          pd^.DimData.P13InWCS:=p1;
          pd^.DimData.P14InWCS:=p2;
          InteractiveRDimManipulator(pd,p2,false);
@@ -415,9 +415,9 @@ begin
          begin
               vd:=pd^.vectorD;
               vn:=pd^.vectorN;
-              gdb.GetCurrentDWG^.FreeConstructionObjects;
+              drawings.GetCurrentDWG^.FreeConstructionObjects;
               pd := AllocEnt(GDBRotatedDimensionID);
-              pd^.initnul(gdb.GetCurrentROOT);
+              pd^.initnul(drawings.GetCurrentROOT);
               zcSetEntPropFromCurrentDrawingProp(pd);
 
               pd^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
@@ -429,8 +429,8 @@ begin
               pd^.vectorN:=vn;
               InteractiveRDimManipulator(pd,p3,false);
 
-              pd^.FormatEntity(gdb.GetCurrentDWG^,dc);
-              {gdb.}zcAddEntToCurrentDrawingWithUndo(pd);
+              pd^.FormatEntity(drawings.GetCurrentDWG^,dc);
+              {drawings.}zcAddEntToCurrentDrawingWithUndo(pd);
          end;
     end;
     result:=cmd_ok;
@@ -443,14 +443,14 @@ var
     dd : pgdbObjDiametricDimension absolute PInteractiveData;
     dc:TDrawContext;
 begin
-  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   zcSetEntPropFromCurrentDrawingProp(dd);
   with dd^ do
    begin
     PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
     DimData.P11InOCS:=Point;
     DimData.P11InOCS:=P11ChangeTo(Point);
-    FormatEntity(gdb.GetCurrentDWG^,dc);
+    FormatEntity(drawings.GetCurrentDWG^,dc);
    end;
 end;
 
@@ -461,12 +461,12 @@ var
     PBlockInsert : PGDBObjBlockInsert absolute PInteractiveData;
     dc:TDrawContext;
 begin
-  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   zcSetEntPropFromCurrentDrawingProp(PBlockInsert);
   with PBlockInsert^ do
    begin
     PBlockInsert^.Local.P_insert:=Point;
-    FormatEntity(gdb.GetCurrentDWG^,dc);
+    FormatEntity(drawings.GetCurrentDWG^,dc);
    end;
 end;
 
@@ -488,12 +488,12 @@ begin
   PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Scale.y:=rscale;
   PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Scale.z:=rscale;
 
-  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   zcSetEntPropFromCurrentDrawingProp(PBlockInsert);
   with PBlockInsert^ do
    begin
     PBlockInsert^.scale:=PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Scale;
-    FormatEntity(gdb.GetCurrentDWG^,dc);
+    FormatEntity(drawings.GetCurrentDWG^,dc);
    end;
 end;
 
@@ -513,12 +513,12 @@ begin
   rRotate:=Vertexangle(CreateVertex2D(1,0),CreateVertex2D(AngleVector.x,AngleVector.y))*180/pi;
   PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Rotate:=rRotate;
 
-  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   zcSetEntPropFromCurrentDrawingProp(PBlockInsert);
   with PBlockInsert^ do
    begin
     PBlockInsert^.rotate:=rRotate;
-    FormatEntity(gdb.GetCurrentDWG^,dc);
+    FormatEntity(drawings.GetCurrentDWG^,dc);
    end;
 end;
 
@@ -530,15 +530,15 @@ var
     dc:TDrawContext;
   procedure FinalCreateDDim;
   begin
-      pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBDiametricDimensionID,gdb.GetCurrentROOT));
+      pd := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBDiametricDimensionID,drawings.GetCurrentROOT));
       pd^.DimData.P10InWCS:=p1;
       pd^.DimData.P15InWCS:=p2;
       InteractiveDDimManipulator(pd,p2,false);
       if commandmanager.Get3DPointInteractive(rscmSpecifyThirdPoint,p3,@InteractiveDDimManipulator,pd) then
       begin
-          gdb.GetCurrentDWG^.FreeConstructionObjects;
+          drawings.GetCurrentDWG^.FreeConstructionObjects;
           pd := AllocEnt(GDBDiametricDimensionID);
-          pd^.initnul(gdb.GetCurrentROOT);
+          pd^.initnul(drawings.GetCurrentROOT);
 
           pd^.DimData.P10InWCS:=p1;
           pd^.DimData.P15InWCS:=p2;
@@ -546,8 +546,8 @@ var
 
           InteractiveDDimManipulator(pd,p3,false);
 
-          pd^.FormatEntity(gdb.GetCurrentDWG^,dc);
-          {gdb.}zcAddEntToCurrentDrawingWithUndo(pd);
+          pd^.FormatEntity(drawings.GetCurrentDWG^,dc);
+          {drawings.}zcAddEntToCurrentDrawingWithUndo(pd);
       end;
   end;
 
@@ -563,7 +563,7 @@ begin
     begin
          if commandmanager.GetEntity('Select circle or arc',pcircle) then
          begin
-              dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+              dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
               case pcircle^.vp.ID of
               GDBCircleID:begin
                               p1:=pcircle^.q1;
@@ -593,25 +593,25 @@ var
     dc:TDrawContext;
   procedure FinalCreateRDim;
   begin
-         pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBRadialDimensionID,gdb.GetCurrentROOT));
+         pd := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBRadialDimensionID,drawings.GetCurrentROOT));
          pd^.DimData.P10InWCS:=p1;
          pd^.DimData.P15InWCS:=p2;
          InteractiveDDimManipulator(pd,p2,false);
     if commandmanager.Get3DPointInteractive(rscmSpecifyThirdPoint,p3,@InteractiveDDimManipulator,pd) then
     begin
-         gdb.GetCurrentDWG^.FreeConstructionObjects;
+         drawings.GetCurrentDWG^.FreeConstructionObjects;
          pd := AllocEnt(GDBRadialDimensionID);
-         pd^.initnul(gdb.GetCurrentROOT);
+         pd^.initnul(drawings.GetCurrentROOT);
 
          pd^.DimData.P10InWCS:=p1;
          pd^.DimData.P15InWCS:=p2;
          pd^.DimData.P11InOCS:=p3;
 
          InteractiveDDimManipulator(pd,p3,false);
-         dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+         dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 
-         pd^.FormatEntity(gdb.GetCurrentDWG^,dc);
-         {gdb.}zcAddEntToCurrentDrawingWithUndo(pd);
+         pd^.FormatEntity(drawings.GetCurrentDWG^,dc);
+         {drawings.}zcAddEntToCurrentDrawingWithUndo(pd);
     end;
   end;
 
@@ -675,8 +675,8 @@ begin
                            sysvar.dwg.DWG_CLType^,
                            sysvar.dwg.DWG_CColor^,
                            sysvar.dwg.DWG_CLinew^);
-       dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-       PT3PointPentity(PInteractiveData)^.pentity^.FormatEntity(gdb.GetCurrentDWG^,dc);
+       dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+       PT3PointPentity(PInteractiveData)^.pentity^.FormatEntity(drawings.GetCurrentDWG^,dc);
      end;
 end;
 function DrawArc_com(operands:TCommandOperands):TCommandResult;
@@ -688,25 +688,25 @@ var
 begin
     if commandmanager.get3dpoint('Specify first point:',pe.p1) then
     begin
-         pline := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
+         pline := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
          pline^.CoordInOCS.lBegin:=pe.p1;
          InteractiveLineEndManipulator(pline,pe.p1,false);
       if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveLineEndManipulator,pline) then
       begin
-           gdb.GetCurrentDWG^.FreeConstructionObjects;
-           pe.pentity:= GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBArcID,gdb.GetCurrentROOT));
+           drawings.GetCurrentDWG^.FreeConstructionObjects;
+           pe.pentity:= GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBArcID,drawings.GetCurrentROOT));
         if commandmanager.Get3DPointInteractive('Specify third point:',pe.p3,@InteractiveArcManipulator,@pe) then
           begin
-               gdb.GetCurrentDWG^.FreeConstructionObjects;
+               drawings.GetCurrentDWG^.FreeConstructionObjects;
                pa := AllocEnt(GDBArcID);
                pe.pentity:=pa;
                pa^.initnul;
 
                InteractiveArcManipulator(@pe,pe.p3,false);
-               dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-               pa^.FormatEntity(gdb.GetCurrentDWG^,dc);
+               dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+               pa^.FormatEntity(drawings.GetCurrentDWG^,dc);
 
-               {gdb.}zcAddEntToCurrentDrawingWithUndo(pa);
+               {drawings.}zcAddEntToCurrentDrawingWithUndo(pa);
           end;
       end;
     end;
@@ -722,7 +722,7 @@ var
     dc:TDrawContext;
 begin
   zcSetEntPropFromCurrentDrawingProp(PT3PointCircleModePentity(PInteractiveData)^.pentity);
-  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   case PT3PointCircleModePentity(PInteractiveData)^.npoint of
      0:begin
          PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert:=PT3PointCircleModePentity(PInteractiveData)^.p1;
@@ -766,7 +766,7 @@ begin
          end;
        end;
   end;
-  PT3PointCircleModePentity(PInteractiveData)^.pentity^.FormatEntity(gdb.GetCurrentDWG^,dc);
+  PT3PointCircleModePentity(PInteractiveData)^.pentity^.FormatEntity(drawings.GetCurrentDWG^,dc);
 end;
 
 function DrawCircle_com(operands:TCommandOperands):TCommandResult;
@@ -786,7 +786,7 @@ begin
     if commandmanager.get3dpoint('Specify first point:',pe.p1) then
     begin
          inc(pe.npoint);
-         pe.pentity := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,gdb.GetCurrentROOT));
+         pe.pentity := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,drawings.GetCurrentROOT));
          InteractiveSmartCircleManipulator(@pe,pe.p1,false);
       if commandmanager.Get3DPointInteractive( 'Specify second point:',
                                                pe.p2,
@@ -798,22 +798,22 @@ begin
                 inc(pe.npoint);
                 if commandmanager.Get3DPointInteractive('Specify second point:',pe.p3,@InteractiveSmartCircleManipulator,@pe) then
                 begin
-                     gdb.GetCurrentDWG^.FreeConstructionObjects;
+                     drawings.GetCurrentDWG^.FreeConstructionObjects;
                      pcircle := AllocEnt(GDBCircleID);
                      pe.pentity:=pcircle;
                      pcircle^.initnul;
                      InteractiveSmartCircleManipulator(@pe,pe.p3,false);
-                     {gdb.}zcAddEntToCurrentDrawingWithUndo(pcircle);
+                     {drawings.}zcAddEntToCurrentDrawingWithUndo(pcircle);
                 end;
            end
            else
            begin
-               gdb.GetCurrentDWG^.FreeConstructionObjects;
+               drawings.GetCurrentDWG^.FreeConstructionObjects;
                pcircle := AllocEnt(GDBCircleID);
                pe.pentity:=pcircle;
                pcircle^.initnul;
                InteractiveSmartCircleManipulator(@pe,pe.p2,false);
-               {gdb.}zcAddEntToCurrentDrawingWithUndo(pcircle);
+               {drawings.}zcAddEntToCurrentDrawingWithUndo(pcircle);
            end;
       end;
     end;
@@ -862,10 +862,10 @@ var
 begin
     if commandmanager.getentity('Select source entity: ',ps) then
     begin
-         SetGDBObjInspProc( nil,gdb.GetUnitsFormat,SysUnit^.TypeName2PTD( 'TMatchPropParam'),
+         SetGDBObjInspProc( nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD( 'TMatchPropParam'),
                             @MatchPropParam,
-                            gdb.GetCurrentDWG );
-         dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+                            drawings.GetCurrentDWG );
+         dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
          while commandmanager.getentity('Select destination entity:',pd) do
          begin
               if MatchPropParam.ProcessLayer then
@@ -878,7 +878,7 @@ begin
                  pd^.vp.color:=ps^.vp.Color;
               if MatchPropParam.ProcessLineTypeScale then
                  pd^.vp.LineTypeScale:=ps^.vp.LineTypeScale;
-              pd^.FormatEntity(gdb.GetCurrentDWG^,dc);
+              pd^.FormatEntity(drawings.GetCurrentDWG^,dc);
               if assigned(redrawoglwndproc) then redrawoglwndproc;
          end;
     end;
@@ -894,7 +894,7 @@ begin
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint('Select point:',p) then
     begin
-         pc:=PushCreateTGChangeCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,pgdbvertex(ppointer(vdpvertex.data.Instance)^)^);
+         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pgdbvertex(ppointer(vdpvertex.data.Instance)^)^);
          pgdbvertex(ppointer(vdpvertex.data.Instance)^)^:=p;
          PTGDBVertexChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
          PTGDBVertexChangeCommand(pc)^.ComitFromObj;
@@ -911,7 +911,7 @@ begin
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint('Select X:',p) then
     begin
-         pc:=PushCreateTGChangeCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,PGDBXCoordinate(ppointer(vdpvertex.data.Instance)^)^);
+         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBXCoordinate(ppointer(vdpvertex.data.Instance)^)^);
          pgdbdouble(ppointer(vdpvertex.data.Instance)^)^:=p.x;
          PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
          PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
@@ -928,7 +928,7 @@ begin
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint('Select Y:',p) then
     begin
-         pc:=PushCreateTGChangeCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,PGDBYCoordinate(ppointer(vdpvertex.data.Instance)^)^);
+         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBYCoordinate(ppointer(vdpvertex.data.Instance)^)^);
          pgdbdouble(ppointer(vdpvertex.data.Instance)^)^:=p.y;
          PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
          PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
@@ -945,7 +945,7 @@ begin
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint('Select Z:',p) then
     begin
-         pc:=PushCreateTGChangeCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,PGDBZCoordinate(ppointer(vdpvertex.data.Instance)^)^);
+         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBZCoordinate(ppointer(vdpvertex.data.Instance)^)^);
          pgdbdouble(ppointer(vdpvertex.data.Instance)^)^:=p.z;
          PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
          PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
@@ -964,7 +964,7 @@ begin
     begin
       if commandmanager.get3dpoint('Select point:',p2) then
       begin
-        pc:=PushCreateTGChangeCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,pgdbdouble(ppointer(vdpvertex.data.Instance)^)^);
+        pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pgdbdouble(ppointer(vdpvertex.data.Instance)^)^);
         pgdblength(ppointer(vdpvertex.data.Instance)^)^:=geometry.Vertexlength(p1,p2);
         PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
         PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
@@ -981,14 +981,14 @@ begin
   if not assigned(BlockInsertForm)then                              //если форма несоздана -
     Application.CreateForm(TBlockInsertForm, BlockInsertForm);       //создаем ее
 
-  mr:=BlockInsertForm.run(@gdb.GetCurrentDWG^.BlockDefArray,'_ArchTick');//вызов гуя с передачей адреса таблицы описаний
+  mr:=BlockInsertForm.run(@drawings.GetCurrentDWG^.BlockDefArray,'_ArchTick');//вызов гуя с передачей адреса таблицы описаний
                                                                         //блоков, и делаем вид что в предидущем сеансе команды
                                                                         //мы вставляли блок _dot, гуй его болжен сам выбрать в
                                                                         //комбобоксе, этот параметр нужно сохранять в чертеже
 
 
   {создаем временный блок в области конструируемых объектов, без ундо}
-  CreatedData.PEntity:=GDBInsertBlock(@gdb.GetCurrentDWG^.ConstructObjRoot,//владелец создаваемого блока
+  CreatedData.PEntity:=GDBInsertBlock(@drawings.GetCurrentDWG^.ConstructObjRoot,//владелец создаваемого блока
                                       '_ArchTick',                         //имя
                                       createvertex(0,0,0),                 //точка вставки
                                       createvertex(1,1,1),                 //масштаб
@@ -1018,7 +1018,7 @@ begin
       begin
            {поворот была указан, еск пользователь не жал}
            {создаем постоянный блок в в чертеже, с ундо}
-           GDBInsertBlock(gdb.GetCurrentDWG^.GetCurrentROOT,//владелец создаваемого блока - текущий владелец чертежа. может быть модель, а может быть какоенить определение блока, нужно предусмотреть запрет рекурсивной вставки
+           GDBInsertBlock(drawings.GetCurrentDWG^.GetCurrentROOT,//владелец создаваемого блока - текущий владелец чертежа. может быть модель, а может быть какоенить определение блока, нужно предусмотреть запрет рекурсивной вставки
                           '_ArchTick',                      //имя
                           CreatedData.PInsert,              //точка вставки
                           CreatedData.Scale,                //масштаб
@@ -1086,9 +1086,9 @@ end;
 //
 //  //format entity
 //  //"форматируем" примитив в соответствии с заданными параметрами
-//  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-//  ln^.FormatEntity(gdb.GetCurrentDWG^,dc);
-//  ln2^.FormatEntity(gdb.GetCurrentDWG^,dc);
+//  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+//  ln^.FormatEntity(drawings.GetCurrentDWG^,dc);
+//  ln2^.FormatEntity(drawings.GetCurrentDWG^,dc);
 //
 //end;
 //procedure InteractivePolyLineManipulator2( const PInteractiveData : GDBPointer;
@@ -1137,11 +1137,11 @@ end;
 //                           sysvar.dwg.DWG_CLType^,
 //                           sysvar.dwg.DWG_CColor^,
 //                           sysvar.dwg.DWG_CLinew^);
-//       dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-//       PT3PointPentity(PInteractiveData)^.pentity^.FormatEntity(gdb.GetCurrentDWG^,dc);
+//       dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+//       PT3PointPentity(PInteractiveData)^.pentity^.FormatEntity(drawings.GetCurrentDWG^,dc);
 //     //end;
-//  // dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-//  //ln^.FormatEntity(gdb.GetCurrentDWG^,dc);
+//  // dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+//  //ln^.FormatEntity(drawings.GetCurrentDWG^,dc);
 //end;
 
 procedure InteractiveLWRectangleManipulator( const PInteractiveData : GDBPointer {pointer to the line entity};
@@ -1166,9 +1166,9 @@ begin
   GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(3)^).x := stPoint.x;
   GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(3)^).y := Point.y;
 
-  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 
-  polyLWObj^.FormatEntity(gdb.GetCurrentDWG^,dc);
+  polyLWObj^.FormatEntity(drawings.GetCurrentDWG^,dc);
 
 end;
 
@@ -1195,9 +1195,9 @@ begin
   GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(3)^).x := stPoint.x;
   GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(3)^).y := Point.y;
 
-  dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 
-  polyObj^.FormatEntity(gdb.GetCurrentDWG^,dc);
+  polyObj^.FormatEntity(drawings.GetCurrentDWG^,dc);
 
 end;
 
@@ -1220,9 +1220,9 @@ begin
    pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
    pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
    pf^.base.Attributes:=pf^.base.Attributes or FA_HIDDEN_IN_OBJ_INSP;//устанавливаем ему флаг cкрытности
-   SetGDBObjInspProc( nil,gdb.GetUnitsFormat,PInternalRTTITypeDesk,
+   SetGDBObjInspProc( nil,drawings.GetUnitsFormat,PInternalRTTITypeDesk,
                               @RectangParam,
-                              gdb.GetCurrentDWG );
+                              drawings.GetCurrentDWG );
 
    if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1) then
    begin
@@ -1238,7 +1238,7 @@ begin
         begin
              polyLWObj:=GDBObjLWPolyline.CreateInstance;
              polyLWObj^.Closed:=true;
-             //gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@polyLWObj);//было, теперь стало, не @указатель, а просто указатель
+             //drawings.GetCurrentDWG^.ConstructObjRoot.AddMi(@polyLWObj);//было, теперь стало, не @указатель, а просто указатель
              zcAddEntToCurrentDrawingConstructRoot(polyLWObj);
              vertexLWObj.x:=pe.p1.x;
              vertexLWObj.y:=pe.p1.y;
@@ -1260,14 +1260,14 @@ begin
                 zcAddEntToCurrentDrawingWithUndo(polyLWObj); //Добавить объект из конструкторской области в чертеж через ундо//
                 {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
                 нужно почистить список примитивов конструируемой области, без физического удаления примитивов}
-                //gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
+                //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
                 zcClearCurrentDrawingConstructRoot;
              end
         end
         else begin
              polyObj:=GDBObjPolyline.CreateInstance;
              polyObj^.Closed:=true;
-             //gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@polyObj);
+             //drawings.GetCurrentDWG^.ConstructObjRoot.AddMi(@polyObj);
              zcAddEntToCurrentDrawingConstructRoot(polyObj);
              vertexObj:=pe.p1;
              polyObj^.VertexArrayInOCS.Add(@vertexObj);
@@ -1280,12 +1280,12 @@ begin
                 zcAddEntToCurrentDrawingWithUndo(polyObj); //Добавить объект из конструкторской области в чертеж через ундо//
                 {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
                 нужно почистить список примитивов конструируемой области, без физического удаления примитивов}
-                //gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
+                //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
                 zcClearCurrentDrawingConstructRoot;
              end
         end;
     end;
-    ReturnToDefaultProc(gdb.GetUnitsFormat); //< Возвращает инспектор в значение по умолчанию
+    ReturnToDefaultProc(drawings.GetUnitsFormat); //< Возвращает инспектор в значение по умолчанию
     result:=cmd_ok;
 end;
 
@@ -1316,9 +1316,9 @@ begin
    pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
    pf^.base.Attributes:=pf^.base.Attributes and (not FA_HIDDEN_IN_OBJ_INSP);//сбрасываем ему флаг cкрытности
 
-   SetGDBObjInspProc( nil,gdb.GetUnitsFormat,PInternalRTTITypeDesk,
+   SetGDBObjInspProc( nil,drawings.GetUnitsFormat,PInternalRTTITypeDesk,
                               @RectangParam,
-                              gdb.GetCurrentDWG );
+                              drawings.GetCurrentDWG );
 
     if commandmanager.get3dpoint('Specify first point:',pe.p1) then
     begin
@@ -1340,13 +1340,13 @@ begin
       pf:=PInternalRTTITypeDesk^.FindField('ET');//находим описание поля ET
       pf^.base.Attributes:=pf^.base.Attributes or FA_READONLY;//устанавливаем ему флаг ридонли
 
-        // pline := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
+        // pline := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
          //создаем только одну полилинию//GDBObjLWPolyline.CreateInstance;
          polyObj:=GDBObjLWPolyline.CreateInstance;
       //polyObj:=GDBObjPolyline.CreateInstance;
       polyObj^.Closed:=true;
          //и НЕЗАБЫВЕМ добавить ее в область конструируемых объектов//
-         gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@polyObj);
+         drawings.GetCurrentDWG^.ConstructObjRoot.AddMi(@polyObj);
 
          polyVert.x:=pe.p1.x;
          polyVert.y:=pe.p1.y;
@@ -1377,7 +1377,7 @@ begin
           //незабываем вконце добавить всё что наконструировали в чертеж//
           zcAddEntToCurrentDrawingWithUndo(polyObj);
           //так как сейчас у нас объект находится и в чертеже и в конструируемой области, нужно почистить список примитивов конструируемой области, без физического удаления примитивов//
-          //gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
+          //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
           zcClearCurrentDrawingConstructRoot;
 
           //GDBObjLine.CreateInstance;
@@ -1436,14 +1436,14 @@ begin
           // Polly^. Width2D_in_OCS_Array.Add(@Polywidth);
           //
           //
-          //     dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
+          //     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
           //
-          //     pline1^.FormatEntity(gdb.GetCurrentDWG^,dc);
-          //     pline2^.FormatEntity(gdb.GetCurrentDWG^,dc);
-          //     pline3^.FormatEntity(gdb.GetCurrentDWG^,dc);
-          //     pline4^.FormatEntity(gdb.GetCurrentDWG^,dc);
+          //     pline1^.FormatEntity(drawings.GetCurrentDWG^,dc);
+          //     pline2^.FormatEntity(drawings.GetCurrentDWG^,dc);
+          //     pline3^.FormatEntity(drawings.GetCurrentDWG^,dc);
+          //     pline4^.FormatEntity(drawings.GetCurrentDWG^,dc);
           //
-          //     Polly^.FormatEntity(gdb.GetCurrentDWG^,dc);
+          //     Polly^.FormatEntity(drawings.GetCurrentDWG^,dc);
           //
           //     zcStartUndoCommand('');
           //     zcAddEntToCurrentDrawingWithUndo(pline1);
@@ -1454,7 +1454,7 @@ begin
           //     zcEndUndoCommand;
           //
       end;
-      ReturnToDefaultProc(gdb.GetUnitsFormat);
+      ReturnToDefaultProc(drawings.GetUnitsFormat);
     end;
     result:=cmd_ok;
 end;

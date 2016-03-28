@@ -81,7 +81,7 @@ var pobj,pobj2:PGDBObjCable;
     lastadddevice:PGDBObjDevice;
     pentvarext,pentvarext2:PTVariablesExtender;
 begin
-     pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+     pobj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
      if pobj<>nil then
      repeat
            if pobj^.vp.ID=GDBCableID then
@@ -102,7 +102,7 @@ begin
                 if pvn<>nil then
                                 pcd^.length:=pcd^.length+pgdbdouble(pvn^.data.Instance)^;
            end;
-           pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+           pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
      until pobj=nil;
      pcd:=beginiterate(ir2);
      if pcd<>nil then

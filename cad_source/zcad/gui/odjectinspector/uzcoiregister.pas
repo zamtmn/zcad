@@ -28,7 +28,7 @@ procedure ZCADFormSetupProc(Form:TControl);
 var
   pint:PGDBInteger;
 begin
-  SetGDBObjInsp(nil,gdb.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,nil);
+  SetGDBObjInsp(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,nil);
   SetCurrentObjDefault;
   //pint:=SavedUnit.FindValue('VIEW_ObjInspV');
   SetNameColWidth(Form.Width div 2);

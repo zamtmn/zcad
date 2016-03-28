@@ -195,7 +195,7 @@ type
                end;
 procedure UpdateVisible;
 function LoadLayout_com(Operands:pansichar):GDBInteger;
-function _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject):Integer;
+function _CloseDWGPage(ClosedDWG:PTZCADDrawing;lincedcontrol:TObject):Integer;
 
 var
   IVars:TInterfaceVars;
@@ -271,7 +271,7 @@ begin
            if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then
            begin
                 commandmanager.executecommandtotalend;
-                commandmanager.executecommand('Load('+ts+')',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                commandmanager.executecommand('Load('+ts+')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
            end;
      until msgstring='';
 end;
@@ -291,7 +291,7 @@ var lw:GDBInteger;
     ir:itrec;
 begin
 
-  if gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
+  if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
   then
       begin
            if assigned(LinewBox) then
@@ -301,8 +301,8 @@ begin
            LayerBox.ItemIndex:=getsortedindex(SysVar.dwg.DWG_CLayer^);}
            IVars.CColor:=sysvar.dwg.DWG_CColor^;
            IVars.CLWeight:=sysvar.dwg.DWG_CLinew^;
-           ivars.CLayer:={gdb.GetCurrentDWG.LayerTable.getelement}(sysvar.dwg.DWG_CLayer^);
-           ivars.CLType:={gdb.GetCurrentDWG.LTypeStyleTable.getelement}(sysvar.dwg.DWG_CLType^);
+           ivars.CLayer:={drawings.GetCurrentDWG.LayerTable.getelement}(sysvar.dwg.DWG_CLayer^);
+           ivars.CLType:={drawings.GetCurrentDWG.LTypeStyleTable.getelement}(sysvar.dwg.DWG_CLType^);
            ivars.CTStyle:=sysvar.dwg.DWG_CTStyle^;
            ivars.CDimStyle:=sysvar.dwg.DWG_CDimStyle^;
       end
@@ -315,8 +315,8 @@ begin
            ltype:=PEmpty;
            tstyle:=PEmpty;
            dimstyle:=PEmpty;
-           pv:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
-           //pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+           pv:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
+           //pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
            if pv<>nil then
            repeat
            if pv^.objaddr<>nil then
@@ -345,7 +345,7 @@ begin
                     end;
                 if (layer=PDifferent)and(lw=IntDifferent)and(color=IntDifferent)and(ltype=PDifferent)and(tstyle=PDifferent)and(dimstyle=PDifferent) then system.Break;
            end;
-           pv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
+           pv:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
            until pv=nil;
            if lw<>IntEmpty then
            if lw=IntDifferent then
@@ -396,8 +396,8 @@ procedure TZCADMainWindow.addoneobject;
 var lw:GDBInteger;
 begin
   exit;
-  lw:=PGDBObjEntity(gdb.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.LineWeight;
-  if gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=1
+  lw:=PGDBObjEntity(drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.LineWeight;
+  if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=1
   then
       begin
            if assigned(LinewBox)then
@@ -408,8 +408,8 @@ begin
                        end
                    else LinewBox.ItemIndex:=((lw div 10)+3);
            end;
-           ivars.CColor:=PGDBObjEntity(gdb.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.color;
-           ivars.CLType:=PGDBObjEntity(gdb.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.LineType;
+           ivars.CColor:=PGDBObjEntity(drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.color;
+           ivars.CLType:=PGDBObjEntity(drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.LineType;
       end
   else
       begin
@@ -418,9 +418,9 @@ begin
            if assigned(LinewBox)then
            if LinewBox.ItemIndex<>lw then LinewBox.ItemIndex:=(LinewBox.Items.Count-1);
 
-           if ivars.CColor<>PGDBObjEntity(gdb.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.color then
+           if ivars.CColor<>PGDBObjEntity(drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.color then
               ivars.CColor:=ClDifferent;
-           if ivars.CLType<>PGDBObjEntity(gdb.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.LineType then
+           if ivars.CLType<>PGDBObjEntity(drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.LineType then
               ivars.CLType:=nil;
       end;
 end;
@@ -430,7 +430,7 @@ var
    cdwg:PTSimpleDrawing;
    tcl:PGDBLayerProp;
 begin
-     CDWG:=GDB.GetCurrentDWG;
+     CDWG:=drawings.GetCurrentDWG;
      result:=false;
      case numprop of
                     0:begin
@@ -443,15 +443,15 @@ begin
                     {1:;}
                     2:PGDBLayerProp(PLayer)^._lock:=not(PGDBLayerProp(PLayer)^._lock);
                     3:begin
-                           cdwg:=gdb.GetCurrentDWG;
+                           cdwg:=drawings.GetCurrentDWG;
                            if cdwg<>nil then
                            begin
-                                if gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0 then
+                                if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0 then
                                 begin
                                           if assigned(sysvar.dwg.DWG_CLayer) then
                                           if sysvar.dwg.DWG_CLayer^<>Player then
                                           begin
-                                               with PushCreateTGChangeCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CLayer^)^ do
+                                               with PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CLayer^)^ do
                                                begin
                                                     sysvar.dwg.DWG_CLayer^:=Player;
                                                     ComitFromObj;
@@ -465,7 +465,7 @@ begin
                                 begin
                                        tcl:=SysVar.dwg.DWG_CLayer^;
                                        SysVar.dwg.DWG_CLayer^:=Player;
-                                       commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                                       commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
                                        SysVar.dwg.DWG_CLayer^:=tcl;
                                        setvisualprop;
                                 end;
@@ -489,7 +489,7 @@ var
    counter:integer;
 begin
      result:=false;
-     cdwg:=gdb.GetCurrentDWG;
+     cdwg:=drawings.GetCurrentDWG;
      if cdwg<>nil then
      begin
          if assigned(cdwg^.wa.getviewcontrol) then
@@ -516,7 +516,7 @@ begin
      if player=nil then
                        begin
                             result:=false;
-                            cdwg:=gdb.GetCurrentDWG;
+                            cdwg:=drawings.GetCurrentDWG;
                             if cdwg<>nil then
                             begin
                                  if assigned(cdwg^.wa) then
@@ -664,7 +664,7 @@ begin
      begin
      if not result then
                        begin
-                       if gdb.GetCurrentDWG<>nil then
+                       if drawings.GetCurrentDWG<>nil then
                                                      i:=ZCADMainWindow.messagebox(@rsQuitQuery[1],@rsQuitCaption[1],MB_YESNO or MB_ICONQUESTION)
                                                  else
                                                      i:=IDYES;
@@ -728,7 +728,7 @@ begin
           if assigned(FreEditorProc)then
                                         FreEditorProc;
           if assigned(ReturnToDefaultProc)then
-                                           ReturnToDefaultProc(gdb.GetUnitsFormat);
+                                           ReturnToDefaultProc(drawings.GetUnitsFormat);
           application.terminate;
      end;
 end;
@@ -780,7 +780,7 @@ begin
      {PreferredWidth:=0;
      PreferredHeight:=0;}
 end;
-function _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject):Integer;
+function _CloseDWGPage(ClosedDWG:PTZCADDrawing;lincedcontrol:TObject):Integer;
 var
    viewcontrol:TCADControl;
    s:string;
@@ -804,10 +804,10 @@ begin
                                  end;
        commandmanager.ChangeModeAndEnd(TGPCloseDWG);
        viewcontrol:=ClosedDWG.wa.getviewcontrol;
-       if gdb.GetCurrentDWG=pointer(ClosedDwg) then
-                                                   gdb.freedwgvars;
-       gdb.eraseobj(ClosedDWG);
-       gdb.pack;
+       if drawings.GetCurrentDWG=pointer(ClosedDwg) then
+                                                   drawings.freedwgvars;
+       drawings.eraseobj(ClosedDWG);
+       drawings.pack;
 
        viewcontrol.free;
 
@@ -817,15 +817,15 @@ begin
        if viewcontrol<>nil then
        begin
             tobject(viewcontrol):=FindComponentByType(viewcontrol,TAbstractViewArea);
-            gdb.CurrentDWG:=PTDrawing(TAbstractViewArea(viewcontrol).PDWG);
+            drawings.CurrentDWG:=PTZCADDrawing(TAbstractViewArea(viewcontrol).PDWG);
             TAbstractViewArea(viewcontrol).GDBActivate;
        end
        else
-           gdb.freedwgvars;
+           drawings.freedwgvars;
        if assigned(FreEditorProc)then
                                      FreEditorProc;
        if assigned(ReturnToDefaultProc)then
-                                           ReturnToDefaultProc(gdb.GetUnitsFormat);
+                                           ReturnToDefaultProc(drawings.GetUnitsFormat);
        uzcshared.SBTextOut('Закрыто');
        if assigned(UpdateVisibleProc) then UpdateVisibleProc;
   end;
@@ -838,13 +838,13 @@ end;
 function TZCADMainWindow.CloseDWGPage(Sender: TObject):integer;
 var
    wa:TGeneralViewArea;
-   ClosedDWG:PTDrawing;
+   ClosedDWG:PTZCADDrawing;
    //i:integer;
 begin
   Closeddwg:=nil;
   wa:=TGeneralViewArea(FindComponentByType(TTabSheet(sender),TGeneralViewArea));
   if wa<>nil then
-                      Closeddwg:=ptdrawing(wa.PDWG);
+                      Closeddwg:=PTZCADDrawing(wa.PDWG);
   result:=_CloseDWGPage(ClosedDWG,Sender);
 
 end;
@@ -2096,7 +2096,7 @@ begin
                           OGL.GDBActivate;
      OGL.param.firstdraw:=true;
      OGL.draworinvalidate;
-     ReturnToDefaultProc(gdb.GetUnitsFormat);
+     ReturnToDefaultProc(drawings.GetUnitsFormat);
 end;
 
 destructor TZCADMainWindow.Destroy;
@@ -2152,7 +2152,7 @@ begin
 
 
      _disabled:=false;
-     PSimpleDrawing:=gdb.GetCurrentDWG;
+     PSimpleDrawing:=drawings.GetCurrentDWG;
      POGLWndParam:=nil;
      if PSimpleDrawing<>nil then
      if PSimpleDrawing.wa<>nil then
@@ -2220,9 +2220,9 @@ begin
                               comtext:=cmdedit.text;
      if comtext='' then
      begin
-     if assigned(gdb.GetCurrentDWG) then
-     if assigned(gdb.GetCurrentDWG.wa.getviewcontrol)then
-                    gdb.GetCurrentDWG.wa.myKeyPress(tempkey,shift);
+     if assigned(drawings.GetCurrentDWG) then
+     if assigned(drawings.GetCurrentDWG.wa.getviewcontrol)then
+                    drawings.GetCurrentDWG.wa.myKeyPress(tempkey,shift);
      end
      else
          if key=VK_ESCAPE then
@@ -2234,7 +2234,7 @@ begin
                                       if assigned(PageControl)then
                                          if PageControl.PageCount>1 then
                                          begin
-                                              commandmanager.executecommandsilent('PrevDrawing',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                                              commandmanager.executecommandsilent('PrevDrawing',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
                                               tempkey:=00;
                                          end;
                                  end
@@ -2243,7 +2243,7 @@ begin
                                       if assigned(PageControl)then
                                          if PageControl.PageCount>1 then
                                          begin
-                                              commandmanager.executecommandsilent('NextDrawing',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                                              commandmanager.executecommandsilent('NextDrawing',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
                                               tempkey:=00;
                                          end;
                                  end
@@ -2296,7 +2296,7 @@ begin
      sysvar.debug.languadedeb.UpdatePO:=_UpdatePO;
      sysvar.debug.languadedeb.NotEnlishWord:=_NotEnlishWord;
      sysvar.debug.languadedeb.DebugWord:=_DebugWord;
-     pdwg:=gdb.GetCurrentDWG;
+     pdwg:=drawings.GetCurrentDWG;
      if (pdwg<>nil)and(pdwg.wa<>nil) then
      begin
      if pdwg.wa.getviewcontrol<>nil then
@@ -2318,7 +2318,7 @@ begin
      if (pdwg)<>nil then
      if (pdwg.wa.param.SelDesc.Selectedobjcount=0) then
      begin
-          commandmanager.executecommandsilent('QSave(QS)',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+          commandmanager.executecommandsilent('QSave(QS)',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
           SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
      end;
      date:=sysutils.date;
@@ -2358,12 +2358,12 @@ procedure TZCADMainWindow.DropDownLType(Sender:Tobject);
 var
    i:integer;
 begin
-     SetcomboItemsCount(tcombobox(Sender),gdb.GetCurrentDWG.LTypeStyleTable.Count+1);
-     for i:=0 to gdb.GetCurrentDWG.LTypeStyleTable.Count-1 do
+     SetcomboItemsCount(tcombobox(Sender),drawings.GetCurrentDWG.LTypeStyleTable.Count+1);
+     for i:=0 to drawings.GetCurrentDWG.LTypeStyleTable.Count-1 do
      begin
-          tcombobox(Sender).Items.Objects[i]:=tobject(gdb.GetCurrentDWG.LTypeStyleTable.getelement(i));
+          tcombobox(Sender).Items.Objects[i]:=tobject(drawings.GetCurrentDWG.LTypeStyleTable.getelement(i));
      end;
-     tcombobox(Sender).Items.Objects[gdb.GetCurrentDWG.LTypeStyleTable.Count]:=LTEditor;
+     tcombobox(Sender).Items.Objects[drawings.GetCurrentDWG.LTypeStyleTable.Count]:=LTEditor;
 end;
 procedure TZCADMainWindow.DropUpColor(Sender:Tobject);
 begin
@@ -2377,16 +2377,16 @@ var
 begin
      index:=tcombobox(Sender).ItemIndex;
      plt:=PGDBLtypeProp(tcombobox(Sender).items.Objects[index]);
-     LTIndex:=gdb.GetCurrentDWG.LTypeStyleTable.GetIndexByPointer(plt);
+     LTIndex:=drawings.GetCurrentDWG.LTypeStyleTable.GetIndexByPointer(plt);
      if plt=nil then
                          exit;
      if plt=lteditor then
                          begin
-                              commandmanager.ExecuteCommand('LineTypes',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                              commandmanager.ExecuteCommand('LineTypes',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
                          end
      else
      begin
-     if gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
+     if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
      then
      begin
           SysVar.dwg.DWG_CLType^:={LTIndex}plt;
@@ -2395,7 +2395,7 @@ begin
      begin
           CLTSave:=SysVar.dwg.DWG_CLType^;
           SysVar.dwg.DWG_CLType^:={LTIndex}plt;
-          commandmanager.ExecuteCommand('SelObjChangeLTypeToCurrent',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+          commandmanager.ExecuteCommand('SelObjChangeLTypeToCurrent',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
           SysVar.dwg.DWG_CLType^:=CLTSave;
      end;
      end;
@@ -2435,7 +2435,7 @@ begin
                            end;
      if colorindex<0 then
                          exit;
-     if gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
+     if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
      then
      begin
           SysVar.dwg.DWG_CColor^:=ColorIndex;
@@ -2444,7 +2444,7 @@ begin
      begin
           CColorSave:=SysVar.dwg.DWG_CColor^;
           SysVar.dwg.DWG_CColor^:=ColorIndex;
-          commandmanager.ExecuteCommand('SelObjChangeColorToCurrent',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+          commandmanager.ExecuteCommand('SelObjChangeColorToCurrent',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
           SysVar.dwg.DWG_CColor^:=CColorSave;
      end;
      setvisualprop;
@@ -2456,7 +2456,7 @@ var tcl,index:GDBInteger;
 begin
   index:=tcombobox(Sender).ItemIndex;
   index:=integer(tcombobox(Sender).items.Objects[index]);
-  if gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
+  if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
   then
   begin
       SysVar.dwg.DWG_CLinew^:=index;
@@ -2466,7 +2466,7 @@ begin
            begin
                 tcl:=SysVar.dwg.DWG_CLinew^;
                 SysVar.dwg.DWG_CLinew^:=index;
-                commandmanager.ExecuteCommand('SelObjChangeLWToCurrent',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                commandmanager.ExecuteCommand('SelObjChangeLWToCurrent',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
                 SysVar.dwg.DWG_CLinew^:=tcl;
            end;
   end;
@@ -2520,14 +2520,14 @@ begin
 end;
 procedure TZCADMainWindow.ShowAllCursors;
 begin
-     if gdb.GetCurrentDWG<>nil then
-     gdb.GetCurrentDWG.wa.showmousecursor;
+     if drawings.GetCurrentDWG<>nil then
+     drawings.GetCurrentDWG.wa.showmousecursor;
 end;
 
 procedure TZCADMainWindow.RestoreCursors;
 begin
-     if gdb.GetCurrentDWG<>nil then
-     gdb.GetCurrentDWG.wa.hidemousecursor;
+     if drawings.GetCurrentDWG<>nil then
+     drawings.GetCurrentDWG.wa.hidemousecursor;
 end;
 
 procedure TZCADMainWindow.Say(word:gdbstring);
@@ -2616,7 +2616,7 @@ var
   menu:TmyPopupMenu;
 begin
   menu:=nil;
-                                  if gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount>0 then
+                                  if drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount>0 then
                                                                           menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'SELECTEDENTSCXMENU'))
                                                                       else
                                                                           menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'NONSELECTEDENTSCXMENU'));
@@ -2642,7 +2642,7 @@ var
    pdwg:PTSimpleDrawing;
    nevpos:gdbvertex;
 begin
-  pdwg:=gdb.GetCurrentDWG;
+  pdwg:=drawings.GetCurrentDWG;
   if pdwg<>nil then
   if pdwg.wa.getviewcontrol<>nil then begin
      nevpos:=PDWG.Getpcamera^.prop.point;
@@ -2743,7 +2743,7 @@ begin
   key := MouseButton2ZKey(shift);
   begin
     sender.getonmouseobjectbytree(sender.PDWG.GetCurrentROOT.ObjArray.ObjTree,sysvarDWGEditInSubEntry);
-    //getonmouseobject(@gdb.GetCurrentROOT.ObjArray);
+    //getonmouseobject(@drawings.GetCurrentROOT.ObjArray);
     if (key and MZW_CONTROL)<>0 then
     begin
          commandmanager.ExecuteCommandSilent('SelectOnMouseObjects',sender.pdwg,@sender.param);
@@ -2752,14 +2752,14 @@ begin
     else
     begin
     {//Выделение всех объектов под мышью
-    if gdb.GetCurrentDWG.OnMouseObj.Count >0 then
+    if drawings.GetCurrentDWG.OnMouseObj.Count >0 then
     begin
-         pobj:=gdb.GetCurrentDWG.OnMouseObj.beginiterate(ir);
+         pobj:=drawings.GetCurrentDWG.OnMouseObj.beginiterate(ir);
          if pobj<>nil then
          repeat
                pobj^.select;
                wa.param.SelDesc.LastSelectedObject := pobj;
-               pobj:=gdb.GetCurrentDWG.OnMouseObj.iterate(ir);
+               pobj:=drawings.GetCurrentDWG.OnMouseObj.iterate(ir);
          until pobj=nil;
       addoneobject;
       SetObjInsp;
@@ -2863,7 +2863,7 @@ begin
         //if commandmanager.pcommandrunning <> nil then
         //                                             FreeClick:=false;
         commandmanager.sendmousecoordwop(sender,key);
-        //GDBFreeMem(GDB.PObjPropArray^.propertyarray[0].pobject);
+        //GDBFreeMem(drawings.PObjPropArray^.propertyarray[0].pobject);
       end;
        {if FreeClick and(((wa.param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0)) then
           begin
@@ -3033,11 +3033,11 @@ begin
                                                                                       objcount:=1;
   if Sender.param.SelDesc.Selectedobjcount>objcount then
     begin
-       if gdb.GetCurrentDWG.SelObjArray.Count>0 then
+       if drawings.GetCurrentDWG.SelObjArray.Count>0 then
                                                     commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',Sender.pdwg,@Sender.param)
                                                 else
                                                     If assigned(ReturnToDefaultProc)then
-                                                                                        ReturnToDefaultProc(gdb.GetUnitsFormat);
+                                                                                        ReturnToDefaultProc(drawings.GetUnitsFormat);
     end
   else
   begin
@@ -3049,13 +3049,13 @@ begin
        if ptype<>nil then
        begin
             If assigned(SetGDBObjInspProc)then
-            SetGDBObjInspProc(gdb.GetUndoStack,gdb.GetUnitsFormat,ptype,Sender.param.SelDesc.LastSelectedObject,Sender.pdwg);
+            SetGDBObjInspProc(drawings.GetUndoStack,drawings.GetUnitsFormat,ptype,Sender.param.SelDesc.LastSelectedObject,Sender.pdwg);
        end;
   end
   else
   begin
     If assigned(ReturnToDefaultProc)then
-    ReturnToDefaultProc(gdb.GetUnitsFormat);
+    ReturnToDefaultProc(drawings.GetUnitsFormat);
   end;
   end
 end;
@@ -3068,7 +3068,7 @@ var
 begin
   if (ZCADMainWindow.HScrollBar.Focused)or(ZCADMainWindow.VScrollBar.Focused)then
                                                                        setnormalfocus(nil);
-  pdwg:=gdb.GetCurrentDWG;
+  pdwg:=drawings.GetCurrentDWG;
   if pdwg<>nil then
   if pdwg.wa<>nil then begin
   bb:=pdwg.GetCurrentROOT.vp.BoundingBox;
@@ -3095,7 +3095,7 @@ var
    pdwg:PTSimpleDrawing;
 begin
 
-   pdwg:=gdb.GetCurrentDWG;
+   pdwg:=drawings.GetCurrentDWG;
    if assigned(ZCADMainWindow)then
    begin
    ZCADMainWindow.UpdateControls;
@@ -3104,7 +3104,7 @@ begin
   if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
   begin
   ZCADMainWindow.setvisualprop;
-  ZCADMainWindow.Caption:='ZCad v'+sysvar.SYS.SYS_Version^+' - ['+gdb.GetCurrentDWG.GetFileName+']';
+  ZCADMainWindow.Caption:='ZCad v'+sysvar.SYS.SYS_Version^+' - ['+drawings.GetCurrentDWG.GetFileName+']';
 
   if assigned(LayerBox) then
   LayerBox.enabled:=true;
@@ -3170,11 +3170,11 @@ begin
            if assigned(poglwnd) then
             if poglwnd.wa.PDWG<>nil then
             begin
-                name:=extractfilename(PTDrawing(poglwnd.wa.PDWG)^.FileName);
-                if @PTDRAWING(poglwnd.wa.PDWG).mainObjRoot=(PTDRAWING(poglwnd.wa.PDWG).pObjRoot) then
+                name:=extractfilename(PTZCADDrawing(poglwnd.wa.PDWG)^.FileName);
+                if @PTZCADDrawing(poglwnd.wa.PDWG).mainObjRoot=(PTZCADDrawing(poglwnd.wa.PDWG).pObjRoot) then
                                                                      ZCADMainWindow.PageControl.Pages[i].caption:=(name)
                                                                  else
-                                                                     ZCADMainWindow.PageControl.Pages[i].caption:='BEdit('+name+':'+Tria_AnsiToUtf8(PGDBObjBlockdef(PTDRAWING(poglwnd.wa.PDWG).pObjRoot).Name)+')';
+                                                                     ZCADMainWindow.PageControl.Pages[i].caption:='BEdit('+name+':'+Tria_AnsiToUtf8(PGDBObjBlockdef(PTZCADDrawing(poglwnd.wa.PDWG).pObjRoot).Name)+')';
 
                 if k<=high(ZCADMainWindow.OpenedDrawings) then
                 begin

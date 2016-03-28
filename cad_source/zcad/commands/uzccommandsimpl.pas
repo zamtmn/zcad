@@ -117,20 +117,20 @@ begin
          TTA30:c:=6;
     end;
 
-  gdb.GetCurrentDWG.wa.PolarAxis.clear;
+  drawings.GetCurrentDWG.wa.PolarAxis.clear;
   for i := 0 to c - 1 do
   begin
     v.x:=cos(pi * i / c);
     v.y:=sin(pi * i / c);
     v.z:=0;
-    gdb.GetCurrentDWG.wa.PolarAxis.add(@v);
+    drawings.GetCurrentDWG.wa.PolarAxis.add(@v);
   end;
   if self.trace.ZAxis then
   begin
     v.x:=0;
     v.y:=0;
     v.z:=1;
-    gdb.GetCurrentDWG.wa.PolarAxis.add(@v);
+    drawings.GetCurrentDWG.wa.PolarAxis.add(@v);
   end;
 end;
 procedure TOSModeEditor.GetState;
@@ -222,31 +222,31 @@ end;
 procedure CommandFastObjectPlugin.CommandEnd;
 begin
     //inherited;
-    if gdb.currentdwg<>nil then
+    if drawings.currentdwg<>nil then
     begin
     if (self.CEndActionAttr and CEDeSelect)<>0 then
     //if (@self<>pfindcom)and(@self<>@OnDrawingEd)and(@self<>selframecommand)and(@self<>ms2objinsp)and(@self<>csel)and(@self<>selall) then
     begin
-    gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
-    gdb.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
-    gdb.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
-    gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
-    gdb.GetCurrentDWG.SelObjArray.clearallobjects;
+    drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+    drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
+    drawings.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
+    drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
+    drawings.GetCurrentDWG.SelObjArray.clearallobjects;
     end;
-    if gdb.GetCurrentDWG.wa<>nil then
+    if drawings.GetCurrentDWG.wa<>nil then
     if not overlay then
-  gdb.GetCurrentDWG.wa.Clear0Ontrackpoint;
+  drawings.GetCurrentDWG.wa.Clear0Ontrackpoint;
   if not overlay then
                      begin
-                          gdb.GetCurrentDWG.FreeConstructionObjects;
-                          {gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
-                          gdb.GetCurrentDWG.ConstructObjRoot.ObjCasheArray.Clear;
-                          //gdb.GetCurrentDWG.ConstructObjRoot.ObjToConnectedArray.Clear;
-                          gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;}
+                          drawings.GetCurrentDWG.FreeConstructionObjects;
+                          {drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+                          drawings.GetCurrentDWG.ConstructObjRoot.ObjCasheArray.Clear;
+                          //drawings.GetCurrentDWG.ConstructObjRoot.ObjToConnectedArray.Clear;
+                          drawings.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;}
                      end;
-  if gdb.GetCurrentDWG.wa.getviewcontrol<>nil then
-  gdb.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
-  gdb.GetCurrentDWG.OnMouseObj.Clear;
+  if drawings.GetCurrentDWG.wa.getviewcontrol<>nil then
+  drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
+  drawings.GetCurrentDWG.OnMouseObj.Clear;
   //poglwnd^.md.mode := savemousemode;
   OSModeEditor.GetState;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
@@ -259,28 +259,28 @@ begin
     if (self.CEndActionAttr and CEDeSelect)<>0 then
     //if (@self<>pfindcom)and(@self<>@OnDrawingEd)and(@self<>selframecommand) then
     begin
-    gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
-    gdb.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
-    gdb.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
-    gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
-    gdb.GetCurrentDWG.SelObjArray.clearallobjects;
+    drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+    drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
+    drawings.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
+    drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
+    drawings.GetCurrentDWG.SelObjArray.clearallobjects;
     end;
-  gdb.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
-  gdb.GetCurrentDWG.OnMouseObj.Clear;
+  drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
+  drawings.GetCurrentDWG.OnMouseObj.Clear;
   if uzccommandsmanager.commandmanager.CommandsStack.Count=0 then
   begin
-  gdb.GetCurrentDWG.wa.Clear0Ontrackpoint;
-  gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
-  gdb.GetCurrentDWG.ConstructObjRoot.ObjCasheArray.Clear;
-  //gdb.GetCurrentDWG.ConstructObjRoot.ObjToConnectedArray.Clear;
-  gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
+  drawings.GetCurrentDWG.wa.Clear0Ontrackpoint;
+  drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+  drawings.GetCurrentDWG.ConstructObjRoot.ObjCasheArray.Clear;
+  //drawings.GetCurrentDWG.ConstructObjRoot.ObjToConnectedArray.Clear;
+  drawings.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
   end;
-  gdb.GetCurrentDWG.wa.SetMouseMode(savemousemode);
+  drawings.GetCurrentDWG.wa.SetMouseMode(savemousemode);
   sysvarDWGOSMode := saveosmode;
 
   if uzccommandsmanager.commandmanager.CommandsStack.Count=0 then
-                                                           gdb.GetCurrentDWG.wa.setobjinsp;
-  //-------------------------------gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
+                                                           drawings.GetCurrentDWG.wa.setobjinsp;
+  //-------------------------------drawings.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   OSModeEditor.GetState;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
 end;
@@ -338,8 +338,8 @@ begin
 
                                         a:=onAfterClick(wc,mc,button,osp,mouseclic);
                                         mouseclic:=a;
-                                        dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-                                        gdb.GetCurrentROOT.getoutbound(dc);
+                                        dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+                                        drawings.GetCurrentROOT.getoutbound(dc);
                                         result:=a;
                                         if (mouseclic=1)and(commandmanager.pcommandrunning<>nil) then BeforeClick(wc,mc,button,osp);
                                         //if mouseclic=0 then
@@ -397,26 +397,26 @@ end;
 
 procedure CommandRTEdObject.CommandStart;
 begin
-  savemousemode := gdb.GetCurrentDWG.wa.param.md.mode;
+  savemousemode := drawings.GetCurrentDWG.wa.param.md.mode;
   saveosmode := sysvarDWGOSMode;
   mouseclic := 0;
-  UndoTop:=gdb.GetCurrentDWG.GetUndoTop{UndoStack.CurrentCommand};
+  UndoTop:=drawings.GetCurrentDWG.GetUndoTop{UndoStack.CurrentCommand};
 
   if (commanddata.Instance<>nil)
   and(commanddata.PTD<>nil) then
                                 begin
                                      if assigned(SetGDBObjInspProc)then
-                                                                       SetGDBObjInspProc(nil,gdb.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),@self,gdb.GetCurrentDWG);
+                                                                       SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),@self,drawings.GetCurrentDWG);
                                 end; 
 
 end;
 
 procedure CommandRTEdObject.CommandCancel;
 begin
-  gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
-  gdb.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
-  gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
-  gdb.GetCurrentDWG.wa.SetMouseMode(savemousemode);
+  drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+  drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
+  drawings.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
+  drawings.GetCurrentDWG.wa.SetMouseMode(savemousemode);
   if assigned(redrawoglwndproc) then redrawoglwndproc;
 end;
 

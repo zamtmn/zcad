@@ -45,7 +45,7 @@ begin
      ltd.LoadFromFile(filename);
      ListView1.BeginUpdate;
      ListView1.Clear;
-     pdwg:=gdb.GetCurrentDWG;
+     pdwg:=drawings.GetCurrentDWG;
 
      CurrentLine:=1;
      repeat

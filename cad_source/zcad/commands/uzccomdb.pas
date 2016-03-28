@@ -48,7 +48,7 @@ var //t:PUserTypeDescriptor;
 begin
      if commandmanager.ContextCommandParams<>nil then
      begin
-           pu:=ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
+           pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
            pvd:=pu^.FindVariable('DBCounter');
            vn:=inttostr(GDBInteger(pvd.data.Instance^));
            vn:='_EQ'+dupestring('0',6-length(vn))+vn;
@@ -74,7 +74,7 @@ var
 begin
      if commandmanager.ContextCommandParams<>nil then
      begin
-           pu:=ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
+           pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
            pdbv:=pu.InterfaceVariables.findvardescbyinst(PTTypedData(commandmanager.ContextCommandParams)^.Instance);
            if pdbv<>nil then
            begin
@@ -162,12 +162,12 @@ var //t:PUserTypeDescriptor;
 begin
      if commandmanager.ContextCommandParams<>nil then
      begin
-           pu:=ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
+           pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
            pdbv:=pu.InterfaceVariables.findvardescbyinst(PTTypedData(commandmanager.ContextCommandParams)^.Instance);
            if pdbv<>nil then
            begin
                  c:=0;
-                 pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+                 pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
                  if pv<>nil then
                  repeat
                       if pv^.Selected then
@@ -177,11 +177,11 @@ begin
                                                if pvd<>nil then
                                                begin
                                                     PGDBString(pvd^.data.Instance)^:=pdbv^.name;
-                                                    DBLinkProcess(pv,gdb.GetCurrentDWG^);
+                                                    DBLinkProcess(pv,drawings.GetCurrentDWG^);
                                                     inc(c);
                                                end;
                                           end;
-                 pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+                 pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
                  until pv=nil;
                  HistoryOutSTR(format(rscmNEntitiesProcessed,[inttostr(c)]));
            end;
@@ -191,7 +191,7 @@ begin
 {     if TempPGDBEqNode<>nil then
      begin
              c:=0;
-             pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+             pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
              if pv<>nil then
              repeat
                   if pv^.Selected then
@@ -203,7 +203,7 @@ begin
                                                 inc(c);
                                            end;
                                       end;
-             pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+             pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
              until pv=nil;
              HistoryOutSTR(inttostr(c)+' примитивов обработано');
      end

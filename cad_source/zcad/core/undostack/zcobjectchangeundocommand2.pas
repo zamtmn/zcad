@@ -86,11 +86,11 @@ begin
      if AfterAction then
      begin
      if AutoProcessGDB then
-                           PGDBObjEntity(undomethod.Data)^.YouChanged(gdb.GetCurrentDWG^)
+                           PGDBObjEntity(undomethod.Data)^.YouChanged(drawings.GetCurrentDWG^)
                        else
                            begin
-                                dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-                                PGDBObjEntity(undomethod.Data)^.formatEntity(gdb.GetCurrentDWG^,dc);
+                                dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+                                PGDBObjEntity(undomethod.Data)^.formatEntity(drawings.GetCurrentDWG^,dc);
                            end;
      end;
 end;
@@ -105,11 +105,11 @@ begin
      if AfterAction then
      begin
      if AutoProcessGDB then
-                           PGDBObjEntity(undomethod.Data)^.YouChanged(gdb.GetCurrentDWG^)
+                           PGDBObjEntity(undomethod.Data)^.YouChanged(drawings.GetCurrentDWG^)
                        else
                            begin
-                           dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-                           PGDBObjEntity(undomethod.Data)^.formatEntity(gdb.GetCurrentDWG^,dc);
+                           dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+                           PGDBObjEntity(undomethod.Data)^.formatEntity(drawings.GetCurrentDWG^,dc);
                            end;
      end;
 end;

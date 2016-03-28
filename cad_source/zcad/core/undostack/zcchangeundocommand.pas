@@ -121,7 +121,7 @@ procedure TGChangeCommand.UnDo;
 begin
      _T(addr^):=OldData;
      if assigned(PEntity)then
-                             PEntity^.YouChanged(gdb.GetCurrentDWG^);
+                             PEntity^.YouChanged(drawings.GetCurrentDWG^);
      if assigned(SetVisuaProplProc)then
                                        SetVisuaProplProc;
 end;
@@ -129,7 +129,7 @@ procedure TGChangeCommand.Comit;
 begin
      _T(addr^):=NewData;
      if assigned(PEntity)then
-                             PEntity^.YouChanged(gdb.GetCurrentDWG^);
+                             PEntity^.YouChanged(drawings.GetCurrentDWG^);
      if assigned(SetVisuaProplProc)then
                                        SetVisuaProplProc;
 

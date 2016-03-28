@@ -91,7 +91,7 @@ end;
 class procedure TSupportColorCombo.ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
   State: StdCtrls.TOwnerDrawState);
 begin
-    if (gdb.GetCurrentDWG=nil)or(sysvar.DWG.DWG_CColor=nil) then
+    if (drawings.GetCurrentDWG=nil)or(sysvar.DWG.DWG_CColor=nil) then
     exit;
     begin
     ComboBoxDrawItem(Control,ARect,State);

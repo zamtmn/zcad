@@ -30,7 +30,7 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzeentitiesmanager,uzepalet
   {**Добавление в чертеж примитива с обвязкой undo
     @param(PEnt Указатель на добавляемый примитив)
     @param(Drawing Чертеж куда будет добавлен примитив)}
-  procedure zcAddEntToDrawingWithUndo(const PEnt:PGDBObjEntity;var Drawing:TDrawing);
+  procedure zcAddEntToDrawingWithUndo(const PEnt:PGDBObjEntity;var Drawing:TZCADDrawing);
 
   {**Добавление в текущий чертеж примитива с обвязкой undo
     @param(PEnt Указатель на добавляемый примитив)}
@@ -104,14 +104,14 @@ begin
   if pb=nil then exit;
   //setdefaultproperty(pb);
   pb.pattrib := nil;
-  pb^.BuildGeometry(gdb.GetCurrentDWG^);
-  pb^.BuildVarGeometry(gdb.GetCurrentDWG^);
-  DC:=gdb.GetCurrentDWG^.CreateDrawingRC;
-  pb^.formatEntity(gdb.GetCurrentDWG^,dc);
+  pb^.BuildGeometry(drawings.GetCurrentDWG^);
+  pb^.BuildVarGeometry(drawings.GetCurrentDWG^);
+  DC:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  pb^.formatEntity(drawings.GetCurrentDWG^,dc);
   owner.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
   result:=pb;
 end;
-procedure zcAddEntToDrawingWithUndo(const PEnt:PGDBObjEntity;var Drawing:TDrawing);
+procedure zcAddEntToDrawingWithUndo(const PEnt:PGDBObjEntity;var Drawing:TZCADDrawing);
 var
     domethod,undomethod:tmethod;
 begin
@@ -124,23 +124,23 @@ begin
 end;
 procedure zcAddEntToCurrentDrawingWithUndo(const PEnt:PGDBObjEntity);
 begin
-     zcAddEntToDrawingWithUndo(PEnt,PTDrawing(gdb.GetCurrentDWG)^);
+     zcAddEntToDrawingWithUndo(PEnt,PTZCADDrawing(drawings.GetCurrentDWG)^);
 end;
 procedure zcStartUndoCommand(CommandName:GDBString);
 begin
-     PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushStartMarker(CommandName);
+     PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker(CommandName);
 end;
 procedure zcAddEntToCurrentDrawingConstructRoot(const PEnt: PGDBObjEntity);
 begin
-  zeAddEntToRoot(PEnt,gdb.GetCurrentDWG^.ConstructObjRoot);
+  zeAddEntToRoot(PEnt,drawings.GetCurrentDWG^.ConstructObjRoot);
 end;
 procedure zcClearCurrentDrawingConstructRoot;
 begin
-  gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
+  drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
 end;
 procedure zcEndUndoCommand;
 begin
-     PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushEndMarker;
+     PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
 end;
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;//владелец
                         BlockName:GDBString;       //имя блока
@@ -155,7 +155,7 @@ var
   DC:TDrawContext;
 begin
   result := GDBPointer(own.ObjArray.CreateObj(GDBBlockInsertID));
-  result.init(gdb.GetCurrentROOT,gdb.GetCurrentDWG^.GetCurrentLayer,0);
+  result.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
   result^.Name:=BlockName;
   result^.vp.ID:=GDBBlockInsertID;
   result^.Local.p_insert:=p_insert;
@@ -163,7 +163,7 @@ begin
   result^.CalcObjMatrix;
   result^.setrot(rotate);
   result^.rotate:=rotate;
-  tb:=pointer(result^.FromDXFPostProcessBeforeAdd(nil,gdb.GetCurrentDWG^));
+  tb:=pointer(result^.FromDXFPostProcessBeforeAdd(nil,drawings.GetCurrentDWG^));
   if tb<>nil then begin
                        tb^.bp:=result^.bp;
                        result^.done;
@@ -173,7 +173,7 @@ begin
   if needundo then
   begin
       SetObjCreateManipulator(domethod,undomethod);
-      with PushMultiObjectCreateCommand(PTDrawing(gdb.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
+      with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1)^ do
       begin
            AddObject(result);
            comit;
@@ -182,31 +182,31 @@ begin
   else
      own.ObjArray.add(addr(result));
   result^.CalcObjMatrix;
-  result^.BuildGeometry(gdb.GetCurrentDWG^);
-  result^.BuildVarGeometry(gdb.GetCurrentDWG^);
-  DC:=gdb.GetCurrentDWG^.CreateDrawingRC;
-  result^.FormatEntity(gdb.GetCurrentDWG^,dc);
+  result^.BuildGeometry(drawings.GetCurrentDWG^);
+  result^.BuildVarGeometry(drawings.GetCurrentDWG^);
+  DC:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  result^.FormatEntity(drawings.GetCurrentDWG^,dc);
   if needundo then
   begin
-  gdb.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(result);
+  drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(result);
   result^.Visible:=0;
-  result^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,gdb.GetCurrentDWG^.myGluProject2,dc);
+  result^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
   end;
 end;
 function zcGetSelEntsDeskInCurrentRoot:TSelEntsDesk;
 begin
-  result:=zeGetSelEntsDeskInRoot(gdb.GetCurrentROOT^);
+  result:=zeGetSelEntsDeskInRoot(drawings.GetCurrentROOT^);
 end;
 procedure zcSetEntPropFromCurrentDrawingProp(const PEnt: PGDBObjEntity);
 begin
-     zeSetEntPropFromDrawingProp(PEnt,gdb.GetCurrentDWG^)
+     zeSetEntPropFromDrawingProp(PEnt,drawings.GetCurrentDWG^)
 end;
 
 procedure setdefaultproperty(pvo:pgdbobjEntity);
 begin
   pvo^.selected := false;
-  pvo^.Visible:=gdb.GetCurrentDWG.pcamera.VISCOUNT;
-  pvo^.vp.layer :=gdb.GetCurrentDWG.GetCurrentLayer;
+  pvo^.Visible:=drawings.GetCurrentDWG.pcamera.VISCOUNT;
+  pvo^.vp.layer :=drawings.GetCurrentDWG.GetCurrentLayer;
   pvo^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
 end;
 

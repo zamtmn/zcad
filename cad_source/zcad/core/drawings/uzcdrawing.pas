@@ -32,8 +32,8 @@ type
                 Name:GDBString;
                 Number:GDBInteger;
           end;}
-PTDrawing=^TDrawing;
-TDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
+PTZCADDrawing=^TZCADDrawing;
+TZCADDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
 
            FileName:GDBString;
            Changed:GDBBoolean;
@@ -71,7 +71,7 @@ TDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
  uses uzcdrawings,uzeenttext,uzeentdevice,uzeentblockinsert,uzeffdxf,uzcutils,uzcshared,uzccommandsmanager;
-procedure TDrawing.FillDrawingPartRC(var dc:TDrawContext);
+procedure TZCADDrawing.FillDrawingPartRC(var dc:TDrawContext);
 var
   vd:pvardesk;
 begin
@@ -85,7 +85,7 @@ begin
                                                dc.DrawingContext.DrawHeplGeometryProc:=commandmanager.pcommandrunning^.DrawHeplGeometry;
 end;
 
-function TDrawing.GetUnitsFormat:TzeUnitsFormat;
+function TZCADDrawing.GetUnitsFormat:TzeUnitsFormat;
 begin
      result.DeciminalSeparator:=DDSDot;
      if Assigned(sysvar.DWG.DWG_AngBase) then
@@ -121,7 +121,7 @@ begin
                                                     else
                                                         result.RemoveTrailingZeros:=true;
 end;
-procedure TDrawing.SetUnitsFormat(f:TzeUnitsFormat);
+procedure TZCADDrawing.SetUnitsFormat(f:TzeUnitsFormat);
 begin
      if Assigned(sysvar.DWG.DWG_AngBase) then
                                             sysvar.DWG.DWG_AngBase^:=f.abase;
@@ -139,15 +139,15 @@ begin
                                             sysvar.DWG.DWG_UnitMode^:=f.umode;
 end;
 
-procedure TDrawing.SetCurrentDWG();
+procedure TZCADDrawing.SetCurrentDWG();
 begin
-  gdb.SetCurrentDWG(@self);
+  drawings.SetCurrentDWG(@self);
 end;
-function TDrawing.StoreOldCamerapPos:Pointer;
+function TZCADDrawing.StoreOldCamerapPos:Pointer;
 begin
      result:=PushCreateTGChangeCommand(UndoStack,GetPcamera^.prop)
 end;
-procedure TDrawing.rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);
+procedure TZCADDrawing.rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);
 var
     tum:TUndableMethod;
 begin
@@ -162,67 +162,67 @@ begin
        StoreUndoData(rtmod);
   end;
 end;
-procedure TDrawing.StoreNewCamerapPos(command:Pointer);
+procedure TZCADDrawing.StoreNewCamerapPos(command:Pointer);
 begin
      if command<>nil then
                          PTGDBCameraBasePropChangeCommand(command).ComitFromObj;
 end;
-procedure TDrawing.PushStartMarker(CommandName:GDBString);
+procedure TZCADDrawing.PushStartMarker(CommandName:GDBString);
 begin
      self.UndoStack.PushStartMarker(CommandName);
 end;
-procedure TDrawing.PushEndMarker;
+procedure TZCADDrawing.PushEndMarker;
 begin
       self.UndoStack.PushEndMarker;
 end;
-procedure TDrawing.SetFileName(NewName:GDBString);
+procedure TZCADDrawing.SetFileName(NewName:GDBString);
 begin
      self.FileName:=NewName;
 end;
-function TDrawing.GetFileName:GDBString;
+function TZCADDrawing.GetFileName:GDBString;
 begin
      result:=FileName;
 end;
-procedure TDrawing.ChangeStampt;
+procedure TZCADDrawing.ChangeStampt;
 begin
      self.Changed:={true}st;
      inherited;
 end;
-function TDrawing.GetChangeStampt:GDBBoolean;
+function TZCADDrawing.GetChangeStampt:GDBBoolean;
 begin
      result:=self.Changed;
 end;
-function TDrawing.GetUndoTop:TArrayIndex;
+function TZCADDrawing.GetUndoTop:TArrayIndex;
 begin
      result:=UndoStack.CurrentCommand;
 end;
-function TDrawing.GetUndoStack:GDBPointer;
+function TZCADDrawing.GetUndoStack:GDBPointer;
 begin
      result:=@UndoStack;
 end;
-function TDrawing.CanUndo:boolean;
+function TZCADDrawing.CanUndo:boolean;
 begin
      if UndoStack.CurrentCommand>0 then
                                        result:=true
                                    else
                                        result:=false;
 end;
-function TDrawing.CanRedo:boolean;
+function TZCADDrawing.CanRedo:boolean;
 begin
      if UndoStack.CurrentCommand<UndoStack.Count then
                                                      result:=true
                                                  else
                                                      result:=false;
 end;
-function TDrawing.GetDWGUnits:{PTUnitManager}pointer;
+function TZCADDrawing.GetDWGUnits:{PTUnitManager}pointer;
 begin
      result:=@DWGUnits;
 end;
-procedure TDrawing.AddBlockFromDBIfNeed(name:GDBString);
+procedure TZCADDrawing.AddBlockFromDBIfNeed(name:GDBString);
 begin
-     gdb.AddBlockFromDBIfNeed(@self,name);
+     drawings.AddBlockFromDBIfNeed(@self,name);
 end;
-constructor TDrawing.init;
+constructor TZCADDrawing.init;
 var {tp:GDBTextStyleProp;}
     //ts:PTGDBTableStyle;
     //cs:TGDBTableCellStyle;
@@ -286,42 +286,42 @@ begin
   //OGLwindow1.initxywh('oglwnd',nil,200,72,768,596,false);
   //OGLwindow1.show;
 end;
-procedure TDrawing.onUndoRedoDataOwner(PDataOwner:Pointer);
+procedure TZCADDrawing.onUndoRedoDataOwner(PDataOwner:Pointer);
 var
    DC:TDrawContext;
 begin
   if assigned(PDataOwner)then
                           begin
-                               //PDataOwner^.YouChanged(gdb.GetCurrentDWG^);
-                               if PGDBObjEntity(PDataOwner)^.bp.ListPos.Owner=gdb.GetCurrentDWG^.GetCurrentRootSimple
+                               //PDataOwner^.YouChanged(drawings.GetCurrentDWG^);
+                               if PGDBObjEntity(PDataOwner)^.bp.ListPos.Owner=drawings.GetCurrentDWG^.GetCurrentRootSimple
                                then
-                                   PGDBObjEntity(PDataOwner)^.YouChanged(gdb.GetCurrentDWG^)
+                                   PGDBObjEntity(PDataOwner)^.YouChanged(drawings.GetCurrentDWG^)
                                else
                                    begin
-                                        dc:=gdb.GetCurrentDWG^.CreateDrawingRC;
-                                        PGDBObjEntity(PDataOwner)^.FormatEntity(gdb.GetCurrentDWG^,dc);
-                                        gdb.GetCurrentDWG^.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
+                                        dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+                                        PGDBObjEntity(PDataOwner)^.FormatEntity(drawings.GetCurrentDWG^,dc);
+                                        drawings.GetCurrentDWG^.GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
                                    end;
                           end;
   if assigned(SetVisuaProplProc)then
                                     SetVisuaProplProc;
 end;
-procedure TDrawing.onUndoRedo;
+procedure TZCADDrawing.onUndoRedo;
 var
    DC:TDrawContext;
 begin
   DC:=CreateDrawingRC;
-  GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);
+  GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
 end;
 
-destructor TDrawing.done;
+destructor TZCADDrawing.done;
 begin
      inherited;
      undostack.done;
      DWGUnits.FreeAndDone;
      FileName:='';
 end;
-//procedure TDrawing.SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);
+//procedure TZCADDrawing.SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);
 //begin
 //end;
 begin

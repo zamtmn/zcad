@@ -1874,6 +1874,7 @@ begin
   CreateCommandFastObjectPlugin(@SaveAs_com,'SaveAs',CADWG,0);
   CreateCommandFastObjectPlugin(@Cam_reset_com,'Cam_Reset',CADWG,0);
   CreateCommandFastObjectPlugin(@ObjVarMan_com,'ObjVarMan',CADWG or CASelEnt,0);
+  CreateCommandFastObjectPlugin(@MultiObjVarMan_com,'MultiObjVarMan',CADWG or CASelEnts,0);
   CreateCommandFastObjectPlugin(@BlockDefVarMan_com,'BlockDefVarMan',CADWG,0);
   CreateCommandFastObjectPlugin(@BlockDefVarMan_com,'BlockDefVarMan',CADWG,0);
   CreateCommandFastObjectPlugin(@UnitsMan_com,'UnitsMan',0,0);

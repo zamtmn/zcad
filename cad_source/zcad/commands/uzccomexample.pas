@@ -862,9 +862,7 @@ var
 begin
     if commandmanager.getentity('Select source entity: ',ps) then
     begin
-         SetGDBObjInspProc( nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD( 'TMatchPropParam'),
-                            @MatchPropParam,
-                            drawings.GetCurrentDWG );
+         zcShowCommandParams(SysUnit^.TypeName2PTD( 'TMatchPropParam'),@MatchPropParam);
          dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
          while commandmanager.getentity('Select destination entity:',pd) do
          begin
@@ -1220,9 +1218,7 @@ begin
    pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
    pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
    pf^.base.Attributes:=pf^.base.Attributes or FA_HIDDEN_IN_OBJ_INSP;//устанавливаем ему флаг cкрытности
-   SetGDBObjInspProc( nil,drawings.GetUnitsFormat,PInternalRTTITypeDesk,
-                              @RectangParam,
-                              drawings.GetCurrentDWG );
+   zcShowCommandParams(PInternalRTTITypeDesk,@RectangParam);
 
    if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1) then
    begin
@@ -1316,9 +1312,7 @@ begin
    pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
    pf^.base.Attributes:=pf^.base.Attributes and (not FA_HIDDEN_IN_OBJ_INSP);//сбрасываем ему флаг cкрытности
 
-   SetGDBObjInspProc( nil,drawings.GetUnitsFormat,PInternalRTTITypeDesk,
-                              @RectangParam,
-                              drawings.GetCurrentDWG );
+   zcShowCommandParams(PInternalRTTITypeDesk,@RectangParam);
 
     if commandmanager.get3dpoint('Specify first point:',pe.p1) then
     begin

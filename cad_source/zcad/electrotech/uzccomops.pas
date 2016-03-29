@@ -383,8 +383,7 @@ begin
   drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_PS_DAT_TERMO');
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera));
   historyout('Первый угол:');
-  If assigned(SetGDBObjInspProc)then
-  SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),pco,drawings.GetCurrentDWG);
+  zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pco);
   result:=cmd_ok;
 end;
 function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): integer;
@@ -1108,8 +1107,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
   result:=cmd_ok;
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera));
   historyout('Первый угол:');
-  If assigned(SetGDBObjInspProc)then
-  SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),pco2,drawings.GetCurrentDWG);
+  zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pco2);
   OPSPlaceSmokeDetectorOrtoParam.DMC:=TOPSMDC_1_2;
 end;
 function PlBeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): integer;

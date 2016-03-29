@@ -25,7 +25,7 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzeentitiesmanager,uzepalet
      uzeentityfactory,uzgldrawcontext,uzcdrawing,uzestyleslinetypes,uzcsysvars,
      uzestyleslayers,sysutils,gdbasetypes,gdbase,uzcdrawings,varmandef,
      uzeconsts,UGDBVisibleOpenArray,uzeentgenericsubentry,uzeentity,
-     uzeentblockinsert,memman;
+     uzeentblockinsert,memman,uzcinterface;
 
   {**Добавление в чертеж примитива с обвязкой undo
     @param(PEnt Указатель на добавляемый примитив)
@@ -59,6 +59,12 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzeentitiesmanager,uzepalet
      операций отмены. Допускаются вложеные команды. Количество маркеров начала и
      конца должно совпадать}
   procedure zcEndUndoCommand;
+
+  {**Показать параметры команды. Пока только в инспекторе объектов, потом может
+     добавлю возможность показа и редактирования параметров в командной строке
+    @param(PDataTypeDesk Указатель на описание структуры параметров (обычно то что возвращает SysUnit^.TypeName2PTD))
+    @param(PInstance Указатель на параметры)}
+  procedure zcShowCommandParams(const PDataTypeDesk:PUserTypeDescriptor;const PInstance:Pointer);
 
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:GDBString;p_insert:GDBVertex;
                         scale:GDBVertex;rotate:GDBDouble;needundo:GDBBoolean=false
@@ -141,6 +147,13 @@ end;
 procedure zcEndUndoCommand;
 begin
      PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
+end;
+procedure zcShowCommandParams(const PDataTypeDesk:PUserTypeDescriptor;const PInstance:Pointer);
+begin
+     if assigned(SetGDBObjInspProc)then
+     SetGDBObjInspProc(nil,drawings.GetUnitsFormat,
+                       PDataTypeDesk,PInstance,
+                       drawings.GetCurrentDWG);
 end;
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;//владелец
                         BlockName:GDBString;       //имя блока

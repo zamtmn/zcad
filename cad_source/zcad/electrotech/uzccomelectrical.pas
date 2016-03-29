@@ -1411,8 +1411,7 @@ begin
 
   s:='**Напрямую**';
   cabcomparam.Traces.Enums.add(@s);
-  if assigned(SetGDBObjInspProc)then
-  SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),pcabcom,drawings.GetCurrentDWG);
+  zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pcabcom);
 
 
 
@@ -2367,8 +2366,7 @@ function Find_com(operands:TCommandOperands):TCommandResult;
    // pv:pGDBObjEntity;
    // ir:itrec;
 begin
-     if assigned(SetGDBObjInspProc)then
-  SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),pfindcom,drawings.GetCurrentDWG);
+  zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pfindcom);
   drawings.GetCurrentDWG.SelObjArray.clearallobjects;
   drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
   result:=cmd_ok;
@@ -2615,8 +2613,7 @@ begin
   pold:=nil;
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   sysvarDWGOSMode:=sysvarDWGOSMode or osm_nearest;
-  if assigned(SetGDBObjInspProc)then
-  SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('TELLeaderComParam'),@ELLeaderComParam,drawings.GetCurrentDWG);
+  zcShowCommandParams(SysUnit.TypeName2PTD('TELLeaderComParam'),@ELLeaderComParam);
   historyout('Первая точка:');
   result:=cmd_ok;
 end;
@@ -2627,10 +2624,8 @@ function _Cable_com_Manager(operands:TCommandOperands):TCommandResult;
 begin
         CableManager.init;
         CableManager.build;
-        if assigned(SetGDBObjInspProc)then
-        SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('TCableManager'),@CableManager,drawings.GetCurrentDWG);
+        zcShowCommandParams(SysUnit.TypeName2PTD('TCableManager'),@CableManager);
         result:=cmd_ok;
-
 end;
 function _Ren_n_to_0n_com(operands:TCommandOperands):TCommandResult;
 var {i,}len: GDBInteger;

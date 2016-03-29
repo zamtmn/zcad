@@ -1,4 +1,4 @@
-unit aregGDBDescriptor;
+unit aregTZCADDrawingsManager;
 {$INCLUDE def.inc}
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
@@ -9,8 +9,8 @@ pt:PObjectDescriptor;
 initialization
 if assigned(SysUnit) then
 begin
-     pt:=SysUnit.ObjectTypeName2PTD('GDBDescriptor');
-     pt^.RegisterObject(TypeOf(GDBDescriptor),@GDBDescriptor.initnul);
-     pt^.AddMetod('','initnul','',@GDBDescriptor.initnul,m_constructor);
+     pt:=SysUnit.ObjectTypeName2PTD('TZCADDrawingsManager');
+     pt^.RegisterObject(TypeOf(TZCADDrawingsManager),@TZCADDrawingsManager.initnul);
+     pt^.AddMetod('','initnul','',@TZCADDrawingsManager.initnul,m_constructor);
 end;
 end.

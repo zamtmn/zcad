@@ -50,7 +50,7 @@ type
                 TxtEntType:TMSPrimitiveDetector;(*'Process primitives'*)
                 VariablesUnit:TObjectUnit;(*'Variables'*)
                 GeneralUnit:TObjectUnit;(*'General'*)
-                GeometryUnit:TObjectUnit;(*'uzegeometry'*)
+                GeometryUnit:TObjectUnit;(*'Geometry'*)
                 MiscUnit:TObjectUnit;(*'Misc'*)
                 SummaryUnit:TObjectUnit;(*'Summary'*)
                 ObjIDVector:{-}TObjIDVector{/GDBPointer/};(*hidden_in_objinsp*)

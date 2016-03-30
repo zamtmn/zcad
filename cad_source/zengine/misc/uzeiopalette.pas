@@ -19,9 +19,9 @@
 unit uzeiopalette;
 {$INCLUDE def.inc}
 interface
-uses paths,uzepalette,uzcstrconsts,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
-     strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}{log,}sysutils,
-     UGDBOpenArrayOfByte,gdbasetypes,gdbase;
+uses uzbpaths,uzepalette,uzcstrconsts,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
+     uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}{log,}sysutils,
+     UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes;
 procedure readpalette(filename:string);
 implementation
 procedure readpalette;

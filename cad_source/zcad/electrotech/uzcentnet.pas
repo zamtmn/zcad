@@ -10,8 +10,8 @@ unit uzcentnet;
 interface
 uses uzeobjectextender,uzeentityfactory,Varman,uzgldrawcontext,uzestyleslayers,
      uzeentgenericsubentry,uzedrawingdef,uzeentitiesprop,uzcsysvars,UGDBOpenArrayOfByte,
-     gdbasetypes,uzeentity,UGDBOpenArrayOfPV,uzeentconnected,uzeconsts,
-     varmandef,uzegeometry,gdbase,UGDBGraf,memman,uzeentsubordinated,uunitmanager,
+     uzbtypesbase,uzeentity,UGDBOpenArrayOfPV,uzeentconnected,uzeconsts,
+     varmandef,uzegeometry,uzbtypes,UGDBGraf,uzbmemman,uzeentsubordinated,uunitmanager,
      uzcshared,sysutils,UGDBOpenArrayOfPObjects;
 const
      UNNAMEDNET='NET';

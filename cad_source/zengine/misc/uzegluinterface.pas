@@ -20,7 +20,7 @@ unit uzegluinterface;
 {$INCLUDE def.inc}
 
 interface
-uses LCLProc,uzepalette,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
+uses LCLProc,uzepalette,uzbtypes,{$IFNDEF DELPHI}LCLType,{$ENDIF}
      {$IFNDEF DELPHI}glu,gl,{$ELSE}dglOpenGL,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
      {log,}sysutils{,varmandef};

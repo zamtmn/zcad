@@ -19,8 +19,8 @@ unit uzeblockdef;
 {$INCLUDE def.inc}
 interface
 uses uzeentity,uzeentityfactory,uzgldrawcontext,uzeobjectextender,uzedrawingdef,
-     uzeentsubordinated,uzeffdxfsupport,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,
-     memman,uzegeometry,uzestyleslayers,uzeconsts,uzeentgenericsubentry;
+     uzeentsubordinated,uzeffdxfsupport,UGDBOpenArrayOfByte,uzbtypesbase,sysutils,uzbtypes,
+     uzbmemman,uzegeometry,uzestyleslayers,uzeconsts,uzeentgenericsubentry;
 type
 {REGISTEROBJECTTYPE GDBObjBlockdef}
 {Export+}

@@ -19,7 +19,7 @@
 unit uzgprimitives;
 {$INCLUDE def.inc}
 interface
-uses math,uzglgeomdata,uzgldrawcontext,uzgvertex3sarray,uzgldrawerabstract,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
+uses math,uzglgeomdata,uzgldrawcontext,uzgvertex3sarray,uzgldrawerabstract,uzbtypesbase,UGDBOpenArrayOfData,sysutils,uzbtypes,uzbmemman,
      uzegeometry;
 const
      LLAttrNothing=0;

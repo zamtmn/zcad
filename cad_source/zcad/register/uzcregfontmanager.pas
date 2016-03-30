@@ -19,7 +19,7 @@
 unit uzcregfontmanager;
 {$INCLUDE def.inc}
 interface
-uses uzcsysvars,uzefontmanager,paths,uzctranslations,UUnitManager,TypeDescriptors;
+uses uzcsysvars,uzefontmanager,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors;
 implementation
 
 initialization

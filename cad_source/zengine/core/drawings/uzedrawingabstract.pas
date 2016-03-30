@@ -21,7 +21,7 @@ unit uzedrawingabstract;
 interface
 uses
     uzestylesdim,uzestylestexts,uzestyleslinetypes,uzgldrawcontext,uzedrawingdef,
-    gdbase,gdbasetypes,uzecamera,uzeentity,uzeentgenericsubentry,uzeroot,
+    uzbtypesbase,uzbtypes,uzecamera,uzeentity,uzeentgenericsubentry,uzeroot,
     UGDBSelectedObjArray,uzestyleslayers,UGDBOpenArrayOfPV;
 type
 {EXPORT+}

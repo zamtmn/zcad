@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfPointer;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,sysutils,UGDBOpenArray;
+uses uzbtypesbase,sysutils,UGDBOpenArray;
 type
 GDBPointerArray=array [0..0] of GDBPointer;
 PGDBPointerArray=^GDBPointerArray;

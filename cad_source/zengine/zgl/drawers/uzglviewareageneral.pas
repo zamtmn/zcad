@@ -20,10 +20,10 @@ unit uzglviewareageneral;
 {$INCLUDE def.inc}
 interface
 uses
-     LCLProc,memman,uzemathutils,uzepalette,
-     uzegeometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
+     LCLProc,uzbmemman,uzemathutils,uzepalette,
+     uzegeometry,uzbtypesbase,uzbtypes,UGDBSelectedObjArray,
      uzglviewareadata,uzgldrawcontext,uzeentity,uzedrawingabstract,UGDBPoint3DArray,uzeentitiestree,
-     uzeconsts,uzestrconsts,UGDBTracePropArray,math,sysutils,uzedrawingdef,strproc,
+     uzeconsts,uzestrconsts,UGDBTracePropArray,math,sysutils,uzedrawingdef,uzbstrproc,
      ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,
      UGDBOpenArrayOfPV,uzeentgenericsubentry,uzecamera,UGDBVisibleOpenArray,uzgldrawerabstract,
      uzgldrawergeneral,uzglviewareaabstract;

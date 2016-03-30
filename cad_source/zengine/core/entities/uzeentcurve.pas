@@ -21,9 +21,9 @@ unit uzeentcurve;
 
 interface
 uses uzgldrawcontext,uzedrawingdef,uzecamera,UGDBOpenArrayOfPObjects,
-     UGDBOpenArrayOfByte,uzestyleslayers,gdbasetypes,UGDBVectorSnapArray,
+     UGDBOpenArrayOfByte,uzestyleslayers,uzbtypesbase,UGDBVectorSnapArray,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBPolyLine2DArray,UGDBPoint3DArray,
-     GDBase,uzegeometry,uzeconsts,uzglviewareadata,uzeffdxfsupport,sysutils,memman,
+     uzbtypes,uzegeometry,uzeconsts,uzglviewareadata,uzeffdxfsupport,sysutils,uzbmemman,
      uzeentsubordinated;
 type
 //------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)

@@ -20,8 +20,8 @@ unit uzeentityextender;
 {$INCLUDE def.inc}
 
 interface
-uses memman,uzedrawingdef,gdbasetypes,gdbase,usimplegenerics,
-     {gvector,}{gmap,}UGDBOpenArrayOfByte;
+uses uzbmemman,uzedrawingdef,uzbtypesbase,uzbtypes,usimplegenerics,
+     UGDBOpenArrayOfByte;
 
 type
 TBaseObjExtender={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)

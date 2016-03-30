@@ -21,17 +21,17 @@ unit uzccominterface;
 
 interface
 uses
- uzccomimport,paths,uzeffmanager,uzglbackendmanager,uzglviewareaabstract,uzgldrawerogl,
+ uzccomimport,uzbpaths,uzeffmanager,uzglbackendmanager,uzglviewareaabstract,uzgldrawerogl,
  uzcfcolors,uzcfdimstyles,uzcflinetypes,uzcftextstyles,uzcinfoform,uzefontmanager,uzedrawingsimple,uzccombase,
  uzcsysvars,uzccommandsmanager,TypeDescriptors,uzcutils,uzcstrconsts,UGDBStringArray,uzcctrlcontextmenu,
- {$IFNDEF DELPHI}uzctranslations,{$ENDIF}uzcflayers,uzcfunits,strproc,uzctreenode,menus,
+ {$IFNDEF DELPHI}uzctranslations,{$ENDIF}uzcflayers,uzcfunits,uzbstrproc,uzctreenode,menus,
  {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} {fileutil}LazUTF8,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   uzcsysinfo,
   //commandline,
   uzccommandsabstract,
   uzccommandsimpl,
-  gdbase,
+  uzbtypes,
   uzcdrawings,
   sysutils,
   varmandef,
@@ -48,7 +48,7 @@ uses
   uzeentity,
  uzcshared,
  uzcdrawing,
-  {zmenus,}uzcfprojecttree,gdbasetypes,{optionswnd,}uzcfabout,uzcfhelp,memman,uzcdialogsfiles,{txteditwnd,}
+  {zmenus,}uzcfprojecttree,uzbtypesbase,{optionswnd,}uzcfabout,uzcfhelp,uzbmemman,uzcdialogsfiles,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}uzclog,Varman,UGDBNumerator,uzcfcommandline,
  AnchorDocking,dialogs,XMLPropStorage,xmlconf,uzglviewareaogl
  {,uPSCompiler,

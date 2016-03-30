@@ -19,7 +19,7 @@
 unit UOpenArray;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,sysutils,gdbase;
+uses uzbtypesbase,sysutils,uzbtypes;
 type
 GDBITERATEPROC = procedure(const pdata:GDBPointer)of object;
 {Export+}

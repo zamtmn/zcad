@@ -20,7 +20,7 @@ unit langsystem;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses strproc,gdbasetypes{,varman},varmandef,memman,UBaseTypeDescriptor;
+uses uzbstrproc,uzbtypesbase,varmandef,uzbmemman,UBaseTypeDescriptor;
 type
     TTypesArray=array of pointer;
 var

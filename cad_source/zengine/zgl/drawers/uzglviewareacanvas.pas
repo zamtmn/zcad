@@ -23,8 +23,8 @@ uses
      {$IFDEF LCLQT}
      qt4,
      {$ENDIF}
-     uzgldrawercanvas,uzglviewareaabstract,sysutils,memman,
-     gdbase,gdbasetypes,
+     uzgldrawercanvas,uzglviewareaabstract,sysutils,uzbmemman,
+     uzbtypesbase,uzbtypes,
      varmandef,uzccommandsmanager,uzcsysvars,uzegeometry,uzcshared,LCLType,
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,uzglbackendmanager,
      {$IFNDEF DELPHI}OpenGLContext{$ENDIF},uzglviewareacanvasgeneral;

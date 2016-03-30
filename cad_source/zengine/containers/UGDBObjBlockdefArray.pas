@@ -19,8 +19,8 @@
 unit UGDBObjBlockdefArray;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,uzgldrawcontext,uzedrawingdef,strproc,uzeblockdef,UGDBOpenArrayOfData,sysutils,gdbase,memman,uzegeometry,
-     gdbasetypes;
+uses LCLProc,uzgldrawcontext,uzedrawingdef,uzbstrproc,uzeblockdef,UGDBOpenArrayOfData,sysutils,uzbtypes,uzbmemman,uzegeometry,
+     uzbtypesbase;
 type
 {REGISTEROBJECTTYPE GDBObjBlockdefArray}
 {Export+}
@@ -117,7 +117,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       if strproc.Tria_Utf8ToAnsi(p^.Name)='*D234' then
+       if Tria_Utf8ToAnsi(p^.Name)='*D234' then
                             p^.Name:=p^.Name;
        if VerboseLog then
          debugln('{D+}Formatting blockdef name="%s"',[p^.Name]);

@@ -21,7 +21,7 @@ unit uabstractunit;
 {$MODE DELPHI}
 interface
 uses
-  gdbase;
+  uzbtypes;
 type
 {Export+}
   PTAbstractUnit=^TAbstractUnit;

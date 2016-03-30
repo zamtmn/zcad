@@ -19,7 +19,7 @@
 unit UGDBTracePropArray;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfData,sysutils,gdbasetypes,gdbase;
+uses UGDBOpenArrayOfData,sysutils,uzbtypesbase,uzbtypes;
 {Export+}
 type
   ptraceprop=^traceprop;

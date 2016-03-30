@@ -1,9 +1,9 @@
 unit uzcdevicebase;
 {$INCLUDE def.inc}
 interface
-uses paths,uzctranslations,gvector,varmandef,CsvDocument,uzcdevicebaseabstract,uzcsysvars,
-  LazUTF8,uzcsysinfo,strmy,gdbasetypes,gdbase,UUnitManager,varman,{varmandef,}sysutils,
-  typedescriptors,URecordDescriptor,UObjectDescriptor,uzcshared;
+uses uzbpaths,uzctranslations,gvector,varmandef,CsvDocument,uzcdevicebaseabstract,uzcsysvars,
+     LazUTF8,uzcsysinfo,strmy,uzbtypesbase,uzbtypes,UUnitManager,varman,sysutils,
+     typedescriptors,URecordDescriptor,UObjectDescriptor,uzcshared;
 type
 {REGISTEROBJECTTYPE DeviceDbBaseObject}
 {REGISTEROBJECTTYPE ElDeviceBaseObject}

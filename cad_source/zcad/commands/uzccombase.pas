@@ -23,16 +23,16 @@ interface
 uses
  {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
  uzglviewareageneral,zeundostack,zcchangeundocommand,uzcoimultiobjects,
- uzcenitiesvariablesextender,uzgldrawcontext,uzcdrawing,paths,uzeffmanager,
+ uzcenitiesvariablesextender,uzgldrawcontext,uzcdrawing,uzbpaths,uzeffmanager,
  uzeentdimension,uzestylesdim,uzestylestexts,uzeenttext,uzestyleslinetypes,
  URecordDescriptor,uzefontmanager,uzedrawingsimple,uzcsysvars,uzccommandsmanager,
  TypeDescriptors,uzcutils,uzcstrconsts,uzcctrlcontextmenu,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
- strproc,uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ uzbstrproc,uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,LazUTF8,Forms,Controls,Clipbrd,lclintf,
   uzcsysinfo,
   uzccommandsabstract,
   uzccommandsimpl,
-  gdbase,
+  uzbtypes,
   uzcdrawings,
   sysutils,
   varmandef,
@@ -44,7 +44,7 @@ uses
   uzeentity,
  uzcshared,
  uzeentitiestree,
- gdbasetypes,memman,uzcdialogsfiles,
+ uzbtypesbase,uzbmemman,uzcdialogsfiles,
  UUnitManager,uzclog,Varman,
  dialogs,uzcinfoform;
    var selframecommand:PCommandObjectDef;

@@ -20,8 +20,8 @@ unit uzcfsplash;
 {$INCLUDE def.inc}
 interface
 uses
- paths,uzclog,uniqueinstanceraw,uzcstrconsts,strproc,Forms, stdctrls, Controls, Graphics,
- ExtCtrls,gdbasetypes,uzcsysinfo,{fileutil}LazUTF8,sysutils;
+ uzbpaths,uzclog,uniqueinstanceraw,uzcstrconsts,uzbstrproc,Forms, stdctrls, Controls, Graphics,
+ ExtCtrls,uzbtypesbase,uzcsysinfo,{fileutil}LazUTF8,sysutils;
 type
   TSplashForm = class(TForm)
     txt:tlabel;

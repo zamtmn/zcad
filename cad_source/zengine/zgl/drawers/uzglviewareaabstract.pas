@@ -20,7 +20,7 @@ unit uzglviewareaabstract;
 {$INCLUDE def.inc}
 interface
 uses
-     UGDBOpenArrayOfPV,uzgldrawerabstract,uzeentgenericsubentry,gdbase,gdbasetypes,
+     UGDBOpenArrayOfPV,uzgldrawerabstract,uzeentgenericsubentry,uzbtypesbase,uzbtypes,
      uzglviewareadata,uzgldrawcontext,UGDBPoint3DArray,uzeentitiestree,uzegeometry,uzedrawingabstract,
      {uzcshared,}sysutils,
      ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,Messages,Graphics,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,uzeentity;

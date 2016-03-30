@@ -21,9 +21,9 @@ unit uzeentpoint;
 
 interface
 uses uzeentityfactory,uzgldrawcontext,uzeffdxfsupport,uzedrawingdef,uzecamera,
-     UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,UGDBSelectedObjArray,
+     UGDBOpenArrayOfPObjects,uzestyleslayers,uzbtypesbase,UGDBSelectedObjArray,
      uzeentsubordinated,uzeent3d,uzeentity,sysutils,UGDBOpenArrayOfByte,
-     GDBase,uzeconsts,uzglviewareadata,uzegeometry,memman;
+     uzbtypes,uzeconsts,uzglviewareadata,uzegeometry,uzbmemman;
 type
 {REGISTEROBJECTTYPE GDBObjPoint}
 {Export+}

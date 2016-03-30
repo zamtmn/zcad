@@ -26,7 +26,7 @@ uses
      {$IFDEF LCLQT}
      qt4,qtint,
      {$ENDIF}
-     uzgldrawergdi,uzglviewareaabstract,uzgldrawerogl,sysutils,memman,gdbase,gdbasetypes,
+     uzgldrawergdi,uzglviewareaabstract,uzgldrawerogl,sysutils,uzbmemman,uzbtypesbase,uzbtypes,
      uzegeometry,{$IFNDEF DELPHI}LCLType,{$ENDIF}{$IFDEF DELPHI}Types,{$ENDIF}
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,uzglbackendmanager,uzglviewareacanvasgeneral;
 type

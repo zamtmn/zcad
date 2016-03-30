@@ -20,7 +20,7 @@ unit uzcprinterspecfunc;
 {$INCLUDE def.inc}
 
 interface
-uses uzepalette,gdbasetypes,gdbase,LCLType,Printers,
+uses uzepalette,uzbtypesbase,uzbtypes,LCLType,Printers,
      gl,glu,uzgloglstatemanager,
      {$IFDEF SLINUX}glx,{$ENDIF}
      sysutils,varmandef,Graphics;

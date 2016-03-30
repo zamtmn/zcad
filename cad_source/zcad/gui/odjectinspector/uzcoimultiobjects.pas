@@ -21,9 +21,9 @@ unit uzcoimultiobjects;
 
 interface
 uses
-  uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,memman,uzcshared,
+  uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,uzbmemman,uzcshared,
   uzcstrconsts,sysutils,uzeentityfactory,uzcenitiesvariablesextender,uzgldrawcontext,
-  gdbase,uzcdrawings,varmandef,uzeentity,gdbasetypes,Varman,UGDBStringArray;
+  uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,Varman,UGDBStringArray;
 type
   PTOneVarData=^TOneVarData;
   TOneVarData=record

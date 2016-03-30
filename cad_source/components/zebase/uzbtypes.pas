@@ -15,10 +15,10 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-unit gdbase;
+unit uzbtypes;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,sysutils;
+uses uzbtypesbase,sysutils;
      //gdbobjectsconstdef;
 const
      cmd_ok=-1;

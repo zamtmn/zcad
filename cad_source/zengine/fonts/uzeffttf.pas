@@ -20,8 +20,8 @@ unit uzeffttf;
 {$INCLUDE def.inc}
 interface
 uses uzefontmanager,EasyLazFreeType,uzefontttf,uzegeometry,
-    uzefont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,
-    UGDBOpenArrayOfByte,gdbasetypes,gdbase,memman;
+    uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,
+    UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,uzbmemman;
 type ptsyminfo=^tsyminfo;
      tsyminfo=packed record
                            number,size:word;

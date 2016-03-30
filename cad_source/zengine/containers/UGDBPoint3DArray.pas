@@ -19,7 +19,7 @@
 unit UGDBPoint3DArray;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,math,
+uses uzbtypesbase,UGDBOpenArrayOfData,sysutils,uzbtypes,uzbmemman,math,
      uzegeometry;
 type
 {REGISTEROBJECTTYPE GDBPoint3dArray}

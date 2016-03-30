@@ -20,7 +20,7 @@ unit uzgldrawergdi;
 {$INCLUDE def.inc}
 interface
 uses
-    sysutils,gdbasetypes,uzgldrawergeneral2d,uzelclintfex,fileutil,math,uzefontmanager,uzefont,{zcadsysvars,}uzglviewareaabstract,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}uzglgeomdata,uzgldrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,uzepalette,
+    sysutils,uzbtypesbase,uzgldrawergeneral2d,uzelclintfex,fileutil,math,uzefontmanager,uzefont,uzglviewareaabstract,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}uzglgeomdata,uzgldrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,uzepalette,
     {$IFDEF WINDOWS}windows,{$ENDIF}{$IFDEF DELPHI}windows,{$ENDIF}
     {$IFDEF LCLGTK2}
     Gtk2Def,
@@ -30,7 +30,7 @@ uses
     {$ENDIF}
     {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
     Classes,Controls,
-    uzegeometry,uzgldrawergeneral,uzgldrawerabstract,Graphics,gdbase;
+    uzegeometry,uzgldrawergeneral,uzgldrawerabstract,Graphics,uzbtypes;
 const
   NeedScreenInvalidrect=true;
 type

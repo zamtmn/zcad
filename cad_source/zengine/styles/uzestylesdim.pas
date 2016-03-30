@@ -19,8 +19,9 @@
 unit uzestylesdim;
 {$INCLUDE def.inc}
 interface
-uses uzepalette,uzeconsts,uzestyleslinetypes,uzestylestexts,usimplegenerics,gdbasetypes,sysutils,gdbase,uzegeometry,
-     strproc,UGDBNamedObjectsArray,memman;
+uses uzepalette,uzeconsts,uzestyleslinetypes,uzestylestexts,usimplegenerics,uzbtypesbase,
+     sysutils,uzbtypes,uzegeometry,
+     uzbstrproc,UGDBNamedObjectsArray,uzbmemman;
 const
      DIMLWEDefaultValue=LnWtByBlock;
      DIMCLREDefaultValue=ClByBlock;

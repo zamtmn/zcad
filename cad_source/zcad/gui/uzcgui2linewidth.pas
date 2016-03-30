@@ -23,7 +23,7 @@ interface
 
 uses
   uzeconsts,uzcflineweights,usupportgui,StdCtrls,uzcdrawings,
-  Controls,Classes,strproc,uzcsysvars,uzccommandsmanager;
+  Controls,Classes,uzbstrproc,uzcsysvars,uzccommandsmanager;
 
 type
   TSupportLineWidthCombo = class

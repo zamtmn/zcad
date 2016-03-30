@@ -24,7 +24,7 @@ uses
   uzcinterface,ExtCtrls,
   {$IFNDEF DELPHI}lclproc,{$ENDIF}
   Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,fileutil,ButtonPanel,{$ENDIF}Buttons,
-  {strutils,}{$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,uzcshared,uzcsysinfo,UGDBOpenArrayOfByte;
+  {strutils,}{$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils,uzbstrproc,varmandef,Varman,UBaseTypeDescriptor,uzbtypesbase,uzcshared,uzcsysinfo,UGDBOpenArrayOfByte;
 type
   TButtonMethod=procedure({Sender:pointer;}pdata:{GDBPointer}GDBPlatformint)of object;
   TButtonProc=procedure(pdata:GDBPointer);

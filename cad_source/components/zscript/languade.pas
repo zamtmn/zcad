@@ -21,7 +21,7 @@ unit languade;
 {$MODE DELPHI}
 interface
 uses
-  strproc,gdbasetypes,varman, langsystem, sysutils,{ strmy,}varmandef,memman{,TypeDescriptors,URecordDescriptor},UObjectDescriptor;
+  uzbstrproc,uzbtypesbase,varman, langsystem, sysutils,varmandef,uzbmemman,UObjectDescriptor;
 var
   s, s1: GDBString;
   v: vardesk;

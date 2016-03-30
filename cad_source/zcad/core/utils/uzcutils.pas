@@ -23,9 +23,9 @@ unit uzcutils;
 interface
 uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzeentitiesmanager,uzepalette,
      uzeentityfactory,uzgldrawcontext,uzcdrawing,uzestyleslinetypes,uzcsysvars,
-     uzestyleslayers,sysutils,gdbasetypes,gdbase,uzcdrawings,varmandef,
+     uzestyleslayers,sysutils,uzbtypesbase,uzbtypes,uzcdrawings,varmandef,
      uzeconsts,UGDBVisibleOpenArray,uzeentgenericsubentry,uzeentity,
-     uzeentblockinsert,memman,uzcinterface;
+     uzeentblockinsert,uzbmemman,uzcinterface;
 
   {**Добавление в чертеж примитива с обвязкой undo
     @param(PEnt Указатель на добавляемый примитив)

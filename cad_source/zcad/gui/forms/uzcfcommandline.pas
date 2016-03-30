@@ -20,9 +20,9 @@ unit uzcfcommandline;
 {$INCLUDE def.inc}
 interface
 uses
- uzcguimanager,paths,Themes,buttons,uzcsysvars,uzcstrconsts,strproc,uzcsysinfo,lclproc,sysutils,gdbasetypes,
+ uzcguimanager,uzbpaths,Themes,buttons,uzcsysvars,uzcstrconsts,uzbstrproc,uzcsysinfo,lclproc,sysutils,uzbtypesbase,
  StdCtrls,ExtCtrls,Controls,Classes,menus,Forms,fileutil,graphics,
- gdbase, memman,uzcdrawings,math,uzccommandsmanager,varman,languade,
+ uzbtypes, uzbmemman,uzcdrawings,math,uzccommandsmanager,varman,languade,
  UGDBTracePropArray,varmandef,
  uzegeometry,uzcshared,UGDBStringArray,uzcinterface,uzctreenode;
 

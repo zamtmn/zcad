@@ -19,8 +19,9 @@
 unit uzefontmanager;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfByte,{$IFNDEF DELPHI}LResources,{$ENDIF}LCLProc,paths,uzelclintfex,uzestrconsts,{uzcshared,}{zcadsysvars,}strproc,uzefont,gdbasetypes,{SysInfo,}memman,
-     sysutils,gdbase,uzegeometry,usimplegenerics,
+uses UGDBOpenArrayOfByte,{$IFNDEF DELPHI}LResources,{$ENDIF}LCLProc,uzbpaths,
+     uzelclintfex,uzestrconsts,uzbstrproc,uzefont,uzbtypesbase,uzbmemman,
+     sysutils,uzbtypes,uzegeometry,usimplegenerics,
      UGDBNamedObjectsArray,classes;
 type
 TFontLoadProcedure=function(name:GDBString;var pf:PGDBfont):GDBBoolean;

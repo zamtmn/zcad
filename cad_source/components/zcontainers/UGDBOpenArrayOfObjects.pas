@@ -19,8 +19,8 @@
 unit UGDBOpenArrayOfObjects;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,UGDBOpenArrayOfData,
-     gdbase,memman;
+uses uzbtypesbase,UGDBOpenArrayOfData,
+     uzbtypes,uzbmemman;
 type
 {Export+}
 PGDBOpenArrayOfObjects=^GDBOpenArrayOfObjects;

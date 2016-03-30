@@ -20,12 +20,12 @@ unit uzcfprojecttree;
 {$INCLUDE def.inc}
 interface
 uses
- uzcsysvars,uzctranslations,uzcenitiesvariablesextender,uzcdrawing,paths,
- UGDBStringArray,uzeconsts,uzcstrconsts,uzcctrlcontextmenu,strproc,
+ uzcsysvars,uzctranslations,uzcenitiesvariablesextender,uzcdrawing,uzbpaths,
+ UGDBStringArray,uzeconsts,uzcstrconsts,uzcctrlcontextmenu,uzbstrproc,
  uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  Classes,FileUtil,Forms,stdctrls,Controls,ComCtrls,
- uzcdevicebaseabstract,uzclog,SysUtils,gdbase,uzcdrawings,varman,languade,
- varmandef,uzcshared,uzcsysinfo,memman,gdbasetypes,uzccommandsimpl,uzccommandsabstract;
+ uzcdevicebaseabstract,uzclog,SysUtils,uzbtypes,uzcdrawings,varman,languade,
+ varmandef,uzcshared,uzcsysinfo,uzbmemman,uzbtypesbase,uzccommandsimpl,uzccommandsabstract;
 const
   uncat='UNCAT';
   uncat_='UNCAT_';

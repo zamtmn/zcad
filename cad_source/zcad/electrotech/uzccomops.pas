@@ -11,11 +11,11 @@ interface
 uses
 
   uzctranslations,uzeentitiesmanager,uzeentity,uzglviewareaabstract,uzgldrawcontext,
-  uzeentabstracttext,uzeenttext,UGDBStringArray,uzeentityfactory,uzcsysvars,strproc,
-  gdbasetypes,uzccommandsmanager,uzclog,UGDBOpenArrayOfPObjects,
-  uzccommandsabstract,uzccommandsimpl,gdbase,uzcdrawings,uzeutils,uzcutils,sysutils,
-  varmandef,UGDBOpenArrayOfByte,uzeffdxf,uzcinterface,uzegeometry,memman,uzeconsts,
-  uzccomdraw,UGDBVisibleOpenArray,uzeentline,paths,uzcshared,uzeentblockinsert,
+  uzeentabstracttext,uzeenttext,UGDBStringArray,uzeentityfactory,uzcsysvars,uzbstrproc,
+  uzbtypesbase,uzccommandsmanager,uzclog,UGDBOpenArrayOfPObjects,
+  uzccommandsabstract,uzccommandsimpl,uzbtypes,uzcdrawings,uzeutils,uzcutils,sysutils,
+  varmandef,UGDBOpenArrayOfByte,uzeffdxf,uzcinterface,uzegeometry,uzbmemman,uzeconsts,
+  uzccomdraw,UGDBVisibleOpenArray,uzeentline,uzbpaths,uzcshared,uzeentblockinsert,
   varman,uzccablemanager,uzeentdevice,uzeentmtext,math;
 
 type
@@ -803,7 +803,7 @@ var
    tv:gdbvertex;
    DC:TDrawContext;
 begin
-          name:=strproc.Tria_Utf8ToAnsi(name);
+          name:=uzbstrproc.Tria_Utf8ToAnsi(name);
 
      drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
      pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,

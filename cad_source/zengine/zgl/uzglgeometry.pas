@@ -21,8 +21,8 @@ unit uzglgeometry;
 interface
 uses uzgldrawergeneral,math,uzgldrawcontext,uzgldrawerabstract,uzgvertex3sarray,
      UGDBOpenArrayOfData,UGDBPoint3DArray,uzegeometry,uzeentitiesprop,
-     uzestyleslinetypes,sysutils,gdbase,memman,
-     gdbasetypes,strproc,uzefont,uzglvectorobject;
+     uzestyleslinetypes,sysutils,uzbtypes,uzbmemman,
+     uzbtypesbase,uzbstrproc,uzefont,uzglvectorobject;
 type
 {Export+}
 PZGLGeometry=^ZGLGeometry;

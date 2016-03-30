@@ -21,8 +21,8 @@ unit URecordDescriptor;
 {$MODE DELPHI}
 {$ASMMODE intel}
 interface
-uses LCLProc,UPointerDescriptor,strproc,{log,}UGDBOpenArrayOfByte,sysutils,UBaseTypeDescriptor,UGDBOpenArrayOfTObjLinkRecord,
-  TypeDescriptors{,UGDBOpenArrayOfPointer},UGDBOpenArrayOfData,gdbasetypes,varmandef,gdbase{,UGDBStringArray},memman;
+uses LCLProc,UPointerDescriptor,uzbstrproc,{log,}UGDBOpenArrayOfByte,sysutils,UBaseTypeDescriptor,UGDBOpenArrayOfTObjLinkRecord,
+  TypeDescriptors{,UGDBOpenArrayOfPointer},UGDBOpenArrayOfData,uzbtypesbase,varmandef,uzbtypes,uzbmemman;
 type
 {** Для работы с инспектором.}
 PRecordDescriptor=^RecordDescriptor;

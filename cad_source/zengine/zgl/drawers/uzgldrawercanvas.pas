@@ -20,12 +20,12 @@ unit uzgldrawercanvas;
 {$INCLUDE def.inc}
 interface
 uses
-    FPCanvas,gdbasetypes,uzgldrawergeneral2d,uzcsysvars,
+    FPCanvas,uzbtypesbase,uzgldrawergeneral2d,uzcsysvars,
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
     LCLIntf,LCLType,Classes,Controls,
-    uzegeometry,uzgldrawergeneral,uzgldrawerabstract,Graphics,gdbase;
+    uzegeometry,uzgldrawergeneral,uzgldrawerabstract,Graphics,uzbtypes;
 const
   NeedScreenInvalidrect=true;
 type

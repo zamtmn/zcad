@@ -20,9 +20,8 @@ unit uzeffshx;
 {$INCLUDE def.inc}
 interface
 uses uzgprimitivescreator,uzglvectorobject,uzefontmanager,uzefontshx,uzegeometry,
-     {$IFNDEF DELPHI}{intftranslations,}{$ENDIF}
-     uzefont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,{log,}sysutils,
-     UGDBOpenArrayOfByte,gdbasetypes,{SysInfo,}gdbase,memman,uzgprimitives;
+     uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,{log,}sysutils,
+     UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,uzbmemman,uzgprimitives;
 const
   fontdirect:array[0..$F,0..1] of GDBDouble=
   ((1,0),(1,0.5),(1,1),(0.5,1),(0,1),(-0.5,1),(-1,1),(-1,0.5),(-1,0),(-1,-0.5),(-1,-1),(-0.5,-1),(0,-1),(0.5,-1),(1,-1),(1,-0.5));

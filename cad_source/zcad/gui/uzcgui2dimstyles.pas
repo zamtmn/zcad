@@ -23,7 +23,7 @@ interface
 
 uses
   usupportgui,StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,uzestylesdim,
-  strproc,uzcsysvars,uzccommandsmanager,uzcinterface;
+  uzbstrproc,uzcsysvars,uzccommandsmanager,uzcinterface;
 
 type
   TSupportDimStyleCombo = class

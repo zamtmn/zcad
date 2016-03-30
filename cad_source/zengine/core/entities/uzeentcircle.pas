@@ -21,9 +21,9 @@ unit uzeentcircle;
 interface
 uses
     uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzecamera,
-    UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,uzehelpobj,UGDBSelectedObjArray,
+    UGDBOpenArrayOfPObjects,uzestyleslayers,uzbtypesbase,uzehelpobj,UGDBSelectedObjArray,
     uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,
-    GDBase,uzeentwithlocalcs,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,memman;
+    uzbtypes,uzeentwithlocalcs,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzbmemman;
 type
 //PProjPoint:PGDBPolyPoint2DArray;
 //PProjPoint:{-}PGDBPolyPoint2DArray{/GDBPointer/};

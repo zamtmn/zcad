@@ -20,8 +20,8 @@ unit uzefontttf;
 {$INCLUDE def.inc}
 interface
 uses LCLProc,uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzefontbase,uzebeziersolver,math,uzgloglstatemanager,uzegluinterface,TTTypes,TTObjs,
-  usimplegenerics,EasyLazFreeType,memman,strproc,gdbasetypes,sysutils,
-  gdbase,uzegeometry;
+  usimplegenerics,EasyLazFreeType,uzbmemman,uzbstrproc,uzbtypesbase,sysutils,
+  uzbtypes,uzegeometry;
 type
 PTTTFSymInfo=^TTTFSymInfo;
 TTTFSymInfo=packed record

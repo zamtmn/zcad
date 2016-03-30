@@ -24,9 +24,9 @@ unit Varman;
 interface
 uses
   LCLProc,uabstractunit,{zcadstrconsts,}UGDBOpenArrayOfPointer,SysUtils,UBaseTypeDescriptor,
-  gdbasetypes,gdbase,UGDBOpenArrayOfByte,UGDBStringArray,varmandef,
+  uzbtypesbase,uzbtypes,UGDBOpenArrayOfByte,UGDBStringArray,varmandef,
   UGDBOpenArrayOfPObjects,usimplegenerics,
-  {log,}memman,TypeDescriptors,URecordDescriptor,UObjectDescriptor,strproc,classes;
+  uzbmemman,TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes;
 type
     td=record
              template:GDBString;

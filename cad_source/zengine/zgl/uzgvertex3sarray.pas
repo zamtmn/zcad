@@ -19,7 +19,7 @@
 unit uzgvertex3sarray;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
+uses uzbtypesbase,UGDBOpenArrayOfData,sysutils,uzbtypes,uzbmemman,
      uzegeometry;
 type
 {Export+}

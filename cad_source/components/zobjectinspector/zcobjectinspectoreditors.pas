@@ -25,8 +25,8 @@ interface
 uses
   UEnumDescriptor,zcobjectinspector,Forms,sysutils,
   Graphics,LCLType,Themes,UGDBStringArray,
-  varmandef,Varman,gdbase,gdbasetypes,usupportgui,
-  StdCtrls,Controls,Classes,strproc;
+  varmandef,Varman,uzbtypesbase,uzbtypes,usupportgui,
+  StdCtrls,Controls,Classes,uzbstrproc;
 type
     TBaseTypesEditors=class
                              class function BaseCreateEditor           (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;InitialValue:GDBString;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc;

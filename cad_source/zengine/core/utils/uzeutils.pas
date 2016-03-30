@@ -20,7 +20,7 @@ unit uzeutils;
 {$INCLUDE def.inc}
 interface
 uses
-  uzepalette,uzestyleslinetypes,uzestyleslayers,uzedrawingsimple,gdbase,GDBasetypes,uzeentity,uzegeometry,uzeentgenericsubentry;
+  uzepalette,uzestyleslinetypes,uzestyleslayers,uzedrawingsimple,uzbtypesbase,uzbtypes,uzeentity,uzegeometry,uzeentgenericsubentry;
 type
   {**Структура описатель выбраных примитивов
     @member(PFirstSelectedEnt Указатель на первый выбраный примитив в чертеже)

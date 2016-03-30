@@ -19,7 +19,7 @@
 unit uzefontshx;
 {$INCLUDE def.inc}
 interface
-uses uzefontbase,memman,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,
+uses uzefontbase,uzbmemman,UGDBOpenArrayOfByte,uzbtypesbase,sysutils,uzbtypes,
      uzegeometry;
 type
 {EXPORT+}

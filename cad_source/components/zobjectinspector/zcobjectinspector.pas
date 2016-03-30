@@ -35,9 +35,9 @@ uses
   types,graphics,
   ExtCtrls,Controls,Classes,menus,Forms,lcltype,
 
-  Varman,gdbasetypes,SysUtils,
-  gdbase,varmandef,
-  memman,TypeDescriptors,UGDBStringArray;
+  Varman,uzbtypesbase,SysUtils,
+  uzbtypes,varmandef,
+  uzbmemman,TypeDescriptors,UGDBStringArray;
 const
   fastEditorOffset={$IFDEF LCLQT}2{$ELSE}2{$ENDIF} ;
   spliterhalfwidth=4;

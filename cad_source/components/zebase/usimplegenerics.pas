@@ -19,7 +19,7 @@ unit usimplegenerics;
 {$INCLUDE def.inc}
 
 interface
-uses strproc,gdbase,gdbasetypes,
+uses uzbstrproc,uzbtypesbase,uzbtypes,
      {$IFNDEF DELPHI}gutil,gmap,ghashmap,gvector,{$ENDIF}
      {$IFDEF DELPHI}generics.collections,{$ENDIF}
      sysutils;

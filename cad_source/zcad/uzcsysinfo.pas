@@ -19,7 +19,7 @@
 unit uzcsysinfo;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,paths,uzcstrconsts,gdbasetypes,Forms,gdbase{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF},sysutils;
+uses LCLProc,uzbpaths,uzcstrconsts,uzbtypesbase,Forms,uzbtypes{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF},sysutils;
 {$INCLUDE revision.inc}
 type
   tsysparam=record
@@ -119,7 +119,7 @@ begin
        else if (paramUC='NOSPLASH')or(paramUC='NS')then
                                                    SysParam.NoSplash:=true
        else if (paramUC='VERBOSELOG')or(paramUC='VL')then
-                                                          gdbase.VerboseLog:=true
+                                                          uzbtypes.VerboseLog:=true
        else if (paramUC='NOLOADLAYOUT')or(paramUC='NLL')then
                                                                SysParam.NoLoadLayout:=true
        else if (paramUC='STANDARTINTERFACE')or(paramUC='SI')then

@@ -20,10 +20,10 @@ unit uzeentdimaligned;
 
 interface
 uses uzgldrawcontext,uzeentityfactory,uzeentdimension,uzeentpoint,uzestylesdim,
-     uzestyleslayers,uzedrawingdef,UGDBOpenArrayOfPObjects,strproc,
-     UGDBOpenArrayOfByte,UGDBControlPointArray,uzegeometry,uzeentline,gdbasetypes,
-     uzeentcomplex,sysutils,UGDBSelectedObjArray,uzeentity,GDBase,uzeconsts,
-     uzeffdxfsupport,memman,uzeentsubordinated;
+     uzestyleslayers,uzedrawingdef,UGDBOpenArrayOfPObjects,uzbstrproc,
+     UGDBOpenArrayOfByte,UGDBControlPointArray,uzegeometry,uzeentline,uzbtypesbase,
+     uzeentcomplex,sysutils,UGDBSelectedObjArray,uzeentity,uzbtypes,uzeconsts,
+     uzeffdxfsupport,uzbmemman,uzeentsubordinated;
 (*
 Alligned dimension structure in DXF
 

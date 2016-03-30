@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfTObjLinkRecord;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,sysutils,uGDBOpenArrayofdata,memman,gdbase;
+uses uzbtypesbase,sysutils,uGDBOpenArrayofdata,uzbmemman,uzbtypes;
 type
 {REGISTEROBJECTTYPE GDBOpenArrayOfTObjLinkRecord}
 {Export+}

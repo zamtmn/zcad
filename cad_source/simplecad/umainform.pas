@@ -8,8 +8,8 @@ uses
   LCLType,Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, StdCtrls, Spin,
   {From ZCAD}
-  memman,                                                                       //zcad memorymanager
-  GDBase, GDBasetypes,                                                          //zcad basetypes
+  uzbmemman,                                                                       //zcad memorymanager
+  uzbtypes, uzbtypesbase,                                                          //zcad basetypes
   uzegeometry,                                                                     //some mathematical and geometrical support
   uzefontmanager,uzeffshx,                                                        //fonts manager and SHX fileformat support
   uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,                          //generic view areas support

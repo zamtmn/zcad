@@ -8,9 +8,9 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ButtonPanel, Buttons, ExtCtrls, ComCtrls, Spin,
 
-  uzcflinetypesload,uzcsysvars, uzedrawingsimple, gdbase, gdbasetypes,
-  uzestyleslinetypes,uzcdrawings,uzcimagesmanager,uzcsysinfo,strproc,usupportgui,uzeutils,
-  paths,uzcstrconsts,uzcshared,UGDBNamedObjectsArray;
+  uzcflinetypesload,uzcsysvars, uzedrawingsimple,uzbtypesbase,uzbtypes,
+  uzestyleslinetypes,uzcdrawings,uzcimagesmanager,uzcsysinfo,uzbstrproc,usupportgui,uzeutils,
+  uzbpaths,uzcstrconsts,uzcshared,UGDBNamedObjectsArray;
 
 type
 
@@ -80,9 +80,9 @@ begin
                                                              Item.ImageIndex:=II_Ok;
                                                              CurrentLType:=Item;
                                                              end;
-                 Item.SubItems.Add(strproc.Tria_AnsiToUtf8(pltp^.Name));
+                 Item.SubItems.Add(uzbstrproc.Tria_AnsiToUtf8(pltp^.Name));
                  Item.SubItems.Add('');
-                 Item.SubItems.Add(strproc.Tria_AnsiToUtf8(pltp^.desk));
+                 Item.SubItems.Add(uzbstrproc.Tria_AnsiToUtf8(pltp^.desk));
 end;
 procedure TLineTypesForm._UpDateLV(LV:TListView;SLT:PGDBLtypeProp);
 var
@@ -191,9 +191,9 @@ begin
                      end;
      CurrentLine:=1;
      pdwg^.GetLTypeTable.ParseStrings(ltd,CurrentLine,LTName,LTDesk,LTImpl);
-     LTName:=strproc.Tria_Utf8ToAnsi(LTName);
-     LTDesk:=strproc.Tria_Utf8ToAnsi(LTDesk);
-     LTImpl:=strproc.Tria_Utf8ToAnsi(LTImpl);
+     LTName:=uzbstrproc.Tria_Utf8ToAnsi(LTName);
+     LTDesk:=uzbstrproc.Tria_Utf8ToAnsi(LTDesk);
+     LTImpl:=uzbstrproc.Tria_Utf8ToAnsi(LTImpl);
      pltp^.Name:=LTName;
      pltp^.desk:=LTDesk;
      pltp^.CreateLineTypeFrom(LTImpl);
@@ -235,9 +235,9 @@ begin
      ltd:=tstringlist.Create;
      ltd.Text:=self.Memo1.Text;
      pdwg^.GetLTypeTable.ParseStrings(ltd,CurrentLine,LTName,LTDesk,LTImpl);
-     LTName:=strproc.Tria_Utf8ToAnsi(LTName);
-     LTDesk:=strproc.Tria_Utf8ToAnsi(LTDesk);
-     LTImpl:=strproc.Tria_Utf8ToAnsi(LTImpl);
+     LTName:=uzbstrproc.Tria_Utf8ToAnsi(LTName);
+     LTDesk:=uzbstrproc.Tria_Utf8ToAnsi(LTDesk);
+     LTImpl:=uzbstrproc.Tria_Utf8ToAnsi(LTImpl);
 
      if (pdwg^.GetLTypeTable.AddItem(LTName,pltp)<>IsCreated) then
                         begin

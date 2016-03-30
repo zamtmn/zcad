@@ -873,7 +873,6 @@
       <Unit154>
         <Filename Value="zcad/electrotech/uzcbillofmaterial.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="UGDBBillOfMaterial"/>
       </Unit154>
       <Unit155>
         <Filename Value="zengine/zgl/drawers/uzgloglstatemanager.pas"/>
@@ -886,7 +885,6 @@
       <Unit157>
         <Filename Value="zcad/uzcplugins.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="plugins"/>
       </Unit157>
       <Unit158>
         <Filename Value="zcad/uzcinterface.pas"/>
@@ -895,7 +893,6 @@
       <Unit159>
         <Filename Value="zengine/misc/uzelclintfex.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="lclintfex"/>
       </Unit159>
       <Unit160>
         <Filename Value="zengine/core/uzeentityfactory.pas"/>

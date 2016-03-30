@@ -20,8 +20,8 @@ unit UUnitManager;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses LCLProc,paths,strproc,Varman,languade,UGDBOpenArrayOfObjects,SysUtils,
-     UBaseTypeDescriptor,gdbasetypes, gdbase,UGDBOpenArrayOfByte, strmy, varmandef,
+uses LCLProc,uzbpaths,uzbstrproc,Varman,languade,UGDBOpenArrayOfObjects,SysUtils,
+     UBaseTypeDescriptor,uzbtypesbase, uzbtypes,UGDBOpenArrayOfByte, strmy, varmandef,
      UGDBOpenArrayOfData,UGDBStringArray,TypeDescriptors,UEnumDescriptor,UArrayDescriptor,UPointerDescriptor,
      URecordDescriptor,UObjectDescriptor,USinonimDescriptor;
 type
@@ -54,7 +54,7 @@ var
    PTObj:PPointer;
 implementation
 uses
-    {log,}memman;
+    uzbmemman;
 //var s:gdbstring;
 const
      {GDBGDBPointerType:gdbtypedesk=

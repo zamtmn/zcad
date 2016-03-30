@@ -21,9 +21,9 @@ unit uzeentsolid;
 interface
 uses
     uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentwithlocalcs,
-    UGDBOpenArrayOfPObjects,uzegeometry,uzeffdxfsupport,uzestyleslayers,gdbasetypes,
+    UGDBOpenArrayOfPObjects,uzegeometry,uzeffdxfsupport,uzestyleslayers,uzbtypesbase,
     UGDBSelectedObjArray,uzeentsubordinated,uzeentity,sysutils,UGDBOpenArrayOfByte,
-    GDBase,uzeconsts,memman;
+    uzbtypes,uzeconsts,uzbmemman;
 type
 {REGISTEROBJECTTYPE GDBObjSolid}
 {Export+}

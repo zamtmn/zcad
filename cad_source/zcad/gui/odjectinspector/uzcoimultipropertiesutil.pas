@@ -21,12 +21,12 @@ unit uzcoimultipropertiesutil;
 
 interface
 uses
-  uzcoimultiobjects,uzepalette,memman,uzcshared,sysutils,uzeentityfactory,
-  gdbase,
+  uzcoimultiobjects,uzepalette,uzbmemman,uzcshared,sysutils,uzeentityfactory,
+  uzbtypes,
   uzcdrawings,
   varmandef,
   uzeentity,
-  gdbasetypes,
+  uzbtypesbase,
   Varman,UGDBPoint3DArray,
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,uzeentmtext,uzeentpolyline,uzegeometry,uzcoimultiproperties;
 function GetOneVarData(mp:TMultiProperty;pu:PTObjectUnit):GDBPointer;

@@ -19,11 +19,11 @@ unit uzcregisterenitiesfeatures;
 {$INCLUDE def.inc}
 
 interface
-uses uzeffdxf,paths,uzcsysvars,uzctranslations,sysutils,
+uses uzeffdxf,uzbpaths,uzcsysvars,uzctranslations,sysutils,
      uzcenitiesvariablesextender,uzcstrconsts,uzcshared,uzeconsts,devices,uzccomdb,uzcentcable,uzcentnet,uzeentdevice,TypeDescriptors,uzeffdxfsupport,
-     uzetextpreprocessor,UGDBOpenArrayOfByte,gdbasetypes,gdbase,uzeobjectextender,
+     uzetextpreprocessor,UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,uzeobjectextender,
      uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,varmandef,Varman,UUnitManager,
-     URecordDescriptor,UBaseTypeDescriptor,uzedrawingdef,memman;
+     URecordDescriptor,UBaseTypeDescriptor,uzedrawingdef,uzbmemman;
 var
    PFCTTD:GDBPointer=nil;
    extvarunit:TUnit;

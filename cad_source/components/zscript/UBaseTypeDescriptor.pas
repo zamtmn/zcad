@@ -23,8 +23,9 @@ unit UBaseTypeDescriptor;
 interface
 uses
       LCLProc,Graphics,classes,Themes,
-      uzemathutils,uzegeometry,{zcadstrconsts,}strproc,{log,}TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,sysutils,UGDBOpenArrayOfByte,gdbasetypes,
-      {usupportgui,}varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,math{,uzcshared};
+      uzemathutils,uzegeometry,uzbstrproc,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,
+      sysutils,UGDBOpenArrayOfByte,uzbtypesbase,
+      varmandef,uzbtypes,UGDBOpenArrayOfData,UGDBStringArray,uzbmemman,math;
 resourcestring
   rsDifferent='Different';
 type

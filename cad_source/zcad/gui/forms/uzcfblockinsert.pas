@@ -10,8 +10,8 @@ uses
 
   UGDBObjBlockdefArray, //описание таблицы блоков
   uzeblockdef,          //описания блоков
-  gdbasetypes,          //базовые типы
-  strproc               //билеберда для работы со стрингами
+  uzbtypesbase,          //базовые типы
+  uzbstrproc               //билеберда для работы со стрингами
   ;
 
 type

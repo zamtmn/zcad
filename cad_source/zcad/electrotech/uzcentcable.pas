@@ -10,8 +10,8 @@ unit uzcentcable;
 interface
 uses uzeobjectextender,varman,uzgldrawcontext,uzeentgenericsubentry,uzedrawingdef,
      uzcsysvars,UGDBOpenArrayOfByte,uzestyleslayers,UUnitManager,uzeentcurve,uzegeometry,
-     math,UGDBOpenArrayOfData,gdbasetypes,uzeentity,varmandef,GDBase,
-     uzeconsts,uzeffdxfsupport,sysutils,memman,uzeentsubordinated,uzeentdevice;
+     math,UGDBOpenArrayOfData,uzbtypesbase,uzeentity,varmandef,uzbtypes,
+     uzeconsts,uzeffdxfsupport,sysutils,uzbmemman,uzeentsubordinated,uzeentdevice;
 type
 {Повторное описание типа в Cableы}
   PTCableType=^TCableType;

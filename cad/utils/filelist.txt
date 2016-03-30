@@ -1,5 +1,5 @@
-components/zebase/gdbasetypes.pas
-components/zebase/gdbase.pas
+components/zebase/uzbtypesbase.pas
+components/zebase/uzbtypes.pas
 zengine/core/objects/uzepalette.pas
 components/zcontainers/UOpenArray.pas
 components/zcontainers/UGDBOpenArray.pas

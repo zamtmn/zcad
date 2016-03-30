@@ -3,7 +3,7 @@ unit uzcflinetypesload;
 interface
 
 uses
-  strproc,uzcdrawings,gdbase,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  uzbstrproc,uzcdrawings,uzbtypes,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ButtonPanel, lclintf,lcltype, EditBtn, ComCtrls,uzedrawingsimple;
 
 type
@@ -50,9 +50,9 @@ begin
      CurrentLine:=1;
      repeat
      pdwg^.GetLTypeTable.ParseStrings(ltd,CurrentLine,LTName,LTDesk,LTImpl);
-     LTName:=strproc.Tria_AnsiToUtf8(LTName);
-     LTDesk:=strproc.Tria_AnsiToUtf8(LTDesk);
-     LTImpl:=strproc.Tria_AnsiToUtf8(LTImpl);
+     LTName:=Tria_AnsiToUtf8(LTName);
+     LTDesk:=Tria_AnsiToUtf8(LTDesk);
+     LTImpl:=Tria_AnsiToUtf8(LTImpl);
      if (LTName<>'')and(LTImpl<>'')then
      if (length(LTName)<200)and(length(LTImpl)<200)then
      begin

@@ -22,9 +22,9 @@ unit uzeentdevice;
 interface
 uses uzestyleslayers,uzepalette,uzeobjectextender,uabstractunit,uzeentityfactory,
      uzgldrawcontext,uzedrawingdef,uzecamera,uzcsysvars,sysutils,devices,
-     UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,uunitmanager,memman,uzegeometry,
-     uzeconsts,uzeentity,uzeentsubordinated,varmandef,gdbasetypes,
-     uzeentblockinsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray;
+     UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,uunitmanager,uzbmemman,uzegeometry,
+     uzeconsts,uzeentity,uzeentsubordinated,varmandef,uzbtypesbase,
+     uzeentblockinsert,uzbtypes,UGDBVisibleOpenArray,UGDBObjBlockdefArray;
 
 type
 {REGISTEROBJECTTYPE GDBObjDevice}
@@ -111,7 +111,7 @@ begin
      //p^.done;
      //memman.GDBFreeMem(GDBPointer(p))
      pobj^.done;
-     memman.GDBFreeMem(GDBPointer(pobj));
+     uzbmemman.GDBFreeMem(GDBPointer(pobj));
 end;
 
 procedure GDBObjDevice.addcontrolpoints(tdesc:GDBPointer);

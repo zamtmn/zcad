@@ -20,8 +20,8 @@ unit UPointerDescriptor;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses types,{zcadstrconsts,}TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,
-     gdbasetypes,varmandef,gdbase{,UGDBOpenArrayOfData},UGDBStringArray,memman;
+uses types,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,
+     uzbtypesbase,varmandef,uzbtypes,UGDBStringArray,uzbmemman;
 resourcestring
   rsUnassigned='Unassigned';
 type

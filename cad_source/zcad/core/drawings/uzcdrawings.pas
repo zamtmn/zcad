@@ -21,11 +21,11 @@ unit uzcdrawings;
 interface
 uses
     uzglviewareageneral,uzctranslations,uzedimblocksregister,uzeblockdefsfactory,
-    uzemathutils,uzgldrawcontext,uzcdrawing,uzedrawingdef,paths,uzestylesdim,
+    uzemathutils,uzgldrawcontext,uzcdrawing,uzedrawingdef,uzbpaths,uzestylesdim,
     uzedrawingabstract,uzcdialogsfiles,LResources,uzcsysvars,uzcinterface,
-    uzcstrconsts,strproc,uzeblockdef,UGDBObjBlockdefArray,UUnitManager,
-    gdbase,varmandef,varman,sysutils,memman,uzegeometry,uzeconsts,
-    gdbasetypes,uzedrawingsimple,uzeentgenericsubentry,uzestyleslayers,uzeentity,
+    uzcstrconsts,uzbstrproc,uzeblockdef,UGDBObjBlockdefArray,UUnitManager,
+    uzbtypes,varmandef,varman,sysutils,uzbmemman,uzegeometry,uzeconsts,
+    uzbtypesbase,uzedrawingsimple,uzeentgenericsubentry,uzestyleslayers,uzeentity,
     UGDBSelectedObjArray,uzestylestexts,uzefontmanager,uzestyleslinetypes,
     UGDBOpenArrayOfPV,uzefont,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,
     uzetrash,UGDBOpenArrayOfByte,uzglviewareadata;

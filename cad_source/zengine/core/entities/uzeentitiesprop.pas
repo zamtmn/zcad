@@ -19,7 +19,7 @@
 unit uzeentitiesprop;
 {$INCLUDE def.inc}
 interface
-uses uzepalette,uzestyleslinetypes,gdbasetypes,GDBase,uzegeometry,sysutils,memman,
+uses uzepalette,uzestyleslinetypes,uzbtypesbase,uzbtypes,uzegeometry,sysutils,uzbmemman,
      UGDBOpenArrayOfByte,uzestyleslayers;
 type
 //ID:TObjID;(*'Object type'*)(*oi_readonly*)(*hidden_in_objinsp*)

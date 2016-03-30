@@ -37,9 +37,9 @@ uses
   uzcfsplash,
   uzcsysvars,
 
-  memman,uzclog,
+  uzbmemman,uzclog,
   uzcsysinfo,
-  paths,
+  uzbpaths,
 
   varman,
   //

@@ -19,7 +19,7 @@
 unit UGDBStringArray;
 {$INCLUDE def.inc}
 interface
-uses gdbase,gdbasetypes,UGDBOpenArrayOfData,strproc,sysutils,UGDBOpenArray;
+uses uzbtypesbase,uzbtypes,UGDBOpenArrayOfData,uzbstrproc,sysutils,UGDBOpenArray;
 type
 {EXPORT+}
     PGDBGDBStringArray=^GDBGDBStringArray;
@@ -149,7 +149,7 @@ end;
 function GDBGDBStringArray.addutoa(p:GDBPointer):TArrayIndex;
 var s:GDBString;
 begin
-     s:=strproc.Tria_Utf8ToAnsi(pGDBString(p)^);
+     s:=Tria_Utf8ToAnsi(pGDBString(p)^);
      result:=inherited add(@s);
      GDBPointer(s):=nil;
 end;

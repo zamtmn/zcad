@@ -19,8 +19,8 @@
 unit uzestylestexts;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,paths,uzefontmanager,gdbasetypes,sysutils,gdbase,uzegeometry,
-     strproc,uzefont,uzestrconsts,UGDBNamedObjectsArray,memman;
+uses LCLProc,uzbpaths,uzefontmanager,uzbtypesbase,sysutils,uzbtypes,uzegeometry,
+     uzbstrproc,uzefont,uzestrconsts,UGDBNamedObjectsArray,uzbmemman;
 type
   //ptextstyle = ^textstyle;
 {REGISTEROBJECTTYPE GDBTextStyleArray}

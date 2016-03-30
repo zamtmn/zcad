@@ -21,7 +21,7 @@ unit uzccomdbgappexplorer;
 
 interface
 uses
- uzccommandsimpl,uzccommandsabstract,gdbase,AppExploreFrm;
+ uzccommandsimpl,uzccommandsabstract,uzbtypes,AppExploreFrm;
 implementation
 function DbgAppExplorer_com(operands:TCommandOperands):TCommandResult;
 begin

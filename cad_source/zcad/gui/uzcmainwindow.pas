@@ -30,8 +30,11 @@ uses
   {FPC}
        lineinfo,
   {ZCAD BASE}
-       uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,uzemathutils,uzelongprocesssupport,uzegluinterface,uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,uzepalette,paths,uzglviewareadata,uzeentitiesprop,uzglgeometry,uzcinterface,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
-       uzegeometry,uzcsysvars,uzcstrconsts,strproc,UGDBNamedObjectsArray,uzclog,
+       uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,uzemathutils,uzelongprocesssupport,
+       uzegluinterface,uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
+       uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzglgeometry,uzcinterface,
+       UGDBOpenArrayOfByte,uzbmemman,uzbtypesbase,uzbtypes,
+       uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,UGDBNamedObjectsArray,uzclog,
        varmandef, varman,UUnitManager,uzcsysinfo,uzcshared,strmy,uzestylestexts,uzestylesdim,
   {ZCAD SIMPLE PASCAL SCRIPT}
        languade,

@@ -16,10 +16,10 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit strproc;
+unit uzbstrproc;
 {$INCLUDE def.inc}
 interface
-uses {$IFNDEF DELPHI}{fileutil,}{$ENDIF}gdbasetypes,sysutils,strutils{$IFNDEF DELPHI},LCLProc{$ENDIF};
+uses {$IFNDEF DELPHI}{fileutil,}{$ENDIF}uzbtypesbase,sysutils,strutils{$IFNDEF DELPHI},LCLProc{$ENDIF};
 function GetPredStr(var s: GDBString; substr: GDBString): GDBString;
 function readspace(expr: GDBString): GDBString;
 

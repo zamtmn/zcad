@@ -19,7 +19,7 @@
 unit uzcdialogsfiles;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes, gdbase,sysutils,strproc,
+uses uzbtypesbase,uzbtypes,sysutils,uzbstrproc,
      {$IFNDEF DELPHI}LResources,{$ENDIF}Dialogs{$IFNDEF DELPHI},FileUtil{$ENDIF};
 const
     ImportFileFilter: GDBString = 'PDF files (*.pdf)|*.pdf|PostScript files (*.ps)|*.ps|SVG files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf|EPS files (*.eps)|*.eps';

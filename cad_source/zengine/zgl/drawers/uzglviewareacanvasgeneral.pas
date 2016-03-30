@@ -23,7 +23,7 @@ uses
      {$IFDEF LCLQT}
      qtwidgets,qt4,
      {$ENDIF}
-     uzgldrawergdi,uzglviewareaabstract,sysutils,memman,gdbase,
+     uzgldrawergdi,uzglviewareaabstract,sysutils,uzbmemman,uzbtypes,
      uzegeometry,{$IFNDEF DELPHI}LCLType,LMessages,{$ENDIF}{$IFDEF DELPHI}windows,messages,{$ENDIF}
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,uzglbackendmanager;
 type

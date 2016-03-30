@@ -23,8 +23,8 @@ uses uzgldrawcontext,uzeentityfactory,
      {$IFNDEF DELPHI}dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}
      uzedrawingsimple,
      uzeentcircle,uzeentarc,uzeentline,
-     uzegeometry,uzcshared,gdbasetypes,uzclog,gdbase,
-     sysutils,memman,uzeconsts,
+     uzegeometry,uzcshared,uzbtypesbase,uzclog,uzbtypes,
+     sysutils,uzbmemman,uzeconsts,
      UGDBOpenArrayOfByte,uzeentity;
 {$IFNDEF DELPHI}
 procedure Import(name: GDBString;var drawing:TSimpleDrawing);

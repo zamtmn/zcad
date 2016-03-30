@@ -27,10 +27,10 @@ uses
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 
-  uzeconsts,uzestylestexts,uzcdrawings,gdbase,gdbasetypes,varmandef,
+  uzeconsts,uzestylestexts,uzcdrawings,uzbtypesbase,uzbtypes,varmandef,
   uzcsuptypededitors,
 
-  paths,uzcinterface, uzcstrconsts, uzcsysinfo,strproc, uzcshared,UBaseTypeDescriptor,
+  uzbpaths,uzcinterface, uzcstrconsts, uzcsysinfo,uzbstrproc, uzcshared,UBaseTypeDescriptor,
   uzcimagesmanager, usupportgui, ZListView,uzefontmanager,varman,UGDBStringArray,
   uzeentity,uzeenttext;
 

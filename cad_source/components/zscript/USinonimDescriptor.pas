@@ -20,8 +20,8 @@ unit USinonimDescriptor;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,gdbasetypes,
-     varmandef,gdbase{,UGDBOpenArrayOfData,UGDBStringArray},memman;
+uses TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,uzbtypesbase,
+     varmandef,uzbtypes{,UGDBOpenArrayOfData,UGDBStringArray},uzbmemman;
 type
 PGDBSinonimDescriptor=^GDBSinonimDescriptor;
 GDBSinonimDescriptor=object(TUserTypeDescriptor)

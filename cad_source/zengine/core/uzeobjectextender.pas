@@ -20,7 +20,7 @@ unit uzeobjectextender;
 {$INCLUDE def.inc}
 
 interface
-uses uzeentityextender,uzeentsubordinated,uzedrawingdef,gdbasetypes,gdbase,
+uses uzeentityextender,uzeentsubordinated,uzedrawingdef,uzbtypesbase,uzbtypes,
      usimplegenerics,UGDBOpenArrayOfByte;
 
 type

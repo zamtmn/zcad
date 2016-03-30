@@ -19,7 +19,7 @@
 unit uzgldrawerabstract;
 {$INCLUDE def.inc}
 interface
-uses {$IFDEF DELPHI}types,{$ENDIF}uzgprimitivescreatorabstract,uzepalette,Classes,UGDBOpenArrayOfData,Graphics,gdbase,uzecamera,uzegeometry;
+uses {$IFDEF DELPHI}types,{$ENDIF}uzgprimitivescreatorabstract,uzepalette,Classes,UGDBOpenArrayOfData,Graphics,uzbtypes,uzecamera,uzegeometry;
 type
 TRenderMode=(TRM_ModelSpace,TRM_DisplaySpace,TRM_WindowSpace);
 TZGLPenStyle=(TPS_Solid,TPS_Dot,TPS_Dash,TPS_Selected);

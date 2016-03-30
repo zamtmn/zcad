@@ -19,8 +19,8 @@
 unit zebaseundocommands;
 {$INCLUDE def.inc}
 interface
-uses varmandef,gdbasetypes,sysutils,
-     gdbase,memman;
+uses varmandef,uzbtypesbase,sysutils,
+     uzbtypes,uzbmemman;
 type
 TTypeCommand=(TTC_MBegin,TTC_MEnd,TTC_MNotUndableIfOverlay,TTC_Command,TTC_ChangeCommand);
 PTElementaryCommand=^TElementaryCommand;

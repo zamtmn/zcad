@@ -19,7 +19,7 @@
 unit uzclog;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,LazLoggerBase,LazLogger;
+uses uzbtypesbase,LazLoggerBase,LazLogger;
 const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
       {$IFDEF FPC}
                   {$IFDEF LINUX}filelog='log/zcad_linux.log';{$ENDIF}

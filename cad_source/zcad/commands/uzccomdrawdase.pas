@@ -23,9 +23,9 @@ interface
 uses
   uzcstrconsts,GL,printers,graphics,fileutil,Clipbrd,LCLType,classes,
   uzccommandsabstract,
-  gdbasetypes,uzccommandsmanager,uzccombase,
+  uzbtypesbase,uzccommandsmanager,uzccombase,
   uzccommandsimpl,
-  gdbase,
+  uzbtypes,
   uzcdrawings,
   uzcutils,
   sysutils,
@@ -33,7 +33,7 @@ uses
   uzglviewareadata,
   uzeffdxf,
   uzegeometry,
-  memman,
+  uzbmemman,
   uzeconsts,
   uzcshared,uzclog;
 implementation

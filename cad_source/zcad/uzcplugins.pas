@@ -19,7 +19,7 @@
 unit uzcplugins;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,sysutils, dynlibs, uzclog,memman,UGDBOpenArrayOfData,uzeentity;
+uses uzbtypesbase,sysutils, dynlibs, uzclog,uzbmemman,UGDBOpenArrayOfData,uzeentity;
 type
     {Export+}
   PluginVersionInfo=packed record

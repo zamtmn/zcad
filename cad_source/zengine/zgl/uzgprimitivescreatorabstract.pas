@@ -19,7 +19,7 @@
 unit uzgprimitivescreatorabstract;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfData,uzgindexsarray,gdbasetypes,sysutils,gdbase,memman,
+uses UGDBOpenArrayOfData,uzgindexsarray,uzbtypesbase,sysutils,uzbtypes,uzbmemman,
      uzegeometry;
 type
 TLLPrimitivesCreatorAbstract=class

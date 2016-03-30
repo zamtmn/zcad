@@ -22,9 +22,9 @@ unit uzcgui2linetypes;
 interface
 
 uses
-  uzgldrawergdi,uzegeometry,uzgldrawcontext,uzeentitiesprop,gdbase,uzglgeometry,
-  uzestyleslinetypes,graphics,gdbasetypes,usupportgui,StdCtrls,uzcdrawings,
-  uzcstrconsts,Controls,Classes,strproc,uzcsysvars,uzccommandsmanager;
+  uzgldrawergdi,uzegeometry,uzgldrawcontext,uzeentitiesprop,uzbtypes,uzglgeometry,
+  uzestyleslinetypes,graphics,uzbtypesbase,usupportgui,StdCtrls,uzcdrawings,
+  uzcstrconsts,Controls,Classes,uzbstrproc,uzcsysvars,uzccommandsmanager;
 
 type
   TSupportLineTypeCombo = class

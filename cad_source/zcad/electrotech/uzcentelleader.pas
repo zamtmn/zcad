@@ -10,11 +10,11 @@ unit uzcentelleader;
 interface
 uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      uzeentabstracttext,uzeentgenericsubentry,uzetrash,uzedrawingdef,uzecamera,
-     uzcsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,
+     uzcsysvars,UGDBOpenArrayOfPObjects,uzbstrproc,UGDBOpenArrayOfByte,math,
      uzeenttext,uzeentdevice,uzcentcable,uzeenttable,UGDBControlPointArray,uzegeometry,
-     uzeentline,gdbasetypes,uzeentcomplex,sysutils,UGDBStringArray,
-     UGDBSelectedObjArray,uzeentity,varmandef,GDBase,uzeconsts,uzeffdxfsupport,
-     memman,uzeentsubordinated;
+     uzeentline,uzbtypesbase,uzeentcomplex,sysutils,UGDBStringArray,
+     UGDBSelectedObjArray,uzeentity,varmandef,uzbtypes,uzeconsts,uzeffdxfsupport,
+     uzbmemman,uzeentsubordinated;
 type
 {EXPORT+}
 PGDBObjElLeader=^GDBObjElLeader;

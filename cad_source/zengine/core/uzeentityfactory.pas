@@ -22,7 +22,7 @@ unit uzeentityfactory;
 
 interface
 uses uzeentsubordinated,usimplegenerics,uzedrawingdef,uzeconsts,
-    memman,GDBase,GDBasetypes,uzeentgenericsubentry,uzeentity;
+     uzbmemman,uzbtypesbase,uzbtypes,uzeentgenericsubentry,uzeentity;
 type
 TAllocEntFunc=function:GDBPointer;
 TAllocAndInitEntFunc=function (owner:PGDBObjGenericWithSubordinated): PGDBObjEntity;

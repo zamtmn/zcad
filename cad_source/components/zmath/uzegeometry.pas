@@ -20,7 +20,7 @@ unit uzegeometry;
 {$INCLUDE def.inc}
 
 interface
-uses LCLProc,gdbase,gdbasetypes, math;
+uses LCLProc,uzbtypesbase,uzbtypes, math;
 resourcestring
   rsDivByZero='Divide by zero';
 const

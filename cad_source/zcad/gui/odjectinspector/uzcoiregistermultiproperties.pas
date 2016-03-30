@@ -21,13 +21,13 @@ unit uzcoiregistermultiproperties;
 
 interface
 uses
-  math,uzcoimultiobjects,uzepalette,memman,uzcshared,sysutils,uzeentityfactory,
-  gdbase,
+  math,uzcoimultiobjects,uzepalette,uzbmemman,uzcshared,sysutils,uzeentityfactory,
+  uzbtypes,
   uzcdrawings,
   varmandef,
   uzeconsts,
   uzeentity,
-  gdbasetypes,
+  uzbtypesbase,
   Varman,
   uzcoimultipropertiesutil,
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,uzeentmtext,uzeentpolyline,uzcentelleader,uzeentdimension,uzeentellipse,

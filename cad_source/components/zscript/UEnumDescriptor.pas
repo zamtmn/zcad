@@ -20,8 +20,8 @@ unit UEnumDescriptor;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses types,sysutils,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,TypeDescriptors,gdbasetypes,varmandef,gdbase,
-  {zcadstrconsts,}UGDBOpenArrayOfData,UGDBStringArray,memman{,zcadsysvars};
+uses types,sysutils,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,TypeDescriptors,
+     uzbtypesbase,varmandef,uzbtypes,UGDBOpenArrayOfData,UGDBStringArray,uzbmemman;
 resourcestring
   rsDifferent='Different';
 type

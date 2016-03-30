@@ -23,7 +23,7 @@ unit uzedimblocksregister;
 interface
 uses uzeutils,uzestyleslayers,uzestyleslinetypes,uzeconsts,uzeentitiesmanager,
      UGDBObjBlockdefArray,uzeblockdefsfactory,uzeblockdef,uzedrawingdef,
-     memman,uzcsysvars,GDBase,GDBasetypes,uzeentgenericsubentry,uzeentity;
+     uzbmemman,uzcsysvars,uzbtypesbase,uzbtypes,uzeentgenericsubentry,uzeentity;
 implementation
 uses
     uzcutils;

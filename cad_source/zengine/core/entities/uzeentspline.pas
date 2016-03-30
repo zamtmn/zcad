@@ -22,9 +22,9 @@ unit uzeentspline;
 interface
 uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanager,UGDBOpenArrayOfData,
      UGDBPoint3DArray,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
-     UGDBOpenArrayOfPObjects,uzestyleslayers,uzeentsubordinated,uzeentcurve,gdbasetypes,
-     uzeentity,UGDBOpenArrayOfByte,GDBase,uzeconsts,uzglviewareadata,
-     uzegeometry,uzeffdxfsupport,sysutils,memman;
+     UGDBOpenArrayOfPObjects,uzestyleslayers,uzeentsubordinated,uzeentcurve,uzbtypesbase,
+     uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,uzglviewareadata,
+     uzegeometry,uzeffdxfsupport,sysutils,uzbmemman;
 type
 {REGISTEROBJECTTYPE GDBObjSpline}
 {Export+}

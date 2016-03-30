@@ -19,7 +19,7 @@
 unit uzepalette;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes;
+uses uzbtypesbase;
 type
 {EXPORT+}
   PTRGB=^TRGB;

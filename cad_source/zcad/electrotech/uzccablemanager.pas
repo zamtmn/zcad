@@ -7,7 +7,9 @@
 unit uzccablemanager;
 {$INCLUDE def.inc}
 interface
-uses uzcenitiesvariablesextender,uzcvariablesutils,Varman,strproc,uzcentcable,uzeentdevice,uzeconsts,UGDBOpenArrayOfPObjects{,Varman},languade,UGDBOpenArrayOfObjects{,RegCnownTypes,URegisterObjects},SysUtils{,UBaseTypeDescriptor},gdbasetypes{, uzcshared},gdbase{,UGDBOpenArrayOfByte}, varmandef{,sysinfo}{,UGDBOpenArrayOfData},{log,}memman;
+uses uzcenitiesvariablesextender,uzcvariablesutils,Varman,uzbstrproc,uzcentcable,
+     uzeentdevice,uzeconsts,UGDBOpenArrayOfPObjects,languade,UGDBOpenArrayOfObjects,
+     SysUtils,uzbtypesbase,uzbtypes,varmandef,uzbmemman;
 const
      DefCableName='Создан. Не назван';
      UnNamedCable='Имя отсутствует';

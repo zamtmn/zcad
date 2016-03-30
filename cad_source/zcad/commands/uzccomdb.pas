@@ -21,10 +21,10 @@ unit uzccomdb;
 
 interface
 uses
-  paths,uzcsysvars,uzctranslations,uzcdrawing,uzeconsts,uzcstrconsts,
+  uzbpaths,uzcsysvars,uzctranslations,uzcdrawing,uzeconsts,uzcstrconsts,
   uzccommandsabstract,
   uzccommandsimpl,
-  gdbase,
+  uzbtypes,
   uzcdrawings,
   sysutils,
   varmandef,
@@ -32,7 +32,7 @@ uses
   UGDBOpenArrayOfByte,
   uzeentity,
   uzcshared,
-  uzcdevicebaseabstract,UUnitManager,gdbasetypes,strutils,forms,Controls,uzcinterface,uzedrawingdef,UGDBStringArray,strmy,memman;
+  uzcdevicebaseabstract,UUnitManager,uzbtypesbase,strutils,forms,Controls,uzcinterface,uzedrawingdef,UGDBStringArray,strmy,uzbmemman;
 
 procedure DBLinkProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
 

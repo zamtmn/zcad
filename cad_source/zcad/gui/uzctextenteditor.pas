@@ -20,9 +20,9 @@ unit uzctextenteditor;
 {$INCLUDE def.inc}
 interface
 uses
-     uzcsysvars,gdbase,gdbasetypes,uzcsysinfo,
+     uzcsysvars,uzbtypesbase,uzbtypes,uzcsysinfo,
      uzcinfoform,Varman,uzcinterface,
-     uzedrawingdef,strproc,uzeenttext,uzeconsts,uzcstrconsts,uzcfsinglelinetexteditor,
+     uzedrawingdef,uzbstrproc,uzeenttext,uzeconsts,uzcstrconsts,uzcfsinglelinetexteditor,
      Controls,Classes,Forms;
 var
     InfoForm:TInfoForm=nil;

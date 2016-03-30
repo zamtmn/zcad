@@ -20,9 +20,9 @@ unit uzeentdimradial;
 
 interface
 uses uzeentityfactory,uzeentdimdiametric,uzeentdimension,uzestylesdim,
-     uzestyleslayers,uzedrawingdef,strproc,UGDBOpenArrayOfByte,
-     uzegeometry,gdbasetypes,sysutils,uzeentity,GDBase,uzeconsts,uzeffdxfsupport,
-     memman,uzeentsubordinated;
+     uzestyleslayers,uzedrawingdef,uzbstrproc,UGDBOpenArrayOfByte,
+     uzegeometry,uzbtypesbase,sysutils,uzeentity,uzbtypes,uzeconsts,uzeffdxfsupport,
+     uzbmemman,uzeentsubordinated;
 (*
 
 Diametric dimension structure in DXF

@@ -24,28 +24,28 @@
         <Type Value="Include"/>
       </Item1>
       <Item2>
-        <Filename Value="gdbasetypes.pas"/>
-        <UnitName Value="gdbasetypes"/>
+        <Filename Value="uzbtypesbase.pas"/>
+        <UnitName Value="uzbtypesbase"/>
       </Item2>
       <Item3>
-        <Filename Value="gdbase.pas"/>
-        <UnitName Value="gdbase"/>
+        <Filename Value="uzbtypes.pas"/>
+        <UnitName Value="uzbtypes"/>
       </Item3>
       <Item4>
-        <Filename Value="memman.pas"/>
-        <UnitName Value="memman"/>
+        <Filename Value="uzbmemman.pas"/>
+        <UnitName Value="uzbmemman"/>
       </Item4>
       <Item5>
-        <Filename Value="strproc.pas"/>
-        <UnitName Value="strproc"/>
+        <Filename Value="uzbstrproc.pas"/>
+        <UnitName Value="uzbstrproc"/>
       </Item5>
       <Item6>
         <Filename Value="usimplegenerics.pas"/>
         <UnitName Value="usimplegenerics"/>
       </Item6>
       <Item7>
-        <Filename Value="paths.pas"/>
-        <UnitName Value="paths"/>
+        <Filename Value="uzbpaths.pas"/>
+        <UnitName Value="uzbpaths"/>
       </Item7>
     </Files>
     <RequiredPkgs Count="2">

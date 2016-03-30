@@ -25,7 +25,7 @@ uses
  {$IFDEF LCLQT}qt4,qtobjects,{$ENDIF}
  {$IFNDEF DELPHI}LCLType,LCLIntf,{$ENDIF}
  {$IFDEF DELPHI}windows,types,{$ENDIF}
- gdbase;
+ uzbtypes;
 const
      GM_COMPATIBLE=1;
      GM_ADVANCED=2;

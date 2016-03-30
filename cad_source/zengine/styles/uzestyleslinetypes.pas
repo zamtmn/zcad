@@ -19,9 +19,9 @@
 unit uzestyleslinetypes;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,LazUTF8,Classes,UGDBOpenArrayOfData,gdbasetypes,sysutils,gdbase,
+uses LCLProc,LazUTF8,Classes,UGDBOpenArrayOfData,uzbtypesbase,sysutils,uzbtypes,
      uzegeometry,uzestylestexts,UGDBOpenArrayOfObjects,UGDBNamedObjectsArray,
-     StrProc;
+     uzbstrproc;
 const
      DefaultSHXHeight=1;
      DefaultSHXAngle=0;

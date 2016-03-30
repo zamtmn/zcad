@@ -19,13 +19,14 @@
 unit uzcregother;
 {$INCLUDE def.inc}
 interface
-uses paths,UUnitManager,uzcsysvars,uzcstrconsts,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}strproc,Varman,languade,SysUtils,
-     UBaseTypeDescriptor,uzcshared,gdbase,UGDBOpenArrayOfByte, strmy, varmandef,uzcsysinfo,
+uses uzbpaths,UUnitManager,uzcsysvars,uzcstrconsts,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
+     uzbstrproc,Varman,languade,SysUtils,
+     UBaseTypeDescriptor,uzcshared,uzbtypes,UGDBOpenArrayOfByte, strmy, varmandef,uzcsysinfo,
      TypeDescriptors,
      URecordDescriptor;
 implementation
 uses
-    uzclog,memman;
+    uzclog,uzbmemman;
 {$IFNDEF WINDOWS}
 var
   ptd:PUserTypeDescriptor;
@@ -227,10 +228,10 @@ initialization;
   //units.loadunit(expandpath('*rtl\objdefunits\bglsensor.pas'),nil);
   //units.loadunit(expandpath('*rtl\objdefunits\bias.pas'),nil);
 
-  SysVar.debug.memdeb.GetMemCount:=@memman.GetMemCount;
-  SysVar.debug.memdeb.FreeMemCount:=@memman.FreeMemCount;
-  SysVar.debug.memdeb.TotalAllocMb:=@memman.TotalAllocMb;
-  SysVar.debug.memdeb.CurrentAllocMB:=@memman.CurrentAllocMB;
+  SysVar.debug.memdeb.GetMemCount:=@uzbmemman.GetMemCount;
+  SysVar.debug.memdeb.FreeMemCount:=@uzbmemman.FreeMemCount;
+  SysVar.debug.memdeb.TotalAllocMb:=@uzbmemman.TotalAllocMb;
+  SysVar.debug.memdeb.CurrentAllocMB:=@uzbmemman.CurrentAllocMB;
 
   if sysunit<>nil then
   begin

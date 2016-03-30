@@ -21,9 +21,9 @@ unit uzeentcomplex;
 
 interface
 uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,UGDBOpenArrayOfPObjects,
-     uzestyleslayers,gdbasetypes,sysutils,UGDBSelectedObjArray,UGDBVisibleOpenArray,
-     uzeentity,UGDBVisibleTreeArray,uzeentitiestree,GDBase,uzeentwithlocalcs,
-     uzeconsts,uzegeometry,memman;
+     uzestyleslayers,uzbtypesbase,sysutils,UGDBSelectedObjArray,UGDBVisibleOpenArray,
+     uzeentity,UGDBVisibleTreeArray,uzeentitiestree,uzbtypes,uzeentwithlocalcs,
+     uzeconsts,uzegeometry,uzbmemman;
 type
 {EXPORT+}
 PGDBObjComplex=^GDBObjComplex;

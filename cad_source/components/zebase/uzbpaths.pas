@@ -16,10 +16,10 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit paths;
+unit uzbpaths;
 {$INCLUDE def.inc}
 interface
-uses gdbase,Masks,LCLProc,gdbasetypes,{fileutil}LazUTF8,sysutils;
+uses uzbtypes,Masks,LCLProc,uzbtypesbase,{fileutil}LazUTF8,sysutils;
 type
   TFromDirIterator=procedure (filename:GDBString);
   TFromDirIteratorObj=procedure (filename:GDBString) of object;

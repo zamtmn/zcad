@@ -19,7 +19,7 @@
 unit UGDBOpenArray;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,sysutils,UOpenArray,memman,gdbase;
+uses uzbtypesbase,sysutils,UOpenArray,uzbmemman,uzbtypes;
 type
 {Export+}
 PGDBOpenArray=^GDBOpenArray;

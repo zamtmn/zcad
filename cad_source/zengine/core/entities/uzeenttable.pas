@@ -20,10 +20,10 @@ unit uzeenttable;
 {$INCLUDE def.inc}
 
 interface
-uses uzgldrawcontext,uzeentabstracttext,uzetrash,uzedrawingdef,strproc,UGDBOpenArrayOfByte,
-     uzestylestables,uzeentline,gdbasetypes,uzeentcomplex,sysutils,UGDBTable,
-     UGDBStringArray,uzeentmtext,uzeentity,GDBase,uzeconsts,uzegeometry,
-     memman;
+uses uzgldrawcontext,uzeentabstracttext,uzetrash,uzedrawingdef,uzbstrproc,UGDBOpenArrayOfByte,
+     uzestylestables,uzeentline,uzbtypesbase,uzeentcomplex,sysutils,UGDBTable,
+     UGDBStringArray,uzeentmtext,uzeentity,uzbtypes,uzeconsts,uzegeometry,
+     uzbmemman;
 //jcm(*'TopMiddle'*),
 type
 {TTableCellJustify=(jcl(*'TopLeft'*),

@@ -20,9 +20,9 @@ unit uzeentarc;
 interface
 uses
     uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,math,uzeentwithlocalcs,
-    uzecamera,UGDBOpenArrayOfPObjects,uzestyleslayers,gdbasetypes,UGDBSelectedObjArray,
-    uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,GDBase,
-    uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,memman,uzeentplain;
+    uzecamera,UGDBOpenArrayOfPObjects,uzestyleslayers,uzbtypesbase,UGDBSelectedObjArray,
+    uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,uzbtypes,
+    uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzbmemman,uzeentplain;
 type
 {REGISTEROBJECTTYPE GDBObjArc}
 {Export+}

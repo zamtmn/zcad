@@ -16,10 +16,10 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit memman;
+unit uzbmemman;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,gdbasetypes,sysutils;
+uses LCLProc,uzbtypesbase,sysutils;
 
 //const firstarraysize=100;
 

@@ -20,9 +20,9 @@ unit uzeentity;
 {$INCLUDE def.inc}
 interface
 uses uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingdef,
-     uzecamera,uzeentitiesprop,uzglgeometry,uzestyleslinetypes,gdbasetypes,
-     UGDBControlPointArray,uzeentsubordinated,GDBase,uzeconsts,
-     uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,memman,UGDBOpenArrayOfByte,
+     uzecamera,uzeentitiesprop,uzglgeometry,uzestyleslinetypes,uzbtypesbase,
+     UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,
+     uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,uzbmemman,UGDBOpenArrayOfByte,
      uzestyleslayers,UGDBOpenArrayOfPObjects;
 type
 //Owner:{-}PGDBObjEntity{/GDBPointer/};(*'Владелец'*)

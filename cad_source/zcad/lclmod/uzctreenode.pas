@@ -21,10 +21,10 @@ unit uzctreenode;
 interface
 
 uses
-  paths,Themes,uzcinterface,uzccommandsabstract,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,
+  uzbpaths,Themes,uzcinterface,uzccommandsabstract,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,
   Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}LazUTF8,Buttons,
-  {$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils,strproc,varmandef,
-  Varman,UBaseTypeDescriptor,gdbasetypes,uzcshared,uzcsysinfo,UGDBOpenArrayOfByte;
+  {$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils,uzbstrproc,varmandef,
+  Varman,UBaseTypeDescriptor,uzbtypesbase,uzcshared,uzcsysinfo,UGDBOpenArrayOfByte;
 type
     TZAction=class(TAction)
                    public

@@ -21,9 +21,9 @@ unit UObjectDescriptor;
 {$MODE DELPHI}
 {$ASMMODE intel}
 interface
-uses LCLProc,{zcadsysvars,}UGDBOpenArrayOfObjects,{log,}ugdbopenarray,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
-     UBaseTypeDescriptor,{gdbobjectsconstdef,}UGDBOpenArrayOfTObjLinkRecord,TypeDescriptors,
-     UGDBOpenArrayOfPointer,UGDBOpenArrayOfData,gdbasetypes,varmandef,gdbase{,UGDBStringArray},memman,strproc;
+uses LCLProc,UGDBOpenArrayOfObjects,ugdbopenarray,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
+     UBaseTypeDescriptor,UGDBOpenArrayOfTObjLinkRecord,TypeDescriptors,
+     UGDBOpenArrayOfPointer,UGDBOpenArrayOfData,uzbtypesbase,varmandef,uzbtypes,uzbmemman,uzbstrproc;
 type
 simpleproc=procedure of object;
 PObjectDescriptor=^ObjectDescriptor;

@@ -21,10 +21,10 @@ unit uzcdrawing;
 interface
 uses
     uzctranslations,uzcinterface,uzgldrawcontext,zeundostack,zcchangeundocommand,
-    zcobjectchangeundocommand,zebaseundocommands,paths,uzestylesdim,
-    uzcdialogsfiles,LResources,uzcsysvars,uzcstrconsts,strproc,uzeblockdef,UUnitManager,
-    gdbase,varmandef,varman,sysutils, memman,uzegeometry, uzeconsts,
-    gdbasetypes,uzedrawingsimple,uzestyleslayers,uzeentity,uzefontmanager,
+    zcobjectchangeundocommand,zebaseundocommands,uzbpaths,uzestylesdim,
+    uzcdialogsfiles,LResources,uzcsysvars,uzcstrconsts,uzbstrproc,uzeblockdef,UUnitManager,
+    uzbtypes,varmandef,varman,sysutils, uzbmemman,uzegeometry, uzeconsts,
+    uzbtypesbase,uzedrawingsimple,uzestyleslayers,uzeentity,uzefontmanager,
     UGDBOpenArrayOfPObjects,UGDBOpenArrayOfByte;
 type
 {EXPORT+}

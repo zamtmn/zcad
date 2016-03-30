@@ -20,7 +20,7 @@ unit uzcreggeneralwiewarea;
 {$INCLUDE def.inc}
 interface
 uses uzglbackendmanager,uzglgeometry,uzeentitiestree,uzcsysvars,uzglviewareageneral,
-     paths,uzctranslations,UUnitManager,TypeDescriptors;
+     uzbpaths,uzctranslations,UUnitManager,TypeDescriptors;
 implementation
 
 initialization

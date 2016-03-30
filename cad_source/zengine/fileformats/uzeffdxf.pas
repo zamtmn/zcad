@@ -19,12 +19,12 @@
 unit uzeffdxf;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,paths,strproc,uzgldrawcontext,usimplegenerics,uzestylesdim,uzeentityfactory,
+uses LCLProc,uzbpaths,uzbstrproc,uzgldrawcontext,usimplegenerics,uzestylesdim,uzeentityfactory,
     {$IFNDEF DELPHI}LazUTF8,{$ENDIF}
     UGDBNamedObjectsArray,uzestyleslinetypes,uzedrawingsimple,uzelongprocesssupport,
     uzglviewareadata,uzeffdxfsupport,uzestrconsts,uzestylestexts,
-    uzegeometry,uzeentsubordinated,gdbasetypes,uzeentgenericsubentry,gdbase,
-    sysutils,memman,uzeconsts,UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,
+    uzegeometry,uzeentsubordinated,uzbtypesbase,uzeentgenericsubentry,uzbtypes,
+    sysutils,uzbmemman,uzeconsts,UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,
     UGDBOpenArrayOfByte,UGDBVisibleOpenArray,uzeentity,uzeblockdef,uzestyleslayers,uzeffmanager;
 type
    TCreateExtLoadData=function:pointer;

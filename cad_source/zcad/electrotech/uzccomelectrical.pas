@@ -15,11 +15,11 @@ uses
   uzcenitiesvariablesextender,uzgldrawcontext,uzcdrawing,uzcvariablesutils,
   uzeentabstracttext,uzcstrconsts,UGDBSelectedObjArray,uzeentityfactory,uzcsysvars,
   csvdocument,
-  UGDBOpenArrayOfPV,uzeentblockinsert,devices,UGDBTree,uzcdrawings,gdbasetypes,
+  UGDBOpenArrayOfPV,uzeentblockinsert,devices,UGDBTree,uzcdrawings,uzbtypesbase,
   uzccommandsmanager,uzccomdraw,uzcentelleader,
   uzccommandsabstract,
   uzccommandsimpl,
-  gdbase,
+  uzbtypes,
   uzcutils,
   sysutils,
   {fileutil}LazUTF8,
@@ -27,13 +27,13 @@ uses
   uzglviewareadata,
   uzcinterface,
   uzegeometry,
-  memman,
+  uzbmemman,
   uzeconsts,
   uzeentity,uzeentline,
   uzcentnet,
   uzcshared,uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
   UGDBOpenArrayOfPObjects,uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
-  paths,UGDBStringArray,math,Masks,uzclog,uzccombase,strproc;
+  uzbpaths,UGDBStringArray,math,Masks,uzclog,uzccombase,uzbstrproc;
 type
 {Export+}
   TFindType=(

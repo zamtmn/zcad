@@ -20,9 +20,9 @@ unit uzeentwithlocalcs;
 {$INCLUDE def.inc}
 
 interface
-uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,gdbasetypes,uzeentity,
-     UGDBOutbound2DIArray,UGDBOpenArrayOfByte,uzeentwithmatrix,GDBase,
-     uzegeometry,uzeffdxfsupport,sysutils,memman,uzeentsubordinated,uzestyleslayers;
+uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzbtypesbase,uzeentity,
+     UGDBOutbound2DIArray,UGDBOpenArrayOfByte,uzeentwithmatrix,uzbtypes,
+     uzegeometry,uzeffdxfsupport,sysutils,uzbmemman,uzeentsubordinated,uzestyleslayers;
 type
 //pprojoutbound:{-}PGDBOOutbound2DIArray{/GDBPointer/};
 {EXPORT+}

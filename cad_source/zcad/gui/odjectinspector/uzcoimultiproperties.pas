@@ -21,7 +21,7 @@ unit uzcoimultiproperties;
 
 interface
 uses
-  uzcshared,uzctranslations,gdbase,gdbasetypes,uzclog,
+  uzcshared,uzctranslations,uzbtypesbase,uzbtypes,uzclog,
   usimplegenerics,varmandef,Varman,garrayutils;
 type
   TObjID2Counter=TMyMapCounter<TObjID,LessObjID>;

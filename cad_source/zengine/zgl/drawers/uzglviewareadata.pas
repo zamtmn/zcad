@@ -20,7 +20,7 @@ unit uzglviewareadata;
 {$INCLUDE def.inc}
 
 interface
-uses gdbasetypes,gdbase{,gdbobjectsconstdef}, UGDBPoint3DArray,UGDBTracePropArray{,GDBCamera};
+uses uzbtypesbase,uzbtypes, UGDBPoint3DArray,UGDBTracePropArray;
 const
 MZW_LBUTTON=1;
 MZW_SHIFT=128;

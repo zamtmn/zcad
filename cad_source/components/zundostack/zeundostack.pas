@@ -20,8 +20,8 @@
 unit zeundostack;
 {$INCLUDE def.inc}
 interface
-uses zebaseundocommands,varmandef,gdbasetypes,
-     UGDBOpenArrayOfPObjects,sysutils,gdbase,memman;
+uses zebaseundocommands,varmandef,uzbtypesbase,
+     UGDBOpenArrayOfPObjects,sysutils,uzbtypes,uzbmemman;
 const BeginUndo:GDBString='BeginUndo';
       EndUndo:GDBString='EndUndo';
 type

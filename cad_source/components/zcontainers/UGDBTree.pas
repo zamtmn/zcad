@@ -19,7 +19,7 @@
 unit UGDBTree;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,gdbase,UGDBOpenArrayOfPObjects;//,UGDBOpenArrayOfData,sysutils,UGDBVisibleOpenArray,uzegeometry,gdbEntity,UGDBOpenArrayOfPV;
+uses uzbtypesbase,uzbtypes,UGDBOpenArrayOfPObjects;//,UGDBOpenArrayOfData,sysutils,UGDBVisibleOpenArray,uzegeometry,gdbEntity,UGDBOpenArrayOfPV;
 type
 PGDBBaseNode=^GDBBaseNode;
 PIterateCmpareFunc=function(pnode:PGDBBaseNode;PExpr:GDBPointer):GDBBoolean;
@@ -40,7 +40,7 @@ GDBBaseNode={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
             end;
 {EXPORT-}
 implementation
-uses memman;
+uses uzbmemman;
 procedure GDBBaseNode.free;
 begin
      inherited;

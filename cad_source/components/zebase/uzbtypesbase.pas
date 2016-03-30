@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit gdbasetypes;
+unit uzbtypesbase;
 {$INCLUDE def.inc}
 interface
 type

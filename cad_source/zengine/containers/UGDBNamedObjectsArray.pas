@@ -19,8 +19,8 @@
 unit UGDBNamedObjectsArray;
 {$INCLUDE def.inc}
 interface
-uses ugdbopenarrayofpidentobects,sysutils,gdbase,uzegeometry,
-     {varmandef,gdbobjectsconstdef}gdbasetypes;
+uses ugdbopenarrayofpidentobects,sysutils,uzbtypes,uzegeometry,
+     uzbtypesbase;
 type
 {EXPORT+}
 TForCResult=(IsFounded(*'IsFounded'*)=1,

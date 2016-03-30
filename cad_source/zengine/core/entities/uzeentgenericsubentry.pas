@@ -21,9 +21,9 @@ unit uzeentgenericsubentry;
 
 interface
 uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzestyleslayers,
-     UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,
-     uzeentwithmatrix,uzeentsubordinated,gdbase,uzegeometry,uzeentity,
-     uzeconsts,memman,uzeentitiestree;
+     UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,uzbtypesbase,
+     uzeentwithmatrix,uzeentsubordinated,uzbtypes,uzegeometry,uzeentity,
+     uzeconsts,uzbmemman,uzeentitiestree;
 type
 //GDBObjGenericSubEntry=object(GDBObjWithLocalCS)
 //GDBObjGenericSubEntry=object(GDBObj3d)
@@ -492,7 +492,7 @@ begin
      //memman.GDBFreeMem(GDBPointer(p))}
      RemoveMiFromArray(pobj,pobjinarray);
      pobj^.done;
-     memman.GDBFreeMem(GDBPointer(pobj));
+     uzbmemman.GDBFreeMem(GDBPointer(pobj));
 end;
 function GDBObjGenericSubEntry.ImEdited;
 begin

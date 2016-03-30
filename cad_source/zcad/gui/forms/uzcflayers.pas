@@ -9,9 +9,9 @@ uses
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 
-  uzeconsts,uzestyleslayers,uzcdrawings,gdbase,gdbasetypes,varmandef,
+  uzeconsts,uzestyleslayers,uzcdrawings,uzbtypesbase,uzbtypes,varmandef,
 
-  uzcinterface, uzcstrconsts, strproc, uzcshared, UBaseTypeDescriptor,
+  uzcinterface, uzcstrconsts, uzbstrproc, uzcshared, UBaseTypeDescriptor,
   uzcimagesmanager, usupportgui, ZListView;
 
 const
@@ -290,7 +290,7 @@ var
 begin
 ARect:=ListViewDrawSubItem(state,aCanvas,Item,SubItem);
 ARect := Item.DisplayRectSubItem( SubItem,drLabel);
-s:=strproc.Tria_AnsiToUtf8(GetLTName(PGDBLayerProp(Item.Data)^.LT));
+s:=Tria_AnsiToUtf8(GetLTName(PGDBLayerProp(Item.Data)^.LT));
 drawLT(aCanvas,ARect,s,PGDBLayerProp(Item.Data)^.LT);
 end;
 procedure FillSelector(SelectorWindow: TSelectorForm);
@@ -307,7 +307,7 @@ begin
        if pltp<>nil then
        repeat
             if (pltp^.Mode<>TLTByBlock)and(pltp^.Mode<>TLTByLayer)then
-                SelectorWindow.AddItem(strproc.Tria_AnsiToUtf8(pltp^.Name),strproc.Tria_AnsiToUtf8(pltp^.desk),pltp);
+                SelectorWindow.AddItem(Tria_AnsiToUtf8(pltp^.Name),Tria_AnsiToUtf8(pltp^.desk),pltp);
 
             pltp:=pdwg^.LTypeStyleTable.iterate(ir);
        until pltp=nil;
@@ -316,7 +316,7 @@ begin
 end;
 function TLayersForm.GetLineTypeName(Item: TListItem):string;
 begin
-     result:=strproc.Tria_AnsiToUtf8(GetLTName(PGDBLayerProp(Item.Data)^.LT));
+     result:=Tria_AnsiToUtf8(GetLTName(PGDBLayerProp(Item.Data)^.LT));
 end;
 
 function TLayersForm.LayerLTClick(Item: TListItem;r: TRect):boolean;

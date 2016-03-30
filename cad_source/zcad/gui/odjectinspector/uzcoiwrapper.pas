@@ -21,7 +21,7 @@ unit uzcoiwrapper;
 
 interface
 uses
-  gdbase,uzclog;
+  uzbtypes,uzclog;
 type
 {Export+}
   TWrapper2ObjInsp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)

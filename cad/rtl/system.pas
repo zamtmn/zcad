@@ -2,7 +2,7 @@ unit System;
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
 type
-//Generate on E:/zcad/cad_source/components/zebase/gdbasetypes.pas
+//Generate on E:/zcad/cad_source/components/zebase/uzbtypesbase.pas
 PGDBDouble=^GDBDouble;
 
 PGDBNonDimensionDouble=^GDBNonDimensionDouble;
@@ -41,7 +41,7 @@ itrec=packed record
             itp:GDBPointer;
             itc:GDBInteger;
       end;
-//Generate on E:/zcad/cad_source/components/zebase/gdbase.pas
+//Generate on E:/zcad/cad_source/components/zebase/uzbtypes.pas
 (*varcategoryforoi SUMMARY='Суммарно'*)
 (*varcategoryforoi CABLE='Параметры кабеля'*)
 (*varcategoryforoi DEVICE='Параметры устройства'*)

@@ -21,8 +21,8 @@ unit uzeentdimension;
 interface
 uses uzemathutils,uzgldrawcontext,uzeentabstracttext,uzestylestexts,UGDBXYZWStringArray,
      uzestylesdim,uzeentmtext,uzestyleslayers,uzedrawingdef,uzecamera,
-     strproc,UGDBOpenArrayOfByte,uzeenttext,uzegeometry,uzeentline,gdbasetypes,uzeentcomplex,
-     sysutils,uzeentity,GDBase,uzeconsts,memman;
+     uzbstrproc,UGDBOpenArrayOfByte,uzeenttext,uzegeometry,uzeentline,uzbtypesbase,uzeentcomplex,
+     sysutils,uzeentity,uzbtypes,uzeconsts,uzbmemman;
 type
 {EXPORT+}
 PTDXFDimData2D=^TDXFDimData2D;

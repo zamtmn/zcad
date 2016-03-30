@@ -19,7 +19,7 @@
 unit uzcbillofmaterial;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,gdbase,UGDBOpenArrayOfData{,UGDBOpenArrayOfByte},sysutils;
+uses uzbtypesbase,uzbtypes,UGDBOpenArrayOfData,sysutils;
 type
 {EXPORT+}
 PGDBBOMItem=^GDBBOMItem;

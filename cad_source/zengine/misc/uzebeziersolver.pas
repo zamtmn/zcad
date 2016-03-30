@@ -19,8 +19,8 @@
 unit uzebeziersolver;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitivescreator,uzgprimitives,usimplegenerics,uzglvectorobject,{glstatemanager,}uzegluinterface,gvector,memman,
-     UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,uzegeometry;
+uses uzgprimitivescreator,uzgprimitives,usimplegenerics,uzglvectorobject,uzegluinterface,gvector,uzbmemman,
+     UGDBOpenArrayOfByte,uzbtypesbase,sysutils,uzbtypes,uzegeometry;
 type
 TPointAttr=(TPA_OnCurve,TPA_NotOnCurve);
 TSolverMode=(TSM_WaitStartCountur,TSM_WaitStartPoint,TSM_WaitPoint);

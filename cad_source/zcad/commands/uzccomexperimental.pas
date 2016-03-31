@@ -589,12 +589,7 @@ begin
 end;
 
 initialization
-
      CreateCommandFastObjectPlugin(@test_com,       'ts',         CADWG,0);
      CreateCommandFastObjectPlugin(@TestInsert1_com,'TestInsert1',CADWG,0);
      CreateCommandFastObjectPlugin(@TestInsert2_com,'TestInsert2',CADWG,0);
-
-     RectangParam.ET:=RET_3DPoly;
-     RectangParam.VNum:=4;
-     RectangParam.PolyWidth:=0;
 end.

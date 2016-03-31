@@ -22,7 +22,7 @@ unit uzcftextstyles;
 interface
 
 uses
-  zcchangeundocommand,zcobjectchangeundocommand2,uzcdrawing,LMessages,uzefont,
+  uzcutils,zcchangeundocommand,zcobjectchangeundocommand2,uzcdrawing,LMessages,uzefont,
   uzclog,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
@@ -144,19 +144,11 @@ end;
 
 procedure TTextStylesForm.CreateUndoStartMarkerNeeded;
 begin
-  if not IsUndoEndMarkerCreated then
-   begin
-    IsUndoEndMarkerCreated:=true;
-    PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker('Change text styles');
-   end;
+  zcPlaceUndoStartMarkerIfNeed(IsUndoEndMarkerCreated,'Change text styles');
 end;
 procedure TTextStylesForm.CreateUndoEndMarkerNeeded;
 begin
-  if IsUndoEndMarkerCreated then
-   begin
-    IsUndoEndMarkerCreated:=false;
-    PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
-   end;
+  zcPlaceUndoEndMarkerIfNeed(IsUndoEndMarkerCreated);
 end;
 
 procedure TTextStylesForm.UpdateItem2(Item:TObject);

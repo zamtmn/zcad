@@ -5,7 +5,7 @@ unit uzcflayers;
 interface
 
 uses
-  zcchangeundocommand,zcobjectchangeundocommand2,uzcdrawing,uzepalette,uzcsuptypededitors,LMessages,uzcfselector,uzestyleslinetypes,uzeutils,uzclog,uzcflineweights,uzcfcolors,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
+  uzcutils,zcchangeundocommand,zcobjectchangeundocommand2,uzcdrawing,uzepalette,uzcsuptypededitors,LMessages,uzcfselector,uzestyleslinetypes,uzeutils,uzclog,uzcflineweights,uzcfcolors,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 
@@ -120,19 +120,11 @@ uses
 {$R *.lfm}
 procedure TLayersForm.CreateUndoStartMarkerNeeded;
 begin
-  if not IsUndoEndMarkerCreated then
-   begin
-    IsUndoEndMarkerCreated:=true;
-    PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker('Change layers');
-   end;
+  zcPlaceUndoStartMarkerIfNeed(IsUndoEndMarkerCreated,'Change layers');
 end;
 procedure TLayersForm.CreateUndoEndMarkerNeeded;
 begin
-  if IsUndoEndMarkerCreated then
-   begin
-    IsUndoEndMarkerCreated:=false;
-    PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
-   end;
+  zcPlaceUndoEndMarkerIfNeed(IsUndoEndMarkerCreated);
 end;
 
 function TLayersForm.IsShortcut(var Message: TLMKey): boolean;

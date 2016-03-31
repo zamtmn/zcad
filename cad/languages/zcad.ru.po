@@ -11,6 +11,142 @@ msgstr ""
 "Language: ru\n"
 "X-Generator: Poedit 1.6.10\n"
 
+#: tblockinsertform.checkbox1.caption
+msgid "Расчленить"
+msgstr ""
+
+#: tblockinsertform.checkbox2.caption
+msgctxt "tblockinsertform.checkbox2.caption"
+msgid "Указать на экране"
+msgstr ""
+
+#: tblockinsertform.checkbox3.caption
+msgctxt "tblockinsertform.checkbox3.caption"
+msgid "Указать на экране"
+msgstr ""
+
+#: tblockinsertform.checkbox4.caption
+msgctxt "tblockinsertform.checkbox4.caption"
+msgid "Указать на экране"
+msgstr ""
+
+#: tblockinsertform.checkbox5.caption
+msgid "Равные масштабы"
+msgstr ""
+
+#: tblockinsertform.combobox1.text
+msgid "ComboBox1"
+msgstr ""
+
+#: tblockinsertform.edit1.text
+msgctxt "tblockinsertform.edit1.text"
+msgid "0"
+msgstr ""
+
+#: tblockinsertform.edit2.text
+msgctxt "tblockinsertform.edit2.text"
+msgid "0"
+msgstr ""
+
+#: tblockinsertform.edit3.text
+msgctxt "tblockinsertform.edit3.text"
+msgid "0"
+msgstr ""
+
+#: tblockinsertform.edit4.text
+msgctxt "tblockinsertform.edit4.text"
+msgid "1"
+msgstr ""
+
+#: tblockinsertform.edit5.text
+msgctxt "tblockinsertform.edit5.text"
+msgid "1"
+msgstr ""
+
+#: tblockinsertform.edit6.text
+msgctxt "tblockinsertform.edit6.text"
+msgid "1"
+msgstr ""
+
+#: tblockinsertform.edit7.text
+msgctxt "tblockinsertform.edit7.text"
+msgid "0"
+msgstr ""
+
+#: tblockinsertform.edit8.text
+msgid "Без единиц измерения"
+msgstr ""
+
+#: tblockinsertform.edit9.text
+msgid "Edit9"
+msgstr ""
+
+#: tblockinsertform.groupbox1.caption
+msgid "Точка вставки"
+msgstr ""
+
+#: tblockinsertform.groupbox2.caption
+msgid "Масштаб"
+msgstr ""
+
+#: tblockinsertform.groupbox3.caption
+msgid "Угол поворота"
+msgstr ""
+
+#: tblockinsertform.groupbox4.caption
+msgid "Единицы измерений блока"
+msgstr ""
+
+#: tblockinsertform.label1.caption
+msgid "Имя: "
+msgstr ""
+
+#: tblockinsertform.label10.caption
+msgid "Коэффициент: "
+msgstr ""
+
+#: tblockinsertform.label11.caption
+msgid "Путь: "
+msgstr ""
+
+#: tblockinsertform.label2.caption
+msgctxt "tblockinsertform.label2.caption"
+msgid "X: "
+msgstr ""
+
+#: tblockinsertform.label3.caption
+msgctxt "tblockinsertform.label3.caption"
+msgid "Y: "
+msgstr ""
+
+#: tblockinsertform.label4.caption
+msgctxt "tblockinsertform.label4.caption"
+msgid "Z: "
+msgstr ""
+
+#: tblockinsertform.label5.caption
+msgctxt "tblockinsertform.label5.caption"
+msgid "X: "
+msgstr ""
+
+#: tblockinsertform.label6.caption
+msgctxt "tblockinsertform.label6.caption"
+msgid "Z: "
+msgstr ""
+
+#: tblockinsertform.label7.caption
+msgctxt "tblockinsertform.label7.caption"
+msgid "Y: "
+msgstr ""
+
+#: tblockinsertform.label8.caption
+msgid "Угол: "
+msgstr ""
+
+#: tblockinsertform.label9.caption
+msgid "Единицы: "
+msgstr ""
+
 #: tcolorselectform.byblock.caption
 msgctxt "tcolorselectform.byblock.caption"
 msgid "??ByBlock"
@@ -255,6 +391,96 @@ msgctxt "tlayerwindow.listview1.columns[9].caption"
 msgid "Description"
 msgstr "Описание"
 
+#: tlinetypesform.bitbtn1.caption
+#, fuzzy
+msgctxt "tlinetypesform.bitbtn1.caption"
+msgid "Update"
+msgstr "Обновить"
+
+#: tlinetypesform.bitbtn2.caption
+#, fuzzy
+msgctxt "tlinetypesform.bitbtn2.caption"
+msgid "Create"
+msgstr "Создать"
+
+#: tlinetypesform.bitbtn3.caption
+#, fuzzy
+msgctxt "tlinetypesform.bitbtn3.caption"
+msgid "Load"
+msgstr "Загрузить"
+
+#: tlinetypesform.checkbox1.caption
+#, fuzzy
+msgctxt "tlinetypesform.checkbox1.caption"
+msgid "Auto rotate text"
+msgstr "Авто поворот текста (для читаемости)"
+
+#: tlinetypesform.groupbox1.caption
+#, fuzzy
+msgctxt "tlinetypesform.groupbox1.caption"
+msgid "Line type description"
+msgstr "Описание типа линии"
+
+#: tlinetypesform.groupbox2.caption
+#, fuzzy
+msgctxt "tlinetypesform.groupbox2.caption"
+msgid "Drawing settings"
+msgstr "Настройки чертежа"
+
+#: tlinetypesform.groupbox3.caption
+#, fuzzy
+msgctxt "tlinetypesform.groupbox3.caption"
+msgid "Global settings"
+msgstr "Глобальные настройки"
+
+#: tlinetypesform.label3.caption
+#, fuzzy
+msgctxt "tlinetypesform.label3.caption"
+msgid "Global scale factor"
+msgstr "Общий масштаб"
+
+#: tlinetypesform.label4.caption
+#, fuzzy
+msgctxt "tlinetypesform.label4.caption"
+msgid "Current object scale factor"
+msgstr "Текущий масштаб примитивов"
+
+#: tlinetypesform.listview1.columns[0].caption
+#, fuzzy
+msgctxt "tlinetypesform.listview1.columns[0].caption"
+msgid "Status"
+msgstr "Статус"
+
+#: tlinetypesform.listview1.columns[1].caption
+#, fuzzy
+msgctxt "tlinetypesform.listview1.columns[1].caption"
+msgid "Line type"
+msgstr "Тип линии"
+
+#: tlinetypesform.listview1.columns[2].caption
+#, fuzzy
+msgctxt "tlinetypesform.listview1.columns[2].caption"
+msgid "Apperance"
+msgstr "Внешний вид"
+
+#: tlinetypesform.listview1.columns[3].caption
+#, fuzzy
+msgctxt "tlinetypesform.listview1.columns[3].caption"
+msgid "Description"
+msgstr "Описание"
+
+#: tlinetypesloadform.listview1.columns[0].caption
+#, fuzzy
+msgctxt "tlinetypesloadform.listview1.columns[0].caption"
+msgid "Name"
+msgstr "Имя"
+
+#: tlinetypesloadform.listview1.columns[1].caption
+#, fuzzy
+msgctxt "tlinetypesloadform.listview1.columns[1].caption"
+msgid "Description"
+msgstr "Описание"
+
 #: tlineweightselectwindow.caption
 msgid "Form1"
 msgstr ""
@@ -270,14 +496,17 @@ msgid "Description"
 msgstr "Описание"
 
 #: tltwindow.bitbtn1.caption
+msgctxt "tltwindow.bitbtn1.caption"
 msgid "Update"
 msgstr "Обновить"
 
 #: tltwindow.bitbtn2.caption
+msgctxt "tltwindow.bitbtn2.caption"
 msgid "Create"
 msgstr "Создать"
 
 #: tltwindow.bitbtn3.caption
+msgctxt "tltwindow.bitbtn3.caption"
 msgid "Load"
 msgstr "Загрузить"
 
@@ -286,26 +515,32 @@ msgid "Line type manager"
 msgstr "Менеждер типов линий"
 
 #: tltwindow.checkbox1.caption
+msgctxt "tltwindow.checkbox1.caption"
 msgid "Auto rotate text"
 msgstr "Авто поворот текста (для читаемости)"
 
 #: tltwindow.groupbox1.caption
+msgctxt "tltwindow.groupbox1.caption"
 msgid "Line type description"
 msgstr "Описание типа линии"
 
 #: tltwindow.groupbox2.caption
+msgctxt "tltwindow.groupbox2.caption"
 msgid "Drawing settings"
 msgstr "Настройки чертежа"
 
 #: tltwindow.groupbox3.caption
+msgctxt "tltwindow.groupbox3.caption"
 msgid "Global settings"
 msgstr "Глобальные настройки"
 
 #: tltwindow.label3.caption
+msgctxt "tltwindow.label3.caption"
 msgid "Global scale factor"
 msgstr "Общий масштаб"
 
 #: tltwindow.label4.caption
+msgctxt "tltwindow.label4.caption"
 msgid "Current object scale factor"
 msgstr "Текущий масштаб примитивов"
 
@@ -320,6 +555,7 @@ msgid "Line type"
 msgstr "Тип линии"
 
 #: tltwindow.listview1.columns[2].caption
+msgctxt "tltwindow.listview1.columns[2].caption"
 msgid "Apperance"
 msgstr "Внешний вид"
 
@@ -335,6 +571,18 @@ msgstr ""
 #: toswindow.label1.caption
 msgid "Object Snap Editor: Not yet implemented"
 msgstr "Редактор привязок. Пока не реализовано"
+
+#: tselectorform.listview1.columns[0].caption
+#, fuzzy
+msgctxt "tselectorform.listview1.columns[0].caption"
+msgid "Name"
+msgstr "Имя"
+
+#: tselectorform.listview1.columns[1].caption
+#, fuzzy
+msgctxt "tselectorform.listview1.columns[1].caption"
+msgid "Description"
+msgstr "Описание"
 
 #: tsltexteditor1.cancelbutton.caption
 msgctxt "tsltexteditor1.cancelbutton.caption"
@@ -590,6 +838,69 @@ msgstr ""
 #: ttextstyleswindow.toolbar1.caption
 msgctxt "ttextstyleswindow.toolbar1.caption"
 msgid "ToolBar1"
+msgstr ""
+
+#: tunitsform.angdircheckbox.caption
+msgctxt "tunitsform.angdircheckbox.caption"
+msgid "Clockwise"
+msgstr ""
+
+#: tunitsform.angledirectionbitbtn.caption
+msgid "Direction"
+msgstr ""
+
+#: tunitsform.groupbox1.caption
+#, fuzzy
+msgctxt "tunitsform.groupbox1.caption"
+msgid "Length"
+msgstr "Длина"
+
+#: tunitsform.groupbox2.caption
+#, fuzzy
+msgctxt "tunitsform.groupbox2.caption"
+msgid "Angle"
+msgstr "Угол"
+
+#: tunitsform.groupbox3.caption
+msgid "Insertion scale"
+msgstr ""
+
+#: tunitsform.groupbox4.caption
+msgctxt "tunitsform.groupbox4.caption"
+msgid "Sample output"
+msgstr ""
+
+#: tunitsform.label1.caption
+msgctxt "tunitsform.label1.caption"
+msgid "Sample output"
+msgstr ""
+
+#: tunitsform.label3.caption
+msgctxt "tunitsform.label3.caption"
+msgid "Type:"
+msgstr ""
+
+#: tunitsform.label4.caption
+msgctxt "tunitsform.label4.caption"
+msgid "Precision:"
+msgstr ""
+
+#: tunitsform.label5.caption
+msgctxt "tunitsform.label5.caption"
+msgid "Type:"
+msgstr ""
+
+#: tunitsform.label6.caption
+msgctxt "tunitsform.label6.caption"
+msgid "Precision:"
+msgstr ""
+
+#: tunitsform.label7.caption
+msgid "Units to scale inserted content:"
+msgstr ""
+
+#: tunitsform.unitmodecheckbox.caption
+msgid "Unit mode"
 msgstr ""
 
 #: ugdbdescriptor.unnamedwindowtitle
@@ -3477,6 +3788,7 @@ msgid "Zoom"
 msgstr "Масштаб"
 
 #: zcadexternal.tangdir~adclockwise
+msgctxt "zcadexternal.tangdir~adclockwise"
 msgid "Clockwise"
 msgstr ""
 
@@ -5205,6 +5517,7 @@ msgid "With spaces"
 msgstr ""
 
 #: zcadexternal.tuprec~uprec0
+msgctxt "zcadexternal.tuprec~uprec0"
 msgid "0"
 msgstr ""
 

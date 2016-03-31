@@ -1,6 +1,142 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
+#: tblockinsertform.checkbox1.caption
+msgid "Расчленить"
+msgstr ""
+
+#: tblockinsertform.checkbox2.caption
+msgctxt "TBLOCKINSERTFORM.CHECKBOX2.CAPTION"
+msgid "Указать на экране"
+msgstr ""
+
+#: tblockinsertform.checkbox3.caption
+msgctxt "TBLOCKINSERTFORM.CHECKBOX3.CAPTION"
+msgid "Указать на экране"
+msgstr ""
+
+#: tblockinsertform.checkbox4.caption
+msgctxt "tblockinsertform.checkbox4.caption"
+msgid "Указать на экране"
+msgstr ""
+
+#: tblockinsertform.checkbox5.caption
+msgid "Равные масштабы"
+msgstr ""
+
+#: tblockinsertform.combobox1.text
+msgid "ComboBox1"
+msgstr ""
+
+#: tblockinsertform.edit1.text
+msgctxt "TBLOCKINSERTFORM.EDIT1.TEXT"
+msgid "0"
+msgstr ""
+
+#: tblockinsertform.edit2.text
+msgctxt "TBLOCKINSERTFORM.EDIT2.TEXT"
+msgid "0"
+msgstr ""
+
+#: tblockinsertform.edit3.text
+msgctxt "TBLOCKINSERTFORM.EDIT3.TEXT"
+msgid "0"
+msgstr ""
+
+#: tblockinsertform.edit4.text
+msgctxt "TBLOCKINSERTFORM.EDIT4.TEXT"
+msgid "1"
+msgstr ""
+
+#: tblockinsertform.edit5.text
+msgctxt "tblockinsertform.edit5.text"
+msgid "1"
+msgstr ""
+
+#: tblockinsertform.edit6.text
+msgctxt "TBLOCKINSERTFORM.EDIT6.TEXT"
+msgid "1"
+msgstr ""
+
+#: tblockinsertform.edit7.text
+msgctxt "TBLOCKINSERTFORM.EDIT7.TEXT"
+msgid "0"
+msgstr ""
+
+#: tblockinsertform.edit8.text
+msgid "Без единиц измерения"
+msgstr ""
+
+#: tblockinsertform.edit9.text
+msgid "Edit9"
+msgstr ""
+
+#: tblockinsertform.groupbox1.caption
+msgid "Точка вставки"
+msgstr ""
+
+#: tblockinsertform.groupbox2.caption
+msgid "Масштаб"
+msgstr ""
+
+#: tblockinsertform.groupbox3.caption
+msgid "Угол поворота"
+msgstr ""
+
+#: tblockinsertform.groupbox4.caption
+msgid "Единицы измерений блока"
+msgstr ""
+
+#: tblockinsertform.label1.caption
+msgid "Имя: "
+msgstr ""
+
+#: tblockinsertform.label10.caption
+msgid "Коэффициент: "
+msgstr ""
+
+#: tblockinsertform.label11.caption
+msgid "Путь: "
+msgstr ""
+
+#: tblockinsertform.label2.caption
+msgctxt "tblockinsertform.label2.caption"
+msgid "X: "
+msgstr ""
+
+#: tblockinsertform.label3.caption
+msgctxt "tblockinsertform.label3.caption"
+msgid "Y: "
+msgstr ""
+
+#: tblockinsertform.label4.caption
+msgctxt "tblockinsertform.label4.caption"
+msgid "Z: "
+msgstr ""
+
+#: tblockinsertform.label5.caption
+msgctxt "TBLOCKINSERTFORM.LABEL5.CAPTION"
+msgid "X: "
+msgstr ""
+
+#: tblockinsertform.label6.caption
+msgctxt "TBLOCKINSERTFORM.LABEL6.CAPTION"
+msgid "Z: "
+msgstr ""
+
+#: tblockinsertform.label7.caption
+msgctxt "TBLOCKINSERTFORM.LABEL7.CAPTION"
+msgid "Y: "
+msgstr ""
+
+#: tblockinsertform.label8.caption
+msgid "Угол: "
+msgstr ""
+
+#: tblockinsertform.label9.caption
+msgid "Единицы: "
+msgstr ""
+
 #: tcolorselectform.byblock.caption
 msgctxt "TCOLORSELECTFORM.BYBLOCK.CAPTION"
 msgid "??ByBlock"
@@ -230,6 +366,81 @@ msgctxt "tlayerwindow.listview1.columns[9].caption"
 msgid "Description"
 msgstr ""
 
+#: tlinetypesform.bitbtn1.caption
+msgctxt "TLINETYPESFORM.BITBTN1.CAPTION"
+msgid "Update"
+msgstr ""
+
+#: tlinetypesform.bitbtn2.caption
+msgctxt "TLINETYPESFORM.BITBTN2.CAPTION"
+msgid "Create"
+msgstr ""
+
+#: tlinetypesform.bitbtn3.caption
+msgctxt "TLINETYPESFORM.BITBTN3.CAPTION"
+msgid "Load"
+msgstr ""
+
+#: tlinetypesform.checkbox1.caption
+msgctxt "TLINETYPESFORM.CHECKBOX1.CAPTION"
+msgid "Auto rotate text"
+msgstr ""
+
+#: tlinetypesform.groupbox1.caption
+msgctxt "TLINETYPESFORM.GROUPBOX1.CAPTION"
+msgid "Line type description"
+msgstr ""
+
+#: tlinetypesform.groupbox2.caption
+msgctxt "TLINETYPESFORM.GROUPBOX2.CAPTION"
+msgid "Drawing settings"
+msgstr ""
+
+#: tlinetypesform.groupbox3.caption
+msgctxt "TLINETYPESFORM.GROUPBOX3.CAPTION"
+msgid "Global settings"
+msgstr ""
+
+#: tlinetypesform.label3.caption
+msgctxt "TLINETYPESFORM.LABEL3.CAPTION"
+msgid "Global scale factor"
+msgstr ""
+
+#: tlinetypesform.label4.caption
+msgctxt "TLINETYPESFORM.LABEL4.CAPTION"
+msgid "Current object scale factor"
+msgstr ""
+
+#: tlinetypesform.listview1.columns[0].caption
+msgctxt "TLINETYPESFORM.LISTVIEW1.COLUMNS[0].CAPTION"
+msgid "Status"
+msgstr ""
+
+#: tlinetypesform.listview1.columns[1].caption
+msgctxt "TLINETYPESFORM.LISTVIEW1.COLUMNS[1].CAPTION"
+msgid "Line type"
+msgstr ""
+
+#: tlinetypesform.listview1.columns[2].caption
+msgctxt "TLINETYPESFORM.LISTVIEW1.COLUMNS[2].CAPTION"
+msgid "Apperance"
+msgstr ""
+
+#: tlinetypesform.listview1.columns[3].caption
+msgctxt "TLINETYPESFORM.LISTVIEW1.COLUMNS[3].CAPTION"
+msgid "Description"
+msgstr ""
+
+#: tlinetypesloadform.listview1.columns[0].caption
+msgctxt "TLINETYPESLOADFORM.LISTVIEW1.COLUMNS[0].CAPTION"
+msgid "Name"
+msgstr ""
+
+#: tlinetypesloadform.listview1.columns[1].caption
+msgctxt "TLINETYPESLOADFORM.LISTVIEW1.COLUMNS[1].CAPTION"
+msgid "Description"
+msgstr ""
+
 #: tlineweightselectwindow.caption
 msgid "Form1"
 msgstr ""
@@ -245,14 +456,17 @@ msgid "Description"
 msgstr ""
 
 #: tltwindow.bitbtn1.caption
+msgctxt "tltwindow.bitbtn1.caption"
 msgid "Update"
 msgstr ""
 
 #: tltwindow.bitbtn2.caption
+msgctxt "tltwindow.bitbtn2.caption"
 msgid "Create"
 msgstr ""
 
 #: tltwindow.bitbtn3.caption
+msgctxt "tltwindow.bitbtn3.caption"
 msgid "Load"
 msgstr ""
 
@@ -261,26 +475,32 @@ msgid "Line type manager"
 msgstr ""
 
 #: tltwindow.checkbox1.caption
+msgctxt "tltwindow.checkbox1.caption"
 msgid "Auto rotate text"
 msgstr ""
 
 #: tltwindow.groupbox1.caption
+msgctxt "tltwindow.groupbox1.caption"
 msgid "Line type description"
 msgstr ""
 
 #: tltwindow.groupbox2.caption
+msgctxt "tltwindow.groupbox2.caption"
 msgid "Drawing settings"
 msgstr ""
 
 #: tltwindow.groupbox3.caption
+msgctxt "tltwindow.groupbox3.caption"
 msgid "Global settings"
 msgstr ""
 
 #: tltwindow.label3.caption
+msgctxt "tltwindow.label3.caption"
 msgid "Global scale factor"
 msgstr ""
 
 #: tltwindow.label4.caption
+msgctxt "tltwindow.label4.caption"
 msgid "Current object scale factor"
 msgstr ""
 
@@ -295,6 +515,7 @@ msgid "Line type"
 msgstr ""
 
 #: tltwindow.listview1.columns[2].caption
+msgctxt "tltwindow.listview1.columns[2].caption"
 msgid "Apperance"
 msgstr ""
 
@@ -309,6 +530,16 @@ msgstr ""
 
 #: toswindow.label1.caption
 msgid "Object Snap Editor: Not yet implemented"
+msgstr ""
+
+#: tselectorform.listview1.columns[0].caption
+msgctxt "TSELECTORFORM.LISTVIEW1.COLUMNS[0].CAPTION"
+msgid "Name"
+msgstr ""
+
+#: tselectorform.listview1.columns[1].caption
+msgctxt "TSELECTORFORM.LISTVIEW1.COLUMNS[1].CAPTION"
+msgid "Description"
 msgstr ""
 
 #: tsltexteditor1.cancelbutton.caption
@@ -553,6 +784,67 @@ msgstr ""
 #: ttextstyleswindow.toolbar1.caption
 msgctxt "ttextstyleswindow.toolbar1.caption"
 msgid "ToolBar1"
+msgstr ""
+
+#: tunitsform.angdircheckbox.caption
+msgctxt "TUNITSFORM.ANGDIRCHECKBOX.CAPTION"
+msgid "Clockwise"
+msgstr ""
+
+#: tunitsform.angledirectionbitbtn.caption
+msgid "Direction"
+msgstr ""
+
+#: tunitsform.groupbox1.caption
+msgctxt "TUNITSFORM.GROUPBOX1.CAPTION"
+msgid "Length"
+msgstr ""
+
+#: tunitsform.groupbox2.caption
+msgctxt "TUNITSFORM.GROUPBOX2.CAPTION"
+msgid "Angle"
+msgstr ""
+
+#: tunitsform.groupbox3.caption
+msgid "Insertion scale"
+msgstr ""
+
+#: tunitsform.groupbox4.caption
+msgctxt "tunitsform.groupbox4.caption"
+msgid "Sample output"
+msgstr ""
+
+#: tunitsform.label1.caption
+msgctxt "TUNITSFORM.LABEL1.CAPTION"
+msgid "Sample output"
+msgstr ""
+
+#: tunitsform.label3.caption
+msgctxt "tunitsform.label3.caption"
+msgid "Type:"
+msgstr ""
+
+#: tunitsform.label4.caption
+msgctxt "tunitsform.label4.caption"
+msgid "Precision:"
+msgstr ""
+
+#: tunitsform.label5.caption
+msgctxt "TUNITSFORM.LABEL5.CAPTION"
+msgid "Type:"
+msgstr ""
+
+#: tunitsform.label6.caption
+msgctxt "TUNITSFORM.LABEL6.CAPTION"
+msgid "Precision:"
+msgstr ""
+
+#: tunitsform.label7.caption
+msgid "Units to scale inserted content:"
+msgstr ""
+
+#: tunitsform.unitmodecheckbox.caption
+msgid "Unit mode"
 msgstr ""
 
 #: ugdbdescriptor.unnamedwindowtitle
@@ -3767,6 +4059,7 @@ msgid "Zoom"
 msgstr ""
 
 #: zcadexternal.tangdir~adclockwise
+msgctxt "zcadexternal.tangdir~adclockwise"
 msgid "Clockwise"
 msgstr ""
 
@@ -5365,6 +5658,7 @@ msgid "With spaces"
 msgstr ""
 
 #: zcadexternal.tuprec~uprec0
+msgctxt "zcadexternal.tuprec~uprec0"
 msgid "0"
 msgstr ""
 

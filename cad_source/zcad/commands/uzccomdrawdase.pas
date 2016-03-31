@@ -48,7 +48,7 @@ begin
   if operands='' then
                      historyoutstr(rscmPoint)
                  else
-                     historyout(operands);
+                     historyoutstr(operands);
   result:=cmd_ok;
 end;
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;

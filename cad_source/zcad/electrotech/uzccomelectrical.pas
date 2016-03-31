@@ -74,21 +74,21 @@ TBasicFinter=packed record
     New_line: PGDBObjLine;
     FirstOwner,SecondOwner,OldFirstOwner:PGDBObjNet;
     constructor init(cn:GDBString;SA,DA:TCStartAttr);
-    procedure CommandStart(Operands:pansichar); virtual;
+    procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandCancel; virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
 
   EM_SRBUILD_com = object(FloatInsert_com)
-    procedure Command(Operands:pansichar); virtual;
+    procedure Command(Operands:TCommandOperands); virtual;
   end;
   EM_SEPBUILD_com = object(FloatInsertWithParams_com)
-    procedure Command(Operands:pansichar); virtual;
-    procedure BuildDM(Operands:pansichar); virtual;
+    procedure Command(Operands:TCommandOperands); virtual;
+    procedure BuildDM(Operands:TCommandOperands); virtual;
   end;
   KIP_CDBuild_com=object(FloatInsert_com)
-    procedure Command(Operands:pansichar); virtual;
+    procedure Command(Operands:TCommandOperands); virtual;
   end;
 
     (*PGDBEmSEPDeviceNode=^GDBEmSEPDeviceNode;
@@ -537,7 +537,7 @@ begin
               until pcabledesk=nil;
 end;
 *)
-procedure EM_SEPBUILD_com.BuildDM(Operands:pansichar);
+procedure EM_SEPBUILD_com.BuildDM(Operands:TCommandOperands);
 begin
     //commandmanager.DMAddProcedure('test1','подсказка1',nil);
     commandmanager.DMAddMethod('Разместить','подсказка3',run);
@@ -545,7 +545,7 @@ begin
     commandmanager.DMAddMethod('Разместить','подсказка3',run);
     commandmanager.DMShow;
 end;
-procedure EM_SEPBUILD_com.Command(Operands:pansichar);
+procedure EM_SEPBUILD_com.Command(Operands:TCommandOperands);
 begin
 
 end;
@@ -623,7 +623,7 @@ commandmanager.DMShow;
   cman.done;
   //treecontrol.done;
 end;*)
-procedure KIP_CDBuild_com.Command(Operands:pansichar);
+procedure KIP_CDBuild_com.Command(Operands:TCommandOperands);
 var
     psd:PSelectedObjDesc;
     ir:itrec;
@@ -763,7 +763,7 @@ begin
      dna.Destroy;
 end;
 
-procedure EM_SRBUILD_com.Command(Operands:pansichar);
+procedure EM_SRBUILD_com.Command(Operands:TCommandOperands);
 var
       pobj: pGDBObjEntity;
       pgroupdev:pGDBObjDevice;

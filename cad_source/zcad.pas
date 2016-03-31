@@ -111,6 +111,7 @@ uses
   uzccomdraw,
   uzvcom,
   uzccomexample,
+  uzccomexperimental,
   uzccominterface,
 
   uzccomelectrical,

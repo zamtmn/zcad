@@ -3085,7 +3085,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
   end;
   PCommandRTEdObjectDef=^CommandRTEdObjectDef;
   CommandRTEdObjectDef = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandFastObjectDef)
-    procedure CommandStart(Operands:pansichar); virtual;abstract;
+    procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
     procedure CommandEnd; virtual;abstract;
     procedure CommandCancel; virtual;abstract;
     procedure CommandInit; virtual;abstract;
@@ -3104,7 +3104,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
   CommandFastObjectPlugin = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandFastObjectDef)
     onCommandStart:comfuncwithoper;
     constructor Init(name:pansichar;func:comfuncwithoper);
-    procedure CommandStart(Operands:pansichar); virtual;abstract;
+    procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
     procedure CommandCancel; virtual;abstract;
     procedure CommandEnd; virtual;abstract;
   end;
@@ -3113,7 +3113,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
     saveosmode:GDBInteger;(*hidden_in_objinsp*)
     UndoTop:TArrayIndex;(*hidden_in_objinsp*)
     commanddata:TTypedData;(*'Command options'*)
-    procedure CommandStart(Operands:pansichar); virtual;abstract;
+    procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
     procedure CommandEnd; virtual;abstract;
     procedure CommandCancel; virtual;abstract;
     procedure CommandInit; virtual;abstract;
@@ -3132,7 +3132,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
     onHelpGeometryDraw:comdrawfunc;
     onCommandContinue:comproc;
     constructor init(ocs:comfuncwithoper;oce,occ,ocf:comproc;obc,oac:commousefunc;onCCont:comproc;name:pansichar);
-    procedure CommandStart(Operands:pansichar); virtual;abstract;
+    procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
     procedure CommandEnd; virtual;abstract;
     procedure CommandCancel; virtual;abstract;
     procedure Format;virtual;abstract;
@@ -3295,7 +3295,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
   OnDrawingEd_com =packed  object(CommandRTEdObject)
     t3dp: gdbvertex;
     constructor init(cn:GDBString;SA,DA:TCStartAttr);
-    procedure CommandStart(Operands:pansichar); virtual;abstract;
+    procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
     procedure CommandCancel; virtual;abstract;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
@@ -3304,7 +3304,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
     t3dp: gdbvertex;
     pcoa:PGDBOpenArrayOfData;
     //constructor init;
-    procedure CommandStart(Operands:pansichar); virtual;abstract;
+    procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
     procedure CommandCancel; virtual;abstract;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
@@ -3333,53 +3333,53 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
     procedure CommandContinue; virtual;abstract;
   end;
   copybase_com = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
-    procedure CommandStart(Operands:pansichar); virtual;abstract;
+    procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
   end;
   FloatInsert_com = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
-    procedure CommandStart(Operands:pansichar); virtual;abstract;
-    procedure Build(Operands:pansichar); virtual;abstract;
-    procedure Command(Operands:pansichar); virtual;abstract;
+    procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
+    procedure Build(Operands:TCommandOperands); virtual;abstract;
+    procedure Command(Operands:TCommandOperands); virtual;abstract;
     function DoEnd(pdata:GDBPointer):GDBBoolean;virtual;abstract;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
   end;
   TFIWPMode=(FIWPCustomize,FIWPRun);
   FloatInsertWithParams_com = {$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
     CMode:TFIWPMode;
-    procedure CommandStart(Operands:pansichar); virtual;abstract;
-    procedure BuildDM(Operands:pansichar); virtual;abstract;
+    procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
+    procedure BuildDM(Operands:TCommandOperands); virtual;abstract;
     procedure Run(pdata:GDBPlatformint); virtual;abstract;
     function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
     //procedure Command(Operands:pansichar); virtual;abstract;
     //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
   end;
   PasteClip_com = {$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
-    procedure Command(Operands:pansichar); virtual;abstract;
+    procedure Command(Operands:TCommandOperands); virtual;abstract;
   end;
   TextInsert_com={$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
                        pt:PGDBObjText;
                        //procedure Build(Operands:pansichar); virtual;abstract;
-                       procedure CommandStart(Operands:pansichar); virtual;abstract;
+                       procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
                        procedure CommandEnd; virtual;abstract;
-                       procedure Command(Operands:pansichar); virtual;abstract;
+                       procedure Command(Operands:TCommandOperands); virtual;abstract;
                        procedure BuildPrimitives; virtual;abstract;
                        procedure Format;virtual;abstract;
                        function DoEnd(pdata:GDBPointer):GDBBoolean;virtual;abstract;
   end;
   BlockReplace_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
-                         procedure CommandStart(Operands:pansichar); virtual;abstract;
-                         procedure BuildDM(Operands:pansichar); virtual;abstract;
+                         procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
+                         procedure BuildDM(Operands:TCommandOperands); virtual;abstract;
                          procedure Format;virtual;abstract;
                          procedure Run(pdata:{pointer}GDBPlatformint); virtual;abstract;
                    end;
   BlockScale_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
-                         procedure CommandStart(Operands:pansichar); virtual;abstract;
-                         procedure BuildDM(Operands:pansichar); virtual;abstract;
+                         procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
+                         procedure BuildDM(Operands:TCommandOperands); virtual;abstract;
                          procedure Run(pdata:{pointer}GDBPlatformint); virtual;abstract;
                    end;
   BlockRotate_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
-                         procedure CommandStart(Operands:pansichar); virtual;abstract;
-                         procedure BuildDM(Operands:pansichar); virtual;abstract;
+                         procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
+                         procedure BuildDM(Operands:TCommandOperands); virtual;abstract;
                          procedure Run(pdata:{pointer}GDBPlatformint); virtual;abstract;
                    end;
   SelSim_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
@@ -3387,7 +3387,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                          bnames,textcontents,textremplates:GDBGDBStringArray;
                          layers,weights,objtypes,linetypes:GDBOpenArrayOfGDBPointer;
                          linetypescales:GDBOpenArrayOfGDBDouble;
-                         procedure CommandStart(Operands:pansichar); virtual;abstract;
+                         procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
                          procedure createbufs;
                          //procedure BuildDM(Operands:pansichar); virtual;abstract;
                          //procedure Format;virtual;abstract;
@@ -3396,7 +3396,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                    end;
   ATO_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          powner:PGDBObjDevice;
-                         procedure CommandStart(Operands:pansichar); virtual;abstract;
+                         procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
                          procedure ShowMenu;virtual;abstract;
                          procedure Run(pdata:GDBPlatformint); virtual;abstract;
           end;
@@ -3405,12 +3405,12 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                          procedure Run(pdata:GDBPlatformint); virtual;abstract;
           end;
   Number_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
-                         procedure CommandStart(Operands:pansichar); virtual;abstract;
+                         procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
                          procedure ShowMenu;virtual;abstract;
                          procedure Run(pdata:GDBPlatformint); virtual;abstract;
              end;
   ExportDevWithAxis_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
-                         procedure CommandStart(Operands:pansichar); virtual;abstract;
+                         procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
                          procedure ShowMenu;virtual;abstract;
                          procedure Run(pdata:GDBPlatformint); virtual;abstract;
              end;
@@ -3418,7 +3418,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                          VS:GDBInteger;
                          p1,p2:GDBVertex;
                          procedure CommandContinue; virtual;abstract;
-                         procedure CommandStart(Operands:pansichar); virtual;abstract;
+                         procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
                          procedure ShowMenu;virtual;abstract;
                          procedure Print(pdata:GDBPlatformint); virtual;abstract;
                          procedure SetWindow(pdata:GDBPlatformint); virtual;abstract;
@@ -3426,13 +3426,13 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                          procedure SelectPaper(pdata:GDBPlatformint); virtual;abstract;
           end;
   ITT_com = {$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
-    procedure Command(Operands:pansichar); virtual;abstract;
+    procedure Command(Operands:TCommandOperands); virtual;abstract;
   end;
 //Generate on E:/zcad/cad_source/zcad/commands/uzccomexample.pas
     PTMatchPropParam=^TMatchPropParam;
     TMatchPropParam=packed record
                        ProcessLayer:GDBBoolean;(*'Process layer'*)
-                       ProcessLineveight:GDBBoolean;(*'Process line weight'*)
+                       ProcessLineWeight:GDBBoolean;(*'Process line weight'*)
                        ProcessLineType:GDBBoolean;(*'Process line type'*)
                        ProcessLineTypeScale:GDBBoolean;(*'Process line type scale'*)
                        ProcessColor:GDBBoolean;(*'Process color'*)
@@ -3874,7 +3874,7 @@ TZCADDrawingsManager={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObject
                   lBegin,lEnd:GDBvertex;
               end;
   OPS_SPBuild={$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
-    procedure Command(Operands:pansichar); virtual;abstract;
+    procedure Command(Operands:TCommandOperands); virtual;abstract;
   end;
 //Generate on E:/zcad/cad_source/zcad/electrotech/uzccomelectrical.pas
   TFindType=(

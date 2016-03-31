@@ -60,7 +60,7 @@ uses
    procedure CopyToClipboard;
    function CopyClip_com(operands:TCommandOperands):TCommandResult;
    function Regen_com(operands:TCommandOperands):TCommandResult;
-   function Load_Merge(Operands:pansichar;LoadMode:TLoadOpt):GDBInteger;
+   function Load_Merge(Operands:TCommandOperands;LoadMode:TLoadOpt):GDBInteger;
    function Merge_com(operands:TCommandOperands):TCommandResult;
    function MergeBlocks_com(operands:TCommandOperands):TCommandResult;
    procedure ReCreateClipboardDWG;
@@ -191,7 +191,7 @@ begin
 end;
 
 
-function Load_Merge(Operands:pansichar;LoadMode:TLoadOpt):GDBInteger;
+function Load_Merge(Operands:TCommandOperands;LoadMode:TLoadOpt):GDBInteger;
 var
    s: GDBString;
    fileext:GDBString;
@@ -299,7 +299,7 @@ begin
 
      if length(operands)>0 then
      s:=FindInSupportPath(SupportPath,operands);
-     result:=Merge_com(@s[1]);
+     result:=Merge_com(s);
 
 
      drawings.CurrentDWG:=pdwg;

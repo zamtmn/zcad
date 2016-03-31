@@ -96,7 +96,7 @@ type
                   lBegin,lEnd:GDBvertex;
               end;
   OPS_SPBuild={$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
-    procedure Command(Operands:pansichar); virtual;
+    procedure Command(Operands:TCommandOperands); virtual;
   end;
 
 {Export-}
@@ -886,7 +886,7 @@ else if datcount>2 then
      pl^.Formatentity(drawings.GetCurrentDWG^,dc);
      result:=pl;
 end;
-procedure OPS_SPBuild.Command(Operands:pansichar);
+procedure OPS_SPBuild.Command(Operands:TCommandOperands);
 //function OPS_SPBuild_com(Operands:pansichar):GDBInteger;
 var count: GDBInteger;
     pcabledesk:PTCableDesctiptor;

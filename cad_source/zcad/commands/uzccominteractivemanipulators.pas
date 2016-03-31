@@ -1,0 +1,441 @@
+{
+*****************************************************************************
+*                                                                           *
+*  This file is part of the ZCAD                                            *
+*                                                                           *
+*  See the file COPYING.modifiedLGPL.txt, included in this distribution,    *
+*  for details about the copyright.                                         *
+*                                                                           *
+*  This program is distributed in the hope that it will be useful,          *
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                     *
+*                                                                           *
+*****************************************************************************
+}
+{
+@author(Andrey Zubarev <zamtmn@yandex.ru>)
+}
+{$mode objfpc}
+
+{**Модуль реализации чертежных команд (линия, круг, размеры и т.д.)}
+unit uzccominteractivemanipulators;
+
+{ file def.inc is necessary to include at the beginning of each module zcad
+  it contains a centralized compilation parameters settings }
+
+{ файл def.inc необходимо включать в начале каждого модуля zcad
+  он содержит в себе централизованные настройки параметров компиляции  }
+  
+{$INCLUDE def.inc}
+
+interface
+uses
+
+  { uses units, the list will vary depending on the required entities
+    and actions }
+  { подключеные модули, список будет меняться в зависимости от требуемых
+    примитивов и действий с ними }
+
+  sysutils, math,
+
+  URecordDescriptor,TypeDescriptors,
+
+  Forms, uzcfblockinsert, uzcfarrayinsert,
+
+  uzeutils,
+
+  uzeentblockinsert,      //unit describes blockinsert entity
+                       //модуль описывающий примитив вставка блока
+  uzeentline,             //unit describes line entity
+                       //модуль описывающий примитив линия
+
+  uzeentlwpolyline,             //unit describes line entity
+                       //модуль описывающий примитив двухмерная ПОЛИлиния
+
+  uzeentpolyline,             //unit describes line entity
+                       //модуль описывающий примитив трехмерная ПОЛИлиния
+
+  uzeentdimaligned, //unit describes aligned dimensional entity
+                       //модуль описывающий выровненный размерный примитив
+  uzeentdimrotated,
+
+  uzeentdimdiametric,
+
+  uzeentdimradial,
+  uzeentarc,
+  uzeentcircle,
+  uzeentity,
+
+  uzcentcable,
+  uzeentdevice,
+  UGDBOpenArrayOfPV,
+
+  uzegeometry,
+  uzeentitiesmanager,
+
+  uzcshared,
+  uzeentityfactory,    //unit describing a "factory" to create primitives
+                      //модуль описывающий "фабрику" для создания примитивов
+  uzcsysvars,        //system global variables
+                      //системные переменные
+  uzgldrawcontext,
+  uzcinterface,
+  uzbtypesbase,uzbtypes, //base types
+                      //описания базовых типов
+  uzeconsts, //base constants
+                      //описания базовых констант
+  uzccommandsmanager,
+  uzccommandsabstract,
+  uzccommandsimpl, //Commands manager and related objects
+                      //менеджер команд и объекты связанные с ним
+  uzcdrawing,
+  uzcdrawings,     //Drawings manager, all open drawings are processed him
+                      //"Менеджер" чертежей
+  uzcutils,         //different functions simplify the creation entities, while there are very few
+                      //разные функции упрощающие создание примитивов, пока их там очень мало
+  varmandef,
+  Varman,
+  {UGDBOpenArrayOfUCommands,}zcchangeundocommand,
+
+  uzcstrconsts,       //resouce strings
+
+  uzclog;                //log system
+                      //<**система логирования
+
+type
+    PT3PointPentity=^T3PointPentity;
+    T3PointPentity=record
+                         p1,p2,p3:gdbvertex;
+                         pentity:PGDBObjEntity;
+                   end;
+    TCircleDrawMode=(TCDM_CR,TCDM_CD,TCDM_2P,TCDM_3P);
+    PT3PointCircleModePentity=^T3PointCircleModePentity;
+    T3PointCircleModePEntity=record
+                                   p1,p2,p3:gdbvertex;
+                                   cdm:TCircleDrawMode;
+                                   npoint:GDBInteger;
+                                   pentity:PGDBObjEntity;
+                             end;
+
+procedure InteractiveLineEndManipulator( const PInteractiveData : PGDBObjLine {pointer to the line entity};
+                                                          Point : GDBVertex  {new end coord};
+                                                          Click : GDBBoolean {true if lmb presseed});
+procedure InteractiveADimManipulator( const PInteractiveData : PGDBObjAlignedDimension;
+                                                         Point : GDBVertex;
+                                                         Click : GDBBoolean );
+procedure InteractiveRDimManipulator( const PInteractiveData : PGDBObjRotatedDimension;
+                                                       Point : GDBVertex;
+                                                       Click : GDBBoolean );
+procedure InteractiveDDimManipulator( const PInteractiveData:pgdbObjDiametricDimension;
+                                                       Point:GDBVertex;
+                                                       Click:GDBBoolean);
+procedure InteractiveArcManipulator( const PInteractiveData : PT3PointPentity;
+                                                      Point : GDBVertex;
+                                                      Click : GDBBoolean);
+procedure InteractiveSmartCircleManipulator( const PInteractiveData:PT3PointCircleModePentity;
+                                             Point:GDBVertex;
+                                             Click:GDBBoolean );
+procedure InteractiveLWRectangleManipulator( const PInteractiveData : PGDBObjLWPolyline {pointer to the line entity};
+                                                          Point : GDBVertex  {new end coord};
+                                                          Click : GDBBoolean {true if lmb presseed});
+procedure InteractiveRectangleManipulator( const PInteractiveData : PGDBObjPolyline {pointer to the line entity};
+                                                          Point : GDBVertex  {new end coord};
+                                                          Click : GDBBoolean {true if lmb presseed});
+implementation
+{ Интерактивные процедуры используются совместно с Get3DPointInteractive,
+  впоследствии будут вынесены в отдельный модуль }
+{ Interactive procedures are used together with Get3DPointInteractive,
+  later to be moved to a separate unit }
+
+{Procedure interactive changes end of the line}
+{Процедура интерактивного изменения конца линии}
+procedure InteractiveLineEndManipulator( const PInteractiveData : PGDBObjLine {pointer to the line entity};
+                                                          Point : GDBVertex  {new end coord};
+                                                          Click : GDBBoolean {true if lmb presseed});
+var
+  ln : PGDBObjLine absolute PInteractiveData;
+  dc:TDrawContext;
+begin
+
+  // assign general properties from system variables to entity
+  //присваиваем примитиву общие свойства из системных переменных
+  zcSetEntPropFromCurrentDrawingProp(ln);
+
+  // set the new point to the end of the line
+  // устанавливаем новую точку конца линии
+  ln^.CoordInOCS.lEnd:=Point;
+  //format entity
+  //"форматируем" примитив в соответствии с заданными параметрами
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  ln^.FormatEntity(drawings.GetCurrentDWG^,dc);
+
+end;
+
+{Procedure interactive changes third point of aligned dimensions}
+{Процедура интерактивного изменения третьей точки выровненного размера}
+procedure InteractiveADimManipulator( const PInteractiveData : PGDBObjAlignedDimension;
+                                                       Point : GDBVertex;
+                                                       Click : GDBBoolean );
+var
+  ad : PGDBObjAlignedDimension absolute PInteractiveData;
+  dc:TDrawContext;
+begin
+
+  // assign general properties from system variables to entity
+  // присваиваем примитиву общие свойства из системных переменных
+  zcSetEntPropFromCurrentDrawingProp(ad);
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  with ad^ do
+   begin
+     //specify the dimension style
+     //указываем стиль размеров
+     PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
+
+     //assign the obtained point to the appropriate location primitive
+     //присваиваем полученые точки в соответствующие места примитиву
+     DimData.P10InWCS := Point;
+
+     { calculate P10InWCS - she must lie on normal drawn from P14InWCS,
+       use the built-in to primitive mechanism }
+     { рассчитываем P10InWCS - она должна лежать на нормали проведенной
+       из P14InWCS, используем для этого встроенный в примитив механизм }
+     CalcDNVectors;
+
+     { calculate P10InWCS - she must lie on normal drawn from P14InWCS,
+       use the built-in to primitive mechanism}
+     { рассчитываем P10InWCS - она должна лежать на нормали проведенной из
+       P14InWCS, используем для этого встроенный в примитив механизм }
+     DimData.P10InWCS := P10ChangeTo(Point);
+
+     //format entity
+     //"форматируем" примитив в соответствии с заданными параметрами
+     FormatEntity(drawings.GetCurrentDWG^,dc);
+
+   end;
+end;
+
+function isRDIMHorisontal(p1,p2,p3,nevp3:gdbvertex):integer;
+var
+   minx,maxx,miny,maxy:GDBDouble;
+begin
+  minx:=min(p1.x,p2.x);
+  maxx:=max(p1.x,p2.x);
+  miny:=min(p1.y,p2.y);
+  maxy:=max(p1.y,p2.y);
+  if (minx<=p3.x)and (p3.x<=maxx) and (miny<=p3.y)and (p3.y<=maxy) then
+    begin
+     if (minx<=nevp3.x)and(nevp3.x<=maxx)and(miny<=nevp3.y)and(nevp3.y<=maxy)
+     then
+         result:=0
+     else
+         begin
+              if (minx>nevp3.x)or(nevp3.x>maxx)then
+                  result:=2
+                else
+                  result:=1;
+
+         end;
+    end
+    else
+     result:=0;
+end;
+{Процедура}
+procedure InteractiveRDimManipulator( const PInteractiveData : PGDBObjRotatedDimension;
+                                                       Point : GDBVertex;
+                                                       Click : GDBBoolean );
+var
+  rd : PGDBObjRotatedDimension absolute PInteractiveData;
+  dc:TDrawContext;
+begin
+
+  zcSetEntPropFromCurrentDrawingProp(rd);
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  with rd^ do
+   begin
+    PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
+    case isRDIMHorisontal( DimData.P13InWCS,
+                           DimData.P14InWCS,
+                           DimData.P10InWCS,
+                           Point )
+    of
+      1:begin
+           vectorD := XWCS;
+           vectorN := YWCS;
+        end;
+      2:begin
+           vectorD := YWCS;
+           vectorN := XWCS;
+        end;
+    end;
+    DimData.P10InWCS :=Point;
+    DimData.P10InWCS := P10ChangeTo(Point);
+    FormatEntity(drawings.GetCurrentDWG^,dc);
+   end;
+end;
+
+procedure InteractiveDDimManipulator( const PInteractiveData:pgdbObjDiametricDimension;
+                                                       Point:GDBVertex;
+                                                       Click:GDBBoolean);
+var
+    dd : pgdbObjDiametricDimension absolute PInteractiveData;
+    dc:TDrawContext;
+begin
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  zcSetEntPropFromCurrentDrawingProp(dd);
+  with dd^ do
+   begin
+    PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
+    DimData.P11InOCS:=Point;
+    DimData.P11InOCS:=P11ChangeTo(Point);
+    FormatEntity(drawings.GetCurrentDWG^,dc);
+   end;
+end;
+
+procedure InteractiveArcManipulator( const PInteractiveData : PT3PointPentity;
+                                                      Point : GDBVertex;
+                                                      Click : GDBBoolean);
+var
+    PointData:TArcrtModify;
+    ad:TArcData;
+    dc:TDrawContext;
+begin
+     PointData.p1.x:=PT3PointPentity(PInteractiveData)^.p1.x;
+     PointData.p1.y:=PT3PointPentity(PInteractiveData)^.p1.y;
+     PointData.p2.x:=PT3PointPentity(PInteractiveData)^.p2.x;
+     PointData.p2.y:=PT3PointPentity(PInteractiveData)^.p2.y;
+     PointData.p3.x:=Point.x;
+     PointData.p3.y:=Point.y;
+     if GetArcParamFrom3Point2D(PointData,ad) then
+     begin
+       PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.Local.p_insert.x:=ad.p.x;
+       PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.Local.p_insert.y:=ad.p.y;
+       PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.Local.p_insert.z:=0;
+       PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.startangle:=ad.startangle;
+       PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.endangle:=ad.endangle;
+       PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.r:=ad.r;
+
+       zeSetEntityProp(PT3PointPentity(PInteractiveData)^.pentity,
+                           sysvar.dwg.DWG_CLayer^,
+                           sysvar.dwg.DWG_CLType^,
+                           sysvar.dwg.DWG_CColor^,
+                           sysvar.dwg.DWG_CLinew^);
+       dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+       PT3PointPentity(PInteractiveData)^.pentity^.FormatEntity(drawings.GetCurrentDWG^,dc);
+     end;
+end;
+
+procedure InteractiveSmartCircleManipulator( const PInteractiveData:PT3PointCircleModePentity;
+                                             Point:GDBVertex;
+                                             Click:GDBBoolean );
+var
+    PointData:tarcrtmodify;
+    ad:TArcData;
+    dc:TDrawContext;
+begin
+  zcSetEntPropFromCurrentDrawingProp(PT3PointCircleModePentity(PInteractiveData)^.pentity);
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  case PT3PointCircleModePentity(PInteractiveData)^.npoint of
+     0:begin
+         PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert:=PT3PointCircleModePentity(PInteractiveData)^.p1;
+       end;
+     1:begin
+         case
+             PT3PointCircleModePentity(PInteractiveData)^.cdm of
+             TCDM_CR:begin
+                       PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert:=PT3PointCircleModePentity(PInteractiveData)^.p1;
+                       PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Radius:=uzegeometry.Vertexlength(PT3PointCircleModePentity(PInteractiveData)^.p1,point);
+                     end;
+             TCDM_CD:begin
+                       PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert:=PT3PointCircleModePentity(PInteractiveData)^.p1;
+                       PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Radius:=uzegeometry.Vertexlength(PT3PointCircleModePentity(PInteractiveData)^.p1,point)/2;
+                     end;
+             TCDM_2P,TCDM_3P:begin
+                       PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert:=VertexMulOnSc(VertexAdd(PT3PointCircleModePentity(PInteractiveData)^.p1,point),0.5);
+                       PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Radius:=uzegeometry.Vertexlength(PT3PointCircleModePentity(PInteractiveData)^.p1,point)/2;
+                     end;
+
+         end;
+       end;
+     2:begin
+         case
+             PT3PointCircleModePentity(PInteractiveData)^.cdm of
+             TCDM_3P:begin
+                 PointData.p1.x:=PT3PointCircleModePentity(PInteractiveData)^.p1.x;
+                 PointData.p1.y:=PT3PointCircleModePentity(PInteractiveData)^.p1.y;
+                 PointData.p2.x:=PT3PointCircleModePentity(PInteractiveData)^.p2.x;
+                 PointData.p2.y:=PT3PointCircleModePentity(PInteractiveData)^.p2.y;
+                 PointData.p3.x:=Point.x;
+                 PointData.p3.y:=Point.y;
+                 if GetArcParamFrom3Point2D(PointData,ad) then
+                 begin
+                   PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert.x:=ad.p.x;
+                   PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert.y:=ad.p.y;
+                   PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert.z:=0;
+                   PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Radius:=ad.r;
+                 end;
+                     end;
+         end;
+       end;
+  end;
+  PT3PointCircleModePentity(PInteractiveData)^.pentity^.FormatEntity(drawings.GetCurrentDWG^,dc);
+end;
+
+procedure InteractiveLWRectangleManipulator( const PInteractiveData : PGDBObjLWPolyline {pointer to the line entity};
+                                                          Point : GDBVertex  {new end coord};
+                                                          Click : GDBBoolean {true if lmb presseed});
+var
+  polyLWObj : PGDBObjLWPolyline absolute PInteractiveData;
+  stPoint: GDBvertex2D;
+  dc:TDrawContext;
+begin
+
+  zcSetEntPropFromCurrentDrawingProp(polyLWObj);
+
+  stPoint := GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(0)^);
+
+  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(1)^).x := Point.x;
+  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(1)^).y := stPoint.y;
+
+  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(2)^).x := Point.x;
+  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(2)^).y := Point.y;
+
+  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(3)^).x := stPoint.x;
+  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(3)^).y := Point.y;
+
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+
+  polyLWObj^.FormatEntity(drawings.GetCurrentDWG^,dc);
+
+end;
+
+
+procedure InteractiveRectangleManipulator( const PInteractiveData : PGDBObjPolyline {pointer to the line entity};
+                                                          Point : GDBVertex  {new end coord};
+                                                          Click : GDBBoolean {true if lmb presseed});
+var
+  polyObj : PGDBObjPolyline absolute PInteractiveData;
+  stPoint: GDBvertex;
+  dc:TDrawContext;
+begin
+
+  zcSetEntPropFromCurrentDrawingProp(polyObj);
+
+  stPoint := GDBvertex(polyObj^.VertexArrayInOCS.getelement(0)^);
+
+  GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(1)^).x := Point.x;
+  GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(1)^).y := stPoint.y;
+
+  GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(2)^).x := Point.x;
+  GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(2)^).y := Point.y;
+
+  GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(3)^).x := stPoint.x;
+  GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(3)^).y := Point.y;
+
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+
+  polyObj^.FormatEntity(drawings.GetCurrentDWG^,dc);
+
+end;
+
+initialization
+end.

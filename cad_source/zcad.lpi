@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="169">
+    <Units Count="171">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -443,7 +443,7 @@
         <IsPartOfProject Value="True"/>
       </Unit46>
       <Unit47>
-        <Filename Value="zcad/commands/uzccomexample.pas"/>
+        <Filename Value="zcad/commands/uzccomexperimental.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit47>
       <Unit48>
@@ -930,6 +930,14 @@
         <Filename Value="zcad/commands/uzccomdrawdase.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit168>
+      <Unit169>
+        <Filename Value="zcad/commands/uzccominteractivemanipulators.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit169>
+      <Unit170>
+        <Filename Value="zcad/commands/uzccomexample.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit170>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

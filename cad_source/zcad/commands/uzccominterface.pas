@@ -172,7 +172,7 @@ begin
      if length(operands)=0 then
                                begin
                                     dwgname:=drawings.GetDefaultDrawingName;
-                                    operands:=@dwgname[1];
+                                    operands:=dwgname;
                                     ptd^.FileName:=dwgname;
                                end
                             else
@@ -246,7 +246,7 @@ begin
      begin
      tn:=expandpath(sysvar.PATH.Template_Path^)+sysvar.PATH.Template_File^;
      if fileExists(utf8tosys(tn)) then
-                           {merge_com(@tn[1])}Load_merge(@tn[1],TLOLoad)
+                           {merge_com(@tn[1])}Load_merge(tn,TLOLoad)
                        else
                            uzcshared.ShowError(format(rsTemplateNotFound,[tn]));
                            //uzcshared.ShowError('Не найден файл шаблона "'+tn+'"');
@@ -293,7 +293,7 @@ begin
   isload:=FileExists(utf8tosys(s));
   if isload then
   begin
-       newdwg_com(@s[1]);
+       newdwg_com(s);
        drawings.GetCurrentDWG.SetFileName(s);
        import(s,drawings.GetCurrentDWG^);
   end
@@ -340,11 +340,11 @@ begin
      isload:=FileExists(utf8tosys(s));
      if isload then
      begin
-          newdwg_com(@s[1]);
+          newdwg_com(s);
           //if operands<>'QS' then
                                 drawings.GetCurrentDWG.SetFileName(s);
           //programlog.logoutstr('gdb.GetCurrentDWG.FileName:=s;',0);
-          load_merge(@s[1],tloload);
+          load_merge(s,tloload);
           drawings.GetCurrentDWG.wa.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
                                                   //создания или загрузки
           redrawoglwnd;

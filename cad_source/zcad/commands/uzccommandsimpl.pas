@@ -39,7 +39,7 @@ type
   CommandFastObjectPlugin = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandFastObjectDef)
     onCommandStart:comfuncwithoper;
     constructor Init(name:pansichar;func:comfuncwithoper);
-    procedure CommandStart(Operands:pansichar); virtual;
+    procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandCancel; virtual;
     procedure CommandEnd; virtual;
   end;
@@ -48,7 +48,7 @@ type
     saveosmode:GDBInteger;(*hidden_in_objinsp*)
     UndoTop:TArrayIndex;(*hidden_in_objinsp*)
     commanddata:TTypedData;(*'Command options'*)
-    procedure CommandStart(Operands:pansichar); virtual;
+    procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandEnd; virtual;
     procedure CommandCancel; virtual;
     procedure CommandInit; virtual;
@@ -67,7 +67,7 @@ type
     onHelpGeometryDraw:comdrawfunc;
     onCommandContinue:comproc;
     constructor init(ocs:comfuncwithoper;oce,occ,ocf:comproc;obc,oac:commousefunc;onCCont:comproc;name:pansichar);
-    procedure CommandStart(Operands:pansichar); virtual;
+    procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandEnd; virtual;
     procedure CommandCancel; virtual;
     procedure Format;virtual;

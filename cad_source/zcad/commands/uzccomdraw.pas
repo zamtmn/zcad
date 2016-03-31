@@ -198,7 +198,7 @@ type
   OnDrawingEd_com =packed  object(CommandRTEdObject)
     t3dp: gdbvertex;
     constructor init(cn:GDBString;SA,DA:TCStartAttr);
-    procedure CommandStart(Operands:pansichar); virtual;
+    procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandCancel; virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
@@ -207,7 +207,7 @@ type
     t3dp: gdbvertex;
     pcoa:PGDBOpenArrayOfData;
     //constructor init;
-    procedure CommandStart(Operands:pansichar); virtual;
+    procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandCancel; virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
@@ -237,55 +237,55 @@ type
     procedure CommandContinue; virtual;
   end;
   copybase_com = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
-    procedure CommandStart(Operands:pansichar); virtual;
+    procedure CommandStart(Operands:TCommandOperands); virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
   FloatInsert_com = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
-    procedure CommandStart(Operands:pansichar); virtual;
-    procedure Build(Operands:pansichar); virtual;
-    procedure Command(Operands:pansichar); virtual;abstract;
+    procedure CommandStart(Operands:TCommandOperands); virtual;
+    procedure Build(Operands:TCommandOperands); virtual;
+    procedure Command(Operands:TCommandOperands); virtual;abstract;
     function DoEnd(pdata:GDBPointer):GDBBoolean;virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
   TFIWPMode=(FIWPCustomize,FIWPRun);
   FloatInsertWithParams_com = {$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
     CMode:TFIWPMode;
-    procedure CommandStart(Operands:pansichar); virtual;
-    procedure BuildDM(Operands:pansichar); virtual;
+    procedure CommandStart(Operands:TCommandOperands); virtual;
+    procedure BuildDM(Operands:TCommandOperands); virtual;
     procedure Run(pdata:GDBPlatformint); virtual;
     function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     //procedure Command(Operands:pansichar); virtual;abstract;
     //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
   PasteClip_com = {$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
-    procedure Command(Operands:pansichar); virtual;
+    procedure Command(Operands:TCommandOperands); virtual;
   end;
 
   TextInsert_com={$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
                        pt:PGDBObjText;
                        //procedure Build(Operands:pansichar); virtual;
-                       procedure CommandStart(Operands:pansichar); virtual;
+                       procedure CommandStart(Operands:TCommandOperands); virtual;
                        procedure CommandEnd; virtual;
-                       procedure Command(Operands:pansichar); virtual;
+                       procedure Command(Operands:TCommandOperands); virtual;
                        procedure BuildPrimitives; virtual;
                        procedure Format;virtual;
                        function DoEnd(pdata:GDBPointer):GDBBoolean;virtual;
   end;
 
   BlockReplace_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
-                         procedure CommandStart(Operands:pansichar); virtual;
-                         procedure BuildDM(Operands:pansichar); virtual;
+                         procedure CommandStart(Operands:TCommandOperands); virtual;
+                         procedure BuildDM(Operands:TCommandOperands); virtual;
                          procedure Format;virtual;
                          procedure Run(pdata:{pointer}GDBPlatformint); virtual;
                    end;
   BlockScale_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
-                         procedure CommandStart(Operands:pansichar); virtual;
-                         procedure BuildDM(Operands:pansichar); virtual;
+                         procedure CommandStart(Operands:TCommandOperands); virtual;
+                         procedure BuildDM(Operands:TCommandOperands); virtual;
                          procedure Run(pdata:{pointer}GDBPlatformint); virtual;
                    end;
   BlockRotate_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
-                         procedure CommandStart(Operands:pansichar); virtual;
-                         procedure BuildDM(Operands:pansichar); virtual;
+                         procedure CommandStart(Operands:TCommandOperands); virtual;
+                         procedure BuildDM(Operands:TCommandOperands); virtual;
                          procedure Run(pdata:{pointer}GDBPlatformint); virtual;
                    end;
   SelSim_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
@@ -293,7 +293,7 @@ type
                          bnames,textcontents,textremplates:GDBGDBStringArray;
                          layers,weights,objtypes,linetypes:GDBOpenArrayOfGDBPointer;
                          linetypescales:GDBOpenArrayOfGDBDouble;
-                         procedure CommandStart(Operands:pansichar); virtual;
+                         procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure createbufs;
                          //procedure BuildDM(Operands:pansichar); virtual;
                          //procedure Format;virtual;
@@ -302,7 +302,7 @@ type
                    end;
   ATO_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          powner:PGDBObjDevice;
-                         procedure CommandStart(Operands:pansichar); virtual;
+                         procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure ShowMenu;virtual;
                          procedure Run(pdata:GDBPlatformint); virtual;
           end;
@@ -311,12 +311,12 @@ type
                          procedure Run(pdata:GDBPlatformint); virtual;
           end;
   Number_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
-                         procedure CommandStart(Operands:pansichar); virtual;
+                         procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure ShowMenu;virtual;
                          procedure Run(pdata:GDBPlatformint); virtual;
              end;
   ExportDevWithAxis_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
-                         procedure CommandStart(Operands:pansichar); virtual;
+                         procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure ShowMenu;virtual;
                          procedure Run(pdata:GDBPlatformint); virtual;
              end;
@@ -324,7 +324,7 @@ type
                          VS:GDBInteger;
                          p1,p2:GDBVertex;
                          procedure CommandContinue; virtual;
-                         procedure CommandStart(Operands:pansichar); virtual;
+                         procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure ShowMenu;virtual;
                          procedure Print(pdata:GDBPlatformint); virtual;
                          procedure SetWindow(pdata:GDBPlatformint); virtual;
@@ -334,7 +334,7 @@ type
 
 
   ITT_com = {$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
-    procedure Command(Operands:pansichar); virtual;
+    procedure Command(Operands:TCommandOperands); virtual;
   end;
 {EXPORT-}
 taxisdesc=record
@@ -518,11 +518,11 @@ begin
            inc(i);
      until pb=nil;
 end;
-procedure FloatInsertWithParams_com.BuildDM(Operands:pansichar);
+procedure FloatInsertWithParams_com.BuildDM(Operands:TCommandOperands);
 begin
 
 end;
-procedure FloatInsertWithParams_com.CommandStart(Operands:pansichar);
+procedure FloatInsertWithParams_com.CommandStart(Operands:TCommandOperands);
 begin
      CommandRTEdObject.CommandStart(Operands);
      CMode:=FIWPCustomize;
@@ -539,7 +539,7 @@ begin
                           inherited MouseMoveCallback(wc,mc,button,osp);
      result:=cmd_ok;
 end;
-procedure FloatInsert_com.Build(Operands:pansichar);
+procedure FloatInsert_com.Build(Operands:TCommandOperands);
 begin
      Command(operands);
      if drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count-drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Deleted<=0
@@ -553,7 +553,7 @@ end;
                        procedure BuildDM(Operands:pansichar); virtual;
                        procedure Run(pdata:GDBPlatformint); virtual;
                  end;}
-procedure BlockRotate_com.CommandStart(Operands:pansichar);
+procedure BlockRotate_com.CommandStart(Operands:TCommandOperands);
 var //pb:PGDBObjBlockdef;
     pobj:PGDBObjBlockInsert;
     ir:itrec;
@@ -580,7 +580,7 @@ begin
    BuildDM(Operands);
           inherited;
 end;
-procedure BlockRotate_com.BuildDM(Operands:pansichar);
+procedure BlockRotate_com.BuildDM(Operands:TCommandOperands);
 begin
   commandmanager.DMAddMethod('Изменить','Изменить угол поворота выделенных блоков',@run);
   commandmanager.DMShow;
@@ -621,7 +621,7 @@ begin
 end;
 
 
-procedure BlockScale_com.CommandStart(Operands:pansichar);
+procedure BlockScale_com.CommandStart(Operands:TCommandOperands);
 var //pb:PGDBObjBlockdef;
     pobj:PGDBObjBlockInsert;
     ir:itrec;
@@ -648,7 +648,7 @@ begin
    BuildDM(Operands);
           inherited;
 end;
-procedure BlockScale_com.BuildDM(Operands:pansichar);
+procedure BlockScale_com.BuildDM(Operands:TCommandOperands);
 begin
   commandmanager.DMAddMethod('Изменить','Изменить масштаб выделенных блоков',@run);
   commandmanager.DMShow;
@@ -695,7 +695,7 @@ end;
 
 
 
-procedure BlockReplace_com.CommandStart(Operands:pansichar);
+procedure BlockReplace_com.CommandStart(Operands:TCommandOperands);
 var //pb:PGDBObjBlockdef;
     //ir:itrec;
     i:integer;
@@ -724,7 +724,7 @@ begin
                  commandmanager.executecommandend;
             end;
 end;
-procedure BlockReplace_com.BuildDM(Operands:pansichar);
+procedure BlockReplace_com.BuildDM(Operands:TCommandOperands);
 begin
   commandmanager.DMAddMethod('Заменить','Заменить блоки',@run);
   commandmanager.DMShow;
@@ -928,7 +928,7 @@ begin
      powner:=nil;
      Commandmanager.executecommandend;
 end;
-procedure ExportDevWithAxis_com.CommandStart(Operands:pansichar);
+procedure ExportDevWithAxis_com.CommandStart(Operands:TCommandOperands);
 begin
   self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
   if drawings.GetCurrentDWG^.SelObjArray.Count>0 then
@@ -1143,7 +1143,7 @@ begin
   psd:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
   until psd=nil;
 end;
-procedure Number_com.CommandStart(Operands:pansichar);
+procedure Number_com.CommandStart(Operands:TCommandOperands);
 begin
   self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
   if drawings.GetCurrentDWG^.SelObjArray.Count>0 then
@@ -1313,7 +1313,7 @@ begin
   commandmanager.DMShow;
 end;
 
-procedure ATO_com.CommandStart(Operands:pansichar);
+procedure ATO_com.CommandStart(Operands:TCommandOperands);
 var
    test:boolean;
 begin
@@ -1373,7 +1373,7 @@ begin
      Commandmanager.executecommandend;
 end;
 
-procedure SelSim_com.CommandStart(Operands:pansichar);
+procedure SelSim_com.CommandStart(Operands:TCommandOperands);
 begin
   created:=false;
   self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
@@ -1576,7 +1576,7 @@ begin
      end;
 
 end;
-procedure Print_com.CommandStart(Operands:pansichar);
+procedure Print_com.CommandStart(Operands:TCommandOperands);
 begin
   Error(rsNotYetImplemented);
   self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
@@ -1760,7 +1760,7 @@ begin
      drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.add(@pt);
      end;
 end;
-procedure TextInsert_com.CommandStart(Operands:pansichar);
+procedure TextInsert_com.CommandStart(Operands:TCommandOperands);
 begin
      inherited;
      if drawings.GetCurrentDWG^.TextStyleTable.GetRealCount<1 then
@@ -1774,7 +1774,7 @@ begin
 
 end;
 
-procedure TextInsert_com.Command(Operands:pansichar);
+procedure TextInsert_com.Command(Operands:TCommandOperands);
 var
    s:string;
    i:integer;
@@ -1853,7 +1853,7 @@ begin
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
      pt^.FormatEntity(drawings.GetCurrentDWG^,dc);
 end;
-procedure FloatInsert_com.CommandStart(Operands:pansichar);
+procedure FloatInsert_com.CommandStart(Operands:TCommandOperands);
 begin
      inherited CommandStart(Operands);
      build(operands);
@@ -1922,7 +1922,7 @@ begin
   end;
   result:=cmd_ok;
 end;
-procedure pasteclip_com.Command(Operands:pansichar);
+procedure pasteclip_com.Command(Operands:TCommandOperands);
 var //res:longbool;
     //uFormat:longword;
 
@@ -1995,7 +1995,7 @@ begin
          drawings.GetCurrentDWG^.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
     end;*)
 end;
-procedure copybase_com.CommandStart(Operands:pansichar);
+procedure copybase_com.CommandStart(Operands:TCommandOperands);
 var //i: GDBInteger;
   {tv,}pobj: pGDBObjEntity;
       ir:itrec;
@@ -2085,7 +2085,7 @@ begin
   end;
   result:=cmd_ok;
 end;
-function Insert_com_CommandStart(operands:pansichar):GDBInteger;
+function Insert_com_CommandStart(operands:TCommandOperands):GDBInteger;
 var pb:PGDBObjBlockdef;
     //ir:itrec;
     i:integer;
@@ -2356,7 +2356,7 @@ begin
   inherited init(cn,sa,da);
   dyn:=false;
 end;
-procedure OnDrawingEd_com.CommandStart(Operands:pansichar);
+procedure OnDrawingEd_com.CommandStart(Operands:TCommandOperands);
 //var i: GDBInteger;
 //  lastremove: GDBInteger;
 //  findselected:GDBBoolean;
@@ -2692,7 +2692,7 @@ begin
      end;
 end;
 
-procedure Move_com.CommandStart(Operands:pansichar);
+procedure Move_com.CommandStart(Operands:TCommandOperands);
 var //i: GDBInteger;
   tv,pobj: pGDBObjEntity;
       ir:itrec;
@@ -3600,7 +3600,7 @@ begin
         else
             HistoryOutstr(rscmCommandOnlyCTXMenu);
 end;
-procedure ITT_com.Command(Operands:pansichar);
+procedure ITT_com.Command(Operands:TCommandOperands);
 var //pv:pGDBObjEntity;
     pt:PGDBObjTable;
     //pleader:PGDBObjElLeader;

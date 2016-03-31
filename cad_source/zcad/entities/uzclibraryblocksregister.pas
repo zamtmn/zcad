@@ -41,7 +41,7 @@ begin
     until tdp='';
     BlockDefArray:=BlockBaseDWG^.GetBlockDefArraySimple;
     if BlockDefArray.getblockdef(BlockName)=nil then
-                                                    MergeBlocks_com(@BlockDeffinedIn[1]);
+                                                    MergeBlocks_com(BlockDeffinedIn);
     result:=nil;
 end;
 function ReadBlockLibrary_com(operands:TCommandOperands):TCommandResult;

@@ -19,7 +19,8 @@
 unit zcchangeundocommand;
 {$INCLUDE def.inc}
 interface
-uses uzbmemman,zeundostack,zebaseundocommands,uzbtypesbase,uzbtypes,uzeentity,uzestyleslayers;
+uses uzepalette,uzbmemman,zeundostack,zebaseundocommands,uzbtypesbase,uzbtypes,
+     uzeentity,uzestyleslayers;
 
 type
 generic TGChangeCommand<_T>=object(TCustomChangeCommand)
@@ -70,6 +71,15 @@ generic TGChangeCommand<_T>=object(TCustomChangeCommand)
 {$DEFINE PTCommand := PTGDBGDBByteChangeCommand}
 {$DEFINE TData     := GDBByte}
   {$I TGChangeCommandIMPL.inc}
+
+{$DEFINE TCommand  := TGDBTGDBLineWeightChangeCommand}
+{$DEFINE PTCommand := PTGDBTGDBLineWeightChangeCommand}
+{$DEFINE TData     := TGDBLineWeight}
+  {$I TGChangeCommandIMPL.inc}
+{$DEFINE TCommand  := TGDBTGDBPaletteColorChangeCommand}
+{$DEFINE PTCommand := PTGDBTGDBPaletteColorChangeCommand}
+{$DEFINE TData     := TGDBPaletteColor}
+  {$I TGChangeCommandIMPL.inc}
 {$UNDEF INTERFACE}
 
 {$DEFINE CLASSDECLARATION}
@@ -106,6 +116,16 @@ generic TGChangeCommand<_T>=object(TCustomChangeCommand)
 {$DEFINE TCommand  := TGDBGDBByteChangeCommand}
 {$DEFINE PTCommand := PTGDBGDBByteChangeCommand}
 {$DEFINE TData     := GDBByte}
+  {$I TGChangeCommandIMPL.inc}
+
+{$DEFINE TCommand  := TGDBTGDBLineWeightChangeCommand}
+{$DEFINE PTCommand := PTGDBTGDBLineWeightChangeCommand}
+{$DEFINE TData     := TGDBLineWeight}
+  {$I TGChangeCommandIMPL.inc}
+
+{$DEFINE TCommand  := TGDBTGDBPaletteColorChangeCommand}
+{$DEFINE PTCommand := PTGDBTGDBPaletteColorChangeCommand}
+{$DEFINE TData     := TGDBPaletteColor}
   {$I TGChangeCommandIMPL.inc}
 {$UNDEF CLASSDECLARATION}
 implementation
@@ -177,6 +197,16 @@ end;
 {$DEFINE TCommand  := TGDBGDBByteChangeCommand}
 {$DEFINE PTCommand := PTGDBGDBByteChangeCommand}
 {$DEFINE TData     := GDBByte}
+  {$I TGChangeCommandIMPL.inc}
+
+{$DEFINE TCommand  := TGDBTGDBLineWeightChangeCommand}
+{$DEFINE PTCommand := PTGDBTGDBLineWeightChangeCommand}
+{$DEFINE TData     := TGDBLineWeight}
+  {$I TGChangeCommandIMPL.inc}
+
+{$DEFINE TCommand  := TGDBTGDBPaletteColorChangeCommand}
+{$DEFINE PTCommand := PTGDBTGDBPaletteColorChangeCommand}
+{$DEFINE TData     := TGDBPaletteColor}
   {$I TGChangeCommandIMPL.inc}
 {$UNDEF IMPLEMENTATION}
 

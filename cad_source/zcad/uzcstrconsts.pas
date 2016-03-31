@@ -73,6 +73,12 @@ resourcestring
   rsTemplateNotFound='Template file "%s" not found';
 
   {commands messages}
+  rscmSelectSourceEntity='Select source entity:';
+  rscmSelectDestinationEntity='Select destination entity:';
+  rscmSpecifyX='Specify X:';
+  rscmSpecifyY='Specify Y:';
+  rscmSpecifyZ='Specify Z:';
+  rscmSpecifyPoint='Specify point:';
   rscmSpecifyFirstPoint='Specify first point:';
   rscmSpecifySecondPoint='Specify second point:';
   rscmSpecifyThirdPoint='Specify third point:';

@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-{/$mode objfpc}
+{$mode delphi}//need delphi mode for disable type checking in interactive manipulators
 
 {**Модуль реализации чертежных команд (линия, круг, размеры и т.д.)}
 unit uzccomexample;
@@ -42,7 +42,6 @@ uses
 
   URecordDescriptor,TypeDescriptors,
 
-  Forms, uzcfblockinsert, uzcfarrayinsert,
 
   uzeutils,
 
@@ -101,7 +100,7 @@ uses
 
   uzcstrconsts,       //resouce strings
 
-  uzclog;                //log system
+  uzclog;             //log system
                       //<**система логирования
 
 type
@@ -119,7 +118,7 @@ type
     //** Добавление панели упр многоугольниками в инспекторе
     TRectangParam=packed record
                        ET:TRectangEntType;(*'Entity type'*)      //**< Выбор типа объекта 3Dolyline или LWPolyline
-                       VNum:GDBInteger;(*'Number of vertices'*)  //**< Определение количества вершин
+                       //VNum:GDBInteger;(*'Number of vertices'*)  //**< Определение количества вершин
                        PolyWidth:GDBDouble;(*'Polyline width'*)  //**< Вес линий
                  end;
 {EXPORT-}
@@ -558,123 +557,93 @@ begin
     end;
     result:=cmd_ok;
 end;
-
+procedure PlaceUndoStartMarkerIfNeed(var flag:boolean;const CommandName:GDBString);
+begin
+    if flag then exit;
+    zcStartUndoCommand(CommandName);
+    flag:=true;
+end;
+procedure PlaceUndoEndMarkerIfNeed(var flag:boolean);
+begin
+    if not flag then exit;
+    zcEndUndoCommand;
+    flag:=false;
+end;
 function matchprop_com(operands:TCommandOperands):TCommandResult;
 var
     ps,pd:PGDBObjCircle;
     dc:TDrawContext;
+    UndoStartMarkerPlaced:boolean;
+    drawing:PTZCADDrawing;
+const
+    CommandName='MatchProp';
 begin
-    if commandmanager.getentity('Select source entity: ',ps) then
+    UndoStartMarkerPlaced:=false;
+    if commandmanager.getentity(rscmSelectSourceEntity,ps) then
     begin
          zcShowCommandParams(SysUnit^.TypeName2PTD( 'TMatchPropParam'),@MatchPropParam);
-         dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-         while commandmanager.getentity('Select destination entity:',pd) do
+         drawing:=PTZCADDrawing(drawings.GetCurrentDWG);
+         dc:=drawing^.CreateDrawingRC;
+         while commandmanager.getentity(rscmSelectDestinationEntity,pd) do
          begin
               if MatchPropParam.ProcessLayer then
-                 pd^.vp.Layer:=ps^.vp.Layer;
+                if pd^.vp.Layer<>ps^.vp.Layer then
+                  begin
+                    PlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                    with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.Layer)^ do
+                    begin
+                         pd^.vp.Layer:=ps^.vp.Layer;
+                         ComitFromObj;
+                    end;
+                  end;
               if MatchPropParam.ProcessLineType then
-                 pd^.vp.LineType:=ps^.vp.LineType;
+                if pd^.vp.LineType<>ps^.vp.LineType then
+                  begin
+                    PlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                    with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.LineType)^ do
+                    begin
+                         pd^.vp.LineType:=ps^.vp.LineType;
+                         ComitFromObj;
+                    end;
+                  end;
               if MatchPropParam.ProcessLineWeight then
-                 pd^.vp.LineWeight:=ps^.vp.LineWeight;
+                if pd^.vp.LineWeight<>ps^.vp.LineWeight then
+                  begin
+                    PlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                    with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.LineWeight)^ do
+                    begin
+                         pd^.vp.LineWeight:=ps^.vp.LineWeight;
+                         ComitFromObj;
+                    end;
+                  end;
               if MatchPropParam.ProcessColor then
-                 pd^.vp.color:=ps^.vp.Color;
+                if pd^.vp.color<>ps^.vp.Color then
+                  begin
+                    PlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                    with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.color)^ do
+                    begin
+                         pd^.vp.color:=ps^.vp.Color;
+                         ComitFromObj;
+                    end;
+                  end;
               if MatchPropParam.ProcessLineTypeScale then
-                 pd^.vp.LineTypeScale:=ps^.vp.LineTypeScale;
+                if pd^.vp.LineTypeScale<>ps^.vp.LineTypeScale then
+                  begin
+                    PlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                    with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.LineTypeScale)^ do
+                    begin
+                         pd^.vp.LineTypeScale:=ps^.vp.LineTypeScale;
+                         ComitFromObj;
+                    end;
+                  end;
               pd^.FormatEntity(drawings.GetCurrentDWG^,dc);
               if assigned(redrawoglwndproc) then redrawoglwndproc;
          end;
+         PlaceUndoEndMarkerIfNeed(UndoStartMarkerPlaced);
+         zcHideCommandParams;
     end;
     result:=cmd_ok;
 end;
-function GetPoint_com(operands:TCommandOperands):TCommandResult;
-var
-   p:GDBVertex;
-   vdpobj,vdpvertex:vardesk;
-   pc:pointer;
-begin
-    vdpobj:=commandmanager.PopValue;
-    vdpvertex:=commandmanager.PopValue;
-    if commandmanager.get3dpoint('Select point:',p) then
-    begin
-         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pgdbvertex(ppointer(vdpvertex.data.Instance)^)^);
-         pgdbvertex(ppointer(vdpvertex.data.Instance)^)^:=p;
-         PTGDBVertexChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
-         PTGDBVertexChangeCommand(pc)^.ComitFromObj;
-    end;
-    result:=cmd_ok;
-end;
-function GetVertexX_com(operands:TCommandOperands):TCommandResult;
-var
-   p:GDBVertex;
-   vdpobj,vdpvertex:vardesk;
-   pc:pointer;
-begin
-    vdpobj:=commandmanager.PopValue;
-    vdpvertex:=commandmanager.PopValue;
-    if commandmanager.get3dpoint('Select X:',p) then
-    begin
-         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBXCoordinate(ppointer(vdpvertex.data.Instance)^)^);
-         pgdbdouble(ppointer(vdpvertex.data.Instance)^)^:=p.x;
-         PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
-         PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
-    end;
-    result:=cmd_ok;
-end;
-function GetVertexY_com(operands:TCommandOperands):TCommandResult;
-var
-   p:GDBVertex;
-   vdpobj,vdpvertex:vardesk;
-   pc:pointer;
-begin
-    vdpobj:=commandmanager.PopValue;
-    vdpvertex:=commandmanager.PopValue;
-    if commandmanager.get3dpoint('Select Y:',p) then
-    begin
-         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBYCoordinate(ppointer(vdpvertex.data.Instance)^)^);
-         pgdbdouble(ppointer(vdpvertex.data.Instance)^)^:=p.y;
-         PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
-         PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
-    end;
-    result:=cmd_ok;
-end;
-function GetVertexZ_com(operands:TCommandOperands):TCommandResult;
-var
-   p:GDBVertex;
-   vdpobj,vdpvertex:vardesk;
-   pc:pointer;
-begin
-    vdpobj:=commandmanager.PopValue;
-    vdpvertex:=commandmanager.PopValue;
-    if commandmanager.get3dpoint('Select Z:',p) then
-    begin
-         pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBZCoordinate(ppointer(vdpvertex.data.Instance)^)^);
-         pgdbdouble(ppointer(vdpvertex.data.Instance)^)^:=p.z;
-         PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
-         PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
-    end;
-    result:=cmd_ok;
-end;
-function GetLength_com(operands:TCommandOperands):TCommandResult;
-var
-   p1,p2:GDBVertex;
-   vdpobj,vdpvertex:vardesk;
-   pc:pointer;
-begin
-  vdpobj:=commandmanager.PopValue;
-  vdpvertex:=commandmanager.PopValue;
-    if commandmanager.get3dpoint('Select point:',p1) then
-    begin
-      if commandmanager.get3dpoint('Select point:',p2) then
-      begin
-        pc:=PushCreateTGChangeCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pgdbdouble(ppointer(vdpvertex.data.Instance)^)^);
-        pgdblength(ppointer(vdpvertex.data.Instance)^)^:=uzegeometry.Vertexlength(p1,p2);
-        PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
-        PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
-      end;
-    end;
-    result:=cmd_ok;
-end;
-
 
 function DrawRectangle_com(operands:TCommandOperands):TCommandResult;    //< Чертим прямоугольник
 var
@@ -758,7 +727,7 @@ begin
              end
         end;
     end;
-    ReturnToDefaultProc(drawings.GetUnitsFormat); //< Возвращает инспектор в значение по умолчанию
+    zcHideCommandParams; //< Возвращает инспектор в значение по умолчанию
     result:=cmd_ok;
 end;
 
@@ -776,27 +745,19 @@ initialization
      CreateCommandFastObjectPlugin(@DrawDiametricDim_com,'DimDiameter',CADWG,0);
      CreateCommandFastObjectPlugin(@DrawRadialDim_com,   'DimRadius',  CADWG,0);
 
+     CreateCommandFastObjectPlugin(@DrawArc_com,         'Arc',        CADWG,0);
+     CreateCommandFastObjectPlugin(@DrawCircle_com,      'Circle',     CADWG,0);
+     CreateCommandFastObjectPlugin(@DrawLine_com,        'DrawLine',   CADWG,0);
+     CreateCommandFastObjectPlugin(@DrawRectangle_com,   'Rectangle',  CADWG,0);
+     CreateCommandFastObjectPlugin(@matchprop_com,       'MatchProp',  CADWG,0);
+
      MatchPropParam.ProcessLayer:=true;
      MatchPropParam.ProcessLineType:=true;
      MatchPropParam.ProcessLineWeight:=true;
      MatchPropParam.ProcessColor:=true;
      MatchPropParam.ProcessLineTypeScale:=true;
 
-     CreateCommandFastObjectPlugin(@matchprop_com,'MatchProp',CADWG,0);
-
-
-     CreateCommandFastObjectPlugin(@DrawArc_com,'Arc',CADWG,0);
-     CreateCommandFastObjectPlugin(@DrawCircle_com,'Circle',CADWG,0);
-     CreateCommandFastObjectPlugin(@DrawLine_com,'DrawLine',CADWG,0);
-     CreateCommandFastObjectPlugin(@DrawRectangle_com,'Rectangle',CADWG,0);
-
-     CreateCommandFastObjectPlugin(@GetPoint_com,   'GetPoint',   CADWG,0);
-     CreateCommandFastObjectPlugin(@GetVertexX_com, 'GetVertexX', CADWG,0);
-     CreateCommandFastObjectPlugin(@GetVertexY_com, 'GetVertexY', CADWG,0);
-     CreateCommandFastObjectPlugin(@GetVertexZ_com, 'GetVertexZ', CADWG,0);
-     CreateCommandFastObjectPlugin(@GetLength_com,  'GetLength',  CADWG,0);
 
      RectangParam.ET:=RET_3DPoly;
-     RectangParam.VNum:=4;
      RectangParam.PolyWidth:=0;
 end.

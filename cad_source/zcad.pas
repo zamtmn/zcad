@@ -111,6 +111,7 @@ uses
   uzccomdraw,
   uzvcom,
   uzccomexample,
+  uzccomobjectinspector,
   uzccomexperimental,
   uzccominterface,
 

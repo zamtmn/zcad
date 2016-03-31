@@ -66,6 +66,9 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzeentitiesmanager,uzepalet
     @param(PInstance Указатель на параметры)}
   procedure zcShowCommandParams(const PDataTypeDesk:PUserTypeDescriptor;const PInstance:Pointer);
 
+  {**Завершить показ параметров команды, вернуть содержиммое инспектора к умолчательному состоянию}
+  procedure zcHideCommandParams();
+
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:GDBString;p_insert:GDBVertex;
                         scale:GDBVertex;rotate:GDBDouble;needundo:GDBBoolean=false
                         ):PGDBObjBlockInsert;
@@ -150,10 +153,15 @@ begin
 end;
 procedure zcShowCommandParams(const PDataTypeDesk:PUserTypeDescriptor;const PInstance:Pointer);
 begin
-     if assigned(SetGDBObjInspProc)then
-     SetGDBObjInspProc(nil,drawings.GetUnitsFormat,
-                       PDataTypeDesk,PInstance,
-                       drawings.GetCurrentDWG);
+  if assigned(SetGDBObjInspProc)then
+      SetGDBObjInspProc(nil,drawings.GetUnitsFormat,
+                        PDataTypeDesk,PInstance,
+                        drawings.GetCurrentDWG);
+end;
+procedure zcHideCommandParams();
+begin
+  if assigned(ReturnToDefaultProc)then
+      ReturnToDefaultProc(drawings.GetUnitsFormat);
 end;
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;//владелец
                         BlockName:GDBString;       //имя блока

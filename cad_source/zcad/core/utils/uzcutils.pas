@@ -60,6 +60,15 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzeentitiesmanager,uzepalet
      конца должно совпадать}
   procedure zcEndUndoCommand;
 
+  {**Добавление в стек undo маркера начала команды при необходимости
+    @param(UndoStartMarkerPlaced Флаг установки маркера: false - маркер еще не поставлен, ставим маркер, поднимаем флаг. true - ничего не делаем)
+    @param(CommandName Имя команды. Будет показано в окне истории при отмене\повторе)}
+  procedure zcPlaceUndoStartMarkerIfNeed(var UndoStartMarkerPlaced:boolean;const CommandName:GDBString);
+
+  {**Добавление в стек undo маркера конца команды при необходимости
+    @param(UndoStartMarkerPlaced Флаг установки маркера начала: true - маркер начала поставлен, ставим маркер конца, сбрасываем флаг. false - ничего не делаем)}
+  procedure zcPlaceUndoEndMarkerIfNeed(var UndoStartMarkerPlaced:boolean);
+
   {**Показать параметры команды. Пока только в инспекторе объектов, потом может
      добавлю возможность показа и редактирования параметров в командной строке
     @param(PDataTypeDesk Указатель на описание структуры параметров (обычно то что возвращает SysUnit^.TypeName2PTD))
@@ -150,6 +159,18 @@ end;
 procedure zcEndUndoCommand;
 begin
      PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
+end;
+procedure zcPlaceUndoStartMarkerIfNeed(var UndoStartMarkerPlaced:boolean;const CommandName:GDBString);
+begin
+    if UndoStartMarkerPlaced then exit;
+    zcStartUndoCommand(CommandName);
+    UndoStartMarkerPlaced:=true;
+end;
+procedure zcPlaceUndoEndMarkerIfNeed(var UndoStartMarkerPlaced:boolean);
+begin
+    if not UndoStartMarkerPlaced then exit;
+    zcEndUndoCommand;
+    UndoStartMarkerPlaced:=false;
 end;
 procedure zcShowCommandParams(const PDataTypeDesk:PUserTypeDescriptor;const PInstance:Pointer);
 begin

@@ -557,18 +557,6 @@ begin
     end;
     result:=cmd_ok;
 end;
-procedure PlaceUndoStartMarkerIfNeed(var flag:boolean;const CommandName:GDBString);
-begin
-    if flag then exit;
-    zcStartUndoCommand(CommandName);
-    flag:=true;
-end;
-procedure PlaceUndoEndMarkerIfNeed(var flag:boolean);
-begin
-    if not flag then exit;
-    zcEndUndoCommand;
-    flag:=false;
-end;
 function matchprop_com(operands:TCommandOperands):TCommandResult;
 var
     ps,pd:PGDBObjCircle;
@@ -589,7 +577,7 @@ begin
               if MatchPropParam.ProcessLayer then
                 if pd^.vp.Layer<>ps^.vp.Layer then
                   begin
-                    PlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                    zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
                     with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.Layer)^ do
                     begin
                          pd^.vp.Layer:=ps^.vp.Layer;
@@ -599,7 +587,7 @@ begin
               if MatchPropParam.ProcessLineType then
                 if pd^.vp.LineType<>ps^.vp.LineType then
                   begin
-                    PlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                    zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
                     with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.LineType)^ do
                     begin
                          pd^.vp.LineType:=ps^.vp.LineType;
@@ -609,7 +597,7 @@ begin
               if MatchPropParam.ProcessLineWeight then
                 if pd^.vp.LineWeight<>ps^.vp.LineWeight then
                   begin
-                    PlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                    zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
                     with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.LineWeight)^ do
                     begin
                          pd^.vp.LineWeight:=ps^.vp.LineWeight;
@@ -619,7 +607,7 @@ begin
               if MatchPropParam.ProcessColor then
                 if pd^.vp.color<>ps^.vp.Color then
                   begin
-                    PlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                    zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
                     with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.color)^ do
                     begin
                          pd^.vp.color:=ps^.vp.Color;
@@ -629,7 +617,7 @@ begin
               if MatchPropParam.ProcessLineTypeScale then
                 if pd^.vp.LineTypeScale<>ps^.vp.LineTypeScale then
                   begin
-                    PlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                    zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
                     with PushCreateTGChangeCommand(drawing.UndoStack,pd^.vp.LineTypeScale)^ do
                     begin
                          pd^.vp.LineTypeScale:=ps^.vp.LineTypeScale;
@@ -639,7 +627,7 @@ begin
               pd^.FormatEntity(drawings.GetCurrentDWG^,dc);
               if assigned(redrawoglwndproc) then redrawoglwndproc;
          end;
-         PlaceUndoEndMarkerIfNeed(UndoStartMarkerPlaced);
+         zcPlaceUndoEndMarkerIfNeed(UndoStartMarkerPlaced);
          zcHideCommandParams;
     end;
     result:=cmd_ok;

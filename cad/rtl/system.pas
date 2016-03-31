@@ -386,6 +386,18 @@ GDBUNISymbolInfo=packed record
     symbol:GDBInteger;
     symbolinfo:GDBsymdolinfo;
   end;
+TTextJustify=(jstl(*'TopLeft'*)=1,
+              jstc(*'TopCenter'*)=2,
+              jstr(*'TopRight'*)=3,
+              jsml(*'MiddleLeft'*)=4,
+              jsmc(*'MiddleCenter'*)=5, //СерединаЦентр
+              jsmr(*'MiddleRight'*)=6,
+              jsbl(*'BottomLeft'*)=7,
+              jsbc(*'BottomCenter'*)=8,
+              jsbr(*'BottomRight'*)=9,
+              jsbtl(*'Left'*)=10,
+              jsbtc(*'Center'*)=11,
+              jsbtr(*'Right'*)=12);
 TSymbolInfoArray=packed array [0..255] of GDBsymdolinfo;
 PTAlign=^TAlign;
 TAlign=(TATop,TABottom,TALeft,TARight);
@@ -1926,18 +1938,6 @@ GDBObjPlainWithOX={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                procedure CalcObjMatrix;virtual;abstract;
          end;
 //Generate on E:/zcad/cad_source/zengine/core/entities/uzeentabstracttext.pas
-TTextJustify=(jstl(*'TopLeft'*)=1,
-              jstc(*'TopCenter'*)=2,
-              jstr(*'TopRight'*)=3,
-              jsml(*'MiddleLeft'*)=4,
-              jsmc(*'MiddleCenter'*)=5, //СерединаЦентр
-              jsmr(*'MiddleRight'*)=6,
-              jsbl(*'BottomLeft'*)=7,
-              jsbc(*'BottomCenter'*)=8,
-              jsbr(*'BottomRight'*)=9,
-              jsbtl(*'Left'*)=10,
-              jsbtc(*'Center'*)=11,
-              jsbtr(*'Right'*)=12);
 PGDBTextProp=^GDBTextProp;
 GDBTextProp=packed record
                   size:GDBDouble;(*saved_to_shd*)
@@ -3429,6 +3429,13 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
     procedure Command(Operands:TCommandOperands); virtual;abstract;
   end;
 //Generate on E:/zcad/cad_source/zcad/commands/uzccomexample.pas
+    TMatchPropTextParam=packed record
+                       ProcessTextStyle:GDBBoolean;(*'Process style'*)
+                       ProcessTextSize:GDBBoolean;(*'Process size'*)
+                       ProcessTextOblique:GDBBoolean;(*'Process oblique'*)
+                       ProcessTextWFactor:GDBBoolean;(*'Process wfactor'*)
+                       ProcessTextJustify:GDBBoolean;(*'Process justify'*)
+                 end;
     PTMatchPropParam=^TMatchPropParam;
     TMatchPropParam=packed record
                        ProcessLayer:GDBBoolean;(*'Process layer'*)
@@ -3436,13 +3443,14 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                        ProcessLineType:GDBBoolean;(*'Process line type'*)
                        ProcessLineTypeScale:GDBBoolean;(*'Process line type scale'*)
                        ProcessColor:GDBBoolean;(*'Process color'*)
+                       TextParams:TMatchPropTextParam;(*'Text params'*)
                  end;
     //** Создание выподающего меню в инспекторе (3Dolyline или LWPolyline)
     TRectangEntType=(RET_3DPoly(*'3DPoly'*),RET_LWPoly(*'LWPoly'*));
     //** Добавление панели упр многоугольниками в инспекторе
     TRectangParam=packed record
                        ET:TRectangEntType;(*'Entity type'*)      //**< Выбор типа объекта 3Dolyline или LWPolyline
-                       VNum:GDBInteger;(*'Number of vertices'*)  //**< Определение количества вершин
+                       //VNum:GDBInteger;(*'Number of vertices'*)  //**< Определение количества вершин
                        PolyWidth:GDBDouble;(*'Polyline width'*)  //**< Вес линий
                  end;
 //Generate on E:/zcad/cad_source/zengine/containers/UGDBTracePropArray.pas

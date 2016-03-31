@@ -13,7 +13,6 @@ object LayersForm: TLayersForm
   OnCreate = FormCreate
   OnShow = RefreshListItems
   Position = poMainFormCenter
-  LCLVersion = '1.7'
   Visible = False
   object Bevel1: TBevel
     AnchorSideLeft.Control = ToolBar1
@@ -25,7 +24,7 @@ object LayersForm: TLayersForm
     Left = 123
     Height = 25
     Top = 1
-    Width = 927
+    Width = 981
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 2
     BorderSpacing.Top = 1
@@ -41,7 +40,7 @@ object LayersForm: TLayersForm
     Left = 124
     Height = 23
     Top = 2
-    Width = 925
+    Width = 979
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 1
     Layout = tlCenter
@@ -52,9 +51,9 @@ object LayersForm: TLayersForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 896
+    Left = 950
     Height = 30
-    Top = 559
+    Top = 647
     Width = 154
     Anchors = [akRight, akBottom]
     BorderSpacing.Right = 1
@@ -67,9 +66,9 @@ object LayersForm: TLayersForm
     AnchorSideRight.Control = ButtonApplyClose
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 745
+    Left = 799
     Height = 30
-    Top = 559
+    Top = 647
     Width = 150
     Anchors = [akRight, akBottom]
     BorderSpacing.Right = 1
@@ -87,9 +86,9 @@ object LayersForm: TLayersForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonApplyClose
     Left = 1
-    Height = 529
+    Height = 617
     Top = 28
-    Width = 1049
+    Width = 1103
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 1
     BorderSpacing.Top = 2
@@ -102,7 +101,7 @@ object LayersForm: TLayersForm
       end    
       item
         Caption = 'Name'
-        Width = 238
+        Width = 292
       end    
       item
         Caption = 'On'
@@ -208,35 +207,35 @@ object LayersForm: TLayersForm
     top = 260
     object AddLayer: TAction
       Caption = 'AddLayer'
-      Enabled = False
+      DisableIfNoHandler = False
       Hint = 'Add layer'
       OnExecute = LayerAdd
       ShortCut = 45
     end
     object DelLayer: TAction
       Caption = 'DelLayer'
-      Enabled = False
+      DisableIfNoHandler = False
       Hint = 'Delete layer'
       OnExecute = LayerDelete
       ShortCut = 46
     end
     object MkCurrentLayer: TAction
       Caption = 'MkCurrentLayer'
-      Enabled = False
+      DisableIfNoHandler = False
       Hint = 'Make selected layer current'
       OnExecute = MkCurrent
       ShortCut = 32
     end
     object PurgeLayers: TAction
       Caption = 'PurgeLayers'
-      Enabled = False
+      DisableIfNoHandler = False
       Hint = 'Purge layers'
       OnExecute = _PurgeLayers
       ShortCut = 8238
     end
     object RefreshLayers: TAction
       Caption = 'RefreshLayers'
-      Enabled = False
+      DisableIfNoHandler = False
       Hint = 'Refresh layers'
       OnExecute = RefreshListItems
       ShortCut = 115

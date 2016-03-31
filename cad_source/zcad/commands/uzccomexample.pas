@@ -712,7 +712,6 @@ begin
                       EntChange:=true;
                     end;
               end;
-              if MatchPropParam.ProcessLineTypeScale then
               if EntChange then
                 begin
                   pd^.FormatEntity(drawings.GetCurrentDWG^,dc);

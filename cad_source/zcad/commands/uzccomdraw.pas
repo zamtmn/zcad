@@ -4021,7 +4021,7 @@ begin
   TextInsertParams.h:=2.5;
   TextInsertParams.Oblique:=0;
   TextInsertParams.WidthFactor:=1;
-  TextInsertParams.justify:=uzeentabstracttext.jstl;
+  TextInsertParams.justify:=uzbtypes.jstl;
   TextInsertParams.text:='text';
   TextInsertParams.runtexteditor:=false;
   TextInsertParams.Width:=100;

@@ -381,6 +381,18 @@ GDBUNISymbolInfo=packed record
     symbol:GDBInteger;
     symbolinfo:GDBsymdolinfo;
   end;
+TTextJustify=(jstl(*'TopLeft'*)=1,
+              jstc(*'TopCenter'*)=2,
+              jstr(*'TopRight'*)=3,
+              jsml(*'MiddleLeft'*)=4,
+              jsmc(*'MiddleCenter'*)=5, //СерединаЦентр
+              jsmr(*'MiddleRight'*)=6,
+              jsbl(*'BottomLeft'*)=7,
+              jsbc(*'BottomCenter'*)=8,
+              jsbr(*'BottomRight'*)=9,
+              jsbtl(*'Left'*)=10,
+              jsbtc(*'Center'*)=11,
+              jsbtr(*'Right'*)=12);
 TSymbolInfoArray=packed array [0..255] of GDBsymdolinfo;
 PTAlign=^TAlign;
 TAlign=(TATop,TABottom,TALeft,TARight);

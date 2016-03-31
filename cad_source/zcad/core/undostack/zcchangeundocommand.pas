@@ -76,9 +76,15 @@ generic TGChangeCommand<_T>=object(TCustomChangeCommand)
 {$DEFINE PTCommand := PTGDBTGDBLineWeightChangeCommand}
 {$DEFINE TData     := TGDBLineWeight}
   {$I TGChangeCommandIMPL.inc}
+
 {$DEFINE TCommand  := TGDBTGDBPaletteColorChangeCommand}
 {$DEFINE PTCommand := PTGDBTGDBPaletteColorChangeCommand}
 {$DEFINE TData     := TGDBPaletteColor}
+  {$I TGChangeCommandIMPL.inc}
+
+{$DEFINE TCommand  := TGDBTTextJustifyChangeCommand}
+{$DEFINE PTCommand := PTGDBTTextJustifyChangeCommand}
+{$DEFINE TData     := TTextJustify}
   {$I TGChangeCommandIMPL.inc}
 {$UNDEF INTERFACE}
 
@@ -126,6 +132,11 @@ generic TGChangeCommand<_T>=object(TCustomChangeCommand)
 {$DEFINE TCommand  := TGDBTGDBPaletteColorChangeCommand}
 {$DEFINE PTCommand := PTGDBTGDBPaletteColorChangeCommand}
 {$DEFINE TData     := TGDBPaletteColor}
+  {$I TGChangeCommandIMPL.inc}
+
+{$DEFINE TCommand  := TGDBTTextJustifyChangeCommand}
+{$DEFINE PTCommand := PTGDBTTextJustifyChangeCommand}
+{$DEFINE TData     := TTextJustify}
   {$I TGChangeCommandIMPL.inc}
 {$UNDEF CLASSDECLARATION}
 implementation
@@ -207,6 +218,11 @@ end;
 {$DEFINE TCommand  := TGDBTGDBPaletteColorChangeCommand}
 {$DEFINE PTCommand := PTGDBTGDBPaletteColorChangeCommand}
 {$DEFINE TData     := TGDBPaletteColor}
+  {$I TGChangeCommandIMPL.inc}
+
+{$DEFINE TCommand  := TGDBTTextJustifyChangeCommand}
+{$DEFINE PTCommand := PTGDBTTextJustifyChangeCommand}
+{$DEFINE TData     := TTextJustify}
   {$I TGChangeCommandIMPL.inc}
 {$UNDEF IMPLEMENTATION}
 

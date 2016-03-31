@@ -25,18 +25,6 @@ uses uzglviewareageneral,uzgldrawcontext,uzeentity,uzecamera,UGDBOpenArrayOfPObj
 type
 //jstm(*'TopCenter'*)=2,
 {EXPORT+}
-TTextJustify=(jstl(*'TopLeft'*)=1,
-              jstc(*'TopCenter'*)=2,
-              jstr(*'TopRight'*)=3,
-              jsml(*'MiddleLeft'*)=4,
-              jsmc(*'MiddleCenter'*)=5, //СерединаЦентр
-              jsmr(*'MiddleRight'*)=6,
-              jsbl(*'BottomLeft'*)=7,
-              jsbc(*'BottomCenter'*)=8,
-              jsbr(*'BottomRight'*)=9,
-              jsbtl(*'Left'*)=10,
-              jsbtc(*'Center'*)=11,
-              jsbtr(*'Right'*)=12);
 PGDBTextProp=^GDBTextProp;
 GDBTextProp=packed record
                   size:GDBDouble;(*saved_to_shd*)

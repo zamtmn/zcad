@@ -58,6 +58,8 @@ uses
 
   uzeentdimaligned, //unit describes aligned dimensional entity
                        //модуль описывающий выровненный размерный примитив
+  uzeenttext,
+
   uzeentdimrotated,
 
   uzeentdimdiametric,
@@ -105,6 +107,13 @@ uses
 
 type
 {EXPORT+}
+    TMatchPropTextParam=packed record
+                       ProcessTextStyle:GDBBoolean;(*'Process style'*)
+                       ProcessTextSize:GDBBoolean;(*'Process size'*)
+                       ProcessTextOblique:GDBBoolean;(*'Process oblique'*)
+                       ProcessTextWFactor:GDBBoolean;(*'Process wfactor'*)
+                       ProcessTextJustify:GDBBoolean;(*'Process justify'*)
+                 end;
     PTMatchPropParam=^TMatchPropParam;
     TMatchPropParam=packed record
                        ProcessLayer:GDBBoolean;(*'Process layer'*)
@@ -112,6 +121,7 @@ type
                        ProcessLineType:GDBBoolean;(*'Process line type'*)
                        ProcessLineTypeScale:GDBBoolean;(*'Process line type scale'*)
                        ProcessColor:GDBBoolean;(*'Process color'*)
+                       TextParams:TMatchPropTextParam;(*'Text params'*)
                  end;
     //** Создание выподающего меню в инспекторе (3Dolyline или LWPolyline)
     TRectangEntType=(RET_3DPoly(*'3DPoly'*),RET_LWPoly(*'LWPoly'*));
@@ -559,12 +569,24 @@ begin
 end;
 function matchprop_com(operands:TCommandOperands):TCommandResult;
 var
-    ps,pd:PGDBObjCircle;
+    ps,pd:PGDBObjEntity;
+    SourceObjType:TObjID;
+    isSourceObjText:boolean;
     dc:TDrawContext;
     UndoStartMarkerPlaced:boolean;
     drawing:PTZCADDrawing;
+    EntChange:boolean;
 const
     CommandName='MatchProp';
+function isTextEnt(ObjType:TObjID):boolean;
+begin
+     if (ObjType=GDBtextID)
+     or(ObjType=GDBMTextID)then
+                               result:=true
+                           else
+                               result:=false;
+end;
+
 begin
     UndoStartMarkerPlaced:=false;
     if commandmanager.getentity(rscmSelectSourceEntity,ps) then
@@ -572,8 +594,11 @@ begin
          zcShowCommandParams(SysUnit^.TypeName2PTD( 'TMatchPropParam'),@MatchPropParam);
          drawing:=PTZCADDrawing(drawings.GetCurrentDWG);
          dc:=drawing^.CreateDrawingRC;
+         SourceObjType:=ps^.GetObjType;
+         isSourceObjText:=isTextEnt(SourceObjType);
          while commandmanager.getentity(rscmSelectDestinationEntity,pd) do
          begin
+              EntChange:=false;
               if MatchPropParam.ProcessLayer then
                 if pd^.vp.Layer<>ps^.vp.Layer then
                   begin
@@ -583,6 +608,7 @@ begin
                          pd^.vp.Layer:=ps^.vp.Layer;
                          ComitFromObj;
                     end;
+                    EntChange:=true;
                   end;
               if MatchPropParam.ProcessLineType then
                 if pd^.vp.LineType<>ps^.vp.LineType then
@@ -593,6 +619,7 @@ begin
                          pd^.vp.LineType:=ps^.vp.LineType;
                          ComitFromObj;
                     end;
+                    EntChange:=true;
                   end;
               if MatchPropParam.ProcessLineWeight then
                 if pd^.vp.LineWeight<>ps^.vp.LineWeight then
@@ -603,6 +630,7 @@ begin
                          pd^.vp.LineWeight:=ps^.vp.LineWeight;
                          ComitFromObj;
                     end;
+                    EntChange:=true;
                   end;
               if MatchPropParam.ProcessColor then
                 if pd^.vp.color<>ps^.vp.Color then
@@ -613,6 +641,7 @@ begin
                          pd^.vp.color:=ps^.vp.Color;
                          ComitFromObj;
                     end;
+                    EntChange:=true;
                   end;
               if MatchPropParam.ProcessLineTypeScale then
                 if pd^.vp.LineTypeScale<>ps^.vp.LineTypeScale then
@@ -623,9 +652,72 @@ begin
                          pd^.vp.LineTypeScale:=ps^.vp.LineTypeScale;
                          ComitFromObj;
                     end;
+                    EntChange:=true;
                   end;
-              pd^.FormatEntity(drawings.GetCurrentDWG^,dc);
-              if assigned(redrawoglwndproc) then redrawoglwndproc;
+              if (isSourceObjText)and(isTextEnt(pd^.GetObjType))then
+              begin
+                if MatchPropParam.TextParams.ProcessTextStyle then
+                  if PGDBObjText(pd)^.TXTStyleIndex<>PGDBObjText(ps)^.TXTStyleIndex then
+                    begin
+                      zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                      with PushCreateTGChangeCommand(drawing.UndoStack,PGDBObjText(pd)^.TXTStyleIndex)^ do
+                      begin
+                           PGDBObjText(pd)^.TXTStyleIndex:=PGDBObjText(ps)^.TXTStyleIndex;
+                           ComitFromObj;
+                      end;
+                      EntChange:=true;
+                    end;
+                if MatchPropParam.TextParams.ProcessTextSize then
+                  if PGDBObjText(pd)^.textprop.size<>PGDBObjText(ps)^.textprop.size then
+                    begin
+                      zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                      with PushCreateTGChangeCommand(drawing.UndoStack,PGDBObjText(pd)^.textprop.size)^ do
+                      begin
+                           PGDBObjText(pd)^.textprop.size:=PGDBObjText(ps)^.textprop.size;
+                           ComitFromObj;
+                      end;
+                      EntChange:=true;
+                    end;
+                if MatchPropParam.TextParams.ProcessTextOblique then
+                  if PGDBObjText(pd)^.textprop.Oblique<>PGDBObjText(ps)^.textprop.Oblique then
+                    begin
+                      zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                      with PushCreateTGChangeCommand(drawing.UndoStack,PGDBObjText(pd)^.textprop.Oblique)^ do
+                      begin
+                           PGDBObjText(pd)^.textprop.Oblique:=PGDBObjText(ps)^.textprop.Oblique;
+                           ComitFromObj;
+                      end;
+                      EntChange:=true;
+                    end;
+                if MatchPropParam.TextParams.ProcessTextWFactor then
+                  if PGDBObjText(pd)^.textprop.wfactor<>PGDBObjText(ps)^.textprop.wfactor then
+                    begin
+                      zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                      with PushCreateTGChangeCommand(drawing.UndoStack,PGDBObjText(pd)^.textprop.wfactor)^ do
+                      begin
+                           PGDBObjText(pd)^.textprop.wfactor:=PGDBObjText(ps)^.textprop.wfactor;
+                           ComitFromObj;
+                      end;
+                      EntChange:=true;
+                    end;
+                if MatchPropParam.TextParams.ProcessTextJustify then
+                  if PGDBObjText(pd)^.textprop.justify<>PGDBObjText(ps)^.textprop.justify then
+                    begin
+                      zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
+                      with PushCreateTGChangeCommand(drawing.UndoStack,PGDBObjText(pd)^.textprop.justify)^ do
+                      begin
+                           PGDBObjText(pd)^.textprop.justify:=PGDBObjText(ps)^.textprop.justify;
+                           ComitFromObj;
+                      end;
+                      EntChange:=true;
+                    end;
+              end;
+              if MatchPropParam.ProcessLineTypeScale then
+              if EntChange then
+                begin
+                  pd^.FormatEntity(drawings.GetCurrentDWG^,dc);
+                  if assigned(redrawoglwndproc) then redrawoglwndproc;
+                end;
          end;
          zcPlaceUndoEndMarkerIfNeed(UndoStartMarkerPlaced);
          zcHideCommandParams;
@@ -744,6 +836,11 @@ initialization
      MatchPropParam.ProcessLineWeight:=true;
      MatchPropParam.ProcessColor:=true;
      MatchPropParam.ProcessLineTypeScale:=true;
+     MatchPropParam.TextParams.ProcessTextStyle:=true;
+     MatchPropParam.TextParams.ProcessTextSize:=true;
+     MatchPropParam.TextParams.ProcessTextOblique:=true;
+     MatchPropParam.TextParams.ProcessTextWFactor:=true;
+     MatchPropParam.TextParams.ProcessTextJustify:=true;
 
 
      RectangParam.ET:=RET_3DPoly;

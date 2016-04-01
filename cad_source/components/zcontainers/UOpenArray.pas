@@ -21,7 +21,6 @@ unit UOpenArray;
 interface
 uses uzbtypesbase,sysutils,uzbtypes;
 type
-GDBITERATEPROC = procedure(const pdata:GDBPointer)of object;
 {Export+}
 POpenArray=^OpenArray;
 OpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)

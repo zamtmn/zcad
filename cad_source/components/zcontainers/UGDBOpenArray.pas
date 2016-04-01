@@ -38,7 +38,6 @@ GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(OpenArray)
                       procedure Shrink;virtual;
                       procedure Grow(newmax:GDBInteger=0);virtual;
                       procedure setsize(nsize:TArrayIndex);
-                      procedure iterategl(proc:GDBITERATEPROC);
                       function getelement(index:TArrayIndex):GDBPointer;
                       procedure Invert;
                       function getGDBString(index:TArrayIndex):GDBString;
@@ -301,17 +300,6 @@ procedure GDBOpenArray.clear;
 begin
   count:=0;
   deleted:=0;
-end;
-procedure GDBOpenArray.iterategl;
-var i: GDBInteger;
-  p: pgdbvertex;
-begin
-  p := PArray;
-  for i := 0 to Count - 1 do
-  begin
-    proc(@p^);
-    inc(pGDBByte(p),size);
-  end;
 end;
 function GDBOpenArray.getelement;
 begin

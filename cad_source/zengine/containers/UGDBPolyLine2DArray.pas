@@ -19,7 +19,7 @@
 unit UGDBPolyLine2DArray;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,UGDBOpenArrayOfData,sysutils,uzbtypes, uzegeometry,uzgloglstatemanager;
+uses uzbtypesbase,UGDBOpenArrayOfData,sysutils,uzbtypes, uzegeometry;
 type
 {REGISTEROBJECTTYPE GDBPolyline2DArray}
 {Export+}
@@ -30,7 +30,6 @@ GDBPolyline2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
                       constructor initnul;
 
                       //function onmouse(mc:GDBvertex2DI):GDBBoolean;virtual;
-                      procedure DrawGeometry;virtual;
                       procedure optimize;virtual;
                       function _optimize:GDBBoolean;virtual;
                       function inrect(Frame1, Frame2: GDBvertex2DI;inv:GDBBoolean):GDBBoolean;virtual;
@@ -41,7 +40,6 @@ GDBPolyline2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
 {Export-}
 function _intercept2d(const p1,p2,p:GDBVertex2D;const dirx, diry: GDBDouble): GDBBoolean;
 implementation
-//uses {UGDBDescriptor,}log;
 procedure GDBPolyline2DArray.transform(const t_matrix:DMatrix4D);
 var
     pv:PGDBVertex2D;
@@ -157,18 +155,6 @@ end;
 constructor GDBPolyline2DArray.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBVertex2D));
-end;
-procedure GDBPolyline2DArray.drawgeometry;
-//var p:PGDBVertex2D;
-//    counter:GDBInteger;
-//    i:GDBInteger;
-begin
-  if count<2 then exit;
-  //p:=parray;
-  //counter:=0;
-  oglsm.myglbegin(GL_LINE_STRIP);
-  iterategl(oglsm.myglvertex2dv);
-  oglsm.myglend;
 end;
 function GDBPolyline2DArray.inrect;
 var p,pp:PGDBVertex2D;

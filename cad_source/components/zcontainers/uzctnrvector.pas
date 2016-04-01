@@ -16,35 +16,25 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit UOpenArray;
+unit uzctnrvector;
 {$INCLUDE def.inc}
 interface
 uses uzbtypesbase,sysutils,uzbtypes;
 type
 {Export+}
-POpenArray=^OpenArray;
-OpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                Deleted:TArrayIndex;(*hidden_in_objinsp*)
-                Count:TArrayIndex;(*saved_to_shd*)(*hidden_in_objinsp*)
-                Max:TArrayIndex;(*hidden_in_objinsp*)
-                Size:TArrayIndex;(*hidden_in_objinsp*)
-                constructor init(m,s:GDBInteger);
-                function GetElemCount:GDBInteger;
-          end;
+TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
+            object(GDBaseObject)
+                  {-}type{//}
+                      {-}PT=^T;{//}
+                      {-}TArr=array[0..0] of T;{//}
+                      {-}PTArr=^TArr;{//}
+                  {-}var{//}
+                  PArray:{-}PTArr{/GDBPointer/};(*hidden_in_objinsp*)
+                  GUID:GDBString;(*hidden_in_objinsp*)
+                  Count:TArrayIndex;(*hidden_in_objinsp*)
+                  Max:TArrayIndex;(*hidden_in_objinsp*)
+            end;
 {Export-}
 implementation
-//uses
-//    log;
-function OpenArray.GetElemCount:GDBInteger;
-begin
-  result:=count-deleted;
-end;
-constructor OpenArray.init(m, s: GDBInteger);
-begin
-  Count := 0;
-  Deleted:=0;
-  Max := m;
-  Size := s;
-end;
 begin
 end.

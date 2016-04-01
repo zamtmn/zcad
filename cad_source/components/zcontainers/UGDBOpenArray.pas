@@ -19,11 +19,15 @@
 unit UGDBOpenArray;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,sysutils,UOpenArray,uzbmemman,uzbtypes;
+uses uzbtypesbase,sysutils,uzbmemman,uzbtypes;
 type
 {Export+}
 PGDBOpenArray=^GDBOpenArray;
-GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(OpenArray)
+GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+                      Deleted:TArrayIndex;(*hidden_in_objinsp*)
+                      Count:TArrayIndex;(*saved_to_shd*)(*hidden_in_objinsp*)
+                      Max:TArrayIndex;(*hidden_in_objinsp*)
+                      Size:TArrayIndex;(*hidden_in_objinsp*)
                       PArray:GDBPointer;(*hidden_in_objinsp*)
                       guid:GDBString;
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m,s:GDBInteger);
@@ -50,11 +54,16 @@ GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(OpenArray)
                       function GetRealCount:GDBInteger;
                       function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
                       function AllocData(SData:GDBword):GDBPointer;virtual;
+                      function GetElemCount:GDBInteger;
              end;
 {Export-}
 implementation
 //uses
 //    log;
+function GDBOpenArray.GetElemCount:GDBInteger;
+begin
+  result:=count-deleted;
+end;
 function GDBOpenArray.AllocData(SData:GDBword):GDBPointer;
 begin
   if parray=nil then
@@ -216,7 +225,10 @@ begin
 end;
 constructor GDBOpenArray.init;
 begin
-  inherited init(m,s);
+  Count := 0;
+  Deleted:=0;
+  Max := m;
+  Size := s;
   PArray:=nil;
   pointer(guid):=nil;
   {$IFDEF DEBUGBUILD}Guid:=ErrGuid;{$ENDIF}

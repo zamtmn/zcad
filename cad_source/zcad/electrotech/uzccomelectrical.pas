@@ -1324,7 +1324,7 @@ begin
     if assigned(ClrarIfItIsProc)then
     ClrarIfItIsProc(drawings.GetUnitsFormat,SecondOwner);
 
-    if assigned(redrawoglwndproc) then redrawoglwndproc;
+    zcRedrawCurrentDrawing;
     if mode= 2 then commandmanager.executecommandend
                else beforeclick(wc,mc,button,osp);
   end;
@@ -1689,10 +1689,10 @@ else begin
      end;
     drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     result:=1;
-    if assigned(redrawoglwndproc) then redrawoglwndproc;
+    zcRedrawCurrentDrawing;
   end;
 end;
-function _Cable_com_Hd(operands:TCommandOperands):TCommandResult;
+function _Cable_com_Hd(mclick:GDBInteger):TCommandResult;
 begin
      //mclick:=mclick;//        asdf
      result:=cmd_ok;
@@ -1922,7 +1922,7 @@ begin
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   pt^.FormatEntity(drawings.GetCurrentDWG^,dc);
   end;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   FileClose(handle);
   cman.done;
   DecimalSeparator := '.';
@@ -2138,7 +2138,7 @@ begin
   pt^.FormatEntity(drawings.GetCurrentDWG^,dc);
 
 
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   bom.done;
   end;
   result:=cmd_ok;
@@ -2171,7 +2171,7 @@ begin
     end;
   pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
- if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
 {
@@ -2251,7 +2251,7 @@ begin
   end
   else
       historyoutstr('Имя переменной должно быть задано в параметре команды');
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
 
@@ -2274,7 +2274,7 @@ begin
     end;
   pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
 function _Cable_com_Join(operands:TCommandOperands):TCommandResult;
@@ -2370,7 +2370,7 @@ begin
   drawings.GetCurrentDWG.SelObjArray.clearallobjects;
   drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
   result:=cmd_ok;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
 end;
 procedure commformat;
 var pv,pvlast:pGDBObjEntity;
@@ -2482,7 +2482,7 @@ begin
   //drawings.GetCurrentDWG.ObjRoot.calcvisible;
   //drawings.GetCurrentDWG.ConstructObjRoot.calcvisible;
   end;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   historyoutstr('Найдено '+inttostr(count)+' объектов');
 end;
 function _Cable_mark_com(operands:TCommandOperands):TCommandResult;
@@ -2543,7 +2543,7 @@ begin
   pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
 
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   cman.done;
   result:=cmd_ok;
 end;
@@ -2605,7 +2605,7 @@ begin
     end;
     drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
     result:=-1;
-    if assigned(redrawoglwndproc) then redrawoglwndproc;
+    zcRedrawCurrentDrawing;
   end;
 end;
 function ElLeaser_com_CommandStart(operands:TCommandOperands):TCommandResult;

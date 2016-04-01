@@ -238,7 +238,7 @@ begin
                                          begin
                                          drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
                                          //isOpenGLError;
-                                         if assigned(redrawoglwndproc) then redrawoglwndproc;
+                                         zcRedrawCurrentDrawing;
                                          end;
      result:=cmd_ok;
 
@@ -389,7 +389,7 @@ begin
   ComitFromObj;
   end;
   PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.PushEndMarker;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
 function Undo_com(operands:TCommandOperands):TCommandResult;
@@ -415,7 +415,7 @@ begin
     URRNoCommandsToUndo:uzcshared.ShowError(rscmNoCTU);
   end;
   if msg<>'' then uzcshared.HistoryOutStr(msg);
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
 function Redo_com(operands:TCommandOperands):TCommandResult;
@@ -427,7 +427,7 @@ begin
     URRNoCommandsToUndo:uzcshared.ShowError(rscmNoCTR);
   end;
   if msg<>'' then uzcshared.HistoryOutStr(msg);
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
 
@@ -442,7 +442,7 @@ begin
     begin
     drawings.GetCurrentDWG.wa.param.projtype := projparalel;
     end;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
 procedure FrameEdit_com_CommandStart(Operands:pansichar);
@@ -673,7 +673,7 @@ begin
        psv:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
        until psv=nil;
   end;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
 function SelObjChangeTStyleToCurrent_com(operands:TCommandOperands):TCommandResult;
@@ -712,7 +712,7 @@ begin
        psv:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
        until psv=nil;
   end;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
 function SelObjChangeDimStyleToCurrent_com(operands:TCommandOperands):TCommandResult;
@@ -751,7 +751,7 @@ begin
        psv:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
        until psv=nil;
   end;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
 function SelObjChangeLayerToCurrent_com(operands:TCommandOperands):TCommandResult;
@@ -784,7 +784,7 @@ begin
        psv:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
        until psv=nil;
   end;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
 function SelObjChangeColorToCurrent_com(operands:TCommandOperands):TCommandResult;
@@ -798,7 +798,7 @@ begin
     if pv^.Selected then pv^.vp.color:=sysvar.dwg.DWG_CColor^ ;
   pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
 
@@ -813,7 +813,7 @@ begin
     if pv^.Selected then pv^.vp.LineWeight:=sysvar.dwg.DWG_CLinew^ ;
   pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
 procedure createInfoFormVar;
@@ -1208,7 +1208,7 @@ begin
     if assigned(ReturnToDefaultProc)then
                                       ReturnToDefaultProc(drawings.GetUnitsFormat);
   clearcp;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   depth:=0;
   //PrintTreeNode(@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,depth);
 

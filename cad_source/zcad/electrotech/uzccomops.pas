@@ -440,7 +440,7 @@ begin
        drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
 
        drawings.GetCurrentROOT.calcbb(dc);
-       if assigned(redrawoglwndproc) then redrawoglwndproc;
+       zcRedrawCurrentDrawing;
        historyout('Первый угол:');
        //commandend;
        //pcommandmanager^.executecommandend;
@@ -792,7 +792,7 @@ begin
   UManager.done;
   cman.done;
   ProcessedDevices.ClearAndDone;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
 procedure InsertDat2(datname,name:GDBString;var currentcoord:GDBVertex; var root:GDBObjRoot);
@@ -1043,7 +1043,7 @@ begin
 
   cman.done;
 
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
 end;
 procedure commformat2;
 var
@@ -1103,7 +1103,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
                                         exit;
                                    end;
 
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   result:=cmd_ok;
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera));
   historyout('Первый угол:');
@@ -1320,7 +1320,7 @@ begin
        drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
 
        drawings.GetCurrentROOT.calcbb(dc);
-       if assigned(redrawoglwndproc) then redrawoglwndproc;
+       zcRedrawCurrentDrawing;
        historyout('Первый угол:');
        //commandend;
        //pcommandmanager^.executecommandend;

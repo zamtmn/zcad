@@ -663,8 +663,7 @@ begin
      if changedstamp then
      begin
            if assigned(UpdateVisibleProc) then UpdateVisibleProc;
-           if assigned(redrawoglwndproc)then
-                                            redrawoglwndproc;
+           zcRedrawCurrentDrawing;
      end;
 end;
 

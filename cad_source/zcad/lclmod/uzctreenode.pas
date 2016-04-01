@@ -21,7 +21,7 @@ unit uzctreenode;
 interface
 
 uses
-  uzbpaths,Themes,uzcinterface,uzccommandsabstract,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,
+  uzcutils,uzbpaths,Themes,uzcinterface,uzccommandsabstract,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,
   Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}LazUTF8,Buttons,
   {$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils,uzbstrproc,varmandef,
   Varman,UBaseTypeDescriptor,uzbtypesbase,uzcshared,uzcsysinfo,UGDBOpenArrayOfByte;
@@ -265,7 +265,7 @@ begin
                                                                     end;
                                                                end;
      end;
-     if assigned(redrawoglwndproc) then redrawoglwndproc;
+     zcRedrawCurrentDrawing;
      if assigned(UpdateVisibleProc) then UpdateVisibleProc;
 end;
 
@@ -707,7 +707,7 @@ begin
                                                                     end;
                                                                end;
      end;
-     if assigned(redrawoglwndproc) then redrawoglwndproc;
+     zcRedrawCurrentDrawing;
      if assigned(UpdateVisibleProc) then UpdateVisibleProc;
 end;
 procedure TmyCommandToolButton.click;

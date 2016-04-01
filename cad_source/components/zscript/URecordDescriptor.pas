@@ -262,7 +262,8 @@ destructor RecordDescriptor.done;
 begin
      inherited;
      //destructor FreewithprocAndDone(freeproc:freeelproc);virtual;
-     fields.FreewithprocAndDone(freefield);
+     fields.Freewithproc(freefield);
+     fields.done;
      parent:=nil;
 end;
 procedure RecordDescriptor.AddConstField;

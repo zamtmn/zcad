@@ -601,7 +601,8 @@ begin
        DebugLn('{T+}varmanager.done;');
 
      //programlog.LogOutStr('varmanager.done',lp_IncPos,LM_Trace);
-     vardescarray.freewithprocanddone(vardeskclear);
+     vardescarray.freewithproc(vardeskclear);
+     vardescarray.done;
      vararray.done;//TODO:проверить чистятся ли стринги внутри
      //exttype.freewithproc(basetypedescclear);
      if VerboseLog then

@@ -29,7 +29,6 @@ GDBOpenArrayOfData={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                     //procedure clear;virtual;
                     //procedure freeelement(p:GDBPointer);virtual;abstract;
                     destructor FreeAndDone;virtual;
-                    destructor FreewithprocAndDone(freeproc:freeelproc);virtual;
                     function deleteelement(index:GDBInteger):GDBPointer;
                     function DeleteElementByP(pel:GDBPointer):GDBPointer;
                     function InsertElement(index,dir:GDBInteger;p:GDBPointer):GDBPointer;
@@ -98,11 +97,6 @@ end;
 destructor GDBOpenArrayOfData.FreeAndDone;
 begin
      free;
-     done;
-end;
-destructor GDBOpenArrayOfData.FreewithprocAndDone;
-begin
-     freewithproc(freeproc);
      done;
 end;
 {procedure GDBOpenArrayOfData.clear;

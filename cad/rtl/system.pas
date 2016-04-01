@@ -489,19 +489,26 @@ PExtensionData=GDBPointer;
   PTGDBPaletteColor=^TGDBPaletteColor;
   TGDBPaletteColor=GDBInteger;
   TGDBPalette={$IFNDEF DELPHI}packed {$ENDIF}array[0..255] of TDXFCOLOR;
-//Generate on E:/zcad/cad_source/components/zcontainers/UOpenArray.pas
-POpenArray=^OpenArray;
-OpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                Deleted:TArrayIndex;(*hidden_in_objinsp*)
-                Count:TArrayIndex;(*saved_to_shd*)(*hidden_in_objinsp*)
-                Max:TArrayIndex;(*hidden_in_objinsp*)
-                Size:TArrayIndex;(*hidden_in_objinsp*)
-                constructor init(m,s:GDBInteger);
-                function GetElemCount:GDBInteger;
-          end;
+//Generate on E:/zcad/cad_source/components/zcontainers/uzctnrvector.pas
+TZctnrVector={$IFNDEF DELPHI}packed{$ENDIF}
+            object(GDBaseObject)
+                  
+                      
+                      
+                      
+                  
+                  PArray:GDBPointer;(*hidden_in_objinsp*)
+                  GUID:GDBString;(*hidden_in_objinsp*)
+                  Count:TArrayIndex;(*hidden_in_objinsp*)
+                  Max:TArrayIndex;(*hidden_in_objinsp*)
+            end;
 //Generate on E:/zcad/cad_source/components/zcontainers/UGDBOpenArray.pas
 PGDBOpenArray=^GDBOpenArray;
-GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(OpenArray)
+GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+                      Deleted:TArrayIndex;(*hidden_in_objinsp*)
+                      Count:TArrayIndex;(*saved_to_shd*)(*hidden_in_objinsp*)
+                      Max:TArrayIndex;(*hidden_in_objinsp*)
+                      Size:TArrayIndex;(*hidden_in_objinsp*)
                       PArray:GDBPointer;(*hidden_in_objinsp*)
                       guid:GDBString;
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m,s:GDBInteger);
@@ -511,15 +518,13 @@ GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(OpenArray)
                       destructor done;virtual;abstract;
                       destructor ClearAndDone;virtual;abstract;
                       procedure Clear;virtual;abstract;
-                      function Add(p:GDBPointer):TArrayIndex;virtual;abstract;
-                      function AddRef(var obj):TArrayIndex;virtual;abstract;
+                      function AddByPointer(p:GDBPointer):TArrayIndex;virtual;abstract;
+                      function AddByRef(var obj):TArrayIndex;virtual;abstract;
                       procedure Shrink;virtual;abstract;
                       procedure Grow(newmax:GDBInteger=0);virtual;abstract;
                       procedure setsize(nsize:TArrayIndex);
-                      procedure iterategl(proc:GDBITERATEPROC);
                       function getelement(index:TArrayIndex):GDBPointer;
                       procedure Invert;
-                      function getGDBString(index:TArrayIndex):GDBString;
                       function AfterDeSerialize(SaveFlag:GDBWord;membuf:GDBPointer):integer;virtual;abstract;
                       procedure free;virtual;abstract;
                       procedure freewithproc(freeproc:freeelproc);virtual;abstract;
@@ -530,6 +535,7 @@ GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(OpenArray)
                       function GetRealCount:GDBInteger;
                       function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
                       function AllocData(SData:GDBword):GDBPointer;virtual;abstract;
+                      function GetElemCount:GDBInteger;
              end;
 //Generate on E:/zcad/cad_source/components/zcontainers/UGDBOpenArrayOfData.pas
 PGDBOpenArrayOfData=^GDBOpenArrayOfData;
@@ -538,7 +544,6 @@ GDBOpenArrayOfData={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                     //procedure clear;virtual;abstract;
                     //procedure freeelement(p:GDBPointer);virtual;abstract;
                     destructor FreeAndDone;virtual;abstract;
-                    destructor FreewithprocAndDone(freeproc:freeelproc);virtual;abstract;
                     function deleteelement(index:GDBInteger):GDBPointer;
                     function DeleteElementByP(pel:GDBPointer):GDBPointer;
                     function InsertElement(index,dir:GDBInteger;p:GDBPointer):GDBPointer;
@@ -551,7 +556,7 @@ GDBOpenArrayOfGDBPointer={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                       constructor initnul;
                       function iterate (var ir:itrec):GDBPointer;virtual;abstract;
                       function addnodouble(pobj:GDBPointer):GDBInteger;virtual;abstract;
-                      //function add(p:GDBPointer):GDBInteger;virtual;abstract;
+                      //function AddByPointer(p:GDBPointer):GDBInteger;virtual;abstract;
                       destructor FreeAndDone;virtual;abstract;
                       procedure cleareraseobj;virtual;abstract;
                       function IsObjExist(pobj:GDBPointer):GDBBoolean;
@@ -658,7 +663,6 @@ GDBPolyline2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger;c:GDBBoolean);
                       constructor initnul;
                       //function onmouse(mc:GDBvertex2DI):GDBBoolean;virtual;abstract;
-                      procedure DrawGeometry;virtual;abstract;
                       procedure optimize;virtual;abstract;
                       function _optimize:GDBBoolean;virtual;abstract;
                       function inrect(Frame1, Frame2: GDBvertex2DI;inv:GDBBoolean):GDBBoolean;virtual;abstract;
@@ -723,13 +727,14 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                           function findstring(s:GDBString;ucase:gdbboolean):boolean;
                           procedure sort;virtual;abstract;
                           procedure SortAndSaveIndex(var index:TArrayIndex);virtual;abstract;
-                          function add(p:GDBPointer):TArrayIndex;virtual;abstract;
+                          function AddByPointer(p:GDBPointer):TArrayIndex;virtual;abstract;
                           function addutoa(p:GDBPointer):TArrayIndex;
                           function addwithscroll(p:GDBPointer):GDBInteger;virtual;abstract;
                           function GetLengthWithEOL:GDBInteger;
                           function GetTextWithEOL:GDBString;
                           function addnodouble(p:GDBPointer):GDBInteger;
                           function copyto(source:PGDBOpenArray):GDBInteger;virtual;abstract;
+                          function getGDBString(index:TArrayIndex):GDBString;
                           //destructor done;virtual;abstract;
                           //function copyto(source:PGDBOpenArrayOfData):GDBInteger;virtual;abstract;
                     end;

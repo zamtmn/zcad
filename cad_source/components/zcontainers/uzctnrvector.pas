@@ -63,9 +63,48 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   function GetRealCount:GDBInteger;
                   function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
                   function AllocData(SData:GDBword):GDBPointer;virtual;
+
+                  function addnodouble(data:T):GDBInteger;
+                  function IsObjExist(pobj:T):GDBBoolean;
             end;
 {Export-}
 implementation
+function TZctnrVector<T>.IsObjExist;
+var p:PT;
+    ir:itrec;
+begin
+       p:=beginiterate(ir);
+       if p<>nil then
+       repeat
+             if p^=pobj then
+                           begin
+                                result:=true;
+                                exit;
+                           end;
+             p:=iterate(ir);
+       until p=nil;
+       result:=false;
+end;
+function TZctnrVector<T>.addnodouble;
+var p,newp:PT;
+    newd:GDBPointer;
+    ir:itrec;
+begin
+  result := -1;
+  if parray=nil then
+                    createarray;
+  if count = max then grow;
+  if count >0 then
+  begin
+       p:=beginiterate(ir);
+       if p<>nil then
+       repeat
+             if p^=data then exit;
+             p:=iterate(ir);
+       until p=nil;
+  end;
+  result := AddByPointer(@data);
+end;
 function TZctnrVector<T>.AllocData(SData:GDBword):GDBPointer;
 begin
   if parray=nil then

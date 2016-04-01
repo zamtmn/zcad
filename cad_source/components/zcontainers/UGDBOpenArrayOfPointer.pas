@@ -19,29 +19,94 @@
 unit UGDBOpenArrayOfPointer;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,sysutils,UGDBOpenArray;
+uses uzbtypesbase,sysutils,UGDBOpenArray,uzctnrvector;
 type
 GDBPointerArray=array [0..0] of GDBPointer;
 PGDBPointerArray=^GDBPointerArray;
 {Export+}
+TZctnrVectorP{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
+                                 object(TZctnrVector{-}<T>{//})
+                                       function iterate (var ir:itrec):GDBPointer;virtual;
+                                       destructor FreeAndDone;virtual;
+                                       procedure cleareraseobj;virtual;abstract;
+                                       procedure RemoveFromArray(const pdata:GDBPointer);virtual;
+                                       procedure AddToArray(const pdata:GDBPointer);virtual;
+                                       function addnodouble(pobj:GDBPointer):GDBInteger;virtual;
+                                 end;
 PGDBOpenArrayOfGDBPointer=^GDBOpenArrayOfGDBPointer;
-GDBOpenArrayOfGDBPointer={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
-                      constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                      constructor initnul;
-                      function iterate (var ir:itrec):GDBPointer;virtual;
-                      function addnodouble(pobj:GDBPointer):GDBInteger;virtual;
-                      //function AddByPointer(p:GDBPointer):GDBInteger;virtual;
-                      destructor FreeAndDone;virtual;
-                      procedure cleareraseobj;virtual;abstract;
-                      function IsObjExist(pobj:GDBPointer):GDBBoolean;
-                      function copyto(source:PGDBOpenArray):GDBInteger;virtual;
-                      procedure RemoveFromArray(const pdata:GDBPointer);virtual;
-                      procedure AddToArray(const pdata:GDBPointer);virtual;
-             end;
+GDBOpenArrayOfGDBPointer=packed object(TZctnrVectorP{-}<GDBPointer>{//}) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
+                                   end;
 {Export-}
 implementation
-//uses
-//    log;
+function TZctnrVectorP<T>.addnodouble;
+var p,newp:GDBPointer;
+    ir:itrec;
+begin
+  result := -1;
+  if parray=nil then
+                    createarray;
+  if count = max then grow;
+  newp:=pGDBPointer(pobj)^;
+  if count >0 then
+  begin
+       p:=beginiterate(ir);
+       if p<>nil then
+       repeat
+             if p=newp then exit;
+             p:=iterate(ir);
+       until p=nil;
+  end;
+  Move(pobj^, PGDBPointerArray(parray)^[count], size);
+  result := count;
+  inc(count);
+end;
+destructor TZctnrVectorP<T>.FreeAndDone;
+begin
+     cleareraseobj;
+     done;
+end;
+function TZctnrVectorP<T>.iterate;
+var
+  p:GDBPointer;
+begin
+  result:=nil;
+  if count=0 then exit;
+
+  inc(pGDBByte(ir.itp),size);
+  inc(ir.itc);
+
+  if ir.itc>=count then exit;
+  p:=ir.itp^;
+
+  if p=nil then
+  repeat
+  inc(pGDBByte(ir.itp),size);
+  inc(ir.itc);
+  if ir.itc<>count then p:=ir.itp^;
+  until (ir.itc=count)or(p<>nil);
+  result:=p;
+end;
+procedure TZctnrVectorP<T>.RemoveFromArray(const pdata:GDBPointer);
+var p:GDBPointer;
+    ir:itrec;
+begin
+       p:=beginiterate(ir);
+       if p<>nil then
+       repeat
+             if p=pdata then
+                           begin
+                                pointer(ir.itp^):=nil;
+                                exit;
+                           end;
+             p:=iterate(ir);
+       until p=nil;
+end;
+procedure TZctnrVectorP<T>.AddToArray(const pdata:GDBPointer);
+begin
+     AddByPointer(@pdata);
+end;
+
+(*
 function GDBOpenArrayOfGDBPointer.copyto;
 var p:GDBPointer;
     ir:itrec;
@@ -102,7 +167,7 @@ begin
   result := -1;
   if parray=nil then
                     createarray;
-  if count = max then {exit}grow;
+  if count = max then grow;
   newp:=pGDBPointer(pobj)^;
   if count >0 then
   begin
@@ -117,17 +182,6 @@ begin
   result := count;
   inc(count);
 end;
-{function GDBOpenArrayOfGDBPointer.AddByPointer;
-begin
-  if count = max then
-                     begin
-                     count:=count;
-                     exit;
-                     end;
-  Move(p^,PGDBPointerArray(parray)^[count], size);
-  result := count;
-  inc(count);
-end;}
 function GDBOpenArrayOfGDBPointer.iterate;
 var
   p:GDBPointer;
@@ -143,7 +197,7 @@ begin
 
   if p=nil then
   repeat
-  inc(pGDBByte(ir.itp),size);//inc(ir.itp);
+  inc(pGDBByte(ir.itp),size);
   inc(ir.itc);
   if ir.itc<>count then p:=ir.itp^;
   until (ir.itc=count)or(p<>nil);
@@ -152,7 +206,6 @@ end;
 constructor GDBOpenArrayOfGDBPointer.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBPointer));
-  //GDBGetMem(PArray, size * max);
 end;
 constructor GDBOpenArrayOfGDBPointer.initnul;
 begin
@@ -161,5 +214,6 @@ begin
   Size := sizeof(GDBPointer);
   PArray:=nil;
 end;
+*)
 begin
 end.

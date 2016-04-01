@@ -1412,6 +1412,8 @@ var p:ptunit;
 begin
      result:=nil;
                        begin
+                            if InterfaceUses.PArray<>nil then
+                                                             p:=p;
                             p:=InterfaceUses.beginiterate(ir);
                             if p<>nil then
                             repeat

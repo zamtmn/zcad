@@ -66,7 +66,8 @@ end;
 constructor GDBTextStyleArray.initnul;
 begin
   inherited initnul;
-  size:=sizeof(GDBTextStyle);
+  objsizeof:=sizeof(GDBTextStyle);
+  //size:=sizeof(GDBTextStyle);
 end;
 constructor GDBTextStyleArray.init;
 begin

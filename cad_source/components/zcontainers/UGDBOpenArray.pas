@@ -19,42 +19,41 @@
 unit UGDBOpenArray;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,sysutils,uzbmemman,uzbtypes;
+uses uzctnrvector,uzbtypesbase,sysutils,uzbmemman,uzbtypes;
 type
 {Export+}
 PGDBOpenArray=^GDBOpenArray;
 GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                      Deleted:TArrayIndex;(*hidden_in_objinsp*)
-                      Count:TArrayIndex;(*saved_to_shd*)(*hidden_in_objinsp*)
-                      Max:TArrayIndex;(*hidden_in_objinsp*)
-                      Size:TArrayIndex;(*hidden_in_objinsp*)
-                      PArray:GDBPointer;(*hidden_in_objinsp*)
-                      guid:GDBString;
-                      constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m,s:GDBInteger);
-                      constructor initnul;
-                      function beginiterate(out ir:itrec):GDBPointer;virtual;
-                      function iterate(var ir:itrec):GDBPointer;virtual;
-                      destructor done;virtual;
-                      destructor ClearAndDone;virtual;
-                      procedure Clear;virtual;
-                      function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
-                      function AddByRef(var obj):TArrayIndex;virtual;
-                      procedure Shrink;virtual;
-                      procedure Grow(newmax:GDBInteger=0);virtual;
-                      procedure setsize(nsize:TArrayIndex);
-                      function getelement(index:TArrayIndex):GDBPointer;
-                      procedure Invert;
-                      function AfterDeSerialize(SaveFlag:GDBWord;membuf:GDBPointer):integer;virtual;
-                      procedure free;virtual;
-                      procedure freewithproc(freeproc:freeelproc);virtual;
-                      procedure freeelement(p:GDBPointer);virtual;abstract;
-                      function CreateArray:GDBPointer;virtual;
-                      function SetCount(index:GDBInteger):GDBPointer;virtual;
-                      function copyto(source:PGDBOpenArray):GDBInteger;virtual;
-                      function GetRealCount:GDBInteger;
-                      function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
-                      function AllocData(SData:GDBword):GDBPointer;virtual;
-                      function GetElemCount:GDBInteger;
+           {released} Deleted:TArrayIndex;(*hidden_in_objinsp*)
+           {released} Count:TArrayIndex;(*saved_to_shd*)(*hidden_in_objinsp*)
+           {released} Max:TArrayIndex;(*hidden_in_objinsp*)
+           {released} Size:TArrayIndex;(*hidden_in_objinsp*)
+           {released} PArray:GDBPointer;(*hidden_in_objinsp*)
+           {released} guid:GDBString;
+           {released} constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m,s:GDBInteger);
+           {released} constructor initnul;
+           {released} function beginiterate(out ir:itrec):GDBPointer;virtual;
+           {released} function iterate(var ir:itrec):GDBPointer;virtual;
+           {released} destructor done;virtual;
+           {released} destructor ClearAndDone;virtual;
+           {released} procedure Clear;virtual;
+           {released} function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
+           {released} function AddByRef(var obj):TArrayIndex;virtual;
+           {released} procedure Shrink;virtual;
+           {released} procedure Grow(newmax:GDBInteger=0);virtual;
+           {released} procedure setsize(nsize:TArrayIndex);
+           {released} function getelement(index:TArrayIndex):GDBPointer;
+           {released} procedure Invert;
+           {released} procedure free;virtual;
+           {released} procedure freewithproc(freeproc:freeelproc);virtual;
+           {released} procedure freeelement(p:GDBPointer);virtual;abstract;
+           {released} function CreateArray:GDBPointer;virtual;
+           {released} function SetCount(index:GDBInteger):GDBPointer;virtual;
+           {released} function copyto(source:PGDBOpenArray):GDBInteger;virtual;
+           {released} function GetRealCount:GDBInteger;
+           {released} function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
+           {released} function AllocData(SData:GDBword):GDBPointer;virtual;
+           {released} function GetElemCount:GDBInteger;
              end;
 {Export-}
 implementation
@@ -183,16 +182,6 @@ begin
                       end
                   else result:=nil;
 end;
-function GDBOpenArray.AfterDeSerialize;
-var temp:GDBLongword;
-begin
-  max:=count;
-  temp:=count * size;
-  if temp>0 then
-                GDBGetMem({$IFDEF DEBUGBUILD}'{94D787E9-97EE-4198-8A72-5B904B98F275}',{$ENDIF}PArray,temp);
-  result:=0;
-end;
-
 function GDBOpenArray.beginiterate;
 begin
   if parray=nil then

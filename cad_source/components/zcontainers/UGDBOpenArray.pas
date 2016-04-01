@@ -40,7 +40,6 @@ GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(OpenArray)
                       procedure setsize(nsize:TArrayIndex);
                       function getelement(index:TArrayIndex):GDBPointer;
                       procedure Invert;
-                      function getGDBString(index:TArrayIndex):GDBString;
                       function AfterDeSerialize(SaveFlag:GDBWord;membuf:GDBPointer):integer;virtual;
                       procedure free;virtual;
                       procedure freewithproc(freeproc:freeelproc);virtual;
@@ -310,10 +309,6 @@ begin
   result := PArray;
   inc(pGDBByte(result),size*index);
      end;
-end;
-function GDBOpenArray.getGDBString;
-begin
-  result := pGDBString(getelement(index))^;
 end;
 begin
 end.

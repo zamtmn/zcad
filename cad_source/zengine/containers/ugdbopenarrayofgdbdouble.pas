@@ -40,7 +40,7 @@ implementation
 //    log;
 procedure GDBOpenArrayOfGDBDouble.AddToArray(const data:GDBDouble);
 begin
-     add(@data);
+     AddByPointer(@data);
 end;
 
 function GDBOpenArrayOfGDBDouble.IsObjExist;
@@ -82,7 +82,7 @@ begin
              p:=iterate(ir);
        until p=nil;
   end;
-  result := add(@data);
+  result := AddByPointer(@data);
 end;
 constructor GDBOpenArrayOfGDBDouble.init;
 begin

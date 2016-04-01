@@ -248,7 +248,7 @@ begin
   begin
   temp:=CreateInitObjfree(t,owner);
   temp^.bp.ListPos.Owner:=owner;
-  add(@temp);
+  AddByPointer(@temp);
   end;
   result := temp;
 end;

@@ -311,7 +311,7 @@ begin
                           begin
                                s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
                                //s:=pstring(pvn^.data.Instance)^;
-                               sta.add(@s);
+                               sta.AddByPointer(@s);
                                S:='';
                           end;
                      end;
@@ -358,7 +358,7 @@ begin
                                   begin
                                        s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
                                        //s:=pstring(pvn^.data.Instance)^;
-                                       sta.add(@s);
+                                       sta.AddByPointer(@s);
                                   end;
                                   system.break;
 
@@ -374,7 +374,7 @@ begin
      if sta.Count=0 then
                         begin
                              s:='??';
-                             sta.add(@s);
+                             sta.AddByPointer(@s);
                         end
                     else
                         sta.sort;
@@ -397,7 +397,7 @@ begin
                                        psl.init(10);
                                   end;
           s:=ps^;
-          psl.add(@s);
+          psl.AddByPointer(@s);
           S:='';
           ps:=sta.iterate(ir);
      until ps=nil;

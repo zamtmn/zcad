@@ -245,7 +245,7 @@ begin
           if S=currentitem then
            CurrentFontIndex:=FontsSelector.Enums.Count;
           S:=extractfilename(S);
-          FontsSelector.Enums.add(@S);
+          FontsSelector.Enums.AddByPointer(@S);
      end;
      if FontsFilter<>TFTF_TTF then
      for i:=0 to FontManager.shxfontfiles.Count-1 do
@@ -254,13 +254,13 @@ begin
           if S=currentitem then
            CurrentFontIndex:=FontsSelector.Enums.Count;
           S:=extractfilename(S);
-          FontsSelector.Enums.add(@S);
+          FontsSelector.Enums.AddByPointer(@S);
      end;
      if CurrentFontIndex=-1 then
      begin
           CurrentFontIndex:=FontsSelector.Enums.Count;
           S:=extractfilename(currentitempfont^.fontfile);
-          FontsSelector.Enums.add(@S);
+          FontsSelector.Enums.AddByPointer(@S);
      end;
      FontsSelector.Selected:=CurrentFontIndex;
      FontsSelector.Enums.SortAndSaveIndex(FontsSelector.Selected);

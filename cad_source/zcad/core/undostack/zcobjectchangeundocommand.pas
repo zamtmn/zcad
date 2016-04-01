@@ -89,7 +89,7 @@ end;
 function {GDBObjOpenArrayOfUCommands.}PushCreateTGObjectChangeCommand(var us:GDBObjOpenArrayOfUCommands; var data:TRTModifyData;_method:tmethod):PTGDBRTModifyChangeCommand;overload;
 begin
   result:=CreateTGObjectChangeCommand(data,_method);
-  us.add(@result);
+  us.AddByPointer(@result);
   inc(us.CurrentCommand);
 end;
 

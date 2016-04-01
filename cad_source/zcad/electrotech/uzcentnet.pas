@@ -92,7 +92,7 @@ begin
       repeat
             pv^.Transform(t_matrix);
             //pv^.YouChanged;{убраное проверить}
-            self.ObjCasheArray.Add(@pv);{замена YouChanged тоже проверить}
+            self.ObjCasheArray.AddByPointer(@pv);{замена YouChanged тоже проверить}
       pv:=ObjArray.iterate(ir);
       until pv=nil;
 end;

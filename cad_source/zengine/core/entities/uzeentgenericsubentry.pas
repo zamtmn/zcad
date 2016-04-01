@@ -234,7 +234,7 @@ begin
            if  boundingintersect(Volume,pobj^.vp.BoundingBox) then
            begin
                 result:=true;
-                Objects.Add(@pobj);
+                Objects.AddByPointer(@pobj);
            end;
 
            pobj:=Node.nul.iterate(ir);
@@ -644,7 +644,7 @@ begin
        if ot then
                  begin
                       lstonmouse:=p;
-                      {PGDBObjOpenArrayOfPV}(popa).add(addr(p));
+                      {PGDBObjOpenArrayOfPV}(popa).AddByPointer(addr(p));
                  end;
        result:=result or ot;
        end;

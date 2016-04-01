@@ -54,9 +54,9 @@ begin
   result:=pa.count;
   ptt:=pa.AllocData(sizeof(TLLFreeTriangle));
   ptt.init;
-  ptt.P1IndexInIndexesArray:=ia.Add(@P1Index);
-  ia.Add(@P2Index);
-  ia.Add(@P3Index);
+  ptt.P1IndexInIndexesArray:=ia.AddByPointer(@P1Index);
+  ia.AddByPointer(@P2Index);
+  ia.AddByPointer(@P3Index);
   {ptt.P1Index:=P1Index;
   ptt.P2Index:=P2Index;
   ptt.P3Index:=P3Index;}

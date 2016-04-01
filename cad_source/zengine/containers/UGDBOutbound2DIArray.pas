@@ -52,7 +52,7 @@ begin
                     (PGDBvertex2DIArray(parray)^[count-1].y<>point.y))
      then
      begin
-          add(@point);
+          AddByPointer(@point);
           //PGDBvertex2DIArray(parray)^[count]:=point;
           //inc(count);
      end;

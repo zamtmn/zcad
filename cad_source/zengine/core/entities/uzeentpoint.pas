@@ -263,7 +263,7 @@ begin
           pdesc.worldcoord:=P_insertInOCS;
           {pdesc.dispcoord.x:=round(ProjPoint.x);
           pdesc.dispcoord.y:=round(ProjPoint.y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
 end;
 procedure GDBObjPoint.rtmodifyonepoint(const rtmod:TRTModifyData);
 begin

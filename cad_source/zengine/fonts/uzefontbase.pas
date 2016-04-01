@@ -150,7 +150,7 @@ begin
                                  usi.symbolinfo.SymMinY:=0;
                                  usi.symbolinfo.LatestCreate:=false;
                                  killstring(usi.symbolinfo.Name);
-                                 unisymbolinfo.Add(@usi);
+                                 unisymbolinfo.AddByPointer(@usi);
 
                                  result:=@(PGDBUNISymbolInfo(unisymbolinfo.getelement(unisymbolinfo.Count-1))^.symbolinfo);
                             end;

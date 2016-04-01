@@ -167,7 +167,7 @@ var
 begin
      ptd:=drawings.CreateDWG('*rtl/dwg/DrawingDeviceBase.pas','*rtl/dwg/DrawingVars.pas');
 
-     drawings.AddRef(ptd^);
+     drawings.AddByRef(ptd^);
 
      if length(operands)=0 then
                                begin
@@ -713,7 +713,7 @@ begin
    p:=commandmanager.beginiterate(ir);
    if p<>nil then
    repeat
-         clist.add(@p^.CommandName);
+         clist.AddByPointer(@p^.CommandName);
          p:=commandmanager.iterate(ir);
    until p=nil;
    clist.sort;

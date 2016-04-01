@@ -191,7 +191,7 @@ begin
                Conturs.VArray[i].mutable[j]^.index:=VectorData.GeomData.Add2DPoint(Conturs.VArray[i][j].v.x,Conturs.VArray[i][j].v.y);
                if Conturs.VArray[i].mutable[j]^.attr=TPA_OnCurve then
                                                                      begin
-                                                                          simpleindex:=VectorData.GeomData.Indexes.add(@ Conturs.VArray[i].mutable[j]^.index);
+                                                                          simpleindex:=VectorData.GeomData.Indexes.AddByPointer(@ Conturs.VArray[i].mutable[j]^.index);
                                                                           ptpl^.AddSimplifiedIndex(simpleindex);
                                                                      end;
           end;

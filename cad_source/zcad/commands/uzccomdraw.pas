@@ -443,7 +443,7 @@ begin
            if uppercase(pb^.name)=selname then
                                               result:=i;
            s:=Tria_AnsiToUtf8(pb^.name);
-           BDefNames.add(@s);
+           BDefNames.AddByPointer(@s);
            pb:=drawings.GetCurrentDWG^.BlockDefArray.iterate(ir);
            inc(i);
      until pb=nil;
@@ -513,7 +513,7 @@ begin
            if uppercase(pb^.name)=selname then
                                               result:=i;
 
-           BDefNames.add(@pb^.name);
+           BDefNames.AddByPointer(@pb^.name);
            pb:=drawings.GetCurrentDWG^.TextStyleTable.iterate(ir);
            inc(i);
      until pb=nil;
@@ -2732,7 +2732,7 @@ begin
                     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.add(addr(tv));
                     tcd.obj:=pobj;
                     tcd.clone:=tv;
-                    pcoa^.Add(@tcd);
+                    pcoa^.AddByPointer(@tcd);
                     tv^.formatentity(drawings.GetCurrentDWG^,dc);
                 end;
               end;
@@ -3629,7 +3629,7 @@ begin
     for i := 1 to 16 do
       begin
            s:=inttostr(i);
-           psl^.add(@s);
+           psl^.AddByPointer(@s);
       end;
   end;
 
@@ -3677,7 +3677,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
 
      BEditParam.Blocks.Enums.free;
      i:=GetBlockDefNames(BEditParam.Blocks.Enums,tn);
-     BEditParam.Blocks.Enums.add(@modelspacename);
+     BEditParam.Blocks.Enums.AddByPointer(@modelspacename);
      if BEditParam.CurrentEditBlock=modelspacename then
        begin
             BEditParam.Blocks.Selected:=BEditParam.Blocks.Enums.Count-1;
@@ -3812,7 +3812,7 @@ begin
       if ip.isintercept then
       begin
            inc(intersectcount);
-           pparray^.Add(@ip.interceptcoord);
+           pparray^.AddByPointer(@ip.interceptcoord);
            if lineiterator=nil then
                                    begin
                                         lineiterator:=LinesMap.InsertAndGetIterator(pl1,PointOnCurve3DPropArray.Create);

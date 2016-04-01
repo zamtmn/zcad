@@ -55,7 +55,7 @@ var
    del,afterdel:pointer;
    s:integer;
 begin
-     add(p);
+     AddByPointer(p);
      if (index=count-2)and(dir=1) then
                                       else
 begin

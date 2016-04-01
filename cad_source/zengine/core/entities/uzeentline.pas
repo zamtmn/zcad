@@ -295,7 +295,7 @@ begin
      if {distance2piece}SQRdist_Point_to_Segment(point,self.CoordInWCS.lBegin,self.CoordInWCS.lEnd)<bigeps then
                                                                                   begin
                                                                                     result:=true;
-                                                                                    objects.AddRef(self);
+                                                                                    objects.AddByRef(self);
                                                                                   end
                                                                                 else
                                                                                     result:=false;
@@ -741,19 +741,19 @@ begin
           pdesc.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2);
           {pdesc.dispcoord.x:=round(PProjPoint[4].x);
           pdesc.dispcoord.y:=round(PProjPoint[4].y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
 
           pdesc.pointtype:=os_begin;
           pdesc.worldcoord:=CoordInWCS.lbegin;
           {pdesc.dispcoord.x:=round(PProjPoint[0].x);
           pdesc.dispcoord.y:=round(PProjPoint[0].y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
 
           pdesc.pointtype:=os_end;
           pdesc.worldcoord:=CoordInWCS.lend;
           {pdesc.dispcoord.x:=round(PProjPoint[1].x);
           pdesc.dispcoord.y:=round(PProjPoint[1].y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
 end;
 {function GDBObjLine.InRect;
 begin

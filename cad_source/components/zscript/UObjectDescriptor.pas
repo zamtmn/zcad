@@ -68,7 +68,7 @@ end;
 
 procedure ObjectDescriptor.AddProperty(var pd:PropertyDescriptor);
 begin
-     Properties.add(@pd);
+     Properties.AddByPointer(@pd);
      GDBPointer(pd.base.ProgramName):=nil;
      GDBPointer(pd.r):=nil;
      GDBPointer(pd.w):=nil;
@@ -264,7 +264,7 @@ begin
                                                             pcmd.init(objname,mn,dt,pointer(vmtcurrentoffset),attr,punit);
                                                             inc(vmtcurrentoffset,{4 cpu64}sizeof(pointer));
                                                        end;
-                         //SimpleMenods.add(@pcmd);
+                         //SimpleMenods.AddByPointer(@pcmd);
                          //GDBPointer(pcmd.MetodName):=nil;
                          //GDBPointer(pcmd.OperandsName):=nil;
                     end
@@ -527,7 +527,7 @@ begin
            pcmd.MetodAddr:=pmd^.MetodAddr;
            pcmd.Attributes:=pmd^.Attributes;
            pcmd.Operands.init({$IFDEF DEBUGBUILD}'{AD13B409-3869-418B-A314-DF70AB5C1601}',{$ENDIF}10,sizeof(GDBOperandDesc));
-           //PObjectDescriptor(rd)^.SimpleMenods.Add(@pcmd);
+           //PObjectDescriptor(rd)^.SimpleMenods.AddByPointer(@pcmd);
            //pointer(pcmd.MetodName):=nil;
            //pointer(pcmd.OperandsName):=nil;
            pmd:=SimpleMenods.iterate(ir);

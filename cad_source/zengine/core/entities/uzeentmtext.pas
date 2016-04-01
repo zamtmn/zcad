@@ -700,7 +700,7 @@ begin
                              lp:=pgdbvertex(@matr[3,0])^;
                              lp.y:=lp.y-0.2*textprop.size;
                              lp:=VectorTransform3d(lp,objmatrix);
-                             pl.Add(@lp);
+                             pl.AddByPointer(@lp);
                      end;
 
   while i<=length(pswp^.str) do
@@ -714,7 +714,7 @@ begin
                              lp:=pgdbvertex(@matr[3,0])^;
                              lp.y:=lp.y-0.2*textprop.size;
                              lp:=VectorTransform3d(lp,objmatrix);
-                             pl.Add(@lp);
+                             pl.AddByPointer(@lp);
                         end
                     {оригинал}
                     {begin
@@ -741,7 +741,7 @@ begin
                              lp:=pgdbvertex(@matr[3,0])^;
                              lp.y:=lp.y-0.2*textprop.size;
                              lp:=VectorTransform3d(lp,objmatrix);
-                             pl.Add(@lp);
+                             pl.AddByPointer(@lp);
                         end;
     end
     else
@@ -770,7 +770,7 @@ begin
                              lp:=pgdbvertex(@matr[3,0])^;
                              lp.y:=lp.y-0.2*textprop.size;
                              lp:=VectorTransform3d(lp,objmatrix);
-                             pl.Add(@lp);
+                             pl.AddByPointer(@lp);
                      end;
             pswp:=text.iterate(ir);
         until pswp=nil;

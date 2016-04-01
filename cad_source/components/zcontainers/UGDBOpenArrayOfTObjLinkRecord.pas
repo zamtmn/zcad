@@ -60,7 +60,7 @@ begin
   if pd<>nil then
   repeat
         if pd^.LinkCount>0 then
-                               temp.add(pd);
+                               temp.AddByPointer(pd);
         pd:=iterate(ir);
   until pd=nil;
   gdbfreemem(parray);
@@ -119,7 +119,7 @@ begin
                                    fillchar(linkdata,sizeof(linkdata),0);
                                    linkdata.OldAddr:=GDBPlatformint(PObj);
                                    linkdata.TempAddr:=filepos;
-                                   add(@linkdata);
+                                   AddByPointer(@linkdata);
                               end;
                       UBR:begin
                                p:=FindByOldAddres(pobj);
@@ -132,7 +132,7 @@ begin
                                                   fillchar(linkdata,sizeof(linkdata),0);
                                                   linkdata.OldAddr:=GDBPlatformint(PObj);
                                                   linkdata.TempAddr:={filepos}0;
-                                                  add(@linkdata);
+                                                  AddByPointer(@linkdata);
                                              end;
                           end;
           end;

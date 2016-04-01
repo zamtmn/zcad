@@ -83,7 +83,7 @@ begin
      if VertexArrayInWCS.onpoint(point,closed) then
                                                 begin
                                                      result:=true;
-                                                     objects.AddRef(self);
+                                                     objects.AddByRef(self);
                                                 end
                                             else
                                                 result:=false;
@@ -164,7 +164,7 @@ begin
   p:=vertexarrayinocs.PArray;
   for i:=0 to vertexarrayinocs.Count-1 do
   begin
-      tpo^.vertexarrayinocs.add(p);
+      tpo^.vertexarrayinocs.AddByPointer(p);
       inc(p)
   end;
   //tpo^.snaparray:=nil;

@@ -532,7 +532,7 @@ begin
                                                                        self.executecommandtotalend
                                                                    else
                                                                        begin
-                                                                            CommandsStack.AddRef(pcommandrunning^)
+                                                                            CommandsStack.AddByRef(pcommandrunning^)
                                                                        end;
                                                               end
                                                           else
@@ -729,7 +729,7 @@ end;
 procedure GDBcommandmanager.CommandRegister(pc:PCommandObjectDef);
 begin
   if count=max then exit;
-  add(@pc);
+  AddByPointer(@pc);
 end;
 procedure comdeskclear(p:GDBPointer);
 begin

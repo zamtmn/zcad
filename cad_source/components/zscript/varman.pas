@@ -493,7 +493,7 @@ function typemanager.AddTypeByPP(p:GDBPointer):TArrayIndex;
 var
   pt:PUserTypeDescriptor;
 begin
-     result:=exttype.add(p);
+     result:=exttype.AddByPointer(p);
      pt:=ppointer(p)^;
      n2i.insert(uppercase(pt^.TypeName),result);
 end;
@@ -628,7 +628,7 @@ begin
          vd.data.PTD.InitInstance(vd.data.Instance);
        end;
        vd.attrib:=0;
-       i:=vardescarray.add(@vd);
+       i:=vardescarray.AddByPointer(@vd);
        result:=vardescarray.getelement(i);
        KillString(vd.name);
        KillString(vd.username);

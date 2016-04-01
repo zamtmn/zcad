@@ -308,8 +308,8 @@ end;
 procedure GDBObjBlockInsert.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 //var tv:gdbvertex;
 begin
-     posr.arrayworldaxis.Add(@local.basis.OX);
-     posr.arrayworldaxis.Add(@local.basis.OY);
+     posr.arrayworldaxis.AddByPointer(@local.basis.OX);
+     posr.arrayworldaxis.AddByPointer(@local.basis.OY);
 end;
 procedure GDBObjBlockInsert.rtsave;
 //var m:DMatrix4D;

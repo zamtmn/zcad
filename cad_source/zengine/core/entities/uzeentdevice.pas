@@ -148,7 +148,7 @@ begin
                pdesc.worldcoord:=PGDBObjDevice(pv).P_insert_in_WCS;
                {pdesc.dispcoord.x:=round(PGDBObjDevice(pv).ProjP_insert.x);
                pdesc.dispcoord.y:=round(PGDBObjDevice(pv).ProjP_insert.y);}
-               PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
+               PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
                end;
               pv:=VarObjArray.iterate(ir);
           until pv=nil
@@ -333,7 +333,7 @@ begin
        if ot then
                  begin
                       lstonmouse:=p^.ReturnLastOnMouse(InSubEntry);
-                      {PGDBObjOpenArrayOfPV}(popa).add(addr(p));
+                      {PGDBObjOpenArrayOfPV}(popa).AddByPointer(addr(p));
                  end;
        result:=result or ot;
        p:=VarObjArray.iterate(ir);

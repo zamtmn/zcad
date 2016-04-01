@@ -3395,7 +3395,7 @@ const
 
 (*
  * The passed pointer is an IUnknown ptr. The cbData argument to SetPrivateData
- * must be set to SizeOf(IUnknown^). DirectDraw will call AddRef through this
+ * must be set to SizeOf(IUnknown^). DirectDraw will call AddByRef through this
  * pointer and Release when the private data is destroyed. This includes when
  * the surface or palette is destroyed before such priovate data is destroyed.
  *)

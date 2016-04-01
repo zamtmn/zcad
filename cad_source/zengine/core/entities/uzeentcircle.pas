@@ -106,7 +106,7 @@ begin
      if abs(uzegeometry.Vertexlength(point,P_insert_in_WCS)-radius)<bigeps then
                                                                      begin
                                                                        result:=true;
-                                                                       objects.AddRef(self);
+                                                                       objects.AddByRef(self);
                                                                      end
                                                                    else
                                                                      result:=false;
@@ -370,7 +370,7 @@ begin
         v:=VectorTransform3D(tv,objmatrix);
         //v.count:=l-ir.itc;
 
-        Vertex3D_in_WCS_Array.Add(@v);
+        Vertex3D_in_WCS_Array.AddByPointer(@v);
 
         pvertex:=circlepointoflod[l].iterate(ir);
   until pvertex=nil;
@@ -726,31 +726,31 @@ begin
           pdesc.worldcoord:=Local.p_insert;
           {pdesc.dispcoord.x:=round(ProjP_insert.x);
           pdesc.dispcoord.y:=round(ProjP_insert.y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
 
           pdesc.pointtype:=os_q0;
           pdesc.worldcoord:=q0;
           {pdesc.dispcoord.x:=round(Pq0.x);
           pdesc.dispcoord.y:=round(Pq0.y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
 
           pdesc.pointtype:=os_q1;
           pdesc.worldcoord:=q1;
           {pdesc.dispcoord.x:=round(Pq1.x);
           pdesc.dispcoord.y:=round(Pq1.y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
 
           pdesc.pointtype:=os_q2;
           pdesc.worldcoord:=q2;
           {pdesc.dispcoord.x:=round(Pq2.x);
           pdesc.dispcoord.y:=round(Pq2.y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
 
           pdesc.pointtype:=os_q3;
           pdesc.worldcoord:=q3;
           {pdesc.dispcoord.x:=round(Pq3.x);
           pdesc.dispcoord.y:=round(Pq3.y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
 end;
 function GDBObjCircle.beforertmodify;
 begin

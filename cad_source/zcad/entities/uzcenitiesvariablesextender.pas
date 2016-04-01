@@ -93,7 +93,7 @@ end;
 constructor TVariablesExtender.init;
 begin
      entityunit.init('entity');
-     entityunit.InterfaceUses.add(@SysUnit);
+     entityunit.InterfaceUses.AddByPointer(@SysUnit);
      if PFCTTD=nil then
                        PFCTTD:=sysunit.TypeName2PTD('PTObjectUnit');
      //PGDBObjEntity(pEntity).OU.Instance:=@entityunit;

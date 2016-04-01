@@ -34,7 +34,7 @@ GDBBbillOfMaterial={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Op
                        constructor init(m:GDBInteger);
                        procedure freeelement(p:GDBPointer);virtual;
                        //function getnamenumber(_Name:GDBString):GDBstring;
-                       function add(p:GDBPointer):TArrayIndex;virtual;
+                       function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
                        function findorcreate(_Name:GDBString):PGDBBOMItem;virtual;
                        end;
 {EXPORT-}
@@ -70,11 +70,11 @@ begin
   ni.Names:='';
   ni.Amount:=0;
   ni.processed:=false;
-  result:=self.getelement(add(@ni));
+  result:=self.getelement(AddByPointer(@ni));
 end;
-function GDBBbillOfMaterial.add(p:GDBPointer):TArrayIndex;
+function GDBBbillOfMaterial.AddByPointer(p:GDBPointer):TArrayIndex;
 begin
-     result:=inherited add(p);
+     result:=inherited AddByPointer(p);
      GDBPointer(PGDBBOMItem(p)^.Material):=nil;
      GDBPointer(PGDBBOMItem(p)^.Names):=nil;
      PGDBBOMItem(p)^.processed:=false;

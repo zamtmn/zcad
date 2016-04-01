@@ -54,7 +54,7 @@ begin
      vs.x:=v.x;
      vs.y:=v.y;
      vs.z:=v.z;
-     result:=add(@vs);
+     result:=AddByPointer(@vs);
 end;
 
 constructor ZGLVertex3Sarray.init;

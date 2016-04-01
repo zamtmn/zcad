@@ -193,7 +193,7 @@ begin
      if Vertex3D_in_WCS_Array.onpoint(point,closed) then
                                                 begin
                                                      result:=true;
-                                                     objects.AddRef(self);
+                                                     objects.AddByRef(self);
                                                 end
                                             else
                                                 result:=false;
@@ -411,7 +411,7 @@ begin
                pdesc.worldcoord:=pv^;
                {pdesc.dispcoord.x:=round(pv2d^.x);
                pdesc.dispcoord.y:=round(pv2d.y);}
-               PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
+               PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
                inc(pv);
                inc(pv2d);
           end;
@@ -431,8 +431,8 @@ begin
   pw:=Width2D_in_OCS_Array.parray;
   for i:=0 to Vertex2D_in_OCS_Array.Count-1 do
   begin
-      tpo^.Vertex2D_in_OCS_Array.add(p);
-      tpo^.Width2D_in_OCS_Array.add(pw);
+      tpo^.Vertex2D_in_OCS_Array.AddByPointer(p);
+      tpo^.Width2D_in_OCS_Array.AddByPointer(pw);
       inc(p);
       inc(pw);
   end;
@@ -671,7 +671,7 @@ begin
         begin
           s := f.readgdbstring;
           val(s, p.y, code);
-          Vertex2D_in_OCS_Array.add(@p);
+          Vertex2D_in_OCS_Array.AddByPointer(@p);
           inc(hlGDBWord);
         end;
       38:
@@ -846,7 +846,7 @@ begin
        v.w:=1;
        v:=VectorTransform(v,objMatrix);
        v3d:=PGDBvertex(@v)^;
-       Vertex3D_in_WCS_Array.add(@v3d);
+       Vertex3D_in_WCS_Array.AddByPointer(@v3d);
        inc(pv);
   end;
   Vertex3D_in_WCS_Array.Shrink;
@@ -870,7 +870,7 @@ begin
                          ProjectProc(ptpv^,tv);
                          tpv.x:=tv.x;
                          tpv.y:=tv.y;
-                         PprojPoint^.add(@tpv);
+                         PprojPoint^.AddByPointer(@tpv);
                          inc(ptpv);
                     end;
 
@@ -937,7 +937,7 @@ begin
            v:=VectorTransform(v,objMatrix);
            q3d[k]:=PGDBvertex(@v)^;
       end;
-      Width3D_in_WCS_Array.add(@q3d);
+      Width3D_in_WCS_Array.AddByPointer(@q3d);
   end;
   Width2D_in_OCS_Array.Shrink;
   Width3D_in_WCS_Array.Shrink;

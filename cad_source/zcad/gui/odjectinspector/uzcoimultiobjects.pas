@@ -345,7 +345,7 @@ begin
                else
                    TxtEntType.Selected:=1;
   s:=sysutils.format(rsNameWithCounter,[rsNameAll,counter]);
-  TxtEntType.Enums.add(@s);
+  TxtEntType.Enums.AddByPointer(@s);
   ObjIDVector.PushBack(0);
 
   iterator:=ObjID2Counter.Min;
@@ -356,7 +356,7 @@ begin
         else
           s:=rsNotRegistred;
         s:=sysutils.format(rsNameWithCounter,[s,iterator.getvalue]);
-        TxtEntType.Enums.add(@s);
+        TxtEntType.Enums.AddByPointer(@s);
         ObjIDVector.PushBack(iterator.getkey);
   until not iterator.Next;
   if assigned(iterator) then

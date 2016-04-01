@@ -34,7 +34,7 @@ implementation
 //    log;
 function XYZWGDBGDBStringArray.add(p:GDBPointer):TArrayIndex;
 begin
-     GDBOpenArrayOfData.add(p);
+     GDBOpenArrayOfData.AddByPointer(p);
      GDBPointer(PGDBStrWithPoint(p)^.str):=nil;
 end;
 procedure XYZWGDBGDBStringArray.freeelement(p:GDBPointer);

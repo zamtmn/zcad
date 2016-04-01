@@ -30,7 +30,7 @@ GDBOpenArrayOfGDBPointer={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                       constructor initnul;
                       function iterate (var ir:itrec):GDBPointer;virtual;
                       function addnodouble(pobj:GDBPointer):GDBInteger;virtual;
-                      //function add(p:GDBPointer):GDBInteger;virtual;
+                      //function AddByPointer(p:GDBPointer):GDBInteger;virtual;
                       destructor FreeAndDone;virtual;
                       procedure cleareraseobj;virtual;abstract;
                       function IsObjExist(pobj:GDBPointer):GDBBoolean;
@@ -49,7 +49,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-        source.add(@p{^});  //-----------------//-----------
+        source.AddByPointer(@p{^});  //-----------------//-----------
         p:=iterate(ir);
   until p=nil;
   result:=count;
@@ -71,7 +71,7 @@ begin
 end;
 procedure GDBOpenArrayOfGDBPointer.AddToArray(const pdata:GDBPointer);
 begin
-     add(@pdata);
+     AddByPointer(@pdata);
 end;
 
 function GDBOpenArrayOfGDBPointer.IsObjExist;
@@ -117,7 +117,7 @@ begin
   result := count;
   inc(count);
 end;
-{function GDBOpenArrayOfGDBPointer.add;
+{function GDBOpenArrayOfGDBPointer.AddByPointer;
 begin
   if count = max then
                      begin

@@ -167,7 +167,7 @@ begin
           pdesc.worldcoord:=P_insert_in_WCS;//Local.P_insert;
           {pdesc.dispcoord.x:=round(ProjP_insert.x);
           pdesc.dispcoord.y:=round(ProjP_insert.y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
 end;
 (*function GDBObjAbstractText.InRect;
 //var i:GDBInteger;

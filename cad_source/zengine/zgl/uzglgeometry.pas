@@ -207,14 +207,14 @@ begin
                              lp.y:=lp.y-0.2*textprop_size;
                              lp.x:=lp.x-0.1*textprop_size;
                              lp:=VectorTransform3d(lp,objmatrix);
-                             pl.Add(@lp);
+                             pl.AddByPointer(@lp);
                         end
                    else begin
                              lp:=pgdbvertex(@matr[3,0])^;
                              lp.y:=lp.y-0.2*textprop_size;
                              lp.x:=lp.x-0.1*textprop_size;
                              lp:=VectorTransform3d(lp,objmatrix);
-                             pl.Add(@lp);
+                             pl.AddByPointer(@lp);
                         end;
     end
     else
@@ -237,7 +237,7 @@ begin
                              lp.y:=lp.y-0.2*textprop_size;
                              lp.x:=lp.x-0.1*textprop_size;
                              lp:=VectorTransform3d(lp,objmatrix);
-                             pl.Add(@lp);
+                             pl.AddByPointer(@lp);
                      end;
 
        if Bound.LB.x=+infinity then Bound.LB.x:=0;
@@ -283,7 +283,7 @@ var
 begin
      tv:=VertexD2S(p);
      if rc.drawer<>nil then
-     rc.drawer.GetLLPrimitivesCreator.CreateLLPoint(LLprimitives,GeomData.Vertex3S.Add(@tv));
+     rc.drawer.GetLLPrimitivesCreator.CreateLLPoint(LLprimitives,GeomData.Vertex3S.AddByPointer(@tv));
 end;
 
 procedure ZGLGeometry.AddLine(var rc:TDrawContext;const p1,p2:GDBVertex);
@@ -293,10 +293,10 @@ begin
      tv1:=VertexD2S(p1);
      tv2:=VertexD2S(p2);
      if rc.drawer<>nil then
-                           rc.drawer.GetLLPrimitivesCreator.CreateLLLine(LLprimitives,GeomData.Vertex3S.Add(@tv1));
+                           rc.drawer.GetLLPrimitivesCreator.CreateLLLine(LLprimitives,GeomData.Vertex3S.AddByPointer(@tv1));
                        {else
                            DefaultLLPCreator.CreateLLLine(LLprimitives,GeomData.Vertex3S.Add(@tv1));}
-     GeomData.Vertex3S.Add(@tv2);
+     GeomData.Vertex3S.AddByPointer(@tv2);
 
      //lines.Add(@p1);
      //lines.Add(@p2);
@@ -327,7 +327,7 @@ var
 begin
      inherited init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}1,sizeof(ZPolySegmentData));
      length:=CalcSegment(startpoint,endpoint,segment,0);
-     add(@segment);
+     AddByPointer(@segment);
      normalize(length);
      PGeom:=pg;
 end;
@@ -369,7 +369,7 @@ begin
     if ptv<>nil then
     repeat
           length:=CalcSegment(ptvprev^,ptv^,segment,length);
-          add(@segment);
+          AddByPointer(@segment);
 
           ptvprev:=ptv;
           ptv:=points.iterate(_ir);
@@ -377,7 +377,7 @@ begin
     if closed then
                   begin
                        length:=CalcSegment(ptvprev^,pfirstv^,segment,length);
-                       add(@segment);
+                       AddByPointer(@segment);
                   end;
     normalize(length);
     PGeom:=pg;

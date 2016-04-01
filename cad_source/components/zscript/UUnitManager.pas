@@ -638,7 +638,7 @@ begin
                                                   if maxvalue<enumodj.value then maxvalue:=enumodj.value;
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
                                                   parseresult:=runparser('_softspace'#0'=,',line,parseerror);
-                                                  enumobjlist.add(@enumodj);
+                                                  enumobjlist.AddByPointer(@enumodj);
                                                   GDBPointer(enumodj.source):=nil;
                                                   GDBPointer(enumodj.user):=nil;
                                                   until not parseerror;
@@ -655,13 +655,13 @@ begin
                                              penu:=enumobjlist.beginiterate(ir);
                                              if penu<>nil then
                                                repeat
-                                                     PEnumDescriptor(etd)^.SourceValue.add(@penu^.source);
+                                                     PEnumDescriptor(etd)^.SourceValue.AddByPointer(@penu^.source);
                                                      //GDBPointer(penu^.source):=nil;
                                                      penu^.source:='';
-                                                     PEnumDescriptor(etd)^.UserValue.add(@penu^.user);
+                                                     PEnumDescriptor(etd)^.UserValue.AddByPointer(@penu^.user);
                                                      //GDBPointer(penu^.user):=nil;
                                                      penu^.user:='';
-                                                     PEnumDescriptor(etd)^.Value.add(@penu^.value);
+                                                     PEnumDescriptor(etd)^.Value.AddByPointer(@penu^.value);
                                                      penu:=enumobjlist.iterate(ir);
                                               until penu=nil;
                                              enumobjlist.clear;

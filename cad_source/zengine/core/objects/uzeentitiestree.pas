@@ -352,7 +352,7 @@ begin
            if d=0 then
                       begin
                            if (d1=0)and(d2=0) then
-                                                  //ta[i].nul.AddRef(pobj^)
+                                                  //ta[i].nul.AddByRef(pobj^)
                                                   ta[i].nul.addwithoutcorrect(@pobj)
                       else if (d1>0)or(d2>0)  then
                                                   ta[i].plus.addwithoutcorrect(@pobj)

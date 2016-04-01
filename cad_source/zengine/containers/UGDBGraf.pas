@@ -185,7 +185,7 @@ begin
         pgfe:=iterate(ir);
   until pgfe=nil;
   if pgfe2<>nil then
-  pa.Add(@pgfe2.point);
+  pa.AddByPointer(@pgfe2.point);
   dec(step);
   pgfe3:=pgfe2;
   while step>0 do
@@ -215,9 +215,9 @@ begin
         pgfe2:=pgfe3;
         if getlinktype(mainlinkline)=LT_OnlyLink then
         begin
-             pa.Add(@InfinityVertex);
+             pa.AddByPointer(@InfinityVertex);
         end;
-        pa.Add(@pgfe2.point);
+        pa.AddByPointer(@pgfe2.point);
   end;
 
   pa.Invert;
@@ -242,7 +242,7 @@ end;
 function grafelement.addline;
 begin
      inc(linkcount);
-     link.add(addr(pv));
+     link.AddByPointer(addr(pv));
 end;
 constructor grafelement.initnul;
 begin

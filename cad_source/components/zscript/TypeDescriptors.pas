@@ -178,7 +178,7 @@ begin
                                               begin
                                                    od.PTD:=ptunit(punit).TypeName2PTD(parseresult^.getGDBString(parseresult.Count-1));
                                                    for i:=1 to parseresult.Count-1 do
-                                                                                     Operands.Add(@od);
+                                                                                     Operands.AddByPointer(@od);
                                               end
                             else begin
                                       parseresult:=runparser('_identifiers_cs'#0'_softspace'#0,dt,parseerror);
@@ -186,7 +186,7 @@ begin
                                               begin
                                                    od.PTD:=ptunit(punit).TypeName2PTD('GDBPointer');
                                                    for i:=1 to parseresult.Count do
-                                                                                     Operands.Add(@od);
+                                                                                     Operands.AddByPointer(@od);
                                               end
                                  end;
                             if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;     
@@ -211,7 +211,7 @@ begin
      then
          begin
               result:=CreatePD;
-              PPDA^.add(@result);
+              PPDA^.AddByPointer(@result);
          end
      else
          begin

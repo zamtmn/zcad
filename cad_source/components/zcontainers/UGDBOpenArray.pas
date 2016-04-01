@@ -33,8 +33,8 @@ GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(OpenArray)
                       destructor done;virtual;
                       destructor ClearAndDone;virtual;
                       procedure Clear;virtual;
-                      function Add(p:GDBPointer):TArrayIndex;virtual;
-                      function AddRef(var obj):TArrayIndex;virtual;
+                      function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
+                      function AddByRef(var obj):TArrayIndex;virtual;
                       procedure Shrink;virtual;
                       procedure Grow(newmax:GDBInteger=0);virtual;
                       procedure setsize(nsize:TArrayIndex);
@@ -100,7 +100,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-        source^.add(@p^);  //-----------------//-----------
+        source^.AddByPointer(@p^);  //-----------------//-----------
         p:=iterate(ir);
   until p=nil;
   result:=count;
@@ -253,7 +253,7 @@ begin
      max:=newmax;
 end;
 
-function GDBOpenArray.add;
+function GDBOpenArray.AddByPointer;
 var addr: GDBPlatformint;
 begin
   if parray=nil then
@@ -268,12 +268,12 @@ begin
        inc(count);
   end;
 end;
-function GDBOpenArray.AddRef;
+function GDBOpenArray.AddByRef;
 var
    p:pointer;
 begin
      p:=@obj;
-     result:=add(@p)
+     result:=AddByPointer(@p)
 end;
 procedure GDBOpenArray.Shrink;
 begin

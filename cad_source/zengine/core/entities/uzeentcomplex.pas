@@ -148,7 +148,7 @@ begin
           pdesc.worldcoord:=self.P_insert_in_WCS;// Local.P_insert;
           {pdesc.dispcoord.x:=round(ProjP_insert.x);
           pdesc.dispcoord.y:=round(ProjP_insert.y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
 end;
 procedure GDBObjComplex.DrawOnlyGeometry;
 begin
@@ -245,7 +245,7 @@ begin
        ot:=p^.isonmouse(popa,mf,InSubEntry);
        if ot then
                  begin
-                      {PGDBObjOpenArrayOfPV}(popa).add(addr(p));
+                      {PGDBObjOpenArrayOfPV}(popa).AddByPointer(addr(p));
                  end;
        result:=result or ot;
        p:=ConstObjArray.iterate(ir);

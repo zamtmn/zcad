@@ -481,17 +481,17 @@ begin
          polyVert.y:=pe.p1.y;
 
 
-         polyObj^.Vertex2D_in_OCS_Array.Add(@polyVert);
-         polyObj^.Width2D_in_OCS_Array.Add(@PollyWidth);
+         polyObj^.Vertex2D_in_OCS_Array.AddByPointer(@polyVert);
+         polyObj^.Width2D_in_OCS_Array.AddByPointer(@PollyWidth);
 
-         polyObj^.Vertex2D_in_OCS_Array.Add(@polyVert);
-         polyObj^.Width2D_in_OCS_Array.Add(@PollyWidth);
+         polyObj^.Vertex2D_in_OCS_Array.AddByPointer(@polyVert);
+         polyObj^.Width2D_in_OCS_Array.AddByPointer(@PollyWidth);
 
-         polyObj^.Vertex2D_in_OCS_Array.Add(@polyVert);
-         polyObj^.Width2D_in_OCS_Array.Add(@PollyWidth);
+         polyObj^.Vertex2D_in_OCS_Array.AddByPointer(@polyVert);
+         polyObj^.Width2D_in_OCS_Array.AddByPointer(@PollyWidth);
 
-         polyObj^.Vertex2D_in_OCS_Array.Add(@polyVert);
-         polyObj^.Width2D_in_OCS_Array.Add(@PollyWidth);
+         polyObj^.Vertex2D_in_OCS_Array.AddByPointer(@polyVert);
+         polyObj^.Width2D_in_OCS_Array.AddByPointer(@PollyWidth);
 
          //polyObj^.CoordInOCS.lBegin:=pe.p1;
          InteractiveLWRectangleManipulator(polyObj,pe.p1,false);

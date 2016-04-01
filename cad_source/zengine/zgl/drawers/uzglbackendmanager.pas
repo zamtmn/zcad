@@ -33,8 +33,8 @@ implementation
 procedure RegisterBackend(BackEndClass:TVA;Name:string);
 begin
      //sysvar.RD.RD_RendererBackEnd.Enums.add(@name);
-     BackendsNames.Enums.add(@name);
-     Backends.Add(@BackEndClass);
+     BackendsNames.Enums.AddByPointer(@name);
+     Backends.AddByPointer(@BackEndClass);
 end;
 function GetCurrentBackEnd:TVA;
 begin

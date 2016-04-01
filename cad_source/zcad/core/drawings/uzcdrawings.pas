@@ -486,7 +486,7 @@ begin
      ptd:=currentdwg;
      currentdwg:=result;
      result^.init(@units,preloadedfile1,preloadedfile2);
-     //self.AddRef(result^);
+     //self.AddByRef(result^);
      currentdwg:=ptd;
 end;
 (*function TZCADDrawingsManager.CreateSimpleDWG:PTSimpleDrawing;
@@ -497,7 +497,7 @@ begin
      ptd:=currentdwg;
      currentdwg:=pointer(result);
      result^.init(nil);//(@units);
-     //self.AddRef(result^);
+     //self.AddByRef(result^);
      currentdwg:=pointer(ptd);
 end;*)
 
@@ -809,7 +809,7 @@ begin
                     begin
                          if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then
                          begin
-                              entarray.Add(@pvisible);
+                              entarray.AddByPointer(@pvisible);
                          end;
                     end;
                end;
@@ -837,7 +837,7 @@ begin
                     pvd:=pentvarext^.entityunit.FindVariable(vname);
                     if pvd<>nil then
                     begin
-                         entarray.Add(@pvisible);
+                         entarray.AddByPointer(@pvisible);
                     end;
                end;
               pvisible:=croot.ObjArray.iterate(ir);

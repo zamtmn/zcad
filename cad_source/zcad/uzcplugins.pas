@@ -102,7 +102,7 @@ begin
             @temp.donefunction := GetProcAddress(dllhandle, 'Finalize');
             registercommands := GetProcAddress(dllhandle, 'RegisterCommands');
             registercommands;
-            add(@temp);
+            AddByPointer(@temp);
           end
           else
           begin

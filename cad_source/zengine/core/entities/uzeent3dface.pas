@@ -450,7 +450,7 @@ begin
           pdesc.worldcoord:=PInWCS[i];
           {pdesc.dispcoord.x:=round(PInDCS[i].x);
           pdesc.dispcoord.y:=round(PInDCS[i].y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
           end;
 end;
 

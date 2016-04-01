@@ -123,14 +123,14 @@ begin
     v.x:=cos(pi * i / c);
     v.y:=sin(pi * i / c);
     v.z:=0;
-    drawings.GetCurrentDWG.wa.PolarAxis.add(@v);
+    drawings.GetCurrentDWG.wa.PolarAxis.AddByPointer(@v);
   end;
   if self.trace.ZAxis then
   begin
     v.x:=0;
     v.y:=0;
     v.z:=1;
-    drawings.GetCurrentDWG.wa.PolarAxis.add(@v);
+    drawings.GetCurrentDWG.wa.PolarAxis.AddByPointer(@v);
   end;
 end;
 procedure TOSModeEditor.GetState;

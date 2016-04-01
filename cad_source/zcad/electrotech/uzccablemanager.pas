@@ -98,7 +98,7 @@ begin
                 if sname='RS' then
                                sname:=sname;
                 pcd:=FindOrCreate(sname);
-                pcd^.Segments.AddRef(pobj^);
+                pcd^.Segments.AddByRef(pobj^);
                 //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('AmountD');
                 pvn:=pentvarext^.entityunit.FindVariable('AmountD');
                 if pvn<>nil then
@@ -160,7 +160,7 @@ begin
                             begin
                                  if pnp^.DevLink<>lastadddevice then
                                  begin
-                                       pcd^.Devices.AddRef(pnp^.DevLink^);
+                                       pcd^.Devices.AddByRef(pnp^.DevLink^);
                                        lastadddevice:=pnp^.DevLink;
                                  end;
                                  if pcd^.EndDevice<>nil then

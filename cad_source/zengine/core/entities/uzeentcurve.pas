@@ -212,7 +212,7 @@ begin
 end;
 procedure GDBObjCurve.AddVertex(Vertex:GDBVertex);
 begin
-     vertexarrayinocs.add(@vertex);
+     vertexarrayinocs.AddByPointer(@vertex);
 end;
 
 procedure GDBObjCurve.getoutbound;
@@ -331,7 +331,7 @@ begin
         vs.l_1_2:=vertexmorph(ptvprev^,ptv^,1/2);
         vs.l_2_3:=vertexmorph(ptvprev^,ptv^,2/3);
         vs.l_3_4:=vertexmorph(ptvprev^,ptv^,3/4);
-        snaparray.add(@vs);
+        snaparray.AddByPointer(@vs);
         ptvprev:=ptv;
         ptv:=VertexArrayInWCS.iterate(ir);
   until ptv=nil;
@@ -343,7 +343,7 @@ begin
   vs.l_1_2:=vertexmorph(ptvprev^,ptv^,1/2);
   vs.l_2_3:=vertexmorph(ptvprev^,ptv^,2/3);
   vs.l_3_4:=vertexmorph(ptvprev^,ptv^,3/4);
-  snaparray.add(@vs);
+  snaparray.AddByPointer(@vs);
   end;
 
 
@@ -379,7 +379,7 @@ begin
   if ptv<>nil then
   repeat
         tv:=VectorTransform3D(ptv^,bp.ListPos.owner^.GetMatrix^);
-        VertexArrayInWCS.Add(@tv);
+        VertexArrayInWCS.AddByPointer(@tv);
         ptv:=vertexarrayinocs.iterate(ir);
   until ptv=nil;
 
@@ -439,7 +439,7 @@ begin
   p:=vertexarrayinocs.PArray;
   for i:=0 to VertexArrayInWCS.Count-1 do
   begin
-      tpo^.vertexarrayinocs.add(p);
+      tpo^.vertexarrayinocs.AddByPointer(p);
       inc(p)
   end;
   //tpo^.snaparray:=nil;
@@ -500,7 +500,7 @@ begin
                          {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(ptpv^,tv);
                          tpv.x:=tv.x;
                          tpv.y:=tv.y;
-                         PprojPoint^.add(@tpv);
+                         PprojPoint^.AddByPointer(@tpv);
                          inc(ptpv);
                     end;
 
@@ -519,7 +519,7 @@ begin
      if VertexArrayInWCS.onpoint(point,false) then
                                                 begin
                                                      result:=true;
-                                                     objects.AddRef(self);
+                                                     objects.AddByRef(self);
                                                 end
                                             else
                                                 result:=false;
@@ -562,7 +562,7 @@ begin
                pdesc.worldcoord:=pv^;
                (*pdesc.dispcoord.x:=round(pv2d^.x);
                pdesc.dispcoord.y:=round({GDB.GetCurrentDWG.OGLwindow1.height-}pv2d.y);*)
-               PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
+               PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
                inc(pv);
                {inc(pv2d);}
           end;

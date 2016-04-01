@@ -30,7 +30,7 @@ type
                           function findstring(s:GDBString;ucase:gdbboolean):boolean;
                           procedure sort;virtual;
                           procedure SortAndSaveIndex(var index:TArrayIndex);virtual;
-                          function add(p:GDBPointer):TArrayIndex;virtual;
+                          function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
                           function addutoa(p:GDBPointer):TArrayIndex;
                           function addwithscroll(p:GDBPointer):GDBInteger;virtual;
                           function GetLengthWithEOL:GDBInteger;
@@ -71,7 +71,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-        source.add(p);  //-----------------//-----------
+        source.AddByPointer(p);  //-----------------//-----------
         p:=iterate(ir);
   until p=nil;
   result:=count;
@@ -143,19 +143,19 @@ begin
      until IsEnd;
 
 end;
-function GDBGDBStringArray.add(p:GDBPointer):TArrayIndex;
+function GDBGDBStringArray.AddByPointer(p:GDBPointer):TArrayIndex;
 //var s:GDBString;
 begin
      //s:=pGDBString(p)^;
      //GDBPointer(s):=nil;
-     result:=inherited add(p);
+     result:=inherited AddByPointer(p);
      RemoveOneRefCount(pGDBString(p)^);
 end;
 function GDBGDBStringArray.addutoa(p:GDBPointer):TArrayIndex;
 var s:GDBString;
 begin
      s:=Tria_Utf8ToAnsi(pGDBString(p)^);
-     result:=inherited add(@s);
+     result:=inherited AddByPointer(@s);
      GDBPointer(s):=nil;
 end;
 function GDBGDBStringArray.findstring(s:GDBString;ucase:gdbboolean):boolean;
@@ -200,7 +200,7 @@ begin
      until ps=nil;
 
      GDBPointer(s):=nil;
-     inherited add(p);
+     inherited AddByPointer(p);
 end;
 function GDBGDBStringArray.addwithscroll(p:GDBPointer):GDBInteger;
 var
@@ -222,7 +222,7 @@ begin
                            pspred^:='';
                            dec(count);
                       end;
-     result:=add(p)
+     result:=AddByPointer(p)
 end;
 function GDBGDBStringArray.GetLengthWithEOL:GDBInteger;
 var
@@ -290,7 +290,7 @@ begin
       line:=f.readGDBString;
       if (line<>'')and(line[1]<>';') then
         begin
-          add(@line);
+          AddByPointer(@line);
           //GDBPointer(line):=nil;
         end;
     end;

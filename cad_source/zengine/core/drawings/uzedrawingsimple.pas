@@ -340,7 +340,7 @@ begin
      //ptd:=currentdwg;
      //currentdwg:=pointer(result);
      result^.init(nil);//(@units);
-     //self.AddRef(result^);
+     //self.AddByRef(result^);
      //currentdwg:=pointer(ptd);
 end;
 procedure TSimpleDrawing.PushStartMarker(CommandName:GDBString);
@@ -697,7 +697,7 @@ begin
   cs.Width:=1;
   cs.TextWidth:={cf.Width-2}0;
   cs.CF:=TTableCellJustify.jcc;
-  PTempTableStyle.tblformat.Add(@cs);
+  PTempTableStyle.tblformat.AddByPointer(@cs);
 
   ts:=TableStyleTable.AddStyle('Standart');
 
@@ -707,7 +707,7 @@ begin
   cs.Width:=20;
   cs.TextWidth:={cf.Width-2}0;
   cs.CF:=jcc;
-  ts.tblformat.Add(@cs);
+  ts.tblformat.AddByPointer(@cs);
 
   ts:=TableStyleTable.AddStyle('Spec');
 
@@ -719,47 +719,47 @@ begin
      cs.Width:=20;
      cs.TextWidth:=cs.Width-2;
      cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=130;
      cs.TextWidth:=cs.Width-2;
      cs.cf:={UGDBTableStyleArray.TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=60;
      cs.TextWidth:=cs.Width-2;
      cs.cf:={UGDBTableStyleArray.TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=35;
      cs.TextWidth:=cs.Width-2;
      cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=45;
      cs.TextWidth:=cs.Width-2;
      cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=20;
      cs.TextWidth:=cs.Width-2;
      cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=20;
      cs.TextWidth:=cs.Width-2;
      cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=25;
      cs.TextWidth:=cs.Width-2;
      cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=40;
      cs.TextWidth:=cs.Width-2;
      cs.cf:={TCellJustify.}jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
   ts:=TableStyleTable.AddStyle('ShRaspr');
 
@@ -771,82 +771,82 @@ begin
      cs.Width:=25;
      cs.TextWidth:=cs.Width-2;
      cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=33;
      cs.TextWidth:=cs.Width-2;
      cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=5;
      cs.TextWidth:=cs.Width-1;
      cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=33;
      cs.TextWidth:=cs.Width-2;
      cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=5;
      cs.TextWidth:=cs.Width-1;
      cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=5;
      cs.TextWidth:=cs.Width-1;
      cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=17;
      cs.TextWidth:=cs.Width-2;
      cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=13;
      cs.TextWidth:=cs.Width-2;
      cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=25;
      cs.TextWidth:=cs.Width-2;
      cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=13;
      cs.TextWidth:=cs.Width-2;
      cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=23;
      cs.TextWidth:=cs.Width-2;
      cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=13;
      cs.TextWidth:=cs.Width-2;
      cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=16;
      cs.TextWidth:=cs.Width-2;
      cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=12;
      cs.TextWidth:=cs.Width-2;
      cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=12;
      cs.TextWidth:=cs.Width-2;
      cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=35;
      cs.TextWidth:=cs.Width-2;
      cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
 
 
@@ -861,42 +861,42 @@ begin
      cs.Width:=20;
      cs.TextWidth:=cs.Width-2;
      cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=46;
      cs.TextWidth:=cs.Width-2;
      cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=46;
      cs.TextWidth:=cs.Width-1;
      cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=20;
      cs.TextWidth:=cs.Width-2;
      cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=15;
      cs.TextWidth:=cs.Width-1;
      cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=15;
      cs.TextWidth:=cs.Width-1;
      cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=15;
      cs.TextWidth:=cs.Width-2;
      cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=40;
      cs.TextWidth:=cs.Width-2;
      cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      {cs.Width:=25;
      cs.TextWidth:=cs.Width-2;
@@ -906,22 +906,22 @@ begin
      cs.Width:=15;
      cs.TextWidth:=cs.Width-2;
      cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=15;
      cs.TextWidth:=cs.Width-2;
      cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=25;
      cs.TextWidth:=cs.Width-2;
      cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
      cs.Width:=15;
      cs.TextWidth:=cs.Width-2;
      cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
+     ts.tblformat.AddByPointer(@cs);
 
 end;
 

@@ -46,7 +46,7 @@ GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
                                  function redo(out msg:string):TUndoRedoResult;
                                  constructor init;
                                  procedure doOnUndoRedo;
-                                 function Add(p:GDBPointer):TArrayIndex;virtual;
+                                 function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
                                  Procedure ClearFrom(cc:TArrayIndex);
 
                                  function CreateTTypedChangeCommand(PDataInstance:GDBPointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
@@ -70,7 +70,7 @@ begin
      begin
      GDBGetMem({$IFDEF DEBUGBUILD}'{30D8D2A8-1130-40FB-81BC-10C7D9A1FF38}',{$ENDIF}pointer(pmarker),sizeof(TMarkerCommand));
      pmarker^.init(CommandName,-1);
-     currentcommandstartmarker:=self.Add(@pmarker);
+     currentcommandstartmarker:=self.AddByPointer(@pmarker);
      inc(CurrentCommand);
      end;
 end;
@@ -83,7 +83,7 @@ begin
      begin
      GDBGetMem({$IFDEF DEBUGBUILD}'{30D8D2A8-1130-40FB-81BC-10C7D9A1FF38}',{$ENDIF}pointer(pmarker),sizeof(TMarkerCommand));
      pmarker^.init('StoneMarker',-2);
-     currentcommandstartmarker:=self.Add(@pmarker);
+     currentcommandstartmarker:=self.AddByPointer(@pmarker);
      inc(CurrentCommand);
      end;
 end;
@@ -97,7 +97,7 @@ begin
      GDBGetMem({$IFDEF DEBUGBUILD}'{F5F5F128-96B3-4AB9-81A1-2B86E0C95EF4}',{$ENDIF}pointer(pmarker),sizeof(TMarkerCommand));
      pmarker^.init('EndMarker',currentcommandstartmarker);
      currentcommandstartmarker:=-1;
-     self.Add(@pmarker);
+     self.AddByPointer(@pmarker);
      inc(CurrentCommand);
      startmarkercount:=0;
      end;
@@ -118,7 +118,7 @@ begin
      GDBGetMem({$IFDEF DEBUGBUILD}'{3A3AAA8F-40EB-415B-BDC2-798712E9F402}',{$ENDIF}pointer(pcc),sizeof(TChangeCommand));
      pcc^.init(_obj,_fieldsize);
      inc(CurrentCommand);
-     add(@pcc);
+     AddByPointer(@pcc);
 end;
 procedure GDBObjOpenArrayOfUCommands.KillLastCommand;
 var
@@ -247,7 +247,7 @@ begin
      CurrentCommand:=Count;
 end;
 
-function GDBObjOpenArrayOfUCommands.Add(p:GDBPointer):TArrayIndex;
+function GDBObjOpenArrayOfUCommands.AddByPointer(p:GDBPointer):TArrayIndex;
 begin
      if self.CurrentCommand<count then
                                        self.cleareraseobjfrom2(self.CurrentCommand);
@@ -273,7 +273,7 @@ begin
   {if CurrentCommand<>count then
                                self.cleareraseobjfrom2(CurrentCommand);}
 
-  add(@result);
+  AddByPointer(@result);
   inc(CurrentCommand);
 end;
 

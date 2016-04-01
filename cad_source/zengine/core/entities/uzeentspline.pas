@@ -89,7 +89,7 @@ begin
      if VertexArrayInWCS.onpoint(point,closed) then
                                                 begin
                                                      result:=true;
-                                                     objects.AddRef(self);
+                                                     objects.AddByRef(self);
                                                 end
                                             else
                                                 result:=false;
@@ -112,7 +112,7 @@ begin
      tv.x:=v^.x+tv0.x;
      tv.y:=v^.y+tv0.y;
      tv.z:=v^.z+tv0.z;
-     parr^.add(@tv);
+     parr^.AddByPointer(@tv);
      tv.x:=0;
 end;
 
@@ -184,7 +184,7 @@ begin
         tfvs.y:=tfv.y;
         tfvs.z:=tfv.z;
         tfvs.w:=tfv.w;
-        CP.Add(@tfvs);
+        CP.AddByPointer(@tfvs);
         ptv:=VertexArrayInOCS.iterate(ir);
   until ptv=nil;
 
@@ -371,7 +371,7 @@ begin
                                          end
   else if dxfGDBFloatload(f,40,byt,tr) then
                                       begin
-                                           Knots.add(@tr);
+                                           Knots.AddByPointer(@tr);
                                       end
   else if dxfGDBIntegerload(f,70,byt,hlGDBWord) then
                                                    begin

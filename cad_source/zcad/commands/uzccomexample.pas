@@ -763,17 +763,17 @@ begin
              zcAddEntToCurrentDrawingConstructRoot(polyLWObj);
              vertexLWObj.x:=pe.p1.x;
              vertexLWObj.y:=pe.p1.y;
-             polyLWObj^.Vertex2D_in_OCS_Array.Add(@vertexLWObj);
-             polyLWObj^.Width2D_in_OCS_Array.Add(@widthObj);
+             polyLWObj^.Vertex2D_in_OCS_Array.AddByPointer(@vertexLWObj);
+             polyLWObj^.Width2D_in_OCS_Array.AddByPointer(@widthObj);
 
-             polyLWObj^.Vertex2D_in_OCS_Array.Add(@vertexLWObj);
-             polyLWObj^.Width2D_in_OCS_Array.Add(@widthObj);
+             polyLWObj^.Vertex2D_in_OCS_Array.AddByPointer(@vertexLWObj);
+             polyLWObj^.Width2D_in_OCS_Array.AddByPointer(@widthObj);
 
-             polyLWObj^.Vertex2D_in_OCS_Array.Add(@vertexLWObj);
-             polyLWObj^.Width2D_in_OCS_Array.Add(@widthObj);
+             polyLWObj^.Vertex2D_in_OCS_Array.AddByPointer(@vertexLWObj);
+             polyLWObj^.Width2D_in_OCS_Array.AddByPointer(@widthObj);
 
-             polyLWObj^.Vertex2D_in_OCS_Array.Add(@vertexLWObj);
-             polyLWObj^.Width2D_in_OCS_Array.Add(@widthObj);
+             polyLWObj^.Vertex2D_in_OCS_Array.AddByPointer(@vertexLWObj);
+             polyLWObj^.Width2D_in_OCS_Array.AddByPointer(@widthObj);
 
              InteractiveLWRectangleManipulator(polyLWObj,pe.p1,false);
              if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractiveLWRectangleManipulator,polyLWObj) then
@@ -791,10 +791,10 @@ begin
              //drawings.GetCurrentDWG^.ConstructObjRoot.AddMi(@polyObj);
              zcAddEntToCurrentDrawingConstructRoot(polyObj);
              vertexObj:=pe.p1;
-             polyObj^.VertexArrayInOCS.Add(@vertexObj);
-             polyObj^.VertexArrayInOCS.Add(@vertexObj);
-             polyObj^.VertexArrayInOCS.Add(@vertexObj);
-             polyObj^.VertexArrayInOCS.Add(@vertexObj);
+             polyObj^.VertexArrayInOCS.AddByPointer(@vertexObj);
+             polyObj^.VertexArrayInOCS.AddByPointer(@vertexObj);
+             polyObj^.VertexArrayInOCS.AddByPointer(@vertexObj);
+             polyObj^.VertexArrayInOCS.AddByPointer(@vertexObj);
              InteractiveRectangleManipulator(polyObj,pe.p1,false);
              if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractiveRectangleManipulator,polyObj) then
              begin

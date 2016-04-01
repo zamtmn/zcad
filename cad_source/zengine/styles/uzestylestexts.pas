@@ -159,7 +159,7 @@ begin
   //ts.pfont:=FontManager.{FindFonf}getAddres(FontFile);
   //if ts.pfont=nil then ts.pfont:=FontManager.getAddres('normal.shx');
   ts.prop:=tp;
-  result:=getelement(add(@ts));
+  result:=getelement(AddByPointer(@ts));
   //pointer(ts.name):=nil;
   //pointer(ts.dxfname):=nil;
 end;

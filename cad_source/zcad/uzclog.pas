@@ -259,7 +259,7 @@ else if IncIndent>0 then
                            WriteToLog(str,todisk,FromStartTime,DeltaTime,tick,dtick,IncIndent);
                            inc(Indent,IncIndent);
 
-                           timebuf.Add(@CurrentTime);
+                           timebuf.AddByPointer(@CurrentTime);
                       end
                   else
                       begin
@@ -362,7 +362,7 @@ begin
      CreateLog;
      WriteToLog('------------------------Log started------------------------',true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
      WriteToLog('Log mode: '+LogMode2string(CurrentLogMode),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
-     timebuf.Add(@CurrentTime);
+     timebuf.AddByPointer(@CurrentTime);
      setlength(LatestLogStrings,MaxLatestLogStrings);
      LatestLogStringsCount:=0;
      TotalLogStringsCount:=0;

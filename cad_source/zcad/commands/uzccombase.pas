@@ -1360,10 +1360,10 @@ begin
           if pva.ispointinside(Vertexmorph(PGDBVertex2D(pva.getelement(p1))^,PGDBVertex2D(pva.getelement(p3))^,0.5))then
           if IsSubContur(pva,p1,p2,p3,p4)then
               begin
-                   pvr.add(pva.getelement(p1));
-                   pvr.add(pva.getelement(p2));
-                   pvr.add(pva.getelement(p3));
-                   pvr.add(pva.getelement(p4));
+                   pvr.AddByPointer(pva.getelement(p1));
+                   pvr.AddByPointer(pva.getelement(p2));
+                   pvr.AddByPointer(pva.getelement(p3));
+                   pvr.AddByPointer(pva.getelement(p4));
 
                    pva.deleteelement(p3);
                    pva.deleteelement(p2);
@@ -1390,10 +1390,10 @@ begin
           if pva.ispointinside(Vertexmorph(PGDBVertex2D(pva.getelement(p1))^,PGDBVertex2D(pva.getelement(p3))^,0.5))then
           if IsSubContur2(pva,p1,p2,p3,p)then
               begin
-                   pvr.add(pva.getelement(p1));
-                   pvr.add(pva.getelement(p2));
-                   pvr.add(pva.getelement(p3));
-                   pvr.add(@p);
+                   pvr.AddByPointer(pva.getelement(p1));
+                   pvr.AddByPointer(pva.getelement(p2));
+                   pvr.AddByPointer(pva.getelement(p3));
+                   pvr.AddByPointer(@p);
 
                    PGDBVertex2D(pva.getelement(p3))^.x:=p.x;
                    PGDBVertex2D(pva.getelement(p3))^.y:=p.y;

@@ -74,7 +74,7 @@ begin
   p:=vertexarrayinocs.PArray;
   for i:=0 to VertexArrayInOCS.Count-1 do
   begin
-      tvo^.vertexarrayinocs.add(p);
+      tvo^.vertexarrayinocs.AddByPointer(p);
       inc(p)
   end;
   result := tvo;
@@ -152,7 +152,7 @@ begin
            np.NextP:=ptvnext^;
            np.PrevP:=ptvnext^;
            ptvnext:=vertexarrayInWCS.iterate(ir_inVertexArray);
-           NodePropArray.Add(@np);
+           NodePropArray.AddByPointer(@np);
      until ptvnext=nil;
 end;
 
@@ -197,7 +197,7 @@ begin
                                   tn.DevLink:=nil;
                                   tn.PrevP:=ptv^;
                                   tn.NextP:=ptv^;
-                                  NodePropArray.Add(@tn)
+                                  NodePropArray.AddByPointer(@tn)
 
                              end;
              ptv:=vertexarrayInWCS.iterate(ir_inVertexArray);

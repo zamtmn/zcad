@@ -486,27 +486,27 @@ begin
           case OPSPlaceSmokeDetectorOrtoParam.DatType of
                TOPSDT_Smoke:begin
                                  s:='До 3,5м';
-                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.add(@s);
+                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.AddByPointer(@s);
                                  s:='Св. 3,5 до 6,0';
-                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.add(@s);
+                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.AddByPointer(@s);
                                  s:='Св. 6,0 до 10,0';
-                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.add(@s);
+                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.AddByPointer(@s);
                                  s:='Св. 10,5 до 12,0';
-                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.add(@s);
+                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.AddByPointer(@s);
                                  s:='Не норм.';
-                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.add(@s);
+                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.AddByPointer(@s);
                                  OPSPlaceSmokeDetectorOrtoParam.oldth:=OPSPlaceSmokeDetectorOrtoParam.Height.Selected;
                                  OPSPlaceSmokeDetectorOrtoParam.Height.Selected:=OPSPlaceSmokeDetectorOrtoParam.oldsh;
                             end;
                TOPSDT_Termo:begin
                                  s:='До 3,5м';
-                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.add(@s);
+                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.AddByPointer(@s);
                                  s:='Св. 3,5 до 6,0';
-                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.add(@s);
+                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.AddByPointer(@s);
                                  s:='Св. 6,0 до 9,0';
-                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.add(@s);
+                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.AddByPointer(@s);
                                  s:='Не норм.';
-                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.add(@s);
+                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.AddByPointer(@s);
                                  OPSPlaceSmokeDetectorOrtoParam.oldsh:=OPSPlaceSmokeDetectorOrtoParam.Height.Selected;
                                  OPSPlaceSmokeDetectorOrtoParam.Height.Selected:=OPSPlaceSmokeDetectorOrtoParam.oldth;
                             end;
@@ -750,7 +750,7 @@ begin
 
                          units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/objcalc/opsmark.pas'),(currentunit));
 
-                         ProcessedDevices.Add(@ptn^.bp.ListPos.Owner);
+                         ProcessedDevices.AddByPointer(@ptn^.bp.ListPos.Owner);
 
                          dec(currentunit.InterfaceUses.Count,2);
 

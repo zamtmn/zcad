@@ -171,7 +171,7 @@ begin
                                                          begin
                                                               pts:=ptrdata^.LLprimitives.getelement(CurrentLLentity);
                                                               index:=ptruint(v);
-                                                              index:=ptrdata^.GeomData.Indexes.Add(@index);
+                                                              index:=ptrdata^.GeomData.Indexes.AddByPointer(@index);
                                                               pts^.AddIndex(index);
                                                               exit;
                                                          end;

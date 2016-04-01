@@ -1056,40 +1056,40 @@ begin
                            else}
                                begin
                                     s:='';
-                                    psl.add(@s);
+                                    psl.AddByPointer(@s);
                                end;
                   s:='';
-                  psl.add(@s);
-                  psl.add(@s);
-                  psl.add(@s);
-                  psl.add(@s);
+                  psl.AddByPointer(@s);
+                  psl.AddByPointer(@s);
+                  psl.AddByPointer(@s);
+                  psl.AddByPointer(@s);
                   s:='1';
-                  psl.add(@s);
+                  psl.AddByPointer(@s);
                   s:=Uni2CP(pcabledesk^.Name);
-                  psl.add(@s);
+                  psl.AddByPointer(@s);
                   s:='';
-                  psl.add(@s);
+                  psl.AddByPointer(@s);
                   s:='qwer';
                   pcablevarext:=pcabledesk^.StartSegment^.GetExtension(typeof(TVariablesExtender));
                   pvd:=pcablevarext^.entityunit.FindVariable('DB_link');
                   if pvd<>nil then
                                   s:=Uni2CP(pgdbstring(pvd.data.Instance)^);
                   //pvd:=pgroupdev^.ou.FindVariable('DB_link');
-                  psl.add(@s);
+                  psl.AddByPointer(@s);
                   s:=floattostr(pcabledesk^.length);
-                  psl.add(@s);
+                  psl.AddByPointer(@s);
                   s:='';
-                  psl.add(@s);
+                  psl.AddByPointer(@s);
                   s:='';
-                  psl.add(@s);
+                  psl.AddByPointer(@s);
                   s:=potrname;
-                  psl.add(@s);
+                  psl.AddByPointer(@s);
                   s:=floattostr(roundto({sumpotrp}potrpust,-2));
-                  psl.add(@s);
+                  psl.AddByPointer(@s);
                   s:=floattostr(roundto({sumpotri}potriust,-2));
-                  psl.add(@s);
+                  psl.AddByPointer(@s);
                   s:=Uni2CP('Потребитель');
-                  psl.add(@s);
+                  psl.AddByPointer(@s);
 
                          end;
 
@@ -1101,34 +1101,34 @@ begin
               cosf^:=sumpcos/pust^;
 
                   s:=Uni2CP(name);
-                  psfirstline.add(@s);
+                  psfirstline.AddByPointer(@s);
                   s:='';
-                  psfirstline.add(@s);
-                  psfirstline.add(@s);
-                  psfirstline.add(@s);
-                  psfirstline.add(@s);
+                  psfirstline.AddByPointer(@s);
+                  psfirstline.AddByPointer(@s);
+                  psfirstline.AddByPointer(@s);
+                  psfirstline.AddByPointer(@s);
                   s:='1';
-                  psfirstline.add(@s);
+                  psfirstline.AddByPointer(@s);
                   s:='';
-                  psfirstline.add(@s);
+                  psfirstline.AddByPointer(@s);
                   s:='';
-                  psfirstline.add(@s);
+                  psfirstline.AddByPointer(@s);
                   //s:='qwer';
-                  psfirstline.add(@s);
+                  psfirstline.AddByPointer(@s);
                   //s:=floattostr(pcabledesk^.length);
-                  psfirstline.add(@s);
+                  psfirstline.AddByPointer(@s);
                   s:='';
-                  psfirstline.add(@s);
+                  psfirstline.AddByPointer(@s);
                   s:='';
-                  psfirstline.add(@s);
+                  psfirstline.AddByPointer(@s);
                   //s:=potrname;
-                  psfirstline.add(@s);
+                  psfirstline.AddByPointer(@s);
                   s:=floattostr(roundto(p^,-2));
-                  psfirstline.add(@s);
+                  psfirstline.AddByPointer(@s);
                   s:=floattostr(roundto(i^,-2));
-                  psfirstline.add(@s);
+                  psfirstline.AddByPointer(@s);
                   s:=Uni2CP('Ввод');
-                  psfirstline.add(@s);
+                  psfirstline.AddByPointer(@s);
 
 
               drawings.CurrentDWG.ConstructObjRoot.ObjArray.add(@pt);
@@ -1360,7 +1360,7 @@ begin
                 s:=getentname(CurrentObj);
                 if s<>'' then
                 begin
-                     cabcomparam.Traces.Enums.add(@s);
+                     cabcomparam.Traces.Enums.AddByPointer(@s);
                      if cabcomparam.Traces.Selected=cabcomparam.Traces.Enums.Count-1 then
                                                                                          cabcomparam.PTrace:=CurrentObj;
 
@@ -1371,7 +1371,7 @@ begin
      until CurrentObj=nil;
 
   s:='**Напрямую**';
-  cabcomparam.Traces.Enums.add(@s);
+  cabcomparam.Traces.Enums.AddByPointer(@s);
 end;
 function _Cable_com_CommandStart(operands:TCommandOperands):TCommandResult;
 var
@@ -1394,7 +1394,7 @@ begin
                 s:=getentname(CurrentObj);
                 if s<>'' then
                 begin
-                     cabcomparam.Traces.Enums.add(@s);
+                     cabcomparam.Traces.Enums.AddByPointer(@s);
                      if CurrentObj^.Selected then
                      begin
                           cabcomparam.Traces.Selected:=cabcomparam.Traces.Enums.Count-1;
@@ -1410,7 +1410,7 @@ begin
      until CurrentObj=nil;
 
   s:='**Напрямую**';
-  cabcomparam.Traces.Enums.add(@s);
+  cabcomparam.Traces.Enums.AddByPointer(@s);
   zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pcabcom);
 
 
@@ -1584,7 +1584,7 @@ begin
   if pv<>nil then
   repeat
         if pv^.x<>infinity then
-                               tcable.VertexArrayInOCS.add(@pv^)
+                               tcable.VertexArrayInOCS.AddByPointer(@pv^)
                            else
                                begin
                                     tcable := GDBPointer(drawings.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,drawings.GetCurrentROOT));
@@ -1596,7 +1596,7 @@ begin
                                     if pvd<>nil then
                                     PGDBInteger(pvd^.data.Instance)^:=PGDBInteger(pvd^.data.Instance)^+cablecount;
                                     inc(cablecount);
-                                    result.Add(@tcable);
+                                    result.AddByPointer(@tcable);
                                end;
         pv:=pa.iterate(ir);
   until pv=nil;
@@ -2064,12 +2064,12 @@ begin
                    psl.init(2);
 
                    s:='';
-                   psl.add(@s);
+                   psl.AddByPointer(@s);
 
                    s:=Tria_Utf8ToAnsi(currentgroup^);
                    s:='  '+system.copy(s,2,length(s)-1);
                    //s:='  '+system.copy(currentgroup^,2,length(currentgroup^)-1);
-                   psl.add(@s);
+                   psl.AddByPointer(@s);
             end
 
   else
@@ -2113,7 +2113,7 @@ begin
                    psl.addutoa(@s);
 
                    s:=floattostr(PBOMITEM^.Amount);
-                   psl.add(@s);
+                   psl.AddByPointer(@s);
 
                    s:='';
                    psl.addutoa(@s);
@@ -2234,7 +2234,7 @@ begin
            begin
                 content:='Переменной в описании примитива не обнаружено';
            end;
-    VarContents.add(@content);
+    VarContents.AddByPointer(@content);
     end;
   pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
@@ -2801,7 +2801,7 @@ begin
               np:=NearestPointOnSegment(riser.P_insert_in_WCS,nline.CoordInWCS.lBegin,nline.CoordInWCS.lEnd);
               if IsPointEqual(np,riser.P_insert_in_WCS)then
               begin
-                   net.riserarray.add(@riser);
+                   net.riserarray.AddByPointer(@riser);
               end;
               riser:=riserarray.iterate(ir_riser);
         until riser=nil;
@@ -2986,17 +2986,17 @@ begin
                                                             if not processednets.IsObjExist(net) then
                                                             begin
                                                                  net.objarray.copyto(@supernet.ObjArray);
-                                                                 processednets.AddRef(net^);
+                                                                 processednets.AddByRef(net^);
                                                                  //net2processed:=true;
-                                                                 //log.LogOut('processednets.AddRef(net^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
+                                                                 //log.LogOut('processednets.AddByRef(net^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
 
                                                             if not processednets.IsObjExist(net2) then
                                                             begin
                                                                  net2.objarray.copyto(@supernet.ObjArray);
-                                                                 processednets.AddRef(net2^);
+                                                                 processednets.AddByRef(net2^);
                                                                  //net2processed:=true;
-                                                                 //log.LogOut('processednets.AddRef(net2^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
+                                                                 //log.LogOut('processednets.AddByRef(net2^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
 
                                                                 New_line:=PGDBObjLine(ENTF_CreateLine(drawings.GetCurrentROOT,{@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray}nil,[riser.P_insert_in_WCS.x,riser.P_insert_in_WCS.y,riser.P_insert_in_WCS.z,riser2.P_insert_in_WCS.x,riser2.P_insert_in_WCS.y,riser2.P_insert_in_WCS.z]));
@@ -3018,7 +3018,7 @@ begin
                                                                 New_line^.Formatentity(drawings.GetCurrentDWG^,dc);
                                                                 //New_line.bp.ListPos.Owner^.RemoveInArray(New_line.bp.ListPos.SelfIndex);
                                                                 supernet^.ObjArray.add(addr(New_line));
-                                                                linesarray.Add(addr(New_line));
+                                                                linesarray.AddByPointer(addr(New_line));
                                                                 //log.LogOut('supernet^.ObjArray.add(addr(New_line)); Примитивов в графе: '+inttostr(supernet^.objarray.count));
 
 
@@ -3042,7 +3042,7 @@ begin
                           until (net=nil){or(supernet<>nil)};
                           riserarray.ClearAndDone;
                           if supernet<>nil then
-                                          supernetsarray.AddRef(supernet^);
+                                          supernetsarray.AddByRef(supernet^);
                           end
                              else
                                  supernet:=supernet;

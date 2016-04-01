@@ -108,7 +108,7 @@ begin
 end;
 procedure TGDBTree.AddNode(pnode:PGDBBaseNode);
 begin
-     add(@pnode);
+     AddByPointer(@pnode);
 end;
 function GDBBaseNode.GetNodeName;
 begin

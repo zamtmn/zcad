@@ -61,7 +61,7 @@ begin
 end;
 procedure TGMultiObjectChangeCommand.AddMethod(method:tmethod);
 begin
-     objarray.add(@method);
+     objarray.AddByPointer(@method);
 end;
 {procedure TGMultiObjectChangeCommand.StoreUndoData(var _undodata:_T);
 begin
@@ -119,7 +119,7 @@ end;
 function {GDBObjOpenArrayOfUCommands.}PushCreateTGMultiObjectChangeCommand(var us:GDBObjOpenArrayOfUCommands; var data,undodata:DMatrix4D;const objcount:Integer):PTGDBTransformChangeCommand;overload;
 begin
   result:=CreateTGMultiObjectChangeCommand(data,undodata,objcount);
-  us.add(@result);
+  us.AddByPointer(@result);
   inc(us.CurrentCommand);
 end;
 end.

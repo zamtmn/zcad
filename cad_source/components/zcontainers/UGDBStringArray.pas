@@ -37,6 +37,7 @@ type
                           function GetTextWithEOL:GDBString;
                           function addnodouble(p:GDBPointer):GDBInteger;
                           function copyto(source:PGDBOpenArray):GDBInteger;virtual;
+                          function getGDBString(index:TArrayIndex):GDBString;
                           //destructor done;virtual;
                           //function copyto(source:PGDBOpenArrayOfData):GDBInteger;virtual;
                     end;
@@ -59,6 +60,10 @@ begin
   until p=nil;
   inherited;
 end;}
+function GDBGDBStringArray.getGDBString;
+begin
+  result := pGDBString(getelement(index))^;
+end;
 function GDBGDBStringArray.copyto;
 var p:GDBPointer;
     ir:itrec;

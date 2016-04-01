@@ -21,13 +21,13 @@ unit uzccommandsimpl;
 
 
 interface
-uses uzgldrawcontext,uzglviewareageneral,uzeconsts,uzcsysvars,uzegeometry,
+uses uzcutils,uzgldrawcontext,uzglviewareageneral,uzeconsts,uzcsysvars,uzegeometry,
      varmandef,uzbtypesbase,uzbtypes,uzccommandsabstract,uzccommandsmanager,
      uzglviewareadata,uzcdrawings,uzbmemman,uzcshared;
 type
   comproc=procedure(_self:pointer);
   commousefunc=function(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger):GDBInteger;
-  comdrawfunc=function(mclick:GDBInteger):GDBInteger;
+  comdrawfunc=function(mclick:GDBInteger):TCommandResult;
   comfunc=function:GDBInteger;
   comfuncwithoper=function(operands:TCommandOperands):TCommandResult;
 {Export+}
@@ -249,7 +249,7 @@ begin
   drawings.GetCurrentDWG.OnMouseObj.Clear;
   //poglwnd^.md.mode := savemousemode;
   OSModeEditor.GetState;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   if assigned(UpdateVisibleProc) then UpdateVisibleProc;
     end;
 end;
@@ -282,7 +282,7 @@ begin
                                                            drawings.GetCurrentDWG.wa.setobjinsp;
   //-------------------------------drawings.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   OSModeEditor.GetState;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
 end;
 function CreateCommandFastObjectPlugin;
 var p:pCommandFastObjectPlugin;
@@ -417,7 +417,7 @@ begin
   drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   drawings.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
   drawings.GetCurrentDWG.wa.SetMouseMode(savemousemode);
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
 end;
 
 procedure CommandFastObject.CommandInit;

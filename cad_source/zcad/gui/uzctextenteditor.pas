@@ -20,7 +20,7 @@ unit uzctextenteditor;
 {$INCLUDE def.inc}
 interface
 uses
-     uzcsysvars,uzbtypesbase,uzbtypes,uzcsysinfo,
+     uzcutils,uzcsysvars,uzbtypesbase,uzbtypes,uzcsysinfo,
      uzcinfoform,Varman,uzcinterface,
      uzedrawingdef,uzbstrproc,uzeenttext,uzeconsts,uzcstrconsts,uzcfsinglelinetexteditor,
      Controls,Classes,Forms;
@@ -79,7 +79,7 @@ begin
      if modalresult=MrOk then
                          begin
                               PGDBObjText(pobj)^.YouChanged(drawing);
-                              if assigned(redrawoglwndproc) then redrawoglwndproc;
+                              zcRedrawCurrentDrawing;
                          end;
 
 end;

@@ -13,6 +13,7 @@ object LayersForm: TLayersForm
   OnCreate = FormCreate
   OnShow = RefreshListItems
   Position = poMainFormCenter
+  LCLVersion = '1.7'
   Visible = False
   object Bevel1: TBevel
     AnchorSideLeft.Control = ToolBar1
@@ -24,7 +25,7 @@ object LayersForm: TLayersForm
     Left = 123
     Height = 25
     Top = 1
-    Width = 981
+    Width = 927
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 2
     BorderSpacing.Top = 1
@@ -40,7 +41,7 @@ object LayersForm: TLayersForm
     Left = 124
     Height = 23
     Top = 2
-    Width = 979
+    Width = 925
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 1
     Layout = tlCenter
@@ -51,9 +52,9 @@ object LayersForm: TLayersForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 950
+    Left = 896
     Height = 30
-    Top = 647
+    Top = 559
     Width = 154
     Anchors = [akRight, akBottom]
     BorderSpacing.Right = 1
@@ -66,9 +67,9 @@ object LayersForm: TLayersForm
     AnchorSideRight.Control = ButtonApplyClose
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 799
+    Left = 745
     Height = 30
-    Top = 647
+    Top = 559
     Width = 150
     Anchors = [akRight, akBottom]
     BorderSpacing.Right = 1
@@ -86,9 +87,9 @@ object LayersForm: TLayersForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonApplyClose
     Left = 1
-    Height = 617
+    Height = 529
     Top = 28
-    Width = 1103
+    Width = 1049
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 1
     BorderSpacing.Top = 2
@@ -101,7 +102,7 @@ object LayersForm: TLayersForm
       end    
       item
         Caption = 'Name'
-        Width = 292
+        Width = 238
       end    
       item
         Caption = 'On'

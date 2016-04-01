@@ -78,6 +78,9 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzeentitiesmanager,uzepalet
   {**Завершить показ параметров команды, вернуть содержиммое инспектора к умолчательному состоянию}
   procedure zcHideCommandParams();
 
+  {**Перерисовать окно текущего чертежа}
+  procedure zcRedrawCurrentDrawing();
+
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:GDBString;p_insert:GDBVertex;
                         scale:GDBVertex;rotate:GDBDouble;needundo:GDBBoolean=false
                         ):PGDBObjBlockInsert;
@@ -183,6 +186,11 @@ procedure zcHideCommandParams();
 begin
   if assigned(ReturnToDefaultProc)then
       ReturnToDefaultProc(drawings.GetUnitsFormat);
+end;
+procedure zcRedrawCurrentDrawing();
+begin
+  if assigned(redrawoglwndproc) then
+                                    redrawoglwndproc;
 end;
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;//владелец
                         BlockName:GDBString;       //имя блока

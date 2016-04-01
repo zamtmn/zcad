@@ -1846,7 +1846,6 @@ begin
                     begin
                     param.firstdraw:=true;
                     DrawOrInvalidate;
-                    //if assigned(redrawoglwndproc) then redrawoglwndproc;
                     end;
 end;
 

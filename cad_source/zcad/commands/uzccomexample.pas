@@ -715,7 +715,7 @@ begin
               if EntChange then
                 begin
                   pd^.FormatEntity(drawings.GetCurrentDWG^,dc);
-                  if assigned(redrawoglwndproc) then redrawoglwndproc;
+                  zcRedrawCurrentDrawing;
                 end;
          end;
          zcPlaceUndoEndMarkerIfNeed(UndoStartMarkerPlaced);

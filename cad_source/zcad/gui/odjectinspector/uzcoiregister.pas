@@ -19,7 +19,7 @@
 unit uzcoiregister;
 {$INCLUDE def.inc}
 interface
-uses uzbpaths,TypeDescriptors,uzctranslations,uzcshared,Forms,uzcinterface,uzeroot,
+uses uzcutils,uzbpaths,TypeDescriptors,uzctranslations,uzcshared,Forms,uzcinterface,uzeroot,
      uzbtypes,uzedrawingdef,uzgldrawcontext,UGDBStringArray,varmandef,uzedrawingsimple,
      uzeentity,uzcenitiesvariablesextender,zcobjectinspector,uzcguimanager,uzcstrconsts,
      Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,uzbtypesbase,uzcsysinfo;
@@ -86,7 +86,7 @@ begin
 
                 end;
   if assigned(resetoglwndproc) then resetoglwndproc;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   if assigned(UpdateVisibleProc) then UpdateVisibleProc;
 end;
 

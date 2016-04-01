@@ -1722,7 +1722,7 @@ begin
     end;
   end;
   ForeGround:=oldForeGround;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
 end;
 
 
@@ -1805,7 +1805,7 @@ function TextInsert_com.DoEnd(pdata:GDBPointer):GDBBoolean;
 begin
      result:=false;
      dec(self.mouseclic);
-     if assigned(redrawoglwndproc) then redrawoglwndproc;
+     zcRedrawCurrentDrawing;
      if TextInsertParams.runtexteditor then
                                            RunTextEditor(pdata,drawings.GetCurrentDWG^);
      //redrawoglwnd;
@@ -2189,7 +2189,7 @@ begin
     pb:=nil;
     //commandmanager.executecommandend;
     //result:=1;
-    if assigned(redrawoglwndproc) then redrawoglwndproc;
+    zcRedrawCurrentDrawing;
 
     result:=0;
   end
@@ -2293,7 +2293,7 @@ begin
   if assigned(ReturnToDefaultProc)then
                                       ReturnToDefaultProc(drawings.GetUnitsFormat);
   clearcp;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
 function CutClip_com(operands:TCommandOperands):TCommandResult;
@@ -2332,7 +2332,7 @@ begin
   drawings.GetCurrentDWG^.wa.param.lastonmouseobject:=nil;
   //{objinsp.GDBobjinsp.}ReturnToDefault;
   //clearcp;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
 
@@ -2649,7 +2649,7 @@ begin
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
     result:=1;
     //Line_com_BeforeClick(wc,mc,button,osp);
-    if assigned(redrawoglwndproc) then redrawoglwndproc;
+    zcRedrawCurrentDrawing;
     //commandend;
     //commandmanager.executecommandend;
   end;
@@ -2879,7 +2879,7 @@ begin
       if (button and MZW_LBUTTON)<>0 then
       begin
            copy(dispmatr,self.CommandName);
-           if assigned(redrawoglwndproc) then redrawoglwndproc;
+           zcRedrawCurrentDrawing;
       end;
       result:=cmd_ok;
 end;
@@ -3241,7 +3241,7 @@ begin
     //drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
     //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
     result:=1;
-    if assigned(redrawoglwndproc) then redrawoglwndproc;
+    zcRedrawCurrentDrawing;
   end;
 end;
 
@@ -3469,7 +3469,7 @@ begin
                                                   p3dpl^.YouChanged(drawings.GetCurrentDWG^);
                                                   drawings.GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
                                                   //p3dpl^.Format;
-                                                  if assigned(redrawoglwndproc) then redrawoglwndproc;
+                                                  zcRedrawCurrentDrawing;
                                              end
                                              else
                                                  historyoutstr(rscm2VNotRemove);
@@ -3499,7 +3499,7 @@ begin
                                                                          p3dpl^.YouChanged(drawings.GetCurrentDWG^);
                                                                          drawings.GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
                                                                          //p3dpl^.Format;
-                                                                         if assigned(redrawoglwndproc) then redrawoglwndproc;
+                                                                         zcRedrawCurrentDrawing;
                                                                          PEProp.setpoint:=false;
                                                                     end
                                                                 else
@@ -3558,7 +3558,7 @@ begin
                                     end
 
        end;
-      if assigned(redrawoglwndproc) then redrawoglwndproc;
+      zcRedrawCurrentDrawing;
       //drawings.GetCurrentDWG^.OGLwindow1.draw;
 
   end
@@ -3652,7 +3652,7 @@ begin
                                   else
                                       drawings.GetCurrentDWG^.pObjRoot:=@drawings.GetCurrentDWG^.mainObjRoot;
           if assigned(UpdateVisibleProc) then UpdateVisibleProc;
-          if assigned(redrawoglwndproc) then redrawoglwndproc;
+          zcRedrawCurrentDrawing;
      end;
 end;
 function bedit_com(operands:TCommandOperands):TCommandResult;
@@ -3704,7 +3704,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
           drawings.GetCurrentDWG^.SelObjArray.clearallobjects;
           drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.GetSelObjArray,drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
           result:=cmd_ok;
-          if assigned(redrawoglwndproc) then redrawoglwndproc;
+          zcRedrawCurrentDrawing;
           if tn<>'' then
                         bedit_format(nil);
           //poglwnd^.md.mode := (MGet3DPoint) or (MMoveCamera) or (MRotateCamera);
@@ -3724,7 +3724,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
   drawings.GetCurrentDWG^.SelObjArray.clearallobjects;
   drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.GetSelObjArray,drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
   result:=cmd_ok;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  zcRedrawCurrentDrawing;
 end;
 function PlaceAllBlocks_com(operands:TCommandOperands):TCommandResult;
 var pb:PGDBObjBlockdef;
@@ -3768,7 +3768,7 @@ begin
            xcoord:=xcoord+20;
      until pb=nil;
 
-    if assigned(redrawoglwndproc) then redrawoglwndproc;
+    zcRedrawCurrentDrawing;
 
     result:=cmd_ok;
 

@@ -150,6 +150,7 @@ end;*)
 initialization
 gdbplugins.init({$IFDEF DEBUGBUILD}'{7893C445-EAE9-4361-B7AF-244513EE799F}',{$ENDIF}100);
 finalization
-gdbplugins.FreewithprocAndDone(@freeplugin);
+gdbplugins.Freewithproc(@freeplugin);
+gdbplugins.done;
 
 end.

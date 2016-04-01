@@ -220,7 +220,8 @@ begin
      //SimpleMenods.FreewithprocAndDone(freemetods);
      SimpleMenods.FreeAndDone;
      //fields.FreewithprocAndDone(freeprop);
-     Properties.FreewithprocAndDone(freeprop);
+     Properties.Freewithproc(freeprop);
+     Properties.done;
      //Properties.FreeAndDone;
      parent:=nil;
      ColArray.done;

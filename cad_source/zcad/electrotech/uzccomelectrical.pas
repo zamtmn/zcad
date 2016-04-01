@@ -2985,7 +2985,7 @@ begin
                                                             end;
                                                             if not processednets.IsObjExist(net) then
                                                             begin
-                                                                 net.objarray.copyto(@supernet.ObjArray);
+                                                                 net.objarray.copyto(supernet.ObjArray);
                                                                  processednets.AddByRef(net^);
                                                                  //net2processed:=true;
                                                                  //log.LogOut('processednets.AddByRef(net^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
@@ -2993,7 +2993,7 @@ begin
 
                                                             if not processednets.IsObjExist(net2) then
                                                             begin
-                                                                 net2.objarray.copyto(@supernet.ObjArray);
+                                                                 net2.objarray.copyto(supernet.ObjArray);
                                                                  processednets.AddByRef(net2^);
                                                                  //net2processed:=true;
                                                                  //log.LogOut('processednets.AddByRef(net2^); Примитивов в графе: '+inttostr(supernet^.objarray.count));

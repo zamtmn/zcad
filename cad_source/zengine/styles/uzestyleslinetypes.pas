@@ -336,7 +336,8 @@ end;
 constructor GDBLtypeArray.initnul;
 begin
   inherited initnul;
-  size:=sizeof(GDBLtypeProp);
+  objsizeof:=sizeof(GDBLtypeProp);
+  //size:=sizeof(GDBLtypeProp);
 end;
 constructor TextProp.initnul;
 begin

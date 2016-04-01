@@ -500,42 +500,69 @@ TZctnrVector={$IFNDEF DELPHI}packed{$ENDIF}
                   PArray:GDBPointer;(*hidden_in_objinsp*)
                   GUID:GDBString;(*hidden_in_objinsp*)
                   Count:TArrayIndex;(*hidden_in_objinsp*)
+                  Deleted:TArrayIndex;(*hidden_in_objinsp*)
                   Max:TArrayIndex;(*hidden_in_objinsp*)
+                  constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
+                  constructor initnul;
+                  destructor done;virtual;abstract;
+                  destructor ClearAndDone;virtual;abstract;
+                  function Size:TArrayIndex;
+                  procedure Clear;virtual;abstract;
+                  function CreateArray:GDBPointer;virtual;abstract;
+                  procedure Grow(newmax:GDBInteger=0);virtual;abstract;
+                  procedure Shrink;virtual;abstract;
+                  procedure setsize(nsize:TArrayIndex);
+                  function getelement(index:TArrayIndex):GDBPointer;
+                  procedure freeelement(p:GDBPointer);virtual;abstract;
+                  function GetElemCount:GDBInteger;
+                  function AddByPointer(p:GDBPointer):TArrayIndex;virtual;abstract;
+                  function AddByRef(var obj):TArrayIndex;virtual;abstract;
+                  function beginiterate(out ir:itrec):GDBPointer;virtual;abstract;
+                  function iterate(var ir:itrec):GDBPointer;virtual;abstract;
+                  procedure free;virtual;abstract;
+                  procedure freewithproc(freeproc:freeelproc);virtual;abstract;
+                  function SetCount(index:GDBInteger):GDBPointer;virtual;abstract;
+                  procedure Invert;
+                  function copyto(var source:TZctnrVector<T>):GDBInteger;virtual;abstract;
+                  function GetRealCount:GDBInteger;
+                  function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
+                  function AllocData(SData:GDBword):GDBPointer;virtual;abstract;
+                  function addnodouble(data:T):GDBInteger;
+                  function IsObjExist(pobj:T):GDBBoolean;
             end;
 //Generate on E:/zcad/cad_source/components/zcontainers/UGDBOpenArray.pas
 PGDBOpenArray=^GDBOpenArray;
 GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                      Deleted:TArrayIndex;(*hidden_in_objinsp*)
-                      Count:TArrayIndex;(*saved_to_shd*)(*hidden_in_objinsp*)
-                      Max:TArrayIndex;(*hidden_in_objinsp*)
-                      Size:TArrayIndex;(*hidden_in_objinsp*)
-                      PArray:GDBPointer;(*hidden_in_objinsp*)
-                      guid:GDBString;
-                      constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m,s:GDBInteger);
-                      constructor initnul;
-                      function beginiterate(out ir:itrec):GDBPointer;virtual;abstract;
-                      function iterate(var ir:itrec):GDBPointer;virtual;abstract;
-                      destructor done;virtual;abstract;
-                      destructor ClearAndDone;virtual;abstract;
-                      procedure Clear;virtual;abstract;
-                      function AddByPointer(p:GDBPointer):TArrayIndex;virtual;abstract;
-                      function AddByRef(var obj):TArrayIndex;virtual;abstract;
-                      procedure Shrink;virtual;abstract;
-                      procedure Grow(newmax:GDBInteger=0);virtual;abstract;
-                      procedure setsize(nsize:TArrayIndex);
-                      function getelement(index:TArrayIndex):GDBPointer;
-                      procedure Invert;
-                      function AfterDeSerialize(SaveFlag:GDBWord;membuf:GDBPointer):integer;virtual;abstract;
-                      procedure free;virtual;abstract;
-                      procedure freewithproc(freeproc:freeelproc);virtual;abstract;
-                      procedure freeelement(p:GDBPointer);virtual;abstract;
-                      function CreateArray:GDBPointer;virtual;abstract;
-                      function SetCount(index:GDBInteger):GDBPointer;virtual;abstract;
-                      function copyto(source:PGDBOpenArray):GDBInteger;virtual;abstract;
-                      function GetRealCount:GDBInteger;
-                      function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
-                      function AllocData(SData:GDBword):GDBPointer;virtual;abstract;
-                      function GetElemCount:GDBInteger;
+           {released} Deleted:TArrayIndex;(*hidden_in_objinsp*)
+           {released} Count:TArrayIndex;(*saved_to_shd*)(*hidden_in_objinsp*)
+           {released} Max:TArrayIndex;(*hidden_in_objinsp*)
+           {released} Size:TArrayIndex;(*hidden_in_objinsp*)
+           {released} PArray:GDBPointer;(*hidden_in_objinsp*)
+           {released} guid:GDBString;
+           {released} constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m,s:GDBInteger);
+           {released} constructor initnul;
+           {released} function beginiterate(out ir:itrec):GDBPointer;virtual;abstract;
+           {released} function iterate(var ir:itrec):GDBPointer;virtual;abstract;
+           {released} destructor done;virtual;abstract;
+           {released} destructor ClearAndDone;virtual;abstract;
+           {released} procedure Clear;virtual;abstract;
+           {released} function AddByPointer(p:GDBPointer):TArrayIndex;virtual;abstract;
+           {released} function AddByRef(var obj):TArrayIndex;virtual;abstract;
+           {released} procedure Shrink;virtual;abstract;
+           {released} procedure Grow(newmax:GDBInteger=0);virtual;abstract;
+           {released} procedure setsize(nsize:TArrayIndex);
+           {released} function getelement(index:TArrayIndex):GDBPointer;
+           {released} procedure Invert;
+           {released} procedure free;virtual;abstract;
+           {released} procedure freewithproc(freeproc:freeelproc);virtual;abstract;
+           {released} procedure freeelement(p:GDBPointer);virtual;abstract;
+           {released} function CreateArray:GDBPointer;virtual;abstract;
+           {released} function SetCount(index:GDBInteger):GDBPointer;virtual;abstract;
+           {released} function copyto(source:PGDBOpenArray):GDBInteger;virtual;abstract;
+           {released} function GetRealCount:GDBInteger;
+           {released} function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
+           {released} function AllocData(SData:GDBword):GDBPointer;virtual;abstract;
+           {released} function GetElemCount:GDBInteger;
              end;
 //Generate on E:/zcad/cad_source/components/zcontainers/UGDBOpenArrayOfData.pas
 PGDBOpenArrayOfData=^GDBOpenArrayOfData;
@@ -550,31 +577,29 @@ GDBOpenArrayOfData={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                     //function copyto(source:PGDBOpenArrayOfData):GDBInteger;virtual;abstract;
               end;
 //Generate on E:/zcad/cad_source/components/zcontainers/UGDBOpenArrayOfPointer.pas
+TZctnrVectorP={$IFNDEF DELPHI}packed{$ENDIF}
+                                 object(TZctnrVector)
+                                       function iterate (var ir:itrec):GDBPointer;virtual;abstract;
+                                       destructor FreeAndDone;virtual;abstract;
+                                       procedure cleareraseobj;virtual;abstract;
+                                       procedure RemoveFromArray(const pdata:GDBPointer);virtual;abstract;
+                                       procedure AddToArray(const pdata:GDBPointer);virtual;abstract;
+                                       function addnodouble(pobj:GDBPointer):GDBInteger;virtual;abstract;
+                                 end;
 PGDBOpenArrayOfGDBPointer=^GDBOpenArrayOfGDBPointer;
-GDBOpenArrayOfGDBPointer={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
-                      constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                      constructor initnul;
-                      function iterate (var ir:itrec):GDBPointer;virtual;abstract;
-                      function addnodouble(pobj:GDBPointer):GDBInteger;virtual;abstract;
-                      //function AddByPointer(p:GDBPointer):GDBInteger;virtual;abstract;
-                      destructor FreeAndDone;virtual;abstract;
-                      procedure cleareraseobj;virtual;abstract;
-                      function IsObjExist(pobj:GDBPointer):GDBBoolean;
-                      function copyto(source:PGDBOpenArray):GDBInteger;virtual;abstract;
-                      procedure RemoveFromArray(const pdata:GDBPointer);virtual;abstract;
-                      procedure AddToArray(const pdata:GDBPointer);virtual;abstract;
-             end;
+GDBOpenArrayOfGDBPointer=packed object(TZctnrVectorP) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
+                                   end;
 //Generate on E:/zcad/cad_source/components/zcontainers/UGDBOpenArrayOfPObjects.pas
+GDBOpenArrayOfPObjects=packed object(TZctnrVectorP)
+                                    procedure cleareraseobjfrom(n:GDBInteger);virtual;abstract;
+                                    procedure cleareraseobjfrom2(n:GDBInteger);virtual;abstract;
+                                    function GetObject(index:GDBInteger):PGDBaseObject;
+                                    procedure eraseobj(ObjAddr:PGDBaseObject);virtual;abstract;
+                                    procedure pack;virtual;abstract;
+                                    procedure cleareraseobj;virtual;abstract;
+                                    destructor done;virtual;abstract;
+                                   end;
 PGDBOpenArrayOfPObjects=^GDBOpenArrayOfPObjects;
-GDBOpenArrayOfPObjects={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfGDBPointer)
-                             procedure cleareraseobj;virtual;abstract;
-                             procedure eraseobj(ObjAddr:PGDBaseObject);virtual;abstract;
-                             procedure cleareraseobjfrom(n:GDBInteger);virtual;abstract;
-                             procedure cleareraseobjfrom2(n:GDBInteger);virtual;abstract;
-                             procedure pack;virtual;abstract;
-                             function GetObject(index:GDBInteger):PGDBaseObject;
-                             destructor done;virtual;abstract;
-                       end;
 //Generate on E:/zcad/cad_source/components/zcontainers/UGDBOpenArrayOfObjects.pas
 PGDBOpenArrayOfObjects=^GDBOpenArrayOfObjects;
 GDBOpenArrayOfObjects={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)

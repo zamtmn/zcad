@@ -65,7 +65,8 @@ end;
 constructor GDBTableStyleArray.initnul;
 begin
   inherited initnul;
-  size:=sizeof(TGDBTableStyle);
+  objsizeof:=sizeof(TGDBTableStyle);
+  //size:=sizeof(TGDBTableStyle);
 end;
 constructor TGDBTableStyle.Init;
 begin

@@ -110,7 +110,8 @@ end;
 constructor GDBLayerArray.initnul;
 begin
   inherited initnul;
-  size:=sizeof(GDBLayerProp);
+  objsizeof:=sizeof(GDBLayerProp);
+  //size:=sizeof(GDBLayerProp);
 end;
 destructor GDBLayerProp.done;
 begin

@@ -488,7 +488,8 @@ end;
 constructor GDBDimStyleArray.initnul;
 begin
   inherited initnul;
-  size:=sizeof(GDBDimStyle);
+  objsizeof:=sizeof(GDBDimStyle);
+  //size:=sizeof(GDBDimStyle);
 end;
 constructor GDBDimStyleArray.init;
 begin

@@ -85,6 +85,7 @@ begin
      inherited init(size,tname,pu);
      SourceValue.init(20);
      UserValue.init(20);
+     gdbgetmem({$IFDEF DEBUGBUILD}'{B8CB2886-0E46-4426-B99B-EA4A0948FAE7}',{$ENDIF}GDBPointer(Value),sizeof(TByteVector));
      case size of
                  1:Value.init({$IFDEF DEBUGBUILD}'{EA29780F-2455-4BBF-9CB6-054B6A4D48C5}',{$ENDIF}20{,1});
                  2:PTWordVector(Value).init({$IFDEF DEBUGBUILD}'{E17DB617-1782-4815-BA8B-12F53B06DAD8}',{$ENDIF}20{,2});

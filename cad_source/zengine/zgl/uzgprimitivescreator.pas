@@ -20,25 +20,26 @@ unit uzgprimitivescreator;
 {$INCLUDE def.inc}
 interface
 uses UGDBOpenArrayOfData,uzgprimitivescreatorabstract,uzgindexsarray,uzgprimitives,uzbtypesbase,sysutils,uzbtypes,uzbmemman,
-     uzegeometry;
+     uzgprimitivessarray,uzegeometry;
 type
+
 TLLPrimitivesCreator=class(TLLPrimitivesCreatorAbstract)
-                function CreateLLLine(var pa:GDBOpenArrayOfData;const P1Index:TLLVertexIndex):TArrayIndex;override;
-                function CreateLLTriangle(var pa:GDBOpenArrayOfData;const P1Index:TLLVertexIndex):TArrayIndex;override;
-                function CreateLLFreeTriangle(var pa:GDBOpenArrayOfData;const P1Index,P2Index,P3Index:TLLVertexIndex; var ia:ZGLIndexsArray):TArrayIndex;override;
-                function CreateLLTriangleStrip(var pa:GDBOpenArrayOfData):TArrayIndex;override;
-                function CreateLLTriangleFan(var pa:GDBOpenArrayOfData):TArrayIndex;override;
-                function CreateLLPoint(var pa:GDBOpenArrayOfData;const PIndex:TLLVertexIndex):TArrayIndex;override;
-                function CreateLLSymbol(var pa:GDBOpenArrayOfData):TArrayIndex;override;
-                function CreateLLSymbolLine(var pa:GDBOpenArrayOfData):TArrayIndex;override;
-                function CreateLLSymbolEnd(var pa:GDBOpenArrayOfData):TArrayIndex;override;
-                function CreateLLPolyLine(var pa:GDBOpenArrayOfData;const P1Index,_Count:TLLVertexIndex;_closed:GDBBoolean=false):TArrayIndex;override;
+                function CreateLLLine(var pa:TLLPrimitivesArray;const P1Index:TLLVertexIndex):TArrayIndex;override;
+                function CreateLLTriangle(var pa:TLLPrimitivesArray;const P1Index:TLLVertexIndex):TArrayIndex;override;
+                function CreateLLFreeTriangle(var pa:TLLPrimitivesArray;const P1Index,P2Index,P3Index:TLLVertexIndex; var ia:ZGLIndexsArray):TArrayIndex;override;
+                function CreateLLTriangleStrip(var pa:TLLPrimitivesArray):TArrayIndex;override;
+                function CreateLLTriangleFan(var pa:TLLPrimitivesArray):TArrayIndex;override;
+                function CreateLLPoint(var pa:TLLPrimitivesArray;const PIndex:TLLVertexIndex):TArrayIndex;override;
+                function CreateLLSymbol(var pa:TLLPrimitivesArray):TArrayIndex;override;
+                function CreateLLSymbolLine(var pa:TLLPrimitivesArray):TArrayIndex;override;
+                function CreateLLSymbolEnd(var pa:TLLPrimitivesArray):TArrayIndex;override;
+                function CreateLLPolyLine(var pa:TLLPrimitivesArray;const P1Index,_Count:TLLVertexIndex;_closed:GDBBoolean=false):TArrayIndex;override;
              end;
 var
    DefaultLLPCreator:TLLPrimitivesCreator;
 implementation
 //uses log;
-function TLLPrimitivesCreator.CreateLLTriangle(var pa:GDBOpenArrayOfData;const P1Index:TLLVertexIndex):TArrayIndex;
+function TLLPrimitivesCreator.CreateLLTriangle(var pa:TLLPrimitivesArray;const P1Index:TLLVertexIndex):TArrayIndex;
 var
   ptt:PTLLTriangle;
 begin
@@ -47,7 +48,7 @@ begin
   ptt.init;
   ptt.P1Index:=P1Index;
 end;
-function TLLPrimitivesCreator.CreateLLFreeTriangle(var pa:GDBOpenArrayOfData;const P1Index,P2Index,P3Index:TLLVertexIndex; var ia:ZGLIndexsArray):TArrayIndex;
+function TLLPrimitivesCreator.CreateLLFreeTriangle(var pa:TLLPrimitivesArray;const P1Index,P2Index,P3Index:TLLVertexIndex; var ia:ZGLIndexsArray):TArrayIndex;
 var
   ptt:PTLLFreeTriangle;
 begin
@@ -61,7 +62,7 @@ begin
   ptt.P2Index:=P2Index;
   ptt.P3Index:=P3Index;}
 end;
-function TLLPrimitivesCreator.CreateLLTriangleStrip(var pa:GDBOpenArrayOfData):TArrayIndex;
+function TLLPrimitivesCreator.CreateLLTriangleStrip(var pa:TLLPrimitivesArray):TArrayIndex;
 var
   pts:PTLLTriangleStrip;
 begin
@@ -70,7 +71,7 @@ begin
   pts.init;
 end;
 
-function TLLPrimitivesCreator.CreateLLTriangleFan(var pa:GDBOpenArrayOfData):TArrayIndex;
+function TLLPrimitivesCreator.CreateLLTriangleFan(var pa:TLLPrimitivesArray):TArrayIndex;
 var
   ptf:PTLLTriangleFan;
 begin
@@ -79,7 +80,7 @@ begin
   ptf.init;
 end;
 
-function TLLPrimitivesCreator.CreateLLLine(var pa:GDBOpenArrayOfData;const P1Index:TLLVertexIndex):TArrayIndex;
+function TLLPrimitivesCreator.CreateLLLine(var pa:TLLPrimitivesArray;const P1Index:TLLVertexIndex):TArrayIndex;
 var
    ptl:PTLLLine;
 begin
@@ -88,7 +89,7 @@ begin
      ptl.init;
      ptl.P1Index:=P1Index;
 end;
-function TLLPrimitivesCreator.CreateLLPolyLine(var pa:GDBOpenArrayOfData;const P1Index,_Count:TLLVertexIndex;_closed:GDBBoolean=false):tarrayindex;
+function TLLPrimitivesCreator.CreateLLPolyLine(var pa:TLLPrimitivesArray;const P1Index,_Count:TLLVertexIndex;_closed:GDBBoolean=false):tarrayindex;
 var
    ptpl:PTLLPolyLine;
 begin
@@ -99,7 +100,7 @@ begin
      ptpl.Count:=_Count;
      ptpl.Closed:=_closed;
 end;
-function TLLPrimitivesCreator.CreateLLPoint(var pa:GDBOpenArrayOfData;const PIndex:TLLVertexIndex):TArrayIndex;
+function TLLPrimitivesCreator.CreateLLPoint(var pa:TLLPrimitivesArray;const PIndex:TLLVertexIndex):TArrayIndex;
 var
    ptp:PTLLPoint;
 begin
@@ -108,7 +109,7 @@ begin
      ptp.init;
      ptp.PIndex:=PIndex;
 end;
-function TLLPrimitivesCreator.CreateLLSymbolLine(var pa:GDBOpenArrayOfData):TArrayIndex;
+function TLLPrimitivesCreator.CreateLLSymbolLine(var pa:TLLPrimitivesArray):TArrayIndex;
 var
    ptsl:PTLLSymbolLine;
 begin
@@ -116,7 +117,7 @@ begin
      ptsl:=pa.AllocData(sizeof(TLLSymbolLine));
      ptsl.init;
 end;
-function TLLPrimitivesCreator.CreateLLSymbol(var pa:GDBOpenArrayOfData):TArrayIndex;
+function TLLPrimitivesCreator.CreateLLSymbol(var pa:TLLPrimitivesArray):TArrayIndex;
 var
    pts:PTLLSymbol;
 begin
@@ -124,7 +125,7 @@ begin
      pts:=pa.AllocData(sizeof(TLLSymbol));
      pts.init;
 end;
-function TLLPrimitivesCreator.CreateLLSymbolEnd(var pa:GDBOpenArrayOfData):TArrayIndex;
+function TLLPrimitivesCreator.CreateLLSymbolEnd(var pa:TLLPrimitivesArray):TArrayIndex;
 var
    ptse:PTLLSymbolEnd;
 begin

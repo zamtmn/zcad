@@ -24,18 +24,12 @@ type
 {Export+}
 TZctnrVectorRec{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(TZctnrVector{-}<T>{//})
-                                                     function iterate(var ir:itrec):GDBPointer;virtual;
                                                      destructor FreeAndDone;virtual;
                                                      function deleteelement(index:GDBInteger):GDBPointer;
                                                      function DeleteElementByP(pel:GDBPointer):GDBPointer;
                                                      function InsertElement(index,dir:GDBInteger;p:GDBPointer):GDBPointer;
                                  end;
 {Export-}
-(*
-PGDBOpenArrayOfData=^GDBOpenArrayOfData;
-GDBOpenArrayOfData=packed object(TZctnrVectorData{-}<byte>{//})
-                                   end;
-*)
 implementation
 function TZctnrVectorRec<T>.InsertElement;
 var
@@ -47,11 +41,11 @@ begin
                                       else
 begin
   del := PArray;
-  inc(pGDBByte(del),size*index);
-  GDBPlatformUInt(afterdel):=GDBPlatformUInt(del)+size;
-  s:=(count-index-1)*size;
+  inc(pGDBByte(del),SizeOfData*index);
+  GDBPlatformUInt(afterdel):=GDBPlatformUInt(del)+SizeOfData;
+  s:=(count-index-1)*SizeOfData;
   Move(del^,afterdel^,s);
-  Move(p^,del^,size);
+  Move(p^,del^,SizeOfData);
   //dec(count);
 end;
   result:=parray;
@@ -62,9 +56,9 @@ var
    s:integer;
 begin
   del := PArray;
-  inc(pGDBByte(del),size*index);
-  GDBPlatformUInt(afterdel):=GDBPlatformUInt(del)+size;
-  s:=(count-index-1)*size;
+  inc(pGDBByte(del),SizeOfData*index);
+  GDBPlatformUInt(afterdel):=GDBPlatformUInt(del)+SizeOfData;
+  s:=(count-index-1)*SizeOfData;
   Move(afterdel^,del^,s);
   dec(count);
   result:=parray;
@@ -74,8 +68,8 @@ var
    afterdel:pointer;
    s:integer;
 begin
-  GDBPlatformUInt(afterdel):=GDBPlatformUInt(pel)+size;
-  s:=GDBPlatformUInt(parray)+count*size-GDBPlatformUInt(pel);
+  GDBPlatformUInt(afterdel):=GDBPlatformUInt(pel)+SizeOfData;
+  s:=GDBPlatformUInt(parray)+count*SizeOfData-GDBPlatformUInt(pel);
   //s:=(count-index-1)*size;
   Move(afterdel^,pel^,s);
   dec(count);
@@ -85,17 +79,6 @@ destructor TZctnrVectorRec<T>.FreeAndDone;
 begin
      free;
      done;
-end;
-function TZctnrVectorRec<T>.iterate;
-begin
-  if count=0 then result:=nil
-  else if ir.itc<count-1 then
-                      begin
-                           inc(pGDBByte(ir.itp),size);
-                           inc(ir.itc);
-                           result:=ir.itp;
-                      end
-                  else result:=nil;
 end;
 begin
 end.

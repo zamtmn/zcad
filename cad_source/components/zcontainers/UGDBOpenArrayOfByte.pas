@@ -321,7 +321,7 @@ end;
 constructor GDBOpenArrayOfByte.initnul;
 begin
   ReadPos:=0;
-  //size:=1;
+  //SizeOfData:=1;
   inherited initnul;
 end;
 function GDBOpenArrayOfByte.AddByteByVal(Data:GDBByte):GDBInteger;
@@ -348,7 +348,7 @@ var addr:GDBPlatformint;
 begin
   {if count = max then
                      begin
-                          parray := enlargememblock(parray, size * max, 2*size * max);
+                          parray := enlargememblock(parray, SizeOfData * max, 2*SizeOfData * max);
                           max:=2*max;
                      end;}
   begin

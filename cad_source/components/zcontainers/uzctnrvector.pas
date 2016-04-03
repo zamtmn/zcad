@@ -40,7 +40,7 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   constructor initnul;
                   destructor done;virtual;
                   destructor ClearAndDone;virtual;
-                  function Size:TArrayIndex;
+                  function SizeOfData:TArrayIndex;
                   procedure Clear;virtual;
                   function CreateArray:GDBPointer;virtual;
                   procedure Grow(newmax:GDBInteger=0);virtual;
@@ -62,13 +62,13 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
                   function AllocData(SData:GDBword):GDBPointer;virtual;
 
-                  function addnodouble(data:T;EqualFunc:TEqualFunc):GDBInteger;
+                  function AddNoDouble(data:T;EqualFunc:TEqualFunc):GDBInteger;
                   function IsObjExist(pobj:T;EqualFunc:TEqualFunc):GDBBoolean;
 
                   function GetParrayAsPointer:pointer;
 
                   {reworked}
-                  procedure setsize(nsize:TArrayIndex);
+                  procedure SetSize(nsize:TArrayIndex);
                   function getDataMutable(index:TArrayIndex):PT;
                   function getData(index:TArrayIndex):T;
                   function PushBackData(const data:T):TArrayIndex;
@@ -134,7 +134,7 @@ begin
        until p=nil;
        result:=false;
 end;
-function TZctnrVector<T>.addnodouble;
+function TZctnrVector<T>.AddNoDouble;
 var p,newp:PT;
     newd:GDBPointer;
     ir:itrec;
@@ -160,7 +160,7 @@ begin
                     createarray;
   if count+sdata>max then
                          Grow((count+sdata)*2);
-  result:=pointer(GDBPlatformUInt(parray)+count*size);
+  result:=pointer(GDBPlatformUInt(parray)+count*SizeOfData);
   {$IFDEF FILL0ALLOCATEDMEMORY}
   fillchar(result^,sdata,0);
   {$ENDIF}
@@ -222,16 +222,16 @@ begin
   p:=beginiterate(ir);
   p:=getDataMutable({count-1}0);
   pl:=getDataMutable(count-1);
-  GDBGetMem({$IFDEF DEBUGBUILD}'{D9D91D43-BD6A-450A-B07E-E964425E7C99}',{$ENDIF}tp, size);
+  GDBGetMem({$IFDEF DEBUGBUILD}'{D9D91D43-BD6A-450A-B07E-E964425E7C99}',{$ENDIF}tp,SizeOfData);
   if p<>nil then
   repeat
         if GDBPlatformUInt(pl)<=GDBPlatformUInt(p) then
                                          break;
-        Move(p^,tp^,size);
-        Move(pl^,p^,size);
-        Move(tp^,pl^,size);
-        dec(GDBPlatformUInt(pl),size);
-        inc(GDBPlatformUInt(p),size);
+        Move(p^,tp^,SizeOfData);
+        Move(pl^,p^,SizeOfData);
+        Move(tp^,pl^,SizeOfData);
+        dec(GDBPlatformUInt(pl),SizeOfData);
+        inc(GDBPlatformUInt(p),SizeOfData);
         //p:=iterate(ir);
   until {p=nil}false;
   GDBFreeMem(tp);
@@ -244,9 +244,9 @@ begin
      if count>=max then
                        begin
                             if count>2*max then
-                                               setsize(2*count)
+                                               SetSize(2*count)
                                            else
-                                               setsize(2*max);
+                                               SetSize(2*max);
                        end;
      result:=parray;
 end;
@@ -280,7 +280,7 @@ begin
                     result:=nil
                 else
                     begin
-                          ir.itp:=pointer(GDBPlatformUInt(parray)-size);
+                          ir.itp:=pointer(GDBPlatformUInt(parray)-SizeOfData);
                           ir.itc:=-1;
                           result:=iterate(ir);
                     end;
@@ -290,7 +290,7 @@ begin
   if count=0 then result:=nil
   else if ir.itc<(count-1) then
                       begin
-                           inc(pGDBByte(ir.itp),size);
+                           inc(pGDBByte(ir.itp),SizeOfData);
                            inc(ir.itc);
 
                            result:=ir.itp;
@@ -306,8 +306,8 @@ begin
                      grow;
   begin
        GDBPointer(addr) := parray;
-       addr := addr + count * size;
-       Move(p^, GDBPointer(addr)^,size);
+       addr := addr + count * SizeOfData;
+       Move(p^, GDBPointer(addr)^,SizeOfData);
        result:=count;
        inc(count);
   end;
@@ -344,7 +344,7 @@ begin
      clear;
      done;
 end;
-function TZctnrVector<T>.Size:TArrayIndex;
+function TZctnrVector<T>.SizeOfData:TArrayIndex;
 begin
   result:=sizeof(T);
 end;
@@ -355,21 +355,21 @@ begin
 end;
 function TZctnrVector<T>.CreateArray;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}PArray, size*max);
+  GDBGetMem({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}PArray, SizeOfData*max);
   result:=parray;
 end;
 procedure TZctnrVector<T>.Grow;
 begin
      if newmax<=0 then
                      newmax:=2*max;
-     parray := enlargememblock({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}parray, size * max, size * newmax);
+     parray := enlargememblock({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}parray, SizeOfData * max, SizeOfData * newmax);
      max:=newmax;
 end;
 procedure TZctnrVector<T>.Shrink;
 begin
   if (count<>0)and(count<max) then
   begin
-       parray := remapmememblock({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}parray, size * count);
+       parray := remapmememblock({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}parray, SizeOfData * count);
        max := count;
   end;
 end;
@@ -377,15 +377,15 @@ procedure TZctnrVector<T>.SetSize;
 begin
      if nsize>max then
                       begin
-                           parray := enlargememblock({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}parray, size * max, size*nsize);
+                           parray := enlargememblock({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}parray, SizeOfData*max, SizeOfData*nsize);
                       end
 else if nsize<max then
                       begin
-                           parray := enlargememblock({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}parray, size * max, size*nsize);
+                           parray := enlargememblock({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}parray, SizeOfData*max, SizeOfData*nsize);
                            if count>nsize then count:=nsize;
 
                       end;
-max:=nsize;
+     max:=nsize;
 end;
 function TZctnrVector<T>.GetElemCount:GDBInteger;
 begin

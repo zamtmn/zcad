@@ -19,20 +19,20 @@
 unit uzgprimitivescreatorabstract;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfData,uzgindexsarray,uzbtypesbase,sysutils,uzbtypes,uzbmemman,
+uses uzgprimitivessarray,UGDBOpenArrayOfData,uzgindexsarray,uzbtypesbase,sysutils,uzbtypes,uzbmemman,
      uzegeometry;
 type
 TLLPrimitivesCreatorAbstract=class
-                function CreateLLLine(var pa:GDBOpenArrayOfData;const P1Index:TLLVertexIndex):TArrayIndex;virtual;abstract;
-                function CreateLLTriangle(var pa:GDBOpenArrayOfData;const P1Index:TLLVertexIndex):TArrayIndex;virtual;abstract;
-                function CreateLLFreeTriangle(var pa:GDBOpenArrayOfData;const P1Index,P2Index,P3Index:TLLVertexIndex; var ia:ZGLIndexsArray):TArrayIndex;virtual;abstract;
-                function CreateLLTriangleStrip(var pa:GDBOpenArrayOfData):TArrayIndex;virtual;abstract;
-                function CreateLLTriangleFan(var pa:GDBOpenArrayOfData):TArrayIndex;virtual;abstract;
-                function CreateLLPoint(var pa:GDBOpenArrayOfData;const PIndex:TLLVertexIndex):TArrayIndex;virtual;abstract;
-                function CreateLLSymbol(var pa:GDBOpenArrayOfData):TArrayIndex;virtual;abstract;
-                function CreateLLSymbolLine(var pa:GDBOpenArrayOfData):TArrayIndex;virtual;abstract;
-                function CreateLLSymbolEnd(var pa:GDBOpenArrayOfData):TArrayIndex;virtual;abstract;
-                function CreateLLPolyLine(var pa:GDBOpenArrayOfData;const P1Index,_Count:TLLVertexIndex;_closed:GDBBoolean=false):TArrayIndex;virtual;abstract;
+                function CreateLLLine(var pa:TLLPrimitivesArray;const P1Index:TLLVertexIndex):TArrayIndex;virtual;abstract;
+                function CreateLLTriangle(var pa:TLLPrimitivesArray;const P1Index:TLLVertexIndex):TArrayIndex;virtual;abstract;
+                function CreateLLFreeTriangle(var pa:TLLPrimitivesArray;const P1Index,P2Index,P3Index:TLLVertexIndex; var ia:ZGLIndexsArray):TArrayIndex;virtual;abstract;
+                function CreateLLTriangleStrip(var pa:TLLPrimitivesArray):TArrayIndex;virtual;abstract;
+                function CreateLLTriangleFan(var pa:TLLPrimitivesArray):TArrayIndex;virtual;abstract;
+                function CreateLLPoint(var pa:TLLPrimitivesArray;const PIndex:TLLVertexIndex):TArrayIndex;virtual;abstract;
+                function CreateLLSymbol(var pa:TLLPrimitivesArray):TArrayIndex;virtual;abstract;
+                function CreateLLSymbolLine(var pa:TLLPrimitivesArray):TArrayIndex;virtual;abstract;
+                function CreateLLSymbolEnd(var pa:TLLPrimitivesArray):TArrayIndex;virtual;abstract;
+                function CreateLLPolyLine(var pa:TLLPrimitivesArray;const P1Index,_Count:TLLVertexIndex;_closed:GDBBoolean=false):TArrayIndex;virtual;abstract;
              end;
 implementation
 //uses log;

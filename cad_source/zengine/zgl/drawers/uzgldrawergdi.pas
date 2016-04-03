@@ -20,7 +20,7 @@ unit uzgldrawergdi;
 {$INCLUDE def.inc}
 interface
 uses
-    sysutils,uzbtypesbase,uzgldrawergeneral2d,uzelclintfex,fileutil,math,uzefontmanager,uzefont,uzglviewareaabstract,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}uzglgeomdata,uzgldrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,uzepalette,
+    uzgprimitivessarray,sysutils,uzbtypesbase,uzgldrawergeneral2d,uzelclintfex,fileutil,math,uzefontmanager,uzefont,uzglviewareaabstract,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}uzglgeomdata,uzgldrawcontext,uzgprimitives,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,uzepalette,
     {$IFDEF WINDOWS}windows,{$ENDIF}{$IFDEF DELPHI}windows,{$ENDIF}
     {$IFDEF LCLGTK2}
     Gtk2Def,
@@ -65,7 +65,7 @@ TLLGDISymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLSymbol)
               procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);virtual;
         end;
 TLLGDIPrimitivesCreator=class(TLLPrimitivesCreator)
-                             function CreateLLSymbol(var pa:GDBOpenArrayOfData):TArrayIndex;override;
+                             function CreateLLSymbol(var pa:TLLPrimitivesArray):TArrayIndex;override;
                         end;
 TZGLGDIDrawer=class(TZGLGeneral2DDrawer)
                         public
@@ -486,7 +486,7 @@ function TZGLGDIDrawer.GetLLPrimitivesCreator:TLLPrimitivesCreatorAbstract;
 begin
      result:=LLGDIPrimitivesCreator;
 end;
-function TLLGDIPrimitivesCreator.CreateLLSymbol(var pa:GDBOpenArrayOfData):TArrayIndex;
+function TLLGDIPrimitivesCreator.CreateLLSymbol(var pa:TLLPrimitivesArray):TArrayIndex;
 var
    pgdisymbol:PTLLGDISymbol;
 begin

@@ -34,6 +34,7 @@ const
      LLTriangleId=6;}
 type
 {Export+}
+PTLLPrimitivesArray=^TLLPrimitivesArray;
 TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBByte>{//})(*OpenArrayOfData=GDBByte*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;

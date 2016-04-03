@@ -19,7 +19,8 @@
 unit UGDBTable;
 {$INCLUDE def.inc}
 interface
-uses uzctnrvector,UGDBOpenArrayOfData,uzbtypesbase,uzbtypes,sysutils,UGDBOpenArrayOfObjects,UGDBStringArray;
+uses uzctnrvector,uzctnrvectorrec,uzbtypesbase,uzbtypes,sysutils,UGDBOpenArrayOfObjects,
+     UGDBStringArray;
 type
 {EXPORT+}
 PGDBTableArray=^GDBTableArray;

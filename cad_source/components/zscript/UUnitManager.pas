@@ -22,8 +22,8 @@ unit UUnitManager;
 interface
 uses LCLProc,uzbpaths,uzbstrproc,Varman,languade,UGDBOpenArrayOfObjects,SysUtils,
      UBaseTypeDescriptor,uzbtypesbase, uzbtypes,UGDBOpenArrayOfByte, strmy, varmandef,
-     UGDBOpenArrayOfData,UGDBStringArray,TypeDescriptors,UEnumDescriptor,UArrayDescriptor,UPointerDescriptor,
-     URecordDescriptor,UObjectDescriptor,USinonimDescriptor;
+     uzctnrvectorrec,UGDBStringArray,TypeDescriptors,UEnumDescriptor,UArrayDescriptor,
+     UPointerDescriptor,URecordDescriptor,UObjectDescriptor,USinonimDescriptor;
 type
 {EXPORT+}
     PTUnitManager=^TUnitManager;

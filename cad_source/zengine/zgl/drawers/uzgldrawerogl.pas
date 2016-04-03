@@ -20,7 +20,7 @@ unit uzgldrawerogl;
 {$INCLUDE def.inc}
 interface
 uses
-    LCLProc,UGDBOpenArrayOfData,uzepalette,
+    LCLProc,uzctnrvectorrec,uzepalette,
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}

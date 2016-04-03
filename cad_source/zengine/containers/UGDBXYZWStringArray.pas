@@ -19,7 +19,7 @@
 unit UGDBXYZWStringArray;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzbtypes,UGDBOpenArrayOfData,sysutils;
+uses uzbtypesbase,uzbtypes,uzctnrvectorrec,sysutils;
 type
 {EXPORT+}
 PGDBXYZWGDBStringArray=^XYZWGDBGDBStringArray;

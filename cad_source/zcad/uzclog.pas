@@ -90,7 +90,7 @@ var programlog:tlog;
    HistoryTextOut,MessageBoxTextOut:THistoryTextOutProc;
 implementation
 uses
-    UGDBOpenArrayOfByte,UGDBOpenArrayOfData,strutils,sysutils{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF};
+    UGDBOpenArrayOfByte,uzctnrvectorrec,strutils,sysutils{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF};
 var
     PerfomaneBuf:GDBOpenArrayOfByte;
     TimeBuf:GDBOpenArrayOfData<TMyTimeStamp>;

@@ -19,7 +19,7 @@
 unit uzgprimitivessarray;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,UGDBOpenArrayOfData,sysutils,uzbtypes,uzbmemman,
+uses uzbtypesbase,uzctnrvectorrec,sysutils,uzbtypes,uzbmemman,
      uzegeometry;
 const
      LLAttrNothing=0;

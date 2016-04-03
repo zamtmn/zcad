@@ -20,7 +20,7 @@ unit uzestylestables;
 {$INCLUDE def.inc}
 interface
 uses uzbtypesbase,sysutils,uzbtypes,uzegeometry,
-     UGDBNamedObjectsArray,UGDBOpenArrayOfData;
+     UGDBNamedObjectsArray,uzctnrvectorrec;
 type
 {TCellJustify=(jcl(*'ВерхЛево'*),
               jcm(*'ВерхЦентр'*),

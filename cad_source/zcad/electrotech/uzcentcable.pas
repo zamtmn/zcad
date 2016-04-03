@@ -29,7 +29,7 @@ TNodeProp=packed record
           end;
 PGDBObjCable=^GDBObjCable;
 GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
-                 NodePropArray:GDBOpenArrayOfData;(*hidden_in_objinsp*)
+                 NodePropArray:GDBOpenArrayOfData{-}<TNodeProp>{//};(*hidden_in_objinsp*)
                  str11:GDBVertex;(*hidden_in_objinsp*)
                  str12:GDBVertex;(*hidden_in_objinsp*)
                  str13:GDBVertex;(*hidden_in_objinsp*)
@@ -71,7 +71,7 @@ begin
   //tvo^.vp:=vp;
   //tvo^.GetObjType :=GDBCableID;
   CopyVPto(tvo^);
-  p:=vertexarrayinocs.PArray;
+  p:=vertexarrayinocs.GetParrayAsPointer;
   for i:=0 to VertexArrayInOCS.Count-1 do
   begin
       tvo^.vertexarrayinocs.AddByPointer(p);
@@ -417,7 +417,7 @@ constructor GDBObjCable.init;
    //pvd:pvardesk;
 begin
   inherited init(own,layeraddres, lw);
-  NodePropArray.init({$IFDEF DEBUGBUILD}'{28ED5BF5-7598-4903-A715-C525BC68C116}',{$ENDIF}1000,sizeof(TNodeProp));
+  NodePropArray.init({$IFDEF DEBUGBUILD}'{28ED5BF5-7598-4903-A715-C525BC68C116}',{$ENDIF}1000{,sizeof(TNodeProp)});
   //vp.ID := GDBCableID;
   //PTObjectUnit(self.ou.Instance)^.init('cable');
   GetDXFIOFeatures.AddExtendersToEntity(@self);
@@ -425,7 +425,7 @@ end;
 constructor GDBObjCable.initnul;
 begin
   inherited initnul(owner);
-  NodePropArray.init({$IFDEF DEBUGBUILD}'{28ED5BF5-7598-4903-A715-C525BC68C116}',{$ENDIF}1000,sizeof(TNodeProp));
+  NodePropArray.init({$IFDEF DEBUGBUILD}'{28ED5BF5-7598-4903-A715-C525BC68C116}',{$ENDIF}1000{,sizeof(TNodeProp)});
   //vp.id := GDBCableID;
   GetDXFIOFeatures.AddExtendersToEntity(@self);
   //OU.done;

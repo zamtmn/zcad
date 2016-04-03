@@ -23,7 +23,7 @@ uses uzbtypesbase,UGDBOpenArrayOfData, sysutils,uzbtypes, uzegeometry;
 type
 {Export+}
 PGDBPolyPoint2DArray=^GDBPolyPoint2DArray;
-GDBPolyPoint2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
+GDBPolyPoint2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBPolyVertex2D>{//})
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 
                       //procedure DrawGeometry;virtual;
@@ -38,7 +38,7 @@ begin
 end;
 constructor GDBPolyPoint2DArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBPolyVertex2D));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(GDBPolyVertex2D)});
 end;
 (*procedure GDBPolyPoint2DArray.drawgeometry;
 var p:PGDBPolyVertex2D;
@@ -71,7 +71,7 @@ var p,pp:PGDBPolyVertex2D;
     //lines:GDBBoolean;
 begin
   if (count<2){or(not POGLWND^.seldesc.MouseFrameInverse)} then exit;
-  p:=parray;
+  p:=GetParrayAsPointer;
   counter:=0;
   i:=count;
   while i>0 do{or i:=0 to count-1 do}

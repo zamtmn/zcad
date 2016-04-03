@@ -60,7 +60,7 @@ begin
   result:=inherited;
   if closed then
   begin
-       ptpv0:=VertexArrayInWCS.parray;
+       ptpv0:=VertexArrayInWCS.GetParrayAsPointer;
        ptpv1:=VertexArrayInWCS.getelement(VertexArrayInWCS.Count-1);
        result:=result+uzegeometry.Vertexlength(ptpv0^,ptpv1^);
   end;
@@ -161,7 +161,7 @@ begin
   tpo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight,closed);
   CopyVPto(tpo^);
   //tpo^.vertexarray.init({$IFDEF DEBUGBUILD}'{90423E18-2ABF-48A8-8E0E-5D08A9E54255}',{$ENDIF}1000);
-  p:=vertexarrayinocs.PArray;
+  p:=vertexarrayinocs.GetParrayAsPointer;
   for i:=0 to vertexarrayinocs.Count-1 do
   begin
       tpo^.vertexarrayinocs.AddByPointer(p);

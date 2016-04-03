@@ -24,7 +24,7 @@ uses LCLProc,uzbpaths,uzbstrproc,uzgldrawcontext,usimplegenerics,uzestylesdim,uz
     UGDBNamedObjectsArray,uzestyleslinetypes,uzedrawingsimple,uzelongprocesssupport,
     uzglviewareadata,uzeffdxfsupport,uzestrconsts,uzestylestexts,
     uzegeometry,uzeentsubordinated,uzbtypesbase,uzeentgenericsubentry,uzbtypes,
-    sysutils,uzbmemman,uzeconsts,UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,
+    sysutils,uzbmemman,uzeconsts,UGDBObjBlockdefArray,
     UGDBOpenArrayOfByte,UGDBVisibleOpenArray,uzeentity,uzeblockdef,uzestyleslayers,uzeffmanager;
 type
    TCreateExtLoadData=function:pointer;
@@ -2771,7 +2771,7 @@ var
   outfile:GDBInteger;
   memorybuf:PGDBOpenArrayOfByte;
   //s:ZCPHeader;
-  linkbyf:PGDBOpenArrayOfTObjLinkRecord;
+  //linkbyf:PGDBOpenArrayOfTObjLinkRecord;
 //  test:gdbvertex;
   sub:integer;
 begin

@@ -21,7 +21,7 @@ unit uzccomdraw;
 
 interface
 uses
-  uzglviewareageneral,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,
+  uzctnrvector,uzglviewareageneral,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,
   zcmultiobjectcreateundocommand,uzeentitiesmanager,uzgldrawercanvas,
   uzcoimultiobjects,uzcenitiesvariablesextender,uzcdrawing,uzepalette,
   ugdbopenarrayofgdbdouble,uzctextenteditor,uzgldrawcontext,usimplegenerics,UGDBPoint3DArray,
@@ -203,9 +203,11 @@ type
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
+  ptpcoavector=^tpcoavector;
+  tpcoavector=specialize GDBOpenArrayOfData<TCopyObjectDesc>;
   move_com = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
     t3dp: gdbvertex;
-    pcoa:PGDBOpenArrayOfData;
+    pcoa:ptpcoavector;
     //constructor init;
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandCancel; virtual;
@@ -1426,7 +1428,7 @@ begin
          linetypes.addnodouble(@tp);
 
          td:=pobj^.vp.LineTypeScale;
-         linetypescales.addnodouble(td);
+         linetypescales.addnodouble(td,@EqualFuncGDBDouble);
 
          tp:=pointer(pobj^.vp.LineWeight);
          weights.addnodouble(@tp);
@@ -1480,21 +1482,21 @@ begin
            if pobj^.selected then
                                 pobj^.DeSelect(drawings.GetCurrentDWG^.GetSelObjArray,drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
 
-           islayer:=layers.IsObjExist(pobj^.vp.Layer);
+           islayer:=layers.IsObjExist(pobj^.vp.Layer,@EqualFuncPointer);
 
-           islinetype:=linetypes.IsObjExist(pobj^.vp.LineType);
+           islinetype:=linetypes.IsObjExist(pobj^.vp.LineType,@EqualFuncPointer);
 
-           islinetypescale:=linetypescales.IsObjExist(pobj^.vp.LineTypeScale);
+           islinetypescale:=linetypescales.IsObjExist(pobj^.vp.LineTypeScale,@EqualFuncGDBDouble);
 
            tp:=pointer(pobj^.vp.LineWeight);
-           isweght:=weights.IsObjExist(tp);
+           isweght:=weights.IsObjExist(tp,@EqualFuncPointer);
 
            tp:=pointer(pobj^.GetObjType);
            if (GDBPlatformUInt(tp)=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
                                   GDBPlatformUInt(tp):=GDBBlockInsertID;
            if (GDBPlatformUInt(tp)=GDBMtextID)and(SelSimParams.Texts.DiffTextMText=TD_NotDiff) then
                                   GDBPlatformUInt(tp):=GDBTextID;
-           isobjtype:=objtypes.IsObjExist(tp);
+           isobjtype:=objtypes.IsObjExist(tp,@EqualFuncPointer);
            if isobjtype then
            begin
                 if ((GDBPlatformUInt(tp)=GDBBlockInsertID)or(GDBPlatformUInt(tp)=GDBDeviceID))and(SelSimParams.Blocks.SameName) then
@@ -2718,9 +2720,8 @@ begin
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   showprompt(0);
    dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-   GDBGetMem({$IFDEF DEBUGBUILD}'{7702D93A-064E-4935-BFB5-DFDDBAFF9A93}',{$ENDIF}GDBPointer(pcoa),sizeof(GDBOpenArrayOfData));
-   pcoa^.init({$IFDEF DEBUGBUILD}'{379DC609-F39E-42E5-8E79-6D15F8630061}',{$ENDIF}counter,sizeof(TCopyObjectDesc));
-   pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
+   GDBGetMem({$IFDEF DEBUGBUILD}'{7702D93A-064E-4935-BFB5-DFDDBAFF9A93}',{$ENDIF}GDBPointer(pcoa),sizeof(tpcoavector));
+   pcoa^.init({$IFDEF DEBUGBUILD}'{379DC609-F39E-42E5-8E79-6D15F8630061}',{$ENDIF}counter{,sizeof(TCopyObjectDesc)});   pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
    if pobj<>nil then
    repeat
           begin
@@ -3622,7 +3623,7 @@ begin
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 
 
-  for j := 1 to 10 do
+  {for j := 1 to 10 do
   begin
   psl:=pointer(pt^.tbl.CreateObject);
   psl^.init(16);
@@ -3631,7 +3632,7 @@ begin
            s:=inttostr(i);
            psl^.AddByPointer(@s);
       end;
-  end;
+  end;}
 
   pt^.Build(drawings.GetCurrentDWG^);
   pt^.FormatEntity(drawings.GetCurrentDWG^,dc);

@@ -29,7 +29,7 @@ VectorSnap=packed record
 PVectorSnapArray=^VectorSnapArray;
 VectorSnapArray=packed array [0..0] of VectorSnap;
 PGDBVectorSnapArray=^GDBVectorSnapArray;
-GDBVectorSnapArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
+GDBVectorSnapArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<VectorSnap>{//})
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
              end;
 {Export-}
@@ -38,7 +38,7 @@ implementation
 //    log;
 constructor GDBVectorSnapArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(VectorSnap));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(VectorSnap)});
 end;
 begin
 end.

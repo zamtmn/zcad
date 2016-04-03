@@ -26,7 +26,7 @@ uses
     {$ENDIF}
     {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
     Classes,Controls,
-    uzegeometry,uzgldrawergeneral,uzgldrawerabstract,uzgloglstatemanager,Graphics,uzbtypes,
+    uzgvertex3sarray,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,uzgloglstatemanager,Graphics,uzbtypes,
     uzbtypesbase,uzecamera;
 const
   texturesize=128;
@@ -61,13 +61,13 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         function startpaint(InPaintMessage:boolean;w,h:integer):boolean;override;
                         procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);override;
                         procedure endrender;override;
-                        procedure DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);override;
-                        procedure DrawTriangle(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3:TLLVertexIndex);override;
-                        procedure DrawTrianglesFan(const PVertexBuffer,PIndexBuffer:PGDBOpenArrayOfData;const i1,IndexCount:TLLVertexIndex);override;
-                        procedure DrawTrianglesStrip(const PVertexBuffer,PIndexBuffer:PGDBOpenArrayOfData;const i1,IndexCount:TLLVertexIndex);override;
-                        procedure DrawQuad(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3,i4:TLLVertexIndex);override;
-                        function CheckOutboundInDisplay(const PVertexBuffer:PGDBOpenArrayOfData;const i1:TLLVertexIndex):boolean;override;
-                        procedure DrawPoint(const PVertexBuffer:PGDBOpenArrayOfData;const i:TLLVertexIndex);override;
+                        procedure DrawLine(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2:TLLVertexIndex);override;
+                        procedure DrawTriangle(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3:TLLVertexIndex);override;
+                        procedure DrawTrianglesFan(const PVertexBuffer,PIndexBuffer:PZGLVertex3Sarray;const i1,IndexCount:TLLVertexIndex);override;
+                        procedure DrawTrianglesStrip(const PVertexBuffer,PIndexBuffer:PZGLVertex3Sarray;const i1,IndexCount:TLLVertexIndex);override;
+                        procedure DrawQuad(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3,i4:TLLVertexIndex);override;
+                        function CheckOutboundInDisplay(const PVertexBuffer:PZGLVertex3Sarray;const i1:TLLVertexIndex):boolean;override;
+                        procedure DrawPoint(const PVertexBuffer:PZGLVertex3Sarray;const i:TLLVertexIndex);override;
                         procedure SetLineWidth(const w:single);override;
                         procedure SetPointSize(const s:single);override;
                         procedure SetColor(const red, green, blue, alpha: byte);overload;override;
@@ -126,14 +126,14 @@ procedure TZGLOpenGLDrawer.popMatrix;
 begin
   oglsm.myglPopMatrix;
 end;
-procedure TZGLOpenGLDrawer.DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);
+procedure TZGLOpenGLDrawer.DrawLine(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_LINES);
     oglsm.myglVertex3fV(PVertexBuffer.getelement(i1));
     oglsm.myglVertex3fV(PVertexBuffer.getelement(i2));
     oglsm.myglend;
 end;
-procedure TZGLOpenGLDrawer.DrawTriangle(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3:TLLVertexIndex);
+procedure TZGLOpenGLDrawer.DrawTriangle(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_TRIANGLES);
     oglsm.myglVertex3fV(PVertexBuffer.getelement(i1));
@@ -141,7 +141,7 @@ begin
     oglsm.myglVertex3fV(PVertexBuffer.getelement(i3));
     oglsm.myglend;
 end;
-procedure TZGLOpenGLDrawer.DrawTrianglesFan(const PVertexBuffer,PIndexBuffer:PGDBOpenArrayOfData;const i1,IndexCount:TLLVertexIndex);
+procedure TZGLOpenGLDrawer.DrawTrianglesFan(const PVertexBuffer,PIndexBuffer:PZGLVertex3Sarray;const i1,IndexCount:TLLVertexIndex);
 var
    i,index:integer;
    pindex:PTLLVertexIndex;
@@ -154,7 +154,7 @@ begin
     end;
     oglsm.myglend{mytotalglend};
 end;
-procedure TZGLOpenGLDrawer.DrawTrianglesStrip(const PVertexBuffer,PIndexBuffer:PGDBOpenArrayOfData;const i1,IndexCount:TLLVertexIndex);
+procedure TZGLOpenGLDrawer.DrawTrianglesStrip(const PVertexBuffer,PIndexBuffer:PZGLVertex3Sarray;const i1,IndexCount:TLLVertexIndex);
 var
    i,index:integer;
    pindex:PTLLVertexIndex;
@@ -167,7 +167,7 @@ begin
     end;
     oglsm.myglend{mytotalglend};
 end;
-procedure TZGLOpenGLDrawer.DrawQuad(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3,i4:TLLVertexIndex);
+procedure TZGLOpenGLDrawer.DrawQuad(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3,i4:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_QUADS);
     oglsm.myglVertex3fV(PVertexBuffer.getelement(i1));
@@ -176,12 +176,12 @@ begin
     oglsm.myglVertex3fV(PVertexBuffer.getelement(i4));
     oglsm.myglend;
 end;
-function TZGLOpenGLDrawer.CheckOutboundInDisplay(const PVertexBuffer:PGDBOpenArrayOfData;const i1:TLLVertexIndex):boolean;
+function TZGLOpenGLDrawer.CheckOutboundInDisplay(const PVertexBuffer:PZGLVertex3Sarray;const i1:TLLVertexIndex):boolean;
 begin
     result:=true;
 end;
 
-procedure TZGLOpenGLDrawer.DrawPoint(const PVertexBuffer:PGDBOpenArrayOfData;const i:TLLVertexIndex);
+procedure TZGLOpenGLDrawer.DrawPoint(const PVertexBuffer:PZGLVertex3Sarray;const i:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_points);
     oglsm.myglVertex3fV(PVertexBuffer.getelement(i));

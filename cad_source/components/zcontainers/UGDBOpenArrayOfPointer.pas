@@ -37,7 +37,12 @@ PGDBOpenArrayOfGDBPointer=^GDBOpenArrayOfGDBPointer;
 GDBOpenArrayOfGDBPointer=packed object(TZctnrVectorP{-}<GDBPointer>{//}) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
                                    end;
 {Export-}
+function EqualFuncPointer(const a, b: pointer):Boolean;
 implementation
+function EqualFuncPointer(const a, b: pointer):Boolean;
+begin
+  result:=(a=b);
+end;
 function TZctnrVectorP<T>.addnodouble;
 var p,newp:GDBPointer;
     ir:itrec;

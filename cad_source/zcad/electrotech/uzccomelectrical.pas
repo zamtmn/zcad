@@ -10,7 +10,7 @@ unit uzccomelectrical;
 
 interface
 uses
-  uzeutils,uzglviewareageneral,uzctranslations,zcobjectchangeundocommand2,
+  UGDBOpenArrayOfPointer,uzeutils,uzglviewareageneral,uzctranslations,zcobjectchangeundocommand2,
   zcmultiobjectcreateundocommand,uzeentitiesmanager,uzedrawingdef,
   uzcenitiesvariablesextender,uzgldrawcontext,uzcdrawing,uzcvariablesutils,
   uzeentabstracttext,uzcstrconsts,UGDBSelectedObjArray,uzeentityfactory,uzcsysvars,
@@ -845,7 +845,7 @@ begin
                      pt^.ptablestyle:=drawings.GetCurrentDWG.TableStyleTable.getAddres('ShRaspr');
                      pt^.tbl.cleareraseobj;
                      //first:=true;
-                     psfirstline:=pointer(pt^.tbl.CreateObject);
+                     {$ifndef GenericsContainerNotFinished}psfirstline:=pointer(pt^.tbl.CreateObject);{$endif}
                      psfirstline.init(16);
 
                    historyoutstr('Текущие значения Pрасч='+floattostr(p^)+'; Iрасч='+floattostr(i^)+'; Pуст='+floattostr(pust^)+'; Iуст='+floattostr(iust^)+' будут пересчитаны');
@@ -1045,7 +1045,7 @@ begin
 
                                     node:=pcabledesk^.Devices.iterate(ir_inNodeArray);
                               until node=nil;
-                  psl:=pointer(pt^.tbl.CreateObject);
+                  {$ifndef GenericsContainerNotFinished} psl:=pointer(pt^.tbl.CreateObject);{$endif}
                   psl.init(16);
                   {if first then
                                begin
@@ -1527,7 +1527,7 @@ begin
                     cable^.AddVertex(firstpoint);
                     if not IsPointEqual(tw1,firstpoint) then
                                                         cable^.AddVertex(tw1);
-                    pa.copyto(@cable.VertexArrayInOCS);
+                    pa.copyto(cable.VertexArrayInOCS);
                     //firstpoint:=pgdbvertex(cable^.VertexArrayInWCS.getelement(cable^.VertexArrayInWCS.Count-1))^;
                     if not IsPointEqual(tw2,firstpoint) then
                                                         cable^.AddVertex(tw2);
@@ -1848,7 +1848,7 @@ begin
                                   else
                                       nodeend:=nodestart;
           puredevstart:=devstart;
-                psl:=pointer(pt^.tbl.CreateObject);
+                {$ifndef GenericsContainerNotFinished}psl:=pointer(pt^.tbl.CreateObject);{$endif}
                 psl.init(12);
           repeat
                 devend:='Не присоединено';
@@ -2060,7 +2060,8 @@ begin
   repeat
   if currentgroup^[1]='!' then
               begin
-                   psl:=pointer(pt^.tbl.CreateObject);
+                   {$ifndef GenericsContainerNotFinished}psl:=pointer(pt^.tbl.CreateObject);{$endif}
+                   //psl:=pointer(pt^.tbl.CreateObject);
                    psl.init(2);
 
                    s:='';
@@ -2087,7 +2088,8 @@ begin
 
                    begin
                    PBOMITEM.processed:=true;
-                   psl:=pointer(pt^.tbl.CreateObject);
+                   {$ifndef GenericsContainerNotFinished}psl:=pointer(pt^.tbl.CreateObject);{$endif}
+                   //psl:=pointer(pt^.tbl.CreateObject);
                    psl.init(9);
 
                    s:=pdbi^.Position;
@@ -2318,19 +2320,19 @@ begin
                                                    begin
                                                         pc1.VertexArrayInOCS.Invert;
                                                         pc2.VertexArrayInOCS.deleteelement(0);
-                                                        pc2.VertexArrayInOCS.copyto(@pc1.VertexArrayInOCS);
+                                                        pc2.VertexArrayInOCS.copyto(pc1.VertexArrayInOCS);
                                                         pc2.YouDeleted(drawings.GetCurrentDWG^);
                                                    end
 else if uzegeometry.Vertexlength(pv12^,pv21^)<eps then
                                                    begin
                                                         pc2.VertexArrayInOCS.deleteelement(0);
-                                                        pc2.VertexArrayInOCS.copyto(@pc1.VertexArrayInOCS);
+                                                        pc2.VertexArrayInOCS.copyto(pc1.VertexArrayInOCS);
                                                         pc2.YouDeleted(drawings.GetCurrentDWG^);
                                                    end
 else if uzegeometry.Vertexlength(pv11^,pv22^)<eps then
                                                    begin
                                                         pc1.VertexArrayInOCS.deleteelement(0);
-                                                        pc1.VertexArrayInOCS.copyto(@pc2.VertexArrayInOCS);
+                                                        pc1.VertexArrayInOCS.copyto(pc2.VertexArrayInOCS);
                                                         pc1.YouDeleted(drawings.GetCurrentDWG^);
                                                         pc1:=pc2
                                                    end
@@ -2338,7 +2340,7 @@ else if uzegeometry.Vertexlength(pv12^,pv22^)<eps then
                                                    begin
                                                         pc2.VertexArrayInOCS.Invert;
                                                         pc2.VertexArrayInOCS.deleteelement(0);
-                                                        pc2.VertexArrayInOCS.copyto(@pc1.VertexArrayInOCS);
+                                                        pc2.VertexArrayInOCS.copyto(pc1.VertexArrayInOCS);
                                                         pc2.YouDeleted(drawings.GetCurrentDWG^);
                                                    end
 else
@@ -2983,7 +2985,7 @@ begin
                                                                  psupernetvarext^.entityunit.copyfrom(@pnetvarext.entityunit);
                                                                  //log.LogOut('supernet.initnul(nil); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
-                                                            if not processednets.IsObjExist(net) then
+                                                            if not processednets.IsObjExist(net,@EqualFuncPointer) then
                                                             begin
                                                                  net.objarray.copyto(supernet.ObjArray);
                                                                  processednets.AddByRef(net^);
@@ -2991,7 +2993,7 @@ begin
                                                                  //log.LogOut('processednets.AddByRef(net^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
 
-                                                            if not processednets.IsObjExist(net2) then
+                                                            if not processednets.IsObjExist(net2,@EqualFuncPointer) then
                                                             begin
                                                                  net2.objarray.copyto(supernet.ObjArray);
                                                                  processednets.AddByRef(net2^);

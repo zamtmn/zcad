@@ -50,8 +50,13 @@ GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects
                       //function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;virtual;
                 end;
 {Export-}
+function EqualFuncPGDBaseObject(const a, b: PGDBaseObject):Boolean;
 implementation
 uses uzeentityfactory;
+function EqualFuncPGDBaseObject(const a, b: PGDBaseObject):Boolean;
+begin
+  result:=(a=b);
+end;
 {function GDBObjOpenArrayOfPV.FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;
 var
    pvisible:PGDBObjEntity;

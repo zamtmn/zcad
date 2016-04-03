@@ -19,22 +19,22 @@
 unit UGDBTable;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArray,UGDBOpenArrayOfData,uzbtypesbase,uzbtypes,sysutils,UGDBOpenArrayOfObjects,UGDBStringArray;
+uses uzctnrvector,UGDBOpenArray,UGDBOpenArrayOfData,uzbtypesbase,uzbtypes,sysutils,UGDBOpenArrayOfObjects,UGDBStringArray;
 type
 {EXPORT+}
 PGDBTableArray=^GDBTableArray;
-GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
+GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBGDBStringArray>{//})(*OpenArrayOfData=GDBGDBStringArray*)
                     columns,rows:GDBInteger;
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}c,r:GDBInteger);
                     destructor done;virtual;
                     procedure cleareraseobj;virtual;
-                    function copyto(source:PGDBOpenArray):GDBInteger;virtual;
+                    //function copyto(var source:GDBOpenArrayOfData{-}<GDBGDBStringArray>{//}):GDBInteger;virtual;
               end;
 {EXPORT-}
 implementation
 //uses
 //    log;
-function GDBTableArray.copyto(source:PGDBOpenArray):GDBInteger; //PGDBOpenArrayOfData
+{function GDBTableArray.copyto(source:PGDBOpenArray):GDBInteger; //PGDBOpenArrayOfData
 var
   p,np:PGDBGDBStringArray;
   ir:itrec;
@@ -49,7 +49,7 @@ begin
         p^.copyto(np);
         p:=iterate(ir);
   until p=nil;
-end;
+end;}
 procedure GDBTableArray.cleareraseobj;
 var
   p:PGDBaseObject;
@@ -79,7 +79,7 @@ constructor GDBTableArray.init;
     //psl:PGDBGDBStringArray;
     //s:gdbstring;
 begin
-   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}r,sizeof(GDBGDBStringArray));
+   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}r{,sizeof(GDBGDBStringArray)});
 
    {psl:=pointer(CreateObject);
           psl.init(c);

@@ -269,7 +269,7 @@ var i: GDBInteger;
 begin
   if (pcp^.max - pcp^.count) >=VertexArrayInWCS.Count then
   begin
-    p := VertexArrayInWCS.PArray;
+    p := VertexArrayInWCS.GetParrayAsPointer;
     for i := 0 to VertexArrayInWCS.Count - 1 do
     begin
         pcp^.arraycp[pcp^.count].objnum := objnum;
@@ -294,7 +294,7 @@ begin
     {pvsa:=GDBPointer(self.snaparray);
     inc(pvsa,vertexnum);}
     //------------pvsa:=snaparray.getelement(vertexnum);
-    ptv:=VertexArrayInWCS.PArray;
+    ptv:=VertexArrayInWCS.GetParrayAsPointer;
     inc(ptv,vertexnum);
     case mode of
                 0:
@@ -436,7 +436,7 @@ begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{8F88CAFB-14F3-4F33-96B5-F493DB8B28B7}',{$ENDIF}GDBPointer(tpo), sizeof(GDBObjCurve));
   tpo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   //tpo^.vertexarrayinocs.init({$IFDEF DEBUGBUILD}'{90423E18-2ABF-48A8-8E0E-5D08A9E54255}',{$ENDIF}1000);
-  p:=vertexarrayinocs.PArray;
+  p:=vertexarrayinocs.GetParrayAsPointer;
   for i:=0 to VertexArrayInWCS.Count-1 do
   begin
       tpo^.vertexarrayinocs.AddByPointer(p);
@@ -453,8 +453,8 @@ begin
   if mode <= os_polymin then
   begin
   i:=round(os_polymin-mode);
-  p:=vertexarrayinocs.PArray;
-  pold:=pgdbobjcurve(refp)^.vertexarrayinocs.PArray;
+  p:=vertexarrayinocs.GetParrayAsPointer;
+  pold:=pgdbobjcurve(refp)^.vertexarrayinocs.GetParrayAsPointer;
   inc(p,i);
   inc(pold,i);
   p^ := VertexAdd(pold^, dist);
@@ -465,8 +465,8 @@ procedure GDBObjCurve.rtsave;
 var p,pold:pgdbvertex;
     i:GDBInteger;
 begin
-  p:=vertexarrayinocs.PArray;
-  pold:=pgdbobjcurve(refp)^.vertexarrayinocs.PArray;
+  p:=vertexarrayinocs.GetParrayAsPointer;
+  pold:=pgdbobjcurve(refp)^.vertexarrayinocs.GetParrayAsPointer;
   for i:=0 to vertexarrayinocs.Count-1 do
   begin
       pold^:=p^;
@@ -494,7 +494,7 @@ begin
                      end;
                     GDBGetMem(PprojPoint,sizeof(GDBpolyline2DArray));
                     PprojPoint^.init(vertexarray.count,closed);}
-                    ptpv:=VertexArrayInWCS.parray;
+                    ptpv:=VertexArrayInWCS.GetParrayAsPointer;
                     for i:=0 to VertexArrayInWCS.count-1 do
                     begin
                          {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(ptpv^,tv);
@@ -552,7 +552,7 @@ begin
           //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{48F91543-AAA8-4CF7-A038-D3DDC248BE3E}',{$ENDIF}{pprojpoint}VertexArrayInWCS.count);
           {pv2d:=pprojpoint^.parray;}
-          pv:=VertexArrayInWCS.parray;
+          pv:=VertexArrayInWCS.GetParrayAsPointer;
           pdesc.selected:=false;
           pdesc.pobject:=nil;
 

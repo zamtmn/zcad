@@ -27,7 +27,7 @@ type
 PGDBObjBlockdefArray=^GDBObjBlockdefArray;
 PBlockdefArray=^BlockdefArray;
 BlockdefArray=packed array [0..0] of GDBObjBlockdef;
-GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBObjBlockdef*)
+GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBObjBlockdef>{//})(*OpenArrayOfData=GDBObjBlockdef*)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       constructor initnul;
 
@@ -76,12 +76,12 @@ begin
 end;
 constructor GDBObjBlockdefArray.init;
 begin
-     inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBObjBlockdef));
+     inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(GDBObjBlockdef)});
 end;
 constructor GDBObjBlockdefArray.initnul;
 begin
      inherited initnul;
-     size:=sizeof(GDBObjBlockdef);
+     //size:=sizeof(GDBObjBlockdef);
 end;
 function GDBObjBlockdefArray.create;
 begin

@@ -23,7 +23,7 @@ uses uzgldrawcontext,uzbtypesbase,UGDBOpenArrayOfData,sysutils,uzbtypes,uzegeome
 type
 {Export+}
 PGDBOOutbound2DIArray=^GDBOOutbound2DIArray;
-GDBOOutbound2DIArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
+GDBOOutbound2DIArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBvertex2DI>{//})
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       procedure DrawGeometry(var DC:TDrawContext);virtual;
                       procedure addpoint(point:GDBvertex2DI);virtual;
@@ -40,7 +40,7 @@ implementation
 //uses {UGDBDescriptor,}log;
 constructor GDBOOutbound2DIArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBvertex2DI));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(GDBvertex2DI)});
 end;
 procedure GDBOOutbound2DIArray.clear;
 begin
@@ -95,7 +95,7 @@ begin
                else
                begin
 
-                    p:=parray;
+                    p:=GetParrayAsPointer;
                     oldp:=p;
                     inc(p);
                     //oglsm.myglbegin(GL_line_loop);

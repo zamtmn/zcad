@@ -30,7 +30,7 @@ type
                  end;
 
     PTCableManager=^TCableManager;
-    TCableManager={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*OpenArrayOfPObj*)
+    TCableManager={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects<TCableDesctiptor>)(*OpenArrayOfPObj*)
                        constructor init;
                        procedure build;virtual;
                        function FindOrCreate(sname:gdbstring):PTCableDesctiptor;virtual;
@@ -60,7 +60,7 @@ begin
 end;
 constructor TCableManager.init;
 begin
-     inherited init({$IFDEF DEBUGBUILD}'{D8494E55-1296-45ED-A5ED-175D6C0671F5}',{$ENDIF}100,sizeof(TCableDesctiptor));
+     inherited init({$IFDEF DEBUGBUILD}'{D8494E55-1296-45ED-A5ED-175D6C0671F5}',{$ENDIF}100{,sizeof(TCableDesctiptor)});
 end;
 destructor TCableDesctiptor.done;
 begin

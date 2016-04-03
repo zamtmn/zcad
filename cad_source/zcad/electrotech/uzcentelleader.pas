@@ -380,7 +380,7 @@ begin
                         sta.sort;
      CopyVPto(tbl);
      tbl.tbl.cleareraseobj{clear};
-     psl:=pointer(tbl.tbl.CreateObject);
+     {$ifndef GenericsContainerNotFinished}  psl:=pointer(tbl.tbl.CreateObject);{$endif}
      psl.init(10);
 
      if size>=0 then
@@ -393,7 +393,7 @@ begin
      repeat
            if width<=psl.Count then
                                   begin
-                                       psl:=pointer(tbl.tbl.CreateObject);
+                                       {$ifndef GenericsContainerNotFinished} psl:=pointer(tbl.tbl.CreateObject);{$endif}
                                        psl.init(10);
                                   end;
           s:=ps^;

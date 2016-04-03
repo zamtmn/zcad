@@ -71,7 +71,12 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   function GetParrayAsPointer:pointer;
             end;
 {Export-}
+function EqualFuncGDBDouble(const a, b:GDBDouble):Boolean;
 implementation
+function EqualFuncGDBDouble(const a, b:GDBDouble):Boolean;
+begin
+  result:=(a=b);
+end;
 function TZctnrVector<T>.GetParrayAsPointer;
 begin
   result:=pointer(parray);

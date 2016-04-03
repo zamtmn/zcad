@@ -152,7 +152,7 @@ procedure GDBObjLWpolyline.TransformAt;
 begin
     inherited;
     Vertex2D_in_OCS_Array.clear;
-    pGDBObjLWpolyline(p)^.Vertex2D_in_OCS_Array.copyto(@Vertex2D_in_OCS_Array);
+    pGDBObjLWpolyline(p)^.Vertex2D_in_OCS_Array.copyto(Vertex2D_in_OCS_Array);
     Vertex2D_in_OCS_Array.transform(t_matrix^);
 end;
 
@@ -215,14 +215,14 @@ begin
 
 
   q3d:=Width3D_in_WCS_Array.parray;
-  p3d:=Vertex3D_in_WCS_Array.PArray;
+  p3d:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
   p3dold:=p3d;
   inc(p3d);
   for i := 1 to ie do
   begin
     begin
             if i=Vertex3D_in_WCS_Array.count then
-                                           p3d:=Vertex3D_in_WCS_Array.PArray;
+                                           p3d:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
 
       subresult:=CalcOutBound4VInFrustum(q3d^,mf);
           if subresult=IRFully then
@@ -339,8 +339,8 @@ var p,pold:pgdbvertex2d;
     i:GDBInteger;
 begin
   inherited;
-  p:=Vertex2D_in_OCS_Array.PArray;
-  pold:=PGDBObjLWPolyline(refp)^.Vertex2D_in_OCS_Array.PArray;
+  p:=Vertex2D_in_OCS_Array.GetParrayAsPointer;
+  pold:=PGDBObjLWPolyline(refp)^.Vertex2D_in_OCS_Array.GetParrayAsPointer;
   for i:=0 to Vertex2D_in_OCS_Array.Count-1 do
   begin
       pold^:=p^;
@@ -401,7 +401,7 @@ begin
           //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{48F91543-AAA8-4CF7-A038-D3DDC248BE3E}',{$ENDIF}{pprojpoint}Vertex3D_in_WCS_Array.count);
           //pv2d:=pprojpoint^.parray;
-          pv:=Vertex3D_in_WCS_Array.parray;
+          pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
           pdesc.selected:=false;
           pdesc.pobject:=nil;
 
@@ -427,8 +427,8 @@ begin
   CopyVPto(tpo^);
   tpo^.Local:=local;
   //tpo^.vertexarray.init({$IFDEF DEBUGBUILD}'{90423E18-2ABF-48A8-8E0E-5D08A9E54255}',{$ENDIF}1000);
-  p:=Vertex2D_in_OCS_Array.PArray;
-  pw:=Width2D_in_OCS_Array.parray;
+  p:=Vertex2D_in_OCS_Array.GetParrayAsPointer;
+  pw:=Width2D_in_OCS_Array.GetParrayAsPointer;
   for i:=0 to Vertex2D_in_OCS_Array.Count-1 do
   begin
       tpo^.Vertex2D_in_OCS_Array.AddByPointer(p);
@@ -560,7 +560,7 @@ begin
 
 
     q3d:=Width3D_in_WCS_Array.parray;
-    plw:=Width2D_in_OCS_Array.parray;
+    plw:=Width2D_in_OCS_Array.GetParrayAsPointer;
     for i := 0 to ie do
     begin
       begin
@@ -581,7 +581,7 @@ begin
 
     //oglsm.myglbegin(GL_Lines);
     q3d:=Width3D_in_WCS_Array.parray;
-    plw:=Width2D_in_OCS_Array.parray;
+    plw:=Width2D_in_OCS_Array.GetParrayAsPointer;
     for i := 0 to ie do
     begin
       begin
@@ -805,13 +805,13 @@ begin
     result:=0;
     if Vertex2D_in_OCS_Array.count<2 then exit;
 
-    pv:=Vertex2D_in_OCS_Array.parray;
+    pv:=Vertex2D_in_OCS_Array.GetParrayAsPointer;
     pvnext:=pv;
     inc(pvnext);
     for i:=1 to Vertex2D_in_OCS_Array.count do
     begin
        if i=Vertex2D_in_OCS_Array.count then
-                                            pvnext:=Vertex2D_in_OCS_Array.parray;
+                                            pvnext:=Vertex2D_in_OCS_Array.GetParrayAsPointer;
        result:=result+(pv.x+pvnext.x)*(pv.y-pvnext.y);
        inc(pv);
        inc(pvnext);
@@ -837,7 +837,7 @@ var
   pv:PGDBVertex2D;
 begin
   Vertex3D_in_WCS_Array.clear;
-  pv:=Vertex2D_in_OCS_Array.parray;
+  pv:=Vertex2D_in_OCS_Array.GetParrayAsPointer;
   for i:=0 to Vertex2D_in_OCS_Array.count-1 do
   begin
        v.x:=pv.x;
@@ -864,7 +864,7 @@ begin
        pprojpoint^.init({$IFDEF DEBUGBUILD}'{C2BA8485-D361-4FB7-9EA1-74CEE160AE8F}',{$ENDIF}Vertex3D_in_WCS_Array.count,closed);
   end;
   pprojpoint^.clear;
-                    ptpv:=Vertex3D_in_WCS_Array.parray;
+                    ptpv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
                     for i:=0 to Vertex3D_in_WCS_Array.count-1 do
                     begin
                          ProjectProc(ptpv^,tv);

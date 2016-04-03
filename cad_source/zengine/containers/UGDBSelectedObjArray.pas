@@ -31,7 +31,7 @@ SelectedObjDesc=packed record
                       ptempobj:PGDBObjEntity;
                 end;
 PGDBSelectedObjArray=^GDBSelectedObjArray;
-GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
+GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<selectedobjdesc>{//})
                           SelectedCount:GDBInteger;
                           constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 
@@ -66,7 +66,7 @@ var tdesc:pselectedobjdesc;
 begin
   if count<>0 then
   begin
-       tdesc:=parray;
+       tdesc:=GetParrayAsPointer;
        for i:=0 to count-1 do
        begin
             //dec(tdesc^.objaddr^.vp.LastCameraPos);
@@ -95,7 +95,7 @@ begin
   Max := m;
   Size := sizeof(selectedobjdesc);
   GDBGetMem(PArray, size * max);}
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(selectedobjdesc));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(selectedobjdesc)});
 end;
 function GDBSelectedObjArray.addobject;
 var tdesc:pselectedobjdesc;
@@ -104,7 +104,7 @@ begin
   result:=nil;
   if PARRAY=nil then
                     createarray;
-  tdesc:=parray;
+  tdesc:=GetParrayAsPointer;
   if count<>0 then
   begin
        for i:=0 to count-1 do
@@ -128,7 +128,7 @@ procedure GDBSelectedObjArray.clearallobjects;
 var tdesc:pselectedobjdesc;
     i:GDBInteger;
 begin
-  tdesc:=parray;
+  tdesc:=GetParrayAsPointer;
   if count<>0 then
   begin
        for i:=0 to count-1 do
@@ -154,7 +154,7 @@ var tdesc:pselectedobjdesc;
 begin
   if count<>0 then
   begin
-       tdesc:=parray;
+       tdesc:=GetParrayAsPointer;
        dc.drawer.SetPointSize(GripSize);
        for i:=0 to count-1 do
        begin
@@ -173,7 +173,7 @@ var tdesc:pselectedobjdesc;
 begin
   if count<>0 then
   begin
-       tdesc:=parray;
+       tdesc:=GetParrayAsPointer;
        for i:=0 to count-1 do
        begin
             if tdesc^.objaddr<>nil then
@@ -193,7 +193,7 @@ var tdesc:pselectedobjdesc;
 begin
   if count<>0 then
   begin
-       tdesc:=parray;
+       tdesc:=GetParrayAsPointer;
        for i:=0 to count-1 do
        begin
             if tdesc^.objaddr<>nil then
@@ -210,7 +210,7 @@ var tdesc:pselectedobjdesc;
 begin
   if count<>0 then
   begin
-       tdesc:=parray;
+       tdesc:=GetParrayAsPointer;
        for i:=0 to count-1 do
        begin
             if tdesc^.pcontrolpoint<>nil then
@@ -231,7 +231,7 @@ begin
   td.disttomouse:=9999;
   if count > 0 then
   begin
-    tdesc:=parray;
+    tdesc:=GetParrayAsPointer;
     for i := 0 to count - 1 do
     begin
       if tdesc^.pcontrolpoint<>nil then tdesc^.pcontrolpoint^.getnearesttomouse(td,mx,my);
@@ -372,7 +372,7 @@ var i: GDBInteger;
 begin
   if count > 0 then
   begin
-    tdesc:=parray;
+    tdesc:=GetParrayAsPointer;
     for i := 0 to count - 1 do
     begin
       if tdesc^.pcontrolpoint<>nil then
@@ -396,7 +396,7 @@ var i: GDBInteger;
 begin
   if count > 0 then
   begin
-    tdesc:=parray;
+    tdesc:=GetParrayAsPointer;
     for i := 0 to count - 1 do
     begin
       if tdesc^.pcontrolpoint<>nil then
@@ -428,7 +428,7 @@ var i: GDBInteger;
 begin
   if count > 0 then
   begin
-    tdesc:=parray;
+    tdesc:=GetParrayAsPointer;
     for i := 0 to count - 1 do
     begin
       if tdesc^.pcontrolpoint<>nil then
@@ -453,7 +453,7 @@ var i: GDBInteger;
 begin
   if count > 0 then
   begin
-    tdesc:=parray;
+    tdesc:=GetParrayAsPointer;
     for i := 0 to count - 1 do
     begin
       if tdesc^.pcontrolpoint<>nil then
@@ -483,7 +483,7 @@ var i: GDBInteger;
 begin
   if count > 0 then
   begin
-    tdesc:=parray;
+    tdesc:=GetParrayAsPointer;
     for i := 0 to count - 1 do
     begin
       if tdesc^.pcontrolpoint<>nil then
@@ -509,7 +509,7 @@ var i: GDBInteger;
 begin
   if count > 0 then
   begin
-    tdesc:=parray;
+    tdesc:=GetParrayAsPointer;
     for i := 0 to count - 1 do
     begin
       if tdesc^.ptempobj<>nil then
@@ -542,7 +542,7 @@ begin
   until p=nil;}
   if count > 0 then
   begin
-    tdesc:=parray;
+    tdesc:=GetParrayAsPointer;
     for i := 0 to count - 1 do
     begin
       if tdesc^.ptempobj<>nil then
@@ -562,7 +562,7 @@ var
 begin
   if count > 0 then
   begin
-    tdesc:=parray;
+    tdesc:=GetParrayAsPointer;
     tdesc^.objaddr^.getonlyoutbound(dc);
     result:=tdesc^.objaddr^.vp.BoundingBox;
     inc(tdesc);
@@ -591,7 +591,7 @@ var i: GDBInteger;
 begin
   if count > 0 then
   begin
-    tdesc:=parray;
+    tdesc:=GetParrayAsPointer;
     for i := 0 to count - 1 do
     begin
       if tdesc^.ptempobj<>nil then
@@ -612,7 +612,7 @@ begin
   SelectedCount:=0;
   if count > 0 then
   begin
-    tdesc:=parray;
+    tdesc:=GetParrayAsPointer;
     for i := 0 to count - 1 do
     begin
       if tdesc^.pcontrolpoint<>nil then tdesc^.pcontrolpoint^.selectcurrentcontrolpoint(key,mx,my,h);

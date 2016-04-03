@@ -34,7 +34,7 @@ const
      LLTriangleId=6;}
 type
 {Export+}
-TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBByte*)
+TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBByte>{//})(*OpenArrayOfData=GDBByte*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
              end;
@@ -43,12 +43,12 @@ implementation
 //uses log;
 constructor TLLPrimitivesArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBByte));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(GDBByte)});
 end;
 constructor TLLPrimitivesArray.initnul;
 begin
   inherited initnul;
-  size:=sizeof(GDBByte);
+  //size:=sizeof(GDBByte);
 end;
 begin
 end.

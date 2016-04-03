@@ -31,7 +31,7 @@ ZPolySegmentData={$IFNDEF DELPHI}packed{$ENDIF} record
                                                       startpoint,endpoint,dir:GDBVertex;
                                                       length,nlength,naccumlength,accumlength:GDBDouble;
                                                 end;
-ZSegmentator={$IFNDEF DELPHI}packed{$ENDIF}object(GDBOpenArrayOfData)
+ZSegmentator={$IFNDEF DELPHI}packed{$ENDIF}object(GDBOpenArrayOfData{-}<ZPolySegmentData>{//})
                                                  dir,cp:GDBvertex;
                                                  cdp,angle:GDBDouble;
                                                  pcurrsegment:PZPolySegmentData;
@@ -325,7 +325,7 @@ constructor ZSegmentator.InitFromLine(const startpoint,endpoint:GDBVertex;out le
 var
    segment:ZPolySegmentData;
 begin
-     inherited init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}1,sizeof(ZPolySegmentData));
+     inherited init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}1{,sizeof(ZPolySegmentData)});
      length:=CalcSegment(startpoint,endpoint,segment,0);
      AddByPointer(@segment);
      normalize(length);
@@ -359,9 +359,9 @@ var
    _ir:itrec;
 begin
      if closed then
-                   inherited init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}points.Count,sizeof(ZPolySegmentData))
+                   inherited init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}points.Count{,sizeof(ZPolySegmentData)})
                else
-                   inherited init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}points.Count+1,sizeof(ZPolySegmentData));
+                   inherited init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}points.Count+1{,sizeof(ZPolySegmentData)});
     length:=0;
     ptvprev:=points.beginiterate(_ir);
     pfirstv:=ptvprev;

@@ -65,7 +65,7 @@ begin
      OptData.ignorelines:=false;
      OptData.symplify:=false;
      ProcessedSize:=0;
-     PPrimitive:=LLprimitives.parray;
+     PPrimitive:=LLprimitives.GetParrayAsPointer;
      while ProcessedSize<LLprimitives.count do
      begin
           CurrentSize:=PPrimitive.draw(Drawer,rc,GeomData,LLprimitives,OptData);
@@ -344,7 +344,7 @@ begin
                                 exit;
                               end;
   ProcessedSize:=0;
-  PPrimitive:=LLprimitives.parray;
+  PPrimitive:=LLprimitives.GetParrayAsPointer;
   if ProcessedSize<LLprimitives.count then
   begin
        CurrentSize:=PPrimitive.CalcTrueInFrustum(frustum,GeomData,result);

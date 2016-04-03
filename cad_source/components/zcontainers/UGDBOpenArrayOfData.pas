@@ -19,38 +19,25 @@
 unit UGDBOpenArrayOfData;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,UGDBOpenArray,uzbtypes;
+uses uzbtypesbase,UGDBOpenArray,uzbtypes,uzctnrvector;
 type
 {Export+}
-PGDBOpenArrayOfData=^GDBOpenArrayOfData;
-GDBOpenArrayOfData={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
-
-                    function iterate(var ir:itrec):GDBPointer;virtual;
-                    //procedure clear;virtual;
-                    //procedure freeelement(p:GDBPointer);virtual;abstract;
-                    destructor FreeAndDone;virtual;
-                    function deleteelement(index:GDBInteger):GDBPointer;
-                    function DeleteElementByP(pel:GDBPointer):GDBPointer;
-                    function InsertElement(index,dir:GDBInteger;p:GDBPointer):GDBPointer;
-                    //function copyto(source:PGDBOpenArrayOfData):GDBInteger;virtual;
-              end;
+GDBOpenArrayOfData{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
+                                 object(TZctnrVector{-}<T>{//})
+                                                     function iterate(var ir:itrec):GDBPointer;virtual;
+                                                     destructor FreeAndDone;virtual;
+                                                     function deleteelement(index:GDBInteger):GDBPointer;
+                                                     function DeleteElementByP(pel:GDBPointer):GDBPointer;
+                                                     function InsertElement(index,dir:GDBInteger;p:GDBPointer):GDBPointer;
+                                 end;
 {Export-}
+(*
+PGDBOpenArrayOfData=^GDBOpenArrayOfData;
+GDBOpenArrayOfData=packed object(TZctnrVectorData{-}<byte>{//})
+                                   end;
+*)
 implementation
-//uses
-//    log;
-{function GDBOpenArrayOfData.copyto;
-var p:GDBPointer;
-    ir:itrec;
-begin
-  p:=beginiterate(ir);
-  if p<>nil then
-  repeat
-        source.add(p);
-        p:=iterate(ir);
-  until p=nil;
-  result:=count;
-end;}
-function GDBOpenArrayOfData.InsertElement;
+function GDBOpenArrayOfData<T>.InsertElement;
 var
    del,afterdel:pointer;
    s:integer;
@@ -69,7 +56,7 @@ begin
 end;
   result:=parray;
 end;
-function GDBOpenArrayOfData.deleteelement;
+function GDBOpenArrayOfData<T>.deleteelement;
 var
    del,afterdel:pointer;
    s:integer;
@@ -82,7 +69,7 @@ begin
   dec(count);
   result:=parray;
 end;
-function GDBOpenArrayOfData.DeleteElementByP;
+function GDBOpenArrayOfData<T>.DeleteElementByP;
 var
    afterdel:pointer;
    s:integer;
@@ -94,16 +81,12 @@ begin
   dec(count);
   result:=parray;
 end;
-destructor GDBOpenArrayOfData.FreeAndDone;
+destructor GDBOpenArrayOfData<T>.FreeAndDone;
 begin
      free;
      done;
 end;
-{procedure GDBOpenArrayOfData.clear;
-begin
-     count:=0;
-end;}
-function GDBOpenArrayOfData.iterate;
+function GDBOpenArrayOfData<T>.iterate;
 begin
   if count=0 then result:=nil
   else if ir.itc<count-1 then

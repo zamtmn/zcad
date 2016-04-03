@@ -60,15 +60,15 @@ ShapeProp={$IFNDEF DELPHI}packed{$ENDIF} object(BasicSHXDashProp)
                 constructor initnul;
                 destructor done;virtual;
           end;
-GDBDashInfoArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=TDashInfo*)
+GDBDashInfoArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<TDashInfo>{//})(*OpenArrayOfData=TDashInfo*)
                end;
-GDBDoubleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBDouble*)
+GDBDoubleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBDouble>{//})(*OpenArrayOfData=GDBDouble*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                end;
-GDBShapePropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*OpenArrayOfObject=ShapeProp*)
+GDBShapePropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects{-}<ShapeProp>{//})(*OpenArrayOfObject=ShapeProp*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                end;
-GDBTextPropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*OpenArrayOfObject=TextProp*)
+GDBTextPropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects{-}<TextProp>{//})(*OpenArrayOfObject=TextProp*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                end;
 PPGDBLtypePropObjInsp=^PGDBLtypePropObjInsp;
@@ -306,7 +306,7 @@ begin
      Mode:=N2TLTMode(n);
      len:=0;
      pointer(desk):=nil;
-     dasharray.init({$IFDEF DEBUGBUILD}'{9DA63ECC-B244-4EBD-A9AE-AB24F008B526}',{$ENDIF}10,sizeof(TDashInfo));
+     dasharray.init({$IFDEF DEBUGBUILD}'{9DA63ECC-B244-4EBD-A9AE-AB24F008B526}',{$ENDIF}10{,sizeof(TDashInfo)});
      strokesarray.init({$IFDEF DEBUGBUILD}'{70B68C69-C222-4BE5-BB48-B88F08BA7605}',{$ENDIF}10);
      shapearray.init({$IFDEF DEBUGBUILD}'{9174ED86-C17E-4683-9BD1-E1927A9F9B3E}',{$ENDIF}10);
      Textarray.init({$IFDEF DEBUGBUILD}'{0A026EC4-B78B-4973-9016-A02E4919B1C8}',{$ENDIF}10);
@@ -396,8 +396,8 @@ begin
                        begin
                        result.init(_source.Name);
                        result.len:=_source.len;
-                       _source.dasharray.copyto(@result.dasharray);
-                       _source.strokesarray.copyto(@result.strokesarray);
+                       _source.dasharray.copyto(result.dasharray);
+                       _source.strokesarray.copyto(result.strokesarray);
                        //_source.shapearray.copyto(@result.shapearray);
                        psp:=_source.shapearray.beginiterate(ir);
                        if psp<>nil then
@@ -675,15 +675,15 @@ end;
 
 constructor GDBDoubleArray.init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(gdbdouble));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(gdbdouble)});
 end;
 constructor GDBShapePropArray.init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(ShapeProp));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(ShapeProp)});
 end;
 constructor GDBTextPropArray.init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(TextProp));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(TextProp)});
 end;
 
 begin

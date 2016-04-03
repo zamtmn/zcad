@@ -34,7 +34,7 @@ TGDBTableCellStyle=packed record
                           Width,TextWidth:GDBDouble;
                           CF:TTableCellJustify;
                     end;
-GDBCellFormatArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=TGDBTableCellStyle*)
+GDBCellFormatArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<TGDBTableCellStyle>{//})(*OpenArrayOfData=TGDBTableCellStyle*)
                    end;
 PTGDBTableStyle=^TGDBTableStyle;
 TGDBTableStyle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
@@ -71,7 +71,7 @@ end;
 constructor TGDBTableStyle.Init;
 begin
     inherited;
-    tblformat.init({$IFDEF DEBUGBUILD}'{3FD7CFC7-3885-4C97-9BEE-BA27E83862BB}',{$ENDIF}10,sizeof(TGDBTableCellStyle));
+    tblformat.init({$IFDEF DEBUGBUILD}'{3FD7CFC7-3885-4C97-9BEE-BA27E83862BB}',{$ENDIF}10{,sizeof(TGDBTableCellStyle)});
 end;
 destructor TGDBTableStyle.Done;
 begin

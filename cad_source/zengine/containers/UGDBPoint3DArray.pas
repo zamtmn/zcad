@@ -25,7 +25,7 @@ type
 {REGISTEROBJECTTYPE GDBPoint3dArray}
 {Export+}
 PGDBPoint3dArray=^GDBPoint3dArray;
-GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex*)
+GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBVertex>{//})(*OpenArrayOfData=GDBVertex*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
                 function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
@@ -41,7 +41,7 @@ implementation
 uses uzgloglstatemanager;
 function GDBPoint3DArray.getoutbound;
 var
-    t,b,l,r,n,f:GDBDouble;
+    tt,b,l,r,n,f:GDBDouble;
     ptv:pgdbvertex;
     ir:itrec;
 begin
@@ -49,7 +49,7 @@ begin
   b:=Infinity;
   n:=Infinity;
   r:=NegInfinity;
-  t:=NegInfinity;
+  tt:=NegInfinity;
   f:=NegInfinity;
   ptv:=beginiterate(ir);
   if ptv<>nil then
@@ -61,8 +61,8 @@ begin
                  r:=ptv.x;
         if ptv.y<b then
                  b:=ptv.y;
-        if ptv.y>t then
-                 t:=ptv.y;
+        if ptv.y>tt then
+                 tt:=ptv.y;
         if ptv.z<n then
                  n:=ptv.z;
         if ptv.z>f then
@@ -70,7 +70,7 @@ begin
         ptv:=iterate(ir);
   until ptv=nil;
   result.LBN:=CreateVertex(l,B,n);
-  result.RTF:=CreateVertex(r,T,f);
+  result.RTF:=CreateVertex(r,Tt,f);
 
   end
               else
@@ -85,7 +85,7 @@ var p:PGDBVertex;
     i:GDBInteger;
 begin
   if count<2 then exit;
-  p:=parray;
+  p:=GetParrayAsPointer;
   oglsm.myglbegin(GL_LINES{_STRIP});
   oglsm.myglVertex3dV(@p^);
   inc(p);
@@ -104,7 +104,7 @@ var p:PGDBVertex;
     i:GDBInteger;
 begin
   if count<2 then exit;
-  p:=parray;
+  p:=GetParrayAsPointer;
   oglsm.myglbegin(GL_LINE_STRIP);
   oglsm.myglVertex3dV(@p^);
   inc(p);
@@ -125,7 +125,7 @@ begin
   if closed then
   begin
   if count<2 then exit;
-  p:=parray;
+  p:=GetParrayAsPointer;
   oglsm.myglbegin(GL_LINES{_STRIP});
   oglsm.myglVertex3dV(@p^);
   inc(p);
@@ -152,7 +152,7 @@ var i,{counter,}emptycount:GDBInteger;
 begin
    //result:=IREmpty;
    emptycount:=0;
-   ptpv0:=parray;
+   ptpv0:=GetParrayAsPointer;
    ptpv1:=ptpv0;
    inc(ptpv1);
    i:=0;
@@ -189,7 +189,7 @@ var i{,counter}:GDBInteger;
     ptpv0,ptpv1:PGDBVertex;
 begin
   result:=false;
-   ptpv0:=parray;
+   ptpv0:=GetParrayAsPointer;
    ptpv1:=ptpv0;
    inc(ptpv1);
    i:=0;
@@ -212,7 +212,7 @@ begin
    end;
    if closed then
    begin
-        ptpv1:=parray;
+        ptpv1:=GetParrayAsPointer;
    if uzegeometry.CalcTrueInFrustum (ptpv0^,ptpv1^,mf)<>IREmpty
                                                                         then
                                                                             result:=true
@@ -228,7 +228,7 @@ var i{,counter}:GDBInteger;
     a,b:integer;
 begin
    result:=false;
-   ptpv0:=parray;
+   ptpv0:=GetParrayAsPointer;
    ptpv1:=ptpv0;
    inc(ptpv1);
    i:=0;
@@ -250,18 +250,18 @@ begin
                             inc(ptpv1);
                             inc(ptpv0);
                             if i=b then
-                                       ptpv1:=parray;
+                                       ptpv1:=GetParrayAsPointer;
      end;
    end;
 end;
 constructor GDBPoint3DArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(gdbvertex));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(gdbvertex)});
 end;
 constructor GDBPoint3DArray.initnul;
 begin
   inherited initnul;
-  size:=sizeof(gdbvertex);
+  //size:=sizeof(gdbvertex);
 end;
 begin
 end.

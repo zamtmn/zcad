@@ -28,6 +28,7 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                       {-}PT=^T;{//}
                       {-}TArr=array[0..0] of T;{//}
                       {-}PTArr=^TArr;{//}
+                      {-}TEqualFunc=function(const a, b: T):Boolean;{//}
                   {-}var{//}
                   PArray:{-}PTArr{/GDBPointer/};(*hidden_in_objinsp*)
                   GUID:GDBString;(*hidden_in_objinsp*)
@@ -64,11 +65,18 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
                   function AllocData(SData:GDBword):GDBPointer;virtual;
 
-                  function addnodouble(data:T):GDBInteger;
-                  function IsObjExist(pobj:T):GDBBoolean;
+                  function addnodouble(data:T;EqualFunc:TEqualFunc):GDBInteger;
+                  function IsObjExist(pobj:T;EqualFunc:TEqualFunc):GDBBoolean;
+
+                  function GetParrayAsPointer:pointer;
             end;
 {Export-}
 implementation
+function TZctnrVector<T>.GetParrayAsPointer;
+begin
+  result:=pointer(parray);
+end;
+
 function TZctnrVector<T>.IsObjExist;
 var p:PT;
     ir:itrec;
@@ -76,7 +84,7 @@ begin
        p:=beginiterate(ir);
        if p<>nil then
        repeat
-             if p^=pobj then
+             if EqualFunc(p^,pobj) then
                            begin
                                 result:=true;
                                 exit;
@@ -99,7 +107,7 @@ begin
        p:=beginiterate(ir);
        if p<>nil then
        repeat
-             if p^=data then exit;
+             if EqualFunc(p^,data) then exit;
              p:=iterate(ir);
        until p=nil;
   end;

@@ -20,7 +20,7 @@ unit UPointerDescriptor;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses types,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,
+uses types,TypeDescriptors,UGDBOpenArrayOfByte,
      uzbtypesbase,varmandef,uzbtypes,UGDBStringArray,uzbmemman;
 resourcestring
   rsUnassigned='Unassigned';
@@ -32,8 +32,8 @@ GDBPointerDescriptor=object(TUserTypeDescriptor)
                      //constructor init(var t:gdbtypedesk);
                      constructor init(ptype:GDBString;tname:string;pu:pointer);
                      function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
-                     function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                     function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                     //function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                     //function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                      procedure Format;virtual;
                      function GetTypeAttributes:TTypeAttr;virtual;
                      function CreateEditor(TheOwner:TPropEditorOwner;rect:trect{x,y,w,h:GDBInteger};pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;InitialValue:GDBString;preferedHeight:integer):TEditorDesc{TPropEditor};virtual;
@@ -64,7 +64,7 @@ begin
 
      result:=TypeOf^.CreateEditor(theowner,rect,pointer(pinstance^),nil,FreeOnLostFocus,initialvalue,preferedHeight)
 end;
-function GDBPointerDescriptor.Serialize;
+(*function GDBPointerDescriptor.Serialize;
 var //pd:PFieldDescriptor;
 //     d:FieldDescriptor;
 //     p:pointer;
@@ -91,8 +91,8 @@ begin
                          end
                      else
                          membuf^.AddData(@PNIL,sizeof(PNIL));}
-end;
-function GDBPointerDescriptor.DeSerialize;
+end;*)
+(*function GDBPointerDescriptor.DeSerialize;
 var //pd:PFieldDescriptor;
 //     d:FieldDescriptor;
 //     p:pointer;
@@ -115,7 +115,7 @@ begin
                                                          pGDBPointer(PInstance)^:=nil;
                                                     end
                          end;
-end;
+end;*)
 
 constructor GDBPointerDescriptor.init;
 begin

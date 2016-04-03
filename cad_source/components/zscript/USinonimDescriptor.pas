@@ -20,7 +20,7 @@ unit USinonimDescriptor;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,uzbtypesbase,
+uses TypeDescriptors,UGDBOpenArrayOfByte,uzbtypesbase,
      varmandef,uzbtypes{,UGDBOpenArrayOfData,UGDBStringArray},uzbmemman;
 type
 PGDBSinonimDescriptor=^GDBSinonimDescriptor;
@@ -30,8 +30,8 @@ GDBSinonimDescriptor=object(TUserTypeDescriptor)
                      constructor init(SinonimTypeName,Tname:GDBString;pu:pointer);
                      function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                      procedure ApplyOperator(oper,path:GDBString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;
-                     function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                     function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                     //function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                     //function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                      destructor Done;virtual;
                      function GetFactTypedef:PUserTypeDescriptor;virtual;
                      function Compare(pleft,pright:pointer):TCompareResult;virtual;
@@ -87,13 +87,13 @@ procedure GDBSinonimDescriptor.ApplyOperator;
 begin
      PTUserTypeDescriptor(PSinonimOf)^.ApplyOperator(oper,path,offset,tc);
 end;
-function GDBSinonimDescriptor.Serialize;
+{function GDBSinonimDescriptor.Serialize;
 begin
       PTUserTypeDescriptor(PSinonimOf)^.Serialize(PInstance,SaveFlag,membuf,linkbuf,sub);
 end;
 function GDBSinonimDescriptor.DeSerialize;
 begin
       PTUserTypeDescriptor(PSinonimOf)^.DeSerialize(PInstance,SaveFlag,membuf,linkbuf);
-end;
+end;}
 begin
 end.

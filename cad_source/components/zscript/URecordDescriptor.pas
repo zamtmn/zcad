@@ -21,13 +21,13 @@ unit URecordDescriptor;
 {$MODE DELPHI}
 {$ASMMODE intel}
 interface
-uses LCLProc,UPointerDescriptor,uzbstrproc,{log,}UGDBOpenArrayOfByte,sysutils,UBaseTypeDescriptor,UGDBOpenArrayOfTObjLinkRecord,
+uses LCLProc,UPointerDescriptor,uzbstrproc,{log,}UGDBOpenArrayOfByte,sysutils,UBaseTypeDescriptor,
   TypeDescriptors{,UGDBOpenArrayOfPointer},UGDBOpenArrayOfData,uzbtypesbase,varmandef,uzbtypes,uzbmemman;
 type
-{** Для работы с инспектором.}
+TFieldDescriptor=GDBOpenArrayOfData<FieldDescriptor>;
 PRecordDescriptor=^RecordDescriptor;
 RecordDescriptor=object(TUserTypeDescriptor)
-                       Fields:GDBOpenArrayOfData;
+                       Fields:{GDBOpenArrayOfData}TFieldDescriptor;
                        Parent:PRecordDescriptor;
                        constructor init(tname:string;pu:pointer);
                        function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
@@ -37,8 +37,8 @@ RecordDescriptor=object(TUserTypeDescriptor)
                        procedure ApplyOperator(oper,path:GDBString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;
                        procedure AddConstField(const fd:FieldDescriptor);
                        procedure CopyTo(RD:PTUserTypeDescriptor);
-                       function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                       function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                       //function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                       //function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                        function GetTypeAttributes:TTypeAttr;virtual;
                        procedure MagicFreeInstance(PInstance:GDBPointer);virtual;
                        destructor Done;virtual;
@@ -131,7 +131,7 @@ begin
               pd:=Fields.iterate(ir);
         until pd=nil;
 end;
-function RecordDescriptor.Serialize;
+(*function RecordDescriptor.Serialize;
 var pd:PFieldDescriptor;
 //     d:FieldDescriptor;
      p:pointer;
@@ -198,8 +198,8 @@ begin
      if VerboseLog then
        DebugLn('{T-}End Serialize for "%s"',[self.TypeName]);
      //programlog.LogOutFormatStr('End Serialize for "%s"',[self.TypeName],lp_DecPos,LM_Trace);
-end;
-function RecordDescriptor.DeSerialize;
+end;*)
+(*function RecordDescriptor.DeSerialize;
 var pd:PFieldDescriptor;
 //     d:FieldDescriptor;
      p:pointer;
@@ -246,11 +246,11 @@ begin
      if VerboseLog then
        DebugLn('{T-}End Serialize for "%s"',[self.TypeName]);
      //programlog.LogOutFormatStr('End Serialize for "%s"',[self.TypeName],lp_DecPos,LM_Trace);
-end;
+end;*)
 constructor RecordDescriptor.init;
 begin
      inherited init(0,tname,pu);
-     fields.init({$IFDEF DEBUGBUILD}'{693E7B49-A224-4778-9FD6-49E131AEBD54}',{$ENDIF}20,sizeof({RecordDescriptor}FieldDescriptor));
+     fields.init({$IFDEF DEBUGBUILD}'{693E7B49-A224-4778-9FD6-49E131AEBD54}',{$ENDIF}20{,sizeof(FieldDescriptor)});
      parent:=nil;
 end;
 procedure FREEFIELD(p:GDBPointer);

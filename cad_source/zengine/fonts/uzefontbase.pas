@@ -23,11 +23,12 @@ uses uzgprimitives,uzglvectorobject,uzbmemman,uzbstrproc,UGDBOpenArrayOfByte,uzb
      uzbtypes,uzegeometry;
 type
 {EXPORT+}
+TGDBUNISymbolInfoVector=GDBOpenArrayOfData<GDBUNISymbolInfo>;
 PBASEFont=^BASEFont;
 BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               unicode:GDBBoolean;
               symbolinfo:TSymbolInfoArray;
-              unisymbolinfo:GDBOpenArrayOfData;
+              unisymbolinfo:{GDBOpenArrayOfData}TGDBUNISymbolInfoVector;
               //----//SHXdata:GDBOpenArrayOfByte;
               FontData:ZGLVectorObject;
               constructor init;
@@ -65,7 +66,7 @@ begin
       symbolinfo[i].LatestCreate:=false;
      end;
      unicode:=false;
-     unisymbolinfo.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1000,sizeof(GDBUNISymbolInfo));
+     unisymbolinfo.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1000{,sizeof(GDBUNISymbolInfo)});
      //----//SHXdata.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1024);
      FontData.init({$IFDEF DEBUGBUILD}'BASEFont.init'{$ENDIF});
 end;

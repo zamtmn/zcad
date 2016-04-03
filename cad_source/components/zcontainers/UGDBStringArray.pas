@@ -23,7 +23,7 @@ uses uzbtypesbase,uzbtypes,UGDBOpenArrayOfData,uzbstrproc,sysutils,UGDBOpenArray
 type
 {EXPORT+}
     PGDBGDBStringArray=^GDBGDBStringArray;
-    GDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBString*)
+    GDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBString>{//})(*OpenArrayOfData=GDBString*)
                           constructor init(m:GDBInteger);
                           procedure loadfromfile(fname:GDBString);
                           procedure freeelement(p:GDBPointer);virtual;
@@ -36,7 +36,7 @@ type
                           function GetLengthWithEOL:GDBInteger;
                           function GetTextWithEOL:GDBString;
                           function addnodouble(p:GDBPointer):GDBInteger;
-                          function copyto(source:PGDBOpenArray):GDBInteger;virtual;
+                          //function copyto(var source:GDBGDBStringArray):GDBInteger;virtual;
                           function getGDBString(index:TArrayIndex):GDBString;
                           //destructor done;virtual;
                           //function copyto(source:PGDBOpenArrayOfData):GDBInteger;virtual;
@@ -64,7 +64,7 @@ function GDBGDBStringArray.getGDBString;
 begin
   result := pGDBString(getelement(index))^;
 end;
-function GDBGDBStringArray.copyto;
+(*function GDBGDBStringArray.copyto;
 var p:GDBPointer;
     ir:itrec;
 begin
@@ -75,7 +75,7 @@ begin
         p:=iterate(ir);
   until p=nil;
   result:=count;
-end;
+end;*)
 procedure GDBGDBStringArray.sort;
 var
    isEnd:boolean;
@@ -277,7 +277,7 @@ begin
 end;
 constructor GDBGDBStringArray.init(m:GDBInteger);
 begin
-     inherited init({$IFDEF DEBUGBUILD}'{C4288C8A-7E49-4F97-9F66-347B38494638}',{$ENDIF}m,sizeof(GDBString));
+     inherited init({$IFDEF DEBUGBUILD}'{C4288C8A-7E49-4F97-9F66-347B38494638}',{$ENDIF}m{,sizeof(GDBString)});
 end;
 procedure GDBGDBStringArray.loadfromfile(fname:GDBString);
 var f:GDBOpenArrayOfByte;

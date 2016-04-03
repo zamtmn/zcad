@@ -281,7 +281,7 @@ begin
                                             else result:=parse(subexpr,str,@strarr,mode,@l,position);
                              if (result)and(strarr.count<>0) then
                              begin
-                                  strarr.copyto(GDBStringarray);
+                                  strarr.copyto(GDBStringarray^);
                                   l:=l;
                              end;
                              strarr.FreeAndDone;

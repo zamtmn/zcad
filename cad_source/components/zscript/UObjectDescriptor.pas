@@ -22,20 +22,25 @@ unit UObjectDescriptor;
 {$ASMMODE intel}
 interface
 uses LCLProc,UGDBOpenArrayOfObjects,ugdbopenarray,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
-     UBaseTypeDescriptor,UGDBOpenArrayOfTObjLinkRecord,TypeDescriptors,
+     UBaseTypeDescriptor,TypeDescriptors,
      UGDBOpenArrayOfPointer,UGDBOpenArrayOfData,uzbtypesbase,varmandef,uzbtypes,uzbmemman,uzbstrproc;
 type
 simpleproc=procedure of object;
+//SimpleMenods.init({$IFDEF DEBUGBUILD}'{E4674594-B99F-4A72-8766-E2B49DF50FCE}',{$ENDIF}20,sizeof(MetodDescriptor));
+//Properties.init({$IFDEF DEBUGBUILD}'{CFC9264A-23FA-4FE4-AE71-30495AD54ECE}',{$ENDIF}20,sizeof(PropertyDescriptor));
+TSimpleMenodsVector=GDBOpenArrayOfObjects<MetodDescriptor>;
+TPropertiesVector=GDBOpenArrayOfData<PropertyDescriptor>;
+
 PObjectDescriptor=^ObjectDescriptor;
 ObjectDescriptor=object(RecordDescriptor)
                        PVMT:GDBPointer;
                        VMTCurrentOffset:GDBInteger;
                        PDefaultConstructor:GDBPointer;
-                       SimpleMenods:GDBOpenArrayOfObjects;
+                       SimpleMenods:{GDBOpenArrayOfObjects}TSimpleMenodsVector;
                        LincedData:GDBString;
                        LincedObjects:GDBboolean;
                        ColArray:GDBOpenArrayOfByte;
-                       Properties:GDBOpenArrayOfData;
+                       Properties:TPropertiesVector;
 
 
                        constructor init(tname:string;pu:pointer);
@@ -51,8 +56,8 @@ ObjectDescriptor=object(RecordDescriptor)
                        procedure RunMetod(mn:GDBString;obj:GDBPointer);
                        procedure SimpleRunMetodWithArg(mn:GDBString;obj,arg:GDBPointer);
                        procedure RunDefaultConstructor(PInstance:GDBPointer);
-                       function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                       function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                       //function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                       //function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                        destructor Done;virtual;
                        function GetTypeAttributes:TTypeAttr;virtual;
                        procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
@@ -83,7 +88,7 @@ begin
         inherited;
          membuf.TXTAddGDBStringEOL('');
 end;
-function ObjectDescriptor.Serialize;
+(*function ObjectDescriptor.Serialize;
 var
    pld:PRecordDescriptor;
    p:pointer;
@@ -180,7 +185,7 @@ begin
                    objtypename:='';
              end;
              objtypename:='';*)
-        end;
+//        end;
         {if LincedObjects then
         begin
              p:=PGDBOpenArrayOfGDBPointer(PInstance)^.beginiterate;
@@ -200,7 +205,7 @@ begin
              objtypename:=ObjN_ArrayEnd;
              GDBStringDescriptorObj^.Serialize(@objtypename,saveflag,membuf,linkbuf);
         end;}
-end;
+//end;*)
 procedure freemetods(p:GDBPointer);
 begin
      PMetodDescriptor(p)^.MetodName:='';
@@ -236,8 +241,8 @@ VMT=RECORD
 END;}
 begin
      inherited init(tname,pu);
-     SimpleMenods.init({$IFDEF DEBUGBUILD}'{E4674594-B99F-4A72-8766-E2B49DF50FCE}',{$ENDIF}20,sizeof(MetodDescriptor));
-     Properties.init({$IFDEF DEBUGBUILD}'{CFC9264A-23FA-4FE4-AE71-30495AD54ECE}',{$ENDIF}20,sizeof(PropertyDescriptor));
+     SimpleMenods.init({$IFDEF DEBUGBUILD}'{E4674594-B99F-4A72-8766-E2B49DF50FCE}',{$ENDIF}20{,sizeof(MetodDescriptor)});
+     Properties.init({$IFDEF DEBUGBUILD}'{CFC9264A-23FA-4FE4-AE71-30495AD54ECE}',{$ENDIF}20{,sizeof(PropertyDescriptor)});
      pvmt:=nil;
      {$IFDEF FPC}VMTCurrentOffset:=12;{$ENDIF}
      {$IFDEF CPU64}VMTCurrentOffset:=24{sizeof(VMT)};{$ENDIF}
@@ -526,7 +531,7 @@ begin
            pcmd.ResultPTD:=pmd^.ResultPTD;
            pcmd.MetodAddr:=pmd^.MetodAddr;
            pcmd.Attributes:=pmd^.Attributes;
-           pcmd.Operands.init({$IFDEF DEBUGBUILD}'{AD13B409-3869-418B-A314-DF70AB5C1601}',{$ENDIF}10,sizeof(GDBOperandDesc));
+           pcmd.Operands.init({$IFDEF DEBUGBUILD}'{AD13B409-3869-418B-A314-DF70AB5C1601}',{$ENDIF}10{,sizeof(GDBOperandDesc)});
            //PObjectDescriptor(rd)^.SimpleMenods.AddByPointer(@pcmd);
            //pointer(pcmd.MetodName):=nil;
            //pointer(pcmd.OperandsName):=nil;
@@ -604,6 +609,7 @@ begin
      //eaddr:=addr;
         if colarray.parray=nil then
                                    colarray.CreateArray;
+     {$IFNDEF GenericsContainerNotFinished}
      if LincedObjects or(LincedData<>'') then begin
         colarray.Count:=colarray.max;
         sca:=colarray.max;
@@ -625,8 +631,9 @@ begin
                            fillchar(colarray.PArray^,sa,true);
                       end;
                   end;
+      {$ENDIF}
         if ppointer(baddr)^=nil then exit;
-
+        {$IFNDEF GenericsContainerNotFinished}
         if LincedData<>''then
         begin
  (*       bmodesave:=property_build;
@@ -670,6 +677,8 @@ begin
              until p=nil;
              //if bmodesave<>property_build then bmode:=bmodesave;
         end;
+        {$ENDIF}
+        {$IFNDEF GenericsContainerNotFinished}
         if LincedObjects then
         begin
              //if assigned(sysvar.debug.ShowHiddenFieldInObjInsp) then
@@ -703,6 +712,7 @@ begin
              objtypename:=ObjN_ArrayEnd;
              GDBStringDescriptorObj.Serialize(@objtypename,saveflag,membuf,linkbuf);}
      end;
+     {$ENDIF}
 end;
 begin
 end.

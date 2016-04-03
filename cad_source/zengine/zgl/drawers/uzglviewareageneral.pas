@@ -458,7 +458,7 @@ begin
       dc.drawer.SetColor(80,80, 80,255);
       if param.ontrackarray.otrackarray[i].arraydispaxis.Count <> 0 then
       begin;
-      pt:=param.ontrackarray.otrackarray[i].arraydispaxis.PArray;
+      pt:=param.ontrackarray.otrackarray[i].arraydispaxis.GetParrayAsPointer;
       for j := 0 to param.ontrackarray.otrackarray[i].arraydispaxis.count - 1 do
         begin
           if pt.trace then
@@ -1942,8 +1942,8 @@ begin
   copyospoint(param.ontrackarray.otrackarray[param.ontrackarray.current],param.ospoint);
   param.ontrackarray.otrackarray[param.ontrackarray.current].arrayworldaxis.clear;
   param.ontrackarray.otrackarray[param.ontrackarray.current].arraydispaxis.clear;
-  param.ospoint.arrayworldaxis.copyto(@param.ontrackarray.otrackarray[param.ontrackarray.current].arrayworldaxis);
-  param.ospoint.arraydispaxis.copyto(@param.ontrackarray.otrackarray[param.ontrackarray.current].arraydispaxis);
+  param.ospoint.arrayworldaxis.copyto(param.ontrackarray.otrackarray[param.ontrackarray.current].arrayworldaxis);
+  param.ospoint.arraydispaxis.copyto(param.ontrackarray.otrackarray[param.ontrackarray.current].arraydispaxis);
 
 
   inc(param.ontrackarray.current);
@@ -2732,7 +2732,7 @@ begin
   if not sysvarDWGPolarMode then exit;
   //param.ospoint.arrayworldaxis.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}4);
   param.ospoint.arrayworldaxis.clear;
-  pv:=polaraxis.PArray;
+  pv:=polaraxis.GetParrayAsPointer;
   for i:=0 to polaraxis.Count-1 do
   begin
        param.ospoint.arrayworldaxis.AddByPointer(@pv^);
@@ -2779,7 +2779,7 @@ begin
   param.ospoint.arraydispaxis.clear;
   //GDBGetMem(param.ospoint.arraydispaxis, sizeof(GDBWord) + param.ospoint.arrayworldaxis.count * sizeof(traceprop));
   //param.ospoint.arraydispaxis.count := param.ospoint.arrayworldaxis.count;
-  pv:=param.ospoint.arrayworldaxis.PArray;
+  pv:=param.ospoint.arrayworldaxis.GetParrayAsPointer;
   for i := 0 to param.ospoint.arrayworldaxis.count - 1 do
   begin
     PDWG.myGluProject2(createvertex(param.ospoint.worldcoord.x + pv.x, param.ospoint.worldcoord.y + pv.y, param.ospoint.worldcoord.z + pv.z),
@@ -2820,7 +2820,7 @@ begin
   if not sysvarDWGPolarMode then exit;
   //param.ontrackarray.otrackarray[0].arrayworldaxis.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}4);
   param.ontrackarray.otrackarray[0].arrayworldaxis.clear;
-  pv:=polaraxis.PArray;
+  pv:=polaraxis.GetParrayAsPointer;
   for i:=0 to polaraxis.Count-1 do
   begin
        param.ontrackarray.otrackarray[0].arrayworldaxis.AddByPointer(@pv^);
@@ -2878,7 +2878,7 @@ begin
   param.ontrackarray.otrackarray[0].arraydispaxis.clear;
   //GDBGetMem(param.ospoint.arraydispaxis, sizeof(GDBWord) +param.ospoint.arrayworldaxis.count * sizeof(traceprop));
   //param.ospoint.arraydispaxis.count := param.ospoint.arrayworldaxis.count;
-  pv:=param.ontrackarray.otrackarray[0].arrayworldaxis.PArray;
+  pv:=param.ontrackarray.otrackarray[0].arrayworldaxis.GetParrayAsPointer;
   for i := 0 to param.ontrackarray.otrackarray[0].arrayworldaxis.count - 1 do
   begin
     {gdb.GetCurrentDWG^}pdwg.myGluProject2(createvertex(param.ontrackarray.otrackarray
@@ -2944,8 +2944,8 @@ begin
     pt2:=nil;
     if param.ontrackarray.otrackarray[j].arrayworldaxis.Count <> 0 then
     begin
-      pv:=param.ontrackarray.otrackarray[j].arrayworldaxis.PArray;
-      pt:=param.ontrackarray.otrackarray[j].arraydispaxis.PArray;
+      pv:=param.ontrackarray.otrackarray[j].arrayworldaxis.GetParrayAsPointer;
+      pt:=param.ontrackarray.otrackarray[j].arraydispaxis.GetParrayAsPointer;
       for i := 0 to param.ontrackarray.otrackarray[j].arrayworldaxis.count - 1 do
       begin
         PDWG.myGluProject2(createvertex(param.ontrackarray.otrackarray[j].worldcoord.x + pv.x,

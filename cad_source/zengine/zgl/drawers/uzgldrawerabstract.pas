@@ -19,7 +19,7 @@
 unit uzgldrawerabstract;
 {$INCLUDE def.inc}
 interface
-uses {$IFDEF DELPHI}types,{$ENDIF}uzgprimitivescreatorabstract,uzepalette,Classes,UGDBOpenArrayOfData,Graphics,uzbtypes,uzecamera,uzegeometry;
+uses uzgvertex3sarray,{$IFDEF DELPHI}types,{$ENDIF}uzgprimitivescreatorabstract,uzepalette,Classes,UGDBOpenArrayOfData,Graphics,uzbtypes,uzecamera,uzegeometry;
 type
 TRenderMode=(TRM_ModelSpace,TRM_DisplaySpace,TRM_WindowSpace);
 TZGLPenStyle=(TPS_Solid,TPS_Dot,TPS_Dash,TPS_Selected);
@@ -29,13 +29,13 @@ TZGLAbstractDrawer=class
                         //PVertexBuffer:PGDBOpenArrayOfData;
                         function GetLLPrimitivesCreator:TLLPrimitivesCreatorAbstract;virtual;abstract;
 
-                        procedure DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2:TLLVertexIndex);virtual;abstract;
-                        procedure DrawTriangle(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3:TLLVertexIndex);virtual;abstract;
-                        procedure DrawTrianglesFan(const PVertexBuffer,PIndexBuffer:PGDBOpenArrayOfData;const i1,IndexCount:TLLVertexIndex);virtual;abstract;
-                        procedure DrawTrianglesStrip(const PVertexBuffer,PIndexBuffer:PGDBOpenArrayOfData;const i1,IndexCount:TLLVertexIndex);virtual;abstract;
-                        procedure DrawQuad(const PVertexBuffer:PGDBOpenArrayOfData;const i1,i2,i3,i4:TLLVertexIndex);virtual;abstract;
-                        function CheckOutboundInDisplay(const PVertexBuffer:PGDBOpenArrayOfData;const i1:TLLVertexIndex):boolean;virtual;abstract;
-                        procedure DrawPoint(const PVertexBuffer:PGDBOpenArrayOfData;const i:TLLVertexIndex);virtual;abstract;
+                        procedure DrawLine(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2:TLLVertexIndex);virtual;abstract;
+                        procedure DrawTriangle(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3:TLLVertexIndex);virtual;abstract;
+                        procedure DrawTrianglesFan(const PVertexBuffer,PIndexBuffer:PZGLVertex3Sarray;const i1,IndexCount:TLLVertexIndex);virtual;abstract;
+                        procedure DrawTrianglesStrip(const PVertexBuffer,PIndexBuffer:PZGLVertex3Sarray;const i1,IndexCount:TLLVertexIndex);virtual;abstract;
+                        procedure DrawQuad(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3,i4:TLLVertexIndex);virtual;abstract;
+                        function CheckOutboundInDisplay(const PVertexBuffer:PZGLVertex3Sarray;const i1:TLLVertexIndex):boolean;virtual;abstract;
+                        procedure DrawPoint(const PVertexBuffer:PZGLVertex3Sarray;const i:TLLVertexIndex);virtual;abstract;
                         procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);virtual;abstract;
                         procedure endrender;virtual;abstract;
                         function startpaint(InPaintMessage:boolean;w,h:integer):boolean;virtual;abstract;

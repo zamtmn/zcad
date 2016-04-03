@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfData;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,UGDBOpenArray,uzbtypes,uzctnrvector;
+uses uzbtypesbase,uzbtypes,uzctnrvector;
 type
 {Export+}
 GDBOpenArrayOfData{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}

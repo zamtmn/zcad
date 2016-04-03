@@ -69,7 +69,7 @@ begin
              p:=iterate(ir);
        until p=nil;
   end;
-  Move(pobj^, PGDBPointerArray(parray)^[count], size);
+  Move(pobj^, PGDBPointerArray(parray)^[count],SizeOfData);
   result := count;
   inc(count);
 end;
@@ -85,7 +85,7 @@ begin
   result:=nil;
   if count=0 then exit;
 
-  inc(pGDBByte(ir.itp),size);
+  inc(pGDBByte(ir.itp),SizeOfData);
   inc(ir.itc);
 
   if ir.itc>=count then exit;
@@ -93,7 +93,7 @@ begin
 
   if p=nil then
   repeat
-  inc(pGDBByte(ir.itp),size);
+  inc(pGDBByte(ir.itp),SizeOfData);
   inc(ir.itc);
   if ir.itc<>count then p:=ir.itp^;
   until (ir.itc=count)or(p<>nil);

@@ -109,12 +109,12 @@ var //p:GDBPointer;
     i:integer;
     punit:pgdbaseobject;
 begin
-  GDBPlatformUInt(punit):=GDBPlatformUInt(parray)+size*(count-1);
+  GDBPlatformUInt(punit):=GDBPlatformUInt(parray)+SizeOfData*(count-1);
   for i := count-1 downto 0 do
   begin
        punit^.Done;
        AfterObjectDone(punit);
-       dec(GDBPlatformUInt(punit),size);
+       dec(GDBPlatformUInt(punit),SizeOfData);
   end;
 
   {p:=beginiterate(ir);

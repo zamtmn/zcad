@@ -110,9 +110,9 @@ begin
            if pnew^<>nil then
                             begin
                                  inc(nc);
-                                 inc(GDBPlatformint(pnew),size{sizeof(pointer)});
+                                 inc(GDBPlatformint(pnew),SizeOfData);
                             end;
-           inc(GDBPlatformint(pold),size{sizeof(pointer)});
+           inc(GDBPlatformint(pold),SizeOfData);
            inc(c);
      until c=count;
      count:=nc;

@@ -665,15 +665,6 @@ GDBPolyPoint2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec)
                       function InRect(Frame1, Frame2: GDBvertex2DI):TInBoundingVolume;virtual;abstract;
                       procedure freeelement(p:GDBPointer);virtual;abstract;
                 end;
-//Generate on E:/zcad/cad_source/zengine/containers/UGDBPolyPoint3DArray.pas
-PGDBPolyPoint3DArray=^GDBPolyPoint3DArray;
-GDBPolyPoint3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
-                      constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                      procedure DrawGeometry(var rc:TDrawContext);virtual;abstract;
-                      procedure DrawNiceGeometry;virtual;abstract;
-                      procedure SimpleDrawGeometry(var rc:TDrawContext; const num:integer);virtual;abstract;
-                      function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;abstract;
-                end;
 //Generate on E:/zcad/cad_source/zengine/containers/UGDBSelectedObjArray.pas
 PSelectedObjDesc=^SelectedObjDesc;
 SelectedObjDesc=packed record

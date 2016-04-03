@@ -181,7 +181,7 @@ begin
           result.LLPrimitivesDataSize:=result.LLPrimitivesDataSize+CurrLLPrimitiveSize;
           inc(pbyte(PLLPrimitive),CurrLLPrimitiveSize);
      end;
-     result.GeomDataSize:=(result.EID.GeomIndexMax-result.EID.GeomIndexMin+1)*GeomData.Vertex3S.Size;
+     result.GeomDataSize:=(result.EID.GeomIndexMax-result.EID.GeomIndexMin+1)*GeomData.Vertex3S.SizeOfData;
 end;
 function ZGLVectorObject.CopyTo(var dest:ZGLVectorObject;CopyParam:TZGLVectorDataCopyParam):TZGLVectorDataCopyParam;
 var
@@ -209,7 +209,7 @@ begin
          //result.GeomDataSize:=CopyParam.GeomDataSize;
          DestIndexsDataAddr:=dest.GeomData.Indexes.AllocData(CopyParam.EID.IndexsIndexMax-CopyParam.EID.IndexsIndexMin+1);
          SourceIndexsDataAddr:=pointer(self.GeomData.Indexes.getDataMutable(CopyParam.EID.IndexsIndexMin));
-         Move(SourceIndexsDataAddr^,DestIndexsDataAddr^,(CopyParam.EID.IndexsIndexMax-CopyParam.EID.IndexsIndexMin+1)*GeomData.Indexes.Size);
+         Move(SourceIndexsDataAddr^,DestIndexsDataAddr^,(CopyParam.EID.IndexsIndexMax-CopyParam.EID.IndexsIndexMin+1)*GeomData.Indexes.SizeOfData);
        end
      else
        begin

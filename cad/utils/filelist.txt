@@ -13,7 +13,6 @@ zengine/containers/UGDBOutbound2DIArray.pas
 zengine/containers/UGDBPoint3DArray.pas
 zengine/containers/UGDBPolyLine2DArray.pas
 zengine/containers/UGDBPolyPoint2DArray.pas
-zengine/containers/UGDBPolyPoint3DArray.pas
 zengine/containers/UGDBSelectedObjArray.pas
 components/zcontainers/UGDBStringArray.pas
 components/zcontainers/UGDBOpenArrayOfByte.pas

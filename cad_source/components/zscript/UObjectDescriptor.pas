@@ -21,7 +21,7 @@ unit UObjectDescriptor;
 {$MODE DELPHI}
 {$ASMMODE intel}
 interface
-uses LCLProc,UGDBOpenArrayOfObjects,ugdbopenarray,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
+uses LCLProc,UGDBOpenArrayOfObjects,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
      UBaseTypeDescriptor,TypeDescriptors,
      UGDBOpenArrayOfPointer,UGDBOpenArrayOfData,uzbtypesbase,varmandef,uzbtypes,uzbmemman,uzbstrproc;
 type

@@ -8,7 +8,7 @@ unit zcontainers;
 interface
 
 uses
-  UGDBOpenArray, UGDBOpenArrayOfByte, UGDBOpenArrayOfData, 
+  UGDBOpenArrayOfByte, UGDBOpenArrayOfData,
   UGDBOpenArrayOfObjects, UGDBOpenArrayOfPObjects, UGDBOpenArrayOfPointer, 
   UGDBStringArray, UGDBTree, uzctnrvector, LazarusPackageIntf;
 

@@ -19,7 +19,7 @@
 unit ugdbopenarrayofgdbdouble;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,sysutils,UGDBOpenArray,uzctnrvector;
+uses uzbtypesbase,sysutils,uzctnrvector;
 type
 {Export+}
 PGDBOpenArrayOfGDBDouble=^GDBOpenArrayOfGDBDouble;

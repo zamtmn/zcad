@@ -18,43 +18,39 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="9">
+    <Files Count="8">
       <Item1>
-        <Filename Value="UGDBOpenArray.pas"/>
-        <UnitName Value="UGDBOpenArray"/>
-      </Item1>
-      <Item2>
         <Filename Value="UGDBOpenArrayOfByte.pas"/>
         <UnitName Value="UGDBOpenArrayOfByte"/>
-      </Item2>
-      <Item3>
+      </Item1>
+      <Item2>
         <Filename Value="UGDBOpenArrayOfData.pas"/>
         <UnitName Value="UGDBOpenArrayOfData"/>
-      </Item3>
-      <Item4>
+      </Item2>
+      <Item3>
         <Filename Value="UGDBOpenArrayOfObjects.pas"/>
         <UnitName Value="UGDBOpenArrayOfObjects"/>
-      </Item4>
-      <Item5>
+      </Item3>
+      <Item4>
         <Filename Value="UGDBOpenArrayOfPObjects.pas"/>
         <UnitName Value="UGDBOpenArrayOfPObjects"/>
-      </Item5>
-      <Item6>
+      </Item4>
+      <Item5>
         <Filename Value="UGDBOpenArrayOfPointer.pas"/>
         <UnitName Value="UGDBOpenArrayOfPointer"/>
-      </Item6>
-      <Item7>
+      </Item5>
+      <Item6>
         <Filename Value="UGDBStringArray.pas"/>
         <UnitName Value="UGDBStringArray"/>
-      </Item7>
-      <Item8>
+      </Item6>
+      <Item7>
         <Filename Value="UGDBTree.pas"/>
         <UnitName Value="UGDBTree"/>
-      </Item8>
-      <Item9>
+      </Item7>
+      <Item8>
         <Filename Value="uzctnrvector.pas"/>
         <UnitName Value="uzctnrvector"/>
-      </Item9>
+      </Item8>
     </Files>
     <RequiredPkgs Count="2">
       <Item1>

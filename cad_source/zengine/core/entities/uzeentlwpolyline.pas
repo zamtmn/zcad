@@ -20,22 +20,24 @@ unit uzeentlwpolyline;
 {$INCLUDE def.inc}
 
 interface
-uses uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzecamera,
+uses UGDBOpenArrayOfData,uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzecamera,
      UGDBOpenArrayOfPObjects,uzglviewareadata,uzeentcurve,UGDBVectorSnapArray,
      uzegeometry,uzestyleslayers,uzeentity,uzbmemman,uzbtypesbase,UGDBPoint3DArray,
-     UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,uzbtypes,uzeentwithlocalcs,
+     UGDBPolyLine2DArray,UGDBOpenArrayOfByte,uzbtypes,uzeentwithlocalcs,
      uzeconsts,math,uzeffdxfsupport,sysutils,UGDBLineWidthArray;
 type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {REGISTEROBJECTTYPE GDBObjLWPolyline}
 {Export+}
+TWidth3D_in_WCS_Vector={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBQuad3d>{//})
+                end;
 PGDBObjLWPolyline=^GDBObjLWpolyline;
 GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  Closed:GDBBoolean;(*saved_to_shd*)
                  Vertex2D_in_OCS_Array:GDBpolyline2DArray;(*saved_to_shd*)
                  Vertex3D_in_WCS_Array:GDBPoint3dArray;
                  Width2D_in_OCS_Array:GDBLineWidthArray;(*saved_to_shd*)
-                 Width3D_in_WCS_Array:GDBOpenArray;
+                 Width3D_in_WCS_Array:{GDBOpenArray}TWidth3D_in_WCS_Vector;
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
                  Square:GDBdouble;(*'Oriented area'*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
@@ -214,7 +216,7 @@ begin
                 ie:=Width3D_in_WCS_Array.count - 1;
 
 
-  q3d:=Width3D_in_WCS_Array.parray;
+  q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
   p3d:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
   p3dold:=p3d;
   inc(p3d);
@@ -465,7 +467,7 @@ begin
   Vertex2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{B8E62148-AC02-4BDF-9F48-B9D3307013A1}',{$ENDIF}1000,c);
   Width2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{EFDA3BB3-E3AD-4D5C-97D2-FECD92A7276E}',{$ENDIF}1000);
   Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{C5FE7AEE-3EF6-4AF8-ADCE-4D30495CE3F1}',{$ENDIF}1000);
-  Width3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{C9BB8E1B-18AA-464D-8726-68F2F609FEE0}',{$ENDIF}1000, sizeof(GDBQuad3d));
+  Width3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{C9BB8E1B-18AA-464D-8726-68F2F609FEE0}',{$ENDIF}1000{, sizeof(GDBQuad3d)});
   //----------------snaparray.init({$IFDEF DEBUGBUILD}'{C37BA022-4629-4E16-BEB6-E8AAB9AC6986}',{$ENDIF}1000);
   PProjPoint:=nil;
 end;
@@ -477,7 +479,7 @@ begin
   Vertex2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{E04F78DD-94C2-416D-A006-5050A8F52015}',{$ENDIF}1000,false);
   Width2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{BFB21020-CF58-474B-8E84-D510B269092B}',{$ENDIF}1000);
   Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{1496DC9D-41EB-49A6-9593-E5EFD9FD1605}',{$ENDIF}1000);
-  Width3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{798E46E0-01F0-42BB-9426-0F018A9F1C74}',{$ENDIF}1000, sizeof(GDBQuad3d));
+  Width3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{798E46E0-01F0-42BB-9426-0F018A9F1C74}',{$ENDIF}1000{, sizeof(GDBQuad3d)});
   //----------------snaparray.init({$IFDEF DEBUGBUILD}'{556C3123-58FC-41AA-BA5C-C453F025ACF6}',{$ENDIF}1000);
   PProjPoint:=nil;
 end;
@@ -546,7 +548,7 @@ begin
     if not CanSimplyDrawInWCS(DC,uzegeometry.oneVertexlength(v),5) then
     if Width3D_in_WCS_Array.parray<>nil then
            begin
-                q3d:=Width3D_in_WCS_Array.parray;
+                q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
                 dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],dc.DrawingContext.matrixs);
                 {oglsm.myglbegin(GL_Lines);
                 oglsm.myglVertex3dv(@q3d^[0]);
@@ -559,7 +561,7 @@ begin
               else ie:=Width3D_in_WCS_Array.count - 2;
 
 
-    q3d:=Width3D_in_WCS_Array.parray;
+    q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
     plw:=Width2D_in_OCS_Array.GetParrayAsPointer;
     for i := 0 to ie do
     begin
@@ -580,7 +582,7 @@ begin
    end;
 
     //oglsm.myglbegin(GL_Lines);
-    q3d:=Width3D_in_WCS_Array.parray;
+    q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
     plw:=Width2D_in_OCS_Array.GetParrayAsPointer;
     for i := 0 to ie do
     begin

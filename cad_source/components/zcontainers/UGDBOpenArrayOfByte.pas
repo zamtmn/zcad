@@ -19,14 +19,14 @@
 unit UGDBOpenArrayOfByte;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,sysutils,UGDBOpenArray,uzbtypes{$IFNDEF DELPHI},LazUTF8{$ENDIF};
+uses uzctnrvector,uzbtypesbase,sysutils,UGDBOpenArray,uzbtypes{$IFNDEF DELPHI},LazUTF8{$ENDIF};
 const
      breacer=[#13,#10,' '];
   eol: GDBString=#13 + #10;
 type
 {Export+}
 PGDBOpenArrayOfByte=^GDBOpenArrayOfByte;
-GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
+GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArray}TZctnrVector{-}<byte>{//})
                       ReadPos:GDBInteger;
                       name:GDBString;
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
@@ -316,12 +316,12 @@ end;
 constructor GDBOpenArrayOfByte.init;
 begin
   ReadPos:=0;
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,1);
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,1});
 end;
 constructor GDBOpenArrayOfByte.initnul;
 begin
   ReadPos:=0;
-  size:=1;
+  //size:=1;
   inherited initnul;
 end;
 function GDBOpenArrayOfByte.AddByteByVal(Data:GDBByte):GDBInteger;

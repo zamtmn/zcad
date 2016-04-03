@@ -839,7 +839,7 @@ begin
      entityunit.SaveToMem(mem);
      //mem.SaveToFile(expandpath(ProgramPath+'autosave\lastvariableset.pas'));
      setlength(astring,mem.Count);
-     StrLCopy(@astring[1],mem.PArray,mem.Count);
+     StrLCopy(@astring[1],mem.GetParrayAsPointer,mem.Count);
      u8s:=(astring);
 
      createInfoFormVar;

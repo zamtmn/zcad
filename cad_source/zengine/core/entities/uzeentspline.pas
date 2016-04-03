@@ -28,11 +28,15 @@ uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanage
 type
 {REGISTEROBJECTTYPE GDBObjSpline}
 {Export+}
+TKnotsVector={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBFloat>{//})
+                             end;
+TCPVector={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBvertex4S>{//})
+                             end;
 PGDBObjSpline=^GDBObjSpline;
 GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  ControlArrayInOCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  ControlArrayInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
-                 Knots:GDBOpenArrayOfData;(*saved_to_shd*)(*hidden_in_objinsp*)
+                 Knots:{GDBOpenArrayOfData}TKnotsVector;(*saved_to_shd*)(*hidden_in_objinsp*)
                  AproxPointInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  Closed:GDBBoolean;(*saved_to_shd*)
                  Degree:GDBInteger;(*saved_to_shd*)
@@ -148,14 +152,14 @@ var //i,j: GDBInteger;
     //vs:VectorSnap;
         ir:itrec;
     nurbsobj:GLUnurbsObj;
-    CP:GDBOpenArrayOfData;
+    CP:{GDBOpenArrayOfData}TCPVector;
     tfv,base:GDBvertex4D;
     tfvs:GDBvertex4S;
     m:DMatrix4D;
 begin
 
      FormatWithoutSnapArray;
-     CP.init({$IFDEF DEBUGBUILD}'{4FCFE57E-4000-4535-A086-549DEC959CD4}',{$ENDIF}VertexArrayInOCS.count,sizeof(GDBvertex4S));
+     CP.init({$IFDEF DEBUGBUILD}'{4FCFE57E-4000-4535-A086-549DEC959CD4}',{$ENDIF}VertexArrayInOCS.count{,sizeof(GDBvertex4S)});
      ptv:=VertexArrayInOCS.beginiterate(ir);
      tv0:=ptv^;
      if bp.ListPos.owner<>nil then
@@ -221,7 +225,7 @@ begin
   GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_ERROR,@NurbsErrorCallBack);
 
   GLUIntrf.BeginCurve(nurbsobj);
-  GLUIntrf.NurbsCurve (nurbsobj,Knots.Count,Knots.PArray,{CP.Count}4,CP.PArray,degree+1,GL_MAP1_VERTEX_4);
+  GLUIntrf.NurbsCurve (nurbsobj,Knots.Count,Knots.GetParrayAsPointer,{CP.Count}4,CP.GetParrayAsPointer,degree+1,GL_MAP1_VERTEX_4);
   GLUIntrf.EndCurve(nurbsobj);
 
 
@@ -251,7 +255,7 @@ begin
   inherited init(own,layeraddres, lw);
   ControlArrayInWCS.init({$IFDEF DEBUGBUILD}'{4213E1EA-8FF1-4E99-AEF5-C1635CB49B5A}',{$ENDIF}1000);
   ControlArrayInOCS.init({$IFDEF DEBUGBUILD}'{F4681C13-46C9-4831-A614-7039A7EB205B}',{$ENDIF}1000);
-  Knots.init({$IFDEF DEBUGBUILD}'{BF696899-F624-47EA-8E03-2086912119AE}',{$ENDIF}1000,sizeof(GDBFloat));
+  Knots.init({$IFDEF DEBUGBUILD}'{BF696899-F624-47EA-8E03-2086912119AE}',{$ENDIF}1000{,sizeof(GDBFloat)});
   AproxPointInWCS.init({$IFDEF DEBUGBUILD}'{D9ECB710-37F2-414F-9CB2-7DE7DBDCD5AE}',{$ENDIF}1000);
   //vp.ID := GDBSplineID;
 end;
@@ -260,7 +264,7 @@ begin
   inherited initnul(owner);
   ControlArrayInWCS.init({$IFDEF DEBUGBUILD}'{4213E1EA-8FF1-4E99-AEF5-C1635CB49B5A}',{$ENDIF}1000);
   ControlArrayInOCS.init({$IFDEF DEBUGBUILD}'{892EA1AE-FB34-47B5-A2D1-18FA6B51A163}',{$ENDIF}1000);
-  Knots.init({$IFDEF DEBUGBUILD}'{BF696899-F624-47EA-8E03-2086912119AE}',{$ENDIF}1000,sizeof(GDBFloat));
+  Knots.init({$IFDEF DEBUGBUILD}'{BF696899-F624-47EA-8E03-2086912119AE}',{$ENDIF}1000{,sizeof(GDBFloat)});
   AproxPointInWCS.init({$IFDEF DEBUGBUILD}'{84E195AD-72EC-43D1-8C37-F6EDDC84E325}',{$ENDIF}1000);
   //vp.ID := GDBSplineID;
 end;
@@ -294,8 +298,8 @@ begin
   tpo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight,closed);
   CopyVPto(tpo^);
   //tpo^.vertexarray.init({$IFDEF DEBUGBUILD}'{90423E18-2ABF-48A8-8E0E-5D08A9E54255}',{$ENDIF}1000);
-  vertexarrayinocs.copyto(@tpo^.vertexarrayinocs);
-  Knots.copyto(@tpo^.Knots);
+  vertexarrayinocs.copyto(tpo^.vertexarrayinocs);
+  Knots.copyto(tpo^.Knots);
   tpo^.degree:=degree;
   {p:=vertexarrayinocs.PArray;
   for i:=0 to vertexarrayinocs.Count-1 do

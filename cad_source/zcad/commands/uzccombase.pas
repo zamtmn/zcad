@@ -1476,7 +1476,7 @@ begin
        pva.init({$IFDEF DEBUGBUILD}'{9372BADE-74EE-4101-8FA4-FC696054CD4F}',{$ENDIF}pgdbobjlwpolyline(drawings.GetCurrentDWG.GetLastSelected).Vertex2D_in_OCS_Array.count,true);
        pvr.init({$IFDEF DEBUGBUILD}'{9372BADE-74EE-4101-8FA4-FC696054CD4F}',{$ENDIF}pgdbobjlwpolyline(drawings.GetCurrentDWG.GetLastSelected).Vertex2D_in_OCS_Array.count,true);
 
-       pgdbobjlwpolyline(drawings.GetCurrentDWG.GetLastSelected).Vertex2D_in_OCS_Array.copyto(@pva);
+       pgdbobjlwpolyline(drawings.GetCurrentDWG.GetLastSelected).Vertex2D_in_OCS_Array.copyto(pva);
 
        polydiv(pva,pvr,pgdbobjlwpolyline(drawings.GetCurrentDWG.GetLastSelected).GetMatrix^);
 

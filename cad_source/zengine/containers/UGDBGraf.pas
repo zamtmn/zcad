@@ -40,7 +40,7 @@ grafelement={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                   function addline(pv:pgdbobjEntity):GDBInteger;
                   function IsConnectedTo(node:pgrafelement):pgdbobjEntity;
             end;
-GDBGraf={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=grafelement*)
+GDBGraf={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<grafelement>{//})(*OpenArrayOfData=grafelement*)
                 constructor init(m:GDBInteger);
                 function addge(v:gdbvertex):pgrafelement;
                 procedure clear;virtual;
@@ -122,7 +122,7 @@ begin
   pgfe:=beginiterate(ir);
   if pgfe<>nil then
   repeat
-        if pgfe^.link.IsObjExist(l1) then
+        if pgfe^.link.IsObjExist(l1,EqualFuncPGDBaseObject) then
         begin
              pgfe^.step:=step;
              pgfe^.pathlength:=Vertexlength(point1,pgfe^.point);
@@ -146,7 +146,7 @@ begin
                     pgfe2:=beginiterate(ir3);
                     if pgfe2<>nil then
                     repeat
-                          if (pgfe<>pgfe2)and(pgfe2^.link.IsObjExist(pl)) then
+                          if (pgfe<>pgfe2)and(pgfe2^.link.IsObjExist(pl,EqualFuncPGDBaseObject)) then
                           begin
                           npath:=pgfe^.pathlength+{Vertexlength(pgfe^.point,pgfe2^.point)}linklength;
                           if {(pgfe2.step=0)or}(pgfe2.pathlength>npath) then
@@ -172,7 +172,7 @@ begin
   pgfe:=beginiterate(ir);
   if pgfe<>nil then
   repeat
-        if pgfe^.link.IsObjExist(l2) then
+        if pgfe^.link.IsObjExist(l2,EqualFuncPGDBaseObject) then
         begin
              npath:=pgfe^.pathlength+Vertexlength(pgfe^.point,point2);
              if npath<=npathmin then
@@ -230,7 +230,7 @@ begin
   line:=link.beginiterate(ir);
   if line<>nil then
   repeat
-        if node^.link.IsObjExist(line)then
+        if node^.link.IsObjExist(line,EqualFuncPGDBaseObject)then
                                           begin
                                                result:=line;
                                                exit;
@@ -268,7 +268,7 @@ begin
 end;
 constructor GDBGraf.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}'{C0D04628-FDC7-4EC4-A3F7-F03C05C15CCE}',{$ENDIF}m,sizeof(grafelement));
+  inherited init({$IFDEF DEBUGBUILD}'{C0D04628-FDC7-4EC4-A3F7-F03C05C15CCE}',{$ENDIF}m{,sizeof(grafelement)});
 end;
 function GDBGraf.minimalize;
 var
@@ -391,7 +391,7 @@ begin
                       createarray;
     pgrafelement(Parray)^.init(v);
     inc(count);
-    result:=parray;
+    result:=GetParrayAsPointer;
   end
   else
   begin

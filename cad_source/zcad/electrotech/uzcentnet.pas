@@ -236,7 +236,7 @@ var i{,j}:GDBInteger;
 begin
      inc(dc.subrender);
      if graf.Count=0 then exit;
-     tgf:=graf.PArray;
+     tgf:=graf.GetParrayAsPointer;
      i:=0;
      //oglsm.myglEnable(GL_POINT_SMOOTH);
      //oglsm.myglpointsize(10);

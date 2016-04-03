@@ -23,7 +23,7 @@ uses uzbtypesbase,UGDBOpenArrayOfData,sysutils,uzbtypes,uzbmemman;
 type
 {REGISTEROBJECTTYPE GDBLineWidthArray}
 {Export+}
-GDBLineWidthArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GLLWWidth*)
+GDBLineWidthArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GLLWWidth>{//})(*OpenArrayOfData=GLLWWidth*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
              end;
@@ -33,12 +33,12 @@ implementation
 //    log;
 constructor GDBLineWidthArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GLLWWidth));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(GLLWWidth)});
 end;
 constructor GDBLineWidthArray.initnul;
 begin
   inherited initnul;
-  size:=sizeof(GLLWWidth);
+  //size:=sizeof(GLLWWidth);
 end;
 begin
 end.

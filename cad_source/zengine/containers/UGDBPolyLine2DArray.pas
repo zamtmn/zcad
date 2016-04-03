@@ -24,7 +24,7 @@ type
 {REGISTEROBJECTTYPE GDBPolyline2DArray}
 {Export+}
 PGDBPolyline2DArray=^GDBPolyline2DArray;
-GDBPolyline2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex2D*)
+GDBPolyline2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBVertex2D>{//})(*OpenArrayOfData=GDBVertex2D*)
                       closed:GDBBoolean;(*saved_to_shd*)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger;c:GDBBoolean);
                       constructor initnul;
@@ -47,7 +47,7 @@ var
     i{,c}:integer;
 
 begin
-    pv:=parray;
+    pv:=GetParrayAsPointer;
     for i:=1 to count do
     begin
          tv.x:=pv^.x;
@@ -95,14 +95,14 @@ begin
     result:=false;
     if count<2 then exit;
     //c:=0;
-    pv:=parray;
+    pv:=GetParrayAsPointer;
     pvnext:=pv;
     inc(pvnext);
     pvprev:=self.getelement(count-1);
     for i:=0 to count-1 do
     begin
              if i=count-1 then
-                      pvnext:=parray;
+                      pvnext:=GetParrayAsPointer;
        v1.x:=pv.x-pvprev.x;
        v1.y:=pv.y-pvprev.y;
        v1.z:=0;
@@ -132,13 +132,13 @@ begin
     result:=false;
     if count<2 then exit;
     c:=0;
-    pv:=parray;
+    pv:=GetParrayAsPointer;
     pvnext:=pv;
     inc(pvnext);
     for i:=1 to count do
     begin
        if i=count then
-                      pvnext:=parray;
+                      pvnext:=GetParrayAsPointer;
        if _intercept2d(pv^,pvnext^,point,1,0) then
                                                   inc(c);
        inc(pv);
@@ -150,11 +150,11 @@ end;
 constructor GDBPolyline2DArray.initnul;
 begin
   inherited initnul;
-  size:=sizeof(GDBVertex2D);
+  //size:=sizeof(GDBVertex2D);
 end;
 constructor GDBPolyline2DArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBVertex2D));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(GDBVertex2D)});
 end;
 function GDBPolyline2DArray.inrect;
 var p,pp:PGDBVertex2D;
@@ -164,7 +164,7 @@ var p,pp:PGDBVertex2D;
 begin
   result := false;
   if (count<2){or(not POGLWND^.seldesc.MouseFrameInverse)} then exit;
-  p:=parray;
+  p:=GetParrayAsPointer;
   i:=count;
 
   if {GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrame}Inv{erse} then

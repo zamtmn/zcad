@@ -30,7 +30,7 @@ GDBBOMItem=packed record
                  processed:GDBBoolean;
                 end;
 PBbillOfMaterial=^GDBBbillOfMaterial;
-GDBBbillOfMaterial={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBNumItem*)
+GDBBbillOfMaterial={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData<GDBBOMItem>)(*OpenArrayOfData=GDBNumItem*)
                        constructor init(m:GDBInteger);
                        procedure freeelement(p:GDBPointer);virtual;
                        //function getnamenumber(_Name:GDBString):GDBstring;
@@ -86,7 +86,7 @@ begin
 end;
 constructor GDBBbillOfMaterial.init(m:GDBInteger);
 begin
-     inherited init({$IFDEF DEBUGBUILD}'{4249FDF0-86E5-4D42-8538-1402D5B7C55B}',{$ENDIF}m,sizeof(GDBBOMItem));
+     inherited init({$IFDEF DEBUGBUILD}'{4249FDF0-86E5-4D42-8538-1402D5B7C55B}',{$ENDIF}m{,sizeof(GDBBOMItem)});
 end;
 begin
 end.

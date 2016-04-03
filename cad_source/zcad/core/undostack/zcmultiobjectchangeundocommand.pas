@@ -27,10 +27,10 @@ uses UGDBOpenArrayOfData,uzbmemman,zeundostack,zebaseundocommands,uzbtypesbase,u
 {DEFINE TData     := DMatrix4D}
 
 type
-
+TtmethodVector=specialize GDBOpenArrayOfData<tmethod>;
     generic TGMultiObjectChangeCommand<_T>=object(TCustomChangeCommand)
                                           DoData,UnDoData:_T;
-                                          ObjArray:GDBOpenArrayOfData;
+                                          ObjArray:{GDBOpenArrayOfData}TtmethodVector;
                                           public
                                           constructor Assign(const _dodata,_undodata:_T;const objcount:GDBInteger);
                                           //procedure StoreUndoData(var _undodata:_T);virtual;
@@ -57,7 +57,7 @@ constructor TGMultiObjectChangeCommand.Assign(const _dodata,_undodata:_T;const o
 begin
      DoData:=_DoData;
      UnDoData:=_UnDoData;
-     self.ObjArray.init({$IFDEF DEBUGBUILD}'{108FD060-E408-4161-9548-64EEAFC3BEB2}',{$ENDIF}objcount,sizeof(tmethod));
+     self.ObjArray.init({$IFDEF DEBUGBUILD}'{108FD060-E408-4161-9548-64EEAFC3BEB2}',{$ENDIF}objcount{,sizeof(tmethod)});
 end;
 procedure TGMultiObjectChangeCommand.AddMethod(method:tmethod);
 begin

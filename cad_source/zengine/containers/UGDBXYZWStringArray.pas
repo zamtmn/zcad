@@ -23,7 +23,7 @@ uses uzbtypesbase,uzbtypes,UGDBOpenArrayOfData,sysutils;
 type
 {EXPORT+}
 PGDBXYZWGDBStringArray=^XYZWGDBGDBStringArray;
-XYZWGDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
+XYZWGDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBStrWithPoint>{//})
                              constructor init(m:GDBInteger);
                              procedure freeelement(p:GDBPointer);virtual;
                              function add(p:GDBPointer):TArrayIndex;virtual;
@@ -34,7 +34,7 @@ implementation
 //    log;
 function XYZWGDBGDBStringArray.add(p:GDBPointer):TArrayIndex;
 begin
-     GDBOpenArrayOfData.AddByPointer(p);
+     AddByPointer(p);
      GDBPointer(PGDBStrWithPoint(p)^.str):=nil;
 end;
 procedure XYZWGDBGDBStringArray.freeelement(p:GDBPointer);
@@ -43,7 +43,7 @@ begin
 end;
 constructor XYZWGDBGDBStringArray.init(m:GDBInteger);
 begin
-     inherited init({$IFDEF DEBUGBUILD}'{5F615BF3-34BD-4C3E-9019-CE7CB9D2C2E7}',{$ENDIF}m,sizeof(GDBStrWithPoint));
+     inherited init({$IFDEF DEBUGBUILD}'{5F615BF3-34BD-4C3E-9019-CE7CB9D2C2E7}',{$ENDIF}m{,sizeof(GDBStrWithPoint)});
 end;
 begin
 end.

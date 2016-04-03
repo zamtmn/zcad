@@ -51,7 +51,7 @@ type
                           copyobjectarray:copyobjectarray;
                     end;
   PGDBPluginsArray=^GDBPluginsArray;
-  GDBPluginsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
+  GDBPluginsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData<moduledesc>)
                         constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                         procedure loadplugins(path: GDBString);
                   end;
@@ -67,7 +67,7 @@ procedure finalize;}
 implementation
 constructor GDBPluginsArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(moduledesc));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(moduledesc)});
 end;
 procedure GDBPluginsArray.loadplugins(path: GDBString);
 var

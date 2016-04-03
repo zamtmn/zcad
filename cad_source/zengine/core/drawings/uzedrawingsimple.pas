@@ -380,7 +380,7 @@ begin
      end;
      p:=obj^.beforertmodify;
      if save then PSelectedObjDesc(md).pcontrolpoint^.SelectedCount:=0;
-     point:=PSelectedObjDesc(md).pcontrolpoint^.parray;
+     point:=PSelectedObjDesc(md).pcontrolpoint^.GetParrayAsPointer;
      for i:=1 to PSelectedObjDesc(md).pcontrolpoint^.count do
      begin
           if point.selected then

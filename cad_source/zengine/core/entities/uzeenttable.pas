@@ -126,7 +126,7 @@ var tvo: PGDBObjTable;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjTable));
   tvo^.initnul;
-  tbl.copyto(@tvo^.tbl);
+  //tbl.copyto(@tvo^.tbl);
 
   tvo^.PTableStyle:=PTableStyle;
   tvo^.w:=w;

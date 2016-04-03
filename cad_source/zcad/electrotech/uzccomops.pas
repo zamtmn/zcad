@@ -10,7 +10,7 @@ unit uzccomops;
 interface
 uses
 
-  uzctranslations,uzeentitiesmanager,uzeentity,uzglviewareaabstract,uzgldrawcontext,
+  UGDBOpenArrayOfPointer,uzctranslations,uzeentitiesmanager,uzeentity,uzglviewareaabstract,uzgldrawcontext,
   uzeentabstracttext,uzeenttext,UGDBStringArray,uzeentityfactory,uzcsysvars,uzbstrproc,
   uzbtypesbase,uzccommandsmanager,uzclog,UGDBOpenArrayOfPObjects,
   uzccommandsabstract,uzccommandsimpl,uzbtypes,uzcdrawings,uzeutils,uzcutils,sysutils,
@@ -733,7 +733,7 @@ begin
                                                         end;
                         if devicemetric=cablemetric then
                         begin
-                        if ProcessedDevices.IsObjExist(@ptn^.bp.ListPos.Owner^)=false then
+                        if ProcessedDevices.IsObjExist(@ptn^.bp.ListPos.Owner^,@EqualFuncPointer)=false then
                     begin
                          currentunit:=GetNumUnit(numingroupmetric);
 

@@ -259,7 +259,7 @@ var
   penu:penumodj;
   enumodj:tenumodj;
   currvalue,maxvalue:GDBLongword;
-  enumobjlist:GDBOpenArrayOfData<tenumodj>;
+  enumobjlist:TZctnrVectorRec<tenumodj>;
   indexx:ArrayIndexDescriptor;
   p,pfu:pointer;
   unitpart:TunitPart;

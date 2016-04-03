@@ -104,7 +104,7 @@ GDBOperandDesc=record
                      StoreMode:GDBTOperandStoreMode;
                end;
 GDBMetodModifier=GDBWord;
-TOperandsVector=GDBOpenArrayOfdata<GDBOperandDesc>;
+TOperandsVector=TZctnrVectorRec<GDBOperandDesc>;
 PMetodDescriptor=^MetodDescriptor;
 MetodDescriptor=object(GDBaseObject)
                       objname:GDBString;

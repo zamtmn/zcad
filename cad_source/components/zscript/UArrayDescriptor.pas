@@ -26,7 +26,7 @@ PArrayIndexDescriptor=^ArrayIndexDescriptor;
 ArrayIndexDescriptor=record
                            IndexMin,IndexCount:GDBInteger;
                      end;
-TArrayIndexDescriptorVector=GDBOpenArrayOfData<ArrayIndexDescriptor>;
+TArrayIndexDescriptorVector=TZctnrVectorRec<ArrayIndexDescriptor>;
 PArrayDescriptor=^ArrayDescriptor;
 ArrayDescriptor=object(TUserTypeDescriptor)
                      NumOfIndex:GDBInteger;

@@ -23,7 +23,7 @@ uses uzbtypesbase,uzbtypes,uzctnrvectorrec,sysutils;
 type
 {EXPORT+}
 PGDBXYZWGDBStringArray=^XYZWGDBGDBStringArray;
-XYZWGDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBStrWithPoint>{//})
+XYZWGDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<GDBStrWithPoint>{//})
                              constructor init(m:GDBInteger);
                              procedure freeelement(p:GDBPointer);virtual;
                              function add(p:GDBPointer):TArrayIndex;virtual;

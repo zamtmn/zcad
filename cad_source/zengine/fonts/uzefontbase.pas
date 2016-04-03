@@ -23,7 +23,7 @@ uses uzgprimitives,uzglvectorobject,uzbmemman,uzbstrproc,UGDBOpenArrayOfByte,
      uzbtypesbase,uzctnrvectorrec,sysutils,uzbtypes,uzegeometry;
 type
 {EXPORT+}
-TGDBUNISymbolInfoVector=GDBOpenArrayOfData{-}<GDBUNISymbolInfo>{//};
+TGDBUNISymbolInfoVector=TZctnrVectorRec{-}<GDBUNISymbolInfo>{//};
 PBASEFont=^BASEFont;
 BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               unicode:GDBBoolean;

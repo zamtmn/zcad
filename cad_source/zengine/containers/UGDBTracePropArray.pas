@@ -31,7 +31,7 @@ type
     dispraycoord: GDBVertex;
     worldraycoord: GDBVertex;
   end;
-GDBtracepropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<traceprop>{//})
+GDBtracepropArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<traceprop>{//})
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
              end;
 {Export-}

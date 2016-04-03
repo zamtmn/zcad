@@ -24,7 +24,7 @@ uses uzbtypesbase,uzctnrvectorrec,
 type
 {Export+}
 GDBOpenArrayOfObjects{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
-                      object(GDBOpenArrayOfData{-}<T>{//})
+                      object(TZctnrVectorRec{-}<T>{//})
                              procedure cleareraseobj;virtual;
                              function CreateObject:PGDBaseObject;
                              procedure free;virtual;

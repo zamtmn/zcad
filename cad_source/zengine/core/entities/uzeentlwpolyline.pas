@@ -29,7 +29,7 @@ type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {REGISTEROBJECTTYPE GDBObjLWPolyline}
 {Export+}
-TWidth3D_in_WCS_Vector={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBQuad3d>{//})
+TWidth3D_in_WCS_Vector={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<GDBQuad3d>{//})
                 end;
 PGDBObjLWPolyline=^GDBObjLWpolyline;
 GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)

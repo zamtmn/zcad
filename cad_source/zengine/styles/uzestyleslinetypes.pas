@@ -60,9 +60,9 @@ ShapeProp={$IFNDEF DELPHI}packed{$ENDIF} object(BasicSHXDashProp)
                 constructor initnul;
                 destructor done;virtual;
           end;
-GDBDashInfoArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<TDashInfo>{//})(*OpenArrayOfData=TDashInfo*)
+GDBDashInfoArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<TDashInfo>{//})(*OpenArrayOfData=TDashInfo*)
                end;
-GDBDoubleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBDouble>{//})(*OpenArrayOfData=GDBDouble*)
+GDBDoubleArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<GDBDouble>{//})(*OpenArrayOfData=GDBDouble*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                end;
 GDBShapePropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects{-}<ShapeProp>{//})(*OpenArrayOfObject=ShapeProp*)

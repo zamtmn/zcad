@@ -65,7 +65,7 @@ TGDIFontCacheKey=record
                   end;}
 PTLLGDISymbol=^TLLGDISymbol;
 TLLGDISymbol={$IFNDEF DELPHI}packed{$ENDIF} object(TLLSymbol)
-              procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);virtual;
+              procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);virtual;
         end;
 TLLGDIPrimitivesCreator=class(TLLPrimitivesCreator)
                              function CreateLLSymbol(var pa:TLLPrimitivesArray):TArrayIndex;override;
@@ -497,7 +497,7 @@ begin
      pgdisymbol:=pa.AllocData(sizeof(TLLGDISymbol));
      pgdisymbol.init;
 end;
-procedure TLLGDISymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:GDBOpenArrayOfData;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);
+procedure TLLGDISymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);
 var
    r:TRect;
 

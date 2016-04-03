@@ -34,7 +34,7 @@ TGDBTableCellStyle=packed record
                           Width,TextWidth:GDBDouble;
                           CF:TTableCellJustify;
                     end;
-GDBCellFormatArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<TGDBTableCellStyle>{//})(*OpenArrayOfData=TGDBTableCellStyle*)
+GDBCellFormatArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<TGDBTableCellStyle>{//})(*OpenArrayOfData=TGDBTableCellStyle*)
                    end;
 PTGDBTableStyle=^TGDBTableStyle;
 TGDBTableStyle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)

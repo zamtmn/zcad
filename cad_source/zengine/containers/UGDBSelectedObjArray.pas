@@ -31,7 +31,7 @@ SelectedObjDesc=packed record
                       ptempobj:PGDBObjEntity;
                 end;
 PGDBSelectedObjArray=^GDBSelectedObjArray;
-GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<selectedobjdesc>{//})
+GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<selectedobjdesc>{//})
                           SelectedCount:GDBInteger;
                           constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 

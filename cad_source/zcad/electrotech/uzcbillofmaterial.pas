@@ -30,7 +30,7 @@ GDBBOMItem=packed record
                  processed:GDBBoolean;
                 end;
 PBbillOfMaterial=^GDBBbillOfMaterial;
-GDBBbillOfMaterial={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBBOMItem>{//})(*OpenArrayOfData=GDBNumItem*)
+GDBBbillOfMaterial={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<GDBBOMItem>{//})(*OpenArrayOfData=GDBNumItem*)
                        constructor init(m:GDBInteger);
                        procedure freeelement(p:GDBPointer);virtual;
                        //function getnamenumber(_Name:GDBString):GDBstring;

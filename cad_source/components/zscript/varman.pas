@@ -23,7 +23,7 @@ unit Varman;
 
 interface
 uses
-  UGDBOpenArrayOfData,LCLProc,uabstractunit,{zcadstrconsts,}UGDBOpenArrayOfPointer,SysUtils,UBaseTypeDescriptor,
+  uzctnrvectorrec,LCLProc,uabstractunit,{zcadstrconsts,}UGDBOpenArrayOfPointer,SysUtils,UBaseTypeDescriptor,
   uzbtypesbase,uzbtypes,UGDBOpenArrayOfByte,UGDBStringArray,varmandef,
   UGDBOpenArrayOfPObjects,usimplegenerics,
   uzbmemman,TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes;
@@ -159,7 +159,7 @@ typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)
                   function AddTypeByPP(p:GDBPointer):TArrayIndex;virtual;
                   function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;virtual;
             end;
-Tvardescarray=GDBOpenArrayOfData<vardesk>;
+Tvardescarray=GDBOpenArrayOfData{-}<vardesk>{//};
 pvarmanager=^varmanager;
 varmanager={$IFNDEF DELPHI}packed{$ENDIF} object(varmanagerdef)
             vardescarray:{GDBOpenArrayOfData}Tvardescarray;

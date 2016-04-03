@@ -22,7 +22,7 @@ unit URecordDescriptor;
 {$ASMMODE intel}
 interface
 uses LCLProc,UPointerDescriptor,uzbstrproc,{log,}UGDBOpenArrayOfByte,sysutils,UBaseTypeDescriptor,
-  TypeDescriptors{,UGDBOpenArrayOfPointer},UGDBOpenArrayOfData,uzbtypesbase,varmandef,uzbtypes,uzbmemman;
+  TypeDescriptors,uzctnrvectorrec,uzbtypesbase,varmandef,uzbtypes,uzbmemman;
 type
 TFieldDescriptor=GDBOpenArrayOfData<FieldDescriptor>;
 PRecordDescriptor=^RecordDescriptor;

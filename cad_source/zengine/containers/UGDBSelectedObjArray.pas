@@ -20,7 +20,7 @@ unit UGDBSelectedObjArray;
 {$INCLUDE def.inc}
 interface
 uses uzepalette,uzgldrawcontext,uzecamera,uzeentwithmatrix,uzeentity,
-     UGDBControlPointArray,UGDBOpenArrayOfData,sysutils,uzbtypes,uzegeometry,
+     UGDBControlPointArray,uzctnrvectorrec,sysutils,uzbtypes,uzegeometry,
      uzbtypesbase,uzbmemman,uzedrawingdef;
 type
 {Export+}

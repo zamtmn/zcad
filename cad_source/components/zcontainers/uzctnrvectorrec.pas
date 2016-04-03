@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit UGDBOpenArrayOfData;
+unit uzctnrvectorrec;
 {$INCLUDE def.inc}
 interface
 uses uzbtypesbase,uzbtypes,uzctnrvector;

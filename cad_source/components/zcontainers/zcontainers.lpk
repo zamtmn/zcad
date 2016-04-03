@@ -24,8 +24,8 @@
         <UnitName Value="UGDBOpenArrayOfByte"/>
       </Item1>
       <Item2>
-        <Filename Value="UGDBOpenArrayOfData.pas"/>
-        <UnitName Value="UGDBOpenArrayOfData"/>
+        <Filename Value="uzctnrvectorrec.pas"/>
+        <UnitName Value="uzctnrvectorrec"/>
       </Item2>
       <Item3>
         <Filename Value="UGDBOpenArrayOfObjects.pas"/>

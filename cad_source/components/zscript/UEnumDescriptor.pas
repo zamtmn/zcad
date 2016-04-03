@@ -21,7 +21,7 @@ unit UEnumDescriptor;
 {$MODE DELPHI}
 interface
 uses types,sysutils,UGDBOpenArrayOfByte,TypeDescriptors,
-     uzbtypesbase,varmandef,uzbtypes,UGDBOpenArrayOfData,UGDBStringArray,uzbmemman;
+     uzbtypesbase,varmandef,uzbtypes,uzctnrvectorrec,UGDBStringArray,uzbmemman;
 resourcestring
   rsDifferent='Different';
 type

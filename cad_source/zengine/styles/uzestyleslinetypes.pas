@@ -19,7 +19,7 @@
 unit uzestyleslinetypes;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,LazUTF8,Classes,UGDBOpenArrayOfData,uzbtypesbase,sysutils,uzbtypes,
+uses LCLProc,LazUTF8,Classes,uzctnrvectorrec,uzbtypesbase,sysutils,uzbtypes,
      uzegeometry,uzestylestexts,UGDBOpenArrayOfObjects,UGDBNamedObjectsArray,
      uzbstrproc;
 const

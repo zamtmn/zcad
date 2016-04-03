@@ -19,7 +19,7 @@
 unit UGDBPolyPoint2DArray;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,UGDBOpenArrayOfData, sysutils,uzbtypes, uzegeometry;
+uses uzbtypesbase,uzctnrvectorrec,sysutils,uzbtypes, uzegeometry;
 type
 {Export+}
 PGDBPolyPoint2DArray=^GDBPolyPoint2DArray;

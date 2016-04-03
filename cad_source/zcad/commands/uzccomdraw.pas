@@ -44,7 +44,8 @@ uses
   uzbmemman,
   uzeconsts,
   uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
-  uzcshared,uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,UGDBOpenArrayOfData,math,uzeenttable,UGDBStringArray,uzcprinterspecfunc;
+  uzcshared,uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,uzctnrvectorrec,
+  math,uzeenttable,UGDBStringArray,uzcprinterspecfunc;
 const
      modelspacename:GDBSTring='**Модель**';
 type
@@ -204,7 +205,8 @@ type
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
   ptpcoavector=^tpcoavector;
-  tpcoavector=specialize GDBOpenArrayOfData<TCopyObjectDesc>;
+  tpcoavector={-}specialize{//}
+              GDBOpenArrayOfData{-}<TCopyObjectDesc>{//};
   move_com = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
     t3dp: gdbvertex;
     pcoa:ptpcoavector;

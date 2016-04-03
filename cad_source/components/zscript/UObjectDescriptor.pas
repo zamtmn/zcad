@@ -23,7 +23,7 @@ unit UObjectDescriptor;
 interface
 uses LCLProc,UGDBOpenArrayOfObjects,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
      UBaseTypeDescriptor,TypeDescriptors,
-     UGDBOpenArrayOfPointer,UGDBOpenArrayOfData,uzbtypesbase,varmandef,uzbtypes,uzbmemman,uzbstrproc;
+     UGDBOpenArrayOfPointer,uzctnrvectorrec,uzbtypesbase,varmandef,uzbtypes,uzbmemman,uzbstrproc;
 type
 simpleproc=procedure of object;
 //SimpleMenods.init({$IFDEF DEBUGBUILD}'{E4674594-B99F-4A72-8766-E2B49DF50FCE}',{$ENDIF}20,sizeof(MetodDescriptor));

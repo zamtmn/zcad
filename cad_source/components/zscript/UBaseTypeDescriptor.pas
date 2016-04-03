@@ -25,7 +25,7 @@ uses
       LCLProc,Graphics,classes,Themes,
       uzemathutils,uzegeometry,uzbstrproc,TypeDescriptors,
       sysutils,UGDBOpenArrayOfByte,uzbtypesbase,
-      varmandef,uzbtypes,UGDBOpenArrayOfData,UGDBStringArray,uzbmemman,math;
+      varmandef,uzbtypes,uzctnrvectorrec,UGDBStringArray,uzbmemman,math;
 resourcestring
   rsDifferent='Different';
 type

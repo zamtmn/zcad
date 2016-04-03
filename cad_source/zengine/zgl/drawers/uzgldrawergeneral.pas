@@ -19,7 +19,9 @@
 unit uzgldrawergeneral;
 {$INCLUDE def.inc}
 interface
-uses uzgvertex3sarray,uzgprimitivescreatorabstract,uzgprimitivescreator,UGDBOpenArrayOfData,uzgldrawerabstract,uzepalette,types,Classes,Graphics,uzbtypesbase,uzbtypes,uzecamera,uzegeometry;
+uses uzgvertex3sarray,uzgprimitivescreatorabstract,uzgprimitivescreator,
+     uzctnrvectorrec,uzgldrawerabstract,uzepalette,types,Classes,Graphics,
+     uzbtypesbase,uzbtypes,uzecamera,uzegeometry;
 type
 TPaintState=(TPSBufferNotSaved,TPSBufferSaved);
 TZGLGeneralDrawer=class(TZGLAbstractDrawer)

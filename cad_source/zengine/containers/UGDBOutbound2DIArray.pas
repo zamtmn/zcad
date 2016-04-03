@@ -19,7 +19,7 @@
 unit UGDBOutbound2DIArray;
 {$INCLUDE def.inc}
 interface
-uses uzgldrawcontext,uzbtypesbase,UGDBOpenArrayOfData,sysutils,uzbtypes,uzegeometry;
+uses uzgldrawcontext,uzbtypesbase,uzctnrvectorrec,sysutils,uzbtypes,uzegeometry;
 type
 {Export+}
 PGDBOOutbound2DIArray=^GDBOOutbound2DIArray;

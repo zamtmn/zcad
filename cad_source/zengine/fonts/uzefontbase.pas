@@ -19,11 +19,11 @@
 unit uzefontbase;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitives,uzglvectorobject,uzbmemman,uzbstrproc,UGDBOpenArrayOfByte,uzbtypesbase,UGDBOpenArrayOfData,sysutils,
-     uzbtypes,uzegeometry;
+uses uzgprimitives,uzglvectorobject,uzbmemman,uzbstrproc,UGDBOpenArrayOfByte,
+     uzbtypesbase,uzctnrvectorrec,sysutils,uzbtypes,uzegeometry;
 type
 {EXPORT+}
-TGDBUNISymbolInfoVector=GDBOpenArrayOfData<GDBUNISymbolInfo>;
+TGDBUNISymbolInfoVector=GDBOpenArrayOfData{-}<GDBUNISymbolInfo>{//};
 PBASEFont=^BASEFont;
 BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               unicode:GDBBoolean;

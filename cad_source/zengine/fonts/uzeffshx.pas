@@ -131,7 +131,7 @@ begin
                                 pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
                    end;
                end;
-             //----//pGDBWord(PSHXFont(pf^.font).SHXdata.getelement(ppolycount))^:=sizeshp;
+             //----//pGDBWord(PSHXFont(pf^.font).SHXdata.getDataMutable(ppolycount))^:=sizeshp;
            end
          else
            begin
@@ -271,7 +271,7 @@ begin
                            end;
 
                       (*
-                      psubsymbol:=PSHXFont(pf^.font).SHXdata.getelement(psubsyminfo.addr);
+                      psubsymbol:=PSHXFont(pf^.font).SHXdata.getDataMutable(psubsyminfo.addr);
                       xb:=x;
                       yb:=y;
                       if (psubsymbol<>nil){and(subsymbol<>111)} then
@@ -446,7 +446,7 @@ begin
                               inc(sizeshp);
 
                               pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
-                              inc(PTLLPolyLine(pf^.font.FontData.LLprimitives.getelement(LLPolyLineIndexInArray))^.Count);
+                              inc(PTLLPolyLine(pf^.font.FontData.LLprimitives.getDataMutable(LLPolyLineIndexInArray))^.Count);
 
                               if onlyver=0 then
                               begin
@@ -479,7 +479,7 @@ begin
                         end;
                         if draw then
                             begin
-                      //----//pGDBWord(PSHXFont(pf^.font).SHXdata.getelement(ppolycount))^:=sizeshp;
+                      //----//pGDBWord(PSHXFont(pf^.font).SHXdata.getDataMutable(ppolycount))^:=sizeshp;
                             end;
                       end;
                     end;
@@ -529,7 +529,7 @@ begin
                         end;
                       x:=x1;
                       y:=y1;
-                      //----//pGDBWord(PSHXFont(pf^.font).SHXdata.getelement(ppolycount))^:=sizeshp;
+                      //----//pGDBWord(PSHXFont(pf^.font).SHXdata.getDataMutable(ppolycount))^:=sizeshp;
                     end;
                   011:
                     begin
@@ -587,7 +587,7 @@ begin
                      end;
                    x:=x1;
                    y:=y1;
-                   //----//pGDBWord(PSHXFont(pf^.font).SHXdata.getelement(ppolycount))^:=sizeshp;
+                   //----//pGDBWord(PSHXFont(pf^.font).SHXdata.getDataMutable(ppolycount))^:=sizeshp;
                     end;
                   012:
                     begin

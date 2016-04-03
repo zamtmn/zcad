@@ -280,18 +280,18 @@ begin
   if count = 0 then exit;
   for i := 0 to count - 1 do
   begin
-       tgf:=pgrafelement(self.getelement(i));
+       tgf:=pgrafelement(self.getDataMutable(i));
        if tgf^.linkcount=2 then
        begin
               //j:=0;
               //repeat
-              l1:=tgf^.link.getelement({j}0);
+              l1:=pointer(tgf^.link.getDataMutable({j}0));
               if l1<>nil then
                              l1:=pgdbobjline(ppointer(l1)^);
               //inc(j);
               //until l1<>nil;
               //repeat
-              l2:=tgf^.link.getelement({j}1);
+              l2:=pointer(tgf^.link.getDataMutable({j}1));
               if l2<>nil then
                              l2:=pgdbobjline(ppointer(l2)^);
               //inc(j);
@@ -318,17 +318,17 @@ begin
   result:=false;
   for i := 0 to count - 1 do
   begin
-       tgf:=pgrafelement(self.getelement(i));
+       tgf:=pgrafelement(self.getDataMutable(i));
        if tgf<>pgf then
        begin
             for j:=0 to pgf^.link.Count-1 do
             begin
-                 l1addr:=pgf^.link.getelement(j);
+                 l1addr:=pointer(pgf^.link.getDataMutable(j));
                  l1:=pgdbobjline(l1addr^);
                  if l1<>nil then
                  for k:=0 to tgf^.link.Count-1 do
                  begin
-                      l2addr:=tgf^.link.getelement(k);
+                      l2addr:=pointer(tgf^.link.getDataMutable(k));
                       l2:=pgdbobjline(l2addr^);
                       if l2<>nil then
                       if l1=l2 then
@@ -353,7 +353,7 @@ var
 begin
   result:=false;
   if count = 0 then exit;
-  tgf:=pgrafelement(self.getelement(0));
+  tgf:=pgrafelement(self.getDataMutable(0));
   marknearelement(tgf);
   repeat
   q:=false;
@@ -362,7 +362,7 @@ begin
   if tgf<>nil then
   //begin
   repeat
-       //tgf:=pgrafelement(self.getelement(i));
+       //tgf:=pgrafelement(self.getDataMutable(i));
        if (tgf^.connected>0)and(tgf^.connected<tgf^.linkcount) then
        q:=q or marknearelement(tgf);
        tgf:=iterate(ir);
@@ -372,7 +372,7 @@ begin
   //q:=false;
   for i := 0 to count - 1 do
   begin
-       tgf:=pgrafelement(self.getelement(i));
+       tgf:=pgrafelement(self.getDataMutable(i));
        if tgf^.connected=0 then
        begin
             result:=true;
@@ -397,7 +397,7 @@ begin
   begin
     for i := 0 to count - 1 do
     begin
-      tgf:=pgrafelement(self.getelement(i));
+      tgf:=pgrafelement(self.getDataMutable(i));
       if vertexeq(tgf^.point,v) then
         begin
              result:=tgf;
@@ -407,7 +407,7 @@ begin
     //if i = count then
     begin
       inc(count);
-      tgf:=pgrafelement(self.getelement(count-1));
+      tgf:=pgrafelement(self.getDataMutable(count-1));
       tgf^.init(v);
       result:=tgf;
 
@@ -423,7 +423,7 @@ begin
   begin
     for i := 0 to count - 1 do
     begin
-      tgf:=pgrafelement(self.getelement(i));
+      tgf:=pgrafelement(self.getDataMutable(i));
       tgf^.point:=nulvertex;
       tgf^.link.Count:=0;
       tgf^.linkcount:=0;

@@ -160,8 +160,8 @@ procedure TZGLGDIPlusDrawer.DrawLine(const PVertexBuffer:PGDBOpenArrayOfData;con
 var
    pv1,pv2:PGDBVertex3S;
 begin
-    pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
-    pv2:=PGDBVertex3S(PVertexBuffer.getelement(i2));
+    pv1:=PGDBVertex3S(PVertexBuffer.getDataMutable(i1));
+    pv2:=PGDBVertex3S(PVertexBuffer.getDataMutable(i2));
     //graphicsGDIPlus.DrawLine(Pen,pv1.x,midline-pv1.y,pv2.x,midline-pv2.y);
 end;
 
@@ -169,7 +169,7 @@ procedure TZGLGDIPlusDrawer.DrawPoint(const PVertexBuffer:PGDBOpenArrayOfData;co
 var
    pv:PGDBVertex3S;
 begin
-     pv:=PGDBVertex3S(PVertexBuffer.getelement(i));
+     pv:=PGDBVertex3S(PVertexBuffer.getDataMutable(i));
      //graphicsGDIPlus.Drawpoint(Pen,pv.x,midline-pv.y);
 end;
 *)

@@ -304,8 +304,8 @@ begin
            LayerBox.ItemIndex:=getsortedindex(SysVar.dwg.DWG_CLayer^);}
            IVars.CColor:=sysvar.dwg.DWG_CColor^;
            IVars.CLWeight:=sysvar.dwg.DWG_CLinew^;
-           ivars.CLayer:={drawings.GetCurrentDWG.LayerTable.getelement}(sysvar.dwg.DWG_CLayer^);
-           ivars.CLType:={drawings.GetCurrentDWG.LTypeStyleTable.getelement}(sysvar.dwg.DWG_CLType^);
+           ivars.CLayer:={drawings.GetCurrentDWG.LayerTable.getDataMutable}(sysvar.dwg.DWG_CLayer^);
+           ivars.CLType:={drawings.GetCurrentDWG.LTypeStyleTable.getDataMutable}(sysvar.dwg.DWG_CLType^);
            ivars.CTStyle:=sysvar.dwg.DWG_CTStyle^;
            ivars.CDimStyle:=sysvar.dwg.DWG_CDimStyle^;
       end
@@ -2367,7 +2367,7 @@ begin
      SetcomboItemsCount(tcombobox(Sender),drawings.GetCurrentDWG.LTypeStyleTable.Count+1);
      for i:=0 to drawings.GetCurrentDWG.LTypeStyleTable.Count-1 do
      begin
-          tcombobox(Sender).Items.Objects[i]:=tobject(drawings.GetCurrentDWG.LTypeStyleTable.getelement(i));
+          tcombobox(Sender).Items.Objects[i]:=tobject(drawings.GetCurrentDWG.LTypeStyleTable.getDataMutable(i));
      end;
      tcombobox(Sender).Items.Objects[drawings.GetCurrentDWG.LTypeStyleTable.Count]:=LTEditor;
 end;

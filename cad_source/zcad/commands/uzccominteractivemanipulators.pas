@@ -391,16 +391,16 @@ begin
 
   zcSetEntPropFromCurrentDrawingProp(polyLWObj);
 
-  stPoint := GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(0)^);
+  stPoint := GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(0)^);
 
-  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(1)^).x := Point.x;
-  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(1)^).y := stPoint.y;
+  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(1)^).x := Point.x;
+  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(1)^).y := stPoint.y;
 
-  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(2)^).x := Point.x;
-  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(2)^).y := Point.y;
+  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(2)^).x := Point.x;
+  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(2)^).y := Point.y;
 
-  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(3)^).x := stPoint.x;
-  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getelement(3)^).y := Point.y;
+  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(3)^).x := stPoint.x;
+  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(3)^).y := Point.y;
 
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 
@@ -420,16 +420,16 @@ begin
 
   zcSetEntPropFromCurrentDrawingProp(polyObj);
 
-  stPoint := GDBvertex(polyObj^.VertexArrayInOCS.getelement(0)^);
+  stPoint := GDBvertex(polyObj^.VertexArrayInOCS.getDataMutable(0)^);
 
-  GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(1)^).x := Point.x;
-  GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(1)^).y := stPoint.y;
+  PGDBvertex2D(polyObj^.VertexArrayInOCS.getDataMutable(1))^.x := Point.x;
+  PGDBvertex2D(polyObj^.VertexArrayInOCS.getDataMutable(1))^.y := stPoint.y;
 
-  GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(2)^).x := Point.x;
-  GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(2)^).y := Point.y;
+  PGDBvertex2D(polyObj^.VertexArrayInOCS.getDataMutable(2))^.x := Point.x;
+  PGDBvertex2D(polyObj^.VertexArrayInOCS.getDataMutable(2))^.y := Point.y;
 
-  GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(3)^).x := stPoint.x;
-  GDBvertex2D(polyObj^.VertexArrayInOCS.getelement(3)^).y := Point.y;
+  PGDBvertex2D(polyObj^.VertexArrayInOCS.getDataMutable(3))^.x := stPoint.x;
+  PGDBvertex2D(polyObj^.VertexArrayInOCS.getDataMutable(3))^.y := Point.y;
 
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 

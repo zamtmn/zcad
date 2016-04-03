@@ -401,7 +401,7 @@ begin
   drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
   if commandmanager.CommandsStack.Count>0 then
                                               begin
-                                                   prevundo:=pCommandRTEdObject(ppointer(commandmanager.CommandsStack.getelement(commandmanager.CommandsStack.Count-1))^)^.UndoTop;
+                                                   prevundo:=pCommandRTEdObject(ppointer(commandmanager.CommandsStack.getDataMutable(commandmanager.CommandsStack.Count-1))^)^.UndoTop;
                                                    overlay:=true;
                                               end
                                           else
@@ -647,7 +647,7 @@ var pv:pGDBObjEntity;
     DC:TDrawContext;
 begin
   if (drawings.GetCurrentROOT.ObjArray.count = 0)or(drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0) then exit;
-  plt:={drawings.GetCurrentDWG.LTypeStyleTable.getelement}(SysVar.dwg.DWG_CLType^);
+  plt:={drawings.GetCurrentDWG.LTypeStyleTable.getDataMutable}(SysVar.dwg.DWG_CLType^);
   if plt=nil then
                  exit;
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
@@ -1290,16 +1290,16 @@ begin
                        then
                        begin
                             c:=0;
-                            if _intercept2d(PGDBVertex2D(pva.getelement(p1))^,PGDBVertex2D(pva.getelement(p2))^,PGDBVertex2D(pva.getelement(i))^, 1, 0)
+                            if _intercept2d(PGDBVertex2D(pva.getDataMutable(p1))^,PGDBVertex2D(pva.getDataMutable(p2))^,PGDBVertex2D(pva.getDataMutable(i))^, 1, 0)
                             then
                                 inc(c);
-                            if _intercept2d(PGDBVertex2D(pva.getelement(p2))^,PGDBVertex2D(pva.getelement(p3))^,PGDBVertex2D(pva.getelement(i))^, 1, 0)
+                            if _intercept2d(PGDBVertex2D(pva.getDataMutable(p2))^,PGDBVertex2D(pva.getDataMutable(p3))^,PGDBVertex2D(pva.getDataMutable(i))^, 1, 0)
                             then
                                 inc(c);
-                            if _intercept2d(PGDBVertex2D(pva.getelement(p3))^,PGDBVertex2D(pva.getelement(p4))^,PGDBVertex2D(pva.getelement(i))^, 1, 0)
+                            if _intercept2d(PGDBVertex2D(pva.getDataMutable(p3))^,PGDBVertex2D(pva.getDataMutable(p4))^,PGDBVertex2D(pva.getDataMutable(i))^, 1, 0)
                             then
                                 inc(c);
-                            if _intercept2d(PGDBVertex2D(pva.getelement(p4))^,PGDBVertex2D(pva.getelement(p1))^,PGDBVertex2D(pva.getelement(i))^, 1, 0)
+                            if _intercept2d(PGDBVertex2D(pva.getDataMutable(p4))^,PGDBVertex2D(pva.getDataMutable(p1))^,PGDBVertex2D(pva.getDataMutable(i))^, 1, 0)
                             then
                                 inc(c);
                             if ((c mod 2)=1) then
@@ -1321,16 +1321,16 @@ begin
                        then
                        begin
                             c:=0;
-                            if _intercept2d(PGDBVertex2D(pva.getelement(p1))^,PGDBVertex2D(pva.getelement(p2))^,PGDBVertex2D(pva.getelement(i))^, 1, 0)
+                            if _intercept2d(PGDBVertex2D(pva.getDataMutable(p1))^,PGDBVertex2D(pva.getDataMutable(p2))^,PGDBVertex2D(pva.getDataMutable(i))^, 1, 0)
                             then
                                 inc(c);
-                            if _intercept2d(PGDBVertex2D(pva.getelement(p2))^,PGDBVertex2D(pva.getelement(p3))^,PGDBVertex2D(pva.getelement(i))^, 1, 0)
+                            if _intercept2d(PGDBVertex2D(pva.getDataMutable(p2))^,PGDBVertex2D(pva.getDataMutable(p3))^,PGDBVertex2D(pva.getDataMutable(i))^, 1, 0)
                             then
                                 inc(c);
-                            if _intercept2d(PGDBVertex2D(pva.getelement(p3))^,p,PGDBVertex2D(pva.getelement(i))^, 1, 0)
+                            if _intercept2d(PGDBVertex2D(pva.getDataMutable(p3))^,p,PGDBVertex2D(pva.getDataMutable(i))^, 1, 0)
                             then
                                 inc(c);
-                            if _intercept2d(p,PGDBVertex2D(pva.getelement(p1))^,PGDBVertex2D(pva.getelement(i))^, 1, 0)
+                            if _intercept2d(p,PGDBVertex2D(pva.getDataMutable(p1))^,PGDBVertex2D(pva.getDataMutable(i))^, 1, 0)
                             then
                                 inc(c);
                             if ((c mod 2)=1) then
@@ -1353,17 +1353,17 @@ begin
      p1:=0;p2:=1;p3:=2;p4:=3;
      for i:=1 to pva.count do
      begin
-          if isrect(PGDBVertex2D(pva.getelement(p1))^,
-                    PGDBVertex2D(pva.getelement(p2))^,
-                    PGDBVertex2D(pva.getelement(p3))^,
-                    PGDBVertex2D(pva.getelement(p4))^)then
-          if pva.ispointinside(Vertexmorph(PGDBVertex2D(pva.getelement(p1))^,PGDBVertex2D(pva.getelement(p3))^,0.5))then
+          if isrect(PGDBVertex2D(pva.getDataMutable(p1))^,
+                    PGDBVertex2D(pva.getDataMutable(p2))^,
+                    PGDBVertex2D(pva.getDataMutable(p3))^,
+                    PGDBVertex2D(pva.getDataMutable(p4))^)then
+          if pva.ispointinside(Vertexmorph(PGDBVertex2D(pva.getDataMutable(p1))^,PGDBVertex2D(pva.getDataMutable(p3))^,0.5))then
           if IsSubContur(pva,p1,p2,p3,p4)then
               begin
-                   pvr.AddByPointer(pva.getelement(p1));
-                   pvr.AddByPointer(pva.getelement(p2));
-                   pvr.AddByPointer(pva.getelement(p3));
-                   pvr.AddByPointer(pva.getelement(p4));
+                   pvr.AddByPointer(pva.getDataMutable(p1));
+                   pvr.AddByPointer(pva.getDataMutable(p2));
+                   pvr.AddByPointer(pva.getDataMutable(p3));
+                   pvr.AddByPointer(pva.getDataMutable(p4));
 
                    pva.deleteelement(p3);
                    pva.deleteelement(p2);
@@ -1384,19 +1384,19 @@ begin
      p1:=0;p2:=1;p3:=2;p4:=3;
      for i:=1 to pva.count do
      begin
-          p.x:=PGDBVertex2D(pva.getelement(p1))^.x+(PGDBVertex2D(pva.getelement(p3))^.x-PGDBVertex2D(pva.getelement(p2))^.x);
-          p.y:=PGDBVertex2D(pva.getelement(p1))^.y+(PGDBVertex2D(pva.getelement(p3))^.y-PGDBVertex2D(pva.getelement(p2))^.y);
-          if distance2piece_2dmy(p,PGDBVertex2D(pva.getelement(p3))^,PGDBVertex2D(pva.getelement(p4))^)<eps then
-          if pva.ispointinside(Vertexmorph(PGDBVertex2D(pva.getelement(p1))^,PGDBVertex2D(pva.getelement(p3))^,0.5))then
+          p.x:=PGDBVertex2D(pva.getDataMutable(p1))^.x+(PGDBVertex2D(pva.getDataMutable(p3))^.x-PGDBVertex2D(pva.getDataMutable(p2))^.x);
+          p.y:=PGDBVertex2D(pva.getDataMutable(p1))^.y+(PGDBVertex2D(pva.getDataMutable(p3))^.y-PGDBVertex2D(pva.getDataMutable(p2))^.y);
+          if distance2piece_2dmy(p,PGDBVertex2D(pva.getDataMutable(p3))^,PGDBVertex2D(pva.getDataMutable(p4))^)<eps then
+          if pva.ispointinside(Vertexmorph(PGDBVertex2D(pva.getDataMutable(p1))^,PGDBVertex2D(pva.getDataMutable(p3))^,0.5))then
           if IsSubContur2(pva,p1,p2,p3,p)then
               begin
-                   pvr.AddByPointer(pva.getelement(p1));
-                   pvr.AddByPointer(pva.getelement(p2));
-                   pvr.AddByPointer(pva.getelement(p3));
+                   pvr.AddByPointer(pva.getDataMutable(p1));
+                   pvr.AddByPointer(pva.getDataMutable(p2));
+                   pvr.AddByPointer(pva.getDataMutable(p3));
                    pvr.AddByPointer(@p);
 
-                   PGDBVertex2D(pva.getelement(p3))^.x:=p.x;
-                   PGDBVertex2D(pva.getelement(p3))^.y:=p.y;
+                   PGDBVertex2D(pva.getDataMutable(p3))^.x:=p.x;
+                   PGDBVertex2D(pva.getDataMutable(p3))^.y:=p.y;
                    pva.deleteelement(p2);
                    pva.optimize;
 
@@ -1443,8 +1443,8 @@ begin
      dc:=drawings.GetCurrentDwg^.CreateDrawingRC;
      while i<pvr.Count do
      begin
-          wc.x:=PGDBVertex2D(pvr.getelement(i))^.x;
-          wc.y:=PGDBVertex2D(pvr.getelement(i))^.y;
+          wc.x:=PGDBVertex2D(pvr.getDataMutable(i))^.x;
+          wc.y:=PGDBVertex2D(pvr.getDataMutable(i))^.y;
           wc.z:=0;
           wc:=uzegeometry.VectorTransform3D(wc,m);
           p3dpl^.AddVertex(wc);

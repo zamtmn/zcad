@@ -429,7 +429,7 @@ begin
                                                   if typename='PTUnitManager' then
                                                                                   typename:=typename;
                                                   gdbgetmem({$IFDEF DEBUGBUILD}'{70AF3E6D-C33B-4878-9E59-9FDAF04540EE}',{$ENDIF}GDBPointer(etd),sizeof(GDBPointerDescriptor));
-                                                  PGDBPointerDescriptor(etd)^.init(pGDBString(parseresult^.getelement(1))^,typename,currentunit);
+                                                  PGDBPointerDescriptor(etd)^.init(pGDBString(parseresult^.getDataMutable(1))^,typename,currentunit);
                                                   //GDBStringtypearray := chr(TGDBPointer)+pGDBString(parseresult^.getelement(1))^;
                                                   GDBStringtypearray:='';
                                                   fieldoffset := sizeof(pointer);
@@ -518,7 +518,7 @@ begin
                                                   addtype:=false;
                                              end;
                                   arraytype,packedarraytype:begin
-                                                  typename:=pGDBString(parseresult^.getelement(0))^;
+                                                  typename:=pGDBString(parseresult^.getDataMutable(0))^;
                                                   if typ<>packedarraytype then
                                                                               begin
                                                                                //ShowError('Array "'+typename+'" not packed');
@@ -608,7 +608,7 @@ begin
                                              fieldoffset:=maxvalue;*)
                                                   currvalue:=0;
                                                   maxvalue:=0;
-                                                  typename:=pGDBString(parseresult^.getelement(0))^;
+                                                  typename:=pGDBString(parseresult^.getDataMutable(0))^;
                                                   if typename='TInsUnits' then
                                                                                 typename:=typename;
                                                   repeat
@@ -638,7 +638,7 @@ begin
                                                   if maxvalue<enumodj.value then maxvalue:=enumodj.value;
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
                                                   parseresult:=runparser('_softspace'#0'=,',line,parseerror);
-                                                  enumobjlist.AddByPointer(@enumodj);
+                                                  enumobjlist.PushBackData(enumodj);
                                                   GDBPointer(enumodj.source):=nil;
                                                   GDBPointer(enumodj.user):=nil;
                                                   until not parseerror;
@@ -655,13 +655,13 @@ begin
                                              penu:=enumobjlist.beginiterate(ir);
                                              if penu<>nil then
                                                repeat
-                                                     PEnumDescriptor(etd)^.SourceValue.AddByPointer(@penu^.source);
+                                                     PEnumDescriptor(etd)^.SourceValue.PushBackData(penu^.source);
                                                      //GDBPointer(penu^.source):=nil;
                                                      penu^.source:='';
-                                                     PEnumDescriptor(etd)^.UserValue.AddByPointer(@penu^.user);
+                                                     PEnumDescriptor(etd)^.UserValue.PushBackData(penu^.user);
                                                      //GDBPointer(penu^.user):=nil;
                                                      penu^.user:='';
-                                                     PEnumDescriptor(etd)^.Value.AddByPointer(@penu^.value);
+                                                     PEnumDescriptor(etd)^.Value.PushBackData(penu^.value);
                                                      penu:=enumobjlist.iterate(ir);
                                               until penu=nil;
                                              enumobjlist.clear;
@@ -740,13 +740,13 @@ if addtype then
                                 subparseresult:=runparser('_softspace'#0'=(=*_GDBString'#0'=*=)'#0,line,subparseerror);
                                 vuname:='';
                                 if (subparseresult<>nil)and subparseerror then
-                                                                              vuname:=pGDBString(subparseresult^.getelement(0))^;
+                                                                              vuname:=pGDBString(subparseresult^.getDataMutable(0))^;
                                 if (parseresult<>nil)and parseerror then
                                 begin
-                                     vartype:=pGDBString(parseresult^.getelement(parseresult.Count-1))^;
+                                     vartype:=pGDBString(parseresult^.getDataMutable(parseresult.Count-1))^;
                                      for i:=0 to parseresult.Count-2 do
                                      begin
-                                     varname:=pGDBString(parseresult^.getelement(i))^;
+                                     varname:=pGDBString(parseresult^.getDataMutable(i))^;
                                      if varname='INTF_ObjInsp_WhiteBackground' then
                                                             varname:=varname;
                                      if currentunit^.FindVariable(varname)=nil then
@@ -783,10 +783,10 @@ if addtype then
                                                    end;
                                 if (parseresult<>nil)and parseerror then
                                 begin
-                                     vartype:=pGDBString(parseresult^.getelement(parseresult.Count-1))^;
+                                     vartype:=pGDBString(parseresult^.getDataMutable(parseresult.Count-1))^;
                                      for i:=0 to parseresult.Count-2 do
                                      begin
-                                     varname:=pGDBString(parseresult^.getelement(i))^;
+                                     varname:=pGDBString(parseresult^.getDataMutable(i))^;
                                      currentunit^.setvardesc(vd, varname,'', vartype);
                                      currentunit^.InterfaceVariables.createvariable(vd.name, vd);
                                      end;

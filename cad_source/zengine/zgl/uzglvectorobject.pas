@@ -81,7 +81,7 @@ var
 begin
      if LLprimitives.count<StartOffset+Count then exit;
      ProcessedSize:=0;
-     PPrimitive:=LLprimitives.getelement(StartOffset);
+     PPrimitive:=pointer(LLprimitives.getDataMutable(StartOffset));
      while count>0 do
      begin
           CurrentSize:=PPrimitive.draw(Drawer,rc,GeomData,LLprimitives,OptData);
@@ -98,7 +98,7 @@ var
    PIndex:PGDBInteger;
    PLLPrimitive:PTLLPrimitive;
 begin
-     PLLPrimitive:=LLprimitives.getelement(LLPrimitivesStartIndex);
+     PLLPrimitive:=pointer(LLprimitives.getDataMutable(LLPrimitivesStartIndex));
      for i:=1 to LLPCount do
      begin
           CurrLLPrimitiveSize:=PLLPrimitive.getPrimitiveSize;
@@ -107,7 +107,7 @@ begin
      end;
      if IndexesStartIndex<>-1 then
      begin
-       PIndex:=GeomData.Indexes.getelement(IndexesStartIndex);
+       PIndex:=GeomData.Indexes.getDataMutable(IndexesStartIndex);
        for i:=1 to IndexesCount do
        begin
             PIndex^:=PIndex^+offset.GeomIndexOffset;
@@ -167,7 +167,7 @@ begin
 end;
 begin
      result.LLPrimitivesStartIndex:=LLPStartIndex;
-     PLLPrimitive:=LLprimitives.getelement(LLPStartIndex);
+     PLLPrimitive:=pointer(LLprimitives.getDataMutable(LLPStartIndex));
      result.LLPrimitivesDataSize:=0;
      result.EID.GeomIndexMin:=-1;
      result.EID.GeomIndexMax:=-1;
@@ -191,14 +191,14 @@ begin
      result.LLPrimitivesDataSize:=CopyParam.LLPrimitivesDataSize;
      result.LLPrimitivesStartIndex:=dest.LLprimitives.Count;
      LLPrimitivesDestAddr:=dest.LLprimitives.AllocData(CopyParam.LLPrimitivesDataSize);
-     LLPrimitivesSourceAddr:=LLprimitives.getelement(CopyParam.LLPrimitivesStartIndex);
+     LLPrimitivesSourceAddr:=pointer(LLprimitives.getDataMutable(CopyParam.LLPrimitivesStartIndex));
      Move(LLPrimitivesSourceAddr^,LLPrimitivesDestAddr^,CopyParam.LLPrimitivesDataSize);
 
      result.EID.GeomIndexMin:=dest.GeomData.Vertex3S.Count;
      result.EID.GeomIndexMax:=result.EID.GeomIndexMin+CopyParam.EID.GeomIndexMax-CopyParam.EID.GeomIndexMin;
      result.GeomDataSize:=CopyParam.GeomDataSize;
      DestGeomDataAddr:=dest.GeomData.Vertex3S.AllocData(CopyParam.EID.GeomIndexMax-CopyParam.EID.GeomIndexMin+1);
-     SourceGeomDataAddr:=self.GeomData.Vertex3S.getelement(CopyParam.EID.GeomIndexMin);
+     SourceGeomDataAddr:=self.GeomData.Vertex3S.getDataMutable(CopyParam.EID.GeomIndexMin);
      if (SourceGeomDataAddr<>nil)and(DestGeomDataAddr<>nil) then
         Move(SourceGeomDataAddr^,DestGeomDataAddr^,CopyParam.GeomDataSize);
 
@@ -208,7 +208,7 @@ begin
          result.EID.IndexsIndexMax:=result.EID.IndexsIndexMin+CopyParam.EID.IndexsIndexMax-CopyParam.EID.IndexsIndexMin;
          //result.GeomDataSize:=CopyParam.GeomDataSize;
          DestIndexsDataAddr:=dest.GeomData.Indexes.AllocData(CopyParam.EID.IndexsIndexMax-CopyParam.EID.IndexsIndexMin+1);
-         SourceIndexsDataAddr:=self.GeomData.Indexes.getelement(CopyParam.EID.IndexsIndexMin);
+         SourceIndexsDataAddr:=pointer(self.GeomData.Indexes.getDataMutable(CopyParam.EID.IndexsIndexMin));
          Move(SourceIndexsDataAddr^,DestIndexsDataAddr^,(CopyParam.EID.IndexsIndexMax-CopyParam.EID.IndexsIndexMin+1)*GeomData.Indexes.Size);
        end
      else
@@ -222,7 +222,7 @@ var
    i:integer;
    p:PGDBvertex3S;
 begin
-     p:=self.GeomData.Vertex3S.getelement(GeomDataIndexMin);
+     p:=self.GeomData.Vertex3S.getDataMutable(GeomDataIndexMin);
      for i:=0 to GeomDataIndexMax-GeomDataIndexMin do
      begin
        p^:=VectorTransform3D(p^,matrix);
@@ -236,7 +236,7 @@ var
 begin
      result.LBN:=InfinityVertex;
      result.RTF:=MinusInfinityVertex;
-     p:=self.GeomData.Vertex3S.getelement(GeomDataIndexMin);
+     p:=self.GeomData.Vertex3S.getDataMutable(GeomDataIndexMin);
      for i:=0 to GeomDataIndexMax-GeomDataIndexMin do
      begin
        if result.LBN.x>p.x then
@@ -262,7 +262,7 @@ var
 begin
      result.LBN:=InfinityVertex;
      result.RTF:=MinusInfinityVertex;
-     p:=self.GeomData.Vertex3S.getelement(GeomDataIndexMin);
+     p:=self.GeomData.Vertex3S.getDataMutable(GeomDataIndexMin);
      for i:=0 to GeomDataIndexMax-GeomDataIndexMin do
      begin
        point:=VectorTransform3D(p^,matrix);
@@ -295,7 +295,7 @@ begin
                                           exit;
                                         end;
   ProcessedSize:=0;
-  PPrimitive:=LLprimitives.getelement(StartOffset);
+  PPrimitive:=pointer(LLprimitives.getDataMutable(StartOffset));
   if count>0 then
   begin
        CurrentSize:=PPrimitive.CalcTrueInFrustum(frustum,GeomData,result);

@@ -187,7 +187,7 @@ begin
 end;
 function TLLLine.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):GDBInteger;
 begin
-     InRect:=uzegeometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(self.P1Index))^,PGDBvertex3S(geomdata.Vertex3S.getelement(self.P1Index+1))^,frustum);
+     InRect:=uzegeometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getDataMutable(self.P1Index))^,PGDBvertex3S(geomdata.Vertex3S.getDataMutable(self.P1Index+1))^,frustum);
      result:=getPrimitiveSize;
 end;
 procedure TLLLine.getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);
@@ -240,9 +240,9 @@ var
 begin
      if not OptData.ignoretriangles then
                                         begin
-                                             P1Index:=GeomData.Indexes.getelement(P1IndexInIndexesArray);
-                                             P2Index:=GeomData.Indexes.getelement(P1IndexInIndexesArray+1);
-                                             P3Index:=GeomData.Indexes.getelement(P1IndexInIndexesArray+2);
+                                             P1Index:=GeomData.Indexes.getDataMutable(P1IndexInIndexesArray);
+                                             P2Index:=GeomData.Indexes.getDataMutable(P1IndexInIndexesArray+1);
+                                             P3Index:=GeomData.Indexes.getDataMutable(P1IndexInIndexesArray+2);
                                              Drawer.DrawTriangle(@geomdata.Vertex3S,P1Index^,P2Index^,P3Index^);
                                         end;
      result:=inherited;
@@ -251,9 +251,9 @@ procedure TLLFreeTriangle.getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntInde
 var
    P1Index,P2Index,P3Index:pinteger;
 begin
-     P1Index:=GeomData.Indexes.getelement(P1IndexInIndexesArray);
-     P2Index:=GeomData.Indexes.getelement(P1IndexInIndexesArray+1);
-     P3Index:=GeomData.Indexes.getelement(P1IndexInIndexesArray+2);
+     P1Index:=GeomData.Indexes.getDataMutable(P1IndexInIndexesArray);
+     P2Index:=GeomData.Indexes.getDataMutable(P1IndexInIndexesArray+1);
+     P3Index:=GeomData.Indexes.getDataMutable(P1IndexInIndexesArray+2);
      eid.GeomIndexMin:=min(min(P1Index^,P2Index^),P3Index^);
      eid.GeomIndexMax:=max(max(P1Index^,P2Index^),P3Index^);
      eid.IndexsIndexMin:=P1IndexInIndexesArray;
@@ -285,13 +285,13 @@ begin
      if P1IndexInIndexesArray<>-1 then
      begin
        index:=P1IndexInIndexesArray;
-       PIndex:=GeomData.Indexes.getelement(index);
+       PIndex:=GeomData.Indexes.getDataMutable(index);
        eid.GeomIndexMin:=PIndex^;
        eid.GeomIndexMax:=PIndex^;
        inc(index);
        for i:=2 to IndexInIndexesArraySize do
        begin
-         PIndex:=GeomData.Indexes.getelement(index);
+         PIndex:=GeomData.Indexes.getDataMutable(index);
          eid.GeomIndexMin:=min(eid.GeomIndexMin,PIndex^);
          eid.GeomIndexMax:=max(eid.GeomIndexMax,PIndex^);
          inc(index);
@@ -348,11 +348,11 @@ begin
     begin
       sindex:=SimplifiedContourIndex;
       if sindex<0 then sindex:=0;
-      oldindex:=PTArrayIndex(GeomData.Indexes.getelement(sindex))^;
+      oldindex:=PTArrayIndex(GeomData.Indexes.getDataMutable(sindex))^;
       inc(sindex);
       for i:=1 to SimplifiedContourSize-1 do
       begin
-         index:=PTArrayIndex(GeomData.Indexes.getelement(sindex))^;
+         index:=PTArrayIndex(GeomData.Indexes.getDataMutable(sindex))^;
          Drawer.DrawLine(@geomdata.Vertex3S,oldindex,index);
          oldindex:=index;
          inc(sindex);
@@ -400,14 +400,14 @@ var
    i,index:integer;
    SubRect:TInBoundingVolume;
 begin
-     InRect:=uzegeometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(P1Index))^,PGDBvertex3S(geomdata.Vertex3S.getelement(P1Index+1))^,frustum);
+     InRect:=uzegeometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getDataMutable(P1Index))^,PGDBvertex3S(geomdata.Vertex3S.getDataMutable(P1Index+1))^,frustum);
      result:=getPrimitiveSize;
      if InRect=IRPartially then
                                exit;
      index:=P1Index+1;
      for i:=2 to Count-1 do
      begin
-        SubRect:=uzegeometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getelement(index))^,PGDBvertex3S(geomdata.Vertex3S.getelement(index+1))^,frustum);
+        SubRect:=uzegeometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getDataMutable(index))^,PGDBvertex3S(geomdata.Vertex3S.getDataMutable(index+1))^,frustum);
         case SubRect of
           IREmpty:if InRect=IRFully then
                                          InRect:=IRPartially;
@@ -468,19 +468,19 @@ var
    OutBound:OutBound4V;
    p:PGDBvertex3S;
 begin
-     p:=geomdata.Vertex3S.getelement(OutBoundIndex);
+     p:=geomdata.Vertex3S.getDataMutable(OutBoundIndex);
      OutBound[0].x:=p^.x;
      OutBound[0].y:=p^.y;
      OutBound[0].z:=p^.z;
-     p:=geomdata.Vertex3S.getelement(OutBoundIndex+1);
+     p:=geomdata.Vertex3S.getDataMutable(OutBoundIndex+1);
      OutBound[1].x:=p^.x;
      OutBound[1].y:=p^.y;
      OutBound[1].z:=p^.z;
-     p:=geomdata.Vertex3S.getelement(OutBoundIndex+2);
+     p:=geomdata.Vertex3S.getDataMutable(OutBoundIndex+2);
      OutBound[2].x:=p^.x;
      OutBound[2].y:=p^.y;
      OutBound[2].z:=p^.z;
-     p:=geomdata.Vertex3S.getelement(OutBoundIndex+3);
+     p:=geomdata.Vertex3S.getDataMutable(OutBoundIndex+3);
      OutBound[3].x:=p^.x;
      OutBound[3].y:=p^.y;
      OutBound[3].z:=p^.z;
@@ -507,7 +507,7 @@ begin
   result:=0;
   if self.LineIndex<>-1 then
   begin
-    PLLSymbolLine:=LLPArray.getelement(self.LineIndex);
+    PLLSymbolLine:=LLPArray.getDataMutable(self.LineIndex);
     PSymbolsParam:=@PLLSymbolLine^.SymbolsParam;
   if PLLSymbolLine^.SimplyDrawed then
                                                                            begin

@@ -230,7 +230,7 @@ begin
   //for i:=1 to length(content) do
   begin
     sym:=getsymbol_fromGDBText(content,i,l,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont^.font.unicode);
-    //psyminfo:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(content[i])));
+    //psyminfo:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getDataMutable(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(content[i])));
     psyminfo:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(sym{//-ttf-//,tdinfo});
     obj_width:=obj_width+psyminfo.NextSymX;
     if psyminfo.SymMaxY>obj_height then obj_height:=psyminfo.SymMaxY;
@@ -407,7 +407,7 @@ begin
 
   psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(integer(_symbol));
   deb:=psyminfo^;
-  psymbol := PGDBfont(pfont)^.SHXdata.getelement({pgdbfont(pfont).symbo linfo[GDBByte(_symbol)]}psyminfo.addr);// GDBPointer(GDBPlatformint(pfont)+ pgdbfont(pfont).symbo linfo[GDBByte(_symbol)].addr);
+  psymbol := PGDBfont(pfont)^.SHXdata.getDataMutable({pgdbfont(pfont).symbo linfo[GDBByte(_symbol)]}psyminfo.addr);// GDBPointer(GDBPlatformint(pfont)+ pgdbfont(pfont).symbo linfo[GDBByte(_symbol)].addr);
   if {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size <> 0 then
     for j := 1 to {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size do
     begin
@@ -674,9 +674,9 @@ else if dxfGDBDoubleload(f,51,byt,textprop.oblique) then
                                                         textprop.oblique:=textprop.oblique*pi/180
 else if     dxfGDBStringload(f,7,byt,style)then
                                              begin
-                                                  TXTStyleIndex :={drawing.GetTextStyleTable^.getelement}(drawing.GetTextStyleTable^.FindStyle(Style,false));
+                                                  TXTStyleIndex :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
                                                   if TXTStyleIndex=nil then
-                                                                      TXTStyleIndex:=drawing.GetTextStyleTable^.getelement(0);
+                                                                      TXTStyleIndex:=drawing.GetTextStyleTable^.getDataMutable(0);
                                              end
 else if not dxfGDBIntegerload(f,72,byt,gv)then
      if not dxfGDBIntegerload(f,73,byt,vv)then

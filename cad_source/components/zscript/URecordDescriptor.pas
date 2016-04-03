@@ -268,7 +268,7 @@ begin
 end;
 procedure RecordDescriptor.AddConstField;
 begin
-     fields.AddByPointer(@fd);
+     fields.PushBackData(fd);
      SizeInGDBBytes:=SizeInGDBBytes+fd.Size;
 end;
 procedure RecordDescriptor.AddField;

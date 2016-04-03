@@ -45,13 +45,10 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   function CreateArray:GDBPointer;virtual;
                   procedure Grow(newmax:GDBInteger=0);virtual;
                   procedure Shrink;virtual;
-                  procedure setsize(nsize:TArrayIndex);
-                  function getelement(index:TArrayIndex):GDBPointer;
                   procedure freeelement(p:GDBPointer);virtual;abstract;
                   function GetElemCount:GDBInteger;
 
                   function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
-                  function AddByRef(var obj):TArrayIndex;virtual;
 
                   function beginiterate(out ir:itrec):GDBPointer;virtual;
                   function iterate(var ir:itrec):GDBPointer;virtual;
@@ -69,6 +66,12 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   function IsObjExist(pobj:T;EqualFunc:TEqualFunc):GDBBoolean;
 
                   function GetParrayAsPointer:pointer;
+
+                  {reworked}
+                  procedure setsize(nsize:TArrayIndex);
+                  function getDataMutable(index:TArrayIndex):PT;
+                  function getData(index:TArrayIndex):T;
+                  function PushBackData(const data:T):TArrayIndex;
             end;
 {Export-}
 function EqualFuncGDBDouble(const a, b:GDBDouble):Boolean;
@@ -76,6 +79,39 @@ implementation
 function EqualFuncGDBDouble(const a, b:GDBDouble):Boolean;
 begin
   result:=(a=b);
+end;
+
+function TZctnrVector<T>.getDataMutable;
+begin
+     if (index>=max)
+        or(index<0)then
+                     result:=nil
+else if PArray=nil then
+                     result:=nil
+                   else
+                     result:=@parray[index];
+end;
+function TZctnrVector<T>.getData;
+begin
+     if (index>=max)
+        or(index<0)then
+                     result:=default(T)
+else if PArray=nil then
+                     result:=default(T)
+                   else
+                     result:=parray[index];
+end;
+function TZctnrVector<T>.PushBackData(const data:T):TArrayIndex;
+begin
+  if parray=nil then
+                     CreateArray;
+  if count = max then
+                     grow;
+  begin
+       parray[count]:=data;
+       result:=count;
+       inc(count);
+  end;
 end;
 function TZctnrVector<T>.GetParrayAsPointer;
 begin
@@ -184,8 +220,8 @@ var p,pl,tp:GDBPointer;
     ir:itrec;
 begin
   p:=beginiterate(ir);
-  p:=getelement({count-1}0);
-  pl:=getelement(count-1);
+  p:=getDataMutable({count-1}0);
+  pl:=getDataMutable(count-1);
   GDBGetMem({$IFDEF DEBUGBUILD}'{D9D91D43-BD6A-450A-B07E-E964425E7C99}',{$ENDIF}tp, size);
   if p<>nil then
   repeat
@@ -260,13 +296,6 @@ begin
                            result:=ir.itp;
                       end
                   else result:=nil;
-end;
-function TZctnrVector<T>.AddByRef;
-var
-   p:pointer;
-begin
-     p:=@obj;
-     result:=AddByPointer(@p)
 end;
 function TZctnrVector<T>.AddByPointer;
 var addr: GDBPlatformint;
@@ -357,16 +386,6 @@ else if nsize<max then
 
                       end;
 max:=nsize;
-end;
-function TZctnrVector<T>.getelement;
-begin
-     if (index>=max)or(index<0) then
-                        result:=nil
-                    else
-     begin
-  result := PArray;
-  inc(pGDBByte(result),size*index);
-     end;
 end;
 function TZctnrVector<T>.GetElemCount:GDBInteger;
 begin

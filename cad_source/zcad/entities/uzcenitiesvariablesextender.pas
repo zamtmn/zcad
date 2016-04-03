@@ -120,7 +120,7 @@ var
    pblockdef:PGDBObjBlockdef;
    pbdunit:PTVariablesExtender;
 begin
-     pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getelement(PGDBObjDevice(pEntity)^.index);
+     pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getDataMutable(PGDBObjDevice(pEntity)^.index);
      pbdunit:=nil;
      if assigned(pblockdef^.EntExtensions)then
      pbdunit:=pblockdef^.EntExtensions.GetExtension(typeof(TVariablesExtender));

@@ -116,7 +116,7 @@ begin
      tv.x:=v^.x+tv0.x;
      tv.y:=v^.y+tv0.y;
      tv.z:=v^.z+tv0.z;
-     parr^.AddByPointer(@tv);
+     parr^.PushBackData(tv);
      tv.x:=0;
 end;
 
@@ -188,7 +188,7 @@ begin
         tfvs.y:=tfv.y;
         tfvs.z:=tfv.z;
         tfvs.w:=tfv.w;
-        CP.AddByPointer(@tfvs);
+        CP.PushBackData(tfvs);
         ptv:=VertexArrayInOCS.iterate(ir);
   until ptv=nil;
 
@@ -375,7 +375,7 @@ begin
                                          end
   else if dxfGDBFloatload(f,40,byt,tr) then
                                       begin
-                                           Knots.AddByPointer(@tr);
+                                           Knots.PushBackData(tr);
                                       end
   else if dxfGDBIntegerload(f,70,byt,hlGDBWord) then
                                                    begin

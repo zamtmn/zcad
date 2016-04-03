@@ -103,7 +103,7 @@ implementation
 //uses log;
 {function GDBObjGenericSubEntry.SubMi;
 begin
-     //pobj^.bp.PSelfInOwnerArray:=ObjArray.getelement(ObjArray.add(pobj));
+     //pobj^.bp.PSelfInOwnerArray:=ObjArray.getDataMutable(ObjArray.add(pobj));
      ObjArray.add(pobj);
      pGDBObjEntity(ppointer(pobj)^).bp.Owner:=@self;
 end;}
@@ -442,7 +442,7 @@ begin
 end;
 function GDBObjGenericSubEntry.AddMi;
 begin
-     //pobj^.bp.PSelfInOwnerArray:=ObjArray.getelement(ObjArray.add(pobj));
+     //pobj^.bp.PSelfInOwnerArray:=ObjArray.getDataMutable(ObjArray.add(pobj));
      ObjArray.add(pobj);
      pGDBObjEntity(ppointer(pobj)^).bp.ListPos.Owner:=@self;
 end;
@@ -615,7 +615,7 @@ begin
   result:=false;
   for i:=0 to ObjArray.count-1 do
   begin
-       p:=pGDBPointer(ObjArray.getelement(i))^;
+       p:=pGDBPointer(ObjArray.getDataMutable(i))^;
        if p<>nil then
        begin
        ot:=p^.onpoint(objects,point);
@@ -637,7 +637,7 @@ begin
   //p:=GDBPointer(ObjArray.parray^);
   for i:=0 to ObjArray.count-1 do
   begin
-       p:=pGDBPointer(ObjArray.getelement(i))^;
+       p:=pGDBPointer(ObjArray.getDataMutable(i))^;
        if p<>nil then
        begin
        ot:=p^.onmouse(popa,mf,InSubEntry);

@@ -380,7 +380,7 @@ begin
                                                  s:=s;
      if pCable^.NodePropArray.Count>0 then
                                            begin
-                                                ptn:=pCable^.NodePropArray.getelement(0);
+                                                ptn:=pCable^.NodePropArray.getDataMutable(0);
                                                 pdev:=ptn^.DevLink;
                                            end
                                       else
@@ -395,7 +395,7 @@ begin
 
      if pCable^.NodePropArray.Count>0 then
                                            begin
-                                                ptn:=pCable^.NodePropArray.getelement(pCable^.NodePropArray.Count-1);
+                                                ptn:=pCable^.NodePropArray.getDataMutable(pCable^.NodePropArray.Count-1);
                                                 pdev:=ptn^.DevLink;
                                            end
                                       else

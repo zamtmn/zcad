@@ -284,7 +284,7 @@ var
    txtlines:XYZWGDBGDBStringArray;
 begin
    dimtext:={GetLinearDimStr(abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)))}GetDimStr(drawing);
-   dimtxtstyle:=PDimStyle.Text.DIMTXSTY;//drawing.GetTextStyleTable^.getelement(0);
+   dimtxtstyle:=PDimStyle.Text.DIMTXSTY;//drawing.GetTextStyleTable^.getDataMutable(0);
    txtlines.init(3);
    FormatMtext(dimtxtstyle.pfont,0,PDimStyle.Text.DIMTXT,dimtxtstyle^.prop.wfactor,dimtext,txtlines);
    dimtexth:=GetLinesH(GetLineSpaceFromLineSpaceF(1,PDimStyle.Text.DIMTXT),PDimStyle.Text.DIMTXT,txtlines);
@@ -344,7 +344,7 @@ var
 begin
   //CalcTextParam;
   dimtext:={GetLinearDimStr(abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)))}GetDimStr(drawing);
-  dimtxtstyle:=PDimStyle.Text.DIMTXSTY;//drawing.GetTextStyleTable^.getelement(0);
+  dimtxtstyle:=PDimStyle.Text.DIMTXSTY;//drawing.GetTextStyleTable^.getDataMutable(0);
   {txtlines.init(3);
   FormatMtext(dimtxtstyle.pfont,0,PDimStyle.Text.DIMTXT,dimtxtstyle^.prop.wfactor,dimtext,txtlines);
   dimtexth:=GetLinesH(1,PDimStyle.Text.DIMTXT,txtlines);

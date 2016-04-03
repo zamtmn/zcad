@@ -741,8 +741,8 @@ begin
    pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
    pf:=PInternalRTTITypeDesk^.FindField('PolyWidth'); //находим описание поля ET
    pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
-   pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
-   pf^.base.Attributes:=pf^.base.Attributes or FA_HIDDEN_IN_OBJ_INSP;//устанавливаем ему флаг cкрытности
+   //pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
+   //pf^.base.Attributes:=pf^.base.Attributes or FA_HIDDEN_IN_OBJ_INSP;//устанавливаем ему флаг cкрытности
    zcShowCommandParams(PInternalRTTITypeDesk,@RectangParam);
 
    if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1) then
@@ -763,17 +763,17 @@ begin
              zcAddEntToCurrentDrawingConstructRoot(polyLWObj);
              vertexLWObj.x:=pe.p1.x;
              vertexLWObj.y:=pe.p1.y;
-             polyLWObj^.Vertex2D_in_OCS_Array.AddByPointer(@vertexLWObj);
-             polyLWObj^.Width2D_in_OCS_Array.AddByPointer(@widthObj);
+             polyLWObj^.Vertex2D_in_OCS_Array.PushBackData(vertexLWObj);
+             polyLWObj^.Width2D_in_OCS_Array.PushBackData(widthObj);
 
-             polyLWObj^.Vertex2D_in_OCS_Array.AddByPointer(@vertexLWObj);
-             polyLWObj^.Width2D_in_OCS_Array.AddByPointer(@widthObj);
+             polyLWObj^.Vertex2D_in_OCS_Array.PushBackData(vertexLWObj);
+             polyLWObj^.Width2D_in_OCS_Array.PushBackData(widthObj);
 
-             polyLWObj^.Vertex2D_in_OCS_Array.AddByPointer(@vertexLWObj);
-             polyLWObj^.Width2D_in_OCS_Array.AddByPointer(@widthObj);
+             polyLWObj^.Vertex2D_in_OCS_Array.PushBackData(vertexLWObj);
+             polyLWObj^.Width2D_in_OCS_Array.PushBackData(widthObj);
 
-             polyLWObj^.Vertex2D_in_OCS_Array.AddByPointer(@vertexLWObj);
-             polyLWObj^.Width2D_in_OCS_Array.AddByPointer(@widthObj);
+             polyLWObj^.Vertex2D_in_OCS_Array.PushBackData(vertexLWObj);
+             polyLWObj^.Width2D_in_OCS_Array.PushBackData(widthObj);
 
              InteractiveLWRectangleManipulator(polyLWObj,pe.p1,false);
              if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractiveLWRectangleManipulator,polyLWObj) then
@@ -791,10 +791,10 @@ begin
              //drawings.GetCurrentDWG^.ConstructObjRoot.AddMi(@polyObj);
              zcAddEntToCurrentDrawingConstructRoot(polyObj);
              vertexObj:=pe.p1;
-             polyObj^.VertexArrayInOCS.AddByPointer(@vertexObj);
-             polyObj^.VertexArrayInOCS.AddByPointer(@vertexObj);
-             polyObj^.VertexArrayInOCS.AddByPointer(@vertexObj);
-             polyObj^.VertexArrayInOCS.AddByPointer(@vertexObj);
+             polyObj^.VertexArrayInOCS.PushBackData(vertexObj);
+             polyObj^.VertexArrayInOCS.PushBackData(vertexObj);
+             polyObj^.VertexArrayInOCS.PushBackData(vertexObj);
+             polyObj^.VertexArrayInOCS.PushBackData(vertexObj);
              InteractiveRectangleManipulator(polyObj,pe.p1,false);
              if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractiveRectangleManipulator,polyObj) then
              begin

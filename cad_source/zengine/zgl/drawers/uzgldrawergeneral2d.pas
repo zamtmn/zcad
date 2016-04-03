@@ -261,10 +261,10 @@ begin
 end;
 
 begin
- pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
- pv2:=PGDBVertex3S(PVertexBuffer.getelement(i1+1));
- pv3:=PGDBVertex3S(PVertexBuffer.getelement(i1+2));
- pv4:=PGDBVertex3S(PVertexBuffer.getelement(i1+3));
+ pv1:=PGDBVertex3S(PVertexBuffer.getDataMutable(i1));
+ pv2:=PGDBVertex3S(PVertexBuffer.getDataMutable(i1+1));
+ pv3:=PGDBVertex3S(PVertexBuffer.getDataMutable(i1+2));
+ pv4:=PGDBVertex3S(PVertexBuffer.getDataMutable(i1+3));
  p1:=TranslatePoint{WithLocalCS}(pv1^);
  p2:=TranslatePoint{WithLocalCS}(pv2^);
  p3:=TranslatePoint{WithLocalCS}(pv3^);
@@ -296,14 +296,14 @@ var
    sp:array [1..3]of TPoint;
 begin
     index:=i1;
-    pindex:=PIndexBuffer.getelement(index);
-    pv1:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+    pindex:=pointer(PIndexBuffer.getDataMutable(index));
+    pv1:=PGDBVertex3S(PVertexBuffer.getDataMutable(pindex^));
     inc(index);
-    pindex:=PIndexBuffer.getelement(index);
-    pv2:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+    pindex:=pointer(PIndexBuffer.getDataMutable(index));
+    pv2:=PGDBVertex3S(PVertexBuffer.getDataMutable(pindex^));
     inc(index);
-    pindex:=PIndexBuffer.getelement(index);
-    pv3:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+    pindex:=pointer(PIndexBuffer.getDataMutable(index));
+    pv3:=PGDBVertex3S(PVertexBuffer.getDataMutable(pindex^));
     inc(index);
 
     p1:=TranslatePointWithLocalCS(pv1^);
@@ -331,8 +331,8 @@ begin
         p2:=p3;
         //sp[1]:=sp[2];
         //sp[2]:=sp[3];
-        pindex:=PIndexBuffer.getelement(i);
-        pv3:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+        pindex:=pointer(PIndexBuffer.getDataMutable(i));
+        pv3:=PGDBVertex3S(PVertexBuffer.getDataMutable(pindex^));
 
         p3:=TranslatePointWithLocalCS(pv3^);
 
@@ -355,14 +355,14 @@ var
    //sp:array [1..3]of TPoint;
 begin
     index:=i1;
-    pindex:=PIndexBuffer.getelement(index);
-    pv1:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+    pindex:=pointer(PIndexBuffer.getDataMutable(index));
+    pv1:=PGDBVertex3S(PVertexBuffer.getDataMutable(pindex^));
     inc(index);
-    pindex:=PIndexBuffer.getelement(index);
-    pv2:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+    pindex:=pointer(PIndexBuffer.getDataMutable(index));
+    pv2:=PGDBVertex3S(PVertexBuffer.getDataMutable(pindex^));
     inc(index);
-    pindex:=PIndexBuffer.getelement(index);
-    pv3:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+    pindex:=pointer(PIndexBuffer.getDataMutable(index));
+    pv3:=PGDBVertex3S(PVertexBuffer.getDataMutable(pindex^));
     inc(index);
 
     p1:=TranslatePointWithLocalCS(pv1^);
@@ -387,8 +387,8 @@ begin
     begin
         p2:=p3;
         //sp[2]:=sp[3];
-        pindex:=PIndexBuffer.getelement(i);
-        pv3:=PGDBVertex3S(PVertexBuffer.getelement(pindex^));
+        pindex:=pointer(PIndexBuffer.getDataMutable(i));
+        pv3:=PGDBVertex3S(PVertexBuffer.getDataMutable(pindex^));
 
         p3:=TranslatePointWithLocalCS(pv3^);
 
@@ -406,7 +406,7 @@ var
    pv:PGDBVertex3S;
    p:GDBVertex3S;
 begin
-    pv:=PGDBVertex3S(PVertexBuffer.getelement(i));
+    pv:=PGDBVertex3S(PVertexBuffer.getDataMutable(i));
     p:=TranslatePointWithLocalCS(pv^);
     InternalDrawPoint(p.x,p.y);
 end;
@@ -415,9 +415,9 @@ var
    pv1,pv2,pv3:PGDBVertex3S;
    p1,p2,p3:GDBVertex3S;
 begin
-    pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
-    pv2:=PGDBVertex3S(PVertexBuffer.getelement(i2));
-    pv3:=PGDBVertex3S(PVertexBuffer.getelement(i3));
+    pv1:=PGDBVertex3S(PVertexBuffer.getDataMutable(i1));
+    pv2:=PGDBVertex3S(PVertexBuffer.getDataMutable(i2));
+    pv3:=PGDBVertex3S(PVertexBuffer.getDataMutable(i3));
     p1:=TranslatePointWithLocalCS(pv1^);
     p2:=TranslatePointWithLocalCS(pv2^);
     p3:=TranslatePointWithLocalCS(pv3^);
@@ -430,10 +430,10 @@ procedure TZGLGeneral2DDrawer.DrawQuad(const PVertexBuffer:PZGLVertex3Sarray;con
    x,y:integer;
    sp:array [1..4]of TPoint;
 begin
-    pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
-    pv2:=PGDBVertex3S(PVertexBuffer.getelement(i2));
-    pv3:=PGDBVertex3S(PVertexBuffer.getelement(i3));
-    pv4:=PGDBVertex3S(PVertexBuffer.getelement(i4));
+    pv1:=PGDBVertex3S(PVertexBuffer.getDataMutable(i1));
+    pv2:=PGDBVertex3S(PVertexBuffer.getDataMutable(i2));
+    pv3:=PGDBVertex3S(PVertexBuffer.getDataMutable(i3));
+    pv4:=PGDBVertex3S(PVertexBuffer.getDataMutable(i4));
     p1:=TranslatePointWithLocalCS(pv1^);
     p2:=TranslatePointWithLocalCS(pv2^);
     p3:=TranslatePointWithLocalCS(pv3^);
@@ -446,8 +446,8 @@ var
    pv1,pv2:PGDBVertex3S;
    p1,p2:GDBVertex3S;
 begin
-    pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
-    pv2:=PGDBVertex3S(PVertexBuffer.getelement(i2));
+    pv1:=PGDBVertex3S(PVertexBuffer.getDataMutable(i1));
+    pv2:=PGDBVertex3S(PVertexBuffer.getDataMutable(i2));
     p1:=TranslatePointWithLocalCS(pv1^);
     p2:=TranslatePointWithLocalCS(pv2^);
 

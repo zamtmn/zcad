@@ -596,16 +596,16 @@ var
    //{pvisible,}pvisible2:PGDBObjEntity;
    //pl:PGDBLayerProp;
 begin
-                    poldstyle:=oldti{PGDBTextStyle(_from.TextStyleTable.getelement(oldti))};
+                    poldstyle:=oldti{PGDBTextStyle(_from.TextStyleTable.getDataMutable(oldti))};
                     tsname:=poldstyle^.name;
                     newti:=_to.TextStyleTable.FindStyle(tsname,poldstyle^.UsedInLTYPE);
                     if newti{<0}=nil then
                                    begin
                                         newti:=_to.TextStyleTable.addstyle(poldstyle.name,poldstyle.pfont.Name,poldstyle.prop,poldstyle.UsedInLTYPE);
-                                        pnevstyle:=PGDBTextStyle({_to.TextStyleTable.getelement}(newti));
+                                        pnevstyle:=PGDBTextStyle({_to.TextStyleTable.getDataMutable}(newti));
                                         pnevstyle^:=poldstyle^;
                                    end;
-      result:={_to.TextStyleTable.getelement}(_to.TextStyleTable.FindStyle(tsname,poldstyle^.UsedInLTYPE));
+      result:={_to.TextStyleTable.getDataMutable}(_to.TextStyleTable.FindStyle(tsname,poldstyle^.UsedInLTYPE));
 end;
 procedure createtstyleifneed(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
 //var
@@ -622,13 +622,13 @@ begin
                begin
                     PGDBObjText(_dest)^.TXTStyleIndex:=createtstylebyindex(_from,_to,PGDBObjText(_source)^.TXTStyleIndex);
                     {oldti:=PGDBObjText(_source)^.TXTStyleIndex;
-                    poldstyle:=PGDBTextStyle(_from.TextStyleTable.getelement(oldti));
+                    poldstyle:=PGDBTextStyle(_from.TextStyleTable.getDataMutable(oldti));
                     tsname:=poldstyle^.name;
                     newti:=_to.TextStyleTable.FindStyle(tsname);
                     if newti<0 then
                                    begin
                                         newti:=_to.TextStyleTable.addstyle(poldstyle.name,poldstyle.pfont.Name,poldstyle.prop);
-                                        pnevstyle:=PGDBTextStyle(_to.TextStyleTable.getelement(newti));
+                                        pnevstyle:=PGDBTextStyle(_to.TextStyleTable.getDataMutable(newti));
                                         pnevstyle^:=poldstyle^;
                                    end
                     createtstylebyindex

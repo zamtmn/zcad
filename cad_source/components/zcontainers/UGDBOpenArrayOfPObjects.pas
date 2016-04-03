@@ -121,7 +121,7 @@ begin
 end;
 function TZctnrVectorPObj<T>.GetObject;
 begin
-  result:=pointer(getelement(index)^);
+  result:=pointer(getDataMutable(index)^);
 end;
 procedure TZctnrVectorPObj<T>.cleareraseobjfrom;
 var
@@ -261,7 +261,7 @@ begin
 end;
 function GDBOpenArrayOfPObjects.GetObject;
 begin
-  result:=pointer(getelement(index)^);
+  result:=pointer(getDataMutable(index)^);
 end;*)
 begin
 end.

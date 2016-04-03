@@ -445,7 +445,7 @@ begin
            if uppercase(pb^.name)=selname then
                                               result:=i;
            s:=Tria_AnsiToUtf8(pb^.name);
-           BDefNames.AddByPointer(@s);
+           BDefNames.PushBackData(s);
            pb:=drawings.GetCurrentDWG^.BlockDefArray.iterate(ir);
            inc(i);
      until pb=nil;
@@ -515,7 +515,7 @@ begin
            if uppercase(pb^.name)=selname then
                                               result:=i;
 
-           BDefNames.AddByPointer(@pb^.name);
+           BDefNames.PushBackData(pb^.name);
            pb:=drawings.GetCurrentDWG^.TextStyleTable.iterate(ir);
            inc(i);
      until pb=nil;
@@ -1360,7 +1360,7 @@ begin
                     if pvisible^.IsHaveLCS then
                                pvisible^.Formatentity(drawings.GetCurrentDWG^,dc);
            pvisible^.transform(m);
-           //pvisible^.correctobjects(powner,{pblockdef.ObjArray.getelement(i)}i);
+           //pvisible^.correctobjects(powner,{pblockdef.ObjArray.getMutableData(i)}i);
            powner^.objmatrix:=m2;
            pvisible^.formatentity(drawings.GetCurrentDWG^,dc);
            pvisible^.BuildGeometry(drawings.GetCurrentDWG^);
@@ -1823,8 +1823,8 @@ begin
                                                                         BuildPrimitives;
      pt^.vp.Layer:=drawings.GetCurrentDWG^.GetCurrentLayer;
      pt^.vp.LineWeight:=sysvar.dwg.DWG_CLinew^;
-     //pt^.TXTStyleIndex:=drawings.GetCurrentDWG^.TextStyleTable.getelement(TextInsertParams.Style.Selected);
-     pt^.TXTStyleIndex:=drawings.GetCurrentDWG^.TextStyleTable.FindStyle(pgdbstring(TextInsertParams.Style.Enums.getelement(TextInsertParams.Style.Selected))^,false);
+     //pt^.TXTStyleIndex:=drawings.GetCurrentDWG^.TextStyleTable.getMutableData(TextInsertParams.Style.Selected);
+     pt^.TXTStyleIndex:=drawings.GetCurrentDWG^.TextStyleTable.FindStyle(pgdbstring(TextInsertParams.Style.Enums.getDataMutable(TextInsertParams.Style.Selected))^,false);
      pt^.textprop.size:=TextInsertParams.h;
      pt^.Content:='';
      pt^.Template:=(TextInsertParams.text);
@@ -2153,7 +2153,7 @@ begin
     pb := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID{,drawings.GetCurrentROOT}));
     //PGDBObjBlockInsert(pb)^.initnul;//(@drawings.GetCurrentDWG^.ObjRoot,drawings.LayerTable.GetSystemLayer,0);
     PGDBObjBlockInsert(pb)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
-    pb^.Name:=PGDBObjBlockdef(drawings.GetCurrentDWG^.BlockDefArray.getelement(BIProp.Blocks.Selected))^.Name;//'DEVICE_NOC';
+    pb^.Name:=PGDBObjBlockdef(drawings.GetCurrentDWG^.BlockDefArray.getDataMutable(BIProp.Blocks.Selected))^.Name;//'DEVICE_NOC';
     //pb^.vp.ID:=GDBBlockInsertID;
     pb^.Local.p_insert:=wc;
     pb^.scale:=BIProp.Scale;
@@ -2209,7 +2209,7 @@ begin
     //pb := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.CreateObj(GDBBlockInsertID,@drawings.GetCurrentDWG^.ObjRoot));
     //PGDBObjBlockInsert(pb)^.initnul;//(@drawings.GetCurrentDWG^.ObjRoot,drawings.LayerTable.GetSystemLayer,0);
     PGDBObjBlockInsert(pb)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
-    pb^.Name:=PGDBObjBlockdef(drawings.GetCurrentDWG^.BlockDefArray.getelement(BIProp.Blocks.Selected))^.Name;//'NOC';//'TESTBLOCK';
+    pb^.Name:=PGDBObjBlockdef(drawings.GetCurrentDWG^.BlockDefArray.getDataMutable(BIProp.Blocks.Selected))^.Name;//'NOC';//'TESTBLOCK';
     //pb^.vp.ID:=GDBBlockInsertID;
     pb^.Local.p_insert:=wc;
 
@@ -2733,7 +2733,7 @@ begin
                     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.add(addr(tv));
                     tcd.obj:=pobj;
                     tcd.clone:=tv;
-                    pcoa^.AddByPointer(@tcd);
+                    pcoa^.PushBackData(tcd);
                     tv^.formatentity(drawings.GetCurrentDWG^,dc);
                 end;
               end;
@@ -3678,7 +3678,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
 
      BEditParam.Blocks.Enums.free;
      i:=GetBlockDefNames(BEditParam.Blocks.Enums,tn);
-     BEditParam.Blocks.Enums.AddByPointer(@modelspacename);
+     BEditParam.Blocks.Enums.PushBackData(modelspacename);
      if BEditParam.CurrentEditBlock=modelspacename then
        begin
             BEditParam.Blocks.Selected:=BEditParam.Blocks.Enums.Count-1;
@@ -3813,7 +3813,7 @@ begin
       if ip.isintercept then
       begin
            inc(intersectcount);
-           pparray^.AddByPointer(@ip.interceptcoord);
+           pparray^.PushBackData(ip.interceptcoord);
            if lineiterator=nil then
                                    begin
                                         lineiterator:=LinesMap.InsertAndGetIterator(pl1,PointOnCurve3DPropArray.Create);

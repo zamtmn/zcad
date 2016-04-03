@@ -692,7 +692,7 @@ begin
                                  psp^.Psymbol:=pointer(shapenumber);
                                  psp^.param.PStyle:=pointer(stylehandle);
                                  psp^.param.PstyleIsHandle:=true;
-                                 pltypeprop^.dasharray.AddByPointer(@dashinfo);
+                                 pltypeprop^.dasharray.PushBackData(dashinfo);
                              end;
                         end;
                TDIText:begin
@@ -703,13 +703,13 @@ begin
                              //ptp^.Style:=;
                              ptp^.param.PStyle:=pointer(stylehandle);
                              psp^.param.PstyleIsHandle:=true;
-                             pltypeprop^.dasharray.AddByPointer(@dashinfo);
+                             pltypeprop^.dasharray.PushBackData(dashinfo);
                         end;
                end;
                     dashinfo:=TDIDash;
                     TempDouble:=strtofloat(s);
-                    pltypeprop^.dasharray.AddByPointer(@dashinfo);
-                    pltypeprop^.strokesarray.AddByPointer(@TempDouble);
+                    pltypeprop^.dasharray.PushBackData(dashinfo);
+                    pltypeprop^.strokesarray.PushBackData(TempDouble);
                if TempDouble>eps then
                                      begin
                                           pltypeprop^.LastStroke:=TODILine;

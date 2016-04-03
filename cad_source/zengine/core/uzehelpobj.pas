@@ -38,13 +38,13 @@ begin
        pv.coord.x:=1;
        pv.coord.y:=0;
        pv.count:=-j;
-       circlepointoflod[j].AddByPointer(@pv);
+       circlepointoflod[j].PushBackData(pv);
        for i:=1 to j do
        begin
             pv.coord.x:=cos(i/j*2*pi);
             pv.coord.y:=sin(i/j*2*pi);
             pv.count:=i-j;
-            circlepointoflod[j].AddByPointer(@pv);
+            circlepointoflod[j].PushBackData(pv);
         end;
     end;
 end;

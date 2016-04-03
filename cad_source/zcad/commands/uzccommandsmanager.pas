@@ -310,7 +310,7 @@ function GDBcommandmanager.GetValue:vardesk;
 var
 lastelement:pvardesk;
 begin
-     lastelement:=pvardesk(varstack.vardescarray.getelement(varstack.vardescarray.Count-1));
+     lastelement:=pvardesk(varstack.vardescarray.getDataMutable(varstack.vardescarray.Count-1));
      result:=lastelement^;
 end;
 
@@ -318,7 +318,7 @@ function GDBcommandmanager.PopValue:vardesk;
 var
 lastelement:pvardesk;
 begin
-     lastelement:=pvardesk(varstack.vardescarray.getelement(varstack.vardescarray.Count-1));
+     lastelement:=pvardesk(varstack.vardescarray.getDataMutable(varstack.vardescarray.Count-1));
      dec(varstack.vardescarray.Count);
      result:=lastelement^;
      lastelement.name:='';
@@ -659,7 +659,7 @@ begin
                    SetCommandLineMode(CLCOMMANDREDY);
   if self.CommandsStack.Count>0 then
                                     begin
-                                         pcommandrunning:=ppointer(CommandsStack.getelement(CommandsStack.Count-1))^;
+                                         pcommandrunning:=ppointer(CommandsStack.getDataMutable(CommandsStack.Count-1))^;
                                          dec(CommandsStack.Count);
                                          pcommandrunning.CommandContinue;
                                     end

@@ -433,7 +433,7 @@ begin
   v.y:=sin(startangle);
   v.z:=0;
   pv:=VectorTransform3D(v,objmatrix);
-  Vertex3D_in_WCS_Array.AddByPointer(@pv);
+  Vertex3D_in_WCS_Array.PushBackData(pv);
 
   if dc.MaxDetail then
                       maxlod:=50
@@ -454,7 +454,7 @@ begin
               v.y:=sin(startangle+i / lod * angle);
               v.z:=0;
               pv:=VectorTransform3D(v,objmatrix);
-              Vertex3D_in_WCS_Array.AddByPointer(@pv);
+              Vertex3D_in_WCS_Array.PushBackData(pv);
   end;
   Vertex3D_in_WCS_Array.Shrink;
 end;
@@ -635,19 +635,19 @@ begin
           pdesc.worldcoord:=q0;
           {pdesc.dispcoord.x:=round(Pq0.x);
           pdesc.dispcoord.y:=round(Pq0.y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
           pdesc.pointtype:=os_midle;
           pdesc.worldcoord:=q1;
           {pdesc.dispcoord.x:=round(Pq1.x);
           pdesc.dispcoord.y:=round(Pq1.y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
           pdesc.pointtype:=os_end;
           pdesc.worldcoord:=q1;
           {pdesc.dispcoord.x:=round(Pq2.x);
           pdesc.dispcoord.y:=round(Pq2.y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 end;
 function GDBObjARC.getsnap;
 //var t,d,e:GDBDouble;

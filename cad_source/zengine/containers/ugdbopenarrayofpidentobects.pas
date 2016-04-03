@@ -27,15 +27,15 @@ PGDBObjOpenArrayOfPIdentObects=^GDBObjOpenArrayOfPIdentObects;
 GDBObjOpenArrayOfPIdentObects={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                              objsizeof:GDBInteger;
                              constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m,_objsizeof:GDBInteger);
-                             function getelement(index:TArrayIndex):GDBPointer;
+                             function getDataMutable(index:TArrayIndex):GDBPointer;
                              function CreateObject:PGDBaseObject;
                 end;
 {Export-}
 implementation
-function GDBObjOpenArrayOfPIdentObects.getelement(index:TArrayIndex):GDBPointer;
+function GDBObjOpenArrayOfPIdentObects.getDataMutable(index:TArrayIndex):GDBPointer;
 var pp:ppointer;
 begin
-     pp:=inherited getelement(index);
+     pp:=pointer(inherited getDataMutable(index));
      if pp=nil then
                    result:=nil
                else

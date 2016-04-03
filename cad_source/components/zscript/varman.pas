@@ -154,7 +154,7 @@ typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)
                   destructor systemdone;virtual;
                   procedure free;virtual;
                   {for hide exttype}
-                  function getelement(index:TArrayIndex):GDBPointer;virtual;
+                  function getDataMutable(index:TArrayIndex):GDBPointer;virtual;
                   function getcount:TArrayIndex;virtual;
                   function AddTypeByPP(p:GDBPointer):TArrayIndex;virtual;
                   function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;virtual;
@@ -483,9 +483,9 @@ function typemanager._TypeIndex2PTD;
 begin
   result:=PUserTypeDescriptor(exttype.getobject(ind));
 end;
-function typemanager.getelement(index:TArrayIndex):GDBPointer;
+function typemanager.getDataMutable(index:TArrayIndex):GDBPointer;
 begin
-     result:=exttype.getelement(index);
+     result:=exttype.getDataMutable(index);
 end;
 function typemanager.getcount:TArrayIndex;
 begin
@@ -630,8 +630,8 @@ begin
          vd.data.PTD.InitInstance(vd.data.Instance);
        end;
        vd.attrib:=0;
-       i:=vardescarray.AddByPointer(@vd);
-       result:=vardescarray.getelement(i);
+       i:=vardescarray.PushBackData(vd);
+       result:=vardescarray.getDataMutable(i);
        KillString(vd.name);
        KillString(vd.username);
 end;
@@ -686,9 +686,9 @@ var parseerror{,parsesuberror}:GDBBoolean;
 function getlastfirld:PBaseDescriptor;
 begin
      if state=metods then
-                         result:=@PPropertyDescriptor(PObjectDescriptor(ptd)^.Properties.getelement(PObjectDescriptor(ptd)^.Properties.Count-1))^.base
+                         result:=@PPropertyDescriptor(PObjectDescriptor(ptd)^.Properties.getDataMutable(PObjectDescriptor(ptd)^.Properties.Count-1))^.base
                      else
-                         result:=@PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.base
+                         result:=@PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getDataMutable(PRecordDescriptor(ptd)^.Fields.Count-1))^.base
 end;
 
 begin
@@ -767,13 +767,13 @@ begin
                           end;
            oi_hidden:
                           begin
-                               //a:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.Attributes;
+                               //a:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getDataMutable(PRecordDescriptor(ptd)^.Fields.Count-1))^.Attributes;
                                getlastfirld.Attributes:=
                                getlastfirld.Attributes or FA_HIDDEN_IN_OBJ_INSP;
                           end;
            oi_readonly:
                        begin
-                               //a:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.Attributes;
+                               //a:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getDataMutable(PRecordDescriptor(ptd)^.Fields.Count-1))^.Attributes;
                                getlastfirld.Attributes:=
                                getlastfirld.Attributes or FA_READONLY;
                           end;
@@ -783,7 +783,7 @@ begin
            username:
                     begin
                       fieldtype:=parseresult^.getGDBString(0);
-                      //pf:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1));
+                      //pf:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getDataMutable(PRecordDescriptor(ptd)^.Fields.Count-1));
                       if fieldtype='Paths' then
                                           fieldtype:=fieldtype;
                       {$IFNDEF DELPHI}
@@ -852,7 +852,7 @@ begin
                                                              end;
                                                         parsesubresult:=runparser('_softspace'#0'=(=*_GDBString'#0'=*=)',line,parsesuberror);}
                                                         fieldtype:=parseresult^.getGDBString(parseresult.Count-1);
-                                                        //pGDBString(parseresult^.getelement(parseresult.Count-1))^;
+                                                        //pGDBString(parseresult^.getDataMutable(parseresult.Count-1))^;
                                                         fieldgdbtype:=PTUnit(PRecordDescriptor(ptd)^.punit).TypeName2PTD(fieldtype);
                                                         for i:=0 to parseresult.Count-2 do
                                                         begin
@@ -877,8 +877,8 @@ begin
                                                                                 fd.Size:=fd.base.PFT^.SizeInGDBBytes
                                                                             else
                                                                                 fd.Size:=1;
-                                                             //if PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count))^.username=''
-                                                             //then PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count))^.username:=fieldname;
+                                                             //if PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getDataMutable(PRecordDescriptor(ptd)^.Fields.Count))^.username=''
+                                                             //then PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getDataMutable(PRecordDescriptor(ptd)^.Fields.Count))^.username:=fieldname;
                                                              if ptd<>nil then PRecordDescriptor(ptd)^.AddField(fd);
                                                              if (fd.Size <> 0) and (fieldoffset <> dynamicoffset) then
                                                                                                               fieldoffset := fieldoffset + fd.Size
@@ -940,8 +940,8 @@ begin
   begin
     path := '';
   end;
-  //typeGDBString := ptypedesk(Types.exttype.getelement(pvardesk(pdesc)^.vartypecustom))^.tdesk;
-  pt:=pointer(pvardesk(pdesc)^.data.ptd);// pointer(PUserTypeDescriptor(Types.exttype.getelement(pvardesk(pdesc)^.vartypecustom)^));
+  //typeGDBString := ptypedesk(Types.exttype.getDataMutable(pvardesk(pdesc)^.vartypecustom))^.tdesk;
+  pt:=pointer(pvardesk(pdesc)^.data.ptd);// pointer(PUserTypeDescriptor(Types.exttype.getDataMutable(pvardesk(pdesc)^.vartypecustom)^));
      {result:=true;}
   repeat
     case oper of
@@ -976,8 +976,8 @@ begin
           if tc<>nil then
                                   begin
                                        result := true;
-                                       //typeGDBString := ptypedesk(Types.exttype.getelement(tc))^.tdesk;
-                                       //pt:=pointer(PUserTypeDescriptor(Types.exttype.getelement(tc)^));
+                                       //typeGDBString := ptypedesk(Types.exttype.getDataMutable(tc))^.tdesk;
+                                       //pt:=pointer(PUserTypeDescriptor(Types.exttype.getDataMutable(tc)^));
                                        pt:=pointer(tc);
                                   end
                               else

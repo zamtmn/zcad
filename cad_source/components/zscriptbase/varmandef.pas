@@ -243,7 +243,7 @@ typemanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                   function _TypeName2PTD(name: GDBString):PUserTypeDescriptor;virtual;abstract;
                   function _TypeIndex2PTD(ind:integer):PUserTypeDescriptor;virtual;abstract;
 
-                  function getelement(index:TArrayIndex):GDBPointer;virtual;abstract;
+                  function getDataMutable(index:TArrayIndex):GDBPointer;virtual;abstract;
                   function getcount:TArrayIndex;virtual;abstract;
                   function AddTypeByPP(p:GDBPointer):TArrayIndex;virtual;abstract;
                   function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;virtual;abstract;

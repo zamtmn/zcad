@@ -407,7 +407,7 @@ begin
                              //i:=_DestTextStyleTable.FindStyle(sp.param.PStyle^.name,sp.param.PStyle^.UsedInLTYPE);
                              sp.param.PStyle:=_DestTextStyleTable.FindStyle(sp.param.PStyle^.name,sp.param.PStyle^.UsedInLTYPE);//_DestTextStyleTable.getelement(i);
                              sp.Psymbol:=sp.param.PStyle.pfont.GetOrCreateSymbolInfo(sp.Psymbol.Number);
-                             result.shapearray.AddByPointer(@sp);
+                             result.shapearray.PushBackData(sp);
                              pointer(sp.SymbolName):=nil;
                              pointer(sp.FontName):=nil;
                              psp:=_source.shapearray.iterate(ir);
@@ -420,7 +420,7 @@ begin
                              //i:=_DestTextStyleTable.FindStyle(tp.param.PStyle^.name,tp.param.PStyle^.UsedInLTYPE);
                              tp.param.PStyle:=_DestTextStyleTable.FindStyle(tp.param.PStyle^.name,tp.param.PStyle^.UsedInLTYPE);//_DestTextStyleTable.getelement(i);
                              //tp.Psymbol:=tp.param.PStyle.pfont.GetOrCreateSymbolInfo(tp.Psymbol.Number);
-                             result.textarray.AddByPointer(@tp);
+                             result.textarray.PushBackData(tp);
                              //pointer(tp.SymbolName):=nil;
                              //pointer(tp.FontName):=nil;
                              pointer(tp.Text):=nil;
@@ -551,7 +551,7 @@ begin
                        TDIDash:begin
                                     trystrtofloat(element,stroke);
                                     len:=len+abs(stroke);
-                                    strokesarray.AddByPointer(@stroke);
+                                    strokesarray.PushBackData(stroke);
                                     if stroke>eps then
                                                       begin
                                                            LastStroke:=TODILine;
@@ -581,7 +581,7 @@ begin
                                                     TP.Text:=trim(TP.Text);
                                                     TP.Style:=trim(GetPredStr(element,','));
                                                     GetParam(TP);
-                                                    Textarray.AddByPointer(@TP);
+                                                    Textarray.PushBackData(TP);
                                                     killstring(TP.Text);
                                                     killstring(TP.Style);
                                                     TP.done;
@@ -593,7 +593,7 @@ begin
                                                     SP.SymbolName:=GetPredStr(element,',');
                                                     SP.FontName:=GetPredStr(element,',');
                                                     GetParam(SP);
-                                                    shapearray.AddByPointer(@SP);
+                                                    shapearray.PushBackData(SP);
                                                     killstring(SP.SymbolName);
                                                     killstring(SP.FontName);
                                                     SP.done;
@@ -601,7 +601,7 @@ begin
                                end;
 
           end;
-          dasharray.AddByPointer(@dinfo);
+          dasharray.PushBackData(dinfo);
           element:=GetStr(LT,dinfo);
      end;
 end;

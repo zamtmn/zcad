@@ -437,13 +437,13 @@ begin
      i:=0;
      pentvarext:=GetExtension(typeof(TVariablesExtender));
      repeat
-           pl:=pgdbobjline(ObjArray.getelement(i)^);
+           pl:=pgdbobjline(ObjArray.getDataMutable(i)^);
            if pl<>nil then
            if i<>ObjArray.Count-1 then
            begin
                 j:=i+1;
                 repeat
-                      pl2:=pgdbobjline(ObjArray.getelement(j)^);
+                      pl2:=pgdbobjline(ObjArray.getDataMutable(j)^);
                       if pl2<>nil then
                       begin
                            ip:=intercept3d(pl^.CoordInWCS.lBegin,pl^.CoordInWCS.lEnd,pl2^.CoordInWCS.lBegin,pl2^.CoordInWCS.lEnd);
@@ -519,7 +519,7 @@ begin
           ti.init({$IFDEF DEBUGBUILD}'{B106F951-AEAB-43B9-B0B9-B18827EACFE5}',{$ENDIF}100){%H-};
           for i:=0 to self.graf.Count-1 do
           begin
-               tgf:=pgrafelement(graf.getelement(i));
+               tgf:=pgrafelement(graf.getDataMutable(i));
                if tgf^.connected=0 then
                begin
                     pl:=GDBPointer(tgf^.link.beginiterate(ir));

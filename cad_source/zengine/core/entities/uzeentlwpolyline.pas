@@ -101,7 +101,7 @@ begin
                            if Vertex3D_in_WCS_Array.Count<3 then
                                                         exit;
                            ptv:=Vertex3D_in_WCS_Array.beginiterate(ir);
-                           ppredtv:=Vertex3D_in_WCS_Array.getelement(Vertex3D_in_WCS_Array.Count-1);
+                           ppredtv:=Vertex3D_in_WCS_Array.getDataMutable(Vertex3D_in_WCS_Array.Count-1);
                     end;
   found:=0;
   if (ptv<>nil)and(ppredtv<>nil) then
@@ -291,8 +291,8 @@ begin
       result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum);
       if (result=IREmpty)and(Vertex3D_in_WCS_Array.count>3) then
                                           begin
-                                               pv1:=Vertex3D_in_WCS_Array.getelement(0);
-                                               pv2:=Vertex3D_in_WCS_Array.getelement(Vertex3D_in_WCS_Array.Count-1);
+                                               pv1:=Vertex3D_in_WCS_Array.getDataMutable(0);
+                                               pv2:=Vertex3D_in_WCS_Array.getDataMutable(Vertex3D_in_WCS_Array.Count-1);
                                                result:=uzegeometry.CalcTrueInFrustum(pv1^,pv2^,frustum);
                                           end;
 end;
@@ -413,7 +413,7 @@ begin
                pdesc.worldcoord:=pv^;
                {pdesc.dispcoord.x:=round(pv2d^.x);
                pdesc.dispcoord.y:=round(pv2d.y);}
-               PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
+               PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
                inc(pv);
                inc(pv2d);
           end;
@@ -433,8 +433,8 @@ begin
   pw:=Width2D_in_OCS_Array.GetParrayAsPointer;
   for i:=0 to Vertex2D_in_OCS_Array.Count-1 do
   begin
-      tpo^.Vertex2D_in_OCS_Array.AddByPointer(p);
-      tpo^.Width2D_in_OCS_Array.AddByPointer(pw);
+      tpo^.Vertex2D_in_OCS_Array.PushBackData(p^);
+      tpo^.Width2D_in_OCS_Array.PushBackData(pw^);
       inc(p);
       inc(pw);
   end;
@@ -673,7 +673,7 @@ begin
         begin
           s := f.readgdbstring;
           val(s, p.y, code);
-          Vertex2D_in_OCS_Array.AddByPointer(@p);
+          Vertex2D_in_OCS_Array.PushBackData(p);
           inc(hlGDBWord);
         end;
       38:
@@ -687,13 +687,13 @@ begin
           s := f.readgdbstring;
           //val(s, PGLLWWidth(Width2D_in_OCS_Array.getelement(hlGDBWord-1)).startw, code);
           Width2D_in_OCS_Array.SetCount(hlGDBWord);
-          val(s, PGLLWWidth(Width2D_in_OCS_Array.getelement(hlGDBWord-1)).startw, code);
+          val(s, PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord-1)).startw, code);
         end;
       41:
         begin
           s := f.readgdbstring;
           Width2D_in_OCS_Array.SetCount(hlGDBWord);
-          val(s, PGLLWWidth(Width2D_in_OCS_Array.getelement(hlGDBWord- 1)).endw, code);
+          val(s, PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord- 1)).endw, code);
           //Width2D_in_OCS_Array.SetCount(hlGDBWord);
         end;
       43:
@@ -705,8 +705,8 @@ begin
           Width2D_in_OCS_Array.Count := numv;
           for i := 0 to numv - 1 do
           begin
-            PGLLWWidth(Width2D_in_OCS_Array.getelement(i)).endw := tGDBDouble;
-            PGLLWWidth(Width2D_in_OCS_Array.getelement(i)).startw := tGDBDouble;
+            PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(i)).endw := tGDBDouble;
+            PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(i)).startw := tGDBDouble;
           end;
           Width2D_in_OCS_Array.Count := numv;
         end;
@@ -781,8 +781,8 @@ begin
        //tv:=uzegeometry.VectorTransform3D(tv,m);
     dxfvertex2dout(outhandle,10,PGDBVertex2D(@tv)^);
     //dxfvertex2dout(outhandle,10,PGDBArrayVertex2D(Vertex2D_in_OCS_Array.PArray)^[j]);
-    dxfGDBDoubleout(outhandle,40,PGLLWWidth(Width2D_in_OCS_Array.getelement(j)).startw);
-    dxfGDBDoubleout(outhandle,41,PGLLWWidth(Width2D_in_OCS_Array.getelement(j)).endw);
+    dxfGDBDoubleout(outhandle,40,PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(j)).startw);
+    dxfGDBDoubleout(outhandle,41,PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(j)).endw);
   end;
   SaveToDXFObjPostfix(outhandle);
 end;
@@ -848,7 +848,7 @@ begin
        v.w:=1;
        v:=VectorTransform(v,objMatrix);
        v3d:=PGDBvertex(@v)^;
-       Vertex3D_in_WCS_Array.AddByPointer(@v3d);
+       Vertex3D_in_WCS_Array.PushBackData(v3d);
        inc(pv);
   end;
   Vertex3D_in_WCS_Array.Shrink;
@@ -872,7 +872,7 @@ begin
                          ProjectProc(ptpv^,tv);
                          tpv.x:=tv.x;
                          tpv.y:=tv.y;
-                         PprojPoint^.AddByPointer(@tpv);
+                         PprojPoint^.PushBackData(tpv);
                          inc(ptpv);
                     end;
 
@@ -896,8 +896,8 @@ begin
   begin
     if i <> Vertex2D_in_OCS_Array.count - 1 then j := i + 1
                                             else j := 0;
-    v2dj:=Vertex2D_in_OCS_Array.getelement(j);
-    v2di:=Vertex2D_in_OCS_Array.getelement(i);
+    v2dj:=Vertex2D_in_OCS_Array.getDataMutable(j);
+    v2di:=Vertex2D_in_OCS_Array.getDataMutable(i);
     dx := v2dj^.x - v2di^.x;
     dy := v2dj^.y - v2di^.y;
     nx := -dy;
@@ -914,7 +914,7 @@ begin
                             ny :=0;
                       end;
 
-    plw:=PGLlwwidth(Width2D_in_OCS_Array.getelement(i));
+    plw:=PGLlwwidth(Width2D_in_OCS_Array.getDataMutable(i));
 
     if (plw^.startw = 0) and (plw^.endw = 0) then plw^.hw := false
                                              else plw^.hw := true;
@@ -939,7 +939,7 @@ begin
            v:=VectorTransform(v,objMatrix);
            q3d[k]:=PGDBvertex(@v)^;
       end;
-      Width3D_in_WCS_Array.AddByPointer(@q3d);
+      Width3D_in_WCS_Array.PushBackData(q3d);
   end;
   Width2D_in_OCS_Array.Shrink;
   Width3D_in_WCS_Array.Shrink;
@@ -951,15 +951,15 @@ begin
   begin
     if i <> Width3D_in_WCS_Array.count - 1 then j := i + 1
                                            else j := 0;
-    plw:=PGLlwwidth(Width2D_in_OCS_Array.getelement(i));
-    plw2:=PGLlwwidth(Width2D_in_OCS_Array.getelement(j));
+    plw:=PGLlwwidth(Width2D_in_OCS_Array.getDataMutable(i));
+    plw2:=PGLlwwidth(Width2D_in_OCS_Array.getDataMutable(j));
     if plw.hw and plw2.hw then
     begin
     if plw.endw>plw2.startw then l:=plw.endw
                             else l:=plw2.startw;
     l:=4*l*l;
-    pq3d:=Width3D_in_WCS_Array.getelement(i);
-    pq3dnext:=Width3D_in_WCS_Array.getelement(j);
+    pq3d:=Width3D_in_WCS_Array.getDataMutable(i);
+    pq3dnext:=Width3D_in_WCS_Array.getDataMutable(j);
     ip:=intercept3dmy2(pq3d^[0] ,pq3d^[1],pq3dnext^[1] ,pq3dnext^[0]);
     ip2:=intercept3dmy2(pq3d^[3] ,pq3d^[2],pq3dnext^[2] ,pq3dnext^[3]);
 
@@ -969,7 +969,7 @@ begin
     {if (ip.t1<2) and (ip.t2<2) then
     if (ip2.t1<2) and (ip2.t2<2) then}
     begin
-         v2:=Pgdbvertex(Vertex3D_in_WCS_Array.getelement(j));
+         v2:=Pgdbvertex(Vertex3D_in_WCS_Array.getDataMutable(j));
          if SqrVertexlength(v2^,ip.interceptcoord)<l then
          if SqrVertexlength(v2^,ip2.interceptcoord)<l then
          begin

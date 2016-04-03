@@ -407,7 +407,7 @@ begin
              pvar:=_unit{.InterfaceVariables}.FindVariable(s1);
              if pvar<>nil then
              begin
-                  {PObjectDescriptor(PUserTypeDescriptor(Types.exttype.getelement(pvar^.vartypecustom)^))}PObjectDescriptor(pvar^.data.ptd)^.RunMetod(s2,pvar^.data.Instance);
+                  {PObjectDescriptor(PUserTypeDescriptor(Types.exttype.getDataMutable(pvar^.vartypecustom)^))}PObjectDescriptor(pvar^.data.ptd)^.RunMetod(s2,pvar^.data.Instance);
                   s:=s;
              end
         end

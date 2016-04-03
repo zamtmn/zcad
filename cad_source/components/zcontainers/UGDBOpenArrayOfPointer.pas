@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfPointer;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,sysutils,uzctnrvector;
+uses uzbtypes,uzbtypesbase,sysutils,uzctnrvector;
 type
 GDBPointerArray=array [0..0] of GDBPointer;
 PGDBPointerArray=^GDBPointerArray;
@@ -32,6 +32,7 @@ TZctnrVectorP{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                        procedure RemoveFromArray(const pdata:GDBPointer);virtual;
                                        procedure AddToArray(const pdata:GDBPointer);virtual;
                                        function addnodouble(pobj:GDBPointer):GDBInteger;virtual;
+                                       function AddByRef(var obj):TArrayIndex;virtual;
                                  end;
 PGDBOpenArrayOfGDBPointer=^GDBOpenArrayOfGDBPointer;
 GDBOpenArrayOfGDBPointer=packed object(TZctnrVectorP{-}<GDBPointer>{//}) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
@@ -42,6 +43,13 @@ implementation
 function EqualFuncPointer(const a, b: pointer):Boolean;
 begin
   result:=(a=b);
+end;
+function TZctnrVectorP<T>.AddByRef;
+var
+   p:pointer;
+begin
+     p:=@obj;
+     result:=AddByPointer(@p)
 end;
 function TZctnrVectorP<T>.addnodouble;
 var p,newp:GDBPointer;

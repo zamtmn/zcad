@@ -98,7 +98,7 @@ begin
     pv:=GetParrayAsPointer;
     pvnext:=pv;
     inc(pvnext);
-    pvprev:=self.getelement(count-1);
+    pvprev:=self.getDataMutable(count-1);
     for i:=0 to count-1 do
     begin
              if i=count-1 then

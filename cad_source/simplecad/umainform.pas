@@ -223,7 +223,7 @@ begin
 end;
 procedure SetEntityLayer(pobj:PGDBObjEntity;CurrentDrawing:PTSimpleDrawing);//set random layer for entity
 begin
-     pobj^.vp.Layer:=CurrentDrawing^.LayerTable.getelement(random(CurrentDrawing^.LayerTable.Count));
+     pobj^.vp.Layer:=CurrentDrawing^.LayerTable.getDataMutable(random(CurrentDrawing^.LayerTable.Count));
 end;
 function CreateRandomVertex2D(len,hanflen:GDBDouble):GDBVertex2D;//create random 2DVertex in [-hanflen..hanflen] interval
 begin

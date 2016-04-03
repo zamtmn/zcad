@@ -308,8 +308,8 @@ end;
 procedure GDBObjBlockInsert.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 //var tv:gdbvertex;
 begin
-     posr.arrayworldaxis.AddByPointer(@local.basis.OX);
-     posr.arrayworldaxis.AddByPointer(@local.basis.OY);
+     posr.arrayworldaxis.PushBackData(local.basis.OX);
+     posr.arrayworldaxis.PushBackData(local.basis.OY);
 end;
 procedure GDBObjBlockInsert.rtsave;
 //var m:DMatrix4D;
@@ -441,8 +441,8 @@ begin
 {
      //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
      index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
-     //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
-     pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getelement(index);
+     //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getDataMutable(index);
+     pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getDataMutable(index);
      PTObjectUnit(pblockdef^.ou.Instance)^.copyto(PTObjectUnit(ou.Instance));
 }
 end;
@@ -472,7 +472,7 @@ begin
           if mainowner<>nil then
           if mainowner.gettype=1 then
                                    exit;
-          pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getelement(index);
+          pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getDataMutable(index);
           if pblockdef.ObjArray.count>0 then
           begin
           dc:=drawing.CreateDrawingRC;

@@ -238,10 +238,10 @@ begin
 
      if timebuf.Count>0 then
                             begin
-                                 FromStartTime:=CurrentTime.time-PTMyTimeStamp(TimeBuf.getelement(0))^.time;
-                                 DeltaTime:=CurrentTime.time-PTMyTimeStamp(TimeBuf.getelement(timebuf.Count-1))^.time;
-                                 tick:=CurrentTime.rdtsc-PTMyTimeStamp(TimeBuf.getelement(0))^.rdtsc;
-                                 dtick:=CurrentTime.rdtsc-PTMyTimeStamp(TimeBuf.getelement(timebuf.Count-1))^.rdtsc;
+                                 FromStartTime:=CurrentTime.time-PTMyTimeStamp(TimeBuf.getDataMutable(0))^.time;
+                                 DeltaTime:=CurrentTime.time-PTMyTimeStamp(TimeBuf.getDataMutable(timebuf.Count-1))^.time;
+                                 tick:=CurrentTime.rdtsc-PTMyTimeStamp(TimeBuf.getDataMutable(0))^.rdtsc;
+                                 dtick:=CurrentTime.rdtsc-PTMyTimeStamp(TimeBuf.getDataMutable(timebuf.Count-1))^.rdtsc;
                             end
                         else
                             begin
@@ -259,7 +259,7 @@ else if IncIndent>0 then
                            WriteToLog(str,todisk,FromStartTime,DeltaTime,tick,dtick,IncIndent);
                            inc(Indent,IncIndent);
 
-                           timebuf.AddByPointer(@CurrentTime);
+                           timebuf.PushBackData(CurrentTime);
                       end
                   else
                       begin
@@ -362,7 +362,7 @@ begin
      CreateLog;
      WriteToLog('------------------------Log started------------------------',true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
      WriteToLog('Log mode: '+LogMode2string(CurrentLogMode),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
-     timebuf.AddByPointer(@CurrentTime);
+     timebuf.PushBackData(CurrentTime);
      setlength(LatestLogStrings,MaxLatestLogStrings);
      LatestLogStringsCount:=0;
      TotalLogStringsCount:=0;

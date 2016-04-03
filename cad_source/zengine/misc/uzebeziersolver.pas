@@ -184,14 +184,14 @@ begin
      for i:=0 to Conturs.VArray.Size-1 do
      begin
           polyindex:={VectorData.LLprimitives.}DefaultLLPCreator.CreateLLPolyLine(VectorData.LLprimitives,VectorData.GeomData.Vertex3S.Count,Conturs.VArray[i].Size-1,true);
-          ptpl:=VectorData.LLprimitives.getelement(polyindex);
+          ptpl:=pointer(VectorData.LLprimitives.getDataMutable(polyindex));
           inc(shxsize^);
           for j:=0 to Conturs.VArray[i].Size-1 do
           begin
                Conturs.VArray[i].mutable[j]^.index:=VectorData.GeomData.Add2DPoint(Conturs.VArray[i][j].v.x,Conturs.VArray[i][j].v.y);
                if Conturs.VArray[i].mutable[j]^.attr=TPA_OnCurve then
                                                                      begin
-                                                                          simpleindex:=VectorData.GeomData.Indexes.AddByPointer(@ Conturs.VArray[i].mutable[j]^.index);
+                                                                          simpleindex:=VectorData.GeomData.Indexes.PushBackData(Conturs.VArray[i].mutable[j]^.index);
                                                                           ptpl^.AddSimplifiedIndex(simpleindex);
                                                                      end;
           end;

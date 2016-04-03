@@ -51,7 +51,7 @@ begin
   //Correct items
   for i:=0 to PDimStyleArray.Count-1 do
   begin
-       PDimStyle:=drawings.GetCurrentDWG.DimStyleTable.getelement(i);
+       PDimStyle:=drawings.GetCurrentDWG.DimStyleTable.getDataMutable(i);
        tcombobox(Sender).Items.Objects[i]:=tobject(PDimStyle);
   end;
   tcombobox(Sender).ItemIndex:=-1;

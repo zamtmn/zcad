@@ -79,7 +79,7 @@ begin
 end;
 procedure ArrayDescriptor.AddIndex;
 begin
-     indexs.AddByPointer(@Index);
+     indexs.PushBackData(Index);
      inc(NumOfIndex);
      SizeInGDBBytes:=SizeInGDBBytes+typeof^.SizeInGDBBytes*Index.IndexCount
 end;

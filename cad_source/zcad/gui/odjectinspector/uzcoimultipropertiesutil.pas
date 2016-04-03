@@ -129,7 +129,7 @@ begin
      cc:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).Count-1;
      if cc<PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^ then
                                                                                                PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^:=cc;
-     tv:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).getelement(PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^);
+     tv:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).getDataMutable(PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^);
      if fistrun then
                     begin
                          ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PXVarDesc.attrib,0,vda_different);
@@ -173,7 +173,7 @@ begin
      else begin
        PGDBDTypeDesc:=SysUnit.TypeName2PTD('GDBDouble');
        pindex:=pu^.FindValue(mp.MPName);
-       tv:=PGDBObjPolyline(ChangedData.pentity).VertexArrayInWCS.getelement(pindex^);
+       tv:=PGDBObjPolyline(ChangedData.pentity).VertexArrayInWCS.getDataMutable(pindex^);
        v:=tv^;
        if pvardesk(pdata).name=mp.MPName+'x' then
                                                  PGDBDTypeDesc.CopyInstanceTo(pvardesk(pdata).data.Instance,@v.x);
@@ -181,7 +181,7 @@ begin
                                                  PGDBDTypeDesc.CopyInstanceTo(pvardesk(pdata).data.Instance,@v.y);
        if pvardesk(pdata).name=mp.MPName+'z' then
                                                  PGDBDTypeDesc.CopyInstanceTo(pvardesk(pdata).data.Instance,@v.z);
-       tv:=PGDBPoint3dArray(ChangedData.PSetDataInEtity).getelement(pindex^);
+       tv:=PGDBPoint3dArray(ChangedData.PSetDataInEtity).getDataMutable(pindex^);
        tv^:=v;
      end;
 end;

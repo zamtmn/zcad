@@ -1750,7 +1750,7 @@ begin
        v.x:=cos(pi * i / 4);
        v.y:=sin(pi * i / 4);
        v.z:=0;
-       PolarAxis.AddByPointer(@v);
+       PolarAxis.PushBackData(v);
      end;
 
      param.ontrackarray.otrackarray[0].arrayworldaxis.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}10);
@@ -2735,7 +2735,7 @@ begin
   pv:=polaraxis.GetParrayAsPointer;
   for i:=0 to polaraxis.Count-1 do
   begin
-       param.ospoint.arrayworldaxis.AddByPointer(@pv^);
+       param.ospoint.arrayworldaxis.PushBackData(pv^);
        inc(pv);
   end;
   //if param.ospoint.PGDBObject<>nil then
@@ -2787,7 +2787,7 @@ begin
     tp.dir.x:=temp.x - param.ospoint.dispcoord.x;
     tp.dir.y:=(temp.y - param.ospoint.dispcoord.y);
     tp.dir.z:=temp.z - param.ospoint.dispcoord.z;
-    param.ospoint.arraydispaxis.AddByPointer(@tp);
+    param.ospoint.arraydispaxis.PushBackData(tp);
     {param.ospoint.arraydispaxis.arr[i].dir.x := temp.x - param.ospoint.dispcoord.x;
     param.ospoint.arraydispaxis.arr[i].dir.y := -(temp.y - param.ospoint.dispcoord.y);
     param.ospoint.arraydispaxis.arr[i].dir.z := temp.z - param.ospoint.dispcoord.z;}
@@ -2797,12 +2797,12 @@ end;
 
 procedure TGeneralViewArea.addaxistootrack(var posr:os_record;const axis:GDBVertex);
 begin
-     posr.arrayworldaxis.AddByPointer(@axis);
+     posr.arrayworldaxis.PushBackData(axis);
 
      if @posr<>@param.ontrackarray.otrackarray[0] then
      if (sysvarDWGOSMode and osm_paralel)<>0 then
      begin
-          param.ontrackarray.otrackarray[0].arrayworldaxis.AddByPointer(@axis);
+          param.ontrackarray.otrackarray[0].arrayworldaxis.PushBackData(axis);
      end;
 end;
 
@@ -2823,7 +2823,7 @@ begin
   pv:=polaraxis.GetParrayAsPointer;
   for i:=0 to polaraxis.Count-1 do
   begin
-       param.ontrackarray.otrackarray[0].arrayworldaxis.AddByPointer(@pv^);
+       param.ontrackarray.otrackarray[0].arrayworldaxis.PushBackData(pv^);
        inc(pv);
   end;
 
@@ -2888,7 +2888,7 @@ begin
     tp.dir.x:=temp.x - param.ontrackarray.otrackarray[0].dispcoord.x;
     tp.dir.y:=(temp.y - param.ontrackarray.otrackarray[0].dispcoord.y);
     tp.dir.z:=temp.z - param.ontrackarray.otrackarray[0].dispcoord.z;
-    param.ontrackarray.otrackarray[0].arraydispaxis.AddByPointer(@tp);
+    param.ontrackarray.otrackarray[0].arraydispaxis.PushBackData(tp);
     {param.ospoint.arraydispaxis.arr[i].dir.x := temp.x -
       param.ospoint.dispcoord.x;
     param.ospoint.arraydispaxis.arr[i].dir.y := -(temp.y -

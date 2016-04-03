@@ -352,7 +352,7 @@ begin
                                                                       lexema:=lexema;
 
                                                 subexpr:=lexema^;
-                                                GDBStringarray.AddByPointer(@subexpr);
+                                                GDBStringarray.PushBackData(subexpr);
                                                 subexpr:='';
                                                 lexema^:='';
                                            end;

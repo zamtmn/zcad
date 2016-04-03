@@ -166,15 +166,15 @@ begin
 
           pdesc.pointtype:=os_p10;
           pdesc.worldcoord:=DimData.P10InWCS;
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
           pdesc.pointtype:=os_p11;
           pdesc.worldcoord:=DimData.P11InOCS;
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
           pdesc.pointtype:=os_p15;
           pdesc.worldcoord:=DimData.P15InWCS;
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 end;
 
 function GDBObjDiametricDimension.Clone;

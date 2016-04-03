@@ -713,7 +713,7 @@ begin
    p:=commandmanager.beginiterate(ir);
    if p<>nil then
    repeat
-         clist.AddByPointer(@p^.CommandName);
+         clist.PushBackData(p^.CommandName);
          p:=commandmanager.iterate(ir);
    until p=nil;
    clist.sort;

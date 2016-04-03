@@ -311,7 +311,7 @@ begin
                           begin
                                s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
                                //s:=pstring(pvn^.data.Instance)^;
-                               sta.AddByPointer(@s);
+                               sta.PushBackData(s);
                                S:='';
                           end;
                      end;
@@ -358,7 +358,7 @@ begin
                                   begin
                                        s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
                                        //s:=pstring(pvn^.data.Instance)^;
-                                       sta.AddByPointer(@s);
+                                       sta.PushBackData(s);
                                   end;
                                   system.break;
 
@@ -374,7 +374,7 @@ begin
      if sta.Count=0 then
                         begin
                              s:='??';
-                             sta.AddByPointer(@s);
+                             sta.PushBackData(s);
                         end
                     else
                         sta.sort;
@@ -397,7 +397,7 @@ begin
                                        psl.init(10);
                                   end;
           s:=ps^;
-          psl.AddByPointer(@s);
+          psl.PushBackData(s);
           S:='';
           ps:=sta.iterate(ir);
      until ps=nil;
@@ -482,7 +482,7 @@ begin
           ptext.Local.P_insert:=tbl.Local.P_insert;
           ptext.Local.P_insert.y:=ptext.Local.P_insert.y+1.5*scale;
           ptext.textprop.justify:=jsbl;
-          ptext.TXTStyleIndex:=drawing.GetTextStyleTable^.getelement(0);
+          ptext.TXTStyleIndex:=drawing.GetTextStyleTable^.getDataMutable(0);
           if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then
                                    begin
                                    ptext.Local.P_insert.x:= ptext.Local.P_insert.x+tbl.w;

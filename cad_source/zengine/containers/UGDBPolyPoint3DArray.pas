@@ -399,9 +399,9 @@ begin
                 //oglsm.myglbegin(GL_LINES);
                 DUMMY_oglsmmyglbegin;
                 DUMMY_oglsmmyglVertex3dV(rc,self.PArray);
-                DUMMY_oglsmmyglVertex3dV(rc,self.getelement(self.Count-1));
+                DUMMY_oglsmmyglVertex3dV(rc,self.getDataMutable(self.Count-1));
                 //oglsm.myglvertex3dv(self.PArray);
-                //oglsm.myglvertex3dv(self.getelement(self.Count-1));
+                //oglsm.myglvertex3dv(self.getDataMutable(self.Count-1));
                 //oglsm.myglend;
           end;
         2:

@@ -62,7 +62,7 @@ begin
 end;}
 function GDBGDBStringArray.getGDBString;
 begin
-  result := pGDBString(getelement(index))^;
+  result := pGDBString(getDataMutable(index))^;
 end;
 (*function GDBGDBStringArray.copyto;
 var p:GDBPointer;

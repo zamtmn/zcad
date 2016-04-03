@@ -289,7 +289,7 @@ begin
   end;
   if LLSymbolIndex<>-1 then
   begin
-  PLLPsymbol:=geom.LLprimitives.getelement(LLSymbolIndex);
+  PLLPsymbol:=pointer(geom.LLprimitives.getDataMutable(LLSymbolIndex));
   PLLPsymbol^.SymSize:=geom.LLprimitives.Count-LLSymbolIndex;
   PLLPsymbol^.LineIndex:=-1;
   PLLPsymbol^.PExternalVectorObject:=@font.FontData;
@@ -323,9 +323,9 @@ begin
   geom.GeomData.Vertex3S.AddGDBVertex(v);
   if LLSymbolLineIndex<>-1 then
   begin
-    PLLPsymbol:=geom.LLprimitives.getelement(LLSymbolIndex);
+    PLLPsymbol:=pointer(geom.LLprimitives.getDataMutable(LLSymbolIndex));
     PLLPsymbol^.LineIndex:=LLSymbolLineIndex;
-    PLLSymbolLine:=geom.LLprimitives.getelement(LLSymbolLineIndex);
+    PLLSymbolLine:=pointer(geom.LLprimitives.getDataMutable(LLSymbolLineIndex));
     if LLSymbolLineCreated then
                                begin
                                     PLLSymbolLine^.SymbolsParam.IsCanSystemDraw:=font^.IsCanSystemDraw;

@@ -129,16 +129,16 @@ end;
 procedure TZGLOpenGLDrawer.DrawLine(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_LINES);
-    oglsm.myglVertex3fV(PVertexBuffer.getelement(i1));
-    oglsm.myglVertex3fV(PVertexBuffer.getelement(i2));
+    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i1));
+    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i2));
     oglsm.myglend;
 end;
 procedure TZGLOpenGLDrawer.DrawTriangle(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_TRIANGLES);
-    oglsm.myglVertex3fV(PVertexBuffer.getelement(i1));
-    oglsm.myglVertex3fV(PVertexBuffer.getelement(i2));
-    oglsm.myglVertex3fV(PVertexBuffer.getelement(i3));
+    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i1));
+    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i2));
+    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i3));
     oglsm.myglend;
 end;
 procedure TZGLOpenGLDrawer.DrawTrianglesFan(const PVertexBuffer,PIndexBuffer:PZGLVertex3Sarray;const i1,IndexCount:TLLVertexIndex);
@@ -149,8 +149,8 @@ begin
     oglsm.myglbegin(GL_TRIANGLE_FAN);
     for i:=i1 to i1+IndexCount-1 do
     begin
-    pindex:=PIndexBuffer.getelement(i);
-    oglsm.myglVertex3fV(PVertexBuffer.getelement(pindex^));
+    pindex:=pointer(PIndexBuffer.getDataMutable(i));
+    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(pindex^));
     end;
     oglsm.myglend{mytotalglend};
 end;
@@ -162,18 +162,18 @@ begin
     oglsm.myglbegin(GL_TRIANGLE_STRIP);
     for i:=i1 to i1+IndexCount-1 do
     begin
-    pindex:=PIndexBuffer.getelement(i);
-    oglsm.myglVertex3fV(PVertexBuffer.getelement(pindex^));
+    pindex:=pointer(PIndexBuffer.getDataMutable(i));
+    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(pindex^));
     end;
     oglsm.myglend{mytotalglend};
 end;
 procedure TZGLOpenGLDrawer.DrawQuad(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3,i4:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_QUADS);
-    oglsm.myglVertex3fV(PVertexBuffer.getelement(i1));
-    oglsm.myglVertex3fV(PVertexBuffer.getelement(i2));
-    oglsm.myglVertex3fV(PVertexBuffer.getelement(i3));
-    oglsm.myglVertex3fV(PVertexBuffer.getelement(i4));
+    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i1));
+    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i2));
+    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i3));
+    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i4));
     oglsm.myglend;
 end;
 function TZGLOpenGLDrawer.CheckOutboundInDisplay(const PVertexBuffer:PZGLVertex3Sarray;const i1:TLLVertexIndex):boolean;
@@ -184,7 +184,7 @@ end;
 procedure TZGLOpenGLDrawer.DrawPoint(const PVertexBuffer:PZGLVertex3Sarray;const i:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_points);
-    oglsm.myglVertex3fV(PVertexBuffer.getelement(i));
+    oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i));
     oglsm.myglend;
 end;
 procedure TZGLOpenGLDrawer.TranslateCoord2D(const tx,ty:single);

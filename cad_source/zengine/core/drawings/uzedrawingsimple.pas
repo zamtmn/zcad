@@ -109,7 +109,7 @@ begin
   if CurrentDimStyle<>nil then
                               result:=CurrentDimStyle
                           else
-                              result:=DimStyleTable.getelement(0);
+                              result:=DimStyleTable.getDataMutable(0);
 end;
 
 function TSimpleDrawing.GetCurrentTextStyle;
@@ -117,14 +117,14 @@ begin
      if CurrentTextStyle<>nil then
                                   result:=CurrentTextStyle
                               else
-                                  result:=TextStyleTable.getelement(0);
+                                  result:=TextStyleTable.getDataMutable(0);
 end;
 function TSimpleDrawing.GetCurrentLType;
 begin
      if CurrentLType<>nil then
                               result:=CurrentLType
                           else
-                              result:=LTypeStyleTable.getelement(0);
+                              result:=LTypeStyleTable.getDataMutable(0);
 end;
 function TSimpleDrawing.GetCurrentLayer;
 begin
@@ -270,9 +270,9 @@ begin
    PTP:=pltp.textarray.beginiterate(ir2);
                                       if PTP<>nil then
                                       repeat
-                                            pts:={TextStyleTable.getelement}(TextStyleTable.FindStyle(PTP.Style,false));
+                                            pts:={TextStyleTable.getDataMutable}(TextStyleTable.FindStyle(PTP.Style,false));
                                             if pts=nil then
-                                                           pts:=TextStyleTable.getelement(0);
+                                                           pts:=TextStyleTable.getDataMutable(0);
                                             PTP^.param.PStyle:=pts;
                                             {for i:=1 to length(PTP^.Text) do
                                             begin

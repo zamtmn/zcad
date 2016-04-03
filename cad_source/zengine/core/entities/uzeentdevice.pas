@@ -148,7 +148,7 @@ begin
                pdesc.worldcoord:=PGDBObjDevice(pv).P_insert_in_WCS;
                {pdesc.dispcoord.x:=round(PGDBObjDevice(pv).ProjP_insert.x);
                pdesc.dispcoord.y:=round(PGDBObjDevice(pv).ProjP_insert.y);}
-               PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
+               PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
                end;
               pv:=VarObjArray.iterate(ir);
           until pv=nil
@@ -162,7 +162,7 @@ begin
 end;
 function GDBObjDevice.AddMi;
 begin
-     //pobj^.bp.PSelfInOwnerArray:=ObjArray.getelement(ObjArray.add(pobj));
+     //pobj^.bp.PSelfInOwnerArray:=ObjArray.getDataMutable(ObjArray.add(pobj));
      VarObjArray.add(pobj);
      pGDBObjEntity(ppointer(pobj)^).bp.ListPos.Owner:=@self;
 end;
@@ -420,19 +420,19 @@ begin
           devnam:=DevicePrefix+name;
           //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(@devnam[1]);
           index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(devnam);
-          //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
+          //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getDataMutable(index);
           if index>-1 then
           begin
-          pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getelement(index);
+          pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getDataMutable(index);
           for i:=0 to pblockdef.ObjArray.count-1 do
           begin
-               pvisible:=GDBPointer(pblockdef.ObjArray.getelement(i)^);
+               pvisible:=GDBPointer(pblockdef.ObjArray.getDataMutable(i)^);
                pvisible:=pvisible^.Clone(@self);
                pvisible2:=PGDBObjEntity(pvisible^.FromDXFPostProcessBeforeAdd(nil,drawing));
                dc:=drawing.createdrawingrc;
                if pvisible2=nil then
                                      begin
-                                          pvisible^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
+                                          pvisible^.correctobjects(@self,{pblockdef.ObjArray.getDataMutable(i)}i);
                                           pvisible^.formatEntity(drawing,dc);
                                           pvisible.BuildGeometry(drawing);
                                           if pvisible^.GetObjType=GDBDeviceID then
@@ -445,7 +445,7 @@ begin
                                      end
                                  else
                                      begin
-                                          pvisible2^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
+                                          pvisible2^.correctobjects(@self,{pblockdef.ObjArray.getDataMutable(i)}i);
                                           pvisible2^.FromDXFPostProcessBeforeAdd(nil,drawing);
                                           pvisible2^.formatEntity(drawing,dc);
                                           pvisible2.BuildGeometry(drawing);
@@ -484,16 +484,16 @@ begin
           index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
           assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), 'Неверный индекс блока');
           ConstObjArray.cleareraseobj;
-          //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
-          pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getelement(index);
+          //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getDataMutable(index);
+          pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getDataMutable(index);
           for i:=0 to pblockdef.ObjArray.count-1 do
           begin
-               pvisible:=GDBPointer(pblockdef.ObjArray.getelement(i)^);
+               pvisible:=GDBPointer(pblockdef.ObjArray.getDataMutable(i)^);
                pvisible:=pvisible^.Clone(@self);
                pvisible2:=PGDBObjEntity(pvisible^.FromDXFPostProcessBeforeAdd(nil,drawing));
                if pvisible2=nil then
                                      begin
-                                         pvisible^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
+                                         pvisible^.correctobjects(@self,{pblockdef.ObjArray.getDataMutable(i)}i);
                                          pvisible^.formatEntity(drawing,dc);
                                         pvisible.BuildGeometry(drawing);
                                         ConstObjArray.add(@pvisible)
@@ -501,7 +501,7 @@ begin
                                      end
                                  else
                                      begin
-                                         pvisible2^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
+                                         pvisible2^.correctobjects(@self,{pblockdef.ObjArray.getDataMutable(i)}i);
                                          pvisible2^.FromDXFPostProcessBeforeAdd(nil,drawing);
                                          pvisible2^.formatEntity(drawing,dc);
                                         pvisible2.BuildGeometry(drawing);
@@ -511,22 +511,22 @@ begin
           //name:=copy(name,8,length(name)-7);
           {devnam:=DevicePrefix+name;
           index:=GDB.BlockDefArray.getindex(@devnam[1]);
-          pblockdef:=GDB.BlockDefArray.getelement(index);
+          pblockdef:=GDB.BlockDefArray.getDataMutable(index);
           for i:=0 to pblockdef.ObjArray.count-1 do
           begin
-               pvisible:=GDBPointer(pblockdef.ObjArray.getelement(i)^);
+               pvisible:=GDBPointer(pblockdef.ObjArray.getDataMutable(i)^);
                pvisible:=pvisible^.Clone(@self);
                pvisible2:=PGDBObjEntity(pvisible^.FromDXFPostProcessBeforeAdd);
                if pvisible2=nil then
                                      begin
-                                          pvisible^.correctobjects(@self,pblockdef.ObjArray.getelement(i));
+                                          pvisible^.correctobjects(@self,pblockdef.ObjArray.getDataMutable(i));
                                           pvisible^.format;
                                           pvisible.BuildGeometry;
                                           VarObjArray.add(@pvisible)
                                      end
                                  else
                                      begin
-                                          pvisible2^.correctobjects(@self,pblockdef.ObjArray.getelement(i));
+                                          pvisible2^.correctobjects(@self,pblockdef.ObjArray.getDataMutable(i));
                                           pvisible2^.FromDXFPostProcessBeforeAdd;
                                           pvisible2^.format;
                                           pvisible2.BuildGeometry;
@@ -554,7 +554,7 @@ begin
   until p=nil;
   {index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
   assert((index>=0) and (index<gdb.GetCurrentDWG.BlockDefArray.count), 'Неверный индекс блока');
-  pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
+  pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getDataMutable(index);
   self.BlockDesc:=pblockdef.BlockDesc;
   calcobjmatrix;
   CreateDeviceNameProcess(@self);}

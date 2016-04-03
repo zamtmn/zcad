@@ -171,7 +171,7 @@ begin
                     end;
    setlength(DataOpenArray2,0);
    //////////////////////////////////////////////////        }
-  LastPoint:=PGDBVertex(pc^.VertexArrayInWCS.getelement(pc^.VertexArrayInWCS.Count-1))^;//получаем точку в конце кабеля
+  LastPoint:=PGDBVertex(pc^.VertexArrayInWCS.getDataMutable(pc^.VertexArrayInWCS.Count-1))^;//получаем точку в конце кабеля
 
   volume.LBN:=createvertex(LastPoint.x-MyEPSILON,LastPoint.y-MyEPSILON,LastPoint.z-MyEPSILON);//считаем левую\нижнюю\ближнюю точку объема
   volume.RTF:=createvertex(LastPoint.x+MyEPSILON,LastPoint.y+MyEPSILON,LastPoint.z+MyEPSILON);//считаем правую\верхнюю\дальнюю точку объема
@@ -186,7 +186,7 @@ begin
        repeat
              if pc2^.GetObjType=GDBCableID then//если он кабель то
              begin
-                  FirstPoint:=PGDBVertex(pc2^.VertexArrayInWCS.getelement(0))^;//получаем точку в начале найденного кабеля
+                  FirstPoint:=PGDBVertex(pc2^.VertexArrayInWCS.getDataMutable(0))^;//получаем точку в начале найденного кабеля
                   if uzegeometry.Vertexlength(LastPoint,FirstPoint)<MyEPSILON then//если конец кабеля совпадает с началом с погрешностью, то
                   begin
                        pc2^.SelectQuik;            //выделяем
@@ -457,8 +457,8 @@ begin
                  for i:=1 to pc^.VertexArrayInOCS.GetRealCount-1 do
                      begin
 
-                       infoCable.stPoint:=PGDBVertex(pc^.VertexArrayInOCS.getelement(i-1))^;
-                       infoCable.edPoint:=PGDBVertex(pc^.VertexArrayInOCS.getelement(i))^;
+                       infoCable.stPoint:=PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(i-1))^;
+                       infoCable.edPoint:=PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(i))^;
                        infoCable.stIndex:=i-1;
                        infoCable.edIndex:=i;
                        listCable.PushBack(infoCable); //добавляем к списку реальные кабели
@@ -515,8 +515,8 @@ begin
                  for j:=1 to pc^.VertexArrayInOCS.GetRealCount-1 do
                      begin
                        // Опеделяем выбраный програмой учаток трассы тот же что и выбранный перебором, как то так
-                     //  tempStPointLineComparison:= PGDBVertex(pc^.VertexArrayInOCS.getelement(j-1))^;
-                     //  tempEdPointLineComparison:= PGDBVertex(pc^.VertexArrayInOCS.getelement(j))^;
+                     //  tempStPointLineComparison:= PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(j-1))^;
+                     //  tempEdPointLineComparison:= PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(j))^;
                      //if ((listCable[i].stPoint.x = tempStPointLineComparison.x) AND
                      //    (listCable[i].stPoint.y = tempStPointLineComparison.y) AND
                      //    (listCable[i].edPoint.x = tempEdPointLineComparison.x) AND
@@ -530,7 +530,7 @@ begin
                      //    else
                      //      begin
                               //удлиняем каждую проверяемую линиию, для исключения погрешностей
-                              extNextLine:= extendedLineFunc(PGDBVertex(pc^.VertexArrayInOCS.getelement(j-1))^,PGDBVertex(pc^.VertexArrayInOCS.getelement(j))^,Epsilon,false) ;
+                              extNextLine:= extendedLineFunc(PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(j-1))^,PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(j))^,Epsilon,false) ;
                               //Производим сравнение основной линии с перебираемой линией
                               if uzegeometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).isintercept then
                               begin

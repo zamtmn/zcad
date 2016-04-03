@@ -700,7 +700,7 @@ begin
                              lp:=pgdbvertex(@matr[3,0])^;
                              lp.y:=lp.y-0.2*textprop.size;
                              lp:=VectorTransform3d(lp,objmatrix);
-                             pl.AddByPointer(@lp);
+                             pl.PushBackData(lp);
                      end;
 
   while i<=length(pswp^.str) do
@@ -714,7 +714,7 @@ begin
                              lp:=pgdbvertex(@matr[3,0])^;
                              lp.y:=lp.y-0.2*textprop.size;
                              lp:=VectorTransform3d(lp,objmatrix);
-                             pl.AddByPointer(@lp);
+                             pl.PushBackData(lp);
                         end
                     {оригинал}
                     {begin
@@ -741,7 +741,7 @@ begin
                              lp:=pgdbvertex(@matr[3,0])^;
                              lp.y:=lp.y-0.2*textprop.size;
                              lp:=VectorTransform3d(lp,objmatrix);
-                             pl.AddByPointer(@lp);
+                             pl.PushBackData(lp);
                         end;
     end
     else
@@ -770,7 +770,7 @@ begin
                              lp:=pgdbvertex(@matr[3,0])^;
                              lp.y:=lp.y-0.2*textprop.size;
                              lp:=VectorTransform3d(lp,objmatrix);
-                             pl.AddByPointer(@lp);
+                             pl.PushBackData(lp);
                      end;
             pswp:=text.iterate(ir);
         until pswp=nil;
@@ -920,9 +920,9 @@ begin
 
     else if     dxfGDBStringload(f,7,byt,style)then
                                                  begin
-                                                 TXTStyleIndex :={drawing.GetTextStyleTable^.getelement}(drawing.GetTextStyleTable^.FindStyle(Style,false));
+                                                 TXTStyleIndex :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
                                                  if TXTStyleIndex=nil then
-                                                                     TXTStyleIndex:=drawing.GetTextStyleTable^.getelement(0);
+                                                                     TXTStyleIndex:=drawing.GetTextStyleTable^.getDataMutable(0);
                                                  end
     else {s := }f.readgdbstring;
     byt:=readmystrtoint(f);

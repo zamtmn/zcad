@@ -169,9 +169,9 @@ begin
                          begin
                               if (trmode=TM_TriangleStrip)or(trmode=TM_TriangleFan) then
                                                          begin
-                                                              pts:=ptrdata^.LLprimitives.getelement(CurrentLLentity);
+                                                              pts:=pointer(ptrdata^.LLprimitives.getDataMutable(CurrentLLentity));
                                                               index:=ptruint(v);
-                                                              index:=ptrdata^.GeomData.Indexes.AddByPointer(@index);
+                                                              index:=ptrdata^.GeomData.Indexes.PushBackData(index);
                                                               pts^.AddIndex(index);
                                                               exit;
                                                          end;
@@ -255,8 +255,8 @@ begin//----//
      oldtparrayindex:=tparrayindex;
       if startcounturindex<pttf.SHXdata.Count then
       begin
-           psymbol:=pttf.SHXdata.getelement(startcounturindex);
-           pendsymbol:=pttf.SHXdata.getelement(pttf.SHXdata.Count);
+           psymbol:=pttf.SHXdata.getDataMutable(startcounturindex);
+           pendsymbol:=pttf.SHXdata.getDataMutable(pttf.SHXdata.Count);
            while psymbol<pendsymbol do
                begin
                  case GDBByte(psymbol^) of
@@ -474,7 +474,7 @@ begin
 end;
 //-ttf-//function TTFFont.GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;
 //-ttf-//begin
-//-ttf-//     result:=self.TriangleData.getelement(offset);
+//-ttf-//     result:=self.TriangleData.getDataMutable(offset);
 //-ttf-//end;
 procedure TTFFont.ProcessTriangleData(si:PGDBsymdolinfo);
 var

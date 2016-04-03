@@ -151,9 +151,9 @@ begin
                                  usi.symbolinfo.SymMinY:=0;
                                  usi.symbolinfo.LatestCreate:=false;
                                  killstring(usi.symbolinfo.Name);
-                                 unisymbolinfo.AddByPointer(@usi);
+                                 unisymbolinfo.PushBackData(usi);
 
-                                 result:=@(PGDBUNISymbolInfo(unisymbolinfo.getelement(unisymbolinfo.Count-1))^.symbolinfo);
+                                 result:=@(PGDBUNISymbolInfo(unisymbolinfo.getDataMutable(unisymbolinfo.Count-1))^.symbolinfo);
                             end;
                        end;
 end;

@@ -42,7 +42,7 @@ begin
      vs.x:=x;
      vs.y:=y;
      vs.z:=0;
-     result:=Vertex3S.AddByPointer(@vs);
+     result:=Vertex3S.PushBackData(vs);
 end;
 constructor ZGLGeomData.init;
 begin

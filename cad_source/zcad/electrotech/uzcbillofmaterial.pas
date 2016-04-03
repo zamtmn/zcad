@@ -70,7 +70,7 @@ begin
   ni.Names:='';
   ni.Amount:=0;
   ni.processed:=false;
-  result:=self.getelement(AddByPointer(@ni));
+  result:=self.getDataMutable(AddByPointer(@ni));
 end;
 function GDBBbillOfMaterial.AddByPointer(p:GDBPointer):TArrayIndex;
 begin

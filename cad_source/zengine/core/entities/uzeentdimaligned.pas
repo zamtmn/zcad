@@ -289,19 +289,19 @@ begin
 
           pdesc.pointtype:=os_p10;
           pdesc.worldcoord:=DimData.P10InWCS;
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
           pdesc.pointtype:=os_p11;
           pdesc.worldcoord:=DimData.P11InOCS;
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
           pdesc.pointtype:=os_p13;
           pdesc.worldcoord:=DimData.P13InWCS;
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
           pdesc.pointtype:=os_p14;
           pdesc.worldcoord:=DimData.P14InWCS;
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.AddByPointer(@pdesc);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 end;
 
 function GDBObjAlignedDimension.Clone;

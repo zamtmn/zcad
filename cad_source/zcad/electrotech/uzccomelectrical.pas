@@ -1528,7 +1528,7 @@ begin
                     if not IsPointEqual(tw1,firstpoint) then
                                                         cable^.AddVertex(tw1);
                     pa.copyto(cable.VertexArrayInOCS);
-                    //firstpoint:=pgdbvertex(cable^.VertexArrayInWCS.getelement(cable^.VertexArrayInWCS.Count-1))^;
+                    //firstpoint:=pgdbvertex(cable^.VertexArrayInWCS.getDataMutable(cable^.VertexArrayInWCS.Count-1))^;
                     if not IsPointEqual(tw2,firstpoint) then
                                                         cable^.AddVertex(tw2);
                     if not IsPointEqual(tw2,lastpoint) then
@@ -1602,7 +1602,7 @@ begin
   until pv=nil;
 
 
-                    //firstpoint:=pgdbvertex(cable^.VertexArrayInWCS.getelement(cable^.VertexArrayInWCS.Count-1))^;
+                    //firstpoint:=pgdbvertex(cable^.VertexArrayInWCS.getDataMutable(cable^.VertexArrayInWCS.Count-1))^;
                     if not IsPointEqual(tw2,firstpoint) then
                                                         tcable^.AddVertex(tw2);
                     if not IsPointEqual(tw2,lastpoint) then
@@ -1650,7 +1650,7 @@ begin
           drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
     end
 else begin
-          plastw:=p3dpl^.VertexArrayInWCS.getelement(p3dpl^.VertexArrayInWCS.Count-1);
+          plastw:=p3dpl^.VertexArrayInWCS.getDataMutable(p3dpl^.VertexArrayInWCS.Count-1);
 
           rootbytrace(plastw^,wc,cabcomparam.PTrace,p3dpl,false);
 
@@ -1676,7 +1676,7 @@ else begin
                             if not IsPointEqual(tw1,plastw^) then
                                                                 p3dpl^.AddVertex(tw1);
                             pa.copyto(@p3dpl.VertexArrayInOCS);
-                            plastw:=p3dpl^.VertexArrayInWCS.getelement(p3dpl^.VertexArrayInWCS.Count-1);
+                            plastw:=p3dpl^.VertexArrayInWCS.getDataMutable(p3dpl^.VertexArrayInWCS.Count-1);
                             if not IsPointEqual(tw2,plastw^) then
                                                                 p3dpl^.AddVertex(tw2);
                             if not IsPointEqual(tw2,wc) then
@@ -2311,10 +2311,10 @@ begin
                       historyoutstr('Выбери 2 кабеля!');
                       exit;
                  end;
-  pv11:=pc1.VertexArrayInWCS.getelement(0);
-  pv12:=pc1.VertexArrayInWCS.getelement(pc1.VertexArrayInWCS.Count-1);
-  pv21:=pc2.VertexArrayInWCS.getelement(0);
-  pv22:=pc2.VertexArrayInWCS.getelement(pc2.VertexArrayInWCS.Count-1);
+  pv11:=pc1.VertexArrayInWCS.getDataMutable(0);
+  pv12:=pc1.VertexArrayInWCS.getDataMutable(pc1.VertexArrayInWCS.Count-1);
+  pv21:=pc2.VertexArrayInWCS.getDataMutable(0);
+  pv22:=pc2.VertexArrayInWCS.getDataMutable(pc2.VertexArrayInWCS.Count-1);
 
      if uzegeometry.Vertexlength(pv11^,pv21^)<eps then
                                                    begin

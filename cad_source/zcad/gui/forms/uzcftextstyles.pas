@@ -157,7 +157,7 @@ var
 begin
      if FontChange then
      begin
-          newfont:=FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,pstring(FontsSelector.Enums.getelement(FontsSelector.Selected))^));
+          newfont:=FontManager.addFonf(FindInPaths(sysvarPATHFontsPath,pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^));
           if  newfont<>PGDBTextStyle(TListItem(Item).Data)^.pfont then
           begin
                CreateUndoStartMarkerNeeded;
@@ -245,7 +245,7 @@ begin
           if S=currentitem then
            CurrentFontIndex:=FontsSelector.Enums.Count;
           S:=extractfilename(S);
-          FontsSelector.Enums.AddByPointer(@S);
+          FontsSelector.Enums.PushBackData(S);
      end;
      if FontsFilter<>TFTF_TTF then
      for i:=0 to FontManager.shxfontfiles.Count-1 do
@@ -254,13 +254,13 @@ begin
           if S=currentitem then
            CurrentFontIndex:=FontsSelector.Enums.Count;
           S:=extractfilename(S);
-          FontsSelector.Enums.AddByPointer(@S);
+          FontsSelector.Enums.PushBackData(S);
      end;
      if CurrentFontIndex=-1 then
      begin
           CurrentFontIndex:=FontsSelector.Enums.Count;
           S:=extractfilename(currentitempfont^.fontfile);
-          FontsSelector.Enums.AddByPointer(@S);
+          FontsSelector.Enums.PushBackData(S);
      end;
      FontsSelector.Selected:=CurrentFontIndex;
      FontsSelector.Enums.SortAndSaveIndex(FontsSelector.Selected);

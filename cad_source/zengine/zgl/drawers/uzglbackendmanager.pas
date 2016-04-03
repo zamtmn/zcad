@@ -38,7 +38,7 @@ begin
 end;
 function GetCurrentBackEnd:TVA;
 begin
-     result:=ppointer(Backends.getelement(BackendsNames.Selected))^;
+     result:=ppointer(Backends.getDataMutable(BackendsNames.Selected))^;
 end;
 initialization
   BackendsNames.Enums.init(10);

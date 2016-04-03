@@ -61,7 +61,7 @@ begin
   if closed then
   begin
        ptpv0:=VertexArrayInWCS.GetParrayAsPointer;
-       ptpv1:=VertexArrayInWCS.getelement(VertexArrayInWCS.Count-1);
+       ptpv1:=VertexArrayInWCS.getDataMutable(VertexArrayInWCS.Count-1);
        result:=result+uzegeometry.Vertexlength(ptpv0^,ptpv1^);
   end;
 end;
@@ -164,7 +164,7 @@ begin
   p:=vertexarrayinocs.GetParrayAsPointer;
   for i:=0 to vertexarrayinocs.Count-1 do
   begin
-      tpo^.vertexarrayinocs.AddByPointer(p);
+      tpo^.vertexarrayinocs.PushBackData(p^);
       inc(p)
   end;
   //tpo^.snaparray:=nil;

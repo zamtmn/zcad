@@ -486,27 +486,27 @@ begin
           case OPSPlaceSmokeDetectorOrtoParam.DatType of
                TOPSDT_Smoke:begin
                                  s:='До 3,5м';
-                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.AddByPointer(@s);
+                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.PushBackData(s);
                                  s:='Св. 3,5 до 6,0';
-                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.AddByPointer(@s);
+                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.PushBackData(s);
                                  s:='Св. 6,0 до 10,0';
-                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.AddByPointer(@s);
+                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.PushBackData(s);
                                  s:='Св. 10,5 до 12,0';
-                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.AddByPointer(@s);
+                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.PushBackData(s);
                                  s:='Не норм.';
-                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.AddByPointer(@s);
+                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.PushBackData(s);
                                  OPSPlaceSmokeDetectorOrtoParam.oldth:=OPSPlaceSmokeDetectorOrtoParam.Height.Selected;
                                  OPSPlaceSmokeDetectorOrtoParam.Height.Selected:=OPSPlaceSmokeDetectorOrtoParam.oldsh;
                             end;
                TOPSDT_Termo:begin
                                  s:='До 3,5м';
-                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.AddByPointer(@s);
+                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.PushBackData(s);
                                  s:='Св. 3,5 до 6,0';
-                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.AddByPointer(@s);
+                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.PushBackData(s);
                                  s:='Св. 6,0 до 9,0';
-                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.AddByPointer(@s);
+                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.PushBackData(s);
                                  s:='Не норм.';
-                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.AddByPointer(@s);
+                                 OPSPlaceSmokeDetectorOrtoParam.Height.Enums.PushBackData(s);
                                  OPSPlaceSmokeDetectorOrtoParam.oldsh:=OPSPlaceSmokeDetectorOrtoParam.Height.Selected;
                                  OPSPlaceSmokeDetectorOrtoParam.Height.Selected:=OPSPlaceSmokeDetectorOrtoParam.oldth;
                             end;
@@ -829,7 +829,7 @@ begin
      begin
      pt:=pointer(AllocEnt(GDBMtextID));
      pt^.init({drawings.GetCurrentROOT}@root,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,name,tv,2.5,0,0.65,RightAngle,jsbc,1,1);
-     pt^.TXTStyleIndex:=drawings.GetCurrentDWG.GetTextStyleTable^.getelement(0);
+     pt^.TXTStyleIndex:=drawings.GetCurrentDWG.GetTextStyleTable^.getDataMutable(0);
      {drawings.GetCurrentROOT}root.ObjArray.add(@pt);
      pt^.Formatentity(drawings.GetCurrentDWG^,dc);
      end;

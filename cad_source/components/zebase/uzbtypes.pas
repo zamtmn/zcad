@@ -88,14 +88,6 @@ ZCPHeader=packed record
                 OffsetTable:TZCPOffsetTable;(*saved_to_shd*)
           end;
 TObjLinkRecordMode=(OBT(*'ObjBeginToken'*),OFT(*'ObjFieldToken'*),UBR(*'UncnownByReference'*));
-PTObjLinkRecord=^TObjLinkRecord;
-TObjLinkRecord=packed record
-                     OldAddr:GDBLongword;(*saved_to_shd*)
-                     NewAddr:GDBLongword;(*saved_to_shd*)
-                     TempAddr:GDBLongword;(*saved_to_shd*)
-                     LinkCount:GDBInteger;(*saved_to_shd*)
-                     Mode:TObjLinkRecordMode;(*saved_to_shd*)
-               end;
 TCompareResult=(CRLess,CREqual,CRGreater,CRNotEqual);
 PIMatrix4=^IMatrix4;               
 IMatrix4=packed array[0..3]of GDBInteger;

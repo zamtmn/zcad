@@ -942,7 +942,7 @@ begin
           {if ScrollMode then }renderfeedback({gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount,camera,ProjectProc,dc);
           if pp.count<>0 then
           begin
-               pdesc:=pp^.parray;
+               pdesc:=pp^.getparrayaspointer;
                for i:=0 to pp.count-1 do
                begin
                     if pdesc.pobject<>nil then

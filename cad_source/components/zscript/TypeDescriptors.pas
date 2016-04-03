@@ -104,12 +104,13 @@ GDBOperandDesc=record
                      StoreMode:GDBTOperandStoreMode;
                end;
 GDBMetodModifier=GDBWord;
+TOperandsVector=GDBOpenArrayOfdata<GDBOperandDesc>;
 PMetodDescriptor=^MetodDescriptor;
 MetodDescriptor=object(GDBaseObject)
                       objname:GDBString;
                       MetodName:GDBString;
                       OperandsName:GDBString;
-                      Operands:GDBOpenArrayOfdata; {DATA}
+                      Operands:{GDBOpenArrayOfdata}TOperandsVector; {DATA}
                       ResultPTD:PUserTypeDescriptor;
                       MetodAddr:GDBPointer;
                       Attributes:GDBMetodModifier;
@@ -163,7 +164,7 @@ begin
 
      MetodAddr:=ma;
      Attributes:=attr;
-     Operands.init({$IFDEF DEBUGBUILD}'{CC044792-AE73-48C9-B10A-346BFE9E46C9}',{$ENDIF}10,sizeof(GDBOperandDesc));
+     Operands.init({$IFDEF DEBUGBUILD}'{CC044792-AE73-48C9-B10A-346BFE9E46C9}',{$ENDIF}10{,sizeof(GDBOperandDesc)});
      parseresult:=runparser('_softspace'#0'=(_softspace'#0,dt,parseerror);
      if parseerror then
                        begin

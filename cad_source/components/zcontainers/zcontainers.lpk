@@ -18,7 +18,7 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="10">
+    <Files Count="9">
       <Item1>
         <Filename Value="UGDBOpenArray.pas"/>
         <UnitName Value="UGDBOpenArray"/>
@@ -44,21 +44,17 @@
         <UnitName Value="UGDBOpenArrayOfPointer"/>
       </Item6>
       <Item7>
-        <Filename Value="UGDBOpenArrayOfTObjLinkRecord.pas"/>
-        <UnitName Value="UGDBOpenArrayOfTObjLinkRecord"/>
-      </Item7>
-      <Item8>
         <Filename Value="UGDBStringArray.pas"/>
         <UnitName Value="UGDBStringArray"/>
-      </Item8>
-      <Item9>
+      </Item7>
+      <Item8>
         <Filename Value="UGDBTree.pas"/>
         <UnitName Value="UGDBTree"/>
-      </Item9>
-      <Item10>
+      </Item8>
+      <Item9>
         <Filename Value="uzctnrvector.pas"/>
         <UnitName Value="uzctnrvector"/>
-      </Item10>
+      </Item9>
     </Files>
     <RequiredPkgs Count="2">
       <Item1>

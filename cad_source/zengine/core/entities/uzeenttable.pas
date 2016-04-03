@@ -330,7 +330,7 @@ end;
 destructor GDBObjTable.done;
 begin
      inherited done;
-     tbl.freeandsubfree; //TODO:чистить...чистить...
+     {generics containers}//tbl.freeandsubfree; //TODO:чистить...чистить...
      tbl.done;
 end;
 begin

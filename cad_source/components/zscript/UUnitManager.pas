@@ -27,7 +27,7 @@ uses LCLProc,uzbpaths,uzbstrproc,Varman,languade,UGDBOpenArrayOfObjects,SysUtils
 type
 {EXPORT+}
     PTUnitManager=^TUnitManager;
-    TUnitManager={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)
+    TUnitManager={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects{-}<TUnit>{//})
                        currentunit:PTUnit;
                        NextUnitManager:PTUnitManager;
                        constructor init;
@@ -259,7 +259,7 @@ var
   penu:penumodj;
   enumodj:tenumodj;
   currvalue,maxvalue:GDBLongword;
-  enumobjlist:GDBOpenArrayOfData;
+  enumobjlist:GDBOpenArrayOfData<tenumodj>;
   indexx:ArrayIndexDescriptor;
   p,pfu:pointer;
   unitpart:TunitPart;
@@ -269,7 +269,7 @@ var
 begin
   unitpart:=tnothing;
   currentunit:=pointer(pcreatedunit);
-  enumobjlist.init({$IFDEF DEBUGBUILD}'{43998D84-19F0-4356-A9B8-B2D86B29C623}',{$ENDIF}255,sizeof(enumodj));
+  enumobjlist.init({$IFDEF DEBUGBUILD}'{43998D84-19F0-4356-A9B8-B2D86B29C623}',{$ENDIF}255{,sizeof(enumodj)});
   //f.init(1000);
   mode:=unitmode;
   line:='';
@@ -801,7 +801,7 @@ if addtype then
 end;
 constructor TUnitManager.init;
 begin
-     inherited init({$IFDEF DEBUGBUILD}'{94D787E9-97EE-4198-8A72-5B904B98F275}',{$ENDIF}500,sizeof(TUnit));
+     inherited init({$IFDEF DEBUGBUILD}'{94D787E9-97EE-4198-8A72-5B904B98F275}',{$ENDIF}500{,sizeof(TUnit)});
      NextUnitManager:=nil;
 end;
 procedure TUnitManager.LoadFolder(PPaths:GDBString;TranslateFunc:TTranslateFunction;path: GDBString);

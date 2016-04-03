@@ -93,7 +93,7 @@ uses
     UGDBOpenArrayOfByte,UGDBOpenArrayOfData,strutils,sysutils{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF};
 var
     PerfomaneBuf:GDBOpenArrayOfByte;
-    TimeBuf:GDBOpenArrayOfData;
+    TimeBuf:GDBOpenArrayOfData<TMyTimeStamp>;
     function LogMode2string(LogMode:TLogMode):GDBString;
     begin
       case LogMode of
@@ -357,7 +357,7 @@ begin
      CurrentTime:=mynow();
      logfilename:=fn;
      PerfomaneBuf.init({$IFDEF DEBUGBUILD}'{39063C66-9D18-4707-8AD3-97DFBCB23185}',{$ENDIF}5*1024);
-     TimeBuf.init({$IFDEF DEBUGBUILD}'{6EE1BC6B-1177-40B0-B4A5-793D66BF8BC8}',{$ENDIF}50,sizeof({TDateTime}TMyTimeStamp));
+     TimeBuf.init({$IFDEF DEBUGBUILD}'{6EE1BC6B-1177-40B0-B4A5-793D66BF8BC8}',{$ENDIF}50{,sizeof(TMyTimeStamp)});
      Indent:=1;
      CreateLog;
      WriteToLog('------------------------Log started------------------------',true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);

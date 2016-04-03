@@ -23,7 +23,7 @@ unit UBaseTypeDescriptor;
 interface
 uses
       LCLProc,Graphics,classes,Themes,
-      uzemathutils,uzegeometry,uzbstrproc,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,
+      uzemathutils,uzegeometry,uzbstrproc,TypeDescriptors,
       sysutils,UGDBOpenArrayOfByte,uzbtypesbase,
       varmandef,uzbtypes,UGDBOpenArrayOfData,UGDBStringArray,uzbmemman,math;
 resourcestring
@@ -32,8 +32,8 @@ type
 PBaseTypeDescriptor=^BaseTypeDescriptor;
 BaseTypeDescriptor=object(TUserTypeDescriptor)
                          function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
-                         function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                         function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                         //function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                         //function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
                    end;
 GDBBooleanDescriptor=object(BaseTypeDescriptor)
@@ -102,8 +102,8 @@ GDBAngleDoubleDescriptor=object(GDBDoubleDescriptor)
                          end;
 GDBStringDescriptor=object(BaseTypeDescriptor)
                           constructor init;
-                          function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                          function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                          //function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                          //function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure CopyInstanceTo(source,dest:pointer);virtual;
@@ -257,7 +257,7 @@ begin
                            end;
      IncAddr(addr);
 end;
-function BaseTypeDescriptor.Serialize;
+(*function BaseTypeDescriptor.Serialize;
 var s:string;
 begin
      if membuf=nil then
@@ -277,7 +277,7 @@ end;
 function BaseTypeDescriptor.DeSerialize;
 begin
      membuf.ReadData(PInstance,SizeInGDBBytes)
-end;
+end;*)
 procedure BaseTypeDescriptor.SetValueFromString;
 begin
 end;
@@ -693,7 +693,7 @@ constructor GDBPointerDescriptor.init;
 begin
      inherited init(sizeof(GDBPointer),'GDBPointer',nil);
 end;
-function GDBStringDescriptor.Serialize;
+(*function GDBStringDescriptor.Serialize;
 var l:gdbword;
     s:gdbstring;
 begin
@@ -715,7 +715,7 @@ begin
                                 membuf^.AddData(@s[1],l);
                                 membuf^.AddData(pointer(lineend),length(lineend));
                            end;
-end;
+end;*)
 procedure GDBStringDescriptor.SavePasToMem;
 begin
      membuf.TXTAddGDBStringEOL(prefix+':='''+{pvd.data.PTD.}GetValueAsString(PInstance)+''';');
@@ -734,14 +734,14 @@ begin
          result:=CREqual;
 end;
 
-function GDBStringDescriptor.DeSerialize;
+(*function GDBStringDescriptor.DeSerialize;
 var l:gdbword;
 begin
      PGDBString(PInstance)^:='';
      membuf.ReadData(@L,sizeof(gdbword));
      setlength(PGDBString(PInstance)^,l);
      membuf.ReadData(@PGDBString(PInstance)^[1],l)
-end;
+end;*)
 function GDBPointerDescriptor.GetValueAsString;
 var
      uGDBPointer:GDBPointer;

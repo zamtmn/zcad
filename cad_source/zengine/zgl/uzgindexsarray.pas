@@ -23,7 +23,7 @@ uses uzbtypesbase,UGDBOpenArrayOfData,sysutils,uzbtypes,uzbmemman,
      uzegeometry;
 type
 {Export+}
-ZGLIndexsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=TArrayIndex*)
+ZGLIndexsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<TArrayIndex>{//})(*OpenArrayOfData=TArrayIndex*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
              end;
@@ -32,12 +32,12 @@ implementation
 //uses {glstatemanager,}log;
 constructor ZGLIndexsArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(TArrayIndex));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(TArrayIndex)});
 end;
 constructor ZGLIndexsArray.initnul;
 begin
   inherited initnul;
-  size:=sizeof(TArrayIndex);
+  //size:=sizeof(TArrayIndex);
 end;
 begin
 end.

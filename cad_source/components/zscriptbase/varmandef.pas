@@ -18,12 +18,13 @@
 
 unit varmandef;
 {$INCLUDE def.inc}
-{$MODE DELPHI}
+{$modeswitch advancedrecords}
+{MODE objfpc}{H+}
 
 interface
 uses
   LCLProc,SysUtils,UGDBTree,UGDBStringArray,strutils,uzbtypesbase,
-  UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,uzbtypes,UGDBOpenArrayOfData,
+  {UGDBOpenArrayOfTObjLinkRecord,}UGDBOpenArrayOfByte,uzbtypes,UGDBOpenArrayOfData,
   Classes,Controls,StdCtrls,Graphics,types;
 const
   {Ttypenothing=-1;
@@ -144,9 +145,9 @@ UserTypeDescriptor=object(GDBaseObject)
                          procedure _init(size:GDBInteger;tname:string;pu:pointer);
                          function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;InitialValue:GDBString;preferedHeight:integer):TEditorDesc;virtual;
                          procedure ApplyOperator(oper,path:GDBString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;abstract;
-                         function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
+                         //function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
                          function SerializePreProcess(Value:GDBString;sub:integer):GDBString;virtual;
-                         function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;abstract;
+                         //function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;abstract;
                          function GetTypeAttributes:TTypeAttr;virtual;
                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                          function GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;virtual;
@@ -232,6 +233,7 @@ TOSMode=packed record
     username: GDBString;
     data: TTypedData;
     attrib:TVariableAttributes;
+    class operator =(a, b: vardesk): Boolean;
   end;
 ptypemanagerdef=^typemanagerdef;
 typemanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -248,8 +250,8 @@ typemanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
             end;
 pvarmanagerdef=^varmanagerdef;
 varmanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                 vardescarray:GDBOpenArrayOfData;
-                 vararray:GDBOpenArrayOfByte;
+                 {vardescarray:GDBOpenArrayOfData;
+                 vararray:GDBOpenArrayOfByte;}
                  function findvardesc(varname:GDBString): pvardesk;virtual;abstract;
                  function createvariable(varname:GDBString; var vd:vardesk): pvardesk;virtual;abstract;
                  procedure createvariablebytype(varname,vartype:GDBString);virtual;abstract;
@@ -263,6 +265,10 @@ procedure ProcessVariableAttributes(var attr:TVariableAttributes; const setattri
 implementation
 //uses log;
 {for hide exttype}
+class operator vardesk.=(a, b: vardesk): Boolean;
+begin
+  Result := (a.name=b.name);
+end;
 procedure ProcessVariableAttributes(var attr:TVariableAttributes; const setattrib,resetattrib:TVariableAttributes);
 begin
      attr:=(attr or setattrib)and(not resetattrib);
@@ -293,7 +299,7 @@ begin
      if key=#13 then
                     if assigned(OwnerNotify) then
                                                  begin
-                                                      ptd.SetValueFromString(PInstance,tedit(sender).text);
+                                                      ptd^.SetValueFromString(PInstance,tedit(sender).text);
                                                       OwnerNotify(self,TMNC_EditingDoneEnterKey);
                                                  end;
 end;
@@ -308,10 +314,10 @@ begin
                       begin
                            i:=tcombobox(sender).ItemIndex;
                            p:=tcombobox(sender).Items.Objects[i];
-                           ptd.CopyInstanceTo(@p,PInstance)
+                           ptd^.CopyInstanceTo(@p,PInstance)
                       end
                   else
-                      ptd.SetValueFromString(PInstance,tedit(sender).text);
+                      ptd^.SetValueFromString(PInstance,tedit(sender).text);
      end;
 end;
 procedure TPropEditor.EditingDone(Sender: TObject);
@@ -349,13 +355,13 @@ begin
                                                              i:=tcombobox(sender).ItemIndex;
                                                              p:=tcombobox(sender).Items.Objects[i];
                                                              if CanRunFastEditor then
-                                                             if RunFastEditorValue=p then
+                                                             if pointer(RunFastEditorValue)=p then
                                                                                          rfs:=true;
                                                              if not rfs then
-                                                                            ptd.CopyInstanceTo(@p,PInstance);
+                                                                            ptd^.CopyInstanceTo(@p,PInstance);
                                                         end
                                                     else
-                                                        ptd.SetValueFromString(PInstance,tedit(sender).text);
+                                                        ptd^.SetValueFromString(PInstance,tedit(sender).text);
                                         if rfs then
                                                    OwnerNotify(self,TMNC_RunFastEditor)
                                                else
@@ -379,7 +385,7 @@ begin
                                                       EditingDone(peditor);
                              end;
 end;
-procedure UserTypeDescriptor.IncAddr;
+procedure UserTypeDescriptor.IncAddr(var addr:GDBPointer);
 begin
      inc(pGDBByte(addr),SizeInGDBBytes);
 end;
@@ -402,7 +408,7 @@ procedure UserTypeDescriptor.InitInstance(PInstance:GDBPointer);
 begin
      fillchar(pinstance^,SizeInGDBBytes,0)
 end;
-procedure UserTypeDescriptor.CopyInstanceTo;
+procedure UserTypeDescriptor.CopyInstanceTo(source,dest:pointer);
 begin
      Move(source^, dest^,SizeInGDBBytes);
      MagicAfterCopyInstance(dest);
@@ -415,11 +421,11 @@ begin
                                                          result:=CRNotEqual;
 end;
 
-function UserTypeDescriptor.SerializePreProcess;
+function UserTypeDescriptor.SerializePreProcess(Value:GDBString;sub:integer):GDBString;
 begin
      result:=DupeString(' ',sub)+value;
 end;
-procedure UserTypeDescriptor._init;
+procedure UserTypeDescriptor._init(size:GDBInteger;tname:string;pu:pointer);
 begin
      SizeInGDBBytes:=size;
      pointer(typename):=nil;
@@ -431,11 +437,11 @@ begin
      onCreateEditorFunc:=nil;
 end;
 
-constructor UserTypeDescriptor.init;
+constructor UserTypeDescriptor.init(size:GDBInteger;tname:string;pu:pointer);
 begin
      baseinit(size,tname,pu);
 end;
-constructor UserTypeDescriptor.baseinit;
+constructor UserTypeDescriptor.baseinit(size:GDBInteger;tname:string;pu:pointer);
 begin
      _init(size,tname,pu);
      Decorators.OnGetValueAsString:=nil;
@@ -449,7 +455,7 @@ begin
      SizeInGDBBytes:=0;
      typename:='';
 end;
-function UserTypeDescriptor.CreateEditor;
+function UserTypeDescriptor.CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;InitialValue:GDBString;preferedHeight:integer):TEditorDesc;
 begin
      if assigned(onCreateEditorFunc) then
                                          result:=onCreateEditorFunc(TheOwner,rect,pinstance,psa,FreeOnLostFocus,initialvalue,@self,preferedHeight)
@@ -459,11 +465,11 @@ begin
                                            result.mode:=TEM_Nothing;
                                          end;
 end;
-function UserTypeDescriptor.GetTypeAttributes;
+function UserTypeDescriptor.GetTypeAttributes:TTypeAttr;
 begin
      result:=0;
 end;
-function UserTypeDescriptor.GetValueAsString;
+function UserTypeDescriptor.GetValueAsString(pinstance:GDBPointer):GDBString;
 begin
      result:='UserTypeDescriptor.GetValueAsString;';
 end;
@@ -472,7 +478,7 @@ begin
      result:=GetValueAsString(PInstance);
 end;
 
-function UserTypeDescriptor.GetUserValueAsString;
+function UserTypeDescriptor.GetUserValueAsString(pinstance:GDBPointer):GDBString;
 begin
      result:=GetValueAsString(pinstance);
 end;

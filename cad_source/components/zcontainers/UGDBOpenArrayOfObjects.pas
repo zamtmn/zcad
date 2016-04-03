@@ -23,23 +23,23 @@ uses uzbtypesbase,UGDBOpenArrayOfData,
      uzbtypes,uzbmemman;
 type
 {Export+}
-PGDBOpenArrayOfObjects=^GDBOpenArrayOfObjects;
-GDBOpenArrayOfObjects={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
+GDBOpenArrayOfObjects{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
+                      object(GDBOpenArrayOfData{-}<T>{//})
                              procedure cleareraseobj;virtual;
                              function CreateObject:PGDBaseObject;
                              procedure free;virtual;
-                             procedure freeandsubfree;virtual;
+                             //procedure freeandsubfree;virtual;
                              procedure AfterObjectDone(p:PGDBaseObject);virtual;
                        end;
 {Export-}
 implementation
 //uses
 //    log;
-procedure GDBOpenArrayOfObjects.AfterObjectDone;
+procedure GDBOpenArrayOfObjects<T>.AfterObjectDone;
 begin
 
 end;
-procedure GDBOpenArrayOfObjects.cleareraseobj;
+procedure GDBOpenArrayOfObjects<T>.cleareraseobj;
 var
   p:PGDBaseObject;
     ir:itrec;
@@ -52,7 +52,7 @@ begin
   until p=nil;
   count:=0;
 end;
-function GDBOpenArrayOfObjects.CreateObject;
+function GDBOpenArrayOfObjects<T>.CreateObject;
 var addr: GDBPlatformint;
 begin
   if parray=nil then
@@ -66,7 +66,7 @@ begin
        inc(count);
   end;
 end;
-procedure GDBOpenArrayOfObjects.free;
+procedure GDBOpenArrayOfObjects<T>.free;
 var p:GDBPointer;
     ir:itrec;
 begin
@@ -79,7 +79,7 @@ begin
   until p=nil;
   clear;
 end;
-procedure GDBOpenArrayOfObjects.freeandsubfree;
+{procedure GDBOpenArrayOfObjects<T>.freeandsubfree;
 var p:GDBPointer;
     ir:itrec;
 begin
@@ -90,6 +90,6 @@ begin
         p:=iterate(ir);
   until p=nil;
   clear;
-end;
+end;}
 begin
 end.

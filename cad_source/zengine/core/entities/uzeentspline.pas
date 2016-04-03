@@ -28,9 +28,9 @@ uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanage
 type
 {REGISTEROBJECTTYPE GDBObjSpline}
 {Export+}
-TKnotsVector={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBFloat>{//})
+TKnotsVector={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<GDBFloat>{//})
                              end;
-TCPVector={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<GDBvertex4S>{//})
+TCPVector={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<GDBvertex4S>{//})
                              end;
 PGDBObjSpline=^GDBObjSpline;
 GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)

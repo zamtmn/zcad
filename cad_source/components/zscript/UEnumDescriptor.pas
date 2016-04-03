@@ -26,11 +26,11 @@ resourcestring
   rsDifferent='Different';
 type
 PTByteVector=^TByteVector;
-TByteVector=GDBOpenArrayOfData<Byte>;
+TByteVector=TZctnrVectorRec<Byte>;
 PTWordVector=^TWordVector;
-TWordVector=GDBOpenArrayOfData<Word>;
+TWordVector=TZctnrVectorRec<Word>;
 PTCardinalVector=^TCardinalVector;
-TCardinalVector=GDBOpenArrayOfData<Cardinal>;
+TCardinalVector=TZctnrVectorRec<Cardinal>;
 PEnumDescriptor=^EnumDescriptor;
 EnumDescriptor=object(TUserTypeDescriptor)
                      SourceValue:GDBGDBStringArray;

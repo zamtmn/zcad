@@ -24,7 +24,7 @@ uses uzepalette,uzgldrawcontext,uzbtypesbase,uzctnrvectorrec,sysutils,uzbtypes,u
 type
 {Export+}
 PGDBControlPointArray=^GDBControlPointArray;
-GDBControlPointArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<controlpointdesc>{//})
+GDBControlPointArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<controlpointdesc>{//})
                            SelectedCount:GDBInteger;
                            constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 

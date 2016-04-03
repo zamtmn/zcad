@@ -23,7 +23,7 @@ uses uzbtypesbase,uzctnrvectorrec,sysutils,uzbtypes,uzbmemman,
      uzegeometry;
 type
 {Export+}
-ZGLIndexsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData{-}<TArrayIndex>{//})(*OpenArrayOfData=TArrayIndex*)
+ZGLIndexsArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<TArrayIndex>{//})(*OpenArrayOfData=TArrayIndex*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
              end;

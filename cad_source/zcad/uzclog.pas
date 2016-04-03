@@ -93,7 +93,7 @@ uses
     UGDBOpenArrayOfByte,uzctnrvectorrec,strutils,sysutils{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF};
 var
     PerfomaneBuf:GDBOpenArrayOfByte;
-    TimeBuf:GDBOpenArrayOfData<TMyTimeStamp>;
+    TimeBuf:TZctnrVectorRec<TMyTimeStamp>;
     function LogMode2string(LogMode:TLogMode):GDBString;
     begin
       case LogMode of

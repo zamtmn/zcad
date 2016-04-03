@@ -29,7 +29,7 @@ simpleproc=procedure of object;
 //SimpleMenods.init({$IFDEF DEBUGBUILD}'{E4674594-B99F-4A72-8766-E2B49DF50FCE}',{$ENDIF}20,sizeof(MetodDescriptor));
 //Properties.init({$IFDEF DEBUGBUILD}'{CFC9264A-23FA-4FE4-AE71-30495AD54ECE}',{$ENDIF}20,sizeof(PropertyDescriptor));
 TSimpleMenodsVector=GDBOpenArrayOfObjects<MetodDescriptor>;
-TPropertiesVector=GDBOpenArrayOfData<PropertyDescriptor>;
+TPropertiesVector=TZctnrVectorRec<PropertyDescriptor>;
 
 PObjectDescriptor=^ObjectDescriptor;
 ObjectDescriptor=object(RecordDescriptor)

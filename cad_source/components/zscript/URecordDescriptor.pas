@@ -24,7 +24,7 @@ interface
 uses LCLProc,UPointerDescriptor,uzbstrproc,{log,}UGDBOpenArrayOfByte,sysutils,UBaseTypeDescriptor,
   TypeDescriptors,uzctnrvectorrec,uzbtypesbase,varmandef,uzbtypes,uzbmemman;
 type
-TFieldDescriptor=GDBOpenArrayOfData<FieldDescriptor>;
+TFieldDescriptor=TZctnrVectorRec<FieldDescriptor>;
 PRecordDescriptor=^RecordDescriptor;
 RecordDescriptor=object(TUserTypeDescriptor)
                        Fields:{GDBOpenArrayOfData}TFieldDescriptor;

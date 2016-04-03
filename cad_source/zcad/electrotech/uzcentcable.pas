@@ -29,7 +29,7 @@ TNodeProp=packed record
           end;
 PGDBObjCable=^GDBObjCable;
 GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
-                 NodePropArray:GDBOpenArrayOfData{-}<TNodeProp>{//};(*hidden_in_objinsp*)
+                 NodePropArray:TZctnrVectorRec{-}<TNodeProp>{//};(*hidden_in_objinsp*)
                  str11:GDBVertex;(*hidden_in_objinsp*)
                  str12:GDBVertex;(*hidden_in_objinsp*)
                  str13:GDBVertex;(*hidden_in_objinsp*)

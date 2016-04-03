@@ -206,7 +206,7 @@ type
   end;
   ptpcoavector=^tpcoavector;
   tpcoavector={-}specialize{//}
-              GDBOpenArrayOfData{-}<TCopyObjectDesc>{//};
+              TZctnrVectorRec{-}<TCopyObjectDesc>{//};
   move_com = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
     t3dp: gdbvertex;
     pcoa:ptpcoavector;

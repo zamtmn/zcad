@@ -27,7 +27,7 @@ uses uzctnrvectorrec,uzbmemman,zeundostack,zebaseundocommands,uzbtypesbase,uzbty
 {DEFINE TData     := DMatrix4D}
 
 type
-TtmethodVector=specialize GDBOpenArrayOfData<tmethod>;
+TtmethodVector=specialize TZctnrVectorRec<tmethod>;
     generic TGMultiObjectChangeCommand<_T>=object(TCustomChangeCommand)
                                           DoData,UnDoData:_T;
                                           ObjArray:{GDBOpenArrayOfData}TtmethodVector;

@@ -22,7 +22,7 @@ interface
 uses uzbtypesbase,uzbtypes,uzctnrvector;
 type
 {Export+}
-GDBOpenArrayOfData{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
+TZctnrVectorRec{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(TZctnrVector{-}<T>{//})
                                                      function iterate(var ir:itrec):GDBPointer;virtual;
                                                      destructor FreeAndDone;virtual;
@@ -37,7 +37,7 @@ GDBOpenArrayOfData=packed object(TZctnrVectorData{-}<byte>{//})
                                    end;
 *)
 implementation
-function GDBOpenArrayOfData<T>.InsertElement;
+function TZctnrVectorRec<T>.InsertElement;
 var
    del,afterdel:pointer;
    s:integer;
@@ -56,7 +56,7 @@ begin
 end;
   result:=parray;
 end;
-function GDBOpenArrayOfData<T>.deleteelement;
+function TZctnrVectorRec<T>.deleteelement;
 var
    del,afterdel:pointer;
    s:integer;
@@ -69,7 +69,7 @@ begin
   dec(count);
   result:=parray;
 end;
-function GDBOpenArrayOfData<T>.DeleteElementByP;
+function TZctnrVectorRec<T>.DeleteElementByP;
 var
    afterdel:pointer;
    s:integer;
@@ -81,12 +81,12 @@ begin
   dec(count);
   result:=parray;
 end;
-destructor GDBOpenArrayOfData<T>.FreeAndDone;
+destructor TZctnrVectorRec<T>.FreeAndDone;
 begin
      free;
      done;
 end;
-function GDBOpenArrayOfData<T>.iterate;
+function TZctnrVectorRec<T>.iterate;
 begin
   if count=0 then result:=nil
   else if ir.itc<count-1 then

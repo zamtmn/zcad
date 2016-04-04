@@ -30,9 +30,9 @@ type
                           function findstring(s:GDBString;ucase:gdbboolean):boolean;
                           procedure sort;virtual;
                           procedure SortAndSaveIndex(var index:TArrayIndex);virtual;
-                          function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
-                          function addutoa(p:GDBPointer):TArrayIndex;
-                          function addwithscroll(p:GDBPointer):GDBInteger;virtual;
+                          //function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
+                          function addutoa(p:GDBString):TArrayIndex;
+                          function addwithscroll(p:GDBString):GDBInteger;virtual;
                           function GetLengthWithEOL:GDBInteger;
                           function GetTextWithEOL:GDBString;
                           //function addnodouble(p:GDBPointer):GDBInteger;
@@ -143,20 +143,16 @@ begin
      until IsEnd;
 
 end;
-function GDBGDBStringArray.AddByPointer(p:GDBPointer):TArrayIndex;
-//var s:GDBString;
+{function GDBGDBStringArray.AddByPointer(p:GDBPointer):TArrayIndex;
 begin
-     //s:=pGDBString(p)^;
-     //GDBPointer(s):=nil;
      result:=inherited AddByPointer(p);
      RemoveOneRefCount(pGDBString(p)^);
-end;
-function GDBGDBStringArray.addutoa(p:GDBPointer):TArrayIndex;
+end;}
+function GDBGDBStringArray.addutoa(p:GDBString):TArrayIndex;
 var s:GDBString;
 begin
-     s:=Tria_Utf8ToAnsi(pGDBString(p)^);
-     result:=inherited AddByPointer(@s);
-     GDBPointer(s):=nil;
+     s:=Tria_Utf8ToAnsi(p);
+     result:=PushBackData(s);
 end;
 function GDBGDBStringArray.findstring(s:GDBString;ucase:gdbboolean):boolean;
 var
@@ -202,7 +198,7 @@ begin
      GDBPointer(s):=nil;
      inherited AddByPointer(p);
 end;*)
-function GDBGDBStringArray.addwithscroll(p:GDBPointer):GDBInteger;
+function GDBGDBStringArray.addwithscroll(p:GDBString):GDBInteger;
 var
    ps,pspred:pgdbstring;
 //   s:gdbstring;
@@ -222,7 +218,7 @@ begin
                            pspred^:='';
                            dec(count);
                       end;
-     result:=AddByPointer(p)
+     result:=pushbackdata(p);
 end;
 function GDBGDBStringArray.GetLengthWithEOL:GDBInteger;
 var

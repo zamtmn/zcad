@@ -1866,8 +1866,8 @@ begin
                                  begin
                                  line:='`'+cablename+';'+CableMaterial+';'+CableLength+';'+devstart+';'+devend+#13#10;
                                  s:='';
-                                 psl.addutoa(@(cablename));
-                                 psl.addutoa(@devstart);
+                                 psl.addutoa((cablename));
+                                 psl.addutoa(devstart);
                                  {psl.add(@devend);
                                  psl.add(@s);
                                  psl.add(@s);
@@ -1897,17 +1897,17 @@ begin
                 nodeend:=pv^.Devices.iterate(ir_inNodeArray);
           until nodeend=nil;
                                  s:='';
-                                 psl.addutoa(@devend);
-                                 psl.addutoa(@s);
-                                 psl.addutoa(@s);
-                                 psl.addutoa(@s);
-                                 psl.addutoa(@s);
-                                 psl.addutoa(@CableMaterial);
-                                 psl.addutoa(@CableLength);
-                                 psl.addutoa(@s);
-                                 psl.addutoa(@s);
+                                 psl.addutoa(devend);
+                                 psl.addutoa(s);
+                                 psl.addutoa(s);
+                                 psl.addutoa(s);
+                                 psl.addutoa(s);
+                                 psl.addutoa(CableMaterial);
+                                 psl.addutoa(CableLength);
+                                 psl.addutoa(s);
+                                 psl.addutoa(s);
                                  s:='';
-                                 psl.addutoa(@s);
+                                 psl.addutoa(s);
 
          //historyoutstr(cablename+' '+CableMaterial+' '+CableLength);
          HistoryOutStr('Кабель "'+pv^.Name+'", сегментов '+inttostr(pv^.Segments.Count)+', материал "'+CableMaterial+'", начало: '+puredevstart+' конец: '+devend);
@@ -2093,33 +2093,33 @@ begin
                    psl.init(9);
 
                    s:=pdbi^.Position;
-                   psl.addutoa(@s);
+                   psl.addutoa(s);
 
                    s:=' '+pdbi^.NameFull;
-                   psl.addutoa(@s);
+                   psl.addutoa(s);
 
                    s:=pdbi^.NameShort+' '+pdbi^.Standard;
-                   psl.addutoa(@s);
+                   psl.addutoa(s);
 
                    s:=pdbi^.OKP;
-                   psl.addutoa(@s);
+                   psl.addutoa(s);
 
                    s:=pdbi^.Manufacturer;
-                   psl.addutoa(@s);
+                   psl.addutoa(s);
 
                    s:='??';
                    case pdbi^.EdIzm of
                                       _sht:s:='шт.';
                                       _m:s:='м';
                    end;
-                   psl.addutoa(@s);
+                   psl.addutoa(s);
 
                    s:=floattostr(PBOMITEM^.Amount);
                    psl.AddByPointer(@s);
 
                    s:='';
-                   psl.addutoa(@s);
-                   psl.addutoa(@s);
+                   psl.addutoa(s);
+                   psl.addutoa(s);
                    end;
 
 

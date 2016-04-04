@@ -12,7 +12,7 @@ uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      uzeentabstracttext,uzeentgenericsubentry,uzetrash,uzedrawingdef,uzecamera,
      uzcsysvars,UGDBOpenArrayOfPObjects,uzbstrproc,UGDBOpenArrayOfByte,math,
      uzeenttext,uzeentdevice,uzcentcable,uzeenttable,UGDBControlPointArray,uzegeometry,
-     uzeentline,uzbtypesbase,uzeentcomplex,sysutils,UGDBStringArray,
+     uzeentline,uzbtypesbase,uzeentcomplex,sysutils,uzctnrvectorgdbstring,
      UGDBSelectedObjArray,uzeentity,varmandef,uzbtypes,uzeconsts,uzeffdxfsupport,
      uzbmemman,uzeentsubordinated;
 type

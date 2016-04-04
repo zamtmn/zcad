@@ -22,7 +22,7 @@ unit UUnitManager;
 interface
 uses LCLProc,uzbpaths,uzbstrproc,Varman,languade,UGDBOpenArrayOfObjects,SysUtils,
      UBaseTypeDescriptor,uzbtypesbase, uzbtypes,UGDBOpenArrayOfByte, strmy, varmandef,
-     uzctnrvectorrec,UGDBStringArray,TypeDescriptors,UEnumDescriptor,UArrayDescriptor,
+     uzctnrvectorrec,uzctnrvectorgdbstring,TypeDescriptors,UEnumDescriptor,UArrayDescriptor,
      UPointerDescriptor,URecordDescriptor,UObjectDescriptor,USinonimDescriptor;
 type
 {EXPORT+}
@@ -367,7 +367,7 @@ begin
                               if unitpart=tnothing then
                                                       begin
                               parseresult:=runparser('_identifier'#0'_softend'#0,line,parseerror);
-                              unitname:=parseresult^.getGDBString(0);
+                              unitname:=parseresult^.getData(0);
                               if currentunit=nil then
                                 begin
                                 currentunit:=internalfindunit(unitname);
@@ -391,7 +391,7 @@ begin
                 subunitmode:
                          begin
                               parseresult:=runparser('_identifier'#0'_softend'#0,line,parseerror);
-                              currentunit:=findunit(PPaths,TranslateFunc,parseresult^.getGDBString(0));
+                              currentunit:=findunit(PPaths,TranslateFunc,parseresult^.getData(0));
                               if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
                          end;
                 interf:
@@ -412,20 +412,20 @@ begin
                                             variablecategory:
                                                      begin
                                                            unitpart:=unitpart;
-                                                           typename:=parseresult^.getGDBString(0)+'_'+parseresult^.getGDBString(1);
-                                                           VarCategory.addnodouble(@typename);
+                                                           typename:=parseresult^.getData(0)+'_'+parseresult^.getData(1);
+                                                           VarCategory.PushBackIfNotPresent(typename);
                                                            addtype:=false;
                                                      end;
                                   identtype:begin
-                                                  typename:=parseresult^.getGDBString(0);
+                                                  typename:=parseresult^.getData(0);
                                                   if typename='GDBXCoordinate' then
                                                                                   typename:=typename;
                                                   gdbgetmem({$IFDEF DEBUGBUILD}'{611C73B3-FC2B-4E77-A58F-061B3C7707C8}',{$ENDIF}GDBPointer(etd),sizeof(GDBSinonimDescriptor));
-                                                  PGDBSinonimDescriptor(etd)^.init(parseresult^.getGDBString(1),typename,currentunit);
+                                                  PGDBSinonimDescriptor(etd)^.init(parseresult^.getData(1),typename,currentunit);
                                                   fieldoffset:=PGDBSinonimDescriptor(etd)^.SizeInGDBBytes;
                                              end;
                                       ptype:begin
-                                                  typename:=parseresult^.getGDBString(0);
+                                                  typename:=parseresult^.getData(0);
                                                   if typename='PTUnitManager' then
                                                                                   typename:=typename;
                                                   gdbgetmem({$IFDEF DEBUGBUILD}'{70AF3E6D-C33B-4878-9E59-9FDAF04540EE}',{$ENDIF}GDBPointer(etd),sizeof(GDBPointerDescriptor));
@@ -435,7 +435,7 @@ begin
                                                   fieldoffset := sizeof(pointer);
                                              end;
                                  recordtype,packedrecordtype:begin
-                                                  typename:=parseresult^.getGDBString(0);
+                                                  typename:=parseresult^.getData(0);
                                                   if typ<>packedrecordtype then
                                                                                begin
                                                                                //ShowError('Record "'+typename+'" not packed');
@@ -454,7 +454,7 @@ begin
                                              end;
                                  objecttype,packedobjecttype:begin
                                                   {FPVMT}
-                                                  typename:=parseresult^.getGDBString(0);
+                                                  typename:=parseresult^.getData(0);
                                                   if typ<>packedobjecttype then
                                                                                begin
                                                                                //ShowError('Object "'+typename+'" not packed');
@@ -481,7 +481,7 @@ begin
                                                   parseresult:=runparser('_softspace'#0'=(_softspace'#0'_identifier'#0'_softspace'#0'=)',line,parseerror);
                                               if parseerror then
                                                   begin
-                                                       (*if uppercase(parseresult^.getGDBString(0)) = 'GDBASEOBJECT'
+                                                       (*if uppercase(parseresult^.getData(0)) = 'GDBASEOBJECT'
                                                        then
                                                            begin
                                                                 PObjectDescriptor(etd)^.Parent:=nil;
@@ -493,8 +493,8 @@ begin
                                                            end
                                                       else*)
                                                           begin
-                                                               fieldgdbtype := currentunit.TypeName2PTD(parseresult^.getGDBString(0));
-                                                               //programlog.logoutstr(parseresult^.getGDBString(0),0);
+                                                               fieldgdbtype := currentunit.TypeName2PTD(parseresult^.getData(0));
+                                                               //programlog.logoutstr(parseresult^.getData(0),0);
                                                                //GDBStringtypearray :=ptypedesk(Types.exttype.getelement(fieldgdbtype.gdbtypecustom)^)^.tdesk;
                                                                PObjectDescriptor(fieldgdbtype)^.CopyTo(PObjectDescriptor(etd));
                                                                PObjectDescriptor(etd)^.Parent:=PObjectDescriptor(fieldgdbtype);
@@ -533,7 +533,7 @@ begin
                                                   subparseresult:=runparser('_softspace'#0'=o=f_softspace'#0'_identifier'#0'_softend'#0,line,parseerror);
                                                   //GDBStringtypearray := chr(Tarray);
                                                   GDBStringtypearray:='';
-                                                  fieldtype:=subparseresult^.getGDBString(0);
+                                                  fieldtype:=subparseresult^.getData(0);
                                                   fieldgdbtype := currentunit.TypeName2PTD(fieldtype);
                                                   gdbgetmem({$IFDEF DEBUGBUILD}'{A1A1275E-CE41-4EF5-A95E-B0040B568B40}',{$ENDIF}GDBPointer(etd),sizeof(ArrayDescriptor));
                                                   PArrayDescriptor(etd)^.init(fieldgdbtype,typename,currentunit);
@@ -543,8 +543,8 @@ begin
                                                   arrind1 := '';
                                                   for i := 0 to (parseresult^.Count div 2)-1 do
                                                   begin
-                                                       indcount := strtoint(parseresult^.getGDBString(i*2+1));
-                                                       indmin := strtoint(parseresult^.getGDBString(i*2));
+                                                       indcount := strtoint(parseresult^.getData(i*2+1));
+                                                       indmin := strtoint(parseresult^.getData(i*2));
                                                        indcount := indcount - indmin + 1;
                                                        razmer := razmer * indcount;
                                                        arrind1 := arrind1 + pac_lGDBWord_to_GDBString(indmin) + pac_lGDBWord_to_GDBString(indcount);
@@ -566,15 +566,15 @@ begin
                                                   repeat
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
                                                   parseresult:=runparser('_identifier'#0,line,parseerror);
-                                                  if parseerror then enumodj.source:=parseresult^.getGDBString(0)
+                                                  if parseerror then enumodj.source:=parseresult^.getData(0)
                                                                 else HaltOnFatalError('Syntax error in file '+f.name);
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
                                                   parseresult:=runparser('_softspace'#0'=(=*_GDBString'#0'=*=)',line,parseerror);
-                                                  if parseerror then enumodj.user:=parseresult^.getGDBString(0)
+                                                  if parseerror then enumodj.user:=parseresult^.getData(0)
                                                                 else enumodj.user:=enumodj.source;
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
                                                   parseresult:=runparser('_softspace'#0'==_intnumber'#0,line,parseerror);
-                                                  if parseerror then enumodj.value:=strtoint(parseresult^.getGDBString(0))
+                                                  if parseerror then enumodj.value:=strtoint(parseresult^.getData(0))
                                                                 else begin enumodj.value:=currvalue;inc(currvalue);end;
                                                   if maxvalue<enumodj.value then maxvalue:=enumodj.value;
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
@@ -614,7 +614,7 @@ begin
                                                   repeat
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
                                                   parseresult:=runparser('_identifier'#0,line,parseerror);
-                                                  if parseerror then enumodj.source:=parseresult^.getGDBString(0)
+                                                  if parseerror then enumodj.source:=parseresult^.getData(0)
                                                                 else
                                                                     begin
                                                                       //FatalError('Syntax error in file '+f.name);
@@ -625,7 +625,7 @@ begin
                                                   parseresult:=runparser('_softspace'#0'=(=*_GDBString'#0'=*=)',line,parseerror);
                                                   if parseerror then
                                                                     begin
-                                                                         enumodj.user:=parseresult^.getGDBString(0);
+                                                                         enumodj.user:=parseresult^.getData(0);
                                                                          //{$IFNDEF DELPHI}enumodj.user:=InterfaceTranslate(typename+'~'+enumodj.source,enumodj.user);{$ENDIF}
                                                                          if assigned(TranslateFunc)then
                                                                                                        enumodj.user:=TranslateFunc(typename+'~'+enumodj.source,enumodj.user);
@@ -633,7 +633,7 @@ begin
                                                                 else enumodj.user:=enumodj.source;
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
                                                   parseresult:=runparser('_softspace'#0'==_intnumber'#0,line,parseerror);
-                                                  if parseerror then enumodj.value:=strtoint(parseresult^.getGDBString(0))
+                                                  if parseerror then enumodj.value:=strtoint(parseresult^.getData(0))
                                                                 else begin enumodj.value:=currvalue;inc(currvalue);end;
                                                   if maxvalue<enumodj.value then maxvalue:=enumodj.value;
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;

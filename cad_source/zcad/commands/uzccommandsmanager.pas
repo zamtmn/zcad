@@ -91,7 +91,7 @@ procedure ParseCommand(comm:string; out command,operands:GDBString);
 {procedure startup;
 procedure finalize;}
 implementation
-uses uzedrawingsimple,UGDBStringArray,forms;
+uses uzedrawingsimple,uzctnrvectorgdbstring,forms;
 
 procedure GDBcommandmanager.sendcoordtocommandTraceOn(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte;pos:pos_record);
 var

@@ -21,7 +21,7 @@ unit uzcsysvars;
 
 interface
 uses uzbtypesbase,uzepalette,
-     uzbtypes,UGDBStringArray,
+     uzbtypes,uzctnrvectorgdbstring,
 {$IFDEF LCLGTK2}
 gtk2,gdk2,
 {$ENDIF}

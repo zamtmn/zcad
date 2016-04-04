@@ -23,7 +23,7 @@ interface
 uses
   uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,uzbmemman,uzcshared,
   uzcstrconsts,sysutils,uzeentityfactory,uzcenitiesvariablesextender,uzgldrawcontext,
-  uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,Varman,UGDBStringArray;
+  uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,Varman,uzctnrvectorgdbstring;
 type
   PTOneVarData=^TOneVarData;
   TOneVarData=record

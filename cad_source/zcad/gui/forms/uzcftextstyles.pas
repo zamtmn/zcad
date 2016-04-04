@@ -31,7 +31,7 @@ uses
   uzcsuptypededitors,
 
   uzbpaths,uzcinterface, uzcstrconsts, uzcsysinfo,uzbstrproc, uzcshared,UBaseTypeDescriptor,
-  uzcimagesmanager, usupportgui, ZListView,uzefontmanager,varman,UGDBStringArray,
+  uzcimagesmanager, usupportgui, ZListView,uzefontmanager,varman,uzctnrvectorgdbstring,
   uzeentity,uzeenttext;
 
 const

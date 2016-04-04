@@ -25,7 +25,7 @@ uses
       LCLProc,Graphics,classes,Themes,
       uzemathutils,uzegeometry,uzbstrproc,TypeDescriptors,
       sysutils,UGDBOpenArrayOfByte,uzbtypesbase,
-      varmandef,uzbtypes,uzctnrvectorrec,UGDBStringArray,uzbmemman,math;
+      varmandef,uzbtypes,uzctnrvectorrec,uzctnrvectorgdbstring,uzbmemman,math;
 resourcestring
   rsDifferent='Different';
 type
@@ -859,7 +859,7 @@ begin
      if PTEnumData(Pinstance)^.Selected>=PTEnumData(Pinstance)^.Enums.Count then
                                                                                result:='ENUMERROR'
                                                                            else
-                                                                               result:=PTEnumData(Pinstance)^.Enums.getGDBString(PTEnumData(Pinstance)^.Selected);
+                                                                               result:=PTEnumData(Pinstance)^.Enums.getData(PTEnumData(Pinstance)^.Selected);
      {GetNumberInArrays(pinstance,num);
      result:=UserValue.getGDBString(num)}
 end;

@@ -37,7 +37,7 @@ uses
 
   Varman,uzbtypesbase,SysUtils,
   uzbtypes,varmandef,
-  uzbmemman,TypeDescriptors,UGDBStringArray;
+  uzbmemman,TypeDescriptors,uzctnrvectorgdbstring;
 const
   fastEditorOffset={$IFDEF LCLQT}2{$ELSE}2{$ENDIF} ;
   spliterhalfwidth=4;

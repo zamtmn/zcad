@@ -21,7 +21,7 @@ unit UEnumDescriptor;
 {$MODE DELPHI}
 interface
 uses types,sysutils,UGDBOpenArrayOfByte,TypeDescriptors,
-     uzbtypesbase,varmandef,uzbtypes,uzctnrvectorrec,UGDBStringArray,uzbmemman;
+     uzbtypesbase,varmandef,uzbtypes,uzctnrvectorrec,uzctnrvectorgdbstring,uzbmemman;
 resourcestring
   rsDifferent='Different';
 type
@@ -112,7 +112,7 @@ begin
      
      if (ppd^.Attr and FA_DIFFERENT)=0 then
                                            begin
-                                                 if GetNumberInArrays(GDBPointer(ppd^.valueAddres),currval)then ppd^.value:=UserValue.getGDBString(currval)
+                                                 if GetNumberInArrays(GDBPointer(ppd^.valueAddres),currval)then ppd^.value:=UserValue.getData(currval)
                                                                                                            else ppd^.value:='NotFound';
                                            end
                                        else
@@ -182,7 +182,7 @@ var //currval:GDBLongword;
 begin
      result:='ENUMERROR';
      GetNumberInArrays(pinstance,num);
-     result:={UserValue}SourceValue.getGDBString(num)
+     result:={UserValue}SourceValue.getData(num)
 end;
 function EnumDescriptor.GetUserValueAsString;
 var //currval:GDBLongword;
@@ -193,7 +193,7 @@ var //currval:GDBLongword;
 begin
      result:='ENUMERROR';
      GetNumberInArrays(pinstance,num);
-     result:=UserValue.getGDBString(num)
+     result:=UserValue.getData(num)
 end;
 function EnumDescriptor.CreateEditor;
 begin

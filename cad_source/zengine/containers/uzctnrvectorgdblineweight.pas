@@ -16,14 +16,14 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit ugdbopenarrayofgdbdouble;
+unit uzctnrvectorgdblineweight;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,sysutils,uzctnrvector;
+uses uzbtypes,uzctnrvectorsimple;
 type
 {Export+}
-PGDBOpenArrayOfGDBDouble=^GDBOpenArrayOfGDBDouble;
-GDBOpenArrayOfGDBDouble=TZctnrVector{-}<GDBDouble>{//};
+PTZctnrVectorGDBLineWeight=^TZctnrVectorGDBLineWeight;
+TZctnrVectorGDBLineWeight=TZctnrVectorSimple{-}<TGDBLineWeight>{//};
 {Export-}
 implementation
 begin

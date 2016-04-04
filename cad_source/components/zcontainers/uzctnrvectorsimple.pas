@@ -16,16 +16,44 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzctnrvectorrec;
+unit uzctnrvectorsimple;
 {$INCLUDE def.inc}
 interface
 uses uzbtypesbase,uzbtypes,uzctnrvector;
 type
 {Export+}
-TZctnrVectorRec{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
+TZctnrVectorSimple{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(TZctnrVector{-}<T>{//})
+                                   function PushBackIfNotPresent(data:T):GDBInteger;
+                                   function IsDataExist(pobj:T):GDBBoolean;
                                  end;
 {Export-}
 implementation
+
+function TZctnrVectorSimple<T>.IsDataExist;
+var p:PT;
+    ir:itrec;
+begin
+       p:=beginiterate(ir);
+       if p<>nil then
+       repeat
+             if p^=pobj then
+                          begin
+                            result:=true;
+                            exit;
+                          end;
+             p:=iterate(ir);
+       until p=nil;
+       result:=false;
+end;
+function TZctnrVectorSimple<T>.PushBackIfNotPresent;
+begin
+  if IsDataExist(data)then
+                        begin
+                          result := -1;
+                          exit;
+                        end;
+  result:=PushBackData(data);
+end;
 begin
 end.

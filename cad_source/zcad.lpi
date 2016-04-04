@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="172">
+    <Units Count="174">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -942,6 +942,14 @@
         <Filename Value="zcad/commands/uzccomexample.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit171>
+      <Unit172>
+        <Filename Value="zengine/containers/uzctnrvectorgdblineweight.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit172>
+      <Unit173>
+        <Filename Value="zengine/containers/uzctnrvectorobjid.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit173>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

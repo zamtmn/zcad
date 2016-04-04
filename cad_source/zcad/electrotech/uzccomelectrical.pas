@@ -33,7 +33,7 @@ uses
   uzcentnet,
   uzcshared,uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
   UGDBOpenArrayOfPObjects,uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
-  uzbpaths,UGDBStringArray,math,Masks,uzclog,uzccombase,uzbstrproc;
+  uzbpaths,uzctnrvectorgdbstring,math,Masks,uzclog,uzccombase,uzbstrproc;
 type
 {Export+}
   TFindType=(

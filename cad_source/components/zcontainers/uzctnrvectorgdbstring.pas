@@ -16,14 +16,14 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit UGDBStringArray;
+unit uzctnrvectorgdbstring;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzbtypes,uzctnrvectorrec,uzbstrproc,sysutils;
+uses uzbtypesbase,uzbtypes,uzctnrvectorsimple,uzbstrproc,sysutils;
 type
 {EXPORT+}
     PGDBGDBStringArray=^GDBGDBStringArray;
-    GDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<GDBString>{//})(*OpenArrayOfData=GDBString*)
+    GDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorSimple{-}<GDBString>{//})(*OpenArrayOfData=GDBString*)
                           constructor init(m:GDBInteger);
                           procedure loadfromfile(fname:GDBString);
                           procedure freeelement(p:GDBPointer);virtual;
@@ -35,9 +35,9 @@ type
                           function addwithscroll(p:GDBPointer):GDBInteger;virtual;
                           function GetLengthWithEOL:GDBInteger;
                           function GetTextWithEOL:GDBString;
-                          function addnodouble(p:GDBPointer):GDBInteger;
+                          //function addnodouble(p:GDBPointer):GDBInteger;
                           //function copyto(var source:GDBGDBStringArray):GDBInteger;virtual;
-                          function getGDBString(index:TArrayIndex):GDBString;
+                          //function getGDBString(index:TArrayIndex):GDBString;
                           //destructor done;virtual;
                           //function copyto(source:PGDBOpenArrayOfData):GDBInteger;virtual;
                     end;
@@ -60,10 +60,10 @@ begin
   until p=nil;
   inherited;
 end;}
-function GDBGDBStringArray.getGDBString;
+{function GDBGDBStringArray.getGDBString;
 begin
   result := pGDBString(getDataMutable(index))^;
-end;
+end;}
 (*function GDBGDBStringArray.copyto;
 var p:GDBPointer;
     ir:itrec;
@@ -180,7 +180,7 @@ begin
      until ps=nil;
      result:=false;
 end;
-function GDBGDBStringArray.addnodouble(p:GDBPointer):GDBInteger;
+(*function GDBGDBStringArray.addnodouble(p:GDBPointer):GDBInteger;
 var
 //   isEnd:boolean;
    ps{,pspred}:pgdbstring;
@@ -201,7 +201,7 @@ begin
 
      GDBPointer(s):=nil;
      inherited AddByPointer(p);
-end;
+end;*)
 function GDBGDBStringArray.addwithscroll(p:GDBPointer):GDBInteger;
 var
    ps,pspred:pgdbstring;

@@ -40,8 +40,8 @@
         <UnitName Value="UGDBOpenArrayOfPointer"/>
       </Item5>
       <Item6>
-        <Filename Value="UGDBStringArray.pas"/>
-        <UnitName Value="UGDBStringArray"/>
+        <Filename Value="uzctnrvectorgdbstring.pas"/>
+        <UnitName Value="uzctnrvectorgdbstring"/>
       </Item6>
       <Item7>
         <Filename Value="UGDBTree.pas"/>

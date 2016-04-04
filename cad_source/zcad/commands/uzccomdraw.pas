@@ -45,7 +45,7 @@ uses
   uzeconsts,
   uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
   uzcshared,uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,uzctnrvectorrec,
-  math,uzeenttable,UGDBStringArray,uzcprinterspecfunc;
+  math,uzeenttable,uzctnrvectorgdbstring,uzcprinterspecfunc;
 const
      modelspacename:GDBSTring='**Модель**';
 type
@@ -472,7 +472,7 @@ begin
                        BRM_Block:begin
                                       if pb^.GetObjType=GDBBlockInsertID then
                                       begin
-                                           BDefNames.addnodouble(@pb^.name);
+                                           BDefNames.PushBackIfNotPresent(pb^.name);
                                            inc(i);
                                            if result=-1 then
                                            if uppercase(pb^.name)=selname then
@@ -482,7 +482,7 @@ begin
                        BRM_Device:begin
                                       if pb^.GetObjType=GDBDeviceID then
                                       begin
-                                           BDefNames.addnodouble(@pb^.name);
+                                           BDefNames.PushBackIfNotPresent(pb^.name);
                                            inc(i);
                                            if result=-1 then
                                            if uppercase(pb^.name)=selname then
@@ -493,7 +493,7 @@ begin
                                       if (pb^.GetObjType=GDBBlockInsertID)or
                                          (pb^.GetObjType=GDBDeviceID)then
                                       begin
-                                           BDefNames.addnodouble(@pb^.name);
+                                           BDefNames.PushBackIfNotPresent(pb^.name);
                                            inc(i);
                                            if result=-1 then
                                            if uppercase(pb^.name)=selname then
@@ -1435,14 +1435,14 @@ begin
          if (oid=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
                                 oid:=GDBBlockInsertID;
          if ((oid=GDBBlockInsertID)or(oid=GDBDeviceID)) then
-                                    bnames.addnodouble(@PGDBObjBlockInsert(pobj)^.Name);
+                                    bnames.PushBackIfNotPresent(PGDBObjBlockInsert(pobj)^.Name);
 
          if (oid=GDBMtextID)and(SelSimParams.Texts.DiffTextMText=TD_NotDiff) then
                                 oid:=GDBTextID;
          if ((oid=GDBTextID)or(oid=GDBMTextID)) then
                              begin
-                                    textcontents.addnodouble(@PGDBObjText(pobj)^.Content);
-                                    textremplates.addnodouble(@PGDBObjText(pobj)^.Template);
+                                    textcontents.PushBackIfNotPresent(PGDBObjText(pobj)^.Content);
+                                    textremplates.PushBackIfNotPresent(PGDBObjText(pobj)^.Template);
                              end;
 
          objtypes.PushBackIfNotPresent(oid);
@@ -1782,7 +1782,7 @@ begin
                                                                                 end
                                                                             else
                                                                                 begin
-                                                                                     s:=TextInsertParams.Style.Enums.getGDBString(TextInsertParams.Style.Selected);
+                                                                                     s:=TextInsertParams.Style.Enums.getData(TextInsertParams.Style.Selected);
                                                                                 end;
       //TextInsertParams.Style.Enums.Clear;
       TextInsertParams.Style.Enums.free;
@@ -3637,7 +3637,7 @@ procedure bedit_format(_self:pointer);
 var
    nname:gdbstring;
 begin
-     nname:=(BEditParam.Blocks.Enums.getGDBString(BEditParam.Blocks.Selected));
+     nname:=(BEditParam.Blocks.Enums.getData(BEditParam.Blocks.Selected));
      if nname<>BEditParam.CurrentEditBlock then
      begin
           BEditParam.CurrentEditBlock:=nname;

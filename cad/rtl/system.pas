@@ -499,7 +499,7 @@ TZctnrVector={$IFNDEF DELPHI}packed{$ENDIF}
                   constructor initnul;
                   destructor done;virtual;abstract;
                   destructor ClearAndDone;virtual;abstract;
-                  function Size:TArrayIndex;
+                  function SizeOfData:TArrayIndex;
                   procedure Clear;virtual;abstract;
                   function CreateArray:GDBPointer;virtual;abstract;
                   procedure Grow(newmax:GDBInteger=0);virtual;abstract;
@@ -517,23 +517,23 @@ TZctnrVector={$IFNDEF DELPHI}packed{$ENDIF}
                   function GetRealCount:GDBInteger;
                   function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
                   function AllocData(SData:GDBword):GDBPointer;virtual;abstract;
-                  function addnodouble(data:T;EqualFunc:TEqualFunc):GDBInteger;
-                  function IsObjExist(pobj:T;EqualFunc:TEqualFunc):GDBBoolean;
                   function GetParrayAsPointer:pointer;
                   {reworked}
-                  procedure setsize(nsize:TArrayIndex);
+                  procedure SetSize(nsize:TArrayIndex);
                   function getDataMutable(index:TArrayIndex):PT;
                   function getData(index:TArrayIndex):T;
                   function PushBackData(const data:T):TArrayIndex;
+                  function PushBackIfNotPresentWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
+                  function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):GDBBoolean;
+                  {old}
+                  destructor FreeAndDone;virtual;abstract;
+                  function deleteelement(index:GDBInteger):GDBPointer;
+                  function DeleteElementByP(pel:GDBPointer):GDBPointer;
+                  function InsertElement(index,dir:GDBInteger;p:GDBPointer):GDBPointer;
             end;
 //Generate on E:/zcad/cad_source/components/zcontainers/uzctnrvectorrec.pas
 TZctnrVectorRec={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(TZctnrVector)
-                                                     function iterate(var ir:itrec):GDBPointer;virtual;abstract;
-                                                     destructor FreeAndDone;virtual;abstract;
-                                                     function deleteelement(index:GDBInteger):GDBPointer;
-                                                     function DeleteElementByP(pel:GDBPointer):GDBPointer;
-                                                     function InsertElement(index,dir:GDBInteger;p:GDBPointer):GDBPointer;
                                  end;
 //Generate on E:/zcad/cad_source/components/zcontainers/UGDBOpenArrayOfPointer.pas
 TZctnrVectorP={$IFNDEF DELPHI}packed{$ENDIF}
@@ -697,9 +697,15 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec)
                           function calcvisible(frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;abstract;
                           procedure resprojparam(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
                     end;
-//Generate on E:/zcad/cad_source/components/zcontainers/UGDBStringArray.pas
+//Generate on E:/zcad/cad_source/components/zcontainers/uzctnrvectorsimple.pas
+TZctnrVectorSimple={$IFNDEF DELPHI}packed{$ENDIF}
+                                 object(TZctnrVector)
+                                   function PushBackIfNotPresent(data:T):GDBInteger;
+                                   function IsDataExist(pobj:T):GDBBoolean;
+                                 end;
+//Generate on E:/zcad/cad_source/components/zcontainers/uzctnrvectorgdbstring.pas
     PGDBGDBStringArray=^GDBGDBStringArray;
-    GDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec)(*OpenArrayOfData=GDBString*)
+    GDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorSimple)(*OpenArrayOfData=GDBString*)
                           constructor init(m:GDBInteger);
                           procedure loadfromfile(fname:GDBString);
                           procedure freeelement(p:GDBPointer);virtual;abstract;
@@ -711,9 +717,9 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec)
                           function addwithscroll(p:GDBPointer):GDBInteger;virtual;abstract;
                           function GetLengthWithEOL:GDBInteger;
                           function GetTextWithEOL:GDBString;
-                          function addnodouble(p:GDBPointer):GDBInteger;
+                          //function addnodouble(p:GDBPointer):GDBInteger;
                           //function copyto(var source:GDBGDBStringArray):GDBInteger;virtual;abstract;
-                          function getGDBString(index:TArrayIndex):GDBString;
+                          //function getGDBString(index:TArrayIndex):GDBString;
                           //destructor done;virtual;abstract;
                           //function copyto(source:PGDBOpenArrayOfData):GDBInteger;virtual;abstract;
                     end;
@@ -3371,8 +3377,10 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
   SelSim_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          created:boolean;
                          bnames,textcontents,textremplates:GDBGDBStringArray;
-                         layers,weights,objtypes,linetypes:GDBOpenArrayOfGDBPointer;
-                         linetypescales:GDBOpenArrayOfGDBDouble;
+                         layers,linetypes:TZctnrVectorGDBPointer;
+                         weights:TZctnrVectorGDBLineWeight;
+                         objtypes:TZctnrVectorObjID;
+                         linetypescales:TZctnrVectorGDBDouble;
                          procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
                          procedure createbufs;
                          //procedure BuildDM(Operands:pansichar); virtual;abstract;

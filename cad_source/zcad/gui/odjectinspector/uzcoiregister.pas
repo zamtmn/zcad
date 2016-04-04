@@ -20,7 +20,7 @@ unit uzcoiregister;
 {$INCLUDE def.inc}
 interface
 uses uzcutils,uzbpaths,TypeDescriptors,uzctranslations,uzcshared,Forms,uzcinterface,uzeroot,
-     uzbtypes,uzedrawingdef,uzgldrawcontext,UGDBStringArray,varmandef,uzedrawingsimple,
+     uzbtypes,uzedrawingdef,uzgldrawcontext,uzctnrvectorgdbstring,varmandef,uzedrawingsimple,
      uzeentity,uzcenitiesvariablesextender,zcobjectinspector,uzcguimanager,uzcstrconsts,
      Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,uzbtypesbase,uzcsysinfo;
 implementation
@@ -114,7 +114,7 @@ begin
                        vv:=pv.data.PTD.GetValueAsString(pv.data.Instance);
                        if vv<>'' then
 
-                       vsa.addnodouble(@vv);
+                       vsa.PushBackIfNotPresent(vv);
                   end;
              end;
              end;

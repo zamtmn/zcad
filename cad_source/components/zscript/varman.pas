@@ -24,7 +24,7 @@ unit Varman;
 interface
 uses
   uzctnrvectorrec,LCLProc,uabstractunit,{zcadstrconsts,}UGDBOpenArrayOfPointer,SysUtils,UBaseTypeDescriptor,
-  uzbtypesbase,uzbtypes,UGDBOpenArrayOfByte,UGDBStringArray,varmandef,
+  uzbtypesbase,uzbtypes,UGDBOpenArrayOfByte,uzctnrvectorgdbstring,varmandef,
   UGDBOpenArrayOfPObjects,usimplegenerics,
   uzbmemman,TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes;
 type
@@ -705,7 +705,7 @@ begin
                  end;
 
            oaod:begin
-                     PObjectDescriptor(ptd)^.LincedData:=parseresult^.getGDBString(0);
+                     PObjectDescriptor(ptd)^.LincedData:=parseresult^.getData(0);
                      state:=state;
                 end;
            functionmember,
@@ -733,7 +733,7 @@ begin
                                parseresult:=runparser('_softspace'#0'_identifier'#0'_softspace'#0,line,parseerror);
                                if parseerror then
                                                   begin
-                                                       functionname:=parseresult^.getGDBString(0);
+                                                       functionname:=parseresult^.getData(0);
                                                        functionoperands:=line;
                                                   end
                                               else
@@ -782,7 +782,7 @@ begin
                       getlastfirld.saved or SA_SAVED_TO_SHD;
            username:
                     begin
-                      fieldtype:=parseresult^.getGDBString(0);
+                      fieldtype:=parseresult^.getData(0);
                       //pf:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getDataMutable(PRecordDescriptor(ptd)^.Fields.Count-1));
                       if fieldtype='Paths' then
                                           fieldtype:=fieldtype;
@@ -815,12 +815,12 @@ begin
                parseresult:=runparser('_softspace'#0'_identifier'#0'_softspace'#0'=:'#0'_softspace'#0'_identifier'#0'_softspace'#0'=r=e=a=d'#0'_softspace'#0'_identifier'#0'_softspace'#0'=w=r=i=t=e'#0'_softspace'#0'_identifier'#0'_softspace'#0'=;',line,parseerror);
                if parseerror then
                                   begin
-                                       pd.base.ProgramName:=parseresult^.getGDBString(0);
-                                       fieldtype:=parseresult^.getGDBString(1);
+                                       pd.base.ProgramName:=parseresult^.getData(0);
+                                       fieldtype:=parseresult^.getData(1);
                                        fieldgdbtype:=PTUnit(PRecordDescriptor(ptd)^.punit).TypeName2PTD(fieldtype);
                                        pd.base.PFT:=fieldgdbtype;
-                                       pd.r:=parseresult^.getGDBString(2);
-                                       pd.w:=parseresult^.getGDBString(3);
+                                       pd.r:=parseresult^.getData(2);
+                                       pd.w:=parseresult^.getData(3);
                                        pd.base.Attributes:=0;
                                        if ptd<>nil then PObjectDescriptor(ptd)^.AddProperty(pd);
                                   end
@@ -851,12 +851,12 @@ begin
                                                                   inc(count);
                                                              end;
                                                         parsesubresult:=runparser('_softspace'#0'=(=*_GDBString'#0'=*=)',line,parsesuberror);}
-                                                        fieldtype:=parseresult^.getGDBString(parseresult.Count-1);
+                                                        fieldtype:=parseresult^.getData(parseresult.Count-1);
                                                         //pGDBString(parseresult^.getDataMutable(parseresult.Count-1))^;
                                                         fieldgdbtype:=PTUnit(PRecordDescriptor(ptd)^.punit).TypeName2PTD(fieldtype);
                                                         for i:=0 to parseresult.Count-2 do
                                                         begin
-                                                             fieldname:=parseresult^.getGDBString(i);
+                                                             fieldname:=parseresult^.getData(i);
                                                              if fieldname='PInOCS' then
                                                                                            fieldname:=fieldname;
                                                              GDBStringtypearray := GDBStringtypearray + fieldname + #0;

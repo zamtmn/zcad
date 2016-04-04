@@ -23,7 +23,7 @@ interface
 
 uses
   uzccommandsabstract,zcobjectinspectoreditors,uzcsysinfo,uzepalette,UEnumDescriptor,zcobjectinspector,uzcinfoform,Forms,uzestyleslinetypes,sysutils,uzctreenode,uzcfsnapeditor,uzccominterface,
-  Graphics,LCLType,Themes,types,uzeconsts,UGDBNamedObjectsArray,UGDBStringArray,
+  Graphics,LCLType,Themes,types,uzeconsts,UGDBNamedObjectsArray,uzctnrvectorgdbstring,
   varmandef,Varman,uzcfcolors,uzestyleslayers,uzbtypes,uzcflineweights,uzbtypesbase,usupportgui,
   StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,uzbstrproc,uzcsysvars,uzccommandsmanager,
   uzcinterface;

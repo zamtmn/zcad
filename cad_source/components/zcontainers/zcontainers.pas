@@ -9,8 +9,8 @@ interface
 
 uses
   UGDBOpenArrayOfByte, uzctnrvectorrec, UGDBOpenArrayOfObjects, 
-  UGDBOpenArrayOfPObjects, UGDBOpenArrayOfPointer, UGDBStringArray, UGDBTree, 
-  uzctnrvector, uzctnrvectorsimple, LazarusPackageIntf;
+  UGDBOpenArrayOfPObjects, UGDBOpenArrayOfPointer, uzctnrvectorgdbstring, 
+  UGDBTree, uzctnrvector, uzctnrvectorsimple, LazarusPackageIntf;
 
 implementation
 

@@ -19,7 +19,7 @@ unit TypeDescriptors;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses LCLProc,uzbtypesbase,varmandef,uzbtypes,uzctnrvectorrec,UGDBStringArray,uzbmemman,
+uses LCLProc,uzbtypesbase,varmandef,uzbtypes,uzctnrvectorrec,uzctnrvectorgdbstring,uzbmemman,
       UGDBOpenArrayOfPointer,uzbstrproc,sysutils;
 const
      m_procedure=1;
@@ -177,7 +177,7 @@ begin
                             parseresult:=runparser('_identifiers_cs'#0'=:_identifier'#0'_softspace'#0,dt,parseerror);
                             if parseerror then
                                               begin
-                                                   od.PTD:=ptunit(punit).TypeName2PTD(parseresult^.getGDBString(parseresult.Count-1));
+                                                   od.PTD:=ptunit(punit).TypeName2PTD(parseresult^.getData(parseresult.Count-1));
                                                    for i:=1 to parseresult.Count-1 do
                                                                                      Operands.PushBackData(od);
                                               end
@@ -198,7 +198,7 @@ begin
      parseresult:=runparser('=:_softspace'#0'_identifier'#0,dt,parseerror);
      if parseerror then
                        begin
-                            self.ResultPTD:=ptunit(punit).TypeName2PTD(parseresult^.getGDBString(0));
+                            self.ResultPTD:=ptunit(punit).TypeName2PTD(parseresult^.getData(0));
                        end;
      if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
      parseresult:=runparser('=:_softspace'#0'_identifier'#0'_softspace'#0,dt,parseerror);

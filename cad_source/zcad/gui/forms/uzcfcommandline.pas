@@ -24,7 +24,7 @@ uses
  StdCtrls,ExtCtrls,Controls,Classes,menus,Forms,fileutil,graphics,
  uzbtypes, uzbmemman,uzcdrawings,math,uzccommandsmanager,varman,languade,
  UGDBTracePropArray,varmandef,
- uzegeometry,uzcshared,UGDBStringArray,uzcinterface,uzctreenode;
+ uzegeometry,uzcshared,uzctnrvectorgdbstring,uzcinterface,uzctreenode;
 
 const
      cheight=48;
@@ -433,17 +433,17 @@ begin
            begin
                  if drawings.GetCurrentDWG<>nil then
                  if drawings.GetCurrentDWG.wa.getviewcontrol<>nil then
-                 commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,uzegeometry.CreateVertex(strtodouble(parseresult^.getGDBString(0)),
-                                                                                              strtodouble(parseresult^.getGDBString(1)),
-                                                                                              strtodouble(parseresult^.getGDBString(2))),MZW_LBUTTON,nil);
+                 commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,uzegeometry.CreateVertex(strtodouble(parseresult^.getData(0)),
+                                                                                              strtodouble(parseresult^.getData(1)),
+                                                                                              strtodouble(parseresult^.getData(2))),MZW_LBUTTON,nil);
                  if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
            end
            else if IsParsed('_realnumber'#0'_softspace'#0'=,_realnumber'#0,superexpr,parseresult)then
            begin
                  if drawings.GetCurrentDWG<>nil then
                  if drawings.GetCurrentDWG.wa.getviewcontrol<>nil then
-                 commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,uzegeometry.CreateVertex(strtodouble(parseresult^.getGDBString(0)),
-                                                                                              strtodouble(parseresult^.getGDBString(1)),
+                 commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,uzegeometry.CreateVertex(strtodouble(parseresult^.getData(0)),
+                                                                                              strtodouble(parseresult^.getData(1)),
                                                                                               0),MZW_LBUTTON,nil);
                  if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
            end
@@ -456,9 +456,9 @@ begin
 
                  tv:=pgdbvertex(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arrayworldaxis.getDataMutable(drawings.GetCurrentDWG.wa.param.axisnum))^;
                  tv:=uzegeometry.normalizevertex(tv);
-                 temp.x := drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].worldcoord.x + strtodouble(parseresult^.getGDBString(0)) * tv.x * sign(ptraceprop(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getDataMutable(drawings.GetCurrentDWG.wa.param.axisnum)).tmouse);
-                 temp.y := drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].worldcoord.y + strtodouble(parseresult^.getGDBString(0)) * tv.y * sign(ptraceprop(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getDataMutable(drawings.GetCurrentDWG.wa.param.axisnum)).tmouse);
-                 temp.z := drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].worldcoord.z + strtodouble(parseresult^.getGDBString(0)) * tv.z * sign(ptraceprop(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getDataMutable(drawings.GetCurrentDWG.wa.param.axisnum)).tmouse);
+                 temp.x := drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].worldcoord.x + strtodouble(parseresult^.getData(0)) * tv.x * sign(ptraceprop(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getDataMutable(drawings.GetCurrentDWG.wa.param.axisnum)).tmouse);
+                 temp.y := drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].worldcoord.y + strtodouble(parseresult^.getData(0)) * tv.y * sign(ptraceprop(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getDataMutable(drawings.GetCurrentDWG.wa.param.axisnum)).tmouse);
+                 temp.z := drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].worldcoord.z + strtodouble(parseresult^.getData(0)) * tv.z * sign(ptraceprop(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getDataMutable(drawings.GetCurrentDWG.wa.param.axisnum)).tmouse);
                  commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,temp,MZW_LBUTTON,nil);
                  end;
 

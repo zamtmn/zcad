@@ -14,7 +14,8 @@ zengine/containers/UGDBPoint3DArray.pas
 zengine/containers/UGDBPolyLine2DArray.pas
 zengine/containers/UGDBPolyPoint2DArray.pas
 zengine/containers/UGDBSelectedObjArray.pas
-components/zcontainers/UGDBStringArray.pas
+components/zcontainers/uzctnrvectorsimple.pas
+components/zcontainers/uzctnrvectorgdbstring.pas
 components/zcontainers/UGDBOpenArrayOfByte.pas
 zengine/fonts/uzefontbase.pas
 zengine/fonts/uzefontshx.pas

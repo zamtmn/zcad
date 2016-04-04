@@ -122,7 +122,7 @@ begin
   pgfe:=beginiterate(ir);
   if pgfe<>nil then
   repeat
-        if pgfe^.link.IsObjExist(l1,EqualFuncPGDBaseObject) then
+        if pgfe^.link.IsDataExistWithCompareProc(l1,EqualFuncPGDBaseObject) then
         begin
              pgfe^.step:=step;
              pgfe^.pathlength:=Vertexlength(point1,pgfe^.point);
@@ -146,7 +146,7 @@ begin
                     pgfe2:=beginiterate(ir3);
                     if pgfe2<>nil then
                     repeat
-                          if (pgfe<>pgfe2)and(pgfe2^.link.IsObjExist(pl,EqualFuncPGDBaseObject)) then
+                          if (pgfe<>pgfe2)and(pgfe2^.link.IsDataExistWithCompareProc(pl,EqualFuncPGDBaseObject)) then
                           begin
                           npath:=pgfe^.pathlength+{Vertexlength(pgfe^.point,pgfe2^.point)}linklength;
                           if {(pgfe2.step=0)or}(pgfe2.pathlength>npath) then
@@ -172,7 +172,7 @@ begin
   pgfe:=beginiterate(ir);
   if pgfe<>nil then
   repeat
-        if pgfe^.link.IsObjExist(l2,EqualFuncPGDBaseObject) then
+        if pgfe^.link.IsDataExistWithCompareProc(l2,EqualFuncPGDBaseObject) then
         begin
              npath:=pgfe^.pathlength+Vertexlength(pgfe^.point,point2);
              if npath<=npathmin then
@@ -230,7 +230,7 @@ begin
   line:=link.beginiterate(ir);
   if line<>nil then
   repeat
-        if node^.link.IsObjExist(line,EqualFuncPGDBaseObject)then
+        if node^.link.IsDataExistWithCompareProc(line,EqualFuncPGDBaseObject)then
                                           begin
                                                result:=line;
                                                exit;

@@ -10,7 +10,7 @@ interface
 uses
   UGDBOpenArrayOfByte, uzctnrvectorrec, UGDBOpenArrayOfObjects, 
   UGDBOpenArrayOfPObjects, UGDBOpenArrayOfPointer, UGDBStringArray, UGDBTree, 
-  uzctnrvector, LazarusPackageIntf;
+  uzctnrvector, uzctnrvectorsimple, LazarusPackageIntf;
 
 implementation
 

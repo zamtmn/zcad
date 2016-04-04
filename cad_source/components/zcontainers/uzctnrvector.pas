@@ -62,9 +62,6 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
                   function AllocData(SData:GDBword):GDBPointer;virtual;
 
-                  function AddNoDouble(data:T;EqualFunc:TEqualFunc):GDBInteger;
-                  function IsObjExist(pobj:T;EqualFunc:TEqualFunc):GDBBoolean;
-
                   function GetParrayAsPointer:pointer;
 
                   {reworked}
@@ -72,15 +69,19 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   function getDataMutable(index:TArrayIndex):PT;
                   function getData(index:TArrayIndex):T;
                   function PushBackData(const data:T):TArrayIndex;
+                  function PushBackIfNotPresentWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
+                  function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):GDBBoolean;
+
+
+                  {old}
+                  destructor FreeAndDone;virtual;
+                  function deleteelement(index:GDBInteger):GDBPointer;
+                  function DeleteElementByP(pel:GDBPointer):GDBPointer;
+                  function InsertElement(index,dir:GDBInteger;p:GDBPointer):GDBPointer;
+
             end;
 {Export-}
-function EqualFuncGDBDouble(const a, b:GDBDouble):Boolean;
 implementation
-function EqualFuncGDBDouble(const a, b:GDBDouble):Boolean;
-begin
-  result:=(a=b);
-end;
-
 function TZctnrVector<T>.getDataMutable;
 begin
      if (index>=max)
@@ -118,7 +119,7 @@ begin
   result:=pointer(parray);
 end;
 
-function TZctnrVector<T>.IsObjExist;
+function TZctnrVector<T>.IsDataExistWithCompareProc;
 var p:PT;
     ir:itrec;
 begin
@@ -134,25 +135,14 @@ begin
        until p=nil;
        result:=false;
 end;
-function TZctnrVector<T>.AddNoDouble;
-var p,newp:PT;
-    newd:GDBPointer;
-    ir:itrec;
+function TZctnrVector<T>.PushBackIfNotPresentWithCompareProc;
 begin
-  result := -1;
-  if parray=nil then
-                    createarray;
-  if count = max then grow;
-  if count >0 then
-  begin
-       p:=beginiterate(ir);
-       if p<>nil then
-       repeat
-             if EqualFunc(p^,data) then exit;
-             p:=iterate(ir);
-       until p=nil;
-  end;
-  result := AddByPointer(@data);
+  if IsDataExistWithCompareProc(data,EqualFunc)then
+                                                   begin
+                                                        result := -1;
+                                                        exit;
+                                                   end;
+  result:=PushBackData(data);
 end;
 function TZctnrVector<T>.AllocData(SData:GDBword):GDBPointer;
 begin
@@ -390,6 +380,55 @@ end;
 function TZctnrVector<T>.GetElemCount:GDBInteger;
 begin
   result:=count-deleted;
+end;
+function TZctnrVector<T>.InsertElement;
+var
+   del,afterdel:pointer;
+   s:integer;
+begin
+     AddByPointer(p);
+     if (index=count-2)and(dir=1) then
+                                      else
+begin
+  del := PArray;
+  inc(pGDBByte(del),SizeOfData*index);
+  GDBPlatformUInt(afterdel):=GDBPlatformUInt(del)+SizeOfData;
+  s:=(count-index-1)*SizeOfData;
+  Move(del^,afterdel^,s);
+  Move(p^,del^,SizeOfData);
+  //dec(count);
+end;
+  result:=parray;
+end;
+function TZctnrVector<T>.deleteelement;
+var
+   del,afterdel:pointer;
+   s:integer;
+begin
+  del := PArray;
+  inc(pGDBByte(del),SizeOfData*index);
+  GDBPlatformUInt(afterdel):=GDBPlatformUInt(del)+SizeOfData;
+  s:=(count-index-1)*SizeOfData;
+  Move(afterdel^,del^,s);
+  dec(count);
+  result:=parray;
+end;
+function TZctnrVector<T>.DeleteElementByP;
+var
+   afterdel:pointer;
+   s:integer;
+begin
+  GDBPlatformUInt(afterdel):=GDBPlatformUInt(pel)+SizeOfData;
+  s:=GDBPlatformUInt(parray)+count*SizeOfData-GDBPlatformUInt(pel);
+  //s:=(count-index-1)*size;
+  Move(afterdel^,pel^,s);
+  dec(count);
+  result:=parray;
+end;
+destructor TZctnrVector<T>.FreeAndDone;
+begin
+     free;
+     done;
 end;
 begin
 end.

@@ -152,7 +152,7 @@ begin
      AddByPointer(@pdata);
 end;
 
-function GDBOpenArrayOfGDBPointer.IsObjExist;
+function GDBOpenArrayOfGDBPointer.IsDataExistWithCompareProc;
 var p:GDBPointer;
     ir:itrec;
 begin

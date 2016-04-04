@@ -18,7 +18,7 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="8">
+    <Files Count="9">
       <Item1>
         <Filename Value="UGDBOpenArrayOfByte.pas"/>
         <UnitName Value="UGDBOpenArrayOfByte"/>
@@ -51,6 +51,10 @@
         <Filename Value="uzctnrvector.pas"/>
         <UnitName Value="uzctnrvector"/>
       </Item8>
+      <Item9>
+        <Filename Value="uzctnrvectorsimple.pas"/>
+        <UnitName Value="uzctnrvectorsimple"/>
+      </Item9>
     </Files>
     <RequiredPkgs Count="2">
       <Item1>

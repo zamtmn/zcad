@@ -24,7 +24,7 @@ uses
   uzctnrvector,uzglviewareageneral,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,
   zcmultiobjectcreateundocommand,uzeentitiesmanager,uzgldrawercanvas,
   uzcoimultiobjects,uzcenitiesvariablesextender,uzcdrawing,uzepalette,
-  ugdbopenarrayofgdbdouble,uzctextenteditor,uzgldrawcontext,usimplegenerics,UGDBPoint3DArray,
+  uzctnrvectorobjid,uzctnrvectorgdbdouble,uzctnrvectorgdblineweight,uzctnrvectorgdbpointer,uzctextenteditor,uzgldrawcontext,usimplegenerics,UGDBPoint3DArray,
   uzeentpoint,uzeentitiestree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,uzeentityfactory,
   uzedrawingsimple,uzcsysvars,uzcstrconsts,uzccomdrawdase,
   PrintersDlgs,printers,graphics,uzeentdevice,uzeentwithlocalcs,UGDBOpenArrayOfPointer,
@@ -295,8 +295,10 @@ type
   SelSim_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          created:boolean;
                          bnames,textcontents,textremplates:GDBGDBStringArray;
-                         layers,weights,objtypes,linetypes:GDBOpenArrayOfGDBPointer;
-                         linetypescales:GDBOpenArrayOfGDBDouble;
+                         layers,linetypes:TZctnrVectorGDBPointer;
+                         weights:TZctnrVectorGDBLineWeight;
+                         objtypes:TZctnrVectorObjID;
+                         linetypescales:TZctnrVectorGDBDouble;
                          procedure CommandStart(Operands:TCommandOperands); virtual;
                          procedure createbufs;
                          //procedure BuildDM(Operands:pansichar); virtual;
@@ -1404,8 +1406,7 @@ procedure SelSim_com.createbufs;
 var
    pobj: pGDBObjEntity;
    ir:itrec;
-   tp:gdbpointer;
-   td:gdbdouble;
+   oid:TObjID;
 begin
   if not created then
   begin
@@ -1423,34 +1424,28 @@ begin
   repeat
     if pobj^.selected then
     begin
-         tp:=pobj^.vp.Layer;
-         layers.addnodouble(@tp);
+         layers.PushBackIfNotPresent(pobj^.vp.Layer);
+         linetypes.PushBackIfNotPresent(pobj^.vp.LineType);
+         linetypescales.PushBackIfNotPresent(pobj^.vp.LineTypeScale);
+         weights.PushBackIfNotPresent(pobj^.vp.LineWeight);
 
-         tp:=pobj^.vp.LineType;
-         linetypes.addnodouble(@tp);
 
-         td:=pobj^.vp.LineTypeScale;
-         linetypescales.addnodouble(td,@EqualFuncGDBDouble);
+         oid:=pobj^.GetObjType;
 
-         tp:=pointer(pobj^.vp.LineWeight);
-         weights.addnodouble(@tp);
-
-         tp:=pointer(pobj^.GetObjType);
-
-         if (GDBPlatformUInt(tp)=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
-                                GDBPlatformUInt(tp):=GDBBlockInsertID;
-         if ((GDBPlatformUInt(tp)=GDBBlockInsertID)or(GDBPlatformUInt(tp)=GDBDeviceID)) then
+         if (oid=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
+                                oid:=GDBBlockInsertID;
+         if ((oid=GDBBlockInsertID)or(oid=GDBDeviceID)) then
                                     bnames.addnodouble(@PGDBObjBlockInsert(pobj)^.Name);
 
-         if (GDBPlatformUInt(tp)=GDBMtextID)and(SelSimParams.Texts.DiffTextMText=TD_NotDiff) then
-                                GDBPlatformUInt(tp):=GDBTextID;
-         if ((GDBPlatformUInt(tp)=GDBTextID)or(GDBPlatformUInt(tp)=GDBMTextID)) then
+         if (oid=GDBMtextID)and(SelSimParams.Texts.DiffTextMText=TD_NotDiff) then
+                                oid:=GDBTextID;
+         if ((oid=GDBTextID)or(oid=GDBMTextID)) then
                              begin
                                     textcontents.addnodouble(@PGDBObjText(pobj)^.Content);
                                     textremplates.addnodouble(@PGDBObjText(pobj)^.Template);
                              end;
 
-         objtypes.addnodouble(@tp);
+         objtypes.PushBackIfNotPresent(oid);
     end;
   pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
   until pobj=nil;
@@ -1464,7 +1459,7 @@ procedure SelSim_com.Run(pdata:GDBPlatformint);
 var
    pobj: pGDBObjEntity;
    ir:itrec;
-   tp:gdbpointer;
+   oid:TObjID;
 
    insel,islayer,isweght,isobjtype,select,islinetype,islinetypescale:boolean;
 
@@ -1484,31 +1479,27 @@ begin
            if pobj^.selected then
                                 pobj^.DeSelect(drawings.GetCurrentDWG^.GetSelObjArray,drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
 
-           islayer:=layers.IsObjExist(pobj^.vp.Layer,@EqualFuncPointer);
+           islayer:=layers.IsDataExist(pobj^.vp.Layer);
+           islinetype:=linetypes.IsDataExist(pobj^.vp.LineType);
+           islinetypescale:=linetypescales.IsDataExist(pobj^.vp.LineTypeScale);
+           isweght:=weights.IsDataExist(pobj^.vp.LineWeight);
 
-           islinetype:=linetypes.IsObjExist(pobj^.vp.LineType,@EqualFuncPointer);
-
-           islinetypescale:=linetypescales.IsObjExist(pobj^.vp.LineTypeScale,@EqualFuncGDBDouble);
-
-           tp:=pointer(pobj^.vp.LineWeight);
-           isweght:=weights.IsObjExist(tp,@EqualFuncPointer);
-
-           tp:=pointer(pobj^.GetObjType);
-           if (GDBPlatformUInt(tp)=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
-                                  GDBPlatformUInt(tp):=GDBBlockInsertID;
-           if (GDBPlatformUInt(tp)=GDBMtextID)and(SelSimParams.Texts.DiffTextMText=TD_NotDiff) then
-                                  GDBPlatformUInt(tp):=GDBTextID;
-           isobjtype:=objtypes.IsObjExist(tp,@EqualFuncPointer);
+           oid:=pobj^.GetObjType;
+           if (oid=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
+                                  oid:=GDBBlockInsertID;
+           if (oid=GDBMtextID)and(SelSimParams.Texts.DiffTextMText=TD_NotDiff) then
+                                  oid:=GDBTextID;
+           isobjtype:=objtypes.IsDataExist(oid);
            if isobjtype then
            begin
-                if ((GDBPlatformUInt(tp)=GDBBlockInsertID)or(GDBPlatformUInt(tp)=GDBDeviceID))and(SelSimParams.Blocks.SameName) then
+                if ((oid=GDBBlockInsertID)or(oid=GDBDeviceID))and(SelSimParams.Blocks.SameName) then
                 if not bnames.findstring(uppercase(PGDBObjBlockInsert(pobj)^.Name),true) then
                    isobjtype:=false;
 
-                if ((GDBPlatformUInt(tp)=GDBTextID)or(GDBPlatformUInt(tp)=GDBMTextID))and(SelSimParams.Texts.SameContent) then
+                if ((oid=GDBTextID)or(oid=GDBMTextID))and(SelSimParams.Texts.SameContent) then
                 if not textcontents.findstring(uppercase(PGDBObjText(pobj)^.Content),true) then
                    isobjtype:=false;
-                if ((GDBPlatformUInt(tp)=GDBTextID)or(GDBPlatformUInt(tp)=GDBMTextID))and(SelSimParams.Texts.SameContent) then
+                if ((oid=GDBTextID)or(oid=GDBMTextID))and(SelSimParams.Texts.SameContent) then
                 if not textremplates.findstring(uppercase(PGDBObjText(pobj)^.Template),true) then
                    isobjtype:=false;
 

@@ -40,7 +40,12 @@ begin
 
 end;
 procedure GDBOpenArrayOfObjects<T>.cleareraseobj;
-var
+var i:integer;
+begin
+     for i:=0 to count-1 do
+       parray[i].done;
+end;
+{var
   p:PGDBaseObject;
     ir:itrec;
 begin
@@ -51,7 +56,7 @@ begin
        p:=iterate(ir);
   until p=nil;
   count:=0;
-end;
+end;}
 function GDBOpenArrayOfObjects<T>.CreateObject;
 var addr: GDBPlatformint;
 begin
@@ -67,7 +72,15 @@ begin
   end;
 end;
 procedure GDBOpenArrayOfObjects<T>.free;
-var p:GDBPointer;
+var i:integer;
+begin
+     for i:=0 to count-1 do
+     begin
+       pgdbaseobject(@parray[i]).done;
+       AfterObjectDone(@parray[i]);
+     end;
+end;
+{var p:GDBPointer;
     ir:itrec;
 begin
   p:=beginiterate(ir);
@@ -78,7 +91,7 @@ begin
         p:=iterate(ir);
   until p=nil;
   clear;
-end;
+end;}
 {procedure GDBOpenArrayOfObjects<T>.freeandsubfree;
 var p:GDBPointer;
     ir:itrec;

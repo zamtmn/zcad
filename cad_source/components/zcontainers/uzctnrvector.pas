@@ -119,20 +119,15 @@ begin
 end;
 
 function TZctnrVector<T>.IsDataExistWithCompareProc;
-var p:PT;
-    ir:itrec;
+var i:integer;
 begin
-       p:=beginiterate(ir);
-       if p<>nil then
-       repeat
-             if EqualFunc(p^,pobj) then
+     for i:=0 to count-1 do
+     if EqualFunc(parray[i],pobj) then
                            begin
                                 result:=true;
                                 exit;
                            end;
-             p:=iterate(ir);
-       until p=nil;
-       result:=false;
+     result:=false;
 end;
 function TZctnrVector<T>.PushBackIfNotPresentWithCompareProc;
 begin
@@ -184,16 +179,22 @@ function TZctnrVector<T>.GetRealCount:GDBInteger;
 var p:GDBPointer;
     ir:itrec;
 begin
-  result:=0;
-  p:=beginiterate(ir);
+  result:=GetElemCount;
+  {p:=beginiterate(ir);
   if p<>nil then
   repeat
         inc(result);
         p:=iterate(ir);
-  until p=nil;
+  until p=nil;}
 end;
 function TZctnrVector<T>.copyto(var source:TZctnrVector<T>):GDBInteger;
-var p:pt;
+var i:integer;
+begin
+     for i:=0 to count-1 do
+       source.PushBackData(parray[i]);
+end;
+
+{var p:pt;
     ir:itrec;
 begin
   p:=beginiterate(ir);
@@ -203,13 +204,13 @@ begin
         p:=iterate(ir);
   until p=nil;
   result:=count;
-end;
+end;}
 procedure TZctnrVector<T>.Invert;
-var p,pl,tp:GDBPointer;
+(*var p,pl,tp:GDBPointer;
     ir:itrec;
 begin
   p:=beginiterate(ir);
-  p:=getDataMutable({count-1}0);
+  p:=getDataMutable(0);
   pl:=getDataMutable(count-1);
   GDBGetMem({$IFDEF DEBUGBUILD}'{D9D91D43-BD6A-450A-B07E-E964425E7C99}',{$ENDIF}tp,SizeOfData);
   if p<>nil then
@@ -221,10 +222,21 @@ begin
         Move(tp^,pl^,SizeOfData);
         dec(GDBPlatformUInt(pl),SizeOfData);
         inc(GDBPlatformUInt(p),SizeOfData);
-        //p:=iterate(ir);
-  until {p=nil}false;
+  until false;
   GDBFreeMem(tp);
+end;*)
+var i,j:integer;
+    tdata:t;
+begin
+  j:=count-1;
+  for i:=0 to count-1 do
+  begin
+       tdata:=parray^[i];
+       parray^[i]:=parray^[j];
+       parray^[j]:=tdata;
+  end;
 end;
+
 function TZctnrVector<T>.SetCount;
 begin
      count:=index;
@@ -240,7 +252,12 @@ begin
      result:=parray;
 end;
 procedure TZctnrVector<T>.freewithproc;
-var p:GDBPointer;
+var i:integer;
+begin
+     for i:=0 to count-1 do
+       freeproc(@parray[i]);
+end;
+{var p:GDBPointer;
     ir:itrec;
 begin
   p:=beginiterate(ir);
@@ -250,9 +267,14 @@ begin
         p:=iterate(ir);
   until p=nil;
   clear;
-end;
+end;}
 procedure TZctnrVector<T>.free;
-var p:GDBPointer;
+var i:integer;
+begin
+     for i:=0 to count-1 do
+       freeelement(@parray[i]);
+end;
+{var p:GDBPointer;
     ir:itrec;
 begin
   p:=beginiterate(ir);
@@ -262,7 +284,7 @@ begin
         p:=iterate(ir);
   until p=nil;
   clear;
-end;
+end;}
 function TZctnrVector<T>.beginiterate;
 begin
   if parray=nil then
@@ -317,21 +339,20 @@ begin
   Deleted:=0;
   Max:=m;
   {$IFDEF DEBUGBUILD}Guid:=ErrGuid;{$ENDIF}
-  //CreateArray;
-  { TODO: делаем познее выделение }
-  //GDBGetMem({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}PArray, size * max);
 end;
 destructor TZctnrVector<T>.done;
-var p:pt;
-    ir:itrec;
+var {p:pt;
+    ir:itrec;}
+    i:integer;
 begin
-  p:=beginiterate(ir);
+  {p:=beginiterate(ir);
   if p<>nil then
   repeat
         p^:=default(t);
         p:=iterate(ir);
-  until p=nil;
-
+  until p=nil;}
+  for i:=0 to count-1 do
+                        PArray^[i]:=default(t);
   if PArray<>nil then
                      GDBFreeMem(PArray);
   PArray:=nil;
@@ -381,7 +402,6 @@ else if nsize<max then
                       begin
                            parray := enlargememblock({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}parray, SizeOfData*max, SizeOfData*nsize);
                            if count>nsize then count:=nsize;
-
                       end;
      max:=nsize;
 end;

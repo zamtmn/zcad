@@ -3520,10 +3520,10 @@ begin
 
                                           end;
                                         if p3dpl2^.VertexArrayInOCS.Count>1 then
-                                                                               p3dpl2^.VertexArrayInOCS.InsertElement(0,1,@_tv)
+                                                                               p3dpl2^.VertexArrayInOCS.InsertElement(0,1,_tv)
                                                                            else
-                                                                               p3dpl2^.VertexArrayInOCS.InsertElement(0,-1,@_tv);
-                                        p3dpl^.VertexArrayInOCS.InsertElement(p3dpl^.VertexArrayInOCS.Count-1,1,@_tv);
+                                                                               p3dpl2^.VertexArrayInOCS.InsertElement(0,-1,_tv);
+                                        p3dpl^.VertexArrayInOCS.InsertElement(p3dpl^.VertexArrayInOCS.Count-1,1,_tv);
                                         p3dpl2^.Formatentity(drawings.GetCurrentDWG^,dc);
                                         p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
                                         drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl2);

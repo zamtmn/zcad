@@ -217,7 +217,7 @@ begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
              swp.w := swp.w - pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo({ach2uch}(GDBByte(' ')){,tdinfo//-ttf-//}).NextSymX;
         end;
-        text.add(@swp);
+        text.PushBackData(swp);
         newline:=true;
         linewidth := 0;
         lastsymspace:=0;
@@ -253,7 +253,7 @@ begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
              swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(GDBByte(' '))}32{//-ttf-//,tdinfo}).NextSymX;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
         end;
-        text.add(@swp);
+        text.PushBackData(swp);
 
       end;
     inc(currsymbol,l);
@@ -274,7 +274,7 @@ begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
              swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(GDBByte(' '))}32{//-ttf-//,tdinfo}).NextSymX;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
         end;
-        text.add(@swp);
+        text.PushBackData(swp);
   //w := width;
 end;
 

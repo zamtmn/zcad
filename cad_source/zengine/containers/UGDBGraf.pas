@@ -185,7 +185,7 @@ begin
         pgfe:=iterate(ir);
   until pgfe=nil;
   if pgfe2<>nil then
-  pa.AddByPointer(@pgfe2.point);
+  pa.PushBackData(pgfe2.point);
   dec(step);
   pgfe3:=pgfe2;
   while step>0 do
@@ -215,9 +215,9 @@ begin
         pgfe2:=pgfe3;
         if getlinktype(mainlinkline)=LT_OnlyLink then
         begin
-             pa.AddByPointer(@InfinityVertex);
+             pa.PushBackData(InfinityVertex);
         end;
-        pa.AddByPointer(@pgfe2.point);
+        pa.PushBackData(pgfe2.point);
   end;
 
   pa.Invert;

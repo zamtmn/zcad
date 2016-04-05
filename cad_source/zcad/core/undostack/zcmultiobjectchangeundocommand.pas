@@ -61,7 +61,7 @@ begin
 end;
 procedure TGMultiObjectChangeCommand.AddMethod(method:tmethod);
 begin
-     objarray.AddByPointer(@method);
+     objarray.PushBackData(method);
 end;
 {procedure TGMultiObjectChangeCommand.StoreUndoData(var _undodata:_T);
 begin

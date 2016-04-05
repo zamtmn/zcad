@@ -26,17 +26,17 @@ PGDBXYZWGDBStringArray=^XYZWGDBGDBStringArray;
 XYZWGDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<GDBStrWithPoint>{//})
                              constructor init(m:GDBInteger);
                              procedure freeelement(p:GDBPointer);virtual;
-                             function add(p:GDBPointer):TArrayIndex;virtual;
+                             //function add(p:GDBPointer):TArrayIndex;virtual;
                        end;
 {EXPORT-}
 implementation
 //uses
 //    log;
-function XYZWGDBGDBStringArray.add(p:GDBPointer):TArrayIndex;
+{function XYZWGDBGDBStringArray.add(p:GDBPointer):TArrayIndex;
 begin
      AddByPointer(p);
      GDBPointer(PGDBStrWithPoint(p)^.str):=nil;
-end;
+end;}
 procedure XYZWGDBGDBStringArray.freeelement(p:GDBPointer);
 begin
      PGDBStrWithPoint(p)^.str:='';

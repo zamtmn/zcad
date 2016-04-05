@@ -33,6 +33,7 @@ TZctnrVectorP{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                        procedure AddToArray(const pdata:GDBPointer);virtual;
                                        function addnodouble(pobj:GDBPointer):GDBInteger;virtual;
                                        function AddByRef(var obj):TArrayIndex;virtual;
+                                       function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
                                  end;
 PGDBOpenArrayOfGDBPointer=^GDBOpenArrayOfGDBPointer;
 GDBOpenArrayOfGDBPointer=packed object(TZctnrVectorP{-}<GDBPointer>{//}) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
@@ -43,6 +44,21 @@ implementation
 function EqualFuncPointer(const a, b: pointer):Boolean;
 begin
   result:=(a=b);
+end;
+function TZctnrVectorP<T>.AddByPointer;
+var addr: GDBPlatformint;
+begin
+  if parray=nil then
+                     CreateArray;
+  if count = max then
+                     grow;
+  begin
+       GDBPointer(addr) := parray;
+       addr := addr + count * SizeOfData;
+       Move(p^, GDBPointer(addr)^,SizeOfData);
+       result:=count;
+       inc(count);
+  end;
 end;
 function TZctnrVectorP<T>.AddByRef;
 var

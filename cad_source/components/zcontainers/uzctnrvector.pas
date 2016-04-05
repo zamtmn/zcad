@@ -48,7 +48,7 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   procedure freeelement(p:GDBPointer);virtual;abstract;
                   function GetElemCount:GDBInteger;
 
-                  function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
+                  //function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
 
                   function beginiterate(out ir:itrec):GDBPointer;virtual;
                   function iterate(var ir:itrec):GDBPointer;virtual;
@@ -77,7 +77,7 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   destructor FreeAndDone;virtual;
                   function deleteelement(index:GDBInteger):GDBPointer;
                   function DeleteElementByP(pel:GDBPointer):GDBPointer;
-                  function InsertElement(index,dir:GDBInteger;p:GDBPointer):GDBPointer;
+                  function InsertElement(index,dir:GDBInteger;const data:T):GDBPointer;
 
             end;
 {Export-}
@@ -194,13 +194,13 @@ begin
   until p=nil;
 end;
 function TZctnrVector<T>.copyto(var source:TZctnrVector<T>):GDBInteger;
-var p:GDBPointer;
+var p:pt;
     ir:itrec;
 begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-        source.AddByPointer(@p^);  //-----------------//-----------
+        source.PushBackData(p^);  //-----------------//-----------
         p:=iterate(ir);
   until p=nil;
   result:=count;
@@ -287,7 +287,7 @@ begin
                       end
                   else result:=nil;
 end;
-function TZctnrVector<T>.AddByPointer;
+{function TZctnrVector<T>.AddByPointer;
 var addr: GDBPlatformint;
 begin
   if parray=nil then
@@ -301,7 +301,7 @@ begin
        result:=count;
        inc(count);
   end;
-end;
+end;}
 constructor TZctnrVector<T>.initnul;
 begin
   PArray:=nil;
@@ -386,7 +386,7 @@ var
    del,afterdel:pointer;
    s:integer;
 begin
-     AddByPointer(p);
+     PushBackData(Data);
      if (index=count-2)and(dir=1) then
                                       else
 begin
@@ -395,7 +395,7 @@ begin
   GDBPlatformUInt(afterdel):=GDBPlatformUInt(del)+SizeOfData;
   s:=(count-index-1)*SizeOfData;
   Move(del^,afterdel^,s);
-  Move(p^,del^,SizeOfData);
+  Move({p^}data,del^,SizeOfData);
   //dec(count);
 end;
   result:=parray;

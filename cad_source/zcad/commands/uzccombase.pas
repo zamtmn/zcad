@@ -1360,10 +1360,10 @@ begin
           if pva.ispointinside(Vertexmorph(PGDBVertex2D(pva.getDataMutable(p1))^,PGDBVertex2D(pva.getDataMutable(p3))^,0.5))then
           if IsSubContur(pva,p1,p2,p3,p4)then
               begin
-                   pvr.AddByPointer(pva.getDataMutable(p1));
-                   pvr.AddByPointer(pva.getDataMutable(p2));
-                   pvr.AddByPointer(pva.getDataMutable(p3));
-                   pvr.AddByPointer(pva.getDataMutable(p4));
+                   pvr.PushBackData(pva.getDataMutable(p1)^);
+                   pvr.PushBackData(pva.getDataMutable(p2)^);
+                   pvr.PushBackData(pva.getDataMutable(p3)^);
+                   pvr.PushBackData(pva.getDataMutable(p4)^);
 
                    pva.deleteelement(p3);
                    pva.deleteelement(p2);
@@ -1390,10 +1390,10 @@ begin
           if pva.ispointinside(Vertexmorph(PGDBVertex2D(pva.getDataMutable(p1))^,PGDBVertex2D(pva.getDataMutable(p3))^,0.5))then
           if IsSubContur2(pva,p1,p2,p3,p)then
               begin
-                   pvr.AddByPointer(pva.getDataMutable(p1));
-                   pvr.AddByPointer(pva.getDataMutable(p2));
-                   pvr.AddByPointer(pva.getDataMutable(p3));
-                   pvr.AddByPointer(@p);
+                   pvr.PushBackData(pva.getDataMutable(p1)^);
+                   pvr.PushBackData(pva.getDataMutable(p2)^);
+                   pvr.PushBackData(pva.getDataMutable(p3)^);
+                   pvr.PushBackData(p);
 
                    PGDBVertex2D(pva.getDataMutable(p3))^.x:=p.x;
                    PGDBVertex2D(pva.getDataMutable(p3))^.y:=p.y;

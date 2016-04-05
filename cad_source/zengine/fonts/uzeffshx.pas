@@ -717,8 +717,10 @@ var
    psinfo:ptsyminfo;
    //pf:PGDBfont;
    pdata:pbyte;
+   membufcreated:boolean;
 begin
   result:=true;
+  membufcreated:=true;
   memorybuf.InitFromFile(name);
   line:=memorybuf.ReadString(#10,#13);
   line:=uppercase(line);
@@ -769,6 +771,8 @@ begin
                      else
                          begin
                               debugln('{T+}symbol %d',[integer(symnum)]);
+                              if symnum=135 then
+                                                symnum:=symnum;
                               //programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
                               dataread:=createsymbol(pf,symnum,memorybuf.GetCurrentReadAddres,false,line);
                               memorybuf.jump({datalen}dataread);
@@ -786,7 +790,11 @@ begin
          inc(psinfo);
     end;
         line:=memorybuf.readstring('','');
-        memorybuf.done;
+        if membufcreated then
+                             begin
+                               memorybuf.done;
+                               membufcreated:=false;
+                             end;
         PSHXFont(pf^.font).FontData.Shrink;
         //pf.compiledsize:=pf.SHXdata.Count;
   end
@@ -847,6 +855,8 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
                          test:=test;
          //if (*pf^.GetOrCreateSymbolInfo(test)^.{ .symbo linfo[test].}addr=0*)symnum<2560000 then
          debugln('{T+}symbol %d',[integer(symnum)]);
+         if symnum=135 then
+                           symnum:=symnum;
          //programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
          {if symnum<256 then }dataread:=createsymbol(pf,test{symnum},memorybuf.GetCurrentReadAddres,true,line);
          debugln('{T-}end');
@@ -874,7 +884,11 @@ else
     result:=false;
   if pf.font<>nil then
   //PSHXFont(pf^.font).compiledsize:=PSHXFont(pf^.font).SHXdata.Count;
-  memorybuf.done;
+  if membufcreated then
+                       begin
+                         memorybuf.done;
+                         membufcreated:=false;
+                       end;
 end;
 initialization
   RegisterFontLoadProcedure('shx','Autocad SHX font',@createnewfontfromshx);

@@ -81,7 +81,7 @@ implementation
 //    log;
 procedure GDBObjCurve.InsertVertex(const PolyData:TPolyData);
 begin
-     vertexarrayinocs.InsertElement(PolyData.nearestline,PolyData.dir,@PolyData.wc);
+     vertexarrayinocs.InsertElement(PolyData.nearestline,PolyData.dir,PolyData.wc);
 end;
 
 procedure GDBObjCurve.DeleteVertex(const PolyData:TPolyData);

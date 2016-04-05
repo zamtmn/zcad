@@ -49,6 +49,11 @@ type
 {EXPORT-}
 implementation
 uses UGDBOpenArrayOfByte;
+{function GDBGDBStringArray.AddByPointer(p:GDBPointer):TArrayIndex;
+begin
+     result:=inherited AddByPointer(p);
+     RemoveOneRefCount(pGDBString(p)^);
+end;}
 {destructor GDBGDBStringArray.done;
 var p:PGDBString;
     ir:itrec;
@@ -286,7 +291,7 @@ begin
       line:=f.readGDBString;
       if (line<>'')and(line[1]<>';') then
         begin
-          AddByPointer(@line);
+          PushBackData(line);
           //GDBPointer(line):=nil;
         end;
     end;

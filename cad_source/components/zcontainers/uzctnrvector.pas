@@ -36,17 +36,8 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   Deleted:TArrayIndex;(*hidden_in_objinsp*)
                   Max:TArrayIndex;(*hidden_in_objinsp*)
 
-                  constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
-                  constructor initnul;
                   destructor done;virtual;
-                  destructor ClearAndDone;virtual;
-                  function SizeOfData:TArrayIndex;
-                  procedure Clear;virtual;
-                  function CreateArray:GDBPointer;virtual;
-                  procedure Grow(newmax:GDBInteger=0);virtual;
-                  procedure Shrink;virtual;
                   procedure freeelement(p:GDBPointer);virtual;abstract;
-                  function GetElemCount:GDBInteger;
 
                   //function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
 
@@ -62,7 +53,11 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
                   function AllocData(SData:GDBword):GDBPointer;virtual;
 
-                  function GetParrayAsPointer:pointer;
+
+                  {old}
+                  function deleteelement(index:GDBInteger):GDBPointer;
+                  function DeleteElementByP(pel:GDBPointer):GDBPointer;
+                  function InsertElement(index,dir:GDBInteger;const data:T):GDBPointer;
 
                   {reworked}
                   procedure SetSize(nsize:TArrayIndex);
@@ -72,13 +67,17 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   function PushBackIfNotPresentWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
                   function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):GDBBoolean;
 
-
-                  {old}
                   destructor FreeAndDone;virtual;
-                  function deleteelement(index:GDBInteger):GDBPointer;
-                  function DeleteElementByP(pel:GDBPointer):GDBPointer;
-                  function InsertElement(index,dir:GDBInteger;const data:T):GDBPointer;
-
+                  destructor ClearAndDone;virtual;
+                  function SizeOfData:TArrayIndex;
+                  function GetParrayAsPointer:pointer;
+                  function CreateArray:GDBPointer;virtual;
+                  procedure Clear;virtual;
+                  function GetElemCount:GDBInteger;
+                  procedure Grow(newmax:GDBInteger=0);virtual;
+                  procedure Shrink;virtual;
+                  constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
+                  constructor initnul;
             end;
 {Export-}
 implementation
@@ -323,7 +322,16 @@ begin
   //GDBGetMem({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}PArray, size * max);
 end;
 destructor TZctnrVector<T>.done;
+var p:pt;
+    ir:itrec;
 begin
+  p:=beginiterate(ir);
+  if p<>nil then
+  repeat
+        p^:=default(t);
+        p:=iterate(ir);
+  until p=nil;
+
   if PArray<>nil then
                      GDBFreeMem(PArray);
   PArray:=nil;

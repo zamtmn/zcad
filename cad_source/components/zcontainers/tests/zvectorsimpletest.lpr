@@ -7,6 +7,10 @@ const
   InitVectorLength={10000000}1;
 type
   TMyTime=TDateTime;
+
+  datatype={byte}{integer}ansistring;
+var
+  typi:pointer;
 function StartTimer:TMyTime;
 begin
   result:=now();
@@ -26,15 +30,13 @@ end;
 
 procedure TestIntegerVector;
 type
-  datatype=integer{ansistring};
   TZInegerVector=TZctnrVectorSimple<datatype>;
 var
   InegerVector:TZInegerVector;
   i:integer;
-  TypeData :PTypeData;
-  TypeInfo :PTypeInfo;
   data:datatype;
   Time:TMyTime;
+  pti:PTypeInfo;
 
   procedure writeresult;
   var
@@ -49,15 +51,19 @@ var
   end;
 
 begin
-  writeln('Start test');
+  writeln('Start test for TZctnrVectorSimple');
+  pti:=TypeInfo(datatype);
+  writeln(' Specialized by ',pti^.Name);
+  writeln(' SizeOf=',sizeof(TZInegerVector));
   writeln(' MaxVectorLength=',MaxVectorLength);
   writeln(' InitVectorLength=',InitVectorLength);
+
   Time:=StartTimer;
   InegerVector.init(InitVectorLength);
 
   for i:=0 to MaxVectorLength-1 do
   begin
-   data:=CreateValue(i);
+   data:=CreateValues(i);
    InegerVector.PushBackData(data);
   end;
   Writeln(' Time to create and fill ',GetElapsedTime(Time):2:3,'sec');
@@ -76,17 +82,19 @@ end;
 
 procedure TestIntegerGVector;
 type
-  datatype=integer{ansistring};
   TZInegerVector=Tvector<datatype>;
 var
   InegerVector:TZInegerVector;
-  i:integer;
-  TypeData :PTypeData;
-  TypeInfo :PTypeInfo;
+  i,j:integer;
   data:datatype;
   Time:TMyTime;
+  pti:PTypeInfo;
+  tdata:datatype;
 begin
-  writeln('Start test');
+  writeln('Start test for gvector.TVector');
+  pti:=TypeInfo(datatype);
+  writeln(' Specialized by ',pti^.Name);
+  writeln(' InstanceSize=',TZInegerVector.InstanceSize);
   writeln(' MaxVectorLength=',MaxVectorLength);
   writeln(' InitVectorLength=',InitVectorLength);
   Time:=StartTimer;
@@ -94,14 +102,20 @@ begin
 
   for i:=0 to MaxVectorLength-1 do
   begin
-   data:=CreateValue(i);
+   data:=CreateValues(i);
    InegerVector.PushBack(data);
   end;
   Writeln(' Time to create and fill ',GetElapsedTime(Time):2:3,'sec');
-  //writeresult;
-  //Time:=StartTimer;
-  //InegerVector.Invert;
-  //Writeln(' Time to invert ',GetElapsedTime(Time):2:3,'sec');
+
+  Time:=StartTimer;
+  j:=InegerVector.Size-1;
+  for i:=0 to (InegerVector.Size-1)div 2 do
+  begin
+       tdata:=InegerVector[i];
+       InegerVector[i]:=InegerVector[j];
+       InegerVector[j]:=tdata;
+  end;
+  Writeln(' Time to invert ',GetElapsedTime(Time):2:3,'sec');
 
   //writeresult;
 
@@ -112,10 +126,11 @@ begin
 end;
 
 begin
-  TestIntegerVector;
-  TestIntegerVector;
   TestIntegerGVector;
   TestIntegerGVector;
+
+  TestIntegerVector;
+  TestIntegerVector;
   readln;
 end.
 

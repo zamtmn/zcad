@@ -19,7 +19,16 @@
 unit uzctnrvector;
 {$INCLUDE def.inc}
 interface
-uses uzbmemman,uzbtypesbase,sysutils,uzbtypes;
+uses uzbmemman,uzbtypesbase,sysutils,uzbtypes,typinfo;
+const
+  TypesNeedToFinalize=[tkUnknown,tkSString,tkLString,tkAString,
+                       tkWString,tkVariant,tkRecord,tkInterface,
+                       tkClass,tkObject,tkDynArray,tkInterfaceRaw,
+                       tkUString,tkUChar,tkHelper,tkFile,tkClassRef];
+  TypesNeedToInicialize=[tkUnknown,tkSString,tkLString,tkAString,
+                         tkWString,tkVariant,tkRecord,tkInterface,
+                         tkClass,tkObject,tkDynArray,tkInterfaceRaw,
+                         tkUString,tkUChar,tkHelper,tkFile,tkClassRef];
 type
 {Export+}
 TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
@@ -66,6 +75,7 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   function PushBackData(const data:T):TArrayIndex;
                   function PushBackIfNotPresentWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
                   function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):GDBBoolean;
+                  function GetSpecializedTypeInfo:PTypeInfo;inline;
 
                   destructor FreeAndDone;virtual;
                   destructor ClearAndDone;virtual;
@@ -81,6 +91,11 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
             end;
 {Export-}
 implementation
+function TZctnrVector<T>.GetSpecializedTypeInfo:PTypeInfo;
+begin
+  result:=TypeInfo(T);
+end;
+
 function TZctnrVector<T>.getDataMutable;
 begin
      if (index>=max)
@@ -108,6 +123,8 @@ begin
   if count = max then
                      grow;
   begin
+       if PTypeInfo(TypeInfo(T))^.kind in TypesNeedToInicialize
+          then fillchar(parray[count],sizeof(T),0);
        parray[count]:=data;
        result:=count;
        inc(count);
@@ -229,7 +246,7 @@ var i,j:integer;
     tdata:t;
 begin
   j:=count-1;
-  for i:=0 to count-1 do
+  for i:=0 to (count-1)div 2 do
   begin
        tdata:=parray^[i];
        parray^[i]:=parray^[j];
@@ -344,6 +361,7 @@ destructor TZctnrVector<T>.done;
 var {p:pt;
     ir:itrec;}
     i:integer;
+    _pt:PTypeInfo;
 begin
   {p:=beginiterate(ir);
   if p<>nil then
@@ -351,8 +369,10 @@ begin
         p^:=default(t);
         p:=iterate(ir);
   until p=nil;}
-  for i:=0 to count-1 do
-                        PArray^[i]:=default(t);
+  _pt:=GetSpecializedTypeInfo;
+  if _pt^.Kind in TypesNeedToFinalize then
+    for i:=0 to count-1 do
+                          PArray^[i]:=default(t);
   if PArray<>nil then
                      GDBFreeMem(PArray);
   PArray:=nil;
@@ -374,7 +394,7 @@ begin
 end;
 function TZctnrVector<T>.CreateArray;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}PArray, SizeOfData*max);
+  GDBGetMem({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}PArray,SizeOfData*max);
   result:=parray;
 end;
 procedure TZctnrVector<T>.Grow;

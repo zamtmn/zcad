@@ -251,6 +251,7 @@ begin
        tdata:=parray^[i];
        parray^[i]:=parray^[j];
        parray^[j]:=tdata;
+       dec(j);
   end;
 end;
 
@@ -369,7 +370,7 @@ begin
         p^:=default(t);
         p:=iterate(ir);
   until p=nil;}
-  _pt:=GetSpecializedTypeInfo;
+  _pt:=TypeInfo(T);
   if _pt^.Kind in TypesNeedToFinalize then
     for i:=0 to count-1 do
                           PArray^[i]:=default(t);
@@ -449,28 +450,27 @@ end;
   result:=parray;
 end;
 function TZctnrVector<T>.deleteelement;
-var
-   del,afterdel:pointer;
-   s:integer;
 begin
-  del := PArray;
-  inc(pGDBByte(del),SizeOfData*index);
-  GDBPlatformUInt(afterdel):=GDBPlatformUInt(del)+SizeOfData;
-  s:=(count-index-1)*SizeOfData;
-  Move(afterdel^,del^,s);
-  dec(count);
+  if (index>=0)and(index<count)then
+  begin
+    dec(count);
+    if PTypeInfo(TypeInfo(T))^.kind in TypesNeedToInicialize
+      then parray^[index]:=default(t);
+    if index<>count then
+    Move(parray^[index+1],parray^[index],(count-index)*SizeOfData);
+  end;
   result:=parray;
 end;
 function TZctnrVector<T>.DeleteElementByP;
 var
-   afterdel:pointer;
    s:integer;
 begin
-  GDBPlatformUInt(afterdel):=GDBPlatformUInt(pel)+SizeOfData;
-  s:=GDBPlatformUInt(parray)+count*SizeOfData-GDBPlatformUInt(pel);
-  //s:=(count-index-1)*size;
-  Move(afterdel^,pel^,s);
-  dec(count);
+  s:=(GDBPlatformUInt(parray)-GDBPlatformUInt(pel));
+  if s>0 then
+  begin
+    s:=s div SizeOfData;
+    deleteelement(s);
+  end;
   result:=parray;
 end;
 destructor TZctnrVector<T>.FreeAndDone;

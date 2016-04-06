@@ -1,16 +1,15 @@
 program zvectorsimpletest;
 {$MODE DELPHI}
-uses sysutils,TypInfo,uzctnrvectorsimple,gvector;
+uses sysutils,TypInfo,uzctnrvectorsimple,gvector,strutils;
 
 const
   MaxVectorLength=10000000;
   InitVectorLength={10000000}1;
+ {$define stringdata}
 type
   TMyTime=TDateTime;
 
-  datatype={byte}{integer}ansistring;
-var
-  typi:pointer;
+  datatype={$ifndef stringdata}{byte}integer{$else}ansistring{$endif};
 function StartTimer:TMyTime;
 begin
   result:=now();
@@ -19,13 +18,23 @@ function GetElapsedTime(prewtime:TMyTime):Double;
 begin
   result:=(now-prewtime)*10e4;
 end;
-function CreateValue(n:integer):integer;overload;
+procedure WriteElapsedTime(Time:TMyTime;procname:ansistring);
 begin
-  result:=n;
+  writeln(procname,GetElapsedTime(Time):2:3,'sec');
 end;
-function CreateValueS(n:integer):ansistring;overload;
+procedure writedata(data:datatype);
 begin
-  result:=inttostr(n);
+  {$ifndef stringdata}
+    write(data:2,';')
+  {$else}
+    data:=PadLeft(data,2);
+    write(data,';')
+  {$endif};
+end;
+
+function CreateValue(n:integer):{$ifndef stringdata}integer{$else}string{$endif};
+begin
+  result:={$ifndef stringdata}n{$else}inttostr(n){$endif};;
 end;
 
 procedure TestIntegerVector;
@@ -42,10 +51,11 @@ var
   var
     ii:integer;
   begin
-    if InegerVector.count<200 then
+    ii:=InegerVector.count;
+    if ii<200 then
     begin
-    for ii:=0 to MaxVectorLength-1 do
-     write(InegerVector.getData(ii),';');
+    for ii:=0 to InegerVector.count-1 do
+     writedata(InegerVector.getData(ii));
     writeln;
     end;
   end;
@@ -63,20 +73,25 @@ begin
 
   for i:=0 to MaxVectorLength-1 do
   begin
-   data:=CreateValues(i);
+   data:=CreateValue(i);
    InegerVector.PushBackData(data);
   end;
-  Writeln(' Time to create and fill ',GetElapsedTime(Time):2:3,'sec');
+  WriteElapsedTime(Time,' Time to create and fill ');
   writeresult;
   Time:=StartTimer;
   InegerVector.Invert;
-  Writeln(' Time to invert ',GetElapsedTime(Time):2:3,'sec');
+  WriteElapsedTime(Time,' Time to invert ');
+  writeresult;
 
+  Time:=StartTimer;
+  for i:=0 to MaxVectorLength-1 do
+    InegerVector.deleteelement({0}InegerVector.count-1);
+  WriteElapsedTime(Time,' Time to del all elements ');
   writeresult;
 
   Time:=StartTimer;
   InegerVector.done;
-  Writeln(' Time to done ',GetElapsedTime(Time):2:3,'sec');
+  WriteElapsedTime(Time,' Time to done ');
   writeln('End test');
 end;
 
@@ -90,6 +105,19 @@ var
   Time:TMyTime;
   pti:PTypeInfo;
   tdata:datatype;
+
+  procedure writeresult;
+  var
+    ii:integer;
+  begin
+    i:=InegerVector.Size;
+    if i<200 then
+    begin
+    for ii:=0 to InegerVector.Size-1 do
+     writedata(InegerVector.items[ii]);
+    writeln;
+    end;
+  end;
 begin
   writeln('Start test for gvector.TVector');
   pti:=TypeInfo(datatype);
@@ -102,10 +130,11 @@ begin
 
   for i:=0 to MaxVectorLength-1 do
   begin
-   data:=CreateValues(i);
+   data:=CreateValue(i);
    InegerVector.PushBack(data);
   end;
-  Writeln(' Time to create and fill ',GetElapsedTime(Time):2:3,'sec');
+  WriteElapsedTime(Time,' Time to create and fill ');
+  writeresult;
 
   Time:=StartTimer;
   j:=InegerVector.Size-1;
@@ -114,23 +143,35 @@ begin
        tdata:=InegerVector[i];
        InegerVector[i]:=InegerVector[j];
        InegerVector[j]:=tdata;
+       dec(j);
   end;
-  Writeln(' Time to invert ',GetElapsedTime(Time):2:3,'sec');
+  WriteElapsedTime(Time,' Time to invert ');
+  writeresult;
 
-  //writeresult;
+  Time:=StartTimer;
+  for i:=0 to MaxVectorLength-1 do
+  InegerVector.Erase({0}InegerVector.Size-1);
+  WriteElapsedTime(Time,' Time to del all elements ');
+  writeresult;
 
   Time:=StartTimer;
   InegerVector.Destroy;
-  Writeln(' Time to done ',GetElapsedTime(Time):2:3,'sec');
+  WriteElapsedTime(Time,' Time to done ');
   writeln('End test');
 end;
 
 begin
   TestIntegerGVector;
-  TestIntegerGVector;
+  //TestIntegerGVector;
 
   TestIntegerVector;
+  //TestIntegerVector;
+
+  TestIntegerGVector;
+  //TestIntegerGVector;
+
   TestIntegerVector;
+  //TestIntegerVector;
   readln;
 end.
 

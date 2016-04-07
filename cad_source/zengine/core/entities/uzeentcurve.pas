@@ -81,12 +81,12 @@ implementation
 //    log;
 procedure GDBObjCurve.InsertVertex(const PolyData:TPolyData);
 begin
-     vertexarrayinocs.InsertElement(PolyData.nearestline,PolyData.dir,PolyData.wc);
+     vertexarrayinocs.InsertElement(PolyData.{nearestline}index,{PolyData.dir,}PolyData.wc);
 end;
 
 procedure GDBObjCurve.DeleteVertex(const PolyData:TPolyData);
 begin
-     vertexarrayinocs.deleteelement(PolyData.nearestvertex);
+     vertexarrayinocs.deleteelement(PolyData.{nearestvertex}index);
 end;
 function GetDirInPoint(const VertexArrayInWCS:GDBPoint3dArray;point:GDBVertex;closed:GDBBoolean):GDBVertex;
 var //tv:gdbvertex;

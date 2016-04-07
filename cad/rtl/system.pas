@@ -340,9 +340,10 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
   PTArrayIndex=^TArrayIndex;
   TArrayIndex=GDBInteger;
   TPolyData=packed record
-                  nearestvertex:gdbinteger;
-                  nearestline:gdbinteger;
-                  dir:gdbinteger;
+                  //nearestvertex:gdbinteger;
+                  //nearestline:gdbinteger;
+                  //dir:gdbinteger;
+                  index:gdbinteger;
                   wc:GDBVertex;
             end;
   TLoadOpt=(TLOLoad,TLOMerge);
@@ -495,18 +496,9 @@ TZctnrVector={$IFNDEF DELPHI}packed{$ENDIF}
                   Count:TArrayIndex;(*hidden_in_objinsp*)
                   Deleted:TArrayIndex;(*hidden_in_objinsp*)
                   Max:TArrayIndex;(*hidden_in_objinsp*)
-                  constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
-                  constructor initnul;
                   destructor done;virtual;abstract;
-                  destructor ClearAndDone;virtual;abstract;
-                  function SizeOfData:TArrayIndex;
-                  procedure Clear;virtual;abstract;
-                  function CreateArray:GDBPointer;virtual;abstract;
-                  procedure Grow(newmax:GDBInteger=0);virtual;abstract;
-                  procedure Shrink;virtual;abstract;
                   procedure freeelement(p:GDBPointer);virtual;abstract;
-                  function GetElemCount:GDBInteger;
-                  function AddByPointer(p:GDBPointer):TArrayIndex;virtual;abstract;
+                  //function AddByPointer(p:GDBPointer):TArrayIndex;virtual;abstract;
                   function beginiterate(out ir:itrec):GDBPointer;virtual;abstract;
                   function iterate(var ir:itrec):GDBPointer;virtual;abstract;
                   procedure free;virtual;abstract;
@@ -517,7 +509,10 @@ TZctnrVector={$IFNDEF DELPHI}packed{$ENDIF}
                   function GetRealCount:GDBInteger;
                   function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
                   function AllocData(SData:GDBword):GDBPointer;virtual;abstract;
-                  function GetParrayAsPointer:pointer;
+                  {old}
+                  function deleteelement(index:GDBInteger):GDBPointer;
+                  function DeleteElementByP(pel:GDBPointer):GDBPointer;
+                  function InsertElement(index{,dir}:GDBInteger;const data:T):GDBPointer;
                   {reworked}
                   procedure SetSize(nsize:TArrayIndex);
                   function getDataMutable(index:TArrayIndex):PT;
@@ -525,11 +520,18 @@ TZctnrVector={$IFNDEF DELPHI}packed{$ENDIF}
                   function PushBackData(const data:T):TArrayIndex;
                   function PushBackIfNotPresentWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
                   function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):GDBBoolean;
-                  {old}
+                  function GetSpecializedTypeInfo:PTypeInfo;inline;
                   destructor FreeAndDone;virtual;abstract;
-                  function deleteelement(index:GDBInteger):GDBPointer;
-                  function DeleteElementByP(pel:GDBPointer):GDBPointer;
-                  function InsertElement(index,dir:GDBInteger;p:GDBPointer):GDBPointer;
+                  destructor ClearAndDone;virtual;abstract;
+                  function SizeOfData:TArrayIndex;
+                  function GetParrayAsPointer:pointer;
+                  function CreateArray:GDBPointer;virtual;abstract;
+                  procedure Clear;virtual;abstract;
+                  function GetElemCount:GDBInteger;
+                  procedure Grow(newmax:GDBInteger=0);virtual;abstract;
+                  procedure Shrink;virtual;abstract;
+                  constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
+                  constructor initnul;
             end;
 //Generate on E:/zcad/cad_source/components/zcontainers/uzctnrvectorrec.pas
 TZctnrVectorRec={$IFNDEF DELPHI}packed{$ENDIF}
@@ -545,6 +547,9 @@ TZctnrVectorP={$IFNDEF DELPHI}packed{$ENDIF}
                                        procedure AddToArray(const pdata:GDBPointer);virtual;abstract;
                                        function addnodouble(pobj:GDBPointer):GDBInteger;virtual;abstract;
                                        function AddByRef(var obj):TArrayIndex;virtual;abstract;
+                                       function AddByPointer(p:GDBPointer):TArrayIndex;virtual;abstract;
+                                       function GetRealCount:GDBInteger;
+                                       function beginiterate(out ir:itrec):GDBPointer;virtual;abstract;
                                  end;
 PGDBOpenArrayOfGDBPointer=^GDBOpenArrayOfGDBPointer;
 GDBOpenArrayOfGDBPointer=packed object(TZctnrVectorP) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
@@ -712,9 +717,9 @@ TZctnrVectorSimple={$IFNDEF DELPHI}packed{$ENDIF}
                           function findstring(s:GDBString;ucase:gdbboolean):boolean;
                           procedure sort;virtual;abstract;
                           procedure SortAndSaveIndex(var index:TArrayIndex);virtual;abstract;
-                          function AddByPointer(p:GDBPointer):TArrayIndex;virtual;abstract;
-                          function addutoa(p:GDBPointer):TArrayIndex;
-                          function addwithscroll(p:GDBPointer):GDBInteger;virtual;abstract;
+                          //function AddByPointer(p:GDBPointer):TArrayIndex;virtual;abstract;
+                          function addutoa(p:GDBString):TArrayIndex;
+                          function addwithscroll(p:GDBString):GDBInteger;virtual;abstract;
                           function GetLengthWithEOL:GDBInteger;
                           function GetTextWithEOL:GDBString;
                           //function addnodouble(p:GDBPointer):GDBInteger;
@@ -810,7 +815,7 @@ PGDBXYZWGDBStringArray=^XYZWGDBGDBStringArray;
 XYZWGDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec)
                              constructor init(m:GDBInteger);
                              procedure freeelement(p:GDBPointer);virtual;abstract;
-                             function add(p:GDBPointer):TArrayIndex;virtual;abstract;
+                             //function add(p:GDBPointer):TArrayIndex;virtual;abstract;
                        end;
 //Generate on E:/zcad/cad_source/zengine/containers/UGDBVectorSnapArray.pas
 PVectotSnap=^VectorSnap;

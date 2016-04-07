@@ -3213,9 +3213,10 @@ begin
   begin
 
 
-  polydata.nearestvertex:=p3dpl^.VertexArrayInOCS.count;
-  polydata.nearestline:=p3dpl^.VertexArrayInOCS.count-1;
-  polydata.dir:=1;
+  //polydata.nearestvertex:=p3dpl^.VertexArrayInOCS.count;
+  //polydata.nearestline:=p3dpl^.VertexArrayInOCS.count-1;
+  //polydata.dir:=1;
+  polydata.index:=p3dpl^.VertexArrayInOCS.count;
   polydata.wc:=wc;
   domethod:=tmethod(@p3dpl^.InsertVertex);
   {tmethod(domethod).Code:=pointer(p3dpl.InsertVertex);
@@ -3436,14 +3437,17 @@ begin
                                         begin
                                              if p3dpl^.vertexarrayinocs.Count>2 then
                                              begin
-                                                  polydata.nearestvertex:=PEProp.nearestvertex;
-                                                  polydata.nearestline:={PEProp.nearestline}polydata.nearestvertex;
+                                                  polydata.index:=PEProp.nearestvertex;
+                                                  if PEProp.nearestvertex=p3dpl^.vertexarrayinocs.GetElemCount then
+                                                                                polydata.index:=polydata.index+1;
+                                                  {polydata.nearestvertex:=PEProp.nearestvertex;
+                                                  polydata.nearestline:=polydata.nearestvertex;
                                                   polydata.dir:=PEProp.dir;
                                                   polydata.dir:=-1;
                                                   if PEProp.nearestvertex=0 then
                                                                                 polydata.dir:=-1;
-                                                  if PEProp.nearestvertex=p3dpl^.vertexarrayinocs.{Count}GetElemCount then
-                                                                                polydata.dir:=1;
+                                                  if PEProp.nearestvertex=p3dpl^.vertexarrayinocs.GetElemCount then
+                                                                                polydata.dir:=1;}
                                                   polydata.wc:=PEProp.vvertex;
                                                   domethod:=tmethod(@p3dpl^.DeleteVertex);
                                                   {tmethod(domethod).Code:=pointer(p3dpl.DeleteVertex);
@@ -3472,11 +3476,11 @@ begin
                                         begin
                                              if (PEProp.setpoint)or(PEProp.Mode=TPEM_Nearest) then
                                                                     begin
-                                                                         polydata.nearestvertex:=PEProp.nearestline;
+                                                                         polydata.{nearestvertex}index:=PEProp.nearestline;
                                                                          if PEProp.dir=1 then
-                                                                                      inc(polydata.nearestvertex);
-                                                                         polydata.nearestline:=PEProp.nearestline;
-                                                                         polydata.dir:=PEProp.dir;
+                                                                                      inc(polydata.{nearestvertex}index);
+                                                                         //polydata.nearestline:=PEProp.nearestline;
+                                                                         //polydata.dir:=PEProp.dir;
                                                                          polydata.wc:=wc;
                                                                          domethod:=tmethod(@p3dpl^.InsertVertex);
                                                                          {tmethod(domethod).Code:=pointer(p3dpl.InsertVertex);
@@ -3520,10 +3524,10 @@ begin
 
                                           end;
                                         if p3dpl2^.VertexArrayInOCS.Count>1 then
-                                                                               p3dpl2^.VertexArrayInOCS.InsertElement(0,1,_tv)
+                                                                               p3dpl2^.VertexArrayInOCS.InsertElement({0}1,{1,}_tv)
                                                                            else
-                                                                               p3dpl2^.VertexArrayInOCS.InsertElement(0,-1,_tv);
-                                        p3dpl^.VertexArrayInOCS.InsertElement(p3dpl^.VertexArrayInOCS.Count-1,1,_tv);
+                                                                               p3dpl2^.VertexArrayInOCS.InsertElement(0,{-1,}_tv);
+                                        p3dpl^.VertexArrayInOCS.InsertElement(p3dpl^.VertexArrayInOCS.Count,{1,}_tv);
                                         p3dpl2^.Formatentity(drawings.GetCurrentDWG^,dc);
                                         p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
                                         drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl2);

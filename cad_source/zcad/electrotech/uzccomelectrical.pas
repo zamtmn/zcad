@@ -1632,9 +1632,10 @@ begin
   begin
     if cabcomparam.PTrace=nil then
     begin
-         polydata.nearestvertex:=p3dpl^.VertexArrayInWCS.Count;
+         {polydata.nearestvertex:=p3dpl^.VertexArrayInWCS.Count;
          polydata.nearestline:=p3dpl^.VertexArrayInWCS.Count;
-         polydata.dir:=1;
+         polydata.dir:=1;}
+         polydata.index:=p3dpl^.VertexArrayInWCS.Count;
          polydata.wc:=wc;
          tmethod(domethod).Code:=pointer(p3dpl.InsertVertex);
          tmethod(domethod).Data:=p3dpl;

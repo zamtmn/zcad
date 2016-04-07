@@ -334,9 +334,10 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
   TArrayIndex=GDBInteger;
 
   TPolyData=packed record
-                  nearestvertex:gdbinteger;
-                  nearestline:gdbinteger;
-                  dir:gdbinteger;
+                  //nearestvertex:gdbinteger;
+                  //nearestline:gdbinteger;
+                  //dir:gdbinteger;
+                  index:gdbinteger;
                   wc:GDBVertex;
             end;
   TLoadOpt=(TLOLoad,TLOMerge);

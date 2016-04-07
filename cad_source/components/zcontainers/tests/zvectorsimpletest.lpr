@@ -5,7 +5,7 @@ uses sysutils,TypInfo,uzctnrvectorsimple,gvector,strutils;
 const
   MaxVectorLength=10000000;
   InitVectorLength={10000000}1;
- {$define stringdata}
+ {define stringdata}
 type
   TMyTime=TDateTime;
 
@@ -83,10 +83,16 @@ begin
   WriteElapsedTime(Time,' Time to invert ');
   writeresult;
 
-  Time:=StartTimer;
+  (*Time:=StartTimer;
   for i:=0 to MaxVectorLength-1 do
     InegerVector.deleteelement({0}InegerVector.count-1);
   WriteElapsedTime(Time,' Time to del all elements ');
+  writeresult;*)
+
+  Time:=StartTimer;
+  for i:=0 to 100 do
+    InegerVector.InsertElement(0,CreateValue(i+100));
+  WriteElapsedTime(Time,' Time to insert ');
   writeresult;
 
   Time:=StartTimer;
@@ -148,10 +154,15 @@ begin
   WriteElapsedTime(Time,' Time to invert ');
   writeresult;
 
-  Time:=StartTimer;
+  (*Time:=StartTimer;
   for i:=0 to MaxVectorLength-1 do
   InegerVector.Erase({0}InegerVector.Size-1);
   WriteElapsedTime(Time,' Time to del all elements ');
+  writeresult;*)
+  Time:=StartTimer;
+  for i:=0 to 100 do
+    InegerVector.Insert(0,CreateValue(i+100));
+  WriteElapsedTime(Time,' Time to insert ');
   writeresult;
 
   Time:=StartTimer;

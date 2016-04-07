@@ -66,7 +66,7 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   {old}
                   function deleteelement(index:GDBInteger):GDBPointer;
                   function DeleteElementByP(pel:GDBPointer):GDBPointer;
-                  function InsertElement(index,dir:GDBInteger;const data:T):GDBPointer;
+                  function InsertElement(index{,dir}:GDBInteger;const data:T):GDBPointer;
 
                   {reworked}
                   procedure SetSize(nsize:TArrayIndex);
@@ -432,22 +432,23 @@ begin
 end;
 function TZctnrVector<T>.InsertElement;
 var
-   del,afterdel:pointer;
    s:integer;
 begin
-     PushBackData(Data);
-     if (index=count-2)and(dir=1) then
-                                      else
-begin
-  del := PArray;
-  inc(pGDBByte(del),SizeOfData*index);
-  GDBPlatformUInt(afterdel):=GDBPlatformUInt(del)+SizeOfData;
-  s:=(count-index-1)*SizeOfData;
-  Move(del^,afterdel^,s);
-  Move({p^}data,del^,SizeOfData);
-  //dec(count);
-end;
-  result:=parray;
+     if index=count then
+                        PushBackData(data)
+                    else
+     begin
+       if parray=nil then
+                          CreateArray;
+       if count = max then
+                          grow;
+       Move(parray[index],parray[index+1],(count-index)*sizeof(t));
+       if PTypeInfo(TypeInfo(T))^.kind in TypesNeedToInicialize
+               then fillchar(parray[index],sizeof(T),0);
+       parray[index]:=data;
+       inc(count);
+     end;
+     result:=parray;
 end;
 function TZctnrVector<T>.deleteelement;
 begin

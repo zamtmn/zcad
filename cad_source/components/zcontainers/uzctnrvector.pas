@@ -38,15 +38,15 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                       {-}TArr=array[0..0] of T;{//}
                       {-}PTArr=^TArr;{//}
                       {-}TEqualFunc=function(const a, b: T):Boolean;{//}
+                      {-}TProcessProc=procedure(const p: PT);{//}
                   {-}var{//}
                   PArray:{-}PTArr{/GDBPointer/};(*hidden_in_objinsp*)
                   GUID:GDBString;(*hidden_in_objinsp*)
                   Count:TArrayIndex;(*hidden_in_objinsp*)
-                  Deleted:TArrayIndex;(*hidden_in_objinsp*)
                   Max:TArrayIndex;(*hidden_in_objinsp*)
 
                   destructor done;virtual;
-                  procedure freeelement(p:GDBPointer);virtual;abstract;
+                  //procedure freeelement(PItem:PT);virtual;abstract;
 
                   //function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
 
@@ -54,7 +54,6 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   function iterate(var ir:itrec):GDBPointer;virtual;
 
                   procedure free;virtual;
-                  procedure freewithproc(freeproc:freeelproc);virtual;
                   function SetCount(index:GDBInteger):GDBPointer;virtual;
                   procedure Invert;
                   function copyto(var source:TZctnrVector<T>):GDBInteger;virtual;
@@ -269,40 +268,15 @@ begin
                        end;
      result:=parray;
 end;
-procedure TZctnrVector<T>.freewithproc;
-var i:integer;
-begin
-     for i:=0 to count-1 do
-       freeproc(@parray[i]);
-end;
-{var p:GDBPointer;
-    ir:itrec;
-begin
-  p:=beginiterate(ir);
-  if p<>nil then
-  repeat
-        freeproc(p);
-        p:=iterate(ir);
-  until p=nil;
-  clear;
-end;}
 procedure TZctnrVector<T>.free;
 var i:integer;
+   _pt:PTypeInfo;
 begin
-     for i:=0 to count-1 do
-       freeelement(@parray[i]);
+ _pt:=TypeInfo(T);
+     if _pt^.Kind in TypesNeedToFinalize then
+       for i:=0 to count-1 do
+                             PArray^[i]:=default(t);
 end;
-{var p:GDBPointer;
-    ir:itrec;
-begin
-  p:=beginiterate(ir);
-  if p<>nil then
-  repeat
-        freeelement(p);
-        p:=iterate(ir);
-  until p=nil;
-  clear;
-end;}
 function TZctnrVector<T>.beginiterate;
 begin
   if parray=nil then
@@ -326,27 +300,11 @@ begin
                       end
                   else result:=nil;
 end;
-{function TZctnrVector<T>.AddByPointer;
-var addr: GDBPlatformint;
-begin
-  if parray=nil then
-                     CreateArray;
-  if count = max then
-                     grow;
-  begin
-       GDBPointer(addr) := parray;
-       addr := addr + count * SizeOfData;
-       Move(p^, GDBPointer(addr)^,SizeOfData);
-       result:=count;
-       inc(count);
-  end;
-end;}
 constructor TZctnrVector<T>.initnul;
 begin
   PArray:=nil;
   pointer(GUID):=nil;
   Count:=0;
-  Deleted:=0;
   Max:=0;
 end;
 constructor TZctnrVector<T>.init;
@@ -354,7 +312,6 @@ begin
   PArray:=nil;
   pointer(GUID):=nil;
   Count:=0;
-  Deleted:=0;
   Max:=m;
   {$IFDEF DEBUGBUILD}Guid:=ErrGuid;{$ENDIF}
 end;
@@ -364,12 +321,6 @@ var {p:pt;
     i:integer;
     _pt:PTypeInfo;
 begin
-  {p:=beginiterate(ir);
-  if p<>nil then
-  repeat
-        p^:=default(t);
-        p:=iterate(ir);
-  until p=nil;}
   _pt:=TypeInfo(T);
   if _pt^.Kind in TypesNeedToFinalize then
     for i:=0 to count-1 do
@@ -391,7 +342,6 @@ end;
 procedure TZctnrVector<T>.clear;
 begin
   count:=0;
-  deleted:=0;
 end;
 function TZctnrVector<T>.CreateArray;
 begin
@@ -428,7 +378,7 @@ else if nsize<max then
 end;
 function TZctnrVector<T>.GetElemCount:GDBInteger;
 begin
-  result:=count-deleted;
+  result:=count;
 end;
 function TZctnrVector<T>.InsertElement;
 var

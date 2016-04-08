@@ -32,14 +32,14 @@ GDBControlPointArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<co
                            procedure draw(var DC:TDrawContext;const SelColor,UnSelColor:TRGB);virtual;
                            procedure getnearesttomouse(var td:tcontrolpointdist;mx,my:integer);virtual;
                            procedure selectcurrentcontrolpoint(key:GDBByte;mx,my,h:integer);virtual;
-                           procedure freeelement(p:GDBPointer);virtual;
+                           procedure freeelement(PItem:PT);virtual;
                      end;
 {Export-}
 implementation
 //uses log;
 procedure GDBControlPointArray.freeelement;
 begin
-  pcontrolpointdesc(p):=pcontrolpointdesc(p);
+  pcontrolpointdesc(PItem):=pcontrolpointdesc(PItem);
 end;
 constructor GDBControlPointArray.init;
 begin

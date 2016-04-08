@@ -31,21 +31,6 @@ TZctnrVectorSimple{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
 implementation
 
 function TZctnrVectorSimple<T>.IsDataExist;
-{var p:PT;
-    ir:itrec;
-begin
-       p:=beginiterate(ir);
-       if p<>nil then
-       repeat
-             if p^=pobj then
-                          begin
-                            result:=true;
-                            exit;
-                          end;
-             p:=iterate(ir);
-       until p=nil;
-       result:=false;
-end;}
 var i:integer;
 begin
      for i:=0 to count-1 do

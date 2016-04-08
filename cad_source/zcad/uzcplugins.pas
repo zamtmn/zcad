@@ -133,7 +133,7 @@ function getpmodule: GDBPointer;
 begin
   result:=@gdbplugins;
 end;
-procedure freeplugin(p:pmoduledesc);
+procedure freeplugin(const p:pmoduledesc);
 begin
      p^.donefunction;
      p^.modulename:='';
@@ -150,7 +150,7 @@ end;*)
 initialization
 gdbplugins.init({$IFDEF DEBUGBUILD}'{7893C445-EAE9-4361-B7AF-244513EE799F}',{$ENDIF}100);
 finalization
-gdbplugins.Freewithproc(@freeplugin);
+gdbplugins.Freewithproc(freeplugin);
 gdbplugins.done;
 
 end.

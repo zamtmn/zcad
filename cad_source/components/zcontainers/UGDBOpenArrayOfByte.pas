@@ -26,7 +26,7 @@ const
 type
 {Export+}
 PGDBOpenArrayOfByte=^GDBOpenArrayOfByte;
-GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArray}TZctnrVector{-}<byte>{//})
+GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVector{-}<byte>{//})
                       ReadPos:GDBInteger;
                       name:GDBString;
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);

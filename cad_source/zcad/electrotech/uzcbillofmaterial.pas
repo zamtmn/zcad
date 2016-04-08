@@ -32,7 +32,7 @@ GDBBOMItem=packed record
 PBbillOfMaterial=^GDBBbillOfMaterial;
 GDBBbillOfMaterial={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<GDBBOMItem>{//})(*OpenArrayOfData=GDBNumItem*)
                        constructor init(m:GDBInteger);
-                       procedure freeelement(p:GDBPointer);virtual;
+                       procedure freeelement(PItem:PT);virtual;
                        //function getnamenumber(_Name:GDBString):GDBstring;
                        //function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
                        function findorcreate(_Name:GDBString):PGDBBOMItem;virtual;
@@ -72,10 +72,10 @@ begin
   ni.processed:=false;
   result:=getDataMutable(PushBackData(ni));
 end;
-procedure GDBBbillOfMaterial.freeelement(p:GDBPointer);
+procedure GDBBbillOfMaterial.freeelement(PItem:PT);
 begin
-     PGDBBOMItem(p)^.Names:='';
-     PGDBBOMItem(p)^.Material:='';
+     PGDBBOMItem(PItem)^.Names:='';
+     PGDBBOMItem(PItem)^.Material:='';
 end;
 constructor GDBBbillOfMaterial.init(m:GDBInteger);
 begin

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit UGDBOpenArrayOfObjects;
+unit uzctnrvectorobjects;
 {$INCLUDE def.inc}
 interface
 uses uzbtypesbase,uzctnrvectorrec,
@@ -28,81 +28,36 @@ GDBOpenArrayOfObjects{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                              procedure cleareraseobj;virtual;
                              function CreateObject:PGDBaseObject;
                              procedure free;virtual;
-                             //procedure freeandsubfree;virtual;
-                             procedure AfterObjectDone(p:PGDBaseObject);virtual;
                        end;
 {Export-}
 implementation
-//uses
-//    log;
-procedure GDBOpenArrayOfObjects<T>.AfterObjectDone;
-begin
-
-end;
 procedure GDBOpenArrayOfObjects<T>.cleareraseobj;
 var i:integer;
 begin
      for i:=0 to count-1 do
        parray[i].done;
 end;
-{var
-  p:PGDBaseObject;
-    ir:itrec;
-begin
-  p:=beginiterate(ir);
-  if p<>nil then
-  repeat
-       p^.done;
-       p:=iterate(ir);
-  until p=nil;
-  count:=0;
-end;}
 function GDBOpenArrayOfObjects<T>.CreateObject;
 var addr: GDBPlatformint;
 begin
-  if parray=nil then
+     result:=getdatamutable(pushbackdata(default(T)));
+  {if parray=nil then
                     createarray;
   if count = max then grow;
   begin
        GDBPointer(addr) := parray;
        addr := addr + GDBPlatformint(count*SizeOfData);
-       //Move(p^, GDBPointer(addr)^,size);
        result:=pointer(addr);
        inc(count);
-  end;
+  end;}
 end;
 procedure GDBOpenArrayOfObjects<T>.free;
 var i:integer;
 begin
      for i:=0 to count-1 do
      begin
-       pgdbaseobject(@parray[i]).done;
-       AfterObjectDone(@parray[i]);
+       parray[i].done;
      end;
 end;
-{var p:GDBPointer;
-    ir:itrec;
-begin
-  p:=beginiterate(ir);
-  if p<>nil then
-  repeat
-        pgdbaseobject(p).done;
-        AfterObjectDone(p);
-        p:=iterate(ir);
-  until p=nil;
-  clear;
-end;}
-{procedure GDBOpenArrayOfObjects<T>.freeandsubfree;
-var p:GDBPointer;
-    ir:itrec;
-begin
-  p:=beginiterate(ir);
-  if p<>nil then
-  repeat
-        PGDBOpenArrayOfData(p).freeanddone;
-        p:=iterate(ir);
-  until p=nil;
-  clear;
-end;}
 begin
 end.

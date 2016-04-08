@@ -53,7 +53,7 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<sel
                           procedure TransformObj(dispmatr:DMatrix4D);
 
                           procedure drawobj(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                          procedure freeelement(p:GDBPointer);virtual;
+                          procedure freeelement(PItem:PT);virtual;
                           function calcvisible(frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                           procedure resprojparam(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
                     end;
@@ -77,15 +77,15 @@ begin
 end;
 procedure GDBSelectedObjArray.freeelement;
 begin
-  if PSelectedObjDesc(p).pcontrolpoint<>nil then
+  if PSelectedObjDesc(PItem).pcontrolpoint<>nil then
                                                 begin
-                                                     PSelectedObjDesc(p).pcontrolpoint^.FreeAndDone;
-                                                     gdbfreemem(GDBPointer(PSelectedObjDesc(p).pcontrolpoint));
+                                                     PSelectedObjDesc(PItem).pcontrolpoint^.FreeAndDone;
+                                                     gdbfreemem(GDBPointer(PSelectedObjDesc(PItem).pcontrolpoint));
                                                 end;
-  if PSelectedObjDesc(p).ptempobj<>nil then
+  if PSelectedObjDesc(PItem).ptempobj<>nil then
                                            begin
-                                                PSelectedObjDesc(p).ptempobj^.done;
-                                                gdbfreemem(GDBPointer(PSelectedObjDesc(p).ptempobj));
+                                                PSelectedObjDesc(PItem).ptempobj^.done;
+                                                gdbfreemem(GDBPointer(PSelectedObjDesc(PItem).ptempobj));
                                            end;
   //PGDBObjBlockdef(p).Entities.ClearAndDone;
 end;

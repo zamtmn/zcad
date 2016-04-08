@@ -20,7 +20,7 @@ unit UUnitManager;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses LCLProc,uzbpaths,uzbstrproc,Varman,languade,UGDBOpenArrayOfObjects,SysUtils,
+uses LCLProc,uzbpaths,uzbstrproc,Varman,languade,uzctnrvectorobjects,SysUtils,
      UBaseTypeDescriptor,uzbtypesbase, uzbtypes,UGDBOpenArrayOfByte, strmy, varmandef,
      uzctnrvectorrec,uzctnrvectorgdbstring,TypeDescriptors,UEnumDescriptor,UArrayDescriptor,
      UPointerDescriptor,URecordDescriptor,UObjectDescriptor,USinonimDescriptor;
@@ -40,7 +40,7 @@ type
                        procedure SetNextManager(PNM:PTUnitManager);
                        procedure LoadFolder(PPaths:GDBString;TranslateFunc:TTranslateFunction;path: GDBString);
 
-                       procedure AfterObjectDone(p:PGDBaseObject);virtual;
+                       //procedure AfterObjectDone(p:PGDBaseObject);virtual;
                        procedure free;virtual;
 
                        procedure CreateExtenalSystemVariable(PPaths:GDBString;sysunitname:GDBString;TranslateFunc:TTranslateFunction;varname,vartype:GDBString;pinstance:Pointer);
@@ -99,10 +99,10 @@ begin
     end;
   SysVarUnit.CreateVariable(varname,vartype,pinstance);
 end;
-procedure TUnitManager.AfterObjectDone;
+{procedure TUnitManager.AfterObjectDone;
 begin
      //GDBFreeMem(pointer(p));
-end;
+end;}
 procedure TUnitManager.free;
 var //p:GDBPointer;
     //ir:itrec;
@@ -113,7 +113,7 @@ begin
   for i := count-1 downto 0 do
   begin
        punit^.Done;
-       AfterObjectDone(punit);
+       //AfterObjectDone(punit);
        dec(GDBPlatformUInt(punit),SizeOfData);
   end;
 

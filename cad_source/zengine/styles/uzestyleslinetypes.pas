@@ -20,7 +20,7 @@ unit uzestyleslinetypes;
 {$INCLUDE def.inc}
 interface
 uses LCLProc,LazUTF8,Classes,uzctnrvectorrec,uzbtypesbase,sysutils,uzbtypes,
-     uzegeometry,uzestylestexts,UGDBOpenArrayOfObjects,UGDBNamedObjectsArray,
+     uzegeometry,uzestylestexts,uzctnrvectorobjects,UGDBNamedObjectsArray,
      uzbstrproc;
 const
      DefaultSHXHeight=1;

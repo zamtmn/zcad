@@ -21,7 +21,7 @@ unit uzccommandsmanager;
 interface
 uses UGDBOpenArrayOfPObjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
      uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,uzcsysinfo,
-     uzbstrproc,UGDBOpenArrayOfPointer,
+     uzbstrproc,uzctnrvectorp,
      uzbtypesbase,uzccommandsabstract, sysutils,uzbtypes,uzglviewareadata,
      uzbmemman,uzcshared,uzclog,varmandef,varman,uzedrawingdef,uzcinterface;
 const

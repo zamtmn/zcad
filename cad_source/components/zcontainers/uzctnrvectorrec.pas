@@ -24,8 +24,18 @@ type
 {Export+}
 TZctnrVectorRec{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(TZctnrVector{-}<T>{//})
+                                   procedure freewithproc(freeproc:TProcessProc);virtual;
                                  end;
 {Export-}
 implementation
+procedure TZctnrVectorRec<T>.freewithproc;
+var i:integer;
+begin
+     for i:=0 to self.count-1 do
+     begin
+       freeproc(@parray[i]);
+     end;
+     self.count:=0;
+end;
 begin
 end.

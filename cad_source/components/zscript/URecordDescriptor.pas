@@ -253,7 +253,7 @@ begin
      fields.init({$IFDEF DEBUGBUILD}'{693E7B49-A224-4778-9FD6-49E131AEBD54}',{$ENDIF}20{,sizeof(FieldDescriptor)});
      parent:=nil;
 end;
-procedure FREEFIELD(p:GDBPointer);
+procedure FREEFIELD(const p:PFieldDescriptor);
 begin
      PFieldDescriptor(p)^.base.ProgramName:='';
      PFieldDescriptor(p)^.base.UserName:='';

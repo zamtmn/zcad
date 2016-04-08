@@ -20,7 +20,7 @@ unit TypeDescriptors;
 {$MODE DELPHI}
 interface
 uses LCLProc,uzbtypesbase,varmandef,uzbtypes,uzctnrvectorrec,uzctnrvectorgdbstring,uzbmemman,
-      UGDBOpenArrayOfPointer,uzbstrproc,sysutils;
+      uzctnrvectorp,uzbstrproc,sysutils;
 const
      m_procedure=1;
      m_function=2;

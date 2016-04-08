@@ -49,7 +49,7 @@ GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*O
                     function addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
                     function setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
                     function FindStyle(StyleName:GDBString;ult:GDBBoolean):PGDBTextStyle;
-                    procedure freeelement(p:GDBPointer);virtual;
+                    procedure freeelement(PItem:PT);virtual;
               end;
 {EXPORT-}
 implementation
@@ -60,8 +60,8 @@ begin
 end;
 procedure GDBTextStyleArray.freeelement;
 begin
-  PGDBTextStyle(p).name:='';
-  PGDBTextStyle(p).dxfname:='';
+  PGDBTextStyle(PItem).name:='';
+  PGDBTextStyle(PItem).dxfname:='';
 end;
 constructor GDBTextStyleArray.initnul;
 begin

@@ -10,7 +10,7 @@ unit uzccomops;
 interface
 uses
 
-  UGDBOpenArrayOfPointer,uzctranslations,uzeentitiesmanager,uzeentity,uzglviewareaabstract,uzgldrawcontext,
+  uzctnrvectorp,uzctranslations,uzeentitiesmanager,uzeentity,uzglviewareaabstract,uzgldrawcontext,
   uzeentabstracttext,uzeenttext,uzctnrvectorgdbstring,uzeentityfactory,uzcsysvars,uzbstrproc,
   uzbtypesbase,uzccommandsmanager,uzclog,UGDBOpenArrayOfPObjects,
   uzccommandsabstract,uzccommandsimpl,uzbtypes,uzcdrawings,uzeutils,uzcutils,sysutils,

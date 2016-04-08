@@ -28,7 +28,7 @@ GDBPolyPoint2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<GDB
 
                       //procedure DrawGeometry;virtual;
                       function InRect(Frame1, Frame2: GDBvertex2DI):TInBoundingVolume;virtual;
-                      procedure freeelement(p:GDBPointer);virtual;
+                      procedure freeelement(PItem:PT);virtual;
                 end;
 {Export-}
 implementation

@@ -28,16 +28,16 @@
         <UnitName Value="uzctnrvectorrec"/>
       </Item2>
       <Item3>
-        <Filename Value="UGDBOpenArrayOfObjects.pas"/>
-        <UnitName Value="UGDBOpenArrayOfObjects"/>
+        <Filename Value="uzctnrvectorobjects.pas"/>
+        <UnitName Value="uzctnrvectorobjects"/>
       </Item3>
       <Item4>
         <Filename Value="UGDBOpenArrayOfPObjects.pas"/>
         <UnitName Value="UGDBOpenArrayOfPObjects"/>
       </Item4>
       <Item5>
-        <Filename Value="UGDBOpenArrayOfPointer.pas"/>
-        <UnitName Value="UGDBOpenArrayOfPointer"/>
+        <Filename Value="uzctnrvectorp.pas"/>
+        <UnitName Value="uzctnrvectorp"/>
       </Item5>
       <Item6>
         <Filename Value="uzctnrvectorgdbstring.pas"/>

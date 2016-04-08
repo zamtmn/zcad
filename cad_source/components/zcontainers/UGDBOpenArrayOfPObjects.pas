@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfPObjects;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,UGDBOpenArrayOfPointer,
+uses uzbtypesbase,uzctnrvectorp,
      uzbtypes,uzbmemman;
 type
 {Export+}

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit UGDBOpenArrayOfPointer;
+unit uzctnrvectorp;
 {$INCLUDE def.inc}
 interface
 uses uzbtypes,uzbtypesbase,sysutils,uzctnrvector;
@@ -26,7 +26,9 @@ PGDBPointerArray=^GDBPointerArray;
 {Export+}
 TZctnrVectorP{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(TZctnrVector{-}<T>{//})
+                                       Deleted:TArrayIndex;(*hidden_in_objinsp*)
                                        function iterate (var ir:itrec):GDBPointer;virtual;
+                                       function beginiterate(out ir:itrec):GDBPointer;virtual;
                                        destructor FreeAndDone;virtual;
                                        procedure cleareraseobj;virtual;abstract;
                                        procedure RemoveFromArray(const pdata:GDBPointer);virtual;
@@ -36,7 +38,10 @@ TZctnrVectorP{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                        function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
                                        function GetRealCount:GDBInteger;
 
-                                       function beginiterate(out ir:itrec):GDBPointer;virtual;
+                                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
+                                       constructor initnul;
+                                       procedure Clear;virtual;
+                                       function GetElemCount:GDBInteger;
                                  end;
 PGDBOpenArrayOfGDBPointer=^GDBOpenArrayOfGDBPointer;
 GDBOpenArrayOfGDBPointer=packed object(TZctnrVectorP{-}<GDBPointer>{//}) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
@@ -47,6 +52,25 @@ implementation
 function EqualFuncPointer(const a, b: pointer):Boolean;
 begin
   result:=(a=b);
+end;
+function TZctnrVectorP<T>.GetElemCount:GDBInteger;
+begin
+  result:=count-deleted;
+end;
+procedure TZctnrVectorP<T>.clear;
+begin
+  inherited;
+  deleted:=0;
+end;
+constructor TZctnrVectorP<T>.initnul;
+begin
+  inherited;
+  Deleted:=0;
+end;
+constructor TZctnrVectorP<T>.init;
+begin
+  inherited;
+  Deleted:=0;
 end;
 function TZctnrVectorP<T>.beginiterate;
 begin

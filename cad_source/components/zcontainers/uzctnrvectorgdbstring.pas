@@ -26,20 +26,13 @@ type
     GDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorSimple{-}<GDBString>{//})(*OpenArrayOfData=GDBString*)
                           constructor init(m:GDBInteger);
                           procedure loadfromfile(fname:GDBString);
-                          procedure freeelement(p:GDBPointer);virtual;
                           function findstring(s:GDBString;ucase:gdbboolean):boolean;
                           procedure sort;virtual;
                           procedure SortAndSaveIndex(var index:TArrayIndex);virtual;
-                          //function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
                           function addutoa(p:GDBString):TArrayIndex;
                           function addwithscroll(p:GDBString):GDBInteger;virtual;
                           function GetLengthWithEOL:GDBInteger;
                           function GetTextWithEOL:GDBString;
-                          //function addnodouble(p:GDBPointer):GDBInteger;
-                          //function copyto(var source:GDBGDBStringArray):GDBInteger;virtual;
-                          //function getGDBString(index:TArrayIndex):GDBString;
-                          //destructor done;virtual;
-                          //function copyto(source:PGDBOpenArrayOfData):GDBInteger;virtual;
                     end;
     PTEnumData=^TEnumData;
     TEnumData=packed record
@@ -49,38 +42,6 @@ type
 {EXPORT-}
 implementation
 uses UGDBOpenArrayOfByte;
-{function GDBGDBStringArray.AddByPointer(p:GDBPointer):TArrayIndex;
-begin
-     result:=inherited AddByPointer(p);
-     RemoveOneRefCount(pGDBString(p)^);
-end;}
-{destructor GDBGDBStringArray.done;
-var p:PGDBString;
-    ir:itrec;
-begin
-  p:=beginiterate(ir);
-  if p<>nil then
-  repeat
-        p^:='';
-  until p=nil;
-  inherited;
-end;}
-{function GDBGDBStringArray.getGDBString;
-begin
-  result := pGDBString(getDataMutable(index))^;
-end;}
-(*function GDBGDBStringArray.copyto;
-var p:GDBPointer;
-    ir:itrec;
-begin
-  p:=beginiterate(ir);
-  if p<>nil then
-  repeat
-        source.AddByPointer(p);  //-----------------//-----------
-        p:=iterate(ir);
-  until p=nil;
-  result:=count;
-end;*)
 procedure GDBGDBStringArray.sort;
 var
    isEnd:boolean;
@@ -148,11 +109,6 @@ begin
      until IsEnd;
 
 end;
-{function GDBGDBStringArray.AddByPointer(p:GDBPointer):TArrayIndex;
-begin
-     result:=inherited AddByPointer(p);
-     RemoveOneRefCount(pGDBString(p)^);
-end;}
 function GDBGDBStringArray.addutoa(p:GDBString):TArrayIndex;
 var s:GDBString;
 begin
@@ -181,32 +137,9 @@ begin
      until ps=nil;
      result:=false;
 end;
-(*function GDBGDBStringArray.addnodouble(p:GDBPointer):GDBInteger;
-var
-//   isEnd:boolean;
-   ps{,pspred}:pgdbstring;
-   s:gdbstring;
-   ir:itrec;
-begin
-     s:=pGDBString(p)^;
-
-     ps:=beginiterate(ir);
-     if (ps<>nil) then
-     repeat
-          if uppercase(ps^)=uppercase(s) then
-                             begin
-                                  exit;
-                             end;
-          ps:=iterate(ir);
-     until ps=nil;
-
-     GDBPointer(s):=nil;
-     inherited AddByPointer(p);
-end;*)
 function GDBGDBStringArray.addwithscroll(p:GDBString):GDBInteger;
 var
    ps,pspred:pgdbstring;
-//   s:gdbstring;
    ir:itrec;
 begin
      if count=max then
@@ -245,7 +178,6 @@ end;
 function GDBGDBStringArray.GetTextWithEOL:GDBString;
 var
    ps:pgdbstring;
-//   s:gdbstring;
    i:integer;
    ir:itrec;
 begin
@@ -272,10 +204,6 @@ begin
                            until ps=nil;
                       end;
 end;
-procedure GDBGDBStringArray.freeelement(p:GDBPointer);
-begin
-     GDBString(p^):='';
-end;
 constructor GDBGDBStringArray.init(m:GDBInteger);
 begin
      inherited init({$IFDEF DEBUGBUILD}'{C4288C8A-7E49-4F97-9F66-347B38494638}',{$ENDIF}m{,sizeof(GDBString)});
@@ -284,7 +212,6 @@ procedure GDBGDBStringArray.loadfromfile(fname:GDBString);
 var f:GDBOpenArrayOfByte;
     line:GDBString;
 begin
-  //f.init(1024);
   f.InitFromFile(fname);
   while f.notEOF do
     begin
@@ -292,10 +219,8 @@ begin
       if (line<>'')and(line[1]<>';') then
         begin
           PushBackData(line);
-          //GDBPointer(line):=nil;
         end;
     end;
-  //f.close;
   f.done;
 end;
 begin

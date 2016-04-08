@@ -23,7 +23,7 @@ unit Varman;
 
 interface
 uses
-  uzctnrvectorrec,LCLProc,uabstractunit,{zcadstrconsts,}UGDBOpenArrayOfPointer,SysUtils,UBaseTypeDescriptor,
+  uzctnrvectorrec,LCLProc,uabstractunit,uzctnrvectorp,SysUtils,UBaseTypeDescriptor,
   uzbtypesbase,uzbtypes,UGDBOpenArrayOfByte,uzctnrvectorgdbstring,varmandef,
   UGDBOpenArrayOfPObjects,usimplegenerics,
   uzbmemman,TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes;
@@ -215,7 +215,7 @@ TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
             procedure free;virtual;
       end;
 {EXPORT-}
-procedure vardeskclear(p:GDBPointer);
+procedure vardeskclear(const p:pvardesk);
 var
   SysUnit:PTUnit=nil;
   SysVarUnit:PTUnit=nil;
@@ -358,7 +358,8 @@ end;
 procedure TObjectUnit.free;
 begin
      self.InterfaceUses.clear;
-     self.InterfaceVariables.vardescarray.Freewithproc(@vardeskclear);
+     self.InterfaceVariables.vardescarray.Freewithproc(vardeskclear);
+     //self.InterfaceVariables.vardescarray.Clear;
      self.InterfaceVariables.vararray.Clear;
 end;
 function TSimpleUnit.SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;
@@ -424,7 +425,7 @@ function GetPVarMan: GDBPointer; export;
 begin
   result := @SysUnit.InterfaceVariables;
 end;
-procedure vardeskclear(p:GDBPointer);
+procedure vardeskclear(const p:pvardesk);
 //var
    //s:string;
 begin

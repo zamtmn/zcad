@@ -19,7 +19,7 @@
 unit uzclog;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,LazLoggerBase,LazLogger;
+uses uzbtypesbase,uzbtypes,LazLoggerBase,LazLogger;
 const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
       {$IFDEF FPC}
                   {$IFDEF LINUX}filelog='log/zcad_linux.log';{$ENDIF}
@@ -345,6 +345,8 @@ begin
                                          CurrentTime:=mynow();
                                          CurrentLogMode:=LogMode;
                                          WriteToLog('Log mode changed to: '+LogMode2string(LogMode),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
+                                         if LogMode=LM_Trace then
+                                                                 uzbtypes.VerboseLog:=true;
                                     end;
 end;
 

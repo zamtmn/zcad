@@ -21,7 +21,7 @@ unit uzcoimultiobjects;
 
 interface
 uses
-  uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,uzbmemman,uzcshared,
+  LazLoggerBase,uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,uzbmemman,uzcshared,
   uzcstrconsts,sysutils,uzeentityfactory,uzcenitiesvariablesextender,uzgldrawcontext,
   uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,Varman,uzctnrvectorgdbstring;
 type
@@ -500,19 +500,43 @@ var //i: GDBInteger;
     ir,ir2:itrec;
     pentvarext:PTVariablesExtender;
 begin
+     debugln('{D+}TMSEditor.createunit start');
      SavezeUnitsFormat:=f;
      if _GetEntsTypes then
                           GetEntsTypes;
-
+     if VerboseLog then
+                       debugln('{T+}VariablesUnit.free start');
      VariablesUnit.free;
+     if VerboseLog then
+                       debugln('{T-}end');
+
+     if VerboseLog then
+                       debugln('{T+}GeneralUnit.free start');
      GeneralUnit.free;
      GeneralUnit.InterfaceUses.addnodouble(@sysunit);
+     if VerboseLog then
+                       debugln('{T-}end');
+
+     if VerboseLog then
+                       debugln('{T+}GeometryUnit.free start');
      GeometryUnit.free;
      GeometryUnit.InterfaceUses.addnodouble(@sysunit);
+     if VerboseLog then
+                       debugln('{T-}end');
+
+     if VerboseLog then
+                  debugln('{T+}MiscUnit.free start');
      MiscUnit.free;
      MiscUnit.InterfaceUses.addnodouble(@sysunit);
+     if VerboseLog then
+                       debugln('{T-}end');
+
+     if VerboseLog then
+                  debugln('{T+}SummaryUnit.free start');
      SummaryUnit.free;
      SummaryUnit.InterfaceUses.addnodouble(@sysunit);
+     if VerboseLog then
+                       debugln('{T-}end');
 
      CheckMultiPropertyUse;
      CreateMultiPropertys(f);
@@ -568,6 +592,7 @@ begin
      //pv:=drawings.GetCurrentDWG.ObjRoot.ObjArray.iterate(ir);
      psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
      until psd=nil;
+     debugln('{D+}TMSEditor.createunit end');
 end;
 procedure DeselectEnts(PInstance:GDBPointer);
 var

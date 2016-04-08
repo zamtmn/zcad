@@ -21,9 +21,9 @@ unit UObjectDescriptor;
 {$MODE DELPHI}
 {$ASMMODE intel}
 interface
-uses LCLProc,UGDBOpenArrayOfObjects,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
+uses LCLProc,uzctnrvectorobjects,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
      UBaseTypeDescriptor,TypeDescriptors,
-     UGDBOpenArrayOfPointer,uzctnrvectorrec,uzbtypesbase,varmandef,uzbtypes,uzbmemman,uzbstrproc;
+     uzctnrvectorp,uzctnrvectorrec,uzbtypesbase,varmandef,uzbtypes,uzbmemman,uzbstrproc;
 type
 simpleproc=procedure of object;
 //SimpleMenods.init({$IFDEF DEBUGBUILD}'{E4674594-B99F-4A72-8766-E2B49DF50FCE}',{$ENDIF}20,sizeof(MetodDescriptor));
@@ -225,7 +225,7 @@ begin
      //SimpleMenods.FreewithprocAndDone(freemetods);
      SimpleMenods.FreeAndDone;
      //fields.FreewithprocAndDone(freeprop);
-     Properties.Freewithproc(freeprop);
+     Properties.Freewithproc(@freeprop);
      Properties.done;
      //Properties.FreeAndDone;
      parent:=nil;

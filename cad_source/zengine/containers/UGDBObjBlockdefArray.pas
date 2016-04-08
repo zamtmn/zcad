@@ -35,7 +35,7 @@ GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<GDB
                       function getblockdef(name:GDBString):PGDBObjBlockdef;virtual;
                       //function loadblock(filename,bname:pansichar;pdrawing:GDBPointer):GDBInteger;virtual;
                       function create(name:GDBString):PGDBObjBlockdef;virtual;
-                      procedure freeelement(p:GDBPointer);virtual;
+                      procedure freeelement(PItem:PT);virtual;
                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       procedure Grow(newmax:GDBInteger=0);virtual;
                       procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
@@ -71,7 +71,7 @@ end;
 
 procedure GDBObjBlockdefArray.freeelement;
 begin
-  PGDBObjBlockdef(p).done;
+  PGDBObjBlockdef(PItem).done;
   //PGDBObjBlockdef(p).ObjArray.FreeAndDone;
 end;
 constructor GDBObjBlockdefArray.init;

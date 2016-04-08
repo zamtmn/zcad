@@ -47,7 +47,7 @@ GDBGraf={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<grafelement>{//
                 function minimalize(var drawing:TDrawingDef):GDBBoolean;
                 function divide:GDBBoolean;
                 destructor done;virtual;
-                procedure freeelement(p:GDBPointer);virtual;
+                procedure freeelement(PItem:PT);virtual;
 
                 procedure BeginFindPath;
                 procedure FindPath(point1,point2:gdbvertex;l1,l2:pgdbobjEntity;var pa:GDBPoint3dArray);
@@ -261,8 +261,8 @@ begin
 end;
 procedure GDBGraf.freeelement;
 begin
-  pgrafelement(p).link.Clear;
-  pgrafelement(p).link.done;
+  pgrafelement(PItem).link.Clear;
+  pgrafelement(PItem).link.done;
   //pgrafelement(p).
   //GDBFreeMem(PGDBFontRecord(p).Pfont);
 end;

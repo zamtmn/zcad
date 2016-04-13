@@ -1072,6 +1072,14 @@ msgstr "Устройство должно быть выбрано до запу�
 msgid "Devices must be selected before run the command"
 msgstr "Устройства должны быть выбраны до запуска команды"
 
+#: uzcstrconsts.rscmselectdestinationentity
+msgid "Select destination entity:"
+msgstr ""
+
+#: uzcstrconsts.rscmselectsourceentity
+msgid "Select source entity:"
+msgstr ""
+
 #: uzcstrconsts.rscmselentbeforecomm
 msgid "Entities must be selected before run the command"
 msgstr "Примитивы должны быть выбраны до запуска команды"
@@ -1088,6 +1096,10 @@ msgstr ""
 msgid "Specify insert point:"
 msgstr ""
 
+#: uzcstrconsts.rscmspecifypoint
+msgid "Specify point:"
+msgstr ""
+
 #: uzcstrconsts.rscmspecifyrotate
 msgid "Specify rotate:"
 msgstr ""
@@ -1102,6 +1114,18 @@ msgstr ""
 
 #: uzcstrconsts.rscmspecifythirdpoint
 msgid "Specify third point:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifyx
+msgid "Specify X:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifyy
+msgid "Specify Y:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifyz
+msgid "Specify Z:"
 msgstr ""
 
 #: uzcstrconsts.rscolornum

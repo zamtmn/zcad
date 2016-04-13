@@ -1015,6 +1015,14 @@ msgstr ""
 msgid "Devices must be selected before run the command"
 msgstr ""
 
+#: uzcstrconsts.rscmselectdestinationentity
+msgid "Select destination entity:"
+msgstr ""
+
+#: uzcstrconsts.rscmselectsourceentity
+msgid "Select source entity:"
+msgstr ""
+
 #: uzcstrconsts.rscmselentbeforecomm
 msgid "Entities must be selected before run the command"
 msgstr ""
@@ -1031,6 +1039,10 @@ msgstr ""
 msgid "Specify insert point:"
 msgstr ""
 
+#: uzcstrconsts.rscmspecifypoint
+msgid "Specify point:"
+msgstr ""
+
 #: uzcstrconsts.rscmspecifyrotate
 msgid "Specify rotate:"
 msgstr ""
@@ -1045,6 +1057,18 @@ msgstr ""
 
 #: uzcstrconsts.rscmspecifythirdpoint
 msgid "Specify third point:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifyx
+msgid "Specify X:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifyy
+msgid "Specify Y:"
+msgstr ""
+
+#: uzcstrconsts.rscmspecifyz
+msgid "Specify Z:"
 msgstr ""
 
 #: uzcstrconsts.rscolornum

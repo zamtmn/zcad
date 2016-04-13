@@ -2986,7 +2986,7 @@ begin
                                                                  psupernetvarext^.entityunit.copyfrom(@pnetvarext.entityunit);
                                                                  //log.LogOut('supernet.initnul(nil); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
-                                                            if not processednets.IsDataExistWithCompareProc(net,@EqualFuncPointer) then
+                                                            if not processednets.IsDataExist{WithCompareProc}(net{,@EqualFuncPointer}) then
                                                             begin
                                                                  net.objarray.copyto(supernet.ObjArray);
                                                                  processednets.PushBackData(net);
@@ -2994,7 +2994,7 @@ begin
                                                                  //log.LogOut('processednets.AddByRef(net^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
 
-                                                            if not processednets.IsDataExistWithCompareProc(net2,@EqualFuncPointer) then
+                                                            if not processednets.IsDataExist{WithCompareProc}(net2{,@EqualFuncPointer}) then
                                                             begin
                                                                  net2.objarray.copyto(supernet.ObjArray);
                                                                  processednets.PushBackData(net2);

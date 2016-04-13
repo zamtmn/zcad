@@ -449,7 +449,7 @@ begin
   pcreatedstyle^.Name:=stylename;
 
   domethod:=tmethod(@pdwg^.TextStyleTable.PushBackData);
-  undomethod:=tmethod(@pdwg^.TextStyleTable.RemoveFromArray);
+  undomethod:=tmethod(@pdwg^.TextStyleTable.RemoveData);
   CreateUndoStartMarkerNeeded;
   with PushCreateTGObjectChangeCommand2(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pcreatedstyle,tmethod(domethod),tmethod(undomethod))^ do
   begin
@@ -467,7 +467,7 @@ var
 begin
   pdwg:=drawings.GetCurrentDWG;
   pstyle:=(ProcessedItem.Data);
-  domethod:=tmethod(@pdwg^.TextStyleTable.RemoveFromArray);
+  domethod:=tmethod(@pdwg^.TextStyleTable.RemoveData);
   undomethod:=tmethod(@pdwg^.TextStyleTable.PushBackData);
   CreateUndoStartMarkerNeeded;
   with PushCreateTGObjectChangeCommand2(PTZCADDrawing(pdwg)^.UndoStack,pstyle,tmethod(domethod),tmethod(undomethod))^ do

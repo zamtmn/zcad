@@ -733,7 +733,7 @@ begin
                                                         end;
                         if devicemetric=cablemetric then
                         begin
-                        if ProcessedDevices.IsDataExistWithCompareProc(@ptn^.bp.ListPos.Owner^,@EqualFuncPointer)=false then
+                        if ProcessedDevices.IsDataExist{WithCompareProc}(@ptn^.bp.ListPos.Owner^{,@EqualFuncPointer})=false then
                     begin
                          currentunit:=GetNumUnit(numingroupmetric);
 

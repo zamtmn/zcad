@@ -31,11 +31,7 @@ TZctnrVectorP{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                        function beginiterate(out ir:itrec):GDBPointer;virtual;
                                        destructor FreeAndDone;virtual;
                                        procedure cleareraseobj;virtual;abstract;
-                                       procedure RemoveFromArray(const data:T);virtual;
-                                       //procedure AddToArray(const pdata:GDBPointer);virtual;
-                                       //function addnodouble(pobj:GDBPointer):GDBInteger;virtual;
-                                       //function AddByRef(var obj):TArrayIndex;virtual;
-                                       //function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
+                                       procedure RemoveData(const data:T);virtual;
                                        function GetRealCount:GDBInteger;
 
                                        constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
@@ -165,7 +161,7 @@ begin
   until (ir.itc=count)or(p<>nil);
   result:=p;
 end;
-procedure TZctnrVectorP<T>.RemoveFromArray(const data:T);
+procedure TZctnrVectorP<T>.RemoveData(const data:T);
 var p:GDBPointer;
     ir:itrec;
 begin
@@ -198,7 +194,7 @@ begin
   until p=nil;
   result:=count;
 end;
-procedure GDBOpenArrayOfGDBPointer.RemoveFromArray(const pdata:GDBPointer);
+procedure GDBOpenArrayOfGDBPointer.RemoveData(const pdata:GDBPointer);
 var p:GDBPointer;
     ir:itrec;
 begin

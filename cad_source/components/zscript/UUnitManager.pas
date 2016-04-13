@@ -95,7 +95,7 @@ begin
   if SysVarUnit=nil then
     begin
       SysVarUnit:=units.FindOrCreateEmptyUnit('sysvar');
-      SysVarUnit.InterfaceUses.addnodouble(@SysUnit);
+      SysVarUnit.InterfaceUses.PushBackIfNotPresent(SysUnit);
     end;
   SysVarUnit.CreateVariable(varname,vartype,pinstance);
 end;
@@ -219,7 +219,7 @@ begin
        pfu:=findunit(PPaths,TranslateFunc,'system');
        if (pfu<>nil)and(pfu<>CurrentUnit) then
        begin
-            CurrentUnit.InterfaceUses.addnodouble(@pfu);
+            CurrentUnit.InterfaceUses.PushBackIfNotPresent(pfu);
        end;
      end;
      if newmode=endmode then
@@ -330,13 +330,13 @@ begin
                                                            pfu:=findunit(PPaths,TranslateFunc,pstring(p)^);
                                                            if pfu<>nil then
                                                                            begin
-                                                                                CurrentUnit.InterfaceUses.addnodouble(@pfu);
+                                                                                CurrentUnit.InterfaceUses.PushBackIfNotPresent(pfu);
                                                                            end;
                                                            if (pfu=nil)and(uppercase(pstring(p)^)='SYSTEM')then
                                                            begin
                                                                 pfu:=pointer(CreateObject);
                                                                 PTUnit(pfu)^.init('system');
-                                                                CurrentUnit.InterfaceUses.addnodouble(@pfu);
+                                                                CurrentUnit.InterfaceUses.PushBackIfNotPresent(pfu);
                                                            end;
                                                            p:=parseresult.iterate(ir);
                                                      until p=nil;

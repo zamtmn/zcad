@@ -167,7 +167,7 @@ var
 begin
      ptd:=drawings.CreateDWG('*rtl/dwg/DrawingDeviceBase.pas','*rtl/dwg/DrawingVars.pas');
 
-     drawings.AddByRef(ptd^);
+     drawings.PushBackData(ptd);
 
      if length(operands)=0 then
                                begin

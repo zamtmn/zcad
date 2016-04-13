@@ -253,7 +253,7 @@ begin
   begin
   temp:=CreateInitObjfree(t,owner);
   temp^.bp.ListPos.Owner:=owner;
-  AddByPointer(@temp);
+  PushBackData(temp);
   end;
   result := temp;
 end;

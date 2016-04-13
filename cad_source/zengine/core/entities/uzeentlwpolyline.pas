@@ -195,7 +195,7 @@ begin
      if Vertex3D_in_WCS_Array.onpoint(point,closed) then
                                                 begin
                                                      result:=true;
-                                                     objects.AddByRef(self);
+                                                     objects.PushBackData(@self);
                                                 end
                                             else
                                                 result:=false;

@@ -2804,7 +2804,7 @@ begin
               np:=NearestPointOnSegment(riser.P_insert_in_WCS,nline.CoordInWCS.lBegin,nline.CoordInWCS.lEnd);
               if IsPointEqual(np,riser.P_insert_in_WCS)then
               begin
-                   net.riserarray.AddByPointer(@riser);
+                   net.riserarray.PushBackData(riser);
               end;
               riser:=riserarray.iterate(ir_riser);
         until riser=nil;
@@ -2989,7 +2989,7 @@ begin
                                                             if not processednets.IsDataExistWithCompareProc(net,@EqualFuncPointer) then
                                                             begin
                                                                  net.objarray.copyto(supernet.ObjArray);
-                                                                 processednets.AddByRef(net^);
+                                                                 processednets.PushBackData(net);
                                                                  //net2processed:=true;
                                                                  //log.LogOut('processednets.AddByRef(net^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
@@ -2997,7 +2997,7 @@ begin
                                                             if not processednets.IsDataExistWithCompareProc(net2,@EqualFuncPointer) then
                                                             begin
                                                                  net2.objarray.copyto(supernet.ObjArray);
-                                                                 processednets.AddByRef(net2^);
+                                                                 processednets.PushBackData(net2);
                                                                  //net2processed:=true;
                                                                  //log.LogOut('processednets.AddByRef(net2^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
@@ -3021,7 +3021,7 @@ begin
                                                                 New_line^.Formatentity(drawings.GetCurrentDWG^,dc);
                                                                 //New_line.bp.ListPos.Owner^.RemoveInArray(New_line.bp.ListPos.SelfIndex);
                                                                 supernet^.ObjArray.add(addr(New_line));
-                                                                linesarray.AddByPointer(addr(New_line));
+                                                                linesarray.PushBackData(New_line);
                                                                 //log.LogOut('supernet^.ObjArray.add(addr(New_line)); Примитивов в графе: '+inttostr(supernet^.objarray.count));
 
 
@@ -3045,7 +3045,7 @@ begin
                           until (net=nil){or(supernet<>nil)};
                           riserarray.ClearAndDone;
                           if supernet<>nil then
-                                          supernetsarray.AddByRef(supernet^);
+                                          supernetsarray.PushBackData(supernet);
                           end
                              else
                                  supernet:=supernet;

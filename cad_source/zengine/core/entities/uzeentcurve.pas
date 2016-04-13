@@ -519,7 +519,7 @@ begin
      if VertexArrayInWCS.onpoint(point,false) then
                                                 begin
                                                      result:=true;
-                                                     objects.AddByRef(self);
+                                                     objects.PushBackData(@self);
                                                 end
                                             else
                                                 result:=false;

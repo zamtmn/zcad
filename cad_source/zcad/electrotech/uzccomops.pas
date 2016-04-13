@@ -740,17 +740,17 @@ begin
                          SaveCabUName:=pcablestartsegmentvarext^.entityunit.Name;
                          pcablestartsegmentvarext^.entityunit.Name:='Cable';
                          p:=@pcablestartsegmentvarext^.entityunit;
-                         currentunit.InterfaceUses.addnodouble(@p);
+                         currentunit.InterfaceUses.PushBackIfNotPresent(p);
                          ucount:=currentunit.InterfaceUses.Count;
 
                          SaveEntUName:=pptnownervarext^.entityunit.Name;
                          pptnownervarext^.entityunit.Name:='Entity';
                          p:=@pptnownervarext^.entityunit;
-                         currentunit.InterfaceUses.addnodouble(@p);
+                         currentunit.InterfaceUses.PushBackIfNotPresent(p);
 
                          units.loadunit(SupportPath,InterfaceTranslate,expandpath('*rtl/objcalc/opsmark.pas'),(currentunit));
 
-                         ProcessedDevices.AddByPointer(@ptn^.bp.ListPos.Owner);
+                         ProcessedDevices.PushBackData(ptn^.bp.ListPos.Owner);
 
                          dec(currentunit.InterfaceUses.Count,2);
 

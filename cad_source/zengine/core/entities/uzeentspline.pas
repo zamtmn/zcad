@@ -93,7 +93,7 @@ begin
      if VertexArrayInWCS.onpoint(point,closed) then
                                                 begin
                                                      result:=true;
-                                                     objects.AddByRef(self);
+                                                     objects.PushBackData(@self);
                                                 end
                                             else
                                                 result:=false;

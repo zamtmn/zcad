@@ -31,7 +31,7 @@ begin
   {if CurrentCommand<>count then
                                self.cleareraseobjfrom2(CurrentCommand);}
 
-  us.AddByPointer(@result);
+  us.PushBackData(result);
   inc(us.CurrentCommand);
 end;
 

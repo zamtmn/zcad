@@ -92,7 +92,7 @@ begin
       repeat
             pv^.Transform(t_matrix);
             //pv^.YouChanged;{убраное проверить}
-            self.ObjCasheArray.AddByPointer(@pv);{замена YouChanged тоже проверить}
+            self.ObjCasheArray.PushBackData(pv);{замена YouChanged тоже проверить}
       pv:=ObjArray.iterate(ir);
       until pv=nil;
 end;
@@ -525,7 +525,7 @@ begin
                     pl:=GDBPointer(tgf^.link.beginiterate(ir));
                     if pl<>nil then
                     repeat
-                          ti.addnodouble(addr(pl));
+                          ti.PushBackIfNotPresent(pl);
                           pl:=GDBPointer(tgf^.link.iterate(ir));
                     until pl=nil;
                end;

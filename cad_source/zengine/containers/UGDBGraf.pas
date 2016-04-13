@@ -242,7 +242,7 @@ end;
 function grafelement.addline;
 begin
      inc(linkcount);
-     link.AddByPointer(addr(pv));
+     link.PushBackData(pv);
 end;
 constructor grafelement.initnul;
 begin

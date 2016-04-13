@@ -295,7 +295,7 @@ begin
      if {distance2piece}SQRdist_Point_to_Segment(point,self.CoordInWCS.lBegin,self.CoordInWCS.lEnd)<bigeps then
                                                                                   begin
                                                                                     result:=true;
-                                                                                    objects.AddByRef(self);
+                                                                                    objects.PushBackData(@self);
                                                                                   end
                                                                                 else
                                                                                     result:=false;

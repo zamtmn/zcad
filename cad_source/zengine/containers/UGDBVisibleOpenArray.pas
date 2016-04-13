@@ -87,12 +87,12 @@ begin
   begin
        pGDBObjEntity(p^).bp.ListPos.Owner.RemoveInArray(pGDBObjEntity(p^).bp.ListPos.SelfIndex);
   end;}
-  result:=inherited AddByPointer(p);
+  result:=inherited PushBackData(ppointer(p)^);
   pGDBObjEntity(p^).bp.ListPos.SelfIndex:={addr(PGDBObjEntityArray(parray)^[}result{])};
 end;
 function GDBObjEntityOpenArray.addwithoutcorrect;
 begin
-  result:=inherited AddByPointer(p);
+  result:=inherited PushBackData(ppointer(p)^);
 end;
 function GDBObjEntityOpenArray.copytowithoutcorrect;
 var p:GDBPointer;

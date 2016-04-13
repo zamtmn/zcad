@@ -320,7 +320,7 @@ begin
      pu:=InterfaceUses.beginiterate(ir);
      if pu<>nil then
                     repeat
-                          source.InterfaceUses.addnodouble(@pu);
+                          source.InterfaceUses.PushBackIfNotPresent(pu);
                           pu:=InterfaceUses.iterate(ir);
                     until pu=nil;
      pv:=InterfaceVariables.vardescarray.beginiterate(ir);
@@ -343,7 +343,7 @@ begin
      pu:=source.InterfaceUses.beginiterate(ir);
      if pu<>nil then
                     repeat
-                          InterfaceUses.addnodouble(@pu);
+                          InterfaceUses.PushBackIfNotPresent(pu);
                           pu:=source.InterfaceUses.iterate(ir);
                     until pu=nil;
      pv:=source.InterfaceVariables.vardescarray.beginiterate(ir);
@@ -496,7 +496,7 @@ function typemanager.AddTypeByPP(p:GDBPointer):TArrayIndex;
 var
   pt:PUserTypeDescriptor;
 begin
-     result:=exttype.AddByPointer(p);
+     result:=exttype.PushBackData(ppointer(p)^);
      pt:=ppointer(p)^;
      n2i.insert(uppercase(pt^.TypeName),result);
 end;

@@ -230,7 +230,7 @@ begin
   DWGUnits.SetNextManager(num);
   pdwgwarsunit:=pointer(DWGUnits.CreateObject);
   pdwgwarsunit^.init('DrawingVars');
-  pdwgwarsunit.InterfaceUses.addnodouble(@SysUnit);
+  pdwgwarsunit.InterfaceUses.PushBackIfNotPresent(SysUnit);
   pdwgwarsunit^.CreateVariable('DWG_DrawMode','GDBBoolean',@LWDisplay);
   pdwgwarsunit^.CreateVariable('DWG_SnapGrid','GDBBoolean',@SnapGrid);
   pdwgwarsunit^.CreateVariable('DWG_DrawGrid','GDBBoolean',@DrawGrid);

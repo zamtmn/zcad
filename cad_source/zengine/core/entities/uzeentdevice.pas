@@ -333,7 +333,7 @@ begin
        if ot then
                  begin
                       lstonmouse:=p^.ReturnLastOnMouse(InSubEntry);
-                      {PGDBObjOpenArrayOfPV}(popa).AddByPointer(addr(p));
+                      {PGDBObjOpenArrayOfPV}(popa).PushBackData(p);
                  end;
        result:=result or ot;
        p:=VarObjArray.iterate(ir);

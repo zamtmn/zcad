@@ -63,7 +63,7 @@ var
    p:pointer;
 begin
      p:=PObject;
-     objarray.AddByPointer(@P{Object});
+     objarray.PushBackData(P);
 end;
 procedure TGMultiObjectProcessCommand.UnDo;
 type
@@ -121,7 +121,7 @@ end;
 function {GDBObjOpenArrayOfUCommands.}PushMultiObjectCreateCommand(var us:GDBObjOpenArrayOfUCommands; var dodata,undodata:tmethod;objcount:integer):PTGDBMultiCreateCommand;overload;
 begin
   result:=CreateMultiObjectCreateCommand(dodata,undodata,objcount);
-  us.AddByPointer(@result);
+  us.PushBackData(result);
   inc(us.CurrentCommand);
 end;
 

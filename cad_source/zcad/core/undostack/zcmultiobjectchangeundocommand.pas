@@ -119,7 +119,7 @@ end;
 function {GDBObjOpenArrayOfUCommands.}PushCreateTGMultiObjectChangeCommand(var us:GDBObjOpenArrayOfUCommands; var data,undodata:DMatrix4D;const objcount:Integer):PTGDBTransformChangeCommand;overload;
 begin
   result:=CreateTGMultiObjectChangeCommand(data,undodata,objcount);
-  us.AddByPointer(@result);
+  us.PushBackData(result);
   inc(us.CurrentCommand);
 end;
 end.

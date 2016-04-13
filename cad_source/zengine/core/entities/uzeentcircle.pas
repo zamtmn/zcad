@@ -106,7 +106,7 @@ begin
      if abs(uzegeometry.Vertexlength(point,P_insert_in_WCS)-radius)<bigeps then
                                                                      begin
                                                                        result:=true;
-                                                                       objects.AddByRef(self);
+                                                                       objects.pushbackdata(@self);
                                                                      end
                                                                    else
                                                                      result:=false;

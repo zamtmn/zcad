@@ -34,7 +34,7 @@ procedure RegisterBackend(BackEndClass:TVA;Name:string);
 begin
      //sysvar.RD.RD_RendererBackEnd.Enums.add(@name);
      BackendsNames.Enums.PushBackData(name);
-     Backends.AddByPointer(@BackEndClass);
+     Backends.PushBackData(BackEndClass);
 end;
 function GetCurrentBackEnd:TVA;
 begin

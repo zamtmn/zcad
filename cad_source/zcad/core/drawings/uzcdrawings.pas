@@ -809,7 +809,7 @@ begin
                     begin
                          if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then
                          begin
-                              entarray.AddByPointer(@pvisible);
+                              entarray.PushBackData(pvisible);
                          end;
                     end;
                end;
@@ -837,7 +837,7 @@ begin
                     pvd:=pentvarext^.entityunit.FindVariable(vname);
                     if pvd<>nil then
                     begin
-                         entarray.AddByPointer(@pvisible);
+                         entarray.PushBackData(pvisible);
                     end;
                end;
               pvisible:=croot.ObjArray.iterate(ir);

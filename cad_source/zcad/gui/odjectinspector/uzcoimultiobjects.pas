@@ -513,28 +513,28 @@ begin
      if VerboseLog then
                        debugln('{T+}GeneralUnit.free start');
      GeneralUnit.free;
-     GeneralUnit.InterfaceUses.addnodouble(@sysunit);
+     GeneralUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
      if VerboseLog then
                        debugln('{T-}end');
 
      if VerboseLog then
                        debugln('{T+}GeometryUnit.free start');
      GeometryUnit.free;
-     GeometryUnit.InterfaceUses.addnodouble(@sysunit);
+     GeometryUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
      if VerboseLog then
                        debugln('{T-}end');
 
      if VerboseLog then
                   debugln('{T+}MiscUnit.free start');
      MiscUnit.free;
-     MiscUnit.InterfaceUses.addnodouble(@sysunit);
+     MiscUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
      if VerboseLog then
                        debugln('{T-}end');
 
      if VerboseLog then
                   debugln('{T+}SummaryUnit.free start');
      SummaryUnit.free;
-     SummaryUnit.InterfaceUses.addnodouble(@sysunit);
+     SummaryUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
      if VerboseLog then
                        debugln('{T-}end');
 
@@ -557,7 +557,7 @@ begin
             pu:=pentvarext^.entityunit.InterfaceUses.beginiterate(ir2);
             if pu<>nil then
             repeat
-                  VariablesUnit.InterfaceUses.addnodouble(@pu);
+                  VariablesUnit.InterfaceUses.PushBackIfNotPresent(pu);
                   pu:=pentvarext^.entityunit.InterfaceUses.iterate(ir2)
             until pu=nil;
             pvd:=pentvarext^.entityunit.InterfaceVariables.vardescarray.beginiterate(ir2);

@@ -70,7 +70,7 @@ begin
      begin
           vardata:=addvariablestoentity(PEnt);
      end;
-     vardata^.entityunit.InterfaceUses.addnodouble(@usedunit);
+     vardata^.entityunit.InterfaceUses.PushBackIfNotPresent(usedunit);
      result:=true;
      {vardata:=PEnt^.GetExtension(typeof(TVariablesExtender));
      test:=@vardata^.entityunit;
@@ -482,7 +482,7 @@ begin
   //PTUnit(result)^.init('temparraryunit');
   //PTUnit(result)^.InterfaceUses.addnodouble(@SysUnit);
      extvarunit.init('temparraryunit');
-     extvarunit.InterfaceUses.addnodouble(@SysUnit);
+     extvarunit.InterfaceUses.PushBackIfNotPresent(SysUnit);
      result:=@extvarunit;
 end;
 procedure ClearExtLoadData(peld:pointer);

@@ -19,23 +19,23 @@
 unit uzctnrvectorp;
 {$INCLUDE def.inc}
 interface
-uses uzbtypes,uzbtypesbase,sysutils,uzctnrvector;
+uses uzbtypes,uzbtypesbase,sysutils,uzctnrvector,uzctnrvectorsimple;
 type
 GDBPointerArray=array [0..0] of GDBPointer;
 PGDBPointerArray=^GDBPointerArray;
 {Export+}
 TZctnrVectorP{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
-                                 object(TZctnrVector{-}<T>{//})
+                                 object(TZctnrVectorSimple{-}<T>{//})
                                        Deleted:TArrayIndex;(*hidden_in_objinsp*)
                                        function iterate (var ir:itrec):GDBPointer;virtual;
                                        function beginiterate(out ir:itrec):GDBPointer;virtual;
                                        destructor FreeAndDone;virtual;
                                        procedure cleareraseobj;virtual;abstract;
-                                       procedure RemoveFromArray(const pdata:GDBPointer);virtual;
-                                       procedure AddToArray(const pdata:GDBPointer);virtual;
-                                       function addnodouble(pobj:GDBPointer):GDBInteger;virtual;
-                                       function AddByRef(var obj):TArrayIndex;virtual;
-                                       function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
+                                       procedure RemoveFromArray(const data:T);virtual;
+                                       //procedure AddToArray(const pdata:GDBPointer);virtual;
+                                       //function addnodouble(pobj:GDBPointer):GDBInteger;virtual;
+                                       //function AddByRef(var obj):TArrayIndex;virtual;
+                                       //function AddByPointer(p:GDBPointer):TArrayIndex;virtual;
                                        function GetRealCount:GDBInteger;
 
                                        constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
@@ -95,7 +95,7 @@ begin
         p:=iterate(ir);
   until p=nil;
 end;
-function TZctnrVectorP<T>.AddByPointer;
+{function TZctnrVectorP<T>.AddByPointer;
 var addr: GDBPlatformint;
 begin
   if parray=nil then
@@ -109,15 +109,15 @@ begin
        result:=count;
        inc(count);
   end;
-end;
-function TZctnrVectorP<T>.AddByRef;
+end;}
+{function TZctnrVectorP<T>.AddByRef;
 var
    p:pointer;
 begin
      p:=@obj;
      result:=AddByPointer(@p)
-end;
-function TZctnrVectorP<T>.addnodouble;
+end;}
+{function TZctnrVectorP<T>.addnodouble;
 var p,newp:GDBPointer;
     ir:itrec;
 begin
@@ -138,7 +138,7 @@ begin
   Move(pobj^, PGDBPointerArray(parray)^[count],SizeOfData);
   result := count;
   inc(count);
-end;
+end;}
 destructor TZctnrVectorP<T>.FreeAndDone;
 begin
      cleareraseobj;
@@ -165,14 +165,14 @@ begin
   until (ir.itc=count)or(p<>nil);
   result:=p;
 end;
-procedure TZctnrVectorP<T>.RemoveFromArray(const pdata:GDBPointer);
+procedure TZctnrVectorP<T>.RemoveFromArray(const data:T);
 var p:GDBPointer;
     ir:itrec;
 begin
        p:=beginiterate(ir);
        if p<>nil then
        repeat
-             if p=pdata then
+             if p=data then
                            begin
                                 pointer(ir.itp^):=nil;
                                 exit;
@@ -180,10 +180,10 @@ begin
              p:=iterate(ir);
        until p=nil;
 end;
-procedure TZctnrVectorP<T>.AddToArray(const pdata:GDBPointer);
+{procedure TZctnrVectorP<T>.AddToArray(const pdata:GDBPointer);
 begin
-     AddByPointer(@pdata);
-end;
+     PushBackData(pdata);
+end;}
 
 (*
 function GDBOpenArrayOfGDBPointer.copyto;

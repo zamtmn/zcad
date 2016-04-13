@@ -234,7 +234,7 @@ begin
            if  boundingintersect(Volume,pobj^.vp.BoundingBox) then
            begin
                 result:=true;
-                Objects.AddByPointer(@pobj);
+                Objects.PushBackData(pobj);
            end;
 
            pobj:=Node.nul.iterate(ir);
@@ -496,7 +496,7 @@ begin
 end;
 function GDBObjGenericSubEntry.ImEdited;
 begin
-     ObjCasheArray.addnodouble(@pobj);
+     ObjCasheArray.PushBackIfNotPresent(pobj);
 end;
 function GDBObjGenericSubEntry.ReturnLastOnMouse;
 begin
@@ -644,7 +644,7 @@ begin
        if ot then
                  begin
                       lstonmouse:=p;
-                      {PGDBObjOpenArrayOfPV}(popa).AddByPointer(addr(p));
+                      {PGDBObjOpenArrayOfPV}(popa).PushBackData(p);
                  end;
        result:=result or ot;
        end;

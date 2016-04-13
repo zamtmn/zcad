@@ -245,7 +245,7 @@ begin
        ot:=p^.isonmouse(popa,mf,InSubEntry);
        if ot then
                  begin
-                      {PGDBObjOpenArrayOfPV}(popa).AddByPointer(addr(p));
+                      {PGDBObjOpenArrayOfPV}(popa).PushBackData(p);
                  end;
        result:=result or ot;
        p:=ConstObjArray.iterate(ir);

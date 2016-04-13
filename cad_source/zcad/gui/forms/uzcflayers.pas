@@ -571,7 +571,7 @@ begin
      pcreatedlayer^:=player^;
      pcreatedlayer^.Name:=layername;
 
-     domethod:=tmethod(@pdwg^.LayerTable.AddToArray);
+     domethod:=tmethod(@pdwg^.LayerTable.PushBackData);
      undomethod:=tmethod(@pdwg^.LayerTable.RemoveFromArray);
      with PushCreateTGObjectChangeCommand2(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pcreatedlayer,tmethod(domethod),tmethod(undomethod))^ do
      begin
@@ -590,7 +590,7 @@ begin
   pdwg:=drawings.GetCurrentDWG;
   player:=(ProcessedItem.Data);
   domethod:=tmethod(@pdwg^.LayerTable.RemoveFromArray);
-  undomethod:=tmethod(@pdwg^.LayerTable.AddToArray);
+  undomethod:=tmethod(@pdwg^.LayerTable.PushBackData);
   CreateUndoStartMarkerNeeded;
   with PushCreateTGObjectChangeCommand2(PTZCADDrawing(pdwg)^.UndoStack,player,tmethod(domethod),tmethod(undomethod))^ do
   begin

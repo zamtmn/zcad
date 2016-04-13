@@ -2037,7 +2037,7 @@ begin
                 inc(_isonmouse);
                 pp:=pp.ReturnLastOnMouse(InSubEntry);
                 param.SelDesc.OnMouseObject:=pp;
-                PDWG.GetOnMouseObj.AddByPointer(addr(pp));
+                PDWG.GetOnMouseObj.PushBackData(pp);
            end;
 
        end;

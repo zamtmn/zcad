@@ -19,7 +19,7 @@ end;
 function {GDBObjOpenArrayOfUCommands.}PushCreateTGObjectChangeCommand2(var us:GDBObjOpenArrayOfUCommands; var _dodata:TData;_domethod,_undomethod:tmethod):PTCommand;overload;
 begin
   result:=CreateTGObjectChangeCommand2(_dodata,_domethod,_undomethod);
-  us.AddByPointer(@result);
+  us.PushBackData(result);
   inc(us.CurrentCommand);
 end;
 

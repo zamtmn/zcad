@@ -32,7 +32,7 @@ implementation
 //uses {UGDBDescriptor,}log;
 procedure GDBObjConnected.addtoconnect(pobj:pgdbobjEntity;var ConnectedArray:GDBObjOpenArrayOfPV);
 begin
-     ConnectedArray.{gdb.GetCurrentROOT.ObjToConnectedArray.}addnodouble(@pobj);
+     ConnectedArray.PushBackIfNotPresent(pobj);
 end;
 begin
 end.

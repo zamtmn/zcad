@@ -105,7 +105,7 @@ begin
           PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nul.deliteminarray(pobj^.bp.TreePos.SelfIndex);
      end;
 
-     //pointer(p):= VarObjArray.GetObject(pobjinarray);
+     //pointer(p):= VarObjArray.getDataMutable(pobjinarray);
      VarObjArray.deliteminarray(pobjinarray);
 
      //p^.done;

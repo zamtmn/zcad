@@ -127,7 +127,7 @@ begin
                                                                   begin
                                                                        PDimStyle:=drawing.GetDimStyleTable^.getAddres(Style);
                                                                        if PDimStyle=nil then
-                                                                                            PDimStyle:=drawing.GetDimStyleTable^.getDataMutable(0);
+                                                                                            PDimStyle:=pointer(drawing.GetDimStyleTable^.getDataMutable(0));
                                                                   end
                             else
                                 f.readGDBSTRING;

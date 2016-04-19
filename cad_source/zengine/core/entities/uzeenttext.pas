@@ -676,7 +676,7 @@ else if     dxfGDBStringload(f,7,byt,style)then
                                              begin
                                                   TXTStyleIndex :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
                                                   if TXTStyleIndex=nil then
-                                                                      TXTStyleIndex:=drawing.GetTextStyleTable^.getDataMutable(0);
+                                                                      TXTStyleIndex:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
                                              end
 else if not dxfGDBIntegerload(f,72,byt,gv)then
      if not dxfGDBIntegerload(f,73,byt,vv)then

@@ -922,7 +922,7 @@ begin
                                                  begin
                                                  TXTStyleIndex :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
                                                  if TXTStyleIndex=nil then
-                                                                     TXTStyleIndex:=drawing.GetTextStyleTable^.getDataMutable(0);
+                                                                     TXTStyleIndex:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
                                                  end
     else {s := }f.readgdbstring;
     byt:=readmystrtoint(f);

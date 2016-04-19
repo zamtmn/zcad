@@ -2888,7 +2888,7 @@ begin
                  if (startdev<>nil)and(enddev<>nil) then
                  if netarray.Count=1 then
                  begin
-                  PGDBaseObject(net):=netarray.GetObject(0);
+                  PGDBaseObject(net):=netarray.getDataMutable(0);
                  //PGDBObjEntity(net):=drawings.FindEntityByVar(GDBNetID,'NMO_Name',FDoc.Cells[3,row]);
                  if net=nil then
                                      uzcshared.HistoryOutStr('В строке '+inttostr(row)+' не найдена трасса '+FDoc.Cells[3,row]);

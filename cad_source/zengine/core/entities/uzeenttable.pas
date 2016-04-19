@@ -188,7 +188,7 @@ ConstObjArray.cleareraseobj;
                            pgdbmtext.width:=pcf^.TextWidth*scale;
                            //pgdbmtext.vp.Layer:=vp.Layer;
                            CopyVPto(pgdbmtext^);
-                           pgdbmtext.TXTStyleIndex:=drawing.GetTextStyleTable^.getDataMutable(0);
+                           pgdbmtext.TXTStyleIndex:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
 
                            pgdbmtext.Local.P_insert.y:=(-ccount*PTableStyle^.rowheight-PTableStyle^.rowheight/4)*scale;
                            case pcf^.CF of

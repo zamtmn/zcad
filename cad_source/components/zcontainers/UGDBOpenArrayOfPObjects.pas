@@ -23,17 +23,17 @@ uses uzbtypesbase,uzctnrvectorp,
      uzbtypes,uzbmemman;
 type
 {Export+}
-TZctnrVectorPObj{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
-                                 object(TZctnrVectorP{-}<T>{//})
+TZctnrVectorPObj{-}<PTObj,TObj>{//}={$IFNDEF DELPHI}packed{$ENDIF}
+                                 object(TZctnrVectorP{-}<PTObj>{//})
                                        procedure cleareraseobjfrom(n:GDBInteger);virtual;
                                        procedure cleareraseobjfrom2(n:GDBInteger);virtual;
-                                       function GetObject(index:GDBInteger):PGDBaseObject;
-                                       procedure eraseobj(ObjAddr:PGDBaseObject);virtual;
+                                       function getDataMutable(index:GDBInteger):PGDBaseObject;
+                                       procedure RemoveData(const data:PTObj);virtual;
                                        procedure pack;virtual;
                                        procedure cleareraseobj;virtual;
                                        destructor done;virtual;
                                  end;
-GDBOpenArrayOfPObjects=packed object(TZctnrVectorPObj{-}<PGDBaseObject>{//})
+GDBOpenArrayOfPObjects=packed object(TZctnrVectorPObj{-}<PGDBaseObject,GDBaseObject>{//})
                                    end;
 PGDBOpenArrayOfPObjects=^GDBOpenArrayOfPObjects;
 {Export-}
@@ -47,7 +47,7 @@ PGDBOpenArrayOfPObjects=^GDBOpenArrayOfPObjects;
                              destructor done;virtual;
                        end;*)
 implementation
-destructor TZctnrVectorPObj<T>.done;
+destructor TZctnrVectorPObj<PTObj,TObj>.done;
 var
   p:PGDBaseObject;
   ir:itrec;
@@ -62,7 +62,7 @@ begin
   count:=0;
   inherited;
 end;
-procedure TZctnrVectorPObj<T>.cleareraseobj;
+procedure TZctnrVectorPObj<PTObj,TObj>.cleareraseobj;
 var
   p:PGDBaseObject;
   ir:itrec;
@@ -76,17 +76,18 @@ begin
   until p=nil;
   count:=0;
 end;
-procedure TZctnrVectorPObj<T>.eraseobj;
+procedure TZctnrVectorPObj<PTObj,TObj>.RemoveData(const data:PTObj);
+//procedure TZctnrVectorPObj<T,TObj>.eraseobj;
 var
-  p:PGDBaseObject;
-      ir:itrec;
+  p:PTObj;
+  ir:itrec;
 begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-        if ObjAddr=p then
+        if data=p then
                          begin
-                              p^.done;
+                              p.done;
                               pointer(ir.itp^):=nil;
                               GDBFreeMem(GDBPointer(p));
                               exit;
@@ -94,7 +95,7 @@ begin
        p:=iterate(ir);
   until p=nil;
 end;
-procedure TZctnrVectorPObj<T>.pack;
+procedure TZctnrVectorPObj<PTObj,TObj>.pack;
 var
 pnew,pold:ppointer;
 nc,c:integer;
@@ -119,11 +120,19 @@ begin
      deleted:=0;
      end;
 end;
-function TZctnrVectorPObj<T>.GetObject;
+function TZctnrVectorPObj<PTObj,TObj>.getDataMutable;
+var pp:ppointer;
 begin
-  result:=pointer(getDataMutable(index)^);
+     pp:=pointer(inherited getDataMutable(index));
+     if pp=nil then
+                   result:=nil
+               else
+                   result:=pp^;
 end;
-procedure TZctnrVectorPObj<T>.cleareraseobjfrom;
+{begin
+  result:=pointer(getDataMutable(index)^);
+end;}
+procedure TZctnrVectorPObj<T,TObj>.cleareraseobjfrom;
 var
   p:PGDBaseObject;
       ir:itrec;
@@ -138,7 +147,7 @@ begin
   until p=nil;
   count:=0;
 end;
-procedure TZctnrVectorPObj<T>.cleareraseobjfrom2(n:GDBInteger);
+procedure TZctnrVectorPObj<PTObj,TObj>.cleareraseobjfrom2(n:GDBInteger);
 var
   p:PGDBaseObject;
       ir:itrec;

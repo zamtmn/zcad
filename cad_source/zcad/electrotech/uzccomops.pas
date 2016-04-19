@@ -829,7 +829,7 @@ begin
      begin
      pt:=pointer(AllocEnt(GDBMtextID));
      pt^.init({drawings.GetCurrentROOT}@root,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,name,tv,2.5,0,0.65,RightAngle,jsbc,1,1);
-     pt^.TXTStyleIndex:=drawings.GetCurrentDWG.GetTextStyleTable^.getDataMutable(0);
+     pt^.TXTStyleIndex:=pointer(drawings.GetCurrentDWG.GetTextStyleTable^.getDataMutable(0));
      {drawings.GetCurrentROOT}root.ObjArray.add(@pt);
      pt^.Formatentity(drawings.GetCurrentDWG^,dc);
      end;

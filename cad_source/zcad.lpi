@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="174">
+    <Units Count="176">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -950,6 +950,14 @@
         <Filename Value="zengine/containers/uzctnrvectorobjid.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit173>
+      <Unit174>
+        <Filename Value="zengine/containers/UGDBNamedObjectsArray.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit174>
+      <Unit175>
+        <Filename Value="zengine/containers/UGDBNumerator.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit175>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

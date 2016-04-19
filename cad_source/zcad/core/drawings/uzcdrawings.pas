@@ -57,7 +57,8 @@ TZCADDrawingsManager={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObject
 
                     function CreateDWG(preloadedfile1,preloadedfile2:GDBString):PTZCADDrawing;
                     //function CreateSimpleDWG:PTSimpleDrawing;virtual;
-                    procedure eraseobj(ObjAddr:PGDBaseObject);virtual;
+                    //procedure eraseobj(ObjAddr:PGDBaseObject);virtual;
+                    procedure RemoveData(const data:PGDBaseObject);virtual;
 
                     procedure CopyBlock(_from,_to:PTSimpleDrawing;_source:PGDBObjBlockdef);
                     function CopyEnt(_from,_to:PTSimpleDrawing;_source:PGDBObjEntity):PGDBObjEntity;
@@ -468,10 +469,11 @@ begin
      if z>drawings.GetCurrentDWG.pcamera^.obj_zmin then
      drawings.GetCurrentDWG.pcamera^.obj_zmin:=z;
 end;
-procedure TZCADDrawingsManager.eraseobj(ObjAddr:PGDBaseObject);
+procedure TZCADDrawingsManager.RemoveData(const data:PGDBaseObject);
+//procedure TZCADDrawingsManager.eraseobj(ObjAddr:PGDBaseObject);
 begin
-     inherited eraseobj(objaddr);
-     if objaddr=pointer(CurrentDWG) then
+     inherited RemoveData(data);
+     if data=pointer(CurrentDWG) then
                                         begin
                                              CurrentDWG:=nil;
                                              DWGUnit:=nil;

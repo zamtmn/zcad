@@ -28,7 +28,7 @@ GDBNumItem={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                  constructor Init(N:GDBString);
                 end;
 PGDBNumerator=^GDBNumerator;
-GDBNumerator={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBNumItem*)
+GDBNumerator={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray<PGDBNumItem,GDBNumItem>)(*OpenArrayOfData=GDBNumItem*)
                        constructor init(m:GDBInteger);
                        function getnamenumber(_Name:GDBString;AutoInc:GDBBoolean):GDBstring;
                        function getnumber(_Name:GDBString;AutoInc:GDBBoolean):GDBInteger;

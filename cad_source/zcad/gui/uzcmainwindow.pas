@@ -164,7 +164,7 @@ type
     procedure DropUpColor(Sender:Tobject);
     procedure ChangeLayout(Sender:Tobject);
     procedure idle(Sender: TObject; var Done: Boolean);virtual;
-    procedure ReloadLayer(plt:PGDBNamedObjectsArray);
+    procedure ReloadLayer(plt:PGDBNamedObjectsArrayTemp);
     procedure GeneralTick(Sender: TObject);
     procedure ShowFastMenu(Sender: TObject);
     procedure asynccloseapp(Data: PtrInt);
@@ -809,7 +809,7 @@ begin
        viewcontrol:=ClosedDWG.wa.getviewcontrol;
        if drawings.GetCurrentDWG=pointer(ClosedDwg) then
                                                    drawings.freedwgvars;
-       drawings.eraseobj(ClosedDWG);
+       drawings.RemoveData(ClosedDWG);
        drawings.pack;
 
        viewcontrol.free;
@@ -2569,7 +2569,7 @@ begin
                      uzcshared.HistoryOutStr(format(rsprocesstimemsg,[pname,ts]));
     pname:='';
 end;
-procedure TZCADMainWindow.ReloadLayer(plt: PGDBNamedObjectsArray);
+procedure TZCADMainWindow.ReloadLayer(plt: PGDBNamedObjectsArrayTemp);
 begin
   (*
   {layerbox.ClearText;}

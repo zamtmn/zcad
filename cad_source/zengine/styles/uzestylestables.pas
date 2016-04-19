@@ -46,7 +46,7 @@ TGDBTableStyle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                      destructor Done;virtual;
                end;
 PGDBTableStyleArray=^GDBTableStyleArray;
-GDBTableStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=TGDBTableStyle*)
+GDBTableStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArrayTemp)(*OpenArrayOfData=TGDBTableStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
                     function AddStyle(name:GDBString):PTGDBTableStyle;

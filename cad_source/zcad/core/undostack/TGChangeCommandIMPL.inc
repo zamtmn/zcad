@@ -20,7 +20,7 @@ function {GDBObjOpenArrayOfUCommands.}PushCreateTGChangeCommand(var us:GDBObjOpe
 begin
   if us.CurrentCommand>0 then
   begin
-       result:=pointer(us.GetObject(us.CurrentCommand-1));
+       result:=pointer(us.getDataMutable(us.CurrentCommand-1));
        if result^.GetCommandType=TTC_ChangeCommand then
        if (result^.Addr=@data)
        and(result^.GetDataTypeSize=sizeof(data))

@@ -23,31 +23,35 @@ uses UGDBOpenArrayOfPObjects,
      uzbtypesbase,uzbtypes,uzbmemman;
 type
 {Export+}
-PGDBObjOpenArrayOfPIdentObects=^GDBObjOpenArrayOfPIdentObects;
-GDBObjOpenArrayOfPIdentObects={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
+GDBObjOpenArrayOfPIdentObects{-}<PGDBaseObject,GDBaseObject>{//}
+                             ={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPObj{-}<PGDBaseObject,GDBaseObject>{//})
+                             constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                             function CreateObject:PGDBaseObject;
+                end;
+PGDBObjOpenArrayOfPIdentObectsTEMP=^GDBObjOpenArrayOfPIdentObectsTEMP;
+GDBObjOpenArrayOfPIdentObectsTEMP={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                              objsizeof:GDBInteger;
                              constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m,_objsizeof:GDBInteger);
-                             function getDataMutable(index:TArrayIndex):GDBPointer;
                              function CreateObject:PGDBaseObject;
                 end;
 {Export-}
 implementation
-function GDBObjOpenArrayOfPIdentObects.getDataMutable(index:TArrayIndex):GDBPointer;
-var pp:ppointer;
+constructor GDBObjOpenArrayOfPIdentObects<PGDBaseObject,GDBaseObject>.init;
 begin
-     pp:=pointer(inherited getDataMutable(index));
-     if pp=nil then
-                   result:=nil
-               else
-                   result:=pp^;
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m);
+end;
+function GDBObjOpenArrayOfPIdentObects<PGDBaseObject,GDBaseObject>.CreateObject;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{6F264155-0BCB-408F-BDA7-F3E8A4540F18}',{$ENDIF}result,sizeof(GDBaseObject));
+  PushBackData(result);
 end;
 
-constructor GDBObjOpenArrayOfPIdentObects.init;
+constructor GDBObjOpenArrayOfPIdentObectsTEMP.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m);
   objsizeof:=_objsizeof;
 end;
-function GDBObjOpenArrayOfPIdentObects.CreateObject;
+function GDBObjOpenArrayOfPIdentObectsTEMP.CreateObject;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{6F264155-0BCB-408F-BDA7-F3E8A4540F18}',{$ENDIF}pointer(result),objsizeof);
   PushBackData(result);

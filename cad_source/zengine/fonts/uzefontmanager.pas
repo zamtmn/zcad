@@ -37,7 +37,7 @@ TFontExt2LoadProcMap=GKey2DataMap<GDBString,TFontLoadProcedureData{$IFNDEF DELPH
     Pfont: GDBPointer;
   end;
 PGDBFontManager=^GDBFontManager;
-GDBFontManager={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArrayOfData}GDBNamedObjectsArray)(*OpenArrayOfData=GDBfont*)
+GDBFontManager={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArrayOfData}GDBNamedObjectsArrayTemp)(*OpenArrayOfData=GDBfont*)
                     ttffontfiles:TStringList;
                     shxfontfiles:TStringList;
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);

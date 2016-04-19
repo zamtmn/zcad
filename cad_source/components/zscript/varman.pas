@@ -482,7 +482,7 @@ begin
 end;
 function typemanager._TypeIndex2PTD;
 begin
-  result:=PUserTypeDescriptor(exttype.getobject(ind));
+  result:=PUserTypeDescriptor(exttype.getDataMutable(ind));
 end;
 function typemanager.getDataMutable(index:TArrayIndex):GDBPointer;
 begin

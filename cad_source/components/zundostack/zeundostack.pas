@@ -109,7 +109,7 @@ var
 begin
      if CurrentCommand>0 then
      begin
-          pcc:=pointer(self.GetObject(CurrentCommand-1));
+          pcc:=pointer(self.getDataMutable(CurrentCommand-1));
           if pcc^.GetCommandType=TTC_ChangeCommand then
           if (pcc^.Addr=_obj)
           and(pcc^.datasize=_fieldsize) then
@@ -128,7 +128,7 @@ begin
      begin
           mcounter:=0;
           repeat
-          pcc:=pointer(self.GetObject(CurrentCommand-1));
+          pcc:=pointer(self.getDataMutable(CurrentCommand-1));
 
           if pcc^.GetCommandType=TTC_MEnd then
                                               begin
@@ -157,7 +157,7 @@ begin
      begin
           mcounter:=0;
           repeat
-          pcc:=pointer(self.GetObject(CurrentCommand-1));
+          pcc:=pointer(self.getDataMutable(CurrentCommand-1));
 
           if pcc^.GetCommandType=TTC_MEnd then
                                               begin
@@ -204,12 +204,12 @@ var
 begin
      if CurrentCommand<count then
      begin
-          {pcc:=pointer(self.GetObject(CurrentCommand));
+          {pcc:=pointer(self.getDataMutable(CurrentCommand));
           pcc^.Comit;
           inc(CurrentCommand);}
           mcounter:=0;
           repeat
-          pcc:=pointer(self.GetObject(CurrentCommand));
+          pcc:=pointer(self.getDataMutable(CurrentCommand));
 
           if pcc^.GetCommandType=TTC_MEnd then
                                               begin
@@ -262,7 +262,7 @@ function GDBObjOpenArrayOfUCommands.PushCreateTTypedChangeCommand(PDataInstance:
 begin
   if CurrentCommand>0 then
   begin
-       result:=pointer(self.GetObject(CurrentCommand-1));
+       result:=pointer(self.getDataMutable(CurrentCommand-1));
        if result^.GetCommandType=TTC_ChangeCommand then
        if (result^.Addr=PDataInstance)
        and(result^.PTypeManager=PType)

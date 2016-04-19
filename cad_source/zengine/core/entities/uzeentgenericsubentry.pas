@@ -473,7 +473,7 @@ begin
      end;
      pobj^.bp.TreePos.Owner:=nil;
 
-     //pointer(p):=ObjArray.GetObject(pobjinarray);
+     //pointer(p):=ObjArray.getDataMutable(pobjinarray);
      ObjArray.deliteminarray(pobjinarray);
 end;
 function GDBObjGenericSubEntry.EraseMi;
@@ -485,7 +485,7 @@ begin
           PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nul.deliteminarray(pobj^.bp.TreePos.SelfIndex);
      end;
 
-     pointer(p):=ObjArray.GetObject(pobjinarray);
+     pointer(p):=ObjArray.getDataMutable(pobjinarray);
      ObjArray.deliteminarray(pobjinarray);
 
      //p^.done;

@@ -42,7 +42,7 @@ PGDBTextStyleProp=^GDBTextStyleProp;
     destructor Done;virtual;
   end;
 PGDBTextStyleArray=^GDBTextStyleArray;
-GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBTextStyle*)
+GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArrayTemp)(*OpenArrayOfData=GDBTextStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
 
@@ -160,7 +160,7 @@ begin
   //ts.pfont:=FontManager.{FindFonf}getAddres(FontFile);
   //if ts.pfont=nil then ts.pfont:=FontManager.getAddres('normal.shx');
   ts.prop:=tp;
-  result:=getDataMutable(PushBackData(ts));
+  result:=pointer(getDataMutable(PushBackData(ts)));
   //pointer(ts.name):=nil;
   //pointer(ts.dxfname):=nil;
 end;

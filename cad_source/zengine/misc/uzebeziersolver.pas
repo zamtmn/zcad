@@ -178,7 +178,7 @@ end;
 
 procedure TBezierSolver2D.DrawCountur;
 var
-   i,j,simpleindex,polyindex:integer;
+   i,j,simpleindex,polyindex,ii:integer;
    ptpl:PTLLPolyLine;
 begin
      for i:=0 to Conturs.VArray.Size-1 do
@@ -188,7 +188,8 @@ begin
           inc(shxsize^);
           for j:=0 to Conturs.VArray[i].Size-1 do
           begin
-               Conturs.VArray[i].mutable[j]^.index:=VectorData.GeomData.Add2DPoint(Conturs.VArray[i][j].v.x,Conturs.VArray[i][j].v.y);
+               ii:=VectorData.GeomData.Add2DPoint(Conturs.VArray[i].mutable[j]^.v.x,Conturs.VArray[i].mutable[j]^.v.y);
+               Conturs.VArray[i].mutable[j]^.index:=ii;
                if Conturs.VArray[i].mutable[j]^.attr=TPA_OnCurve then
                                                                      begin
                                                                           simpleindex:=VectorData.GeomData.Indexes.PushBackData(Conturs.VArray[i].mutable[j]^.index);

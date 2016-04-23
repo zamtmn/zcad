@@ -21,7 +21,7 @@ unit uzeentpolyline;
 
 interface
 uses uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
-     UGDBOpenArrayOfPObjects,uzestyleslayers,uzeentsubordinated,uzeentcurve,uzbtypesbase,
+     uzctnrvectorpdata,uzestyleslayers,uzeentsubordinated,uzeentcurve,uzbtypesbase,
      uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,uzglviewareadata,
      uzegeometry,uzeffdxfsupport,sysutils,uzbmemman;
 type

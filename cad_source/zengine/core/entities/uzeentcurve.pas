@@ -20,7 +20,7 @@ unit uzeentcurve;
 {$INCLUDE def.inc}
 
 interface
-uses uzgldrawcontext,uzedrawingdef,uzecamera,UGDBOpenArrayOfPObjects,
+uses uzgldrawcontext,uzedrawingdef,uzecamera,uzctnrvectorpdata,
      UGDBOpenArrayOfByte,uzestyleslayers,uzbtypesbase,UGDBVectorSnapArray,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBPolyLine2DArray,UGDBPoint3DArray,
      uzbtypes,uzegeometry,uzeconsts,uzglviewareadata,uzeffdxfsupport,sysutils,uzbmemman,

@@ -20,7 +20,7 @@ unit uzeentdimaligned;
 
 interface
 uses uzgldrawcontext,uzeentityfactory,uzeentdimension,uzeentpoint,uzestylesdim,
-     uzestyleslayers,uzedrawingdef,UGDBOpenArrayOfPObjects,uzbstrproc,
+     uzestyleslayers,uzedrawingdef,uzctnrvectorpdata,uzbstrproc,
      UGDBOpenArrayOfByte,UGDBControlPointArray,uzegeometry,uzeentline,uzbtypesbase,
      uzeentcomplex,sysutils,UGDBSelectedObjArray,uzeentity,uzbtypes,uzeconsts,
      uzeffdxfsupport,uzbmemman,uzeentsubordinated;

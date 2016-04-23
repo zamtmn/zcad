@@ -25,7 +25,7 @@ interface
 uses
   uzctnrvectorrec,LCLProc,uabstractunit,uzctnrvectorp,SysUtils,UBaseTypeDescriptor,
   uzbtypesbase,uzbtypes,UGDBOpenArrayOfByte,uzctnrvectorgdbstring,varmandef,
-  UGDBOpenArrayOfPObjects,usimplegenerics,
+  uzctnrvectorpdata,usimplegenerics,
   uzbmemman,TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes;
 type
     td=record

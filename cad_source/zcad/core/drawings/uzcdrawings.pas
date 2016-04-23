@@ -27,7 +27,7 @@ uses
     uzbtypes,varmandef,varman,sysutils,uzbmemman,uzegeometry,uzeconsts,
     uzbtypesbase,uzedrawingsimple,uzeentgenericsubentry,uzestyleslayers,uzeentity,
     UGDBSelectedObjArray,uzestylestexts,uzefontmanager,uzestyleslinetypes,
-    UGDBOpenArrayOfPV,uzefont,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,
+    UGDBOpenArrayOfPV,uzefont,uzctnrvectorpdata,UGDBVisibleOpenArray,
     uzetrash,UGDBOpenArrayOfByte,uzglviewareadata;
 type
 {TDWGProps=packed record

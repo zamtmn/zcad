@@ -32,8 +32,8 @@
         <UnitName Value="uzctnrvectorobjects"/>
       </Item3>
       <Item4>
-        <Filename Value="UGDBOpenArrayOfPObjects.pas"/>
-        <UnitName Value="UGDBOpenArrayOfPObjects"/>
+        <Filename Value="uzctnrvectorpdata.pas"/>
+        <UnitName Value="uzctnrvectorpdata"/>
       </Item4>
       <Item5>
         <Filename Value="uzctnrvectorp.pas"/>

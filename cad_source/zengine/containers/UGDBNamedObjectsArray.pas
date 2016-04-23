@@ -19,15 +19,14 @@
 unit UGDBNamedObjectsArray;
 {$INCLUDE def.inc}
 interface
-uses ugdbopenarrayofpidentobects,sysutils,uzbtypes,uzegeometry,
-     uzbtypesbase;
+uses uzctnrvectorpobjects,sysutils,uzbtypes,uzegeometry,uzbtypesbase;
 type
 {EXPORT+}
 TForCResult=(IsFounded(*'IsFounded'*)=1,
              IsCreated(*'IsCreated'*)=2,
              IsError(*'IsError'*)=3);
 GDBNamedObjectsArray{-}<PObj,Obj>{//}
-                     ={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPIdentObects{-}<PObj,Obj>{//})
+                     ={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPObects{-}<PObj,Obj>{//})
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     function getIndex(name: GDBString):GDBInteger;
                     function getAddres(name: GDBString):GDBPointer;

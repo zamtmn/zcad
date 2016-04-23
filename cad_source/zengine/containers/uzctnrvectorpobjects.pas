@@ -23,20 +23,15 @@ uses uzctnrvectorpdata,
      uzbtypesbase,uzbtypes,uzbmemman;
 type
 {Export+}
-TZctnrVectorPObects{-}<PGDBaseObject,GDBaseObject>{//}
-                             ={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPData{-}<PGDBaseObject,GDBaseObject>{//})
-                             constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                             function CreateObject:PGDBaseObject;
+TZctnrVectorPObects{-}<PObj,Obj>{//}
+                             ={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPData{-}<PObj,Obj>{//})
+                             function CreateObject:PObj;
                 end;
 {Export-}
 implementation
-constructor TZctnrVectorPObects<PGDBaseObject,GDBaseObject>.init;
+function TZctnrVectorPObects<PObj,Obj>.CreateObject;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m);
-end;
-function TZctnrVectorPObects<PGDBaseObject,GDBaseObject>.CreateObject;
-begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{6F264155-0BCB-408F-BDA7-F3E8A4540F18}',{$ENDIF}result,sizeof(GDBaseObject));
+  GDBGetMem({$IFDEF DEBUGBUILD}'{6F264155-0BCB-408F-BDA7-F3E8A4540F18}',{$ENDIF}result,sizeof(Obj));
   PushBackData(result);
 end;
 begin

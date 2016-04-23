@@ -95,7 +95,7 @@ GDBLtypeProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
 PGDBLtypePropArray=^GDBLtypePropArray;
 GDBLtypePropArray=packed array [0..0] of GDBLtypeProp;
 PGDBLtypeArray=^GDBLtypeArray;
-GDBLtypeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArrayTemp)(*OpenArrayOfData=GDBLtypeProp*)
+GDBLtypeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray{-}<PGDBLtypeProp,GDBLtypeProp>{//})(*OpenArrayOfData=GDBLtypeProp*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
                     procedure LoadFromFile(fname:GDBString;lm:TLoadOpt);
@@ -325,7 +325,7 @@ constructor GDBLtypeArray.init;
 var
    plp:PGDBLtypeProp;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBLtypeProp));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m);
   if AddItem('Continuous',pointer(plp))=IsCreated then
             begin
                  plp.init('Continuous');
@@ -336,7 +336,7 @@ end;
 constructor GDBLtypeArray.initnul;
 begin
   inherited initnul;
-  objsizeof:=sizeof(GDBLtypeProp);
+  //objsizeof:=sizeof(GDBLtypeProp);
   //size:=sizeof(GDBLtypeProp);
 end;
 constructor TextProp.initnul;

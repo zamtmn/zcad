@@ -28,12 +28,6 @@ GDBObjOpenArrayOfPIdentObects{-}<PGDBaseObject,GDBaseObject>{//}
                              constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                              function CreateObject:PGDBaseObject;
                 end;
-PGDBObjOpenArrayOfPIdentObectsTEMP=^GDBObjOpenArrayOfPIdentObectsTEMP;
-GDBObjOpenArrayOfPIdentObectsTEMP={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
-                             objsizeof:GDBInteger;
-                             constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m,_objsizeof:GDBInteger);
-                             function CreateObject:PGDBaseObject;
-                end;
 {Export-}
 implementation
 constructor GDBObjOpenArrayOfPIdentObects<PGDBaseObject,GDBaseObject>.init;
@@ -45,17 +39,5 @@ begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{6F264155-0BCB-408F-BDA7-F3E8A4540F18}',{$ENDIF}result,sizeof(GDBaseObject));
   PushBackData(result);
 end;
-
-constructor GDBObjOpenArrayOfPIdentObectsTEMP.init;
-begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m);
-  objsizeof:=_objsizeof;
-end;
-function GDBObjOpenArrayOfPIdentObectsTEMP.CreateObject;
-begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{6F264155-0BCB-408F-BDA7-F3E8A4540F18}',{$ENDIF}pointer(result),objsizeof);
-  PushBackData(result);
-end;
-
 begin
 end.

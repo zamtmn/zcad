@@ -19,12 +19,12 @@
 unit ugdbopenarrayofpidentobects;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfPObjects,
+uses uzctnrvectorpdata,
      uzbtypesbase,uzbtypes,uzbmemman;
 type
 {Export+}
 GDBObjOpenArrayOfPIdentObects{-}<PGDBaseObject,GDBaseObject>{//}
-                             ={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPObj{-}<PGDBaseObject,GDBaseObject>{//})
+                             ={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPData{-}<PGDBaseObject,GDBaseObject>{//})
                              constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                              function CreateObject:PGDBaseObject;
                 end;

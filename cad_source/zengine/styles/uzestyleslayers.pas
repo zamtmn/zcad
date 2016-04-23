@@ -44,7 +44,7 @@ GDBLayerProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
 PGDBLayerPropArray=^GDBLayerPropArray;
 GDBLayerPropArray=packed array [0..0] of PGDBLayerProp;
 PGDBLayerArray=^GDBLayerArray;
-GDBLayerArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArrayTemp)(*OpenArrayOfData=GDBLayerProp*)
+GDBLayerArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})(*OpenArrayOfData=GDBLayerProp*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger;psyslt:GDBPointer);
                     constructor initnul;
 
@@ -103,14 +103,14 @@ begin
 end;
 constructor GDBLayerArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBLayerProp));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m);
   addlayer(LNSysLayerName,CGDBWhile,lwgdbdefault,true,false,true,'',TLOLoad).LT:=psyslt;
   addlayer(LNMetricLayerName,CGDBWhile,lwgdbdefault,false,false,false,'',TLOLoad).LT:=psyslt;
 end;
 constructor GDBLayerArray.initnul;
 begin
   inherited initnul;
-  objsizeof:=sizeof(GDBLayerProp);
+  //objsizeof:=sizeof(GDBLayerProp);
   //size:=sizeof(GDBLayerProp);
 end;
 destructor GDBLayerProp.done;

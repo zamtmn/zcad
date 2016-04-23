@@ -107,7 +107,7 @@ GDBDimStyle = {$IFNDEF DELPHI}packed{$ENDIF}object(GDBNamedObject)
                       destructor Done;virtual;
              end;
 PGDBDimStyleArray=^GDBDimStyleArray;
-GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArrayTemp)(*OpenArrayOfData=GDBDimStyle*)
+GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray{-}<PGDBDimStyle,GDBDimStyle>{//})(*OpenArrayOfData=GDBDimStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
                     procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
@@ -488,12 +488,12 @@ end;
 constructor GDBDimStyleArray.initnul;
 begin
   inherited initnul;
-  objsizeof:=sizeof(GDBDimStyle);
+  //objsizeof:=sizeof(GDBDimStyle);
   //size:=sizeof(GDBDimStyle);
 end;
 constructor GDBDimStyleArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBDimStyle));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(GDBDimStyle)});
 end;
 
 

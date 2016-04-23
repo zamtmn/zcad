@@ -42,7 +42,7 @@ PGDBTextStyleProp=^GDBTextStyleProp;
     destructor Done;virtual;
   end;
 PGDBTextStyleArray=^GDBTextStyleArray;
-GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArrayTemp)(*OpenArrayOfData=GDBTextStyle*)
+GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray{-}<PGDBTextStyle,GDBTextStyle>{//})(*OpenArrayOfData=GDBTextStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
 
@@ -66,13 +66,13 @@ end;
 constructor GDBTextStyleArray.initnul;
 begin
   inherited initnul;
-  objsizeof:=sizeof(GDBTextStyle);
+  //objsizeof:=sizeof(GDBTextStyle);
   //size:=sizeof(GDBTextStyle);
 end;
 constructor GDBTextStyleArray.init;
 begin
   //Size := sizeof(GDBTextStyle);
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBTextStyle));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(GDBTextStyle)});
   //addlayer('0',cgdbwhile,lwgdbdefault);
 end;
 

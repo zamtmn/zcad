@@ -19,8 +19,8 @@ unit TypeDescriptors;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses LCLProc,uzbtypesbase,varmandef,uzbtypes,uzctnrvectordata,uzctnrvectorgdbstring,uzbmemman,
-      uzctnrvectorp,uzbstrproc,sysutils;
+uses LCLProc,uzbtypesbase,varmandef,uzbtypes,gzctnrvectordata,uzctnrvectorgdbstring,uzbmemman,
+      gzctnrvectorp,uzbstrproc,sysutils;
 const
      m_procedure=1;
      m_function=2;
@@ -50,7 +50,7 @@ type tzcpmode=(zcptxt,zcpbin);
                            function IsVisible:boolean;
                      end;
 PTPropertyDeskriptorArray=^TPropertyDeskriptorArray;
-TPropertyDeskriptorArray=object(GDBOpenArrayOfGDBPointer)
+TPropertyDeskriptorArray=object(TZctnrVectorPointer)
                                procedure cleareraseobj;virtual;
                                function GetRealPropertyDeskriptorsCount:integer;virtual;
                                function findcategory(category:GDBString):PPropertyDeskriptor;
@@ -104,7 +104,7 @@ GDBOperandDesc=record
                      StoreMode:GDBTOperandStoreMode;
                end;
 GDBMetodModifier=GDBWord;
-TOperandsVector=TZctnrVectorData<GDBOperandDesc>;
+TOperandsVector=GZVectorData<GDBOperandDesc>;
 PMetodDescriptor=^MetodDescriptor;
 MetodDescriptor=object(GDBaseObject)
                       objname:GDBString;
@@ -146,7 +146,7 @@ end;
 constructor MetodDescriptor.init;
 var
   parseerror:GDBBoolean;
-  parseresult{,subparseresult}:PGDBGDBStringArray;
+  parseresult{,subparseresult}:PTZctnrVectorGDBString;
   od:GDBOperandDesc;
   i:integer;
 begin

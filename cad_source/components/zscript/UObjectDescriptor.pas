@@ -21,15 +21,15 @@ unit UObjectDescriptor;
 {$MODE DELPHI}
 {$ASMMODE intel}
 interface
-uses LCLProc,uzctnrvectorobjects,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
+uses LCLProc,gzctnrvectorobjects,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
      UBaseTypeDescriptor,TypeDescriptors,
-     uzctnrvectorp,uzctnrvectordata,uzbtypesbase,varmandef,uzbtypes,uzbmemman,uzbstrproc;
+     gzctnrvectorp,gzctnrvectordata,uzbtypesbase,varmandef,uzbtypes,uzbmemman,uzbstrproc;
 type
 simpleproc=procedure of object;
 //SimpleMenods.init({$IFDEF DEBUGBUILD}'{E4674594-B99F-4A72-8766-E2B49DF50FCE}',{$ENDIF}20,sizeof(MetodDescriptor));
 //Properties.init({$IFDEF DEBUGBUILD}'{CFC9264A-23FA-4FE4-AE71-30495AD54ECE}',{$ENDIF}20,sizeof(PropertyDescriptor));
-TSimpleMenodsVector=GDBOpenArrayOfObjects<MetodDescriptor>;
-TPropertiesVector=TZctnrVectorData<PropertyDescriptor>;
+TSimpleMenodsVector=GZVectorObjects<MetodDescriptor>;
+TPropertiesVector=GZVectorData<PropertyDescriptor>;
 
 PObjectDescriptor=^ObjectDescriptor;
 ObjectDescriptor=object(RecordDescriptor)

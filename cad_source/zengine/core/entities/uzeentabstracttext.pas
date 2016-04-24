@@ -19,7 +19,7 @@ unit uzeentabstracttext;
 {$INCLUDE def.inc}
 
 interface
-uses uzglviewareageneral,uzgldrawcontext,uzeentity,uzecamera,uzctnrvectorpobjects,
+uses uzglviewareageneral,uzgldrawcontext,uzeentity,uzecamera,gzctnrvectorpobjects,
      uzbstrproc,sysutils,uzeentplainwithox,uzbtypesbase,UGDBSelectedObjArray,
      uzbtypes,uzeconsts,uzegeometry,math;
 type
@@ -47,7 +47,7 @@ GDBObjAbstractText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlainWithOX)
                          procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                          function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
                          function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
-                         function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
+                         function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                          //function InRect:TInRect;virtual;
                          procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                          procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;

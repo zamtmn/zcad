@@ -21,7 +21,7 @@ unit uzeentgenericsubentry;
 
 interface
 uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzestyleslayers,
-     uzctnrvectorpobjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,uzbtypesbase,
+     gzctnrvectorpobjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,uzbtypesbase,
      uzeentwithmatrix,uzeentsubordinated,uzbtypes,uzegeometry,uzeentity,
      uzeconsts,uzbmemman,uzeentitiestree;
 type
@@ -47,7 +47,7 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
                             procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
-                            function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
+                            function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                             procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                             procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                             procedure restructure(var drawing:TDrawingDef);virtual;
@@ -91,7 +91,7 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                               function FindObjectsInPointInNode(const point:GDBVertex;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
                               function FindObjectsInVolumeInNode(const Volume:TBoundingBox;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
                               //function FindObjectsInPointDone(const point:GDBVertex):GDBBoolean;virtual;
-                              function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
+                              function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
                               procedure correctsublayers(var la:GDBLayerArray);virtual;
                               function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
 
@@ -606,7 +606,7 @@ procedure GDBObjGenericSubEntry.renderfeedbac(infrustumactualy:TActulity;pcount:
 begin
   ObjArray.renderfeedbac(infrustumactualy,pcount,camera,ProjectProc,dc);
 end;
-function GDBObjGenericSubEntry.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
+function GDBObjGenericSubEntry.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
 var //t,xx,yy:GDBDouble;
     i:GDBInteger;
     p:pGDBObjEntity;

@@ -90,7 +90,7 @@ begin
   if assigned(UpdateVisibleProc) then UpdateVisibleProc;
 end;
 
-procedure _onGetOtherValues(var vsa:GDBGDBStringArray;const valkey:GDBString;const pcurcontext:gdbpointer;const pcurrobj:GDBPointer;const GDBobj:GDBBoolean);
+procedure _onGetOtherValues(var vsa:TZctnrVectorGDBString;const valkey:GDBString;const pcurcontext:gdbpointer;const pcurrobj:GDBPointer;const GDBobj:GDBBoolean);
 var
   pentvarext:PTVariablesExtender;
   pobj:pGDBObjEntity;

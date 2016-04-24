@@ -10,11 +10,11 @@ unit uzccomops;
 interface
 uses
 
-  uzctnrvectorp,uzctranslations,uzeentitiesmanager,uzeentity,uzglviewareaabstract,uzgldrawcontext,
-  uzeentabstracttext,uzeenttext,uzctnrvectorgdbstring,uzeentityfactory,uzcsysvars,uzbstrproc,
-  uzbtypesbase,uzccommandsmanager,uzclog,uzctnrvectorpobjects,
+  gzctnrvectorp,uzctranslations,uzeentitiesmanager,uzeentity,uzglviewareaabstract,uzgldrawcontext,
+  uzeenttext,uzctnrvectorgdbstring,uzeentityfactory,uzcsysvars,uzbstrproc,
+  uzbtypesbase,uzccommandsmanager,uzclog,gzctnrvectorpobjects,
   uzccommandsabstract,uzccommandsimpl,uzbtypes,uzcdrawings,uzeutils,uzcutils,sysutils,
-  varmandef,UGDBOpenArrayOfByte,uzeffdxf,uzcinterface,uzegeometry,uzbmemman,uzeconsts,
+  varmandef,UGDBOpenArrayOfByte,uzeffdxf,uzegeometry,uzbmemman,uzeconsts,
   uzccomdraw,UGDBVisibleOpenArray,uzeentline,uzbpaths,uzcshared,uzeentblockinsert,
   varman,uzccablemanager,uzeentdevice,uzeentmtext,math;
 
@@ -644,7 +644,7 @@ var //i: GDBInteger;
     cman:TCableManager;
     SaveEntUName,SaveCabUName:gdbstring;
     cablemetric,devicemetric,numingroupmetric:GDBString;
-    ProcessedDevices:GDBOpenArrayOfPObjects;
+    ProcessedDevices:TZctnrVectorPGDBaseObjects;
     name:gdbstring;
     DC:TDrawContext;
     pcablestartsegmentvarext,pptnownervarext:PTVariablesExtender;

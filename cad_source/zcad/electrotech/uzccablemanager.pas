@@ -8,7 +8,7 @@ unit uzccablemanager;
 {$INCLUDE def.inc}
 interface
 uses uzcenitiesvariablesextender,uzcvariablesutils,Varman,uzbstrproc,uzcentcable,
-     uzeentdevice,uzeconsts,uzctnrvectorpobjects,languade,uzctnrvectorobjects,
+     uzeentdevice,uzeconsts,gzctnrvectorpobjects,languade,gzctnrvectorobjects,
      SysUtils,uzbtypesbase,uzbtypes,varmandef,uzbmemman;
 const
      DefCableName='Создан. Не назван';
@@ -18,10 +18,10 @@ type
     PTCableDesctiptor=^TCableDesctiptor;
     TCableDesctiptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                      Name:GDBString;
-                     Segments:GDBOpenArrayOfPObjects;
+                     Segments:TZctnrVectorPGDBaseObjects;
                      StartDevice,EndDevice:PGDBObjDevice;
                      StartSegment:PGDBObjCable;
-                     Devices:GDBOpenArrayOfPObjects;
+                     Devices:TZctnrVectorPGDBaseObjects;
                      length:GDBDouble;
                      constructor init;
                      destructor done;virtual;
@@ -30,7 +30,7 @@ type
                  end;
 
     PTCableManager=^TCableManager;
-    TCableManager={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects<TCableDesctiptor>)(*OpenArrayOfPObj*)
+    TCableManager={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorObjects<TCableDesctiptor>)(*OpenArrayOfPObj*)
                        constructor init;
                        procedure build;virtual;
                        function FindOrCreate(sname:gdbstring):PTCableDesctiptor;virtual;

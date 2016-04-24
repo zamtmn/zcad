@@ -19,11 +19,11 @@
 unit UGDBXYZWStringArray;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzbtypes,uzctnrvectordata,sysutils;
+uses uzbtypesbase,uzbtypes,gzctnrvectordata,sysutils;
 type
 {EXPORT+}
 PGDBXYZWGDBStringArray=^XYZWGDBGDBStringArray;
-XYZWGDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<GDBStrWithPoint>{//})
+XYZWGDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBStrWithPoint>{//})
                              constructor init(m:GDBInteger);
                              procedure freeelement(PItem:PT);virtual;
                              //function add(p:GDBPointer):TArrayIndex;virtual;

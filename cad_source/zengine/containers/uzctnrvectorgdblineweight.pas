@@ -19,11 +19,11 @@
 unit uzctnrvectorgdblineweight;
 {$INCLUDE def.inc}
 interface
-uses uzbtypes,uzctnrvectorsimple;
+uses uzbtypes,gzctnrvectorsimple;
 type
 {Export+}
 PTZctnrVectorGDBLineWeight=^TZctnrVectorGDBLineWeight;
-TZctnrVectorGDBLineWeight=TZctnrVectorSimple{-}<TGDBLineWeight>{//};
+TZctnrVectorGDBLineWeight=GZVectorSimple{-}<TGDBLineWeight>{//};
 {Export-}
 implementation
 begin

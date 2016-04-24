@@ -19,9 +19,9 @@
 unit uzccommandsmanager;
 {$INCLUDE def.inc}
 interface
-uses uzctnrvectorpobjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
+uses gzctnrvectorpobjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
      uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,uzcsysinfo,
-     uzbstrproc,uzctnrvectorp,
+     uzbstrproc,gzctnrvectorp,
      uzbtypesbase,uzccommandsabstract, sysutils,uzbtypes,uzglviewareadata,
      uzbmemman,uzcshared,uzclog,varmandef,varman,uzedrawingdef,uzcinterface;
 const
@@ -32,7 +32,7 @@ type
             end;
   TOnCommandRun=procedure(command:string) of object;
 
-  GDBcommandmanager=object(GDBOpenArrayOfPObjects)
+  GDBcommandmanager=object(TZctnrVectorPGDBaseObjects)
 
                           lastcommand:GDBString;
                           pcommandrunning:PCommandRTEdObjectDef;
@@ -41,7 +41,7 @@ type
                           LatestRunOperands:GDBString;
                           LatestRunPDrawing:PTDrawingDef;
 
-                          CommandsStack:GDBOpenArrayOfGDBPointer;
+                          CommandsStack:TZctnrVectorPointer;
                           ContextCommandParams:GDBPointer;
                           busy:GDBBoolean;
                           varstack:tvarstack;
@@ -375,7 +375,7 @@ end;
 
 procedure GDBcommandmanager.executefile;
 var
-   sa:GDBGDBStringArray;
+   sa:TZctnrVectorGDBString;
    p:pstring;
    ir:itrec;
    oldlastcomm:GDBString;

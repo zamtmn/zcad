@@ -19,7 +19,7 @@
 unit uzcbillofmaterial;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzbtypes,uzctnrvectordata,sysutils;
+uses uzbtypesbase,uzbtypes,gzctnrvectordata,sysutils;
 type
 {EXPORT+}
 PGDBBOMItem=^GDBBOMItem;
@@ -30,7 +30,7 @@ GDBBOMItem=packed record
                  processed:GDBBoolean;
                 end;
 PBbillOfMaterial=^GDBBbillOfMaterial;
-GDBBbillOfMaterial={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<GDBBOMItem>{//})(*OpenArrayOfData=GDBNumItem*)
+GDBBbillOfMaterial={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBBOMItem>{//})(*OpenArrayOfData=GDBNumItem*)
                        constructor init(m:GDBInteger);
                        procedure freeelement(PItem:PT);virtual;
                        //function getnamenumber(_Name:GDBString):GDBstring;

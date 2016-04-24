@@ -27,7 +27,7 @@ uses
     uzbtypes,varmandef,varman,sysutils,uzbmemman,uzegeometry,uzeconsts,
     uzbtypesbase,uzedrawingsimple,uzeentgenericsubentry,uzestyleslayers,uzeentity,
     UGDBSelectedObjArray,uzestylestexts,uzefontmanager,uzestyleslinetypes,
-    UGDBOpenArrayOfPV,uzefont,uzctnrvectorpobjects,UGDBVisibleOpenArray,
+    UGDBOpenArrayOfPV,uzefont,gzctnrvectorpobjects,UGDBVisibleOpenArray,
     uzetrash,UGDBOpenArrayOfByte,uzglviewareadata;
 type
 {TDWGProps=packed record
@@ -37,7 +37,7 @@ type
 {REGISTEROBJECTTYPE TZCADDrawingsManager}
 {EXPORT+}
 PTZCADDrawingsManager=^TZCADDrawingsManager;
-TZCADDrawingsManager={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
+TZCADDrawingsManager={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseObjects)
                     CurrentDWG:{PTZCADDrawing}PTSimpleDrawing;
                     ProjectUnits:TUnitManager;
                     FileNameCounter:integer;
@@ -66,8 +66,8 @@ TZCADDrawingsManager={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObject
                     //procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
                     function FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
                     function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
-                    procedure FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:GDBOpenArrayOfPObjects);
-                    procedure FindMultiEntityByVar2(objID:GDBWord;vname:GDBString;var entarray:GDBOpenArrayOfPObjects);
+                    procedure FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
+                    procedure FindMultiEntityByVar2(objID:GDBWord;vname:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
                     procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
                     //procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
                     function GetDefaultDrawingName:GDBString;
@@ -789,7 +789,7 @@ begin
     end;
     result:=tv;
 end;
-procedure TZCADDrawingsManager.FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:GDBOpenArrayOfPObjects);
+procedure TZCADDrawingsManager.FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
 var
    croot:PGDBObjGenericSubEntry;
    pvisible{,pvisible2,pv}:PGDBObjEntity;
@@ -819,7 +819,7 @@ begin
          until pvisible=nil;
      end;
 end;
-procedure TZCADDrawingsManager.FindMultiEntityByVar2(objID:GDBWord;vname:GDBString;var entarray:GDBOpenArrayOfPObjects);
+procedure TZCADDrawingsManager.FindMultiEntityByVar2(objID:GDBWord;vname:GDBString;var entarray:TZctnrVectorPGDBaseObjects);
 var
    croot:PGDBObjGenericSubEntry;
    pvisible{,pvisible2,pv}:PGDBObjEntity;

@@ -21,24 +21,24 @@ unit UEnumDescriptor;
 {$MODE DELPHI}
 interface
 uses types,sysutils,UGDBOpenArrayOfByte,TypeDescriptors,
-     uzbtypesbase,varmandef,uzbtypes,uzctnrvectordata,uzctnrvectorgdbstring,uzbmemman;
+     uzbtypesbase,varmandef,uzbtypes,gzctnrvectordata,uzctnrvectorgdbstring,uzbmemman;
 resourcestring
   rsDifferent='Different';
 type
 PTByteVector=^TByteVector;
-TByteVector=TZctnrVectorData<Byte>;
+TByteVector=GZVectorData<Byte>;
 PTWordVector=^TWordVector;
-TWordVector=TZctnrVectorData<Word>;
+TWordVector=GZVectorData<Word>;
 PTCardinalVector=^TCardinalVector;
-TCardinalVector=TZctnrVectorData<Cardinal>;
+TCardinalVector=GZVectorData<Cardinal>;
 PEnumDescriptor=^EnumDescriptor;
 EnumDescriptor=object(TUserTypeDescriptor)
-                     SourceValue:GDBGDBStringArray;
-                     UserValue:GDBGDBStringArray;
+                     SourceValue:TZctnrVectorGDBString;
+                     UserValue:TZctnrVectorGDBString;
                      Value:PTByteVector;
                      constructor init(size:GDBInteger;tname:string;pu:pointer);
                      function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
-                     function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;InitialValue:GDBString;preferedHeight:integer):TEditorDesc;virtual;
+                     function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;InitialValue:GDBString;preferedHeight:integer):TEditorDesc;virtual;
                      function GetNumberInArrays(addr:GDBPointer;out number:GDBLongword):GDBBoolean;virtual;
                      //function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                      //function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;

@@ -20,32 +20,32 @@
     </CompilerOptions>
     <Files Count="10">
       <Item1>
-        <Filename Value="uzctnrvector.pas"/>
-        <UnitName Value="uzctnrvector"/>
+        <Filename Value="gzctnrvector.pas"/>
+        <UnitName Value="gzctnrvector"/>
       </Item1>
       <Item2>
-        <Filename Value="uzctnrvectorsimple.pas"/>
-        <UnitName Value="uzctnrvectorsimple"/>
+        <Filename Value="gzctnrvectorsimple.pas"/>
+        <UnitName Value="gzctnrvectorsimple"/>
       </Item2>
       <Item3>
-        <Filename Value="uzctnrvectordata.pas"/>
-        <UnitName Value="uzctnrvectordata"/>
+        <Filename Value="gzctnrvectordata.pas"/>
+        <UnitName Value="gzctnrvectordata"/>
       </Item3>
       <Item4>
-        <Filename Value="uzctnrvectorobjects.pas"/>
-        <UnitName Value="uzctnrvectorobjects"/>
+        <Filename Value="gzctnrvectorobjects.pas"/>
+        <UnitName Value="gzctnrvectorobjects"/>
       </Item4>
       <Item5>
-        <Filename Value="uzctnrvectorp.pas"/>
-        <UnitName Value="uzctnrvectorp"/>
+        <Filename Value="gzctnrvectorp.pas"/>
+        <UnitName Value="gzctnrvectorp"/>
       </Item5>
       <Item6>
-        <Filename Value="uzctnrvectorpdata.pas"/>
-        <UnitName Value="uzctnrvectorpdata"/>
+        <Filename Value="gzctnrvectorpdata.pas"/>
+        <UnitName Value="gzctnrvectorpdata"/>
       </Item6>
       <Item7>
-        <Filename Value="uzctnrvectorpobjects.pas"/>
-        <UnitName Value="uzctnrvectorpobjects"/>
+        <Filename Value="gzctnrvectorpobjects.pas"/>
+        <UnitName Value="gzctnrvectorpobjects"/>
       </Item7>
       <Item8>
         <Filename Value="uzctnrvectorgdbstring.pas"/>

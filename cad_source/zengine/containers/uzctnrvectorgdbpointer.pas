@@ -19,11 +19,11 @@
 unit uzctnrvectorgdbpointer;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzctnrvectorsimple;
+uses uzbtypesbase,gzctnrvectorsimple;
 type
 {Export+}
 PTZctnrVectorGDBPointer=^TZctnrVectorGDBPointer;
-TZctnrVectorGDBPointer=TZctnrVectorSimple{-}<GDBPointer>{//};
+TZctnrVectorGDBPointer=GZVectorSimple{-}<GDBPointer>{//};
 {Export-}
 implementation
 begin

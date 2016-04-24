@@ -19,7 +19,7 @@
 unit uzcplugins;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,sysutils, dynlibs, uzclog,uzbmemman,uzctnrvectordata,uzeentity;
+uses uzbtypesbase,sysutils, dynlibs, uzclog,uzbmemman,gzctnrvectordata,uzeentity;
 type
     {Export+}
   PluginVersionInfo=packed record
@@ -51,7 +51,7 @@ type
                           copyobjectarray:copyobjectarray;
                     end;
   PGDBPluginsArray=^GDBPluginsArray;
-  GDBPluginsArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData<moduledesc>)
+  GDBPluginsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData<moduledesc>)
                         constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                         procedure loadplugins(path: GDBString);
                   end;

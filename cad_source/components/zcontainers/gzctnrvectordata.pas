@@ -16,21 +16,21 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzctnrvectordata;
+unit gzctnrvectordata;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzbtypes,uzctnrvector;
+uses uzbtypesbase,uzbtypes,gzctnrvector;
 type
 {Export+}
-TZctnrVectorData{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
-                                 object(TZctnrVector{-}<T>{//})
+GZVectorData{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
+                                 object(GZVector{-}<T>{//})
                                    procedure freewithproc(freeproc:TProcessProc);virtual;
                                  end;
 {Export-}
 PTGenericVectorData=^TGenericVectorData;
-TGenericVectorData=TZctnrVectorData<byte>;
+TGenericVectorData=GZVectorData<byte>;
 implementation
-procedure TZctnrVectorData<T>.freewithproc;
+procedure GZVectorData<T>.freewithproc;
 var i:integer;
 begin
      for i:=0 to self.count-1 do

@@ -19,7 +19,7 @@
 unit UGDBTracePropArray;
 {$INCLUDE def.inc}
 interface
-uses uzctnrvectordata,sysutils,uzbtypesbase,uzbtypes;
+uses gzctnrvectordata,sysutils,uzbtypesbase,uzbtypes;
 {Export+}
 type
   ptraceprop=^traceprop;
@@ -31,7 +31,7 @@ type
     dispraycoord: GDBVertex;
     worldraycoord: GDBVertex;
   end;
-GDBtracepropArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<traceprop>{//})
+GDBtracepropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<traceprop>{//})
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
              end;
 {Export-}

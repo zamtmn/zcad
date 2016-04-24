@@ -21,7 +21,7 @@ unit zeundostack;
 {$INCLUDE def.inc}
 interface
 uses zebaseundocommands,varmandef,uzbtypesbase,
-     uzctnrvectorpobjects,sysutils,uzbtypes,uzbmemman;
+     gzctnrvectorpobjects,sysutils,uzbtypes,uzbmemman;
 const BeginUndo:GDBString='BeginUndo';
       EndUndo:GDBString='EndUndo';
 type
@@ -31,7 +31,7 @@ TUndoRedoResult=(URROk,
                  URRNoCommandsToRedo);
 TOnUndoRedoProc=procedure of object;
 PTZctnrVectorUndoCommands=^TZctnrVectorUndoCommands;
-TZctnrVectorUndoCommands=object(specialize TZctnrVectorPObects{-}<PTElementaryCommand,TElementaryCommand>{//})
+TZctnrVectorUndoCommands=object(specialize GZVectorPObects{-}<PTElementaryCommand,TElementaryCommand>{//})
                                  public
                                  CurrentCommand:TArrayIndex;
                                  currentcommandstartmarker:TArrayIndex;

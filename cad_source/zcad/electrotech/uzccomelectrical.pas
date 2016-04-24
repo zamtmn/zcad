@@ -10,10 +10,10 @@ unit uzccomelectrical;
 
 interface
 uses
-  uzctnrvectorp,uzeutils,uzglviewareageneral,uzctranslations,zcobjectchangeundocommand2,
+  uzeutils,uzglviewareageneral,uzctranslations,zcobjectchangeundocommand2,
   zcmultiobjectcreateundocommand,uzeentitiesmanager,uzedrawingdef,
   uzcenitiesvariablesextender,uzgldrawcontext,uzcdrawing,uzcvariablesutils,
-  uzeentabstracttext,uzcstrconsts,UGDBSelectedObjArray,uzeentityfactory,uzcsysvars,
+  uzcstrconsts,UGDBSelectedObjArray,uzeentityfactory,uzcsysvars,
   csvdocument,
   UGDBOpenArrayOfPV,uzeentblockinsert,devices,UGDBTree,uzcdrawings,uzbtypesbase,
   uzccommandsmanager,uzccomdraw,uzcentelleader,
@@ -32,7 +32,7 @@ uses
   uzeentity,uzeentline,
   uzcentnet,
   uzcshared,uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
-  uzctnrvectorpobjects,uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
+  gzctnrvectorpobjects,uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
   uzbpaths,uzctnrvectorgdbstring,math,Masks,uzclog,uzccombase,uzbstrproc;
 type
 {Export+}
@@ -111,7 +111,7 @@ var
    pcabcom,pfindcom:pCommandRTEdObjectPlugin;
    cabcomparam:TELCableComParam;
    csel:pCommandFastObjectPlugin;
-   MainSpecContentFormat:GDBGDBStringArray;
+   MainSpecContentFormat:TZctnrVectorGDBString;
 
    EM_SRBUILD:EM_SRBUILD_com;
    EM_SEPBUILD:EM_SEPBUILD_com;
@@ -778,7 +778,7 @@ var
       pcabledesk:PTCableDesctiptor;
       node:PGDBObjDevice;
       pt:PGDBObjTable;
-      psl,psfirstline:PGDBGDBStringArray;
+      psl,psfirstline:PTZctnrVectorGDBString;
       //first:boolean;
       s:gdbstring;
       TCP:TCodePage;
@@ -1536,7 +1536,7 @@ begin
                     pa.done;
                end;
 end;
-function RootByMultiTrace(firstpoint,lastpoint:GDBVertex;PTrace:PGDBObjNet;cable:PGDBObjCable;addfirstpoint:gdbboolean):GDBOpenArrayOfPObjects;
+function RootByMultiTrace(firstpoint,lastpoint:GDBVertex;PTrace:PGDBObjNet;cable:PGDBObjCable;addfirstpoint:gdbboolean):TZctnrVectorPGDBaseObjects;
 var //po:PGDBObjSubordinated;
     //plastw:pgdbvertex;
     tw1,tw2:gdbvertex;
@@ -1796,7 +1796,7 @@ var //i: GDBInteger;
     firstline:boolean;
     cman:TCableManager;
     pt:PGDBObjTable;
-    psl{,psfirstline}:PGDBGDBStringArray;
+    psl{,psfirstline}:PTZctnrVectorGDBString;
 
     eq:pvardesk;
     DC:TDrawContext;
@@ -1947,7 +1947,7 @@ var //i: GDBInteger;
     PBOMITEM:PGDBBOMItem;
 
     pt:PGDBObjTable;
-    psl{,psfirstline}:PGDBGDBStringArray;
+    psl{,psfirstline}:PTZctnrVectorGDBString;
 
     pdbu:ptunit;
     pdbv:pvardesk;
@@ -2214,7 +2214,7 @@ var pv:pGDBObjEntity;
     ir:itrec;
     pvd:pvardesk;
     name,content:gdbstring;
-    VarContents:GDBGDBStringArray;
+    VarContents:TZctnrVectorGDBString;
     ps{,pspred}:pgdbstring;
     pentvarext:PTVariablesExtender;
 begin
@@ -2756,14 +2756,14 @@ var
     supernet,net,net2:PGDBObjNet;
     cable:PGDBObjCable;
     pvd,pvd2:pvardesk;
-    netarray,riserarray,linesarray:GDBOpenArrayOfPObjects;
+    netarray,riserarray,linesarray:TZctnrVectorPGDBaseObjects;
     ir_net,ir_net2,ir_riser,ir_riser2:itrec;
     nline,new_line:pgdbobjline;
     np:GDBVertex;
     //net2processed:boolean;
-    processednets:GDBOpenArrayOfPObjects;
+    processednets:TZctnrVectorPGDBaseObjects;
     vd,pvn,pvn2: pvardesk;
-    segments:GDBOpenArrayOfPObjects;
+    segments:TZctnrVectorPGDBaseObjects;
     supernetsarray:GDBObjOpenArrayOfPV;
     DC:TDrawContext;
     priservarext,priser2varext,psupernetvarext,pnetvarext,plinevarext:PTVariablesExtender;

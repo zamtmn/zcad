@@ -21,7 +21,7 @@ unit uzeentcircle;
 interface
 uses
     uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzecamera,
-    uzctnrvectorpobjects,uzestyleslayers,uzbtypesbase,uzehelpobj,UGDBSelectedObjArray,
+    gzctnrvectorpobjects,uzestyleslayers,uzbtypesbase,uzehelpobj,UGDBSelectedObjArray,
     uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,
     uzbtypes,uzeentwithlocalcs,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzbmemman;
 type
@@ -63,7 +63,7 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  procedure rtsave(refp:GDBPointer);virtual;
                  procedure createpoint;virtual;
                  procedure projectpoint;virtual;
-                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                  //procedure higlight;virtual;
                  function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                  //function InRect:TInRect;virtual;
@@ -84,7 +84,7 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
 
                  function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
-                 function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
+                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
 
                  class function CreateInstance:PGDBObjCircle;static;
                  function GetObjType:TObjID;virtual;
@@ -93,7 +93,7 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
 implementation
 //uses
 //    log;
-function GDBObjCircle.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
+function GDBObjCircle.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
 var
    m1:DMatrix4D;
    ppoint:GDBVertex;

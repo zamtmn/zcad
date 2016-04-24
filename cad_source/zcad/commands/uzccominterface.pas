@@ -707,7 +707,7 @@ function CommandList_com(operands:TCommandOperands):TCommandResult;
 var
    p:PCommandObjectDef;
    ir:itrec;
-   clist:GDBGDBStringArray;
+   clist:TZctnrVectorGDBString;
 begin
    clist.init(200);
    p:=commandmanager.beginiterate(ir);

@@ -12,7 +12,7 @@ uses uzeobjectextender,uzeentityfactory,Varman,uzgldrawcontext,uzestyleslayers,
      uzeentgenericsubentry,uzedrawingdef,uzeentitiesprop,uzcsysvars,UGDBOpenArrayOfByte,
      uzbtypesbase,uzeentity,UGDBOpenArrayOfPV,uzeentconnected,uzeconsts,
      varmandef,uzegeometry,uzbtypes,UGDBGraf,uzbmemman,uzeentsubordinated,uunitmanager,
-     uzcshared,sysutils,uzctnrvectorpobjects;
+     uzcshared,sysutils,gzctnrvectorpobjects;
 const
      UNNAMEDNET='NET';
 type
@@ -21,7 +21,7 @@ type
 PGDBObjNet=^GDBObjNet;
 GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
                  graf:GDBGraf;
-                 riserarray:GDBOpenArrayOfPObjects;
+                 riserarray:TZctnrVectorPGDBaseObjects;
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;
                  function EubEntryType:GDBInteger;virtual;

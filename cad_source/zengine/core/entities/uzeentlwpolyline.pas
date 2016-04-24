@@ -20,8 +20,8 @@ unit uzeentlwpolyline;
 {$INCLUDE def.inc}
 
 interface
-uses uzctnrvectorpobjects,uzctnrvectordata,uzeentityfactory,uzeentsubordinated,
-     uzgldrawcontext,uzedrawingdef,uzecamera,uzctnrvectorpdata,uzglviewareadata,
+uses gzctnrvectorpobjects,gzctnrvectordata,uzeentityfactory,uzeentsubordinated,
+     uzgldrawcontext,uzedrawingdef,uzecamera,uzglviewareadata,
      uzeentcurve,UGDBVectorSnapArray,uzegeometry,uzestyleslayers,uzeentity,
      uzbmemman,uzbtypesbase,UGDBPoint3DArray,UGDBPolyLine2DArray,
      UGDBOpenArrayOfByte,uzbtypes,uzeentwithlocalcs,uzeconsts,math,
@@ -30,7 +30,7 @@ type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {REGISTEROBJECTTYPE GDBObjLWPolyline}
 {Export+}
-TWidth3D_in_WCS_Vector={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<GDBQuad3d>{//})
+TWidth3D_in_WCS_Vector={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBQuad3d>{//})
                 end;
 PGDBObjLWPolyline=^GDBObjLWpolyline;
 GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
@@ -63,8 +63,8 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  //function InRect:TInRect;virtual;
-                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
-                 function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
+                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
                  function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                  procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
                  procedure endsnap(out osp:os_record; var pdata:GDBPointer);virtual;
@@ -191,7 +191,7 @@ function GDBObjLWpolyline.getsnap;
 begin
      result:=GDBPoint3dArraygetsnap(Vertex3D_in_WCS_Array,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,closed,param,ProjectProc,snapmode);
 end;
-function GDBObjLWpolyline.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
+function GDBObjLWpolyline.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
 begin
      if Vertex3D_in_WCS_Array.onpoint(point,closed) then
                                                 begin

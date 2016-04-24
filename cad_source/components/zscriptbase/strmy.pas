@@ -33,9 +33,9 @@ function countchar(s: GDBString; ch: ansichar): GDBInteger;
 procedure replaceeqlen(var s: GDBString; substr,newstr: GDBString);
 function replacenull(s:GDBString): GDBString;
 function strtohex(s:GDBString): GDBString;
-function parse(template, str:GDBString; GDBStringarray:PGDBGDBStringArray;mode:GDBBoolean;lexema:PLexema; var position:GDBInteger):GDBBoolean;
-function runparser(template:GDBString;var str:GDBString; out parsed:GDBBoolean):PGDBGDBStringArray;
-function IsParsed(template:GDBString;var str:GDBString; out strins:PGDBGDBStringArray):boolean;
+function parse(template, str:GDBString; GDBStringarray:PTZctnrVectorGDBString;mode:GDBBoolean;lexema:PLexema; var position:GDBInteger):GDBBoolean;
+function runparser(template:GDBString;var str:GDBString; out parsed:GDBBoolean):PTZctnrVectorGDBString;
+function IsParsed(template:GDBString;var str:GDBString; out strins:PTZctnrVectorGDBString):boolean;
 const maxlexem=16;
 
 const
@@ -204,16 +204,16 @@ begin
   while (expr[subend]<>sym) and (subend < length(expr)) do
         inc(subend);
 end;
-function IsParsed(template:GDBString;var str:GDBString; out strins:PGDBGDBStringArray):boolean;
+function IsParsed(template:GDBString;var str:GDBString; out strins:PTZctnrVectorGDBString):boolean;
 begin
      strins:=runparser(template,str,result);
 end;
-function runparser(template:GDBString;var str:GDBString; out parsed:GDBBoolean):PGDBGDBStringArray;
+function runparser(template:GDBString;var str:GDBString; out parsed:GDBBoolean):PTZctnrVectorGDBString;
 var i:GDBInteger;
-    GDBStringarray:PGDBGDBStringArray;
+    GDBStringarray:PTZctnrVectorGDBString;
 begin
      i:=1;
-     gdbgetmem({$IFDEF DEBUGBUILD}'{A87D84AD-14A7-47F0-97B1-BF7CAAFB5886}',{$ENDIF}GDBPointer(GDBStringarray),sizeof(GDBGDBStringArray));
+     gdbgetmem({$IFDEF DEBUGBUILD}'{A87D84AD-14A7-47F0-97B1-BF7CAAFB5886}',{$ENDIF}GDBPointer(GDBStringarray),sizeof(TZctnrVectorGDBString));
      GDBStringarray^.init(20);
      parsed:=false;
      if str<>'' then
@@ -246,13 +246,13 @@ begin
                                  end;
      result:=GDBStringarray;
 end;
-function parse(template, str:GDBString; GDBStringarray:PGDBGDBStringArray;mode:GDBBoolean;lexema:PLexema; var position:GDBInteger):GDBBoolean;
+function parse(template, str:GDBString; GDBStringarray:PTZctnrVectorGDBString;mode:GDBBoolean;lexema:PLexema; var position:GDBInteger):GDBBoolean;
 var i,iend{,subpos},subi:GDBInteger;
     subexpr:GDBString;
     {error,}subresult:GDBBoolean;
     command:ansichar;
     l:TLexema;
-    strarr:GDBGDBStringArray;
+    strarr:TZctnrVectorGDBString;
     //mode:GDBBoolean;
 begin
      result:=false;

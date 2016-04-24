@@ -19,11 +19,11 @@
 unit uzctnrvectorobjid;
 {$INCLUDE def.inc}
 interface
-uses uzbtypes,uzctnrvectorsimple;
+uses uzbtypes,gzctnrvectorsimple;
 type
 {Export+}
 PTZctnrVectorObjID=^TZctnrVectorObjID;
-TZctnrVectorObjID=TZctnrVectorSimple{-}<TObjID>{//};
+TZctnrVectorObjID=GZVectorSimple{-}<TObjID>{//};
 {Export-}
 implementation
 begin

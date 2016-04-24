@@ -276,6 +276,7 @@ begin
      if _pt^.Kind in TypesNeedToFinalize then
        for i:=0 to count-1 do
                              PArray^[i]:=default(t);
+  count:=0;
 end;
 function TZctnrVector<T>.beginiterate;
 begin

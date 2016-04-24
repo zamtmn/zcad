@@ -558,9 +558,6 @@ GZVectorP={$IFNDEF DELPHI}packed{$ENDIF}
                                        procedure Clear;virtual;abstract;
                                        function GetElemCount:GDBInteger;
                                  end;
-PTZctnrVectorPointer=^TZctnrVectorPointer;
-TZctnrVectorPointer=packed object(GZVectorP) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
-                                   end;
 //Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectorpdata.pas
 GZVectorPData={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVectorP)
@@ -641,9 +638,11 @@ GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GZVector)
                       function readtoparser(break:GDBString): GDBString;
                       destructor done;virtual;abstract;
                    end;
-//Generate on E:/zcad/cad_source/zengine/containers/uzctnrvectorgdbpointer.pas
+//Generate on E:/zcad/cad_source/components/zcontainers/uzctnrvectorgdbpointer.pas
 PTZctnrVectorGDBPointer=^TZctnrVectorGDBPointer;
-TZctnrVectorGDBPointer=GZVectorSimple;
+TZctnrVectorGDBPointer=packed object(GZVectorP) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
+                                                                   //TODO:надо тут поменять GZVectorP на GZVectorSimple
+                    end;
 //Generate on E:/zcad/cad_source/zengine/containers/UGDBOpenArrayOfPV.pas
 PGDBObjOpenArrayOfPV=^GDBObjOpenArrayOfPV;
 GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseObjects)
@@ -1379,7 +1378,7 @@ PTUnit=^TUnit;
 PTSimpleUnit=^TSimpleUnit;
 TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
                   Name:GDBString;
-                  InterfaceUses:TZctnrVectorPointer;
+                  InterfaceUses:TZctnrVectorGDBPointer;
                   InterfaceVariables: varmanager;
                   constructor init(nam:GDBString);
                   destructor done;virtual;abstract;

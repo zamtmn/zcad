@@ -11,7 +11,7 @@ components/zcontainers/gzctnrvectorobjects.pas
 components/zcontainers/gzctnrvectorsimple.pas
 components/zcontainers/uzctnrvectorgdbstring.pas
 components/zcontainers/UGDBOpenArrayOfByte.pas
-zengine/containers/uzctnrvectorgdbpointer.pas
+components/zcontainers/uzctnrvectorgdbpointer.pas
 zengine/containers/UGDBOpenArrayOfPV.pas
 zengine/containers/UGDBVisibleOpenArray.pas
 zengine/containers/UGDBControlPointArray.pas

@@ -23,9 +23,9 @@ unit Varman;
 
 interface
 uses
-  gzctnrvectordata,gzctnrvectorpobjects,LCLProc,uabstractunit,gzctnrvectorp,
+  uzctnrvectorgdbpointer,gzctnrvectordata,gzctnrvectorpobjects,LCLProc,uabstractunit,gzctnrvectorp,
   SysUtils,UBaseTypeDescriptor,uzbtypesbase,uzbtypes,UGDBOpenArrayOfByte,
-  uzctnrvectorgdbstring,varmandef,gzctnrvectorpdata,usimplegenerics,uzbmemman,
+  uzctnrvectorgdbstring,varmandef,usimplegenerics,uzbmemman,
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes;
 type
     td=record
@@ -178,7 +178,7 @@ PTUnit=^TUnit;
 PTSimpleUnit=^TSimpleUnit;
 TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
                   Name:GDBString;
-                  InterfaceUses:TZctnrVectorPointer;
+                  InterfaceUses:TZctnrVectorGDBPointer;
                   InterfaceVariables: varmanager;
                   constructor init(nam:GDBString);
                   destructor done;virtual;

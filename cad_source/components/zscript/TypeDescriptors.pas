@@ -19,7 +19,7 @@ unit TypeDescriptors;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses LCLProc,uzbtypesbase,varmandef,uzbtypes,gzctnrvectordata,uzctnrvectorgdbstring,uzbmemman,
+uses uzctnrvectorgdbpointer,LCLProc,uzbtypesbase,varmandef,uzbtypes,gzctnrvectordata,uzctnrvectorgdbstring,uzbmemman,
       gzctnrvectorp,uzbstrproc,sysutils;
 const
      m_procedure=1;
@@ -50,7 +50,7 @@ type tzcpmode=(zcptxt,zcpbin);
                            function IsVisible:boolean;
                      end;
 PTPropertyDeskriptorArray=^TPropertyDeskriptorArray;
-TPropertyDeskriptorArray=object(TZctnrVectorPointer)
+TPropertyDeskriptorArray=object(TZctnrVectorGDBPointer)
                                procedure cleareraseobj;virtual;
                                function GetRealPropertyDeskriptorsCount:integer;virtual;
                                function findcategory(category:GDBString):PPropertyDeskriptor;

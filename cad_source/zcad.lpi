@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="180">
+    <Units Count="179">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -963,17 +963,13 @@
         <IsPartOfProject Value="True"/>
       </Unit176>
       <Unit177>
-        <Filename Value="zengine/containers/uzctnrvectorgdbpointer.pas"/>
+        <Filename Value="zengine/containers/UGDBTable.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit177>
       <Unit178>
-        <Filename Value="zengine/containers/UGDBTable.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit178>
-      <Unit179>
         <Filename Value="zengine/zgl/drawers/uzglbackendmanager.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit179>
+      </Unit178>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

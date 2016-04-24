@@ -33,9 +33,6 @@ TZctnrVectorPData{-}<PTData,TData>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                        procedure cleareraseobj;virtual;
                                        destructor done;virtual;
                                  end;
-GDBOpenArrayOfPObjects=packed object(TZctnrVectorPData{-}<PGDBaseObject,GDBaseObject>{//})
-                                   end;
-PGDBOpenArrayOfPObjects=^GDBOpenArrayOfPObjects;
 {Export-}
 implementation
 destructor TZctnrVectorPData<PTData,TData>.done;

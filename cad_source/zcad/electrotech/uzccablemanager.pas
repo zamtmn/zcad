@@ -8,7 +8,7 @@ unit uzccablemanager;
 {$INCLUDE def.inc}
 interface
 uses uzcenitiesvariablesextender,uzcvariablesutils,Varman,uzbstrproc,uzcentcable,
-     uzeentdevice,uzeconsts,uzctnrvectorpdata,languade,uzctnrvectorobjects,
+     uzeentdevice,uzeconsts,uzctnrvectorpobjects,languade,uzctnrvectorobjects,
      SysUtils,uzbtypesbase,uzbtypes,varmandef,uzbmemman;
 const
      DefCableName='Создан. Не назван';

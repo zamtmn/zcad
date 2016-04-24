@@ -19,7 +19,7 @@
 unit uzccommandsmanager;
 {$INCLUDE def.inc}
 interface
-uses uzctnrvectorpdata,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
+uses uzctnrvectorpobjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
      uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,uzcsysinfo,
      uzbstrproc,uzctnrvectorp,
      uzbtypesbase,uzccommandsabstract, sysutils,uzbtypes,uzglviewareadata,

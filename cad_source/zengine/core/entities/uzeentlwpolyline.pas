@@ -20,11 +20,12 @@ unit uzeentlwpolyline;
 {$INCLUDE def.inc}
 
 interface
-uses uzctnrvectordata,uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzecamera,
-     uzctnrvectorpdata,uzglviewareadata,uzeentcurve,UGDBVectorSnapArray,
-     uzegeometry,uzestyleslayers,uzeentity,uzbmemman,uzbtypesbase,UGDBPoint3DArray,
-     UGDBPolyLine2DArray,UGDBOpenArrayOfByte,uzbtypes,uzeentwithlocalcs,
-     uzeconsts,math,uzeffdxfsupport,sysutils,UGDBLineWidthArray;
+uses uzctnrvectorpobjects,uzctnrvectordata,uzeentityfactory,uzeentsubordinated,
+     uzgldrawcontext,uzedrawingdef,uzecamera,uzctnrvectorpdata,uzglviewareadata,
+     uzeentcurve,UGDBVectorSnapArray,uzegeometry,uzestyleslayers,uzeentity,
+     uzbmemman,uzbtypesbase,UGDBPoint3DArray,UGDBPolyLine2DArray,
+     UGDBOpenArrayOfByte,uzbtypes,uzeentwithlocalcs,uzeconsts,math,
+     uzeffdxfsupport,sysutils,UGDBLineWidthArray;
 type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {REGISTEROBJECTTYPE GDBObjLWPolyline}

@@ -23,10 +23,10 @@ unit Varman;
 
 interface
 uses
-  uzctnrvectordata,LCLProc,uabstractunit,uzctnrvectorp,SysUtils,UBaseTypeDescriptor,
-  uzbtypesbase,uzbtypes,UGDBOpenArrayOfByte,uzctnrvectorgdbstring,varmandef,
-  uzctnrvectorpdata,usimplegenerics,
-  uzbmemman,TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes;
+  uzctnrvectordata,uzctnrvectorpobjects,LCLProc,uabstractunit,uzctnrvectorp,
+  SysUtils,UBaseTypeDescriptor,uzbtypesbase,uzbtypes,UGDBOpenArrayOfByte,
+  uzctnrvectorgdbstring,varmandef,uzctnrvectorpdata,usimplegenerics,uzbmemman,
+  TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes;
 type
     td=record
              template:GDBString;

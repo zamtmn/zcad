@@ -19,9 +19,9 @@ unit uzeentabstracttext;
 {$INCLUDE def.inc}
 
 interface
-uses uzglviewareageneral,uzgldrawcontext,uzeentity,uzecamera,uzctnrvectorpdata,
-     uzbstrproc,sysutils,uzeentplainwithox,uzbtypesbase,UGDBSelectedObjArray,uzbtypes,
-     uzeconsts,uzegeometry,math;
+uses uzglviewareageneral,uzgldrawcontext,uzeentity,uzecamera,uzctnrvectorpobjects,
+     uzbstrproc,sysutils,uzeentplainwithox,uzbtypesbase,UGDBSelectedObjArray,
+     uzbtypes,uzeconsts,uzegeometry,math;
 type
 //jstm(*'TopCenter'*)=2,
 {EXPORT+}

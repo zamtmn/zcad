@@ -48,7 +48,7 @@ TGDBRTModifyChangeCommand=specialize TGObjectChangeCommand<TRTModifyData>;
   {I TGObjectChangeCommandIMPL.inc}
 
 function CreateTGObjectChangeCommand(var data:TRTModifyData;_method:tmethod):PTGDBRTModifyChangeCommand;overload;
-function PushCreateTGObjectChangeCommand(var us:GDBObjOpenArrayOfUCommands; var data:TRTModifyData;_method:tmethod):PTGDBRTModifyChangeCommand;overload;
+function PushCreateTGObjectChangeCommand(var us:TZctnrVectorUndoCommands; var data:TRTModifyData;_method:tmethod):PTGDBRTModifyChangeCommand;overload;
 
 
 implementation
@@ -86,7 +86,7 @@ begin
      gdbgetmem({$IFDEF DEBUGBUILD}'{9FE25B12-DEE0-410A-BDCD-7E69A41E4389}',{$ENDIF}result,sizeof(TGDBRTModifyChangeCommand));
      result^.Assign(data,_method);
 end;
-function {GDBObjOpenArrayOfUCommands.}PushCreateTGObjectChangeCommand(var us:GDBObjOpenArrayOfUCommands; var data:TRTModifyData;_method:tmethod):PTGDBRTModifyChangeCommand;overload;
+function {GDBObjOpenArrayOfUCommands.}PushCreateTGObjectChangeCommand(var us:TZctnrVectorUndoCommands; var data:TRTModifyData;_method:tmethod):PTGDBRTModifyChangeCommand;overload;
 begin
   result:=CreateTGObjectChangeCommand(data,_method);
   us.PushBackData(result);

@@ -27,7 +27,7 @@ TZctnrVectorPData{-}<PTData,TData>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(TZctnrVectorP{-}<PTData>{//})
                                        procedure cleareraseobjfrom(n:GDBInteger);virtual;
                                        procedure cleareraseobjfrom2(n:GDBInteger);virtual;
-                                       function getDataMutable(index:GDBInteger):PGDBaseObject;
+                                       function getDataMutable(index:GDBInteger):PTData;
                                        procedure RemoveData(const data:PTData);virtual;
                                        procedure pack;virtual;
                                        procedure cleareraseobj;virtual;

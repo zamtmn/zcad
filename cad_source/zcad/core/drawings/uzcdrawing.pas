@@ -34,7 +34,7 @@ TZCADDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
            FileName:GDBString;
            Changed:GDBBoolean;
            attrib:GDBLongword;
-           UndoStack:GDBObjOpenArrayOfUCommands;
+           UndoStack:TZctnrVectorUndoCommands;
            DWGUnits:TUnitManager;
 
            constructor init(num:PTUnitManager;preloadedfile1,preloadedfile2:GDBString);

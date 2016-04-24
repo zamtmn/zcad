@@ -47,7 +47,7 @@ TGDBMultiCreateCommand=specialize TGMultiObjectProcessCommand<GDBObjOpenArrayOfP
 
 
 function CreateMultiObjectCreateCommand(var dodata,undodata:tmethod;objcount:integer):PTGDBMultiCreateCommand;overload;
-function PushMultiObjectCreateCommand(var us:GDBObjOpenArrayOfUCommands; var dodata,undodata:tmethod;objcount:integer):PTGDBMultiCreateCommand;overload;
+function PushMultiObjectCreateCommand(var us:TZctnrVectorUndoCommands; var dodata,undodata:tmethod;objcount:integer):PTGDBMultiCreateCommand;overload;
 
 
 implementation
@@ -113,12 +113,12 @@ begin
                           end;
 end;
 
-function {GDBObjOpenArrayOfUCommands.}CreateMultiObjectCreateCommand(var dodata,undodata:tmethod;objcount:integer):PTGDBMultiCreateCommand;overload;
+function {TZctnrVectorUndoCommands.}CreateMultiObjectCreateCommand(var dodata,undodata:tmethod;objcount:integer):PTGDBMultiCreateCommand;overload;
 begin
      gdbgetmem({$IFDEF DEBUGBUILD}'{9FE25B12-DEE0-410A-BDCD-7E69A41E4389}',{$ENDIF}result,sizeof(TGDBMultiCreateCommand));
      result^.Assign(dodata,undodata,objcount);
 end;
-function {GDBObjOpenArrayOfUCommands.}PushMultiObjectCreateCommand(var us:GDBObjOpenArrayOfUCommands; var dodata,undodata:tmethod;objcount:integer):PTGDBMultiCreateCommand;overload;
+function {TZctnrVectorUndoCommands.}PushMultiObjectCreateCommand(var us:TZctnrVectorUndoCommands; var dodata,undodata:tmethod;objcount:integer):PTGDBMultiCreateCommand;overload;
 begin
   result:=CreateMultiObjectCreateCommand(dodata,undodata,objcount);
   us.PushBackData(result);

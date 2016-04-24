@@ -30,8 +30,8 @@ TUndoRedoResult=(URROk,
                  URRNoCommandsToUndo,
                  URRNoCommandsToRedo);
 TOnUndoRedoProc=procedure of object;
-PGDBObjOpenArrayOfUCommands=^GDBObjOpenArrayOfUCommands;
-GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
+PTZctnrVectorUndoCommands=^TZctnrVectorUndoCommands;
+TZctnrVectorUndoCommands=object(specialize TZctnrVectorPObects{-}<PTElementaryCommand,TElementaryCommand>{//})
                                  public
                                  CurrentCommand:TArrayIndex;
                                  currentcommandstartmarker:TArrayIndex;
@@ -55,13 +55,13 @@ GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
                            end;
 implementation
 
-procedure GDBObjOpenArrayOfUCommands.doOnUndoRedo;
+procedure TZctnrVectorUndoCommands.doOnUndoRedo;
 begin
   if assigned(onUndoRedo)then
                              onUndoRedo;
 end;
 
-procedure GDBObjOpenArrayOfUCommands.PushStartMarker(CommandName:GDBString);
+procedure TZctnrVectorUndoCommands.PushStartMarker(CommandName:GDBString);
 var
    pmarker:PTMarkerCommand;
 begin
@@ -74,7 +74,7 @@ begin
      inc(CurrentCommand);
      end;
 end;
-procedure GDBObjOpenArrayOfUCommands.PushStone;
+procedure TZctnrVectorUndoCommands.PushStone;
 var
    pmarker:PTMarkerCommand;
 begin
@@ -87,7 +87,7 @@ begin
      inc(CurrentCommand);
      end;
 end;
-procedure GDBObjOpenArrayOfUCommands.PushEndMarker;
+procedure TZctnrVectorUndoCommands.PushEndMarker;
 var
    pmarker:PTMarkerCommand;
 begin
@@ -102,8 +102,8 @@ begin
      startmarkercount:=0;
      end;
 end;
-//procedure GDBObjOpenArrayOfUCommands.PushTypedChangeCommand(_obj:GDBPointer;_PTypeManager:PUserTypeDescriptor);overload;
-procedure GDBObjOpenArrayOfUCommands.PushChangeCommand(_obj:GDBPointer;_fieldsize:PtrInt);
+//procedure TZctnrVectorUndoCommands.PushTypedChangeCommand(_obj:GDBPointer;_PTypeManager:PUserTypeDescriptor);overload;
+procedure TZctnrVectorUndoCommands.PushChangeCommand(_obj:GDBPointer;_fieldsize:PtrInt);
 var
    pcc:PTChangeCommand;
 begin
@@ -120,15 +120,15 @@ begin
      inc(CurrentCommand);
      PushBackData(pcc);
 end;
-procedure GDBObjOpenArrayOfUCommands.KillLastCommand;
+procedure TZctnrVectorUndoCommands.KillLastCommand;
 var
-   pcc:PTChangeCommand;
+   pcc:PTElementaryCommand;
    mcounter:integer;
 begin
      begin
           mcounter:=0;
           repeat
-          pcc:=pointer(self.getDataMutable(CurrentCommand-1));
+          pcc:=self.getDataMutable(CurrentCommand-1);
 
           if pcc^.GetCommandType=TTC_MEnd then
                                               begin
@@ -147,9 +147,9 @@ begin
      end;
      count:=self.CurrentCommand;
 end;
-function GDBObjOpenArrayOfUCommands.undo(out msg:string;prevheap:TArrayIndex;overlay:GDBBoolean):TUndoRedoResult;
+function TZctnrVectorUndoCommands.undo(out msg:string;prevheap:TArrayIndex;overlay:GDBBoolean):TUndoRedoResult;
 var
-   pcc:PTChangeCommand;
+   pcc:PTElementaryCommand;
    mcounter:integer;
 begin
      result:=URROk;
@@ -157,7 +157,7 @@ begin
      begin
           mcounter:=0;
           repeat
-          pcc:=pointer(self.getDataMutable(CurrentCommand-1));
+          pcc:=self.getDataMutable(CurrentCommand-1);
 
           if pcc^.GetCommandType=TTC_MEnd then
                                               begin
@@ -197,9 +197,9 @@ begin
      gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^,dc);}
      doOnUndoRedo;
 end;
-function GDBObjOpenArrayOfUCommands.redo(out msg:string):TUndoRedoResult;
+function TZctnrVectorUndoCommands.redo(out msg:string):TUndoRedoResult;
 var
-   pcc:PTChangeCommand;
+   pcc:PTElementaryCommand;
    mcounter:integer;
 begin
      if CurrentCommand<count then
@@ -209,7 +209,7 @@ begin
           inc(CurrentCommand);}
           mcounter:=0;
           repeat
-          pcc:=pointer(self.getDataMutable(CurrentCommand));
+          pcc:=self.getDataMutable(CurrentCommand);
 
           if pcc^.GetCommandType=TTC_MEnd then
                                               begin
@@ -235,30 +235,30 @@ begin
      doOnUndoRedo;
 end;
 
-constructor GDBObjOpenArrayOfUCommands.init;
+constructor TZctnrVectorUndoCommands.init;
 begin
      inherited init({$IFDEF DEBUGBUILD}'{EF79AD53-2ECF-4848-8EDA-C498803A4188}',{$ENDIF}1);
      CurrentCommand:=0;
      onUndoRedo:=nil;;
 end;
-procedure GDBObjOpenArrayOfUCommands.ClearFrom(cc:TArrayIndex);
+procedure TZctnrVectorUndoCommands.ClearFrom(cc:TArrayIndex);
 begin
      cleareraseobjfrom2(cc);
      CurrentCommand:=Count;
 end;
 
-function GDBObjOpenArrayOfUCommands.PushBackData(const data:GDBPointer):TArrayIndex;
+function TZctnrVectorUndoCommands.PushBackData(const data:GDBPointer):TArrayIndex;
 begin
      if self.CurrentCommand<count then
                                        self.cleareraseobjfrom2(self.CurrentCommand);
      result:=inherited PushBackData(data);
 end;
-function GDBObjOpenArrayOfUCommands.CreateTTypedChangeCommand(PDataInstance:GDBPointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
+function TZctnrVectorUndoCommands.CreateTTypedChangeCommand(PDataInstance:GDBPointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
 begin
      gdbgetmem({$IFDEF DEBUGBUILD}'{6D631C2E-57FF-4553-991B-332464B7495E}',{$ENDIF}result,sizeof(TTypedChangeCommand));
      result^.Assign(PDataInstance,PType);
 end;
-function GDBObjOpenArrayOfUCommands.PushCreateTTypedChangeCommand(PDataInstance:GDBPointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
+function TZctnrVectorUndoCommands.PushCreateTTypedChangeCommand(PDataInstance:GDBPointer;PType:PUserTypeDescriptor):PTTypedChangeCommand;overload;
 begin
   if CurrentCommand>0 then
   begin

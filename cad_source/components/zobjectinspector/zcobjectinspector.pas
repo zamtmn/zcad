@@ -57,7 +57,7 @@ type
   parrayarrindop=^arrayarrindop;
   TEditorContext=record
                        ppropcurrentedit:PPropertyDeskriptor;
-                       UndoStack:PGDBObjOpenArrayOfUCommands;
+                       UndoStack:PTZctnrVectorUndoCommands;
                        UndoCommand:PTTypedChangeCommand;
                  end;
 
@@ -75,12 +75,12 @@ type
 
     PStoredObj:GDBPointer;
     StoredObjGDBType:PUserTypeDescriptor;
-    StoredUndoStack:PGDBObjOpenArrayOfUCommands;
+    StoredUndoStack:PTZctnrVectorUndoCommands;
     pStoredContext:GDBPointer;
 
     pcurrobj,pdefaultobj:GDBPointer;
     currobjgdbtype,defaultobjgdbtype:PUserTypeDescriptor;
-    DefaultUndoStack:PGDBObjOpenArrayOfUCommands;
+    DefaultUndoStack:PTZctnrVectorUndoCommands;
 
     pcurcontext,pdefaultcontext:GDBPointer;
     PEditor:TPropEditor;
@@ -101,7 +101,7 @@ type
     procedure BeforeInit; virtual;
     procedure _onresize(sender:tobject);virtual;
     procedure updateeditorBounds;virtual;
-    procedure buildproplist(const UndoStack:PGDBObjOpenArrayOfUCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; bmode:GDBInteger; var addr:GDBPointer);
+    procedure buildproplist(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; bmode:GDBInteger; var addr:GDBPointer);
     procedure SetCurrentObjDefault;
     procedure ReturnToDefault(const f:TzeUnitsFormat);
     procedure rebuild;
@@ -134,7 +134,7 @@ type
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);override;
     procedure MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);override;
     procedure UpdateObjectInInsp;
-    procedure setptr(const UndoStack:PGDBObjOpenArrayOfUCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+    procedure setptr(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
     procedure updateinsp;
     private
     protected
@@ -151,8 +151,8 @@ type
     procedure FormHide(Sender: TObject);
   end;
 
-procedure SetGDBObjInsp(const UndoStack:PGDBObjOpenArrayOfUCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
-procedure StoreAndSetGDBObjInsp(const UndoStack:PGDBObjOpenArrayOfUCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+procedure SetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+procedure StoreAndSetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
 function ReStoreGDBObjInsp:GDBBoolean;
 procedure UpdateObjInsp;
 procedure ReturnToDefault(const f:TzeUnitsFormat);
@@ -294,7 +294,7 @@ begin
                                     end;
      end;
 end;
-procedure StoreAndSetGDBObjInsp(const UndoStack:PGDBObjOpenArrayOfUCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+procedure StoreAndSetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
 begin
      if assigned(GDBobjinsp)then
      begin
@@ -309,7 +309,7 @@ begin
      end;
 end;
 
-procedure SetGDBObjInsp(const UndoStack:PGDBObjOpenArrayOfUCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+procedure SetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
 begin
      if assigned(GDBobjinsp)then
                                 begin

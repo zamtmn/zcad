@@ -29,7 +29,7 @@ uses
 type
   TUndoContext=record
                        //ppropcurrentedit:PPropertyDeskriptor;
-                       UndoStack:PGDBObjOpenArrayOfUCommands;
+                       UndoStack:PTZctnrVectorUndoCommands;
                        UndoCommand:PTTypedChangeCommand;
                  end;
   TOnUpdateControl=procedure (AEditedControl:TObject)of object;

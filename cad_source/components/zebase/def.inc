@@ -38,4 +38,4 @@
 {DEFINE FILL0ALLOCATEDMEMORY}
 {$DEFINE DynamicLinkOpenGL}
 
-{$DEFINE GenericsContainerNotFinished}
+{DEFINE GenericsContainerNotFinished}

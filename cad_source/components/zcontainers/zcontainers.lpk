@@ -18,7 +18,7 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="9">
+    <Files Count="10">
       <Item1>
         <Filename Value="uzctnrvector.pas"/>
         <UnitName Value="uzctnrvector"/>
@@ -32,29 +32,33 @@
         <UnitName Value="uzctnrvectordata"/>
       </Item3>
       <Item4>
-        <Filename Value="uzctnrvectorp.pas"/>
-        <UnitName Value="uzctnrvectorp"/>
-      </Item4>
-      <Item5>
-        <Filename Value="uzctnrvectorpdata.pas"/>
-        <UnitName Value="uzctnrvectorpdata"/>
-      </Item5>
-      <Item6>
         <Filename Value="uzctnrvectorobjects.pas"/>
         <UnitName Value="uzctnrvectorobjects"/>
+      </Item4>
+      <Item5>
+        <Filename Value="uzctnrvectorp.pas"/>
+        <UnitName Value="uzctnrvectorp"/>
+      </Item5>
+      <Item6>
+        <Filename Value="uzctnrvectorpdata.pas"/>
+        <UnitName Value="uzctnrvectorpdata"/>
       </Item6>
       <Item7>
-        <Filename Value="uzctnrvectorgdbstring.pas"/>
-        <UnitName Value="uzctnrvectorgdbstring"/>
+        <Filename Value="uzctnrvectorpobjects.pas"/>
+        <UnitName Value="uzctnrvectorpobjects"/>
       </Item7>
       <Item8>
-        <Filename Value="UGDBTree.pas"/>
-        <UnitName Value="UGDBTree"/>
+        <Filename Value="uzctnrvectorgdbstring.pas"/>
+        <UnitName Value="uzctnrvectorgdbstring"/>
       </Item8>
       <Item9>
+        <Filename Value="UGDBTree.pas"/>
+        <UnitName Value="UGDBTree"/>
+      </Item9>
+      <Item10>
         <Filename Value="UGDBOpenArrayOfByte.pas"/>
         <UnitName Value="UGDBOpenArrayOfByte"/>
-      </Item9>
+      </Item10>
     </Files>
     <RequiredPkgs Count="2">
       <Item1>

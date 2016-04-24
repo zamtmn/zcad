@@ -23,7 +23,7 @@ uses uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingd
      uzecamera,uzeentitiesprop,uzglgeometry,uzestyleslinetypes,uzbtypesbase,
      UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,
      uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,uzbmemman,UGDBOpenArrayOfByte,
-     uzestyleslayers,uzctnrvectorpobjects;
+     uzestyleslayers,gzctnrvectorpobjects;
 type
 //Owner:{-}PGDBObjEntity{/GDBPointer/};(*'Владелец'*)
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
@@ -99,10 +99,10 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure DrawBB(var DC:TDrawContext);
                     function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
 
-                    function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
-                    function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
+                    function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
+                    function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
 
-                    function isonmouse(var popa:GDBOpenArrayOfPObjects;mousefrustum:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
+                    function isonmouse(var popa:TZctnrVectorPGDBaseObjects;mousefrustum:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                     procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
                     function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                     procedure endsnap(out osp:os_record; var pdata:GDBPointer);virtual;
@@ -819,7 +819,7 @@ begin
                       else
                           result:=false;
 end;
-function GDBObjEntity.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
+function GDBObjEntity.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
 begin
      result:=false;
 end;

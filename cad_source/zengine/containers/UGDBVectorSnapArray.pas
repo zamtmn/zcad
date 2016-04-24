@@ -19,7 +19,7 @@
 unit UGDBVectorSnapArray;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzctnrvectordata,sysutils,uzbtypes;
+uses uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes;
 type
 {Export+}
 PVectotSnap=^VectorSnap;
@@ -29,7 +29,7 @@ VectorSnap=packed record
 PVectorSnapArray=^VectorSnapArray;
 VectorSnapArray=packed array [0..0] of VectorSnap;
 PGDBVectorSnapArray=^GDBVectorSnapArray;
-GDBVectorSnapArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<VectorSnap>{//})
+GDBVectorSnapArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<VectorSnap>{//})
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
              end;
 {Export-}

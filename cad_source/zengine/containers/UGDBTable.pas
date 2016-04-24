@@ -19,17 +19,17 @@
 unit UGDBTable;
 {$INCLUDE def.inc}
 interface
-uses uzctnrvector,uzctnrvectordata,uzctnrvectorpobjects,uzbtypesbase,uzbtypes,sysutils,uzctnrvectorobjects,
+uses gzctnrvector,gzctnrvectordata,gzctnrvectorpobjects,uzbtypesbase,uzbtypes,sysutils,gzctnrvectorobjects,
      uzctnrvectorgdbstring;
 type
 {EXPORT+}
 PGDBTableArray=^GDBTableArray;
-GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPObects{-}<PGDBGDBStringArray,GDBGDBStringArray>{//})(*OpenArrayOfData=GDBGDBStringArray*)
+GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorPObects{-}<PTZctnrVectorGDBString,TZctnrVectorGDBString>{//})(*OpenArrayOfData=TZctnrVectorGDBString*)
                     columns,rows:GDBInteger;
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}c,r:GDBInteger);
                     destructor done;virtual;
                     procedure cleareraseobj;virtual;
-                    //function copyto(var source:GDBOpenArrayOfData{-}<GDBGDBStringArray>{//}):GDBInteger;virtual;
+                    //function copyto(var source:GDBOpenArrayOfData{-}<TZctnrVectorGDBString>{//}):GDBInteger;virtual;
               end;
 {EXPORT-}
 implementation
@@ -37,7 +37,7 @@ implementation
 //    log;
 {function GDBTableArray.copyto(source:PGDBOpenArray):GDBInteger; //PGDBOpenArrayOfData
 var
-  p,np:PGDBGDBStringArray;
+  p,np:PTZctnrVectorGDBString;
   ir:itrec;
 begin
   PGDBTableArray(source)^.columns:=columns;
@@ -59,13 +59,13 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       PGDBGDBStringArray(p)^.FREEANDdone;
+       PTZctnrVectorGDBString(p)^.FREEANDdone;
        p:=iterate(ir);
   until p=nil;
   count:=0;
 end;
 destructor GDBTableArray.done;
-var p:PGDBGDBStringArray;
+var p:PTZctnrVectorGDBString;
     ir:itrec;
 begin
   p:=beginiterate(ir);
@@ -77,10 +77,10 @@ begin
 end;
 constructor GDBTableArray.init;
 //var //i,j:gdbinteger;
-    //psl:PGDBGDBStringArray;
+    //psl:PTZctnrVectorGDBString;
     //s:gdbstring;
 begin
-   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}r{,sizeof(GDBGDBStringArray)});
+   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}r{,sizeof(TZctnrVectorGDBString)});
 
    {psl:=pointer(CreateObject);
           psl.init(c);

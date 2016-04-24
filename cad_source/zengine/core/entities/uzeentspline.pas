@@ -20,17 +20,17 @@ unit uzeentspline;
 {$INCLUDE def.inc}
 
 interface
-uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanager,uzctnrvectordata,
+uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanager,gzctnrvectordata,
      UGDBPoint3DArray,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
-     uzctnrvectorpobjects,uzestyleslayers,uzeentsubordinated,uzeentcurve,uzbtypesbase,
+     gzctnrvectorpobjects,uzestyleslayers,uzeentsubordinated,uzeentcurve,uzbtypesbase,
      uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,uzglviewareadata,
      uzegeometry,uzeffdxfsupport,sysutils,uzbmemman;
 type
 {REGISTEROBJECTTYPE GDBObjSpline}
 {Export+}
-TKnotsVector={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<GDBFloat>{//})
+TKnotsVector={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBFloat>{//})
                              end;
-TCPVector={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<GDBvertex4S>{//})
+TCPVector={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBvertex4S>{//})
                              end;
 PGDBObjSpline=^GDBObjSpline;
 GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
@@ -55,8 +55,8 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
-                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
-                 function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
+                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
 
@@ -88,7 +88,7 @@ begin
                                   end;
    result:={VertexArrayInWCS}AproxPointInWCS.onmouse(mf,closed);
 end;
-function GDBObjSpline.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
+function GDBObjSpline.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
 begin
      if VertexArrayInWCS.onpoint(point,closed) then
                                                 begin

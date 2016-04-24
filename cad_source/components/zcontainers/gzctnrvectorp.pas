@@ -16,16 +16,14 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzctnrvectorp;
+unit gzctnrvectorp;
 {$INCLUDE def.inc}
 interface
-uses uzbtypes,uzbtypesbase,sysutils,uzctnrvector,uzctnrvectorsimple;
+uses uzbtypes,uzbtypesbase,sysutils,gzctnrvector,gzctnrvectorsimple;
 type
-GDBPointerArray=array [0..0] of GDBPointer;
-PGDBPointerArray=^GDBPointerArray;
 {Export+}
-TZctnrVectorP{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
-                                 object(TZctnrVectorSimple{-}<T>{//})
+GZVectorP{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
+                                 object(GZVectorSimple{-}<T>{//})
                                        Deleted:TArrayIndex;(*hidden_in_objinsp*)
                                        function iterate (var ir:itrec):GDBPointer;virtual;
                                        function beginiterate(out ir:itrec):GDBPointer;virtual;
@@ -39,8 +37,8 @@ TZctnrVectorP{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                        procedure Clear;virtual;
                                        function GetElemCount:GDBInteger;
                                  end;
-PGDBOpenArrayOfGDBPointer=^GDBOpenArrayOfGDBPointer;
-GDBOpenArrayOfGDBPointer=packed object(TZctnrVectorP{-}<GDBPointer>{//}) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
+PTZctnrVectorPointer=^TZctnrVectorPointer;
+TZctnrVectorPointer=packed object(GZVectorP{-}<GDBPointer>{//}) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
                                    end;
 {Export-}
 function EqualFuncPointer(const a, b: pointer):Boolean;
@@ -49,26 +47,26 @@ function EqualFuncPointer(const a, b: pointer):Boolean;
 begin
   result:=(a=b);
 end;
-function TZctnrVectorP<T>.GetElemCount:GDBInteger;
+function GZVectorP<T>.GetElemCount:GDBInteger;
 begin
   result:=count-deleted;
 end;
-procedure TZctnrVectorP<T>.clear;
+procedure GZVectorP<T>.clear;
 begin
   inherited;
   deleted:=0;
 end;
-constructor TZctnrVectorP<T>.initnul;
+constructor GZVectorP<T>.initnul;
 begin
   inherited;
   Deleted:=0;
 end;
-constructor TZctnrVectorP<T>.init;
+constructor GZVectorP<T>.init;
 begin
   inherited;
   Deleted:=0;
 end;
-function TZctnrVectorP<T>.beginiterate;
+function GZVectorP<T>.beginiterate;
 begin
   if parray=nil then
                     result:=nil
@@ -79,7 +77,7 @@ begin
                           result:=iterate(ir);
                     end;
 end;
-function TZctnrVectorP<T>.GetRealCount:GDBInteger;
+function GZVectorP<T>.GetRealCount:GDBInteger;
 var p:GDBPointer;
     ir:itrec;
 begin
@@ -91,7 +89,7 @@ begin
         p:=iterate(ir);
   until p=nil;
 end;
-{function TZctnrVectorP<T>.AddByPointer;
+{function GZVectorP<T>.AddByPointer;
 var addr: GDBPlatformint;
 begin
   if parray=nil then
@@ -106,14 +104,14 @@ begin
        inc(count);
   end;
 end;}
-{function TZctnrVectorP<T>.AddByRef;
+{function GZVectorP<T>.AddByRef;
 var
    p:pointer;
 begin
      p:=@obj;
      result:=AddByPointer(@p)
 end;}
-{function TZctnrVectorP<T>.addnodouble;
+{function GZVectorP<T>.addnodouble;
 var p,newp:GDBPointer;
     ir:itrec;
 begin
@@ -135,12 +133,12 @@ begin
   result := count;
   inc(count);
 end;}
-destructor TZctnrVectorP<T>.FreeAndDone;
+destructor GZVectorP<T>.FreeAndDone;
 begin
      cleareraseobj;
      done;
 end;
-function TZctnrVectorP<T>.iterate;
+function GZVectorP<T>.iterate;
 var
   p:GDBPointer;
 begin
@@ -161,7 +159,7 @@ begin
   until (ir.itc=count)or(p<>nil);
   result:=p;
 end;
-procedure TZctnrVectorP<T>.RemoveData(const data:T);
+procedure GZVectorP<T>.RemoveData(const data:T);
 var p:GDBPointer;
     ir:itrec;
 begin
@@ -176,7 +174,7 @@ begin
              p:=iterate(ir);
        until p=nil;
 end;
-{procedure TZctnrVectorP<T>.AddToArray(const pdata:GDBPointer);
+{procedure GZVectorP<T>.AddToArray(const pdata:GDBPointer);
 begin
      PushBackData(pdata);
 end;}

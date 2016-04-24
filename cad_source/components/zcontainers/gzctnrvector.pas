@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzctnrvector;
+unit gzctnrvector;
 {$INCLUDE def.inc}
 interface
 uses uzbmemman,uzbtypesbase,sysutils,uzbtypes,typinfo;
@@ -31,7 +31,7 @@ const
                          tkUString,tkUChar,tkHelper,tkFile,tkClassRef];
 type
 {Export+}
-TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
+GZVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
             object(GDBaseObject)
                   {-}type{//}
                       {-}PT=^T;{//}
@@ -56,7 +56,7 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   procedure free;virtual;
                   function SetCount(index:GDBInteger):GDBPointer;virtual;
                   procedure Invert;
-                  function copyto(var source:TZctnrVector<T>):GDBInteger;virtual;
+                  function copyto(var source:GZVector<T>):GDBInteger;virtual;
                   function GetRealCount:GDBInteger;
                   function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
                   function AllocData(SData:GDBword):GDBPointer;virtual;
@@ -90,12 +90,12 @@ TZctnrVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
             end;
 {Export-}
 implementation
-function TZctnrVector<T>.GetSpecializedTypeInfo:PTypeInfo;
+function GZVector<T>.GetSpecializedTypeInfo:PTypeInfo;
 begin
   result:=TypeInfo(T);
 end;
 
-function TZctnrVector<T>.getDataMutable;
+function GZVector<T>.getDataMutable;
 begin
      if (index>=max)
         or(index<0)then
@@ -105,7 +105,7 @@ else if PArray=nil then
                    else
                      result:=@parray[index];
 end;
-function TZctnrVector<T>.getData;
+function GZVector<T>.getData;
 begin
      if (index>=max)
         or(index<0)then
@@ -115,7 +115,7 @@ else if PArray=nil then
                    else
                      result:=parray[index];
 end;
-function TZctnrVector<T>.PushBackData(const data:T):TArrayIndex;
+function GZVector<T>.PushBackData(const data:T):TArrayIndex;
 begin
   if parray=nil then
                      CreateArray;
@@ -129,12 +129,12 @@ begin
        inc(count);
   end;
 end;
-function TZctnrVector<T>.GetParrayAsPointer;
+function GZVector<T>.GetParrayAsPointer;
 begin
   result:=pointer(parray);
 end;
 
-function TZctnrVector<T>.IsDataExistWithCompareProc;
+function GZVector<T>.IsDataExistWithCompareProc;
 var i:integer;
 begin
      for i:=0 to count-1 do
@@ -145,7 +145,7 @@ begin
                            end;
      result:=false;
 end;
-function TZctnrVector<T>.PushBackIfNotPresentWithCompareProc;
+function GZVector<T>.PushBackIfNotPresentWithCompareProc;
 begin
   if IsDataExistWithCompareProc(data,EqualFunc)then
                                                    begin
@@ -154,7 +154,7 @@ begin
                                                    end;
   result:=PushBackData(data);
 end;
-function TZctnrVector<T>.AllocData(SData:GDBword):GDBPointer;
+function GZVector<T>.AllocData(SData:GDBword):GDBPointer;
 begin
   if parray=nil then
                     createarray;
@@ -166,7 +166,7 @@ begin
   {$ENDIF}
   inc(count,SData);
 end;
-function TZctnrVector<T>.AddData(PData:GDBPointer;SData:GDBword):GDBInteger;
+function GZVector<T>.AddData(PData:GDBPointer;SData:GDBword):GDBInteger;
 var addr:GDBPlatformint;
 begin
   if parray=nil then
@@ -191,7 +191,7 @@ begin
        inc(count,SData);
   end;
 end;
-function TZctnrVector<T>.GetRealCount:GDBInteger;
+function GZVector<T>.GetRealCount:GDBInteger;
 var p:GDBPointer;
     ir:itrec;
 begin
@@ -203,7 +203,7 @@ begin
         p:=iterate(ir);
   until p=nil;}
 end;
-function TZctnrVector<T>.copyto(var source:TZctnrVector<T>):GDBInteger;
+function GZVector<T>.copyto(var source:GZVector<T>):GDBInteger;
 var i:integer;
 begin
      for i:=0 to count-1 do
@@ -221,7 +221,7 @@ begin
   until p=nil;
   result:=count;
 end;}
-procedure TZctnrVector<T>.Invert;
+procedure GZVector<T>.Invert;
 (*var p,pl,tp:GDBPointer;
     ir:itrec;
 begin
@@ -254,7 +254,7 @@ begin
   end;
 end;
 
-function TZctnrVector<T>.SetCount;
+function GZVector<T>.SetCount;
 begin
      count:=index;
      if parray=nil then
@@ -268,7 +268,7 @@ begin
                        end;
      result:=parray;
 end;
-procedure TZctnrVector<T>.free;
+procedure GZVector<T>.free;
 var i:integer;
    _pt:PTypeInfo;
 begin
@@ -278,7 +278,7 @@ begin
                              PArray^[i]:=default(t);
   count:=0;
 end;
-function TZctnrVector<T>.beginiterate;
+function GZVector<T>.beginiterate;
 begin
   if parray=nil then
                     result:=nil
@@ -289,7 +289,7 @@ begin
                           result:=iterate(ir);
                     end;
 end;
-function TZctnrVector<T>.iterate;
+function GZVector<T>.iterate;
 begin
   if count=0 then result:=nil
   else if ir.itc<(count-1) then
@@ -301,14 +301,14 @@ begin
                       end
                   else result:=nil;
 end;
-constructor TZctnrVector<T>.initnul;
+constructor GZVector<T>.initnul;
 begin
   PArray:=nil;
   pointer(GUID):=nil;
   Count:=0;
   Max:=0;
 end;
-constructor TZctnrVector<T>.init;
+constructor GZVector<T>.init;
 begin
   PArray:=nil;
   pointer(GUID):=nil;
@@ -316,7 +316,7 @@ begin
   Max:=m;
   {$IFDEF DEBUGBUILD}Guid:=ErrGuid;{$ENDIF}
 end;
-destructor TZctnrVector<T>.done;
+destructor GZVector<T>.done;
 var {p:pt;
     ir:itrec;}
     i:integer;
@@ -331,32 +331,32 @@ begin
   PArray:=nil;
   {$IFDEF DEBUGBUILD}Guid:='';{$ENDIF}
 end;
-destructor TZctnrVector<T>.clearanddone;
+destructor GZVector<T>.clearanddone;
 begin
      clear;
      done;
 end;
-function TZctnrVector<T>.SizeOfData:TArrayIndex;
+function GZVector<T>.SizeOfData:TArrayIndex;
 begin
   result:=sizeof(T);
 end;
-procedure TZctnrVector<T>.clear;
+procedure GZVector<T>.clear;
 begin
   count:=0;
 end;
-function TZctnrVector<T>.CreateArray;
+function GZVector<T>.CreateArray;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}PArray,SizeOfData*max);
   result:=parray;
 end;
-procedure TZctnrVector<T>.Grow;
+procedure GZVector<T>.Grow;
 begin
      if newmax<=0 then
                      newmax:=2*max;
      parray := enlargememblock({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}parray, SizeOfData * max, SizeOfData * newmax);
      max:=newmax;
 end;
-procedure TZctnrVector<T>.Shrink;
+procedure GZVector<T>.Shrink;
 begin
   if (count<>0)and(count<max) then
   begin
@@ -364,7 +364,7 @@ begin
        max := count;
   end;
 end;
-procedure TZctnrVector<T>.SetSize;
+procedure GZVector<T>.SetSize;
 begin
      if nsize>max then
                       begin
@@ -377,11 +377,11 @@ else if nsize<max then
                       end;
      max:=nsize;
 end;
-function TZctnrVector<T>.GetElemCount:GDBInteger;
+function GZVector<T>.GetElemCount:GDBInteger;
 begin
   result:=count;
 end;
-function TZctnrVector<T>.InsertElement;
+function GZVector<T>.InsertElement;
 var
    s:integer;
 begin
@@ -401,7 +401,7 @@ begin
      end;
      result:=parray;
 end;
-function TZctnrVector<T>.deleteelement;
+function GZVector<T>.deleteelement;
 begin
   if (index>=0)and(index<count)then
   begin
@@ -413,7 +413,7 @@ begin
   end;
   result:=parray;
 end;
-function TZctnrVector<T>.DeleteElementByP;
+function GZVector<T>.DeleteElementByP;
 var
    s:integer;
 begin
@@ -425,7 +425,7 @@ begin
   end;
   result:=parray;
 end;
-destructor TZctnrVector<T>.FreeAndDone;
+destructor GZVector<T>.FreeAndDone;
 begin
      free;
      done;

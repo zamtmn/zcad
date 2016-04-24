@@ -16,30 +16,39 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit UGDBLineWidthArray;
+unit gzctnrvectorsimple;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzbmemman;
+uses uzbtypesbase,uzbtypes,gzctnrvector;
 type
-{REGISTEROBJECTTYPE GDBLineWidthArray}
 {Export+}
-GDBLineWidthArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GLLWWidth>{//})(*OpenArrayOfData=GLLWWidth*)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                constructor initnul;
-             end;
+GZVectorSimple{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
+                                 object(GZVector{-}<T>{//})
+                                   function PushBackIfNotPresent(data:T):GDBInteger;
+                                   function IsDataExist(pobj:T):GDBBoolean;
+                                 end;
 {Export-}
 implementation
-//uses
-//    log;
-constructor GDBLineWidthArray.init;
+
+function GZVectorSimple<T>.IsDataExist;
+var i:integer;
 begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(GLLWWidth)});
+     for i:=0 to count-1 do
+     if parray[i]=pobj then
+                           begin
+                                result:=true;
+                                exit;
+                           end;
+     result:=false;
 end;
-constructor GDBLineWidthArray.initnul;
+function GZVectorSimple<T>.PushBackIfNotPresent;
 begin
-  inherited initnul;
-  //size:=sizeof(GLLWWidth);
+  if IsDataExist(data)then
+                        begin
+                          result := -1;
+                          exit;
+                        end;
+  result:=PushBackData(data);
 end;
 begin
 end.
-

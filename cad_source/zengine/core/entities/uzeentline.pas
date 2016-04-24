@@ -21,7 +21,7 @@ unit uzeentline;
 
 interface
 uses LCLProc,uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,uzglgeometry,
-     uzctnrvectorpobjects,uzestyleslayers,uzbtypesbase,uzeentsubordinated,
+     gzctnrvectorpobjects,uzestyleslayers,uzbtypesbase,uzeentsubordinated,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,
      uzglviewareadata,uzegeometry,uzeffdxfsupport,uzbmemman;
 type
@@ -59,8 +59,8 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
-                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
+                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
+                  function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
                  //procedure feedbackinrect;virtual;
                  //function InRect:TInRect;virtual;
                   function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
@@ -290,7 +290,7 @@ function GDBObjLine.CalcTrueInFrustum;
 begin
       result:=geom.CalcTrueInFrustum(frustum,true);
 end;
-function GDBObjLine.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
+function GDBObjLine.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
 begin
      if {distance2piece}SQRdist_Point_to_Segment(point,self.CoordInWCS.lBegin,self.CoordInWCS.lEnd)<bigeps then
                                                                                   begin

@@ -24,7 +24,7 @@ unit varmandef;
 interface
 uses
   LCLProc,SysUtils,UGDBTree,uzctnrvectorgdbstring,strutils,uzbtypesbase,
-  UGDBOpenArrayOfByte,uzbtypes,uzctnrvectordata,
+  UGDBOpenArrayOfByte,uzbtypes,gzctnrvectordata,
   Classes,Controls,StdCtrls,Graphics,types;
 const
   {Ttypenothing=-1;
@@ -64,7 +64,7 @@ TEditorDesc=packed record
                   Editor:TPropEditor;
                   Mode:TEditorMode;
             end;
-TOnCreateEditor=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+TOnCreateEditor=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 TOnGetValueAsString=function(PInstance:GDBPointer):GDBString;
 TOnDrawProperty=procedure(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
 
@@ -130,7 +130,7 @@ TOIProps=record
 pvardesk = ^vardesk;
 TMyNotifyCommand=(TMNC_EditingDoneEnterKey,TMNC_EditingDoneLostFocus,TMNC_EditingDoneESC,TMNC_EditingProcess,TMNC_RunFastEditor,TMNC_EditingDoneDoNothing);
 TMyNotifyProc=procedure (Sender: TObject;Command:TMyNotifyCommand) of object;
-TCreateEditorFunc=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;InitialValue:GDBString;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc of object;
+TCreateEditorFunc=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;InitialValue:GDBString;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc of object;
 UserTypeDescriptor=object(GDBaseObject)
                          SizeInGDBBytes:GDBInteger;
                          TypeName:String;
@@ -143,7 +143,7 @@ UserTypeDescriptor=object(GDBaseObject)
                          constructor init(size:GDBInteger;tname:string;pu:pointer);
                          constructor baseinit(size:GDBInteger;tname:string;pu:pointer);
                          procedure _init(size:GDBInteger;tname:string;pu:pointer);
-                         function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;InitialValue:GDBString;preferedHeight:integer):TEditorDesc;virtual;
+                         function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;InitialValue:GDBString;preferedHeight:integer):TEditorDesc;virtual;
                          procedure ApplyOperator(oper,path:GDBString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;abstract;
                          //function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
                          function SerializePreProcess(Value:GDBString;sub:integer):GDBString;virtual;
@@ -455,7 +455,7 @@ begin
      SizeInGDBBytes:=0;
      typename:='';
 end;
-function UserTypeDescriptor.CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;InitialValue:GDBString;preferedHeight:integer):TEditorDesc;
+function UserTypeDescriptor.CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;InitialValue:GDBString;preferedHeight:integer):TEditorDesc;
 begin
      if assigned(onCreateEditorFunc) then
                                          result:=onCreateEditorFunc(TheOwner,rect,pinstance,psa,FreeOnLostFocus,initialvalue,@self,preferedHeight)

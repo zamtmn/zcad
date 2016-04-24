@@ -21,13 +21,13 @@ unit uzccomdraw;
 
 interface
 uses
-  uzctnrvector,uzglviewareageneral,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,
+  gzctnrvector,uzglviewareageneral,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,
   zcmultiobjectcreateundocommand,uzeentitiesmanager,uzgldrawercanvas,
   uzcoimultiobjects,uzcenitiesvariablesextender,uzcdrawing,uzepalette,
   uzctnrvectorobjid,uzctnrvectorgdbdouble,uzctnrvectorgdblineweight,uzctnrvectorgdbpointer,uzctextenteditor,uzgldrawcontext,usimplegenerics,UGDBPoint3DArray,
   uzeentpoint,uzeentitiestree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,uzeentityfactory,
   uzedrawingsimple,uzcsysvars,uzcstrconsts,uzccomdrawdase,
-  PrintersDlgs,printers,graphics,uzeentdevice,uzeentwithlocalcs,uzctnrvectorp,
+  PrintersDlgs,printers,graphics,uzeentdevice,uzeentwithlocalcs,
   LazUTF8,Clipbrd,LCLType,classes,uzeenttext,uzeentabstracttext,uzestylestexts,
   uzccommandsabstract,uzbstrproc,
   uzbtypesbase,uzccommandsmanager,uzccombase,
@@ -44,7 +44,7 @@ uses
   uzbmemman,
   uzeconsts,
   uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
-  uzcshared,uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,uzctnrvectordata,
+  uzcshared,uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
   math,uzeenttable,uzctnrvectorgdbstring,uzcprinterspecfunc;
 const
      modelspacename:GDBSTring='**Модель**';
@@ -206,7 +206,7 @@ type
   end;
   ptpcoavector=^tpcoavector;
   tpcoavector={-}specialize{//}
-              TZctnrVectorData{-}<TCopyObjectDesc>{//};
+              GZVectorData{-}<TCopyObjectDesc>{//};
   move_com = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
     t3dp: gdbvertex;
     pcoa:ptpcoavector;
@@ -294,7 +294,7 @@ type
                    end;
   SelSim_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          created:boolean;
-                         bnames,textcontents,textremplates:GDBGDBStringArray;
+                         bnames,textcontents,textremplates:TZctnrVectorGDBString;
                          layers,linetypes:TZctnrVectorGDBPointer;
                          weights:TZctnrVectorGDBLineWeight;
                          objtypes:TZctnrVectorObjID;
@@ -434,7 +434,7 @@ function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;o
 function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 implementation
 uses uzeentcurve,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
-function GetBlockDefNames(var BDefNames:GDBGDBStringArray;selname:GDBString):GDBInteger;
+function GetBlockDefNames(var BDefNames:TZctnrVectorGDBString;selname:GDBString):GDBInteger;
 var pb:PGDBObjBlockdef;
     ir:itrec;
     i:gdbinteger;
@@ -454,7 +454,7 @@ begin
            inc(i);
      until pb=nil;
 end;
-function GetSelectedBlockNames(var BDefNames:GDBGDBStringArray;selname:GDBString;mode:BRMode):GDBInteger;
+function GetSelectedBlockNames(var BDefNames:TZctnrVectorGDBString;selname:GDBString;mode:BRMode):GDBInteger;
 var pb:PGDBObjBlockInsert;
     ir:itrec;
     i:gdbinteger;
@@ -505,7 +505,7 @@ begin
            pb:=poa^.iterate(ir);
      until pb=nil;
 end;
-function GetStyleNames(var BDefNames:GDBGDBStringArray;selname:GDBString):GDBInteger;
+function GetStyleNames(var BDefNames:TZctnrVectorGDBString;selname:GDBString):GDBInteger;
 var pb:PGDBTextStyle;
     ir:itrec;
     i:gdbinteger;
@@ -3603,7 +3603,7 @@ var //pv:pGDBObjEntity;
     pt:PGDBObjTable;
     //pleader:PGDBObjElLeader;
     //ir:itrec;
-    psl:PGDBGDBStringArray;
+    psl:PTZctnrVectorGDBString;
     i,j:integer;
     s:gdbstring;
     dc:TDrawContext;

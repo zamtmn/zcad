@@ -20,7 +20,7 @@ unit UGDBOpenArrayOfPV;
 {$INCLUDE def.inc}
 interface
 uses uzgldrawcontext,uzedrawingdef,uzeentity,uzecamera,uzbtypesbase,
-     uzctnrvectorpobjects,sysutils,uzbtypes,uzegeometry,uzbmemman,uzeentsubordinated;
+     gzctnrvectorpobjects,sysutils,uzbtypes,uzegeometry,uzbmemman,uzeentsubordinated;
 type
 {PGDBObjEntityArray=^GDBObjEntityArray;
 objvizarray = array[0..0] of PGDBObjEntity;
@@ -28,7 +28,7 @@ pobjvizarray = ^objvizarray;
 GDBObjEntityArray=array [0..0] of PGDBObjEntity;}
 {Export+}
 PGDBObjOpenArrayOfPV=^GDBObjOpenArrayOfPV;
-GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
+GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseObjects)
                       procedure DrawWithattrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
                       procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                       procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
@@ -46,7 +46,7 @@ GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects
                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       //function InRect:TInRect;virtual;
-                      function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
+                      function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;virtual;
                       //function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;virtual;
                 end;
 {Export-}
@@ -84,7 +84,7 @@ begin
          until pvisible=nil;
      end;
 end;}
-function GDBObjOpenArrayOfPV.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
+function GDBObjOpenArrayOfPV.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
 var pobj:pGDBObjEntity;
     ir:itrec;
     //fr:TInRect;

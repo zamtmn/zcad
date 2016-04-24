@@ -20,13 +20,13 @@ unit UArrayDescriptor;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses sysutils,LCLProc,TypeDescriptors,uzbtypesbase,varmandef,uzbtypes,uzctnrvectordata,uzbmemman;
+uses sysutils,LCLProc,TypeDescriptors,uzbtypesbase,varmandef,uzbtypes,gzctnrvectordata,uzbmemman;
 type
 PArrayIndexDescriptor=^ArrayIndexDescriptor;
 ArrayIndexDescriptor=record
                            IndexMin,IndexCount:GDBInteger;
                      end;
-TArrayIndexDescriptorVector=TZctnrVectorData<ArrayIndexDescriptor>;
+TArrayIndexDescriptorVector=GZVectorData<ArrayIndexDescriptor>;
 PArrayDescriptor=^ArrayDescriptor;
 ArrayDescriptor=object(TUserTypeDescriptor)
                      NumOfIndex:GDBInteger;

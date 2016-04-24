@@ -19,14 +19,14 @@
 unit UGDBTree;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzbtypes,uzctnrvectorpobjects;
+uses uzbtypesbase,uzbtypes,gzctnrvectorpobjects;
 type
 PGDBBaseNode=^GDBBaseNode;
 PIterateCmpareFunc=function(pnode:PGDBBaseNode;PExpr:GDBPointer):GDBBoolean;
 IterateProc=procedure(pnode:PGDBBaseNode;PProcData:Pointer);
 {EXPORT+}
 PTGDBTree=^TGDBTree;
-TGDBTree={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
+TGDBTree={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseObjects)
                procedure AddNode(pnode:PGDBBaseNode);
                function IterateFind(CompareFunc:PIterateCmpareFunc;PExpr:GDBPointer;SubFind:GDBBoolean):PGDBBaseNode;
                procedure IterateProc(Proc:IterateProc;SubProc:GDBBoolean;PProcData:Pointer);

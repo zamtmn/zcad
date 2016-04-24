@@ -23,9 +23,9 @@ unit Varman;
 
 interface
 uses
-  uzctnrvectordata,uzctnrvectorpobjects,LCLProc,uabstractunit,uzctnrvectorp,
+  gzctnrvectordata,gzctnrvectorpobjects,LCLProc,uabstractunit,gzctnrvectorp,
   SysUtils,UBaseTypeDescriptor,uzbtypesbase,uzbtypes,UGDBOpenArrayOfByte,
-  uzctnrvectorgdbstring,varmandef,uzctnrvectorpdata,usimplegenerics,uzbmemman,
+  uzctnrvectorgdbstring,varmandef,gzctnrvectorpdata,usimplegenerics,uzbmemman,
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes;
 type
     td=record
@@ -142,7 +142,7 @@ TNameToIndex=TMyGDBStringDictionary<TArrayIndex>;
 ptypemanager=^typemanager;
 typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)
                   protected
-                  exttype:GDBOpenArrayOfPObjects;
+                  exttype:TZctnrVectorPGDBaseObjects;
                   n2i:TNameToIndex;
                   public
                   constructor init;
@@ -159,7 +159,7 @@ typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)
                   function AddTypeByPP(p:GDBPointer):TArrayIndex;virtual;
                   function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;virtual;
             end;
-Tvardescarray=TZctnrVectorData{-}<vardesk>{//};
+Tvardescarray=GZVectorData{-}<vardesk>{//};
 pvarmanager=^varmanager;
 varmanager={$IFNDEF DELPHI}packed{$ENDIF} object(varmanagerdef)
             vardescarray:{GDBOpenArrayOfData}Tvardescarray;
@@ -178,7 +178,7 @@ PTUnit=^TUnit;
 PTSimpleUnit=^TSimpleUnit;
 TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
                   Name:GDBString;
-                  InterfaceUses:GDBOpenArrayOfGDBPointer;
+                  InterfaceUses:TZctnrVectorPointer;
                   InterfaceVariables: varmanager;
                   constructor init(nam:GDBString);
                   destructor done;virtual;
@@ -222,11 +222,11 @@ var
   SavedUnit,DBUnit,DWGDBUnit,DWGUnit:PTUnit;
   BaseTypesEndIndex:GDBInteger;
   OldTypesCount:GDBInteger;
-  VarCategory:GDBGDBStringArray;
+  VarCategory:TZctnrVectorGDBString;
   CategoryCollapsed:GDBOpenArrayOfByte;
   CategoryUnknownCOllapsed:boolean;
 
-function getpattern(ptd:ptdarray; max:GDBInteger;var line:GDBString; out typ:GDBInteger):PGDBGDBStringArray;
+function getpattern(ptd:ptdarray; max:GDBInteger;var line:GDBString; out typ:GDBInteger):PTZctnrVectorGDBString;
 function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfByte; var line,GDBStringtypearray:GDBString; var fieldoffset: GDBSmallint; ptd:PRecordDescriptor):GDBBoolean;
 function GetPVarMan: GDBPointer; export;
 function FindCategory(category:GDBString;var catname:GDBString):Pointer;
@@ -636,9 +636,9 @@ begin
        KillString(vd.name);
        KillString(vd.username);
 end;
-function getpattern(ptd:ptdarray; max:GDBInteger;var line:GDBString; out typ:GDBInteger):PGDBGDBStringArray;
+function getpattern(ptd:ptdarray; max:GDBInteger;var line:GDBString; out typ:GDBInteger):PTZctnrVectorGDBString;
 var i:GDBInteger;
-    parseresult:PGDBGDBStringArray;
+    parseresult:PTZctnrVectorGDBString;
     parseerror:GDBBoolean;
 begin
      typ:=0;
@@ -666,7 +666,7 @@ function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfB
 type
     trrstate=(fields,metods);
 var parseerror{,parsesuberror}:GDBBoolean;
-    parseresult{,parsesubresult}:PGDBGDBStringArray;
+    parseresult{,parsesubresult}:PTZctnrVectorGDBString;
     count,typ:GDBInteger;
     {typename,}oldline, fieldname, {fieldvalue,} fieldtype, {sub, indmins, indmaxs, arrind1,}rname,wname,functionname,functionoperands: GDBString;
     fieldgdbtype:PUserTypeDescriptor;

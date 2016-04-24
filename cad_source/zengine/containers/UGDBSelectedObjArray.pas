@@ -20,7 +20,7 @@ unit UGDBSelectedObjArray;
 {$INCLUDE def.inc}
 interface
 uses uzepalette,uzgldrawcontext,uzecamera,uzeentwithmatrix,uzeentity,
-     UGDBControlPointArray,uzctnrvectordata,sysutils,uzbtypes,uzegeometry,
+     UGDBControlPointArray,gzctnrvectordata,sysutils,uzbtypes,uzegeometry,
      uzbtypesbase,uzbmemman,uzedrawingdef;
 type
 {Export+}
@@ -31,7 +31,7 @@ SelectedObjDesc=packed record
                       ptempobj:PGDBObjEntity;
                 end;
 PGDBSelectedObjArray=^GDBSelectedObjArray;
-GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<selectedobjdesc>{//})
+GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<selectedobjdesc>{//})
                           SelectedCount:GDBInteger;
                           constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 

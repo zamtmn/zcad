@@ -46,7 +46,7 @@ type
     //DMenu:TDMenuWnd;
     utfpresent:boolean;
     utflen:integer;
-    aliases:GDBGDBStringArray;
+    aliases:TZctnrVectorGDBString;
     procedure keypressmy(Sender: TObject; var Key: char);
     procedure SetMode(m:TCLineMode);virtual;
     procedure DoOnResize; override;
@@ -353,7 +353,7 @@ var code{,ch}: GDBInteger;
   v:vardesk;
   s,{xx,yy,zz,}expr:GDBString;
   tv:gdbvertex;
-  parseresult:PGDBGDBStringArray;
+  parseresult:PTZctnrVectorGDBString;
   cmd,subexpr,superexpr:string;
   parsed:gdbboolean;
   command,operands:GDBString;

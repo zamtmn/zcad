@@ -1692,7 +1692,7 @@ function StoreFrustum_com(operands:TCommandOperands):TCommandResult;
    //p:PCommandObjectDef;
    //ps:pgdbstring;
    //ir:itrec;
-   //clist:GDBGDBStringArray;
+   //clist:TZctnrVectorGDBString;
 begin
    drawings.GetCurrentDWG.wa.param.debugfrustum:=drawings.GetCurrentDWG.pcamera.frustum;
    drawings.GetCurrentDWG.wa.param.ShowDebugFrustum:=true;

@@ -10,7 +10,7 @@ unit uzcentcable;
 interface
 uses uzeobjectextender,varman,uzgldrawcontext,uzeentgenericsubentry,uzedrawingdef,
      uzcsysvars,UGDBOpenArrayOfByte,uzestyleslayers,UUnitManager,uzeentcurve,uzegeometry,
-     math,uzctnrvectordata,uzbtypesbase,uzeentity,varmandef,uzbtypes,
+     math,gzctnrvectordata,uzbtypesbase,uzeentity,varmandef,uzbtypes,
      uzeconsts,uzeffdxfsupport,sysutils,uzbmemman,uzeentsubordinated,uzeentdevice;
 type
 {Повторное описание типа в Cableы}
@@ -29,7 +29,7 @@ TNodeProp=packed record
           end;
 PGDBObjCable=^GDBObjCable;
 GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
-                 NodePropArray:TZctnrVectorData{-}<TNodeProp>{//};(*hidden_in_objinsp*)
+                 NodePropArray:GZVectorData{-}<TNodeProp>{//};(*hidden_in_objinsp*)
                  str11:GDBVertex;(*hidden_in_objinsp*)
                  str12:GDBVertex;(*hidden_in_objinsp*)
                  str13:GDBVertex;(*hidden_in_objinsp*)

@@ -19,11 +19,11 @@
 unit uzctnrvectorgdbstring;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzbtypes,uzctnrvectorsimple,uzbstrproc,sysutils;
+uses uzbtypesbase,uzbtypes,gzctnrvectorsimple,uzbstrproc,sysutils;
 type
 {EXPORT+}
-    PGDBGDBStringArray=^GDBGDBStringArray;
-    GDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorSimple{-}<GDBString>{//})(*OpenArrayOfData=GDBString*)
+    PTZctnrVectorGDBString=^TZctnrVectorGDBString;
+    TZctnrVectorGDBString={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorSimple{-}<GDBString>{//})(*OpenArrayOfData=GDBString*)
                           constructor init(m:GDBInteger);
                           procedure loadfromfile(fname:GDBString);
                           function findstring(s:GDBString;ucase:gdbboolean):boolean;
@@ -37,12 +37,12 @@ type
     PTEnumData=^TEnumData;
     TEnumData=packed record
                     Selected:GDBInteger;
-                    Enums:GDBGDBStringArray;
+                    Enums:TZctnrVectorGDBString;
               end;
 {EXPORT-}
 implementation
 uses UGDBOpenArrayOfByte;
-procedure GDBGDBStringArray.sort;
+procedure TZctnrVectorGDBString.sort;
 var
    isEnd:boolean;
    ps,pspred:pgdbstring;
@@ -69,7 +69,7 @@ begin
      until IsEnd;
 
 end;
-procedure GDBGDBStringArray.SortAndSaveIndex;
+procedure TZctnrVectorGDBString.SortAndSaveIndex;
 var
    isEnd:boolean;
    ps,pspred:pgdbstring;
@@ -109,13 +109,13 @@ begin
      until IsEnd;
 
 end;
-function GDBGDBStringArray.addutoa(p:GDBString):TArrayIndex;
+function TZctnrVectorGDBString.addutoa(p:GDBString):TArrayIndex;
 var s:GDBString;
 begin
      s:=Tria_Utf8ToAnsi(p);
      result:=PushBackData(s);
 end;
-function GDBGDBStringArray.findstring(s:GDBString;ucase:gdbboolean):boolean;
+function TZctnrVectorGDBString.findstring(s:GDBString;ucase:gdbboolean):boolean;
 var
    ps{,pspred}:pgdbstring;
    ir:itrec;
@@ -137,7 +137,7 @@ begin
      until ps=nil;
      result:=false;
 end;
-function GDBGDBStringArray.addwithscroll(p:GDBString):GDBInteger;
+function TZctnrVectorGDBString.addwithscroll(p:GDBString):GDBInteger;
 var
    ps,pspred:pgdbstring;
    ir:itrec;
@@ -158,7 +158,7 @@ begin
                       end;
      result:=pushbackdata(p);
 end;
-function GDBGDBStringArray.GetLengthWithEOL:GDBInteger;
+function TZctnrVectorGDBString.GetLengthWithEOL:GDBInteger;
 var
    ps:pgdbstring;
    ir:itrec;
@@ -175,7 +175,7 @@ begin
                            result:=result-2;
                       end;
 end;
-function GDBGDBStringArray.GetTextWithEOL:GDBString;
+function TZctnrVectorGDBString.GetTextWithEOL:GDBString;
 var
    ps:pgdbstring;
    i:integer;
@@ -204,11 +204,11 @@ begin
                            until ps=nil;
                       end;
 end;
-constructor GDBGDBStringArray.init(m:GDBInteger);
+constructor TZctnrVectorGDBString.init(m:GDBInteger);
 begin
      inherited init({$IFDEF DEBUGBUILD}'{C4288C8A-7E49-4F97-9F66-347B38494638}',{$ENDIF}m{,sizeof(GDBString)});
 end;
-procedure GDBGDBStringArray.loadfromfile(fname:GDBString);
+procedure TZctnrVectorGDBString.loadfromfile(fname:GDBString);
 var f:GDBOpenArrayOfByte;
     line:GDBString;
 begin

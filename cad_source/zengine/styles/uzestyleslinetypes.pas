@@ -19,8 +19,8 @@
 unit uzestyleslinetypes;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,LazUTF8,Classes,uzctnrvectordata,uzbtypesbase,sysutils,uzbtypes,
-     uzegeometry,uzestylestexts,uzctnrvectorobjects,UGDBNamedObjectsArray,
+uses LCLProc,LazUTF8,Classes,gzctnrvectordata,uzbtypesbase,sysutils,uzbtypes,
+     uzegeometry,uzestylestexts,gzctnrvectorobjects,UGDBNamedObjectsArray,
      uzbstrproc;
 const
      DefaultSHXHeight=1;
@@ -60,15 +60,15 @@ ShapeProp={$IFNDEF DELPHI}packed{$ENDIF} object(BasicSHXDashProp)
                 constructor initnul;
                 destructor done;virtual;
           end;
-GDBDashInfoArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<TDashInfo>{//})(*OpenArrayOfData=TDashInfo*)
+GDBDashInfoArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<TDashInfo>{//})(*OpenArrayOfData=TDashInfo*)
                end;
-GDBDoubleArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<GDBDouble>{//})(*OpenArrayOfData=GDBDouble*)
+GDBDoubleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBDouble>{//})(*OpenArrayOfData=GDBDouble*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                end;
-GDBShapePropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects{-}<ShapeProp>{//})(*OpenArrayOfObject=ShapeProp*)
+GDBShapePropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorObjects{-}<ShapeProp>{//})(*OpenArrayOfObject=ShapeProp*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                end;
-GDBTextPropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects{-}<TextProp>{//})(*OpenArrayOfObject=TextProp*)
+GDBTextPropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorObjects{-}<TextProp>{//})(*OpenArrayOfObject=TextProp*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                end;
 PPGDBLtypePropObjInsp=^PGDBLtypePropObjInsp;

@@ -20,7 +20,7 @@ unit uzglgeometry;
 {$INCLUDE def.inc}
 interface
 uses uzgldrawergeneral,math,uzgldrawcontext,uzgldrawerabstract,uzgvertex3sarray,
-     uzctnrvectordata,UGDBPoint3DArray,uzegeometry,uzeentitiesprop,
+     gzctnrvectordata,UGDBPoint3DArray,uzegeometry,uzeentitiesprop,
      uzestyleslinetypes,sysutils,uzbtypes,uzbmemman,
      uzbtypesbase,uzbstrproc,uzefont,uzglvectorobject;
 type
@@ -31,7 +31,7 @@ ZPolySegmentData={$IFNDEF DELPHI}packed{$ENDIF} record
                                                       startpoint,endpoint,dir:GDBVertex;
                                                       length,nlength,naccumlength,accumlength:GDBDouble;
                                                 end;
-ZSegmentator={$IFNDEF DELPHI}packed{$ENDIF}object(TZctnrVectorData{-}<ZPolySegmentData>{//})
+ZSegmentator={$IFNDEF DELPHI}packed{$ENDIF}object(GZVectorData{-}<ZPolySegmentData>{//})
                                                  dir,cp:GDBvertex;
                                                  cdp,angle:GDBDouble;
                                                  pcurrsegment:PZPolySegmentData;

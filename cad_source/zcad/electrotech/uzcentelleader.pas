@@ -10,7 +10,7 @@ unit uzcentelleader;
 interface
 uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      uzeentabstracttext,uzeentgenericsubentry,uzetrash,uzedrawingdef,uzecamera,
-     uzcsysvars,uzctnrvectorpobjects,uzbstrproc,UGDBOpenArrayOfByte,math,
+     uzcsysvars,gzctnrvectorpobjects,uzbstrproc,UGDBOpenArrayOfByte,math,
      uzeenttext,uzeentdevice,uzcentcable,uzeenttable,UGDBControlPointArray,uzegeometry,
      uzeentline,uzbtypesbase,uzeentcomplex,sysutils,uzctnrvectorgdbstring,
      UGDBSelectedObjArray,uzeentity,varmandef,uzbtypes,uzeconsts,uzeffdxfsupport,
@@ -33,7 +33,7 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             procedure getoutbound(var DC:TDrawContext);virtual;
             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
             function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
-            function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
+            function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
             procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
             procedure addcontrolpoints(tdesc:GDBPointer);virtual;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
@@ -238,9 +238,9 @@ var
    pobj,pcable:PGDBObjCable;
    ir,ir2:itrec;
    s:gdbstring;
-   psl:PGDBGDBStringArray;
+   psl:PTZctnrVectorGDBString;
    pvn:pvardesk;
-   sta:GDBGDBStringArray;
+   sta:TZctnrVectorGDBString;
    ps:pgdbstring;
    bb:TBoundingBox;
    pdev:PGDBObjDevice;

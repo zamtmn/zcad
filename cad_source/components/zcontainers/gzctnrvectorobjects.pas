@@ -16,26 +16,48 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzctnrvectorpobjects;
+unit gzctnrvectorobjects;
 {$INCLUDE def.inc}
 interface
-uses uzctnrvectorpdata,
-     uzbtypesbase,uzbtypes,uzbmemman;
+uses uzbtypesbase,gzctnrvectordata,
+     uzbtypes,uzbmemman;
 type
 {Export+}
-TZctnrVectorPObects{-}<PTObj,TObj>{//}
-                             ={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPData{-}<PTObj,TObj>{//})
-                             function CreateObject:PTObj;
-                end;
-GDBOpenArrayOfPObjects=packed object(TZctnrVectorPData{-}<PGDBaseObject,GDBaseObject>{//})
-                                   end;
-PGDBOpenArrayOfPObjects=^GDBOpenArrayOfPObjects;
+GZVectorObjects{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
+                      object(GZVectorData{-}<T>{//})
+                             procedure cleareraseobj;virtual;
+                             function CreateObject:PGDBaseObject;
+                             procedure free;virtual;
+                       end;
 {Export-}
 implementation
-function TZctnrVectorPObects<PTObj,TObj>.CreateObject;
+procedure GZVectorObjects<T>.cleareraseobj;
+var i:integer;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{6F264155-0BCB-408F-BDA7-F3E8A4540F18}',{$ENDIF}result,sizeof(TObj));
-  PushBackData(result);
+     for i:=0 to count-1 do
+       parray[i].done;
+end;
+function GZVectorObjects<T>.CreateObject;
+var addr: GDBPlatformint;
+begin
+     result:=getdatamutable(pushbackdata(default(T)));
+  {if parray=nil then
+                    createarray;
+  if count = max then grow;
+  begin
+       GDBPointer(addr) := parray;
+       addr := addr + GDBPlatformint(count*SizeOfData);
+       result:=pointer(addr);
+       inc(count);
+  end;}
+end;
+procedure GZVectorObjects<T>.free;
+var i:integer;
+begin
+     for i:=0 to count-1 do
+     begin
+       parray[i].done;
+     end;
 end;
 begin
 end.

@@ -19,12 +19,12 @@
 unit UGDBControlPointArray;
 {$INCLUDE def.inc}
 interface
-uses uzepalette,uzgldrawcontext,uzbtypesbase,uzctnrvectordata,sysutils,uzbtypes,uzegeometry,
+uses uzepalette,uzgldrawcontext,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzegeometry,
      uzbmemman;
 type
 {Export+}
 PGDBControlPointArray=^GDBControlPointArray;
-GDBControlPointArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<controlpointdesc>{//})
+GDBControlPointArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<controlpointdesc>{//})
                            SelectedCount:GDBInteger;
                            constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 

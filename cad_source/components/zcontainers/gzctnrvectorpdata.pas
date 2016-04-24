@@ -16,15 +16,15 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzctnrvectorpdata;
+unit gzctnrvectorpdata;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzctnrvectorp,
+uses uzbtypesbase,gzctnrvectorp,
      uzbtypes,uzbmemman;
 type
 {Export+}
-TZctnrVectorPData{-}<PTData,TData>{//}={$IFNDEF DELPHI}packed{$ENDIF}
-                                 object(TZctnrVectorP{-}<PTData>{//})
+GZVectorPData{-}<PTData,TData>{//}={$IFNDEF DELPHI}packed{$ENDIF}
+                                 object(GZVectorP{-}<PTData>{//})
                                        procedure cleareraseobjfrom(n:GDBInteger);virtual;
                                        procedure cleareraseobjfrom2(n:GDBInteger);virtual;
                                        function getDataMutable(index:GDBInteger):PTData;
@@ -35,7 +35,7 @@ TZctnrVectorPData{-}<PTData,TData>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                  end;
 {Export-}
 implementation
-destructor TZctnrVectorPData<PTData,TData>.done;
+destructor GZVectorPData<PTData,TData>.done;
 var
   p:PGDBaseObject;
   ir:itrec;
@@ -50,7 +50,7 @@ begin
   count:=0;
   inherited;
 end;
-procedure TZctnrVectorPData<PTData,TData>.cleareraseobj;
+procedure GZVectorPData<PTData,TData>.cleareraseobj;
 var
   p:PGDBaseObject;
   ir:itrec;
@@ -64,7 +64,7 @@ begin
   until p=nil;
   count:=0;
 end;
-procedure TZctnrVectorPData<PTData,TData>.RemoveData(const data:PTData);
+procedure GZVectorPData<PTData,TData>.RemoveData(const data:PTData);
 //procedure TZctnrVectorPObj<T,TObj>.eraseobj;
 var
   p:PTData;
@@ -83,7 +83,7 @@ begin
        p:=iterate(ir);
   until p=nil;
 end;
-procedure TZctnrVectorPData<PTData,TData>.pack;
+procedure GZVectorPData<PTData,TData>.pack;
 var
 pnew,pold:ppointer;
 nc,c:integer;
@@ -108,7 +108,7 @@ begin
      deleted:=0;
      end;
 end;
-function TZctnrVectorPData<PTData,TData>.getDataMutable;
+function GZVectorPData<PTData,TData>.getDataMutable;
 var pp:ppointer;
 begin
      pp:=pointer(inherited getDataMutable(index));
@@ -120,7 +120,7 @@ end;
 {begin
   result:=pointer(getDataMutable(index)^);
 end;}
-procedure TZctnrVectorPData<PTData,TData>.cleareraseobjfrom;
+procedure GZVectorPData<PTData,TData>.cleareraseobjfrom;
 var
   p:PGDBaseObject;
       ir:itrec;
@@ -135,7 +135,7 @@ begin
   until p=nil;
   count:=0;
 end;
-procedure TZctnrVectorPData<PTData,TData>.cleareraseobjfrom2(n:GDBInteger);
+procedure GZVectorPData<PTData,TData>.cleareraseobjfrom2(n:GDBInteger);
 var
   p:PGDBaseObject;
       ir:itrec;

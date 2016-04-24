@@ -19,11 +19,11 @@
 unit uzctnrvectorgdbdouble;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,sysutils,uzctnrvectorsimple;
+uses uzbtypesbase,sysutils,gzctnrvectorsimple;
 type
 {Export+}
 PTZctnrVectorGDBDouble=^TZctnrVectorGDBDouble;
-TZctnrVectorGDBDouble=TZctnrVectorSimple{-}<GDBDouble>{//};
+TZctnrVectorGDBDouble=GZVectorSimple{-}<GDBDouble>{//};
 {Export-}
 implementation
 begin

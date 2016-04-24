@@ -20,12 +20,12 @@ unit uzglbackendmanager;
 {$INCLUDE def.inc}
 
 interface
-uses uzbtypesbase,uzbtypes,uzctnrvectorgdbstring,uzglviewareaabstract,uzctnrvectorp;
+uses uzbtypesbase,uzbtypes,uzctnrvectorgdbstring,uzglviewareaabstract,gzctnrvectorp;
 const test:GDBSTRING='asdasd';
 type
     TVA=class of TAbstractViewArea;
 var
-    Backends:GDBOpenArrayOfGDBPointer;
+    Backends:TZctnrVectorPointer;
     BackendsNames:TEnumData;
 procedure RegisterBackend(BackEndClass:TVA;Name:string);
 function GetCurrentBackEnd:TVA;

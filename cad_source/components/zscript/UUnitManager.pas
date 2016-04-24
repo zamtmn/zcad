@@ -20,14 +20,14 @@ unit UUnitManager;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses LCLProc,uzbpaths,uzbstrproc,Varman,languade,uzctnrvectorobjects,SysUtils,
+uses LCLProc,uzbpaths,uzbstrproc,Varman,languade,gzctnrvectorobjects,SysUtils,
      UBaseTypeDescriptor,uzbtypesbase, uzbtypes,UGDBOpenArrayOfByte, strmy, varmandef,
-     uzctnrvectordata,uzctnrvectorgdbstring,TypeDescriptors,UEnumDescriptor,UArrayDescriptor,
+     gzctnrvectordata,uzctnrvectorgdbstring,TypeDescriptors,UEnumDescriptor,UArrayDescriptor,
      UPointerDescriptor,URecordDescriptor,UObjectDescriptor,USinonimDescriptor;
 type
 {EXPORT+}
     PTUnitManager=^TUnitManager;
-    TUnitManager={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects{-}<TUnit>{//})
+    TUnitManager={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorObjects{-}<TUnit>{//})
                        currentunit:PTUnit;
                        NextUnitManager:PTUnitManager;
                        constructor init;
@@ -244,7 +244,7 @@ var
   varname, vartype,vuname, line,oldline,unitname: GDBString;
   vd: vardesk;
   //parsepos:GDBInteger;
-  parseresult,subparseresult:PGDBGDBStringArray;
+  parseresult,subparseresult:PTZctnrVectorGDBString;
   mode:GDBInteger;
   parseerror,subparseerror:GDBBoolean;
   i:GDBInteger;
@@ -259,7 +259,7 @@ var
   penu:penumodj;
   enumodj:tenumodj;
   currvalue,maxvalue:GDBLongword;
-  enumobjlist:TZctnrVectorData<tenumodj>;
+  enumobjlist:GZVectorData<tenumodj>;
   indexx:ArrayIndexDescriptor;
   p,pfu:pointer;
   unitpart:TunitPart;

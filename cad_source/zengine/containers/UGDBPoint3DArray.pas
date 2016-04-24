@@ -19,13 +19,13 @@
 unit UGDBPoint3DArray;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzctnrvectordata,sysutils,uzbtypes,uzbmemman,math,
+uses uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzbmemman,math,
      uzegeometry;
 type
 {REGISTEROBJECTTYPE GDBPoint3dArray}
 {Export+}
 PGDBPoint3dArray=^GDBPoint3dArray;
-GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<GDBVertex>{//})(*OpenArrayOfData=GDBVertex*)
+GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBVertex>{//})(*OpenArrayOfData=GDBVertex*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
                 function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;

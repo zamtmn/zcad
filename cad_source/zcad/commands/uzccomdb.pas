@@ -68,7 +68,7 @@ var
     pdbv:pvardesk;
     pu:ptunit;
     s,s1:gdbstring;
-    parseresult:PGDBGDBStringArray;
+    parseresult:PTZctnrVectorGDBString;
     parseerror:boolean;
     renamed:boolean;
 begin

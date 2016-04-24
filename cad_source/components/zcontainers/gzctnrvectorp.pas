@@ -37,9 +37,6 @@ GZVectorP{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                        procedure Clear;virtual;
                                        function GetElemCount:GDBInteger;
                                  end;
-PTZctnrVectorPointer=^TZctnrVectorPointer;
-TZctnrVectorPointer=packed object(GZVectorP{-}<GDBPointer>{//}) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
-                                   end;
 {Export-}
 function EqualFuncPointer(const a, b: pointer):Boolean;
 implementation

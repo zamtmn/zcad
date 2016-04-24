@@ -27,8 +27,6 @@ GZVectorData{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                    procedure freewithproc(freeproc:TProcessProc);virtual;
                                  end;
 {Export-}
-PTGenericVectorData=^TGenericVectorData;
-TGenericVectorData=GZVectorData<byte>;
 implementation
 procedure GZVectorData<T>.freewithproc;
 var i:integer;

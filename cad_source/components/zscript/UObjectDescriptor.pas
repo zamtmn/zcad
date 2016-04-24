@@ -63,6 +63,8 @@ ObjectDescriptor=object(RecordDescriptor)
                        procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
                        procedure MagicFreeInstance(PInstance:GDBPointer);virtual;
                  end;
+PTGenericVectorData=^TGenericVectorData;
+TGenericVectorData=GZVectorData<byte>;
 implementation
 uses varman;
 procedure ObjectDescriptor.MagicFreeInstance(PInstance:GDBPointer);

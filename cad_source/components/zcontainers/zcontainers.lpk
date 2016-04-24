@@ -18,7 +18,7 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="10">
+    <Files Count="11">
       <Item1>
         <Filename Value="gzctnrvector.pas"/>
         <UnitName Value="gzctnrvector"/>
@@ -52,13 +52,17 @@
         <UnitName Value="uzctnrvectorgdbstring"/>
       </Item8>
       <Item9>
-        <Filename Value="UGDBTree.pas"/>
-        <UnitName Value="UGDBTree"/>
+        <Filename Value="uzctnrvectorgdbpointer.pas"/>
+        <UnitName Value="uzctnrvectorgdbpointer"/>
       </Item9>
       <Item10>
+        <Filename Value="UGDBTree.pas"/>
+        <UnitName Value="UGDBTree"/>
+      </Item10>
+      <Item11>
         <Filename Value="UGDBOpenArrayOfByte.pas"/>
         <UnitName Value="UGDBOpenArrayOfByte"/>
-      </Item10>
+      </Item11>
     </Files>
     <RequiredPkgs Count="2">
       <Item1>

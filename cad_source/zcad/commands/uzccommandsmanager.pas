@@ -19,7 +19,7 @@
 unit uzccommandsmanager;
 {$INCLUDE def.inc}
 interface
-uses gzctnrvectorpobjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
+uses uzctnrvectorgdbpointer,gzctnrvectorpobjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
      uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,uzcsysinfo,
      uzbstrproc,gzctnrvectorp,
      uzbtypesbase,uzccommandsabstract, sysutils,uzbtypes,uzglviewareadata,
@@ -41,7 +41,7 @@ type
                           LatestRunOperands:GDBString;
                           LatestRunPDrawing:PTDrawingDef;
 
-                          CommandsStack:TZctnrVectorPointer;
+                          CommandsStack:TZctnrVectorGDBPointer;
                           ContextCommandParams:GDBPointer;
                           busy:GDBBoolean;
                           varstack:tvarstack;

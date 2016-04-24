@@ -23,7 +23,8 @@ uses uzbtypesbase,gzctnrvectorsimple;
 type
 {Export+}
 PTZctnrVectorGDBPointer=^TZctnrVectorGDBPointer;
-TZctnrVectorGDBPointer=GZVectorSimple{-}<GDBPointer>{//};
+TZctnrVectorGDBPointer=packed object(GZVectorSimple{-}<GDBPointer>{//}) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
+                    end;
 {Export-}
 implementation
 begin

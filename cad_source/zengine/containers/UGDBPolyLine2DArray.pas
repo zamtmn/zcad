@@ -19,12 +19,12 @@
 unit UGDBPolyLine2DArray;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzctnrvectorrec,sysutils,uzbtypes, uzegeometry;
+uses uzbtypesbase,uzctnrvectordata,sysutils,uzbtypes, uzegeometry;
 type
 {REGISTEROBJECTTYPE GDBPolyline2DArray}
 {Export+}
 PGDBPolyline2DArray=^GDBPolyline2DArray;
-GDBPolyline2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<GDBVertex2D>{//})(*OpenArrayOfData=GDBVertex2D*)
+GDBPolyline2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<GDBVertex2D>{//})(*OpenArrayOfData=GDBVertex2D*)
                       closed:GDBBoolean;(*saved_to_shd*)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger;c:GDBBoolean);
                       constructor initnul;

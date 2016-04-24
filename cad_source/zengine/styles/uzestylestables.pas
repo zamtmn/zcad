@@ -20,7 +20,7 @@ unit uzestylestables;
 {$INCLUDE def.inc}
 interface
 uses uzbtypesbase,sysutils,uzbtypes,uzegeometry,
-     UGDBNamedObjectsArray,uzctnrvectorrec;
+     UGDBNamedObjectsArray,uzctnrvectordata;
 type
 {TCellJustify=(jcl(*'ВерхЛево'*),
               jcm(*'ВерхЦентр'*),
@@ -34,7 +34,7 @@ TGDBTableCellStyle=packed record
                           Width,TextWidth:GDBDouble;
                           CF:TTableCellJustify;
                     end;
-GDBCellFormatArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<TGDBTableCellStyle>{//})(*OpenArrayOfData=TGDBTableCellStyle*)
+GDBCellFormatArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<TGDBTableCellStyle>{//})(*OpenArrayOfData=TGDBTableCellStyle*)
                    end;
 PTGDBTableStyle=^TGDBTableStyle;
 TGDBTableStyle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)

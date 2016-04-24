@@ -22,7 +22,7 @@ unit UUnitManager;
 interface
 uses LCLProc,uzbpaths,uzbstrproc,Varman,languade,uzctnrvectorobjects,SysUtils,
      UBaseTypeDescriptor,uzbtypesbase, uzbtypes,UGDBOpenArrayOfByte, strmy, varmandef,
-     uzctnrvectorrec,uzctnrvectorgdbstring,TypeDescriptors,UEnumDescriptor,UArrayDescriptor,
+     uzctnrvectordata,uzctnrvectorgdbstring,TypeDescriptors,UEnumDescriptor,UArrayDescriptor,
      UPointerDescriptor,URecordDescriptor,UObjectDescriptor,USinonimDescriptor;
 type
 {EXPORT+}
@@ -259,7 +259,7 @@ var
   penu:penumodj;
   enumodj:tenumodj;
   currvalue,maxvalue:GDBLongword;
-  enumobjlist:TZctnrVectorRec<tenumodj>;
+  enumobjlist:TZctnrVectorData<tenumodj>;
   indexx:ArrayIndexDescriptor;
   p,pfu:pointer;
   unitpart:TunitPart;

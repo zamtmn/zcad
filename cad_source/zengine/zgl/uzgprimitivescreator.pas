@@ -19,7 +19,7 @@
 unit uzgprimitivescreator;
 {$INCLUDE def.inc}
 interface
-uses uzctnrvectorrec,uzgprimitivescreatorabstract,uzgindexsarray,uzgprimitives,
+uses uzctnrvectordata,uzgprimitivescreatorabstract,uzgindexsarray,uzgprimitives,
      uzbtypesbase,sysutils,uzbtypes,uzbmemman,uzgprimitivessarray,uzegeometry;
 type
 

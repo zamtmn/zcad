@@ -19,7 +19,7 @@ unit TypeDescriptors;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses LCLProc,uzbtypesbase,varmandef,uzbtypes,uzctnrvectorrec,uzctnrvectorgdbstring,uzbmemman,
+uses LCLProc,uzbtypesbase,varmandef,uzbtypes,uzctnrvectordata,uzctnrvectorgdbstring,uzbmemman,
       uzctnrvectorp,uzbstrproc,sysutils;
 const
      m_procedure=1;
@@ -104,7 +104,7 @@ GDBOperandDesc=record
                      StoreMode:GDBTOperandStoreMode;
                end;
 GDBMetodModifier=GDBWord;
-TOperandsVector=TZctnrVectorRec<GDBOperandDesc>;
+TOperandsVector=TZctnrVectorData<GDBOperandDesc>;
 PMetodDescriptor=^MetodDescriptor;
 MetodDescriptor=object(GDBaseObject)
                       objname:GDBString;

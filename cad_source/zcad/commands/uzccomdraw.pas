@@ -44,7 +44,7 @@ uses
   uzbmemman,
   uzeconsts,
   uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
-  uzcshared,uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,uzctnrvectorrec,
+  uzcshared,uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,uzctnrvectordata,
   math,uzeenttable,uzctnrvectorgdbstring,uzcprinterspecfunc;
 const
      modelspacename:GDBSTring='**Модель**';
@@ -206,7 +206,7 @@ type
   end;
   ptpcoavector=^tpcoavector;
   tpcoavector={-}specialize{//}
-              TZctnrVectorRec{-}<TCopyObjectDesc>{//};
+              TZctnrVectorData{-}<TCopyObjectDesc>{//};
   move_com = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
     t3dp: gdbvertex;
     pcoa:ptpcoavector;

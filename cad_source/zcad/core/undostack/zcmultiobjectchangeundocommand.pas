@@ -19,7 +19,7 @@
 unit zcmultiobjectchangeundocommand;
 {$INCLUDE def.inc}
 interface
-uses uzctnrvectorrec,uzbmemman,zeundostack,zebaseundocommands,uzbtypesbase,uzbtypes,
+uses uzctnrvectordata,uzbmemman,zeundostack,zebaseundocommands,uzbtypesbase,uzbtypes,
      uzeentity,uzcdrawings;
 
 {DEFINE TCommand  := TGDBTransformChangeCommand}
@@ -27,7 +27,7 @@ uses uzctnrvectorrec,uzbmemman,zeundostack,zebaseundocommands,uzbtypesbase,uzbty
 {DEFINE TData     := DMatrix4D}
 
 type
-TtmethodVector=specialize TZctnrVectorRec<tmethod>;
+TtmethodVector=specialize TZctnrVectorData<tmethod>;
     generic TGMultiObjectChangeCommand<_T>=object(TCustomChangeCommand)
                                           DoData,UnDoData:_T;
                                           ObjArray:{GDBOpenArrayOfData}TtmethodVector;

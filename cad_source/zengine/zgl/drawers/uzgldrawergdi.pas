@@ -23,7 +23,7 @@ uses
     uzgprimitivessarray,sysutils,uzbtypesbase,uzgldrawergeneral2d,uzelclintfex,
     fileutil,math,uzefontmanager,uzefont,uzglviewareaabstract,
     {$IFNDEF DELPHI}LazUTF8,{$ENDIF}uzglgeomdata,uzgldrawcontext,uzgprimitives,
-    uzgprimitivescreatorabstract,uzgprimitivescreator,uzctnrvectorrec,uzepalette,
+    uzgprimitivescreatorabstract,uzgprimitivescreator,uzctnrvectordata,uzepalette,
     {$IFDEF WINDOWS}windows,{$ENDIF}{$IFDEF DELPHI}windows,{$ENDIF}
     {$IFDEF LCLGTK2}
     Gtk2Def,

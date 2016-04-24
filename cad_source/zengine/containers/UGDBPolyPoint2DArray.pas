@@ -19,11 +19,11 @@
 unit UGDBPolyPoint2DArray;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzctnrvectorrec,sysutils,uzbtypes, uzegeometry;
+uses uzbtypesbase,uzctnrvectordata,sysutils,uzbtypes, uzegeometry;
 type
 {Export+}
 PGDBPolyPoint2DArray=^GDBPolyPoint2DArray;
-GDBPolyPoint2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<GDBPolyVertex2D>{//})
+GDBPolyPoint2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<GDBPolyVertex2D>{//})
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 
                       //procedure DrawGeometry;virtual;

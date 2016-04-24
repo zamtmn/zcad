@@ -90,10 +90,10 @@ var programlog:tlog;
    HistoryTextOut,MessageBoxTextOut:THistoryTextOutProc;
 implementation
 uses
-    UGDBOpenArrayOfByte,uzctnrvectorrec,strutils,sysutils{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF};
+    UGDBOpenArrayOfByte,uzctnrvectordata,strutils,sysutils{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF};
 var
     PerfomaneBuf:GDBOpenArrayOfByte;
-    TimeBuf:TZctnrVectorRec<TMyTimeStamp>;
+    TimeBuf:TZctnrVectorData<TMyTimeStamp>;
     function LogMode2string(LogMode:TLogMode):GDBString;
     begin
       case LogMode of

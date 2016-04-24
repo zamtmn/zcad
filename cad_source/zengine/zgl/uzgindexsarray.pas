@@ -19,11 +19,11 @@
 unit uzgindexsarray;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzctnrvectorrec,sysutils,uzbtypes,uzbmemman,
+uses uzbtypesbase,uzctnrvectordata,sysutils,uzbtypes,uzbmemman,
      uzegeometry;
 type
 {Export+}
-ZGLIndexsArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<TArrayIndex>{//})(*OpenArrayOfData=TArrayIndex*)
+ZGLIndexsArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<TArrayIndex>{//})(*OpenArrayOfData=TArrayIndex*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
              end;

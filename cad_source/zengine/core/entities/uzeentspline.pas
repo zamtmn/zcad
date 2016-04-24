@@ -20,7 +20,7 @@ unit uzeentspline;
 {$INCLUDE def.inc}
 
 interface
-uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanager,uzctnrvectorrec,
+uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanager,uzctnrvectordata,
      UGDBPoint3DArray,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
      uzctnrvectorpdata,uzestyleslayers,uzeentsubordinated,uzeentcurve,uzbtypesbase,
      uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,uzglviewareadata,
@@ -28,9 +28,9 @@ uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanage
 type
 {REGISTEROBJECTTYPE GDBObjSpline}
 {Export+}
-TKnotsVector={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<GDBFloat>{//})
+TKnotsVector={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<GDBFloat>{//})
                              end;
-TCPVector={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<GDBvertex4S>{//})
+TCPVector={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<GDBvertex4S>{//})
                              end;
 PGDBObjSpline=^GDBObjSpline;
 GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)

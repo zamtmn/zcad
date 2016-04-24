@@ -16,48 +16,28 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzctnrvectorobjects;
+unit uzctnrvectordata;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzctnrvectordata,
-     uzbtypes,uzbmemman;
+uses uzbtypesbase,uzbtypes,uzctnrvector;
 type
 {Export+}
-GDBOpenArrayOfObjects{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
-                      object(TZctnrVectorData{-}<T>{//})
-                             procedure cleareraseobj;virtual;
-                             function CreateObject:PGDBaseObject;
-                             procedure free;virtual;
-                       end;
+TZctnrVectorData{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
+                                 object(TZctnrVector{-}<T>{//})
+                                   procedure freewithproc(freeproc:TProcessProc);virtual;
+                                 end;
 {Export-}
+PTGenericVectorData=^TGenericVectorData;
+TGenericVectorData=TZctnrVectorData<byte>;
 implementation
-procedure GDBOpenArrayOfObjects<T>.cleareraseobj;
+procedure TZctnrVectorData<T>.freewithproc;
 var i:integer;
 begin
-     for i:=0 to count-1 do
-       parray[i].done;
-end;
-function GDBOpenArrayOfObjects<T>.CreateObject;
-var addr: GDBPlatformint;
-begin
-     result:=getdatamutable(pushbackdata(default(T)));
-  {if parray=nil then
-                    createarray;
-  if count = max then grow;
-  begin
-       GDBPointer(addr) := parray;
-       addr := addr + GDBPlatformint(count*SizeOfData);
-       result:=pointer(addr);
-       inc(count);
-  end;}
-end;
-procedure GDBOpenArrayOfObjects<T>.free;
-var i:integer;
-begin
-     for i:=0 to count-1 do
+     for i:=0 to self.count-1 do
      begin
-       parray[i].done;
+       freeproc(@parray[i]);
      end;
+     self.count:=0;
 end;
 begin
 end.

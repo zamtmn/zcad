@@ -19,11 +19,11 @@
 unit UGDBLineWidthArray;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzctnrvectorrec,sysutils,uzbtypes,uzbmemman;
+uses uzbtypesbase,uzctnrvectordata,sysutils,uzbtypes,uzbmemman;
 type
 {REGISTEROBJECTTYPE GDBLineWidthArray}
 {Export+}
-GDBLineWidthArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<GLLWWidth>{//})(*OpenArrayOfData=GLLWWidth*)
+GDBLineWidthArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<GLLWWidth>{//})(*OpenArrayOfData=GLLWWidth*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
              end;

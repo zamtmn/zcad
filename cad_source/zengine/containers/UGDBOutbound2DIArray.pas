@@ -19,11 +19,11 @@
 unit UGDBOutbound2DIArray;
 {$INCLUDE def.inc}
 interface
-uses uzgldrawcontext,uzbtypesbase,uzctnrvectorrec,sysutils,uzbtypes,uzegeometry;
+uses uzgldrawcontext,uzbtypesbase,uzctnrvectordata,sysutils,uzbtypes,uzegeometry;
 type
 {Export+}
 PGDBOOutbound2DIArray=^GDBOOutbound2DIArray;
-GDBOOutbound2DIArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<GDBvertex2DI>{//})
+GDBOOutbound2DIArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<GDBvertex2DI>{//})
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       procedure DrawGeometry(var DC:TDrawContext);virtual;
                       procedure addpoint(point:GDBvertex2DI);virtual;

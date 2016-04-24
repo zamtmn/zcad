@@ -20,7 +20,7 @@ unit uzgldrawergeneral;
 {$INCLUDE def.inc}
 interface
 uses uzgvertex3sarray,uzgprimitivescreatorabstract,uzgprimitivescreator,
-     uzctnrvectorrec,uzgldrawerabstract,uzepalette,types,Classes,Graphics,
+     uzctnrvectordata,uzgldrawerabstract,uzepalette,types,Classes,Graphics,
      uzbtypesbase,uzbtypes,uzecamera,uzegeometry;
 type
 TPaintState=(TPSBufferNotSaved,TPSBufferSaved);

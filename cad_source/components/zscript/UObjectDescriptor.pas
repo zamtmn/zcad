@@ -23,13 +23,13 @@ unit UObjectDescriptor;
 interface
 uses LCLProc,uzctnrvectorobjects,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
      UBaseTypeDescriptor,TypeDescriptors,
-     uzctnrvectorp,uzctnrvectorrec,uzbtypesbase,varmandef,uzbtypes,uzbmemman,uzbstrproc;
+     uzctnrvectorp,uzctnrvectordata,uzbtypesbase,varmandef,uzbtypes,uzbmemman,uzbstrproc;
 type
 simpleproc=procedure of object;
 //SimpleMenods.init({$IFDEF DEBUGBUILD}'{E4674594-B99F-4A72-8766-E2B49DF50FCE}',{$ENDIF}20,sizeof(MetodDescriptor));
 //Properties.init({$IFDEF DEBUGBUILD}'{CFC9264A-23FA-4FE4-AE71-30495AD54ECE}',{$ENDIF}20,sizeof(PropertyDescriptor));
 TSimpleMenodsVector=GDBOpenArrayOfObjects<MetodDescriptor>;
-TPropertiesVector=TZctnrVectorRec<PropertyDescriptor>;
+TPropertiesVector=TZctnrVectorData<PropertyDescriptor>;
 
 PObjectDescriptor=^ObjectDescriptor;
 ObjectDescriptor=object(RecordDescriptor)
@@ -606,11 +606,10 @@ begin
      //eaddr:=addr;
         if colarray.parray=nil then
                                    colarray.CreateArray;
-     {$IFNDEF GenericsContainerNotFinished}
      if LincedObjects or(LincedData<>'') then begin
         colarray.Count:=colarray.max;
         sca:=colarray.max;
-        sa:=PGDBOpenArrayOfData(baddr)^.getelemcount;
+        sa:={PGDBOpenArrayOfData}PTGenericVectorData(baddr)^.getelemcount;
         if sa<=0 then exit;
         if sca>sa then
                       begin
@@ -628,9 +627,7 @@ begin
                            fillchar(colarray.PArray^,sa,true);
                       end;
                   end;
-      {$ENDIF}
         if ppointer(baddr)^=nil then exit;
-        {$IFNDEF GenericsContainerNotFinished}
         if LincedData<>''then
         begin
  (*       bmodesave:=property_build;
@@ -659,7 +656,7 @@ begin
  *)
              pld:=pointer(SysUnit.TypeName2PTD(LincedData));
              //pld:=pointer(PUserTypeDescriptor(SysUnit.InterfaceTypes.exttype.getDataMutable(SysUnit.InterfaceTypes._TypeName2Index(LincedData))^));
-             p:=PGDBOpenArrayOfData(baddr)^.beginiterate(ir);
+             p:={PGDBOpenArrayOfData}PTGenericVectorData(baddr)^.beginiterate(ir);
              pcol:=colarray.beginiterate(ir2);
              if p<>nil then
              repeat
@@ -669,19 +666,17 @@ begin
                                                pld^.CreateProperties(f,PDM_Field,{PPDA}ts,LincedData,pcol{PCollapsed}{field_no_attrib},ownerattrib,bmode,p,'','');
                    //p:=b2addr;
                    pcol:=colarray.iterate(ir2);
-                   p:=PGDBOpenArrayOfData(baddr)^.iterate(ir);
+                   p:={PGDBOpenArrayOfData}PTGenericVectorData(baddr)^.iterate(ir);
                    //if (bmode<>property_build)then inc(bmode);
              until p=nil;
              //if bmodesave<>property_build then bmode:=bmodesave;
         end;
-        {$ENDIF}
-        {$IFNDEF GenericsContainerNotFinished}
         if LincedObjects then
         begin
              //if assigned(sysvar.debug.ShowHiddenFieldInObjInsp) then
              if not debugShowHiddenFieldInObjInsp{sysvar.debug.ShowHiddenFieldInObjInsp^} then
                                                                 exit;
-             p:=PGDBOpenArray(baddr)^.beginiterate(ir);
+             p:={PGDBOpenArrayOfData}PTGenericVectorData(baddr)^.beginiterate(ir);
              pcol:=colarray.beginiterate(ir2);
              if p<>nil then
              repeat
@@ -690,7 +685,7 @@ begin
                    if bmode=property_build then
                                                pld^.CreateProperties(f,PDM_Field,{PPDA}ts,objtypename,pcol{PCollapsed}{field_no_attrib},ownerattrib,bmode,p,'','');
                    pcol:=colarray.iterate(ir2);
-                   p:=PGDBOpenArrayOfData(baddr)^.iterate(ir);
+                   p:={PGDBOpenArrayOfData}PTGenericVectorData(baddr)^.iterate(ir);
              until p=nil;
              {p:=PGDBOpenArrayOfGDBPointer(PInstance)^.beginiterate(ir);
              if p<>nil then
@@ -709,7 +704,6 @@ begin
              objtypename:=ObjN_ArrayEnd;
              GDBStringDescriptorObj.Serialize(@objtypename,saveflag,membuf,linkbuf);}
      end;
-     {$ENDIF}
 end;
 begin
 end.

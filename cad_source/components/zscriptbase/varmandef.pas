@@ -24,7 +24,7 @@ unit varmandef;
 interface
 uses
   LCLProc,SysUtils,UGDBTree,uzctnrvectorgdbstring,strutils,uzbtypesbase,
-  UGDBOpenArrayOfByte,uzbtypes,uzctnrvectorrec,
+  UGDBOpenArrayOfByte,uzbtypes,uzctnrvectordata,
   Classes,Controls,StdCtrls,Graphics,types;
 const
   {Ttypenothing=-1;

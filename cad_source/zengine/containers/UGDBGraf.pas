@@ -19,7 +19,7 @@
 unit UGDBGraf;
 {$INCLUDE def.inc}
 interface
-uses varman,uzedrawingdef,varmandef,UGDBPoint3DArray,uzbtypesbase,uzctnrvectorrec,
+uses varman,uzedrawingdef,varmandef,UGDBPoint3DArray,uzbtypesbase,uzctnrvectordata,
      sysutils,uzbtypes,uzegeometry,uzeentity,UGDBOpenArrayOfPV;
 type
 {EXPORT+}
@@ -40,7 +40,7 @@ grafelement={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                   function addline(pv:pgdbobjEntity):GDBInteger;
                   function IsConnectedTo(node:pgrafelement):pgdbobjEntity;
             end;
-GDBGraf={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<grafelement>{//})(*OpenArrayOfData=grafelement*)
+GDBGraf={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<grafelement>{//})(*OpenArrayOfData=grafelement*)
                 constructor init(m:GDBInteger);
                 function addge(v:gdbvertex):pgrafelement;
                 procedure clear;virtual;

@@ -19,12 +19,12 @@
 unit UGDBTable;
 {$INCLUDE def.inc}
 interface
-uses uzctnrvector,uzctnrvectorrec,uzbtypesbase,uzbtypes,sysutils,uzctnrvectorobjects,
+uses uzctnrvector,uzctnrvectordata,uzbtypesbase,uzbtypes,sysutils,uzctnrvectorobjects,
      uzctnrvectorgdbstring;
 type
 {EXPORT+}
 PGDBTableArray=^GDBTableArray;
-GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorRec{-}<GDBGDBStringArray>{//})(*OpenArrayOfData=GDBGDBStringArray*)
+GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorData{-}<GDBGDBStringArray>{//})(*OpenArrayOfData=GDBGDBStringArray*)
                     columns,rows:GDBInteger;
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}c,r:GDBInteger);
                     destructor done;virtual;

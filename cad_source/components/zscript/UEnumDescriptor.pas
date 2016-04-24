@@ -21,16 +21,16 @@ unit UEnumDescriptor;
 {$MODE DELPHI}
 interface
 uses types,sysutils,UGDBOpenArrayOfByte,TypeDescriptors,
-     uzbtypesbase,varmandef,uzbtypes,uzctnrvectorrec,uzctnrvectorgdbstring,uzbmemman;
+     uzbtypesbase,varmandef,uzbtypes,uzctnrvectordata,uzctnrvectorgdbstring,uzbmemman;
 resourcestring
   rsDifferent='Different';
 type
 PTByteVector=^TByteVector;
-TByteVector=TZctnrVectorRec<Byte>;
+TByteVector=TZctnrVectorData<Byte>;
 PTWordVector=^TWordVector;
-TWordVector=TZctnrVectorRec<Word>;
+TWordVector=TZctnrVectorData<Word>;
 PTCardinalVector=^TCardinalVector;
-TCardinalVector=TZctnrVectorRec<Cardinal>;
+TCardinalVector=TZctnrVectorData<Cardinal>;
 PEnumDescriptor=^EnumDescriptor;
 EnumDescriptor=object(TUserTypeDescriptor)
                      SourceValue:GDBGDBStringArray;

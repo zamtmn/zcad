@@ -27,6 +27,9 @@ TZctnrVectorPObects{-}<PTObj,TObj>{//}
                              ={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPData{-}<PTObj,TObj>{//})
                              function CreateObject:PTObj;
                 end;
+GDBOpenArrayOfPObjects=packed object(TZctnrVectorPData{-}<PGDBaseObject,GDBaseObject>{//})
+                                   end;
+PGDBOpenArrayOfPObjects=^GDBOpenArrayOfPObjects;
 {Export-}
 implementation
 function TZctnrVectorPObects<PTObj,TObj>.CreateObject;

@@ -20,7 +20,7 @@ unit uzeentcomplex;
 {$INCLUDE def.inc}
 
 interface
-uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzctnrvectorpdata,
+uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzctnrvectorpobjects,
      uzestyleslayers,uzbtypesbase,sysutils,UGDBSelectedObjArray,UGDBVisibleOpenArray,
      uzeentity,UGDBVisibleTreeArray,uzeentitiestree,uzbtypes,uzeentwithlocalcs,
      uzeconsts,uzegeometry,uzbmemman;

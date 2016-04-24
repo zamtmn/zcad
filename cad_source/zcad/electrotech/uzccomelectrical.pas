@@ -32,7 +32,7 @@ uses
   uzeentity,uzeentline,
   uzcentnet,
   uzcshared,uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
-  uzctnrvectorpdata,uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
+  uzctnrvectorpobjects,uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
   uzbpaths,uzctnrvectorgdbstring,math,Masks,uzclog,uzccombase,uzbstrproc;
 type
 {Export+}

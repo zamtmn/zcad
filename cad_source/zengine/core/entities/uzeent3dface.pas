@@ -20,7 +20,7 @@ unit uzeent3dface;
 
 interface
 uses
-    uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,uzctnrvectorpdata,
+    uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,uzctnrvectorpobjects,
     uzegeometry,uzeffdxfsupport,uzestyleslayers,uzbtypesbase,UGDBSelectedObjArray,uzeentsubordinated,
     uzeent3d,uzeentity,sysutils,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,uzbmemman;
 type

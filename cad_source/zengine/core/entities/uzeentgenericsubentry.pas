@@ -21,7 +21,7 @@ unit uzeentgenericsubentry;
 
 interface
 uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzestyleslayers,
-     uzctnrvectorpdata,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,uzbtypesbase,
+     uzctnrvectorpobjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,uzbtypesbase,
      uzeentwithmatrix,uzeentsubordinated,uzbtypes,uzegeometry,uzeentity,
      uzeconsts,uzbmemman,uzeentitiestree;
 type

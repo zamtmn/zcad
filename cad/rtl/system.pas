@@ -1415,7 +1415,7 @@ TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
       end;
 //Generate on E:/zcad/cad_source/zengine/zgl/uzgvertex3sarray.pas
 PZGLVertex3Sarray=^ZGLVertex3Sarray;
-ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData<GDBvertex3S>)(*OpenArrayOfData=GDBvertex3S*)
+ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOfData=GDBvertex3S*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
                 function AddGDBVertex(const v:GDBvertex):TArrayIndex;virtual;abstract;
@@ -2860,9 +2860,11 @@ TNodeProp=packed record
                 PrevP,NextP:GDBVertex;
                 DevLink:PGDBObjDevice;
           end;
+TNodePropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
+end;
 PGDBObjCable=^GDBObjCable;
 GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
-                 NodePropArray:GZVectorData;(*hidden_in_objinsp*)
+                 NodePropArray:TNodePropArray;(*hidden_in_objinsp*)
                  str11:GDBVertex;(*hidden_in_objinsp*)
                  str12:GDBVertex;(*hidden_in_objinsp*)
                  str13:GDBVertex;(*hidden_in_objinsp*)

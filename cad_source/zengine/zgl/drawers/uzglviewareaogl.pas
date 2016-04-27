@@ -98,7 +98,7 @@ begin
 end;
 
 procedure TOpenGLViewArea.setdeicevariable;
-var tarray:array [0..1] of GDBDouble;
+var tarray:array [0..1] of Double;
     p:pansichar;
 begin
   //programlog.logoutstr('TOGLWnd.SetDeiceVariable',lp_IncPos,LM_Debug);

@@ -253,7 +253,7 @@ end;
 
 procedure createrealvar(var vd: vardesk; s: GDBString);
 var
-  rez: double;
+  rez:GDBDouble;
 begin
   if vd.data.Instance<> nil then
   begin
@@ -265,7 +265,7 @@ begin
   rez := strtofloat(s);
   begin
     GDBGetMem({$IFDEF DEBUGBUILD}'{12B7DD0B-AA54-42DA-845C-A285FB30C5D3}',{$ENDIF}vd.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
-    pdouble(vd.data.Instance)^ := rez;
+    pGDBDouble(vd.data.Instance)^ := rez;
     vd.data.ptd:=@GDBDoubleDescriptorObj;
   end;
 end;

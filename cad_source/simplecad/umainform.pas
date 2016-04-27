@@ -289,10 +289,10 @@ begin
     v1:=CreateRandomVertex2D(1000,500);
     for j:=1 to vcount do
     begin
-         PLWPolyLineEnt^.Vertex2D_in_OCS_Array.Add(@v1);
+         PLWPolyLineEnt^.Vertex2D_in_OCS_Array.PushBackData(v1);
          lw.endw:=CreateRandomDouble(10);
          lw.startw:=CreateRandomDouble(10);
-         PLWPolyLineEnt^.Width2D_in_OCS_Array.Add(@lw);
+         PLWPolyLineEnt^.Width2D_in_OCS_Array.PushBackData(lw);
          v1:=uzegeometry.Vertex2DAdd(v1,CreateRandomVertex2D(100,50));
     end;
     if vcount>2 then

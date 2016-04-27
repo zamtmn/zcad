@@ -24,7 +24,7 @@ uses uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzbmemman,
 type
 {Export+}
 PZGLVertex3Sarray=^ZGLVertex3Sarray;
-ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData<GDBvertex3S>)(*OpenArrayOfData=GDBvertex3S*)
+ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBvertex3S>{//})(*OpenArrayOfData=GDBvertex3S*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
                 function AddGDBVertex(const v:GDBvertex):TArrayIndex;virtual;

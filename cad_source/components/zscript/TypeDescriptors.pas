@@ -50,7 +50,7 @@ type tzcpmode=(zcptxt,zcpbin);
                            function IsVisible:boolean;
                      end;
 PTPropertyDeskriptorArray=^TPropertyDeskriptorArray;
-TPropertyDeskriptorArray=object(TZctnrVectorGDBPointer)
+TPropertyDeskriptorArray=packed object(GZVectorP{-}<PPropertyDeskriptor>{//})
                                procedure cleareraseobj;virtual;
                                function GetRealPropertyDeskriptorsCount:integer;virtual;
                                function findcategory(category:GDBString):PPropertyDeskriptor;

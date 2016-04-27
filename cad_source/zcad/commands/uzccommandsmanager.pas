@@ -32,7 +32,7 @@ type
             end;
   TOnCommandRun=procedure(command:string) of object;
 
-  GDBcommandmanager=object(TZctnrVectorPGDBaseObjects)
+  GDBcommandmanager=object({TZctnrVectorPGDBaseObjects}GZVectorPObects{-}<PCommandObjectDef,CommandObjectDef>{//})
 
                           lastcommand:GDBString;
                           pcommandrunning:PCommandRTEdObjectDef;

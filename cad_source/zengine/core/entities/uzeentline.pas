@@ -40,11 +40,6 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  CoordInOCS:GDBLineProp;(*'Coordinates OCS'*)(*saved_to_shd*)
                  CoordInWCS:GDBLineProp;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
                  PProjPoint:PGDBLineProj;(*'Coordinates DCS'*)(*hidden_in_objinsp*)
-                 Length:GDBDouble;(*'Length'*)(*oi_readonly*)
-                 //Length_2:GDBDouble;(*'Sqrt length'*)(*hidden_in_objinsp*)
-                 //dir:GDBvertex;(*'Direction'*)(*hidden_in_objinsp*)
-
-                 //Geom2:ZGLGeometry;
 
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -147,7 +142,7 @@ var t1,t2,a1,a2:GDBDouble;
     dc:TDrawContext;
 begin
      result:=false;
-     if length<pl^.length then
+     if Vertexlength(CoordInWCS.lbegin, CoordInWCS.lend)<Vertexlength(pl^.CoordInWCS.lbegin,pl^.CoordInWCS.lend) then
      begin
           result:=pl^.jointoline(@self,drawing);
           exit;
@@ -246,25 +241,12 @@ begin
 end;
 
 procedure GDBObjLine.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
-//var m:DMatrix4D;
 begin
   calcgeometry;
   calcbb(dc);
-  //l_1_4 := Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 4);
-  //l_1_3 := Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 3);
-  //l_1_2 := Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2);
-  //l_2_3 := Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 2 / 3);
-  //l_3_4 := Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 3 / 4);
-  length := Vertexlength(CoordInWCS.lbegin, CoordInWCS.lend);
-  //length_2:=length*length;
-  //dir.x:=CoordInWCS.lend.x-CoordInWCS.lbegin.x;
-  //dir.y:=CoordInWCS.lend.y-CoordInWCS.lbegin.y;
-  //dir.z:=CoordInWCS.lend.z-CoordInWCS.lbegin.z;
 
   Geom.Clear;
   Geom.DrawLineWithLT(dc,CoordInWCS.lBegin,CoordInWCS.lEnd,vp);
-
-  //self.RenderFeedbackIFNeed;
 end;
 function GDBObjLine.CalcInFrustum;
 var i:GDBInteger;

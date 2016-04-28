@@ -98,12 +98,12 @@ begin
      begin
      pvd:=pentvarext.entityunit.FindVariable('LengthOverrider');
      if pvd=nil then
-                    result:=pv^.Length
+                    result:=Vertexlength(pv^.CoordInWCS.lbegin,pv^.CoordInWCS.lend)
                 else
                     result:=PGDBDouble(pvd.data.Instance)^;
      end
         else
-            result:=pv^.Length;
+            result:=Vertexlength(pv^.CoordInWCS.lbegin,pv^.CoordInWCS.lend);
 end;
 procedure GDBGraf.FindPath;
 var

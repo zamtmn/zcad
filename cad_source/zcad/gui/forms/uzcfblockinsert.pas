@@ -6,13 +6,14 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, EditBtn, ButtonPanel,
+  StdCtrls, EditBtn, ButtonPanel, Spin, ExtCtrls,
 
   UGDBObjBlockdefArray, //описание таблицы блоков
   uzeblockdef,          //описания блоков
   uzbtypesbase,          //базовые типы
   uzbstrproc               //билеберда для работы со стрингами
   ;
+
 
 type
 
@@ -26,16 +27,16 @@ type
     CheckBox4: TCheckBox;
     CheckBox5: TCheckBox;
     ComboBox1: TComboBox;
-    Edit1: TEdit;
+    ComboBox2: TComboBox;
     Edit10: TFileNameEdit;
-    Edit2: TEdit;
-    Edit3: TEdit;
-    Edit4: TEdit;
-    Edit5: TEdit;
-    Edit6: TEdit;
-    Edit7: TEdit;
-    Edit8: TEdit;
-    Edit9: TEdit;
+    FloatSpinEdit1: TFloatSpinEdit;
+    FloatSpinEdit2: TFloatSpinEdit;
+    FloatSpinEdit3: TFloatSpinEdit;
+    FloatSpinEdit4: TFloatSpinEdit;
+    FloatSpinEdit5: TFloatSpinEdit;
+    FloatSpinEdit6: TFloatSpinEdit;
+    FloatSpinEdit7: TFloatSpinEdit;
+    FloatSpinEdit8: TFloatSpinEdit;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     GroupBox3: TGroupBox;
@@ -51,6 +52,8 @@ type
     Label7: TLabel;
     Label8: TLabel;
     Label9: TLabel;
+    Panel1: TPanel;
+    Panel2: TPanel;
     procedure CheckBox2Change(Sender: TObject);
     procedure CheckBox3Change(Sender: TObject);
     procedure CheckBox4Change(Sender: TObject);
@@ -77,65 +80,70 @@ end;
 procedure TBlockInsertForm.CheckBox4Change(Sender: TObject);
 begin
   if Checkbox4.Checked = True then
-     begin
-   Edit1.Enabled := False;
-   Edit2.Enabled := False;
-   Edit3.Enabled := False;
+  begin
+    FloatSpinEdit1.Enabled := False;
+    FloatSpinEdit2.Enabled := False;
+    FloatSpinEdit3.Enabled := False;
   end
   else
   begin
-   Edit1.Enabled := True;
-   Edit2.Enabled := True;
-   Edit3.Enabled := True;
+    FloatSpinEdit1.Enabled := True;
+    FloatSpinEdit2.Enabled := True;
+    FloatSpinEdit3.Enabled := True;
   end;
-
 end;
 
 procedure TBlockInsertForm.CheckBox5Change(Sender: TObject);
 begin
-   if Checkbox3.Checked = False then
-     begin
-   Edit4.Enabled := True;
-   Edit5.Enabled := False;
-   Edit6.Enabled := False;
-   end;
- end;
-
-procedure TBlockInsertForm.CheckBox2Change(Sender: TObject);
-begin
-  if CheckBox2.Checked = True then
-    begin
-   Edit7.Enabled := False;
+  if Checkbox3.Checked then exit;
+  if Checkbox5.Checked then
+  begin
+    FloatSpinEdit5.Enabled := False;
+    FloatSpinEdit6.Enabled := False;
   end
   else
   begin
-   Edit7.Enabled := True;
+    FloatSpinEdit5.Enabled := True;
+    FloatSpinEdit6.Enabled := True;
   end;
+end;
 
+procedure TBlockInsertForm.CheckBox2Change(Sender: TObject);
+begin
+  if CheckBox2.Checked then
+  begin
+    FloatSpinEdit7.Enabled := False;
+  end
+  else
+  begin
+    FloatSpinEdit7.Enabled := True;
+  end;
 end;
 
 procedure TBlockInsertForm.CheckBox3Change(Sender: TObject);
 begin
-  if Checkbox3.Checked = True then
+  if Checkbox3.Checked then
+  begin
+    FloatSpinEdit4.Enabled := False;
+    FloatSpinEdit5.Enabled := False;
+    FloatSpinEdit6.Enabled := False;
+  end
+  else
+  begin
+    if Checkbox5.Checked then
     begin
-      Edit4.Enabled := False;
-      Edit5.Enabled := False;
-      Edit6.Enabled := False;
+      FloatSpinEdit4.Enabled := True;
+      FloatSpinEdit5.Enabled := False;
+      FloatSpinEdit6.Enabled := False;
+      FloatSpinEdit5.Value:= FloatSpinEdit4.Value;
+      FloatSpinEdit6.Value:= FloatSpinEdit4.Value;
     end
     else
-    if Checkbox5.Checked = True then
-     begin
-       Edit4.Enabled := True;
-       Edit5.Enabled := False;
-       Edit6.Enabled := False;
-       Edit5.Text:= Edit4.Text;
-       Edit6.Text:= Edit4.Text;
-    end
-    else
     begin
-      Edit4.Enabled := True;
-      Edit5.Enabled := True;
-      Edit6.Enabled := True;
+      FloatSpinEdit4.Enabled := True;
+      FloatSpinEdit5.Enabled := True;
+      FloatSpinEdit6.Enabled := True;
+    end;
   end;
 end;
 

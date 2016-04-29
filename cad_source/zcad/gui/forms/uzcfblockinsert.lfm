@@ -1,261 +1,58 @@
 object BlockInsertForm: TBlockInsertForm
-  Left = 602
+  Left = 480
   Height = 320
-  Top = 376
-  Width = 520
-  BorderIcons = [biSystemMenu]
+  Top = 302
+  Width = 750
+  Anchors = []
   Caption = 'Вставка блока'
   ClientHeight = 320
-  ClientWidth = 520
-  Constraints.MaxHeight = 320
+  ClientWidth = 750
   Constraints.MinHeight = 320
-  Constraints.MinWidth = 480
+  Constraints.MinWidth = 750
   OnCreate = FormCreate
-  LCLVersion = '1.7'
-  Visible = False
+  LCLVersion = '1.6.0.4'
   object Label1: TLabel
-    Left = 8
-    Height = 19
-    Top = 40
-    Width = 34
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = ComboBox1
+    AnchorSideTop.Side = asrCenter
+    Left = 5
+    Height = 13
+    Top = 35
+    Width = 26
+    BorderSpacing.Left = 5
     Caption = 'Имя: '
     ParentColor = False
   end
-  object GroupBox1: TGroupBox
-    Left = 6
-    Height = 176
-    Top = 72
-    Width = 130
-    Caption = 'Точка вставки'
-    ClientHeight = 152
-    ClientWidth = 126
-    TabOrder = 0
-    object Edit2: TEdit
-      Left = 32
-      Height = 27
-      Top = 80
-      Width = 80
-      TabOrder = 0
-      Text = '0'
-    end
-    object Edit3: TEdit
-      Left = 32
-      Height = 27
-      Top = 120
-      Width = 80
-      TabOrder = 1
-      Text = '0'
-    end
-    object Edit1: TEdit
-      Left = 32
-      Height = 27
-      Top = 40
-      Width = 80
-      TabOrder = 2
-      Text = '0'
-    end
-    object Label2: TLabel
-      Left = 8
-      Height = 19
-      Top = 40
-      Width = 15
-      Caption = 'X: '
-      ParentColor = False
-    end
-    object Label3: TLabel
-      Left = 8
-      Height = 19
-      Top = 72
-      Width = 15
-      Caption = 'Y: '
-      ParentColor = False
-    end
-    object Label4: TLabel
-      Left = 8
-      Height = 19
-      Top = 120
-      Width = 15
-      Caption = 'Z: '
-      ParentColor = False
-    end
-    object CheckBox4: TCheckBox
-      Left = 8
-      Height = 23
-      Top = 8
-      Width = 138
-      Caption = 'Указать на экране'
-      OnChange = CheckBox4Change
-      TabOrder = 3
-    end
-  end
-  object GroupBox2: TGroupBox
-    Left = 144
-    Height = 195
-    Top = 72
-    Width = 152
-    Caption = 'Масштаб'
-    ClientHeight = 171
-    ClientWidth = 148
-    TabOrder = 1
-    object Edit5: TEdit
-      Left = 30
-      Height = 27
-      Top = 80
-      Width = 80
-      TabOrder = 0
-      Text = '1'
-    end
-    object Edit6: TEdit
-      Left = 30
-      Height = 27
-      Top = 120
-      Width = 80
-      TabOrder = 1
-      Text = '1'
-    end
-    object Edit4: TEdit
-      Left = 30
-      Height = 27
-      Top = 40
-      Width = 80
-      TabOrder = 2
-      Text = '1'
-    end
-    object Label5: TLabel
-      Left = 6
-      Height = 19
-      Top = 40
-      Width = 15
-      Caption = 'X: '
-      ParentColor = False
-    end
-    object Label6: TLabel
-      Left = 6
-      Height = 19
-      Top = 120
-      Width = 15
-      Caption = 'Z: '
-      ParentColor = False
-    end
-    object Label7: TLabel
-      Left = 6
-      Height = 19
-      Top = 80
-      Width = 15
-      Caption = 'Y: '
-      ParentColor = False
-    end
-    object CheckBox3: TCheckBox
-      Left = 6
-      Height = 23
-      Top = 8
-      Width = 138
-      Caption = 'Указать на экране'
-      OnChange = CheckBox3Change
-      TabOrder = 3
-    end
-    object CheckBox5: TCheckBox
-      Left = 6
-      Height = 23
-      Top = 152
-      Width = 140
-      Caption = 'Равные масштабы'
-      OnChange = CheckBox5Change
-      TabOrder = 4
-    end
-  end
-  object GroupBox3: TGroupBox
-    Left = 304
-    Height = 88
-    Top = 72
-    Width = 210
-    Caption = 'Угол поворота'
-    ClientHeight = 64
-    ClientWidth = 206
-    TabOrder = 2
-    object Edit7: TEdit
-      Left = 78
-      Height = 27
-      Top = 32
-      Width = 88
-      TabOrder = 0
-      Text = '0'
-    end
-    object Label8: TLabel
-      Left = 14
-      Height = 19
-      Top = 32
-      Width = 35
-      Caption = 'Угол: '
-      ParentColor = False
-    end
-    object CheckBox2: TCheckBox
-      Left = 14
-      Height = 23
-      Top = 8
-      Width = 138
-      Caption = 'Указать на экране'
-      OnChange = CheckBox2Change
-      TabOrder = 1
-    end
-  end
   object CheckBox1: TCheckBox
-    Left = 16
-    Height = 23
-    Top = 248
-    Width = 96
+    AnchorSideLeft.Control = Owner
+    AnchorSideRight.Control = Panel1
+    AnchorSideBottom.Control = ButtonPanel1
+    Left = 5
+    Height = 17
+    Top = 265
+    Width = 530
+    Anchors = [akLeft, akRight, akBottom]
+    BorderSpacing.Left = 5
+    BorderSpacing.Right = 5
+    BorderSpacing.Bottom = 5
     Caption = 'Расчленить'
-    TabOrder = 3
-  end
-  object GroupBox4: TGroupBox
-    Left = 304
-    Height = 91
-    Top = 176
-    Width = 210
-    Caption = 'Единицы измерений блока'
-    ClientHeight = 67
-    ClientWidth = 206
-    TabOrder = 4
-    object Edit9: TEdit
-      Left = 142
-      Height = 27
-      Top = 40
-      Width = 56
-      Enabled = False
-      TabOrder = 0
-      Text = 'Edit9'
-    end
-    object Edit8: TEdit
-      Left = 62
-      Height = 27
-      Top = 8
-      Width = 136
-      Enabled = False
-      TabOrder = 1
-      Text = 'Без единиц измерения'
-    end
-    object Label9: TLabel
-      Left = 6
-      Height = 19
-      Top = 8
-      Width = 64
-      Caption = 'Единицы: '
-      ParentColor = False
-    end
-    object Label10: TLabel
-      Left = 6
-      Height = 19
-      Top = 40
-      Width = 94
-      Caption = 'Коэффициент: '
-      ParentColor = False
-    end
+    TabOrder = 0
   end
   object ButtonPanel1: TButtonPanel
-    Left = 6
-    Height = 37
-    Top = 277
-    Width = 508
+    AnchorSideLeft.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 5
+    Height = 33
+    Top = 287
+    Width = 740
+    Align = alNone
+    Anchors = [akLeft, akRight, akBottom]
+    BorderSpacing.Left = 5
+    BorderSpacing.Right = 5
+    BorderSpacing.Around = 0
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     HelpButton.Name = 'HelpButton'
@@ -264,40 +61,51 @@ object BlockInsertForm: TBlockInsertForm
     CloseButton.DefaultCaption = True
     CancelButton.Name = 'CancelButton'
     CancelButton.DefaultCaption = True
-    TabOrder = 5
+    TabOrder = 1
+    Spacing = 5
     ShowButtons = [pbOK, pbCancel, pbHelp]
   end
   object ComboBox1: TComboBox
     AnchorSideLeft.Control = Label1
     AnchorSideLeft.Side = asrBottom
-    AnchorSideRight.Control = Edit10
-    AnchorSideRight.Side = asrCenter
-    Left = 47
-    Height = 27
-    Top = 40
-    Width = 436
+    AnchorSideTop.Control = Edit10
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 36
+    Height = 21
+    Top = 31
+    Width = 709
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 5
+    BorderSpacing.Top = 5
     BorderSpacing.Right = 5
-    ItemHeight = 19
-    TabOrder = 6
+    ItemHeight = 13
+    TabOrder = 2
     Text = 'ComboBox1'
   end
   object Label11: TLabel
-    Left = 6
-    Height = 19
-    Top = 8
-    Width = 37
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Edit10
+    AnchorSideTop.Side = asrCenter
+    Left = 5
+    Height = 13
+    Top = 9
+    Width = 32
+    BorderSpacing.Left = 5
     Caption = 'Путь: '
     ParentColor = False
   end
   object Edit10: TFileNameEdit
     AnchorSideLeft.Control = Label11
     AnchorSideLeft.Side = asrBottom
-    Left = 48
-    Height = 27
-    Top = 8
-    Width = 434
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 42
+    Height = 21
+    Top = 5
+    Width = 703
     Filter = 'Drawing Xchange Format|*.dxf|ZCad Drawing|*.dwg'
     FilterIndex = 0
     HideDirectories = False
@@ -306,8 +114,495 @@ object BlockInsertForm: TBlockInsertForm
     NumGlyphs = 1
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 5
+    BorderSpacing.Top = 5
     BorderSpacing.Right = 5
+    AutoSize = False
     MaxLength = 0
+    TabOrder = 3
+  end
+  object Panel1: TPanel
+    AnchorSideLeft.Control = Panel2
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = ComboBox1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = ButtonPanel1
+    Left = 540
+    Height = 220
+    Top = 62
+    Width = 205
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Left = 5
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 5
+    BorderSpacing.Bottom = 5
+    Caption = 'Для демонстрашки'
+    TabOrder = 4
+  end
+  object GroupBox1: TGroupBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = ComboBox1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = GroupBox2
+    AnchorSideBottom.Side = asrBottom
+    Left = 5
+    Height = 145
+    Top = 62
+    Width = 152
+    Anchors = [akTop, akLeft, akBottom]
+    AutoSize = True
+    BorderSpacing.Left = 5
+    BorderSpacing.Top = 10
+    Caption = 'Точка вставки'
+    ClientHeight = 127
+    ClientWidth = 148
+    TabOrder = 5
+    object Label2: TLabel
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = FloatSpinEdit1
+      AnchorSideTop.Side = asrCenter
+      Left = 5
+      Height = 13
+      Top = 31
+      Width = 13
+      BorderSpacing.Left = 5
+      Caption = 'X: '
+      ParentColor = False
+    end
+    object Label3: TLabel
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = FloatSpinEdit2
+      AnchorSideTop.Side = asrCenter
+      Left = 5
+      Height = 13
+      Top = 57
+      Width = 13
+      BorderSpacing.Left = 5
+      Caption = 'Y: '
+      ParentColor = False
+    end
+    object Label4: TLabel
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = FloatSpinEdit3
+      AnchorSideTop.Side = asrCenter
+      Left = 5
+      Height = 13
+      Top = 83
+      Width = 13
+      BorderSpacing.Left = 5
+      Caption = 'Z: '
+      ParentColor = False
+    end
+    object CheckBox4: TCheckBox
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = GroupBox1
+      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Side = asrBottom
+      Left = 5
+      Height = 17
+      Top = 5
+      Width = 138
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 5
+      Caption = 'Указать на экране'
+      OnChange = CheckBox4Change
+      TabOrder = 0
+    end
+    object FloatSpinEdit1: TFloatSpinEdit
+      AnchorSideLeft.Control = Label2
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = CheckBox4
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Side = asrBottom
+      Left = 23
+      Height = 21
+      Top = 27
+      Width = 120
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 5
+      Constraints.MinWidth = 120
+      Increment = 1
+      MaxValue = 100
+      MinValue = 0
+      TabOrder = 1
+      Value = 0
+    end
+    object FloatSpinEdit2: TFloatSpinEdit
+      AnchorSideLeft.Control = Label3
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = FloatSpinEdit1
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Side = asrBottom
+      Left = 23
+      Height = 21
+      Top = 53
+      Width = 120
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 5
+      Constraints.MinWidth = 120
+      Increment = 1
+      MaxValue = 100
+      MinValue = 0
+      TabOrder = 2
+      Value = 0
+    end
+    object FloatSpinEdit3: TFloatSpinEdit
+      AnchorSideLeft.Control = Label4
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = FloatSpinEdit2
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Side = asrBottom
+      Left = 23
+      Height = 21
+      Top = 79
+      Width = 120
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 5
+      BorderSpacing.Bottom = 5
+      Constraints.MinWidth = 120
+      Increment = 1
+      MaxValue = 100
+      MinValue = 0
+      TabOrder = 3
+      Value = 0
+    end
+  end
+  object GroupBox2: TGroupBox
+    AnchorSideLeft.Control = GroupBox1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = ComboBox1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideBottom.Side = asrBottom
+    Left = 162
+    Height = 145
+    Top = 62
+    Width = 152
+    AutoSize = True
+    BorderSpacing.Left = 5
+    BorderSpacing.Top = 10
+    Caption = 'Масштаб'
+    ClientHeight = 127
+    ClientWidth = 148
+    TabOrder = 6
+    object Label5: TLabel
+      AnchorSideLeft.Control = GroupBox2
+      AnchorSideTop.Control = FloatSpinEdit4
+      AnchorSideTop.Side = asrCenter
+      Left = 5
+      Height = 13
+      Top = 31
+      Width = 13
+      BorderSpacing.Left = 5
+      Caption = 'X: '
+      ParentColor = False
+    end
+    object Label6: TLabel
+      AnchorSideLeft.Control = GroupBox2
+      AnchorSideTop.Control = FloatSpinEdit6
+      AnchorSideTop.Side = asrCenter
+      Left = 5
+      Height = 13
+      Top = 83
+      Width = 13
+      BorderSpacing.Left = 5
+      Caption = 'Z: '
+      ParentColor = False
+    end
+    object Label7: TLabel
+      AnchorSideLeft.Control = GroupBox2
+      AnchorSideTop.Control = FloatSpinEdit5
+      AnchorSideTop.Side = asrCenter
+      Left = 5
+      Height = 13
+      Top = 57
+      Width = 13
+      BorderSpacing.Left = 5
+      Caption = 'Y: '
+      ParentColor = False
+    end
+    object CheckBox3: TCheckBox
+      AnchorSideLeft.Control = GroupBox2
+      AnchorSideTop.Control = GroupBox2
+      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Side = asrBottom
+      Left = 5
+      Height = 17
+      Top = 5
+      Width = 138
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 5
+      Caption = 'Указать на экране'
+      OnChange = CheckBox3Change
+      TabOrder = 0
+    end
+    object CheckBox5: TCheckBox
+      AnchorSideLeft.Control = GroupBox2
+      AnchorSideTop.Control = FloatSpinEdit6
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Side = asrBottom
+      Left = 5
+      Height = 17
+      Top = 105
+      Width = 138
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 5
+      BorderSpacing.Bottom = 5
+      Caption = 'Равные масштабы'
+      OnChange = CheckBox5Change
+      TabOrder = 1
+    end
+    object FloatSpinEdit4: TFloatSpinEdit
+      AnchorSideLeft.Control = Label5
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = CheckBox3
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Side = asrBottom
+      Left = 23
+      Height = 21
+      Top = 27
+      Width = 120
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 5
+      Constraints.MinWidth = 120
+      Increment = 1
+      MaxValue = 100
+      MinValue = 0
+      TabOrder = 2
+      Value = 0
+    end
+    object FloatSpinEdit5: TFloatSpinEdit
+      AnchorSideLeft.Control = Label6
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = FloatSpinEdit4
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Side = asrBottom
+      Left = 23
+      Height = 21
+      Top = 53
+      Width = 120
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 5
+      Constraints.MinWidth = 120
+      Increment = 1
+      MaxValue = 100
+      MinValue = 0
+      TabOrder = 3
+      Value = 0
+    end
+    object FloatSpinEdit6: TFloatSpinEdit
+      AnchorSideLeft.Control = Label7
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = FloatSpinEdit5
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Side = asrBottom
+      Left = 23
+      Height = 21
+      Top = 79
+      Width = 120
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 5
+      Constraints.MinWidth = 120
+      Increment = 1
+      MaxValue = 100
+      MinValue = 0
+      TabOrder = 4
+      Value = 0
+    end
+  end
+  object Panel2: TPanel
+    AnchorSideLeft.Control = GroupBox2
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = ComboBox1
+    AnchorSideTop.Side = asrBottom
+    Left = 319
+    Height = 151
+    Top = 62
+    Width = 216
+    AutoSize = True
+    BorderSpacing.Left = 5
+    BorderSpacing.Top = 10
+    BevelOuter = bvNone
+    ClientHeight = 151
+    ClientWidth = 216
     TabOrder = 7
+    object GroupBox3: TGroupBox
+      AnchorSideLeft.Control = Panel2
+      AnchorSideTop.Control = Panel2
+      AnchorSideRight.Control = Panel2
+      AnchorSideRight.Side = asrBottom
+      Left = 0
+      Height = 71
+      Top = 0
+      Width = 216
+      Anchors = [akTop, akLeft, akRight]
+      AutoSize = True
+      Caption = 'Угол поворота'
+      ClientHeight = 53
+      ClientWidth = 212
+      TabOrder = 0
+      object Label8: TLabel
+        AnchorSideLeft.Control = GroupBox3
+        AnchorSideTop.Control = FloatSpinEdit7
+        AnchorSideTop.Side = asrCenter
+        Left = 5
+        Height = 13
+        Top = 31
+        Width = 31
+        BorderSpacing.Left = 5
+        Caption = 'Угол: '
+        ParentColor = False
+      end
+      object CheckBox2: TCheckBox
+        AnchorSideLeft.Control = GroupBox3
+        AnchorSideTop.Control = GroupBox3
+        AnchorSideRight.Control = GroupBox3
+        AnchorSideRight.Side = asrBottom
+        Left = 5
+        Height = 17
+        Top = 5
+        Width = 202
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 5
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 5
+        Caption = 'Указать на экране'
+        OnChange = CheckBox2Change
+        TabOrder = 0
+      end
+      object FloatSpinEdit7: TFloatSpinEdit
+        AnchorSideLeft.Control = Label8
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = CheckBox2
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = GroupBox3
+        AnchorSideRight.Side = asrBottom
+        Left = 41
+        Height = 21
+        Top = 27
+        Width = 166
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 5
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 5
+        BorderSpacing.Bottom = 5
+        Constraints.MinWidth = 120
+        Increment = 1
+        MaxValue = 100
+        MinValue = 0
+        TabOrder = 1
+        Value = 0
+      end
+    end
+    object GroupBox4: TGroupBox
+      AnchorSideLeft.Control = Panel2
+      AnchorSideTop.Control = GroupBox3
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = Panel2
+      AnchorSideRight.Side = asrBottom
+      Left = 0
+      Height = 75
+      Top = 76
+      Width = 216
+      Anchors = [akTop, akLeft, akRight]
+      AutoSize = True
+      BorderSpacing.Top = 5
+      Caption = 'Единицы измерений блока'
+      ClientHeight = 57
+      ClientWidth = 212
+      TabOrder = 1
+      object Label9: TLabel
+        AnchorSideLeft.Control = GroupBox4
+        AnchorSideTop.Control = ComboBox2
+        AnchorSideTop.Side = asrCenter
+        Left = 5
+        Height = 13
+        Top = 9
+        Width = 52
+        BorderSpacing.Left = 5
+        Caption = 'Единицы: '
+        ParentColor = False
+      end
+      object Label10: TLabel
+        AnchorSideLeft.Control = GroupBox4
+        AnchorSideTop.Control = FloatSpinEdit8
+        AnchorSideTop.Side = asrCenter
+        Left = 5
+        Height = 13
+        Top = 35
+        Width = 77
+        BorderSpacing.Left = 5
+        Caption = 'Коэффициент: '
+        ParentColor = False
+      end
+      object ComboBox2: TComboBox
+        AnchorSideLeft.Control = Label9
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = GroupBox4
+        AnchorSideRight.Control = GroupBox4
+        AnchorSideRight.Side = asrBottom
+        Left = 62
+        Height = 21
+        Top = 5
+        Width = 145
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 5
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 5
+        Constraints.MinWidth = 120
+        ItemHeight = 13
+        TabOrder = 0
+        Text = 'ComboBox2'
+      end
+      object FloatSpinEdit8: TFloatSpinEdit
+        AnchorSideLeft.Control = Label10
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = ComboBox2
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = GroupBox4
+        AnchorSideRight.Side = asrBottom
+        Left = 87
+        Height = 21
+        Top = 31
+        Width = 120
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 5
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 5
+        BorderSpacing.Bottom = 5
+        Constraints.MinWidth = 120
+        Increment = 1
+        MaxValue = 100
+        MinValue = 0
+        TabOrder = 1
+        Value = 0
+      end
+    end
   end
 end

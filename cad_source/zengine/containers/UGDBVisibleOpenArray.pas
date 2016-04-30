@@ -92,7 +92,7 @@ begin
 end;
 function GDBObjEntityOpenArray.addwithoutcorrect;
 begin
-  result:=inherited PushBackData(ppointer(p)^);
+  result:=inherited PushBackData(p);
 end;
 function GDBObjEntityOpenArray.copytowithoutcorrect;
 var p:GDBPointer;
@@ -101,7 +101,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-        source.addwithoutcorrect(@p);  //-----------------//-----------
+        source.addwithoutcorrect(p);  //-----------------//-----------
         p:=iterate(ir);
   until p=nil;
   result:=count;

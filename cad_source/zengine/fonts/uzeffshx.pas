@@ -770,13 +770,15 @@ begin
                          end
                      else
                          begin
-                              debugln('{T+}symbol %d',[integer(symnum)]);
+                              if VerboseLog then
+                                debugln('{T+}symbol %d',[integer(symnum)]);
                               if symnum=135 then
                                                 symnum:=symnum;
                               //programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
                               dataread:=createsymbol(pf,symnum,memorybuf.GetCurrentReadAddres,false,line);
                               memorybuf.jump({datalen}dataread);
-                              debugln('{T-}end');
+                              if VerboseLog then
+                                debugln('{T-}end');
                               //programlog.LogOutStr('end',lp_DecPos,LM_Trace);
                          end;
 
@@ -854,12 +856,14 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
          if test=49 then
                          test:=test;
          //if (*pf^.GetOrCreateSymbolInfo(test)^.{ .symbo linfo[test].}addr=0*)symnum<2560000 then
-         debugln('{T+}symbol %d',[integer(symnum)]);
+         if VerboseLog then
+           debugln('{T+}symbol %d',[integer(symnum)]);
          if symnum=135 then
                            symnum:=symnum;
          //programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
          {if symnum<256 then }dataread:=createsymbol(pf,test{symnum},memorybuf.GetCurrentReadAddres,true,line);
-         debugln('{T-}end');
+         if VerboseLog then
+           debugln('{T-}end');
          //programlog.LogOutStr('end',lp_DecPos,LM_Trace);
          //                                                                 else
          //                                                                     pf:=pf;

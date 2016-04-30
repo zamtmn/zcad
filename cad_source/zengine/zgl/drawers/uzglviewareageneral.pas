@@ -710,6 +710,7 @@ begin
   if (getviewcontrol.clientwidth=0)or(getviewcontrol.clientheight=0) then exit;
   LPTime:=now;
   needredraw:=param.firstdraw{ or true};
+  if VerboseLog then
   debugln('{T}TOGLWnd.draw');
   //programlog.logoutstr('TOGLWnd.draw',0,LM_Trace);
   //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.draw',lp_IncPos);{$ENDIF}

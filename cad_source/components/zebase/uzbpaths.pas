@@ -194,7 +194,8 @@ begin
          fn:=path+systoutf8(s);{$ENDIF}
      //fn:=fn+systoutf8(s);
      *конец попытки*)
-     DebugLn(sysutils.Format('Process file %s',[fn]));
+     if VerboseLog then
+       DebugLn(sysutils.Format('{D}Process file %s',[fn]));
      //programlog.LogOutFormatStr('Process file %s',[fn],lp_OldPos,LM_Trace);
      if @method<>nil then
                          method(fn);
@@ -203,7 +204,8 @@ begin
 
 end;
 begin
-  DebugLn('{D+}FromDirIterator start');
+  if VerboseLog then
+    DebugLn('{D+}FromDirIterator start');
   //programlog.LogOutStr('FromDirIterator start',lp_IncPos,LM_Debug);
   if firstloadfilename<>'' then
   if fileexists(path+firstloadfilename) then
@@ -227,7 +229,8 @@ begin
     until FindNext(sr) <> 0;
     FindClose(sr);
   end;
-  DebugLn('{D-}end; {FromDirIterator}');
+  if VerboseLog then
+    DebugLn('{D-}end; {FromDirIterator}');
   //programlog.LogOutStr('FromDirIterator....{end}',lp_DecPos,LM_Debug);
 end;
 initialization

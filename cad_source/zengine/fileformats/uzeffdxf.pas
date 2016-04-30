@@ -361,7 +361,8 @@ begin
     begin
     if owner <> nil then
       begin
-        debugln('{T}AddEntitiesFromDXF.Found primitive ',s);
+        if VerboseLog then
+          debugln('{D}AddEntitiesFromDXF.Found primitive ',s);
         //programlog.LogOutFormatStr('AddEntitiesFromDXF.Found primitive %s',[s],lp_OldPos,LM_Trace);
         {$IFDEF DEBUGBUILD}inc(i2);if i2=4349 then
                                                   i2:=i2;{$ENDIF}
@@ -996,11 +997,7 @@ begin
        begin
          s := f.readGDBString;
          byt := strtoint(s);
-         debugln('{D}Group :',s);
-         //programlog.LogOutFormatStr('Group :"%s"',[s],lp_OldPos,LM_Debug);
          s := f.readGDBString;
-         debugln('{D}Value :',s);
-         //programlog.LogOutFormatStr('Value :"%s"',[s],lp_OldPos,LM_Debug);
          if (byt=0)and(s='VPORT')then
          begin
                byt := -100;

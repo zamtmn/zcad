@@ -399,6 +399,7 @@ var
    msg:string;
 begin
   drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+  drawings.GetCurrentDWG.GetSelObjArray.clearallobjects;
   if commandmanager.CommandsStack.Count>0 then
                                               begin
                                                    prevundo:=pCommandRTEdObject(ppointer(commandmanager.CommandsStack.getDataMutable(commandmanager.CommandsStack.Count-1))^)^.UndoTop;

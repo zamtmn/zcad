@@ -27,7 +27,6 @@ PGDBTableArray=^GDBTableArray;
 GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorPObects{-}<PTZctnrVectorGDBString,TZctnrVectorGDBString>{//})(*OpenArrayOfData=TZctnrVectorGDBString*)
                     columns,rows:GDBInteger;
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}c,r:GDBInteger);
-                    destructor done;virtual;
                     procedure cleareraseobj;virtual;
                     //function copyto(var source:GDBOpenArrayOfData{-}<TZctnrVectorGDBString>{//}):GDBInteger;virtual;
               end;
@@ -64,17 +63,18 @@ begin
   until p=nil;
   count:=0;
 end;
-destructor GDBTableArray.done;
+(*destructor GDBTableArray.done;
 var p:PTZctnrVectorGDBString;
     ir:itrec;
 begin
-  p:=beginiterate(ir);
+  {p:=beginiterate(ir);
   if p<>nil then
   repeat
         p^.done;
-  until p=nil;
+        p:=iterate(ir);
+  until p=nil;}
   inherited;
-end;
+end;*)
 constructor GDBTableArray.init;
 //var //i,j:gdbinteger;
     //psl:PTZctnrVectorGDBString;

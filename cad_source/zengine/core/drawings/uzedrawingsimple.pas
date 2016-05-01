@@ -185,6 +185,7 @@ begin
   else
   begin
        result:=CreateFaceRC;
+       FillDrawingPartRC(result);
   end;
 end;
 procedure TSimpleDrawing.FillDrawingPartRC(var dc:TDrawContext);
@@ -200,6 +201,7 @@ begin
   dc.DrawingContext.pcamera:=GetPcamera;
   dc.DrawingContext.DrawHeplGeometryProc:=nil;
   dc.DrawMode:=LWDisplay;
+  dc.DrawingContext.GlobalLTScale:=LTScale;
 end;
 
 function TSimpleDrawing.GetChangeStampt:GDBBoolean;

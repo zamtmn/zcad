@@ -683,7 +683,7 @@ begin
      {s:=pstring(Pinstance)^;
      killstring(s);
      //pointer(s):=nil;}
-     RemoveOneRefCount(pstring(Pinstance)^);
+     KillString(pstring(Pinstance)^);
 end;
 constructor GDBStringDescriptor.init;
 begin

@@ -43,7 +43,6 @@ function ConvertToDxfString(str:GDBString):GDBString;
 function MakeHash(const s: GDBString):SizeUInt;
 
 procedure KillString(var str:GDBString);inline;
-procedure RemoveOneRefCount(str:GDBString);inline;
 
 Function PosWithBracket(c : AnsiChar; Const s : {RawByteString}GDBString) : SizeInt;
 
@@ -82,10 +81,6 @@ else if bracketcounter=0 then
   exit(0)
 end;
 procedure KillString(var str:GDBString);inline;
-begin
-     GDBPointer(str):=nil;
-end;
-procedure RemoveOneRefCount(str:GDBString);inline;
 begin
      GDBPointer(str):=nil;
 end;

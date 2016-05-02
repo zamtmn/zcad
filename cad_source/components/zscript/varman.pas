@@ -633,8 +633,8 @@ begin
        vd.attrib:=0;
        i:=vardescarray.PushBackData(vd);
        result:=vardescarray.getDataMutable(i);
-       KillString(vd.name);
-       KillString(vd.username);
+       //KillString(vd.name);
+       //KillString(vd.username);
 end;
 function getpattern(ptd:ptdarray; max:GDBInteger;var line:GDBString; out typ:GDBInteger):PTZctnrVectorGDBString;
 var i:GDBInteger;
@@ -867,7 +867,7 @@ begin
                                                              //GDBStringtypearray := GDBStringtypearray + pac_GDBWord_to_GDBString(fieldgdbtype.gdbtypecustom) + pac_lGDBWord_to_GDBString(fieldgdbtype.sizeinmem);
                                                              fd.base.ProgramName:=fieldname;
                                                              fd.base.PFT:=fieldgdbtype;
-                                                             GDBPointer(fd.base.UserName):=nil;
+                                                             //GDBPointer(fd.base.UserName):=nil;
                                                              //fd.UserName:='sdfsdf';
                                                              fd.base.Attributes:=0;
                                                              fd.base.Saved:=0;

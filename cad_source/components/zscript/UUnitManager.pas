@@ -639,8 +639,8 @@ begin
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
                                                   parseresult:=runparser('_softspace'#0'=,',line,parseerror);
                                                   enumobjlist.PushBackData(enumodj);
-                                                  GDBPointer(enumodj.source):=nil;
-                                                  GDBPointer(enumodj.user):=nil;
+                                                  //GDBPointer(enumodj.source):=nil;
+                                                  //GDBPointer(enumodj.user):=nil;
                                                   until not parseerror;
                                                   runparser('_softspace'#0'=)_softend'#0,line,parseerror);
                                                   if maxvalue<256 then maxvalue:=1

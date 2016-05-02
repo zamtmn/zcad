@@ -274,7 +274,7 @@ end;
 procedure RecordDescriptor.AddField;
 begin
      AddConstField(fd);
-     GDBPointer(fd.base.ProgramName):=nil;
+     //GDBPointer(fd.base.ProgramName):=nil;
 end;
 function RecordDescriptor.FindField(fn:GDBString):PFieldDescriptor;
 var pd:PFieldDescriptor;

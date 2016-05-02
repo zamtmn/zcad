@@ -340,7 +340,7 @@ begin
 end;
 function CreateObjInspInstance:TForm;
 begin
-     GDBobjinsp:=TGDBObjInsp.Create(nil);
+     GDBobjinsp:=TGDBObjInsp.Create(Application);
      //result:=GDBobjinsp;
      result:=tform(TForm.NewInstance);
 end;

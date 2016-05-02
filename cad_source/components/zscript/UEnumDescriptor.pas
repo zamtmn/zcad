@@ -77,6 +77,7 @@ begin
      SourceValue.FreeAndDone;
      UserValue.FreeAndDone;
      value.Done;
+     gdbfreemem(Value);
 end;
 constructor EnumDescriptor.init;
 begin

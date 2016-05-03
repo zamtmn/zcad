@@ -355,7 +355,7 @@ begin
   repeat
         case pv^.GetObjType of
         GDBLineID:begin
-                       l:=PGDBObjLine(pv)^.Length/10;
+                       l:=Vertexlength(PGDBObjLine(pv)^.CoordInWCS.lbegin,PGDBObjLine(pv)^.CoordInWCS.lend)/10;
                        hl:=l/2;
                        PGDBObjLine(pv)^.CoordInOCS.lBegin:=uzegeometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lBegin,CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked));
                        PGDBObjLine(pv)^.CoordInOCS.lEnd:=uzegeometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lEnd,CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked));

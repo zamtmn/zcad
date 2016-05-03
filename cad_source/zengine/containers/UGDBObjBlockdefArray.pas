@@ -19,7 +19,7 @@
 unit UGDBObjBlockdefArray;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,uzgldrawcontext,uzedrawingdef,uzbstrproc,uzeblockdef,gzctnrvectordata,
+uses LCLProc,uzgldrawcontext,uzedrawingdef,uzbstrproc,uzeblockdef,gzctnrvectorobjects,
      sysutils,uzbtypes,uzbmemman,uzegeometry,uzbtypesbase;
 type
 {REGISTEROBJECTTYPE GDBObjBlockdefArray}
@@ -27,7 +27,7 @@ type
 PGDBObjBlockdefArray=^GDBObjBlockdefArray;
 PBlockdefArray=^BlockdefArray;
 BlockdefArray=packed array [0..0] of GDBObjBlockdef;
-GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBObjBlockdef>{//})(*OpenArrayOfData=GDBObjBlockdef*)
+GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorObjects{-}<GDBObjBlockdef>{//})(*OpenArrayOfData=GDBObjBlockdef*)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       constructor initnul;
 

@@ -321,8 +321,8 @@ begin
               d.base.Saved:=pd^.base.Saved;
               d.Collapsed:=pd^.Collapsed;
               PRecordDescriptor(rd)^.AddField(d);
-              GDBPointer(d.base.ProgramName):=nil;
-              GDBPointer(d.base.userName):=nil;
+              //GDBPointer(d.base.ProgramName):=nil;
+              //GDBPointer(d.base.userName):=nil;
               pd:=Fields.iterate(ir);
         until pd=nil;
 end;

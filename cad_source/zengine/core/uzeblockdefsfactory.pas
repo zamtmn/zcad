@@ -85,4 +85,6 @@ end;
 
 initialization
 finalization
+if assigned(BlockDefName2BlockDefCreateData) then
+                                                  BlockDefName2BlockDefCreateData.destroy;
 end.

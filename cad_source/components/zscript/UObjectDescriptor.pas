@@ -76,9 +76,9 @@ end;
 procedure ObjectDescriptor.AddProperty(var pd:PropertyDescriptor);
 begin
      Properties.PushBackData(pd);
-     GDBPointer(pd.base.ProgramName):=nil;
-     GDBPointer(pd.r):=nil;
-     GDBPointer(pd.w):=nil;
+     //GDBPointer(pd.base.ProgramName):=nil;
+     //GDBPointer(pd.r):=nil;
+     //GDBPointer(pd.w):=nil;
 end;
 
 procedure ObjectDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);

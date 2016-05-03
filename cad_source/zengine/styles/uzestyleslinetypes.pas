@@ -582,8 +582,8 @@ begin
                                                     TP.Style:=trim(GetPredStr(element,','));
                                                     GetParam(TP);
                                                     Textarray.PushBackData(TP);
-                                                    killstring(TP.Text);
-                                                    killstring(TP.Style);
+                                                    //killstring(TP.Text);
+                                                    //killstring(TP.Style);
                                                     TP.done;
                                                end
                                            else
@@ -594,8 +594,8 @@ begin
                                                     SP.FontName:=GetPredStr(element,',');
                                                     GetParam(SP);
                                                     shapearray.PushBackData(SP);
-                                                    killstring(SP.SymbolName);
-                                                    killstring(SP.FontName);
+                                                    //killstring(SP.SymbolName);
+                                                    //killstring(SP.FontName);
                                                     SP.done;
                                                end;
                                end;

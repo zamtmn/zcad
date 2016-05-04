@@ -1,7 +1,7 @@
 object BlockInsertForm: TBlockInsertForm
-  Left = 480
+  Left = 950
   Height = 320
-  Top = 302
+  Top = 6
   Width = 750
   Anchors = []
   Caption = 'Вставка блока'
@@ -18,10 +18,10 @@ object BlockInsertForm: TBlockInsertForm
     AnchorSideTop.Side = asrCenter
     Left = 5
     Height = 19
-    Top = 38
-    Width = 45
+    Top = 35
+    Width = 43
     BorderSpacing.Left = 5
-    Caption = 'Имя: '
+    Caption = 'Name: '
     ParentColor = False
   end
   object CheckBox1: TCheckBox
@@ -30,13 +30,13 @@ object BlockInsertForm: TBlockInsertForm
     AnchorSideBottom.Control = ButtonPanel1
     Left = 5
     Height = 23
-    Top = 255
-    Width = 675
+    Top = 256
+    Width = 502
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 5
     BorderSpacing.Right = 5
     BorderSpacing.Bottom = 5
-    Caption = 'Расчленить'
+    Caption = 'Explode'
     TabOrder = 0
   end
   object ButtonPanel1: TButtonPanel
@@ -46,8 +46,8 @@ object BlockInsertForm: TBlockInsertForm
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 5
-    Height = 37
-    Top = 283
+    Height = 36
+    Top = 284
     Width = 740
     Align = alNone
     Anchors = [akLeft, akRight, akBottom]
@@ -73,15 +73,15 @@ object BlockInsertForm: TBlockInsertForm
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 55
-    Height = 33
+    Left = 53
+    Height = 27
     Top = 31
-    Width = 690
+    Width = 692
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 5
     BorderSpacing.Top = 5
     BorderSpacing.Right = 5
-    ItemHeight = 25
+    ItemHeight = 19
     TabOrder = 2
     Text = 'ComboBox1'
   end
@@ -92,9 +92,9 @@ object BlockInsertForm: TBlockInsertForm
     Left = 5
     Height = 19
     Top = 6
-    Width = 51
+    Width = 35
     BorderSpacing.Left = 5
-    Caption = 'Путь: '
+    Caption = 'Path: '
     ParentColor = False
   end
   object Edit10: TFileNameEdit
@@ -103,10 +103,10 @@ object BlockInsertForm: TBlockInsertForm
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 61
+    Left = 45
     Height = 21
     Top = 5
-    Width = 684
+    Width = 700
     Filter = 'Drawing Xchange Format|*.dxf|ZCad Drawing|*.dwg'
     FilterIndex = 0
     HideDirectories = False
@@ -129,16 +129,16 @@ object BlockInsertForm: TBlockInsertForm
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonPanel1
-    Left = 685
-    Height = 204
-    Top = 74
-    Width = 60
+    Left = 512
+    Height = 211
+    Top = 68
+    Width = 233
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 5
     BorderSpacing.Top = 10
     BorderSpacing.Right = 5
     BorderSpacing.Bottom = 5
-    Caption = 'Для демонстрашки'
+    Caption = 'Prewiev'
     TabOrder = 4
   end
   object GroupBox1: TGroupBox
@@ -149,16 +149,16 @@ object BlockInsertForm: TBlockInsertForm
     AnchorSideBottom.Control = GroupBox2
     AnchorSideBottom.Side = asrBottom
     Left = 5
-    Height = 206
-    Top = 74
-    Width = 198
+    Height = 181
+    Top = 68
+    Width = 154
     Anchors = [akTop, akLeft, akBottom]
     AutoSize = True
     BorderSpacing.Left = 5
     BorderSpacing.Top = 10
-    Caption = 'Точка вставки'
-    ClientHeight = 175
-    ClientWidth = 194
+    Caption = 'Insertion point'
+    ClientHeight = 157
+    ClientWidth = 150
     TabOrder = 5
     object Label2: TLabel
       AnchorSideLeft.Control = GroupBox1
@@ -166,8 +166,8 @@ object BlockInsertForm: TBlockInsertForm
       AnchorSideTop.Side = asrCenter
       Left = 5
       Height = 19
-      Top = 40
-      Width = 22
+      Top = 37
+      Width = 15
       BorderSpacing.Left = 5
       Caption = 'X: '
       ParentColor = False
@@ -178,8 +178,8 @@ object BlockInsertForm: TBlockInsertForm
       AnchorSideTop.Side = asrCenter
       Left = 5
       Height = 19
-      Top = 78
-      Width = 19
+      Top = 69
+      Width = 15
       BorderSpacing.Left = 5
       Caption = 'Y: '
       ParentColor = False
@@ -190,8 +190,8 @@ object BlockInsertForm: TBlockInsertForm
       AnchorSideTop.Side = asrCenter
       Left = 5
       Height = 19
-      Top = 116
-      Width = 22
+      Top = 101
+      Width = 15
       BorderSpacing.Left = 5
       Caption = 'Z: '
       ParentColor = False
@@ -204,12 +204,12 @@ object BlockInsertForm: TBlockInsertForm
       Left = 5
       Height = 23
       Top = 5
-      Width = 184
+      Width = 140
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
       BorderSpacing.Right = 5
-      Caption = 'Указать на экране'
+      Caption = 'Specify on-screen'
       OnChange = CheckBox4Change
       TabOrder = 0
     end
@@ -220,10 +220,10 @@ object BlockInsertForm: TBlockInsertForm
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = GroupBox1
       AnchorSideRight.Side = asrBottom
-      Left = 32
-      Height = 33
+      Left = 25
+      Height = 27
       Top = 33
-      Width = 157
+      Width = 120
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
@@ -242,10 +242,10 @@ object BlockInsertForm: TBlockInsertForm
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = GroupBox1
       AnchorSideRight.Side = asrBottom
-      Left = 29
-      Height = 33
-      Top = 71
-      Width = 160
+      Left = 25
+      Height = 27
+      Top = 65
+      Width = 120
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
@@ -264,10 +264,10 @@ object BlockInsertForm: TBlockInsertForm
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = GroupBox1
       AnchorSideRight.Side = asrBottom
-      Left = 32
-      Height = 33
-      Top = 109
-      Width = 157
+      Left = 25
+      Height = 27
+      Top = 97
+      Width = 120
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
@@ -287,16 +287,16 @@ object BlockInsertForm: TBlockInsertForm
     AnchorSideTop.Control = ComboBox1
     AnchorSideTop.Side = asrBottom
     AnchorSideBottom.Side = asrBottom
-    Left = 208
-    Height = 206
-    Top = 74
-    Width = 198
+    Left = 164
+    Height = 181
+    Top = 68
+    Width = 154
     AutoSize = True
     BorderSpacing.Left = 5
     BorderSpacing.Top = 10
-    Caption = 'Масштаб'
-    ClientHeight = 175
-    ClientWidth = 194
+    Caption = 'Scale'
+    ClientHeight = 157
+    ClientWidth = 150
     TabOrder = 6
     object Label5: TLabel
       AnchorSideLeft.Control = GroupBox2
@@ -304,8 +304,8 @@ object BlockInsertForm: TBlockInsertForm
       AnchorSideTop.Side = asrCenter
       Left = 5
       Height = 19
-      Top = 40
-      Width = 22
+      Top = 37
+      Width = 15
       BorderSpacing.Left = 5
       Caption = 'X: '
       ParentColor = False
@@ -316,8 +316,8 @@ object BlockInsertForm: TBlockInsertForm
       AnchorSideTop.Side = asrCenter
       Left = 5
       Height = 19
-      Top = 116
-      Width = 22
+      Top = 101
+      Width = 15
       BorderSpacing.Left = 5
       Caption = 'Z: '
       ParentColor = False
@@ -328,8 +328,8 @@ object BlockInsertForm: TBlockInsertForm
       AnchorSideTop.Side = asrCenter
       Left = 5
       Height = 19
-      Top = 78
-      Width = 19
+      Top = 69
+      Width = 15
       BorderSpacing.Left = 5
       Caption = 'Y: '
       ParentColor = False
@@ -342,12 +342,12 @@ object BlockInsertForm: TBlockInsertForm
       Left = 5
       Height = 23
       Top = 5
-      Width = 184
+      Width = 140
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
       BorderSpacing.Right = 5
-      Caption = 'Указать на экране'
+      Caption = 'Specify on-screen'
       OnChange = CheckBox3Change
       TabOrder = 0
     end
@@ -359,14 +359,14 @@ object BlockInsertForm: TBlockInsertForm
       AnchorSideRight.Side = asrBottom
       Left = 5
       Height = 23
-      Top = 147
-      Width = 184
+      Top = 129
+      Width = 140
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
       BorderSpacing.Right = 5
       BorderSpacing.Bottom = 5
-      Caption = 'Равные масштабы'
+      Caption = 'Uniform scale'
       OnChange = CheckBox5Change
       TabOrder = 1
     end
@@ -377,10 +377,10 @@ object BlockInsertForm: TBlockInsertForm
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = GroupBox2
       AnchorSideRight.Side = asrBottom
-      Left = 32
-      Height = 33
+      Left = 25
+      Height = 27
       Top = 33
-      Width = 157
+      Width = 120
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
@@ -399,10 +399,10 @@ object BlockInsertForm: TBlockInsertForm
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = GroupBox2
       AnchorSideRight.Side = asrBottom
-      Left = 32
-      Height = 33
-      Top = 71
-      Width = 157
+      Left = 25
+      Height = 27
+      Top = 65
+      Width = 120
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
@@ -421,10 +421,10 @@ object BlockInsertForm: TBlockInsertForm
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = GroupBox2
       AnchorSideRight.Side = asrBottom
-      Left = 29
-      Height = 33
-      Top = 109
-      Width = 160
+      Left = 25
+      Height = 27
+      Top = 97
+      Width = 120
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
@@ -442,16 +442,16 @@ object BlockInsertForm: TBlockInsertForm
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = ComboBox1
     AnchorSideTop.Side = asrBottom
-    Left = 411
-    Height = 219
-    Top = 74
-    Width = 269
+    Left = 323
+    Height = 187
+    Top = 68
+    Width = 184
     AutoSize = True
     BorderSpacing.Left = 5
     BorderSpacing.Top = 10
     BevelOuter = bvNone
-    ClientHeight = 219
-    ClientWidth = 269
+    ClientHeight = 187
+    ClientWidth = 184
     TabOrder = 7
     object GroupBox3: TGroupBox
       AnchorSideLeft.Control = Panel2
@@ -459,14 +459,14 @@ object BlockInsertForm: TBlockInsertForm
       AnchorSideRight.Control = Panel2
       AnchorSideRight.Side = asrBottom
       Left = 0
-      Height = 102
+      Height = 89
       Top = 0
-      Width = 269
+      Width = 184
       Anchors = [akTop, akLeft, akRight]
       AutoSize = True
-      Caption = 'Угол поворота'
-      ClientHeight = 71
-      ClientWidth = 265
+      Caption = 'Rotation'
+      ClientHeight = 65
+      ClientWidth = 180
       TabOrder = 0
       object Label8: TLabel
         AnchorSideLeft.Control = GroupBox3
@@ -474,10 +474,10 @@ object BlockInsertForm: TBlockInsertForm
         AnchorSideTop.Side = asrCenter
         Left = 5
         Height = 19
-        Top = 40
-        Width = 49
+        Top = 37
+        Width = 42
         BorderSpacing.Left = 5
-        Caption = 'Угол: '
+        Caption = 'Angle: '
         ParentColor = False
       end
       object CheckBox2: TCheckBox
@@ -488,12 +488,12 @@ object BlockInsertForm: TBlockInsertForm
         Left = 5
         Height = 23
         Top = 5
-        Width = 255
+        Width = 170
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 5
         BorderSpacing.Top = 5
         BorderSpacing.Right = 5
-        Caption = 'Указать на экране'
+        Caption = 'Specify on-screen'
         OnChange = CheckBox2Change
         TabOrder = 0
       end
@@ -504,10 +504,10 @@ object BlockInsertForm: TBlockInsertForm
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = GroupBox3
         AnchorSideRight.Side = asrBottom
-        Left = 59
-        Height = 33
+        Left = 52
+        Height = 27
         Top = 33
-        Width = 201
+        Width = 123
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 5
         BorderSpacing.Top = 5
@@ -528,15 +528,15 @@ object BlockInsertForm: TBlockInsertForm
       AnchorSideRight.Control = Panel2
       AnchorSideRight.Side = asrBottom
       Left = 0
-      Height = 112
-      Top = 107
-      Width = 269
+      Height = 93
+      Top = 94
+      Width = 184
       Anchors = [akTop, akLeft, akRight]
       AutoSize = True
       BorderSpacing.Top = 5
-      Caption = 'Единицы измерений блока'
-      ClientHeight = 81
-      ClientWidth = 265
+      Caption = 'Block unit'
+      ClientHeight = 69
+      ClientWidth = 180
       TabOrder = 1
       object Label9: TLabel
         AnchorSideLeft.Control = GroupBox4
@@ -544,10 +544,10 @@ object BlockInsertForm: TBlockInsertForm
         AnchorSideTop.Side = asrCenter
         Left = 5
         Height = 19
-        Top = 12
-        Width = 87
+        Top = 9
+        Width = 33
         BorderSpacing.Left = 5
-        Caption = 'Единицы: '
+        Caption = 'Unit: '
         ParentColor = False
       end
       object Label10: TLabel
@@ -556,10 +556,10 @@ object BlockInsertForm: TBlockInsertForm
         AnchorSideTop.Side = asrCenter
         Left = 5
         Height = 19
-        Top = 50
-        Width = 130
+        Top = 41
+        Width = 45
         BorderSpacing.Left = 5
-        Caption = 'Коэффициент: '
+        Caption = 'Factor: '
         ParentColor = False
       end
       object ComboBox2: TComboBox
@@ -568,16 +568,16 @@ object BlockInsertForm: TBlockInsertForm
         AnchorSideTop.Control = GroupBox4
         AnchorSideRight.Control = GroupBox4
         AnchorSideRight.Side = asrBottom
-        Left = 97
-        Height = 33
+        Left = 43
+        Height = 27
         Top = 5
-        Width = 163
+        Width = 132
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 5
         BorderSpacing.Top = 5
         BorderSpacing.Right = 5
         Constraints.MinWidth = 120
-        ItemHeight = 25
+        ItemHeight = 19
         TabOrder = 0
         Text = 'ComboBox2'
       end
@@ -588,9 +588,9 @@ object BlockInsertForm: TBlockInsertForm
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = GroupBox4
         AnchorSideRight.Side = asrBottom
-        Left = 140
-        Height = 33
-        Top = 43
+        Left = 55
+        Height = 27
+        Top = 37
         Width = 120
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 5

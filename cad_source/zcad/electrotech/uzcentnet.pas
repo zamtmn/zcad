@@ -437,13 +437,13 @@ begin
      i:=0;
      pentvarext:=GetExtension(typeof(TVariablesExtender));
      repeat
-           pl:=pgdbobjline(ObjArray.getDataMutable(i)^);
+           pl:=pgdbobjline(ObjArray.getDataMutable(i));
            if pl<>nil then
            if i<>ObjArray.Count-1 then
            begin
                 j:=i+1;
                 repeat
-                      pl2:=pgdbobjline(ObjArray.getDataMutable(j)^);
+                      pl2:=pgdbobjline(ObjArray.getDataMutable(j));
                       if pl2<>nil then
                       begin
                            ip:=intercept3d(pl^.CoordInWCS.lBegin,pl^.CoordInWCS.lEnd,pl2^.CoordInWCS.lBegin,pl2^.CoordInWCS.lEnd);

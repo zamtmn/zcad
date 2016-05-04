@@ -615,7 +615,7 @@ begin
   result:=false;
   for i:=0 to ObjArray.count-1 do
   begin
-       p:=pGDBPointer(ObjArray.getDataMutable(i))^;
+       p:=GDBPointer(ObjArray.getDataMutable(i));
        if p<>nil then
        begin
        ot:=p^.onpoint(objects,point);
@@ -637,7 +637,7 @@ begin
   //p:=GDBPointer(ObjArray.parray^);
   for i:=0 to ObjArray.count-1 do
   begin
-       p:=pGDBPointer(ObjArray.getDataMutable(i))^;
+       p:=GDBPointer(ObjArray.getDataMutable(i));
        if p<>nil then
        begin
        ot:=p^.onmouse(popa,mf,InSubEntry);

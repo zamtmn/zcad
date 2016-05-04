@@ -287,13 +287,13 @@ begin
               //repeat
               l1:=pointer(tgf^.link.getDataMutable({j}0));
               if l1<>nil then
-                             l1:=pgdbobjline(ppointer(l1)^);
+                             l1:=pgdbobjline(ppointer(l1));
               //inc(j);
               //until l1<>nil;
               //repeat
               l2:=pointer(tgf^.link.getDataMutable({j}1));
               if l2<>nil then
-                             l2:=pgdbobjline(ppointer(l2)^);
+                             l2:=pgdbobjline(ppointer(l2));
               //inc(j);
               //until l2<>nil;
 
@@ -313,7 +313,7 @@ function marknearelement(pgf:pgrafelement):GDBBoolean;
 var i,j,k: GDBInteger;
     tgf: pgrafelement;
     l1,l2:pgdbobjline;
-    l1addr,l2addr:pGDBPointer;
+    l1addr,l2addr:GDBPointer;
 begin
   result:=false;
   for i := 0 to count - 1 do
@@ -324,19 +324,19 @@ begin
             for j:=0 to pgf^.link.Count-1 do
             begin
                  l1addr:=pointer(pgf^.link.getDataMutable(j));
-                 l1:=pgdbobjline(l1addr^);
+                 l1:=pgdbobjline(l1addr);
                  if l1<>nil then
                  for k:=0 to tgf^.link.Count-1 do
                  begin
                       l2addr:=pointer(tgf^.link.getDataMutable(k));
-                      l2:=pgdbobjline(l2addr^);
+                      l2:=pgdbobjline(l2addr);
                       if l2<>nil then
                       if l1=l2 then
                       begin
                            inc(pgf^.connected);
                            inc(tgf^.connected);
-                           l1addr^:=nil;
-                           l2addr^:=nil;
+                           l1addr:=nil;
+                           l2addr:=nil;
                            result:=true;
                       end;
                  end;

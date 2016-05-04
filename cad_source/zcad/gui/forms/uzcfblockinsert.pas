@@ -59,6 +59,7 @@ type
     procedure CheckBox4Change(Sender: TObject);
     procedure CheckBox5Change(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure _onShow(Sender: TObject);
   private
     { private declarations }
   public
@@ -75,6 +76,21 @@ implementation
 procedure TBlockInsertForm.FormCreate(Sender: TObject);
 begin
 
+end;
+
+procedure TBlockInsertForm._onShow(Sender: TObject);
+var
+  n:Integer;
+begin
+n:=ButtonPanel1.Height+ButtonPanel1.BorderSpacing.Top+ButtonPanel1.BorderSpacing.Bottom
+  +CheckBox1.Height+CheckBox1.BorderSpacing.Top+CheckBox1.BorderSpacing.Bottom
+  +Edit10.Height+Edit10.BorderSpacing.Top+Edit10.BorderSpacing.Bottom
+  +ComboBox1.Height+ComboBox1.BorderSpacing.Top+ComboBox1.BorderSpacing.Bottom;
+if GroupBox2.Height>Panel2.Height then
+  n:=n+GroupBox2.Height+GroupBox2.BorderSpacing.Top+GroupBox2.BorderSpacing.Bottom
+else
+  n:=n+Panel2.Height+Panel2.BorderSpacing.Top+Panel2.BorderSpacing.Bottom;
+self.Constraints.MinHeight:=n;
 end;
 
 procedure TBlockInsertForm.CheckBox4Change(Sender: TObject);

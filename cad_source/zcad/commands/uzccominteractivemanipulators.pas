@@ -40,7 +40,7 @@ uses
 
   URecordDescriptor,TypeDescriptors,
 
-  Forms, uzcfblockinsert, uzcfarrayinsert,
+  Forms,
 
   uzeutils,
 
@@ -68,10 +68,8 @@ uses
 
   uzcentcable,
   uzeentdevice,
-  UGDBOpenArrayOfPV,
 
   uzegeometry,
-  uzeentitiesmanager,
 
   uzcshared,
   uzeentityfactory,    //unit describing a "factory" to create primitives
@@ -79,25 +77,18 @@ uses
   uzcsysvars,        //system global variables
                       //системные переменные
   uzgldrawcontext,
-  uzcinterface,
+
   uzbtypesbase,uzbtypes, //base types
                       //описания базовых типов
-  uzeconsts, //base constants
                       //описания базовых констант
   uzccommandsmanager,
-  uzccommandsabstract,
-  uzccommandsimpl, //Commands manager and related objects
-                      //менеджер команд и объекты связанные с ним
-  uzcdrawing,
+
   uzcdrawings,     //Drawings manager, all open drawings are processed him
                       //"Менеджер" чертежей
   uzcutils,         //different functions simplify the creation entities, while there are very few
                       //разные функции упрощающие создание примитивов, пока их там очень мало
   varmandef,
   Varman,
-  {UGDBOpenArrayOfUCommands,}zcchangeundocommand,
-
-  uzcstrconsts,       //resouce strings
 
   uzclog;                //log system
                       //<**система логирования

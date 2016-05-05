@@ -36,15 +36,12 @@ uses
   { подключеные модули, список будет меняться в зависимости от требуемых
     примитивов и действий с ними }
 
-  sysutils, math,
-
-  uzccominteractivemanipulators,
+  sysutils,
 
   URecordDescriptor,TypeDescriptors,
 
-  Forms, uzcfblockinsert, uzcfarrayinsert,
+  Forms,
 
-  uzeutils,
 
   uzeentblockinsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока
@@ -70,21 +67,16 @@ uses
 
   uzcentcable,
   uzeentdevice,
-  UGDBOpenArrayOfPV,
 
   uzegeometry,
-  uzeentitiesmanager,
 
   uzcshared,
   uzeentityfactory,    //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
   uzcsysvars,        //system global variables
                       //системные переменные
-  uzgldrawcontext,
-  uzcinterface,
   uzbtypesbase,uzbtypes, //base types
                       //описания базовых типов
-  uzeconsts, //base constants
                       //описания базовых констант
   uzccommandsmanager,
   uzccommandsabstract,
@@ -93,7 +85,6 @@ uses
   uzcdrawing,
   uzcdrawings,     //Drawings manager, all open drawings are processed him
                       //"Менеджер" чертежей
-  uzcutils,         //different functions simplify the creation entities, while there are very few
                       //разные функции упрощающие создание примитивов, пока их там очень мало
   varmandef,
   Varman,

@@ -339,6 +339,7 @@ objid: GDBInteger;
   bylayerlt:GDBPointer;
   lph:TLPSHandle;
 begin
+  s:='';
   lph:=lps.StartLongProcess(f.Count,'addentitiesfromdxf',@f);
   if Assigned(CreateExtLoadData) then
                                      PExtLoadData:=CreateExtLoadData()
@@ -530,6 +531,7 @@ var
   h2p:TMapHandleToPointer;
   lph:TLPSHandle;
 begin
+  s:='';
   lph:=lps.StartLongProcess(f.Count,'addfromdxf12',@f);
   debugln('{D+}AddFromDXF12');
   //programlog.LogOutStr('AddFromDXF12',lp_IncPos,LM_Debug);
@@ -628,6 +630,7 @@ var
    DWGHandle:TDWGHandle;
 begin
   dashinfo:=TDIDash;
+  txtstr:='';
   if GoToDXForENDTAB(f, 0, dxfName_LType) then
   while s = dxfName_LType do
   begin
@@ -1232,6 +1235,10 @@ var
   Handle2BlockName:TMapBlockHandle_BlockNames;
   lph:TLPSHandle;
 begin
+  ctstyle:='';
+  clayer:='';
+  cltype:='';
+  cdimstyle:='';
   lph:=lps.StartLongProcess(f.Count,'addfromdxf2000',@f);
   Handle2BlockName:=TMapBlockHandle_BlockNames.Create;
   blockload:=false;

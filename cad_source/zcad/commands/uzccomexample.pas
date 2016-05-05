@@ -42,9 +42,6 @@ uses
 
   URecordDescriptor,TypeDescriptors,
 
-
-  uzeutils,
-
   uzeentblockinsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока
   uzeentline,             //unit describes line entity
@@ -74,7 +71,6 @@ uses
   UGDBOpenArrayOfPV,
 
   uzegeometry,
-  uzeentitiesmanager,
 
   uzcshared,
   uzeentityfactory,    //unit describing a "factory" to create primitives
@@ -82,7 +78,6 @@ uses
   uzcsysvars,        //system global variables
                       //системные переменные
   uzgldrawcontext,
-  uzcinterface,
   uzbtypesbase,uzbtypes, //base types
                       //описания базовых типов
   uzeconsts, //base constants
@@ -264,7 +259,7 @@ begin
                    //команда завершилась, говорим что всё заебись
 end;
 
-function GetInteractiveLine(prompt1,prompt2:GDBString;var p1,p2:GDBVertex):GDBBoolean;
+function GetInteractiveLine(prompt1,prompt2:GDBString;out p1,p2:GDBVertex):GDBBoolean;
 var
     pline:PGDBObjLine;
 begin

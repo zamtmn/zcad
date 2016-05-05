@@ -311,7 +311,7 @@ begin
           lines.Add(@tv);
      end;}
 end;
-function CalcSegment(const startpoint,endpoint:GDBVertex;var segment:ZPolySegmentData;prevlength:GDBDouble):GDBDouble;
+function CalcSegment(const startpoint,endpoint:GDBVertex;out segment:ZPolySegmentData;prevlength:GDBDouble):GDBDouble;
 begin
      segment.startpoint:=startpoint;
      segment.endpoint:=endpoint;

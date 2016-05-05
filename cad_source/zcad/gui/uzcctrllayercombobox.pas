@@ -37,9 +37,9 @@ type
   end;
 
   TLayerArray=array of TLayerPropRecord;
-  TGetLayerPropFunc=function(PLayer:Pointer;var lp:TLayerPropRecord):boolean of object;
-  TGetLayersArrayFunc=function(var la:TLayerArray):boolean of object;
-  TClickOnLayerPropFunc=function(PLayer:Pointer;NumProp:integer;var newlp:TLayerPropRecord):boolean of object;
+  TGetLayerPropFunc=function(PLayer:Pointer;out lp:TLayerPropRecord):boolean of object;
+  TGetLayersArrayFunc=function(out la:TLayerArray):boolean of object;
+  TClickOnLayerPropFunc=function(PLayer:Pointer;NumProp:integer;out newlp:TLayerPropRecord):boolean of object;
 
   TMyListView=class(TListView)
   public

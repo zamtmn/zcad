@@ -377,7 +377,7 @@ begin
      pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');
      if pvn<>nil then
      if pstring(pvn^.data.Instance)^='@1' then
-                                                 s:=s;
+                                              pvn^.data.Instance:=pvn^.data.Instance;
      if pCable^.NodePropArray.Count>0 then
                                            begin
                                                 ptn:=pCable^.NodePropArray.getDataMutable(0);

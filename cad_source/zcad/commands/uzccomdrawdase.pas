@@ -27,7 +27,6 @@ uses
   uzccommandsimpl,
   uzbtypes,
   uzcdrawings,
-  uzcutils,
   sysutils,
   varmandef,
   uzglviewareadata,

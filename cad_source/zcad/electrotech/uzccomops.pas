@@ -10,7 +10,7 @@ unit uzccomops;
 interface
 uses
 
-  gzctnrvectorp,uzctranslations,uzeentitiesmanager,uzeentity,uzglviewareaabstract,uzgldrawcontext,
+  uzctranslations,uzeentitiesmanager,uzeentity,uzglviewareaabstract,uzgldrawcontext,
   uzeenttext,uzctnrvectorgdbstring,uzeentityfactory,uzcsysvars,uzbstrproc,
   uzbtypesbase,uzccommandsmanager,uzclog,gzctnrvectorpobjects,
   uzccommandsabstract,uzccommandsimpl,uzbtypes,uzcdrawings,uzeutils,uzcutils,sysutils,

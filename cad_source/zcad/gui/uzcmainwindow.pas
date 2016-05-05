@@ -32,7 +32,7 @@ uses
   {ZCAD BASE}
        uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,uzemathutils,uzelongprocesssupport,
        uzegluinterface,uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
-       uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzglgeometry,uzcinterface,
+       uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzcinterface,
        UGDBOpenArrayOfByte,uzbmemman,uzbtypesbase,uzbtypes,
        uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,UGDBNamedObjectsArray,uzclog,
        varmandef, varman,UUnitManager,uzcsysinfo,uzcshared,strmy,uzestylestexts,uzestylesdim,
@@ -179,9 +179,9 @@ type
                                    WithThemeSpace: boolean = true); override;
 
     function IsShortcut(var Message: TLMKey): boolean; override;
-    function GetLayerProp(PLayer:Pointer;var lp:TLayerPropRecord):boolean;
-    function GetLayersArray(var la:TLayerArray):boolean;
-    function ClickOnLayerProp(PLayer:Pointer;NumProp:integer;var newlp:TLayerPropRecord):boolean;
+    function GetLayerProp(PLayer:Pointer;out lp:TLayerPropRecord):boolean;
+    function GetLayersArray(out la:TLayerArray):boolean;
+    function ClickOnLayerProp(PLayer:Pointer;NumProp:integer;out newlp:TLayerPropRecord):boolean;
 
     procedure setvisualprop;
     procedure addoneobject;
@@ -225,7 +225,7 @@ begin
   self.MinSize:=1;
 end;
 
-procedure setlayerstate(PLayer:PGDBLayerProp;var lp:TLayerPropRecord);
+procedure setlayerstate(PLayer:PGDBLayerProp;out lp:TLayerPropRecord);
 begin
      lp._On:=player^._on;
      lp.Freze:=false;
@@ -428,7 +428,7 @@ begin
       end;
 end;
 
-function TZCADMainWindow.ClickOnLayerProp(PLayer:Pointer;NumProp:integer;var newlp:TLayerPropRecord):boolean;
+function TZCADMainWindow.ClickOnLayerProp(PLayer:Pointer;NumProp:integer;out newlp:TLayerPropRecord):boolean;
 var
    cdwg:PTSimpleDrawing;
    tcl:PGDBLayerProp;
@@ -484,7 +484,7 @@ begin
                        end;
 end;
 
-function TZCADMainWindow.GetLayersArray(var la:TLayerArray):boolean;
+function TZCADMainWindow.GetLayersArray(out la:TLayerArray):boolean;
 var
    cdwg:PTSimpleDrawing;
    pcl:PGDBLayerProp;
@@ -512,7 +512,7 @@ begin
          end;
      end;
 end;
-function TZCADMainWindow.GetLayerProp(PLayer:Pointer;var lp:TLayerPropRecord):boolean;
+function TZCADMainWindow.GetLayerProp(PLayer:Pointer;out lp:TLayerPropRecord):boolean;
 var
    cdwg:PTSimpleDrawing;
 begin

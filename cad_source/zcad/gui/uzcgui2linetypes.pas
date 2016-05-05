@@ -23,7 +23,7 @@ interface
 
 uses
   uzgldrawergdi,uzegeometry,uzgldrawcontext,uzeentitiesprop,uzbtypes,uzglgeometry,
-  uzestyleslinetypes,graphics,uzbtypesbase,usupportgui,StdCtrls,uzcdrawings,
+  uzestyleslinetypes,graphics,usupportgui,StdCtrls,uzcdrawings,
   uzcstrconsts,Controls,Classes,uzbstrproc,uzcsysvars,uzccommandsmanager;
 
 type

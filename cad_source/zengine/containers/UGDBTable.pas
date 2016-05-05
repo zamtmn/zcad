@@ -19,7 +19,7 @@
 unit UGDBTable;
 {$INCLUDE def.inc}
 interface
-uses gzctnrvector,gzctnrvectordata,gzctnrvectorpobjects,uzbtypesbase,uzbtypes,sysutils,gzctnrvectorobjects,
+uses gzctnrvector,gzctnrvectorpobjects,uzbtypesbase,uzbtypes,sysutils,
      uzctnrvectorgdbstring;
 type
 {EXPORT+}

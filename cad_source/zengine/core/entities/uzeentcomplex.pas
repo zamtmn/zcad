@@ -202,7 +202,7 @@ begin
 end;
 destructor GDBObjComplex.done;
 begin
-     ConstObjArray.cleareraseobj;
+     ConstObjArray.free;
      ConstObjArray.done;
      inherited done;
 end;

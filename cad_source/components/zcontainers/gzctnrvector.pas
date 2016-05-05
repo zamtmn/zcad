@@ -76,8 +76,6 @@ GZVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):GDBBoolean;
                   function GetSpecializedTypeInfo:PTypeInfo;inline;
 
-                  destructor FreeAndDone;virtual;
-                  destructor ClearAndDone;virtual;
                   function SizeOfData:TArrayIndex;
                   function GetParrayAsPointer:pointer;
                   function CreateArray:GDBPointer;virtual;
@@ -271,16 +269,6 @@ begin
                        end;
      result:=parray;
 end;
-procedure GZVector<T>.free;
-var i:integer;
-   _pt:PTypeInfo;
-begin
- _pt:=TypeInfo(T);
-     if _pt^.Kind in TypesNeedToFinalize then
-       for i:=0 to count-1 do
-                             PArray^[i]:=default(t);
-  count:=0;
-end;
 function GZVector<T>.beginiterate;
 begin
   if parray=nil then
@@ -320,24 +308,22 @@ begin
   {$IFDEF DEBUGBUILD}Guid:=ErrGuid;{$ENDIF}
 end;
 destructor GZVector<T>.done;
-var {p:pt;
-    ir:itrec;}
-    i:integer;
-    _pt:PTypeInfo;
 begin
-  _pt:=TypeInfo(T);
-  if _pt^.Kind in TypesNeedToFinalize then
-    for i:=0 to count-1 do
-                          PArray^[i]:=default(t);
+  free;
   if PArray<>nil then
                      GDBFreeMem(PArray);
   PArray:=nil;
   {$IFDEF DEBUGBUILD}Guid:='';{$ENDIF}
 end;
-destructor GZVector<T>.clearanddone;
+procedure GZVector<T>.free;
+var i:integer;
+   _pt:PTypeInfo;
 begin
-     clear;
-     done;
+ _pt:=TypeInfo(T);
+     if _pt^.Kind in TypesNeedToFinalize then
+       for i:=0 to count-1 do
+                             PArray^[i]:=default(t);
+  count:=0;
 end;
 function GZVector<T>.SizeOfData:TArrayIndex;
 begin
@@ -427,11 +413,6 @@ begin
     deleteelement(s);
   end;
   result:=parray;
-end;
-destructor GZVector<T>.FreeAndDone;
-begin
-     free;
-     done;
 end;
 begin
 end.

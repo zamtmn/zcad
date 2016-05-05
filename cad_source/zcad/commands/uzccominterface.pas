@@ -797,7 +797,7 @@ begin
 
      DOShowModal(InfoForm);
      InfoForm.Free;
-     memcount.FreeAndDone;
+     memcount.Done;
     result:=cmd_ok;
 end;
 function ShowPage_com(operands:TCommandOperands):TCommandResult;

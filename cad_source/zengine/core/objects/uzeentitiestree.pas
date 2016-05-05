@@ -222,10 +222,13 @@ begin
 end;
 destructor TTestTreeNode.done;
 begin
-     nul.ClearAndDone;
+     nul.Clear;
+     nul.Done;
      //nul.done;
-     plus.ClearAndDone;
-     minus.ClearAndDone;
+     plus.Clear;
+     plus.Done;
+     minus.Clear;
+     minus.Done;
 end;
 function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
 begin
@@ -451,7 +454,8 @@ else if (tv.z>=tv.x*aabbaxisscale)and(tv.z>=tv.y*aabbaxisscale) then
      if prootnode=nil then
                           begin
                           ta[imin].done;
-                          entitys.ClearAndDone;
+                          entitys.Clear;
+                          entitys.Done;
                           end;
 
      //result.BoundingBox:=result.nul.getoutbound;

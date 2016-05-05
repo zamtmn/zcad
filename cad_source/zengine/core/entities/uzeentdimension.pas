@@ -289,7 +289,7 @@ begin
    FormatMtext(dimtxtstyle.pfont,0,PDimStyle.Text.DIMTXT,dimtxtstyle^.prop.wfactor,dimtext,txtlines);
    dimtexth:=GetLinesH(GetLineSpaceFromLineSpaceF(1,PDimStyle.Text.DIMTXT),PDimStyle.Text.DIMTXT,txtlines);
    dimtextw:=GetLinesW(txtlines)*PDimStyle.Text.DIMTXT;
-   txtlines.freeanddone;
+   txtlines.done;
 
      {dimdir:=uzegeometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
      dimdir:=normalizevertex(dimdir);}

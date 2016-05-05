@@ -2755,7 +2755,8 @@ begin
   begin
        pgdbobjentity(param.ospoint.PGDBObject)^.AddOnTrackAxis(@param.ospoint);   fghfgh
   end;}
-  objects.ClearAndDone;
+  objects.Clear;
+  objects.Done;
   if param.processObjConstruct then
   begin
   objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}100);
@@ -2768,7 +2769,8 @@ begin
                              pobj:=objects.iterate(ir);
                        until pobj=nil;
   end;
-  objects.ClearAndDone;
+  objects.Clear;
+  objects.Done;
   end;
   end;
   project0axis;
@@ -2840,7 +2842,8 @@ begin
                              pobj:=objects.iterate(ir);
                        until pobj=nil;
   end;
-  objects.ClearAndDone;
+  objects.Clear;
+  objects.Done;
                        if param.processObjConstruct then
                        begin
   objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}100);
@@ -2853,7 +2856,8 @@ begin
                              pobj:=objects.iterate(ir);
                        until pobj=nil;
   end;
-  objects.ClearAndDone;
+  objects.Clear;
+  objects.Done;
   end;
   end;
 

@@ -247,7 +247,8 @@ begin
 end;
 destructor GDBObjCircle.done;
 begin
-     Vertex3D_in_WCS_Array.ClearAndDone;
+     //Vertex3D_in_WCS_Array.Clear;
+     Vertex3D_in_WCS_Array.Done;
      inherited done;
 end;
 function GDBObjCircle.ObjToGDBString(prefix,sufix:GDBString):GDBString;

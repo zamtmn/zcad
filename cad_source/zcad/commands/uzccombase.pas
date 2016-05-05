@@ -1120,7 +1120,7 @@ var
    DC:TDrawContext;
    NeedReCreateClipboardDWG:boolean;
 begin
-   ClipboardDWG.pObjRoot.ObjArray.cleareraseobj;
+   ClipboardDWG.pObjRoot.ObjArray.free;
    dc:=drawings.GetCurrentDwg^.CreateDrawingRC;
    NeedReCreateClipboardDWG:=true;
    pobj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);

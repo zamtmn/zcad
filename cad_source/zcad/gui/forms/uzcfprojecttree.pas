@@ -384,7 +384,7 @@ begin
      {FreeAndNil(ProgramDBContextMenuN);
      FreeAndNil(ProjectDBContextMenuN);
      FreeAndNil(ProgramDEVContextMenuN);}
-     BlockCategory.FreeAndDone;
-     EqCategory.FreeAndDone;
+     BlockCategory.Done;
+     EqCategory.Done;
 end;
 end.

@@ -991,7 +991,7 @@ begin
   GDBFreemem(pointer(ClipboardDWG));
   end;
   pbasefont:=nil;
-  LTypeManager.FreeAndDone;
+  LTypeManager.Done;
   GDBTrash.done;
 end;
 begin

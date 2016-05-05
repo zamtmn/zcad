@@ -30,7 +30,7 @@ GZVectorPData{-}<PTData,TData>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                        function getDataMutable(index:GDBInteger):PTData;
                                        procedure RemoveData(const data:PTData);virtual;
                                        procedure pack;virtual;
-                                       procedure cleareraseobj;virtual;
+                                       procedure free;virtual;
                                        destructor done;virtual;
                                  end;
 {Export-}
@@ -50,7 +50,7 @@ begin
   count:=0;
   inherited;
 end;
-procedure GZVectorPData<PTData,TData>.cleareraseobj;
+procedure GZVectorPData<PTData,TData>.free;
 var
   p:PGDBaseObject;
   ir:itrec;

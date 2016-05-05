@@ -467,7 +467,7 @@ begin
                                                                                 dc:=drawing.CreateDrawingRC;
                                                                                 PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].FormatEntity(drawing,dc);
                                                                                end;
-          ConstObjArray.cleareraseobj;
+          ConstObjArray.free;
           mainowner:=getmainowner;
           if mainowner<>nil then
           if mainowner.gettype=1 then

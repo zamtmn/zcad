@@ -46,7 +46,7 @@ begin
      inherited;
      if SubNode<>nil then
      begin
-          SubNode^.FreeAndDone;
+          SubNode^.Done;
           gdbfreemem(pointer(subnode));
           SubNode:=nil;
      end;

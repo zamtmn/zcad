@@ -97,7 +97,7 @@ begin
                       else
                       begin
                       parseresult:=runparser('_sym'#0'[{_symordig'#0'}',s1,parseerror);
-                      if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                      if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                       if parseerror and (s1='') then
                                         begin
                                              uzcshared.HistoryOutStr(format(rsRenamedTo,['Entry',pdbv.name,s]));

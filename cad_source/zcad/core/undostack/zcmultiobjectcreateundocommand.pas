@@ -105,7 +105,7 @@ destructor TGMultiObjectProcessCommand.Done;
 begin
      inherited;
      if {not} FreeArray then
-                          ObjArray.freeanddone
+                          ObjArray.done
                         else
                           begin
                             ObjArray.clear;

@@ -54,7 +54,7 @@ var
 begin
   for j:=0 to CircleLODCount do
   begin
-       circlepointoflod[j].FreeAndDone;
+       circlepointoflod[j].Done;
   end;
 end;
 initialization

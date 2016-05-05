@@ -456,7 +456,7 @@ begin
      if VerboseLog then
        DebugLn('{T+}TypeManager.done');
      //programlog.LogOutStr('TypeManager.done',lp_IncPos,LM_Trace);
-     exttype.cleareraseobj;
+     exttype.free;
      exttype.done;
      n2i.destroy;
      if VerboseLog then
@@ -657,7 +657,7 @@ begin
                                       inc(i);
                         if parseresult<>nil then
                                                 begin
-                                                parseresult.FreeAndDone;
+                                                parseresult.Done;
                                                 GDBFreeMem(Gdbpointer(parseresult));
                                                 end;
                    end;
@@ -748,7 +748,7 @@ begin
                                if uppercase(functionname)='FORMAT' then
                                                                    functionname:=functionname;
 
-                               if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                               if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                                repeat
                                line := f.readtoparser(';');
                                parseresult:=getpattern(@parsefuncmodss,maxmod,line,typ); // длдл
@@ -760,7 +760,7 @@ begin
                                                  mattr:=mattr;
                                             end;
                                end;
-                               if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                               if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                                until typ=0;
                                PObjectDescriptor(ptd)^.addmetod(ptd^.TypeName,functionname,functionoperands,nil,mattr);
                                //line:=oldline;
@@ -889,7 +889,7 @@ begin
                                                    end;
                           end;
            end;{case}
-           if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+           if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
            if (line='')or(count=300) then
                                          begin
                                               line := f.readtoparser(';');
@@ -1516,7 +1516,7 @@ begin
 end;
 finalization;
 begin
-     VarCategory.FreeAndDone;
+     VarCategory.Done;
      CategoryCollapsed.done;
 end;
 end.

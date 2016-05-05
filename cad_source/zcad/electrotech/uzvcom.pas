@@ -197,7 +197,8 @@ begin
              pc2:=NearObjects.iterate(ir);//получаем следующий примитив из списка
        until pc2=nil;                     //выходим когда список кончился
   end;
-  NearObjects.ClearAndDone;//убиваем список
+  NearObjects.Clear;
+  NearObjects.Done;//убиваем список
 end;
 
 function compareVertex(p1:GDBVertex;p2:GDBVertex;inaccuracy:GDBDouble):Boolean;
@@ -571,7 +572,8 @@ begin
        until pobj=nil;
        HistoryOutStr('сколько было обследовано элементов = ' + IntToStr(counter));   //выходим когда список кончился
     end;
-  NearObjects.ClearAndDone;//убиваем список
+    NearObjects.Clear;
+    NearObjects.Done;//убиваем список
 
   end;
 

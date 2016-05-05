@@ -407,7 +407,7 @@ var
     line,ucline:GDBString;
     actionname,actioncommand,actionpic,actioncaption,actionhint,actionshortcut:string;
 
-    ts,ts2,bc,masks:GDBString;
+    {ts,ts2,bc,}masks:GDBString;
     i:longint;
     code:GDBInteger;
     mask:DWord;

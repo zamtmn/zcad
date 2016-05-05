@@ -61,8 +61,8 @@ implementation
 //uses {math,}log;
 procedure TBezierSolver2D.AddPointToContur(x,y:fontfloat;attr:TPointAttr);
 var
-   tff1,tff0,tff:{GDBFontVertex2D}TDummyData;
-   a: GDBDouble;
+   {tff1,tff0,}tff:{GDBFontVertex2D}TDummyData;
+   //a: GDBDouble;
 begin
     //if attr=TPA_NotOnCurve then exit;
     tff.v.x:=x;

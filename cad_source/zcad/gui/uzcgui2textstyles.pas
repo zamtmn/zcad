@@ -72,7 +72,7 @@ class procedure TSupportTStyleCombo.DrawItemTStyle(Control: TWinControl; Index: 
                                                      State: TOwnerDrawState);
 var
   pts:PGDBTextStyle;
-   ll:integer;
+   //ll:integer;
    s:string;
 begin
     if drawings.GetCurrentDWG=nil then
@@ -88,12 +88,12 @@ begin
     if pts<>nil then
                    begin
                         s:=Tria_AnsiToUtf8(pts^.Name);
-                        ll:=0;
+                        //ll:=0;
                    end
                else
                    begin
                        s:=rsDifferent;
-                       ll:=0;
+                       //ll:=0;
                    end;
 
     ARect.Left:=ARect.Left+2;

@@ -150,12 +150,12 @@ end;
 procedure TGLUInterface.TessVertex(tess:TessObj; location:PGDBVertex; data:pointer);
 {type
     PT3darray=^T3darray;}
-var
-   tv:gdbvertex;
+//var
+//   tv:gdbvertex;
 begin
-     tv.x:=location.x;
-     tv.y:=location.y;
-     tv.z:=0;
+     //tv.x:=location.x;
+     //tv.y:=location.y;
+     //tv.z:=0;
      gluTessVertex(tess,{PT3darray(@tv)^}pointer(location),data);
 end;
 

@@ -934,12 +934,12 @@ end;
 
 procedure startup(preloadedfile1,preloadedfile2:GDBString);
 var
-   r: TLResource;
-   f:GDBOpenArrayOfByte;
+   {r: TLResource;
+   f:GDBOpenArrayOfByte;}
    pds:PGDBDimStyle;
-const
+{const
    resname='GEWIND';
-   filename='GEWIND.SHX';
+   filename='GEWIND.SHX';}
 begin
   RedrawOGLWNDProc:=RedrawOGLWND;
   ResetOGLWNDProc:=ResetOGLWND;

@@ -206,12 +206,12 @@ end;
 procedure TLineTypesForm._LTSelect(Sender: TObject; Item: TListItem; Selected: Boolean);
 var
    pltp:PGDBLtypeProp;
-   pdwg:PTSimpleDrawing;
+   //pdwg:PTSimpleDrawing;
    inent,inblock:integer;
 begin
      if selected then
      begin
-          pdwg:=drawings.GetCurrentDWG;
+          //pdwg:=drawings.GetCurrentDWG;
           pltp:=(Item.Data);
           countlt(pltp,inent,inblock);
           LTDescLabel.Caption:=Format(rsLineTypeUsedIn,[Tria_AnsiToUtf8(pltp^.Name),inent,inblock]);

@@ -28,7 +28,7 @@ type
     Logo: TImage;
     cb:TComboBox;
     procedure TXTOut(s:GDBstring;pm:boolean);virtual;
-    private
+    public
     procedure AfterConstruction; override;
   end;
 var

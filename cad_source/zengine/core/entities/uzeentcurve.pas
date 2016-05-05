@@ -368,7 +368,7 @@ end;
 
 procedure GDBObjCurve.FormatWithoutSnapArray;
 var //i,j: GDBInteger;
-    ptv,ptvprev: pgdbvertex;
+    ptv{,ptvprev}: pgdbvertex;
     tv:gdbvertex;
     //vs:VectorSnap;
         ir:itrec;

@@ -143,7 +143,7 @@ begin
 end;
 procedure TZGLOpenGLDrawer.DrawTrianglesFan(const PVertexBuffer:PZGLVertex3Sarray;const PIndexBuffer:PZGLIndexsArray;const i1,IndexCount:TLLVertexIndex);
 var
-   i,index:integer;
+   i{,index}:integer;
    pindex:PTLLVertexIndex;
 begin
     oglsm.myglbegin(GL_TRIANGLE_FAN);
@@ -156,7 +156,7 @@ begin
 end;
 procedure TZGLOpenGLDrawer.DrawTrianglesStrip(const PVertexBuffer:PZGLVertex3Sarray;const PIndexBuffer:PZGLIndexsArray;const i1,IndexCount:TLLVertexIndex);
 var
-   i,index:integer;
+   i{,index}:integer;
    pindex:PTLLVertexIndex;
 begin
     oglsm.myglbegin(GL_TRIANGLE_STRIP);

@@ -461,7 +461,7 @@ end;
 procedure GDBObjARC.Renderfeedback;
 var //pm:DMatrix4D;
     tv:GDBvertex;
-    d:GDBDouble;
+    //d:GDBDouble;
 begin
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(Local.p_insert,ProjP_insert);
            pprojoutbound^.clear;

@@ -41,7 +41,7 @@ class procedure TSupportLineTypeCombo.LTypeBoxDrawItem(Control: TWinControl; Ind
                                                State: StdCtrls.TOwnerDrawState);
 var
    plt:PGDBLtypeProp;
-   ll:integer;
+   //ll:integer;
    s:string;
 begin
     if drawings.GetCurrentDWG=nil then
@@ -59,19 +59,19 @@ begin
                        begin
                        s:=rsSelectLT;
                        plt:=nil;
-                       ll:=0;
+                       //ll:=0;
                        end
 else if plt<>nil then
                    begin
                         s:=Tria_AnsiToUtf8(plt^.Name);
-                        ll:=30;
+                        //ll:=30;
                    end
                else
                    begin
                        s:=rsDifferent;
                        if drawings.GetCurrentDWG.LTypeStyleTable.Count=0 then
                                  exit;
-                       ll:=0;
+                       //ll:=0;
                    end;
 
     ARect.Left:=ARect.Left+2;
@@ -80,17 +80,17 @@ end;
 
 procedure drawLT(const canvas:TCanvas;const ARect: TRect;const s:string;const plt:PGDBLtypeProp);
 var
-  y:integer;
-  midline:integer;
+  //y:integer;
+  //midline:integer;
   oldw:Integer;
   n:double;
   geom:ZGLGeometry;
   vp:GDBObjVisualProp;
   p1,p2:Gdbvertex;
-    p,pp,ppp:PGDBVertex;
-    i:GDBInteger;
-    Points: array of TPoint;
-    ppoly,poldpoly:PGDBPolyVertex3D;
+    //p,pp,ppp:PGDBVertex;
+    //i:GDBInteger;
+    //Points: array of TPoint;
+    //ppoly,poldpoly:PGDBPolyVertex3D;
     ll: Integer;
     DC:TDrawContext;
 const
@@ -119,8 +119,8 @@ begin
         oldw:=canvas.Pen.Width;
         canvas.Pen.Style:=psSolid;
         canvas.Pen.EndCap:=pecFlat;
-        y:=(ARect.Top+ARect.Bottom)div 2;
-        midline:=ARect.Top+ARect.Bottom;
+        //y:=(ARect.Top+ARect.Bottom)div 2;
+        //midline:=ARect.Top+ARect.Bottom;
 
         //CanvasDrawer.midline:=midline;
         GDIDrawer.canvas:=canvas;

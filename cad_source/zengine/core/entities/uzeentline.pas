@@ -292,8 +292,8 @@ begin
                                                                               result:=false;
 end;
 procedure GDBObjLine.DrawGeometry;
-var
-  templod:gdbdouble;
+//var
+//  templod:gdbdouble;
 begin
   if (selected)or(dc.selected) then
                      geom.DrawNiceGeometry(DC)

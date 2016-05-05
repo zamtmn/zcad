@@ -52,8 +52,8 @@ begin
      result:=ps;
 end;
 function textformat;
-var i,i2,counter:GDBInteger;
-    ps,s2:GDBString;
+var i{,i2},counter:GDBInteger;
+    ps{,s2}:GDBString;
     {$IFNDEF DELPHI}
     iterator:Prefix2ProcessFunc.TIterator;
     {$ENDIF}
@@ -74,7 +74,7 @@ begin
      if assigned(iterator) then
      begin
      repeat
-       s2:=iterator.key;
+       //s2:=iterator.key;
        if assigned(iterator.value)then
        begin
          repeat

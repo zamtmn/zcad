@@ -50,7 +50,7 @@ procedure evaluatesubstr(var str:gdbstring;startpos:integer;pobj:PGDBObjGenericW
 var
   endpos:integer;
   varname:GDBString;
-  pv:pvardesk;
+  //pv:pvardesk;
   vd:vardesk;
   pentvarext:PTVariablesExtender;
 begin

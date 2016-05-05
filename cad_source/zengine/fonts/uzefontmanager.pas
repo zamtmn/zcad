@@ -72,8 +72,8 @@ begin
 end;
 
 procedure GDBFontManager.EnumerateTTFFontFile(filename:GDBString);
-var
-   r:longint;
+{var
+   r:longint;}
 begin
      if AddFontResourceFile(filename)>0 then
         ttffontfiles.Add(filename);

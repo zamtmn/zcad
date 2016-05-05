@@ -96,7 +96,7 @@ implementation
 procedure TZGLGeneral2DDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
 var
    pp1,pp2,pp3,pp4:GDBVertex;
-   sp:array [1..4]of TPoint;
+   //sp:array [1..4]of TPoint;
 begin
     _myGluProject2(p1,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp1);
     _myGluProject2(p2,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp2);
@@ -293,7 +293,7 @@ var
 
    pv1,pv2,pv3:PGDBVertex3S;
    p1,p2,p3:GDBVertex3S;
-   sp:array [1..3]of TPoint;
+   //sp:array [1..3]of TPoint;
 begin
     index:=i1;
     pindex:=pointer(PIndexBuffer.getDataMutable(index));
@@ -427,8 +427,8 @@ end;
 procedure TZGLGeneral2DDrawer.DrawQuad(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3,i4:TLLVertexIndex);var
    pv1,pv2,pv3,pv4:PGDBVertex3S;
    p1,p2,p3,p4:GDBVertex3S;
-   x,y:integer;
-   sp:array [1..4]of TPoint;
+   //x,y:integer;
+   //sp:array [1..4]of TPoint;
 begin
     pv1:=PGDBVertex3S(PVertexBuffer.getDataMutable(i1));
     pv2:=PGDBVertex3S(PVertexBuffer.getDataMutable(i2));

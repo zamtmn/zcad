@@ -176,6 +176,7 @@ var
     ir2,ir3,ir4,ir5:itrec;
 begin
   begin
+    result:='';
     TDI:=dasharray.beginiterate(ir2);
     PStroke:=strokesarray.beginiterate(ir3);
     PSP:=shapearray.beginiterate(ir4);

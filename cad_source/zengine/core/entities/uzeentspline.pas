@@ -122,27 +122,27 @@ end;
 
 procedure NurbsErrorCallBack(const v: GLenum);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 var
-    tv: GLenum;
+    //tv: GLenum;
     p:pchar;
 begin
-     tv:=v;
+     //tv:=v;
      p:=GLUIntrf.ErrorString(v);
      debugln('{E}'+p);
      //log.LogOut(p);
 end;
 
 procedure NurbsBeginCallBack(const v: GLenum);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
-var
-    tv: GLenum;
+//var
+    //tv: GLenum;
 begin
-     tv:=v;
+     //tv:=v;
 end;
 
 procedure NurbsEndCallBack;{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
-var
-    tv: GLenum;
+//var
+//    tv: GLenum;
 begin
-     tv:=1;
+     //tv:=1;
 end;
 
 procedure GDBObjSpline.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
@@ -153,7 +153,7 @@ var //i,j: GDBInteger;
         ir:itrec;
     nurbsobj:GLUnurbsObj;
     CP:{GDBOpenArrayOfData}TCPVector;
-    tfv,base:GDBvertex4D;
+    tfv{,base}:GDBvertex4D;
     tfvs:GDBvertex4S;
     m:DMatrix4D;
 begin
@@ -351,22 +351,22 @@ begin
 end;
 
 procedure GDBObjSpline.LoadFromDXF;
-var s{, layername}: GDBString;
+var //s{, layername}: GDBString;
   byt{, code}: GDBInteger;
   //p: gdbvertex;
   hlGDBWord: GDBinteger;
-  vertexgo: GDBBoolean;
+  //vertexgo: GDBBoolean;
   tv:gdbvertex;
   tr:gdbfloat;
 begin
   closed := false;
-  vertexgo := false;
+  //vertexgo := false;
 
   //initnul(@gdb.ObjRoot);
   byt:=readmystrtoint(f);
   while byt <> 0 do
   begin
-    s:='';
+    //s:='';
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
        if dxfvertexload(f,10,byt,tv) then
                                          begin
@@ -386,7 +386,7 @@ begin
                                                         Degree:=Degree;
                                                    end
 
-                                      else s:= f.readGDBSTRING;
+                                      else {s:= }f.readGDBSTRING;
     byt:=readmystrtoint(f);
   end;
 vertexarrayinocs.Shrink;

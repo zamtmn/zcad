@@ -644,7 +644,7 @@ var
   matr,m1: DMatrix4D;
   v:GDBvertex4D;
   //pv:GDBPolyVertex2D;
-  pv3:GDBPolyVertex3D;
+  //pv3:GDBPolyVertex3D;
   Bound:TBoundingRect;
 
   lp{,tv}:gdbvertex;
@@ -815,11 +815,11 @@ begin
   if plp2<>nil then
   repeat
 
-                             pv3.coord:=plp^;
-                             pv3.count:=0;
+                             //pv3.coord:=plp^;
+                             //pv3.count:=0;
                              //geom.SHX.add(@pv3);
-                             pv3.coord:=plp2^;
-                             pv3.count:=0;
+                             //pv3.coord:=plp2^;
+                             //pv3.count:=0;
                              //geom.SHX.add(@pv3);
 
         plp:=pl.iterate(ir);

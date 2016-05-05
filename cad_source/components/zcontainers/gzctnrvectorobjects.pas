@@ -38,7 +38,7 @@ begin
        parray[i].done;
 end;
 function GZVectorObjects<T>.CreateObject;
-var addr: GDBPlatformint;
+{var addr: GDBPlatformint;}
 begin
      result:=getdatamutable(pushbackdata(default(T)));
   {if parray=nil then

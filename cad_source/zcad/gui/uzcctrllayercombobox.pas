@@ -52,7 +52,7 @@ end;
   TZCADLayerComboBox=class(TCustomControl)                          // Компонент TZCADLayerComboBox
   private
     Index:integer;
-    AktivItem:TLayerPropRecord;
+    //AktivItem:TLayerPropRecord;
     M1:boolean; // Маркер
     PoleLista:TZCADDropDownForm;
     sLV:TMyListView;

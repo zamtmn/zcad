@@ -293,8 +293,6 @@ begin
 end;
 
 procedure tlog.AddStrToLatest(str:GDBString);
-var
-   i:integer;
 begin
      if LatestLogStringsCount>High(LatestLogStrings) then
                                                          LatestLogStringsCount:=Low(LatestLogStrings);

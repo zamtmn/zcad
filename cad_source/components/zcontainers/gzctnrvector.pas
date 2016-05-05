@@ -160,14 +160,15 @@ begin
                     createarray;
   if count+sdata>max then
                          Grow((count+sdata)*2);
-  result:=pointer(GDBPlatformUInt(parray)+count*SizeOfData);
+  result:=@parray^[count];
+  //result:=pointer(GDBPlatformUInt(parray)+count*SizeOfData);
   {$IFDEF FILL0ALLOCATEDMEMORY}
   fillchar(result^,sdata,0);
   {$ENDIF}
   inc(count,SData);
 end;
 function GZVector<T>.AddData(PData:GDBPointer;SData:GDBword):GDBInteger;
-var addr:GDBPlatformint;
+var addr:GDBpointer;
 begin
   if parray=nil then
                     createarray;
@@ -184,16 +185,17 @@ begin
                           max:=2*max;
                      end;}
   begin
-       GDBPointer(addr) := parray;
-       addr := addr + count;
-       Move(PData^, GDBPointer(addr)^,SData);
+       //GDBPointer(addr) := parray;
+       //addr := addr + count;
+       addr:=@parray^[count];
+       Move(PData^, addr^,SData*SizeOfData);
        result:=count;
        inc(count,SData);
   end;
 end;
 function GZVector<T>.GetRealCount:GDBInteger;
-var p:GDBPointer;
-    ir:itrec;
+{var p:GDBPointer;
+    ir:itrec;}
 begin
   result:=GetElemCount;
   {p:=beginiterate(ir);
@@ -206,6 +208,7 @@ end;
 function GZVector<T>.copyto(var source:GZVector<T>):GDBInteger;
 var i:integer;
 begin
+     result:=count;
      for i:=0 to count-1 do
        source.PushBackData(parray[i]);
 end;
@@ -382,8 +385,8 @@ begin
   result:=count;
 end;
 function GZVector<T>.InsertElement;
-var
-   s:integer;
+{var
+   s:integer;}
 begin
      if index=count then
                         PushBackData(data)

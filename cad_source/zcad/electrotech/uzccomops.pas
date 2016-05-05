@@ -211,7 +211,7 @@ begin
      end;
 end;
 procedure place2(pva:PGDBObjEntityOpenArray;basepoint, dir: gdbvertex; count: integer; length,sd,dd: GDBDouble; name: pansichar;angle:GDBDouble;norm:GDBBoolean;scaleblock:GDBDouble;ps:TPlaceSensorsStrategy);
-var line2: gdbline;
+var //line2: gdbline;
     i: integer;
     d: TPlaceParam;
 begin

@@ -63,8 +63,8 @@ mp - описание мультипроперти
 pu - модуль в котором будет создана переменная для мультипроперти
 возвращает указатель на созданную структуру
 }
-var
-   vd:vardesk;
+{var
+   vd:vardesk;}
 begin
     GDBGetMem({$IFDEF DEBUGBUILD}'{831CDE55-8FC6-4ACD-8A4C-FEB861D44294}',{$ENDIF}result,sizeof(TOneVarData));
     pointer(PTOneVarData(result)^.StrValue):=nil;
@@ -78,8 +78,8 @@ mp - описание мультипроперти
 pu - модуль в котором будет создана переменная для мультипроперти
 возвращает указатель на созданную структуру
 }
-var
-   vd:vardesk;
+{var
+   vd:vardesk;}
 begin
     GDBGetMem({$IFDEF DEBUGBUILD}'{15C8D138-5A5B-44F1-B725-FFFF20869CD9}',{$ENDIF}result,sizeof(TVertex3DControlVarData));
     pointer(PTVertex3DControlVarData(result)^.StrValueX):=nil;

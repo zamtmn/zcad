@@ -593,10 +593,10 @@ begin
 end;
 
 procedure GDBObjDevice.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
-var pvn,{pvnt,}pvp,pvphase,pvi,pvcos:pvardesk;
+(*var pvn,{pvnt,}pvp,pvphase,pvi,pvcos:pvardesk;
     volt:TVoltage;
     calcip:TCalcIP;
-    u:gdbdouble;
+    u:gdbdouble;*)
 begin
          //if PTObjectUnit(ou.Instance)^.InterfaceVariables.vardescarray.Count=0 then
                                                         begin

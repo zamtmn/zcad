@@ -107,10 +107,10 @@ var
   EntIterator: itrec;
   PDestVD: pvardesk;
   pentity: pGDBObjEntity;
-  DC:TDrawContext;
+  //DC:TDrawContext;
 begin
   PSourceVD.attrib:=PSourceVD.attrib and (not vda_different);
-  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  //dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   pentity:=drawings.GetCurrentROOT.ObjArray.beginiterate(EntIterator);
   if pentity<>nil then
   repeat
@@ -214,9 +214,9 @@ begin
 end;
 procedure TMSEditor.SetMultiProperty(pu:PTObjectUnit;PSourceVD:PVarDesk;NeededObjType:TObjID);
 var
-  pentvarext: PTVariablesExtender;
+  //pentvarext: PTVariablesExtender;
   EntIterator: itrec;
-  PDestVD: pvardesk;
+  //PDestVD: pvardesk;
   pentity: pGDBObjEntity;
   DC:TDrawContext;
   psd:PSelectedObjDesc;
@@ -259,7 +259,7 @@ var //i: GDBInteger;
     //pu:pointer;
     pvd:pvardesk;
     //vd:vardesk;
-    ir2:itrec;
+    //ir2:itrec;
     //etype:integer;
 begin
       if PFIELD=@self.TxtEntType then
@@ -600,7 +600,7 @@ var
     pv:pGDBObjEntity;
     ir:itrec;
     count:integer;
-    psd:PSelectedObjDesc;
+    //psd:PSelectedObjDesc;
 begin
     NeededObjType:=MSEditor.GetObjType;
     count:=0;

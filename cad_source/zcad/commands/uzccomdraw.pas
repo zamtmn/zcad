@@ -956,7 +956,7 @@ end;
 procedure GetNearestAxis(axisarray:taxisdescarray;coord:gdbvertex;var nearestaxis,secondaxis:integer);
 var
    i:integer;
-   nearestd,nearestd0,secondd,secondd0:double;
+   nearestd,{nearestd0,}secondd{,secondd0}:double;
    tp1,tp2:gdbvertex;
    dit,pdit:DistAndt;
    Vertex0:GDBVertex;
@@ -965,8 +965,8 @@ begin
   secondaxis:=-1;
   nearestd:=Infinity;
   secondd:=Infinity;
-  nearestd0:=infinity;
-  secondd0:=infinity;
+  //nearestd0:=infinity;
+  //secondd0:=infinity;
   Vertex0:=drawings.GetCurrentROOT^.vp.BoundingBox.LBN;
   for i:=0 to axisarray.size-1 do
   begin
@@ -980,7 +980,7 @@ begin
                          begin
                               nearestaxis:=i;
                               nearestd:=dit.d;
-                              nearestd0:=axisarray[nearestaxis].d0;
+                              //nearestd0:=axisarray[nearestaxis].d0;
                               if abs(dit.d)<bigeps then
                                                     begin
                                                          secondaxis:=-1;
@@ -991,7 +991,7 @@ begin
                          begin
                               secondaxis:=i;
                               secondd:=dit.d;
-                              secondd0:=axisarray[i].d0;
+                              //secondd0:=axisarray[i].d0;
                               if abs(dit.d)<bigeps then
                                                     begin
                                                          nearestaxis:=-1;
@@ -1032,7 +1032,7 @@ var
    dv:gdbvertex;
    axisdesc:taxisdesc;
    psd:PSelectedObjDesc;
-   hi,hi2,vi,vi2,ti,i:integer;
+   hi,hi2,vi,vi2,{ti,}i:integer;
    hname,vname:gdbstring;
    dit:DistAndt;
    Vertex0:GDBVertex;
@@ -3603,9 +3603,9 @@ var //pv:pGDBObjEntity;
     pt:PGDBObjTable;
     //pleader:PGDBObjElLeader;
     //ir:itrec;
-    psl:PTZctnrVectorGDBString;
-    i,j:integer;
-    s:gdbstring;
+    //psl:PTZctnrVectorGDBString;
+    //i,j:integer;
+    //s:gdbstring;
     dc:TDrawContext;
 begin
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));

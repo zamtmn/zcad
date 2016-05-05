@@ -752,7 +752,7 @@ end;
 procedure GDBObjLWpolyline.SaveToDXF;
 var j: GDBInteger;
     tv:gdbvertex;
-    m:DMatrix4D;
+    //m:DMatrix4D;
 begin
   SaveToDXFObjPrefix(handle,outhandle,'LWPOLYLINE','AcDbPolyline');
   dxfGDBStringout(outhandle,90,inttostr(Vertex2D_in_OCS_Array.Count));
@@ -771,7 +771,7 @@ begin
   //WriteString_EOL(outhandle, '38');
   //WriteString_EOL(outhandle, floattostr(local.p_insert.z));
 
-  m:=CalcObjMatrixWithoutOwner;
+  {m:=}CalcObjMatrixWithoutOwner;//наверно это ненужно. надо проверить
   //MatrixTranspose(m);
 
   for j := 0 to (Vertex2D_in_OCS_Array.Count - 1) do

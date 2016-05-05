@@ -88,7 +88,7 @@ type
     procedure countstyle(ptextstyle:PGDBTextStyle;out e,b,inDimStyles:GDBInteger);
   private
     changedstamp:boolean;
-    EditedItem:TListItem;
+    //EditedItem:TListItem;
     FontsSelector:TEnumData;
     SupportTypedEditors:TSupportTypedEditors;
     FontChange:boolean;
@@ -410,12 +410,12 @@ end;
 procedure TTextStylesForm.ListView1SelectItem(Sender: TObject; Item: TListItem;Selected: Boolean);
 var
    pstyle:PGDBTextStyle;
-   pdwg:PTSimpleDrawing;
+   //pdwg:PTSimpleDrawing;
    inent,inblock,indimstyles:integer;
 begin
      if selected then
      begin
-          pdwg:=drawings.GetCurrentDWG;
+          //pdwg:=drawings.GetCurrentDWG;
           pstyle:=(Item.Data);
           countstyle(pstyle,inent,inblock,indimstyles);
           DescLabel.Caption:=Format(rsTextStyleUsedIn,[pstyle^.Name,inent,inblock,indimstyles]);
@@ -427,8 +427,8 @@ var
    pstyle,pcreatedstyle:PGDBTextStyle;
    pdwg:PTSimpleDrawing;
    stylename:string;
-   counter:integer;
-   li:TListItem;
+   //counter:integer;
+   //li:TListItem;
    domethod,undomethod:tmethod;
 begin
   pdwg:=drawings.GetCurrentDWG;
@@ -483,7 +483,7 @@ var
    pstyle:PGDBTextStyle;
    pdwg:PTSimpleDrawing;
    inEntities,inBlockTable,indimstyles:GDBInteger;
-   domethod,undomethod:tmethod;
+   //domethod,undomethod:tmethod;
 begin
   pdwg:=drawings.GetCurrentDWG;
   if assigned(ListView1.Selected)then

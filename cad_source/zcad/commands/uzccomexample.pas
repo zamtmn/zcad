@@ -544,7 +544,7 @@ end;
 function DrawLine_com(operands:TCommandOperands):TCommandResult;
 var
     pline:PGDBObjLine;
-    pe:T3PointCircleModePentity;
+    //pe:T3PointCircleModePentity;
     p1,p2:gdbvertex;
 begin
     if commandmanager.get3dpoint('Specify first point:',p1) then                //просим первую точку

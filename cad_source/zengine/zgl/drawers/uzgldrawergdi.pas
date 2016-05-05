@@ -180,7 +180,7 @@ end;
 procedure TZGLGDIDrawer.PostRenderDraw;
 var
    s:gdbstring;
-   r:trect;
+   //r:trect;
    TM: TTextMetric;
    x,y:integer;
 begin
@@ -505,7 +505,7 @@ var
    x,y:integer;
    s:AnsiString;
    {$IFDEF LCLQT}_transminusM2,{$ENDIF}_transminusM,_obliqueM,_transplusM,_scaleM,_rotateM:DMatrix4D;
-   gdiDrawYOffset,txtOblique,txtRotate,txtSx,txtSy:single;
+   {gdiDrawYOffset,}txtOblique,txtRotate,txtSx,txtSy:single;
 
    lfcp:TLogFont;
 

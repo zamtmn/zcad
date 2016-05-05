@@ -194,7 +194,7 @@ end;
 function Load_Merge(Operands:TCommandOperands;LoadMode:TLoadOpt):GDBInteger;
 var
    s: GDBString;
-   fileext:GDBString;
+   //fileext:GDBString;
    isload:boolean;
    mem:GDBOpenArrayOfByte;
    pu:ptunit;
@@ -215,7 +215,7 @@ begin
      isload:=(assigned(loadproc))and(FileExists(utf8tosys(s)));
      if isload then
      begin
-          fileext:=uppercase(ExtractFileEXT(s));
+          //fileext:=uppercase(ExtractFileEXT(s));
           loadproc(s,@drawings.GetCurrentDWG^.pObjRoot^,loadmode,drawings.GetCurrentDWG^);
      if FileExists(utf8tosys(s+'.dbpas')) then
      begin
@@ -830,8 +830,8 @@ end;
 function EditUnit(var entityunit:TSimpleUnit):boolean;
 var
    mem:GDBOpenArrayOfByte;
-   pobj:PGDBObjEntity;
-   op:gdbstring;
+   //pobj:PGDBObjEntity;
+   //op:gdbstring;
    modalresult:integer;
    u8s:UTF8String;
    astring:ansistring;
@@ -866,7 +866,7 @@ end;
 function ObjVarMan_com(operands:TCommandOperands):TCommandResult;
 var
    pobj:PGDBObjEntity;
-   op:gdbstring;
+   //op:gdbstring;
    pentvarext:PTVariablesExtender;
 begin
   if drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount=1 then
@@ -924,8 +924,8 @@ end;
 function UnitsMan_com(operands:TCommandOperands):TCommandResult;
 var
    PUnit:ptunit;
-   op:gdbstring;
-   pentvarext:PTVariablesExtender;
+   //op:gdbstring;
+   //pentvarext:PTVariablesExtender;
 begin
     if length(Operands)>0 then
                                begin

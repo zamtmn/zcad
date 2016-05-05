@@ -1173,10 +1173,10 @@ begin
 end;
 
 procedure myDumpAddr(Addr: Pointer;var f:system.text);
-var
-  func,source:shortstring;
-  line:longint;
-  FoundLine:boolean;
+//var
+  //func,source:shortstring;
+  //line:longint;
+  //FoundLine:boolean;
 begin
     //BackTraceStrFunc:=StoreBackTraceStrFunc;//this unneed after fpc rev 31026 see http://bugs.freepascal.org/view.php?id=13518
   try
@@ -1205,8 +1205,8 @@ procedure TZCADMainWindow.ZcadException(Sender: TObject; E: Exception);
 var
   f:system.text;
   crashreportfilename,errmsg:shortstring;
-  ST:TSystemTime;
-  i:integer;
+  //ST:TSystemTime;
+  //i:integer;
 begin
      crashreportfilename:=TempPath+'zcadcrashreport.txt';
      system.Assign(f,crashreportfilename);
@@ -1258,11 +1258,11 @@ begin
 end;
 function TZCADMainWindow.CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
 var
-  pint:PGDBInteger;
+  //pint:PGDBInteger;
   TB:TToolBar;
   tbdesk:string;
   ta:TmyAction;
-  TempForm:TForm;
+  //TempForm:TForm;
   PFID:PTFormInfoData;
 begin
   ta:=tmyaction(self.StandartActions.ActionByName('ACN_Show_'+aname));
@@ -1445,7 +1445,7 @@ begin
   OnResize:=_onResize;
 end;
 procedure TZCADMainWindow._onResize(Sender: TObject);
-var PreferredWidth, PreferredHeight: integer;
+//var PreferredWidth, PreferredHeight: integer;
 begin
      AdjustHeight(self,true,ToolBarU.Height);
 end;
@@ -2378,12 +2378,12 @@ begin
 end;
 procedure TZCADMainWindow.ChangeLType(Sender:Tobject);
 var
-   LTIndex,index:Integer;
+   {LTIndex,}index:Integer;
    CLTSave,plt:PGDBLtypeProp;
 begin
      index:=tcombobox(Sender).ItemIndex;
      plt:=PGDBLtypeProp(tcombobox(Sender).items.Objects[index]);
-     LTIndex:=drawings.GetCurrentDWG.LTypeStyleTable.GetIndexByPointer(plt);
+     //LTIndex:=drawings.GetCurrentDWG.LTypeStyleTable.GetIndexByPointer(plt);
      if plt=nil then
                          exit;
      if plt=lteditor then
@@ -2712,7 +2712,7 @@ end;
 function TZCADMainWindow.wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer):boolean;
 var
   key:GDBByte;
-  needredraw:boolean;
+  //needredraw:boolean;
   FreeClick:boolean;
 function ProcessControlpoint:boolean;
 begin
@@ -2722,7 +2722,7 @@ begin
     if Sender.param.gluetocp then
     begin
       Sender.PDWG.GetSelObjArray.selectcurrentcontrolpoint(key,Sender.param.md.mouseglue.x,Sender.param.md.mouseglue.y,Sender.param.height);
-      needredraw:=true;
+      //needredraw:=true;
       result:=true;
       if (key and MZW_SHIFT) = 0 then
       begin
@@ -2742,8 +2742,8 @@ begin
   end;
 end;
 function ProcessEntSelect:boolean;
-var
-    RelSelectedObjects:Integer;
+//var
+//    RelSelectedObjects:Integer;
 begin
   result:=false;
   key := MouseButton2ZKey(shift);
@@ -2806,7 +2806,7 @@ begin
              begin
                commandmanager.pcommandrunning^.IData.GetPointMode:=TGPEnt;
              end;
-         NeedRedraw:=true;
+         //NeedRedraw:=true;
     end
 
     else if ((sender.param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0) then
@@ -2860,7 +2860,7 @@ begin
 
         {else} if FreeClick and((sender.param.md.mode and MGetSelectObject) <> 0) then
         FreeClick:=not ProcessEntSelect;
-        needredraw:=true;
+        //needredraw:=true;
     end;
     //---------------------------------------------------------else
     begin
@@ -2877,7 +2877,7 @@ begin
             sendmousecoord(MZW_LBUTTON);
             FreeClick:=false;
           end;}
-      needredraw:=true;
+      //needredraw:=true;
     end;
     If assigned(UpdateObjInspProc)then
     UpdateObjInspProc;

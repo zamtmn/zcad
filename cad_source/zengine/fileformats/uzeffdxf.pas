@@ -140,9 +140,9 @@ begin
 end;
 procedure readvariables(var drawing:TSimpleDrawing;var f: GDBOpenArrayOfByte;var ctstyle:GDBstring; var clayer:GDBString;var cltype:GDBString;var cdimstyle:GDBString;LoadMode:TLoadOpt;DWGVarsDict:TGDBString2GDBStringDictionary);
 var
-  byt: GDBByte;
+  {byt: GDBByte;}
   s: GDBString;
-  error: GDBInteger;
+  {error: GDBInteger;}
 begin
      if LoadMode=TLOLoad then
      begin
@@ -207,7 +207,7 @@ var
   s,varname: GDBString;
   error,varcount: GDBInteger;
   ParseMode:TDXFHeaderMode;
-  grouppsarray:array[0..maxlines]of integer;
+  //grouppsarray:array[0..maxlines]of integer;
   valuesarray:array[0..maxlines]of string;
   currentindex,maxindex:integer;
 procedure storevariable;
@@ -224,7 +224,7 @@ begin
      inc(currentindex);
      if currentindex>maxindex then
                                   maxindex:=currentindex;
-     grouppsarray[currentindex]:=group;
+     //grouppsarray[currentindex]:=group;
      valuesarray[currentindex]:=value;
 end;
 procedure freearrays;
@@ -1641,9 +1641,9 @@ function savedxf2000(name: GDBString; var drawing:TSimpleDrawing):boolean;
 var
   templatefile: GDBOpenArrayOfByte;
   outstream: {GDBInteger}GDBOpenArrayOfByte;
-  groups, values, ucvalues,ts: GDBString;
+  groups, values, {ucvalues,}ts: GDBString;
   groupi, valuei, intable,attr: GDBInteger;
-  temphandle,temphandle2,temphandle3,temphandle4,handle,lasthandle,vporttablehandle,plottablefansdle,dimtablehandle: TDWGHandle;
+  temphandle,temphandle2,{temphandle3,temphandle4,}handle,lasthandle,vporttablehandle,plottablefansdle,dimtablehandle: TDWGHandle;
   i: integer;
   OldHandele2NewHandle:TMapHandleToHandle;
   //phandlea: pdxfhandlerecopenarray;
@@ -1652,7 +1652,7 @@ var
   ignoredsource:boolean;
   instyletable:boolean;
   invporttable:boolean;
-  olddwg:{PTDrawing}PTSimpleDrawing;
+  //olddwg:{PTDrawing}PTSimpleDrawing;
   pltp:PGDBLtypeProp;
   plp:PGDBLayerProp;
   pdsp:PGDBDimStyle;
@@ -1675,7 +1675,7 @@ begin
   VarsDict:=TGDBString2GDBStringDictionary.create;
   DecimalSeparator := '.';
   //standartstylehandle:=0;
-  olddwg:=nil;//@drawing;
+  //olddwg:=nil;//@drawing;
   (*!!!if assigned(SetCurrentDWGProc)
                             then olddwg:=SetCurrentDWGProc(@drawing);*)
   //gdb.SetCurrentDWG(pdrawing);
@@ -1710,7 +1710,7 @@ begin
         handle:=handle;
     groups := templatefile.readGDBString;
     values := templatefile.readGDBString;
-    ucvalues:=uppercase(values);
+    //ucvalues:=uppercase(values);
     groupi := strtoint(groups);
     variablenotprocessed:=true;
     if (groupi = 9)and(processedvarscount>0) then
@@ -2251,8 +2251,8 @@ begin
                 { TODO :  надо писать заголовок таблицы руками, а не из шаблона DXF, т.к. там есть перечень стилей который проебывается}
                 indimstyletable:=false;
                 ignoredsource:=false;
-                temphandle3:=handle-1;
-                temphandle4:=handle-3;
+                //temphandle3:=handle-1;
+                //temphandle4:=handle-3;
                 //дальше идут стили
                 pdsp:=drawing.DimStyleTable.beginiterate(ir);
                 if pdsp<>nil then
@@ -2761,7 +2761,7 @@ ENDTAB}
   //gdb.SetCurrentDWG(olddwg);
 end;
 procedure SaveZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
-var
+(*var
 //  memsize:longint;
 //  objcount:GDBInteger;
 //  pmem,tmem:GDBPointer;
@@ -2770,7 +2770,7 @@ var
   //s:ZCPHeader;
   //linkbyf:PGDBOpenArrayOfTObjLinkRecord;
 //  test:gdbvertex;
-  sub:integer;
+  sub:integer;  *)
 begin
 (*
      memorybuf:=nil;

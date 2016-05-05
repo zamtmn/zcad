@@ -1432,11 +1432,11 @@ end;
 
 procedure TGeneralViewArea.WaMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);
 var
-  glmcoord1: gdbpiece;
+  //glmcoord1: gdbpiece;
   ux,uy:GDBDouble;
-  htext,htext2:gdbstring;
+  //htext,htext2:gdbstring;
   key: GDBByte;
-  f:TzeUnitsFormat;
+  //f:TzeUnitsFormat;
 begin
   //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.Pre_MouseMove',lp_IncPos);{$ENDIF}
   if assigned(mainmousemove)then
@@ -1457,7 +1457,7 @@ begin
                                    param.md.glmouse.x := x;
                                    exit;
                             end;
-  glmcoord1:= param.md.mouseraywithoutos;
+  //glmcoord1:= param.md.mouseraywithoutos;
   //if param.ospoint.ostype<>os_none then
   //                                   glmcoord1.lend := param.ospoint.worldcoord;  //пан при привязке ездит меньше
 
@@ -1806,12 +1806,12 @@ begin
      result:=WorkArea;
 end;
 procedure TGeneralViewArea.WaMouseDown(Sender:TObject;Button: TMouseButton; Shift: TShiftState;X, Y: Integer);
-var key: GDBByte;
+var //key: GDBByte;
     NeedRedraw:boolean;
     //menu:TmyPopupMenu;
-    FreeClick:boolean;
+    //FreeClick:boolean;
 begin
-  FreeClick:=true;
+  //FreeClick:=true;
   if assigned(MainmouseDown)then
   if mainmousedown(self) then
                        exit;
@@ -1831,7 +1831,7 @@ begin
   begin
   //r.handled:=true;
   if pdwg=nil then exit;
-  key := MouseButton2ZKey(shift);
+  //key := MouseButton2ZKey(shift);
   if (ssMiddle in shift) then
   begin
     WorkArea.cursor := crHandPoint;

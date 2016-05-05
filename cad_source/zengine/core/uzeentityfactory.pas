@@ -120,8 +120,8 @@ procedure RegisterDXFEntity(const _EntityID:TObjID;
                          const _AllocAndInitEntity:TAllocAndInitEntFunc;
                          const _SetGeomPropsFunc:TSetGeomPropsFunc=nil;
                          const _AllocAndCreateEntFunc:TAllocAndInitAndSetGeomPropsFunc=nil);
-var
-   EntInfoData:TEntInfoData;
+{var
+   EntInfoData:TEntInfoData;}
 begin
      _RegisterEntity(_EntityID,_DXFName,_UserName,_AllocEntity,_AllocAndInitEntity,_SetGeomPropsFunc,_AllocAndCreateEntFunc,true);
 end;
@@ -131,8 +131,8 @@ procedure RegisterEntity(const _EntityID:TObjID;
                          const _AllocAndInitEntity:TAllocAndInitEntFunc;
                          const _SetGeomPropsFunc:TSetGeomPropsFunc=nil;
                          const _AllocAndCreateEntFunc:TAllocAndInitAndSetGeomPropsFunc=nil);
-var
-   EntInfoData:TEntInfoData;
+{var
+   EntInfoData:TEntInfoData;}
 begin
      _RegisterEntity(_EntityID,'',_UserName,_AllocEntity,_AllocAndInitEntity,_SetGeomPropsFunc,_AllocAndCreateEntFunc,false);
 end;
@@ -165,7 +165,7 @@ end;
 
 
 function CreateInitObjFree(t:TObjID;owner:PGDBObjGenericSubEntry): PGDBObjEntity;export;
-var temp: PGDBObjEntity;
+var //temp: PGDBObjEntity;
    EntInfoData:TEntInfoData;
 begin
   if ObjID2EntInfoData.MyGetValue(t,EntInfoData) then
@@ -175,7 +175,7 @@ begin
 
 end;
 function AllocEnt(t:TObjID): GDBPointer;export;
-var temp: PGDBObjEntity;
+var //temp: PGDBObjEntity;
    EntInfoData:TEntInfoData;
 begin
   if ObjID2EntInfoData.MyGetValue(t,EntInfoData) then

@@ -36,7 +36,7 @@ var
 Procedure GetSysInfo;
 implementation
 uses uzclog;
-function GetVersion(_file:pchar):TmyFileVersionInfo;
+function GetVersion({_file:pchar}):TmyFileVersionInfo;
 var
  (*VerInfoSize, Dummy: DWord;
  PVerBbuff, PFixed : GDBPointer;
@@ -44,7 +44,7 @@ var
 
   i: Integer;
   //Version: TFileVersionInfo;
-  {MyFile,} MyVersion,ts: GDBString;
+  {MyFile,} MyVersion{,ts}: GDBString;
 
 begin
      result.build:=0;
@@ -158,9 +158,9 @@ begin
 
 
      {$IFDEF FPC}
-                 SysParam.Ver:=GetVersion('zcad.exe');
+                 SysParam.Ver:=GetVersion({'zcad.exe'});
      {$ELSE}
-                 sysparam.ver:=GetVersion('ZCAD.exe');
+                 sysparam.ver:=GetVersion({'ZCAD.exe'});
      {$ENDIF}
 
      ProcessParamStr;

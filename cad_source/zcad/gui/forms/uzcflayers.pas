@@ -72,7 +72,7 @@ type
   private
     changedstamp:boolean;
     //PEditor:TPropEditor;
-    EditedItem:TListItem;
+    //EditedItem:TListItem;
     SupportTypedEditors:TSupportTypedEditors;
     IsUndoEndMarkerCreated:boolean;
     { private declarations }
@@ -273,12 +273,12 @@ end;
 {layer LineType handle procedures}
 procedure TLayersForm.LtSubitemDraw(aCanvas:TCanvas; Item: TListItem; SubItem:Integer; State: TCustomDrawState);
 var
-   colorindex:integer;
+   //colorindex:integer;
    s:string;
-   y:integer;
-   textrect:TRect;
+   //y:integer;
+   //textrect:TRect;
    ARect: TRect;
-   ts:TTextStyle;
+   //ts:TTextStyle;
 begin
 ARect:=ListViewDrawSubItem(state,aCanvas,Item,SubItem);
 ARect := Item.DisplayRectSubItem( SubItem,drLabel);
@@ -335,10 +335,10 @@ procedure TLayersForm.LWSubitemDraw(aCanvas:TCanvas; Item: TListItem; SubItem:In
 var
    colorindex,ll:integer;
    s:string;
-   y:integer;
-   textrect:TRect;
+   //y:integer;
+   //textrect:TRect;
    ARect: TRect;
-   ts:TTextStyle;
+   //ts:TTextStyle;
 begin
   ARect:=ListViewDrawSubItem(state,aCanvas,Item,SubItem);
   colorindex:=PGDBLayerProp(Item.Data)^.lineweight;
@@ -534,12 +534,12 @@ end;
 procedure TLayersForm.ListView1SelectItem(Sender: TObject; Item: TListItem;Selected: Boolean);
 var
    player:PGDBLayerProp;
-   pdwg:PTSimpleDrawing;
+   //pdwg:PTSimpleDrawing;
    inent,inblock:integer;
 begin
      if selected then
      begin
-          pdwg:=drawings.GetCurrentDWG;
+          //pdwg:=drawings.GetCurrentDWG;
           player:=(Item.Data);
           countlayer(player,inent,inblock);
           LayerDescLabel.Caption:=Format(rsLayerUsedIn,[Tria_AnsiToUtf8(player^.Name),inent,inblock]);
@@ -551,7 +551,7 @@ var
    player,pcreatedlayer:PGDBLayerProp;
    pdwg:PTSimpleDrawing;
    layername:string;
-   li:TListItem;
+   //li:TListItem;
    domethod,undomethod:tmethod;
 begin
      pdwg:=drawings.GetCurrentDWG;
@@ -603,7 +603,7 @@ procedure TLayersForm._PurgeLayers(Sender: TObject);
 var
    i,purgedcounter:integer;
    ProcessedItem:TListItem;
-   inEntities,inBlockTable,indimstyles:GDBInteger;
+   inEntities,inBlockTable{,indimstyles}:GDBInteger;
    PCurrentLayer:PGDBLayerProp;
 begin
      i:=0;
@@ -629,12 +629,12 @@ end;
 procedure TLayersForm.LayerDelete(Sender: TObject); // Процедура удаления слоя
 var
    player:PGDBLayerProp;
-   pdwg:PTSimpleDrawing;
+   //pdwg:PTSimpleDrawing;
    e,b:GDBInteger;
-   domethod,undomethod:tmethod;
+   //domethod,undomethod:tmethod;
 begin
   //ShowError(rsNotYetImplemented);
-  pdwg:=drawings.GetCurrentDWG;
+  //pdwg:=drawings.GetCurrentDWG;
   if assigned(ListView1.Selected)then
                                      begin
                                      player:=(ListView1.Selected.Data);

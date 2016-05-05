@@ -190,7 +190,7 @@ begin
                                                                                      Operands.PushBackData(od);
                                               end
                                  end;
-                            if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;     
+                            if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                             parseresult:=runparser('=;_softspace'#0,dt,parseerror);
                             until not parseerror;
                             parseresult:=runparser('=)_softspace'#0,dt,parseerror);
@@ -200,9 +200,9 @@ begin
                        begin
                             self.ResultPTD:=ptunit(punit).TypeName2PTD(parseresult^.getData(0));
                        end;
-     if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+     if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
      parseresult:=runparser('=:_softspace'#0'_identifier'#0'_softspace'#0,dt,parseerror);
-     if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+     if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
      //parseresult:=runparser('_softspace'#0'=(_softspace'#0'_identifier'#0'_softspace'#0'=)',line,parseerror);
 
 end;
@@ -274,7 +274,7 @@ begin
                                  end;
     if SubNode<>nil then
     begin
-         PTPropertyDeskriptorArray(SubNode)^.FreeAndDone;
+         PTPropertyDeskriptorArray(SubNode)^.Done;
          gdbfreemem(GDBPointer(SubNode));
     end;
 end;

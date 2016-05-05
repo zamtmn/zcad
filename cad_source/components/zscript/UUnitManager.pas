@@ -341,7 +341,7 @@ begin
                                                            p:=parseresult.iterate(ir);
                                                      until p=nil;
                                                 end;
-                              if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                              if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                          end;
                 usescopymode:begin
                               //line:='';
@@ -360,7 +360,7 @@ begin
                                                            p:=parseresult.iterate(ir);
                                                      until p=nil;
                                                 end;
-                              if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                              if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                          end;
                 unitmode:
                          begin
@@ -386,13 +386,13 @@ begin
 
                                                        end;   
                               line:='';
-                              if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                              if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                          end;
                 subunitmode:
                          begin
                               parseresult:=runparser('_identifier'#0'_softend'#0,line,parseerror);
                               currentunit:=findunit(PPaths,TranslateFunc,parseresult^.getData(0));
-                              if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                              if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                          end;
                 interf:
                          begin
@@ -469,7 +469,7 @@ begin
                                                   PObjectDescriptor(etd)^.init(typename,currentunit);
                                                   //GDBStringtypearray := chr(TGDBobject);
                                                   GDBStringtypearray:='';
-                                                  if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                                                  if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                                                   if (typename) = 'GDBaseObject'
                                                   then
                                                        begin
@@ -508,7 +508,7 @@ begin
                                                                 else
                                                   begin
                                                   end;
-                                                  if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                                                  if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                                                   //etd.typeobj:=nil;
                                                   ObjOrRecordRead(TranslateFunc,f,line,GDBStringtypearray,fieldoffset,GDBPointer(etd));
                                                   PObjectDescriptor(etd)^.SimpleMenods.Shrink;
@@ -528,7 +528,7 @@ begin
                                                                               end;
                                                   if typename='GDBPalette' then
                                                                               typename:=typename;
-                                                  if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                                                  if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                                                   parseresult:=runparser('_softspace'#0'=[_intdiapazons_cs'#0'_softspace'#0'=]',line,parseerror);
                                                   subparseresult:=runparser('_softspace'#0'=o=f_softspace'#0'_identifier'#0'_softend'#0,line,parseerror);
                                                   //GDBStringtypearray := chr(Tarray);
@@ -555,8 +555,8 @@ begin
                                                   end;
                                                   GDBStringtypearray := GDBStringtypearray + pac_GDBWord_to_GDBString(parseresult^.Count div 2) + arrind1;
                                                   fieldoffset := razmer*fieldgdbtype.SizeInGDBBytes;
-                                                  if subparseresult<>nil then begin subparseresult^.FreeAndDone;GDBfreeMem(gdbpointer(subparseresult));end;
-                                                  if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                                                  if subparseresult<>nil then begin subparseresult^.Done;GDBfreeMem(gdbpointer(subparseresult));end;
+                                                  if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                                              end;
                                     enumtype:begin
                                                   (*currvalue:=0;
@@ -564,7 +564,7 @@ begin
 
                                                   typename:=pGDBString(parseresult^.getelement(0))^;
                                                   repeat
-                                                  if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                                                  if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                                                   parseresult:=runparser('_identifier'#0,line,parseerror);
                                                   if parseerror then enumodj.source:=parseresult^.getData(0)
                                                                 else HaltOnFatalError('Syntax error in file '+f.name);
@@ -612,7 +612,7 @@ begin
                                                   if typename='TInsUnits' then
                                                                                 typename:=typename;
                                                   repeat
-                                                  if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                                                  if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                                                   parseresult:=runparser('_identifier'#0,line,parseerror);
                                                   if parseerror then enumodj.source:=parseresult^.getData(0)
                                                                 else
@@ -621,7 +621,7 @@ begin
                                                                       debugln('Syntax error in file '+f.name);
                                                                       halt(0);
                                                                     end;
-                                                  if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                                                  if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                                                   parseresult:=runparser('_softspace'#0'=(=*_GDBString'#0'=*=)',line,parseerror);
                                                   if parseerror then
                                                                     begin
@@ -631,12 +631,12 @@ begin
                                                                                                        enumodj.user:=TranslateFunc(typename+'~'+enumodj.source,enumodj.user);
                                                                     end
                                                                 else enumodj.user:=enumodj.source;
-                                                  if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                                                  if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                                                   parseresult:=runparser('_softspace'#0'==_intnumber'#0,line,parseerror);
                                                   if parseerror then enumodj.value:=strtoint(parseresult^.getData(0))
                                                                 else begin enumodj.value:=currvalue;inc(currvalue);end;
                                                   if maxvalue<enumodj.value then maxvalue:=enumodj.value;
-                                                  if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                                                  if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                                                   parseresult:=runparser('_softspace'#0'=,',line,parseerror);
                                                   enumobjlist.PushBackData(enumodj);
                                                   //GDBPointer(enumodj.source):=nil;
@@ -677,7 +677,7 @@ begin
                                              end;
                                 end;
 
-                                if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                                if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
 
 
 
@@ -757,8 +757,8 @@ if addtype then
                                      end;
                                 end;
                                 vuname:='';
-                                if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
-                                if subparseresult<>nil then begin subparseresult^.FreeAndDone;GDBfreeMem(gdbpointer(subparseresult));end;
+                                if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
+                                if subparseresult<>nil then begin subparseresult^.Done;GDBfreeMem(gdbpointer(subparseresult));end;
                            end;
                 beginmode:begin
                                 //parsepos:=1;
@@ -791,7 +791,7 @@ if addtype then
                                      currentunit^.InterfaceVariables.createvariable(vd.name, vd);
                                      end;
                                 end;
-                                if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                                if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                                 line:='';
                            end;
     end;
@@ -843,5 +843,5 @@ finalization;
                 PVardeskInDBUnit:=DBUnit.InterfaceVariables.vardescarray.iterate(IrInDBUnit);
           until PVardeskInDBUnit=nil
      end;
-     units.FreeAndDone;
+     units.Done;
 end.

@@ -205,7 +205,7 @@ var
   center:GDBVertex;
   pl:pgdbobjline;
 begin
-          ConstObjArray.cleareraseobj;
+          ConstObjArray.free;
           CalcDNVectors;
           center:=GetCenterPoint;
 

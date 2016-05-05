@@ -441,7 +441,8 @@ end;
 destructor GDBObjCable.done;
 begin
      inherited done;
-     NodePropArray.ClearAndDone;
+     NodePropArray.Clear;
+     NodePropArray.Done;
 end;
 
 procedure GDBObjCable.DrawGeometry;

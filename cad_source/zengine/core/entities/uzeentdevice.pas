@@ -168,7 +168,7 @@ begin
 end;
 destructor GDBObjDevice.done;
 begin
-     VarObjArray.cleareraseobj;
+     VarObjArray.free;
      VarObjArray.done;
      inherited done;
 end;
@@ -483,7 +483,7 @@ begin
           //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
           index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
           assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), 'Неверный индекс блока');
-          ConstObjArray.cleareraseobj;
+          ConstObjArray.free;
           //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getDataMutable(index);
           pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getDataMutable(index);
           for i:=0 to pblockdef.ObjArray.count-1 do

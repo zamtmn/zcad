@@ -85,7 +85,7 @@ begin
 end;
 destructor GDBObjMText.done;
 begin
-  text.FreeAndDone;
+  text.Done;
   inherited done;  
 end;
 constructor GDBObjMText.initnul;

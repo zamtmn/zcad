@@ -211,7 +211,7 @@ end;
 
 procedure TSimpleDrawing.FreeConstructionObjects;
 begin
-  ConstructObjRoot.ObjArray.cleareraseobj;
+  ConstructObjRoot.ObjArray.free;
   ConstructObjRoot.ObjCasheArray.Clear;
   //ConstructObjRoot.ObjToConnectedArray.Clear;
   ConstructObjRoot.ObjMatrix:=onematrix;
@@ -602,18 +602,19 @@ destructor TSimpleDrawing.done;
 begin
      //undostack.done;
      mainObjRoot.done;
-     LayerTable.FreeAndDone;
-     //ConstructObjRoot.ObjArray.FreeAndDone;
+     LayerTable.Done;
+     //ConstructObjRoot.ObjArray.Done;
      ConstructObjRoot.done;
-     SelObjArray.FreeAndDone;
-     //DWGUnits.FreeAndDone;
-     OnMouseObj.ClearAndDone;
-     TextStyleTable.FreeAndDone;
-     BlockDefArray.FreeAndDone;
-     Numerator.FreeAndDone;
-     TableStyleTable.FreeAndDone;
-     LTypeStyleTable.FreeAndDone;
-     DimStyleTable.FreeAndDone;
+     SelObjArray.Done;
+     //DWGUnits.Done;
+     OnMouseObj.Clear;
+     OnMouseObj.Done;
+     TextStyleTable.Done;
+     BlockDefArray.Done;
+     Numerator.Done;
+     TableStyleTable.Done;
+     LTypeStyleTable.Done;
+     DimStyleTable.Done;
      //FileName:='';
      if internalcamera then
      if assigned(pcamera) then

@@ -1543,9 +1543,9 @@ begin
      objtypes.done;
      linetypes.done;
      linetypescales.done;
-     textcontents.FreeAndDone;
-     textremplates.FreeAndDone;
-     bnames.FreeAndDone;
+     textcontents.Done;
+     textremplates.Done;
+     bnames.Done;
      created:=false;
      Commandmanager.executecommandend;
 end;
@@ -1725,7 +1725,7 @@ procedure TextInsert_com.BuildPrimitives;
 begin
      if drawings.GetCurrentDWG^.TextStyleTable.GetRealCount>0 then
      begin
-     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.cleareraseobj;
+     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
      case TextInsertParams.mode of
            TIM_Text:
            begin
@@ -2042,7 +2042,7 @@ begin
   NeedReCreateClipboardDWG:=true;
   if (button and MZW_LBUTTON)<>0 then
   begin
-      ClipboardDWG^.pObjRoot^.ObjArray.cleareraseobj;
+      ClipboardDWG^.pObjRoot^.ObjArray.free;
       dist.x := -wc.x;
       dist.y := -wc.y;
       dist.z := -wc.z;
@@ -2140,7 +2140,7 @@ begin
                          //pb^.done;
                          //gdbfreemem(pointer(pb));
                          pb:=nil;
-                         drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.cleareraseobj;
+                         drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
                          //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
                     end;
     pb := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID{,drawings.GetCurrentROOT}));
@@ -2194,7 +2194,7 @@ begin
                          //pb^.done;
                          //gdbfreemem(pointer(pb));
                          pb:=nil;
-                         drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.cleareraseobj;
+                         drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
                          //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
                     end;
     pointer(pb) :=AllocEnt(GDBBlockInsertID);
@@ -2746,7 +2746,7 @@ begin
      if pcoa<>nil then
      begin
           pcoa^.done;
-          drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.cleareraseobj;
+          drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
           GDBFreemem(pointer(pcoa));
      end;
      inherited;
@@ -2819,7 +2819,7 @@ begin
    move(dispmatr,self.CommandName);
 
    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=onematrix;
-   drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.cleareraseobj;
+   drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
    drawings.GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
 
    commandmanager.executecommandend;
@@ -2984,7 +2984,7 @@ if (button and MZW_LBUTTON)=0 then
 if (button and MZW_LBUTTON)<>0 then
 begin
 drawings.GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
-drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.cleareraseobj;
+drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
 commandend;
 commandmanager.executecommandend;
 end;
@@ -3104,7 +3104,7 @@ if (button and MZW_LBUTTON)=0 then
 if (button and MZW_LBUTTON)<>0 then
 begin
 drawings.GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
-drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.cleareraseobj;
+drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
 commandend;
 commandmanager.executecommandend;
 end;
@@ -3304,7 +3304,7 @@ begin
 
   if (pc<>nil)or(PCreatedGDBLine<>nil) then
                  begin
-                      drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.cleareraseobj;
+                      drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
                       pc:=nil;
                       PCreatedGDBLine:=nil;
                  end;
@@ -3616,7 +3616,7 @@ begin
   drawings.CurrentDWG^.ConstructObjRoot.ObjArray.add(@pt);
 
   pt^.ptablestyle:=drawings.GetCurrentDWG^.TableStyleTable.getAddres('ShRaspr');
-  pt^.tbl.cleareraseobj;
+  pt^.tbl.free;
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 
 
@@ -4106,9 +4106,9 @@ begin
 end;
 procedure Finalize;
 begin
-  BIProp.Blocks.Enums.freeanddone;
-  BEditParam.Blocks.Enums.freeanddone;
-  TextInsertParams.Style.Enums.freeanddone;
+  BIProp.Blocks.Enums.done;
+  BEditParam.Blocks.Enums.done;
+  TextInsertParams.Style.Enums.done;
   freeandnil(psd);
   freeandnil(paged);
 end;

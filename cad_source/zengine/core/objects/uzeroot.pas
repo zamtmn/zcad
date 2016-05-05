@@ -137,10 +137,10 @@ begin
 end;
 destructor GDBObjRoot.done;
 begin
-     ObjArray.FreeAndDone;
-     self.ObjCasheArray.FreeAndDone;
+     ObjArray.Done;
+     self.ObjCasheArray.Done;
      self.
-     ObjToConnectedArray.FreeAndDone;
+     ObjToConnectedArray.Done;
      inherited done;
 end;
 constructor GDBObjRoot.initnul;

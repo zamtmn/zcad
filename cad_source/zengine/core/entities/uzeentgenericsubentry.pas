@@ -541,8 +541,8 @@ begin
 end;
 destructor GDBObjGenericSubEntry.done;
 begin
-     ObjArray.FreeAndDone;
-     ObjCasheArray.FreeAndDone;
+     ObjArray.Done;
+     ObjCasheArray.Done;
      //self.ObjArray.ObjTree.done;
      inherited done;
 end;

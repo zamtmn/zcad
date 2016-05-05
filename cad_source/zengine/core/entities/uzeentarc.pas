@@ -216,7 +216,8 @@ end;
 destructor GDBObjARC.done;
 begin
      inherited done;
-     Vertex3D_in_WCS_Array.ClearAndDone;
+     //Vertex3D_in_WCS_Array.Clear;
+     Vertex3D_in_WCS_Array.Done;
 end;
 constructor GDBObjARC.initnul;
 begin

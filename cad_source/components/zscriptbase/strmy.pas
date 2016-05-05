@@ -240,7 +240,7 @@ begin
      end;
      if (GDBStringarray^.Count=0)or(not parsed) then
                                  begin
-                                      GDBStringarray^.FreeAndDone;
+                                      GDBStringarray^.Done;
                                       gdbfreemem(GDBPointer(GDBStringarray));
                                       GDBStringarray:=nil;
                                  end;
@@ -284,7 +284,7 @@ begin
                                   strarr.copyto(GDBStringarray^);
                                   l:=l;
                              end;
-                             strarr.FreeAndDone;
+                             strarr.Done;
                         end;
                         i:=subi;
                    end;

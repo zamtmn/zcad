@@ -379,7 +379,7 @@ begin
                     else
                         sta.sort;
      CopyVPto(tbl);
-     tbl.tbl.cleareraseobj{clear};
+     tbl.tbl.free{clear};
      {$ifndef GenericsContainerNotFinished}  psl:=pointer(tbl.tbl.CreateObject);{$endif}
      psl.init(10);
 
@@ -402,7 +402,7 @@ begin
           ps:=sta.iterate(ir);
      until ps=nil;
 
-     sta.FreeAndDone;
+     sta.Done;
      //sta.done;
      tbl.scale:=scale;
      if twidth>0 then
@@ -456,7 +456,7 @@ begin
      if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).y>=0 then
                             tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h;
      tbl.FormatEntity(drawing,dc);
-     ConstObjArray.cleareraseobj;
+     ConstObjArray.free;
      if pdev<>nil then
      begin
           s:='';
@@ -513,7 +513,8 @@ begin
      inherited;
 
      CodePage:=TCP;
-     objects.ClearAndDone;
+     objects.Clear;
+     objects.Done;
      buildgeometry(drawing);
 end;
 function GDBObjElLeader.select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;

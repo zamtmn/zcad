@@ -196,7 +196,8 @@ end;
 destructor GDBObjEllipse.done;
 begin
      inherited done;
-     Vertex3D_in_WCS_Array.ClearAndDone;
+     //Vertex3D_in_WCS_Array.Clear;
+     Vertex3D_in_WCS_Array.Done;
 end;
 constructor GDBObjEllipse.initnul;
 begin

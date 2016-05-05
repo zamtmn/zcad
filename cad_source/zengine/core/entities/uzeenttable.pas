@@ -157,7 +157,7 @@ var
    DC:TDrawContext;
 begin
 
-ConstObjArray.cleareraseobj;
+ConstObjArray.free;
 
      psa:=tbl.beginiterate(ir);
      ccount:=0;

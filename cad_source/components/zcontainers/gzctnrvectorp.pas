@@ -27,8 +27,6 @@ GZVectorP{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                        Deleted:TArrayIndex;(*hidden_in_objinsp*)
                                        function iterate (var ir:itrec):GDBPointer;virtual;
                                        function beginiterate(out ir:itrec):GDBPointer;virtual;
-                                       destructor FreeAndDone;virtual;
-                                       procedure cleareraseobj;virtual;abstract;
                                        procedure RemoveData(const data:T);virtual;
                                        function GetRealCount:GDBInteger;
 
@@ -85,11 +83,6 @@ begin
         inc(result);
         p:=iterate(ir);
   until p=nil;
-end;
-destructor GZVectorP<T>.FreeAndDone;
-begin
-     cleareraseobj;
-     done;
 end;
 function GZVectorP<T>.iterate;
 var

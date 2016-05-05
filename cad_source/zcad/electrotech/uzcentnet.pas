@@ -216,8 +216,9 @@ destructor GDBObjNet.done;
 begin
      //name:='';
      {name:='';}
-     graf.FreeAndDone;
-     riserarray.ClearAndDone;
+     graf.Done;
+     riserarray.Clear;
+     riserarray.Done;
      inherited done;//  error
 end;
 function GDBObjNet.EraseMi;

@@ -418,7 +418,7 @@ begin
                                                               //drawings.GetCurrentDWG.BlockDefArray.loadblock(pansichar(sysinfo.sysparam.programpath+'blocks\ops\'+sdname+'.dxf'),@sdname[1],drawings.GetCurrentDWG)
                                                          end;}
   result:=mclick;
-  drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+  drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.free;
 
   pl := PGDBObjLine(ENTF_CreateLine(@drawings.GetCurrentDWG.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,[t3dp.x,t3dp.y,t3dp.z,wc.x,wc.y,wc.z]));
   zcSetEntPropFromCurrentDrawingProp(pl);
@@ -437,7 +437,7 @@ begin
        //pco^.mouseclic:=-1;
        //drawings.GetCurrentDWG.ConstructObjRoot.cleareraseobj;
        placedatcic(@drawings.GetCurrentROOT.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, dw, dd,@sdname[1],OPSPlaceSmokeDetectorOrtoParam.NormalizePoint,OPSPlaceSmokeDetectorOrtoParam.ScaleBlock,OPSPlaceSmokeDetectorOrtoParam.PlaceStrategy);
-       drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+       drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.free;
 
        drawings.GetCurrentROOT.calcbb(dc);
        zcRedrawCurrentDrawing;
@@ -791,7 +791,8 @@ begin
   defaultunit.done;
   UManager.done;
   cman.done;
-  ProcessedDevices.ClearAndDone;
+  ProcessedDevices.Clear;
+  ProcessedDevices.Done;
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
@@ -1211,7 +1212,7 @@ begin
   //nx:=OrtoDevPlaceParam.NX;
   //ny:=OrtoDevPlaceParam.NY;
   result:=mclick;
-  drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+  drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.free;
 
 
   pl := PGDBObjLine(ENTF_CreateLine(@drawings.GetCurrentDWG.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,[t3dp.x,t3dp.y,t3dp.z,wc.x,wc.y,wc.z]));
@@ -1317,7 +1318,7 @@ begin
        pco^.mouseclic:=-1;
        //drawings.GetCurrentDWG.ConstructObjRoot.cleareraseobj;
        placedev(@drawings.GetCurrentROOT.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, NX, NY,@OrtoDevPlaceParam.Name[1],OrtoDevPlaceParam.Angle,OrtoDevPlaceParam.AutoAngle,OrtoDevPlaceParam.NormalizePoint);
-       drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+       drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.free;
 
        drawings.GetCurrentROOT.calcbb(dc);
        zcRedrawCurrentDrawing;
@@ -1375,7 +1376,7 @@ begin
 end;
 procedure finalize;
 begin
-  OPSPlaceSmokeDetectorOrtoParam.Height.Enums.FreeAndDone;
+  OPSPlaceSmokeDetectorOrtoParam.Height.Enums.Done;
   //result := 0;
 end;
 initialization

@@ -25,18 +25,11 @@ type
 {Export+}
 GZVectorObjects{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                       object(GZVectorData{-}<T>{//})
-                             procedure cleareraseobj;virtual;
                              function CreateObject:PGDBaseObject;
                              procedure free;virtual;
                        end;
 {Export-}
 implementation
-procedure GZVectorObjects<T>.cleareraseobj;
-var i:integer;
-begin
-     for i:=0 to count-1 do
-       parray[i].done;
-end;
 function GZVectorObjects<T>.CreateObject;
 {var addr: GDBPlatformint;}
 begin

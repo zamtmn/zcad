@@ -843,7 +843,7 @@ begin
                      GDBGetMem({$IFDEF DEBUGBUILD}'{76F46B7D-CAFA-4509-8B65-8759292D8709}',{$ENDIF}pointer(pt),sizeof(GDBObjTable));
                      pt^.initnul;
                      pt^.ptablestyle:=drawings.GetCurrentDWG.TableStyleTable.getAddres('ShRaspr');
-                     pt^.tbl.cleareraseobj;
+                     pt^.tbl.free;
                      //first:=true;
                      {$ifndef GenericsContainerNotFinished}psfirstline:=pointer(pt^.tbl.CreateObject);{$endif}
                      psfirstline.init(16);
@@ -1177,7 +1177,8 @@ begin
   begin
        FirstOwner:=pointer(drawings.FindOneInArray(Objects,GDBNetID,true));
   end;
-  Objects.ClearAndDone;
+  Objects.Clear;
+  Objects.Done;
   (*if osp<>nil then
   begin
        if (PGDBObjEntity(osp^.PGDBObject)<>nil)and(osp^.PGDBObject<>FirstOwner)
@@ -1226,7 +1227,8 @@ begin
   begin
        SecondOwner:=pointer(drawings.FindOneInArray(Objects,GDBNetID,true));
   end;
-  Objects.ClearAndDone;
+  Objects.Clear;
+  Objects.Done;
 
   if osp<>nil then
   begin
@@ -1817,7 +1819,7 @@ begin
                      GDBGetMem({$IFDEF DEBUGBUILD}'{9F4AB2A7-1093-4FFB-8053-E8885D691B85}',{$ENDIF}pointer(pt),sizeof(GDBObjTable));
                      pt^.initnul;
                      pt^.ptablestyle:=drawings.GetCurrentDWG.TableStyleTable.getAddres('KZ');
-                     pt^.tbl.cleareraseobj;
+                     pt^.tbl.free;
   repeat
     begin
          cablename:=pv^.Name;
@@ -2052,7 +2054,7 @@ begin
                      GDBGetMem({$IFDEF DEBUGBUILD}'{76882CEC-39E7-459C-9CCB-F596DE17539A}',{$ENDIF}pointer(pt),sizeof(GDBObjTable));
                      pt^.initnul;
                      pt^.ptablestyle:=drawings.GetCurrentDWG.TableStyleTable.getAddres('Spec');
-                     pt^.tbl.cleareraseobj;
+                     pt^.tbl.free;
 
   pdbu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
   currentgroup:=MainSpecContentFormat.beginiterate(ir_inscf);
@@ -2250,7 +2252,7 @@ begin
        ps:=VarContents.iterate(ir);
   until ps=nil;
 
-  VarContents.FreeAndDone;
+  VarContents.Done;
   end
   else
       historyoutstr('Имя переменной должно быть задано в параметре команды');
@@ -2606,7 +2608,7 @@ begin
   //pleader.BuildGeometry;
 
     end;
-    drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+    drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.free;
     result:=-1;
     zcRedrawCurrentDrawing;
   end;
@@ -3043,7 +3045,8 @@ begin
 
                                 net:=netarray.iterate(ir_net);
                           until (net=nil){or(supernet<>nil)};
-                          riserarray.ClearAndDone;
+                          riserarray.Clear;
+                          riserarray.Done;
                           if supernet<>nil then
                                           supernetsarray.PushBackData(supernet);
                           end
@@ -3123,10 +3126,12 @@ begin
        if assigned (ProcessLongProcessProc) then
                                                 ProcessLongProcessProc(row);
        end;
-       netarray.ClearAndDone;
+       netarray.Clear;
+       netarray.Done;
 
        FDoc.Destroy;
-       processednets.ClearAndDone;
+       processednets.Clear;
+       processednets.Done;
 
        net:=supernetsarray.beginiterate(ir_net);
        if (net<>nil) then
@@ -3276,7 +3281,7 @@ end;
 
 procedure finalize;
 begin
-     MainSpecContentFormat.FreeAndDone;
+     MainSpecContentFormat.Done;
 end;
 initialization
   startup;

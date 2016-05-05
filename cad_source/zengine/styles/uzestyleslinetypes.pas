@@ -317,8 +317,8 @@ begin
      self.desk:='';
      dasharray.done;
      strokesarray.done;
-     shapearray.freeanddone;
-     Textarray.freeanddone;
+     shapearray.done;
+     Textarray.done;
      inherited;
 end;
 

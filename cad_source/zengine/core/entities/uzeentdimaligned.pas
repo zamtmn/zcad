@@ -378,7 +378,7 @@ var
   tv:GDBVertex;
   l:double;
 begin
-          ConstObjArray.cleareraseobj;
+          ConstObjArray.free;
           CalcDNVectors;
 
           l:=GetTFromDirNormalizedPoint(DimData.P10InWCS,DimData.P14InWCS,vectorN);

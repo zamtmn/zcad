@@ -314,7 +314,7 @@ destructor TZCADDrawing.done;
 begin
      inherited;
      undostack.done;
-     DWGUnits.FreeAndDone;
+     DWGUnits.Done;
      FileName:='';
 end;
 //procedure TZCADDrawing.SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);

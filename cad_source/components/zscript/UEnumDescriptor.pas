@@ -74,8 +74,8 @@ end;*)
 destructor EnumDescriptor.done;
 begin
      inherited;
-     SourceValue.FreeAndDone;
-     UserValue.FreeAndDone;
+     SourceValue.Done;
+     UserValue.Done;
      value.Done;
      gdbfreemem(Value);
 end;

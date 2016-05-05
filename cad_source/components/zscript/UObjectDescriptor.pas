@@ -225,7 +225,7 @@ destructor ObjectDescriptor.done;
 begin
      //destructor FreewithprocAndDone(freeproc:freeelproc);virtual;
      //SimpleMenods.FreewithprocAndDone(freemetods);
-     SimpleMenods.FreeAndDone;
+     SimpleMenods.Done;
      //fields.FreewithprocAndDone(freeprop);
      Properties.Freewithproc(@freeprop);
      Properties.done;

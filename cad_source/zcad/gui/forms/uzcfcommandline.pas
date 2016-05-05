@@ -256,7 +256,7 @@ begin
 end;
 destructor TCLine.Destroy;
 begin
-     aliases.FreeAndDone;
+     aliases.Done;
      inherited;
 end;
 
@@ -436,7 +436,7 @@ begin
                  commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,uzegeometry.CreateVertex(strtodouble(parseresult^.getData(0)),
                                                                                               strtodouble(parseresult^.getData(1)),
                                                                                               strtodouble(parseresult^.getData(2))),MZW_LBUTTON,nil);
-                 if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                 if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
            end
            else if IsParsed('_realnumber'#0'_softspace'#0'=,_realnumber'#0,superexpr,parseresult)then
            begin
@@ -445,7 +445,7 @@ begin
                  commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,uzegeometry.CreateVertex(strtodouble(parseresult^.getData(0)),
                                                                                               strtodouble(parseresult^.getData(1)),
                                                                                               0),MZW_LBUTTON,nil);
-                 if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                 if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
            end
            else if IsParsed('_realnumber'#0'_softspace'#0,superexpr,parseresult)then
            begin
@@ -462,7 +462,7 @@ begin
                  commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,temp,MZW_LBUTTON,nil);
                  end;
 
-                 if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+                 if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
            end
            end
               else

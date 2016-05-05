@@ -270,7 +270,7 @@ begin
   if uzccommandsmanager.commandmanager.CommandsStack.Count=0 then
   begin
   drawings.GetCurrentDWG.wa.Clear0Ontrackpoint;
-  drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+  drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.free;
   drawings.GetCurrentDWG.ConstructObjRoot.ObjCasheArray.Clear;
   //drawings.GetCurrentDWG.ConstructObjRoot.ObjToConnectedArray.Clear;
   drawings.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
@@ -413,7 +413,7 @@ end;
 
 procedure CommandRTEdObject.CommandCancel;
 begin
-  drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+  drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.free;
   drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   drawings.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
   drawings.GetCurrentDWG.wa.SetMouseMode(savemousemode);

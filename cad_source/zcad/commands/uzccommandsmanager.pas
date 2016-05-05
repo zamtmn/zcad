@@ -404,7 +404,7 @@ begin
                                                     end;
         p:=sa.iterate(ir);
   until p=nil;
-  sa.FreeAndDone;
+  sa.Done;
   lastcommand:=oldlastcomm;
 
      uzcshared.EnableCmdLine;
@@ -741,6 +741,7 @@ end;
 destructor GDBcommandmanager.done;
 begin
      {self.freewithprocanddone(comdeskclear);}
+     cleareraseobj;
      lastcommand:='';
      inherited done;
      CommandsStack.done;
@@ -757,5 +758,5 @@ end;}
 initialization
      commandmanager.init(1000);
 finalization
-     commandmanager.FreeAndDone;
+     commandmanager.Done;
 end.

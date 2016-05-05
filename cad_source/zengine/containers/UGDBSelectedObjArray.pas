@@ -79,7 +79,7 @@ procedure GDBSelectedObjArray.freeelement;
 begin
   if PSelectedObjDesc(PItem).pcontrolpoint<>nil then
                                                 begin
-                                                     PSelectedObjDesc(PItem).pcontrolpoint^.FreeAndDone;
+                                                     PSelectedObjDesc(PItem).pcontrolpoint^.Done;
                                                      gdbfreemem(GDBPointer(PSelectedObjDesc(PItem).pcontrolpoint));
                                                 end;
   if PSelectedObjDesc(PItem).ptempobj<>nil then

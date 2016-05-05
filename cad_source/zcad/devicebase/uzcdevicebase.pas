@@ -160,7 +160,7 @@ begin
 end;
 procedure DeviceDbBaseObject.Format;
 begin
-     inherited format;
+     //inherited format;
      if NameShortTemplate<>'' then
      NameShort:=NameShortTemplate;
      if NameTemplate<>'' then

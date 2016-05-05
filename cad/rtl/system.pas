@@ -70,7 +70,7 @@ PGDBaseObject=^GDBaseObject;
 GDBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object
     function ObjToGDBString(prefix,sufix:GDBString):GDBString; virtual;abstract;
     function GetObjType:TObjID;virtual;abstract;
-    procedure Format;virtual;abstract;
+    //procedure Format;virtual;abstract;
     procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
     function AfterSerialize(SaveFlag:GDBWord; membuf:GDBPointer):GDBInteger;virtual;abstract;
     function AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer):GDBInteger;virtual;abstract;
@@ -520,8 +520,6 @@ GZVector={$IFNDEF DELPHI}packed{$ENDIF}
                   function PushBackIfNotPresentWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
                   function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):GDBBoolean;
                   function GetSpecializedTypeInfo:PTypeInfo;inline;
-                  destructor FreeAndDone;virtual;abstract;
-                  destructor ClearAndDone;virtual;abstract;
                   function SizeOfData:TArrayIndex;
                   function GetParrayAsPointer:pointer;
                   function CreateArray:GDBPointer;virtual;abstract;
@@ -549,8 +547,6 @@ GZVectorP={$IFNDEF DELPHI}packed{$ENDIF}
                                        Deleted:TArrayIndex;(*hidden_in_objinsp*)
                                        function iterate (var ir:itrec):GDBPointer;virtual;abstract;
                                        function beginiterate(out ir:itrec):GDBPointer;virtual;abstract;
-                                       destructor FreeAndDone;virtual;abstract;
-                                       procedure cleareraseobj;virtual;abstract;
                                        procedure RemoveData(const data:T);virtual;abstract;
                                        function GetRealCount:GDBInteger;
                                        constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
@@ -566,7 +562,7 @@ GZVectorPData={$IFNDEF DELPHI}packed{$ENDIF}
                                        function getDataMutable(index:GDBInteger):PTData;
                                        procedure RemoveData(const data:PTData);virtual;abstract;
                                        procedure pack;virtual;abstract;
-                                       procedure cleareraseobj;virtual;abstract;
+                                       procedure free;virtual;abstract;
                                        destructor done;virtual;abstract;
                                  end;
 //Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectorpobjects.pas
@@ -580,7 +576,6 @@ PGDBOpenArrayOfPObjects=^TZctnrVectorPGDBaseObjects;
 //Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectorobjects.pas
 GZVectorObjects={$IFNDEF DELPHI}packed{$ENDIF}
                       object(GZVectorData)
-                             procedure cleareraseobj;virtual;abstract;
                              function CreateObject:PGDBaseObject;
                              procedure free;virtual;abstract;
                        end;
@@ -1095,8 +1090,6 @@ PGDBTableArray=^GDBTableArray;
 GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorPObects)(*OpenArrayOfData=TZctnrVectorGDBString*)
                     columns,rows:GDBInteger;
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}c,r:GDBInteger);
-                    destructor done;virtual;abstract;
-                    procedure cleareraseobj;virtual;abstract;
                     //function copyto(var source:GDBOpenArrayOfData):GDBInteger;virtual;abstract;
               end;
 //Generate on E:/zcad/cad_source/zcad/uzcsysvars.pas
@@ -1422,6 +1415,7 @@ ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayO
                 function GetLength(const i:TArrayIndex):GDBFloat;virtual;abstract;
              end;
 //Generate on E:/zcad/cad_source/zengine/zgl/uzgindexsarray.pas
+PZGLIndexsArray=^ZGLIndexsArray;
 ZGLIndexsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOfData=TArrayIndex*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
@@ -1719,7 +1713,6 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure SaveToDXFfollow(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;abstract;
                     procedure SaveToDXFPostProcess(var handle:GDBOpenArrayOfByte);
                     procedure SaveToDXFObjXData(var outhandle:GDBOpenArrayOfByte);virtual;abstract;
-                    procedure Format;virtual;abstract;
                     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
                     procedure FormatFeatures(var drawing:TDrawingDef);virtual;abstract;
                     procedure FormatFast(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
@@ -2245,7 +2238,7 @@ GDBObjBlockdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
 PGDBObjBlockdefArray=^GDBObjBlockdefArray;
 PBlockdefArray=^BlockdefArray;
 BlockdefArray=packed array [0..0] of GDBObjBlockdef;
-GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOfData=GDBObjBlockdef*)
+GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorObjects)(*OpenArrayOfData=GDBObjBlockdef*)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       constructor initnul;
                       function getindex(name:GDBString):GDBInteger;virtual;abstract;
@@ -2589,10 +2582,6 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  CoordInOCS:GDBLineProp;(*'Coordinates OCS'*)(*saved_to_shd*)
                  CoordInWCS:GDBLineProp;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
                  PProjPoint:PGDBLineProj;(*'Coordinates DCS'*)(*hidden_in_objinsp*)
-                 //Length:GDBDouble;(*'Length'*)(*oi_readonly*)
-                 //Length_2:GDBDouble;(*'Sqrt length'*)(*hidden_in_objinsp*)
-                 //dir:GDBvertex;(*'Direction'*)(*hidden_in_objinsp*)
-                 //Geom2:ZGLGeometry;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PExtensionData;var drawing:TDrawingDef);virtual;abstract;

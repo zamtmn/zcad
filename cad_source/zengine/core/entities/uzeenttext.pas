@@ -262,7 +262,7 @@ begin
   begin
     Local.p_insert := VertexAdd(pgdbobjtext(refp)^.Local.p_insert, dist);
     calcobjmatrix;
-    format;
+    //format;
   end
 end;
 destructor GDBObjText.done;

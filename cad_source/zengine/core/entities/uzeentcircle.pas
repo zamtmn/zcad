@@ -515,7 +515,7 @@ begin
          //r:=VertexAdd(pgdbobjcircle(refp)^.p_insert,wc);
     Radius := Vertexlength(Local.p_insert, wc);
   end;
-  format;
+  //format;
 end;
 {procedure GDBObjCircle.higlight;
 begin

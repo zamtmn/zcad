@@ -163,6 +163,7 @@ UserTypeDescriptor=object(GDBaseObject)
                          procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
                          procedure IncAddr(var addr:GDBPointer);virtual;
                          function GetFactTypedef:PUserTypeDescriptor;virtual;
+                         procedure Format;virtual;
                    end;
 TPropEditor=class(TComponent)
                  public
@@ -392,6 +393,9 @@ end;
 function UserTypeDescriptor.GetFactTypedef:PUserTypeDescriptor;
 begin
      result:=@self;
+end;
+procedure UserTypeDescriptor.Format;
+begin
 end;
 procedure UserTypeDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);
 begin

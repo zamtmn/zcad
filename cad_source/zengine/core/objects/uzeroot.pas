@@ -133,7 +133,7 @@ function GDBObjRoot.AfterDeSerialize;
 begin
      inherited AfterDeSerialize(SaveFlag,membuf);
      correctobjects(nil,-1);
-     format;
+     //format;
 end;
 destructor GDBObjRoot.done;
 begin

@@ -114,7 +114,7 @@ begin
     matrixinvert(m);
     Local.p_insert :={vectortransform3d( }VertexAdd(PGDBObjComplex(refp)^.Local.p_insert, dist){,m)};
   end;
-  format;
+  //format;
 end;
 procedure GDBObjComplex.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 begin

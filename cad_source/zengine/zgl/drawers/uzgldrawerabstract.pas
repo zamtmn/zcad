@@ -19,7 +19,7 @@
 unit uzgldrawerabstract;
 {$INCLUDE def.inc}
 interface
-uses uzgvertex3sarray,{$IFDEF DELPHI}types,{$ENDIF}uzgprimitivescreatorabstract,
+uses uzgindexsarray,uzgvertex3sarray,{$IFDEF DELPHI}types,{$ENDIF}uzgprimitivescreatorabstract,
      uzepalette,Classes,Graphics,uzbtypes,uzecamera,uzegeometry;
 type
 TRenderMode=(TRM_ModelSpace,TRM_DisplaySpace,TRM_WindowSpace);
@@ -32,8 +32,8 @@ TZGLAbstractDrawer=class
 
                         procedure DrawLine(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2:TLLVertexIndex);virtual;abstract;
                         procedure DrawTriangle(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3:TLLVertexIndex);virtual;abstract;
-                        procedure DrawTrianglesFan(const PVertexBuffer,PIndexBuffer:PZGLVertex3Sarray;const i1,IndexCount:TLLVertexIndex);virtual;abstract;
-                        procedure DrawTrianglesStrip(const PVertexBuffer,PIndexBuffer:PZGLVertex3Sarray;const i1,IndexCount:TLLVertexIndex);virtual;abstract;
+                        procedure DrawTrianglesFan(const PVertexBuffer:PZGLVertex3Sarray;const PIndexBuffer:PZGLIndexsArray;const i1,IndexCount:TLLVertexIndex);virtual;abstract;
+                        procedure DrawTrianglesStrip(const PVertexBuffer:PZGLVertex3Sarray;const PIndexBuffer:PZGLIndexsArray;const i1,IndexCount:TLLVertexIndex);virtual;abstract;
                         procedure DrawQuad(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3,i4:TLLVertexIndex);virtual;abstract;
                         function CheckOutboundInDisplay(const PVertexBuffer:PZGLVertex3Sarray;const i1:TLLVertexIndex):boolean;virtual;abstract;
                         procedure DrawPoint(const PVertexBuffer:PZGLVertex3Sarray;const i:TLLVertexIndex);virtual;abstract;

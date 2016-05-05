@@ -19,7 +19,7 @@
 unit uzgldrawergeneral2d;
 {$INCLUDE def.inc}
 interface
-uses {$IFNDEF DELPHI}LCLIntf,{$ENDIF}{$IFDEF DELPHI}windows,Types,{$ENDIF}Controls,
+uses uzgindexsarray,{$IFNDEF DELPHI}LCLIntf,{$ENDIF}{$IFDEF DELPHI}windows,Types,{$ENDIF}Controls,
      uzglviewareaabstract,uzgldrawergeneral,uzgprimitivescreator,gzctnrvectordata,
      uzgvertex3sarray,uzgldrawerabstract,uzepalette,Classes,Graphics,uzbtypesbase,uzbtypes,uzegeometry;
 type
@@ -75,8 +75,8 @@ TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
                           procedure DrawTriangle(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3:TLLVertexIndex);override;
                           procedure DrawQuad(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3,i4:TLLVertexIndex);override;
                           procedure DrawPoint(const PVertexBuffer:PZGLVertex3Sarray;const i:TLLVertexIndex);override;
-                          procedure DrawTrianglesFan(const PVertexBuffer,PIndexBuffer:PZGLVertex3Sarray;const i1,IndexCount:TLLVertexIndex);override;
-                          procedure DrawTrianglesStrip(const PVertexBuffer,PIndexBuffer:PZGLVertex3Sarray;const i1,IndexCount:TLLVertexIndex);override;
+                          procedure DrawTrianglesFan(const PVertexBuffer:PZGLVertex3Sarray;const PIndexBuffer:PZGLIndexsArray;const i1,IndexCount:TLLVertexIndex);override;
+                          procedure DrawTrianglesStrip(const PVertexBuffer:PZGLVertex3Sarray;const PIndexBuffer:PZGLIndexsArray;const i1,IndexCount:TLLVertexIndex);override;
 
                           procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);override;
                           procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
@@ -286,7 +286,7 @@ begin
                                   result:=true;
 end;
 
-procedure TZGLGeneral2DDrawer.DrawTrianglesStrip(const PVertexBuffer,PIndexBuffer:PZGLVertex3Sarray;const i1,IndexCount:TLLVertexIndex);
+procedure TZGLGeneral2DDrawer.DrawTrianglesStrip(const PVertexBuffer:PZGLVertex3Sarray;const PIndexBuffer:PZGLIndexsArray;const i1,IndexCount:TLLVertexIndex);
 var
    i,index:integer;
    pindex:PTLLVertexIndex;
@@ -345,7 +345,7 @@ begin
     end;
 end;
 
-procedure TZGLGeneral2DDrawer.DrawTrianglesFan(const PVertexBuffer,PIndexBuffer:PZGLVertex3Sarray;const i1,IndexCount:TLLVertexIndex);
+procedure TZGLGeneral2DDrawer.DrawTrianglesFan(const PVertexBuffer:PZGLVertex3Sarray;const PIndexBuffer:PZGLIndexsArray;const i1,IndexCount:TLLVertexIndex);
 var
    i,index:integer;
    pindex:PTLLVertexIndex;

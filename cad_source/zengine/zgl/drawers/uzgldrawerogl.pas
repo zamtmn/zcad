@@ -20,7 +20,7 @@ unit uzgldrawerogl;
 {$INCLUDE def.inc}
 interface
 uses
-    LCLProc,gzctnrvectordata,uzepalette,
+    uzgindexsarray,LCLProc,gzctnrvectordata,uzepalette,
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
@@ -63,8 +63,8 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure endrender;override;
                         procedure DrawLine(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2:TLLVertexIndex);override;
                         procedure DrawTriangle(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3:TLLVertexIndex);override;
-                        procedure DrawTrianglesFan(const PVertexBuffer,PIndexBuffer:PZGLVertex3Sarray;const i1,IndexCount:TLLVertexIndex);override;
-                        procedure DrawTrianglesStrip(const PVertexBuffer,PIndexBuffer:PZGLVertex3Sarray;const i1,IndexCount:TLLVertexIndex);override;
+                        procedure DrawTrianglesFan(const PVertexBuffer:PZGLVertex3Sarray;const PIndexBuffer:PZGLIndexsArray;const i1,IndexCount:TLLVertexIndex);override;
+                        procedure DrawTrianglesStrip(const PVertexBuffer:PZGLVertex3Sarray;const PIndexBuffer:PZGLIndexsArray;const i1,IndexCount:TLLVertexIndex);override;
                         procedure DrawQuad(const PVertexBuffer:PZGLVertex3Sarray;const i1,i2,i3,i4:TLLVertexIndex);override;
                         function CheckOutboundInDisplay(const PVertexBuffer:PZGLVertex3Sarray;const i1:TLLVertexIndex):boolean;override;
                         procedure DrawPoint(const PVertexBuffer:PZGLVertex3Sarray;const i:TLLVertexIndex);override;
@@ -141,7 +141,7 @@ begin
     oglsm.myglVertex3fV(PVertexBuffer.getDataMutable(i3));
     oglsm.myglend;
 end;
-procedure TZGLOpenGLDrawer.DrawTrianglesFan(const PVertexBuffer,PIndexBuffer:PZGLVertex3Sarray;const i1,IndexCount:TLLVertexIndex);
+procedure TZGLOpenGLDrawer.DrawTrianglesFan(const PVertexBuffer:PZGLVertex3Sarray;const PIndexBuffer:PZGLIndexsArray;const i1,IndexCount:TLLVertexIndex);
 var
    i,index:integer;
    pindex:PTLLVertexIndex;
@@ -154,7 +154,7 @@ begin
     end;
     oglsm.myglend{mytotalglend};
 end;
-procedure TZGLOpenGLDrawer.DrawTrianglesStrip(const PVertexBuffer,PIndexBuffer:PZGLVertex3Sarray;const i1,IndexCount:TLLVertexIndex);
+procedure TZGLOpenGLDrawer.DrawTrianglesStrip(const PVertexBuffer:PZGLVertex3Sarray;const PIndexBuffer:PZGLIndexsArray;const i1,IndexCount:TLLVertexIndex);
 var
    i,index:integer;
    pindex:PTLLVertexIndex;

@@ -1413,7 +1413,7 @@ begin
           until (s = dxfName_ENDSEC);
           debugln('{D-}end; {block table}');
           //programlog.LogOutStr('end; {block table}',lp_DecPos,LM_Debug);
-          drawing.BlockDefArray.Format;
+          //drawing.BlockDefArray.Format;
           drawing.DimStyleTable.ResolveDXFHandles(Handle2BlockName);
           drawing.DimStyleTable.ResolveLineTypes(drawing.LTypeStyleTable);
         end;

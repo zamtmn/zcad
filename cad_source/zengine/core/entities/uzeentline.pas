@@ -620,7 +620,7 @@ begin
   begin
     CoordInOCS.lbegin := VertexAdd(pgdbobjline(refp)^.CoordInOCS.lBegin, dist);
   end;
-  format;
+  //format;
 end;
 
 procedure GDBObjLine.rtsave;

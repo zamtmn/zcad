@@ -458,7 +458,7 @@ begin
   inc(p,i);
   inc(pold,i);
   p^ := VertexAdd(pold^, dist);
-  format;
+  //format;
   end;
 end;
 procedure GDBObjCurve.rtsave;

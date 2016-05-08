@@ -28,7 +28,7 @@ GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
                  procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
                  procedure restructure(var drawing:TDrawingDef);virtual;
                  procedure DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;
-                 function BuildGraf(var drawing:TDrawingDef):GDBInteger;virtual;
+                 procedure BuildGraf(var drawing:TDrawingDef);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  procedure EraseMi(pobj:pgdbobjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
                  function CalcNewName(Net1,Net2:PGDBObjNet):GDBInteger;
@@ -284,7 +284,7 @@ begin
      ObjArray.DeSelect(SelObjArray,SelectedObjCount);
 
 end;
-function GDBObjNet.BuildGraf(var drawing:TDrawingDef):GDBInteger;
+procedure GDBObjNet.BuildGraf(var drawing:TDrawingDef);
 var pl:pgdbobjline;
     //i:GDBInteger;
     tgf: pgrafelement;

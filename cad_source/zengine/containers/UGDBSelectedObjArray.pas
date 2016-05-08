@@ -54,7 +54,7 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<select
 
                           procedure drawobj(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                           procedure freeelement(PItem:PT);virtual;
-                          function calcvisible(frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
+                          procedure calcvisible(frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
                           procedure resprojparam(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
                     end;
 {EXPORT-}
@@ -523,7 +523,7 @@ begin
   end;
 end;
 
-function GDBSelectedObjArray.calcvisible;
+procedure GDBSelectedObjArray.calcvisible;
 {var
   p:pGDBObjEntity;
   q:GDBBoolean;}

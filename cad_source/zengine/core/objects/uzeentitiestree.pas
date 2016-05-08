@@ -61,8 +61,8 @@ TTreeStatistik=record
                             procedure Clear;
                             procedure updateenttreeadress;
                             procedure addtonul(p:PGDBObjEntity);
-                            function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;
-                            function CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;
+                            procedure AddObjectToNodeTree(pobj:PGDBObjEntity);
+                            procedure CorrectNodeTreeBB(pobj:PGDBObjEntity);
                       end;
 {EXPORT-}
 TTestTreeNode=Object(GDBaseObject)
@@ -127,11 +127,11 @@ begin
 
   //root.DrawWithattrib(gdb.GetCurrentDWG.pcamera.POSCOUNT);
 end;
-function TEntTreeNode.CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;
+procedure TEntTreeNode.CorrectNodeTreeBB(pobj:PGDBObjEntity);
 begin
      ConcatBB(BoundingBox,pobj^.vp.BoundingBox);
 end;
-function TEntTreeNode.AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;
+procedure TEntTreeNode.AddObjectToNodeTree(pobj:PGDBObjEntity);
 begin
     addtonul(pobj);
     CorrectNodeTreeBB(pobj);

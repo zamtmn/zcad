@@ -23,7 +23,7 @@ interface
 uses LCLProc,uzbtypesbase,uzbtypes,uzegeometry;
 
 type
-GDBProjectProc=function (objcoord:GDBVertex; out wincoord:GDBVertex):Integer of object;
+GDBProjectProc=procedure (objcoord:GDBVertex; out wincoord:GDBVertex) of object;
 {REGISTEROBJECTTYPE GDBObjCamera}
 {EXPORT+}
 PGDBObjCamera=^GDBObjCamera;

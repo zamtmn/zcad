@@ -9,11 +9,10 @@ object SingleLineTextEditorForm: TSingleLineTextEditorForm
   ClientHeight = 40
   ClientWidth = 530
   KeyPreview = True
-  OnKeyDown = KeyDown
+  OnKeyDown = _onKeyDown
   OnShow = shoftedform
   Position = poOwnerFormCenter
   LCLVersion = '1.7'
-  Visible = False
   object EditField: TEdit
     Left = 25
     Height = 40

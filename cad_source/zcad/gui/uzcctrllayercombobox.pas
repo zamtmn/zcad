@@ -77,7 +77,7 @@ end;
     procedure PLDeActivate2(Data:PtrInt);
     procedure PLDeActivate3(Data:PtrInt);
     procedure LVKlac(Sender:TObject);
-    procedure KeyDown(Sender:TObject;var Key:Word;Shift:TShiftState);
+    procedure _onKeyDown(Sender:TObject;var Key:Word;Shift:TShiftState);
     procedure ObnovitSpisok;
   protected
     procedure Paint;override;
@@ -406,7 +406,7 @@ begin
     sLV.Columns.Add;
     sLV.Columns.Items[3].Width:=PoleLista.Width-18*3-30;
     sLV.OnClick:=@LVKlac;
-    sLV.OnKeyDown:=@KeyDown;
+    sLV.OnKeyDown:=@_onKeyDown;
     sLV.OnCompare:=@Compareevent;
     ObnovitSpisok;
     if sListHeight>0 then
@@ -548,7 +548,7 @@ begin
   end;
 end;
 
-procedure TZCADLayerComboBox.KeyDown(Sender:TObject;var Key:Word;Shift:TShiftState); // Отлавливаем эскей
+procedure TZCADLayerComboBox._onKeyDown(Sender:TObject;var Key:Word;Shift:TShiftState); // Отлавливаем эскей
 begin
   if Key=27 then Application.QueueAsyncCall(@PLDeActivate3,0);
 end;

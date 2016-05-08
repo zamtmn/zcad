@@ -11,11 +11,10 @@ object ColorSelectForm: TColorSelectForm
   Constraints.MinHeight = 470
   Constraints.MinWidth = 632
   OnCreate = _onCreate
-  OnResize = resize
+  OnResize = _onResize
   OnShow = _onshow
   Position = poMainFormCenter
   LCLVersion = '1.7'
-  Visible = False
   object ButtonPanel1: TButtonPanel
     Left = 1
     Height = 37

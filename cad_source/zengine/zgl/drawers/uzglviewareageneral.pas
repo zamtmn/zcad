@@ -85,7 +85,7 @@ type
                            procedure SetOHintTimer(Sender: TObject);override;
                            procedure getosnappoint(radius: GDBFloat);override;
                            procedure getonmouseobject(pva: PGDBObjEntityOpenArray;InSubEntry:GDBBoolean);virtual;
-                           function findonmobj(pva: PGDBObjEntityOpenArray; var i: GDBInteger;InSubEntry:GDBBoolean): GDBInteger;virtual;
+                           procedure findonmobj(pva: PGDBObjEntityOpenArray; var i: GDBInteger;InSubEntry:GDBBoolean);virtual;
                            procedure getonmouseobjectbytree(var Node:TEntTreeNode;InSubEntry:GDBBoolean);override;
                            procedure processmousenode(Node:TEntTreeNode;var i:integer;InSubEntry:GDBBoolean);virtual;
                            procedure AddOntrackpoint;override;
@@ -2013,7 +2013,7 @@ begin
   //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobjectbytree------{end}',lp_DecPos);{$ENDIF}
 end;
 
-function TGeneralViewArea.findonmobj(pva: PGDBObjEntityOpenArray; var i: GDBInteger;InSubEntry:GDBBoolean): GDBInteger;
+procedure TGeneralViewArea.findonmobj(pva: PGDBObjEntityOpenArray; var i: GDBInteger;InSubEntry:GDBBoolean);
 var
   pp:PGDBObjEntity;
   ir:itrec;

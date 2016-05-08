@@ -42,7 +42,7 @@ TBezierSolver2D=class
                      Conturs:TMyVectorArrayGDBFontVertex2D;
                      LastOncurveLineAdded:boolean;
                      constructor create;
-                     destructor Destroy;overload;
+                     destructor Destroy;override;
                      procedure AddPoint(x,y:double;pa:TPointAttr);overload;
                      procedure AddPoint(p:GDBvertex2D;pa:TPointAttr);overload;
                      procedure ChangeMode(Mode:TSolverMode);

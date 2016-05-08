@@ -32,7 +32,7 @@ const
      commandprefix=' ';
 type
   TCWindow = class(TForm)
-    private
+    public
     procedure AfterConstruction; override;
   end;
   TCLine = class({TPanel}TForm{Tcustomform})

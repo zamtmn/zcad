@@ -28,8 +28,8 @@ GDBObjEntityOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPV)
                       function add(p:GDBPointer):TArrayIndex;virtual;
                       function addwithoutcorrect(p:GDBPointer):GDBInteger;virtual;
                       function copytowithoutcorrect(source:PGDBObjEntityOpenArray):GDBInteger;virtual;
-                      function deliteminarray(p:GDBInteger):GDBInteger;virtual;
-                      function cloneentityto(PEA:PGDBObjEntityOpenArray;own:GDBPointer):GDBInteger;virtual;
+                      procedure deliteminarray(p:GDBInteger);virtual;
+                      procedure cloneentityto(PEA:PGDBObjEntityOpenArray;own:GDBPointer);virtual;
                       //function clonetransformedentityto(PEA:PGDBObjEntityOpenArray;own:GDBPointer;const t_matrix:DMatrix4D):GDBInteger;virtual;
                       procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
 
@@ -69,7 +69,7 @@ begin
      until pobj=nil;
 end;}
 
-function GDBObjEntityOpenArray.CloneEntityTo(PEA:PGDBObjEntityOpenArray;own:GDBPointer):GDBInteger;
+procedure GDBObjEntityOpenArray.CloneEntityTo(PEA:PGDBObjEntityOpenArray;own:GDBPointer);
 var pobj,pcobj:PGDBObjEntity;
     ir:itrec;
 begin
@@ -106,7 +106,7 @@ begin
   until p=nil;
   result:=count;
 end;
-function GDBObjEntityOpenArray.deliteminarray;
+procedure GDBObjEntityOpenArray.deliteminarray;
 begin
      //if (parray<>nil)and(p>=0)then
      PGDBObjEntityArray(parray)^[p]:=nil;

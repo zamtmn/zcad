@@ -62,7 +62,7 @@ GDBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object
     //procedure Format;virtual;
     procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
     function AfterSerialize(SaveFlag:GDBWord; membuf:GDBPointer):GDBInteger;virtual;
-    function AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer):GDBInteger;virtual;
+    procedure AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer);virtual;
     function GetObjTypeName:GDBString;virtual;
     function GetObjName:GDBString;virtual;
     constructor initnul;
@@ -525,9 +525,8 @@ function GDBaseObject.AfterSerialize(SaveFlag:GDBWord; membuf:GDBPointer):GDBInt
 begin
      result:=0;
 end;
-function GDBaseObject.AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer):GDBInteger;
+procedure GDBaseObject.AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer);
 begin
-     result:=0;
 end;
 function GDBaseObject.GetObjTypeName:GDBString;
 begin

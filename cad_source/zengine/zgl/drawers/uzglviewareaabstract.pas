@@ -37,7 +37,7 @@ type
                 procedure WMPaint(var Message: TWMPaint); message WM_PAINT;
                 {$ENDIF}
                 public
-                function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint): Boolean; overload;
+                function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint): Boolean; override;
                 property OnMouseUp;
                 property onmousedown;
                 property onmousemove;
@@ -181,7 +181,7 @@ end;
 
 function TCADControl.DoMouseWheel(Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint): Boolean;
 begin
-     inherited;
+     result:=inherited;
 end;
 {$IFDEF DELPHI}
 procedure TCADControl.WMPaint(var Message: TWMPaint);

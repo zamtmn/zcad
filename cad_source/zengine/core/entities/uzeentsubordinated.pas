@@ -42,9 +42,8 @@ GDBObjGenericWithSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjExtend
                                     procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
                                     procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger);virtual;
                                     procedure DelSelectedSubitem(var drawing:TDrawingDef);virtual;
-                                    function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;abstract;
+                                    procedure AddMi(pobj:PGDBObjSubordinated);virtual;abstract;
                                     procedure RemoveInArray(pobjinarray:GDBInteger);virtual;abstract;
-                                    function CreateOU:GDBInteger;virtual;
                                     procedure createfield;virtual;
                                     //function FindVariable(varname:GDBString):pvardesk;virtual;
                                     destructor done;virtual;
@@ -317,9 +316,6 @@ begin
                                                  result:=self.bp.ListPos.Owner.FindVariable(varname);
 
 end;}
-function GDBObjGenericWithSubordinated.CreateOU;
-begin
-end;
 procedure GDBObjGenericWithSubordinated.ImEdited;
 begin
 end;

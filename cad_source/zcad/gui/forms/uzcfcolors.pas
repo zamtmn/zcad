@@ -61,7 +61,7 @@ type
     procedure OddMDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure OddPalettePaint(Sender: TObject);
-    procedure resize(Sender: TObject);
+    procedure _onResize(Sender: TObject);
     procedure testsetcolor(Sender: TObject);
     procedure _onCreate(Sender: TObject);
     procedure _onshow(Sender: TObject);
@@ -178,7 +178,7 @@ begin
      PalettePainter(TPaintBox(sender).Canvas,11,2,OddGeometry.startx,OddGeometry.starty,OddGeometry.dx,OddGeometry.dy,24,5);
 end;
 
-procedure TColorSelectForm.resize(Sender: TObject);
+procedure TColorSelectForm._onResize(Sender: TObject);
 var
   h,hone:integer;
 const

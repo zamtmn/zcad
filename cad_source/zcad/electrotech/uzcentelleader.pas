@@ -50,7 +50,7 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             function GetObjTypeName:GDBString;virtual;
             function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
             procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger);virtual;
-            function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
+            procedure DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;
             procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
             //function InRect:TInRect;virtual;
 
@@ -140,7 +140,7 @@ procedure GDBObjElLeader.ImSelected;
 begin
      {select;}selected:=true;
 end;
-function GDBObjElLeader.DeSelect;
+procedure GDBObjElLeader.DeSelect;
 var
    DummySelectedObjCount:integer=3;
 begin
@@ -148,7 +148,7 @@ begin
      MainLine.DeSelect(SelObjArray,DummySelectedObjCount);
      MarkLine.DeSelect(SelObjArray,DummySelectedObjCount);
      Tbl.DeSelect(SelObjArray,DummySelectedObjCount);
-     result:=inherited deselect(SelObjArray,SelectedObjCount);
+     {result:=}inherited deselect(SelObjArray,SelectedObjCount);
 end;
 function GDBObjElLeader.GetObjTypeName;
 begin

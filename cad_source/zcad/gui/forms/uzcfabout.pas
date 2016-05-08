@@ -26,7 +26,7 @@ uses
 type
   TAboutForm = class(TFreedForm)
     Memo:TMemo;
-    private
+    public
     procedure AfterConstruction; override;
   end;
 var

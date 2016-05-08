@@ -125,8 +125,8 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     function getownermatrix:PDMatrix4D;virtual;
                     function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;
                     function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
-                    function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
-                    function YouDeleted(var drawing:TDrawingDef):GDBInteger;virtual;
+                    procedure DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;
+                    procedure YouDeleted(var drawing:TDrawingDef);virtual;
                     procedure YouChanged(var drawing:TDrawingDef);virtual;
                     function GetObjTypeName:GDBString;virtual;
                     function GetObjType:TObjID;virtual;
@@ -150,7 +150,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
 
                     function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
 
-                    function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
+                    procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
                     function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
                     procedure CalcObjMatrix;virtual;
                     procedure ReCalcFromObjMatrix;virtual;
@@ -226,7 +226,7 @@ procedure GDBObjEntity.CalcObjMatrix;
 begin
 
 end;
-function GDBObjEntity.EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;
+procedure GDBObjEntity.EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);
 begin
 
 end;
@@ -396,7 +396,7 @@ function GDBObjEntity.GetObjType;
 begin
      result:={vp.ID}0;
 end;
-function GDBObjEntity.YouDeleted;
+procedure GDBObjEntity.YouDeleted;
 begin
      pgdbobjgenericsubentry(bp.ListPos.owner)^.EraseMi(@self,bp.ListPos.SelfIndex,drawing);
 end;
@@ -912,7 +912,7 @@ begin
      end;
      end;
 end;
-function GDBObjEntity.DeSelect;
+procedure GDBObjEntity.DeSelect;
 var tdesc:pselectedobjdesc;
     ir:itrec;
 begin

@@ -37,7 +37,7 @@ grafelement={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
 
                   constructor initnul;
                   constructor init(v:gdbvertex);
-                  function addline(pv:pgdbobjEntity):GDBInteger;
+                  procedure addline(pv:pgdbobjEntity);
                   function IsConnectedTo(node:pgrafelement):pgdbobjEntity;
             end;
 GDBGraf={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<grafelement>{//})(*OpenArrayOfData=grafelement*)
@@ -239,7 +239,7 @@ begin
   until line=nil;
   result:=nil;
 end;
-function grafelement.addline;
+procedure grafelement.addline;
 begin
      inc(linkcount);
      link.PushBackData(pv);

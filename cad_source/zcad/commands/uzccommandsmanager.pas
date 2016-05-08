@@ -48,14 +48,14 @@ type
                           DMenu:TDMenuWnd;
                           OnCommandRun:TOnCommandRun;
                           constructor init(m:GDBInteger);
-                          function execute(const comm:string;silent:GDBBoolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;
-                          function executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;
-                          function executecommandsilent(const comm:pansichar;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;
+                          procedure execute(const comm:string;silent:GDBBoolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
+                          procedure executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
+                          procedure executecommandsilent(const comm:pansichar;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure executecommandend;virtual;
                           procedure executecommandtotalend;virtual;
                           procedure ChangeModeAndEnd(newmode:TGetPointMode);
                           procedure executefile(fn:GDBString;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
-                          function executelastcommad(pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;
+                          procedure executelastcommad(pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure sendpoint2command(p3d:gdbvertex; p2d:gdbvertex2di; mode:GDBByte;osp:pos_record;const drawing:TDrawingDef);virtual;
                           procedure CommandRegister(pc:PCommandObjectDef);virtual;
                           procedure run(pc:PCommandObjectDef;operands:GDBString;pdrawing:PTDrawingDef);virtual;
@@ -553,7 +553,7 @@ begin
           pcommandrunning^.pdwg:=pd;
           pcommandrunning^.CommandStart(pansichar(operands));
 end;
-function GDBcommandmanager.execute(const comm:string;silent:GDBBoolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;
+procedure GDBcommandmanager.execute(const comm:string;silent:GDBBoolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);
 var //i,p1,p2: GDBInteger;
     command,operands:GDBString;
     cc:TCStartAttr;
@@ -606,17 +606,17 @@ begin
   command:='';
   operands:='';
 end;
-function GDBcommandmanager.executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;
+procedure GDBcommandmanager.executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);
 begin
      if not busy then
-                     result:=execute(comm,false,pdrawing,POGLWndParam)
+                     execute(comm,false,pdrawing,POGLWndParam)
                  else
                      uzcshared.ShowError(rsCommandNRInC);
 end;
-function GDBcommandmanager.executecommandsilent{(const comm:pansichar): GDBInteger};
+procedure GDBcommandmanager.executecommandsilent{(const comm:pansichar): GDBInteger};
 begin
      if not busy then
-     result:=execute(comm,true,pdrawing,POGLWndParam);
+     execute(comm,true,pdrawing,POGLWndParam);
 end;
 procedure GDBcommandmanager.PrepairVarStack;
 var
@@ -703,9 +703,9 @@ procedure GDBcommandmanager.executecommandtotalend;
 begin
   ChangeModeAndEnd(TGPCancel);
 end;
-function GDBcommandmanager.executelastcommad(pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;
+procedure GDBcommandmanager.executelastcommad(pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);
 begin
-  result:=executecommand(lastcommand,pdrawing,POGLWndParam);
+  executecommand(lastcommand,pdrawing,POGLWndParam);
 end;
 constructor GDBcommandmanager.init;
 var

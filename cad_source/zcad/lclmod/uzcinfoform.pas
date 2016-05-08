@@ -45,7 +45,7 @@ type
                 FProc:TButtonProc;
                 FMethod:TButtonMethod;
                 PPata:GDBPointer;
-                protected procedure Click; override;
+                procedure Click; override;
                 end;
 implementation
 uses uzclog;

@@ -17,7 +17,7 @@ type
     OkButton: TButton;
     EditField: TEdit;
     helptext: TLabel;
-    procedure KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure _onKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure shoftedform(Sender: TObject);
   private
     { private declarations }
@@ -42,7 +42,7 @@ begin
      Constraints.MinHeight:=Height;
 end;
 
-procedure TSingleLineTextEditorForm.KeyDown(Sender: TObject; var Key: Word;
+procedure TSingleLineTextEditorForm._onKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
 {$IFNDEF DELPHI}

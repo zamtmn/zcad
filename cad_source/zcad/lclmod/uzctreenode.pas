@@ -70,7 +70,7 @@ type
     TmyCommandToolButton=class({Tmy}TToolButton)
                   public
                   FCommand:String;{**<Command to manager commands}
-                  protected procedure Click; override;
+                  procedure Click; override;
                   end;
     TmyVariableToolButton=class({Tmy}TToolButton)
                   public
@@ -78,7 +78,7 @@ type
                   FBufer:DWord;
                   FMask:DWord;
                   procedure AssignToVar(varname:string;mask:DWord);
-                  protected procedure Click; override;
+                  procedure Click; override;
                   end;
     {**Modified TMenuItem}
     TmyMenuItem = class (TMenuItem)
@@ -87,7 +87,6 @@ type
                        FSilent:Boolean;
                        constructor create(TheOwner: TComponent;_Caption,_Command:TTranslateString);
                        procedure SetCommand(_Caption,_Command:TTranslateString);
-                       protected
                        procedure Click; override;
                   end;
     TCreatedNode = class of TTreeNode;

@@ -41,7 +41,7 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                             VisibleOBJBoundingBox:TBoundingBox;
                             //ObjTree:TEntTreeNode;
                             function AddObjectToObjArray(p:GDBPointer):GDBInteger;virtual;
-                            function GoodAddObjectToObjArray(const obj:GDBObjEntity):GDBInteger;virtual;
+                            procedure GoodAddObjectToObjArray(const obj:GDBObjEntity);virtual;
                             {function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;virtual;
                             function CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;virtual;}
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -56,13 +56,13 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                             function getowner:PGDBObjSubordinated;virtual;
                             function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;
                             function EubEntryType:GDBInteger;virtual;
-                            function MigrateTo(new_sub:PGDBObjGenericSubEntry):GDBInteger;virtual;
-                            function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
-                            function RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
-                            function GoodRemoveMiFromArray(const obj:GDBObjEntity):GDBInteger;virtual;
+                            procedure MigrateTo(new_sub:PGDBObjGenericSubEntry);virtual;
+                            procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
+                            procedure RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:GDBInteger);virtual;
+                            procedure GoodRemoveMiFromArray(const obj:GDBObjEntity);virtual;
                             {function SubMi(pobj:pGDBObjEntity):GDBInteger;virtual;}
                             //** Добавляет объект в область ConstructObjRoot или mainObjRoot или итд. Пример добавления gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@sampleObj);
-                            function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;
+                            procedure AddMi(pobj:PGDBObjSubordinated);virtual;
                             procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
                             function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
                             procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
@@ -260,7 +260,7 @@ begin
      else
          result:=false;
 end;
-function GDBObjGenericSubEntry.GoodAddObjectToObjArray(const obj:GDBObjEntity):GDBInteger;
+procedure GDBObjGenericSubEntry.GoodAddObjectToObjArray(const obj:GDBObjEntity);
 var
     p:pointer;
 begin
@@ -440,7 +440,7 @@ procedure GDBObjGenericSubEntry.RemoveInArray(pobjinarray:GDBInteger);
 begin
      ObjArray.deliteminarray(pobjinarray);
 end;
-function GDBObjGenericSubEntry.AddMi;
+procedure GDBObjGenericSubEntry.AddMi;
 begin
      //pobj^.bp.PSelfInOwnerArray:=ObjArray.getDataMutable(ObjArray.add(pobj));
      ObjArray.add(pobj);
@@ -459,11 +459,11 @@ begin
            pobj:=self.ObjArray.iterate(ir);
      until pobj=nil;
 end;
-function GDBObjGenericSubEntry.GoodRemoveMiFromArray(const obj:GDBObjEntity):GDBInteger;
+procedure GDBObjGenericSubEntry.GoodRemoveMiFromArray(const obj:GDBObjEntity);
 begin
      RemoveMiFromArray(@obj,obj.bp.ListPos.SelfIndex);
 end;
-function GDBObjGenericSubEntry.RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;
+procedure GDBObjGenericSubEntry.RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:GDBInteger);
 //var
 //p:PGDBObjEntity;
 begin
@@ -476,7 +476,7 @@ begin
      //pointer(p):=ObjArray.getDataMutable(pobjinarray);
      ObjArray.deliteminarray(pobjinarray);
 end;
-function GDBObjGenericSubEntry.EraseMi;
+procedure GDBObjGenericSubEntry.EraseMi;
 //var
 //p:PGDBObjEntity;
 begin
@@ -503,7 +503,7 @@ begin
      if InSubEntry then result:=lstonmouse
                    else result:=@self;
 end;
-function GDBObjGenericSubEntry.MigrateTo;
+procedure GDBObjGenericSubEntry.MigrateTo;
 var p:pGDBObjEntity;
 //    i:GDBInteger;
         ir:itrec;

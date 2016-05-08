@@ -2399,6 +2399,7 @@ begin
   if (button and MZW_LBUTTON)<>0 then
   begin
     begin
+      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
       drawings.GetCurrentDWG^{.UndoStack}.PushStartMarker('Редактирование на чертеже');
       drawings.GetCurrentDWG^.SelObjArray.modifyobj(dist,wc,true,pobj,drawings.GetCurrentDWG^);
       drawings.GetCurrentDWG^{.UndoStack}.PushEndMarker;

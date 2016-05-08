@@ -61,13 +61,13 @@ TZCADDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
            procedure AddBlockFromDBIfNeed(name:GDBString);virtual;
            function GetUnitsFormat:TzeUnitsFormat;virtual;
            procedure SetUnitsFormat(f:TzeUnitsFormat);virtual;
-           procedure FillDrawingPartRC(var dc:TDrawContext);virtual;
+           procedure FillDrawingPartRC(out dc:TDrawContext);virtual;
      end;
 {EXPORT-}
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
  uses uzcdrawings,uzeenttext,uzeentdevice,uzeentblockinsert,uzeffdxf,uzcshared,uzccommandsmanager;
-procedure TZCADDrawing.FillDrawingPartRC(var dc:TDrawContext);
+procedure TZCADDrawing.FillDrawingPartRC(out dc:TDrawContext);
 var
   vd:pvardesk;
 begin

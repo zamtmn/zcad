@@ -27,10 +27,10 @@ GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
                  function EubEntryType:GDBInteger;virtual;
                  procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
                  procedure restructure(var drawing:TDrawingDef);virtual;
-                 function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
+                 procedure DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;
                  function BuildGraf(var drawing:TDrawingDef):GDBInteger;virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                 function EraseMi(pobj:pgdbobjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
+                 procedure EraseMi(pobj:pgdbobjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
                  function CalcNewName(Net1,Net2:PGDBObjNet):GDBInteger;
                  procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry;var drawing:TDrawingDef);virtual;
                  function GetObjTypeName:GDBString;virtual;
@@ -221,7 +221,7 @@ begin
      riserarray.Done;
      inherited done;//  error
 end;
-function GDBObjNet.EraseMi;
+procedure GDBObjNet.EraseMi;
 begin
      objarray.deliteminarray(pobjinarray);
      objarray.pack;
@@ -278,7 +278,7 @@ begin
      dc.drawer.setpointsize(1);
      inherited DrawGeometry(lw,dc{infrustumactualy,subrender});
 end;
-function GDBObjNet.DeSelect;
+procedure GDBObjNet.DeSelect;
 begin
      inherited deselect(SelObjArray,SelectedObjCount);
      ObjArray.DeSelect(SelObjArray,SelectedObjCount);

@@ -55,7 +55,7 @@ type
                       procedure getareacaps; override;
                       procedure GDBActivateGLContext; override;
                       function NeedDrawInsidePaintEvent:boolean; override;
-                      procedure setdeicevariable;
+                      procedure setdeicevariable; override;
                       function getParam:pointer; override;
                       function getParamTypeName:GDBString; override;
                       function CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;override;
@@ -73,7 +73,6 @@ begin
 end;
 procedure TOGLWnd.EraseBackground(DC: HDC);
 begin
-     dc:=0;
 end;
 function TOpenGLViewArea.getParam;
 begin

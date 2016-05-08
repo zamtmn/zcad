@@ -39,7 +39,7 @@ TFormName2FormInfoDataMap=GKey2DataMap<GDBString,TFormInfoData,LessGDBString>;
 TZCADGUIManager=class
                      FormsInfo:TFormName2FormInfoDataMap;
                      constructor Create;
-                     destructor Destroy;virtual;
+                     destructor Destroy;override;
                      procedure RegisterZCADFormInfo(FormName,FormCaption:GDBString;const FormClass:TClass;const bounds:TRect;SetupProc:TZCADFormSetupProc;CreateProc:TZCADFormCreateProc;PInstanceVariable:pointer);
                      function GetZCADFormInfo(FormName:GDBString; out PFormInfoData:PTFormInfoData):boolean;
                      function CreateZCADFormInstance(var FormInfo:TFormInfoData):tobject;

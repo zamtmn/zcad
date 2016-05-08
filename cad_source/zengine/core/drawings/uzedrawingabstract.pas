@@ -51,8 +51,8 @@ TAbstractDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TDrawingDef)
                        InsUnits:TInsUnits;
                        TextSize:GDBDouble;
 
-                       function myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex):Integer;virtual;abstract;
-                       function myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;virtual;abstract;
+                       procedure myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex);virtual;abstract;
+                       procedure myGluUnProject(win:GDBVertex;out obj:GDBvertex);virtual;abstract;
                        function GetPcamera:PGDBObjCamera;virtual;abstract;
                        function GetCurrentROOT:PGDBObjGenericSubEntry;virtual;abstract;
                        function GetConstructObjRoot:PGDBObjRoot;virtual;abstract;
@@ -66,7 +66,7 @@ TAbstractDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TDrawingDef)
                        procedure StoreNewCamerapPos(command:Pointer);virtual;abstract;
                        procedure SetUnitsFormat(f:TzeUnitsFormat);virtual;abstract;
                        procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
-                       procedure FillDrawingPartRC(var dc:TDrawContext);virtual;abstract;
+                       procedure FillDrawingPartRC(out dc:TDrawContext);virtual;abstract;
                  end;
 {EXPORT-}
 implementation

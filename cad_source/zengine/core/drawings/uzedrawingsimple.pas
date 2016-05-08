@@ -51,8 +51,8 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function GetLastSelected:PGDBObjEntity;virtual;
                        constructor init(pcam:PGDBObjCamera);
                        destructor done;virtual;
-                       function myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex):Integer;virtual;
-                       function myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;virtual;
+                       procedure myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex);virtual;
+                       procedure myGluUnProject(win:GDBVertex;out obj:GDBvertex);virtual;
                        function GetPcamera:PGDBObjCamera;virtual;
                        function GetCurrentROOT:PGDBObjGenericSubEntry;virtual;
                        function GetCurrentRootSimple:GDBPointer;virtual;
@@ -90,7 +90,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        procedure FreeConstructionObjects;virtual;
                        function GetChangeStampt:GDBBoolean;virtual;
                        function CreateDrawingRC(_maxdetail:GDBBoolean=false):TDrawContext;virtual;
-                       procedure FillDrawingPartRC(var dc:TDrawContext);virtual;
+                       procedure FillDrawingPartRC(out dc:TDrawContext);virtual;
                        function GetUnitsFormat:TzeUnitsFormat;virtual;
                        function CreateBlockDef(name:GDBString):GDBPointer;virtual;
                        procedure HardReDraw;
@@ -188,7 +188,7 @@ begin
        FillDrawingPartRC(result);
   end;
 end;
-procedure TSimpleDrawing.FillDrawingPartRC(var dc:TDrawContext);
+procedure TSimpleDrawing.FillDrawingPartRC(out dc:TDrawContext);
 begin
   dc.DrawingContext.VisibleActualy:=Getpcamera.POSCOUNT;
   dc.DrawingContext.InfrustumActualy:=Getpcamera.POSCOUNT;
@@ -588,12 +588,12 @@ function TSimpleDrawing.GetPcamera:PGDBObjCamera;
 begin
      result:=pcamera;
 end;
-function TSimpleDrawing.myGluProject2;
+procedure TSimpleDrawing.myGluProject2;
 begin
       objcoord:=vertexadd(objcoord,pcamera^.CamCSOffset);
      _myGluProject(objcoord.x,objcoord.y,objcoord.z,@pcamera^.modelMatrixLCS,@pcamera^.projMatrixLCS,@pcamera^.viewport,wincoord.x,wincoord.y,wincoord.z);
 end;
-function TSimpleDrawing.myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;
+procedure TSimpleDrawing.myGluUnProject(win:GDBVertex;out obj:GDBvertex);
 begin
      _myGluUnProject(win.x,win.y,win.z,@pcamera^.modelMatrixLCS,@pcamera^.projMatrixLCS,@pcamera^.viewport, obj.x,obj.y,obj.z);
      OBJ:=vertexsub(OBJ,pcamera^.CamCSOffset);

@@ -46,7 +46,7 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                    function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
                    procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
-                   function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
+                   procedure DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;
                    //function GetDeviceType:TDeviceType;virtual;
                    procedure getoutbound(var DC:TDrawContext);virtual;
 
@@ -58,12 +58,12 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
 
                    procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
                    procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-                   function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;
+                   procedure AddMi(pobj:PGDBObjSubordinated);virtual;
                    //procedure select;virtual;
                    procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
                    procedure addcontrolpoints(tdesc:GDBPointer);virtual;
 
-                   function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
+                   procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
                    procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
                    procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                    class function GetDXFIOFeatures:TDXFEntIODataManager;
@@ -96,7 +96,7 @@ begin
      until pobj=nil;
 end;
 
-function GDBObjDevice.EraseMi;
+procedure GDBObjDevice.EraseMi;
 //var
 //p:PGDBObjEntity;
 begin
@@ -160,7 +160,7 @@ begin
      inherited SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
      VarObjArray.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
 end;
-function GDBObjDevice.AddMi;
+procedure GDBObjDevice.AddMi;
 begin
      //pobj^.bp.PSelfInOwnerArray:=ObjArray.getDataMutable(ObjArray.add(pobj));
      VarObjArray.add(pobj);
@@ -293,7 +293,7 @@ begin
   PTObjectUnit(ou.Instance)^.CopyTo(PTObjectUnit(tvo.ou.Instance));}
   tvo^.BlockDesc:=BlockDesc;
 end;
-function GDBObjDevice.DeSelect;
+procedure GDBObjDevice.DeSelect;
 begin
      inherited deselect(SelObjArray,SelectedObjCount);
      VarObjArray.DeSelect(SelObjArray,SelectedObjCount);

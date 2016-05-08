@@ -398,7 +398,7 @@ end;
 procedure GDBObjLWpolyline.AddControlpoints;
 var pdesc:controlpointdesc;
     i:GDBInteger;
-    pv2d:pGDBvertex2d;
+    //pv2d:pGDBvertex2d;
     pv:pGDBvertex;
 begin
           //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
@@ -416,7 +416,7 @@ begin
                pdesc.dispcoord.y:=round(pv2d.y);}
                PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
                inc(pv);
-               inc(pv2d);
+               //inc(pv2d);
           end;
 end;
 function GDBObjLWpolyline.Clone;

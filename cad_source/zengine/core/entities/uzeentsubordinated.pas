@@ -39,8 +39,8 @@ PGDBObjSubordinated=^GDBObjSubordinated;
 PGDBObjGenericWithSubordinated=^GDBObjGenericWithSubordinated;
 GDBObjGenericWithSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjExtendable)
                                     {OU:TFaceTypedData;(*'Variables'*)}
-                                    function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
-                                    function ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
+                                    procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
+                                    procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger);virtual;
                                     procedure DelSelectedSubitem(var drawing:TDrawingDef);virtual;
                                     function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;abstract;
                                     procedure RemoveInArray(pobjinarray:GDBInteger);virtual;abstract;
@@ -320,10 +320,10 @@ end;}
 function GDBObjGenericWithSubordinated.CreateOU;
 begin
 end;
-function GDBObjGenericWithSubordinated.ImEdited;
+procedure GDBObjGenericWithSubordinated.ImEdited;
 begin
 end;
-function GDBObjGenericWithSubordinated.ImSelected;
+procedure GDBObjGenericWithSubordinated.ImSelected;
 begin
 end;
 procedure GDBObjGenericWithSubordinated.DelSelectedSubitem;

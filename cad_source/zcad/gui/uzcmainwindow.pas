@@ -2970,6 +2970,8 @@ var
     RelSelectedObjects:Integer;
 begin
   RelSelectedObjects:=SelectRelatedObjects(Sender.PDWG,@Sender.param,Sender.param.SelDesc.LastSelectedObject);
+  if RelSelectedObjects>0 then
+                              HistoryOutStr(format(rsAdditionalSelected,[RelSelectedObjects]));
   if (commandmanager.pcommandrunning=nil)or(commandmanager.pcommandrunning^.IData.GetPointMode<>TGPWaitEnt) then
   begin
   if PGDBObjEntity(Sender.param.SelDesc.OnMouseObject)^.select(Sender.PDWG^.GetSelObjArray,Sender.param.SelDesc.Selectedobjcount) then

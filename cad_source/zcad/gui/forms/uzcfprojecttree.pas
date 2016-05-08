@@ -354,6 +354,7 @@ begin
   if not assigned(ProjectTreeForm) then
                                   ProjectTreeForm:=TProjectTreeForm.mycreate(Application,@ProjectTreeForm);
   ProjectTreeForm.Show;
+  result:=cmd_ok;
 end;
 initialization
 begin

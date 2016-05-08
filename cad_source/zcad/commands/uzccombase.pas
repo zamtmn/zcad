@@ -88,8 +88,8 @@ begin
                                  if assigned(SetGDBObjInspProc)then
                                                                SetGDBObjInspProc(drawings.GetUndoStack,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('TMSEditor'),@MSEditor,drawings.GetCurrentDWG);
                                 end
-                            else
-                                commandmanager.executecommandend;
+                            {else
+                                commandmanager.executecommandend};
      result:=cmd_ok;
 end;
 function GetOnMouseObjWAddr(var ContextMenu:TPopupMenu):GDBInteger;

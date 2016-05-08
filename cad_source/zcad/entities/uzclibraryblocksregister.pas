@@ -62,6 +62,7 @@ begin
         end;
     end;
   f.done;
+  result:=cmd_ok;
 end;
 initialization
   CreateCommandFastObjectPlugin(@ReadBlockLibrary_com,'ReadBlockLibrary',0,0);

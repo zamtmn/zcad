@@ -953,7 +953,7 @@ begin
   commandmanager.DMAddMethod('Export','Экспортировать выбранные устройства с привязкой к осям',@run);
   commandmanager.DMShow;
 end;
-procedure GetNearestAxis(axisarray:taxisdescarray;coord:gdbvertex;var nearestaxis,secondaxis:integer);
+procedure GetNearestAxis(axisarray:taxisdescarray;coord:gdbvertex;out nearestaxis,secondaxis:integer);
 var
    i:integer;
    nearestd,{nearestd0,}secondd{,secondd0}:double;
@@ -2091,12 +2091,12 @@ begin
           if pb=nil then
                         begin
                              drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,operands);
-                             {pb:=BlockBaseDWG^.BlockDefArray.getblockdef(operands);
+                             (*pb:=BlockBaseDWG^.BlockDefArray.getblockdef(operands);
                              if pb<>nil then
                              begin
                                   drawings.CopyBlock(BlockBaseDWG,drawings.GetCurrentDWG,pb);
                                   //pb^.CloneToGDB({@drawings.GetCurrentDWG^.BlockDefArray});
-                             end;}
+                             end;*)
                         end;
      end;
 

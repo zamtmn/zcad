@@ -45,7 +45,7 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                    function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                    function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
-                   function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
+                   procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
                    function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
                    //function GetDeviceType:TDeviceType;virtual;
                    procedure getoutbound(var DC:TDrawContext);virtual;
@@ -299,7 +299,7 @@ begin
      VarObjArray.DeSelect(SelObjArray,SelectedObjCount);
      //lstonmouse:=nil;
 end;
-function GDBObjDevice.ImEdited;
+procedure GDBObjDevice.ImEdited;
 //var t:gdbinteger;
 begin
      inherited imedited (pobj,pobjinarray,drawing);
@@ -426,7 +426,7 @@ begin
           pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getDataMutable(index);
           for i:=0 to pblockdef.ObjArray.count-1 do
           begin
-               pvisible:=GDBPointer(pblockdef.ObjArray.getDataMutable(i)^);
+               pvisible:=GDBPointer(pblockdef.ObjArray.getDataMutable(i));
                pvisible:=pvisible^.Clone(@self);
                pvisible2:=PGDBObjEntity(pvisible^.FromDXFPostProcessBeforeAdd(nil,drawing));
                dc:=drawing.createdrawingrc;

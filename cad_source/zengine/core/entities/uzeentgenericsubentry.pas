@@ -63,7 +63,7 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                             {function SubMi(pobj:pGDBObjEntity):GDBInteger;virtual;}
                             //** Добавляет объект в область ConstructObjRoot или mainObjRoot или итд. Пример добавления gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@sampleObj);
                             function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;
-                            function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
+                            procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
                             function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
                             procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
                             destructor done;virtual;
@@ -494,7 +494,7 @@ begin
      pobj^.done;
      uzbmemman.GDBFreeMem(GDBPointer(pobj));
 end;
-function GDBObjGenericSubEntry.ImEdited;
+procedure GDBObjGenericSubEntry.ImEdited;
 begin
      ObjCasheArray.PushBackIfNotPresent(pobj);
 end;

@@ -192,6 +192,7 @@ resourcestring
   rsprocesstimemsg='%s:  %s second';
 
   rsncOGLc='OpenGL context is not created';
+  rsAdditionalSelected='Additional were selected %d primitives';
 implementation
 
 end.

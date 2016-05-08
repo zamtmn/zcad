@@ -25,7 +25,7 @@ GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;
                  function EubEntryType:GDBInteger;virtual;
-                 function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
+                 procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
                  procedure restructure(var drawing:TDrawingDef);virtual;
                  function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
                  function BuildGraf(var drawing:TDrawingDef):GDBInteger;virtual;
@@ -554,7 +554,7 @@ begin
           ti.done;
      end;
 end;
-function GDBObjNet.ImEdited;
+procedure GDBObjNet.ImEdited;
 begin
      //pobj^.format;
      inherited ImEdited(pobj,pobjinarray,drawing);

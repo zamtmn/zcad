@@ -41,7 +41,7 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             function beforertmodify:GDBPointer;virtual;
             function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;virtual;
             procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-            function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef):GDBInteger;virtual;
+            procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
 
             constructor initnul;
             function Clone(own:GDBPointer):PGDBObjEntity;virtual;
@@ -49,7 +49,7 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             procedure DXFOut(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
             function GetObjTypeName:GDBString;virtual;
             function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
-            function ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
+            procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger);virtual;
             function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
             procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
             //function InRect:TInRect;virtual;
@@ -136,7 +136,7 @@ else
    result:=IREmpty
 
 end;}
-function GDBObjElLeader.ImSelected;
+procedure GDBObjElLeader.ImSelected;
 begin
      {select;}selected:=true;
 end;
@@ -222,7 +222,7 @@ begin
      objmatrix:=m4;
      //historyout('ElLeader DXFOut end');
 end;
-function GDBObjElLeader.ImEdited;
+procedure GDBObjElLeader.ImEdited;
 //var t:gdbinteger;
 begin
      //format;

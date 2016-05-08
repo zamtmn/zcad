@@ -30,6 +30,7 @@ type
     TGDIPanel=class({TCustomControl}TCADControl)
                 protected
                 procedure WMPaint(var Message: {$IFNDEF DELPHI}TLMPaint{$ENDIF}{$IFDEF DELPHI}TWMPaint{$ENDIF}); message {$IFNDEF DELPHI}LM_PAINT{$ENDIF}{$IFDEF DELPHI}WM_PAINT{$ENDIF};
+                public
                 procedure EraseBackground(DC: HDC); {$IFNDEF DELPHI}override;{$ENDIF}
     end;
     TGeneralCanvasViewArea=class(TGeneralViewArea)

@@ -20,7 +20,7 @@ unit uzctranslations;
 {$INCLUDE def.inc}
 
 interface
-uses uzbpaths,LCLVersion,uzbstrproc{$IFNDEF DELPHI},LCLProc,gettext,translations,fileutil,LResources{$ENDIF},uzcsysinfo,sysutils,uzclog,forms,Classes, typinfo;
+uses uzbpaths,LCLVersion,uzbstrproc{$IFNDEF DELPHI},LazUTF8,gettext,translations,fileutil,LResources{$ENDIF},uzcsysinfo,sysutils,uzclog,forms,Classes, typinfo;
 
 type
     TmyPOFile = class(TPOFile)

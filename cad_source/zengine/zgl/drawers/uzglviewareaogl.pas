@@ -37,7 +37,6 @@ type
     private
     public
       wa:TAbstractViewArea;
-      protected
       procedure EraseBackground(DC: HDC);{$IFNDEF DELPHI}override;{$ENDIF}
     end;
     TOpenGLViewArea=class(TGeneralViewArea)

@@ -787,6 +787,7 @@ function _CloseDWGPage(ClosedDWG:PTZCADDrawing;lincedcontrol:TObject):Integer;
 var
    viewcontrol:TCADControl;
    s:string;
+   TAWA:TAbstractViewArea;
 begin
   if ClosedDWG<>nil then
   begin
@@ -819,9 +820,9 @@ begin
 
        if viewcontrol<>nil then
        begin
-            tobject(viewcontrol):=FindComponentByType(viewcontrol,TAbstractViewArea);
-            drawings.CurrentDWG:=PTZCADDrawing(TAbstractViewArea(viewcontrol).PDWG);
-            TAbstractViewArea(viewcontrol).GDBActivate;
+            TAWA:=TAbstractViewArea(FindComponentByType(viewcontrol,TAbstractViewArea));
+            drawings.CurrentDWG:=pointer(TAWA.PDWG);
+            TAWA.GDBActivate;
        end
        else
            drawings.freedwgvars;

@@ -80,7 +80,6 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
 
                     procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                     procedure RenderFeedbackIFNeed(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                    function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;
                     function CalculateLineWeight(const DC:TDrawContext):GDBInteger;//inline;
                     //function InRect:TInRect;virtual;
                     function Clone(own:GDBPointer):PGDBObjEntity;virtual;
@@ -799,9 +798,6 @@ end;
 procedure GDBObjEntity.getonlyoutbound;
 begin
      getoutbound(dc);
-end;
-function GDBObjEntity.GetOsnapPoint;
-begin
 end;
 function GDBObjEntity.IsActualy:GDBBoolean;
 begin

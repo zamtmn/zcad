@@ -39,7 +39,6 @@ GDBObjCurve={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure FormatWithoutSnapArray;virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                 function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;
                  procedure AddControlpoint(pcp:popenarrayobjcontrolpoint_GDBWordwm;objnum:GDBInteger);virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
@@ -280,39 +279,6 @@ begin
         inc(pcp^.count);
     end;
   end
-end;
-function GDBObjCurve.getosnappoint;
-var ptv: pgdbvertex;
-    pvsa:PVectotSnap;
-    vertexnum,temp,mode:GDBInteger;
-begin
-  if (ostype<=os_polymin) and (ostype>=os_polymax) then
-  begin
-    temp:=round(os_polymin-ostype);
-    mode:= temp mod 6;
-    vertexnum:= (temp div 6);
-    {pvsa:=GDBPointer(self.snaparray);
-    inc(pvsa,vertexnum);}
-    //------------pvsa:=snaparray.getDataMutable(vertexnum);
-    ptv:=VertexArrayInWCS.GetParrayAsPointer;
-    inc(ptv,vertexnum);
-    case mode of
-                0:
-                  result:=ptv^;
-                1:
-                  result:=pvsa^.l_1_4;
-                2:
-                  result:=pvsa^.l_1_3;
-                3:
-                  result:=pvsa^.l_1_2;
-                4:
-                  result:=pvsa^.l_2_3;
-                5:
-                  result:=pvsa^.l_3_4;
-              end;
-
-
-  end;
 end;
 procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray;const closed:GDBBoolean);
 var

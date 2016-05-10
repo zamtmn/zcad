@@ -42,7 +42,6 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
 
                      procedure SaveToDXF(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
                      procedure CalcObjMatrix;virtual;
-                     function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;
                      function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                      //procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                      //procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);virtual;
@@ -449,7 +448,7 @@ end;
 procedure GDBObjBlockInsert.BuildGeometry;
 var
     pvisible,pvisible2:PGDBObjEntity;
-    i:GDBInteger;
+    //i:GDBInteger;
     mainowner:PGDBObjSubordinated;
     dc:TDrawContext;
     ir:itrec;
@@ -491,7 +490,7 @@ begin
                                      end
                                  else
                                      begin
-                                          pvisible2^.correctobjects(@self,i);
+                                          pvisible2^.correctobjects(@self,{i}ir.itc);
                                           pvisible2^.FormatEntity(drawing,dc);
                                           pvisible.BuildGeometry(drawing);
                                           ConstObjArray.add(@pvisible2);
@@ -506,10 +505,6 @@ begin
           self.BlockDesc:=pblockdef.BlockDesc;
           self.getoutbound(dc);
           inherited;
-end;
-function GDBObjBlockInsert.getosnappoint;
-begin
-  if ostype = os_blockinsert then result := Local.p_insert
 end;
 procedure GDBObjBlockInsert.LoadFromDXF;
 var

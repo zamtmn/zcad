@@ -1807,7 +1807,7 @@ begin
   filename:='';
   if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Сохранить данные...') then
   begin
-  DecimalSeparator := ',';
+  DefaultFormatSettings.DecimalSeparator := ',';
   cman.init;
   cman.build;
   handle:=FileCreate(UTF8ToSys(filename),fmOpenWrite);
@@ -1928,7 +1928,7 @@ begin
   zcRedrawCurrentDrawing;
   FileClose(handle);
   cman.done;
-  DecimalSeparator := '.';
+  DefaultFormatSettings.DecimalSeparator := '.';
   end;
   result:=cmd_ok;
 end;
@@ -2037,7 +2037,7 @@ begin
 
   cman.done;
 
-  DecimalSeparator := ',';
+  DefaultFormatSettings.DecimalSeparator := ',';
   PBOMITEM:=bom.beginiterate(ir);
   if PBOMITEM<>nil then
   repeat
@@ -2047,7 +2047,7 @@ begin
 
         PBOMITEM:=bom.iterate(ir);
   until PBOMITEM=nil ;
-  DecimalSeparator := '.';
+  DefaultFormatSettings.DecimalSeparator := '.';
   FileClose(handle);
 
 

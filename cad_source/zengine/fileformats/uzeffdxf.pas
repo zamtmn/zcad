@@ -1680,7 +1680,7 @@ var
 begin
   Handle2pointer:=TMapPointerToHandle.Create;
   VarsDict:=TGDBString2GDBStringDictionary.create;
-  DecimalSeparator := '.';
+  DefaultFormatSettings.DecimalSeparator := '.';
   //standartstylehandle:=0;
   //olddwg:=nil;//@drawing;
   (*!!!if assigned(SetCurrentDWGProc)
@@ -2874,5 +2874,5 @@ begin
      i2:=0;
      FOC:=0;
      Ext2LoadProcMap.RegisterExt('dxf','AutoCAD DXF files (*.dxf)',@addfromdxf,true);
-     DecimalSeparator:='.';
+     DefaultFormatSettings.DecimalSeparator:='.';
 end.

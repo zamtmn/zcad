@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CONFIG>
-  <Compiler Value="C:\fplaz\pp\bin\i386-win32\fpc.exe" Date="1199199386"/>
-  <Params Value=" -Mdelphi -Scghi -O1 -g -gl -l -vewnhibq -FiC:\TEMP\AGraph\Test\Graphs -FiC:\TEMP\AGraph\Test\Vectors -FiC:\TEMP\AGraph\Test\Attrs -FuC:\TEMP\AGraph\Test\Graphs -FuC:\TEMP\AGraph\Test\Vectors -FuC:\TEMP\AGraph\Test\Attrs -FuC:\TEMP\AGraph\Graphs -FuC:\TEMP\AGraph\Vectors -FuC:\fplaz\lazarus\lcl\units\i386-win32\win32 -FuC:\fplaz\lazarus\lcl\units\i386-win32 -FuC:\fplaz\lazarus\components\lazutils\lib\i386-win32 -FuC:\fplaz\lazarus\packager\units\i386-win32 &quot;-FuC:\TEMP\AGraph\Test\Graph\lazarus\Минимальная длина из точки в точку\&quot; -dLCL -dLCLwin32 -dBorland -dVer150 -dDelphi7 -dCompiler6_Up -dPUREPASCAL GraphTestMinWeightPath.lpr"/>
-  <Complete Value="False"/>
-</CONFIG>

@@ -706,7 +706,7 @@ begin
           mem.done;
           end;
 
-          historyout('   Вот и всё бля...............');
+          HistoryOutStr('   Вот и всё бля...............');
 
 
      end
@@ -830,7 +830,7 @@ begin
                                      FreEditorProc;
        if assigned(ReturnToDefaultProc)then
                                            ReturnToDefaultProc(drawings.GetUnitsFormat);
-       uzcshared.SBTextOut('Закрыто');
+       uzcshared.StatusLineTextOut('Закрыто');
        if assigned(UpdateVisibleProc) then UpdateVisibleProc;
   end;
 end;
@@ -2707,7 +2707,7 @@ begin
 
             Application.ActivateHint(Sender.getviewcontrol.ClientToScreen(classes.Point(Sender.param.md.mouse.x,Sender.param.md.mouse.y)));
        end;
-       SBTextOut(htext);
+       StatusLineTextOut(htext);
 end;
 
 function TZCADMainWindow.wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer):boolean;

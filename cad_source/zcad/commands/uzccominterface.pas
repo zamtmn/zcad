@@ -121,7 +121,7 @@ begin
             drawings.CurrentDWG:=poglwnd.PDWG;
             poglwnd.GDBActivate;
        end;
-       uzcshared.SBTextOut('Закрыто');
+       uzcshared.StatusLineTextOut('Закрыто');
        GDBobjinsp.ReturnToDefault;
        sharedgdb.updatevisible;
   end;*)

@@ -597,11 +597,11 @@ begin
           end
      else
          begin
-              historyout(@rsCommandNRInC[1]);
+              HistoryOutStr(rsCommandNRInC);
          end;
     end;
   end
-  else historyout(GDBPointer(rsUnknownCommand+':"'+command+'"'));
+  else HistoryOutStr(rsUnknownCommand+':"'+command+'"');
   end;
   command:='';
   operands:='';

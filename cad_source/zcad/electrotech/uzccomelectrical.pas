@@ -1142,7 +1142,7 @@ begin
   until pobj=nil;
   end;
   if counter=0 then
-                   historyout('Выбери объект(ы) источник энергии!');
+                   HistoryOutStr('Выбери объект(ы) источник энергии!');
   cman.done;
   CodePage:=TCP;
 end;
@@ -1236,7 +1236,7 @@ begin
        then
        begin
             PGDBObjEntity(osp^.PGDBObject)^.formatentity(drawings.GetCurrentDWG^,dc);
-            historyout(GDBPointer(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ','')));
+            HistoryOutStr(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ',''));
             //po:=PGDBObjEntity(osp^.PGDBObject)^.getowner;
             //SecondOwner:=GDBPointer(po);
        end
@@ -1417,7 +1417,7 @@ begin
 
 
 
-  historyout('Первая точка:');
+  HistoryOutStr('Первая точка:');
   result:=cmd_ok;
 end;
 Procedure _Cable_com_CommandEnd(_self:GDBPointer);
@@ -2573,7 +2573,7 @@ begin
        begin
             PGDBObjEntity(osp^.PGDBObject)^.formatentity(drawings.GetCurrentDWG^,dc);
             //PGDBObjEntity(osp^.PGDBObject)^.ObjToGDBString('Found: ','');
-            historyout(GDBPointer(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ','')));
+            HistoryOutStr(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ',''));
             //po:=PGDBObjEntity(osp^.PGDBObject)^.getowner;
             pold:=osp^.PGDBObject;
        end
@@ -2619,7 +2619,7 @@ begin
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   sysvarDWGOSMode:=sysvarDWGOSMode or osm_nearest;
   zcShowCommandParams(SysUnit.TypeName2PTD('TELLeaderComParam'),@ELLeaderComParam);
-  historyout('Первая точка:');
+  HistoryOutStr('Первая точка:');
   result:=cmd_ok;
 end;
 function _Cable_com_Manager(operands:TCommandOperands):TCommandResult;
@@ -3187,12 +3187,12 @@ end;
 
 function _test_com(operands:TCommandOperands):TCommandResult;
 begin
-     historyout('Тест производительности. запасаемя терпением');
+     HistoryOutStr('Тест производительности. запасаемя терпением');
      {$IFDEF PERFOMANCELOG}programlog.LogOutStrFast('тест производительности - getonmouseobject*10000',lp_IncPos);{$ENDIF}
      //for i:=0 to 10000 do
      //       drawings.GetCurrentDWG.wa.getonmouseobject(@drawings.GetCurrentROOT.ObjArray);
      {$IFDEF PERFOMANCELOG}programlog.LogOutStrFast('тест производительности',lp_DecPos);{$ENDIF}
-     historyout('Конец теста. выходим, смотрим результаты в конце лога.');
+     HistoryOutStr('Конец теста. выходим, смотрим результаты в конце лога.');
      //quit_com('');
      result:=cmd_ok;
 end;

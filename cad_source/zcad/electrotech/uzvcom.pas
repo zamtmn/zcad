@@ -819,7 +819,7 @@ begin
              for j:=1 to pc^.VertexArrayInOCS.GetRealCount-1 do
                  begin
                   //удлиняем каждую проверяемую линиию, для исключения погрешностей
-                  extNextLine:= extendedLineFunc(PGDBVertex(pc^.VertexArrayInOCS.getelement(j-1))^,PGDBVertex(pc^.VertexArrayInOCS.getelement(j))^,Epsilon) ;
+                  extNextLine:= extendedLineFunc(pc^.VertexArrayInOCS.getdata(j-1),pc^.VertexArrayInOCS.getdata(j),Epsilon) ;
                   //Производим сравнение основной линии с перебираемой линией
                   if uzegeometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).isintercept then
                   begin

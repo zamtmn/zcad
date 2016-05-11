@@ -319,7 +319,7 @@ begin
                           begin
                                s1:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^);
                                s:=rsAutoSave+': '''+s1+'''';
-                               historyout(pansichar(s));
+                               HistoryOutStr(s);
                                itautoseve:=true;
                           end
                       else
@@ -1244,12 +1244,12 @@ begin
   begin
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera) or (MRotateCamera) or (MGet3DPoint));
   //drawings.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := true;
-  historyout('тыкаем и проверяем внутри\снаружи 2D полилинии:');
+  HistoryOutStr('тыкаем и проверяем внутри\снаружи 2D полилинии:');
   exit;
   end;
   //else
   begin
-       historyout('перед запуском нужно выбрать 2D полилинию');
+       HistoryOutStr('перед запуском нужно выбрать 2D полилинию');
        commandmanager.executecommandend;
   end;
 end;
@@ -1260,9 +1260,9 @@ begin
   if (button and MZW_LBUTTON)<>0 then
   begin
        if pgdbobjlwpolyline(drawings.GetCurrentDWG.GetLastSelected).isPointInside(wc) then
-       historyout('Внутри!')
+       HistoryOutStr('Внутри!')
        else
-       historyout('Снаружи!')
+       HistoryOutStr('Снаружи!')
   end;
 end;
 function isrect(const p1,p2,p3,p4:GDBVertex2D):boolean;
@@ -1487,7 +1487,7 @@ begin
   end;
   //else
   begin
-       historyout('перед запуском нужно выбрать 2D полилинию');
+       HistoryOutStr('перед запуском нужно выбрать 2D полилинию');
        commandmanager.executecommandend;
   end;
 end;

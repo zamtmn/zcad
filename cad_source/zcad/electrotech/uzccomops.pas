@@ -382,7 +382,7 @@ begin
   drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_PS_DAT_SMOKE');
   drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_PS_DAT_TERMO');
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera));
-  historyout('Первый угол:');
+  HistoryOutStr('Первый угол:');
   zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pco);
   result:=cmd_ok;
 end;
@@ -392,7 +392,7 @@ begin
   if (button and MZW_LBUTTON)<>0 then
     //if pco^.mouseclic = 1 then
     begin
-      historyout('Второй угол');
+      HistoryOutStr('Второй угол');
       t3dp:=wc;
     end;
 end;
@@ -441,7 +441,7 @@ begin
 
        drawings.GetCurrentROOT.calcbb(dc);
        zcRedrawCurrentDrawing;
-       historyout('Первый угол:');
+       HistoryOutStr('Первый угол:');
        //commandend;
        //pcommandmanager^.executecommandend;
   end;
@@ -1099,7 +1099,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
 
   if (OrtoDevPlaceParam.Name='')or(sd.SelectedEntsCount=0)or(sd.SelectedEntsCount>1) then
                                    begin
-                                        historyout('Должен быть выбран только один блок или устройство!');
+                                        HistoryOutStr('Должен быть выбран только один блок или устройство!');
                                         commandmanager.executecommandend;
                                         exit;
                                    end;
@@ -1107,7 +1107,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera));
-  historyout('Первый угол:');
+  HistoryOutStr('Первый угол:');
   zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pco2);
   OPSPlaceSmokeDetectorOrtoParam.DMC:=TOPSMDC_1_2;
 end;
@@ -1116,7 +1116,7 @@ begin
   result:=mclick;
   if (button and MZW_LBUTTON)<>0 then
     begin
-      historyout('Второй угол');
+      HistoryOutStr('Второй угол');
       t3dp:=wc;
     end
 end;
@@ -1322,7 +1322,7 @@ begin
 
        drawings.GetCurrentROOT.calcbb(dc);
        zcRedrawCurrentDrawing;
-       historyout('Первый угол:');
+       HistoryOutStr('Первый угол:');
        //commandend;
        //pcommandmanager^.executecommandend;
   end;

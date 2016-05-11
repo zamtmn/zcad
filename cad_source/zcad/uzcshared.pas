@@ -28,7 +28,7 @@ SimpleProcOfObject=procedure of object;
 
 procedure HistoryOut(s: pansichar); export;
 procedure HistoryOutStr(s:GDBString);
-procedure SBTextOut(s:GDBString);
+procedure StatusLineTextOut(s:GDBString);
 procedure FatalError(errstr:GDBString);
 procedure LogError(errstr:GDBString); export;
 procedure ShowError(errstr:GDBString); export;
@@ -109,7 +109,7 @@ procedure HistoryOutStr(s:GDBString);
 begin
      HistoryOut(pansichar(s));
 end;
-procedure SBTextOut(s:GDBString);
+procedure StatusLineTextOut(s:GDBString);
 begin
      if assigned(HintText) then
      HintText.caption:=(s);
@@ -136,7 +136,7 @@ begin
      if sysvar.SYS.SYS_IsHistoryLineCreated^ then}
      if assigned(HistoryLine) then
      begin
-     HistoryOut(@errstr[1]);
+     HistoryOutStr(errstr);
      //SendMessageA(cline.HistoryLine.Handle, WM_vSCROLL, SB_PAGEDOWN	, 0);
      end;
      programlog.logoutstr(errstr,0,LM_Error);

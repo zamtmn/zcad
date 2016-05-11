@@ -1,0 +1,231 @@
+{ Version 000828. Copyright © Alexey A.Chernobaev, 1996-2000 }
+{
+  Базовые числовые векторы (интерфейс).
+  Перед включением данного файла необходимо определить тип NumberType.
+
+  Generic numeral vectors (interface part).
+  You must define type NumberType before including this file.
+}
+
+protected
+  FDefaultValue: NumberType;
+  procedure InitMemory(Offset, InitCount: Integer); override;
+  function GetValue(I: Integer): NumberType; virtual; abstract;
+  procedure SetValue(I: Integer; Value: NumberType); virtual; abstract;
+public
+  constructor Create(ElemCount: Integer; ADefaultValue: NumberType);
+  procedure WriteToStream(VStream: TVStream); override;
+  procedure ReadFromStream(VStream: TVStream); override;
+  procedure WriteToTextStream(TextStream: TTextStream);
+  { записывает вектор в текстовый поток }
+  { writes the vector to the text stream }
+  procedure ReadFromTextStream(TextStream: TTextStream);
+  { читает вектор из текстового потока }
+  { reads the vector from the text stream }
+  procedure Assign(Source: TVector); override;
+  procedure CopyRange(FromIndex: Integer; Source: TVector; SourceFrom,
+    SourceTo: Integer); override;
+  procedure ExchangeRange(FromIndex, ToIndex, ACount: Integer); override;
+  function EqualTo(V: TVector): Bool; override;
+  procedure Exchange(I, J: Integer); override;
+{$IFNDEF SPECIAL_COMPARE}
+  function Compare(I: Integer; const V): Int32; override;
+{$ENDIF}
+  procedure SetToDefault; virtual;
+  { устанавливает все элементы в DefaultValue }
+  { sets all elements to DefaultValue }
+  procedure FillValue(Value: NumberType); virtual;
+  { присваивает всем элементам значение Value }
+  { sets all vector elements to Value }
+  procedure SetItems(Values: array of NumberType);
+  { устанавливает значения элементов вектора в Values (Count:=High(Values) + 1) }
+  { sets the vector elements to Values (Count:=High(Values) + 1) }
+  procedure Insert(I: Integer; Value: NumberType); virtual;
+  { вставляет значение Value в позицию I }
+  { inserts Value in the position I }
+  function Add(Value: NumberType): Integer; {virtual;}
+  { добавляет значение в конец вектора и возвращает его индекс (Count - 1) }
+  { appends Value to the end of the vector and returns it's index (Count - 1) }
+  procedure Move(CurIndex, NewIndex: Integer); {virtual;}
+  { изменяет позицию элемента CurIndex на NewIndex }
+  { moves the element from the position CurIndex to NewIndex }
+  function IndexFrom(I: Integer; Value: NumberType): Integer; virtual;
+  { возвращает индекс первого, начиная с I, вхождения значения Value в вектор,
+    либо -1, если такого вхождения не существует }
+  { returns the index of the first occurrence of Value in the vector beginning
+    from I or -1 if there's no such occurrence }
+  function IndexOf(Value: NumberType): Integer; {virtual;}
+  { IndexOf(Value) = IndexFrom(0, Value) }
+  function LastIndexFrom(I: Integer; Value: NumberType): Integer; virtual;
+  { возвращает индекс последнего вхождения значения Value в вектор, который
+    не превышает I, либо -1, если нет таких вхождений }
+  { returns the index of the last occurrence of Value in the vector which is not
+    greater then I or -1 if there's no such occurrence }
+  function LastIndexOf(Value: NumberType): Integer; {virtual;}
+  { LastIndexOf(Value) = LastIndexFrom(Count - 1, Value) }
+  function Remove(Value: NumberType): Integer; {virtual;}
+  { находит первое вхождение Value в вектор, удаляет его вызовом Delete и
+    возвращает индекс удаленного значения, либо -1, если Value не найдено }
+  { searches for the first occurrence of Value in the vector, deletes it with
+    Delete and returns the index of the deleted value or -1 if Value wasn't
+    found }
+  function RemoveLast(Value: NumberType): Integer; {virtual;}
+  { находит последнее вхождение Value в вектор, удаляет его вызовом Delete и
+    возвращает индекс удаленного значения, либо -1, если Value не найдено }
+  { searches for the last occurrence of Value in the vector, deletes it with
+    Delete and returns the index of the deleted value or -1 if Value wasn't
+    found }
+  function RemoveFrom(I: Integer; Value: NumberType): Integer; {virtual;}
+  { находит первое, начиная с I, вхождение Value в вектор, удаляет его вызовом
+    Delete и возвращает индекс удаленного значения, либо -1, если Value
+    не найдено }
+  { searches for the first occurrence of Value in the vector beginning from I,
+    deletes it with Delete and returns the index of the deleted value or -1 if
+    Value wasn't found }
+  function RemoveLastFrom(I: Integer; Value: NumberType): Integer; {virtual;}
+  { находит последнее, но не больше I, вхождение Value в вектор и удаляет его
+    вызовом Delete, возвращая индекс удаленного значения, либо -1, если Value
+    не найдено }
+  { searches for the last occurrence of Value in the vector which is not greater
+    then I, deletes it with Delete and returns the index of the deleted value
+    or -1 if Value wasn't found }
+  function NumberOfValues(Value: NumberType): Integer; virtual;
+  { возвращает количество элементов, равных Value }
+  { returns the number of elements equal to Value }
+  function FindInSortedRange(Value: NumberType; L, H: Integer): Integer;
+  { находит дихотомически значение Value в упорядоченном по возрастанию векторе,
+    начиная с индекса L и кончая H; возвращает минимальный индекс найденного
+    значения, либо -1, если значение не найдено }
+  { searches for the Value in the sorted (ascending) vector dichotomically from
+    the index L to H; returns the minimum index of Value or -1 if Value wasn't
+    found }
+  function FindInSorted(Value: NumberType): Integer;
+  { ищет значение Value в упорядоченном по возрастанию векторе дихотомически;
+    возвращает минимальный индекс найденного значения, либо -1, если значение
+    не найдено }
+  { searches for the Value in the sorted (ascending) vector dichotomically;
+    returns the minimum index of Value or -1 if Value wasn't found }
+  function Find(Value: NumberType; var Index: Integer): Bool;
+  { ищет значение Value в упорядоченном по возрастанию векторе дихотомически;
+    возвращает True, если значение найдено (при этом Index равен минимальному
+    индексу найденного значения), иначе возвращает False (при этом Index
+    указывает, куда надо вставить Value, чтобы вектор остался упорядоченным) }
+  { searches for the Value in the sorted (ascending) vector dichotomically;
+    returns True if Value was found (in such case Index is equal to the minimum
+    index of Value), otherwise returns False (in such case Index is equal to
+    the position where Value can be inserted so that the vector remains sorted) }
+  procedure ConcatenateWith(V: TGenericNumberVector); virtual;
+  { добавляет значения вектора V в конец данного вектора }
+  { appends values from V to the end of the current vector }
+  procedure AddScalar(T: NumberType); virtual;
+  { увеличивает каждый элемент вектора на константу }
+  { increments every vector element by the constant T }
+  procedure SubScalar(T: NumberType); virtual;
+  { уменьшает каждый элемент вектора на константу }
+  { decrements every vector element by the constant T }
+  procedure AddVector(V: TGenericNumberVector); virtual;
+  { прибавляет вектор V к данному вектору }
+  { adds the vector V to the current vector }
+  procedure AddScaled(Factor: NumberType; V: TGenericNumberVector); virtual;
+  { прибавляет вектор V, умноженный на Factor, к данному вектору }
+  { adds the vector V multiplied by Factor, to the current vector }
+  procedure SubVector(V: TGenericNumberVector); virtual;
+  { вычитает вектор V из данного вектора }
+  { subtracts the vector V from the current vector }
+  procedure Mul(V: TGenericNumberVector); virtual;
+  { умножает вектор Self на вектор V поэлементно }
+  { multiplies the vector Self by the vector V element by element }
+  procedure Divide(V: TGenericNumberVector); virtual;
+  { делит вектор Self на вектор V поэлементно }
+  { divides the vector Self by the vector V element by element }
+  procedure MulScalar(T: NumberType); virtual;
+  { умножает каждый элемент на скаляр T }
+  { multiplies every element by the scalar T }
+  procedure DivScalar(T: NumberType); virtual;
+  { делит каждый элемент на скаляр T }
+  { divides every element by the scalar T }
+  procedure ArithmeticProgression(A0, D: NumberType); virtual;
+  { устанавливает значения элементов вектора в соответствии с арифметической
+    прогрессией An+1 = An + D, n = 0..Count - 2 }
+  { sets the vector elements according to the arithmetic progression An+1 = An + D,
+    n = 0..Count - 2}
+  function Min: NumberType; virtual;
+  { возвращает значение минимального элемента }
+  { returns the value of the minimum element }
+  function Max: NumberType; virtual;
+  { возвращает значение максимального элемента }
+  { returns the value of the maximum element }
+  function MinIndex(var MinValue: NumberType): Integer;
+  { находит индекс минимального элемента и сам этот элемент (в MinValue) }
+  { returns the index of the minimum element and it's value itself (in MinValue) }
+  function MaxIndex(var MaxValue: NumberType): Integer;
+  { находит индекс максимального элемента и сам этот элемент }
+  { returns the index of the maximum element and it's value itself }
+  function MinIndexFrom(I: Integer; var MinValue: NumberType): Integer; virtual;
+  { находит индекс минимального элемента, начиная с I, и сам этот элемент }
+  { returns the index of the minimum element beginning from I and it's value }
+  function MaxIndexFrom(I: Integer; var MaxValue: NumberType): Integer; virtual;
+  { находит индекс максимального элемента, начиная с I, и сам этот элемент }
+  { returns the index of the maximum element beginning from I and it's value }
+  function Sum:
+    {$IFDEF FLOAT} Float80 {$ELSE}
+      {$IFDEF INT64_VECT} Int64 {$ELSE}
+        {$IFDEF UINT} UInt32 {$ELSE} Int32 {$ENDIF} {$ENDIF} {$ENDIF}; virtual;
+  { возвращает сумму элементов вектора }
+  { returns the sum of the vector elements }
+  function SqrSum:
+    {$IFDEF FLOAT} Float80 {$ELSE}
+      {$IFDEF INT64_VECT} Int64 {$ELSE} UInt32 {$ENDIF} {$ENDIF}; virtual;
+  { возвращает сумму квадратов элементов вектора }
+  { returns the sum of the squared vector elements }
+  function DotProduct(V: TGenericNumberVector):
+    {$IFDEF FLOAT} Float80 {$ELSE}
+      {$IFDEF INT64_VECT} Int64 {$ELSE}
+        {$IFDEF UINT} UInt32 {$ELSE} Int32 {$ENDIF} {$ENDIF} {$ENDIF}; virtual;
+  { возвращает скалярное произведение векторов }
+  { returns the dot product of the current vector and the vector V }
+  function ScrEuclidianMetric(V: TGenericNumberVector):
+    {$IFDEF FLOAT} Float80 {$ELSE}
+      {$IFDEF INT64_VECT} Int64 {$ELSE} UInt32 {$ENDIF} {$ENDIF}; virtual;
+  { возвращает квадрат евклидова расстояния между векторами }
+  { returns the squared euclidean distance between the vectors }
+  function RectangularMetric(V: TGenericNumberVector):
+    {$IFDEF FLOAT} Float80 {$ELSE}
+      {$IFDEF INT64_VECT} Int64 {$ELSE} UInt32 {$ENDIF} {$ENDIF}; virtual;
+  { вычисляет "прямоугольную" метрику }
+  { calculates the "rectangular" metric }
+  function Last: NumberType;
+  { возвращает последний элемент вектора (который не должен быть пустым) }
+  { returns the last element of the vector (which must be non-empty) }
+  function Pop: NumberType;
+  { возвращает последний элемент вектора (который не должен быть пустым)
+    и удаляет его (т.е. уменьшает длину вектора на единицу) }
+  { returns the last element of the vector (which must be non-empty) and removes
+    it (i.e. decreases the length of the vector by one) }
+  function IncItem(I: Integer; Value: NumberType): NumberType; virtual;
+  { Result:=Items[I]:=Items[I] + Value }
+  function DecItem(I: Integer; Value: NumberType): NumberType; virtual;
+  { Result:=Items[I]:=Items[I] - Value }
+  function MulItem(I: Integer; Value: NumberType): NumberType; virtual;
+  { Result:=Items[I]:=Items[I] * Value }
+  function DivItem(I: Integer; Value: NumberType): NumberType; virtual;
+  { Result:=Items[I]:=Items[I] div Value (или Items[I]:=Items[I] / Value) }
+  {$IFNDEF FLOAT}{$IFNDEF INT64_VECT}
+  function OrItem(I: Integer; Value: NumberType): NumberType; virtual;
+  { Result:=Items[I]:=Items[I] or Value }
+  function XorItem(I: Integer; Value: NumberType): NumberType; virtual;
+  { Result:=Items[I]:=Items[I] xor Value }
+  function AndItem(I: Integer; Value: NumberType): NumberType; virtual;
+  { Result:=Items[I]:=Items[I] and Value }
+  function NotItem(I: Integer): NumberType; virtual;
+  { Result:=Items[I]:=not Items[I] }
+  {$ENDIF}{$ENDIF}
+  property Items[I: Integer]: NumberType read GetValue write SetValue; default;
+  property DefaultValue: NumberType read FDefaultValue;
+  procedure DebugWrite;
+  { отладочная печать; для вывода отладочной информации в графических
+    Win32-приложениях необходимо создать консоль с помощью AllocConsole }
+  { debug write; to use in Win32 GUI applications it's necessary to create
+    console with AllocConsole }
+
+{ end }

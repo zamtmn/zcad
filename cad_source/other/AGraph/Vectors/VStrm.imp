@@ -1,0 +1,1364 @@
+{ Version 050702. Copyright © Alexey A.Chernobaev, 1996-2005 }
+{
+  Потоки (реализация).
+
+  Streams (implementation part).
+}
+
+{ TVStream }
+
+class procedure TVStream.Error(const Msg: String);
+{$IFDEF V_DELPHI}{$IFDEF WIN32}
+  function ReturnAddr: Pointer;
+  asm
+    MOV    EAX, [EBP+4]
+  end;
+{$ENDIF}{$ENDIF}
+begin
+  raise EVStream.Create('Class ' + ClassName + ':'#13#10 + Msg)
+    {$IFDEF V_DELPHI}{$IFDEF WIN32}at ReturnAddr{$ENDIF}{$ENDIF};
+end;
+
+procedure TVStream.SetReadFilter(Filter: TReadFilter);
+begin
+  FReadFilter:=Filter;
+end;
+
+function TVStream.SafeSeek(Offset: ILong): Boolean;
+begin
+  if (Offset >= 0) and (Offset <= Size) then begin
+    Seek(Offset);
+    Result:=True;
+  end
+  else
+    Result:=False;
+end;
+
+function TVStream.BytesLeft: ILong;
+begin
+  Result:=Size - Position;
+end;
+
+procedure TVStream.SeekBy(Offset: ILong);
+begin
+  Seek(Position + Offset);
+end;
+
+function TVStream.SafeSeekBy(Offset: ILong): Boolean;
+begin
+  Result:=SafeSeek(Position + Offset);
+end;
+
+function TVStream.Eof: Boolean;
+begin
+  Result:=Position >= Size;
+end;
+
+{$IFDEF V_INTERFACE}
+function TVStream.WriteProgress(const Buffer; Count, BlockSize: Int32;
+  Progress: IProgress): Boolean;
+var
+  Copied: Integer;
+  P: PChar;
+begin
+  if BlockSize <= 0 then
+    Error(SErrorInParameters);
+  P:=@Buffer;
+  Copied:=0;
+  while Count > 0 do begin
+    if Assigned(Progress) and not Progress.Progress(Copied, -1) then begin
+      Result:=False;
+      Exit;
+    end;
+    if BlockSize > Count then
+      BlockSize:=Count;
+    WriteProc(P^, BlockSize);
+    Inc(P, BlockSize);
+    Inc(Copied, BlockSize);
+    Dec(Count, BlockSize);
+  end;
+  Result:=not Assigned(Progress) or Progress.Progress(Copied, -1);
+end;
+{$ENDIF}
+
+procedure TVStream.ReadProc(var Buffer; Count: Integer);
+begin
+  if ReadFunc(Buffer, Count) <> Count then
+    Error(SReadAfterEnd);
+end;
+
+function TVStream.SafeRead(var Buffer; Count: Integer): Boolean;
+begin
+  Result:=ReadFunc(Buffer, Count) = Count;
+end;
+
+procedure TVStream.AppendTo(DestinStream: TVStream);
+var
+  Sz: ILong;
+begin
+  Seek(0);
+  Sz:=Size;
+  if AppendFromCurrentTo(DestinStream, Sz) <> Sz then
+    Error(SStreamError);
+end;
+
+function TVStream.AppendFromCurrentTo(DestinStream: TVStream; Count: ILong): ILong;
+begin
+  DestinStream.Seek(DestinStream.Size);
+  Result:=CopyFromCurrent(DestinStream, Count);
+end;
+
+function TVStream.CopyFromCurrent(DestinStream: TVStream; Count: ILong): ILong;
+var
+  Sz: Integer;
+  Buffer: Pointer;
+begin
+  if Count <= 0 then begin
+    Result:=0;
+    Exit;
+  end;
+  Sz:=DefaultBufferSize;
+  if Count < Sz then
+    Sz:={$IFDEF FLOAT_ILONG}Round{$ENDIF}(Count);
+  GetMem(Buffer, Sz);
+  try
+    Result:=CopyUsingBuffer(DestinStream, Count, Buffer, Sz);
+  finally
+    FreeMem(Buffer, Sz);
+  end;
+end;
+
+function TVStream.CopyUsingBuffer(DestinStream: TVStream; Count: ILong;
+  Buffer: Pointer; BufferSize: Int32): ILong;
+var
+  ToRead, BytesRead: Int32;
+begin
+  Result:=0;
+  while Count > 0 do begin
+    ToRead:=BufferSize;
+    if ToRead > Count then
+      ToRead:={$IFDEF FLOAT_ILONG}Round{$ENDIF}(Count);
+    BytesRead:=ReadFunc(Buffer^, ToRead);
+    DestinStream.WriteProc(Buffer^, BytesRead);
+    Result:=Result + BytesRead;
+    if BytesRead < ToRead then
+      Break;
+    Count:=Count - BytesRead;
+  end;
+end;
+
+procedure TVStream.CopyTo(DestinStream: TVStream);
+begin
+  DestinStream.Size:=0;
+  AppendTo(DestinStream);
+end;
+
+procedure TVStream.WriteString(const S: String);
+var
+  L: Int32;
+begin
+  L:=Length(S);
+  WriteProc(L, SizeOf(L));
+  {$IFDEF V_LONGSTRINGS}
+  WriteProc(Pointer(S)^, L);
+  {$ELSE}
+  WriteProc(S[1], L);
+  {$ENDIF}
+end;
+
+procedure TVStream.WriteShortString(const S: String);
+var
+  L: Int32;
+begin
+  L:=Length(S);
+  {$IFDEF V_LONGSTRINGS}
+  if L > 255 then
+    Error(SErrorInParameters);
+  {$ENDIF}
+  WriteInt8(Int8(L));
+  {$IFDEF V_LONGSTRINGS}
+  WriteProc(Pointer(S)^, L);
+  {$ELSE}
+  WriteProc(S[1], L);
+  {$ENDIF}
+end;
+
+procedure TVStream.WriteChars(const S: String);
+begin
+  {$IFDEF V_LONGSTRINGS}
+  WriteProc(Pointer(S)^, Length(S));
+  {$ELSE}
+  WriteProc(S[1], Length(S));
+  {$ENDIF}
+end;
+
+procedure TVStream.WriteLine(const S: String);
+begin
+  WriteChars(S);
+  WriteChars(DefaultLineDelimiter);
+end;
+
+{$IFDEF V_WIDESTRINGS}
+procedure TVStream.WriteWideString(const WS: WideString);
+var
+  L: Integer;
+begin
+  L:=Length(WS);
+  WriteInt32(L);
+  WriteProc(PWideChar(WS)^, 2 * L);
+end;
+
+procedure TVStream.WriteWideChars(const WS: WideString);
+begin
+  WriteProc(PWideChar(WS)^, 2 * Length(WS));
+end;
+
+procedure TVStream.WriteWideLine(const WS: WideString);
+begin
+  WriteWideChars(WS);
+  WriteWideChars(DefaultLineDelimiter);
+end;
+{$ENDIF} {V_WIDESTRINGS}
+
+procedure TVStream.WriteInt8(I: Int8);
+begin
+  WriteProc(I, SizeOf(I));
+end;
+
+procedure TVStream.WriteInt16(I: Int16);
+begin
+  WriteProc(I, SizeOf(I));
+end;
+
+procedure TVStream.WriteInt32(I: Int32);
+begin
+  WriteProc(I, SizeOf(I));
+end;
+
+procedure TVStream.WriteInt64(I: Int64);
+begin
+  WriteProc(I, SizeOf(I));
+end;
+
+procedure TVStream.WriteFloat32(F: Float32);
+begin
+  WriteProc(F, SizeOf(F));
+end;
+
+procedure TVStream.WriteFloat64(F: Float64);
+begin
+  WriteProc(F, SizeOf(F));
+end;
+
+procedure TVStream.WriteFloat80(F: Float80);
+begin
+  WriteProc(F, SizeOf(F));
+end;
+
+function TVStream.ReadString: String;
+var
+  L: Int32;
+begin
+  ReadProc(L, SizeOf(L));
+  {$IFDEF V_LONGSTRINGS}
+  SetLength(Result, L);
+  ReadProc(Pointer(Result)^, L);
+  {$ELSE}
+  Result[0]:=Chr(L);
+  ReadProc(Result[1], L);
+  {$ENDIF}
+end;
+
+function TVStream.ReadShortString: String;
+var
+  L: Int32;
+begin
+  L:=Byte(ReadInt8);
+  {$IFDEF V_LONGSTRINGS}
+  SetLength(Result, L);
+  ReadProc(Pointer(Result)^, L);
+  {$ELSE}
+  Result[0]:=Chr(L);
+  ReadProc(Result[1], L);
+  {$ENDIF}
+end;
+
+function TVStream.ReadFixedString(Len: Integer): String;
+begin
+  {$IFDEF V_LONGSTRINGS}
+  SetLength(Result, Len);
+  ReadProc(Pointer(Result)^, Len);
+  {$ELSE}
+  Result[0]:=Chr(Len);
+  ReadProc(Result[1], Len);
+  {$ENDIF}
+end;
+
+{$IFDEF V_WIDESTRINGS}
+function TVStream.ReadWideString: WideString;
+var
+  L: Integer;
+begin
+  L:=ReadInt32;
+  SetLength(Result, L);
+  ReadProc(PWideChar(Result)^, 2 * L);
+end;
+{$ENDIF} {V_WIDESTRINGS}
+
+function TVStream.ReadInt8: Int8;
+begin
+  ReadProc(Result, SizeOf(Result));
+end;
+
+function TVStream.ReadBoolean: Boolean;
+begin
+  Result:=ReadInt8 <> 0;
+end;
+
+function TVStream.ReadInt16: Int16;
+begin
+  ReadProc(Result, SizeOf(Result));
+end;
+
+function TVStream.ReadInt32: Int32;
+begin
+  ReadProc(Result, SizeOf(Result));
+end;
+
+function TVStream.ReadInt64: Int64;
+begin
+  ReadProc(Result, SizeOf(Result));
+end;
+
+function TVStream.ReadFloat32: Float32;
+begin
+  ReadProc(Result, SizeOf(Result));
+end;
+
+function TVStream.ReadFloat64: Float64;
+begin
+  ReadProc(Result, SizeOf(Result));
+end;
+
+function TVStream.ReadFloat80: Float80;
+begin
+  ReadProc(Result, SizeOf(Result));
+end;
+
+function TVStream.SafeCheckStringMatch(const S: String): Boolean;
+var
+  L: Integer;
+  T: String;
+begin
+  L:=Length(S);
+  SetLength(T, L);
+  Result:=(ReadFunc(T[1], L) = L) and (S = T);
+end;
+
+function TVStream.SearchBuf(const SearchBytes; SearchCount: Integer;
+  Buf: Pointer; BufSize: Integer; MaxBytesRead: ILong): Boolean;
+var
+  OldPos: ILong;
+  I, BufOfs, BytesRead: Integer;
+begin
+  Result:=False;
+  if SearchCount > 0 then begin
+    BufOfs:=0;
+    OldPos:=Position;
+    while not Eof do begin
+      BytesRead:=BufSize - BufOfs;
+      if BytesRead > MaxBytesRead then
+        BytesRead:={$IFDEF FLOAT_ILONG}Round{$ENDIF}(MaxBytesRead);
+      BytesRead:=ReadFunc((PChar(Buf) + BufOfs)^, BytesRead);
+      I:=BytesRead + BufOfs;
+      if I < SearchCount then
+        Break;
+      I:=FindInBuf(SearchBytes, SearchCount, Buf^, I);
+      if I >= 0 then begin
+        Seek(Position - BytesRead - BufOfs + I);
+        Result:=True;
+        Exit;
+      end;
+      BufOfs:=SearchCount - 1;
+      Move((PChar(Buf) + BytesRead - BufOfs)^, Buf^, BufOfs);
+      MaxBytesRead:=MaxBytesRead - BytesRead;
+    end;
+    Seek(OldPos);
+  end;
+end;
+
+function TVStream.Search(const SearchBytes; SearchCount: Integer;
+  MaxBytesRead: ILong): Boolean;
+var
+  Sz: Integer;
+  Buf: Pointer;
+begin
+  Result:=False;
+  if SearchCount > 0 then begin
+    Sz:=2 * SearchCount;
+    if Sz < DefaultBufferSize then
+      Sz:=DefaultBufferSize;
+    GetMem(Buf, Sz);
+    try
+      Result:=SearchBuf(SearchBytes, SearchCount, Buf, Sz, MaxBytesRead);
+    finally
+      FreeMem(Buf, Sz);
+    end;
+  end;
+end;
+
+function TVStream.SearchString(const S: String; MaxBytesRead: ILong): Boolean;
+begin
+  {$IFDEF V_LONGSTRINGS}
+  Result:=Search(PChar(S)^, Length(S), MaxBytesRead);
+  {$ELSE}
+  Result:=Search(S[1], Length(S), MaxBytesRead);
+  {$ENDIF}
+end;
+
+{ TVNullStream }
+
+function TVNullStream.GetPos: ILong;
+begin
+  Result:=0;
+end;
+
+function TVNullStream.GetSize: ILong;
+begin
+  Result:=0;
+end;
+
+procedure TVNullStream.SetSize(NewSize: ILong);
+begin
+  if NewSize <> 0 then
+    Error(SMethodNotApplicable);
+end;
+
+procedure TVNullStream.Seek(Offset: ILong);
+begin
+  if Offset <> 0 then
+    Error(SMethodNotApplicable);
+end;
+
+procedure TVNullStream.WriteProc(const Buffer; Count: Int32);
+begin
+end;
+
+function TVNullStream.ReadFunc(var Buffer; Count: Int32): Int32;
+begin
+  Result:=0;
+end;
+
+{ TVBaseMemStream }
+
+destructor TVBaseMemStream.Destroy;
+begin
+  SetSize(0);
+  inherited Destroy;
+end;
+
+function TVBaseMemStream.GetSize: ILong;
+begin
+  Result:=FSize;
+end;
+
+procedure TVBaseMemStream.ReAllocate(NewSize: Int32);
+begin
+  NewSize:=(NewSize + 3) and -4;
+  if NewSize <> FCapacity then begin
+    if NewSize < 0 then
+      Error(SErrorInParameters);
+    {$IFDEF V_32}
+    ReAllocMem(FBuffer, NewSize);
+    {$ELSE}
+    FBuffer:=ReAllocMem(FBuffer, FCapacity, NewSize);
+    {$ENDIF}
+    FCapacity:=NewSize;
+  end;
+end;
+
+procedure TVBaseMemStream.SetCapacity(NewCapacity: Int32);
+begin
+  if NewCapacity < Size then
+    Error(SSetSizeError);
+  ReAllocate(NewCapacity);
+end;
+
+procedure TVBaseMemStream.SetSize(NewSize: ILong);
+begin
+  ReAllocate({$IFDEF FLOAT_ILONG}Round{$ENDIF}(NewSize));
+  FSize:={$IFDEF FLOAT_ILONG}Round{$ENDIF}(NewSize);
+  if FSize < FPosition then
+    FPosition:=FSize;
+end;
+
+function TVBaseMemStream.GetPos: ILong;
+begin
+  Result:=FPosition;
+end;
+
+procedure TVBaseMemStream.Seek(Offset: ILong);
+begin
+  if Offset <= FSize then
+    FPosition:={$IFDEF FLOAT_ILONG}Round{$ENDIF}(Offset)
+  else
+    Error(Format(SSeekError_d, [Offset]));
+end;
+
+procedure TVBaseMemStream.WriteProc(const Buffer; Count: Int32);
+var
+  Delta: Int32;
+begin
+  if Count > 0 then begin
+    if FPosition + Count > FSize then begin
+      FSize:=FPosition + Count;
+      if FCapacity < FSize then begin
+        {$IFDEF V_32}
+        if FCapacity > 1048576 then
+          Delta:=UInt32(FCapacity) div 8 + 131072
+        else
+        {$ENDIF}
+          if FCapacity > 64 then
+            Delta:=UInt32(FCapacity) div 4
+          else
+            Delta:=16;
+        Inc(Delta, FCapacity);
+        if Delta < FSize then
+          Delta:=FSize;
+        ReAllocate(Delta);
+      end;
+    end;
+    Case Count of
+      1: PInt8(PChar(FBuffer) + FPosition)^:=PInt8(@Buffer)^;
+      2: PInt16(PChar(FBuffer) + FPosition)^:=PInt16(@Buffer)^;
+      4: PInt32(PChar(FBuffer) + FPosition)^:=PInt32(@Buffer)^;
+      {$IFDEF V_32}
+      8: PInt64(PChar(FBuffer) + FPosition)^:=PInt64(@Buffer)^;
+      {$ENDIF}
+    Else
+      Move(Buffer, (PChar(FBuffer) + FPosition)^, Count);
+    End;
+    Inc(FPosition, Count);
+  end;
+end;
+
+function TVBaseMemStream.ReadFunc(var Buffer; Count: Int32): Int32;
+var
+  T: Int32;
+begin
+  if Count <= 0 then begin
+    Result:=0;
+    Exit;
+  end;
+  T:=FSize - FPosition;
+  if Count > T then
+    Count:=T;
+  if Count > 0 then begin
+    Case Count of
+      1: PInt8(@Buffer)^:=PInt8(PChar(FBuffer) + FPosition)^;
+      2: PInt16(@Buffer)^:=PInt16(PChar(FBuffer) + FPosition)^;
+      4: PInt32(@Buffer)^:=PInt32(PChar(FBuffer) + FPosition)^;
+      {$IFDEF V_32}
+      8: PInt64(@Buffer)^:=PInt64(PChar(FBuffer) + FPosition)^;
+      {$ENDIF}
+    Else
+      Move((PChar(FBuffer) + FPosition)^, Buffer, Count);
+    End;
+    Inc(FPosition, Count);
+  end;
+  Result:=Count;
+  if FReadFilter <> nil then
+    FReadFilter.OnRead(Self, Buffer, Result);
+end;
+
+function TVBaseMemStream.Search(const SearchBytes; SearchCount: Integer;
+  MaxBytesRead: ILong): Boolean;
+var
+  I: Integer;
+begin
+  if FReadFilter = nil then begin
+    I:=FSize - FPosition;
+    if MaxBytesRead > I then
+      MaxBytesRead:=I;
+    I:=FindInBuf(SearchBytes, SearchCount,
+      (PChar(Memory) + {$IFDEF FLOAT_ILONG}Round{$ENDIF}(FPosition))^,
+      {$IFDEF FLOAT_ILONG}Round{$ENDIF}(MaxBytesRead));
+    if I >= 0 then begin
+      Inc(FPosition, I);
+      Result:=True;
+    end
+    else
+      Result:=False;
+  end
+  else
+    Result:=inherited Search(SearchBytes, SearchCount, MaxBytesRead);
+end;
+
+procedure TVBaseMemStream.Delete(Count: Int32);
+var
+  BytesLeft: Int32;
+  P: PChar;
+begin
+  if Count <= 0 then
+    Exit;
+  BytesLeft:=FSize - FPosition;
+  if BytesLeft = 0 then
+    Exit;
+  if Count < BytesLeft then begin
+    P:=PChar(FBuffer) + FPosition;
+    Move(P[Count], P[0], BytesLeft - Count);
+    SetSize(FSize - Count);
+  end
+  else
+    SetSize(FPosition);
+end;
+
+{ TVMemStream }
+
+function TVMemStream.GrabMemory(var P: Pointer): Int32;
+begin
+  P:=FBuffer;
+  Result:=FCapacity;
+  FPosition:=0;
+  FSize:=0;
+  FCapacity:=0;
+end;
+
+procedure TVMemStream.SetData(Data: Pointer; ASize: Int32);
+begin
+  SetSize(0);
+  FBuffer:=Data;
+  FSize:=ASize;
+  FCapacity:=ASize;
+end;
+
+{ TVReadOnlyMemStream }
+
+constructor TVReadOnlyMemStream.Create(ABuffer: Pointer; ASize: ILong);
+begin
+  inherited Create;
+  FBuffer:=ABuffer;
+  FSize:={$IFDEF FLOAT_ILONG}Round{$ENDIF}(ASize);
+end;
+
+destructor TVReadOnlyMemStream.Destroy;
+begin
+  FBuffer:=nil;
+  inherited Destroy;
+end;
+
+procedure TVReadOnlyMemStream.SetSize(NewSize: ILong);
+begin
+  if FBuffer <> nil then
+    Error(SMethodNotApplicable);
+end;
+
+procedure TVReadOnlyMemStream.WriteProc(const Buffer; Count: Int32);
+begin
+  Error(SMethodNotApplicable);
+end;
+
+{$IFDEF V_32}
+{$IFDEF V_D7}{$WARN SYMBOL_PLATFORM OFF}{$ENDIF}
+
+{ TGMEMStream }
+
+{$IFDEF V_WIN}
+constructor TGMEMStream.Create(ASize: Integer; uFlags: DWORD);
+begin
+  inherited Create;
+  FFlags:=uFlags;
+  FReAllocate(ASize);
+end;
+{$ENDIF}
+
+{$IFDEF LINUX}
+constructor TGMEMStream.Create(ASize: Integer);
+begin
+  inherited Create;
+  FReAllocate(ASize);
+end;
+{$ENDIF}
+
+procedure TGMEMStream.SetSize(NewSize: ILong);
+begin
+  FReAllocate({$IFDEF FLOAT_ILONG}Round{$ENDIF}(NewSize));
+  FSize:={$IFDEF FLOAT_ILONG}Round{$ENDIF}(NewSize);
+  if FSize < FPosition then
+    FPosition:=FSize;
+end;
+
+procedure TGMEMStream.FReAllocate(NewSize: Int32);
+var
+  {$IFDEF V_WIN}
+  NewData: HGLOBAL;
+  {$ENDIF}
+  {$IFDEF LINUX}
+  NewBuffer: Pointer;
+  {$ENDIF}
+begin
+  if NewSize < 0 then
+    Error(SErrorInParameters);
+  {$IFDEF V_WIN}
+  if (NewSize <> FCapacity) or ((NewSize = 0) and (FData <> 0)) then
+  {$ENDIF}
+  {$IFDEF LINUX}
+  if (NewSize <> FCapacity) or ((NewSize = 0) and (FBuffer <> nil)) then
+  {$ENDIF}
+  begin
+    if NewSize > 0 then begin
+      {$IFDEF V_WIN}
+      if FData <> 0 then begin
+        GlobalUnlock(FData);
+        FBuffer:=nil;
+        {$IFNDEF CHECK_ALLOC_GLOBAL}
+        NewData:=GlobalReAlloc(FData, NewSize, GMEM_MOVEABLE);
+        {$ELSE}
+        NewData:=ExtSys.ReAllocGlobal(FData, FCapacity, NewSize);
+        {$ENDIF}
+      end
+      else
+        {$IFNDEF CHECK_ALLOC_GLOBAL}
+        NewData:=GlobalAlloc(FFlags, NewSize);
+        {$ELSE}
+        NewData:=ExtSys.AllocGlobal(NewSize, -1, FFlags);
+        {$ENDIF}
+      OSCheck(NewData <> 0);
+      FData:=NewData;
+      FBuffer:=GlobalLock(NewData);
+      OSCheck(FBuffer <> nil);
+      {$ENDIF} {V_WIN}
+      {$IFDEF LINUX}
+      if FBuffer <> nil then
+        {$IFNDEF CHECK_ALLOC_GLOBAL}
+        NewBuffer:=realloc(FBuffer, NewSize)
+        {$ELSE}
+        NewBuffer:=ExtSys.ReAllocGlobal(FBuffer, FCapacity, NewSize)
+        {$ENDIF}
+      else
+        {$IFNDEF CHECK_ALLOC_GLOBAL}
+        NewBuffer:=malloc(NewSize);
+        {$ELSE}
+        NewBuffer:=ExtSys.AllocGlobal(NewSize, -1);
+        {$ENDIF}
+      OSCheck(NewBuffer <> nil);
+      FBuffer:=NewBuffer;
+      {$ENDIF} {LINUX}
+    end
+    else begin
+      {$IFDEF V_WIN}
+      if FBuffer <> nil then begin
+        GlobalUnlock(FData);
+        FBuffer:=nil;
+      end;
+      {$IFNDEF CHECK_ALLOC_GLOBAL}
+      GlobalFree(FData);
+      {$ELSE}
+      ExtSys.FreeGlobal(FData);
+      {$ENDIF}
+      FData:=0;
+      {$ENDIF} {V_WIN}
+      {$IFDEF LINUX}
+      if FBuffer <> nil then begin
+        {$IFNDEF CHECK_ALLOC_GLOBAL}
+        {$IFDEF V_DELPHI}Libc{$ELSE}Linux{$ENDIF}.free(FBuffer);
+        {$ELSE}
+        ExtSys.FreeGlobal(FBuffer);
+        {$ENDIF}
+        FBuffer:=nil;
+      end;
+      {$ENDIF} {LINUX}
+    end;
+    FCapacity:=NewSize;
+  end;
+end;
+
+procedure TGMEMStream.ReAllocate(NewSize: Int32);
+begin
+  if NewSize > 0 then
+    NewSize:=((NewSize - 1) div AllocGlobalGranularity + 1) * AllocGlobalGranularity;
+  FReAllocate(NewSize);
+end;
+
+function TGMEMStream.GrabMemory(var Mem: TGMEM): Int32;
+begin
+  Result:=FCapacity;
+  {$IFDEF V_WIN}
+  if FData <> 0 then begin
+    Mem:=FData;
+    GlobalUnlock(FData);
+    FData:=0;
+    FBuffer:=nil;
+    if (FSize <> FCapacity) and
+      ((FSize < AllocGlobalGranularity div 2) or (FCapacity - FSize > FSize div 4)) then
+    begin
+      {$IFNDEF CHECK_ALLOC_GLOBAL}
+      Mem:=GlobalReAlloc(Mem, FSize, GMEM_MOVEABLE);
+      {$ELSE}
+      Mem:=ExtSys.ReAllocGlobal(Mem, FCapacity, FSize);
+      {$ENDIF}
+      Result:=FSize;
+    end;
+  end
+  else begin
+    {$IFNDEF CHECK_ALLOC_GLOBAL}
+    Mem:=GlobalAlloc(FFlags, 0);
+    {$ELSE}
+    Mem:=ExtSys.AllocGlobal(0, -1, FFlags);
+    {$ENDIF}
+  end;
+  {$ENDIF}
+  {$IFDEF LINUX}
+  if FBuffer <> nil then begin
+    Mem:=FBuffer;
+    FBuffer:=nil;
+    if (FSize <> FCapacity) and
+      ((FSize < AllocGlobalGranularity div 2) or (FCapacity - FSize > FSize div 4)) then
+    begin
+      {$IFNDEF CHECK_ALLOC_GLOBAL}
+      Mem:=realloc(Mem, FSize);
+      {$ELSE}
+      Mem:=ExtSys.ReAllocGlobal(Mem, FCapacity, FSize);
+      {$ENDIF}
+      Result:=FSize;
+    end;
+  end
+  else begin
+    {$IFNDEF CHECK_ALLOC_GLOBAL}
+    Mem:=malloc(0);
+    {$ELSE}
+    Mem:=ExtSys.AllocGlobal(0, -1);
+    {$ENDIF}
+  end;
+  {$ENDIF}
+  FCapacity:=0;
+end;
+
+procedure TGMEMStream.SetData(Data: TGMEM; ASize: Int32);
+begin
+  SetSize(0);
+  {$IFDEF V_WIN}
+  if (Data <> 0) and (ASize >= 0) then begin
+    FData:=Data;
+    FBuffer:=GlobalLock(FData);
+    OSCheck(FBuffer <> nil);
+    FSize:=ASize;
+    FCapacity:=ASize;
+  end;
+  {$ENDIF}
+  {$IFDEF LINUX}
+  if (Data <> nil) and (ASize >= 0) then begin
+    FBuffer:=Data;
+    FSize:=ASize;
+    FCapacity:=ASize;
+  end;
+  {$ENDIF}
+end;
+
+{$IFDEF V_D7}{$WARN SYMBOL_PLATFORM ON}{$ENDIF}
+{$ENDIF} {V_32}
+
+{ TVStreamOnStream }
+
+constructor TVStreamOnStream.Create(AStream: TVStream);
+begin
+  inherited Create;
+  FStream:=AStream;
+end;
+
+destructor TVStreamOnStream.Destroy;
+begin
+  if Ownership then
+    FStream.Free;
+  inherited Destroy;
+end;
+
+function TVStreamOnStream.GetPos: ILong;
+begin
+  Result:=FStream.GetPos;
+end;
+
+function TVStreamOnStream.GetSize: ILong;
+begin
+  Result:=FStream.GetSize;
+end;
+
+procedure TVStreamOnStream.SetSize(NewSize: ILong);
+begin
+  FStream.SetSize(NewSize);
+end;
+
+procedure TVStreamOnStream.Seek(Offset: ILong);
+begin
+  FStream.Seek(Offset);
+end;
+
+function TVStreamOnStream.Eof: Boolean;
+begin
+  Result:=FStream.Eof;
+end;
+
+procedure TVStreamOnStream.WriteProc(const Buffer; Count: Int32);
+begin
+  FStream.WriteProc(Buffer, Count);
+end;
+
+function TVStreamOnStream.ReadFunc(var Buffer; Count: Int32): Int32;
+begin
+  Result:=FStream.ReadFunc(Buffer, Count);
+  if FReadFilter <> nil then
+    FReadFilter.OnRead(Self, Buffer, Result);
+end;
+
+{ TVSelfPosStreamOnStream }
+
+function TVSelfPosStreamOnStream.GetPos: ILong;
+begin
+  Result:=FSelfPos;
+end;
+
+procedure TVSelfPosStreamOnStream.Seek(Offset: ILong);
+begin
+  if (Offset < 0) or (Offset > Size) then
+    Error(Format(SSeekError_d, [Offset]));
+  FSelfPos:=Offset;
+end;
+
+function TVSelfPosStreamOnStream.Eof: Boolean;
+begin
+  Result:=FSelfPos >= Size;
+end;
+
+procedure TVSelfPosStreamOnStream.WriteProc(const Buffer; Count: Int32);
+begin
+  FStream.Seek(FSelfPos);
+  inherited WriteProc(Buffer, Count);
+  Inc(FSelfPos, Count);
+end;
+
+function TVSelfPosStreamOnStream.ReadFunc(var Buffer; Count: Int32): Int32;
+begin
+  FStream.Seek(FSelfPos);
+  Result:=inherited ReadFunc(Buffer, Count);
+  Inc(FSelfPos, Result);
+end;
+
+{ TVLimitedStream }
+
+constructor TVLimitedStream.Create(AStream: TVStream; ARangeStart,
+  ARangeSize: ILong);
+begin
+  inherited Create(AStream);
+  SetRange(ARangeStart, ARangeSize);
+end;
+
+procedure TVLimitedStream.SetRange(ARangeStart, ARangeSize: ILong);
+begin
+  FRangeStart:=ARangeStart;
+  FRangeSize:=ARangeSize;
+  Seek(0);
+end;
+
+function TVLimitedStream.GetPos: ILong;
+begin
+  Result:=inherited GetPos - FRangeStart;
+end;
+
+function TVLimitedStream.GetSize: ILong;
+begin
+  Result:=FRangeSize;
+end;
+
+procedure TVLimitedStream.SetSize(NewSize: ILong);
+begin
+  Error(SNotImplemented);
+end;
+
+procedure TVLimitedStream.Seek(Offset: ILong);
+begin
+  inherited Seek(FRangeStart + Offset);
+end;
+
+function TVLimitedStream.Eof: Boolean;
+begin
+  Result:=inherited Eof or (inherited GetPos >= FRangeStart + FRangeSize);
+end;
+
+procedure TVLimitedStream.WriteProc(const Buffer; Count: Int32);
+begin
+  if inherited GetPos + Count > FRangeStart + FRangeSize then
+    Error(SErrorInParameters);
+  inherited WriteProc(Buffer, Count);
+end;
+
+function TVLimitedStream.ReadFunc(var Buffer; Count: Int32): Int32;
+var
+  Ofs, Limit: ILong;
+begin
+  Result:=Count;
+  Ofs:=inherited GetPos;
+  Limit:=FRangeStart + FRangeSize;
+  if Ofs + Result > Limit then
+    Result:={$IFDEF FLOAT_ILONG}Round{$ENDIF}(Limit - Ofs);
+  Result:=inherited ReadFunc(Buffer, Result);
+end;
+
+{ TVReadCharStream }
+
+constructor TVReadCharStream.Create(AStream: TVStream);
+begin
+  inherited Create(AStream);
+  FCur:=FBuf;
+  FLimit:=FBuf;
+end;
+
+function TVReadCharStream.GetPos: ILong;
+begin
+  {$IFNDEF FLOAT_ILONG}
+  Result:=FStream.GetPos - (FLimit - FCur);
+  {$ELSE}
+  Result:=Round(FStream.GetPos - (FLimit - FCur));
+  {$ENDIF}
+end;
+
+procedure TVReadCharStream.SetSize(NewSize: ILong);
+begin
+  FStream.SetSize(NewSize);
+  FCur:=FBuf;
+  FLimit:=FBuf;
+end;
+
+procedure TVReadCharStream.SetReadFilter(Filter: TReadFilter);
+begin
+  if FReadFilter <> Filter then begin
+    FReadFilter:=Filter;
+    if FCur < FLimit then begin
+      FStream.Seek(GetPos);
+      FCur:=FBuf;
+      FLimit:=FBuf;
+    end;
+  end;
+end;
+
+procedure TVReadCharStream.Seek(Offset: ILong);
+var
+  BufLen: Integer;
+  Delta, BufPos: ILong;
+begin
+  if FCur < FLimit then begin
+    BufLen:=Cardinal(FLimit) - Cardinal(@FBuf); { Cardinal(...) - for FreePascal }
+    BufPos:=FStream.GetPos - BufLen;
+    Delta:=Offset - BufPos;
+    FCur:=FBuf;
+    if (Delta >= 0) and (Offset <= BufPos + BufLen) then
+      Inc(FCur, {$IFDEF FLOAT_ILONG}Round{$ELSE}Integer{$ENDIF}(Delta))
+    else begin
+      FLimit:=FBuf;
+      FStream.Seek(Offset);
+    end;
+  end
+  else
+    FStream.Seek(Offset);
+end;
+
+function TVReadCharStream.Eof: Boolean;
+begin
+  Result:=(FCur >= FLimit) and FStream.Eof;
+end;
+
+procedure TVReadCharStream.WriteProc(const Buffer; Count: Int32);
+begin
+  Error(SNotImplemented);
+end;
+
+function TVReadCharStream.ReadFunc(var Buffer; Count: Int32): Int32;
+var
+  N, M: Integer;
+  P, pBuffer: PChar;
+begin
+  if Count <= 0 then begin
+    Result:=0;
+    Exit;
+  end;
+  P:=FCur + Count;
+  if P <= FLimit then begin
+    Move(FCur^, Buffer, Count);
+    FCur:=P;
+    Result:=Count;
+  end
+  else begin
+    pBuffer:=@Buffer;
+    Result:=FLimit - FCur;
+    if Result > 0 then begin
+      Move(FCur^, pBuffer^, Result);
+      Inc(FCur, Result);
+      Dec(Count, Result);
+      if Count = 0 then
+        Exit;
+      Inc(pBuffer, Result);
+    end;
+    FCur:=FBuf;
+    FLimit:=FBuf;
+    if Count < SizeOf(FBuf) then begin
+      N:=inherited ReadFunc(FBuf, SizeOf(FBuf));
+      M:=Count;
+      if N < Count then
+        M:=N; { M = Min(N, Count) }
+      Inc(FCur, M);
+      Inc(FLimit, N);
+      Move(FBuf, pBuffer^, M);
+      Inc(Result, M);
+    end
+    else
+      Inc(Result, inherited ReadFunc(pBuffer^, Count));
+  end;
+end;
+
+function TVReadCharStream.ReadChar: Char;
+begin
+  if FCur >= FLimit then begin
+    FCur:=FBuf;
+    FLimit:=FCur + inherited ReadFunc(FBuf, SizeOf(FBuf));
+    if FCur = FLimit then
+      Error(SReadAfterEnd);
+  end;
+  Result:=FCur^;
+  Inc(FCur);
+end;
+
+{$IFDEF V_32}
+function TVReadCharStream.ReadWideChar: WideChar;
+begin
+  if FCur <= FLimit - 2 then begin
+    Result:=PWideChar(FCur)^;
+    Inc(FCur, 2);
+  end
+  else begin
+    WordRec(Result).Lo:=Byte(ReadChar);
+    WordRec(Result).Hi:=Byte(ReadChar);
+  end;
+end;
+{$ENDIF}
+
+function TVReadCharStream.ReadInt32Buf: Int32;
+begin
+  if FCur <= FLimit - 4 then begin
+    Result:=PInt32(FCur)^;
+    Inc(FCur, 4);
+  end
+  else
+    ReadProc(Result, 4);
+end;
+
+{ TVWriteCharStream }
+
+constructor TVWriteCharStream.Create(AStream: TVStream);
+begin
+  inherited Create(AStream);
+  FCur:=FBuf;
+  FLimit:=FBuf + SizeOf(FBuf);
+end;
+
+destructor TVWriteCharStream.Destroy;
+begin
+  Flush;
+  inherited Destroy;
+end;
+
+procedure TVWriteCharStream.FreeNoFlush;
+begin
+  if Self <> nil then begin
+    FCur:=nil;
+    Destroy;
+  end;
+end;
+
+function TVWriteCharStream.GetPos: ILong;
+begin
+  Result:=FStream.GetPos;
+  if FCur <> nil then
+    {$IFNDEF FLOAT_ILONG}
+    Inc(Result, Cardinal(FCur) - Cardinal(@FBuf));
+    {$ELSE}
+    Result:=Round(Result + (FCur - FBuf));
+    {$ENDIF}
+end;
+
+procedure TVWriteCharStream.SetSize(NewSize: ILong);
+begin
+  Flush;
+  FStream.SetSize(NewSize);
+end;
+
+procedure TVWriteCharStream.Seek(Offset: ILong);
+begin
+  Flush;
+  FStream.Seek(Offset);
+end;
+
+function TVWriteCharStream.Eof: Boolean;
+begin
+  Result:=(FCur > FBuf) or FStream.Eof;
+end;
+
+procedure TVWriteCharStream.WriteProc(const Buffer; Count: Int32);
+var
+  P: PChar;
+begin
+  P:=FCur + Count;
+  if P <= FLimit then begin
+    Move(Buffer, FCur^, Count);
+    FCur:=P;
+  end
+  else begin
+    if FCur > FBuf then
+      Seek(GetPos);
+    inherited WriteProc(Buffer, Count);
+  end;
+end;
+
+{$IFDEF NOWARN}{$WARNINGS OFF}{$ENDIF}
+function TVWriteCharStream.ReadFunc(var Buffer; Count: Int32): Int32;
+begin
+  Error(SNotImplemented);
+end;
+{$IFDEF NOWARN}{$WARNINGS ON}{$ENDIF}
+
+procedure TVWriteCharStream.WriteChar(C: Char);
+begin
+  if FCur >= FLimit then
+    Flush;
+  FCur^:=C;
+  Inc(FCur);
+end;
+
+{$IFDEF V_32}
+procedure TVWriteCharStream.WriteWideChar(WC: WideChar);
+begin
+  if FCur > FLimit - 2 then
+    Flush;
+  PWideChar(FCur)^:=WC;
+  Inc(FCur, 2);
+end;
+{$ENDIF}
+
+procedure TVWriteCharStream.WriteInt32Buf(I: Int32);
+begin
+  if FCur > FLimit - 4 then
+    Flush;
+  PInt32(FCur)^:=I;
+  Inc(FCur, 4);
+end;
+
+procedure TVWriteCharStream.Flush;
+begin
+  if FCur > FBuf then begin
+    inherited WriteProc(FBuf, Cardinal(FCur) - Cardinal(@FBuf));
+    FCur:=FBuf;
+  end;
+end;
+
+{ TVReadReverseStream }
+
+function TVReadReverseStream.GetPos: ILong;
+begin
+  Result:=FStream.GetSize - FStream.GetPos;
+end;
+
+procedure TVReadReverseStream.SetSize(NewSize: ILong);
+begin
+  Error(SMethodNotApplicable);
+end;
+
+procedure TVReadReverseStream.Seek(Offset: ILong);
+begin
+  FStream.Seek(FStream.GetSize - Offset);
+end;
+
+function TVReadReverseStream.Eof: Boolean;
+begin
+  Result:=FStream.Position = 0;
+end;
+
+procedure TVReadReverseStream.WriteProc(const Buffer; Count: Int32);
+begin
+  Error(SMethodNotApplicable);
+end;
+
+function TVReadReverseStream.ReadFunc(var Buffer; Count: Int32): Int32;
+var
+  NewOfs: ILong;
+begin
+  NewOfs:=FStream.Position - Count;
+  if NewOfs < 0 then begin
+    Inc(Count, NewOfs);
+    NewOfs:=0;
+  end;
+  FStream.Seek(NewOfs);
+  FStream.ReadProc(Buffer, Count);
+  FStream.Seek(NewOfs);
+  ReverseBytes(Buffer, Count);
+  if FReadFilter <> nil then
+    FReadFilter.OnRead(Self, Buffer, Count);
+  Result:=Count;
+end;
+
+{ TChainedFilter }
+
+procedure TChainedFilter.OnRead(AStream: TVStream; var Buffer; Count: Int32);
+begin
+  if PrevFilter <> nil then
+    PrevFilter.OnRead(AStream, Buffer, Count);
+end;
+
+{ TLowerCaseFilter }
+
+procedure TLowerCaseFilter.OnRead(AStream: TVStream; var Buffer; Count: Int32);
+var
+  I: Integer;
+  P: PChar;
+begin
+  inherited OnRead(AStream, Buffer, Count);
+  P:=@Buffer;
+  for I:=0 to Count - 1 do begin
+    if (P^ >= 'A') and (P^ <= 'Z') then
+      Inc(Byte(P^), $20);
+    Inc(P);
+  end;
+end;
+
+{ TUpperCaseFilter }
+
+procedure TUpperCaseFilter.OnRead(AStream: TVStream; var Buffer; Count: Int32);
+var
+  I: Integer;
+  P: PChar;
+begin
+  inherited OnRead(AStream, Buffer, Count);
+  P:=@Buffer;
+  for I:=0 to Count - 1 do begin
+    if (P^ >= 'a') and (P^ <= 'z') then
+      Dec(Byte(P^), $20);
+    Inc(P);
+  end;
+end;
+
+{ TBigEndianFilter }
+
+procedure TBigEndianFilter.OnRead(AStream: TVStream; var Buffer; Count: Int32);
+var
+  C: Char;
+  P, Limit: PChar;
+begin
+  inherited OnRead(AStream, Buffer, Count);
+  P:=@Buffer;
+  Limit:=P + Count - 1;
+  while P < Limit do begin
+    C:=P^;
+    P^:=(P + 1)^;
+    (P + 1)^:=C;
+    Inc(P, 2);
+  end;
+end;
+
+{ end }

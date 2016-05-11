@@ -1,0 +1,84 @@
+{ Version 050602. Copyright © Alexey A.Chernobaev, 1996-2005 }
+{
+  Числовые векторы (интерфейс).
+  Перед включением данного файла необходимо определить тип NumberType.
+
+  Numeral vectors (interface part).
+  Type NumberType must be defined before including this file.
+}
+
+public
+  procedure Assign(Source: TVector); override;
+  procedure CopyRange(FromIndex: Integer; Source: TVector; SourceFrom,
+    SourceTo: Integer); override;
+  procedure ExchangeRange(FromIndex, ToIndex, ACount: Integer); override;
+  function EqualTo(V: TVector): Bool; override;
+  procedure Exchange(I, J: Integer); override;
+  function Compare(I: Integer; const V): Int32; override;
+  procedure SortRange(L, R: Integer); override;
+  procedure SortRangeDesc(L, R: Integer); override;
+  function GetValue(I: Integer): NumberType; override;
+  procedure SetValue(I: Integer; Value: NumberType); override;
+  {$IFDEF V_INLINE}
+  function GetValueI(I: Integer): NumberType; inline;
+  procedure SetValueI(I: Integer; Value: NumberType); inline;
+  {$ENDIF}
+  procedure SetToDefault; override;
+  procedure FillValue(Value: NumberType); override;
+  procedure Insert(I: Integer; Value: NumberType); override;
+  function IndexFrom(I: Integer; Value: NumberType): Integer; override;
+  function LastIndexFrom(I: Integer; Value: NumberType): Integer; override;
+  function NumberOfValues(Value: NumberType): Integer; override;
+  procedure ConcatenateWith(V: TGenericNumberVector); override;
+  procedure AddScalar(T: NumberType); override;
+  procedure SubScalar(T: NumberType); override;
+  procedure AddVector(V: TGenericNumberVector); override;
+  procedure AddScaled(Factor: NumberType; V: TGenericNumberVector); override;
+  procedure SubVector(V: TGenericNumberVector); override;
+  procedure Mul(V: TGenericNumberVector); override;
+  procedure Divide(V: TGenericNumberVector); override;
+  procedure MulScalar(T: NumberType); override;
+  procedure DivScalar(T: NumberType); override;
+  procedure ArithmeticProgression(A0, D: NumberType); override;
+  function Min: NumberType; override;
+  function Max: NumberType; override;
+  function MinIndexFrom(I: Integer; var MinValue: NumberType): Integer; override;
+  function MaxIndexFrom(I: Integer; var MaxValue: NumberType): Integer; override;
+  {$IFNDEF INT64_VECT}
+  function Sum:
+    {$IFDEF FLOAT} Float80 {$ELSE}
+      {$IFDEF UINT} UInt32 {$ELSE} Int32 {$ENDIF} {$ENDIF}; override;
+  function SqrSum:
+    {$IFDEF FLOAT} Float80 {$ELSE} UInt32 {$ENDIF}; override;
+  {$ENDIF}
+  function DotProduct(V: TGenericNumberVector):
+    {$IFDEF FLOAT} Float80 {$ELSE}
+      {$IFDEF INT64_VECT} Int64 {$ELSE}
+        {$IFDEF UINT} UInt32 {$ELSE} Int32 {$ENDIF} {$ENDIF} {$ENDIF}; override;
+  function ScrEuclidianMetric(V: TGenericNumberVector):
+    {$IFDEF FLOAT} Float80 {$ELSE}
+      {$IFDEF INT64_VECT} Int64 {$ELSE} UInt32 {$ENDIF} {$ENDIF}; override;
+  function RectangularMetric(V: TGenericNumberVector):
+    {$IFDEF FLOAT} Float80 {$ELSE}
+      {$IFDEF INT64_VECT} Int64 {$ELSE} UInt32 {$ENDIF} {$ENDIF}; override;
+  {$IFNDEF CHECK_VECTORS}
+  function IncItem(I: Integer; Value: NumberType): NumberType; override;
+  function DecItem(I: Integer; Value: NumberType): NumberType; override;
+  function MulItem(I: Integer; Value: NumberType): NumberType; override;
+  function DivItem(I: Integer; Value: NumberType): NumberType; override;
+  {$IFNDEF FLOAT}{$IFNDEF INT64_VECT}
+  function OrItem(I: Integer; Value: NumberType): NumberType; override;
+  { Result:=Items[I]:=Items[I] or Value }
+  function XorItem(I: Integer; Value: NumberType): NumberType; override;
+  { Result:=Items[I]:=Items[I] xor Value }
+  function AndItem(I: Integer; Value: NumberType): NumberType; override;
+  { Result:=Items[I]:=Items[I] and Value }
+  function NotItem(I: Integer): NumberType; override;
+  { Result:=Items[I]:=not Items[I] }
+  {$ENDIF}{$ENDIF}
+  {$IFDEF V_INLINE}
+  property ItemsI[I: Integer]: NumberType read GetValueI write SetValueI; default;
+  {$ENDIF}
+  {$ENDIF}
+
+{ end }

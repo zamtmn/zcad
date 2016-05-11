@@ -1,0 +1,100 @@
+{ Version 001020. Copyright © Alexey A.Chernobaev, 1996-2000 }
+{
+  Базовая очередь (реализация).
+  Перед включением данного файла необходимо определить типы TVGenericQueue и
+  NumberType.
+
+  Generic queue (implementation part).
+  Types TVGenericQueue and NumberType must be defined before including this file.
+}
+
+constructor TVGenericQueue.Create;
+begin
+  {$IFDEF CHECK_OBJECTS_FREE}
+  RegisterObjectCreate(Self);
+  {$ENDIF}
+  inherited Create;
+  New(FHead);
+  FHead^.Next:=nil;
+  FTail:=FHead;
+end;
+
+destructor TVGenericQueue.Destroy;
+begin
+  {$IFDEF CHECK_OBJECTS_FREE}
+  RegisterObjectFree(Self);
+  {$ENDIF}
+  Clear;
+  Dispose(FHead);
+  inherited Destroy;
+end;
+
+procedure TVGenericQueue.Clear;
+var
+  P1, P2: PQueueRecord;
+begin
+  P1:=FHead^.Next;
+  while P1 <> nil do begin
+    P2:=P1^.Next;
+    Dispose(P1);
+    P1:=P2;
+  end;
+  FTail:=FHead;
+  FCount:=0;
+end;
+
+function TVGenericQueue.IsEmpty: Bool;
+begin
+  Result:=FCount = 0;
+end;
+
+procedure TVGenericQueue.AddAfter(const X: NumberType);
+var
+  P: PQueueRecord;
+begin
+  New(P);
+  P^.Value:=X;
+  P^.Next:=nil;
+  FTail^.Next:=P;
+  FTail:=P;
+  Inc(FCount);
+end;
+
+procedure TVGenericQueue.InsertBefore(const X: NumberType);
+var
+  P: PQueueRecord;
+begin
+  New(P);
+  P^.Value:=X;
+  P^.Next:=FHead^.Next;
+  FHead^.Next:=P;
+  if FCount = 0 then FTail:=P;
+  Inc(FCount);
+end;
+
+function TVGenericQueue.Head: NumberType;
+begin
+  if FCount = 0 then raise Exception.Create(SEmptyQueue);
+  Result:=FHead^.Next^.Value;
+end;
+
+function TVGenericQueue.Tail: NumberType;
+begin
+  if FCount = 0 then raise Exception.Create(SEmptyQueue);
+  Result:=FTail^.Value;
+end;
+
+function TVGenericQueue.DeleteHead: NumberType;
+var
+  P: PQueueRecord;
+begin
+  if FCount = 0 then raise Exception.Create(SEmptyStack);
+  P:=FHead^.Next;
+  Result:=P^.Value;
+  FHead^.Next:=P^.Next;
+  Dispose(P);
+  Dec(FCount);
+  if FCount = 0 then FTail:=FHead;
+end;
+
+{ end }

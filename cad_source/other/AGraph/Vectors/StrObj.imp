@@ -1,0 +1,168 @@
+{ Version 050131. Copyright © Alexey A.Chernobaev, 1996-2005 }
+
+function TStrObj.CreateCompatibleVector: TPointerVector;
+begin
+  Result:=TStrObj.Create;
+end;
+
+destructor TStrObj.Destroy;
+begin
+  FObjects.Free;
+  inherited Destroy;
+end;
+
+procedure TStrObj.Assign(Source: TVector);
+begin
+  inherited Assign(Source);
+  ClearObjects;
+  if (Source is TStrObj) and (TStrObj(Source).FObjects <> nil) then begin
+    FObjects:=TClassList.Create;
+    FObjects.Assign(TStrObj(Source).FObjects);
+  end;
+end;
+
+function TStrObj.EqualTo(V: TVector): Bool;
+begin
+  Result:=inherited EqualTo(V);
+  if Result and (V is TStrObj) then
+    if TStrObj(V).FObjects <> nil then
+      Result:=(FObjects <> nil) and FObjects.EqualTo(TStrObj(V).FObjects)
+    else
+      Result:=(FObjects = nil) or (FObjects.NumberOfValues(nil) = Count);
+end;
+
+procedure TStrObj.Insert(I: Integer; const Value: TString);
+begin
+  if FObjects <> nil then
+    FObjects.EnsureRoom(1);
+  inherited Insert(I, Value);
+  if FObjects <> nil then
+    FObjects.Insert(I, nil);
+end;
+
+procedure TStrObj.Delete(I: Integer);
+begin
+  inherited Delete(I);
+  if FObjects <> nil then
+    FObjects.Delete(I);
+end;
+
+procedure TStrObj.Exchange(I, J: Integer);
+begin
+  inherited Exchange(I, J);
+  if FObjects <> nil then
+    FObjects.Exchange(I, J);
+end;
+
+procedure TStrObj.Move(CurIndex, NewIndex: Integer);
+var
+  T: Pointer;
+begin
+  if CurIndex <> NewIndex then begin
+    T:=FObjects[CurIndex];
+    inherited Move(CurIndex, NewIndex);
+    SetObject(NewIndex, T);
+  end;
+end;
+
+procedure TStrObj.ConcatenateWith(V: TPointerVector);
+var
+  SaveCount: Integer;
+  SaveObjects: Pointer;
+begin
+  SaveCount:=Count;
+  SaveObjects:=FObjects;
+  FObjects:=nil;
+  inherited ConcatenateWith(V);
+  FObjects:=SaveObjects;
+  if V is TStrObj then
+    if TStrObj(V).FObjects <> nil then begin
+      if FObjects = nil then begin
+        FObjects:=TClassList.Create;
+        FObjects.Count:=SaveCount;
+      end;
+      FObjects.ConcatenateWith(TStrObj(V).FObjects);
+    end;
+  FObjects.Count:=Count;
+end;
+
+procedure TStrObj.ClearObjects;
+begin
+  FreeAndNil(FObjects);
+end;
+
+procedure TStrObj.SetCount(ACount: Integer);
+begin
+  if FObjects <> nil then
+    FObjects.Count:=ACount;
+  inherited SetCount(ACount);
+end;
+
+function TStrObj.GetObject(I: Integer): TObject;
+begin
+  {$IFDEF CHECK_VECTORS}
+  if (I < 0) or (I >= Count) then ErrorFmt(SRangeError_d, [I]);
+  {$ENDIF}
+  if FObjects <> nil then
+    Result:=FObjects[I]
+  else
+    Result:=nil;
+end;
+
+procedure TStrObj.SetObject(I: Integer; Value: TObject);
+begin
+  {$IFDEF CHECK_VECTORS}
+  if (I < 0) or (I >= Count) then ErrorFmt(SRangeError_d, [I]);
+  {$ENDIF}
+  if FObjects = nil then
+    if Value <> nil then begin
+      FObjects:=TClassList.Create;
+      FObjects.Count:=Count;
+    end
+    else
+      Exit;
+  FObjects[I]:=Value;
+end;
+
+function TStrObj.AddObject(const S: TString; AObject: TObject): Integer;
+begin
+  Result:=Add(S);
+  if (AObject <> nil) or (FObjects <> nil) then
+    SetObject(Result, AObject);
+end;
+
+function TStrObj.IndexOfObject(AObject: TObject): Integer;
+begin
+  if FObjects <> nil then
+    Result:=FObjects.IndexOf(AObject)
+  else
+    if (Count > 0) and (AObject = nil) then
+      Result:=0
+    else
+      Result:=-1;
+end;
+
+procedure TStrObj.InsertObject(Index: Integer; const S: TString; AObject: TObject);
+begin
+  if (AObject <> nil) and (FObjects = nil) then begin
+    FObjects:=TClassList.Create;
+    try
+      FObjects.Count:=Count;
+    except
+      FreeAndNil(FObjects);
+      raise;
+    end;
+  end;
+  Insert(Index, S);
+  if FObjects <> nil then
+    FObjects[Index]:=AObject;
+end;
+
+procedure TStrObj.FreeItems;
+var
+  I: Integer;
+begin
+  if Self <> nil then
+    for I:=0 to Count - 1 do
+      Objects[I].Free;
+end;

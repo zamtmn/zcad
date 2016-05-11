@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.05.03"/>
+    <PROJECT value="pkVector.bpl"/>
+    <OBJFILES value="..\Vectors\Aliasm.obj ..\Vectors\Aliasv.obj ..\Vectors\Base16v.obj 
+      ..\Vectors\Base32v.obj ..\Vectors\Base64v.obj ..\Vectors\Base80v.obj 
+      ..\Vectors\Base8v.obj ..\Vectors\Boolm.obj ..\Vectors\Boolv.obj 
+      ..\Vectors\ChckFree.obj ..\Vectors\CheckCPU.obj ..\Vectors\Crc16.obj 
+      ..\Vectors\Crc32.obj ..\Vectors\ExtSys.obj ..\Vectors\ExtType.obj 
+      ..\Vectors\F_PQueue.obj ..\Vectors\F32g.obj ..\Vectors\F32m.obj 
+      ..\Vectors\F32sv.obj ..\Vectors\F32v.obj ..\Vectors\F64g.obj 
+      ..\Vectors\F64m.obj ..\Vectors\F64sv.obj ..\Vectors\F64v.obj 
+      ..\Vectors\F80g.obj ..\Vectors\F80m.obj ..\Vectors\F80sv.obj 
+      ..\Vectors\F80v.obj ..\Vectors\II64Dic.obj ..\Vectors\IIDic.obj 
+      ..\Vectors\Indexsv.obj ..\Vectors\Indexv.obj ..\Vectors\Int16g.obj 
+      ..\Vectors\Int16m.obj ..\Vectors\Int16sv.obj ..\Vectors\Int16v.obj 
+      ..\Vectors\Int32g.obj ..\Vectors\Int32m.obj ..\Vectors\Int32sv.obj 
+      ..\Vectors\Int32v.obj ..\Vectors\Int64g.obj ..\Vectors\Int64m.obj 
+      ..\Vectors\Int64sv.obj ..\Vectors\Int64v.obj ..\Vectors\Int8g.obj 
+      ..\Vectors\Int8m.obj ..\Vectors\Int8sv.obj ..\Vectors\Int8v.obj 
+      ..\Vectors\IPDic.obj ..\Vectors\IQueue.obj ..\Vectors\ISDic.obj 
+      ..\Vectors\IStack.obj ..\Vectors\LogFile.obj ..\Vectors\MultiLst.obj 
+      ..\Vectors\NLSTypes.obj ..\Vectors\ParseCmd.obj 
+      ..\Vectors\ParseWideCmd.obj ..\Vectors\Pointerv.obj ..\Vectors\PQueue.obj 
+      ..\Vectors\PStack.obj ..\Vectors\RBTree.obj ..\Vectors\SIDic.obj 
+      ..\Vectors\SIQueue.obj ..\Vectors\SPDic.obj ..\Vectors\SQueue.obj 
+      ..\Vectors\SSDic.obj ..\Vectors\StrCount.obj ..\Vectors\StrLst.obj 
+      ..\Vectors\UInt16g.obj ..\Vectors\UInt16m.obj ..\Vectors\UInt16sv.obj 
+      ..\Vectors\UInt16v.obj ..\Vectors\UInt32g.obj ..\Vectors\UInt32m.obj 
+      ..\Vectors\UInt32sv.obj ..\Vectors\UInt32v.obj ..\Vectors\UInt8g.obj 
+      ..\Vectors\UInt8m.obj ..\Vectors\UInt8sv.obj ..\Vectors\UInt8v.obj 
+      ..\Vectors\VCLCmpt.obj ..\Vectors\VComUtil.obj ..\Vectors\VectErr.obj 
+      ..\Vectors\Vectors.obj ..\Vectors\VectProc.obj ..\Vectors\VectStr.obj 
+      ..\Vectors\VFileSys.obj ..\Vectors\VFormat.obj ..\Vectors\VFStream.obj 
+      ..\Vectors\VFStrm64.obj ..\Vectors\VFstTmr.obj ..\Vectors\VMapStrm.obj 
+      ..\Vectors\VOleStrm.obj ..\Vectors\VStream.obj ..\Vectors\VStrm64.obj 
+      ..\Vectors\VTxtStrm.obj ..\Vectors\VUnicode.obj ..\Vectors\VWideStr.obj 
+      ..\Vectors\VWinUtil.obj ..\Vectors\WFileSys.obj ..\Vectors\WSPDic.obj 
+      ..\Vectors\WSPDicFast.obj ..\Vectors\WSSDic.obj ..\Vectors\WStrLst.obj 
+      ..\Vectors\VStrmCrc.obj pkVector.obj"/>
+    <RESFILES value="pkVector.res"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES)"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value="ML.lib"/>
+    <SPARELIBS value="VCL50.lib ML.lib"/>
+    <PACKAGES value="vcl50.bpi"/>
+    <PATHCPP value=".;"/>
+    <PATHPAS value=".;..\Vectors"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="tlink32"/>
+    <USERDEFINES value="_DEBUG"/>
+    <SYSDEFINES value="_RTLDLL;NO_STRICT;USEPACKAGES"/>
+    <MAINSOURCE value="pkVector.cpp"/>
+    <INCLUDEPATH value="..\Vectors;C:\Delphi\Vectors\;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="..\Vectors;$(BCB)\Projects\Lib;C:\Delphi\Vectors\;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-par"/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-I..\Vectors -IC:\Delphi\Vectors\. -I$(BCB)\include -I$(BCB)\include\vcl 
+      -src_suffix cpp -D_DEBUG -boa"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
+      -tWM"/>
+    <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="-D&quot;Vectors Library v.030514&quot; -aa -Tpp -Gpr -x -Gn -Gl -Gi -v"/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0pkg32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
+  </LINKER>
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=1
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1049
+CodePage=1251
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[HistoryLists\hlIncludePath]
+Count=1
+Item0=C:\Delphi\Vectors\;$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=2
+Item0=$(BCB)\Projects\Lib;C:\Delphi\Vectors\;$(BCB)\lib\obj;$(BCB)\lib
+Item1=C:\Delphi\Vectors\;$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=1
+Item0=_DEBUG
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=0
+LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
+  </IDEOPTIONS>
+</PROJECT>

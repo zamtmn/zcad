@@ -1,0 +1,303 @@
+{ Version 030515. Copyright © Alexey A.Chernobaev, 1996-2003 }
+{
+  Числовые и логические матрицы (интерфейс).
+  Перед включением данного файла необходимо определить тип BaseType.
+
+  Generic numeral and boolean matrixes (interface part).
+  Type BaseType must be defined before including this file.
+}
+
+{ TNumberMatrix }
+
+TNumberMatrix = class(TVectorObject)
+protected
+  FVector: TGenericBaseVector;
+  FRowCount, FColCount: Integer;
+  function CreateVector(ElemCount: Integer;
+    ADefaultValue: BaseType): TGenericBaseVector; virtual;
+  procedure InitVector(ADefaultValue: BaseType); virtual;
+  procedure CatchVector(AVector: TGenericBaseVector); virtual;
+  function GetValue(I, J: Integer): BaseType; virtual;
+  procedure SetValue(I, J: Integer; Value: BaseType); virtual;
+  function CreateClone(ARowCount, AColCount: Integer): TNumberMatrix; virtual;
+  { создает и возвращает матрицу того же типа с заданным размером; потомки
+    должны переопределить! }
+  { creates and returns the matrix of the same type with the specified size;
+    descendants must override! }
+  procedure SetRowCount(ARowCount: Integer); virtual;
+  procedure SetColCount(AColCount: Integer); virtual;
+public
+  constructor Create(ARowCount, AColCount: Integer; ADefaultValue: BaseType);
+  { создает матрицу размерности ARowCount * AColCount со значением по умолчанию
+    ADefaultValue }
+  { creates the matrix with dimensions ARowCount * AColCount and the default
+    value ADefaultValue }
+  constructor CreateRowOrColumn(var AVector: TGenericBaseVector;
+    IsRow: Boolean);
+  { создает матрицу-строку размерности 1 * AVector.Count (IsRow = True) или
+    матрицу-столбец размерности AVector.Count * 1 (IsRow = False) со значениями
+    из вектора AVector; после создания матрицы этот вектор уничтожается, а
+    переменной AVector присваивается значение nil }
+  { creates a row-matrix with dimensions 1 * AVector.Count (IsRow = True) or a
+    column-matrix with dimensions AVector.Count * 1 (IsRow = False) and and
+    values from the vector AVector; destroys the vector and assigns nil to the
+    variable AVector after creating the matrix }
+  procedure ConvertToRow(var AVector: TGenericBaseVector);
+  { преобразует матрицу в матрицу-строку со значениями из AVector, уничтожает
+    этот вектор и присваивает переменной AVector значение nil }
+  { converts the matrix to the row-matrix with values from AVector, destroys
+    this vector and assigns nil to the variable AVector }
+  procedure ConvertToColumn(var AVector: TGenericBaseVector);
+  { преобразует матрицу в матрицу-столбец со значениями из AVector, уничтожает
+    этот вектор и присваивает переменной AVector значение nil }
+  { converts the matrix to the column-matrix with values from AVector, destroys
+    this vector and assigns nil to the variable AVector }
+  procedure SplitToRows(RowsList: TClassList);
+  { разбивает матрицу на список векторов, которые являются ее строками }
+  { splits the matrix to the list of vectors forming it's rows }
+  procedure SplitToColumns(ColumnsList: TClassList);
+  { разбивает матрицу на список векторов, которые являются ее столбцами }
+  { splits the matrix to the list of vectors forming it's columns }
+  procedure RearrangeRows(Substitution: TGenericIntegerVector);
+  { переставляет строки матрицы в соответствии с перестановкой, заданной
+    вектором Substitution: Substitution[I]-я строка становится I-ой строкой;
+    метод неприменим к симметричным матрицам }
+  { rearranges the matrix rows according to the permutation vector Substitution:
+    row Substitution[I] becomes row I; method is inapplicable to the symmetric
+    matrixes }
+  procedure RearrangeColumns(Substitution: TGenericIntegerVector);
+  { переставляет столбцы матрицы в соответствии с перестановкой, заданной
+    вектором Substitution: Substitution[J]-й столбец становится J-ым столбцом;
+    метод неприменим к симметричным матрицам }
+  { rearranges the matrix columns according to the permutation vector
+    Substitution: column Substitution[J] becomes column J; method is inapplicable
+    to the symmetric matrixes }
+  procedure Assign(Source: TNumberMatrix); virtual;
+  { присваивает Self значение Source }
+  { assigns Source to Self }
+  procedure AssignRow(AVector: TGenericBaseVector); virtual;
+  { преобразует матрицу в матрицу-строку со значениями из AVector }
+  { converts the matrix to the matrix-row with values from AVector }
+  procedure AssignColumn(AVector: TGenericBaseVector); virtual;
+  { преобразует матрицу в матрицу-столбец со значениями из AVector }
+  { converts the matrix to the matrix-column with values from AVector }
+  procedure SetItems(Values: array of BaseType);
+  { устанавливает значения элементов матрицы в Values (построчно); Values должен
+    содержать как минимум RowCount * ColCount элементов }
+  { sets the matrix elements according to Values (by rows); Values must contain
+    at least RowCount * ColCount elements }
+  procedure SetDiagonal(Value: BaseType);
+  { устанавливает значения главной диагонали в Value }
+  { sets the elements of the matrix main diagonal according to Values }
+{$IFNDEF BOOL}
+  function Trace: BaseType;
+  { возвращает сумму диагональных элементов матрицы: Trace(A) = Sum Aii }
+  { returns the sum of the matrix diagonal elements: Trace(A) = Sum Aii }
+  constructor CreateMatrixProduct(A1, A2: TNumberMatrix);
+  { создает матрицу - произведение матриц A1 и A2; необходимое условие:
+    Vector.DefaultValue = A1.Vector.DefaultValue }
+  { creates the matrix which is a product of the matrixes A1 and A2; necessary
+    condition: Vector.DefaultValue = A1.Vector.DefaultValue }
+{$ENDIF}
+  destructor Destroy; override;
+  procedure WriteToStream(VStream: TVStream); {virtual;}
+  { записывает матрицу в поток }
+  { writes the matrix to the stream }
+  procedure ReadFromStream(VStream: TVStream); {virtual;}
+  { читает матрицу из потока }
+  { reads the matrix from the stream }
+  procedure WriteToTextStream(TextStream: TTextStream);
+  { записывает матрицу в текстовый поток }
+  { writes the matrix to the text stream }
+  procedure ReadFromTextStream(TextStream: TTextStream);
+  { читает матрицу из текстового потока }
+  { reads the matrix from the text stream }
+  function SizeInBytes: Integer; virtual;
+  { возвращает размер матрицы в байтах }
+  { returns the matrix size in bytes }
+  procedure CopyTo(T: TNumberMatrix); virtual;
+  { копирует в матрицу T все элементы Self с индексами, превышающими размеров T }
+  { copies to the matrix T all elements of Self with indexes not exceeding the
+    dimensions of T }
+  procedure Transpose; virtual;
+  { транспонирует матрицу }
+  { transposes the matrix }
+  procedure SetSize(ARowCount, AColCount: Integer);
+  { изменяет размер матрицы, сохраняя старые значения элементов }
+  { changes the matrix dimensions preserving the old element values }
+{$IFNDEF BOOL}
+  procedure AddScalar(T: BaseType); virtual;
+  { увеличивает каждый элемент на скаляр T }
+  { adds scalar T to every element }
+  procedure SubScalar(T: BaseType); virtual;
+  { уменьшает каждый элемент на скаляр T }
+  { subs scalar T from the every element }
+  procedure AddMatrix(T: TNumberMatrix); virtual;
+  { прибавляет матрицу }
+  { adds the matrix }
+  procedure AddScaled(Factor: BaseType; T: TNumberMatrix); virtual;
+  { прибавляет матрицу, умноженную на коэффициент }
+  { adds the matrix scaled by Factor }
+  procedure SubMatrix(T: TNumberMatrix); virtual;
+  { вычитает матрицу }
+  { subs the matrix }
+  procedure MulScalar(T: BaseType); virtual;
+  { умножает на скаляр }
+  { multiplies by the scalar }
+  procedure DivScalar(T: BaseType); virtual;
+  { делит на скаляр }
+  { divides by the scalar }
+  procedure MatrixProduct(A1, A2: TNumberMatrix); virtual;
+  { присваивает матрице результат произведения A1 на A2 (необходимое условие:
+    A1.ColCount = A2.RowCount) }
+  { sets matrix to the matrix product of A1 and A2 (necessary condition:
+    A1.ColCount = A2.RowCount) }
+  function IncItem(I, J: Integer; Value: BaseType): BaseType; virtual;
+  { Result:=Items[I, J]:=Items[I, J] + Value }
+  function DecItem(I, J: Integer; Value: BaseType): BaseType; virtual;
+  { Result:=Items[I, J]:=Items[I, J] - Value }
+  function MulItem(I, J: Integer; Value: BaseType): BaseType; virtual;
+  { Result:=Items[I, J]:=Items[I, J] * Value }
+  function DivItem(I, J: Integer; Value: BaseType): BaseType; virtual;
+  { Result:=Items[I, J]:=Items[I, J] div Value (или Items[I, J] / Value) }
+{$ELSE}
+  procedure AndMatrix(T: TNumberMatrix); virtual;
+  { конъюнкция логических матриц }
+  { conjunction of the boolean matrixes }
+  procedure OrMatrix(T: TNumberMatrix); virtual;
+  { дизъюнкция логических матриц }
+  { disjunction of the boolean matrixes }
+  procedure XorMatrix(T: TNumberMatrix); virtual;
+  { сложение логических матриц по модулю два }
+  { addition of the boolean matrixes by modulo two }
+  procedure NotMatrix; virtual;
+  { отрицание логической матрицы }
+  { negation of the boolean matrix }
+  procedure GetRowsNumTrue(NumTrue: TGenericIntegerVector);
+  { записывает количество значений True в каждой строке матрицы в вектор NumTrue }
+  { writes the number of True values in every matrix row to the vector NumTrue }
+  procedure GetColumnsNumTrue(NumTrue: TGenericIntegerVector);
+  { записывает количество значений True в каждом столбце матрицы в вектор NumTrue }
+  { writes the number of True values in every matrix column to the vector NumTrue }
+{$ENDIF}
+  function RowMin(I: Integer): BaseType;
+  { возвращает минимальный элемент I-й строки }
+  { returns the minimum element of Ith row }
+  function RowMax(I: Integer): BaseType;
+  { возвращает максимальный элемент I-й строки }
+  { returns the maximum element of Ith row }
+  function RowMinIndex(I: Integer; var MinValue: BaseType): Integer;
+  { возвращает индекс столбца минимального элемента I-й строки и сам этот
+    элемент в MinValue }
+  { returns the index of the column containing the minimum element of Ith row and
+    this element itself in MinValue }
+  function RowMaxIndex(I: Integer; var MaxValue: BaseType): Integer;
+  { находит индекс столбца максимального элемента I-й строки и сам этот элемент }
+  { returns the index of the column containing the maximum element of Ith row and
+    this element itself in MaxValue }
+  function ColumnMin(J: Integer): BaseType;
+  { минимальный элемент J-го столбца }
+  { returns the minimum element of Jth column }
+  function ColumnMax(J: Integer): BaseType;
+  { максимальный элемент J-го столбца }
+  { returns the maximum element of Jth column }
+  function ColumnMinIndex(J: Integer; var MinValue: BaseType): Integer;
+  { возвращает индекс строки минимального элемента J-го столбца и сам этот
+    элемент в MinValue }
+  { returns the index of the row containing the minimum element of Jth column and
+    this element itself in MaxValue }
+  function ColumnMaxIndex(J: Integer; var MaxValue: BaseType): Integer;
+  { возвращает индекс строки максимального элемента J-го столбца и сам этот
+    элемент в MaxValue }
+  { returns the index of the row containing the maximum element of Jth column and
+    this element itself in MaxValue }
+  function StartOfRow(I: Integer): Integer; virtual;
+  { возвращает индекс начала I-й строки: 0 для обычных матриц, I для симметричных }
+  { returns the start index of Ith row: 0 for ordinary matrixes, I for symmetric }
+  property RowCount: Integer read FRowCount write SetRowCount;
+  { количество строк }
+  { number of rows }
+  property ColCount: Integer read FColCount write SetColCount;
+  { количество столбцов }
+  { number of columns }
+  property Items[I, J: Integer]: BaseType read GetValue write SetValue; default;
+  { значения матрицы }
+  { matrix values }
+  property Vector: TGenericBaseVector read FVector;
+  { "базовый" вектор; пришлось сделать доступным }
+  { matrix "base" vector }
+  procedure DebugWrite;
+{$IFDEF BOOL}
+  procedure DebugWrite01;
+{$ENDIF}
+  { отладочная печать; для вывода отладочной информации в графических
+    Win32-приложениях необходимо создать консоль с помощью AllocConsole }
+  { debug write; to use in Win32 GUI applications it's necessary to create
+    console with AllocConsole }
+end;
+
+{ TSparseMatrix }
+
+TSparseMatrix = class(TNumberMatrix)
+protected
+  function CreateVector(ElemCount: Integer;
+    ADefaultValue: BaseType): TGenericBaseVector; override;
+  procedure CatchVector(AVector: TGenericBaseVector); override;
+  function CreateClone(ARowCount, AColCount: Integer): TNumberMatrix; override;
+end;
+
+{ TSquareMatrix }
+
+TSquareMatrix = class(TNumberMatrix)
+protected
+  function CreateClone(ARowCount, AColCount: Integer): TNumberMatrix; override;
+  procedure SetRowCount(ARowCount: Integer); override;
+  procedure SetColCount(AColCount: Integer); override;
+public
+  constructor Create(ASize: Integer; ADefaultValue: BaseType);
+  property Size: Integer read FRowCount write SetRowCount;
+  { Size = RowCount = ColCount }
+end;
+
+{ TSimMatrix }
+
+TSimMatrix = class(TSquareMatrix)
+protected
+  procedure InitVector(ADefaultValue: BaseType); override;
+  procedure CatchVector(AVector: TGenericBaseVector); override;
+  function CreateClone(ARowCount, AColCount: Integer): TNumberMatrix; override;
+  function GetValue(I, J: Integer): BaseType; override;
+  procedure SetValue(I, J: Integer; Value: BaseType); override;
+public
+  procedure CopyTo(T: TNumberMatrix); override;
+{$IFNDEF BOOL}
+  procedure AddMatrix(T: TNumberMatrix); override;
+  procedure SubMatrix(T: TNumberMatrix); override;
+  procedure MatrixProduct(A1, A2: TNumberMatrix); override;
+  function IncItem(I, J: Integer; Value: BaseType): BaseType; override;
+  function DecItem(I, J: Integer; Value: BaseType): BaseType; override;
+  function MulItem(I, J: Integer; Value: BaseType): BaseType; override;
+  function DivItem(I, J: Integer; Value: BaseType): BaseType; override;
+{$ELSE}
+  procedure AndMatrix(T: TNumberMatrix); override;
+  procedure OrMatrix(T: TNumberMatrix); override;
+  procedure XorMatrix(T: TNumberMatrix); override;
+{$ENDIF}
+  procedure Transpose; override;
+  function StartOfRow(I: Integer): Integer; override;
+end;
+
+{ TSparseSimMatrix }
+
+TSparseSimMatrix = class(TSimMatrix)
+protected
+  function CreateVector(ElemCount: Integer;
+    ADefaultValue: BaseType): TGenericBaseVector; override;
+  function CreateClone(ARowCount, AColCount: Integer): TNumberMatrix; override;
+end;
+
+{$IFDEF BCB}
+{$NODEFINE BaseType}
+{$NODEFINE TGenericBaseVector}
+{$NODEFINE TBaseVector}
+{$ENDIF}

@@ -1,0 +1,153 @@
+{ Version 020122. Copyright © Alexey A.Chernobaev, 1999-2002 }
+{
+  Словарь на основе красно-черных деревьев (реализация).
+
+  Dictionary based on red-black trees (implementation part).
+}
+
+{$IFNDEF USER_COMPARE_OBJECTS}
+function CMP(a, b: TTreeData): Integer;
+begin
+  if a.Key < b.Key then Result:=-1 else if a.Key > b.Key then Result:=1
+  else Result:=0;
+end;
+{$ENDIF}
+
+{$I RBTree.imp}
+
+{ TDic }
+
+function TDic.Add(const AKey: TDicKey; const AData: TDicData): Boolean;
+var
+  TreeData: TTreeData;
+  Node: PNode;
+begin
+  TreeData.Key:=AKey; { TreeData.Data не используется при поиске }
+  if not FFindNode(TreeData, Node) then begin
+    TreeData.Data:=AData;
+    FInsertNode(TreeData, Node);
+    Result:=True;
+  end
+  else begin
+    Node^.data.Data:=AData;
+    Result:=False;
+  end;
+end;
+
+function TDic.AddIfNew(const AKey: TDicKey; const AData: TDicData): Boolean;
+var
+  TreeData: TTreeData;
+  Node: PNode;
+begin
+  Result:=False;
+  TreeData.Key:=AKey; { TreeData.Data не используется при поиске }
+  if not FFindNode(TreeData, Node) then begin
+    TreeData.Data:=AData;
+    FInsertNode(TreeData, Node);
+    Result:=True;
+  end
+end;
+
+function TDic.Find(const AKey: TDicKey): Boolean;
+var
+  TreeData: TTreeData;
+begin
+  TreeData.Key:=AKey;
+  Result:=inherited Find(TreeData);
+end;
+
+function TDic.FindLessEqual(const AKey: TDicKey; var FoundKey: TDicKey;
+  var FoundData: TDicData): Boolean;
+var
+  TreeData, TreeFoundData: TTreeData;
+begin
+  TreeData.Key:=AKey;
+  Result:=inherited FindLessEqual(TreeData, TreeFoundData);
+  if Result then begin
+    FoundKey:=TreeFoundData.Key;
+    FoundData:=TreeFoundData.Data;
+  end;
+end;
+
+function TDic.FindGreaterEqual(const AKey: TDicKey; var FoundKey: TDicKey;
+  var FoundData: TDicData): Boolean;
+var
+  TreeData, TreeFoundData: TTreeData;
+begin
+  TreeData.Key:=AKey;
+  Result:=inherited FindGreaterEqual(TreeData, TreeFoundData);
+  if Result then begin
+    FoundKey:=TreeFoundData.Key;
+    FoundData:=TreeFoundData.Data;
+  end;
+end;
+
+procedure TDic.Delete(const AKey: TDicKey);
+var
+  TreeData: TTreeData;
+  Node: PNode;
+begin
+  TreeData.Key:=AKey;
+  Node:=FindNode(TreeData);
+  if Node <> nil then
+    DeleteNode(Node)
+  else
+    raise EDicError.CreateFmt(SKeyNotFound, [AKey]);
+end;
+
+function TDic.SafeDelete(const AKey: TDicKey): Boolean;
+var
+  TreeData: TTreeData;
+  Node: PNode;
+begin
+  TreeData.Key:=AKey;
+  Node:=FindNode(TreeData);
+  if Node <> nil then begin
+    DeleteNode(Node);
+    Result:=True;
+  end
+  else
+    Result:=False;
+end;
+
+function TDic.Data(const AKey: TDicKey): TDicData;
+var
+  TreeData: TTreeData;
+  Node: PNode;
+begin
+  TreeData.Key:=AKey; { TreeData.Data не используется при поиске }
+  Node:=FindNode(TreeData);
+  if Node <> nil then
+    Result:=Node^.data.Data
+  else
+    raise EDicError.CreateFmt(SKeyNotFound, [AKey]);
+end;
+
+function TDic.PData(const AKey: TDicKey): PDicData;
+var
+  TreeData: TTreeData;
+begin
+  TreeData.Key:=AKey; { TreeData.Data не используется при поиске }
+  PNode(Result):=FindNode(TreeData);
+  if Result <> nil then Result:=@(PNode(Result)^.data.Data);
+end;
+
+function TDic.FindKeyForData(const Data: TDicData; var Key: TDicKey): Boolean;
+var
+  It: TRBTreeIterator;
+begin
+  Result:=False;
+  It:=TRBTreeIterator.Create(Self);
+  try
+    while not It.Eof do begin
+      if It.Data.Data = Data then begin
+        Key:=It.Data.Key;
+        Result:=True;
+        Exit;
+      end;
+      It.Next;
+    end;
+  finally
+    It.Free;
+  end;
+end;

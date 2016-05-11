@@ -1,0 +1,98 @@
+{ Version 040110. Copyright © Alexey A.Chernobaev, 1996-2004 }
+{
+  Словарь на основе красно-черных деревьев (интерфейс).
+
+  A dictionary based on the red-black trees (interface part).
+
+  Для создания на основе данного шаблона конкретных классов-словарей необходимо:
+  1) включить модули SysUtils, ExtType и Pointerv в секцию uses модуля;
+  2) определить типы TDicKey и TDicData;
+  3) включить данный файл в интерфейсную часть модуля с помощью директивы $I;
+  4) включить файл Dic.imp в часть реализации с помощью директивы $I.
+
+  To define specific dictionary classes based on this template you have to:
+  1) include SysUtils, ExtType and Pointerv to the "uses" clause of your unit;
+  2) define TDicKey and TDicData data types;
+  3) include this file to the interface part of your unit using $I;
+  4) include file Dic.imp to the implementation part of your unit using $I.
+}
+
+  TTreeData = packed record { packed for correct read/write }
+    Key: TDicKey;
+    Data: TDicData;
+  end;
+
+  {$I RBTree.def}
+
+  EDicError = class(Exception);
+
+  PDicData = ^TDicData;
+
+  TDic = class(TRBTree)
+  public
+    function Add(const AKey: TDicKey; const AData: TDicData): Boolean;
+    { если значения с ключом AKey не было в словаре, то добавляет значение
+      (AKey, AData) в словарь и возвращает True, иначе изменяет поле Data
+      значения с ключом AKey на AData и возвращает False }
+    { if there's no value with the key AKey in the dictionary then adds value
+      (AKey, AData) to the dictionary and returns True else replaces Data field
+      of value with the key AKey to AData and returns False }
+    function AddIfNew(const AKey: TDicKey; const AData: TDicData): Boolean;
+    { если значения с ключом AKey не было в словаре, то добавляет значение
+      (AKey, AData) в словарь и возвращает True, иначе возвращает False и не
+      изменяет словарь }
+    { if there's no value with the key AKey in the dictionary then adds value
+      (AKey, AData) to the dictionary and returns True else returns False and
+      doesn't change the dictionary }
+    function Find(const AKey: TDicKey): Boolean; {$IFDEF V_INLINE}inline;{$ENDIF}
+    { возвращает True, если в словаре есть значение с ключом AKey, иначе False }
+    { returns True if there's a value with the key AKey in the dictionary and
+      False otherwise }
+    function FindLessEqual(const AKey: TDicKey; var FoundKey: TDicKey;
+      var FoundData: TDicData): Boolean;
+    { ищет в словаре ключ, меньший либо равный AKey, и при этом "ближайший" к
+      AKey (в смысле абсолютного значения CMP); в случае успеха возвращает этот
+      ключ в FoundKey и связанное с ним значение в FoundData; результат равен
+      True, если такой ключ существует, иначе False }
+    { searches the dictionary for a key which is less then or equal to AKey and
+      is also the "nearest" to AKey (in the sense of the absolute value of CMP);
+      if successful then returns this key in FoundKey and it's linked value in
+      FoundData; the result is equal to True if the specified key exists,
+      otherwise False }
+    function FindGreaterEqual(const AKey: TDicKey; var FoundKey: TDicKey;
+      var FoundData: TDicData): Boolean;
+    { аналогично FindLessEqual, но ищет значение, большее либо равное AKey }
+    { analog of FindLessEqual, but it searches for a key which is greater or
+      equal then AKey }
+    procedure Delete(const AKey: TDicKey);
+    { если в словаре есть значение с ключом AKey, то удаляет его, иначе
+      возбуждает исключение EDicError }
+    { if there is a value with the key AKey in the dictionary then deletes it
+      else raises exception EDicError }
+    function SafeDelete(const AKey: TDicKey): Boolean;
+    { если в словаре есть значение с ключом AKey, то удаляет его и возвращает
+      True, иначе возвращает False }
+    { if there is a value with the key AKey in the dictionary then deletes and
+      returns True, otherwise returns False }
+    function Data(const AKey: TDicKey): TDicData;
+    { если в словаре есть значение с ключом AKey, то возращает поле Data этого
+      значения, иначе возбуждает исключение EDicError }
+    { if there's a value with the key AKey in the dictionary then returns Data
+      field of this value else raises exception EDicError }
+    function PData(const AKey: TDicKey): PDicData; {$IFDEF V_INLINE}inline;{$ENDIF}
+    { если в словаре есть значение с ключом AKey, то возращает указатель на поле
+      Data этого значения, иначе возвращает nil }
+    { if there's a value with the key AKey in the dictionary then returns
+      pointer to Data field of this value else returns nil }
+    function FindKeyForData(const Data: TDicData; var Key: TDicKey): Boolean;
+    { если в словаре есть значение Data, то возвращает True и записывает в Key
+      ключ этого значения, иначе возвращает False; если значение Data хранится
+      с разными ключами, то возвращает любой из этих ключей; функция является
+      неэффективной (в худшем случае просматриваются все узлы дерева) }
+    { if there's a value Data in the dictionary then returns True and writes the
+      corresponding key to Key else returns False; if the value Data is stored
+      with different keys then returns any of these keys; the function is
+      inefficient (all nodes of the tree will be visited in the worst case) }
+  end;
+
+  TDicIterator = TRBTreeIterator;

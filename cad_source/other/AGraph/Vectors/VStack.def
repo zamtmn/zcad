@@ -1,0 +1,41 @@
+{ Version 000417. Copyright © Alexey A.Chernobaev, 1996-2000 }
+{
+  Базовый стек (интерфейс).
+  Перед включением данного файла необходимо определить тип NumberType.
+
+  Generic stack (interface part).
+  Type NumberType must be defined before including this file.
+}
+
+  TVGenericStack = class
+  protected
+    FCount: Integer;
+    FTop: PPointer;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure Clear;
+    { очищает стек (т.е. удаляет все элементы) }
+    { clears the stack }
+    function IsEmpty: Bool;
+    { Result:=Count = 0 }
+    procedure Push(const X: NumberType);
+    { помещает в стек элемент X }
+    { pushes X to the stack }
+    procedure SetTop(const X: NumberType);
+    { меняет значение верхнего элемента стека на X }
+    { changes top element of the stack to X }
+    function Pop: NumberType;
+    { выталкивает из стека верхний элемент и возвращает его значение }
+    { pops top element from the stack and returns it's value }
+    function Top: NumberType;
+    { возвращает верхний элемент стека }
+    { returns value of top element of the stack }
+    procedure PopTop;
+    { выталкивает из стека верхний элемент }
+    { pops top element from the stack }
+    property Count: Integer read FCount;
+    { количество элементов в стеке }
+    { number of elements in the stack }
+
+{ end }

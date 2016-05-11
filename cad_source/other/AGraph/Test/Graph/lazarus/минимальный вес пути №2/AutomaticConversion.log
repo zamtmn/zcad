@@ -1,0 +1,20 @@
+Hint: * Converting file C:\TEMP\AGraph\Test\Graph\lazarus\минимальный вес пути №2\GraphTestMinWeightPath2.dpr *
+Hint: Added defines -dBorland -dVer150 -dDelphi7 -dCompiler6_Up -dPUREPASCAL in custom options
+Hint: Found all unit files
+Hint: * Fixing used units for file C:\TEMP\AGraph\Test\Graph\lazarus\минимальный вес пути №2\GraphTestMinWeightPath2.dpr *
+Hint: 
+Hint: *** Converting unit files belonging to project/package ***
+Hint: 
+Hint: *** Converting unit files found during conversion ***
+Hint: * Converting file C:\TEMP\AGraph\Vectors\ExtSys.pas *
+Hint: Changed encoding from cp1251 to UTF-8
+Hint: Repairing include files : ..\..\..\..\Vectors\VCheck.inc
+Hint: Removed unit "Windows" in uses section.
+Hint: * Converting file C:\TEMP\AGraph\Test\Graph\TestMinWeightPath2.pas *
+Hint: Removed unit "Windows" in uses section.
+Hint: 
+Hint: *** Fixing used units and Repairing form files ***
+Hint: * Fixing used units for file C:\TEMP\AGraph\Vectors\ExtSys.pas *
+Hint: * Fixing used units for file C:\TEMP\AGraph\Test\Graph\TestMinWeightPath2.pas *
+Hint: Conversion took: 00:00:06
+Hint: Conversion Ready.

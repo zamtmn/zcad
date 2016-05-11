@@ -1,0 +1,56 @@
+package pkGraph;
+
+{$R *.RES}
+{$ALIGN ON}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO OFF}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'Graphs Library Package (C) A.Chernobaev v.030516'}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  VCL50,
+  pkVector,
+  pkAttr,
+  pkMath;
+
+contains
+  CTrick in '..\Graphs\CTrick.pas',
+  EulerCyc in '..\Graphs\EulerCyc.pas',
+  ExtGraph in '..\Graphs\ExtGraph.pas',
+  GMLObj in '..\Graphs\GMLObj.pas',
+  GraphErr in '..\Graphs\GraphErr.pas',
+  GraphGML in '..\Graphs\GraphGML.pas',
+  GraphIO in '..\Graphs\GraphIO.pas',
+  Graphs in '..\Graphs\Graphs.pas',
+  GrColor in '..\Graphs\GrColor.pas',
+  HamilCyc in '..\Graphs\HamilCyc.pas',
+  Isomorph in '..\Graphs\Isomorph.pas',
+  MapColor in '..\Graphs\MapColor.pas',
+  MinPath in '..\Graphs\MinPath.pas',
+  Planar in '..\Graphs\Planar.pas',
+  Postman in '..\Graphs\Postman.pas',
+  RWGML in '..\Graphs\RWGML.pas',
+  Steiner in '..\Graphs\Steiner.pas',
+  VFGraph in '..\Graphs\VFGraph.pas',
+  VFState in '..\Graphs\VFState.pas';
+
+end.

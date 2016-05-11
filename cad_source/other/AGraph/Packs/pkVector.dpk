@@ -1,0 +1,141 @@
+package pkVector;
+
+{$R *.RES}
+{$ALIGN ON}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO OFF}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'Vectors Library Package (C) A.Chernobaev v.030514'}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+{$DEFINE PACKAGE}
+{$DEFINE FAR_EAST}
+
+requires
+  VCL50;
+
+contains
+  Aliasm in '..\Vectors\Aliasm.pas',
+  Aliasv in '..\Vectors\Aliasv.pas',
+  Base8v in '..\Vectors\Base8v.pas',
+  Base16v in '..\Vectors\Base16v.pas',
+  Base32v in '..\Vectors\Base32v.pas',
+  Base64v in '..\Vectors\Base64v.pas',
+  Base80v in '..\Vectors\Base80v.pas',
+  Boolm in '..\Vectors\Boolm.pas',
+  Boolv in '..\Vectors\Boolv.pas',
+  ChckFree in '..\Vectors\ChckFree.pas',
+  CheckCPU in '..\Vectors\CheckCPU.pas',
+  Crc16 in '..\Vectors\Crc16.pas',
+  Crc32 in '..\Vectors\Crc32.pas',
+  ExtSys in '..\Vectors\ExtSys.pas',
+  ExtType in '..\Vectors\ExtType.pas',
+  F_PQueue in '..\Vectors\F_PQueue.pas',
+  F32g in '..\Vectors\F32g.pas',
+  F32m in '..\Vectors\F32m.pas',
+  F32sv in '..\Vectors\F32sv.pas',
+  F32v in '..\Vectors\F32v.pas',
+  F64g in '..\Vectors\F64g.pas',
+  F64m in '..\Vectors\F64m.pas',
+  F64sv in '..\Vectors\F64sv.pas',
+  F64v in '..\Vectors\F64v.pas',
+  F80g in '..\Vectors\F80g.pas',
+  F80m in '..\Vectors\F80m.pas',
+  F80sv in '..\Vectors\F80sv.pas',
+  F80v in '..\Vectors\F80v.pas',
+  Int8g in '..\Vectors\Int8g.pas',
+  Int8m in '..\Vectors\Int8m.pas',
+  Int8sv in '..\Vectors\Int8sv.pas',
+  Int8v in '..\Vectors\Int8v.pas',
+  Int16g in '..\Vectors\Int16g.pas',
+  Int16m in '..\Vectors\Int16m.pas',
+  Int16sv in '..\Vectors\Int16sv.pas',
+  Int16v in '..\Vectors\Int16v.pas',
+  Int32g in '..\Vectors\Int32g.pas',
+  Int32m in '..\Vectors\Int32m.pas',
+  Int32sv in '..\Vectors\Int32sv.pas',
+  Int32v in '..\Vectors\Int32v.pas',
+  Int64g in '..\Vectors\Int64g.pas',
+  Int64m in '..\Vectors\Int64m.pas',
+  Int64sv in '..\Vectors\Int64sv.pas',
+  Int64v in '..\Vectors\Int64v.pas',
+  UInt8g in '..\Vectors\UInt8g.pas',
+  UInt8m in '..\Vectors\UInt8m.pas',
+  UInt8sv in '..\Vectors\UInt8sv.pas',
+  UInt8v in '..\Vectors\UInt8v.pas',
+  UInt16g in '..\Vectors\UInt16g.pas',
+  UInt16m in '..\Vectors\UInt16m.pas',
+  UInt16sv in '..\Vectors\UInt16sv.pas',
+  UInt16v in '..\Vectors\UInt16v.pas',
+  UInt32g in '..\Vectors\UInt32g.pas',
+  UInt32m in '..\Vectors\UInt32m.pas',
+  UInt32sv in '..\Vectors\UInt32sv.pas',
+  UInt32v in '..\Vectors\UInt32v.pas',
+  Indexsv in '..\Vectors\Indexsv.pas',
+  Indexv in '..\Vectors\Indexv.pas',
+  IIDic in '..\Vectors\IIDic.pas',
+  IPDic in '..\Vectors\IPDic.pas',
+  II64Dic in '..\Vectors\II64Dic.pas',
+  ISDic in '..\Vectors\ISDic.pas',
+  Pointerv in '..\Vectors\Pointerv.pas',
+  PQueue in '..\Vectors\PQueue.pas',
+  PStack in '..\Vectors\PStack.pas',
+  RBTree in '..\Vectors\RBTree.pas',
+  SIDic in '..\Vectors\SIDic.pas',
+  SPDic in '..\Vectors\SPDic.pas',
+  SSDic in '..\Vectors\SSDic.pas',
+  IQueue in '..\Vectors\IQueue.pas',
+  SIQueue in '..\Vectors\SIQueue.pas',
+  SQueue in '..\Vectors\SQueue.pas',
+  StrCount in '..\Vectors\StrCount.pas',
+  StrLst in '..\Vectors\StrLst.pas',
+  IStack in '..\Vectors\IStack.pas',
+  LogFile in '..\Vectors\LogFile.pas',
+  MultiLst in '..\Vectors\MultiLst.pas',
+  NLSTypes in '..\Vectors\NLSTypes.pas',
+  ParseCmd in '..\Vectors\ParseCmd.pas',
+  ParseWideCmd in '..\Vectors\ParseWideCmd.pas',
+  VCLCmpt in '..\Vectors\VCLCmpt.pas',
+  VComUtil in '..\Vectors\VComUtil.pas',
+  VectErr in '..\Vectors\VectErr.pas',
+  Vectors in '..\Vectors\Vectors.pas',
+  VectProc in '..\Vectors\VectProc.pas',
+  VectStr in '..\Vectors\VectStr.pas',
+  VFileSys in '..\Vectors\VFileSys.pas',
+  VFormat in '..\Vectors\VFormat.pas',
+  VFStream in '..\Vectors\VFStream.pas',
+  VFStrm64 in '..\Vectors\VFStrm64.pas',
+  VFstTmr in '..\Vectors\VFstTmr.pas',
+  VMapStrm in '..\Vectors\VMapStrm.pas',
+  VStream in '..\Vectors\VStream.pas',
+  VStrm64 in '..\Vectors\VStrm64.pas',
+  VStrmCrc in '..\Vectors\VStrmCrc.pas',
+  VTxtStrm in '..\Vectors\VTxtStrm.pas',
+  VUnicode in '..\Vectors\VUnicode.pas',
+  VOleStrm in '..\Vectors\VOleStrm.pas',
+  VWideStr in '..\Vectors\VWideStr.pas',
+  VWinUtil in '..\Vectors\VWinUtil.pas',
+  WFileSys in '..\Vectors\WFileSys.pas',
+  WSPDic in '..\Vectors\WSPDic.pas',
+  WSPDicFast in '..\Vectors\WSPDicFast.pas',
+  WSSDic in '..\Vectors\WSSDic.pas',
+  WStrLst in '..\Vectors\WStrLst.pas';
+
+end.

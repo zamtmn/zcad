@@ -107,6 +107,9 @@ uses
   ExtType,
   Pointerv,
   Graphs;
+
+
+
 type
     //+++Здесь описывается все переменые для выполения анализа чертежей с целью нумирации извещателе, иполучения длин продукции и тд.
 
@@ -170,29 +173,7 @@ type
       end;
 
 
-
-      //** Создания устройств к кто подключается
-      PTDeviceInfo=^TDeviceInfo;
-      TDeviceInfo=record
-                         num:GDBInteger;
-      end;
-      TListSubDevice=specialize TVector<TDeviceInfo>;
-
-      //** Создания групп у устройства к которому подключаются
-      PTHeadGroupInfo=^THeadGroupInfo;
-      THeadGroupInfo=record
-                         listDevice:TListSubDevice;
-      end;
-      TListHeadGroup=specialize TVector<THeadGroupInfo>;
-
-      //** Создания устройств к кому подключаются
-      PTHeadDeviceInfo=^THeadDeviceInfo;
-      THeadDeviceInfo=record
-                         num:GDBInteger;
-                         listGroup:TListHeadGroup; //список подчиненных устройств
-      end;
-      TListHeadDevice=specialize TVector<THeadDeviceInfo>;
-
+      function graphBulderFunc():TGraphBuilder;
 implementation
 
 procedure RecurseSearhCable(pc:PGDBObjCable);
@@ -905,7 +886,7 @@ begin
     result.listVertex:=listDevice;
     result.listEdge:=listEdge;
   end;
-
+  {*
   function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
   var
     G: TGraph;
@@ -1048,10 +1029,10 @@ begin
     end;
     result:=cmd_ok;
   end;
-
+        *}
 
 initialization
   CreateCommandFastObjectPlugin(@TemplateForVeb_com,'Trrree',CADWG,0);
-  CreateCommandFastObjectPlugin(@NumPsIzvAndDlina_com,'test111',CADWG,0);
-  CreateCommandFastObjectPlugin(@TestgraphUses_com,'testgraph',CADWG,0);
+ // CreateCommandFastObjectPlugin(@NumPsIzvAndDlina_com,'test111',CADWG,0);
+ // CreateCommandFastObjectPlugin(@TestgraphUses_com,'testgraph',CADWG,0);
 end.

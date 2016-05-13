@@ -19,7 +19,7 @@
 unit uzcshared;
 {$INCLUDE def.inc}
 interface
-uses uzbpaths,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}Controls,uzcstrconsts,
+uses uzcfcommandline,uzclog,uzbpaths,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}Controls,uzcstrconsts,
      uzbtypesbase,Classes, SysUtils, {$IFNDEF DELPHI}fileutil,{$ENDIF}Forms,
      stdctrls, ExtCtrls, ComCtrls{$IFNDEF DELPHI},LCLProc{$ENDIF};
 
@@ -36,28 +36,18 @@ procedure ShowError(errstr:GDBString); export;
 procedure DisableCmdLine;
 procedure EnableCmdLine;
 var
-    ProcessBar:TProgressBar;
     HintText:TLabel;
 
-    prompt:TLabel;
-    cmdedit:TEdit;
-    panel:tpanel;
-    HistoryLine:TMemo;
-    CWMemo:TMemo;
-
-    utflen:integer;
-    historychanged:boolean;
     CursorOn:SimpleProcOfObject=nil;
     CursorOff:SimpleProcOfObject=nil;
 
 implementation
-uses uzclog;
 procedure DisableCmdLine;
 begin
   application.MainForm.ActiveControl:=nil;
-  if assigned(uzcshared.cmdedit) then
+  if assigned(uzcfcommandline.cmdedit) then
                                   begin
-                                      uzcshared.cmdedit.Enabled:=false;
+                                      uzcfcommandline.cmdedit.Enabled:=false;
                                   end;
   if assigned(uzcshared.HintText) then
                                    begin
@@ -67,10 +57,10 @@ end;
 
 procedure EnableCmdLine;
 begin
-  if assigned(uzcshared.cmdedit) then
+  if assigned(uzcfcommandline.cmdedit) then
                                   begin
-                                       uzcshared.cmdedit.Enabled:=true;
-                                       uzcshared.cmdedit.SetFocus;
+                                       uzcfcommandline.cmdedit.Enabled:=true;
+                                       uzcfcommandline.cmdedit.SetFocus;
                                   end;
   if assigned(uzcshared.HintText) then
                                    uzcshared.HintText.Enabled:=true;
@@ -132,12 +122,9 @@ end;
 procedure LogError(errstr:GDBString); export;
 begin
      errstr:=rserrorprefix+errstr;
-     {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
-     if sysvar.SYS.SYS_IsHistoryLineCreated^ then}
      if assigned(HistoryLine) then
      begin
      HistoryOutStr(errstr);
-     //SendMessageA(cline.HistoryLine.Handle, WM_vSCROLL, SB_PAGEDOWN	, 0);
      end;
      programlog.logoutstr(errstr,0,LM_Error);
 end;
@@ -154,8 +141,6 @@ begin
                                 CursorOff;
 end;
 begin
-utflen:=0;
-historychanged:=false;
 uzclog.HistoryTextOut:=@HistoryOutStr;
 uzclog.MessageBoxTextOut:=@ShowError;
 end.

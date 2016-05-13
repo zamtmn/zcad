@@ -23,7 +23,7 @@ uses uzctnrvectorgdbpointer,gzctnrvectorpobjects,uzcsysvars,uzegeometry,uzglview
      uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,uzcsysinfo,
      uzbstrproc,gzctnrvectorp,
      uzbtypesbase,uzccommandsabstract, sysutils,uzbtypes,uzglviewareadata,
-     uzbmemman,uzcshared,uzclog,varmandef,varman,uzedrawingdef,uzcinterface;
+     uzbmemman,uzclog,varmandef,varman,uzedrawingdef,uzcinterface;
 const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;
@@ -91,7 +91,7 @@ procedure ParseCommand(comm:string; out command,operands:GDBString);
 {procedure startup;
 procedure finalize;}
 implementation
-uses uzedrawingsimple,uzctnrvectorgdbstring,forms;
+uses uzcshared,uzedrawingsimple,uzctnrvectorgdbstring,forms;
 
 procedure GDBcommandmanager.sendcoordtocommandTraceOn(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte;pos:pos_record);
 var

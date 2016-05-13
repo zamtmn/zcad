@@ -211,6 +211,7 @@ var
   oldlongprocess:integer;
   OLDColor:integer;
   localpm:TFiletoMenuIteratorData;
+  ProcessBar:TProgressBar;
   //StoreBackTraceStrFunc:TBackTraceStrFunc;//this unneed after fpc rev 31026 see http://bugs.freepascal.org/view.php?id=13518
 const
      LTEditor:pointer=@LTypeBox;//пофиг что, используем только цифру

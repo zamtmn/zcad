@@ -19,7 +19,7 @@
 unit uzcoiregister;
 {$INCLUDE def.inc}
 interface
-uses uzcutils,uzbpaths,TypeDescriptors,uzctranslations,uzcshared,Forms,uzcinterface,uzeroot,
+uses uzcfcommandline,uzcutils,uzbpaths,TypeDescriptors,uzctranslations,uzcshared,Forms,uzcinterface,uzeroot,
      uzbtypes,uzedrawingdef,uzgldrawcontext,uzctnrvectorgdbstring,varmandef,uzedrawingsimple,
      uzeentity,uzcenitiesvariablesextender,zcobjectinspector,uzcguimanager,uzcstrconsts,
      Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,uzbtypesbase,uzcsysinfo;
@@ -125,9 +125,9 @@ begin
 end;
 procedure _onAfterFreeEditor(sender:tobject);
 begin
-  if assigned(uzcshared.cmdedit) then
-       if uzcshared.cmdedit.IsVisible then
-                                       uzcshared.cmdedit.SetFocus;
+  if assigned(uzcfcommandline.cmdedit) then
+       if uzcfcommandline.cmdedit.IsVisible then
+                                       uzcfcommandline.cmdedit.SetFocus;
 end;
 
 initialization

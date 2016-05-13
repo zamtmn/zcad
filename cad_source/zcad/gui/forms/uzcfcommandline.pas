@@ -24,7 +24,7 @@ uses
  StdCtrls,ExtCtrls,Controls,Classes,menus,Forms,fileutil,graphics,
  uzbtypes, uzbmemman,uzcdrawings,math,uzccommandsmanager,varman,languade,
  UGDBTracePropArray,varmandef,
- uzegeometry,uzcshared,uzctnrvectorgdbstring,uzcinterface,uzctreenode;
+ uzegeometry,uzctnrvectorgdbstring,uzcinterface,uzctreenode;
 
 const
      cheight=48;
@@ -62,8 +62,15 @@ type
 var
   CLine: TCLine;
   CWindow:TCWindow;
+  cmdedit:TEdit;
+  prompt:TLabel;
+  panel:tpanel;
+  HistoryLine:TMemo;
+  CWMemo:TMemo;
+  utflen:integer;
+  historychanged:boolean;
 implementation
-uses uzglviewareadata,uzclog,strmy;
+uses uzcshared,uzglviewareadata,uzclog,strmy;
 procedure TCWindow.AfterConstruction;
 begin
     inherited;
@@ -488,5 +495,7 @@ begin
     end;
 end;
 begin
+  utflen:=0;
+  historychanged:=false;
   ZCADGUIManager.RegisterZCADFormInfo('CommandLine',rsCommandLineWndName,TCLine,rect(200,100,600,100),nil,nil,@CLine);
 end.

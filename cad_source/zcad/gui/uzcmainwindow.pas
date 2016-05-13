@@ -1151,6 +1151,7 @@ begin
   TempForm.Show;
 
   TempForm:=TForm(CreateZCADControl('ObjectInspector'));
+  TempForm.BorderStyle:=bsnone;
   TempForm.Parent:=self;
   TempForm.Align:=alLeft;
   TempForm.Show;
@@ -1449,7 +1450,10 @@ end;
 procedure TZCADMainWindow._onResize(Sender: TObject);
 //var PreferredWidth, PreferredHeight: integer;
 begin
-     AdjustHeight(self,true,ToolBarU.Height);
+     if assigned(ToolBarU) then
+                               AdjustHeight(self,true,ToolBarU.Height)
+                           else
+                               AdjustHeight(self,true,0)
 end;
 
 procedure TZCADMainWindow.AfterConstruction;
@@ -3076,8 +3080,9 @@ var
    BB:TBoundingBox;
    size,min,max,position:integer;
 begin
+  if (ZCADMainWindow.HScrollBar<>nil)and(ZCADMainWindow.VScrollBar<>nil) then
   if (ZCADMainWindow.HScrollBar.Focused)or(ZCADMainWindow.VScrollBar.Focused)then
-                                                                       setnormalfocus(nil);
+                                                                                 setnormalfocus(nil);
   pdwg:=drawings.GetCurrentDWG;
   if pdwg<>nil then
   if pdwg.wa<>nil then begin

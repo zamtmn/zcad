@@ -75,8 +75,8 @@
 }
 {$IFDEF V_FREEPASCAL}       { Free Pascal }
   {$DEFINE V_32}            { 32-bit environment }
+  {$DEFINE V_WIN}           {by zcad}
   {$IFDEF WIN32}
-    {$DEFINE V_WIN}
     {$DEFINE V_WIN32}
   {$ENDIF}
 {$ENDIF}
@@ -186,9 +186,9 @@
       {$ASMMODE INTEL}
     {$ENDIF}
     {$IFNDEF CLR}
-      {$DEFINE USE_ASM}
-      {$DEFINE USE_MMX}
-      {$DEFINE USE_3DNow}
+      {.$DEFINE USE_ASM}
+      {.$DEFINE USE_MMX}
+      {.$DEFINE USE_3DNow}
     {$ENDIF}
   {$ENDIF}
 {$ENDIF}

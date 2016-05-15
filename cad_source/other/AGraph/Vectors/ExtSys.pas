@@ -447,7 +447,7 @@ function ComparePackedDT40(const PackedDT1, PackedDT2: TPackedDT40): Integer;
 
 {$ENDIF} {CLR}
 
-{$IFDEF V_WIN32}
+{$IFDEF V_WIN}{32}{by zcad}
 
 {$IFNDEF V_FREEPASCAL}
 {$IFNDEF CLR}
@@ -580,7 +580,7 @@ begin
     Result:=0;
 {$ELSE}
 begin
-  Result:=MaxAvail;
+  Result:={MaxAvail}High(LongInt){by zcad};
 {$ENDIF} {LINUX}
 {$ENDIF} {V_WIN32}
 end;
@@ -604,7 +604,7 @@ begin
     Result:=0;
 {$ELSE}
 begin
-  Result:=MemAvail;
+  Result:={MaxAvail}High(LongInt){by zcad};
 {$ENDIF} {LINUX}
 {$ENDIF} {V_WIN32}
 end;
@@ -1681,7 +1681,7 @@ var
   Limit: PWideChar;
 begin
   if P <> nil then begin
-    Integer(Limit):=Integer(P) + Bytes - 1;
+    PtrInt(Limit):=Integer(P) + Bytes - 1;{by zcad}
     while P < Limit do begin
       B:=WordRec(P^).Lo;
       WordRec(P^).Lo:=WordRec(P^).Hi;
@@ -2668,7 +2668,7 @@ end;
 function SafeDOSFileDateToDateTime(FileDate: Integer): TDateTime;
 begin
   {$IFDEF V_WIN}
-  Result:=SafeFileDateToDateTime(FileDate);
+  Result:={Safe}FileDateToDateTime(FileDate);{{by zcad}
   {$ENDIF}
   {$IFDEF LINUX}
   try
@@ -2842,7 +2842,7 @@ end;
 
 {$ENDIF} {CLR}
 
-{$IFDEF V_WIN32}
+{$IFDEF V_WIN}{32}{by zcad}
 
 {$IFNDEF V_FREEPASCAL}
 {$IFNDEF CLR}

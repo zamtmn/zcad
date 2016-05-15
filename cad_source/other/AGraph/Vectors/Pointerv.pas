@@ -207,7 +207,7 @@ var
   P: Pointer;
 begin
   P:=nil;
-  FillMem(Offset, InitCount, TBase32(P));
+  FillMem(Offset, InitCount, TBase32(integer(P)));{by zcad}
 end;
 
 function TPointerVector.GetValue(I: Integer): Pointer;
@@ -510,7 +510,7 @@ end;
 
 function TPointerVector.IndexFrom(I: Integer; Value: Pointer): Integer;
 begin
-  Result:=IndexOfBaseValue(I, TBase(Value));
+  Result:=IndexOfBaseValue(I, TBase(integer(Value)));{by zcad}
 end;
 
 function TPointerVector.IndexOf(Value: Pointer): Integer;
@@ -520,7 +520,7 @@ end;
 
 function TPointerVector.LastIndexFrom(I: Integer; Value: Pointer): Integer;
 begin
-  Result:=LastIndexOfBaseValue(I, TBase(Value));
+  Result:=LastIndexOfBaseValue(I, TBase(integer(Value)));{by zcad}
 end;
 
 function TPointerVector.LastIndexOf(Value: Pointer): Integer;
@@ -530,7 +530,7 @@ end;
 
 function TPointerVector.NumberOfValues(Value: Pointer): Integer;
 begin
-  Result:=CountValuesEqualTo(TBase(Value));
+  Result:=CountValuesEqualTo(TBase(integer(Value)));{by zcad}
 end;
 
 function TPointerVector.FindInSortedRange(Value: Pointer; L, H: Integer): Integer;

@@ -13,7 +13,7 @@ interface
 {$I VCheck.inc}
 
 uses
-  {$IFDEF V_WIN}{$IFNDEF WIN32}WinTypes, WinProcs,{$ELSE}Windows,{$ENDIF}{$ENDIF}
+  {$IFDEF V_WIN}{$IFNDEF WIN32}Windows,{WinTypes, WinProcs,}{$ELSE}Windows,{$ENDIF}{$ENDIF} {by zcad}
   SysUtils, ExtSys, ExtType
   {$IFDEF V_WIDESTRINGS}{$IFDEF V_D4},SysConst{$ENDIF}{$ENDIF};
 

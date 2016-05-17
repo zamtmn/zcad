@@ -23,7 +23,7 @@ unit Varman;
 
 interface
 uses
-  uzctnrvectorgdbpointer,gzctnrvectordata,gzctnrvectorpobjects,LCLProc,uabstractunit,gzctnrvectorp,
+  uzctnrvectorgdbpointer,gzctnrvectordata,gzctnrvectorpobjects,LCLProc,uabstractunit,{gzctnrvectorp,}
   SysUtils,UBaseTypeDescriptor,uzbtypesbase,uzbtypes,UGDBOpenArrayOfByte,
   uzctnrvectorgdbstring,varmandef,usimplegenerics,uzbmemman,
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes;
@@ -903,7 +903,7 @@ begin
 end;
 function varmanager.findfieldcustom;
 var
-  path,{sp,} typeGDBString, sub, {field,} inds: GDBString;
+  path,{sp,} {typeGDBString,} sub, {field,} inds: GDBString;
   oper: ansichar;
   i, oldi, j, indexcount: GDBInteger;
   pind: parrayindex;
@@ -949,7 +949,7 @@ begin
       '.':
         begin
           //typeGDBString := exttypearrayptr^.typearray[pvardesk(pdesc)^.vartypecustom].tdesk;
-          typeGDBString := copy(typeGDBString, 2, length(typeGDBString));
+          //typeGDBString := copy(typeGDBString, 2, length(typeGDBString));
           i := 1;
           while not (path[i] in ['.', '[', '^']) do
           begin
@@ -989,7 +989,7 @@ begin
         end;
       '[':
         begin
-          typeGDBString := copy(typeGDBString, 2, length(typeGDBString));
+          //typeGDBString := copy(typeGDBString, 2, length(typeGDBString));
           i := 1;
           while not (path[i] in [']']) do
           begin
@@ -1014,12 +1014,12 @@ begin
           inc(i);}
 //----------------------------------          tc := unpac_GDBString_to_GDBWord(copy(typeGDBString, i, 2));
           inc(i, 2);
-          {sizeinmem :=} unpac_GDBString_to_lGDBWord(copy(typeGDBString, i, 4));
+          {sizeinmem :=} //unpac_GDBString_to_lGDBWord(copy(typeGDBString, i, 4));
              //offset:=offset+sizeinmem;
           inc(i, 4);
-          indexcount := unpac_GDBString_to_GDBWord(copy(typeGDBString, i, 2));
+          indexcount :=-100;// unpac_GDBString_to_GDBWord(copy(typeGDBString, i, 2));
           inc(i, 2);
-          pind := @typeGDBString[i];
+          //pind := @typeGDBString[i];
           i := 1;
              //offset:=0;
           for oldi := 1 to indexcount - 1 do
@@ -1415,8 +1415,6 @@ var p:ptunit;
 begin
      result:=nil;
                        begin
-                            if InterfaceUses.PArray<>nil then
-                                                             p:=p;
                             p:=InterfaceUses.beginiterate(ir);
                             if p<>nil then
                             repeat
@@ -1482,7 +1480,7 @@ begin
                                                     exit;
                                               end;
           ps:=VarCategory.iterate(ir);
-          inc(GDBPlatformuint(result));
+          inc(pbyte(result));
      until ps=nil;
      result:=@CategoryUnknownCOllapsed;
      catname:=category;

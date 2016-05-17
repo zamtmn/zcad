@@ -152,6 +152,7 @@ var
    pcc:PTElementaryCommand;
    mcounter:integer;
 begin
+     msg:='';
      result:=URROk;
      if CurrentCommand>prevheap then
      begin

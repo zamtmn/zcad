@@ -275,7 +275,9 @@ begin
                     result:=nil
                 else
                     begin
-                          ir.itp:=pointer(GDBPlatformUInt(parray)-SizeOfData);
+                          {ir.itp:=pointer(GDBPlatformUInt(parray)-SizeOfData);}
+                          ir.itp:=pointer(parray);
+                          dec(pt(ir.itp));
                           ir.itc:=-1;
                           result:=iterate(ir);
                     end;
@@ -406,10 +408,12 @@ function GZVector<T>.DeleteElementByP;
 var
    s:integer;
 begin
-  s:=(GDBPlatformUInt(parray)-GDBPlatformUInt(pel));
-  if s>0 then
+  //s:=(GDBPlatformUInt(parray)-GDBPlatformUInt(pel));
+  //s:=pbyte(parray)-pbyte(pel);
+  s:=PT(parray)-PT(pel);
+  if s>=0 then
   begin
-    s:=s div SizeOfData;
+    //s:=s div SizeOfData;
     deleteelement(s);
   end;
   result:=parray;

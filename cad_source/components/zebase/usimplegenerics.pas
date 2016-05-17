@@ -70,8 +70,9 @@ TMyVectorArray <T> = class
         var
         VArray:TArrayOfVec;
         CurrentArray:SizeInt;
+        public
         constructor create;
-        destructor destroy;virtual;
+        destructor destroy;override;
         function AddArray:SizeInt;
         procedure SetCurrentArray(ai:SizeInt);
         procedure AddDataToCurrentArray(data:T);

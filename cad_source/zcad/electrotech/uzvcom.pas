@@ -174,6 +174,8 @@ type
 
 
       function graphBulderFunc():TGraphBuilder;
+      function testTempDrawLine(p1:GDBVertex;p2:GDBVertex):TCommandResult;
+      function testTempDrawCircle(p1:GDBVertex;rr:GDBDouble):TCommandResult;
 implementation
 
 procedure RecurseSearhCable(pc:PGDBObjCable);

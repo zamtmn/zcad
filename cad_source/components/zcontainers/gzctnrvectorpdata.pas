@@ -85,7 +85,7 @@ begin
 end;
 procedure GZVectorPData<PTData,TData>.pack;
 var
-pnew,pold:ppointer;
+pnew,pold:{ppointer}^PTData;
 nc,c:integer;
 begin
      if assigned(parray)then
@@ -99,9 +99,11 @@ begin
            if pnew^<>nil then
                             begin
                                  inc(nc);
-                                 inc(GDBPlatformint(pnew),SizeOfData);
+                                 //inc(GDBPlatformint(pnew),SizeOfData);
+                                 inc(pnew);
                             end;
-           inc(GDBPlatformint(pold),SizeOfData);
+           //inc(GDBPlatformint(pold),SizeOfData);
+           inc(pold);
            inc(c);
      until c=count;
      count:=nc;

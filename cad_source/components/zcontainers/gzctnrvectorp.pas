@@ -67,7 +67,9 @@ begin
                     result:=nil
                 else
                     begin
-                          ir.itp:=pointer(GDBPlatformUInt(parray)-SizeOfData);
+                          {ir.itp:=pointer(GDBPlatformUInt(parray)-SizeOfData);}
+                          ir.itp:=pointer(parray);
+                          dec(pt(ir.itp));
                           ir.itc:=-1;
                           result:=iterate(ir);
                     end;

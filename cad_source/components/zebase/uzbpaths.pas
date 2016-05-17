@@ -117,7 +117,7 @@ begin
                                       result:=FileName;
                                       //programlog.LogOutStr(format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]),0,LM_Info);
                                       if VerboseLog then
-                                        DebugLn(sysutils.Format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]));
+                                        DebugLn(sysutils.Format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
                                       exit;
                                  end;
      //if PPaths<>nil then

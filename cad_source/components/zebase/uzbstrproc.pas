@@ -19,7 +19,7 @@
 unit uzbstrproc;
 {$INCLUDE def.inc}
 interface
-uses {$IFNDEF DELPHI}{fileutil,}{$ENDIF}uzbtypesbase,sysutils,strutils{$IFNDEF DELPHI},LCLProc{$ENDIF};
+uses {$IFNDEF DELPHI}{fileutil,}{$ENDIF}uzbtypesbase,sysutils,strutils{$IFNDEF DELPHI},{LCLProc}LazUTF8,lazutf16{$ENDIF};
 function GetPredStr(var s: GDBString; substr: GDBString): GDBString;
 function readspace(expr: GDBString): GDBString;
 
@@ -127,7 +127,7 @@ begin
 end;
 function ach2uch(ach:byte):word;
 var s:gdbstring;
-    {$IFNDEF DELPHI}tstr:UTF16String;{$ENDIF}
+    {$IFNDEF DELPHI}tstr:{UTF16String}UnicodeString;{$ENDIF}
     CharLen: integer;
 begin
     {$IFNDEF DELPHI}

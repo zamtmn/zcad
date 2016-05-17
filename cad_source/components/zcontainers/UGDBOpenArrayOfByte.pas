@@ -39,7 +39,7 @@ GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GZVector{-}<byte>{//})
                       procedure TXTAddGDBStringEOL(s:GDBString);virtual;
                       procedure TXTAddGDBString(s:GDBString);virtual;
                       function ReadData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
-                      function PopData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
+                      //function PopData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
                       function ReadString(break, ignore: GDBString): shortString;inline;
                       function ReadGDBString: GDBString;inline;
                       function ReadString2:GDBString;inline;
@@ -80,8 +80,13 @@ begin
      self.AddData(@s[1],length(s));
 end;
 function GDBOpenArrayOfByte.GetChar;
+var
+  p:PT;
 begin
-     result:=pansichar(GDBPlatformUInt(parray)+rp)^;
+     p:=@parray[0];
+     inc(p,rp);
+     result:=pansichar(p)^;
+     //result:=pansichar(GDBPlatformUInt(parray)+rp)^;
 end;
 function GDBOpenArrayOfByte.readtoparser;
 var
@@ -194,17 +199,32 @@ begin
      result:=(readpos<(count-1))and(parray<>nil)
 end;
 function GDBOpenArrayOfByte.Jump;
+var
+  p:PT;
 begin
      readpos:=readpos+offset;
-     result:=pointer(GDBPlatformUInt(parray)+readpos);
+     p:=@parray[0];
+     inc(p,readpos);
+     result:=p;
+     //result:=pointer(GDBPlatformUInt(parray)+readpos);
 end;
 function GDBOpenArrayOfByte.GetCurrentReadAddres;
+var
+  p:PT;
 begin
-     result:=pointer(GDBPlatformUInt(parray)+readpos);
+     p:=@parray[0];
+     inc(p,readpos);
+     result:=p;
+     //result:=pointer(GDBPlatformUInt(parray)+readpos);
 end;
 function GDBOpenArrayOfByte.readbyte;
+var
+  p:PT;
 begin
-     result:=pbyte(GDBPlatformUInt(parray)+readpos)^;
+     p:=@parray[0];
+     inc(p,readpos);
+     result:=pbyte(p)^;
+     //result:=pbyte(GDBPlatformUInt(parray)+readpos)^;
      inc(readpos);
 end;
 function GDBOpenArrayOfByte.readword;
@@ -219,12 +239,16 @@ var
   lastbreak:GDBBoolean;
   addr:pansichar;
   myresult:shortString;
+  p:PT;
 begin
   //s := '';
   setlength(myresult,255);
   lastbreak:=false;
   i:=0;
-  addr:=pointer(GDBPlatformUInt(parray)+readpos);
+  p:=@parray[0];
+  inc(p,readpos);
+  addr:=pointer(p);
+  //addr:=pointer(GDBPlatformUInt(parray)+readpos);
     while ReadPos <> count do
     begin
       if (pos(addr[0], break) = 0)or(({s=''}i=0)and(addr[0]=' ')) then
@@ -344,7 +368,8 @@ begin
      result:=adddata(pdata,sizeof(GDBWord));
 end;
 function GDBOpenArrayOfByte.ReadData;
-var addr:GDBPlatformint;
+{var addr:GDBPlatformint;
+    p:pt;}
 begin
   {if count = max then
                      begin
@@ -352,14 +377,14 @@ begin
                           max:=2*max;
                      end;}
   begin
-       GDBPointer(addr) := parray;
-       addr := addr + ReadPos;
-       Move(GDBPointer(addr)^,PData^,SData);
+       {GDBPointer(addr) := parray;
+       addr := addr + ReadPos;}
+       Move({GDBPointer(addr)^}parray^[ReadPos],PData^,SData);
        result:=count;
        inc(ReadPos,SData);
   end;
 end;
-function GDBOpenArrayOfByte.PopData;
+{function GDBOpenArrayOfByte.PopData;
 var addr:GDBPlatformint;
 begin
   begin
@@ -368,9 +393,7 @@ begin
        Move(GDBPointer(addr)^,PData^,SData);
        result:=count;
        dec(count,SData);
-       //if count<0 then
-       //               count:=count;
   end;
-end;
+end;}
 begin
 end.

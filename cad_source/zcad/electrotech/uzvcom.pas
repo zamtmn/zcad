@@ -167,9 +167,12 @@ type
 
       //Граф и ребра для обработки
       PTGraphBuilder=^TGraphBuilder;
-      TGraphBuilder=record
+      TGraphBuilder=class(TObject)
                          listEdge:TListEdgeGraph;   //список реальных и виртуальных линий
                          listVertex:TListDeviceLine;
+                         public
+                         constructor Create;
+                         destructor Destroy;virtual;
       end;
 
 
@@ -177,6 +180,18 @@ type
       function testTempDrawLine(p1:GDBVertex;p2:GDBVertex):TCommandResult;
       function testTempDrawCircle(p1:GDBVertex;rr:GDBDouble):TCommandResult;
 implementation
+
+constructor TGraphBuilder.Create;
+begin
+  listEdge:=TListEdgeGraph.Create;
+  listVertex:=TListDeviceLine.Create;
+end;
+
+destructor TGraphBuilder.Destroy;
+begin
+  listEdge.Destroy;
+  listVertex.Destroy;
+end;
 
 procedure RecurseSearhCable(pc:PGDBObjCable);
 const
@@ -687,11 +702,11 @@ var
 
 
     //список всех устройств на из выделеных на чертеже в произвольном порядке
-    listDevice:TListDeviceLine;   //сам список
+    //listDevice:TListDeviceLine;   //сам список
     infoDevice:TStructDeviceLine; //инфо по объекта списка
 
     //список всех ребер между вершинами графа
-    listEdge:TListEdgeGraph;   //список ребер
+    //listEdge:TListEdgeGraph;   //список ребер
     tempListEdge:TListEdgeGraph;   //временный список ребер
     infoEdge:TInfoEdgeGraph;   //описание ребра
 
@@ -732,8 +747,9 @@ var
 
 begin
    listCable := TListCableLine.Create;  // инициализация списка кабелей
-   listDevice := TListDeviceLine.Create;  // инициализация списка устройств
-   listEdge := TListEdgeGraph.Create;
+   result:=TGraphBuilder.Create;
+   //listDevice := TListDeviceLine.Create;  // инициализация списка устройств
+   //listEdge := TListEdgeGraph.Create;
    tempListEdge := TListEdgeGraph.Create;
 
    counter:=0; //обнуляем счетчик
@@ -766,7 +782,7 @@ begin
                  pd:=PGDBObjDevice(pobj);
                  infoDevice.deviceEnt:=pd;
                  infoDevice.centerPoint:=pd^.GetCenterPoint;
-                 listDevice.PushBack(infoDevice);
+                 result.listVertex{listDevice}.PushBack(infoDevice);
                  inc(counter2);
                end;
              //GDBObjDevice
@@ -808,10 +824,10 @@ begin
                   begin
                     interceptVertex:=uzegeometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).interceptcoord;
                     //выполнить проверку на есть ли уже такая вершина
-                     if dublicateVertex(listDevice,interceptVertex,Epsilon) = false then begin
+                     if dublicateVertex({listDevice}result.listVertex,interceptVertex,Epsilon) = false then begin
                       infoDevice.deviceEnt:=nil;
                       infoDevice.centerPoint:=interceptVertex;
-                      listDevice.PushBack(infoDevice);
+                      {listDevice}result.listVertex.PushBack(infoDevice);
                    //   testTempDrawCircle(interceptVertex,Epsilon);
                     end;
                   end;
@@ -841,17 +857,17 @@ begin
                         begin
                           interceptVertex:=uzegeometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).interceptcoord;
                           //проверка есть ли уже такая вершина, если нет то добавляем вершину и сразу создаем ребро
-                           if dublicateVertex(listDevice,interceptVertex,Epsilon) = false then begin
+                           if dublicateVertex({listDevice}result.listVertex,interceptVertex,Epsilon) = false then begin
                             infoDevice.deviceEnt:=nil;
                             infoDevice.centerPoint:=interceptVertex;
-                            listDevice.PushBack(infoDevice);
+                            result.listVertex{listDevice}.PushBack(infoDevice);
 
-                            infoEdge.VIndex1:=listDevice.Size-1;
-                            infoEdge.VIndex2:=getNumDeviceInListDevice(listDevice,pObjDevice);
+                            infoEdge.VIndex1:=result.listVertex{listDevice}.Size-1;
+                            infoEdge.VIndex2:=getNumDeviceInListDevice(result.listVertex{listDevice},pObjDevice);
                             infoEdge.VPoint1:=interceptVertex;
                             infoEdge.VPoint2:=pObjDevice^.GetCenterPoint;
                             infoEdge.edgeLength:=uzegeometry.Vertexlength(interceptVertex,pObjDevice^.GetCenterPoint);
-                            listEdge.PushBack(infoEdge);
+                            result.listEdge.PushBack(infoEdge);
                           end;
                         end;
                     end;
@@ -871,13 +887,13 @@ begin
   end;
 
   //**** поиск ребер между узлами****//
-  for i:=0 to listDevice.Size-1 do    //перебираем все узлы
+  for i:=0 to result.listVertex{listDevice}.Size-1 do    //перебираем все узлы
   begin
-      tempListEdge:=getListEdgeAreaVertexLine(i,Epsilon,listDevice,listCable);
+      tempListEdge:=getListEdgeAreaVertexLine(i,Epsilon,result.listVertex{listDevice},listCable);
       if tempListEdge.size <> 0 then
         for j:=0 to tempListEdge.Size-1 do
-          if listHaveThisEdge(listEdge,tempListEdge[j]) = false then
-            listEdge.PushBack(tempListEdge[j]);
+          if listHaveThisEdge(result.listEdge,tempListEdge[j]) = false then
+            result.listEdge.PushBack(tempListEdge[j]);
 
    //   HistoryOutStr('до = ' + IntToStr(tempListEdge.size));
       tempListEdge.Clear;
@@ -885,8 +901,8 @@ begin
   end;
 
 
-    result.listVertex:=listDevice;
-    result.listEdge:=listEdge;
+    //result.listVertex:=listDevice;
+    //result.listEdge:=listEdge;
   end;
   {*
   function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;

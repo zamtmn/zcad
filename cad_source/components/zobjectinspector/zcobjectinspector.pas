@@ -25,7 +25,7 @@ unit zcobjectinspector;
 interface
 
 uses
-  math,LMessages,LCLIntf,usupportgui,
+  {math,LMessages,}LCLIntf,usupportgui,
   zeundostack,zebaseundocommands,StdCtrls,strutils,
   Themes,
   {$IFDEF LCLGTK2}
@@ -713,7 +713,7 @@ begin
                      end;
   end;
 end;
-procedure drawstring(cnvs:tcanvas;r:trect;L,T:integer;s:string;TextDetails: TThemedElementDetails);
+procedure drawstring(cnvs:tcanvas;r:trect;{L,T:integer;}s:string;TextDetails: TThemedElementDetails);
 {const
   maxsize=200;
 var
@@ -760,7 +760,7 @@ begin
     if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)and((ppd^.Attr and FA_DIFFERENT)=0)) then
                                        ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
                                    else
-                                       drawstring(canvas,r,r.Left,r.Top,(value),DefaultDetails);
+                                       drawstring(canvas,r,{r.Left,r.Top,}(value),DefaultDetails);
     canvas.Font.Color:=tempcolor;
   end
   else
@@ -772,7 +772,7 @@ begin
     if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)and((ppd^.Attr and FA_DIFFERENT)=0)) then
                                                    ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
                                                else
-                                                   drawstring(canvas,r,r.Left,r.Top,(value),DefaultDetails);
+                                                   drawstring(canvas,r,{r.Left,r.Top,}(value),DefaultDetails);
     end;
 
 if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
@@ -1289,16 +1289,16 @@ end;
 
 procedure TGDBobjinsp.createscrollbars;
 var
-   changed:boolean;
+   //changed:boolean;
    ch:integer;
 begin
 
      //ебаный скролинг работает везде по разному, или я туплю... переписывать надо эту хрень
      ch:=contentheigth+HeadersHeight;
-     if (VertScrollBar.Range=ch)or(VertScrollBar.Position=0) then
+     {if (VertScrollBar.Range=ch)or(VertScrollBar.Position=0) then
                                               changed:=false
                                           else
-                                              changed:=true;
+                                              changed:=true;}
      self.VertScrollBar.Range:=ch;
      self.VertScrollBar.page:=height;
      self.VertScrollBar.Tracking:=true;

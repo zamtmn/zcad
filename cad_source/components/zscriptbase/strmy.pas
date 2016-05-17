@@ -25,10 +25,10 @@ uses uzbtypesbase,sysutils,uzctnrvectorgdbstring,uzbmemman;
 type
   TLexema=shortstring;
   PLexema=^TLexema;
-function pac_lGDBWord_to_GDBString(lw: GDBLongword): GDBString;
-function pac_GDBWord_to_GDBString(w: GDBWord): GDBString;
-function unpac_GDBString_to_GDBWord(s: GDBString): GDBWord;
-function unpac_GDBString_to_lGDBWord(s: GDBString): GDBLongword;
+//function pac_lGDBWord_to_GDBString(lw: GDBLongword): GDBString;
+//function pac_GDBWord_to_GDBString(w: GDBWord): GDBString;
+//function unpac_GDBString_to_GDBWord(s: GDBString): GDBWord;
+//function unpac_GDBString_to_lGDBWord(s: GDBString): GDBLongword;
 function countchar(s: GDBString; ch: ansichar): GDBInteger;
 procedure replaceeqlen(var s: GDBString; substr,newstr: GDBString);
 function replacenull(s:GDBString): GDBString;
@@ -133,7 +133,7 @@ begin
      //result:='234';
 end;
 
-function pac_GDBWord_to_GDBString(w: GDBWord): GDBString;
+{function pac_GDBWord_to_GDBString(w: GDBWord): GDBString;
 begin
   result := chr(lo(w)) + chr(hi(w));
 end;
@@ -151,7 +151,7 @@ end;
 function unpac_GDBString_to_lGDBWord(s: GDBString): GDBLongword;
 begin
   result := GDBLongword(pGDBLongword(s)^);
-end;
+end;}
 
 function countchar(s: GDBString; ch: ansichar): GDBInteger;
 var i, c: GDBInteger;

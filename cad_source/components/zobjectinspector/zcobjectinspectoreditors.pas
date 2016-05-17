@@ -35,8 +35,6 @@ type
                              class function EnumDescriptorCreateEditor (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;InitialValue:GDBString;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc;
     end;
 implementation
-var
-   count:integer;
 class function TBaseTypesEditors.BaseCreateEditor;
    var
       ps:pgdbstring;

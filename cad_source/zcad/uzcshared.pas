@@ -21,7 +21,7 @@ unit uzcshared;
 interface
 uses uzcfcommandline,uzclog,uzbpaths,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}Controls,uzcstrconsts,
      uzbtypesbase,Classes, SysUtils, {$IFNDEF DELPHI}fileutil,{$ENDIF}Forms,
-     stdctrls, ExtCtrls, ComCtrls{$IFNDEF DELPHI},LCLProc{$ENDIF};
+     stdctrls, ExtCtrls{, ComCtrls}{$IFNDEF DELPHI},LCLProc{$ENDIF};
 
 type
 SimpleProcOfObject=procedure of object;

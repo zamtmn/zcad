@@ -249,7 +249,7 @@ var
   parseerror,subparseerror:GDBBoolean;
   i:GDBInteger;
   {kolvo,}typ:GDBInteger;
-  typename, {fieldname, fieldvalue,} fieldtype, GDBStringtypearray, {sub,} {indmins, indmaxs,} arrind1: GDBString;
+  typename, {fieldname, fieldvalue,} fieldtype, GDBStringtypearray {sub,} {indmins, indmaxs,} {,arrind1}: GDBString;
   fieldgdbtype:pUserTypeDescriptor;
   fieldoffset: GDBSmallint;
   //handle,poz, kolvo, i,oldcount: GDBInteger;
@@ -540,20 +540,20 @@ begin
                                                   //GDBStringtypearray := GDBStringtypearray + pac_GDBWord_to_GDBString(fieldgdbtype.TypeIndex) + pac_lGDBWord_to_GDBString(fieldgdbtype.sizeinmem);
                                                   razmer := 1;
                                                   fieldoffset:=0;
-                                                  arrind1 := '';
+                                                  //arrind1 := '';
                                                   for i := 0 to (parseresult^.Count div 2)-1 do
                                                   begin
                                                        indcount := strtoint(parseresult^.getData(i*2+1));
                                                        indmin := strtoint(parseresult^.getData(i*2));
                                                        indcount := indcount - indmin + 1;
                                                        razmer := razmer * indcount;
-                                                       arrind1 := arrind1 + pac_lGDBWord_to_GDBString(indmin) + pac_lGDBWord_to_GDBString(indcount);
+                                                       //arrind1 := arrind1 + pac_lGDBWord_to_GDBString(indmin) + pac_lGDBWord_to_GDBString(indcount);
 
                                                        indexx.IndexMin:=indmin;
                                                        indexx.IndexCount:=indcount;
                                                        PArrayDescriptor(etd)^.AddIndex(indexx);
                                                   end;
-                                                  GDBStringtypearray := GDBStringtypearray + pac_GDBWord_to_GDBString(parseresult^.Count div 2) + arrind1;
+                                                  //GDBStringtypearray := GDBStringtypearray + pac_GDBWord_to_GDBString(parseresult^.Count div 2) + arrind1;
                                                   fieldoffset := razmer*fieldgdbtype.SizeInGDBBytes;
                                                   if subparseresult<>nil then begin subparseresult^.Done;GDBfreeMem(gdbpointer(subparseresult));end;
                                                   if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;

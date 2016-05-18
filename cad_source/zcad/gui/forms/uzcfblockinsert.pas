@@ -10,60 +10,66 @@ uses
 
   UGDBObjBlockdefArray, //описание таблицы блоков
   uzeblockdef,          //описания блоков
+  uzbtypes,          //базовые типы
   uzbtypesbase,          //базовые типы
   uzbstrproc               //билеберда для работы со стрингами
   ;
 
-
 type
+
+  TZEBlockInsertParams=record            //объявление записи для сбора данных из формы
+      PInsert,Scale:GDBVertex;
+      Rotate:GDBDouble;
+      BlockName:GDBString;
+  end;
 
   { TBlockInsertForm }
 
   TBlockInsertForm = class(TForm)
-    ButtonPanel1: TButtonPanel;
-    CheckBox1: TCheckBox;
-    CheckBox2: TCheckBox;
-    CheckBox3: TCheckBox;
-    CheckBox4: TCheckBox;
-    CheckBox5: TCheckBox;
-    ComboBox1: TComboBox;
-    ComboBox2: TComboBox;
-    Edit10: TFileNameEdit;
-    FloatSpinEdit1: TFloatSpinEdit;
-    FloatSpinEdit2: TFloatSpinEdit;
-    FloatSpinEdit3: TFloatSpinEdit;
-    FloatSpinEdit4: TFloatSpinEdit;
-    FloatSpinEdit5: TFloatSpinEdit;
-    FloatSpinEdit6: TFloatSpinEdit;
-    FloatSpinEdit7: TFloatSpinEdit;
-    FloatSpinEdit8: TFloatSpinEdit;
-    GroupBox1: TGroupBox;
-    GroupBox2: TGroupBox;
-    GroupBox3: TGroupBox;
-    GroupBox4: TGroupBox;
-    Label1: TLabel;
-    Label10: TLabel;
-    Label11: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    Label7: TLabel;
-    Label8: TLabel;
-    Label9: TLabel;
-    Panel1: TPanel;
-    Panel2: TPanel;
-    procedure CheckBox2Change(Sender: TObject);
-    procedure CheckBox3Change(Sender: TObject);
-    procedure CheckBox4Change(Sender: TObject);
-    procedure CheckBox5Change(Sender: TObject);
+    MainButtonPanel: TButtonPanel;
+    ExplodeCheckBox: TCheckBox;
+    AngleOnScreen: TCheckBox;
+    ScaleOnScreen: TCheckBox;
+    InsertOnScreen: TCheckBox;
+    UniformScale: TCheckBox;
+    BlockNameComboBox: TComboBox;
+    BlockInit: TComboBox;
+    PathEdit: TFileNameEdit;
+    InsertX: TFloatSpinEdit;
+    InsertY: TFloatSpinEdit;
+    InsertZ: TFloatSpinEdit;
+    ScaleX: TFloatSpinEdit;
+    ScaleY: TFloatSpinEdit;
+    ScaleZ: TFloatSpinEdit;
+    Angle: TFloatSpinEdit;
+    BlockInitFactor: TFloatSpinEdit;
+    InsertGroupBox: TGroupBox;
+    ScaleGroupBox: TGroupBox;
+    RotationGroupBox: TGroupBox;
+    UnitsGroupBox: TGroupBox;
+    BlockNameLabel: TLabel;
+    FactorLabel: TLabel;
+    PathLabel: TLabel;
+    InsXLabel: TLabel;
+    InsYLabel: TLabel;
+    InsZLabel: TLabel;
+    ScaleXLabel: TLabel;
+    ScaleYLabel: TLabel;
+    ScaleZLabel: TLabel;
+    AngleLabel: TLabel;
+    UnitLabel: TLabel;
+    MainPanel: TPanel;
+    PrewievPanel: TPanel;
+    procedure AngleOnScreenChange(Sender: TObject);
+    procedure ScaleOnScreenChange(Sender: TObject);
+    procedure InsertOnScreenChange(Sender: TObject);
+    procedure UniformScaleChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure _onShow(Sender: TObject);
   private
     { private declarations }
   public
-    function Run(PBlockDefs:PGDBObjBlockdefArray;LastInsertedBlockName:GDBString):Integer;
+    function Run(PBlockDefs:PGDBObjBlockdefArray;LastInsertedBlockName:GDBString;out InsertParams:TZEBlockInsertParams):Integer;
     { public declarations }
   end;
 
@@ -82,99 +88,103 @@ procedure TBlockInsertForm._onShow(Sender: TObject);
 var
   n:Integer;
 begin
-n:=ButtonPanel1.Height+ButtonPanel1.BorderSpacing.Top+ButtonPanel1.BorderSpacing.Bottom
-  +CheckBox1.Height+CheckBox1.BorderSpacing.Top+CheckBox1.BorderSpacing.Bottom
-  +Edit10.Height+Edit10.BorderSpacing.Top+Edit10.BorderSpacing.Bottom
-  +ComboBox1.Height+ComboBox1.BorderSpacing.Top+ComboBox1.BorderSpacing.Bottom;
-if GroupBox2.Height>Panel2.Height then
-  n:=n+GroupBox2.Height+GroupBox2.BorderSpacing.Top+GroupBox2.BorderSpacing.Bottom
+n:=MainButtonPanel.Height+MainButtonPanel.BorderSpacing.Top+MainButtonPanel.BorderSpacing.Bottom
+  +ExplodeCheckBox.Height+ExplodeCheckBox.BorderSpacing.Top+ExplodeCheckBox.BorderSpacing.Bottom
+  +PathEdit.Height+PathEdit.BorderSpacing.Top+PathEdit.BorderSpacing.Bottom
+  +BlockNameComboBox.Height+BlockNameComboBox.BorderSpacing.Top+BlockNameComboBox.BorderSpacing.Bottom;
+if ScaleGroupBox.Height>PrewievPanel.Height then
+  n:=n+ScaleGroupBox.Height+ScaleGroupBox.BorderSpacing.Top+ScaleGroupBox.BorderSpacing.Bottom
 else
-  n:=n+Panel2.Height+Panel2.BorderSpacing.Top+Panel2.BorderSpacing.Bottom;
+  n:=n+PrewievPanel.Height+PrewievPanel.BorderSpacing.Top+PrewievPanel.BorderSpacing.Bottom;
 self.Constraints.MinHeight:=n;
 end;
 
-procedure TBlockInsertForm.CheckBox4Change(Sender: TObject);
+procedure TBlockInsertForm.InsertOnScreenChange(Sender: TObject);
 begin
-  if Checkbox4.Checked = True then
+  if InsertOnScreen.Checked = True then
   begin
-    FloatSpinEdit1.Enabled := False;
-    FloatSpinEdit2.Enabled := False;
-    FloatSpinEdit3.Enabled := False;
+    InsertX.Enabled := False;
+    InsertY.Enabled := False;
+    InsertZ.Enabled := False;
   end
   else
   begin
-    FloatSpinEdit1.Enabled := True;
-    FloatSpinEdit2.Enabled := True;
-    FloatSpinEdit3.Enabled := True;
+    InsertX.Enabled := True;
+    InsertY.Enabled := True;
+    InsertZ.Enabled := True;
   end;
 end;
 
-procedure TBlockInsertForm.CheckBox5Change(Sender: TObject);
+procedure TBlockInsertForm.UniformScaleChange(Sender: TObject);
 begin
-  if Checkbox3.Checked then exit;
-  if Checkbox5.Checked then
+  if ScaleOnScreen.Checked then exit;
+  if UniformScale.Checked then
   begin
-    FloatSpinEdit5.Enabled := False;
-    FloatSpinEdit6.Enabled := False;
+    ScaleY.Enabled := False;
+    ScaleZ.Enabled := False;
   end
   else
   begin
-    FloatSpinEdit5.Enabled := True;
-    FloatSpinEdit6.Enabled := True;
+    ScaleY.Enabled := True;
+    ScaleZ.Enabled := True;
   end;
 end;
 
-procedure TBlockInsertForm.CheckBox2Change(Sender: TObject);
+procedure TBlockInsertForm.AngleOnScreenChange(Sender: TObject);
 begin
-  if CheckBox2.Checked then
+  if AngleOnScreen.Checked then
   begin
-    FloatSpinEdit7.Enabled := False;
+    Angle.Enabled := False;
   end
   else
   begin
-    FloatSpinEdit7.Enabled := True;
+    Angle.Enabled := True;
   end;
 end;
 
-procedure TBlockInsertForm.CheckBox3Change(Sender: TObject);
+procedure TBlockInsertForm.ScaleOnScreenChange(Sender: TObject);
 begin
-  if Checkbox3.Checked then
+  if ScaleOnScreen.Checked then
   begin
-    FloatSpinEdit4.Enabled := False;
-    FloatSpinEdit5.Enabled := False;
-    FloatSpinEdit6.Enabled := False;
+    ScaleX.Enabled := False;
+    ScaleY.Enabled := False;
+    ScaleZ.Enabled := False;
   end
   else
   begin
-    if Checkbox5.Checked then
+    if UniformScale.Checked then
     begin
-      FloatSpinEdit4.Enabled := True;
-      FloatSpinEdit5.Enabled := False;
-      FloatSpinEdit6.Enabled := False;
-      FloatSpinEdit5.Value:= FloatSpinEdit4.Value;
-      FloatSpinEdit6.Value:= FloatSpinEdit4.Value;
+      ScaleX.Enabled := True;
+      ScaleY.Enabled := False;
+      ScaleZ.Enabled := False;
+      ScaleY.Value:= ScaleX.Value;
+      ScaleZ.Value:= ScaleX.Value;
     end
     else
     begin
-      FloatSpinEdit4.Enabled := True;
-      FloatSpinEdit5.Enabled := True;
-      FloatSpinEdit6.Enabled := True;
+      ScaleX.Enabled := True;
+      ScaleY.Enabled := True;
+      ScaleZ.Enabled := True;
     end;
   end;
 end;
 
 function TBlockInsertForm.Run(
-                             PBlockDefs:PGDBObjBlockdefArray; //указатель на таблицу описаний блоков
-                             LastInsertedBlockName:GDBString  //имя последнего (например в предидущем сеансе команды) вставленного блока, чтобы его выбрать "по умолчанию"
-                                                              //его нужно сохранять гденить в чертеже
-                             ):Integer;                       //модальнвй результат
+                             PBlockDefs:PGDBObjBlockdefArray;     //указатель на таблицу описаний блоков
+                             LastInsertedBlockName:GDBString;     //имя последнего (например в предидущем сеансе команды) вставленного блока, чтобы его выбрать "по умолчанию"
+                                                                  //его нужно сохранять гденить в чертеже
+                             out InsertParams:TZEBlockInsertParams//сюда возвращаем значения
+                             ):Integer;                           //модальнвй результат
+
 var
   p:PGDBObjBlockdef;              //указатель на описание блоков, им будем перебирать таблицу
-  ir:itrec;                       //"счетчтк" для перебора в таблице
+  ir:itrec;                       //"счетчик" для перебора в таблице
   LastInsertedBlockIndex:integer; //индекс выделенного элемента в комбике
+  //Record1:TZEBlockInsertParams; это я убрал, потому что параметры передаются-возвращаются в параметрах вызова
+
 begin
   //mess
-  ComboBox1.Clear;//чистим на всякий пожарный
+  BlockNameComboBox.Clear;//чистим на всякий пожарный
 
   LastInsertedBlockIndex:=-1;// заранее предполагаем что последнего вставленного блока мы ненайдем
   LastInsertedBlockName:=uppercase(LastInsertedBlockName); //искать будем case`независимо
@@ -183,19 +193,33 @@ begin
     p:=PBlockDefs^.BeginIterate(ir);//начинаем перебирать описания в таблице
     if p<>nil then
     repeat
-         ComboBox1.AddItem(Tria_AnsiToUtf8(p^.Name),tobject(p));//загоняем имя и адрес найденного описания в комбик
+         BlockNameComboBox.AddItem(Tria_AnsiToUtf8(p^.Name),tobject(p));//загоняем имя и адрес найденного описания в комбик
                                                                 //причем имена в описании лежат в анси кодировке, комбику они нужны в утф8
          if LastInsertedBlockName=uppercase(p^.Name) then       //если вдруг имя текущего блока совпало с ранее вставленным
-          LastInsertedBlockIndex:=ComboBox1.Items.Count-1;      //запоминаем его индекс
+          LastInsertedBlockIndex:=BlockNameComboBox.Items.Count-1;      //запоминаем его индекс
 
          p:=PBlockDefs^.iterate(ir);                            //выбираем следующее определение
     until p=nil;                                                //выходим если перебрали все определения
   end;
-  ComboBox1.ItemIndex:=LastInsertedBlockIndex;                  //присваиваем текущий выбраный в комбике элемент
+  BlockNameComboBox.ItemIndex:=LastInsertedBlockIndex;                  //присваиваем текущий выбраный в комбике элемент
                                                                 //к возможно найденному ранее вставленному блоку
-  ComboBox1.Sorted:=true;                                       //сортируем
+  BlockNameComboBox.Sorted:=true;                                       //сортируем
 
   result:=ShowModal;
+
+  if result=mrOK then //возвращать параметры надо только если пользователь нажал ОК, если нет,
+                      //пусть вернется то что пришло - движек всеравно ничего делать небудет
+  begin
+    InsertParams.PInsert.x := BlockInsertForm.InsertX.Value;
+    InsertParams.PInsert.y := BlockInsertForm.InsertY.Value;
+    InsertParams.PInsert.z := BlockInsertForm.InsertZ.Value;
+
+    InsertParams.Scale.x := BlockInsertForm.ScaleX.Value;
+    InsertParams.Scale.y := BlockInsertForm.ScaleY.Value;
+    InsertParams.Scale.z := BlockInsertForm.ScaleZ.Value;
+
+    InsertParams.Rotate:= BlockInsertForm.Angle.Value;
+  end;
 end;
 
 initialization

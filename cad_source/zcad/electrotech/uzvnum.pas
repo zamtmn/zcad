@@ -148,17 +148,27 @@ type
       TListHeadGroup=specialize TVector<THeadGroupInfo>;
 
       //** Создания устройств к кому подключаются
-      PTHeadDeviceInfo=^THeadDeviceInfo;
-      THeadDeviceInfo=record
+      //PTHeadDeviceInfo=^THeadDeviceInfo;
+      THeadDeviceInfo=class
                          num:GDBInteger;
                          name:String;
                          listGroup:TListHeadGroup; //список подчиненных устройств
+                         public
+                         constructor Create;
+                         destructor Destroy;virtual;
       end;
       TListHeadDevice=specialize TVector<THeadDeviceInfo>;
 
 
 implementation
-
+constructor THeadDeviceInfo.Create;
+begin
+  listGroup:=TListHeadGroup.Create;
+end;
+destructor THeadDeviceInfo.Destroy;
+begin
+  listGroup.Destroy;
+end;
   //** Поиск номера по имени устройства из списка из списка устройства
 function getNumHeadDevice(listVertex:TListDeviceLine;name:string):integer;
 var
@@ -251,8 +261,9 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
                begin
                HistoryOutStr('-11-');
                numHead:=0;
-                   headDeviceInfo.name:=headDevName;
-                   headDeviceInfo.num:=numHeadDev;
+                   headDeviceInfo:=THeadDeviceInfo.Create;
+                     headDeviceInfo.name:=headDevName;
+                     headDeviceInfo.num:=numHeadDev;
                    numHead:=0;
                    pvd:=FindVariableInEnt(ourGraph.listVertex[i].deviceEnt,'GC_HDGroup');
                    deviceInfo.num:=i;
@@ -261,9 +272,12 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
                    HeadGroupInfo.listDevice.PushBack(deviceInfo);
                    HeadGroupInfo.name:=pgdbstring(pvd^.data.Instance)^;
 
-                   headDeviceInfo.listGroup:=TListHeadGroup.Create;
+                   //headDeviceInfo.listGroup:=TListHeadGroup.Create;
                    headDeviceInfo.listGroup.PushBack(HeadGroupInfo);
                    listHeadDevice.PushBack(headDeviceInfo);
+                   headDeviceInfo:=nil;//насколько я понимаю, после его добавления listHeadDevice
+                                       //никаких действий с ним делать уже ненадо, поэтому обнулим
+                                       //чтоб при попытке доступа был вылет, и ошибку можно было легко локализовать
 
                    //listHeadDevice.Mutable[numHead]^.listGroup:=TListHeadGroup.Create;
                    //listHeadDevice.Mutable[numHead]^.listGroup.PushBack(HeadGroupInfo);

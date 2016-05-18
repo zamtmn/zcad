@@ -140,15 +140,18 @@ type
       TListSubDevice=specialize TVector<TDeviceInfo>;
 
       //** Создания групп у устройства к которому подключаются
-      PTHeadGroupInfo=^THeadGroupInfo;
-      THeadGroupInfo=record
+      //PTHeadGroupInfo=^THeadGroupInfo;//с классами эта байда уже не нужна, т.к. класс сам по себе уже указатель
+      THeadGroupInfo=class
                          listDevice:TListSubDevice;
                          name:String;
+                         public
+                         constructor Create;
+                         destructor Destroy;virtual;
       end;
       TListHeadGroup=specialize TVector<THeadGroupInfo>;
 
       //** Создания устройств к кому подключаются
-      //PTHeadDeviceInfo=^THeadDeviceInfo;
+      //PTHeadDeviceInfo=^THeadDeviceInfo;//с классами эта байда уже не нужна, т.к. класс сам по себе уже указатель
       THeadDeviceInfo=class
                          num:GDBInteger;
                          name:String;
@@ -161,6 +164,14 @@ type
 
 
 implementation
+constructor THeadGroupInfo.Create;
+begin
+  listDevice:=TListSubDevice.Create;
+end;
+destructor THeadGroupInfo.Destroy;
+begin
+  listDevice.Destroy;
+end;
 constructor THeadDeviceInfo.Create;
 begin
   listGroup:=TListHeadGroup.Create;
@@ -268,12 +279,16 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
                    pvd:=FindVariableInEnt(ourGraph.listVertex[i].deviceEnt,'GC_HDGroup');
                    deviceInfo.num:=i;
                    deviceInfo.tDevice:=typDev;
-                   HeadGroupInfo.listDevice:= TListSubDevice.Create;
+                   HeadGroupInfo:=THeadGroupInfo.Create;
+                   //HeadGroupInfo.listDevice:= TListSubDevice.Create;
                    HeadGroupInfo.listDevice.PushBack(deviceInfo);
                    HeadGroupInfo.name:=pgdbstring(pvd^.data.Instance)^;
 
                    //headDeviceInfo.listGroup:=TListHeadGroup.Create;
                    headDeviceInfo.listGroup.PushBack(HeadGroupInfo);
+                   HeadGroupInfo:=nil;//насколько я понимаю, после его добавления listHeadDevice
+                                      //никаких действий с ним делать уже ненадо, поэтому обнулим
+                                      //чтоб при попытке доступа был вылет, и ошибку можно было легко локализовать
                    listHeadDevice.PushBack(headDeviceInfo);
                    headDeviceInfo:=nil;//насколько я понимаю, после его добавления listHeadDevice
                                        //никаких действий с ним делать уже ненадо, поэтому обнулим
@@ -336,11 +351,15 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
                                  HistoryOutStr('-7-');
                                  deviceInfo.num:=i;
                                  deviceInfo.tDevice:=typDev;
-                                 HeadGroupInfo.listDevice:= TListSubDevice.Create;
+                                 HeadGroupInfo:=THeadGroupInfo.Create;
+                                 //HeadGroupInfo.listDevice:= TListSubDevice.Create;
                                  HeadGroupInfo.listDevice.PushBack(deviceInfo);
                                  HeadGroupInfo.name:=pgdbstring(pvd^.data.Instance)^;
                                  //listHeadDevice.Mutable[numHead]^.listGroup:=TListHeadGroup.Create;
                                  listHeadDevice.Mutable[numHead]^.listGroup.PushBack(HeadGroupInfo);
+                                 HeadGroupInfo:=nil;//насколько я понимаю, после его добавления listHeadDevice
+                                                    //никаких действий с ним делать уже ненадо, поэтому обнулим
+                                                    //чтоб при попытке доступа был вылет, и ошибку можно было легко локализовать
                                  HistoryOutStr('-8-');
                               end;
                       end;

@@ -194,11 +194,12 @@ var
    mr:integer;
    CreatedData:TEntityModifyData_Point_Scale_Rotation;
    vertex:gdbvertex;
+   InsertParams:TZEBlockInsertParams;
 begin
   if not assigned(BlockInsertForm)then                              //если форма несоздана -
     Application.CreateForm(TBlockInsertForm, BlockInsertForm);       //создаем ее
 
-  mr:=BlockInsertForm.run(@drawings.GetCurrentDWG^.BlockDefArray,'_ArchTick');//вызов гуя с передачей адреса таблицы описаний
+  mr:=BlockInsertForm.run(@drawings.GetCurrentDWG^.BlockDefArray,'_ArchTick',InsertParams);//вызов гуя с передачей адреса таблицы описаний
                                                                         //блоков, и делаем вид что в предидущем сеансе команды
                                                                         //мы вставляли блок _dot, гуй его болжен сам выбрать в
                                                                         //комбобоксе, этот параметр нужно сохранять в чертеже

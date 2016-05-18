@@ -1,7 +1,7 @@
 object BlockInsertForm: TBlockInsertForm
-  Left = 950
+  Left = 527
   Height = 320
-  Top = 6
+  Top = 979
   Width = 750
   Anchors = []
   Caption = 'Вставка блока'
@@ -12,9 +12,9 @@ object BlockInsertForm: TBlockInsertForm
   OnCreate = FormCreate
   OnShow = _onShow
   LCLVersion = '1.7'
-  object Label1: TLabel
+  object BlockNameLabel: TLabel
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = ComboBox1
+    AnchorSideTop.Control = BlockNameComboBox
     AnchorSideTop.Side = asrCenter
     Left = 5
     Height = 19
@@ -24,10 +24,10 @@ object BlockInsertForm: TBlockInsertForm
     Caption = 'Name: '
     ParentColor = False
   end
-  object CheckBox1: TCheckBox
+  object ExplodeCheckBox: TCheckBox
     AnchorSideLeft.Control = Owner
-    AnchorSideRight.Control = Panel1
-    AnchorSideBottom.Control = ButtonPanel1
+    AnchorSideRight.Control = MainPanel
+    AnchorSideBottom.Control = MainButtonPanel
     Left = 5
     Height = 23
     Top = 256
@@ -39,7 +39,7 @@ object BlockInsertForm: TBlockInsertForm
     Caption = 'Explode'
     TabOrder = 0
   end
-  object ButtonPanel1: TButtonPanel
+  object MainButtonPanel: TButtonPanel
     AnchorSideLeft.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
@@ -66,10 +66,10 @@ object BlockInsertForm: TBlockInsertForm
     Spacing = 5
     ShowButtons = [pbOK, pbCancel, pbHelp]
   end
-  object ComboBox1: TComboBox
-    AnchorSideLeft.Control = Label1
+  object BlockNameComboBox: TComboBox
+    AnchorSideLeft.Control = BlockNameLabel
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = Edit10
+    AnchorSideTop.Control = PathEdit
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
@@ -83,11 +83,11 @@ object BlockInsertForm: TBlockInsertForm
     BorderSpacing.Right = 5
     ItemHeight = 19
     TabOrder = 2
-    Text = 'ComboBox1'
+    Text = 'BlockNameComboBox'
   end
-  object Label11: TLabel
+  object PathLabel: TLabel
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Edit10
+    AnchorSideTop.Control = PathEdit
     AnchorSideTop.Side = asrCenter
     Left = 5
     Height = 19
@@ -97,8 +97,8 @@ object BlockInsertForm: TBlockInsertForm
     Caption = 'Path: '
     ParentColor = False
   end
-  object Edit10: TFileNameEdit
-    AnchorSideLeft.Control = Label11
+  object PathEdit: TFileNameEdit
+    AnchorSideLeft.Control = PathLabel
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
@@ -121,14 +121,14 @@ object BlockInsertForm: TBlockInsertForm
     MaxLength = 0
     TabOrder = 3
   end
-  object Panel1: TPanel
-    AnchorSideLeft.Control = Panel2
+  object MainPanel: TPanel
+    AnchorSideLeft.Control = PrewievPanel
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = ComboBox1
+    AnchorSideTop.Control = BlockNameComboBox
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = ButtonPanel1
+    AnchorSideBottom.Control = MainButtonPanel
     Left = 512
     Height = 211
     Top = 68
@@ -141,12 +141,12 @@ object BlockInsertForm: TBlockInsertForm
     Caption = 'Prewiev'
     TabOrder = 4
   end
-  object GroupBox1: TGroupBox
+  object InsertGroupBox: TGroupBox
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = ComboBox1
+    AnchorSideTop.Control = BlockNameComboBox
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = GroupBox2
+    AnchorSideBottom.Control = ScaleGroupBox
     AnchorSideBottom.Side = asrBottom
     Left = 5
     Height = 181
@@ -160,9 +160,9 @@ object BlockInsertForm: TBlockInsertForm
     ClientHeight = 157
     ClientWidth = 150
     TabOrder = 5
-    object Label2: TLabel
-      AnchorSideLeft.Control = GroupBox1
-      AnchorSideTop.Control = FloatSpinEdit1
+    object InsXLabel: TLabel
+      AnchorSideLeft.Control = InsertGroupBox
+      AnchorSideTop.Control = InsertX
       AnchorSideTop.Side = asrCenter
       Left = 5
       Height = 19
@@ -172,9 +172,9 @@ object BlockInsertForm: TBlockInsertForm
       Caption = 'X: '
       ParentColor = False
     end
-    object Label3: TLabel
-      AnchorSideLeft.Control = GroupBox1
-      AnchorSideTop.Control = FloatSpinEdit2
+    object InsYLabel: TLabel
+      AnchorSideLeft.Control = InsertGroupBox
+      AnchorSideTop.Control = InsertY
       AnchorSideTop.Side = asrCenter
       Left = 5
       Height = 19
@@ -184,9 +184,9 @@ object BlockInsertForm: TBlockInsertForm
       Caption = 'Y: '
       ParentColor = False
     end
-    object Label4: TLabel
-      AnchorSideLeft.Control = GroupBox1
-      AnchorSideTop.Control = FloatSpinEdit3
+    object InsZLabel: TLabel
+      AnchorSideLeft.Control = InsertGroupBox
+      AnchorSideTop.Control = InsertZ
       AnchorSideTop.Side = asrCenter
       Left = 5
       Height = 19
@@ -196,10 +196,10 @@ object BlockInsertForm: TBlockInsertForm
       Caption = 'Z: '
       ParentColor = False
     end
-    object CheckBox4: TCheckBox
-      AnchorSideLeft.Control = GroupBox1
-      AnchorSideTop.Control = GroupBox1
-      AnchorSideRight.Control = GroupBox1
+    object InsertOnScreen: TCheckBox
+      AnchorSideLeft.Control = InsertGroupBox
+      AnchorSideTop.Control = InsertGroupBox
+      AnchorSideRight.Control = InsertGroupBox
       AnchorSideRight.Side = asrBottom
       Left = 5
       Height = 23
@@ -210,15 +210,15 @@ object BlockInsertForm: TBlockInsertForm
       BorderSpacing.Top = 5
       BorderSpacing.Right = 5
       Caption = 'Specify on-screen'
-      OnChange = CheckBox4Change
+      OnChange = InsertOnScreenChange
       TabOrder = 0
     end
-    object FloatSpinEdit1: TFloatSpinEdit
-      AnchorSideLeft.Control = Label2
+    object InsertX: TFloatSpinEdit
+      AnchorSideLeft.Control = InsXLabel
       AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = CheckBox4
+      AnchorSideTop.Control = InsertOnScreen
       AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Control = InsertGroupBox
       AnchorSideRight.Side = asrBottom
       Left = 25
       Height = 27
@@ -235,12 +235,12 @@ object BlockInsertForm: TBlockInsertForm
       TabOrder = 1
       Value = 0
     end
-    object FloatSpinEdit2: TFloatSpinEdit
-      AnchorSideLeft.Control = Label3
+    object InsertY: TFloatSpinEdit
+      AnchorSideLeft.Control = InsYLabel
       AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = FloatSpinEdit1
+      AnchorSideTop.Control = InsertX
       AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Control = InsertGroupBox
       AnchorSideRight.Side = asrBottom
       Left = 25
       Height = 27
@@ -257,12 +257,12 @@ object BlockInsertForm: TBlockInsertForm
       TabOrder = 2
       Value = 0
     end
-    object FloatSpinEdit3: TFloatSpinEdit
-      AnchorSideLeft.Control = Label4
+    object InsertZ: TFloatSpinEdit
+      AnchorSideLeft.Control = InsZLabel
       AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = FloatSpinEdit2
+      AnchorSideTop.Control = InsertY
       AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Control = InsertGroupBox
       AnchorSideRight.Side = asrBottom
       Left = 25
       Height = 27
@@ -281,10 +281,10 @@ object BlockInsertForm: TBlockInsertForm
       Value = 0
     end
   end
-  object GroupBox2: TGroupBox
-    AnchorSideLeft.Control = GroupBox1
+  object ScaleGroupBox: TGroupBox
+    AnchorSideLeft.Control = InsertGroupBox
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = ComboBox1
+    AnchorSideTop.Control = BlockNameComboBox
     AnchorSideTop.Side = asrBottom
     AnchorSideBottom.Side = asrBottom
     Left = 164
@@ -298,9 +298,9 @@ object BlockInsertForm: TBlockInsertForm
     ClientHeight = 157
     ClientWidth = 150
     TabOrder = 6
-    object Label5: TLabel
-      AnchorSideLeft.Control = GroupBox2
-      AnchorSideTop.Control = FloatSpinEdit4
+    object ScaleXLabel: TLabel
+      AnchorSideLeft.Control = ScaleGroupBox
+      AnchorSideTop.Control = ScaleX
       AnchorSideTop.Side = asrCenter
       Left = 5
       Height = 19
@@ -310,9 +310,9 @@ object BlockInsertForm: TBlockInsertForm
       Caption = 'X: '
       ParentColor = False
     end
-    object Label6: TLabel
-      AnchorSideLeft.Control = GroupBox2
-      AnchorSideTop.Control = FloatSpinEdit6
+    object ScaleYLabel: TLabel
+      AnchorSideLeft.Control = ScaleGroupBox
+      AnchorSideTop.Control = ScaleZ
       AnchorSideTop.Side = asrCenter
       Left = 5
       Height = 19
@@ -322,9 +322,9 @@ object BlockInsertForm: TBlockInsertForm
       Caption = 'Z: '
       ParentColor = False
     end
-    object Label7: TLabel
-      AnchorSideLeft.Control = GroupBox2
-      AnchorSideTop.Control = FloatSpinEdit5
+    object ScaleZLabel: TLabel
+      AnchorSideLeft.Control = ScaleGroupBox
+      AnchorSideTop.Control = ScaleY
       AnchorSideTop.Side = asrCenter
       Left = 5
       Height = 19
@@ -334,10 +334,10 @@ object BlockInsertForm: TBlockInsertForm
       Caption = 'Y: '
       ParentColor = False
     end
-    object CheckBox3: TCheckBox
-      AnchorSideLeft.Control = GroupBox2
-      AnchorSideTop.Control = GroupBox2
-      AnchorSideRight.Control = GroupBox2
+    object ScaleOnScreen: TCheckBox
+      AnchorSideLeft.Control = ScaleGroupBox
+      AnchorSideTop.Control = ScaleGroupBox
+      AnchorSideRight.Control = ScaleGroupBox
       AnchorSideRight.Side = asrBottom
       Left = 5
       Height = 23
@@ -348,14 +348,14 @@ object BlockInsertForm: TBlockInsertForm
       BorderSpacing.Top = 5
       BorderSpacing.Right = 5
       Caption = 'Specify on-screen'
-      OnChange = CheckBox3Change
+      OnChange = ScaleOnScreenChange
       TabOrder = 0
     end
-    object CheckBox5: TCheckBox
-      AnchorSideLeft.Control = GroupBox2
-      AnchorSideTop.Control = FloatSpinEdit6
+    object UniformScale: TCheckBox
+      AnchorSideLeft.Control = ScaleGroupBox
+      AnchorSideTop.Control = ScaleZ
       AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Control = ScaleGroupBox
       AnchorSideRight.Side = asrBottom
       Left = 5
       Height = 23
@@ -367,15 +367,15 @@ object BlockInsertForm: TBlockInsertForm
       BorderSpacing.Right = 5
       BorderSpacing.Bottom = 5
       Caption = 'Uniform scale'
-      OnChange = CheckBox5Change
+      OnChange = UniformScaleChange
       TabOrder = 1
     end
-    object FloatSpinEdit4: TFloatSpinEdit
-      AnchorSideLeft.Control = Label5
+    object ScaleX: TFloatSpinEdit
+      AnchorSideLeft.Control = ScaleXLabel
       AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = CheckBox3
+      AnchorSideTop.Control = ScaleOnScreen
       AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Control = ScaleGroupBox
       AnchorSideRight.Side = asrBottom
       Left = 25
       Height = 27
@@ -392,12 +392,12 @@ object BlockInsertForm: TBlockInsertForm
       TabOrder = 2
       Value = 0
     end
-    object FloatSpinEdit5: TFloatSpinEdit
-      AnchorSideLeft.Control = Label6
+    object ScaleY: TFloatSpinEdit
+      AnchorSideLeft.Control = ScaleYLabel
       AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = FloatSpinEdit4
+      AnchorSideTop.Control = ScaleX
       AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Control = ScaleGroupBox
       AnchorSideRight.Side = asrBottom
       Left = 25
       Height = 27
@@ -414,12 +414,12 @@ object BlockInsertForm: TBlockInsertForm
       TabOrder = 3
       Value = 0
     end
-    object FloatSpinEdit6: TFloatSpinEdit
-      AnchorSideLeft.Control = Label7
+    object ScaleZ: TFloatSpinEdit
+      AnchorSideLeft.Control = ScaleZLabel
       AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = FloatSpinEdit5
+      AnchorSideTop.Control = ScaleY
       AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Control = ScaleGroupBox
       AnchorSideRight.Side = asrBottom
       Left = 25
       Height = 27
@@ -437,10 +437,10 @@ object BlockInsertForm: TBlockInsertForm
       Value = 0
     end
   end
-  object Panel2: TPanel
-    AnchorSideLeft.Control = GroupBox2
+  object PrewievPanel: TPanel
+    AnchorSideLeft.Control = ScaleGroupBox
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = ComboBox1
+    AnchorSideTop.Control = BlockNameComboBox
     AnchorSideTop.Side = asrBottom
     Left = 323
     Height = 187
@@ -453,10 +453,10 @@ object BlockInsertForm: TBlockInsertForm
     ClientHeight = 187
     ClientWidth = 184
     TabOrder = 7
-    object GroupBox3: TGroupBox
-      AnchorSideLeft.Control = Panel2
-      AnchorSideTop.Control = Panel2
-      AnchorSideRight.Control = Panel2
+    object RotationGroupBox: TGroupBox
+      AnchorSideLeft.Control = PrewievPanel
+      AnchorSideTop.Control = PrewievPanel
+      AnchorSideRight.Control = PrewievPanel
       AnchorSideRight.Side = asrBottom
       Left = 0
       Height = 89
@@ -468,9 +468,9 @@ object BlockInsertForm: TBlockInsertForm
       ClientHeight = 65
       ClientWidth = 180
       TabOrder = 0
-      object Label8: TLabel
-        AnchorSideLeft.Control = GroupBox3
-        AnchorSideTop.Control = FloatSpinEdit7
+      object AngleLabel: TLabel
+        AnchorSideLeft.Control = RotationGroupBox
+        AnchorSideTop.Control = Angle
         AnchorSideTop.Side = asrCenter
         Left = 5
         Height = 19
@@ -480,10 +480,10 @@ object BlockInsertForm: TBlockInsertForm
         Caption = 'Angle: '
         ParentColor = False
       end
-      object CheckBox2: TCheckBox
-        AnchorSideLeft.Control = GroupBox3
-        AnchorSideTop.Control = GroupBox3
-        AnchorSideRight.Control = GroupBox3
+      object AngleOnScreen: TCheckBox
+        AnchorSideLeft.Control = RotationGroupBox
+        AnchorSideTop.Control = RotationGroupBox
+        AnchorSideRight.Control = RotationGroupBox
         AnchorSideRight.Side = asrBottom
         Left = 5
         Height = 23
@@ -494,15 +494,15 @@ object BlockInsertForm: TBlockInsertForm
         BorderSpacing.Top = 5
         BorderSpacing.Right = 5
         Caption = 'Specify on-screen'
-        OnChange = CheckBox2Change
+        OnChange = AngleOnScreenChange
         TabOrder = 0
       end
-      object FloatSpinEdit7: TFloatSpinEdit
-        AnchorSideLeft.Control = Label8
+      object Angle: TFloatSpinEdit
+        AnchorSideLeft.Control = AngleLabel
         AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = CheckBox2
+        AnchorSideTop.Control = AngleOnScreen
         AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = GroupBox3
+        AnchorSideRight.Control = RotationGroupBox
         AnchorSideRight.Side = asrBottom
         Left = 52
         Height = 27
@@ -521,11 +521,11 @@ object BlockInsertForm: TBlockInsertForm
         Value = 0
       end
     end
-    object GroupBox4: TGroupBox
-      AnchorSideLeft.Control = Panel2
-      AnchorSideTop.Control = GroupBox3
+    object UnitsGroupBox: TGroupBox
+      AnchorSideLeft.Control = PrewievPanel
+      AnchorSideTop.Control = RotationGroupBox
       AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Control = Panel2
+      AnchorSideRight.Control = PrewievPanel
       AnchorSideRight.Side = asrBottom
       Left = 0
       Height = 93
@@ -538,9 +538,9 @@ object BlockInsertForm: TBlockInsertForm
       ClientHeight = 69
       ClientWidth = 180
       TabOrder = 1
-      object Label9: TLabel
-        AnchorSideLeft.Control = GroupBox4
-        AnchorSideTop.Control = ComboBox2
+      object UnitLabel: TLabel
+        AnchorSideLeft.Control = UnitsGroupBox
+        AnchorSideTop.Control = BlockInit
         AnchorSideTop.Side = asrCenter
         Left = 5
         Height = 19
@@ -550,9 +550,9 @@ object BlockInsertForm: TBlockInsertForm
         Caption = 'Unit: '
         ParentColor = False
       end
-      object Label10: TLabel
-        AnchorSideLeft.Control = GroupBox4
-        AnchorSideTop.Control = FloatSpinEdit8
+      object FactorLabel: TLabel
+        AnchorSideLeft.Control = UnitsGroupBox
+        AnchorSideTop.Control = BlockInitFactor
         AnchorSideTop.Side = asrCenter
         Left = 5
         Height = 19
@@ -562,11 +562,11 @@ object BlockInsertForm: TBlockInsertForm
         Caption = 'Factor: '
         ParentColor = False
       end
-      object ComboBox2: TComboBox
-        AnchorSideLeft.Control = Label9
+      object BlockInit: TComboBox
+        AnchorSideLeft.Control = UnitLabel
         AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = GroupBox4
-        AnchorSideRight.Control = GroupBox4
+        AnchorSideTop.Control = UnitsGroupBox
+        AnchorSideRight.Control = UnitsGroupBox
         AnchorSideRight.Side = asrBottom
         Left = 43
         Height = 27
@@ -579,14 +579,14 @@ object BlockInsertForm: TBlockInsertForm
         Constraints.MinWidth = 120
         ItemHeight = 19
         TabOrder = 0
-        Text = 'ComboBox2'
+        Text = 'BlockInit'
       end
-      object FloatSpinEdit8: TFloatSpinEdit
-        AnchorSideLeft.Control = Label10
+      object BlockInitFactor: TFloatSpinEdit
+        AnchorSideLeft.Control = FactorLabel
         AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = ComboBox2
+        AnchorSideTop.Control = BlockInit
         AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = GroupBox4
+        AnchorSideRight.Control = UnitsGroupBox
         AnchorSideRight.Side = asrBottom
         Left = 55
         Height = 27

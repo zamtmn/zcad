@@ -1820,8 +1820,15 @@ begin
   //ActivePopupMenu:=ActivePopupMenu;
   NeedRedraw:=false;
   if assigned(OnWaMouseDown) then
-  if OnWaMouseDown(self,Button,Shift,X, Y,param.SelDesc.OnMouseObject) then
+  if OnWaMouseDown(self,Button,Shift,X, Y,param.SelDesc.OnMouseObject,needredraw) then
+  begin
+    if needredraw then
+                    begin
+                    param.firstdraw:=true;
+                    DrawOrInvalidate;
+                    end;
     exit;
+  end;
   if ssRight in shift then
                            begin
                                 if assigned(ShowCXMenu)then

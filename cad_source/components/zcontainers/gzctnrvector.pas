@@ -410,7 +410,7 @@ var
 begin
   //s:=(GDBPlatformUInt(parray)-GDBPlatformUInt(pel));
   //s:=pbyte(parray)-pbyte(pel);
-  s:=PT(parray)-PT(pel);
+  s:=PT(pel)-PT(parray);
   if s>=0 then
   begin
     //s:=s div SizeOfData;

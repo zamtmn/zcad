@@ -119,7 +119,7 @@ type
 
     procedure PageControlMouseDown(Sender: TObject;Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure correctscrollbars;
-    function wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer):boolean;
+    function wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer;var NeedRedraw:Boolean):boolean;
     procedure wamm(Sender:TAbstractViewArea;Shift:TShiftState;X,Y:Integer);
     procedure wams(Sender:TAbstractViewArea;SelectedEntity:GDBPointer);
     procedure wakp(Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState);
@@ -2715,7 +2715,7 @@ begin
        StatusLineTextOut(htext);
 end;
 
-function TZCADMainWindow.wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer):boolean;
+function TZCADMainWindow.wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:GDBPointer;var NeedRedraw:Boolean):boolean;
 var
   key:GDBByte;
   //needredraw:boolean;
@@ -2812,7 +2812,7 @@ begin
              begin
                commandmanager.pcommandrunning^.IData.GetPointMode:=TGPEnt;
              end;
-         //NeedRedraw:=true;
+         NeedRedraw:=true;
     end
 
     else if ((sender.param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0) then

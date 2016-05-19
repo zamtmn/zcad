@@ -50,7 +50,7 @@ type
                 end;
     TCameraChangedNotify=procedure of object;
     TAbstractViewArea=class;
-    TOnWaMouseDown=function (Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;OnMouseEntity:GDBPointer):boolean of object;
+    TOnWaMouseDown=function (Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;OnMouseEntity:GDBPointer;var NeedRedraw:Boolean):boolean of object;
     TOnWaMouseMove=procedure (Sender:TAbstractViewArea;Shift:TShiftState;X,Y:Integer) of object;
     TOnWaMouseSelect=procedure (Sender:TAbstractViewArea;SelectedEntity:GDBPointer) of object;
     TOnWaKeyPress=procedure (Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState) of object;

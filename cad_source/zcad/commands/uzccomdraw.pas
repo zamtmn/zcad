@@ -1368,7 +1368,7 @@ begin
            powner^.objmatrix:=m2;
            pvisible^.formatentity(drawings.GetCurrentDWG^,dc);
            pvisible^.BuildGeometry(drawings.GetCurrentDWG^);
-           powner^.VarObjArray.add(@pvisible);
+           powner^.VarObjArray.PushBackPEntity(pvisible^);
            pobj^.YouDeleted(drawings.GetCurrentDWG^);
            end;
            pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
@@ -1752,7 +1752,7 @@ begin
            end;
 
      end;
-     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.add(@pt);
+     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.PushBackPEntity(pt^);
      end;
 end;
 procedure TextInsert_com.CommandStart(Operands:TCommandOperands);
@@ -2220,7 +2220,7 @@ begin
                          gdbfreemem(pointer(pb));
                          pb:=pointer(tb);
     end;
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.add(addr(pb));
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.PushBackPEntity(pb^);
     //PGDBObjEntity(pb)^.FromDXFPostProcessAfterAdd;
     pb^.CalcObjMatrix;
     pb^.BuildGeometry(drawings.GetCurrentDWG^);
@@ -2628,7 +2628,7 @@ begin
     begin
     PCreatedGDBLine^.bp.ListPos.Owner:=po;
     //drawings.ObjRoot.ObjArray.add(addr(pl));
-    PGDBObjGenericSubEntry(po)^.ObjArray.add(addr(PCreatedGDBLine));
+    PGDBObjGenericSubEntry(po)^.ObjArray.PushBackPEntity(PCreatedGDBLine^);
     end
     else
     begin
@@ -2724,7 +2724,7 @@ begin
                 tv := pobj^.Clone({drawings.GetCurrentROOT}@drawings.GetCurrentDWG^.ConstructObjRoot);
                 if tv<>nil then
                 begin
-                    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.add(addr(tv));
+                    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.PushBackPEntity(tv^);
                     tcd.obj:=pobj;
                     tcd.clone:=tv;
                     pcoa^.PushBackData(tcd);
@@ -3614,7 +3614,7 @@ begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{743A21EB-4741-42A4-8CB2-D4E4A1E2EAF8}',{$ENDIF}pointer(pt),sizeof(GDBObjTable));
   pt^.initnul;
   pt^.bp.ListPos.Owner:=@drawings.CurrentDWG^.ConstructObjRoot;
-  drawings.CurrentDWG^.ConstructObjRoot.ObjArray.add(@pt);
+  drawings.CurrentDWG^.ConstructObjRoot.ObjArray.PushBackPEntity(pt^);
 
   pt^.ptablestyle:=drawings.GetCurrentDWG^.TableStyleTable.getAddres('ShRaspr');
   pt^.tbl.free;

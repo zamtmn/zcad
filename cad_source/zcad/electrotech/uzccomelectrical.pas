@@ -253,7 +253,7 @@ begin
           begin
           ptext:=pointer(AllocEnt(GDBMtextID));
           ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,obozn,CreateVertex(p.x+pbdef.vp.BoundingBox.LBN.x-1,p.y,p.z),2.5,0,0.65,RightAngle,jsbc,1,1);
-          drawings.CurrentDWG.ConstructObjRoot.ObjArray.add(@ptext);
+          drawings.CurrentDWG.ConstructObjRoot.ObjArray.PushBackPEntity(ptext^);
           ptext^.FormatEntity(drawings.GetCurrentDWG^,dc);
           end;
 
@@ -268,7 +268,7 @@ var
 begin
      pl:=pointer(AllocEnt(GDBLineID));
      pl^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,p1,p2);
-     drawings.CurrentDWG.ConstructObjRoot.ObjArray.add(@pl);
+     drawings.CurrentDWG.ConstructObjRoot.ObjArray.PushBackPEntity(pl^);
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
      pl^.Formatentity(drawings.GetCurrentDWG^,dc);
      if pcabledesk<>nil then
@@ -292,12 +292,12 @@ begin
 
           ptext:=pointer(AllocEnt(GDBMtextID));
           ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,GetCableMaterial(pcabledesk)+' L='+floattostr(pcabledesk^.length)+'м',vertexadd(Vertexmorph(p1,p2,0.5),v),2.5,0,0.65,a,jsbc,vertexlength(p1,p2),1);
-          drawings.CurrentDWG.ConstructObjRoot.ObjArray.add(@ptext);
+          drawings.CurrentDWG.ConstructObjRoot.ObjArray.PushBackPEntity(ptext^);
           ptext^.Formatentity(drawings.GetCurrentDWG^,dc);
 
           ptext:=pointer(AllocEnt(GDBMtextID));
           ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,pcabledesk^.Name,vertexsub(Vertexmorph(p1,p2,0.5),v),2.5,0,0.65,a,jstc,vertexlength(p1,p2),1);
-          drawings.CurrentDWG.ConstructObjRoot.ObjArray.add(@ptext);
+          drawings.CurrentDWG.ConstructObjRoot.ObjArray.PushBackPEntity(ptext^);
           ptext^.Formatentity(drawings.GetCurrentDWG^,dc);
 
      end;
@@ -702,7 +702,7 @@ begin
                        if pcobj^.IsHaveLCS then
                                              pcobj^.FormatEntity(drawings.GetCurrentDWG^,dc);
                        pcobj^.FormatEntity(drawings.GetCurrentDWG^,dc);
-                       pnevdev^.VarObjArray.add(@pcobj);
+                       pnevdev^.VarObjArray.PushBackPEntity(pcobj^);
                        pobj:=PBH.ObjArray.iterate(ir2);
                  until pobj=nil;
 
@@ -710,7 +710,7 @@ begin
 
             pnevdev^.formatEntity(drawings.GetCurrentDWG^,dc);
 
-            drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.add(addr(pnevdev));
+            drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.PushBackPEntity(pnevdev^);
             currentcoord.x:=currentcoord.x+45;
 
             //drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
@@ -1131,7 +1131,7 @@ begin
                   psfirstline.PushBackData(s);
 
 
-              drawings.CurrentDWG.ConstructObjRoot.ObjArray.add(@pt);
+              drawings.CurrentDWG.ConstructObjRoot.ObjArray.PushBackPEntity(pt^);
               pt^.Build(drawings.GetCurrentDWG^);
               pt^.FormatEntity(drawings.GetCurrentDWG^,dc);
               end;
@@ -1275,7 +1275,7 @@ begin
                  pstring(pvd^.data.Instance)^:=UNNAMEDNET;
                  //TempNet^.name:=drawings.numerator.getnamenumber(el_unname_prefix);
                  New_line^.bp.ListPos.Owner:=TempNet;
-                 TempNet^.ObjArray.add(addr(New_line));
+                 TempNet^.ObjArray.PushBackPEntity(New_line^);
                  TempNet^.Formatentity(drawings.GetCurrentDWG^,dc);
                  drawings.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@TempNet);
                  firstowner:=TempNet;
@@ -1283,7 +1283,7 @@ begin
             end;
           1:begin
                  New_line^.bp.ListPos.Owner:=FirstOwner;
-                 FirstOwner^.ObjArray.add(addr(New_line));
+                 FirstOwner^.ObjArray.PushBackPEntity(New_line^);
                  //FirstOwner^.Formatentity(drawings.GetCurrentDWG^);
                  FirstOwner.YouChanged(drawings.GetCurrentDWG^);
                  mode:=-1;
@@ -1306,7 +1306,7 @@ begin
                  end;
 
                  New_line^.bp.ListPos.Owner:=FirstOwner;
-                 FirstOwner^.ObjArray.add(addr(New_line));
+                 FirstOwner^.ObjArray.PushBackPEntity(New_line^);
                  //FirstOwner^.Formatentity(drawings.GetCurrentDWG^);
                  FirstOwner.YouChanged(drawings.GetCurrentDWG^);
                  mode:=-1;
@@ -3022,7 +3022,7 @@ begin
                                                                 end;
                                                                 New_line^.Formatentity(drawings.GetCurrentDWG^,dc);
                                                                 //New_line.bp.ListPos.Owner^.RemoveInArray(New_line.bp.ListPos.SelfIndex);
-                                                                supernet^.ObjArray.add(addr(New_line));
+                                                                supernet^.ObjArray.PushBackPEntity(New_line^);
                                                                 linesarray.PushBackData(New_line);
                                                                 //log.LogOut('supernet^.ObjArray.add(addr(New_line)); Примитивов в графе: '+inttostr(supernet^.objarray.count));
 

@@ -29,7 +29,7 @@ GDBObjEntityTreeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntityOpenArra
                             constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                             constructor initnul;
                             destructor done;virtual;
-                            function add(p:GDBPointer):TArrayIndex;virtual;
+                            function PushBackPEntity(var entity:GDBObjEntity):TArrayIndex;virtual;
                             procedure RemoveFromTree(p:PGDBObjEntity);
 
                       end;
@@ -50,10 +50,14 @@ begin
   inherited;
   objtree.done;
 end;
-function GDBObjEntityTreeArray.add;
+function GDBObjEntityTreeArray.PushBackPEntity;
 begin
-  result:=inherited add(p);
-  ObjTree.AddObjectToNodeTree(PGDBObjEntity(p^));
+  result:=inherited PushBackPEntity(entity);
+  ObjTree.AddObjectToNodeTree(@entity);
+  {result:=inherited PushBackPointerToEntity(p);
+  ObjTree.AddObjectToNodeTree(PGDBObjEntity(p^));}
+  //result:=inherited PushBackPointerToEntity({ppointer(p)^}@entity);
+  //{pGDBObjEntity(p^)}entity.bp.ListPos.SelfIndex:=result;
 end;
 constructor GDBObjEntityTreeArray.init;
 begin

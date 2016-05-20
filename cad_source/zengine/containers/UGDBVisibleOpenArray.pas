@@ -19,13 +19,13 @@
 unit UGDBVisibleOpenArray;
 {$INCLUDE def.inc}
 interface
-uses uzecamera,uzbtypesbase,UGDBOpenArrayOfPV,sysutils,uzbtypes,uzegeometry,uzbmemman;
+uses uzeentity,uzecamera,uzbtypesbase,UGDBOpenArrayOfPV,sysutils,uzbtypes,uzegeometry,uzbmemman;
 type
 {REGISTEROBJECTTYPE GDBObjEntityOpenArray}
 {Export+}
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
 GDBObjEntityOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
-                      function add(p:GDBPointer):TArrayIndex;virtual;
+                      function PushBackPEntity({p:GDBPointer}var entity:GDBObjEntity):TArrayIndex;virtual;
                       function addwithoutcorrect(p:GDBPointer):GDBInteger;virtual;
                       function copytowithoutcorrect(source:PGDBObjEntityOpenArray):GDBInteger;virtual;
                       procedure deliteminarray(p:GDBInteger);virtual;
@@ -36,7 +36,6 @@ GDBObjEntityOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPV)
                 end;
 {Export-}
 implementation
-uses uzeentity;
 type
 //objvizarray = array[0..0] of PGDBObjEntity;
 //pobjvizarray = ^objvizarray;
@@ -77,18 +76,19 @@ begin
      if pobj<>nil then
      repeat
            pcobj:=pobj.Clone(own);
-           PEA^.add(@pcobj);
+           PEA^.PushBackPEntity(pcobj^);
            pobj:=iterate(ir);
      until pobj=nil;
 end;
-function GDBObjEntityOpenArray.add;
+{function GDBObjEntityOpenArray.PushBackPEntity;
 begin
-  {if pGDBObjEntity(p^).bp.ListPos.Owner<>nil then
-  begin
-       pGDBObjEntity(p^).bp.ListPos.Owner.RemoveInArray(pGDBObjEntity(p^).bp.ListPos.SelfIndex);
-  end;}
   result:=inherited PushBackData(ppointer(p)^);
-  pGDBObjEntity(p^).bp.ListPos.SelfIndex:={addr(PGDBObjEntityArray(parray)^[}result{])};
+  pGDBObjEntity(p^).bp.ListPos.SelfIndex:=result;
+end;}
+function GDBObjEntityOpenArray.PushBackPEntity({p:GDBPointer}var entity:GDBObjEntity):TArrayIndex;
+begin
+  result:={inherited }PushBackData({ppointer(p)^}@entity);
+  {pGDBObjEntity(p^)}entity.bp.ListPos.SelfIndex:=result;
 end;
 function GDBObjEntityOpenArray.addwithoutcorrect;
 begin

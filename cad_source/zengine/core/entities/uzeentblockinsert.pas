@@ -486,14 +486,14 @@ begin
                                           pvisible^.correctobjects(@self,ir.itc);
                                           pvisible^.FormatEntity(drawing,dc);
                                           pvisible.BuildGeometry(drawing);
-                                          ConstObjArray.add(@pvisible);
+                                          ConstObjArray.PushBackPEntity(pvisible^);
                                      end
                                  else
                                      begin
                                           pvisible2^.correctobjects(@self,{i}ir.itc);
                                           pvisible2^.FormatEntity(drawing,dc);
                                           pvisible.BuildGeometry(drawing);
-                                          ConstObjArray.add(@pvisible2);
+                                          ConstObjArray.PushBackPEntity(pvisible2^);
                                      end;
           pvisible:=pblockdef.ObjArray.iterate(ir);
           until pvisible=nil;

@@ -270,7 +270,7 @@ end;
 
 function GDBObjGenericSubEntry.AddObjectToObjArray(p:GDBPointer):GDBInteger;
 begin
-     result:=ObjArray.add(p);
+     result:=ObjArray.PushBackPEntity(PGDBObjEntity(p^)^);
      PGDBObjEntity(p^).bp.ListPos.Owner:=@self;
      //ObjArray.ObjTree.AddObjectToNodeTree(PGDBObjEntity(p^));
 end;
@@ -443,7 +443,7 @@ end;
 procedure GDBObjGenericSubEntry.AddMi;
 begin
      //pobj^.bp.PSelfInOwnerArray:=ObjArray.getDataMutable(ObjArray.add(pobj));
-     ObjArray.add(pobj);
+     ObjArray.PushBackPEntity(pGDBObjEntity(ppointer(pobj)^)^);
      pGDBObjEntity(ppointer(pobj)^).bp.ListPos.Owner:=@self;
 end;
 procedure GDBObjGenericSubEntry.correctobjects;
@@ -513,7 +513,7 @@ begin
      if p<>nil then
      repeat
            p^.bp.ListPos.Owner:=new_sub;
-           new_sub^.ObjArray.add(@p);
+           new_sub^.ObjArray.PushBackPEntity(p^);
      p:=objarray.iterate(ir);
      until p=nil;
      {p:=objarray.parray;

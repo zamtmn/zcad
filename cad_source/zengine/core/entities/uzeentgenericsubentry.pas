@@ -438,7 +438,7 @@ begin
 end;
 procedure GDBObjGenericSubEntry.RemoveInArray(pobjinarray:GDBInteger);
 begin
-     ObjArray.deliteminarray(pobjinarray);
+     ObjArray.DeleteElement(pobjinarray);
 end;
 procedure GDBObjGenericSubEntry.AddMi;
 begin
@@ -469,12 +469,12 @@ procedure GDBObjGenericSubEntry.RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray
 begin
      if pobj^.bp.TreePos.Owner<>nil then
      begin
-          PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nul.deliteminarray(pobj^.bp.TreePos.SelfIndex);
+          PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nul.DeleteElement(pobj^.bp.TreePos.SelfIndex);
      end;
      pobj^.bp.TreePos.Owner:=nil;
 
      //pointer(p):=ObjArray.getDataMutable(pobjinarray);
-     ObjArray.deliteminarray(pobjinarray);
+     ObjArray.DeleteElement(pobjinarray);
 end;
 procedure GDBObjGenericSubEntry.EraseMi;
 //var

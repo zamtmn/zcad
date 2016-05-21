@@ -469,7 +469,7 @@ begin
                                      {выдрано из GDBObjLineInit для отвязки от GDBManager}
                                      tpl^.init(@self,{drawing.GetLayerTable^.GetCurrentLayer}self.vp.Layer,sysvar.dwg.DWG_CLinew^,tv,ip.interceptcoord);
                                      CopyVPto(tpl^);
-                                     objarray.PushBackPEntity(tpl^);
+                                     objarray.AddPEntity(tpl^);
                                      {tpl := GDBPointer(self.ObjArray.CreateObj(GDBLineID,@self));
                                      GDBObjLineInit(@self,tpl, sysvar.DWG_CLayer^, sysvar.DWG_CLinew^, tv,ip.interceptcoord);}
                                      tpl.FormatEntity(drawing,dc);
@@ -487,7 +487,7 @@ begin
                                      {выдрано из GDBObjLineInit для отвязки от GDBManager}
                                      tpl^.init(@self,{drawing.GetLayerTable^.GetCurrentLayer}self.vp.Layer,sysvar.dwg.DWG_CLinew^,tv,ip.interceptcoord);
                                      CopyVPto(tpl^);
-                                     objarray.PushBackPEntity(tpl^);
+                                     objarray.AddPEntity(tpl^);
                                      {tpl := GDBPointer(self.ObjArray.CreateObj(GDBLineID,@self));
                                      GDBObjLineInit(@self,tpl, sysvar.DWG_CLayer^, sysvar.DWG_CLinew^, tv,ip.interceptcoord);}
                                      tpl.FormatEntity(drawing,dc);
@@ -541,7 +541,7 @@ begin
 
                 //pl^.bp.Owner^.RemoveInArray(pl^.bp.PSelfInOwnerArray);
                 //GDBPointer(pl^.bp.PSelfInOwnerArray^):=nil;
-                tempnet.ObjArray.PushBackPEntity(pl^);
+                tempnet.ObjArray.AddPEntity(pl^);
                 pl.bp.ListPos.Owner:=tempnet;
                 pl:=GDBPointer(ti.iterate(ir));
           until pl=nil;

@@ -59,7 +59,7 @@ begin
                                PGDBObjEntity(pb):=CreateProc(owner,[point.x,point.y,point.z,scale,angle,nam]);
                                zeSetEntityProp(pb,layeraddres,LTAddres,color,LW);
                                if ownerarray<>nil then
-                                               ownerarray^.PushBackPEntity(pb^);
+                                               ownerarray^.AddPEntity(pb^);
                            end
                        else
                            begin
@@ -77,7 +77,7 @@ begin
                                                begin
                                                    result:=_StandartSolidCreateProcedure(owner,args);
                                                    if ownerarray<>nil then
-                                                                          ownerarray^.PushBackPEntity(result^);
+                                                                          ownerarray^.AddPEntity(result^);
                                                end
                                            else
                                                begin
@@ -92,7 +92,7 @@ begin
                                                begin
                                                    result:=_StandartLineCreateProcedure(owner,args);
                                                    if ownerarray<>nil then
-                                                                          ownerarray^.PushBackPEntity(result^);
+                                                                          ownerarray^.AddPEntity(result^);
                                                end
                                            else
                                                begin
@@ -107,7 +107,7 @@ begin
                                                begin
                                                    result:=_StandartCircleCreateProcedure(owner,args);
                                                    if ownerarray<>nil then
-                                                                          ownerarray^.PushBackPEntity(result^);
+                                                                          ownerarray^.AddPEntity(result^);
                                                end
                                            else
                                                begin

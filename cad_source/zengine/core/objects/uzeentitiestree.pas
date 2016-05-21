@@ -292,7 +292,7 @@ begin
                                                      if prootnode<>nil then
                                                                            begin
                                                                                 //nul.init({$IFDEF DEBUGBUILD}'{A1E9743F-63CF-4C8F-8C40-57CCDC24F8CF}',{$ENDIF}entitys.Count);
-                                                                                entitys.copytowithoutcorrect(@result.nul);
+                                                                                entitys.copyto{withoutcorrect}({@}result.nul);
                                                                            end
                                                                        else
                                                                            begin

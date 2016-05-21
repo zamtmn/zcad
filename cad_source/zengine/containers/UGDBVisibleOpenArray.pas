@@ -26,7 +26,7 @@ type
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
 GDBObjEntityOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
                       function AddPEntity({p:GDBPointer}var entity:GDBObjEntity):TArrayIndex;virtual;
-                      function addwithoutcorrect(p:GDBPointer):GDBInteger;virtual;
+                      //function PushBackPEntity(p:GDBPointer):GDBInteger;virtual;
                       function copytowithoutcorrect(source:PGDBObjEntityOpenArray):GDBInteger;virtual;
                       procedure deliteminarray(p:GDBInteger);virtual;
                       procedure cloneentityto(PEA:PGDBObjEntityOpenArray;own:GDBPointer);virtual;
@@ -90,10 +90,10 @@ begin
   result:={inherited }PushBackData({ppointer(p)^}@entity);
   {pGDBObjEntity(p^)}entity.bp.ListPos.SelfIndex:=result;
 end;
-function GDBObjEntityOpenArray.addwithoutcorrect;
+{function GDBObjEntityOpenArray.PushBackPEntity;
 begin
   result:=inherited PushBackData(p);
-end;
+end;}
 function GDBObjEntityOpenArray.copytowithoutcorrect;
 var p:GDBPointer;
     ir:itrec;
@@ -101,7 +101,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-        source.addwithoutcorrect(p);  //-----------------//-----------
+        source.PushBackData(p);  //-----------------//-----------
         p:=iterate(ir);
   until p=nil;
   result:=count;

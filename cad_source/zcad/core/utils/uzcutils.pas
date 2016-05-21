@@ -114,7 +114,7 @@ begin
                                PGDBObjEntity(pb):=CreateProc(owner,[point.x,point.y,point.z,scale,angle,nam]);
                                zeSetEntityProp(pb,layeraddres,LTAddres,color,LW);
                                if ownerarray<>nil then
-                                               ownerarray^.PushBackPEntity(pb^);
+                                               ownerarray^.AddPEntity(pb^);
                            end
                        else
                            begin
@@ -230,7 +230,7 @@ begin
       end;
   end
   else
-     own.ObjArray.PushBackPEntity(result^);
+     own.ObjArray.AddPEntity(result^);
   result^.CalcObjMatrix;
   result^.BuildGeometry(drawings.GetCurrentDWG^);
   result^.BuildVarGeometry(drawings.GetCurrentDWG^);

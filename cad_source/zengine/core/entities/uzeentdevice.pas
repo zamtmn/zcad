@@ -163,7 +163,7 @@ end;
 procedure GDBObjDevice.AddMi;
 begin
      //pobj^.bp.PSelfInOwnerArray:=ObjArray.getDataMutable(ObjArray.add(pobj));
-     VarObjArray.PushBackPEntity(pGDBObjEntity(ppointer(pobj)^)^);
+     VarObjArray.AddPEntity(pGDBObjEntity(ppointer(pobj)^)^);
      pGDBObjEntity(ppointer(pobj)^).bp.ListPos.Owner:=@self;
 end;
 destructor GDBObjDevice.done;
@@ -440,7 +440,7 @@ begin
                                                                              PGDBObjDevice(pvisible)^.BuildVarGeometry(drawing);
                                                                              //debp:=PGDBObjDevice(pvisible)^.ConstObjArray.PArray;
                                           end;
-                                          VarObjArray.PushBackPEntity(pvisible^);
+                                          VarObjArray.AddPEntity(pvisible^);
 
                                      end
                                  else
@@ -454,7 +454,7 @@ begin
                                                                               PGDBObjDevice(pvisible2)^.BuildVarGeometry(drawing);
                                                                               //debp:=PGDBObjDevice(pvisible)^.ConstObjArray.PArray;
                                           end;
-                                          VarObjArray.PushBackPEntity(pvisible2^);
+                                          VarObjArray.AddPEntity(pvisible2^);
                                     end;
           end;
           ConstObjArray.Shrink;
@@ -496,7 +496,7 @@ begin
                                          pvisible^.correctobjects(@self,{pblockdef.ObjArray.getDataMutable(i)}i);
                                          pvisible^.formatEntity(drawing,dc);
                                         pvisible.BuildGeometry(drawing);
-                                        ConstObjArray.PushBackPEntity(pvisible^)
+                                        ConstObjArray.AddPEntity(pvisible^)
 
                                      end
                                  else
@@ -505,7 +505,7 @@ begin
                                          pvisible2^.FromDXFPostProcessBeforeAdd(nil,drawing);
                                          pvisible2^.formatEntity(drawing,dc);
                                         pvisible2.BuildGeometry(drawing);
-                                        ConstObjArray.PushBackPEntity(pvisible2^)
+                                        ConstObjArray.AddPEntity(pvisible2^)
                                     end;
           end;
           //name:=copy(name,8,length(name)-7);

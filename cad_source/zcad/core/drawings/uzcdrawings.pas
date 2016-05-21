@@ -919,7 +919,7 @@ begin
                                           pvisible2^.correctobjects(_dest,ir.itc);
                                           pvisible2^.FormatEntity(_to^,dc);
                                           pvisible2.BuildGeometry(_to^);
-                                          _dest.ObjArray.PushBackPEntity(pvisible2^);
+                                          _dest.ObjArray.AddPEntity(pvisible2^);
                                      end;
           pvisible:=_source.ObjArray.iterate(ir);
      until pvisible=nil;

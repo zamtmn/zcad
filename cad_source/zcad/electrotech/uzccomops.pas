@@ -831,7 +831,7 @@ begin
      pt:=pointer(AllocEnt(GDBMtextID));
      pt^.init({drawings.GetCurrentROOT}@root,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,name,tv,2.5,0,0.65,RightAngle,jsbc,1,1);
      pt^.TXTStyleIndex:=pointer(drawings.GetCurrentDWG.GetTextStyleTable^.getDataMutable(0));
-     {drawings.GetCurrentROOT}root.ObjArray.PushBackPEntity(pt^);
+     {drawings.GetCurrentROOT}root.ObjArray.AddPEntity(pt^);
      pt^.Formatentity(drawings.GetCurrentDWG^,dc);
      end;
 
@@ -860,22 +860,22 @@ else if datcount>1 then
                        begin
                          pl:=pointer(AllocEnt(GDBLineID));
                          pl^.init({drawings.GetCurrentROOT}@root,drawings.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord,oldcoord2);
-                         {drawings.GetCurrentROOT}root.ObjArray.PushBackPEntity(pl^);
+                         {drawings.GetCurrentROOT}root.ObjArray.AddPEntity(pl^);
                          pl^.Formatentity(drawings.GetCurrentDWG^,dc);
                        end
 else if datcount>2 then
                        begin
                          pl:=pointer(AllocEnt(GDBLineID));
                          pl^.init({drawings.GetCurrentROOT}@root,drawings.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord, Vertexmorphabs2(oldcoord,oldcoord2,2));
-                         {drawings.GetCurrentROOT}root.ObjArray.PushBackPEntity(pl^);
+                         {drawings.GetCurrentROOT}root.ObjArray.AddPEntity(pl^);
                          pl^.Formatentity(drawings.GetCurrentDWG^,dc);
                          pl:=pointer(AllocEnt(GDBLineID));
                          pl^.init({drawings.GetCurrentROOT}@root,drawings.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,Vertexmorphabs2(oldcoord,oldcoord2,4), Vertexmorphabs2(oldcoord,oldcoord2,6));
-                         {drawings.GetCurrentROOT}root.ObjArray.PushBackPEntity(pl^);
+                         {drawings.GetCurrentROOT}root.ObjArray.AddPEntity(pl^);
                          pl^.Formatentity(drawings.GetCurrentDWG^,dc);
                          pl:=pointer(AllocEnt(GDBLineID));
                          pl^.init({drawings.GetCurrentROOT}@root,drawings.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,Vertexmorphabs2(oldcoord,oldcoord2,8), oldcoord2);
-                         {drawings.GetCurrentROOT}root.ObjArray.PushBackPEntity(pl^);
+                         {drawings.GetCurrentROOT}root.ObjArray.AddPEntity(pl^);
                          pl^.Formatentity(drawings.GetCurrentDWG^,dc);
                        end;
 
@@ -883,7 +883,7 @@ else if datcount>2 then
      currentcoord.y:=currentcoord.y+10;
      pl:=pointer(AllocEnt(GDBLineID));
      pl^.init({drawings.GetCurrentROOT}@root,drawings.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord,currentcoord);
-     {drawings.GetCurrentROOT}root.ObjArray.PushBackPEntity(pl^);
+     {drawings.GetCurrentROOT}root.ObjArray.AddPEntity(pl^);
      pl^.Formatentity(drawings.GetCurrentDWG^,dc);
      result:=pl;
 end;

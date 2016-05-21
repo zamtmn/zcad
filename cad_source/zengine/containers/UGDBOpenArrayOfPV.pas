@@ -57,33 +57,6 @@ function EqualFuncPGDBaseObject(const a, b: PGDBaseObject):Boolean;
 begin
   result:=(a=b);
 end;
-{function GDBObjOpenArrayOfPV.FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;
-var
-   pvisible:PGDBObjEntity;
-   ir:itrec;
-   pvd:pvardesk;
-begin
-     result:=nil;
-     begin
-         pvisible:=beginiterate(ir);
-         if pvisible<>nil then
-         repeat
-               if pvisible.GetObjType=objID then
-               begin
-                    pvd:=PTObjectUnit(pvisible^.ou.Instance)^.FindVariable(vname);
-                    if pvd<>nil then
-                    begin
-                         if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then
-                         begin
-                              result:=pvisible;
-                              exit;
-                         end;
-                    end;
-               end;
-              pvisible:=iterate(ir);
-         until pvisible=nil;
-     end;
-end;}
 function GDBObjOpenArrayOfPV.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
 var pobj:pGDBObjEntity;
     ir:itrec;
@@ -105,33 +78,6 @@ begin
 
 end;
 
-{function GDBObjOpenArrayOfPV.inrect;
-var pobj:pGDBObjEntity;
-    ir:itrec;
-    fr:TInRect;
-    all:boolean;
-begin
-     all:=true;
-     pobj:=beginiterate(ir);
-     if pobj<>nil then
-                       repeat
-                             fr:=pobj^.InRect;
-                             if fr<>IRFully then
-                                                begin
-                                                     all:=false;
-                                                     if fr=IRPartially then
-                                                                           begin
-                                                                                result:=IRPartially;
-                                                                                exit;
-                                                                           end;
-                                                end;
-                             pobj:=iterate(ir);
-                       until pobj=nil;
-    if all then
-               result:=IRFully
-           else
-               result:=IREmpty;
-end;}
 
 function GDBObjOpenArrayOfPV.calcbb:TBoundingBox;
 var pobj:pGDBObjEntity;

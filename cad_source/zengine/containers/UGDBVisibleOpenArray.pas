@@ -25,7 +25,7 @@ type
 {Export+}
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
 GDBObjEntityOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
-                      function PushBackPEntity({p:GDBPointer}var entity:GDBObjEntity):TArrayIndex;virtual;
+                      function AddPEntity({p:GDBPointer}var entity:GDBObjEntity):TArrayIndex;virtual;
                       function addwithoutcorrect(p:GDBPointer):GDBInteger;virtual;
                       function copytowithoutcorrect(source:PGDBObjEntityOpenArray):GDBInteger;virtual;
                       procedure deliteminarray(p:GDBInteger);virtual;
@@ -76,16 +76,16 @@ begin
      if pobj<>nil then
      repeat
            pcobj:=pobj.Clone(own);
-           PEA^.PushBackPEntity(pcobj^);
+           PEA^.AddPEntity(pcobj^);
            pobj:=iterate(ir);
      until pobj=nil;
 end;
-{function GDBObjEntityOpenArray.PushBackPEntity;
+{function GDBObjEntityOpenArray.AddPEntity;
 begin
   result:=inherited PushBackData(ppointer(p)^);
   pGDBObjEntity(p^).bp.ListPos.SelfIndex:=result;
 end;}
-function GDBObjEntityOpenArray.PushBackPEntity({p:GDBPointer}var entity:GDBObjEntity):TArrayIndex;
+function GDBObjEntityOpenArray.AddPEntity({p:GDBPointer}var entity:GDBObjEntity):TArrayIndex;
 begin
   result:={inherited }PushBackData({ppointer(p)^}@entity);
   {pGDBObjEntity(p^)}entity.bp.ListPos.SelfIndex:=result;

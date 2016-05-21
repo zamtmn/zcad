@@ -28,6 +28,7 @@ GZVectorP{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                        function iterate (var ir:itrec):GDBPointer;virtual;
                                        function beginiterate(out ir:itrec):GDBPointer;virtual;
                                        procedure RemoveData(const data:T);virtual;
+                                       function DeleteElement(index:GDBInteger):GDBPointer;
                                        function GetRealCount:GDBInteger;
 
                                        constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
@@ -42,6 +43,15 @@ function EqualFuncPointer(const a, b: pointer):Boolean;
 begin
   result:=(a=b);
 end;
+function GZVectorP<T>.DeleteElement(index:GDBInteger):GDBPointer;
+begin
+  if (index>=0)and(index<count)then
+  begin
+    parray^[index]:=default(t);
+  end;
+  result:=parray;
+end;
+
 function GZVectorP<T>.GetElemCount:GDBInteger;
 begin
   result:=count-deleted;

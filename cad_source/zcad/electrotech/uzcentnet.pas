@@ -223,7 +223,7 @@ begin
 end;
 procedure GDBObjNet.EraseMi;
 begin
-     objarray.deliteminarray(pobjinarray);
+     objarray.DeleteElement(pobjinarray);
      objarray.pack;
      self.correctobjects(pointer(bp.ListPos.Owner),bp.ListPos.SelfIndex);
      pobj^.done;
@@ -535,7 +535,7 @@ begin
           pl:=GDBPointer(ti.beginiterate(ir));
           if pl<>nil then
           repeat
-                self.ObjArray.deliteminarray(pl^.bp.ListPos.SelfIndex);
+                self.ObjArray.DeleteElement(pl^.bp.ListPos.SelfIndex);
                 //self.EraseMi(pl,pl^.bp.PSelfInOwnerArray);
                 //pl^.bp.Owner:=TempNet;
 

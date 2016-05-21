@@ -102,11 +102,11 @@ procedure GDBObjDevice.EraseMi;
 begin
      if pobj^.bp.TreePos.Owner<>nil then
      begin
-          PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nul.deliteminarray(pobj^.bp.TreePos.SelfIndex);
+          PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nul.DeleteElement(pobj^.bp.TreePos.SelfIndex);
      end;
 
      //pointer(p):= VarObjArray.getDataMutable(pobjinarray);
-     VarObjArray.deliteminarray(pobjinarray);
+     VarObjArray.DeleteElement(pobjinarray);
 
      //p^.done;
      //memman.GDBFreeMem(GDBPointer(p))

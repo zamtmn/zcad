@@ -21,44 +21,22 @@ unit uzeentitiestree;
 interface
 uses
     graphics,
-    uzgldrawcontext,uzegeometry,UGDBVisibleOpenArray,uzeentity,uzbtypesbase,uzbtypes,uzbmemman;
+    gzctnrtree,uzgldrawcontext,uzegeometry,UGDBVisibleOpenArray,uzeentity,uzbtypesbase,uzbtypes,uzbmemman;
 const
      IninialNodeDepth=-1;
 type
-TTreeLevelStatistik=record
-                          NodesCount,EntCount,OverflowCount:GDBInteger;
-                    end;
-PTTreeLevelStatistikArray=^TTreeLevelStatistikArray;
-TTreeLevelStatistikArray=Array [0..0] of  TTreeLevelStatistik;
-TTreeStatistik=record
-                     NodesCount,EntCount,OverflowCount,MaxDepth:GDBInteger;
-                     PLevelStat:PTTreeLevelStatistikArray;
-               end;
 {EXPORT+}
-         TNodeDir=(TND_Plus,TND_Minus,TND_Root);
+TDrawType=(TDTFulDraw,TDTSimpleDraw);
+TEntTreeNodeData=record
+                     infrustum:TActulity;
+                     nuldrawpos,minusdrawpos,plusdrawpos:TActulity;
+                     FulDraw:{GDBBoolean}TDrawType;
+                     nodedepth:GDBInteger;
+                     pluscount,minuscount:GDBInteger;
+                 end;
          PTEntTreeNode=^TEntTreeNode;
-         TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                            nodedepth:GDBInteger;
-                            pluscount,minuscount:GDBInteger;
-                            point:GDBVertex;
-                            plane:DVector4D;
-                            BoundingBox:TBoundingBox;
-                            nul:GDBObjEntityOpenArray;
-                            pplusnode,pminusnode:PTEntTreeNode;
-
-                            NodeDir:TNodeDir;
-                            Root:{-}PTEntTreeNode{/GDBPointer/};
-                            FulDraw:GDBBoolean;
-
-                            {selected:boolean;}
-                            infrustum:TActulity;
-                            nuldrawpos,minusdrawpos,plusdrawpos:TActulity;
-                            constructor initnul;
-                            destructor done;virtual;
-                            procedure draw(var DC:TDrawContext);
-                            procedure drawonlyself(var DC:TDrawContext);
-                            procedure ClearSub;
-                            procedure Clear;
+         TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData>{//})
+                            procedure DrawVolume(var DC:TDrawContext);
                             procedure updateenttreeadress;
                             procedure addtonul(p:PGDBObjEntity);
                             procedure AddObjectToNodeTree(pobj:PGDBObjEntity);
@@ -78,19 +56,7 @@ var
 function createtree(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
 function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
 procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext{subrender:GDBInteger});
-function MakeTreeStatisticRec(treedepth:integer):TTreeStatistik;
-procedure KillTreeStatisticRec(var tr:TTreeStatistik);
 implementation
-function MakeTreeStatisticRec(treedepth:integer):TTreeStatistik;
-begin
-     fillchar(result,sizeof(TTreeStatistik),0);
-     gdbgetmem({$IFDEF DEBUGBUILD}'{7604D7A4-2788-49B5-BB45-F9CD42F9785B}',{$ENDIF}pointer(result.PLevelStat),(treedepth+1)*sizeof(TTreeLevelStatistik));
-end;
-procedure KillTreeStatisticRec(var tr:TTreeStatistik);
-begin
-     gdbfreemem(pointer(tr.PLevelStat));
-end;
-
 procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext{subrender:GDBInteger});
 //var
    //currtime:TDateTime;
@@ -98,29 +64,29 @@ procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext{subrender:GDBInte
    //q1,q2:gdbboolean; {currd:PTSimpleDrawing;}
 begin
   //currd:=gdb.GetCurrentDWG;
-  if (Node.infrustum={currd.pcamera.POSCOUNT}dc.DrawingContext.InfrustumActualy) then
+  if (Node.NodeData.infrustum={currd.pcamera.POSCOUNT}dc.DrawingContext.InfrustumActualy) then
   begin
-       if node.FulDraw then
-       if (Node.FulDraw)or(Node.nul.count=0) then
+       if node.NodeData.FulDraw=TDTFulDraw then
+       if (Node.NodeData.FulDraw=TDTFulDraw)or(Node.nul.count=0) then
        begin
        if assigned(node.pminusnode)then
-                                       if (node.minusdrawpos<>{currd.pcamera}dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then
+                                       if (node.NodeData.minusdrawpos<>{currd.pcamera}dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then
                                        begin
-                                            treerender(node.pminusnode^,dc);
-                                            node.minusdrawpos:={currd.pcamera}dc.DrawingContext.DRAWCOUNT
+                                            treerender(PTEntTreeNode(node.pminusnode)^,dc);
+                                            node.NodeData.minusdrawpos:={currd.pcamera}dc.DrawingContext.DRAWCOUNT
                                        end;
        if assigned(node.pplusnode)then
-                                      if (node.plusdrawpos<>{currd.pcamera}dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then
+                                      if (node.NodeData.plusdrawpos<>{currd.pcamera}dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then
                                       begin
-                                       treerender(node.pplusnode^,dc);
-                                           node.plusdrawpos:={currd.pcamera}dc.DrawingContext.DRAWCOUNT
+                                       treerender(PTEntTreeNode(node.pplusnode)^,dc);
+                                           node.NodeData.plusdrawpos:={currd.pcamera}dc.DrawingContext.DRAWCOUNT
                                       end;
        end;
        //if (node.FulDraw) then
        begin
-            if (node.FulDraw)or(dc.MaxDetail) then
+            if (node.NodeData.FulDraw=TDTFulDraw)or(dc.MaxDetail) then
         Node.nul.DrawWithattrib(dc{gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender});
-        node.nuldrawpos:={currd.pcamera}dc.DrawingContext.DRAWCOUNT;
+        node.NodeData.nuldrawpos:={currd.pcamera}dc.DrawingContext.DRAWCOUNT;
        end;
   end;
   //Node.drawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT;
@@ -137,63 +103,18 @@ begin
     CorrectNodeTreeBB(pobj);
     //ConcatBB(ObjTree.BoundingBox,pobj^.vp.BoundingBox);
 end;
-procedure TEntTreeNode.drawonlyself;
+procedure TEntTreeNode.DrawVolume;
 begin
+     if assigned(pplusnode) then
+                       PTEntTreeNode(pplusnode)^.DrawVolume(dc);
+     if assigned(pminusnode) then
+                       PTEntTreeNode(pminusnode)^.DrawVolume(dc);
      dc.drawer.DrawAABB3DInModelSpace(BoundingBox,dc.DrawingContext.matrixs);
-     //DrawAABB(BoundingBox);
-end;
-
-procedure TEntTreeNode.draw;
-begin
-     if assigned(pplusnode) then
-                       pplusnode^.draw(dc);
-     if assigned(pminusnode) then
-                       pminusnode^.draw(dc);
-
-     {if selected then glColor3ub(255, 0, 0)
-                 else glColor3ub(100, 100, 100);}
-
-     {myglbegin(GL_lines);
-     myglVertex3d(vertexadd(point,createvertex(-1000/nodedepth,0,0)));
-     myglVertex3d(vertexadd(point,createvertex(1000/nodedepth,0,0)));
-     myglVertex3d(vertexadd(point,createvertex(0,-1000/nodedepth,0)));
-     myglVertex3d(vertexadd(point,createvertex(0,1000/nodedepth,0)));
-     myglVertex3d(vertexadd(point,createvertex(0,0,-1000/nodedepth)));
-     myglVertex3d(vertexadd(point,createvertex(0,0,1000/nodedepth)));
-     myglend;}
-     {if selected then }drawonlyself(dc);
-end;
-
-constructor TEntTreeNode.initnul;
-begin
-     nul.init({$IFDEF DEBUGBUILD}'TEntTreeNode.nul',{$ENDIF}50);
-     FulDraw:=True;
-end;
-procedure TEntTreeNode.ClearSub;
-begin
-     nul.Clear;
-     if assigned(pplusnode) then
-                                begin
-                                     pplusnode^.done;
-                                     gdbfreemem(pointer(pplusnode));
-                                end;
-     if assigned(pminusnode) then
-                                begin
-                                     pminusnode^.done;
-                                     gdbfreemem(pointer(pminusnode));
-                                end;
-end;
-procedure TEntTreeNode.Clear;
-begin
-     clearsub;
 end;
 
 procedure TEntTreeNode.addtonul(p:PGDBObjEntity);
 begin
      p^.bp.TreePos.Owner:=@self;
-
-
-
      p^.bp.TreePos.SelfIndex:=nul.PushBackData(p);
 end;
 procedure TEntTreeNode.updateenttreeadress;
@@ -208,11 +129,6 @@ begin
 
            pobj:=nul.iterate(ir);
      until pobj=nil;
-end;
-destructor TEntTreeNode.done;
-begin
-     ClearSub;
-     nul.done;
 end;
 constructor TTestTreeNode.initnul;
 begin
@@ -271,8 +187,8 @@ begin
                            result.initnul;
                            end;
      result.BoundingBox:=aabb;
-     result.pluscount:=0;
-     result.minuscount:=0;
+     result.NodeData.pluscount:=0;
+     result.NodeData.minuscount:=0;
      result.Root:=_root;
      result.NodeDir:=dir;
      //if SysVar.RD.RD_SpatialNodesDepth<>nil then
@@ -286,7 +202,7 @@ begin
                                                                        if PGDBObjEntity(entitys.beginiterate(ir))^.Selected then
                                                                            result.selected:=true;}
 
-                                                     result.plane:=uzegeometry.NulVector4D;
+                                                     result.Separator:=uzegeometry.NulVector4D;
                                                      result.pminusnode:=nil;
                                                      result.pplusnode:=nil;
                                                      if prootnode<>nil then
@@ -435,8 +351,8 @@ else if (tv.z>=tv.x*aabbaxisscale)and(tv.z>=tv.y*aabbaxisscale) then
                    end;
      end;
 
-     result.plane:=ta[imin].plane;
-     result.point:=midlepoint;
+     result.Separator:=ta[imin].plane;
+     //result.point:=midlepoint;
      if Result.nul.PArray<>nil then
      GDBFreeMem(Result.nul.PArray);
      result.nul:=ta[imin].nul;
@@ -446,11 +362,11 @@ else if (tv.z>=tv.x*aabbaxisscale)and(tv.z>=tv.y*aabbaxisscale) then
      result.nul.Shrink;
 
      result^.updateenttreeadress;
-     result.nodedepth:=nodedepth;
+     result.NodeData.nodedepth:=nodedepth;
      result.pminusnode:=createtree(ta[imin].minus,minusaabb,nil,nodedepth,result,TND_Minus);
      result.pplusnode:=createtree(ta[imin].plus,plusaabb,nil,nodedepth,result,TND_Plus);
-     result.pluscount:=ta[imin].plus.Count;
-     result.minuscount:=ta[imin].minus.Count;
+     result.NodeData.pluscount:=ta[imin].plus.Count;
+     result.NodeData.minuscount:=ta[imin].minus.Count;
      if prootnode=nil then
                           begin
                           ta[imin].done;

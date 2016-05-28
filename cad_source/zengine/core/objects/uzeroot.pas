@@ -73,7 +73,7 @@ var
    myfrustum:ClipArray;
 begin
      myfrustum:=FrustumTransform(frustum,ObjMatrix);
-     ProcessTree(myfrustum,infrustumactualy,visibleactualy,enttree,IRPartially,true,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
+     ProcessTree(myfrustum,infrustumactualy,visibleactualy,enttree,IRPartially,TDTFulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
      self.VisibleOBJBoundingBox:=ObjArray.calcvisbb({gdb.GetCurrentDWG.pcamera^.POSCOUNT}{visibleactualy}infrustumactualy);
 end;
 function GDBObjRoot.CalcInFrustum;

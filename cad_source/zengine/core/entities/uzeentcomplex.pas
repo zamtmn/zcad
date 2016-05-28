@@ -20,7 +20,7 @@ unit uzeentcomplex;
 {$INCLUDE def.inc}
 
 interface
-uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,gzctnrvectorpobjects,
+uses gzctnrtree,uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,gzctnrvectorpobjects,
      uzestyleslayers,uzbtypesbase,sysutils,UGDBSelectedObjArray,UGDBVisibleOpenArray,
      uzeentity,UGDBVisibleTreeArray,uzeentitiestree,uzbtypes,uzeentwithlocalcs,
      uzeconsts,uzegeometry,uzbmemman;
@@ -80,7 +80,7 @@ begin
      inherited;
      ConstObjArray.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
      ConstObjArray.ObjTree.BoundingBox:=vp.BoundingBox;
-     ProcessTree(frustum,infrustumactualy,visibleactualy,ConstObjArray.ObjTree,IRFully,true,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
+     ProcessTree(frustum,infrustumactualy,visibleactualy,ConstObjArray.ObjTree,IRFully,TDTFulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
 end;
 {function GDBObjComplex.InRect:TInRect;
 begin
@@ -176,7 +176,7 @@ begin
   //ConstObjArray.DrawWithattrib(dc{infrustumactualy,subrender)}{DrawGeometry(CalculateLineWeight});
   treerender(ConstObjArray.ObjTree,dc);
       if DC.SystmGeometryDraw then
-                                  ConstObjArray.ObjTree.draw(dc);
+                                  ConstObjArray.ObjTree.DrawVolume(dc);
   dec(dc.subrender);
   dc.OwnerLineWeight:=oldlw;
   dc.ownercolor:=oldColor;
@@ -209,7 +209,7 @@ end;
 function GDBObjComplex.CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;
 begin
      result:=ConstObjArray.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
-     ProcessTree(frustum,infrustumactualy,visibleactualy,ConstObjArray.ObjTree,IRPartially,true,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
+     ProcessTree(frustum,infrustumactualy,visibleactualy,ConstObjArray.ObjTree,IRPartially,TDTFulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
 end;
 function GDBObjComplex.CalcTrueInFrustum;
 begin

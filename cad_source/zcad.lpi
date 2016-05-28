@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="179">
+    <Units Count="181">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -835,7 +835,7 @@
         <IsPartOfProject Value="True"/>
       </Unit144>
       <Unit145>
-        <Filename Value="zengine/core/objects/uzeentitiestree.pas"/>
+        <Filename Value="zengine/core/objects/gzctnrtree.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit145>
       <Unit146>
@@ -970,6 +970,14 @@
         <Filename Value="zengine/zgl/drawers/uzglbackendmanager.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit178>
+      <Unit179>
+        <Filename Value="zengine/containers/UGDBVisibleTreeArray.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit179>
+      <Unit180>
+        <Filename Value="zengine/core/objects/uzeentitiestree.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit180>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

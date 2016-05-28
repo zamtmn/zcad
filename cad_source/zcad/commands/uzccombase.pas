@@ -22,7 +22,7 @@ unit uzccombase;
 interface
 uses
  {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
- uzglviewareageneral,zeundostack,zcchangeundocommand,uzcoimultiobjects,
+ gzctnrtree,uzglviewareageneral,zeundostack,zcchangeundocommand,uzcoimultiobjects,
  uzcenitiesvariablesextender,uzgldrawcontext,uzcdrawing,uzbpaths,uzeffmanager,
  uzeentdimension,uzestylesdim,uzestylestexts,uzeenttext,uzestyleslinetypes,
  URecordDescriptor,uzefontmanager,uzedrawingsimple,uzcsysvars,uzccommandsmanager,
@@ -1153,18 +1153,18 @@ begin
      begin
           s:='В ноде примитивов: '+inttostr(pnode^.nul.Count);
      end;
-     s:=s+'(далее в +): '+inttostr(pnode.pluscount);
-     s:=s+' (далее в -): '+inttostr(pnode.minuscount);
+     s:=s+'(далее в +): '+inttostr(pnode.NodeData.pluscount);
+     s:=s+' (далее в -): '+inttostr(pnode.NodeData.minuscount);
      {$IFDEF DEBUGBUILD}
      uzcshared.HistoryOutStr(dupestring('  ',pnode.nodedepth)+s);
      {$ENDIF}
-     if pnode.nodedepth>depth then
-                                  depth:=pnode.nodedepth;
+     if pnode.NodeData.nodedepth>depth then
+                                  depth:=pnode.NodeData.nodedepth;
 
      if assigned(pnode.pplusnode) then
-                       PrintTreeNode(pnode.pplusnode,depth);
+                       PrintTreeNode(PTEntTreeNode(pnode.pplusnode),depth);
      if assigned(pnode.pminusnode) then
-                       PrintTreeNode(pnode.pminusnode,depth);
+                       PrintTreeNode(PTEntTreeNode(pnode.pminusnode),depth);
 end;
 procedure GetTreeStat(pnode:PTEntTreeNode;depth:integer;var tr:TTreeStatistik);
 begin
@@ -1181,9 +1181,9 @@ begin
      inc(tr.PLevelStat^[depth].EntCount,pnode^.nul.Count);
 
      if assigned(pnode.pplusnode) then
-                       GetTreeStat(pnode.pplusnode,depth+1,tr);
+                       GetTreeStat(PTEntTreeNode(pnode.pplusnode),depth+1,tr);
      if assigned(pnode.pminusnode) then
-                       GetTreeStat(pnode.pminusnode,depth+1,tr);
+                       GetTreeStat(PTEntTreeNode(pnode.pminusnode),depth+1,tr);
 end;
 
 function RebuildTree_com(operands:TCommandOperands):TCommandResult;

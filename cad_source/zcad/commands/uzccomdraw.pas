@@ -3843,9 +3843,9 @@ begin
            until pl1=nil;
 
            if PNode^.pplusnode<>nil then
-                                        FindLineIntersectionsInNode(pl,PNode^.pplusnode,lineAABBtests,linelinetests,intersectcount,pparray,LinesMap,lineiterator);
+                                        FindLineIntersectionsInNode(pl,PTEntTreeNode(PNode^.pplusnode),lineAABBtests,linelinetests,intersectcount,pparray,LinesMap,lineiterator);
            if PNode^.pminusnode<>nil then
-                                        FindLineIntersectionsInNode(pl,PNode^.pminusnode,lineAABBtests,linelinetests,intersectcount,pparray,LinesMap,lineiterator);
+                                        FindLineIntersectionsInNode(pl,PTEntTreeNode(PNode^.pminusnode),lineAABBtests,linelinetests,intersectcount,pparray,LinesMap,lineiterator);
 
      end;
 end;
@@ -3870,18 +3870,18 @@ begin
            until pl2=nil;
 
            if PNode^.pplusnode<>nil then
-                                        FindLineIntersectionsInNode(pl1,PNode^.pplusnode,lineAABBtests,linelinetests,intersectcount,pparray,LinesMap,lineiterator);
+                                        FindLineIntersectionsInNode(pl1,PTEntTreeNode(PNode^.pplusnode),lineAABBtests,linelinetests,intersectcount,pparray,LinesMap,lineiterator);
            if PNode^.pminusnode<>nil then
-                                        FindLineIntersectionsInNode(pl1,PNode^.pminusnode,lineAABBtests,linelinetests,intersectcount,pparray,LinesMap,lineiterator);
+                                        FindLineIntersectionsInNode(pl1,PTEntTreeNode(PNode^.pminusnode),lineAABBtests,linelinetests,intersectcount,pparray,LinesMap,lineiterator);
 
            pl1:=PNode^.nul.iterate(ir1);
      until pl1=nil;
      //else
          begin
                if PNode^.pplusnode<>nil then
-                                            FindAllIntersectionsInNode(PNode^.pplusnode,lineAABBtests,linelinetests,intersectcount,pparray,LinesMap);
+                                            FindAllIntersectionsInNode(PTEntTreeNode(PNode^.pplusnode),lineAABBtests,linelinetests,intersectcount,pparray,LinesMap);
                if PNode^.pminusnode<>nil then
-                                            FindAllIntersectionsInNode(PNode^.pminusnode,lineAABBtests,linelinetests,intersectcount,pparray,LinesMap);
+                                            FindAllIntersectionsInNode(PTEntTreeNode(PNode^.pminusnode),lineAABBtests,linelinetests,intersectcount,pparray,LinesMap);
          end;
 end;
 procedure PlaceLines(LinesMap:MapPointOnCurve3DPropArray;var lm,lcr:integer);inline;

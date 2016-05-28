@@ -184,12 +184,12 @@ begin
      if assigned(Node.pminusnode) then
        if uzegeometry.IsPointInBB(point,Node.pminusnode.BoundingBox) then
        begin
-            minus:=FindObjectsInPointInNode(point,Node.pminusnode^,Objects);
+            minus:=FindObjectsInPointInNode(point,PTEntTreeNode(Node.pminusnode)^,Objects);
        end;
      if assigned(Node.pplusnode) then
        if uzegeometry.IsPointInBB(point,Node.pplusnode.BoundingBox) then
        begin
-            plus:=FindObjectsInPointInNode(point,Node.pplusnode^,Objects);
+            plus:=FindObjectsInPointInNode(point,PTEntTreeNode(Node.pplusnode)^,Objects);
        end;
 
        pobj:=Node.nul.beginiterate(ir);
@@ -220,12 +220,12 @@ begin
      if assigned(Node.pminusnode) then
        if uzegeometry.boundingintersect(Volume,Node.pminusnode.BoundingBox) then
        begin
-            minus:=FindObjectsInVolumeInNode(Volume,Node.pminusnode^,Objects);
+            minus:=FindObjectsInVolumeInNode(Volume,PTEntTreeNode(Node.pminusnode)^,Objects);
        end;
      if assigned(Node.pplusnode) then
        if uzegeometry.boundingintersect(Volume,Node.pplusnode.BoundingBox) then
        begin
-            plus:=FindObjectsInVolumeInNode(Volume,Node.pplusnode^,Objects);
+            plus:=FindObjectsInVolumeInNode(Volume,PTEntTreeNode(Node.pplusnode)^,Objects);
        end;
 
        pobj:=Node.nul.beginiterate(ir);
@@ -307,81 +307,6 @@ begin
                           end;
      //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('GDBObjGenericSubEntry.CalcVisibleByTree----{end}',lp_decPos);{$ENDIF}
 end;
-(*procedure GDBObjGenericSubEntry.ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInRect);
-var
-     ImInFrustum:TInRect;
-     pobj:PGDBObjEntity;
-     ir:itrec;
-     v1,v2:gdbvertex;
-begin
-     //enttree.FulDraw:=random(100)<80;
-     gdb.GetCurrentDWG^.myGluProject2(enttree.BoundingBox.LBN,v1);
-     gdb.GetCurrentDWG^.myGluProject2(enttree.BoundingBox.RTF,v2);
-     if abs((v2.x-v1.x)*(v2.y-v1.y))<10 then
-                                             enttree.FulDraw:=false
-                                         else
-                                             enttree.FulDraw:=true;
-     case OwnerInFrustum of
-     IREmpty:begin
-                   OwnerInFrustum:=OwnerInFrustum;
-             end;
-     IRFully:begin
-                   enttree.infrustum:=infrustumactualy;
-                   pobj:=enttree.nul.beginiterate(ir);
-                   if pobj<>nil then
-                   repeat
-                         pobj^.SetInFrustumFromTree(infrustumactualy,visibleactualy);
-                         //pobj^.infrustum:=infrustumactualy;
-                         pobj:=enttree.nul.iterate(ir);
-                   until pobj=nil;
-                   if assigned(enttree.pminusnode) then
-                                                       ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pminusnode^,IRFully);
-                   if assigned(enttree.pplusnode) then
-                                                       ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pplusnode^,IRFully);
-             end;
- IRPartially:begin
-                  ImInFrustum:=CalcAABBInFrustum(enttree.BoundingBox,frustum);
-                  case ImInFrustum of
-                       IREmpty:begin
-                                     OwnerInFrustum:=OwnerInFrustum;
-                               end;
-                       IRFully{,IRPartially}:begin
-                                     enttree.infrustum:=infrustumactualy;
-                                     pobj:=enttree.nul.beginiterate(ir);
-                                     if pobj<>nil then
-                                     repeat
-                                           pobj^.SetInFrustumFromTree(infrustumactualy,visibleactualy);
-                                           //pobj^.infrustum:=infrustumactualy;
-                                           pobj:=enttree.nul.iterate(ir);
-                                     until pobj=nil;
-                                     if assigned(enttree.pminusnode) then
-                                                                         ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pminusnode^,ImInFrustum);
-                                     if assigned(enttree.pplusnode) then
-                                                                         ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pplusnode^,ImInFrustum);
-
-                              end;
-                  IRPartially:begin
-                                     enttree.infrustum:=infrustumactualy;
-                                     pobj:=enttree.nul.beginiterate(ir);
-                                     if pobj<>nil then
-                                     repeat
-                                           if pobj^.CalcInFrustum(frustum,infrustumactualy,visibleactualy) then
-                                           begin
-                                                pobj^.SetInFrustumFromTree(infrustumactualy,visibleactualy);
-                                           end;
-                                           pobj:=enttree.nul.iterate(ir);
-                                     until pobj=nil;
-                                     if assigned(enttree.pminusnode) then
-                                                                         ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pminusnode^,IRPartially);
-                                     if assigned(enttree.pplusnode) then
-                                                                         ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pplusnode^,IRPartially);
-
-                              end;
-                  end;
-
-             end;
-     end;
-end;*)
 function GDBObjGenericSubEntry.CreatePreCalcData:PTDrawingPreCalcData;
 begin
      GDBGetMem({$IFDEF DEBUGBUILD}'{1F00FCF0-E9C6-4A6B-8B98-FFCC5D163190}',{$ENDIF}GDBPointer(result),sizeof(TDrawingPreCalcData));

@@ -35,13 +35,13 @@ GDBObjWithMatrix={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)
                        procedure transform(const t_matrix:DMatrix4D);virtual;
                        procedure ReCalcFromObjMatrix;virtual;abstract;
                        procedure CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
-                       procedure ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInBoundingVolume;OwnerFuldraw:GDBBoolean;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
+                       procedure ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInBoundingVolume;OwnerFuldraw:TDrawType;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;
                  end;
 {EXPORT-}
 implementation
 //uses
 //    log{,zcadsysvars};
-procedure GDBObjWithMatrix.ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInBoundingVolume;OwnerFuldraw:GDBBoolean;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);
+procedure GDBObjWithMatrix.ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInBoundingVolume;OwnerFuldraw:TDrawType;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);
 var
      ImInFrustum:TInBoundingVolume;
      pobj:PGDBObjEntity;
@@ -50,8 +50,7 @@ var
      tx:double;
      //bb:GDBBoundingBbox;
 begin
-     //enttree.FulDraw:=true;
-     if OwnerFuldraw then
+     if OwnerFuldraw=TDTFulDraw then
      begin
      {вариант с точным расчетом - медленный((
      gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.LBN.y,enttree.BoundingBox.LBN.Z),v1);
@@ -93,18 +92,18 @@ begin
      v1:=uzegeometry.VertexSub(enttree.BoundingBox.RTF,enttree.BoundingBox.LBN);
      tx:=uzegeometry.oneVertexlength(v1);
      if tx/zoom<currentdegradationfactor then
-                                                                                        enttree.FulDraw:=false
+                                                                                        enttree.NodeData.FulDraw:=TDTSimpleDraw
                                                                                     else
-                                                                                        enttree.FulDraw:=true;
+                                                                                        enttree.NodeData.FulDraw:=TDTFulDraw;
      end
      else
-         enttree.FulDraw:=false;
+         enttree.NodeData.FulDraw:=TDTSimpleDraw;
      case OwnerInFrustum of
      IREmpty:begin
                    OwnerInFrustum:=OwnerInFrustum;
              end;
      IRFully:begin
-                   enttree.infrustum:=infrustumactualy;
+                   enttree.NodeData.infrustum:=infrustumactualy;
                    pobj:=enttree.nul.beginiterate(ir);
                    if pobj<>nil then
                    repeat
@@ -113,9 +112,9 @@ begin
                          pobj:=enttree.nul.iterate(ir);
                    until pobj=nil;
                    if assigned(enttree.pminusnode) then
-                                                       ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pminusnode^,IRFully,enttree.FulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
+                                                       ProcessTree(frustum,infrustumactualy,visibleactualy,PTEntTreeNode(enttree.pminusnode)^,IRFully,enttree.NodeData.FulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
                    if assigned(enttree.pplusnode) then
-                                                       ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pplusnode^,IRFully,enttree.FulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
+                                                       ProcessTree(frustum,infrustumactualy,visibleactualy,PTEntTreeNode(enttree.pplusnode)^,IRFully,enttree.NodeData.FulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
              end;
  IRPartially:begin
                   ImInFrustum:=CalcAABBInFrustum(enttree.BoundingBox,frustum);
@@ -124,7 +123,7 @@ begin
                                      OwnerInFrustum:=OwnerInFrustum;
                                end;
                        IRFully{,IRPartially}:begin
-                                     enttree.infrustum:=infrustumactualy;
+                                     enttree.NodeData.infrustum:=infrustumactualy;
                                      pobj:=enttree.nul.beginiterate(ir);
                                      if pobj<>nil then
                                      repeat
@@ -133,13 +132,13 @@ begin
                                            pobj:=enttree.nul.iterate(ir);
                                      until pobj=nil;
                                      if assigned(enttree.pminusnode) then
-                                                                         ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pminusnode^,ImInFrustum,enttree.FulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
+                                                                         ProcessTree(frustum,infrustumactualy,visibleactualy,PTEntTreeNode(enttree.pminusnode)^,ImInFrustum,enttree.NodeData.FulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
                                      if assigned(enttree.pplusnode) then
-                                                                         ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pplusnode^,ImInFrustum,enttree.FulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
+                                                                         ProcessTree(frustum,infrustumactualy,visibleactualy,PTEntTreeNode(enttree.pplusnode)^,ImInFrustum,enttree.NodeData.FulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
 
                               end;
                   IRPartially:begin
-                                     enttree.infrustum:=infrustumactualy;
+                                     enttree.NodeData.infrustum:=infrustumactualy;
                                      pobj:=enttree.nul.beginiterate(ir);
                                      if pobj<>nil then
                                      repeat
@@ -150,9 +149,9 @@ begin
                                            pobj:=enttree.nul.iterate(ir);
                                      until pobj=nil;
                                      if assigned(enttree.pminusnode) then
-                                                                         ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pminusnode^,IRPartially,enttree.FulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
+                                                                         ProcessTree(frustum,infrustumactualy,visibleactualy,PTEntTreeNode(enttree.pminusnode)^,IRPartially,enttree.NodeData.FulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
                                      if assigned(enttree.pplusnode) then
-                                                                         ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pplusnode^,IRPartially,enttree.FulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
+                                                                         ProcessTree(frustum,infrustumactualy,visibleactualy,PTEntTreeNode(enttree.pplusnode)^,IRPartially,enttree.NodeData.FulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
 
                               end;
                   end;
@@ -163,7 +162,7 @@ end;
 
 procedure GDBObjWithMatrix.CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);
 begin
-     ProcessTree(frustum,infrustumactualy,visibleactualy,enttree,IRPartially,true,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor)
+     ProcessTree(frustum,infrustumactualy,visibleactualy,enttree,IRPartially,TDTFulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor)
 end;
 
 procedure GDBObjWithMatrix.transform(const t_matrix:DMatrix4D);

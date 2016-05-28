@@ -611,31 +611,31 @@ begin //currd:=gdb.GetCurrentDWG;
      q1:=false;
      q2:=false;
 
-  if Node.infrustum={gdb.GetCurrentDWG}PDWG.Getpcamera.POSCOUNT then
+  if Node.NodeData.infrustum={gdb.GetCurrentDWG}PDWG.Getpcamera.POSCOUNT then
   begin
-       if (Node.FulDraw)or(Node.nul.count=0) then
+       if (Node.NodeData.FulDraw=TDTFulDraw)or(Node.nul.count=0) then
        begin
        if assigned(node.pminusnode)then
-                                       if node.minusdrawpos<>PDWG.Getpcamera.DRAWCOUNT then
+                                       if node.NodeData.minusdrawpos<>PDWG.Getpcamera.DRAWCOUNT then
                                        begin
-                                       if not treerender(node.pminusnode^,StartTime,dc) then
-                                           node.minusdrawpos:=PDWG.Getpcamera.DRAWCOUNT
+                                       if not treerender(PTEntTreeNode(node.pminusnode)^,StartTime,dc) then
+                                           node.NodeData.minusdrawpos:=PDWG.Getpcamera.DRAWCOUNT
                                                                                      else
                                                                                          q1:=true;
                                        end;
        if assigned(node.pplusnode)then
-                                      if node.plusdrawpos<>PDWG.Getpcamera.DRAWCOUNT then
+                                      if node.NodeData.plusdrawpos<>PDWG.Getpcamera.DRAWCOUNT then
                                       begin
-                                       if not treerender(node.pplusnode^,StartTime,dc) then
-                                           node.plusdrawpos:=PDWG.Getpcamera.DRAWCOUNT
+                                       if not treerender(PTEntTreeNode(node.pplusnode)^,StartTime,dc) then
+                                           node.NodeData.plusdrawpos:=PDWG.Getpcamera.DRAWCOUNT
                                                                                     else
                                                                                         q2:=true;
                                       end;
        end;
-       if node.nuldrawpos<>PDWG.Getpcamera.DRAWCOUNT then
+       if node.NodeData.nuldrawpos<>PDWG.Getpcamera.DRAWCOUNT then
        begin
         Node.nul.DrawWithattrib(dc{gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender});
-        node.nuldrawpos:=PDWG.Getpcamera.DRAWCOUNT;
+        node.NodeData.nuldrawpos:=PDWG.Getpcamera.DRAWCOUNT;
        end;
   end;
   result:=(q1) or (q2);
@@ -763,7 +763,7 @@ begin
     if (sysvarDISPSystmGeometryDraw) then
                                                begin
                                                dc.drawer.setcolor(palette[dc.SystmGeometryColor+2].RGB);
-                                               PDWG.GetCurrentROOT^.ObjArray.ObjTree.draw(dc);
+                                               PDWG.GetCurrentROOT^.ObjArray.ObjTree.DrawVolume(dc);
                                                end;
     begin
     dc.drawer.startrender(TRM_ModelSpace,dc.DrawingContext.matrixs);
@@ -1975,9 +1975,9 @@ begin
      begin
           findonmobj(@node.nul, i,InSubEntry);
           if assigned(node.pminusnode) then
-                                           processmousenode(node.pminusnode^,i,InSubEntry);
+                                           processmousenode(PTEntTreeNode(node.pminusnode)^,i,InSubEntry);
           if assigned(node.pplusnode) then
-                                           processmousenode(node.pplusnode^,i,InSubEntry);
+                                           processmousenode(PTEntTreeNode(node.pplusnode)^,i,InSubEntry);
      end;
 end;
 

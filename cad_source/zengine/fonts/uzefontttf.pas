@@ -348,7 +348,7 @@ begin
   cends:=0;
   lastoncurve:=0;
   startcountur:=true;
-  for j:=0 to _glyph^.outline.n_points do
+  for j:=0 to _glyph^.outline.n_points-3 do
   begin
        if  startcountur then
                             bs.StartCountur;
@@ -402,6 +402,8 @@ begin
          inc(psyminfo.size);}
          if cends=_glyph^.outline.n_contours then
                                                  break;
+         {if (_glyph^.outline.n_points-j)<5 then
+                                                 break;}
     end;
   end;
   end;
@@ -418,23 +420,29 @@ begin
   GLUIntrf.TessBeginPolygon(tesselator,nil);
   for i:=0 to bs.Conturs.VArray.Size-1 do
   begin
+       if VerboseLog then
+          DebugLn('{T+}Contur=%d',[i]);
        GLUIntrf.TessBeginContour(tesselator);
        for j:=0 to bs.Conturs.VArray[i].Size-1 do
        begin
+            if VerboseLog then
+               DebugLn('x=%f;y=%f',[(bs.Conturs.VArray[i][j].v.x),(bs.Conturs.VArray[i][j].v.y)]);
             tv.x:=bs.Conturs.VArray[i][j].v.x;
             tv.y:=bs.Conturs.VArray[i][j].v.y;
             tv.z:=0;
             GLUIntrf.TessVertex(tesselator,@tv,pointer(bs.Conturs.VArray[i][j].index));
             //VectorData.GeomData.Add2DPoint(Conturs.VArray[i][j].x,Conturs.VArray[i][j].y);
        end;
-       GLUIntrf.TessEndContour(tesselator)
+       GLUIntrf.TessEndContour(tesselator);
+       if VerboseLog then
+          DebugLn('{T-}End contur');
   end;
   GLUIntrf.TessEndPolygon(tesselator);
 
 
   //gluTessNormal( tesselator, 0.0, 0.0, -1.0);
 
-  GLUIntrf.TessEndPolygon(tesselator);
+  //GLUIntrf.TessEndPolygon(tesselator);
   //si.TrianglesDataInfo.TrianglesSize:=pttf^.TriangleData.count-si.TrianglesDataInfo.TrianglesSize;
   GLUIntrf.DeleteTess(tesselator);
   //si.PSymbolInfo.LLPrimitiveCount:=pttf^.FontData.LLprimitives.Count-si.PSymbolInfo.LLPrimitiveStartIndex;

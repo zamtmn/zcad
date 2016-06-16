@@ -27,23 +27,28 @@ const
 type
 {EXPORT+}
 TDrawType=(TDTFulDraw,TDTSimpleDraw);
+TZEntsManipulator=class
+                   class procedure DrawNodeVolume(const BoundingBox:TBoundingBox;var DC:TDrawContext);
+                  end;
+
 TEntTreeNodeData=record
                      infrustum:TActulity;
                      nuldrawpos,minusdrawpos,plusdrawpos:TActulity;
-                     FulDraw:{GDBBoolean}TDrawType;
+                     FulDraw:TDrawType;
                      nodedepth:GDBInteger;
                      pluscount,minuscount:GDBInteger;
                  end;
          PTEntTreeNode=^TEntTreeNode;
-         TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData>{//})
-                            procedure DrawVolume(var DC:TDrawContext);
+         TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator>{//})
                             procedure updateenttreeadress;
                             procedure addtonul(p:PGDBObjEntity);
                             procedure AddObjectToNodeTree(pobj:PGDBObjEntity);
                             procedure CorrectNodeTreeBB(pobj:PGDBObjEntity);
+                            procedure treerender(var DC:TDrawContext);
+                            procedure MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox);
                       end;
 {EXPORT-}
-TTestTreeNode=Object(GDBaseObject)
+ TTestTreeNode=Object(GDBaseObject)
                     plane:DVector4D;
                     nul,plus,minus:GDBObjEntityOpenArray;
                     constructor initnul(InNodeCount:integer);
@@ -53,45 +58,48 @@ TTestTreeArray=array [0..2] of TTestTreeNode;
 var
    SysVarRDSpatialNodeCount:integer=500;
    SysVarRDSpatialNodesDepth:integer=16;
-function createtree(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
+function createtree(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;
+                    PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;
+                    dir:TNodeDir):PTEntTreeNode;
 function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
-procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext{subrender:GDBInteger});
+//procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext);
 implementation
-procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext{subrender:GDBInteger});
-//var
-   //currtime:TDateTime;
-   //Hour,Minute,Second,MilliSecond:word;
-   //q1,q2:gdbboolean; {currd:PTSimpleDrawing;}
+class procedure TZEntsManipulator.DrawNodeVolume(const BoundingBox:TBoundingBox;var DC:TDrawContext);
 begin
-  //currd:=gdb.GetCurrentDWG;
-  if (Node.NodeData.infrustum={currd.pcamera.POSCOUNT}dc.DrawingContext.InfrustumActualy) then
+  dc.drawer.DrawAABB3DInModelSpace(BoundingBox,dc.DrawingContext.matrixs);
+end;
+
+procedure TEntTreeNode.MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox);
+begin
+     createtree(entitys,AABB,@self,IninialNodeDepth,nil,TND_Root);
+end;
+
+procedure TEntTreeNode.treerender(var DC:TDrawContext);
+begin
+  if (NodeData.infrustum=dc.DrawingContext.InfrustumActualy) then
   begin
-       if node.NodeData.FulDraw=TDTFulDraw then
-       if (Node.NodeData.FulDraw=TDTFulDraw)or(Node.nul.count=0) then
+       if NodeData.FulDraw=TDTFulDraw then
+       if (NodeData.FulDraw=TDTFulDraw)or(nul.count=0) then
        begin
-       if assigned(node.pminusnode)then
-                                       if (node.NodeData.minusdrawpos<>{currd.pcamera}dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then
+       if assigned(pminusnode)then
+                                       if (NodeData.minusdrawpos<>dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then
                                        begin
-                                            treerender(PTEntTreeNode(node.pminusnode)^,dc);
-                                            node.NodeData.minusdrawpos:={currd.pcamera}dc.DrawingContext.DRAWCOUNT
+                                            PTEntTreeNode(pminusnode)^.treerender(dc);
+                                            NodeData.minusdrawpos:=dc.DrawingContext.DRAWCOUNT
                                        end;
-       if assigned(node.pplusnode)then
-                                      if (node.NodeData.plusdrawpos<>{currd.pcamera}dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then
+       if assigned(pplusnode)then
+                                      if (NodeData.plusdrawpos<>dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then
                                       begin
-                                       treerender(PTEntTreeNode(node.pplusnode)^,dc);
-                                           node.NodeData.plusdrawpos:={currd.pcamera}dc.DrawingContext.DRAWCOUNT
+                                           PTEntTreeNode(pplusnode)^.treerender(dc);
+                                           NodeData.plusdrawpos:=dc.DrawingContext.DRAWCOUNT
                                       end;
        end;
-       //if (node.FulDraw) then
        begin
-            if (node.NodeData.FulDraw=TDTFulDraw)or(dc.MaxDetail) then
-        Node.nul.DrawWithattrib(dc{gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender});
-        node.NodeData.nuldrawpos:={currd.pcamera}dc.DrawingContext.DRAWCOUNT;
+            if (NodeData.FulDraw=TDTFulDraw)or(dc.MaxDetail) then
+                                                                 nul.DrawWithattrib(dc);
+            NodeData.nuldrawpos:=dc.DrawingContext.DRAWCOUNT;
        end;
   end;
-  //Node.drawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT;
-
-  //root.DrawWithattrib(gdb.GetCurrentDWG.pcamera.POSCOUNT);
 end;
 procedure TEntTreeNode.CorrectNodeTreeBB(pobj:PGDBObjEntity);
 begin
@@ -101,17 +109,7 @@ procedure TEntTreeNode.AddObjectToNodeTree(pobj:PGDBObjEntity);
 begin
     addtonul(pobj);
     CorrectNodeTreeBB(pobj);
-    //ConcatBB(ObjTree.BoundingBox,pobj^.vp.BoundingBox);
 end;
-procedure TEntTreeNode.DrawVolume;
-begin
-     if assigned(pplusnode) then
-                       PTEntTreeNode(pplusnode)^.DrawVolume(dc);
-     if assigned(pminusnode) then
-                       PTEntTreeNode(pminusnode)^.DrawVolume(dc);
-     dc.drawer.DrawAABB3DInModelSpace(BoundingBox,dc.DrawingContext.matrixs);
-end;
-
 procedure TEntTreeNode.addtonul(p:PGDBObjEntity);
 begin
      p^.bp.TreePos.Owner:=@self;
@@ -140,7 +138,6 @@ destructor TTestTreeNode.done;
 begin
      nul.Clear;
      nul.Done;
-     //nul.done;
      plus.Clear;
      plus.Done;
      minus.Clear;

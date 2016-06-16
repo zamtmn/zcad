@@ -25,12 +25,11 @@ uses
 const
      IninialNodeDepth=-1;
 type
-{EXPORT+}
-TDrawType=(TDTFulDraw,TDTSimpleDraw);
 TZEntsManipulator=class
                    class procedure DrawNodeVolume(const BoundingBox:TBoundingBox;var DC:TDrawContext);
                   end;
-
+{EXPORT+}
+TDrawType=(TDTFulDraw,TDTSimpleDraw);
 TEntTreeNodeData=record
                      infrustum:TActulity;
                      nuldrawpos,minusdrawpos,plusdrawpos:TActulity;

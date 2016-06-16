@@ -191,6 +191,8 @@ type
              DISP_UnSelectedGripColor:PTGDBPaletteColor;(*'Unselected grip color'*)
              DISP_SelectedGripColor:PTGDBPaletteColor;(*'Selected grip color'*)
              DISP_HotGripColor:PTGDBPaletteColor;(*'Hot grip color'*)
+             DISP_LWDisplayScale:PGDBInteger;(*'LWDisplayScale'*)
+             DISP_DefaultLW:PTGDBLineWeight;(*'DefaultLW'*)
         end;
   pgdbsysvariable=^gdbsysvariable;
   gdbsysvariable=packed record

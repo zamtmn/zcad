@@ -466,7 +466,8 @@ begin
      _StartLongProcess(0,'Rebuild spatial tree');
      dc:=GetCurrentDrawing^.CreateDrawingRC;
      GetCurrentDrawing^.pObjRoot^.calcbb(dc);
-     GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree:=createtree(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox,@GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
+     GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree.maketreefrom(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox);
+     //GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree:=createtree(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox,@GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
      _EndLongProcess;
      GetCurrentDrawing^.HardReDraw;
 end;
@@ -551,7 +552,8 @@ begin
           dc:=GetCurrentDrawing^.CreateDrawingRC;
           addfromdxf(OpenDialog1.FileName,@GetCurrentDrawing^.pObjRoot^,TLOLoad,GetCurrentDrawing^);
           GetCurrentDrawing^.pObjRoot^.FormatEntity(GetCurrentDrawing^,dc);
-          GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree:=createtree(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox,@GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
+          GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree.maketreefrom(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox);
+          //GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree:=createtree(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox,@GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
           GetCurrentDrawing^.HardReDraw;
           _EndLongProcess;
      end;

@@ -440,33 +440,48 @@ begin
 end;
 function GDBObjEntity.CalculateLineWeight;
 var lw: GDBInteger;
+    minlw: GDBInteger;
 begin
-     if not dc.drawmode then
-                                         begin
-                                              lw := 1;
-                                              exit;
-                                         end;
+  if not dc.drawmode then
+                       begin
+                            lw := 1;
+                            exit;
+                       end;
+
+  if dc.LWDisplayScale>14 then
+                           minlw:=2
+                       else
+                           minlw:=1;
+
   if vp.lineweight < 0 then
   begin
     case vp.lineweight of
-      -3: lw := 1;
-      -2: lw := {PGDBObjEntity(bp.ListPos.owner)^.GetLineWeight}dc.OwnerLineWeight;
+      -3: lw := dc.DefaultLW;
+      -2: lw := dc.OwnerLineWeight;
       -1: lw := vp.layer^.lineweight;
     end
   end
   else lw := vp.lineweight;
-  if lw <= 0 then lw := 1;
-  if lw > 19 then begin
-    lw := lw div 10;
+
+  case lw of
+      -3: lw := dc.DefaultLW;
+      -2: lw := dc.OwnerLineWeight;
+      -1: lw := vp.layer^.lineweight;
+  end;
+
+  if lw <= 0 then lw := minlw;
+  if lw > {19old behavior}25+(20-dc.LWDisplayScale)*2 then begin
+    lw := (lw div ({10}(31-dc.LWDisplayScale+9)))+1;
     if lw>dc.MaxWidth then lw:=dc.MaxWidth;
     result := lw;
-    dc.drawer.setlinewidth(lw);
+    //dc.drawer.setlinewidth(lw);
   end
   else
   begin
-    result := 1;
-    dc.drawer.setlinewidth(1);
+    result := minlw;
+    //dc.drawer.setlinewidth(1);
   end;
+  dc.drawer.setlinewidth(result);
 end;
 constructor GDBObjEntity.init;
 begin

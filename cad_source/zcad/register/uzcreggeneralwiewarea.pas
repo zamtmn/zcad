@@ -76,6 +76,10 @@ sysvar.DISP.DISP_UnSelectedGripColor:=@sysvarDISPUnSelGripColor;
 sysvar.DISP.DISP_GripSize:=@sysvarDISPGripSize;
 sysvar.DISP.DISP_ColorAxis:=@sysvarDISPColorAxis;
 sysvar.DISP.DISP_DrawZAxis:=@sysvarDISPDrawZAxis;
+
+sysvar.DISP.DISP_LWDisplayScale:=@sysvarDISPLWDisplayScale;
+sysvar.DISP.DISP_DefaultLW:=@sysvarDISPDefaultLW;
+
 sysvar.RD.RD_DrawInsidePaintMessage:=@sysvarDrawInsidePaintMessage;
 
 sysvar.DWG.DWG_OSMode:=@sysvarDWGOSMode;

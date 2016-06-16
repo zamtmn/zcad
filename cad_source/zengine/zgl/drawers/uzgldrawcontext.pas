@@ -38,6 +38,8 @@ TDrawContext=packed record
                    Selected:GDBBoolean;
                    MaxDetail:GDBBoolean;
                    DrawMode:GDBBoolean;
+                   LWDisplayScale:GDBInteger{=2};
+                   DefaultLW:GDBInteger{=25};
                    OwnerLineWeight:GDBSmallInt;
                    OwnerColor:GDBInteger;
                    MaxWidth:GDBInteger;
@@ -58,6 +60,8 @@ begin
       result.DrawingContext.SysLayer:=nil;
       result.MaxDetail:=true;
       result.DrawMode:=true;
+      result.LWDisplayScale:=2;
+      result.DefaultLW:=25;
       result.OwnerLineWeight:=-3;
       result.OwnerColor:=ClWhite;
       result.MaxWidth:=20;

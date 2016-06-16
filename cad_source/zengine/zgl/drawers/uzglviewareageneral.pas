@@ -181,6 +181,10 @@ var
 
    OnActivateProc:TOnActivateProc=nil;
    ForeGround:TRGB;
+
+   sysvarDISPLWDisplayScale:GDBInteger=10;
+   sysvarDISPDefaultLW:TGDBLineWeight=LnWt025;
+
 implementation
 procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
 begin
@@ -1886,6 +1890,9 @@ function TGeneralViewArea.CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;
 begin
   if PDWG<>nil then
                    PDWG^.FillDrawingPartRC(result);
+
+  result.LWDisplayScale:=sysvarDISPLWDisplayScale;
+  result.DefaultLW:=sysvarDISPDefaultLW;
 
   result.Subrender:=0;
   result.Selected:=false;

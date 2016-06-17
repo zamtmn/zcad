@@ -1891,6 +1891,8 @@ begin
   if PDWG<>nil then
                    PDWG^.FillDrawingPartRC(result);
 
+  if sysvarDISPLWDisplayScale<2 then sysvarDISPLWDisplayScale:=2;
+  if sysvarDISPLWDisplayScale>20 then sysvarDISPLWDisplayScale:=20;
   result.LWDisplayScale:=sysvarDISPLWDisplayScale;
   result.DefaultLW:=sysvarDISPDefaultLW;
 

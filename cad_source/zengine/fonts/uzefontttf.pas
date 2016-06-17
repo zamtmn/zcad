@@ -388,24 +388,24 @@ begin
          PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
          inc(psyminfo.size);}
     end;
-  if j=_glyph^.outline.conEnds[cends] then
-    begin
-         EndSymContour;
-         inc(cends);
-         startcountur:=true;
-         lastoncurve:=j+1;
-         {PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);
-         PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
-         PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
-         PSHXFont(pf^.font).SHXdata.AddFontFloat(@scx);
-         PSHXFont(pf^.font).SHXdata.AddFontFloat(@scy);
-         inc(psyminfo.size);}
-         if cends=_glyph^.outline.n_contours then
-                                                 break;
-         {if (_glyph^.outline.n_points-j)<5 then
-                                                 break;}
-    end;
   end;
+    if j=_glyph^.outline.conEnds[cends] then
+      begin
+           EndSymContour;
+           inc(cends);
+           startcountur:=true;
+           lastoncurve:=j+1;
+           {PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);
+           PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
+           PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
+           PSHXFont(pf^.font).SHXdata.AddFontFloat(@scx);
+           PSHXFont(pf^.font).SHXdata.AddFontFloat(@scy);
+           inc(psyminfo.size);}
+           if cends=_glyph^.outline.n_contours then
+                                                   break;
+           if (_glyph^.outline.n_points-j)<5 then
+                                                   break;
+      end;
   end;
   bs.DrawCountur;
 

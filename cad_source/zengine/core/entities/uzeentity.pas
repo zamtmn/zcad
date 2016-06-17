@@ -470,16 +470,14 @@ begin
   end;
 
   if lw <= 0 then lw := minlw;
-  if lw > {19old behavior}25+(20-dc.LWDisplayScale)*2 then begin
-    lw := (lw div ({10}(31-dc.LWDisplayScale+9)))+1;
+  if lw > 65-2*dc.LWDisplayScale then begin
+    lw := (lw div (35-dc.LWDisplayScale))+1;
     if lw>dc.MaxWidth then lw:=dc.MaxWidth;
     result := lw;
-    //dc.drawer.setlinewidth(lw);
   end
   else
   begin
     result := minlw;
-    //dc.drawer.setlinewidth(1);
   end;
   dc.drawer.setlinewidth(result);
 end;

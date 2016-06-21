@@ -175,10 +175,19 @@ type
                          destructor Destroy;virtual;
       end;
 
+      //** Создания списка  вершин для построение прямоугольника
+      //PTListVertexPoint=^TListVertexPoint;
+      //TListVertexPoint=record
+      //                   p:GDBVertex;
+      //                   color:integer;
+      //end;
+      GListVertexPoint=specialize TVector<GDBVertex>;
 
-      function graphBulderFunc():TGraphBuilder;
+
+      function graphBulderFunc(Epsilon:double):TGraphBuilder;
       function testTempDrawLine(p1:GDBVertex;p2:GDBVertex):TCommandResult;
       function testTempDrawCircle(p1:GDBVertex;rr:GDBDouble):TCommandResult;
+      function testTempDrawPolyLine(listVertex:GListVertexPoint;color:Integer):TCommandResult;
 implementation
 
 constructor TGraphBuilder.Create;
@@ -347,6 +356,29 @@ begin
       zcAddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
     end;
     result:=cmd_ok;
+end;
+//рисуем прямоугольник с цветом
+function testTempDrawPolyLine(listVertex:GListVertexPoint;color:Integer):TCommandResult;
+var
+    polyObj:PGDBObjPolyLine;
+    i:integer;
+    //vertexObj:GDBvertex;
+   // pe:T3PointCircleModePentity;
+   // p1,p2:gdbvertex;
+begin
+     polyObj:=GDBObjPolyline.CreateInstance;
+     zcSetEntPropFromCurrentDrawingProp(polyObj);
+     polyObj^.Closed:=false;
+     polyObj^.vp.Color:=color;
+     polyObj^.vp.LineWeight:=LnWt050;
+
+     for i:=0 to listVertex.Size-1 do
+     begin
+//         listVertex.Mutable[i].:=0;
+         polyObj^.VertexArrayInOCS.PushBackData(listVertex[i]);
+     end;
+     zcAddEntToCurrentDrawingWithUndo(polyObj);
+     result:=cmd_ok;
 end;
 function testTempDrawCircle(p1:GDBVertex;rr:GDBDouble):TCommandResult;
 var
@@ -690,9 +722,9 @@ begin
 end;
 
 //** Базовая функция запуска алгоритма анализа кабеля на плане, подключенных устройств, их нумерация и.т.д
-function graphBulderFunc():TGraphBuilder;
-const
-     Epsilon=0.05;   //ПОГРЕШНОСТЬ при черчении
+function graphBulderFunc(Epsilon:double):TGraphBuilder;
+//const
+//     Epsilon=0.5;   //ПОГРЕШНОСТЬ при черчении
 var
     //список всех кабелей на чертеже в произвольном порядке
     listCable:TListCableLine;   //список реальных и виртуальных линий

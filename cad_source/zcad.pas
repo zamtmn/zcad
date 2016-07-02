@@ -112,7 +112,7 @@ uses
   //uzvnum,
   uzccomexample,
   uzccomobjectinspector,
-  uzccomexperimental,
+  //uzccomexperimental,
   uzccominterface,
 
   uzccomelectrical,

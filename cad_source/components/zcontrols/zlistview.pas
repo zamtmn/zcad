@@ -175,7 +175,7 @@ procedure TZListView.ProcessClick(ListItem:TListItem;SubItem:Integer;DblClck:Boo
 var i:integer;
 begin
      BeginUpdate;
-     process(ListItem,SubItem,DoubleClick);
+     process(ListItem,SubItem,{DoubleClick}DblClck);
      for i:=0 to Items.Count-1 do
      begin
           if Items[i].Selected then

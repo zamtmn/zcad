@@ -381,6 +381,8 @@ end;
 //** Анализ полученного списка устройств движение трассы и построение на базе главного графа дерева,
 //которое будет относится только к группе(шлейфу)
 
+{***времено что лучше процедура или функция
+
 function createTreeDeviceinGroup(ourListGroup:THeadGroupInfo;ourGraph:TGraphBuilder):TListVertexSubGraph;
 var
   // tempNumVertex:TInfoTempNumVertex;
@@ -388,13 +390,12 @@ var
    //tempVertexNum:TVertexAfterBefore;
    beforeLength:double;
    IsExchange, haveLimb:boolean;
-   i,j,k,l:integer;
+   i,j,k,l,counterColor:integer;
 begin
     result:=TListVertexSubGraph.Create;
 
     for i:= 0 to ourListGroup.listDevice.Size-1 do begin
        HistoryOutStr('длина группы :' + IntToStr(ourListGroup.listDevice[i].listNumVertexMinWeight.Size));
-      // beforeLength
       for j:= 0 to ourListGroup.listDevice[i].listNumVertexMinWeight.Size-1 do begin
          HistoryOutStr(IntToStr(ourListGroup.listDevice[i].listNumVertexMinWeight[j].num));
       end;
@@ -402,7 +403,7 @@ begin
       //делаем проход по всем вершинам от главного устройства до устр. и заплняем нужной информацией ребра
       //с начала проходка от головного до устр
        for j:= 1 to ourListGroup.listDevice[i].listNumVertexMinWeight.Size-1 do begin
-          HistoryOutStr('1' + IntToStr(result.Size));
+          //HistoryOutStr('1' + IntToStr(result.Size));
           // limbTreeDeviceinGroup:=TInfoVertexSubGraph.Create;
            //beforeLength:=uzegeometry.Vertexlength(ourGraph.listVertex[ourListGroup.listDevice[i].listNumVertexMinWeight[j-1]].centerPoint,ourGraph.listVertex[ourListGroup.listDevice[i].listNumVertexMinWeight[j]].centerPoint);
            //limbTreeDeviceinGroup.beforeLength:=limbTreeDeviceinGroup.beforeLength + beforeLength;
@@ -449,7 +450,7 @@ begin
                        end;
              end;
         end;
-       HistoryOutStr('222' + IntToStr(result.Size));
+      // HistoryOutStr('222' + IntToStr(result.Size));
        // теперь от каждого устр. до головного
        // нужно что бы около головного устройства можно было понять какой из путей самый длинный или какой самый загружанный датчиками
        for j:=ourListGroup.listDevice[i].listNumVertexMinWeight.Size-2 to 0 do begin
@@ -467,8 +468,9 @@ begin
                              end;
                    end;
         end;
+       HistoryOutStr('длина списка' + IntToStr(result.Size));
     end;
-    HistoryOutStr('длина списка' + IntToStr(result.Size));
+
 end;
   // repeat
   //  IsExchange := False;
@@ -482,6 +484,96 @@ end;
   //  end;
   //until not IsExchange;
   //
+  ***}
+ procedure createTreeDeviceinGroup(var ourListGroup:THeadGroupInfo;ourGraph:TGraphBuilder);
+var
+  // tempNumVertex:TInfoTempNumVertex;
+   limbTreeDeviceinGroup:TInfoVertexSubGraph;
+   //tempVertexNum:TVertexAfterBefore;
+   beforeLength:double;
+   IsExchange, haveLimb:boolean;
+   i,j,k,l,counterColor:integer;
+begin
+    //ourListGroup.listVertexWayGroup;
+    for i:= 0 to ourListGroup.listDevice.Size-1 do begin
+       HistoryOutStr('длина группы :' + IntToStr(ourListGroup.listDevice[i].listNumVertexMinWeight.Size));
+      for j:= 0 to ourListGroup.listDevice[i].listNumVertexMinWeight.Size-1 do begin
+         HistoryOutStr(IntToStr(ourListGroup.listDevice[i].listNumVertexMinWeight[j].num));
+      end;
+      // строим только ребра графа, в качестве вершин будут выступать вершины главного графа.
+      //делаем проход по всем вершинам от главного устройства до устр. и заплняем нужной информацией ребра
+      //с начала проходка от головного до устр
+       for j:= 1 to ourListGroup.listDevice[i].listNumVertexMinWeight.Size-1 do begin
+          //HistoryOutStr('1' + IntToStr(result.Size));
+          // limbTreeDeviceinGroup:=TInfoVertexSubGraph.Create;
+           //beforeLength:=uzegeometry.Vertexlength(ourGraph.listVertex[ourListGroup.listDevice[i].listNumVertexMinWeight[j-1]].centerPoint,ourGraph.listVertex[ourListGroup.listDevice[i].listNumVertexMinWeight[j]].centerPoint);
+           //limbTreeDeviceinGroup.beforeLength:=limbTreeDeviceinGroup.beforeLength + beforeLength;
+           if ourListGroup.listVertexWayGroup.IsEmpty then //если список пуст
+               begin
+                  // limbTreeDeviceinGroup
+
+                   limbTreeDeviceinGroup.VIndex1:=ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num;
+                   limbTreeDeviceinGroup.VIndex2:=ourListGroup.listDevice[i].listNumVertexMinWeight[j].num;
+                   limbTreeDeviceinGroup.length:=uzegeometry.Vertexlength(ourGraph.listVertex[ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num].centerPoint,ourGraph.listVertex[ourListGroup.listDevice[i].listNumVertexMinWeight[j].num].centerPoint);
+                   limbTreeDeviceinGroup.beforeLength:=limbTreeDeviceinGroup.length;
+                   limbTreeDeviceinGroup.numBefore:=1;
+                   ourListGroup.listVertexWayGroup.PushBack(limbTreeDeviceinGroup);
+                   //limbTreeDeviceinGroup:=nil;
+               end
+             else
+                 begin
+                    haveLimb:=true;
+                    for k:=0 to ourListGroup.listVertexWayGroup.Size-1 do    //проверяем существует ли уже такое ребро
+                       if (ourListGroup.listVertexWayGroup[k].VIndex1 = ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num) or (ourListGroup.listVertexWayGroup[k].VIndex2 = ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num) then
+                         if (ourListGroup.listVertexWayGroup[k].VIndex1 = ourListGroup.listDevice[i].listNumVertexMinWeight[j].num) or (ourListGroup.listVertexWayGroup[k].VIndex2 = ourListGroup.listDevice[i].listNumVertexMinWeight[j].num) then
+                             begin
+                                  ourListGroup.listVertexWayGroup.Mutable[k]^.numBefore:=ourListGroup.listVertexWayGroup[k].numBefore+1;
+                                  haveLimb:=false;
+                             end;
+                    if haveLimb then        // если такого ребра нет, то добавляем новое
+                       begin
+                           //limbTreeDeviceinGroup:=nil;
+                           limbTreeDeviceinGroup.VIndex1:=ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num;
+                           limbTreeDeviceinGroup.VIndex2:=ourListGroup.listDevice[i].listNumVertexMinWeight[j].num;
+                           limbTreeDeviceinGroup.length:=uzegeometry.Vertexlength(ourGraph.listVertex[ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num].centerPoint,ourGraph.listVertex[ourListGroup.listDevice[i].listNumVertexMinWeight[j].num].centerPoint);
+                           for k:=0 to ourListGroup.listVertexWayGroup.Size-1 do    //проверяем существует ли уже такое ребро
+                             if (ourListGroup.listVertexWayGroup[k].VIndex2 = ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num) then
+                               begin
+                                  limbTreeDeviceinGroup.beforeLength:=ourListGroup.listVertexWayGroup[k].beforeLength+limbTreeDeviceinGroup.length;
+                               end
+                               else
+                               begin
+                                  limbTreeDeviceinGroup.beforeLength:=limbTreeDeviceinGroup.length;
+                               end;
+                           limbTreeDeviceinGroup.numBefore:=1;
+                           ourListGroup.listVertexWayGroup.PushBack(limbTreeDeviceinGroup);
+                           //limbTreeDeviceinGroup:=nil;
+                       end;
+             end;
+        end;
+
+      // HistoryOutStr('222' + IntToStr(result.Size));
+       // теперь от каждого устр. до головного
+       // нужно что бы около головного устройства можно было понять какой из путей самый длинный или какой самый загружанный датчиками
+       for j:=ourListGroup.listDevice[i].listNumVertexMinWeight.Size-2 to 0 do begin
+          for k:=0 to ourListGroup.listVertexWayGroup.Size-1 do
+             if (ourListGroup.listVertexWayGroup[k].VIndex2 = ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num) and (ourListGroup.listVertexWayGroup[k].VIndex1 = ourListGroup.listDevice[i].listNumVertexMinWeight[j].num) then
+                   begin
+                       for l:=0 to ourListGroup.listVertexWayGroup.Size-1 do
+                           if (ourListGroup.listVertexWayGroup[l].VIndex1 = ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num) then
+                             begin
+                                ourListGroup.listVertexWayGroup.Mutable[k]^.afterLength:=ourListGroup.listVertexWayGroup[l].afterLength+ourListGroup.listVertexWayGroup[k].length;
+                             end
+                             else
+                             begin
+                                ourListGroup.listVertexWayGroup.Mutable[k]^.afterLength:=ourListGroup.listVertexWayGroup[k].length;
+                             end;
+                   end;
+        end;
+       HistoryOutStr('длина списка' + IntToStr(ourListGroup.listVertexWayGroup.Size));
+    end;
+
+end;
 
 function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
   var
@@ -663,28 +755,29 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
                   G.EdgePathToVertexPath(G[listHeadDevice[i].num], EdgePath, VertexPath);
                   //HistoryOutStr('333555');
                   //HistoryOutStr(inttostr(VertexPath.Count));
-                  tempListNumVertexMinWeight:=TListNumVertexMinWeight.Create;
-                  tempNumVertexMinWeight.num:=listHeadDevice[i].num;
-                  tempListNumVertexMinWeight.PushBack(tempNumVertexMinWeight);
+                  //tempListNumVertexMinWeight:=TListNumVertexMinWeight.Create;
+                  //tempNumVertexMinWeight.num:=listHeadDevice[i].num;
+                  //tempListNumVertexMinWeight.PushBack(tempNumVertexMinWeight);
                   //listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listDevice.Mutable[k]^.listNumVertexMinWeight.PushBack(listHeadDevice[i].num);
                   //GListVert.PushBack(ourGraph.listVertex[listHeadDevice[i].num].centerPoint);
-                 // HistoryOutStr('4444444');
+                  HistoryOutStr('4444444');
                   for m:=0 to VertexPath.Count - 1 do  begin
                     //listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listDevice.Mutable[k]^.listNumVertexMinWeight.PushBack(TVertex(VertexPath[m]).Index);
                       //GListVert.PushBack(ourGraph.listVertex[TVertex(VertexPath[m]).Index].centerPoint);
                     tempNumVertexMinWeight.num:=TVertex(VertexPath[m]).Index;
-                     tempListNumVertexMinWeight.PushBack(tempNumVertexMinWeight);
+                    listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listDevice.Mutable[k]^.listNumVertexMinWeight.PushBack(tempNumVertexMinWeight);
+                     //tempListNumVertexMinWeight
 
                   end;
-                  tempNumVertexMinWeight.num:=listHeadDevice[i].listGroup[j].listDevice[k].num;
-                  tempListNumVertexMinWeight.PushBack(tempNumVertexMinWeight);
-                 // HistoryOutStr('444555');
-                  listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listDevice.Mutable[k]^.listNumVertexMinWeight:=tempListNumVertexMinWeight;
+                  //tempNumVertexMinWeight.num:=listHeadDevice[i].listGroup[j].listDevice[k].num;
+                  //tempListNumVertexMinWeight.PushBack(tempNumVertexMinWeight);
+                  HistoryOutStr('444555');
+                  //listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listDevice.Mutable[k]^.listNumVertexMinWeight:=tempListNumVertexMinWeight;
                   for m:=0 to listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listDevice.Mutable[k]^.listNumVertexMinWeight.Size - 1 do  begin
                      HistoryOutStr(' device = ' + IntToStr(listHeadDevice[i].listGroup[j].listDevice[k].listNumVertexMinWeight[m].num));
-                     HistoryOutStr(' type = ' + IntToStr(tempListNumVertexMinWeight[m].num));
+                   //  HistoryOutStr(' type = ' + IntToStr(tempListNumVertexMinWeight[m].num));
                   end;
-                  tempListNumVertexMinWeight.Destroy;
+                  //tempListNumVertexMinWeight.Destroy;
                   EdgePath.Free;
                   VertexPath.Free;
 
@@ -694,12 +787,14 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
               // и уже основываясь на том что будет в этом списке можно будет получить все остальные данные
 
               HistoryOutStr('444666');
-              listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listVertexWayGroup:= createTreeDeviceinGroup(listHeadDevice[i].listGroup[j],ourGraph);
-              HistoryOutStr('5555555');
+              createTreeDeviceinGroup(listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^,ourGraph);
+              HistoryOutStr('длина списка графа после создания' + IntToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup.Size));
+             // listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listVertexWayGroup:= createTreeDeviceinGroup(listHeadDevice[i].listGroup[j],ourGraph);
+             // HistoryOutStr('5555555');
             end;
-         HistoryOutStr('66666666');
+         //HistoryOutStr('66666666');
       end;
-       HistoryOutStr('77777777');
+      // HistoryOutStr('77777777');
 
 
 

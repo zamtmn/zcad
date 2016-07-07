@@ -99,7 +99,6 @@ begin
   textprop.size := 1;
   textprop.oblique := 0;
   textprop.wfactor := 1;
-  textprop.angle := 0;
   textprop.justify := jstl;
   //geom.SHX.init({$IFDEF DEBUGBUILD}'{08E35ED5-B4A7-4210-A3C9-0645E8F27ABA}-GDBText.Vertex3D_in_WCS_Array',{$ENDIF}100);
   //Vertex2D_in_DCS_Array.init({$IFDEF DEBUGBUILD}'{116E3B21-8230-44E8-B7A5-9CEED4B886D2}',{$ENDIF}100);
@@ -116,7 +115,6 @@ begin
   textprop.size := s;
   textprop.oblique := o;
   textprop.wfactor := w;
-  textprop.angle := a;
   textprop.justify := j;
   //geom.SHX.init({$IFDEF DEBUGBUILD}'{8776360E-8115-4773-917D-83ED1843FF9C}',{$ENDIF}1000);
   //Vertex2D_in_DCS_Array.init({$IFDEF DEBUGBUILD}'{EDC6D76B-DDFF-41A0-ACCC-48804795A3F5}',{$ENDIF}100);
@@ -616,7 +614,7 @@ begin
     dxfvertexout(outhandle,10,tv);
   end;
   dxfGDBDoubleout(outhandle,40,textprop.size);
-  dxfGDBDoubleout(outhandle,50,textprop.angle*180/pi);
+  dxfGDBDoubleout(outhandle,50,CalcRotate*180/pi);
   dxfGDBDoubleout(outhandle,41,textprop.wfactor);
   dxfGDBDoubleout(outhandle,51,textprop.oblique*180/pi);
   dxfGDBIntegerout(outhandle,72,hv);
@@ -646,6 +644,7 @@ procedure GDBObjText.LoadFromDXF;
 var //s{, layername}: GDBString;
   byt{, code}: GDBInteger;
   doublepoint,angleload: GDBBoolean;
+  angle:double;
   vv, gv, textbackward: GDBInteger;
   style:GDBString;
 begin
@@ -665,11 +664,11 @@ begin
                                                      doublepoint := true
 else if not dxfGDBDoubleload(f,40,byt,textprop.size) then
      if not dxfGDBDoubleload(f,41,byt,textprop.wfactor) then
-     if dxfGDBDoubleload(f,50,byt,textprop.angle) then
-                                                      begin
-                                                      angleload := true;
-                                                      textprop.angle:=textprop.angle*pi/180;
-                                                      end
+     if dxfGDBDoubleload(f,50,byt,angle) then
+                                             begin
+                                               angleload := true;
+                                               angle:=angle*pi/180;
+                                             end
 else if dxfGDBDoubleload(f,51,byt,textprop.oblique) then
                                                         textprop.oblique:=textprop.oblique*pi/180
 else if     dxfGDBStringload(f,7,byt,style)then
@@ -710,7 +709,7 @@ else if not dxfGDBIntegerload(f,72,byt,gv)then
                                                                     Local.basis.ox:=CrossVertex(YWCS,Local.basis.oz)
                                                                 else
                                                                     Local.basis.ox:=CrossVertex(ZWCS,Local.basis.oz);
-  local.basis.OX:=VectorTransform3D(local.basis.OX,CreateAffineRotationMatrix(Local.basis.oz,-textprop.angle));
+  local.basis.OX:=VectorTransform3D(local.basis.OX,CreateAffineRotationMatrix(Local.basis.oz,-angle));
   end;
   {if not angleload then
   begin

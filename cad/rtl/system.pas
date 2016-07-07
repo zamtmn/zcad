@@ -1929,7 +1929,7 @@ GDBTextProp=packed record
                   size:GDBDouble;(*saved_to_shd*)
                   oblique:GDBDouble;(*saved_to_shd*)
                   wfactor:GDBDouble;(*saved_to_shd*)
-                  angle:GDBDouble;(*saved_to_shd*)
+                  aaaangle:GDBDouble;(*saved_to_shd*)
                   justify:TTextJustify;(*saved_to_shd*)
                   upsidedown:GDBBoolean;
                   backward:GDBBoolean;
@@ -1951,6 +1951,7 @@ GDBObjAbstractText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlainWithOX)
                          procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                          procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
                          procedure ReCalcFromObjMatrix;virtual;abstract;
+                         function CalcRotate:GDBDouble;virtual;abstract;
                          procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
                          procedure setrot(r:GDBDouble);
                          procedure transform(const t_matrix:DMatrix4D);virtual;abstract;

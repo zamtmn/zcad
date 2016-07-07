@@ -372,7 +372,7 @@ begin
   ptext.Local.P_insert:=p;
   ptext.linespacef:=1;
   ptext.textprop.justify:=jsmc;
-  ptext.textprop.angle:=TextAngle;
+  { TODO : removeing angle from text ents }//ptext.textprop.angle:=TextAngle;
   ptext.Local.basis.ox.x:=cos(TextAngle);
   ptext.Local.basis.ox.y:=sin(TextAngle);
   ptext.TXTStyleIndex:=dimtxtstyle;

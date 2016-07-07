@@ -30,7 +30,7 @@ GDBTextProp=packed record
                   size:GDBDouble;(*saved_to_shd*)
                   oblique:GDBDouble;(*saved_to_shd*)
                   wfactor:GDBDouble;(*saved_to_shd*)
-                  angle:GDBDouble;(*saved_to_shd*)
+                  aaaangle:GDBDouble;(*saved_to_shd*)
                   justify:TTextJustify;(*saved_to_shd*)
                   upsidedown:GDBBoolean;
                   backward:GDBBoolean;
@@ -52,6 +52,7 @@ GDBObjAbstractText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlainWithOX)
                          procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                          procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                          procedure ReCalcFromObjMatrix;virtual;
+                         function CalcRotate:GDBDouble;virtual;
                          procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
                          procedure setrot(r:GDBDouble);
                          procedure transform(const t_matrix:DMatrix4D);virtual;
@@ -95,6 +96,8 @@ var
    ox:gdbvertex;
    {m,}m2,m3:DMAtrix4D;
 begin
+     { TODO : removeing angle from text ents }
+     (*
      if PField=@textprop.angle then
                                    begin
                                         //m:=self.CalcObjMatrixWithoutOwner;
@@ -116,9 +119,42 @@ begin
                                         textprop.angle:=r;
                                    end;
      inherited;
+     *)
 end;
 
 procedure GDBObjAbstractText.ReCalcFromObjMatrix;
+{var
+    ox:gdbvertex;}
+begin
+     inherited;
+     Local.basis.ox:=PGDBVertex(@objmatrix[0])^;
+     Local.basis.oy:=PGDBVertex(@objmatrix[1])^;
+
+     Local.basis.ox:=normalizevertex(Local.basis.ox);
+     Local.basis.oy:=normalizevertex(Local.basis.oy);
+     Local.basis.oz:=normalizevertex(Local.basis.oz);
+
+     Local.P_insert:=PGDBVertex(@objmatrix[3])^;
+
+     {scale.x:=PGDBVertex(@objmatrix[0])^.x/local.OX.x;
+     scale.y:=PGDBVertex(@objmatrix[1])^.y/local.Oy.y;
+     scale.z:=PGDBVertex(@objmatrix[2])^.z/local.Oz.z;}
+
+     {if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
+                                                                    ox:=CrossVertex(YWCS,Local.basis.oz)
+                                                                else
+                                                                    ox:=CrossVertex(ZWCS,Local.basis.oz);
+     normalizevertex(ox);}
+     { TODO : removeing angle from text ents }
+     (*
+     textprop.angle:=scalardot(Local.basis.ox,ox);
+     textprop.angle:=arccos(textprop.angle);
+     if local.basis.OX.y<-eps then textprop.angle:=2*pi-textprop.angle;
+     *)
+     //Local.basis.ox:=ox;
+end;
+
+function GDBObjAbstractText.CalcRotate:GDBDouble;
 var
     ox:gdbvertex;
 begin
@@ -141,12 +177,10 @@ begin
                                                                 else
                                                                     ox:=CrossVertex(ZWCS,Local.basis.oz);
      normalizevertex(ox);
-     textprop.angle:=scalardot(Local.basis.ox,ox);
-     textprop.angle:=arccos(textprop.angle);
-     if local.basis.OX.y<-eps then textprop.angle:=2*pi-textprop.angle;
-     //Local.basis.ox:=ox;
+     result:=scalardot(Local.basis.ox,ox);
+     result:=arccos(result);
+     if local.basis.OX.y<-eps then result:=2*pi-result;
 end;
-
 procedure GDBObjAbstractText.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 begin
                     case pdesc^.pointtype of

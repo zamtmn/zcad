@@ -109,7 +109,7 @@ begin
                                                                     Local.basis.ox:=CrossVertex(YWCS,Local.basis.oz)
                                                                 else
                                                                     Local.basis.ox:=CrossVertex(ZWCS,Local.basis.oz);
-  local.basis.OX:=VectorTransform3D(local.basis.OX,uzegeometry.CreateAffineRotationMatrix(Local.basis.oz,-textprop.angle));
+  local.basis.OX:=VectorTransform3D(local.basis.OX,uzegeometry.CreateAffineRotationMatrix(Local.basis.oz,{-textprop.angle}{ TODO : removeing angle from text ents }a));
   end;
 
   text.init(10);
@@ -894,6 +894,7 @@ var //s{, layername}: GDBString;
   byt{, code}: GDBInteger;
   ux: gdbvertex;
   angleload: GDBBoolean;
+  angle:double;
   j:GDBInteger;
   style:GDBString;
 begin
@@ -916,7 +917,7 @@ begin
     if not dxfGDBIntegerload(f,71,byt,j)then
     if not dxfGDBStringload(f,1,byt,template)then
     if not dxfGDBStringload(f,3,byt,template)then
-    if dxfGDBDoubleload(f,50,byt,textprop.angle) then angleload := true
+    if dxfGDBDoubleload(f,50,byt,angle) then angleload := true
 
     else if     dxfGDBStringload(f,7,byt,style)then
                                                  begin
@@ -939,7 +940,7 @@ begin
   P_drawInOCS := Local.p_insert;
   linespace := textprop.size * linespacef * 5 / 3;
   if not angleload then
-                       textprop.angle := vertexangle(NulVertex2D,pgdbvertex2d(@ux)^);
+                       angle := vertexangle(NulVertex2D,pgdbvertex2d(@ux)^);
   Local.basis.ox:=ux;
   //ptext := nil;
   //text.init(10);

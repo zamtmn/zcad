@@ -529,7 +529,7 @@ begin
     pobj^.textprop.wfactor:=0.3+random*0.7;
     pobj^.textprop.oblique:=(random(30)-15)*pi/180;
     angl:=pi*random;
-    pobj^.textprop.angle:=angl;
+    //pobj^.textprop.angle:=angl;
     pobj^.local.basis.OX:=VectorTransform3D(PGDBObjText(pobj)^.local.basis.OX,uzegeometry.CreateAffineRotationMatrix(PGDBObjText(pobj)^.Local.basis.oz,-angl));
     GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
     SetEntityLayer(pobj,GetCurrentDrawing);

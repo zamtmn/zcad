@@ -21,14 +21,14 @@ unit gzctnrvector;
 interface
 uses uzbmemman,uzbtypesbase,sysutils,uzbtypes,typinfo;
 const
-  TypesNeedToFinalize=[tkUnknown,tkSString,tkLString,tkAString,
+  TypesNeedToFinalize=[tkUnknown{$IFNDEF DELPHI},tkSString{$ENDIF},tkLString{$IFNDEF DELPHI},tkAString{$ENDIF},
                        tkWString,tkVariant,tkRecord,tkInterface,
-                       tkClass,tkObject,tkDynArray,tkInterfaceRaw,
-                       tkUString,tkUChar,tkHelper,tkFile,tkClassRef];
-  TypesNeedToInicialize=[tkUnknown,tkSString,tkLString,tkAString,
+                       tkClass{$IFNDEF DELPHI},tkObject{$ENDIF},tkDynArray{$IFNDEF DELPHI},tkInterfaceRaw{$ENDIF},
+                       tkUString{$IFNDEF DELPHI},tkUChar{$ENDIF}{$IFNDEF DELPHI},tkHelper{$ENDIF}{$IFNDEF DELPHI},tkFile{$ENDIF},tkClassRef];
+  TypesNeedToInicialize=[tkUnknown{$IFNDEF DELPHI},tkSString{$ENDIF},tkLString{$IFNDEF DELPHI},tkAString{$ENDIF},
                          tkWString,tkVariant,tkRecord,tkInterface,
-                         tkClass,tkObject,tkDynArray,tkInterfaceRaw,
-                         tkUString,tkUChar,tkHelper,tkFile,tkClassRef];
+                         tkClass{$IFNDEF DELPHI},tkObject{$ENDIF},tkDynArray{$IFNDEF DELPHI},tkInterfaceRaw{$ENDIF},
+                         tkUString{$IFNDEF DELPHI},tkUChar{$ENDIF}{$IFNDEF DELPHI},tkHelper{$ENDIF}{$IFNDEF DELPHI},tkFile{$ENDIF},tkClassRef];
 type
 {Export+}
 GZVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}

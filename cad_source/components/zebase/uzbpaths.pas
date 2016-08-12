@@ -19,7 +19,7 @@
 unit uzbpaths;
 {$INCLUDE def.inc}
 interface
-uses uzbtypes,Masks,LCLProc,uzbtypesbase,{fileutil}LazUTF8,sysutils;
+uses uzbtypes,Masks,LCLProc,uzbtypesbase,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils;
 type
   TFromDirIterator=procedure (filename:GDBString);
   TFromDirIteratorObj=procedure (filename:GDBString) of object;
@@ -185,7 +185,7 @@ function IsASCII(const s: string): boolean; inline;
    end;
 begin
      (*РАботало на xp,lin, перестало на 7х64*)
-     fn:={systoutf8}(systoutf8{Tria_AnsiToUtf8}(path)+systoutf8(s));
+     fn:={systoutf8}({$IFNDEF DELPHI}systoutf8{$ENDIF}{Tria_AnsiToUtf8}(path)+{$IFNDEF DELPHI}systoutf8{$ENDIF}(s));
 
      (*попытка закостылить*
      {$IFNDEF DELPHI}if NeedRTLAnsi and (not IsASCII(path)) then{$ENDIF}

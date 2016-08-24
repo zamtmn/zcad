@@ -1,140 +1,120 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
-#: tblockinsertform.checkbox1.caption
-msgid "Расчленить"
+#: tblockinsertform.anglelabel.caption
+msgctxt "TBLOCKINSERTFORM.ANGLELABEL.CAPTION"
+msgid "Angle: "
 msgstr ""
 
-#: tblockinsertform.checkbox2.caption
-msgctxt "TBLOCKINSERTFORM.CHECKBOX2.CAPTION"
-msgid "Указать на экране"
+#: tblockinsertform.angleonscreen.caption
+msgctxt "TBLOCKINSERTFORM.ANGLEONSCREEN.CAPTION"
+msgid "Specify on-screen"
 msgstr ""
 
-#: tblockinsertform.checkbox3.caption
-msgctxt "TBLOCKINSERTFORM.CHECKBOX3.CAPTION"
-msgid "Указать на экране"
+#: tblockinsertform.blockinit.text
+msgid "BlockInit"
 msgstr ""
 
-#: tblockinsertform.checkbox4.caption
-msgctxt "tblockinsertform.checkbox4.caption"
-msgid "Указать на экране"
+#: tblockinsertform.blocknamecombobox.text
+msgid "BlockNameComboBox"
 msgstr ""
 
-#: tblockinsertform.checkbox5.caption
-msgid "Равные масштабы"
+#: tblockinsertform.blocknamelabel.caption
+msgctxt "TBLOCKINSERTFORM.BLOCKNAMELABEL.CAPTION"
+msgid "Name: "
 msgstr ""
 
-#: tblockinsertform.combobox1.text
-msgid "ComboBox1"
+#: tblockinsertform.caption
+msgid "Вставка блока"
 msgstr ""
 
-#: tblockinsertform.edit1.text
-msgctxt "TBLOCKINSERTFORM.EDIT1.TEXT"
-msgid "0"
+#: tblockinsertform.explodecheckbox.caption
+msgctxt "TBLOCKINSERTFORM.EXPLODECHECKBOX.CAPTION"
+msgid "Explode"
 msgstr ""
 
-#: tblockinsertform.edit2.text
-msgctxt "TBLOCKINSERTFORM.EDIT2.TEXT"
-msgid "0"
+#: tblockinsertform.factorlabel.caption
+msgctxt "TBLOCKINSERTFORM.FACTORLABEL.CAPTION"
+msgid "Factor: "
 msgstr ""
 
-#: tblockinsertform.edit3.text
-msgctxt "TBLOCKINSERTFORM.EDIT3.TEXT"
-msgid "0"
+#: tblockinsertform.insertgroupbox.caption
+msgctxt "TBLOCKINSERTFORM.INSERTGROUPBOX.CAPTION"
+msgid "Insertion point"
 msgstr ""
 
-#: tblockinsertform.edit4.text
-msgctxt "TBLOCKINSERTFORM.EDIT4.TEXT"
-msgid "1"
+#: tblockinsertform.insertonscreen.caption
+msgctxt "tblockinsertform.insertonscreen.caption"
+msgid "Specify on-screen"
 msgstr ""
 
-#: tblockinsertform.edit5.text
-msgctxt "tblockinsertform.edit5.text"
-msgid "1"
-msgstr ""
-
-#: tblockinsertform.edit6.text
-msgctxt "TBLOCKINSERTFORM.EDIT6.TEXT"
-msgid "1"
-msgstr ""
-
-#: tblockinsertform.edit7.text
-msgctxt "TBLOCKINSERTFORM.EDIT7.TEXT"
-msgid "0"
-msgstr ""
-
-#: tblockinsertform.edit8.text
-msgid "Без единиц измерения"
-msgstr ""
-
-#: tblockinsertform.edit9.text
-msgid "Edit9"
-msgstr ""
-
-#: tblockinsertform.groupbox1.caption
-msgid "Точка вставки"
-msgstr ""
-
-#: tblockinsertform.groupbox2.caption
-msgid "Масштаб"
-msgstr ""
-
-#: tblockinsertform.groupbox3.caption
-msgid "Угол поворота"
-msgstr ""
-
-#: tblockinsertform.groupbox4.caption
-msgid "Единицы измерений блока"
-msgstr ""
-
-#: tblockinsertform.label1.caption
-msgid "Имя: "
-msgstr ""
-
-#: tblockinsertform.label10.caption
-msgid "Коэффициент: "
-msgstr ""
-
-#: tblockinsertform.label11.caption
-msgid "Путь: "
-msgstr ""
-
-#: tblockinsertform.label2.caption
-msgctxt "tblockinsertform.label2.caption"
+#: tblockinsertform.insxlabel.caption
+msgctxt "TBLOCKINSERTFORM.INSXLABEL.CAPTION"
 msgid "X: "
 msgstr ""
 
-#: tblockinsertform.label3.caption
-msgctxt "tblockinsertform.label3.caption"
+#: tblockinsertform.insylabel.caption
+msgctxt "TBLOCKINSERTFORM.INSYLABEL.CAPTION"
 msgid "Y: "
 msgstr ""
 
-#: tblockinsertform.label4.caption
-msgctxt "tblockinsertform.label4.caption"
+#: tblockinsertform.inszlabel.caption
+msgctxt "TBLOCKINSERTFORM.INSZLABEL.CAPTION"
 msgid "Z: "
 msgstr ""
 
-#: tblockinsertform.label5.caption
-msgctxt "TBLOCKINSERTFORM.LABEL5.CAPTION"
+#: tblockinsertform.mainpanel.caption
+msgctxt "TBLOCKINSERTFORM.MAINPANEL.CAPTION"
+msgid "Prewiev"
+msgstr ""
+
+#: tblockinsertform.pathlabel.caption
+msgctxt "TBLOCKINSERTFORM.PATHLABEL.CAPTION"
+msgid "Path: "
+msgstr ""
+
+#: tblockinsertform.rotationgroupbox.caption
+msgctxt "TBLOCKINSERTFORM.ROTATIONGROUPBOX.CAPTION"
+msgid "Rotation"
+msgstr ""
+
+#: tblockinsertform.scalegroupbox.caption
+msgctxt "TBLOCKINSERTFORM.SCALEGROUPBOX.CAPTION"
+msgid "Scale"
+msgstr ""
+
+#: tblockinsertform.scaleonscreen.caption
+msgctxt "TBLOCKINSERTFORM.SCALEONSCREEN.CAPTION"
+msgid "Specify on-screen"
+msgstr ""
+
+#: tblockinsertform.scalexlabel.caption
+msgctxt "TBLOCKINSERTFORM.SCALEXLABEL.CAPTION"
 msgid "X: "
 msgstr ""
 
-#: tblockinsertform.label6.caption
-msgctxt "TBLOCKINSERTFORM.LABEL6.CAPTION"
+#: tblockinsertform.scaleylabel.caption
+msgctxt "TBLOCKINSERTFORM.SCALEYLABEL.CAPTION"
 msgid "Z: "
 msgstr ""
 
-#: tblockinsertform.label7.caption
-msgctxt "TBLOCKINSERTFORM.LABEL7.CAPTION"
+#: tblockinsertform.scalezlabel.caption
+msgctxt "TBLOCKINSERTFORM.SCALEZLABEL.CAPTION"
 msgid "Y: "
 msgstr ""
 
-#: tblockinsertform.label8.caption
-msgid "Угол: "
+#: tblockinsertform.uniformscale.caption
+msgid "Uniform scale"
 msgstr ""
 
-#: tblockinsertform.label9.caption
-msgid "Единицы: "
+#: tblockinsertform.unitlabel.caption
+msgctxt "TBLOCKINSERTFORM.UNITLABEL.CAPTION"
+msgid "Unit: "
+msgstr ""
+
+#: tblockinsertform.unitsgroupbox.caption
+msgctxt "TBLOCKINSERTFORM.UNITSGROUPBOX.CAPTION"
+msgid "Block unit"
 msgstr ""
 
 #: tcolorselectform.byblock.caption
@@ -208,6 +188,11 @@ msgstr ""
 #: tlayersform.button_apply.caption
 msgctxt "TLAYERSFORM.BUTTON_APPLY.CAPTION"
 msgid "Apply"
+msgstr ""
+
+#: tlayersform.caption
+msgctxt "TLAYERSFORM.CAPTION"
+msgid "Layers"
 msgstr ""
 
 #: tlayersform.dellayer.caption
@@ -865,6 +850,10 @@ msgstr ""
 #: uzcstrconsts.rsaboutwndcaption
 msgctxt "uzcstrconsts.rsaboutwndcaption"
 msgid "About ZCAD"
+msgstr ""
+
+#: uzcstrconsts.rsadditionalselected
+msgid "Additional were selected %d primitives"
 msgstr ""
 
 #: uzcstrconsts.rsauthor

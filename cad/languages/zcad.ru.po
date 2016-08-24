@@ -11,140 +11,122 @@ msgstr ""
 "Language: ru\n"
 "X-Generator: Poedit 1.6.10\n"
 
-#: tblockinsertform.checkbox1.caption
-msgid "Расчленить"
+#: tblockinsertform.anglelabel.caption
+msgctxt "tblockinsertform.anglelabel.caption"
+msgid "Angle: "
 msgstr ""
 
-#: tblockinsertform.checkbox2.caption
-msgctxt "tblockinsertform.checkbox2.caption"
-msgid "Указать на экране"
+#: tblockinsertform.angleonscreen.caption
+msgctxt "tblockinsertform.angleonscreen.caption"
+msgid "Specify on-screen"
 msgstr ""
 
-#: tblockinsertform.checkbox3.caption
-msgctxt "tblockinsertform.checkbox3.caption"
-msgid "Указать на экране"
+#: tblockinsertform.blockinit.text
+msgid "BlockInit"
 msgstr ""
 
-#: tblockinsertform.checkbox4.caption
-msgctxt "tblockinsertform.checkbox4.caption"
-msgid "Указать на экране"
+#: tblockinsertform.blocknamecombobox.text
+msgid "BlockNameComboBox"
 msgstr ""
 
-#: tblockinsertform.checkbox5.caption
-msgid "Равные масштабы"
+#: tblockinsertform.blocknamelabel.caption
+msgctxt "tblockinsertform.blocknamelabel.caption"
+msgid "Name: "
 msgstr ""
 
-#: tblockinsertform.combobox1.text
-msgid "ComboBox1"
+#: tblockinsertform.caption
+msgid "Вставка блока"
 msgstr ""
 
-#: tblockinsertform.edit1.text
-msgctxt "tblockinsertform.edit1.text"
-msgid "0"
+#: tblockinsertform.explodecheckbox.caption
+msgctxt "tblockinsertform.explodecheckbox.caption"
+msgid "Explode"
 msgstr ""
 
-#: tblockinsertform.edit2.text
-msgctxt "tblockinsertform.edit2.text"
-msgid "0"
+#: tblockinsertform.factorlabel.caption
+msgctxt "tblockinsertform.factorlabel.caption"
+msgid "Factor: "
 msgstr ""
 
-#: tblockinsertform.edit3.text
-msgctxt "tblockinsertform.edit3.text"
-msgid "0"
+#: tblockinsertform.insertgroupbox.caption
+msgctxt "tblockinsertform.insertgroupbox.caption"
+msgid "Insertion point"
 msgstr ""
 
-#: tblockinsertform.edit4.text
-msgctxt "tblockinsertform.edit4.text"
-msgid "1"
+#: tblockinsertform.insertonscreen.caption
+msgctxt "tblockinsertform.insertonscreen.caption"
+msgid "Specify on-screen"
 msgstr ""
 
-#: tblockinsertform.edit5.text
-msgctxt "tblockinsertform.edit5.text"
-msgid "1"
-msgstr ""
-
-#: tblockinsertform.edit6.text
-msgctxt "tblockinsertform.edit6.text"
-msgid "1"
-msgstr ""
-
-#: tblockinsertform.edit7.text
-msgctxt "tblockinsertform.edit7.text"
-msgid "0"
-msgstr ""
-
-#: tblockinsertform.edit8.text
-msgid "Без единиц измерения"
-msgstr ""
-
-#: tblockinsertform.edit9.text
-msgid "Edit9"
-msgstr ""
-
-#: tblockinsertform.groupbox1.caption
-msgid "Точка вставки"
-msgstr ""
-
-#: tblockinsertform.groupbox2.caption
-msgid "Масштаб"
-msgstr ""
-
-#: tblockinsertform.groupbox3.caption
-msgid "Угол поворота"
-msgstr ""
-
-#: tblockinsertform.groupbox4.caption
-msgid "Единицы измерений блока"
-msgstr ""
-
-#: tblockinsertform.label1.caption
-msgid "Имя: "
-msgstr ""
-
-#: tblockinsertform.label10.caption
-msgid "Коэффициент: "
-msgstr ""
-
-#: tblockinsertform.label11.caption
-msgid "Путь: "
-msgstr ""
-
-#: tblockinsertform.label2.caption
-msgctxt "tblockinsertform.label2.caption"
+#: tblockinsertform.insxlabel.caption
+msgctxt "tblockinsertform.insxlabel.caption"
 msgid "X: "
 msgstr ""
 
-#: tblockinsertform.label3.caption
-msgctxt "tblockinsertform.label3.caption"
+#: tblockinsertform.insylabel.caption
+msgctxt "tblockinsertform.insylabel.caption"
 msgid "Y: "
 msgstr ""
 
-#: tblockinsertform.label4.caption
-msgctxt "tblockinsertform.label4.caption"
+#: tblockinsertform.inszlabel.caption
+msgctxt "tblockinsertform.inszlabel.caption"
 msgid "Z: "
 msgstr ""
 
-#: tblockinsertform.label5.caption
-msgctxt "tblockinsertform.label5.caption"
+#: tblockinsertform.mainpanel.caption
+msgctxt "tblockinsertform.mainpanel.caption"
+msgid "Prewiev"
+msgstr ""
+
+#: tblockinsertform.pathlabel.caption
+msgctxt "tblockinsertform.pathlabel.caption"
+msgid "Path: "
+msgstr ""
+
+#: tblockinsertform.rotationgroupbox.caption
+#, fuzzy
+msgctxt "tblockinsertform.rotationgroupbox.caption"
+msgid "Rotation"
+msgstr "Поворот"
+
+#: tblockinsertform.scalegroupbox.caption
+#, fuzzy
+msgctxt "tblockinsertform.scalegroupbox.caption"
+msgid "Scale"
+msgstr "Масштабировать"
+
+#: tblockinsertform.scaleonscreen.caption
+msgctxt "tblockinsertform.scaleonscreen.caption"
+msgid "Specify on-screen"
+msgstr ""
+
+#: tblockinsertform.scalexlabel.caption
+msgctxt "tblockinsertform.scalexlabel.caption"
 msgid "X: "
 msgstr ""
 
-#: tblockinsertform.label6.caption
-msgctxt "tblockinsertform.label6.caption"
+#: tblockinsertform.scaleylabel.caption
+msgctxt "tblockinsertform.scaleylabel.caption"
 msgid "Z: "
 msgstr ""
 
-#: tblockinsertform.label7.caption
-msgctxt "tblockinsertform.label7.caption"
+#: tblockinsertform.scalezlabel.caption
+msgctxt "tblockinsertform.scalezlabel.caption"
 msgid "Y: "
 msgstr ""
 
-#: tblockinsertform.label8.caption
-msgid "Угол: "
+#: tblockinsertform.uniformscale.caption
+msgid "Uniform scale"
 msgstr ""
 
-#: tblockinsertform.label9.caption
-msgid "Единицы: "
+#: tblockinsertform.unitlabel.caption
+msgctxt "tblockinsertform.unitlabel.caption"
+msgid "Unit: "
+msgstr ""
+
+#: tblockinsertform.unitsgroupbox.caption
+msgctxt "tblockinsertform.unitsgroupbox.caption"
+msgid "Block unit"
 msgstr ""
 
 #: tcolorselectform.byblock.caption
@@ -223,6 +205,12 @@ msgstr "Применить и закрыть"
 msgctxt "tlayersform.button_apply.caption"
 msgid "Apply"
 msgstr "Применить"
+
+#: tlayersform.caption
+#, fuzzy
+msgctxt "tlayersform.caption"
+msgid "Layers"
+msgstr "Слои"
 
 #: tlayersform.dellayer.caption
 msgid "DelLayer"
@@ -922,6 +910,10 @@ msgstr "Контекст OpenGL не создан"
 msgctxt "uzcstrconsts.rsaboutwndcaption"
 msgid "About ZCAD"
 msgstr "О программе ZCAD"
+
+#: uzcstrconsts.rsadditionalselected
+msgid "Additional were selected %d primitives"
+msgstr ""
 
 #: uzcstrconsts.rsauthor
 msgid "Writeln by Andrey M. Zubarev"

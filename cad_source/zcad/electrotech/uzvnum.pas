@@ -62,6 +62,7 @@ uses
   uzeentline,             //unit describes line entity
                        //модуль описывающий примитив линия
 
+
   uzeentlwpolyline,             //unit describes line entity
                        //модуль описывающий примитив двухмерная ПОЛИлиния
 
@@ -78,6 +79,7 @@ uses
   uzeentarc,
   uzeentcircle,
   uzeentity,
+
 
 
   gvector,garrayutils, // Подключение Generics и модуля для работы с ним
@@ -540,6 +542,7 @@ begin
                              if (ourListGroup.listVertexWayGroup[k].VIndex2 = ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num) then
                                begin
                                   limbTreeDeviceinGroup.beforeLength:=ourListGroup.listVertexWayGroup[k].beforeLength+limbTreeDeviceinGroup.length;
+                                  uzvcom.testTempDrawText(ourGraph.listVertex[ourListGroup.listVertexWayGroup[k].VIndex2].centerPoint,'ljlkj');
                                end
                                else
                                begin
@@ -555,8 +558,10 @@ begin
       // HistoryOutStr('222' + IntToStr(result.Size));
        // теперь от каждого устр. до головного
        // нужно что бы около головного устройства можно было понять какой из путей самый длинный или какой самый загружанный датчиками
+       HistoryOutStr('вставка текста0');
        for j:=ourListGroup.listDevice[i].listNumVertexMinWeight.Size-2 to 0 do begin
-          for k:=0 to ourListGroup.listVertexWayGroup.Size-1 do
+          for k:=0 to ourListGroup.listVertexWayGroup.Size-1 do begin
+             HistoryOutStr('вставка текста1');
              if (ourListGroup.listVertexWayGroup[k].VIndex2 = ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num) and (ourListGroup.listVertexWayGroup[k].VIndex1 = ourListGroup.listDevice[i].listNumVertexMinWeight[j].num) then
                    begin
                        for l:=0 to ourListGroup.listVertexWayGroup.Size-1 do
@@ -568,7 +573,10 @@ begin
                              begin
                                 ourListGroup.listVertexWayGroup.Mutable[k]^.afterLength:=ourListGroup.listVertexWayGroup[k].length;
                              end;
+                             HistoryOutStr('вставка текста2');
+                       uzvcom.testTempDrawText(ourGraph.listVertex[ourListGroup.listVertexWayGroup[k].VIndex1].centerPoint,'ljlkj');
                    end;
+          end;
         end;
        HistoryOutStr('длина списка' + IntToStr(ourListGroup.listVertexWayGroup.Size));
     end;

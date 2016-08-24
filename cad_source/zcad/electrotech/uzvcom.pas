@@ -46,6 +46,8 @@ uses
                        //модуль описывающий примитив вставка блока
   uzeentline,             //unit describes line entity
                        //модуль описывающий примитив линия
+    uzeenttext,             //unit describes line entity
+                       //модуль описывающий примитив текст
 
   uzeentlwpolyline,             //unit describes line entity
                        //модуль описывающий примитив двухмерная ПОЛИлиния
@@ -188,6 +190,7 @@ type
       function testTempDrawLine(p1:GDBVertex;p2:GDBVertex):TCommandResult;
       function testTempDrawCircle(p1:GDBVertex;rr:GDBDouble):TCommandResult;
       function testTempDrawPolyLine(listVertex:GListVertexPoint;color:Integer):TCommandResult;
+      function testTempDrawText(p1:GDBVertex;rr:GDBString):TCommandResult;
 implementation
 
 constructor TGraphBuilder.Create;
@@ -380,6 +383,25 @@ begin
      zcAddEntToCurrentDrawingWithUndo(polyObj);
      result:=cmd_ok;
 end;
+//быстрое написание текста
+function testTempDrawText(p1:GDBVertex;rr:GDBString):TCommandResult;
+var
+    ptext:PGDBObjText;
+   // pe:T3PointCircleModePentity;
+   // p1,p2:gdbvertex;
+begin
+      ptext := GDBObjText.CreateInstance;
+         //     GDBObjText.Content:=rr;
+      zcSetEntPropFromCurrentDrawingProp(ptext);
+      ptext^.P_insert_in_WCS:=p1;
+      //ptext^.obj_height:=100;
+      //ptext^.obj_width:=188;
+      ptext^.Template:='fdfgdfgd';
+      zcAddEntToCurrentDrawingWithUndo(ptext);   //добавляем в чертеж
+                                //добавляем в чертеж
+    result:=cmd_ok;
+end;
+
 function testTempDrawCircle(p1:GDBVertex;rr:GDBDouble):TCommandResult;
 var
     pcircle:PGDBObjCircle;

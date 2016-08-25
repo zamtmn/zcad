@@ -20,8 +20,11 @@ unit uzeutils;
 {$INCLUDE def.inc}
 interface
 uses
-  uzepalette,uzestyleslinetypes,uzestyleslayers,uzedrawingsimple,uzbtypesbase,uzbtypes,uzeentity,uzegeometry,uzeentgenericsubentry;
+  uzepalette,uzestyleslinetypes,uzestyleslayers,uzedrawingsimple,uzbtypesbase,
+  uzbtypes,uzeentity,uzegeometry,uzeentgenericsubentry,usimplegenerics;
 type
+  TEntPropSetterFromDrawing=procedure(const PEnt: PGDBObjEntity; var Drawing:TSimpleDrawing);
+  TEntPropSetters=TMyVector<TEntPropSetterFromDrawing>;
   {**Структура описатель выбраных примитивов
     @member(PFirstSelectedEnt Указатель на первый выбраный примитив в чертеже)
     @member(SelectedEntsCount Общее количество выбраных примитивов в чертеже)}
@@ -29,17 +32,26 @@ type
                  PFirstSelectedEnt:PGDBObjEntity;
                  SelectedEntsCount:GDBInteger;
                end;
+  procedure zeRegisterEntPropSetter(proc:TEntPropSetterFromDrawing);
 
   {**Получение "описателя" выбраных примитивов в "корне"
     @param(Root "Корневой" примитив владелец)
     @return(Указатель на первый выбранный примитив и общее количество выбраных примитивов)}
   function zeGetSelEntsDeskInRoot(var Root:GDBObjGenericSubEntry):TSelEntsDesk;
 
-  {**Выставление общих свойств примитива в соответствии с настройками чертежа.
-     Слой, Тип линии, Вес линии, Цвет, Масштаб типа линии
+  {**Выставление свойств примитива в соответствии с настройками чертежа.
+     процедура выполняет все зарегистрированные TEntPropSetterFromDrawing с
+     помощью zeRegisterEntPropSetter для примитива. Поумолчанию зарегистрирована
+     только zeSetEntPropFromDrawingProp
     @param(PEnt Указатель на примитив)
     @param(Drawing Чертеж откуда будут взяты настройки)}
   procedure zeSetEntPropFromDrawingProp(const PEnt: PGDBObjEntity; var Drawing:TSimpleDrawing);
+
+  {**Выставление базовых свойств примитива в соответствии с настройками чертежа.
+     Слой, Тип линии, Вес линии, Цвет, Масштаб типа линии
+    @param(PEnt Указатель на примитив)
+    @param(Drawing Чертеж откуда будут взяты настройки)}
+  procedure zeSetBaseEntPropFromDrawingProp(const PEnt: PGDBObjEntity; var Drawing:TSimpleDrawing);
 
   {**Выставление общих свойств примитива
      Слой, Тип линии, Вес линии, Цвет
@@ -60,8 +72,9 @@ type
   {**Процедура счетчик, если тип линии примитива PInstance равен PCounted, то Counter инкрементируется.
      используется для подсчета количества ссылок на тип линии в примитивах}
   procedure LTypeCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
-
 implementation
+var
+   EntPropSetters:TEntPropSetters;
 procedure zeAddEntToRoot(const PEnt: PGDBObjEntity; var Root:GDBObjGenericSubEntry);
 begin
   Root.AddMi(@PEnt);
@@ -86,13 +99,24 @@ begin
   pv:=Root.ObjArray.iterate(ir);
   until pv=nil;
 end;
-procedure zeSetEntPropFromDrawingProp(const PEnt: PGDBObjEntity; var Drawing:TSimpleDrawing);
+procedure zeRegisterEntPropSetter(proc:TEntPropSetterFromDrawing);
+begin
+ EntPropSetters.PushBack(proc);
+end;
+procedure zeSetBaseEntPropFromDrawingProp(const PEnt: PGDBObjEntity; var Drawing:TSimpleDrawing);
 begin
      PEnt^.vp.Layer:=Drawing.currentLayer;
      PEnt^.vp.LineType:=Drawing.CurrentLType;
      PEnt^.vp.LineWeight:=Drawing.CurrentLineW;
      PEnt^.vp.color:=Drawing.CColor;
      PEnt^.vp.LineTypeScale:=Drawing.CLTScale;
+end;
+procedure zeSetEntPropFromDrawingProp(const PEnt: PGDBObjEntity; var Drawing:TSimpleDrawing);
+var
+ i:integer;
+begin
+     for i:=0 to EntPropSetters.Size-1 do
+       EntPropSetters[i](PEnt,Drawing);
 end;
 procedure zeSetEntityProp(const PEnt:PGDBObjEntity;const PLayer:PGDBLayerProp;const PLT:PGDBLtypeProp;const Color:TGDBPaletteColor;const LW:TGDBLineWeight);
 begin
@@ -111,5 +135,13 @@ begin
      if PCounted=PGDBObjEntity(PInstance)^.vp.LineType then
                                   inc(Counter);
 end;
+initialization
 begin
+  EntPropSetters:=TEntPropSetters.Create;
+  zeRegisterEntPropSetter(zeSetBaseEntPropFromDrawingProp);
+end;
+finalization
+begin
+  EntPropSetters.Destroy;
+end;
 end.

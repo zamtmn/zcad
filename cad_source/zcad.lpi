@@ -214,7 +214,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="181">
+    <Units Count="182">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -415,7 +415,7 @@
         <IsPartOfProject Value="True"/>
       </Unit39>
       <Unit40>
-        <Filename Value="zcad/register/uzcregother.pas"/>
+        <Filename Value="zcad/register/uzcregenginefeatures.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit40>
       <Unit41>
@@ -978,6 +978,10 @@
         <Filename Value="zengine/core/objects/uzeentitiestree.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit180>
+      <Unit181>
+        <Filename Value="zcad/register/uzcregother.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit181>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

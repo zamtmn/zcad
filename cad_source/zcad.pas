@@ -50,6 +50,7 @@ uses
   uzcreggeneralwiewarea,
   uzcregfontmanager,
   uzcregpaths,
+  uzcregenginefeatures,
   //
   //next line load system.pas
   //

@@ -44,8 +44,9 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
     @return(Указатель на первый выбранный примитив и общее количество выбраных примитивов)}
   function zcGetSelEntsDeskInCurrentRoot:TSelEntsDesk;
 
-  {**Выставление общих свойств примитива в соответствии с настройками текущего чертежа.
-     Слой, Тип линии, Вес линии, Цвет, Масштаб типа линии
+  {**Выставление свойств для примитива в соответствии с настройками текущего чертежа
+  процедуры устанавливающие свойства должны быть заранее зарегистрированные с помощью
+  zeRegisterEntPropSetter
     @param(PEnt Указатель на примитив)}
   procedure zcSetEntPropFromCurrentDrawingProp(const PEnt: PGDBObjEntity);
 

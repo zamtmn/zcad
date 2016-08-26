@@ -19,7 +19,7 @@
 unit uzcregenginefeatures;
 {$INCLUDE def.inc}
 interface
-uses uzeutils,uzeentity,uzedrawingsimple,uzbtypes,uzeconsts,uzeenttext;
+uses uzeutils,uzeentity,uzedrawingsimple,uzbtypes,uzeconsts,uzeenttext,uzeentdimension;
 implementation
 procedure zeSetTextStylePropFromDrawingProp(const PEnt: PGDBObjEntity; var Drawing:TSimpleDrawing);
 var
@@ -31,7 +31,19 @@ begin
        PGDBObjText(PEnt)^.TXTStyleIndex:=Drawing.CurrentTextStyle;
      end;
 end;
+procedure zeSetDimStylePropFromDrawingProp(const PEnt: PGDBObjEntity; var Drawing:TSimpleDrawing);
+var
+  enttype:TObjID;
+begin
+     enttype:=PEnt^.GetObjType;
+     if (enttype=GDBAlignedDimensionID)or(enttype=GDBRotatedDimensionID)or
+        (enttype=GDBDiametricDimensionID)or(enttype=GDBRadialDimensionID)then
+     begin
+       PGDBObjDimension(PEnt)^.PDimStyle:=Drawing.CurrentDimStyle;
+     end;
+end;
 initialization;
     zeRegisterEntPropSetter(zeSetTextStylePropFromDrawingProp);
+    zeRegisterEntPropSetter(zeSetDimStylePropFromDrawingProp);
 finalization;
 end.

@@ -1402,6 +1402,9 @@ TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
             function SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
             destructor done;virtual;abstract;
             procedure free;virtual;abstract;
+            function RegisterType(ti:PTypeInfo):PUserTypeDescriptor;
+            function RegisterRecordType(ti:PTypeInfo):PUserTypeDescriptor;
+            function RegisterPointerType(ti:PTypeInfo):PUserTypeDescriptor;
       end;
 //Generate on E:/zcad/cad_source/zengine/zgl/uzgvertex3sarray.pas
 PZGLVertex3Sarray=^ZGLVertex3Sarray;

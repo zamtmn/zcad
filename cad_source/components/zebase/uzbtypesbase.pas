@@ -30,16 +30,16 @@ DWord=longword;
 {$ENDIF}
 {EXPORT+}
 PGDBDouble=^GDBDouble;
-{-}GDBDouble=double;{//}
+{-}GDBDouble=type Double;{//}
 
 PGDBNonDimensionDouble=^GDBNonDimensionDouble;
-{-}GDBNonDimensionDouble=GDBDouble;{//}
+{-}GDBNonDimensionDouble=type Double;{//}
 
 PGDBAngleDegDouble=^GDBAngleDegDouble;
-{-}GDBAngleDegDouble=GDBDouble;{//}
+{-}GDBAngleDegDouble=type Double;{//}
 
 PGDBAngleDouble=^GDBAngleDouble;
-{-}GDBAngleDouble=GDBDouble;{//}
+{-}GDBAngleDouble=type Double;{//}
 
 PGDBFloat=^GDBFloat;
 {-}GDBFloat=single;{//}

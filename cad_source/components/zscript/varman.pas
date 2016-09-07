@@ -26,7 +26,7 @@ uses
   uzctnrvectorgdbpointer,gzctnrvectordata,gzctnrvectorpobjects,LCLProc,uabstractunit,{gzctnrvectorp,}
   SysUtils,UBaseTypeDescriptor,uzbtypesbase,uzbtypes,UGDBOpenArrayOfByte,
   uzctnrvectorgdbstring,varmandef,usimplegenerics,uzbmemman,
-  TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes;
+  TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,UPointerDescriptor;
 type
     td=record
              template:GDBString;
@@ -213,6 +213,9 @@ TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
             function SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;
             destructor done;virtual;
             procedure free;virtual;
+            function RegisterType(ti:PTypeInfo):PUserTypeDescriptor;
+            function RegisterRecordType(ti:PTypeInfo):PUserTypeDescriptor;
+            function RegisterPointerType(ti:PTypeInfo):PUserTypeDescriptor;
       end;
 {EXPORT-}
 procedure vardeskclear(const p:pvardesk);
@@ -355,6 +358,65 @@ begin
               pv:=source.InterfaceVariables.vardescarray.iterate(ir);
         until pv=nil;
 end;
+function TUnit.RegisterRecordType(ti:PTypeInfo):PUserTypeDescriptor;
+var
+   td:PTypeData;
+   mf: PManagedField;
+   i:integer;
+   etd:PRecordDescriptor;
+   fd:FieldDescriptor;
+begin
+     gdbgetmem({$IFDEF DEBUGBUILD}'{874DEDEF-E023-4558-A3C6-392D9C3B23C9}',{$ENDIF}GDBPointer(etd),sizeof(RecordDescriptor));
+     PRecordDescriptor(etd)^.init(ti^.Name,@self);
+     td:=GetTypeData(ti);
+     mf:=@td.ManagedFldCount;
+     inc(pointer(mf),sizeof(td.ManagedFldCount));
+     for i:=0 to td.ManagedFldCount-1 do
+     begin
+          ti:=mf.TypeRef;
+
+
+          fd.base.ProgramName:=ti.Name;
+          fd.base.PFT:=RegisterType(ti);;
+          fd.base.Attributes:=0;
+          fd.base.Saved:=0;
+          fd.Collapsed:=true;
+          fd.Offset:=mf.FldOffset;
+          if fd.base.PFT<>nil then
+                             fd.Size:=fd.base.PFT^.SizeInGDBBytes
+                         else
+                             fd.Size:=1;
+          etd^.AddField(fd);
+
+          inc(mf);
+     end;
+     etd^.SizeInGDBBytes:=td.RecSize;
+     InterfaceTypes.AddTypeByPP(@etd);
+end;
+function TUnit.RegisterPointerType(ti:PTypeInfo):PUserTypeDescriptor;
+var
+   td:PTypeData;
+   mf: PManagedField;
+   i:integer;
+   etd:PGDBPointerDescriptor;
+   fd:FieldDescriptor;
+begin
+     td:=GetTypeData(ti);
+     gdbgetmem({$IFDEF DEBUGBUILD}'{EB691608-9520-4E6F-9042-960EFE61FA89}',{$ENDIF}GDBPointer(etd),sizeof(GDBPointerDescriptor));
+     etd^.init(td.RefType^.Name,ti^.Name,@self);
+     etd^.TypeOf:=RegisterType(td.RefType);
+     InterfaceTypes.AddTypeByPP(@etd);
+end;
+function TUnit.RegisterType(ti:PTypeInfo):PUserTypeDescriptor;
+begin
+   result:=TypeName2PTD(ti^.Name);
+   if result=nil then
+     case ti^.Kind of
+       tkRecord:result:=RegisterRecordType(ti);
+       tkPointer:result:=RegisterPointerType(ti);
+     end;
+end;
+
 procedure TObjectUnit.free;
 begin
      self.InterfaceUses.clear;

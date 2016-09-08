@@ -1,0 +1,75 @@
+object Form1: TForm1
+  Left = 927
+  Height = 550
+  Top = 459
+  Width = 683
+  Caption = 'Form1'
+  ClientHeight = 550
+  ClientWidth = 683
+  OnClick = AddOtherdata
+  OnCreate = CreateForm
+  LCLVersion = '1.7'
+  object GDBobjinsp1: TGDBobjinsp
+    Left = 0
+    Height = 550
+    Top = 0
+    Width = 254
+    HorzScrollBar.Page = 1
+    VertScrollBar.Increment = 200
+    VertScrollBar.Page = 550
+    VertScrollBar.Range = 550
+    Align = alLeft
+    AutoScroll = False
+    BorderStyle = bsNone
+    TabOrder = 0
+  end
+  object Splitter1: TSplitter
+    Left = 254
+    Height = 550
+    Top = 0
+    Width = 10
+  end
+  object SpeedButton1: TSpeedButton
+    Left = 312
+    Height = 23
+    Top = 120
+    Width = 208
+    AutoSize = True
+    Caption = 'Add otherdata to data by pointer'
+    OnClick = AddOtherdata
+  end
+  object SpeedButton2: TSpeedButton
+    Left = 312
+    Height = 23
+    Top = 16
+    Width = 85
+    AutoSize = True
+    Caption = 'Swith to data'
+    OnClick = SwithToData
+  end
+  object SpeedButton3: TSpeedButton
+    Left = 312
+    Height = 23
+    Top = 64
+    Width = 118
+    AutoSize = True
+    Caption = 'Swith to otherdata'
+    OnClick = SwithToOtherData
+  end
+  object SpeedButton4: TSpeedButton
+    Left = 312
+    Height = 72
+    Top = 176
+    Width = 304
+    Caption = 'Remove otherdata from data by pointer'
+    OnClick = RemoveOtherData
+  end
+  object SpeedButton5: TSpeedButton
+    Left = 312
+    Height = 99
+    Top = 288
+    Width = 295
+    Caption = 'Randomize data'
+    OnClick = RandomizeData
+  end
+end

@@ -31,6 +31,7 @@ type
                        currentunit:PTUnit;
                        NextUnitManager:PTUnitManager;
                        constructor init;
+                       function CreateUnit(PPaths:GDBString;TranslateFunc:TTranslateFunction;UName:GDBString):PTUnit;
                        function loadunit(PPaths:GDBString;TranslateFunc:TTranslateFunction;fname:GDBString; pcreatedunit:PTSimpleUnit):ptunit;virtual;
                        function parseunit(PPaths:GDBString;TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfByte; pcreatedunit:PTSimpleUnit):ptunit;virtual;
                        function changeparsemode(PPaths:GDBString;TranslateFunc:TTranslateFunction;newmode:GDBInteger;var mode:GDBInteger):pasparsemode;
@@ -239,6 +240,29 @@ begin
   f.done;
   //result:=pointer(pcreatedunit);
 end;
+function TUnitManager.CreateUnit(PPaths:GDBString;TranslateFunc:TTranslateFunction;UName:GDBString):PTUnit;
+var
+  pfu:PTUnit;
+begin
+        pfu:=findunit(PPaths,TranslateFunc,UName);
+        if pfu<>nil then
+                        begin
+                             result:=pfu;
+                        end
+        else
+        begin
+          result:=pointer(CreateObject);
+          result.init(UName);
+          pfu:=findunit(PPaths,TranslateFunc,'SYSTEM');
+          if (pfu=nil)then
+          begin
+               pfu:=pointer(CreateObject);
+               PTUnit(pfu)^.init('system');
+          end;
+          result.InterfaceUses.PushBackIfNotPresent(pfu);
+        end;
+end;
+
 function TUnitManager.parseunit;
 var
   varname, vartype,vuname, line,oldline,unitname: GDBString;

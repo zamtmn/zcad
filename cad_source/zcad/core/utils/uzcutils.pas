@@ -16,6 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
+{**Модуль утилит зкада}
 unit uzcutils;
 {$INCLUDE def.inc}
 

@@ -159,7 +159,7 @@ procedure ReturnToDefault(const f:TzeUnitsFormat);
 procedure rebuild;
 procedure SetCurrentObjDefault;
 function  GetCurrentObj:Pointer;
-procedure ClrarIfItIs(const f:TzeUnitsFormat;addr:GDBPointer);
+procedure ClrarIfItIs(const f:TzeUnitsFormat;addr:pointer);
 procedure SetNameColWidth(w:integer);
 function GetNameColWidth:integer;
 function CreateObjInspInstance:TForm;
@@ -323,7 +323,7 @@ begin
                                      GDBobjinsp.updateinsp;
                                 end;
 end;
-procedure ClrarIfItIs(const f:TzeUnitsFormat;addr:GDBPointer);
+procedure ClrarIfItIs(const f:TzeUnitsFormat;addr:pointer);
 begin
        if assigned(GDBobjinsp)then
                                   begin

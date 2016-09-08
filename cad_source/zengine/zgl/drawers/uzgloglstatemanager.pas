@@ -379,7 +379,7 @@ begin
                            glVertex3dV(@t);
                       end;
 end;
-procedure TOGLStateManager.myglvertex2dv(const V:Pointer);
+procedure TOGLStateManager.myglvertex2dv(const V:GDBPointer);
 var t:gdbvertex;
 begin
      {$IFDEF DEBUGCOUNTGEOMETRY}

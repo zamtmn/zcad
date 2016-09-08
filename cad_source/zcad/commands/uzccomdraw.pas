@@ -2230,7 +2230,7 @@ begin
     //pb^.RenderFeedback;
   end;
 end;
-procedure Insert_com_CommandEnd(_self:GDBPointer);
+procedure Insert_com_CommandEnd(_self:pointer);
 begin
      if pb<>nil then
                     begin
@@ -3134,7 +3134,7 @@ begin
   result:=cmd_ok;
 end;
 
-Procedure _3DPoly_com_CommandEnd(_self:GDBPointer);
+Procedure _3DPoly_com_CommandEnd(_self:pointer);
 var
     domethod,undomethod:tmethod;
     cc:integer;

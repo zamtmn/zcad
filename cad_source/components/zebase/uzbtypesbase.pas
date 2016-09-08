@@ -42,43 +42,43 @@ PGDBAngleDouble=^GDBAngleDouble;
 {-}GDBAngleDouble=type Double;{//}
 
 PGDBFloat=^GDBFloat;
-{-}GDBFloat=single;{//}
+{-}GDBFloat=type single;{//}
 
 PGDBString=^GDBString;
-{-}GDBString=ansistring;{//}
+{-}GDBString=type ansistring;{//}
 
 PGDBAnsiString=^GDBAnsiString;
-{-}GDBAnsiString=ansistring;{//}
+{-}GDBAnsiString=type ansistring;{//}
 
 PGDBBoolean=^GDBBoolean;
-{-}GDBBoolean=boolean;{//}
+{-}GDBBoolean=type boolean;{//}
 
 PGDBInteger=^GDBInteger;
-{-}GDBInteger=integer;{//}
+{-}GDBInteger=type integer;{//}
 
 PGDBByte=^GDBByte;
-{-}GDBByte=byte;{//}
+{-}GDBByte=type byte;{//}
 
 PGDBLongword=^GDBLongword;
-{-}GDBLongword=longword;{//}
+{-}GDBLongword=type longword;{//}
 
 PGDBQWord=^GDBQWord;
-{-}GDBQWord=QWord;{//}
+{-}GDBQWord=type QWord;{//}
 
 PGDBWord=^GDBWord;
-{-}GDBWord=word;{//}
+{-}GDBWord=type word;{//}
 
 PGDBSmallint=^GDBSmallint;
-{-}GDBSmallint=smallint;{//}
+{-}GDBSmallint=type smallint;{//}
 
 PGDBShortint=^GDBShortint;
-{-}GDBShortint=shortint;{//}
+{-}GDBShortint=type shortint;{//}
 
 PGDBPointer=^GDBPointer;
-{-}GDBPointer=pointer;{//}
+{-}GDBPointer=type pointer;{//}
 
 PGDBPtrUInt=^GDBPtrUInt;
-{-}GDBPtrUInt=PtrUInt;{//}
+{-}GDBPtrUInt=type PtrUInt;{//}
 
 itrec=packed record
             itp:{-}PGDBPointer{/GDBPointer/};

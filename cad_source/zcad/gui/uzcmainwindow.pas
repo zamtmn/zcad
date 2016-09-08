@@ -168,8 +168,8 @@ type
     procedure GeneralTick(Sender: TObject);
     procedure ShowFastMenu(Sender: TObject);
     procedure asynccloseapp(Data: PtrInt);
-    procedure processfilehistory(filename:GDBString);
-    procedure processcommandhistory(Command:GDBString);
+    procedure processfilehistory(filename:string);
+    procedure processcommandhistory(Command:string);
     function CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
@@ -606,7 +606,7 @@ begin
                       else
                           taa[0].SetCommand(rsEmpty,'','');
 end;
-procedure TZCADMainWindow.processfilehistory(filename:GDBString);
+procedure TZCADMainWindow.processfilehistory(filename:string);
 var i,j,k:integer;
     pstr,pstrnext:PGDBString;
 begin
@@ -630,7 +630,7 @@ begin
      SetArrayTop(@FileHistory,FileName,'Load',FileName);
      CheckArray(@FileHistory,low(filehistory),high(filehistory));
 end;
-procedure  TZCADMainWindow.processcommandhistory(Command:GDBString);
+procedure  TZCADMainWindow.processcommandhistory(Command:string);
 var
    k:integer;
 begin

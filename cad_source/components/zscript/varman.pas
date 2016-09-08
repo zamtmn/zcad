@@ -23,7 +23,7 @@ unit Varman;
 
 interface
 uses
-  uzctnrvectorgdbpointer,gzctnrvectordata,gzctnrvectorpobjects,LCLProc,uabstractunit,{gzctnrvectorp,}
+  UEnumDescriptor,uzctnrvectorgdbpointer,gzctnrvectordata,gzctnrvectorpobjects,LCLProc,uabstractunit,{gzctnrvectorp,}
   SysUtils,UBaseTypeDescriptor,uzbtypesbase,uzbtypes,UGDBOpenArrayOfByte,
   uzctnrvectorgdbstring,varmandef,usimplegenerics,uzbmemman,
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,UPointerDescriptor;
@@ -216,6 +216,7 @@ TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
             function RegisterType(ti:PTypeInfo):PUserTypeDescriptor;
             function RegisterRecordType(ti:PTypeInfo):PUserTypeDescriptor;
             function RegisterPointerType(ti:PTypeInfo):PUserTypeDescriptor;
+            function RegisterEnumType(ti:PTypeInfo):PUserTypeDescriptor;
       end;
 {EXPORT-}
 procedure vardeskclear(const p:pvardesk);
@@ -392,6 +393,7 @@ begin
      end;
      etd^.SizeInGDBBytes:=td.RecSize;
      InterfaceTypes.AddTypeByPP(@etd);
+     result:=etd;
 end;
 function TUnit.RegisterPointerType(ti:PTypeInfo):PUserTypeDescriptor;
 var
@@ -406,6 +408,48 @@ begin
      etd^.init(td.RefType^.Name,ti^.Name,@self);
      etd^.TypeOf:=RegisterType(td.RefType);
      InterfaceTypes.AddTypeByPP(@etd);
+     result:=etd;
+end;
+function TUnit.RegisterEnumType(ti:PTypeInfo):PUserTypeDescriptor;
+var
+   td:PTypeData;
+   etd:PEnumDescriptor;
+   bytessize:integer;
+
+  procedure SetEnumData(TypeInfo : PTypeInfo);
+  var PS : PShortString;
+      PT : PTypeData;
+      Count:Integer;
+  begin
+    PT:=GetTypeData(TypeInfo);
+    PS:=@PT^.NameList;
+    Count:=PT^.MinValue;
+    While (PByte(PS)^<>0)and(Count<=PT^.MaxValue) do
+      begin
+        etd^.SourceValue.PushBackData(PS^);
+        etd^.UserValue.PushBackData(PS^);
+        etd^.Value.PushBackData(Count);
+
+        PS:=PShortString(pointer(PS)+PByte(PS)^+1);
+        Inc(Count);
+      end;
+  end;
+
+begin
+     td:=GetTypeData(ti);
+     gdbgetmem({$IFDEF DEBUGBUILD}'{EB691608-9520-4E6F-9042-960EFE61FA89}',{$ENDIF}GDBPointer(etd),sizeof(EnumDescriptor));
+     case td.OrdType of
+        otSByte:bytessize:=1;
+        otUByte:bytessize:=1;
+        otSWord:bytessize:=2;
+        otUWord:bytessize:=2;
+        otSLong:bytessize:=4;
+        otULong:bytessize:=4;
+     end;
+     etd^.init(bytessize,ti^.Name,@self);
+     SetEnumData(ti);
+     InterfaceTypes.AddTypeByPP(@etd);
+     result:=etd;
 end;
 function TUnit.RegisterType(ti:PTypeInfo):PUserTypeDescriptor;
 begin
@@ -414,6 +458,7 @@ begin
      case ti^.Kind of
        tkRecord:result:=RegisterRecordType(ti);
        tkPointer:result:=RegisterPointerType(ti);
+       tkEnumeration:result:=RegisterEnumType(ti);
      end;
 end;
 

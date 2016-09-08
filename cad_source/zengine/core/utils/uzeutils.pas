@@ -13,9 +13,10 @@
 *****************************************************************************
 }
 {**
-@author(Andrey Zubarev <zamtmn@yandex.ru>) 
+@author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 
+{**Модуль утилит движка}
 unit uzeutils;
 {$INCLUDE def.inc}
 interface

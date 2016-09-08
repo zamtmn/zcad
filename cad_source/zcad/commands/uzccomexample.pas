@@ -12,12 +12,13 @@
 *                                                                           *
 *****************************************************************************
 }
-{
+{**
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}//need delphi mode for disable type checking in interactive manipulators
 
-{**Модуль реализации чертежных команд (линия, круг, размеры и т.д.)}
+{**Примерный модуль реализации чертежных команд (линия, круг, размеры и т.д.)
+   Ничего не экспортирует, содержит некоторые команды доступные в зкаде}
 unit uzccomexample;
 
 { file def.inc is necessary to include at the beginning of each module zcad
@@ -98,10 +99,11 @@ uses
   uzcstrconsts,       //resouce strings
 
   uzclog;             //log system
-                      //<**система логирования
+                      //система логирования
 
 type
 {EXPORT+}
+    //** Тип данных для отображения в инспекторе опций команды MatchProp о текстовых примитивах, составная часть TMatchPropParam
     TMatchPropTextParam=packed record
                        ProcessTextStyle:GDBBoolean;(*'Process style'*)
                        ProcessTextSize:GDBBoolean;(*'Process size'*)
@@ -109,7 +111,7 @@ type
                        ProcessTextWFactor:GDBBoolean;(*'Process wfactor'*)
                        ProcessTextJustify:GDBBoolean;(*'Process justify'*)
                  end;
-    PTMatchPropParam=^TMatchPropParam;
+    //** Тип данных для отображения в инспекторе опций команды MatchProp
     TMatchPropParam=packed record
                        ProcessLayer:GDBBoolean;(*'Process layer'*)
                        ProcessLineWeight:GDBBoolean;(*'Process line weight'*)
@@ -118,21 +120,24 @@ type
                        ProcessColor:GDBBoolean;(*'Process color'*)
                        TextParams:TMatchPropTextParam;(*'Text params'*)
                  end;
-    //** Создание выподающего меню в инспекторе (3Dolyline или LWPolyline)
-    TRectangEntType=(RET_3DPoly(*'3DPoly'*),RET_LWPoly(*'LWPoly'*));
-    //** Добавление панели упр многоугольниками в инспекторе
+    //** Перечислимый тип для отображения в инспекторе режима создания прямоугольника (из 3DPolyLine или LWPolyLine, составная часть TRectangParam)
+    TRectangEntType=(
+                     RET_3DPoly(*'3DPoly'*) //**< будет использован примитив 3DPolyLine
+                    ,RET_LWPoly(*'LWPoly'*) //**< будет использован примитив LWPolyline
+                     );
+    //** Тип данных для отображения в инспекторе опций команды Rectangle
     TRectangParam=packed record
-                       ET:TRectangEntType;(*'Entity type'*)      //**< Выбор типа объекта 3Dolyline или LWPolyline
+                       ET:TRectangEntType;(*'Entity type'*)      //**< Выбор типа примитива, которым будет создан прямоугольник - 3Dolyline или LWPolyline
                        //VNum:GDBInteger;(*'Number of vertices'*)  //**< Определение количества вершин
-                       PolyWidth:GDBDouble;(*'Polyline width'*)  //**< Вес линий
+                       PolyWidth:GDBDouble;(*'Polyline width'*)  //**< Ширина полилинии (если в качестве примитива выбран RET_LWPoly)
                  end;
 {EXPORT-}
 var
-   MatchPropParam:TMatchPropParam;
-   RectangParam:TRectangParam;
+   MatchPropParam:TMatchPropParam; //**< Переменная содержащая опции команды MatchProp
+   RectangParam:TRectangParam;     //**< Переменная содержащая опции команды Rectangle
 
 implementation
-
+//** блаблабла
 function isRDIMHorisontal(p1,p2,p3,nevp3:gdbvertex):integer;
 var
    minx,maxx,miny,maxy:GDBDouble;
@@ -586,7 +591,7 @@ begin
     UndoStartMarkerPlaced:=false;
     if commandmanager.getentity(rscmSelectSourceEntity,ps) then
     begin
-         zcShowCommandParams(SysUnit^.TypeName2PTD( 'TMatchPropParam'),@MatchPropParam);
+         zcShowCommandParams(SysUnit^.TypeName2PTD('TMatchPropParam'),@MatchPropParam);
          drawing:=PTZCADDrawing(drawings.GetCurrentDWG);
          dc:=drawing^.CreateDrawingRC;
          SourceObjType:=ps^.GetObjType;

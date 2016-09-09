@@ -78,26 +78,7 @@ GDBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object
     destructor Done;virtual;{ abstract;}
     function IsEntity:GDBBoolean;virtual;abstract;
   end;
-devicedesk=packed record
-                 category,variable,name,id,nameall,tu,edizm,mass:GDBString;
-           end;
-PTZCPOffsetTable=^TZCPOffsetTable;
-TZCPOffsetTable=packed record
-                      GDB:GDBLongword;(*saved_to_shd*)
-                      GDBRT:GDBLongword;(*saved_to_shd*)
-                end;
-PZCPHeader=^ZCPHeader;
-ZCPHeader=packed record
-                Signature:GDBString;(*saved_to_shd*)
-                Copyright:GDBString;(*saved_to_shd*)
-                Coment:GDBString;(*saved_to_shd*)
-                HiVersion:GDBWord;(*saved_to_shd*)
-                LoVersion:GDBWord;(*saved_to_shd*)
-                OffsetTable:TZCPOffsetTable;(*saved_to_shd*)
-          end;
-TObjLinkRecordMode=(OBT(*'ObjBeginToken'*),OFT(*'ObjFieldToken'*),UBR(*'UncnownByReference'*));
-TCompareResult=(CRLess,CREqual,CRGreater,CRNotEqual);
-PIMatrix4=^IMatrix4;               
+PIMatrix4=^IMatrix4;
 IMatrix4=packed array[0..3]of GDBInteger;
 DVector4D=packed array[0..3]of GDBDouble;
 DVector3D=packed array[0..2]of GDBDouble;
@@ -176,10 +157,6 @@ GDBFontVertex2D=packed record
                 x:FontFloat;(*saved_to_shd*)
                 y:FontFloat;(*saved_to_shd*)
             end;
-{//-ttf-//TTrianglesDataInfo=packed record
-               TrianglesAddr: GDBInteger;
-               TrianglesSize: GDBWord;
-               end;}
 PGDBPolyVertex2D=^GDBPolyVertex2D;
 GDBPolyVertex2D=packed record
                       coord:GDBvertex2D;
@@ -210,12 +187,10 @@ TBoundingRect=packed record
 TInBoundingVolume=(IRFully,IRPartially,IREmpty);
 PGDBvertex2DI=^GDBvertex2DI;
 GDBvertex2DIArray=packed array [0..0] of GDBvertex2DI;
-PGDBvertex2DIArray=^GDBvertex2DIArray;
 OutBound4V=packed array [0..3]of GDBvertex;
-Proj4V2DI=packed array [0..3]of GDBvertex2DI;
 PGDBQuad3d=^GDBQuad3d;
 GDBQuad2d=packed array[0..3] of GDBvertex2D;
-GDBQuad3d={array[0..3] of GDBvertex}OutBound4V;
+GDBQuad3d=OutBound4V;
 PGDBLineProj=^GDBLineProj;
 GDBLineProj=packed array[0..6] of GDBvertex2D;
 GDBplane=packed record
@@ -282,10 +257,6 @@ GDBNamedObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                      procedure SetDefaultValues;virtual;abstract;
                      procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;abstract;
                end;
-ODBDevicepassport=packed record
-                        category,name,id,nameall,tu,edizm:GDBString;
-                        mass:GDBDouble;
-                  end;
 PGLLWWidth=^GLLWWidth;
 GLLWWidth=packed record
                 startw:GDBDouble;(*saved_to_shd*)
@@ -293,25 +264,15 @@ GLLWWidth=packed record
                 hw:GDBBoolean;(*saved_to_shd*)
                 quad:GDBQuad2d;
           end;
-PGDBOpenArrayGLlwwidth_GDBWord=^GDBOpenArrayGLlwwidth_GDBWord;
 PGDBStrWithPoint=^GDBStrWithPoint;
 GDBStrWithPoint=packed record
                       str:GDBString;
                       x,y,z,w:GDBDouble;
                 end;
-GDBAttrib=packed record
-                tag,prompt,value:GDBString;
-          end;
 GDBArrayVertex2D=packed array[0..300] of GDBVertex2D;
 PGDBArrayVertex2D=^GDBArrayVertex2D;
-GDBArrayGDBDouble=packed array[0..300] of GDBDouble;
-GDBArrayAttrib=packed array[0..300] of GDBAttrib;
 PGDBArrayGLlwwidth=^GDBArrayGLlwwidth;
 GDBArrayGLlwwidth=packed array[0..300] of GLLWWidth;
-GDBOpenArrayGLlwwidth_GDBWord=packed record
-    count: GDBWord;
-    widtharray: GDBArrayGLlwwidth;
-  end;
 PGDBArrayVertex=^GDBArrayVertex;
 GDBArrayVertex=packed array[0..0] of GDBvertex;
   pcontrolpointdesc=^controlpointdesc;
@@ -331,10 +292,6 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
     pcontrolpoint:pcontrolpointdesc;
     disttomouse:GDBInteger;
   end;
-  TmyFileVersionInfo=packed record
-                         major,minor,release,build,revision:GDBInteger;
-                         versionstring:GDBstring;
-                     end;
   PTArrayIndex=^TArrayIndex;
   TArrayIndex=GDBInteger;
   TPolyData=packed record
@@ -361,7 +318,6 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
                    BBorder:TBlockBorder;(*'Border'*)
                    BGroup:TBlockGroup;(*'Block group'*)
              end;
-FreeElProc=procedure (p:GDBPointer);
 TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
 PGDBsymdolinfo=^GDBsymdolinfo;
 GDBsymdolinfo=packed record
@@ -1405,6 +1361,7 @@ TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
             function RegisterType(ti:PTypeInfo):PUserTypeDescriptor;
             function RegisterRecordType(ti:PTypeInfo):PUserTypeDescriptor;
             function RegisterPointerType(ti:PTypeInfo):PUserTypeDescriptor;
+            function RegisterEnumType(ti:PTypeInfo):PUserTypeDescriptor;
       end;
 //Generate on E:/zcad/cad_source/zengine/zgl/uzgvertex3sarray.pas
 PZGLVertex3Sarray=^ZGLVertex3Sarray;
@@ -3423,6 +3380,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
     procedure Command(Operands:TCommandOperands); virtual;abstract;
   end;
 //Generate on E:/zcad/cad_source/zcad/commands/uzccomexample.pas
+    //** Тип данных для отображения в инспекторе опций команды MatchProp о текстовых примитивах, составная часть TMatchPropParam
     TMatchPropTextParam=packed record
                        ProcessTextStyle:GDBBoolean;(*'Process style'*)
                        ProcessTextSize:GDBBoolean;(*'Process size'*)
@@ -3430,7 +3388,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                        ProcessTextWFactor:GDBBoolean;(*'Process wfactor'*)
                        ProcessTextJustify:GDBBoolean;(*'Process justify'*)
                  end;
-    PTMatchPropParam=^TMatchPropParam;
+    //** Тип данных для отображения в инспекторе опций команды MatchProp
     TMatchPropParam=packed record
                        ProcessLayer:GDBBoolean;(*'Process layer'*)
                        ProcessLineWeight:GDBBoolean;(*'Process line weight'*)
@@ -3439,13 +3397,16 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                        ProcessColor:GDBBoolean;(*'Process color'*)
                        TextParams:TMatchPropTextParam;(*'Text params'*)
                  end;
-    //** Создание выподающего меню в инспекторе (3Dolyline или LWPolyline)
-    TRectangEntType=(RET_3DPoly(*'3DPoly'*),RET_LWPoly(*'LWPoly'*));
-    //** Добавление панели упр многоугольниками в инспекторе
+    //** Перечислимый тип для отображения в инспекторе режима создания прямоугольника (из 3DPolyLine или LWPolyLine, составная часть TRectangParam)
+    TRectangEntType=(
+                     RET_3DPoly(*'3DPoly'*) //**< будет использован примитив 3DPolyLine
+                    ,RET_LWPoly(*'LWPoly'*) //**< будет использован примитив LWPolyline
+                     );
+    //** Тип данных для отображения в инспекторе опций команды Rectangle
     TRectangParam=packed record
-                       ET:TRectangEntType;(*'Entity type'*)      //**< Выбор типа объекта 3Dolyline или LWPolyline
+                       ET:TRectangEntType;(*'Entity type'*)      //**< Выбор типа примитива, которым будет создан прямоугольник - 3Dolyline или LWPolyline
                        //VNum:GDBInteger;(*'Number of vertices'*)  //**< Определение количества вершин
-                       PolyWidth:GDBDouble;(*'Polyline width'*)  //**< Вес линий
+                       PolyWidth:GDBDouble;(*'Polyline width'*)  //**< Ширина полилинии (если в качестве примитива выбран RET_LWPoly)
                  end;
 //Generate on E:/zcad/cad_source/zengine/containers/UGDBTracePropArray.pas
 type
@@ -3581,6 +3542,7 @@ type
                        currentunit:PTUnit;
                        NextUnitManager:PTUnitManager;
                        constructor init;
+                       function CreateUnit(PPaths:GDBString;TranslateFunc:TTranslateFunction;UName:GDBString):PTUnit;
                        function loadunit(PPaths:GDBString;TranslateFunc:TTranslateFunction;fname:GDBString; pcreatedunit:PTSimpleUnit):ptunit;virtual;abstract;
                        function parseunit(PPaths:GDBString;TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfByte; pcreatedunit:PTSimpleUnit):ptunit;virtual;abstract;
                        function changeparsemode(PPaths:GDBString;TranslateFunc:TTranslateFunction;newmode:GDBInteger;var mode:GDBInteger):pasparsemode;

@@ -22,6 +22,10 @@ interface
 uses LCLProc,uzbpaths,uzcstrconsts,uzbtypesbase,Forms,uzbtypes{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF},sysutils;
 {$INCLUDE revision.inc}
 type
+  TmyFileVersionInfo=packed record
+                         major,minor,release,build,revision:GDBInteger;
+                         versionstring:GDBstring;
+                     end;
   tsysparam=record
                      ScreenX,ScreenY:GDBInteger;
                      DefaultHeight:GDBInteger;

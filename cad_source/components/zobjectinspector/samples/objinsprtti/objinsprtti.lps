@@ -10,7 +10,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="16"/>
-        <UsageCount Value="31"/>
+        <UsageCount Value="32"/>
       </Unit0>
       <Unit1>
         <Filename Value="mainform.pas"/>
@@ -19,9 +19,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="79"/>
-        <CursorPos Y="87"/>
-        <UsageCount Value="31"/>
+        <TopLine Value="80"/>
+        <CursorPos X="5" Y="102"/>
+        <UsageCount Value="32"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
@@ -30,7 +30,7 @@
         <EditorIndex Value="4"/>
         <TopLine Value="234"/>
         <CursorPos X="17" Y="262"/>
-        <UsageCount Value="14"/>
+        <UsageCount Value="15"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
@@ -45,7 +45,7 @@
         <EditorIndex Value="8"/>
         <TopLine Value="74"/>
         <CursorPos X="24" Y="80"/>
-        <UsageCount Value="14"/>
+        <UsageCount Value="15"/>
         <Loaded Value="True"/>
       </Unit4>
       <Unit5>
@@ -53,7 +53,7 @@
         <EditorIndex Value="3"/>
         <TopLine Value="1794"/>
         <CursorPos X="29" Y="1794"/>
-        <UsageCount Value="14"/>
+        <UsageCount Value="15"/>
         <Loaded Value="True"/>
       </Unit5>
       <Unit6>
@@ -76,7 +76,7 @@
         <EditorIndex Value="6"/>
         <TopLine Value="194"/>
         <CursorPos X="22" Y="216"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit8>
       <Unit9>
@@ -91,7 +91,7 @@
         <EditorIndex Value="7"/>
         <TopLine Value="468"/>
         <CursorPos Y="489"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit10>
       <Unit11>
@@ -99,7 +99,7 @@
         <EditorIndex Value="5"/>
         <TopLine Value="6"/>
         <CursorPos X="39" Y="28"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit11>
@@ -107,7 +107,7 @@
         <Filename Value="..\..\..\zcontainers\gzctnrvectorsimple.pas"/>
         <EditorIndex Value="2"/>
         <CursorPos Y="36"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit12>
@@ -116,7 +116,7 @@
         <EditorIndex Value="1"/>
         <TopLine Value="50"/>
         <CursorPos X="21" Y="72"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit13>

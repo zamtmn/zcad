@@ -93,8 +93,8 @@ begin
   data.dataS:='test';
   data.pointerToOtherData:=nil;
 
-  RunTimeUnit:=units.CreateUnit('',nil,'RunTimeUnit');
-  RunTimeUnit.RegisterType(TypeInfo(TData1));
+  RunTimeUnit:=units.CreateUnit('',nil,'RunTimeUnit');//create empty zscript unit
+  RunTimeUnit.RegisterType(TypeInfo(TData1));//register rtti types in zscript unit
 
   AddEditorToType('GDBInteger',TBaseTypesEditors.BaseCreateEditor);//register standart editor to integer type
   AddEditorToType('GDBDouble',TBaseTypesEditors.BaseCreateEditor);//register standart editor to double type

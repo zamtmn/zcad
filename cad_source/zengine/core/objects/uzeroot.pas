@@ -23,7 +23,7 @@ interface
 Uses
    uzgldrawcontext,uzedrawingdef,uzecamera,uzeentitiestree,uzbtypesbase,uzbtypes,
    uzeconsts,uzeentity,uzeentgenericsubentry,uzeentconnected,uzeentsubordinated,
-   uzegeometry;
+   uzbgeomtypes,uzegeometry;
 type
 {REGISTEROBJECTTYPE GDBObjRoot}
 {Export+}

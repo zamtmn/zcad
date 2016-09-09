@@ -21,7 +21,7 @@ unit uzefont;
 interface
 uses math,uzgldrawerabstract,uzgprimitivescreator,uzgprimitives,uzgprimitivessarray,uzbmemman,
      uzbstrproc,UGDBOpenArrayOfByte,uzbtypesbase,sysutils,uzbtypes,
-     uzefontbase,uzegeometry,uzglvectorobject;
+     uzefontbase,uzbgeomtypes,uzegeometry,uzglvectorobject;
 type
 {EXPORT+}
 PGDBfont=^GDBfont;

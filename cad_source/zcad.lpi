@@ -173,46 +173,49 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="13">
+    <RequiredPackages Count="14">
       <Item1>
-        <PackageName Value="zobjectinspector"/>
+        <PackageName Value="zmath"/>
       </Item1>
       <Item2>
-        <PackageName Value="zundostack"/>
+        <PackageName Value="zobjectinspector"/>
       </Item2>
       <Item3>
-        <PackageName Value="zscript"/>
+        <PackageName Value="zundostack"/>
       </Item3>
       <Item4>
-        <PackageName Value="zscriptbase"/>
+        <PackageName Value="zscript"/>
       </Item4>
       <Item5>
-        <PackageName Value="zcontainers"/>
+        <PackageName Value="zscriptbase"/>
       </Item5>
       <Item6>
-        <PackageName Value="zebase"/>
+        <PackageName Value="zcontainers"/>
       </Item6>
       <Item7>
-        <PackageName Value="zcontrols"/>
+        <PackageName Value="zebase"/>
       </Item7>
       <Item8>
-        <PackageName Value="FCL"/>
+        <PackageName Value="zcontrols"/>
       </Item8>
       <Item9>
-        <PackageName Value="fpvectorialpkg"/>
+        <PackageName Value="FCL"/>
       </Item9>
       <Item10>
-        <PackageName Value="Printer4Lazarus"/>
+        <PackageName Value="fpvectorialpkg"/>
       </Item10>
       <Item11>
-        <PackageName Value="AnchorDocking"/>
+        <PackageName Value="Printer4Lazarus"/>
       </Item11>
       <Item12>
-        <PackageName Value="LazOpenGLContext"/>
+        <PackageName Value="AnchorDocking"/>
       </Item12>
       <Item13>
-        <PackageName Value="LCL"/>
+        <PackageName Value="LazOpenGLContext"/>
       </Item13>
+      <Item14>
+        <PackageName Value="LCL"/>
+      </Item14>
     </RequiredPackages>
     <Units Count="182">
       <Unit0>

@@ -20,7 +20,7 @@ unit zcchangeundocommand;
 {$INCLUDE def.inc}
 interface
 uses uzepalette,uzbmemman,zeundostack,zebaseundocommands,uzbtypesbase,uzbtypes,
-     uzeentity,uzestyleslayers;
+     uzbgeomtypes,uzeentity,uzestyleslayers;
 
 type
 generic TGChangeCommand<_T>=object(TCustomChangeCommand)

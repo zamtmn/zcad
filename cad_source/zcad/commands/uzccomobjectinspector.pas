@@ -41,7 +41,7 @@ uses
   URecordDescriptor,TypeDescriptors,
 
   Forms,
-
+  uzbgeomtypes,
 
   uzeentblockinsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока

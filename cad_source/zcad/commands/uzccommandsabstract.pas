@@ -19,7 +19,7 @@
 unit uzccommandsabstract;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzbtypes,uzglviewareadata,uzclog;
+uses uzbgeomtypes,uzbtypesbase,uzbtypes,uzglviewareadata,uzclog;
 const
      CADWG=1;
      CASelEnt=2;

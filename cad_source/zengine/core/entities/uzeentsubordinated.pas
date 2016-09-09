@@ -21,7 +21,7 @@ unit uzeentsubordinated;
 
 interface
 uses strutils,uzgldrawcontext,uzeentityextender,uzetextpreprocessor,uzedrawingdef,
-     uzbstrproc{$IFNDEF DELPHI},LazUTF8{$ENDIF},UGDBOpenArrayOfByte,uzbtypes,
+     uzbstrproc{$IFNDEF DELPHI},LazUTF8{$ENDIF},UGDBOpenArrayOfByte,uzbgeomtypes,uzbtypes,
      uzbtypesbase,sysutils,uzestyleslayers;
 type
 //Owner:PGDBObjGenericWithSubordinated;(*'Владелец'*)

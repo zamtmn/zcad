@@ -22,7 +22,7 @@ uses
     uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzecamera,
     uzeentwithlocalcs,gzctnrvectorpobjects,uzestyleslayers,uzbtypesbase,
     UGDBSelectedObjArray,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,
-    UGDBOpenArrayOfByte,varman,varmandef,uzbtypes,uzeconsts,
+    uzbgeomtypes,UGDBOpenArrayOfByte,varman,varmandef,uzbtypes,uzeconsts,
     uzglviewareadata,uzegeometry,uzeffdxfsupport,uzbmemman,uzeentplain;
 type
 {REGISTEROBJECTTYPE GDBObjEllipse}

@@ -27,7 +27,7 @@ uses
      qt4,qtint,
      {$ENDIF}
      uzgldrawergdi,uzglviewareaabstract,uzgldrawerogl,sysutils,uzbmemman,uzbtypesbase,uzbtypes,
-     uzegeometry,{$IFNDEF DELPHI}LCLType,{$ENDIF}{$IFDEF DELPHI}Types,{$ENDIF}
+     uzbgeomtypes,uzegeometry,{$IFNDEF DELPHI}LCLType,{$ENDIF}{$IFDEF DELPHI}Types,{$ENDIF}
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,uzglbackendmanager,uzglviewareacanvasgeneral;
 type
     TGDIViewArea=class(TGeneralCanvasViewArea)

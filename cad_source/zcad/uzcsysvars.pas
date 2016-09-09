@@ -20,7 +20,7 @@ unit uzcsysvars;
 {$INCLUDE def.inc}
 
 interface
-uses uzbtypesbase,uzepalette,
+uses uzbtypesbase,uzbgeomtypes,uzepalette,
      uzbtypes,uzctnrvectorgdbstring,
 {$IFDEF LCLGTK2}
 gtk2,gdk2,

@@ -19,7 +19,7 @@ uses
   uzccommandsmanager,uzccomdraw,uzcentelleader,
   uzccommandsabstract,
   uzccommandsimpl,
-  uzbtypes,
+  uzbgeomtypes,uzbtypes,
   uzcutils,
   sysutils,
   {fileutil}LazUTF8,

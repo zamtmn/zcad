@@ -43,7 +43,7 @@ uses
   uzegeometry,
   uzbmemman,
   uzeconsts,
-  uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
+  uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
   uzcshared,uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
   math,uzeenttable,uzctnrvectorgdbstring,uzcprinterspecfunc;
 const

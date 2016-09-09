@@ -23,7 +23,7 @@ unit uzccommandsimpl;
 interface
 uses uzcutils,uzgldrawcontext,uzglviewareageneral,uzeconsts,uzcsysvars,uzegeometry,
      varmandef,uzbtypesbase,uzbtypes,uzccommandsabstract,uzccommandsmanager,
-     uzglviewareadata,uzcdrawings,uzbmemman,uzcshared;
+     uzbgeomtypes,uzglviewareadata,uzcdrawings,uzbmemman,uzcshared;
 type
   comproc=procedure(_self:pointer);
   commousefunc=function(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger):GDBInteger;

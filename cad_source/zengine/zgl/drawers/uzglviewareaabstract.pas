@@ -22,7 +22,7 @@ interface
 uses
      UGDBOpenArrayOfPV,uzgldrawerabstract,uzeentgenericsubentry,uzbtypesbase,uzbtypes,
      uzglviewareadata,uzgldrawcontext,UGDBPoint3DArray,uzeentitiestree,uzegeometry,uzedrawingabstract,
-     {uzcshared,}sysutils,
+     uzbgeomtypes,sysutils,
      ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,Messages,Graphics,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,uzeentity;
 
 type

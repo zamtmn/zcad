@@ -43,6 +43,7 @@ uses
   Forms,
 
   uzeutils,
+  uzbgeomtypes,
 
   uzeentblockinsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока

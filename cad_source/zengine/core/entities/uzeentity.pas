@@ -21,7 +21,7 @@ unit uzeentity;
 interface
 uses uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingdef,
      uzecamera,uzeentitiesprop,uzglgeometry,uzestyleslinetypes,uzbtypesbase,
-     UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,
+     uzbgeomtypes,UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,
      uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,uzbmemman,UGDBOpenArrayOfByte,
      uzestyleslayers,gzctnrvectorpobjects;
 type

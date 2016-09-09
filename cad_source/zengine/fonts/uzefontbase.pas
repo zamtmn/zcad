@@ -20,7 +20,7 @@ unit uzefontbase;
 {$INCLUDE def.inc}
 interface
 uses uzgprimitives,uzglvectorobject,uzbmemman,uzbstrproc,UGDBOpenArrayOfByte,
-     uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzegeometry;
+     uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzbgeomtypes,uzegeometry;
 type
 {EXPORT+}
 TGDBUNISymbolInfoVector=GZVectorData{-}<GDBUNISymbolInfo>{//};

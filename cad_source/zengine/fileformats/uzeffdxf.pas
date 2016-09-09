@@ -57,17 +57,6 @@ const
      (entname:'SPLINE'),
      (entname:'DIMENSION')
      );}
-     NULZCPHeader:ZCPHeader=(
-     Signature:'';
-     Copyright:'';
-     Coment:'';
-     HiVersion:0;
-     LoVersion:0;
-     OffsetTable:(
-                  GDB:0;
-                  GDBRT:0;
-                 );
-                );
 {$IFDEF DEBUGBUILD}
 var i2:GDBInteger;
 {$ENDIF}

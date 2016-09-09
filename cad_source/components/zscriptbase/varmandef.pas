@@ -55,6 +55,7 @@ const
   vda_RO=2;
   vda_approximately=4;
 type
+TCompareResult=(CRLess,CREqual,CRGreater,CRNotEqual);
 TPropEditorOwner=TWinControl;
 PDMode=(PDM_Field,PDM_Property);
 PUserTypeDescriptor=^UserTypeDescriptor;

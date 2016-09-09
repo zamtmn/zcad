@@ -48,8 +48,8 @@ begin
 end;
 procedure GDBOOutbound2DIArray.addpoint;
 begin
-     if (count=0)or((PGDBvertex2DIArray(parray)^[count-1].x<>point.x)or
-                    (PGDBvertex2DIArray(parray)^[count-1].y<>point.y))
+     if (count=0)or((parray^[count-1].x<>point.x)or
+                    (parray^[count-1].y<>point.y))
      then
      begin
           PushBackData(point);
@@ -59,12 +59,12 @@ begin
 end;
 procedure GDBOOutbound2DIArray.addlastpoint;
 begin
-     if ((PGDBvertex2DIArray(parray)^[count-1].x<>point.x)or(PGDBvertex2DIArray(parray)^[count-1].y<>point.y))
+     if ((parray^[count-1].x<>point.x)or(parray^[count-1].y<>point.y))
         and
-        ((PGDBvertex2DIArray(parray)^[0].x<>point.x)or(PGDBvertex2DIArray(parray)^[0].y<>point.y))
+        ((parray^[0].x<>point.x)or(parray^[0].y<>point.y))
      then
      begin
-          PGDBvertex2DIArray(parray)^[count]:=point;
+          parray^[count]:=point;
           inc(count);
      end;
 end;
@@ -155,7 +155,7 @@ begin
      begin
           if i=count-1 then j:=0
                        else j:=i+1;
-          result:=result+vertexlen2df(PGDBvertex2DIArray(parray)^[i].x, PGDBvertex2DIArray(parray)^[i].y,PGDBvertex2DIArray(parray)^[j].x,PGDBvertex2DIArray(parray)^[j].y);
+          result:=result+vertexlen2df(parray^[i].x, parray^[i].y,parray^[j].x,parray^[j].y);
      end;
 end;
 {function GDBOOutbound2DIArray.onmouse;

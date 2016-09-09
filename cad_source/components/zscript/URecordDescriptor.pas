@@ -261,7 +261,6 @@ end;
 destructor RecordDescriptor.done;
 begin
      inherited;
-     //destructor FreewithprocAndDone(freeproc:freeelproc);virtual;
      fields.Freewithproc(freefield);
      fields.done;
      parent:=nil;

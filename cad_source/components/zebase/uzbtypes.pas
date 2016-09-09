@@ -68,26 +68,7 @@ GDBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object
     function IsEntity:GDBBoolean;virtual;
 
   end;
-devicedesk=packed record
-                 category,variable,name,id,nameall,tu,edizm,mass:GDBString;
-           end;
-PTZCPOffsetTable=^TZCPOffsetTable;
-TZCPOffsetTable=packed record
-                      GDB:GDBLongword;(*saved_to_shd*)
-                      GDBRT:GDBLongword;(*saved_to_shd*)
-                end;
-PZCPHeader=^ZCPHeader;
-ZCPHeader=packed record
-                Signature:GDBString;(*saved_to_shd*)
-                Copyright:GDBString;(*saved_to_shd*)
-                Coment:GDBString;(*saved_to_shd*)
-                HiVersion:GDBWord;(*saved_to_shd*)
-                LoVersion:GDBWord;(*saved_to_shd*)
-                OffsetTable:TZCPOffsetTable;(*saved_to_shd*)
-          end;
-TObjLinkRecordMode=(OBT(*'ObjBeginToken'*),OFT(*'ObjFieldToken'*),UBR(*'UncnownByReference'*));
-TCompareResult=(CRLess,CREqual,CRGreater,CRNotEqual);
-PIMatrix4=^IMatrix4;               
+PIMatrix4=^IMatrix4;
 IMatrix4=packed array[0..3]of GDBInteger;
 DVector4D=packed array[0..3]of GDBDouble;
 DVector3D=packed array[0..2]of GDBDouble;
@@ -167,10 +148,6 @@ GDBFontVertex2D=packed record
                 x:FontFloat;(*saved_to_shd*)
                 y:FontFloat;(*saved_to_shd*)
             end;
-{//-ttf-//TTrianglesDataInfo=packed record
-               TrianglesAddr: GDBInteger;
-               TrianglesSize: GDBWord;
-               end;}
 PGDBPolyVertex2D=^GDBPolyVertex2D;
 GDBPolyVertex2D=packed record
                       coord:GDBvertex2D;
@@ -203,12 +180,10 @@ TInBoundingVolume=(IRFully,IRPartially,IREmpty);
 
 PGDBvertex2DI=^GDBvertex2DI;
 GDBvertex2DIArray=packed array [0..0] of GDBvertex2DI;
-PGDBvertex2DIArray=^GDBvertex2DIArray;
 OutBound4V=packed array [0..3]of GDBvertex;
-Proj4V2DI=packed array [0..3]of GDBvertex2DI;
 PGDBQuad3d=^GDBQuad3d;
 GDBQuad2d=packed array[0..3] of GDBvertex2D;
-GDBQuad3d={array[0..3] of GDBvertex}OutBound4V;
+GDBQuad3d=OutBound4V;
 PGDBLineProj=^GDBLineProj;
 GDBLineProj=packed array[0..6] of GDBvertex2D;
 GDBplane=packed record
@@ -275,10 +250,6 @@ GDBNamedObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                      procedure SetDefaultValues;virtual;
                      procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
                end;
-ODBDevicepassport=packed record
-                        category,name,id,nameall,tu,edizm:GDBString;
-                        mass:GDBDouble;
-                  end;
 PGLLWWidth=^GLLWWidth;
 GLLWWidth=packed record
                 startw:GDBDouble;(*saved_to_shd*)
@@ -286,25 +257,15 @@ GLLWWidth=packed record
                 hw:GDBBoolean;(*saved_to_shd*)
                 quad:GDBQuad2d;
           end;
-PGDBOpenArrayGLlwwidth_GDBWord=^GDBOpenArrayGLlwwidth_GDBWord;
 PGDBStrWithPoint=^GDBStrWithPoint;
 GDBStrWithPoint=packed record
                       str:GDBString;
                       x,y,z,w:GDBDouble;
                 end;
-GDBAttrib=packed record
-                tag,prompt,value:GDBString;
-          end;
 GDBArrayVertex2D=packed array[0..300] of GDBVertex2D;
 PGDBArrayVertex2D=^GDBArrayVertex2D;
-GDBArrayGDBDouble=packed array[0..300] of GDBDouble;
-GDBArrayAttrib=packed array[0..300] of GDBAttrib;
 PGDBArrayGLlwwidth=^GDBArrayGLlwwidth;
 GDBArrayGLlwwidth=packed array[0..300] of GLLWWidth;
-GDBOpenArrayGLlwwidth_GDBWord=packed record
-    count: GDBWord;
-    widtharray: GDBArrayGLlwwidth;
-  end;
 PGDBArrayVertex=^GDBArrayVertex;
 GDBArrayVertex=packed array[0..0] of GDBvertex;
   pcontrolpointdesc=^controlpointdesc;
@@ -324,10 +285,6 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
     pcontrolpoint:pcontrolpointdesc;
     disttomouse:GDBInteger;
   end;
-  TmyFileVersionInfo=packed record
-                         major,minor,release,build,revision:GDBInteger;
-                         versionstring:GDBstring;
-                     end;
   PTArrayIndex=^TArrayIndex;
   TArrayIndex=GDBInteger;
 
@@ -356,7 +313,6 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
                    BBorder:TBlockBorder;(*'Border'*)
                    BGroup:TBlockGroup;(*'Block group'*)
              end;
-FreeElProc=procedure (p:GDBPointer);
 TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
 PGDBsymdolinfo=^GDBsymdolinfo;
 GDBsymdolinfo=packed record
@@ -469,21 +425,6 @@ const
   GDBBaseObjectID = 30000;
   ObjN_NotRecognized='NotRecognized';
   ObjN_ArrayEnd='ArrayEnd';
-
-  ZCPHead:ZCPHeader=
-                    (
-                     Signature:ZCPSignature;
-                     Copyright:ZCPCopyright;
-                     Coment:ZCPComent;
-                     HiVersion:0;
-                     LoVersion:2;
-                     OffsetTable:(
-                                  GDB:1;
-                                  GDBRT:2;
-                                 )
-                     );
-   ZCPHeadOffsetTableOffset=3*sizeof(word)+length(ZCPSignature)+length(ZCPCopyright)+length(ZCPComent)
-                             +sizeof(ZCPHead.HiVersion)+sizeof(ZCPHead.LoVersion);
 var
   VerboseLog:boolean=false;
 {$IFDEF DELPHI}

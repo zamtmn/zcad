@@ -11,7 +11,7 @@ uses
   UGDBObjBlockdefArray, //описание таблицы блоков
   uzeblockdef,          //описания блоков
   uzbtypes,          //базовые типы
-  uzbtypesbase,          //базовые типы
+  uzbgeomtypes,uzbtypesbase,          //базовые типы
   uzbstrproc               //билеберда для работы со стрингами
   ;
 

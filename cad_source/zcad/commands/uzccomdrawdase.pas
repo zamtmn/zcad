@@ -34,7 +34,7 @@ uses
   uzegeometry,
   uzbmemman,
   uzeconsts,
-  uzcshared,uzclog;
+  uzbgeomtypes,uzcshared,uzclog;
 implementation
 uses UBaseTypeDescriptor,Varman,TypeDescriptors;
 var

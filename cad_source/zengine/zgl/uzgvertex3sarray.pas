@@ -20,7 +20,7 @@ unit uzgvertex3sarray;
 {$INCLUDE def.inc}
 interface
 uses uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzbmemman,
-     uzegeometry;
+     uzbgeomtypes,uzegeometry;
 type
 {Export+}
 PZGLVertex3Sarray=^ZGLVertex3Sarray;

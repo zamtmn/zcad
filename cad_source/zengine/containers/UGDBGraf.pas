@@ -20,7 +20,7 @@ unit UGDBGraf;
 {$INCLUDE def.inc}
 interface
 uses varman,uzedrawingdef,varmandef,UGDBPoint3DArray,uzbtypesbase,gzctnrvectordata,
-     sysutils,uzbtypes,uzegeometry,uzeentity,UGDBOpenArrayOfPV;
+     uzbgeomtypes,sysutils,uzbtypes,uzegeometry,uzeentity,UGDBOpenArrayOfPV;
 type
 {EXPORT+}
 PTLinkType=^TLinkType;

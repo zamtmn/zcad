@@ -20,7 +20,7 @@ unit uzgloglstatemanager;
 {$INCLUDE def.inc}
 
 interface
-uses uzepalette,uzbtypesbase,uzbtypes,{$IFNDEF DELPHI}LCLType,{$ENDIF}
+uses uzbgeomtypes,uzepalette,uzbtypesbase,uzbtypes,{$IFNDEF DELPHI}LCLType,{$ENDIF}
      {$IFNDEF DELPHI}gl,{glu,}glext,{$ELSE}dglOpenGL,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
      {$IFDEF WINDOWS}windows,{$ENDIF}

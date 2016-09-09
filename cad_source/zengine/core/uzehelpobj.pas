@@ -19,7 +19,7 @@
 unit uzehelpobj;
 {$INCLUDE def.inc}
 interface
-uses UGDBPolyPoint2DArray,uzbtypes;
+uses uzbgeomtypes,UGDBPolyPoint2DArray,uzbtypes;
 const
    CircleLODCount=100;
 var

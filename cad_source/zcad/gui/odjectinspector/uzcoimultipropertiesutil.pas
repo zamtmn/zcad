@@ -22,7 +22,7 @@ unit uzcoimultipropertiesutil;
 interface
 uses
   uzcoimultiobjects,uzepalette,uzbmemman,uzcshared,sysutils,uzeentityfactory,
-  uzbtypes,
+  uzbgeomtypes,uzbtypes,
   uzcdrawings,
   varmandef,
   uzeentity,

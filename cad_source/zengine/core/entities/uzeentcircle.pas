@@ -22,7 +22,7 @@ interface
 uses
     uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,uzecamera,
     gzctnrvectorpobjects,uzestyleslayers,uzbtypesbase,uzehelpobj,UGDBSelectedObjArray,
-    uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,
+    uzbgeomtypes,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,
     uzbtypes,uzeentwithlocalcs,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzbmemman;
 type
 //PProjPoint:PGDBPolyPoint2DArray;

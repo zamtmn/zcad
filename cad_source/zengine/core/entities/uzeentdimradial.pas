@@ -22,7 +22,7 @@ interface
 uses uzeentityfactory,uzeentdimdiametric,uzeentdimension,uzestylesdim,
      uzestyleslayers,uzedrawingdef,uzbstrproc,UGDBOpenArrayOfByte,
      uzegeometry,uzbtypesbase,sysutils,uzeentity,uzbtypes,uzeconsts,uzeffdxfsupport,
-     uzbmemman,uzeentsubordinated;
+     uzbgeomtypes,uzbmemman,uzeentsubordinated;
 (*
 
 Diametric dimension structure in DXF

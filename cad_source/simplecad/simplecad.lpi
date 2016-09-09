@@ -45,7 +45,7 @@
         <PackageName Value="LCL"/>
       </Item5>
     </RequiredPackages>
-    <Units Count="314">
+    <Units Count="316">
       <Unit0>
         <Filename Value="simplecad.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -60,8 +60,8 @@
         <ComponentName Value="Form1"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="8"/>
-        <CursorPos X="15" Y="27"/>
+        <TopLine Value="152"/>
+        <CursorPos X="32" Y="163"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -2448,16 +2448,34 @@
       </Unit312>
       <Unit313>
         <Filename Value="..\zengine\core\uzeentitiesmanager.pas"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="5"/>
         <CursorPos X="6" Y="25"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit313>
+      <Unit314>
+        <Filename Value="..\components\zebase\uzbtypes.pas"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="446"/>
+        <CursorPos Y="458"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit314>
+      <Unit315>
+        <Filename Value="..\zengine\fileformats\uzeffdxf.pas"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="38"/>
+        <CursorPos Y="60"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit315>
     </Units>
-    <JumpHistory Count="14" HistoryIndex="13">
+    <JumpHistory Count="24" HistoryIndex="23">
       <Position1>
         <Filename Value="umainform.pas"/>
         <Caret Line="547" Column="6"/>
@@ -2513,6 +2531,45 @@
       <Position14>
         <Filename Value="..\zengine\core\uzeentitiesmanager.pas"/>
       </Position14>
+      <Position15>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="163" Column="32" TopLine="152"/>
+      </Position15>
+      <Position16>
+        <Filename Value="..\components\zebase\uzbtypes.pas"/>
+        <Caret Line="88" TopLine="75"/>
+      </Position16>
+      <Position17>
+        <Filename Value="..\zengine\fileformats\uzeffdxf.pas"/>
+      </Position17>
+      <Position18>
+        <Filename Value="..\zengine\fileformats\uzeffdxf.pas"/>
+        <Caret Line="2790" Column="7" TopLine="2768"/>
+      </Position18>
+      <Position19>
+        <Filename Value="..\components\zebase\uzbtypes.pas"/>
+        <Caret Line="75" TopLine="57"/>
+      </Position19>
+      <Position20>
+        <Filename Value="..\components\zebase\uzbtypes.pas"/>
+        <Caret Line="86" Column="29" TopLine="57"/>
+      </Position20>
+      <Position21>
+        <Filename Value="..\components\zebase\uzbtypes.pas"/>
+        <Caret Line="75" TopLine="57"/>
+      </Position21>
+      <Position22>
+        <Filename Value="..\components\zebase\uzbtypes.pas"/>
+        <Caret Line="473" Column="15" TopLine="459"/>
+      </Position22>
+      <Position23>
+        <Filename Value="..\components\zebase\uzbtypes.pas"/>
+        <Caret Line="74" TopLine="58"/>
+      </Position23>
+      <Position24>
+        <Filename Value="..\components\zebase\uzbtypes.pas"/>
+        <Caret Line="458" TopLine="446"/>
+      </Position24>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

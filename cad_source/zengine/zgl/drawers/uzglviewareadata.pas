@@ -20,7 +20,7 @@ unit uzglviewareadata;
 {$INCLUDE def.inc}
 
 interface
-uses uzbtypesbase,uzbtypes, UGDBPoint3DArray,UGDBTracePropArray;
+uses uzbgeomtypes,uzbtypesbase,uzbtypes, UGDBPoint3DArray,UGDBTracePropArray;
 const
 MZW_LBUTTON=1;
 MZW_SHIFT=128;

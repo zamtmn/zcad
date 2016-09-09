@@ -41,43 +41,7 @@ itrec=packed record
             itp:GDBPointer;
             itc:GDBInteger;
       end;
-//Generate on E:/zcad/cad_source/components/zebase/uzbtypes.pas
-(*varcategoryforoi SUMMARY='Суммарно'*)
-(*varcategoryforoi CABLE='Параметры кабеля'*)
-(*varcategoryforoi DEVICE='Параметры устройства'*)
-(*varcategoryforoi OBJFUNC='Функция:объект'*)
-(*varcategoryforoi NMO='Имя'*)
-(*varcategoryforoi DB='База данных'*)
-(*varcategoryforoi GC='Групповое подключение'*)
-(*varcategoryforoi LENGTH='Параметры длинны'*)
-(*varcategoryforoi BTY='Параметры определения блока'*)
-(*varcategoryforoi EL='El(Устаревшая группа)'*)
-(*varcategoryforoi UNITPARAM='Измеряемый параметр'*)
-(*varcategoryforoi DESC='Описание'*)
-(*varcategoryforoi CENTER='Center'*)
-(*varcategoryforoi START='Start'*)
-(*varcategoryforoi END='End'*)
-(*varcategoryforoi DELTA='Delta'*)
-(*varcategoryforoi INSERT='Insert'*)
-(*varcategoryforoi NORMAL='Normal'*)
-(*varcategoryforoi SCALE='Scale'*)
-GDBTypedPointer=packed record
-                      Instance:GDBPointer;
-                      PTD:GDBPointer;
-                end;
-TObjID=GDBWord;
-PGDBaseObject=^GDBaseObject;
-GDBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object
-    function ObjToGDBString(prefix,sufix:GDBString):GDBString; virtual;abstract;
-    function GetObjType:TObjID;virtual;abstract;
-    //procedure Format;virtual;abstract;
-    procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
-    function GetObjTypeName:GDBString;virtual;abstract;
-    function GetObjName:GDBString;virtual;abstract;
-    constructor initnul;
-    destructor Done;virtual;{ abstract;}
-    function IsEntity:GDBBoolean;virtual;abstract;
-  end;
+//Generate on E:/zcad/cad_source/components/zebase/uzbgeomtypes.pas
 PIMatrix4=^IMatrix4;
 IMatrix4=packed array[0..3]of GDBInteger;
 DVector4D=packed array[0..3]of GDBDouble;
@@ -203,6 +167,43 @@ GDBray=packed record
 GDBPiece=packed record
              lbegin,dir,lend:GDBvertex;
        end;
+//Generate on E:/zcad/cad_source/components/zebase/uzbtypes.pas
+(*varcategoryforoi SUMMARY='Суммарно'*)
+(*varcategoryforoi CABLE='Параметры кабеля'*)
+(*varcategoryforoi DEVICE='Параметры устройства'*)
+(*varcategoryforoi OBJFUNC='Функция:объект'*)
+(*varcategoryforoi NMO='Имя'*)
+(*varcategoryforoi DB='База данных'*)
+(*varcategoryforoi GC='Групповое подключение'*)
+(*varcategoryforoi LENGTH='Параметры длинны'*)
+(*varcategoryforoi BTY='Параметры определения блока'*)
+(*varcategoryforoi EL='El(Устаревшая группа)'*)
+(*varcategoryforoi UNITPARAM='Измеряемый параметр'*)
+(*varcategoryforoi DESC='Описание'*)
+(*varcategoryforoi CENTER='Center'*)
+(*varcategoryforoi START='Start'*)
+(*varcategoryforoi END='End'*)
+(*varcategoryforoi DELTA='Delta'*)
+(*varcategoryforoi INSERT='Insert'*)
+(*varcategoryforoi NORMAL='Normal'*)
+(*varcategoryforoi SCALE='Scale'*)
+GDBTypedPointer=packed record
+                      Instance:GDBPointer;
+                      PTD:GDBPointer;
+                end;
+TObjID=GDBWord;
+PGDBaseObject=^GDBaseObject;
+GDBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object
+    function ObjToGDBString(prefix,sufix:GDBString):GDBString; virtual;abstract;
+    function GetObjType:TObjID;virtual;abstract;
+    //procedure Format;virtual;abstract;
+    procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
+    function GetObjTypeName:GDBString;virtual;abstract;
+    function GetObjName:GDBString;virtual;abstract;
+    constructor initnul;
+    destructor Done;virtual;{ abstract;}
+    function IsEntity:GDBBoolean;virtual;abstract;
+  end;
 ptarcrtmodify=^tarcrtmodify;
 tarcrtmodify=packed record
                       p1,p2,p3:GDBVertex2d;

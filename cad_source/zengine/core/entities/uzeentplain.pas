@@ -21,7 +21,7 @@ unit uzeentplain;
 
 interface
 uses
- uzgldrawcontext,uzegeometry,uzeentwithlocalcs,uzbtypesbase,uzbtypes;
+ uzbgeomtypes,uzgldrawcontext,uzegeometry,uzeentwithlocalcs,uzbtypesbase,uzbtypes;
 type
 {EXPORT+}
 GDBObjPlain={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)

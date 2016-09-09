@@ -25,7 +25,7 @@ uses
     uzedrawingdef,uzecamera,uzbstrproc,sysutils,uzefont,uzestyleslayers,uzbtypesbase,
     uzeentabstracttext,uzeentity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,uzbtypes,
     uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzbmemman,uzeentsubordinated,
-    uzestylestexts;
+    uzbgeomtypes,uzestylestexts;
 type
 {REGISTEROBJECTTYPE GDBObjText}
 {Export+}

@@ -23,7 +23,7 @@ interface
 uses uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
      gzctnrvectorpobjects,uzestyleslayers,uzeentsubordinated,uzeentcurve,uzbtypesbase,
      uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,uzglviewareadata,
-     uzegeometry,uzeffdxfsupport,sysutils,uzbmemman;
+     uzbgeomtypes,uzegeometry,uzeffdxfsupport,sysutils,uzbmemman;
 type
 {REGISTEROBJECTTYPE GDBObjPolyline}
 {Export+}

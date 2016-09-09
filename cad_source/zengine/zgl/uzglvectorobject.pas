@@ -20,7 +20,7 @@ unit uzglvectorobject;
 {$INCLUDE def.inc}
 interface
 uses uzgldrawerabstract,uzgldrawcontext,uzgprimitives,uzglgeomdata,uzgprimitivessarray,
-     uzegeometry,sysutils,uzbtypes,uzbmemman,uzbstrproc,uzbtypesbase;
+     uzbgeomtypes,uzegeometry,sysutils,uzbtypes,uzbmemman,uzbstrproc,uzbtypesbase;
 type
 {Export+}
 TZGLVectorDataCopyParam=packed record

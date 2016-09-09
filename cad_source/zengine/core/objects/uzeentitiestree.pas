@@ -21,7 +21,7 @@ unit uzeentitiestree;
 interface
 uses
     graphics,
-    gzctnrtree,uzgldrawcontext,uzegeometry,UGDBVisibleOpenArray,uzeentity,uzbtypesbase,uzbtypes,uzbmemman;
+    uzbgeomtypes,gzctnrtree,uzgldrawcontext,uzegeometry,UGDBVisibleOpenArray,uzeentity,uzbtypesbase,uzbtypes,uzbmemman;
 const
      IninialNodeDepth=-1;
 type

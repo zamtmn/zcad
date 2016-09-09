@@ -20,7 +20,7 @@ unit uzebeziersolver;
 {$INCLUDE def.inc}
 interface
 uses uzgprimitivescreator,uzgprimitives,usimplegenerics,uzglvectorobject,uzegluinterface,gvector,uzbmemman,
-     UGDBOpenArrayOfByte,uzbtypesbase,sysutils,uzbtypes,uzegeometry;
+     uzbgeomtypes,UGDBOpenArrayOfByte,uzbtypesbase,sysutils,uzbtypes,uzegeometry;
 type
 TPointAttr=(TPA_OnCurve,TPA_NotOnCurve);
 TSolverMode=(TSM_WaitStartCountur,TSM_WaitStartPoint,TSM_WaitPoint);

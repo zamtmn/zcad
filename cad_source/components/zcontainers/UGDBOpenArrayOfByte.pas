@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfByte;
 {$INCLUDE def.inc}
 interface
-uses gzctnrvector,uzbtypesbase,sysutils,uzbtypes{$IFNDEF DELPHI},LazUTF8{$ENDIF};
+uses gzctnrvector,uzbtypesbase,uzbgeomtypes,sysutils,uzbtypes{$IFNDEF DELPHI},LazUTF8{$ENDIF};
 const
      breacer=[#13,#10,' '];
   eol: GDBString=#13 + #10;

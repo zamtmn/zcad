@@ -46,7 +46,7 @@ uses
  uzeentitiestree,
  uzbtypesbase,uzbmemman,uzcdialogsfiles,
  UUnitManager,uzclog,Varman,
- dialogs,uzcinfoform;
+ uzbgeomtypes,dialogs,uzcinfoform;
    var selframecommand:PCommandObjectDef;
        zoomwindowcommand:PCommandObjectDef;
        ms2objinsp:PCommandObjectDef;

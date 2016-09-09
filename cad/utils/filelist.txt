@@ -1,4 +1,5 @@
 components/zebase/uzbtypesbase.pas
+components/zebase/uzbgeomtypes.pas
 components/zebase/uzbtypes.pas
 zengine/core/objects/uzepalette.pas
 components/zcontainers/gzctnrvector.pas

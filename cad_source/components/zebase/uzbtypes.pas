@@ -25,6 +25,8 @@ const
      cmd_error=1;
      cmd_cancel=-2;
      ZCMD_OK_NOEND=-10;
+     GDBBaseObjectID = 30000;
+     ObjN_NotRecognized='NotRecognized';
 type
 TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 {REGISTEROBJECTTYPE GDBBaseCamera}
@@ -200,18 +202,18 @@ GDBUNISymbolInfo=packed record
     symbol:GDBInteger;
     symbolinfo:GDBsymdolinfo;
   end;
-TTextJustify=(jstl(*'TopLeft'*)=1,
-              jstc(*'TopCenter'*)=2,
-              jstr(*'TopRight'*)=3,
-              jsml(*'MiddleLeft'*)=4,
-              jsmc(*'MiddleCenter'*)=5, //СерединаЦентр
-              jsmr(*'MiddleRight'*)=6,
-              jsbl(*'BottomLeft'*)=7,
-              jsbc(*'BottomCenter'*)=8,
-              jsbr(*'BottomRight'*)=9,
-              jsbtl(*'Left'*)=10,
-              jsbtc(*'Center'*)=11,
-              jsbtr(*'Right'*)=12);
+TTextJustify=(jstl(*'TopLeft'*),
+              jstc(*'TopCenter'*),
+              jstr(*'TopRight'*),
+              jsml(*'MiddleLeft'*),
+              jsmc(*'MiddleCenter'*), //СерединаЦентр
+              jsmr(*'MiddleRight'*),
+              jsbl(*'BottomLeft'*),
+              jsbc(*'BottomCenter'*),
+              jsbr(*'BottomRight'*),
+              jsbtl(*'Left'*),
+              jsbtc(*'Center'*),
+              jsbtr(*'Right'*));
 TSymbolInfoArray=packed array [0..255] of GDBsymdolinfo;
 PTAlign=^TAlign;
 TAlign=(TATop,TABottom,TALeft,TARight);
@@ -288,23 +290,12 @@ TImageDegradation=packed record
                     end;
 PExtensionData=GDBPointer;
 {EXPORT-}
-const
-  empty_GDBString='Empty GDBString';
-  arccount: GDBWord=16;
-  ZCPSignature='ZCAD project file'#13#10;
-  ZCPCopyright='Copyright (C) 2005-2007 Zubarev Andrey'#13#10;
-  ZCPComent='Формат файла будет меняться в ходе разработки программы';
-  GDBBaseObjectID = 30000;
-  ObjN_NotRecognized='NotRecognized';
-  ObjN_ArrayEnd='ArrayEnd';
 var
   VerboseLog:boolean=false;
 {$IFDEF DELPHI}
 function StrToQWord(sh:string):UInt64;
 {$ENDIF}
 implementation
-//uses
-//     log;
 function GDBaseObject.GetObjType:GDBWord;
 begin
      result:=GDBBaseObjectID;

@@ -23,6 +23,7 @@ uses uzgprimitivescreator,uzglvectorobject,uzefontmanager,uzefontshx,uzegeometry
      uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,{log,}sysutils,
      uzbgeomtypes,UGDBOpenArrayOfByte,uzbtypesbase,uzbtypes,uzbmemman,uzgprimitives;
 const
+  arccount=16;
   fontdirect:array[0..$F,0..1] of GDBDouble=
   ((1,0),(1,0.5),(1,1),(0.5,1),(0,1),(-0.5,1),(-1,1),(-1,0.5),(-1,0),(-1,-0.5),(-1,-1),(-0.5,-1),(0,-1),(0.5,-1),(1,-1),(1,-0.5));
 type ptsyminfo=^tsyminfo;

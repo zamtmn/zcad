@@ -96,7 +96,7 @@ end;
 procedure CommandObjectDef.CommandContinue;
 begin
 end;
-function CommandObjectDef.GetObjTypeName;
+function CommandObjectDef.GetObjTypeName:GDBString;
 begin
      //pointer(result):=typeof(testobj);
      result:='CommandObjectDef';
@@ -121,11 +121,11 @@ end;
 procedure CommandObjectDef.DrawHeplGeometry;
 begin
 end;
-function CommandRTEdObjectDef.BeforeClick;
+function CommandRTEdObjectDef.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record):GDBInteger;
 begin
      result:=0;
 end;
-function CommandRTEdObjectDef.AfterClick;
+function CommandRTEdObjectDef.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
 begin
      if self.mouseclic=1 then
                              result:=0
@@ -139,7 +139,7 @@ end;
 procedure CommandRTEdObjectDef.CommandContinue;
 begin
 end;
-function CommandRTEdObjectDef.MouseMoveCallback;
+function CommandRTEdObjectDef.MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
 begin
   //result:=0;
   programlog.logoutstr('CommandRTEdObjectDef.MouseMoveCallback',0,LM_Trace);

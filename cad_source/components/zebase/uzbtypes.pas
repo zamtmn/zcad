@@ -70,10 +70,6 @@ GDBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object
     function IsEntity:GDBBoolean;virtual;
 
   end;
-ptarcrtmodify=^tarcrtmodify;
-tarcrtmodify=packed record
-                      p1,p2,p3:GDBVertex2d;
-                end;
 TArcData=packed record
                r,startangle,endangle:gdbdouble;
                p:GDBvertex2D;
@@ -229,7 +225,7 @@ TFaceTypedData=packed record
                  Instance: GDBPointer;
                  PTD: GDBPointer;
                 end;
-TDimUnit=(DUScientific(*'Scientific'*),DUDecimal(*'Decimal'*),DUEngineering(*'Engineering'*),DUArchitectural(*'Architectural'*),DUFractional(*'Fractional'*),DUSystem(*'System'*));
+TDimUnit =(DUScientific(*'Scientific'*),DUDecimal(*'Decimal'*),DUEngineering(*'Engineering'*),DUArchitectural(*'Architectural'*),DUFractional(*'Fractional'*),DUSystem(*'System'*));
 TDimDSep=(DDSDot,DDSComma,DDSSpace);
 PTLUnits=^TLUnits;
 TLUnits=(LUScientific(*'Scientific'*),LUDecimal(*'Decimal'*),LUEngineering(*'Engineering'*),LUArchitectural(*'Architectural'*),LUFractional(*'Fractional'*));

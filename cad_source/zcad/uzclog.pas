@@ -18,6 +18,7 @@
 
 unit uzclog;
 {$INCLUDE def.inc}
+{$mode objfpc}{$H+}
 interface
 uses uzbtypesbase,uzbtypes,LazLoggerBase,LazLogger;
 const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
@@ -93,7 +94,7 @@ uses
     UGDBOpenArrayOfByte,gzctnrvectordata,strutils,sysutils{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF};
 var
     PerfomaneBuf:GDBOpenArrayOfByte;
-    TimeBuf:GZVectorData<TMyTimeStamp>;
+    TimeBuf:specialize GZVectorData<TMyTimeStamp>;
     function LogMode2string(LogMode:TLogMode):GDBString;
     begin
       case LogMode of
@@ -152,7 +153,7 @@ begin
 
 end;
 
-procedure tlog.WriteToLog;
+procedure tlog.WriteToLog(s:GDBString;todisk:boolean;t,dt:TDateTime;tick,dtick:int64;IncIndent:GDBInteger);
 var ts:gdbstring;
 begin
   ts:=TimeToStr(Time)+{'|'+}DupeString(' ',Indent*2);
@@ -227,7 +228,7 @@ begin
      result.rdtsc:=a;
 end;
 
-procedure tlog.processstrtolog;
+procedure tlog.processstrtolog(str:GDBString;IncIndent:GDBInteger;todisk:boolean);
 var
    CurrentTime:TMyTimeStamp;
    DeltaTime,FromStartTime:TDateTime;
@@ -320,12 +321,12 @@ begin
      ProcessStrToLog(str,IncIndent,true);
      AddStrToLatest('  '+str);
 end;
-procedure tlog.logoutstr;
+procedure tlog.logoutstr(str:GDBString;IncIndent:GDBInteger;LogMode:TLogMode{=LM_Trace});
 begin
      if IsNeedToLog(LogMode) then
                                  ProcessStr(str,IncIndent);
 end;
-procedure tlog.LogOutStrFast;
+procedure tlog.LogOutStrFast(str:GDBString;IncIndent:GDBInteger);
 begin
      //if (str='TOGLWnd.Pre_MouseMove----{end}')and(Indent=3) then
      //               indent:=3;
@@ -348,7 +349,7 @@ begin
                                     end;
 end;
 
-constructor tlog.init;
+constructor tlog.init(fn:GDBString;LogMode:TLogMode);
 var
    CurrentTime:TMyTimeStamp;
    lz:TLazLogger;
@@ -370,8 +371,8 @@ begin
      if assigned(lz)then
        if lz is TLazLoggerFile then
          begin
-              TLazLoggerFile(lz).OnDebugLn:=ZOnDebugLN;
-              TLazLoggerFile(lz).OnDbgOut:=ZOnDebugLN;
+              TLazLoggerFile(lz).OnDebugLn:=@ZOnDebugLN;
+              TLazLoggerFile(lz).OnDbgOut:=@ZOnDebugLN;
          end;
 end;
 procedure tlog.ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);

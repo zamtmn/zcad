@@ -149,6 +149,10 @@ GDBray=packed record
 GDBPiece=packed record
              lbegin,dir,lend:GDBvertex;
        end;
+ptarcrtmodify=^tarcrtmodify;
+tarcrtmodify=packed record
+                      p1,p2,p3:GDBVertex2d;
+                end;
 {EXPORT-}
 implementation
 begin

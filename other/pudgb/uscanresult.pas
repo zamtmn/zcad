@@ -8,31 +8,40 @@ uses
   Classes, SysUtils, gvector, ghashmap;
 
 type
-  TUnitName=String;
-  TUnitIndex=integer;
+  TUnitName=String;    //алиас для имени юнита
+  TUnitIndex=integer;  //алиас для индекса юнита в массиве
 
   UnitNameHash=class
-    class function hash(s:TUnitName; n:longint):SizeUInt;
+    class function hash(s:TUnitName; n:longint):SizeUInt;//процедура ращета хэша для стринга, нужна для устройства хэшмапы
   end;
 
-  TUnitName2IndexMap=specialize THashMap<TUnitName, TUnitIndex, UnitNameHash>;
-  TUsesArray=specialize TVector<TUnitIndex>;
-  TUnitInfo=record
-    UnitName:TUnitName;
-    InterfaceUses,ImplementationUses:TUsesArray;
+  TUnitName2IndexMap=specialize THashMap<TUnitName, TUnitIndex, UnitNameHash>;//хэшмапа для перевода имени блока в индекс
+  TUsesArray=specialize TVector<TUnitIndex>;//вектор индексов
+  TUnitInfo=record //информация о юните, пока тут почти пусто
+    UnitName:TUnitName;                         //имя юнита
+    InterfaceUses,ImplementationUses:TUsesArray;//массив индексов юнитов которые есть в усес этого юнита
   end;
-  TUnitInfoArray=specialize TVector<TUnitInfo>;
+  TUnitInfoArray=specialize TVector<TUnitInfo>;//вектор элементов типа TUnitInfo
 
   TScanResult=class
     private
       function CreateEmptyUnitInfo(const un:TUnitName):TUnitInfo;
     public
-      UnitInfoArray:TUnitInfoArray;
-      UnitName2IndexMap:TUnitName2IndexMap;
+      UnitInfoArray:TUnitInfoArray;        //массив юнитов
+      UnitName2IndexMap:TUnitName2IndexMap;//хэшмап для быстрого перевода имени юнита в индекс в UnitInfoArray
       constructor create;
       destructor destroy;override;
 
+      {попытка создания в массиве записи для юнита un}
+      {возвращает false если запись с таким именем уже есть, создавать ненадо}
+      {возвращает true если записи с таким именем еще небыло, она создана}
+      {возвращает UnitIindex индекс записи в любом случае}
       function TryCreateNewUnitInfo(const un:TUnitName;var UnitIindex:TUnitIndex):boolean;
+
+      {проверка наличия в массиве записи для юнита un}
+      {возвращает true если запись с таким именем есть}
+      {возвращает false если записи с таким именем нет}
+      {возвращает UnitIindex индекс записи если true}
       function isUnitInfoPresent(const un:TUnitName;var UnitIindex:TUnitIndex):boolean;
   end;
 

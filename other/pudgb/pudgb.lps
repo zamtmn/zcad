@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="24">
+      <Unit0>
+        <Filename Value="pudgb.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="5"/>
+        <CursorPos X="18" Y="10"/>
+        <UsageCount Value="41"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="mainform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <TopLine Value="49"/>
+        <CursorPos X="5" Y="69"/>
+        <UsageCount Value="41"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="uscaner.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="9"/>
+        <TopLine Value="151"/>
+        <CursorPos X="8" Y="188"/>
+        <UsageCount Value="29"/>
+        <Loaded Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="uoptions.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="2"/>
+        <CursorPos X="3" Y="18"/>
+        <UsageCount Value="28"/>
+        <Loaded Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="uscanresult.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="24"/>
+        <CursorPos X="44" Y="65"/>
+        <UsageCount Value="28"/>
+        <Loaded Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="uwriter.pas"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="31"/>
+        <CursorPos X="51" Y="60"/>
+        <UsageCount Value="25"/>
+        <Loaded Value="True"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="..\..\cad_source\components\zebase\uzbtypesbase.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="10"/>
+        <UsageCount Value="8"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="..\..\cad_source\components\zebase\zebase.pas"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="11"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="E:\ppsrc\packages\paszlib\src\zbase.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="461"/>
+        <UsageCount Value="8"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="E:\ppsrc\packages\fcl-passrc\src\pparser.pp"/>
+        <UnitName Value="PParser"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="675"/>
+        <CursorPos Y="697"/>
+        <UsageCount Value="11"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="E:\ppsrc\packages\fcl-passrc\src\pscanner.pp"/>
+        <UnitName Value="PScanner"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1306"/>
+        <CursorPos X="5" Y="1328"/>
+        <UsageCount Value="11"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="E:\ppsrc\rtl\objpas\sysutils\sysutilh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="103"/>
+        <CursorPos X="16" Y="125"/>
+        <UsageCount Value="11"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="E:\ppsrc\packages\fcl-passrc\src\pastree.pp"/>
+        <UnitName Value="PasTree"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="323"/>
+        <CursorPos X="19" Y="352"/>
+        <UsageCount Value="11"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="E:\ppsrc\packages\fcl-passrc\examples\test_parser.pp"/>
+        <UnitName Value="test_parser1"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1909"/>
+        <CursorPos X="19" Y="1937"/>
+        <UsageCount Value="11"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="E:\lazarus\lcl\include\custommemo.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="6"/>
+        <CursorPos Y="43"/>
+        <UsageCount Value="14"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="E:\ppsrc\rtl\objpas\classes\classesh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="193"/>
+        <CursorPos X="3" Y="215"/>
+        <UsageCount Value="14"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="pparser.pp"/>
+        <UnitName Value="PParser"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="480"/>
+        <CursorPos X="11" Y="506"/>
+        <UsageCount Value="13"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="pscanner.pp"/>
+        <UnitName Value="PScanner"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="307"/>
+        <CursorPos X="5" Y="329"/>
+        <UsageCount Value="10"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="E:\lazarus\lcl\interfaces\win32\win32proc.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1047"/>
+        <CursorPos Y="1069"/>
+        <UsageCount Value="10"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="E:\ppsrc\packages\fcl-stl\src\gvector.pp"/>
+        <EditorIndex Value="8"/>
+        <TopLine Value="53"/>
+        <CursorPos X="14" Y="74"/>
+        <UsageCount Value="14"/>
+        <Loaded Value="True"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="E:\ppsrc\packages\fcl-stl\src\gmap.pp"/>
+        <EditorIndex Value="7"/>
+        <CursorPos X="11" Y="44"/>
+        <UsageCount Value="14"/>
+        <Loaded Value="True"/>
+      </Unit20>
+      <Unit21>
+        <Filename Value="E:\ppsrc\rtl\inc\objpash.inc"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="189"/>
+        <CursorPos X="22" Y="211"/>
+        <UsageCount Value="14"/>
+        <Loaded Value="True"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="E:\ppsrc\packages\fcl-stl\src\ghashmap.pp"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="190"/>
+        <CursorPos X="3" Y="194"/>
+        <UsageCount Value="14"/>
+        <Loaded Value="True"/>
+      </Unit22>
+      <Unit23>
+        <Filename Value="pastree.pp"/>
+        <UnitName Value="PasTree"/>
+        <EditorIndex Value="10"/>
+        <TopLine Value="172"/>
+        <CursorPos X="28" Y="195"/>
+        <UsageCount Value="13"/>
+        <Loaded Value="True"/>
+      </Unit23>
+    </Units>
+    <JumpHistory Count="29" HistoryIndex="28">
+      <Position1>
+        <Filename Value="uscanresult.pas"/>
+        <Caret Line="88" Column="18" TopLine="54"/>
+      </Position1>
+      <Position2>
+        <Filename Value="uscanresult.pas"/>
+        <Caret Line="91" TopLine="54"/>
+      </Position2>
+      <Position3>
+        <Filename Value="uscanresult.pas"/>
+        <Caret Line="92" TopLine="54"/>
+      </Position3>
+      <Position4>
+        <Filename Value="uscanresult.pas"/>
+        <Caret Line="95" TopLine="54"/>
+      </Position4>
+      <Position5>
+        <Filename Value="uscanresult.pas"/>
+        <Caret Line="96" TopLine="54"/>
+      </Position5>
+      <Position6>
+        <Filename Value="uscaner.pas"/>
+        <Caret Line="176" TopLine="151"/>
+      </Position6>
+      <Position7>
+        <Filename Value="uscaner.pas"/>
+        <Caret Line="173" TopLine="151"/>
+      </Position7>
+      <Position8>
+        <Filename Value="uscaner.pas"/>
+        <Caret Line="174" TopLine="151"/>
+      </Position8>
+      <Position9>
+        <Filename Value="uscanresult.pas"/>
+        <Caret Line="90" TopLine="54"/>
+      </Position9>
+      <Position10>
+        <Filename Value="uscanresult.pas"/>
+        <Caret Line="91" TopLine="54"/>
+      </Position10>
+      <Position11>
+        <Filename Value="uscanresult.pas"/>
+        <Caret Line="92" TopLine="54"/>
+      </Position11>
+      <Position12>
+        <Filename Value="uscanresult.pas"/>
+        <Caret Line="93" TopLine="54"/>
+      </Position12>
+      <Position13>
+        <Filename Value="uscanresult.pas"/>
+        <Caret Line="96" TopLine="54"/>
+      </Position13>
+      <Position14>
+        <Filename Value="uscaner.pas"/>
+        <Caret Line="187" TopLine="151"/>
+      </Position14>
+      <Position15>
+        <Filename Value="uscaner.pas"/>
+        <Caret Line="173" TopLine="151"/>
+      </Position15>
+      <Position16>
+        <Filename Value="uscaner.pas"/>
+        <Caret Line="174" TopLine="151"/>
+      </Position16>
+      <Position17>
+        <Filename Value="uscanresult.pas"/>
+        <Caret Line="90" TopLine="54"/>
+      </Position17>
+      <Position18>
+        <Filename Value="uscanresult.pas"/>
+        <Caret Line="72" TopLine="52"/>
+      </Position18>
+      <Position19>
+        <Filename Value="uscaner.pas"/>
+        <Caret Line="173" TopLine="151"/>
+      </Position19>
+      <Position20>
+        <Filename Value="uscanresult.pas"/>
+        <Caret Line="76" TopLine="51"/>
+      </Position20>
+      <Position21>
+        <Filename Value="uscanresult.pas"/>
+        <Caret Line="78" Column="13" TopLine="51"/>
+      </Position21>
+      <Position22>
+        <Filename Value="uscanresult.pas"/>
+        <Caret Line="80" Column="43" TopLine="50"/>
+      </Position22>
+      <Position23>
+        <Filename Value="uscaner.pas"/>
+        <Caret Line="173" TopLine="151"/>
+      </Position23>
+      <Position24>
+        <Filename Value="uscaner.pas"/>
+        <Caret Line="174" TopLine="151"/>
+      </Position24>
+      <Position25>
+        <Filename Value="uscaner.pas"/>
+        <Caret Line="188" Column="16" TopLine="152"/>
+      </Position25>
+      <Position26>
+        <Filename Value="uscaner.pas"/>
+        <Caret Line="140" Column="6" TopLine="117"/>
+      </Position26>
+      <Position27>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="68"/>
+      </Position27>
+      <Position28>
+        <Filename Value="uscanresult.pas"/>
+        <Caret Line="60" Column="3" TopLine="50"/>
+      </Position28>
+      <Position29>
+        <Filename Value="uscanresult.pas"/>
+        <Caret Line="64" Column="49" TopLine="42"/>
+      </Position29>
+    </JumpHistory>
+  </ProjectSession>
+  <Debugging>
+    <BreakPoints Count="1">
+      <Item1>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="pparser.pp"/>
+        <Line Value="1197"/>
+      </Item1>
+    </BreakPoints>
+  </Debugging>
+</CONFIG>

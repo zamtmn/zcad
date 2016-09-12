@@ -1,0 +1,115 @@
+object Form1: TForm1
+  Left = 891
+  Height = 579
+  Top = 237
+  Width = 512
+  Caption = 'Form1'
+  ClientHeight = 556
+  ClientWidth = 512
+  Menu = MainMenu1
+  OnClose = _onClose
+  OnCreate = _onCreate
+  LCLVersion = '1.7'
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 28
+    Top = 528
+    Width = 512
+    Panels = <>
+  end
+  object ToolBar1: TToolBar
+    Left = 0
+    Height = 24
+    Top = 0
+    Width = 512
+    AutoSize = True
+    Caption = 'ToolBar1'
+    ShowCaptions = True
+    TabOrder = 1
+    object ToolButton1: TToolButton
+      Left = 1
+      Top = 2
+      Action = Scan
+    end
+    object ToolButton2: TToolButton
+      Left = 37
+      Top = 2
+      Action = Save
+    end
+  end
+  object Splitter1: TSplitter
+    Left = 156
+    Height = 504
+    Top = 24
+    Width = 4
+  end
+  object Panel1: TPanel
+    Left = 160
+    Height = 504
+    Top = 24
+    Width = 352
+    Align = alClient
+    Caption = 'Panel1'
+    ClientHeight = 504
+    ClientWidth = 352
+    TabOrder = 3
+    object Memo1: TMemo
+      Left = 1
+      Height = 167
+      Top = 336
+      Width = 350
+      Align = alBottom
+      Lines.Strings = (
+        'Memo1'
+      )
+      ScrollBars = ssAutoBoth
+      TabOrder = 0
+    end
+    object Splitter2: TSplitter
+      Cursor = crVSplit
+      Left = 1
+      Height = 7
+      Top = 329
+      Width = 350
+      Align = alBottom
+      ResizeAnchor = akBottom
+    end
+  end
+  object GDBobjinsp1: TPanel
+    Left = 0
+    Height = 504
+    Top = 24
+    Width = 156
+    Align = alLeft
+    TabOrder = 4
+  end
+  object ActionList1: TActionList
+    left = 472
+    top = 32
+    object Scan: TAction
+      Caption = 'Scan'
+      Hint = 'Scan files'
+      OnExecute = _Scan
+      ShortCut = 16467
+    end
+    object Save: TAction
+      Caption = 'Save'
+      Hint = 'Save graph'
+      OnExecute = _Save
+      ShortCut = 113
+    end
+  end
+  object MainMenu1: TMainMenu
+    left = 234
+    top = 100
+    object MenuItem1: TMenuItem
+      Caption = 'File'
+      object MenuItem2: TMenuItem
+        Action = Scan
+      end
+      object MenuItem3: TMenuItem
+        Action = Save
+      end
+    end
+  end
+end

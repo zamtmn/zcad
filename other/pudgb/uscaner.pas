@@ -138,6 +138,7 @@ procedure GetDecls(PM:TPrepareMode;Decl:TPasDeclarations;Options:TOptions;ScanRe
      l:TStringList;
      ss,s:string;
      uarr:TUsesArray;
+     t:boolean;
 begin
  if assigned(Decl)then
   begin
@@ -169,7 +170,7 @@ begin
    for i:=0 to l.Count-1 do
     begin
     s:=l.Strings[i];
-    if s='debug' then
+    if lowercase(s)='fpdpansi' then
                       s:=s;
     if not ScanResult.isUnitInfoPresent(l.Strings[i],j)then
     begin
@@ -178,13 +179,15 @@ begin
       if s<>''then
                   begin
                     ScanModule(s,Options,ScanResult,LogWriter);
-                    if ScanResult.UnitName2IndexMap.GetValue(l.Strings[i],j) then
+                    if ScanResult.UnitName2IndexMap.GetValue(lowercase(l.Strings[i]),j) then
                                                                                  uarr.PushBack(j);
                   end;
     end
     else
     begin
-       s:='/'+l.Strings[i]+'.pas';
+       s:=l.Strings[i];
+       if lowercase(s)='fpdpansi' then
+                      s:=s;
        uarr.PushBack(j);
     end;
     end;

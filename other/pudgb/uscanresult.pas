@@ -14,8 +14,13 @@ type
   UnitNameHash=class
     class function hash(s:TUnitName; n:longint):SizeUInt;//процедура ращета хэша для стринга, нужна для устройства хэшмапы
   end;
-
+  {$IF FPC_FULLVERSION>=030001}
   TUnitName2IndexMap=specialize THashMap<TUnitName, TUnitIndex, UnitNameHash>;//хэшмапа для перевода имени блока в индекс
+  {$ELSE}
+  TUnitName2IndexMap=class (specialize THashMap<TUnitName, TUnitIndex, UnitNameHash>)
+                       function GetValue(key:TUnitName;out value:TUnitIndex):boolean;inline;
+                     end;
+  {$ENDIF}
   TUsesArray=specialize TVector<TUnitIndex>;//вектор индексов
   TUnitInfo=record //информация о юните, пока тут почти пусто
     UnitName:TUnitName;                         //имя юнита
@@ -46,6 +51,28 @@ type
   end;
 
 implementation
+{$IF FPC_FULLVERSION<030001}
+function TUnitName2IndexMap.GetValue(key:TUnitName;out value:TUnitIndex): boolean;
+var i,bs:SizeUInt;
+    curbucket:TContainer;
+begin
+  curbucket:=FData[THash.hash(key,FData.size)];
+  bs:=curbucket.size;
+  i:=0;
+  while i < bs do begin
+{$ifdef STL_INTERFACE_EXT}
+    if THash.equal(curbucket[i].Key, key) then begin
+{$else}
+    if (curbucket[i].Key = key) then begin
+{$endif}
+      value:=curbucket[i].Value;
+      exit(true);
+    end;
+    inc(i);
+  end;
+  exit(false);
+end;
+{$ENDIF}
 function MakeHash(const s: String):SizeUInt;
 var
   I: Integer;

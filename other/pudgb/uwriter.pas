@@ -45,7 +45,8 @@ begin
 
     //LogWriter('CUT HERE 8x----------------------');
     LogWriter('DiGraph Classes {');
-
+    if assigned(ScanResult) then
+    begin
     for i:=0 to ScanResult.UnitInfoArray.Size-1 do
     begin
      if ScanResult.UnitInfoArray[i].InterfaceUses.Size>0 then
@@ -62,6 +63,7 @@ begin
        for j:=0 to ScanResult.UnitInfoArray[i].ImplementationUses.Size-1 do
        LogWriter(format(' %s -> %s',[ScanResult.UnitInfoArray[i].UnitName,ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].UnitName]));
      end;
+    end;
     end;
 
     LogWriter('}');

@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 884
+  Left = 264
   Height = 579
-  Top = 243
+  Top = 230
   Width = 512
   Caption = 'Form1'
   ClientHeight = 556
@@ -103,6 +103,7 @@ object Form1: TForm1
       Top = 25
       Width = 350
       Anchors = [akTop, akLeft, akRight]
+      OnEditingDone = _SetOptionFromUI
       TabOrder = 2
       Text = 'EditMainFile'
     end
@@ -129,6 +130,7 @@ object Form1: TForm1
       Top = 76
       Width = 350
       Anchors = [akTop, akLeft, akRight]
+      OnEditingDone = _SetOptionFromUI
       TabOrder = 3
       Text = 'EditCompilerOptions'
     end
@@ -155,6 +157,7 @@ object Form1: TForm1
       Top = 127
       Width = 350
       Anchors = [akTop, akLeft, akRight]
+      OnEditingDone = _SetOptionFromUI
       TabOrder = 4
       Text = 'EditPaths'
     end

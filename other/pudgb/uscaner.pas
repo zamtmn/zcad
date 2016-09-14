@@ -47,7 +47,7 @@ begin
    begin
    if M is TPasProgram then
     begin
-     if assigned(LogWriter) then LogWriter('Program '+M.Name+';');
+     //if assigned(LogWriter) then LogWriter('Program '+M.Name+';');
      GetDecls(PMProgram,(M as TPasProgram).ProgramSection as TPasDeclarations,Options,ScanResult,UnitIndex,LogWriter);
      if assigned(M.ImplementationSection) then
        begin
@@ -56,12 +56,12 @@ begin
     end
    else
     begin
-      if assigned(LogWriter) then LogWriter('Unit '+M.Name+';');
-      if assigned(LogWriter) then LogWriter('Interface');
+      //if assigned(LogWriter) then LogWriter('Unit '+M.Name+';');
+      //if assigned(LogWriter) then LogWriter('Interface');
       GetDecls(PMInterface,M.InterfaceSection as TPasDeclarations,Options,ScanResult,UnitIndex,LogWriter);
       if assigned(M.ImplementationSection) then
        begin
-        if assigned(LogWriter) then LogWriter('Implementation');
+        //if assigned(LogWriter) then LogWriter('Implementation');
         GetDecls(PMImplementation,M.ImplementationSection as TPasDeclarations,Options,ScanResult,UnitIndex,LogWriter);
        end;
     end;
@@ -74,20 +74,29 @@ var
   E:TPasTreeContainer;
 begin
    E := TSimpleEngine.Create;
-   if assigned(LogWriter) then LogWriter(format('Process file: "%s"',[mn]));
+   //if assigned(LogWriter) then LogWriter(format('Process file: "%s"',[mn]));
    try
      M := ParseSource(E,mn+' '+Options._CompilerOptions,Options.TargetOS,Options.TargetCPU,False);
+     PrepareModule(M,Options,ScanResult,LogWriter);
+     E.Free;
+     M.Free;
    except
      on excep:EParserError do
        begin
-         if assigned(LogWriter) then LogWriter(format('Error! "%s" line:%d column:%d  file:%s',[excep.message,excep.row,excep.column,excep.filename]));
+         if assigned(LogWriter) then LogWriter(format('Parser error: "%s" line:%d column:%d  file:%s',[excep.message,excep.row,excep.column,excep.filename]));
          //raise;
+       end;
+     on excep:Exception do
+       begin
+         if assigned(LogWriter) then LogWriter(format('Exception: "%s" in file "%s"',[excep.message,mn]));
+         //raise;
+       end;
+     else
+      begin
+        if assigned(LogWriter) then LogWriter(format('Error in file "%s"',[mn]));
       end;
    end;
-    PrepareModule(M,Options,ScanResult,LogWriter);
-    if assigned(LogWriter) then LogWriter(format('Done file: "%s"',[mn]));
-    E.Free;
-    M.Free;
+    //if assigned(LogWriter) then LogWriter(format('Done file: "%s"',[mn]));
 end;
 procedure GetDecls(PM:TPrepareMode;Decl:TPasDeclarations;Options:TOptions;ScanResult:TScanResult;UnitIndex:TUnitIndex;const LogWriter:TLogWriter);
  var i,j:integer;
@@ -113,7 +122,7 @@ begin
      ps:=TPasSection(pe);
      if ps.UsesList.Count >0 then
       begin
-       if assigned(LogWriter) then LogWriter('uses');
+       //if assigned(LogWriter) then LogWriter('uses');
        ps:=TPasSection(Decl);
        for i:=0 to ps.UsesList.Count-2 do
         begin
@@ -123,7 +132,7 @@ begin
         end;
        s:=s+(TPasElement(ps.UsesList[ps.UsesList.Count-1]).Name+';');
        l.Add(TPasElement(ps.UsesList[ps.UsesList.Count-1]).Name);
-       if assigned(LogWriter) then LogWriter(s);
+       //if assigned(LogWriter) then LogWriter(s);
       end;
     end;
    for i:=0 to l.Count-1 do

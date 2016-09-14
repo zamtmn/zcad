@@ -19,7 +19,7 @@ var
 begin
   if assigned(LogWriter) then
   begin
-    LogWriter(format('Total %d nodes:',[ScanResult.UnitInfoArray.Size-1]));
+    {LogWriter(format('Total %d nodes:',[ScanResult.UnitInfoArray.Size-1]));
     for i:=0 to ScanResult.UnitInfoArray.Size-1 do
     begin
      LogWriter(format('Node %s',[ScanResult.UnitInfoArray[i].UnitName]));
@@ -41,9 +41,9 @@ begin
          s:=s+ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[ScanResult.UnitInfoArray[i].ImplementationUses.Size-1]].UnitName+';';
        LogWriter(format(' Implementation uses %s',[s]));
      end;
-    end;
+    end;}
 
-    LogWriter('CUT HERE 8x----------------------');
+    //LogWriter('CUT HERE 8x----------------------');
     LogWriter('DiGraph Classes {');
 
     for i:=0 to ScanResult.UnitInfoArray.Size-1 do
@@ -65,7 +65,7 @@ begin
     end;
 
     LogWriter('}');
-    LogWriter('CUT HERE 8x----------------------');
+    //LogWriter('CUT HERE 8x----------------------');
 
   end;
 end;

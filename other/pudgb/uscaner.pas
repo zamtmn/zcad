@@ -47,7 +47,7 @@ begin
    begin
    if M is TPasProgram then
     begin
-     //if assigned(LogWriter) then LogWriter('Program '+M.Name+';');
+     ScanResult.UnitInfoArray.Mutable[UnitIndex]^.UnitType:=TUnitType.UTProgram;
      GetDecls(PMProgram,(M as TPasProgram).ProgramSection as TPasDeclarations,Options,ScanResult,UnitIndex,LogWriter);
      if assigned(M.ImplementationSection) then
        begin
@@ -56,8 +56,7 @@ begin
     end
    else
     begin
-      //if assigned(LogWriter) then LogWriter('Unit '+M.Name+';');
-      //if assigned(LogWriter) then LogWriter('Interface');
+      ScanResult.UnitInfoArray.Mutable[UnitIndex]^.UnitType:=TUnitType.UTUnit;
       GetDecls(PMInterface,M.InterfaceSection as TPasDeclarations,Options,ScanResult,UnitIndex,LogWriter);
       if assigned(M.ImplementationSection) then
        begin
@@ -76,7 +75,7 @@ begin
    E := TSimpleEngine.Create;
    //if assigned(LogWriter) then LogWriter(format('Process file: "%s"',[mn]));
    try
-     M := ParseSource(E,mn+' '+Options._CompilerOptions,Options.TargetOS,Options.TargetCPU,False);
+     M := ParseSource(E,mn+' '+Options.ParserOptions._CompilerOptions,Options.ParserOptions.TargetOS,Options.ParserOptions.TargetCPU,False);
      PrepareModule(M,Options,ScanResult,LogWriter);
      E.Free;
      M.Free;
@@ -143,7 +142,7 @@ begin
     if not ScanResult.isUnitInfoPresent(l.Strings[i],j)then
     begin
       s:='/'+l.Strings[i]+'.pas';
-      s:=FindInSupportPath(Options._Paths,s);
+      s:=FindInSupportPath(Options.Paths._Paths,s);
       if s<>''then
                   begin
                     ScanModule(s,Options,ScanResult,LogWriter);

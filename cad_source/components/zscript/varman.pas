@@ -214,6 +214,7 @@ TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
             destructor done;virtual;
             procedure free;virtual;
             function RegisterType(ti:PTypeInfo):PUserTypeDescriptor;
+            function SetTypeDesk(ti:PTypeInfo;fieldnames:array of const):PUserTypeDescriptor;
             function RegisterRecordType(ti:PTypeInfo):PUserTypeDescriptor;
             function RegisterPointerType(ti:PTypeInfo):PUserTypeDescriptor;
             function RegisterEnumType(ti:PTypeInfo):PUserTypeDescriptor;
@@ -460,6 +461,40 @@ begin
        tkPointer:result:=RegisterPointerType(ti);
        tkEnumeration:result:=RegisterEnumType(ti);
      end;
+end;
+function TUnit.SetTypeDesk(ti:PTypeInfo;fieldnames:array of const):PUserTypeDescriptor;
+function GetFieldName(index:integer;oldname:string):string;
+begin
+  if index>high(fieldnames) then
+                            begin
+                              result:=oldname;
+                              exit;
+                            end;
+  case fieldnames[index].VType of
+                    vtString:result:=fieldnames[index].VString^;
+                    vtChar:result:=fieldnames[index].VChar;
+                vtAnsiString:result:=ansistring(fieldnames[index].VAnsiString);
+                else
+                  result:=oldname;
+  end;{case}
+end;
+var
+    i:integer;
+begin
+  result:=TypeName2PTD(ti^.Name);
+  if result<>nil then
+    case ti^.Kind of
+      tkRecord:
+      begin
+        for i:=0 to PRecordDescriptor(result)^.Fields.Count-1 do
+          PRecordDescriptor(result)^.Fields.PArray^[i].base.UserName:=GetFieldName(i,PRecordDescriptor(result)^.Fields.PArray^[i].base.UserName);
+      end;
+      tkEnumeration:
+      begin
+        for i:=0 to PEnumDescriptor(result)^.UserValue.Count-1 do
+         PEnumDescriptor(result)^.UserValue.PArray^[i]:=GetFieldName(i,PEnumDescriptor(result)^.UserValue.PArray^[i]);
+      end;
+    end;
 end;
 
 procedure TObjectUnit.free;

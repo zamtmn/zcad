@@ -147,7 +147,16 @@ begin
                   begin
                     ScanModule(s,Options,ScanResult,LogWriter);
                     if ScanResult.UnitName2IndexMap.GetValue(lowercase(l.Strings[i]),j) then
-                                                                                 uarr.PushBack(j);
+                    begin
+                      ScanResult.UnitInfoArray.Mutable[j]^.UnitPath:='s';
+                      uarr.PushBack(j);
+                    end;
+                  end
+              else
+                  begin
+                       ScanResult.TryCreateNewUnitInfo(l.Strings[i],j);
+                       ScanResult.UnitInfoArray.Mutable[j]^.UnitPath:='';
+                       uarr.PushBack(j);
                   end;
     end
     else

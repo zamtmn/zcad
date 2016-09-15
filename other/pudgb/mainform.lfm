@@ -1,11 +1,11 @@
 object Form1: TForm1
-  Left = 139
+  Left = 140
   Height = 579
   Top = 101
-  Width = 627
+  Width = 626
   Caption = 'Form1'
   ClientHeight = 556
-  ClientWidth = 627
+  ClientWidth = 626
   Menu = MainMenu1
   OnClose = _onClose
   OnCreate = _onCreate
@@ -14,14 +14,14 @@ object Form1: TForm1
     Left = 0
     Height = 28
     Top = 528
-    Width = 627
+    Width = 626
     Panels = <>
   end
   object ToolBar1: TToolBar
     Left = 0
     Height = 24
     Top = 0
-    Width = 627
+    Width = 626
     AutoSize = True
     Caption = 'ToolBar1'
     ParentShowHint = False
@@ -68,7 +68,7 @@ object Form1: TForm1
     Left = 304
     Height = 504
     Top = 24
-    Width = 323
+    Width = 322
     Align = alClient
     Lines.Strings = (
       'Memo1'

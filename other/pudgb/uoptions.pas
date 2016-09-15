@@ -22,6 +22,7 @@ type
   end;
   TEdgeType=(ETContinuous,ETDotted);
   TGraphBulding=packed record
+    IncludeNotFoundedUnits:GDBBoolean;
     IncludeInterfaceUses:GDBBoolean;
     InterfaceUsesEdgeType:TEdgeType;
     IncludeImplementationUses:GDBBoolean;
@@ -47,6 +48,7 @@ begin
  result.ParserOptions.TargetOS:='linux';
  result.ParserOptions.TargetCPU:='i386';
 
+ result.GraphBulding.IncludeNotFoundedUnits:=false;
  result.GraphBulding.IncludeInterfaceUses:=true;
  result.GraphBulding.InterfaceUsesEdgeType:=ETContinuous;
  result.GraphBulding.IncludeImplementationUses:=true;

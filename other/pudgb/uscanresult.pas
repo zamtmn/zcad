@@ -21,9 +21,12 @@ type
                        function GetValue(key:TUnitName;out value:TUnitIndex):boolean;inline;
                      end;
   {$ENDIF}
+  TUnitType=(UTProgram,UTUnit);
   TUsesArray=specialize TVector<TUnitIndex>;//вектор индексов
   TUnitInfo=record //информация о юните, пока тут почти пусто
+    Processed:Boolean;                          //Метка "уже обработан" при записи в граф. для записи одноразовой информации
     UnitName:TUnitName;                         //имя юнита
+    UnitType:TUnitType;                         //тип юнита
     InterfaceUses,ImplementationUses:TUsesArray;//массив индексов юнитов которые есть в усес этого юнита
   end;
   TUnitInfoArray=specialize TVector<TUnitInfo>;//вектор элементов типа TUnitInfo

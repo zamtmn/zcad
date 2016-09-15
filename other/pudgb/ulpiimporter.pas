@@ -37,7 +37,7 @@ begin
  if MainFilename<>'' then
  begin
       if not FileExists(MainFilename) then MainFilename:=basepath+MainFilename;
-      Options._File:=MainFilename;
+      Options.Paths._File:=MainFilename;
  end;
  if IncludeFiles<>'' then
  begin
@@ -50,10 +50,10 @@ begin
             if DirectoryExists(utf8tosys(ts)) then
                                                   opt:=opt+' -Fi'+ts;
       until s='';
-     Options._CompilerOptions:=opt;
+     Options.ParserOptions._CompilerOptions:=opt;
  end
  else
-  Options._CompilerOptions:='-Sc'+' -Fi'+basepath;
+  Options.ParserOptions._CompilerOptions:='-Sc'+' -Fi'+basepath;
  if OtherUnitFiles<>'' then
  begin
       s:=OtherUnitFiles;
@@ -65,10 +65,10 @@ begin
             if DirectoryExists(utf8tosys(ts)) then
                                                   opt:=opt+';'+ts
       until s='';
-     Options._Paths:=opt;
+     Options.Paths._Paths:=opt;
  end
  else
-  Options._Paths:=basepath;
+  Options.Paths._Paths:=basepath;
 end;
 
 end.

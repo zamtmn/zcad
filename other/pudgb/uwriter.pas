@@ -11,13 +11,28 @@ uses
 procedure WriteGraph(Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 
 implementation
-procedure ProcessNode(Options:TOptions;var Node:TUnitInfo;const LogWriter:TLogWriter);
+function IncludeToGraph(Options:TOptions;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter):boolean;
 begin
-  if not node.Processed then
+  result:=false;
+  if not Options.GraphBulding.IncludeNotFoundedUnits then
+    if (node.UnitPath='')and(index<>0) then exit;
+  result:=true;
+end;
+
+procedure ProcessNode(Options:TOptions;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter);
+begin
+  if node.NodeState=NSNotCheced then
   begin
-    if Node.UnitType=UTProgram then
-    LogWriter(format(' %s [shape=box]',[Node.UnitName]));
-    node.Processed:=true;
+    if IncludeToGraph(Options,Node,index,LogWriter)then
+    begin
+        if Node.UnitType=UTProgram then
+          LogWriter(format(' %s [shape=box]',[Node.UnitName]));
+        if (Node.UnitPath='')and(index<>0) then
+          LogWriter(format(' %s [style=dashed]',[Node.UnitName]));
+        node.NodeState:=NSCheced;
+    end
+    else
+        node.NodeState:=NSFiltredOut;
   end;
 end;
 
@@ -28,49 +43,28 @@ var
 begin
   if assigned(LogWriter) then
   begin
-    {LogWriter(format('Total %d nodes:',[ScanResult.UnitInfoArray.Size-1]));
-    for i:=0 to ScanResult.UnitInfoArray.Size-1 do
-    begin
-     LogWriter(format('Node %s',[ScanResult.UnitInfoArray[i].UnitName]));
-
-     if ScanResult.UnitInfoArray[i].InterfaceUses.Size>0 then
-     begin
-       s:='';
-       for j:=0 to ScanResult.UnitInfoArray[i].InterfaceUses.Size-2 do
-         s:=s+ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].UnitName+',';
-         s:=s+ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[ScanResult.UnitInfoArray[i].InterfaceUses.Size-1]].UnitName+';';
-       LogWriter(format(' Interface uses %s',[s]));
-     end;
-
-     if ScanResult.UnitInfoArray[i].ImplementationUses.Size>0 then
-     begin
-       s:='';
-       for j:=0 to ScanResult.UnitInfoArray[i].ImplementationUses.Size-2 do
-         s:=s+ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].UnitName+',';
-         s:=s+ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[ScanResult.UnitInfoArray[i].ImplementationUses.Size-1]].UnitName+';';
-       LogWriter(format(' Implementation uses %s',[s]));
-     end;
-    end;}
-
-    //LogWriter('CUT HERE 8x----------------------');
     LogWriter('DiGraph Classes {');
     if assigned(ScanResult) then
     begin
       for i:=0 to ScanResult.UnitInfoArray.Size-1 do
-       ScanResult.UnitInfoArray.mutable[i]^.Processed:=False;
+       ScanResult.UnitInfoArray.mutable[i]^.NodeState:=NSNotCheced;
 
     if Options.GraphBulding.IncludeInterfaceUses then
     for i:=0 to ScanResult.UnitInfoArray.Size-1 do
     begin
      if ScanResult.UnitInfoArray[i].InterfaceUses.Size>0 then
      begin
-       ProcessNode(Options,ScanResult.UnitInfoArray.Mutable[i]^,LogWriter);
+       ProcessNode(Options,ScanResult.UnitInfoArray.Mutable[i]^,i,LogWriter);
+       if ScanResult.UnitInfoArray[i].NodeState<>NSFiltredOut then
        for j:=0 to ScanResult.UnitInfoArray[i].InterfaceUses.Size-1 do
        begin
-         ProcessNode(Options,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].InterfaceUses[j]]^,LogWriter);
+         ProcessNode(Options,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].InterfaceUses[j]]^,ScanResult.UnitInfoArray[i].InterfaceUses[j],LogWriter);
+         if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].NodeState<>NSFiltredOut then
+         begin
          if Options.GraphBulding.InterfaceUsesEdgeType=ETDotted then
                                                                     LogWriter(' edge [style=dotted]');
          LogWriter(format(' %s -> %s',[ScanResult.UnitInfoArray[i].UnitName,ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].UnitName]));
+         end;
        end;
      end;
     end;
@@ -78,15 +72,18 @@ begin
     if Options.GraphBulding.IncludeImplementationUses then
     for i:=0 to ScanResult.UnitInfoArray.Size-1 do
     begin
+     if ScanResult.UnitInfoArray[i].NodeState<>NSFiltredOut then
      if ScanResult.UnitInfoArray[i].ImplementationUses.Size>0 then
      begin
-       ProcessNode(Options,ScanResult.UnitInfoArray.Mutable[i]^,LogWriter);
        for j:=0 to ScanResult.UnitInfoArray[i].ImplementationUses.Size-1 do
        begin
-         ProcessNode(Options,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].ImplementationUses[j]]^,LogWriter);
+         ProcessNode(Options,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].ImplementationUses[j]]^,ScanResult.UnitInfoArray[i].ImplementationUses[j],LogWriter);
+         if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].NodeState<>NSFiltredOut then
+         begin
          if Options.GraphBulding.ImplementationUsesEdgeType=ETDotted then
                                                                          LogWriter(' edge [style=dotted]');
            LogWriter(format(' %s -> %s',[ScanResult.UnitInfoArray[i].UnitName,ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].UnitName]));
+         end;
        end;
      end;
     end;

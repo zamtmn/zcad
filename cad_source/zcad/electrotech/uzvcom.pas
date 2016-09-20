@@ -190,7 +190,7 @@ type
       function testTempDrawLine(p1:GDBVertex;p2:GDBVertex):TCommandResult;
       function testTempDrawCircle(p1:GDBVertex;rr:GDBDouble):TCommandResult;
       function testTempDrawPolyLine(listVertex:GListVertexPoint;color:Integer):TCommandResult;
-      function testTempDrawText(p1:GDBVertex;rr:GDBString):TCommandResult;
+      function testTempDrawText(p1:GDBVertex;mText:GDBString):TCommandResult;
 implementation
 
 constructor TGraphBuilder.Create;
@@ -272,14 +272,14 @@ begin
   NearObjects.Clear;
   NearObjects.Done;//убиваем список
 end;
-
+//Сравнение 2-х вершин одинаковые они или нет, с учетом погрешности
 function compareVertex(p1:GDBVertex;p2:GDBVertex;inaccuracy:GDBDouble):Boolean;
 begin
     result:=false;
     if ((p1.x >= p2.x-inaccuracy) and (p1.x <= p2.x+inaccuracy) and (p2.y >= p2.y-inaccuracy) and (p2.y <= p2.y+inaccuracy)) then
        result:=true;
 end;
-
+//Проверка списка на дубликаты, при добавлении новой вершины, с учетом погрешности
 function dublicateVertex(listVertex:TListDeviceLine;addVertex:GDBVertex;inaccuracy:GDBDouble):Boolean;
 var
     i:integer;
@@ -384,22 +384,17 @@ begin
      result:=cmd_ok;
 end;
 //быстрое написание текста
-function testTempDrawText(p1:GDBVertex;rr:GDBString):TCommandResult;
+function testTempDrawText(p1:GDBVertex;mText:GDBString):TCommandResult;
 var
     ptext:PGDBObjText;
-   // pe:T3PointCircleModePentity;
-   // p1,p2:gdbvertex;
 begin
       ptext := GDBObjText.CreateInstance;
-         //     GDBObjText.Content:=rr;
-      zcSetEntPropFromCurrentDrawingProp(ptext);
-      ptext^.P_insert_in_WCS:=p1;
-      //ptext^.obj_height:=100;
-      //ptext^.obj_width:=188;
-      ptext^.Template:='fdfgdfgd';
+      zcSetEntPropFromCurrentDrawingProp(ptext); //добавляем дефаултные свойства
+      ptext^.TXTStyleIndex:=drawings.GetCurrentDWG^.GetCurrentTextStyle; //добавляет тип стиля текста, дефаултные свойства его не добавляют
+      ptext^.Local.P_insert:=p1;  // координата
+      ptext^.Template:=mText;     // сам текст
       zcAddEntToCurrentDrawingWithUndo(ptext);   //добавляем в чертеж
-                                //добавляем в чертеж
-    result:=cmd_ok;
+      result:=cmd_ok;
 end;
 
 function testTempDrawCircle(p1:GDBVertex;rr:GDBDouble):TCommandResult;

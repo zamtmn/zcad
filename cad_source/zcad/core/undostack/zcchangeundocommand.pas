@@ -23,7 +23,7 @@ uses uzepalette,uzbmemman,zeundostack,zebaseundocommands,uzbtypesbase,uzbtypes,
      uzbgeomtypes,uzeentity,uzestyleslayers;
 
 type
-generic TGChangeCommand<_T>=object(TCustomChangeCommand)
+generic TGChangeCommand<_T> =object(TCustomChangeCommand)
                                       public
                                       OldData,NewData:_T;
                                       PEntity:PGDBObjEntity;

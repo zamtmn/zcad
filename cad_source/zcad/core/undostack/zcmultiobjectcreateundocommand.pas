@@ -28,7 +28,7 @@ uses uzbmemman,UGDBOpenArrayOfPV,zeundostack,zebaseundocommands,uzbtypesbase,uzb
 
 
 type
-generic TGMultiObjectProcessCommand<_LT>=object(TCustomChangeCommand)
+generic TGMultiObjectProcessCommand<_LT> =object(TCustomChangeCommand)
                                       DoData,UnDoData:tmethod;
                                       ObjArray:_LT;
                                       FreeArray:boolean;

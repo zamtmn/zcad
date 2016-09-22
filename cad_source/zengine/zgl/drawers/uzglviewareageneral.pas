@@ -1915,6 +1915,7 @@ begin
   result.SystmGeometryDraw:=sysvarDISPSystmGeometryDraw;
   result.SystmGeometryColor:=sysvarDISPSystmGeometryColor;
   result.DrawingContext.GlobalLTScale:=1;
+  result.DrawingContext.ForeGround:=ForeGround;
 end;
 procedure TGeneralViewArea.CorrectMouseAfterOS;
 var d,tv1,tv2:GDBVertex;

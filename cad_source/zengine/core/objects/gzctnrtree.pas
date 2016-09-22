@@ -21,7 +21,7 @@ unit gzctnrtree;
 interface
 uses
     graphics,
-    uzgldrawcontext,uzegeometry,UGDBVisibleOpenArray,uzeentity,uzbtypesbase,uzbtypes,uzbmemman;
+    uzgldrawcontext,uzegeometry,UGDBVisibleOpenArray,{uzeentity,}uzbtypesbase,uzbtypes,uzbmemman;
 type
 TTreeLevelStatistik=record
                           NodesCount,EntCount,OverflowCount:GDBInteger;

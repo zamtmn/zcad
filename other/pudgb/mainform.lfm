@@ -1,10 +1,10 @@
 object Form1: TForm1
-  Left = 140
+  Left = 336
   Height = 579
-  Top = 101
+  Top = 278
   Width = 626
   Caption = 'Form1'
-  ClientHeight = 556
+  ClientHeight = 559
   ClientWidth = 626
   Menu = MainMenu1
   OnClose = _onClose
@@ -12,8 +12,8 @@ object Form1: TForm1
   LCLVersion = '1.7'
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 28
-    Top = 528
+    Height = 23
+    Top = 536
     Width = 626
     Panels = <>
   end
@@ -29,36 +29,36 @@ object Form1: TForm1
     ShowHint = True
     TabOrder = 1
     object ToolButton1: TToolButton
-      Left = 1
+      Left = 64
       Top = 2
       Action = Scan
     end
     object ToolButton2: TToolButton
-      Left = 37
+      Left = 97
       Top = 2
       Action = Save
     end
     object ToolButton3: TToolButton
-      Left = 73
+      Left = 1
       Top = 2
       Action = ImportLPI
     end
   end
   object Splitter1: TSplitter
     Left = 300
-    Height = 504
+    Height = 512
     Top = 24
     Width = 4
   end
   object GDBobjinsp1: TGDBobjinsp
     Left = 0
-    Height = 504
+    Height = 512
     Top = 24
     Width = 300
     HorzScrollBar.Page = 1
     VertScrollBar.Increment = 200
-    VertScrollBar.Page = 504
-    VertScrollBar.Range = 504
+    VertScrollBar.Page = 512
+    VertScrollBar.Range = 512
     Align = alLeft
     AutoScroll = False
     BorderStyle = bsNone
@@ -66,7 +66,7 @@ object Form1: TForm1
   end
   object Memo1: TMemo
     Left = 304
-    Height = 504
+    Height = 512
     Top = 24
     Width = 322
     Align = alClient

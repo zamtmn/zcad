@@ -31,6 +31,7 @@ TDrawingContext=packed record
                    pcamera:PGDBBaseCamera;
                    GlobalLTScale:GDBDouble;
                    DrawHeplGeometryProc:TDrawHeplGeometry;
+                   ForeGround:TRGB;
 end;
 TDrawContext=packed record
                    DrawingContext:TDrawingContext;
@@ -75,6 +76,9 @@ begin
       result.SystmGeometryDraw:=false;
       result.SystmGeometryColor:=1;
       result.DrawingContext.GlobalLTScale:=1;
+      result.DrawingContext.foreground.r:=255;
+      result.DrawingContext.foreground.g:=255;
+      result.DrawingContext.foreground.b:=255;
 end;
 begin
 end.

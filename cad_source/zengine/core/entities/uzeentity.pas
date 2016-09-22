@@ -165,7 +165,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
 var onlygetsnapcount:GDBInteger;
     GDBObjEntityDXFFeatures:TDXFEntIODataManager;
 implementation
-uses uzglviewareageneral,usimplegenerics,uzeentityfactory,uzeentgenericsubentry,UGDBSelectedObjArray;
+uses usimplegenerics,uzeentityfactory,UGDBSelectedObjArray;
 procedure GDBObjEntity.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
 begin
     proc(@self,PCounted,Counter);
@@ -397,7 +397,7 @@ begin
 end;
 procedure GDBObjEntity.YouDeleted;
 begin
-     pgdbobjgenericsubentry(bp.ListPos.owner)^.EraseMi(@self,bp.ListPos.SelfIndex,drawing);
+     PGDBObjEntity(bp.ListPos.owner)^.EraseMi(@self,bp.ListPos.SelfIndex,drawing);
 end;
 procedure GDBObjEntity.YouChanged;
 begin
@@ -526,7 +526,7 @@ begin
   if color<>7 then
                   dc.drawer.SetColor(palette[color].RGB)
               else
-                  dc.drawer.SetColor(foreground);
+                  dc.drawer.SetColor(DC.DrawingContext.ForeGround);
 end;
 
 begin

@@ -22,7 +22,7 @@ unit uzcctrllayercombobox;
 interface
 
 uses
-  StdCtrls,GraphType,types,{$IFDEF WINDOWS}win32proc,windows,{$endif}LCLIntf,LCLType,
+  StdCtrls,GraphType,{types,}{$IFDEF WINDOWS}win32proc,windows,{$endif}LCLIntf,LCLType,
   Controls,Classes,Graphics,Buttons,ExtCtrls,ComCtrls,Forms,Themes;
 const
   RightButtonWidth=20;// Ширина правой кнопки-стрелки при "темной" отрисовке

@@ -9,6 +9,7 @@ uses
   uoptions,uscanresult;
 
 procedure WriteGraph(Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure ProcessNode(Options:TOptions;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;ForceInclude:boolean=false);
 
 implementation
 function IncludeToGraph(Options:TOptions;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter):boolean;
@@ -16,14 +17,15 @@ begin
   result:=false;
   if not Options.GraphBulding.IncludeNotFoundedUnits then
     if (node.UnitPath='')and(index<>0) then exit;
+  if Options.GraphBulding.IncludeOnlyLoops and not(UFLoop in node.UnitFlags) then exit;
   result:=true;
 end;
 
-procedure ProcessNode(Options:TOptions;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter);
+procedure ProcessNode(Options:TOptions;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;ForceInclude:boolean=false);
 begin
   if node.NodeState=NSNotCheced then
   begin
-    if IncludeToGraph(Options,Node,index,LogWriter)then
+    if ForceInclude or IncludeToGraph(Options,Node,index,LogWriter)then
     begin
         if Node.UnitType=UTProgram then
           LogWriter(format(' %s [shape=box]',[Node.UnitName]));

@@ -27,6 +27,7 @@ type
     InterfaceUsesEdgeType:TEdgeType;
     IncludeImplementationUses:GDBBoolean;
     ImplementationUsesEdgeType:TEdgeType;
+    IncludeOnlyLoops:GDBBoolean;
   end;
   TOptions=packed record
     Paths:TPaths;
@@ -53,6 +54,7 @@ begin
  result.GraphBulding.InterfaceUsesEdgeType:=ETContinuous;
  result.GraphBulding.IncludeImplementationUses:=true;
  result.GraphBulding.ImplementationUsesEdgeType:=ETDotted;
+ result.GraphBulding.IncludeOnlyLoops:=false;
 end;
 
 end.

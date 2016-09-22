@@ -16,7 +16,7 @@ procedure ProcessNode(Options:TOptions;var Node:TUnitInfo;const index:integer;co
 // потом продумаю подробнее параметры
 procedure WriteGML (Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 procedure NodeGML (Options:TOptions;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;ForceInclude:boolean=false);
-procedure GraphGML (Options:TOptions; var Node:TUnitInfo;); //проставление связей. (второй проход по узлам) параметры пока не ставлю специально.
+procedure GraphGML (Options:TOptions; var Node:TUnitInfo); //проставление связей. (второй проход по узлам) параметры пока не ставлю специально.
 // end arinelex
 implementation
 function IncludeToGraph(Options:TOptions;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter):boolean;
@@ -109,7 +109,7 @@ procedure WriteGML(Options: TOptions; ScanResult: TScanResult;
   const LogWriter: TLogWriter);
 var
   i,j:integer;
-  s,tabs:string;
+  s,Tabs:string;
 begin
   if assigned(LogWriter) then
   begin
@@ -119,7 +119,7 @@ begin
     LogWriter('Graph');
     LogWriter(BracketLeft);
     // конец шапки
-    Tabs=tab; // отступ от начала строки   выставляем на один таб
+    Tabs:=tab; // отступ от начала строки   выставляем на один таб
     if assigned(ScanResult) then
     begin
       for i:=0 to ScanResult.UnitInfoArray.Size-1 do
@@ -190,7 +190,7 @@ begin
   end;
 end;
 
-procedure GraphGML;
+procedure GraphGML(Options: TOptions; var Node: TUnitInfo);
 begin
 
 end;

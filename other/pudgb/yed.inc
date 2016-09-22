@@ -57,7 +57,7 @@ Type
  TEdPoint=record
         x, y:real;  //нужна если только линия отличается от идеально прямой, что в данном случае не суть важно.
 }
-end;
+//end;
 TAnchor=record
       xSource, ySourse, xTarget, yTarget: real;
 end;

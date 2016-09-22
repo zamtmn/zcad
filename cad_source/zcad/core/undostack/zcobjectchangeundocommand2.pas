@@ -24,7 +24,7 @@ uses uzbmemman,zeundostack,zebaseundocommands,uzbtypes,uzeentity,
 
 type
 
-generic TGObjectChangeCommand2<_T>=object(TCustomChangeCommand)
+generic TGObjectChangeCommand2<_T> =object(TCustomChangeCommand)
                                       Data:_T;
                                       DoMethod,UnDoMethod:tmethod;
                                       constructor Assign(var _dodata:_T;_domethod,_undomethod:tmethod);

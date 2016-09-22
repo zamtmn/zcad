@@ -17,6 +17,12 @@ procedure CheckGraph(Options:TOptions;ScanResult:TScanResult;const LogWriter:TLo
 implementation
 
 procedure CheckGraph(Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+function getDecoratedUnnitname(index:integer):string;
+begin
+  //result:=ScanResult.UnitInfoArray[index].UnitName;
+  result:=format('%s_%d_%d',[ScanResult.UnitInfoArray[index].UnitName,ScanResult.UnitInfoArray[index].InterfaceUses.Size,ScanResult.UnitInfoArray[index].ImplementationUses.Size])
+end;
+
 var
   G: TGraph;
   M: TMultiList;
@@ -97,8 +103,10 @@ begin
        ProcessNode(Options,ScanResult.UnitInfoArray.mutable[G.Edges[i].V1.Index]^,G.Edges[i].V1.Index,LogWriter,true);
        ProcessNode(Options,ScanResult.UnitInfoArray.mutable[G.Edges[i].V2.Index]^,G.Edges[i].V1.Index,LogWriter,true);
        if G.Edges[i].Weight<3 then
-                                  LogWriter(' edge [style=dotted]');
-       LogWriter(format(' %s -> %s',[ScanResult.UnitInfoArray.mutable[G.Edges[i].V1.Index]^.UnitName,ScanResult.UnitInfoArray.mutable[G.Edges[i].V2.Index]^.UnitName]));
+                                  LogWriter(' edge [style=dotted]')
+                              else
+                                  LogWriter(' edge [style=solid]');
+       LogWriter(format(' %s -> %s',[getDecoratedUnnitname(G.Edges[i].V1.Index),getDecoratedUnnitname(G.Edges[i].V2.Index)]));
       end;
     end;
     LogWriter('}');

@@ -71,7 +71,9 @@ begin
          if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].NodeState<>NSFiltredOut then
          begin
          if Options.GraphBulding.InterfaceUsesEdgeType=ETDotted then
-                                                                    LogWriter(' edge [style=dotted]');
+                                                                    LogWriter(' edge [style=dotted]')
+                                                                else
+                                                                    LogWriter(' edge [style=solid]');
          LogWriter(format(' %s -> %s',[ScanResult.UnitInfoArray[i].UnitName,ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].UnitName]));
          end;
        end;
@@ -90,7 +92,9 @@ begin
          if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].NodeState<>NSFiltredOut then
          begin
          if Options.GraphBulding.ImplementationUsesEdgeType=ETDotted then
-                                                                         LogWriter(' edge [style=dotted]');
+                                                                         LogWriter(' edge [style=dotted]')
+                                                                     else
+                                                                         LogWriter(' edge [style=solid]');
            LogWriter(format(' %s -> %s',[ScanResult.UnitInfoArray[i].UnitName,ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].UnitName]));
          end;
        end;

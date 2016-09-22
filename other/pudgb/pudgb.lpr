@@ -7,7 +7,8 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, mainform;
+  Forms, mainform;//,
+  //passrcerrors;
 
 {$R *.res}
 

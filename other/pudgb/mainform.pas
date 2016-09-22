@@ -1,6 +1,7 @@
 unit mainform;
 
 {$mode delphi}{$H+}
+{$DEFINE CHECKLOOPS}
 
 interface
 
@@ -10,6 +11,8 @@ uses
 
   zcobjectinspector,Varman,uzbtypes,uzemathutils,UUnitManager,varmandef,zcobjectinspectoreditors,UEnumDescriptor,
 
+
+  {$IFDEF CHECKLOOPS}uchecker,{$ENDIF}
   uoptions,uscaner,uscanresult,uwriter,ulpiimporter;
 
   type
@@ -90,10 +93,12 @@ begin
    RunTimeUnit^.SetTypeDesk(TypeInfo(TOptions),['Paths','Parser options','Graph bulding']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TPaths),['File','Paths']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TParser),['Compiler options','Target OS','Target CPU']);
-   RunTimeUnit^.SetTypeDesk(TypeInfo(TGraphBulding),['Include not founded units','Include interface uses','Interface uses edge type','Include implementation uses','Implementation uses edge type']);
+   RunTimeUnit^.SetTypeDesk(TypeInfo(TGraphBulding),['Include not founded units','Include interface uses','Interface uses edge type','Include implementation uses','Implementation uses edge type','Only looped edges']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TEdgeType),['Continuous','Dotted']);
 
-  {tp:='Z:\hdd\src\fpc\lazarus-ccr\applications\cactusjukebox\';//путь к тестику
+   Options.Paths._File:=ExtractFileDir(ParamStr(0))+pathdelim+'passrcerrors.pas';
+   Options.Paths._Paths:=ExtractFileDir(ParamStr(0));
+   {tp:='Z:\hdd\src\fpc\lazarus-ccr\applications\cactusjukebox\';//путь к тестику
   Options.Paths._File:=tp+'source\cactusjukebox.pas';                //главный файл
   Options.Paths._Paths:=tp+'source';                                 //путь к исходникам
   Options.ParserOptions._CompilerOptions:='-Sc';}                             //"опция компилятора" разрешающая си синтаксис по типу i+=j;
@@ -147,6 +152,7 @@ begin
    if assigned(ScanResult)then FreeAndNil(ScanResult);           //чистим прошлый результат
    ScanResult:=TScanResult.Create;                               //создаем новый результат
    ScanModule(Options.Paths._File,Options,ScanResult,DummyWriteToLog);//пытаемся читать исходники
+   {$IFDEF CHECKLOOPS}CheckGraph(Options,ScanResult,DummyWriteToLog);{$ENDIF}//проверяем граф
 end;
 procedure TForm1.DummyWriteToLog(msg:string);
 begin

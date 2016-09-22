@@ -21,6 +21,8 @@ type
                        function GetValue(key:TUnitName;out value:TUnitIndex):boolean;inline;
                      end;
   {$ENDIF}
+  TUnitFlag=(UFLoop);
+  TUnitFlags=set of TUnitFlag;
   TNodeState=(NSNotCheced,NSCheced,NSFiltredOut);
   TUnitType=(UTProgram,UTUnit);
   TUsesArray=specialize TVector<TUnitIndex>;//вектор индексов
@@ -29,6 +31,7 @@ type
     UnitName:TUnitName;                         //имя юнита
     UnitPath:string;                            //путь к юниту;
     UnitType:TUnitType;                         //тип юнита
+    UnitFlags:TUnitFlags;
     InterfaceUses,ImplementationUses:TUsesArray;//массив индексов юнитов которые есть в усес этого юнита
   end;
   TUnitInfoArray=specialize TVector<TUnitInfo>;//вектор элементов типа TUnitInfo
@@ -112,6 +115,7 @@ begin
   result.UnitName:=un;
   result.InterfaceUses:=TUsesArray.Create;
   result.ImplementationUses:=TUsesArray.Create;
+  result.UnitFlags:=[];
 end;
 
 function TScanResult.TryCreateNewUnitInfo(const un:TUnitName;var UnitIindex:TUnitIndex):boolean;

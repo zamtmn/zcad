@@ -36,7 +36,7 @@
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="7">
+    <Units Count="8">
       <Unit0>
         <Filename Value="pudgb.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -68,6 +68,10 @@
         <Filename Value="ulpiimporter.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit6>
+      <Unit7>
+        <Filename Value="passrcerrors.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit7>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -77,7 +81,8 @@
       <Filename Value="pudgb"/>
     </Target>
     <SearchPaths>
-      <IncludeFiles Value="$(ProjOutDir)"/>
+      <IncludeFiles Value="$(ProjOutDir);..\..\cad_source\other\AGraph\Vectors"/>
+      <OtherUnitFiles Value="..\..\cad_source\other\AGraph\Vectors;..\..\cad_source\other\AGraph\Graphs;..\..\cad_source\other\AGraph\Attrs"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

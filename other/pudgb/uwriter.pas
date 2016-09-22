@@ -109,15 +109,17 @@ procedure WriteGML(Options: TOptions; ScanResult: TScanResult;
   const LogWriter: TLogWriter);
 var
   i,j:integer;
-  s:string;
+  s,tabs:string;
 begin
   if assigned(LogWriter) then
   begin
   //шапка файла
     LogWriter(Title);
-    LogWriter (Vers);
-    LogWriter (BracketLeft);
+    LogWriter(Vers);
+    LogWriter('Graph');
+    LogWriter(BracketLeft);
     // конец шапки
+    Tabs=tab; // отступ от начала строки   выставляем на один таб
     if assigned(ScanResult) then
     begin
       for i:=0 to ScanResult.UnitInfoArray.Size-1 do
@@ -173,7 +175,19 @@ end;
 procedure NodeGML(Options: TOptions; var Node: TUnitInfo; const index: integer;
   const LogWriter: TLogWriter; ForceInclude: boolean);
 begin
-
+   if node.NodeState=NSNotCheced then
+  begin
+    if ForceInclude or IncludeToGraph(Options,Node,index,LogWriter)then
+    begin
+        if Node.UnitType=UTProgram then   // здесь заполняется первый этап
+          LogWriter(format(' %s [shape=box]',[Node.UnitName]));
+        if (Node.UnitPath='')and(index<>0) then
+          LogWriter(format(' %s [style=dashed]',[Node.UnitName]));
+        node.NodeState:=NSCheced;
+    end
+    else
+        node.NodeState:=NSFiltredOut;
+  end;
 end;
 
 procedure GraphGML;

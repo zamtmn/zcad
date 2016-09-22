@@ -38,6 +38,8 @@ yEdSource='sourse';
 yEdTarget='target';
 yEdType='type';
 yEdType1='"bezier"';
+yEdStyle='Style';
+yEdStyle1='"dotted"';//пунктир если обычная линия, то просто опускается
 ColorBlack='"#000000"';
 yEdTargetArrow='targetArrow';
 yEdTargetArrow1='"standard"';
@@ -51,14 +53,16 @@ yEdyTarget='yTarget';
 yEdStep=50.0; //шаг сетки
 
 Type
-TEdPoint=record
-       x, y:real;
+{
+ TEdPoint=record
+        x, y:real;  //нужна если только линия отличается от идеально прямой, что в данном случае не суть важно.
+}
 end;
 TAnchor=record
       xSource, ySourse, xTarget, yTarget: real;
 end;
 Tedge=record
-     Sourse,Target:Real;
+     Sourse,Target:word; // это номера узлов, так что вполне хватит и слова (байта мало)
 end;
 Tgraphics=record
      types,fill, TargetArrow:Real;

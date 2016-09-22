@@ -20,10 +20,8 @@ unit uzctextpreprocessorimpl;
 
 interface
 uses uzeentity,uzcvariablesutils,uzetextpreprocessor,languade,uzbstrproc,sysutils,
-     uzbtypesbase,varmandef,uzbtypes;
+     uzbtypesbase,varmandef,uzbtypes,uzcenitiesvariablesextender,uzeentsubordinated;
 implementation
-uses
-   uzcenitiesvariablesextender,uzeentsubordinated;
 procedure var2value(var str:gdbstring;startpos:integer;pobj:PGDBObjGenericWithSubordinated);
 var
   endpos:integer;

@@ -23,10 +23,8 @@ unit uzclibraryblocksregister;
 interface
 uses uzccommandsimpl,uzbstrproc,UGDBOpenArrayOfByte,uzccommandsabstract,uzbpaths,
      uzestyleslayers,UGDBObjBlockdefArray,uzeblockdefsfactory,uzeblockdef,uzedrawingdef,
-     uzbmemman,uzcsysvars,uzbtypesbase,uzbtypes,uzeentity;
+     uzbmemman,uzcsysvars,uzbtypesbase,uzbtypes,uzeentity,uzcdrawings,uzccombase,uzclog;
 implementation
-uses
-    uzcdrawings,uzccombase,uzclog;
 function LoadLibraryBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:GDBString):PGDBObjBlockdef;
 var
   DependOnBlock,tdp:gdbstring;

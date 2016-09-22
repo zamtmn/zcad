@@ -20,7 +20,8 @@ unit UGDBGraf;
 {$INCLUDE def.inc}
 interface
 uses varman,uzedrawingdef,varmandef,UGDBPoint3DArray,uzbtypesbase,gzctnrvectordata,
-     uzbgeomtypes,sysutils,uzbtypes,uzegeometry,uzeentity,UGDBOpenArrayOfPV;
+     uzbgeomtypes,sysutils,uzbtypes,uzegeometry,uzeentity,UGDBOpenArrayOfPV,
+     uzcenitiesvariablesextender,uzeentline,math;
 type
 {EXPORT+}
 PTLinkType=^TLinkType;
@@ -55,7 +56,6 @@ GDBGraf={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<grafelement>{//})(
 {EXPORT-}
 function getlinktype(pv:PGDBObjEntity):TLinktype;
 implementation
-uses uzcenitiesvariablesextender,uzeentline,math;
 procedure GDBGraf.BeginFindPath;
 var
   pgfe: pgrafelement;

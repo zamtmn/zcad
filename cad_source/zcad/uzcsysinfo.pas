@@ -19,7 +19,7 @@
 unit uzcsysinfo;
 {$INCLUDE def.inc}
 interface
-uses LCLProc,uzbpaths,uzcstrconsts,uzbtypesbase,Forms,uzbtypes{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF},sysutils;
+uses LCLProc,uzclog,uzbpaths,uzcstrconsts,uzbtypesbase,Forms,uzbtypes{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF},sysutils;
 {$INCLUDE revision.inc}
 type
   TmyFileVersionInfo=packed record
@@ -39,7 +39,6 @@ var
 
 Procedure GetSysInfo;
 implementation
-uses uzclog;
 function GetVersion({_file:pchar}):TmyFileVersionInfo;
 var
  (*VerInfoSize, Dummy: DWord;

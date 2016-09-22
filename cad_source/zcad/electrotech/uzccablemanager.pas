@@ -9,7 +9,7 @@ unit uzccablemanager;
 interface
 uses uzcenitiesvariablesextender,uzcvariablesutils,Varman,uzbstrproc,uzcentcable,
      uzeentdevice,uzeconsts,gzctnrvectorpobjects,languade,gzctnrvectorobjects,
-     SysUtils,uzbtypesbase,uzbtypes,varmandef,uzbmemman;
+     SysUtils,uzbtypesbase,uzbtypes,varmandef,uzbmemman,uzcdrawings;
 const
      DefCableName='Создан. Не назван';
      UnNamedCable='Имя отсутствует';
@@ -38,7 +38,6 @@ type
                  end;
 {EXPORT-}
 implementation
-uses uzcdrawings;
 function TCableDesctiptor.GetObjTypeName;
 begin
      result:='TCableDesctiptor';

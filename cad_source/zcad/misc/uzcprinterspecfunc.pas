@@ -23,7 +23,7 @@ interface
 uses uzbgeomtypes,uzepalette,uzbtypesbase,uzbtypes,LCLType,Printers,
      gl,glu,uzgloglstatemanager,
      {$IFDEF SLINUX}glx,{$ENDIF}
-     sysutils,varmandef,Graphics;
+     sysutils,varmandef,Graphics,uzcdrawings,uzegeometry;
 type
     PTPrinterRasterizer=^TPrinterRasterizer;
     TPrinterRasterizer=object(TOGLStateManager)
@@ -45,8 +45,6 @@ type
                            procedure myglLineWidth(const width: GLfloat);virtual;//inline;
     end;
 implementation
-uses
-    uzcdrawings,uzegeometry;
 procedure TPrinterRasterizer.myglPointSize(const size: GLfloat);
 begin
      myglLineWidth(size);

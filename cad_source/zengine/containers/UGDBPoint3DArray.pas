@@ -20,7 +20,7 @@ unit UGDBPoint3DArray;
 {$INCLUDE def.inc}
 interface
 uses uzbgeomtypes,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzbmemman,math,
-     uzegeometry;
+     uzgloglstatemanager,uzegeometry;
 type
 {REGISTEROBJECTTYPE GDBPoint3dArray}
 {Export+}
@@ -38,7 +38,6 @@ GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBVertex>
              end;
 {Export-}
 implementation
-uses uzgloglstatemanager;
 function GDBPoint3DArray.getoutbound;
 var
     tt,b,l,r,n,f:GDBDouble;

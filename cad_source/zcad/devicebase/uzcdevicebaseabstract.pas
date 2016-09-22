@@ -2,7 +2,7 @@ unit uzcdevicebaseabstract;
 {$INCLUDE def.inc}
 interface
 uses uzcsysvars,{$IFNDEF DELPHI}fileutil,{$ENDIF}uzbstrproc,strmy,uzbtypesbase,
-     uzbtypes,UUnitManager,varman,sysutils,typedescriptors,uzcshared;
+     uzbtypes,UUnitManager,varman,sysutils,typedescriptors,uzcshared,uzclog;
 type
 {REGISTEROBJECTTYPE DbBaseObject}
 {EXPORT+}
@@ -33,7 +33,6 @@ DbBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                  end;
 {EXPORT-}
 implementation
-uses uzclog;
 constructor DbBaseObject.initnul;
 begin
      Inherited initnul;

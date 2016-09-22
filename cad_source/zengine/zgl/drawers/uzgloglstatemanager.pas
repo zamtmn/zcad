@@ -24,7 +24,7 @@ uses uzbgeomtypes,uzepalette,uzbtypesbase,uzbtypes,{$IFNDEF DELPHI}LCLType,{$END
      {$IFNDEF DELPHI}gl,{glu,}glext,{$ELSE}dglOpenGL,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
      {$IFDEF WINDOWS}windows,{$ENDIF}
-     {log,}sysutils{,varmandef};
+     uzgldrawergeneral,uzegeometry,sysutils;
 type
     GLenum={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GLenum;
     TViewPortArray = array [0..3] of GLint;//ВРЕМЕННО
@@ -255,8 +255,6 @@ var
    primcount,pointcount,bathcount:GDBInteger;
    middlepoint:GDBVertex;
 implementation
-uses
-    uzgldrawergeneral,uzegeometry;
 procedure MywglCreateContext(var oglc:TOGLContextDesk);
 begin
      //oglc.hrc := wglCreateContext(oglc.DC);

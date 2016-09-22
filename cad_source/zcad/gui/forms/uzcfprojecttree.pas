@@ -25,7 +25,8 @@ uses
  uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  Classes,FileUtil,Forms,stdctrls,Controls,ComCtrls,
  uzcdevicebaseabstract,uzclog,SysUtils,uzbtypes,uzcdrawings,varman,languade,
- varmandef,uzcshared,uzcsysinfo,uzbmemman,uzbtypesbase,uzccommandsimpl,uzccommandsabstract;
+ varmandef,uzcshared,uzcsysinfo,uzbmemman,uzbtypesbase,uzccommandsimpl,uzccommandsabstract,
+ uzeblockdef,UBaseTypeDescriptor,uzcinterface,UUnitManager;
 const
   uncat='UNCAT';
   uncat_='UNCAT_';
@@ -72,7 +73,6 @@ var
   //ProgramDBContextMenuN,ProjectDBContextMenuN,ProgramDEVContextMenuN:TmyPopupMenu;
 
 implementation
-uses uzeblockdef,UBaseTypeDescriptor,uzcinterface,UUnitManager;
 function TBlockTreeNode.GetParams;
 begin
      result:=@FBlockName;

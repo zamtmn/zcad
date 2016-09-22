@@ -22,7 +22,8 @@ interface
 uses uzemathutils,uzgldrawcontext,uzeentabstracttext,uzestylestexts,UGDBXYZWStringArray,
      uzestylesdim,uzeentmtext,uzestyleslayers,uzedrawingdef,uzecamera,
      uzbstrproc,UGDBOpenArrayOfByte,uzeenttext,uzegeometry,uzeentline,uzbtypesbase,uzeentcomplex,
-     uzbgeomtypes,sysutils,uzeentity,uzbtypes,uzeconsts,uzbmemman;
+     uzbgeomtypes,sysutils,uzeentity,uzbtypes,uzeconsts,uzbmemman,
+     uzeentitiesmanager,UGDBOpenArrayOfPV,uzeentblockinsert;
 type
 {EXPORT+}
 PTDXFDimData2D=^TDXFDimData2D;
@@ -93,7 +94,6 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 end;
 {EXPORT-}
 implementation
-uses uzeentitiesmanager,UGDBOpenArrayOfPV,uzeentblockinsert;
 procedure GDBObjDimension.DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;var drawing:TDrawingDef;var DC:TDrawContext);
 var
    l:GDBDouble;

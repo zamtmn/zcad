@@ -28,8 +28,8 @@ type ptsyminfo=^tsyminfo;
                      end;
 function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
 implementation
-uses
-   uzcshared;
+{uses
+   uzcshared;}
 function CreateTTFFontInstance:PTTFFont;
 begin
      GDBGetMem({$IFDEF DEBUGBUILD}'{638B5484-83D8-4FEA-AE47-918B8B0CBC08}',{$ENDIF}result,sizeof(TTFFont));

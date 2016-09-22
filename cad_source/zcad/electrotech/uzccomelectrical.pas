@@ -33,7 +33,8 @@ uses
   uzcentnet,
   uzcshared,uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
   gzctnrvectorpobjects,uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
-  uzbpaths,uzctnrvectorgdbstring,math,Masks,uzclog,uzccombase,uzbstrproc;
+  uzbpaths,uzctnrvectorgdbstring,math,Masks,uzclog,uzccombase,uzbstrproc,
+  uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract;
 type
 {Export+}
   TFindType=(
@@ -126,7 +127,6 @@ var
 procedure finalize;}
 procedure Cable2CableMark(pcd:PTCableDesctiptor;pv:pGDBObjDevice);
 implementation
-uses uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract;
 function GetCableMaterial(pcd:PTCableDesctiptor):GDBString;
 var
    {pvn,}{pvm,}pvmc{,pvl}:pvardesk;

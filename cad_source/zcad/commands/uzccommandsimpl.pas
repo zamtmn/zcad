@@ -23,7 +23,8 @@ unit uzccommandsimpl;
 interface
 uses uzcutils,uzgldrawcontext,uzglviewareageneral,uzeconsts,uzcsysvars,uzegeometry,
      varmandef,uzbtypesbase,uzbtypes,uzccommandsabstract,uzccommandsmanager,
-     uzbgeomtypes,uzglviewareadata,uzcdrawings,uzbmemman,uzcshared;
+     uzbgeomtypes,uzglviewareadata,uzcdrawings,uzbmemman,uzcshared,
+     uzcinterface,varman,uzclog;
 type
   comproc=procedure(_self:pointer);
   commousefunc=function(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger):GDBInteger;
@@ -88,7 +89,6 @@ var
 function CreateCommandRTEdObjectPlugin(ocs:comfuncwithoper;oce,occ,ocf:comproc;obc,oac:commousefunc;ohgd:comdrawfunc;occont:comproc;name:pansichar;SA,DA:TCStartAttr):pCommandRTEdObjectPlugin;export;
 function CreateCommandFastObjectPlugin(ocs:comfuncwithoper;name:pansichar;SA,DA:TCStartAttr):pCommandFastObjectPlugin;export;
 implementation
-uses uzcinterface,varman,uzclog;
 procedure  TOSModeEditor.Format;
 var
    i,c:integer;

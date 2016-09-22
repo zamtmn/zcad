@@ -20,7 +20,7 @@ unit uzcfhelp;
 {$INCLUDE def.inc}
 interface
 uses
- uzbstrproc,uzctreenode,FileUtil,Forms, stdctrls, Controls,uzbtypes,languade,uzbmemman;
+ uzcshared,uzclog,uzbstrproc,uzctreenode,FileUtil,Forms, stdctrls, Controls,uzbtypes,languade,uzbmemman;
 type
   THelpForm = class(TFreedForm)
     Memo:TMemo;
@@ -30,7 +30,6 @@ type
 var
   HelpForm:THelpForm;
 implementation
-uses uzcshared,uzclog;
 procedure THelpForm.AfterConstruction;
 begin
   inherited;

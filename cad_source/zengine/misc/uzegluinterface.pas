@@ -23,7 +23,7 @@ interface
 uses LCLProc,uzepalette,uzbtypes,{$IFNDEF DELPHI}LCLType,{$ENDIF}
      {$IFNDEF DELPHI}glu,gl,{$ELSE}dglOpenGL,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
-     uzbgeomtypes,sysutils{,varmandef};
+     uzbgeomtypes,sysutils,uzegeometry;
 const
       GLU_VERSION={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_VERSION;
       GLU_TESS_VERTEX={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_TESS_VERTEX;
@@ -76,8 +76,6 @@ var
    GLUIntrf:TGLUInterface;
    GLUVersion,GLUExtensions:String;
 implementation
-uses
-    uzegeometry;
 function TGLUInterface.mygluGetString(name: GLenum): PAnsiChar;
 begin
      result:=gluGetString(name);

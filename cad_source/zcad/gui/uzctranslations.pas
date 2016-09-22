@@ -121,14 +121,8 @@ begin
   end else
     Result:=OriginalValue;
 end;
-{$IF LCL_FULLVERSION<1030000}
-procedure TmyPOFile.Add(const Identifier, OriginalValue, TranslatedValue, Comments,
-                    Context, Flags, PreviousID: string);
-{$ENDIF}
-{$IF LCL_FULLVERSION>=1030000}
 procedure TmyPOFile.Add(const Identifier, OriginalValue, TranslatedValue,
   Comments, Context, Flags, PreviousID: string; SetFuzzy: boolean = false; LineNr: Integer = -1);
-{$ENDIF}
 var
    t:boolean;
 begin

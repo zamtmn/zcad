@@ -23,7 +23,7 @@ uses uzbmemman,zeundostack,zebaseundocommands,uzbtypes,uzeentity;
 
 type
 
-    generic TGObjectChangeCommand<_T>=object(TCustomChangeCommand)
+    generic TGObjectChangeCommand<_T> =object(TCustomChangeCommand)
                                           {type
                                               TCangeMethod=procedure(data:_T)of object;}
                                           private

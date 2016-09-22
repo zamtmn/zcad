@@ -1894,7 +1894,7 @@ begin
                                  psl.add(@s);}
                                  end;
                 line:=Tria_Utf8ToAnsi(line);
-                FileWrite(handle,(line)[1],length((line)));
+                FileWrite(handle,line[1],length(line));
                 firstline:=false;
                 devstart:=devend;
                 nodeend:=pv^.Devices.iterate(ir_inNodeArray);

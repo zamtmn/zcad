@@ -1,4 +1,4 @@
-﻿// константы и типы для формата gml
+// константы и типы для формата gml
 Const
 Title='Creator	"yFiles"';
 vers='Version	"2.14"';
@@ -15,13 +15,13 @@ yEdDirected='Directed';
 yEdNode='node';
 yEdID='id';
 yEdgraphics='graphics';
-square='"'//кавычка
-yEdx='x';
-yEdy='y';
-yEdw='w';
-yEdh='h';
+square='"';//кавычка
+y_Edx='x';
+y_Edy='y';
+y_Edw='w';
+y_Edh='h';
 yEdconfiguration='customconfiguration';
-yEdConf1='"BevelNode"'
+yEdConf1='"BevelNode"';
 yEdFill='fill';//это цвет. Нужна процедура перевода цвета (шеснадцатеричных цифр) в текстовое представление.
 yEdHasOutline='hasOutline';
 yEdLabelGraphics='LabelGraphics';
@@ -35,7 +35,7 @@ yEdModel1='"null"';
 //вторая часть файла -- связи.
 yEdEdge='edge';
 yEdSource='sourse';
-yEdTarget='target'
+yEdTarget='target';
 yEdType='type';
 yEdType1='"bezier"';
 ColorBlack='"#000000"';
@@ -48,7 +48,7 @@ yEdxSourse='xSource';
 yEdySourse='ySource';
 yEdxTarget='xTarget';
 yEdyTarget='yTarget';
-yEdStep=50.0 //шаг сетки
+yEdStep=50.0; //шаг сетки
 
 Type
 TEdPoint=record
@@ -58,19 +58,20 @@ TAnchor=record
       xSource, ySourse, xTarget, yTarget: real;
 end;
 Tedge=record
-     Sourse,Target;Real;
+     Sourse,Target:Real;
 end;
 Tgraphics=record
-     type,fill, TargetArrow:Real;
+     types,fill, TargetArrow:Real;
 End;
 Tgraphics2=record
-x, y. w, h, hasOutline:real; //hasOutline располагается на последнем месте!!!
+x, y, w, h, hasOutline:real; //hasOutline располагается на последнем месте!!!
 customconfiguration, fill:String;
 End;
 TLabelGraphics=record
 text:String;
 fontSize:Byte;//нет смысла больше, так как шрифт больше 50 неудобен
 fontName,	model:string;
+End;
 Node=record
 graph:TGraphics2;
 LabelGr:TLabelGraphics;

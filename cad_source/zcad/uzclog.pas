@@ -20,7 +20,8 @@ unit uzclog;
 {$INCLUDE def.inc}
 {$mode objfpc}{$H+}
 interface
-uses uzbtypesbase,uzbtypes,LazLoggerBase,LazLogger;
+uses UGDBOpenArrayOfByte,gzctnrvectordata,uzbtypesbase,uzbtypes,LazLoggerBase,
+     LazLogger,strutils,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF};
 const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
       {$IFDEF FPC}
                   {$IFDEF LINUX}filelog='log/zcad_linux.log';{$ENDIF}
@@ -90,8 +91,6 @@ var programlog:tlog;
    SplashTextOut:TSplashTextOutProc;
    HistoryTextOut,MessageBoxTextOut:THistoryTextOutProc;
 implementation
-uses
-    UGDBOpenArrayOfByte,gzctnrvectordata,strutils,sysutils{$IFNDEF DELPHI},{fileutil}LazUTF8{$ENDIF};
 var
     PerfomaneBuf:GDBOpenArrayOfByte;
     TimeBuf:specialize GZVectorData<TMyTimeStamp>;

@@ -23,10 +23,9 @@ uses uzbpaths,UUnitManager,uzcsysvars,uzcstrconsts,{$IFNDEF DELPHI}uzctranslatio
      uzbstrproc,Varman,languade,SysUtils,
      UBaseTypeDescriptor,uzcshared,uzbtypes,UGDBOpenArrayOfByte, strmy, varmandef,uzcsysinfo,
      TypeDescriptors,
-     URecordDescriptor;
+     URecordDescriptor,
+     uzclog,uzbmemman;
 implementation
-uses
-    uzclog,uzbmemman;
 {$IFNDEF WINDOWS}
 var
   ptd:PUserTypeDescriptor;

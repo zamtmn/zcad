@@ -14,7 +14,7 @@ uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      uzeenttext,uzeentdevice,uzcentcable,uzeenttable,UGDBControlPointArray,uzegeometry,
      uzeentline,uzbtypesbase,uzeentcomplex,sysutils,uzctnrvectorgdbstring,
      UGDBSelectedObjArray,uzeentity,varmandef,uzbtypes,uzeconsts,uzeffdxfsupport,
-     uzbgeomtypes,uzbmemman,uzeentsubordinated;
+     uzbgeomtypes,uzbmemman,uzeentsubordinated,uzestylestables,uzclog,UGDBOpenArrayOfPV,uzeentcurve;
 type
 {EXPORT+}
 PGDBObjElLeader=^GDBObjElLeader;
@@ -64,7 +64,6 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             end;
 {EXPORT-}
 implementation
-uses uzestylestables,uzclog,UGDBOpenArrayOfPV,uzeentcurve;
 function GDBObjElLeader.calcvisible;
 //var i:GDBInteger;
 //    tv,tv1:gdbvertex4d;

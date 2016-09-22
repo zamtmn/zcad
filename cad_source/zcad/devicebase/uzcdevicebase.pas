@@ -3,7 +3,7 @@ unit uzcdevicebase;
 interface
 uses uzbpaths,uzctranslations,gvector,varmandef,CsvDocument,uzcdevicebaseabstract,uzcsysvars,
      LazUTF8,uzcsysinfo,strmy,uzbtypesbase,uzbtypes,UUnitManager,varman,sysutils,
-     typedescriptors,URecordDescriptor,UObjectDescriptor,uzcshared;
+     typedescriptors,URecordDescriptor,UObjectDescriptor,uzcshared,uzclog;
 type
 {REGISTEROBJECTTYPE DeviceDbBaseObject}
 {REGISTEROBJECTTYPE ElDeviceBaseObject}
@@ -51,7 +51,6 @@ const
      firstfilename='_startup.pas';
 var devman:DeviceManager;
 implementation
-uses uzclog;
 constructor CableDeviceBaseObject.initnul;
 begin
      Inherited initnul;

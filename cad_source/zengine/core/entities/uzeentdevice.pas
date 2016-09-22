@@ -24,7 +24,8 @@ uses uzestyleslayers,uzepalette,uzeobjectextender,uabstractunit,uzeentityfactory
      uzgldrawcontext,uzedrawingdef,uzecamera,uzcsysvars,sysutils,
      UGDBOpenArrayOfByte,gzctnrvectorpobjects,uunitmanager,uzbmemman,uzegeometry,
      uzeconsts,uzeentity,uzeentsubordinated,varmandef,uzbtypesbase,
-     uzbgeomtypes,uzeentblockinsert,uzbtypes,UGDBVisibleOpenArray,UGDBObjBlockdefArray;
+     uzbgeomtypes,uzeentblockinsert,uzbtypes,UGDBVisibleOpenArray,UGDBObjBlockdefArray,
+     uzeblockdef,uzeffdxfsupport,UGDBSelectedObjArray,uzeentitiestree;
 
 type
 {REGISTEROBJECTTYPE GDBObjDevice}
@@ -76,7 +77,6 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
 var
     GDBObjDeviceDXFFeatures:TDXFEntIODataManager;
 implementation
-uses uzeblockdef,uzeffdxfsupport,UGDBSelectedObjArray,uzeentitiestree;
 function GDBObjDevice.GetNameInBlockTable:GDBString;
 begin
   result:=DevicePrefix+name;

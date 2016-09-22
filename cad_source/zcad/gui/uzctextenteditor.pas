@@ -23,13 +23,11 @@ uses
      uzcutils,uzcsysvars,uzbtypesbase,uzbtypes,uzcsysinfo,
      uzcinfoform,Varman,uzcinterface,
      uzedrawingdef,uzbstrproc,uzeenttext,uzeconsts,uzcstrconsts,uzcfsinglelinetexteditor,
-     Controls,Classes,Forms;
+     Controls,Classes,Forms,uzccommandsmanager;
 var
     InfoForm:TInfoForm=nil;
 procedure RunTextEditor(Pobj:GDBPointer;var drawing:TDrawingDef);
 implementation
-uses
-    uzccommandsmanager;
 procedure RunTextEditor(Pobj:GDBPointer;var drawing:TDrawingDef);
 var
    modalresult:integer;

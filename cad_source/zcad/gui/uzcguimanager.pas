@@ -22,7 +22,7 @@ unit uzcguimanager;
 
 interface
 uses usimplegenerics,
-    uzbmemman,uzcsysvars,uzbtypesbase,uzbtypes,uzeentity,Types,Controls,Forms;
+     uzclog,uzbmemman,uzcsysvars,uzbtypesbase,uzbtypes,uzeentity,Types,Controls,Forms;
 type
 TZCADFormSetupProc=procedure(Form:TControl);
 TZCADFormCreateProc=function:TForm;
@@ -47,8 +47,6 @@ TZCADGUIManager=class
 var
   ZCADGUIManager:TZCADGUIManager;
 implementation
-uses
-    uzclog;
 function TZCADGUIManager.CreateZCADFormInstance(var FormInfo:TFormInfoData):tobject;
 begin
      result:=FormInfo.FormClass.NewInstance;

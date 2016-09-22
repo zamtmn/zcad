@@ -25,7 +25,7 @@ uses gzctnrvectorpobjects,gzctnrvectordata,uzeentityfactory,uzeentsubordinated,
      uzeentcurve,UGDBVectorSnapArray,uzegeometry,uzestyleslayers,uzeentity,
      uzbmemman,uzbtypesbase,UGDBPoint3DArray,UGDBPolyLine2DArray,
      UGDBOpenArrayOfByte,uzbtypes,uzeentwithlocalcs,uzeconsts,math,
-     uzbgeomtypes,uzeffdxfsupport,sysutils,UGDBLineWidthArray;
+     uzbgeomtypes,uzeffdxfsupport,sysutils,UGDBLineWidthArray,UGDBSelectedObjArray;
 type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {REGISTEROBJECTTYPE GDBObjLWPolyline}
@@ -81,7 +81,6 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
            end;
 {Export-}
 implementation
-uses UGDBSelectedObjArray{,log};
 procedure GDBObjLWpolyline.higlight(var DC:TDrawContext);
 begin
 end;

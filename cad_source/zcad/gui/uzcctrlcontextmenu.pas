@@ -22,7 +22,7 @@ interface
 
 uses
   ExtCtrls,lclproc,Graphics,ActnList,{ComCtrls,StdCtrls,}Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,Buttons,
-  {strutils,}{$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils{,strproc,varmandef,Varman,gdbasetypes,UGDBOpenArrayOfByte};
+  uzclog,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils{,strproc,varmandef,Varman,gdbasetypes,UGDBOpenArrayOfByte};
 
 type
    tcxmenumgr=class
@@ -41,7 +41,6 @@ type
 var
    cxmenumgr:tcxmenumgr=nil;
 implementation
-uses uzclog;
 procedure tcxmenumgr.RegisterLCLMenu(var menu:TPopupMenu);
 begin
      menu.OnClose:=LCLCloseNotify;

@@ -11,7 +11,8 @@ interface
 uses uzeobjectextender,varman,uzgldrawcontext,uzeentgenericsubentry,uzedrawingdef,
      uzcsysvars,UGDBOpenArrayOfByte,uzestyleslayers,UUnitManager,uzeentcurve,uzegeometry,
      math,gzctnrvectordata,uzbtypesbase,uzeentity,varmandef,uzbtypes,
-     uzbgeomtypes,uzeconsts,uzeffdxfsupport,sysutils,uzbmemman,uzeentsubordinated,uzeentdevice;
+     uzbgeomtypes,uzeconsts,uzeffdxfsupport,sysutils,uzbmemman,uzeentsubordinated,uzeentdevice,
+     uzcenitiesvariablesextender,uzeentityfactory,uzclog;
 type
 {Повторное описание типа в Cableы}
   PTCableType=^TCableType;
@@ -61,7 +62,6 @@ GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
 var
     GDBObjCableDXFFeatures:TDXFEntIODataManager;
 implementation
-uses uzcenitiesvariablesextender,uzeentityfactory,uzclog;
 function GDBObjCable.Clone;
 var tvo: PGDBObjCable;
     i:GDBInteger;

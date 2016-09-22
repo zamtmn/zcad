@@ -23,7 +23,7 @@ interface
 uses uzgldrawcontext,uzeentabstracttext,uzetrash,uzedrawingdef,uzbstrproc,UGDBOpenArrayOfByte,
      uzestylestables,uzeentline,uzbtypesbase,uzeentcomplex,sysutils,UGDBTable,
      uzctnrvectorgdbstring,uzeentmtext,uzeentity,uzbtypes,uzeconsts,uzegeometry,
-     uzbgeomtypes,uzbmemman;
+     uzbgeomtypes,uzbmemman,uzeentblockinsert;
 //jcm(*'TopMiddle'*),
 type
 {TTableCellJustify=(jcl(*'TopLeft'*),
@@ -52,7 +52,6 @@ GDBObjTable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             end;
 {EXPORT-}
 implementation
-uses uzeentblockinsert;
 procedure GDBObjTable.ReCalcFromObjMatrix;
 //var
     //ox:gdbvertex;

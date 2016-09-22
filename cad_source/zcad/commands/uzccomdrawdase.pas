@@ -34,9 +34,9 @@ uses
   uzegeometry,
   uzbmemman,
   uzeconsts,
-  uzbgeomtypes,uzcshared,uzclog;
+  uzbgeomtypes,uzcshared,uzclog,
+  UBaseTypeDescriptor,Varman,TypeDescriptors;
 implementation
-uses UBaseTypeDescriptor,Varman,TypeDescriptors;
 var
    c1,c2:integer;
    distlen:gdbdouble;

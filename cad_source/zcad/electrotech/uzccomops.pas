@@ -16,7 +16,9 @@ uses
   uzccommandsabstract,uzccommandsimpl,uzbtypes,uzcdrawings,uzeutils,uzcutils,sysutils,
   varmandef,UGDBOpenArrayOfByte,uzeffdxf,uzegeometry,uzbmemman,uzeconsts,
   uzccomdraw,UGDBVisibleOpenArray,uzeentline,uzbpaths,uzcshared,uzeentblockinsert,
-  uzbgeomtypes,varman,uzccablemanager,uzeentdevice,uzeentmtext,math;
+  uzbgeomtypes,varman,uzccablemanager,uzeentdevice,uzeentmtext,math,
+  uzcenitiesvariablesextender,uzeroot,uzglviewareadata,uzcentcable,UUnitManager,
+  uzccomelectrical,URecordDescriptor,TypeDescriptors;
 
 type
   TPlaceParam=record
@@ -155,8 +157,6 @@ var
 procedure finalize;}
 
 implementation
-uses uzcenitiesvariablesextender,uzeroot,uzglviewareadata,uzcentcable,UUnitManager,
-     uzccomelectrical,URecordDescriptor,TypeDescriptors;
 function docorrecttogrid(point:GDBVertex;need:GDBBoolean):GDBVertex;
 var
    gr:GDBBoolean;

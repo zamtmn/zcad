@@ -21,7 +21,8 @@ unit uzeentdimensiongeneric;
 interface
 uses uzeentityfactory,uzeentwithlocalcs,uzeentdimension,uzestylesdim,uzestyleslayers,
      uzedrawingdef,uzbstrproc,UGDBOpenArrayOfByte,uzegeometry,uzbtypesbase,
-     sysutils,uzeentity,uzbtypes,uzeconsts,uzeffdxfsupport,uzbmemman,uzeentsubordinated;
+     sysutils,uzeentity,uzbtypes,uzeconsts,uzeffdxfsupport,uzbmemman,uzeentsubordinated,
+     uzeentdimradial,uzeentdimdiametric,uzeentdimrotated,uzeentdimaligned;
 type
 {REGISTEROBJECTTYPE GDBObjGenericDimension}
 {EXPORT+}
@@ -40,7 +41,6 @@ GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                    end;
 {EXPORT-}
 implementation
-uses uzeentdimradial,uzeentdimdiametric,uzeentdimrotated,uzeentdimaligned;
 var
   WorkingFormatSettings:TFormatSettings;
 function GDBObjGenericDimension.FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;

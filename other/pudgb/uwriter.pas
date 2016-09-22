@@ -8,6 +8,8 @@ uses
   Classes, SysUtils,
   uoptions,uscanresult;
 
+{$I yed.inc}
+
 procedure WriteGraph(Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 procedure ProcessNode(Options:TOptions;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;ForceInclude:boolean=false);
 

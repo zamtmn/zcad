@@ -33,7 +33,7 @@
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="8">
+    <Units Count="9">
       <Unit0>
         <Filename Value="pudgb.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -69,6 +69,11 @@
         <Filename Value="passrcerrors.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit7>
+      <Unit8>
+        <Filename Value="yedwriter.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="yEdWriter"/>
+      </Unit8>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

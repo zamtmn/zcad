@@ -20,7 +20,6 @@ y_Edx='x';
 y_Edy='y';
 y_Edw='w';
 y_Edh='h';
-yEdconfiguration='customconfiguration';
 yEdConf1='"BevelNode"';
 yEdFill='fill';//это цвет. Нужна процедура перевода цвета (шеснадцатеричных цифр) в текстовое представление.
 yEdHasOutline='hasOutline';
@@ -41,10 +40,11 @@ yEdType1='"bezier"';
 yEdStyle='Style';
 yEdStyle1='"dotted"';//пунктир если обычная линия, то просто опускается
 ColorBlack='"#000000"';
+ColorWhite='"#FFFFF0"';
+Color1='"#9999FF"';
 yEdTargetArrow='targetArrow';
 yEdTargetArrow1='"standard"';
-yEdLine='Line';
-yEdpoint='point';
+
 yEdedgeAnchor='edgeAnhor';
 yEdxSourse='xSource';
 yEdySourse='ySource';
@@ -53,11 +53,7 @@ yEdyTarget='yTarget';
 yEdStep=50.0; //шаг сетки
 
 Type
-{
- TEdPoint=record
-        x, y:real;  //нужна если только линия отличается от идеально прямой, что в данном случае не суть важно.
-}
-//end;
+
 TAnchor=record
       xSource, ySourse, xTarget, yTarget: real;
 end;

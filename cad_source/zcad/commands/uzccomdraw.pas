@@ -1760,7 +1760,7 @@ begin
      inherited;
      if drawings.GetCurrentDWG^.TextStyleTable.GetRealCount<1 then
      begin
-          uzcshared.ShowError(rscmInDwgTxtStyleNotDeffined);
+          ShowError(rscmInDwgTxtStyleNotDeffined);
           commandmanager.executecommandend;
      end;
 end;
@@ -3537,7 +3537,7 @@ begin
                                     begin
                                          if (PEProp.nearestvertex=0)or(PEProp.nearestvertex=p3dpl^.VertexArrayInOCS.Count-1) then
                                          begin
-                                              uzcshared.ShowError(rscmNotCutHere);
+                                              ShowError(rscmNotCutHere);
                                               exit;
                                          end;
                                          p3dpl2 := pointer(p3dpl^.Clone(p3dpl^.bp.ListPos.Owner));
@@ -3973,8 +3973,8 @@ begin
      if assigned(StartLongProcessProc) then StartLongProcessProc(10,'Cutting lines');
       PlaceLines(LinesMap,lm,lc);
      if assigned(EndLongProcessProc) then EndLongProcessProc;
-     uzcshared.HistoryOutStr('Lines modified: '+inttostr(lm));
-     uzcshared.HistoryOutStr('Lines created: '+inttostr(lc));
+     HistoryOutStr('Lines modified: '+inttostr(lm));
+     HistoryOutStr('Lines created: '+inttostr(lc));
 
 
 
@@ -3982,9 +3982,9 @@ begin
      parray.done;
      LinesMap.Free;
      if assigned(EndLongProcessProc) then EndLongProcessProc;
-     uzcshared.HistoryOutStr('Line-AABB tests count: '+inttostr(lineAABBtests));
-     uzcshared.HistoryOutStr('Line-Line tests count: '+inttostr(linelinetests));
-     uzcshared.HistoryOutStr('Intersections count: '+inttostr(intersectcount));
+     HistoryOutStr('Line-AABB tests count: '+inttostr(lineAABBtests));
+     HistoryOutStr('Line-Line tests count: '+inttostr(linelinetests));
+     HistoryOutStr('Intersections count: '+inttostr(intersectcount));
      result:=cmd_ok;
 end;
 

@@ -246,7 +246,7 @@ begin
 
      end
         else
-        uzcshared.ShowError('MERGE:'+format(rsUnableToOpenFile,[s]));
+        ShowError('MERGE:'+format(rsUnableToOpenFile,[s]));
 end;
 function Merge_com(operands:TCommandOperands):TCommandResult;
 begin
@@ -359,7 +359,7 @@ begin
                                      if assigned(updatevisibleproc) then updatevisibleproc;
                                 end
      else begin
-          uzcshared.ShowError(Format(rsunknownFileExt, [fileext]));
+          ShowError(Format(rsunknownFileExt, [fileext]));
           end;
      end;
      result:=cmd_ok;
@@ -414,10 +414,10 @@ begin
                                                    if assigned(ReturnToDefaultProc) then ReturnToDefaultProc(drawings.GetUnitsFormat);
                                               end;
   case PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.undo(msg,prevundo,overlay) of
-    URRNoCommandsToUndoInOverlayMode:uzcshared.ShowError(rscmNoCTUSE);
-    URRNoCommandsToUndo:uzcshared.ShowError(rscmNoCTU);
+    URRNoCommandsToUndoInOverlayMode:ShowError(rscmNoCTUSE);
+    URRNoCommandsToUndo:ShowError(rscmNoCTU);
   end;
-  if msg<>'' then uzcshared.HistoryOutStr(msg);
+  if msg<>'' then HistoryOutStr(msg);
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
@@ -427,9 +427,9 @@ var
 begin
   drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
   case PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.redo(msg) of
-    URRNoCommandsToUndo:uzcshared.ShowError(rscmNoCTR);
+    URRNoCommandsToUndo:ShowError(rscmNoCTR);
   end;
-  if msg<>'' then uzcshared.HistoryOutStr(msg);
+  if msg<>'' then HistoryOutStr(msg);
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
@@ -1158,7 +1158,7 @@ begin
      s:=s+'(далее в +): '+inttostr(pnode.NodeData.pluscount);
      s:=s+' (далее в -): '+inttostr(pnode.NodeData.minuscount);
      {$IFDEF DEBUGBUILD}
-     uzcshared.HistoryOutStr(dupestring('  ',pnode.nodedepth)+s);
+     HistoryOutStr(dupestring('  ',pnode.nodedepth)+s);
      {$ENDIF}
      if pnode.NodeData.nodedepth>depth then
                                   depth:=pnode.NodeData.nodedepth;
@@ -1197,15 +1197,15 @@ var i: GDBInteger;
     depth:integer;
     tr:TTreeStatistik;
 begin
-  uzcshared.HistoryOutStr('Total entities: '+inttostr(drawings.GetCurrentROOT.ObjArray.count));
-  uzcshared.HistoryOutStr('Max tree depth: '+inttostr(SysVar.RD.RD_SpatialNodesDepth^));
-  uzcshared.HistoryOutStr('Max in node entities: '+inttostr(GetInNodeCount(SysVar.RD.RD_SpatialNodeCount^)));
-  uzcshared.HistoryOutStr('Create tree...');
+  HistoryOutStr('Total entities: '+inttostr(drawings.GetCurrentROOT.ObjArray.count));
+  HistoryOutStr('Max tree depth: '+inttostr(SysVar.RD.RD_SpatialNodesDepth^));
+  HistoryOutStr('Max in node entities: '+inttostr(GetInNodeCount(SysVar.RD.RD_SpatialNodeCount^)));
+  HistoryOutStr('Create tree...');
   if assigned(StartLongProcessProc) then StartLongProcessProc(drawings.GetCurrentROOT.ObjArray.count,'Rebuild drawing spatial');
   drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox);
   //drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
   if assigned(EndLongProcessProc) then EndLongProcessProc;
-  uzcshared.HistoryOutStr('Done');
+  HistoryOutStr('Done');
   drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
   drawings.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
   drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
@@ -1218,24 +1218,24 @@ begin
 
   tr:=MakeTreeStatisticRec(SysVar.RD.RD_SpatialNodesDepth^);
   GetTreeStat(@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,depth,tr);
-  uzcshared.HistoryOutStr('as a result:');
-  uzcshared.HistoryOutStr('Total entities: '+inttostr(tr.EntCount));
-  uzcshared.HistoryOutStr('Total nodes: '+inttostr(tr.NodesCount));
-  uzcshared.HistoryOutStr('Total overflow nodes: '+inttostr(tr.OverflowCount));
-  uzcshared.HistoryOutStr('Fact tree depth: '+inttostr(tr.MaxDepth));
-  uzcshared.HistoryOutStr('by levels:');
+  HistoryOutStr('as a result:');
+  HistoryOutStr('Total entities: '+inttostr(tr.EntCount));
+  HistoryOutStr('Total nodes: '+inttostr(tr.NodesCount));
+  HistoryOutStr('Total overflow nodes: '+inttostr(tr.OverflowCount));
+  HistoryOutStr('Fact tree depth: '+inttostr(tr.MaxDepth));
+  HistoryOutStr('by levels:');
   ap:=0;
   for i:=0 to tr.MaxDepth do
   begin
-       uzcshared.HistoryOutStr('level '+inttostr(i));
-       uzcshared.HistoryOutStr('  Entities: '+inttostr(tr.PLevelStat^[i].EntCount));
+       HistoryOutStr('level '+inttostr(i));
+       HistoryOutStr('  Entities: '+inttostr(tr.PLevelStat^[i].EntCount));
        cp:=tr.PLevelStat^[i].EntCount/tr.EntCount*100;
        ap:=ap+cp;
        str(cp:2:2,percent);
        str(ap:2:2,apercent);
-       uzcshared.HistoryOutStr('  Entities(%)[summary]: '+percent+'['+apercent+']');
-       uzcshared.HistoryOutStr('  Nodes: '+inttostr(tr.PLevelStat^[i].NodesCount));
-       uzcshared.HistoryOutStr('  Overflow nodes: '+inttostr(tr.PLevelStat^[i].OverflowCount));
+       HistoryOutStr('  Entities(%)[summary]: '+percent+'['+apercent+']');
+       HistoryOutStr('  Nodes: '+inttostr(tr.PLevelStat^[i].NodesCount));
+       HistoryOutStr('  Overflow nodes: '+inttostr(tr.PLevelStat^[i].OverflowCount));
   end;
   KillTreeStatisticRec(tr);
   result:=cmd_ok;
@@ -1761,7 +1761,7 @@ var
   Script:GDBString;
 begin
                    Script:='GDBString;';
-                   uzcshared.ShowError(Script);
+                   ShowError(Script);
 end;
 function TestScript_com(operands:TCommandOperands):TCommandResult;
 (*var
@@ -1791,7 +1791,7 @@ var f: TForm; i: Longint; begin f := TForm.CreateNew(f{, 0}); f.Show; while f.Vi
          Messages := Messages +
                      Compiler.Msg[i].MessageToString +
                      #13#10;
-       uzcshared.ShowError(Messages);
+       ShowError(Messages);
        Compiler.Free;
         // You could raise an exception here.
        Exit;

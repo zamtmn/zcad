@@ -24,7 +24,7 @@ uses
  StdCtrls,ExtCtrls,Controls,Classes,menus,Forms,fileutil,graphics,
  uzbtypes, uzbmemman,uzcdrawings,math,uzccommandsmanager,varman,languade,
  uzbgeomtypes,UGDBTracePropArray,varmandef,
- uzegeometry,uzctnrvectorgdbstring,uzcinterface,uzctreenode;
+ uzegeometry,uzctnrvectorgdbstring,uzcinterface,uzctreenode,uzglviewareadata,uzclog,strmy;
 
 const
      cheight=48;
@@ -69,8 +69,10 @@ var
   CWMemo:TMemo;
   utflen:integer;
   historychanged:boolean;
+
+  HintText:TLabel;
+
 implementation
-uses uzcshared,uzglviewareadata,uzclog,strmy;
 procedure TCWindow.AfterConstruction;
 begin
     inherited;
@@ -473,7 +475,7 @@ begin
            end
            end
               else
-                  uzcshared.ShowError('Unable to parse line "'+subexpr+'"');
+                  ShowError('Unable to parse line "'+subexpr+'"');
       end;
     end;
     CmdEdit.text:='';
@@ -494,8 +496,91 @@ begin
     poglwnd.paint;}
     end;
 end;
+
+procedure HistoryOut(s: pansichar); export;
+var
+   a:string;
+begin
+     {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
+     if sysvar.SYS.SYS_IsHistoryLineCreated^ then}
+     if assigned(HistoryLine) then
+     begin
+          a:=(s);
+               if HistoryLine.Lines.Count=0 then
+                                            utflen:=utflen+{UTF8}Length(a)
+                                        else
+                                            utflen:=2+utflen+{UTF8}Length(a);
+          {$IFNDEF DELPHI}
+          HistoryLine.Append(a);
+          CWMemo.Append(a);
+          {$ENDIF}
+          //application.ProcessMessages;
+
+          //HistoryLine.SelStart:=utflen{HistoryLine.GetTextLen};
+          //HistoryLine.SelLength:=2;
+          historychanged:=true;
+          //HistoryLine.SelLength:=0;
+          //{CLine}HistoryLine.append(s);
+          {CLine}//---------------------------------------------------------HistoryLine.repaint;
+          //a:=CLine.HistoryLine.Lines[CLine.HistoryLine.Lines.Count];
+     //SendMessageA(cline.HistoryLine.Handle, WM_vSCROLL, SB_PAGEDOWN	, 0);
+     end;
+     programlog.logoutstr('HISTORY: '+s,0,LM_Info);
+end;
+procedure HistoryOutStr(s:String);
+begin
+     HistoryOut(pansichar(s));
+end;
+procedure DisableCmdLine;
+begin
+  application.MainForm.ActiveControl:=nil;
+  if assigned(uzcfcommandline.cmdedit) then
+                                  begin
+                                      uzcfcommandline.cmdedit.Enabled:=false;
+                                  end;
+  if assigned(HintText) then
+                          begin
+                            HintText.Enabled:=false;
+                          end;
+end;
+
+procedure EnableCmdLine;
+begin
+  if assigned(uzcfcommandline.cmdedit) then
+                                  begin
+                                       uzcfcommandline.cmdedit.Enabled:=true;
+                                       uzcfcommandline.cmdedit.SetFocus;
+                                  end;
+  if assigned(HintText) then
+                            HintText.Enabled:=true;
+end;
+
+procedure StatusLineTextOut(s:String);
+begin
+     if assigned(HintText) then
+     HintText.caption:=(s);
+     //HintText.{Update}repaint;
+end;
+procedure LogError(errstr:String); export;
+begin
+     errstr:=rserrorprefix+errstr;
+     if assigned(HistoryLine) then
+     begin
+     HistoryOutStr(errstr);
+     end;
+     programlog.logoutstr(errstr,0,LM_Error);
+end;
 begin
   utflen:=0;
   historychanged:=false;
   ZCADGUIManager.RegisterZCADFormInfo('CommandLine',rsCommandLineWndName,TCLine,rect(200,100,600,100),nil,nil,@CLine);
+
+  uzcinterface.HistoryOutStr:=HistoryOutStr;
+  uzcinterface.HistoryOut:=HistoryOut;
+
+  uzcinterface.DisableCmdLine:=DisableCmdLine;
+  uzcinterface.EnableCmdLine:=EnableCmdLine;
+
+  uzcinterface.StatusLineTextOut:=StatusLineTextOut;
+  uzcinterface.LogError:=LogError;
 end.

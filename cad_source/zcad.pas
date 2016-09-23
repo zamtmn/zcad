@@ -132,6 +132,7 @@ uses
   uzclibraryblocksregister,
   uzglviewareaogl,uzglviewareagdi,uzglviewareacanvas,
 
+  uzcinterface,
   uzccomdbgappexplorer;
   //RegCnownTypes,URegisterObjects;
 

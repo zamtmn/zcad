@@ -440,7 +440,7 @@ begin
   stylename:=pdwg^.TextStyleTable.GetFreeName(Tria_Utf8ToAnsi(rsNewTextStyleNameFormat),1);
   if stylename='' then
   begin
-    uzcshared.ShowError(rsUnableSelectFreeTextStylerName);
+    ShowError(rsUnableSelectFreeTextStylerName);
     exit;
   end;
 

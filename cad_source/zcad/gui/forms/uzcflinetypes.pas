@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ButtonPanel, Buttons, ExtCtrls, ComCtrls, Spin,
 
-  uzcgui2linetypes,uzcflinetypesload,uzcsysvars, uzedrawingsimple,uzbtypesbase,uzbtypes,
+  uzcinterface,uzcgui2linetypes,uzcflinetypesload,uzcsysvars, uzedrawingsimple,uzbtypesbase,uzbtypes,
   uzestyleslinetypes,uzcdrawings,uzcimagesmanager,uzcsysinfo,uzbstrproc,usupportgui,uzeutils,
   uzbpaths,uzcstrconsts,uzcshared,UGDBNamedObjectsArray;
 
@@ -185,7 +185,7 @@ begin
                                                      pltp:=nil;
      if (pltp=nil) then
                      begin
-                          uzcshared.ShowError('Please select non system layer!!!');
+                          ShowError('Please select non system layer!!!');
                           exit;
                      end;
      CurrentLine:=1;
@@ -240,7 +240,7 @@ begin
 
      if (pdwg^.GetLTypeTable.AddItem(LTName,pltp)<>IsCreated) then
                         begin
-                             uzcshared.ShowError('Line type name already exist!!!');
+                             ShowError('Line type name already exist!!!');
                              exit;
                         end;
 

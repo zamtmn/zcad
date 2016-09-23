@@ -1,7 +1,7 @@
 unit uzcdevicebase;
 {$INCLUDE def.inc}
 interface
-uses uzbpaths,uzctranslations,gvector,varmandef,CsvDocument,uzcdevicebaseabstract,uzcsysvars,
+uses uzcinterface,uzbpaths,uzctranslations,gvector,varmandef,CsvDocument,uzcdevicebaseabstract,uzcsysvars,
      LazUTF8,uzcsysinfo,strmy,uzbtypesbase,uzbtypes,UUnitManager,varman,sysutils,
      typedescriptors,URecordDescriptor,UObjectDescriptor,uzcshared,uzclog;
 type
@@ -214,7 +214,7 @@ begin
                           end;
                      end
                  else
-                     uzcshared.ShowError('');
+                     ShowError('');
 end;
 procedure DeviceManager.loadfromdir(path: GDBString);
 //var sr: TSearchRec;

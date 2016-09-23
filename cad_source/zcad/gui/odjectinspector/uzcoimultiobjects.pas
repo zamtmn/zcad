@@ -205,9 +205,9 @@ begin
                                                                                            entname:=rsNotRegistred;
                                if PMultiPropertyDataForObjects.SetValueErrorRange
                                then
-                                uzcshared.ShowError(sysutils.format(rsInvalidInputForPropery,[mp.MPUserName,entname,msg]))
+                                ShowError(sysutils.format(rsInvalidInputForPropery,[mp.MPUserName,entname,msg]))
                                else
-                                uzcshared.LogError(sysutils.format(rsInvalidInputForPropery,[mp.MPUserName,entname,msg]));
+                                LogError(sysutils.format(rsInvalidInputForPropery,[mp.MPUserName,entname,msg]));
                              end;
      end
 
@@ -615,7 +615,7 @@ begin
       end;
       pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
     until pv=nil;
-    uzcshared.HistoryOutStr(sysutils.Format(rscmNEntitiesDeselected,[count]));
+    HistoryOutStr(sysutils.Format(rscmNEntitiesDeselected,[count]));
     if count>0 then
                    //ZCADMainWindow.waSetObjInsp(drawings.GetCurrentDWG.wa);
                    waSetObjInspProc(drawings.GetCurrentDWG.wa);

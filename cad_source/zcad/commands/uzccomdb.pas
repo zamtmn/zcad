@@ -92,7 +92,7 @@ begin
 
                       if pu^.FindVariable(s)<>nil then
                                                  begin
-                                                      uzcshared.ShowError(format(rsEntryAlreadyExist,[s]));
+                                                      ShowError(format(rsEntryAlreadyExist,[s]));
                                                  end
                       else
                       begin
@@ -100,12 +100,12 @@ begin
                       if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
                       if parseerror and (s1='') then
                                         begin
-                                             uzcshared.HistoryOutStr(format(rsRenamedTo,['Entry',pdbv.name,s]));
+                                             HistoryOutStr(format(rsRenamedTo,['Entry',pdbv.name,s]));
                                              pdbv.name:=s;
                                              renamed:=true;
                                         end
                                            else
-                                               uzcshared.ShowError(format(rsInvalidIdentificator,[s]));
+                                               ShowError(format(rsInvalidIdentificator,[s]));
                       end;
                  end;
                  until renamed or (SingleLineTextEditorForm.ModalResult<>mrok);

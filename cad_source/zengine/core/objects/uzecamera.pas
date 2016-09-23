@@ -145,7 +145,7 @@ begin
 
       end else
               Debugln('GDBObjCamera.MoveInLocalCSXY:'+rsDivByZero);
-              //uzcshared.historyoutstr('Divide by zero');
+              //HistoryOutStr('Divide by zero');
 end;
 
 

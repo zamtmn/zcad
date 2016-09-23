@@ -283,7 +283,7 @@ begin
      OldVersTextReplace(vv);
      if nevname<>'' then
                         begin
-                             //uzcshared.HistoryOutStr('Старая переменная '+vn+' обновлена до '+nevname);
+                             //HistoryOutStr('Старая переменная '+vn+' обновлена до '+nevname);
                              vn:=nevname;
                         end;
 

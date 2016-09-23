@@ -91,7 +91,7 @@ begin
                                                                  SetGDBObjInspProc(nil,drawings.GetUnitsFormat,TypeDesk,Instance,drawings.GetCurrentDWG)
                           end
                       else
-                          uzcshared.ShowError(format(rscmNoBlockDefInDWGCXMenu,[FBlockName]));
+                          ShowError(format(rscmNoBlockDefInDWGCXMenu,[FBlockName]));
 end;
 
 

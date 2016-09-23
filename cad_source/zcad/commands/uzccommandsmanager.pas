@@ -23,7 +23,7 @@ uses uzctnrvectorgdbpointer,gzctnrvectorpobjects,uzcsysvars,uzegeometry,uzglview
      uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,uzcsysinfo,
      uzbgeomtypes,uzbstrproc,gzctnrvectorp,
      uzbtypesbase,uzccommandsabstract, sysutils,uzbtypes,uzglviewareadata,
-     uzbmemman,uzclog,varmandef,varman,uzedrawingdef,uzcinterface;
+     uzbmemman,uzclog,varmandef,varman,uzedrawingdef,uzcinterface,uzcshared,uzedrawingsimple,uzctnrvectorgdbstring,forms;
 const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;
@@ -91,7 +91,6 @@ procedure ParseCommand(comm:string; out command,operands:GDBString);
 {procedure startup;
 procedure finalize;}
 implementation
-uses uzcshared,uzedrawingsimple,uzctnrvectorgdbstring,forms;
 
 procedure GDBcommandmanager.sendcoordtocommandTraceOn(Sender:TAbstractViewArea;coord:GDBVertex;key: GDBByte;pos:pos_record);
 var
@@ -147,7 +146,7 @@ begin
     begin
          begin
               {if (key and MZW_LBUTTON)<>0 then
-                                              uzcshared.HistoryOutStr(floattostr(wa.param.ospoint.ostype));}
+                                              HistoryOutStr(floattostr(wa.param.ospoint.ostype));}
               tv:=sender.param.ospoint.worldcoord;
               if (key and MZW_SHIFT)<>0 then
                                             begin
@@ -226,7 +225,7 @@ begin
                                                                                                      //устанавливаем режим указания точек мышью
                                                                       MGetControlpoint or MGetSelectionFrame or MGetSelectObject);//reset selection entities  mode
                                                                                                               //сбрасываем режим выбора примитивов мышью
-  uzcshared.HistoryOutStr(prompt);
+  HistoryOutStr(prompt);
   pcommandrunning^.IData.GetPointMode:=TGPWait;
   pcommandrunning^.IData.PInteractiveData:=PInteractiveData;
   pcommandrunning^.IData.PInteractiveProc:=InteractiveProc;
@@ -243,7 +242,7 @@ begin
                                                                              else
                                                                                  begin
                                                                                  result:=false;
-                                                                                 //uzcshared.HistoryOutStr('cancel');
+                                                                                 //HistoryOutStr('cancel');
                                                                                  end;
   if (pcommandrunning^.IData.GetPointMode<>TGPCloseDWG)then
   PTSimpleDrawing(pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);//restore editor mode
@@ -260,7 +259,7 @@ var
 begin
   savemode:=PTSimpleDrawing(pcommandrunning.pdwg)^.DefMouseEditorMode(MGetSelectObject,
                                                                       MGet3DPoint or MGet3DPointWoOP or MGetSelectionFrame or MGetControlpoint);
-  uzcshared.HistoryOutStr(prompt);
+  HistoryOutStr(prompt);
   pcommandrunning^.IData.GetPointMode:=TGPWaitEnt;
   pcommandrunning^.IData.PInteractiveData:=nil;
   pcommandrunning^.IData.PInteractiveProc:=nil;
@@ -277,7 +276,7 @@ begin
                                                                              else
                                                                                  begin
                                                                                  result:=false;
-                                                                                 //uzcshared.HistoryOutStr('cancel');
+                                                                                 //HistoryOutStr('cancel');
                                                                                  end;
   PTSimpleDrawing(pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);//restore editor mode
                                                                       //восстанавливаем сохраненный режим редактора
@@ -385,7 +384,7 @@ begin
      historyoutstr(sysutils.format(rsRunScript,[s]));
      busy:=true;
 
-     uzcshared.DisableCmdLine;
+     DisableCmdLine;
 
      oldlastcomm:=lastcommand;
      sa.init(200);
@@ -407,7 +406,7 @@ begin
   sa.Done;
   lastcommand:=oldlastcomm;
 
-     uzcshared.EnableCmdLine;
+     EnableCmdLine;
      busy:=false;
 end;
 procedure GDBcommandmanager.sendpoint2command;
@@ -611,7 +610,7 @@ begin
      if not busy then
                      execute(comm,false,pdrawing,POGLWndParam)
                  else
-                     uzcshared.ShowError(rsCommandNRInC);
+                     ShowError(rsCommandNRInC);
 end;
 procedure GDBcommandmanager.executecommandsilent{(const comm:pansichar): GDBInteger};
 begin
@@ -626,12 +625,12 @@ var
 begin
      if self.varstack.vardescarray.Count<>0 then
      begin
-     uzcshared.HistoryOutStr(rscmInStackData);
+     HistoryOutStr(rscmInStackData);
      pvd:=self.varstack.vardescarray.beginiterate(ir);
      if pvd<>nil then
      repeat
            value:=pvd.data.PTD.GetValueAsString(pvd.data.Instance);
-           uzcshared.HistoryOutStr(pvd.data.PTD.TypeName+':'+value);
+           HistoryOutStr(pvd.data.PTD.TypeName+':'+value);
 
      pvd:=self.varstack.vardescarray.iterate(ir);
      until pvd=nil;

@@ -20,7 +20,7 @@ unit uzcctrldynamiccommandmenu;
 {$INCLUDE def.inc}
 interface
 uses
- uzcinfoform,ComCtrls,uzbtypes,Controls,Forms,uzbmemman,uzbtypesbase;
+ uzcinfoform,ComCtrls,uzbtypes,Controls,Forms,uzbmemman,uzbtypesbase,uzclog;
 type
   DMMethod=procedure(sender:GDBPointer) of object;
   //PTDMenuWnd=^TDMenuWnd;
@@ -39,7 +39,6 @@ type
       procedure clear;
   end;
 implementation
-uses uzclog;
 procedure TDMenuWnd.AfterConstruction;
 begin
      FormStyle:=fsStayOnTop;

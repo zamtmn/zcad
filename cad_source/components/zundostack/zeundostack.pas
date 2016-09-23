@@ -169,7 +169,7 @@ begin
                                                 begin
                                                      dec(mcounter);
                                                      if mcounter=0 then
-                                                     {uzcshared.HistoryOutStr}msg:=msg+('Undo "'+PTMarkerCommand(pcc)^.Name+'"');
+                                                     {HistoryOutStr}msg:=msg+('Undo "'+PTMarkerCommand(pcc)^.Name+'"');
                                                      //pcc^.undo;
                                                 end
      else if pcc^.GetCommandType=TTC_MNotUndableIfOverlay then
@@ -220,7 +220,7 @@ begin
      else if pcc^.GetCommandType=TTC_MBegin then
                                                 begin
                                                      if mcounter=0 then
-                                                     {uzcshared.HistoryOutStr}msg:=msg+('Redo "'+PTMarkerCommand(pcc)^.Name+'"');
+                                                     {HistoryOutStr}msg:=msg+('Redo "'+PTMarkerCommand(pcc)^.Name+'"');
                                                      dec(mcounter);
                                                      pcc^.undo;
                                                 end

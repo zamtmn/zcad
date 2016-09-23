@@ -122,8 +122,12 @@ begin
     LogWriter(Vers);
     LogWriter('Graph');
     LogWriter(BracketLeft);
+    Tabs:=tab; // отступ от начала строки   выставляем на один таб т. к. начинается шапка graph
+    LogWriter(Tabs + yEdMode + Tab + '1');
+    LogWriter(Tabs + yEdLabel +Tab + '""');
+    LogWriter(Tabs + yEdDirected + Tab + '1');
     // конец шапки
-    Tabs:=tab; // отступ от начала строки   выставляем на один таб
+
     if assigned(ScanResult) then
     begin
       for i:=0 to ScanResult.UnitInfoArray.Size-1 do
@@ -135,11 +139,11 @@ begin
      if ScanResult.UnitInfoArray[i].InterfaceUses.Size>0 then
      begin
      // изменить
-     ProcessNode(Options,ScanResult.UnitInfoArray.Mutable[i]^,i,LogWriter);
+     NodeGML(Options,ScanResult.UnitInfoArray.Mutable[i]^,i,LogWriter);
        if ScanResult.UnitInfoArray[i].NodeState<>NSFiltredOut then
        for j:=0 to ScanResult.UnitInfoArray[i].InterfaceUses.Size-1 do
        begin
-         ProcessNode(Options,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].InterfaceUses[j]]^,ScanResult.UnitInfoArray[i].InterfaceUses[j],LogWriter);
+         NodeGML(Options,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].InterfaceUses[j]]^,ScanResult.UnitInfoArray[i].InterfaceUses[j],LogWriter);
          if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].NodeState<>NSFiltredOut then
          begin
          if Options.GraphBulding.InterfaceUsesEdgeType=ETDotted then //изменить
@@ -158,7 +162,7 @@ begin
      begin
        for j:=0 to ScanResult.UnitInfoArray[i].ImplementationUses.Size-1 do
        begin
-         ProcessNode(Options,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].ImplementationUses[j]]^,ScanResult.UnitInfoArray[i].ImplementationUses[j],LogWriter);
+         NodeGML(Options,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].ImplementationUses[j]]^,ScanResult.UnitInfoArray[i].ImplementationUses[j],LogWriter);
          if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].NodeState<>NSFiltredOut then
          begin
          if Options.GraphBulding.ImplementationUsesEdgeType=ETDotted then  //изменить

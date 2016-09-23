@@ -821,7 +821,7 @@ begin
                                      FreEditorProc;
        if assigned(ReturnToDefaultProc)then
                                            ReturnToDefaultProc(drawings.GetUnitsFormat);
-       uzcshared.StatusLineTextOut('Закрыто');
+       StatusLineTextOut('Закрыто');
        if assigned(UpdateVisibleProc) then UpdateVisibleProc;
   end;
 end;
@@ -943,7 +943,7 @@ begin
     end;
   except
     on E: Exception do begin
-                            uzcshared.ShowError(rsLayoutLoad+' '+Filename+':'#13+E.Message);
+                            ShowError(rsLayoutLoad+' '+Filename+':'#13+E.Message);
       //MessageDlg('Error',
       //  'Error loading layout from file '+Filename+':'#13+E.Message,mtError,
       //  [mbCancel],0);
@@ -1290,7 +1290,7 @@ else
 begin
 tbdesk:=self.findtoolbatdesk(aName);
 if tbdesk=''then
-          uzcshared.ShowError(format(rsToolBarNotFound,[aName]));
+          ShowError(format(rsToolBarNotFound,[aName]));
 FToolBar:=TToolButtonForm(TToolButtonForm.NewInstance);
 if DoDisableAlign then
 FToolBar.DisableAlign;
@@ -1728,7 +1728,7 @@ begin
            if (tbname='Status')and(not sysparam.standartinterface) then
                        begin
                             if assigned(LayoutBox) then
-                                                      uzcshared.ShowError(format(rsReCreating,['LAYOUTBOX']));
+                                                      ShowError(format(rsReCreating,['LAYOUTBOX']));
                             CreateLayoutbox(tb);
                             if ts<>''then
                             begin
@@ -1892,7 +1892,7 @@ begin
                                        createdmenu.items.Add(ppopupmenu);
                                   end
                               else
-                                  uzcshared.ShowError(format(rsMenuNotFounf,[ts]));
+                                  ShowError(format(rsMenuNotFounf,[ts]));
            until line='';
 end;
 procedure bugfileiterator(filename:GDBString);
@@ -2564,9 +2564,9 @@ begin
     time:=(now-LPTime)*10e4;
     str(time:3:2,ts);
     if pname='' then
-                     uzcshared.HistoryOutStr(format(rscompiledtimemsg,[ts]))
+                     HistoryOutStr(format(rscompiledtimemsg,[ts]))
                  else
-                     uzcshared.HistoryOutStr(format(rsprocesstimemsg,[pname,ts]));
+                     HistoryOutStr(format(rsprocesstimemsg,[pname,ts]));
     pname:='';
 end;
 procedure TZCADMainWindow.ReloadLayer(plt:PTGenericNamedObjectsArray);

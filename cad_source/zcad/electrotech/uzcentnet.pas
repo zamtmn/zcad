@@ -8,7 +8,7 @@ unit uzcentnet;
 {$INCLUDE def.inc}
 
 interface
-uses uzeobjectextender,uzeentityfactory,Varman,uzgldrawcontext,uzestyleslayers,
+uses uzcinterface,uzeobjectextender,uzeentityfactory,Varman,uzgldrawcontext,uzestyleslayers,
      uzeentgenericsubentry,uzedrawingdef,uzeentitiesprop,uzcsysvars,UGDBOpenArrayOfByte,
      uzbtypesbase,uzeentity,UGDBOpenArrayOfPV,uzeentconnected,uzeconsts,
      varmandef,uzegeometry,uzbtypes,UGDBGraf,uzbmemman,uzeentsubordinated,uunitmanager,
@@ -405,7 +405,7 @@ begin
                                       system.break;
                                       end
                                          else
-                                         uzcshared.ShowError('Нельзя обьеденить');
+                                         ShowError('Нельзя обьеденить');
                                  end;
 
                            ptestline:=currentnet^.objarray.iterate(ir3);

@@ -192,7 +192,7 @@ begin
                        end;
              IsCreated:
                        begin
-                            //uzcshared.HistoryOutStr(sysutils.format(rsLoadingFontFile,[FontPathName]));
+                            //HistoryOutStr(sysutils.format(rsLoadingFontFile,[FontPathName]));
                             debugln('{IH+}Loading font "%s"',[FontPathName]);
                             //programlog.LogOutFormatStr('Loading font "%s"',[FontPathName],lp_IncPos,LM_Info);
                             _key:=lowercase(FontExt);
@@ -214,7 +214,7 @@ begin
                             begin
                                  debugln('{EH}Font file "%S" unknown format',[FontPathName]);
                                  //programlog.LogOutFormatStr('Font file "%S" unknown format',[FontPathName],lp_OldPos,LM_Error);
-                                 //uzcshared.ShowError(sysutils.format('Font file "%S" unknown format',[FontPathName]));
+                                 //ShowError(sysutils.format('Font file "%S" unknown format',[FontPathName]));
                                  dec(self.Count);
                                  //p^.Name:='ERROR ON LOAD';
                                  p:=nil;

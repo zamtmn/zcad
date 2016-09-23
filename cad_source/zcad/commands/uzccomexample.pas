@@ -44,6 +44,8 @@ uses
   URecordDescriptor,TypeDescriptors,
   uzbgeomtypes,
 
+  uzcinterface,
+
   uzeentblockinsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока
   uzeentline,             //unit describes line entity
@@ -381,7 +383,7 @@ begin
                               FinalCreateDDim;
                           end;
                      else begin
-                              uzcshared.ShowError('Please select Arc or Circle');
+                              ShowError('Please select Arc or Circle');
                           end;
               end;
          end;
@@ -442,7 +444,7 @@ begin
                               FinalCreateRDim;
                           end;
                      else begin
-                              uzcshared.ShowError('Please select Arc or Circle');
+                              ShowError('Please select Arc or Circle');
                           end;
               end;
          end;

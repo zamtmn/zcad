@@ -19,7 +19,7 @@
 unit uzccomimport;
 {$INCLUDE def.inc}
 interface
-uses uzgldrawcontext,uzeentityfactory,
+uses uzcinterface,uzgldrawcontext,uzeentityfactory,
      {$IFNDEF DELPHI}dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}
      uzedrawingsimple,
      uzeentcircle,uzeentarc,uzeentline,
@@ -106,7 +106,7 @@ begin
   except
         on Exception do
         begin
-             uzcshared.ShowError('Unsupported vector graphics format?');
+             ShowError('Unsupported vector graphics format?');
         end
   end;
   //finally

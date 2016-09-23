@@ -248,8 +248,8 @@ begin
      if fileExists(utf8tosys(tn)) then
                            {merge_com(@tn[1])}Load_merge(tn,TLOLoad)
                        else
-                           uzcshared.ShowError(format(rsTemplateNotFound,[tn]));
-                           //uzcshared.ShowError('Не найден файл шаблона "'+tn+'"');
+                           ShowError(format(rsTemplateNotFound,[tn]));
+                           //ShowError('Не найден файл шаблона "'+tn+'"');
      end;
      wpowner.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
                                 //создания или загрузки
@@ -298,8 +298,8 @@ begin
        import(s,drawings.GetCurrentDWG^);
   end
             else
-     uzcshared.ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
-     //uzcshared.ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
+     ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
+     //ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
 end;
 function Load_com(operands:TCommandOperands):TCommandResult;
 var
@@ -355,10 +355,10 @@ begin
      end
                else
                begin
-                    uzcshared.ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
+                    ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
                     result:=cmd_error;
                end;
-        //uzcshared.ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
+        //ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
 end;
 function units_cmd(operands:TCommandOperands):TCommandResult;
 var
@@ -511,11 +511,11 @@ begin
                                                 If IsValidIdent(Operands) then
                                                                               DockMaster.ShowControl(Operands,true)
                                                                           else
-                                                                              uzcshared.ShowError('Show: invalid identificator!');
+                                                                              ShowError('Show: invalid identificator!');
                                            end;
                       end
                   else
-                      uzcshared.ShowError('Show command must have one operand!');
+                      ShowError('Show command must have one operand!');
   result:=cmd_ok;
 end;
 function quit_com(operands:TCommandOperands):TCommandResult;
@@ -717,7 +717,7 @@ begin
          p:=commandmanager.iterate(ir);
    until p=nil;
    clist.sort;
-   uzcshared.HistoryOutStr(clist.GetTextWithEOL);
+   HistoryOutStr(clist.GetTextWithEOL);
    clist.done;
    result:=cmd_ok;
 end;

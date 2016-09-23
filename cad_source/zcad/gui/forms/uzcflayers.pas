@@ -561,7 +561,7 @@ begin
      layername:=pdwg^.LayerTable.GetFreeName(Tria_Utf8ToAnsi(rsNewLayerNameFormat),1);
      if layername='' then
      begin
-       uzcshared.ShowError(rsUnableSelectFreeLayerName);
+       ShowError(rsUnableSelectFreeLayerName);
        exit;
      end;
 

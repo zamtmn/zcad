@@ -50,6 +50,11 @@ type
     TFunction__TComponent=Function:TComponent;
 
     TMethod_String_=procedure (s:String) of object;
+    TProcedure_String_=procedure (s:String);
+    TProcedure_PAnsiChar_=procedure (s:PAnsiChar);
+
+    //SimpleProcOfObject=procedure of object;
+
 
 
     //ObjInsp
@@ -116,6 +121,17 @@ var
 
    //cmdline
     SetCommandLineMode:TSetCommandLineMode;
+
+   //uzcshared
+   HistoryOutStr:TProcedure_String_;
+   HistoryOut:TProcedure_PAnsiChar_;
+   CursorOn:TSimpleMethod=nil;
+   CursorOff:TSimpleMethod=nil;
+   ShowError:TProcedure_String_;
+   DisableCmdLine:TSimpleProcedure;
+   EnableCmdLine:TSimpleProcedure;
+   StatusLineTextOut:TProcedure_String_;
+   LogError:TProcedure_String_;
 
 
 function DoShowModal(MForm:TForm): Integer;

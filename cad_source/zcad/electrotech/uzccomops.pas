@@ -12,7 +12,7 @@ uses
 
   uzctranslations,uzeentitiesmanager,uzeentity,uzglviewareaabstract,uzgldrawcontext,
   uzeenttext,uzctnrvectorgdbstring,uzeentityfactory,uzcsysvars,uzbstrproc,
-  uzbtypesbase,uzccommandsmanager,uzclog,gzctnrvectorpobjects,
+  uzcinterface,uzbtypesbase,uzccommandsmanager,uzclog,gzctnrvectorpobjects,
   uzccommandsabstract,uzccommandsimpl,uzbtypes,uzcdrawings,uzeutils,uzcutils,sysutils,
   varmandef,UGDBOpenArrayOfByte,uzeffdxf,uzegeometry,uzbmemman,uzeconsts,
   uzccomdraw,UGDBVisibleOpenArray,uzeentline,uzbpaths,uzcshared,uzeentblockinsert,
@@ -778,7 +778,7 @@ begin
                                         begin
                                              name:='"без имени"';
                                         end;
-                            uzcshared.HistoryOutstr(format('Попытка повторной нумерации устройства %s кабелем (сегментом кабеля) %s',[name,'"'+pcabledesk^.Name+'"']));
+                            HistoryOutStr(format('Попытка повторной нумерации устройства %s кабелем (сегментом кабеля) %s',[name,'"'+pcabledesk^.Name+'"']));
                             end;
                         end;
 
@@ -947,7 +947,7 @@ begin
              //if PTCableType(pvd^.data.Instance)^=TCT_ShleifOPS then
              if (pcabledesk.StartDevice<>nil){and(pcabledesk.EndDevice<>nil)} then
              begin
-                  uzcshared.HistoryOutStr(pcabledesk.Name);
+                  HistoryOutStr(pcabledesk.Name);
                   //programlog.logoutstr(pcabledesk.Name,0);
                   currentcoord:=coord;
                   PTCableType(pvd^.data.Instance)^:=TCT_ShleifOPS;

@@ -1342,14 +1342,14 @@ begin
               begin
                 //programlog.logoutstr('Ignored block '+s+';',lp_OldPos);
                 DebugLn('{IH}'+rsBlockIgnored,[s]);
-                //uzcshared.HistoryOutStr(format(rsBlockIgnored,[s]));
+                //HistoryOutStr(format(rsBlockIgnored,[s]));
                 while (s <> 'ENDBLK') do
                   s := f.readGDBString;
               end
               else if drawing.BlockDefArray.getindex(s)>=0 then
                                begin
                                     //programlog.logoutstr('Ignored double definition block '+s+';',lp_OldPos);
-                                    //uzcshared.HistoryOutStr(format(rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]));
+                                    //HistoryOutStr(format(rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]));
                                     DebugLn('{IH}'+rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]);
                                     if s='DEVICE_PS_UK-VK'then
                                                s:=s;
@@ -1434,7 +1434,7 @@ begin
   debugln('{D+}AddFromDXF("%s")',[name]);
   //programlog.LogOutFormatStr('AddFromDXF("%s")',[name],lp_IncPos,LM_Debug);
   DebugLn('{IH}'+rsLoadingFile,[name]);
-  //uzcshared.HistoryOutStr(format(rsLoadingFile,[name]));
+  //HistoryOutStr(format(rsLoadingFile,[name]));
   f.InitFromFile(name);
   if f.Count<>0 then
   begin
@@ -1455,28 +1455,28 @@ begin
         begin
              case dxfversion of
                                1009:begin
-                                         //uzcshared.HistoryOutStr(format(rsFileFormat,['DXF12 ('+s+')']));
+                                         //HistoryOutStr(format(rsFileFormat,['DXF12 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF12 ('+s+')']);
                                          gotodxf(f, 0, dxfName_ENDSEC);
                                          addfromdxf12(f,'EOF',owner,loadmode,drawing);
                                     end;
                                1015:begin
-                                         //uzcshared.HistoryOutStr(format(rsFileFormat,['DXF2000 ('+s+')']));
+                                         //HistoryOutStr(format(rsFileFormat,['DXF2000 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF2000 ('+s+')']);
                                          addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p,DWGVarsDict)
                                     end;
                                1018:begin
-                                         //uzcshared.HistoryOutStr(format(rsFileFormat,['DXF2004 ('+s+')']));
+                                         //HistoryOutStr(format(rsFileFormat,['DXF2004 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF2004 ('+s+')']);
                                          addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p,DWGVarsDict)
                                     end;
                                1021:begin
-                                         //uzcshared.HistoryOutStr(format(rsFileFormat,['DXF2007 ('+s+')']));
+                                         //HistoryOutStr(format(rsFileFormat,['DXF2007 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF2007 ('+s+')']);
                                          addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p,DWGVarsDict)
                                     end;
                                1024:begin
-                                         //uzcshared.HistoryOutStr(format(rsFileFormat,['DXF2010 ('+s+')']));
+                                         //HistoryOutStr(format(rsFileFormat,['DXF2010 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF2010 ('+s+')']);
                                          addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p,DWGVarsDict)
                                     end;
@@ -1503,7 +1503,7 @@ begin
   end
      else
          DebugLn('{EM}'+'IODXF.ADDFromDXF: Не могу открыть файл: '+name);
-         //uzcshared.ShowError('IODXF.ADDFromDXF: Не могу открыть файл: '+name);
+         //ShowError('IODXF.ADDFromDXF: Не могу открыть файл: '+name);
   f.done;
   debugln('{D-}end; {AddFromDXF}');
   //programlog.LogOutStr('end; {AddFromDXF}',lp_DecPos,LM_Debug);
@@ -2728,13 +2728,13 @@ ENDTAB}
                                 if (not(deletefile(name+'.bak')) or (not renamefile(name,name+'.bak'))) then
                                 begin
                                    DebugLn('{WH}'+rsUnableRenameFileToBak,[name]);
-                                   //uzcshared.HistoryOutStr(format(rsUnableRenameFileToBak,[name]));
+                                   //HistoryOutStr(format(rsUnableRenameFileToBak,[name]));
                                 end;
                            end;
 
   if outstream.SaveToFile({expandpath}(name))<=0 then
                                        begin
-                                       //uzcshared.ShowError(format(rsUnableToWriteFile,[name]));
+                                       //ShowError(format(rsUnableToWriteFile,[name]));
                                        DebugLn('{EM}'+rsUnableToWriteFile,[name]);
                                        result:=false;
                                        end

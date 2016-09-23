@@ -141,7 +141,7 @@ begin
                                                                                      else
                                                                                          begin
                                                                                           reorder(mp.sortedid,sortedid,id);
-                                                                                          //uzcshared.HistoryOutStr('Something wrong in multipropertys sorting "'+name+'"');
+                                                                                          //HistoryOutStr('Something wrong in multipropertys sorting "'+name+'"');
                                                                                          end;
                                                              mp.MPObjectsData.RegisterKey(id,mpdfo);
                                                         end

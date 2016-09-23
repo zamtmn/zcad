@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 369
+  Left = 329
   Height = 579
-  Top = 363
+  Top = 337
   Width = 626
   Caption = 'Form1'
   ClientHeight = 559
@@ -42,6 +42,11 @@ object Form1: TForm1
       Left = 1
       Top = 2
       Action = ImportLPI
+    end
+    object ToolButton4: TToolButton
+      Left = 129
+      Top = 2
+      Caption = 'ToolButton4'
     end
   end
   object Splitter1: TSplitter
@@ -95,6 +100,12 @@ object Form1: TForm1
       Caption = 'Import LPI'
       Hint = 'Import Lazarus project file'
       OnExecute = _ImportLPI
+    end
+    object SaveGML: TAction
+      Caption = 'SaveGML'
+      Hint = 'не реализовано'
+      OnExecute = _SaveGML
+      Visible = False
     end
   end
   object MainMenu1: TMainMenu

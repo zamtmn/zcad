@@ -20,6 +20,7 @@ uses
   { TForm1 }
 
   TForm1 = class(TForm)
+    SaveGML: TAction;
     GDBobjinsp1: TGDBobjinsp;
     ImportLPI: TAction;
     MainMenu1: TMainMenu;
@@ -40,6 +41,8 @@ uses
     ToolButton1: TToolButton;
     ToolButton2: TToolButton;
     ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    procedure _SaveGML(Sender: TObject);
     procedure _ImportLPI(Sender: TObject);
     procedure _onClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure _onCreate(Sender: TObject);
@@ -139,6 +142,12 @@ begin
    end;
    od.Free;
    _SetUIFromOption(nil);
+end;
+
+procedure TForm1._SaveGML(Sender: TObject);
+begin
+    Memo1.Clear;
+   WriteGML(Options,ScanResult,DummyWriteToLog);//пишем то что унас есть в результате
 end;
 
 procedure TForm1._Save(Sender: TObject);

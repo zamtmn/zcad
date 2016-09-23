@@ -22,7 +22,7 @@ unit uzcgui2linewidth;
 interface
 
 uses
-  uzeconsts,uzcflineweights,usupportgui,StdCtrls,uzcdrawings,
+  uzcinterfacedata,uzeconsts,uzcflineweights,usupportgui,StdCtrls,uzcdrawings,
   Controls,Classes,uzbstrproc,uzcsysvars,uzccommandsmanager;
 
 type
@@ -32,8 +32,6 @@ type
   end;
 
 implementation
-uses
-  uzcmainwindow;
 class procedure TSupportLineWidthCombo.LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
                                                         State: StdCtrls.TOwnerDrawState);
 var

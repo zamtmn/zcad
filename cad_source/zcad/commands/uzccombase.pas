@@ -46,7 +46,9 @@ uses
  uzeentitiestree,
  uzbtypesbase,uzbmemman,uzcdialogsfiles,
  UUnitManager,uzclog,Varman,
- uzbgeomtypes,dialogs,uzcinfoform;
+ uzbgeomtypes,dialogs,uzcinfoform,
+ uzeentpolyline,UGDBPolyLine2DArray,uzeentlwpolyline,UGDBSelectedObjArray,
+ uzegeometry;
    var selframecommand:PCommandObjectDef;
        zoomwindowcommand:PCommandObjectDef;
        ms2objinsp:PCommandObjectDef;
@@ -67,8 +69,6 @@ uses
 const
      ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
 implementation
-uses uzeentpolyline,UGDBPolyLine2DArray,uzeentlwpolyline,UGDBSelectedObjArray,
-     uzegeometry;
 var
    CopyClipFile:GDBString;
 function MultiSelect2ObjIbsp_com(operands:TCommandOperands):TCommandResult;

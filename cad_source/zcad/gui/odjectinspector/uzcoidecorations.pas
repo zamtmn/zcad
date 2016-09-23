@@ -26,7 +26,7 @@ uses
   Graphics,LCLType,Themes,types,uzeconsts,UGDBNamedObjectsArray,uzctnrvectorgdbstring,
   varmandef,Varman,uzcfcolors,uzestyleslayers,uzbtypes,uzcflineweights,uzbtypesbase,usupportgui,
   StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,uzbstrproc,uzcsysvars,uzccommandsmanager,
-  uzbgeomtypes,uzcinterface;
+  uzbgeomtypes,uzcinterface,uzcoimultiobjects,uzcgui2color,uzcgui2linewidth,uzcgui2linetypes;
 type
     AsyncCommHelper=class
                          class procedure GetVertex(Pinstance:PtrInt);
@@ -43,8 +43,6 @@ procedure AddFastEditorToType(tn:string;GetPrefferedFastEditorSize:TGetPreffered
 procedure ButtonHLineDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
 function ButtonGetPrefferedFastEditorSize(PInstance:GDBPointer):TSize;
 implementation
-uses
-  uzcgui2color,uzcgui2linewidth,uzcgui2linetypes;
 var
    count:integer;
 function LWDecorator(PInstance:GDBPointer):GDBString;
@@ -703,5 +701,6 @@ begin
      AddFastEditorToType('GDBYCoordinate',@ButtonGetPrefferedFastEditorSize,@ButtonYDrawFastEditor,@GetYFromDrawing,true);
      AddFastEditorToType('GDBZCoordinate',@ButtonGetPrefferedFastEditorSize,@ButtonZDrawFastEditor,@GetZFromDrawing,true);
      AddFastEditorToType('TGDBOSMode',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runOSwnd);
+     AddFastEditorToType('TMSPrimitiveDetector',@ButtonGetPrefferedFastEditorSize,@ButtonHLineDrawFastEditor,@DeselectEnts,true);
 end;
 end.

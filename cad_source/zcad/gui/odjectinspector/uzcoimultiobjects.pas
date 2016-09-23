@@ -21,9 +21,9 @@ unit uzcoimultiobjects;
 
 interface
 uses
-  LazLoggerBase,uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,uzbmemman,uzcshared,
+  uzcinterface,LazLoggerBase,uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,uzbmemman,uzcshared,
   uzcstrconsts,sysutils,uzeentityfactory,uzcenitiesvariablesextender,uzgldrawcontext,
-  uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,Varman,uzctnrvectorgdbstring;
+  uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,Varman,uzctnrvectorgdbstring,UGDBSelectedObjArray;
 type
   PTOneVarData=^TOneVarData;
   TOneVarData=record
@@ -72,10 +72,10 @@ type
                 procedure ClearErrorRange;
             end;
 {Export-}
+procedure DeselectEnts(PInstance:GDBPointer);
 var
    MSEditor:TMSEditor;
 implementation
-uses uzcmainwindow,uzcoidecorations,UGDBSelectedObjArray;
 constructor  TMSEditor.init;
 begin
      VariablesUnit.init('VariablesUnit');
@@ -617,7 +617,8 @@ begin
     until pv=nil;
     uzcshared.HistoryOutStr(sysutils.Format(rscmNEntitiesDeselected,[count]));
     if count>0 then
-                   ZCADMainWindow.waSetObjInsp(drawings.GetCurrentDWG.wa);
+                   //ZCADMainWindow.waSetObjInsp(drawings.GetCurrentDWG.wa);
+                   waSetObjInspProc(drawings.GetCurrentDWG.wa);
 
     {pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pv<>nil then
@@ -647,7 +648,7 @@ end;
 procedure startup;
 begin
   MSEditor.init;
-  AddFastEditorToType('TMSPrimitiveDetector',@ButtonGetPrefferedFastEditorSize,@ButtonHLineDrawFastEditor,@DeselectEnts,true);
+  //AddFastEditorToType('TMSPrimitiveDetector',@ButtonGetPrefferedFastEditorSize,@ButtonHLineDrawFastEditor,@DeselectEnts,true);
 end;
 initialization
   startup;

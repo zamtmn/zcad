@@ -22,7 +22,7 @@ unit uzcgui2textstyles;
 interface
 
 uses
-  uzbtypesbase,usupportgui,StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,
+  uzcinterfacedata,uzbtypesbase,usupportgui,StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,
   uzestylestexts,uzbstrproc,uzcsysvars,uzccommandsmanager,uzcinterface;
 
 type
@@ -36,8 +36,6 @@ type
   end;
 
 implementation
-uses
-  uzcmainwindow;
 class procedure TSupportTStyleCombo.DropDownTStyle(Sender:Tobject);
 var
   tStyleCounter:integer;

@@ -44,20 +44,14 @@ uses
   {ZCAD COMMANDS}
        uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
   {GUI}
-       uzctextenteditor,uzcoidecorations,uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
+       uzctextenteditor,{uzcoidecorations,}uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
        uzcfcolors,uzcimagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,
   {}
-       zcchangeundocommand,uzgldrawcontext,uzgldrawerogl,uzglviewareaabstract,uzcguimanager;
+       zcchangeundocommand,uzgldrawcontext,uzgldrawerogl,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
+       uzcenitiesvariablesextender,uzglviewareageneral,uzglviewareaogl;
   {}
 type
   TComboFiller=procedure(cb:TCustomComboBox) of object;
-  TInterfaceVars=record
-                       CColor,CLWeight:GDBInteger;
-                       CLayer:PGDBLayerProp;
-                       CLType:PGDBLTypeProp;
-                       CTStyle:PGDBTextStyle;
-                       CDimStyle:PGDBDimStyle;
-                 end;
   TFiletoMenuIteratorData=record
                                 localpm:TMenuItem;
                                 ImageIndex:Integer;
@@ -201,7 +195,6 @@ function LoadLayout_com(Operands:pansichar):GDBInteger;
 function _CloseDWGPage(ClosedDWG:PTZCADDrawing;lincedcontrol:TObject):Integer;
 
 var
-  IVars:TInterfaceVars;
   ZCADMainWindow: TZCADMainWindow;
   LayerBox:TZCADLayerComboBox;
   LineWBox,ColorBox,LTypeBox,TStyleBox,DimStyleBox:TComboBox;
@@ -213,13 +206,10 @@ var
   localpm:TFiletoMenuIteratorData;
   ProcessBar:TProgressBar;
   //StoreBackTraceStrFunc:TBackTraceStrFunc;//this unneed after fpc rev 31026 see http://bugs.freepascal.org/view.php?id=13518
-const
-     LTEditor:pointer=@LTypeBox;//пофиг что, используем только цифру
   function CloseApp:GDBInteger;
   function IsRealyQuit:GDBBoolean;
 
 implementation
-uses uzcenitiesvariablesextender,uzglviewareageneral,uzglviewareaogl;
 constructor TmyAnchorDockSplitter.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
@@ -972,6 +962,7 @@ begin
      end;
 end;
 procedure TZCADMainWindow.InitSystemCalls;
+var tm:tmethod;
 begin
   ShowAllCursorsProc:=self.ShowAllCursors;
   RestoreAllCursorsProc:=self.RestoreCursors;
@@ -992,6 +983,9 @@ begin
   commandmanager.OnCommandRun:=processcommandhistory;
   AppCloseProc:=asynccloseapp;
   uzcinterface.SetNormalFocus:=self.setnormalfocus;
+  tm.Code:=pointer(self.waSetObjInsp);
+  tm.Data:=@self;;
+  tmethod(waSetObjInspProc):=tm;
 end;
 
 procedure TZCADMainWindow.LoadActions;
@@ -1417,7 +1411,7 @@ begin
   UniqueInstanceBase.FIPCServer.OnMessage:=IPCMessage;
    sysvar.INTF.INTF_DefaultControlHeight^:=sysparam.defaultheight;
 
-  DecorateSysTypes;
+  //DecorateSysTypes;
   self.onclose:=self.FormClose;
   self.onkeydown:=self.mykeypress;
   self.KeyPreview:=true;

@@ -50,7 +50,7 @@ uses
  uzcdrawing,
   {zmenus,}uzcfprojecttree,uzbtypesbase,{optionswnd,}uzcfabout,uzcfhelp,uzbmemman,uzcdialogsfiles,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}uzclog,Varman,UGDBNumerator,uzcfcommandline,
- AnchorDocking,dialogs,XMLPropStorage,xmlconf,uzglviewareaogl
+ AnchorDocking,dialogs,XMLPropStorage,xmlconf,uzglviewareaogl,
  {,uPSCompiler,
   uPSRuntime,
   uPSC_std,
@@ -61,7 +61,9 @@ uses
   uPSR_controls,
   uPSR_stdctrls,
   uPSR_forms,
-  uPSUtils};
+  uPSUtils}
+ uzcmainwindow,
+ uzegeometry;
 
 
 
@@ -85,8 +87,6 @@ uses
    //function Regen_com(Operands:pansichar):GDBInteger;
 //var DWGPageCxMenu:pzpopupmenu;
 implementation
-uses uzcmainwindow,
-     uzegeometry;
 function CloseDWG_com(operands:TCommandOperands):TCommandResult;
 var
    //poglwnd:toglwnd;

@@ -9,7 +9,7 @@ uses
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 
-  uzeconsts,uzestyleslayers,uzcdrawings,uzbtypesbase,uzbtypes,varmandef,
+  uzcgui2linetypes,uzeconsts,uzestyleslayers,uzcdrawings,uzbtypesbase,uzbtypes,varmandef,
 
   uzcinterface, uzcstrconsts, uzbstrproc, uzcshared, UBaseTypeDescriptor,
   uzcimagesmanager, usupportgui, ZListView;
@@ -115,8 +115,6 @@ type
 var
   LayersForm: TLayersForm;
 implementation
-uses
-    uzcgui2linetypes;
 {$R *.lfm}
 procedure TLayersForm.CreateUndoStartMarkerNeeded;
 begin

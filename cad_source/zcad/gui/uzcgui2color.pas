@@ -22,7 +22,7 @@ unit uzcgui2color;
 interface
 
 uses
-  uzepalette,uzeconsts,uzcflineweights,uzgldrawergdi,uzegeometry,
+  uzcinterfacedata,uzepalette,uzeconsts,uzcflineweights,uzgldrawergdi,uzegeometry,
   uzbtypes,graphics,  usupportgui,StdCtrls,uzcdrawings,Controls,Classes,
   uzbstrproc,uzcsysvars,uzccommandsmanager;
 
@@ -38,9 +38,6 @@ type
   end;
 
 implementation
-uses
-    uzcmainwindow;
-
 procedure DrawColor(Canvas:TCanvas; Index: Integer; ARect: TRect);
 var
    s:string;

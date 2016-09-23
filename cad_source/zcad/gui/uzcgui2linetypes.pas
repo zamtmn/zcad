@@ -22,7 +22,7 @@ unit uzcgui2linetypes;
 interface
 
 uses
-  uzgldrawergdi,uzegeometry,uzgldrawcontext,uzeentitiesprop,uzbtypes,uzglgeometry,
+  uzcinterfacedata,uzgldrawergdi,uzegeometry,uzgldrawcontext,uzeentitiesprop,uzbtypes,uzglgeometry,
   uzestyleslinetypes,graphics,usupportgui,StdCtrls,uzcdrawings,
   uzbgeomtypes,uzcstrconsts,Controls,Classes,uzbstrproc,uzcsysvars,uzccommandsmanager;
 
@@ -35,8 +35,6 @@ type
 procedure drawLT(const canvas:TCanvas;const ARect: TRect;const s:string;const plt:PGDBLtypeProp);safecall;
 
 implementation
-uses
-    uzcmainwindow;
 class procedure TSupportLineTypeCombo.LTypeBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
                                                State: StdCtrls.TOwnerDrawState);
 var

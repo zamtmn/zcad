@@ -51,6 +51,7 @@ uses
   uzcregfontmanager,
   uzcregpaths,
   uzcregenginefeatures,
+  uzcreginterface,
   //
   //next line load system.pas
   //

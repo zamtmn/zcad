@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ButtonPanel, Buttons, ExtCtrls, ComCtrls, Spin,
 
-  uzcflinetypesload,uzcsysvars, uzedrawingsimple,uzbtypesbase,uzbtypes,
+  uzcgui2linetypes,uzcflinetypesload,uzcsysvars, uzedrawingsimple,uzbtypesbase,uzbtypes,
   uzestyleslinetypes,uzcdrawings,uzcimagesmanager,uzcsysinfo,uzbstrproc,usupportgui,uzeutils,
   uzbpaths,uzcstrconsts,uzcshared,UGDBNamedObjectsArray;
 
@@ -62,7 +62,6 @@ var
 
 implementation
 
-uses uzcgui2linetypes;
 {$R *.lfm}
 
 { TLineTypesForm }

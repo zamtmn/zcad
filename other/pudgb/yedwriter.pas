@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils,
-  uoptions,uscanresult;
+  uoptions,uscanresult,uwriter;
 
 {$I yed.inc}
 // потом продумаю подробнее параметры

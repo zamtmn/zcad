@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 329
+  Left = 471
   Height = 579
-  Top = 337
+  Top = 323
   Width = 626
   Caption = 'Form1'
   ClientHeight = 559
@@ -46,7 +46,8 @@ object Form1: TForm1
     object ToolButton4: TToolButton
       Left = 129
       Top = 2
-      Caption = 'ToolButton4'
+      Action = SaveGML
+      Visible = False
     end
   end
   object Splitter1: TSplitter
@@ -105,7 +106,6 @@ object Form1: TForm1
       Caption = 'SaveGML'
       Hint = 'не реализовано'
       OnExecute = _SaveGML
-      Visible = False
     end
   end
   object MainMenu1: TMainMenu

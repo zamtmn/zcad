@@ -22,7 +22,7 @@ unit uzcgui2dimstyles;
 interface
 
 uses
-  usupportgui,StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,uzestylesdim,
+  uzcinterfacedata,usupportgui,StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,uzestylesdim,
   uzbstrproc,uzcsysvars,uzccommandsmanager,uzcinterface;
 
 type
@@ -36,8 +36,6 @@ type
   end;
 
 implementation
-uses
-  uzcmainwindow;
 class procedure TSupportDimStyleCombo.DropDownTStyle(Sender:Tobject);
 var
   i:integer;

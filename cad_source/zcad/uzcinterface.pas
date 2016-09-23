@@ -112,6 +112,8 @@ var
    SetCurrentDWGProc:TSetCurrentDrawing;
    _GetUndoStack:TMethod__Pointer;
 
+   waSetObjInspProc:TSimpleLCLMethod;
+
    //cmdline
     SetCommandLineMode:TSetCommandLineMode;
 

@@ -13,7 +13,7 @@ uses
 
 
   {$IFDEF CHECKLOOPS}uchecker,{$ENDIF}
-  uoptions,uscaner,uscanresult,uwriter,ulpiimporter;
+  uoptions,uscaner,uscanresult,uwriter,yEdWriter,ulpiimporter;
 
   type
 
@@ -147,7 +147,7 @@ end;
 procedure TForm1._SaveGML(Sender: TObject);
 begin
     Memo1.Clear;
-   WriteGML(Options,ScanResult,DummyWriteToLog);//пишем то что унас есть в результате
+    WriteGML(Options,ScanResult,DummyWriteToLog);//пишем то что унас есть в результате
 end;
 
 procedure TForm1._Save(Sender: TObject);

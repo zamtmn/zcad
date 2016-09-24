@@ -45,7 +45,6 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<select
                           procedure selectcurrentcontrolpoint(key:GDBByte;mx,my,h:integer);virtual;
                           procedure RenderFeedBack(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                           //destructor done;virtual;
-                          procedure modifyobj(dist,wc:gdbvertex;save:GDBBoolean;pconobj:pgdbobjEntity;var drawing:TDrawingDef);virtual;
                           procedure freeclones;
                           procedure Transform(dispmatr:DMatrix4D);
                           procedure SetRotate(minusd,plusd,rm:DMatrix4D;x,y,z:GDBVertex);
@@ -59,7 +58,7 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<select
                     end;
 {EXPORT-}
 implementation
-uses uzedrawingabstract,uzeentgenericsubentry;
+//uses uzedrawingabstract,uzeentgenericsubentry;
 procedure GDBSelectedObjArray.resprojparam;
 var tdesc:pselectedobjdesc;
     i:GDBInteger;
@@ -471,35 +470,6 @@ begin
   end;
   {if save then
               gdb.GetCurrentROOT.FormatAfterEdit;}
-end;
-
-procedure GDBSelectedObjArray.modifyobj;
-var i: GDBInteger;
-//  d: GDBDouble;
-//  td:tcontrolpointdist;
-  tdesc:pselectedobjdesc;
-  dc:TDrawContext;
-
-begin
-  if count > 0 then
-  begin
-    tdesc:=GetParrayAsPointer;
-    for i := 0 to count - 1 do
-    begin
-      if tdesc^.pcontrolpoint<>nil then
-        if tdesc^.pcontrolpoint^.SelectedCount<>0 then
-        begin
-           {tdesc^.objaddr^}PTAbstractDrawing(@drawing)^{gdb.GetCurrentDWG}.rtmodify(tdesc^.objaddr,tdesc,dist,wc,save);
-        end;
-      inc(tdesc);
-    end;
-  end;
-  if save then
-              begin
-                   dc:=drawing.CreateDrawingRC;
-                   PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.FormatAfterEdit(drawing,dc);
-              end;
-
 end;
 procedure GDBSelectedObjArray.freeclones;
 var i: GDBInteger;

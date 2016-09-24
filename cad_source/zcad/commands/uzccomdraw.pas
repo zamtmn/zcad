@@ -21,7 +21,7 @@ unit uzccomdraw;
 
 interface
 uses
-  gzctnrvector,uzglviewareageneral,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,
+  uzedrawingabstract,uzedrawingdef,gzctnrvector,uzglviewareageneral,zcobjectchangeundocommand2,zcmultiobjectchangeundocommand,
   zcmultiobjectcreateundocommand,uzeentitiesmanager,uzgldrawercanvas,
   uzcoimultiobjects,uzcenitiesvariablesextender,uzcdrawing,uzepalette,
   uzctnrvectorobjid,uzctnrvectorgdbdouble,uzctnrvectorgdblineweight,uzctnrvectorgdbpointer,uzctextenteditor,uzgldrawcontext,usimplegenerics,UGDBPoint3DArray,
@@ -2373,6 +2373,36 @@ begin
                     t3dp := wc;
   result:=0;
 end;
+
+procedure modifyobj(dist,wc:gdbvertex;save:GDBBoolean;pconobj:pgdbobjEntity;var drawing:TDrawingDef;psa:PGDBSelectedObjArray);
+var i: GDBInteger;
+//  d: GDBDouble;
+//  td:tcontrolpointdist;
+  tdesc:pselectedobjdesc;
+  dc:TDrawContext;
+
+begin
+  if psa^.count > 0 then
+  begin
+    tdesc:=psa^.GetParrayAsPointer;
+    for i := 0 to psa^.count - 1 do
+    begin
+      if tdesc^.pcontrolpoint<>nil then
+        if tdesc^.pcontrolpoint^.SelectedCount<>0 then
+        begin
+           {tdesc^.objaddr^}PTAbstractDrawing(@drawing)^{gdb.GetCurrentDWG}.rtmodify(tdesc^.objaddr,tdesc,dist,wc,save);
+        end;
+      inc(tdesc);
+    end;
+  end;
+  if save then
+              begin
+                   dc:=drawing.CreateDrawingRC;
+                   PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.FormatAfterEdit(drawing,dc);
+              end;
+
+end;
+
 function OnDrawingEd_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
 var //oldi, newi, i: GDBInteger;
   dist: gdbvertex;
@@ -2401,7 +2431,7 @@ begin
     begin
       dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
       drawings.GetCurrentDWG^{.UndoStack}.PushStartMarker('Редактирование на чертеже');
-      drawings.GetCurrentDWG^.SelObjArray.modifyobj(dist,wc,true,pobj,drawings.GetCurrentDWG^);
+      modifyobj(dist,wc,true,pobj,drawings.GetCurrentDWG^,@drawings.GetCurrentDWG^.SelObjArray);
       drawings.GetCurrentDWG^{.UndoStack}.PushEndMarker;
       drawings.GetCurrentDWG^.SelObjArray.resprojparam(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
 
@@ -2452,7 +2482,7 @@ begin
     begin
       if fixentities then
       begin
-           drawings.GetCurrentDWG^.SelObjArray.modifyobj(dist,wc,false,pobj,drawings.GetCurrentDWG^);
+           modifyobj(dist,wc,false,pobj,drawings.GetCurrentDWG^,@drawings.GetCurrentDWG^.SelObjArray);
 
            //xdir:=GetDirInPoint(pgdbobjlwPolyline(osp^.PGDBObject).Vertex3D_in_WCS_Array,wc,pgdbobjlwPolyline(osp^.PGDBObject).closed);
            xdir:=pgdbobjentity(osp^.PGDBObject)^.GetTangentInPoint(wc);// GetDirInPoint(pgdbobjlwPolyline(osp^.PGDBObject).Vertex3D_in_WCS_Array,wc,pgdbobjlwPolyline(osp^.PGDBObject).closed);
@@ -2497,7 +2527,7 @@ begin
            end;
       end
       else
-      drawings.GetCurrentDWG^.SelObjArray.modifyobj(dist,wc,false,pobj,drawings.GetCurrentDWG^);
+      modifyobj(dist,wc,false,pobj,drawings.GetCurrentDWG^,@drawings.GetCurrentDWG^.SelObjArray);
     end
   end;
   result:=cmd_ok;

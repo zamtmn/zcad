@@ -29,9 +29,10 @@ var
   i,j,k,mmm:integer;
   TotalUnitsWithImplUses,
   TotalFoundedUnits,
-  TotaEdgesWithLoops,
+  TotaEdgesWithLoops,CurrentEdgesWithLoops,
   TotaUnitsWithLoops:integer;
   ts:string;
+  te:TEdge;
 begin
   G:=TGraph.Create;
   G.Features:=[Directed,Weighted];
@@ -106,7 +107,16 @@ begin
                                   LogWriter(' edge [style=dotted]')
                               else
                                   LogWriter(' edge [style=solid]');
-       LogWriter(format(' %s -> %s',[getDecoratedUnnitname(G.Edges[i].V1.Index),getDecoratedUnnitname(G.Edges[i].V2.Index)]));
+       te:=G.Edges[i];
+       te.Hide;
+       CurrentEdgesWithLoops:=0;
+       begin
+       for j:=0 to G.EdgeCount - 1 do
+       if G.Edges[j].RingEdge then
+         inc(CurrentEdgesWithLoops);
+       end;
+       te.Restore;
+       LogWriter(format(' %s -> %s [label=%d]',[getDecoratedUnnitname(G.Edges[i].V1.Index),getDecoratedUnnitname(G.Edges[i].V2.Index),CurrentEdgesWithLoops]));
       end;
     end;
     LogWriter('}');

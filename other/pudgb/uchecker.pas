@@ -30,7 +30,7 @@ var
   TotalUnitsWithImplUses,
   TotalFoundedUnits,
   TotaEdgesWithLoops,CurrentEdgesWithLoops,
-  TotaUnitsWithLoops:integer;
+  TotaUnitsWithLoops,StrongEdgeWeight,StrongEdge:integer;
   ts:string;
   te:TEdge;
 begin
@@ -90,6 +90,7 @@ begin
     LogWriter('}');*)
 
     TotaEdgesWithLoops:=0;
+    StrongEdgeWeight:=maxint;
     for i:=0 to ScanResult.UnitInfoArray.Size-1 do
       ScanResult.UnitInfoArray.mutable[i]^.NodeState:=NSNotCheced;
     LogWriter('Loop graph by edges:');
@@ -114,6 +115,11 @@ begin
        for j:=0 to G.EdgeCount - 1 do
        if G.Edges[j].RingEdge then
          inc(CurrentEdgesWithLoops);
+       end;
+       if StrongEdgeWeight>CurrentEdgesWithLoops then
+       begin
+         StrongEdgeWeight:=CurrentEdgesWithLoops;
+         StrongEdge:=i;
        end;
        te.Restore;
        LogWriter(format(' %s -> %s [label=%d]',[getDecoratedUnnitname(G.Edges[i].V1.Index),getDecoratedUnnitname(G.Edges[i].V2.Index),CurrentEdgesWithLoops]));
@@ -144,6 +150,13 @@ begin
 
     LogWriter(format('Total dependencies: %d ',[G.EdgeCount]));
     LogWriter(format('Total dependencies in loops: %d ',[TotaEdgesWithLoops]));
+    if StrongEdgeWeight<>maxint then
+    begin
+      LogWriter(format('The worst addiction from "%s" to "%s" with %d ',[ScanResult.UnitInfoArray[G.Edges[StrongEdge].V1.Index].UnitName,ScanResult.UnitInfoArray[G.Edges[StrongEdge].V2.Index].UnitName,StrongEdgeWeight]));
+    StrongEdgeWeight:=CurrentEdgesWithLoops;
+    StrongEdge:=i;
+    end;
+
 
     if ts<>'' then LogWriter(format('Implimentation uses can be move to interface in %s ',[ts]));
   finally

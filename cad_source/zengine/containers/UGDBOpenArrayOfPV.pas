@@ -20,7 +20,7 @@ unit UGDBOpenArrayOfPV;
 {$INCLUDE def.inc}
 interface
 uses uzbgeomtypes,uzgldrawcontext,uzedrawingdef,uzeentity,uzecamera,uzbtypesbase,
-     gzctnrvectorpobjects,sysutils,uzbtypes,uzegeometry,uzbmemman,uzeentsubordinated;
+     gzctnrvectorpobjects,sysutils,uzbtypes,uzegeometry,uzbmemman,uzeentsubordinated,uzeentityfactory;
 type
 {PGDBObjEntityArray=^GDBObjEntityArray;
 objvizarray = array[0..0] of PGDBObjEntity;
@@ -52,7 +52,6 @@ GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseObj
 {Export-}
 function EqualFuncPGDBaseObject(const a, b: PGDBaseObject):Boolean;
 implementation
-uses uzeentityfactory;
 function EqualFuncPGDBaseObject(const a, b: PGDBaseObject):Boolean;
 begin
   result:=(a=b);

@@ -603,7 +603,7 @@ GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseObj
                       procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;abstract;
                       function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;abstract;
                       function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;abstract;
-                      procedure DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;abstract;
+                      procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;abstract;
                       function CreateObj(t: GDBByte{;owner:GDBPointer}):GDBPointer;virtual;abstract;
                       function CreateInitObj(t: GDBByte;owner:GDBPointer):PGDBObjSubordinated;virtual;abstract;
                       function calcbb:TBoundingBox;
@@ -1638,6 +1638,7 @@ GDBObjVisualProp=packed record
 //Generate on E:/zcad/cad_source/zengine/core/entities/uzeentity.pas
 PGDBObjEntity=^GDBObjEntity;
 
+
 PTExtAttrib=^TExtAttrib;
 TExtAttrib=packed record
                  OwnerHandle:GDBQWord;
@@ -1708,9 +1709,10 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     function getintersect(var osp:os_record;pobj:PGDBObjEntity; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;abstract;
                     procedure higlight(var DC:TDrawContext);virtual;abstract;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
-                    function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger;s2s:TSelect2Stage):GDBBoolean;virtual;abstract;
+                    function select(var SelectedObjCount:GDBInteger;s2s:TSelect2Stage):GDBBoolean;virtual;abstract;
                     //procedure Selector(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;abstract;
-                    procedure DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;abstract;
+                    //procedure DeSelector(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;abstract;
+                    procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;abstract;
                     function SelectQuik:GDBBoolean;virtual;abstract;
                     procedure remapcontrolpoints(pp:PGDBControlPointArray;pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;abstract;
                     //procedure rtmodify(md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
@@ -2456,7 +2458,7 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;abstract;
                    function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;abstract;
                    procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;abstract;
-                   procedure DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;abstract;
+                   procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;abstract;
                    //function GetDeviceType:TDeviceType;virtual;abstract;
                    procedure getoutbound(var DC:TDrawContext);virtual;abstract;
                    //function AssignToVariable(pv:pvardesk):GDBInteger;virtual;abstract;
@@ -2521,7 +2523,7 @@ GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
                  function EubEntryType:GDBInteger;virtual;abstract;
                  procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;abstract;
                  procedure restructure(var drawing:TDrawingDef);virtual;abstract;
-                 procedure DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;abstract;
+                 procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;abstract;
                  procedure BuildGraf(var drawing:TDrawingDef);virtual;abstract;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                  procedure EraseMi(pobj:pgdbobjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;abstract;
@@ -2919,7 +2921,7 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
             procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
             function beforertmodify:GDBPointer;virtual;abstract;
-            function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger;s2s:TSelect2Stage):GDBBoolean;virtual;abstract;
+            function select(var SelectedObjCount:GDBInteger;s2s:TSelect2Stage):GDBBoolean;virtual;abstract;
             procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
             procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;abstract;
             constructor initnul;
@@ -2929,7 +2931,7 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             function GetObjTypeName:GDBString;virtual;abstract;
             function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;abstract;
             procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger);virtual;abstract;
-            procedure DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;abstract;
+            procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;abstract;
             procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;abstract;
             //function InRect:TInRect;virtual;abstract;
             destructor done;virtual;abstract;
@@ -3703,7 +3705,8 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function GetCurrentLType:PGDBLtypeProp;
                        function GetCurrentTextStyle:PGDBTextStyle;
                        function GetCurrentDimStyle:PGDBDimStyle;
-                       procedure Selector(PV:PGDBObjEntity;var SelectedObjCount:GDBInteger);virtual;abstract;
+                       procedure Selector(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:GDBInteger);virtual;abstract;
+                       procedure DeSelector(PV:PGDBObjEntity;var SelectedObjCount:GDBInteger);virtual;abstract;
                  end;
 //Generate on E:/zcad/cad_source/zcad/core/drawings/uzcdrawings.pas
 PTZCADDrawingsManager=^TZCADDrawingsManager;

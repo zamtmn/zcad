@@ -62,8 +62,8 @@ TBasicFinter=packed record
   PTELCableComParam=^TELCableComParam;
   TELCableComParam=packed record
                         Traces:TEnumData;(*'Trace'*)
-                        PCable:PGDBObjCable;(*'Cabel'*)
-                        PTrace:PGDBObjNet;(*'Trace (pointer)'*)
+                        PCable:{PGDBObjCable}GDBPointer;(*'Cabel'*)
+                        PTrace:{PGDBObjNet}GDBPointer;(*'Trace (pointer)'*)
                    end;
   TELLeaderComParam=packed record
                         Scale:GDBDouble;(*'Scale'*)
@@ -2988,7 +2988,7 @@ begin
                                                                  psupernetvarext^.entityunit.copyfrom(@pnetvarext.entityunit);
                                                                  //log.LogOut('supernet.initnul(nil); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
-                                                            if not processednets.IsDataExist{WithCompareProc}(net{,@EqualFuncPointer}) then
+                                                            if not processednets.IsDataExist(net)<>-1 then
                                                             begin
                                                                  net.objarray.copyto(supernet.ObjArray);
                                                                  processednets.PushBackData(net);
@@ -2996,7 +2996,7 @@ begin
                                                                  //log.LogOut('processednets.AddByRef(net^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
 
-                                                            if not processednets.IsDataExist{WithCompareProc}(net2{,@EqualFuncPointer}) then
+                                                            if not processednets.IsDataExist(net2)<>-1 then
                                                             begin
                                                                  net2.objarray.copyto(supernet.ObjArray);
                                                                  processednets.PushBackData(net2);

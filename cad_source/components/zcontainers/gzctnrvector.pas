@@ -73,7 +73,7 @@ GZVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                   function getData(index:TArrayIndex):T;
                   function PushBackData(const data:T):TArrayIndex;
                   function PushBackIfNotPresentWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
-                  function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):GDBBoolean;
+                  function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):GDBInteger;
                   function GetSpecializedTypeInfo:PTypeInfo;inline;
 
                   function SizeOfData:TArrayIndex;
@@ -138,19 +138,22 @@ begin
      for i:=0 to count-1 do
      if EqualFunc(parray[i],pobj) then
                            begin
-                                result:=true;
+                                result:=i;
                                 exit;
                            end;
-     result:=false;
+     result:=-1;
 end;
 function GZVector<T>.PushBackIfNotPresentWithCompareProc;
 begin
-  if IsDataExistWithCompareProc(data,EqualFunc)then
+  result:=IsDataExistWithCompareProc(data,EqualFunc);
+  if result=-1 then
+                   result:=PushBackData(data);
+  {if IsDataExistWithCompareProc(data,EqualFunc)>=0 then
                                                    begin
                                                         result := -1;
                                                         exit;
                                                    end;
-  result:=PushBackData(data);
+  result:=PushBackData(data);}
 end;
 function GZVector<T>.AllocData(SData:GDBword):GDBPointer;
 begin

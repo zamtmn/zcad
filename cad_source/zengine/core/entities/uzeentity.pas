@@ -907,8 +907,7 @@ begin
        result:=SelectQuik;
      if result then
      begin
-          //selected:=true;
-          tdesc:={gdb.GetCurrentDWG.}PGDBSelectedObjArray(SelObjArray)^.addobject(@self);
+          tdesc:=PGDBSelectedObjArray(SelObjArray)^.addobject(@self);
           if tdesc<>nil then
           if IsHaveGRIPS then
           begin
@@ -916,7 +915,7 @@ begin
           addcontrolpoints(tdesc);
           end;
           bp.ListPos.Owner.ImSelected(@self,bp.ListPos.SelfIndex);
-          inc({GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.}Selectedobjcount);
+          inc(Selectedobjcount);
 
      end;
      end;
@@ -927,19 +926,19 @@ var tdesc:pselectedobjdesc;
 begin
      if selected then
      begin
-          tdesc:={gdb.GetCurrentDWG.}PGDBSelectedObjArray(SelObjArray)^.beginiterate(ir);
+          tdesc:=PGDBSelectedObjArray(SelObjArray)^.beginiterate(ir);
           if tdesc<>nil then
           repeat
                 if tdesc^.objaddr=@self then
                                             begin
-                                                 {gdb.GetCurrentDWG.}PGDBSelectedObjArray(SelObjArray)^.freeelement(tdesc);
-                                                 {gdb.GetCurrentDWG.}PGDBSelectedObjArray(SelObjArray)^.deleteelementbyp(tdesc);
+                                                 PGDBSelectedObjArray(SelObjArray)^.freeelement(tdesc);
+                                                 PGDBSelectedObjArray(SelObjArray)^.deleteelementbyp(tdesc);
                                             end;
 
-                tdesc:={gdb.GetCurrentDWG.}PGDBSelectedObjArray(SelObjArray)^.iterate(ir);
+                tdesc:=PGDBSelectedObjArray(SelObjArray)^.iterate(ir);
           until tdesc=nil;
           Selected:=false;
-          dec({GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.}Selectedobjcount);
+          dec(Selectedobjcount);
      end;
 end;
 procedure GDBObjEntity.remapcontrolpoints;

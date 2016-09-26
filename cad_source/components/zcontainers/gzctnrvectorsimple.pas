@@ -25,7 +25,7 @@ type
 GZVectorSimple{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVector{-}<T>{//})
                                    function PushBackIfNotPresent(data:T):GDBInteger;
-                                   function IsDataExist(pobj:T):GDBBoolean;
+                                   function IsDataExist(pobj:T):GDBInteger;
                                  end;
 {Export-}
 implementation
@@ -36,19 +36,22 @@ begin
      for i:=0 to count-1 do
      if parray[i]=pobj then
                            begin
-                                result:=true;
+                                result:=i;
                                 exit;
                            end;
-     result:=false;
+     result:=-1;
 end;
 function GZVectorSimple<T>.PushBackIfNotPresent;
 begin
-  if IsDataExist(data)then
+  result:=IsDataExist(data);
+  if result=-1 then
+                   result:=PushBackData(data);
+  {if result:=IsDataExist(data)then
                         begin
                           result := -1;
                           exit;
                         end;
-  result:=PushBackData(data);
+  result:=PushBackData(data);}
 end;
 begin
 end.

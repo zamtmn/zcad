@@ -33,9 +33,8 @@ SelectedObjDesc=packed record
 PGDBSelectedObjArray=^GDBSelectedObjArray;
 GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<selectedobjdesc>{//})
                           SelectedCount:GDBInteger;
-                          constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 
-                          function addobject(objnum:PGDBObjEntity):pselectedobjdesc;virtual;
+                          function addobject(PEntity:PGDBObjEntity):pselectedobjdesc;virtual;
                           procedure clearallobjects;virtual;
                           procedure remappoints(pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                           procedure drawpoint(var DC:TDrawContext;const GripSize:GDBInteger; const SelColor,UnSelColor:TRGB);virtual;
@@ -88,40 +87,29 @@ begin
                                            end;
   //PGDBObjBlockdef(p).Entities.ClearAndDone;
 end;
-constructor GDBSelectedObjArray.init;
+function dummyseldesccompare(const a, b: selectedobjdesc):Boolean;
 begin
-  {Count := 0;
-  Max := m;
-  Size := sizeof(selectedobjdesc);
-  GDBGetMem(PArray, size * max);}
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(selectedobjdesc)});
+   if a.objaddr=b.objaddr then
+                              result:=true
+                          else
+                              result:=false;
 end;
+
 function GDBSelectedObjArray.addobject;
-var tdesc:pselectedobjdesc;
+var dummyseldesc:selectedobjdesc;
     i:GDBInteger;
 begin
-  result:=nil;
-  if PARRAY=nil then
-                    createarray;
-  tdesc:=GetParrayAsPointer;
-  if count<>0 then
-  begin
-       for i:=0 to count-1 do
-       begin
-            if tdesc^.objaddr=objnum then
-            begin
-                 result:=tdesc;
-                 exit;
-            end;
-            inc(tdesc);
-       end;
-  end;
-  if count=max then exit;
-  result:=tdesc;
-  inc(count);
-  tdesc^.objaddr:=objnum;
-  tdesc^.pcontrolpoint:=nil;
-  tdesc^.ptempobj:=nil;
+  dummyseldesc.objaddr:=PEntity;
+  dummyseldesc.pcontrolpoint:=nil;
+  dummyseldesc.ptempobj:=nil;
+  i:=PushBackIfNotPresentWithCompareProc(dummyseldesc,dummyseldesccompare);
+  result:=@PArray^[i];
+  {i:=IsDataExistWithCompareProc(dummyseldesc,dummyseldesccompare);
+  if i<0 then
+              begin
+                i:=PushBackData(dummyseldesc);
+              end;
+  result:=@PArray^[i];}
 end;
 procedure GDBSelectedObjArray.clearallobjects;
 var tdesc:pselectedobjdesc;
@@ -145,7 +133,7 @@ begin
             inc(tdesc);
        end;
   end;
-  count:=0;
+  clear;
 end;
 procedure GDBSelectedObjArray.drawpoint;
 var tdesc:pselectedobjdesc;

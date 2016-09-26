@@ -22,7 +22,7 @@ unit uzeentityfactory;
 
 interface
 uses uzeentsubordinated,usimplegenerics,uzedrawingdef,uzeconsts,
-     uzbmemman,uzbtypesbase,uzbtypes,uzeentgenericsubentry,uzeentity;
+     uzbmemman,uzbtypesbase,uzbtypes,{uzeentgenericsubentry,}uzeentity;
 type
 TAllocEntFunc=function:GDBPointer;
 TAllocAndInitEntFunc=function (owner:PGDBObjGenericWithSubordinated): PGDBObjEntity;
@@ -45,7 +45,7 @@ TDXFName2EntInfoDataMap=GKey2DataMap<GDBString,TEntInfoData{$IFNDEF DELPHI},Less
 TObjID2EntInfoDataMap=GKey2DataMap<TObjID,TEntInfoData{$IFNDEF DELPHI},LessObjID{$ENDIF}>;
 TEntUpgradeDataMap=GKey2DataMap<TEntUpgradeKey,TEntUpgradeData{$IFNDEF DELPHI},LessEntUpgradeKey{$ENDIF}>;
 
-function CreateInitObjFree(t:TObjID;owner:PGDBObjGenericSubEntry):PGDBObjEntity;
+function CreateInitObjFree(t:TObjID;owner:{PGDBObjGenericSubEntry}pointer):PGDBObjEntity;
 function AllocEnt(t:TObjID): GDBPointer;
 
 procedure RegisterDXFEntity(const _EntityID:TObjID;
@@ -164,7 +164,7 @@ begin
 end;
 
 
-function CreateInitObjFree(t:TObjID;owner:PGDBObjGenericSubEntry): PGDBObjEntity;export;
+function CreateInitObjFree(t:TObjID;owner:{PGDBObjGenericSubEntry}pointer): PGDBObjEntity;export;
 var //temp: PGDBObjEntity;
    EntInfoData:TEntInfoData;
 begin

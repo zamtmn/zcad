@@ -13,7 +13,7 @@ uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      uzcsysvars,gzctnrvectorpobjects,uzbstrproc,UGDBOpenArrayOfByte,math,
      uzeenttext,uzeentdevice,uzcentcable,uzeenttable,UGDBControlPointArray,uzegeometry,
      uzeentline,uzbtypesbase,uzeentcomplex,sysutils,uzctnrvectorgdbstring,
-     UGDBSelectedObjArray,uzeentity,varmandef,uzbtypes,uzeconsts,uzeffdxfsupport,
+     {UGDBSelectedObjArray,}uzeentity,varmandef,uzbtypes,uzeconsts,uzeffdxfsupport,
      uzbgeomtypes,uzbmemman,uzeentsubordinated,uzestylestables,uzclog,UGDBOpenArrayOfPV,uzeentcurve;
 type
 {EXPORT+}
@@ -39,7 +39,7 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
             procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
             function beforertmodify:GDBPointer;virtual;
-            function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;virtual;
+            function select(var SelectedObjCount:GDBInteger;s2s:TSelect2Stage):GDBBoolean;virtual;
             procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
             procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
 
@@ -50,7 +50,7 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             function GetObjTypeName:GDBString;virtual;
             function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
             procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger);virtual;
-            procedure DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;
+            procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;
             procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;var drawing:TDrawingDef);virtual;
             //function InRect:TInRect;virtual;
 
@@ -144,10 +144,10 @@ var
    DummySelectedObjCount:integer=3;
 begin
      MainLine.Selected:=true;
-     MainLine.DeSelect(SelObjArray,DummySelectedObjCount);
-     MarkLine.DeSelect(SelObjArray,DummySelectedObjCount);
-     Tbl.DeSelect(SelObjArray,DummySelectedObjCount);
-     {result:=}inherited deselect(SelObjArray,SelectedObjCount);
+     MainLine.DeSelect(DummySelectedObjCount,ds2s);
+     MarkLine.DeSelect(DummySelectedObjCount,ds2s);
+     Tbl.DeSelect(DummySelectedObjCount,ds2s);
+     {result:=}inherited deselect(SelectedObjCount,ds2s);
 end;
 function GDBObjElLeader.GetObjTypeName;
 begin
@@ -516,27 +516,33 @@ begin
      objects.Done;
      buildgeometry(drawing);
 end;
-function GDBObjElLeader.select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;
-var tdesc:pselectedobjdesc;
+function GDBObjElLeader.select(var SelectedObjCount:GDBInteger;s2s:TSelect2Stage):GDBBoolean;
+//var tdesc:pselectedobjdesc;
 begin
-     result:=false;
+     (*result:=false;
      if selected=false then
      begin
        result:=SelectQuik;
      if result then
      begin
           selected:=true;
-          //tdesc:=gdb.GetCurrentDWG.SelObjArray.addobject(@{mainline}self);
-          tdesc:={gdb.GetCurrentDWG.}PGDBSelectedObjArray(SelObjArray)^.addobject(@self);
+          tdesc:=PGDBSelectedObjArray(SelObjArray)^.addobject(@self);
           if tdesc<>nil then
           begin
           GDBGetMem({$IFDEF DEBUGBUILD}'{B50BE8C9-E00A-40C0-A051-230877BD3A56}',{$ENDIF}GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
           mainline.addcontrolpoints(tdesc);
-          //inc(GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
-          inc({GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.}Selectedobjcount);
+          inc(Selectedobjcount);
           end;
      end;
-     end;
+     end;*)
+   result:=false;
+   if selected=false then
+   begin
+     result:=SelectQuik;
+     if result then
+       if assigned(s2s)then
+         s2s(@self,@mainline,SelectedObjCount);
+   end;
 end;
 function GDBObjElLeader.ReturnLastOnMouse;
 begin

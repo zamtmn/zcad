@@ -2781,7 +2781,7 @@ begin
                   //if assigned(sysvar.DSGN.DSGN_SelNew)then
                   if sysvarDSGNSelNew then
                   begin
-                        sender.pdwg.GetCurrentROOT.ObjArray.DeSelect(sender.pdwg.GetSelObjArray,sender.param.SelDesc.Selectedobjcount);
+                        sender.pdwg.GetCurrentROOT.ObjArray.DeSelect(sender.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
                         sender.param.SelDesc.LastSelectedObject := nil;
                         //wa.param.SelDesc.OnMouseObject := nil;
                         sender.param.seldesc.Selectedobjcount:=0;
@@ -2793,7 +2793,7 @@ begin
              end
          else
              begin
-                  PGDBObjEntity(sender.param.SelDesc.OnMouseObject)^.DeSelect(sender.PDWG^.GetSelObjArray,sender.param.SelDesc.Selectedobjcount);
+                  PGDBObjEntity(sender.param.SelDesc.OnMouseObject)^.DeSelect(sender.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
                   sender.param.SelDesc.LastSelectedObject := nil;
                   //addoneobject;
                   sender.SetObjInsp;
@@ -2913,7 +2913,7 @@ begin
                               if pvname2<>nil then
                               if pgdbstring(pvname2^.data.Instance)^=pgdbstring(pvname^.data.Instance)^ then
                               begin
-                                   if pobj^.select(pdwg.GetSelObjArray,param.SelDesc.Selectedobjcount)then
+                                   if pobj^.select(param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector)then
                                                                                                           inc(result);
                               end;
                          end;
@@ -2934,7 +2934,7 @@ begin
        Sender.ClearOntrackpoint;
        if commandmanager.pcommandrunning=nil then
          begin
-         Sender.PDWG.GetCurrentROOT.ObjArray.DeSelect(Sender.PDWG^.GetSelObjArray,Sender.param.SelDesc.Selectedobjcount);
+         Sender.PDWG.GetCurrentROOT.ObjArray.DeSelect(Sender.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
          Sender.param.SelDesc.LastSelectedObject := nil;
          Sender.param.SelDesc.OnMouseObject := nil;
          Sender.param.seldesc.Selectedobjcount:=0;
@@ -2974,7 +2974,7 @@ begin
                               HistoryOutStr(format(rsAdditionalSelected,[RelSelectedObjects]));
   if (commandmanager.pcommandrunning=nil)or(commandmanager.pcommandrunning^.IData.GetPointMode<>TGPWaitEnt) then
   begin
-  if PGDBObjEntity(Sender.param.SelDesc.OnMouseObject)^.select(Sender.PDWG^.GetSelObjArray,Sender.param.SelDesc.Selectedobjcount) then
+  if PGDBObjEntity(Sender.param.SelDesc.OnMouseObject)^.select(Sender.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector) then
     begin
           if assigned(addoneobjectproc) then addoneobjectproc;
           Sender.SetObjInsp;

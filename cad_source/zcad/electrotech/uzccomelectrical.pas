@@ -2168,7 +2168,7 @@ begin
                     begin
                     CurrentObj:=pointer(ptn^.DevLink^.bp.ListPos.owner);
                     if CurrentObj<>nil then
-                                           CurrentObj^.select(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+                                           CurrentObj^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector);
                     end;
 
                     ptn:=PGDBObjCable(pv)^.NodePropArray.iterate(irnpa);
@@ -2373,7 +2373,7 @@ function Find_com(operands:TCommandOperands):TCommandResult;
 begin
   zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pfindcom);
   drawings.GetCurrentDWG.SelObjArray.clearallobjects;
-  drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+  drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
   result:=cmd_ok;
   zcRedrawCurrentDrawing;
 end;
@@ -2391,7 +2391,7 @@ var pv,pvlast:pGDBObjEntity;
     pentvarext:PTVariablesExtender;
 begin
   drawings.GetCurrentDWG.SelObjArray.clearallobjects;
-  drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+  drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
    case FindDeviceParam.FindType of
       tft_obozn:begin
                      varname:=('NMO_Name');
@@ -2442,7 +2442,7 @@ begin
 
                if findvarvalue then
                begin
-                  pv^.select(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+                  pv^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector);
                   pvlast:=pv;
                   inc(count);
                end;

@@ -24,7 +24,7 @@ uses uzedrawingdef,uzeblockdefsfactory,uzestylesdim,uzeentwithlocalcs,
      UGDBNumerator,uzbtypes,sysutils, uzbmemman,uzegeometry,uzbtypesbase,uzeentgenericsubentry,
      uzestyleslayers,uzestyleslinetypes,uzeentity,UGDBSelectedObjArray,uzestylestexts,
      uzbgeomtypes,uzecamera,UGDBOpenArrayOfPV,uzeroot,uzefont,
-     uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext;
+     uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,UGDBControlPointArray;
 type
 TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:GDBString) of object;
 {EXPORT+}
@@ -98,12 +98,45 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function GetCurrentLType:PGDBLtypeProp;
                        function GetCurrentTextStyle:PGDBTextStyle;
                        function GetCurrentDimStyle:PGDBDimStyle;
+                       procedure Selector(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:GDBInteger);virtual;
+                       procedure DeSelector(PV:PGDBObjEntity;var SelectedObjCount:GDBInteger);virtual;
                  end;
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 var
     MainBlockCreateProc:TMainBlockCreateProc=nil;
 implementation
+procedure TSimpleDrawing.Selector;
+var tdesc:pselectedobjdesc;
+begin
+     tdesc:=SelObjArray.addobject(PEntity);
+     if tdesc<>nil then
+     if PEntity^.IsHaveGRIPS then
+     begin
+       GDBGetMem({$IFDEF DEBUGBUILD}'{B50BE8C9-E00A-40C0-A051-230877BD3A56}',{$ENDIF}GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
+       PGripsCreator^.addcontrolpoints(tdesc);
+     end;
+     PEntity^.bp.ListPos.Owner.ImSelected(@self,PEntity^.bp.ListPos.SelfIndex);
+     inc(Selectedobjcount);
+end;
+procedure TSimpleDrawing.DeSelector;
+var tdesc:pselectedobjdesc;
+    ir:itrec;
+begin
+          tdesc:=SelObjArray.beginiterate(ir);
+          if tdesc<>nil then
+          repeat
+                if tdesc^.objaddr=pv then
+                                            begin
+                                                 SelObjArray.freeelement(tdesc);
+                                                 SelObjArray.deleteelementbyp(tdesc);
+                                            end;
+
+                tdesc:=SelObjArray.iterate(ir);
+          until tdesc=nil;
+          dec(Selectedobjcount);
+end;
+
 function TSimpleDrawing.GetCurrentDimStyle:PGDBDimStyle;
 begin
   if CurrentDimStyle<>nil then

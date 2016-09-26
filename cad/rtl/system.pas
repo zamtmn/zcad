@@ -167,6 +167,10 @@ GDBray=packed record
 GDBPiece=packed record
              lbegin,dir,lend:GDBvertex;
        end;
+ptarcrtmodify=^tarcrtmodify;
+tarcrtmodify=packed record
+                      p1,p2,p3:GDBVertex2d;
+                end;
 //Generate on E:/zcad/cad_source/components/zebase/uzbtypes.pas
 (*varcategoryforoi SUMMARY='Суммарно'*)
 (*varcategoryforoi CABLE='Параметры кабеля'*)
@@ -204,10 +208,6 @@ GDBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object
     destructor Done;virtual;{ abstract;}
     function IsEntity:GDBBoolean;virtual;abstract;
   end;
-ptarcrtmodify=^tarcrtmodify;
-tarcrtmodify=packed record
-                      p1,p2,p3:GDBVertex2d;
-                end;
 TArcData=packed record
                r,startangle,endangle:gdbdouble;
                p:GDBvertex2D;
@@ -361,7 +361,7 @@ TFaceTypedData=packed record
                  Instance: GDBPointer;
                  PTD: GDBPointer;
                 end;
-TDimUnit=(DUScientific(*'Scientific'*),DUDecimal(*'Decimal'*),DUEngineering(*'Engineering'*),DUArchitectural(*'Architectural'*),DUFractional(*'Fractional'*),DUSystem(*'System'*));
+TDimUnit =(DUScientific(*'Scientific'*),DUDecimal(*'Decimal'*),DUEngineering(*'Engineering'*),DUArchitectural(*'Architectural'*),DUFractional(*'Fractional'*),DUSystem(*'System'*));
 TDimDSep=(DDSDot,DDSComma,DDSSpace);
 PTLUnits=^TLUnits;
 TLUnits=(LUScientific(*'Scientific'*),LUDecimal(*'Decimal'*),LUEngineering(*'Engineering'*),LUArchitectural(*'Architectural'*),LUFractional(*'Fractional'*));
@@ -473,7 +473,7 @@ GZVector={$IFNDEF DELPHI}packed{$ENDIF}
                   function getData(index:TArrayIndex):T;
                   function PushBackData(const data:T):TArrayIndex;
                   function PushBackIfNotPresentWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
-                  function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):GDBBoolean;
+                  function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):GDBInteger;
                   function GetSpecializedTypeInfo:PTypeInfo;inline;
                   function SizeOfData:TArrayIndex;
                   function GetParrayAsPointer:pointer;
@@ -489,7 +489,7 @@ GZVector={$IFNDEF DELPHI}packed{$ENDIF}
 GZVectorSimple={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVector)
                                    function PushBackIfNotPresent(data:T):GDBInteger;
-                                   function IsDataExist(pobj:T):GDBBoolean;
+                                   function IsDataExist(pobj:T):GDBInteger;
                                  end;
 //Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectordata.pas
 GZVectorData={$IFNDEF DELPHI}packed{$ENDIF}
@@ -539,7 +539,7 @@ GZVectorObjects={$IFNDEF DELPHI}packed{$ENDIF}
 GZVectorSimple={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVector)
                                    function PushBackIfNotPresent(data:T):GDBInteger;
-                                   function IsDataExist(pobj:T):GDBBoolean;
+                                   function IsDataExist(pobj:T):GDBInteger;
                                  end;
 //Generate on E:/zcad/cad_source/components/zcontainers/uzctnrvectorgdbstring.pas
     PTZctnrVectorGDBString=^TZctnrVectorGDBString;
@@ -693,8 +693,7 @@ SelectedObjDesc=packed record
 PGDBSelectedObjArray=^GDBSelectedObjArray;
 GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
                           SelectedCount:GDBInteger;
-                          constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                          function addobject(objnum:PGDBObjEntity):pselectedobjdesc;virtual;abstract;
+                          function addobject(PEntity:PGDBObjEntity):pselectedobjdesc;virtual;abstract;
                           procedure clearallobjects;virtual;abstract;
                           procedure remappoints(pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;abstract;
                           procedure drawpoint(var DC:TDrawContext;const GripSize:GDBInteger; const SelColor,UnSelColor:TRGB);virtual;abstract;
@@ -704,7 +703,6 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
                           procedure selectcurrentcontrolpoint(key:GDBByte;mx,my,h:integer);virtual;abstract;
                           procedure RenderFeedBack(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;abstract;
                           //destructor done;virtual;abstract;
-                          procedure modifyobj(dist,wc:gdbvertex;save:GDBBoolean;pconobj:pgdbobjEntity;var drawing:TDrawingDef);virtual;abstract;
                           procedure freeclones;
                           procedure Transform(dispmatr:DMatrix4D);
                           procedure SetRotate(minusd,plusd,rm:DMatrix4D;x,y,z:GDBVertex);
@@ -1360,6 +1358,7 @@ TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
             destructor done;virtual;abstract;
             procedure free;virtual;abstract;
             function RegisterType(ti:PTypeInfo):PUserTypeDescriptor;
+            function SetTypeDesk(ti:PTypeInfo;fieldnames:array of const):PUserTypeDescriptor;
             function RegisterRecordType(ti:PTypeInfo):PUserTypeDescriptor;
             function RegisterPointerType(ti:PTypeInfo):PUserTypeDescriptor;
             function RegisterEnumType(ti:PTypeInfo):PUserTypeDescriptor;
@@ -1637,6 +1636,8 @@ GDBObjVisualProp=packed record
                       Color:TGDBPaletteColor;
                  end;
 //Generate on E:/zcad/cad_source/zengine/core/entities/uzeentity.pas
+PGDBObjEntity=^GDBObjEntity;
+
 PTExtAttrib=^TExtAttrib;
 TExtAttrib=packed record
                  OwnerHandle:GDBQWord;
@@ -1644,7 +1645,6 @@ TExtAttrib=packed record
                  Upgrade:TEntUpgradeInfo;
                  ExtAttrib2:GDBBoolean;
            end;
-PGDBObjEntity=^GDBObjEntity;
 GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     vp:GDBObjVisualProp;(*'General'*)(*saved_to_shd*)
                     Selected:GDBBoolean;(*'Selected'*)(*hidden_in_objinsp*)
@@ -1708,7 +1708,9 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     function getintersect(var osp:os_record;pobj:PGDBObjEntity; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;abstract;
                     procedure higlight(var DC:TDrawContext);virtual;abstract;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
-                    function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;virtual;abstract;
+                    function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger;s2s:TSelect2Stage):GDBBoolean;virtual;abstract;
+                    //procedure Selector(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;abstract;
+                    procedure DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;abstract;
                     function SelectQuik:GDBBoolean;virtual;abstract;
                     procedure remapcontrolpoints(pp:PGDBControlPointArray;pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;abstract;
                     //procedure rtmodify(md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
@@ -1725,7 +1727,6 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     function getownermatrix:PDMatrix4D;virtual;abstract;
                     function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;abstract;
                     function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;abstract;
-                    procedure DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;abstract;
                     procedure YouDeleted(var drawing:TDrawingDef);virtual;abstract;
                     procedure YouChanged(var drawing:TDrawingDef);virtual;abstract;
                     function GetObjTypeName:GDBString;virtual;abstract;
@@ -2918,7 +2919,7 @@ GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
             procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
             function beforertmodify:GDBPointer;virtual;abstract;
-            function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;virtual;abstract;
+            function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger;s2s:TSelect2Stage):GDBBoolean;virtual;abstract;
             procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
             procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;abstract;
             constructor initnul;
@@ -3702,6 +3703,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function GetCurrentLType:PGDBLtypeProp;
                        function GetCurrentTextStyle:PGDBTextStyle;
                        function GetCurrentDimStyle:PGDBDimStyle;
+                       procedure Selector(PV:PGDBObjEntity;var SelectedObjCount:GDBInteger);virtual;abstract;
                  end;
 //Generate on E:/zcad/cad_source/zcad/core/drawings/uzcdrawings.pas
 PTZCADDrawingsManager=^TZCADDrawingsManager;
@@ -3868,8 +3870,8 @@ TBasicFinter=packed record
   PTELCableComParam=^TELCableComParam;
   TELCableComParam=packed record
                         Traces:TEnumData;(*'Trace'*)
-                        PCable:PGDBObjCable;(*'Cabel'*)
-                        PTrace:PGDBObjNet;(*'Trace (pointer)'*)
+                        PCable:{PGDBObjCable}GDBPointer;(*'Cabel'*)
+                        PTrace:{PGDBObjNet}GDBPointer;(*'Trace (pointer)'*)
                    end;
   TELLeaderComParam=packed record
                         Scale:GDBDouble;(*'Scale'*)

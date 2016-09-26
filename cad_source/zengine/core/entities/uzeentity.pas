@@ -28,6 +28,9 @@ type
 //Owner:{-}PGDBObjEntity{/GDBPointer/};(*'Владелец'*)
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
 {Export+}
+PGDBObjEntity=^GDBObjEntity;
+{-}TSelect2Stage=procedure(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:GDBInteger)of object;{//}
+{-}TDeSelect2Stage=procedure(PV:PGDBObjEntity;var SelectedObjCount:GDBInteger)of object;{//}
 PTExtAttrib=^TExtAttrib;
 TExtAttrib=packed record
                  OwnerHandle:GDBQWord;
@@ -35,7 +38,6 @@ TExtAttrib=packed record
                  Upgrade:TEntUpgradeInfo;
                  ExtAttrib2:GDBBoolean;
            end;
-PGDBObjEntity=^GDBObjEntity;
 GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     vp:GDBObjVisualProp;(*'General'*)(*saved_to_shd*)
                     Selected:GDBBoolean;(*'Selected'*)(*hidden_in_objinsp*)
@@ -107,7 +109,10 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     function getintersect(var osp:os_record;pobj:PGDBObjEntity; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):GDBBoolean;virtual;
                     procedure higlight(var DC:TDrawContext);virtual;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
-                    function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;virtual;
+                    function select(var SelectedObjCount:GDBInteger;s2s:TSelect2Stage):GDBBoolean;virtual;
+                    //procedure Selector(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;
+                    //procedure DeSelector(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;
+                    procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;
                     function SelectQuik:GDBBoolean;virtual;
                     procedure remapcontrolpoints(pp:PGDBControlPointArray;pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                     //procedure rtmodify(md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
@@ -124,7 +129,6 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     function getownermatrix:PDMatrix4D;virtual;
                     function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;
                     function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
-                    procedure DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;
                     procedure YouDeleted(var drawing:TDrawingDef);virtual;
                     procedure YouChanged(var drawing:TDrawingDef);virtual;
                     function GetObjTypeName:GDBString;virtual;
@@ -165,7 +169,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
 var onlygetsnapcount:GDBInteger;
     GDBObjEntityDXFFeatures:TDXFEntIODataManager;
 implementation
-uses usimplegenerics,uzeentityfactory,UGDBSelectedObjArray;
+uses usimplegenerics,uzeentityfactory{,UGDBSelectedObjArray};
 procedure GDBObjEntity.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
 begin
     proc(@self,PCounted,Counter);
@@ -898,34 +902,34 @@ begin
                                 selected:=true;
                            end;
 end;
-function GDBObjEntity.select;
+(*procedure GDBObjEntity.Selector;
 var tdesc:pselectedobjdesc;
+begin
+     tdesc:=PGDBSelectedObjArray(SelObjArray)^.addobject(@self);
+     if tdesc<>nil then
+     if IsHaveGRIPS then
+     begin
+     GDBGetMem({$IFDEF DEBUGBUILD}'{B50BE8C9-E00A-40C0-A051-230877BD3A56}',{$ENDIF}GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
+     addcontrolpoints(tdesc);
+     end;
+     bp.ListPos.Owner.ImSelected(@self,bp.ListPos.SelfIndex);
+     inc(Selectedobjcount);
+end;*)
+function GDBObjEntity.select;
 begin
      result:=false;
      if selected=false then
      begin
        result:=SelectQuik;
-     if result then
-     begin
-          tdesc:=PGDBSelectedObjArray(SelObjArray)^.addobject(@self);
-          if tdesc<>nil then
-          if IsHaveGRIPS then
-          begin
-          GDBGetMem({$IFDEF DEBUGBUILD}'{B50BE8C9-E00A-40C0-A051-230877BD3A56}',{$ENDIF}GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
-          addcontrolpoints(tdesc);
-          end;
-          bp.ListPos.Owner.ImSelected(@self,bp.ListPos.SelfIndex);
-          inc(Selectedobjcount);
-
-     end;
+       if result then
+         if assigned(s2s)then
+           s2s(@self,@self,SelectedObjCount);
      end;
 end;
-procedure GDBObjEntity.DeSelect;
+{procedure GDBObjEntity.DeSelector;
 var tdesc:pselectedobjdesc;
     ir:itrec;
 begin
-     if selected then
-     begin
           tdesc:=PGDBSelectedObjArray(SelObjArray)^.beginiterate(ir);
           if tdesc<>nil then
           repeat
@@ -937,8 +941,17 @@ begin
 
                 tdesc:=PGDBSelectedObjArray(SelObjArray)^.iterate(ir);
           until tdesc=nil;
-          Selected:=false;
           dec(Selectedobjcount);
+end;}
+procedure GDBObjEntity.DeSelect;
+{var tdesc:pselectedobjdesc;
+    ir:itrec;}
+begin
+     if selected then
+     begin
+       if assigned(ds2s)then
+         ds2s(@self,SelectedObjCount);
+       Selected:=false;
      end;
 end;
 procedure GDBObjEntity.remapcontrolpoints;

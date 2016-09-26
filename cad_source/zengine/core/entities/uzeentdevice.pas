@@ -47,7 +47,7 @@ GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:GDBBoolean):GDBBoolean;virtual;
                    function ReturnLastOnMouse(InSubEntry:GDBBoolean):PGDBObjEntity;virtual;
                    procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
-                   procedure DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger);virtual;
+                   procedure DeSelect(var SelectedObjCount:GDBInteger;ds2s:TDeSelect2Stage);virtual;
                    //function GetDeviceType:TDeviceType;virtual;
                    procedure getoutbound(var DC:TDrawContext);virtual;
 
@@ -295,8 +295,8 @@ begin
 end;
 procedure GDBObjDevice.DeSelect;
 begin
-     inherited deselect(SelObjArray,SelectedObjCount);
-     VarObjArray.DeSelect(SelObjArray,SelectedObjCount);
+     inherited deselect(SelectedObjCount,ds2s);
+     VarObjArray.DeSelect(SelectedObjCount,ds2s);
      //lstonmouse:=nil;
 end;
 procedure GDBObjDevice.ImEdited;

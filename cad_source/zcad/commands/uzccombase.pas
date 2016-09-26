@@ -150,7 +150,7 @@ begin
      val(Operands,GDBPlatformUInt(pp),code);
      if (code=0)and(assigned(pp))then
                                      begin
-                                     pp^.select(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+                                     pp^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.Selector);
                                      drawings.CurrentDWG.wa.param.SelDesc.LastSelectedObject:=pp;
                                      end;
      if assigned(updatevisibleproc) then updatevisibleproc;
@@ -283,7 +283,7 @@ begin
         if count>10000 then
                            pv^.SelectQuik//:=true
                        else
-                           pv^.select(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+                           pv^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector);
 
   pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
@@ -400,7 +400,7 @@ var
    overlay:GDBBoolean;
    msg:string;
 begin
-  drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+  drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
   drawings.GetCurrentDWG.GetSelObjArray.clearallobjects;
   if commandmanager.CommandsStack.Count>0 then
                                               begin
@@ -425,7 +425,7 @@ function Redo_com(operands:TCommandOperands):TCommandResult;
 var
    msg:string;
 begin
-  drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+  drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
   case PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.redo(msg) of
     URRNoCommandsToUndo:ShowError(rscmNoCTR);
   end;
@@ -528,7 +528,7 @@ begin
          //if assigned(sysvarDSGNSelNew) then
          if sysvarDSGNSelNew then
          begin
-               drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+               drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
                drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
                drawings.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
                drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
@@ -582,9 +582,9 @@ begin
                                                begin
                                                pv^.RenderFeedbackIFNeed(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
                                                if (button and MZW_SHIFT)=0 then
-                                                                               pv^.select(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount)
+                                                                               pv^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector)
                                                                            else
-                                                                               pv^.deselect(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+                                                                               pv^.deselect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.deselector);
                                                drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject:=pv;
                                                end;
                         end
@@ -594,9 +594,9 @@ begin
                                               begin
                                                pv^.RenderFeedbackIFNeed(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
                                                if (button and MZW_SHIFT)=0 then
-                                                                               pv^.select(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount)
+                                                                               pv^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector)
                                                                            else
-                                                                               pv^.deselect(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+                                                                               pv^.deselect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.deselector);
                                                drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject:=pv;
                                               end;
                         end

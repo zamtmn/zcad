@@ -227,7 +227,7 @@ begin
     if (self.CEndActionAttr and CEDeSelect)<>0 then
     //if (@self<>pfindcom)and(@self<>@OnDrawingEd)and(@self<>selframecommand)and(@self<>ms2objinsp)and(@self<>csel)and(@self<>selall) then
     begin
-    drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+    drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
     drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
     drawings.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
     drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
@@ -259,7 +259,7 @@ begin
     if (self.CEndActionAttr and CEDeSelect)<>0 then
     //if (@self<>pfindcom)and(@self<>@OnDrawingEd)and(@self<>selframecommand) then
     begin
-    drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.GetSelObjArray,drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+    drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
     drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
     drawings.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
     drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;

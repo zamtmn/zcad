@@ -1477,7 +1477,7 @@ begin
            islinetype:=false;
            islinetypescale:=false;
            if pobj^.selected then
-                                pobj^.DeSelect(drawings.GetCurrentDWG^.GetSelObjArray,drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
+                                pobj^.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.CurrentDWG^.DeSelector);
 
            islayer:=layers.IsDataExist(pobj^.vp.Layer)<>-1;
            islinetype:=linetypes.IsDataExist(pobj^.vp.LineType)<>-1;
@@ -1528,7 +1528,7 @@ begin
                                                  end;
            if select then
            begin
-              pobj^.select(drawings.GetCurrentDWG^.GetSelObjArray,drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
+              pobj^.select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.CurrentDWG^.selector);
               drawings.GetCurrentDWG^.wa.param.SelDesc.LastSelectedObject:=pobj;
            end;
 
@@ -2310,12 +2310,12 @@ begin
   repeat
     if pv^.Selected then
                         begin
-                             pv^.deselect(drawings.GetCurrentDWG^.GetSelObjArray,drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
+                             pv^.deselect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.CurrentDWG^.DeSelector);
                              inc(count);
                         end
                     else
                         begin
-                          pv^.select(drawings.GetCurrentDWG^.GetSelObjArray,drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
+                          pv^.select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.CurrentDWG^.selector);
                           inc(count);
                         end;
 
@@ -3731,7 +3731,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
           if assigned(SetGDBObjInspProc)then
           SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,drawings.GetCurrentDWG);
           drawings.GetCurrentDWG^.SelObjArray.clearallobjects;
-          drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.GetSelObjArray,drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
+          drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.GetCurrentDWG^.deselector);
           result:=cmd_ok;
           zcRedrawCurrentDrawing;
           if tn<>'' then
@@ -3751,7 +3751,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
   if assigned(SetGDBObjInspProc)then
   SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,drawings.GetCurrentDWG);
   drawings.GetCurrentDWG^.SelObjArray.clearallobjects;
-  drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.GetSelObjArray,drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
+  drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.GetCurrentDWG^.deselector);
   result:=cmd_ok;
   zcRedrawCurrentDrawing;
 end;

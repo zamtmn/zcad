@@ -526,7 +526,7 @@ begin
                                       begin
                                            if pc^.overlay then
                                                               begin
-                                                                   if CommandsStack.IsDataExist{WithCompareProc}(pc{,EqualFuncPointer})
+                                                                   if CommandsStack.IsDataExist(pc)<>-1
                                                                    then
                                                                        self.executecommandtotalend
                                                                    else

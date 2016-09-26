@@ -1479,17 +1479,17 @@ begin
            if pobj^.selected then
                                 pobj^.DeSelect(drawings.GetCurrentDWG^.GetSelObjArray,drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
 
-           islayer:=layers.IsDataExist(pobj^.vp.Layer);
-           islinetype:=linetypes.IsDataExist(pobj^.vp.LineType);
-           islinetypescale:=linetypescales.IsDataExist(pobj^.vp.LineTypeScale);
-           isweght:=weights.IsDataExist(pobj^.vp.LineWeight);
+           islayer:=layers.IsDataExist(pobj^.vp.Layer)<>-1;
+           islinetype:=linetypes.IsDataExist(pobj^.vp.LineType)<>-1;
+           islinetypescale:=linetypescales.IsDataExist(pobj^.vp.LineTypeScale)<>-1;
+           isweght:=weights.IsDataExist(pobj^.vp.LineWeight)<>-1;
 
            oid:=pobj^.GetObjType;
            if (oid=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
                                   oid:=GDBBlockInsertID;
            if (oid=GDBMtextID)and(SelSimParams.Texts.DiffTextMText=TD_NotDiff) then
                                   oid:=GDBTextID;
-           isobjtype:=objtypes.IsDataExist(oid);
+           isobjtype:=objtypes.IsDataExist(oid)<>-1;
            if isobjtype then
            begin
                 if ((oid=GDBBlockInsertID)or(oid=GDBDeviceID))and(SelSimParams.Blocks.SameName) then

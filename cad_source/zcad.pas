@@ -113,6 +113,7 @@ uses
   //uzvcom,
   //uzvnum,
   uzccomexample,
+  uzccomexample2,
   uzccomobjectinspector,
   //uzccomexperimental,
   uzccominterface,

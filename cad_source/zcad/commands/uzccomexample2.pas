@@ -28,6 +28,8 @@ uses uzccommandsimpl,    //тут реализация объекта CommandRTE
 type
 TExample_com=object(CommandRTEdObject)//определяем тип - объект наследник базового объекта "динамической" команды
              procedure CommandStart(Operands:TCommandOperands);virtual;//переопределяем метод вызываемый при старте команды
+             //procedure CommandEnd; virtual;//переопределяем метод вызываемый при окончании команды
+             //procedure CommandCancel; virtual;//переопределяем метод вызываемый при отмене команды
              procedure DoSomething(pdata:GDBPlatformint); virtual;//реализация какогото действия
              procedure DoSomething2(pdata:GDBPlatformint); virtual;//реализация какогото другого действия
             end;

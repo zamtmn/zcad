@@ -56,21 +56,6 @@ function EnumDescriptor.GetTypeAttributes:TTypeAttr;
 begin
      result:=ta_enum;
 end;
-(*function EnumDescriptor.Serialize;
-//var l:gdbword;
-begin
-     if membuf=nil then
-                       begin
-                            gdbgetmem({$IFDEF DEBUGBUILD}'{EB2A30ED-C143-4D72-9D2F-FB9B0FEA334D}',{$ENDIF}pointer(membuf),sizeof(GDBOpenArrayOfByte));
-                            membuf.init({$IFDEF DEBUGBUILD}'{9A6388D0-F417-4E04-BA50-2CB224DD4F66}',{$ENDIF}1000000);
-                       end;
-     membuf^.AddData(PInstance,SizeInGDBBytes)
-end;
-function EnumDescriptor.DeSerialize;
-//var l:gdbword;
-begin
-     membuf.ReadData(PInstance,SizeInGDBBytes)
-end;*)
 destructor EnumDescriptor.done;
 begin
      inherited;

@@ -64,58 +64,6 @@ begin
 
      result:=TypeOf^.CreateEditor(theowner,rect,pointer(pinstance^),nil,FreeOnLostFocus,initialvalue,preferedHeight)
 end;
-(*function GDBPointerDescriptor.Serialize;
-var //pd:PFieldDescriptor;
-//     d:FieldDescriptor;
-//     p:pointer;
-//     fo:integer;
-     //pld:PRecordDescriptor;
-    ta:GDBPointer;
-//    ppd:PPropertyDeskriptor;
-//    PLinkData:PTObjLinkRecord;
-begin
-     if membuf=nil then
-                       begin
-                            gdbgetmem({$IFDEF DEBUGBUILD}'{1E61A15A-E5F2-4B77-99AB-4A89CC4D0A3B}',{$ENDIF}pointer(membuf),sizeof(GDBOpenArrayOfByte));
-                            membuf.init({$IFDEF DEBUGBUILD}'{EFEC2C2D-FAF1-4122-9A0B-72E1B42FEFF7}',{$ENDIF}1000000);
-                       end;
-     ta:=pGDBPointer(PInstance)^;
-     //linkbuf.CreateLinkRecord(ta,membuf^.Count,UBR);
-     membuf^.AddData(pinstance,sizeof(GDBPointer));
-     linkbuf.CreateLinkRecord(ta,membuf^.Count,UBR);
-
-{     if assigned(ta) then
-                         begin
-                              membuf^.AddData(@PAssigned,sizeof(PAssigned));
-                              linkbuf.CreateLinkRecord(ta,membuf^.Count,UBR);
-                         end
-                     else
-                         membuf^.AddData(@PNIL,sizeof(PNIL));}
-end;*)
-(*function GDBPointerDescriptor.DeSerialize;
-var //pd:PFieldDescriptor;
-//     d:FieldDescriptor;
-//     p:pointer;
-//     fo:integer;
-//     objtypename:string;
-     PLinkData:PTObjLinkRecord;
-     ta:GDBPointer;
-begin
-     membuf.ReadData(PInstance,sizeof(GDBPointer));
-     ta:=pGDBPointer(PInstance)^;
-     if linkbuf<>nil then
-                         begin
-                              PLinkData:=linkbuf.FindByOldAddres(ta);
-                              if PLinkData<>nil then
-                                                    begin
-                                                         pGDBPointer(PInstance)^:=pointer(PLinkData^.NewAddr);
-                                                    end
-                                                else
-                                                    begin
-                                                         pGDBPointer(PInstance)^:=nil;
-                                                    end
-                         end;
-end;*)
 
 constructor GDBPointerDescriptor.init;
 begin

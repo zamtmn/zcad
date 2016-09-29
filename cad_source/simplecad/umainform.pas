@@ -129,7 +129,7 @@ procedure TForm1._KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);//
 begin
   if Key=VK_ESCAPE then
   begin
-       GetCurrentDrawing^.SelObjArray.clearallobjects;
+       GetCurrentDrawing^.SelObjArray.Free;
        GetCurrentDrawing^.GetCurrentROOT^.ObjArray.DeSelect(GetCurrentDrawing^.GetSelObjArray,GetCurrentDrawing^.wa.param.SelDesc.Selectedobjcount);
        GetCurrentDrawing^.HardReDraw;
        Key:=0;
@@ -494,7 +494,7 @@ begin
   GetCurrentDrawing^.wa.param.seldesc.LastSelectedObject:=nil;
   GetCurrentDrawing^.wa.param.lastonmouseobject:=nil;
   GetCurrentDrawing^.OnMouseObj.Clear;
-  GetCurrentDrawing^.SelObjArray.clearallobjects;
+  GetCurrentDrawing^.SelObjArray.Free;
   _EndLongProcess;
   GetCurrentDrawing^.HardReDraw;
 end;

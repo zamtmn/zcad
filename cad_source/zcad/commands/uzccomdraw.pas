@@ -3309,7 +3309,7 @@ begin
                         if assigned(SetGDBObjInspProc)then
                         SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('TPolyEdit'),@PEProp,drawings.GetCurrentDWG);
                         drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-                        drawings.GetCurrentDWG^.SelObjArray.clearallobjects;
+                        drawings.GetCurrentDWG^.SelObjArray.Free;
                         //historyout('Поехали:');
                    end;
   result:=cmd_ok;
@@ -3469,7 +3469,7 @@ begin
                                              if p3dpl^.vertexarrayinocs.Count>2 then
                                              begin
                                                   polydata.index:=PEProp.nearestvertex;
-                                                  if PEProp.nearestvertex=p3dpl^.vertexarrayinocs.GetElemCount then
+                                                  if PEProp.nearestvertex=p3dpl^.vertexarrayinocs.GetCount then
                                                                                 polydata.index:=polydata.index+1;
                                                   {polydata.nearestvertex:=PEProp.nearestvertex;
                                                   polydata.nearestline:=polydata.nearestvertex;
@@ -3477,7 +3477,7 @@ begin
                                                   polydata.dir:=-1;
                                                   if PEProp.nearestvertex=0 then
                                                                                 polydata.dir:=-1;
-                                                  if PEProp.nearestvertex=p3dpl^.vertexarrayinocs.GetElemCount then
+                                                  if PEProp.nearestvertex=p3dpl^.vertexarrayinocs.GetCount then
                                                                                 polydata.dir:=1;}
                                                   polydata.wc:=PEProp.vvertex;
                                                   domethod:=tmethod(@p3dpl^.DeleteVertex);
@@ -3494,7 +3494,7 @@ begin
 
 
 
-                                                  //p3dpl^.vertexarrayinocs.deleteelement(PEProp.nearestvertex);
+                                                  //p3dpl^.vertexarrayinocs.DeleteElement(PEProp.nearestvertex);
                                                   p3dpl^.YouChanged(drawings.GetCurrentDWG^);
                                                   drawings.GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
                                                   //p3dpl^.Format;
@@ -3549,9 +3549,9 @@ begin
                                         for i:=0 to p3dpl^.VertexArrayInOCS.count-1 do
                                           begin
                                                if i<PEProp.nearestline then
-                                                                             p3dpl2^.VertexArrayInOCS.deleteelement(0);
+                                                                             p3dpl2^.VertexArrayInOCS.DeleteElement(0);
                                                if i>PEProp.nearestline-1 then
-                                                                             p3dpl^.VertexArrayInOCS.deleteelement(PEProp.nearestline+1);
+                                                                             p3dpl^.VertexArrayInOCS.DeleteElement(PEProp.nearestline+1);
 
                                           end;
                                         if p3dpl2^.VertexArrayInOCS.Count>1 then
@@ -3576,9 +3576,9 @@ begin
                                          for i:=0 to p3dpl^.VertexArrayInOCS.count-1 do
                                            begin
                                                 if i<PEProp.nearestvertex then
-                                                                              p3dpl2^.VertexArrayInOCS.deleteelement(0);
+                                                                              p3dpl2^.VertexArrayInOCS.DeleteElement(0);
                                                 if i>PEProp.nearestvertex then
-                                                                              p3dpl^.VertexArrayInOCS.deleteelement(PEProp.nearestvertex+1);
+                                                                              p3dpl^.VertexArrayInOCS.DeleteElement(PEProp.nearestvertex+1);
 
                                            end;
                                          p3dpl2^.Formatentity(drawings.GetCurrentDWG^,dc);
@@ -3730,7 +3730,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
                                          end;
           if assigned(SetGDBObjInspProc)then
           SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,drawings.GetCurrentDWG);
-          drawings.GetCurrentDWG^.SelObjArray.clearallobjects;
+          drawings.GetCurrentDWG^.SelObjArray.Free;
           drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.GetCurrentDWG^.deselector);
           result:=cmd_ok;
           zcRedrawCurrentDrawing;
@@ -3750,7 +3750,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
   exit;
   if assigned(SetGDBObjInspProc)then
   SetGDBObjInspProc(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,drawings.GetCurrentDWG);
-  drawings.GetCurrentDWG^.SelObjArray.clearallobjects;
+  drawings.GetCurrentDWG^.SelObjArray.Free;
   drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.GetCurrentDWG^.deselector);
   result:=cmd_ok;
   zcRedrawCurrentDrawing;

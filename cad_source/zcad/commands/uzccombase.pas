@@ -401,7 +401,7 @@ var
    msg:string;
 begin
   drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
-  drawings.GetCurrentDWG.GetSelObjArray.clearallobjects;
+  drawings.GetCurrentDWG.GetSelObjArray.Free;
   if commandmanager.CommandsStack.Count>0 then
                                               begin
                                                    prevundo:=pCommandRTEdObject(ppointer(commandmanager.CommandsStack.getDataMutable(commandmanager.CommandsStack.Count-1))^)^.UndoTop;
@@ -532,7 +532,7 @@ begin
                drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
                drawings.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
                drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
-               drawings.GetCurrentDWG.GetSelObjArray.clearallobjects;
+               drawings.GetCurrentDWG.GetSelObjArray.Free;
          end;
 
       //mclick:=-1;

@@ -34,7 +34,7 @@ GZVectorP{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                        constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
                                        constructor initnul;
                                        procedure Clear;virtual;
-                                       function GetElemCount:GDBInteger;
+                                       function GetCount:GDBInteger;
                                  end;
 {Export-}
 function EqualFuncPointer(const a, b: pointer):Boolean;
@@ -52,7 +52,7 @@ begin
   result:=parray;
 end;
 
-function GZVectorP<T>.GetElemCount:GDBInteger;
+function GZVectorP<T>.GetCount:GDBInteger;
 begin
   result:=count-deleted;
 end;

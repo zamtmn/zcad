@@ -257,27 +257,6 @@ begin
                            end;
      IncAddr(addr);
 end;
-(*function BaseTypeDescriptor.Serialize;
-var s:string;
-begin
-     if membuf=nil then
-                       begin
-                            gdbgetmem({$IFDEF DEBUGBUILD}'{D569104A-E9AE-4A36-A161-9AC3BFF2B5F5}',{$ENDIF}pointer(membuf),sizeof(GDBOpenArrayOfByte));
-                            membuf.init({$IFDEF DEBUGBUILD}'{1E74F150-E399-4CF9-8D34-E8F2E2AC0D85}',{$ENDIF}1000000);
-                       end;
-     if zcpmode=zcpbin then
-                           membuf^.AddData(PInstance,SizeInGDBBytes)
-                       else
-                           begin
-                                s:=GetValueAsString(Pinstance);
-                                membuf^.AddData(pointer(s),length(s));
-                                membuf^.AddData(pointer(lineend),length(lineend));
-                           end;
-end;
-function BaseTypeDescriptor.DeSerialize;
-begin
-     membuf.ReadData(PInstance,SizeInGDBBytes)
-end;*)
 procedure BaseTypeDescriptor.SetValueFromString;
 begin
 end;
@@ -693,29 +672,7 @@ constructor GDBPointerDescriptor.init;
 begin
      inherited init(sizeof(GDBPointer),'GDBPointer',nil);
 end;
-(*function GDBStringDescriptor.Serialize;
-var l:gdbword;
-    s:gdbstring;
-begin
-     if membuf=nil then
-                       begin
-                            gdbgetmem({$IFDEF DEBUGBUILD}'{7E700EF0-5B7C-4188-A911-5CB7A22F823E}',{$ENDIF}pointer(membuf),sizeof(GDBOpenArrayOfByte));
-                            membuf.init({$IFDEF DEBUGBUILD}'{D6881B13-EE4D-40A0-BC51-1D0E0CD90F71}',{$ENDIF}1000000);
-                       end;
-     l:=length(pstring(PInstance)^);
-          if zcpmode=zcpbin then
-                                begin
-                                membuf^.AddData(@L,sizeof(gdbword));
-                                membuf^.AddData(@pstring(PInstance)^[1],l)
-                                end
-                       else
-                           begin
-                                s:=SerializePreProcess(pstring(PInstance)^,sub);
-                                l:=l+sub;
-                                membuf^.AddData(@s[1],l);
-                                membuf^.AddData(pointer(lineend),length(lineend));
-                           end;
-end;*)
+
 procedure GDBStringDescriptor.SavePasToMem;
 begin
      membuf.TXTAddGDBStringEOL(prefix+':='''+{pvd.data.PTD.}GetValueAsString(PInstance)+''';');
@@ -733,15 +690,6 @@ begin
      else
          result:=CREqual;
 end;
-
-(*function GDBStringDescriptor.DeSerialize;
-var l:gdbword;
-begin
-     PGDBString(PInstance)^:='';
-     membuf.ReadData(@L,sizeof(gdbword));
-     setlength(PGDBString(PInstance)^,l);
-     membuf.ReadData(@PGDBString(PInstance)^[1],l)
-end;*)
 function GDBPointerDescriptor.GetValueAsString;
 var
      uGDBPointer:GDBPointer;

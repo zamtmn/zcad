@@ -610,7 +610,7 @@ begin
      if LincedObjects or(LincedData<>'') then begin
         colarray.Count:=colarray.max;
         sca:=colarray.max;
-        sa:={PGDBOpenArrayOfData}PTGenericVectorData(baddr)^.getelemcount;
+        sa:={PGDBOpenArrayOfData}PTGenericVectorData(baddr)^.getcount;
         if sa<=0 then exit;
         if sca>sa then
                       begin

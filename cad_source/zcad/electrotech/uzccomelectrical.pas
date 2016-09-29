@@ -2372,7 +2372,7 @@ function Find_com(operands:TCommandOperands):TCommandResult;
    // ir:itrec;
 begin
   zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pfindcom);
-  drawings.GetCurrentDWG.SelObjArray.clearallobjects;
+  drawings.GetCurrentDWG.SelObjArray.Free;
   drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
   result:=cmd_ok;
   zcRedrawCurrentDrawing;
@@ -2390,7 +2390,7 @@ var pv,pvlast:pGDBObjEntity;
     DC:TDrawContext;
     pentvarext:PTVariablesExtender;
 begin
-  drawings.GetCurrentDWG.SelObjArray.clearallobjects;
+  drawings.GetCurrentDWG.SelObjArray.Free;
   drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
    case FindDeviceParam.FindType of
       tft_obozn:begin

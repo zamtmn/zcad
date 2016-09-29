@@ -107,9 +107,6 @@ begin
              startangle:=ad.startangle;
              angle:=ad.endangle-ad.startangle;
              if angle<0 then angle := 2*pi+angle;
-             //----//PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXPoly);
-             //----//ppolycount:=PSHXFont(pf^.font).SHXdata.Count;
-             //----//PSHXFont(pf^.font).SHXdata.AllocData(sizeof(GDBWord));
              inc(sizeshx);
 
              sizeshp:=0;
@@ -421,9 +418,6 @@ begin
                       end;
                       if draw then
                             begin
-                      //----//PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXPoly);
-                      //----//ppolycount:=PSHXFont(pf^.font).SHXdata.count;
-                      //----//PSHXFont(pf^.font).SHXdata.AllocData(sizeof(GDBWord));
                       inc(sizeshx);
                       if (dx<>0)or(dy<>0) then
                                               sizeshp:=1
@@ -500,13 +494,8 @@ begin
                       xb:=x-r*cos(startangle);
                       yb:=y-r*sin(startangle);
 
-                      //----//PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXPoly);
-                      //----//ppolycount:=PSHXFont(pf^.font).SHXdata.Count;
-                      //----//PSHXFont(pf^.font).SHXdata.AllocData(sizeof(GDBWord));
                       inc(sizeshx);
                       sizeshp:=1;
-                      //----//PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
-                      //----//PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
 
                       GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
                       DefaultLLPCreator.CreateLLPolyLine(pf^.font.FontData.LLprimitives,GeomDataIndex,arccount);
@@ -557,14 +546,8 @@ begin
                    startangle:=hi*pi/4+sign(Shortint(byt))*pi/180*{round}(startoffset/256*45);
                    xb:=x-r*cos(startangle);
                    yb:=y-r*sin(startangle);
-
-                   //----//PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXPoly);
-                   //----//ppolycount:=PSHXFont(pf^.font).SHXdata.Count;
-                   //----//PSHXFont(pf^.font).SHXdata.AllocData(sizeof(GDBWord));
                    inc(sizeshx);
                    sizeshp:=1;
-                   //----//PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
-                   //----//PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
 
                    GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
                    DefaultLLPCreator.CreateLLPolyLine(pf^.font.FontData.LLprimitives,GeomDataIndex,arccount);
@@ -734,7 +717,6 @@ begin
   //pf.ItSHX;
   pf^.fontfile:=name;
   pf^.font.unicode:=false;
-  //----//PSHXFont(pf^.font).SHXdata.AllocData(2);
   pdata:=pointer(pf);
   inc(pdata,sizeof(GDBfont));
   {test:=}memorybuf.readbyte;
@@ -810,7 +792,6 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
        //pf.ItSHX;
        pf^.fontfile:=name;
        pf^.font.unicode:=true;
-       //----//PSHXFont(pf^.font).SHXdata.AllocData(2);
        pdata:=pointer(pf);
        inc(pdata,sizeof(GDBfont));
        {test:=}memorybuf.readbyte;

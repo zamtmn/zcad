@@ -35,7 +35,7 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<select
                           SelectedCount:GDBInteger;
 
                           function addobject(PEntity:PGDBObjEntity):pselectedobjdesc;virtual;
-                          procedure clearallobjects;virtual;
+                          procedure free;virtual;
                           procedure remappoints(pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                           procedure drawpoint(var DC:TDrawContext;const GripSize:GDBInteger; const SelColor,UnSelColor:TRGB);virtual;
                           procedure drawobject(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
@@ -111,7 +111,7 @@ begin
               end;
   result:=@PArray^[i];}
 end;
-procedure GDBSelectedObjArray.clearallobjects;
+procedure GDBSelectedObjArray.free;
 var tdesc:pselectedobjdesc;
     i:GDBInteger;
 begin

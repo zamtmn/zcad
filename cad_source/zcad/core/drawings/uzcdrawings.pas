@@ -244,7 +244,7 @@ begin
 end;
 procedure clearcp;
 begin
-     drawings.GetCurrentDWG.SelObjArray.clearallobjects;
+     drawings.GetCurrentDWG.SelObjArray.Free;
      //drawings.SelObjArray.clear;
 end;
 

@@ -2785,7 +2785,7 @@ begin
                         sender.param.SelDesc.LastSelectedObject := nil;
                         //wa.param.SelDesc.OnMouseObject := nil;
                         sender.param.seldesc.Selectedobjcount:=0;
-                        sender.PDWG^.GetSelObjArray.clearallobjects;
+                        sender.PDWG^.GetSelObjArray.Free;
                   end;
                   sender.param.SelDesc.LastSelectedObject := sender.param.SelDesc.OnMouseObject;
                   if assigned(sender.OnWaMouseSelect)then
@@ -2939,7 +2939,7 @@ begin
          Sender.param.SelDesc.OnMouseObject := nil;
          Sender.param.seldesc.Selectedobjcount:=0;
          Sender.param.firstdraw := TRUE;
-         Sender.PDWG.GetSelObjArray.clearallobjects;
+         Sender.PDWG.GetSelObjArray.Free;
          Sender.CalcOptimalMatrix;
          Sender.paint;
          if assigned(SetVisuaProplProc) then SetVisuaProplProc;

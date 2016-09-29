@@ -231,7 +231,7 @@ begin
     drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
     drawings.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
     drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
-    drawings.GetCurrentDWG.SelObjArray.clearallobjects;
+    drawings.GetCurrentDWG.SelObjArray.Free;
     end;
     if drawings.GetCurrentDWG.wa<>nil then
     if not overlay then
@@ -263,7 +263,7 @@ begin
     drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
     drawings.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
     drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
-    drawings.GetCurrentDWG.SelObjArray.clearallobjects;
+    drawings.GetCurrentDWG.SelObjArray.Free;
     end;
   drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   drawings.GetCurrentDWG.OnMouseObj.Clear;

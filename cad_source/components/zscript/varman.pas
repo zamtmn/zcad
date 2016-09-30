@@ -769,7 +769,7 @@ begin
                           end;
        if vd.data.Instance=nil then
        begin
-         vd.data.Instance:=vararray.AllocData(size);
+         vd.data.Instance:=vararray.getDataMutable(vararray.AllocData(size));
          vd.data.PTD.InitInstance(vd.data.Instance);
        end;
        vd.attrib:=0;

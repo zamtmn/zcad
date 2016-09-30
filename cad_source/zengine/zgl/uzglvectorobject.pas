@@ -190,14 +190,14 @@ var
 begin
      result.LLPrimitivesDataSize:=CopyParam.LLPrimitivesDataSize;
      result.LLPrimitivesStartIndex:=dest.LLprimitives.Count;
-     LLPrimitivesDestAddr:=dest.LLprimitives.AllocData(CopyParam.LLPrimitivesDataSize);
+     pointer(LLPrimitivesDestAddr):=dest.LLprimitives.getDataMutable(dest.LLprimitives.AllocData(CopyParam.LLPrimitivesDataSize));
      LLPrimitivesSourceAddr:=pointer(LLprimitives.getDataMutable(CopyParam.LLPrimitivesStartIndex));
      Move(LLPrimitivesSourceAddr^,LLPrimitivesDestAddr^,CopyParam.LLPrimitivesDataSize);
 
      result.EID.GeomIndexMin:=dest.GeomData.Vertex3S.Count;
      result.EID.GeomIndexMax:=result.EID.GeomIndexMin+CopyParam.EID.GeomIndexMax-CopyParam.EID.GeomIndexMin;
      result.GeomDataSize:=CopyParam.GeomDataSize;
-     DestGeomDataAddr:=dest.GeomData.Vertex3S.AllocData(CopyParam.EID.GeomIndexMax-CopyParam.EID.GeomIndexMin+1);
+     DestGeomDataAddr:=dest.GeomData.Vertex3S.getDataMutable(dest.GeomData.Vertex3S.AllocData(CopyParam.EID.GeomIndexMax-CopyParam.EID.GeomIndexMin+1));
      SourceGeomDataAddr:=self.GeomData.Vertex3S.getDataMutable(CopyParam.EID.GeomIndexMin);
      if (SourceGeomDataAddr<>nil)and(DestGeomDataAddr<>nil) then
         Move(SourceGeomDataAddr^,DestGeomDataAddr^,CopyParam.GeomDataSize);
@@ -207,7 +207,7 @@ begin
          result.EID.IndexsIndexMin:=dest.GeomData.Indexes.Count;
          result.EID.IndexsIndexMax:=result.EID.IndexsIndexMin+CopyParam.EID.IndexsIndexMax-CopyParam.EID.IndexsIndexMin;
          //result.GeomDataSize:=CopyParam.GeomDataSize;
-         DestIndexsDataAddr:=dest.GeomData.Indexes.AllocData(CopyParam.EID.IndexsIndexMax-CopyParam.EID.IndexsIndexMin+1);
+         pointer(DestIndexsDataAddr):=dest.GeomData.Indexes.getDataMutable(dest.GeomData.Indexes.AllocData(CopyParam.EID.IndexsIndexMax-CopyParam.EID.IndexsIndexMin+1));
          SourceIndexsDataAddr:=pointer(self.GeomData.Indexes.getDataMutable(CopyParam.EID.IndexsIndexMin));
          Move(SourceIndexsDataAddr^,DestIndexsDataAddr^,(CopyParam.EID.IndexsIndexMax-CopyParam.EID.IndexsIndexMin+1)*GeomData.Indexes.SizeOfData);
        end

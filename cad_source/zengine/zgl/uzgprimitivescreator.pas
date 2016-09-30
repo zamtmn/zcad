@@ -44,7 +44,7 @@ var
   ptt:PTLLTriangle;
 begin
   result:=pa.count;
-  ptt:=pa.AllocData(sizeof(TLLTriangle));
+  pointer(ptt):=pa.getDataMutable(pa.AllocData(sizeof(TLLTriangle)));
   ptt.init;
   ptt.P1Index:=P1Index;
 end;
@@ -53,7 +53,7 @@ var
   ptt:PTLLFreeTriangle;
 begin
   result:=pa.count;
-  ptt:=pa.AllocData(sizeof(TLLFreeTriangle));
+  pointer(ptt):=pa.getDataMutable(pa.AllocData(sizeof(TLLFreeTriangle)));
   ptt.init;
   ptt.P1IndexInIndexesArray:=ia.PushBackData(P1Index);
   ia.PushBackData(P2Index);
@@ -67,7 +67,7 @@ var
   pts:PTLLTriangleStrip;
 begin
   result:=pa.count;
-  pts:=pa.AllocData(sizeof(TLLTriangleStrip));
+  pointer(pts):=pa.getDataMutable(pa.AllocData(sizeof(TLLTriangleStrip)));
   pts.init;
 end;
 
@@ -76,7 +76,7 @@ var
   ptf:PTLLTriangleFan;
 begin
   result:=pa.count;
-  ptf:=pa.AllocData(sizeof(TLLTriangleFan));
+  pointer(ptf):=pa.getDataMutable(pa.AllocData(sizeof(TLLTriangleFan)));
   ptf.init;
 end;
 
@@ -85,7 +85,7 @@ var
    ptl:PTLLLine;
 begin
      result:=pa.count;
-     ptl:=pa.AllocData(sizeof(TLLLine));
+     pointer(ptl):=pa.getDataMutable(pa.AllocData(sizeof(TLLLine)));
      ptl.init;
      ptl.P1Index:=P1Index;
 end;
@@ -94,7 +94,7 @@ var
    ptpl:PTLLPolyLine;
 begin
      result:=pa.count;
-     ptpl:=pa.AllocData(sizeof(TLLPolyLine));
+     pointer(ptpl):=pa.getDataMutable(pa.AllocData(sizeof(TLLPolyLine)));
      ptpl.init;
      ptpl.P1Index:=P1Index;
      ptpl.Count:=_Count;
@@ -105,7 +105,7 @@ var
    ptp:PTLLPoint;
 begin
      result:=pa.count;
-     ptp:=pa.AllocData(sizeof(TLLPoint));
+     pointer(ptp):=pa.getDataMutable(pa.AllocData(sizeof(TLLPoint)));
      ptp.init;
      ptp.PIndex:=PIndex;
 end;
@@ -114,7 +114,7 @@ var
    ptsl:PTLLSymbolLine;
 begin
      result:=pa.count;
-     ptsl:=pa.AllocData(sizeof(TLLSymbolLine));
+     pointer(ptsl):=pa.getDataMutable(pa.AllocData(sizeof(TLLSymbolLine)));
      ptsl.init;
 end;
 function TLLPrimitivesCreator.CreateLLSymbol(var pa:TLLPrimitivesArray):TArrayIndex;
@@ -122,7 +122,7 @@ var
    pts:PTLLSymbol;
 begin
      result:=pa.count;
-     pts:=pa.AllocData(sizeof(TLLSymbol));
+     pointer(pts):=pa.getDataMutable(pa.AllocData(sizeof(TLLSymbol)));
      pts.init;
 end;
 function TLLPrimitivesCreator.CreateLLSymbolEnd(var pa:TLLPrimitivesArray):TArrayIndex;
@@ -130,7 +130,7 @@ var
    ptse:PTLLSymbolEnd;
 begin
      result:=pa.count;
-     ptse:=pa.AllocData(sizeof(TLLSymbolEnd));
+     pointer(ptse):=pa.getDataMutable(pa.AllocData(sizeof(TLLSymbolEnd)));
      ptse.init;
 end;
 initialization

@@ -438,35 +438,43 @@ PExtensionData=GDBPointer;
   TGDBPaletteColor=GDBInteger;
   TGDBPalette={$IFNDEF DELPHI}packed {$ENDIF}array[0..255] of TDXFCOLOR;
 //Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvector.pas
+{**Генерик объекта-массива}
 GZVector={$IFNDEF DELPHI}packed{$ENDIF}
             object(GDBaseObject)
                   
-                      
-                      
-                      
-                      
-                      
+                                                           //**< Тип указатель на тип данных T
+                                           //**< Тип массив данных T
+                                                     //**< Тип указатель на массив данных T
+                      //**< Тип функция идентичности T
+                             //**< Тип процедура принимающая указатель на T
                   
-                  PArray:GDBPointer;(*hidden_in_objinsp*)
-                  GUID:GDBString;(*hidden_in_objinsp*)
-                  Count:TArrayIndex;(*hidden_in_objinsp*)
-                  Max:TArrayIndex;(*hidden_in_objinsp*)
+                  PArray:GDBPointer;(*hidden_in_objinsp*)   //**< Указатель на массив данных
+                  GUID:GDBString;(*hidden_in_objinsp*)                  //**< Шняга для подсчета куда уходит память. используется только с DEBUGBUILD. Надо чтото ч ней делать
+                  Count:TArrayIndex;(*hidden_in_objinsp*)               //**< Количество занятых элементов массива
+                  Max:TArrayIndex;(*hidden_in_objinsp*)                 //**< Размер массива (под сколько элементов выделено памяти)
+                  {**Деструктор}
                   destructor done;virtual;abstract;
-                  //procedure freeelement(PItem:PT);virtual;abstract;
-                  //function AddByPointer(p:GDBPointer):TArrayIndex;virtual;abstract;
-                  function beginiterate(out ir:itrec):GDBPointer;virtual;abstract;
-                  function iterate(var ir:itrec):GDBPointer;virtual;abstract;
+                  {**Удаление элементов массива}
                   procedure free;virtual;abstract;
+                  {**Начало "перебора" элементов массива
+                    @param(ir переменная "итератор")
+                    @return(указатель на первый элемент массива)}
+                  function beginiterate(out ir:itrec):GDBPointer;virtual;abstract;
+                  {**"Перебор" элементов массива
+                    @param(ir переменная "итератор")
+                    @return(указатель на следующий элемент массива, nil если это конец)}
+                  function iterate(var ir:itrec):GDBPointer;virtual;abstract;
                   function SetCount(index:GDBInteger):GDBPointer;virtual;abstract;
+                  {**Инвертировать массив}
                   procedure Invert;
                   function copyto(var source:GZVector<T>):GDBInteger;virtual;abstract;
                   function GetRealCount:GDBInteger;
                   function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
                   function AllocData(SData:GDBword):GDBPointer;virtual;abstract;
                   {old}
-                  function deleteelement(index:GDBInteger):GDBPointer;
+                  function DeleteElement(index:GDBInteger):GDBPointer;
                   function DeleteElementByP(pel:GDBPointer):GDBPointer;
-                  function InsertElement(index{,dir}:GDBInteger;const data:T):GDBPointer;
+                  function InsertElement(index:GDBInteger;const data:T):GDBPointer;
                   {reworked}
                   procedure SetSize(nsize:TArrayIndex);
                   function getDataMutable(index:TArrayIndex):PT;
@@ -694,7 +702,7 @@ PGDBSelectedObjArray=^GDBSelectedObjArray;
 GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
                           SelectedCount:GDBInteger;
                           function addobject(PEntity:PGDBObjEntity):pselectedobjdesc;virtual;abstract;
-                          procedure clearallobjects;virtual;abstract;
+                          procedure free;virtual;abstract;
                           procedure remappoints(pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;abstract;
                           procedure drawpoint(var DC:TDrawContext;const GripSize:GDBInteger; const SelColor,UnSelColor:TRGB);virtual;abstract;
                           procedure drawobject(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;

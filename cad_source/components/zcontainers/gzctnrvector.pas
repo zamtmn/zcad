@@ -35,85 +35,98 @@ type
 {Export+}
 {**Генерик объекта-массива}
 GZVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
-            object(GDBaseObject)
-                  {-}type{//}
-                      {-}PT=^T;{//}                                     //**< Тип указатель на тип данных T
-                      {-}TArr=array[0..0] of T;{//}                     //**< Тип массив данных T
-                      {-}PTArr=^TArr;{//}                               //**< Тип указатель на массив данных T
-                      {-}TEqualFunc=function(const a, b: T):Boolean;{//}//**< Тип функция идентичности T
-                      {-}TProcessProc=procedure(const p: PT);{//}       //**< Тип процедура принимающая указатель на T
-                  {-}var{//}
-                  PArray:{-}PTArr{/GDBPointer/};(*hidden_in_objinsp*)   //**< Указатель на массив данных
-                  GUID:GDBString;(*hidden_in_objinsp*)                  //**< Шняга для подсчета куда уходит память. используется только с DEBUGBUILD. Надо чтото ч ней делать
-                  Count:TArrayIndex;(*hidden_in_objinsp*)               //**< Количество занятых элементов массива
-                  Max:TArrayIndex;(*hidden_in_objinsp*)                 //**< Размер массива (под сколько элементов выделено памяти)
+  object(GDBaseObject)
+    {-}type{//}
+        {-}PT=^T;{//}                                     //**< Тип указатель на тип данных T
+        {-}TArr=array[0..0] of T;{//}                     //**< Тип массив данных T
+        {-}PTArr=^TArr;{//}                               //**< Тип указатель на массив данных T
+        {-}TEqualFunc=function(const a, b: T):Boolean;{//}//**< Тип функция идентичности T
+        {-}TProcessProc=procedure(const p: PT);{//}       //**< Тип процедура принимающая указатель на T
+    {-}var{//}
+        PArray:{-}PTArr{/GDBPointer/};(*hidden_in_objinsp*)   //**< Указатель на массив данных
+        GUID:GDBString;(*hidden_in_objinsp*)                  //**< Шняга для подсчета куда уходит память. используется только с DEBUGBUILD. Надо чтото ч ней делать
+        Count:TArrayIndex;(*hidden_in_objinsp*)               //**< Количество занятых элементов массива
+        Max:TArrayIndex;(*hidden_in_objinsp*)                 //**< Размер массива (под сколько элементов выделено памяти)
 
-                  {**Деструктор}
-                  destructor done;virtual;
-                  {**Конструктор}
-                  constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
-                  {**Конструктор}
-                  constructor initnul;
+        {**Деструктор}
+        destructor done;virtual;
+        {**Конструктор}
+        constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
+        {**Конструктор}
+        constructor initnul;
 
-                  {**Удаление элементов массива}
-                  procedure free;virtual;
+        {**Удаление всех элементов массива}
+        procedure free;virtual;
 
-                  {**Начало "перебора" элементов массива
-                    @param(ir переменная "итератор")
-                    @return(указатель на первый элемент массива)}
-                  function beginiterate(out ir:itrec):GDBPointer;virtual;
-                  {**"Перебор" элементов массива
-                    @param(ir переменная "итератор")
-                    @return(указатель на следующий элемент массива, nil если это конец)}
-                  function iterate(var ir:itrec):GDBPointer;virtual;
+        {**Начало "перебора" элементов массива
+          @param(ir переменная "итератор")
+          @return(указатель на первый элемент массива)}
+        function beginiterate(out ir:itrec):GDBPointer;virtual;
+        {**"Перебор" элементов массива
+          @param(ir переменная "итератор")
+          @return(указатель на следующий элемент массива, nil если это конец)}
+        function iterate(var ir:itrec):GDBPointer;virtual;
 
-                  function SetCount(index:GDBInteger):GDBPointer;virtual;
-                  {**Инвертировать массив}
-                  procedure Invert;
-                  {**Копировать в массив}
-                  function copyto(var source:GZVector<T>):GDBInteger;virtual;
-                  {**Получить реальное колво элементов, в данном случае=count}
-                  function GetRealCount:GDBInteger;
-                  {**Выделяет место и копирует в массив SData элементов из PData. Надо compilermagic! соответствие с AllocData
-                    @PData(указатель на копируемые элементы)
-                    @SData(кол-во копируемых элементов)
-                    @return(индекс первого скопированного элемента в массиве)}
-                  function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
-                  {**Выделяет место в массиве под SData элементов. Надо compilermagic! соответствие с AddData
-                    @SData(кол-во копируемых элементов)
-                    @return(указатель на первый выделенный элемент в массиве)}
-                  function AllocData(SData:GDBword):GDBPointer;virtual;
+        function SetCount(index:GDBInteger):GDBPointer;virtual;
+        {**Инвертировать массив}
+        procedure Invert;
+        {**Копировать в массив}
+        function copyto(var source:GZVector<T>):GDBInteger;virtual;
+        {**Выделяет место и копирует в массив SData элементов из PData. Надо compilermagic! соответствие с AllocData
+          @PData(указатель на копируемые элементы)
+          @SData(кол-во копируемых элементов)
+          @return(индекс первого скопированного элемента в массиве)}
+        function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
+        {**Выделяет место в массиве под SData элементов. Надо compilermagic! соответствие с AddData
+          @SData(кол-во копируемых элементов)
+          @return(индекс первого выделенного элемента в массиве)}
+        function AllocData(SData:GDBword):GDBInteger;virtual;
 
 
-                  {old}
-                  function DeleteElement(index:GDBInteger):GDBPointer;
-                  function DeleteElementByP(pel:GDBPointer):GDBPointer;
-                  function InsertElement(index:GDBInteger;const data:T):GDBPointer;
+        {old}
+        {**Удалить элемент по индексу}
+        function DeleteElement(index:GDBInteger):GDBPointer;
+        {**Перевод указателя в индекс}
+        function P2I(pel:GDBPointer):GDBInteger;
+        {**Удалить элемент по указателю}
+        function DeleteElementByP(pel:GDBPointer):GDBPointer;
+        {**вставить элемент}
+        function InsertElement(index:GDBInteger;const data:T):GDBPointer;
 
-                  {reworked}
-                  procedure SetSize(nsize:TArrayIndex);
-                  function getDataMutable(index:TArrayIndex):PT;
-                  function getData(index:TArrayIndex):T;
-                  function PushBackData(const data:T):TArrayIndex;
-                  function PushBackIfNotPresentWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
-                  function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):GDBInteger;
-                  {**Возвращает тип элемента массива}
-                  function GetSpecializedTypeInfo:PTypeInfo;inline;
+        {need compilermagic}
+        procedure Grow(newmax:GDBInteger=0);virtual;
+        {**Выделяет память под массив}
+        function CreateArray:GDBPointer;virtual;
 
-                  {**Возвращает размер элемента массива}
-                  function SizeOfData:TArrayIndex;
-                  {**Возвращает указатель на массив}
-                  function GetParrayAsPointer:pointer;
-                  {**Выделяет память под массив}
-                  function CreateArray:GDBPointer;virtual;
-                  {**Очищает массив не убивая элементы, просто count:=0}
-                  procedure Clear;virtual;
-                  {**Возвращает колво элементов}
-                  function GetCount:GDBInteger;
-                  procedure Grow(newmax:GDBInteger=0);virtual;
-                  {**Подрезать выделенную память по count}
-                  procedure Shrink;virtual;
-            end;
+        {reworked}
+        {**Устанавливает длину массива}
+        procedure SetSize(nsize:TArrayIndex);
+        {**Возвращает указатель на значение по индексу}
+        function getDataMutable(index:TArrayIndex):PT;
+        {**Возвращает значение по индексу}
+        function getData(index:TArrayIndex):T;
+        {**Добавить в конец массива значение, возвращает индекс добавленного значения}
+        function PushBackData(const data:T):TArrayIndex;
+        {**Добавить в конец массива значение если его еще нет в массиве, возвращает индекс найденного или добавленного значения}
+        function PushBackIfNotPresentWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
+        {**Проверка нахождения в массиве значения с функцией сравнения}
+        function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):GDBInteger;
+        {**Возвращает тип элемента массива}
+        function GetSpecializedTypeInfo:PTypeInfo;inline;
+
+        {**Возвращает размер элемента массива}
+        function SizeOfData:TArrayIndex;
+        {**Возвращает указатель на массив}
+        function GetParrayAsPointer:pointer;
+        {**Очищает массив не убивая элементы, просто count:=0}
+        procedure Clear;virtual;
+        {**Возвращает реальное колво элементов, в данном случае=count}
+        function GetRealCount:GDBInteger;
+        {**Возвращает колво элементов}
+        function GetCount:GDBInteger;
+        {**Подрезать выделенную память по count}
+        procedure Shrink;virtual;
+  end;
 {Export-}
 implementation
 function GZVector<T>.GetSpecializedTypeInfo:PTypeInfo;
@@ -183,13 +196,13 @@ begin
                                                    end;
   result:=PushBackData(data);}
 end;
-function GZVector<T>.AllocData(SData:GDBword):GDBPointer;
+function GZVector<T>.AllocData(SData:GDBword):GDBInteger;
 begin
   if parray=nil then
                     createarray;
   if count+sdata>max then
                          Grow((count+sdata)*2);
-  result:=@parray^[count];
+  result:={@parray^[}count{]};
   //result:=pointer(GDBPlatformUInt(parray)+count*SizeOfData);
   {$IFDEF FILL0ALLOCATEDMEMORY}
   fillchar(result^,sdata,0);
@@ -436,19 +449,21 @@ begin
   end;
   result:=parray;
 end;
+function GZVector<T>.P2I(pel:GDBPointer):GDBInteger;
+begin
+  result:=PT(pel)-PT(parray);
+end;
 function GZVector<T>.DeleteElementByP;
 var
    s:integer;
 begin
-  //s:=(GDBPlatformUInt(parray)-GDBPlatformUInt(pel));
-  //s:=pbyte(parray)-pbyte(pel);
-  s:=PT(pel)-PT(parray);
+  deleteelement(p2i(pel));
+  {s:=PT(pel)-PT(parray);
   if s>=0 then
   begin
-    //s:=s div SizeOfData;
     deleteelement(s);
   end;
-  result:=parray;
+  result:=parray;}
 end;
 begin
 end.

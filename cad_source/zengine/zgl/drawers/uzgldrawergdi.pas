@@ -494,7 +494,7 @@ var
    pgdisymbol:PTLLGDISymbol;
 begin
      result:=pa.count;
-     pgdisymbol:=pa.AllocData(sizeof(TLLGDISymbol));
+     pointer(pgdisymbol):=pa.getDataMutable(pa.AllocData(sizeof(TLLGDISymbol)));
      pgdisymbol.init;
 end;
 procedure TLLGDISymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);

@@ -32,15 +32,8 @@ type
     worldraycoord: GDBVertex;
   end;
 GDBtracepropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<traceprop>{//})
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
              end;
 {Export-}
 implementation
-//uses
-//    log;
-constructor GDBtracepropArray.init;
-begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(traceprop)});
-end;
 begin
 end.

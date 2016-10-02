@@ -21,7 +21,7 @@ unit uzeentabstracttext;
 interface
 uses uzglviewareageneral,uzgldrawcontext,uzeentity,uzecamera,gzctnrvectorpobjects,
      uzbstrproc,sysutils,uzeentplainwithox,uzbtypesbase,UGDBSelectedObjArray,
-     uzbgeomtypes,uzbtypes,uzeconsts,uzegeometry,math;
+     UGDBOutbound2DIArray,uzbgeomtypes,uzbtypes,uzeconsts,uzegeometry,math;
 type
 //jstm(*'TopCenter'*)=2,
 {EXPORT+}
@@ -318,13 +318,13 @@ begin
            //pprojoutbound^.clear;
            //pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[0],tv);
-           pprojoutbound^.addgdbvertex(tv);
+           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[1],tv);
-           pprojoutbound^.addgdbvertex(tv);
+           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[2],tv);
-           pprojoutbound^.addgdbvertex(tv);
+           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[3],tv);
-           pprojoutbound^.addlastgdbvertex(tv);
+           pprojoutbound^.PushBackIfNotLastOrFirstWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
            //if (pprojoutbound^.count<4) then visible:=false;
            {if (projoutbound[0].x=projoutbound[1].x) and (projoutbound[0].y=projoutbound[1].y) then visible:=false;
            if (projoutbound[1].x=projoutbound[2].x) and (projoutbound[1].y=projoutbound[2].y) then visible:=false;

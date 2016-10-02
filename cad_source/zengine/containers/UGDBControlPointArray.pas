@@ -26,32 +26,17 @@ type
 PGDBControlPointArray=^GDBControlPointArray;
 GDBControlPointArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<controlpointdesc>{//})
                            SelectedCount:GDBInteger;
-                           constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 
                            destructor done;virtual;
                            procedure draw(var DC:TDrawContext;const SelColor,UnSelColor:TRGB);virtual;
                            procedure getnearesttomouse(var td:tcontrolpointdist;mx,my:integer);virtual;
                            procedure selectcurrentcontrolpoint(key:GDBByte;mx,my,h:integer);virtual;
-                           procedure freeelement(PItem:PT);virtual;
                      end;
 {Export-}
 implementation
-//uses log;
-procedure GDBControlPointArray.freeelement;
-begin
-  pcontrolpointdesc(PItem):=pcontrolpointdesc(PItem);
-end;
-constructor GDBControlPointArray.init;
-begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(controlpointdesc)})
-  {Count := 0;
-  Max := m;
-  Size := sizeof(controlpointdesc);
-  GDBGetMem(PArray, size * max);}
-end;
 destructor GDBControlPointArray.done;
 begin
-  GDBFreeMem(PArray);
+  destroy;
 end;
 procedure GDBControlPointArray.draw;
 var point:^controlpointdesc;

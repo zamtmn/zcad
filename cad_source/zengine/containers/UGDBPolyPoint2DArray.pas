@@ -24,21 +24,14 @@ type
 {Export+}
 PGDBPolyPoint2DArray=^GDBPolyPoint2DArray;
 GDBPolyPoint2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBPolyVertex2D>{//})
-                      constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-
                       //procedure DrawGeometry;virtual;
                       function InRect(Frame1, Frame2: GDBvertex2DI):TInBoundingVolume;virtual;
                       procedure freeelement(PItem:PT);virtual;
                 end;
 {Export-}
 implementation
-//uses {UGDBDescriptor,}log;
 procedure GDBPolyPoint2DArray.freeelement;
 begin
-end;
-constructor GDBPolyPoint2DArray.init;
-begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(GDBPolyVertex2D)});
 end;
 (*procedure GDBPolyPoint2DArray.drawgeometry;
 var p:PGDBPolyVertex2D;

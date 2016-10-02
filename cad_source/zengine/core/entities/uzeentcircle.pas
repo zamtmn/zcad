@@ -387,13 +387,13 @@ begin
            pprojoutbound^.clear;
            //pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[0],tv);
-           pprojoutbound^.addgdbvertex(tv);
+           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[1],tv);
-           pprojoutbound^.addgdbvertex(tv);
+           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[2],tv);
-           pprojoutbound^.addgdbvertex(tv);
+           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[3],tv);
-           pprojoutbound^.addlastgdbvertex(tv);
+           pprojoutbound^.PushBackIfNotLastOrFirstWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q0,pq0);
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q1,pq1);
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q2,pq2);

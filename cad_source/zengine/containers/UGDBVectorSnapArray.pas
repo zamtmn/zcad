@@ -26,19 +26,10 @@ PVectotSnap=^VectorSnap;
 VectorSnap=packed record
                  l_1_4,l_1_3,l_1_2,l_2_3,l_3_4:GDBvertex;
            end;
-PVectorSnapArray=^VectorSnapArray;
-VectorSnapArray=packed array [0..0] of VectorSnap;
 PGDBVectorSnapArray=^GDBVectorSnapArray;
 GDBVectorSnapArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<VectorSnap>{//})
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
              end;
 {Export-}
 implementation
-//uses
-//    log;
-constructor GDBVectorSnapArray.init;
-begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(VectorSnap)});
-end;
 begin
 end.

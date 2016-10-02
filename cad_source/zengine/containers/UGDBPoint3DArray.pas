@@ -26,8 +26,6 @@ type
 {Export+}
 PGDBPoint3dArray=^GDBPoint3dArray;
 GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBVertex>{//})(*OpenArrayOfData=GDBVertex*)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                constructor initnul;
                 function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
                 function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;
                 function CalcTrueInFrustum(frustum:ClipArray):TInBoundingVolume;virtual;
@@ -252,15 +250,6 @@ begin
                                        ptpv1:=GetParrayAsPointer;
      end;
    end;
-end;
-constructor GDBPoint3DArray.init;
-begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(gdbvertex)});
-end;
-constructor GDBPoint3DArray.initnul;
-begin
-  inherited initnul;
-  //size:=sizeof(gdbvertex);
 end;
 begin
 end.

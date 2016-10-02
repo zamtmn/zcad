@@ -50,6 +50,8 @@ GZVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
 
         {**Деструктор}
         destructor done;virtual;
+        {**Деструктор}
+        destructor destroy;virtual;
         {**Конструктор}
         constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
         {**Конструктор}
@@ -109,6 +111,10 @@ GZVector{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
         function PushBackData(const data:T):TArrayIndex;
         {**Добавить в конец массива значение если его еще нет в массиве, возвращает индекс найденного или добавленного значения}
         function PushBackIfNotPresentWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
+        {**Добавить в конец массива значение если оно еще не в конце массива, возвращает индекс найденного или добавленного значения}
+        function PushBackIfNotLastWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
+        {**Добавить в конец массива значение если оно еще не в конце массива или не в начале масива, возвращает индекс найденного или добавленного значения}
+        function PushBackIfNotLastOrFirstWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
         {**Проверка нахождения в массиве значения с функцией сравнения}
         function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):GDBInteger;
         {**Возвращает тип элемента массива}
@@ -183,6 +189,35 @@ begin
                                 exit;
                            end;
      result:=-1;
+end;
+function GZVector<T>.PushBackIfNotLastWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
+begin
+  if count>0 then
+  begin
+    if not EqualFunc(parray[count-1],data) then
+      result:=PushBackData(data)
+    else
+      result:=count-1;
+  end
+  else
+    result:=PushBackData(data);
+end;
+function GZVector<T>.PushBackIfNotLastOrFirstWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
+begin
+  if count>0 then
+  begin
+    if not EqualFunc(parray[count-1],data) then
+    begin
+      if not EqualFunc(parray[0],data) then
+        result:=PushBackData(data)
+      else
+        result:=0;
+    end
+    else
+      result:=count-1;
+  end
+  else
+    result:=PushBackData(data);
 end;
 function GZVector<T>.PushBackIfNotPresentWithCompareProc;
 begin
@@ -370,6 +405,10 @@ end;
 destructor GZVector<T>.done;
 begin
   free;
+  destroy;
+end;
+destructor GZVector<T>.destroy;
+begin
   if PArray<>nil then
                      GDBFreeMem(PArray);
   PArray:=nil;

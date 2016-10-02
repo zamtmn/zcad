@@ -85,6 +85,7 @@ type Intercept3DProp=record
                     t,d:GDBDouble;
               end;
      TCSDir=(TCSDLeft,TCSDRight);
+function ToVertex2DI(const V:GDBVertex):GDBVertex2DI;
 function CrossVertex(const Vector1, Vector2: GDBVertex): GDBVertex;inline;
 function VertexD2S(const Vector1:GDBVertex): GDBVertex3S;inline;
 function intercept2d(const x1, y1, x2, y2, x3, y3, x4, y4: GDBDouble): GDBBoolean;inline;
@@ -233,7 +234,11 @@ var WorldMatrix{,CurrentCS}:DMatrix4D;
 type
     TLineClipArray=array[0..5]of gdbdouble;
 implementation
-//uses {uzcshared,}log;
+function ToVertex2DI(const V:GDBVertex):GDBVertex2DI;
+begin
+  result.x:=round(V.x);
+  result.y:=round(V.y);
+end;
 function myPickMatrix(const x,y,deltax,deltay:gdbdouble;const vp:IMatrix4): DMatrix4D;
 var
   tm,sm: DMatrix4D;

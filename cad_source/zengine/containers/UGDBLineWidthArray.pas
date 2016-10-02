@@ -24,22 +24,9 @@ type
 {REGISTEROBJECTTYPE GDBLineWidthArray}
 {Export+}
 GDBLineWidthArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GLLWWidth>{//})(*OpenArrayOfData=GLLWWidth*)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                constructor initnul;
              end;
 {Export-}
 implementation
-//uses
-//    log;
-constructor GDBLineWidthArray.init;
-begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(GLLWWidth)});
-end;
-constructor GDBLineWidthArray.initnul;
-begin
-  inherited initnul;
-  //size:=sizeof(GLLWWidth);
-end;
 begin
 end.
 

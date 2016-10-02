@@ -27,7 +27,6 @@ PGDBPolyline2DArray=^GDBPolyline2DArray;
 GDBPolyline2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBVertex2D>{//})(*OpenArrayOfData=GDBVertex2D*)
                       closed:GDBBoolean;(*saved_to_shd*)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger;c:GDBBoolean);
-                      constructor initnul;
 
                       //function onmouse(mc:GDBvertex2DI):GDBBoolean;virtual;
                       procedure optimize;virtual;
@@ -147,14 +146,10 @@ begin
     result:=((c mod 2)=1);
 end;
 
-constructor GDBPolyline2DArray.initnul;
-begin
-  inherited initnul;
-  //size:=sizeof(GDBVertex2D);
-end;
 constructor GDBPolyline2DArray.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(GDBVertex2D)});
+  closed:=c;
 end;
 function GDBPolyline2DArray.inrect;
 var p,pp:PGDBVertex2D;

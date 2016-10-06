@@ -23,9 +23,12 @@ type
                TCT_Sila(*'Силовой'*)
               );
 {Export+}
+
 PTNodeProp=^TNodeProp;
 TNodeProp=packed record
+                //**Точка в котором кабель был усечен устройством исчез и появился
                 PrevP,NextP:GDBVertex;
+                //**Устройство коннектор которого попадает в узел кабеля
                 DevLink:PGDBObjDevice;
           end;
 TNodePropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<TNodeProp>{//})
@@ -33,6 +36,9 @@ end;
 
 PGDBObjCable=^GDBObjCable;
 GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
+                 {**Список устройств DevLink коннектор которых попадает в узел кабеля,
+                    а так же показывается PrevP,NextP точка в котором кабель был усечен устройством
+                    и точка в которой появился**}
                  NodePropArray:TNodePropArray;(*hidden_in_objinsp*)
                  str11:GDBVertex;(*hidden_in_objinsp*)
                  str12:GDBVertex;(*hidden_in_objinsp*)

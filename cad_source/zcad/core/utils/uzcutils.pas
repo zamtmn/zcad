@@ -131,7 +131,7 @@ begin
   pb^.BuildVarGeometry(drawings.GetCurrentDWG^);
   DC:=drawings.GetCurrentDWG^.CreateDrawingRC;
   pb^.formatEntity(drawings.GetCurrentDWG^,dc);
-  owner.ObjArray.ObjTree.CorrectNodeTreeBB(pb^);
+  owner.ObjArray.ObjTree.CorrectNodeBoundingBox(pb^);
   result:=pb;
 end;
 procedure zcAddEntToDrawingWithUndo(const PEnt:PGDBObjEntity;var Drawing:TZCADDrawing);
@@ -240,7 +240,7 @@ begin
   result^.FormatEntity(drawings.GetCurrentDWG^,dc);
   if needundo then
   begin
-  drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(result^);
+  drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(result^);
   result^.Visible:=0;
   result^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
   end;

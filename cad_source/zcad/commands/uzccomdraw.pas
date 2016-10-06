@@ -785,7 +785,7 @@ begin
     end;
 
     nb^.Formatentity(drawings.GetCurrentDWG^,dc);
-    drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(nb^);
+    drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(nb^);
     nb^.Visible:=0;
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
     nb^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
@@ -2177,7 +2177,7 @@ begin
     pb^.BuildGeometry(drawings.GetCurrentDWG^);
     pb^.BuildVarGeometry(drawings.GetCurrentDWG^);
     pb^.FormatEntity(drawings.GetCurrentDWG^,dc);
-    drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(pb^);
+    drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(pb^);
     pb^.Visible:=0;
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
     pb^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
@@ -3213,7 +3213,7 @@ begin
     p3dpl^.AddVertex(wc);
     p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
     //drawings.GetCurrentROOT^.ObjArray.ObjTree.AddObjectToNodeTree(p3dpl);
-    //drawings.GetCurrentROOT^.ObjArray.ObjTree.{AddObjectToNodeTree(p3dpl)}CorrectNodeTreeBB(p3dpl);   vbnvbn
+    //drawings.GetCurrentROOT^.ObjArray.ObjTree.{AddObjectToNodeTree(p3dpl)}CorrectNodeBoundingBox(p3dpl);   vbnvbn
     //drawings.GetCurrentROOT^.AddObjectToObjArray(addr(p3dpl));
     if assigned(SetGDBObjInspProc)then
     SetGDBObjInspProc(drawings.GetUndoStack,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('GDBObjPolyline'),p3dpl,drawings.GetCurrentDWG);
@@ -3264,7 +3264,7 @@ begin
     //p3dpl^.AddVertex(wc);
     p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
     p3dpl^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
-    //drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
+    //drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(p3dpl);
     //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
     result:=1;
     zcRedrawCurrentDrawing;
@@ -3561,7 +3561,7 @@ begin
                                         p3dpl^.VertexArrayInOCS.InsertElement(p3dpl^.VertexArrayInOCS.Count,{1,}_tv);
                                         p3dpl2^.Formatentity(drawings.GetCurrentDWG^,dc);
                                         p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
-                                        drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl2^);
+                                        drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(p3dpl2^);
                                         end
                                     else
                                     begin
@@ -3583,7 +3583,7 @@ begin
                                            end;
                                          p3dpl2^.Formatentity(drawings.GetCurrentDWG^,dc);
                                          p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
-                                         drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl2^);
+                                         drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(p3dpl2^);
                                     end
 
        end;

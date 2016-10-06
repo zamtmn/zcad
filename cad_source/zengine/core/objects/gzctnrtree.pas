@@ -34,10 +34,10 @@ TTreeStatistik=record
                end;
 {EXPORT+}
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);
-         GZBInarySeparatedGeometry{-}<TBoundingBox,TSeparator,TNodeData,TEntsManipulator>{//}
+         GZBInarySeparatedGeometry{-}<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>{//}
                          ={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                          {-}type{//}
-                            {-}PGZBInarySeparatedGeometry=^GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator>;{//}
+                            {-}PGZBInarySeparatedGeometry=^GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>;{//}
                          {-}var{//}
                          Separator:TSeparator;
                          BoundingBox:TBoundingBox;
@@ -51,12 +51,49 @@ TTreeStatistik=record
                          procedure Clear;
                          constructor initnul;
                          procedure DrawVolume(var DC:TDrawContext);
+                         procedure AddObjToNul(var Entity:TEntity);
+                         procedure updateenttreeadress;
+                         procedure CorrectNodeBoundingBox(var Entity:TEntity);
+                         procedure AddObjectToNodeTree(var Entity:TEntity);
                          end;
 {EXPORT-}
 function MakeTreeStatisticRec(treedepth:integer):TTreeStatistik;
 procedure KillTreeStatisticRec(var tr:TTreeStatistik);
 implementation
-procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator>.DrawVolume;
+procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>.AddObjectToNodeTree(var Entity:TEntity);
+begin
+    AddObjToNul(Entity);
+    CorrectNodeBoundingBox(Entity);
+end;
+procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>.CorrectNodeBoundingBox(var Entity:TEntity);
+begin
+     TEntsManipulator.CorrectNodeBoundingBox(BoundingBox,Entity);
+end;
+procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>.updateenttreeadress;
+var pobj:^TEntity;
+    ir:itrec;
+begin
+     pobj:=nul.beginiterate(ir);
+     if pobj<>nil then
+     repeat
+           TEntsManipulator.StoreTreeAdressInOnject(pobj^,self,ir.itc);
+           {pobj^.bp.TreePos.Owner:=@self;
+           pobj^.bp.TreePos.SelfIndex:=ir.itc;}
+
+           pobj:=nul.iterate(ir);
+     until pobj=nil;
+end;
+procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>.AddObjToNul(var Entity:TEntity);
+var
+   index:integer;
+begin
+     index:=nul.PushBackData(@Entity);
+     TEntsManipulator.StoreTreeAdressInOnject(Entity,self,index);
+     {Entity.bp.TreePos.Owner:=@self;
+     Entity.bp.TreePos.SelfIndex:=index;}
+end;
+
+procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>.DrawVolume;
 begin
      if assigned(pplusnode) then
                        pplusnode^.DrawVolume(dc);
@@ -64,17 +101,17 @@ begin
                        pminusnode^.DrawVolume(dc);
      TEntsManipulator.DrawNodeVolume(BoundingBox,dc);
 end;
-constructor GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator>.initnul;
+constructor GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>.initnul;
 begin
      nul.init({$IFDEF DEBUGBUILD}'TEntTreeNode.nul',{$ENDIF}50);
      NodeData:=default(TNodeData);
      //NodeData.FulDraw:={True}TDTFulDraw;
 end;
-procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator>.Clear;
+procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>.Clear;
 begin
      clearsub;
 end;
-procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator>.ClearSub;
+procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>.ClearSub;
 begin
      nul.Clear;
      if assigned(pplusnode) then
@@ -88,7 +125,7 @@ begin
                                      gdbfreemem(pointer(pminusnode));
                                 end;
 end;
-destructor GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator>.done;
+destructor GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>.done;
 begin
      ClearSub;
      nul.done;

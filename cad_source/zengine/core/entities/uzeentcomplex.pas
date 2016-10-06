@@ -175,7 +175,8 @@ begin
   end;
   inc(dc.subrender);
   //ConstObjArray.DrawWithattrib(dc{infrustumactualy,subrender)}{DrawGeometry(CalculateLineWeight});
-  ConstObjArray.ObjTree.treerender(dc);
+  TZEntsManipulator.treerender(ConstObjArray.ObjTree,dc);
+  //ConstObjArray.ObjTree.treerender(dc);
       if DC.SystmGeometryDraw then
                                   ConstObjArray.ObjTree.DrawVolume(dc);
   dec(dc.subrender);

@@ -25,9 +25,6 @@ uses
 const
      IninialNodeDepth=-1;
 type
-TZEntsManipulator=class
-                   class procedure DrawNodeVolume(const BoundingBox:TBoundingBox;var DC:TDrawContext);
-                  end;
 {EXPORT+}
 TDrawType=(TDTFulDraw,TDTSimpleDraw);
 TEntTreeNodeData=record
@@ -37,13 +34,16 @@ TEntTreeNodeData=record
                      nodedepth:GDBInteger;
                      pluscount,minuscount:GDBInteger;
                  end;
+         TZEntsManipulator=class
+                            class procedure DrawNodeVolume(const BoundingBox:TBoundingBox;var DC:TDrawContext);
+                            class procedure StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>;const index:GDBInteger);
+                            class procedure CorrectNodeBoundingBox(var NodeBB:TBoundingBox;var Entity:GDBObjEntity);
+
+                            {not used in generic, for external use}
+                            class procedure treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>;var DC:TDrawContext);
+                           end;
          PTEntTreeNode=^TEntTreeNode;
-         TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator>{//})
-                            procedure updateenttreeadress;
-                            procedure AddObjToNul(var Entity:GDBObjEntity);
-                            procedure AddObjectToNodeTree(var Entity:GDBObjEntity);
-                            procedure CorrectNodeTreeBB(var Entity:GDBObjEntity);
-                            procedure treerender(var DC:TDrawContext);
+         TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>{//})
                             procedure MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox);
                       end;
 {EXPORT-}
@@ -61,71 +61,54 @@ function createtree(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;
                     PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;
                     dir:TNodeDir):PTEntTreeNode;
 function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
-//procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext);
 implementation
+class procedure TZEntsManipulator.treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>;var DC:TDrawContext);
+begin
+     begin
+       if (Node.NodeData.infrustum=dc.DrawingContext.InfrustumActualy) then
+       begin
+            if Node.NodeData.FulDraw=TDTFulDraw then
+            if (Node.NodeData.FulDraw=TDTFulDraw)or(Node.nul.count=0) then
+            begin
+            if assigned(Node.pminusnode)then
+                                            if (Node.NodeData.minusdrawpos<>dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then
+                                            begin
+                                                 treerender(Node.pminusnode^,dc);
+                                                 //PTEntTreeNode(Node.pminusnode)^.treerender(dc);
+                                                 Node.NodeData.minusdrawpos:=dc.DrawingContext.DRAWCOUNT
+                                            end;
+            if assigned(Node.pplusnode)then
+                                           if (Node.NodeData.plusdrawpos<>dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then
+                                           begin
+                                                treerender(Node.pplusnode^,dc);
+                                                //PTEntTreeNode(Node.pplusnode)^.treerender(dc);
+                                                Node.NodeData.plusdrawpos:=dc.DrawingContext.DRAWCOUNT
+                                           end;
+            end;
+            begin
+                 if (Node.NodeData.FulDraw=TDTFulDraw)or(dc.MaxDetail) then
+                                                                      Node.nul.DrawWithattrib(dc);
+                 Node.NodeData.nuldrawpos:=dc.DrawingContext.DRAWCOUNT;
+            end;
+       end;
+     end;
+end;
 class procedure TZEntsManipulator.DrawNodeVolume(const BoundingBox:TBoundingBox;var DC:TDrawContext);
 begin
   dc.drawer.DrawAABB3DInModelSpace(BoundingBox,dc.DrawingContext.matrixs);
 end;
-
+class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>;const index:GDBInteger);
+begin
+  Entity.bp.TreePos.Owner:=@Node;
+  Entity.bp.TreePos.SelfIndex:=index;
+end;
+class procedure TZEntsManipulator.CorrectNodeBoundingBox(var NodeBB:TBoundingBox;var Entity:GDBObjEntity);
+begin
+     ConcatBB(NodeBB,Entity.vp.BoundingBox);
+end;
 procedure TEntTreeNode.MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox);
 begin
      createtree(entitys,AABB,@self,IninialNodeDepth,nil,TND_Root);
-end;
-
-procedure TEntTreeNode.treerender(var DC:TDrawContext);
-begin
-  if (NodeData.infrustum=dc.DrawingContext.InfrustumActualy) then
-  begin
-       if NodeData.FulDraw=TDTFulDraw then
-       if (NodeData.FulDraw=TDTFulDraw)or(nul.count=0) then
-       begin
-       if assigned(pminusnode)then
-                                       if (NodeData.minusdrawpos<>dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then
-                                       begin
-                                            PTEntTreeNode(pminusnode)^.treerender(dc);
-                                            NodeData.minusdrawpos:=dc.DrawingContext.DRAWCOUNT
-                                       end;
-       if assigned(pplusnode)then
-                                      if (NodeData.plusdrawpos<>dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then
-                                      begin
-                                           PTEntTreeNode(pplusnode)^.treerender(dc);
-                                           NodeData.plusdrawpos:=dc.DrawingContext.DRAWCOUNT
-                                      end;
-       end;
-       begin
-            if (NodeData.FulDraw=TDTFulDraw)or(dc.MaxDetail) then
-                                                                 nul.DrawWithattrib(dc);
-            NodeData.nuldrawpos:=dc.DrawingContext.DRAWCOUNT;
-       end;
-  end;
-end;
-procedure TEntTreeNode.CorrectNodeTreeBB(var Entity:GDBObjEntity);
-begin
-     ConcatBB(BoundingBox,Entity.vp.BoundingBox);
-end;
-procedure TEntTreeNode.AddObjectToNodeTree(var Entity:GDBObjEntity);
-begin
-    AddObjToNul(Entity);
-    CorrectNodeTreeBB(Entity);
-end;
-procedure TEntTreeNode.AddObjToNul(var Entity:GDBObjEntity);
-begin
-     Entity.bp.TreePos.Owner:=@self;
-     Entity.bp.TreePos.SelfIndex:=nul.PushBackData(@Entity);
-end;
-procedure TEntTreeNode.updateenttreeadress;
-var pobj:PGDBObjEntity;
-    ir:itrec;
-begin
-     pobj:=nul.beginiterate(ir);
-     if pobj<>nil then
-     repeat
-           pobj^.bp.TreePos.Owner:=@self;
-           pobj^.bp.TreePos.SelfIndex:=ir.itc;
-
-           pobj:=nul.iterate(ir);
-     until pobj=nil;
 end;
 constructor TTestTreeNode.initnul;
 begin

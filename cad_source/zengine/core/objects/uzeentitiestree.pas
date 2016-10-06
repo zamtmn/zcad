@@ -40,9 +40,9 @@ TEntTreeNodeData=record
          PTEntTreeNode=^TEntTreeNode;
          TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator>{//})
                             procedure updateenttreeadress;
-                            procedure addtonul(p:PGDBObjEntity);
-                            procedure AddObjectToNodeTree(pobj:PGDBObjEntity);
-                            procedure CorrectNodeTreeBB(pobj:PGDBObjEntity);
+                            procedure AddObjToNul(var Entity:GDBObjEntity);
+                            procedure AddObjectToNodeTree(var Entity:GDBObjEntity);
+                            procedure CorrectNodeTreeBB(var Entity:GDBObjEntity);
                             procedure treerender(var DC:TDrawContext);
                             procedure MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox);
                       end;
@@ -100,19 +100,19 @@ begin
        end;
   end;
 end;
-procedure TEntTreeNode.CorrectNodeTreeBB(pobj:PGDBObjEntity);
+procedure TEntTreeNode.CorrectNodeTreeBB(var Entity:GDBObjEntity);
 begin
-     ConcatBB(BoundingBox,pobj^.vp.BoundingBox);
+     ConcatBB(BoundingBox,Entity.vp.BoundingBox);
 end;
-procedure TEntTreeNode.AddObjectToNodeTree(pobj:PGDBObjEntity);
+procedure TEntTreeNode.AddObjectToNodeTree(var Entity:GDBObjEntity);
 begin
-    addtonul(pobj);
-    CorrectNodeTreeBB(pobj);
+    AddObjToNul(Entity);
+    CorrectNodeTreeBB(Entity);
 end;
-procedure TEntTreeNode.addtonul(p:PGDBObjEntity);
+procedure TEntTreeNode.AddObjToNul(var Entity:GDBObjEntity);
 begin
-     p^.bp.TreePos.Owner:=@self;
-     p^.bp.TreePos.SelfIndex:=nul.PushBackData(p);
+     Entity.bp.TreePos.Owner:=@self;
+     Entity.bp.TreePos.SelfIndex:=nul.PushBackData(@Entity);
 end;
 procedure TEntTreeNode.updateenttreeadress;
 var pobj:PGDBObjEntity;

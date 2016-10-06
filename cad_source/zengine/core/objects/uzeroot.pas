@@ -177,7 +177,7 @@ begin
              if p^.bp.TreePos.Owner<>nil then
              begin
                   self.ObjArray.RemoveFromTree(p);
-                  self.ObjArray.ObjTree.AddObjectToNodeTree(p);
+                  self.ObjArray.ObjTree.AddObjectToNodeTree(p^);
              end;
             p:=ObjCasheArray.iterate(ir);
        until p=nil;

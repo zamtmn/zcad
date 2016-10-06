@@ -18,7 +18,7 @@ type
     PTCableDesctiptor=^TCableDesctiptor;
     TCableDesctiptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                      Name:GDBString;
-                     Segments:TZctnrVectorPGDBaseObjects;
+                     Segments:TZctnrVectorPGDBaseObjects;   // сборщик всех кабелей с одинаковым именем (ШС..)
                      StartDevice,EndDevice:PGDBObjDevice;
                      StartSegment:PGDBObjCable;
                      Devices:TZctnrVectorPGDBaseObjects;
@@ -67,6 +67,7 @@ begin
      Segments.done;
      //inherited;
 end;
+
 procedure TCableManager.build;
 var pobj,pobj2:PGDBObjCable;
     ir,ir2,ir3:itrec;
@@ -82,33 +83,36 @@ var pobj,pobj2:PGDBObjCable;
     lastadddevice:PGDBObjDevice;
     pentvarext,pentvarext2:PTVariablesExtender;
 begin
-     pobj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+     //** Создание списка всех кабелей по их имени + дополнительно собирается длина кабеля
+     pobj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir); //выбрать первый элемент чертежа
      if pobj<>nil then
-     repeat
-           if pobj^.GetObjType=GDBCableID then
+     repeat                                                   //перебор всех элементов чертежа
+           if pobj^.GetObjType=GDBCableID then                //работа только с кабелями
            begin
-                pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));
+                pentvarext:=pobj^.GetExtension(typeof(TVariablesExtender));   //получаем доступ к РТТИ что бы можно было просматривать что на заполнял пользователь
                 //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
-                pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');
+                pvn:=pentvarext^.entityunit.FindVariable('NMO_Name');      //находим обозначение кабеля (ШС2)
                 if pvn<>nil then
                                 sname:=pgdbstring(pvn^.data.Instance)^
                             else
                                 sname:=UnNamedCable;
                 if sname='RS' then
                                sname:=sname;
-                pcd:=FindOrCreate(sname);
-                pcd^.Segments.PushBackData(pobj);
+                pcd:=FindOrCreate(sname);                                         //поиск или создание нового элемента в списки. Если такое имя в списке есть, то возвращает указатель на него, если нет то создает новый.
+                pcd^.Segments.PushBackData(pobj);                                 //добавляем к сегменту новый кабель
                 //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('AmountD');
-                pvn:=pentvarext^.entityunit.FindVariable('AmountD');
+                pvn:=pentvarext^.entityunit.FindVariable('AmountD');              //получаем длину кабеля
                 if pvn<>nil then
-                                pcd^.length:=pcd^.length+pgdbdouble(pvn^.data.Instance)^;
+                                pcd^.length:=pcd^.length+pgdbdouble(pvn^.data.Instance)^; //доюавляем к шлейфу общую длину
            end;
-           pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+           pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);    //следующий элемент в списке чертежа
      until pobj=nil;
-     pcd:=beginiterate(ir2);
+
+     pcd:=beginiterate(ir2);         //перебираем полученый список разноименных кабелей
      if pcd<>nil then
      repeat
-           if pcd^.Segments.Count>1 then
+           ///****сортировка внутри кабельного контейнера, по возрастанию сегмента кабеля забитого пользователем ***///
+           if pcd^.Segments.Count>1 then       //более одного кабеля с таким именим
            begin
                 repeat
                 itsok:=true;
@@ -144,10 +148,16 @@ begin
                 until pobj=nil;
                 until itsok;
            end;
-                lastadddevice:=nil;
-                pobj:=pcd^.Segments.beginiterate(ir);
-                pcd^.StartSegment:=pobj;
-                      pnp:=pobj^.NodePropArray.beginiterate(ir3);
+           ///***сортировка закончина***///
+
+           {***Заполнение кабелей, а именно какой кабель какие девайсы подключает с учетом стойков.
+                формирует стартовый девайc и конечный.
+                А так же список всех девайсов на данном шлейфе
+                от себя плохо понял как работает это место***}
+                lastadddevice:=nil;                                      // промежуточная переменная
+                pobj:=pcd^.Segments.beginiterate(ir);                    // перебераем кабели, одного шлейфа
+                pcd^.StartSegment:=pobj;                                 // присваеваем что это первый кабель
+                      pnp:=pobj^.NodePropArray.beginiterate(ir3);        // список, устройств подключеных к кабелю.
                       pcd^.StartDevice:=pnp^.DevLink;
                 if pobj<>nil then
                 repeat
@@ -187,24 +197,27 @@ begin
                 until pobj=nil;
            pcd:=iterate(ir2);
      until pcd=nil;
+     //****************сбор данных заполнения кабелей закончен**********//
 
+     //**********сортировка шлейфов по возврастанию, от ШС1..ШС9,ШС10..ШСх
      repeat
-     sorted:=false;
-     prevpcd:=beginiterate(ir2);
-     pcd:=iterate(ir2);
-     if (prevpcd<>nil)and(pcd<>nil) then
-     repeat
-           if {CompareNUMSTR}AnsiNaturalCompare(prevpcd^.Name,pcd^.Name)>0 then
-                                          begin
-                                               tcd:=prevpcd^;
-                                               prevpcd^:=pcd^;
-                                               pcd^:=tcd;
-                                               sorted:=true;
-                                          end;
-           prevpcd:=pcd;
-           pcd:=iterate(ir2);
-     until pcd=nil;
+       sorted:=false;
+       prevpcd:=beginiterate(ir2);
+       pcd:=iterate(ir2);
+       if (prevpcd<>nil)and(pcd<>nil) then
+       repeat
+             if {CompareNUMSTR}AnsiNaturalCompare(prevpcd^.Name,pcd^.Name)>0 then
+                                            begin
+                                                 tcd:=prevpcd^;
+                                                 prevpcd^:=pcd^;
+                                                 pcd^:=tcd;
+                                                 sorted:=true;
+                                            end;
+             prevpcd:=pcd;
+             pcd:=iterate(ir2);
+       until pcd=nil;
      until not sorted;
+     //*****************сортировка шлейфов окончена*************//
 
      {pcd:=beginiterate(ir2);
      if (pcd<>nil) then

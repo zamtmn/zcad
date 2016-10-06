@@ -1457,7 +1457,7 @@ begin
           begin
                p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
                p3dpl^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-               drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
+               drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl^);
                if i<>pvr.Count-1 then
                p3dpl := GDBPointer(drawings.GetCurrentROOT.ObjArray.CreateInitObj(GDBPolylineID,drawings.GetCurrentROOT));
                p3dpl.Closed:=true;
@@ -1467,7 +1467,7 @@ begin
 
      p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
      p3dpl^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-     drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
+     drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl^);
      //redrawoglwnd;
 end;
 

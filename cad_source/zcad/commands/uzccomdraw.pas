@@ -785,7 +785,7 @@ begin
     end;
 
     nb^.Formatentity(drawings.GetCurrentDWG^,dc);
-    drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(nb);
+    drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(nb^);
     nb^.Visible:=0;
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
     nb^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
@@ -2177,7 +2177,7 @@ begin
     pb^.BuildGeometry(drawings.GetCurrentDWG^);
     pb^.BuildVarGeometry(drawings.GetCurrentDWG^);
     pb^.FormatEntity(drawings.GetCurrentDWG^,dc);
-    drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
+    drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(pb^);
     pb^.Visible:=0;
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
     pb^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
@@ -3561,7 +3561,7 @@ begin
                                         p3dpl^.VertexArrayInOCS.InsertElement(p3dpl^.VertexArrayInOCS.Count,{1,}_tv);
                                         p3dpl2^.Formatentity(drawings.GetCurrentDWG^,dc);
                                         p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
-                                        drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl2);
+                                        drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl2^);
                                         end
                                     else
                                     begin
@@ -3583,7 +3583,7 @@ begin
                                            end;
                                          p3dpl2^.Formatentity(drawings.GetCurrentDWG^,dc);
                                          p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
-                                         drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl2);
+                                         drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl2^);
                                     end
 
        end;

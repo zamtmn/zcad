@@ -53,7 +53,7 @@ end;
 function GDBObjEntityTreeArray.AddPEntity;
 begin
   result:=inherited AddPEntity(entity);
-  ObjTree.AddObjectToNodeTree(@entity);
+  ObjTree.AddObjectToNodeTree(entity);
   {result:=inherited PushBackPointerToEntity(p);
   ObjTree.AddObjectToNodeTree(PGDBObjEntity(p^));}
   //result:=inherited PushBackPointerToEntity({ppointer(p)^}@entity);

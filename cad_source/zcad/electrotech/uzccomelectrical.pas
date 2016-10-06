@@ -1650,7 +1650,7 @@ begin
           {p3dpl^.AddVertex(wc);}
           p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
           p3dpl^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-          drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl^);
+          drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(p3dpl^);
     end
 else begin
           plastw:=p3dpl^.VertexArrayInWCS.getDataMutable(p3dpl^.VertexArrayInWCS.Count-1);
@@ -1688,7 +1688,7 @@ else begin
                        end;*)
         p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
         p3dpl^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-        drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl^);
+        drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(p3dpl^);
      end;
     drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     result:=1;
@@ -2924,13 +2924,13 @@ begin
                  pvd:=cable.ou.FindVariable('CABLE_AutoGen');
                  pgdbboolean(pvd^.data.Instance)^:=true;}
 
-                 drawings.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(cable)}CorrectNodeTreeBB(cable^);
+                 drawings.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(cable)}CorrectNodeBoundingBox(cable^);
 
                  rootbytrace(startdev.P_insert_in_WCS,enddev.P_insert_in_WCS,net,Cable,true);
 
                  Cable^.Formatentity(drawings.GetCurrentDWG^,dc);
                  Cable^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-                 drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(Cable^);
+                 drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(Cable^);
                  end;
 
                  end;
@@ -3076,7 +3076,7 @@ begin
                           pvd:=cable.ou.FindVariable('CABLE_AutoGen');
                           pgdbboolean(pvd^.data.Instance)^:=true;}
 
-                          drawings.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(cable)}CorrectNodeTreeBB(cable^);
+                          drawings.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(cable)}CorrectNodeBoundingBox(cable^);
 
                           //log.LogOut('Примитивов в графе: '+inttostr(supernet^.objarray.count));
 
@@ -3084,7 +3084,7 @@ begin
 
                           Cable^.Formatentity(drawings.GetCurrentDWG^,dc);
                           Cable^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-                          drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(Cable^);
+                          drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(Cable^);
 
                           cable:=segments.beginiterate(ir_net);
                           if (cable<>nil) then
@@ -3092,7 +3092,7 @@ begin
 
                                 Cable^.Formatentity(drawings.GetCurrentDWG^,dc);
                                 Cable^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-                                drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(Cable^);
+                                drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(Cable^);
 
                           cable:=segments.iterate(ir_net);
                           until cable=nil;

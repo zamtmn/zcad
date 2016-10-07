@@ -34,6 +34,7 @@ TTreeStatistik=record
                end;
 {EXPORT+}
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);
+         TElemPosition=(TEP_Plus,TEP_Minus,TEP_nul);
          GZBInarySeparatedGeometry{-}<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>{//}
                          ={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                          {-}type{//}

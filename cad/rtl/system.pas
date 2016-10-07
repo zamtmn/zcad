@@ -440,59 +440,95 @@ PExtensionData=GDBPointer;
 //Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvector.pas
 {**Генерик объекта-массива}
 GZVector={$IFNDEF DELPHI}packed{$ENDIF}
-            object(GDBaseObject)
-                  
-                                                           //**< Тип указатель на тип данных T
-                                           //**< Тип массив данных T
-                                                     //**< Тип указатель на массив данных T
-                      //**< Тип функция идентичности T
-                             //**< Тип процедура принимающая указатель на T
-                  
-                  PArray:GDBPointer;(*hidden_in_objinsp*)   //**< Указатель на массив данных
-                  GUID:GDBString;(*hidden_in_objinsp*)                  //**< Шняга для подсчета куда уходит память. используется только с DEBUGBUILD. Надо чтото ч ней делать
-                  Count:TArrayIndex;(*hidden_in_objinsp*)               //**< Количество занятых элементов массива
-                  Max:TArrayIndex;(*hidden_in_objinsp*)                 //**< Размер массива (под сколько элементов выделено памяти)
-                  {**Деструктор}
-                  destructor done;virtual;abstract;
-                  {**Удаление элементов массива}
-                  procedure free;virtual;abstract;
-                  {**Начало "перебора" элементов массива
-                    @param(ir переменная "итератор")
-                    @return(указатель на первый элемент массива)}
-                  function beginiterate(out ir:itrec):GDBPointer;virtual;abstract;
-                  {**"Перебор" элементов массива
-                    @param(ir переменная "итератор")
-                    @return(указатель на следующий элемент массива, nil если это конец)}
-                  function iterate(var ir:itrec):GDBPointer;virtual;abstract;
-                  function SetCount(index:GDBInteger):GDBPointer;virtual;abstract;
-                  {**Инвертировать массив}
-                  procedure Invert;
-                  function copyto(var source:GZVector<T>):GDBInteger;virtual;abstract;
-                  function GetRealCount:GDBInteger;
-                  function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
-                  function AllocData(SData:GDBword):GDBPointer;virtual;abstract;
-                  {old}
-                  function DeleteElement(index:GDBInteger):GDBPointer;
-                  function DeleteElementByP(pel:GDBPointer):GDBPointer;
-                  function InsertElement(index:GDBInteger;const data:T):GDBPointer;
-                  {reworked}
-                  procedure SetSize(nsize:TArrayIndex);
-                  function getDataMutable(index:TArrayIndex):PT;
-                  function getData(index:TArrayIndex):T;
-                  function PushBackData(const data:T):TArrayIndex;
-                  function PushBackIfNotPresentWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
-                  function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):GDBInteger;
-                  function GetSpecializedTypeInfo:PTypeInfo;inline;
-                  function SizeOfData:TArrayIndex;
-                  function GetParrayAsPointer:pointer;
-                  function CreateArray:GDBPointer;virtual;abstract;
-                  procedure Clear;virtual;abstract;
-                  function GetElemCount:GDBInteger;
-                  procedure Grow(newmax:GDBInteger=0);virtual;abstract;
-                  procedure Shrink;virtual;abstract;
-                  constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
-                  constructor initnul;
-            end;
+  object(GDBaseObject)
+    
+                                             //**< Тип указатель на тип данных T
+                             //**< Тип массив данных T
+                                       //**< Тип указатель на массив данных T
+        //**< Тип функция идентичности T
+               //**< Тип процедура принимающая указатель на T
+    
+        PArray:GDBPointer;(*hidden_in_objinsp*)   //**< Указатель на массив данных
+        GUID:GDBString;(*hidden_in_objinsp*)                  //**< Шняга для подсчета куда уходит память. используется только с DEBUGBUILD. Надо чтото ч ней делать
+        Count:TArrayIndex;(*hidden_in_objinsp*)               //**< Количество занятых элементов массива
+        Max:TArrayIndex;(*hidden_in_objinsp*)                 //**< Размер массива (под сколько элементов выделено памяти)
+        {**Деструктор}
+        destructor done;virtual;abstract;
+        {**Деструктор}
+        destructor destroy;virtual;abstract;
+        {**Конструктор}
+        constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
+        {**Конструктор}
+        constructor initnul;
+        {**Удаление всех элементов массива}
+        procedure free;virtual;abstract;
+        {**Начало "перебора" элементов массива
+          @param(ir переменная "итератор")
+          @return(указатель на первый элемент массива)}
+        function beginiterate(out ir:itrec):GDBPointer;virtual;abstract;
+        {**"Перебор" элементов массива
+          @param(ir переменная "итератор")
+          @return(указатель на следующий элемент массива, nil если это конец)}
+        function iterate(var ir:itrec):GDBPointer;virtual;abstract;
+        function SetCount(index:GDBInteger):GDBPointer;virtual;abstract;
+        {**Инвертировать массив}
+        procedure Invert;
+        {**Копировать в массив}
+        function copyto(var source:GZVector<T>):GDBInteger;virtual;abstract;
+        {**Выделяет место и копирует в массив SData элементов из PData. Надо compilermagic! соответствие с AllocData
+          @PData(указатель на копируемые элементы)
+          @SData(кол-во копируемых элементов)
+          @return(индекс первого скопированного элемента в массиве)}
+        function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
+        {**Выделяет место в массиве под SData элементов. Надо compilermagic! соответствие с AddData
+          @SData(кол-во копируемых элементов)
+          @return(индекс первого выделенного элемента в массиве)}
+        function AllocData(SData:GDBword):GDBInteger;virtual;abstract;
+        {old}
+        {**Удалить элемент по индексу}
+        function DeleteElement(index:GDBInteger):GDBPointer;
+        {**Перевод указателя в индекс}
+        function P2I(pel:GDBPointer):GDBInteger;
+        {**Удалить элемент по указателю}
+        function DeleteElementByP(pel:GDBPointer):GDBPointer;
+        {**вставить элемент}
+        function InsertElement(index:GDBInteger;const data:T):GDBPointer;
+        {need compilermagic}
+        procedure Grow(newmax:GDBInteger=0);virtual;abstract;
+        {**Выделяет память под массив}
+        function CreateArray:GDBPointer;virtual;abstract;
+        {reworked}
+        {**Устанавливает длину массива}
+        procedure SetSize(nsize:TArrayIndex);
+        {**Возвращает указатель на значение по индексу}
+        function getDataMutable(index:TArrayIndex):PT;
+        {**Возвращает значение по индексу}
+        function getData(index:TArrayIndex):T;
+        {**Добавить в конец массива значение, возвращает индекс добавленного значения}
+        function PushBackData(const data:T):TArrayIndex;
+        {**Добавить в конец массива значение если его еще нет в массиве, возвращает индекс найденного или добавленного значения}
+        function PushBackIfNotPresentWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
+        {**Добавить в конец массива значение если оно еще не в конце массива, возвращает индекс найденного или добавленного значения}
+        function PushBackIfNotLastWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
+        {**Добавить в конец массива значение если оно еще не в конце массива или не в начале масива, возвращает индекс найденного или добавленного значения}
+        function PushBackIfNotLastOrFirstWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
+        {**Проверка нахождения в массиве значения с функцией сравнения}
+        function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):GDBInteger;
+        {**Возвращает тип элемента массива}
+        function GetSpecializedTypeInfo:PTypeInfo;inline;
+        {**Возвращает размер элемента массива}
+        function SizeOfData:TArrayIndex;
+        {**Возвращает указатель на массив}
+        function GetParrayAsPointer:pointer;
+        {**Очищает массив не убивая элементы, просто count:=0}
+        procedure Clear;virtual;abstract;
+        {**Возвращает реальное колво элементов, в данном случае=count}
+        function GetRealCount:GDBInteger;
+        {**Возвращает колво элементов}
+        function GetCount:GDBInteger;
+        {**Подрезать выделенную память по count}
+        procedure Shrink;virtual;abstract;
+  end;
 //Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectorsimple.pas
 GZVectorSimple={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVector)
@@ -516,7 +552,7 @@ GZVectorP={$IFNDEF DELPHI}packed{$ENDIF}
                                        constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
                                        constructor initnul;
                                        procedure Clear;virtual;abstract;
-                                       function GetElemCount:GDBInteger;
+                                       function GetCount:GDBInteger;
                                  end;
 //Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectorpdata.pas
 GZVectorPData={$IFNDEF DELPHI}packed{$ENDIF}
@@ -636,32 +672,21 @@ GDBObjEntityOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPV)
 PGDBControlPointArray=^GDBControlPointArray;
 GDBControlPointArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
                            SelectedCount:GDBInteger;
-                           constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                            destructor done;virtual;abstract;
                            procedure draw(var DC:TDrawContext;const SelColor,UnSelColor:TRGB);virtual;abstract;
                            procedure getnearesttomouse(var td:tcontrolpointdist;mx,my:integer);virtual;abstract;
                            procedure selectcurrentcontrolpoint(key:GDBByte;mx,my,h:integer);virtual;abstract;
-                           procedure freeelement(PItem:PT);virtual;abstract;
                      end;
 //Generate on E:/zcad/cad_source/zengine/containers/UGDBOutbound2DIArray.pas
 PGDBOOutbound2DIArray=^GDBOOutbound2DIArray;
 GDBOOutbound2DIArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
-                      constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       procedure DrawGeometry(var DC:TDrawContext);virtual;abstract;
-                      procedure addpoint(point:GDBvertex2DI);virtual;abstract;
-                      procedure addlastpoint(point:GDBvertex2DI);virtual;abstract;
-                      procedure addgdbvertex(point:GDBvertex);virtual;abstract;
-                      procedure addlastgdbvertex(point:GDBvertex);virtual;abstract;
-                      procedure clear;virtual;abstract;
-                      //function onmouse(mc:GDBvertex2DI):GDBInteger;virtual;abstract;
                       function InRect(Frame1, Frame2: GDBvertex2DI):TInBoundingVolume;virtual;abstract;
                       function perimetr:GDBDouble;virtual;abstract;
                 end;
 //Generate on E:/zcad/cad_source/zengine/containers/UGDBPoint3DArray.pas
 PGDBPoint3dArray=^GDBPoint3dArray;
 GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOfData=GDBVertex*)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                constructor initnul;
                 function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
                 function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;abstract;
                 function CalcTrueInFrustum(frustum:ClipArray):TInBoundingVolume;virtual;abstract;
@@ -675,7 +700,6 @@ PGDBPolyline2DArray=^GDBPolyline2DArray;
 GDBPolyline2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOfData=GDBVertex2D*)
                       closed:GDBBoolean;(*saved_to_shd*)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger;c:GDBBoolean);
-                      constructor initnul;
                       //function onmouse(mc:GDBvertex2DI):GDBBoolean;virtual;abstract;
                       procedure optimize;virtual;abstract;
                       function _optimize:GDBBoolean;virtual;abstract;
@@ -686,7 +710,6 @@ GDBPolyline2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArra
 //Generate on E:/zcad/cad_source/zengine/containers/UGDBPolyPoint2DArray.pas
 PGDBPolyPoint2DArray=^GDBPolyPoint2DArray;
 GDBPolyPoint2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
-                      constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       //procedure DrawGeometry;virtual;abstract;
                       function InRect(Frame1, Frame2: GDBvertex2DI):TInBoundingVolume;virtual;abstract;
                       procedure freeelement(PItem:PT);virtual;abstract;
@@ -780,16 +803,11 @@ PVectotSnap=^VectorSnap;
 VectorSnap=packed record
                  l_1_4,l_1_3,l_1_2,l_2_3,l_3_4:GDBvertex;
            end;
-PVectorSnapArray=^VectorSnapArray;
-VectorSnapArray=packed array [0..0] of VectorSnap;
 PGDBVectorSnapArray=^GDBVectorSnapArray;
 GDBVectorSnapArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
              end;
 //Generate on E:/zcad/cad_source/zengine/containers/UGDBLineWidthArray.pas
 GDBLineWidthArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOfData=GLLWWidth*)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                constructor initnul;
              end;
 //Generate on E:/zcad/cad_source/zengine/containers/UGDBNamedObjectsArray.pas
 TForCResult=(IsFounded(*'IsFounded'*)=1,
@@ -2081,6 +2099,7 @@ GDBObjEllipse={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
            end;
 //Generate on E:/zcad/cad_source/zengine/core/objects/gzctnrtree.pas
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);
+         TElemPosition=(TEP_Plus,TEP_Minus,TEP_nul);
          GZBInarySeparatedGeometry
                          ={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                          
@@ -2098,6 +2117,10 @@ GDBObjEllipse={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                          procedure Clear;
                          constructor initnul;
                          procedure DrawVolume(var DC:TDrawContext);
+                         procedure AddObjToNul(var Entity:TEntity);
+                         procedure updateenttreeadress;
+                         procedure CorrectNodeBoundingBox(var Entity:TEntity);
+                         procedure AddObjectToNodeTree(var Entity:TEntity);
                          end;
 //Generate on E:/zcad/cad_source/zengine/core/objects/uzeentitiestree.pas
 TDrawType=(TDTFulDraw,TDTSimpleDraw);
@@ -2110,12 +2133,13 @@ TEntTreeNodeData=record
                  end;
          PTEntTreeNode=^TEntTreeNode;
          TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry)
-                            procedure updateenttreeadress;
-                            procedure addtonul(p:PGDBObjEntity);
-                            procedure AddObjectToNodeTree(pobj:PGDBObjEntity);
-                            procedure CorrectNodeTreeBB(pobj:PGDBObjEntity);
-                            procedure treerender(var DC:TDrawContext);
                             procedure MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox);
+                            class function createtree(var entitys:GDBObjEntityOpenArray;//массив примитивов
+                                                      AABB:TBoundingBox;                //ограничивающий объем массива примитивов
+                                                      PParentNode:PTEntTreeNode;        //указатель на родительскую ноду
+                                                      PNode:PTEntTreeNode;              //указатель на ноду, если не ноль то это начало дерева, если  ноль - нода создается динамически и возвращается в результе
+                                                      nodedepth:GDBInteger;             //текущая глубина
+                                                      dir:TNodeDir):PTEntTreeNode;      //что есть текущая нода: +,- или корень
                       end;
 //Generate on E:/zcad/cad_source/zengine/containers/UGDBVisibleTreeArray.pas
 PGDBObjEntityTreeArray=^GDBObjEntityTreeArray;
@@ -2822,13 +2846,18 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
 //Generate on E:/zcad/cad_source/zcad/electrotech/uzcentcable.pas
 PTNodeProp=^TNodeProp;
 TNodeProp=packed record
+                //**Точка в котором кабель был усечен устройством исчез и появился
                 PrevP,NextP:GDBVertex;
+                //**Устройство коннектор которого попадает в узел кабеля
                 DevLink:PGDBObjDevice;
           end;
 TNodePropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
 end;
 PGDBObjCable=^GDBObjCable;
 GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
+                 {**Список устройств DevLink коннектор которых попадает в узел кабеля,
+                    а так же показывается PrevP,NextP точка в котором кабель был усечен устройством
+                    и точка в которой появился**}
                  NodePropArray:TNodePropArray;(*hidden_in_objinsp*)
                  str11:GDBVertex;(*hidden_in_objinsp*)
                  str12:GDBVertex;(*hidden_in_objinsp*)
@@ -3432,7 +3461,6 @@ type
     worldraycoord: GDBVertex;
   end;
 GDBtracepropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
              end;
 //Generate on E:/zcad/cad_source/zengine/zgl/drawers/uzglviewareadata.pas 
   pmousedesc = ^mousedesc;
@@ -3893,7 +3921,7 @@ TBasicFinter=packed record
     PTCableDesctiptor=^TCableDesctiptor;
     TCableDesctiptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                      Name:GDBString;
-                     Segments:TZctnrVectorPGDBaseObjects;
+                     Segments:TZctnrVectorPGDBaseObjects;   // сборщик всех кабелей с одинаковым именем (ШС..)
                      StartDevice,EndDevice:PGDBObjDevice;
                      StartSegment:PGDBObjCable;
                      Devices:TZctnrVectorPGDBaseObjects;

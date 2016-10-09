@@ -48,7 +48,7 @@ uses
  UUnitManager,uzclog,Varman,
  uzbgeomtypes,dialogs,uzcinfoform,
  uzeentpolyline,UGDBPolyLine2DArray,uzeentlwpolyline,UGDBSelectedObjArray,
- uzegeometry;
+ uzegeometry,uzelongprocesssupport;
    var selframecommand:PCommandObjectDef;
        zoomwindowcommand:PCommandObjectDef;
        ms2objinsp:PCommandObjectDef;
@@ -1004,8 +1004,10 @@ var //i: GDBInteger;
         ir:itrec;
     drawing:PTSimpleDrawing;
     DC:TDrawContext;
+    lpsh:TLPSHandle;
 begin
-  if assigned(StartLongProcessProc) then StartLongProcessProc(drawings.GetCurrentROOT.ObjArray.count,'Regenerate drawing');
+  lpsh:=lps.StartLongProcess(drawings.GetCurrentROOT.ObjArray.count,'Regenerate drawing',nil);
+  //if assigned(StartLongProcessProc) then StartLongProcessProc(drawings.GetCurrentROOT.ObjArray.count,'Regenerate drawing');
   drawing:=drawings.GetCurrentDwg;
   drawing.wa.CalcOptimalMatrix;
   dc:=drawings.GetCurrentDwg^.CreateDrawingRC;
@@ -1014,10 +1016,12 @@ begin
   repeat
     pv^.FormatEntity(drawing^,dc);
   pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-  if assigned(ProcessLongProcessProc) then ProcessLongProcessProc(ir.itc);
+  lps.ProgressLongProcess(lpsh,ir.itc);
+  //if assigned(ProcessLongProcessProc) then ProcessLongProcessProc(ir.itc);
   until pv=nil;
   drawings.GetCurrentROOT.getoutbound(dc);
-  if assigned(EndLongProcessProc) then EndLongProcessProc;
+  lps.EndLongProcess(lpsh);
+  //if assigned(EndLongProcessProc) then EndLongProcessProc;
 
   drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
   drawings.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
@@ -1196,15 +1200,18 @@ var i: GDBInteger;
     //ir:itrec;
     depth:integer;
     tr:TTreeStatistik;
+    lpsh:TLPSHandle;
 begin
   HistoryOutStr('Total entities: '+inttostr(drawings.GetCurrentROOT.ObjArray.count));
   HistoryOutStr('Max tree depth: '+inttostr(SysVar.RD.RD_SpatialNodesDepth^));
   HistoryOutStr('Max in node entities: '+inttostr(GetInNodeCount(SysVar.RD.RD_SpatialNodeCount^)));
   HistoryOutStr('Create tree...');
-  if assigned(StartLongProcessProc) then StartLongProcessProc(drawings.GetCurrentROOT.ObjArray.count,'Rebuild drawing spatial');
+  lpsh:=LPS.StartLongProcess(drawings.GetCurrentROOT.ObjArray.count,'Rebuild drawing spatial',nil);
+  //if assigned(StartLongProcessProc) then StartLongProcessProc(drawings.GetCurrentROOT.ObjArray.count,'Rebuild drawing spatial');
   drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,IninialNodeDepth);
   //drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
-  if assigned(EndLongProcessProc) then EndLongProcessProc;
+  LPS.EndLongProcess(lpsh);
+  //if assigned(EndLongProcessProc) then EndLongProcessProc;
   HistoryOutStr('Done');
   drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
   drawings.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;

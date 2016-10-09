@@ -46,7 +46,8 @@ uses
   uzbgeomtypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
   uzcshared,uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,gzctnrvectordata,
   math,uzeenttable,uzctnrvectorgdbstring,uzcprinterspecfunc,
-  uzeentcurve,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
+  uzeentcurve,uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
+  ,uzelongprocesssupport;
 const
      modelspacename:GDBSTring='**Модель**';
 type
@@ -3977,6 +3978,7 @@ var
     pv:PGDBVertex;
     ir:itrec;
     LinesMap:MapPointOnCurve3DPropArray;
+    lph:TLPSHandle;
     //PointOnCurve3DPropArray=specialize TVector<PointOnCurve3DProp>;
     //MapPointOnCurve3DPropArray=specialize TMap<PGDBObjLine,PointOnCurve3DPropArray, lessppi>;
 begin
@@ -3987,31 +3989,31 @@ begin
      lc:=0;
      parray.init({$IFDEF DEBUGBUILD}'{527C1C8F-E832-43F9-B8C4-2733AD9EAF67}',{$ENDIF}10000);
      LinesMap:=MapPointOnCurve3DPropArray.Create;
-     if assigned(StartLongProcessProc) then StartLongProcessProc(10,'Search intersections and storing data');
+     lph:=lps.StartLongProcess(10,'Search intersections and storing data',nil);
      FindAllIntersectionsInNode(@drawings.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,lineAABBtests,linelinetests,intersectcount,@parray,LinesMap);
-     if assigned(EndLongProcessProc) then EndLongProcessProc;
+     lps.EndLongProcess(lph);
 
-     if assigned(StartLongProcessProc) then StartLongProcessProc(10,'Placing points');
+     lph:=lps.StartLongProcess(10,'Placing points',nil);
        pv:=parray.beginiterate(ir);
        if pv<>nil then
        repeat
              PlacePoint(pv^);
              pv:=parray.iterate(ir);
        until pv=nil;
-     if assigned(EndLongProcessProc) then EndLongProcessProc;
+     lps.EndLongProcess(lph);
 
-     if assigned(StartLongProcessProc) then StartLongProcessProc(10,'Cutting lines');
+     lph:=lps.StartLongProcess(10,'Cutting lines',nil);
       PlaceLines(LinesMap,lm,lc);
-     if assigned(EndLongProcessProc) then EndLongProcessProc;
+     lps.EndLongProcess(lph);
      HistoryOutStr('Lines modified: '+inttostr(lm));
      HistoryOutStr('Lines created: '+inttostr(lc));
 
 
 
-     if assigned(StartLongProcessProc) then StartLongProcessProc(10,'Freeing memory');
+     lph:=lps.StartLongProcess(10,'Freeing memory',nil);
      parray.done;
      LinesMap.Free;
-     if assigned(EndLongProcessProc) then EndLongProcessProc;
+     lps.EndLongProcess(lph);
      HistoryOutStr('Line-AABB tests count: '+inttostr(lineAABBtests));
      HistoryOutStr('Line-Line tests count: '+inttostr(linelinetests));
      HistoryOutStr('Intersections count: '+inttostr(intersectcount));

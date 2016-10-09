@@ -26,6 +26,11 @@ const
      IninialNodeDepth=-1;
 type
 TZEntsManipulator=class;
+TFirstStageData=record
+                  midlepoint:gdbvertex;
+                  d:double;
+                  counter:integer;
+                end;
 {EXPORT+}
 TDrawType=(TDTFulDraw,TDTSimpleDraw);
 TEntTreeNodeData=record
@@ -37,7 +42,7 @@ TEntTreeNodeData=record
                  end;
          PTEntTreeNode=^TEntTreeNode;
          TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>{//})
-                            procedure MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox);
+                            procedure MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;nodedepth:GDBInteger);
                             class function createtree(var entitys:GDBObjEntityOpenArray;//массив примитивов
                                                       AABB:TBoundingBox;                //ограничивающий объем массива примитивов
                                                       PParentNode:PTEntTreeNode;        //указатель на родительскую ноду
@@ -50,21 +55,21 @@ TZEntsManipulator=class
                    class procedure DrawNodeVolume(const BoundingBox:TBoundingBox;var DC:TDrawContext);
                    class procedure StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>;const index:GDBInteger);
                    class procedure CorrectNodeBoundingBox(var NodeBB:TBoundingBox;var Entity:GDBObjEntity);
+                   class function GetEntityBoundingBox(var Entity:GDBObjEntity):TBoundingBox;
                    class function GetBBPosition(const sep:DVector4D;const BB:TBoundingBox):TElemPosition;
+                   class function isUnneedSeparate(const count,depth:integer):boolean;
+                   class function GetTestNodesCount:integer;
+                   class procedure FirstStageCalcSeparatirs(var Entity:GDBObjEntity;var PFirstStageData:pointer;TSM:TStageMode);
+                   class procedure CreateSeparator(var TestNode:TEntTreeNode.TTestNode;var PFirstStageData:pointer;const NodeNum:integer);
 
                    {not used in generic, for external use}
                    class procedure treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>;var DC:TDrawContext);
                   end;
- TTestTreeNode=Object(GDBaseObject)
-                    plane:DVector4D;
-                    nul,plus,minus:GDBObjEntityOpenArray;
-                    constructor initnul(InNodeCount:integer);
-                    destructor done;virtual;
-              end;
-TTestTreeArray=array [0..2] of TTestTreeNode;
+TTestTreeArray=array [0..2] of TEntTreeNode.TTestNode;
 var
    SysVarRDSpatialNodeCount:integer=500;
    SysVarRDSpatialNodesDepth:integer=16;
+   FirstStageData:TFirstStageData;
 function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
 implementation
 class function  TEntTreeNode.createtree(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;PParentNode:PTEntTreeNode;PNode:PTEntTreeNode;nodedepth:GDBInteger;dir:TNodeDir):PTEntTreeNode;
@@ -78,12 +83,7 @@ var pobj:PGDBObjEntity;
     ta:TTestTreeArray;
     plusaabb,minusaabb:TBoundingBox;
     tv:gdbvertex;
-     _InNodeCount:gdbinteger;
-    SpatialNodeCount,SpatialNodesDepth:integer;
 begin
-     SpatialNodeCount:=SysVarRDSpatialNodeCount;
-     _InNodeCount:=GetInNodeCount(SpatialNodeCount);
-
      inc(nodedepth);
 
      if PNode<>nil then
@@ -103,8 +103,7 @@ begin
      result.Root:=PParentNode;
      result.NodeDir:=dir;
 
-     SpatialNodesDepth:=SysVarRDSpatialNodesDepth;
-     if (entitys.Count<=_InNodeCount)or(nodedepth>=SpatialNodesDepth) then
+     if TZEntsManipulator.isUnneedSeparate(entitys.Count,nodedepth) then
                                                 begin
                                                      result.Separator:=default(DVector4D);
                                                      result.pminusnode:=nil;
@@ -293,6 +292,56 @@ begin
        end;
      end;
 end;
+class function TZEntsManipulator.isUnneedSeparate(const count,depth:integer):boolean;
+begin
+     if (Count<=GetInNodeCount(SysVarRDSpatialNodeCount))or(depth>=SysVarRDSpatialNodesDepth) then
+       result:=true
+     else
+       result:=false;
+end;
+class function TZEntsManipulator.GetTestNodesCount:integer;
+begin
+   result:=3;
+end;
+class procedure TZEntsManipulator.FirstStageCalcSeparatirs(var Entity:GDBObjEntity;var PFirstStageData:pointer;TSM:TStageMode);
+begin
+   case TSM of
+       TSMStart:begin
+                   FirstStageData.midlepoint:=NulVertex;
+                   FirstStageData.counter:=0;
+                   PFirstStageData:=@FirstStageData;
+                end;
+TSMAccumulation:begin
+                   FirstStageData.midlepoint:=vertexadd(Entity.vp.BoundingBox.LBN,FirstStageData.midlepoint);
+                   FirstStageData.midlepoint:=vertexadd(Entity.vp.BoundingBox.RTF,FirstStageData.midlepoint);
+                   inc(FirstStageData.counter,2);
+                end;
+        TSMCalc:begin
+                   FirstStageData.midlepoint:=VertexMulOnSc(FirstStageData.midlepoint,1/FirstStageData.counter);
+                   FirstStageData.d:=sqrt(sqr(FirstStageData.midlepoint.x) + sqr(FirstStageData.midlepoint.y) + sqr(FirstStageData.midlepoint.z));
+                end;
+         TSMEnd:begin
+                   PFirstStageData:=nil;
+                end;
+   end;
+end;
+class procedure TZEntsManipulator.CreateSeparator(var TestNode:TEntTreeNode.TTestNode;var PFirstStageData:pointer;const NodeNum:integer);
+begin
+case NodeNum of
+      0:TestNode.plane:=uzegeometry.PlaneFrom3Pont(FirstStageData.midlepoint,
+                                          vertexadd(FirstStageData.midlepoint,VertexMulOnSc(x_Y_zVertex,FirstStageData.d)),
+                                          vertexadd(FirstStageData.midlepoint,VertexMulOnSc(xy_Z_Vertex,FirstStageData.d))
+                                          );
+      1:TestNode.plane:=uzegeometry.PlaneFrom3Pont(FirstStageData.midlepoint,
+                                          vertexadd(FirstStageData.midlepoint,VertexMulOnSc(_X_yzVertex,FirstStageData.d)),
+                                          vertexadd(FirstStageData.midlepoint,VertexMulOnSc(xy_Z_Vertex,FirstStageData.d))
+                                          );
+      2:TestNode.plane:=uzegeometry.PlaneFrom3Pont(FirstStageData.midlepoint,
+                                          vertexadd(FirstStageData.midlepoint,VertexMulOnSc(_X_yzVertex,FirstStageData.d)),
+                                          vertexadd(FirstStageData.midlepoint,VertexMulOnSc(x_Y_ZVertex,FirstStageData.d))
+                                          );
+end;
+end;
 class procedure TZEntsManipulator.DrawNodeVolume(const BoundingBox:TBoundingBox;var DC:TDrawContext);
 begin
   dc.drawer.DrawAABB3DInModelSpace(BoundingBox,dc.DrawingContext.matrixs);
@@ -304,8 +353,13 @@ begin
 end;
 class procedure TZEntsManipulator.CorrectNodeBoundingBox(var NodeBB:TBoundingBox;var Entity:GDBObjEntity);
 begin
-     ConcatBB(NodeBB,Entity.vp.BoundingBox);
+     ConcatBB(NodeBB,GetEntityBoundingBox(Entity));
 end;
+class function TZEntsManipulator.GetEntityBoundingBox(var Entity:GDBObjEntity):TBoundingBox;
+begin
+     result:=Entity.vp.BoundingBox;
+end;
+
 class function TZEntsManipulator.GetBBPosition(const sep:DVector4D;const BB:TBoundingBox):TElemPosition;
 var
     d,d1,d2:double;
@@ -342,24 +396,21 @@ else if (d1>0)or(d2>0)  then
      //result:=TEP_nul;
 end;
 
-procedure TEntTreeNode.MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox);
+procedure TEntTreeNode.MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;nodedepth:GDBInteger);
+var
+    pobj:PGDBObjEntity;
+    ir:itrec;
 begin
-     createtree(entitys,AABB,nil,@self,IninialNodeDepth,TND_Root);
-end;
-constructor TTestTreeNode.initnul;
-begin
-     nul.init({$IFDEF DEBUGBUILD}'TTestTreeNode.nul',{$ENDIF}InNodeCount{*2});
-     plus.init({$IFDEF DEBUGBUILD}'TTestTreeNode.plus',{$ENDIF}InNodeCount{*2});
-     minus.init({$IFDEF DEBUGBUILD}'TTestTreeNode.minus',{$ENDIF}InNodeCount{*2});
-end;
-destructor TTestTreeNode.done;
-begin
-     nul.Clear;
-     nul.Done;
-     plus.Clear;
-     plus.Done;
-     minus.Clear;
-     minus.Done;
+     ClearSub;
+     Lock;
+     pobj:=entitys.beginiterate(ir);
+     if pobj<>nil then
+       repeat
+         AddObjectToNodeTree(pobj^);
+         pobj:=entitys.iterate(ir);
+       until pobj=nil;
+     UnLock;
+     //createtree(entitys,AABB,nil,@self,nodedepth,TND_Root);
 end;
 function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
 begin

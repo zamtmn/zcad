@@ -100,9 +100,9 @@ var
 
    //mainwindow
    ShowAllCursorsProc,RestoreAllCursorsProc:TSimpleMethod;
-   StartLongProcessProc:TStartLongProcessProc;
-   ProcessLongProcessProc:TProcessLongProcessProc;
-   EndLongProcessProc:TEndLongProcessProc;
+   //StartLongProcessProc:TStartLongProcessProc;
+   //ProcessLongProcessProc:TProcessLongProcessProc;
+   //EndLongProcessProc:TEndLongProcessProc;
    UpdateVisibleProc:TSimpleProcedure;
    MessageBoxProc:TMessageBox;
    ProcessFilehistoryProc:TMethod_String_;

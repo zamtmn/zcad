@@ -34,7 +34,7 @@ uses
   uzcshared,uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
   gzctnrvectorpobjects,uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
   uzbpaths,uzctnrvectorgdbstring,math,Masks,uzclog,uzccombase,uzbstrproc,
-  uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract;
+  uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,uzelongprocesssupport;
 type
 {Export+}
   TFindType=(
@@ -2769,6 +2769,7 @@ var
     supernetsarray:GDBObjOpenArrayOfPV;
     DC:TDrawContext;
     priservarext,priser2varext,psupernetvarext,pnetvarext,plinevarext:PTVariablesExtender;
+    lph:TLPSHandle;
 procedure GetStartEndPin(startdevname,enddevname:GDBString);
 begin
   PGDBObjEntity(startdev):=drawings.FindEntityByVar(GDBDeviceID,'NMO_Name',startdevname);
@@ -2846,8 +2847,7 @@ begin
        FDoc:=TCSVDocument.Create;
        FDoc.Delimiter:=';';
        FDoc.LoadFromFile(utf8tosys(s));
-       if assigned (StartLongProcessProc) then
-                          StartLongProcessProc(FDoc.RowCount,'Create cables');
+       lph:=lps.StartLongProcess(FDoc.RowCount,'Create cables',nil);
        netarray.init({$IFDEF DEBUGBUILD}'{6FC12C96-F62C-47A3-A5B4-35D9564DB25E}',{$ENDIF}100);
        for row:=0 to FDoc.RowCount-1 do
        begin
@@ -3123,8 +3123,7 @@ begin
                 for col:=0 to FDoc.ColCount[row] do
                 HistoryOutStr(FDoc.Cells[col,row]);
                 end;
-       if assigned (ProcessLongProcessProc) then
-                                                ProcessLongProcessProc(row);
+       lps.ProgressLongProcess(lph,row);
        end;
        netarray.Clear;
        netarray.Done;
@@ -3144,8 +3143,7 @@ begin
        linesarray.done;
 
 
-       if assigned (EndLongProcessProc) then
-                                            EndLongProcessProc
+       lps.EndLongProcess(lph)
   end
             else
      ShowError('GDBCommandsElectrical.El_ExternalKZ: Не могу открыть файл: '+s+'('+Operands+')');
@@ -3203,8 +3201,9 @@ var
         ir:itrec;
     drawing:PTDrawingDef;
     DC:TDrawContext;
+    lph:TLPSHandle;
 begin
-  if assigned(StartLongProcessProc) then StartLongProcessProc(drawings.GetCurrentROOT.ObjArray.count,'Regenerate ZCAD entities');
+  lph:=lps.StartLongProcess(drawings.GetCurrentROOT.ObjArray.count,'Regenerate ZCAD entities',nil);
   drawing:=drawings.GetCurrentDwg;
   dc:=drawings.GetCurrentDwg^.CreateDrawingRC;
   pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
@@ -3213,10 +3212,10 @@ begin
     if (pv^.GetObjType>=GDBZCadEntsMinID)and(pv^.GetObjType<=GDBZCadEntsMaxID)then
                                                                         pv^.FormatEntity(drawing^,dc);
   pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-  if assigned(ProcessLongProcessProc) then ProcessLongProcessProc(ir.itc);
+  lps.ProgressLongProcess(lph,ir.itc);
   until pv=nil;
   drawings.GetCurrentROOT.getoutbound(dc);
-  if assigned(EndLongProcessProc) then EndLongProcessProc;
+  lps.EndLongProcess(lph);
 
   drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
   drawings.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;

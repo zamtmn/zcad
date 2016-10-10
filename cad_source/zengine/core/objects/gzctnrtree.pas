@@ -20,8 +20,7 @@ unit gzctnrtree;
 {$INCLUDE def.inc}
 interface
 uses
-    graphics,
-    uzgldrawcontext,uzegeometry,UGDBVisibleOpenArray,{uzeentity,}uzbtypesbase,uzbtypes,uzbmemman;
+    UGDBVisibleOpenArray,uzbtypesbase,uzbtypes,uzbmemman;
 type
 TTreeLevelStatistik=record
                           NodesCount,EntCount,OverflowCount:GDBInteger;
@@ -29,7 +28,7 @@ TTreeLevelStatistik=record
 PTTreeLevelStatistikArray=^TTreeLevelStatistikArray;
 TTreeLevelStatistikArray=Array [0..0] of  TTreeLevelStatistik;
 TTreeStatistik=record
-                     NodesCount,EntCount,OverflowCount,MaxDepth:GDBInteger;
+                     NodesCount,EntCount,OverflowCount,MaxDepth,MemCount:GDBInteger;
                      PLevelStat:PTTreeLevelStatistikArray;
                end;
 {EXPORT+}
@@ -59,7 +58,6 @@ TTreeStatistik=record
                          procedure ClearSub;
                          procedure Clear;
                          constructor initnul;
-                         procedure DrawVolume(var DC:TDrawContext);
                          procedure AddObjToNul(var Entity:TEntity);
                          procedure updateenttreeadress;
                          procedure CorrectNodeBoundingBox(var Entity:TEntity);
@@ -264,15 +262,6 @@ begin
      TEntsManipulator.StoreTreeAdressInOnject(Entity,self,index);
      {Entity.bp.TreePos.Owner:=@self;
      Entity.bp.TreePos.SelfIndex:=index;}
-end;
-
-procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>.DrawVolume;
-begin
-     if assigned(pplusnode) then
-                       pplusnode^.DrawVolume(dc);
-     if assigned(pminusnode) then
-                       pminusnode^.DrawVolume(dc);
-     TEntsManipulator.DrawNodeVolume(BoundingBox,dc);
 end;
 constructor GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>.initnul;
 begin

@@ -37,7 +37,7 @@ TEntTreeNodeData=record
                      infrustum:TActulity;
                      nuldrawpos,minusdrawpos,plusdrawpos:TActulity;
                      FulDraw:TDrawType;
-                     nodedepth:GDBInteger;
+                     //nodedepth:GDBInteger;
                      pluscount,minuscount:GDBInteger;
                  end;
          PTEntTreeNode=^TEntTreeNode;
@@ -49,10 +49,11 @@ TEntTreeNodeData=record
                                                       PNode:PTEntTreeNode;              //указатель на ноду, если не ноль то это начало дерева, если  ноль - нода создается динамически и возвращается в результе
                                                       nodedepth:GDBInteger;             //текущая глубина
                                                       dir:TNodeDir):PTEntTreeNode;      //что есть текущая нода: +,- или корень
+                            procedure DrawVolume(var DC:TDrawContext);
+                            procedure DrawNodeVolume(var DC:TDrawContext);
                       end;
 {EXPORT-}
 TZEntsManipulator=class
-                   class procedure DrawNodeVolume(const BoundingBox:TBoundingBox;var DC:TDrawContext);
                    class procedure StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>;const index:GDBInteger);
                    class procedure CorrectNodeBoundingBox(var NodeBB:TBoundingBox;var Entity:GDBObjEntity);
                    class function GetEntityBoundingBox(var Entity:GDBObjEntity):TBoundingBox;
@@ -72,6 +73,19 @@ var
    FirstStageData:TFirstStageData;
 function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
 implementation
+procedure TEntTreeNode.DrawNodeVolume(var DC:TDrawContext);
+begin
+  dc.drawer.DrawAABB3DInModelSpace(BoundingBox,dc.DrawingContext.matrixs);
+end;
+procedure TEntTreeNode.DrawVolume;
+begin
+     if assigned(pplusnode) then
+                       PTEntTreeNode(pplusnode)^.DrawVolume(dc);
+     if assigned(pminusnode) then
+                       PTEntTreeNode(pminusnode)^.DrawVolume(dc);
+     DrawNodeVolume(dc);
+end;
+
 class function  TEntTreeNode.createtree(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;PParentNode:PTEntTreeNode;PNode:PTEntTreeNode;nodedepth:GDBInteger;dir:TNodeDir):PTEntTreeNode;
 const
      aabbaxisscale=3;
@@ -242,7 +256,7 @@ else if (tv.z>=tv.x*aabbaxisscale)and(tv.z>=tv.y*aabbaxisscale) then
      result.nul.Shrink;
 
      result^.updateenttreeadress;
-     result.NodeData.nodedepth:=nodedepth;
+     //result.NodeData.nodedepth:=nodedepth;
      result.pminusnode:=createtree(ta[imin].minus,minusaabb,result,nil,nodedepth,TND_Minus);
      result.pplusnode:=createtree(ta[imin].plus,plusaabb,result,nil,nodedepth,TND_Plus);
      result.NodeData.pluscount:=ta[imin].plus.Count;
@@ -341,10 +355,6 @@ case NodeNum of
                                           vertexadd(FirstStageData.midlepoint,VertexMulOnSc(x_Y_ZVertex,FirstStageData.d))
                                           );
 end;
-end;
-class procedure TZEntsManipulator.DrawNodeVolume(const BoundingBox:TBoundingBox;var DC:TDrawContext);
-begin
-  dc.drawer.DrawAABB3DInModelSpace(BoundingBox,dc.DrawingContext.matrixs);
 end;
 class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>;const index:GDBInteger);
 begin

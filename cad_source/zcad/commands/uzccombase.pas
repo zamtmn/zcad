@@ -231,13 +231,13 @@ begin
      //drawings.GetCurrentDWG.ObjRoot.format;//FormatAfterEdit;
      //drawings.GetCurrentROOT.sddf
      //drawings.GetCurrentROOT.format;
-     drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,IninialNodeDepth);
+     drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
      //drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
      drawings.GetCurrentROOT.FormatEntity(drawings.GetCurrentDWG^,dc);
      if assigned(updatevisibleproc) then updatevisibleproc;
      if drawings.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
                                          begin
-                                         drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,IninialNodeDepth);
+                                         drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
                                          //drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
                                          //isOpenGLError;
                                          zcRedrawCurrentDrawing;
@@ -1176,7 +1176,7 @@ var
    lpsh:TLPSHandle;
 begin
   lpsh:=LPS.StartLongProcess(drawings.GetCurrentROOT.ObjArray.count,'Rebuild drawing spatial',nil);
-  drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,IninialNodeDepth);
+  drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
   LPS.EndLongProcess(lpsh);
   drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
   drawings.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;

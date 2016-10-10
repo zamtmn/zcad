@@ -22,8 +22,6 @@ interface
 uses
     graphics,
     uzbgeomtypes,gzctnrtree,uzgldrawcontext,uzegeometry,UGDBVisibleOpenArray,uzeentity,uzbtypesbase,uzbtypes,uzbmemman;
-const
-     IninialNodeDepth=-1;
 type
 TZEntsManipulator=class;
 TFirstStageData=record
@@ -42,7 +40,7 @@ TEntTreeNodeData=record
                  end;
          PTEntTreeNode=^TEntTreeNode;
          TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>{//})
-                            procedure MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;nodedepth:GDBInteger);
+                            procedure MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;const RN:Pointer);
                             class function createtree(var entitys:GDBObjEntityOpenArray;//массив примитивов
                                                       AABB:TBoundingBox;                //ограничивающий объем массива примитивов
                                                       PParentNode:PTEntTreeNode;        //указатель на родительскую ноду
@@ -406,13 +404,14 @@ else if (d1>0)or(d2>0)  then
      //result:=TEP_nul;
 end;
 
-procedure TEntTreeNode.MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;nodedepth:GDBInteger);
+procedure TEntTreeNode.MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;const RN:Pointer);
 var
     pobj:PGDBObjEntity;
     ir:itrec;
 begin
      ClearSub;
      Lock;
+     root:=rn;
      pobj:=entitys.beginiterate(ir);
      if pobj<>nil then
        repeat

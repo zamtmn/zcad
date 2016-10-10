@@ -638,7 +638,8 @@ begin //currd:=gdb.GetCurrentDWG;
        end;
        if node.NodeData.nuldrawpos<>PDWG.Getpcamera.DRAWCOUNT then
        begin
-        Node.nul.DrawWithattrib(dc{gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender});
+        GDBObjEntityOpenArray.DrawWithAttribExternalArray(dc,@(Node.nul));
+        //GDBObjEntityOpenArray(Node.nul).DrawWithattrib(dc{gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender});
         node.NodeData.nuldrawpos:=PDWG.Getpcamera.DRAWCOUNT;
        end;
   end;

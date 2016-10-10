@@ -41,12 +41,6 @@ TEntTreeNodeData=record
          PTEntTreeNode=^TEntTreeNode;
          TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>{//})
                             procedure MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;const RN:Pointer);
-                            class function createtree(var entitys:GDBObjEntityOpenArray;//массив примитивов
-                                                      AABB:TBoundingBox;                //ограничивающий объем массива примитивов
-                                                      PParentNode:PTEntTreeNode;        //указатель на родительскую ноду
-                                                      PNode:PTEntTreeNode;              //указатель на ноду, если не ноль то это начало дерева, если  ноль - нода создается динамически и возвращается в результе
-                                                      nodedepth:GDBInteger;             //текущая глубина
-                                                      dir:TNodeDir):PTEntTreeNode;      //что есть текущая нода: +,- или корень
                             procedure DrawVolume(var DC:TDrawContext);
                             procedure DrawNodeVolume(var DC:TDrawContext);
                       end;
@@ -83,196 +77,6 @@ begin
                        PTEntTreeNode(pminusnode)^.DrawVolume(dc);
      DrawNodeVolume(dc);
 end;
-
-class function  TEntTreeNode.createtree(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;PParentNode:PTEntTreeNode;PNode:PTEntTreeNode;nodedepth:GDBInteger;dir:TNodeDir):PTEntTreeNode;
-const
-     aabbaxisscale=3;
-var pobj:PGDBObjEntity;
-    ir:itrec;
-    midlepoint:gdbvertex;
-    d1,d2,d:gdbdouble;
-    entcount,dentcount,i,imin:integer;
-    ta:TTestTreeArray;
-    plusaabb,minusaabb:TBoundingBox;
-    tv:gdbvertex;
-begin
-     inc(nodedepth);
-
-     if PNode<>nil then
-                           begin
-                           result:=PNode;
-                           PNode^.ClearSub;
-                           end
-                       else
-                           begin
-                           GDBGetMem({$IFDEF DEBUGBUILD}'TEntTreeNode',{$ENDIF}pointer(result),sizeof(TEntTreeNode));
-                           result.initnul;
-                           end;
-
-     result.BoundingBox:=aabb;
-     //result.NodeData.pluscount:=0;
-     //result.NodeData.minuscount:=0;
-     result.Root:=PParentNode;
-     result.NodeDir:=dir;
-
-     if TZEntsManipulator.isUnneedSeparate(entitys.Count,nodedepth) then
-                                                begin
-                                                     result.Separator:=default(DVector4D);
-                                                     result.pminusnode:=nil;
-                                                     result.pplusnode:=nil;
-                                                     if PNode<>nil then
-                                                                           begin
-                                                                                entitys.copyto(result.nul);
-                                                                           end
-                                                                       else
-                                                                           begin
-                                                                                if Result.nul.PArray<>nil then
-                                                                                GDBFreeMem(Result.nul.PArray);
-                                                                                result.nul:=entitys;
-                                                                                entitys.Clear;
-                                                                                entitys.PArray:=nil;
-                                                                           end;
-                                                     result.updateenttreeadress;
-                                                     result.nul.Shrink;
-                                                     exit;
-                                                end;
-     midlepoint:=nulvertex;
-     entcount:=0;
-     pobj:=entitys.beginiterate(ir);
-     if pobj<>nil then
-     repeat
-           midlepoint:=vertexadd(midlepoint,VertexMulOnSc(vertexadd(pobj^.vp.BoundingBox.RTF,pobj^.vp.BoundingBox.LBN),1/2));
-           inc(entcount);
-
-           pobj:=entitys.iterate(ir);
-     until pobj=nil;
-
-     if entcount<>0 then
-                        midlepoint:=uzegeometry.VertexMulOnSc(midlepoint,1/entcount);
-
-     d:=sqrt(sqr(midlepoint.x) + sqr(midlepoint.y) + sqr(midlepoint.z));
-     ta[0].initnul(entitys.GetRealCount);
-     ta[0].plane:=uzegeometry.PlaneFrom3Pont(midlepoint,
-                                          vertexadd(midlepoint,VertexMulOnSc(x_Y_zVertex,d)),
-                                          vertexadd(midlepoint,VertexMulOnSc(xy_Z_Vertex,d))
-                                          );
-     ta[1].initnul(entitys.GetRealCount);
-     ta[1].plane:=uzegeometry.PlaneFrom3Pont(midlepoint,
-                                          vertexadd(midlepoint,VertexMulOnSc(_X_yzVertex,d)),
-                                          vertexadd(midlepoint,VertexMulOnSc(xy_Z_Vertex,d))
-                                          );
-     ta[2].initnul(entitys.GetRealCount);
-     ta[2].plane:=uzegeometry.PlaneFrom3Pont(midlepoint,
-                                          vertexadd(midlepoint,VertexMulOnSc(_X_yzVertex,d)),
-                                          vertexadd(midlepoint,VertexMulOnSc(x_Y_ZVertex,d))
-                                          );
-     for i:=0 to 2 do
-     begin
-     pobj:=entitys.beginiterate(ir);
-     if pobj<>nil then
-     repeat
-        case TZEntsManipulator.GetBBPosition(ta[i].plane,pobj^.vp.BoundingBox) of
-          TEP_Plus:ta[i].plus.PushBackData(pobj);
-         TEP_Minus:ta[i].minus.PushBackData(pobj);
-           TEP_nul:ta[i].nul.PushBackData(pobj);
-        end;
-           pobj:=entitys.iterate(ir);
-     until pobj=nil;
-     end;
-     entcount:=ta[0].nul.Count;
-     dentcount:=abs(ta[0].plus.Count-ta[0].minus.Count);
-     imin:=0;
-     for i:=1 to 2 do
-     begin
-          if ta[i].nul.Count<entcount then
-                                          begin
-                                               entcount:=ta[i].nul.Count;
-                                               dentcount:=abs(ta[i].plus.Count-ta[i].minus.Count);
-                                               imin:=i;
-                                          end
-     else if ta[i].nul.Count=entcount then
-                                       begin
-                                            if abs(ta[i].plus.Count-ta[i].minus.Count)<dentcount then
-                                            begin
-                                                 entcount:=ta[i].nul.Count;
-                                                 dentcount:=abs(ta[i].plus.Count-ta[i].minus.Count);
-                                                 imin:=i;
-                                            end;
-                                       end;
-     end;
-
-     //if imin=-1 then
-     begin
-
-     tv:=vertexsub(aabb.RTF,aabb.LBN);
-     if (tv.x>=tv.y*aabbaxisscale)and(tv.x>=tv.z*aabbaxisscale) then
-                                        imin:=0
-else if (tv.y>=tv.x*aabbaxisscale)and(tv.y>=tv.z*aabbaxisscale) then
-                                        imin:=1
-else if (tv.z>=tv.x*aabbaxisscale)and(tv.z>=tv.y*aabbaxisscale) then
-                                        imin:=2;
-     end;
-
-
-
-     plusaabb:=aabb;
-     minusaabb:=aabb;
-
-     case imin of
-                 0:
-                   begin
-                        minusaabb.RTF.x:=midlepoint.x;
-                        plusaabb.LBN.x:=midlepoint.x;
-                        ta[1].done;
-                        ta[2].done;
-                   end;
-                 1:
-                   begin
-                        minusaabb.LBN.y:=midlepoint.y;
-                        plusaabb.RTF.y:=midlepoint.y;
-                        ta[0].done;
-                        ta[2].done;
-                   end;
-                 2:
-                   begin
-                        minusaabb.RTF.z:=midlepoint.z;
-                        plusaabb.LBN.z:=midlepoint.z;
-                        ta[0].done;
-                        ta[1].done;
-
-                   end;
-     end;
-
-     result.Separator:=ta[imin].plane;
-     //result.point:=midlepoint;
-     if Result.nul.PArray<>nil then
-     GDBFreeMem(Result.nul.PArray);
-     result.nul:=ta[imin].nul;
-     ta[imin].nul.PArray:=nil;
-     ta[imin].nul.Clear;
-
-     result.nul.Shrink;
-
-     result^.updateenttreeadress;
-     //result.NodeData.nodedepth:=nodedepth;
-     result.pminusnode:=createtree(ta[imin].minus,minusaabb,result,nil,nodedepth,TND_Minus);
-     result.pplusnode:=createtree(ta[imin].plus,plusaabb,result,nil,nodedepth,TND_Plus);
-     //result.NodeData.pluscount:=ta[imin].plus.Count;
-     //result.NodeData.minuscount:=ta[imin].minus.Count;
-     if PNode=nil then
-                          begin
-                          ta[imin].done;
-                          entitys.Clear;
-                          entitys.Done;
-                          end;
-
-     //result.BoundingBox:=result.nul.getoutbound;
-     //ta[0].nul.done;
-     //ta[0].done;
-     //ta[1].done;
-     //ta[2].done;
-end;
-
 class procedure TZEntsManipulator.treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>;var DC:TDrawContext);
 begin
      begin
@@ -298,7 +102,8 @@ begin
             end;
             begin
                  if (Node.NodeData.FulDraw=TDTFulDraw)or(dc.MaxDetail) then
-                                                                      Node.nul.DrawWithattrib(dc);
+                                                                      GDBObjEntityOpenArray.DrawWithAttribExternalArray(dc,@(Node.nul));
+                                                                      //GDBObjEntityOpenArray(Node.nul).DrawWithattrib(dc);
                  Node.NodeData.nuldrawpos:=dc.DrawingContext.DRAWCOUNT;
             end;
        end;

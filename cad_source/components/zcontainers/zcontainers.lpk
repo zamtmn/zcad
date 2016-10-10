@@ -18,7 +18,7 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="11">
+    <Files Count="12">
       <Item1>
         <Filename Value="gzctnrvector.pas"/>
         <UnitName Value="gzctnrvector"/>
@@ -63,6 +63,10 @@
         <Filename Value="UGDBOpenArrayOfByte.pas"/>
         <UnitName Value="UGDBOpenArrayOfByte"/>
       </Item11>
+      <Item12>
+        <Filename Value="gzctnrtree.pas"/>
+        <UnitName Value="gzctnrtree"/>
+      </Item12>
     </Files>
     <RequiredPkgs Count="2">
       <Item1>

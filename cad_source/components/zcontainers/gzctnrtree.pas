@@ -20,7 +20,7 @@ unit gzctnrtree;
 {$INCLUDE def.inc}
 interface
 uses
-    UGDBVisibleOpenArray,uzbtypesbase,uzbtypes,uzbmemman;
+    gzctnrvectorpobjects,uzbtypesbase,uzbtypes,uzbmemman;
 type
 TTreeLevelStatistik=record
                           NodesCount,EntCount,OverflowCount:GDBInteger;
@@ -39,19 +39,21 @@ TTreeStatistik=record
                                    ={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
          {-}type{//}
             {-}PGZBInarySeparatedGeometry=^GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>;{//}
+            {-}PTEntity=^TEntity;{//}
+            {-}TEntityArray=GZVectorPObects<PTEntity,TEntity>;{//}
             {-}TTestNode=Object(GDBaseObject){//}
                  {-}plane:TSeparator;{//}
-                 {-}nul,plus,minus:GDBObjEntityOpenArray;{//}
+                 {-}nul,plus,minus:TEntityArray;{//}
                  {-}constructor initnul(InNodeCount:integer);{//}
                  {-}destructor done;virtual;{//}
-           {-}end;{//}
+            {-}end;{//}
          {-}var{//}
             Separator:TSeparator;
             BoundingBox:TBoundingBox;
             NodeDir:TNodeDir;
             Root:{-}PGZBInarySeparatedGeometry{/GDBPointer/};
             pplusnode,pminusnode:{-}PGZBInarySeparatedGeometry{/GDBPointer/};
-            nul:GDBObjEntityOpenArray;
+            nul:TEntityArray;
             NodeData:TNodeData;
             LockCounter:integer;
             destructor done;virtual;

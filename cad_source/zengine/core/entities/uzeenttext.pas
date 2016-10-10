@@ -73,7 +73,7 @@ function acadvjustify(j:TTextJustify): GDBByte;
 var
   t: GDBByte;
 begin
-  t := 3 - ((ord(j) - 1) div 3);
+  t := 3 - (({ord(j)}j2b[j] - 1) div 3);
   if t = 1 then
     result := 0
   else
@@ -597,7 +597,7 @@ var
   s:GDBString;
 begin
   vv := acadvjustify(textprop.justify);
-  hv := (ord(textprop.justify) - 1) mod 3;
+  hv := (j2b[textprop.justify]{ord(textprop.justify)} - 1) mod 3;
   SaveToDXFObjPrefix(handle,outhandle,'TEXT','AcDbText');
   tv:=Local.p_insert;
   tv.x:=tv.x+P_drawInOCS.x;

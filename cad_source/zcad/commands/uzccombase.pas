@@ -1206,13 +1206,16 @@ begin
   HistoryOutStr('Total nodes: '+inttostr(tr.NodesCount));
   HistoryOutStr('Total overflow nodes: '+inttostr(tr.OverflowCount));
   HistoryOutStr('Fact tree depth: '+inttostr(tr.MaxDepth));
-  HistoryOutStr('by levels:');
+  HistoryOutStr('By levels:');
   ap:=0;
   for i:=0 to tr.MaxDepth do
   begin
        HistoryOutStr('level '+inttostr(i));
        HistoryOutStr('  Entities: '+inttostr(tr.PLevelStat^[i].EntCount));
-       cp:=tr.PLevelStat^[i].EntCount/tr.EntCount*100;
+       if tr.EntCount<>0 then
+                             cp:=tr.PLevelStat^[i].EntCount/tr.EntCount*100
+                         else
+                             cp:=0;
        ap:=ap+cp;
        str(cp:2:2,percent);
        str(ap:2:2,apercent);

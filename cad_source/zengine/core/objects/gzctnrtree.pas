@@ -148,6 +148,7 @@ begin
         pplusnode.initnul;
       end;
       pplusnode.lock;
+      pplusnode.root:=@self;
        pobj:=TestNode.plus.beginiterate(ir);
        if pobj<>nil then
          repeat
@@ -164,6 +165,7 @@ begin
         pminusnode.initnul;
       end;
       pminusnode.lock;
+      pminusnode.root:=@self;
       pobj:=TestNode.minus.beginiterate(ir);
       if pobj<>nil then
         repeat
@@ -183,6 +185,7 @@ var
    ir:itrec;
    ep:TElemPosition;
 begin
+  //writeln(GetNodeDepth);
   if TEntsManipulator.isUnneedSeparate(nul.count,GetNodeDepth)then
                                                                   exit;
   MoveSub(self);

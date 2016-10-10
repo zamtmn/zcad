@@ -38,7 +38,7 @@ TEntTreeNodeData=record
                      nuldrawpos,minusdrawpos,plusdrawpos:TActulity;
                      FulDraw:TDrawType;
                      //nodedepth:GDBInteger;
-                     pluscount,minuscount:GDBInteger;
+                     //pluscount,minuscount:GDBInteger;
                  end;
          PTEntTreeNode=^TEntTreeNode;
          TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>{//})
@@ -112,8 +112,8 @@ begin
                            end;
 
      result.BoundingBox:=aabb;
-     result.NodeData.pluscount:=0;
-     result.NodeData.minuscount:=0;
+     //result.NodeData.pluscount:=0;
+     //result.NodeData.minuscount:=0;
      result.Root:=PParentNode;
      result.NodeDir:=dir;
 
@@ -259,8 +259,8 @@ else if (tv.z>=tv.x*aabbaxisscale)and(tv.z>=tv.y*aabbaxisscale) then
      //result.NodeData.nodedepth:=nodedepth;
      result.pminusnode:=createtree(ta[imin].minus,minusaabb,result,nil,nodedepth,TND_Minus);
      result.pplusnode:=createtree(ta[imin].plus,plusaabb,result,nil,nodedepth,TND_Plus);
-     result.NodeData.pluscount:=ta[imin].plus.Count;
-     result.NodeData.minuscount:=ta[imin].minus.Count;
+     //result.NodeData.pluscount:=ta[imin].plus.Count;
+     //result.NodeData.minuscount:=ta[imin].minus.Count;
      if PNode=nil then
                           begin
                           ta[imin].done;

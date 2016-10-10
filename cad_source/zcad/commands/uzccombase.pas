@@ -1164,8 +1164,8 @@ begin
      {$IFDEF DEBUGBUILD}
      HistoryOutStr(dupestring('  ',pnode.nodedepth)+s);
      {$ENDIF}
-     if pnode.NodeData.nodedepth>depth then
-                                  depth:=pnode.NodeData.nodedepth;
+     if pnode.GetNodeDepth{NodeData.nodedepth}>depth then
+                                  depth:=pnode.GetNodeDepth{NodeData.nodedepth};
 
      if assigned(pnode.pplusnode) then
                        PrintTreeNode(PTEntTreeNode(pnode.pplusnode),depth);
@@ -1176,6 +1176,7 @@ procedure GetTreeStat(pnode:PTEntTreeNode;depth:integer;var tr:TTreeStatistik);
 begin
      inc(tr.NodesCount);
      inc(tr.EntCount,pnode^.nul.Count);
+     inc(tr.MemCount,sizeof(pnode^));
      if depth>tr.MaxDepth then
                               tr.MaxDepth:=depth;
      if pnode^.nul.Count>GetInNodeCount(SysVar.RD.RD_SpatialNodeCount^) then
@@ -1225,8 +1226,9 @@ begin
 
   tr:=MakeTreeStatisticRec(SysVar.RD.RD_SpatialNodesDepth^);
   GetTreeStat(@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,depth,tr);
-  HistoryOutStr('as a result:');
+  HistoryOutStr('As a result:');
   HistoryOutStr('Total entities: '+inttostr(tr.EntCount));
+  HistoryOutStr('Memory usage (bytes): '+inttostr(tr.MemCount));
   HistoryOutStr('Total nodes: '+inttostr(tr.NodesCount));
   HistoryOutStr('Total overflow nodes: '+inttostr(tr.OverflowCount));
   HistoryOutStr('Fact tree depth: '+inttostr(tr.MaxDepth));

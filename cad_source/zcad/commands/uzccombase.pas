@@ -1150,28 +1150,6 @@ begin
 
    result:=cmd_ok;
 end;
-procedure PrintTreeNode(pnode:PTEntTreeNode;var depth:integer);
-var
-   s:gdbstring;
-begin
-     s:='';
-     if pnode^.nul.Count<>0 then
-     begin
-          s:='В ноде примитивов: '+inttostr(pnode^.nul.Count);
-     end;
-     s:=s+'(далее в +): '+inttostr(pnode.NodeData.pluscount);
-     s:=s+' (далее в -): '+inttostr(pnode.NodeData.minuscount);
-     {$IFDEF DEBUGBUILD}
-     HistoryOutStr(dupestring('  ',pnode.nodedepth)+s);
-     {$ENDIF}
-     if pnode.GetNodeDepth{NodeData.nodedepth}>depth then
-                                  depth:=pnode.GetNodeDepth{NodeData.nodedepth};
-
-     if assigned(pnode.pplusnode) then
-                       PrintTreeNode(PTEntTreeNode(pnode.pplusnode),depth);
-     if assigned(pnode.pminusnode) then
-                       PrintTreeNode(PTEntTreeNode(pnode.pminusnode),depth);
-end;
 procedure GetTreeStat(pnode:PTEntTreeNode;depth:integer;var tr:TTreeStatistik);
 begin
      inc(tr.NodesCount);
@@ -1194,26 +1172,12 @@ begin
 end;
 
 function RebuildTree_com(operands:TCommandOperands):TCommandResult;
-var i: GDBInteger;
-    percent,apercent:string;
-    cp,ap:single;
-    //pv:pGDBObjEntity;
-    //ir:itrec;
-    depth:integer;
-    tr:TTreeStatistik;
-    lpsh:TLPSHandle;
+var
+   lpsh:TLPSHandle;
 begin
-  HistoryOutStr('Total entities: '+inttostr(drawings.GetCurrentROOT.ObjArray.count));
-  HistoryOutStr('Max tree depth: '+inttostr(SysVar.RD.RD_SpatialNodesDepth^));
-  HistoryOutStr('Max in node entities: '+inttostr(GetInNodeCount(SysVar.RD.RD_SpatialNodeCount^)));
-  HistoryOutStr('Create tree...');
   lpsh:=LPS.StartLongProcess(drawings.GetCurrentROOT.ObjArray.count,'Rebuild drawing spatial',nil);
-  //if assigned(StartLongProcessProc) then StartLongProcessProc(drawings.GetCurrentROOT.ObjArray.count,'Rebuild drawing spatial');
   drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,IninialNodeDepth);
-  //drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
   LPS.EndLongProcess(lpsh);
-  //if assigned(EndLongProcessProc) then EndLongProcessProc;
-  HistoryOutStr('Done');
   drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
   drawings.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
   drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
@@ -1221,12 +1185,22 @@ begin
                                       ReturnToDefaultProc(drawings.GetUnitsFormat);
   clearcp;
   zcRedrawCurrentDrawing;
+  result:=cmd_ok;
+end;
+function TreeStat_com(operands:TCommandOperands):TCommandResult;
+var i: GDBInteger;
+    percent,apercent:string;
+    cp,ap:single;
+    depth:integer;
+    tr:TTreeStatistik;
+begin
   depth:=0;
-  //PrintTreeNode(@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,depth);
-
   tr:=MakeTreeStatisticRec(SysVar.RD.RD_SpatialNodesDepth^);
   GetTreeStat(@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,depth,tr);
-  HistoryOutStr('As a result:');
+  HistoryOutStr('Total entities: '+inttostr(drawings.GetCurrentROOT.ObjArray.count));
+  HistoryOutStr('Max tree depth: '+inttostr(SysVar.RD.RD_SpatialNodesDepth^));
+  HistoryOutStr('Max in node entities: '+inttostr(GetInNodeCount(SysVar.RD.RD_SpatialNodeCount^)));
+  HistoryOutStr('Current drawing spatial index Info:');
   HistoryOutStr('Total entities: '+inttostr(tr.EntCount));
   HistoryOutStr('Memory usage (bytes): '+inttostr(tr.MemCount));
   HistoryOutStr('Total nodes: '+inttostr(tr.NodesCount));
@@ -1904,6 +1878,7 @@ begin
   selframecommand^.overlay:=true;
   selframecommand.CEndActionAttr:=0;
   CreateCommandFastObjectPlugin(@RebuildTree_com,'RebuildTree',CADWG,0);
+  CreateCommandFastObjectPlugin(@TreeStat_com,'TreeStat',CADWG,0);
   CreateCommandFastObjectPlugin(@undo_com,'Undo',CADWG or CACanUndo,0).overlay:=true;
   CreateCommandFastObjectPlugin(@redo_com,'Redo',CADWG or CACanRedo,0).overlay:=true;
 

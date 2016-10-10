@@ -29,7 +29,8 @@ GDBObjEntityArray=array [0..0] of PGDBObjEntity;}
 {Export+}
 PGDBObjOpenArrayOfPV=^GDBObjOpenArrayOfPV;
 GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseObjects)
-                      procedure DrawWithattrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
+                      procedure DrawWithattrib(var DC:TDrawContext);virtual;
+                      procedure DrawWithAttribExternalArray(var DC:TDrawContext;POAPV:PGDBObjOpenArrayOfPV);static;
                       procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                       procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                       procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
@@ -263,18 +264,29 @@ end;
 procedure GDBObjOpenArrayOfPV.DrawWithattrib;
 var
   p:pGDBObjEntity;
-      ir:itrec;
+  ir:itrec;
 begin
   if Count>1 then
                     Count:=Count;
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       //if p^.vp.ID<>0 then
-                         //p^.vp.ID:=p^.vp.ID;
        if p^.infrustum=dc.DrawingContext.infrustumactualy then
-                           p^.DrawWithAttrib({infrustumactualy,subrender}dc);
+                           p^.DrawWithAttrib(dc);
        p:=iterate(ir);
+  until p=nil;
+end;
+procedure GDBObjOpenArrayOfPV.DrawWithAttribExternalArray(var DC:TDrawContext;POAPV:PGDBObjOpenArrayOfPV);
+var
+  p:pGDBObjEntity;
+  ir:itrec;
+begin
+  p:=POAPV^.beginiterate(ir);
+  if p<>nil then
+  repeat
+       if p^.infrustum=dc.DrawingContext.infrustumactualy then
+                           p^.DrawWithAttrib(dc);
+       p:=POAPV^.iterate(ir);
   until p=nil;
 end;
 procedure GDBObjOpenArrayOfPV.DrawGeometry;

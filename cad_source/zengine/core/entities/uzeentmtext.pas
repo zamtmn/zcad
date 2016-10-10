@@ -977,7 +977,7 @@ begin
   dxfvertexout(outhandle,10,Local.p_insert);
   dxfGDBDoubleout(outhandle,40,textprop.size);
   dxfGDBDoubleout(outhandle,41,width);
-  dxfGDBIntegerout(outhandle,71,ord(textprop.justify));
+  dxfGDBIntegerout(outhandle,71,j2b[textprop.justify]{ord(textprop.justify)+1});
   if  convertfromunicode(template)=content then
                                                s := template
                                            else

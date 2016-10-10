@@ -56,7 +56,6 @@ TTreeStatistik=record
             LockCounter:integer;
             destructor done;virtual;
             procedure ClearSub;
-            procedure Clear;
             constructor initnul;
             procedure AddObjToNul(var Entity:TEntity);
             procedure updateenttreeadress;
@@ -271,10 +270,6 @@ begin
      NodeData:=default(TNodeData);
      LockCounter:=0;
      //NodeData.FulDraw:={True}TDTFulDraw;
-end;
-procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>.Clear;
-begin
-     clearsub;
 end;
 procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>.ClearSub;
 begin

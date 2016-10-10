@@ -123,6 +123,9 @@ action ACN_COPYVALUETOCLIP,ObjInspCopyToClip(VALUE),#CVL,Copy value,,
 
 action ACN_DIST,Dist,dist.bmp,Distance,,
 
+action ACN_REBUILDTREE,RebuildTree,#rtree,Rebuild current drawing spatial index,,
+action ACN_TREESTAT,TreeStat,#ti,Spatial index info,Current drawing spatial index info,
+
 action2variable ACN_OS_INSERT,DWG_OSMode|1,snaptoinsert.bmp,Snap to insert point,,
 action2variable ACN_OS_END,DWG_OSMode|2,snaptoend.bmp,Snap to end point,,
 action2variable ACN_OS_MIDDLE,DWG_OSMode|4,snaptomid.bmp,Snap to middle point,,

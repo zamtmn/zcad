@@ -82,7 +82,7 @@ Panel Standart;
     action ACN_DEVNUMBERING
     action ACN_KIPCDBUILD
     Separator
-    button RebuildTree,#rtree,Rebuild entitys tree
+    action ACN_REBUILDTREE
     Separator
     action ACN_PROCESSKZ
     action ACN_REMAUTOCABLES
@@ -506,6 +506,8 @@ MainMenuItem Debug;
      Command BlocksList,BlocksList,none,none
      Command Check clipboard,DebClip,none,none
      Command Report on memory allocation(for debugbuild),MemSummary,none,none
+     action ACN_TREESTAT
+     Command AppExplorer,DbgAppExplorer,none,none
     }
     MenuItem Inspector;
       {
@@ -513,7 +515,6 @@ MainMenuItem Debug;
         Command **GDB,SetObjInsp(GDBDescriptor),none,none
         Command **OGLWND (отладка),SetObjInsp(OGLWND_DEBUG),none,none
       }
-    Command AppExplorer,DbgAppExplorer,none,none
   }
 MainMenuItem DB;
   {

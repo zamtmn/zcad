@@ -36,41 +36,40 @@ TTreeStatistik=record
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);
          TElemPosition=(TEP_Plus,TEP_Minus,TEP_nul);
          GZBInarySeparatedGeometry{-}<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>{//}
-                         ={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                      {-}type{//}
-                         {-}PGZBInarySeparatedGeometry=^GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>;{//}
-                         {-}TTestNode=Object(GDBaseObject){//}
-                              {-}plane:TSeparator;{//}
-                              {-}nul,plus,minus:GDBObjEntityOpenArray;{//}
-                              {-}constructor initnul(InNodeCount:integer);{//}
-                              {-}destructor done;virtual;{//}
-                         {-}end;{//}
-                      {-}var{//}
-                         Separator:TSeparator;
-                         BoundingBox:TBoundingBox;
-                         NodeDir:TNodeDir;
-                         Root:{-}PGZBInarySeparatedGeometry{/GDBPointer/};
-                         pplusnode,pminusnode:{-}PGZBInarySeparatedGeometry{/GDBPointer/};
-                         nul:GDBObjEntityOpenArray;
-                         NodeData:TNodeData;
-                         LockCounter:integer;
-                         destructor done;virtual;
-                         procedure ClearSub;
-                         procedure Clear;
-                         constructor initnul;
-                         procedure AddObjToNul(var Entity:TEntity);
-                         procedure updateenttreeadress;
-                         procedure CorrectNodeBoundingBox(var Entity:TEntity);
-                         procedure AddObjectToNodeTree(var Entity:TEntity);
-                         procedure Lock;
-                         procedure UnLock;
-                         procedure Separate;virtual;
-                         function GetNodeDepth:integer;virtual;
-                         procedure MoveSub(var node:GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>);
-                         function GetOptimalTestNode(var TNArray:array of TTestNode):integer;
-                         procedure StoreOptimalTestNode(var TestNode:TTestNode);
-                         //procedure AddEntity(var e)
-                         end;
+                                   ={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+         {-}type{//}
+            {-}PGZBInarySeparatedGeometry=^GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>;{//}
+            {-}TTestNode=Object(GDBaseObject){//}
+                 {-}plane:TSeparator;{//}
+                 {-}nul,plus,minus:GDBObjEntityOpenArray;{//}
+                 {-}constructor initnul(InNodeCount:integer);{//}
+                 {-}destructor done;virtual;{//}
+           {-}end;{//}
+         {-}var{//}
+            Separator:TSeparator;
+            BoundingBox:TBoundingBox;
+            NodeDir:TNodeDir;
+            Root:{-}PGZBInarySeparatedGeometry{/GDBPointer/};
+            pplusnode,pminusnode:{-}PGZBInarySeparatedGeometry{/GDBPointer/};
+            nul:GDBObjEntityOpenArray;
+            NodeData:TNodeData;
+            LockCounter:integer;
+            destructor done;virtual;
+            procedure ClearSub;
+            procedure Clear;
+            constructor initnul;
+            procedure AddObjToNul(var Entity:TEntity);
+            procedure updateenttreeadress;
+            procedure CorrectNodeBoundingBox(var Entity:TEntity);
+            procedure AddObjectToNodeTree(var Entity:TEntity);
+            procedure Lock;
+            procedure UnLock;
+            procedure Separate;virtual;
+            function GetNodeDepth:integer;virtual;
+            procedure MoveSub(var node:GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>);
+            function GetOptimalTestNode(var TNArray:array of TTestNode):integer;
+            procedure StoreOptimalTestNode(var TestNode:TTestNode);
+          end;
 {EXPORT-}
 function MakeTreeStatisticRec(treedepth:integer):TTreeStatistik;
 procedure KillTreeStatisticRec(var tr:TTreeStatistik);

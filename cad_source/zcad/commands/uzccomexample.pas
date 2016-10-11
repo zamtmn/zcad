@@ -50,6 +50,7 @@ uses
                        //модуль описывающий примитив вставка блока
   uzeentline,             //unit describes line entity
                        //модуль описывающий примитив линия
+  uzventsuperline,uzcenitiesvariablesextender,UUnitManager,uzbpaths,uzctranslations,
 
   uzeentlwpolyline,             //unit describes line entity
                        //модуль описывающий примитив двухмерная ПОЛИлиния
@@ -812,6 +813,31 @@ begin
     zcHideCommandParams; //< Возвращает инспектор в значение по умолчанию
     result:=cmd_ok;
 end;
+function DrawSuperLine_com(operands:TCommandOperands):TCommandResult;
+var
+    psuperline:PGDBObjSuperLine;
+    p1,p2:gdbvertex;
+    pvarext:PTVariablesExtender;
+    psu:ptunit;
+begin
+    if commandmanager.get3dpoint('Specify first point:',p1) then
+    if commandmanager.get3dpoint('Specify first second:',p2) then
+    begin
+      psuperline := AllocEnt(GDBSuperLineID);
+      psuperline^.init(nil,nil,0,p1,p2);
+      pvarext:=psuperline^.GetExtension(typeof(TVariablesExtender));
+      if pvarext<>nil then
+      begin
+        psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
+        if psu<>nil then
+          pvarext^.entityunit.copyfrom(psu);
+      end;
+
+      zcSetEntPropFromCurrentDrawingProp(psuperline);
+      zcAddEntToCurrentDrawingWithUndo(psuperline);
+    end;
+    result:=cmd_ok;
+end;
 
 initialization
 { тут регистрация функций в интерфейсе зкада}
@@ -832,6 +858,8 @@ initialization
      CreateCommandFastObjectPlugin(@DrawLine_com,        'DrawLine',   CADWG,0);
      CreateCommandFastObjectPlugin(@DrawRectangle_com,   'Rectangle',  CADWG,0);
      CreateCommandFastObjectPlugin(@matchprop_com,       'MatchProp',  CADWG,0);
+
+     CreateCommandFastObjectPlugin(@DrawSuperLine_com,        'DrawSuperLine',   CADWG,0);
 
      MatchPropParam.ProcessLayer:=true;
      MatchPropParam.ProcessLineType:=true;

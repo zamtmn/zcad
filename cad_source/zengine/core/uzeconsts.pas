@@ -76,6 +76,7 @@ const {as_normal=0;
   GDBRotatedDimensionID = 106;
   GDBDiametricDimensionID = 107;
   GDBRadialDimensionID = 108;
+  GDBSuperLineID = 109;
 
   PROJParalel = 1;
   PROJPerspective = 2;
@@ -198,6 +199,7 @@ const {as_normal=0;
   ObjN_GDBObjText='GDBObjText';
   ObjN_GDBObjMText='GDBObjMText';
   ObjN_GDBObjLine='GDBObjLine';
+  ObjN_GDBObjSuperLine='GDBObjSuperLine';
   ObjN_GDBObjCircle='GDBObjCircle';
   ObjN_GDBObjArc='GDBObjArc';
   ObjN_GDBObjEllipse='GDBObjEllipse';
@@ -235,6 +237,8 @@ const {as_normal=0;
   {Upgrade объектов DXF}
   UD_LineToLeader=1;
   UD_LineToNet=2;
+  UD_LineToSuperLine=10;
+
   ClByBlock=0;
   ClByLayer=256;
   ClDifferent=258;

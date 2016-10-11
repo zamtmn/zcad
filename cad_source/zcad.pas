@@ -112,6 +112,7 @@ uses
   uzccomdraw,
   //uzvcom,
   //uzvnum,
+  uzventsuperline,
   uzccomexample,
   uzccomexample2,
   uzccomobjectinspector,

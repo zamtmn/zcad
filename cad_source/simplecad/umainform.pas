@@ -9,7 +9,7 @@ uses
   ExtCtrls, StdCtrls, Spin,
   {From ZCAD}
   uzbmemman,                                                                       //zcad memorymanager
-  uzbtypes, uzbtypesbase,                                                          //zcad basetypes
+  uzbtypes, uzbtypesbase,uzbgeomtypes,                                              //zcad basetypes
   uzegeometry,                                                                     //some mathematical and geometrical support
   uzefontmanager,uzeffshx,                                                        //fonts manager and SHX fileformat support
   uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,                          //generic view areas support
@@ -130,7 +130,7 @@ begin
   if Key=VK_ESCAPE then
   begin
        GetCurrentDrawing^.SelObjArray.Free;
-       GetCurrentDrawing^.GetCurrentROOT^.ObjArray.DeSelect(GetCurrentDrawing^.GetSelObjArray,GetCurrentDrawing^.wa.param.SelDesc.Selectedobjcount);
+       GetCurrentDrawing^.GetCurrentROOT^.ObjArray.DeSelect(GetCurrentDrawing^.wa.param.SelDesc.Selectedobjcount,nil);
        GetCurrentDrawing^.HardReDraw;
        Key:=0;
   end;
@@ -466,7 +466,7 @@ begin
      _StartLongProcess(0,'Rebuild spatial tree');
      dc:=GetCurrentDrawing^.CreateDrawingRC;
      GetCurrentDrawing^.pObjRoot^.calcbb(dc);
-     GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree.maketreefrom(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox);
+     GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree.maketreefrom(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox,nil);
      //GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree:=createtree(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox,@GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
      _EndLongProcess;
      GetCurrentDrawing^.HardReDraw;
@@ -552,7 +552,7 @@ begin
           dc:=GetCurrentDrawing^.CreateDrawingRC;
           addfromdxf(OpenDialog1.FileName,@GetCurrentDrawing^.pObjRoot^,TLOLoad,GetCurrentDrawing^);
           GetCurrentDrawing^.pObjRoot^.FormatEntity(GetCurrentDrawing^,dc);
-          GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree.maketreefrom(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox);
+          GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree.maketreefrom(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox,nil);
           //GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree:=createtree(GetCurrentDrawing^.pObjRoot^.ObjArray,GetCurrentDrawing^.pObjRoot^.vp.BoundingBox,@GetCurrentDrawing^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
           GetCurrentDrawing^.HardReDraw;
           _EndLongProcess;
@@ -595,7 +595,7 @@ begin
         if count>10000 then
                            pv^.SelectQuik
                        else
-                           pv^.select(GetCurrentDrawing^.GetSelObjArray,GetCurrentDrawing^.wa.param.SelDesc.Selectedobjcount);
+                           pv^.select(GetCurrentDrawing^.wa.param.SelDesc.Selectedobjcount,nil);
 
   pv:=GetCurrentDrawing^.GetCurrentROOT^.ObjArray.iterate(ir);
   until pv=nil;
@@ -613,7 +613,7 @@ begin
             if GetCurrentDrawing^.wa.param.SelDesc.LastSelectedObject<>nil then
             begin
                  pGDBObjEntity(GetCurrentDrawing^.wa.param.SelDesc.LastSelectedObject)^.vp.Layer^._on:=false;
-                 pGDBObjEntity(GetCurrentDrawing^.wa.param.SelDesc.LastSelectedObject)^.DeSelect(GetCurrentDrawing^.GetSelObjArray,GetCurrentDrawing^.wa.param.SelDesc.Selectedobjcount);
+                 pGDBObjEntity(GetCurrentDrawing^.wa.param.SelDesc.LastSelectedObject)^.DeSelect(GetCurrentDrawing^.wa.param.SelDesc.Selectedobjcount,nil);
             end;
             GetCurrentDrawing^.HardReDraw;
        end

@@ -22,12 +22,14 @@ interface
 uses uzgldrawcontext,uzgldrawerabstract,
      uzbtypesbase,sysutils,uzbmemman,
      uzbgeomtypes,uzegeometry,uzglgeometry,uzefont,uzeentitiesprop,UGDBPoint3DArray,
-     uzgeomentity3d;
+     uzgeomline3d;
 type
 {Export+}
 TZEntityRepresentation={$IFNDEF DELPHI}packed{$ENDIF} object
                        {-}private{//}
                        Graphix:ZGLGraphix;(*hidden_in_objinsp*)
+                       //Graphix2:ZGLGraphix;
+                       //ent:TGeomLine3D;
                        {-}public{//}
                        constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar{$ENDIF});
                        destructor done;virtual;

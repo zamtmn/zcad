@@ -16,15 +16,16 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzgeomentity;
+unit uzgeomline3d;
 {$INCLUDE def.inc}
 interface
-uses uzgprimitivessarray,math,uzglgeomdata,uzgldrawcontext,uzgvertex3sarray,uzgldrawerabstract,
-     uzbtypesbase,sysutils,uzbtypes,uzbmemman,
-     uzbgeomtypes,uzegeometry;
+uses
+     sysutils,uzbtypes,uzbmemman,
+     uzgeomentity,uzgeomentity3d,uzbgeomtypes;
 type
 {Export+}
-TGeomEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+TGeomLine3D={$IFNDEF DELPHI}packed{$ENDIF} object(TGeomEntity3D)
+                                           LineData:GDBLineProp;
                                            end;
 {Export-}
 implementation

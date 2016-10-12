@@ -136,9 +136,14 @@ type
                        PolyWidth:GDBDouble;(*'Polyline width'*)  //**< Ширина полилинии (если в качестве примитива выбран RET_LWPoly)
                  end;
 {EXPORT-}
+PTDrawSuperlineParams=^TDrawSuperlineParams;
+TDrawSuperlineParams=packed record
+                         pu:PTUnit;
+                     end;
 var
    MatchPropParam:TMatchPropParam; //**< Переменная содержащая опции команды MatchProp
    RectangParam:TRectangParam;     //**< Переменная содержащая опции команды Rectangle
+   DrawSuperlineParams:TDrawSuperlineParams;
 
 implementation
 //** блаблабла
@@ -849,6 +854,9 @@ begin
 end;
 
 begin
+    psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
+    DrawSuperlineParams.pu:=psu;
+    zcShowCommandParams(pointer(SysUnit^.TypeName2PTD('TDrawSuperlineParams')),@DrawSuperlineParams);
     UndoMarcerIsPlazed:=false;
     if GetInteractiveLine('Specify first point:','Specify second point:',p1,p2) then
     begin
@@ -884,6 +892,7 @@ initialization
      CreateCommandFastObjectPlugin(@DrawRectangle_com,   'Rectangle',  CADWG,0);
      CreateCommandFastObjectPlugin(@matchprop_com,       'MatchProp',  CADWG,0);
 
+     SysUnit.RegisterType(TypeInfo(TDrawSuperlineParams));//регистрируем тип данных в зкадном RTTI
      CreateCommandFastObjectPlugin(@DrawSuperLine_com,        'DrawSuperLine',   CADWG,0);
 
      MatchPropParam.ProcessLayer:=true;

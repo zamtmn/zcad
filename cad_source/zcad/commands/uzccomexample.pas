@@ -285,6 +285,16 @@ begin
     end;
     drawings.GetCurrentDWG^.FreeConstructionObjects;
 end;
+function GetInteractiveLineFrom1to2(prompt2:GDBString;const p1:GDBVertex; out p2:GDBVertex):GDBBoolean;
+var
+    pline:PGDBObjLine;
+begin
+    pline := GDBPointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
+    pline^.CoordInOCS.lBegin:=p1;
+    InteractiveLineEndManipulator(pline,p1,false);
+    result:=commandmanager.Get3DPointInteractive(prompt2,p2,@InteractiveLineEndManipulator,pline);
+    drawings.GetCurrentDWG^.FreeConstructionObjects;
+end;
 
 function DrawRotatedDim_com(operands:TCommandOperands):TCommandResult;
 var
@@ -819,23 +829,38 @@ var
     p1,p2:gdbvertex;
     pvarext:PTVariablesExtender;
     psu:ptunit;
-begin
-    if commandmanager.get3dpoint('Specify first point:',p1) then
-    if commandmanager.get3dpoint('Specify first second:',p2) then
-    begin
-      psuperline := AllocEnt(GDBSuperLineID);
-      psuperline^.init(nil,nil,0,p1,p2);
-      pvarext:=psuperline^.GetExtension(typeof(TVariablesExtender));
-      if pvarext<>nil then
-      begin
-        psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
-        if psu<>nil then
-          pvarext^.entityunit.copyfrom(psu);
-      end;
+    UndoMarcerIsPlazed:boolean;
 
-      zcSetEntPropFromCurrentDrawingProp(psuperline);
-      zcAddEntToCurrentDrawingWithUndo(psuperline);
+procedure createline;
+begin
+    psuperline := AllocEnt(GDBSuperLineID);
+    psuperline^.init(nil,nil,0,p1,p2);
+    pvarext:=psuperline^.GetExtension(typeof(TVariablesExtender));
+    if pvarext<>nil then
+    begin
+      psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
+      if psu<>nil then
+        pvarext^.entityunit.copyfrom(psu);
     end;
+    zcSetEntPropFromCurrentDrawingProp(psuperline);
+    zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'DrawSuperLine');
+    zcAddEntToCurrentDrawingWithUndo(psuperline);
+    zcRedrawCurrentDrawing;
+end;
+
+begin
+    UndoMarcerIsPlazed:=false;
+    if GetInteractiveLine('Specify first point:','Specify second point:',p1,p2) then
+    begin
+      createline;
+      p1:=p2;
+      while GetInteractiveLineFrom1to2('Specify second point:',p1,p2)do
+      begin
+       createline;
+       p1:=p2;
+      end;
+    end;
+    zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
     result:=cmd_ok;
 end;
 

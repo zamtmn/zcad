@@ -100,7 +100,7 @@ begin
   textprop.oblique := 0;
   textprop.wfactor := 1;
   textprop.justify := jstl;
-  //geom.SHX.init({$IFDEF DEBUGBUILD}'{08E35ED5-B4A7-4210-A3C9-0645E8F27ABA}-GDBText.Vertex3D_in_WCS_Array',{$ENDIF}100);
+  //Representation.SHX.init({$IFDEF DEBUGBUILD}'{08E35ED5-B4A7-4210-A3C9-0645E8F27ABA}-GDBText.Vertex3D_in_WCS_Array',{$ENDIF}100);
   //Vertex2D_in_DCS_Array.init({$IFDEF DEBUGBUILD}'{116E3B21-8230-44E8-B7A5-9CEED4B886D2}',{$ENDIF}100);
   PProjoutbound:=nil;
 end;
@@ -116,7 +116,7 @@ begin
   textprop.oblique := o;
   textprop.wfactor := w;
   textprop.justify := j;
-  //geom.SHX.init({$IFDEF DEBUGBUILD}'{8776360E-8115-4773-917D-83ED1843FF9C}',{$ENDIF}1000);
+  //Representation.SHX.init({$IFDEF DEBUGBUILD}'{8776360E-8115-4773-917D-83ED1843FF9C}',{$ENDIF}1000);
   //Vertex2D_in_DCS_Array.init({$IFDEF DEBUGBUILD}'{EDC6D76B-DDFF-41A0-ACCC-48804795A3F5}',{$ENDIF}100);
   PProjoutbound:=nil;
   //format;
@@ -129,7 +129,7 @@ procedure GDBObjText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 var
       TCP:TCodePage;
 begin
-  Geom.Clear;
+  Representation.geom.Clear;
 
   TCP:=CodePage;
   CodePage:=CP_win;
@@ -207,7 +207,7 @@ begin
     calcobjmatrix;
     //getoutbound;
     //createpoint(drawing);
-    Geom.DrawTextContent(dc.drawer,content,TXTStyleIndex^.pfont,DrawMatrix,objmatrix,textprop.size,Outbound);
+    Representation.geom.DrawTextContent(dc.drawer,content,TXTStyleIndex^.pfont,DrawMatrix,objmatrix,textprop.size,Outbound);
     calcbb(dc);
 
     //P_InsertInWCS:=VectorTransform3D(local.P_insert,vp.owner^.GetMatrix^);
@@ -267,7 +267,7 @@ destructor GDBObjText.done;
 begin
   content:='';
   template:='';
-  //geom.SHX.Done;
+  //Representation.SHX.Done;
   //Vertex2D_in_DCS_Array.Done;
   inherited done;
 end;

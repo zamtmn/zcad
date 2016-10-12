@@ -104,7 +104,7 @@ begin
   FormatWithoutSnapArray;
   calcbb(dc);
   //-------------BuildSnapArray(VertexArrayInWCS,snaparray,Closed);
-  Geom.Clear;
+  Representation.geom.Clear;
   if VertexArrayInWCS.Count>1 then
   begin
   {ptv:=VertexArrayInWCS.beginiterate(ir);
@@ -114,12 +114,12 @@ begin
         ptvprev:=ptv;
         ptv:=VertexArrayInWCS.iterate(ir);
         if ptv<>nil then
-                        Geom.DrawLineWithLT(ptv^,ptvprev^,vp);
+                        Representation.DrawLineWithLT(ptv^,ptvprev^,vp);
   until ptv=nil;
   if closed then
-                Geom.DrawLineWithLT(ptvprev^,ptvfisrt^,vp);
+                Representation.DrawLineWithLT(ptvprev^,ptvfisrt^,vp);
   end;}
-  Geom.DrawPolyLineWithLT(dc,VertexArrayInWCS,vp,closed,false);
+  Representation.geom.DrawPolyLineWithLT(dc,VertexArrayInWCS,vp,closed,false);
   end;
 end;
 
@@ -145,7 +145,7 @@ end;
 procedure GDBObjPolyline.DrawGeometry;
 begin
      //vertexarrayInWCS.DrawGeometryWClosed(closed);
-     self.Geom.DrawGeometry(DC);
+     self.Representation.geom.DrawGeometry(DC);
 {  if closed then oglsm.myglbegin(GL_line_loop)
             else oglsm.myglbegin(GL_line_strip);
   vertexarrayInWCS.iterategl(@myglVertex3dv);

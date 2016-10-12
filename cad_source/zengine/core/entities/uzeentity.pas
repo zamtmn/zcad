@@ -23,7 +23,7 @@ uses uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingd
      uzecamera,uzeentitiesprop,uzglgeometry,uzestyleslinetypes,uzbtypesbase,
      uzbgeomtypes,UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,
      uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,uzbmemman,UGDBOpenArrayOfByte,
-     uzestyleslayers,gzctnrvectorpobjects;
+     uzestyleslayers,gzctnrvectorpobjects,uzeenrepresentation;
 type
 //Owner:{-}PGDBObjEntity{/GDBPointer/};(*'Владелец'*)
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
@@ -44,7 +44,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     Visible:TActulity;(*'Visible'*)(*oi_readonly*)(*hidden_in_objinsp*)
                     infrustum:TActulity;(*'In frustum'*)(*oi_readonly*)(*hidden_in_objinsp*)
                     PExtAttrib:PTExtAttrib;(*hidden_in_objinsp*)
-                    Geom:ZGLGeometry;(*hidden_in_objinsp*)
+                    Representation:TZEntityRepresentation;(*hidden_in_objinsp*)
                     destructor done;virtual;
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -494,7 +494,7 @@ begin
   vp.LineType:={''}nil;
   vp.LineTypeScale:=1;
   bp.ListPos.owner:=own;
-  geom.init({$IFDEF DEBUGBUILD}'GDBObjEntity'{$ENDIF});
+  Representation.init({$IFDEF DEBUGBUILD}'GDBObjEntity'{$ENDIF});
   GetDXFIOFeatures.RunConstructorFeature(@self);
   GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
@@ -503,7 +503,7 @@ begin
      createfield;
      if owner<>nil then
                        bp.ListPos.owner:=owner;
-     geom.init({$IFDEF DEBUGBUILD}{$IFNDEF SEPARATEMEMUSAGE}'GDBObjEntity'{$ELSE}pchar(GetObjTypeName){$ENDIF}{$ENDIF});
+     Representation.init({$IFDEF DEBUGBUILD}{$IFNDEF SEPARATEMEMUSAGE}'GDBObjEntity'{$ELSE}pchar(GetObjTypeName){$ENDIF}{$ENDIF});
      GetDXFIOFeatures.RunConstructorFeature(@self);
      GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
@@ -866,7 +866,7 @@ begin
      if PExtAttrib<>nil then
                             gdbfreemem(pointer(PExtAttrib));
      vp.LineType:={''}nil;
-     geom.done;
+     Representation.done;
      GetDXFIOFeatures.RunDestructorFeature(@self);
 end;
 

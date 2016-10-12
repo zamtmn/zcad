@@ -247,7 +247,7 @@ begin
                                                              exit;
                                                         end;
 
-    if geom.CalcTrueInFrustum (mf,false)<>IREmpty then
+    if Representation.geom.CalcTrueInFrustum (mf,false)<>IREmpty then
                                                  result:=true
                                              else
                                                  result:=false;
@@ -307,7 +307,7 @@ begin
       result:=CalcOutBound4VInFrustum(outbound,frustum);
       if result<>IRPartially then
                                  exit;
-      result:=geom.CalcTrueInFrustum(frustum,true);
+      result:=Representation.geom.CalcTrueInFrustum(frustum,true);
 end;
 procedure GDBObjAbstractText.Renderfeedback;
 var //pm:DMatrix4D;
@@ -390,7 +390,7 @@ begin
 end;
 procedure GDBObjAbstractText.SimpleDrawGeometry;
 begin
-     //geom.SHX.simpledrawgeometry(dc,1);
+     //Representation.SHX.simpledrawgeometry(dc,1);
 end;
 
 procedure GDBObjAbstractText.DrawGeometry;
@@ -411,11 +411,11 @@ begin
                                                                                    //Vertex3D_in_WCS_Array.simpledrawgeometry({_lod}3)
                                                                                    //simpledrawgeometry
                                                                                    begin
-                                                                                   //geom.SHX.drawgeometry;
-                                                                                   geom.DrawGeometry(DC);
+                                                                                   //Representation.SHX.drawgeometry;
+                                                                                   Representation.geom.DrawGeometry(DC);
                                                                                    end
                                                                                else
-                                                                                   geom.DrawGeometry(DC);
+                                                                                   Representation.geom.DrawGeometry(DC);
                                                                                    //simpledrawgeometry(dc);
                                                                                      {begin
                                                                                            myglbegin(gl_line_loop);

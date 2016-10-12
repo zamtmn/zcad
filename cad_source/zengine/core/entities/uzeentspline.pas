@@ -235,8 +235,8 @@ begin
   //programlog.LogOutFormatStr('AproxPointInWCS: count=%d;max=%d;parray=%p',[AproxPointInWCS.Count,AproxPointInWCS.Max,AproxPointInWCS.PArray],lp_OldPos,LM_Trace);
   AproxPointInWCS.Shrink;
 
-  Representation.geom.Clear;
-  Representation.geom.DrawPolyLineWithLT(dc,AproxPointInWCS,vp,closed,false);
+  Representation.Clear;
+  Representation.DrawPolyLineWithLT(dc,AproxPointInWCS,vp,closed,false);
   calcbb(dc);
 end;
 
@@ -283,7 +283,7 @@ end;
 procedure GDBObjSpline.DrawGeometry;
 begin
      //vertexarrayInWCS.DrawGeometryWClosed(closed);
-     self.Representation.Geom.DrawGeometry(DC);
+     self.Representation.DrawGeometry(DC);
 {  if closed then oglsm.myglbegin(GL_line_loop)
             else oglsm.myglbegin(GL_line_strip);
   vertexarrayInWCS.iterategl(@myglVertex3dv);

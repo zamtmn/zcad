@@ -20,7 +20,7 @@ unit uzeentity;
 {$INCLUDE def.inc}
 interface
 uses uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingdef,
-     uzecamera,uzeentitiesprop,uzglgeometry,uzestyleslinetypes,uzbtypesbase,
+     uzecamera,uzeentitiesprop,uzestyleslinetypes,uzbtypesbase,
      uzbgeomtypes,UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,
      uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,uzbmemman,UGDBOpenArrayOfByte,
      uzestyleslayers,gzctnrvectorpobjects,uzeenrepresentation;

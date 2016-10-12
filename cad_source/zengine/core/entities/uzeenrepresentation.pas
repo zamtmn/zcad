@@ -21,7 +21,8 @@ unit uzeenrepresentation;
 interface
 uses uzgldrawcontext,uzgldrawerabstract,
      uzbtypesbase,sysutils,uzbmemman,
-     uzbgeomtypes,uzegeometry,uzglgeometry,uzefont,uzeentitiesprop,UGDBPoint3DArray;
+     uzbgeomtypes,uzegeometry,uzglgeometry,uzefont,uzeentitiesprop,UGDBPoint3DArray,
+     uzgeomentity3d;
 type
 {Export+}
 TZEntityRepresentation={$IFNDEF DELPHI}packed{$ENDIF} object

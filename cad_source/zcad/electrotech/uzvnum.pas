@@ -752,7 +752,7 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
     listSubDevice := TListSubDevice.Create;
     listHeadGroup :=  TListHeadGroup.Create;
     listHeadDevice := TListHeadDevice.Create;
-    Epsilon:=0.5;
+    Epsilon:=0.2;
     counter:=0;
     {*
     //+++Выбираем зону в которой будет происходить анализ кабельной продукции.Создаем два списка, список всех отрезков кабелей и список всех девайсов+++//
@@ -773,6 +773,7 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
 
     ourGraph:=uzvcom.graphBulderFunc(Epsilon);
 
+  {****************************************************************
     counter:=0;
     counter2:=0;
     for i:=0 to ourGraph.listVertex.Size-1 do
@@ -1016,6 +1017,8 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
       end;
       HistoryOutStr('dfsdfsdfsdfsdfsdfsdsdf: ');
          *}
+
+
       {
       T:=G.FindMinWeightPath(G[0], G[6], EdgePath);
 
@@ -1051,7 +1054,11 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
 
       HistoryOutStr('В полученном грhfjhfjhfафе вершин = ' + IntToStr(ourGraph.listVertex.Size));
       HistoryOutStr('В полученном графе ребер = ' + IntToStr(ourGraph.listEdge.Size));
-   {*
+
+
+
+
+      {*
     HistoryOutStr('*** Min Weight Path ***');
   //  writeln('*** Min Weight Path ***');
     G:=TGraph.Create;
@@ -1090,6 +1097,8 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
       G.Free;
       EdgePath.Free;
       VertexPath.Free;  *}
+
+   ***********************************************************************}
   end;
 
   function TestgraphUses_com(operands:TCommandOperands):TCommandResult;

@@ -245,8 +245,8 @@ begin
   calcgeometry;
   calcbb(dc);
 
-  Geom.Clear;
-  Geom.DrawLineWithLT(dc,CoordInWCS.lBegin,CoordInWCS.lEnd,vp);
+  Representation.geom.Clear;
+  Representation.geom.DrawLineWithLT(dc,CoordInWCS.lBegin,CoordInWCS.lEnd,vp);
 end;
 function GDBObjLine.CalcInFrustum;
 var i:GDBInteger;
@@ -270,7 +270,7 @@ begin
 end;
 function GDBObjLine.CalcTrueInFrustum;
 begin
-      result:=geom.CalcTrueInFrustum(frustum,true);
+      result:=Representation.geom.CalcTrueInFrustum(frustum,true);
 end;
 function GDBObjLine.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):GDBBoolean;
 begin
@@ -285,7 +285,7 @@ end;
 
 function GDBObjLine.onmouse;
 begin
-     if geom.CalcTrueInFrustum(mf,false)<>IREmpty
+     if Representation.geom.CalcTrueInFrustum(mf,false)<>IREmpty
                                                                           then
                                                                               result:=true
                                                                           else
@@ -296,10 +296,10 @@ procedure GDBObjLine.DrawGeometry;
 //  templod:gdbdouble;
 begin
   if (selected)or(dc.selected) then
-                     geom.DrawNiceGeometry(DC)
+                     Representation.geom.DrawNiceGeometry(DC)
                  else
                      begin
-                     geom.DrawGeometry(DC);
+                     Representation.geom.DrawGeometry(DC);
                      exit;
                      end;
   {if vp.LineType<>nil then

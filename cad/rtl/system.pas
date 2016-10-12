@@ -638,10 +638,51 @@ PTZctnrVectorGDBPointer=^TZctnrVectorGDBPointer;
 TZctnrVectorGDBPointer=packed object(GZVectorP) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
                                                                    //TODO:надо тут поменять GZVectorP на GZVectorSimple
                     end;
+//Generate on E:/zcad/cad_source/components/zcontainers/gzctnrtree.pas
+         TStageMode=(TSMStart,TSMAccumulation,TSMCalc,TSMEnd);
+         TNodeDir=(TND_Plus,TND_Minus,TND_Root);
+         TElemPosition=(TEP_Plus,TEP_Minus,TEP_nul);
+         GZBInarySeparatedGeometry
+                                   ={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+         
+            
+            
+            
+            
+                 
+                 
+                 
+                 
+            
+         
+            Separator:TSeparator;
+            BoundingBox:TBoundingBox;
+            NodeDir:TNodeDir;
+            Root:GDBPointer;
+            pplusnode,pminusnode:GDBPointer;
+            nul:TEntityArray;
+            NodeData:TNodeData;
+            LockCounter:integer;
+            destructor done;virtual;abstract;
+            procedure ClearSub;
+            constructor initnul;
+            procedure AddObjToNul(var Entity:TEntity);
+            procedure updateenttreeadress;
+            procedure CorrectNodeBoundingBox(var Entity:TEntity);
+            procedure AddObjectToNodeTree(var Entity:TEntity);
+            procedure Lock;
+            procedure UnLock;
+            procedure Separate;virtual;abstract;
+            function GetNodeDepth:integer;virtual;abstract;
+            procedure MoveSub(var node:GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>);
+            function GetOptimalTestNode(var TNArray:array of TTestNode):integer;
+            procedure StoreOptimalTestNode(var TestNode:TTestNode);
+          end;
 //Generate on E:/zcad/cad_source/zengine/containers/UGDBOpenArrayOfPV.pas
 PGDBObjOpenArrayOfPV=^GDBObjOpenArrayOfPV;
 GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseObjects)
-                      procedure DrawWithattrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;abstract;
+                      procedure DrawWithattrib(var DC:TDrawContext);virtual;abstract;
+                      procedure DrawWithAttribExternalArray(var DC:TDrawContext;POAPV:PGDBObjOpenArrayOfPV);static;
                       procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                       procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                       procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;abstract;
@@ -1601,6 +1642,9 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
                 procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
                 //function CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
              end;
+//Generate on E:/zcad/cad_source/zengine/geomlib/uzgeomentity3d.pas 
+TGeomEntity3D={$IFNDEF DELPHI}packed{$ENDIF} object
+                                             end;
 //Generate on E:/zcad/cad_source/zengine/core/entities/uzeentsubordinated.pas
 GDBObjExtendable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  EntExtensions:GDBPointer;
@@ -1661,6 +1705,12 @@ GDBObjVisualProp=packed record
                       LastCameraPos:TActulity;(*oi_readonly*)(*hidden_in_objinsp*)
                       Color:TGDBPaletteColor;
                  end;
+//Generate on E:/zcad/cad_source/zengine/core/entities/uzeenrepresentation.pas
+TZEntityRepresentation={$IFNDEF DELPHI}packed{$ENDIF} object
+                       Geom:ZGLGeometry;(*hidden_in_objinsp*)
+                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar{$ENDIF});
+                       destructor done;virtual;abstract;
+                       end;
 //Generate on E:/zcad/cad_source/zengine/core/entities/uzeentity.pas
 PGDBObjEntity=^GDBObjEntity;
 
@@ -1678,7 +1728,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     Visible:TActulity;(*'Visible'*)(*oi_readonly*)(*hidden_in_objinsp*)
                     infrustum:TActulity;(*'In frustum'*)(*oi_readonly*)(*hidden_in_objinsp*)
                     PExtAttrib:PTExtAttrib;(*hidden_in_objinsp*)
-                    Geom:ZGLGeometry;(*hidden_in_objinsp*)
+                    Representation:TZEntityRepresentation;(*hidden_in_objinsp*)
                     destructor done;virtual;abstract;
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -2097,49 +2147,20 @@ GDBObjEllipse={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  function CreateInstance:PGDBObjEllipse;static;
                  function GetObjType:TObjID;virtual;abstract;
            end;
-//Generate on E:/zcad/cad_source/zengine/core/objects/gzctnrtree.pas
-         TNodeDir=(TND_Plus,TND_Minus,TND_Root);
-         TElemPosition=(TEP_Plus,TEP_Minus,TEP_nul);
-         GZBInarySeparatedGeometry
-                         ={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                         
-                            
-                         
-                         Separator:TSeparator;
-                         BoundingBox:TBoundingBox;
-                         NodeDir:TNodeDir;
-                         Root:GDBPointer;
-                         pplusnode,pminusnode:GDBPointer;
-                         nul:GDBObjEntityOpenArray;
-                         NodeData:TNodeData;
-                         destructor done;virtual;abstract;
-                         procedure ClearSub;
-                         procedure Clear;
-                         constructor initnul;
-                         procedure DrawVolume(var DC:TDrawContext);
-                         procedure AddObjToNul(var Entity:TEntity);
-                         procedure updateenttreeadress;
-                         procedure CorrectNodeBoundingBox(var Entity:TEntity);
-                         procedure AddObjectToNodeTree(var Entity:TEntity);
-                         end;
 //Generate on E:/zcad/cad_source/zengine/core/objects/uzeentitiestree.pas
 TDrawType=(TDTFulDraw,TDTSimpleDraw);
 TEntTreeNodeData=record
                      infrustum:TActulity;
                      nuldrawpos,minusdrawpos,plusdrawpos:TActulity;
                      FulDraw:TDrawType;
-                     nodedepth:GDBInteger;
-                     pluscount,minuscount:GDBInteger;
+                     //nodedepth:GDBInteger;
+                     //pluscount,minuscount:GDBInteger;
                  end;
          PTEntTreeNode=^TEntTreeNode;
          TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry)
-                            procedure MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox);
-                            class function createtree(var entitys:GDBObjEntityOpenArray;//массив примитивов
-                                                      AABB:TBoundingBox;                //ограничивающий объем массива примитивов
-                                                      PParentNode:PTEntTreeNode;        //указатель на родительскую ноду
-                                                      PNode:PTEntTreeNode;              //указатель на ноду, если не ноль то это начало дерева, если  ноль - нода создается динамически и возвращается в результе
-                                                      nodedepth:GDBInteger;             //текущая глубина
-                                                      dir:TNodeDir):PTEntTreeNode;      //что есть текущая нода: +,- или корень
+                            procedure MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;const RN:Pointer);
+                            procedure DrawVolume(var DC:TDrawContext);
+                            procedure DrawNodeVolume(var DC:TDrawContext);
                       end;
 //Generate on E:/zcad/cad_source/zengine/containers/UGDBVisibleTreeArray.pas
 PGDBObjEntityTreeArray=^GDBObjEntityTreeArray;

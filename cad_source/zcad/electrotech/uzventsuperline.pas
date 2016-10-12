@@ -20,10 +20,10 @@ unit uzventsuperline;
 {$INCLUDE def.inc}
 
 interface
-uses uzeobjectextender,LCLProc,uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,uzglgeometry,
-     gzctnrvectorpobjects,uzestyleslayers,uzbtypesbase,uzeentsubordinated,
-     UGDBSelectedObjArray,uzeentline,uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,
-     uzbgeomtypes,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzbmemman;
+uses uzeobjectextender,LCLProc,uzeentityfactory,uzedrawingdef,
+     uzestyleslayers,uzbtypesbase,uzeentsubordinated,
+     uzeentline,uzeentity,UGDBOpenArrayOfByte,uzbtypes,uzeconsts,
+     uzbgeomtypes,uzegeometry,uzeffdxfsupport,uzbmemman;
 type
 {REGISTEROBJECTTYPE GDBObjSuperLine}
 {Export+}

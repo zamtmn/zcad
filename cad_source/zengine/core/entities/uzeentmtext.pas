@@ -481,7 +481,7 @@ begin
 end;
 procedure GDBObjMText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
-  Representation.geom.Clear;
+  Representation.Clear;
 
   formatcontent(drawing);
   calcobjmatrix;
@@ -748,7 +748,7 @@ begin
     begin
     //matr:=matrixmultiply(matr,objmatrix);
 
-      pfont.CreateSymbol(DC.drawer,Representation.geom,sym,objmatrix,matr,Bound,ln);
+      pfont.CreateSymbol(DC.drawer,Representation.GetGraphix^,sym,objmatrix,matr,Bound,ln);
 
       matr:=m1;
       FillChar(m1, sizeof(DMatrix4D), 0);
@@ -832,7 +832,7 @@ begin
 
   //Representation.SHX.Shrink;
   pl.done;
-  Representation.geom.Shrink;
+  Representation.Shrink;
 end;
 {procedure GDBObjMText.CalcObjMatrix;
 var rot_matr,oblique_matr,disp_self_matr,disp_matr,size_matr:DMatrix4D;

@@ -299,8 +299,8 @@ begin
   q3:=VectorTransform3d(CreateVertex(0,1,0),objMatrix);
   //getoutbound;
   calcbb(dc);
-  Representation.geom.Clear;
-  Representation.geom.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,true,true);
+  Representation.Clear;
+  Representation.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,true,true);
 end;
 procedure GDBObjCircle.getoutbound;
 var //tv,tv2:GDBVertex4D;
@@ -436,14 +436,14 @@ begin
            if dc.selected then
                               begin
                               //Vertex3D_in_WCS_Array.drawgeometry2
-                              Representation.geom.DrawGeometry(DC);
+                              Representation.DrawGeometry(DC);
                               end
                           else
                               begin
                                    if CanSimplyDrawInOCS(DC,{self.radius}1,6) then
                                                                                   begin
                                                                                        //Vertex3D_in_WCS_Array.drawgeometry
-                                                                                       Representation.geom.DrawGeometry(DC);
+                                                                                       Representation.DrawGeometry(DC);
                                                                                   end
                                                          else
                                                              begin

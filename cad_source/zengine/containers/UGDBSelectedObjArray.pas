@@ -21,7 +21,7 @@ unit UGDBSelectedObjArray;
 interface
 uses uzbgeomtypes,uzepalette,uzgldrawcontext,uzecamera,uzeentwithmatrix,uzeentity,
      UGDBControlPointArray,gzctnrvectordata,sysutils,uzbtypes,uzegeometry,
-     uzbtypesbase,uzbmemman,uzedrawingdef;
+     uzbtypesbase,uzbmemman;
 type
 {Export+}
 PSelectedObjDesc=^SelectedObjDesc;

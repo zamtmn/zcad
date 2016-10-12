@@ -247,7 +247,7 @@ begin
                                                              exit;
                                                         end;
 
-    if Representation.geom.CalcTrueInFrustum (mf,false)<>IREmpty then
+    if Representation.CalcTrueInFrustum (mf,false)<>IREmpty then
                                                  result:=true
                                              else
                                                  result:=false;
@@ -307,7 +307,7 @@ begin
       result:=CalcOutBound4VInFrustum(outbound,frustum);
       if result<>IRPartially then
                                  exit;
-      result:=Representation.geom.CalcTrueInFrustum(frustum,true);
+      result:=Representation.CalcTrueInFrustum(frustum,true);
 end;
 procedure GDBObjAbstractText.Renderfeedback;
 var //pm:DMatrix4D;
@@ -412,10 +412,10 @@ begin
                                                                                    //simpledrawgeometry
                                                                                    begin
                                                                                    //Representation.SHX.drawgeometry;
-                                                                                   Representation.geom.DrawGeometry(DC);
+                                                                                   Representation.DrawGeometry(DC);
                                                                                    end
                                                                                else
-                                                                                   Representation.geom.DrawGeometry(DC);
+                                                                                   Representation.DrawGeometry(DC);
                                                                                    //simpledrawgeometry(dc);
                                                                                      {begin
                                                                                            myglbegin(gl_line_loop);

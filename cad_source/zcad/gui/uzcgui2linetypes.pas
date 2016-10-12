@@ -82,7 +82,7 @@ var
   //midline:integer;
   oldw:Integer;
   n:double;
-  geom:ZGLGeometry;
+  geom:ZGLGraphix;
   vp:GDBObjVisualProp;
   p1,p2:Gdbvertex;
     //p,pp,ppp:PGDBVertex;

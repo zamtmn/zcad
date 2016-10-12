@@ -19,9 +19,9 @@
 unit uzcshared;
 {$INCLUDE def.inc}
 interface
-uses uzcinterface,uzclog,uzbpaths,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}Controls,uzcstrconsts,
+uses uzcinterface,uzclog,uzbpaths,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}Controls,
      uzbtypesbase,Classes, SysUtils, {$IFNDEF DELPHI}fileutil,{$ENDIF}Forms,
-     stdctrls, ExtCtrls{, ComCtrls}{$IFNDEF DELPHI},LCLProc{$ENDIF};
+     ExtCtrls{, ComCtrls}{$IFNDEF DELPHI},LCLProc{$ENDIF};
 
 procedure FatalError(errstr:GDBString);
 

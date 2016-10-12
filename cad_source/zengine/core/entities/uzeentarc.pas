@@ -305,8 +305,8 @@ begin
 
   calcbb(dc);
   createpoints(dc);
-  Representation.geom.Clear;
-  Representation.geom.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,false,false);
+  Representation.Clear;
+  Representation.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,false,false);
 end;
 procedure GDBObjARC.getoutbound;
 function getQuadrant(a:GDBDouble):integer;
@@ -522,7 +522,7 @@ begin
   if dc.selected then
                      begin
                      //Vertex3D_in_WCS_Array.drawgeometry2
-                          Representation.geom.{DrawGeometry}DrawNiceGeometry(DC);
+                          Representation.DrawNiceGeometry(DC);
                      end
                  else
                      begin
@@ -541,7 +541,7 @@ begin
                          if simply then
                                        begin
                                            //Vertex3D_in_WCS_Array.drawgeometry
-                                           Representation.geom.DrawGeometry(DC);
+                                           Representation.DrawGeometry(DC);
                                        end
                                                         else
                                                             begin

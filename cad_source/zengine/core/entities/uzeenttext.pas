@@ -129,7 +129,7 @@ procedure GDBObjText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 var
       TCP:TCodePage;
 begin
-  Representation.geom.Clear;
+  Representation.Clear;
 
   TCP:=CodePage;
   CodePage:=CP_win;
@@ -207,7 +207,7 @@ begin
     calcobjmatrix;
     //getoutbound;
     //createpoint(drawing);
-    Representation.geom.DrawTextContent(dc.drawer,content,TXTStyleIndex^.pfont,DrawMatrix,objmatrix,textprop.size,Outbound);
+    Representation.DrawTextContent(dc.drawer,content,TXTStyleIndex^.pfont,DrawMatrix,objmatrix,textprop.size,Outbound);
     calcbb(dc);
 
     //P_InsertInWCS:=VectorTransform3D(local.P_insert,vp.owner^.GetMatrix^);

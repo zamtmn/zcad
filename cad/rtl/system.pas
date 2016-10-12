@@ -1603,7 +1603,7 @@ ZGLVectorObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  procedure DrawCountedLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;var OptData:ZGLOptimizerData;StartOffset,Count:GDBInteger);virtual;
                                end;
 //Generate on E:/zcad/cad_source/zengine/zgl/uzglgeometry.pas
-PZGLGeometry=^ZGLGeometry;
+PZGLGraphix=^ZGLGraphix;
 PZPolySegmentData=^ZPolySegmentData;
 ZPolySegmentData={$IFNDEF DELPHI}packed{$ENDIF} record
                                                       startpoint,endpoint,dir:GDBVertex;
@@ -1614,15 +1614,15 @@ ZSegmentator={$IFNDEF DELPHI}packed{$ENDIF}object(GZVectorData)
                                                  cdp,angle:GDBDouble;
                                                  pcurrsegment:PZPolySegmentData;
                                                  ir:itrec;
-                                                 PGeom:PZGLGeometry;
-                                                 constructor InitFromLine(const startpoint,endpoint:GDBVertex;out length:GDBDouble;PG:PZGLGeometry);
-                                                 constructor InitFromPolyline(const points:GDBPoint3dArray;out length:GDBDouble;const closed:GDBBoolean;PG:PZGLGeometry);
+                                                 PGeom:PZGLGraphix;
+                                                 constructor InitFromLine(const startpoint,endpoint:GDBVertex;out length:GDBDouble;PG:PZGLGraphix);
+                                                 constructor InitFromPolyline(const points:GDBPoint3dArray;out length:GDBDouble;const closed:GDBBoolean;PG:PZGLGraphix);
                                                  procedure startdraw;
                                                  procedure nextsegment;
                                                  procedure normalize(l:GDBDouble);
                                                  procedure draw(var rc:TDrawContext;length:GDBDouble;paint:boolean);
                                            end;
-ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
+ZGLGraphix={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
                 procedure DrawGeometry(var rc:TDrawContext);virtual;abstract;
                 procedure DrawNiceGeometry(var rc:TDrawContext);virtual;abstract;
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar{$ENDIF});
@@ -1707,9 +1707,20 @@ GDBObjVisualProp=packed record
                  end;
 //Generate on E:/zcad/cad_source/zengine/core/entities/uzeenrepresentation.pas
 TZEntityRepresentation={$IFNDEF DELPHI}packed{$ENDIF} object
-                       Geom:ZGLGeometry;(*hidden_in_objinsp*)
+                       
+                       Graphix:ZGLGraphix;(*hidden_in_objinsp*)
+                       
                        constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar{$ENDIF});
                        destructor done;virtual;abstract;
+                       function CalcTrueInFrustum(frustum:ClipArray; FullCheck:boolean):TInBoundingVolume;
+                       procedure DrawGeometry(var rc:TDrawContext);virtual;abstract;
+                       procedure DrawNiceGeometry(var rc:TDrawContext);virtual;abstract;
+                       procedure Clear;virtual;abstract;
+                       procedure Shrink;virtual;abstract;
+                       function GetGraphix:PZGLGraphix;
+                       procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
+                       procedure DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);
+                       procedure DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);virtual;abstract;
                        end;
 //Generate on E:/zcad/cad_source/zengine/core/entities/uzeentity.pas
 PGDBObjEntity=^GDBObjEntity;

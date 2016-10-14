@@ -86,6 +86,7 @@ type
                            procedure getosnappoint(radius: GDBFloat);override;
                            procedure getonmouseobject(pva: PGDBObjEntityOpenArray;InSubEntry:GDBBoolean);virtual;
                            procedure findonmobj(pva: PGDBObjEntityOpenArray; var i: GDBInteger;InSubEntry:GDBBoolean);virtual;
+                           procedure findonmobjTree(var Node:TEntTreeNode; var i: GDBInteger;InSubEntry:GDBBoolean);virtual;
                            procedure getonmouseobjectbytree(var Node:TEntTreeNode;InSubEntry:GDBBoolean);override;
                            procedure processmousenode(Node:TEntTreeNode;var i:integer;InSubEntry:GDBBoolean);virtual;
                            procedure AddOntrackpoint;override;
@@ -638,7 +639,7 @@ begin //currd:=gdb.GetCurrentDWG;
        end;
        if node.NodeData.nuldrawpos<>PDWG.Getpcamera.DRAWCOUNT then
        begin
-        GDBObjEntityOpenArray.DrawWithAttribExternalArray(dc,@(Node.nul));
+        TEntTreeNode(Node).DrawWithAttribExternalArray(dc);
         //GDBObjEntityOpenArray(Node.nul).DrawWithattrib(dc{gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender});
         node.NodeData.nuldrawpos:=PDWG.Getpcamera.DRAWCOUNT;
        end;
@@ -1984,7 +1985,7 @@ procedure TGeneralViewArea.processmousenode(Node:TEntTreeNode;var i:integer;InSu
 begin
      if CalcAABBInFrustum (Node.BoundingBox,param.mousefrustum)<>IREmpty then
      begin
-          findonmobj(@node.nul, i,InSubEntry);
+          findonmobjtree(node, i,InSubEntry);
           if assigned(node.pminusnode) then
                                            processmousenode(PTEntTreeNode(node.pminusnode)^,i,InSubEntry);
           if assigned(node.pplusnode) then
@@ -2067,7 +2068,42 @@ begin
   else ;//{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('wa.param.scrollmode=true. exit',0);{$ENDIF}
   //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.findonmobj-----{end}',lp_DecPos);{$ENDIF}
 end;
+procedure TGeneralViewArea.findonmobjTree(var Node:TEntTreeNode; var i: GDBInteger;InSubEntry:GDBBoolean);
+var
+  pp:PGDBObjEntity;
+  ir:itrec;
+  _total,_visible,_isonmouse:integer;
+begin
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.findonmobj',lp_IncPos);{$ENDIF}
+  if not param.scrollmode then
+  begin
+  _total:=0;
+  _visible:=0;
+  _isonmouse:=0;
+  pp:=Node.nulbeginiterate(ir);
+  if pp<>nil then
+  repeat
+       inc(_total);
+       if pp^.visible=PDWG.Getpcamera.VISCOUNT then
+       begin
+       inc(_visible);
+       if pp^.isonmouse(PDWG.GetOnMouseObj^,param.mousefrustum,InSubEntry)
+       then
+           begin
+                inc(_isonmouse);
+                pp:=pp.ReturnLastOnMouse(InSubEntry);
+                param.SelDesc.OnMouseObject:=pp;
+                PDWG.GetOnMouseObj.PushBackData(pp);
+           end;
 
+       end;
+  pp:=Node.nuliterate(ir);
+  until pp=nil;
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('Total:='+inttostr(_total)+'; Visible:='+inttostr(_visible)+'; IsOnMouse:='+inttostr(_isonmouse),0);{$ENDIF}
+  end
+  else ;//{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('wa.param.scrollmode=true. exit',0);{$ENDIF}
+  //{$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.findonmobj-----{end}',lp_DecPos);{$ENDIF}
+end;
 procedure TGeneralViewArea.getonmouseobject;
 var
   i: GDBInteger;

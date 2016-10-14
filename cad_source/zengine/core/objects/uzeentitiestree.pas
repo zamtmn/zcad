@@ -20,7 +20,7 @@ unit uzeentitiestree;
 {$INCLUDE def.inc}
 interface
 uses
-    graphics,
+    graphics,gzctnrvectorsimple,gzctnrvectorpobjects,
     uzbgeomtypes,gzctnrtree,uzgldrawcontext,uzegeometry,UGDBVisibleOpenArray,uzeentity,uzbtypesbase,uzbtypes,uzbmemman;
 type
 TZEntsManipulator=class;
@@ -38,25 +38,28 @@ TEntTreeNodeData=record
                      //nodedepth:GDBInteger;
                      //pluscount,minuscount:GDBInteger;
                  end;
+TEntityArray=GZVectorPObects{GZVectorSimple}<PGDBObjEntity,GDBObjEntity>;
          PTEntTreeNode=^TEntTreeNode;
-         TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>{//})
+         TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>{//})
                             procedure MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;const RN:Pointer);
                             procedure DrawVolume(var DC:TDrawContext);
                             procedure DrawNodeVolume(var DC:TDrawContext);
+                            procedure DrawWithAttribExternalArray(var DC:TDrawContext);
                       end;
 {EXPORT-}
 TZEntsManipulator=class
-                   class procedure StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>;const index:GDBInteger);
+                   class procedure StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;const index:GDBInteger);
                    class procedure CorrectNodeBoundingBox(var NodeBB:TBoundingBox;var Entity:GDBObjEntity);
                    class function GetEntityBoundingBox(var Entity:GDBObjEntity):TBoundingBox;
                    class function GetBBPosition(const sep:DVector4D;const BB:TBoundingBox):TElemPosition;
                    class function isUnneedSeparate(const count,depth:integer):boolean;
                    class function GetTestNodesCount:integer;
-                   class procedure FirstStageCalcSeparatirs(var Entity:GDBObjEntity;var PFirstStageData:pointer;TSM:TStageMode);
-                   class procedure CreateSeparator(var TestNode:TEntTreeNode.TTestNode;var PFirstStageData:pointer;const NodeNum:integer);
+                   class procedure FirstStageCalcSeparatirs(var NodeBB:TBoundingBox;var Entity:GDBObjEntity;var PFirstStageData:pointer;TSM:TStageMode);
+                   class procedure CreateSeparator(var NodeBB:TBoundingBox;var TestNode:TEntTreeNode.TTestNode;var PFirstStageData:pointer;const NodeNum:integer);
+                   class function IterateResult2PEntity(const IterateResult:pointer):PGDBObjEntity;
 
                    {not used in generic, for external use}
-                   class procedure treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>;var DC:TDrawContext);
+                   class procedure treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;var DC:TDrawContext);
                   end;
 TTestTreeArray=array [0..2] of TEntTreeNode.TTestNode;
 var
@@ -65,6 +68,20 @@ var
    FirstStageData:TFirstStageData;
 function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
 implementation
+procedure TEntTreeNode.DrawWithAttribExternalArray(var DC:TDrawContext);
+var
+  pobj:pGDBObjEntity;
+  ir:itrec;
+begin
+  pobj:=nul.beginiterate(ir);
+  if pobj<>nil then
+  repeat
+       pobj:=TZEntsManipulator.IterateResult2PEntity(pobj);
+       if pobj^.infrustum=dc.DrawingContext.infrustumactualy then
+                           pobj^.DrawWithAttrib(dc);
+       pobj:=nul.iterate(ir);
+  until pobj=nil;
+end;
 procedure TEntTreeNode.DrawNodeVolume(var DC:TDrawContext);
 begin
   dc.drawer.DrawAABB3DInModelSpace(BoundingBox,dc.DrawingContext.matrixs);
@@ -77,7 +94,7 @@ begin
                        PTEntTreeNode(pminusnode)^.DrawVolume(dc);
      DrawNodeVolume(dc);
 end;
-class procedure TZEntsManipulator.treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>;var DC:TDrawContext);
+class procedure TZEntsManipulator.treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;var DC:TDrawContext);
 begin
      begin
        if (Node.NodeData.infrustum=dc.DrawingContext.InfrustumActualy) then
@@ -102,7 +119,7 @@ begin
             end;
             begin
                  if (Node.NodeData.FulDraw=TDTFulDraw)or(dc.MaxDetail) then
-                                                                      GDBObjEntityOpenArray.DrawWithAttribExternalArray(dc,@(Node.nul));
+                                                                      TEntTreeNode(Node).DrawWithAttribExternalArray(dc);
                                                                       //GDBObjEntityOpenArray(Node.nul).DrawWithattrib(dc);
                  Node.NodeData.nuldrawpos:=dc.DrawingContext.DRAWCOUNT;
             end;
@@ -120,7 +137,7 @@ class function TZEntsManipulator.GetTestNodesCount:integer;
 begin
    result:=3;
 end;
-class procedure TZEntsManipulator.FirstStageCalcSeparatirs(var Entity:GDBObjEntity;var PFirstStageData:pointer;TSM:TStageMode);
+class procedure TZEntsManipulator.FirstStageCalcSeparatirs(var NodeBB:TBoundingBox;var Entity:GDBObjEntity;var PFirstStageData:pointer;TSM:TStageMode);
 begin
    case TSM of
        TSMStart:begin
@@ -142,7 +159,7 @@ TSMAccumulation:begin
                 end;
    end;
 end;
-class procedure TZEntsManipulator.CreateSeparator(var TestNode:TEntTreeNode.TTestNode;var PFirstStageData:pointer;const NodeNum:integer);
+class procedure TZEntsManipulator.CreateSeparator(var NodeBB:TBoundingBox;var TestNode:TEntTreeNode.TTestNode;var PFirstStageData:pointer;const NodeNum:integer);
 begin
 case NodeNum of
       0:TestNode.plane:=uzegeometry.PlaneFrom3Pont(FirstStageData.midlepoint,
@@ -159,7 +176,7 @@ case NodeNum of
                                           );
 end;
 end;
-class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity>;const index:GDBInteger);
+class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;const index:GDBInteger);
 begin
   Entity.bp.TreePos.Owner:=@Node;
   Entity.bp.TreePos.SelfIndex:=index;
@@ -207,6 +224,14 @@ else if (d1>0)or(d2>0)  then
                             exit(TEP_Minus)
                             //ta[i].minus.PushBackData(pobj);
      //result:=TEP_nul;
+end;
+class function TZEntsManipulator.IterateResult2PEntity(const IterateResult:pointer):PGDBObjEntity;
+begin
+  {if IterateResult<>nil then
+    result:=ppointer(IterateResult)^
+  else
+    result:=nil;}
+  result:=IterateResult;
 end;
 
 procedure TEntTreeNode.MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;const RN:Pointer);

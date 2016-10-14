@@ -3865,12 +3865,12 @@ begin
      inc(lineAABBtests);
      if boundingintersect(pl^.vp.BoundingBox,PNode^.BoundingBox) then
      begin
-           pl1:=PNode^.nul.beginiterate(ir1);
+           pl1:=PNode^.nulbeginiterate(ir1);
            if pl1<>nil then
            repeat
                  CheckIntersection(pl,pl1,linelinetests,intersectcount,pparray,LinesMap,lineiterator);
 
-                 pl1:=PNode^.nul.iterate(ir1);
+                 pl1:=PNode^.nuliterate(ir1);
            until pl1=nil;
 
            if PNode^.pplusnode<>nil then
@@ -3887,17 +3887,17 @@ var
     pl1,pl2:PGDBObjLine;
     lineiterator:MapPointOnCurve3DPropArray.TIterator;
 begin
-     pl1:=PNode^.nul.beginiterate(ir1);
+     pl1:=PNode^.nulbeginiterate(ir1);
      if pl1<>nil then
      repeat
            lineiterator:=LinesMap.Find(pl1);
            ir2:=ir1;
-           pl2:=PNode^.nul.iterate(ir2);
+           pl2:=PNode^.nuliterate(ir2);
            if pl2<>nil then
            repeat
                  CheckIntersection(pl1,pl2,linelinetests,intersectcount,pparray,LinesMap,lineiterator);
 
-                 pl2:=PNode^.nul.iterate(ir2);
+                 pl2:=PNode^.nuliterate(ir2);
            until pl2=nil;
 
            if PNode^.pplusnode<>nil then
@@ -3905,7 +3905,7 @@ begin
            if PNode^.pminusnode<>nil then
                                         FindLineIntersectionsInNode(pl1,PTEntTreeNode(PNode^.pminusnode),lineAABBtests,linelinetests,intersectcount,pparray,LinesMap,lineiterator);
 
-           pl1:=PNode^.nul.iterate(ir1);
+           pl1:=PNode^.nuliterate(ir1);
      until pl1=nil;
      //else
          begin

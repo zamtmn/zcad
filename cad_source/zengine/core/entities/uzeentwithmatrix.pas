@@ -104,12 +104,12 @@ begin
              end;
      IRFully:begin
                    enttree.NodeData.infrustum:=infrustumactualy;
-                   pobj:=enttree.nul.beginiterate(ir);
+                   pobj:=enttree.nulbeginiterate(ir);
                    if pobj<>nil then
                    repeat
                          pobj^.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
                          //pobj^.infrustum:=infrustumactualy;
-                         pobj:=enttree.nul.iterate(ir);
+                         pobj:=enttree.nuliterate(ir);
                    until pobj=nil;
                    if assigned(enttree.pminusnode) then
                                                        ProcessTree(frustum,infrustumactualy,visibleactualy,PTEntTreeNode(enttree.pminusnode)^,IRFully,enttree.NodeData.FulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
@@ -124,12 +124,12 @@ begin
                                end;
                        IRFully{,IRPartially}:begin
                                      enttree.NodeData.infrustum:=infrustumactualy;
-                                     pobj:=enttree.nul.beginiterate(ir);
+                                     pobj:=enttree.nulbeginiterate(ir);
                                      if pobj<>nil then
                                      repeat
                                            pobj^.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
                                            //pobj^.infrustum:=infrustumactualy;
-                                           pobj:=enttree.nul.iterate(ir);
+                                           pobj:=enttree.nuliterate(ir);
                                      until pobj=nil;
                                      if assigned(enttree.pminusnode) then
                                                                          ProcessTree(frustum,infrustumactualy,visibleactualy,PTEntTreeNode(enttree.pminusnode)^,ImInFrustum,enttree.NodeData.FulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
@@ -139,14 +139,14 @@ begin
                               end;
                   IRPartially:begin
                                      enttree.NodeData.infrustum:=infrustumactualy;
-                                     pobj:=enttree.nul.beginiterate(ir);
+                                     pobj:=enttree.nulbeginiterate(ir);
                                      if pobj<>nil then
                                      repeat
                                            if pobj^.CalcInFrustum(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor) then
                                            begin
                                                 pobj^.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
                                            end;
-                                           pobj:=enttree.nul.iterate(ir);
+                                           pobj:=enttree.nuliterate(ir);
                                      until pobj=nil;
                                      if assigned(enttree.pminusnode) then
                                                                          ProcessTree(frustum,infrustumactualy,visibleactualy,PTEntTreeNode(enttree.pminusnode)^,IRPartially,enttree.NodeData.FulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);

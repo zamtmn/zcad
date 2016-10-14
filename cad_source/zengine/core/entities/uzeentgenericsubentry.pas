@@ -192,7 +192,7 @@ begin
             plus:=FindObjectsInPointInNode(point,PTEntTreeNode(Node.pplusnode)^,Objects);
        end;
 
-       pobj:=Node.nul.beginiterate(ir);
+       pobj:=Node.nulbeginiterate(ir);
      if pobj<>nil then
      repeat
            if pobj^.onpoint(Objects,point) then
@@ -201,7 +201,7 @@ begin
                 //Objects.Add(@pobj);
            end;
 
-           pobj:=Node.nul.iterate(ir);
+           pobj:=Node.nuliterate(ir);
      until pobj=nil;
 
      result:=result or (plus or minus);
@@ -228,7 +228,7 @@ begin
             plus:=FindObjectsInVolumeInNode(Volume,PTEntTreeNode(Node.pplusnode)^,Objects);
        end;
 
-       pobj:=Node.nul.beginiterate(ir);
+       pobj:=Node.nulbeginiterate(ir);
      if pobj<>nil then
      repeat
            if  boundingintersect(Volume,pobj^.vp.BoundingBox) then
@@ -237,7 +237,7 @@ begin
                 Objects.PushBackData(pobj);
            end;
 
-           pobj:=Node.nul.iterate(ir);
+           pobj:=Node.nuliterate(ir);
      until pobj=nil;
 
      result:=result or (plus or minus);
@@ -394,7 +394,7 @@ procedure GDBObjGenericSubEntry.RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray
 begin
      if pobj^.bp.TreePos.Owner<>nil then
      begin
-          PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nul.DeleteElement(pobj^.bp.TreePos.SelfIndex);
+          PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nulDeleteElement(pobj^.bp.TreePos.SelfIndex);
      end;
      pobj^.bp.TreePos.Owner:=nil;
 

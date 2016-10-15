@@ -254,9 +254,12 @@ begin
      pobj:=TEntsManipulator.IterateResult2PEntity(pobj);
      ep:=TEntsManipulator.GetBBPosition(TNArray[i].plane,TEntsManipulator.GetEntityBoundingBox(pobj^));
      case ep of
-       TEP_Plus:TNArray[i].plus.PushBackData(pobj);
-      TEP_Minus:TNArray[i].minus.PushBackData(pobj);
-        TEP_nul:TNArray[i].nul.PushBackData(pobj);
+       TEP_Plus://TNArray[i].plus.PushBackData(pobj);
+                TEntsManipulator.StoreEntityToArray(pobj^,TNArray[i].plus);
+      TEP_Minus://TNArray[i].minus.PushBackData(pobj);
+                TEntsManipulator.StoreEntityToArray(pobj^,TNArray[i].minus);
+        TEP_nul://TNArray[i].nul.PushBackData(pobj);
+                TEntsManipulator.StoreEntityToArray(pobj^,TNArray[i].nul);
      end;
         pobj:=nul.iterate(ir);
   until pobj=nil;
@@ -300,7 +303,8 @@ procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManip
 var
    index:integer;
 begin
-     index:=nul.PushBackData(@Entity);
+     index:=TEntsManipulator.StoreEntityToArray(Entity,nul);
+     //index:=nul.PushBackData(@Entity);
      TEntsManipulator.StoreTreeAdressInOnject(Entity,self,index);
      {Entity.bp.TreePos.Owner:=@self;
      Entity.bp.TreePos.SelfIndex:=index;}

@@ -20,7 +20,7 @@ unit uzegeomentitiestree;
 {$INCLUDE def.inc}
 interface
 uses
-    graphics,gzctnrvectorsimple,uzgeomentity,
+    graphics,gzctnrvectorsimple,uzgeomentity,gzctnrvectordata,
     uzbgeomtypes,gzctnrtree,uzgldrawcontext,uzegeometry,uzbtypesbase,uzbtypes,uzbmemman;
 type
 TZEntsManipulator=class;
@@ -32,7 +32,8 @@ TFirstStageData=record
 {EXPORT+}
 TGeomTreeNodeData=record
                   end;
-TEntityArray={GZVectorPObects}GZVectorSimple<PTGeomEntity>;
+TEntityArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBByte>{//})
+end;
          PTEntTreeNode=^TGeomEntTreeNode;
          TGeomEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>{//})
                       end;
@@ -47,6 +48,7 @@ TZEntsManipulator=class
                    class procedure FirstStageCalcSeparatirs(var NodeBB:TBoundingBox;var Entity:TGeomEntity;var PFirstStageData:pointer;TSM:TStageMode);
                    class procedure CreateSeparator(var NodeBB:TBoundingBox;var TestNode:TGeomEntTreeNode.TTestNode;var PFirstStageData:pointer;const NodeNum:integer);
                    class function IterateResult2PEntity(const IterateResult:pointer):PTGeomEntity;
+                   class function StoreEntityToArray(var Entity:TGeomEntity;var arr:TEntityArray):TArrayIndex;
                   end;
 var
    SysVarRDSpatialNodeCount:integer=2;
@@ -54,6 +56,11 @@ var
    FirstStageData:TFirstStageData;
 function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
 implementation
+class function TZEntsManipulator.StoreEntityToArray(var Entity:TGeomEntity;var arr:TEntityArray):TArrayIndex;
+begin
+     //arr.pushBackData(Entity);
+     result:=arr.AddData(@Entity,sizeof(entity));
+end;
 class function TZEntsManipulator.isUnneedSeparate(const count,depth:integer):boolean;
 begin
      if (Count<=GetInNodeCount(SysVarRDSpatialNodeCount))or(depth>=SysVarRDSpatialNodesDepth) then

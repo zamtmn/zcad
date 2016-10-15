@@ -57,6 +57,7 @@ TZEntsManipulator=class
                    class procedure FirstStageCalcSeparatirs(var NodeBB:TBoundingBox;var Entity:GDBObjEntity;var PFirstStageData:pointer;TSM:TStageMode);
                    class procedure CreateSeparator(var NodeBB:TBoundingBox;var TestNode:TEntTreeNode.TTestNode;var PFirstStageData:pointer;const NodeNum:integer);
                    class function IterateResult2PEntity(const IterateResult:pointer):PGDBObjEntity;
+                   class function StoreEntityToArray(var Entity:GDBObjEntity;var arr:TEntityArray):TArrayIndex;
 
                    {not used in generic, for external use}
                    class procedure treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;var DC:TDrawContext);
@@ -126,6 +127,11 @@ begin
        end;
      end;
 end;
+class function TZEntsManipulator.StoreEntityToArray(var Entity:GDBObjEntity;var arr:TEntityArray):TArrayIndex;
+begin
+     result:=arr.pushBackData(@Entity);
+end;
+
 class function TZEntsManipulator.isUnneedSeparate(const count,depth:integer):boolean;
 begin
      if (Count<=GetInNodeCount(SysVarRDSpatialNodeCount))or(depth>=SysVarRDSpatialNodesDepth) then

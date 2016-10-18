@@ -46,7 +46,7 @@ const
       floateps=1e-6;
       sqreps=1e-7;
       bigeps=1e-10;
-      x=0;y=1;z=2;w=3;
+      xAxisIndex=0;yAxisIndex=1;zAxisIndex=2;wAxisIndex=3;
       ScaleOne:GDBVertex=(x:1;y:1;z:1);
       OneVertex:GDBVertex=(x:1;y:1;z:1);
       xy_Z_Vertex:GDBVertex=(x:0;y:0;z:1);
@@ -1014,25 +1014,25 @@ begin
     c4 :=  M[3, 2]; d4 :=  M[3, 3];
 
     // row column labeling reversed since we transpose rows & columns
-    M[X, X] :=  MatrixDetInternal(b2, b3, b4, c2, c3, c4, d2, d3, d4);
-    M[Y, X] := -MatrixDetInternal(a2, a3, a4, c2, c3, c4, d2, d3, d4);
-    M[Z, X] :=  MatrixDetInternal(a2, a3, a4, b2, b3, b4, d2, d3, d4);
-    M[W, X] := -MatrixDetInternal(a2, a3, a4, b2, b3, b4, c2, c3, c4);
+    M[XAxisIndex, XAxisIndex] :=  MatrixDetInternal(b2, b3, b4, c2, c3, c4, d2, d3, d4);
+    M[YAxisIndex, XAxisIndex] := -MatrixDetInternal(a2, a3, a4, c2, c3, c4, d2, d3, d4);
+    M[ZAxisIndex, XAxisIndex] :=  MatrixDetInternal(a2, a3, a4, b2, b3, b4, d2, d3, d4);
+    M[WAxisIndex, XAxisIndex] := -MatrixDetInternal(a2, a3, a4, b2, b3, b4, c2, c3, c4);
 
-    M[X, Y] := -MatrixDetInternal(b1, b3, b4, c1, c3, c4, d1, d3, d4);
-    M[Y, Y] :=  MatrixDetInternal(a1, a3, a4, c1, c3, c4, d1, d3, d4);
-    M[Z, Y] := -MatrixDetInternal(a1, a3, a4, b1, b3, b4, d1, d3, d4);
-    M[W, Y] :=  MatrixDetInternal(a1, a3, a4, b1, b3, b4, c1, c3, c4);
+    M[XAxisIndex, YAxisIndex] := -MatrixDetInternal(b1, b3, b4, c1, c3, c4, d1, d3, d4);
+    M[YAxisIndex, YAxisIndex] :=  MatrixDetInternal(a1, a3, a4, c1, c3, c4, d1, d3, d4);
+    M[ZAxisIndex, YAxisIndex] := -MatrixDetInternal(a1, a3, a4, b1, b3, b4, d1, d3, d4);
+    M[WAxisIndex, YAxisIndex] :=  MatrixDetInternal(a1, a3, a4, b1, b3, b4, c1, c3, c4);
 
-    M[X, Z] :=  MatrixDetInternal(b1, b2, b4, c1, c2, c4, d1, d2, d4);
-    M[Y, Z] := -MatrixDetInternal(a1, a2, a4, c1, c2, c4, d1, d2, d4);
-    M[Z, Z] :=  MatrixDetInternal(a1, a2, a4, b1, b2, b4, d1, d2, d4);
-    M[W, Z] := -MatrixDetInternal(a1, a2, a4, b1, b2, b4, c1, c2, c4);
+    M[XAxisIndex, ZAxisIndex] :=  MatrixDetInternal(b1, b2, b4, c1, c2, c4, d1, d2, d4);
+    M[YAxisIndex, ZAxisIndex] := -MatrixDetInternal(a1, a2, a4, c1, c2, c4, d1, d2, d4);
+    M[ZAxisIndex, ZAxisIndex] :=  MatrixDetInternal(a1, a2, a4, b1, b2, b4, d1, d2, d4);
+    M[WAxisIndex, ZAxisIndex] := -MatrixDetInternal(a1, a2, a4, b1, b2, b4, c1, c2, c4);
 
-    M[X, W] := -MatrixDetInternal(b1, b2, b3, c1, c2, c3, d1, d2, d3);
-    M[Y, W] :=  MatrixDetInternal(a1, a2, a3, c1, c2, c3, d1, d2, d3);
-    M[Z, W] := -MatrixDetInternal(a1, a2, a3, b1, b2, b3, d1, d2, d3);
-    M[W, W] :=  MatrixDetInternal(a1, a2, a3, b1, b2, b3, c1, c2, c3);
+    M[XAxisIndex, WAxisIndex] := -MatrixDetInternal(b1, b2, b3, c1, c2, c3, d1, d2, d3);
+    M[YAxisIndex, WAxisIndex] :=  MatrixDetInternal(a1, a2, a3, c1, c2, c3, d1, d2, d3);
+    M[ZAxisIndex, WAxisIndex] := -MatrixDetInternal(a1, a2, a3, b1, b2, b3, d1, d2, d3);
+    M[WAxisIndex, WAxisIndex] :=  MatrixDetInternal(a1, a2, a3, b1, b2, b3, c1, c2, c3);
 end;
 function MatrixDeterminant(M: DMatrix4D): GDBDouble;
 var a1, a2, a3, a4,
@@ -1371,17 +1371,17 @@ begin
    one_minus_cosine:=1 - cosine;
    axis:=NormalizeVertex(anAxis);
    result:=onematrix;
-   Result[X, X]:=(one_minus_cosine * Sqr(Axis.x)) + Cosine;
-   Result[X, Y]:=(one_minus_cosine * Axis.x * Axis.y) - (Axis.z * Sine);
-   Result[X, Z]:=(one_minus_cosine * Axis.z * Axis.x) + (Axis.y * Sine);
+   Result[XAxisIndex, XAxisIndex]:=(one_minus_cosine * Sqr(Axis.x)) + Cosine;
+   Result[XAxisIndex, YAxisIndex]:=(one_minus_cosine * Axis.x * Axis.y) - (Axis.z * Sine);
+   Result[XAxisIndex, ZAxisIndex]:=(one_minus_cosine * Axis.z * Axis.x) + (Axis.y * Sine);
 
-   Result[Y, X]:=(one_minus_cosine * Axis.x * Axis.y) + (Axis.z * Sine);
-   Result[Y, Y]:=(one_minus_cosine * Sqr(Axis.y)) + Cosine;
-   Result[Y, Z]:=(one_minus_cosine * Axis.y * Axis.z) - (Axis.x * Sine);
+   Result[YAxisIndex, XAxisIndex]:=(one_minus_cosine * Axis.x * Axis.y) + (Axis.z * Sine);
+   Result[YAxisIndex, YAxisIndex]:=(one_minus_cosine * Sqr(Axis.y)) + Cosine;
+   Result[YAxisIndex, ZAxisIndex]:=(one_minus_cosine * Axis.y * Axis.z) - (Axis.x * Sine);
 
-   Result[Z, X]:=(one_minus_cosine * Axis.z * Axis.x) - (Axis.y * Sine);
-   Result[Z, Y]:=(one_minus_cosine * Axis.y * Axis.z) + (Axis.x * Sine);
-   Result[Z, Z]:=(one_minus_cosine * Sqr(Axis.z)) + Cosine;
+   Result[ZAxisIndex, XAxisIndex]:=(one_minus_cosine * Axis.z * Axis.x) - (Axis.y * Sine);
+   Result[ZAxisIndex, YAxisIndex]:=(one_minus_cosine * Axis.y * Axis.z) + (Axis.x * Sine);
+   Result[ZAxisIndex, ZAxisIndex]:=(one_minus_cosine * Sqr(Axis.z)) + Cosine;
 end;
 
 function MatrixMultiply(const M1, M2: DMatrix4D): DMatrix4D;

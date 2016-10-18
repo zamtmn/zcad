@@ -57,7 +57,7 @@ end;
 constructor TZEntityRepresentation.init;
 begin
   inherited;
-  Graphix.init({$IFDEF DEBUGBUILD}ErrGuid:pansichar{$ENDIF});
+  Graphix.init({$IFDEF DEBUGBUILD}ErrGuid{$ENDIF});
   Geometry.initnul;
 end;
 destructor TZEntityRepresentation.done;
@@ -81,10 +81,12 @@ end;
 procedure TZEntityRepresentation.Clear;
 begin
   Graphix.Clear;
+  Geometry.ClearSub;
 end;
 procedure TZEntityRepresentation.Shrink;
 begin
   Graphix.Shrink;
+  Geometry.Shrink;
 end;
 procedure TZEntityRepresentation.DrawTextContent(drawer:TZGLAbstractDrawer;content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
 begin
@@ -94,28 +96,45 @@ procedure TZEntityRepresentation.DrawLineWithLT(var rc:TDrawContext;const startp
 var
   gl:TGeomLine3D;
   gp:TGeomProxy;
-  //LLS,LLE:integer;
   dr:TLLDrawResult;
 begin
-  //LLS:=Graphix.LLprimitives.Count;
   dr:=Graphix.DrawLineWithLT(rc,startpoint,endpoint,vp);
-  //LLE:=Graphix.LLprimitives.Count;
+  Geometry.Lock;
   if dr.Appearance<>TAMatching then
   begin
-    gp.init(dr.LLPStart,dr.LLPEndi,dr.BB);
+    gp.init(dr.LLPStart,dr.LLPEndi-1,dr.BB);
     Geometry.AddObjectToNodeTree(gp);
   end;
   gl.init(startpoint,endpoint);
   Geometry.AddObjectToNodeTree(gl);
-  {LLS:=sizeof(TZEntityRepresentation);
-  LLS:=sizeof(ZGLGraphix);
-  LLS:=sizeof(TGeomEntTreeNode);
-  LLS:=ptrint(@PTZEntityRepresentation(nil).Graphix);
-  LLS:=ptrint(@PTZEntityRepresentation(nil).Geometry);}
+  Geometry.UnLock;
 end;
 procedure TZEntityRepresentation.DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);
+var
+  ptv,ptvprev,ptvfisrt: pgdbvertex;
+  ir:itrec;
+  gl:TGeomLine3D;
 begin
   Graphix.DrawPolyLineWithLT(rc,points,vp,closed,ltgen);
+  Geometry.Lock;
+  ptv:=Points.beginiterate(ir);
+  ptvfisrt:=ptv;
+  if ptv<>nil then
+  repeat
+        ptvprev:=ptv;
+        ptv:=Points.iterate(ir);
+        if ptv<>nil then
+        begin
+          gl.init(ptv^,ptvprev^);
+          Geometry.AddObjectToNodeTree(gl);
+        end;
+  until ptv=nil;
+  if closed then
+  begin
+    gl.init(ptvprev^,ptvfisrt^);
+    Geometry.AddObjectToNodeTree(gl);
+  end;
+  Geometry.UnLock;
 end;
 begin
 end.

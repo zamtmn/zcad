@@ -57,7 +57,7 @@ implementation
 //uses log;
 {$ENDIF}
 {$IFDEF DEBUGBUILD}
-//uses UGDBOpenArrayOfByte,log;
+uses gvector;
 type
     TFreememDesk={GDBOpenArrayOfByte}TVector<integer>;
 var

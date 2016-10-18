@@ -54,16 +54,14 @@ TTreeStatistik=record
                  {-}destructor done;virtual;{//}
             {-}end;{//}
          {-}var{//}
-            Separator:TSeparator;
-            BoundingBox:TBoundingBox;
-            NodeDir:TNodeDir;
-            Root:{-}PGZBInarySeparatedGeometry{/GDBPointer/};
-            pplusnode,pminusnode:{-}PGZBInarySeparatedGeometry{/GDBPointer/};
-            NodeData:TNodeData;
-            LockCounter:integer;
-          {-}//private{//}
-            nul:TEntityArray;
-          {-}public{//}
+            {-}Separator:TSeparator;{//}
+            {-}BoundingBox:TBoundingBox;{//}
+            {-}NodeDir:TNodeDir;{//}
+            {-}Root:PGZBInarySeparatedGeometry;{//}
+            {-}pplusnode,pminusnode:PGZBInarySeparatedGeometry;{//}
+            {-}NodeData:TNodeData;{//}
+            {-}LockCounter:integer;{//}
+            {-}nul:TEntityArray;{//}
             destructor done;virtual;
             procedure ClearSub;
             constructor initnul;

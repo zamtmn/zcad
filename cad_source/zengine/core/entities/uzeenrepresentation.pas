@@ -19,17 +19,18 @@
 unit uzeenrepresentation;
 {$INCLUDE def.inc}
 interface
-uses uzgldrawcontext,uzgldrawerabstract,
+uses uzgldrawcontext,uzgldrawerabstract,uzglvectorobject,
      uzbtypesbase,sysutils,uzbmemman,
      uzbgeomtypes,uzegeometry,uzglgeometry,uzefont,uzeentitiesprop,UGDBPoint3DArray,
-     uzegeomentitiestree,
-     uzgeomline3d;
+     uzegeomentitiestree,uzbtypes,
+     uzgeomline3d,uzgeomproxy;
 type
 {Export+}
-TZEntityRepresentation={$IFNDEF DELPHI}packed{$ENDIF} object
+PTZEntityRepresentation=^TZEntityRepresentation;
+TZEntityRepresentation={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                        {-}private{//}
-                       Graphix:ZGLGraphix;(*hidden_in_objinsp*)
-                       Geometry:TGeomEntTreeNode;(*hidden_in_objinsp*)
+                       Graphix:ZGLGraphix;
+                       Geometry:TGeomEntTreeNode;
                        {-}public{//}
                        constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar{$ENDIF});
                        destructor done;virtual;
@@ -90,8 +91,27 @@ begin
   Graphix.DrawTextContent(drawer,content,_pfont,DrawMatrix,objmatrix,textprop_size,Outbound);
 end;
 procedure TZEntityRepresentation.DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);
+var
+  gl:TGeomLine3D;
+  gp:TGeomProxy;
+  //LLS,LLE:integer;
+  dr:TLLDrawResult;
 begin
-  Graphix.DrawLineWithLT(rc,startpoint,endpoint,vp);
+  //LLS:=Graphix.LLprimitives.Count;
+  dr:=Graphix.DrawLineWithLT(rc,startpoint,endpoint,vp);
+  //LLE:=Graphix.LLprimitives.Count;
+  if dr.Appearance<>TAMatching then
+  begin
+    gp.init(dr.LLPStart,dr.LLPEndi,dr.BB);
+    Geometry.AddObjectToNodeTree(gp);
+  end;
+  gl.init(startpoint,endpoint);
+  Geometry.AddObjectToNodeTree(gl);
+  {LLS:=sizeof(TZEntityRepresentation);
+  LLS:=sizeof(ZGLGraphix);
+  LLS:=sizeof(TGeomEntTreeNode);
+  LLS:=ptrint(@PTZEntityRepresentation(nil).Graphix);
+  LLS:=ptrint(@PTZEntityRepresentation(nil).Geometry);}
 end;
 procedure TZEntityRepresentation.DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);
 begin

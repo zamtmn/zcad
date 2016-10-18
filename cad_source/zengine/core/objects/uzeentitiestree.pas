@@ -38,7 +38,7 @@ TEntTreeNodeData=record
                      //nodedepth:GDBInteger;
                      //pluscount,minuscount:GDBInteger;
                  end;
-TEntityArray=GZVectorPObects{GZVectorSimple}<PGDBObjEntity,GDBObjEntity>;
+TEntityArray=GZVectorPObects{GZVectorSimple}{-}<PGDBObjEntity,GDBObjEntity>{//};
          PTEntTreeNode=^TEntTreeNode;
          TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>{//})
                             procedure MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;const RN:Pointer);

@@ -16,29 +16,32 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzgeomline3d;
+unit uzgeomproxy;
 {$INCLUDE def.inc}
 interface
-uses
-     sysutils,uzbtypes,uzbmemman,uzegeometry,
-     uzgeomentity,uzgeomentity3d,uzbgeomtypes;
+uses uzgeomentity,uzgprimitivessarray,math,uzglgeomdata,uzgldrawcontext,uzgvertex3sarray,uzgldrawerabstract,
+     uzbtypesbase,sysutils,uzbtypes,uzbmemman,
+     uzbgeomtypes,uzegeometry;
 type
 {Export+}
-TGeomLine3D={$IFNDEF DELPHI}packed{$ENDIF} object(TGeomEntity3D)
-                                           LineData:GDBLineProp;
-                                           constructor init(const p1,p2:GDBvertex);
-                                           function GetBB:TBoundingBox;virtual;
+PTGeomProxy=^TGeomProxy;
+TGeomProxy={$IFNDEF DELPHI}packed{$ENDIF} object(TGeomEntity)
+                                             LLEntsStart,LLEntsEnd:TArrayIndex;
+                                             BB:TBoundingBox;
+                                             constructor init(const LLS,LLE:TArrayIndex;const _BB:TBoundingBox);
+                                             function GetBB:TBoundingBox;virtual;
                                            end;
 {Export-}
 implementation
-constructor TGeomLine3D.init(const p1,p2:GDBvertex);
+function TGeomProxy.GetBB:TBoundingBox;
 begin
-  LineData.lBegin:=p1;
-  LineData.lEnd:=p2;
+  result:=BB;
 end;
-function TGeomLine3D.GetBB:TBoundingBox;
+constructor TGeomProxy.init(const LLS,LLE:TArrayIndex;const _BB:TBoundingBox);
 begin
-  result:=CreateBBFrom2Point(LineData.lBegin,LineData.lEnd);
+  LLEntsStart:=LLS;
+  LLEntsEnd:=LLE;
+  bb:=_bb;
 end;
 begin
 end.

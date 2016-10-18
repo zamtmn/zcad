@@ -367,7 +367,7 @@ begin
            tname:=pfd^.base.UserName;
            if tname='' then
                            tname:=pfd^.base.ProgramName;
-           if tname='PTDimStyleDXFLoadingData' then
+           if tname='Geometry' then
                                    tname:=tname;
            if (pfd^.base.PFT^.GetFactTypedef^.TypeName='TEnumData') then
                        begin

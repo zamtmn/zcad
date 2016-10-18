@@ -23,6 +23,14 @@ uses uzgldrawerabstract,uzgldrawcontext,uzgprimitives,uzglgeomdata,uzgprimitives
      uzbgeomtypes,uzegeometry,sysutils,uzbtypes,uzbmemman,uzbstrproc,uzbtypesbase;
 type
 {Export+}
+TAppearance=(TAMatching,TANeedProxy);
+TLLDrawResult=packed record
+                       LLPStart,LLPEndi:TArrayIndex;
+                       LLPCount:TArrayIndex;
+                       Appearance:TAppearance;
+                       BB:TBoundingBox;
+              end;
+
 TZGLVectorDataCopyParam=packed record
                              LLPrimitivesStartIndex:TArrayIndex;
                              LLPrimitivesDataSize:GDBInteger;

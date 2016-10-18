@@ -46,7 +46,10 @@ zengine/zgl/uzgprimitives.pas
 zengine/zgl/uzgprimitivessarray.pas
 zengine/zgl/uzglvectorobject.pas
 zengine/zgl/uzglgeometry.pas
+zengine/geomlib/uzgeomentity.pas 
 zengine/geomlib/uzgeomentity3d.pas 
+zengine/geomlib/uzgeomline3d.pas
+zengine/geomlib/uzegeomentitiestree.pas
 zengine/core/entities/uzeentsubordinated.pas
 zengine/core/entities/uzeentitiesprop.pas
 zengine/core/entities/uzeenrepresentation.pas

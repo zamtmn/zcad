@@ -30,12 +30,20 @@ TFirstStageData=record
                   counter:integer;
                 end;
 {EXPORT+}
-TGeomTreeNodeData=record
+TGeomTreeNodeData=packed record
                   end;
-TEntityArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBByte>{//})
+TEntityArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBByte>{//})(*OpenArrayOfData=GDBByte*)
 end;
          PTEntTreeNode=^TGeomEntTreeNode;
          TGeomEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>{//})
+            {-}{/Separator:DVector4D;/}
+            {-}{/BoundingBox:TBoundingBox;/}
+            {-}{/NodeDir:TNodeDir;/}
+            {-}{/Root:GDBPointer;/}
+            {-}{/pplusnode,pminusnode:PTEntTreeNode;/}
+            {-}{/NodeData:TGeomTreeNodeData;/}
+            {-}{/LockCounter:GDBInteger;/}
+            {-}{/nul:TEntityArray;/}
                       end;
 {EXPORT-}
 TZEntsManipulator=class

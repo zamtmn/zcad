@@ -171,6 +171,7 @@ function  CreateGDBStringFromArray(var counter:integer;const args:array of const
 function CreateVertex2D(const x,y:GDBDouble):GDBVertex2D;inline;
 function IsPointInBB(const point:GDBvertex; var fistbb:TBoundingBox):GDBBoolean;inline;
 function CreateBBFrom2Point(const p1,p2:GDBvertex):TBoundingBox;
+function CreateBBFromPoint(const p:GDBvertex):TBoundingBox;
 procedure ConcatBB(var fistbb:TBoundingBox;const secbb:TBoundingBox);inline;
 procedure concatBBandPoint(var fistbb:TBoundingBox;const point:GDBvertex);inline;
 function IsBBNul(const bb:TBoundingBox):boolean;inline;
@@ -2137,6 +2138,12 @@ begin
   result.LBN:=CreateVertex(l,B,n);
   result.RTF:=CreateVertex(r,T,f);
 end;
+function CreateBBFromPoint(const p:GDBvertex):TBoundingBox;
+begin
+   result.LBN:=p;
+   result.RTF:=p;
+end;
+
 procedure ConcatBB(var fistbb:TBoundingBox;const secbb:TBoundingBox);
 begin
      if (fistbb.RTF.x=fistbb.LBN.x)

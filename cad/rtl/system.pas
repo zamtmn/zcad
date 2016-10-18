@@ -646,6 +646,12 @@ TZctnrVectorGDBPointer=packed object(GZVectorP) //TODO:почемуто не р�
                                    ={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
          
             
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  
             
             
             
@@ -655,14 +661,14 @@ TZctnrVectorGDBPointer=packed object(GZVectorP) //TODO:почемуто не р�
                  
             
          
-            Separator:TSeparator;
-            BoundingBox:TBoundingBox;
-            NodeDir:TNodeDir;
-            Root:GDBPointer;
-            pplusnode,pminusnode:GDBPointer;
-            nul:TEntityArray;
-            NodeData:TNodeData;
-            LockCounter:integer;
+            
+            
+            
+            
+            
+            
+            
+            
             destructor done;virtual;abstract;
             procedure ClearSub;
             constructor initnul;
@@ -674,15 +680,17 @@ TZctnrVectorGDBPointer=packed object(GZVectorP) //TODO:почемуто не р�
             procedure UnLock;
             procedure Separate;virtual;abstract;
             function GetNodeDepth:integer;virtual;abstract;
-            procedure MoveSub(var node:GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity>);
+            procedure MoveSub(var node:GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>);
             function GetOptimalTestNode(var TNArray:array of TTestNode):integer;
             procedure StoreOptimalTestNode(var TestNode:TTestNode);
+            function nuliterate(var ir:itrec):GDBPointer;
+            function nulbeginiterate(out ir:itrec):GDBPointer;
+            function nulDeleteElement(index:GDBInteger):GDBPointer;
           end;
 //Generate on E:/zcad/cad_source/zengine/containers/UGDBOpenArrayOfPV.pas
 PGDBObjOpenArrayOfPV=^GDBObjOpenArrayOfPV;
 GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(TZctnrVectorPGDBaseObjects)
                       procedure DrawWithattrib(var DC:TDrawContext);virtual;abstract;
-                      procedure DrawWithAttribExternalArray(var DC:TDrawContext;POAPV:PGDBObjOpenArrayOfPV);static;
                       procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                       procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                       procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;abstract;
@@ -1575,6 +1583,13 @@ TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArra
                 constructor initnul;
              end;
 //Generate on E:/zcad/cad_source/zengine/zgl/uzglvectorobject.pas
+TAppearance=(TAMatching,TANeedProxy);
+TLLDrawResult=packed record
+                       LLPStart,LLPEndi:TArrayIndex;
+                       LLPCount:TArrayIndex;
+                       Appearance:TAppearance;
+                       BB:TBoundingBox;
+              end;
 TZGLVectorDataCopyParam=packed record
                              LLPrimitivesStartIndex:TArrayIndex;
                              LLPrimitivesDataSize:GDBInteger;
@@ -1620,31 +1635,57 @@ ZSegmentator={$IFNDEF DELPHI}packed{$ENDIF}object(GZVectorData)
                                                  procedure startdraw;
                                                  procedure nextsegment;
                                                  procedure normalize(l:GDBDouble);
-                                                 procedure draw(var rc:TDrawContext;length:GDBDouble;paint:boolean);
+                                                 procedure draw(var rc:TDrawContext;length:GDBDouble;paint:boolean;var dr:TLLDrawResult);
                                            end;
 ZGLGraphix={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
                 procedure DrawGeometry(var rc:TDrawContext);virtual;abstract;
                 procedure DrawNiceGeometry(var rc:TDrawContext);virtual;abstract;
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar{$ENDIF});
                 destructor done;virtual;abstract;
-                procedure DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);virtual;abstract;
-                procedure DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);virtual;abstract;
-                procedure DrawLineWithoutLT(var rc:TDrawContext;const p1,p2:GDBVertex);virtual;abstract;
-                procedure DrawPointWithoutLT(var rc:TDrawContext;const p:GDBVertex);virtual;abstract;
+                function DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp):TLLDrawResult;virtual;                function DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean):TLLDrawResult;virtual;abstract;
+                procedure DrawLineWithoutLT(var rc:TDrawContext;const p1,p2:GDBVertex;var dr:TLLDrawResult);virtual;abstract;
+                procedure DrawPointWithoutLT(var rc:TDrawContext;const p:GDBVertex;var dr:TLLDrawResult);virtual;abstract;
                 {}
                 procedure AddLine(var rc:TDrawContext;const p1,p2:GDBVertex);
                 procedure AddPoint(var rc:TDrawContext;const p:GDBVertex);
                 {Patterns func}
-                procedure PlaceNPatterns(var rc:TDrawContext;var Segmentator:ZSegmentator;num:integer; const vp:PGDBLtypeProp;TangentScale,NormalScale,length:GDBDouble;SupressFirstDash:boolean=false);
-                procedure PlaceOnePattern(var rc:TDrawContext;var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;TangentScale,NormalScale,length,scale_div_length:GDBDouble;SupressFirstDash:boolean=false);
+                procedure PlaceNPatterns(var rc:TDrawContext;var Segmentator:ZSegmentator;num:integer; const vp:PGDBLtypeProp;TangentScale,NormalScale,length:GDBDouble;var dr:TLLDrawResult;SupressFirstDash:boolean=false);
+                procedure PlaceOnePattern(var rc:TDrawContext;var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;TangentScale,NormalScale,length,scale_div_length:GDBDouble;var dr:TLLDrawResult;SupressFirstDash:boolean=false);
                 procedure PlaceShape(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex; PSP:PShapeProp;scale,angle:GDBDouble);
                 procedure PlaceText(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
                 procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
                 //function CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:GDBDouble):GDBBoolean;
              end;
+//Generate on E:/zcad/cad_source/zengine/geomlib/uzgeomentity.pas 
+PTGeomEntity=^TGeomEntity;
+TGeomEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+                                             function GetBB:TBoundingBox;virtual;abstract;
+                                           end;
 //Generate on E:/zcad/cad_source/zengine/geomlib/uzgeomentity3d.pas 
-TGeomEntity3D={$IFNDEF DELPHI}packed{$ENDIF} object
+TGeomEntity3D={$IFNDEF DELPHI}packed{$ENDIF} object(TGeomEntity)
                                              end;
+//Generate on E:/zcad/cad_source/zengine/geomlib/uzgeomline3d.pas
+TGeomLine3D={$IFNDEF DELPHI}packed{$ENDIF} object(TGeomEntity3D)
+                                           LineData:GDBLineProp;
+                                           constructor init(const p1,p2:GDBvertex);
+                                           function GetBB:TBoundingBox;virtual;abstract;
+                                           end;
+//Generate on E:/zcad/cad_source/zengine/geomlib/uzegeomentitiestree.pas
+TGeomTreeNodeData=packed record
+                  end;
+TEntityArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOfData=GDBByte*)
+end;
+         PTEntTreeNode=^TGeomEntTreeNode;
+         TGeomEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry)
+            Separator:DVector4D;
+            BoundingBox:TBoundingBox;
+            NodeDir:TNodeDir;
+            Root:GDBPointer;
+            pplusnode,pminusnode:PTEntTreeNode;
+            NodeData:TGeomTreeNodeData;
+            LockCounter:GDBInteger;
+            nul:TEntityArray;
+                      end;
 //Generate on E:/zcad/cad_source/zengine/core/entities/uzeentsubordinated.pas
 GDBObjExtendable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  EntExtensions:GDBPointer;
@@ -1706,9 +1747,11 @@ GDBObjVisualProp=packed record
                       Color:TGDBPaletteColor;
                  end;
 //Generate on E:/zcad/cad_source/zengine/core/entities/uzeenrepresentation.pas
-TZEntityRepresentation={$IFNDEF DELPHI}packed{$ENDIF} object
+PTZEntityRepresentation=^TZEntityRepresentation;
+TZEntityRepresentation={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                        
-                       Graphix:ZGLGraphix;(*hidden_in_objinsp*)
+                       Graphix:ZGLGraphix;
+                       Geometry:TGeomEntTreeNode;
                        
                        constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar{$ENDIF});
                        destructor done;virtual;abstract;
@@ -1718,6 +1761,7 @@ TZEntityRepresentation={$IFNDEF DELPHI}packed{$ENDIF} object
                        procedure Clear;virtual;abstract;
                        procedure Shrink;virtual;abstract;
                        function GetGraphix:PZGLGraphix;
+                       {Команды которыми примитив рисует сам себя}
                        procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:gdbstring;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:GDBDouble;var Outbound:OutBound4V);
                        procedure DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);
                        procedure DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);virtual;abstract;
@@ -1739,7 +1783,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     Visible:TActulity;(*'Visible'*)(*oi_readonly*)(*hidden_in_objinsp*)
                     infrustum:TActulity;(*'In frustum'*)(*oi_readonly*)(*hidden_in_objinsp*)
                     PExtAttrib:PTExtAttrib;(*hidden_in_objinsp*)
-                    Representation:TZEntityRepresentation;(*hidden_in_objinsp*)
+                    Representation:TZEntityRepresentation;
                     destructor done;virtual;abstract;
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -2167,11 +2211,13 @@ TEntTreeNodeData=record
                      //nodedepth:GDBInteger;
                      //pluscount,minuscount:GDBInteger;
                  end;
+TEntityArray=GZVectorPObects{GZVectorSimple};
          PTEntTreeNode=^TEntTreeNode;
          TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry)
                             procedure MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;const RN:Pointer);
                             procedure DrawVolume(var DC:TDrawContext);
                             procedure DrawNodeVolume(var DC:TDrawContext);
+                            procedure DrawWithAttribExternalArray(var DC:TDrawContext);
                       end;
 //Generate on E:/zcad/cad_source/zengine/containers/UGDBVisibleTreeArray.pas
 PGDBObjEntityTreeArray=^GDBObjEntityTreeArray;

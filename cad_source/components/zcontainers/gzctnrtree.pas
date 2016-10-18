@@ -64,6 +64,7 @@ TTreeStatistik=record
             {-}nul:TEntityArray;{//}
             destructor done;virtual;
             procedure ClearSub;
+            procedure Shrink;
             constructor initnul;
             procedure AddObjToNul(var Entity:TEntity);
             procedure updateenttreeadress;
@@ -166,6 +167,7 @@ var
 begin
   nul.clear;
   TestNode.nul.copyto(nul);
+  Separator:=TestNode.plane;
   if TestNode.plus.count>0 then
   begin
     if pplusnode=nil then
@@ -221,7 +223,7 @@ begin
                                                                   end;
   MoveSub(self);
   TestNodesCount:=TEntsManipulator.GetTestNodesCount;
-  setlength(TNArray,TestNodesCount-1);
+  setlength(TNArray,TestNodesCount{-1});
 
      PFirstStageData:=nil;
      TEntsManipulator.FirstStageCalcSeparatirs(BoundingBox,TEntity(nil^),PFirstStageData,TSMStart);
@@ -313,6 +315,14 @@ begin
      NodeData:=default(TNodeData);
      LockCounter:=0;
      //NodeData.FulDraw:={True}TDTFulDraw;
+end;
+procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.Shrink;
+begin
+  nul.shrink;
+  if assigned(pplusnode) then
+                             pplusnode^.shrink;
+  if assigned(pminusnode) then
+                              pminusnode^.shrink;
 end;
 procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.ClearSub;
 begin

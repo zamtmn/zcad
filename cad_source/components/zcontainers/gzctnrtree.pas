@@ -22,15 +22,6 @@ interface
 uses
     gzctnrvectorpobjects,uzbtypesbase,uzbtypes,uzbmemman,gzctnrvectorsimple;
 type
-TTreeLevelStatistik=record
-                          NodesCount,EntCount,OverflowCount:GDBInteger;
-                    end;
-PTTreeLevelStatistikArray=^TTreeLevelStatistikArray;
-TTreeLevelStatistikArray=Array [0..0] of  TTreeLevelStatistik;
-TTreeStatistik=record
-                     NodesCount,EntCount,OverflowCount,MaxDepth,MemCount:GDBInteger;
-                     PLevelStat:PTTreeLevelStatistikArray;
-               end;
 {EXPORT+}
          TStageMode=(TSMStart,TSMAccumulation,TSMCalc,TSMEnd);
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);
@@ -54,14 +45,14 @@ TTreeStatistik=record
                  {-}destructor done;virtual;{//}
             {-}end;{//}
          {-}var{//}
+            {-}pplusnode,pminusnode:PGZBInarySeparatedGeometry;{//}
+            {-}nul:TEntityArray;{//}
             {-}Separator:TSeparator;{//}
             {-}BoundingBox:TBoundingBox;{//}
             {-}NodeDir:TNodeDir;{//}
             {-}Root:PGZBInarySeparatedGeometry;{//}
-            {-}pplusnode,pminusnode:PGZBInarySeparatedGeometry;{//}
             {-}NodeData:TNodeData;{//}
             {-}LockCounter:integer;{//}
-            {-}nul:TEntityArray;{//}
             destructor done;virtual;
             procedure ClearSub;
             procedure Shrink;
@@ -83,8 +74,6 @@ TTreeStatistik=record
             function nulDeleteElement(index:GDBInteger):GDBPointer;
           end;
 {EXPORT-}
-function MakeTreeStatisticRec(treedepth:integer):TTreeStatistik;
-procedure KillTreeStatisticRec(var tr:TTreeStatistik);
 implementation
 constructor GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.TTestNode.initnul;
 begin
@@ -367,16 +356,6 @@ destructor GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsMani
 begin
      ClearSub;
      nul.done;
-end;
-function MakeTreeStatisticRec(treedepth:integer):TTreeStatistik;
-begin
-     fillchar(result,sizeof(TTreeStatistik),0);
-     gdbgetmem({$IFDEF DEBUGBUILD}'{7604D7A4-2788-49B5-BB45-F9CD42F9785B}',{$ENDIF}pointer(result.PLevelStat),(treedepth+1)*sizeof(TTreeLevelStatistik));
-     fillchar(result.PLevelStat^,(treedepth+1)*sizeof(TTreeLevelStatistik),0);
-end;
-procedure KillTreeStatisticRec(var tr:TTreeStatistik);
-begin
-     gdbfreemem(pointer(tr.PLevelStat));
 end;
 begin
 end.

@@ -39,14 +39,14 @@ TEntityArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBByte>{//})
 end;
          PTEntTreeNode=^TGeomEntTreeNode;
          TGeomEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>{//})
+            {-}{/pplusnode,pminusnode:PTEntTreeNode;/}
+            {-}{/nul:TEntityArray;/}
             {-}{/Separator:DVector4D;/}
             {-}{/BoundingBox:TBoundingBox;/}
             {-}{/NodeDir:TNodeDir;/}
             {-}{/Root:GDBPointer;/}
-            {-}{/pplusnode,pminusnode:PTEntTreeNode;/}
             {-}{/NodeData:TGeomTreeNodeData;/}
             {-}{/LockCounter:GDBInteger;/}
-            {-}{/nul:TEntityArray;/}
                       end;
 {EXPORT-}
 TZEntsManipulator=class
@@ -63,7 +63,7 @@ TZEntsManipulator=class
                   end;
 var
    SysVarRDSpatialNodeCount:integer=2;
-   SysVarRDSpatialNodesDepth:integer=16;
+   SysVarRDSpatialNodesDepth:integer=20;
    FirstStageData:TFirstStageData;
 function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
 implementation

@@ -22,7 +22,7 @@ unit uzccombase;
 interface
 uses
  {$IFDEF DEBUGBUILD}strutils,{$ENDIF}
- gzctnrtree,uzglviewareageneral,zeundostack,zcchangeundocommand,uzcoimultiobjects,
+ uzglviewareageneral,zeundostack,zcchangeundocommand,uzcoimultiobjects,
  uzcenitiesvariablesextender,uzgldrawcontext,uzcdrawing,uzbpaths,uzeffmanager,
  uzeentdimension,uzestylesdim,uzestylestexts,uzeenttext,uzestyleslinetypes,
  URecordDescriptor,uzefontmanager,uzedrawingsimple,uzcsysvars,uzccommandsmanager,
@@ -48,7 +48,20 @@ uses
  UUnitManager,uzclog,Varman,
  uzbgeomtypes,dialogs,uzcinfoform,
  uzeentpolyline,UGDBPolyLine2DArray,uzeentlwpolyline,UGDBSelectedObjArray,
- uzegeometry,uzelongprocesssupport;
+ uzegeometry,uzelongprocesssupport,usimplegenerics;
+type
+  TTreeLevelStatistik=record
+                          NodesCount,EntCount,OverflowCount:GDBInteger;
+                    end;
+  TPopulationCounter=TMyMapCounter<integer,LessInteger>;
+PTTreeLevelStatistikArray=^TTreeLevelStatistikArray;
+TTreeLevelStatistikArray=Array [0..0] of  TTreeLevelStatistik;
+TTreeStatistik=record
+                     NodesCount,EntCount,OverflowCount,MaxDepth,MemCount:GDBInteger;
+                     PLevelStat:PTTreeLevelStatistikArray;
+                     pc:TPopulationCounter;
+               end;
+
    var selframecommand:PCommandObjectDef;
        zoomwindowcommand:PCommandObjectDef;
        ms2objinsp:PCommandObjectDef;
@@ -1155,6 +1168,7 @@ begin
      inc(tr.NodesCount);
      inc(tr.EntCount,pnode^.nul.Count);
      inc(tr.MemCount,sizeof(pnode^));
+     tr.pc.CountKey(pnode^.nul.Count,1);
      if depth>tr.MaxDepth then
                               tr.MaxDepth:=depth;
      if pnode^.nul.Count>GetInNodeCount(SysVar.RD.RD_SpatialNodeCount^) then
@@ -1187,17 +1201,35 @@ begin
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
+function MakeTreeStatisticRec(treedepth:integer):TTreeStatistik;
+begin
+     fillchar(result,sizeof(TTreeStatistik),0);
+     gdbgetmem({$IFDEF DEBUGBUILD}'{7604D7A4-2788-49B5-BB45-F9CD42F9785B}',{$ENDIF}pointer(result.PLevelStat),(treedepth+1)*sizeof(TTreeLevelStatistik));
+     fillchar(result.PLevelStat^,(treedepth+1)*sizeof(TTreeLevelStatistik),0);
+     result.pc:=TPopulationCounter.create;
+end;
+procedure KillTreeStatisticRec(var tr:TTreeStatistik);
+begin
+     gdbfreemem(pointer(tr.PLevelStat));
+     tr.pc.destroy;
+end;
 function TreeStat_com(operands:TCommandOperands):TCommandResult;
 var i: GDBInteger;
     percent,apercent:string;
     cp,ap:single;
     depth:integer;
     tr:TTreeStatistik;
+    rootnode:PTEntTreeNode;
+    iter:TPopulationCounter.TIterator;
 begin
   depth:=0;
-  tr:=MakeTreeStatisticRec(SysVar.RD.RD_SpatialNodesDepth^);
-  GetTreeStat(@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,depth,tr);
-  HistoryOutStr('Total entities: '+inttostr(drawings.GetCurrentROOT.ObjArray.count));
+  tr:=MakeTreeStatisticRec({SysVar.RD.RD_SpatialNodesDepth^}64);
+  if drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject=nil then
+    rootnode:=@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree
+  else
+    rootnode:=@PGDBObjEntity(drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject)^.Representation.Geometry;
+  GetTreeStat(rootnode,depth,tr);
+  HistoryOutStr('Total entities in drawing: '+inttostr(drawings.GetCurrentROOT.ObjArray.count));
   HistoryOutStr('Max tree depth: '+inttostr(SysVar.RD.RD_SpatialNodesDepth^));
   HistoryOutStr('Max in node entities: '+inttostr(GetInNodeCount(SysVar.RD.RD_SpatialNodeCount^)));
   HistoryOutStr('Current drawing spatial index Info:');
@@ -1223,6 +1255,12 @@ begin
        HistoryOutStr('  Nodes: '+inttostr(tr.PLevelStat^[i].NodesCount));
        HistoryOutStr('  Overflow nodes: '+inttostr(tr.PLevelStat^[i].OverflowCount));
   end;
+  iter:=tr.pc.min;
+  if assigned(iter)then
+  repeat
+    HistoryOutStr('  Nodes with population '+inttostr(iter.Data.Key)+': '+inttostr(iter.Data.Value));
+  until not iter.next;
+  if assigned(iter)then iter.destroy;
   KillTreeStatisticRec(tr);
   result:=cmd_ok;
 end;

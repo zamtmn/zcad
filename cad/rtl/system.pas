@@ -671,6 +671,7 @@ TZctnrVectorGDBPointer=packed object(GZVectorP) //TODO:почемуто не р�
             
             destructor done;virtual;abstract;
             procedure ClearSub;
+            procedure Shrink;
             constructor initnul;
             procedure AddObjToNul(var Entity:TEntity);
             procedure updateenttreeadress;
@@ -1642,7 +1643,8 @@ ZGLGraphix={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLVectorObject)
                 procedure DrawNiceGeometry(var rc:TDrawContext);virtual;abstract;
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar{$ENDIF});
                 destructor done;virtual;abstract;
-                function DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp):TLLDrawResult;virtual;                function DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean):TLLDrawResult;virtual;abstract;
+                function DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp):TLLDrawResult;virtual;abstract;
+                function DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean):TLLDrawResult;virtual;abstract;
                 procedure DrawLineWithoutLT(var rc:TDrawContext;const p1,p2:GDBVertex;var dr:TLLDrawResult);virtual;abstract;
                 procedure DrawPointWithoutLT(var rc:TDrawContext;const p:GDBVertex;var dr:TLLDrawResult);virtual;abstract;
                 {}
@@ -1674,17 +1676,19 @@ TGeomLine3D={$IFNDEF DELPHI}packed{$ENDIF} object(TGeomEntity3D)
 TGeomTreeNodeData=packed record
                   end;
 TEntityArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOfData=GDBByte*)
+                   function beginiterate(out ir:itrec):GDBPointer;virtual;abstract;
+                   function iterate(var ir:itrec):GDBPointer;virtual;abstract;
 end;
          PTEntTreeNode=^TGeomEntTreeNode;
          TGeomEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry)
+            pplusnode,pminusnode:PTEntTreeNode;
+            nul:TEntityArray;
             Separator:DVector4D;
             BoundingBox:TBoundingBox;
             NodeDir:TNodeDir;
             Root:GDBPointer;
-            pplusnode,pminusnode:PTEntTreeNode;
             NodeData:TGeomTreeNodeData;
             LockCounter:GDBInteger;
-            nul:TEntityArray;
                       end;
 //Generate on E:/zcad/cad_source/zengine/core/entities/uzeentsubordinated.pas
 GDBObjExtendable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)

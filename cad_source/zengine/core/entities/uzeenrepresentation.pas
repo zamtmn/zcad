@@ -28,7 +28,7 @@ type
 {Export+}
 PTZEntityRepresentation=^TZEntityRepresentation;
 TZEntityRepresentation={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                       {-}private{//}
+                       {-}//private{//}
                        Graphix:ZGLGraphix;
                        Geometry:TGeomEntTreeNode;
                        {-}public{//}

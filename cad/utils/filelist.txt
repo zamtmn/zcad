@@ -22,6 +22,7 @@ zengine/containers/UGDBPoint3DArray.pas
 zengine/containers/UGDBPolyLine2DArray.pas
 zengine/containers/UGDBPolyPoint2DArray.pas
 zengine/containers/UGDBSelectedObjArray.pas
+zengine/containers/uzctnrobjectschunk.pas
 zengine/fonts/uzefontbase.pas
 zengine/fonts/uzefontshx.pas
 zengine/fonts/uzefont.pas

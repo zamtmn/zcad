@@ -20,7 +20,7 @@ unit uzegeomentitiestree;
 {$INCLUDE def.inc}
 interface
 uses
-    graphics,gzctnrvectorsimple,uzgeomentity,gzctnrvectordata,
+    graphics,gzctnrvectorsimple,uzgeomentity,gzctnrvectordata,uzctnrobjectschunk,
     uzbgeomtypes,gzctnrtree,uzgldrawcontext,uzegeometry,uzbtypesbase,uzbtypes,uzbmemman;
 type
 TZEntsManipulator=class;
@@ -32,10 +32,7 @@ TFirstStageData=record
 {EXPORT+}
 TGeomTreeNodeData=packed record
                   end;
-TEntityArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBByte>{//})(*OpenArrayOfData=GDBByte*)
-                   function beginiterate(out ir:itrec):GDBPointer;virtual;
-                   function iterate(var ir:itrec):GDBPointer;virtual;
-
+TEntityArray={$IFNDEF DELPHI}packed{$ENDIF} object(TObjectsChunk)(*OpenArrayOfData=GDBByte*)
 end;
          PTEntTreeNode=^TGeomEntTreeNode;
          TGeomEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>{//})
@@ -67,36 +64,6 @@ var
    FirstStageData:TFirstStageData;
 function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
 implementation
-function TEntityArray.beginiterate(out ir:itrec):GDBPointer;
-begin
-     if parray=nil then
-                       result:=nil
-                   else
-                       begin
-                             ir.itp:=pointer(parray);
-                             ir.itc:=0;
-                             result:=pointer(parray);
-                       end;
-end;
-function TEntityArray.iterate(var ir:itrec):GDBPointer;
-var
-  s:integer;
-begin
-  if count=0 then result:=nil
-  else
-  begin
-      s:=sizeof(PTGeomEntity(ir.itp)^);
-      if ir.itc<(count-s) then
-                      begin
-
-                           inc(pGDBByte(ir.itp),s);
-                           inc(ir.itc,s);
-
-                           result:=ir.itp;
-                      end
-                  else result:=nil;
-  end;
-end;
 class function TZEntsManipulator.StoreEntityToArray(var Entity:TGeomEntity;var arr:TEntityArray):TArrayIndex;
 begin
      //arr.pushBackData(Entity);

@@ -794,6 +794,12 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)
                           procedure calcvisible(frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble);virtual;abstract;
                           procedure resprojparam(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
                     end;
+//Generate on E:/zcad/cad_source/zengine/containers/uzctnrobjectschunk.pas
+PTObjectsChunk=^TObjectsChunk;
+TObjectsChunk={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOfData=GDBByte*)
+                function beginiterate(out ir:itrec):GDBPointer;virtual;abstract;
+                function iterate(var ir:itrec):GDBPointer;virtual;abstract;
+             end;
 //Generate on E:/zcad/cad_source/zengine/fonts/uzefontbase.pas
 TGDBUNISymbolInfoVector=GZVectorData;
 PBASEFont=^BASEFont;
@@ -1579,9 +1585,7 @@ TLLPolyLine={$IFNDEF DELPHI}packed{$ENDIF} object(TLLPrimitive)
         end;
 //Generate on E:/zcad/cad_source/zengine/zgl/uzgprimitivessarray.pas
 PTLLPrimitivesArray=^TLLPrimitivesArray;
-TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOfData=GDBByte*)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                constructor initnul;
+TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(TObjectsChunk)(*OpenArrayOfData=GDBByte*)
              end;
 //Generate on E:/zcad/cad_source/zengine/zgl/uzglvectorobject.pas
 TAppearance=(TAMatching,TANeedProxy);
@@ -1675,9 +1679,7 @@ TGeomLine3D={$IFNDEF DELPHI}packed{$ENDIF} object(TGeomEntity3D)
 //Generate on E:/zcad/cad_source/zengine/geomlib/uzegeomentitiestree.pas
 TGeomTreeNodeData=packed record
                   end;
-TEntityArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData)(*OpenArrayOfData=GDBByte*)
-                   function beginiterate(out ir:itrec):GDBPointer;virtual;abstract;
-                   function iterate(var ir:itrec):GDBPointer;virtual;abstract;
+TEntityArray={$IFNDEF DELPHI}packed{$ENDIF} object(TObjectsChunk)(*OpenArrayOfData=GDBByte*)
 end;
          PTEntTreeNode=^TGeomEntTreeNode;
          TGeomEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF}object(GZBInarySeparatedGeometry)

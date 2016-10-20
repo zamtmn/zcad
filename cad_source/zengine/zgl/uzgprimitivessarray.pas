@@ -19,8 +19,7 @@
 unit uzgprimitivessarray;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzbmemman,
-     uzegeometry;
+uses uzctnrobjectschunk;
 const
      LLAttrNothing=0;
      LLAttrNeedSolid=1;
@@ -35,22 +34,10 @@ const
 type
 {Export+}
 PTLLPrimitivesArray=^TLLPrimitivesArray;
-TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBByte>{//})(*OpenArrayOfData=GDBByte*)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                constructor initnul;
+TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(TObjectsChunk)(*OpenArrayOfData=GDBByte*)
              end;
 {Export-}
 implementation
-//uses log;
-constructor TLLPrimitivesArray.init;
-begin
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m{,sizeof(GDBByte)});
-end;
-constructor TLLPrimitivesArray.initnul;
-begin
-  inherited initnul;
-  //size:=sizeof(GDBByte);
-end;
 begin
 end.
 

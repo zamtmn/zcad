@@ -31,6 +31,7 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
+    BtnAdd3DFaces1: TButton;
     BtnAddCircles1: TButton;
     BtnAddLWPolyLines1: TButton;
     BtnAddLines: TButton;
@@ -67,6 +68,7 @@ type
     procedure BtnAddLinesClick(Sender: TObject);       //Add lines to current drawing
     procedure BtnAddCirclesClick(Sender: TObject);     //Add circles to current drawing
     procedure BtnAddLWPolylines1Click(Sender: TObject);//Add lwpolylines to current drawing
+    procedure BtnAddSplines1Click(Sender: TObject);
     procedure BtnProcessObjectsClick(Sender: TObject); //Move lines and circles in current drawing
     procedure BtnRebuildClick(Sender: TObject);        //Rebuild spatial tree in current drawing
     procedure BtnEraseSelClick(Sender: TObject);       //Erase selected ents in current drawing
@@ -310,6 +312,45 @@ begin
 
   BtnRebuildClick(self);                                           //rebuild drawing spatial tree and redraw
 end;
+
+procedure TForm1.BtnAddSplines1Click(Sender: TObject);
+var
+   i,j:integer;
+   pobj:PGDBObjSpline;
+   v1:gdbvertex;
+   dc:TDrawContext;
+begin
+  _StartLongProcess(0,'Add splines');
+  dc:=GetCurrentDrawing^.CreateDrawingRC;
+  for i:=1 to SpinEdit1.Value do
+  begin
+    pobj := GDBObjSpline.CreateInstance;
+    v1:=CreateRandomVertex(1000,500,Form1.ChkBox3D.Checked);
+    for j:=0 to 4 do
+    begin
+         pobj^.VertexArrayInOCS.PushBackData(v1);
+         v1:=uzegeometry.VertexAdd(v1,CreateRandomVertex(100,50,Form1.ChkBox3D.Checked));
+    end;
+    pobj^.Knots.PushBackData(0);
+    pobj^.Knots.PushBackData(0);
+    pobj^.Knots.PushBackData(0);
+    pobj^.Knots.PushBackData(0);
+    pobj^.Knots.PushBackData(1);
+    pobj^.Knots.PushBackData(2);
+    pobj^.Knots.PushBackData(2);
+    pobj^.Knots.PushBackData(2);
+    pobj^.Knots.PushBackData(2);
+    pobj^.Degree:=3;
+    GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
+    SetEntityLayer(pobj,GetCurrentDrawing);
+    pobj^.BuildGeometry(GetCurrentDrawing^);
+    pobj^.formatEntity(GetCurrentDrawing^,dc);
+  end;
+  _EndLongProcess;
+  //FormatEntitysAndRebuildTreeAndRedraw;
+  BtnRebuildClick(self);
+end;
+
 procedure TForm1.BtnAdd3DFaces1Click(Sender: TObject);
 var
    i,j:integer;

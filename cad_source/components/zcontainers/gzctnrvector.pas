@@ -493,10 +493,10 @@ begin
   result:=PT(pel)-PT(parray);
 end;
 function GZVector<T>.DeleteElementByP;
-var
-   s:integer;
+{var
+   s:integer;}
 begin
-  deleteelement(p2i(pel));
+  result:=deleteelement(p2i(pel));
   {s:=PT(pel)-PT(parray);
   if s>=0 then
   begin

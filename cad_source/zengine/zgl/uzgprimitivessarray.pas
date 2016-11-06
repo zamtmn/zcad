@@ -20,17 +20,6 @@ unit uzgprimitivessarray;
 {$INCLUDE def.inc}
 interface
 uses uzctnrobjectschunk;
-const
-     LLAttrNothing=0;
-     LLAttrNeedSolid=1;
-     LLAttrNeedSimtlify=2;
-
-     {LLLineId=1;
-     LLPointId=2;
-     LLSymbolId=3;
-     LLSymbolEndId=4;
-     LLPolyLineId=5;
-     LLTriangleId=6;}
 type
 {Export+}
 PTLLPrimitivesArray=^TLLPrimitivesArray;

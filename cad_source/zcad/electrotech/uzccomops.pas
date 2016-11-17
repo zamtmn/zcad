@@ -101,14 +101,6 @@ type
     procedure Command(Operands:TCommandOperands); virtual;
   end;
 {Export-}
-tenum=(one,two);
-PGDBLine22=^GDBLine22;
-GDBLine22=packed record
-             lBegin,lEnd:GDBvertex;
-             x:GDBNonDimensionDouble;
-             xx:GDBDouble;
-             en:tenum;
-         end;
 var
    pco,pco2:pCommandRTEdObjectPlugin;
    //pwnd:POGLWndtype;
@@ -124,8 +116,6 @@ var
    OrtoDevPlaceParam:TOrtoDevPlaceParam;
 
    OPS_SPBuild_com:OPS_SPBuild;
-   l22:GDBLine22;
-
 //procedure GDBGetMem({$IFDEF DEBUGBUILD}ErrGuid:pchar;{$ENDIF}var p:pointer; const size: longword); external 'cad.exe';
 //procedure GDBFreeMem(var p: pointer); external 'cad.exe';
 
@@ -1344,20 +1334,12 @@ begin
 end;
 procedure startup;
 begin
-  SysUnit.RegisterType(typeinfo(GDBLine22));
-  SysUnit.RegisterType(typeinfo(PGDBLine22));
   OPS_SPBuild_com.init('OPS_SPBuild',0,0);
   //CreateCommandFastObjectPlugin(@OPS_SPBuild_com,'OPS_SPBuild',CADWG,0);
 
   CreateCommandFastObjectPlugin(@OPS_Sensor_Mark_com,'OPS_Sensor_Mark',CADWG,0);
   pco:=CreateCommandRTEdObjectPlugin(@CommandStart,nil,nil,@commformat,@BeforeClick,@AfterClick,nil,nil,'PlaceSmokeDetectorOrto',0,0);
-  //pco^.SetCommandParam(@OPSPlaceSmokeDetectorOrtoParam,'PTOPSPlaceSmokeDetectorOrtoParam');
-  pco^.SetCommandParam(@l22,'PGDBLine22');
-  l22.lBegin:=CreateVertex(1,2,3);
-  l22.lEnd:=CreateVertex(4,5,6);
-  l22.x:=7;
-  l22.xx:=8;
-  l22.en:=two;;
+  pco^.SetCommandParam(@OPSPlaceSmokeDetectorOrtoParam,'PTOPSPlaceSmokeDetectorOrtoParam');
   OPSPlaceSmokeDetectorOrtoParam.InsertType:=TIT_Device;
   OPSPlaceSmokeDetectorOrtoParam.Height.Enums.init(10);
   OPSPlaceSmokeDetectorOrtoParam.DatType:=TOPSDT_Smoke;

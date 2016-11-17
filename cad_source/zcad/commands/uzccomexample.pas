@@ -871,6 +871,37 @@ begin
     zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
     result:=cmd_ok;
 end;
+function InsertDevice_com(operands:TCommandOperands):TCommandResult;
+var
+    pdev:PGDBObjDevice;
+    p1:gdbvertex;
+    rc:TDrawContext;
+begin
+    if commandmanager.get3dpoint('Specify insert point:',p1) then
+    begin
+      //проверяем наличие блока PS_DAT_SMOKE и устройства DEVICE_PS_DAT_SMOKE в чертеже и копируем при необходимости
+      //этот момент кривой - AddBlockFromDBIfNeed должна быть функцией чтоб было понятно - есть блок или нет, хотя это можно проверить отдельно
+      drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_PS_DAT_SMOKE');
+      //создаем примитив
+      pdev:=AllocEnt(GDBDeviceID);
+      pdev^.init(nil,nil,0);
+      //настраивает
+      pdev.Name:='PS_DAT_SMOKE';
+      pdev^.Local.P_insert:=p1;
+      //строим переменную часть примитива (та что может редактироваться)
+      pdev.BuildVarGeometry(drawings.GetCurrentDWG^);
+      //строим постоянную часть примитива
+      pdev.BuildGeometry(drawings.GetCurrentDWG^);
+      //"форматируем"
+      rc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+      pdev.FormatEntity(drawings.GetCurrentDWG^,rc);
+      //дальше как обычно
+      zcSetEntPropFromCurrentDrawingProp(pdev);
+      zcAddEntToCurrentDrawingWithUndo(pdev);
+      zcRedrawCurrentDrawing;
+    end;
+    result:=cmd_ok;
+end;
 
 initialization
 { тут регистрация функций в интерфейсе зкада}
@@ -893,7 +924,8 @@ initialization
      CreateCommandFastObjectPlugin(@matchprop_com,       'MatchProp',  CADWG,0);
 
      SysUnit.RegisterType(TypeInfo(TDrawSuperlineParams));//регистрируем тип данных в зкадном RTTI
-     CreateCommandFastObjectPlugin(@DrawSuperLine_com,        'DrawSuperLine',   CADWG,0);
+     CreateCommandFastObjectPlugin(@DrawSuperLine_com,   'DrawSuperLine',   CADWG,0);
+     CreateCommandFastObjectPlugin(@InsertDevice_com,    'ID',   CADWG,0);
 
      MatchPropParam.ProcessLayer:=true;
      MatchPropParam.ProcessLineType:=true;

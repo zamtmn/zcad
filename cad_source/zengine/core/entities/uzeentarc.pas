@@ -585,6 +585,8 @@ begin
   endangle := endangle * pi / 180;
   PProjoutbound:=nil;
   dc:=drawing.createdrawingrc;
+  if vp.Layer=nil then
+                      vp.Layer:=nil;
   FormatEntity(drawing,dc);
 end;
 function GDBObjARC.onmouse;

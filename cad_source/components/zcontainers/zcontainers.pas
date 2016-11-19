@@ -11,7 +11,7 @@ uses
   gzctnrvector, gzctnrvectorsimple, gzctnrvectordata, gzctnrvectorobjects, 
   gzctnrvectorp, gzctnrvectorpdata, gzctnrvectorpobjects, 
   uzctnrvectorgdbstring, uzctnrvectorgdbpointer, UGDBTree, 
-  UGDBOpenArrayOfByte, gzctnrtree, LazarusPackageIntf;
+  UGDBOpenArrayOfByte, gzctnrtree, gzctnrstl, LazarusPackageIntf;
 
 implementation
 

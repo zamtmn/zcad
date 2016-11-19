@@ -18,7 +18,7 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="12">
+    <Files Count="13">
       <Item1>
         <Filename Value="gzctnrvector.pas"/>
         <UnitName Value="gzctnrvector"/>
@@ -67,6 +67,10 @@
         <Filename Value="gzctnrtree.pas"/>
         <UnitName Value="gzctnrtree"/>
       </Item12>
+      <Item13>
+        <Filename Value="gzctnrstl.pas"/>
+        <UnitName Value="gzctnrstl"/>
+      </Item13>
     </Files>
     <RequiredPkgs Count="2">
       <Item1>

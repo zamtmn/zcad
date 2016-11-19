@@ -18,7 +18,7 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="8">
+    <Files Count="7">
       <Item1>
         <Filename Value="def.inc"/>
         <Type Value="Include"/>
@@ -40,17 +40,13 @@
         <UnitName Value="uzbstrproc"/>
       </Item5>
       <Item6>
-        <Filename Value="usimplegenerics.pas"/>
-        <UnitName Value="usimplegenerics"/>
-      </Item6>
-      <Item7>
         <Filename Value="uzbpaths.pas"/>
         <UnitName Value="uzbpaths"/>
-      </Item7>
-      <Item8>
+      </Item6>
+      <Item7>
         <Filename Value="uzbgeomtypes.pas"/>
-        <UnitName Value="uzegeomtypes"/>
-      </Item8>
+        <UnitName Value="uzbgeomtypes"/>
+      </Item7>
     </Files>
     <RequiredPkgs Count="2">
       <Item1>

@@ -8,8 +8,8 @@ unit zebase;
 interface
 
 uses
-  uzbtypesbase, uzbtypes, uzbmemman, uzbstrproc, usimplegenerics, uzbpaths, 
-  uzbgeomtypes, LazarusPackageIntf;
+  uzbtypesbase, uzbtypes, uzbmemman, uzbstrproc, uzbpaths, uzbgeomtypes, 
+  LazarusPackageIntf;
 
 implementation
 

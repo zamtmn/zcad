@@ -20,21 +20,23 @@ unit uzgeomline3d;
 {$INCLUDE def.inc}
 interface
 uses
-     sysutils,uzbtypes,uzbmemman,uzegeometry,
+     sysutils,uzbtypes,uzbtypesbase,uzbmemman,uzegeometry,
      uzgeomentity,uzgeomentity3d,uzbgeomtypes;
 type
 {Export+}
 TGeomLine3D={$IFNDEF DELPHI}packed{$ENDIF} object(TGeomEntity3D)
                                            LineData:GDBLineProp;
-                                           constructor init(const p1,p2:GDBvertex);
+                                           StartParam:GDBDouble;
+                                           constructor init(const p1,p2:GDBvertex;const sp:GDBDouble);
                                            function GetBB:TBoundingBox;virtual;
                                            end;
 {Export-}
 implementation
-constructor TGeomLine3D.init(const p1,p2:GDBvertex);
+constructor TGeomLine3D.init(const p1,p2:GDBvertex;const sp:GDBDouble);
 begin
   LineData.lBegin:=p1;
   LineData.lEnd:=p2;
+  StartParam:=sp;
 end;
 function TGeomLine3D.GetBB:TBoundingBox;
 begin

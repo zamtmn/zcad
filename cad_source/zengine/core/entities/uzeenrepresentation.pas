@@ -105,7 +105,7 @@ begin
     gp.init(dr.LLPStart,dr.LLPEndi-1,dr.BB);
     Geometry.AddObjectToNodeTree(gp);
   end;
-  gl.init(startpoint,endpoint);
+  gl.init(startpoint,endpoint,0);
   Geometry.AddObjectToNodeTree(gl);
   Geometry.UnLock;
 end;
@@ -114,24 +114,27 @@ var
   ptv,ptvprev,ptvfisrt: pgdbvertex;
   ir:itrec;
   gl:TGeomLine3D;
+  segcounter:integer;
 begin
   Graphix.DrawPolyLineWithLT(rc,points,vp,closed,ltgen);
   Geometry.Lock;
   ptv:=Points.beginiterate(ir);
   ptvfisrt:=ptv;
+  segcounter:=0;
   if ptv<>nil then
   repeat
         ptvprev:=ptv;
         ptv:=Points.iterate(ir);
         if ptv<>nil then
         begin
-          gl.init(ptv^,ptvprev^);
+          gl.init(ptv^,ptvprev^,segcounter);
           Geometry.AddObjectToNodeTree(gl);
+          inc(segcounter);
         end;
   until ptv=nil;
   if closed then
   begin
-    gl.init(ptvprev^,ptvfisrt^);
+    gl.init(ptvprev^,ptvfisrt^,segcounter);
     Geometry.AddObjectToNodeTree(gl);
   end;
   Geometry.UnLock;

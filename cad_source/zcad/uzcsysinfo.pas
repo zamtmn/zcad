@@ -102,6 +102,8 @@ procedure ProcessParamStr;
 var
    i:integer;
    param,paramUC:GDBString;
+const
+  LogEnableModulePrefix='LEM_';
 begin
      //programlog.LogOutStr('ProcessParamStr',lp_IncPos,LM_Necessarily);
      debugln('{N+}ProcessParamStr');
@@ -141,6 +143,13 @@ begin
                                        programlog.SetLogMode(LM_Error)
        else if (paramUC='LM_FATAL')then
                                        programlog.SetLogMode(LM_Fatal)
+       else if pos(LogEnableModulePrefix,paramUC)=1 then
+                                       begin
+                                         paramUC:=copy(paramUC,
+                                                      length(LogEnableModulePrefix)+1,
+                                                      length(paramUC)-length(LogEnableModulePrefix)+1);
+                                         programlog.enablemodule(paramUC);
+                                       end;
        end;
      debugln('{N-}end;{ProcessParamStr}');
      //programlog.LogOutStr('end;{ProcessParamStr}',lp_DecPos,LM_Necessarily);

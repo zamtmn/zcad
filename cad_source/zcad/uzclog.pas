@@ -20,7 +20,7 @@ unit uzclog;
 {$INCLUDE def.inc}
 {$mode objfpc}{$H+}
 interface
-uses UGDBOpenArrayOfByte,gzctnrvectordata,uzbtypesbase,uzbtypes,LazLoggerBase,
+uses UGDBOpenArrayOfByte,gzctnrvectordata,gzctnrstl,uzbtypesbase,uzbtypes,LazLoggerBase,
      LazLogger,strutils,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF};
 const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
       {$IFDEF FPC}
@@ -35,14 +35,20 @@ const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
 const
       MaxLatestLogStrings=99;
 type
+TLogModuleDeskIndex=integer;
+TLogModuleDesk=record
+                enabled:boolean;
+end;
+TModulesDeskDictionary=specialize TMyGDBAnsiStringDictionary<TLogModuleDeskIndex>;
+TModulesDeskArray=specialize TMyVector<TLogModuleDesk>;
 TLogMode=(
-          LM_Trace,  // — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
-          LM_Debug,  // — журналирование моментов вызова «крупных» операций.
-          LM_Info,   // — разовые операции, которые повторяются крайне редко, но не регулярно. (загрузка конфига, плагина, запуск бэкапа)
-          LM_Warning,// — неожиданные параметры вызова, странный формат запроса, использование дефолтных значений в замен не корректных. Вообще все, что может свидетельствовать о не штатном использовании.
-          LM_Error,  // — повод для внимания разработчиков. Тут интересно окружение конкретного места ошибки.
-          LM_Fatal,   // — тут и так понятно. Выводим все до чего дотянуться можем, так как дальше приложение работать не будет.
-          LM_Necessarily   // — Вывод в любом случае
+          LM_Trace,     // — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
+          LM_Debug,     // — журналирование моментов вызова «крупных» операций.
+          LM_Info,      // — разовые операции, которые повторяются крайне редко, но не регулярно. (загрузка конфига, плагина, запуск бэкапа)
+          LM_Warning,   // — неожиданные параметры вызова, странный формат запроса, использование дефолтных значений в замен не корректных. Вообще все, что может свидетельствовать о не штатном использовании.
+          LM_Error,     // — повод для внимания разработчиков. Тут интересно окружение конкретного места ошибки.
+          LM_Fatal,     // — тут и так понятно. Выводим все до чего дотянуться можем, так как дальше приложение работать не будет.
+          LM_Necessarily// — Вывод в любом случае
          );
 //SplashWnd
 TSplashTextOutProc=procedure (s:string;pm:boolean);
@@ -64,14 +70,17 @@ tlog={$IFNDEF DELPHI}packed{$ENDIF} object
            LatestLogStrings:TLatestLogStrings;
            LatestLogStringsCount,TotalLogStringsCount:GDBInteger;
            CurrentLogMode:TLogMode;
+
+           ModulesDeskDictionary:TModulesDeskDictionary;
+           ModulesDeskArray:TModulesDeskArray;
+           DefaultModuleDeskIndex:TLogModuleDeskIndex;
+           NewModuleDesk:TLogModuleDesk;
+
            constructor init(fn:GDBString;LogMode:TLogMode);
+           function registermodule(modulename:AnsiString):TLogModuleDeskIndex;
+           function enablemodule(modulename:AnsiString):TLogModuleDeskIndex;
            procedure SetLogMode(LogMode:TLogMode);
            destructor done;
-           procedure ProcessStrToLog(str:GDBString;IncIndent:GDBInteger;todisk:boolean);virtual;
-           procedure ProcessStr(str:GDBString;IncIndent:GDBInteger);virtual;
-           procedure LogOutStr(str:GDBString;IncIndent:GDBInteger;LogMode:TLogMode{=LM_Trace});virtual;
-           procedure LogOutFormatStr(Const Fmt:GDBString;const Args :Array of const;IncIndent:GDBInteger;LogMode:TLogMode=LM_Trace);virtual;
-           function IsNeedToLog(LogMode:TLogMode):boolean;
            procedure AddStrToLatest(str:GDBString);
            procedure WriteLatestToFile(var f:system.text);
            procedure LogOutStrFast(str:GDBString;IncIndent:GDBInteger);virtual;
@@ -80,7 +89,14 @@ tlog={$IFNDEF DELPHI}packed{$ENDIF} object
            procedure CloseLog;
            procedure CreateLog;
 
+           function IsNeedToLog(LogMode:TLogMode;LMDI:TLogModuleDeskIndex):boolean;
+
+           procedure LogOutStr(str:GDBString;IncIndent:GDBInteger;LogMode:TLogMode;LMDI:TLogModuleDeskIndex=0);virtual;
+           procedure LogOutFormatStr(Const Fmt:GDBString;const Args :Array of const;IncIndent:GDBInteger;LogMode:TLogMode;LMDI:TLogModuleDeskIndex=0);virtual;
            procedure ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
+           private
+           procedure ProcessStr(str:GDBString;IncIndent:GDBInteger);virtual;
+           procedure ProcessStrToLog(str:GDBString;IncIndent:GDBInteger;todisk:boolean);virtual;
     end;
 {EXPORT-}
 function getprogramlog:GDBPointer;export;
@@ -300,16 +316,18 @@ begin
      inc(TotalLogStringsCount);
      inc(LatestLogStringsCount);
 end;
-function tlog.IsNeedToLog(LogMode:TLogMode):boolean;
+function tlog.IsNeedToLog(LogMode:TLogMode;LMDI:TLogModuleDeskIndex):boolean;
 begin
+     result:=ModulesDeskArray[LMDI].enabled;
+     if result then
      if LogMode<CurrentLogMode then
                                    result:=false
                                else
                                    result:=true;
 end;
-procedure tlog.LogOutFormatStr(Const Fmt:GDBString;const Args :Array of const;IncIndent:GDBInteger;LogMode:TLogMode=LM_Trace);
+procedure tlog.LogOutFormatStr(Const Fmt:GDBString;const Args :Array of const;IncIndent:GDBInteger;LogMode:TLogMode;LMDI:TLogModuleDeskIndex);
 begin
-     if IsNeedToLog(LogMode) then
+     if IsNeedToLog(LogMode,lmdi) then
                                  ProcessStr(format(fmt,args),IncIndent);
 end;
 procedure tlog.ProcessStr(str:GDBString;IncIndent:GDBInteger);
@@ -320,9 +338,9 @@ begin
      ProcessStrToLog(str,IncIndent,true);
      AddStrToLatest('  '+str);
 end;
-procedure tlog.logoutstr(str:GDBString;IncIndent:GDBInteger;LogMode:TLogMode{=LM_Trace});
+procedure tlog.logoutstr(str:GDBString;IncIndent:GDBInteger;LogMode:TLogMode;LMDI:TLogModuleDeskIndex);
 begin
-     if IsNeedToLog(LogMode) then
+     if IsNeedToLog(LogMode,lmdi) then
                                  ProcessStr(str,IncIndent);
 end;
 procedure tlog.LogOutStrFast(str:GDBString;IncIndent:GDBInteger);
@@ -347,12 +365,31 @@ begin
                                                                  uzbtypes.VerboseLog:=true;
                                     end;
 end;
+function tlog.registermodule(modulename:AnsiString):TLogModuleDeskIndex;
+begin
+  if not ModulesDeskDictionary.MyGetValue(modulename,result) then
+  begin
+    result:=ModulesDeskArray.Size;
+    ModulesDeskArray.PushBack(NewModuleDesk);
+    ModulesDeskDictionary.insert(uppercase(modulename),result);
+  end;
+end;
+function tlog.enablemodule(modulename:AnsiString):TLogModuleDeskIndex;
+begin
+  ModulesDeskArray.mutable[registermodule(modulename)]^.enabled:=true;
+end;
 
 constructor tlog.init(fn:GDBString;LogMode:TLogMode);
 var
    CurrentTime:TMyTimeStamp;
    lz:TLazLogger;
 begin
+     ModulesDeskDictionary:=TModulesDeskDictionary.create;
+     ModulesDeskArray:=TModulesDeskArray.create;
+     NewModuleDesk.enabled:=true;
+     DefaultModuleDeskIndex:=registermodule('DEFAULT');
+     NewModuleDesk.enabled:=false;
+
      CurrentLogMode:=LogMode;
      CurrentTime:=mynow();
      logfilename:=fn;
@@ -378,15 +415,17 @@ procedure tlog.ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
 var
    dbgmode:TLogMode;
    _indent:GDBInteger;
-   prefixlength:integer;
+   prefixlength,prefixstart:integer;
    NeedToHistory,NeedMessageBox:boolean;
+   modulename:string;
+   lmdi:TLogModuleDeskIndex;
 begin
      dbgmode:=LM_Info;
      _indent:=lp_OldPos;
      NeedToHistory:=false;
      NeedMessageBox:=false;
-     if s[1]='{' then
      if length(s)>1 then
+     if s[1]='{' then
      begin
         prefixlength:=2;
         while (s[prefixlength]<>'}')and(prefixlength<=length(s)) do
@@ -407,14 +446,32 @@ begin
         end;
         s:=copy(s,prefixlength+1,length(s)-prefixlength);
      end;
+     if length(s)>1 then
+     if s[1]='[' then
+     begin
+        prefixstart:=2;
+        prefixlength:=2;
+        while (s[prefixlength]<>']')and(prefixlength<=length(s)) do
+        begin
+          inc(prefixlength);
+        end;
+        modulename:=uppercase(copy(s,prefixstart,prefixlength-2));
+        s:=copy(s,prefixlength+1,length(s)-prefixlength);
+     end;
+     if modulename='' then
+                 lmdi:=DefaultModuleDeskIndex
+             else
+                 begin
+                  lmdi:=registermodule(modulename);
+                 end;
      if NeedToHistory then
        if assigned(HistoryTextOut) then
          HistoryTextOut(s);
      if NeedMessageBox then
        if assigned(MessageBoxTextOut) then
          MessageBoxTextOut(s);
-     if IsNeedToLog(dbgmode) then
-      LogOutStr(S,_indent,dbgmode);
+     if IsNeedToLog(dbgmode,lmdi) then
+      LogOutStr(S,_indent,dbgmode,lmdi);
 end;
 
 destructor tlog.done;

@@ -21,7 +21,7 @@ unit uzelongprocesssupport;
 
 
 interface
-uses sysutils,usimplegenerics;
+uses sysutils,gzctnrstl;
 type
 TLPSHandle=integer;
 TLPSCounter=integer;

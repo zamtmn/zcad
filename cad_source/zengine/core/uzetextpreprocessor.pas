@@ -19,7 +19,7 @@ unit uzetextpreprocessor;
 {$INCLUDE def.inc}
 
 interface
-uses sysutils,uzbtypesbase,usimplegenerics;
+uses sysutils,uzbtypesbase,usimplegenerics,gzctnrstl;
 type
 TStrProcessFunc=procedure(var str:gdbstring;startpos:integer;pobj:pointer);
 TPrefix2ProcessFunc=GKey2DataMap<GDBString,TStrProcessFunc{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;

@@ -57,6 +57,8 @@ var
 const
   identpref='zcadexternal.';
 implementation
+var
+   TranslateLogModuleId:TLogModuleDeskIndex;
 procedure DisableTranslate;
 begin
      inc(DisableTranslateCount);
@@ -186,7 +188,7 @@ begin
                                    exit;
                               end;
     result:=po.Translate({Identifier}'', OriginalValue);
-    programlog.LogOutFormatStr('InterfaceTranslate: identifier:"%s" originalValue:"%s" translate to "%s"',[Identifier,OriginalValue,result],0,LM_Debug);
+    programlog.LogOutFormatStr('InterfaceTranslate: identifier:"%s" originalValue:"%s" translate to "%s"',[Identifier,OriginalValue,result],0,LM_Debug,TranslateLogModuleId);
 
     if uzcsysinfo.sysparam.updatepo then
      begin
@@ -196,7 +198,7 @@ begin
                if (pos('**',OriginalValue)>0)or(pos('??',OriginalValue)>0)or(pos('__',OriginalValue)=1)then
                begin
                     inc(_DebugWord);
-                    programlog.LogOutStr(format('InterfaceTranslate: found debug word: identifier:"%s" originalValue:"%s"',[Identifier,OriginalValue]),0,LM_Warning);
+                    programlog.LogOutStr(format('InterfaceTranslate: found debug word: identifier:"%s" originalValue:"%s"',[Identifier,OriginalValue]),0,LM_Warning,TranslateLogModuleId);
                end
                else
                begin
@@ -205,13 +207,13 @@ begin
                begin
                     if pos(identpref,Identifier)<>1 then
                         begin
-                             programlog.LogOutStr(format(nontranslatedword,[Identifier,OriginalValue]),0,LM_Warning);
+                             programlog.LogOutStr(format(nontranslatedword,[Identifier,OriginalValue]),0,LM_Warning,TranslateLogModuleId);
                              po.Add(identpref+Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
                              actualypo.Add(identpref+Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
                         end
                     else
                         begin
-                             programlog.LogOutStr(format(nontranslatedword,[Identifier,OriginalValue]),0,LM_Warning);
+                             programlog.LogOutStr(format(nontranslatedword,[Identifier,OriginalValue]),0,LM_Warning,TranslateLogModuleId);
                              po.Add(Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
                              actualypo.Add(Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
                         end;
@@ -221,7 +223,7 @@ begin
                   else
                       begin
                       inc(_NotEnlishWord);
-                      programlog.LogOutStr(format('InterfaceTranslate: found non ASCII word: identifier:"%s" originalValue:"%s"',[Identifier,OriginalValue]),0,LM_Warning);
+                      programlog.LogOutStr(format('InterfaceTranslate: found non ASCII word: identifier:"%s" originalValue:"%s"',[Identifier,OriginalValue]),0,LM_Warning,TranslateLogModuleId);
                       //log.LogOut(Identifier+'--------------'+OriginalValue)
                       end;
 
@@ -257,6 +259,7 @@ procedure initialize;
     end;
 
 initialization
+TranslateLogModuleId:=programlog.registermodule('TRANSLATOR');
 initialize;
 finalization
 if assigned(actualypo) then freeandnil(actualypo);

@@ -137,7 +137,7 @@ const
       (template:'_softspace'#0'=a=b=s=t=r=a=c=t'+'_softspace'#0+'=;';id:mod_abstract)
       );
 type
-TNameToIndex=TMyGDBStringDictionary<TArrayIndex>;
+TNameToIndex=TMyGDBAnsiStringDictionary<TArrayIndex>;
 {EXPORT+}
 ptypemanager=^typemanager;
 typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)

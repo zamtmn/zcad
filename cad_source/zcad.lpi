@@ -169,7 +169,7 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
-        <CommandLineParams Value="nosplash updatepo qnll qsi"/>
+        <CommandLineParams Value="nosplash updatepo qnll qsi lem_sysinfo"/>
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>

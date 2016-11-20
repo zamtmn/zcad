@@ -48,7 +48,7 @@ uses
  UUnitManager,uzclog,Varman,
  uzbgeomtypes,dialogs,uzcinfoform,
  uzeentpolyline,UGDBPolyLine2DArray,uzeentlwpolyline,UGDBSelectedObjArray,
- uzegeometry,uzelongprocesssupport,usimplegenerics;
+ uzegeometry,uzelongprocesssupport,usimplegenerics,gzctnrstl;
 type
   TTreeLevelStatistik=record
                           NodesCount,EntCount,OverflowCount:GDBInteger;

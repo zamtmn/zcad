@@ -21,7 +21,7 @@ unit uzcguimanager;
 
 
 interface
-uses usimplegenerics,
+uses usimplegenerics,gzctnrstl,
      uzclog,uzbmemman,uzcsysvars,uzbtypesbase,uzbtypes,uzeentity,Types,Controls,Forms;
 type
 TZCADFormSetupProc=procedure(Form:TControl);

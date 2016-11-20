@@ -21,7 +21,7 @@ unit uzefontmanager;
 interface
 uses UGDBOpenArrayOfByte,{$IFNDEF DELPHI}LResources,{$ENDIF}LCLProc,uzbpaths,
      uzelclintfex,uzestrconsts,uzbstrproc,uzefont,uzbtypesbase,uzbmemman,
-     sysutils,uzbtypes,uzegeometry,usimplegenerics,
+     sysutils,uzbtypes,uzegeometry,usimplegenerics,gzctnrstl,
      UGDBNamedObjectsArray,classes;
 type
 TFontLoadProcedure=function(name:GDBString;var pf:PGDBfont):GDBBoolean;

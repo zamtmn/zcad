@@ -21,7 +21,7 @@ unit uzeentityextender;
 
 interface
 uses uzbmemman,uzedrawingdef,uzbtypesbase,uzbtypes,usimplegenerics,
-     UGDBOpenArrayOfByte;
+     UGDBOpenArrayOfByte,gzctnrstl;
 
 type
 TBaseObjExtender={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)

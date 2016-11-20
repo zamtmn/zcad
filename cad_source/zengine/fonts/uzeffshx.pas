@@ -167,7 +167,7 @@ begin
             xmax:=NegInfinity;
             while pshxdata^<>0 do
               begin
-                if VerboseLog then
+                if VerboseLog^ then
                   debugln('{T}SHX command %x',[integer(pshxdata^)]);
 
                 //programlog.LogOutFormatStr('shx command %x',[integer(pshxdata^)],lp_OldPos,LM_Trace);
@@ -192,7 +192,7 @@ begin
                       if onlyver=0 then
                         begin
                           baselen:=baselen/pshxdata^;
-                          if VerboseLog then
+                          if VerboseLog^ then
                             debugln('{T}%d',[integer(pshxdata^)]);
 
                           //programlog.LogOutFormatStr('%d',[integer(pshxdata^)],lp_OldPos,LM_Trace);
@@ -205,7 +205,7 @@ begin
                         begin
                           baselen:=baselen*pshxdata^;
                         end;
-                        if VerboseLog then
+                        if VerboseLog^ then
                           debugln('{T}%d',[integer(pshxdata^)]);
 
                         //programlog.LogOutFormatStr('%d',[integer(pshxdata^)],lp_OldPos,LM_Trace);
@@ -241,7 +241,7 @@ begin
                                      begin
                                           subsymbol:=pshxdata^;
                                      end;
-                      if VerboseLog then
+                      if VerboseLog^ then
                         debugln('{T}(%d)',[integer(subsymbol)]);
 
                       //programlog.LogOutFormatStr('(%d)',[integer(subsymbol)],lp_OldPos,LM_Trace);
@@ -368,7 +368,7 @@ begin
                       dx:=pShortint(pshxdata)^;
                       incpshxdata;
                       dy:=pShortint(pshxdata)^;
-                      if VerboseLog then
+                      if VerboseLog^ then
                         debugln('{T}(%d,%d)',[integer(dx),integer(dy)]);
 
                       //programlog.LogOutFormatStr('(%d,%d)',[integer(dx),integer(dy)],lp_OldPos,LM_Trace);
@@ -430,7 +430,7 @@ begin
                             end;
                       while (dx<>0)or(dy<>0) do
                         begin
-                          if VerboseLog then
+                          if VerboseLog^ then
                             debugln('{T}(%d,%d)',[integer(dx),integer(dy)]);
 
                           //programlog.LogOutFormatStr('(%d,%d)',[integer(dx),integer(dy)],lp_OldPos,LM_Trace);
@@ -753,14 +753,14 @@ begin
                          end
                      else
                          begin
-                              if VerboseLog then
+                              if VerboseLog^ then
                                 debugln('{T+}symbol %d',[integer(symnum)]);
                               if symnum=135 then
                                                 symnum:=symnum;
                               //programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
                               dataread:=createsymbol(pf,symnum,memorybuf.GetCurrentReadAddres,false,line);
                               memorybuf.jump({datalen}dataread);
-                              if VerboseLog then
+                              if VerboseLog^ then
                                 debugln('{T-}end');
                               //programlog.LogOutStr('end',lp_DecPos,LM_Trace);
                          end;
@@ -838,13 +838,13 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
          if test=49 then
                          test:=test;
          //if (*pf^.GetOrCreateSymbolInfo(test)^.{ .symbo linfo[test].}addr=0*)symnum<2560000 then
-         if VerboseLog then
+         if VerboseLog^ then
            debugln('{T+}symbol %d',[integer(symnum)]);
          if symnum=135 then
                            symnum:=symnum;
          //programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
          {if symnum<256 then }dataread:=createsymbol(pf,test{symnum},memorybuf.GetCurrentReadAddres,true,line);
-         if VerboseLog then
+         if VerboseLog^ then
            debugln('{T-}end');
          //programlog.LogOutStr('end',lp_DecPos,LM_Trace);
          //                                                                 else

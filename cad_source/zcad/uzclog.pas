@@ -20,7 +20,7 @@ unit uzclog;
 {$INCLUDE def.inc}
 {$mode objfpc}{$H+}
 interface
-uses UGDBOpenArrayOfByte,gzctnrvectordata,gzctnrstl,uzbtypesbase,uzbtypes,LazLoggerBase,
+uses UGDBOpenArrayOfByte,gzctnrvectordata,gzctnrstl,LazLoggerBase,
      LazLogger,strutils,sysutils{$IFNDEF DELPHI},LazUTF8{$ENDIF};
 const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
       {$IFDEF FPC}
@@ -49,7 +49,7 @@ TLogMode=(
           LM_Error,     // — повод для внимания разработчиков. Тут интересно окружение конкретного места ошибки.
           LM_Fatal,     // — тут и так понятно. Выводим все до чего дотянуться можем, так как дальше приложение работать не будет.
           LM_Necessarily// — Вывод в любом случае
-         );
+          );
 //SplashWnd
 TSplashTextOutProc=procedure (s:string;pm:boolean);
 THistoryTextOutProc=procedure (s:string);
@@ -58,17 +58,17 @@ TMyTimeStamp=record
                    time:TDateTime;
                    rdtsc:int64;
 end;
-TLatestLogStrings=array of GDBSTring;
+TLatestLogStrings=array of AnsiString;
 
 //PTDateTime=^TDateTime;
 {EXPORT+}
 ptlog=^tlog;
 tlog={$IFNDEF DELPHI}packed{$ENDIF} object
-           LogFileName:GDBString;
+           LogFileName:AnsiString;
            FileHandle:cardinal;
-           Indent:GDBInteger;
+           Indent:integer;
            LatestLogStrings:TLatestLogStrings;
-           LatestLogStringsCount,TotalLogStringsCount:GDBInteger;
+           LatestLogStringsCount,TotalLogStringsCount:integer;
            CurrentLogMode:TLogMode;
 
            ModulesDeskDictionary:TModulesDeskDictionary;
@@ -76,41 +76,41 @@ tlog={$IFNDEF DELPHI}packed{$ENDIF} object
            DefaultModuleDeskIndex:TLogModuleDeskIndex;
            NewModuleDesk:TLogModuleDesk;
 
-           constructor init(fn:GDBString;LogMode:TLogMode);
+           constructor init(fn:AnsiString;LogMode:TLogMode);
            function registermodule(modulename:AnsiString):TLogModuleDeskIndex;
            function enablemodule(modulename:AnsiString):TLogModuleDeskIndex;
            procedure SetLogMode(LogMode:TLogMode);
            destructor done;
-           procedure AddStrToLatest(str:GDBString);
+           procedure AddStrToLatest(str:AnsiString);
            procedure WriteLatestToFile(var f:system.text);
-           procedure LogOutStrFast(str:GDBString;IncIndent:GDBInteger);virtual;
-           procedure WriteToLog(s:GDBString;todisk:boolean;t,dt:TDateTime;tick,dtick:int64;IncIndent:GDBInteger);virtual;
+           procedure LogOutStrFast(str:AnsiString;IncIndent:integer);virtual;
+           procedure WriteToLog(s:AnsiString;todisk:boolean;t,dt:TDateTime;tick,dtick:int64;IncIndent:integer);virtual;
            procedure OpenLog;
            procedure CloseLog;
            procedure CreateLog;
 
            function IsNeedToLog(LogMode:TLogMode;LMDI:TLogModuleDeskIndex):boolean;
 
-           procedure LogOutStr(str:GDBString;IncIndent:GDBInteger;LogMode:TLogMode;LMDI:TLogModuleDeskIndex=0);virtual;
-           procedure LogOutFormatStr(Const Fmt:GDBString;const Args :Array of const;IncIndent:GDBInteger;LogMode:TLogMode;LMDI:TLogModuleDeskIndex=0);virtual;
+           procedure LogOutStr(str:AnsiString;IncIndent:integer;LogMode:TLogMode;LMDI:TLogModuleDeskIndex=0);virtual;
+           procedure LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;IncIndent:integer;LogMode:TLogMode;LMDI:TLogModuleDeskIndex=0);virtual;
            procedure ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
            private
-           procedure ProcessStr(str:GDBString;IncIndent:GDBInteger);virtual;
-           procedure ProcessStrToLog(str:GDBString;IncIndent:GDBInteger;todisk:boolean);virtual;
+           procedure ProcessStr(str:AnsiString;IncIndent:integer);virtual;
+           procedure ProcessStrToLog(str:AnsiString;IncIndent:integer;todisk:boolean);virtual;
     end;
 {EXPORT-}
-function getprogramlog:GDBPointer;export;
+function getprogramlog:pointer;export;
 //procedure startup(s:GDBString);
-procedure LogOut(s:GDBString);
+procedure LogOut(s:AnsiString);
 var programlog:tlog;
-   //SplashWnd
+   VerboseLog:boolean;
    SplashTextOut:TSplashTextOutProc;
    HistoryTextOut,MessageBoxTextOut:THistoryTextOutProc;
 implementation
 var
     PerfomaneBuf:GDBOpenArrayOfByte;
     TimeBuf:specialize GZVectorData<TMyTimeStamp>;
-    function LogMode2string(LogMode:TLogMode):GDBString;
+    function LogMode2string(LogMode:TLogMode):AnsiString;
     begin
       case LogMode of
                      LM_Trace:result:='LM_Trace';
@@ -123,7 +123,7 @@ var
                          result:='LM_Unknown';
       end;
     end;
-procedure LogOut(s:GDBString);
+procedure LogOut(s:AnsiString);
 var
    FileHandle:cardinal;
    logname:string;
@@ -144,7 +144,7 @@ begin
      fileclose(FileHandle);
      FileHandle:=0;
 end;
-function getprogramlog:GDBPointer;
+function getprogramlog:pointer;
 begin
      result:=@programlog;
 end;
@@ -168,8 +168,8 @@ begin
 
 end;
 
-procedure tlog.WriteToLog(s:GDBString;todisk:boolean;t,dt:TDateTime;tick,dtick:int64;IncIndent:GDBInteger);
-var ts:gdbstring;
+procedure tlog.WriteToLog(s:AnsiString;todisk:boolean;t,dt:TDateTime;tick,dtick:int64;IncIndent:integer);
+var ts:AnsiString;
 begin
   ts:=TimeToStr(Time)+{'|'+}DupeString(' ',Indent*2);
   if todisk then ts :='!!!! '+ts +s
@@ -243,7 +243,7 @@ begin
      result.rdtsc:=a;
 end;
 
-procedure tlog.processstrtolog(str:GDBString;IncIndent:GDBInteger;todisk:boolean);
+procedure tlog.processstrtolog(str:AnsiString;IncIndent:integer;todisk:boolean);
 var
    CurrentTime:TMyTimeStamp;
    DeltaTime,FromStartTime:TDateTime;
@@ -308,7 +308,7 @@ begin
      until LatestLogArraySize=0;
 end;
 
-procedure tlog.AddStrToLatest(str:GDBString);
+procedure tlog.AddStrToLatest(str:AnsiString);
 begin
      if LatestLogStringsCount>High(LatestLogStrings) then
                                                          LatestLogStringsCount:=Low(LatestLogStrings);
@@ -325,12 +325,12 @@ begin
                                else
                                    result:=true;
 end;
-procedure tlog.LogOutFormatStr(Const Fmt:GDBString;const Args :Array of const;IncIndent:GDBInteger;LogMode:TLogMode;LMDI:TLogModuleDeskIndex);
+procedure tlog.LogOutFormatStr(Const Fmt:AnsiString;const Args :Array of const;IncIndent:integer;LogMode:TLogMode;LMDI:TLogModuleDeskIndex);
 begin
      if IsNeedToLog(LogMode,lmdi) then
                                  ProcessStr(format(fmt,args),IncIndent);
 end;
-procedure tlog.ProcessStr(str:GDBString;IncIndent:GDBInteger);
+procedure tlog.ProcessStr(str:AnsiString;IncIndent:integer);
 begin
      if (Indent=0) then
                     if assigned(SplashTextOut) then
@@ -338,12 +338,12 @@ begin
      ProcessStrToLog(str,IncIndent,true);
      AddStrToLatest('  '+str);
 end;
-procedure tlog.logoutstr(str:GDBString;IncIndent:GDBInteger;LogMode:TLogMode;LMDI:TLogModuleDeskIndex);
+procedure tlog.logoutstr(str:AnsiString;IncIndent:integer;LogMode:TLogMode;LMDI:TLogModuleDeskIndex);
 begin
      if IsNeedToLog(LogMode,lmdi) then
                                  ProcessStr(str,IncIndent);
 end;
-procedure tlog.LogOutStrFast(str:GDBString;IncIndent:GDBInteger);
+procedure tlog.LogOutStrFast(str:AnsiString;IncIndent:integer);
 begin
      //if (str='TOGLWnd.Pre_MouseMove----{end}')and(Indent=3) then
      //               indent:=3;
@@ -362,7 +362,7 @@ begin
                                          CurrentLogMode:=LogMode;
                                          WriteToLog('Log mode changed to: '+LogMode2string(LogMode),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
                                          if LogMode=LM_Trace then
-                                                                 uzbtypes.VerboseLog:=true;
+                                                                 VerboseLog:=true;
                                     end;
 end;
 function tlog.registermodule(modulename:AnsiString):TLogModuleDeskIndex;
@@ -379,7 +379,7 @@ begin
   ModulesDeskArray.mutable[registermodule(modulename)]^.enabled:=true;
 end;
 
-constructor tlog.init(fn:GDBString;LogMode:TLogMode);
+constructor tlog.init(fn:AnsiString;LogMode:TLogMode);
 var
    CurrentTime:TMyTimeStamp;
    lz:TLazLogger;
@@ -414,7 +414,7 @@ end;
 procedure tlog.ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
 var
    dbgmode:TLogMode;
-   _indent:GDBInteger;
+   _indent:integer;
    prefixlength,prefixstart:integer;
    NeedToHistory,NeedMessageBox:boolean;
    modulename:string;

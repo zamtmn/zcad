@@ -420,12 +420,12 @@ begin
   GLUIntrf.TessBeginPolygon(tesselator,nil);
   for i:=0 to bs.Conturs.VArray.Size-1 do
   begin
-       if VerboseLog then
+       if VerboseLog^ then
           DebugLn('{T+}Contur=%d',[i]);
        GLUIntrf.TessBeginContour(tesselator);
        for j:=0 to bs.Conturs.VArray[i].Size-1 do
        begin
-            if VerboseLog then
+            if VerboseLog^ then
                DebugLn('x=%f;y=%f',[(bs.Conturs.VArray[i][j].v.x),(bs.Conturs.VArray[i][j].v.y)]);
             tv.x:=bs.Conturs.VArray[i][j].v.x;
             tv.y:=bs.Conturs.VArray[i][j].v.y;
@@ -434,7 +434,7 @@ begin
             //VectorData.GeomData.Add2DPoint(Conturs.VArray[i][j].x,Conturs.VArray[i][j].y);
        end;
        GLUIntrf.TessEndContour(tesselator);
-       if VerboseLog then
+       if VerboseLog^ then
           DebugLn('{T-}End contur');
   end;
   GLUIntrf.TessEndPolygon(tesselator);

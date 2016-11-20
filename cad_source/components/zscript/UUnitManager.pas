@@ -324,7 +324,7 @@ begin
     line:=readspace(line);
    if line='GDBObjLWPolyline=object(GDBObjWithLocalCS) Closed:GDBBoolean;' then
                   line:=line;
-   if VerboseLog then
+   if VerboseLog^ then
      DebugLn('{T}%s',[line]);
 
     //programlog.LogOutFormatStr('%s',[line],lp_OldPos,LM_Trace);
@@ -463,7 +463,7 @@ begin
                                                   if typ<>packedrecordtype then
                                                                                begin
                                                                                //ShowError('Record "'+typename+'" not packed');
-                                                                               if VerboseLog then
+                                                                               if VerboseLog^ then
                                                                                  debugln('Record "'+typename+'" not packed');
 
                                                                                end;
@@ -482,7 +482,7 @@ begin
                                                   if typ<>packedobjecttype then
                                                                                begin
                                                                                //ShowError('Object "'+typename+'" not packed');
-                                                                               if VerboseLog then
+                                                                               if VerboseLog^ then
                                                                                  debugln('Object "'+typename+'" not packed');
 
                                                                                end;
@@ -546,7 +546,7 @@ begin
                                                   if typ<>packedarraytype then
                                                                               begin
                                                                                //ShowError('Array "'+typename+'" not packed');
-                                                                               if VerboseLog then
+                                                                               if VerboseLog^ then
                                                                                  debugln('Array "'+typename+'" not packed');
 
                                                                               end;
@@ -717,7 +717,7 @@ if addtype then
 
         //p:=@etd;
         currentunit.InterfaceTypes.{exttype.}AddTypeByPP(@etd);
-        if VerboseLog then
+        if VerboseLog^ then
           DebugLn('{T}Type "%s" added',[typename]);
 
         //programlog.LogOutFormatStr('Type "%s" added',[typename],lp_OldPos,LM_Trace);
@@ -729,7 +729,7 @@ if addtype then
         //addtype:=true;
                            end;
                 varmode:begin
-                                if VerboseLog then
+                                if VerboseLog^ then
                                   DebugLn('{T}Varmode string: "%s"',[line]);
 
                                 //programlog.LogOutFormatStr('Varmode string: "%s"',[line],lp_OldPos,LM_Trace);
@@ -791,7 +791,7 @@ if addtype then
                                                    system.break
                                                else
                                                    begin
-                                                        if VerboseLog then
+                                                        if VerboseLog^ then
                                                           DebugLn('{D}'+line);
 
                                                         //programlog.logoutstr(line,0,LM_Debug);
@@ -832,21 +832,21 @@ procedure TUnitManager.LoadFolder(PPaths:GDBString;TranslateFunc:TTranslateFunct
 var
   sr: TSearchRec;
 begin
-  if VerboseLog then
+  if VerboseLog^ then
     DebugLn('{T+}TUnitManager.LoadFolder(%s)',[path]);
 
   //programlog.LogOutFormatStr('TUnitManager.LoadFolder(%s)',[path],lp_IncPos,LM_Debug);
   if FindFirst(path + '*.pas', faAnyFile, sr) = 0 then
   begin
     repeat
-      if VerboseLog then
+      if VerboseLog^ then
         DebugLn('{T}Found file "%s"',[path+sr.Name]);
       //programlog.LogOutFormatStr('Found file "%s"',[path+sr.Name],lp_OldPos,LM_Info);
       loadunit(PPaths,TranslateFunc,path+sr.Name,nil);
     until FindNext(sr) <> 0;
     sysutils.FindClose(sr);
   end;
-  if VerboseLog then
+  if VerboseLog^ then
     DebugLn('{T-}end;{TUnitManager.LoadFolder}');
   //programlog.logoutstr('end;{TUnitManager.LoadFolder}',lp_DecPos,LM_Debug);
 end;

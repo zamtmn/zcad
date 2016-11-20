@@ -571,7 +571,7 @@ procedure vardeskclear(const p:pvardesk);
 //var
    //s:string;
 begin
-     if VerboseLog then
+     if VerboseLog^ then
        DebugLn(format('{T}vardeskclear: "%s"',[pvardesk(p)^.name]));
      //programlog.LogOutFormatStr('vardeskclear: "%s"',[pvardesk(p)^.name],lp_OldPos,LM_Trace);
      if pvardesk(p)^.name='_EQ_C2000_KPB' then
@@ -595,25 +595,25 @@ begin
 end;
 destructor typemanager.done;
 begin
-     if VerboseLog then
+     if VerboseLog^ then
        DebugLn('{T+}TypeManager.done');
      //programlog.LogOutStr('TypeManager.done',lp_IncPos,LM_Trace);
      exttype.free;
      exttype.done;
      n2i.destroy;
-     if VerboseLog then
+     if VerboseLog^ then
        DebugLn('{T-}TypeManager.done;//end');
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
 destructor typemanager.systemdone;
 begin
-     if VerboseLog then
+     if VerboseLog^ then
        DebugLn('{T+}TypeManager.systemdone;');
      //programlog.LogOutStr('TypeManager.systemdone',lp_IncPos,LM_Trace);
      exttype.cleareraseobjfrom(BaseTypesEndIndex-1);
      exttype.done;
      n2i.destroy;
-     if VerboseLog then
+     if VerboseLog^ then
        DebugLn('{T-}TypeManager.systemdone;//end');
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
@@ -729,7 +729,7 @@ begin
 
   if vd.data.ptd=nil then
                          begin
-                              if VerboseLog then
+                              if VerboseLog^ then
                                 DebugLn(sysutils.format('{E}Type "%S" not defined in unit "%S"',[typename,self.Name]));
 
                               //programlog.LogOutStr(sysutils.format('Type "%S" not defined in unit "%S"',[typename,self.Name]),lp_OldPos,LM_Error);
@@ -742,7 +742,7 @@ begin
 end;
 destructor varmanager.done;
 begin
-     if VerboseLog then
+     if VerboseLog^ then
        DebugLn('{T+}varmanager.done;');
 
      //programlog.LogOutStr('varmanager.done',lp_IncPos,LM_Trace);
@@ -750,7 +750,7 @@ begin
      vardescarray.done;
      vararray.done;//TODO:проверить чистятся ли стринги внутри
      //exttype.freewithproc(basetypedescclear);
-     if VerboseLog then
+     if VerboseLog^ then
        DebugLn('{T-}varmanager.done;//end');
 
 
@@ -1582,7 +1582,7 @@ begin
      if result<>nil then
                         exit;
      result:=InterfaceTypes._TypeName2PTD(n);
-     if VerboseLog then
+     if VerboseLog^ then
        if result=nil then
          DebugLn('{W}In unit "%s" not found type "%s"',[name,n]);
 
@@ -1639,7 +1639,7 @@ end;
 
 initialization;
 begin
-  if VerboseLog then
+  if VerboseLog^ then
     DebugLn('{D+}Varman.startup');
   //programlog.logoutstr('Varman.startup',lp_IncPos,LM_Debug);
   //DecimalSeparator := '.';
@@ -1650,7 +1650,7 @@ begin
   CategoryCollapsed.CreateArray;
   fillchar(CategoryCollapsed.parray^,CategoryCollapsed.max,byte(true));
   CategoryUnknownCOllapsed:=true;
-  if VerboseLog then
+  if VerboseLog^ then
     DebugLn('{D-}end; {Varman.startup}');
   //programlog.logoutstr('end; {Varman.startup}',lp_DecPos,LM_Debug);
 end;

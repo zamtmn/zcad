@@ -287,11 +287,13 @@ TImageDegradation=packed record
 PExtensionData=GDBPointer;
 {EXPORT-}
 var
-  VerboseLog:boolean=false;
+  VerboseLog:pboolean;
 {$IFDEF DELPHI}
 function StrToQWord(sh:string):UInt64;
 {$ENDIF}
 implementation
+var
+  DummyVerboseLog:boolean=true;
 function GDBaseObject.GetObjType:GDBWord;
 begin
      result:=GDBBaseObjectID;
@@ -371,5 +373,6 @@ begin
 end;
 {$ENDIF}
 begin
+    VerboseLog:=@DummyVerboseLog;
 end.
 

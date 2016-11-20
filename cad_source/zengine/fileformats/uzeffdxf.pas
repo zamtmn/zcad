@@ -351,7 +351,7 @@ begin
     begin
     if owner <> nil then
       begin
-        if VerboseLog then
+        if VerboseLog^ then
           debugln('{D}AddEntitiesFromDXF.Found primitive ',s);
         //programlog.LogOutFormatStr('AddEntitiesFromDXF.Found primitive %s',[s],lp_OldPos,LM_Trace);
         {$IFDEF DEBUGBUILD}inc(i2);if i2=4349 then

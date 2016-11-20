@@ -291,7 +291,7 @@ begin
   repeat
         if curr^.SubNode<>nil then
                                       PTPropertyDeskriptorArray(curr^.SubNode)^.cleareraseobj;
-        if VerboseLog then
+        if VerboseLog^ then
           DebugLn('{T}',curr^.Name,'=',curr^.Value);
         //programlog.LogOutStr(curr^.Name,0,LM_Trace);
         //programlog.LogOutStr('='+curr^.Value,0,LM_Trace);

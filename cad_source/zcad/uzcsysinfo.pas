@@ -109,6 +109,7 @@ begin
      debugln('{N+}ProcessParamStr');
      SysParam.otherinstancerun:=false;
      SysParam.PreloadedFile:='';
+     uzbtypes.VerboseLog:=@uzclog.VerboseLog;
      i:=paramcount;
      for i:=1 to paramcount do
        begin
@@ -124,7 +125,7 @@ begin
        else if (paramUC='NOSPLASH')or(paramUC='NS')then
                                                    SysParam.NoSplash:=true
        else if (paramUC='VERBOSELOG')or(paramUC='VL')then
-                                                          uzbtypes.VerboseLog:=true
+                                                          uzclog.VerboseLog:=true
        else if (paramUC='NOLOADLAYOUT')or(paramUC='NLL')then
                                                                SysParam.NoLoadLayout:=true
        else if (paramUC='STANDARTINTERFACE')or(paramUC='SI')then

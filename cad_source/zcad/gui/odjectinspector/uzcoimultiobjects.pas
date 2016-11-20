@@ -504,38 +504,38 @@ begin
      SavezeUnitsFormat:=f;
      if _GetEntsTypes then
                           GetEntsTypes;
-     if VerboseLog then
+     if VerboseLog^ then
                        debugln('{T+}VariablesUnit.free start');
      VariablesUnit.free;
-     if VerboseLog then
+     if VerboseLog^ then
                        debugln('{T-}end');
 
-     if VerboseLog then
+     if VerboseLog^ then
                        debugln('{T+}GeneralUnit.free start');
      GeneralUnit.free;
      GeneralUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
-     if VerboseLog then
+     if VerboseLog^ then
                        debugln('{T-}end');
 
-     if VerboseLog then
+     if VerboseLog^ then
                        debugln('{T+}GeometryUnit.free start');
      GeometryUnit.free;
      GeometryUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
-     if VerboseLog then
+     if VerboseLog^ then
                        debugln('{T-}end');
 
-     if VerboseLog then
+     if VerboseLog^ then
                   debugln('{T+}MiscUnit.free start');
      MiscUnit.free;
      MiscUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
-     if VerboseLog then
+     if VerboseLog^ then
                        debugln('{T-}end');
 
-     if VerboseLog then
+     if VerboseLog^ then
                   debugln('{T+}SummaryUnit.free start');
      SummaryUnit.free;
      SummaryUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
-     if VerboseLog then
+     if VerboseLog^ then
                        debugln('{T-}end');
 
      CheckMultiPropertyUse;

@@ -166,7 +166,7 @@ implementation
 function TEnumDataDescriptor.CreateProperties;
 var ppd:PPropertyDeskriptor;
 begin
-     if VerboseLog then
+     if VerboseLog^ then
        DebugLn('{T}TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
      //programlog.LogOutFormatStr('TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda],lp_OldPos,LM_Trace);
      ppd:=GetPPD(ppda,bmode);
@@ -211,7 +211,7 @@ end;
 function BaseTypeDescriptor.CreateProperties;
 var ppd:PPropertyDeskriptor;
 begin
-     if VerboseLog then
+     if VerboseLog^ then
        DebugLn('{T}BaseTypeDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
      //programlog.LogOutFormatStr('BaseTypeDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda],lp_OldPos,LM_Trace);
      ppd:=GetPPD(ppda,bmode);

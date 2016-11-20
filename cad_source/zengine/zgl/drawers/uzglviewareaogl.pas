@@ -144,7 +144,7 @@ var
    Widget:PGtkWidget;
 {$ENDIF}
 begin
-  if VerboseLog then
+  if VerboseLog^ then
     debugln('{D+}TOGLWnd.InitOGL');
   //programlog.logoutstr('TOGLWnd.InitOGL',lp_IncPos,LM_Debug);
   {$IFDEF LCLGTK2}
@@ -179,7 +179,7 @@ begin
                                            end;
   end;
   {$ENDIF}
-  if VerboseLog then
+  if VerboseLog^ then
     debugln('{D-}end;{TOGLWnd.InitOGL}');
   //programlog.logoutstr('end;{TOGLWnd.InitOGL}',lp_DecPos,LM_Debug);
 end;

@@ -101,17 +101,15 @@ begin
 end;
 function FindInSupportPath(PPaths:GDBString;FileName:GDBString):GDBString;
 const
-     FindInSupportPath='FindInSupportPath: found file:"%s"';
+     FindInSupportPath='[FILEOPS]FindInSupportPath: found file:"%s"';
 var
    s,ts:gdbstring;
 begin
      if VerboseLog^ then
-       DebugLn(sysutils.Format('FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
-     //programlog.LogOutFormatStr('FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)],0,LM_Debug);
+       DebugLn(sysutils.Format('[FILEOPS]FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
      FileName:=ExpandPath(FileName);
      if VerboseLog^ then
-       DebugLn(sysutils.Format('FindInSupportPath: file name expand to:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
-     //programlog.LogOutFormatStr('FindInSupportPath: file name expand to:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)],0,LM_Debug);
+       DebugLn(sysutils.Format('[FILEOPS]FindInSupportPath: file name expand to:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
      if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)) then
                                  begin
                                       result:=FileName;
@@ -127,8 +125,7 @@ begin
            GetPartOfPath(ts,s,'|');
            ts:=ExpandPath(ts);
            if VerboseLog^ then
-             DebugLn(sysutils.Format('FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]));
-           //programlog.LogOutFormatStr('FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)],0,LM_Debug);
+             DebugLn(sysutils.Format('[FILEOPS]FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]));
            ts:=ts+FileName;
            if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then
                                  begin
@@ -141,8 +138,7 @@ begin
      end;
      result:='';
      if VerboseLog^ then
-       DebugLn(sysutils.Format('FindInSupportPath: file not found:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
-     //programlog.LogOutStr(format('FindInSupportPath: file not found:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]),0,LM_Warning);
+       DebugLn(sysutils.Format('[FILEOPS]FindInSupportPath: file not found:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
 end;
 function ExpandPath(path:GDBString):GDBString;
 begin
@@ -195,7 +191,7 @@ begin
      //fn:=fn+systoutf8(s);
      *конец попытки*)
      if VerboseLog^ then
-       DebugLn(sysutils.Format('{D}Process file %s',[fn]));
+       DebugLn(sysutils.Format('{D}[FILEOPS]Process file %s',[fn]));
      //programlog.LogOutFormatStr('Process file %s',[fn],lp_OldPos,LM_Trace);
      if @method<>nil then
                          method(fn);
@@ -205,7 +201,7 @@ begin
 end;
 begin
   if VerboseLog^ then
-    DebugLn('{D+}FromDirIterator start');
+    DebugLn('{D+}[FILEOPS]FromDirIterator start');
   //programlog.LogOutStr('FromDirIterator start',lp_IncPos,LM_Debug);
   if firstloadfilename<>'' then
   if fileexists(path+firstloadfilename) then
@@ -230,7 +226,7 @@ begin
     FindClose(sr);
   end;
   if VerboseLog^ then
-    DebugLn('{D-}end; {FromDirIterator}');
+    DebugLn('{D-}[FILEOPS]end; {FromDirIterator}');
   //programlog.LogOutStr('FromDirIterator....{end}',lp_DecPos,LM_Debug);
 end;
 initialization

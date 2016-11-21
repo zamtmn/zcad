@@ -325,7 +325,7 @@ begin
    if line='GDBObjLWPolyline=object(GDBObjWithLocalCS) Closed:GDBBoolean;' then
                   line:=line;
    if VerboseLog^ then
-     DebugLn('{T}%s',[line]);
+     DebugLn('{T}[ZSCRIPT]%s',[line]);
 
     //programlog.LogOutFormatStr('%s',[line],lp_OldPos,LM_Trace);
 
@@ -464,7 +464,7 @@ begin
                                                                                begin
                                                                                //ShowError('Record "'+typename+'" not packed');
                                                                                if VerboseLog^ then
-                                                                                 debugln('Record "'+typename+'" not packed');
+                                                                                 debugln('{W}Record "'+typename+'" not packed');
 
                                                                                end;
                                                   if (typename) = 'GDBvertex'
@@ -483,7 +483,7 @@ begin
                                                                                begin
                                                                                //ShowError('Object "'+typename+'" not packed');
                                                                                if VerboseLog^ then
-                                                                                 debugln('Object "'+typename+'" not packed');
+                                                                                 debugln('{W}]Object "'+typename+'" not packed');
 
                                                                                end;
                                                   if (typename) = 'GDBObj3DFace'
@@ -547,7 +547,7 @@ begin
                                                                               begin
                                                                                //ShowError('Array "'+typename+'" not packed');
                                                                                if VerboseLog^ then
-                                                                                 debugln('Array "'+typename+'" not packed');
+                                                                                 debugln('{W}Array "'+typename+'" not packed');
 
                                                                               end;
                                                   if typename='GDBPalette' then
@@ -642,7 +642,7 @@ begin
                                                                 else
                                                                     begin
                                                                       //FatalError('Syntax error in file '+f.name);
-                                                                      debugln('Syntax error in file '+f.name);
+                                                                      debugln('{E}Syntax error in file '+f.name);
                                                                       halt(0);
                                                                     end;
                                                   if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
@@ -671,7 +671,7 @@ begin
                                              else if maxvalue<65536 then maxvalue:=2
                                              else if maxvalue<4294967296 then maxvalue:=4
                                              else begin
-                                                   debugln('Syntax error in file '+f.name);
+                                                   debugln('{E}Syntax error in file '+f.name);
                                                    halt(0);
                                                   end;
                                              gdbgetmem({$IFDEF DEBUGBUILD}'{F26A6C48-52FE-437C-A017-382135CC3DC7}',{$ENDIF}GDBPointer(etd),sizeof(EnumDescriptor));
@@ -695,7 +695,7 @@ begin
 
                                              end;
                                            0:begin
-                                                  debugln('Syntax error in file '+f.name);
+                                                  debugln('{E}Syntax error in file '+f.name);
                                                   halt(0);
                                                   //FatalError('Syntax error in file '+f.name)
                                              end;
@@ -718,7 +718,7 @@ if addtype then
         //p:=@etd;
         currentunit.InterfaceTypes.{exttype.}AddTypeByPP(@etd);
         if VerboseLog^ then
-          DebugLn('{T}Type "%s" added',[typename]);
+          DebugLn('{T}[ZSCRIPT]Type "%s" added',[typename]);
 
         //programlog.LogOutFormatStr('Type "%s" added',[typename],lp_OldPos,LM_Trace);
         if typename='tdisp' then
@@ -730,7 +730,7 @@ if addtype then
                            end;
                 varmode:begin
                                 if VerboseLog^ then
-                                  DebugLn('{T}Varmode string: "%s"',[line]);
+                                  DebugLn('{T}[ZSCRIPT]Varmode string: "%s"',[line]);
 
                                 //programlog.LogOutFormatStr('Varmode string: "%s"',[line],lp_OldPos,LM_Trace);
                                 //parsepos:=1;
@@ -751,7 +751,7 @@ if addtype then
                         if {kolvo=20}line=oldline then
                                    begin
                                         //FatalError('Unable to parse line "'+line+'"');
-                                        debugln('Unable to parse line "'+line+'"');
+                                        debugln('{E}Unable to parse line "'+line+'"');
                                         halt(0);
                                         line := f.readtoparser(';');
                                         //kolvo:=0;
@@ -792,7 +792,7 @@ if addtype then
                                                else
                                                    begin
                                                         if VerboseLog^ then
-                                                          DebugLn('{D}'+line);
+                                                          DebugLn('{D}[ZSCRIPT]'+line);
 
                                                         //programlog.logoutstr(line,0,LM_Debug);
                                                         if copy(line,1,10)='VIEW_ObjIn'
@@ -833,21 +833,21 @@ var
   sr: TSearchRec;
 begin
   if VerboseLog^ then
-    DebugLn('{T+}TUnitManager.LoadFolder(%s)',[path]);
+    DebugLn('{T+}[ZSCRIPT]TUnitManager.LoadFolder(%s)',[path]);
 
   //programlog.LogOutFormatStr('TUnitManager.LoadFolder(%s)',[path],lp_IncPos,LM_Debug);
   if FindFirst(path + '*.pas', faAnyFile, sr) = 0 then
   begin
     repeat
       if VerboseLog^ then
-        DebugLn('{T}Found file "%s"',[path+sr.Name]);
+        DebugLn('{T}[ZSCRIPT]Found file "%s"',[path+sr.Name]);
       //programlog.LogOutFormatStr('Found file "%s"',[path+sr.Name],lp_OldPos,LM_Info);
       loadunit(PPaths,TranslateFunc,path+sr.Name,nil);
     until FindNext(sr) <> 0;
     sysutils.FindClose(sr);
   end;
   if VerboseLog^ then
-    DebugLn('{T-}end;{TUnitManager.LoadFolder}');
+    DebugLn('{T-}[ZSCRIPT]end;{TUnitManager.LoadFolder}');
   //programlog.logoutstr('end;{TUnitManager.LoadFolder}',lp_DecPos,LM_Debug);
 end;
 initialization;

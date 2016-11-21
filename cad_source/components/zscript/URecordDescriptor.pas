@@ -244,7 +244,7 @@ var PFD:PFieldDescriptor;
     SaveFastEditor:TFastEditorProcs;
 begin
      if VerboseLog^ then
-       DebugLn('{T+}RecordDescriptor.CreateProperties "%s"',[name]);
+       DebugLn('{T+}[ZSCRIPT]RecordDescriptor.CreateProperties "%s"',[name]);
      //programlog.LogOutFormatStr('RecordDescriptor.CreateProperties "%s"',[name],lp_IncPos,LM_Trace);
 
      pobj:=addr;
@@ -301,7 +301,7 @@ begin
                                                   if pvd^.name='BTY_TreeCoord' then
                                                                                    pvd^.name:=pvd^.name;
                                                   if VerboseLog^ then
-                                                    DebugLn('{T}process prop: "%s"',[pvd^.name]);
+                                                    DebugLn('{T}[ZSCRIPT]process prop: "%s"',[pvd^.name]);
                                                   //programlog.LogOutFormatStr('process prop: "%s"',[pvd^.name],lp_OldPos,LM_Trace);
                                                   i:=pos('_',pvd^.name);
                                                   tname:=pvd^.username;
@@ -412,7 +412,7 @@ begin
                    else*)
            if pfd^.base.ProgramName='#' then begin
                                                 if VerboseLog^ then
-                                                  DebugLn('{T}Found ##PVMT');
+                                                  DebugLn('{T}[ZSCRIPT]Found ##PVMT');
                                                 //programlog.LogOutStr('Found ##PVMT',lp_OldPos,LM_Trace);
                                                 ppd:=GetPPD(ppda,bmode);
                                                 if ppd^._bmode=property_build then
@@ -442,7 +442,7 @@ begin
                                                                                                       if assigned(ppointer(pobj)^) then
                                                                                                                                        begin
                                                                                                                                        if VerboseLog^ then
-                                                                                                                                         DebugLn('{T}%p',[pobj]);
+                                                                                                                                         DebugLn('{T}[ZSCRIPT]%p',[pobj]);
                                                                                                                                        //programlog.LogOutFormatStr('%p',[pobj],lp_OldPos,LM_Trace);
                                                                                                                                        ppd^.value:=pobj^.GetObjTypeName;
                                                                                                                                        //pobj^.whoisit;
@@ -481,7 +481,7 @@ begin
                if bmodesave<>property_build then
                                       bmode:=bmodesave;
      if VerboseLog^ then
-       DebugLn('{T-}end;{RecordDescriptor.CreateProperties "%s"}',[name]);
+       DebugLn('{T-}[ZSCRIPT]end;{RecordDescriptor.CreateProperties "%s"}',[name]);
      //programlog.LogOutFormatStr('end;{RecordDescriptor.CreateProperties "%s"}',[name],lp_DecPos,LM_Trace);
 end;
 

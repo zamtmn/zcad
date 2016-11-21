@@ -168,9 +168,7 @@ begin
             while pshxdata^<>0 do
               begin
                 if VerboseLog^ then
-                  debugln('{T}SHX command %x',[integer(pshxdata^)]);
-
-                //programlog.LogOutFormatStr('shx command %x',[integer(pshxdata^)],lp_OldPos,LM_Trace);
+                  debugln('{T}[SHX_CONTENTS]SHX command %x',[integer(pshxdata^)]);
                 case pshxdata^ of
                   001:
                     begin
@@ -193,7 +191,7 @@ begin
                         begin
                           baselen:=baselen/pshxdata^;
                           if VerboseLog^ then
-                            debugln('{T}%d',[integer(pshxdata^)]);
+                            debugln('{T}[SHX_CONTENTS]%d',[integer(pshxdata^)]);
 
                           //programlog.LogOutFormatStr('%d',[integer(pshxdata^)],lp_OldPos,LM_Trace);
                         end;
@@ -206,7 +204,7 @@ begin
                           baselen:=baselen*pshxdata^;
                         end;
                         if VerboseLog^ then
-                          debugln('{T}%d',[integer(pshxdata^)]);
+                          debugln('{T}[SHX_CONTENTS]%d',[integer(pshxdata^)]);
 
                         //programlog.LogOutFormatStr('%d',[integer(pshxdata^)],lp_OldPos,LM_Trace);
                     end;
@@ -242,7 +240,7 @@ begin
                                           subsymbol:=pshxdata^;
                                      end;
                       if VerboseLog^ then
-                        debugln('{T}(%d)',[integer(subsymbol)]);
+                        debugln('{T}[SHX_CONTENTS](%d)',[integer(subsymbol)]);
 
                       //programlog.LogOutFormatStr('(%d)',[integer(subsymbol)],lp_OldPos,LM_Trace);
                       psubsyminfo:=pf^.GetOrCreateSymbolInfo(subsymbol);
@@ -369,7 +367,7 @@ begin
                       incpshxdata;
                       dy:=pShortint(pshxdata)^;
                       if VerboseLog^ then
-                        debugln('{T}(%d,%d)',[integer(dx),integer(dy)]);
+                        debugln('{T}[SHX_CONTENTS](%d,%d)',[integer(dx),integer(dy)]);
 
                       //programlog.LogOutFormatStr('(%d,%d)',[integer(dx),integer(dy)],lp_OldPos,LM_Trace);
                       if onlyver=0 then
@@ -431,7 +429,7 @@ begin
                       while (dx<>0)or(dy<>0) do
                         begin
                           if VerboseLog^ then
-                            debugln('{T}(%d,%d)',[integer(dx),integer(dy)]);
+                            debugln('{T}[SHX_CONTENTS](%d,%d)',[integer(dx),integer(dy)]);
 
                           //programlog.LogOutFormatStr('(%d,%d)',[integer(dx),integer(dy)],lp_OldPos,LM_Trace);
                           if draw then
@@ -710,7 +708,7 @@ begin
   line:=uppercase(line);
   if (line='AUTOCAD-86 SHAPES 1.0')or(line='AUTOCAD-86 SHAPES 1.1') then
   begin
-    debugln('{D}AUTOCAD-86 SHAPES 1.0');
+    debugln('{D}[SHX]AUTOCAD-86 SHAPES 1.0');
     //programlog.LogOutStr('AUTOCAD-86 SHAPES 1.0',lp_OldPos,LM_Debug);
   initfont(pf,extractfilename(name));
   pf^.font:=CreateSHXFontInstance;
@@ -754,14 +752,14 @@ begin
                      else
                          begin
                               if VerboseLog^ then
-                                debugln('{T+}symbol %d',[integer(symnum)]);
+                                debugln('{T+}[SHX]symbol %d',[integer(symnum)]);
                               if symnum=135 then
                                                 symnum:=symnum;
                               //programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
                               dataread:=createsymbol(pf,symnum,memorybuf.GetCurrentReadAddres,false,line);
                               memorybuf.jump({datalen}dataread);
                               if VerboseLog^ then
-                                debugln('{T-}end');
+                                debugln('{T-}[SHX]end');
                               //programlog.LogOutStr('end',lp_DecPos,LM_Trace);
                          end;
 
@@ -785,7 +783,7 @@ begin
   end
 else if line='AUTOCAD-86 UNIFONT 1.0' then
   begin
-       debugln('{D}AUTOCAD-86 UNIFONT 1.0');
+       debugln('{D}[SHX]AUTOCAD-86 UNIFONT 1.0');
        //programlog.LogOutStr('AUTOCAD-86 UNIFONT 1.0',lp_OldPos,LM_Debug);
        initfont(pf,extractfilename(name));
        pf^.font:=CreateSHXFontInstance;
@@ -839,13 +837,13 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
                          test:=test;
          //if (*pf^.GetOrCreateSymbolInfo(test)^.{ .symbo linfo[test].}addr=0*)symnum<2560000 then
          if VerboseLog^ then
-           debugln('{T+}symbol %d',[integer(symnum)]);
+           debugln('{T+}[SHX]symbol %d',[integer(symnum)]);
          if symnum=135 then
                            symnum:=symnum;
          //programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
          {if symnum<256 then }dataread:=createsymbol(pf,test{symnum},memorybuf.GetCurrentReadAddres,true,line);
          if VerboseLog^ then
-           debugln('{T-}end');
+           debugln('{T-}[SHX]end');
          //programlog.LogOutStr('end',lp_DecPos,LM_Trace);
          //                                                                 else
          //                                                                     pf:=pf;

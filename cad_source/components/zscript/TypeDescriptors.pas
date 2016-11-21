@@ -292,7 +292,7 @@ begin
         if curr^.SubNode<>nil then
                                       PTPropertyDeskriptorArray(curr^.SubNode)^.cleareraseobj;
         if VerboseLog^ then
-          DebugLn('{T}',curr^.Name,'=',curr^.Value);
+          DebugLn('{T}[ZSCRIPT]',curr^.Name,'=',curr^.Value);
         //programlog.LogOutStr(curr^.Name,0,LM_Trace);
         //programlog.LogOutStr('='+curr^.Value,0,LM_Trace);
         curr^.Name:='';

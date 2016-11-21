@@ -455,7 +455,7 @@ end;
 destructor UserTypeDescriptor.done;
 begin
      if VerboseLog^ then
-       DebugLn('{T}'+self.TypeName);
+       DebugLn('{T}[FINALIZATION_TYPES]'+self.TypeName);
      //programlog.LogOutStr(self.TypeName,lp_OldPos,LM_Trace);
      SizeInGDBBytes:=0;
      typename:='';

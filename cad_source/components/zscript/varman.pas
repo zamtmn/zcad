@@ -572,7 +572,7 @@ procedure vardeskclear(const p:pvardesk);
    //s:string;
 begin
      if VerboseLog^ then
-       DebugLn(format('{T}vardeskclear: "%s"',[pvardesk(p)^.name]));
+       DebugLn(format('{T}[ZSCRIPT]vardeskclear: "%s"',[pvardesk(p)^.name]));
      //programlog.LogOutFormatStr('vardeskclear: "%s"',[pvardesk(p)^.name],lp_OldPos,LM_Trace);
      if pvardesk(p)^.name='_EQ_C2000_KPB' then
      pvardesk(p)^.name:=pvardesk(p)^.name;
@@ -596,25 +596,25 @@ end;
 destructor typemanager.done;
 begin
      if VerboseLog^ then
-       DebugLn('{T+}TypeManager.done');
+       DebugLn('{T+}[ZSCRIPT]TypeManager.done');
      //programlog.LogOutStr('TypeManager.done',lp_IncPos,LM_Trace);
      exttype.free;
      exttype.done;
      n2i.destroy;
      if VerboseLog^ then
-       DebugLn('{T-}TypeManager.done;//end');
+       DebugLn('{T-}[ZSCRIPT]TypeManager.done;//end');
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
 destructor typemanager.systemdone;
 begin
      if VerboseLog^ then
-       DebugLn('{T+}TypeManager.systemdone;');
+       DebugLn('{T+}[ZSCRIPT]TypeManager.systemdone;');
      //programlog.LogOutStr('TypeManager.systemdone',lp_IncPos,LM_Trace);
      exttype.cleareraseobjfrom(BaseTypesEndIndex-1);
      exttype.done;
      n2i.destroy;
      if VerboseLog^ then
-       DebugLn('{T-}TypeManager.systemdone;//end');
+       DebugLn('{T-}[ZSCRIPT]TypeManager.systemdone;//end');
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
 
@@ -743,7 +743,7 @@ end;
 destructor varmanager.done;
 begin
      if VerboseLog^ then
-       DebugLn('{T+}varmanager.done;');
+       DebugLn('{T+}[ZSCRIPT]varmanager.done;');
 
      //programlog.LogOutStr('varmanager.done',lp_IncPos,LM_Trace);
      vardescarray.freewithproc(vardeskclear);
@@ -751,7 +751,7 @@ begin
      vararray.done;//TODO:проверить чистятся ли стринги внутри
      //exttype.freewithproc(basetypedescclear);
      if VerboseLog^ then
-       DebugLn('{T-}varmanager.done;//end');
+       DebugLn('{T-}[ZSCRIPT]varmanager.done;//end');
 
 
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
@@ -1640,7 +1640,7 @@ end;
 initialization;
 begin
   if VerboseLog^ then
-    DebugLn('{D+}Varman.startup');
+    DebugLn('{D+}[ZSCRIPT]Varman.startup');
   //programlog.logoutstr('Varman.startup',lp_IncPos,LM_Debug);
   //DecimalSeparator := '.';
   ShortDateFormat:='MM.yy';
@@ -1651,7 +1651,7 @@ begin
   fillchar(CategoryCollapsed.parray^,CategoryCollapsed.max,byte(true));
   CategoryUnknownCOllapsed:=true;
   if VerboseLog^ then
-    DebugLn('{D-}end; {Varman.startup}');
+    DebugLn('{D-}[ZSCRIPT]end; {Varman.startup}');
   //programlog.logoutstr('end; {Varman.startup}',lp_DecPos,LM_Debug);
 end;
 finalization;

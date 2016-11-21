@@ -372,6 +372,7 @@ begin
     result:=ModulesDeskArray.Size;
     ModulesDeskArray.PushBack(NewModuleDesk);
     ModulesDeskDictionary.insert(uppercase(modulename),result);
+    LogOutStr(format('Register log module "%s"',[modulename]),0,LM_Necessarily);
   end;
 end;
 function tlog.enablemodule(modulename:AnsiString):TLogModuleDeskIndex;
@@ -384,12 +385,6 @@ var
    CurrentTime:TMyTimeStamp;
    lz:TLazLogger;
 begin
-     ModulesDeskDictionary:=TModulesDeskDictionary.create;
-     ModulesDeskArray:=TModulesDeskArray.create;
-     NewModuleDesk.enabled:=true;
-     DefaultModuleDeskIndex:=registermodule('DEFAULT');
-     NewModuleDesk.enabled:=false;
-
      CurrentLogMode:=LogMode;
      CurrentTime:=mynow();
      logfilename:=fn;
@@ -410,6 +405,11 @@ begin
               TLazLoggerFile(lz).OnDebugLn:=@ZOnDebugLN;
               TLazLoggerFile(lz).OnDbgOut:=@ZOnDebugLN;
          end;
+     ModulesDeskDictionary:=TModulesDeskDictionary.create;
+     ModulesDeskArray:=TModulesDeskArray.create;
+     NewModuleDesk.enabled:=true;
+     DefaultModuleDeskIndex:=registermodule('DEFAULT');
+     NewModuleDesk.enabled:=false;
 end;
 procedure tlog.ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
 var

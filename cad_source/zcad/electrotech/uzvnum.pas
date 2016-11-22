@@ -68,6 +68,8 @@ uses
 
   uzeentpolyline,             //unit describes line entity
                        //модуль описывающий примитив трехмерная ПОЛИлиния
+  uzeenttext,             //unit describes line entity
+                       //модуль описывающий примитив текст
 
   uzeentdimaligned, //unit describes aligned dimensional entity
                        //модуль описывающий выровненный размерный примитив
@@ -125,6 +127,10 @@ uses
   Pointerv,
   Graphs,
 
+   uzcenitiesvariablesextender,
+   UUnitManager,
+   uzbpaths,
+   uzctranslations,
 
   uzvcom;
 
@@ -215,12 +221,17 @@ PTDeviceInfoSubGraph=^TDeviceInfoSubGraph;
       //Список точек прохождения трассы прокладки кабеля для визуализации и последующего анализа даного списка и автонумерации
       TListVertexWayOnlyVertex=specialize TVector<integer>;
 
+      //создание списка распределительных коробок вершин главного графа
+      TListVertexTerminalBox=specialize TVector<integer>;
+
       //** Создания групп у устройства к которому подключаются
       //PTHeadGroupInfo=^THeadGroupInfo;//с классами эта байда уже не нужна, т.к. класс сам по себе уже указатель
       THeadGroupInfo=class
                          listDevice:TListSubDevice;
+                         //список движения пути по вершинам и сбор информации по подключенным устройствам
                          listVertexWayGroup:TListVertexSubGraph;
                          listVertexWayOnlyVertex:TListVertexWayOnlyVertex;
+                         listVertexTerminalBox:TListVertexTerminalBox; // список распред коробки, в каких вершинах и сколько кабелей
                          name:String;
                          public
                          constructor Create;
@@ -277,6 +288,11 @@ PTDeviceInfoSubGraph=^TDeviceInfoSubGraph;
       //
 
 
+ function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
+  procedure getListOnlyVertexWayGroup(var ourListGroup:THeadGroupInfo;ourGraph:TGraphBuilder);
+ function testTempDrawPolyLineNeed(myVertex:TListVertexWayOnlyVertex;ourGraph:TGraphBuilder;color:Integer):TCommandResult;
+ function visualGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;color:Integer;numHead:integer;numGroup:integer):TCommandResult;
+ function cablingGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;counterColor:Integer;numHead:integer;numGroup:integer):TCommandResult;
 
 implementation
 //constructor TSubGraphBuilder.Create;
@@ -329,12 +345,14 @@ begin
   listDevice:=TListSubDevice.Create;
   listVertexWayGroup:=TListVertexSubGraph.Create;
   listVertexWayOnlyVertex:=TListVertexWayOnlyVertex.Create;
+  listVertexTerminalBox:=TListVertexTerminalBox.Create;
 end;
 destructor THeadGroupInfo.Destroy;
 begin
   listDevice.Destroy;
   listVertexWayGroup.Destroy;
   listVertexWayOnlyVertex.Destroy;
+  listVertexTerminalBox.Destroy;
 end;
 constructor THeadDeviceInfo.Create;
 begin
@@ -378,6 +396,7 @@ begin
            if listVertex[i].deviceEnt<>nil then
            begin
                pvd:=FindVariableInEnt(listVertex[i].deviceEnt,'NMO_Name');
+               if pvd <> nil then
                if pgdbstring(pvd^.data.Instance)^ = name then
                   result:= i;
            end;
@@ -498,6 +517,9 @@ end;
   //until not IsExchange;
   //
   ***}
+
+  // Данный список будет содержать все вершины в которых прокладывается трассы для устройств в группе
+// и уже основываясь на том, что будет в этом списке, можно будет получить все остальные данные
  procedure createTreeDeviceinGroup(var ourListGroup:THeadGroupInfo;ourGraph:TGraphBuilder);
 var
   // tempNumVertex:TInfoTempNumVertex;
@@ -509,7 +531,7 @@ var
    i,j,k,l,counterColor:integer;
 begin
     //ourListGroup.listVertexWayGroup;
-  counterColor:=0;
+    counterColor:=0;
     for i:= 0 to ourListGroup.listDevice.Size-1 do begin
 
       // строим только ребра графа, в качестве вершин будут выступать вершины главного графа.
@@ -541,7 +563,7 @@ begin
                        begin
                            limbTreeDeviceinGroup.VIndex1:=ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num;
                            limbTreeDeviceinGroup.VIndex2:=ourListGroup.listDevice[i].listNumVertexMinWeight[j].num;
-                            limbTreeDeviceinGroup.numAfter:=0;
+                           limbTreeDeviceinGroup.numAfter:=0;
                            limbTreeDeviceinGroup.length:=uzegeometry.Vertexlength(ourGraph.listVertex[ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num].centerPoint,ourGraph.listVertex[ourListGroup.listDevice[i].listNumVertexMinWeight[j].num].centerPoint);
                            limbTreeDeviceinGroup.afterLength:=limbTreeDeviceinGroup.length;
 
@@ -622,24 +644,39 @@ var
    //tempVertexNum:TVertexAfterBefore;
    beforeLength,bAfterLength:double;
    bNumAfter,numEdgeNow,numEdgeBefore:integer;
-   IsExchange, haveLimb, haveWay, lengthEqual:boolean;
+   IsExchange, haveVertex, haveWay, lengthEqual:boolean;
    i,j,k,l,tempNumVertex,NumVertexSave:integer;
   // IsExchange:boolean;
 begin
 
-    //for i:= 0 to ourListGroup.listVertexWayGroup.Size-1 do begin
-//        ourListGroup. PushBack(headDeviceInfo);
-        listNumEdge:=TListVertexWayOnlyVertex.Create;
-    //    ourListGroup.listVertexWayOnlyVertex.PushBack(ourListGroup.listVertexWayGroup[0].VIndex1);
-        //  HistoryOutStr('т115');
-          NumVertexSave := ourListGroup.listVertexWayOnlyVertex[ourListGroup.listVertexWayOnlyVertex.size-1];
-        for i:= 0 to ourListGroup.listVertexWayGroup.Size-1 do begin
-             if (ourListGroup.listVertexWayGroup[i].VIndex1 = ourListGroup.listVertexWayOnlyVertex[ourListGroup.listVertexWayOnlyVertex.size-1 ])  then
-               begin
-                   listNumEdge.PushBack(i);
-               end;
-        end;
-        // HistoryOutStr('т116');
+
+    //промежуточный список вершин
+          listNumEdge:=TListVertexWayOnlyVertex.Create;
+
+          NumVertexSave := ourListGroup.listVertexWayOnlyVertex[ourListGroup.listVertexWayOnlyVertex.size-1];  // номер первой вершины
+
+          //поиск количество вершин куда двигается путь и их ид
+          for i:= 0 to ourListGroup.listVertexWayGroup.Size-1 do
+            begin
+               if (ourListGroup.listVertexWayGroup[i].VIndex1 = NumVertexSave)  then
+                 begin
+                     listNumEdge.PushBack(i);
+                 end;
+            end;
+
+          //создание списка распределительных коробок, мест, где кабель должен разделится
+          haveVertex:=true;
+          if (listNumEdge.Size > 1) then begin
+            haveVertex:=false;
+            for i:=0 to ourListGroup.listVertexTerminalBox.size-1 do
+               if ourListGroup.listVertexTerminalBox[i] = NumVertexSave then
+                 haveVertex:=true;
+          end;
+          if not haveVertex then
+            ourListGroup.listVertexTerminalBox.PushBack(NumVertexSave);
+
+
+        //сортировка среди полученых вершин у какого пути короче путь
         if listNumEdge.Size > 1 then
           repeat
             IsExchange := False;
@@ -652,19 +689,20 @@ begin
               end;
             end;
           until not IsExchange;
-        // HistoryOutStr('т118');
+
+        //рекурсия отправляемся к следующейй точки у который путь короче
         if listNumEdge.Size > 0 then
           for i := 0 to listNumEdge.Size-1 do begin
               ourListGroup.listVertexWayOnlyVertex.PushBack(ourListGroup.listVertexWayGroup[listNumEdge[i]].VIndex2);
               getListOnlyVertexWayGroup(ourListGroup,ourGraph);
+              ourListGroup.listVertexWayOnlyVertex.PushBack(NumVertexSave);
           end;
-        ourListGroup.listVertexWayOnlyVertex.PushBack(NumVertexSave);
+        listNumEdge.Destroy;
 
-       //  HistoryOutStr('т119');
 end;
 
  //рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
-function testTempDrawPolyLineNeed(listVertex:TListVertexWayOnlyVertex;ourGraph:TGraphBuilder;color:Integer):TCommandResult;
+function testTempDrawPolyLineNeed(myVertex:TListVertexWayOnlyVertex;ourGraph:TGraphBuilder;color:Integer):TCommandResult;
 var
     polyObj:PGDBObjPolyLine;
     i:integer;
@@ -677,16 +715,297 @@ begin
      polyObj^.Closed:=false;
      polyObj^.vp.Color:=color;
      polyObj^.vp.LineWeight:=LnWt050;
-     //ourGraph.listVertex[listVertex[i]].centerPoint;
-     for i:=0 to listVertex.Size-1 do
+
+     for i:=0 to myVertex.Size-1 do
      begin
-//         listVertex.Mutable[i].:=0;
-         polyObj^.VertexArrayInOCS.PushBackData(ourGraph.listVertex[listVertex[i]].centerPoint);
+         polyObj^.VertexArrayInOCS.PushBackData(ourGraph.listVertex[myVertex[i]].centerPoint);
+        // uzvcom.testTempDrawText(ourGraph.listVertex[myVertex[i]].centerPoint,IntToStr(i));
      end;
+
      zcAddEntToCurrentDrawingWithUndo(polyObj);
      result:=cmd_ok;
 end;
 
+
+//Визуализация текста его цвет, координата
+function visualDrawText(p1:GDBVertex;mText:GDBString;color:integer):TCommandResult;
+var
+    ptext:PGDBObjText;
+begin
+      ptext := GDBObjText.CreateInstance;
+      zcSetEntPropFromCurrentDrawingProp(ptext); //добавляем дефаултные свойства
+      ptext^.TXTStyleIndex:=drawings.GetCurrentDWG^.GetCurrentTextStyle; //добавляет тип стиля текста, дефаултные свойства его не добавляют
+      ptext^.Local.P_insert:=p1;  // координата
+      ptext^.Template:=mText;     // сам текст
+      ptext^.vp.LineWeight:=LnWt100;
+      ptext^.vp.Color:=color;
+      zcAddEntToCurrentDrawingWithUndo(ptext);   //добавляем в чертеж
+      result:=cmd_ok;
+end;
+
+//Визуализация круга его цвет, координата, размер
+function visualDrawCircle(p1:GDBVertex;rr:GDBDouble;color:integer):TCommandResult;
+var
+    pcircle:PGDBObjCircle;
+begin
+    begin
+      pcircle := AllocEnt(GDBCircleID);                                             //выделяем память
+      pcircle^.init(nil,nil,0,p1,rr);                                             //инициализируем и сразу создаем
+
+      zcSetEntPropFromCurrentDrawingProp(pcircle);                                        //присваиваем текущие слой, вес и т.п
+      pcircle^.vp.LineWeight:=LnWt100;
+      pcircle^.vp.Color:=color;
+      zcAddEntToCurrentDrawingWithUndo(pcircle);                                    //добавляем в чертеж
+    end;
+    result:=cmd_ok;
+end;
+
+
+//Визуализация построения шлейфов головных устройств с целью визуального изучения того как будут прокладываться кабельные линии
+//дабы исключить возмоные программные ошибки
+function visualGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;color:Integer;numHead:integer;numGroup:integer):TCommandResult;
+var
+    polyObj:PGDBObjPolyLine;
+    i,j,counter:integer;
+    mtext:string;
+    notVertex:boolean;
+    pvdHeadDevice,pvdHDGroup:pvardesk; //для работы со свойствами устройств
+    myVertex,vertexAnalized:TListVertexWayOnlyVertex;
+    myTerminalBox:TListVertexTerminalBox;
+
+
+begin
+     vertexAnalized:= TListVertexWayOnlyVertex.Create;
+     myVertex:=listHeadDevice[numHead].listGroup[numGroup].listVertexWayOnlyVertex;
+     myTerminalBox:=listHeadDevice[numHead].listGroup[numGroup].listVertexTerminalBox;
+     polyObj:=GDBObjPolyline.CreateInstance;
+     zcSetEntPropFromCurrentDrawingProp(polyObj);
+     polyObj^.Closed:=false;
+     polyObj^.vp.Color:=color;
+     polyObj^.vp.LineWeight:=LnWt050;
+
+
+     //визуализация коробок распределения
+     for i:= 0 to myTerminalBox.size-1 do
+       visualDrawCircle(ourGraph.listVertex[myTerminalBox[i]].centerPoint,3,color);
+
+     counter:=0;
+     for i:=0 to myVertex.Size-1 do
+     begin
+         notVertex:=true;
+         polyObj^.VertexArrayInOCS.PushBackData(ourGraph.listVertex[myVertex[i]].centerPoint); //для прорисовки полилинии
+
+         // проверка есть ли данная вершина среди пронумерованых вершин
+         for j:= 0 to vertexAnalized.size-1 do begin
+           if myVertex[i] =  vertexAnalized[j] then
+              notVertex:=false;
+         end;
+        // если в данной вершине есть устройство и оно не стояк и оно не пронумеровано
+         if (ourGraph.listVertex[myVertex[i]].deviceEnt<>nil) and (ourGraph.listVertex[myVertex[i]].break<>true) and notVertex then
+           begin
+            pvdHeadDevice:=FindVariableInEnt(ourGraph.listVertex[myVertex[i]].deviceEnt,'GC_HeadDevice');
+            pvdHDGroup:=FindVariableInEnt(ourGraph.listVertex[myVertex[i]].deviceEnt,'GC_HDGroup');
+            if (listHeadDevice[numHead].name = pgdbstring(pvdHeadDevice^.data.Instance)^) and (listHeadDevice[numHead].listGroup[numGroup].name = pgdbstring(pvdHDGroup^.data.Instance)^) then
+              begin
+              inc(counter);
+              mtext:=pgdbstring(pvdHeadDevice^.data.Instance)^ + '-' + pgdbstring(pvdHDGroup^.data.Instance)^ + '-' + IntToStr(counter);
+              visualDrawCircle(ourGraph.listVertex[myVertex[i]].centerPoint,5,color);
+              visualDrawText(ourGraph.listVertex[myVertex[i]].centerPoint,mtext,color);
+              vertexAnalized.PushBack(myVertex[i]);
+              end;
+           end;
+     end;
+
+     zcAddEntToCurrentDrawingWithUndo(polyObj);
+     result:=cmd_ok;
+end;
+
+//создание кабеля по маршруту и добавления кабелю определенных свойств
+function buildCableGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;color:Integer;numHead:integer;numGroup:integer;numSegment:integer;wayVertex:TListVertexWayOnlyVertex):TCommandResult;
+var
+    //polyObj:PGDBObjPolyLine;
+    polyObj:PGDBObjCable;
+    i,j,counter:integer;
+    mtext:string;
+    notVertex,bCable:boolean;
+    pvd,pvdHDGroup:pvardesk; //для работы со свойствами устройств
+    myVertex,vertexAnalized:TListVertexWayOnlyVertex;
+    myTerminalBox:TListVertexTerminalBox;
+    //listTraversedVert:TListVertexTerminalBox;
+        psu:ptunit;
+        pvarext:PTVariablesExtender;
+begin
+     //vertexAnalized:= TListVertexWayOnlyVertex.Create;
+     //myVertex:=listHeadDevice[numHead].listGroup[numGroup].listVertexWayOnlyVertex;
+     //myTerminalBox:=listHeadDevice[numHead].listGroup[numGroup].listVertexTerminalBox;
+     //
+     //
+     polyObj := AllocEnt(GDBCableID);
+     polyObj^.init(nil,nil,0);
+     zcSetEntPropFromCurrentDrawingProp(polyObj);
+//
+//     counter:=0;
+//     bCable:=false;   //прокладка кабеля не ведется
+//
+     for i:=0 to wayVertex.Size-1 do
+     begin
+        // notVertex:=true;
+         polyObj^.VertexArrayInOCS.PushBackData(ourGraph.listVertex[wayVertex[i]].centerPoint); //для прорисовки полилинии
+
+         //была ли уже прокладка кабеля в этой вершине сравнивается спиок пройденых вершин и данная вершина
+         //for j:= 0 to vertexAnalized.size-1 do
+         //begin
+         //  if myVertex[i] =  vertexAnalized[j] then
+         //     notVertex:=false;
+         //end;
+         //if (bCable=false) and (notVertex) then
+         //  begin
+         //
+         //  end;
+
+         //если в данной вершине есть устройство и оно не стояк и оно не пронумеровано
+         //if (ourGraph.listVertex[myVertex[i]].deviceEnt<>nil) and (ourGraph.listVertex[myVertex[i]].break<>true) and notVertex then
+         //  begin
+         //
+         //   //pvdHeadDevice:=FindVariableInEnt(ourGraph.listVertex[myVertex[i]].deviceEnt,'GC_HeadDevice');
+         //   //pvdHDGroup:=FindVariableInEnt(ourGraph.listVertex[myVertex[i]].deviceEnt,'GC_HDGroup');
+         //   //if (listHeadDevice[numHead].name = pgdbstring(pvdHeadDevice^.data.Instance)^) and (listHeadDevice[numHead].listGroup[numGroup].name = pgdbstring(pvdHDGroup^.data.Instance)^) then
+         //   //  begin
+         //   //  inc(counter);
+         //   //  mtext:=pgdbstring(pvdHeadDevice^.data.Instance)^ + '-' + pgdbstring(pvdHDGroup^.data.Instance)^ + '-' + IntToStr(counter);
+         //   //  visualDrawCircle(ourGraph.listVertex[myVertex[i]].centerPoint,5,color);
+         //   //  visualDrawText(ourGraph.listVertex[myVertex[i]].centerPoint,mtext,color);
+         //   //  vertexAnalized.PushBack(myVertex[i]);
+         //   //  end;
+         //  end;
+     end;
+
+     //**добавление кабельных свойств
+      pvarext:=polyObj^.GetExtension(typeof(TVariablesExtender)); //подклчаемся к инспектору
+      if pvarext<>nil then
+      begin
+        psu:=units.findunit(SupportPath,@InterfaceTranslate,'cable'); //
+        if psu<>nil then
+          pvarext^.entityunit.copyfrom(psu);
+      end;
+      zcSetEntPropFromCurrentDrawingProp(polyObj);
+      //***//
+
+      pvd:=FindVariableInEnt(polyObj,'NMO_Suffix');
+       if pvd<>nil then
+          begin
+             pgdbstring(pvd^.data.Instance)^:=listHeadDevice[numHead].listGroup[numGroup].name ;
+          end;
+
+      pvd:=FindVariableInEnt(polyObj,'NMO_BaseName');
+       if pvd<>nil then
+          begin
+             pgdbstring(pvd^.data.Instance)^:=listHeadDevice[numHead].name + '/';
+          end;
+       pvd:=FindVariableInEnt(polyObj,'CABLE_Segment');
+       if pvd<>nil then
+          begin
+             pgdbinteger(pvd^.data.Instance)^:=numSegment;
+          end;
+
+
+     zcAddEntToCurrentDrawingWithUndo(polyObj);
+     result:=cmd_ok;
+end;
+//прокладка кабелей, от устройства до устройства с учетом распределительных коробок
+// с сегментированием кабелей и доп фишками
+function cablingGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;counterColor:Integer;numHead:integer;numGroup:integer):TCommandResult;
+var
+    //polyObj:PGDBObjPolyLine;
+    polyObj:PGDBObjCable;
+    i,j,counter:integer;
+    mtext:string;
+    notVertex,bCable,breakCable:boolean;
+    pvd,pvdHDGroup:pvardesk; //для работы со свойствами устройств
+    myVertex,vertexAnalized,wayCableLine:TListVertexWayOnlyVertex;
+    myTerminalBox:TListVertexTerminalBox;
+    //listTraversedVert:TListVertexTerminalBox;
+        psu:ptunit;
+        pvarext:PTVariablesExtender;
+begin
+     vertexAnalized:= TListVertexWayOnlyVertex.Create;
+     wayCableLine:= TListVertexWayOnlyVertex.Create;
+     myVertex:=listHeadDevice[numHead].listGroup[numGroup].listVertexWayOnlyVertex;
+     myTerminalBox:=listHeadDevice[numHead].listGroup[numGroup].listVertexTerminalBox;
+
+     counter:=0;
+     bCable:=false;   //прокладка кабеля не ведется
+     notVertex:=true;
+     for i:=0 to myVertex.Size-1 do
+     begin
+         notVertex:=true;
+        // visualDrawText(ourGraph.listVertex[myVertex[i]].centerPoint,inttostr(i),counterColor);
+         //была ли уже прокладка кабеля в этой вершине сравнивается спиок пройденых вершин и данная вершина
+         for j:= 0 to vertexAnalized.size-1 do
+         begin
+           if myVertex[i] = vertexAnalized[j] then
+                notVertex:=false
+         end;
+
+         if (notVertex) then
+           begin
+             if bCable=false then
+               begin
+                 bCable:=true;
+                 if (i<>0) then
+                   if (ourGraph.listVertex[myVertex[i-1]].break<>true) then  //  проерка является ли предыдущая вершина разрывом
+                      wayCableLine.PushBack(myVertex[i-1]);
+               end;
+               vertexAnalized.PushBack(myVertex[i]);
+               wayCableLine.PushBack(myVertex[i]);
+             //  bCable:=true;
+           end;
+        // HistoryOutStr(' nummber vertex = ' + inttostr(i));
+         //проверка на стояки что бы правильно разорвать трассу в местах стояка
+         if i<myVertex.Size-1 then
+           if (ourGraph.listVertex[myVertex[i]].break=true) and (ourGraph.listVertex[myVertex[i+1]].break=true) then
+             begin
+            // HistoryOutStr(' [myVertex[i]].break = ' + BoolToStr(ourGraph.listVertex[myVertex[i]].break)+' [myVertex[i+1]].break = ' + BoolToStr(ourGraph.listVertex[myVertex[i+1]].break));
+               if (ourGraph.listVertex[myVertex[i]].breakName=ourGraph.listVertex[myVertex[i+1]].breakName) then
+               begin
+              // HistoryOutStr(' [myVertex[i]].breakName = ' + ourGraph.listVertex[myVertex[i]].breakName+' [myVertex[i+1]].breakName = ' + ourGraph.listVertex[myVertex[i+1]].breakName);
+
+                 notVertex:=false;
+                 //bCable:=true;
+               end;
+             end;
+
+         if (notVertex=false) and bCable then
+           begin
+             //  visualDrawCircle(ourGraph.listVertex[myVertex[i]].centerPoint,5,4);
+               buildCableGroupLine(listHeadDevice,ourGraph,counterColor,numHead,numGroup,counter,wayCableLine);
+               wayCableLine.clear;
+               counter:=counter+1;
+               bCable:=false;
+           end;
+
+
+
+
+
+         //если в данной вершине есть устройство и оно не стояк и оно не пронумеровано
+         //if (ourGraph.listVertex[myVertex[i]].deviceEnt<>nil) and (ourGraph.listVertex[myVertex[i]].break<>true) and notVertex then
+         //  begin
+         //
+         //   //pvdHeadDevice:=FindVariableInEnt(ourGraph.listVertex[myVertex[i]].deviceEnt,'GC_HeadDevice');
+         //   //pvdHDGroup:=FindVariableInEnt(ourGraph.listVertex[myVertex[i]].deviceEnt,'GC_HDGroup');
+         //   //if (listHeadDevice[numHead].name = pgdbstring(pvdHeadDevice^.data.Instance)^) and (listHeadDevice[numHead].listGroup[numGroup].name = pgdbstring(pvdHDGroup^.data.Instance)^) then
+         //   //  begin
+         //   //  inc(counter);
+         //   //  mtext:=pgdbstring(pvdHeadDevice^.data.Instance)^ + '-' + pgdbstring(pvdHDGroup^.data.Instance)^ + '-' + IntToStr(counter);
+         //   //  visualDrawCircle(ourGraph.listVertex[myVertex[i]].centerPoint,5,color);
+         //   //  visualDrawText(ourGraph.listVertex[myVertex[i]].centerPoint,mtext,color);
+         //   //
+         //   //  end;
+         //  end;
+     end;
+     result:=cmd_ok;
+end;
 
  //рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
 function autoNumberEquip(lVertex:TListVertexWayOnlyVertex;ourGraph:TGraphBuilder;color:Integer):TCommandResult;
@@ -716,6 +1035,11 @@ begin
 end;
 
 function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
+  begin
+
+  end;
+
+function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
   var
     G: TGraph;
     EdgePath, VertexPath: TClassList;
@@ -738,7 +1062,7 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
     T: Float;
     pCenter:GDBVertex;
 
-    ourGraph:TGraphBuilder;
+    //ourGraph:TGraphBuilder;
     pvd:pvardesk; //для работы со свойствами устройств
 
     GListVert:GListVertexPoint;
@@ -754,33 +1078,18 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
     listHeadDevice := TListHeadDevice.Create;
     Epsilon:=0.2;
     counter:=0;
-    {*
-    //+++Выбираем зону в которой будет происходить анализ кабельной продукции.Создаем два списка, список всех отрезков кабелей и список всех девайсов+++//
-  pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
-  if pobj<>nil then
-    repeat
-      if pobj^.selected then
-        begin
-         //    HistoryOutStr(pobj^.GetObjTypeName);
 
-        inc(counter);
-        end;
-      pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
-    until pobj=nil;
-    HistoryOutStr('В поdssdgsdgsdлученном грhfjhfjhfафе вершин = ' + IntToStr(counter));
-    *}
+    //обращаемся к функции за графом
+    //ourGraph:=uzvcom.graphBulderFunc(Epsilon,'ПС');
 
-
-    ourGraph:=uzvcom.graphBulderFunc(Epsilon);
-
-  {****************************************************************
     counter:=0;
     counter2:=0;
     for i:=0 to ourGraph.listVertex.Size-1 do
       begin
-         if ourGraph.listVertex[i].deviceEnt<>nil then
+         if (ourGraph.listVertex[i].deviceEnt<>nil) and (ourGraph.listVertex[i].break<>true) then
          begin
-         inc(counter);
+             inc(counter);
+
              // Проверяем есть ли у устройсва хозяин
              pvd:=FindVariableInEnt(ourGraph.listVertex[i].deviceEnt,'GC_HeadDevice');
              headDevName:=pgdbstring(pvd^.data.Instance)^;
@@ -789,68 +1098,47 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
              begin
              //**Проверяем существует ли хоть одно главное устройство,
              //если нет то создаем, если есть то или добавляем к существующему или создаем еще одно устройство
-             if listHeadDevice.IsEmpty then //если список пуст
-               begin
-                   numHead:=0;
-                   headDeviceInfo:=THeadDeviceInfo.Create;
-                   headDeviceInfo.name:=headDevName;
-                   headDeviceInfo.num:=numHeadDev;
-                   listHeadDevice.PushBack(headDeviceInfo);
-                   headDeviceInfo:=nil;//насколько я понимаю, после его добавления listHeadDevice
-                                       //никаких действий с ним делать уже ненадо, поэтому обнулим
-                                       //чтоб при попытке доступа был вылет, и ошибку можно было легко локализовать
-               end
-             else
+              numHead := -1;
+              for j:=0 to listHeadDevice.Size-1 do    //проверяем существует ли уже такое же головное устройство
+                 if listHeadDevice[j].name = headDevName then
+                       numHead := j ;
+              if numHead < 0 then        // если в списки устройства есть, но нашего нет то добавляем его
                  begin
-
-                    numHead := -1;
-                    for j:=0 to listHeadDevice.Size-1 do    //проверяем существует ли уже такое же головное устройство
-                       if listHeadDevice[j].name = headDevName then
-                             numHead := j ;
-                    if numHead < 0 then        // если в списки устройства есть, но нашего нет то добавляем его
-                       begin
-                             headDeviceInfo:=THeadDeviceInfo.Create;
-                             headDeviceInfo.name:=headDevName;
-                             headDeviceInfo.num:=numHeadDev;
-                             listHeadDevice.PushBack(headDeviceInfo);
-                             numHead:=listHeadDevice.Size-1;
-                             headDeviceInfo:=nil;
-                       end;
-                    end;
-
+                       headDeviceInfo:=THeadDeviceInfo.Create;
+                       headDeviceInfo.name:=headDevName;
+                       headDeviceInfo.num:=numHeadDev;
+                       listHeadDevice.PushBack(headDeviceInfo);
+                       numHead:=listHeadDevice.Size-1;
+                       headDeviceInfo:=nil;    //насколько я понимаю, после его добавления listHeadDevice
+                                               //никаких действий с ним делать уже ненадо, поэтому обнулим
+                                               //чтоб при попытке доступа был вылет, и ошибку можно было легко локализовать
+                 end;
              //**работа по поиску и заполнению групп к головному устройству
              pvd:=FindVariableInEnt(ourGraph.listVertex[i].deviceEnt,'GC_HDGroup');
-             if listHeadDevice[numHead].listGroup.IsEmpty then  // проверяем существует ли хоть одна группа в головном устройстве
-                 begin
-                   numHeadGroup:=0;
-                   HeadGroupInfo:=THeadGroupInfo.Create;
-                   HeadGroupInfo.name:=pgdbstring(pvd^.data.Instance)^;
-                   listHeadDevice.Mutable[numHead]^.listGroup.PushBack(HeadGroupInfo);
-                   HeadGroupInfo:=nil;
-                 end
-             else
-                 begin
+             if pvd<>nil then
+                begin
                  numHeadGroup:=-1;
-                    for j:=0 to listHeadDevice[numHead].listGroup.Size-1 do       // ищем среди существующих групп нашу
-                       if listHeadDevice[numHead].listGroup[j].name = pgdbstring(pvd^.data.Instance)^ then
-                         numHeadGroup:=j;
-                    if  numHeadGroup<0 then                    //если нет то сощздаем новую группу в существующий список групп
-                      begin
-                        HeadGroupInfo:=THeadGroupInfo.Create;
-                        HeadGroupInfo.name:=pgdbstring(pvd^.data.Instance)^;
-                        listHeadDevice.Mutable[numHead]^.listGroup.PushBack(HeadGroupInfo);
-                        numHeadGroup:=listHeadDevice[numHead].listGroup.Size-1;
-                        HeadGroupInfo:=nil;
-                      end;
-             end;
-
+                 for j:=0 to listHeadDevice[numHead].listGroup.Size-1 do       // ищем среди существующих групп нашу
+                    if listHeadDevice[numHead].listGroup[j].name = pgdbstring(pvd^.data.Instance)^ then
+                       numHeadGroup:=j;
+                 if  numHeadGroup<0 then                    //если нет то сощздаем новую группу в существующий список групп
+                   begin
+                     HeadGroupInfo:=THeadGroupInfo.Create;
+                     HeadGroupInfo.name:=pgdbstring(pvd^.data.Instance)^;
+                     listHeadDevice.Mutable[numHead]^.listGroup.PushBack(HeadGroupInfo);
+                     numHeadGroup:=listHeadDevice[numHead].listGroup.Size-1;
+                     HeadGroupInfo:=nil;
+                   end;
+                 end;
                  // Знаем номер головного устройства, номер группы, добавлем к группе новое устройство
                  pvd:=FindVariableInEnt(ourGraph.listVertex[i].deviceEnt,'DB_link');
-                 deviceInfo:=TdeviceInfo.Create;
-                 deviceInfo.num:=i;
-                 deviceInfo.tDevice:=pgdbstring(pvd^.data.Instance)^;
-                 //deviceInfo.listNumVertexMinWeight.free;
-                 listHeadDevice.Mutable[numHead]^.listGroup.Mutable[numHeadGroup]^.listDevice.PushBack(deviceInfo);
+                 if pvd<>nil then
+                   begin
+                   deviceInfo:=TdeviceInfo.Create;
+                   deviceInfo.num:=i;
+                   deviceInfo.tDevice:=pgdbstring(pvd^.data.Instance)^;
+                   listHeadDevice.Mutable[numHead]^.listGroup.Mutable[numHeadGroup]^.listDevice.PushBack(deviceInfo);
+                   end;
            end;
         end;
       end;
@@ -872,6 +1160,7 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
             end;
       end;
 
+
     // Подключение созданного граффа к библиотеке Аграф
     G:=TGraph.Create;
     G.Features:=[Weighted];
@@ -890,83 +1179,69 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
             begin
               for k:=0 to listHeadDevice[i].listGroup[j].listDevice.Size -1 do
                 begin
-                  EdgePath:=TClassList.Create;
-                  VertexPath:=TClassList.Create;
-                  //HistoryOutStr(' device = ' + IntToStr(listHeadDevice[i].listGroup[j].listDevice[k].num) + '_type' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice);
-                  //HistoryOutStr('33333333');
+                  //работа с библиотекой Аграф
+                  EdgePath:=TClassList.Create;     //Создаем реберный путь
+                  VertexPath:=TClassList.Create;   //Создаем вершиный путь
+                  // Получение ребер минимального пути в графи из одной точки в другую
                   T:=G.FindMinWeightPath(G[listHeadDevice[i].num], G[listHeadDevice[i].listGroup[j].listDevice[k].num], EdgePath);
-                  //HistoryOutStr('333444');
-                  //HistoryOutStr('Minimal Length: '+ FloatToStr(T));
+                  // Получение вершин минимального пути в графи на основе минимального пути в ребер, указывается из какой точки старт
                   G.EdgePathToVertexPath(G[listHeadDevice[i].num], EdgePath, VertexPath);
-                  //HistoryOutStr('333555');
-                  //HistoryOutStr(inttostr(VertexPath.Count));
-                  //tempListNumVertexMinWeight:=TListNumVertexMinWeight.Create;
-                  //tempNumVertexMinWeight.num:=listHeadDevice[i].num;
-                  //tempListNumVertexMinWeight.PushBack(tempNumVertexMinWeight);
-                  //listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listDevice.Mutable[k]^.listNumVertexMinWeight.PushBack(listHeadDevice[i].num);
-                  //GListVert.PushBack(ourGraph.listVertex[listHeadDevice[i].num].centerPoint);
-                  HistoryOutStr('4444444');
+
+                  //На основе полученых результатов библиотекой Аграф
+                  //в носим ополнения в список подключеных устройств, а именно
+                  //у каждого устройства прописываем минимальный путь из вершин до головного устройства
                   for m:=0 to VertexPath.Count - 1 do  begin
-                    //listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listDevice.Mutable[k]^.listNumVertexMinWeight.PushBack(TVertex(VertexPath[m]).Index);
-                      //GListVert.PushBack(ourGraph.listVertex[TVertex(VertexPath[m]).Index].centerPoint);
                     tempNumVertexMinWeight.num:=TVertex(VertexPath[m]).Index;
                     listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listDevice.Mutable[k]^.listNumVertexMinWeight.PushBack(tempNumVertexMinWeight);
-                     //tempListNumVertexMinWeight
+                  end;
 
-                  end;
-                  //tempNumVertexMinWeight.num:=listHeadDevice[i].listGroup[j].listDevice[k].num;
-                  //tempListNumVertexMinWeight.PushBack(tempNumVertexMinWeight);
-                  HistoryOutStr('444555');
-                  //listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listDevice.Mutable[k]^.listNumVertexMinWeight:=tempListNumVertexMinWeight;
-                  for m:=0 to listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listDevice.Mutable[k]^.listNumVertexMinWeight.Size - 1 do  begin
-                     HistoryOutStr(' device = ' + IntToStr(listHeadDevice[i].listGroup[j].listDevice[k].listNumVertexMinWeight[m].num));
-                   //  HistoryOutStr(' type = ' + IntToStr(tempListNumVertexMinWeight[m].num));
-                  end;
-                  //tempListNumVertexMinWeight.Destroy;
+                  ////Анализ результата
+                  //for m:=0 to listHeadDevice[i].listGroup[j].listDevice[k].listNumVertexMinWeight.Size - 1 do  begin
+                  //   HistoryOutStr(' device = ' + IntToStr(listHeadDevice[i].listGroup[j].listDevice[k].listNumVertexMinWeight[m].num));
+                  //end;
+
                   EdgePath.Free;
                   VertexPath.Free;
-
                  end;
+
               //** Анализ полученного списка и на базе него заполнение списка групп (список списком погоняет)
               // Данный список будет содержать все вершины в которых прокладывается трассы для устройств в группе
-              // и уже основываясь на том что будет в этом списке можно будет получить все остальные данные
+              // и уже основываясь на том, что будет в этом списке, можно будет получить все остальные данные
 
-              //HistoryOutStr('444666');
               createTreeDeviceinGroup(listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^,ourGraph);
 
-              //для наладки работы кода
-               for k:=0 to listHeadDevice[i].listGroup[j].listVertexWayGroup.Size-1 do begin
-                    pCenter:=VertexCenter(ourGraph.listVertex[listHeadDevice[i].listGroup[j].listVertexWayGroup[k].VIndex1].centerPoint,ourGraph.listVertex[listHeadDevice[i].listGroup[j].listVertexWayGroup[k].VIndex2].centerPoint);
-//                    uzvcom.testTempDrawText(pCenter,FloatToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup[k].beforeLength));
-                    //uzvcom.testTempDrawText(pCenter,FloatToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup[k].afterLength));
-                    //uzvcom.testTempDrawText(pCenter,FloatToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup[k].numAfter));
-                  //  uzvcom.testTempDrawText(pCenter,IntToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup[k].numBefore));
-               end;
-              //<<<
+              ////для наладки работы кода
+              // for k:=0 to listHeadDevice[i].listGroup[j].listVertexWayGroup.Size-1 do begin
+              //      pCenter:=VertexCenter(ourGraph.listVertex[listHeadDevice[i].listGroup[j].listVertexWayGroup[k].VIndex1].centerPoint,ourGraph.listVertex[listHeadDevice[i].listGroup[j].listVertexWayGroup[k].VIndex2].centerPoint);
+              //      uzvcom.testTempDrawText(pCenter,FloatToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup[k].beforeLength));
+              //      uzvcom.testTempDrawText(pCenter,FloatToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup[k].afterLength));
+              //      uzvcom.testTempDrawText(pCenter,FloatToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup[k].numAfter));
+              //      uzvcom.testTempDrawText(pCenter,IntToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup[k].numBefore));
+              // end;
+
               HistoryOutStr('длина списка графа после создания' + IntToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup.Size));
-             // listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listVertexWayGroup:= createTreeDeviceinGroup(listHeadDevice[i].listGroup[j],ourGraph);
-             // HistoryOutStr('5555555');
             end;
-         //HistoryOutStr('66666666');
       end;
-      // HistoryOutStr('77777777');
 
       // Автонумерация исходя из наиболее короткого маршрута ветки устройств,
       // т.е. кабель выходя из головного устройства идет по пути и на разветвлении пойдет сначала в
       // ту сторону общая длина которой короче другой и так проделывается для каждого шлейфа
       // вершина головное устройства всегдо будет первым в списке listVertexWayGroup
-      counterColor:=1;
+
+
+     //counterColor:=1;
       for i:=0 to listHeadDevice.Size-1 do
       begin
          for j:=0 to listHeadDevice[i].listGroup.Size -1 do
             begin
                  listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listVertexWayOnlyVertex.PushBack(listHeadDevice[i].listGroup[j].listVertexWayGroup[0].VIndex1);
+
                  getListOnlyVertexWayGroup(listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^,ourGraph);
-                 if counterColor=7 then
-                      counterColor:=1
-                  else
-                 testTempDrawPolyLineNeed(listHeadDevice[i].listGroup[j].listVertexWayOnlyVertex,ourGraph,counterColor);
-                 inc(counterColor);
+                 //if counterColor=7 then
+                 //     counterColor:=1
+                 // else
+                 //testTempDrawPolyLineNeed(listHeadDevice[i].listGroup[j].listVertexWayOnlyVertex,ourGraph,counterColor);
+                 //inc(counterColor);
 
                  //for k:=0 to listHeadDevice[i].listGroup[j].listVertexWayOnlyVertex.size-1 do
                  //  begin
@@ -976,6 +1251,7 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
             end;
       end;
 
+      result:=listHeadDevice;
 
 
       {*
@@ -1039,21 +1315,21 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
       //G.Destroy;
       //EdgePath.Free;
       //VertexPath.Free;
-
-       HistoryOutStr('dfsdfsdfsdfsdfsdfsdsdf: ');
-
-    for i:=0 to ourGraph.listVertex.Size-1 do
-      begin
-         uzvcom.testTempDrawCircle(ourGraph.listVertex[i].centerPoint,Epsilon);
-      end;
-
-    for i:=0 to ourGraph.listEdge.Size-1 do
-      begin
-         uzvcom.testTempDrawLine(ourGraph.listEdge[i].VPoint1,ourGraph.listEdge[i].VPoint2);
-      end;
-
-      HistoryOutStr('В полученном грhfjhfjhfафе вершин = ' + IntToStr(ourGraph.listVertex.Size));
-      HistoryOutStr('В полученном графе ребер = ' + IntToStr(ourGraph.listEdge.Size));
+//
+//       HistoryOutStr('dfsdfsdfsdfsdfsdfsdsdf: ');
+//
+//    for i:=0 to ourGraph.listVertex.Size-1 do
+//      begin
+//         uzvcom.testTempDrawCircle(ourGraph.listVertex[i].centerPoint,Epsilon);
+//      end;
+//
+//    for i:=0 to ourGraph.listEdge.Size-1 do
+//      begin
+//         uzvcom.testTempDrawLine(ourGraph.listEdge[i].VPoint1,ourGraph.listEdge[i].VPoint2);
+//      end;
+//
+//      HistoryOutStr('В полученном грhfjhfjhfафе вершин = ' + IntToStr(ourGraph.listVertex.Size));
+//      HistoryOutStr('В полученном графе ребер = ' + IntToStr(ourGraph.listEdge.Size));
 
 
 
@@ -1098,7 +1374,6 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
       EdgePath.Free;
       VertexPath.Free;  *}
 
-   ***********************************************************************}
   end;
 
   function TestgraphUses_com(operands:TCommandOperands):TCommandResult;

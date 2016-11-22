@@ -105,9 +105,13 @@ function Vertexlength(const Vector1, Vector2: GDBVertex): GDBDouble;{inline;}
 
 function SqrVertexlength(const Vector1, Vector2: GDBVertex): GDBDouble;inline;overload;
 function SqrVertexlength(const Vector1, Vector2: GDBVertex2d): GDBDouble;inline; overload;
+//**нахождение точки смещения от одной точки к другой в зависимости от коэффициент а
 function Vertexmorph(const Vector1, Vector2: GDBVertex; a: GDBDouble): GDBVertex;inline;overload;
+//**нахождение точки смещения от одной точки к другой в зависимости от коэффициент а
 function Vertexmorph(const Vector1, Vector2: GDBVertex2D; a: GDBDouble): GDBVertex2D;inline;overload;
+//**нахождение точки смещения от одной точки к другой в зависимости от коэффициент а
 function VertexDmorph(const Vector1, Vector2: GDBVertex; a: GDBDouble): GDBVertex;overload;inline;
+//**нахождение точки смещения от одной точки к другой в зависимости от коэффициент а
 function VertexDmorph(const Vector1, Vector2: GDBVertex3S; a: GDBDouble): GDBVertex3S;overload;inline;
 function Vertexangle(const Vector1, Vector2: GDBVertex2d): GDBDouble;inline;
 function oneVertexlength(const Vector1: GDBVertex): GDBDouble;inline;
@@ -115,6 +119,8 @@ function SqrOneVertexlength(const Vector1: GDBVertex): GDBDouble;inline;
 function vertexlen2df(const x1, y1, x2, y2: GDBFloat): GDBFloat;inline;
 function NormalizeVertex(const Vector1: GDBVertex): GDBVertex;{inline;}
 function VertexMulOnSc(const Vector1:GDBVertex;sc:GDBDouble): GDBVertex;inline;
+
+//к первой вершине прибавить вторую по осям Vector1.х + Vector2.у
 function VertexAdd(const Vector1, Vector2: GDBVertex): GDBVertex;inline;overload;
 function VertexAdd(const Vector1, Vector2: GDBVertex3S): GDBVertex3S;inline;overload;
 function Vertex2DAdd(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;inline;

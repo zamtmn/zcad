@@ -87,6 +87,9 @@ action ACN_POLYED,PolyED,polyed.bmp,Edit polyline,,
 action ACN_OBJVARMAN,ObjVarMan,varman.bmp,Object variables manager,,
 action ACN_MULTIOBJVARMAN,MultiObjVarMan,mvarman.bmp,Multi object variables manager,,
 
+action ACN_ExampleCom,ExampleCom,#D(),ExampleCom,,
+action ACN_SupeLine,DrawSuperLine,superline.bmp,SuperLine,,
+
 action ACN_LINE,Line,line.bmp,Draw line,,
 action ACN_3DPOLY,3DPoly,pline.bmp,Draw 3Dpolyline,,
 action ACN_RECTANGLE,Rectangle,rectangle.bmp,Draw rectangle,,

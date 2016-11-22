@@ -34,6 +34,8 @@ GDBObj2dprop=packed record
 PGDBObjWithLocalCS=^GDBObjWithLocalCS;
 GDBObjWithLocalCS={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                Local:GDBObj2dprop;(*'Object orientation'*)(*saved_to_shd*)
+
+               //**получить на чтение координаты в мировой системе координат
                P_insert_in_WCS:GDBvertex;(*'Insertion point WCS'*)(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
                ProjP_insert:GDBvertex;(*'Insertion point DCS'*)(*oi_readonly*)(*hidden_in_objinsp*)
                PProjOutBound:PGDBOOutbound2DIArray;(*'Bounding box DCS'*)(*oi_readonly*)(*hidden_in_objinsp*)

@@ -79,7 +79,7 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  function GetObjTypeName:GDBString;virtual;
 
                  procedure createfield;virtual;
-                 function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
+                 function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual; //<**Пересечение с линией описанной 2-я точками
                  procedure ReCalcFromObjMatrix;virtual;
 
                  function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;

@@ -107,6 +107,7 @@ uses
                       //<**система логирования
   uzcvariablesutils, // для работы с ртти
 
+  uzventsuperline,   //для работы  с суперлинией
   //для работы графа
   ExtType,
   Pointerv,
@@ -127,7 +128,8 @@ type
     //** Создания списка кабелей
       PTStructCableLine=^TStructCableLine;
       TStructCableLine=record
-                         cableEnt:PGDBObjCable;
+                         //cableEnt:PGDBObjCable;
+                         cableEnt:PGDBObjSuperLine;
                          stPoint:GDBVertex;
                          edPoint:GDBVertex;
                          stIndex:Integer; //незнаю нужне ли он будет ну пускай пока будет
@@ -140,6 +142,8 @@ type
       TStructDeviceLine=record
                          deviceEnt:PGDBObjDevice;
                          centerPoint:GDBVertex;
+                         break:boolean;
+                         breakName:string;
                          //lPoint:GDBVertex;
       end;
       TListDeviceLine=specialize TVector<TStructDeviceLine>;
@@ -194,13 +198,42 @@ type
       //end;
       GListVertexPoint=specialize TVector<GDBVertex>;
 
+      //Список номеров
+      TInfoListNumVertex=record
+                   num:GDBInteger; //номер 1-й вершниы по списку
+                   level:GDBDouble; //номер 1-й вершниы по списку
+      end;
+      TListNumVertex=specialize TVector<TInfoListNumVertex>;
 
-      function graphBulderFunc(Epsilon:double):TGraphBuilder;
+      //** Создания списка разрывов и стояков
+      TBreakInfo=class
+                         name:String;
+                         break:boolean;
+                         listNumbers:TListNumVertex;
+                         public
+                         constructor Create;
+                         destructor Destroy;virtual;
+      end;
+      TListBreakInfo=specialize TVector<TBreakInfo>;
+
+
+
+
+      function graphBulderFunc(Epsilon:double;nameCable:string):TGraphBuilder;
       function testTempDrawLine(p1:GDBVertex;p2:GDBVertex):TCommandResult;
       function testTempDrawCircle(p1:GDBVertex;rr:GDBDouble):TCommandResult;
       function testTempDrawPolyLine(listVertex:GListVertexPoint;color:Integer):TCommandResult;
       function testTempDrawText(p1:GDBVertex;mText:GDBString):TCommandResult;
 implementation
+
+constructor TBreakInfo.Create;
+begin
+  listNumbers:=TListNumVertex.Create;
+end;
+destructor TBreakInfo.Destroy;
+begin
+  listNumbers.Destroy;
+end;
 
 constructor TGraphBuilder.Create;
 begin
@@ -357,6 +390,8 @@ begin
       pline := AllocEnt(GDBLineID);                                             //выделяем память
       pline^.init(nil,nil,0,p1,p2);                                             //инициализируем и сразу создаем
 
+
+
       //конец старого способа
 
 
@@ -364,7 +399,9 @@ begin
       //pline:=pointer(ENTF_CreateLine(nil,nil,[p1.x,p1.y,p1.z,p2.x,p2.y,p2.z])); //создаем примитив с зпданой геометрией, не указывая владельца и список во владельце
       //конец нового способа
 
-      zcSetEntPropFromCurrentDrawingProp(pline);                                        //присваиваем текущие слой, вес и т.п
+      zcSetEntPropFromCurrentDrawingProp(pline);//присваиваем текущие слой, вес и т.п
+      pline^.vp.LineWeight:=LnWt100;
+      pline^.vp.Color:=6;
       zcAddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
     end;
     result:=cmd_ok;
@@ -418,6 +455,7 @@ begin
       pcircle := AllocEnt(GDBCircleID);                                             //выделяем память
       pcircle^.init(nil,nil,0,p1,rr);                                             //инициализируем и сразу создаем
 
+
       //конец старого способа
 
 
@@ -426,6 +464,8 @@ begin
       //конец нового способа
 
       zcSetEntPropFromCurrentDrawingProp(pcircle);                                        //присваиваем текущие слой, вес и т.п
+      pcircle^.vp.LineWeight:=LnWt100;
+      pcircle^.vp.Color:=6;
       zcAddEntToCurrentDrawingWithUndo(pcircle);                                    //добавляем в чертеж
     end;
     result:=cmd_ok;
@@ -823,23 +863,16 @@ end;
 procedure getListDeviceAndEdge(var graph:TGraphBuilder;listCable:TListCableLine;accuracy:double);
 var
    i,j,k:integer;
-   areaLine, areaVertex:TBoundingBox;
-   vertexRectangleLine:TRectangleLine;
-
+   areaVertex:TBoundingBox;
    infoEdge:TInfoEdgeGraph;
    infoDevice:TStructDeviceLine; //инфо по объекта списка
-
-   tempListNumVertex:TListTempNumVertex;
-   tempNumVertex:TInfoTempNumVertex;
    inAddEdge:boolean;
    vertexLine:GDBVertex;
    colDevice,numVertDevice:integer;
    pc:PGDBObjCable;
-    //pcdev:PGDBObjLine;
-    //pcdevCircle:PGDBObjCircle;
     pobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
-    pObjDevice,currentSubObj:PGDBObjDevice;
-
+    pObjDevice:PGDBObjDevice;
+    pSuperLine:PGDBObjSuperLine;
     ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
     NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
 begin
@@ -857,26 +890,21 @@ begin
           else
             vertexLine:=listCable[i].edPoint;
           areaVertex:=getAreaVertex(vertexLine,accuracy);
-
           //testTempDrawLine(areaVertex.LBN,areaVertex.RTF);
-          HistoryOutStr('0');
           if drawings.GetCurrentROOT^.FindObjectsInVolume(areaVertex,NearObjects)then //ищем примитивы оболочка которых пересекается с volume
             begin
              pobj:=NearObjects.beginiterate(ir);//получаем первый примитив из списка
              if pobj<>nil then                  //если он есть то
              repeat
-              HistoryOutStr('1');
-               HistoryOutStr(pobj^.GetObjTypeName);
-
-               if (pobj^.GetObjType=GDBCableID) then //если он кабель то
+               //if (pobj^.GetObjType=GDBCableID) then //если он кабель то
+              if (pobj^.GetObjType=GDBSuperLineID) then //если он кабель то
                 begin
-                 HistoryOutStr('2');
-                 pc:= PGDBObjCable(pobj);
-                 testTempDrawLine(PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(0))^,PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(1))^);
-                 if pc <> listCable[i].cableEnt then //если это не тот же кабель который мв сейчас изучаем
+                 pSuperLine:= PGDBObjSuperLine(pobj);
+                 //testTempDrawLine(PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(0))^,PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(1))^);
+                 if pSuperLine <> listCable[i].cableEnt then //если это не тот же кабель который мв сейчас изучаем
                    begin
-                       HistoryOutStr('3');
-                       inAddEdge:=false;
+                    //*** после починки системы выделения объектов, разкоментировать
+                      // inAddEdge:=false;
                    end;
                  end;
                  //поиск пересечений с девайсом
@@ -897,13 +925,14 @@ begin
                begin
                   if graph.listVertex[k].deviceEnt = pObjDevice then
                     numVertDevice:= k;
-                  //HistoryOutStr(inttostr(numVertDevice));
                end;
                //****//
                //** создаем вершину в точки линии в котором обноружилось устройство и прокладываем ребро от этой точки до коннектора устройства
                if dublicateVertex({listDevice}graph.listVertex,vertexLine,accuracy) = false then begin
                   infoDevice.deviceEnt:=nil;
                   infoDevice.centerPoint:=vertexLine;
+                  infoDevice.break:=false;
+                  infoDevice.breakName:='not_break';
                   graph.listVertex{listDevice}.PushBack(infoDevice);
 
                   infoEdge.VIndex1:=graph.listVertex{listDevice}.Size-1;
@@ -918,156 +947,6 @@ begin
         end;
     end;
     NearObjects.Done;//убиваем список
-
-    //NearObjects.init(100); //инициализируем список
-    //if drawings.GetCurrentROOT^.FindObjectsInVolume(areaLine,NearObjects)then //ищем примитивы оболочка которых пересекается с volume
-    //begin
-    //   pobj:=NearObjects.beginiterate(ir);//получаем первый примитив из списка
-    //   if pobj<>nil then                  //если он есть то
-    //   repeat
-    //     if pobj^.GetObjType=GDBCableID then //если он кабель то
-    //     begin
-    //         pc:=PGDBObjCable(pobj);
-    //         for j:=1 to pc^.VertexArrayInOCS.GetRealCount-1 do
-    //             begin
-    //              //удлиняем каждую проверяемую линиию, для исключения погрешностей
-    //              extNextLine:= extendedLineFunc(pc^.VertexArrayInOCS.getdata(j-1),pc^.VertexArrayInOCS.getdata(j),Epsilon) ;
-    //              //Производим сравнение основной линии с перебираемой линией
-    //              if uzegeometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).isintercept then
-    //              begin
-    //                interceptVertex:=uzegeometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).interceptcoord;
-    //                //выполнить проверку на есть ли уже такая вершина
-    //                 if dublicateVertex({listDevice}result.listVertex,interceptVertex,Epsilon) = false then begin
-    //                  infoDevice.deviceEnt:=nil;
-    //                  infoDevice.centerPoint:=interceptVertex;
-    //                  {listDevice}result.listVertex.PushBack(infoDevice);
-    //               //   testTempDrawCircle(interceptVertex,Epsilon);
-    //                end;
-    //              end;
-    //             end;
-    //       end;
-    //
-    //     ///*** Поиск подключенных устройств
-    //
-    //
-    //     {****************место откуда были разработки с пересечением с гранями устройства
-    //     //поиск пересечений с девайсом
-    //     if pobj^.GetObjType=GDBDeviceID then
-    //       begin
-    //        pObjDevice:= PGDBObjDevice(pobj); // передача объекта в девайсы
-    //        currentSubObj:=pObjDevice^.VarObjArray.beginiterate(ir_inDevice); //иследование содержимого девайса
-    //        if (currentSubObj<>nil) then
-    //        repeat
-    //              if currentSubObj^.GetLayer=psldb then BEGIN      // если на слои который отсекаит линию psldb  какая то глобальная константа
-    //               //**для линии
-    //                if currentSubObj^.GetObjType=GDBLineID then begin   //если тип линия, это когда усекающая контур состоит из линий
-    //                 pcdev:= PGDBObjLine(currentSubObj);
-    //
-    //                 tempPoint1.x:= pcdev^.CoordInOCS.lBegin.x + pObjDevice^.GetCenterPoint.x;
-    //                 tempPoint1.y:= pcdev^.CoordInOCS.lBegin.y + pObjDevice^.GetCenterPoint.y;
-    //                 tempPoint1.z:= 0;
-    //
-    //                 tempPoint2.x:= pcdev^.CoordInOCS.lEnd.x + pObjDevice^.GetCenterPoint.x;
-    //                 tempPoint2.y:= pcdev^.CoordInOCS.lEnd.y + pObjDevice^.GetCenterPoint.y;
-    //                 tempPoint2.z:= 0;
-    //                 extNextLine:=extendedLineFunc(tempPoint1,tempPoint2,Epsilon);
-    //                 //testTempDrawLine(extNextLine.stPoint,extNextLine.edPoint); // визуализация
-    //
-    //                 if uzegeometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).isintercept then
-    //                    begin
-    //                      interceptVertex:=uzegeometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).interceptcoord;
-    //                      //проверка есть ли уже такая вершина, если нет то добавляем вершину и сразу создаем ребро
-    //                       if dublicateVertex({listDevice}result.listVertex,interceptVertex,Epsilon) = false then begin
-    //                        infoDevice.deviceEnt:=nil;
-    //                        infoDevice.centerPoint:=interceptVertex;
-    //                        result.listVertex{listDevice}.PushBack(infoDevice);
-    //
-    //                        infoEdge.VIndex1:=result.listVertex{listDevice}.Size-1;
-    //                        infoEdge.VIndex2:=getNumDeviceInListDevice(result.listVertex{listDevice},pObjDevice);
-    //                        infoEdge.VPoint1:=interceptVertex;
-    //                        infoEdge.VPoint2:=pObjDevice^.GetCenterPoint;
-    //                        infoEdge.edgeLength:=uzegeometry.Vertexlength(interceptVertex,pObjDevice^.GetCenterPoint);
-    //                        result.listEdge.PushBack(infoEdge);
-    //                      end;
-    //                    end;
-    //                end;
-    //                //**//
-    //
-    //
-    //                end;
-    //         currentSubObj:=pObjDevice^.VarObjArray.iterate(ir_inDevice);
-    //       until currentSubObj=nil;
-    //              end;
-    //                *********************************}
-    //
-    //
-    //
-    //
-    //     pobj:=NearObjects.iterate(ir);//получаем следующий примитив из списка
-    //   until pobj=nil;
-    //  end;
-    //NearObjects.Clear;
-    //NearObjects.Done;//убиваем список
-
-
-
-    //result:=TListEdgeGraph.Create; //инициализация списка
-    //tempListNumVertex:=TListTempNumVertex.Create;
-    //
-    //areaVertex:=getAreaVertex(listDevice[i].centerPoint,accuracy); // получаем область поиска около вершины
-    //  for j:=0 to listCable.Size-1 do
-    //  begin
-    //    inAddEdge:=false;
-    //      if endsLineToAreaVertex(listCable[j],areaVertex) then  //узнаем попадаетли вершина в одну из линий
-    //         begin
-    //           //находим зону в которой будем искать вершины
-    //           areaLine:= getAreaLine(listCable[j].stPoint,listCable[j].edPoint,accuracy);
-    //           //строим прямоугольник вокруг лини что бы по ниму определять находится ли вершина внутри
-    //           vertexRectangleLine:=convertLineInRectangleWithAccuracy(listCable[j].stPoint,listCable[j].edPoint,accuracy);
-    //
-    //
-    //           for k:=0 to listDevice.Size-1 do    //перебираем все узлы
-    //             begin
-    //                 if i <> k then
-    //                    begin
-    //                      if (areaLine.LBN.x <= listDevice[k].centerPoint.x) and
-    //                         (areaLine.RTF.x > listDevice[k].centerPoint.x) and
-    //                         (areaLine.LBN.y <= listDevice[k].centerPoint.y) and
-    //                         (areaLine.RTF.y > listDevice[k].centerPoint.y) then
-    //                         begin
-    //                            if vertexPointInAreaRectangle(vertexRectangleLine,listDevice[k].centerPoint) then
-    //                            begin
-    //                             tempNumVertex.num:=k;
-    //                             tempListNumVertex.PushBack(tempNumVertex);
-    //                             inAddEdge:=true;
-    //                            end;
-    //                         end;
-    //                    end;
-    //             end;
-    //         end;
-    //       listSortVertexLength(tempListNumVertex,listDevice,i);
-    //       if inAddEdge then
-    //       begin
-    //         for k:=0 to tempListNumVertex.Size-1 do
-    //         begin
-    //             if k=0 then
-    //             begin
-    //               infoEdge.VIndex1:=i;
-    //               infoEdge.VPoint1:=listDevice[i].centerPoint;
-    //             end;
-    //             infoEdge.VIndex2:=tempListNumVertex[k].num;
-    //             infoEdge.VPoint2:=listDevice[tempListNumVertex[k].num].centerPoint;
-    //             infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
-    //             result.PushBack(infoEdge);
-    //             infoEdge.VIndex1:=tempListNumVertex[k].num;
-    //             infoEdge.VPoint1:=listDevice[tempListNumVertex[k].num].centerPoint;
-    //         end;
-    //         tempListNumVertex.Clear;
-    //       end;
-    //  end;
-    //
-    //
-    //
 end;
 //*****//
 
@@ -1162,9 +1041,86 @@ end;
 
 ///******ЗАкончилось работа с пересечением прямой и окружности********/////////
 
+///******Добавление в граф участков проложенных между стойками и разрывами.
+// По одинаковым именам, макс количество разрывов 2 с одним именем. количество стойков не ограничено
+procedure getListEdgeBreak(var graph:TGraphBuilder;accuracy:double);
+var
+   i,j:integer;
+   infoBreak:TBreakInfo;
+   listBreak:TListBreakInfo;
+   infoVertex:TInfoListNumVertex;
+   infoEdge:TInfoEdgeGraph;
+   nameBreak,nameDevice:string;
+   pvd:pvardesk; //для работы со свойствами устройств
+   haveName,IsExchange:boolean;
+begin
+    listBreak:=TListBreakInfo.Create;                                    //создаем список номеров вершин стойков/разрывов с одинаковыми именами
+    for i:=0 to graph.listVertex.Size-1 do
+    begin
+     nameDevice:=graph.listVertex[i].deviceEnt^.Name;
+     if (nameDevice='EL_CABLE_UP') or (nameDevice='EL_CABLE_DOWN') or (nameDevice='EL_CABLE_FROMDOWN') or (nameDevice='EL_CABLE_FROMUP') or (nameDevice='EL_CABLE_BREAK') then
+     begin
+       haveName:=true;
+       pvd:=FindVariableInEnt(graph.listVertex[i].deviceEnt,'RiserName');
+       nameBreak:=pgdbstring(pvd^.data.Instance)^;
+       pvd:=FindVariableInEnt(graph.listVertex[i].deviceEnt,'Elevation');
+       infoVertex.num:=i;
+       infoVertex.level:=PGDBDouble(pvd^.data.Instance)^;
+
+       graph.listVertex.Mutable[i]^.break:=true;
+       graph.listVertex.Mutable[i]^.breakName:=nameBreak;
+
+       for j:=0 to listBreak.Size-1 do
+       begin
+           if listBreak[j].name = nameBreak then
+           begin
+              listBreak.mutable[j]^.listNumbers.PushBack(infoVertex);
+              haveName:=false;
+           end;
+       end;
+       if haveName then
+         begin
+            infoBreak:=TBreakInfo.Create;
+            infoBreak.break:=true;                             //это стояк/разрыв
+
+            infoBreak.name:=nameBreak;
+            infoBreak.listNumbers.PushBack(infoVertex);                 //список стойков/разывов с одинаковым именем
+            listBreak.PushBack(infoBreak);
+            infoBreak:=nil;
+         end;
+     end;
+    end;
+
+    // сортировка списка стояков по уровню
+    for i:=0 to listBreak.Size-1 do
+      repeat
+        IsExchange := False;
+        for j := 0 to listBreak[i].listNumbers.Size-2 do begin
+          if listBreak[i].listNumbers[j].level > listBreak[i].listNumbers[j+1].level then begin
+            infoVertex := listBreak[i].listNumbers[j];
+            listBreak[i].listNumbers.Mutable[j]^ := listBreak[i].listNumbers[j+1];
+            listBreak[i].listNumbers.Mutable[j+1]^ := infoVertex;
+            IsExchange := True;
+          end;
+        end;
+      until not IsExchange;
+
+    //добавление ребер в граф
+    for i:=0 to listBreak.Size-1 do
+      for j:=0 to listBreak[i].listNumbers.Size-2 do
+     begin
+       infoEdge.VIndex1:=listBreak[i].listNumbers[j].num;
+       infoEdge.VIndex2:=listBreak[i].listNumbers[j+1].num;
+       infoEdge.VPoint1:=graph.listVertex[listBreak[i].listNumbers[j].num].centerPoint;
+       infoEdge.VPoint2:=graph.listVertex[listBreak[i].listNumbers[j+1].num].centerPoint;
+       infoEdge.edgeLength:=abs(listBreak[i].listNumbers[j].num-listBreak[i].listNumbers[j+1].num);
+       graph.listEdge.PushBack(infoEdge);
+     end;
+end;
+
 
 //** Базовая функция запуска алгоритма анализа кабеля на плане, подключенных устройств, их нумерация и.т.д
-function graphBulderFunc(Epsilon:double):TGraphBuilder;
+function graphBulderFunc(Epsilon:double;nameCable:string):TGraphBuilder;
 //const
 //     Epsilon=0.5;   //ПОГРЕШНОСТЬ при черчении
 var
@@ -1210,7 +1166,8 @@ var
 
     drawing:PTSimpleDrawing; //для работы с чертежом
     pvd:pvardesk; //для работы со свойствами устройств
-    headDevName:string;
+    headDevName,tempName:string;
+    pSuperLine:PGDBObjSuperLine;
 
 
     //указатель на кабель
@@ -1223,8 +1180,6 @@ var
 begin
    listCable := TListCableLine.Create;  // инициализация списка кабелей
    result:=TGraphBuilder.Create;
-   //listDevice := TListDeviceLine.Create;  // инициализация списка устройств
-   //listEdge := TListEdgeGraph.Create;
    tempListEdge := TListEdgeGraph.Create;
 
    counter:=0; //обнуляем счетчик
@@ -1237,21 +1192,42 @@ begin
     repeat
       if pobj^.selected then
         begin
-             //HistoryOutStr(pobj^.GetObjTypeName);
-             if pobj^.GetObjType=GDBCableID then     //создание списка кабелей
+         // GDBSuperLineID
+             if pobj^.GetObjType=GDBSuperLineID then
                begin
-                 pc:=PGDBObjCable(pobj);
-                 infoCable.cableEnt:=pc;
-                 for i:=1 to pc^.VertexArrayInOCS.GetRealCount-1 do
-                     begin
-                       infoCable.stPoint:=PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(i-1))^;
-                       infoCable.edPoint:=PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(i))^;
-                       infoCable.stIndex:=i-1;
-                       infoCable.edIndex:=i;
-                       listCable.PushBack(infoCable); //добавляем к списку реальные кабели
-                       inc(counter1);
-                     end;
+                 pSuperLine:=PGDBObjSuperLine(pobj);
+                 pvd:=FindVariableInEnt(pSuperLine,'NMO_Name');
+                 tempName:=pgdbstring(pvd^.data.Instance)^;
+                 if nameCable=tempName then
+                   begin
+                     infoCable.cableEnt:=pSuperLine;
+                     infoCable.stPoint:=pSuperLine^.CoordInOCS.lBegin;
+                     infoCable.edPoint:=pSuperLine^.CoordInOCS.lEnd;
+                     infoCable.stIndex:=0;
+                     infoCable.edIndex:=1;
+                     listCable.PushBack(infoCable); //добавляем к списку реальные кабели
+                     inc(counter1);
+                    // PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(i-1))^;
+                   end;
+
                end;
+             //**** вариант для кабельной линии потом можно быстро его перестроить под супер полилинию :)
+             //if pobj^.GetObjType=GDBCableID then     //создание списка кабелей
+             //  begin
+             //    pc:=PGDBObjCable(pobj);
+             //    infoCable.cableEnt:=pc;
+             //    for i:=1 to pc^.VertexArrayInOCS.GetRealCount-1 do
+             //        begin
+             //          infoCable.stPoint:=PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(i-1))^;
+             //          infoCable.edPoint:=PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(i))^;
+             //          infoCable.stIndex:=i-1;
+             //          infoCable.edIndex:=i;
+             //          listCable.PushBack(infoCable); //добавляем к списку реальные кабели
+             //          inc(counter1);
+             //        end;
+             //  end;
+             //*** ***//
+
              if pobj^.GetObjType=GDBDeviceID then
                begin
                   pObjDevice:= PGDBObjDevice(pobj); // передача объекта в девайсы
@@ -1265,10 +1241,12 @@ begin
                            if dublicateVertex({listDevice}result.listVertex,devpoint,Epsilon) = false then begin
                              infoDevice.deviceEnt:=pObjDevice;
                              infoDevice.centerPoint:=devpoint;
+                             infoDevice.break:=false;
+                             infoDevice.breakName:='not_break';
                              result.listVertex{listDevice}.PushBack(infoDevice);
                              inc(counter2);
                            end;
-                           HistoryOutStr('x= ' + FloatToStr(devpoint.x) + ' y=' + FloatToStr(devpoint.y));
+                          // HistoryOutStr('x= ' + FloatToStr(devpoint.x) + ' y=' + FloatToStr(devpoint.y));
                          end;
                      currentSubObj:=pObjDevice^.VarObjArray.iterate(ir_inDevice);
                     until currentSubObj=nil;
@@ -1282,6 +1260,14 @@ begin
   HistoryOutStr('Кол-во ввыбранных элементов = ' + IntToStr(counter));
   HistoryOutStr('Список кусков кабельных линий состоит из = ' + IntToStr(counter1));
   HistoryOutStr('Список устройств состоит из = ' + IntToStr(counter2));
+
+
+  //******* поиск и обработка стояков (переходов между этажами) и разрывов
+    getListEdgeBreak(result,Epsilon);
+  //*******
+
+
+
 
   ///***+++Ищем пересечения каждого кабеля либо друг с другом либо с граними девайсов+++***///
   {*********изменения грани устройств убраны в долгий ящик или навсегда, но временно их не удалять
@@ -1302,13 +1288,13 @@ begin
        pobj:=NearObjects.beginiterate(ir);//получаем первый примитив из списка
        if pobj<>nil then                  //если он есть то
        repeat
-         if pobj^.GetObjType=GDBCableID then //если он кабель то
+         if pobj^.GetObjType=GDBSuperLineID then //если он кабель то
          begin
-             pc:=PGDBObjCable(pobj);
-             for j:=1 to pc^.VertexArrayInOCS.GetRealCount-1 do
-                 begin
+             pSuperLine:=PGDBObjSuperLine(pobj);
+             //for j:=1 to pc^.VertexArrayInOCS.GetRealCount-1 do
+                 //begin
                   //удлиняем каждую проверяемую линиию, для исключения погрешностей
-                  extNextLine:= extendedLineFunc(pc^.VertexArrayInOCS.getdata(j-1),pc^.VertexArrayInOCS.getdata(j),Epsilon) ;
+                  extNextLine:= extendedLineFunc(pSuperLine^.CoordInOCS.lBegin,pSuperLine^.CoordInOCS.lEnd,Epsilon) ;
                   //Производим сравнение основной линии с перебираемой линией
                   if uzegeometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).isintercept then
                   begin
@@ -1317,13 +1303,41 @@ begin
                      if dublicateVertex({listDevice}result.listVertex,interceptVertex,Epsilon) = false then begin
                       infoDevice.deviceEnt:=nil;
                       infoDevice.centerPoint:=interceptVertex;
+                      infoDevice.break:=false;
+                      infoDevice.breakName:='not_break';
                       {listDevice}result.listVertex.PushBack(infoDevice);
                    //   testTempDrawCircle(interceptVertex,Epsilon);
                     end;
                   end;
-                 end;
+                 //end;
            end;
 
+       //***********пересечение с кабелями**////
+       //pobj:=NearObjects.beginiterate(ir);//получаем первый примитив из списка
+       //if pobj<>nil then                  //если он есть то
+       //repeat
+       //  if pobj^.GetObjType=GDBCableID then //если он кабель то
+       //  begin
+       //      pc:=PGDBObjCable(pobj);
+       //      for j:=1 to pc^.VertexArrayInOCS.GetRealCount-1 do
+       //          begin
+       //           //удлиняем каждую проверяемую линиию, для исключения погрешностей
+       //           extNextLine:= extendedLineFunc(pc^.VertexArrayInOCS.getdata(j-1),pc^.VertexArrayInOCS.getdata(j),Epsilon) ;
+       //           //Производим сравнение основной линии с перебираемой линией
+       //           if uzegeometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).isintercept then
+       //           begin
+       //             interceptVertex:=uzegeometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).interceptcoord;
+       //             //выполнить проверку на есть ли уже такая вершина
+       //              if dublicateVertex({listDevice}result.listVertex,interceptVertex,Epsilon) = false then begin
+       //               infoDevice.deviceEnt:=nil;
+       //               infoDevice.centerPoint:=interceptVertex;
+       //               {listDevice}result.listVertex.PushBack(infoDevice);
+       //            //   testTempDrawCircle(interceptVertex,Epsilon);
+       //             end;
+       //           end;
+       //          end;
+       //    end;
+       //********///
          ///*** Поиск подключенных устройств
 
 
@@ -1419,15 +1433,7 @@ begin
 
 
 
-  //for i:=0 to result.listVertex.Size-1 do
-  //    begin
-  //       testTempDrawCircle(result.listVertex[i].centerPoint,Epsilon);
-  //    end;
-  //
-  //  for i:=0 to result.listEdge.Size-1 do
-  //    begin
-  //       testTempDrawLine(result.listEdge[i].VPoint1,result.listEdge[i].VPoint2);
-  //    end;
+
 
 
     //result.listVertex:=listDevice;

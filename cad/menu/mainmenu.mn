@@ -139,8 +139,7 @@ Panel Draw;
     action ACN_RECTANGLE
     action ACN_BInsert
     action ACN_TEXT
-	action ACN_SupeLine
-	action ACN_TEXT
+    action ACN_SupeLine
   }
 Panel Misc;
   {

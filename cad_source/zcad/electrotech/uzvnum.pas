@@ -592,7 +592,7 @@ begin
        // теперь от каждого устр. до головного
        // нужно что бы около головного устройства можно было понять какой из путей самый длинный
        //или какой самый загружанный датчиками
-       HistoryOutStr('вставка текста0');
+       //HistoryOutStr('вставка текста0');
        bAfterLength:=0;
       // lengthEqual:=true;
        for j:=ourListGroup.listDevice[i].listNumVertexMinWeight.Size-2 downto 0 do
@@ -1219,7 +1219,7 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
               //      uzvcom.testTempDrawText(pCenter,IntToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup[k].numBefore));
               // end;
 
-              HistoryOutStr('длина списка графа после создания' + IntToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup.Size));
+           //   HistoryOutStr('длина списка графа после создания' + IntToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup.Size));
             end;
       end;
 
@@ -1234,9 +1234,15 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
       begin
          for j:=0 to listHeadDevice[i].listGroup.Size -1 do
             begin
-                 listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listVertexWayOnlyVertex.PushBack(listHeadDevice[i].listGroup[j].listVertexWayGroup[0].VIndex1);
+                 if listHeadDevice[i].listGroup[j].listVertexWayGroup.Size>0 then
+                   begin
+                   listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listVertexWayOnlyVertex.PushBack(listHeadDevice[i].listGroup[j].listVertexWayGroup[0].VIndex1);
+                   getListOnlyVertexWayGroup(listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^,ourGraph);
+                   end
+                 else
+                   begin
 
-                 getListOnlyVertexWayGroup(listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^,ourGraph);
+                   end;
                  //if counterColor=7 then
                  //     counterColor:=1
                  // else

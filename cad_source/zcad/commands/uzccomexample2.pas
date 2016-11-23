@@ -25,6 +25,7 @@ uses uzccommandsimpl,    //тут реализация объекта CommandRTE
      uzccommandsmanager, //менеджер команд
      uzvcom,             //
      uzvnum,
+     uzcutils,
      Varman;             //Зкадовский RTTI
 
 type
@@ -45,7 +46,7 @@ TExampleComParams=packed record       //определяем параметры 
                                       //регистрировать их будем паскалевским RTTI
                                       //не через экспорт исходников и парсинг файла с определениями типов
   option3:gdbstring;
-  option1:gdbinteger;
+  option1:gdbdouble;
   option2:gdbboolean;
 
 end;
@@ -79,13 +80,16 @@ end;
 procedure TExample_com.visualInspectionGraph(pdata:GDBPlatformint);
 var
  i:integer;
+ UndoMarcerIsPlazed:boolean;
 begin
   //тут делаем чтонибудь что будет усполнено по нажатию DoSomething2
   //выполним Commandmanager.executecommandend;
   //эту кнопку можно нажать 1 раз
-  graphCable:=uzvcom.graphBulderFunc(Epsilon,'ПС');
+  graphCable:=uzvcom.graphBulderFunc(ExampleComParams.option1,ExampleComParams.option3);
 
   //Визуализация графа
+  UndoMarcerIsPlazed:=false;
+  zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'Visualisation Graph');
   for i:=0 to graphCable.listVertex.Size-1 do
     if graphCable.listVertex[i].deviceEnt <> nil then
       //if graphCable.listVertex[i].break then
@@ -97,6 +101,7 @@ begin
     begin
        uzvcom.testTempDrawLine(graphCable.listEdge[i].VPoint1,graphCable.listEdge[i].VPoint2);
     end;
+  zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
   Commandmanager.executecommandend;
 end;
 
@@ -104,14 +109,16 @@ end;
 procedure TExample_com.visualInspectionGroupHeadGraph(pdata:GDBPlatformint);
 var
  i,j,counterColor:integer;
-
+ UndoMarcerIsPlazed:boolean;
 begin
   //тут делаем чтонибудь что будет усполнено по нажатию DoSomething2
   //выполним Commandmanager.executecommandend;
   //эту кнопку можно нажать 1 раз
-  graphCable:=uzvcom.graphBulderFunc(Epsilon,'ПС');
+  graphCable:=uzvcom.graphBulderFunc(ExampleComParams.option1,ExampleComParams.option3);
   listHeadDevice:=uzvnum.getGroupDeviceInGraph(graphCable);
   //Визуализация групп подключеных устройств и датчиков
+  UndoMarcerIsPlazed:=false;
+  zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'Visualisation Group Line');
   counterColor:=1;
   for i:=0 to listHeadDevice.Size-1 do
   begin
@@ -124,20 +131,23 @@ begin
              inc(counterColor);
         end;
   end;
+  zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
   Commandmanager.executecommandend;
 end;
 
 procedure TExample_com.cablingGroupHeadGraph(pdata:GDBPlatformint);
 var
  i,j,counterColor:integer;
-
+ UndoMarcerIsPlazed:boolean;
 begin
   //тут делаем чтонибудь что будет усполнено по нажатию DoSomething2
   //выполним Commandmanager.executecommandend;
   //эту кнопку можно нажать 1 раз
-  graphCable:=uzvcom.graphBulderFunc(Epsilon,'ПС');
+  graphCable:=uzvcom.graphBulderFunc(ExampleComParams.option1,ExampleComParams.option3);
   listHeadDevice:=uzvnum.getGroupDeviceInGraph(graphCable);
-  //Визуализация групп подключеных устройств и датчиков
+  //Прокладка кабелей
+  UndoMarcerIsPlazed:=false;
+  zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'Прокладка кабелей по трассе');
   counterColor:=1;
   for i:=0 to listHeadDevice.Size-1 do
   begin
@@ -150,6 +160,7 @@ begin
              inc(counterColor);
         end;
   end;
+    zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
   Commandmanager.executecommandend;
 end;
 
@@ -160,7 +171,7 @@ begin
   //если тут не вызывать Commandmanager.executecommandend;
   //то выполнение команды не завершится и кнопку можно жать много раз
   //для примера просто играем параметрами
-  inc(ExampleComParams.option1);
+ // inc(ExampleComParams.option1);
   ExampleComParams.option2:=not ExampleComParams.option2;
 
 
@@ -177,12 +188,12 @@ end;
 
 initialization
   //начальные значения параметров
-  ExampleComParams.option1:=-1;
+  ExampleComParams.option1:=0.1;
   ExampleComParams.option2:=false;
   ExampleComParams.option3:='-';
 
   SysUnit.RegisterType(TypeInfo(PTExampleComParams));//регистрируем тип данных в зкадном RTTI
-  SysUnit.SetTypeDesk(TypeInfo(TExampleComParams),['Имя суперлинии','Параметр1','Параметр2']);//Даем человечьи имена параметрам
+  SysUnit.SetTypeDesk(TypeInfo(TExampleComParams),['Имя суперлинии','Погрешность','Параметр2']);//Даем человечьи имена параметрам
   Example_com.init('ExampleCom',CADWG,0);//инициализируем команду
   Example_com.SetCommandParam(@ExampleComParams,'PTExampleComParams');//привязываем параметры к команде
 end.

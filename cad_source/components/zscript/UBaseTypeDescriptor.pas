@@ -656,13 +656,13 @@ begin
      pstring(Pinstance)^:='';
 end;
 procedure GDBStringDescriptor.MagicAfterCopyInstance;
-//var
-//   s:GDBString;
+var
+   s:GDBString;
 begin
-     {s:=pstring(Pinstance)^;
+     s:=pstring(Pinstance)^;
      killstring(s);
-     //pointer(s):=nil;}
-     KillString(pstring(Pinstance)^);
+     //pointer(s):=nil;
+     //KillString(pstring(Pinstance)^);
 end;
 constructor GDBStringDescriptor.init;
 begin

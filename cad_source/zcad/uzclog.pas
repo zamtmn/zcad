@@ -38,6 +38,7 @@ type
 TLogModuleDeskIndex=integer;
 TLogModuleDesk=record
                 enabled:boolean;
+                name:string;
 end;
 TModulesDeskDictionary=specialize TMyGDBAnsiStringDictionary<TLogModuleDeskIndex>;
 TModulesDeskArray=specialize TMyVector<TLogModuleDesk>;
@@ -370,6 +371,7 @@ begin
   if not ModulesDeskDictionary.MyGetValue(modulename,result) then
   begin
     result:=ModulesDeskArray.Size;
+    NewModuleDesk.name:=modulename;
     ModulesDeskArray.PushBack(NewModuleDesk);
     ModulesDeskDictionary.insert(uppercase(modulename),result);
     LogOutStr(format('Register log module "%s"',[modulename]),0,LM_Necessarily);
@@ -477,12 +479,20 @@ end;
 destructor tlog.done;
 var
    CurrentTime:TMyTimeStamp;
+   i:integer;
 begin
+     for i:=0 to ModulesDeskArray.Size-1 do
+      if ModulesDeskArray[i].enabled then
+                                         WriteToLog(format('Log module name "%s" state: Enabled',[ModulesDeskArray[i].name]),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0)
+                                     else
+                                         WriteToLog(format('Log module name "%s" state: Disabled',[ModulesDeskArray[i].name]),true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
      CurrentTime:=mynow();
      WriteToLog('-------------------------Log ended-------------------------',true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
      TimeBuf.done;
      PerfomaneBuf.done;
      setlength(LatestLogStrings,0);
+     ModulesDeskDictionary.destroy;
+     ModulesDeskArray.destroy;
 end;
 initialization
 begin

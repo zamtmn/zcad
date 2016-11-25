@@ -120,7 +120,7 @@ function vertexlen2df(const x1, y1, x2, y2: GDBFloat): GDBFloat;inline;
 function NormalizeVertex(const Vector1: GDBVertex): GDBVertex;{inline;}
 function VertexMulOnSc(const Vector1:GDBVertex;sc:GDBDouble): GDBVertex;inline;
 
-//к первой вершине прибавить вторую по осям Vector1.х + Vector2.у
+//к первой вершине прибавить вторую по осям Vector1.х + Vector2.х
 function VertexAdd(const Vector1, Vector2: GDBVertex): GDBVertex;inline;overload;
 function VertexAdd(const Vector1, Vector2: GDBVertex3S): GDBVertex3S;inline;overload;
 function Vertex2DAdd(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;inline;

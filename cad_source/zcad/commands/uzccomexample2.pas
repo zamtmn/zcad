@@ -23,8 +23,11 @@ uses uzccommandsimpl,    //тут реализация объекта CommandRTE
      uzccommandsabstract,//базовые объявления для команд
      uzbtypesbase,       //базовые типы
      uzccommandsmanager, //менеджер команд
+
      uzvcom,             //
      uzvnum,
+     uzvagensl,
+
      uzcutils,
      Varman;             //Зкадовский RTTI
 
@@ -166,12 +169,15 @@ end;
 
 
 procedure TExample_com.DoSomething(pdata:GDBPlatformint);
+var
+ k:integer;
 begin
   //тут делаем чтонибудь что будет выполнено по нажатию DoSomething
   //если тут не вызывать Commandmanager.executecommandend;
   //то выполнение команды не завершится и кнопку можно жать много раз
   //для примера просто играем параметрами
  // inc(ExampleComParams.option1);
+  k:=uzvagensl.autoGenSLBetweenDevices('победа');
   ExampleComParams.option2:=not ExampleComParams.option2;
 
 

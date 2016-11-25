@@ -132,16 +132,28 @@ uses
    uzbpaths,
    uzctranslations,
 
-  uzvcom;
+
+  uzvcom,
+  uzvsgeom,
+  uzvtestdraw;
 
 
 type
 
       //**создаем список в списке вершин координат
-      TListLineDev=specialize TVector<GDBVertex>;
+      TListVertex=specialize TVector<GDBVertex>;
+
+      //**создаем список в списке вершин координат и стороны
+      TInfoVertexinLine=record
+                   point:GDBVertex;
+                   //0-слева,1-сверху,2-справа,3-снизу
+                   wall:integer;
+                   end;
+      TListVertexinLine=specialize TVector<TInfoVertexinLine>;
 
       TInfoColumnDev=class
-                         listLineDev:TListLineDev;
+                         listLineDev:TListVertex;
+                         orient:integer; //0-слева,1-сверху,2-справа,3-снизу
                          public
                          constructor Create;
                          destructor Destroy;virtual;
@@ -156,15 +168,34 @@ type
                          p3:GDBVertex;
                          p4:GDBVertex;
       end;
-      TVector = record
-        X,Y:extended;
+
+      //** Создания списка вершин графа
+      PTVertexGraph=^TVertexGraph;
+      TVertexGraph=record
+                         deviceEnt:PGDBObjDevice;
+                         centerPoint:GDBVertex;
+                         //break:boolean;
+                         //breakName:string;
+                         //lPoint:GDBVertex;
       end;
+      TListVertexGraph=specialize TVector<TVertexGraph>;
+
+      //** Создания списка ребер графа
+      PTEdgeGraph=^TEdgeGraph;
+      TEdgeGraph=record
+                         VIndex1:GDBInteger; //номер 1-й вершниы по списку
+                         VIndex2:GDBInteger; //номер 2-й вершниы по списку
+                         VPoint1:GDBVertex;  //координаты 1й вершниы
+                         VPoint2:GDBVertex;  //координаты 2й вершниы
+                         edgeLength:GDBDouble; // длина ребра
+      end;
+      TListEdgeGraph=specialize TVector<TEdgeGraph>;
 
 function autoGenSLBetweenDevices(test:string):integer;
 implementation
   constructor TInfoColumnDev.Create;
   begin
-    listLineDev:=TListLineDev.Create;
+    listLineDev:=TListVertex.Create;
   end;
   destructor TInfoColumnDev.Destroy;
   begin
@@ -172,81 +203,9 @@ implementation
   end;
 
 
-  function VDot(v1,v2:TVector):single;
-  begin
-    result:=(v1.X*v2.X+v1.Y*v2.Y);
-  end;
-
-  function VMul(v1:Tvector;A:single):TVector;
-  begin
-    result.X:=v1.X*A;
-    result.Y:=v1.Y*A;
-  end;
-
-  function VSub(const v1,v2:TVector):TVector;
-  begin
-    result.X:=v1.X-v2.X;
-    result.Y:=v1.Y-v2.Y;
-  end;
-  function VLength(V:TVector):single;
-  begin
-    result:=sqrt(sqr(V.x)+sqr(V.y));
-  end;
-  function VNorm(V:TVector):TVector;
-  var vl:single;
-  begin
-    vl:=VLength(V);
-    result.X:=V.X/vl;
-    result.Y:=V.Y/vl;
-  end;
-
-  function VProject(A,B:TVector):TVector;
-  begin
-    A:=VNorm(A);
-    result:=VMul(A,VDot(A,B));
-  end;
-
-  //function Perpendicular(p1,p2:GDBVertex;pp:GDBVertex):GDBVertex;
-  //var CA:TVector;
-  // A,B,C,res:TVector;
-  //begin
-  //  A.X:=p1.x;
-  //  A.y:=p1.y;
-  //  B.X:=p2.x;
-  //  B.y:=p2.y;
-  //  C.X:=pp.x;
-  //  C.y:=pp.y;
-  //  CA:=VSub(C,A);
-  //  res:=VSub(VProject(VSub(B,A),CA),CA);
-  //  result.x:=res.x;
-  //  result.y:=res.y;
-  //  result.z:=0;
-  //end;
-
-  //**Перпендикуляр из точки на отрезок. Поиск точки перпендикуляра на линию. Координата Z-обнуляется
-  function Perpendicular(p1,p2:GDBVertex;pp:GDBVertex):GDBVertex;
-  var
-   //A,B,C,D,res:TVector;
-   a0,a1,a2,a3,k,proverka:double;
-  begin
-     a0:=p2.x-p1.x;
-     a1:=p2.y-p1.y;
-     a2:=pp.x-p1.x;
-     a3:=pp.y-p1.y;
-     proverka:=(a2*a0+a3*a1)*((pp.x-p2.x)*a0+(pp.y-p2.x)*a1);
-
-     HistoryOutStr(' проверка= ' + floattostr(proverka));
-     k:=(a2*a0 + a3*a1) / (a0*a0 + a1*a1);
-     result.x:=p1.x + k*a0;
-     result.y:=p1.y + k*a1 ;
-
-  end;
-
-
   function InsertDevice(p1:GDBVertex):TCommandResult;
   var
       pdev:PGDBObjDevice;
-     // p1:gdbvertex;
       rc:TDrawContext;
   begin
       //if commandmanager.get3dpoint('Specify insert point:',p1) then
@@ -274,14 +233,75 @@ implementation
       //end;
       result:=cmd_ok;
   end;
+
+  //ориентированный список устройств относительно точки в какую сторону должны быть выход кабеля
+  function listDeviceColumnOrient(oldListColumn:TListColumnDev;orient:integer):TListColumnDev;
+  var
+   infoColumnDev:TInfoColumnDev; //информация одной строки
+   columNum,lineNum,i,j:integer;
+   begin
+       result:=TListColumnDev.Create;
+       columNum:=oldListColumn.Size-1;
+       lineNum:=oldListColumn[0].listLineDev.size-1;
+       case orient of
+          0:
+            for j:=0 to lineNum do  begin
+               infoColumnDev:=TInfoColumnDev.Create;
+               for i:=columNum downto 0 do begin
+                  infoColumnDev.listLineDev.PushBack(oldListColumn[i].listLineDev[j]);
+               end;
+               infoColumnDev.orient:=0;
+               result.PushBack(infoColumnDev);
+               infoColumnDev:=nil;
+            end;
+          1:
+            for i:=columNum downto 0 do  begin
+               infoColumnDev:=TInfoColumnDev.Create;
+               for j:=lineNum downto 0 do begin
+                  infoColumnDev.listLineDev.PushBack(oldListColumn[i].listLineDev[j]);
+               end;
+               infoColumnDev.orient:=1;
+               result.PushBack(infoColumnDev);
+               infoColumnDev:=nil;
+            end;
+          2:
+            for j:=lineNum downto 0 do  begin
+               infoColumnDev:=TInfoColumnDev.Create;
+               for i:=0 to columNum do begin
+                  infoColumnDev.listLineDev.PushBack(oldListColumn[i].listLineDev[j]);
+               end;
+               infoColumnDev.orient:=0;
+               result.PushBack(infoColumnDev);
+               infoColumnDev:=nil;
+            end;
+          3:
+            result:=oldListColumn;
+          else
+            HistoryOutStr('ЧТО ТО НЕ ТАК С ОРИЕНТАЦИЕЙ');
+          end;
+          HistoryOutStr(' ориентируется ');
+       end;
+
 function autoGenSLBetweenDevices(test:string):integer;
 var
  listColumnDev:TListColumnDev; //список устройст
  infoColumnDev:TInfoColumnDev; //информация одной строки
- listLineD55ev:TListLineDev;
- tempVertex,stPoint:GDBVertex;
+
+ newListDev:TListColumnDev; //список устройстd после ориентации в пространстве
+
+ listVertexGraph:TListVertexGraph;
+ vertexGraph:TVertexGraph;
+ listEdgeGraph:TListEdgeGraph;
+ edgeGraph:TEdgeGraph;
+
+ listVertexperpend:TListVertexinLine;
+ infoVertexinLine:TInfoVertexinLine;
+
+ tempVertex,mainVertexPerpend,stPoint:GDBVertex;
  pointBuildLine:TInfoBuildLine;
- i,j:integer;
+ i,j,tNum,orient,counter:integer;
+ tempLength,templen2:double;
+ isLine:boolean;
  begin
      //создаем точки помещения
      pointBuildLine.p1.x:=10;
@@ -302,11 +322,12 @@ var
         for i:=0 to 2 do  begin
            infoColumnDev:=TInfoColumnDev.Create;
            for j:=0 to 2 do begin
-              tempVertex.x:=50*i+50;
-              tempVertex.y:=50*j+50;
+              tempVertex.x:=50*j+50;
+              tempVertex.y:=50*i+50;
               tempVertex.z:=0;
               infoColumnDev.listLineDev.PushBack(tempVertex);
            end;
+           infoColumnDev.orient:=3;
            listColumnDev.PushBack(infoColumnDev);
            infoColumnDev:=nil;
         end;
@@ -323,16 +344,94 @@ var
        //***конец создания тестового примера***///
 
        //***начало самого кода*****////
+
+       listVertexGraph:=TListVertexGraph.Create;
+       listEdgeGraph:=TListEdgeGraph.Create;
+
+       listVertexperpend:=TListVertexinLine.Create;
         if commandmanager.get3dpoint('Specify insert point:',stPoint) then
           begin
-            uzvcom.testTempDrawCircle(Perpendicular(pointBuildLine.p1,pointBuildLine.p2,stPoint),10);
-            uzvcom.testTempDrawCircle(Perpendicular(pointBuildLine.p2,pointBuildLine.p3,stPoint),10);
-            uzvcom.testTempDrawCircle(Perpendicular(pointBuildLine.p3,pointBuildLine.p4,stPoint),10);
-            uzvcom.testTempDrawCircle(Perpendicular(pointBuildLine.p4,pointBuildLine.p1,stPoint),10);
-            //Perpendicular
+           //**получаем перпендикуляр к контурам помещения, от указаной точки до наиболее близко расположеной стене
+            if uzvsgeom.perpendToLine(pointBuildLine.p1,pointBuildLine.p2,stPoint,tempVertex) then
+              begin
+              infoVertexinLine.point:=tempVertex;
+              infoVertexinLine.wall:=0;
+              listVertexperpend.PushBack(infoVertexinLine);
+              end;
+            if uzvsgeom.perpendToLine(pointBuildLine.p2,pointBuildLine.p3,stPoint,tempVertex) then
+              begin
+              infoVertexinLine.point:=tempVertex;
+              infoVertexinLine.wall:=1;
+              listVertexperpend.PushBack(infoVertexinLine);
+              end;
+            if uzvsgeom.perpendToLine(pointBuildLine.p3,pointBuildLine.p4,stPoint,tempVertex) then
+              begin
+              infoVertexinLine.point:=tempVertex;
+              infoVertexinLine.wall:=2;
+              listVertexperpend.PushBack(infoVertexinLine);
+              end;
+            if uzvsgeom.perpendToLine(pointBuildLine.p4,pointBuildLine.p1,stPoint,tempVertex) then
+              begin
+              infoVertexinLine.point:=tempVertex;
+              infoVertexinLine.wall:=3;
+              listVertexperpend.PushBack(infoVertexinLine);
+              end;
+            //ищем близ лежащую стенку
+            for i:=0 to listVertexperpend.size-1 do begin
+               if i=0 then begin
+                  tempLength:= uzegeometry.Vertexlength(listVertexperpend[i].point,stPoint);
+                  tNum:=i;
+                  orient:=listVertexperpend[i].wall;
+                  mainVertexPerpend:= listVertexperpend[i].point;
+               end
+               else
+                if uzegeometry.Vertexlength(listVertexperpend[i].point,stPoint) < tempLength then
+                  begin
+                   tempLength := uzegeometry.Vertexlength(listVertexperpend[i].point,stPoint);
+                   tNum:=i;
+                   orient:=listVertexperpend[i].wall;
+                   mainVertexPerpend:= listVertexperpend[i].point;
+                  end;
+            end;
+            //**//
+            //**програмное перестроение нармального списка вершин (сверху вниз, слева направо)
+            //**в список ориетированые относительно стартовой точки
+             newListDev:=listDeviceColumnOrient(listColumnDev,orient);
+
+             counter:=0;
+             for i:=0 to newListDev.size-1 do  begin
+               for j:=0 to newListDev[i].listLineDev.size-1 do begin
+                  counter:=counter+1;
+                  uzvtestdraw.testTempDrawText(newListDev[i].listLineDev[j],inttostr(counter));
+               end;
+            end;
 
 
+
+
+
+             vertexGraph.centerPoint:=stPoint;
+             vertexGraph.deviceEnt:=nil;
+             listVertexGraph.PushBack(vertexGraph);
+
+             vertexGraph.centerPoint:=mainVertexPerpend;
+             vertexGraph.deviceEnt:=nil;
+             listVertexGraph.PushBack(vertexGraph);
+            // vertexGraph:=nil;
+
+             edgeGraph.edgeLength:=tempLength;
+             edgeGraph.VPoint1:=stPoint;
+             edgeGraph.VPoint2:=listVertexperpend[tNum].point;
+             edgeGraph.VIndex1:=listVertexGraph.size-2;
+             edgeGraph.VIndex2:=listVertexGraph.size-1;
+             listEdgeGraph.PushBack(edgeGraph);
+            // edgeGraph:=nil;
+
+
+
+        //    uzvcom.testTempDrawCircle(mainVertexPerpend,10);
           end;
+
 
 
         result:=5;

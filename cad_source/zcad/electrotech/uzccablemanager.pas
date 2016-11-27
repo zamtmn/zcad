@@ -32,6 +32,7 @@ type
     PTCableManager=^TCableManager;
     TCableManager={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorObjects<TCableDesctiptor>)(*OpenArrayOfPObj*)
                        constructor init;
+                       destructor done;virtual;
                        procedure build;virtual;
                        function FindOrCreate(sname:gdbstring):PTCableDesctiptor;virtual;
                        function Find(sname:gdbstring):PTCableDesctiptor;virtual;
@@ -247,6 +248,22 @@ begin
           pcd^.name:=sname;
      end;
      result:=pcd;
+end;
+destructor TCableManager.done;
+var
+    pcd:PTCableDesctiptor;
+    ir:itrec;
+    sn:gdbstring;
+begin
+     pcd:=beginiterate(ir);
+     if pcd<>nil then
+     repeat
+           pcd^.Segments.Clear;
+           pcd^.Devices.Clear;
+
+           pcd:=iterate(ir);
+     until pcd=nil;
+     inherited;
 end;
 function TCableManager.Find;
 var

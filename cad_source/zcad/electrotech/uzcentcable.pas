@@ -65,6 +65,7 @@ GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  function GetObjType:TObjID;virtual;
            end;
 {Export-}
+function AllocCable:PGDBObjCable;
 var
     GDBObjCableDXFFeatures:TDXFEntIODataManager;
 implementation

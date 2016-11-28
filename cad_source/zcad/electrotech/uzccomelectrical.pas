@@ -1589,7 +1589,9 @@ begin
                                tcable.VertexArrayInOCS.PushBackData(pv^)
                            else
                                begin
-                                    tcable := GDBPointer(drawings.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,drawings.GetCurrentROOT));
+                                    tcable := AllocCable;
+                                    tcable.init(drawings.GetCurrentROOT,nil,0);
+                                    //tcable := GDBPointer(drawings.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,drawings.GetCurrentROOT));
                                     ptcablevarext:=tcable^.GetExtension(typeof(TVariablesExtender));
                                     pcablevarext:=cable^.GetExtension(typeof(TVariablesExtender));
                                     ptcablevarext^.entityunit.copyfrom(@pcablevarext^.entityunit);
@@ -2726,7 +2728,9 @@ var
     pvd{,pvd2}:pvardesk;
     pentvarext:PTVariablesExtender;
 begin
-  result := GDBPointer(drawings.GetCurrentROOT.ObjArray.CreateInitObj(GDBCableID,drawings.GetCurrentROOT));
+  result := AllocCable;
+  result.init(drawings.GetCurrentROOT,nil,0);
+  //result := GDBPointer(drawings.GetCurrentROOT.ObjArray.CreateInitObj(GDBCableID,drawings.GetCurrentROOT));
   pentvarext:=result^.GetExtension(typeof(TVariablesExtender));
   pentvarext^.entityunit.copyfrom(units.findunit(SupportPath,InterfaceTranslate,'cable'));
   pvd:=pentvarext^.entityunit.FindVariable('NMO_Suffix');
@@ -2744,7 +2748,7 @@ begin
 
   pvd:=pentvarext^.entityunit.FindVariable('CABLE_AutoGen');
   pgdbboolean(pvd^.data.Instance)^:=true;
-
+  zcSetEntPropFromCurrentDrawingProp(result);
   drawings.standardization(result,GDBCableID);
 end;
 
@@ -2759,13 +2763,14 @@ var
     cable:PGDBObjCable;
     pvd,pvd2:pvardesk;
     netarray,riserarray,linesarray:TZctnrVectorPGDBaseObjects;
+    processednets:TZctnrVectorPGDBaseObjects;
+    segments:TZctnrVectorPGDBaseObjects;
+
     ir_net,ir_net2,ir_riser,ir_riser2:itrec;
     nline,new_line:pgdbobjline;
     np:GDBVertex;
     //net2processed:boolean;
-    processednets:TZctnrVectorPGDBaseObjects;
     vd,pvn,pvn2: pvardesk;
-    segments:TZctnrVectorPGDBaseObjects;
     supernetsarray:GDBObjOpenArrayOfPV;
     DC:TDrawContext;
     priservarext,priser2varext,psupernetvarext,pnetvarext,plinevarext:PTVariablesExtender;
@@ -2924,13 +2929,13 @@ begin
                  pvd:=cable.ou.FindVariable('CABLE_AutoGen');
                  pgdbboolean(pvd^.data.Instance)^:=true;}
 
-                 drawings.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(cable)}CorrectNodeBoundingBox(cable^);
+                 //drawings.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(cable)}CorrectNodeBoundingBox(cable^);
 
                  rootbytrace(startdev.P_insert_in_WCS,enddev.P_insert_in_WCS,net,Cable,true);
-
+                 zcAddEntToCurrentDrawingWithUndo(Cable);
                  Cable^.Formatentity(drawings.GetCurrentDWG^,dc);
                  Cable^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-                 drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(Cable^);
+                 //drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(Cable^);
                  end;
 
                  end;
@@ -3076,23 +3081,27 @@ begin
                           pvd:=cable.ou.FindVariable('CABLE_AutoGen');
                           pgdbboolean(pvd^.data.Instance)^:=true;}
 
-                          drawings.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(cable)}CorrectNodeBoundingBox(cable^);
+                          //drawings.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(cable)}CorrectNodeBoundingBox(cable^);
 
                           //log.LogOut('Примитивов в графе: '+inttostr(supernet^.objarray.count));
 
                           segments:=rootbymultitrace(startdev.P_insert_in_WCS,enddev.P_insert_in_WCS,supernet,Cable,true);
-
+                          zcAddEntToCurrentDrawingWithUndo(Cable);
+                          zcSetEntPropFromCurrentDrawingProp(Cable);
+                          drawings.standardization(Cable,GDBCableID);
                           Cable^.Formatentity(drawings.GetCurrentDWG^,dc);
                           Cable^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-                          drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(Cable^);
+                          //drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(Cable^);
 
                           cable:=segments.beginiterate(ir_net);
                           if (cable<>nil) then
                           repeat
-
+                                zcAddEntToCurrentDrawingWithUndo(Cable);
+                                zcSetEntPropFromCurrentDrawingProp(Cable);
+                                drawings.standardization(Cable,GDBCableID);
                                 Cable^.Formatentity(drawings.GetCurrentDWG^,dc);
                                 Cable^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-                                drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(Cable^);
+                                //drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(Cable^);
 
                           cable:=segments.iterate(ir_net);
                           until cable=nil;

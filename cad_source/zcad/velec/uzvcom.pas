@@ -454,12 +454,13 @@ var
     pcircle:PGDBObjCircle;
    // pe:T3PointCircleModePentity;
    // p1,p2:gdbvertex;
+   rc:TDrawContext;
 begin
     begin
       //старый способ
 
       pcircle := AllocEnt(GDBCircleID);                                             //выделяем память
-      pcircle^.init(@drawings.GetCurrentDWG^.ConstructObjRoot,nil,0,p1,rr);                                             //инициализируем и сразу создаем
+      pcircle^.init(nil,nil,0,p1,rr);                                             //инициализируем и сразу создаем
 
 
       //конец старого способа
@@ -469,10 +470,13 @@ begin
       //pline:=pointer(ENTF_CreateLine(nil,nil,[p1.x,p1.y,p1.z,p2.x,p2.y,p2.z])); //создаем примитив с зпданой геометрией, не указывая владельца и список во владельце
       //конец нового способа
 
+      zcAddEntToCurrentDrawingConstructRoot(pcircle);                                    //добавляем в чертеж
       zcSetEntPropFromCurrentDrawingProp(pcircle);                                        //присваиваем текущие слой, вес и т.п
       pcircle^.vp.LineWeight:=LnWt100;
       pcircle^.vp.Color:=6;
-      zcAddEntToCurrentDrawingConstructRoot(pcircle);                                    //добавляем в чертеж
+
+      rc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+      pcircle^.FormatEntity(drawings.GetCurrentDWG^,rc);
     end;
     result:=cmd_ok;
 end;

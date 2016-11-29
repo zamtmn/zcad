@@ -40,6 +40,7 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
   procedure zcAddEntToCurrentDrawingConstructRoot(const PEnt: PGDBObjEntity);
 
   procedure zcClearCurrentDrawingConstructRoot;
+  procedure zcFreeEntsInCurrentDrawingConstructRoot;
 
   {**Получение "описателя" выбраных примитивов в текущем "корне" текущего чертежа
     @return(Указатель на первый выбранный примитив и общее количество выбраных примитивов)}
@@ -158,6 +159,10 @@ begin
   zeAddEntToRoot(PEnt,drawings.GetCurrentDWG^.ConstructObjRoot);
 end;
 procedure zcClearCurrentDrawingConstructRoot;
+begin
+  drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
+end;
+procedure zcFreeEntsInCurrentDrawingConstructRoot;
 begin
   drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
 end;

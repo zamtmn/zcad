@@ -71,7 +71,7 @@ begin
      result:=GDBSuperLineID;
 end;
 function GDBObjSuperLine.Clone;
-var tvo: PGDBObjLine;
+var tvo: PGDBObjSuperLine;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'GDBObjSuperLine.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjSuperLine));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, CoordInOCS.lBegin, CoordInOCS.lEnd);

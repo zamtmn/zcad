@@ -105,7 +105,8 @@ begin
        uzvcom.testTempDrawLine(graphCable.listEdge[i].VPoint1,graphCable.listEdge[i].VPoint2);
     end;
   zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
-  Commandmanager.executecommandend;
+  zcRedrawCurrentDrawing;
+ // Commandmanager.executecommandend;
 end;
 
 
@@ -135,7 +136,7 @@ begin
         end;
   end;
   zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
-  Commandmanager.executecommandend;
+ // Commandmanager.executecommandend;
 end;
 
 procedure TExample_com.cablingGroupHeadGraph(pdata:GDBPlatformint);
@@ -164,7 +165,7 @@ begin
         end;
   end;
     zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
-  Commandmanager.executecommandend;
+ // Commandmanager.executecommandend;
 end;
 
 

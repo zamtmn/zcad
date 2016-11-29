@@ -164,6 +164,7 @@ begin
 end;
 procedure zcFreeEntsInCurrentDrawingConstructRoot;
 begin
+  drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
   drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
 end;
 procedure zcEndUndoCommand;

@@ -1673,7 +1673,8 @@ TGeomEntity3D={$IFNDEF DELPHI}packed{$ENDIF} object(TGeomEntity)
 //Generate on E:/zcad/cad_source/zengine/geomlib/uzgeomline3d.pas
 TGeomLine3D={$IFNDEF DELPHI}packed{$ENDIF} object(TGeomEntity3D)
                                            LineData:GDBLineProp;
-                                           constructor init(const p1,p2:GDBvertex);
+                                           StartParam:GDBDouble;
+                                           constructor init(const p1,p2:GDBvertex;const sp:GDBDouble);
                                            function GetBB:TBoundingBox;virtual;abstract;
                                            end;
 //Generate on E:/zcad/cad_source/zengine/geomlib/uzegeomentitiestree.pas
@@ -1959,6 +1960,7 @@ GDBObj2dprop=packed record
 PGDBObjWithLocalCS=^GDBObjWithLocalCS;
 GDBObjWithLocalCS={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                Local:GDBObj2dprop;(*'Object orientation'*)(*saved_to_shd*)
+               //**получить на чтение координаты в мировой системе координат
                P_insert_in_WCS:GDBvertex;(*'Insertion point WCS'*)(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
                ProjP_insert:GDBvertex;(*'Insertion point DCS'*)(*oi_readonly*)(*hidden_in_objinsp*)
                PProjOutBound:PGDBOOutbound2DIArray;(*'Bounding box DCS'*)(*oi_readonly*)(*hidden_in_objinsp*)
@@ -2104,7 +2106,7 @@ GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  destructor done;virtual;abstract;
                  function GetObjTypeName:GDBString;virtual;abstract;
                  procedure createfield;virtual;abstract;
-                 function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;abstract;
+                 function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual; //<**Пересечение с линией описанной 2-я точкамиabstract;
                  procedure ReCalcFromObjMatrix;virtual;abstract;
                  function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;abstract;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
@@ -4018,6 +4020,7 @@ TBasicFinter=packed record
     PTCableManager=^TCableManager;
     TCableManager={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorObjects<TCableDesctiptor>)(*OpenArrayOfPObj*)
                        constructor init;
+                       destructor done;virtual;abstract;
                        procedure build;virtual;abstract;
                        function FindOrCreate(sname:gdbstring):PTCableDesctiptor;virtual;abstract;
                        function Find(sname:gdbstring):PTCableDesctiptor;virtual;abstract;

@@ -244,6 +244,7 @@ PTDeviceInfoSubGraph=^TDeviceInfoSubGraph;
       THeadDeviceInfo=class
                          num:GDBInteger;
                          name:String;
+                         shortName:String;
                          listGroup:TListHeadGroup; //список подчиненных устройств
                          public
                          constructor Create;
@@ -897,6 +898,34 @@ begin
              pgdbstring(pvd^.data.Instance)^:=listHeadDevice[numHead].listGroup[numGroup].name ;
           end;
 
+        pvd:=FindVariableInEnt(polyObj,'GC_HDShortName');
+        if pvd<>nil then
+           begin
+              pgdbstring(pvd^.data.Instance)^:=listHeadDevice[numHead].shortName;
+           end;
+
+
+       pvd:=FindVariableInEnt(polyObj,'GC_HeadDevice');
+       if pvd<>nil then
+          begin
+             pgdbstring(pvd^.data.Instance)^:=listHeadDevice[numHead].name ;
+          end;
+
+
+
+       pvd:=FindVariableInEnt(polyObj,'CABLE_AutoGen');
+              if pvd<>nil then
+                 begin
+                    pgdbboolean(pvd^.data.Instance)^:=true;
+                 end;
+
+       pvd:=FindVariableInEnt(polyObj,'GC_HDGroup');
+       if pvd<>nil then
+          begin
+             pgdbstring(pvd^.data.Instance)^:=listHeadDevice[numHead].listGroup[numGroup].name ;
+          end;
+
+
       pvd:=FindVariableInEnt(polyObj,'NMO_BaseName');
        if pvd<>nil then
           begin
@@ -1056,7 +1085,7 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
       pobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
       ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
       numHead,numHeadGroup,numHeadDev : integer;
-      headDevName:string;
+      shortNameHead, headDevName:string;
       counter,counter2,counterColor:integer; //счетчики
     i,j,k,l,m: Integer;
     T: Float;
@@ -1099,14 +1128,23 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
              //**Проверяем существует ли хоть одно главное устройство,
              //если нет то создаем, если есть то или добавляем к существующему или создаем еще одно устройство
               numHead := -1;
+
               for j:=0 to listHeadDevice.Size-1 do    //проверяем существует ли уже такое же головное устройство
                  if listHeadDevice[j].name = headDevName then
                        numHead := j ;
               if numHead < 0 then        // если в списки устройства есть, но нашего нет то добавляем его
                  begin
+                        shortNameHead:='nil' ;
+                        pvd:=FindVariableInEnt(ourGraph.listVertex[numHeadDev].deviceEnt,'NMO_Suffix');
+                        if pvd<>nil then
+                           begin
+                              shortNameHead:=pgdbstring(pvd^.data.Instance)^;
+                           end;
+
                        headDeviceInfo:=THeadDeviceInfo.Create;
                        headDeviceInfo.name:=headDevName;
                        headDeviceInfo.num:=numHeadDev;
+                       headDeviceInfo.shortName:=shortNameHead;
                        listHeadDevice.PushBack(headDeviceInfo);
                        numHead:=listHeadDevice.Size-1;
                        headDeviceInfo:=nil;    //насколько я понимаю, после его добавления listHeadDevice

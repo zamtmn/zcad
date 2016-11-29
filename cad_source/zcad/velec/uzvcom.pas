@@ -459,7 +459,7 @@ begin
       //старый способ
 
       pcircle := AllocEnt(GDBCircleID);                                             //выделяем память
-      pcircle^.init(nil,nil,0,p1,rr);                                             //инициализируем и сразу создаем
+      pcircle^.init(@drawings.GetCurrentDWG^.ConstructObjRoot,nil,0,p1,rr);                                             //инициализируем и сразу создаем
 
 
       //конец старого способа
@@ -472,7 +472,7 @@ begin
       zcSetEntPropFromCurrentDrawingProp(pcircle);                                        //присваиваем текущие слой, вес и т.п
       pcircle^.vp.LineWeight:=LnWt100;
       pcircle^.vp.Color:=6;
-      zcAddEntToCurrentDrawingWithUndo(pcircle);                                    //добавляем в чертеж
+      zcAddEntToCurrentDrawingConstructRoot(pcircle);                                    //добавляем в чертеж
     end;
     result:=cmd_ok;
 end;
@@ -1198,6 +1198,7 @@ begin
     repeat
       if pobj^.selected then
         begin
+          pobj^.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.CurrentDWG^.deselector);
          // GDBSuperLineID
              if pobj^.GetObjType=GDBSuperLineID then
                begin

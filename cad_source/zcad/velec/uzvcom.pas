@@ -224,6 +224,12 @@ type
       function testTempDrawCircle(p1:GDBVertex;rr:GDBDouble):TCommandResult;
       function testTempDrawPolyLine(listVertex:GListVertexPoint;color:Integer):TCommandResult;
       function testTempDrawText(p1:GDBVertex;mText:GDBString):TCommandResult;
+      function convertLineInRectangleWithAccuracy(point1:GDBVertex;point2:GDBVertex;accuracy:double):TRectangleLine;
+      procedure listSortVertexAtStPtLine(var listNumVertex:TListTempNumVertex;listDevice:TListDeviceLine;stVertLine:GDBVertex);
+      function getAreaLine(point1:GDBVertex;point2:GDBVertex;accuracy:double):TBoundingBox;
+      function getAreaVertex(vertexPoint:GDBVertex;accuracy:double):TBoundingBox;
+      function vertexPointInAreaRectangle(rectLine:TRectangleLine;vertexPt:GDBVertex):boolean;
+
 implementation
 
 constructor TBreakInfo.Create;

@@ -132,6 +132,7 @@ uses
 //      end;
 
 function perpendToLine(p1,p2:GDBVertex;pp:GDBVertex;out pointToLine:GDBVertex):boolean;
+function getPointRelativeTwoLines(pline11,pline12,pline21,pline22:GDBVertex;relatLine1,relatLine2:double):GDBVertex;
 
 implementation
 
@@ -157,6 +158,50 @@ implementation
      pointToLine.z:=0;
   end;
 
+  //** смещение по 1-й точки по напрявление ко второй точки, по осям переданым двуя другими переменными
+  function offsetOfFirstPointInSecondPointToLine(point1,point2:GDBVertex;xdiff,ydiff:double):GDBVertex;
+  begin
+   if point1.x <= point2.x then
+         result.x := point1.x + xdiff
+       else
+         result.x := point1.x - xdiff;
+
+   if point1.y <= point2.y then
+       result.y := point1.y + ydiff
+   else
+       result.y := point1.y - ydiff;
+
+       // не стал вводит 3-ю ось, может позже.
+       result.z:=0;
+  end;
+
+//**Поиск точки смещеной от угла образовоного двумя линиями(2-линии заданы точками) в сторону указанную двумя параметрами, каждый осуществляет смещение по своей линии**//
+function getPointRelativeTwoLines(pline11,pline12,pline21,pline22:GDBVertex;relatLine1,relatLine2:double):GDBVertex;
+var
+   xline1,yline1,xyline1,xylinenew1,xlinenew1,ylinenew1,xline2,yline2,xyline2,xylinenew2,xlinenew2,ylinenew2:double;
+   pt1new,pt2new:GDBVertex;
+
+begin
+     //смещение по первой линии
+     xline1:=abs(pline11.x - pline12.x);     //катет х
+     yline1:=abs(pline11.y - pline12.y);     //катет у
+     xyline1:=sqrt(sqr(xline1) + sqr(yline1)); //нашли гипотенузу
+     xylinenew1:=relatLine1;                 //нужное нам смещение по линии
+     xlinenew1:=(xline1*xylinenew1)/xyline1;    //новая длина х
+     ylinenew1:=(yline1*xylinenew1)/xyline1;    //новая длина у
+     pt1new:=offsetOfFirstPointInSecondPointToLine(pline11,pline12,xlinenew1,ylinenew1);
+
+     //смещение по второй линии
+     xline2:=abs(pline21.x - pline22.x);     //катет х
+     yline2:=abs(pline21.y - pline22.y);     //катет у
+     xyline2:=sqrt(sqr(xline2) + sqr(yline2)); //нашли гипотенузу
+     xylinenew2:=relatLine2;                 //нужное нам смещение по линии
+     xlinenew2:=(xline2*xylinenew2)/xyline2;    //новая длина х
+     ylinenew2:=(yline2*xylinenew2)/xyline2;    //новая длина у
+     pt2new:=offsetOfFirstPointInSecondPointToLine(pline21,pline22,xlinenew2,ylinenew2);
+
+     result:=offsetOfFirstPointInSecondPointToLine(pt1new,pt2new,xlinenew2,ylinenew2);
+end;
 //function TestModul_com(operands:TCommandOperands):TCommandResult;
 //var
 // test:string;

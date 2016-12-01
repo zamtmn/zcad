@@ -1279,7 +1279,12 @@ begin
                              if result is TWinControl then
                                                           TWinControl(result).DisableAlign;
        if result is TCustomForm then
+       begin
+         if PFID^.DesignTimeForm then
+                                    TCustomForm(result).Create(Application)
+                                 else
                                     TCustomForm(result).CreateNew(Application);
+       end;
        //tobject(PFID.PInstanceVariable^):=result;
        result.Caption:=PFID.FormCaption;
        result.Name:=aname;

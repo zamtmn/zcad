@@ -34,13 +34,14 @@ TFormInfoData=packed record
                           SetupProc:TZCADFormSetupProc;
                           CreateProc:TZCADFormCreateProc;
                           PInstanceVariable:Pointer;
+                          DesignTimeForm:boolean;
                     end;
 TFormName2FormInfoDataMap=GKey2DataMap<GDBString,TFormInfoData,LessGDBString>;
 TZCADGUIManager=class
                      FormsInfo:TFormName2FormInfoDataMap;
                      constructor Create;
                      destructor Destroy;override;
-                     procedure RegisterZCADFormInfo(FormName,FormCaption:GDBString;const FormClass:TClass;const bounds:TRect;SetupProc:TZCADFormSetupProc;CreateProc:TZCADFormCreateProc;PInstanceVariable:pointer);
+                     procedure RegisterZCADFormInfo(FormName,FormCaption:GDBString;const FormClass:TClass;const bounds:TRect;SetupProc:TZCADFormSetupProc;CreateProc:TZCADFormCreateProc;PInstanceVariable:pointer;DesignTimeForm:boolean=false);
                      function GetZCADFormInfo(FormName:GDBString; out PFormInfoData:PTFormInfoData):boolean;
                      function CreateZCADFormInstance(var FormInfo:TFormInfoData):tobject;
                 end;
@@ -57,7 +58,7 @@ begin
      result:=FormsInfo.MyGetMutableValue(FormName,PFormInfoData);
 end;
 
-procedure TZCADGUIManager.RegisterZCADFormInfo(FormName,FormCaption:GDBString;const FormClass:TClass;const bounds:TRect;SetupProc:TZCADFormSetupProc;CreateProc:TZCADFormCreateProc;PInstanceVariable:pointer);
+procedure TZCADGUIManager.RegisterZCADFormInfo(FormName,FormCaption:GDBString;const FormClass:TClass;const bounds:TRect;SetupProc:TZCADFormSetupProc;CreateProc:TZCADFormCreateProc;PInstanceVariable:pointer;DesignTimeForm:boolean=false);
 var
   FID:TFormInfoData;
 begin
@@ -68,6 +69,7 @@ begin
      fid.SetupProc:=SetupProc;
      fid.CreateProc:=CreateProc;
      fid.PInstanceVariable:=PInstanceVariable;
+     fid.DesignTimeForm:=DesignTimeForm;
      FormsInfo.RegisterKey(FormName,fid);
 end;
 

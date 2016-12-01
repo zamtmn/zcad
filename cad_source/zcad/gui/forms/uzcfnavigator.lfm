@@ -1,0 +1,45 @@
+object Navigator: TNavigator
+  Left = 121
+  Height = 885
+  Top = 167
+  Width = 397
+  Caption = 'Navigator'
+  ClientHeight = 885
+  ClientWidth = 397
+  DesignTimeDPI = 113
+  LCLVersion = '1.7'
+  object ToolBar1: TToolBar
+    Left = 0
+    Height = 24
+    Top = 0
+    Width = 397
+    AutoSize = True
+    Caption = 'ToolBar1'
+    TabOrder = 0
+    object ToolButton1: TToolButton
+      Left = 1
+      Top = 2
+      Caption = 'ToolButton1'
+    end
+    object ToolButton2: TToolButton
+      Left = 24
+      Top = 2
+      Caption = 'ToolButton2'
+    end
+    object ToolButton3: TToolButton
+      Left = 47
+      Top = 2
+      Caption = 'ToolButton3'
+    end
+  end
+  object TreeView1: TTreeView
+    Left = 0
+    Height = 861
+    Top = 24
+    Width = 397
+    Align = alClient
+    DefaultItemHeight = 22
+    ExpandSignSize = 16
+    TabOrder = 1
+  end
+end

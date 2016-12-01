@@ -1,6 +1,7 @@
 unit DEVICE_EL_MOTOR;
 interface
 uses system,devices;
+usescopy vebconnectmodul;
 usescopy blocktype;
 var
    NMO_Template:GDBString;(*'Шаблон Обозначения'*) 

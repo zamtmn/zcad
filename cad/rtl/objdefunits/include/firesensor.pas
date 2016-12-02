@@ -1,6 +1,7 @@
 unit firesensor;
 interface
 uses system,devices;
+usescopy slcabagenmodul;
 usescopy objname;
 usescopy objmaterial;
 usescopy objgroup;

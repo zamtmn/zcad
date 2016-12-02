@@ -1,5 +1,6 @@
 unit DEVICE_PS_DAT_TERMO;
 interface
+usescopy vebconnectmodul;
 usescopy firesensor;
 implementation
 begin

@@ -238,11 +238,23 @@ var
   i:GDBInteger;
   lastbreak:GDBBoolean;
   addr:pansichar;
-  myresult:shortString;
+  myresult:ansistring;
+  strlen:integer;
   p:PT;
+procedure inci;
+begin
+ inc(i);
+ if i>strlen then
+                 begin
+                   strlen:=strlen+255;
+                   setlength(myresult,strlen);
+                 end;
+end;
+
 begin
   //s := '';
-  setlength(myresult,255);
+  strlen:=255;
+  setlength(myresult,strlen);
   lastbreak:=false;
   i:=0;
   p:=@parray[0];
@@ -265,7 +277,7 @@ begin
                                                       if not lastbreak then
                                                                            begin
                                                                                 //s:=s+addr[0];
-                                                                                inc(i);
+                                                                                inci;
                                                                                 myresult[i]:=addr[0];
                                                                            end;
                                                       lastbreak:=true;
@@ -273,7 +285,7 @@ begin
                                              else
                                                  begin
                                                       //s:=s+addr[0];
-                                                      inc(i);
+                                                      inci;
                                                       myresult[i]:=addr[0];
                                                       lastbreak:=false;
                                                  end;

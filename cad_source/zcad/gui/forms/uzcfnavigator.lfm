@@ -7,6 +7,7 @@ object Navigator: TNavigator
   ClientHeight = 885
   ClientWidth = 484
   DesignTimeDPI = 113
+  OnCreate = _onCreate
   LCLVersion = '1.7'
   object MainToolBar: TToolBar
     Left = 0
@@ -24,7 +25,7 @@ object Navigator: TNavigator
     object RefreshToolButton: TToolButton
       Left = 24
       Top = 2
-      Caption = 'RefreshToolButton'
+      Action = Refresh
     end
     object ToolButton3: TToolButton
       Left = 47
@@ -43,7 +44,6 @@ object Navigator: TNavigator
     Header.AutoSizeIndex = 0
     Header.Columns = <>
     Header.MainColumn = -1
-    RootNodeCount = 2
     TabOrder = 1
   end
   object ActionList1: TActionList
@@ -51,6 +51,7 @@ object Navigator: TNavigator
     top = 76
     object Refresh: TAction
       Caption = 'Refresh'
+      OnExecute = RefreshTree
     end
   end
 end

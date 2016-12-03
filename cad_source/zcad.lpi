@@ -175,51 +175,54 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="14">
+    <RequiredPackages Count="15">
       <Item1>
-        <PackageName Value="zmath"/>
+        <PackageName Value="virtualtreeview_package"/>
       </Item1>
       <Item2>
-        <PackageName Value="zobjectinspector"/>
+        <PackageName Value="zmath"/>
       </Item2>
       <Item3>
-        <PackageName Value="zundostack"/>
+        <PackageName Value="zobjectinspector"/>
       </Item3>
       <Item4>
-        <PackageName Value="zscript"/>
+        <PackageName Value="zundostack"/>
       </Item4>
       <Item5>
-        <PackageName Value="zscriptbase"/>
+        <PackageName Value="zscript"/>
       </Item5>
       <Item6>
-        <PackageName Value="zcontainers"/>
+        <PackageName Value="zscriptbase"/>
       </Item6>
       <Item7>
-        <PackageName Value="zebase"/>
+        <PackageName Value="zcontainers"/>
       </Item7>
       <Item8>
-        <PackageName Value="zcontrols"/>
+        <PackageName Value="zebase"/>
       </Item8>
       <Item9>
-        <PackageName Value="FCL"/>
+        <PackageName Value="zcontrols"/>
       </Item9>
       <Item10>
-        <PackageName Value="fpvectorialpkg"/>
+        <PackageName Value="FCL"/>
       </Item10>
       <Item11>
-        <PackageName Value="Printer4Lazarus"/>
+        <PackageName Value="fpvectorialpkg"/>
       </Item11>
       <Item12>
-        <PackageName Value="AnchorDocking"/>
+        <PackageName Value="Printer4Lazarus"/>
       </Item12>
       <Item13>
-        <PackageName Value="LazOpenGLContext"/>
+        <PackageName Value="AnchorDocking"/>
       </Item13>
       <Item14>
-        <PackageName Value="LCL"/>
+        <PackageName Value="LazOpenGLContext"/>
       </Item14>
+      <Item15>
+        <PackageName Value="LCL"/>
+      </Item15>
     </RequiredPackages>
-    <Units Count="183">
+    <Units Count="184">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -991,6 +994,13 @@
         <Filename Value="zengine/core/entities/uzeenrepresentation.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit182>
+      <Unit183>
+        <Filename Value="zcad/gui/forms/uzcfnavigator.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Navigator"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit183>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

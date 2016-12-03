@@ -1,29 +1,30 @@
 object Navigator: TNavigator
-  Left = 121
+  Left = 64
   Height = 885
-  Top = 167
+  Top = 169
   Width = 484
   Caption = 'Navigator'
   ClientHeight = 885
   ClientWidth = 484
+  DesignTimeDPI = 113
   LCLVersion = '1.7'
-  object ToolBar1: TToolBar
+  object MainToolBar: TToolBar
     Left = 0
     Height = 24
     Top = 0
     Width = 484
     AutoSize = True
-    Caption = 'ToolBar1'
+    Caption = 'MainToolBar'
     TabOrder = 0
     object ToolButton1: TToolButton
       Left = 1
       Top = 2
       Caption = 'ToolButton1'
     end
-    object ToolButton2: TToolButton
+    object RefreshToolButton: TToolButton
       Left = 24
       Top = 2
-      Caption = 'ToolButton2'
+      Caption = 'RefreshToolButton'
     end
     object ToolButton3: TToolButton
       Left = 47
@@ -31,13 +32,25 @@ object Navigator: TNavigator
       Caption = 'ToolButton3'
     end
   end
-  object TreeView1: TTreeView
+  object NavTree: TVirtualStringTree
     Left = 0
     Height = 861
     Top = 24
     Width = 484
     Align = alClient
-    ExpandSignSize = 16
+    DefaultNodeHeight = 19
+    DefaultText = 'Node'
+    Header.AutoSizeIndex = 0
+    Header.Columns = <>
+    Header.MainColumn = -1
+    RootNodeCount = 2
     TabOrder = 1
+  end
+  object ActionList1: TActionList
+    left = 365
+    top = 76
+    object Refresh: TAction
+      Caption = 'Refresh'
+    end
   end
 end

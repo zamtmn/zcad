@@ -6,18 +6,20 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  StdCtrls;
+  StdCtrls, ActnList, VirtualTrees;
 
 type
 
   { TNavigator }
 
   TNavigator = class(TForm)
-    ToolBar1: TToolBar;
+    MainToolBar: TToolBar;
     ToolButton1: TToolButton;
-    ToolButton2: TToolButton;
+    RefreshToolButton: TToolButton;
     ToolButton3: TToolButton;
-    TreeView1: TTreeView;
+    NavTree: TVirtualStringTree;
+    ActionList1:TActionList;
+    Refresh:TAction;
   private
 
   public

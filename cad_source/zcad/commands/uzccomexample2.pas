@@ -136,6 +136,7 @@ begin
         end;
   end;
   zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
+    zcRedrawCurrentDrawing;
  // Commandmanager.executecommandend;
 end;
 

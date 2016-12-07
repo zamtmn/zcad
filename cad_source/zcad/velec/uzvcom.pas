@@ -108,6 +108,7 @@ uses
   uzcvariablesutils, // для работы с ртти
 
   uzventsuperline,   //для работы  с суперлинией
+  //uzvtestdraw,       //быстрая рисовалка разных примитивов
   //для работы графа
   ExtType,
   Pointerv,
@@ -185,6 +186,7 @@ type
       TGraphBuilder=class(TObject)
                          listEdge:TListEdgeGraph;   //список реальных и виртуальных линий
                          listVertex:TListDeviceLine;
+                         nameSuperLine:string;
                          public
                          constructor Create;
                          destructor Destroy;virtual;
@@ -406,7 +408,7 @@ begin
       //конец нового способа
 
       zcSetEntPropFromCurrentDrawingProp(pline);//присваиваем текущие слой, вес и т.п
-      pline^.vp.LineWeight:=LnWt100;
+      pline^.vp.LineWeight:=LnWt200;
       pline^.vp.Color:=6;
       zcAddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
     end;
@@ -425,7 +427,7 @@ begin
      zcSetEntPropFromCurrentDrawingProp(polyObj);
      polyObj^.Closed:=false;
      polyObj^.vp.Color:=color;
-     polyObj^.vp.LineWeight:=LnWt050;
+     polyObj^.vp.LineWeight:=LnWt200;
 
      for i:=0 to listVertex.Size-1 do
      begin
@@ -472,7 +474,7 @@ begin
 
       zcAddEntToCurrentDrawingConstructRoot(pcircle);                                    //добавляем в чертеж
       zcSetEntPropFromCurrentDrawingProp(pcircle);                                        //присваиваем текущие слой, вес и т.п
-      pcircle^.vp.LineWeight:=LnWt100;
+      pcircle^.vp.LineWeight:=LnWt200;
       pcircle^.vp.Color:=6;
 
       rc:=drawings.GetCurrentDWG^.CreateDrawingRC;
@@ -642,12 +644,12 @@ begin
                       areaOfTriangle(rectLine.Pt3,rectLine.Pt4,vertexPt)+areaOfTriangle(rectLine.Pt4,rectLine.Pt1,vertexPt);
      //сравниваем площади получаные прямоугольником с суммой 4-х площадей образованных треугольниками
 
-    if  IsDoubleNotEqual(areaRect,sumAreaTriangle,sqreps) = false then
-    begin
-      //HistoryOutStr('прямоугл = ' + floattostr(areaRect));
-      //HistoryOutStr('треугол = ' + floattostr(sumAreaTriangle));
+    if  IsDoubleNotEqual(areaRect,sumAreaTriangle,sqreps*100000) = false then
       result:=true;
-    end;
+
+    HistoryOutStr('прямоугл = ' + floattostr(areaRect));
+    HistoryOutStr('треугол = ' + floattostr(sumAreaTriangle));
+    HistoryOutStr('погрешность = ' + floattostr(sqreps*100000));
 end;
 
 
@@ -852,6 +854,7 @@ begin
                end;
          end;
        end;
+
        listSortVertexAtStPtLine(tempListNumVertex,graph.listVertex,listCable[i].stPoint);
        if (inAddEdge) and (tempListNumVertex.Size > 1) then
        begin
@@ -859,8 +862,10 @@ begin
          begin
              infoEdge.VIndex1:=tempListNumVertex[k-1].num;
              infoEdge.VPoint1:=graph.listVertex[tempListNumVertex[k-1].num].centerPoint;
+             infoEdge.VPoint1.z:=0;
              infoEdge.VIndex2:=tempListNumVertex[k].num;
              infoEdge.VPoint2:=graph.listVertex[tempListNumVertex[k].num].centerPoint;
+             infoEdge.VPoint2.z:=0;
              infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
              graph.listEdge.PushBack(infoEdge);
          end;
@@ -941,6 +946,7 @@ begin
                if dublicateVertex({listDevice}graph.listVertex,vertexLine,accuracy) = false then begin
                   infoDevice.deviceEnt:=nil;
                   infoDevice.centerPoint:=vertexLine;
+                  infoDevice.centerPoint.z:=0;
                   infoDevice.break:=false;
                   infoDevice.breakName:='not_break';
                   graph.listVertex{listDevice}.PushBack(infoDevice);
@@ -948,7 +954,9 @@ begin
                   infoEdge.VIndex1:=graph.listVertex{listDevice}.Size-1;
                   infoEdge.VIndex2:=numVertDevice;
                   infoEdge.VPoint1:=vertexLine;
+                  infoEdge.VPoint1.z:=0;
                   infoEdge.VPoint2:=graph.listVertex[numVertDevice].centerPoint;
+                  infoEdge.VPoint2.z:=0;
                   infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
                   graph.listEdge.PushBack(infoEdge);
                 end;
@@ -1122,7 +1130,9 @@ begin
        infoEdge.VIndex1:=listBreak[i].listNumbers[j].num;
        infoEdge.VIndex2:=listBreak[i].listNumbers[j+1].num;
        infoEdge.VPoint1:=graph.listVertex[listBreak[i].listNumbers[j].num].centerPoint;
+       infoEdge.VPoint1.z:=0;
        infoEdge.VPoint2:=graph.listVertex[listBreak[i].listNumbers[j+1].num].centerPoint;
+       infoEdge.VPoint2.z:=0;
        infoEdge.edgeLength:=abs(listBreak[i].listNumbers[j].num-listBreak[i].listNumbers[j+1].num);
        graph.listEdge.PushBack(infoEdge);
      end;
@@ -1191,7 +1201,7 @@ begin
    listCable := TListCableLine.Create;  // инициализация списка кабелей
    result:=TGraphBuilder.Create;
    tempListEdge := TListEdgeGraph.Create;
-
+   result.nameSuperLine:=nameCable;
    counter:=0; //обнуляем счетчик
    counter1:=0;
    counter2:=0;
@@ -1213,11 +1223,16 @@ begin
                    begin
                      infoCable.cableEnt:=pSuperLine;
                      infoCable.stPoint:=pSuperLine^.CoordInOCS.lBegin;
+                     infoCable.stPoint.z:=0;
                      infoCable.edPoint:=pSuperLine^.CoordInOCS.lEnd;
+                     infoCable.edPoint.z:=0;
                      infoCable.stIndex:=0;
                      infoCable.edIndex:=1;
                      listCable.PushBack(infoCable); //добавляем к списку реальные кабели
                      inc(counter1);
+
+                     //testTempDrawCircle(infoCable.stPoint,25);
+                     //testTempDrawCircle(infoCable.edPoint,25);
                     // PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(i-1))^;
                    end;
 
@@ -1252,6 +1267,7 @@ begin
                            if dublicateVertex({listDevice}result.listVertex,devpoint,Epsilon) = false then begin
                              infoDevice.deviceEnt:=pObjDevice;
                              infoDevice.centerPoint:=devpoint;
+                             infoDevice.centerPoint.z:=0;
                              infoDevice.break:=false;
                              infoDevice.breakName:='not_break';
                              result.listVertex{listDevice}.PushBack(infoDevice);
@@ -1314,10 +1330,11 @@ begin
                      if dublicateVertex({listDevice}result.listVertex,interceptVertex,Epsilon) = false then begin
                       infoDevice.deviceEnt:=nil;
                       infoDevice.centerPoint:=interceptVertex;
+                      infoDevice.centerPoint.z:=0;
                       infoDevice.break:=false;
                       infoDevice.breakName:='not_break';
                       {listDevice}result.listVertex.PushBack(infoDevice);
-                   //   testTempDrawCircle(interceptVertex,Epsilon);
+                      testTempDrawCircle(interceptVertex,30);
                     end;
                   end;
                  //end;

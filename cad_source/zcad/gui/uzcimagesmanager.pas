@@ -23,57 +23,129 @@ interface
 
 uses
   uzbpaths,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  {StdCtrls,} Buttons, {ColorBox,}{ ButtonPanel,}{ Spin,} ExtCtrls, {ComCtrls,}{math,}
-  uzbtypes,{zcadstrconsts,}uzcsysvars,uzcsysinfo;
-var
-  II_Plus,
-  II_Minus,
-  II_Ok,
-  II_LayerOff,
-  II_LayerOn,
-  II_LayerUnPrint,
-  II_LayerPrint,
-  II_LayerUnLock,
-  II_LayerLock,
-  II_LayerFreze,
-  II_LayerUnFreze,
-  II_Bug,
-  II_Dxf,
-  II_Purge,
-  II_Refresh
-  :integer;
-  IconList: TImageList;
-procedure LoadIcons;
-implementation
-function loadicon(iconlist: TImageList;f:string):integer;
-var
-  bmp:TPortableNetworkGraphic;
-begin
-  bmp:=TPortableNetworkGraphic.create;
-  bmp.LoadFromFile(f);
-  bmp.Transparent:=true;
-  result:=iconlist.Add(bmp,nil);
-  freeandnil(bmp);
-end;
-procedure LoadIcons;
-begin
-  iconlist:=timagelist.Create(application);
+  Buttons, ExtCtrls, LazUTF8,
+  uzbtypes,uzcsysvars,uzcsysinfo,uzbtypesbase,gzctnrstl,usimplegenerics;
+type
+  TImageData=record
+    Index:Integer;
+    UppercaseName:string;
+    Path:string;
+  end;
+  TImageName2TImageDataMap=GKey2DataMap<GDBString,TImageData{$IFNDEF DELPHI},LessGDBString{$ENDIF}>;
+  TImagesManager=class(TComponent)
+    private
+      FIconList: TImageList;
+      defaultimageindex:integer;
+      ImageDataMap:TImageName2TImageDataMap;
+      procedure InternalCreate;
+      //procedure FoundImage(filename:{AnsiString}GDBString);
+    public
+      constructor Create;overload;
+      constructor Create(TheOwner: TComponent); override;overload;
+      destructor destroy; override;
+      function loadicon(f:string):integer;
+      procedure ScanDir(path:string);
+      function GetImageIndex(ImageName:string):integer;
+    published
+      property IconList: TImageList read FIconList write FIconList;
+  end;
 
-  II_Plus:=loadicon(iconlist, ProgramPath+'images/plus.png');
-  II_Minus:=loadicon(iconlist, ProgramPath+'images/minus.png');
-  II_Ok:=loadicon(iconlist, ProgramPath+'images/ok.png');
-  II_LayerOff:=loadicon(iconlist, ProgramPath+'images/off.png');
-  II_LayerOn:=loadicon(iconlist, ProgramPath+'images/on.png');
-  II_LayerUnPrint:=loadicon(iconlist, ProgramPath+'images/unprint.png');
-  II_LayerPrint:=loadicon(iconlist, ProgramPath+'images/print.png');
-  II_LayerUnLock:=loadicon(iconlist, ProgramPath+'images/unlock.png');
-  II_LayerLock:=loadicon(iconlist, ProgramPath+'images/lock.png');
-  II_LayerFreze:=loadicon(iconlist, ProgramPath+'images/freze.png');
-  II_LayerUnFreze:=loadicon(iconlist, ProgramPath+'images/unfreze.png');
-  II_Bug:=loadicon(iconlist, ProgramPath+'images/bug.png');
-  II_Dxf:=loadicon(iconlist, ProgramPath+'images/dxf.png');
-  II_Purge:=loadicon(iconlist, ProgramPath+'images/purge.png');
-  II_Refresh:=loadicon(iconlist, ProgramPath+'images/refresh.png');
+var
+  ImagesManager:TImagesManager;
+implementation
+constructor TImagesManager.Create;
+begin
+  inherited;
+  InternalCreate;
 end;
+constructor TImagesManager.Create(TheOwner: TComponent);
+begin
+  inherited;
+  InternalCreate;
+end;
+procedure TImagesManager.InternalCreate;
+var
+   ID:TImageData;
+   PNG:TPortableNetworkGraphic;
+begin
+  FIconList:=TImageList.Create(self);
+  ImageDataMap:=TImageName2TImageDataMap.create;
+
+  PNG:=TPortableNetworkGraphic.create;
+  PNG.LoadFromLazarusResource('!!!noimage');
+  PNG.Transparent:=true;
+  defaultimageindex:=iconlist.Add(PNG,nil);
+  freeandnil(PNG);
+  ID.Index:=defaultimageindex;
+  ID.Path:='fromresources';
+  ID.UppercaseName:='!!!NOIMAGE';
+
+  ImageDataMap.RegisterKey(ID.UppercaseName,ID);
+end;
+destructor TImagesManager.destroy;
+begin
+  FreeAndNil(FIconList);
+  FreeAndNil(ImageDataMap);
+end;
+procedure {TImagesManager.}FoundImage(filename:{AnsiString}GDBString);
+var
+   ID:TImageData;
+   PID:TImageName2TImageDataMap.PTValue;
+   internalname:string;
+begin
+  id.Index:=-1;
+  id.Path:=filename;
+  //exit;
+  internalname:=uppercase(ChangeFileExt(extractfilename(filename),''));
+  if ImagesManager.ImageDataMap.MyGetMutableValue(internalname,PID) then
+    begin
+      //уже зарегистрирован
+    end
+  else
+    begin
+      id.Index:=-1;
+      id.Path:=filename;
+      id.UppercaseName:=internalname;
+      ImagesManager.ImageDataMap.RegisterKey(internalname,id)
+    end;
+end;
+function TImagesManager.GetImageIndex(ImageName:string):integer;
+var
+   PID:TImageName2TImageDataMap.PTValue;
+   internalname:string;
+begin
+   internalname:=uppercase(ChangeFileExt(extractfilename(ImageName),''));
+   if ImagesManager.ImageDataMap.MyGetMutableValue(internalname,PID) then
+     begin
+       if PID^.Index<>-1 then
+                             exit(PID^.Index);
+       PID^.Index:=loadicon(PID^.Path);
+       exit(PID^.Index);
+     end
+   else
+     begin
+       result:=defaultimageindex;
+     end;
+end;
+
+procedure TImagesManager.ScanDir(path:string);
+begin
+  FromDirIterator(utf8tosys(path),'*.png','',foundimage,{TImagesManager.foundimage}nil);
+end;
+function TImagesManager.loadicon(f:string):integer;
+var
+  PNG:TPortableNetworkGraphic;
+begin
+  PNG:=TPortableNetworkGraphic.create;
+  PNG.LoadFromFile(f);
+  PNG.Transparent:=true;
+  result:=iconlist.Add(PNG,nil);
+  freeandnil(PNG);
+end;
+initialization
+  {$i defaultimages.inc}
+  ImagesManager:=TImagesManager.Create;
+finalization
+  ImagesManager.Destroy;
 end.
 

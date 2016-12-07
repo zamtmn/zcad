@@ -76,7 +76,7 @@ begin
      Item.SubItems.Clear;
      if pltp=pdwg^.GetCurrentLType then
                                                              begin
-                                                             Item.ImageIndex:=II_Ok;
+                                                             Item.ImageIndex:=ImagesManager.GetImageIndex('ok');;
                                                              CurrentLType:=Item;
                                                              end;
                  Item.SubItems.Add(uzbstrproc.Tria_AnsiToUtf8(pltp^.Name));
@@ -115,9 +115,9 @@ end;
 
 procedure TLineTypesForm._onCreate(Sender: TObject);
 begin
-     ListView1.SmallImages:=IconList;
-     IconList.GetBitmap(II_Minus,DeleteLtBtn.Glyph);
-     IconList.GetBitmap(II_Ok,MkCurrentBtn.Glyph);
+     ListView1.SmallImages:=ImagesManager.IconList;
+     ImagesManager.IconList.GetBitmap(ImagesManager.GetImageIndex('minus'),DeleteLtBtn.Glyph);
+     ImagesManager.IconList.GetBitmap(ImagesManager.GetImageIndex('ok'),MkCurrentBtn.Glyph);
      GScale.Value:=sysvar.DWG.DWG_LTScale^;
      CScale.Value:=sysvar.DWG.DWG_CLTScale^;
      CheckBox1.Checked:=sysvar.DWG.DWG_RotateTextInLT^;

@@ -385,20 +385,20 @@ end;
 
 procedure TLayersForm.FormCreate(Sender: TObject);
 begin
-  ActionList1.Images:=IconList;
-  ToolBar1.Images:=IconList;
-  AddLayer.ImageIndex:=II_Plus;
-  DelLayer.ImageIndex:=II_Minus;
-  MkCurrentLayer.ImageIndex:=II_Ok;
-  PurgeLayers.ImageIndex:=II_Purge;
-  RefreshLayers.ImageIndex:=II_Refresh;
+  ActionList1.Images:=ImagesManager.IconList;
+  ToolBar1.Images:=ImagesManager.IconList;
+  AddLayer.ImageIndex:=ImagesManager.GetImageIndex('plus');
+  DelLayer.ImageIndex:=ImagesManager.GetImageIndex('minus');
+  MkCurrentLayer.ImageIndex:=ImagesManager.GetImageIndex('ok');;
+  PurgeLayers.ImageIndex:=ImagesManager.GetImageIndex('Purge');
+  RefreshLayers.ImageIndex:=ImagesManager.GetImageIndex('Refresh');
 
   SupportTypedEditors:=TSupportTypedEditors.create;
   SupportTypedEditors.OnUpdateEditedControl:=@ListView1.UpdateItem2;
   IsUndoEndMarkerCreated:=false;
 
-ListView1.SmallImages:=IconList;
-ListView1.DefaultItemIndex:=II_Ok;
+ListView1.SmallImages:=ImagesManager.IconList;
+ListView1.DefaultItemIndex:=ImagesManager.GetImageIndex('ok');;
 
 setlength(ListView1.SubItems,ColumnCount);
 
@@ -409,21 +409,21 @@ begin
 end;
 with ListView1.SubItems[LockColumn] do
 begin
-     OnImageIndex:=II_LayerLock;
-     OffImageIndex:=II_LayerUnLock;
+     OnImageIndex:=ImagesManager.GetImageIndex('lock');
+     OffImageIndex:=ImagesManager.GetImageIndex('unlock');
      OnClick:=@LayerLockClick;
      IsOn:=@IsLayerLock;
 end;
 with ListView1.SubItems[FrezeColumn] do
 begin
-     OnImageIndex:=II_LayerFreze;
-     OffImageIndex:=II_LayerUnFreze;
+     OnImageIndex:=ImagesManager.GetImageIndex('freze');;
+     OffImageIndex:=ImagesManager.GetImageIndex('unfreze');
      IsOn:=@IsLayerFreze;
 end;
 with ListView1.SubItems[OnColumn] do
 begin
-     OnImageIndex:=II_LayerOn;
-     OffImageIndex:=II_LayerOff;
+     OnImageIndex:=ImagesManager.GetImageIndex('on');
+     OffImageIndex:=ImagesManager.GetImageIndex('off');
      OnClick:=@LayerOnClick;
      IsOn:=@IsLayerOn;
 end;
@@ -447,8 +447,8 @@ begin
 end;
 with ListView1.SubItems[PlotColumn] do
 begin
-     OnImageIndex:=II_LayerPrint;
-     OffImageIndex:=II_LayerUnPrint;
+     OnImageIndex:=ImagesManager.GetImageIndex('print');
+     OffImageIndex:=ImagesManager.GetImageIndex('unprint');
      IsOn:=@IsLayerPlot;
      OnClick:=@LayerPlotClick;
 end;

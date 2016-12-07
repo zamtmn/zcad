@@ -77,6 +77,7 @@ begin
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, CoordInOCS.lBegin, CoordInOCS.lEnd);
   CopyVPto(tvo^);
   tvo^.bp.ListPos.Owner:=own;
+  EntExtensions.RunOnCloneProcedures(@self,tvo);
   result := tvo;
 end;
 function AllocSuperLine:PGDBObjLine;

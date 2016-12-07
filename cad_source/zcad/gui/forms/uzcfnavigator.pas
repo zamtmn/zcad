@@ -45,9 +45,9 @@ implementation
 
 procedure TNavigator._onCreate(Sender: TObject);
 begin
-   ActionList1.Images:=IconList;
-   MainToolBar.Images:=IconList;
-   Refresh.ImageIndex:=II_Refresh;
+   ActionList1.Images:=ImagesManager.IconList;
+   MainToolBar.Images:=ImagesManager.IconList;
+   Refresh.ImageIndex:={II_Refresh}ImagesManager.GetImageIndex('Refresh');
 end;
 
 procedure TNavigator.RefreshTree(Sender: TObject);
@@ -56,7 +56,7 @@ var
 begin
    NavTree.BeginUpdate;
    NavTree.Clear;
-   NavTree.Images:=IconList;
+   NavTree.Images:=ImagesManager.IconList;
    PRootNode1:=NavTree.AddChild(nil,nil);
    PRootNode2:=NavTree.AddChild(nil,nil);
    NavTree.OnGetText:=NavGetText;

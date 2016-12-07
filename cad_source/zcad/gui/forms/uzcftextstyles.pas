@@ -274,16 +274,16 @@ end;
 
 procedure TTextStylesForm.FormCreate(Sender: TObject);
 begin
-  ActionList1.Images:=IconList;
-  ToolBar1.Images:=IconList;
-  AddStyle.ImageIndex:=II_Plus;
-  DelStyle.ImageIndex:=II_Minus;
-  MkCurrentStyle.ImageIndex:=II_Ok;
-  PurgeStyles.ImageIndex:=II_Purge;
-  RefreshStyles.ImageIndex:=II_Refresh;
+  ActionList1.Images:=ImagesManager.IconList;
+  ToolBar1.Images:=ImagesManager.IconList;
+  AddStyle.ImageIndex:=ImagesManager.GetImageIndex('plus');
+  DelStyle.ImageIndex:=ImagesManager.GetImageIndex('minus');
+  MkCurrentStyle.ImageIndex:=ImagesManager.GetImageIndex('ok');;
+  PurgeStyles.ImageIndex:=ImagesManager.GetImageIndex('Purge');
+  RefreshStyles.ImageIndex:=ImagesManager.GetImageIndex('Refresh');
 
-  ListView1.SmallImages:=IconList;
-  ListView1.DefaultItemIndex:=II_Ok;
+  ListView1.SmallImages:=ImagesManager.IconList;
+  ListView1.DefaultItemIndex:=ImagesManager.GetImageIndex('ok');;
 
   FontsSelector.Enums.init(100);
   SupportTypedEditors:=TSupportTypedEditors.create;

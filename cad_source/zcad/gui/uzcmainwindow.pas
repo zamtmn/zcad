@@ -1427,7 +1427,7 @@ begin
   SystemTimer.OnTimer:=self.generaltick;
 
   InitSystemCalls;
-  LoadIcons;
+  ImagesManager.ScanDir(ProgramPath+'images/');
   LoadActions;
   toolbars:=tstringlist.Create;
   toolbars.Sorted:=true;
@@ -1668,14 +1668,14 @@ begin
                      begin
                           ReadComboSubParam(bc,ts,w);
                           LayerBox:=TZCADLayerComboBox.Create(tb);
-                          LayerBox.ImageList:=IconList;
+                          LayerBox.ImageList:=ImagesManager.IconList;
 
-                          LayerBox.Index_Lock:=II_LayerLock;
-                          LayerBox.Index_UnLock:=II_LayerUnLock;
-                          LayerBox.Index_Freze:=II_LayerFreze;
-                          LayerBox.Index_UnFreze:=II_LayerUnFreze;
-                          LayerBox.Index_ON:=II_LayerOn;
-                          LayerBox.Index_OFF:=II_LayerOff;
+                          LayerBox.Index_Lock:=ImagesManager.GetImageIndex('lock');
+                          LayerBox.Index_UnLock:=ImagesManager.GetImageIndex('unlock');
+                          LayerBox.Index_Freze:=ImagesManager.GetImageIndex('freze');;
+                          LayerBox.Index_UnFreze:=ImagesManager.GetImageIndex('unfreze');
+                          LayerBox.Index_ON:=ImagesManager.GetImageIndex('on');
+                          LayerBox.Index_OFF:=ImagesManager.GetImageIndex('off');
 
                           LayerBox.fGetLayerProp:=self.GetLayerProp;
                           LayerBox.fGetLayersArray:=self.GetLayersArray;
@@ -1905,7 +1905,7 @@ var
     myitem:TmyMenuItem;
 begin
   myitem:=TmyMenuItem.Create(localpm.localpm,'**'+extractfilename(filename),'Load('+filename+')');
-  localpm.localpm.SubMenuImages:=IconList;
+  localpm.localpm.SubMenuImages:=ImagesManager.IconList;
   myitem.ImageIndex:=localpm.ImageIndex;
   localpm.localpm.Add(myitem);
 end;
@@ -1958,7 +1958,7 @@ begin
                 else if uppercase(line)='BUGFILES' then
                                                       begin
                                                            localpm.localpm:=pm;
-                                                           localpm.ImageIndex:=II_Bug;
+                                                           localpm.ImageIndex:=ImagesManager.GetImageIndex('Bug');;
                                                            FromDirIterator(expandpath('*../errors/'),'*.dxf','',@bugfileiterator,nil);
                                                            line := f.readstring(#$A' ',#$D);
                                                            line:=readspace(line);
@@ -1968,7 +1968,7 @@ begin
                 else if uppercase(line)='SAMPLEFILES' then
                                                       begin
                                                            localpm.localpm:=pm;
-                                                           localpm.ImageIndex:=II_Dxf;
+                                                           localpm.ImageIndex:=ImagesManager.GetImageIndex('Dxf');
                                                            FromDirIterator(expandpath('*/sample'),'*.dxf','',@bugfileiterator,nil);
                                                            FromDirIterator(expandpath('*/sample'),'*.dwg','',@bugfileiterator,nil);
                                                            line := f.readstring(#$A' ',#$D);

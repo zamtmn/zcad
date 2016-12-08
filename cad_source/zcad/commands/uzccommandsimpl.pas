@@ -72,6 +72,7 @@ type
     procedure CommandEnd; virtual;
     procedure CommandCancel; virtual;
     procedure Format;virtual;
+    procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
     procedure CommandContinue; virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
@@ -352,6 +353,10 @@ begin
                                    begin
                                         onHelpGeometryDraw(mouseclic);
                                    end;
+end;
+procedure CommandRTEdObjectPlugin.FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);
+begin
+ Format;
 end;
 procedure CommandRTEdObjectPlugin.Format;
 begin

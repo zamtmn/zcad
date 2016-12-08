@@ -304,7 +304,7 @@ PTDeviceInfoSubGraph=^TDeviceInfoSubGraph;
   procedure getListOnlyVertexWayGroup(var ourListGroup:THeadGroupInfo;ourGraph:TGraphBuilder);
  function testTempDrawPolyLineNeed(myVertex:TListVertexWayOnlyVertex;ourGraph:TGraphBuilder;color:Integer):TCommandResult;
  function visualGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;color:Integer;numHead:integer;numGroup:integer):TCommandResult;
- function cablingGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;counterColor:Integer;numHead:integer;numGroup:integer):TCommandResult;
+ function cablingGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;numHead:integer;numGroup:integer):TCommandResult;
 
 implementation
  type
@@ -543,15 +543,18 @@ var
    beforeLength,bAfterLength:double;
    bNumAfter,numEdgeNow,numEdgeBefore:integer;
    IsExchange, haveLimb, haveWay, lengthEqual:boolean;
-   i,j,k,l,counterColor:integer;
+   i,j,k,l,counterColor,goodWayCol:integer;
 begin
     //ourListGroup.listVertexWayGroup;
     counterColor:=0;
+    goodWayCol:=0;
     for i:= 0 to ourListGroup.listDevice.Size-1 do begin
 
       // строим только ребра графа, в качестве вершин будут выступать вершины главного графа.
       //делаем проход по всем вершинам от главного устройства до устр. и заплняем нужной информацией ребра
       //с начала проходка от головного до устр
+      if ourListGroup.listDevice[i].listNumVertexMinWeight<>nil then begin
+       goodWayCol:=goodWayCol+1;
        for j:= 1 to ourListGroup.listDevice[i].listNumVertexMinWeight.Size-1 do begin
            if ourListGroup.listVertexWayGroup.IsEmpty then //если список пуст
                begin
@@ -604,6 +607,7 @@ begin
              end;
         end;
 
+
        // теперь от каждого устр. до головного
        // нужно что бы около головного устройства можно было понять какой из путей самый длинный
        //или какой самый загружанный датчиками
@@ -647,8 +651,13 @@ begin
             end;
         end;
       // HistoryOutStr('длина списка' + IntToStr(ourListGroup.listVertexWayGroup.Size));
-    end;
 
+    end;
+      end;
+      if goodWayCol=0 then
+      begin
+         ourListGroup.listVertexWayGroup:=nil;
+      end;
 end;
 
  procedure getListOnlyVertexWayGroup(var ourListGroup:THeadGroupInfo;ourGraph:TGraphBuilder);
@@ -801,10 +810,12 @@ begin
 
 
      //визуализация коробок распределения
+     if myTerminalBox <> nil then
      for i:= 0 to myTerminalBox.size-1 do
        visualDrawCircle(ourGraph.listVertex[myTerminalBox[i]].centerPoint,3,color);
 
      counter:=0;
+     if myVertex <> nil then
      for i:=0 to myVertex.Size-1 do
      begin
          notVertex:=true;
@@ -833,7 +844,7 @@ begin
 end;
 
 //создание кабеля по маршруту и добавления кабелю определенных свойств
-function buildCableGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;color:Integer;numHead:integer;numGroup:integer;numSegment:integer;wayVertex:TListVertexWayOnlyVertex):TCommandResult;
+function buildCableGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;numHead:integer;numGroup:integer;numSegment:integer;wayVertex:TListVertexWayOnlyVertex):TCommandResult;
 var
     //polyObj:PGDBObjPolyLine;
     polyObj:PGDBObjCable;
@@ -917,7 +928,7 @@ begin
 end;
 //прокладка кабелей, от устройства до устройства с учетом распределительных коробок
 // с сегментированием кабелей и доп фишками
-function cablingGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;counterColor:Integer;numHead:integer;numGroup:integer):TCommandResult;
+function cablingGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;numHead:integer;numGroup:integer):TCommandResult;
 var
     //polyObj:PGDBObjPolyLine;
     polyObj:PGDBObjCable;
@@ -981,7 +992,7 @@ begin
          if (notVertex=false) and bCable then
            begin
              //  visualDrawCircle(ourGraph.listVertex[myVertex[i]].centerPoint,5,4);
-               buildCableGroupLine(listHeadDevice,ourGraph,counterColor,numHead,numGroup,counter,wayCableLine);
+               buildCableGroupLine(listHeadDevice,ourGraph,numHead,numGroup,counter,wayCableLine);
                wayCableLine.clear;
                counter:=counter+1;
                bCable:=false;
@@ -1143,7 +1154,7 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
              begin
                inc(counter);
                for m:=0 to listCableLaying.size-1 do begin
-                HistoryOutStr(' chto idet = ' + listCableLaying[m].headName + '***'+ listCableLaying[m].GroupNum+ '***'+ listCableLaying[m].typeSLine);
+                //HistoryOutStr(' chto idet = ' + listCableLaying[m].headName + '***'+ listCableLaying[m].GroupNum+ '***'+ listCableLaying[m].typeSLine);
 
                 // Проверяем есть ли у устройсва хозяин
                 // pvd:=FindVariableInEnt(ourGraph.listVertex[i].deviceEnt,'GC_HeadDevice');
@@ -1177,6 +1188,7 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
                              headDeviceInfo.name:=headDevName;
                              headDeviceInfo.num:=numHeadDev;
                              headDeviceInfo.shortName:=shortNameHead;
+                             //headDeviceInfo.listGroup:=nil;
                              listHeadDevice.PushBack(headDeviceInfo);
                              numHead:=listHeadDevice.Size-1;
                              headDeviceInfo:=nil;    //насколько я понимаю, после его добавления listHeadDevice
@@ -1197,6 +1209,10 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
                          begin
                            HeadGroupInfo:=THeadGroupInfo.Create;
                            HeadGroupInfo.name:=groupName;
+                          // HeadGroupInfo.listDevice:=nil;
+                           //HeadGroupInfo.listVertexTerminalBox:=nil;
+                           //HeadGroupInfo.listVertexWayGroup:=nil;
+                           //HeadGroupInfo.listVertexWayOnlyVertex:=nil;
                            listHeadDevice.Mutable[numHead]^.listGroup.PushBack(HeadGroupInfo);
                            numHeadGroup:=listHeadDevice[numHead].listGroup.Size-1;
                            HeadGroupInfo:=nil;
@@ -1208,6 +1224,7 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
                        //  begin
                          deviceInfo:=TdeviceInfo.Create;
                          deviceInfo.num:=i;
+                         //deviceInfo.listNumVertexMinWeight:=nil;
                          deviceInfo.tDevice:=ourGraph.listVertex[i].deviceEnt^.Name;
                          listHeadDevice.Mutable[numHead]^.listGroup.Mutable[numHeadGroup]^.listDevice.PushBack(deviceInfo);
                          //end;
@@ -1223,21 +1240,21 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
       end;
 
     // ОЦЕНКА СИТУАЦИИ С ГОЛОВНЫМИ УСТРОЙСТВАМИ ИХ ГРУППАМИ И ПОДЧИНЕННЫМИ УСТРОЙТСВАМИ
-     //for i:=0 to listHeadDevice.Size-1 do
-     // begin
-     //    HistoryOutStr(listHeadDevice[i].name + ' = '+ IntToStr(listHeadDevice[i].num));
-     //    for j:=0 to listHeadDevice[i].listGroup.Size -1 do
-     //       begin
-     //         HistoryOutStr(' Group = ' + listHeadDevice[i].listGroup[j].name);
-     //         for k:=0 to listHeadDevice[i].listGroup[j].listDevice.Size -1 do
-     //           begin
-     //             HistoryOutStr(' device = ' + IntToStr(listHeadDevice[i].listGroup[j].listDevice[k].num) + '_type' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice);
-     //             //uzvcom.testTempDrawText(ourGraph.listVertex[listHeadDevice[i].listGroup[j].listDevice[k].num].centerPoint,'ljlkj');
-     //             //HistoryOutStr(' cord = ' + FloatToStr(ourGraph.listVertex[listHeadDevice[i].listGroup[j].listDevice[k].num].centerPoint.x));
-     //
-     //           end;
-     //       end;
-     // end;
+     for i:=0 to listHeadDevice.Size-1 do
+      begin
+         HistoryOutStr(listHeadDevice[i].name + ' = '+ IntToStr(listHeadDevice[i].num));
+         for j:=0 to listHeadDevice[i].listGroup.Size -1 do
+            begin
+              HistoryOutStr(' Group = ' + listHeadDevice[i].listGroup[j].name);
+              for k:=0 to listHeadDevice[i].listGroup[j].listDevice.Size -1 do
+                begin
+                  HistoryOutStr(' device = ' + IntToStr(listHeadDevice[i].listGroup[j].listDevice[k].num) + '_type' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice);
+                  //uzvcom.testTempDrawText(ourGraph.listVertex[listHeadDevice[i].listGroup[j].listDevice[k].num].centerPoint,'ljlkj');
+                  //HistoryOutStr(' cord = ' + FloatToStr(ourGraph.listVertex[listHeadDevice[i].listGroup[j].listDevice[k].num].centerPoint.x));
+
+                end;
+            end;
+      end;
 
 
     // Подключение созданного граффа к библиотеке Аграф
@@ -1269,16 +1286,20 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
                   //На основе полученых результатов библиотекой Аграф
                   //в носим ополнения в список подключеных устройств, а именно
                   //у каждого устройства прописываем минимальный путь из вершин до головного устройства
-                  for m:=0 to VertexPath.Count - 1 do  begin
-                    tempNumVertexMinWeight.num:=TVertex(VertexPath[m]).Index;
-                    listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listDevice.Mutable[k]^.listNumVertexMinWeight.PushBack(tempNumVertexMinWeight);
-                  end;
-
-                  ////Анализ результата
-                  //for m:=0 to listHeadDevice[i].listGroup[j].listDevice[k].listNumVertexMinWeight.Size - 1 do  begin
-                  //   HistoryOutStr(' device = ' + IntToStr(listHeadDevice[i].listGroup[j].listDevice[k].listNumVertexMinWeight[m].num));
-                  //end;
-
+                  if VertexPath.Count > 1 then
+                    for m:=0 to VertexPath.Count - 1 do  begin
+                      tempNumVertexMinWeight.num:=TVertex(VertexPath[m]).Index;
+                      listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listDevice.Mutable[k]^.listNumVertexMinWeight.PushBack(tempNumVertexMinWeight);
+                    end
+                    else begin
+                      listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listDevice.Mutable[k]^.listNumVertexMinWeight:=nil;
+                      HistoryOutStr(' ЕСТЬ НЕ ПОДКЛЮЧЕННЫЕ УСТРОЙСТВА = ' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice);
+                    end;
+                    //Анализ результата
+                    //HistoryOutStr(' Путь подключения = ' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice);
+                    //for m:=0 to listHeadDevice[i].listGroup[j].listDevice[k].listNumVertexMinWeight.Size - 1 do  begin
+                    //   HistoryOutStr(' вершина = ' + IntToStr(listHeadDevice[i].listGroup[j].listDevice[k].listNumVertexMinWeight[m].num));
+                    //end;
                   EdgePath.Free;
                   VertexPath.Free;
                  end;
@@ -1290,13 +1311,13 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
               createTreeDeviceinGroup(listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^,ourGraph);
 
               ////для наладки работы кода
-              // for k:=0 to listHeadDevice[i].listGroup[j].listVertexWayGroup.Size-1 do begin
-              //      pCenter:=VertexCenter(ourGraph.listVertex[listHeadDevice[i].listGroup[j].listVertexWayGroup[k].VIndex1].centerPoint,ourGraph.listVertex[listHeadDevice[i].listGroup[j].listVertexWayGroup[k].VIndex2].centerPoint);
-              //      uzvcom.testTempDrawText(pCenter,FloatToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup[k].beforeLength));
-              //      uzvcom.testTempDrawText(pCenter,FloatToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup[k].afterLength));
-              //      uzvcom.testTempDrawText(pCenter,FloatToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup[k].numAfter));
-              //      uzvcom.testTempDrawText(pCenter,IntToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup[k].numBefore));
-              // end;
+               //for k:=0 to listHeadDevice[i].listGroup[j].listVertexWayGroup.Size-1 do begin
+               //     pCenter:=VertexCenter(ourGraph.listVertex[listHeadDevice[i].listGroup[j].listVertexWayGroup[k].VIndex1].centerPoint,ourGraph.listVertex[listHeadDevice[i].listGroup[j].listVertexWayGroup[k].VIndex2].centerPoint);
+               //     uzvcom.testTempDrawText(pCenter,FloatToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup[k].beforeLength));
+               //     uzvcom.testTempDrawText(pCenter,FloatToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup[k].afterLength));
+               //     uzvcom.testTempDrawText(pCenter,FloatToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup[k].numAfter));
+               //     uzvcom.testTempDrawText(pCenter,IntToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup[k].numBefore));
+               //end;
 
            //   HistoryOutStr('длина списка графа после создания' + IntToStr(listHeadDevice[i].listGroup[j].listVertexWayGroup.Size));
             end;
@@ -1313,6 +1334,7 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
       begin
          for j:=0 to listHeadDevice[i].listGroup.Size -1 do
             begin
+               if listHeadDevice[i].listGroup[j].listVertexWayGroup<> nil then
                  if listHeadDevice[i].listGroup[j].listVertexWayGroup.Size>0 then
                    begin
                    listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listVertexWayOnlyVertex.PushBack(listHeadDevice[i].listGroup[j].listVertexWayGroup[0].VIndex1);
@@ -1322,10 +1344,10 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
                    begin
 
                    end;
-                 //if counterColor=7 then
+                 //if counterColor=4 then
                  //     counterColor:=1
                  // else
-                 //testTempDrawPolyLineNeed(listHeadDevice[i].listGroup[j].listVertexWayOnlyVertex,ourGraph,counterColor);
+                 //testTempDrawPolyLineNeed(listHeadDevice[i].listGroup[j].listVertexWayOnlyVertex,ourGraph,2);
                  //inc(counterColor);
 
                  //for k:=0 to listHeadDevice[i].listGroup[j].listVertexWayOnlyVertex.size-1 do

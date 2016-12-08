@@ -175,7 +175,7 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
   TShapeClass=(SC_Connector,SC_Terminal,SC_Graphix,SC_Unknown);
   TShapeGroup=(SG_El_Sch,SG_Cable_Sch,SG_Plan,SG_Unknown);
 
-  TBlockType=(BT_Connector,BT_Unknown);
+  TBlockType=(BT_Unknown,BT_Connector);
   TBlockBorder=(BB_Owner,BB_Self,BB_Empty);
   TBlockGroup=(BG_El_Device,BG_Unknown);
   TBlockDesc=packed record

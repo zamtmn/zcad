@@ -311,7 +311,7 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
   TShapeBorder=(SB_Owner,SB_Self,SB_Empty);
   TShapeClass=(SC_Connector,SC_Terminal,SC_Graphix,SC_Unknown);
   TShapeGroup=(SG_El_Sch,SG_Cable_Sch,SG_Plan,SG_Unknown);
-  TBlockType=(BT_Connector,BT_Unknown);
+  TBlockType=(BT_Unknown,BT_Connector);
   TBlockBorder=(BB_Owner,BB_Self,BB_Empty);
   TBlockGroup=(BG_El_Device,BG_Unknown);
   TBlockDesc=packed record
@@ -3209,6 +3209,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
     procedure CommandEnd; virtual;abstract;
     procedure CommandCancel; virtual;abstract;
     procedure Format;virtual;abstract;
+    procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
     procedure CommandContinue; virtual;abstract;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;

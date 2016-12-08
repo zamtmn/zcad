@@ -644,12 +644,12 @@ begin
                       areaOfTriangle(rectLine.Pt3,rectLine.Pt4,vertexPt)+areaOfTriangle(rectLine.Pt4,rectLine.Pt1,vertexPt);
      //сравниваем площади получаные прямоугольником с суммой 4-х площадей образованных треугольниками
 
-    if  IsDoubleNotEqual(areaRect,sumAreaTriangle,sqreps*100000) = false then
+    if  IsDoubleNotEqual(areaRect,sumAreaTriangle,sqreps*1000000) = false then
       result:=true;
 
-    HistoryOutStr('прямоугл = ' + floattostr(areaRect));
-    HistoryOutStr('треугол = ' + floattostr(sumAreaTriangle));
-    HistoryOutStr('погрешность = ' + floattostr(sqreps*100000));
+    //HistoryOutStr('прямоугл = ' + floattostr(areaRect));
+    //HistoryOutStr('треугол = ' + floattostr(sumAreaTriangle));
+    //HistoryOutStr('погрешность = ' + floattostr(sqreps*100000));
 end;
 
 
@@ -955,6 +955,9 @@ begin
                   infoEdge.VIndex2:=numVertDevice;
                   infoEdge.VPoint1:=vertexLine;
                   infoEdge.VPoint1.z:=0;
+
+                  testTempDrawCircle(infoEdge.VPoint1,15);
+
                   infoEdge.VPoint2:=graph.listVertex[numVertDevice].centerPoint;
                   infoEdge.VPoint2.z:=0;
                   infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
@@ -1138,6 +1141,30 @@ begin
      end;
 end;
 
+//*** поиск точки координаты коннектора в устройстве
+function getPointConnector(pobj:pGDBObjEntity; out pConnect:GDBVertex):Boolean;
+var
+   pd,pObjDevice,pObjDevice2,currentSubObj,currentSubObj2:PGDBObjDevice;
+   ir,ir_inDevice,ir_inDevice2:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
+
+Begin
+   result:=false;
+  pObjDevice:= PGDBObjDevice(pobj); // передача объекта в девайсы
+  currentSubObj:=pObjDevice^.VarObjArray.beginiterate(ir_inDevice); //иследование содержимого девайса
+  if (currentSubObj<>nil) then
+    repeat
+      if (CurrentSubObj^.GetObjType=GDBDeviceID) then begin
+         if CurrentSubObj^.Name = 'CONNECTOR_SQUARE' then
+           begin
+             pConnect:=CurrentSubObj^.P_insert_in_WCS;
+             result:=true;
+           end;
+         if not result then
+            result := getPointConnector(CurrentSubObj,pConnect);
+      end;
+    currentSubObj:=pObjDevice^.VarObjArray.iterate(ir_inDevice);
+    until currentSubObj=nil;
+end;  //AtOtres
 
 //** Базовая функция запуска алгоритма анализа кабеля на плане, подключенных устройств, их нумерация и.т.д
 function graphBulderFunc(Epsilon:double;nameCable:string):TGraphBuilder;
@@ -1165,9 +1192,9 @@ var
     pc:PGDBObjCable;
     pcdev:PGDBObjLine;
     pcdevCircle:PGDBObjCircle;
-    pd,pObjDevice,currentSubObj:PGDBObjDevice;
+    pd,pObjDevice,pObjDevice2,currentSubObj,currentSubObj2:PGDBObjDevice;
 
-    ir,ir_inDevice:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
+    ir,ir_inDevice,ir_inDevice2:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
     NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
 
 
@@ -1180,7 +1207,7 @@ var
                                     //куб со сторонами паралелльными осям, определяется 2мя диагональными точками
                                     //левая-нижняя-ближняя и правая-верхняя-дальня
     interceptVertex,devpoint:GDBVertex;
-    tempPoint1,tempPoint2:GDBVertex;
+    tempPoint1,tempPoint2,pConnect:GDBVertex;
 
     psldb:pointer;
 
@@ -1253,20 +1280,28 @@ begin
              //        end;
              //  end;
              //*** ***//
-
-             if pobj^.GetObjType=GDBDeviceID then
+             //HistoryOutStr('name= ' + pobj^.GetObjTypeName);
+             pConnect.x:=0;
+             pConnect.y:=0;
+             pConnect.z:=0;
+          if pobj^.GetObjType=GDBDeviceID then
                begin
-                  pObjDevice:= PGDBObjDevice(pobj); // передача объекта в девайсы
-                  currentSubObj:=pObjDevice^.VarObjArray.beginiterate(ir_inDevice); //иследование содержимого девайса
-                  if (currentSubObj<>nil) then
-                    repeat
-                    if (CurrentSubObj^.GetObjType=GDBDeviceID) then       //поиск внутри устройства устройства
-                      if CurrentSubObj^.BlockDesc.BType=BT_Connector then //если это устройство коннектор тогда
+                 //if getPointConnector(pobj,pConnect) then
+                   //HistoryOutStr('pobeda= ');
+                  //pObjDevice:= PGDBObjDevice(pobj); // передача объекта в девайсы
+                  //currentSubObj:=pObjDevice^.VarObjArray.beginiterate(ir_inDevice); //иследование содержимого девайса
+                  //if (currentSubObj<>nil) then
+                  //  repeat
+
+                    //if (CurrentSubObj^.GetObjType=GDBDeviceID) then       //поиск внутри устройства устройства
+                    //  if CurrentSubObj^.BlockDesc.BType=BT_Connector then //если это устройство коннектор тогда
+                       if getPointConnector(pobj,pConnect) then
                          begin
-                           devpoint:=CurrentSubObj^.P_insert_in_WCS;
-                           if dublicateVertex({listDevice}result.listVertex,devpoint,Epsilon) = false then begin
+                           //devpoint:=CurrentSubObj^.P_insert_in_WCS;
+                           if dublicateVertex({listDevice}result.listVertex,pConnect,Epsilon) = false then begin
+                             pObjDevice:= PGDBObjDevice(pobj);
                              infoDevice.deviceEnt:=pObjDevice;
-                             infoDevice.centerPoint:=devpoint;
+                             infoDevice.centerPoint:=pConnect;
                              infoDevice.centerPoint.z:=0;
                              infoDevice.break:=false;
                              infoDevice.breakName:='not_break';
@@ -1275,8 +1310,8 @@ begin
                            end;
                           // HistoryOutStr('x= ' + FloatToStr(devpoint.x) + ' y=' + FloatToStr(devpoint.y));
                          end;
-                     currentSubObj:=pObjDevice^.VarObjArray.iterate(ir_inDevice);
-                    until currentSubObj=nil;
+                     //currentSubObj:=pObjDevice^.VarObjArray.iterate(ir_inDevice);
+                    //until currentSubObj=nil;
                   end;
              //GDBObjDevice
         inc(counter);

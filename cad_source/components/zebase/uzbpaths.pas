@@ -26,7 +26,13 @@ type
 function ExpandPath(path:GDBString):GDBString;
 function FindInSupportPath(PPaths:GDBString;FileName:GDBString):GDBString;
 function FindInPaths(Paths,FileName:GDBString):GDBString;
+
+//**Получает части текста разделеные разделителем.
+//**path - текст в котором идет поиск.
+//**separator - разделитель.
+//**part - переменная которая возвращает куски текста
 function GetPartOfPath(out part:GDBString;var path:GDBString;const separator:GDBString):GDBString;
+
 procedure FromDirIterator(const path,mask,firstloadfilename:GDBSTring;proc:TFromDirIterator;method:TFromDirIteratorObj);
 procedure FromDirsIterator(const path,mask,firstloadfilename:GDBString;proc:TFromDirIterator;method:TFromDirIteratorObj);
 var ProgramPath,SupportPath,TempPath:gdbstring;

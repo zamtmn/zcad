@@ -5,7 +5,7 @@ unit uzcflayers;
 interface
 
 uses
-  uzcutils,zcchangeundocommand,zcobjectchangeundocommand2,uzcdrawing,uzepalette,uzcsuptypededitors,LMessages,uzcfselector,uzestyleslinetypes,uzeutils,uzclog,uzcflineweights,uzcfcolors,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
+  UGDBNamedObjectsArray,uzcutils,zcchangeundocommand,zcobjectchangeundocommand2,uzcdrawing,uzepalette,uzcsuptypededitors,LMessages,uzcfselector,uzestyleslinetypes,uzeutils,uzclog,uzcflineweights,uzcfcolors,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 
@@ -564,8 +564,8 @@ begin
        ShowError(rsUnableSelectFreeLayerName);
        exit;
      end;
-
-     pdwg^.LayerTable.AddItem(layername,pcreatedlayer);
+     if pdwg^.LayerTable.AddItem(layername,pcreatedlayer)=IsCreated then
+      pcreatedlayer^.initnul;
      pcreatedlayer^:=player^;
      pcreatedlayer^.Name:=layername;
 

@@ -93,20 +93,20 @@ begin
   //Визуализация графа
   UndoMarcerIsPlazed:=false;
   zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'Visualisation Graph');
-  for i:=0 to graphCable.listVertex.Size-1 do
-    if graphCable.listVertex[i].deviceEnt <> nil then
-      //if graphCable.listVertex[i].break then
-      begin
-         uzvcom.testTempDrawCircle(graphCable.listVertex[i].centerPoint,Epsilon*25);
-      end;
-
+  //for i:=0 to graphCable.listVertex.Size-1 do
+  //  if graphCable.listVertex[i].deviceEnt <> nil then
+  //    //if graphCable.listVertex[i].break then
+  //    begin
+  //       uzvcom.testTempDrawCircle(graphCable.listVertex[i].centerPoint,Epsilon*25);
+  //    end;
+  //
   for i:=0 to graphCable.listEdge.Size-1 do
     begin
        uzvcom.testTempDrawLine(graphCable.listEdge[i].VPoint1,graphCable.listEdge[i].VPoint2);
     end;
   zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
   zcRedrawCurrentDrawing;
- // Commandmanager.executecommandend;
+  //Commandmanager.executecommandend;
 end;
 
 
@@ -129,15 +129,15 @@ begin
      for j:=0 to listHeadDevice[i].listGroup.Size -1 do
         begin
              if counterColor=7 then
-                  counterColor:=1
-              else
+                  counterColor:=1;
              uzvnum.visualGroupLine(listHeadDevice,graphCable,counterColor,i,j);
-             inc(counterColor);
+             counterColor:=counterColor+1;
+             //inc(counterColor);
         end;
   end;
   zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
     zcRedrawCurrentDrawing;
- // Commandmanager.executecommandend;
+  //Commandmanager.executecommandend;
 end;
 
 procedure TExample_com.cablingGroupHeadGraph(pdata:GDBPlatformint);
@@ -158,15 +158,11 @@ begin
   begin
      for j:=0 to listHeadDevice[i].listGroup.Size -1 do
         begin
-             if counterColor=7 then
-                  counterColor:=1
-              else
-             uzvnum.cablingGroupLine(listHeadDevice,graphCable,counterColor,i,j);
-             inc(counterColor);
+             uzvnum.cablingGroupLine(listHeadDevice,graphCable,i,j);
         end;
   end;
     zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
- // Commandmanager.executecommandend;
+   // Commandmanager.executecommandend;
 end;
 
 

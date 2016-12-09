@@ -3,11 +3,11 @@ interface
 uses system,devices;
 var
 
-SLCABAGEN_HeadDeviceName:GDBString;(*'Головное устройство.Метод супер линий. Описание много устр через символ верт.палка '*)
+SLCABAGEN_HeadDeviceName:GDBString;(*'Головное устройство..Множественность через ; '*)
 
-SLCABAGEN_NGHeadDevice:GDBString;(*'Номер группы в головном устройстве. Метод супер линий. Описание много устр через символ верт.палка '*)
+SLCABAGEN_NGHeadDevice:GDBString;(*'Номер группы в головном устройстве.Множественность через ; '*)
 
-SLCABAGEN_SLTypeagen:GDBString;(*'Имя супер линии по которой будет вестись прокладка. Метод супер линий. Описание много устр через символ верт.палка '*)
+SLCABAGEN_SLTypeagen:GDBString;(*'Имя суперлинии по которой будет вестись прокладка.Множественность через ; '*)
 
 SLCABAGEN_SLTest:GDBString;(*'Тестовая'*)
 

@@ -1,6 +1,7 @@
 unit DEVICE_PS_ARK_DEVICE;
 interface
 uses system,devices;
+usescopy slcabagenmodul;
 usescopy objname;
 usescopy blocktype;
 var

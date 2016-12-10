@@ -6,7 +6,6 @@ object Navigator: TNavigator
   Caption = 'Navigator'
   ClientHeight = 885
   ClientWidth = 484
-  DesignTimeDPI = 113
   OnCreate = _onCreate
   LCLVersion = '1.7'
   object MainToolBar: TToolBar

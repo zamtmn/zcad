@@ -12,6 +12,7 @@ var
    GC_HeadDevice:GDBString;
    GC_HDShortName:GDBString;
    GC_HDGroup:GDBInteger;
+   GC_Metric:GDBString;
    GC_NumberInGroup:GDBInteger;
 
    SerialConnection:GDBInteger;

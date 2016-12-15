@@ -98,7 +98,7 @@ uses
                       //разные функции упрощающие создание примитивов, пока их там очень мало
   uzestyleslayers,
   varmandef,
-  Varman,UBaseTypeDescriptor,
+  Varman,UBaseTypeDescriptor,uzbstrproc,
   {UGDBOpenArrayOfUCommands,}zcchangeundocommand,
 
   uzcstrconsts,       //resouce strings
@@ -866,7 +866,8 @@ begin
         //получаем желаемое имя слоя
         layername:=DrawSuperlineParams.LayerNamePrefix+pvd.data.PTD^.GetValueAsString(pvd.data.Instance);
         //ищем описание слоя по имени
-        player:=drawings.GetCurrentDWG.LayerTable.getAddres(layername);
+
+        player:=drawings.GetCurrentDWG.LayerTable.getAddres(Tria_Utf8ToAnsi(layername));
         //если найден - присваиваем, иначе ругаемя
         if player<>nil then
                            psuperline.vp.Layer:=player

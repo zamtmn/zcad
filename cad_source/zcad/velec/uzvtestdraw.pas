@@ -108,6 +108,7 @@ uses
 
 
   function testTempDrawText(p1:GDBVertex;mText:GDBString):TCommandResult;
+  function testTempDrawPLCross(point:GDBVertex;rr:double;color:Integer):TCommandResult;
 implementation
 
   //быстрое написание текста
@@ -123,7 +124,39 @@ implementation
         zcAddEntToCurrentDrawingWithUndo(ptext);   //добавляем в чертеж
         result:=cmd_ok;
   end;
+  function testTempDrawPLCross(point:GDBVertex;rr:double;color:Integer):TCommandResult;
+  var
+      polyObj:PGDBObjPolyLine;
+      tempPoint:GDBVertex;
+      i:integer;
+      //vertexObj:GDBvertex;
+     // pe:T3PointCircleModePentity;
+     // p1,p2:gdbvertex;
+  begin
+       polyObj:=GDBObjPolyline.CreateInstance;
+       zcSetEntPropFromCurrentDrawingProp(polyObj);
+       polyObj^.Closed:=false;
+       polyObj^.vp.Color:=color;
+       polyObj^.vp.LineWeight:=LnWt200;
+       tempPoint.x:=point.x-rr;
+       tempPoint.y:=point.y+rr;
+       tempPoint.z:=0;
+       polyObj^.VertexArrayInOCS.PushBackData(tempPoint);
 
+       tempPoint.x:=point.x+rr;
+       tempPoint.y:=point.y-rr;
+       polyObj^.VertexArrayInOCS.PushBackData(tempPoint);
+
+       tempPoint.y:=point.y+rr;
+       polyObj^.VertexArrayInOCS.PushBackData(tempPoint);
+
+       tempPoint.x:=point.x-rr;
+       tempPoint.y:=point.y-rr;
+       polyObj^.VertexArrayInOCS.PushBackData(tempPoint);
+
+       zcAddEntToCurrentDrawingWithUndo(polyObj);
+       result:=cmd_ok;
+  end;
 
 //function TestModul_com(operands:TCommandOperands):TCommandResult;
 //var

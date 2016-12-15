@@ -153,7 +153,7 @@ Panel Misc;
     action ACN_MATERIALLEGEND
     action ACN_PLACESMOKEDETECTORORTO
     action ACN_SENSORMARK
-    action ACN_ExampleCom
+    action ACN_slagcabCom
     action ACN_ORTODEVPLACE
     action ACN_ADDTOOWNER
     button InsertTestTable,spec.bmp,*DEBUG*Вставить таблицу
@@ -294,7 +294,7 @@ MainMenuItem Draw;
     action ACN_ARC
     action ACN_BInsert
     action ACN_TEXT
-	action ACN_ExampleCom
+	action ACN_slagcabCom
 	action ACN_SupeLine
 	action ACN_TEXT
   }

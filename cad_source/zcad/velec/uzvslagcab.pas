@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 
-unit uzccomexample2;
+unit uzvslagcab;
 {$INCLUDE def.inc}
 interface
 uses uzccommandsimpl,    //тут реализация объекта CommandRTEdObject
@@ -32,7 +32,7 @@ uses uzccommandsimpl,    //тут реализация объекта CommandRTE
      Varman;             //Зкадовский RTTI
 
 type
-TExample_com=object(CommandRTEdObject)//определяем тип - объект наследник базового объекта "динамической" команды
+Tuzvslagcab_com=object(CommandRTEdObject)//определяем тип - объект наследник базового объекта "динамической" команды
              procedure CommandStart(Operands:TCommandOperands);virtual;//переопределяем метод вызываемый при старте команды
              //procedure CommandEnd; virtual;//переопределяем метод вызываемый при окончании команды
              //procedure CommandCancel; virtual;//переопределяем метод вызываемый при отмене команды
@@ -44,20 +44,20 @@ TExample_com=object(CommandRTEdObject)//определяем тип - объек
              procedure DoSomething(pdata:GDBPlatformint); virtual;//реализация какогото действия
              procedure DoSomething2(pdata:GDBPlatformint); virtual;//реализация какогото другого действия
             end;
-PTExampleComParams=^TExampleComParams;//указатель на тип данных параметров команды. зкад работает с ними через указатель
-TExampleComParams=packed record       //определяем параметры команды которые будут видны в инспекторе во время выполнения команды
+PTuzvslagcabComParams=^TuzvslagcabComParams;//указатель на тип данных параметров команды. зкад работает с ними через указатель
+TuzvslagcabComParams=packed record       //определяем параметры команды которые будут видны в инспекторе во время выполнения команды
                                       //регистрировать их будем паскалевским RTTI
                                       //не через экспорт исходников и парсинг файла с определениями типов
-  option3:gdbstring;
-  option1:gdbdouble;
+  nameSL:gdbstring;
+  accuracy:gdbdouble;
   option2:gdbboolean;
 
 end;
 const
   Epsilon=0.2;
 var
- Example_com:TExample_com;//определяем экземпляр нашей команды
- ExampleComParams:TExampleComParams;//определяем экземпляр параметров нашей команды
+ uzvslagcab_com:Tuzvslagcab_com;//определяем экземпляр нашей команды
+ uzvslagcabComParams:TuzvslagcabComParams;//определяем экземпляр параметров нашей команды
 
  graphCable:TGraphBuilder; //созданый граф
  listHeadDevice:TListHeadDevice; //список головных устройств с подключенными к ним устройствами
@@ -66,7 +66,7 @@ var
 
 implementation
 
-procedure TExample_com.CommandStart(Operands:TCommandOperands);
+procedure Tuzvslagcab_com.CommandStart(Operands:TCommandOperands);
 begin
   //создаем командное меню из 3х пунктов
   commandmanager.DMAddMethod('Создать граф и визуал. его','Создает предварительный вид графа для его визуального анализа',visualInspectionGraph);
@@ -80,7 +80,7 @@ begin
   inherited CommandStart('');
 end;
 
-procedure TExample_com.visualInspectionGraph(pdata:GDBPlatformint);
+procedure Tuzvslagcab_com.visualInspectionGraph(pdata:GDBPlatformint);
 var
  i:integer;
  UndoMarcerIsPlazed:boolean;
@@ -88,7 +88,7 @@ begin
   //тут делаем чтонибудь что будет усполнено по нажатию DoSomething2
   //выполним Commandmanager.executecommandend;
   //эту кнопку можно нажать 1 раз
-  graphCable:=uzvcom.graphBulderFunc(ExampleComParams.option1,ExampleComParams.option3);
+  graphCable:=uzvcom.graphBulderFunc(uzvslagcabComParams.accuracy,uzvslagcabComParams.nameSL);
 
   //Визуализация графа
   UndoMarcerIsPlazed:=false;
@@ -110,7 +110,7 @@ begin
 end;
 
 
-procedure TExample_com.visualInspectionGroupHeadGraph(pdata:GDBPlatformint);
+procedure Tuzvslagcab_com.visualInspectionGroupHeadGraph(pdata:GDBPlatformint);
 var
  i,j,counterColor:integer;
  UndoMarcerIsPlazed:boolean;
@@ -118,12 +118,12 @@ begin
   //тут делаем чтонибудь что будет усполнено по нажатию DoSomething2
   //выполним Commandmanager.executecommandend;
   //эту кнопку можно нажать 1 раз
-  graphCable:=uzvcom.graphBulderFunc(ExampleComParams.option1,ExampleComParams.option3);
+  graphCable:=uzvcom.graphBulderFunc(uzvslagcabComParams.accuracy,uzvslagcabComParams.nameSL);
 
   UndoMarcerIsPlazed:=false;
   zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'Visualisation Group Line');
 
-  listHeadDevice:=uzvnum.getGroupDeviceInGraph(graphCable,ExampleComParams.option1);
+  listHeadDevice:=uzvnum.getGroupDeviceInGraph(graphCable,uzvslagcabComParams.accuracy);
 
   counterColor:=1;
   for i:=0 to listHeadDevice.Size-1 do
@@ -132,7 +132,7 @@ begin
         begin
              if counterColor=7 then
                   counterColor:=1;
-             uzvnum.visualGroupLine(listHeadDevice,graphCable,counterColor,i,j,1);
+             uzvnum.visualGroupLine(listHeadDevice,graphCable,counterColor,i,j,uzvslagcabComParams.accuracy);
              counterColor:=counterColor+1;
              //inc(counterColor);
         end;
@@ -142,20 +142,21 @@ begin
   //Commandmanager.executecommandend;
 end;
 
-procedure TExample_com.cablingGroupHeadGraph(pdata:GDBPlatformint);
+procedure Tuzvslagcab_com.cablingGroupHeadGraph(pdata:GDBPlatformint);
 var
- i,j,counterColor:integer;
+ i,j:integer;
  UndoMarcerIsPlazed:boolean;
 begin
   //тут делаем чтонибудь что будет усполнено по нажатию DoSomething2
   //выполним Commandmanager.executecommandend;
   //эту кнопку можно нажать 1 раз
-  graphCable:=uzvcom.graphBulderFunc(ExampleComParams.option1,ExampleComParams.option3);
-  listHeadDevice:=uzvnum.getGroupDeviceInGraph(graphCable,ExampleComParams.option1);
-  //Прокладка кабелей
+  graphCable:=uzvcom.graphBulderFunc(uzvslagcabComParams.accuracy,uzvslagcabComParams.nameSL);
+
   UndoMarcerIsPlazed:=false;
-  zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'Прокладка кабелей по трассе');
-  counterColor:=1;
+  zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'AutoCabeling SuperLine Method');
+
+  listHeadDevice:=uzvnum.getGroupDeviceInGraph(graphCable,uzvslagcabComParams.accuracy);
+  //Прокладка кабелей
   for i:=0 to listHeadDevice.Size-1 do
   begin
      for j:=0 to listHeadDevice[i].listGroup.Size -1 do
@@ -168,7 +169,7 @@ begin
 end;
 
 
-procedure TExample_com.DoSomething(pdata:GDBPlatformint);
+procedure Tuzvslagcab_com.DoSomething(pdata:GDBPlatformint);
 var
  k:integer;
 begin
@@ -178,13 +179,13 @@ begin
   //для примера просто играем параметрами
  // inc(ExampleComParams.option1);
   k:=uzvagensl.autoGenSLBetweenDevices('победа');
-  ExampleComParams.option2:=not ExampleComParams.option2;
+    Commandmanager.executecommandend;
 
 
 
 end;
 
-procedure TExample_com.DoSomething2(pdata:GDBPlatformint);
+procedure Tuzvslagcab_com.DoSomething2(pdata:GDBPlatformint);
 begin
   //тут делаем чтонибудь что будет усполнено по нажатию DoSomething2
   //выполним Commandmanager.executecommandend;
@@ -194,12 +195,13 @@ end;
 
 initialization
   //начальные значения параметров
-  ExampleComParams.option1:=0.1;
-  ExampleComParams.option2:=false;
-  ExampleComParams.option3:='-';
+  uzvslagcabComParams.nameSL:='-';
+  uzvslagcabComParams.accuracy:=0.1;
+  uzvslagcabComParams.option2:=false;
 
-  SysUnit.RegisterType(TypeInfo(PTExampleComParams));//регистрируем тип данных в зкадном RTTI
-  SysUnit.SetTypeDesk(TypeInfo(TExampleComParams),['Имя суперлинии','Погрешность','Параметр2']);//Даем человечьи имена параметрам
-  Example_com.init('ExampleCom',CADWG,0);//инициализируем команду
-  Example_com.SetCommandParam(@ExampleComParams,'PTExampleComParams');//привязываем параметры к команде
+
+  SysUnit.RegisterType(TypeInfo(PTuzvslagcabComParams));//регистрируем тип данных в зкадном RTTI
+  SysUnit.SetTypeDesk(TypeInfo(TuzvslagcabComParams),['Имя суперлинии','Погрешность','Параметр2']);//Даем человечьи имена параметрам
+  uzvslagcab_com.init('slagcab',CADWG,0);//инициализируем команду
+  uzvslagcab_com.SetCommandParam(@uzvslagcabComParams,'PTuzvslagcabComParams');//привязываем параметры к команде
 end.

@@ -132,7 +132,8 @@ uses
    uzbpaths,
    uzctranslations,
 
-  uzvcom;
+  uzvcom,
+  uzvtestdraw;
 
 
 type
@@ -300,10 +301,11 @@ PTDeviceInfoSubGraph=^TDeviceInfoSubGraph;
       //
 
 
- function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
+
+      function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadDevice;
   procedure getListOnlyVertexWayGroup(var ourListGroup:THeadGroupInfo;ourGraph:TGraphBuilder);
  function testTempDrawPolyLineNeed(myVertex:TListVertexWayOnlyVertex;ourGraph:TGraphBuilder;color:Integer):TCommandResult;
- function visualGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;color:Integer;numHead:integer;numGroup:integer):TCommandResult;
+ function visualGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;color:Integer;numHead:integer;numGroup:integer;accuracy:double):TCommandResult;
  function cablingGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;numHead:integer;numGroup:integer):TCommandResult;
 
 implementation
@@ -399,6 +401,8 @@ end;
 //     // HistoryOutStr(IntToStr(result));
 //end;
 //
+
+
   //** Поиск номера по имени устройства из списка из списка устройства
 function getNumHeadDevice(listVertex:TListDeviceLine;name:string):integer;
 var
@@ -751,8 +755,8 @@ begin
 end;
 
 
-//Визуализация текста его цвет, координата
-function visualDrawText(p1:GDBVertex;mText:GDBString;color:integer):TCommandResult;
+//Визуализация текста его p1-координата, mText-текст, color-цвет, размер
+function visualDrawText(p1:GDBVertex;mText:GDBString;color:integer;heightText:double):TCommandResult;
 var
     ptext:PGDBObjText;
 begin
@@ -763,11 +767,12 @@ begin
       ptext^.Template:=mText;     // сам текст
       ptext^.vp.LineWeight:=LnWt100;
       ptext^.vp.Color:=color;
+      ptext^.textprop.size:=heightText;
       zcAddEntToCurrentDrawingWithUndo(ptext);   //добавляем в чертеж
       result:=cmd_ok;
 end;
 
-//Визуализация круга его цвет, координата, размер
+//Визуализация круга его p1-координата, rr-радиус, color-цвет
 function visualDrawCircle(p1:GDBVertex;rr:GDBDouble;color:integer):TCommandResult;
 var
     pcircle:PGDBObjCircle;
@@ -787,7 +792,7 @@ end;
 
 //Визуализация построения шлейфов головных устройств с целью визуального изучения того как будут прокладываться кабельные линии
 //дабы исключить возмоные программные ошибки
-function visualGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;color:Integer;numHead:integer;numGroup:integer):TCommandResult;
+function visualGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;color:Integer;numHead:integer;numGroup:integer;accuracy:double):TCommandResult;
 var
     polyObj:PGDBObjPolyLine;
     i,j,counter:integer;
@@ -834,8 +839,8 @@ begin
                 inc(counter);
                 mtext:=listHeadDevice[numHead].name + '-' + listHeadDevice[numHead].listGroup[numGroup].name + '-' + IntToStr(counter);
                 //HistoryOutStr(' text = ' + mtext);
-                visualDrawCircle(ourGraph.listVertex[myVertex[i]].centerPoint,5,color);
-                visualDrawText(ourGraph.listVertex[myVertex[i]].centerPoint,mtext,color);
+                visualDrawCircle(ourGraph.listVertex[myVertex[i]].centerPoint,500*accuracy,color);
+                visualDrawText(ourGraph.listVertex[myVertex[i]].centerPoint,mtext,color,250*accuracy);
                 vertexAnalized.PushBack(myVertex[i]);
               end;
      end;
@@ -914,7 +919,7 @@ begin
       pvd:=FindVariableInEnt(polyObj,'NMO_BaseName');
        if pvd<>nil then
           begin
-             pgdbstring(pvd^.data.Instance)^:=listHeadDevice[numHead].name + '/';
+             pgdbstring(pvd^.data.Instance)^:=listHeadDevice[numHead].name + '-';
           end;
        pvd:=FindVariableInEnt(polyObj,'CABLE_Segment');
        if pvd<>nil then
@@ -1097,11 +1102,11 @@ begin
         result:=false;
 end;
 
-function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
+function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadDevice;
   var
     G: TGraph;
     EdgePath, VertexPath: TClassList;
-      Epsilon:double;
+      //Epsilon:double;
       deviceInfo: TDeviceInfo;
       listSubDevice:TListSubDevice;  // список подчиненных устройств входит в список головных устройств
 
@@ -1138,7 +1143,7 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
     listHeadDevice := TListHeadDevice.Create;
     listCableLaying := TlistCableLaying.Create;
 
-    Epsilon:=0.2;
+    //Epsilon:=0.2;
     counter:=0;
 
     //обращаемся к функции за графом
@@ -1229,32 +1234,37 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
                          listHeadDevice.Mutable[numHead]^.listGroup.Mutable[numHeadGroup]^.listDevice.PushBack(deviceInfo);
                          //end;
                  end;
+
                //until headDevName='';
 
                end;
                listCableLaying.Clear;
 
-             end;
-
+             end
+             else
+              begin
+                 HistoryOutStr('У устройства нет хозяина = ' + ourGraph.listVertex[i].deviceEnt^.Name);
+                 uzvtestdraw.testTempDrawPLCross(ourGraph.listVertex[i].centerPoint,350*epsilon,6);
+              end;
         end;
       end;
 
     // ОЦЕНКА СИТУАЦИИ С ГОЛОВНЫМИ УСТРОЙСТВАМИ ИХ ГРУППАМИ И ПОДЧИНЕННЫМИ УСТРОЙТСВАМИ
-     for i:=0 to listHeadDevice.Size-1 do
-      begin
-         HistoryOutStr(listHeadDevice[i].name + ' = '+ IntToStr(listHeadDevice[i].num));
-         for j:=0 to listHeadDevice[i].listGroup.Size -1 do
-            begin
-              HistoryOutStr(' Group = ' + listHeadDevice[i].listGroup[j].name);
-              for k:=0 to listHeadDevice[i].listGroup[j].listDevice.Size -1 do
-                begin
-                  HistoryOutStr(' device = ' + IntToStr(listHeadDevice[i].listGroup[j].listDevice[k].num) + '_type' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice);
-                  //uzvcom.testTempDrawText(ourGraph.listVertex[listHeadDevice[i].listGroup[j].listDevice[k].num].centerPoint,'ljlkj');
-                  //HistoryOutStr(' cord = ' + FloatToStr(ourGraph.listVertex[listHeadDevice[i].listGroup[j].listDevice[k].num].centerPoint.x));
-
-                end;
-            end;
-      end;
+     //for i:=0 to listHeadDevice.Size-1 do
+     // begin
+     //    HistoryOutStr(listHeadDevice[i].name + ' = '+ IntToStr(listHeadDevice[i].num));
+     //    for j:=0 to listHeadDevice[i].listGroup.Size -1 do
+     //       begin
+     //         HistoryOutStr(' Group = ' + listHeadDevice[i].listGroup[j].name);
+     //         for k:=0 to listHeadDevice[i].listGroup[j].listDevice.Size -1 do
+     //           begin
+     //             HistoryOutStr(' device = ' + IntToStr(listHeadDevice[i].listGroup[j].listDevice[k].num) + '_type' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice);
+     //             //uzvcom.testTempDrawText(ourGraph.listVertex[listHeadDevice[i].listGroup[j].listDevice[k].num].centerPoint,'ljlkj');
+     //             //HistoryOutStr(' cord = ' + FloatToStr(ourGraph.listVertex[listHeadDevice[i].listGroup[j].listDevice[k].num].centerPoint.x));
+     //
+     //           end;
+     //       end;
+     // end;
 
 
     // Подключение созданного граффа к библиотеке Аграф
@@ -1293,7 +1303,8 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder):TListHeadDevice;
                     end
                     else begin
                       listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listDevice.Mutable[k]^.listNumVertexMinWeight:=nil;
-                      HistoryOutStr(' ЕСТЬ НЕ ПОДКЛЮЧЕННЫЕ УСТРОЙСТВА = ' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice);
+                      HistoryOutStr(' Нет пути от устройства к головному устройству = ' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice);
+                      uzvtestdraw.testTempDrawPLCross(ourGraph.listVertex[listHeadDevice[i].listGroup[j].listDevice[k].num].centerPoint,350*epsilon,4);
                     end;
                     //Анализ результата
                     //HistoryOutStr(' Путь подключения = ' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice);

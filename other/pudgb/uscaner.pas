@@ -6,7 +6,7 @@ interface
 uses
   LazUTF8,Classes, SysUtils,
   uoptions,uscanresult,ufileutils,
-  PParser, PasTree;
+  PParser, PasTree, Masks;
 
 type
     TSimpleEngine = class(TPasTreeContainer)
@@ -21,6 +21,7 @@ type
 
 procedure GetDecls(PM:TPrepareMode;Decl:TPasDeclarations;Options:TOptions;ScanResult:TScanResult;UnitIndex:TUnitIndex;const LogWriter:TLogWriter);
 procedure ScanModule(mn:String;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure ScanDirectory(mn:String;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 
 implementation
 
@@ -96,6 +97,42 @@ begin
       end;
    end;
     //if assigned(LogWriter) then LogWriter(format('Done file: "%s"',[mn]));
+end;
+procedure ScanDirectory(mn:String;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+var
+  path,mask,s:string;
+  i:integer;
+  sr: TSearchRec;
+begin
+   path:=ExtractFileDir(mn)+PathDelim;
+   i:=length(path)+1;
+   while (i<=(length(mn)))and((mn[i] in AllowDirectorySeparators))do
+    inc(i);
+   mask:=copy(mn,i,length(mn)-i+1);
+   if mask='' then
+                  mask:='*.pas;*.pp';
+
+   if FindFirst(path + '*', faDirectory, sr) = 0 then
+   begin
+     repeat
+       if (sr.Name <> '.') and (sr.Name <> '..') then
+       begin
+         if DirectoryExists(path + sr.Name) then
+                                                ScanDirectory(path+sr.Name+PathDelim+mask,Options,ScanResult,LogWriter)
+         else
+         begin
+           //s:=lowercase(sr.Name);
+           if MatchesMaskList(sr.Name,mask) then
+           begin
+             if not ScanResult.isUnitInfoPresent(ExtractFileName(sr.Name),i) then
+             ScanModule(path+PathDelim+sr.Name,Options,ScanResult,LogWriter);
+           end;
+         end;
+       end;
+     until FindNext(sr) <> 0;
+     FindClose(sr);
+   end;
+
 end;
 procedure GetDecls(PM:TPrepareMode;Decl:TPasDeclarations;Options:TOptions;ScanResult:TScanResult;UnitIndex:TUnitIndex;const LogWriter:TLogWriter);
  var i,j:integer;

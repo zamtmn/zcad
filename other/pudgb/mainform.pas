@@ -14,7 +14,7 @@ uses
 
   {$IFDEF CHECKLOOPS}uchecker,{$ENDIF}
   uoptions,uscaner,uscanresult,uwriter,yEdWriter,ulpiimporter;
-
+  {$INCLUDE revision.inc}
   type
 
   { TForm1 }
@@ -120,6 +120,7 @@ begin
   EnumGlobalEditor:=TBaseTypesEditors.EnumDescriptorCreateEditor;//register standart editor to all enum types
 
   GDBobjinsp1.setptr(nil,UnitsFormat,RunTimeUnit^.TypeName2PTD('TOptions'),@Options,nil);//show data variable in inspector
+  caption:='pudgb v 0.1 rev:'+RevisionStr;
 end;
 
 procedure TForm1._onClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -160,7 +161,10 @@ begin
    Memo1.Clear;
    if assigned(ScanResult)then FreeAndNil(ScanResult);           //чистим прошлый результат
    ScanResult:=TScanResult.Create;                               //создаем новый результат
-   ScanModule(Options.Paths._File,Options,ScanResult,DummyWriteToLog);//пытаемся читать исходники
+   if FileExists(Options.Paths._File)then
+    ScanModule(Options.Paths._File,Options,ScanResult,DummyWriteToLog)//пытаемся читать файл исходников
+   else
+    ScanDirectory(Options.Paths._File,Options,ScanResult,DummyWriteToLog);//пытаемся читать директорию с исходниками
    {$IFDEF CHECKLOOPS}CheckGraph(Options,ScanResult,DummyWriteToLog);{$ENDIF}//проверяем граф
 end;
 procedure TForm1.DummyWriteToLog(msg:string);

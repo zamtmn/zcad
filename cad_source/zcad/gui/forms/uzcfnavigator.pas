@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   StdCtrls, ActnList, VirtualTrees,
-  uzcimagesmanager;
+  uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,uzcenitiesvariablesextender,varmandef;
 
 type
 
@@ -31,7 +31,7 @@ type
   private
 
   public
-    PRootNode1,PRootNode2:PVirtualNode;
+    PCombinedNode1,PStandaloneNode:PVirtualNode;
   end;
 
 var
@@ -47,34 +47,53 @@ procedure TNavigator._onCreate(Sender: TObject);
 begin
    ActionList1.Images:=ImagesManager.IconList;
    MainToolBar.Images:=ImagesManager.IconList;
-   Refresh.ImageIndex:={II_Refresh}ImagesManager.GetImageIndex('Refresh');
+   Refresh.ImageIndex:=ImagesManager.GetImageIndex('Refresh');
 end;
 
 procedure TNavigator.RefreshTree(Sender: TObject);
 var
   i:integer;
+  pv:pGDBObjEntity;
+  ir:itrec;
+  pentvarext:PTVariablesExtender;
+  pvd:pvardesk;
+  BaseName:string;
 begin
    NavTree.BeginUpdate;
    NavTree.Clear;
    NavTree.Images:=ImagesManager.IconList;
-   PRootNode1:=NavTree.AddChild(nil,nil);
-   PRootNode2:=NavTree.AddChild(nil,nil);
+   PCombinedNode1:=NavTree.AddChild(nil,nil);
+   PStandaloneNode:=NavTree.AddChild(nil,nil);
    NavTree.OnGetText:=NavGetText;
    NavTree.OnGetImageIndex:=NavGetImage;
-   for i:=0 to 9 do
-      NavTree.AddChild(PRootNode1,nil);
-   for i:=0 to 9 do
-      NavTree.AddChild(PRootNode2,nil);
+   {for i:=0 to 9 do
+      NavTree.AddChild(PCombinedNode1,nil);}
+   {for i:=0 to 9 do
+      NavTree.AddChild(PStandaloneNode,nil);}
+   pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pv<>nil then
+  repeat
+    pentvarext:=pv^.GetExtension(typeof(TVariablesExtender));
+    if pentvarext<>nil then
+    begin
+         pvd:=pentvarext^.entityunit.FindVariable('NMO_BaseName');
+         if pvd<>nil then
+                         BaseName:=pgdbstring(pvd.data.Instance)^
+                     else
+                         BaseName:='??'
+    end;
+  pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+  until pv=nil;
    NavTree.EndUpdate;
 end;
 
 procedure TNavigator.NavGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
                          TextType: TVSTTextType; var CellText: String);
 begin
-     if Node=PRootNode1 then
-                            CellText:='Root1'
-else if Node=PRootNode2 then
-                            CellText:='Root2'
+     if Node=PCombinedNode1 then
+                            CellText:='Combined devices'
+else if Node=PStandaloneNode then
+                            CellText:='Standalone devices'
 else
   begin
   end;
@@ -82,10 +101,10 @@ end;
 procedure TNavigator.NavGetImage(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
                                  var Ghosted: Boolean; var ImageIndex: Integer);
 begin
-     if Node=PRootNode1 then
-                            ImageIndex:=1
-else if Node=PRootNode2 then
-                            ImageIndex:=2
+     if Node=PCombinedNode1 then
+                            ImageIndex:=ImagesManager.GetImageIndex('caddie')
+else if Node=PStandaloneNode then
+                            ImageIndex:=ImagesManager.GetImageIndex('basket')
 else
   begin
   end;

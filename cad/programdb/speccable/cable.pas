@@ -2,6 +2,18 @@ subunit devicebase;
 interface
 uses system;
 type
+     TSPECCABLE_KSBG_A_FRHF_WCS=(_1_2_0_78(*'1х2х0.78'*),
+                                 _2_2_0_78(*'2х2х0.78'*),
+                                 _1_2_0_90(*'1х2х0.90'*),
+                                 _2_2_0_90(*'2х2х0.90'*),
+                                 _1_2_1_10(*'1х2х1.10'*),
+                                 _2_2_1_10(*'2х2х1.10'*),
+                                 _1_2_1_20(*'1х2х1.20'*),
+                                 _2_2_1_20(*'2х2х1.20'*),
+                                 _1_2_1_50(*'1х2х1.50'*),
+                                 _2_2_1_50(*'2х2х1.50'*),
+                                 _1_2_2_00(*'1х2х2.0'*),
+                                 _2_2_2_00(*'2х2х2.0'*));
      TSPECCABLE_KPSVV_WCS=(_1_2_0_5(*'1х2х0.5'*),
                            _2_2_0_5(*'2х2х0.5'*),
                            _1_2_0_75(*'1х2х0.75'*),
@@ -83,6 +95,9 @@ type
     TSPECCABLE_KPSEFRHF=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPECCABLE_KPSE_FRHF_WCS;
            end;
+    TSPECCABLE_KSBG_A_FRHF=packed object(CableDeviceBaseObject)
+                Wire_Count_Section_DESC:TSPECCABLE_KSBG_A_FRHF_WCS;
+           end;
 var
    _EQ_SPECCABLE_KPSVV_ng_LS:TSPECCABLE_KPSVV_ng_LS;
    _EQ_SPECCABLE_KPSVV:TSPECCABLE_KPSVV;
@@ -93,6 +108,7 @@ var
    _EQ_SPECCABLE_KPSVEVKVMN:TSPECCABLE_KPSVEVKVMN;
    _EQ_SPECCABLE_KPSVEVBVM:TSPECCABLE_KPSVEVBVM;
    _EQ_SPECCABLE_KPSEFRHF:TSPECCABLE_KPSEFRHF;
+   _EQ_SPECCABLE_KSBG_A_FRHF:TSPECCABLE_KSBG_A_FRHF;
 
 implementation
 begin
@@ -143,8 +159,8 @@ begin
      _EQ_SPECCABLE_KPSE_ng_FRLS.OKP:='35 8117';
      _EQ_SPECCABLE_KPSE_ng_FRLS.Manufacturer:='НПП "Спецкабель" г.Москва';
      _EQ_SPECCABLE_KPSE_ng_FRLS.Description:='Кабели симметричные парной скрутки огнестойкие предназначены для групповой стационарной прокладки в современных системах охранно-пожарной сигнализации и СОУЭ, а также других системах управления на объектах повышенной пожарной опасности (атомные электростанции, метрополитен, суда, промышленные предприятия, школы, больницы, офисные помещения, высотные здания). Эксплуатируются внутри и вне помещений, при условии защиты от прямого воздействия солнечного излучения и атмосферных осадков.';
-     _EQ_SPECCABLE_KPSE_ng_FRLS.NameShortTemplate:='КПСЭнг-FRLS %%[Wire_Count_Section_DESC]';
-     _EQ_SPECCABLE_KPSE_ng_FRLS.NameTemplate:='Кабель для систем охраны и противопожарной защиты КПСЭнг-FRLS %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSE_ng_FRLS.NameShortTemplate:='КПСЭнг(A)-FRLS %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSE_ng_FRLS.NameTemplate:='Кабель для систем охраны и противопожарной защиты КПСЭнг(A)-FRLS %%[Wire_Count_Section_DESC]';
      _EQ_SPECCABLE_KPSE_ng_FRLS.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
      _EQ_SPECCABLE_KPSE_ng_FRLS.NameFullTemplate:='Кабель для систем охраны и противопожарной защиты огнестойкий групповой прокладки с пониженным дымо- и газовыделением, сечением %%[Wire_Count_Section_DESC]';
      _EQ_SPECCABLE_KPSE_ng_FRLS.Wire_Count_Section_DESC:=_1_2_0_5;
@@ -237,4 +253,21 @@ begin
      _EQ_SPECCABLE_KPSEFRHF.Wire_Count_Section_DESC:=_1_2_0_5;
      _EQ_SPECCABLE_KPSEFRHF.TreeCoord:='BP_СПЕЦКАБЕЛЬ_Для ОПС_КПСЭнг(A)-FRHF|BC_Кабельная продукция_Связи_КПСЭнг(A)-FRHF(СПЕЦКАБЕЛЬ)';
      _EQ_SPECCABLE_KPSEFRHF.format;
+
+     _EQ_SPECCABLE_KSBG_A_FRHF.initnul;
+     _EQ_SPECCABLE_KSBG_A_FRHF.Category:=_kables;
+     _EQ_SPECCABLE_KSBG_A_FRHF.Group:=_cables_sv;
+     _EQ_SPECCABLE_KSBG_A_FRHF.EdIzm:=_m;
+     _EQ_SPECCABLE_KSBG_A_FRHF.ID:='SPECCABLE_KSBG_A_FRHF';
+     _EQ_SPECCABLE_KSBG_A_FRHF.Standard:='ТУ16.К99-040-2009';
+     _EQ_SPECCABLE_KSBG_A_FRHF.OKP:='';
+     _EQ_SPECCABLE_KSBG_A_FRHF.Manufacturer:='НПП "Спецкабель" г.Москва';
+     _EQ_SPECCABLE_KSBG_A_FRHF.Description:='';
+     _EQ_SPECCABLE_KSBG_A_FRHF.NameShortTemplate:='КСБГнг(А)-FRHF %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KSBG_A_FRHF.NameTemplate:='Кабель гибкий огнестойкий групповой прокладки для систем безопасности и промышленной автоматизации КСБГнг(А)-FRHF %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KSBG_A_FRHF.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KSBG_A_FRHF.NameFullTemplate:='Кабель гибкий огнестойкий групповой прокладки для систем безопасности и промышленной автоматизации КСБГнг(А)-FRHF %%[Wire_Count_Section_DESC], сечением %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KSBG_A_FRHF.Wire_Count_Section_DESC:=_1_2_0_78;
+     _EQ_SPECCABLE_KSBG_A_FRHF.TreeCoord:='BP_СПЕЦКАБЕЛЬ_Для ОПС_КСБГнг(А)-FRHF|BC_Кабельная продукция_Связи_КСБГнг(А)-FRHF(СПЕЦКАБЕЛЬ)';
+     _EQ_SPECCABLE_KSBG_A_FRHF.format;
 end.

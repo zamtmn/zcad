@@ -1443,6 +1443,7 @@ var
    DC:TDrawContext;
 begin
      nstep:=0;
+     pva.optimize;
      repeat
            case nstep of
                        0:begin
@@ -1454,21 +1455,23 @@ begin
                               if CutRect3(pva,pvr) then
                                                        nstep:=-1;
                          end;
-                       2:begin
+                       {2:begin
 
                               if CutRect3(pva,pvr) then
                                                        nstep:=-1;
-                         end
+                         end}
            end;
            inc(nstep)
-     until nstep=3;
-     nstep:=nstep;
-     i:=0;
+     until nstep=2;
+
+     if pvr.Count>0 then
+     begin
      p3dpl := GDBPointer(drawings.GetCurrentROOT.ObjArray.CreateInitObj(GDBPolylineID,drawings.GetCurrentROOT));
      p3dpl.Closed:=true;
      p3dpl^.vp.Layer :=drawings.GetCurrentDWG.GetCurrentLayer;
      p3dpl^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
      dc:=drawings.GetCurrentDwg^.CreateDrawingRC;
+     i:=0;
      while i<pvr.Count do
      begin
           wc.x:=PGDBVertex2D(pvr.getDataMutable(i))^.x;
@@ -1481,17 +1484,22 @@ begin
           begin
                p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
                p3dpl^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-               drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(p3dpl^);
+               zcAddEntToCurrentDrawingWithUndo(p3dpl);
+               //drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(p3dpl^);
                if i<>pvr.Count-1 then
+               begin
                p3dpl := GDBPointer(drawings.GetCurrentROOT.ObjArray.CreateInitObj(GDBPolylineID,drawings.GetCurrentROOT));
                p3dpl.Closed:=true;
+               end;
           end;
           inc(i);
      end;
 
-     p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
-     p3dpl^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-     drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(p3dpl^);
+     //p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
+     //p3dpl^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+     //zcAddEntToCurrentDrawingWithUndo(p3dpl);
+     end;
+     //drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(p3dpl^);
      //redrawoglwnd;
 end;
 

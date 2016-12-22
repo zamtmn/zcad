@@ -12,8 +12,11 @@ uses
 type
 
   { TNavigator }
+  TNodeMode=(TNMGroup,TNMAutoGroup,TNMData);
   PTNodeData=^TNodeData;
   TNodeData=record
+    NodeMode:TNodeMode;
+    name,id:string;
     pent:PGDBObjEntity;
   end;
 
@@ -21,11 +24,12 @@ type
     public
     RootNode:PVirtualNode;
     Tree: TVirtualStringTree;
-    ftext:string;
     ficonindex:integer;
-    constructor Create(AOwner:TComponent; ATree: TVirtualStringTree);
+    constructor Create(AOwner:TComponent; ATree: TVirtualStringTree; AName:string);
     destructor Destroy;override;
     procedure ProcessEntity(pent:pGDBObjEntity);
+    function FindGroupNodeById(RootNode:PVirtualNode;id:string):PVirtualNode;
+    //function FindGroupNodeById(RootNode:PVirtualNode;id:string):PVirtualNode;
   end;
 
   TNavigator = class(TForm)
@@ -75,30 +79,67 @@ begin
                        result:=pvd.data.PTD^.GetValueAsString(pvd.data.Instance);
   end;
 end;
+function TRootNodeDesk.FindGroupNodeById(RootNode:PVirtualNode;id:string):PVirtualNode;
+var
+  child:PVirtualNode;
+  pnd:PTNodeData;
+begin
+  child:=RootNode^.FirstChild;
+  while child<>nil do
+  begin
+    pnd := Tree.GetNodeData(child);
+    if Assigned(pnd) then
+    if pnd^.id=id then
+                      system.Break;
+   child:=child^.NextSibling;
+  end;
+  result:=child;
+end;
 
 procedure TRootNodeDesk.ProcessEntity(pent:pGDBObjEntity);
 var
-  pentvarext:PTVariablesExtender;
-  pvd:pvardesk;
-  BaseName:string;
-  pnode:PVirtualNode;
+  BaseName,Name:string;
+  basenode,pnode:PVirtualNode;
   pnd:PTNodeData;
 begin
   if pent^.GetObjType=GDBDeviceID then
   begin
   BaseName:=GetEntityVariableValue(pent,'NMO_BaseName','Absent BaseName');
-  BaseName:=GetEntityVariableValue(pent,'NMO_Name','Absent Name');
-  pnode:=Tree.AddChild(rootnode,nil);
+  Name:=GetEntityVariableValue(pent,'NMO_Name','Absent Name');
+  basenode:=FindGroupNodeById(rootnode,BaseName);
+  if basenode=nil then
+  begin
+    basenode:=Tree.AddChild(rootnode,nil);
+    pnd:=Tree.GetNodeData(basenode);
+    if Assigned(pnd) then
+                       begin
+                         pnd^.NodeMode:=TNMAutoGroup;
+                         pnd^.id:=BaseName;
+                         pnd^.name:=BaseName;
+                       end;
+  end;
+  pnode:=Tree.AddChild(basenode,nil);
   pnd := Tree.GetNodeData(pnode);
   if Assigned(pnd) then
+                      begin
+                      pnd^.NodeMode:=TNMData;
                       pnd^.pent:=pent;
+                      end;
   end;
 end;
-constructor TRootNodeDesk.create(AOwner:TComponent; ATree: TVirtualStringTree);
+constructor TRootNodeDesk.create(AOwner:TComponent; ATree: TVirtualStringTree; AName:string);
+var
+   pnd:PTNodeData;
 begin
    inherited create(AOwner);
    Tree:=ATree;
    RootNode:=ATree.AddChild(nil,nil);
+   pnd := Tree.GetNodeData(RootNode);
+   if Assigned(pnd) then
+   begin
+      pnd^.NodeMode:=TNMGroup;
+      pnd^.name:=AName;
+   end;
 end;
 destructor TRootNodeDesk.Destroy;
 begin
@@ -167,16 +208,13 @@ procedure TNavigator.NavGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Co
 var
   pnd:PTNodeData;
 begin
-     if (assigned(CombinedNode))and(node=CombinedNode.RootNode) then
-                                       celltext:=CombinedNode.ftext
-else if (assigned(StandaloneNode))and(node=StandaloneNode.RootNode) then
-                                       celltext:=StandaloneNode.ftext
-else
+  pnd := Sender.GetNodeData(Node);
+  if assigned(pnd) then
   begin
-    pnd := Sender.GetNodeData(Node);
-    if assigned(pnd) then
-      if pnd^.pent<>nil then
-       celltext:=GetEntityVariableValue(pnd^.pent,'NMO_Name','Absent Name');
+     if pnd^.NodeMode<>TNMData then
+                                   celltext:=pnd^.name
+                               else
+                                   celltext:=GetEntityVariableValue(pnd^.pent,'NMO_Name','Absent Name');
   end;
 end;
 procedure TNavigator.NavGetImage(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
@@ -197,8 +235,7 @@ begin
   //CombinedNode:=TRootNodeDesk.Create(self, NavTree);
   //CombinedNode.ftext:='Combined devices';
   //CombinedNode.ficonindex:=ImagesManager.GetImageIndex('caddie');
-  StandaloneNode:=TRootNodeDesk.Create(self, NavTree);
-  StandaloneNode.ftext:='Standalone devices';
+  StandaloneNode:=TRootNodeDesk.Create(self, NavTree,'Standalone devices');
   StandaloneNode.ficonindex:=ImagesManager.GetImageIndex('basket');
 end;
 

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   StdCtrls, ActnList, VirtualTrees,
-  uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,uzcenitiesvariablesextender,varmandef;
+  uzccommandsmanager,uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,uzcenitiesvariablesextender,varmandef;
 
 type
 
@@ -28,7 +28,9 @@ type
     constructor Create(AOwner:TComponent; ATree: TVirtualStringTree; AName:string);
     destructor Destroy;override;
     procedure ProcessEntity(pent:pGDBObjEntity);
+    procedure ConvertNameNodeToGroupNode(pnode:PVirtualNode);
     function FindGroupNodeById(RootNode:PVirtualNode;id:string):PVirtualNode;
+    function FindGroupNodeByName(RootNode:PVirtualNode;Name:string):PVirtualNode;
     //function FindGroupNodeById(RootNode:PVirtualNode;id:string):PVirtualNode;
   end;
 
@@ -41,6 +43,9 @@ type
     ActionList1:TActionList;
     Refresh:TAction;
     procedure RefreshTree(Sender: TObject);
+    procedure VTCompareNodes(Sender: TBaseVirtualTree; Node1,
+      Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);
+    procedure VTHeaderClick(Sender: TVTHeader; HitInfo: TVTHeaderHitInfo);
     procedure _onCreate(Sender: TObject);
     procedure NavGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
                          TextType: TVSTTextType; var CellText: String);
@@ -95,11 +100,41 @@ begin
   end;
   result:=child;
 end;
+function TRootNodeDesk.FindGroupNodeByName(RootNode:PVirtualNode;Name:string):PVirtualNode;
+var
+  child:PVirtualNode;
+  pnd:PTNodeData;
+begin
+  child:=RootNode^.FirstChild;
+  while child<>nil do
+  begin
+    pnd := Tree.GetNodeData(child);
+    if Assigned(pnd) then
+    if pnd^.Name=Name then
+                      system.Break;
+   child:=child^.NextSibling;
+  end;
+  result:=child;
+end;
+procedure TRootNodeDesk.ConvertNameNodeToGroupNode(pnode:PVirtualNode);
+var
+  pnewnode:PVirtualNode;
+  pnd,pnewnd:PTNodeData;
+begin
+    if pnode^.FirstChild<>nil then
+                                  exit;
+    pnewnode:=Tree.AddChild(pnode,nil);
+    pnd:=Tree.GetNodeData(pnode);
+    pnewnd:=Tree.GetNodeData(pnewnode);
+    if (pnewnd<>nil)and(pnd<>nil) then
+     pnewnd^:=pnd^;
+    pnd^.NodeMode:=TNMAutoGroup;
+end;
 
 procedure TRootNodeDesk.ProcessEntity(pent:pGDBObjEntity);
 var
   BaseName,Name:string;
-  basenode,pnode:PVirtualNode;
+  basenode,namenode,pnode:PVirtualNode;
   pnd:PTNodeData;
 begin
   if pent^.GetObjType=GDBDeviceID then
@@ -118,12 +153,20 @@ begin
                          pnd^.name:=BaseName;
                        end;
   end;
+  namenode:=FindGroupNodeByName(basenode,Name);
+  if namenode<>nil then
+                       begin
+                         ConvertNameNodeToGroupNode(namenode);
+                         basenode:=namenode;
+                       end;
   pnode:=Tree.AddChild(basenode,nil);
   pnd := Tree.GetNodeData(pnode);
   if Assigned(pnd) then
                       begin
                       pnd^.NodeMode:=TNMData;
                       pnd^.pent:=pent;
+                      pnd^.id:=Name;
+                      pnd^.name:=Name;
                       end;
   end;
 end;
@@ -158,13 +201,16 @@ end;
 procedure TNavigator.VTFocuschanged(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);
 var
   pnd:PTNodeData;
+  s:ansistring;
 begin
   pnd := Sender.GetNodeData(Node);
   if assigned(pnd) then
     if pnd^.pent<>nil then
   begin
-   pnd^.pent.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector);
-   if assigned(redrawoglwndproc) then redrawoglwndproc;
+   s:='SelectObjectByAddres('+inttostr(GDBPlatformUInt(pnd^.pent))+')';
+   commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+   //pnd^.pent.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector);
+   //if assigned(redrawoglwndproc) then redrawoglwndproc;
   end;
 end;
 procedure TNavigator._onCreate(Sender: TObject);
@@ -191,16 +237,47 @@ begin
    NavTree.BeginUpdate;
    EraseRoots;
    CreateRoots;
-   pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-   if pv<>nil then
-   repeat
-     if assigned(CombinedNode)then
-       CombinedNode.ProcessEntity(pv);
-     if assigned(StandaloneNode)then
-       StandaloneNode.ProcessEntity(pv);
-     pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-   until pv=nil;
+   if drawings.GetCurrentDWG<>nil then
+   begin
+     pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+     if pv<>nil then
+     repeat
+       if assigned(CombinedNode)then
+         CombinedNode.ProcessEntity(pv);
+       if assigned(StandaloneNode)then
+         StandaloneNode.ProcessEntity(pv);
+       pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+     until pv=nil;
+   end;
    NavTree.EndUpdate;
+end;
+
+procedure TNavigator.VTCompareNodes(Sender: TBaseVirtualTree; Node1,
+  Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);
+begin
+  Result := WideCompareStr(NavTree.Text[Node1, Column], NavTree.Text[Node2, Column]);
+end;
+
+procedure TNavigator.VTHeaderClick(Sender: TVTHeader; HitInfo: TVTHeaderHitInfo
+  );
+begin
+  if HitInfo.Button = mbLeft then
+  begin
+    // Меняем индекс сортирующей колонки на индекс колонки,
+    // которая была нажата.
+    NavTree.Header.SortColumn := HitInfo.Column;
+    // Сортируем всё дерево относительно этой колонки
+    // и изменяем порядок сортировки на противополжный
+    if NavTree.Header.SortDirection = sdAscending then
+    begin
+      NavTree.Header.SortDirection := sdDescending;
+      NavTree.SortTree(HitInfo.Column, NavTree.Header.SortDirection);
+    end
+    else begin
+      NavTree.Header.SortDirection := sdAscending;
+      NavTree.SortTree(HitInfo.Column, NavTree.Header.SortDirection);
+    end;
+  end;
 end;
 
 procedure TNavigator.NavGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;

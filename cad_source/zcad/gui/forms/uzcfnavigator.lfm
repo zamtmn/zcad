@@ -6,6 +6,7 @@ object Navigator: TNavigator
   Caption = 'Navigator'
   ClientHeight = 885
   ClientWidth = 484
+  DesignTimePPI = 113
   OnCreate = _onCreate
   LCLVersion = '1.7'
   object MainToolBar: TToolBar
@@ -41,13 +42,20 @@ object Navigator: TNavigator
     DefaultNodeHeight = 19
     DefaultText = 'Node'
     Header.AutoSizeIndex = 0
-    Header.Columns = <>
-    Header.MainColumn = -1
+    Header.Columns = <    
+      item
+        Position = 0
+        Width = 480
+      end>
+    Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
+    Header.SortColumn = 0
     TabOrder = 1
+    OnCompareNodes = VTCompareNodes
+    OnHeaderClick = VTHeaderClick
   end
   object ActionList1: TActionList
-    left = 365
-    top = 76
+    Left = 365
+    Top = 76
     object Refresh: TAction
       Caption = 'Refresh'
       OnExecute = RefreshTree

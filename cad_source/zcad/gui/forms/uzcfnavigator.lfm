@@ -51,7 +51,9 @@ object Navigator: TNavigator
     Header.SortColumn = 0
     TabOrder = 1
     OnCompareNodes = VTCompareNodes
+    OnDblClick = TVDblClick
     OnHeaderClick = VTHeaderClick
+    OnMouseMove = TVOnMouseMove
   end
   object ActionList1: TActionList
     Left = 365

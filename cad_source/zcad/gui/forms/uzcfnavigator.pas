@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   StdCtrls, ActnList, VirtualTrees,
-  uzccommandsmanager,uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,uzcenitiesvariablesextender,varmandef;
+  uzbgeomtypes ,uzegeometry, uzccommandsmanager,uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,uzcenitiesvariablesextender,varmandef;
 
 type
 
@@ -43,6 +43,8 @@ type
     ActionList1:TActionList;
     Refresh:TAction;
     procedure RefreshTree(Sender: TObject);
+    procedure TVDblClick(Sender: TObject);
+    procedure TVOnMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure VTCompareNodes(Sender: TBaseVirtualTree; Node1,
       Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);
     procedure VTHeaderClick(Sender: TVTHeader; HitInfo: TVTHeaderHitInfo);
@@ -55,6 +57,7 @@ type
   private
     CombinedNode:TRootNodeDesk;
     StandaloneNode:TRootNodeDesk;
+    NavMX,NavMy:integer;
   public
     procedure CreateRoots;
     procedure EraseRoots;
@@ -129,6 +132,7 @@ begin
     if (pnewnd<>nil)and(pnd<>nil) then
      pnewnd^:=pnd^;
     pnd^.NodeMode:=TNMAutoGroup;
+    pnd^.pent:=nil;
 end;
 
 procedure TRootNodeDesk.ProcessEntity(pent:pGDBObjEntity);
@@ -250,6 +254,37 @@ begin
      until pv=nil;
    end;
    NavTree.EndUpdate;
+end;
+
+procedure TNavigator.TVDblClick(Sender: TObject);
+var
+  pnode:PVirtualNode;
+  pnd:PTNodeData;
+  pc,pp:gdbvertex;
+  bb:TBoundingBox;
+const
+  scale=10;
+begin
+  pnode:=NavTree.GetNodeAt(NavMX,NavMy);
+  if pnode<>nil then
+  begin
+    pnd:=NavTree.GetNodeData(pnode);
+    if pnd<>nil then
+    if pnd^.pent<>nil then
+    begin
+      pc:=Vertexmorph(pnd^.pent^.vp.BoundingBox.LBN,pnd^.pent^.vp.BoundingBox.RTF,0.5);
+      bb.LBN:=VertexAdd(pc,VertexMulOnSc(VertexSub(pc,pnd^.pent^.vp.BoundingBox.LBN),scale));
+      bb.RTF:=VertexAdd(pc,VertexMulOnSc(VertexSub(pc,pnd^.pent^.vp.BoundingBox.RTF),scale));
+      drawings.GetCurrentDWG.wa.ZoomToVolume(bb);
+    end;
+  end;
+end;
+
+procedure TNavigator.TVOnMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+  NavMX:=x;
+  NavMy:=y;
 end;
 
 procedure TNavigator.VTCompareNodes(Sender: TBaseVirtualTree; Node1,

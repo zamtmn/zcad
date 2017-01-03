@@ -50,7 +50,7 @@ uses
  uzcdrawing,
   {zmenus,}uzcfprojecttree,uzbtypesbase,{optionswnd,}uzcfabout,uzcfhelp,uzbmemman,uzcdialogsfiles,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}uzclog,Varman,UGDBNumerator,uzcfcommandline,
- AnchorDocking,dialogs,XMLPropStorage,xmlconf,uzglviewareaogl,
+ AnchorDocking,dialogs,XMLPropStorage,xmlconf,{uzglviewareaogl,}
  {,uPSCompiler,
   uPSRuntime,
   uPSC_std,

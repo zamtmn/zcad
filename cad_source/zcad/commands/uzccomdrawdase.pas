@@ -21,7 +21,7 @@ unit uzccomdrawdase;
 
 interface
 uses
-  uzcinterface,uzcstrconsts,GL,printers,graphics,fileutil,Clipbrd,LCLType,classes,
+  uzcinterface,uzcstrconsts,{GL,}printers,graphics,fileutil,Clipbrd,LCLType,classes,
   uzccommandsabstract,
   uzbtypesbase,uzccommandsmanager,uzccombase,
   uzccommandsimpl,

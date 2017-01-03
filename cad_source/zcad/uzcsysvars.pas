@@ -28,6 +28,9 @@ gtk2,gdk2,
 {$IFDEF LCLQT}
 qtwidgets,qt4,qtint,
 {$ENDIF}
+{$IFDEF LCLQT5}
+qtwidgets,qt5,qtint,
+{$ENDIF}
 {$IFNDEF DELPHI}LCLVersion{$ENDIF},sysutils;
 type
 {EXPORT+}
@@ -229,6 +232,9 @@ begin
                                   SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion:=SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion+inttostr(Win32MajorVersion)+'.'+inttostr(Win32MinorVersion)+' build '+inttostr(Win32BuildNumber);
     {$ENDIF}
     {$IFDEF LCLQt}
+       SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion:='Qt'+inttostr(QtVersionMajor)+'.'+inttostr(QtVersionMinor)+'.'+inttostr(QtVersionMicro);
+    {$ENDIF}
+    {$IFDEF LCLQt5}
        SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion:='Qt'+inttostr(QtVersionMajor)+'.'+inttostr(QtVersionMinor)+'.'+inttostr(QtVersionMicro);
     {$ENDIF}
     {$IFDEF LCLGTK2}

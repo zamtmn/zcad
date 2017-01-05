@@ -264,7 +264,7 @@ end;
 procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.AddObjectToNodeTree(var Entity:TEntity);
 begin
     AddObjToNul(Entity);
-    if nul.count<>1 then
+    if (nul.count<>1)or(pplusnode<>nil)or(pminusnode<>nil) then
                         CorrectNodeBoundingBox(Entity)
                     else
                         BoundingBox:=TEntsManipulator.GetEntityBoundingBox(Entity);

@@ -89,6 +89,7 @@ action ACN_OBJVARMAN,ObjVarMan,varman.bmp,Object variables manager,,
 action ACN_MULTIOBJVARMAN,MultiObjVarMan,mvarman.bmp,Multi object variables manager,,
 
 action ACN_slagcabCom,slagcab,#D(),Start command panels for autocabeling SL,,
+action ACN_agslr,AGSLROOM,#ASL,Start command ASL,,
 action ACN_SupeLine,DrawSuperLine,superline.bmp,SuperLine,,
 
 action ACN_LINE,Line,line.bmp,Draw line,,

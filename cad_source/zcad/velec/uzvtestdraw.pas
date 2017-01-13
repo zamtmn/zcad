@@ -108,6 +108,7 @@ uses
 
 
   function testTempDrawText(p1:GDBVertex;mText:GDBString):TCommandResult;
+  function testTempDrawLine(p1:GDBVertex;p2:GDBVertex):TCommandResult;
   function testTempDrawPLCross(point:GDBVertex;rr:double;color:Integer):TCommandResult;
 implementation
 
@@ -123,6 +124,22 @@ implementation
         ptext^.Template:=mText;     // сам текст
         zcAddEntToCurrentDrawingWithUndo(ptext);   //добавляем в чертеж
         result:=cmd_ok;
+  end;
+  //быстрое рисование линии
+  function testTempDrawLine(p1:GDBVertex;p2:GDBVertex):TCommandResult;
+  var
+      pline:PGDBObjLine;
+  begin
+      begin
+        pline := AllocEnt(GDBLineID);                                             //выделяем память
+        pline^.init(nil,nil,0,p1,p2);                                             //инициализируем и сразу создаем
+
+        zcSetEntPropFromCurrentDrawingProp(pline);//присваиваем текущие слой, вес и т.п
+        pline^.vp.LineWeight:=LnWt200;
+        pline^.vp.Color:=6;
+        zcAddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
+      end;
+      result:=cmd_ok;
   end;
   function testTempDrawPLCross(point:GDBVertex;rr:double;color:Integer):TCommandResult;
   var

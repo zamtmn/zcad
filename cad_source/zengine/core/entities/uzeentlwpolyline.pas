@@ -49,6 +49,7 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  function CalcSquare:GDBDouble;virtual;
+                 //**попадаетли данная координата внутрь контура
                  function isPointInside(point:GDBVertex):GDBBoolean;virtual;
                  procedure createpoint;virtual;
                  procedure CalcWidthSegment;virtual;

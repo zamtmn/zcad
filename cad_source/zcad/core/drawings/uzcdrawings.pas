@@ -364,6 +364,7 @@ begin
    { TODO : переделать }
    if typeof(CurrentDWG^)=typeof(TZCADDrawing) then
    begin
+   DWGDBUnit:=PTZCADDrawing(CurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
    DWGUnit:=PTZCADDrawing(CurrentDWG).DWGUnits.findunit(SupportPath,InterfaceTranslate,'DrawingVars');
    //DWGUnit.AssignToSymbol(SysVar.DWG.DWG_SnapGrid,'DWG_SnapGrid');
    SysVar.dwg.DWG_SnapGrid:=@CurrentDWG.SnapGrid;

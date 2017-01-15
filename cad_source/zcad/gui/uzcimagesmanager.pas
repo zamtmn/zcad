@@ -24,7 +24,7 @@ interface
 uses
   uzbpaths,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Buttons, ExtCtrls, LazUTF8,
-  uzbtypes,uzcsysvars,uzcsysinfo,uzbtypesbase,gzctnrstl,usimplegenerics;
+  uzbtypes,uzcsysvars,uzcsysinfo,uzbtypesbase,gzctnrstl,usimplegenerics,UGDBOpenArrayOfByte,uzbstrproc;
 type
   TImageData=record
     Index:Integer;
@@ -45,6 +45,7 @@ type
       destructor destroy; override;
       function loadicon(f:string):integer;
       procedure ScanDir(path:string);
+      procedure LoadAliasesDir(path:string);
       function GetImageIndex(ImageName:string):integer;
     published
       property IconList: TImageList read FIconList write FIconList;
@@ -127,7 +128,38 @@ begin
        result:=defaultimageindex;
      end;
 end;
-
+procedure TImagesManager.LoadAliasesDir(path:string);
+var
+  i,code:GDBInteger;
+  line,sub,internalname:GDBString;
+  f:GDBOpenArrayOfByte;
+  PID:TImageName2TImageDataMap.PTValue;
+  ID:TImageData;
+begin
+  f.InitFromFile(path);
+  while f.notEOF do
+    begin
+      line:=f.readGDBString;
+      if line<>'' then
+      if line[1]<>';' then
+        begin
+          sub:=GetPredStr(line,'=');
+          internalname:=uppercase(sub);
+          if ImagesManager.ImageDataMap.MyGetMutableValue(internalname,PID) then
+            begin
+              //уже зарегистрирован
+            end
+          else
+            begin
+              id.Index:=GetImageIndex(line);;
+              id.Path:=sub;
+              id.UppercaseName:=internalname;
+              ImagesManager.ImageDataMap.RegisterKey(internalname,id)
+            end;
+        end;
+    end;
+  f.done;
+end;
 procedure TImagesManager.ScanDir(path:string);
 begin
   FromDirIterator(utf8tosys(path),'*.png','',foundimage,{TImagesManager.foundimage}nil);

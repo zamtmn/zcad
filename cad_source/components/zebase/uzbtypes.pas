@@ -183,6 +183,7 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
                    BBorder:TBlockBorder;(*'Border'*)
                    BGroup:TBlockGroup;(*'Block group'*)
              end;
+  TENTID=GDBString;
 TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
 PGDBsymdolinfo=^GDBsymdolinfo;
 GDBsymdolinfo=packed record

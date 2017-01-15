@@ -36,6 +36,7 @@ GDBSinonimDescriptor=object(TUserTypeDescriptor)
                      function GetFactTypedef:PUserTypeDescriptor;virtual;
                      function Compare(pleft,pright:pointer):TCompareResult;virtual;
                      function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
+                     procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
                      function GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;virtual;
 
                end;
@@ -48,6 +49,10 @@ end;
 function GDBSinonimDescriptor.GetValueAsString;
 begin
      result:=GetFactTypedef^.GetValueAsString(pinstance);
+end;
+procedure GDBSinonimDescriptor.SetValueFromString(PInstance:GDBPointer;Value:GDBstring);
+begin
+     GetFactTypedef^.SetValueFromString(pinstance,Value);
 end;
 destructor GDBSinonimDescriptor.done;
 begin

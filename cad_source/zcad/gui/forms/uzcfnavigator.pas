@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  StdCtrls, ActnList, VirtualTrees,
+  StdCtrls, ActnList, VirtualTrees, gvector,
   uzbgeomtypes ,uzegeometry, uzccommandsmanager,uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,uzcenitiesvariablesextender,varmandef;
 
 type
@@ -19,7 +19,12 @@ type
     name,id:string;
     pent:PGDBObjEntity;
   end;
-
+  TNodesStatesVector=tvector<TNodeData>;
+  TNodesStates=class
+      OpenedNodes:TNodesStatesVector;
+      constructor Create;
+      destructor Destroy;override;
+  end;
   TRootNodeDesk=class(Tcomponent)
     public
     RootNode:PVirtualNode;
@@ -31,6 +36,10 @@ type
     procedure ConvertNameNodeToGroupNode(pnode:PVirtualNode);
     function FindGroupNodeById(RootNode:PVirtualNode;id:string):PVirtualNode;
     function FindGroupNodeByName(RootNode:PVirtualNode;Name:string):PVirtualNode;
+    function SaveState:TNodesStates;
+    procedure RecursiveSaveState(Node:PVirtualNode;NodesStates:TNodesStates);
+    procedure RestoreState(State:TNodesStates);
+    procedure RecursiveRestoreState(Node:PVirtualNode;var StartInNodestates:integer;NodesStates:TNodesStates);
     //function FindGroupNodeById(RootNode:PVirtualNode;id:string):PVirtualNode;
   end;
 
@@ -56,7 +65,9 @@ type
 
   private
     CombinedNode:TRootNodeDesk;
+    CombinedNodeStates:TNodesStates;
     StandaloneNode:TRootNodeDesk;
+    StandaloneNodeStates:TNodesStates;
     NavMX,NavMy:integer;
   public
     procedure CreateRoots;
@@ -73,6 +84,86 @@ implementation
 {$R *.lfm}
 
 { TNavigator }
+constructor TNodesStates.Create;
+begin
+  OpenedNodes:=TNodesStatesVector.create;
+end;
+destructor TNodesStates.Destroy;
+begin
+  OpenedNodes.Destroy;
+end;
+procedure TRootNodeDesk.RecursiveSaveState(Node:PVirtualNode;NodesStates:TNodesStates);
+var
+  child:PVirtualNode;
+  pnd:PTNodeData;
+begin
+  if vsExpanded in Node.states then
+  begin
+    pnd:=Tree.GetNodeData(Node);
+    if pnd<>nil then
+      NodesStates.OpenedNodes.PushBack(pnd^);
+  end;
+  child:=Node^.FirstChild;
+  while child<>nil do
+  begin
+   RecursiveSaveState(child,NodesStates);
+   child:=child^.NextSibling;
+  end;
+end;
+function TRootNodeDesk.SaveState:TNodesStates;
+begin
+  result:=TNodesStates.create;
+  RecursiveSaveState(RootNode,result);
+end;
+function findin(pnd:PTNodeData;var StartInNodestates:integer;NodesStates:TNodesStates):boolean;
+var
+  i:integer;
+  deb:TNodeData;
+begin
+  for i:={StartInNodestates+1}0 to NodesStates.OpenedNodes.Size-1 do
+  begin
+  deb:=NodesStates.OpenedNodes[i];
+  if (pnd^.id=deb.id)
+  and(pnd^.name=deb.name)
+  and(pnd^.NodeMode=deb.NodeMode)
+  and(pnd^.pent=deb.pent)then
+   begin
+    StartInNodestates:=i;
+    exit(true);
+   end;
+  end;
+    result:=false;
+end;
+
+procedure TRootNodeDesk.RecursiveRestoreState(Node:PVirtualNode;var StartInNodestates:integer;NodesStates:TNodesStates);
+var
+  child:PVirtualNode;
+  pnd:PTNodeData;
+begin
+  pnd:=Tree.GetNodeData(Node);
+  if pnd<>nil then
+  begin
+    if findin(pnd,StartInNodestates,NodesStates) then
+    Tree.Expanded[Node]:=true;
+      //Node^.Expand(True);
+      //Node.states:=Node.states+[vsExpanded];
+  end;
+  if StartInNodestates=NodesStates.OpenedNodes.Size then
+                                                        exit;
+  child:=Node^.FirstChild;
+  while child<>nil do
+  begin
+   RecursiveRestoreState(child,StartInNodestates,NodesStates);
+   child:=child^.NextSibling;
+  end;
+end;
+procedure TRootNodeDesk.RestoreState(State:TNodesStates);
+var
+  StartInNodestates:integer;
+begin
+  StartInNodestates:=-1;
+  RecursiveRestoreState(RootNode,StartInNodestates,State);
+end;
 function GetEntityVariableValue(const pent:pGDBObjEntity;varname,defvalue:string):string;
 var
   pentvarext:PTVariablesExtender;
@@ -253,7 +344,14 @@ begin
        pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
      until pv=nil;
    end;
+
+   if assigned(StandaloneNodeStates) then
+   begin
+   StandaloneNode.RestoreState(StandaloneNodeStates);
+   freeandnil(StandaloneNodeStates);
+   end;
    NavTree.EndUpdate;
+   //NavTree.UpdateRanges;
 end;
 
 procedure TNavigator.TVDblClick(Sender: TObject);
@@ -354,9 +452,15 @@ end;
 procedure TNavigator.EraseRoots;
 begin
   if assigned(CombinedNode) then
+  begin
+    CombinedNodeStates:=CombinedNode.SaveState;
     FreeAndNil(CombinedNode);
+  end;
   if assigned(StandaloneNode) then
-  FreeAndNil(StandaloneNode);
+  begin
+    StandaloneNodeStates:=StandaloneNode.SaveState;
+    FreeAndNil(StandaloneNode);
+  end;
 end;
 
 end.

@@ -34,7 +34,8 @@ begin
   while f.notEOF do
     begin
       line:=f.readGDBString;
-      if (line[1]<>';')and(line[1]<>'') then
+      if line<>'' then
+      if line[1]<>';' then
         begin
           sub:=GetPredStr(line,'=');
           val(sub,i,code);

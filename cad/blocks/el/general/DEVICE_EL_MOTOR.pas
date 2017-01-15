@@ -1,8 +1,8 @@
 unit DEVICE_EL_MOTOR;
 interface
 uses system,devices;
-usescopy slcabagenmodul;
 usescopy blocktype;
+usescopy slcabagenmodul;
 var
    NMO_Template:GDBString;(*'Шаблон Обозначения'*) 
    NMO_Name:GDBString;(*'Обозначение'*)

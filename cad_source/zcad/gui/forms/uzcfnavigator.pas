@@ -78,6 +78,7 @@ type
 
 var
   Navigator: TNavigator;
+  NavGroupIconIndex,NavAutoGroupIconIndex:integer;
 
 implementation
 
@@ -243,7 +244,7 @@ begin
     pnd:=Tree.GetNodeData(basenode);
     if Assigned(pnd) then
                        begin
-                         pnd^.NodeMode:=TNMAutoGroup;
+                         pnd^.NodeMode:=TNMGroup;
                          pnd^.id:=BaseName;
                          pnd^.name:=BaseName;
                        end;
@@ -429,14 +430,38 @@ begin
 end;
 procedure TNavigator.NavGetImage(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
                                  var Ghosted: Boolean; var ImageIndex: Integer);
+var
+  pnd:PTNodeData;
 begin
+  if NavGroupIconIndex=-1 then
+                              NavGroupIconIndex:=ImagesManager.GetImageIndex('navmanualgroup');
+  if NavAutoGroupIconIndex=-1 then
+                              NavAutoGroupIconIndex:=ImagesManager.GetImageIndex('navautogroup');
+
      if (assigned(CombinedNode))and(node=CombinedNode.RootNode) then
                                        ImageIndex:=CombinedNode.ficonindex
 else if (assigned(StandaloneNode))and(node=StandaloneNode.RootNode) then
                                        ImageIndex:=StandaloneNode.ficonindex
 else
   begin
-    ImageIndex:=1;
+    pnd := Sender.GetNodeData(Node);
+      if assigned(pnd) then
+        begin
+          case pnd^.NodeMode of
+          TNMGroup:ImageIndex:=NavGroupIconIndex;
+          TNMAutoGroup:ImageIndex:=NavAutoGroupIconIndex;
+          TNMData:begin
+                    if pnd^.pent<>nil then
+                                          begin
+                                           ImageIndex:=ImagesManager.GetImageIndex(GetEntityVariableValue(pnd^.pent,'ENTID_Type','bug'));
+                                          end
+                    else
+                      ImageIndex:=3;
+                  end;
+          end;
+        end
+      else
+        ImageIndex:=1;
   end;
 end;
 
@@ -462,6 +487,8 @@ begin
     FreeAndNil(StandaloneNode);
   end;
 end;
-
+begin
+  NavGroupIconIndex:=-1;
+  NavAutoGroupIconIndex:=-1;
 end.
 

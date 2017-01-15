@@ -1428,6 +1428,7 @@ begin
 
   InitSystemCalls;
   ImagesManager.ScanDir(ProgramPath+'images/');
+  ImagesManager.LoadAliasesDir(ProgramPath+'images/navigator.ima');
   LoadActions;
   toolbars:=tstringlist.Create;
   toolbars.Sorted:=true;

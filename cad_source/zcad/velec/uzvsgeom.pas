@@ -135,6 +135,9 @@ uses
 //**p1,p2 - точки отрезка,рр - точка от который прокладывается пенпендикуляр
 //**pointToLine - точка на отрезки перпендикуляра, сама функция возвращает лежит перпендикуляр на отрезке или нет
 function perpendToLine(p1,p2:GDBVertex;pp:GDBVertex;out pointToLine:GDBVertex):boolean;
+//**Смещение по направлению линии
+//**pline11,pline21 - одна и таже центральная точка, pline12 точка до центральной точки, pline22 после, если по часовой стрелки рассматривать фигуру
+//**relatLine1,relatLine2 - смещение по одной линии и смещение по ругой линии
 function getPointRelativeTwoLines(pline11,pline12,pline21,pline22:GDBVertex;relatLine1,relatLine2:double):GDBVertex;
 
 implementation
@@ -204,6 +207,7 @@ begin
      pt2new:=offsetOfFirstPointInSecondPointToLine(pline21,pline22,xlinenew2,ylinenew2);
 
      result:=offsetOfFirstPointInSecondPointToLine(pt1new,pt2new,xlinenew2,ylinenew2);
+     //result.x:=
 end;
 //function TestModul_com(operands:TCommandOperands):TCommandResult;
 //var

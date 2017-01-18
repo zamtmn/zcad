@@ -110,8 +110,25 @@ uses
   function testTempDrawText(p1:GDBVertex;mText:GDBString):TCommandResult;
   function testTempDrawLine(p1:GDBVertex;p2:GDBVertex):TCommandResult;
   function testTempDrawPLCross(point:GDBVertex;rr:double;color:Integer):TCommandResult;
+  function testDrawCircle(p1:GDBVertex;rr:GDBDouble;color:integer):TCommandResult;
 implementation
 
+  //Визуализация круга его p1-координата, rr-радиус, color-цвет
+  function testDrawCircle(p1:GDBVertex;rr:GDBDouble;color:integer):TCommandResult;
+  var
+      pcircle:PGDBObjCircle;
+  begin
+      begin
+        pcircle := AllocEnt(GDBCircleID);                                             //выделяем память
+        pcircle^.init(nil,nil,0,p1,rr);                                             //инициализируем и сразу создаем
+
+        zcSetEntPropFromCurrentDrawingProp(pcircle);                                        //присваиваем текущие слой, вес и т.п
+        pcircle^.vp.LineWeight:=LnWt100;
+        pcircle^.vp.Color:=color;
+        zcAddEntToCurrentDrawingWithUndo(pcircle);                                    //добавляем в чертеж
+      end;
+      result:=cmd_ok;
+  end;
   //быстрое написание текста
   function testTempDrawText(p1:GDBVertex;mText:GDBString):TCommandResult;
   var

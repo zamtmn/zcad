@@ -25,4 +25,6 @@ begin
    GC_HeadDevice:='ARK??';
    GC_HDShortName:='??';
    GC_HDGroup:='0';
+
+   ENTID_Type:='OBJT_Devices_OnPlans';
 end.

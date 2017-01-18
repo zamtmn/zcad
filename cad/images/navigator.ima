@@ -10,3 +10,6 @@ navmanualgroup=navgroup
 ; !!!NOIMAGE - "filename" for default "?" icon
 ; it is possible to omit
 ;OBJT_Unknown=!!!NOIMAGE
+
+OBJT_Devices_OnPlans=onplan.png
+OBJT_Devices_OnDiagrams_PIDDiagram=ondiagram.png

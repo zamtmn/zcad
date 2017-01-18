@@ -38,7 +38,8 @@ GDBSinonimDescriptor=object(TUserTypeDescriptor)
                      function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                      procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
                      function GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;virtual;
-
+                     procedure MagicFreeInstance(PInstance:GDBPointer);virtual;
+                     procedure MagicAfterCopyInstance(PInstance:GDBPointer);virtual;
                end;
 implementation
 uses {ZBasicVisible,}UUnitManager{,log};
@@ -53,6 +54,14 @@ end;
 procedure GDBSinonimDescriptor.SetValueFromString(PInstance:GDBPointer;Value:GDBstring);
 begin
      GetFactTypedef^.SetValueFromString(pinstance,Value);
+end;
+procedure GDBSinonimDescriptor.MagicFreeInstance(PInstance:GDBPointer);
+begin
+     GetFactTypedef^.MagicFreeInstance(PInstance);
+end;
+procedure GDBSinonimDescriptor.MagicAfterCopyInstance(PInstance:GDBPointer);
+begin
+     GetFactTypedef^.MagicAfterCopyInstance(PInstance);
 end;
 destructor GDBSinonimDescriptor.done;
 begin

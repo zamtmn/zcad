@@ -1697,7 +1697,7 @@ begin
                      if uppercase(line)='LINEWCOMBOBOX' then
                      begin
                           ReadComboSubParam(bc,ts,w);
-                          LineWBox:=CreateCBox(line,tb,TSupportLineWidthCombo.LineWBoxDrawItem,ChangeCLineW,DropDownColor,DropUpColor,FillLWCombo,w,ts);
+                          LineWBox:=CreateCBox(line,tb,TSupportLineWidthCombo.LineWBoxDrawIVarsItem,ChangeCLineW,DropDownColor,DropUpColor,FillLWCombo,w,ts);
                      end;
                      if uppercase(line)='COLORCOMBOBOX' then
                      begin

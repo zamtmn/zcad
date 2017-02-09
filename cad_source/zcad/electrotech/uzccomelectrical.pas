@@ -657,7 +657,7 @@ begin
            begin
                 pentvarext:=psd^.objaddr^.GetExtension(typeof(TVariablesExtender));
                 //pvd:=PTObjectUnit(psd^.objaddr^.ou.Instance)^.FindVariable('DESC_MountingSite');
-                pvd:=pentvarext^.entityunit.FindVariable('DESC_MountingSite');
+                pvd:=pentvarext^.entityunit.FindVariable({'DESC_MountingSite'}'NMO_Name');
                 if pvd<>nil then
                                 dn.name:=pvd.data.PTD.GetValueAsString(pvd.data.Instance)
                             else
@@ -686,6 +686,9 @@ begin
 
             pnevdev.Local.P_insert:=currentcoord;
             pnevdev.Local.Basis.oz:=xy_Z_Vertex;
+            pnevdev.Local.Basis.ox:=_X_yzVertex;
+            pnevdev.Local.Basis.oy:=x_Y_zVertex;
+            pnevdev.rotate:=0;
 
             //pnevdev^.BuildGeometry(drawings.GetCurrentDWG^);
             //pnevdev^.BuildVarGeometry(drawings.GetCurrentDWG^);

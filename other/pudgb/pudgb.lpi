@@ -22,16 +22,22 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="3">
+    <RequiredPackages Count="5">
       <Item1>
-        <PackageName Value="zobjectinspector"/>
+        <PackageName Value="CodeTools"/>
       </Item1>
       <Item2>
-        <PackageName Value="FCL"/>
+        <PackageName Value="IDEIntf"/>
       </Item2>
       <Item3>
-        <PackageName Value="LCL"/>
+        <PackageName Value="zobjectinspector"/>
       </Item3>
+      <Item4>
+        <PackageName Value="FCL"/>
+      </Item4>
+      <Item5>
+        <PackageName Value="LCL"/>
+      </Item5>
     </RequiredPackages>
     <Units Count="9">
       <Unit0>
@@ -84,7 +90,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir);..\..\cad_source\other\AGraph\Vectors"/>
-      <OtherUnitFiles Value="..\..\cad_source\other\AGraph\Vectors;..\..\cad_source\other\AGraph\Graphs;..\..\cad_source\other\AGraph\Attrs"/>
+      <OtherUnitFiles Value="..\..\cad_source\other\AGraph\Vectors;..\..\cad_source\other\AGraph\Graphs;..\..\cad_source\other\AGraph\Attrs;$(LazarusDir)\ide"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

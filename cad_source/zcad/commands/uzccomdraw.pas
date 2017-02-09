@@ -1171,10 +1171,10 @@ begin
 end;
 class function TGDBNameLess.c(a,b:tdevname):boolean;
 begin
-     if a.name<b.name then
-                          result:=true
+     if {a.name<b.name}AnsiNaturalCompare(a.name,b.name)>0 then
+                          result:=false
                       else
-                          result:=false;
+                          result:=true;
 end;
 class function TGDBtaxisdescLess.c(a,b:taxisdesc):boolean;
 begin

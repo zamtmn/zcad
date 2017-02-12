@@ -21,7 +21,7 @@ unit uzccominterface;
 
 interface
 uses
- uzccomimport,uzbpaths,uzeffmanager,uzglbackendmanager,uzglviewareaabstract,uzgldrawerogl,
+ uzcutils,uzccomimport,uzbpaths,uzeffmanager,uzglbackendmanager,uzglviewareaabstract,uzgldrawerogl,
  uzcfcolors,uzcfdimstyles,uzcflinetypes,uzcftextstyles,uzcinfoform,uzefontmanager,uzedrawingsimple,uzccombase,
  uzcsysvars,uzccommandsmanager,TypeDescriptors,uzcstrconsts,uzctnrvectorgdbstring,uzcctrlcontextmenu,
  {$IFNDEF DELPHI}uzctranslations,{$ENDIF}uzcflayers,uzcfunits,uzbstrproc,uzctreenode,menus,
@@ -139,6 +139,7 @@ begin
                                                   i:=0;
              ZCADMainWindow.PageControl.ActivePageIndex:=i;
      end;
+     zcRedrawCurrentDrawing;
      result:=cmd_ok;
 end;
 function PrevDrawint_com(operands:TCommandOperands):TCommandResult;
@@ -154,6 +155,7 @@ begin
                                                   i:=ZCADMainWindow.PageControl.PageCount-1;
              ZCADMainWindow.PageControl.ActivePageIndex:=i;
      end;
+     zcRedrawCurrentDrawing;
      result:=cmd_ok;
 end;
 function newdwg_com(operands:TCommandOperands):TCommandResult;

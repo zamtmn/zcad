@@ -22,7 +22,7 @@ unit UObjectDescriptor;
 {$ASMMODE intel}
 interface
 uses LCLProc,gzctnrvectorobjects,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
-     UBaseTypeDescriptor,TypeDescriptors,
+     uzedimensionaltypes,UBaseTypeDescriptor,TypeDescriptors,
      strmy,uzctnrvectorgdbstring,gzctnrvectorp,gzctnrvectordata,uzbtypesbase,varmandef,uzbtypes,uzbmemman,uzbstrproc;
 type
 GDBTOperandStoreMode=GDBByte;

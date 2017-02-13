@@ -8,7 +8,7 @@ unit zmath;
 interface
 
 uses
-  uzegeometry, uzemathutils, LazarusPackageIntf;
+  uzegeometry, uzemathutils, uzedimensionaltypes, LazarusPackageIntf;
 
 implementation
 

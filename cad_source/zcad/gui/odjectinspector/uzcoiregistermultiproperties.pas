@@ -27,7 +27,7 @@ uses
   varmandef,
   uzeconsts,
   uzeentity,
-  uzbtypesbase,
+  uzedimensionaltypes,uzbtypesbase,
   Varman,
   uzcoimultipropertiesutil,
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,uzeentmtext,uzeentpolyline,uzcentelleader,uzeentdimension,uzeentellipse,

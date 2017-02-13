@@ -20,7 +20,7 @@ unit UArrayDescriptor;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses sysutils,LCLProc,TypeDescriptors,uzbtypesbase,varmandef,uzbtypes,gzctnrvectordata,uzbmemman;
+uses uzedimensionaltypes,sysutils,LCLProc,TypeDescriptors,uzbtypesbase,varmandef,uzbtypes,gzctnrvectordata,uzbmemman;
 type
 PArrayIndexDescriptor=^ArrayIndexDescriptor;
 ArrayIndexDescriptor=record

@@ -1,74 +1,75 @@
 object Form1: TForm1
   Left = 633
-  Height = 550
+  Height = 647
   Top = 265
-  Width = 683
+  Width = 804
   Caption = 'Form1'
-  ClientHeight = 550
-  ClientWidth = 683
+  ClientHeight = 647
+  ClientWidth = 804
+  DesignTimePPI = 113
   OnClick = AddOtherdata
   OnCreate = CreateForm
-  LCLVersion = '1.5'
+  LCLVersion = '1.7'
   object GDBobjinsp1: TGDBobjinsp
     Left = 0
-    Height = 550
+    Height = 647
     Top = 0
-    Width = 254
+    Width = 299
     HorzScrollBar.Page = 1
     VertScrollBar.Increment = 200
-    VertScrollBar.Page = 550
-    VertScrollBar.Range = 550
+    VertScrollBar.Page = 647
+    VertScrollBar.Range = 647
     Align = alLeft
     AutoScroll = False
     BorderStyle = bsNone
     TabOrder = 0
   end
   object Splitter1: TSplitter
-    Left = 254
-    Height = 550
+    Left = 299
+    Height = 647
     Top = 0
-    Width = 10
+    Width = 12
   end
   object SpeedButton1: TSpeedButton
-    Left = 312
+    Left = 367
     Height = 23
-    Top = 120
+    Top = 141
     Width = 208
     AutoSize = True
     Caption = 'Add otherdata to data by pointer'
     OnClick = AddOtherdata
   end
   object SpeedButton2: TSpeedButton
-    Left = 312
+    Left = 367
     Height = 23
-    Top = 16
+    Top = 19
     Width = 85
     AutoSize = True
     Caption = 'Swith to data'
     OnClick = SwithToData
   end
   object SpeedButton3: TSpeedButton
-    Left = 312
+    Left = 367
     Height = 23
-    Top = 64
+    Top = 75
     Width = 118
     AutoSize = True
     Caption = 'Swith to otherdata'
     OnClick = SwithToOtherData
   end
   object SpeedButton4: TSpeedButton
-    Left = 312
-    Height = 72
-    Top = 176
-    Width = 304
+    Left = 367
+    Height = 85
+    Top = 207
+    Width = 358
     Caption = 'Remove otherdata from data by pointer'
     OnClick = RemoveOtherData
   end
   object SpeedButton5: TSpeedButton
-    Left = 312
-    Height = 99
-    Top = 288
-    Width = 295
+    Left = 367
+    Height = 117
+    Top = 339
+    Width = 347
     Caption = 'Randomize data'
     OnClick = RandomizeData
   end

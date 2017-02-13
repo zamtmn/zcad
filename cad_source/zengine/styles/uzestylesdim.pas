@@ -20,7 +20,7 @@ unit uzestylesdim;
 {$INCLUDE def.inc}
 interface
 uses uzepalette,uzeconsts,uzestyleslinetypes,uzestylestexts,usimplegenerics,uzbtypesbase,
-     sysutils,uzbtypes,uzegeometry,
+     uzedimensionaltypes,sysutils,uzbtypes,uzegeometry,
      uzbstrproc,UGDBNamedObjectsArray,uzbmemman;
 const
      DIMLWEDefaultValue=LnWtByBlock;

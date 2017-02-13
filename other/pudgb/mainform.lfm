@@ -1,40 +1,43 @@
 object Form1: TForm1
   Left = 331
-  Height = 579
+  Height = 682
   Top = 297
-  Width = 626
+  Width = 737
   Caption = 'Form1'
-  ClientHeight = 559
-  ClientWidth = 626
+  ClientHeight = 659
+  ClientWidth = 737
+  DesignTimePPI = 113
   Menu = MainMenu1
   OnClose = _onClose
   OnCreate = _onCreate
   LCLVersion = '1.7'
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 23
-    Top = 536
-    Width = 626
+    Height = 28
+    Top = 631
+    Width = 737
     Panels = <>
   end
   object ToolBar1: TToolBar
     Left = 0
-    Height = 24
+    Height = 28
     Top = 0
-    Width = 626
+    Width = 737
     AutoSize = True
+    ButtonHeight = 26
+    ButtonWidth = 27
     Caption = 'ToolBar1'
     ParentShowHint = False
     ShowCaptions = True
     ShowHint = True
     TabOrder = 1
     object ToolButton1: TToolButton
-      Left = 64
+      Left = 74
       Top = 2
       Action = Scan
     end
     object ToolButton2: TToolButton
-      Left = 97
+      Left = 110
       Top = 2
       Action = Save
     end
@@ -44,37 +47,37 @@ object Form1: TForm1
       Action = ImportLPI
     end
     object ToolButton4: TToolButton
-      Left = 129
+      Left = 146
       Top = 2
       Action = SaveGML
       Visible = False
     end
   end
   object Splitter1: TSplitter
-    Left = 300
-    Height = 512
-    Top = 24
-    Width = 4
+    Left = 353
+    Height = 603
+    Top = 28
+    Width = 5
   end
   object GDBobjinsp1: TGDBobjinsp
     Left = 0
-    Height = 512
-    Top = 24
-    Width = 300
+    Height = 603
+    Top = 28
+    Width = 353
     HorzScrollBar.Page = 1
     VertScrollBar.Increment = 200
-    VertScrollBar.Page = 512
-    VertScrollBar.Range = 512
+    VertScrollBar.Page = 603
+    VertScrollBar.Range = 603
     Align = alLeft
     AutoScroll = False
     BorderStyle = bsNone
     TabOrder = 3
   end
   object Memo1: TMemo
-    Left = 304
-    Height = 512
-    Top = 24
-    Width = 322
+    Left = 358
+    Height = 603
+    Top = 28
+    Width = 379
     Align = alClient
     Lines.Strings = (
       'Memo1'
@@ -83,8 +86,8 @@ object Form1: TForm1
     TabOrder = 4
   end
   object ActionList1: TActionList
-    left = 456
-    top = 32
+    Left = 456
+    Top = 32
     object Scan: TAction
       Caption = 'Scan'
       Hint = 'Scan files'
@@ -109,8 +112,8 @@ object Form1: TForm1
     end
   end
   object MainMenu1: TMainMenu
-    left = 416
-    top = 32
+    Left = 416
+    Top = 32
     object MenuItem1: TMenuItem
       Caption = 'File'
       object MenuItem2: TMenuItem

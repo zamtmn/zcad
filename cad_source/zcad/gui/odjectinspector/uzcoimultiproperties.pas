@@ -22,7 +22,7 @@ unit uzcoimultiproperties;
 interface
 uses
   uzcshared,uzctranslations,uzbtypesbase,uzbtypes,uzclog,
-  usimplegenerics,varmandef,Varman,garrayutils,gzctnrstl;
+  uzedimensionaltypes,usimplegenerics,varmandef,Varman,garrayutils,gzctnrstl;
 type
   TObjID2Counter=TMyMapCounter<TObjID,LessObjID>;
   TObjIDVector=TMyVector<TObjID>;

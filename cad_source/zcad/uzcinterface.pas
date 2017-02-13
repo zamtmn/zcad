@@ -18,7 +18,7 @@
 unit uzcinterface;
 {$INCLUDE def.inc}
 interface
-uses uzelongprocesssupport,zeundostack,varmandef,forms,classes,uzbtypes;
+uses uzedimensionaltypes,uzelongprocesssupport,zeundostack,varmandef,forms,classes,uzbtypes;
 const
      menutoken='MAINMENUITEM';
      popupmenutoken='POPUPMENU';

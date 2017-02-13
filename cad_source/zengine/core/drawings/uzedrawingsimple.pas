@@ -23,7 +23,7 @@ uses uzedrawingdef,uzeblockdefsfactory,uzestylesdim,uzeentwithlocalcs,
      uzedrawingabstract,uzbstrproc,UGDBObjBlockdefArray,uzestylestables,
      UGDBNumerator,uzbtypes,sysutils, uzbmemman,uzegeometry,uzbtypesbase,uzeentgenericsubentry,
      uzestyleslayers,uzestyleslinetypes,uzeentity,UGDBSelectedObjArray,uzestylestexts,
-     uzbgeomtypes,uzecamera,UGDBOpenArrayOfPV,uzeroot,uzefont,
+     uzedimensionaltypes,uzbgeomtypes,uzecamera,UGDBOpenArrayOfPV,uzeroot,uzefont,
      uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,UGDBControlPointArray;
 type
 TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:GDBString) of object;

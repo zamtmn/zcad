@@ -3552,12 +3552,12 @@ begin
                                                if i<PEProp.nearestline then
                                                                              p3dpl2^.VertexArrayInOCS.DeleteElement(0);
                                                if i>PEProp.nearestline-1 then
-                                                                             p3dpl^.VertexArrayInOCS.DeleteElement(PEProp.nearestline+1);
+                                                                             p3dpl^.VertexArrayInOCS.DeleteElement(PEProp.nearestline{+1});
 
                                           end;
-                                        if p3dpl2^.VertexArrayInOCS.Count>1 then
+                                        {if p3dpl2^.VertexArrayInOCS.Count>1 then
                                                                                p3dpl2^.VertexArrayInOCS.InsertElement({0}1,{1,}_tv)
-                                                                           else
+                                                                           else}
                                                                                p3dpl2^.VertexArrayInOCS.InsertElement(0,{-1,}_tv);
                                         p3dpl^.VertexArrayInOCS.InsertElement(p3dpl^.VertexArrayInOCS.Count,{1,}_tv);
                                         p3dpl2^.Formatentity(drawings.GetCurrentDWG^,dc);

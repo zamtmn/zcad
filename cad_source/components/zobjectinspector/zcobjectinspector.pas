@@ -25,19 +25,19 @@ unit zcobjectinspector;
 interface
 
 uses
-  {math,LMessages,}LCLIntf,usupportgui,
-  zeundostack,zebaseundocommands,StdCtrls,strutils,
-  Themes,
-  {$IFDEF LCLGTK2}
-  gtk2,
-  {$ENDIF}
+  Classes,SysUtils,strutils,
+  {$IFDEF LCLGTK2}gtk2,{$ENDIF}
   {$IFDEF WINDOWS}win32proc,{$endif}
-  types,graphics,
-  ExtCtrls,Controls,Classes,menus,Forms,lcltype,
+  Types,Graphics,Themes,LCLIntf,LCLType,
+  ExtCtrls,Controls,Menus,Forms,
+  StdCtrls,
+  usupportgui,
+  zeundostack,zebaseundocommands,
 
-  Varman,uzbtypesbase,SysUtils,
-  uzbtypes,varmandef,
-  uzbmemman,TypeDescriptors,uzctnrvectorgdbstring;
+  varmandef,
+  uzbtypes,uzbtypesbase,
+  TypeDescriptors,
+  uzctnrvectorgdbstring;
 const
   fastEditorOffset={$IFDEF LCLQT}2{$ELSE}2{$ENDIF} ;
   spliterhalfwidth=4;
@@ -51,7 +51,7 @@ const
   );
 type
   arrindop=record
-    currnum,currcount,num,count:GDBInteger;
+    currnum,currcount,num,count:integer;
   end;
   arrayarrindop=array[0..10] of arrindop;
   parrayarrindop=^arrayarrindop;
@@ -61,32 +61,32 @@ type
                        UndoCommand:PTTypedChangeCommand;
                  end;
 
-  TOnGetOtherValues=procedure(var vsa:TZctnrVectorGDBString;const valkey:GDBString;const pcurcontext:gdbpointer;const pcurrobj:GDBPointer;const GDBobj:GDBBoolean);
-  TOnUpdateObjectInInsp=procedure(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:gdbpointer;const pcurrobj:GDBPointer;const GDBobj:GDBBoolean);
-  TOnNotify=procedure(const pcurcontext:gdbpointer);
+  TOnGetOtherValues=procedure(var vsa:TZctnrVectorGDBString;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
+  TOnUpdateObjectInInsp=procedure(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
+  TOnNotify=procedure(const pcurcontext:pointer);
   TMyNotifyEvent=procedure(sender:tobject);
 
   TObjInspCustom=TScrollBox;
 
   TGDBobjinsp=class(TObjInspCustom)
     public
-    GDBobj:GDBBoolean;
+    GDBobj:boolean;
     EDContext:TEditorContext;
 
-    PStoredObj:GDBPointer;
+    PStoredObj:pointer;
     StoredObjGDBType:PUserTypeDescriptor;
     StoredUndoStack:PTZctnrVectorUndoCommands;
-    pStoredContext:GDBPointer;
+    pStoredContext:pointer;
 
-    pcurrobj,pdefaultobj:GDBPointer;
+    pcurrobj,pdefaultobj:pointer;
     currobjgdbtype,defaultobjgdbtype:PUserTypeDescriptor;
     DefaultUndoStack:PTZctnrVectorUndoCommands;
 
-    pcurcontext,pdefaultcontext:GDBPointer;
+    pcurcontext,pdefaultcontext:pointer;
     PEditor:TPropEditor;
     PDA:TPropertyDeskriptorArray;
-    namecol:GDBInteger;
-    contentheigth:GDBInteger;
+    namecol:integer;
+    contentheigth:integer;
     OLDPP:PPropertyDeskriptor;
     OnMousePP:PPropertyDeskriptor;
 
@@ -95,13 +95,13 @@ type
     procedure draw; virtual;
     procedure mypaint(sender:tobject);
     procedure drawprop(PPA:PTPropertyDeskriptorArray;arect:trect);
-    procedure InternalDrawprop(PPA:PTPropertyDeskriptorArray; var y,sub:GDBInteger;miny:GDBInteger;arect:trect;var LastPropAddFreespace:Boolean);
-    procedure calctreeh(PPA:PTPropertyDeskriptorArray; var y:GDBInteger);
-    function gettreeh:GDBInteger; virtual;
+    procedure InternalDrawprop(PPA:PTPropertyDeskriptorArray; var y,sub:integer;miny:integer;arect:trect;var LastPropAddFreespace:Boolean);
+    procedure calctreeh(PPA:PTPropertyDeskriptorArray; var y:integer);
+    function gettreeh:integer; virtual;
     procedure BeforeInit; virtual;
     procedure _onresize(sender:tobject);virtual;
     procedure updateeditorBounds;virtual;
-    procedure buildproplist(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; bmode:GDBInteger; var addr:GDBPointer);
+    procedure buildproplist(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; bmode:integer; var addr:pointer);
     procedure SetCurrentObjDefault;
     procedure ReturnToDefault(const f:TzeUnitsFormat);
     procedure rebuild;
@@ -119,7 +119,7 @@ type
     procedure ClearEDContext;
     procedure AsyncFreeEditorAndSelectNext(Data: PtrInt);
     procedure AsyncFreeEditor(Data: PtrInt);
-    function IsMouseOnSpliter(pp:PPropertyDeskriptor; X,Y:Integer):GDBBoolean;
+    function IsMouseOnSpliter(pp:PPropertyDeskriptor; X,Y:Integer):boolean;
 
     procedure createeditor(pp:PPropertyDeskriptor);
     function CurrObjIsEntity:boolean;
@@ -134,7 +134,7 @@ type
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);override;
     procedure MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);override;
     procedure UpdateObjectInInsp;
-    procedure setptr(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+    procedure setptr(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer);
     procedure updateinsp;
     private
     protected
@@ -151,9 +151,9 @@ type
     procedure FormHide(Sender: TObject);
   end;
 
-procedure SetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
-procedure StoreAndSetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
-function ReStoreGDBObjInsp:GDBBoolean;
+procedure SetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer);
+procedure StoreAndSetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer);
+function ReStoreGDBObjInsp:boolean;
 procedure UpdateObjInsp;
 procedure ReturnToDefault(const f:TzeUnitsFormat);
 procedure rebuild;
@@ -273,7 +273,7 @@ begin
                        aheight:=aheight;
   inherited SetBounds(ALeft, ATop, AWidth, AHeight);
 end;
-function ReStoreGDBObjInsp:GDBBoolean;
+function ReStoreGDBObjInsp:boolean;
 begin
      result:=false;
      if assigned(GDBobjinsp)then
@@ -289,12 +289,12 @@ begin
 
                                          {GDBobjinsp.pcurrobj:=GDBobjinsp.PStoredObj;
                                          GDBobjinsp.currobjgdbtype:=GDBobjinsp.StoredObjGDBType;
-                                         GDBobjinsp.SetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);}
+                                         GDBobjinsp.SetGDBObjInsp(exttype:PUserTypeDescriptor; addr:pointer);}
                                          result:=true;
                                     end;
      end;
 end;
-procedure StoreAndSetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+procedure StoreAndSetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer);
 begin
      if assigned(GDBobjinsp)then
      begin
@@ -309,7 +309,7 @@ begin
      end;
 end;
 
-procedure SetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+procedure SetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer);
 begin
      if assigned(GDBobjinsp)then
                                 begin
@@ -484,7 +484,7 @@ begin
   pda.done;
 end;
 
-function addindex(pindex:parrayarrindop; n:GDBInteger):GDBBoolean;
+function addindex(pindex:parrayarrindop; n:integer):boolean;
 begin
   inc(pindex[n].currnum);
   dec(pindex[n].currcount);
@@ -526,7 +526,7 @@ begin
           y:=y++rowh;
           if not ppd^.Collapsed^ then
             begin
-            calctreeh(GDBPointer(ppd.SubNode),y);
+            calctreeh(pointer(ppd.SubNode),y);
             y:=y+rowh;
             last:=true;
             end;
@@ -784,8 +784,8 @@ end;
 procedure TGDBobjinsp.drawprop(PPA:PTPropertyDeskriptorArray;arect:trect);
 var
    lpafs:boolean;
-   y,sub:GDBInteger;
-   miny:GDBInteger;
+   y,sub:integer;
+   miny:integer;
 begin
      lpafs:=false;
      y:=HeadersHeight+BorderWidth;
@@ -794,7 +794,7 @@ begin
      InternalDrawprop(PPA,y,sub,miny,arect,lpafs);
 end;
 
-procedure TGDBobjinsp.InternalDrawprop(PPA:PTPropertyDeskriptorArray; var y,sub:GDBInteger;miny:GDBInteger;arect:TRect;var LastPropAddFreespace:Boolean);
+procedure TGDBobjinsp.InternalDrawprop(PPA:PTPropertyDeskriptorArray; var y,sub:integer;miny:integer;arect:TRect;var LastPropAddFreespace:Boolean);
 var
   s:GDBString;
   ppd:PPropertyDeskriptor;
@@ -856,7 +856,7 @@ begin
                                     inc(sub);
                                     y:=y+rowh;
                                     if not ppd^.Collapsed^ then
-                                      InternalDrawprop(GDBPointer(ppd.SubNode),y,sub,miny,arect,LastPropAddFreespace);
+                                      InternalDrawprop(pointer(ppd.SubNode),y,sub,miny,arect,LastPropAddFreespace);
                                     dec(sub);
                                      end;
                                   end
@@ -1103,13 +1103,13 @@ begin
               result:=nil;
           exit;
         end;
-        if (curr^.SubNode<>nil)and(not curr^.Collapsed^) then result:=findnext(GDBPointer(curr^.SubNode),current);
+        if (curr^.SubNode<>nil)and(not curr^.Collapsed^) then result:=findnext(pointer(curr^.SubNode),current);
         if result<>nil then exit;
       end;
       curr:=psubtree^.iterate(ir);
     until curr=nil;
 end;
-function InternalMousetoprop(psubtree:PTPropertyDeskriptorArray; mx,my:GDBInteger; var y:GDBInteger;var LastPropAddFreeSpace:boolean):PPropertyDeskriptor;
+function InternalMousetoprop(psubtree:PTPropertyDeskriptorArray; mx,my:integer; var y:integer;var LastPropAddFreeSpace:boolean):PPropertyDeskriptor;
 var
   curr:PPropertyDeskriptor;
   dy:integer;
@@ -1131,7 +1131,7 @@ begin
           exit;
         end;
         inc(y,rowh);
-        if (curr^.SubNode<>nil)and(not curr^.Collapsed^) then result:=InternalMousetoprop(GDBPointer(curr^.SubNode),mx,my,y,LastPropAddFreeSpace);
+        if (curr^.SubNode<>nil)and(not curr^.Collapsed^) then result:=InternalMousetoprop(pointer(curr^.SubNode),mx,my,y,LastPropAddFreeSpace);
         if result<>nil then exit;
       end;
       curr:=psubtree^.iterate(ir);
@@ -1142,7 +1142,7 @@ begin
     LastPropAddFreeSpace:=true;
     end;
 end;
-function mousetoprop(psubtree:PTPropertyDeskriptorArray; mx,my:GDBInteger; var y:GDBInteger):PPropertyDeskriptor;
+function mousetoprop(psubtree:PTPropertyDeskriptorArray; mx,my:integer; var y:integer):PPropertyDeskriptor;
 var
    lpafs:boolean;
 begin
@@ -1197,7 +1197,7 @@ end;
 
 procedure TGDBobjinsp.Notify;
 var
-   pld:GDBPointer;
+   pld:pointer;
    saveppropcurrentedit:PPropertyDeskriptor;
 begin
   if sender=peditor then
@@ -1318,7 +1318,7 @@ begin
                                  end;
      UpdateScrollbars;
 end;
-function TGDBobjinsp.IsMouseOnSpliter(pp:PPropertyDeskriptor; X,Y:Integer):GDBBoolean;
+function TGDBobjinsp.IsMouseOnSpliter(pp:PPropertyDeskriptor; X,Y:Integer):boolean;
 var
    my:integer;
    canresplit:boolean;
@@ -1353,10 +1353,10 @@ end;
 procedure TGDBobjinsp.MouseMove(Shift: TShiftState; X, Y: Integer);
 //procedure TGDBobjinsp.Pre_MouseMove(fwkeys:longint; x,y:GDBSmallInt; var r:HandledMsg);
 var
-  my:GDBInteger;
+  my:integer;
   pp:PPropertyDeskriptor;
-//  tb:GDBBoolean;
-//  pb:PGDBBoolean;
+//  tb:boolean;
+//  pb:Pboolean;
   tp:pointer;
   tempstr:gdbstring;
   FESize:TSize;
@@ -1497,7 +1497,7 @@ end;
 procedure TGDBobjinsp.MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);
 var
   pp:PPropertyDeskriptor;
-  my:GDBInteger;
+  my:integer;
   FESize:TSize;
 begin
      inherited;
@@ -1668,7 +1668,7 @@ end;
 
 procedure TGDBobjinsp.MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);
 var
-  my:GDBInteger;
+  my:integer;
   pp:PPropertyDeskriptor;
   menu:TPopupMenu;
   fesize:tsize;
@@ -1763,7 +1763,7 @@ end;
 
 procedure TGDBobjinsp.rebuild;
 var
-   tp:gdbpointer;
+   tp:pointer;
 begin
     pda.cleareraseobj;
     if peditor<>nil then

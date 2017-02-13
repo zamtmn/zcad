@@ -23,22 +23,19 @@
         <UnitName Value="zcobjectinspectoreditors"/>
       </Item2>
     </Files>
-    <RequiredPkgs Count="5">
+    <RequiredPkgs Count="4">
       <Item1>
-        <PackageName Value="zscript"/>
+        <PackageName Value="zundostack"/>
       </Item1>
       <Item2>
-        <PackageName Value="zundostack"/>
+        <PackageName Value="zcontrols"/>
       </Item2>
       <Item3>
-        <PackageName Value="zcontrols"/>
+        <PackageName Value="zebase"/>
       </Item3>
       <Item4>
-        <PackageName Value="zebase"/>
-      </Item4>
-      <Item5>
         <PackageName Value="FCL"/>
-      </Item5>
+      </Item4>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

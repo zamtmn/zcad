@@ -39,14 +39,14 @@ begin
   GDBobjinsp.BorderStyle:=bsNone;
   GDBobjinsp.Parent:=tform(Form);
 end;
-procedure _onNotify(const pcurcontext:gdbpointer);
+procedure _onNotify(const pcurcontext:pointer);
 begin
   if pcurcontext<>nil then
   begin
        PTDrawingDef(pcurcontext).ChangeStampt(true);
   end;
 end;
-procedure _onUpdateObjectInInsp(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:gdbpointer;const pcurrobj:GDBPointer;const GDBobj:GDBBoolean);
+procedure _onUpdateObjectInInsp(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
 function CurrObjIsEntity:boolean;
 begin
 result:=false;
@@ -90,7 +90,7 @@ begin
   if assigned(UpdateVisibleProc) then UpdateVisibleProc;
 end;
 
-procedure _onGetOtherValues(var vsa:TZctnrVectorGDBString;const valkey:GDBString;const pcurcontext:gdbpointer;const pcurrobj:GDBPointer;const GDBobj:GDBBoolean);
+procedure _onGetOtherValues(var vsa:TZctnrVectorGDBString;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
 var
   pentvarext:PTVariablesExtender;
   pobj:pGDBObjEntity;

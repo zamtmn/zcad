@@ -181,11 +181,48 @@ implementation
        result.z:=0;
   end;
 
+  //**Удлинение линии по ее направлению, от первой ко второй точки **//
+  function extendedLine(point1:GDBVertex;point2:GDBVertex;lengthLine:double):GDBVertex;
+  var
+     xline,yline,xyline,xylinenew,xlinenew,ylinenew,xdiffline,ydiffline:double;
+
+  begin
+       xline:=abs(point2.x - point1.x);
+       yline:=abs(point2.y - point1.y);
+       xyline:=sqrt(sqr(xline) + sqr(yline));
+       xylinenew:=xyline + lengthLine;
+       xlinenew:=(xline*xylinenew)/xyline;
+       ylinenew:=(yline*xylinenew)/xyline;
+       xdiffline:= xlinenew - xline;
+       ydiffline:= ylinenew - yline;
+
+       if point1.x > point2.x then
+              begin
+                result.x := point2.x - xdiffline;
+              end
+              else
+              begin
+                result.x := point2.x + xdiffline;
+              end;
+       if point1.y > point2.y then
+              begin
+                result.y := point2.y - ydiffline;
+              end
+              else
+              begin
+                result.y := point2.y + ydiffline;
+              end;
+
+       // не стал вводит 3-ю ось, может позже.
+       result.z:=0;
+  end;
+
 //**Поиск точки смещеной от угла образовоного двумя линиями(2-линии заданы точками) в сторону указанную двумя параметрами, каждый осуществляет смещение по своей линии**//
 function getPointRelativeTwoLines(pline11,pline12,pline21,pline22:GDBVertex;relatLine1,relatLine2:double):GDBVertex;
 var
    xline1,yline1,xyline1,xylinenew1,xlinenew1,ylinenew1,xline2,yline2,xyline2,xylinenew2,xlinenew2,ylinenew2:double;
-   pt1new,pt2new:GDBVertex;
+   pt1new,pt2new,centerPt:GDBVertex;
+   centerline:double;
 
 begin
      //смещение по первой линии
@@ -206,7 +243,13 @@ begin
      ylinenew2:=(yline2*xylinenew2)/xyline2;    //новая длина у
      pt2new:=offsetOfFirstPointInSecondPointToLine(pline21,pline22,xlinenew2,ylinenew2);
 
-     result:=offsetOfFirstPointInSecondPointToLine(pt1new,pt2new,xlinenew2,ylinenew2);
+     //получаем центр между двумя точками
+     centerPt:=uzegeometry.Vertexmorph(pt1new,pt2new,0.5);
+     centerline:=uzegeometry.Vertexlength(pline11,centerPt);
+
+
+     //result:=offsetOfFirstPointInSecondPointToLine(pt1new,pt2new,xlinenew2,ylinenew2);
+     result:=extendedLine(pline11,centerPt,centerline);
      //result.x:=
 end;
 //function TestModul_com(operands:TCommandOperands):TCommandResult;

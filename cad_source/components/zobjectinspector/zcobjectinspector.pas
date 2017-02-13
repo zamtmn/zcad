@@ -34,7 +34,7 @@ uses
   usupportgui,
   zeundostack,zebaseundocommands,
 
-  UObjectDescriptor,
+  //propertysupport UObjectDescriptor,
 
   varmandef,
   uzbtypes,uzbtypesbase,
@@ -1248,10 +1248,10 @@ begin
                 begin
                      if EDContext.ppropcurrentedit<>nil then
                      begin
-                     if EDContext.ppropcurrentedit^.mode=PDM_Property then
+                     {propertysupport if EDContext.ppropcurrentedit^.mode=PDM_Property then
                                                              begin
                                                                PObjectDescriptor(currobjgdbtype)^.SimpleRunMetodWithArg(EDContext.ppropcurrentedit^.w,pcurrobj,EDContext.ppropcurrentedit^.valueAddres);
-                                                             end;
+                                                             end;}
                     end;
                 end;
   if assigned(onUpdateObjectInInsp)then

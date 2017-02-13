@@ -21,6 +21,7 @@ unit uzedimensionaltypes;
 interface
 uses uzbtypesbase,uzbtypes,math,uzegeometry,sysutils;
 type
+{EXPORT+}
     TDimUnit =(DUScientific(*'Scientific'*),DUDecimal(*'Decimal'*),DUEngineering(*'Engineering'*),DUArchitectural(*'Architectural'*),DUFractional(*'Fractional'*),DUSystem(*'System'*));
     TDimDSep=(DDSDot,DDSComma,DDSSpace);
     PTLUnits=^TLUnits;
@@ -66,6 +67,6 @@ type
                IUAstronomicalUnits(*'Astronomical units'*),
                IULightYears(*'Light years'*),
                IUParsecs(*'Parsecs'*));
-
+{EXPORT-}
 implementation
 end.

@@ -170,7 +170,12 @@ type
            num:integer;
   end;
   TListVertexDevice=specialize TVector<TVertexDevice>;
-
+  //**Список стен с их ориентацией относительно перпендикуляра
+  TWallInfo=record
+         p1,p2:GDBVertex;
+         paralel:boolean;
+  end;
+  TListWallOrient=specialize TVector<TWallInfo>;
   //**Список вершин
   TListVertex=specialize TVector<GDBVertex>;
 
@@ -182,7 +187,42 @@ type
                    constructor Create;
                    destructor Destroy;virtual;
       end;
-      TListColumnDev=specialize TVector<TInfoColumnDev>;
+  TListColumnDev=specialize TVector<TInfoColumnDev>;
+
+
+
+      //**Информация об устройстве
+      PTGraphInfoVertex=^TGraphInfoVertex;
+      TGraphInfoVertex=record
+                         devEnt:PGDBObjDevice;
+                         pt:GDBVertex;
+                         //break:boolean;
+                         //breakName:string;
+                         //lPoint:GDBVertex;
+      end;
+      TListGraphVertex=specialize TVector<TGraphInfoVertex>;
+
+      //** Создания списка ребер графа
+      PTInfoEdgeGraph=^TInfoEdgeGraph;
+      TInfoEdgeGraph=record
+                         VIndex1:GDBInteger; //номер 1-й вершниы по списку
+                         VIndex2:GDBInteger; //номер 2-й вершниы по списку
+                         VPoint1:GDBVertex;  //координаты 1й вершниы
+                         VPoint2:GDBVertex;  //координаты 2й вершниы
+                         edgeLength:GDBDouble; // длина ребра
+      end;
+      TListEdgeGraph=specialize TVector<TInfoEdgeGraph>;
+
+      //**Граф и ребра для обработки автоматической прокладки кабелей
+      PTGraphASL=^TGraphASL;
+      TGraphASL=class
+                         listEdge:TListEdgeGraph;   //список реальных и виртуальных линий
+                         listVertex:TListGraphVertex;
+                        // nameSuperLine:string;
+                         public
+                         constructor Create;
+                         destructor Destroy;virtual;
+      end;
 
  procedure autoNumberDevice(comParams:TuzvagslComParams);
 
@@ -223,42 +263,36 @@ implementation
     listLineDev.Destroy;
   end;
 
+  constructor TGraphASL.Create;
+  begin
+    listEdge:=TListEdgeGraph.Create;
+    listVertex:=TListGraphVertex.Create;
+  end;
+
+  destructor TGraphASL.Destroy;
+  begin
+    listEdge.Destroy;
+    listVertex.Destroy;
+  end;
 
 
    //** метод сортировки имя любое но настройка с
   class function TGDBVertexLess.c(a,b:tdevcoord):boolean;
   var
    epsilon:double;
-   tempvert:gdbvertex;
-   xline,yline,xyline,angle:double;
     begin
-         //if a.coord.y<b.coord.y then
       //epsilon:=uzvagslComParams.DeadDand ;
       epsilon:=10;
-      tempvert:=b.coord;
-      //xline:=uzegeometry.Vertexlength(a.coord,b.coord);
-      ////anglePerpendCos:=xline/xyline;
-      //xyline:=xline/a.angleRoom;
-       //angle:=arccos(a.angleRoom);
-      //double angle = Math.PI * 30 / 180;
-      //      double x = a1.X+ (a2.X-a1.X) * Math.Cos(angle) + (a2.Y-a1.Y) * Math.Sin(angle);
-      //      double y = a1.Y-(a2.X -a1.X)* Math.Sin(angle) + (a2.Y -a1.Y)* Math.Cos(angle);
-      //      a2 = new PointF((float)x, (float)y);
-      //tempvert.x:=a.coord.X+ (b.coord.X-a.coord.X) * Cos(angle) + (b.coord.Y-a.coord.Y) * Sin(angle) ;
-      //tempvert.y:=a.coord.Y-(b.coord.X -a.coord.X)* Sin(angle) + (b.coord.Y -a.coord.Y)* Cos(angle);
-      //tempvert.z:=0;
-      //uzvtestdraw.testTempDrawLine(a.coord,tempvert);
-      //uzvtestdraw.testTempDrawCircle(a.coord,10);
-      //uzvtestdraw.testTempDrawCircle(tempvert,5);
-         if a.coord.y<tempvert.y-epsilon then
+
+         if a.coord.y<b.coord.y-epsilon then
                         result:=true
                     else
-                        if  {a.coord.y>b.coord.y}abs(a.coord.y-tempvert.y)>{eps}epsilon then
+                        if  {a.coord.y>b.coord.y}abs(a.coord.y-b.coord.y)>{eps}epsilon then
                                        begin
                                        result:=false;
                                        end
                     else
-                        if a.coord.x<tempvert.x-epsilon then
+                        if a.coord.x<b.coord.x-epsilon then
                                        result:=true
                     else
                         begin
@@ -269,22 +303,12 @@ implementation
     function thisLinePlaceDev(a,b:tdevcoord):boolean;
       var
    epsilon:double;
-   tempvert:gdbvertex;
-   xline,yline,xyline,angle:double;
     begin
          epsilon:=10;
-      //  angle:=arccos(-a.angleRoom);
-      // tempvert.x:=a.coord.X+ (b.coord.X-a.coord.X) * Cos(angle) + (b.coord.Y-a.coord.Y) * Sin(angle) ;
-      //tempvert.y:=a.coord.Y-(b.coord.X -a.coord.X)* Sin(angle) + (b.coord.Y -a.coord.Y)* Cos(angle);
-      //tempvert.z:=0;
-      tempvert:=b.coord;
-      //uzvtestdraw.testTempDrawLine(a.coord,tempvert);
-      //uzvtestdraw.testDrawCircle(a.coord,10,2);
-      //uzvtestdraw.testDrawCircle(tempvert,5,4);
-         if a.coord.y<tempvert.y-epsilon then
+         if a.coord.y<b.coord.y-epsilon then
                         result:=true
                     else
-                        if  {a.coord.y>b.coord.y}abs(a.coord.y-tempvert.y)>{eps}epsilon then
+                        if  {a.coord.y>b.coord.y}abs(a.coord.y-b.coord.y)>{eps}epsilon then
                                        begin
                                        result:=false;
                                        end
@@ -409,11 +433,11 @@ implementation
 
             anglePerpendCos:=xline/xyline; //косинус
             //временая рисовалка
-            historyoutstr('Заработало угол cos='+floattostr(anglePerpendCos));
-            historyoutstr('Заработало угол f='+floattostr(arccos(anglePerpendCos)));
+            //historyoutstr('Заработало угол cos='+floattostr(anglePerpendCos));
+            //historyoutstr('Заработало угол f='+floattostr(arccos(anglePerpendCos)));
 
-            for i:=1 to perpendListVertex.size-1 do
-              uzvtestdraw.testTempDrawLine(perpendListVertex[i-1],perpendListVertex[i]);
+            //for i:=1 to perpendListVertex.size-1 do
+            //  uzvtestdraw.testTempDrawLine(perpendListVertex[i-1],perpendListVertex[i]);
             //for i:=1 to contourRoomEmbedSL.size-1 do
             //  uzvtestdraw.testTempDrawLine(contourRoomEmbedSL[i-1],contourRoomEmbedSL[i]);
             //uzvtestdraw.testTempDrawLine(contourRoomEmbedSL[contourRoomEmbedSL.size-1],contourRoomEmbedSL.front);
@@ -571,6 +595,124 @@ implementation
         NearObjects.Done;//убиваем список
       end;
 
+    //** линия попадает в 1-ю или 3-ю зону пространства координат
+    function isZona13(p1,p2:GDBVertex):boolean;
+    begin
+       result:=false;
+       //if ((p1.x <= p2.x) and (p1.y>=p2.y)) or ((p1.x >= p2.x) and (p1.y<=p2.y)) then
+       //    result:=false;
+
+       if ((p1.x <= p2.x) and (p1.y<=p2.y)) or ((p1.x >= p2.x) and (p1.y>=p2.y)) then
+           result:=true;
+    end;
+
+
+      //** Определяет ориентированы ли линии друг против друга
+    function isOrientAngle(p1,p2,pr1,pr2:GDBVertex):boolean;
+    var
+        //i:integer;
+        tempVertex:gdbvertex;
+        pzona13,przona13:boolean; //  находится в пространстве 1 или 3
+        xyline,xline,anglewall,angleper:double;
+
+        anglecenter,zonaAngleMin,zonaAngleMin2,zonaAngleMax, zonaAngleMax2:double;
+    begin
+
+       result:=false;
+       pzona13:=isZona13(p1,p2);
+       przona13:=isZona13(pr1,pr2);
+
+       //получение угла стены
+       xyline:= uzegeometry.Vertexlength(p1,p2);
+       tempVertex.x:=p2.x;
+       tempVertex.y:=p1.y;
+       tempVertex.z:=0;
+       xline:=uzegeometry.Vertexlength(p1,tempVertex);
+       anglewall:=arccos(xline/xyline);
+       //historyoutstr('anglewall='+floattostr(anglewall));
+       if not pzona13 then
+         anglewall:=3.1416-anglewall;
+
+       //получение угла перпендикуляра
+       xyline:= uzegeometry.Vertexlength(pr1,pr2);
+       tempVertex.x:=pr2.x;
+       tempVertex.y:=pr1.y;
+       tempVertex.z:=0;
+       xline:=uzegeometry.Vertexlength(pr1,tempVertex);
+       angleper:=arccos(xline/xyline);
+       //historyoutstr('angleper='+floattostr(angleper));
+       if not przona13 then
+         angleper:=3.1416-angleper;
+
+      //historyoutstr('angleper='+floattostr(angleper)+'--- anglewall='+floattostr(anglewall));
+
+
+      //angleper:=arccos(angleper)*180/3.1416 ;
+      //anglewall:=arccos(anglewall)*180/3.1416 ;
+      anglecenter:=3.1416;
+      zonaAngleMin2:=-1;
+      zonaAngleMax2:=-1;
+      zonaAngleMin:=angleper-anglecenter/4;
+      if zonaAngleMin<0 then begin
+        zonaAngleMin:=anglecenter-zonaAngleMin;
+        zonaAngleMin2:=anglecenter;
+      end;
+      zonaAngleMax:=angleper+anglecenter/4;
+      if zonaAngleMax>anglecenter then begin
+        zonaAngleMax:=zonaAngleMax-anglecenter;
+        zonaAngleMax2:=0;
+      end;
+
+      if zonaAngleMin2>=0 then begin
+        if ((anglewall>=zonaAngleMin) and (anglewall<=zonaAngleMin2)) or (anglewall<=zonaAngleMax) then
+           result:=true;
+      end
+      else if zonaAngleMax2>=0 then begin
+        if ((anglewall<=zonaAngleMax2) and (anglewall>=zonaAngleMax2)) or (anglewall>=zonaAngleMin) then
+           result:=true;
+      end
+      else
+        if ((anglewall<=zonaAngleMax) and (anglewall>=zonaAngleMin)) then
+           result:=true;
+
+      historyoutstr('angleper='+floattostr(angleper)+'--- anglewall='+floattostr(anglewall));
+
+    end;
+
+  //**-получение ориентированости стен относительно перпендикуляра, если больше паралельно то true, если больше перпендикулярно то false
+  function getWallInfoOrient(contourRoomEmbedSL:TListVertex;perpendListVertex:TListVertex):TListWallOrient;
+  var
+    angleper,anglewall,xlineper,xylineper,xlinewall,xylinewall:double;
+    tempVertex,perp1,perp2:gdbvertex;
+    i:integer;
+    iwall:Twallinfo;
+  begin
+    result:=TListWallOrient.Create;
+
+    xylineper:=uzegeometry.Vertexlength(perpendListVertex.front,perpendListVertex[1]);
+    tempVertex.x:=perpendListVertex[1].x;
+    tempVertex.y:=perpendListVertex.front.y;
+    tempVertex.z:=0;
+    xlineper:=uzegeometry.Vertexlength(perpendListVertex.front,tempVertex);
+    angleper:=arccos(xlineper/xylineper);
+    for i:=0 to contourRoomEmbedSL.Size-1 do
+    begin
+      if i=0 then
+        iwall.p1:=contourRoomEmbedSL[contourRoomEmbedSL.Size-1]
+      else
+       iwall.p1:=contourRoomEmbedSL[i-1];
+
+       iwall.p2:=contourRoomEmbedSL[i];
+
+       //** если угол лежит в определеном промежутки от угла стены
+       iwall.paralel:=isOrientAngle(iwall.p1,iwall.p2,perpendListVertex.front,perpendListVertex[1]);
+       //uzvtestdraw.testTempDrawLine(iwall.p1,iwall.p2);
+       //uzvtestdraw.testTempDrawLine(iwall.p1,tempVertex);
+
+       result.PushBack(iwall);
+    end;
+  end;
+
   //**Получения матрицы(списка) устройств по строкам и колоннам, для правильной прокладки кабелей
   procedure get2DListDevice(listDeviceinRoom:TListVertexDevice;contourRoom:PGDBObjPolyLine;perpendListVertex:TListVertex;anglePerpendCos:double);
     var
@@ -595,15 +737,17 @@ implementation
          HistoryOutStr('Заработалоssssss');
 
          mpd:=devcoordarray.Create;  //**создания списока устройств и координат
-
          dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 
          //** подбор правильного угла поворота относительно перпендикуляра
-         angle:=arccos(anglePerpendCos)+1.57;
+         angle:=arccos(anglePerpendCos)+1.5707963267949;
+
          if (perpendListVertex.front.x <= perpendListVertex[1].x) and (perpendListVertex.front.y >= perpendListVertex[1].y) then
-            angle:=-arccos(anglePerpendCos)-1.57;
+            angle:=-arccos(anglePerpendCos)-1.5707963267949;
          if (perpendListVertex.front.x >= perpendListVertex[1].x) and (perpendListVertex.front.y <= perpendListVertex[1].y) then
-            angle:=-arccos(anglePerpendCos)-1.57;
+            angle:=-arccos(anglePerpendCos)-3*1.5707963267949;
+         if (perpendListVertex.front.x <= perpendListVertex[1].x) and (perpendListVertex.front.y <= perpendListVertex[1].y) then
+            angle:=arccos(anglePerpendCos)+3*1.5707963267949;
 
 
                for i:=0 to listDeviceinRoom.Size-1 do
@@ -615,36 +759,15 @@ implementation
                    tempvert.z:=0;
                    dcoord.coord:=tempvert;
 
-                   uzvtestdraw.testDrawCircle(tempvert,5,4);
-
-                   //if comParams.InverseX then
-                                                   //dcoord.coord.x:=-dcoord.coord.x;
-                   //if comParams.InverseY then
-                                                   //dcoord.coord.y:=-dcoord.coord.y;
-
-                    dcoord.pdev:=listDeviceinRoom[i].pdev;    // получить устройство
-                    dcoord.angleRoom:=anglePerpendCos;
-                    mpd.PushBack(dcoord);
+                   //uzvtestdraw.testDrawCircle(tempvert,5,4);
+                   dcoord.pdev:=listDeviceinRoom[i].pdev;    // получить устройство
+                   dcoord.angleRoom:=anglePerpendCos;
+                   mpd.PushBack(dcoord);
                end;
-         //psd:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
-         //until psd=nil;
-         //***//
-         //** если ничего не выделено и не обработано то остановка функции
-         //if count=0 then
-         //               begin
-         //                    historyoutstr('In selection not found devices');
-         //                    mpd.Destroy;
-         //                    Commandmanager.executecommandend;
-         //                    exit;
-         //               end;
-         //index:=NumberingParams.StartNumber;
+
          index:=1;
-         //if NumberingParams.SortMode<>TST_UNSORTED then
-         //                                              devcoordsort.Sort(mpd,mpd.Size);
+
          devcoordsort.Sort(mpd,mpd.Size);  // запуск сортировка
-
-
-
 
           //***превращение правильно сортированого списка в список колонн и строк, для удобной автопрокладки трассы
           count:=0;
@@ -914,26 +1037,89 @@ procedure autoNumberDevice(comParams:TuzvagslComParams);
        Commandmanager.executecommandend;
 
 end;
+//**Создания графа устройств и связей между устройствами
+//**В данной функции организуется сам граф и присваиваются базовые вещи,
+//**которые одинаковы для разных методов расскладки
+procedure getGraphASL(out graphASL:TGraphASL;listDeviceinRoom:TListVertexDevice;perpendListVertex:TListVertex);
+var
+  listEdge:TListEdgeGraph;
+  listVertex:TListGraphVertex;
+
+  infoVertex:TGraphInfoVertex;
+  infoEdge:TInfoEdgeGraph;
+
+  angleper,anglewall,xlineper,xylineper,xlinewall,xylinewall:double;
+  tempVertex,perp1,perp2:gdbvertex;
+  i,num:integer;
+  iwall:Twallinfo;
+begin
+
+   graphASL:=TGraphASL.create;            //организация графа
+   listVertex := TListGraphVertex.Create; //Список вершин
+   listEdge := TListEdgeGraph.Create;     //Список ребер
+
+   //**создаем вершины графа по вершинам устройств, так что бы номера вершин графа соответсвовали номерам в списке устройств
+   for i:=0 to listDeviceinRoom.size-1 do
+   begin
+      infoVertex.pt:=listDeviceinRoom[i].coord;
+      infoVertex.devEnt:=listDeviceinRoom[i].pdev;
+      listVertex.PushBack(infoVertex);
+   end;
+   //**Создаем вершины и ребра перпендикуляра
+   num:=0;
+   for i:=0 to perpendListVertex.size-1 do
+   begin
+      infoVertex.pt:=perpendListVertex[i];
+      infoVertex.devEnt:=nil;
+      listVertex.PushBack(infoVertex);
+      if num = 0 then
+        num:=listVertex.size-1
+      else
+        begin
+           infoEdge.VIndex1:=num;
+           infoEdge.VIndex2:=listVertex.size-1;
+           infoEdge.VPoint1:=listVertex[infoEdge.VIndex1].pt;
+           infoEdge.VPoint2:=listVertex[infoEdge.VIndex2].pt;
+           infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
+           listEdge.PushBack(infoEdge);
+           num:=listVertex.size-1;
+        end;
+   end;
+   graphASL.listVertex:=listVertex;
+   graphASL.listEdge:=listEdge;
+end;
+
 function Test111sl(operands:TCommandOperands):TCommandResult;
 var
  contourRoom:PGDBObjPolyLine;
  listDeviceinRoom:TListVertexDevice;
+ listWallOrient:TListWallOrient;
  contourRoomEmbedSL,perpendListVertex:TListVertex;
  stPoint:gdbvertex;
  anglePerpendCos:double;
+ graphASL:TGraphASL;
+ i:integer;
 begin
   //if commandmanager.get3dpoint('Specify insert point:',stPoint) then
    if uzvagsl.getContourRoom(contourRoom) then                  // получить контур помещения
-      if uzvagsl.isRectangelRoom(contourRoom) then begin        //это прямоугольная комната?
+      if uzvagsl.isRectangelRoom(contourRoom) then        //это прямоугольная комната?
          //historyoutstr('проверки пройдены');
           if mainElementAutoEmbedSL(contourRoom,contourRoomEmbedSL,perpendListVertex,anglePerpendCos) then  begin
            listDeviceinRoom:=uzvagsl.getListDeviceinRoom(contourRoom);  //получен список извещателей внутри помещения
            historyoutstr('Количество выделяных извещателей = ' + inttostr(listDeviceinRoom.Size));
-
+           listWallOrient:=getWallInfoOrient(contourRoomEmbedSL,perpendListVertex);
+           //for i:=0 to listWallOrient.size-1 do
+           // if listWallOrient[i].paralel then
+           //   uzvtestdraw.testTempDrawLine(listWallOrient[i].p1,listWallOrient[i].p2);
            get2DListDevice(listDeviceinRoom,contourRoom,perpendListVertex,anglePerpendCos); //получаем двухмерный список устройств правильной сортировки
+           //** начало графовой работы
+           //** метод когда кабели от стартовой точки перпендикуляра вверх
+           //getGraphASL(graphASL,listDeviceinRoom,perpendListVertex);
+           //for i:=0 to graphASL.listEdge.size-1 do
+           //   uzvtestdraw.testTempDrawLine(graphASL.listEdge[i].VPoint1,graphASL.listEdge[i].VPoint2);
+
          end;
          //uzvagsl.autoNumberDevice(uzvagslComParams);
-   end;
    Commandmanager.executecommandend;
 
 end;

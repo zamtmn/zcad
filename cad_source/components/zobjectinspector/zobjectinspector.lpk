@@ -25,10 +25,10 @@
     </Files>
     <RequiredPkgs Count="4">
       <Item1>
-        <PackageName Value="zundostack"/>
+        <PackageName Value="zcontrols"/>
       </Item1>
       <Item2>
-        <PackageName Value="zcontrols"/>
+        <PackageName Value="zundostack"/>
       </Item2>
       <Item3>
         <PackageName Value="zebase"/>

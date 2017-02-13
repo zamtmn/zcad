@@ -34,6 +34,8 @@ uses
   usupportgui,
   zeundostack,zebaseundocommands,
 
+  UObjectDescriptor,
+
   varmandef,
   uzbtypes,uzbtypesbase,
   TypeDescriptors,
@@ -194,9 +196,6 @@ var
   onNotify:TOnNotify=nil;
   onAfterFreeEditor:TMyNotifyEvent=nil;
 implementation
-
-uses UObjectDescriptor;
-
 function PlusMinusDetail(Collapsed,hot:boolean):TThemedTreeview;
 begin
      {$IFDEF WINDOWS}

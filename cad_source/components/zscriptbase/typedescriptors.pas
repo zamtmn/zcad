@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-unit TypeDescriptors;
+unit typedescriptors;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
@@ -98,27 +98,6 @@ PropertyDescriptor=record
                       //Attributes:GDBWord;
                       Collapsed:GDBBoolean;
                 end;
-GDBTOperandStoreMode=GDBByte;
-GDBOperandDesc=record
-                     PTD:PUserTypeDescriptor;
-                     StoreMode:GDBTOperandStoreMode;
-               end;
-GDBMetodModifier=GDBWord;
-TOperandsVector=GZVectorData<GDBOperandDesc>;
-PMetodDescriptor=^MetodDescriptor;
-MetodDescriptor=object(GDBaseObject)
-                      objname:GDBString;
-                      MetodName:GDBString;
-                      OperandsName:GDBString;
-                      Operands:{GDBOpenArrayOfdata}TOperandsVector; {DATA}
-                      ResultPTD:PUserTypeDescriptor;
-                      MetodAddr:GDBPointer;
-                      Attributes:GDBMetodModifier;
-                      punit:pointer;
-                      NameHash:GDBLongword;
-                      constructor init(objn,mn,dt:GDBString;ma:GDBPointer;attr:GDBMetodModifier;pu:pointer);
-                      destructor Done;virtual;
-                end;
 PTUserTypeDescriptor=^TUserTypeDescriptor;
 TUserTypeDescriptor=object(UserTypeDescriptor)
                           function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;abstract;
@@ -131,81 +110,7 @@ var zcpmode:tzcpmode;
     currpd:PPropertyDeskriptor;
     debugShowHiddenFieldInObjInsp:boolean=false;
 implementation
-uses varman,strmy;
-destructor MetodDescriptor.Done;
-begin
-                      MetodName:='';
-                      ObjName:='';
-                      OperandsName:='';
-                      Operands.done;
-                      ResultPTD:=nil;
-                      MetodAddr:=nil;
-                      Attributes:=0;
-                      punit:=nil;
-end;
-constructor MetodDescriptor.init;
-var
-  parseerror:GDBBoolean;
-  parseresult{,subparseresult}:PTZctnrVectorGDBString;
-  od:GDBOperandDesc;
-  i:integer;
-begin
-     punit:=pu;
-     GDBPointer(ObjName):=nil;
-     GDBPointer(MetodName):=nil;
-     GDBPointer(OperandsName):=nil;
-     ResultPTD:=nil;
-     ObjName:=objn;
-     MetodName:=mn;
-     NameHash:=makehash(uppercase(MetodName));
-     OperandsName:=dt;
-     if dt='(var obj):GDBInteger;' then
-                                        dt:=dt;
-
-     MetodAddr:=ma;
-     Attributes:=attr;
-     Operands.init({$IFDEF DEBUGBUILD}'{CC044792-AE73-48C9-B10A-346BFE9E46C9}',{$ENDIF}10{,sizeof(GDBOperandDesc)});
-     parseresult:=runparser('_softspace'#0'=(_softspace'#0,dt,parseerror);
-     if parseerror then
-                       begin
-                            repeat
-                            od.PTD:=nil;
-                            od.StoreMode:=SM_Default;
-                            parseresult:=runparser('=v=a=r_softspace'#0,dt,parseerror);
-                            if parseerror then
-                                              od.StoreMode:=SM_Var;
-                            parseresult:=runparser('_identifiers_cs'#0'=:_identifier'#0'_softspace'#0,dt,parseerror);
-                            if parseerror then
-                                              begin
-                                                   od.PTD:=ptunit(punit).TypeName2PTD(parseresult^.getData(parseresult.Count-1));
-                                                   for i:=1 to parseresult.Count-1 do
-                                                                                     Operands.PushBackData(od);
-                                              end
-                            else begin
-                                      parseresult:=runparser('_identifiers_cs'#0'_softspace'#0,dt,parseerror);
-                                      if parseerror then
-                                              begin
-                                                   od.PTD:=ptunit(punit).TypeName2PTD('GDBPointer');
-                                                   for i:=1 to parseresult.Count do
-                                                                                     Operands.PushBackData(od);
-                                              end
-                                 end;
-                            if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
-                            parseresult:=runparser('=;_softspace'#0,dt,parseerror);
-                            until not parseerror;
-                            parseresult:=runparser('=)_softspace'#0,dt,parseerror);
-                       end;
-     parseresult:=runparser('=:_softspace'#0'_identifier'#0,dt,parseerror);
-     if parseerror then
-                       begin
-                            self.ResultPTD:=ptunit(punit).TypeName2PTD(parseresult^.getData(0));
-                       end;
-     if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
-     parseresult:=runparser('=:_softspace'#0'_identifier'#0'_softspace'#0,dt,parseerror);
-     if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
-     //parseresult:=runparser('_softspace'#0'=(_softspace'#0'_identifier'#0'_softspace'#0'=)',line,parseerror);
-
-end;
+uses strmy;
 function TUserTypeDescriptor.GetPPD(PPDA:PTPropertyDeskriptorArray;var bmode:GDBInteger):PPropertyDeskriptor;
 begin
      if bmode=property_build

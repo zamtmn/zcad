@@ -4,13 +4,13 @@
 
 unit zscript;
 
+{$warn 5023 off : no warning about unused units}
 interface
 
 uses
-  langsystem, languade, TypeDescriptors, UArrayDescriptor, 
-  UBaseTypeDescriptor, UEnumDescriptor, UObjectDescriptor, UPointerDescriptor, 
-  URecordDescriptor, Varman, USinonimDescriptor, UUnitManager, 
-  LazarusPackageIntf;
+  langsystem, languade, UArrayDescriptor, UBaseTypeDescriptor, 
+  UEnumDescriptor, UObjectDescriptor, UPointerDescriptor, URecordDescriptor, 
+  Varman, USinonimDescriptor, UUnitManager, LazarusPackageIntf;
 
 implementation
 

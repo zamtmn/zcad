@@ -19,7 +19,7 @@
 unit uzemathutils;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzbtypes,math,uzegeometry,sysutils;
+uses uzedimensionaltypes,uzbtypesbase,uzbtypes,math,uzegeometry,sysutils;
 function zeDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;
 function zeNonDimensionToString(const value:Double; const f:TzeUnitsFormat):GDBString;
 function zeAngleDegToString(const value:Double; const f:TzeUnitsFormat):GDBString;

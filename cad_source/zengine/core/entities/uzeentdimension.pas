@@ -23,7 +23,7 @@ uses uzemathutils,uzgldrawcontext,uzeentabstracttext,uzestylestexts,UGDBXYZWStri
      uzestylesdim,uzeentmtext,uzestyleslayers,uzedrawingdef,uzecamera,
      uzbstrproc,UGDBOpenArrayOfByte,uzeenttext,uzegeometry,uzeentline,uzbtypesbase,uzeentcomplex,
      uzbgeomtypes,sysutils,uzeentity,uzbtypes,uzeconsts,uzbmemman,
-     uzeentitiesmanager,UGDBOpenArrayOfPV,uzeentblockinsert;
+     uzedimensionaltypes,uzeentitiesmanager,UGDBOpenArrayOfPV,uzeentblockinsert;
 type
 {EXPORT+}
 PTDXFDimData2D=^TDXFDimData2D;

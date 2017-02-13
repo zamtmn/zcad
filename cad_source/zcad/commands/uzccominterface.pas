@@ -27,7 +27,8 @@ uses
  {$IFNDEF DELPHI}uzctranslations,{$ENDIF}uzcflayers,uzcfunits,uzbstrproc,uzctreenode,menus,
  {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} {fileutil}LazUTF8,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
-  uzcsysinfo,
+ uzedimensionaltypes,
+ uzcsysinfo,
   //commandline,
   uzccommandsabstract,
   uzccommandsimpl,

@@ -20,7 +20,7 @@ unit uzedrawingdef;
 {$INCLUDE def.inc}
 interface
 uses uzgldrawcontext,uzestylesdim,uzbtypesbase,uzbtypes,uzestyleslayers,uzestylestexts,
-     uzestyleslinetypes,uzestylestables;
+     uzedimensionaltypes,uzestyleslinetypes,uzestylestables;
 type
 {EXPORT+}
 PTDrawingDef=^TDrawingDef;

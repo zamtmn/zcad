@@ -17,7 +17,7 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="2">
+    <Files Count="3">
       <Item1>
         <Filename Value="uzegeometry.pas"/>
         <UnitName Value="uzegeometry"/>
@@ -26,6 +26,10 @@
         <Filename Value="uzemathutils.pas"/>
         <UnitName Value="uzemathutils"/>
       </Item2>
+      <Item3>
+        <Filename Value="uzedimensionaltypes.pas"/>
+        <UnitName Value="uzedimensionaltypes"/>
+      </Item3>
     </Files>
     <RequiredPkgs Count="2">
       <Item1>

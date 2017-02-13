@@ -35,7 +35,7 @@ uses
   zeundostack,zebaseundocommands,
 
   //propertysupport UObjectDescriptor,
-
+  uzedimensionaltypes,
   varmandef,
   uzbtypes,uzbtypesbase,
   TypeDescriptors,

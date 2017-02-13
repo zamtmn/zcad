@@ -19,7 +19,7 @@ unit typedescriptors;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
 interface
-uses uzctnrvectorgdbpointer,LCLProc,uzbtypesbase,varmandef,uzbtypes,gzctnrvectordata,uzctnrvectorgdbstring,uzbmemman,
+uses uzedimensionaltypes,uzctnrvectorgdbpointer,LCLProc,uzbtypesbase,varmandef,uzbtypes,gzctnrvectordata,uzctnrvectorgdbstring,uzbmemman,
       gzctnrvectorp,uzbstrproc,sysutils;
 const
      m_procedure=1;

@@ -27,19 +27,22 @@
       </Item3>
       <Item4>
         <Filename Value="typedescriptors.pas"/>
-        <UnitName Value="TypeDescriptors"/>
+        <UnitName Value="typedescriptors"/>
       </Item4>
     </Files>
-    <RequiredPkgs Count="3">
+    <RequiredPkgs Count="4">
       <Item1>
-        <PackageName Value="zcontainers"/>
+        <PackageName Value="zmath"/>
       </Item1>
       <Item2>
-        <PackageName Value="zebase"/>
+        <PackageName Value="zcontainers"/>
       </Item2>
       <Item3>
-        <PackageName Value="FCL"/>
+        <PackageName Value="zebase"/>
       </Item3>
+      <Item4>
+        <PackageName Value="FCL"/>
+      </Item4>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

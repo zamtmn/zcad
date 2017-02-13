@@ -362,51 +362,6 @@ TFaceTypedData=packed record
                  Instance: GDBPointer;
                  PTD: GDBPointer;
                 end;
-TDimUnit =(DUScientific(*'Scientific'*),DUDecimal(*'Decimal'*),DUEngineering(*'Engineering'*),DUArchitectural(*'Architectural'*),DUFractional(*'Fractional'*),DUSystem(*'System'*));
-TDimDSep=(DDSDot,DDSComma,DDSSpace);
-PTLUnits=^TLUnits;
-TLUnits=(LUScientific(*'Scientific'*),LUDecimal(*'Decimal'*),LUEngineering(*'Engineering'*),LUArchitectural(*'Architectural'*),LUFractional(*'Fractional'*));
-PTAUnits=^TAUnits;
-TAUnits=(AUDecimalDegrees(*'Decimal degrees'*),AUDegreesMinutesSeconds(*'Degrees minutes seconds'*),AUGradians(*'Gradians'*),AURadians(*'Radians'*),AUSurveyorsUnits(*'Surveyors units'*));
-PTAngDir=^TAngDir;
-TAngDir=(ADCounterClockwise(*'Counterclockwise'*),ADClockwise(*'Clockwise'*));
-PTUPrec=^TUPrec;
-TUPrec=(UPrec0(*'0'*),UPrec1(*'0.0'*),UPrec2(*'0.00'*),UPrec3(*'0.000'*),UPrec4(*'0.0000'*),UPrec5(*'0.00000'*),UPrec6(*'0.000000'*),UPrec7(*'0.0000000'*),UPrec8(*'0.00000000'*));
-PTUnitMode=^TUnitMode;
-TUnitMode=(UMWithSpaces(*'With spaces'*),UMWithoutSpaces(*'Without spaces'*));
-TzeUnitsFormat=packed record
-                     abase:GDBAngleDegDouble;
-                     adir:TAngDir;
-                     aformat:TAUnits;
-                     aprec:TUPrec;
-                     uformat:TLUnits;
-                     uprec:TUPrec;
-                     umode:TUnitMode;
-                     DeciminalSeparator:TDimDSep;
-                     RemoveTrailingZeros:GDBBoolean;
-               end;
-PTInsUnits=^TInsUnits;
-TInsUnits=(IUUnspecified(*'Unspecified'*),
-           IUInches(*'Inches'*),
-           IUFeet(*'Feet'*),
-           IUMiles(*'Miles'*),
-           IUMillimeters(*'Millimeters'*),
-           IUCentimeters(*'Centimeters'*),
-           IUMeters(*'Meters'*),
-           IUKilometers(*'Kilometers'*),
-           IUMicroinches(*'Microinches'*),
-           IUMils(*'Mils'*),
-           IUYards(*'Yards'*),
-           IUAngstroms(*'Angstroms'*),
-           IUNanometers(*'Nanometers'*),
-           IUMicrons(*'Microns'*),
-           IUDecimeters(*'Decimeters'*),
-           IUDekameters(*'Dekameters'*),
-           IUHectometers(*'Hectometers'*),
-           IUGigameters(*'Gigameters'*),
-           IUAstronomicalUnits(*'Astronomical units'*),
-           IULightYears(*'Light years'*),
-           IUParsecs(*'Parsecs'*));
 TLLPrimitiveAttrib=GDBInteger;
 PTLLVertexIndex=^TLLVertexIndex;
 TLLVertexIndex=GDBInteger;
@@ -422,6 +377,52 @@ TImageDegradation=packed record
                         RD_ID_PrefferedRenderTime:PGDBInteger;(*'Prefered rendertime'*)
                     end;
 PExtensionData=GDBPointer;
+//Generate on E:/zcad/cad_source/components/zmath/uzedimensionaltypes.pas 
+    TDimUnit =(DUScientific(*'Scientific'*),DUDecimal(*'Decimal'*),DUEngineering(*'Engineering'*),DUArchitectural(*'Architectural'*),DUFractional(*'Fractional'*),DUSystem(*'System'*));
+    TDimDSep=(DDSDot,DDSComma,DDSSpace);
+    PTLUnits=^TLUnits;
+    TLUnits=(LUScientific(*'Scientific'*),LUDecimal(*'Decimal'*),LUEngineering(*'Engineering'*),LUArchitectural(*'Architectural'*),LUFractional(*'Fractional'*));
+    PTAUnits=^TAUnits;
+    TAUnits=(AUDecimalDegrees(*'Decimal degrees'*),AUDegreesMinutesSeconds(*'Degrees minutes seconds'*),AUGradians(*'Gradians'*),AURadians(*'Radians'*),AUSurveyorsUnits(*'Surveyors units'*));
+    PTAngDir=^TAngDir;
+    TAngDir=(ADCounterClockwise(*'Counterclockwise'*),ADClockwise(*'Clockwise'*));
+    PTUPrec=^TUPrec;
+    TUPrec=(UPrec0(*'0'*),UPrec1(*'0.0'*),UPrec2(*'0.00'*),UPrec3(*'0.000'*),UPrec4(*'0.0000'*),UPrec5(*'0.00000'*),UPrec6(*'0.000000'*),UPrec7(*'0.0000000'*),UPrec8(*'0.00000000'*));
+    PTUnitMode=^TUnitMode;
+    TUnitMode=(UMWithSpaces(*'With spaces'*),UMWithoutSpaces(*'Without spaces'*));
+    TzeUnitsFormat=packed record
+                         abase:GDBAngleDegDouble;
+                         adir:TAngDir;
+                         aformat:TAUnits;
+                         aprec:TUPrec;
+                         uformat:TLUnits;
+                         uprec:TUPrec;
+                         umode:TUnitMode;
+                         DeciminalSeparator:TDimDSep;
+                         RemoveTrailingZeros:GDBBoolean;
+                   end;
+    PTInsUnits=^TInsUnits;
+    TInsUnits=(IUUnspecified(*'Unspecified'*),
+               IUInches(*'Inches'*),
+               IUFeet(*'Feet'*),
+               IUMiles(*'Miles'*),
+               IUMillimeters(*'Millimeters'*),
+               IUCentimeters(*'Centimeters'*),
+               IUMeters(*'Meters'*),
+               IUKilometers(*'Kilometers'*),
+               IUMicroinches(*'Microinches'*),
+               IUMils(*'Mils'*),
+               IUYards(*'Yards'*),
+               IUAngstroms(*'Angstroms'*),
+               IUNanometers(*'Nanometers'*),
+               IUMicrons(*'Microns'*),
+               IUDecimeters(*'Decimeters'*),
+               IUDekameters(*'Dekameters'*),
+               IUHectometers(*'Hectometers'*),
+               IUGigameters(*'Gigameters'*),
+               IUAstronomicalUnits(*'Astronomical units'*),
+               IULightYears(*'Light years'*),
+               IUParsecs(*'Parsecs'*));
 //Generate on E:/zcad/cad_source/zengine/core/objects/uzepalette.pas
   PTRGB=^TRGB;
   TRGB=packed record
@@ -2728,6 +2729,7 @@ GDBObjLWPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
                  function CalcSquare:GDBDouble;virtual;abstract;
+                 //**попадаетли данная координата внутрь контура
                  function isPointInside(point:GDBVertex):GDBBoolean;virtual;abstract;
                  procedure createpoint;virtual;abstract;
                  procedure CalcWidthSegment;virtual;abstract;

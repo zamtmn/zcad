@@ -1,0 +1,209 @@
+LazarusResources.Add('Greek','UNI',[
+  'Greek text part 1'#13#10#206#149#206#186#206#187#206#191#206#179#206#173#207
+  +#130' '#207#131#207#132#206#191' '#206#153#207#131#207#129#206#177#206#174
+  +#206#187#13#10#206#145#207#128#206#181#206#178#206#175#207#137#207#131#206
+  +#181' '#206#191' '#206#147#206#185#206#172#206#189#206#189#206#183#207#130' '
+  +#206#158#206#181#206#189#206#172#206#186#206#183#207#130#13#10#206#156#206
+  +#181#207#132#206#177#206#188#207#140#207#131#207#135#206#181#207#133#207#131
+  +#206#183' '#207#135#206#181#207#129#206#185#206#191#207#141' '#13#10#206#163
+  +#206#172#206#188#207#128#206#177', '#206#186#206#187#207#140#206#191#207#133
+  +#206#189', '#206#188#206#177#207#131#206#186#206#177#207#129#206#172#206#180
+  +#206#181#207#130' '#206#186#206#177#206#185' '#207#128#206#181#206#189#206
+  +#185#206#173#207#130#13#10'Greek text part 2'#13#10#206#148#206#191#206#186
+  +#206#185#206#188#206#172#206#182#206#181#206#185' '#207#132#206#185#207#130
+  +' '#206#177#206#189#207#132#206#191#207#135#206#173#207#130' '#207#132#206
+  +#191#207#133#13#10#206#149#206#189#206#177' '#206#189#207#132#206#173#207#129
+  +#206#188#207#128#206#185' '#206#177#207#135#207#129#206#181#206#175#206#177
+  +#207#131#207#132#206#191'!'#13#10#206#164#206#191' '#206#160#207#140#207#129
+  +#207#132#206#191' '#206#145#206#187#206#173#206#179#207#129#206#181' '#206
+  +#186#206#177#206#187#206#181#206#175' '#207#132#206#191' '#206#157#207#132
+  +#206#177#206#178#207#140#207#130
+]);
+LazarusResources.Add('Arabic','UNI',[
+  #216#167#217#132#216#172#217#128#216#175#217#138#217#128#216#175#13#10#216#167
+  +#217#132#217#133#217#134#216#170#216#172#217#128#217#128#216#167#216#170#13
+  +#10#216#175#217#132#217#138#217#128#217#132' '#216#167#217#132#217#133#217
+  +#136#216#167#217#130#217#128#216#185' '#216#167#217#132#216#185#216#177#216
+  +#168#217#138#216#169' '#13#10#216#167#217#132#217#133#216#179#216#167#216#185
+  +#217#128#216#175#216#169' '#216#167#217#132#217#129#217#134#217#138#216#169
+  +' '
+]);
+LazarusResources.Add('Hebrew','UNI',[
+  #215#148#215#156#215#155#215#149#215#170' '#215#170#215#156#215#158#215#149
+  +#215#147' '#215#170#215#149#215#168#215#148#13#10'.'#215#153#215#169' '#215
+  +#145#215#155#215#156#215#156#215#159' '#215#169#215#170#215#153' '#215#158
+  +#215#166#215#149#215#149#215#170' '#215#162#215#169#215#148'--('#215#144') '
+  +#215#156#215#156#215#158#215#149#215#147' '#215#170#215#149#215#168#215#148
+  +'; ('#215#145') '#215#156#215#155#215#145#215#147' '#215#158#215#156#215#158
+  +#215#147#215#153#215#148' '#215#149#215#153#215#149#215#147#215#162#215#153
+  +#215#148'.  '#215#149#215#145#215#153#215#144#215#149#215#168' '#215#169#215
+  +#170#215#153' '#215#158#215#166#215#149#215#149#215#170' '#215#144#215#156
+  +#215#149' '#215#145#215#164#215#168#215#167#215#153#215#157' '#215#144#215
+  +#156#215#149#13#10#215#148#215#156#215#155#215#149#215#170' '#215#170#215#156
+  +#215#158#215#149#215#147' '#215#170#215#149#215#168#215#148' '#215#164#215
+  +#168#215#167' '#215#144
+]);
+LazarusResources.Add('Lorem ipsum','UNI',[
+  'Chapter heading spanned over two columns.'#13#10'Lorem ipsum dolor sit amet,'
+  +' consectetuer adipiscing elit. Integer pede urna, posuere sed, blandit a, v'
+  +'iverra et, erat. Praesent elementum tellus blandit magna. Duis in turpis ne'
+  +'c dui accumsan iaculis. Vivamus a velit. Etiam porttitor. Nullam volutpat. '
+  +'Ut ante justo, accumsan sed, condimentum id, condimentum et, dolor. Aenean '
+  +'nec sapien. Praesent felis leo, iaculis et, convallis eget, fermentum a, es'
+  +'t. Etiam consequat sagittis odio. Donec vitae elit. Suspendisse vitae magna'
+  +'. Suspendisse potenti.'#13#10'Praesent euismod tincidunt dui. Sed quis magn'
+  +'a. Donec rutrum lacus nec sem semper ultrices. Maecenas cursus. Mauris pell'
+  +'entesque, erat id pretium consectetuer, massa justo faucibus velit, vitae m'
+  +'attis ligula felis eget eros. Vestibulum ante. Morbi sit amet sem non liber'
+  +'o aliquet imperdiet. Proin massa wisi, dignissim eu, aliquam eu, facilisis '
+  +'ut, dolor. Curabitur gravida, tortor sed blandit adipiscing, mi magna fauci'
+  +'bus orci, sit amet convallis purus purus eget est. Nam nonummy mi vitae tel'
+  +'lus. Sed scelerisque. Vivamus at enim.'#13#10'Chapter heading spanned over '
+  +'two columns.'#13#10'Vestibulum in felis. Quisque ut pede feugiat sem ullamc'
+  +'orper pulvinar. Praesent nisl nulla, venenatis a, cursus vel, vestibulum vi'
+  +'tae, enim. Curabitur massa. Nullam pharetra, lorem eget viverra nonummy, nu'
+  +'lla velit ornare pede, ut dictum diam mauris gravida nisl. Donec non urna s'
+  +'ed ante interdum congue. Nulla quam. Ut odio nibh, ullamcorper eget, interd'
+  +'um accumsan, sagittis at, erat. Quisque vel massa. Donec mi elit, tempus qu'
+  +'is, tempor in, condimentum a, felis.'#13#10'Suspendisse ante. Pellentesque '
+  +'libero felis, pulvinar sed, ornare nec, vestibulum ac, orci. Donec ac orci.'
+  +' Donec auctor enim non elit. Curabitur aliquam metus eget turpis. Nullam au'
+  +'gue libero, tristique vel, rhoncus nec, mollis vel, velit. Lorem ipsum dolo'
+  +'r sit amet, consectetuer adipiscing elit. Curabitur eget velit et dolor tri'
+  +'stique hendrerit. Nulla auctor ultricies neque. Class aptent taciti sociosq'
+  +'u ad litora torquent per conubia nostra, per inceptos hymenaeos. Phasellus '
+  +'neque. In quam. Sed vestibulum ullamcorper nulla. Nullam vel erat sed arcu '
+  +'viverra auctor.'#13#10'Chapter heading spanned over two columns.'#13#10'Pra'
+  +'esent quis sem. In massa erat, viverra at, accumsan a, euismod et, mi. Vest'
+  +'ibulum nonummy consequat purus. Proin lobortis diam at nisl. Proin leo. Sed'
+  +' dui quam, luctus sed, tincidunt molestie, vestibulum in, pede. Ut at ligul'
+  +'a et dui pulvinar lacinia. Morbi molestie mi sit amet mauris. Pellentesque '
+  +'at est quis sem auctor ornare. Proin venenatis. Sed odio. Nunc varius venen'
+  +'atis tortor. Aliquam et tortor. Etiam dolor. Quisque eu mauris nec lectus t'
+  +'incidunt faucibus. Lorem ipsum dolor sit amet, consectetuer adipiscing elit'
+  +'. Morbi nonummy odio a urna. Cras laoreet.'#13#10'Praesent egestas, lectus '
+  +'vitae lacinia elementum, augue dolor placerat erat, quis porttitor erat arc'
+  +'u eu urna. Maecenas in nisl sit amet elit aliquam pellentesque. Integer est'
+  +'. Nullam ac purus sed lorem pellentesque commodo. Etiam iaculis placerat or'
+  +'ci. Quisque lobortis massa eget purus. Donec condimentum euismod enim. Sed '
+  +'nec nibh. Phasellus mi. Donec malesuada, justo volutpat sodales laoreet, ju'
+  +'sto nunc dictum lacus, ac auctor quam tortor quis lectus.'#13#10'Chapter he'
+  +'ading spanned over two columns.'#13#10'Duis faucibus nunc non tortor. Cras '
+  +'pretium. Nulla ullamcorper est eu nulla. In nec wisi sed odio interdum frin'
+  +'gilla. Donec mattis. Quisque porta adipiscing ipsum. Suspendisse eu ipsum e'
+  +'t sem commodo iaculis. In lacinia rhoncus tellus. Phasellus placerat nisl e'
+  +'get risus. Integer pede libero, congue eu, ultricies non, viverra non, nisl'
+  +'. Phasellus consequat tortor nec lacus. Donec eros augue, luctus ac, tempor'
+  +' eu, tincidunt eu, quam. Quisque a lorem at lectus suscipit iaculis. Donec '
+  +'erat. Aliquam mattis porttitor felis. Duis pellentesque metus. Aenean aucto'
+  +'r neque in arcu. Morbi dui mi, tincidunt vel, interdum at, pulvinar sit ame'
+  +'t, urna.'#13#10'Duis nec leo. Fusce dignissim. Aliquam erat volutpat. Integ'
+  +'er a sapien non ligula suscipit vulputate. Vestibulum ac urna eu magna cons'
+  +'ectetuer pulvinar. Nulla facilisi. Aliquam sed leo. Duis diam lacus, mattis'
+  +' a, malesuada eu, tincidunt ac, neque. Sed metus. Suspendisse nec velit. Do'
+  +'nec sed risus. Duis dui massa, ultricies eget, scelerisque sed, gravida ac,'
+  +' dolor. Maecenas vestibulum, nibh in congue aliquam, lectus odio consequat '
+  +'ante, ullamcorper fermentum mauris est sed orci. Vestibulum vitae libero qu'
+  +'is dolor elementum sodales. Praesent et mi.'#13#10'Chapter heading spanned '
+  +'over two columns.'#13#10'Vestibulum at turpis. Donec id wisi in orci sceler'
+  +'isque tincidunt. Donec non wisi et massa rutrum semper. Donec tellus. Nulla'
+  +' mauris. Maecenas ullamcorper, nibh sed pulvinar euismod, enim velit pulvin'
+  ,'ar dolor, sed consectetuer massa metus a metus. Maecenas interdum dictum or'
+  +'ci. Nunc laoreet, purus sit amet faucibus rhoncus, tortor nunc semper dui, '
+  +'sit amet egestas justo wisi in elit. Praesent quis orci. Fusce mattis liber'
+  +'o nec ligula sodales consequat. Integer vulputate.'#13#10'Aliquam semper ul'
+  +'tricies urna. Curabitur sed dolor at est sollicitudin suscipit. Aenean volu'
+  +'tpat, ligula nec laoreet fringilla, sapien neque suscipit justo, eget sagit'
+  +'tis libero dolor et lectus. Quisque eu nulla. Donec enim elit, tristique at'
+  +', ultricies at, convallis non, ligula. Proin at lectus. Ut ac est. Nunc eu '
+  +'quam. Cras ac lacus et quam laoreet cursus. Sed sed risus. Nunc ac libero. '
+  +'Donec fermentum varius neque. Quisque eu lorem in mauris dignissim blandit.'
+  +' Suspendisse venenatis est non nunc. Cras aliquet, leo vitae tristique volu'
+  +'tpat, ligula eros lobortis wisi, a rutrum orci arcu in purus. Pellentesque '
+  +'blandit. Sed eget quam a orci venenatis euismod.'#13#10'Chapter heading spa'
+  +'nned over two columns.'#13#10'Donec sit amet nulla eget elit luctus nonummy'
+  +'. Cras ultricies ultricies turpis. Nullam vulputate, nisl vel placerat susc'
+  +'ipit, lectus turpis porta eros, in nonummy justo eros a pede. Nulla eros. S'
+  +'ed placerat, odio at commodo convallis, sapien nisl lacinia mauris, quis tr'
+  +'istique metus lorem quis lorem. Vivamus varius. Cum sociis natoque penatibu'
+  +'s et magnis dis parturient montes, nascetur ridiculus mus. Integer ut odio.'
+  +' Suspendisse venenatis venenatis augue. Praesent aliquam libero nec eros. M'
+  +'orbi nunc. Suspendisse pellentesque arcu at massa. Nunc ut erat. Vivamus le'
+  +'ctus eros, sodales sit amet, faucibus vitae, tristique quis, elit. Cras sod'
+  +'ales. Curabitur lacus augue, ultricies at, porta vel, fringilla non, nunc. '
+  +'Integer eu neque. Ut at erat.'#13#10'Proin ante. Sed vehicula neque commodo'
+  +' libero. Nam gravida lacinia purus. Nulla sed nunc vitae urna condimentum p'
+  +'orttitor. Suspendisse tincidunt, tellus at euismod nonummy, justo leo vulpu'
+  +'tate nulla, sed pharetra dui massa et magna. Cum sociis natoque penatibus e'
+  +'t magnis dis parturient montes, nascetur ridiculus mus. Duis elit. Curabitu'
+  +'r sit amet lorem sed nunc condimentum tincidunt. Nam ultrices cursus ante. '
+  +'Aenean sodales ullamcorper wisi. Donec egestas diam sit amet wisi. Mauris c'
+  +'onvallis lacus.'#13#10'Chapter heading spanned over two columns.'#13#10'Sus'
+  +'pendisse urna eros, bibendum venenatis, imperdiet sit amet, ultricies ut, n'
+  +'ibh. Cras ac eros. Donec malesuada. Quisque tincidunt ante porta neque. Eti'
+  +'am libero. Phasellus dolor quam, convallis et, vehicula vel, mattis nec, pu'
+  +'rus. Quisque sit amet lacus. Vivamus vel risus. Nulla purus massa, bibendum'
+  +' et, eleifend nec, suscipit non, magna. Integer tellus. Aenean nonummy tinc'
+  +'idunt massa.'#13#10'Donec ac elit sit amet wisi molestie convallis. Proin t'
+  +'ortor orci, luctus non, egestas ut, ultrices ut, mi. Ut at leo. Nunc in orc'
+  +'i eget dui volutpat pretium. In tortor. Lorem ipsum dolor sit amet, consect'
+  +'etuer adipiscing elit. Vivamus risus. Cras tempus tortor in purus. Nullam d'
+  +'ictum vulputate est. Sed in nulla. Duis a tellus. Etiam ut pede. Duis purus'
+  +' tellus, mattis eu, venenatis ac, dignissim at, metus. Sed placerat, diam i'
+  +'n interdum iaculis, libero sem fermentum wisi, a venenatis tortor felis sit'
+  +' amet mi.'#13#10'Chapter heading spanned over two columns.'#13#10'Maecenas '
+  +'rhoncus lacinia erat. Integer bibendum, erat nec luctus adipiscing, lorem r'
+  +'isus convallis nibh, non cursus wisi felis eu mi. Curabitur elementum augue'
+  +' at mauris. Integer eget neque. Nulla eleifend urna et tellus. Phasellus so'
+  +'dales augue ut augue. Phasellus urna ligula, ornare quis, ornare sed, tempu'
+  +'s vitae, orci. Sed bibendum gravida tellus. Morbi sit amet nunc sed dolor t'
+  +'incidunt viverra. Phasellus quis metus. Suspendisse sagittis luctus lacus. '
+  +'Integer nec turpis. Mauris massa. Etiam justo felis, convallis sed, gravida'
+  +' sed, aliquet in, dolor. Cras facilisis vulputate dui. Cum sociis natoque p'
+  +'enatibus et magnis dis parturient montes, nascetur ridiculus mus.'#13#10'Ma'
+  +'uris est augue, ornare nec, imperdiet at, tincidunt vitae, sapien. In hac h'
+  +'abitasse platea dictumst. Nullam dapibus, nulla in fermentum imperdiet, fel'
+  +'is ipsum blandit felis, a viverra dui neque et ante. Maecenas ligula massa,'
+  +' dignissim eu, vehicula a, tempor in, elit. Vestibulum et dui. Maecenas pul'
+  +'vinar elementum enim. Nam neque arcu, rhoncus sit amet, mattis at, bibendum'
+  +' quis, nulla. Donec tellus nisl, ullamcorper id, varius eu, sollicitudin eg'
+  +'et, justo. Duis id wisi sit amet pede fermentum ultrices. Nullam magna odio'
+  +', accumsan non, vestibulum id, convallis ut, est. Proin neque tellus, variu'
+  +'s eu, euismod quis, venenatis vel, libero. Nunc lorem wisi, posuere quis, m'
+  +'attis et, auctor eu, elit. Maecenas vitae velit. Nullam diam. Sed libero ni'
+  +'bh, varius ut, venenatis a, ultrices at, nulla. Donec nec tellus. Mauris ve'
+  ,'l quam a odio nonummy rhoncus.'#13#10'Chapter heading spanned over two colu'
+  +'mns.'#13#10'Suspendisse potenti. Cras at dui in lorem tristique porttitor. '
+  +'Nulla in elit. Mauris quis turpis et libero rutrum fermentum. Curabitur eni'
+  +'m. In non velit. Etiam dapibus rutrum wisi. Donec iaculis tincidunt nisl. V'
+  +'ivamus nec velit. Maecenas turpis eros, molestie vitae, accumsan a, congue '
+  +'at, mi. Sed nulla tellus, tempor et, consequat id, vehicula vitae, arcu. In'
+  +' hac habitasse platea dictumst. Nulla facilisi. Cum sociis natoque penatibu'
+  +'s et magnis dis parturient montes, nascetur ridiculus mus. Ut est sapien, c'
+  +'ongue nec, luctus in, tincidunt ut, metus.'#13#10'Mauris laoreet. Proin por'
+  +'ttitor accumsan ligula. Class aptent taciti sociosqu ad litora torquent per'
+  +' conubia nostra, per inceptos hymenaeos. Vestibulum ac enim sed neque imper'
+  +'diet lobortis. In at leo. Lorem ipsum dolor sit amet, consectetuer adipisci'
+  +'ng elit. Donec non est. Sed vel neque ut felis mollis placerat. Morbi lacin'
+  +'ia, sapien nec mattis venenatis, est elit ultrices lorem, et bibendum augue'
+  +' ipsum nec justo. Pellentesque sit amet eros. Mauris ac quam id est iaculis'
+  +' lobortis. In placerat, ante quis tristique suscipit, wisi leo commodo lacu'
+  +'s, vel pulvinar dolor dolor id quam. Curabitur ac nisl. Duis sit amet torto'
+  +'r at lorem molestie vulputate. Duis posuere. Ut nec erat. Cras eget purus.'
+  +#13#10'Chapter heading spanned over two columns.'#13#10'Aliquam a nunc id la'
+  +'cus pulvinar tincidunt. Vestibulum ante ipsum primis in faucibus orci luctu'
+  +'s et ultrices posuere cubilia Curae; Vestibulum tempus, sapien vitae fringi'
+  +'lla ultrices, nibh tortor sodales ante, ut bibendum diam risus nec eros. Su'
+  +'spendisse potenti. Quisque quis magna sit amet mauris bibendum molestie. Cr'
+  +'as suscipit purus at metus. Quisque id erat vel turpis sodales ullamcorper.'
+  +' Sed sed enim. Morbi ac magna. Phasellus ac justo non nisl interdum semper.'
+  +' Aliquam eleifend, odio et lacinia semper, leo odio mattis neque, non ultri'
+  +'cies magna sapien sit amet eros.'#13#10'Sed dapibus. Proin euismod lectus e'
+  +'t nunc. Aliquam dolor eros, tincidunt vitae, lobortis vitae, laoreet vel, a'
+  +'nte. Praesent et diam vel velit volutpat varius. Nunc mauris neque, luctus '
+  +'vel, aliquam a, egestas id, nunc. In sollicitudin viverra tellus. Pellentes'
+  +'que bibendum, nulla ac blandit volutpat, justo tellus pharetra ipsum, sit a'
+  +'met pellentesque nunc mauris in elit. Duis nec neque quis leo faucibus orna'
+  +'re. Phasellus euismod velit sit amet nibh. Nullam dictum. In dolor lacus, a'
+  +'liquet id, egestas sit amet, aliquet at, orci.'#13#10
+]);

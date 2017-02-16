@@ -1,0 +1,3 @@
+lazres ..\virtualtrees.lrs VT_VERTSPLIT.cur VT_HEADERSPLIT.cur VT_MOVEALL.cur VT_MOVEE.cur VT_MOVEEW.cur VT_MOVEN.cur VT_MOVENE.cur VT_MOVENS.cur VT_MOVENW.cur VT_MOVES.cur VT_MOVESE.cur VT_MOVESW.cur VT_MOVEW.cur VT_XPBUTTONPLUS.bmp VT_XPBUTTONMINUS.bmp VT_CHECK_LIGHT.bmp VT_CHECK_DARK.bmp VT_FLAT.bmp VT_TICK_DARK.bmp VT_TICK_LIGHT.bmp VT_UTILITIES.bmp VT_XP.bmp VT_MOVENS_BMP.bmp VT_MOVEEW_BMP.bmp VT_MOVEALL_BMP.bmp
+
+lazres ..\ideicons.lrs tvirtualdrawtree.xpm tvirtualstringtree.xpm tvtheaderpopupmenu.xpm

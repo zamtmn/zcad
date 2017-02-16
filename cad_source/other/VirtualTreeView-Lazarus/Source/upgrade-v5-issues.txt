@@ -1,0 +1,18 @@
+* Use TImageList in checkbox support
+* Review ContentTo* methods
+* Review Thread support
+* Review TVirtualTreeHintWindow. LCL has better support than Delphi so, no need to much changes
+* Review PrepareBitmaps.FiilBitmaps
+* DoDragMsg
+* Evaluate the advantage to use SetCanvasOrigin instead of SetWindowOrgEx. Define UseSetCanvasOrigin
+* See if issue with pf32Bit PixelFormat in PaintTree is still present
+* Check black background  in empty tree
+* Review ASM procedures
+* Review DoDragMsg/CMDrag
+* Add CHANGES.TXT file 
+* Review KeyUnicode -> unnecessary?
+* review FDottedBrush life cycle
+* Reverted changes is FillBitmap. See if will work as is
+* See if will keep TVTHintKind
+* Review thread support
+* Test design-time header feature. Look for code in WMSetCursor (does not exist in LCL port)

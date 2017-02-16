@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <Name Value="virtualtreeview_package"/>
+    <Type Value="RunAndDesignTime"/>
+    <Author Value="Mike Lischke (LCL Port: Luiz Américo)"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <SearchPaths>
+        <IncludeFiles Value="include/intf/$(LCLWidgetType);units;include/intf"/>
+        <OtherUnitFiles Value="units/$(LCLWidgetType)"/>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)-$(LCLWidgetType)"/>
+      </SearchPaths>
+      <Conditionals Value="if VirtualTreeView_Debug = 'True' then
+begin
+  CustomOptions := '-dDEBUG_VTV';
+  UnitPath += ';$PkgOutDir(multiloglaz)';
+  UsageUnitPath += ';$PkgOutDir(multiloglaz)';
+end;"/>
+      <BuildMacros>
+        <Count Value="1"/>
+        <Item1>
+          <Identifier Value="VirtualTreeView_Debug"/>
+          <Description Value="Enables debugging of VTV. Requires MultiLog package"/>
+          <Values Count="2">
+            <Item1 Value="True"/>
+            <Item2 Value="False"/>
+          </Values>
+          <ValueDescriptions Count="2"/>
+        </Item1>
+      </BuildMacros>
+      <Parsing>
+        <SyntaxOptions>
+          <CStyleMacros Value="True"/>
+          <UseAnsiStrings Value="False"/>
+        </SyntaxOptions>
+      </Parsing>
+    </CompilerOptions>
+    <Description Value="Virtual Treeview is an advanced TreeView component
+"/>
+    <License Value=" Mozilla Public License 1.1 (MPL 1.1) or GNU Lesser General Public License
+"/>
+    <Version Major="5" Minor="5" Release="3" Build="1"/>
+    <Files Count="8">
+      <Item1>
+        <Filename Value="VirtualTrees.pas"/>
+        <UnitName Value="VirtualTrees"/>
+      </Item1>
+      <Item2>
+        <Filename Value="VTHeaderPopup.pas"/>
+        <UnitName Value="VTHeaderPopup"/>
+      </Item2>
+      <Item3>
+        <Filename Value="registervirtualtreeview.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="registervirtualtreeview"/>
+      </Item3>
+      <Item4>
+        <Filename Value="ideicons.lrs"/>
+        <Type Value="LRS"/>
+      </Item4>
+      <Item5>
+        <Filename Value="VTConfig.inc"/>
+        <Type Value="Include"/>
+      </Item5>
+      <Item6>
+        <Filename Value="VTGraphics.pas"/>
+        <UnitName Value="VTGraphics"/>
+      </Item6>
+      <Item7>
+        <Filename Value="VirtualTrees.res"/>
+        <Type Value="Binary"/>
+      </Item7>
+      <Item8>
+        <Filename Value="VTIDEEditors.pas"/>
+        <UnitName Value="VTIDEEditors"/>
+      </Item8>
+    </Files>
+    <RequiredPkgs Count="3">
+      <Item1>
+        <PackageName Value="IDEIntf"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="lclextensions_package"/>
+        <MaxVersion Minor="6"/>
+        <MinVersion Minor="6" Valid="True"/>
+      </Item2>
+      <Item3>
+        <PackageName Value="LCL"/>
+      </Item3>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+      <IgnoreBinaries Value="False"/>
+    </PublishOptions>
+    <CustomOptions Items="ExternHelp" Version="2">
+      <_ExternHelp Items="Count"/>
+    </CustomOptions>
+  </Package>
+</CONFIG>

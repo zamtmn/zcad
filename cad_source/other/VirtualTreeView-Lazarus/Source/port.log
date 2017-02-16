@@ -1,0 +1,216 @@
+Port started in 26/01/07
+1) Remove Delphi/Windows dependencies
+* Determine what windows functions are used. Store in windows_functions.txt
+* Undefine ThemeSupport in VTConfig.inc
+* Comment OleAcc unit from uses
+* Convert windows messages to LCL correspondent. Store in windows_messages.txt
+* toShowButtons duplicated in DefaultPaintOptions (Delphi compiles this!!)
+* unclosed comment in OLE Drag definitions
+* VTV uses OLE to drag and drop and clipboard. Necessary to see how LCL handle this. For now enclose all
+  clipboard and drag and drop ole under ifdefs
+* added {$mode delphi}{$H+}
+* Change header of TEnumFormatETC, TVTDragManager, TVTDataObject to match fpc
+* Add Types unit (TSize)
+* THintWindow.IsHintMsg is not implemented in LCL. Comment the code
+* Commented Consts and AxCtrls units in implementation
+* Isolated NC functions. They are used to paint the header
+* Isolated GetControlsAlignment. (Is not used in the LCL)
+* Commented TStringEditLink HideSelection and OEMConvert published formats
+* Added lcltypes.inc
+* Added TBidiMode and BidiMode property set default to LTR
+* Commented Bevel* properties publishing
+* Commented ParentBidiMode property
+* Commented implementation of RaiseLastOSError
+* Added missing clipboard constants
+* Added LCLIntf unit
+* Replaced GetClipboardFormatName by ClipboardFormatToMimeType in RegisterVTClipboardFormat
+* Replaced  RegisterClipboardFormat by ClipboardRegisterFormat
+* Added win32 color constants
+* Removed ISWin2k and XP since was not used. Assume IsWinNt true
+* Removed Global HintFont var used to < Delphi4. Use Screen.HintFont.
+* Commented the global imagelists code. Will be implemented later
+* Added dummy GetTextAlign function
+* Added simple ExtTextOutW and GetTextExtentPoint32W functions. Will be revisited later
+* Commented code that was using GetCurrentObject
+* Commented code for a bug in the Delphi package code
+* Changed way to get NeedToUnitialize. Removed succeeded
+* Replaced LoadCursor by LoadCursorFromLazarusResource.
+* Added virtualtrees.lrs
+* Changed WorkEvent from THandle to TEvent
+* Added INFINITE constant
+* Removed RaiseLastOSError
+* Changed typecast of EnterStates in TWorkerThread.ChangeTreeStates
+* Changed parameter of ReleaseStgMedium to a Pointer
+* Replaced unkForRelease for PunkForRelease in TStgMedium records, similar with stm and stg
+* Isolated DragFunctions dependent of windows
+* replaced lstrLenW by fpc way
+* Replace Windows.DrawTextW by customized
+* Added TVirtualTreeHintWindow.BidiMode property
+* Replace UpdateBounds by SetBounds in Hint show routine
+* In TCustomVirtualTreeOptions.SetMiscOptions called RecreateWnd
+* Commented ValidateRect functions
+* Implemented procedure ChangeBiDiModeAlignment
+* Isolated code from TVTDragImage.MakeAlphaChannel
+* In LoadFromStream changed typecast to longword
+* Added dummy ImageList_DrawEx implementation
+* Replaced ZeroMemory by FillChar
+* Commented BevelKind in PaintHeadder
+* Implemented TBaseVirtualTree.UseRightToLeftAlignment dummy function
+* Isolated Header messages handling
+* Added missing SetWindowPos constants
+* Implemented MapWindowPoints
+* Added dummy RedrawWindow function
+* Commented call to DestroyWindowHandle in Destroy. Probably will not be necessary since the header will be
+  in the client area
+* Used Application.ProcessMessages in InterruptValidation instead of direct call
+* Added dummy LPtoDP
+* Replaced LoadBitmap by LoadFromLazarusResource
+* Added dummy CreatePatternBrush
+* Added Dummy GetBkColor
+* Replaced Reader.ReadStr by Reader.ReadString
+* Added WM_SETREDRAW  constant
+* Added MAKEROP4
+* Added dummy ImageList_DragShowNolock
+* Replaced GetUpdateRect in WMPaint
+* Added dummy ToAscii and GetKeyboardState
+* Added WHEEL_ constants
+* Added Dummy SystemParametersInfo
+* Added Dummy SetTimer, isolated timer functions
+* Isolated CreateParams function
+* Added Failed function
+* Added dummy SubtractRect function
+* Replaced Canvas.TextFlags by TextStyle
+* Added LResources unit
+* Used the PackArray Implmentation from original port
+* The TCanvas of VCL does not has width and height as LCL does. This cause conflict with "with" operator
+* Implemented TOLEStream
+* Fixed bug in LCL.GetScrollPos
+* Fixed Draw problems due to TCanvas.Color
+* Fixed Align problems of TVirtualNode (Hint from original port)
+* Fixed MouseWheel
+* Fixed drawing problem when using ScrollBar or MouseWheel
+* Implemented Support for check images
+* Fixed position of editors while scrolling
+* Header implementation
+* Started handling of Header messages
+* Made TVTHeaderPopupMenu.Popup virtual
+* Added woekaround to drawing when scrolling
+* Implemented column resize
+* Implemented SetTimer/KillTimer
+* Fixed column position
+* Removed direct dependency from ActiveX, Oleutils
+* Started to work in the gtk port
+* Changed package to allow compilation
+* Added dummy virtualdragmanager and mmsystem units to allow compilation
+* Moved DelphiCompat and OleUtils to lclextensions package
+* Added images demo
+* Fixed header click when Header.States is empty
+
+>> The remaining log can be obtained using the svn repository   
+
+#Major Tasks#
+<*> General Painting
+  [*] The NodeBitmap width/Height is not reseted when erasing the background > LCL bug
+< > Define the UNICODE support schema. Probably change from widestring to ansistring and let LCL do the rest
+  [ ] Use GetTextExtentPoint instead of GetTextExtentPoint32 since the later is a wrapper to the former in LCL
+  [?] For now all rendering will be done with DrawTextW wrapper > Windows.DrawTextW
+      UPDATE: VirtualTrees.DrawTextW will be removed. Use DelphiCompat instead
+<*> Find a way to mantain OLE drag and Drop in windows
+  [-] Also maintain OLE ClipBoard?? Necessary?? -> No will be removed
+<-> Replace TWMTimer since is only called in win32. Or implement in GTK Intf?
+  [ ] Will be implemented under gtk
+<-> Implement Imagelist handling
+  [-] See a properly way to setup the ImageLists (avoid current hack)
+  [ ] Create a mask using LclExt functions
+< > GetCurrentObject used for blending does not exists in LCL. Add it?
+  [ ] Gtk.GetObject does not return dmBits (is always nil) -> Is not viable to implement
+      GetObject under Gtk. See another way to do alpha blend (Disable in GTK??)
+  [ ] Add to DelphiCompat    
+<-> Implement the header
+  [ ] BevelEdges is used to paint the Header. See if is worth implementing it
+  [*] Process the header messages or do another way
+  [ ] See if DestroyWindowHandle is necessary in Destroy
+< > Bidi Support
+  [ ]Properly Implement TBaseVirtualTree.UseRightToLeftAlignment
+#Secondary Tasks#
+<-> (low) OleAcc: MSAA (Accessibility)
+  [ ] Will be removed
+<*> WMContextMenu: replace by DoContextPopup??. Add to LCL??
+  [*] Fix Double MouseRUp
+  [*] in line 2042 of callback simplify
+<-> pceltFetched in TEnumFormatEtc.Next is declared as ULong in fpc but PLongInt in Delphi
+  [*] Already reported. No response
+< > Implement THintWindow.IsHintMsg ?
+< > Add TLMEnable ??
+< > Replace WMSetFont since LM_SETFONT is not used in LCL
+<*> Replace RaiseLastOSError. Is used in only one place -> Removed
+< > IsWinNT is currently set to True. See if will support win98 and how do it
+  [ ] IsWinNT Will be removed. Win98 should use MS Unicode Layer 
+< > See what todo with GetTextAlign. Implement in LCL??
+  [ ] Implement in DelphiCompat
+< > Thread support
+  [ ] Replace TVTCriticalSection by SyncObjs.TCriticalSection?? > YES
+  [ ] See appropriate value for INFINITE constant in Linux/BSD etc
+< > TWorkerThread.ChangeTreeStates uses SendMessage. See if it works both in win and linux
+<-> In fpc TStgMedium records have PunkForRelease instead of unkForRelease, same for stm and stg
+  [*] Already reported. No response
+< > Add a way to replace TBitmap.Scanline and all advanced graphics routines
+  [ ] Use TLazIntfImage?
+  [ ] Properly implement CreatePatternBrush or find a way to paint the lines
+< > Implement GetBkColor in LCL > DelphiCompat
+< > Begin/EndUpdate uses WM_SETREDRAW  message to avoid painting. See a crossplatform way of doing it
+  [ ] Add a function in LCLExt
+<*> Translate MAKEROP4 from C to Pascal. Done copied from fpc
+< > TCMMouseWheel type is not used in Lazarus. Remove
+< > Revise CM* functions and messages
+< > Implement SubtractRect
+< > Implement WMSetFont
+< > Implement PackArray using asm
+  [ ] Wait for fpc2.2
+  [ ] Adapt for fpc
+  [ ] Create versions for not i386
+
+#Checks#
+< > See if getting the length of PWideChar by typecasting to WideString is correct
+< > See if the Hint is being show in the correct place
+<-> See the effect of using RecreateWnd (in TCustomVirtualTreeOptions.SetMiscOptions)
+  [-] It seems to be working fine
+<*> WM_NCPAINT: see the behavior under LCL
+  [*] Is not handled. TControl will never receive it
+< > TVMGet* functions: probably it can be ignored, since is windows specific and not necessary at all
+< > See if WM_COPY can be mapped to LM_COPYTOCLIP
+< > See WM_ENABLE,WM_GETDLGCODE behavior under lcl/win32
+< > See function of WM_GETOBJECT and if is necessary to add to LCL
+<*> See the difference between TWMPaint and TLMPaint
+  [*] TLMPaint GetUpdateRect returna an empty rect unlike TWMPaint.
+< > TWMPrint and WM_PRINT. See if is necessary
+<*> In SetCursor uses TLMessage. Investigate > REMOVED  
+< > See if GetRGBColor is necessary. Probably not. If so remove color constants
+< > Found no way to replace ValidateRect in Hint Window animation. See how to replace it
+< > See if the typecasts to longword in TVirtualTreeColumn.LoadFromStream is correct
+< > See te meaning of Bevel* properties. See what values it should be in LCL
+<*> See if custom MapWindowPoints is returning correct values
+  [*] AFAIK yes
+< > See if Application.ProcessMessages in InterruptValidation will work (WM_QUIT handling??)
+<*> See if windows.GetUpdateRect is equal to PaintStruct in WM Paint
+  [*] Yes and no. The values of GetUpdateRect and rcPaint are equal in most times. So is safe to use it
+      But GetUpdateRect will always return an empty Rect when called inside LM_PAINT because there's a
+      prior BeginPaint call
+< > In TWMKillfocus the code to nullify the active control is probably not necessary
+<*> See if DeleteObject is necessary in AdjustCursorPanning > Removed
+< > See if WHEEL_ constants are valids under gtk
+< > See if is necessary WM_SYSCOLORCHANGE
+<*> See if is necessary handle LM_SETCURSOR (not used in LCL). Removed
+<?> See how replace CreateParams
+< > See if Canvas Respect TextStyle properties and if is necessary to set the bk in PaintNormalText
+< > IStream.SetSize expects ULARGE_INTEGER instead of LARGE_INTEGER
+< > Remove  TRect copy in FillRect
+< > In paint tree avoid using TBitmap.Canvas since it does a check each time is called
+< > Why there's a extra 1 in the NodeBitmap that clears the backGround
+< > See code duplicate in TBitmap.SetWidthHeight
+< > Document problem of TCanvas.Color
+< > Document differences between WMMouseWheel
+< > Document Differences between WMPaint
+< > Document that ScrollWindow does not exists in gtk
+< > Due to lclheader implementation, when a editor is scrolled out of the window it disppears (does not returns when scroled back)
+< > Document differences of DrawFrameControl, ScrollWindow, InvalidateRect

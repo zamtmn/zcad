@@ -22,6 +22,8 @@ interface
 uses
  uzbpaths,uzclog,uniqueinstanceraw,uzcstrconsts,uzbstrproc,Forms, stdctrls, Controls, Graphics,
  ExtCtrls,uzbtypesbase,uzcsysinfo,{fileutil}LazUTF8,sysutils;
+const
+  zcaduniqueinstanceid='zcad unique instance';
 type
   TSplashForm = class(TForm)
     txt:tlabel;
@@ -79,7 +81,7 @@ end;
 procedure createsplash;
 begin
      if RunUniqueInstance then
-       sysparam.otherinstancerun:=InstanceRunning('zcad unique instance',true,true);
+       sysparam.otherinstancerun:=InstanceRunning(zcaduniqueinstanceid,true,true);
      SplashForm:=TSplashForm.CreateNew(nil);
      //SplashForm.cb:=TComboBox.CreateParented(SplashForm.Handle);
      SplashForm.cb:=TComboBox.Create(NIL);

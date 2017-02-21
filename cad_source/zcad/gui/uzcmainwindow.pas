@@ -238,7 +238,7 @@ begin
      SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, Pointer(0), 0);
      SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE or SWP_NOSIZE);
      hCurWnd := GetForegroundWindow;
-     AResult := False;
+     AResult := SetForegroundWindow(hWnd);{в вин7 почемуто это подвисает AResult := False;
      while not AResult do
      begin
         dwThreadID := GetCurrentThreadId;
@@ -246,7 +246,7 @@ begin
         AttachThreadInput(dwThreadID, dwCurThreadID, True);
         AResult := SetForegroundWindow(hWnd);
         AttachThreadInput(dwThreadID, dwCurThreadID, False);
-     end;
+     end;}
      SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE or SWP_NOSIZE);
      SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, Pointer(OldTimeOut), 0);
 end;
@@ -2301,9 +2301,9 @@ var
    pdwg:PTSimpleDrawing;
    rc:TDrawContext;
 begin
-     {$IFDEF linux}
+     {IFDEF linux}
      UniqueInstanceBase.FIPCServer.PeekMessage(0,true);
-     {$endif}
+     {endif}
      done:=true;
      sysvar.debug.languadedeb.UpdatePO:=_UpdatePO;
      sysvar.debug.languadedeb.NotEnlishWord:=_NotEnlishWord;

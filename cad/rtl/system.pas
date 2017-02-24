@@ -4,7 +4,7 @@ interface
 type
 //Generate on E:/zcad/cad_source/components/zebase/uzbtypesbase.pas
 PGDBDouble=^GDBDouble;
-
+GDBDouble=Double;
 PGDBNonDimensionDouble=^GDBNonDimensionDouble;
 
 PGDBAngleDegDouble=^GDBAngleDegDouble;
@@ -12,29 +12,29 @@ PGDBAngleDegDouble=^GDBAngleDegDouble;
 PGDBAngleDouble=^GDBAngleDouble;
 
 PGDBFloat=^GDBFloat;
-
+GDBFloat=Single;
 PGDBString=^GDBString;
-
+GDBString=ansistring;
 PGDBAnsiString=^GDBAnsiString;
-
+GDBAnsiString=ansistring;
 PGDBBoolean=^GDBBoolean;
-
+GDBBoolean=Boolean;
 PGDBInteger=^GDBInteger;
-
+GDBInteger=LongInt;
 PGDBByte=^GDBByte;
-
+GDBByte=Byte;
 PGDBLongword=^GDBLongword;
-
+GDBLongword=LongWord;
 PGDBQWord=^GDBQWord;
-
+GDBQWord=QWord;
 PGDBWord=^GDBWord;
-
+GDBWord=word;
 PGDBSmallint=^GDBSmallint;
-
+GDBSmallint=SmallInt;
 PGDBShortint=^GDBShortint;
-
+GDBShortint=ShortInt;
 PGDBPointer=^GDBPointer;
-
+GDBPointer=Pointer;
 PGDBPtrUInt=^GDBPtrUInt;
 
 itrec=packed record

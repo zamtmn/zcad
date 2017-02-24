@@ -142,13 +142,13 @@ TNameToIndex=TMyGDBAnsiStringDictionary<TArrayIndex>;
 ptypemanager=^typemanager;
 typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)
                   protected
-                  exttype:TZctnrVectorPGDBaseObjects;
                   n2i:TNameToIndex;
                   public
+                  exttype:TZctnrVectorPGDBaseObjects;
                   constructor init;
                   procedure CreateBaseTypes;virtual;
-                  function _TypeName2PTD(name: GDBString):PUserTypeDescriptor;virtual;
-                  function _ObjectTypeName2PTD(name: GDBString):PObjectDescriptor;virtual;
+                  function _TypeName2PTD(name: TInternalScriptString):PUserTypeDescriptor;virtual;
+                  function _ObjectTypeName2PTD(name: TInternalScriptString):PObjectDescriptor;virtual;
                   function _TypeIndex2PTD(ind:integer):PUserTypeDescriptor;virtual;
                   destructor done;virtual;
                   destructor systemdone;virtual;
@@ -165,10 +165,10 @@ varmanager={$IFNDEF DELPHI}packed{$ENDIF} object(varmanagerdef)
             vardescarray:{GDBOpenArrayOfData}Tvardescarray;
             vararray:GDBOpenArrayOfByte;
                  constructor init;
-                 function findvardesc(varname:GDBString): pvardesk;virtual;
+                 function findvardesc(varname:TInternalScriptString): pvardesk;virtual;
                  function findvardescbyinst(varinst:GDBPointer):pvardesk;virtual;
                  function findvardescbytype(pt:PUserTypeDescriptor):pvardesk;virtual;
-                 function createvariable(varname:GDBString; var vd:vardesk): pvardesk;virtual;
+                 function createvariable(varname:TInternalScriptString; var vd:vardesk): pvardesk;virtual;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: ShortString): GDBBoolean;virtual;
                  destructor done;virtual;
                  procedure free;virtual;
@@ -177,19 +177,19 @@ TunitPart=(TNothing,TInterf,TImpl,TProg);
 PTUnit=^TUnit;
 PTSimpleUnit=^TSimpleUnit;
 TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
-                  Name:GDBString;
+                  Name:TInternalScriptString;
                   InterfaceUses:TZctnrVectorGDBPointer;
                   InterfaceVariables: varmanager;
-                  constructor init(nam:GDBString);
+                  constructor init(nam:TInternalScriptString);
                   destructor done;virtual;
-                  function CreateVariable(varname,vartype:GDBString;_pinstance:pointer=nil):GDBPointer;virtual;
-                  function FindVariable(varname:GDBString):pvardesk;virtual;
+                  function CreateVariable(varname,vartype:TInternalScriptString;_pinstance:pointer=nil):GDBPointer;virtual;
+                  function FindVariable(varname:TInternalScriptString):pvardesk;virtual;
                   function FindVariableByInstance(_Instance:GDBPointer):pvardesk;virtual;
-                  function FindValue(varname:GDBString):GDBPointer;virtual;
-                  function TypeName2PTD(n: GDBString):PUserTypeDescriptor;virtual;
+                  function FindValue(varname:TInternalScriptString):GDBPointer;virtual;
+                  function TypeName2PTD(n: TInternalScriptString):PUserTypeDescriptor;virtual;
                   function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;
                   function SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
-                  procedure setvardesc(out vd: vardesk; varname, username, typename: GDBString;_pinstance:pointer=nil);
+                  procedure setvardesc(out vd: vardesk; varname, username, typename: TInternalScriptString;_pinstance:pointer=nil);
                   procedure free;virtual;abstract;
                   procedure CopyTo(source:PTSimpleUnit);virtual;
                   procedure CopyFrom(source:PTSimpleUnit);virtual;
@@ -205,11 +205,11 @@ TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
             ImplementationTypes:typemanager;
             ImplementationVariables: varmanager;
 
-            constructor init(nam:GDBString);
+            constructor init(nam:TInternalScriptString);
             function TypeIndex2PTD(ind:GDBinteger):PUserTypeDescriptor;virtual;
-            function TypeName2PTD(n: GDBString):PUserTypeDescriptor;virtual;
-            function ObjectTypeName2PTD(n: GDBString):PObjectDescriptor;virtual;
-            function AssignToSymbol(var psymbol;symbolname:GDBString):GDBInteger;
+            function TypeName2PTD(n: TInternalScriptString):PUserTypeDescriptor;virtual;
+            function ObjectTypeName2PTD(n: TInternalScriptString):PObjectDescriptor;virtual;
+            function AssignToSymbol(var psymbol;symbolname:TInternalScriptString):GDBInteger;
             function SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;
             destructor done;virtual;
             procedure free;virtual;
@@ -220,8 +220,10 @@ TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
             function RegisterEnumType(ti:PTypeInfo):PUserTypeDescriptor;
       end;
 {EXPORT-}
+TOnCreateSystemUnit=procedure (ptsu:PTUnit);
 procedure vardeskclear(const p:pvardesk);
 var
+  OnCreateSystemUnit:TOnCreateSystemUnit=nil;
   SysUnit:PTUnit=nil;
   SysVarUnit:PTUnit=nil;
   SavedUnit,DBUnit,DWGDBUnit,DWGUnit:PTUnit;
@@ -231,11 +233,11 @@ var
   CategoryCollapsed:GDBOpenArrayOfByte;
   CategoryUnknownCOllapsed:boolean;
 
-function getpattern(ptd:ptdarray; max:GDBInteger;var line:GDBString; out typ:GDBInteger):PTZctnrVectorGDBString;
-function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfByte; var line,GDBStringtypearray:GDBString; var fieldoffset: GDBSmallint; ptd:PRecordDescriptor):GDBBoolean;
+function getpattern(ptd:ptdarray; max:GDBInteger;var line:TInternalScriptString; out typ:GDBInteger):PTZctnrVectorGDBString;
+function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfByte; var line,GDBStringtypearray:TInternalScriptString; var fieldoffset: GDBSmallint; ptd:PRecordDescriptor):GDBBoolean;
 function GetPVarMan: GDBPointer; export;
-function FindCategory(category:GDBString;var catname:GDBString):Pointer;
-procedure SetCategoryCollapsed(category:GDBString;value:GDBBoolean);
+function FindCategory(category:TInternalScriptString;var catname:TInternalScriptString):Pointer;
+procedure SetCategoryCollapsed(category:TInternalScriptString;value:GDBBoolean);
 function GetBoundsFromSavedUnit(name:string;w,h:integer):Trect;
 procedure StoreBoundsToSavedUnit(name:string;tr:Trect);
 procedure SetTypedDataVariable(out TypedTataVariable:TTypedData;pTypedTata:pointer;TypeName:string);
@@ -291,7 +293,7 @@ end;
 procedure StoreBoundsToSavedUnit(name:string;tr:Trect);
 var
    pint:PGDBInteger;
-   vn:gdbstring;
+   vn:TInternalScriptString;
 begin
      vn:=name+'_Left';
      pint:=SavedUnit.FindValue(vn);
@@ -320,7 +322,7 @@ var
    pv:pvardesk;
    vd: vardesk;
    ir:itrec;
-//   value:gdbstring;
+//   value:TInternalScriptString;
 begin
      pu:=InterfaceUses.beginiterate(ir);
      if pu<>nil then
@@ -343,7 +345,7 @@ var
    pv:pvardesk;
    vd: vardesk;
    ir:itrec;
-//   value:gdbstring;
+//   value:TInternalScriptString;
 begin
      pu:=source.InterfaceUses.beginiterate(ir);
      if pu<>nil then
@@ -509,7 +511,7 @@ var
    pu:PTUnit;
    pv:pvardesk;
    ir:itrec;
-   value:gdbstring;
+   value:TInternalScriptString;
 begin
      membuf.TXTAddGDBStringEOL('unit '+Name+';');
      membuf.TXTAddGDBStringEOL('interface');
@@ -653,7 +655,7 @@ function typemanager._TypeName2PTD;
 var
   {tp:PUserTypeDescriptor;
   ir:itrec;
-  S:GDBString;}
+  S:TInternalScriptString;}
   rr:tarrayindex;
 begin
   if n2i.MyGetValue(uppercase(name),rr) then
@@ -702,9 +704,6 @@ begin
      AddTypeByRef(FundamentalLongWordDescriptorObj);
      AddTypeByRef(FundamentalQWordDescriptorObj);
      AddTypeByRef(FundamentalDoubleDescriptorObj);
-     AddTypeByRef(GDBNonDimensionDoubleDescriptorObj);
-     AddTypeByRef(GDBAngleDegDoubleDescriptorObj);
-     AddTypeByRef(GDBAngleDoubleDescriptorObj);
      AddTypeByRef(FundamentalStringDescriptorObj);
      AddTypeByRef(FundamentalAnsiStringDescriptorObj);
      AddTypeByRef(FundamentalSingleDescriptorObj);
@@ -719,7 +718,7 @@ end;
 
 
 
-procedure tsimpleunit.setvardesc(out vd: vardesk; varname, username, typename: GDBString;_pinstance:pointer=nil);
+procedure tsimpleunit.setvardesc(out vd: vardesk; varname, username, typename: TInternalScriptString;_pinstance:pointer=nil);
 //var
 //  tpe:PUserTypeDescriptor;
 begin
@@ -758,7 +757,7 @@ begin
 
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
-function varmanager.createvariable(varname: GDBString; var vd: vardesk):pvardesk;
+function varmanager.createvariable(varname: TInternalScriptString; var vd: vardesk):pvardesk;
 var
   size: GDBLongword;
   i:TArrayIndex;
@@ -780,7 +779,7 @@ begin
        //KillString(vd.name);
        //KillString(vd.username);
 end;
-function getpattern(ptd:ptdarray; max:GDBInteger;var line:GDBString; out typ:GDBInteger):PTZctnrVectorGDBString;
+function getpattern(ptd:ptdarray; max:GDBInteger;var line:TInternalScriptString; out typ:GDBInteger):PTZctnrVectorGDBString;
 var i:GDBInteger;
     parseresult:PTZctnrVectorGDBString;
     parseerror:GDBBoolean;
@@ -806,13 +805,13 @@ begin
                                                 end;
                    end;
 end;
-function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfByte; var line,GDBStringtypearray:GDBString; var fieldoffset: GDBSmallint; ptd:PRecordDescriptor):GDBBoolean;
+function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: GDBOpenArrayOfByte; var line,GDBStringtypearray:TInternalScriptString; var fieldoffset: GDBSmallint; ptd:PRecordDescriptor):GDBBoolean;
 type
     trrstate=(fields,metods);
 var parseerror{,parsesuberror}:GDBBoolean;
     parseresult{,parsesubresult}:PTZctnrVectorGDBString;
     count,typ:GDBInteger;
-    {typename,}oldline, fieldname, {fieldvalue,} fieldtype, {sub, indmins, indmaxs, arrind1,}rname,wname,functionname,functionoperands: GDBString;
+    {typename,}oldline, fieldname, {fieldvalue,} fieldtype, {sub, indmins, indmaxs, arrind1,}rname,wname,functionname,functionoperands: TInternalScriptString;
     fieldgdbtype:PUserTypeDescriptor;
     i: GDBInteger;
 //  indmin, indcount, size: GDBLongword;
@@ -1047,7 +1046,7 @@ begin
 end;
 function varmanager.findfieldcustom;
 var
-  path,{sp,} {typeGDBString,} sub, {field,} inds: GDBString;
+  path,{sp,} {typeGDBString,} sub, {field,} inds: TInternalScriptString;
   oper: ansichar;
   i, oldi, j, indexcount: GDBInteger;
   pind: parrayindex;
@@ -1260,7 +1259,7 @@ begin
   pdesc:=self.vardescarray.iterate(ir);
   until pdesc=nil;
 end;
-function varmanager.findvardesc(varname: GDBString): pvardesk;
+function varmanager.findvardesc(varname: TInternalScriptString): pvardesk;
 var
   //pblock: pdblock;
   pdesc: pvardesk;
@@ -1392,7 +1391,7 @@ begin
      InterfaceUses.done;
      name:='';
 end;
-function tsimpleunit.FindValue(varname:GDBString):GDBPointer;
+function tsimpleunit.FindValue(varname:TInternalScriptString):GDBPointer;
 var
   temp:pvardesk;
 begin
@@ -1410,7 +1409,7 @@ end;
 function tsimpleunit.findvariable;
 var p:ptunit;
     ir:itrec;
-    un:gdbstring;
+    un:TInternalScriptString;
     i:integer;
 begin
      i:=pos('.',varname);
@@ -1438,7 +1437,7 @@ begin
                             until p=nil;
      end;
 end;
-function tsimpleunit.createvariable(varname,vartype:GDBString;_pinstance:pointer=nil):GDBPointer;
+function tsimpleunit.createvariable(varname,vartype:TInternalScriptString;_pinstance:pointer=nil):GDBPointer;
 var //t:PUserTypeDescriptor;
     //pvd:pvardesk;
     vd:vardesk;
@@ -1453,7 +1452,7 @@ begin
      InterfaceVariables.createvariable(varname,vd);
      result:=vd.data.Instance;
 end;
-constructor tunit.init(nam: GDBString);
+constructor tunit.init(nam: TInternalScriptString);
 begin
   inherited init(nam);
   InterfaceTypes.init;
@@ -1461,14 +1460,18 @@ begin
   ImplementationVariables.init;
   //InterfaceVariables.init;
   if uppercase(name)='SYSTEM' then
-                        InterfaceTypes.CreateBaseTypes;
+  begin
+    InterfaceTypes.CreateBaseTypes;
+    if assigned(OnCreateSystemUnit) then
+                                        OnCreateSystemUnit(@self);
+  end;
 end;
 function tunit.SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;
 var
    pu:PTUnit;
    pv:pvardesk;
    ir:itrec;
-//   value:gdbstring;
+//   value:TInternalScriptString;
 begin
      membuf.TXTAddGDBString('unit ');
      membuf.TXTAddGDBStringEOL(self.Name+';');
@@ -1598,7 +1601,7 @@ function tunit.TypeIndex2PTD;
 begin
      result:=InterfaceTypes._TypeIndex2PTD(ind);
 end;
-function tunit.AssignToSymbol;//(var psymbol;symbolname:GDBString);
+function tunit.AssignToSymbol;//(var psymbol;symbolname:TInternalScriptString);
 var
   vd:pvardesk;
 begin
@@ -1606,7 +1609,7 @@ begin
      if vd<>nil then
      pointer(psymbol):=vd^.data.Instance;
 end;
-function FindCategory(category:GDBString;var catname:GDBString):Pointer;
+function FindCategory(category:TInternalScriptString;var catname:TInternalScriptString):Pointer;
 var
    ps:pgdbstring;
    ir:itrec;
@@ -1629,9 +1632,9 @@ begin
      result:=@CategoryUnknownCOllapsed;
      catname:=category;
 end;
-procedure SetCategoryCollapsed(category:GDBString;value:GDBBoolean);
+procedure SetCategoryCollapsed(category:TInternalScriptString;value:GDBBoolean);
 var
-  cn:GDBString;
+  cn:TInternalScriptString;
   pc:PGDBBoolean;
 begin
      pc:=FindCategory(category,cn);

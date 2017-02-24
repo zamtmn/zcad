@@ -55,6 +55,7 @@ const
   vda_RO=2;
   vda_approximately=4;
 type
+TInternalScriptString=Ansistring;
 TCompareResult=(CRLess,CREqual,CRGreater,CRNotEqual);
 TPropEditorOwner=TWinControl;
 PDMode=(PDM_Field,PDM_Property);
@@ -144,24 +145,24 @@ UserTypeDescriptor=object(GDBaseObject)
                          constructor init(size:GDBInteger;tname:string;pu:pointer);
                          constructor baseinit(size:GDBInteger;tname:string;pu:pointer);
                          procedure _init(size:GDBInteger;tname:string;pu:pointer);
-                         function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;InitialValue:GDBString;preferedHeight:integer):TEditorDesc;virtual;
-                         procedure ApplyOperator(oper,path:GDBString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;abstract;
+                         function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc;virtual;
+                         procedure ApplyOperator(oper,path:TInternalScriptString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;abstract;
                          //function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
-                         function SerializePreProcess(Value:GDBString;sub:integer):GDBString;virtual;
+                         function SerializePreProcess(Value:TInternalScriptString;sub:integer):TInternalScriptString;virtual;
                          //function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;abstract;
                          function GetTypeAttributes:TTypeAttr;virtual;
-                         function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                         function GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;virtual;
-                         function GetUserValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                         function GetDecoratedValueAsString(pinstance:GDBPointer; const f:TzeUnitsFormat):GDBString;virtual;
+                         function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                         function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
+                         function GetUserValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                         function GetDecoratedValueAsString(pinstance:GDBPointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
                          procedure CopyInstanceTo(source,dest:pointer);virtual;
                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
-                         procedure SetValueFromString(PInstance:GDBPointer;_Value:GDBstring);virtual;abstract;
+                         procedure SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);virtual;abstract;
                          procedure InitInstance(PInstance:GDBPointer);virtual;
                          destructor Done;virtual;
-                         procedure MagicFreeInstance(PInstance:GDBPointer);virtual;
-                         procedure MagicAfterCopyInstance(PInstance:GDBPointer);virtual;
-                         procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
+                         procedure MagicFreeInstance(PInstance:Pointer);virtual;
+                         procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
+                         procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                          procedure IncAddr(var addr:GDBPointer);virtual;
                          function GetFactTypedef:PUserTypeDescriptor;virtual;
                          procedure Format;virtual;
@@ -188,7 +189,7 @@ TPropEditor=class(TComponent)
             end;
   //pd=^GDBDouble;
   {-}{/pGDBInteger=^GDBInteger;/}
-  //pstr=^GDBString;
+  //pstr=^TInternalScriptString;
   {-}{/pGDBPointer=^GDBPointer;/}
   //pbooleab=^GDBBoolean;
  {TODO:огнегне}
@@ -231,8 +232,8 @@ TOSMode=packed record
              end;
   TVariableAttributes=GDBInteger;
   vardesk =packed  record
-    name: GDBString;
-    username: GDBString;
+    name: TInternalScriptString;
+    username: TInternalScriptString;
     data: TTypedData;
     attrib:TVariableAttributes;
     class operator =(a, b: vardesk): Boolean;
@@ -240,9 +241,9 @@ TOSMode=packed record
 ptypemanagerdef=^typemanagerdef;
 typemanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                   procedure readbasetypes;virtual;abstract;
-                  procedure readexttypes(fn: GDBString);virtual;abstract;
-                  function _TypeName2Index(name: GDBString): GDBInteger;virtual;abstract;
-                  function _TypeName2PTD(name: GDBString):PUserTypeDescriptor;virtual;abstract;
+                  procedure readexttypes(fn: TInternalScriptString);virtual;abstract;
+                  function _TypeName2Index(name: TInternalScriptString): GDBInteger;virtual;abstract;
+                  function _TypeName2PTD(name: TInternalScriptString):PUserTypeDescriptor;virtual;abstract;
                   function _TypeIndex2PTD(ind:integer):PUserTypeDescriptor;virtual;abstract;
 
                   function getDataMutable(index:TArrayIndex):GDBPointer;virtual;abstract;
@@ -254,10 +255,10 @@ pvarmanagerdef=^varmanagerdef;
 varmanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                  {vardescarray:GDBOpenArrayOfData;
                  vararray:GDBOpenArrayOfByte;}
-                 function findvardesc(varname:GDBString): pvardesk;virtual;abstract;
-                 function createvariable(varname:GDBString; var vd:vardesk): pvardesk;virtual;abstract;
-                 procedure createvariablebytype(varname,vartype:GDBString);virtual;abstract;
-                 procedure createbasevaluefromGDBString(varname: GDBString; varvalue: GDBString; var vd: vardesk);virtual;abstract;
+                 function findvardesc(varname:TInternalScriptString): pvardesk;virtual;abstract;
+                 function createvariable(varname:TInternalScriptString; var vd:vardesk): pvardesk;virtual;abstract;
+                 procedure createvariablebytype(varname,vartype:TInternalScriptString);virtual;abstract;
+                 procedure createbasevaluefromGDBString(varname: TInternalScriptString; varvalue: TInternalScriptString; var vd: vardesk);virtual;abstract;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: shortString): GDBBoolean;virtual;abstract;
            end;
 {EXPORT-}
@@ -398,14 +399,14 @@ end;
 procedure UserTypeDescriptor.Format;
 begin
 end;
-procedure UserTypeDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);
+procedure UserTypeDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);
 begin
      membuf.TXTAddGDBStringEOL(prefix+':='+{pvd.data.PTD.}GetValueAsString(PInstance)+';');
 end;
-procedure UserTypeDescriptor.MagicFreeInstance(PInstance:GDBPointer);
+procedure UserTypeDescriptor.MagicFreeInstance(PInstance:Pointer);
 begin
 end;
-procedure UserTypeDescriptor.MagicAfterCopyInstance(PInstance:GDBPointer);
+procedure UserTypeDescriptor.MagicAfterCopyInstance(PInstance:Pointer);
 begin
 
 end;
@@ -426,7 +427,7 @@ begin
                                                          result:=CRNotEqual;
 end;
 
-function UserTypeDescriptor.SerializePreProcess(Value:GDBString;sub:integer):GDBString;
+function UserTypeDescriptor.SerializePreProcess(Value:TInternalScriptString;sub:integer):TInternalScriptString;
 begin
      result:=DupeString(' ',sub)+value;
 end;
@@ -460,7 +461,7 @@ begin
      SizeInGDBBytes:=0;
      typename:='';
 end;
-function UserTypeDescriptor.CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;InitialValue:GDBString;preferedHeight:integer):TEditorDesc;
+function UserTypeDescriptor.CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc;
 begin
      if assigned(onCreateEditorFunc) then
                                          result:=onCreateEditorFunc(TheOwner,rect,pinstance,psa,FreeOnLostFocus,initialvalue,@self,preferedHeight)
@@ -474,20 +475,20 @@ function UserTypeDescriptor.GetTypeAttributes:TTypeAttr;
 begin
      result:=0;
 end;
-function UserTypeDescriptor.GetValueAsString(pinstance:GDBPointer):GDBString;
+function UserTypeDescriptor.GetValueAsString(pinstance:Pointer):TInternalScriptString;
 begin
      result:='UserTypeDescriptor.GetValueAsString;';
 end;
-function UserTypeDescriptor.GetFormattedValueAsString(pinstance:GDBPointer; const f:TzeUnitsFormat):GDBString;
+function UserTypeDescriptor.GetFormattedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
 begin
      result:=GetValueAsString(PInstance);
 end;
 
-function UserTypeDescriptor.GetUserValueAsString(pinstance:GDBPointer):GDBString;
+function UserTypeDescriptor.GetUserValueAsString(pinstance:Pointer):TInternalScriptString;
 begin
      result:=GetValueAsString(pinstance);
 end;
-function UserTypeDescriptor.GetDecoratedValueAsString(pinstance:GDBPointer; const f:TzeUnitsFormat):GDBString;
+function UserTypeDescriptor.GetDecoratedValueAsString(pinstance:GDBPointer; const f:TzeUnitsFormat):TInternalScriptString;
 begin
      if assigned(Decorators.OnGetValueAsString) then
                                          result:=Decorators.OnGetValueAsString(pinstance)

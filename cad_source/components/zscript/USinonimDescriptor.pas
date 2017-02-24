@@ -28,23 +28,23 @@ GDBSinonimDescriptor=object(TUserTypeDescriptor)
                      PSinonimOf:PUserTypeDescriptor;
                      SinonimName:GDBString;
                      constructor init(SinonimTypeName,Tname:GDBString;pu:pointer);
-                     constructor init2(SinonimOf:PUserTypeDescriptor;Tname:GDBString;pu:pointer);
-                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
-                     procedure ApplyOperator(oper,path:GDBString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;
-                     //function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                     //function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                     constructor init2(SinonimOf:PUserTypeDescriptor;Tname:TInternalScriptString;pu:pointer);
+                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;var addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+                     procedure ApplyOperator(oper,path:TInternalScriptString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;
+                     //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                     //function DeSerialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                      destructor Done;virtual;
                      function GetFactTypedef:PUserTypeDescriptor;virtual;
                      function Compare(pleft,pright:pointer):TCompareResult;virtual;
-                     function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                     procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
-                     function GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;virtual;
-                     procedure MagicFreeInstance(PInstance:GDBPointer);virtual;
-                     procedure MagicAfterCopyInstance(PInstance:GDBPointer);virtual;
+                     function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                     procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
+                     function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
+                     procedure MagicFreeInstance(PInstance:Pointer);virtual;
+                     procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
                end;
 implementation
 uses {ZBasicVisible,}UUnitManager{,log};
-function GDBSinonimDescriptor.GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;
+function GDBSinonimDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
 begin
      result:=GetFactTypedef^.GetFormattedValueAsString(pinstance,f);
 end;
@@ -52,15 +52,15 @@ function GDBSinonimDescriptor.GetValueAsString;
 begin
      result:=GetFactTypedef^.GetValueAsString(pinstance);
 end;
-procedure GDBSinonimDescriptor.SetValueFromString(PInstance:GDBPointer;Value:GDBstring);
+procedure GDBSinonimDescriptor.SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);
 begin
      GetFactTypedef^.SetValueFromString(pinstance,Value);
 end;
-procedure GDBSinonimDescriptor.MagicFreeInstance(PInstance:GDBPointer);
+procedure GDBSinonimDescriptor.MagicFreeInstance(PInstance:Pointer);
 begin
      GetFactTypedef^.MagicFreeInstance(PInstance);
 end;
-procedure GDBSinonimDescriptor.MagicAfterCopyInstance(PInstance:GDBPointer);
+procedure GDBSinonimDescriptor.MagicAfterCopyInstance(PInstance:Pointer);
 begin
      GetFactTypedef^.MagicAfterCopyInstance(PInstance);
 end;
@@ -80,14 +80,14 @@ begin
 end;
 constructor GDBSinonimDescriptor.init;
 begin
-    GDBPointer(SinonimName):=nil;
+    Pointer(SinonimName):=nil;
     SinonimName:=SinonimTypeName;
     PSinonimOf:=units.currentunit{ SysUnit}.TypeName2PTD(SinonimName);
     inherited init(PSinonimOf^.SizeInGDBBytes,Tname,pu);
 end;
-constructor GDBSinonimDescriptor.init2(SinonimOf:PUserTypeDescriptor;Tname:GDBString;pu:pointer);
+constructor GDBSinonimDescriptor.init2(SinonimOf:PUserTypeDescriptor;Tname:TInternalScriptString;pu:pointer);
 begin
-    GDBPointer(SinonimName):=nil;
+    Pointer(SinonimName):=nil;
     SinonimName:=SinonimOf^.TypeName;
     PSinonimOf:=SinonimOf;
     inherited init(PSinonimOf^.SizeInGDBBytes,Tname,pu);

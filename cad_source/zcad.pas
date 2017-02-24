@@ -45,8 +45,8 @@ uses
   //
   //if need create variables before system.pas loading, place unit bellow
   //
+  uzcregzscript,//this need before other registers
   uzcoiregister,
-  uzcregzscript,
   uzcreggeneralwiewarea,
   uzcregfontmanager,
   uzcregpaths,

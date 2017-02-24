@@ -30,34 +30,34 @@ RecordDescriptor=object(TUserTypeDescriptor)
                        Fields:{GDBOpenArrayOfData}TFieldDescriptor;
                        Parent:PRecordDescriptor;
                        constructor init(tname:string;pu:pointer);
-                       function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
+                       function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;var addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                        procedure AddField(var fd:FieldDescriptor);
-                       function FindField(fn:GDBString):PFieldDescriptor;virtual; //**< Найти требуемое поля. Пример : sampleRTTITypeDesk^.FindField('PolyWidth')
-                       function SetAttrib(fn:GDBString;SetA,UnSetA:GDBWord):PFieldDescriptor;
-                       procedure ApplyOperator(oper,path:GDBString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;
+                       function FindField(fn:TInternalScriptString):PFieldDescriptor;virtual; //**< Найти требуемое поля. Пример : sampleRTTITypeDesk^.FindField('PolyWidth')
+                       function SetAttrib(fn:TInternalScriptString;SetA,UnSetA:GDBWord):PFieldDescriptor;
+                       procedure ApplyOperator(oper,path:TInternalScriptString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;
                        procedure AddConstField(const fd:FieldDescriptor);
                        procedure CopyTo(RD:PTUserTypeDescriptor);
-                       //function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                       //function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                       //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                       //function DeSerialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                        function GetTypeAttributes:TTypeAttr;virtual;
-                       procedure MagicFreeInstance(PInstance:GDBPointer);virtual;
+                       procedure MagicFreeInstance(PInstance:Pointer);virtual;
                        destructor Done;virtual;
-                       procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
-                       procedure MagicAfterCopyInstance(PInstance:GDBPointer);virtual;
-                       function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
+                       procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
+                       procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
+                       function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                    end;
-function typeformat(s:GDBString;PInstance,PTypeDescriptor:GDBPointer):GDBString;
+function typeformat(s:TInternalScriptString;PInstance,PTypeDescriptor:Pointer):TInternalScriptString;
 var
-    EmptyTypedData:GDBString;
+    EmptyTypedData:TInternalScriptString;
 implementation
 uses varman;
-function typeformat(s:GDBString;PInstance,PTypeDescriptor:GDBPointer):GDBString;
+function typeformat(s:TInternalScriptString;PInstance,PTypeDescriptor:Pointer):TInternalScriptString;
 var i,i2:GDBInteger;
-    ps,fieldname:GDBString;
+    ps,fieldname:TInternalScriptString;
 //    pv:pvardesk;
     offset:GDBInteger;
     tc:PUserTypeDescriptor;
-    pf:GDBPointer;
+    pf:Pointer;
 begin
      ps:=s;
      repeat
@@ -85,7 +85,7 @@ begin
      until i<=0;
      result:=ps;
 end;
-procedure RecordDescriptor.MagicFreeInstance(PInstance:GDBPointer);
+procedure RecordDescriptor.MagicFreeInstance(PInstance:Pointer);
 var pd:PFieldDescriptor;
 //     d:FieldDescriptor;
      p:pointer;
@@ -157,9 +157,9 @@ end;
 procedure RecordDescriptor.AddField;
 begin
      AddConstField(fd);
-     //GDBPointer(fd.base.ProgramName):=nil;
+     //Pointer(fd.base.ProgramName):=nil;
 end;
-function RecordDescriptor.FindField(fn:GDBString):PFieldDescriptor;
+function RecordDescriptor.FindField(fn:TInternalScriptString):PFieldDescriptor;
 var pd:PFieldDescriptor;
 //     d:FieldDescriptor;
      ir:itrec;
@@ -177,7 +177,7 @@ begin
         until pd=nil;
         result:=nil;
 end;
-function RecordDescriptor.SetAttrib(fn:GDBString;SetA,UnSetA:GDBWord):PFieldDescriptor;
+function RecordDescriptor.SetAttrib(fn:TInternalScriptString;SetA,UnSetA:GDBWord):PFieldDescriptor;
 begin
      result:=FindField(fn);
      if result<>nil then
@@ -204,12 +204,12 @@ begin
               d.base.Saved:=pd^.base.Saved;
               d.Collapsed:=pd^.Collapsed;
               PRecordDescriptor(rd)^.AddField(d);
-              //GDBPointer(d.base.ProgramName):=nil;
-              //GDBPointer(d.base.userName):=nil;
+              //Pointer(d.base.ProgramName):=nil;
+              //Pointer(d.base.userName):=nil;
               pd:=Fields.iterate(ir);
         until pd=nil;
 end;
-procedure RecordDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);
+procedure RecordDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);
 var pd:PFieldDescriptor;
 //    d:FieldDescriptor;
     ir:itrec;
@@ -230,14 +230,14 @@ function RecordDescriptor.CreateProperties;
 var PFD:PFieldDescriptor;
     ppd:PPropertyDeskriptor;
     bmodesave,bmodesave2,bmodetemp:GDBInteger;
-    tname:GDBString;
-    ta,tb,taa:GDBPointer;
+    tname:TInternalScriptString;
+    ta,tb,taa:Pointer;
     pobj:PGDBaseObject;
     ir,ir2:itrec;
     pvd:pvardesk;
     tw:word;
     i:integer;
-    category:gdbstring;
+    category:TInternalScriptString;
     oldppda:PTPropertyDeskriptorArray;
     recreateunitvars:boolean;
     SaveDecorators:TDecoratedProcs;
@@ -265,7 +265,7 @@ begin
            ppd^.PTypeManager:=@self;
            if bmode=property_build then
            begin
-                gdbgetmem({$IFDEF DEBUGBUILD}'{6F9EBE33-15A8-4FF5-87D7-BF01A40F6789}',{$ENDIF}GDBPointer(ppd^.SubNode),sizeof(TPropertyDeskriptorArray));
+                gdbgetmem({$IFDEF DEBUGBUILD}'{6F9EBE33-15A8-4FF5-87D7-BF01A40F6789}',{$ENDIF}Pointer(ppd^.SubNode),sizeof(TPropertyDeskriptorArray));
                 PTPropertyDeskriptorArray(ppd^.SubNode)^.init({$IFDEF DEBUGBUILD}'{EDA18239-9432-453B-BA54-0381DA1BB665}',{$ENDIF}100);;
                 ppda:=PTPropertyDeskriptorArray(ppd^.SubNode);
            end else
@@ -329,7 +329,7 @@ begin
                                                                            ppd^.Collapsed:=FindCategory(category,ppd^.Name);
                                                                            ppd^.category:=category;
                                                                            ppd^.Attr:=ownerattrib;
-                                                                           gdbgetmem({$IFDEF DEBUGBUILD}'{6F9EBE33-15A8-4FF5-87D7-BF01A40F6789}',{$ENDIF}GDBPointer(ppd^.SubNode),sizeof(TPropertyDeskriptorArray));
+                                                                           gdbgetmem({$IFDEF DEBUGBUILD}'{6F9EBE33-15A8-4FF5-87D7-BF01A40F6789}',{$ENDIF}Pointer(ppd^.SubNode),sizeof(TPropertyDeskriptorArray));
                                                                            PTPropertyDeskriptorArray(ppd^.SubNode)^.init({$IFDEF DEBUGBUILD}'{EDA18239-9432-453B-BA54-0381DA1BB665}',{$ENDIF}100);;
                                                                       end;
                                                       ppda:=PTPropertyDeskriptorArray(ppd^.SubNode);
@@ -390,7 +390,7 @@ begin
                             GDBEnumDataDescriptorObj.CreateProperties(f,PDM_Field,PPDA,tname,@pfd^.collapsed,pfd^.base.Attributes or ownerattrib,bmode,ta,'','');
                             GDBEnumDataDescriptorObj.Decorators:=SaveDecorators;
                             GDBEnumDataDescriptorObj.FastEditor:=SaveFastEditor;
-                            Inc(GDBPlatformint(addr),sizeof(gdbpointer));
+                            Inc(GDBPlatformint(addr),sizeof(Pointer));
                        end
                    else
            (*if (pfd^.PFT^.TypeName='TObjectUnit') then
@@ -448,7 +448,7 @@ begin
                                                                                                                                        //pobj^.whoisit;
                                                                                                                                        //pobj^.GetObjTypeName;
                                                                                                                                        end;
-                                                                                Inc(GDBPlatformint(addr),sizeof(gdbpointer));
+                                                                                Inc(GDBPlatformint(addr),sizeof(Pointer));
                                            end
                    else
                    begin
@@ -485,8 +485,8 @@ begin
      //programlog.LogOutFormatStr('end;{RecordDescriptor.CreateProperties "%s"}',[name],lp_DecPos,LM_Trace);
 end;
 
-//procedure MagicAfterCopyInstance(PInstance:GDBPointer);virtual;
-function RecordDescriptor.GetValueAsString(pinstance:GDBPointer):GDBString;
+//procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
+function RecordDescriptor.GetValueAsString(pinstance:Pointer):TInternalScriptString;
 var pd:PFieldDescriptor;
     ir:itrec;
     notfirst:gdbboolean;
@@ -507,7 +507,7 @@ begin
         until pd=nil;
      result:=result+')';
 end;
-procedure RecordDescriptor.MagicAfterCopyInstance(PInstance:GDBPointer);
+procedure RecordDescriptor.MagicAfterCopyInstance(PInstance:Pointer);
 var pd:PFieldDescriptor;
 //    d:FieldDescriptor;
     ir:itrec;

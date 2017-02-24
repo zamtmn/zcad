@@ -54,7 +54,7 @@ PGDBBoolean=^GDBBoolean;
 {-}GDBBoolean=type boolean;{/GDBBoolean=Boolean;/}
 
 PGDBInteger=^GDBInteger;
-{-}GDBInteger=type integer;{/GDBInteger=LongInt;/}
+{-}GDBInteger=type integer;{/GDBInteger=Integer;/}
 
 PGDBByte=^GDBByte;
 {-}GDBByte=type byte;{/GDBByte=Byte;/}

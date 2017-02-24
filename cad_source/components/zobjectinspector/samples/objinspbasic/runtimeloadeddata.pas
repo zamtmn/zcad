@@ -9,15 +9,15 @@ type
   TMyArray=packed array[0..10] of TSubData;
   PTOtherData=^TOtherData;
   TOtherData=packed record
-    data1:GDBInteger;
-    data2:GDBInteger;
-    data3:GDBInteger;
+    data1:Integer;
+    data2:Integer;
+    data3:Integer;
   end;
   TData1=packed record
     subdata1,subdata2,subdata3:TSubData;
-    dataI:GDBInteger;
-    dataD:GDBDouble;
-    dataS:GDBString;
+    dataI:Integer;
+    dataD:Double;
+    dataS:String;
     arr:TMyArray;
     pointerToOtherData:PTOtherData;
   end;

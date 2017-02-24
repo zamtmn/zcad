@@ -666,7 +666,7 @@ begin
      AddEditorToType('Byte',TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType('SmallInt',TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType('Word',TBaseTypesEditors.BaseCreateEditor);
-     AddEditorToType('Integer',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('LongInt',TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType('LongWord',TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType('QWord',TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType('Double',TBaseTypesEditors.BaseCreateEditor);

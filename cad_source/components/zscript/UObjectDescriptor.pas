@@ -65,24 +65,24 @@ ObjectDescriptor=object(RecordDescriptor)
 
 
                        constructor init(tname:string;pu:pointer);
-                       function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
+                       function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;var addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                        procedure CopyTo(RD:PTUserTypeDescriptor);
-                       procedure RegisterVMT(pv:GDBPointer);
-                       procedure RegisterDefaultConstructor(pv:GDBPointer);
-                       procedure RegisterObject(pv,pc:GDBPointer);
-                       procedure AddMetod(objname,mn,dt:GDBString;ma:GDBPointer;attr:GDBMetodModifier);
+                       procedure RegisterVMT(pv:Pointer);
+                       procedure RegisterDefaultConstructor(pv:Pointer);
+                       procedure RegisterObject(pv,pc:Pointer);
+                       procedure AddMetod(objname,mn,dt:TInternalScriptString;ma:Pointer;attr:GDBMetodModifier);
                        procedure AddProperty(var pd:PropertyDescriptor);
-                       function FindMetod(mn:GDBString;obj:GDBPointer):PMetodDescriptor;virtual;
-                       function FindMetodAddr(mn:GDBString;obj:GDBPointer;out pmd:pMetodDescriptor):TMethod;virtual;
-                       procedure RunMetod(mn:GDBString;obj:GDBPointer);
-                       procedure SimpleRunMetodWithArg(mn:GDBString;obj,arg:GDBPointer);
-                       procedure RunDefaultConstructor(PInstance:GDBPointer);
-                       //function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                       //function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                       function FindMetod(mn:TInternalScriptString;obj:Pointer):PMetodDescriptor;virtual;
+                       function FindMetodAddr(mn:TInternalScriptString;obj:Pointer;out pmd:pMetodDescriptor):TMethod;virtual;
+                       procedure RunMetod(mn:TInternalScriptString;obj:Pointer);
+                       procedure SimpleRunMetodWithArg(mn:TInternalScriptString;obj,arg:Pointer);
+                       procedure RunDefaultConstructor(PInstance:Pointer);
+                       //function Serialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                       //function DeSerialize(PInstance:Pointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                        destructor Done;virtual;
                        function GetTypeAttributes:TTypeAttr;virtual;
-                       procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
-                       procedure MagicFreeInstance(PInstance:GDBPointer);virtual;
+                       procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
+                       procedure MagicFreeInstance(PInstance:Pointer);virtual;
                  end;
 PTGenericVectorData=^TGenericVectorData;
 TGenericVectorData=GZVectorData<byte>;
@@ -107,9 +107,9 @@ var
   i:integer;
 begin
      punit:=pu;
-     GDBPointer(ObjName):=nil;
-     GDBPointer(MetodName):=nil;
-     GDBPointer(OperandsName):=nil;
+     Pointer(ObjName):=nil;
+     Pointer(MetodName):=nil;
+     Pointer(OperandsName):=nil;
      ResultPTD:=nil;
      ObjName:=objn;
      MetodName:=mn;
@@ -141,12 +141,12 @@ begin
                                       parseresult:=runparser('_identifiers_cs'#0'_softspace'#0,dt,parseerror);
                                       if parseerror then
                                               begin
-                                                   od.PTD:=ptunit(punit).TypeName2PTD('GDBPointer');
+                                                   od.PTD:=ptunit(punit).TypeName2PTD('Pointer');
                                                    for i:=1 to parseresult.Count do
                                                                                      Operands.PushBackData(od);
                                               end
                                  end;
-                            if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
+                            if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(Pointer(parseresult));end;
                             parseresult:=runparser('=;_softspace'#0,dt,parseerror);
                             until not parseerror;
                             parseresult:=runparser('=)_softspace'#0,dt,parseerror);
@@ -156,13 +156,13 @@ begin
                        begin
                             self.ResultPTD:=ptunit(punit).TypeName2PTD(parseresult^.getData(0));
                        end;
-     if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
+     if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(Pointer(parseresult));end;
      parseresult:=runparser('=:_softspace'#0'_identifier'#0'_softspace'#0,dt,parseerror);
-     if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(gdbpointer(parseresult));end;
+     if parseresult<>nil then begin parseresult^.Done;GDBfreeMem(Pointer(parseresult));end;
      //parseresult:=runparser('_softspace'#0'=(_softspace'#0'_identifier'#0'_softspace'#0'=)',line,parseerror);
 
 end;
-procedure ObjectDescriptor.MagicFreeInstance(PInstance:GDBPointer);
+procedure ObjectDescriptor.MagicFreeInstance(PInstance:Pointer);
 begin
      //RunMetod('Done',PInstance);
      inherited;
@@ -171,12 +171,12 @@ end;
 procedure ObjectDescriptor.AddProperty(var pd:PropertyDescriptor);
 begin
      Properties.PushBackData(pd);
-     //GDBPointer(pd.base.ProgramName):=nil;
-     //GDBPointer(pd.r):=nil;
-     //GDBPointer(pd.w):=nil;
+     //Pointer(pd.base.ProgramName):=nil;
+     //Pointer(pd.r):=nil;
+     //Pointer(pd.w):=nil;
 end;
 
-procedure ObjectDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);
+procedure ObjectDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);
 //var pd:PFieldDescriptor;
 //    d:FieldDescriptor;
 //    ir:itrec;
@@ -303,13 +303,13 @@ begin
              FundamentalStringDescriptorObj^.Serialize(@objtypename,saveflag,membuf,linkbuf);
         end;}
 //end;*)
-procedure freemetods(p:GDBPointer);
+procedure freemetods(p:Pointer);
 begin
      PMetodDescriptor(p)^.MetodName:='';
      PMetodDescriptor(p)^.ObjName:='';
      PMetodDescriptor(p)^.Operands.done;
 end;
-procedure FREEPROP(p:GDBPointer);
+procedure FREEPROP(p:Pointer);
 begin
      PPropertyDescriptor(p)^.base.ProgramName:='';
      PPropertyDescriptor(p)^.base.UserName:='';
@@ -385,12 +385,12 @@ procedure ObjectDescriptor.RegisterDefaultConstructor;
 begin
      PDefaultConstructor:=pv;
 end;
-procedure ObjectDescriptor.RegisterObject(pv,pc:GDBPointer);
+procedure ObjectDescriptor.RegisterObject(pv,pc:Pointer);
 begin
      RegisterVMT(pv);
      RegisterDefaultConstructor(pc);
 end;
-procedure ObjectDescriptor.RunDefaultConstructor(PInstance:GDBPointer);
+procedure ObjectDescriptor.RunDefaultConstructor(PInstance:Pointer);
 var
    tm:tmethod;
 begin
@@ -418,7 +418,7 @@ var pmd:pMetodDescriptor;
     //l:longint;
     //tm:tmethod;
     h:gdblongword;
-    umn:GDBSTRING;
+    umn:TInternalScriptString;
 begin
      result:=nil;
      umn:=uppercase(mn);
@@ -452,7 +452,7 @@ begin
            pmd:=SimpleMenods.iterate(ir);
      until pmd=nil;
 end;
-function ObjectDescriptor.FindMetodAddr(mn:GDBString;obj:GDBPointer;out pmd:pMetodDescriptor):TMethod;
+function ObjectDescriptor.FindMetodAddr(mn:TInternalScriptString;obj:Pointer;out pmd:pMetodDescriptor):TMethod;
 begin
      pmd:=findmetod(mn,obj);
      if pmd<>nil then
@@ -475,7 +475,7 @@ begin
           result.Code:=nil;
      end;
 end;
-procedure ObjectDescriptor.SimpleRunMetodWithArg(mn:GDBString;obj,arg:GDBPointer);
+procedure ObjectDescriptor.SimpleRunMetodWithArg(mn:TInternalScriptString;obj,arg:Pointer);
 var pmd:pMetodDescriptor;
     tm:tmethod;
 begin
@@ -494,7 +494,7 @@ procedure ObjectDescriptor.RunMetod;
 var pmd:pMetodDescriptor;
     tm:tmethod;
     {$IFDEF fpc}
-    p:GDBPointer;
+    p:Pointer;
     ppp:pointer;
     {$ENDIF}
 begin
@@ -640,7 +640,7 @@ function ObjectDescriptor.GetTypeAttributes;
 begin
      result:=TA_COMPOUND or TA_OBJECT;
 end;
-function processPROPERTYppd({ppd:PPropertyDeskriptor;}pp:PPropertyDescriptor):GDBPointer;
+function processPROPERTYppd({ppd:PPropertyDeskriptor;}pp:PPropertyDescriptor):Pointer;
 begin
      //ppd.mode:=PDM_Property;
      //ppd^.Name:=pp^.PropertyName;
@@ -657,7 +657,7 @@ var
    pp:PPropertyDescriptor;
    objtypename,propname:string;
    ir,ir2:itrec;
-   baddr{,b2addr,eaddr}:GDBPointer;
+   baddr{,b2addr,eaddr}:Pointer;
 //   ppd:PPropertyDeskriptor;
 //   PDA:PTPropertyDeskriptorArray;
 //   bmodesave:GDBInteger;
@@ -735,9 +735,9 @@ begin
            ppd^.Collapsed:=PCollapsed;
            if bmode=property_build then
            begin
-                gdbgetmem({$IFDEF DEBUGBUILD}'{6F9EBE33-15A8-4FF5-87D7-BF01A40F6789}',{$ENDIF}GDBPointer(pda),sizeof(TPropertyDeskriptorArray));
+                gdbgetmem({$IFDEF DEBUGBUILD}'{6F9EBE33-15A8-4FF5-87D7-BF01A40F6789}',{$ENDIF}Pointer(pda),sizeof(TPropertyDeskriptorArray));
                 pda^.init({$IFDEF DEBUGBUILD}'{EDA18239-9432-453B-BA54-0381DA1BB665}',{$ENDIF}100);;
-                ppd^.SubProperty:=GDBPointer(pda);
+                ppd^.SubProperty:=Pointer(pda);
                 ppda:=pda;
            end else
            begin

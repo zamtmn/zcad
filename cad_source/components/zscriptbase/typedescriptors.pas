@@ -53,7 +53,7 @@ PTPropertyDeskriptorArray=^TPropertyDeskriptorArray;
 TPropertyDeskriptorArray=packed object(GZVectorP{-}<PPropertyDeskriptor>{//})
                                procedure cleareraseobj;virtual;
                                function GetRealPropertyDeskriptorsCount:integer;virtual;
-                               function findcategory(category:GDBString):PPropertyDeskriptor;
+                               function findcategory(category:TInternalScriptString):PPropertyDeskriptor;
                                function findvalkey(valkey:GDBString):integer;
                          end;
 SimpleProcOfObj=procedure of object;
@@ -100,11 +100,11 @@ PropertyDescriptor=record
                 end;
 PTUserTypeDescriptor=^TUserTypeDescriptor;
 TUserTypeDescriptor=object(UserTypeDescriptor)
-                          function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;abstract;
+                          function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;var addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;abstract;
                           //procedure IncAddr(var addr:GDBPointer);virtual;
                           function CreatePD:GDBPointer;
                           function GetPPD(PPDA:PTPropertyDeskriptorArray;var bmode:GDBInteger):PPropertyDeskriptor;
-                          function FindField(fn:GDBString):PFieldDescriptor;virtual;
+                          function FindField(fn:TInternalScriptString):PFieldDescriptor;virtual;
                    end;
 var zcpmode:tzcpmode;
     currpd:PPropertyDeskriptor;
@@ -132,7 +132,7 @@ begin
      gdbgetmem({$IFDEF DEBUGBUILD}'{CC044792-AE73-48C9-B10A-346BFE9E46C9}',{$ENDIF}result,sizeof(PropertyDeskriptor));
      PPropertyDeskriptor(result)^.initnul;
 end;
-function TUserTypeDescriptor.FindField(fn:GDBString):PFieldDescriptor;
+function TUserTypeDescriptor.FindField(fn:TInternalScriptString):PFieldDescriptor;
 begin
      result:=nil;
 end;
@@ -224,7 +224,7 @@ begin
         curr:=iterate(ir);
   until curr=nil;
 end;
-function TPropertyDeskriptorArray.findcategory(category:GDBString):PPropertyDeskriptor;
+function TPropertyDeskriptorArray.findcategory(category:TInternalScriptString):PPropertyDeskriptor;
 var
    ir:itrec;
    ppd:PPropertyDeskriptor;

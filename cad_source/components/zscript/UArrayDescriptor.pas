@@ -34,13 +34,13 @@ ArrayDescriptor=object(TUserTypeDescriptor)
                      Indexs:{GDBOpenArrayOfData}TArrayIndexDescriptorVector;
                      constructor init(var t:PUserTypeDescriptor;tname:string;pu:pointer);
                      procedure AddIndex(var Index:ArrayIndexDescriptor);
-                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
+                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;var addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      destructor Done;virtual;
-                     function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
+                     function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                end;
 implementation
 uses {ZBasicVisible,}varman;
-function ArrayDescriptor.GetValueAsString(pinstance:GDBPointer):GDBString;
+function ArrayDescriptor.GetValueAsString(pinstance:Pointer):TInternalScriptString;
 var
    PAID:PArrayIndexDescriptor;
    ir:itrec;

@@ -19,7 +19,7 @@
 unit UBaseTypeDescriptor;
 {$INCLUDE def.inc}
 {$MODE DELPHI}
-{$ASMMODE intel}
+{ASMMODE intel}
 interface
 uses
       LCLProc,Graphics,classes,Themes,
@@ -34,109 +34,100 @@ BaseTypeDescriptor<T>=object(TUserTypeDescriptor)
                          type
                           PT=^T;
                          constructor init(tname:string;pu:pointer);
-                         function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                         function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
-                         //function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                         //function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
-                         procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                         function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                         function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;var addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+                         //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                         //function DeSerialize(PInstance:Pointer;SaveFlag:Word;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                         procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
                    end;
 GDBBooleanDescriptor=object(BaseTypeDescriptor<boolean>)
-                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                          procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
                           function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 TFundamentalShortIntDescriptor=object(BaseTypeDescriptor<shortint>)
-                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                          procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
                           function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 TFundamentalByteDescriptor=object(BaseTypeDescriptor<byte>)
-                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                          procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
                           function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 TFundamentalSmallIntDescriptor=object(BaseTypeDescriptor<smallint>)
-                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                          procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
                           function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 TFundamentalWordDescriptor=object(BaseTypeDescriptor<word>)
-                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                          procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
                           function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBIntegerDescriptor=object(BaseTypeDescriptor<Integer>)
-                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                          procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
                           function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 TFundamentalLongWordDescriptor=object(BaseTypeDescriptor<Longword>)
-                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                          procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
                           function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 TFundamentalLongIntDescriptor=object(BaseTypeDescriptor<LongInt>)
-                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                          procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
                           function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 TFundamentalQWordDescriptor=object(BaseTypeDescriptor<qword>)
-                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                          procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
                           function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBDoubleDescriptor=object(BaseTypeDescriptor<double>)
-                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                          function GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;virtual;
-                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                          function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
+                          procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
                           function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
-GDBNonDimensionDoubleDescriptor=object(GDBDoubleDescriptor)
-                          function GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;virtual;
-                    end;
-GDBAngleDegDoubleDescriptor=object(GDBDoubleDescriptor)
-                                       function GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;virtual;
-                                 end;
-GDBAngleDoubleDescriptor=object(GDBDoubleDescriptor)
-                               function GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;virtual;
-                         end;
 GDBStringDescriptor=object(BaseTypeDescriptor<string>)
-                          //function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
-                          //function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
-                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
-                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
+                          //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
+                          //function DeSerialize(PInstance:Pointer;SaveFlag:Word;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
+                          procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
+                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                           procedure CopyInstanceTo(source,dest:pointer);virtual;
-                          procedure MagicFreeInstance(PInstance:GDBPointer);virtual;
-                          procedure MagicAfterCopyInstance(PInstance:GDBPointer);virtual;
-                          procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
+                          procedure MagicFreeInstance(PInstance:Pointer);virtual;
+                          procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
+                          procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                           function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBAnsiStringDescriptor=object(GDBStringDescriptor)
-                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
-                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
+                          procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
+                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                           function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBFloatDescriptor=object(BaseTypeDescriptor<float>)
-                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                          procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
                           function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
-GDBPointerDescriptor=object(BaseTypeDescriptor<pointer>)
-                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                          procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
+PointerDescriptor=object(BaseTypeDescriptor<pointer>)
+                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                          procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                           function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBPtrUIntDescriptor=object(BaseTypeDescriptor<PtrUint>)
                           constructor init;
-                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                          procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
                           function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 TEnumDataDescriptor=object(BaseTypeDescriptor<TEnumData>)
                      constructor init;
-                     function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                     procedure SetValueFromString(PInstance:GDBPointer;_Value:GDBstring);virtual;
-                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
+                     function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                     procedure SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);virtual;
+                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;var addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      destructor Done;virtual;
                end;
 function MyDataToStr(data:LongInt):string;overload;
@@ -150,9 +141,6 @@ function MyDataToStr(data:pointer):string;overload;
 
 var
 FundamentalDoubleDescriptorObj:GDBDoubleDescriptor;
-GDBNonDimensionDoubleDescriptorObj:GDBNonDimensionDoubleDescriptor;
-GDBAngleDegDoubleDescriptorObj:GDBAngleDegDoubleDescriptor;
-GDBAngleDoubleDescriptorObj:GDBAngleDoubleDescriptor;
 FundamentalStringDescriptorObj:GDBStringDescriptor;
 FundamentalAnsiStringDescriptorObj:GDBAnsiStringDescriptor;
 FundamentalWordDescriptorObj:TFundamentalWordDescriptor;
@@ -165,7 +153,7 @@ FundamentalQWordDescriptorObj:TFundamentalQWordDescriptor;
 FundamentalSingleDescriptorObj:GDBFloatDescriptor;
 FundamentalShortIntDescriptorObj:TFundamentalShortIntDescriptor;
 FundamentalBooleanDescriptorOdj:GDBBooleanDescriptor;
-FundamentalPointerDescriptorOdj:GDBPointerDescriptor;
+FundamentalPointerDescriptorOdj:PointerDescriptor;
 GDBEnumDataDescriptorObj:TEnumDataDescriptor;
 GDBPtrUIntDescriptorObj:GDBPtrUIntDescriptor;
 
@@ -215,7 +203,7 @@ function MyDataToStr(data:pointer):string;overload;
 begin
      if data<>nil then
                       begin
-                           result := '$' + inttohex(int64(GDBPlatformint(data)), 8);
+                           result := '$' + inttohex(int64(data), 8);
                       end
                   else result := 'nil';
 end;
@@ -333,52 +321,52 @@ end;
 procedure BaseTypeDescriptor<T>.SetValueFromString;
 begin
 end;
-procedure GDBBooleanDescriptor.SetValueFromString(PInstance:GDBPointer;Value:GDBstring);
+procedure GDBBooleanDescriptor.SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);
 begin
      if uppercase(value)='TRUE' then
-                                    PGDBboolean(pinstance)^:=true
+                                    PBoolean(pinstance)^:=true
 else if uppercase(value)='FALSE' then
-                                     PGDBboolean(pinstance)^:=false
+                                     PBoolean(pinstance)^:=false
 else
     DebugLn('{E}GDBBooleanDescriptor.SetValueFromString('+value+') {not false\true}');
     //programlog.LogOutStr('GDBBooleanDescriptor.SetValueFromString('+value+') {not false\true}',lp_OldPos,LM_Error);
 end;
 function GDBBooleanDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin
-     if PGDBboolean(pleft)^<>PGDBboolean(pright)^ then
+     if PBoolean(pleft)^<>PBoolean(pright)^ then
                                                       result:=CRNotEqual
                                                   else
                                                       result:=CREqual;
 end;
 function GDBBooleanDescriptor.GetValueAsString;
 begin
-     if PGDBboolean(pinstance)^ then
+     if PBoolean(pinstance)^ then
      result := 'True'
      else
      result := 'False';
 end;
 function TFundamentalLongWordDescriptor.GetValueAsString;
 var
-     uGDBInteger:GDBLongword;
+     uGDBInteger:Longword;
 begin
-    uGDBInteger := pGDBLongword(pinstance)^;
+    uGDBInteger := pLongword(pinstance)^;
     result := inttostr(uGDBInteger);
 end;
 procedure TFundamentalLongWordDescriptor.SetValueFromString;
 var
-     vGDBLongword:GDBLongword;
+     vGDBLongword:Longword;
      error:integer;
 begin
      val(value,vGDBLongword,error);
      if error=0 then
-                    pGDBLongword(pinstance)^:=vGDBLongword;
+                    pLongword(pinstance)^:=vGDBLongword;
 end;
 function TFundamentalLongWordDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin
-     if pGDBLongword(pleft)^<>pGDBLongword(pright)^
+     if pLongword(pleft)^<>pLongword(pright)^
      then
        begin
-            if pGDBLongword(pleft)^<pGDBLongword(pright)^ then
+            if pLongword(pleft)^<pLongword(pright)^ then
                                                           result:=CRLess
                                                       else
                                                           result:=CRGreater;
@@ -388,27 +376,27 @@ begin
 end;
 function TFundamentalQWordDescriptor.GetValueAsString;
 var
-     qw:GDBQWord;
+     qw:QWord;
 begin
-    qw := PGDBQWord(pinstance)^;
+    qw := PWord(pinstance)^;
     result := inttostr(qw);
 end;
 procedure TFundamentalQWordDescriptor.SetValueFromString;
 var
-     qw:GDBQWord;
+     qw:QWord;
      //error:integer;
 begin
      {$IFNDEF DELPHI}
      if TryStrToQWord(value,qw) then
-                                   PGDBQWord(pinstance)^:=qw;
+                                   PQWord(pinstance)^:=qw;
      {$ENDIF}
 end;
 function TFundamentalQWordDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin
-     if PGDBQWord(pleft)^<>PGDBQWord(pright)^
+     if PQWord(pleft)^<>PQWord(pright)^
      then
        begin
-            if PGDBQWord(pleft)^<PGDBQWord(pright)^ then
+            if PQWord(pleft)^<PQWord(pright)^ then
                                                           result:=CRLess
                                                       else
                                                           result:=CRGreater;
@@ -418,28 +406,28 @@ begin
 end;
 function GDBFloatDescriptor.GetValueAsString;
 var
-     uGDBFloat:GDBFloat;
+     uGDBFloat:Float;
 begin
-    uGDBFloat:=pGDBFloat(pinstance)^;
+    uGDBFloat:=pFloat(pinstance)^;
     result := floattostr(uGDBFloat);
     if pos('.',result)<1 then
                              result:=result+'.0';
 end;
 procedure GDBFloatDescriptor.SetValueFromString;
 var
-     vGDBFloat:gdbFloat;
+     vGDBFloat:Float;
      error:integer;
 begin
      val(value,vGDBFloat,error);
      if error=0 then
-                    pGDBFloat(pinstance)^:=vGDBFloat;
+                    pFloat(pinstance)^:=vGDBFloat;
 end;
 function GDBFloatDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin
-     if IsFloatNotEqual(pGDBFloat(pleft)^,pGDBFloat(pright)^)
+     if IsFloatNotEqual(pFloat(pleft)^,pFloat(pright)^)
      then
        begin
-            if pGDBFloat(pleft)^<pGDBFloat(pright)^ then
+            if pFloat(pleft)^<pFloat(pright)^ then
                                                           result:=CRLess
                                                       else
                                                           result:=CRGreater;
@@ -482,9 +470,9 @@ begin
 end;
 function GDBDoubleDescriptor.GetValueAsString;
 var
-     uGDBDouble:GDBDouble;
+     uGDBDouble:Double;
 begin
-    uGDBDouble:=pGDBDouble(pinstance)^;
+    uGDBDouble:=pDouble(pinstance)^;
     if isnan(uGDBDouble) then
                              result := 'NAN'
                          else
@@ -495,26 +483,26 @@ begin
                              end;
 
 end;
-function GDBDoubleDescriptor.GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;
+function GDBDoubleDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
 begin
-    result:=zeDimensionToString(PGDBDouble(PInstance)^,f);
+    result:=zeDimensionToString(PDouble(PInstance)^,f);
 end;
 
 procedure GDBDoubleDescriptor.SetValueFromString;
 var
-     uGDBDouble:GDBDouble;
+     uGDBDouble:Double;
      error:integer;
 begin
      val(value,ugdbdouble,error);
      if error=0 then
-                    pGDBDouble(pinstance)^:=ugdbdouble;
+                    pDouble(pinstance)^:=ugdbdouble;
 end;
 function GDBDoubleDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin
-     if IsDoubleNotEqual(PGDBDouble(pleft)^,PGDBDouble(pright)^)
+     if IsDoubleNotEqual(PDouble(pleft)^,PDouble(pright)^)
      then
        begin
-            if PGDBDouble(pleft)^<PGDBDouble(pright)^ then
+            if PDouble(pleft)^<PDouble(pright)^ then
                                                           result:=CRLess
                                                       else
                                                           result:=CRGreater;
@@ -522,40 +510,28 @@ begin
      else
          result:=CREqual;
 end;
-function GDBNonDimensionDoubleDescriptor.GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;
-begin
-    result:=zeNonDimensionToString(PGDBNonDimensionDouble(PInstance)^,f);
-end;
-function GDBAngleDegDoubleDescriptor.GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;
-begin
-    result:=zeAngleDegToString(PGDBNonDimensionDouble(PInstance)^,f);
-end;
-function GDBAngleDoubleDescriptor.GetFormattedValueAsString(PInstance:GDBPointer; const f:TzeUnitsFormat):GDBString;
-begin
-    result:=zeAngleToString(PGDBNonDimensionDouble(PInstance)^,f);
-end;
 function TFundamentalWordDescriptor.GetValueAsString;
 var
-     uGDBWord:GDBWord;
+     uGDBWord:Word;
 begin
-    uGDBWord := pGDBWord(pinstance)^;
+    uGDBWord := pWord(pinstance)^;
     result := inttostr(uGDBWord);
 end;
 procedure TFundamentalWordDescriptor.SetValueFromString;
 var
-     vGDBWord:gdbWord;
+     vGDBWord:Word;
      error:integer;
 begin
      val(value,vGDBWord,error);
      if error=0 then
-                    pGDBWord(pinstance)^:=vGDBWord;
+                    pWord(pinstance)^:=vGDBWord;
 end;
 function TFundamentalWordDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin
-     if pGDBWord(pleft)^<>pGDBWord(pright)^
+     if pWord(pleft)^<>pWord(pright)^
      then
        begin
-            if pGDBWord(pleft)^<pGDBWord(pright)^ then
+            if pWord(pleft)^<pWord(pright)^ then
                                                           result:=CRLess
                                                       else
                                                           result:=CRGreater;
@@ -568,7 +544,7 @@ function TFundamentalLongIntDescriptor.GetValueAsString;
 var
      uGDBInteger:LongInt;
 begin
-    uGDBInteger := pGDBInteger(pinstance)^;
+    uGDBInteger := pInteger(pinstance)^;
     result := inttostr(uGDBInteger);
 end;
 procedure TFundamentalLongIntDescriptor.SetValueFromString;
@@ -578,7 +554,7 @@ var
 begin
      val(value,vGDBInteger,error);
      if error=0 then
-                    pGDBInteger(pinstance)^:=vGDBInteger;
+                    pInteger(pinstance)^:=vGDBInteger;
 end;
 function TFundamentalLongIntDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin
@@ -597,26 +573,26 @@ end;
 
 function GDBIntegerDescriptor.GetValueAsString;
 var
-     uGDBInteger:GDBInteger;
+     uGDBInteger:Integer;
 begin
-    uGDBInteger := pGDBInteger(pinstance)^;
+    uGDBInteger := pInteger(pinstance)^;
     result := inttostr(uGDBInteger);
 end;
 procedure GDBIntegerDescriptor.SetValueFromString;
 var
-     vGDBInteger:gdbInteger;
+     vGDBInteger:Integer;
      error:integer;
 begin
      val(value,vGDBInteger,error);
      if error=0 then
-                    pGDBInteger(pinstance)^:=vGDBInteger;
+                    pInteger(pinstance)^:=vGDBInteger;
 end;
 function GDBIntegerDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin
-     if pGDBInteger(pleft)^<>pGDBInteger(pright)^
+     if pInteger(pleft)^<>pInteger(pright)^
      then
        begin
-            if pGDBInteger(pleft)^<pGDBInteger(pright)^ then
+            if pInteger(pleft)^<pInteger(pright)^ then
                                                           result:=CRLess
                                                       else
                                                           result:=CRGreater;
@@ -626,26 +602,26 @@ begin
 end;
 function TFundamentalShortIntDescriptor.GetValueAsString;
 var
-     uGDBShortint:GDBShortint;
+     uGDBShortint:Shortint;
 begin
-    uGDBShortint := pGDBShortint(pinstance)^;
+    uGDBShortint := pShortint(pinstance)^;
     result := inttostr(uGDBShortint);
 end;
 procedure TFundamentalShortIntDescriptor.SetValueFromString;
 var
-     vGDBShortint:gdbShortint;
+     vGDBShortint:Shortint;
      error:integer;
 begin
      val(value,vGDBshortint,error);
      if error=0 then                           
-                    pGDBshortint(pinstance)^:=vGDBshortint;
+                    pshortint(pinstance)^:=vGDBshortint;
 end;
 function TFundamentalShortIntDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin
-     if pGDBshortint(pleft)^<>pGDBshortint(pright)^
+     if pshortint(pleft)^<>pshortint(pright)^
      then
        begin
-            if pGDBshortint(pleft)^<pGDBshortint(pright)^ then
+            if pshortint(pleft)^<pshortint(pright)^ then
                                                           result:=CRLess
                                                       else
                                                           result:=CRGreater;
@@ -655,26 +631,26 @@ begin
 end;
 function TFundamentalByteDescriptor.GetValueAsString;
 var
-     uGDBByte:GDBByte;
+     uGDBByte:Byte;
 begin
-    uGDBByte := pGDBByte(pinstance)^;
+    uGDBByte := pByte(pinstance)^;
     result := inttostr(uGDBByte);
 end;
 procedure TFundamentalByteDescriptor.SetValueFromString;
 var
-     vGDBbyte:gdbbyte;
+     vGDBbyte:byte;
      error:integer;
 begin
      val(value,vGDBbyte,error);
      if error=0 then
-                    pGDBbyte(pinstance)^:=vGDBbyte;
+                    pbyte(pinstance)^:=vGDBbyte;
 end;
 function TFundamentalByteDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin
-     if pGDBbyte(pleft)^<>pGDBbyte(pright)^
+     if pbyte(pleft)^<>pbyte(pright)^
      then
        begin
-            if pGDBbyte(pleft)^<pGDBbyte(pright)^ then
+            if pbyte(pleft)^<pbyte(pright)^ then
                                                           result:=CRLess
                                                       else
                                                           result:=CRGreater;
@@ -684,26 +660,26 @@ begin
 end;
 function TFundamentalSmallIntDescriptor.GetValueAsString;
 var
-     uGDBSmallint:GDBSmallint;
+     uGDBSmallint:Smallint;
 begin
-    uGDBSmallint := pGDBSmallint(pinstance)^;
+    uGDBSmallint := pSmallint(pinstance)^;
     result := inttostr(uGDBSmallint);
 end;
 procedure TFundamentalSmallIntDescriptor.SetValueFromString;
 var
-     vGDBSmallint:gdbSmallint;
+     vGDBSmallint:Smallint;
      error:integer;
 begin
      val(value,vGDBSmallint,error);
      if error=0 then
-                    pGDBSmallint(pinstance)^:=vGDBSmallint;
+                    pSmallint(pinstance)^:=vGDBSmallint;
 end;
 function TFundamentalSmallIntDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin
-     if pGDBSmallint(pleft)^<>pGDBSmallint(pright)^
+     if pSmallint(pleft)^<>pSmallint(pright)^
      then
        begin
-            if pGDBSmallint(pleft)^<pGDBSmallint(pright)^ then
+            if pSmallint(pleft)^<pSmallint(pright)^ then
                                                           result:=CRLess
                                                       else
                                                           result:=CRGreater;
@@ -721,7 +697,7 @@ begin
 end;
 procedure GDBStringDescriptor.MagicAfterCopyInstance;
 var
-   s:GDBString;
+   s:TInternalScriptString;
 begin
      s:=pstring(Pinstance)^;
      killstring(s);
@@ -734,10 +710,10 @@ begin
 end;
 function GDBStringDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin
-     if PGDBString(pleft)^<>PGDBString(pright)^
+     if PString(pleft)^<>PString(pright)^
      then
        begin
-            if PGDBString(pleft)^<PGDBString(pright)^ then
+            if PString(pleft)^<PString(pright)^ then
                                                           result:=CRLess
                                                       else
                                                           result:=CRGreater;
@@ -745,28 +721,28 @@ begin
      else
          result:=CREqual;
 end;
-function GDBPointerDescriptor.GetValueAsString;
+function PointerDescriptor.GetValueAsString;
 var
-     uGDBPointer:GDBPointer;
-     uGDBInteger: GDBLongword;
+     uPointer:Pointer;
+     uGDBInteger: Longword;
 begin
-    uGDBPointer := pGDBPointer(pinstance)^;
-                if uGDBPointer<>nil then
+    uPointer := pPointer(pinstance)^;
+                if uPointer<>nil then
                                              begin
-                                                  uGDBInteger := GDBPlatformint(uGDBPointer);
+                                                  uGDBInteger := ptrint(uPointer);
                                                   result := '$' + inttohex(int64(uGDBInteger), 8);
                                              end
                                          else result := 'nil';
 end;
-procedure GDBPointerDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);
+procedure PointerDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);
 begin
 end;
-function GDBPointerDescriptor.Compare(pleft,pright:pointer):TCompareResult;
+function PointerDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin
-     if pGDBPointer(pleft)^<>pGDBPointer(pright)^
+     if pPointer(pleft)^<>pPointer(pright)^
      then
        begin
-            if pGDBPointer(pleft)^<pGDBPointer(pright)^ then
+            if pPointer(pleft)^<pPointer(pright)^ then
                                                           result:=CRLess
                                                       else
                                                           result:=CRGreater;
@@ -777,42 +753,42 @@ end;
 
 function GDBStringDescriptor.GetValueAsString;
 var
-     uGDBString:GDBString;
+     uGDBString:TInternalScriptString;
 begin
-    uGDBString := pGDBString(pinstance)^;
+    uGDBString := pString(pinstance)^;
     result := uni2cp(uGDBString);
 end;
 procedure GDBStringDescriptor.SetValueFromString;
 //var
-//     vGDBLongword:gdbWord;
+//     vGDBLongword:Word;
 //     error:integer;
 begin
      //val(value,vGDBLongword,error);
      //if error=0 then
-                    pGDBString(pinstance)^:=cp2uni(value);//vGDBLongword;
+                    pString(pinstance)^:=cp2uni(value);//vGDBLongword;
 end;
-procedure GDBAnsiStringDescriptor.SetValueFromString(PInstance:GDBPointer;Value:GDBstring);
+procedure GDBAnsiStringDescriptor.SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);
 //var
-//     vGDBLongword:gdbWord;
+//     vGDBLongword:Word;
 //     error:integer;
 begin
      //val(value,vGDBLongword,error);
      //if error=0 then
-                    pGDBString(pinstance)^:=cp2ansi(value);//vGDBLongword;
+                    pString(pinstance)^:=cp2ansi(value);//vGDBLongword;
 end;
-function GDBAnsiStringDescriptor.GetValueAsString(pinstance:GDBPointer):GDBString;
+function GDBAnsiStringDescriptor.GetValueAsString(pinstance:Pointer):TInternalScriptString;
 var
-     uGDBString:GDBString;
+     uGDBString:TInternalScriptString;
 begin
-    uGDBString := pGDBString(pinstance)^;
+    uGDBString := pString(pinstance)^;
     result := ansi2cp(uGDBString);
 end;
 function GDBAnsiStringDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin
-     if PGDBAnsiString(pleft)^<>PGDBAnsiString(pright)^
+     if PAnsiString(pleft)^<>PAnsiString(pright)^
      then
        begin
-            if PGDBAnsiString(pleft)^<PGDBAnsiString(pright)^ then
+            if PAnsiString(pleft)^<PAnsiString(pright)^ then
                                                           result:=CRLess
                                                       else
                                                           result:=CRGreater;
@@ -831,9 +807,9 @@ constructor TEnumDataDescriptor.init;
 begin
      inherited init('TEnumDataDescriptor',nil);
 end;
-procedure TEnumDataDescriptor.SetValueFromString(PInstance:GDBPointer;_Value:GDBstring);
+procedure TEnumDataDescriptor.SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);
 var
-    p:pgdbstring;
+    p:pstring;
     ir:itrec;
 begin
      _value:=uppercase(_value);
@@ -850,7 +826,7 @@ begin
 end;
 function TEnumDataDescriptor.GetValueAsString;
 {var currval:GDBLongword;
-    p:GDBPointer;
+    p:Pointer;
     found:GDBBoolean;
     i:GDBInteger;
     num:cardinal;}
@@ -878,10 +854,6 @@ begin
 
      FundamentalDoubleDescriptorObj.init('Double',nil);
      FundamentalSingleDescriptorObj.init('Single',nil);
-
-     GDBNonDimensionDoubleDescriptorObj.init('GDBNonDimensionDouble',nil);
-     GDBAngleDegDoubleDescriptorObj.init('GDBAngleDegDouble',nil);
-     GDBAngleDoubleDescriptorObj.init('GDBAngleDouble',nil);
 
      AliasIntegerDescriptorOdj.init2(@FundamentalLongIntDescriptorObj,'Integer',nil);
      AliasCardinalDescriptorOdj.init2(@FundamentalLongWordDescriptorObj,'Cardinal',nil);

@@ -19,7 +19,7 @@
 unit uzedimensionaltypes;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzbtypes,math,uzegeometry,sysutils;
+uses uzbtypesbase;
 type
 {EXPORT+}
     TDimUnit =(DUScientific(*'Scientific'*),DUDecimal(*'Decimal'*),DUEngineering(*'Engineering'*),DUArchitectural(*'Architectural'*),DUFractional(*'Fractional'*),DUSystem(*'System'*));

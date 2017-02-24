@@ -225,7 +225,7 @@ var
 begin
   if vd.data.Instance <> nil then
   begin
-    if vd.data.ptd=@GDBStringDescriptorObj then
+    if vd.data.ptd=@FundamentalStringDescriptorObj then
       GDBString(vd.data.Instance) := ''
     else
       GDBFreeMem(vd.data.Instance);
@@ -247,7 +247,7 @@ begin
   begin
     GDBGetMem({$IFDEF DEBUGBUILD}'{AC7AD5B3-B238-497B-BFAB-D44DDD7EA6CF}',{$ENDIF}vd.data.Instance, sizeof(GDBInteger));
     pGDBInteger(vd.data.Instance)^ := rez;
-    vd.data.ptd:=@GDBIntegerDescriptorObj;
+    vd.data.ptd:=@FundamentalLongIntDescriptorObj;
   end;
 end;
 
@@ -257,16 +257,16 @@ var
 begin
   if vd.data.Instance<> nil then
   begin
-    if vd.data.ptd=@GDBStringDescriptorObj then
+    if vd.data.ptd=@FundamentalStringDescriptorObj then
       GDBString(vd.data.Instance) := ''
     else
       GDBFreeMem(vd.data.Instance);
   end;
   rez := strtofloat(s);
   begin
-    GDBGetMem({$IFDEF DEBUGBUILD}'{12B7DD0B-AA54-42DA-845C-A285FB30C5D3}',{$ENDIF}vd.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
+    GDBGetMem({$IFDEF DEBUGBUILD}'{12B7DD0B-AA54-42DA-845C-A285FB30C5D3}',{$ENDIF}vd.data.Instance,FundamentalDoubleDescriptorObj.SizeInGDBBytes);
     pGDBDouble(vd.data.Instance)^ := rez;
-    vd.data.ptd:=@GDBDoubleDescriptorObj;
+    vd.data.ptd:=@FundamentalDoubleDescriptorObj;
   end;
 end;
 procedure createGDBBooleanvar(var vd: vardesk; s: GDBString);
@@ -275,7 +275,7 @@ var
 begin
   if vd.data.Instance <> nil then
   begin
-    if vd.data.ptd=@GDBStringDescriptorObj then
+    if vd.data.ptd=@FundamentalStringDescriptorObj then
       GDBString(vd.data.Instance) := ''
     else
       GDBFreeMem(vd.data.Instance);
@@ -283,9 +283,9 @@ begin
   if uppercase(s)='TRUE' then rez := true
                          else rez := false;
   begin
-    GDBGetMem({$IFDEF DEBUGBUILD}'{C46669D6-42E7-48B7-9B1B-09314777A564}',{$ENDIF}vd.data.Instance,GDBBooleanDescriptorOdj.SizeInGDBBytes);
+    GDBGetMem({$IFDEF DEBUGBUILD}'{C46669D6-42E7-48B7-9B1B-09314777A564}',{$ENDIF}vd.data.Instance,FundamentalBooleanDescriptorOdj.SizeInGDBBytes);
     PGDBBoolean(vd.data.Instance)^ := rez;
-    vd.data.ptd:=@GDBBooleanDescriptorOdj;
+    vd.data.ptd:=@FundamentalBooleanDescriptorOdj;
   end;
 end;
 
@@ -310,7 +310,7 @@ begin
                                      v.data.ptd.MagicFreeInstance(v.data.Instance);
                                 end;
     {if v.data.Instance <> nil then
-      if (v.data.ptd =@GDBStringDescriptorObj) then
+      if (v.data.ptd =@FundamentalStringDescriptorObj) then
                                                    GDBString(v.data.Instance^) := '';}
       begin
         if v.data.Instance<>nil then
@@ -360,12 +360,12 @@ begin
           if expr='34 2511' then
                                 expr:=expr;
           
-          GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}rez.data.Instance,GDBStringDescriptorObj.SizeInGDBBytes);
+          GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}rez.data.Instance,FundamentalStringDescriptorObj.SizeInGDBBytes);
           ppointer(rez.data.Instance)^:=nil;
           pgdbstring(rez.data.Instance)^ := expr;
           expr:='';
           //GDBPointer(expr) := nil;
-          rez.data.ptd := @GDBStringDescriptorObj;
+          rez.data.ptd := @FundamentalStringDescriptorObj;
         end;
     else
       begin

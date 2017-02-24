@@ -216,7 +216,7 @@ begin
   pvd:=SysVarUnit^.InterfaceVariables.findvardesc(FVariable);
      if pvd<>nil then
      begin
-          if pvd^.data.PTD=@GDBBooleanDescriptorOdj then
+          if pvd^.data.PTD=@FundamentalBooleanDescriptorOdj then
                                                         begin
                                                              PGDBBoolean(pvd^.data.Instance)^:=not PGDBBoolean(pvd^.data.Instance)^;
                                                              Checked:=PGDBBoolean(pvd^.data.Instance)^;
@@ -287,7 +287,7 @@ begin
      if pvd<>nil then
      begin
           enabled:=true;
-          if pvd^.data.PTD=@GDBBooleanDescriptorOdj then
+          if pvd^.data.PTD=@FundamentalBooleanDescriptorOdj then
                                                         begin
                                                              Checked:=PGDBBoolean(pvd^.data.Instance)^;
                                                         end
@@ -611,7 +611,7 @@ begin
      if pvd<>nil then
      begin
           enabled:=true;
-          if pvd^.data.PTD=@GDBBooleanDescriptorOdj then
+          if pvd^.data.PTD=@FundamentalBooleanDescriptorOdj then
                                                         begin
                                                              self.Down:=PGDBBoolean(pvd^.data.Instance)^;
                                                         end
@@ -658,7 +658,7 @@ begin
   pvd:=SysVarUnit^.InterfaceVariables.findvardesc(FVariable);
      if pvd<>nil then
      begin
-          if pvd^.data.PTD=@GDBBooleanDescriptorOdj then
+          if pvd^.data.PTD=@FundamentalBooleanDescriptorOdj then
                                                         begin
                                                              PGDBBoolean(pvd^.data.Instance)^:=not PGDBBoolean(pvd^.data.Instance)^;
                                                              self.Down:=PGDBBoolean(pvd^.data.Instance)^;

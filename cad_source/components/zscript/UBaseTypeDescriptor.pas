@@ -25,7 +25,7 @@ uses
       LCLProc,Graphics,classes,Themes,
       uzemathutils,uzegeometry,uzbstrproc,TypeDescriptors,
       sysutils,UGDBOpenArrayOfByte,uzbtypesbase,
-      uzedimensionaltypes,varmandef,uzbtypes,{gzctnrvectordata,}uzctnrvectorgdbstring,uzbmemman,math;
+      USinonimDescriptor,uzedimensionaltypes,varmandef,uzbtypes,{gzctnrvectordata,}uzctnrvectorgdbstring,uzbmemman,math;
 resourcestring
   rsDifferent='Different';
 type
@@ -168,6 +168,9 @@ FundamentalBooleanDescriptorOdj:GDBBooleanDescriptor;
 FundamentalPointerDescriptorOdj:GDBPointerDescriptor;
 GDBEnumDataDescriptorObj:TEnumDataDescriptor;
 GDBPtrUIntDescriptorObj:GDBPtrUIntDescriptor;
+
+AliasIntegerDescriptorOdj:GDBSinonimDescriptor;
+AliasCardinalDescriptorOdj:GDBSinonimDescriptor;
 implementation
 function MyDataToStr(data:LongInt):string;overload;
 begin
@@ -879,6 +882,9 @@ begin
      GDBNonDimensionDoubleDescriptorObj.init('GDBNonDimensionDouble',nil);
      GDBAngleDegDoubleDescriptorObj.init('GDBAngleDegDouble',nil);
      GDBAngleDoubleDescriptorObj.init('GDBAngleDouble',nil);
+
+     AliasIntegerDescriptorOdj.init2(@FundamentalLongIntDescriptorObj,'Integer',nil);
+     AliasCardinalDescriptorOdj.init2(@FundamentalLongWordDescriptorObj,'Cardinal',nil);
 
      GDBEnumDataDescriptorObj.init;
      GDBPtrUIntDescriptorObj.init;

@@ -28,6 +28,7 @@ GDBSinonimDescriptor=object(TUserTypeDescriptor)
                      PSinonimOf:PUserTypeDescriptor;
                      SinonimName:GDBString;
                      constructor init(SinonimTypeName,Tname:GDBString;pu:pointer);
+                     constructor init2(SinonimOf:PUserTypeDescriptor;Tname:GDBString;pu:pointer);
                      function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                      procedure ApplyOperator(oper,path:GDBString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;
                      //function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
@@ -82,6 +83,13 @@ begin
     GDBPointer(SinonimName):=nil;
     SinonimName:=SinonimTypeName;
     PSinonimOf:=units.currentunit{ SysUnit}.TypeName2PTD(SinonimName);
+    inherited init(PSinonimOf^.SizeInGDBBytes,Tname,pu);
+end;
+constructor GDBSinonimDescriptor.init2(SinonimOf:PUserTypeDescriptor;Tname:GDBString;pu:pointer);
+begin
+    GDBPointer(SinonimName):=nil;
+    SinonimName:=SinonimOf^.TypeName;
+    PSinonimOf:=SinonimOf;
     inherited init(PSinonimOf^.SizeInGDBBytes,Tname,pu);
 end;
 function GDBSinonimDescriptor.CreateProperties;

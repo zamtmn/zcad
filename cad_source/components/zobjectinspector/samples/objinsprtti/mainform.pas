@@ -18,20 +18,20 @@ type
   TMyEnum2=(one,two);
   TSubData=packed record
            a:TMyEnum;
-           dataI:GDBInteger;
+           dataI:Integer;
   end;
   PTOtherData=^TOtherData;
   TOtherData=packed record
-    data1:GDBInteger;
-    data2:GDBInteger;
-    data3:GDBInteger;
+    data1:Integer;
+    data2:Integer;
+    data3:Integer;
   end;
   TData1=packed record
     subdata:TSubData;
     Enum2:TMyEnum2;
-    dataI:GDBInteger;
-    dataD:GDBDouble;
-    dataS:GDBString;
+    dataI:Integer;
+    dataD:Double;
+    dataS:String;
     pointerToOtherData:PTOtherData;
   end;
 
@@ -96,9 +96,9 @@ begin
   RunTimeUnit:=units.CreateUnit('',nil,'RunTimeUnit');//create empty zscript unit
   RunTimeUnit.RegisterType(TypeInfo(TData1));//register rtti types in zscript unit
 
-  AddEditorToType('GDBInteger',TBaseTypesEditors.BaseCreateEditor);//register standart editor to integer type
-  AddEditorToType('GDBDouble',TBaseTypesEditors.BaseCreateEditor);//register standart editor to double type
-  AddEditorToType('GDBString',TBaseTypesEditors.BaseCreateEditor);//register standart editor to string type
+  AddEditorToType('LongInt',TBaseTypesEditors.BaseCreateEditor);//register standart editor to integer type
+  AddEditorToType('Double',TBaseTypesEditors.BaseCreateEditor);//register standart editor to double type
+  AddEditorToType('AnsiString',TBaseTypesEditors.BaseCreateEditor);//register standart editor to string type
   EnumGlobalEditor:=TBaseTypesEditors.EnumDescriptorCreateEditor;//register standart editor to all enum types
   GDBobjinsp1.setptr(nil,UnitsFormat,RunTimeUnit^.TypeName2PTD('TData1'),@data,nil);//show data variable in inspector
 end;

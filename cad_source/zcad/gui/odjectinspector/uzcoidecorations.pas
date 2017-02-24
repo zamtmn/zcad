@@ -661,21 +661,21 @@ begin
      AddEditorToType('GDBBoolean',TBaseTypesEditors.GDBBooleanCreateEditor);
 
 
-     AddEditorToType('GDBShortint',TBaseTypesEditors.BaseCreateEditor);
-     AddEditorToType('GDBByte',TBaseTypesEditors.BaseCreateEditor);
-     AddEditorToType('GDBSmallint',TBaseTypesEditors.BaseCreateEditor);
-     AddEditorToType('GDBWord',TBaseTypesEditors.BaseCreateEditor);
-     AddEditorToType('GDBInteger',TBaseTypesEditors.BaseCreateEditor);
-     AddEditorToType('GDBLongword',TBaseTypesEditors.BaseCreateEditor);
-     AddEditorToType('GDBQWord',TBaseTypesEditors.BaseCreateEditor);
-     AddEditorToType('GDBDouble',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('ShortInt',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('Byte',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('SmallInt',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('Word',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('Integer',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('LongWord',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('QWord',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('Double',TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType('GDBNonDimensionDouble',TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType('GDBAngleDouble',TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType('GDBAngleDegDouble',TBaseTypesEditors.BaseCreateEditor);
-     AddEditorToType('GDBString',TBaseTypesEditors.BaseCreateEditor);
-     AddEditorToType('GDBAnsiString',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('String',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('AnsiString',TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType('GDBFloat',TBaseTypesEditors.BaseCreateEditor);
-     AddEditorToType('GDBPointer',TBaseTypesEditors.BaseCreateEditor);
+     AddEditorToType('Pointer',TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType('GDBPtrUInt',TBaseTypesEditors.BaseCreateEditor);
      AddEditorToType('TEnumDataDescriptor',TBaseTypesEditors.TEnumDataCreateEditor);
      EnumGlobalEditor:=TBaseTypesEditors.EnumDescriptorCreateEditor;

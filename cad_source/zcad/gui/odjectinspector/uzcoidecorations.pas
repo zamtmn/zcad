@@ -658,6 +658,7 @@ begin
 end;
 procedure DecorateSysTypes;
 begin
+     AddEditorToType('Boolean',TBaseTypesEditors.GDBBooleanCreateEditor);
      AddEditorToType('GDBBoolean',TBaseTypesEditors.GDBBooleanCreateEditor);
 
 
@@ -690,6 +691,7 @@ begin
      DecorateType('TGDBOSMode',nil,CreateEmptyEditor,nil);
 
      AddFastEditorToType('TGDBPaletteColor',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runcolorswnd);
+     AddFastEditorToType('Boolean',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
      AddFastEditorToType('GDBBoolean',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
      AddFastEditorToType('TGDB3StateBool',@BooleanGetPrefferedFastEditorSize,@_3SBooleanDrawFastEditor,@_3SBooleanInverse);
      AddFastEditorToType('PGDBLayerPropObjInsp',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runlayerswnd);

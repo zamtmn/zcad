@@ -216,14 +216,14 @@ begin
                    begin
                         //if objtypename<>ObjN_GDBObjLine then
                         //                                    objtypename:=objtypename;
-                        GDBStringDescriptorObj.Serialize(@objtypename,saveflag,membuf,linkbuf,sub);
+                        FundamentalStringDescriptorObj.Serialize(@objtypename,saveflag,membuf,linkbuf,sub);
                         pld:=pointer(PUserTypeDescriptor(SysUnit.InterfaceTypes.{exttype.}getDataMutable(SysUnit.InterfaceTypes._TypeName2Index(objtypename))^));
                         pld^.Serialize(p,saveflag,membuf,linkbuf,sub);
                    end;
                    p:=PGDBOpenArrayOfGDBPointer(PInstance)^.iterate(ir);
              until p=nil;
              objtypename:=ObjN_ArrayEnd;
-             GDBStringDescriptorObj.Serialize(@objtypename,saveflag,membuf,linkbuf,sub);
+             FundamentalStringDescriptorObj.Serialize(@objtypename,saveflag,membuf,linkbuf,sub);
         end;
 end;
 function ObjectDescriptor.DeSerialize;
@@ -255,7 +255,7 @@ begin
         begin
              i:=0;
              objtypename:='';
-             GDBStringDescriptorObj.DeSerialize(@objtypename,saveflag,membuf,linkbuf);
+             FundamentalStringDescriptorObj.DeSerialize(@objtypename,saveflag,membuf,linkbuf);
              while objtypename<>ObjN_ArrayEnd do
              begin
                   p:=PGDBOpenArrayOfData(PInstance)^.getDataMutable(i);
@@ -264,14 +264,14 @@ begin
                   pld^.deSerialize(p^,saveflag,membuf,linkbuf);
 
                   objtypename:='';
-                  GDBStringDescriptorObj.DeSerialize(@objtypename,saveflag,membuf,linkbuf);
+                  FundamentalStringDescriptorObj.DeSerialize(@objtypename,saveflag,membuf,linkbuf);
                   inc(i);
              end;
 
              (*for i := 0 to PGDBOpenArrayOfGDBPointer(PInstance)^.Count-1 do
              begin
                    p:=PGDBOpenArrayOfData(PInstance)^.getDataMutable(i);
-                   GDBStringDescriptorObj^.DeSerialize(@objtypename,saveflag,membuf);
+                   FundamentalStringDescriptorObj^.DeSerialize(@objtypename,saveflag,membuf);
                    if objtypename<>ObjN_NotRecognized then
                    begin
                         if objtypename=ObjN_ArrayEnd then system.Break;
@@ -293,14 +293,14 @@ begin
                    begin
                         if objtypename<>ObjN_GDBObjLine then
                                                             objtypename:=objtypename;
-                        GDBStringDescriptorObj^.Serialize(@objtypename,saveflag,membuf,linkbuf);
+                        FundamentalStringDescriptorObj^.Serialize(@objtypename,saveflag,membuf,linkbuf);
                         pld:=pointer(PUserTypeDescriptor(Types.exttype.getDataMutable(Types.TypeName2Index(objtypename))^));
                         pld^.Serialize(p,saveflag,membuf,linkbuf);
                    end;
                    p:=PGDBOpenArrayOfGDBPointer(PInstance)^.iterate;
              until p=nil;
              objtypename:=ObjN_ArrayEnd;
-             GDBStringDescriptorObj^.Serialize(@objtypename,saveflag,membuf,linkbuf);
+             FundamentalStringDescriptorObj^.Serialize(@objtypename,saveflag,membuf,linkbuf);
         end;}
 //end;*)
 procedure freemetods(p:GDBPointer);
@@ -791,14 +791,14 @@ begin
                    begin
                         if objtypename<>ObjN_GDBObjLine then
                                                             objtypename:=objtypename;
-                        GDBStringDescriptorObj.Serialize(@objtypename,saveflag,membuf,linkbuf);
+                        FundamentalStringDescriptorObj.Serialize(@objtypename,saveflag,membuf,linkbuf);
                         pld:=pointer(PUserTypeDescriptor(SysUnit.InterfaceTypes.exttype.getDataMutable(SysUnit.InterfaceTypes._TypeName2Index(objtypename))^));
                         pld^.Serialize(p,saveflag,membuf,linkbuf);
                    end;
                    p:=PGDBOpenArrayOfGDBPointer(PInstance)^.iterate(ir);
              until p=nil;
              objtypename:=ObjN_ArrayEnd;
-             GDBStringDescriptorObj.Serialize(@objtypename,saveflag,membuf,linkbuf);}
+             FundamentalStringDescriptorObj.Serialize(@objtypename,saveflag,membuf,linkbuf);}
      end;
 end;
 begin

@@ -30,7 +30,7 @@ DWord=longword;
 {$ENDIF}
 {EXPORT+}
 PGDBDouble=^GDBDouble;
-{-}GDBDouble=type Double;{//}
+{-}GDBDouble=type Double;{/GDBDouble=Double;/}
 
 PGDBNonDimensionDouble=^GDBNonDimensionDouble;
 {-}GDBNonDimensionDouble=type Double;{//}
@@ -42,40 +42,40 @@ PGDBAngleDouble=^GDBAngleDouble;
 {-}GDBAngleDouble=type Double;{//}
 
 PGDBFloat=^GDBFloat;
-{-}GDBFloat=type single;{//}
+{-}GDBFloat=type single;{/GDBFloat=Single;/}
 
 PGDBString=^GDBString;
-{-}GDBString=type ansistring;{//}
+{-}GDBString=type ansistring;{/GDBString=ansistring;/}
 
 PGDBAnsiString=^GDBAnsiString;
-{-}GDBAnsiString=type ansistring;{//}
+{-}GDBAnsiString=type ansistring;{/GDBAnsiString=ansistring;/}
 
 PGDBBoolean=^GDBBoolean;
-{-}GDBBoolean=type boolean;{//}
+{-}GDBBoolean=type boolean;{/GDBBoolean=Boolean;/}
 
 PGDBInteger=^GDBInteger;
-{-}GDBInteger=type integer;{//}
+{-}GDBInteger=type integer;{/GDBInteger=LongInt;/}
 
 PGDBByte=^GDBByte;
-{-}GDBByte=type byte;{//}
+{-}GDBByte=type byte;{/GDBByte=Byte;/}
 
 PGDBLongword=^GDBLongword;
-{-}GDBLongword=type longword;{//}
+{-}GDBLongword=type longword;{/GDBLongword=LongWord;/}
 
 PGDBQWord=^GDBQWord;
-{-}GDBQWord=type QWord;{//}
+{-}GDBQWord=type QWord;{/GDBQWord=QWord;/}
 
 PGDBWord=^GDBWord;
-{-}GDBWord=type word;{//}
+{-}GDBWord=type word;{/GDBWord=word;/}
 
 PGDBSmallint=^GDBSmallint;
-{-}GDBSmallint=type smallint;{//}
+{-}GDBSmallint=type smallint;{/GDBSmallint=SmallInt;/}
 
 PGDBShortint=^GDBShortint;
-{-}GDBShortint=type shortint;{//}
+{-}GDBShortint=type shortint;{/GDBShortint=ShortInt;/}
 
 PGDBPointer=^GDBPointer;
-{-}GDBPointer=type pointer;{//}
+{-}GDBPointer=type pointer;{/GDBPointer=Pointer;/}
 
 PGDBPtrUInt=^GDBPtrUInt;
 {-}GDBPtrUInt=type PtrUInt;{//}

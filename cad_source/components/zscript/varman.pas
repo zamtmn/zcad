@@ -549,7 +549,7 @@ begin
                             repeat
                                  membuf.TXTAddGDBString('  '+pv^.name+':=');
                                  value:=pv.data.PTD.GetValueAsString(pv.data.Instance);
-                                 if pv.data.PTD=@GDBStringDescriptorObj then
+                                 if pv.data.PTD=@FundamentalStringDescriptorObj then
                                              value:=''''+value+'''';
 
                                  membuf.TXTAddGDBString(value+';');
@@ -584,7 +584,7 @@ begin
 
      pvardesk(p)^.data.ptd^.MagicFreeInstance(pvardesk(p)^.data.Instance);
 
-     //if pvardesk(p)^.data.ptd=@GDBStringDescriptorObj then
+     //if pvardesk(p)^.data.ptd=@FundamentalStringDescriptorObj then
        //                                                   pgdbstring(pvardesk(p)^.data.Instance)^:='';
      pvardesk(p)^.data.ptd:=nil;
      //gdbfreemem(pvardesk(p)^.pvalue);
@@ -692,22 +692,22 @@ begin
 end;
 procedure typemanager.CreateBaseTypes;
 begin
-     AddTypeByRef(GDBPointerDescriptorOdj);
-     AddTypeByRef(GDBBooleanDescriptorOdj);
-     AddTypeByRef(GDBShortintDescriptorObj);
-     AddTypeByRef(GDBByteDescriptorObj);
-     AddTypeByRef(GDBSmallintDescriptorObj);
-     AddTypeByRef(GDBWordDescriptorObj);
-     AddTypeByRef(GDBIntegerDescriptorObj);
-     AddTypeByRef(GDBLongwordDescriptorObj);
-     AddTypeByRef(GDBQWordDescriptorObj);
-     AddTypeByRef(GDBDoubleDescriptorObj);
+     AddTypeByRef(FundamentalPointerDescriptorOdj);
+     AddTypeByRef(FundamentalBooleanDescriptorOdj);
+     AddTypeByRef(FundamentalShortIntDescriptorObj);
+     AddTypeByRef(FundamentalByteDescriptorObj);
+     AddTypeByRef(FundamentalSmallIntDescriptorObj);
+     AddTypeByRef(FundamentalWordDescriptorObj);
+     AddTypeByRef(FundamentalLongIntDescriptorObj);
+     AddTypeByRef(FundamentalLongWordDescriptorObj);
+     AddTypeByRef(FundamentalQWordDescriptorObj);
+     AddTypeByRef(FundamentalDoubleDescriptorObj);
      AddTypeByRef(GDBNonDimensionDoubleDescriptorObj);
      AddTypeByRef(GDBAngleDegDoubleDescriptorObj);
      AddTypeByRef(GDBAngleDoubleDescriptorObj);
-     AddTypeByRef(GDBStringDescriptorObj);
-     AddTypeByRef(GDBAnsiStringDescriptorObj);
-     AddTypeByRef(GDBFloatDescriptorObj);
+     AddTypeByRef(FundamentalStringDescriptorObj);
+     AddTypeByRef(FundamentalAnsiStringDescriptorObj);
+     AddTypeByRef(FundamentalSingleDescriptorObj);
      AddTypeByRef(GDBEnumDataDescriptorObj);
      AddTypeByRef(GDBPtrUIntDescriptorObj);
      BaseTypesEndIndex:=exttype.Count;
@@ -1508,7 +1508,7 @@ begin
                                  pv.data.PTD.SavePasToMem(membuf,pv.data.Instance,'  '+pv^.name);
                                  {membuf.TXTAddGDBString('  '+pv^.name+':=');
                                  value:=pv.data.PTD.GetValueAsString(pv.data.Instance);
-                                 if pv.data.PTD=@GDBStringDescriptorObj then
+                                 if pv.data.PTD=@FundamentalStringDescriptorObj then
                                              value:=''''+value+'''';
 
                                  membuf.TXTAddGDBString(value+';');

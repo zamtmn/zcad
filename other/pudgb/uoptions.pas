@@ -11,23 +11,23 @@ uses
 type
   {$Z1}
   TPaths=packed record
-    _File:GDBString;
-    _Paths:GDBString;
+    _File:String;
+    _Paths:String;
   end;
   TFileSearhing=packed record
   end;
   TParser=packed record
-    _CompilerOptions:GDBString;
-    TargetOS,TargetCPU:GDBString;
+    _CompilerOptions:String;
+    TargetOS,TargetCPU:String;
   end;
   TEdgeType=(ETContinuous,ETDotted);
   TGraphBulding=packed record
-    IncludeNotFoundedUnits:GDBBoolean;
-    IncludeInterfaceUses:GDBBoolean;
+    IncludeNotFoundedUnits:Boolean;
+    IncludeInterfaceUses:Boolean;
     InterfaceUsesEdgeType:TEdgeType;
-    IncludeImplementationUses:GDBBoolean;
+    IncludeImplementationUses:Boolean;
     ImplementationUsesEdgeType:TEdgeType;
-    IncludeOnlyLoops:GDBBoolean;
+    IncludeOnlyLoops:Boolean;
   end;
   TOptions=packed record
     Paths:TPaths;

@@ -112,10 +112,11 @@ begin
 
   _SetUIFromOption(nil);
 
-  AddEditorToType('GDBInteger',TBaseTypesEditors.BaseCreateEditor);//register standart editor to integer type
-  AddEditorToType('GDBDouble',TBaseTypesEditors.BaseCreateEditor);//register standart editor to double type
-  AddEditorToType('GDBString',TBaseTypesEditors.BaseCreateEditor);//register standart editor to string type
-  AddEditorToType('GDBBoolean',TBaseTypesEditors.GDBBooleanCreateEditor);//register standart editor to string type
+  AddEditorToType('Integer',TBaseTypesEditors.BaseCreateEditor);//register standart editor to integer type
+  AddEditorToType('Double',TBaseTypesEditors.BaseCreateEditor);//register standart editor to double type
+  AddEditorToType('AnsiString',TBaseTypesEditors.BaseCreateEditor);//register standart editor to string type
+  AddEditorToType('String',TBaseTypesEditors.BaseCreateEditor);//register standart editor to string type
+  AddEditorToType('Boolean',TBaseTypesEditors.GDBBooleanCreateEditor);//register standart editor to string type
   //AddFastEditorToType('GDBBoolean',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
   EnumGlobalEditor:=TBaseTypesEditors.EnumDescriptorCreateEditor;//register standart editor to all enum types
 

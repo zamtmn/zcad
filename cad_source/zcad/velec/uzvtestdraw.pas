@@ -101,9 +101,7 @@ uses
    uzcenitiesvariablesextender,
    UUnitManager,
    uzbpaths,
-   uzctranslations,
-
-  uzvcom;
+   uzctranslations;
 
 
 

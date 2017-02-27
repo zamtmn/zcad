@@ -112,7 +112,9 @@ uses
   //для работы графа
   ExtType,
   Pointerv,
-  Graphs;
+  Graphs,
+
+  uzvtestdraw; // тестовые рисунки
 
 
 
@@ -217,6 +219,8 @@ type
                          destructor Destroy;virtual;
       end;
       TListBreakInfo=specialize TVector<TBreakInfo>;
+
+      TGDBDevice=specialize TVector<PGDBObjDevice>;
 
 
 
@@ -890,14 +894,20 @@ var
     pSuperLine:PGDBObjSuperLine;
     ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
     NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
+    templength:double;
+    listDev:TGDBDevice;
 begin
 
 
     for i:=0 to listCable.Size-1 do
       begin
+        //HistoryOutStr(inttostr(i+1)+'-я кабельная линия');
         NearObjects.init(100) ;
         for j:=0 to 1 do
         begin
+          listDev:=TGDBDevice.create;
+
+          //HistoryOutStr(inttostr(j+1)+'-й конец кабельной линии');
           inAddEdge:=true; //есть ли кабель в узле. если есть и кабель и девайс, то девайс не запишеться
           colDevice:=0;    //сброс счетчика
           if j = 0 then
@@ -905,7 +915,9 @@ begin
           else
             vertexLine:=listCable[i].edPoint;
           areaVertex:=getAreaVertex(vertexLine,accuracy);
-          //testTempDrawLine(areaVertex.LBN,areaVertex.RTF);
+          //testTempDrawLine(areaVertex.LBN,areaVertex.RTF); // показать область
+
+          //HistoryOutStr('x='+ floattostr(areaVertex.LBN.x)+'---y='+floattostr(areaVertex.LBN.y)); // координата данной точки
 
           if drawings.GetCurrentROOT^.FindObjectsInVolume(areaVertex,NearObjects)then //ищем примитивы оболочка которых пересекается с volume
             begin
@@ -928,15 +940,40 @@ begin
                  begin
                   pObjDevice:= PGDBObjDevice(pobj); // передача объекта в девайсы
                   inc(colDevice);
+                  listDev.PushBack(pObjDevice);
+
+                  //HistoryOutStr('coldev=' + inttostr(colDevice));
+                  //uzvtestdraw.testDrawCircle(pObjDevice^.P_insert_in_WCS,2,4);
                  end;
                pobj:=NearObjects.iterate(ir);//получаем следующий примитив из списка
              until pobj=nil;
             end;
             NearObjects.Clear;
 
+            if (colDevice > 1) then
+            begin
+               templength:=uzegeometry.Vertexlength(vertexLine,PGDBObjDevice(listDev[0])^.P_insert_in_WCS);
+               pObjDevice:= PGDBObjDevice(listDev[0]);
+               for k:= 0 to listDev.Size-1 do
+               begin
+                  if templength > uzegeometry.Vertexlength(vertexLine,PGDBObjDevice(listDev[k])^.P_insert_in_WCS) then
+                  begin
+                    templength:= uzegeometry.Vertexlength(vertexLine,PGDBObjDevice(listDev[k])^.P_insert_in_WCS);
+                    pObjDevice:= PGDBObjDevice(listDev[k]);
+                  end;
+               end;
+               colDevice:=1;
+            end;
+
+
+            listDev.Destroy;
+
             if (inAddEdge) and (colDevice = 1) then  //если есть кабель значит устройство не подсоеденино, и если на конце два устройства это что то не так
             begin
-               //**поиск номера вершины устройства которого мы обноружили кабелем
+
+              //uzvtestdraw.testDrawCircle(pObjDevice^.P_insert_in_WCS,2,4);
+
+              //**поиск номера вершины устройства которого мы обноружили кабелем
                for k:=0 to graph.listVertex.Size-1 do
                begin
                   if graph.listVertex[k].deviceEnt = pObjDevice then
@@ -957,7 +994,7 @@ begin
                   infoEdge.VPoint1:=vertexLine;
                   infoEdge.VPoint1.z:=0;
 
-                  //testTempDrawCircle(infoEdge.VPoint1,15);
+                  //testTempDrawCircle(infoEdge.VPoint1,3);
 
                   infoEdge.VPoint2:=graph.listVertex[numVertDevice].centerPoint;
                   infoEdge.VPoint2.z:=0;
@@ -1264,8 +1301,8 @@ begin
                      listCable.PushBack(infoCable); //добавляем к списку реальные кабели
                      inc(counter1);
 
-                     //testTempDrawCircle(infoCable.stPoint,25);
-                     //testTempDrawCircle(infoCable.edPoint,25);
+                     //testTempDrawCircle(infoCable.stPoint,2.5);
+                     //testTempDrawCircle(infoCable.edPoint,2.5);
                     // PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(i-1))^;
                    end;
 
@@ -1313,6 +1350,9 @@ begin
                              infoDevice.breakName:='not_break';
                              result.listVertex{listDevice}.PushBack(infoDevice);
                              inc(counter2);
+
+                             //testTempDrawCircle(infoDevice.centerPoint,2.5);
+
                            end;
                           // HistoryOutStr('x= ' + FloatToStr(devpoint.x) + ' y=' + FloatToStr(devpoint.y));
                          end;
@@ -1375,7 +1415,7 @@ begin
                       infoDevice.break:=false;
                       infoDevice.breakName:='not_break';
                       {listDevice}result.listVertex.PushBack(infoDevice);
-                      //testTempDrawCircle(interceptVertex,30);
+                      //testTempDrawCircle(interceptVertex,3);
                     end;
                   end;
                  //end;

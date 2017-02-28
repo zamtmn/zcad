@@ -24,7 +24,7 @@ uses
  StdCtrls,ExtCtrls,Controls,Classes,menus,Forms,fileutil,graphics,
  uzbtypes, uzbmemman,uzcdrawings,math,uzccommandsmanager,varman,languade,
  uzbgeomtypes,UGDBTracePropArray,varmandef,
- uzegeometry,uzctnrvectorgdbstring,uzcinterface,uzctreenode,uzglviewareadata,uzclog,strmy;
+ gzctnrvectortypes,uzegeometry,uzctnrvectorgdbstring,uzcinterface,uzctreenode,uzglviewareadata,uzclog,strmy;
 
 const
      cheight=48;

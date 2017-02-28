@@ -23,7 +23,7 @@ uses uzgldrawcontext,uzgldrawerabstract,uzglvectorobject,
      uzbtypesbase,sysutils,uzbmemman,
      uzbgeomtypes,uzegeometry,uzglgeometry,uzefont,uzeentitiesprop,UGDBPoint3DArray,
      uzegeomentitiestree,uzbtypes,
-     uzgeomline3d,uzgeomproxy;
+     gzctnrvectortypes,uzgeomline3d,uzgeomproxy;
 type
 {Export+}
 PTZEntityRepresentation=^TZEntityRepresentation;

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   StdCtrls, ActnList, VirtualTrees, gvector,
-  uzbgeomtypes ,uzegeometry, uzccommandsmanager,uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,uzcenitiesvariablesextender,varmandef;
+  gzctnrvectortypes,uzbgeomtypes ,uzegeometry, uzccommandsmanager,uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,uzcdrawings,uzbtypesbase,uzcenitiesvariablesextender,varmandef;
 
 type
 

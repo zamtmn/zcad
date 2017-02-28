@@ -19,13 +19,13 @@
 unit gzctnrvectorsimple;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzbtypes,gzctnrvector;
+uses {uzbtypesbase,uzbtypes,}gzctnrvector;
 type
 {Export+}
 GZVectorSimple{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVector{-}<T>{//})
-                                   function PushBackIfNotPresent(data:T):GDBInteger;
-                                   function IsDataExist(pobj:T):GDBInteger;
+                                   function PushBackIfNotPresent(data:T):Integer;
+                                   function IsDataExist(pobj:T):Integer;
                                  end;
 {Export-}
 implementation

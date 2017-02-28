@@ -19,7 +19,7 @@
 unit uzctnrvectorgdbstring;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzbtypes,gzctnrvectorsimple,uzbstrproc,sysutils;
+uses gzctnrvectortypes,uzbtypesbase,uzbtypes,gzctnrvectorsimple,uzbstrproc,sysutils;
 type
 {EXPORT+}
     PTZctnrVectorGDBString=^TZctnrVectorGDBString;

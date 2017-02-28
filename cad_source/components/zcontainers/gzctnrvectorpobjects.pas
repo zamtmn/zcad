@@ -20,7 +20,7 @@ unit gzctnrvectorpobjects;
 {$INCLUDE def.inc}
 interface
 uses gzctnrvectorpdata,
-     uzbtypesbase,uzbtypes,uzbmemman;
+     {uzbtypesbase,}uzbtypes,uzbmemman;
 type
 {Export+}
 GZVectorPObects{-}<PTObj,TObj>{//}

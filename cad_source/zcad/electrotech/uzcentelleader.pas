@@ -13,7 +13,7 @@ uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      uzcsysvars,gzctnrvectorpobjects,uzbstrproc,UGDBOpenArrayOfByte,math,
      uzeenttext,uzeentdevice,uzcentcable,uzeenttable,uzegeometry,
      uzeentline,uzbtypesbase,uzeentcomplex,sysutils,uzctnrvectorgdbstring,
-     {UGDBSelectedObjArray,}uzeentity,varmandef,uzbtypes,uzeconsts,uzeffdxfsupport,
+     gzctnrvectortypes,uzeentity,varmandef,uzbtypes,uzeconsts,uzeffdxfsupport,
      uzbgeomtypes,uzbmemman,uzeentsubordinated,uzestylestables,uzclog,UGDBOpenArrayOfPV,uzeentcurve;
 type
 {EXPORT+}

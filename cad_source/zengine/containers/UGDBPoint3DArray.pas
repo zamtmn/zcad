@@ -20,7 +20,7 @@ unit UGDBPoint3DArray;
 {$INCLUDE def.inc}
 interface
 uses uzbgeomtypes,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzbmemman,math,
-     uzgloglstatemanager,uzegeometry;
+     gzctnrvectortypes,uzgloglstatemanager,uzegeometry;
 type
 {REGISTEROBJECTTYPE GDBPoint3dArray}
 {Export+}

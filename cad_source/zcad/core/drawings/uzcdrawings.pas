@@ -28,7 +28,7 @@ uses
     uzbtypesbase,uzedrawingsimple,uzeentgenericsubentry,uzestyleslayers,uzeentity,
     UGDBSelectedObjArray,uzestylestexts,uzefontmanager,uzestyleslinetypes,
     UGDBOpenArrayOfPV,uzefont,gzctnrvectorpobjects,UGDBVisibleOpenArray,
-    uzedimensionaltypes,uzetrash,UGDBOpenArrayOfByte,uzglviewareadata;
+    gzctnrvectortypes,uzedimensionaltypes,uzetrash,UGDBOpenArrayOfByte,uzglviewareadata;
 type
 {TDWGProps=packed record
                 Name:GDBString;

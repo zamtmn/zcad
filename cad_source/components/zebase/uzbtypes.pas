@@ -155,9 +155,6 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
     pcontrolpoint:pcontrolpointdesc;
     disttomouse:GDBInteger;
   end;
-  PTArrayIndex=^TArrayIndex;
-  TArrayIndex=GDBInteger;
-
   TPolyData=packed record
                   //nearestvertex:gdbinteger;
                   //nearestline:gdbinteger;

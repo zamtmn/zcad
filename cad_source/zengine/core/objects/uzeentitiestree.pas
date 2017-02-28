@@ -20,7 +20,7 @@ unit uzeentitiestree;
 {$INCLUDE def.inc}
 interface
 uses
-    graphics,gzctnrvectorsimple,gzctnrvectorpobjects,
+    gzctnrvectortypes,graphics,gzctnrvectorsimple,gzctnrvectorpobjects,
     uzbgeomtypes,gzctnrtree,uzgldrawcontext,uzegeometry,UGDBVisibleOpenArray,uzeentity,uzbtypesbase,uzbtypes,uzbmemman;
 type
 TZEntsManipulator=class;

@@ -21,7 +21,7 @@ unit uzccomdb;
 
 interface
 uses
-  uzbpaths,uzcsysvars,uzctranslations,uzcdrawing,uzeconsts,uzcstrconsts,
+  gzctnrvectortypes,uzbpaths,uzcsysvars,uzctranslations,uzcdrawing,uzeconsts,uzcstrconsts,
   uzccommandsabstract,
   uzccommandsimpl,
   uzbtypes,

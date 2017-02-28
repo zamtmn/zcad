@@ -26,7 +26,7 @@ uses
  Classes,FileUtil,Forms,stdctrls,Controls,ComCtrls,
  uzcdevicebaseabstract,uzclog,SysUtils,uzbtypes,uzcdrawings,varman,languade,
  varmandef,uzcshared,uzcsysinfo,uzbmemman,uzbtypesbase,uzccommandsimpl,uzccommandsabstract,
- uzeblockdef,UBaseTypeDescriptor,uzcinterface,UUnitManager;
+ gzctnrvectortypes,uzeblockdef,UBaseTypeDescriptor,uzcinterface,UUnitManager;
 const
   uncat='UNCAT';
   uncat_='UNCAT_';

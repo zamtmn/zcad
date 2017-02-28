@@ -20,7 +20,7 @@ unit uzglvectorobject;
 {$INCLUDE def.inc}
 interface
 uses uzgldrawerabstract,uzgldrawcontext,uzgprimitives,uzglgeomdata,uzgprimitivessarray,
-     uzbgeomtypes,uzegeometry,sysutils,uzbtypes,uzbmemman,uzbstrproc,uzbtypesbase;
+     gzctnrvectortypes,uzbgeomtypes,uzegeometry,sysutils,uzbtypes,uzbmemman,uzbstrproc,uzbtypesbase;
 type
 {Export+}
 TAppearance=(TAMatching,TANeedProxy);

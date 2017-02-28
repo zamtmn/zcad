@@ -18,7 +18,7 @@ uses
   uzccomdraw,UGDBVisibleOpenArray,uzeentline,uzbpaths,uzcshared,uzeentblockinsert,
   uzbgeomtypes,varman,uzccablemanager,uzeentdevice,uzeentmtext,math,
   uzcenitiesvariablesextender,uzeroot,uzglviewareadata,uzcentcable,UUnitManager,
-  uzccomelectrical,URecordDescriptor,TypeDescriptors;
+  gzctnrvectortypes,uzccomelectrical,URecordDescriptor,TypeDescriptors;
 
 type
   TPlaceParam=record

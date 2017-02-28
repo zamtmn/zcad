@@ -23,7 +23,7 @@ unit UBaseTypeDescriptor;
 interface
 uses
       LCLProc,Graphics,classes,Themes,
-      uzemathutils,uzegeometry,uzbstrproc,TypeDescriptors,
+      gzctnrvectortypes,uzemathutils,uzegeometry,uzbstrproc,TypeDescriptors,
       sysutils,UGDBOpenArrayOfByte,uzbtypesbase,
       USinonimDescriptor,uzedimensionaltypes,varmandef,uzbtypes,{gzctnrvectordata,}uzctnrvectorgdbstring,uzbmemman,math;
 resourcestring

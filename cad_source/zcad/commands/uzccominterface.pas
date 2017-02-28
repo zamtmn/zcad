@@ -30,7 +30,7 @@ uses
  uzedimensionaltypes,
  uzcsysinfo,
   //commandline,
-  uzccommandsabstract,
+  gzctnrvectortypes,uzccommandsabstract,
   uzccommandsimpl,
   uzbtypes,
   uzcdrawings,

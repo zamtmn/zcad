@@ -25,7 +25,7 @@ uses gzctnrvectorpobjects,gzctnrvectordata,uzeentityfactory,uzeentsubordinated,
      uzeentcurve,UGDBVectorSnapArray,uzegeometry,uzestyleslayers,uzeentity,
      uzbmemman,uzbtypesbase,UGDBPoint3DArray,UGDBPolyLine2DArray,
      UGDBOpenArrayOfByte,uzbtypes,uzeentwithlocalcs,uzeconsts,math,
-     uzbgeomtypes,uzeffdxfsupport,sysutils,UGDBLineWidthArray,UGDBSelectedObjArray;
+     gzctnrvectortypes,uzbgeomtypes,uzeffdxfsupport,sysutils,UGDBLineWidthArray,UGDBSelectedObjArray;
 type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {REGISTEROBJECTTYPE GDBObjLWPolyline}

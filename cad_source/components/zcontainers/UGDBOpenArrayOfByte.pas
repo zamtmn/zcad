@@ -19,46 +19,46 @@
 unit UGDBOpenArrayOfByte;
 {$INCLUDE def.inc}
 interface
-uses gzctnrvector,uzbtypesbase,uzbgeomtypes,sysutils,uzbtypes{$IFNDEF DELPHI},LazUTF8{$ENDIF};
+uses gzctnrvector,{uzbtypesbase,}uzbgeomtypes,sysutils,uzbtypes{$IFNDEF DELPHI},LazUTF8{$ENDIF};
 const
      breacer=[#13,#10,' '];
-  eol: GDBString=#13 + #10;
+  eol: AnsiString=#13 + #10;
 type
 {Export+}
 PGDBOpenArrayOfByte=^GDBOpenArrayOfByte;
 GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GZVector{-}<byte>{//})
-                      ReadPos:GDBInteger;
-                      name:GDBString;
-                      constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                      ReadPos:Integer;
+                      name:AnsiString;
+                      constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:Integer);
                       constructor initnul;
-                      constructor InitFromFile(FileName:string);
-                      function AddByte(PData:GDBPointer):GDBInteger;virtual;
-                      function AddByteByVal(Data:GDBByte):GDBInteger;virtual;
-                      function AddWord(PData:GDBPointer):GDBInteger;virtual;
-                      function AddFontFloat(PData:GDBPointer):GDBInteger;virtual;
-                      procedure TXTAddGDBStringEOL(s:GDBString);virtual;
-                      procedure TXTAddGDBString(s:GDBString);virtual;
-                      function ReadData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
+                      constructor InitFromFile(FileName:Ansistring);
+                      function AddByte(PData:Pointer):Integer;virtual;
+                      function AddByteByVal(Data:Byte):Integer;virtual;
+                      function AddWord(PData:Pointer):Integer;virtual;
+                      function AddFontFloat(PData:Pointer):Integer;virtual;
+                      procedure TXTAddGDBStringEOL(s:AnsiString);virtual;
+                      procedure TXTAddGDBString(s:AnsiString);virtual;
+                      function ReadData(PData:Pointer;SData:Word):Integer;virtual;
                       //function PopData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
-                      function ReadString(break, ignore: GDBString): shortString;inline;
-                      function ReadGDBString: GDBString;inline;
-                      function ReadString2:GDBString;inline;
-                      function GetCurrentReadAddres:GDBPointer;virtual;
-                      function Jump(offset:GDBInteger):GDBPointer;virtual;
-                      function SaveToFile(FileName:string):GDBInteger;
-                      function ReadByte: GDBByte;
-                      function ReadWord: GDBWord;
+                      function ReadString(break, ignore: AnsiString): shortString;inline;
+                      function ReadGDBString: AnsiString;inline;
+                      function ReadString2:AnsiString;inline;
+                      function GetCurrentReadAddres:Pointer;virtual;
+                      function Jump(offset:Integer):Pointer;virtual;
+                      function SaveToFile(FileName:Ansistring):Integer;
+                      function ReadByte: Byte;
+                      function ReadWord: Word;
                       function GetChar(rp:integer): Ansichar;
-                      function Seek(pos:GDBInteger):integer;
-                      function notEOF:GDBBoolean;
-                      function readtoparser(break:GDBString): GDBString;
+                      function Seek(pos:Integer):integer;
+                      function notEOF:Boolean;
+                      function readtoparser(break:AnsiString):AnsiString;
                       destructor done;virtual;
                    end;
 {Export-}
-procedure WriteString_EOL(h: GDBInteger; s: GDBString);
+procedure WriteString_EOL(h: Integer; s: AnsiString);
 implementation
 uses uzbstrproc;
-procedure WriteString_EOL(h: GDBInteger; s: GDBString);
+procedure WriteString_EOL(h: Integer; s: AnsiString);
 begin
   s := s + eol;
      //writeln(s);
@@ -92,10 +92,10 @@ function GDBOpenArrayOfByte.readtoparser;
 var
   s: String;
   //i:GDBInteger;
-  scobcacount:GDBInteger;
+  scobcacount:Integer;
   mode:(parse,commenttoendline,commenttouncomment);
-  lastbreak:GDBBoolean;
-  stringread:GDBBoolean;
+  lastbreak:Boolean;
+  stringread:Boolean;
 begin
   lastbreak:=false;
   scobcacount:=0;
@@ -194,7 +194,7 @@ function GDBOpenArrayOfByte.ReadGDBString;
 begin
      result:=ReadString(#10,#13);
 end;
-function GDBOpenArrayOfByte.notEOF:GDBBoolean;
+function GDBOpenArrayOfByte.notEOF:Boolean;
 begin
      result:=(readpos<(count-1))and(parray<>nil)
 end;
@@ -235,8 +235,8 @@ end;
 function GDBOpenArrayOfByte.readstring{(break, ignore: GDBString): shortString};
 var
   //{s,}myresult: shortString;
-  i:GDBInteger;
-  lastbreak:GDBBoolean;
+  i:Integer;
+  lastbreak:Boolean;
   addr:pansichar;
   myresult:ansistring;
   strlen:integer;
@@ -309,13 +309,13 @@ begin
   //myresult := s;
   result := myresult;
 end;
-function GDBOpenArrayOfByte.Seek(pos:GDBInteger):integer;
+function GDBOpenArrayOfByte.Seek(pos:Integer):integer;
 begin
      result:=self.ReadPos;
      readpos:=pos;
 end;
 constructor GDBOpenArrayOfByte.InitFromFile;
-var infile,filelength:GDBInteger;
+var infile,filelength:Integer;
 begin
      //StringToWideChar(filename)
      initnul;
@@ -337,7 +337,7 @@ begin
      end;
 end;
 function GDBOpenArrayOfByte.SaveToFile;
-var infile:GDBInteger;
+var infile:Integer;
 begin
      infile:=filecreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}({ExpandPath}(FileName)));
      if infile>0 then
@@ -360,24 +360,24 @@ begin
   //SizeOfData:=1;
   inherited initnul;
 end;
-function GDBOpenArrayOfByte.AddByteByVal(Data:GDBByte):GDBInteger;
+function GDBOpenArrayOfByte.AddByteByVal(Data:Byte):Integer;
 begin
-     result:=adddata(@data,sizeof(GDBByte));
+     result:=adddata(@data,sizeof(Byte));
 end;
 
-function GDBOpenArrayOfByte.AddByte(PData:GDBPointer):GDBInteger;
+function GDBOpenArrayOfByte.AddByte(PData:Pointer):Integer;
 //var addr:GDBPlatformint;
 begin
-     result:=adddata(pdata,sizeof(GDBByte));
+     result:=adddata(pdata,sizeof(Byte));
 end;
-function GDBOpenArrayOfByte.AddFontFloat(PData:GDBPointer):GDBInteger;
+function GDBOpenArrayOfByte.AddFontFloat(PData:Pointer):Integer;
 //var addr:GDBPlatformint;
 begin
      result:=adddata(pdata,sizeof(fontfloat));
 end;
-function GDBOpenArrayOfByte.AddWord(PData:GDBPointer):GDBInteger;
+function GDBOpenArrayOfByte.AddWord(PData:Pointer):Integer;
 begin
-     result:=adddata(pdata,sizeof(GDBWord));
+     result:=adddata(pdata,sizeof(Word));
 end;
 function GDBOpenArrayOfByte.ReadData;
 {var addr:GDBPlatformint;

@@ -22,7 +22,7 @@ interface
 uses LCLProc,uzbpaths,uzbstrproc,uzgldrawcontext,usimplegenerics,uzestylesdim,uzeentityfactory,
     {$IFNDEF DELPHI}LazUTF8,{$ENDIF}
     UGDBNamedObjectsArray,uzestyleslinetypes,uzedrawingsimple,uzelongprocesssupport,
-    uzglviewareadata,uzeffdxfsupport,uzestrconsts,uzestylestexts,
+    gzctnrvectortypes,uzglviewareadata,uzeffdxfsupport,uzestrconsts,uzestylestexts,
     uzegeometry,uzeentsubordinated,uzbtypesbase,uzeentgenericsubentry,uzbtypes,
     uzedimensionaltypes,uzbgeomtypes,sysutils,uzbmemman,uzeconsts,UGDBObjBlockdefArray,
     UGDBOpenArrayOfByte,UGDBVisibleOpenArray,uzeentity,uzeblockdef,uzestyleslayers,uzeffmanager;

@@ -37,10 +37,6 @@ PGDBPointer=^GDBPointer;
 GDBPointer=Pointer;
 PGDBPtrUInt=^GDBPtrUInt;
 
-itrec=packed record
-            itp:GDBPointer;
-            itc:GDBInteger;
-      end;
 //Generate on E:/zcad/cad_source/components/zebase/uzbgeomtypes.pas
 PIMatrix4=^IMatrix4;
 IMatrix4=packed array[0..3]of GDBInteger;
@@ -293,8 +289,6 @@ GDBArrayVertex=packed array[0..0] of GDBvertex;
     pcontrolpoint:pcontrolpointdesc;
     disttomouse:GDBInteger;
   end;
-  PTArrayIndex=^TArrayIndex;
-  TArrayIndex=GDBInteger;
   TPolyData=packed record
                   //nearestvertex:gdbinteger;
                   //nearestline:gdbinteger;
@@ -439,10 +433,17 @@ PExtensionData=GDBPointer;
   PTGDBPaletteColor=^TGDBPaletteColor;
   TGDBPaletteColor=GDBInteger;
   TGDBPalette={$IFNDEF DELPHI}packed {$ENDIF}array[0..255] of TDXFCOLOR;
+//Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectortypes.pas
+  itrec=packed record
+              itp:Pointer;
+              itc:Integer;
+        end;
+  PTArrayIndex=^TArrayIndex;
+  TArrayIndex=Integer;
 //Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvector.pas
 {**Генерик объекта-массива}
 GZVector={$IFNDEF DELPHI}packed{$ENDIF}
-  object(GDBaseObject)
+  object
     
                                              //**< Тип указатель на тип данных T
                              //**< Тип массив данных T
@@ -451,7 +452,7 @@ GZVector={$IFNDEF DELPHI}packed{$ENDIF}
                //**< Тип процедура принимающая указатель на T
     
         PArray:GDBPointer;(*hidden_in_objinsp*)   //**< Указатель на массив данных
-        GUID:GDBString;(*hidden_in_objinsp*)                  //**< Шняга для подсчета куда уходит память. используется только с DEBUGBUILD. Надо чтото ч ней делать
+        GUID:String;(*hidden_in_objinsp*)                  //**< Шняга для подсчета куда уходит память. используется только с DEBUGBUILD. Надо чтото ч ней делать
         Count:TArrayIndex;(*hidden_in_objinsp*)               //**< Количество занятых элементов массива
         Max:TArrayIndex;(*hidden_in_objinsp*)                 //**< Размер массива (под сколько элементов выделено памяти)
         {**Деструктор}
@@ -467,38 +468,38 @@ GZVector={$IFNDEF DELPHI}packed{$ENDIF}
         {**Начало "перебора" элементов массива
           @param(ir переменная "итератор")
           @return(указатель на первый элемент массива)}
-        function beginiterate(out ir:itrec):GDBPointer;virtual;abstract;
+        function beginiterate(out ir:itrec):Pointer;virtual;abstract;
         {**"Перебор" элементов массива
           @param(ir переменная "итератор")
           @return(указатель на следующий элемент массива, nil если это конец)}
-        function iterate(var ir:itrec):GDBPointer;virtual;abstract;
-        function SetCount(index:GDBInteger):GDBPointer;virtual;abstract;
+        function iterate(var ir:itrec):Pointer;virtual;abstract;
+        function SetCount(index:Integer):Pointer;virtual;abstract;
         {**Инвертировать массив}
         procedure Invert;
         {**Копировать в массив}
-        function copyto(var source:GZVector<T>):GDBInteger;virtual;abstract;
+        function copyto(var source:GZVector<T>):Integer;virtual;abstract;
         {**Выделяет место и копирует в массив SData элементов из PData. Надо compilermagic! соответствие с AllocData
           @PData(указатель на копируемые элементы)
           @SData(кол-во копируемых элементов)
           @return(индекс первого скопированного элемента в массиве)}
-        function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
+        function AddData(PData:Pointer;SData:Word):Integer;virtual;abstract;
         {**Выделяет место в массиве под SData элементов. Надо compilermagic! соответствие с AddData
           @SData(кол-во копируемых элементов)
           @return(индекс первого выделенного элемента в массиве)}
-        function AllocData(SData:GDBword):GDBInteger;virtual;abstract;
+        function AllocData(SData:Word):Integer;virtual;abstract;
         {old}
         {**Удалить элемент по индексу}
-        function DeleteElement(index:GDBInteger):GDBPointer;
+        function DeleteElement(index:Integer):Pointer;
         {**Перевод указателя в индекс}
-        function P2I(pel:GDBPointer):GDBInteger;
+        function P2I(pel:Pointer):Integer;
         {**Удалить элемент по указателю}
-        function DeleteElementByP(pel:GDBPointer):GDBPointer;
+        function DeleteElementByP(pel:Pointer):Pointer;
         {**вставить элемент}
-        function InsertElement(index:GDBInteger;const data:T):GDBPointer;
+        function InsertElement(index:Integer;const data:T):Pointer;
         {need compilermagic}
-        procedure Grow(newmax:GDBInteger=0);virtual;abstract;
+        procedure Grow(newmax:Integer=0);virtual;abstract;
         {**Выделяет память под массив}
-        function CreateArray:GDBPointer;virtual;abstract;
+        function CreateArray:Pointer;virtual;abstract;
         {reworked}
         {**Устанавливает длину массива}
         procedure SetSize(nsize:TArrayIndex);
@@ -509,13 +510,13 @@ GZVector={$IFNDEF DELPHI}packed{$ENDIF}
         {**Добавить в конец массива значение, возвращает индекс добавленного значения}
         function PushBackData(const data:T):TArrayIndex;
         {**Добавить в конец массива значение если его еще нет в массиве, возвращает индекс найденного или добавленного значения}
-        function PushBackIfNotPresentWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
+        function PushBackIfNotPresentWithCompareProc(data:T;EqualFunc:TEqualFunc):Integer;
         {**Добавить в конец массива значение если оно еще не в конце массива, возвращает индекс найденного или добавленного значения}
-        function PushBackIfNotLastWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
+        function PushBackIfNotLastWithCompareProc(data:T;EqualFunc:TEqualFunc):Integer;
         {**Добавить в конец массива значение если оно еще не в конце массива или не в начале масива, возвращает индекс найденного или добавленного значения}
-        function PushBackIfNotLastOrFirstWithCompareProc(data:T;EqualFunc:TEqualFunc):GDBInteger;
+        function PushBackIfNotLastOrFirstWithCompareProc(data:T;EqualFunc:TEqualFunc):Integer;
         {**Проверка нахождения в массиве значения с функцией сравнения}
-        function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):GDBInteger;
+        function IsDataExistWithCompareProc(pobj:T;EqualFunc:TEqualFunc):Integer;
         {**Возвращает тип элемента массива}
         function GetSpecializedTypeInfo:PTypeInfo;inline;
         {**Возвращает размер элемента массива}
@@ -525,17 +526,17 @@ GZVector={$IFNDEF DELPHI}packed{$ENDIF}
         {**Очищает массив не убивая элементы, просто count:=0}
         procedure Clear;virtual;abstract;
         {**Возвращает реальное колво элементов, в данном случае=count}
-        function GetRealCount:GDBInteger;
+        function GetRealCount:Integer;
         {**Возвращает колво элементов}
-        function GetCount:GDBInteger;
+        function GetCount:Integer;
         {**Подрезать выделенную память по count}
         procedure Shrink;virtual;abstract;
   end;
 //Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectorsimple.pas
 GZVectorSimple={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVector)
-                                   function PushBackIfNotPresent(data:T):GDBInteger;
-                                   function IsDataExist(pobj:T):GDBInteger;
+                                   function PushBackIfNotPresent(data:T):Integer;
+                                   function IsDataExist(pobj:T):Integer;
                                  end;
 //Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectordata.pas
 GZVectorData={$IFNDEF DELPHI}packed{$ENDIF}
@@ -546,22 +547,22 @@ GZVectorData={$IFNDEF DELPHI}packed{$ENDIF}
 GZVectorP={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVectorSimple)
                                        Deleted:TArrayIndex;(*hidden_in_objinsp*)
-                                       function iterate (var ir:itrec):GDBPointer;virtual;abstract;
-                                       function beginiterate(out ir:itrec):GDBPointer;virtual;abstract;
+                                       function iterate (var ir:itrec):Pointer;virtual;abstract;
+                                       function beginiterate(out ir:itrec):Pointer;virtual;abstract;
                                        procedure RemoveData(const data:T);virtual;abstract;
-                                       function DeleteElement(index:GDBInteger):GDBPointer;
-                                       function GetRealCount:GDBInteger;
+                                       function DeleteElement(index:Integer):Pointer;
+                                       function GetRealCount:Integer;
                                        constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
                                        constructor initnul;
                                        procedure Clear;virtual;abstract;
-                                       function GetCount:GDBInteger;
+                                       function GetCount:Integer;
                                  end;
 //Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectorpdata.pas
 GZVectorPData={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVectorP)
-                                       procedure cleareraseobjfrom(n:GDBInteger);virtual;abstract;
-                                       procedure cleareraseobjfrom2(n:GDBInteger);virtual;abstract;
-                                       function getDataMutable(index:GDBInteger):PTData;
+                                       procedure cleareraseobjfrom(n:Integer);virtual;abstract;
+                                       procedure cleareraseobjfrom2(n:Integer);virtual;abstract;
+                                       function getDataMutable(index:Integer):PTData;
                                        procedure RemoveData(const data:PTData);virtual;abstract;
                                        procedure pack;virtual;abstract;
                                        procedure free;virtual;abstract;
@@ -584,8 +585,8 @@ GZVectorObjects={$IFNDEF DELPHI}packed{$ENDIF}
 //Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvectorsimple.pas
 GZVectorSimple={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVector)
-                                   function PushBackIfNotPresent(data:T):GDBInteger;
-                                   function IsDataExist(pobj:T):GDBInteger;
+                                   function PushBackIfNotPresent(data:T):Integer;
+                                   function IsDataExist(pobj:T):Integer;
                                  end;
 //Generate on E:/zcad/cad_source/components/zcontainers/uzctnrvectorgdbstring.pas
     PTZctnrVectorGDBString=^TZctnrVectorGDBString;
@@ -608,31 +609,31 @@ GZVectorSimple={$IFNDEF DELPHI}packed{$ENDIF}
 //Generate on E:/zcad/cad_source/components/zcontainers/UGDBOpenArrayOfByte.pas
 PGDBOpenArrayOfByte=^GDBOpenArrayOfByte;
 GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GZVector)
-                      ReadPos:GDBInteger;
-                      name:GDBString;
-                      constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                      ReadPos:Integer;
+                      name:AnsiString;
+                      constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:Integer);
                       constructor initnul;
-                      constructor InitFromFile(FileName:string);
-                      function AddByte(PData:GDBPointer):GDBInteger;virtual;abstract;
-                      function AddByteByVal(Data:GDBByte):GDBInteger;virtual;abstract;
-                      function AddWord(PData:GDBPointer):GDBInteger;virtual;abstract;
-                      function AddFontFloat(PData:GDBPointer):GDBInteger;virtual;abstract;
-                      procedure TXTAddGDBStringEOL(s:GDBString);virtual;abstract;
-                      procedure TXTAddGDBString(s:GDBString);virtual;abstract;
-                      function ReadData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
+                      constructor InitFromFile(FileName:Ansistring);
+                      function AddByte(PData:Pointer):Integer;virtual;abstract;
+                      function AddByteByVal(Data:Byte):Integer;virtual;abstract;
+                      function AddWord(PData:Pointer):Integer;virtual;abstract;
+                      function AddFontFloat(PData:Pointer):Integer;virtual;abstract;
+                      procedure TXTAddGDBStringEOL(s:AnsiString);virtual;abstract;
+                      procedure TXTAddGDBString(s:AnsiString);virtual;abstract;
+                      function ReadData(PData:Pointer;SData:Word):Integer;virtual;abstract;
                       //function PopData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
-                      function ReadString(break, ignore: GDBString): shortString;inline;
-                      function ReadGDBString: GDBString;inline;
-                      function ReadString2:GDBString;inline;
-                      function GetCurrentReadAddres:GDBPointer;virtual;abstract;
-                      function Jump(offset:GDBInteger):GDBPointer;virtual;abstract;
-                      function SaveToFile(FileName:string):GDBInteger;
-                      function ReadByte: GDBByte;
-                      function ReadWord: GDBWord;
+                      function ReadString(break, ignore: AnsiString): shortString;inline;
+                      function ReadGDBString: AnsiString;inline;
+                      function ReadString2:AnsiString;inline;
+                      function GetCurrentReadAddres:Pointer;virtual;abstract;
+                      function Jump(offset:Integer):Pointer;virtual;abstract;
+                      function SaveToFile(FileName:Ansistring):Integer;
+                      function ReadByte: Byte;
+                      function ReadWord: Word;
                       function GetChar(rp:integer): Ansichar;
-                      function Seek(pos:GDBInteger):integer;
-                      function notEOF:GDBBoolean;
-                      function readtoparser(break:GDBString): GDBString;
+                      function Seek(pos:Integer):integer;
+                      function notEOF:Boolean;
+                      function readtoparser(break:AnsiString):AnsiString;
                       destructor done;virtual;abstract;
                    end;
 //Generate on E:/zcad/cad_source/components/zcontainers/uzctnrvectorgdbpointer.pas
@@ -645,7 +646,7 @@ TZctnrVectorGDBPointer=packed object(GZVectorP) //TODO:почемуто не р�
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);
          TElemPosition=(TEP_Plus,TEP_Minus,TEP_nul);
          GZBInarySeparatedGeometry
-                                   ={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+                                   ={$IFNDEF DELPHI}packed{$ENDIF} object
          
             
                                                                   
@@ -686,9 +687,9 @@ TZctnrVectorGDBPointer=packed object(GZVectorP) //TODO:почемуто не р�
             procedure MoveSub(var node:GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>);
             function GetOptimalTestNode(var TNArray:array of TTestNode):integer;
             procedure StoreOptimalTestNode(var TestNode:TTestNode);
-            function nuliterate(var ir:itrec):GDBPointer;
-            function nulbeginiterate(out ir:itrec):GDBPointer;
-            function nulDeleteElement(index:GDBInteger):GDBPointer;
+            function nuliterate(var ir:itrec):Pointer;
+            function nulbeginiterate(out ir:itrec):Pointer;
+            function nulDeleteElement(index:Integer):Pointer;
           end;
 //Generate on E:/zcad/cad_source/zengine/containers/UGDBOpenArrayOfPV.pas
 PGDBObjOpenArrayOfPV=^GDBObjOpenArrayOfPV;
@@ -1339,8 +1340,8 @@ TOSMode=packed record
              end;
   TVariableAttributes=GDBInteger;
   vardesk =packed  record
-    name: GDBString;
-    username: GDBString;
+    name: TInternalScriptString;
+    username: TInternalScriptString;
     data: TTypedData;
     attrib:TVariableAttributes;
     class operator =(a, b: vardesk): Boolean;
@@ -1348,9 +1349,9 @@ TOSMode=packed record
 ptypemanagerdef=^typemanagerdef;
 typemanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                   procedure readbasetypes;virtual;abstract;
-                  procedure readexttypes(fn: GDBString);virtual;abstract;
-                  function _TypeName2Index(name: GDBString): GDBInteger;virtual;abstract;
-                  function _TypeName2PTD(name: GDBString):PUserTypeDescriptor;virtual;abstract;
+                  procedure readexttypes(fn: TInternalScriptString);virtual;abstract;
+                  function _TypeName2Index(name: TInternalScriptString): GDBInteger;virtual;abstract;
+                  function _TypeName2PTD(name: TInternalScriptString):PUserTypeDescriptor;virtual;abstract;
                   function _TypeIndex2PTD(ind:integer):PUserTypeDescriptor;virtual;abstract;
                   function getDataMutable(index:TArrayIndex):GDBPointer;virtual;abstract;
                   function getcount:TArrayIndex;virtual;abstract;
@@ -1361,23 +1362,23 @@ pvarmanagerdef=^varmanagerdef;
 varmanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                  {vardescarray:GDBOpenArrayOfData;
                  vararray:GDBOpenArrayOfByte;}
-                 function findvardesc(varname:GDBString): pvardesk;virtual;abstract;
-                 function createvariable(varname:GDBString; var vd:vardesk): pvardesk;virtual;abstract;
-                 procedure createvariablebytype(varname,vartype:GDBString);virtual;abstract;
-                 procedure createbasevaluefromGDBString(varname: GDBString; varvalue: GDBString; var vd: vardesk);virtual;abstract;
+                 function findvardesc(varname:TInternalScriptString): pvardesk;virtual;abstract;
+                 function createvariable(varname:TInternalScriptString; var vd:vardesk): pvardesk;virtual;abstract;
+                 procedure createvariablebytype(varname,vartype:TInternalScriptString);virtual;abstract;
+                 procedure createbasevaluefromGDBString(varname: TInternalScriptString; varvalue: TInternalScriptString; var vd: vardesk);virtual;abstract;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: shortString): GDBBoolean;virtual;abstract;
            end;
 //Generate on E:/zcad/cad_source/components/zscript/varman.pas
 ptypemanager=^typemanager;
 typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)
                   protected
-                  exttype:TZctnrVectorPGDBaseObjects;
                   n2i:TNameToIndex;
                   public
+                  exttype:TZctnrVectorPGDBaseObjects;
                   constructor init;
                   procedure CreateBaseTypes;virtual;abstract;
-                  function _TypeName2PTD(name: GDBString):PUserTypeDescriptor;virtual;abstract;
-                  function _ObjectTypeName2PTD(name: GDBString):PObjectDescriptor;virtual;abstract;
+                  function _TypeName2PTD(name: TInternalScriptString):PUserTypeDescriptor;virtual;abstract;
+                  function _ObjectTypeName2PTD(name: TInternalScriptString):PObjectDescriptor;virtual;abstract;
                   function _TypeIndex2PTD(ind:integer):PUserTypeDescriptor;virtual;abstract;
                   destructor done;virtual;abstract;
                   destructor systemdone;virtual;abstract;
@@ -1394,10 +1395,10 @@ varmanager={$IFNDEF DELPHI}packed{$ENDIF} object(varmanagerdef)
             vardescarray:{GDBOpenArrayOfData}Tvardescarray;
             vararray:GDBOpenArrayOfByte;
                  constructor init;
-                 function findvardesc(varname:GDBString): pvardesk;virtual;abstract;
+                 function findvardesc(varname:TInternalScriptString): pvardesk;virtual;abstract;
                  function findvardescbyinst(varinst:GDBPointer):pvardesk;virtual;abstract;
                  function findvardescbytype(pt:PUserTypeDescriptor):pvardesk;virtual;abstract;
-                 function createvariable(varname:GDBString; var vd:vardesk): pvardesk;virtual;abstract;
+                 function createvariable(varname:TInternalScriptString; var vd:vardesk): pvardesk;virtual;abstract;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: ShortString): GDBBoolean;virtual;abstract;
                  destructor done;virtual;abstract;
                  procedure free;virtual;abstract;
@@ -1406,19 +1407,19 @@ TunitPart=(TNothing,TInterf,TImpl,TProg);
 PTUnit=^TUnit;
 PTSimpleUnit=^TSimpleUnit;
 TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractUnit)
-                  Name:GDBString;
+                  Name:TInternalScriptString;
                   InterfaceUses:TZctnrVectorGDBPointer;
                   InterfaceVariables: varmanager;
-                  constructor init(nam:GDBString);
+                  constructor init(nam:TInternalScriptString);
                   destructor done;virtual;abstract;
-                  function CreateVariable(varname,vartype:GDBString;_pinstance:pointer=nil):GDBPointer;virtual;abstract;
-                  function FindVariable(varname:GDBString):pvardesk;virtual;abstract;
+                  function CreateVariable(varname,vartype:TInternalScriptString;_pinstance:pointer=nil):GDBPointer;virtual;abstract;
+                  function FindVariable(varname:TInternalScriptString):pvardesk;virtual;abstract;
                   function FindVariableByInstance(_Instance:GDBPointer):pvardesk;virtual;abstract;
-                  function FindValue(varname:GDBString):GDBPointer;virtual;abstract;
-                  function TypeName2PTD(n: GDBString):PUserTypeDescriptor;virtual;abstract;
+                  function FindValue(varname:TInternalScriptString):GDBPointer;virtual;abstract;
+                  function TypeName2PTD(n: TInternalScriptString):PUserTypeDescriptor;virtual;abstract;
                   function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
                   function SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
-                  procedure setvardesc(out vd: vardesk; varname, username, typename: GDBString;_pinstance:pointer=nil);
+                  procedure setvardesc(out vd: vardesk; varname, username, typename: TInternalScriptString;_pinstance:pointer=nil);
                   procedure free;virtual;abstract;
                   procedure CopyTo(source:PTSimpleUnit);virtual;abstract;
                   procedure CopyFrom(source:PTSimpleUnit);virtual;abstract;
@@ -1433,11 +1434,11 @@ TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
             //ImplementationUses:GDBInteger;
             ImplementationTypes:typemanager;
             ImplementationVariables: varmanager;
-            constructor init(nam:GDBString);
+            constructor init(nam:TInternalScriptString);
             function TypeIndex2PTD(ind:GDBinteger):PUserTypeDescriptor;virtual;abstract;
-            function TypeName2PTD(n: GDBString):PUserTypeDescriptor;virtual;abstract;
-            function ObjectTypeName2PTD(n: GDBString):PObjectDescriptor;virtual;abstract;
-            function AssignToSymbol(var psymbol;symbolname:GDBString):GDBInteger;
+            function TypeName2PTD(n: TInternalScriptString):PUserTypeDescriptor;virtual;abstract;
+            function ObjectTypeName2PTD(n: TInternalScriptString):PObjectDescriptor;virtual;abstract;
+            function AssignToSymbol(var psymbol;symbolname:TInternalScriptString):GDBInteger;
             function SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
             destructor done;virtual;abstract;
             procedure free;virtual;abstract;
@@ -2337,7 +2338,7 @@ GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorObjects)(*Open
                       function create(name:GDBString):PGDBObjBlockdef;virtual;abstract;
                       procedure freeelement(PItem:PT);virtual;abstract;
                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
-                      procedure Grow(newmax:GDBInteger=0);virtual;abstract;
+                      procedure Grow(newmax:Integer=0);virtual;abstract;
                       procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;abstract;
                     end;
 //Generate on E:/zcad/cad_source/zengine/core/entities/uzeentcomplex.pas

@@ -21,7 +21,7 @@ unit UGDBGraf;
 interface
 uses varman,uzedrawingdef,varmandef,UGDBPoint3DArray,uzbtypesbase,gzctnrvectordata,
      uzbgeomtypes,sysutils,uzbtypes,uzegeometry,uzeentity,UGDBOpenArrayOfPV,
-     uzcenitiesvariablesextender,uzeentline,math;
+     gzctnrvectortypes,uzcenitiesvariablesextender,uzeentline,math;
 type
 {EXPORT+}
 PTLinkType=^TLinkType;

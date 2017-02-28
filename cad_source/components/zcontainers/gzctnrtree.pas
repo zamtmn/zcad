@@ -20,14 +20,14 @@ unit gzctnrtree;
 {$INCLUDE def.inc}
 interface
 uses
-    gzctnrvectorpobjects,uzbtypesbase,uzbtypes,uzbmemman,gzctnrvectorsimple;
+    gzctnrvectortypes,gzctnrvectorpobjects,uzbmemman,gzctnrvectorsimple;
 type
 {EXPORT+}
          TStageMode=(TSMStart,TSMAccumulation,TSMCalc,TSMEnd);
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);
          TElemPosition=(TEP_Plus,TEP_Minus,TEP_nul);
          GZBInarySeparatedGeometry{-}<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>{//}
-                                   ={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
+                                   ={$IFNDEF DELPHI}packed{$ENDIF} object
          {-}type{//}
             {-}PGZBInarySeparatedGeometry=^GZBInarySeparatedGeometry<TBoundingBox,//ограничивающий объем{//}
                                                                   {-}TSeparator,//разделитель{//}
@@ -38,7 +38,7 @@ type
                                                                   {-}TEntityArray>;//массив примитивов{//}
             {-}(*TEntityArray={GZVectorPObects}GZVectorSimple<PTEntity{,TEntity}>;*){//}
             {-}PTEntity=^TEntity;{//}
-            {-}TTestNode=Object(GDBaseObject){//}
+            {-}TTestNode=Object{//}
                  {-}plane:TSeparator;{//}
                  {-}nul,plus,minus:TEntityArray;{//}
                  {-}constructor initnul(InNodeCount:integer);{//}
@@ -69,9 +69,9 @@ type
             function GetOptimalTestNode(var TNArray:array of TTestNode):integer;
             procedure StoreOptimalTestNode(var TestNode:TTestNode);
 
-            function nuliterate(var ir:itrec):GDBPointer;
-            function nulbeginiterate(out ir:itrec):GDBPointer;
-            function nulDeleteElement(index:GDBInteger):GDBPointer;
+            function nuliterate(var ir:itrec):Pointer;
+            function nulbeginiterate(out ir:itrec):Pointer;
+            function nulDeleteElement(index:Integer):Pointer;
           end;
 {EXPORT-}
 implementation
@@ -134,17 +134,17 @@ begin
                                     end;
   end;
 end;
-function GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.nuliterate(var ir:itrec):GDBPointer;
+function GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.nuliterate(var ir:itrec):Pointer;
 begin
   result:=nul.iterate(ir);
   result:=TEntsManipulator.IterateResult2PEntity(result);
 end;
-function GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.nulbeginiterate(out ir:itrec):GDBPointer;
+function GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.nulbeginiterate(out ir:itrec):Pointer;
 begin
   result:=nul.beginiterate(ir);
   result:=TEntsManipulator.IterateResult2PEntity(result);
 end;
-function GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.nulDeleteElement(index:GDBInteger):GDBPointer;
+function GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.nulDeleteElement(index:Integer):Pointer;
 begin
   result:=nul.DeleteElement(index);
 end;

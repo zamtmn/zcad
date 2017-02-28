@@ -3,6 +3,7 @@ components/zebase/uzbgeomtypes.pas
 components/zebase/uzbtypes.pas
 components/zmath/uzedimensionaltypes.pas 
 zengine/core/objects/uzepalette.pas
+components/zcontainers/gzctnrvectortypes.pas
 components/zcontainers/gzctnrvector.pas
 components/zcontainers/gzctnrvectorsimple.pas
 components/zcontainers/gzctnrvectordata.pas

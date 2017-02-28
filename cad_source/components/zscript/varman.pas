@@ -25,7 +25,7 @@ interface
 uses
   UEnumDescriptor,uzctnrvectorgdbpointer,gzctnrvectordata,gzctnrvectorpobjects,LCLProc,uabstractunit,
   SysUtils,UBaseTypeDescriptor,uzbtypesbase,uzbtypes,UGDBOpenArrayOfByte,
-  uzctnrvectorgdbstring,varmandef,gzctnrstl,uzbmemman,
+  gzctnrvectortypes,uzctnrvectorgdbstring,varmandef,gzctnrstl,uzbmemman,
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,UPointerDescriptor;
 type
     td=record

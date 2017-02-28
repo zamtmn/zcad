@@ -19,7 +19,7 @@
 unit UGDBNamedObjectsArray;
 {$INCLUDE def.inc}
 interface
-uses gzctnrvectorpobjects,sysutils,uzbtypes,uzegeometry,uzbtypesbase;
+uses gzctnrvectortypes,gzctnrvectorpobjects,sysutils,uzbtypes,uzegeometry,uzbtypesbase;
 type
 {EXPORT+}
 TForCResult=(IsFounded(*'IsFounded'*)=1,

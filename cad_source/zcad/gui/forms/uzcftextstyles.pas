@@ -32,7 +32,7 @@ uses
 
   uzbpaths,uzcinterface, uzcstrconsts, uzcsysinfo,uzbstrproc, uzcshared,UBaseTypeDescriptor,
   uzcimagesmanager, usupportgui, ZListView,uzefontmanager,varman,uzctnrvectorgdbstring,
-  uzeentity,uzeenttext;
+  gzctnrvectortypes,uzeentity,uzeenttext;
 
 const
      NameColumn=0;

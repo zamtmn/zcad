@@ -23,7 +23,7 @@ interface
 uses
   uzcinterface,LazLoggerBase,uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,uzbmemman,uzcshared,
   uzedimensionaltypes,uzcstrconsts,sysutils,uzeentityfactory,uzcenitiesvariablesextender,uzgldrawcontext,
-  uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,Varman,uzctnrvectorgdbstring,UGDBSelectedObjArray;
+  gzctnrvectortypes,uzbtypes,uzcdrawings,varmandef,uzeentity,uzbtypesbase,Varman,uzctnrvectorgdbstring,UGDBSelectedObjArray;
 type
   PTOneVarData=^TOneVarData;
   TOneVarData=record

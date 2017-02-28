@@ -20,7 +20,7 @@ unit UGDBObjBlockdefArray;
 {$INCLUDE def.inc}
 interface
 uses LCLProc,uzgldrawcontext,uzedrawingdef,uzbstrproc,uzeblockdef,gzctnrvectorobjects,
-     sysutils,uzbtypes,uzbmemman,uzegeometry,uzbtypesbase;
+     gzctnrvectortypes,sysutils,uzbtypes,uzbmemman,uzegeometry,uzbtypesbase;
 type
 {REGISTEROBJECTTYPE GDBObjBlockdefArray}
 {Export+}
@@ -37,7 +37,7 @@ GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorObjects{-}<GDB
                       function create(name:GDBString):PGDBObjBlockdef;virtual;
                       procedure freeelement(PItem:PT);virtual;
                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                      procedure Grow(newmax:GDBInteger=0);virtual;
+                      procedure Grow(newmax:Integer=0);virtual;
                       procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
                     end;
 {Export-}

@@ -19,15 +19,15 @@
 unit gzctnrvectorpdata;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,gzctnrvectorp,
-     uzbtypes,uzbmemman;
+uses {uzbtypesbase,}gzctnrvectorp,
+     gzctnrvectortypes,uzbtypes,uzbmemman;
 type
 {Export+}
 GZVectorPData{-}<PTData,TData>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVectorP{-}<PTData>{//})
-                                       procedure cleareraseobjfrom(n:GDBInteger);virtual;
-                                       procedure cleareraseobjfrom2(n:GDBInteger);virtual;
-                                       function getDataMutable(index:GDBInteger):PTData;
+                                       procedure cleareraseobjfrom(n:Integer);virtual;
+                                       procedure cleareraseobjfrom2(n:Integer);virtual;
+                                       function getDataMutable(index:Integer):PTData;
                                        procedure RemoveData(const data:PTData);virtual;
                                        procedure pack;virtual;
                                        procedure free;virtual;
@@ -44,7 +44,7 @@ begin
   if p<>nil then
   repeat
        p.done;
-       GDBFreeMem(GDBPointer(p));
+       GDBFreeMem(Pointer(p));
        p:=iterate(ir);
   until p=nil;
   count:=0;
@@ -59,7 +59,7 @@ begin
   if p<>nil then
   repeat
        p^.done;
-       GDBFreeMem(GDBPointer(p));
+       GDBFreeMem(Pointer(p));
        p:=iterate(ir);
   until p=nil;
   count:=0;
@@ -77,7 +77,7 @@ begin
                          begin
                               p.done;
                               pointer(ir.itp^):=nil;
-                              GDBFreeMem(GDBPointer(p));
+                              GDBFreeMem(Pointer(p));
                               exit;
                          end;
        p:=iterate(ir);
@@ -132,12 +132,12 @@ begin
   repeat
        p^.done;
        if ir.itc>n then
-                       GDBFreeMem(GDBPointer(p));
+                       GDBFreeMem(Pointer(p));
        p:=iterate(ir);
   until p=nil;
   count:=0;
 end;
-procedure GZVectorPData<PTData,TData>.cleareraseobjfrom2(n:GDBInteger);
+procedure GZVectorPData<PTData,TData>.cleareraseobjfrom2(n:Integer);
 var
   p:PGDBaseObject;
       ir:itrec;
@@ -148,7 +148,7 @@ begin
        if ir.itc>=n then
                        begin
                        p^.done;
-                       GDBFreeMem(GDBPointer(p));
+                       GDBFreeMem(Pointer(p));
                        end;
        p:=iterate(ir);
   until p=nil;

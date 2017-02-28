@@ -19,7 +19,7 @@
 unit gzctnrvectordata;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzbtypes,gzctnrvector;
+uses gzctnrvector;
 type
 {Export+}
 GZVectorData{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}

@@ -80,10 +80,6 @@ PGDBPointer=^GDBPointer;
 PGDBPtrUInt=^GDBPtrUInt;
 {-}GDBPtrUInt=type PtrUInt;{//}
 
-itrec=packed record
-            itp:{-}PGDBPointer{/GDBPointer/};
-            itc:GDBInteger;
-      end;
 {EXPORT-}
 GDBPlatformInt=PtrInt;
 GDBPlatformUInt=PtrUInt;

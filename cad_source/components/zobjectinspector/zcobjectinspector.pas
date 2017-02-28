@@ -37,9 +37,9 @@ uses
   //propertysupport UObjectDescriptor,
   uzedimensionaltypes,
   varmandef,
-  uzbtypes,uzbtypesbase,
+  uzbtypes,//uzbtypesbase,
   TypeDescriptors,
-  uzctnrvectorgdbstring;
+  gzctnrvectortypes,uzctnrvectorgdbstring;
 const
   fastEditorOffset={$IFDEF LCLQT}2{$ELSE}2{$ENDIF} ;
   spliterhalfwidth=4;
@@ -734,7 +734,7 @@ procedure drawvalue(ppd:PPropertyDeskriptor;canvas:tcanvas;fulldraw:boolean;Text
 var
    r:trect;
    tempcolor:TColor;
-   value:gdbstring;
+   value:string;
 begin
      if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
      begin
@@ -795,7 +795,7 @@ end;
 
 procedure TGDBobjinsp.InternalDrawprop(PPA:PTPropertyDeskriptorArray; var y,sub:integer;miny:integer;arect:TRect;var LastPropAddFreespace:Boolean);
 var
-  s:GDBString;
+  s:String;
   ppd:PPropertyDeskriptor;
   r:trect;
   tempcolor:TColor;
@@ -1357,7 +1357,7 @@ var
 //  tb:boolean;
 //  pb:Pboolean;
   tp:pointer;
-  tempstr:gdbstring;
+  tempstr:string;
   FESize:TSize;
   needredraw:boolean;
 begin
@@ -1580,12 +1580,12 @@ var
   TED:TEditorDesc;
   editorcontrol:TWinControl;
   tr:TRect;
-  initialvalue:GDBString;
+  initialvalue:String;
 begin
      if pp^.SubNode<>nil then
      begin
        StoreAndFreeEditor;
-       if pGDBByte(pp^.Collapsed)^<>0 then pGDBByte(pp^.Collapsed)^:=1;
+       if pByte(pp^.Collapsed)^<>0 then pByte(pp^.Collapsed)^:=1;
                                            pp^.Collapsed^:=not(pp^.Collapsed^);
        updateinsp;
        //draw;

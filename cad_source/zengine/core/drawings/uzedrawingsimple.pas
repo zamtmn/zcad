@@ -20,7 +20,7 @@ unit uzedrawingsimple;
 {$INCLUDE def.inc}
 interface
 uses uzedrawingdef,uzeblockdefsfactory,uzestylesdim,uzeentwithlocalcs,
-     uzedrawingabstract,uzbstrproc,UGDBObjBlockdefArray,uzestylestables,
+     gzctnrvectortypes,uzedrawingabstract,uzbstrproc,UGDBObjBlockdefArray,uzestylestables,
      UGDBNumerator,uzbtypes,sysutils, uzbmemman,uzegeometry,uzbtypesbase,uzeentgenericsubentry,
      uzestyleslayers,uzestyleslinetypes,uzeentity,UGDBSelectedObjArray,uzestylestexts,
      uzedimensionaltypes,uzbgeomtypes,uzecamera,UGDBOpenArrayOfPV,uzeroot,uzefont,

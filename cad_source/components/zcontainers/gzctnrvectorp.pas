@@ -19,22 +19,22 @@
 unit gzctnrvectorp;
 {$INCLUDE def.inc}
 interface
-uses uzbtypes,uzbtypesbase,sysutils,gzctnrvector,gzctnrvectorsimple;
+uses gzctnrvectortypes,{uzbtypesbase,}sysutils,gzctnrvector,gzctnrvectorsimple;
 type
 {Export+}
 GZVectorP{-}<T>{//}={$IFNDEF DELPHI}packed{$ENDIF}
                                  object(GZVectorSimple{-}<T>{//})
                                        Deleted:TArrayIndex;(*hidden_in_objinsp*)
-                                       function iterate (var ir:itrec):GDBPointer;virtual;
-                                       function beginiterate(out ir:itrec):GDBPointer;virtual;
+                                       function iterate (var ir:itrec):Pointer;virtual;
+                                       function beginiterate(out ir:itrec):Pointer;virtual;
                                        procedure RemoveData(const data:T);virtual;
-                                       function DeleteElement(index:GDBInteger):GDBPointer;
-                                       function GetRealCount:GDBInteger;
+                                       function DeleteElement(index:Integer):Pointer;
+                                       function GetRealCount:Integer;
 
                                        constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:TArrayIndex);
                                        constructor initnul;
                                        procedure Clear;virtual;
-                                       function GetCount:GDBInteger;
+                                       function GetCount:Integer;
                                  end;
 {Export-}
 function EqualFuncPointer(const a, b: pointer):Boolean;
@@ -43,7 +43,7 @@ function EqualFuncPointer(const a, b: pointer):Boolean;
 begin
   result:=(a=b);
 end;
-function GZVectorP<T>.DeleteElement(index:GDBInteger):GDBPointer;
+function GZVectorP<T>.DeleteElement(index:Integer):Pointer;
 begin
   if (index>=0)and(index<count)then
   begin
@@ -52,7 +52,7 @@ begin
   result:=parray;
 end;
 
-function GZVectorP<T>.GetCount:GDBInteger;
+function GZVectorP<T>.GetCount:Integer;
 begin
   result:=count-deleted;
 end;
@@ -84,8 +84,8 @@ begin
                           result:=iterate(ir);
                     end;
 end;
-function GZVectorP<T>.GetRealCount:GDBInteger;
-var p:GDBPointer;
+function GZVectorP<T>.GetRealCount:Integer;
+var p:Pointer;
     ir:itrec;
 begin
   result:=0;
@@ -98,12 +98,12 @@ begin
 end;
 function GZVectorP<T>.iterate;
 var
-  p:GDBPointer;
+  p:Pointer;
 begin
   result:=nil;
   if count=0 then exit;
 
-  inc(pGDBByte(ir.itp),SizeOfData);
+  inc(pByte(ir.itp),SizeOfData);
   inc(ir.itc);
 
   if ir.itc>=count then exit;
@@ -111,14 +111,14 @@ begin
 
   if p=nil then
   repeat
-  inc(pGDBByte(ir.itp),SizeOfData);
+  inc(pByte(ir.itp),SizeOfData);
   inc(ir.itc);
   if ir.itc<>count then p:=ir.itp^;
   until (ir.itc=count)or(p<>nil);
   result:=p;
 end;
 procedure GZVectorP<T>.RemoveData(const data:T);
-var p:GDBPointer;
+var p:Pointer;
     ir:itrec;
 begin
        p:=beginiterate(ir);

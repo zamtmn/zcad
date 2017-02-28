@@ -19,7 +19,7 @@
 unit UGDBNumerator;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase,uzbtypes{,UGDBOpenArrayOfData,UGDBOpenArrayOfByte},sysutils,UGDBNamedObjectsArray;
+uses uzbtypesbase,uzbtypes,gzctnrvectortypes,sysutils,UGDBNamedObjectsArray;
 type
 {EXPORT+}
 PGDBNumItem=^GDBNumItem;

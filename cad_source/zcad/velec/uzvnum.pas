@@ -55,7 +55,8 @@ uses
 
   URecordDescriptor,TypeDescriptors,
 
-  Forms, uzcfblockinsert, uzcfarrayinsert,
+  Forms, //uzcfblockinsert,
+   uzcfarrayinsert,
 
   uzeentblockinsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока
@@ -1119,7 +1120,7 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadD
 
       drawing:PTSimpleDrawing; //для работы с чертежом
       pobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
-      ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
+      //ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
       numHead,numHeadGroup,numHeadDev : integer;
       shortNameHead, headDevName, groupName:string;
       counter,counter2,counterColor:integer; //счетчики

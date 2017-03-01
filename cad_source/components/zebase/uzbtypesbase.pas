@@ -45,7 +45,7 @@ PGDBFloat=^GDBFloat;
 {-}GDBFloat=type single;{/GDBFloat=Single;/}
 
 PGDBString=^GDBString;
-{-}GDBString=type ansistring;{/GDBString=ansistring;/}
+{-}GDBString=type ansistring;{/GDBString=string;/}
 
 PGDBAnsiString=^GDBAnsiString;
 {-}GDBAnsiString=type ansistring;{/GDBAnsiString=ansistring;/}

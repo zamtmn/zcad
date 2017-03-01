@@ -14,7 +14,7 @@ PGDBAngleDouble=^GDBAngleDouble;
 PGDBFloat=^GDBFloat;
 GDBFloat=Single;
 PGDBString=^GDBString;
-GDBString=ansistring;
+GDBString=string;
 PGDBAnsiString=^GDBAnsiString;
 GDBAnsiString=ansistring;
 PGDBBoolean=^GDBBoolean;
@@ -443,7 +443,7 @@ PExtensionData=GDBPointer;
 //Generate on E:/zcad/cad_source/components/zcontainers/gzctnrvector.pas
 {**Генерик объекта-массива}
 GZVector={$IFNDEF DELPHI}packed{$ENDIF}
-  object
+  object(GDBaseObject)
     
                                              //**< Тип указатель на тип данных T
                              //**< Тип массив данных T

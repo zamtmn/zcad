@@ -29,7 +29,7 @@ const
 
   basicoperatorcount = 5;
   basicfunctioncount = 1;
-  basicoperatorparamcount = 27;
+  basicoperatorparamcount = 28;
   basicfunctionparamcount = 1;
   {foneGDBBoolean = #7;
   foneGDBByte = #8;
@@ -90,6 +90,7 @@ function TGDBDouble_let_TGDBDouble(var rez, hrez: vardesk): vardesk;
 function TGDBInteger_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function TGDBString_let_TGDBString(var rez, hrez: vardesk): vardesk;
 function TGDBAnsiString_let_TGDBString(var rez, hrez: vardesk): vardesk;
+function TGDBAnsiString_let_TGDBAnsiString(var rez, hrez: vardesk): vardesk;
 function TGDBByte_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function TGDBBoolean_let_TGDBBoolean(var rez, hrez: vardesk): vardesk;
 
@@ -157,6 +158,7 @@ const
     , (name: '*'; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBDouble_mul_TGDBInteger)
     , (name: '*'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_mul_TGDBDouble)
     , (name: '*'; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBDouble_mul_TGDBDouble)
+    , (name: ':='; param: @FundamentalAnsiStringDescriptorObj; hparam: @FundamentalAnsiStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBAnsiString_let_TGDBAnsiString)
     );
 type
 TFunctionTypeArray=array of functiontype;
@@ -360,7 +362,23 @@ begin
   GDBAnsiString(result.data.Instance^) := Tria_Utf8ToAnsi(GDBString(hrez.data.Instance^));
   GDBAnsiString(rez.data.Instance^) := Tria_Utf8ToAnsi(GDBString(hrez.data.Instance^));
 end;
-
+function TGDBAnsiString_let_TGDBAnsiString(var rez, hrez: vardesk): vardesk;
+begin
+  pGDBInteger(result.data.Instance) := nil;
+  result.data.ptd:=@FundamentalAnsiStringDescriptorObj;
+  result.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}result.data.Instance,FundamentalAnsiStringDescriptorObj.SizeInGDBBytes);
+  ppointer(result.data.Instance)^:=nil;
+  if rez.data.Instance=nil then
+                               begin
+                               GDBGetMem({$IFDEF DEBUGBUILD}'{ED860FE9-3A15-459D-B352-7FA4A3AE6F49}',{$ENDIF}rez.data.Instance,FundamentalAnsiStringDescriptorObj.SizeInGDBBytes);
+                               ppointer(rez.data.Instance)^:=nil;
+                               end
+                          else
+                              GDBAnsiString(rez.data.Instance^):='';
+  GDBAnsiString(result.data.Instance^) := {Tria_Utf8ToAnsi}(GDBAnsiString(hrez.data.Instance^));
+  GDBAnsiString(rez.data.Instance^) := {Tria_Utf8ToAnsi}(GDBAnsiString(hrez.data.Instance^));
+end;
 function TGDBInteger_minus_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;

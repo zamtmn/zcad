@@ -130,7 +130,7 @@ begin
   begin
      for j:=0 to listHeadDevice[i].listGroup.Size -1 do
         begin
-             if counterColor=7 then
+             if counterColor=4 then
                   counterColor:=1;
              uzvnum.visualGroupLine(listHeadDevice,graphCable,counterColor,i,j,uzvslagcabComParams.accuracy);
              counterColor:=counterColor+1;
@@ -196,7 +196,7 @@ end;
 initialization
   //начальные значения параметров
   uzvslagcabComParams.nameSL:='-';
-  uzvslagcabComParams.accuracy:=0.1;
+  uzvslagcabComParams.accuracy:=0.3;
   uzvslagcabComParams.option2:=false;
 
 

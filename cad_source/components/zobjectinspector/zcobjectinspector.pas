@@ -34,10 +34,8 @@ uses
   usupportgui,
   zeundostack,zebaseundocommands,
 
-  //propertysupport UObjectDescriptor,
   uzedimensionaltypes,
   varmandef,
-  uzbtypes,//uzbtypesbase,
   TypeDescriptors,
   gzctnrvectortypes,uzctnrvectorgdbstring;
 const
@@ -52,6 +50,7 @@ const
     ttHotGlyphOpened)
   );
 type
+  TIsCurrObjInUndoContext=function(_GDBobj:boolean;_pcurrobj:pointer):boolean;
   arrindop=record
     currnum,currcount,num,count:integer;
   end;
@@ -93,6 +92,7 @@ type
     OnMousePP:PPropertyDeskriptor;
 
     MResplit:boolean;
+    _IsCurrObjInUndoContext:TIsCurrObjInUndoContext;
 
     procedure draw; virtual;
     procedure mypaint(sender:tobject);
@@ -124,7 +124,8 @@ type
     function IsMouseOnSpliter(pp:PPropertyDeskriptor; X,Y:Integer):boolean;
 
     procedure createeditor(pp:PPropertyDeskriptor);
-    function CurrObjIsEntity:boolean;
+    function IsCurrObjInUndoContext(_GDBobj:boolean;_pcurrobj:pointer):boolean;
+    constructor Create(AOwner: TComponent); override;
 
     function IsHeadersEnabled:boolean;
     function HeadersHeight:integer;
@@ -164,7 +165,6 @@ function  GetCurrentObj:Pointer;
 procedure ClrarIfItIs(const f:TzeUnitsFormat;addr:pointer);
 procedure SetNameColWidth(w:integer);
 function GetNameColWidth:integer;
-function CreateObjInspInstance:TForm;
 function GetPeditor:TComponent;
 procedure FreEditor;
 procedure StoreAndFreeEditor;
@@ -183,7 +183,11 @@ var
   INTFObjInspShowFastEditors:boolean=true;
   INTFObjInspShowOnlyHotFastEditors:boolean=true;
   INTFDefaultControlHeight:integer=21;
-  INTFObjInspRowHeight:TGDBIntegerOverrider;
+  LocalRowHeight:integer=21;
+  LocalRowHeightOverride:boolean=false;
+  PRowHeight:PInteger;
+  PRowHeightOverride:PBoolean;
+  //INTFObjInspRowHeight:TGDBIntegerOverrider;
   INTFObjInspSpaceHeight:integer=0;
   INTFObjInspShowEmptySections:boolean=false;
 
@@ -337,12 +341,6 @@ begin
                                        GDBobjinsp.namecol:=w;
                                   end;
 end;
-function CreateObjInspInstance:TForm;
-begin
-     GDBobjinsp:=TGDBObjInsp.Create(Application);
-     //result:=GDBobjinsp;
-     result:=tform(TForm.NewInstance);
-end;
 function GetPeditor:TComponent;
 begin
        if assigned(GDBobjinsp)then
@@ -419,9 +417,9 @@ begin
   //spaceh:=5;
   rowh:=INTFDefaultControlHeight;
 
-  if INTFObjInspRowHeight.Enable then
-  if INTFObjInspRowHeight.Value>0 then
-                                      rowh:=INTFObjInspRowHeight.Value;
+  if {INTFObjInspRowHeight.Enable}PRowHeightOverride^ then
+  if {INTFObjInspRowHeight.Value}PRowHeight^>0 then
+                                      rowh:={INTFObjInspRowHeight.Value}PRowHeight^;
    //spaceh:=INTFObjInspSpaceHeight;
 end;
 
@@ -1539,7 +1537,7 @@ begin
                                                                                                                                      pp.FastEditor.OnRunFastEditor(pp.valueAddres)
                                                                                                                                  else
                                                                                                                                      begin
-                                                                                                                                     if CurrObjIsEntity then
+                                                                                                                                     if IsCurrObjInUndoContext(GDBobj,pcurrobj) then
                                                                                                                                      begin
                                                                                                                                      //EDContext.UndoStack:=GetUndoStack;
                                                                                                                                      EDContext.UndoCommand:=EDContext.UndoStack.PushCreateTTypedChangeCommand(pp^.valueAddres,pp^.PTypeManager);
@@ -1565,14 +1563,19 @@ begin
                             end;
 
 end;
-function TGDBobjinsp.CurrObjIsEntity;
+function TGDBobjinsp.IsCurrObjInUndoContext;
 begin
-result:=false;
-            if GDBobj then
-            if PGDBaseObject(pcurrobj)^.IsEntity then
-            //if PGDBObjEntity(pcurrobj).bp.ListPos.Owner=PTDrawingDef(pcurcontext)^.GetCurrentRootSimple then
-                                                     result:=true;
+  if assigned(_IsCurrObjInUndoContext) then
+    result:=_IsCurrObjInUndoContext(_GDBobj,_pcurrobj)
+  else
+    result:=false;
 end;
+constructor TGDBobjinsp.Create(AOwner: TComponent);
+begin
+     inherited;
+     _IsCurrObjInUndoContext:=nil;
+end;
+
 procedure TGDBobjinsp.createeditor(pp:PPropertyDeskriptor);
 var
   tp:pointer;
@@ -1647,7 +1650,7 @@ begin
             EDContext.ppropcurrentedit:=pp;
             //EDContext.UndoStack:=GetUndoStack;
 
-            if CurrObjIsEntity then
+            if IsCurrObjInUndoContext(GDBobj,pcurrobj) then
             if EDContext.UndoStack<>nil then
             begin
                  EDContext.UndoCommand:=EDContext.UndoStack.PushCreateTTypedChangeCommand(EDContext.ppropcurrentedit^.valueAddres,EDContext.ppropcurrentedit^.PTypeManager);
@@ -1885,5 +1888,7 @@ begin
   RegisterComponents('zcadcontrols',[TGDBobjinsp]);
 end;
 initialization
+  PRowHeight:=@LocalRowHeight;
+  PRowHeightOverride:=@LocalRowHeightOverride;
 end.
 

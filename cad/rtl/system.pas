@@ -5,12 +5,6 @@ type
 //Generate on E:/zcad/cad_source/components/zebase/uzbtypesbase.pas
 PGDBDouble=^GDBDouble;
 GDBDouble=Double;
-PGDBNonDimensionDouble=^GDBNonDimensionDouble;
-
-PGDBAngleDegDouble=^GDBAngleDegDouble;
-
-PGDBAngleDouble=^GDBAngleDouble;
-
 PGDBFloat=^GDBFloat;
 GDBFloat=Single;
 PGDBString=^GDBString;
@@ -372,6 +366,12 @@ TImageDegradation=packed record
                     end;
 PExtensionData=GDBPointer;
 //Generate on E:/zcad/cad_source/components/zmath/uzedimensionaltypes.pas 
+    PGDBNonDimensionDouble=^GDBNonDimensionDouble;
+    
+    PGDBAngleDegDouble=^GDBAngleDegDouble;
+    
+    PGDBAngleDouble=^GDBAngleDouble;
+    
     TDimUnit =(DUScientific(*'Scientific'*),DUDecimal(*'Decimal'*),DUEngineering(*'Engineering'*),DUArchitectural(*'Architectural'*),DUFractional(*'Fractional'*),DUSystem(*'System'*));
     TDimDSep=(DDSDot,DDSComma,DDSSpace);
     PTLUnits=^TLUnits;
@@ -393,7 +393,7 @@ PExtensionData=GDBPointer;
                          uprec:TUPrec;
                          umode:TUnitMode;
                          DeciminalSeparator:TDimDSep;
-                         RemoveTrailingZeros:GDBBoolean;
+                         RemoveTrailingZeros:Boolean;
                    end;
     PTInsUnits=^TInsUnits;
     TInsUnits=(IUUnspecified(*'Unspecified'*),

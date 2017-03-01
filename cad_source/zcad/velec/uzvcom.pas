@@ -631,6 +631,7 @@ begin
    result:=sqrt(p*(p-a)*(p-b)*(p-c));
 end;
 
+//** МЕТОД площадей триугольников и прямоугольников
 //** Определение попадает ли точка внутрь прямоугольника полученого линиией с учетом погрешности
 function vertexPointInAreaRectangle(rectLine:TRectangleLine;vertexPt:GDBVertex):boolean;
 var
@@ -654,6 +655,103 @@ begin
     //HistoryOutStr('прямоугл = ' + floattostr(areaRect));
     //HistoryOutStr('треугол = ' + floattostr(sumAreaTriangle));
     //HistoryOutStr('погрешность = ' + floattostr(sqreps*100000));
+end;
+
+
+//**Новый метод путем поворота и линии и пространства, более точный чем герон, но дольше
+//** Определение попадает ли точка внутрь прямоугольника полученого линиией с учетом погрешности
+function vertexPtInAreaAngleMt(cableLine:TStructCableLine;vertexPt:GDBVertex;accuracy:double):boolean;
+var
+   //areaLine:TBoundingBox;
+   //areaRect,areaTriangle,sumAreaTriangle:double; //площадь прямоугольника
+   tempvert,tempVertex,newEdPtLine:GDBVertex;
+   xline,yline,xyline,angle,anglePerpendCos:double;
+   vertexRectangleLine:TRectangleLine;
+begin
+//
+//     tempvert.x:=cableLine.edPoint.X ;
+//     tempvert.y:=cableLine.stPoint.X ;
+//     tempvert.z:=0;
+//     anglecos:=uzegeometry.Vertexlength(cableLine.stPoint,tempvert)/uzegeometry.Vertexlength(cableLine.stPoint,cableLine.edPoint);
+//
+    result:=false;
+     xyline:=uzegeometry.Vertexlength(cableLine.stPoint,cableLine.edPoint) ;
+     tempVertex.x:=cableLine.edPoint.x;
+     tempVertex.y:=cableLine.stPoint.y;
+     tempVertex.z:=0;
+     xline:=uzegeometry.Vertexlength(cableLine.stPoint,tempVertex);
+
+     anglePerpendCos:=xline/xyline;
+
+     //** подбор правильного угла поворота относительно перпендикуляра
+         angle:=arccos(anglePerpendCos)+1.5707963267949;
+
+         if (cableLine.stPoint.x <= cableLine.edPoint.x) and (cableLine.stPoint.y >= cableLine.edPoint.y) then
+            angle:=-arccos(anglePerpendCos)-1.5707963267949;
+         if (cableLine.stPoint.x >= cableLine.edPoint.x) and (cableLine.stPoint.y <= cableLine.edPoint.y) then
+            angle:=-arccos(anglePerpendCos)-3*1.5707963267949;
+         if (cableLine.stPoint.x <= cableLine.edPoint.x) and (cableLine.stPoint.y <= cableLine.edPoint.y) then
+            angle:=arccos(anglePerpendCos)+3*1.5707963267949;
+
+         newEdPtLine.x:=cableLine.stPoint.X+ (cableLine.edPoint.X-cableLine.stPoint.X) * Cos(angle) + (cableLine.edPoint.Y-cableLine.stPoint.Y) * Sin(angle) ;
+         newEdPtLine.y:=cableLine.stPoint.Y-(cableLine.edPoint.X -cableLine.stPoint.X)* Sin(angle) + (cableLine.edPoint.Y -cableLine.stPoint.Y)* Cos(angle);
+         newEdPtLine.z:=0;
+
+         tempvert.x:=cableLine.stPoint.X+ (vertexPt.X-cableLine.stPoint.X) * Cos(angle) + (vertexPt.Y-cableLine.stPoint.Y) * Sin(angle) ;
+         tempvert.y:=cableLine.stPoint.Y-(vertexPt.X -cableLine.stPoint.X)* Sin(angle) + (vertexPt.Y -cableLine.stPoint.Y)* Cos(angle);
+         tempvert.z:=0;
+
+
+         if cableLine.stPoint.y >= newEdPtLine.y then
+             vertexRectangleLine:=convertLineInRectangleWithAccuracy(cableLine.stPoint,newEdPtLine,accuracy)
+         else
+             vertexRectangleLine:=convertLineInRectangleWithAccuracy(newEdPtLine,cableLine.stPoint,accuracy);
+
+         if vertexRectangleLine.pt1.x >= vertexRectangleLine.pt2.x then
+           begin
+              tempVertex:=vertexRectangleLine.pt2;
+              vertexRectangleLine.pt2:=vertexRectangleLine.pt1;
+              vertexRectangleLine.pt1:=tempVertex;
+
+              tempVertex:=vertexRectangleLine.pt3;
+              vertexRectangleLine.pt3:=vertexRectangleLine.pt4;
+              vertexRectangleLine.pt4:=tempVertex;
+           end;
+
+         //uzvtestdraw.testTempDrawLine(vertexRectangleLine.pt1,vertexRectangleLine.pt3);
+         //uzvtestdraw.testTempDrawLine(vertexRectangleLine.pt2,vertexRectangleLine.pt4);
+         //uzvtestdraw.testDrawCircle(tempvert,3,3);
+         //uzvtestdraw.testDrawCircle(vertexRectangleLine.pt1,2,2);
+         //uzvtestdraw.testDrawCircle(vertexRectangleLine.pt2,2,3);
+         //uzvtestdraw.testDrawCircle(vertexRectangleLine.pt3,4,4);
+
+
+         if (vertexRectangleLine.Pt1.x <= tempvert.x) and (vertexRectangleLine.Pt1.y >= tempvert.y) then
+           if (vertexRectangleLine.Pt2.x >= tempvert.x) and (vertexRectangleLine.Pt2.y >= tempvert.y) then
+             if (vertexRectangleLine.Pt3.x >= tempvert.x) and (vertexRectangleLine.Pt3.y <= tempvert.y) then
+               if (vertexRectangleLine.Pt4.x <= tempvert.x) and (vertexRectangleLine.Pt4.y <= tempvert.y) then
+                    result:=true;
+
+
+
+         //
+//     //при создании прямоугольника все вершины z координаты были обнулены
+//     cableLine.
+//     areaRect:=areaOfRectangle(rectLine.Pt1,rectLine.Pt2,rectLine.Pt3,rectLine.Pt4); //получим площадь прямоугольника
+//     result:=false;
+//     vertexPt.z:=0; //обнулим у вершину z-координату
+//
+//     //**Получаем сумму всех площадей треугольников, образованых от одной грани прямоугольника с проверяемой вершиной
+//     sumAreaTriangle:=areaOfTriangle(rectLine.Pt1,rectLine.Pt2,vertexPt)+areaOfTriangle(rectLine.Pt2,rectLine.Pt3,vertexPt)+
+//                      areaOfTriangle(rectLine.Pt3,rectLine.Pt4,vertexPt)+areaOfTriangle(rectLine.Pt4,rectLine.Pt1,vertexPt);
+//     //сравниваем площади получаные прямоугольником с суммой 4-х площадей образованных треугольниками
+//
+//    if  IsDoubleNotEqual(areaRect,sumAreaTriangle,sqreps*1000000) = false then
+//      result:=true;
+//
+//    //HistoryOutStr('прямоугл = ' + floattostr(areaRect));
+//    //HistoryOutStr('треугол = ' + floattostr(sumAreaTriangle));
+//    //HistoryOutStr('погрешность = ' + floattostr(sqreps*100000));
 end;
 
 
@@ -754,75 +852,76 @@ begin
 
 end;
 
-//** Получение ребер между вершинами, которые попадают в прямоугольную 2d область вокруг линии (определение выполнено методом площадей треуголникров (по герону))
-function getListEdgeAreaVertexLine(i:integer;accuracy:double;listDevice:TListDeviceLine;listCable:TListCableLine):TListEdgeGraph;
-var
-   j,k:integer;
-   areaLine, areaVertex:TBoundingBox;
-   vertexRectangleLine:TRectangleLine;
-   infoEdge:TInfoEdgeGraph;
-   tempListNumVertex:TListTempNumVertex;
-   tempNumVertex:TInfoTempNumVertex;
-   inAddEdge:boolean;
-
-  // angleAccuracy, tempAngleAccuracy:double;
-
-begin
-    result:=TListEdgeGraph.Create; //инициализация списка
-    tempListNumVertex:=TListTempNumVertex.Create;
-
-    areaVertex:=getAreaVertex(listDevice[i].centerPoint,accuracy); // получаем область поиска около вершины
-      for j:=0 to listCable.Size-1 do
-      begin
-        inAddEdge:=false;
-          if endsLineToAreaVertex(listCable[j],areaVertex) then  //узнаем попадаетли вершина в одну из линий
-             begin
-               //находим зону в которой будем искать вершины
-               areaLine:= getAreaLine(listCable[j].stPoint,listCable[j].edPoint,accuracy);
-               //строим прямоугольник вокруг лини что бы по ниму определять находится ли вершина внутри
-               vertexRectangleLine:=convertLineInRectangleWithAccuracy(listCable[j].stPoint,listCable[j].edPoint,accuracy);
-
-
-               for k:=0 to listDevice.Size-1 do    //перебираем все узлы
-                 begin
-                     if i <> k then
-                        begin
-                          if (areaLine.LBN.x <= listDevice[k].centerPoint.x) and
-                             (areaLine.RTF.x > listDevice[k].centerPoint.x) and
-                             (areaLine.LBN.y <= listDevice[k].centerPoint.y) and
-                             (areaLine.RTF.y > listDevice[k].centerPoint.y) then
-                             begin
-                                if vertexPointInAreaRectangle(vertexRectangleLine,listDevice[k].centerPoint) then
-                                begin
-                                 tempNumVertex.num:=k;
-                                 tempListNumVertex.PushBack(tempNumVertex);
-                                 inAddEdge:=true;
-                                end;
-                             end;
-                        end;
-                 end;
-             end;
-           listSortVertexLength(tempListNumVertex,listDevice,i);
-           if inAddEdge then
-           begin
-             for k:=0 to tempListNumVertex.Size-1 do
-             begin
-                 if k=0 then
-                 begin
-                   infoEdge.VIndex1:=i;
-                   infoEdge.VPoint1:=listDevice[i].centerPoint;
-                 end;
-                 infoEdge.VIndex2:=tempListNumVertex[k].num;
-                 infoEdge.VPoint2:=listDevice[tempListNumVertex[k].num].centerPoint;
-                 infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
-                 result.PushBack(infoEdge);
-                 infoEdge.VIndex1:=tempListNumVertex[k].num;
-                 infoEdge.VPoint1:=listDevice[tempListNumVertex[k].num].centerPoint;
-             end;
-             tempListNumVertex.Clear;
-           end;
-      end;
-end;
+////**метод отключен
+////** Получение ребер между вершинами, которые попадают в прямоугольную 2d область вокруг линии (определение выполнено методом площадей треуголникров (по герону))
+//function getListEdgeAreaVertexLine(i:integer;accuracy:double;listDevice:TListDeviceLine;listCable:TListCableLine):TListEdgeGraph;
+//var
+//   j,k:integer;
+//   areaLine, areaVertex:TBoundingBox;
+//   vertexRectangleLine:TRectangleLine;
+//   infoEdge:TInfoEdgeGraph;
+//   tempListNumVertex:TListTempNumVertex;
+//   tempNumVertex:TInfoTempNumVertex;
+//   inAddEdge:boolean;
+//
+//  // angleAccuracy, tempAngleAccuracy:double;
+//
+//begin
+//    result:=TListEdgeGraph.Create; //инициализация списка
+//    tempListNumVertex:=TListTempNumVertex.Create;
+//
+//    areaVertex:=getAreaVertex(listDevice[i].centerPoint,accuracy); // получаем область поиска около вершины
+//      for j:=0 to listCable.Size-1 do
+//      begin
+//        inAddEdge:=false;
+//          if endsLineToAreaVertex(listCable[j],areaVertex) then  //узнаем попадаетли вершина в одну из линий
+//             begin
+//               //находим зону в которой будем искать вершины
+//               areaLine:= getAreaLine(listCable[j].stPoint,listCable[j].edPoint,accuracy);
+//               //строим прямоугольник вокруг лини что бы по ниму определять находится ли вершина внутри
+//               vertexRectangleLine:=convertLineInRectangleWithAccuracy(listCable[j].stPoint,listCable[j].edPoint,accuracy);
+//
+//
+//               for k:=0 to listDevice.Size-1 do    //перебираем все узлы
+//                 begin
+//                     if i <> k then
+//                        begin
+//                          if (areaLine.LBN.x <= listDevice[k].centerPoint.x) and
+//                             (areaLine.RTF.x > listDevice[k].centerPoint.x) and
+//                             (areaLine.LBN.y <= listDevice[k].centerPoint.y) and
+//                             (areaLine.RTF.y > listDevice[k].centerPoint.y) then
+//                             begin
+//                                if vertexPointInAreaRectangle(vertexRectangleLine,listDevice[k].centerPoint) then
+//                                begin
+//                                 tempNumVertex.num:=k;
+//                                 tempListNumVertex.PushBack(tempNumVertex);
+//                                 inAddEdge:=true;
+//                                end;
+//                             end;
+//                        end;
+//                 end;
+//             end;
+//           listSortVertexLength(tempListNumVertex,listDevice,i);
+//           if inAddEdge then
+//           begin
+//             for k:=0 to tempListNumVertex.Size-1 do
+//             begin
+//                 if k=0 then
+//                 begin
+//                   infoEdge.VIndex1:=i;
+//                   infoEdge.VPoint1:=listDevice[i].centerPoint;
+//                 end;
+//                 infoEdge.VIndex2:=tempListNumVertex[k].num;
+//                 infoEdge.VPoint2:=listDevice[tempListNumVertex[k].num].centerPoint;
+//                 infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
+//                 result.PushBack(infoEdge);
+//                 infoEdge.VIndex1:=tempListNumVertex[k].num;
+//                 infoEdge.VPoint1:=listDevice[tempListNumVertex[k].num].centerPoint;
+//             end;
+//             tempListNumVertex.Clear;
+//           end;
+//      end;
+//end;
 //*****другой последний метод
 //** Получение ребер между вершинами, которые попадают в прямоугольную 2d область вокруг линии (определение выполнено методом площадей треуголникров (по герону))
 procedure getListEdge(var graph:TGraphBuilder;listCable:TListCableLine;accuracy:double);
@@ -850,7 +949,9 @@ begin
                //testTempDrawLine(vertexRectangleLine.Pt1,vertexRectangleLine.Pt3);
                //testTempDrawLine(vertexRectangleLine.Pt2,vertexRectangleLine.Pt4);
                //определяем лежит ли вершина на линии
-               if vertexPointInAreaRectangle(vertexRectangleLine,graph.listVertex[j].centerPoint) then
+
+               if vertexPtInAreaAngleMt(listCable[i],graph.listVertex[j].centerPoint,accuracy) then
+               //if vertexPointInAreaRectangle(vertexRectangleLine,graph.listVertex[j].centerPoint) then
                begin
                    tempNumVertex.num:=j;
                    tempListNumVertex.PushBack(tempNumVertex);

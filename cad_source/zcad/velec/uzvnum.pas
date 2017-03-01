@@ -839,8 +839,8 @@ begin
                 inc(counter);
                 mtext:=listHeadDevice[numHead].name + '-' + listHeadDevice[numHead].listGroup[numGroup].name + '-' + IntToStr(counter);
                 //HistoryOutStr(' text = ' + mtext);
-                visualDrawCircle(ourGraph.listVertex[myVertex[i]].centerPoint,500*accuracy,color);
-                visualDrawText(ourGraph.listVertex[myVertex[i]].centerPoint,mtext,color,250*accuracy);
+                visualDrawCircle(ourGraph.listVertex[myVertex[i]].centerPoint,15*accuracy,color);
+                visualDrawText(ourGraph.listVertex[myVertex[i]].centerPoint,mtext,color,8*accuracy);
                 vertexAnalized.PushBack(myVertex[i]);
               end;
      end;
@@ -1243,8 +1243,8 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadD
              end
              else
               begin
-                 HistoryOutStr('У устройства нет хозяина = ' + ourGraph.listVertex[i].deviceEnt^.Name);
-                 uzvtestdraw.testTempDrawPLCross(ourGraph.listVertex[i].centerPoint,350*epsilon,6);
+                 //HistoryOutStr('У устройства нет хозяина = ' + ourGraph.listVertex[i].deviceEnt^.Name);
+                 uzvtestdraw.testTempDrawPLCross(ourGraph.listVertex[i].centerPoint,12*epsilon,6);
               end;
         end;
       end;
@@ -1304,7 +1304,7 @@ function getGroupDeviceInGraph(ourGraph:TGraphBuilder;Epsilon:double):TListHeadD
                     else begin
                       listHeadDevice.Mutable[i]^.listGroup.Mutable[j]^.listDevice.Mutable[k]^.listNumVertexMinWeight:=nil;
                       HistoryOutStr(' Нет пути от устройства к головному устройству = ' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice);
-                      uzvtestdraw.testTempDrawPLCross(ourGraph.listVertex[listHeadDevice[i].listGroup[j].listDevice[k].num].centerPoint,350*epsilon,4);
+                      uzvtestdraw.testTempDrawPLCross(ourGraph.listVertex[listHeadDevice[i].listGroup[j].listDevice[k].num].centerPoint,12*epsilon,4);
                     end;
                     //Анализ результата
                     //HistoryOutStr(' Путь подключения = ' + listHeadDevice[i].listGroup[j].listDevice[k].tDevice);

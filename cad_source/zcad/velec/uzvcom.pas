@@ -40,7 +40,9 @@ uses
 
   uzbgeomtypes,URecordDescriptor,TypeDescriptors,
 
-  Forms, uzcfblockinsert, uzcfarrayinsert,
+  Forms, //gzctnrvectortypes,
+  uzcfblockinsert,  //старое временно
+  uzcfarrayinsert,
 
   uzeentblockinsert,      //unit describes blockinsert entity
                        //модуль описывающий примитив вставка блока

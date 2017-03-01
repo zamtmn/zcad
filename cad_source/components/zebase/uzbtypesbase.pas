@@ -32,15 +32,6 @@ DWord=longword;
 PGDBDouble=^GDBDouble;
 {-}GDBDouble=type Double;{/GDBDouble=Double;/}
 
-PGDBNonDimensionDouble=^GDBNonDimensionDouble;
-{-}GDBNonDimensionDouble=type Double;{//}
-
-PGDBAngleDegDouble=^GDBAngleDegDouble;
-{-}GDBAngleDegDouble=type Double;{//}
-
-PGDBAngleDouble=^GDBAngleDouble;
-{-}GDBAngleDouble=type Double;{//}
-
 PGDBFloat=^GDBFloat;
 {-}GDBFloat=type single;{/GDBFloat=Single;/}
 

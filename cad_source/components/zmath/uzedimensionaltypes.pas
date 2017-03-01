@@ -19,9 +19,17 @@
 unit uzedimensionaltypes;
 {$INCLUDE def.inc}
 interface
-uses uzbtypesbase;
 type
 {EXPORT+}
+    PGDBNonDimensionDouble=^GDBNonDimensionDouble;
+    {-}GDBNonDimensionDouble=type Double;{//}
+
+    PGDBAngleDegDouble=^GDBAngleDegDouble;
+    {-}GDBAngleDegDouble=type Double;{//}
+
+    PGDBAngleDouble=^GDBAngleDouble;
+    {-}GDBAngleDouble=type Double;{//}
+
     TDimUnit =(DUScientific(*'Scientific'*),DUDecimal(*'Decimal'*),DUEngineering(*'Engineering'*),DUArchitectural(*'Architectural'*),DUFractional(*'Fractional'*),DUSystem(*'System'*));
     TDimDSep=(DDSDot,DDSComma,DDSSpace);
     PTLUnits=^TLUnits;
@@ -43,7 +51,7 @@ type
                          uprec:TUPrec;
                          umode:TUnitMode;
                          DeciminalSeparator:TDimDSep;
-                         RemoveTrailingZeros:GDBBoolean;
+                         RemoveTrailingZeros:Boolean;
                    end;
     PTInsUnits=^TInsUnits;
     TInsUnits=(IUUnspecified(*'Unspecified'*),

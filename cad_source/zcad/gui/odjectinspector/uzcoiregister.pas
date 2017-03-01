@@ -23,6 +23,8 @@ uses uzcfcommandline,uzcutils,uzbpaths,TypeDescriptors,uzctranslations,uzcshared
      uzbtypes,uzedrawingdef,uzgldrawcontext,uzctnrvectorgdbstring,varmandef,uzedrawingsimple,
      uzeentity,uzcenitiesvariablesextender,zcobjectinspector,uzcguimanager,uzcstrconsts,
      gzctnrvectortypes,Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,uzbtypesbase,uzcsysinfo;
+var
+  INTFObjInspRowHeight:TGDBIntegerOverrider;
 implementation
 procedure ZCADFormSetupProc(Form:TControl);
 var
@@ -129,7 +131,22 @@ begin
        if uzcfcommandline.cmdedit.IsVisible then
                                        uzcfcommandline.cmdedit.SetFocus;
 end;
+function IsCurrObjInUndoContext(_GDBobj:boolean;_pcurrobj:pointer):boolean;
+begin
+  result:=false;
+  if _GDBobj then
+    if PGDBaseObject(_pcurrobj)^.IsEntity then
+      //if PGDBObjEntity(pcurrobj).bp.ListPos.Owner=PTDrawingDef(pcurcontext)^.GetCurrentRootSimple then
+      result:=true;
+end;
 
+function CreateObjInspInstance:TForm;
+begin
+     GDBobjinsp:=TGDBObjInsp.Create(Application);
+     //result:=GDBobjinsp;
+     result:=tform(TForm.NewInstance);
+     GDBobjinsp._IsCurrObjInUndoContext:=IsCurrObjInUndoContext;
+end;
 initialization
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_WhiteBackground','GDBBoolean',@INTFObjInspWhiteBackground);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_ShowHeaders','GDBBoolean',@INTFObjInspShowHeaders);
@@ -137,7 +154,11 @@ units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),Inte
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_OldStyleDraw','GDBBoolean',@INTFObjInspOldStyleDraw);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_ShowFastEditors','GDBBoolean',@INTFObjInspShowFastEditors);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_ShowOnlyHotFastEditors','GDBBoolean',@INTFObjInspShowOnlyHotFastEditors);
+INTFObjInspRowHeight.Enable:=LocalRowHeightOverride;
+INTFObjInspRowHeight.Value:=LocalRowHeight;
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderEnable','GDBBoolean',@INTFObjInspRowHeight.Enable);
+PRowHeight:=@INTFObjInspRowHeight.Value;
+PRowHeightOverride:=@INTFObjInspRowHeight.Enable;
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderValue','GDBInteger',@INTFObjInspRowHeight.Value);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_SpaceHeight','GDBInteger',@INTFObjInspSpaceHeight);
 units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_ShowEmptySections','GDBBoolean',@INTFObjInspShowEmptySections);
@@ -163,7 +184,6 @@ ReBuildProc:=ReBuild;
 SetCurrentObjDefaultProc:=SetCurrentObjDefault;
 GetCurrentObjProc:=GetCurrentObj;
 GetNameColWidthProc:=GetNameColWidth;
-CreateObjInspInstanceProc:=CreateObjInspInstance;
 GetPeditorProc:=GetPeditor;
 FreEditorProc:=FreEditor;
 StoreAndFreeEditorProc:=StoreAndFreeEditor;

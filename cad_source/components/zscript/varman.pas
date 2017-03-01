@@ -549,13 +549,14 @@ begin
               pv:=InterfaceVariables.vardescarray.beginiterate(ir);
                           if pv<>nil then
                             repeat
-                                 membuf.TXTAddGDBString('  '+pv^.name+':=');
-                                 value:=pv.data.PTD.GetValueAsString(pv.data.Instance);
+                                 //membuf.TXTAddGDBString('  '+pv^.name+':=');
+                                 pv.data.PTD.SavePasToMem(membuf,pv.data.Instance,'  '+pv^.name);
+                                 {value:=pv.data.PTD.GetValueAsString(pv.data.Instance);
                                  if pv.data.PTD=@FundamentalStringDescriptorObj then
                                              value:=''''+value+'''';
 
-                                 membuf.TXTAddGDBString(value+';');
-                                 membuf.TXTAddGDBStringEOL('');
+                                 membuf.TXTAddGDBString(value+';');}
+                                 //membuf.TXTAddGDBStringEOL('');
                                  pv:=InterfaceVariables.vardescarray.iterate(ir);
                             until pv=nil;
             membuf.TXTAddGDBString('end.');

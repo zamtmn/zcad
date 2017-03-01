@@ -105,6 +105,7 @@ GDBStringDescriptor=object(BaseTypeDescriptor<string>)
 GDBAnsiStringDescriptor=object(GDBStringDescriptor)
                           procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
                           function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                          procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                           function Compare(pleft,pright:pointer):TCompareResult;virtual;
                     end;
 GDBFloatDescriptor=object(BaseTypeDescriptor<float>)
@@ -704,10 +705,6 @@ begin
      //pointer(s):=nil;
      //KillString(pstring(Pinstance)^);
 end;
-procedure GDBStringDescriptor.SavePasToMem;
-begin
-     membuf.TXTAddGDBStringEOL(prefix+':='''+{pvd.data.PTD.}GetValueAsString(PInstance)+''';');
-end;
 function GDBStringDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin
      if PString(pleft)^<>PString(pright)^
@@ -750,7 +747,10 @@ begin
      else
          result:=CREqual;
 end;
-
+procedure GDBStringDescriptor.SavePasToMem;
+begin
+     membuf.TXTAddGDBStringEOL(prefix+':='''+{pvd.data.PTD.}GetValueAsString(PInstance)+''';');
+end;
 function GDBStringDescriptor.GetValueAsString;
 var
      uGDBString:TInternalScriptString;
@@ -782,6 +782,10 @@ var
 begin
     uGDBString := pString(pinstance)^;
     result := ansi2cp(uGDBString);
+end;
+procedure GDBAnsiStringDescriptor.SavePasToMem;
+begin
+     membuf.TXTAddGDBStringEOL(prefix+':='''+{pvd.data.PTD.}GetValueAsString(PInstance)+''';');
 end;
 function GDBAnsiStringDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin

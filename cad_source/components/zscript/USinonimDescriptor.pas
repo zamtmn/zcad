@@ -38,6 +38,7 @@ GDBSinonimDescriptor=object(TUserTypeDescriptor)
                      function Compare(pleft,pright:pointer):TCompareResult;virtual;
                      function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                      procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
+                     procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                      function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
                      procedure MagicFreeInstance(PInstance:Pointer);virtual;
                      procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
@@ -51,6 +52,10 @@ end;
 function GDBSinonimDescriptor.GetValueAsString;
 begin
      result:=GetFactTypedef^.GetValueAsString(pinstance);
+end;
+procedure GDBSinonimDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);
+begin
+     GetFactTypedef^.SavePasToMem(membuf,PInstance,prefix);
 end;
 procedure GDBSinonimDescriptor.SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);
 begin

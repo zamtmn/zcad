@@ -709,9 +709,10 @@ begin
      AddTypeByRef(FundamentalAnsiStringDescriptorObj);
      AddTypeByRef(FundamentalSingleDescriptorObj);
      AddTypeByRef(GDBEnumDataDescriptorObj);
-     AddTypeByRef(GDBPtrUIntDescriptorObj);
      AddTypeByRef(AliasIntegerDescriptorOdj);
      AddTypeByRef(AliasCardinalDescriptorOdj);
+     AddTypeByRef(AliasDWordDescriptorOdj);
+     AddTypeByRef(AliasPtrUIntDescriptorOdj);
      BaseTypesEndIndex:=exttype.Count;
 end;
 

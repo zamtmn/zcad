@@ -23,7 +23,7 @@ unit varmandef;
 
 interface
 uses
-  LCLProc,SysUtils,UGDBTree,uzctnrvectorgdbstring,strutils,uzbtypesbase,
+  LCLProc,SysUtils,UGDBTree,gzctnrstl,uzctnrvectorgdbstring,strutils,uzbtypesbase,
   uzedimensionaltypes,UGDBOpenArrayOfByte,uzbtypes,
   gzctnrvectortypes,Classes,Controls,StdCtrls,Graphics,types;
 const
@@ -129,6 +129,7 @@ TTypeAttr=GDBWord;
 TOIProps=record
                ci,barpos:GDBInteger;
          end;
+TFastEditorsVector=specialize TMyVector<TFastEditorProcs>;
 pvardesk = ^vardesk;
 TMyNotifyCommand=(TMNC_EditingDoneEnterKey,TMNC_EditingDoneLostFocus,TMNC_EditingDoneESC,TMNC_EditingProcess,TMNC_RunFastEditor,TMNC_EditingDoneDoNothing);
 TMyNotifyProc=procedure (Sender: TObject;Command:TMyNotifyCommand) of object;
@@ -141,6 +142,7 @@ UserTypeDescriptor=object(GDBaseObject)
                          Collapsed:GDBBoolean;
                          Decorators:TDecoratedProcs;
                          FastEditor:TFastEditorProcs;
+                         FastEditors:TFastEditorsVector;
                          onCreateEditorFunc:TCreateEditorFunc;
                          constructor init(size:GDBInteger;tname:string;pu:pointer);
                          constructor baseinit(size:GDBInteger;tname:string;pu:pointer);
@@ -451,6 +453,7 @@ constructor UserTypeDescriptor.baseinit(size:GDBInteger;tname:string;pu:pointer)
 begin
      _init(size,tname,pu);
      Decorators.OnGetValueAsString:=nil;
+     FastEditors:=nil;
 end;
 
 destructor UserTypeDescriptor.done;
@@ -460,6 +463,8 @@ begin
      //programlog.LogOutStr(self.TypeName,lp_OldPos,LM_Trace);
      SizeInGDBBytes:=0;
      typename:='';
+     if FastEditors<>nil then
+                             FastEditors.Destroy;
 end;
 function UserTypeDescriptor.CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorGDBString;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc;
 begin

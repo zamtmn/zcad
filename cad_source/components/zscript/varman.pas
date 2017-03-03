@@ -713,6 +713,7 @@ begin
      AddTypeByRef(AliasCardinalDescriptorOdj);
      AddTypeByRef(AliasDWordDescriptorOdj);
      AddTypeByRef(AliasPtrUIntDescriptorOdj);
+     AddTypeByRef(AliasUInt64DescriptorOdj);
      BaseTypesEndIndex:=exttype.Count;
 end;
 

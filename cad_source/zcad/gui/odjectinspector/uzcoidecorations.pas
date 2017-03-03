@@ -366,14 +366,20 @@ procedure AddFastEditorToType(tn:string;GetPrefferedFastEditorSize:TGetPreffered
                                         _UndoInsideFastEditor:GDBBoolean=false);
 var
    PT:PUserTypeDescriptor;
+   fsep:TFastEditorProcs;
 begin
      PT:=SysUnit.TypeName2PTD(tn);
      if PT<>nil then
                     begin
-                         PT^.FastEditor.OnGetPrefferedFastEditorSize:=GetPrefferedFastEditorSize;
-                         PT^.FastEditor.OnDrawFastEditor:=DrawFastEditor;
-                         PT^.FastEditor.OnRunFastEditor:=RunFastEditor;
-                         PT^.FastEditor.UndoInsideFastEditor:=_UndoInsideFastEditor;
+                         fsep.OnGetPrefferedFastEditorSize:=GetPrefferedFastEditorSize;
+                         fsep.OnDrawFastEditor:=DrawFastEditor;
+                         fsep.OnRunFastEditor:=RunFastEditor;
+                         fsep.UndoInsideFastEditor:=_UndoInsideFastEditor;
+
+                         if PT^.FastEditors=nil then
+                                                    PT^.FastEditors:=TFastEditorsVector.Create;
+                         PT^.FastEditors.PushBack(fsep);
+                         PT^.FastEditor:=fsep;
                     end;
 end;
 procedure drawLWProp(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
@@ -695,6 +701,7 @@ begin
      AddFastEditorToType('GDBBoolean',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
      AddFastEditorToType('TGDB3StateBool',@BooleanGetPrefferedFastEditorSize,@_3SBooleanDrawFastEditor,@_3SBooleanInverse);
      AddFastEditorToType('PGDBLayerPropObjInsp',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runlayerswnd);
+     AddFastEditorToType('GDBString',@ButtonGetPrefferedFastEditorSize,@ButtonTxtDrawFastEditor,@RunStringEditor);
      AddFastEditorToType('GDBString',@ButtonGetPrefferedFastEditorSize,@ButtonTxtDrawFastEditor,@RunStringEditor);
      AddFastEditorToType('GDBAnsiString',@ButtonGetPrefferedFastEditorSize,@ButtonTxtDrawFastEditor,@RunAnsiStringEditor);
      AddFastEditorToType('GDBCoordinates3D',@ButtonGetPrefferedFastEditorSize,@ButtonCrossDrawFastEditor,@GetVertexFromDrawing,true);

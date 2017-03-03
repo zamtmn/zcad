@@ -98,6 +98,8 @@ TFundamentalLongIntDescriptor=object(BaseTypeDescriptor<LongInt,TOrdinalTypeMani
                     end;
 TFundamentalQWordDescriptor=object(BaseTypeDescriptor<qword,TOrdinalTypeManipulator<qword>>)
                     end;
+TFundamentalInt64Descriptor=object(BaseTypeDescriptor<Int64,TOrdinalTypeManipulator<Int64>>)
+                    end;
 GDBDoubleDescriptor=object(BaseTypeDescriptor<double,TFloatTypeManipulator<double>>)
                     end;
 GDBFloatDescriptor=object(BaseTypeDescriptor<float,TFloatTypeManipulator<float>>)
@@ -140,6 +142,7 @@ FundamentalByteDescriptorObj:TFundamentalByteDescriptor;
 FundamentalSmallIntDescriptorObj:TFundamentalSmallIntDescriptor;
 FundamentalLongWordDescriptorObj:TFundamentalLongWordDescriptor;
 FundamentalQWordDescriptorObj:TFundamentalQWordDescriptor;
+FundamentalInt64Descriptor:TFundamentalInt64Descriptor;
 FundamentalSingleDescriptorObj:GDBFloatDescriptor;
 FundamentalShortIntDescriptorObj:TFundamentalShortIntDescriptor;
 FundamentalBooleanDescriptorOdj:GDBBooleanDescriptor;
@@ -149,7 +152,9 @@ GDBEnumDataDescriptorObj:TEnumDataDescriptor;
 AliasIntegerDescriptorOdj:GDBSinonimDescriptor;
 AliasCardinalDescriptorOdj:GDBSinonimDescriptor;
 AliasDWordDescriptorOdj:GDBSinonimDescriptor;
-AliasPtrUintDescriptorOdj:GDBSinonimDescriptor;
+AliasPtrUIntDescriptorOdj:GDBSinonimDescriptor;
+AliasPtrIntDescriptorOdj:GDBSinonimDescriptor;
+AliasUInt64DescriptorOdj:GDBSinonimDescriptor;
 implementation
 (*function MyDataToStr(data:LongInt):string;overload;
 begin
@@ -564,6 +569,7 @@ begin
      FundamentalBooleanDescriptorOdj.init('Boolean',nil);
      FundamentalPointerDescriptorOdj.init('Pointer',nil);
      FundamentalQWordDescriptorObj.init('QWord',nil);
+     FundamentalInt64Descriptor.init('Int64',nil);
 
      FundamentalStringDescriptorObj.init('String',nil);
      FundamentalAnsiStringDescriptorObj.init('AnsiString',nil);
@@ -574,13 +580,16 @@ begin
      AliasIntegerDescriptorOdj.init2(@FundamentalLongIntDescriptorObj,'Integer',nil);
      AliasCardinalDescriptorOdj.init2(@FundamentalLongWordDescriptorObj,'Cardinal',nil);
      AliasDWordDescriptorOdj.init2(@FundamentalLongWordDescriptorObj,'DWord',nil);
+     AliasUInt64DescriptorOdj.init2(@FundamentalQWordDescriptorObj,'UInt64',nil);
 
      {$ifdef CPU64}
        AliasPtrUIntDescriptorOdj.init2(@AliasDWordDescriptorOdj,'QWord',nil);
+       AliasPtrIntDescriptorOdj.init2(@FundamentalInt64Descriptor,'PtrInt',nil);
      {$endif CPU64}
 
      {$ifdef CPU32}
        AliasPtrUIntDescriptorOdj.init2(@AliasDWordDescriptorOdj,'PtrUInt',nil);
+       AliasPtrIntDescriptorOdj.init2(@FundamentalLongIntDescriptorObj,'PtrInt',nil);
      {$endif CPU32}
 
 

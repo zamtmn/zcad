@@ -240,7 +240,7 @@ begin
      ppd^.ValKey:=valkey;
      ppd^.PTypeManager:=@self;
      ppd^.Decorators:=Decorators;
-     ppd^.FastEditor:=FastEditor;
+     convertToRunTime(FastEditors,ppd^.FastEditors);
      ppd^.Attr:=ownerattrib;
      ppd^.Collapsed:=PCollapsed;
      ppd^.valueAddres:=addr;
@@ -440,7 +440,7 @@ begin
      ppd^.ValType:=valtype;
      ppd^.PTypeManager:=@self;
      ppd^.Decorators:=Decorators;
-     ppd^.FastEditor:=FastEditor;
+     convertToRunTime(FastEditors,ppd^.FastEditors);
      ppd^.Attr:=ownerattrib;
      ppd^.Collapsed:=PCollapsed;
      ppd^.valueAddres:=addr;

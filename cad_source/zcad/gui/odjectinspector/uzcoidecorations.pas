@@ -281,6 +281,14 @@ procedure ButtonHLineDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;
 begin
      ButtonDraw(canvas,r,state,'-',boundr);
 end;
+procedure ButtonGreatThatDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
+begin
+     ButtonDraw(canvas,r,state,'>',boundr);
+end;
+procedure ButtonLessThatDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
+begin
+     ButtonDraw(canvas,r,state,'<',boundr);
+end;
 procedure ButtonXDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
 begin
      ButtonDraw(canvas,r,state,'x',boundr);
@@ -324,9 +332,22 @@ begin
                                                    end
 
 end;
+function HalfButtonGetPrefferedFastEditorSize(PInstance:GDBPointer):TSize;
+begin
+     result:=ButtonGetPrefferedFastEditorSize(nil);
+     result.cx:=(result.cx+((result.cx+1) div 2)+1) div 2
+end;
 procedure BooleanInverse(PInstance:GDBPointer);
 begin
      pboolean(PInstance)^:=not pboolean(PInstance)^;
+end;
+procedure incinteger(PInstance:GDBPointer);
+begin
+     inc(pinteger(PInstance)^);
+end;
+procedure decinteger(PInstance:GDBPointer);
+begin
+     dec(pinteger(PInstance)^);
 end;
 procedure _3SBooleanInverse(PInstance:GDBPointer);
 begin
@@ -379,7 +400,7 @@ begin
                          if PT^.FastEditors=nil then
                                                     PT^.FastEditors:=TFastEditorsVector.Create;
                          PT^.FastEditors.PushBack(fsep);
-                         PT^.FastEditor:=fsep;
+                         //PT^.FastEditor:=fsep;
                     end;
 end;
 procedure drawLWProp(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
@@ -696,12 +717,13 @@ begin
      DecorateType('TGDBPaletteColor',@PaletteColorDecorator,@ColorDecoratorCreateEditor,@drawIndexColorProp);
      DecorateType('TGDBOSMode',nil,CreateEmptyEditor,nil);
 
+     AddFastEditorToType('GDBInteger',@HalfButtonGetPrefferedFastEditorSize,@ButtonGreatThatDrawFastEditor,@incinteger);
+     AddFastEditorToType('GDBInteger',@HalfButtonGetPrefferedFastEditorSize,@ButtonLessThatDrawFastEditor,@decinteger);
      AddFastEditorToType('TGDBPaletteColor',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runcolorswnd);
      AddFastEditorToType('Boolean',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
      AddFastEditorToType('GDBBoolean',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
      AddFastEditorToType('TGDB3StateBool',@BooleanGetPrefferedFastEditorSize,@_3SBooleanDrawFastEditor,@_3SBooleanInverse);
      AddFastEditorToType('PGDBLayerPropObjInsp',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runlayerswnd);
-     AddFastEditorToType('GDBString',@ButtonGetPrefferedFastEditorSize,@ButtonTxtDrawFastEditor,@RunStringEditor);
      AddFastEditorToType('GDBString',@ButtonGetPrefferedFastEditorSize,@ButtonTxtDrawFastEditor,@RunStringEditor);
      AddFastEditorToType('GDBAnsiString',@ButtonGetPrefferedFastEditorSize,@ButtonTxtDrawFastEditor,@RunAnsiStringEditor);
      AddFastEditorToType('GDBCoordinates3D',@ButtonGetPrefferedFastEditorSize,@ButtonCrossDrawFastEditor,@GetVertexFromDrawing,true);

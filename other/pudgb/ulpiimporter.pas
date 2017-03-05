@@ -102,6 +102,7 @@ var
  opt,s,ts:string;
  IDEMacros: TIDEMacros;
  tmm:TMacroMethods;
+ swith:string;
 begin
  IDEMacros:=TLazIDEMacros.Create;
  GlobalMacroList:=TTransferMacroList.Create;
@@ -135,6 +136,16 @@ begin
                                                    LogWriter('Resolve to OtherUnitFiles='+OtherUnitFiles);
  MainFilename:=Doc.GetValue('ProjectOptions/Units/Unit0/Filename/Value','');
  LogWriter('Unit0='+MainFilename);
+
+ swith:='';
+ MainFilename:=Doc.GetValue('CompilerOptions/Parsing/SyntaxOptions/SyntaxMode/Value','');
+ Case Uppercase(MainFilename) of
+      'DELPHI':swith:='-Sd'
+ end;
+ MainFilename:=Doc.GetValue('CompilerOptions/Parsing/SyntaxOptions/SyntaxMode/CPPInline','False');
+ Case Uppercase(MainFilename) of
+      'TRUE':swith:=swith+' -Sc'
+ end;
  Doc.Free;
  basepath:=ExtractFileDir(filename)+PathDelim;
  if MainFilename<>'' then
@@ -145,7 +156,10 @@ begin
  if IncludeFiles<>'' then
  begin
       s:=IncludeFiles;
-      opt:='-Sc'+' -Fi'+basepath;
+      if swith='' then
+                      opt:='-Fi'+basepath
+                  else
+                      opt:=swith+' -Fi'+basepath;
       repeat
             GetPartOfPath(ts,s,';');
             if not DirectoryExists(utf8tosys(ts)) then
@@ -156,7 +170,7 @@ begin
      Options.ParserOptions._CompilerOptions:=opt;
  end
  else
-  Options.ParserOptions._CompilerOptions:='-Sc'+' -Fi'+basepath;
+  Options.ParserOptions._CompilerOptions:=swith+' -Fi'+basepath;
  if OtherUnitFiles<>'' then
  begin
       s:=OtherUnitFiles;

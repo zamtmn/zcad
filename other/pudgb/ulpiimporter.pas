@@ -96,13 +96,13 @@ procedure LPIImport(var Options:TOptions;const filename:string;const LogWriter:T
 var
  Doc:TXMLConfig;
  j:integer;
- IncludeFiles,OtherUnitFiles,MainFilename:string;
+ IncludeFiles,OtherUnitFiles,MainFilename,SwithKey:string;
  FileVersion:integer;
  basepath:string;
  opt,s,ts:string;
  IDEMacros: TIDEMacros;
  tmm:TMacroMethods;
- swith:string;
+ Swith:string;
 begin
  IDEMacros:=TLazIDEMacros.Create;
  GlobalMacroList:=TTransferMacroList.Create;
@@ -137,14 +137,14 @@ begin
  MainFilename:=Doc.GetValue('ProjectOptions/Units/Unit0/Filename/Value','');
  LogWriter('Unit0='+MainFilename);
 
- swith:='';
- MainFilename:=Doc.GetValue('CompilerOptions/Parsing/SyntaxOptions/SyntaxMode/Value','');
- Case Uppercase(MainFilename) of
-      'DELPHI':swith:='-Sd'
+ Swith:='';
+ SwithKey:=Doc.GetValue('CompilerOptions/Parsing/SyntaxOptions/SyntaxMode/Value','');
+ Case Uppercase(SwithKey) of
+      'DELPHI':Swith:='-Sd'
  end;
- MainFilename:=Doc.GetValue('CompilerOptions/Parsing/SyntaxOptions/SyntaxMode/CPPInline','False');
- Case Uppercase(MainFilename) of
-      'TRUE':swith:=swith+' -Sc'
+ SwithKey:=Doc.GetValue('CompilerOptions/Parsing/SyntaxOptions/SyntaxMode/CPPInline','False');
+ Case Uppercase(SwithKey) of
+      'TRUE':Swith:=Swith+' -Sc'
  end;
  Doc.Free;
  basepath:=ExtractFileDir(filename)+PathDelim;
@@ -156,10 +156,10 @@ begin
  if IncludeFiles<>'' then
  begin
       s:=IncludeFiles;
-      if swith='' then
+      if Swith='' then
                       opt:='-Fi'+basepath
                   else
-                      opt:=swith+' -Fi'+basepath;
+                      opt:=Swith+' -Fi'+basepath;
       repeat
             GetPartOfPath(ts,s,';');
             if not DirectoryExists(utf8tosys(ts)) then
@@ -170,7 +170,7 @@ begin
      Options.ParserOptions._CompilerOptions:=opt;
  end
  else
-  Options.ParserOptions._CompilerOptions:=swith+' -Fi'+basepath;
+  Options.ParserOptions._CompilerOptions:=Swith+' -Fi'+basepath;
  if OtherUnitFiles<>'' then
  begin
       s:=OtherUnitFiles;

@@ -241,7 +241,7 @@ var PFD:PFieldDescriptor;
     oldppda:PTPropertyDeskriptorArray;
     recreateunitvars:boolean;
     SaveDecorators:TDecoratedProcs;
-    SaveFastEditor:TFastEditorProcs;
+    SaveFastEditors:TFastEditorsVector;
 begin
      if VerboseLog^ then
        DebugLn('{T+}[ZSCRIPT]RecordDescriptor.CreateProperties "%s"',[name]);
@@ -260,7 +260,7 @@ begin
            ppd^.Attr:=ownerattrib;
            ppd^.Collapsed:=PCollapsed;
            ppd^.Decorators:=Decorators;
-           ppd^.FastEditor:=FastEditor;
+           convertToRunTime(FastEditors,ppd^.FastEditors);
            ppd^.valueAddres:=addr;
            ppd^.PTypeManager:=@self;
            if bmode=property_build then
@@ -372,24 +372,24 @@ begin
            if (pfd^.base.PFT^.GetFactTypedef^.TypeName='TEnumData') then
                        begin
                             SaveDecorators:=GDBEnumDataDescriptorObj.Decorators;
-                            SaveFastEditor:=GDBEnumDataDescriptorObj.FastEditor;
+                            SaveFastEditors:=GDBEnumDataDescriptorObj.FastEditors;
                             GDBEnumDataDescriptorObj.Decorators:=pfd^.base.PFT^.Decorators;
-                            GDBEnumDataDescriptorObj.FastEditor:=pfd^.base.PFT^.FastEditor;
+                            GDBEnumDataDescriptorObj.FastEditors:=pfd^.base.PFT^.FastEditors;
                             GDBEnumDataDescriptorObj.CreateProperties(f,PDM_Field,PPDA,{ppd^.Name}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,addr,'','');
                             GDBEnumDataDescriptorObj.Decorators:=SaveDecorators;
-                            GDBEnumDataDescriptorObj.FastEditor:=SaveFastEditor;
+                            GDBEnumDataDescriptorObj.FastEditors:=SaveFastEditors;
                        end
                    else
            if (pfd^.base.PFT^.GetFactTypedef^.TypeName='PTEnumData') then
                        begin
                             SaveDecorators:=GDBEnumDataDescriptorObj.Decorators;
-                            SaveFastEditor:=GDBEnumDataDescriptorObj.FastEditor;
+                            SaveFastEditors:=GDBEnumDataDescriptorObj.FastEditors;
                             GDBEnumDataDescriptorObj.Decorators:=PGDBPointerDescriptor(pfd^.base.PFT)^.TypeOf^.Decorators;
-                            GDBEnumDataDescriptorObj.FastEditor:=PGDBPointerDescriptor(pfd^.base.PFT)^.TypeOf^.FastEditor;
+                            GDBEnumDataDescriptorObj.FastEditors:=PGDBPointerDescriptor(pfd^.base.PFT)^.TypeOf^.FastEditors;
                             ta:=ppointer(addr)^;
                             GDBEnumDataDescriptorObj.CreateProperties(f,PDM_Field,PPDA,tname,@pfd^.collapsed,pfd^.base.Attributes or ownerattrib,bmode,ta,'','');
                             GDBEnumDataDescriptorObj.Decorators:=SaveDecorators;
-                            GDBEnumDataDescriptorObj.FastEditor:=SaveFastEditor;
+                            GDBEnumDataDescriptorObj.FastEditors:=SaveFastEditors;
                             Inc(GDBPlatformint(addr),sizeof(Pointer));
                        end
                    else

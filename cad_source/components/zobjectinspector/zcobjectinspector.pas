@@ -538,15 +538,15 @@ begin
   if last then
               y:=y-rowh;
 end;
-procedure drawfasteditor(ppd:PPropertyDeskriptor;canvas:tcanvas;var r:trect);
+procedure drawfasteditor(ppd:PPropertyDeskriptor;canvas:tcanvas;var FastEditorRT:TFastEditorRunTimeData;var r:trect);
 var
    fer:trect;
    FESize:TSize;
    temp:integer;
 begin
-     if assigned(ppd.FastEditor.OnGetPrefferedFastEditorSize) then
+     if assigned(FastEditorRT.Procs.OnGetPrefferedFastEditorSize) then
      begin
-           FESize:=ppd.FastEditor.OnGetPrefferedFastEditorSize(ppd^.valueAddres);
+           FESize:=FastEditorRT.Procs.OnGetPrefferedFastEditorSize(ppd^.valueAddres);
            temp:=r.Bottom-r.Top-2;
            if temp<2 then temp:=2;
            if FESize.cy>temp then
@@ -570,11 +570,24 @@ begin
                 begin
                 fer.Top:=fer.Top-3;
                 end;
-                ppd.FastEditor.OnDrawFastEditor(canvas,fer,ppd^.valueAddres,ppd.FastEditorState,r);
+                FastEditorRT.Procs.OnDrawFastEditor(canvas,fer,ppd^.valueAddres,FastEditorRT.FastEditorState,r);
+                FastEditorRT.FastEditorRect:=fer;
                 r.Right:=fer.Left;
-                ppd.FastEditorDrawed:=true;
+                FastEditorRT.FastEditorDrawed:=true;
            end;
      end;
+end;
+
+procedure drawfasteditors(ppd:PPropertyDeskriptor;canvas:tcanvas;var r:trect);
+var
+   fer:trect;
+   FESize:TSize;
+   temp:integer;
+   i:integer;
+begin
+     if assigned(ppd.FastEditors)then
+     for i:=0 to ppd.FastEditors.Size-1 do
+      drawfasteditor(ppd,canvas,ppd.FastEditors.Mutable[i]^,r);
 end;
 procedure drawheader(Canvas:tcanvas;ppd:PPropertyDeskriptor;r:trect;name:string;onm:boolean;TextDetails: TThemedElementDetails);
 function GetSizeTreeIcon(Minus,hot: Boolean):TSize;
@@ -604,10 +617,11 @@ begin
   if (r.Right-r.Left)>size.cx then
   DrawTreeIcon({Canvas,}r.left,r.top+temp,not ppd^.Collapsed^,onm);
   inc(r.left,size.cx+1);
-  ppd.FastEditorDrawed:=false;
+  clearRTd(ppd.FastEditors);
+  //ppd.FastEditorDrawed:=false;
   if NeedDrawFasteditor(onm) then
-  if assigned(ppd.FastEditor.OnGetPrefferedFastEditorSize) then
-  drawfasteditor(ppd,canvas,r);
+  if assigned(ppd.FastEditors) then
+  drawfasteditors(ppd,canvas,r);
   {canvas.Font.Italic:=true;
   if onm then
              begin
@@ -762,9 +776,10 @@ begin
   end
   else
     begin
-         ppd.FastEditorDrawed:=false;
+         clearRTd(ppd.FastEditors);
+         //ppd.FastEditorDrawed:=false;
          if NeedDrawFasteditor(onm) then
-         drawfasteditor(ppd,canvas,r);
+         drawfasteditors(ppd,canvas,r);
     if fulldraw then
     if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)and((ppd^.Attr and FA_DIFFERENT)=0)) then
                                                    ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
@@ -1215,7 +1230,7 @@ begin
     pld:=peditor.PInstance;
 
     if (Command=TMNC_RunFastEditor) then
-                                        EDContext.ppropcurrentedit.FastEditor.OnRunFastEditor(pld);
+                                        EDContext.ppropcurrentedit.FastEditors[0].Procs.OnRunFastEditor(pld);
     if peditor.changed then
                            UpdateObjectInInsp;
    if (Command=TMNC_RunFastEditor)or(Command=TMNC_EditingDoneLostFocus){or(Command=TMNC_EditingDoneDoNothing)} then
@@ -1340,7 +1355,8 @@ procedure TGDBobjinsp.MouseLeave;
 begin
      if OnMousePP<>nil then
                            begin
-                                OnMousePP.FastEditorState:=TFES_Default;
+                                clearRTstate(OnMousePP.FastEditors);
+                                //OnMousePP.FastEditorState:=TFES_Default;
                                 OnMousePP:=nil;
                                 invalidate;
                            end;
@@ -1358,6 +1374,8 @@ var
   tempstr:string;
   FESize:TSize;
   needredraw:boolean;
+  i:integer;
+  currstate:TFastEditorState;
 begin
     needredraw:=false;
     if mresplit then
@@ -1384,7 +1402,8 @@ begin
                        begin
                             needredraw:=true;
                             if OnMousePP<>nil then
-                                                  OnMousePP.FastEditorState:=TFES_Default;
+                                                  clearRTstate(OnMousePP.FastEditors);
+                                                  //OnMousePP.FastEditorState:=TFES_Default;
                             OnMousePP:=pp;
                        end;
   if IsMouseOnSpliter(pp,X,Y) then
@@ -1402,20 +1421,22 @@ begin
        exit;
   end;
 
-  if assigned(pp.FastEditor.OnGetPrefferedFastEditorSize) then
+  if assigned(pp.FastEditors) then
   begin
-  fesize:=pp.FastEditor.OnGetPrefferedFastEditorSize(pp.valueAddres);
-  if (fesize.cx>0)and((pp.rect.Right-x-fastEditorOffset-1)<=fesize.cx) then
-                                                                           begin
-                                                                                if ssLeft in Shift then
-                                                                                                       pp.FastEditorState:=TFES_Pressed
-                                                                                                   else
-                                                                                                       pp.FastEditorState:=TFES_Hot
-                                                                           end
-                                                                       else
-                                                                           pp.FastEditorState:=TFES_Default;
-
-  //drawvalue(pp,canvas,false);
+   if ssLeft in Shift then
+                          currstate:=TFES_Pressed
+                      else
+                          currstate:=TFES_Hot;
+   for i:=0 to pp.FastEditors.Size-1 do
+   begin
+     if pp.FastEditors.Mutable[i]^.FastEditorDrawed then
+     begin
+       if PtInRect(pp.FastEditors[i].FastEditorRect,Point(x, y)) then
+                                                                     pp.FastEditors.Mutable[i]^.FastEditorState:=currstate
+                                                                 else
+                                                                     pp.FastEditors.Mutable[i]^.FastEditorState:=TFES_Default;
+     end;
+   end;
   needredraw:=true;
   end;
 
@@ -1423,7 +1444,8 @@ begin
   begin
        if oldpp<>nil then
                          begin
-                         oldpp.FastEditorState:=TFES_Default;
+                         clearRTstate(oldpp.FastEditors);
+                         //oldpp.FastEditorState:=TFES_Default;
                          //drawvalue(oldpp,canvas,false);
                          needredraw:=true;
                          end;
@@ -1479,14 +1501,14 @@ begin
     begin
       tp:=pcurrobj;
       GDBobjinsp.buildproplist(EDContext.UndoStack,dummyUF,currobjgdbtype,property_correct,tp);
-      //-----------------------------------------------------------------peditor^.done;
-      //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
+      //peditor^.done;
+      //gdbfreemem(pointer(peditor));
       EDContext.ppropcurrentedit:=pp;
     end;
     PEditor:=pp^.PTypeManager^.CreateEditor(@self,pp.rect,pp^.valueAddres,nil,false,'этого не должно тут быть',rowh).Editor;
     if PEditor<>nil then
     begin
-      //-----------------------------------------------------------------PEditor^.show;
+      //PEditor^.show;
     end;
   end;
 end;
@@ -1496,6 +1518,7 @@ var
   pp:PPropertyDeskriptor;
   my:integer;
   FESize:TSize;
+  i:integer;
 begin
      inherited;
      if (button=mbLeft)
@@ -1521,7 +1544,49 @@ begin
                                  pp:=mousetoprop(@pda,x,y,my);
                                  if pp=nil then
                                                exit;
-                                 if assigned(pp.FastEditor.OnGetPrefferedFastEditorSize) then
+                                 if assigned(pp.FastEditors)then
+                                 begin
+                                  for i:=0 to pp.FastEditors.size-1 do
+                                  if pp.FastEditors[i].FastEditorDrawed then
+                                  if PtInRect(pp.FastEditors[i].FastEditorRect,point(x,y)) then
+                                  if pp.FastEditors[i].FastEditorState=TFES_Pressed then
+                                  begin
+                                  pp.FastEditors.Mutable[i]^.FastEditorState:=TFES_Default;
+                                  if assigned(pp.FastEditors[i].Procs.OnRunFastEditor)then
+                                  begin
+                                  StoreAndFreeEditor;;
+                                  EDContext.ppropcurrentedit:=pp;
+                                  //pp.FastEditor.OnRunFastEditor(pp.valueAddres)
+                                  if pp.FastEditors[i].Procs.UndoInsideFastEditor then
+                                                                            pp.FastEditors[i].Procs.OnRunFastEditor(pp.valueAddres)
+                                                                        else
+                                                                            begin
+                                                                            if IsCurrObjInUndoContext(GDBobj,pcurrobj) then
+                                                                            begin
+                                                                            //EDContext.UndoStack:=GetUndoStack;
+                                                                            EDContext.UndoCommand:=EDContext.UndoStack.PushCreateTTypedChangeCommand(pp^.valueAddres,pp^.PTypeManager);
+                                                                            EDContext.UndoCommand.PDataOwner:=pcurrobj;
+
+                                                                            pp.FastEditors[i].Procs.OnRunFastEditor(pp.valueAddres);
+                                                                            EDContext.UndoCommand.ComitFromObj;
+
+                                                                            //EDContext.UndoStack:=nil;
+                                                                            EDContext.UndoCommand:=nil;
+                                                                            end
+                                                                            else
+                                                                                begin
+                                                                                pp.FastEditors[i].Procs.OnRunFastEditor(pp.valueAddres);
+                                                                                end;
+                                                                            end;
+                                  end;
+                                  UpdateObjectInInsp;
+                                  EDContext.ppropcurrentedit:=nil;
+                                  invalidate;
+
+                                  end;
+                                 end
+
+                                 (*-----if assigned(pp.FastEditor.OnGetPrefferedFastEditorSize) then
                                  begin
                                  fesize:=pp.FastEditor.OnGetPrefferedFastEditorSize(pp.valueAddres);
                                  if (fesize.cx>0)and((pp.rect.Right-x-fastEditorOffset-1)<=fesize.cx) then
@@ -1559,7 +1624,7 @@ begin
                                                                                            EDContext.ppropcurrentedit:=nil;
                                                                                            invalidate;
                                                                                       end
-                            end;
+                            end;*)
                             end;
 
 end;
@@ -1660,9 +1725,9 @@ begin
             peditor.OwnerNotify:=self.Notify;
             if peditor.geteditor.Visible then
                                              peditor.geteditor.setfocus;
-         //-----------------------------------------------------------------PEditor^.SetFocus;
-         //-----------------------------------------------------------------PEditor^.show;
-         //-----------------------------------------------------------------PEditor^.SetFocus;
+         //PEditor^.SetFocus;
+         //PEditor^.show;
+         //PEditor^.SetFocus;
        end;
      end;
 end;
@@ -1675,6 +1740,7 @@ var
   menu:TPopupMenu;
   fesize:tsize;
   clickonheader:boolean;
+  i,count:integer;
 begin
   inherited;
   if (y<0)or(y>clientheight)or(x<0)or(x>clientwidth) then
@@ -1707,26 +1773,41 @@ begin
                          begin
                                if not clickonheader then
                                begin
-                              if assigned(pp.FastEditor.OnGetPrefferedFastEditorSize)and(pp.FastEditorDrawed) then
-                              begin
-                              fesize:=pp.FastEditor.OnGetPrefferedFastEditorSize(pp.valueAddres);
-                              if (fesize.cx>0)and((pp.rect.Right-x-fastEditorOffset-1)<=fesize.cx) then
-                                                                                   begin
-                                                                                        pp.FastEditorState:=TFES_Pressed;
-                                                                                        {pp.FastEditor.OnRunFastEditor(pp.valueAddres);
-                                                                                        if GDBobj then
-                                                                                        if PGDBaseObject(pcurrobj)^.IsEntity then
-                                                                                                                            PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^);
-                                                                                        if assigned(resetoglwndproc) then resetoglwndproc;
-                                                                                        if assigned(redrawoglwndproc) then redrawoglwndproc;
-                                                                                        self.updateinsp;
-                                                                                        if assigned(UpdateVisibleProc) then UpdateVisibleProc;}
-                                                                                   end
-                                                                             else
-                                                                                 createeditor(pp)
-                              end
-                                 else
-                                     createeditor(pp)
+                                  if assigned(pp.FastEditors)then
+                                  begin
+                                  count:=0;
+                                  for i:=0 to pp.FastEditors.size-1 do
+                                  if pp.FastEditors[i].FastEditorDrawed then
+                                  if PtInRect(pp.FastEditors[i].FastEditorRect,point(x,y)) then
+                                                                                               begin
+                                                                                                    pp.FastEditors.Mutable[i]^.FastEditorState:=TFES_Pressed;
+                                                                                                    inc(count);
+                                                                                               end;
+                                  if count=0 then
+                                                 createeditor(pp);
+                                  end
+                                  else
+                                      createeditor(pp);
+                                  (*if assigned(pp.FastEditor.OnGetPrefferedFastEditorSize)and(pp.FastEditorDrawed) then
+                                  begin
+                                  fesize:=pp.FastEditor.OnGetPrefferedFastEditorSize(pp.valueAddres);
+                                  if (fesize.cx>0)and((pp.rect.Right-x-fastEditorOffset-1)<=fesize.cx) then
+                                                                                       begin
+                                                                                            pp.FastEditorState:=TFES_Pressed;
+                                                                                            {pp.FastEditor.OnRunFastEditor(pp.valueAddres);
+                                                                                            if GDBobj then
+                                                                                            if PGDBaseObject(pcurrobj)^.IsEntity then
+                                                                                                                                PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^);
+                                                                                            if assigned(resetoglwndproc) then resetoglwndproc;
+                                                                                            if assigned(redrawoglwndproc) then redrawoglwndproc;
+                                                                                            self.updateinsp;
+                                                                                            if assigned(UpdateVisibleProc) then UpdateVisibleProc;}
+                                                                                       end
+                                                                                 else
+                                                                                     createeditor(pp)
+                                  end
+                                     else
+                                         createeditor(pp)*)
                                end;
                          end
                      else
@@ -1770,7 +1851,7 @@ begin
     pda.cleareraseobj;
     if peditor<>nil then
     begin
-      //--MultiSelectEditor not work with this----------self.freeeditor;
+      //--MultiSelectEditor not work with this self.freeeditor;
     end;
     //currobjgdbtype:=exttype;
     //pcurrobj:=addr;

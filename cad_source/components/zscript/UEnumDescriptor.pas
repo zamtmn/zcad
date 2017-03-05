@@ -89,7 +89,7 @@ begin
      ppd^.Name:=name;
      ppd^.PTypeManager:=@self;
      ppd^.Decorators:=Decorators;
-     ppd^.FastEditor:=FastEditor;
+     convertToRunTime(FastEditors,ppd^.FastEditors);
      ppd^.Attr:=ownerattrib;
      ppd^.Collapsed:=PCollapsed;
      ppd^.valueAddres:=addr;

@@ -87,6 +87,14 @@ TFastEditorProcs=packed record
                 OnRunFastEditor:TRunFastEditor;
                 UndoInsideFastEditor:GDBBoolean;
                 end;
+TFastEditorRunTimeData=packed record
+                      Procs:TFastEditorProcs;
+                      FastEditorState:TFastEditorState;
+                      FastEditorDrawed:GDBBoolean;
+                      FastEditorRect:trect;
+                      end;
+TFastEditorsVector=specialize TMyVector<TFastEditorProcs>;
+TFastEditorsRunTimeVector=specialize TMyVector<TFastEditorRunTimeData>;
   PBasePropertyDeskriptor=^BasePropertyDeskriptor;
   BasePropertyDeskriptor=object({GDBaseObject}GDBBaseNode)
     Name: GDBString;
@@ -107,9 +115,7 @@ TFastEditorProcs=packed record
     mode:PDMode;
     r,w:GDBString;
     Decorators:TDecoratedProcs;
-    FastEditor:TFastEditorProcs;
-    FastEditorState:TFastEditorState;
-    FastEditorDrawed:GDBBoolean;
+    FastEditors:{TFastEditorsVector}TFastEditorsRunTimeVector;
   end;
   propdeskptr = ^propdesk;
   propdesk = record
@@ -129,7 +135,6 @@ TTypeAttr=GDBWord;
 TOIProps=record
                ci,barpos:GDBInteger;
          end;
-TFastEditorsVector=specialize TMyVector<TFastEditorProcs>;
 pvardesk = ^vardesk;
 TMyNotifyCommand=(TMNC_EditingDoneEnterKey,TMNC_EditingDoneLostFocus,TMNC_EditingDoneESC,TMNC_EditingProcess,TMNC_RunFastEditor,TMNC_EditingDoneDoNothing);
 TMyNotifyProc=procedure (Sender: TObject;Command:TMyNotifyCommand) of object;
@@ -141,7 +146,7 @@ UserTypeDescriptor=object(GDBaseObject)
                          OIP:TOIProps;
                          Collapsed:GDBBoolean;
                          Decorators:TDecoratedProcs;
-                         FastEditor:TFastEditorProcs;
+                         //FastEditor:TFastEditorProcs;
                          FastEditors:TFastEditorsVector;
                          onCreateEditorFunc:TCreateEditorFunc;
                          constructor init(size:GDBInteger;tname:string;pu:pointer);
@@ -264,12 +269,69 @@ varmanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: shortString): GDBBoolean;virtual;abstract;
            end;
 {EXPORT-}
+procedure convertToRunTime(dt:TFastEditorsVector;var rt:TFastEditorsRunTimeVector);
+procedure clearRTd(rtv:TFastEditorsRunTimeVector);
+procedure clearRTstate(rtv:TFastEditorsRunTimeVector);
 var
   date:TDateTime;
 procedure ProcessVariableAttributes(var attr:TVariableAttributes; const setattrib,resetattrib:TVariableAttributes);
 implementation
 //uses log;
 {for hide exttype}
+procedure clearRTd(rtv:TFastEditorsRunTimeVector);
+var
+  i:integer;
+begin
+  if (assigned(rtv))and(rtv.size>0)then
+    for i:=0 to rtv.size-1 do
+      begin
+        rtv.Mutable[i]^.FastEditorDrawed:=false;
+      end;
+end;
+procedure clearRTstate(rtv:TFastEditorsRunTimeVector);
+var
+  i:integer;
+begin
+  if (assigned(rtv))and(rtv.size>0)then
+    for i:=0 to rtv.size-1 do
+      begin
+        rtv.Mutable[i]^.FastEditorState:=TFES_Default;
+      end;
+end;
+procedure convertToRunTime(dt:TFastEditorsVector;var rt:TFastEditorsRunTimeVector);
+var
+  i:integer;
+  td:TFastEditorRunTimeData;
+begin
+  if (assigned(dt))and(dt.size>0)then
+  begin
+    if not assigned(rt) then
+                        begin
+                            rt:=TFastEditorsRunTimeVector.Create;
+                            rt.Reserve(dt.size);
+                            for i:=0 to dt.size-1 do
+                              begin
+                                td.Procs:=dt[i];
+                                rt.PushBack(td);
+                                //result.Mutable[i]^.Procs:=dt[i];
+                              end;
+                        end
+                        else
+                        begin
+                            for i:=0 to dt.size-1 do
+                              begin
+                                rt.Mutable[i]^.Procs:=dt[i];
+                              end;
+                        end
+
+  end
+  else
+   begin
+     if assigned(rt) then
+                         rt.destroy;
+     rt:=nil;
+   end;
+end;
 class operator vardesk.=(a, b: vardesk): Boolean;
 begin
   Result := (a.name=b.name);

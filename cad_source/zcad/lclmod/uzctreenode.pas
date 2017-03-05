@@ -216,7 +216,7 @@ begin
   pvd:=SysVarUnit^.InterfaceVariables.findvardesc(FVariable);
      if pvd<>nil then
      begin
-          if pvd^.data.PTD=@FundamentalBooleanDescriptorOdj then
+          if pvd^.data.PTD.getfacttypedef=@FundamentalBooleanDescriptorOdj then
                                                         begin
                                                              PGDBBoolean(pvd^.data.Instance)^:=not PGDBBoolean(pvd^.data.Instance)^;
                                                              Checked:=PGDBBoolean(pvd^.data.Instance)^;

@@ -3216,8 +3216,9 @@ begin
     //drawings.GetCurrentROOT^.ObjArray.ObjTree.AddObjectToNodeTree(p3dpl);
     //drawings.GetCurrentROOT^.ObjArray.ObjTree.{AddObjectToNodeTree(p3dpl)}CorrectNodeBoundingBox(p3dpl);   vbnvbn
     //drawings.GetCurrentROOT^.AddObjectToObjArray(addr(p3dpl));
-    if assigned(SetGDBObjInspProc)then
-    SetGDBObjInspProc(drawings.GetUndoStack,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('GDBObjPolyline'),p3dpl,drawings.GetCurrentDWG);
+
+    //if assigned(SetGDBObjInspProc)then
+    //SetGDBObjInspProc(drawings.GetUndoStack,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('GDBObjPolyline'),p3dpl,drawings.GetCurrentDWG);
     end;
 
   end

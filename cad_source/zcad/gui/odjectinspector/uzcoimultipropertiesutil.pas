@@ -115,12 +115,16 @@ begin
      cc:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).Count-1;
      if cc<PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^ then
                                                                                                PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^:=cc;
+     if PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^<0 then
+                                                                                              PTArrayIndex(PTVertex3DControlVarData(pdata).PArrayIndexVarDesc.data.Instance)^:=0;
 end;
 procedure PolylineVertex3DControlEntIterateProc(pdata:GDBPointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
    tv:PGDBVertex;
    cc:TArrayIndex;
 begin
+     if fistrun then
+                    fistrun:=fistrun;
      if @ecp=nil then
                      begin
                           ProcessVariableAttributes(PTVertex3DControlVarData(pdata).PXVarDesc.attrib,vda_RO,0);

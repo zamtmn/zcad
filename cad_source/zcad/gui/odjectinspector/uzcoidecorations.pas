@@ -719,6 +719,10 @@ begin
 
      AddFastEditorToType('GDBInteger',@HalfButtonGetPrefferedFastEditorSize,@ButtonGreatThatDrawFastEditor,@incinteger);
      AddFastEditorToType('GDBInteger',@HalfButtonGetPrefferedFastEditorSize,@ButtonLessThatDrawFastEditor,@decinteger);
+
+     AddFastEditorToType('TArrayIndex',@HalfButtonGetPrefferedFastEditorSize,@ButtonGreatThatDrawFastEditor,@incinteger);
+     AddFastEditorToType('TArrayIndex',@HalfButtonGetPrefferedFastEditorSize,@ButtonLessThatDrawFastEditor,@decinteger);
+
      AddFastEditorToType('TGDBPaletteColor',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runcolorswnd);
      AddFastEditorToType('Boolean',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
      AddFastEditorToType('GDBBoolean',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);

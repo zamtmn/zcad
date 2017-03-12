@@ -257,7 +257,8 @@ begin
 end;
 class function TOrdinalTypeManipulator<T>.GetValueAsString(const data:T):TInternalScriptString;
 begin
-     Str(data,result)
+     result:=data.tostring;
+     //Str(data,result)
   //result:=inttostr(LongInt(data));
 end;
 class procedure TOrdinalTypeManipulator<T>.SetValueFromString(var data:T;Value:TInternalScriptString);
@@ -288,7 +289,8 @@ begin
 end;
 class function TFloatTypeManipulator<T>.GetValueAsString(const data:T):TInternalScriptString;
 begin
-    Str(data:10:10,result);
+    //Str(data:10:10,result);
+    result:=data.tostring;
     if pos('.',result)<1 then
                              result:=result+'.0';
 end;

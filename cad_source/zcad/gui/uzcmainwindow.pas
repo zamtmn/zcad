@@ -1405,7 +1405,7 @@ begin
   StoreBackTraceStrFunc:=BackTraceStrFunc;
   BackTraceStrFunc:=@SysBackTraceStr;
   }
-  {$if FPC_FULlVERSION>=30101}
+  {$if FPC_FULlVERSION>=30002}
   AllowReuseOfLineInfoData:=false;
   {$endif}
   ZCADGUIManager.RegisterZCADFormInfo('PageControl',rsDrawingWindowWndName,Tform,types.rect(200,200,600,500),ZCADMainPanelSetupProc,nil,@ZCADMainWindow.MainPanel);
@@ -2318,7 +2318,11 @@ begin
                                                    rc:=pdwg.CreateDrawingRC;
                                               pdwg.wa.finishdraw(rc);
                                               done:=false;
-                                              end;
+                                              end
+                                          else
+                                              begin
+                                                   pdwg.wa.idle(Sender,Done);
+                                              end
      end
      end
      else

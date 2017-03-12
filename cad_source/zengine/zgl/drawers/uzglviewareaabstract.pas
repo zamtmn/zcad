@@ -133,6 +133,7 @@ type
                            procedure set3dmouse;virtual;abstract;
                            procedure WaMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);virtual;abstract;
                            procedure WaResize(sender:tobject);virtual;abstract;
+                           procedure idle(Sender: TObject; var Done: Boolean);virtual;abstract;
                            procedure SwapBuffers(var DC:TDrawContext); virtual;abstract;
                            procedure LightOn(var DC:TDrawContext); virtual;abstract;
                            procedure LightOff(var DC:TDrawContext); virtual;abstract;

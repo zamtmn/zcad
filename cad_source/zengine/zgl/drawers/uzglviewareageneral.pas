@@ -128,9 +128,10 @@ type
                            procedure WaMouseWheel(Sender:TObject;Shift: TShiftState; WheelDelta: Integer;MousePos: TPoint;var handled:boolean);
                            procedure WaMouseEnter(Sender:TObject);
                            procedure WaMouseLeave(Sender:TObject);
-                           procedure WaResize(sender:tobject); override;
+                           procedure WaResize(sender:tobject);override;
                            procedure mypaint(sender:tobject);
 
+                           procedure idle(Sender: TObject; var Done: Boolean);override;
 
                            constructor Create(TheOwner: TComponent); override;
                            destructor Destroy; override;
@@ -201,6 +202,10 @@ begin
      draw;
      dec(InsidePaintMessage);
      inherited;
+end;
+procedure TGeneralViewArea.idle(Sender: TObject; var Done: Boolean);
+begin
+     //paint;
 end;
 procedure TGeneralViewArea.ZoomIn;
 begin
@@ -811,6 +816,7 @@ begin
   begin
     LightOff(dc);
     drawer.RestoreBuffers;
+    CalcOptimalMatrix;
     inc(dc.subrender);
     dc.drawer.startrender(TRM_ModelSpace,dc.DrawingContext.matrixs);
     if PDWG.GetConstructObjRoot.ObjArray.Count>0 then
@@ -1679,24 +1685,11 @@ var
   i:integer;
 begin
   Drawer.delmyscrbuf;
-  if param.pglscreen <> nil then
-  GDBFreeMem(param.pglscreen);
-
   PolarAxis.done;
-  param.ospoint.arraydispaxis.done;
-  param.ospoint.arrayworldaxis.done;
-  for i := 0 to {wa.param.ontrackarray.total-1}3 do
-                                           begin
-                                           param.ontrackarray.otrackarray[i].arrayworldaxis.done;
-                                           param.ontrackarray.otrackarray[i].arraydispaxis.done;
-                                           end;
-  {переделать}//inherited done;
-
-
-     freeandnil(drawer);
-     freeandnil(OTTimer);
-     freeandnil(OHTimer);
-     inherited;
+  freeandnil(drawer);
+  freeandnil(OTTimer);
+  freeandnil(OHTimer);
+  inherited;
 end;
 
 constructor TGeneralViewArea.Create(TheOwner: TComponent);
@@ -1717,38 +1710,8 @@ begin
 
      PDWG:=nil;
 
-     param.projtype := Projparalel;
-     param.firstdraw := true;
-     param.SelDesc.OnMouseObject := nil;
-     param.lastonmouseobject:=nil;
-     param.SelDesc.LastSelectedObject := nil;
-     param.pglscreen := nil;
-     param.gluetocp := false;
-     param.cpdist.cpnum := -1;
-     param.cpdist.cpdist := 99999;
-
+     param.init;
      SetMouseMode((MGetControlpoint) or (MGetSelectObject) or (MMoveCamera) or (MRotateCamera) or (MGetSelectionFrame));
-     param.seldesc.MouseFrameON := false;
-     param.otracktimerwork := 0;
-     param.ontrackarray.total := 1;
-     param.ontrackarray.current := 1;
-     param.md.workplane{.normal.x}[0] := 0;
-     param.md.workplane{.normal.y}[1] := {sqrt(0.1)}0;
-     param.md.workplane{.normal.z}[2] := {sqrt(0.9)}1;
-     param.md.workplane{.d}[3] := 0;
-     param.scrollmode:=false;
-
-     param.md.mousein:=false;
-     param.processObjConstruct:=false;
-     param.ShowDebugBoundingBbox:=false;
-     param.ShowDebugFrustum:=false;
-     param.CSIcon.AxisLen:=0;
-
-     param.CSIcon.CSIconCoord:=nulvertex;
-     param.CSIcon.CSIconX:=nulvertex;
-     param.CSIcon.CSIconY:=nulvertex;
-
-     param.CSIcon.CSIconZ:=nulvertex;
 
      PolarAxis.init({$IFDEF DEBUGBUILD}'{5AD9927A-0312-4844-8C2D-9498647CCECB}',{$ENDIF}10);
 
@@ -1760,22 +1723,7 @@ begin
        PolarAxis.PushBackData(v);
      end;
 
-     param.ontrackarray.otrackarray[0].arrayworldaxis.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}10);
-     param.ontrackarray.otrackarray[0].arraydispaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
      tocommandmcliccount:=0;
-
-
-     for i := 0 to 3 do
-                     begin
-                     param.ontrackarray.otrackarray[i].arrayworldaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
-                     param.ontrackarray.otrackarray[i].arrayworldaxis.CreateArray;
-                     param.ontrackarray.otrackarray[i].arraydispaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
-                     param.ontrackarray.otrackarray[i].arraydispaxis.CreateArray;
-                     end;
-
-
-     param.ospoint.arraydispaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
-     param.ospoint.arrayworldaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
 
      if PDWG<>nil then
      begin

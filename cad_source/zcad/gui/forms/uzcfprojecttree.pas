@@ -192,7 +192,7 @@ begin
         begin
          offset:=0;
          pvdeq^.data.PTD^.ApplyOperator('.','TreeCoord',offset,tc);
-         if (offset<>0)and(tc=@FundamentalStringDescriptorObj) then
+         if (offset<>0)and(tc^.GetFactTypedef=@FundamentalStringDescriptorObj) then
          begin
               treesuperpos:=pgdbstring(ptruint(pvdeq^.data.Instance) + offset)^;
          end

@@ -20,7 +20,7 @@ unit uzglviewareadata;
 {$INCLUDE def.inc}
 
 interface
-uses uzbgeomtypes,uzbtypesbase,uzbtypes, UGDBPoint3DArray,UGDBTracePropArray;
+uses uzegeometry,uzeconsts,uzbgeomtypes,uzbtypesbase,uzbtypes, UGDBPoint3DArray,UGDBTracePropArray;
 const
 MZW_LBUTTON=1;
 MZW_SHIFT=128;
@@ -109,16 +109,13 @@ type
          end;
 
   POGLWndtype = ^OGLWndtype;
-  OGLWndtype = packed record
+  OGLWndtype = packed object(GDBaseObject)
     polarlinetrace: GDBInteger;
     pointnum, axisnum: GDBInteger;
     CSIcon:TCSIcon;
-    //CSIconCoord: GDBvertex;
-    //CSX, CSY, CSZ: GDBvertex2DI;
     BLPoint,CPoint,TRPoint:GDBvertex2D;
     ViewHeight:GDBDouble;
     projtype: GDBInteger;
-    clipx, clipy: GDBDouble;
     firstdraw: GDBBoolean;
     md: mousedesc;
     gluetocp: GDBBoolean;
@@ -126,11 +123,9 @@ type
     ospoint, oldospoint: os_record;
     height, width: GDBInteger;
     SelDesc: Selectiondesc;
-    pglscreen: GDBPointer;
     otracktimerwork: GDBInteger;
     scrollmode:GDBBoolean;
     lastcp3dpoint,lastpoint: GDBVertex;
-    //cslen:GDBDouble;
     lastonmouseobject:GDBPointer;
     nearesttcontrolpoint:tcontrolpointdist;
     startgluepoint:pcontrolpointdesc;
@@ -142,11 +137,78 @@ type
     ShowDebugBoundingBbox:GDBBoolean;
     DebugBoundingBbox:TBoundingBox;
     processObjConstruct:GDBBoolean;
+    constructor init;
+    destructor done;virtual;
   end;
 {Export-}
 //ppolaraxis: PGDBOpenArrayVertex_GDBWord;
 
 
 implementation
+constructor OGLWndtype.init;
+var
+  i:integer;
+begin
+  projtype := Projparalel;
+  firstdraw := true;
+  SelDesc.OnMouseObject := nil;
+  lastonmouseobject:=nil;
+  SelDesc.LastSelectedObject := nil;
+  gluetocp := false;
+  cpdist.cpnum := -1;
+  cpdist.cpdist := 99999;
+
+  seldesc.MouseFrameON := false;
+  otracktimerwork := 0;
+  ontrackarray.total := 1;
+  ontrackarray.current := 1;
+  md.workplane{.normal.x}[0] := 0;
+  md.workplane{.normal.y}[1] := {sqrt(0.1)}0;
+  md.workplane{.normal.z}[2] := {sqrt(0.9)}1;
+  md.workplane{.d}[3] := 0;
+  scrollmode:=false;
+
+  md.mousein:=false;
+  processObjConstruct:=false;
+  ShowDebugBoundingBbox:=false;
+  ShowDebugFrustum:=false;
+  CSIcon.AxisLen:=0;
+
+  CSIcon.CSIconCoord:=nulvertex;
+  CSIcon.CSIconX:=nulvertex;
+  CSIcon.CSIconY:=nulvertex;
+
+  CSIcon.CSIconZ:=nulvertex;
+
+  ontrackarray.otrackarray[0].arrayworldaxis.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}10);
+  ontrackarray.otrackarray[0].arraydispaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
+
+
+       for i := 0 to 3 do
+                       begin
+                       ontrackarray.otrackarray[i].arrayworldaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
+                       ontrackarray.otrackarray[i].arrayworldaxis.CreateArray;
+                       ontrackarray.otrackarray[i].arraydispaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
+                       ontrackarray.otrackarray[i].arraydispaxis.CreateArray;
+                       end;
+
+
+       ospoint.arraydispaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
+       ospoint.arrayworldaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
+end;
+
+destructor OGLWndtype.done;
+var
+  i:integer;
+begin
+  ospoint.arraydispaxis.done;
+  ospoint.arrayworldaxis.done;
+  for i := 0 to 3 do
+                   begin
+                     ontrackarray.otrackarray[i].arrayworldaxis.done;
+                     ontrackarray.otrackarray[i].arraydispaxis.done;
+                   end;
+
+end;
 
 end.

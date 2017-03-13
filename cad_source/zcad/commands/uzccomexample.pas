@@ -929,6 +929,27 @@ begin
     end;
     result:=cmd_ok;
 end;
+function ExampleCreateLayer_com(operands:TCommandOperands):TCommandResult;
+var
+    pproglayer:PGDBLayerProp;
+    pnevlayer:PGDBLayerProp;
+    pe:PGDBObjEntity;
+const
+    createdlayername='hohoho';
+begin
+    if commandmanager.getentity(rscmSelectSourceEntity,pe) then
+    begin
+      pproglayer:=BlockBaseDWG.LayerTable.getAddres(createdlayername);//ищем описание слоя в библиотеке
+                                                                      //возможно оно найдется, а возможно вернется nil
+      pnevlayer:=drawings.GetCurrentDWG.LayerTable.createlayerifneedbyname(createdlayername,pproglayer);//эта процедура сначала ищет описание слоя в чертеже
+                                                                                                        //если нашла - возвращает его
+                                                                                                        //не нашла, если pproglayer не nil - создает такойде слой в чертеже
+                                                                                                        //и только если слой в чертеже не найден pproglayer=nil то возвращает nil
+      if pnevlayer=nil then //предидущие попытки обламались. в чертеже и в библиотеке слоя нет, тогда создаем новый
+        pnevlayer:=drawings.GetCurrentDWG.LayerTable.addlayer(createdlayername{имя},ClWhite{цвет},-1{вес},true{on},false{lock},true{print},'???'{описание},TLOLoad{режим создания - в данном случае неважен});
+      pe^.vp.Layer:=pnevlayer;
+    end;
+end;
 
 initialization
 { тут регистрация функций в интерфейсе зкада}
@@ -956,6 +977,8 @@ initialization
      DrawSuperlineParams.ProcessLayer:=true;        //начальное значение выключателя
      CreateCommandFastObjectPlugin(@DrawSuperLine_com,   'DrawSuperLine',   CADWG,0);
      CreateCommandFastObjectPlugin(@InsertDevice_com,    'ID',   CADWG,0);
+
+     CreateCommandFastObjectPlugin(@ExampleCreateLayer_com,'ExampleCreateLayer',   CADWG,0);
 
      MatchPropParam.ProcessLayer:=true;
      MatchPropParam.ProcessLineType:=true;

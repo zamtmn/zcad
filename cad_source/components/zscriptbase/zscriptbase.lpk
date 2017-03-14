@@ -12,7 +12,7 @@
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Files Count="4">
+    <Files Count="5">
       <Item1>
         <Filename Value="varmandef.pas"/>
         <UnitName Value="varmandef"/>
@@ -29,6 +29,10 @@
         <Filename Value="typedescriptors.pas"/>
         <UnitName Value="typedescriptors"/>
       </Item4>
+      <Item5>
+        <Filename Value="uzctypesdecorations.pas"/>
+        <UnitName Value="uzctypesdecorations"/>
+      </Item5>
     </Files>
     <RequiredPkgs Count="4">
       <Item1>

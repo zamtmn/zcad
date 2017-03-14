@@ -9,7 +9,7 @@ uses
   LazUTF8,Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   ComCtrls, StdCtrls, ActnList, Menus,
 
-  uzedimensionaltypes,zcobjectinspector,Varman,uzbtypes,uzemathutils,UUnitManager,varmandef,zcobjectinspectoreditors,UEnumDescriptor,
+  zcobjectinspectorui,uzctypesdecorations,uzedimensionaltypes,zcobjectinspector,Varman,uzbtypes,uzemathutils,UUnitManager,varmandef,zcobjectinspectoreditors,UEnumDescriptor,
 
 
   {$IFDEF CHECKLOOPS}uchecker,{$ENDIF}
@@ -77,16 +77,6 @@ begin
    GDBobjinsp1.updateinsp;
 end;
 procedure TForm1._onCreate(Sender: TObject);
-  procedure AddEditorToType(tn:string; CreateEditor:TCreateEditorFunc);//set editor to type
-  var
-     PT:PUserTypeDescriptor;
-  begin
-       PT:=RunTimeUnit^.TypeName2PTD(tn);//find type descriptor by name
-       if PT<>nil then
-                      begin
-                           PT^.onCreateEditorFunc:=CreateEditor;//set editor to type
-                      end;
-  end;
 begin
    Options:=DefaultOptions;
    UnitsFormat:=CreateDefaultUnitsFormat;
@@ -112,12 +102,12 @@ begin
 
   _SetUIFromOption(nil);
 
-  AddEditorToType('Integer',TBaseTypesEditors.BaseCreateEditor);//register standart editor to integer type
-  AddEditorToType('Double',TBaseTypesEditors.BaseCreateEditor);//register standart editor to double type
-  AddEditorToType('AnsiString',TBaseTypesEditors.BaseCreateEditor);//register standart editor to string type
-  AddEditorToType('String',TBaseTypesEditors.BaseCreateEditor);//register standart editor to string type
-  AddEditorToType('Boolean',TBaseTypesEditors.GDBBooleanCreateEditor);//register standart editor to string type
-  //AddFastEditorToType('GDBBoolean',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
+  AddEditorToType(RunTimeUnit^.TypeName2PTD('Integer'),TBaseTypesEditors.BaseCreateEditor);//register standart editor to integer type
+  AddEditorToType(RunTimeUnit^.TypeName2PTD('Double'),TBaseTypesEditors.BaseCreateEditor);//register standart editor to double type
+  AddEditorToType(RunTimeUnit^.TypeName2PTD('AnsiString'),TBaseTypesEditors.BaseCreateEditor);//register standart editor to string type
+  AddEditorToType(RunTimeUnit^.TypeName2PTD('String'),TBaseTypesEditors.BaseCreateEditor);//register standart editor to string type
+  AddEditorToType(RunTimeUnit^.TypeName2PTD('Boolean'),TBaseTypesEditors.GDBBooleanCreateEditor);//register standart editor to string type
+  AddFastEditorToType(RunTimeUnit^.TypeName2PTD('Boolean'),@OIUI_FE_BooleanGetPrefferedSize,@OIUI_FE_BooleanDraw,@OIUI_FE_BooleanInverse);
   EnumGlobalEditor:=TBaseTypesEditors.EnumDescriptorCreateEditor;//register standart editor to all enum types
 
   GDBobjinsp1.setptr(nil,UnitsFormat,RunTimeUnit^.TypeName2PTD('TOptions'),@Options,nil);//show data variable in inspector

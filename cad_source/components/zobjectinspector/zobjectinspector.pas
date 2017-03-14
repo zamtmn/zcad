@@ -4,10 +4,12 @@
 
 unit zobjectinspector;
 
+{$warn 5023 off : no warning about unused units}
 interface
 
 uses
-  zcobjectinspector, zcobjectinspectoreditors, LazarusPackageIntf;
+  zcobjectinspector, zcobjectinspectoreditors, zcobjectinspectorui, 
+  LazarusPackageIntf;
 
 implementation
 

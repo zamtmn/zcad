@@ -546,7 +546,7 @@ var
 begin
      if assigned(FastEditorRT.Procs.OnGetPrefferedFastEditorSize) then
      begin
-           FESize:=FastEditorRT.Procs.OnGetPrefferedFastEditorSize(ppd^.valueAddres);
+           FESize:=FastEditorRT.Procs.OnGetPrefferedFastEditorSize(ppd^.valueAddres,r);
            temp:=r.Bottom-r.Top-2;
            if temp<2 then temp:=2;
            if FESize.cy>temp then

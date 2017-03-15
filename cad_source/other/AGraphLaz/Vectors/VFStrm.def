@@ -41,7 +41,7 @@ type
     function GetFileNameW: WideString;
     {$ENDIF}
     {$IFDEF V_32}
-    function GetLastWriteTime: TDateTime;
+    //function GetLastWriteTime: TDateTime;
     {$IFDEF V_WIN}
     procedure SetLastWriteTime(Value: TDateTime);
     {$ENDIF} {V_WIN}
@@ -80,8 +80,8 @@ type
       class implements buffering); after calling FileSize the value of Size
       property will be corrected }
     {$IFDEF V_32}
-    property LastWriteTime: TDateTime read GetLastWriteTime
-      {$IFDEF V_WIN}write SetLastWriteTime{$ENDIF};
+    //property LastWriteTime: TDateTime read GetLastWriteTime
+    //  {$IFDEF V_WIN}write SetLastWriteTime{$ENDIF};
     {$ENDIF}
     {$IFDEF W_STREAM_WIN}
     property FileName: String read GetFileName;

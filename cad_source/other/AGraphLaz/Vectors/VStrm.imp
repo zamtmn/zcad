@@ -692,8 +692,7 @@ procedure TGMEMStream.FReAllocate(NewSize: Int32);
 var
   {$IFDEF V_WIN}
   NewData: HGLOBAL;
-  {$ENDIF}
-  {$IFDEF LINUX}
+  {$ELSE}
   NewBuffer: Pointer;
   {$ENDIF}
 begin

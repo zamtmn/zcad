@@ -16,8 +16,8 @@ uses
   PQueue, PStack, RBTree, SIDic, SIQueue, SPDic, SQueue, SSDic, StrCount, 
   StrLst, UInt8g, UInt8m, UInt8sv, UInt8v, UInt16g, UInt16m, UInt16sv, 
   UInt16v, UInt32g, UInt32m, UInt32sv, UInt32v, VCLCmpt, VComUtil, VectErr, 
-  Vectors, VectProc, VectStr, VFileLst, VFileSys, VFormat, VFStream, VFstTmr, 
-  VStream, VStrm64, VStrmCrc, VTxtStrm, LazarusPackageIntf;
+  Vectors, VectProc, VectStr, VFileLst, VFileSys, VFormat, VFStream, VStream, 
+  VStrm64, VStrmCrc, VTxtStrm, LazarusPackageIntf;
 
 implementation
 

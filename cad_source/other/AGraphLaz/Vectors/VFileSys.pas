@@ -7,19 +7,19 @@ interface
 {$I VCheck.inc}
 
 uses
+  {$IFNDEF V_WIN}{$IFNDEF LINUX}{$DEFINE V_WIN}{$ENDIF}{$ENDIF}
   {$IFDEF V_WIN}Windows,{$ENDIF}
   {$IFDEF LINUX}{$IFDEF V_KYLIX}Libc{$ELSE}Linux{$ENDIF},{$ENDIF}
   SysUtils, ExtType, ExtSys, VectStr, VectErr;
 
-{$IFNDEF V_WIN}{$IFNDEF LINUX}Error!{$ENDIF}{$ENDIF}
+//{$IFNDEF V_WIN}{$IFNDEF LINUX}Error!{$ENDIF}{$ENDIF}
 
 const
   InvalidWinFileNameChars = ['"', '*', '?', '/', ':', '<', '>', '\', '|'];
-  {$IFDEF V_WIN}
-  InvalidFileNameChars = InvalidWinFileNameChars;
-  {$ENDIF}
   {$IFDEF LINUX}
   InvalidFileNameChars = ['*', '?', '/'];
+  {$ELSE}
+  InvalidFileNameChars = InvalidWinFileNameChars;
   {$ENDIF}
   InvalidFileMaskChars = InvalidFileNameChars - ['*', '?'];
 
@@ -69,8 +69,6 @@ function ExcludePathDelimiterW(const S: WideString): WideString;
 { why use pLastOSError: GetLastError will be altered by WideString cleaning
   code (under Windows) }
 {$IFDEF V_WIN}
-function FileGetAttrW(const FileName: WideString): DWORD;
-function FileSetAttrW(const FileName: WideString; Attr: DWORD): DWORD;
 {$ENDIF}
 
 {$IFDEF LINUX}
@@ -86,20 +84,15 @@ function IsFileNameSyntaxValid(const FileName: WideString): Boolean;
 
 function IsAbsolutePathSyntaxValid(const Path: WideString): Boolean;
 
-function RenameFileW(const OldName, NewName: WideString): Boolean;
-
 function GetTempDir: String;
 
 type
-  TFileLock = {$IFDEF V_WIN}THandle{$ENDIF}{$IFDEF LINUX}Integer{$ENDIF};
+  TFileLock = {$IFDEF LINUX}Integer{$ELSE}THandle{$ENDIF};
 
 { блокирует файл на запись; в случае успеха возвращает дескриптор файла, иначе
   возвращает INVALID_HANDLE_VALUE (Linux: -1) }
 { write-locks the given file; returns a file handle if successful or
   INVALID_HANDLE_VALUE (Linux: -1) if failed }
-
-function ApiCopyFileW(const FromName, ToName: WideString;
-  FailIfExists: Boolean): Boolean;
 
 {$IFDEF V_WIN}
 function GetTempDirW: WideString;
@@ -111,15 +104,8 @@ function GetSystemDir: String;
 function GetSystemDirW: WideString;
 
 function LockFileRead(const FileName: String): THandle;
-function LockFileReadW(const FileName: WideString): THandle;
-{ блокирует файл на чтение; в случае успеха возвращает дескриптор файла, иначе
-  возвращает INVALID_HANDLE_VALUE }
-{ read-locks the given file; returns a file handle if successful or
-  INVALID_HANDLE_VALUE if failed }
 
 function GetLongFileName(const Name: String): String;
-  {$IFDEF V_D6}platform;{$ENDIF}
-function GetLongFileNameW(const Name: WideString): WideString;
   {$IFDEF V_D6}platform;{$ENDIF}
 { возвращает "длинное" имя, соответствующее заданному "короткому" имени файла
   или директории либо пустую строку, если файл или директория не найдены; в
@@ -128,22 +114,12 @@ function GetLongFileNameW(const Name: WideString): WideString;
   name or the empty string if the file or directory were not found; it's legal
   to pass long names to the function }
 
-function WideFileNameToAnsiName(const FileName: WideString): String;
-{ возвращает ANSI-имя файла, соответствующее заданному Unicode-имени файла;
-  файл должен существовать }
-{ returns ANSI file name corresponding to the given Unicode file name; the file
-  must exists }
 
-function CheckCreateFileByWideName(const FileName: WideString;
-  var AnsiName: String; pCreated: PBoolean{$IFDEF V_DEFAULTS} = nil{$ENDIF}): Boolean;
 {$ENDIF} {V_WIN}
 
 {$IFDEF V_DELPHI}{$IFNDEF V_D6}
 function DirectoryExists(const Name: String): Boolean;
 {$ENDIF}{$ENDIF}
-function DirectoryExistsW(const Name: WideString): Boolean;
-{ проверяет, существует ли заданная директория }
-{ checks whether the specified directory exists }
 
 {$IFDEF V_DELPHI}{$IFNDEF V_D6}
 function ForceDirectories(Dir: String): Boolean;
@@ -224,19 +200,6 @@ function GetLinkTarget(const PathOnly: String): String;
 {$ELSE}
 
 {$ENDIF} {V_DEFAULTS}
-
-function SetFileDate(const FileName: String; DateTime: TDateTime): Boolean;
-function SetFileDateW(const FileName: WideString; DateTime: TDateTime): Boolean;
-
-function ReadFileBlockW(const FileName: WideString; Buf: PChar; Count: Integer;
-  Offset: Integer{$IFDEF V_DEFAULTS} = 0{$ENDIF}): Boolean;
-function SafeReadFileBlockW(const FileName: WideString; Buf: PChar;
-  Count: Integer; Offset: Integer{$IFDEF V_DEFAULTS} = 0{$ENDIF}): Boolean;
-
-function CheckFileSignW(const FileName: WideString; const Sign: String;
-  Offset: Integer{$IFDEF V_DEFAULTS} = 0{$ENDIF}): Boolean;
-function SafeCheckFileSignW(const FileName: WideString; const Sign: String;
-  Offset: Integer{$IFDEF V_DEFAULTS} = 0{$ENDIF}): Boolean;
 
 function IsRelativePath(const FileName: String): Boolean;
 
@@ -478,26 +441,7 @@ end;
 
 
 {$IFDEF V_WIN}
-function FileGetAttrW(const FileName: WideString): DWORD;
-begin
-  if Win32Platform = VER_PLATFORM_WIN32_NT then
-    Result:=GetFileAttributesW(PWideChar(UNCPath(FileName)))
-  else
-    Result:=GetFileAttributes(PChar(String(FileName)));
-end;
 
-function FileSetAttrW(const FileName: WideString; Attr: DWORD): DWORD;
-var
-  Success: Boolean;
-begin
-  if Win32Platform = VER_PLATFORM_WIN32_NT then
-    Success:=SetFileAttributesW(PWideChar(UNCPath(FileName)), Attr)
-  else
-    Success:=SetFileAttributes(PChar(String(FileName)), Attr);
-  Result:=0;
-  if not Success then
-    Result:=GetLastError;
-end;
 {$ENDIF}
 
 function ValidateFileName(const FileName: String; MaxLen: Integer): String;
@@ -558,15 +502,6 @@ begin
   {$ENDIF}
 end;
 
-function RenameFileW(const OldName, NewName: WideString): Boolean;
-begin
-  {$IFDEF V_WIN}
-  if Win32Platform = VER_PLATFORM_WIN32_NT then
-    Result:=MoveFileW(PWideChar(UNCPath(OldName)), PWideChar(UNCPath(NewName)))
-  else
-  {$ENDIF}
-    Result:=RenameFile(OldName, NewName);
-end;
 
 function GetTempDir: String;
 {$IFDEF V_WIN}
@@ -590,49 +525,6 @@ begin
   {$ENDIF}
 end;
 
-function ApiCopyFileW(const FromName, ToName: WideString;
-  FailIfExists: Boolean): Boolean;
-{$IFDEF LINUX}
-var
-  ToHandle, BytesRead, FromHandle: Integer;
-  Buf: array [0..32 * KILOBYTE - 1] of Byte;
-{$ENDIF}
-begin
-  {$IFDEF V_WIN}
-  if Win32Platform = VER_PLATFORM_WIN32_NT then
-    Result:=CopyFileW(PWideChar(UNCPath(FromName)), PWideChar(UNCPath(ToName)),
-      FailIfExists)
-  else
-    Result:=CopyFile(PChar(String(FromName)), PChar(String(ToName)),
-      FailIfExists);
-  {$ENDIF}
-  {$IFDEF LINUX}
-  Result:=False;
-  if FailIfExists and FileExists(ToName) then
-    Exit;
-  FromHandle:=FileOpen(FromName, fmOpenRead + fmShareDenyWrite);
-  if FromHandle < 0 then
-    Exit;
-  ToHandle:=FileCreate(ToName);
-  if ToHandle < 0 then begin
-    FileClose(FromHandle);
-    Exit;
-  end;
-  try
-    repeat
-      BytesRead:=FileRead(FromHandle, Buf, SizeOf(Buf));
-      if BytesRead < 0 then
-        Exit;
-      if FileWrite(ToHandle, Buf, BytesRead) <> BytesRead then
-        Exit;
-    until BytesRead < SizeOf(Buf);
-  finally
-    FileClose(FromHandle);
-    FileClose(ToHandle);
-  end;
-  Result:=True;
-  {$ENDIF}
-end;
 
 {$IFDEF V_WIN}
 function GetTempDirW: WideString;
@@ -703,15 +595,6 @@ begin
     FILE_FLAG_NO_BUFFERING, 0);
 end;
 
-function LockFileReadW(const FileName: WideString): THandle;
-begin
-  if Win32Platform = VER_PLATFORM_WIN32_NT then
-    Result:=CreateFileW(PWideChar(UNCPath(FileName)), GENERIC_READ, 0, nil,
-      OPEN_EXISTING, FILE_FLAG_NO_BUFFERING, 0)
-  else
-    Result:=LockFileWrite(FileName);
-end;
-
 function GetLongFileName(const Name: String): String;
 
   function ProcessExpanded(const ExpName: String): String;
@@ -770,165 +653,6 @@ begin
   end;
 end;
 
-function GetLongFileNameW(const Name: WideString): WideString;
-
-  function ProcessExpanded(const ExpName: WideString): WideString;
-  var
-    I: Integer;
-    Name, Path: WideString;
-    hFind: THandle;
-    FindData: TWin32FindDataW;
-  begin
-    Result:=ExpName;
-    I:=Length(Result);
-    if I > 0 then begin
-      if Result[I] = '\' then begin
-        Dec(I);
-        if (I > 0) and (Result[I] = ':') then
-          Exit;
-        SetLength(Result, I);
-      end
-      else
-        if Result[I] = ':' then
-          Exit;
-      ParseFileNameW(Result, Path, Name);
-      if (WideCharPos('*', Name, 1) = 0) and (WideCharPos('?', Name, 1) = 0) then begin
-        hFind:=Windows.FindFirstFileW(PWideChar(Result),
-          {$IFDEF V_FREEPASCAL}@{$ENDIF}FindData);
-        if hFind = INVALID_HANDLE_VALUE then
-          Exit;
-        Windows.FindClose(hFind);
-        if (FindData.cFileName[0] = '.') and (FindData.cFileName[1] = #0) then
-          Exit;
-        Name:=LWideString(@FindData.cFileName, SizeOf(FindData.cFileName) div 2);
-      end;
-      if Length(Path) < I then begin
-        if WideCharPos('~', Result, 1) > 0 then begin
-          Path:=ProcessExpanded(Path);
-          I:=Length(Path);
-          if (I > 0) and (Path[I] <> '\') then
-            Path:=Path + '\';
-        end;
-        Result:=Path + Name;
-      end;
-    end;
-  end;
-
-var
-  UNC: Boolean;
-begin
-  if Win32Platform = VER_PLATFORM_WIN32_NT then begin
-    Result:=Name;
-    if Result <> '' then begin
-      if Result[Length(Result)] = ':' then
-        Result:=Result + '\';
-      Result:=ExpandFileNameW(Result);
-      if WideCharPos('~', Result, 1) > 0 then begin
-        UNC:=False;
-        if Length(Result) >= MAX_PATH then begin
-          Result:=UNCPath(Result);
-          UNC:=True;
-        end;
-        Result:=ProcessExpanded(Result);
-        if UNC and (Copy(Result, 1, 4) = '\\?\') then
-          Delete(Result, 1, 4);
-      end;
-    end;
-  end
-  else
-    Result:=GetLongFileName(Name);
-end;
-
-function WideFileNameToAnsiName(const FileName: WideString): String;
-var
-  L, N: Integer;
-  ShortPath: PWideChar;
-begin
-  Result:=FileName;
-  if Win32Platform = VER_PLATFORM_WIN32_NT then begin
-    L:=Length(FileName);
-    if (L >= MAX_PATH) or (Result <> FileName) then begin
-      Inc(L);
-      GetMem(ShortPath, L * 2);
-      try
-        N:=GetShortPathNameW(PWideChar(UNCPath(FileName)), ShortPath, L);
-        if (N > 0) and (N < L) then begin
-          ShortPath[N]:=#0;
-          Result:=String(WideString(ShortPath));
-          if StrLComp(PChar(Result), '\\?\', 4) = 0 then
-            Delete(Result, 1, 4);
-        end;
-      finally
-        FreeMem(ShortPath);
-      end;
-    end;
-  end;
-end;
-
-function CheckCreateFileByWideName(const FileName: WideString;
-  var AnsiName: String; pCreated: PBoolean{$IFDEF V_DEFAULTS} = nil{$ENDIF}): Boolean;
-
-  function WideCreateFile: Boolean;
-  var
-    hFile: THandle;
-  begin
-    hFile:=CreateFileW(PWideChar(UNCPath(FileName)), GENERIC_WRITE, 0, nil,
-      CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL or FILE_FLAG_NO_BUFFERING, 0);
-    if hFile = INVALID_HANDLE_VALUE then begin
-      Result:=False;
-      Exit;
-    end;
-    CloseHandle(hFile);
-    if pCreated <> nil then
-      pCreated^:=True;
-    Result:=True;
-  end;
-
-var
-  L, N: Integer;
-  hFile: THandle;
-  ShortPath: PWideChar;
-begin
-  Result:=False;
-  AnsiName:=FileName;
-  if pCreated <> nil then
-    pCreated^:=False;
-  if Win32Platform = VER_PLATFORM_WIN32_NT then
-    if AnsiName <> FileName then begin
-      L:=Length(FileName) + 1;
-      GetMem(ShortPath, L * 2);
-      try
-        N:=GetShortPathNameW(PWideChar(FileName), ShortPath, L);
-        if N = 0 then
-          if WideCreateFile then
-            N:=GetShortPathNameW(PWideChar(FileName), ShortPath, L)
-          else
-            Exit;
-        if (N > 0) and (N < L) then begin
-          ShortPath[N]:=#0;
-          AnsiName:=String(WideString(ShortPath));
-          Result:=True;
-        end;
-      finally
-        FreeMem(ShortPath);
-      end;
-    end
-    else
-      Result:=WideCreateFile
-  else
-    if FileExists(AnsiName) then
-      Result:=True
-    else begin
-      hFile:=CreateFile(PAnsiChar(Result), GENERIC_WRITE, 0, nil, CREATE_ALWAYS,
-        FILE_ATTRIBUTE_NORMAL or FILE_FLAG_NO_BUFFERING, 0);
-      if hFile = INVALID_HANDLE_VALUE then
-        Exit;
-      CloseHandle(hFile);
-      if pCreated <> nil then
-        pCreated^:=True;
-      Result:=True;
-    end;
-end;
 {$ENDIF}
 
 {$IFDEF V_DELPHI}{$IFNDEF V_D6}
@@ -940,25 +664,6 @@ begin
   Result:=(Code <> DWORD(-1)) and (Code and FILE_ATTRIBUTE_DIRECTORY <> 0);
 end;
 {$ENDIF}{$ENDIF}
-
-function DirectoryExistsW(const Name: WideString): Boolean;
-{$IFDEF V_WIN}
-var
-  Code: DWORD;
-begin
-  if Win32Platform = VER_PLATFORM_WIN32_NT then begin
-    Code:=GetFileAttributesW(PWideChar(UNCPath(Name)));
-    Result:=(Code <> DWORD(-1)) and (Code and FILE_ATTRIBUTE_DIRECTORY <> 0);
-  end
-  else
-    Result:=DirectoryExists(Name);
-end;
-{$ENDIF}
-{$IFDEF LINUX}
-begin
-  Result:=DirectoryExists(Name);
-end;
-{$ENDIF}
 
 {$IFDEF V_DELPHI}{$IFNDEF V_D6}
 function ForceDirectories(Dir: String): Boolean;
@@ -1265,129 +970,12 @@ begin
 end;
 
 {$IFDEF V_WIN}
-function GetFileProps(const FileName: String; pSize: PInt64; pModifyTime,
-  pCreationTime, pLastAccessTime: PDateTime; pAttributes,
-  pLastOSError: PDWORD): Boolean;
-var
-  HSearch: THandle;
-  FindData: TWin32FindData;
-begin
-  Result:=False;
-  if pSize <> nil then
-    pSize^:=-1;
-  HSearch:=Windows.FindFirstFile(PChar(FileName), FindData);
-  if HSearch <> INVALID_HANDLE_VALUE then begin
-    Windows.FindClose(HSearch);
-    if pAttributes <> nil then
-      pAttributes^:=FindData.dwFileAttributes;
-    if pCreationTime <> nil then
-      pCreationTime^:=FileTimeToLocalDateTime(FindData.ftCreationTime);
-    if pLastAccessTime <> nil then
-      pLastAccessTime^:=FileTimeToLocalDateTime(FindData.ftLastAccessTime);
-    if pModifyTime <> nil then
-      pModifyTime^:=FileTimeToLocalDateTime(FindData.ftLastWriteTime);
-    if pSize <> nil then begin
-      PDWORD(pSize)^:=FindData.nFileSizeLow;
-      PDWORD(PChar(pSize) + 4)^:=FindData.nFileSizeHigh;
-    end;
-    Result:=True;
-  end
-  else
-    if pLastOSError <> nil then
-      pLastOSError^:=GetLastError;
-end;
 
-function GetFilePropsW(const FileName: WideString; pSize: PInt64;
-  pModifyTime, pCreationTime, pLastAccessTime: PDateTime; pAttributes,
-  pLastOSError: PDWORD): Boolean;
-var
-  HSearch: THandle;
-  FindData: TWin32FindDataW;
-begin
-  if Win32Platform = VER_PLATFORM_WIN32_NT then begin
-    Result:=False;
-    if pSize <> nil then
-      pSize^:=-1;
-    HSearch:=Windows.FindFirstFileW(PWideChar(UNCPath(FileName)),
-      {$IFDEF V_FREEPASCAL}@{$ENDIF}FindData);
-    if HSearch <> INVALID_HANDLE_VALUE then begin
-      Windows.FindClose(HSearch);
-      if pAttributes <> nil then
-        pAttributes^:=FindData.dwFileAttributes;
-      if pCreationTime <> nil then
-        pCreationTime^:=FileTimeToLocalDateTime(FindData.ftCreationTime);
-      if pLastAccessTime <> nil then
-        pLastAccessTime^:=FileTimeToLocalDateTime(FindData.ftLastAccessTime);
-      if pModifyTime <> nil then
-        pModifyTime^:=FileTimeToLocalDateTime(FindData.ftLastWriteTime);
-      if pSize <> nil then begin
-        PDWORD(pSize)^:=FindData.nFileSizeLow;
-        PDWORD(PChar(pSize) + 4)^:=FindData.nFileSizeHigh;
-      end;
-      Result:=True;
-    end
-    else
-      if pLastOSError <> nil then
-        pLastOSError^:=GetLastError;
-  end
-  else
-    Result:=GetFileProps(FileName, pSize, pModifyTime, pCreationTime,
-      pLastAccessTime, pAttributes, pLastOSError);
-end;
 {$ENDIF}
 
 {$IFDEF LINUX}
 
 {$ENDIF} {LINUX}
-
-function SetFileDate(const FileName: String; DateTime: TDateTime): Boolean;
-{$IFDEF V_WIN}
-var
-  hFile: THandle;
-  LastWrite: TFileTime;
-begin
-  Result:=False;
-  hFile:=CreateFile(PChar(FileName), GENERIC_WRITE, FILE_SHARE_READ, nil,
-    OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL or FILE_FLAG_NO_BUFFERING, 0);
-  if hFile <> INVALID_HANDLE_VALUE then
-  try
-    LastWrite:=LocalDateTimeToFileTime(DateTime);
-    Result:=SetFileTime(hFile, nil, nil, @LastWrite);
-  finally
-    CloseHandle(hFile);
-  end;
-end;
-{$ENDIF}
-{$IFDEF LINUX}
-begin
-  Result:=FileSetDate(FileName, DateTimeToFileDate(DateTime)) = 0;
-end;
-{$ENDIF}
-
-function SetFileDateW(const FileName: WideString; DateTime: TDateTime): Boolean;
-{$IFDEF V_WIN}
-var
-  hFile: THandle;
-  LastWrite: TFileTime;
-{$ENDIF}
-begin
-  {$IFDEF V_WIN}
-  if Win32Platform = VER_PLATFORM_WIN32_NT then begin
-    Result:=False;
-    hFile:=CreateFileW(PWideChar(UNCPath(FileName)), GENERIC_WRITE,
-      FILE_SHARE_READ, nil, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-    if hFile <> INVALID_HANDLE_VALUE then
-    try
-      LastWrite:=LocalDateTimeToFileTime(DateTime);
-      Result:=SetFileTime(hFile, nil, nil, @LastWrite);
-    finally
-      CloseHandle(hFile);
-    end;
-  end
-  else
-  {$ENDIF}
-    Result:=SetFileDate(FileName, DateTime);
-end;
 
 {$IFDEF V_WIN}
 type
@@ -1395,120 +983,6 @@ type
     {$IFDEF V_D3}{$IFNDEF V_D4}Integer{$ELSE}DWORD{$ENDIF}{$ELSE}DWORD{$ENDIF};
 {$ENDIF}
 
-function SafeReadFileBlockW(const FileName: WideString; Buf: PChar;
-  Count: Integer; Offset: Integer): Boolean;
-{$IFDEF V_WIN}
-var
-  Size: TReadFileSize;
-  hFile: THandle;
-begin
-  if Win32Platform = VER_PLATFORM_WIN32_NT then
-    hFile:=CreateFileW(PWideChar(UNCPath(FileName)), GENERIC_READ,
-      FILE_SHARE_READ, nil, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0)
-  else
-    hFile:=CreateFile(PChar(String(FileName)), GENERIC_READ, FILE_SHARE_READ, nil,
-      OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-  if hFile = INVALID_HANDLE_VALUE then begin
-    Result:=False;
-    Exit;
-  end;
-  try
-    Result:=((Offset = 0) or (FileSeek(hFile, Offset, 0) = Offset)) and
-      ReadFile(hFile, Buf^, Count, Size, nil) and (Integer(Size) = Count);
-  finally
-    CloseHandle(hFile);
-  end;
-end;
-{$ENDIF}
-{$IFDEF LINUX}
-var
-  Handle: Integer;
-begin
-  Handle:=FileOpen(PChar(String(FileName)), fmOpenRead + fmShareDenyNone);
-  if Handle < 0 then begin
-    Result:=False;
-    Exit;
-  end;
-  try
-    Result:=((Offset = 0) or (FileSeek(Handle, Offset, 0) = Offset)) and
-      (FileRead(Handle, Buf^, Count) = Count);
-  finally
-    FileClose(Handle);
-  end;
-end;
-{$ENDIF}
-
-function ReadFileBlockW(const FileName: WideString; Buf: PChar;
-  Count: Integer; Offset: Integer): Boolean;
-{$IFDEF V_WIN}
-var
-  Size: TReadFileSize;
-  hFile: THandle;
-begin
-  if Win32Platform = VER_PLATFORM_WIN32_NT then
-    hFile:=CreateFileW(PWideChar(UNCPath(FileName)), GENERIC_READ,
-      FILE_SHARE_READ, nil, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0)
-  else
-    hFile:=CreateFile(PChar(String(FileName)), GENERIC_READ, FILE_SHARE_READ,
-      nil, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-  OSCheck(hFile <> INVALID_HANDLE_VALUE);
-  try
-    if Offset <> 0 then
-      OSCheck(FileSeek(hFile, Offset, 0) = Offset);
-    OSCheck(ReadFile(hFile, Buf^, Count, Size, nil));
-    Result:=Integer(Size) = Count;
-  finally
-    CloseHandle(hFile);
-  end;
-end;
-{$ENDIF}
-{$IFDEF LINUX}
-var
-  Handle: Integer;
-begin
-  Handle:=FileOpen(PChar(String(FileName)), fmOpenRead + fmShareDenyNone);
-  OSCheck(Handle >= 0);
-  try
-    if Offset <> 0 then
-      OSCheck(FileSeek(Handle, Offset, 0) = Offset);
-    Result:=FileRead(Handle, Buf^, Count) = Count;
-  finally
-    FileClose(Handle);
-  end;
-end;
-{$ENDIF}
-
-function CheckFileSignW(const FileName: WideString; const Sign: String;
-  Offset: Integer): Boolean;
-var
-  Count: Integer;
-  Buf: PChar;
-begin
-  Count:=Length(Sign);
-  GetMem(Buf, Count);
-  try
-    Result:=ReadFileBlockW(FileName, Buf, Count, Offset) and
-      (StrLComp(Buf, @Sign[1], Count) = 0);
-  finally
-    FreeMem(Buf);
-  end;
-end;
-
-function SafeCheckFileSignW(const FileName: WideString; const Sign: String;
-  Offset: Integer): Boolean;
-var
-  Count: Integer;
-  Buf: PChar;
-begin
-  Count:=Length(Sign);
-  GetMem(Buf, Count);
-  try
-    Result:=SafeReadFileBlockW(FileName, Buf, Count, Offset) and
-      (StrLComp(Buf, @Sign[1], Count) = 0);
-  finally
-    FreeMem(Buf);
-  end;
-end;
 
 function IsRelativePath(const FileName: String): Boolean;
 begin

@@ -12,8 +12,9 @@ interface
 {$IFDEF V_D3}{$WRITEABLECONST ON}{$ENDIF}
 
 uses
+  LCLType,
   {$IFDEF LiNUX}
-  QForms, QControls,
+  Forms, Controls,
   {$ELSE}
   Forms, Controls,
   {$ENDIF}
@@ -63,9 +64,9 @@ var
   I: Integer;
   FileName: String;
 {$IFDEF LINUX}
-const
-  MB_YESNO = [smbYes,smbNo];
-  IDYES = smbYes;
+//const
+//  MB_YESNO = [mbYes,smbNo];
+//  IDYES = smbYes;
 {$ENDIF}
 begin
   if CreatedObjects.Count > 0 then begin

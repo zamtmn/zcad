@@ -8,9 +8,8 @@ interface
 {$IFDEF V_D3}{$WRITEABLECONST ON}{$ENDIF}
 
 uses
-  SysUtils, ExtType,
-  {$IFDEF V_WIN}{$IFNDEF WIN32}Windows{$ELSE}Windows{$ENDIF}{$ENDIF}
-  {$IFDEF LINUX}Libc{$ENDIF};
+  {$IFDEF V_WIN}{$IFNDEF WIN32}Windows,{$ELSE}Windows,{$ENDIF}{$ENDIF}
+  SysUtils, ExtType;
 
 type
   TVFastTimer = class
@@ -164,12 +163,12 @@ end;
 
 {$IFDEF LINUX}
 function GetTickCount: UInt32;
-var
-  tv: timeval;
+//var
+//  tv: timeval;
 begin
-  gettimeofday(tv, nil);
+  //gettimeofday(tv, nil);
   {$RANGECHECKS OFF}
-  Result:=tv.tv_sec * 1000 + tv.tv_usec div 1000;
+  //Result:=tv.tv_sec * 1000 + tv.tv_usec div 1000;
 end;
 {$ENDIF}
 

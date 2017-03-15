@@ -8,7 +8,7 @@ interface
 
 uses
   {$IFDEF V_WIN}Windows,{$ENDIF}
-  {$IFDEF LINUX}{$IFDEF V_DELPHI}Libc{$ELSE}Linux{$ENDIF},{$ENDIF}
+  {$IFDEF LINUX}{$IFDEF V_DELPHI}Libc{$ELSE}Linux{,cmem}{$ENDIF},{$ENDIF}
   SysUtils, ExtType, ExtSys, VectErr;
 
 type

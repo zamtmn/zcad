@@ -10,8 +10,8 @@ interface
 
 uses
   {$IFDEF V_WIN32}{$ENDIF}
-  {$IFDEF LINUX}{$IFDEF V_DELPHI}Libc{$ELSE}Linux{$ENDIF},{$ENDIF}
-  SysUtils, {$IFDEF V_D4}SysConst, {$ENDIF}ExtType, VectErr, Windows;
+  {$IFDEF LINUX}{$IFDEF V_DELPHI}Libc{$ELSE}Linux{,cmem}{$ENDIF},{$ENDIF}
+  SysUtils, {$IFDEF V_D4}SysConst, {$ENDIF}ExtType, VectErr{$IFNDEF LINUX}, Windows{$ENDIF};
 
 const
   DefaultBufferSize = {$IFDEF V_32}32768{$ELSE}16384{$ENDIF};
@@ -408,11 +408,11 @@ function SysErrorMessageW(ErrorCode: Integer): WideString;
 
 {$IFDEF V_32}
 function SafeDOSFileDateToDateTime(FileDate: Integer): TDateTime;
-function GetTimeZoneBias: Double;
-function GetTimeZoneStr: String;
-function UTCToLocalDateTime(const DateTime: TDateTime): TDateTime;
+//function GetTimeZoneBias: Double;
+//function GetTimeZoneStr: String;
+//function UTCToLocalDateTime(const DateTime: TDateTime): TDateTime;
 { converts Universal Coordinated Time (UTC) to local date/time }
-function LocalToUTCDateTime(const DateTime: TDateTime): TDateTime;
+//function LocalToUTCDateTime(const DateTime: TDateTime): TDateTime;
 { converts local date/time to Universal Coordinated Time (UTC) }
 {$ENDIF}
 
@@ -496,10 +496,10 @@ function BigToLittleEndian32(From: Int32): Int32;
 {$ENDIF} {CLR}
 
 {$IFDEF LINUX}
-var
-  _euid, _egid: __uid_t;
+{var
+  _euid, _egid: __uid_t;}
 
-function GetTickCount: UInt32;
+//function GetTickCount: UInt32;
 {$ENDIF} {LINUX}
 
 implementation
@@ -574,7 +574,7 @@ begin
 var
   SI: TSysInfo;
 begin
-  if sysinfo(SI){$IFDEF V_DELPHI} = 0{$ENDIF} then
+  if sysinfo(@SI){IFDEF V_DELPHI} = 0{ENDIF} then
     Result:=SI.totalram
   else
     Result:=0;
@@ -598,7 +598,7 @@ begin
 var
   SI: TSysInfo;
 begin
-  if sysinfo(SI){$IFDEF V_DELPHI} = 0{$ENDIF} then
+  if sysinfo(@SI){IFDEF V_DELPHI} = 0{ENDIF} then
     Result:=SI.freeram
   else
     Result:=0;
@@ -2437,7 +2437,7 @@ begin
   Result:=GlobalAlloc(GMEM_FIXED, Size);
   {$ENDIF}
   {$IFDEF LINUX}
-  Result:=malloc(Size);
+  Result:={cmem?}{malloc}allocmem(Size);
   {$ENDIF}
   {$ENDIF} {CHECK_ALLOC_GLOBAL}
 end;
@@ -2578,7 +2578,7 @@ begin
   GlobalFree(Mem);
   {$ENDIF}
   {$IFDEF LINUX}
-  free(Mem);
+  {cmem?}{free}freemem(Mem);
   {$ENDIF}
   {$ENDIF} {CHECK_ALLOC_GLOBAL}
 end;
@@ -2668,7 +2668,7 @@ end;
 function SafeDOSFileDateToDateTime(FileDate: Integer): TDateTime;
 begin
   {$IFDEF V_WIN}
-  Result:={Safe}FileDateToDateTime(FileDate);{{by zcad}
+  Result:={Safe}FileDateToDateTime(FileDate);{by zcad}
   {$ENDIF}
   {$IFDEF LINUX}
   try
@@ -2687,7 +2687,7 @@ begin
   {$ENDIF}
 end;
 
-function GetTimeZoneBias: Double;
+(*function GetTimeZoneBias: Double;
 {$IFDEF V_WIN}
 var
   N: Integer;
@@ -2783,7 +2783,7 @@ function LocalToUTCDateTime(const DateTime: TDateTime): TDateTime;
 begin
   Result:=DateTime{$IFDEF V_WIN} + {$ENDIF}{$IFDEF LINUX} - {$ENDIF}
     GetTimeZoneBias;
-end;
+end;*)
 
 {$ENDIF} {V_32}
 
@@ -3078,10 +3078,10 @@ end;
 {$ENDIF}
 
 {$IFDEF LINUX}
-function GetTickCount: UInt32;
+(*function GetTickCount: UInt32;
 begin
   Result:=CLK_TCK * 1000;
-end;
+end;*)
 {$ENDIF}
 
 {$IFDEF WIN32}{$IFDEF V_FREEPASCAL}
@@ -3146,8 +3146,8 @@ initialization
   InitPlatformId;
   {$ENDIF}{$ENDIF}
   {$IFDEF LINUX}
-  _euid:=geteuid;
-  _egid:=getegid;
+  {_euid:=geteuid;
+  _egid:=getegid;}
   {$ENDIF}
 finalization
   {$IFDEF PATCHED_SYSUTILS}{$IFDEF CHECK_ALLOC_GLOBAL}

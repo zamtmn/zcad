@@ -731,13 +731,13 @@ begin
       {$IFDEF LINUX}
       if FBuffer <> nil then
         {$IFNDEF CHECK_ALLOC_GLOBAL}
-        NewBuffer:=realloc(FBuffer, NewSize)
+        NewBuffer:={cmem?}{realloc}ReAllocMem(FBuffer, NewSize)
         {$ELSE}
         NewBuffer:=ExtSys.ReAllocGlobal(FBuffer, FCapacity, NewSize)
         {$ENDIF}
       else
         {$IFNDEF CHECK_ALLOC_GLOBAL}
-        NewBuffer:=malloc(NewSize);
+        NewBuffer:={cmem?}{malloc}AllocMem(NewSize);
         {$ELSE}
         NewBuffer:=ExtSys.AllocGlobal(NewSize, -1);
         {$ENDIF}
@@ -761,7 +761,7 @@ begin
       {$IFDEF LINUX}
       if FBuffer <> nil then begin
         {$IFNDEF CHECK_ALLOC_GLOBAL}
-        {$IFDEF V_DELPHI}Libc{$ELSE}Linux{$ENDIF}.free(FBuffer);
+        {$IFDEF V_DELPHI}Libc{$ELSE}{Linux}{cmem}{$ENDIF}{.free}{cmem?}Freemem(FBuffer);
         {$ELSE}
         ExtSys.FreeGlobal(FBuffer);
         {$ENDIF}
@@ -816,7 +816,7 @@ begin
       ((FSize < AllocGlobalGranularity div 2) or (FCapacity - FSize > FSize div 4)) then
     begin
       {$IFNDEF CHECK_ALLOC_GLOBAL}
-      Mem:=realloc(Mem, FSize);
+      Mem:={cmem?}{realloc}ReAllocMem(Mem, FSize);
       {$ELSE}
       Mem:=ExtSys.ReAllocGlobal(Mem, FCapacity, FSize);
       {$ENDIF}
@@ -825,7 +825,7 @@ begin
   end
   else begin
     {$IFNDEF CHECK_ALLOC_GLOBAL}
-    Mem:=malloc(0);
+    Mem:={cmem?}{malloc}AllocMem(0);
     {$ELSE}
     Mem:=ExtSys.AllocGlobal(0, -1);
     {$ENDIF}

@@ -71,7 +71,7 @@ var
   I: Integer;
 begin
   for I:=0 to List.Count - 1 do
-    ForceDeleteFile(List[I]);
+    DeleteFile(List[I]);
 end;
 
 procedure ForceDeleteFilesOrDirs(List: TStrLst);
@@ -79,7 +79,7 @@ var
   I: Integer;
 begin
   for I:=0 to List.Count - 1 do
-    ForceDeleteFileOrDir(List[I]);
+    DeleteFile{OrDir}(List[I]);
 end;
 
 procedure ForceDeleteDirs(List: TStrLst; SubDirs: Boolean);
@@ -100,7 +100,7 @@ procedure ForceDeleteDirs(List: TStrLst; SubDirs: Boolean);
         Dirs.Free;
       end;
     end;
-    ForceDeleteDir(Path);
+    DeleteDir(Path);
   end;
 
 var
@@ -311,13 +311,13 @@ begin
   F1:=LoCase(FileName[I + 1]);
   Lst:=TStrLst.Create;
   try
-    GetFileList(Lst, FilePath, F1 + '*');
+    //GetFileList(Lst, FilePath, F1 + '*');
     I:=Lst.IndexOf(FileName);
     if I >= 0 then begin
       Result:=Lst[I];
       Exit;
     end;
-    GetFileList(Lst, FilePath, UpCase(F1) + '*');
+    //GetFileList(Lst, FilePath, UpCase(F1) + '*');
     I:=Lst.IndexOf(FileName);
     if I >= 0 then
       Result:=Lst[I];

@@ -1,0 +1,65 @@
+VECTORS LIBRARY
+
+Copyright (C) Alexey A.Chernobaev, 1996-2003.
+(CP1251: Алексей Анатольевич Чернобаев)
+
+Some code was converted and modified from the free sources of other authors.
+
+See LICENSE for licensing details.
+
+http://www.caravan.ru/~alexch/Vectors
+http://attend.to/alexch/Vectors
+
+I. Overview
+
+Vectors is a class library for Object Pascal (Delphi 1, 3-7, Borland C++
+Builder, Borland Kylix, Free Pascal v.1.0 and higher) which implements vectors
+(dynamically sized arrays) based on different Object Pascal's simple types
+including all integer and real types, booleans, pointers and strings. These
+vectors resemble TList class type from Delphi VCL but in addition to the common
+operations like insert and delete they offer a wide range of operations
+depending on the type of the vector elements - sorting, searching, arithmetic
+vector operations for number-type vectors, logical operations for boolean
+vectors and so on. The library also implements a range of derivative and additional
+classes - sparse vectors, matrixes, queues, stacks, dictionaries, streams.
+
+II. Installation
+
+First, extract all files from the archive to some directory.
+
+DELPHI: include the path to the library units to the Delphi Library Path
+(Tools|Environment Options, Library page).
+
+FREE PASCAL: include the path to the library units to "ppc386.cfg" file.
+
+E.g. if the directory for Vectors units is C:\Delphi\Vectors then you
+should include to "fpc.cfg" the following lines:
+
+-FuC:\Delphi/Vectors
+-FiC:\Delphi/Vectors
+
+Alternative way is to specify the paths in the compiler command line.
+
+WARNING: for Free Pascal you should specify options "-Sd -Sg -Sh" when using
+Vectors units.
+
+III. Documentation
+
+For a brief documentation please see Docs directory of this distribution or
+Vectors Library Web page:
+
+http://www.caravan.ru/~alexch/Vectors
+http://attend.to/alexch/Vectors
+
+Some test programs and examples are also included (see Test directory).
+
+My Home Page (now in Russian only except Vectors page) is:
+
+http://www.caravan.ru/~alexch
+http://attend.to/alexch
+
+Feel free to e-mail me: alexch@caravan.ru
+
+Moscow, Russia
+
+16.05.2003

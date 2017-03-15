@@ -1,0 +1,97 @@
+{ Version 000515. Copyright © Alexey A.Chernobaev, 1996-2000 }
+{
+  Базовый стек (реализация).
+  Перед включением данного файла необходимо определить типы TVGenericStack и
+  NumberType.
+
+  Generic stack (implementation part).
+  Types TVGenericStack and NumberType must be defined before including this file.
+}
+
+type
+  PNumberType = ^NumberType;
+
+constructor TVGenericStack.Create;
+begin
+  {$IFDEF CHECK_OBJECTS_FREE}
+  RegisterObjectCreate(Self);
+  {$ENDIF}
+  inherited Create;
+  New(FTop);
+  FTop^:=nil;
+end;
+
+destructor TVGenericStack.Destroy;
+begin
+  {$IFDEF CHECK_OBJECTS_FREE}
+  RegisterObjectFree(Self);
+  {$ENDIF}
+  Clear;
+  Dispose(FTop);
+  inherited Destroy;
+end;
+
+procedure TVGenericStack.Clear;
+var
+  P: PPointer;
+begin
+  while FTop^ <> nil do begin
+    P:=FTop;
+    FTop:=FTop^;
+    FreeMem(P, SizeOf(Pointer) + SizeOf(NumberType));
+  end;
+  FCount:=0;
+end;
+
+function TVGenericStack.IsEmpty: Bool;
+begin
+  Result:=FCount = 0;
+end;
+
+procedure TVGenericStack.Push(const X: NumberType);
+var
+  P: PPointer;
+begin
+  GetMem(P, SizeOf(Pointer) + SizeOf(NumberType));
+  P^:=FTop;
+  FTop:=P;
+  PNumberType(PChar(P) + SizeOf(Pointer))^:=X;
+  Inc(FCount);
+end;
+
+procedure TVGenericStack.SetTop(const X: NumberType);
+begin
+  if FCount = 0 then raise Exception.Create(SEmptyStack);
+  PNumberType(PChar(FTop) + SizeOf(Pointer))^:=X;
+end;
+
+function TVGenericStack.Pop: NumberType;
+var
+  P: PPointer;
+begin
+  if FCount = 0 then raise Exception.Create(SEmptyStack);
+  P:=FTop;
+  Result:=PNumberType(PChar(P) + SizeOf(Pointer))^;
+  FTop:=P^;
+  FreeMem(P, SizeOf(Pointer) + SizeOf(NumberType));
+  Dec(FCount);
+end;
+
+function TVGenericStack.Top: NumberType;
+begin
+  if FCount = 0 then raise Exception.Create(SEmptyStack);
+  Result:=PNumberType(PChar(FTop) + SizeOf(Pointer))^;
+end;
+
+procedure TVGenericStack.PopTop;
+var
+  P: PPointer;
+begin
+  if FCount = 0 then raise Exception.Create(SEmptyStack);
+  P:=FTop;
+  FTop:=P^;
+  FreeMem(P, SizeOf(Pointer) + SizeOf(NumberType));
+  Dec(FCount);
+end;
+
+{ end }

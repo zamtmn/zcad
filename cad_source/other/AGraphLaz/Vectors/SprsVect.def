@@ -1,0 +1,68 @@
+{ Version 000514. Copyright © Alexey A.Chernobaev, 1999-2000 }
+{
+  Разреженные числовые векторы (интерфейс).
+  Перед включением данного файла необходимо определить типы NumberType и
+  TGenericNumberVector.
+
+  Sparse numeral vectors (interface part).
+  Types NumberType and TGenericNumberVector must be defined before including
+  this file.
+}
+
+TSparseVector = class(TGenericNumberVector)
+protected
+  FSparseCount: Integer;
+  { виртуальное количество элементов }
+  { virtual element count }
+  FIndex: TSVIndexVector;
+  { вектор индексов элементов, значения которых отличны от DefaultValue }
+  { vector of non-default element indexes }
+  function GetValue(I: Integer): NumberType; override;
+  procedure SetValue(I: Integer; Value: NumberType); override;
+  function GetCount: Integer; override;
+  procedure SetCount(ACount: Integer); override;
+  procedure ExpandHelper(I: Integer);
+  procedure SortHelper(I, J: Integer);
+public
+  constructor Create(ElemCount: Integer; ADefaultValue: NumberType);
+  destructor Destroy; override;
+  function EqualTo(V: TVector): Bool; override;
+  procedure GetUntyped(I: Integer; var Result); override;
+  function NumberOfValues(Value: NumberType): Integer; override;
+  procedure WriteToStream(VStream: TVStream); override;
+  procedure ReadFromStream(VStream: TVStream); override;
+  procedure Assign(Source: TVector); override;
+  { необходимое условие: DefaultValue = (Source as TGenericNumberVector).DefaultValue }
+  { necessary condition: DefaultValue = (Source as TGenericNumberVector).DefaultValue }
+  procedure SetToDefault; override;
+  procedure FillValue(Value: NumberType); override;
+  procedure Clear; override;
+  function SizeInBytes: Integer; override;
+  procedure Delete(I: Integer); override;
+  procedure DeleteRange(I, ACount: Integer); override;
+  procedure Insert(I: Integer; Value: NumberType); override;
+  function IndexFrom(I: Integer; Value: NumberType): Integer; override;
+  function LastIndexFrom(I: Integer; Value: NumberType): Integer; override;
+  function Filling: Integer;
+  { степень заполненности, в процентах (0..100) }
+  { fill range in per cents (0..100) }
+  function Valid: Boolean;
+  { возвращает True, если разреженный вектор занимает меньше места в памяти,
+    чем обычный вектор с теми же данными }
+  { returns True if sparse vector takes less memory space then regular vector
+    with the same data }
+  function Min: NumberType; override;
+  function Max: NumberType; override;
+  function MinIndexFrom(I: Integer; var MinValue: NumberType): Integer; override;
+  function MaxIndexFrom(I: Integer; var MaxValue: NumberType): Integer; override;
+  function Sum:
+    {$IFDEF FLOAT} Float80 {$ELSE}
+      {$IFDEF INT64_VECT} Int64 {$ELSE}
+        {$IFDEF UINT} UInt32 {$ELSE} Int32 {$ENDIF} {$ENDIF} {$ENDIF}; override;
+  function SqrSum:
+    {$IFDEF FLOAT} Float80 {$ELSE}
+      {$IFDEF INT64_VECT} Int64 {$ELSE} UInt32 {$ENDIF} {$ENDIF}; override;
+  property NonDefaultCount: Integer read FCount;
+  { количество элементов, значения которых отличны от значения по умолчанию }
+  { number of elements with non-default values }
+end;

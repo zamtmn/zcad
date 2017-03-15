@@ -1,0 +1,679 @@
+{ Version 040228. Copyright © Alexey A.Chernobaev, 1996-2004 }
+{
+  Базовые числовые векторы (реализация).
+  Перед включением данного файла необходимо определить типы NumberType и
+  TGenericNumberVector.
+
+  Generic numeral vectors (implementation part).
+  Types NumberType and TGenericNumberVector must be defined before including
+  this file.
+}
+
+{$IFDEF INT64_VECT}
+{$IFDEF V_DELPHI}
+  {$IFDEF INT64_EQ_COMP}{$DEFINE FLOATDIV}{$ENDIF}
+{$ENDIF}
+{$ENDIF}
+{$IFDEF FLOAT}{$DEFINE FLOATDIV}{$ENDIF}
+
+uses ExtSys;
+
+constructor TGenericNumberVector.Create(ElemCount: Integer; ADefaultValue: NumberType);
+begin
+  inherited Create(SizeOf(NumberType));
+  FDefaultValue:=ADefaultValue;
+  Count:=ElemCount;
+end;
+
+procedure TGenericNumberVector.WriteToStream(VStream: TVStream);
+begin
+  inherited WriteToStream(VStream);
+  VStream.WriteProc(FDefaultValue, SizeOf(FDefaultValue));
+end;
+
+procedure TGenericNumberVector.ReadFromStream(VStream: TVStream);
+begin
+  inherited ReadFromStream(VStream);
+  VStream.ReadProc(FDefaultValue, SizeOf(FDefaultValue));
+end;
+
+procedure TGenericNumberVector.WriteToTextStream(TextStream: TTextStream);
+var
+  I: Integer;
+  S: String;
+begin
+  S:='';
+  for I:=0 to Count - 1 do begin
+    if I > 0 then
+      S:=S + ' ';
+    S:=S +
+    {$IFDEF FLOAT}
+      RealToString(Items[I], DefaultRealFormat)
+    {$ELSE}
+      IntToStr({$IFDEF INT64_VECT}{$IFDEF INT64_EQ_COMP}Round({$ENDIF}{$ENDIF}
+        Items[I]{$IFDEF INT64_VECT}{$IFDEF INT64_EQ_COMP}){$ENDIF}{$ENDIF})
+    {$ENDIF};
+  end;
+  TextStream.WriteString(S);
+end;
+
+procedure TGenericNumberVector.ReadFromTextStream(TextStream: TTextStream);
+var
+  I: Integer;
+  C, LastChar: Char;
+  S, Value: String;
+begin
+  Clear;
+  S:=TextStream.ReadString + ' ';
+  LastChar:=' ';
+  Value:='';
+  for I:=1 to Length(S) do begin
+    C:=S[I];
+    if C = #9 then
+      C:=' ';
+    if (C = ' ') and (C <> LastChar) then begin
+      Add(
+        {$IFDEF FLOAT}
+          StringToReal(Value)
+        {$ELSE}
+        {$IFDEF INT64_VECT}
+        {$IFDEF INT64_EQ_COMP}
+          StringToReal(Value)
+        {$ELSE}{$IFDEF V_DELPHI}
+          StrToInt64(Value)
+        {$ELSE}
+          StrToInt(Value)
+        {$ENDIF}{$ENDIF}
+        {$ELSE}
+          StrToInt(Value)
+        {$ENDIF}{$ENDIF});
+      Value:='';
+    end
+    else
+      Value:=Value + C;
+    LastChar:=C;
+  end;
+end;
+
+procedure TGenericNumberVector.Assign(Source: TVector);
+var
+  I: Integer;
+begin
+  if Source is TGenericNumberVector then begin
+    FDefaultValue:=TGenericNumberVector(Source).FDefaultValue;
+    Count:=TGenericNumberVector(Source).Count;
+    for I:=0 to TGenericNumberVector(Source).Count - 1 do
+      Items[I]:=TGenericNumberVector(Source)[I];
+  end
+  else
+    Error(SAssignError);
+end;
+
+procedure TGenericNumberVector.CopyRange(FromIndex: Integer; Source: TVector;
+  SourceFrom, SourceTo: Integer);
+var
+  I: Integer;
+  NewLength: Integer;
+begin
+  if Source is TGenericNumberVector then begin
+    {$IFDEF CHECK_VECTORS}
+    if (FromIndex < 0) or (SourceFrom < 0) or (SourceTo >= Source.Count) or
+      (SourceFrom > SourceTo)
+    then
+      Error(SErrorInParameters);
+    {$ENDIF}
+    NewLength:=FromIndex + SourceTo - SourceFrom + 1;
+    if NewLength > Count then
+      Count:=NewLength;
+    for I:=SourceFrom to SourceTo do begin
+      Items[FromIndex]:=TGenericNumberVector(Source)[I];
+      Inc(FromIndex);
+    end;
+  end
+  else
+    Error(SAssignError);
+end;
+
+procedure TGenericNumberVector.ExchangeRange(FromIndex, ToIndex, ACount: Integer);
+var
+  I: Integer;
+begin
+  {$IFDEF CHECK_VECTORS}
+  if (FromIndex < 0) or (ToIndex < 0) or (FromIndex + ACount > Count) or
+    (ToIndex + ACount > Count) or
+    (IntMin(FromIndex, ToIndex) + ACount > IntMax(FromIndex, ToIndex))
+  then
+    Error(SErrorInParameters);
+  {$ENDIF}
+  for I:=FromIndex to FromIndex + ACount - 1 do begin
+    Exchange(I, ToIndex);
+    Inc(ToIndex);
+  end;
+end;
+
+{$IFDEF NOWARN}{$WARNINGS OFF}{$ENDIF}
+function TGenericNumberVector.EqualTo(V: TVector): Bool;
+var
+  I: Integer;
+begin
+  if V is TGenericNumberVector then begin
+    Result:=Count = V.Count;
+    if Result then
+      for I:=0 to Count - 1 do
+        if Items[I] <> TGenericNumberVector(V)[I] then begin
+          Result:=False;
+          Exit;
+        end;
+  end
+  else
+    Error(SIncompatibleClasses);
+end;
+{$IFDEF NOWARN}{$WARNINGS ON}{$ENDIF}
+
+procedure TGenericNumberVector.InitMemory(Offset, InitCount: Integer);
+begin
+  FillMem(Offset, InitCount, TBase(FDefaultValue));
+end;
+
+function TGenericNumberVector.Add(Value: NumberType): Integer;
+begin
+  Result:=Count;
+  Insert(Result, Value);
+end;
+
+procedure TGenericNumberVector.Move(CurIndex, NewIndex: Integer);
+var
+  T: NumberType;
+begin
+  if CurIndex <> NewIndex then begin
+    {$IFDEF CHECK_VECTORS}
+    if (NewIndex < 0) or (NewIndex >= Count) then
+      ErrorFmt(SRangeError_d, [NewIndex]);
+    {$ENDIF}
+    T:=Items[CurIndex];
+    Delete(CurIndex);
+    Insert(NewIndex, T);
+  end;
+end;
+
+function TGenericNumberVector.IndexFrom(I: Integer; Value: NumberType): Integer;
+var
+  ACount: Integer;
+begin
+  Result:=I;
+  ACount:=Count;
+  while Result < ACount do
+    if Items[Result] = Value then
+      Exit
+    else
+      Inc(Result);
+  Result:=-1;
+end;
+
+function TGenericNumberVector.IndexOf(Value: NumberType): Integer;
+begin
+  Result:=IndexFrom(0, Value);
+end;
+
+function TGenericNumberVector.LastIndexFrom(I: Integer; Value: NumberType): Integer;
+begin
+  Result:=I;
+  while Result >= 0 do
+    if Items[Result] = Value then
+      Exit
+    else
+      Dec(Result);
+end;
+
+function TGenericNumberVector.LastIndexOf(Value: NumberType): Integer;
+begin
+  Result:=LastIndexFrom(Count - 1, Value);
+end;
+
+function TGenericNumberVector.Remove(Value: NumberType): Integer;
+begin
+  Result:=IndexOf(Value);
+  if Result >= 0 then
+    Delete(Result);
+end;
+
+function TGenericNumberVector.RemoveLast(Value: NumberType): Integer;
+begin
+  Result:=LastIndexOf(Value);
+  if Result >= 0 then
+    Delete(Result);
+end;
+
+function TGenericNumberVector.RemoveFrom(I: Integer; Value: NumberType): Integer;
+begin
+  Result:=IndexFrom(I, Value);
+  if Result >= 0 then
+    Delete(Result);
+end;
+
+function TGenericNumberVector.RemoveLastFrom(I: Integer; Value: NumberType): Integer;
+begin
+  Result:=LastIndexFrom(I, Value);
+  if Result >= 0 then
+    Delete(Result);
+end;
+
+procedure TGenericNumberVector.Exchange(I, J: Integer);
+var
+  T: NumberType;
+begin
+  if I <> J then begin
+    T:=Items[I];
+    Items[I]:=Items[J];
+    Items[J]:=T;
+  end;
+end;
+
+procedure TGenericNumberVector.SetToDefault;
+var
+  I: Integer;
+begin
+  for I:=0 to Count - 1 do Items[I]:=NumberType(FDefaultValue);
+end;
+
+procedure TGenericNumberVector.FillValue(Value: NumberType);
+var
+  I: Integer;
+begin
+  for I:=0 to Count - 1 do Items[I]:=Value;
+end;
+
+procedure TGenericNumberVector.SetItems(Values: array of NumberType);
+var
+  I: Integer;
+begin
+  Count:=High(Values) + 1;
+  for I:=0 to High(Values) do Items[I]:=Values[I];
+end;
+
+procedure TGenericNumberVector.Insert(I: Integer; Value: NumberType);
+begin
+  Expand(I);
+  Items[I]:=Value;
+end;
+
+{$IFNDEF SPECIAL_COMPARE}
+function TGenericNumberVector.Compare(I: Integer; const V): Int32;
+var
+  T: NumberType;
+begin
+  T:=Items[I];
+  if T < NumberType(V) then
+    Result:=-1
+  else
+    if T > NumberType(V) then
+      Result:=1
+    else
+      Result:=0;
+end;
+{$ENDIF}
+
+function TGenericNumberVector.NumberOfValues(Value: NumberType): Integer;
+var
+  I: Integer;
+begin
+  Result:=0;
+  for I:=0 to Count - 1 do
+    if Items[I] = Value then
+      Inc(Result);
+end;
+
+function TGenericNumberVector.FindInSortedRange(Value: NumberType;
+  L, H: Integer): Integer;
+{$I FindSrtd.inc}
+
+function TGenericNumberVector.FindInSorted(Value: NumberType): Integer;
+begin
+  Result:=FindInSortedRange(Value, 0, Count - 1);
+end;
+
+function TGenericNumberVector.Find(Value: NumberType; var Index: Integer): Bool;
+var
+  L, H, I, C: Integer;
+begin
+  Result:=False;
+  L:=0;
+  H:=Count - 1;
+  while L <= H do begin
+    I:=(L + H) div 2;
+    C:=Compare(I, Value);
+    if C < 0 then
+      L:=I + 1
+    else begin
+      H:=I - 1;
+      if C = 0 then
+        Result:=True;
+    end;
+  end;
+  Index:=L;
+end;
+
+procedure TGenericNumberVector.ConcatenateWith(V: TGenericNumberVector);
+var
+  I, OldCount, VCount: Integer;
+begin
+  OldCount:=Count;
+  VCount:=V.Count;
+  Count:=OldCount + VCount;
+  for I:=0 to VCount - 1 do begin
+    Items[OldCount]:=V.Items[I];
+    Inc(OldCount);
+  end;
+end;
+
+procedure TGenericNumberVector.AddScalar(T: NumberType);
+var
+  I: Integer;
+begin
+  for I:=0 to Count - 1 do Items[I]:=Items[I] + T;
+end;
+
+procedure TGenericNumberVector.SubScalar(T: NumberType);
+var
+  I: Integer;
+begin
+  for I:=0 to Count - 1 do Items[I]:=Items[I] - T;
+end;
+
+procedure TGenericNumberVector.AddVector(V: TGenericNumberVector);
+var
+  I: Integer;
+begin
+  for I:=0 to Count - 1 do Items[I]:=Items[I] + V.Items[I];
+end;
+
+procedure TGenericNumberVector.AddScaled(Factor: NumberType;
+  V: TGenericNumberVector);
+var
+  I: Integer;
+begin
+  for I:=0 to Count - 1 do Items[I]:=Items[I] + Factor * V.Items[I];
+end;
+
+procedure TGenericNumberVector.SubVector(V: TGenericNumberVector);
+var
+  I: Integer;
+begin
+  for I:=0 to Count - 1 do Items[I]:=Items[I] - V.Items[I];
+end;
+
+procedure TGenericNumberVector.DivScalar(T: NumberType);
+var
+  I: Integer;
+begin
+  for I:=0 to Count - 1 do
+    Items[I]:=Items[I]{$IFDEF FLOATDIV}/{$ELSE}div{$ENDIF}T;
+end;
+
+procedure TGenericNumberVector.ArithmeticProgression(A0, D: NumberType);
+var
+  ACount, I: Integer;
+begin
+  ACount:=Count;
+  if ACount > 0 then begin
+    Items[0]:=A0;
+    for I:=1 to ACount - 1 do begin
+      A0:=A0 + D;
+      Items[I]:=A0;
+    end;
+  end;
+end;
+
+procedure TGenericNumberVector.Mul(V: TGenericNumberVector);
+var
+  I: Integer;
+begin
+  for I:=0 to Count - 1 do Items[I]:=Items[I] * V.Items[I];
+end;
+
+procedure TGenericNumberVector.Divide(V: TGenericNumberVector);
+var
+  I: Integer;
+begin
+  for I:=0 to Count - 1 do Items[I]:=Items[I]{$IFDEF FLOATDIV}/{$ELSE}div{$ENDIF}V.Items[I];
+end;
+
+procedure TGenericNumberVector.MulScalar(T: NumberType);
+var
+  I: Integer;
+begin
+  for I:=0 to Count - 1 do Items[I]:=Items[I] * T;
+end;
+
+{$IFDEF NOWARN}{$WARNINGS OFF}{$ENDIF}
+function TGenericNumberVector.Min: NumberType;
+var
+  ACount, I: Integer;
+  T: NumberType;
+begin
+  ACount:=Count;
+  if ACount > 0 then begin
+    Result:=Items[0];
+    for I:=1 to ACount - 1 do begin
+      T:=Items[I];
+      if T < Result then
+        Result:=T;
+    end;
+  end
+  else
+    ErrorFmt(SWrongVectorSize_d, [0]);
+end;
+
+function TGenericNumberVector.Max: NumberType;
+var
+  ACount, I: Integer;
+  T: NumberType;
+begin
+  ACount:=Count;
+  if ACount > 0 then begin
+    Result:=Items[0];
+    for I:=1 to ACount - 1 do begin
+      T:=Items[I];
+      if T > Result then
+        Result:=T;
+    end;
+  end
+  else
+    ErrorFmt(SWrongVectorSize_d, [0]);
+end;
+
+function TGenericNumberVector.MinIndex(var MinValue: NumberType): Integer;
+begin
+  Result:=MinIndexFrom(0, MinValue);
+end;
+
+function TGenericNumberVector.MaxIndex(var MaxValue: NumberType): Integer;
+begin
+  Result:=MaxIndexFrom(0, MaxValue);
+end;
+
+function TGenericNumberVector.MinIndexFrom(I: Integer; var MinValue: NumberType): Integer;
+var
+  ACount, J: Integer;
+  T: NumberType;
+begin
+  ACount:=Count;
+  if ACount > 0 then begin
+    MinValue:=Items[I];
+    Result:=I;
+    for J:=I + 1 to ACount - 1 do begin
+      T:=Items[J];
+      if T < MinValue then begin
+        MinValue:=T;
+        Result:=J;
+      end;
+    end;
+  end
+  else
+    ErrorFmt(SWrongVectorSize_d, [0]);
+end;
+
+function TGenericNumberVector.MaxIndexFrom(I: Integer; var MaxValue: NumberType): Integer;
+var
+  ACount, J: Integer;
+  T: NumberType;
+begin
+  ACount:=Count;
+  if ACount > 0 then begin
+    MaxValue:=Items[I];
+    Result:=I;
+    for J:=I + 1 to ACount - 1 do begin
+      T:=Items[J];
+      if T > MaxValue then begin
+        MaxValue:=T;
+        Result:=J;
+      end;
+    end;
+  end
+  else
+    ErrorFmt(SWrongVectorSize_d, [0]);
+end;
+
+{$IFDEF NOWARN}{$WARNINGS ON}{$ENDIF}
+
+function TGenericNumberVector.Sum:
+{$IFDEF FLOAT} Float80 {$ELSE}
+  {$IFDEF INT64_VECT} Int64 {$ELSE}
+    {$IFDEF UINT} UInt32 {$ELSE} Int32 {$ENDIF} {$ENDIF} {$ENDIF};
+var
+  I: Integer;
+begin
+  Result:=0;
+  for I:=0 to Count - 1 do Result:=Result + Items[I];
+end;
+
+function TGenericNumberVector.SqrSum:
+{$IFDEF FLOAT} Float80 {$ELSE}
+  {$IFDEF INT64_VECT} Int64 {$ELSE} UInt32 {$ENDIF} {$ENDIF};
+var
+  I: Integer;
+begin
+  Result:=0;
+  for I:=0 to Count - 1 do
+    Result:=Result +
+    {$IFNDEF FLOAT}{$IFNDEF INT64_VECT}UInt32{$ENDIF}{$ENDIF}
+      (Sqr(Items[I]));
+end;
+
+function TGenericNumberVector.DotProduct(V: TGenericNumberVector):
+{$IFDEF FLOAT} Float80 {$ELSE}
+  {$IFDEF INT64_VECT} Int64 {$ELSE}
+    {$IFDEF UINT} UInt32 {$ELSE} Int32 {$ENDIF} {$ENDIF} {$ENDIF};
+var
+  I: Integer;
+begin
+  Result:=0;
+  for I:=0 to Count - 1 do
+    Result:=Result + Items[I] * V[I];
+end;
+
+function TGenericNumberVector.ScrEuclidianMetric(V: TGenericNumberVector):
+{$IFDEF FLOAT} Float80 {$ELSE}
+  {$IFDEF INT64_VECT} Int64 {$ELSE} UInt32 {$ENDIF} {$ENDIF};
+var
+  I: Integer;
+begin
+  Result:=0;
+  for I:=0 to Count - 1 do
+    Result:=Result + {$IFNDEF FLOAT}{$IFNDEF INT64_VECT}UInt32{$ENDIF}{$ENDIF}
+      (Sqr(Items[I] - V.Items[I]));
+end;
+
+function TGenericNumberVector.RectangularMetric(V: TGenericNumberVector):
+{$IFDEF FLOAT} Float80 {$ELSE}
+  {$IFDEF INT64_VECT} Int64 {$ELSE} UInt32 {$ENDIF} {$ENDIF};
+var
+  I: Integer;
+begin
+  Result:=0;
+  for I:=0 to Count - 1 do
+    Result:=Result + {$IFNDEF FLOAT}{$IFNDEF INT64_VECT}UInt32{$ENDIF}{$ENDIF}
+      (Abs(Items[I] - V.Items[I]));
+end;
+
+function TGenericNumberVector.Last: NumberType;
+begin
+  Result:=Items[Count - 1];
+end;
+
+function TGenericNumberVector.Pop: NumberType;
+var
+  N: Integer;
+begin
+  N:=Count - 1;
+  Result:=Items[N];
+  Delete(N);
+end;
+
+function TGenericNumberVector.IncItem(I: Integer; Value: NumberType): NumberType;
+begin
+  Result:=Items[I] + Value;
+  Items[I]:=Result;
+end;
+
+function TGenericNumberVector.DecItem(I: Integer; Value: NumberType): NumberType;
+begin
+  Result:=Items[I] - Value;
+  Items[I]:=Result;
+end;
+
+function TGenericNumberVector.MulItem(I: Integer; Value: NumberType): NumberType;
+begin
+  Result:=Items[I] * Value;
+  Items[I]:=Result;
+end;
+
+function TGenericNumberVector.DivItem(I: Integer; Value: NumberType): NumberType;
+begin
+  Result:=Items[I]{$IFDEF FLOATDIV}/{$ELSE}div{$ENDIF}Value;
+  Items[I]:=Result;
+end;
+
+{$IFNDEF FLOAT}{$IFNDEF INT64_VECT}
+function TGenericNumberVector.OrItem(I: Integer; Value: NumberType): NumberType;
+begin
+  Result:=Items[I] or Value;
+  Items[I]:=Result;
+end;
+
+function TGenericNumberVector.XorItem(I: Integer; Value: NumberType): NumberType;
+begin
+  Result:=Items[I] xor Value;
+  Items[I]:=Result;
+end;
+
+function TGenericNumberVector.AndItem(I: Integer; Value: NumberType): NumberType;
+begin
+  Result:=Items[I] and Value;
+  Items[I]:=Result;
+end;
+
+function TGenericNumberVector.NotItem(I: Integer): NumberType;
+begin
+  Result:=not Items[I];
+  Items[I]:=Result;
+end;
+{$ENDIF}{$ENDIF}
+
+procedure TGenericNumberVector.DebugWrite;
+var
+  I, N: Integer;
+begin
+  N:=Count - 1;
+  for I:=0 to N do begin
+    write(Items[I] {$IFDEF FLOAT} :8:4 {$ENDIF});
+    if I < N then
+      write(', ')
+    else
+      writeln;
+  end;
+end;
+
+{$UNDEF FLOATDIV}
+
+{ end }

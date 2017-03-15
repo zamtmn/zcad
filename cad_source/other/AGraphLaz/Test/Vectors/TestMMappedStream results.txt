@@ -1,0 +1,39 @@
+1) Win 98 / Celeron 400A / 64 Mb RAM / IBM 10 Gb 7200 RPM HDD
+
+100 Mb
+
+Creating file with 13107200 integers from 0 to 13107199... 16.26 sec
+Creating file with 13107200 integers from 13107200 to 1... 15.66 sec
+Adding file 2 to file 1 using memory-mapped streams... 76.73 sec
+Adding file 1 to file 2 using regular streams... 34.00 sec
+Count elements in the file 1 using memory-mapped stream... 16.84 sec
+Count elements in the file 1 using buffered stream... 28.01 sec
+
+2) Win NT 4.0 SP6 / PIII-500 / 128 Mb RAM / IBM 20 Gb 7200 RPM HDD
+
+100 Mb
+
+Creating file with 13107200 integers from 0 to 13107199... 3.49 sec
+Creating file with 13107200 integers from 13107200 to 1... 3.48 sec
+Adding file 2 to file 1 using memory-mapped streams... 12.98 sec
+Adding file 1 to file 2 using regular streams... 15.72 sec
+Count elements in the file 1 using memory-mapped stream... 1.65 sec
+Count elements in the file 1 using buffered stream... 4.39 sec
+
+200 Mb
+
+Creating file with 26214400 integers from 0 to 26214399... 9.33 sec
+Creating file with 26214400 integers from 26214400 to 1... 9.22 sec
+Adding file 2 to file 1 using memory-mapped streams... 31.49 sec
+Adding file 1 to file 2 using regular streams... 29.11 sec
+Count elements in the file 1 using memory-mapped stream... 4.14 sec
+Count elements in the file 1 using buffered stream... 8.03 sec
+
+300 Mb
+
+Creating file with 39321600 integers from 0 to 39321599... 14.02 sec
+Creating file with 39321600 integers from 39321600 to 1... 13.75 sec
+Adding file 2 to file 1 using memory-mapped streams... 43.29 sec
+Adding file 1 to file 2 using regular streams... 46.31 sec
+Count elements in the file 1 using memory-mapped stream... 5.54 sec
+Count elements in the file 1 using buffered stream... 11.99 sec

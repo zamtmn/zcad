@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <PathDelim Value="\"/>
+    <Name Value="ag_math"/>
+    <Type Value="RunAndDesignTime"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <PathDelim Value="\"/>
+      <SearchPaths>
+        <OtherUnitFiles Value="..\Math"/>
+        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Files Count="8">
+      <Item1>
+        <Filename Value="..\Math\Gauss.pas"/>
+        <UnitName Value="Gauss"/>
+      </Item1>
+      <Item2>
+        <Filename Value="..\Math\Geom_2d.pas"/>
+        <UnitName Value="Geom_2d"/>
+      </Item2>
+      <Item3>
+        <Filename Value="..\Math\Geom_3d.pas"/>
+        <UnitName Value="Geom_3d"/>
+      </Item3>
+      <Item4>
+        <Filename Value="..\Math\Grevil.pas"/>
+        <UnitName Value="Grevil"/>
+      </Item4>
+      <Item5>
+        <Filename Value="..\Math\MathErr.pas"/>
+        <UnitName Value="MathErr"/>
+      </Item5>
+      <Item6>
+        <Filename Value="..\Math\Optimize.pas"/>
+        <UnitName Value="Optimize"/>
+      </Item6>
+      <Item7>
+        <Filename Value="..\Math\SLS_Iter.pas"/>
+        <UnitName Value="SLS_Iter"/>
+      </Item7>
+      <Item8>
+        <Filename Value="..\Math\SVD.pas"/>
+        <UnitName Value="SVD"/>
+      </Item8>
+    </Files>
+    <RequiredPkgs Count="2">
+      <Item1>
+        <PackageName Value="ag_vectors"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="FCL"/>
+      </Item2>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>

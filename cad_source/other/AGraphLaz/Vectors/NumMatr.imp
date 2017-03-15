@@ -1,0 +1,1016 @@
+{ Version 041103. Copyright © Alexey A.Chernobaev, 1996-2004 }
+{
+  Числовые и логические матрицы (реализация).
+  Перед включением данного файла необходимо определить типы BaseType,
+  TNumberMatrix and PArrayType.
+
+  Generic numeral and boolean matrixes (implementation part).
+  Types BaseType, TNumberMatrix and PArrayType must be defined before including
+  this file.
+}
+
+{$I VCheck.inc}
+
+{ TNumberMatrix }
+
+function TNumberMatrix.CreateVector(ElemCount: Integer;
+  ADefaultValue: BaseType): TGenericBaseVector;
+begin
+  Result:=TBaseVector.Create(ElemCount, ADefaultValue);
+end;
+
+procedure TNumberMatrix.InitVector(ADefaultValue: BaseType);
+begin
+  FVector:=CreateVector(RowCount * ColCount, ADefaultValue);
+end;
+
+constructor TNumberMatrix.Create(ARowCount, AColCount: Integer;
+  ADefaultValue: BaseType);
+begin
+  inherited Create;
+  FRowCount:=ARowCount;
+  FColCount:=AColCount;
+  InitVector(ADefaultValue);
+end;
+
+procedure TNumberMatrix.CatchVector(AVector: TGenericBaseVector);
+{ метод должен вызываться либо из конструктора, либо после вызова FVector.Free,
+  т.к. FVector не освобождается! }
+{ method must be called either from constructor or after a call to FVector.Free
+  cause this method doesn't free FVector! }
+begin
+  if AVector.ClassType = TBaseVector then
+    FVector:=AVector
+  else begin
+    FVector:=CreateVector(0, AVector.DefaultValue);
+    FVector.Assign(AVector);
+    AVector.Free;
+  end;
+end;
+
+constructor TNumberMatrix.CreateRowOrColumn(var AVector: TGenericBaseVector;
+  IsRow: Boolean);
+begin
+  inherited Create;
+  if IsRow then begin
+    FColCount:=AVector.Count;
+    FRowCount:=1;
+  end
+  else begin
+    FRowCount:=AVector.Count;
+    FColCount:=1;
+  end;
+  CatchVector(AVector);
+  AVector:=nil;
+end;
+
+procedure TNumberMatrix.Assign(Source: TNumberMatrix);
+begin
+  if (Self is TSimMatrix) xor (Source is TSimMatrix) then
+    Error(SAssignError);
+  FRowCount:=Source.FRowCount;
+  FColCount:=Source.FColCount;
+  FVector.Assign(Source.FVector);
+end;
+
+procedure TNumberMatrix.ConvertToRow(var AVector: TGenericBaseVector);
+begin
+  FColCount:=AVector.Count;
+  FRowCount:=1;
+  FVector.Free;
+  CatchVector(AVector);
+  AVector:=nil;
+end;
+
+procedure TNumberMatrix.ConvertToColumn(var AVector: TGenericBaseVector);
+begin
+  FRowCount:=AVector.Count;
+  FColCount:=1;
+  FVector.Free;
+  CatchVector(AVector);
+  AVector:=nil;
+end;
+
+procedure TNumberMatrix.SplitToRows(RowsList: TClassList);
+var
+  I, J: Integer;
+  Row: TGenericBaseVector;
+begin
+  RowsList.Count:=RowCount;
+  for I:=0 to RowCount - 1 do begin
+    Row:=CreateVector(ColCount, FVector.DefaultValue);
+    for J:=0 to ColCount - 1 do
+      Row[J]:=Items[I, J];
+    RowsList[I]:=Row;
+  end;
+end;
+
+procedure TNumberMatrix.SplitToColumns(ColumnsList: TClassList);
+var
+  I, J: Integer;
+  Column: TGenericBaseVector;
+begin
+  ColumnsList.Count:=ColCount;
+  for J:=0 to ColCount - 1 do begin
+    Column:=CreateVector(RowCount, FVector.DefaultValue);
+    for I:=0 to RowCount - 1 do
+      Column[I]:=Items[I, J];
+    ColumnsList[J]:=Column;
+  end;
+end;
+
+procedure TNumberMatrix.RearrangeRows(Substitution: TGenericIntegerVector);
+var
+  T: TNumberMatrix;
+  V: TGenericBaseVector;
+  I, J, K: Integer;
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if Self is TSimMatrix then
+    Error(SMethodNotApplicable);
+  {$ENDIF}
+  T:=CreateClone(RowCount, ColCount);
+  try
+    for I:=0 to RowCount - 1 do begin
+      K:=Substitution[I];
+      for J:=0 to ColCount - 1 do
+        T[I, J]:=Items[K, J];
+    end;
+    V:=T.FVector;
+    T.FVector:=FVector;
+    FVector:=V;
+  finally
+    T.Free;
+  end;
+end;
+
+procedure TNumberMatrix.RearrangeColumns(Substitution: TGenericIntegerVector);
+var
+  T: TNumberMatrix;
+  V: TGenericBaseVector;
+  I, J, K: Integer;
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if Self is TSimMatrix then
+    Error(SMethodNotApplicable);
+  {$ENDIF}
+  T:=CreateClone(RowCount, ColCount);
+  try
+    for J:=0 to ColCount - 1 do begin
+      K:=Substitution[J];
+      for I:=0 to RowCount - 1 do
+        T[I, J]:=Items[I, K];
+    end;
+    V:=T.FVector;
+    T.FVector:=FVector;
+    FVector:=V;
+  finally
+    T.Free;
+  end;
+end;
+
+procedure TNumberMatrix.AssignRow(AVector: TGenericBaseVector);
+begin
+  FColCount:=AVector.Count;
+  FRowCount:=1;
+  FVector.Assign(AVector);
+end;
+
+procedure TNumberMatrix.AssignColumn(AVector: TGenericBaseVector);
+begin
+  FRowCount:=AVector.Count;
+  FColCount:=1;
+  FVector.Assign(AVector);
+end;
+
+procedure TNumberMatrix.SetItems(Values: array of BaseType);
+var
+  I, J: Integer;
+begin
+  for I:=0 to RowCount - 1 do
+    for J:=0 to ColCount - 1 do
+      Items[I, J]:=Values[I * ColCount + J];
+end;
+
+procedure TNumberMatrix.SetDiagonal(Value: BaseType);
+var
+  I, N: Integer;
+begin
+  N:=RowCount;
+  if ColCount < N then
+    N:=ColCount;
+  for I:=0 to N - 1 do
+    Items[I, I]:=Value;
+end;
+
+{$IFNDEF BOOL}
+function TNumberMatrix.Trace: BaseType;
+var
+  I: Integer;
+begin
+  Result:=0;
+  for I:=0 to IntMin(RowCount, ColCount) - 1 do
+    Result:=Result + Items[I, I];
+end;
+
+constructor TNumberMatrix.CreateMatrixProduct(A1, A2: TNumberMatrix);
+begin
+  inherited Create;
+  FRowCount:=A1.RowCount;
+  FColCount:=A2.ColCount;
+  InitVector(A1.FVector.DefaultValue);
+  MatrixProduct(A1, A2);
+end;
+{$ENDIF}
+
+destructor TNumberMatrix.Destroy;
+begin
+  FVector.Free;
+  inherited Destroy;
+end;
+
+procedure TNumberMatrix.WriteToStream(VStream: TVStream);
+begin
+  VStream.WriteProc(FRowCount, SizeOf(FRowCount));
+  VStream.WriteProc(FColCount, SizeOf(FColCount));
+  FVector.WriteToStream(VStream);
+end;
+
+procedure TNumberMatrix.ReadFromStream(VStream: TVStream);
+begin
+  VStream.ReadProc(FRowCount, SizeOf(FRowCount));
+  VStream.ReadProc(FColCount, SizeOf(FColCount));
+  FVector.ReadFromStream(VStream);
+end;
+
+procedure TNumberMatrix.WriteToTextStream(TextStream: TTextStream);
+var
+  I, J: Integer;
+  S: String;
+begin
+  TextStream.WriteInteger(RowCount);
+  for I:=0 to RowCount - 1 do begin
+    S:='';
+    for J:=0 to ColCount - 1 do begin
+      if J > 0 then
+        S:=S + ' ';
+      S:=S +
+      {$IFDEF FLOAT}
+        RealToString(Items[I, J], DefaultRealFormat)
+      {$ELSE}{$IFDEF BOOL}
+        IntToStr(Ord(Items[I, J]))
+      {$ELSE}
+        IntToStr({$IFDEF INT64_VECT}{$IFDEF INT64_EQ_COMP}Round({$ENDIF}{$ENDIF}
+          Items[I, J]{$IFDEF INT64_VECT}{$IFDEF INT64_EQ_COMP}){$ENDIF}{$ENDIF})
+      {$ENDIF}{$ENDIF};
+    end;
+    TextStream.WriteString(S);
+  end;
+end;
+
+procedure TNumberMatrix.ReadFromTextStream(TextStream: TTextStream);
+var
+  NewColCount: Integer;
+
+  function ProcessLine(S: String; I: Integer; WriteMode: Bool): Integer;
+  var
+    K: Integer;
+    C, LastChar: Char;
+    Value: String;
+  begin
+    LastChar:=' ';
+    Value:='';
+    Result:=0;
+    S:=S + ' ';
+    for K:=1 to Length(S) do begin
+      C:=S[K];
+      if C = #9 then
+        C:=' ';
+      if (C = ' ') and (C <> LastChar) then begin
+        if WriteMode then begin
+          if Result >= NewColCount then
+            Error(STooManyValues); 
+          Items[I, Result]:=
+            {$IFDEF FLOAT}
+              StringToReal(Value)
+            {$ELSE}{$IFDEF BOOL}
+              StrToBool(Value)
+            {$ELSE}
+            {$IFDEF INT64_VECT}
+            {$IFDEF INT64_EQ_COMP}
+              StringToReal(Value)
+            {$ELSE}{$IFDEF V_DELPHI}
+              StrToInt64(Value)
+            {$ELSE}
+              StrToInt(Value)
+            {$ENDIF}{$ENDIF}
+            {$ELSE}
+              StrToInt(Value)
+            {$ENDIF}{$ENDIF}{$ENDIF};
+          Value:='';
+        end;
+        Inc(Result);
+      end
+      else
+        if WriteMode then
+          Value:=Value + C;
+      LastChar:=C;
+    end;
+    if WriteMode and (Result < NewColCount) then
+      Error(SValueExpected);
+  end;
+
+var
+  I, NewRowCount: Integer;
+  S: String;
+begin
+  NewRowCount:=TextStream.ReadInteger;
+  NewColCount:=0;
+  if NewRowCount > 0 then begin
+    S:=TextStream.ReadString;
+    NewColCount:=ProcessLine(S, 0, False);
+    SetSize(NewRowCount, NewColCount);
+    ProcessLine(S, 0, True);
+    for I:=1 to NewRowCount - 1 do
+      ProcessLine(TextStream.ReadString, I, True);
+  end
+  else
+    SetSize(NewRowCount, NewColCount);
+end;
+
+function TNumberMatrix.GetValue(I, J: Integer): BaseType;
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if (I < 0) or (I >= RowCount) or (J < 0) or (J >= ColCount) then
+    ErrorFmt(SRangeError_d, [I]);
+  {$ENDIF}
+  Result:=FVector[I * ColCount + J];
+end;
+
+procedure TNumberMatrix.SetValue(I, J: Integer; Value: BaseType);
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if (I < 0) or (I >= RowCount) or (J < 0) or (J >= ColCount) then
+    ErrorFmt(SRangeError_d, [I]);
+  {$ENDIF}
+  FVector[I * ColCount + J]:=Value;
+end;
+
+function TNumberMatrix.CreateClone(ARowCount, AColCount: Integer): TNumberMatrix;
+begin
+  Result:=TNumberMatrix.Create(ARowCount, AColCount, FVector.DefaultValue);
+end;
+
+function Min(A, B: Integer): Integer;
+begin
+  if A < B then
+    Result:=A
+  else
+    Result:=B;
+end;
+
+procedure TNumberMatrix.CopyTo(T: TNumberMatrix);
+var
+  I, J: Integer;
+begin
+  for I:=0 to Min(RowCount, T.RowCount) - 1 do
+    for J:=0 to Min(ColCount, T.ColCount) - 1 do
+      T[I, J]:=Items[I, J];
+end;
+
+procedure TNumberMatrix.SetSize(ARowCount, AColCount: Integer);
+var
+  T: TNumberMatrix;
+  V: TGenericBaseVector;
+begin
+  if (ARowCount <> RowCount) or (AColCount <> ColCount) then begin
+    T:=CreateClone(ARowCount, AColCount);
+    try
+      CopyTo(T);
+      V:=T.FVector;
+      T.FVector:=FVector;
+      FVector:=V;
+      FRowCount:=ARowCount;
+      FColCount:=AColCount;
+    finally
+      T.Free;
+    end;
+  end;
+end;
+
+procedure TNumberMatrix.SetRowCount(ARowCount: Integer);
+begin
+  SetSize(ARowCount, ColCount);
+end;
+
+procedure TNumberMatrix.SetColCount(AColCount: Integer);
+begin
+  SetSize(RowCount, AColCount);
+end;
+
+function TNumberMatrix.SizeInBytes: Integer;
+begin
+  Result:=FVector.SizeInBytes + SizeOf(FVector) + SizeOf(FRowCount) +
+    SizeOf(FColCount);
+end;
+
+{$IFNDEF BOOL}
+
+procedure TNumberMatrix.AddScalar(T: BaseType);
+begin
+  FVector.AddScalar(T);
+end;
+
+procedure TNumberMatrix.SubScalar(T: BaseType);
+begin
+  FVector.SubScalar(T);
+end;
+
+procedure TNumberMatrix.AddMatrix(T: TNumberMatrix);
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if (ColCount <> T.ColCount) or (RowCount <> T.RowCount) then
+    Error(SWrongMatrixSize);
+  {$ENDIF}
+  FVector.AddVector(T.FVector);
+end;
+
+procedure TNumberMatrix.AddScaled(Factor: BaseType; T: TNumberMatrix);
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if (ColCount <> T.ColCount) or (RowCount <> T.RowCount) then
+    Error(SWrongMatrixSize);
+  {$ENDIF}
+  FVector.AddScaled(Factor, T.FVector);
+end;
+
+procedure TNumberMatrix.SubMatrix(T: TNumberMatrix);
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if (ColCount <> T.ColCount) or (RowCount <> T.RowCount) then
+    Error(SWrongMatrixSize);
+  {$ENDIF}
+  FVector.SubVector(T.FVector);
+end;
+
+procedure TNumberMatrix.MulScalar(T: BaseType);
+begin
+  FVector.MulScalar(T);
+end;
+
+procedure TNumberMatrix.DivScalar(T: BaseType);
+begin
+  FVector.DivScalar(T);
+end;
+
+procedure TNumberMatrix.MatrixProduct(A1, A2: TNumberMatrix);
+var
+  I, J, K: Integer;
+  T: BaseType;
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if A1.ColCount <> A2.RowCount then
+    Error(SWrongMatrixSize);
+  {$ENDIF}
+  if (RowCount <> A1.RowCount) or (ColCount <> A2.ColCount) then begin
+    FRowCount:=A1.RowCount;
+    FColCount:=A2.ColCount;
+    T:=FVector.DefaultValue;
+    FVector.Free;
+    InitVector(T);
+  end;
+  if (ClassType = TNumberMatrix) and (A1.ClassType = TNumberMatrix) and
+    (A2.ClassType = TNumberMatrix) then
+  begin { fast implementation }
+    I:=RowCount;
+    J:=A2.ColCount;
+    K:=A1.ColCount;
+    if (I > 0) and (J > 0) and (K > 0) then
+      MatrixProductProcs[MatrixProductCode](FVector.Memory^, A1.FVector.Memory^,
+        A2.FVector.Memory^, I, J, K);
+  end
+  else { normal implementation }
+    for I:=0 to RowCount - 1 do
+      for J:=0 to ColCount - 1 do begin
+        T:=0;
+        for K:=0 to A2.RowCount - 1 do
+          T:=T + A1[I, K] * A2[K, J];
+        Items[I, J]:=T;
+      end;
+end;
+
+function TNumberMatrix.IncItem(I, J: Integer; Value: BaseType): BaseType;
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if (I < 0) or (I >= RowCount) or (J < 0) or (J >= ColCount) then
+    ErrorFmt(SRangeError_d, [I]);
+  {$ENDIF}
+  Result:=FVector.IncItem(I * ColCount + J, Value);
+end;
+
+function TNumberMatrix.DecItem(I, J: Integer; Value: BaseType): BaseType;
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if (I < 0) or (I >= RowCount) or (J < 0) or (J >= ColCount) then
+    ErrorFmt(SRangeError_d, [I]);
+  {$ENDIF}
+  Result:=FVector.DecItem(I * ColCount + J, Value);
+end;
+
+function TNumberMatrix.MulItem(I, J: Integer; Value: BaseType): BaseType;
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if (I < 0) or (I >= RowCount) or (J < 0) or (J >= ColCount) then
+    ErrorFmt(SRangeError_d, [I]);
+  {$ENDIF}
+  Result:=FVector.MulItem(I * ColCount + J, Value);
+end;
+
+function TNumberMatrix.DivItem(I, J: Integer; Value: BaseType): BaseType;
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if (I < 0) or (I >= RowCount) or (J < 0) or (J >= ColCount) then
+    ErrorFmt(SRangeError_d, [I]);
+  {$ENDIF}
+  Result:=FVector.DivItem(I * ColCount + J, Value);
+end;
+
+{$ELSE} {BOOL}
+
+procedure TNumberMatrix.AndMatrix(T: TNumberMatrix);
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if (ColCount <> T.ColCount) or (RowCount <> T.RowCount) then
+    Error(SWrongMatrixSize);
+  {$ENDIF}
+  FVector.AndVector(T.FVector);
+end;
+
+procedure TNumberMatrix.OrMatrix(T: TNumberMatrix);
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if (ColCount <> T.ColCount) or (RowCount <> T.RowCount) then
+    Error(SWrongMatrixSize);
+  {$ENDIF}
+  FVector.OrVector(T.FVector);
+end;
+
+procedure TNumberMatrix.XorMatrix(T: TNumberMatrix);
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if (ColCount <> T.ColCount) or (RowCount <> T.RowCount) then
+    Error(SWrongMatrixSize);
+  {$ENDIF}
+  FVector.XorVector(T.FVector);
+end;
+
+procedure TNumberMatrix.NotMatrix;
+begin
+  FVector.NotVector;
+end;
+
+procedure TNumberMatrix.GetRowsNumTrue(NumTrue: TGenericIntegerVector);
+var
+  I, J, Sum: Integer;
+begin
+  NumTrue.Count:=RowCount;
+  for I:=0 to RowCount - 1 do begin
+    Sum:=0;
+    for J:=0 to ColCount - 1 do
+      Inc(Sum, Ord(Items[I, J]));
+    NumTrue[I]:=Sum;
+  end;
+end;
+
+procedure TNumberMatrix.GetColumnsNumTrue(NumTrue: TGenericIntegerVector);
+var
+  I, J, Sum: Integer;
+begin
+  NumTrue.Count:=ColCount;
+  for J:=0 to ColCount - 1 do begin
+    Sum:=0;
+    for I:=0 to RowCount - 1 do
+      Inc(Sum, Ord(Items[I, J]));
+    NumTrue[J]:=Sum;
+  end;
+end;
+
+{$ENDIF} {BOOL}
+
+procedure TNumberMatrix.Transpose;
+var
+  T: TNumberMatrix;
+  V: TGenericBaseVector;
+  I, J: Integer;
+begin
+  T:=CreateClone(ColCount, RowCount);
+  try
+    for I:=0 to RowCount - 1 do
+      for J:=0 to ColCount - 1 do
+        T[J, I]:=Items[I, J];
+    V:=T.FVector;
+    T.FVector:=FVector;
+    FVector:=V;
+  finally
+    T.Free;
+  end;
+  I:=FRowCount;
+  FRowCount:=FColCount;
+  FColCount:=I;
+end;
+
+function TNumberMatrix.RowMin(I: Integer): BaseType;
+var
+  J: Integer;
+  T: BaseType;
+begin
+  Result:=Items[I, 0];
+  for J:=1 to ColCount - 1 do begin
+    T:=Items[I, J];
+    if T < Result then
+      Result:=T;
+  end;
+end;
+
+function TNumberMatrix.RowMax(I: Integer): BaseType;
+var
+  J: Integer;
+  T: BaseType;
+begin
+  Result:=Items[I, 0];
+  for J:=1 to ColCount - 1 do begin
+    T:=Items[I, J];
+    if T > Result then
+      Result:=T;
+  end;
+end;
+
+function TNumberMatrix.RowMinIndex(I: Integer; var MinValue: BaseType): Integer;
+var
+  J: Integer;
+  T1, T2: BaseType;
+begin
+  T1:=Items[I, 0];
+  Result:=0;
+  for J:=1 to ColCount - 1 do begin
+    T2:=Items[I, J];
+    if T2 < T1 then begin
+      T1:=T2;
+      Result:=J;
+    end;
+  end;
+  MinValue:=T1;
+end;
+
+function TNumberMatrix.RowMaxIndex(I: Integer; var MaxValue: BaseType): Integer;
+var
+  J: Integer;
+  T1, T2: BaseType;
+begin
+  T1:=Items[I, 0];
+  Result:=0;
+  for J:=1 to ColCount - 1 do begin
+    T2:=Items[I, J];
+    if T2 > T1 then begin
+      T1:=T2;
+      Result:=J;
+    end;
+  end;
+  MaxValue:=T1;
+end;
+
+function TNumberMatrix.ColumnMin(J: Integer): BaseType;
+var
+  I: Integer;
+  T: BaseType;
+begin
+  Result:=Items[0, J];
+  for I:=1 to RowCount - 1 do begin
+    T:=Items[I, J];
+    if T < Result then
+      Result:=T;
+  end;
+end;
+
+function TNumberMatrix.ColumnMax(J: Integer): BaseType;
+var
+  I: Integer;
+  T: BaseType;
+begin
+  Result:=Items[0, J];
+  for I:=1 to RowCount - 1 do begin
+    T:=Items[I, J];
+    if T > Result then
+      Result:=T;
+  end;
+end;
+
+function TNumberMatrix.ColumnMinIndex(J: Integer; var MinValue: BaseType): Integer;
+var
+  I: Integer;
+  T1, T2: BaseType;
+begin
+  T1:=Items[0, J];
+  Result:=0;
+  for I:=1 to RowCount - 1 do begin
+    T2:=Items[I, J];
+    if T2 < T1 then begin
+      T1:=T2;
+      Result:=I;
+    end;
+  end;
+  MinValue:=T1;
+end;
+
+function TNumberMatrix.ColumnMaxIndex(J: Integer; var MaxValue: BaseType): Integer;
+var
+  I: Integer;
+  T1, T2: BaseType;
+begin
+  T1:=Items[0, J];
+  Result:=0;
+  for I:=1 to RowCount - 1 do begin
+    T2:=Items[I, J];
+    if T2 > T1 then begin
+      T1:=T2;
+      Result:=I;
+    end;
+  end;
+  MaxValue:=T1;
+end;
+
+function TNumberMatrix.StartOfRow(I: Integer): Integer;
+begin
+  Result:=0;
+end;
+
+procedure TNumberMatrix.DebugWrite;
+var
+  I, J: Integer;
+begin
+  for I:=0 to RowCount - 1 do begin
+    for J:=0 to ColCount - 1 do
+      write(Items[I, J] {$IFDEF FLOAT} :8:4 {$ENDIF}, ' ');
+    writeln;
+  end;
+end;
+
+{$IFDEF BOOL}
+procedure TNumberMatrix.DebugWrite01;
+var
+  I, J: Integer;
+begin
+  for I:=0 to RowCount - 1 do begin
+    for J:=0 to ColCount - 1 do
+      write(Ord(Items[I, J]), ' ');
+    writeln;
+  end;
+end;
+{$ENDIF}
+
+{ TSparseMatrix }
+
+function TSparseMatrix.CreateVector(ElemCount: Integer;
+  ADefaultValue: BaseType): TGenericBaseVector;
+begin
+  Result:=TSparseVector.Create(ElemCount, ADefaultValue);
+end;
+
+procedure TSparseMatrix.CatchVector(AVector: TGenericBaseVector);
+begin
+  if AVector.ClassType = TSparseVector then
+    FVector:=AVector
+  else begin
+    FVector:=CreateVector(AVector.Count, AVector.DefaultValue);
+    FVector.Assign(AVector);
+    AVector.Free;
+  end;
+end;
+
+function TSparseMatrix.CreateClone(ARowCount, AColCount: Integer): TNumberMatrix;
+begin
+  Result:=TSparseMatrix.Create(ARowCount, AColCount, FVector.DefaultValue);
+end;
+
+{ TSquareMatrix }
+
+function TSquareMatrix.CreateClone(ARowCount, AColCount: Integer): TNumberMatrix;
+begin
+  if ARowCount <> AColCount then
+    Error(SErrorInParameters);
+  Result:=TSquareMatrix.Create(ARowCount, FVector.DefaultValue);
+end;
+
+procedure TSquareMatrix.SetRowCount(ARowCount: Integer);
+begin
+  SetSize(ARowCount, ARowCount);
+end;
+
+procedure TSquareMatrix.SetColCount(AColCount: Integer);
+begin
+  SetSize(AColCount, AColCount);
+end;
+
+constructor TSquareMatrix.Create(ASize: Integer; ADefaultValue: BaseType);
+begin
+  inherited Create(ASize, ASize, ADefaultValue);
+end;
+
+{ TSimMatrix }
+
+procedure TSimMatrix.InitVector(ADefaultValue: BaseType);
+begin
+  FVector:=CreateVector(ColCount * (ColCount + 1) div 2, ADefaultValue);
+end;
+
+procedure TSimMatrix.CatchVector(AVector: TGenericBaseVector);
+begin
+  Error(SMethodNotApplicable);
+end;
+
+function TSimMatrix.CreateClone(ARowCount, AColCount: Integer): TNumberMatrix;
+begin
+  Result:=TSimMatrix.Create(ARowCount, FVector.DefaultValue);
+end;
+
+function TSimMatrix.GetValue(I, J: Integer): BaseType;
+var
+  T: Integer;
+begin
+  if I > J then begin
+    T:=I;
+    I:=J;
+    J:=T;
+  end;
+  Result:=FVector[(2 * ColCount - I + 1) * I div 2 + J - I];
+end;
+
+procedure TSimMatrix.SetValue(I, J: Integer; Value: BaseType);
+var
+  T: Integer;
+begin
+  if I > J then begin
+    T:=I;
+    I:=J;
+    J:=T;
+  end;
+  FVector[(2 * ColCount - I + 1) * I div 2 + J - I]:=Value;
+end;
+
+procedure TSimMatrix.CopyTo(T: TNumberMatrix);
+var
+  I, J: Integer;
+begin
+  if T is TSimMatrix then begin
+    for I:=0 to Min(RowCount, T.RowCount) - 1 do
+      for J:=I to Min(ColCount, T.ColCount) - 1 do
+        T[I, J]:=Items[I, J];
+  end
+  else
+    inherited CopyTo(T);
+end;
+
+{$IFNDEF BOOL}
+
+procedure TSimMatrix.AddMatrix(T: TNumberMatrix);
+begin
+  if not (T is TSimMatrix) then
+    Error(SIncompatibleClasses);
+  inherited AddMatrix(T);
+end;
+
+procedure TSimMatrix.SubMatrix(T: TNumberMatrix);
+begin
+  if not (T is TSimMatrix) then
+    Error(SIncompatibleClasses);
+  inherited SubMatrix(T);
+end;
+
+procedure TSimMatrix.MatrixProduct(A1, A2: TNumberMatrix);
+var
+  I, J, K: Integer;
+  T: BaseType;
+begin
+  if not ((A1 is TSimMatrix) and (A2 is TSimMatrix)) then
+    Error(SIncompatibleClasses);
+  for I:=0 to RowCount - 1 do
+    for J:=I to ColCount - 1 do begin
+      T:=0;
+      for K:=0 to A2.RowCount - 1 do
+        T:=T + A1[I, K] * A2[K, J];
+      Items[I, J]:=T;
+    end;
+end;
+
+function TSimMatrix.IncItem(I, J: Integer; Value: BaseType): BaseType;
+var
+  T: Integer;
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if (I < 0) or (I >= RowCount) or (J < 0) or (J >= ColCount) then
+    ErrorFmt(SRangeError_d, [I]);
+  {$ENDIF}
+  if I > J then begin
+    T:=I;
+    I:=J;
+    J:=T;
+  end;
+  Result:=FVector.IncItem((2 * ColCount - I + 1) * I div 2 + J - I, Value);
+end;
+
+function TSimMatrix.DecItem(I, J: Integer; Value: BaseType): BaseType;
+var
+  T: Integer;
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if (I < 0) or (I >= RowCount) or (J < 0) or (J >= ColCount) then
+    ErrorFmt(SRangeError_d, [I]);
+  {$ENDIF}
+  if I > J then begin
+    T:=I;
+    I:=J;
+    J:=T;
+  end;
+  Result:=FVector.DecItem((2 * ColCount - I + 1) * I div 2 + J - I, Value);
+end;
+
+function TSimMatrix.MulItem(I, J: Integer; Value: BaseType): BaseType;
+var
+  T: Integer;
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if (I < 0) or (I >= RowCount) or (J < 0) or (J >= ColCount) then
+    ErrorFmt(SRangeError_d, [I]);
+  {$ENDIF}
+  if I > J then begin
+    T:=I;
+    I:=J;
+    J:=T;
+  end;
+  Result:=FVector.MulItem((2 * ColCount - I + 1) * I div 2 + J - I, Value);
+end;
+
+function TSimMatrix.DivItem(I, J: Integer; Value: BaseType): BaseType;
+var
+  T: Integer;
+begin
+  {$IFDEF CHECK_MATRIXES}
+  if (I < 0) or (I >= RowCount) or (J < 0) or (J >= ColCount) then
+    ErrorFmt(SRangeError_d, [I]);
+  {$ENDIF}
+  if I > J then begin
+    T:=I;
+    I:=J;
+    J:=T;
+  end;
+  Result:=FVector.DivItem((2 * ColCount - I + 1) * I div 2 + J - I, Value);
+end;
+
+{$ELSE} {BOOL}
+
+procedure TSimMatrix.AndMatrix(T: TNumberMatrix);
+begin
+  if not (T is TSimMatrix) then
+    Error(SIncompatibleClasses);
+  inherited AndMatrix(T);
+end;
+
+procedure TSimMatrix.OrMatrix(T: TNumberMatrix);
+begin
+  if not (T is TSimMatrix) then
+    Error(SIncompatibleClasses);
+  inherited OrMatrix(T);
+end;
+
+procedure TSimMatrix.XorMatrix(T: TNumberMatrix);
+begin
+  if not (T is TSimMatrix) then
+    Error(SIncompatibleClasses);
+  inherited XorMatrix(T);
+end;
+
+{$ENDIF} {BOOL}
+
+procedure TSimMatrix.Transpose;
+begin
+end;
+
+function TSimMatrix.StartOfRow(I: Integer): Integer;
+begin
+  Result:=I;
+end;
+
+{ TSparseSimMatrix }
+
+function TSparseSimMatrix.CreateVector(ElemCount: Integer;
+  ADefaultValue: BaseType): TGenericBaseVector;
+begin
+  Result:=TSparseVector.Create(ElemCount, ADefaultValue);
+end;
+
+function TSparseSimMatrix.CreateClone(ARowCount, AColCount: Integer): TNumberMatrix;
+begin
+  Result:=TSparseSimMatrix.Create(ARowCount, FVector.DefaultValue);
+end;
+
+{ end }

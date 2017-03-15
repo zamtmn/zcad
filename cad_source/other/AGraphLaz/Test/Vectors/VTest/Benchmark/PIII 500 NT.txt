@@ -1,0 +1,205 @@
+Options:
+Use ASM fragments
+MMX CPU found - using MMX commands
+Compiler options R-, Q-
+
+Count          100    1000   10000  100000
+TInt8Vector
+AddVector  1371217  310179   25074    2236
+AddScaled   285199   32368    2966     291
+DotProduct  702795   80322    8071     801
+AddScalar  2802920  998795   33370    3125
+MulScalar   578396   69063    7091     664
+SqrSum      874077   98920    9803     892
+Sum        1993256  363558   38726    2897
+Mul         329165   34829    3604     335
+Sort         94271   18556    1986     218
+TUInt8Vector
+AddVector  1433484  305188   24208    2556
+AddScaled   300197   31547    2966     291
+DotProduct  911274  106464    9735     960
+AddScalar  3105758  994328   31547    3125
+MulScalar   564333   60698    6202     595
+SqrSum      763718  100470   10396     892
+Sum        1579832  384345   38886    2875
+Mul         329963   34806    3513     335
+Sort         84766   15615    1621     166
+TInt16Vector
+AddVector  1138214  159889   12493     823
+AddScaled   804174   95068    7980     595
+DotProduct  993348  177689   13040     937
+AddScalar   826236  143342   21222    2077
+MulScalar  2313644  537097   13473    1370
+SqrSum      333519   36447    3422     345
+Sum        1976732  345028   22407    2145
+Mul         767046   86681    7957     778
+Sort         43103    7387     892      77
+TUInt16Vector
+AddVector  1165610  151934   12197     892
+AddScaled   726271   84333    7137     690
+DotProduct  693838   80299    7593     664
+AddScalar  1005245  155467   22202    1553
+MulScalar  1084105  118681   10738    1074
+SqrSum      341974   37496    3422     345
+Sum        2285291  366772   22339    2123
+Mul         816003   89735    7821     778
+Sort         45997    7319     801      71
+TInt32Vector
+AddVector  1348128  193940    8299     283
+AddScaled   848003   85815    5655     247
+DotProduct  897370  106715    6362     291
+AddScalar  1121416  160732    7752     623
+MulScalar  1019125  116903    7274     573
+SqrSum      897370  112071    7251     579
+Sum        2456208  415319   22658    1644
+Mul         786738   92493    6977     481
+Sort         77724    6316     446      35
+TInt64Vector
+AddVector   647707   63251    4014     114
+AddScaled   122852   12835    1120      67
+DotProduct  140675   13838    1211      71
+AddScalar   680140   79957    3513     140
+MulScalar   171946   18487    1826     117
+SqrSum      136892   14202    1256      97
+Sum         384162   43467    3353     180
+Mul         126453   13541    1234      91
+Sort         26464    2009     140      11
+TFloat32Vector
+AddVector  1077815  154852    6157     234
+AddScaled   661085   88071    5655     162
+DotProduct 1055296  122077    8071     276
+AddScalar  1203832  160983    7456     687
+MulScalar  1200801  156060    7524     687
+SqrSum     1195991  131900   10350    1051
+Sum        1971034  301063   19969    1963
+Mul        1347444  160254    7137     595
+Sort         66009    5382     380      30
+TFloat64Vector
+AddVector   681895   75034    3650     154
+AddScaled   489074   52083    3536     119
+DotProduct 1034282  106487    7501     142
+AddScalar  1139604  155444    5222     234
+MulScalar  1157427  160003    2966     175
+SqrSum      594852   69883    9940     283
+Sum         915422   90852   17188     645
+Mul         787991  100219    2578     185
+Sort         36128    2692     231      16
+TFloat80Vector
+AddVector   267855   22521    2328      87
+AddScaled   270613   22954    2123      87
+DotProduct  385689   28652    2806     111
+AddScalar   352573   39182    2692     102
+MulScalar   332174   36037    2715     102
+SqrSum      562373   69382    4652     231
+Sum         753006   87251    5177     240
+Mul         264915   28880    1872      94
+Sort         27969    2100     142      10
+TFloat32Matrix
+Matrix Product 40x64 * 64x32     709
+TFloat64Matrix
+Matrix Product 40x64 * 64x32     322
+TFloat80Matrix
+Matrix Product 40x64 * 64x32     171
+
+Options:
+Use ASM fragments
+MMX CPU found - using MMX commands
+Compiler options R-, Q-
+
+Count          100    1000   10000  100000
+TInt8Vector
+AddVector  1722601  310271   24413    2259
+AddScaled   293108   30635    2966     291
+DotProduct  691148   80801    8048     801
+AddScalar  2831912  929621   31593    3125
+MulScalar   577621   69587    6954     668
+SqrSum      848527   95729    9849     892
+Sum        1892789  345781   38886    2875
+Mul         320550   34943    3513     335
+Sort         94977   18533    2009     202
+TUInt8Vector
+AddVector  1755536  296276   24140    2556
+AddScaled   292128   30658    2966     291
+DotProduct  767296   96094    8892     869
+AddScalar  2755718  927479   30726    3125
+MulScalar   534726   60721    6179     595
+SqrSum      825439   97462    9712     892
+Sum        2066966  346145   39091    2897
+Mul         318453   34920    3513     335
+Sort         84949   15160    1621     154
+TInt16Vector
+AddVector  1019148  164219   12174    1211
+AddScaled   766932   83353    7980     732
+DotProduct  952550  159729   13040    1097
+AddScalar   787490  143479   21199    2145
+MulScalar  2485131  539103   13496    1370
+SqrSum      325815   36447    3422     348
+Sum        2075444  364333   22430    2100
+Mul         799775   95775    7912     778
+Sort         44972    7501     755      75
+TUInt16Vector
+AddVector  1023889  161074   12197    1120
+AddScaled   715194   96026    7228     778
+DotProduct  893769  109769    7570     892
+AddScalar  1003718  151205   22818    1575
+MulScalar  1012356  119615   10692    1074
+SqrSum      342749   36493    3422     345
+Sum        2463821  376527   22362    2077
+Mul         755809   88823    7821     778
+Sort         41575    6476     709      66
+TInt32Vector
+AddVector  1279684  183547    8071     261
+AddScaled   754715   87593    5655     231
+DotProduct  928276  109838    6635     269
+AddScalar  1197701  156311    7729     732
+MulScalar  1030567  118932    7274     687
+SqrSum      894293  112140    7296     755
+Sum        2334271  392778   23296    2282
+Mul         693131   86521    6772     687
+Sort         78818    6453     459      35
+TInt64Vector
+AddVector   649120   62772    3991     117
+AddScaled   121370   12789    1120      67
+DotProduct  142499   14020    1188      71
+AddScalar   711501   82145    3536     129
+MulScalar   191023   18761    1826     114
+SqrSum      146487   14544    1302      97
+Sum         374271   42191    3422     171
+Mul         122601   13131    1234      91
+Sort         26989    2009     140      11
+TFloat32Vector
+AddVector  1228721  155239    6157     231
+AddScaled   749359   88436    5610     162
+DotProduct  843604  126840    8071     276
+AddScalar  1147285  175000    7456     755
+MulScalar  1189063  161598    7524     668
+SqrSum     1121781  132630   10328    1074
+Sum        1856003  295479   20447    1963
+Mul        1204333  155946    7091     641
+Sort         65553    5359     380      30
+TFloat64Vector
+AddVector   720481   77085    3718     162
+AddScaled   483877   51809    3513     119
+DotProduct  986442   98829    7479     150
+AddScalar  1217462  160390    5222     231
+MulScalar  1194419  160801    2943     175
+SqrSum      596311   73553    9940     276
+Sum         927091   87251   17188     641
+Mul         811672  100288    2578     180
+Sort         35399    2647     224      16
+TFloat80Vector
+AddVector   270362   22499    2328      84
+AddScaled   284698   22316    2123      87
+DotProduct  402692   28561    2806     114
+AddScalar   398635   39205    2670     102
+MulScalar   351319   37997    2715     102
+SqrSum      572493   67376    4630     231
+Sum         711114   87365    5177     234
+Mul         279160   28926    1872      95
+Sort         29405    2077     142      10
+TFloat32Matrix
+Matrix Product 40x64 * 64x32     709
+TFloat64Matrix
+Matrix Product 40x64 * 64x32     322
+TFloat80Matrix
+Matrix Product 40x64 * 64x32     166

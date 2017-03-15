@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <PathDelim Value="\"/>
+    <Name Value="ag_graph"/>
+    <Type Value="RunAndDesignTime"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <PathDelim Value="\"/>
+      <SearchPaths>
+        <OtherUnitFiles Value="..\Graphs"/>
+        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Files Count="19">
+      <Item1>
+        <Filename Value="..\Graphs\CTrick.pas"/>
+        <UnitName Value="CTrick"/>
+      </Item1>
+      <Item2>
+        <Filename Value="..\Graphs\EulerCyc.pas"/>
+        <UnitName Value="EulerCyc"/>
+      </Item2>
+      <Item3>
+        <Filename Value="..\Graphs\ExtGraph.pas"/>
+        <UnitName Value="ExtGraph"/>
+      </Item3>
+      <Item4>
+        <Filename Value="..\Graphs\GMLObj.pas"/>
+        <UnitName Value="GMLObj"/>
+      </Item4>
+      <Item5>
+        <Filename Value="..\Graphs\GraphErr.pas"/>
+        <UnitName Value="GraphErr"/>
+      </Item5>
+      <Item6>
+        <Filename Value="..\Graphs\GraphGML.pas"/>
+        <UnitName Value="GraphGML"/>
+      </Item6>
+      <Item7>
+        <Filename Value="..\Graphs\GraphIO.pas"/>
+        <UnitName Value="GraphIO"/>
+      </Item7>
+      <Item8>
+        <Filename Value="..\Graphs\Graphs.pas"/>
+        <UnitName Value="Graphs"/>
+      </Item8>
+      <Item9>
+        <Filename Value="..\Graphs\GrColor.pas"/>
+        <UnitName Value="GrColor"/>
+      </Item9>
+      <Item10>
+        <Filename Value="..\Graphs\HamilCyc.pas"/>
+        <UnitName Value="HamilCyc"/>
+      </Item10>
+      <Item11>
+        <Filename Value="..\Graphs\Isomorph.pas"/>
+        <UnitName Value="Isomorph"/>
+      </Item11>
+      <Item12>
+        <Filename Value="..\Graphs\MapColor.pas"/>
+        <UnitName Value="MapColor"/>
+      </Item12>
+      <Item13>
+        <Filename Value="..\Graphs\MinPath.pas"/>
+        <UnitName Value="MinPath"/>
+      </Item13>
+      <Item14>
+        <Filename Value="..\Graphs\Planar.pas"/>
+        <UnitName Value="Planar"/>
+      </Item14>
+      <Item15>
+        <Filename Value="..\Graphs\Postman.pas"/>
+        <UnitName Value="Postman"/>
+      </Item15>
+      <Item16>
+        <Filename Value="..\Graphs\RWGML.pas"/>
+        <UnitName Value="RWGML"/>
+      </Item16>
+      <Item17>
+        <Filename Value="..\Graphs\Steiner.pas"/>
+        <UnitName Value="Steiner"/>
+      </Item17>
+      <Item18>
+        <Filename Value="..\Graphs\VFGraph.pas"/>
+        <UnitName Value="VFGraph"/>
+      </Item18>
+      <Item19>
+        <Filename Value="..\Graphs\VFState.pas"/>
+        <UnitName Value="VFState"/>
+      </Item19>
+    </Files>
+    <RequiredPkgs Count="4">
+      <Item1>
+        <PackageName Value="ag_attr"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="ag_math"/>
+      </Item2>
+      <Item3>
+        <PackageName Value="ag_vectors"/>
+      </Item3>
+      <Item4>
+        <PackageName Value="FCL"/>
+      </Item4>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>

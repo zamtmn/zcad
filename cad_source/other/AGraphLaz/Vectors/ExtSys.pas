@@ -355,7 +355,7 @@ const
   AllocGlobalGranularity = 512;
 
 type
-  TGMEM = {$IFDEF V_WIN}HGLOBAL;{$ENDIF}{$IFDEF LINUX}Pointer;{$ENDIF}
+  TGMEM = {$IFDEF V_WIN}HGLOBAL;{$ELSE}Pointer;{$ENDIF}
 
 function AllocGlobal(Size: Integer{$IFDEF CHECK_ALLOC_GLOBAL}; const Id: Int32
   {$IFDEF V_WIN}; Flags: DWORD = GMEM_FIXED{$ENDIF}{$ENDIF}): TGMEM;

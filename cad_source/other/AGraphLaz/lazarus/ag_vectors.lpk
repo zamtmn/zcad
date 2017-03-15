@@ -12,7 +12,7 @@
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Files Count="93">
+    <Files Count="92">
       <Item1>
         <Filename Value="..\Vectors\Aliasm.pas"/>
         <UnitName Value="Aliasm"/>
@@ -366,25 +366,21 @@
         <UnitName Value="VFStream"/>
       </Item88>
       <Item89>
-        <Filename Value="..\Vectors\VFstTmr.pas"/>
-        <UnitName Value="VFstTmr"/>
-      </Item89>
-      <Item90>
         <Filename Value="..\Vectors\VStream.pas"/>
         <UnitName Value="VStream"/>
-      </Item90>
-      <Item91>
+      </Item89>
+      <Item90>
         <Filename Value="..\Vectors\VStrm64.pas"/>
         <UnitName Value="VStrm64"/>
-      </Item91>
-      <Item92>
+      </Item90>
+      <Item91>
         <Filename Value="..\Vectors\VStrmCrc.pas"/>
         <UnitName Value="VStrmCrc"/>
-      </Item92>
-      <Item93>
+      </Item91>
+      <Item92>
         <Filename Value="..\Vectors\VTxtStrm.pas"/>
         <UnitName Value="VTxtStrm"/>
-      </Item93>
+      </Item92>
     </Files>
     <RequiredPkgs Count="2">
       <Item1>

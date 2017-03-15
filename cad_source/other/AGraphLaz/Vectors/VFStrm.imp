@@ -29,7 +29,7 @@ begin
   Ex.Code:=Code;
   {$IFDEF V_32}
   {$IFNDEF LINUX}
-  Ex.LastOSError:=GetLastError;
+  //Ex.LastOSError:=GetLastError;
   {$ENDIF}
   {$ENDIF}
   Ex.FileName:={$IFDEF W_STREAM_WIN}FileNameW{$ELSE}FileName{$ENDIF};

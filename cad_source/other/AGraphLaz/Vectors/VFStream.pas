@@ -8,7 +8,7 @@ interface
 
 uses
   {$IFDEF V_WIN}{$IFNDEF WIN32}Windows,{$ELSE}Windows,{$ENDIF}{$ENDIF} {by zcad}
-  //{$IFDEF WIN32}Windows,{$ENDIF}
+  {$IFDEF WIN32}Windows,{$ENDIF}
   {$IFDEF LINUX}{$IFDEF V_DELPHI}Libc{$ELSE}Linux{$ENDIF},{$ENDIF}
   SysUtils, ExtType, ExtSys, VStream, VectErr;
 

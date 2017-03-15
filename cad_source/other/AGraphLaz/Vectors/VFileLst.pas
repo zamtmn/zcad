@@ -46,16 +46,6 @@ function GetFileListEx(List: TStrLst; Path, Mask: String;
   returns True if either Path or ExtractFilePath(Path) directory exist and
   False otherwise }
 
-function GetDirList(List: TStrLst; const Path: String;
-  Mask: String{$IFDEF V_D4} = ''{$ENDIF}
-  {$IFDEF V_WIN}; DirExcludeAttrs: UInt16 = 0{$ENDIF}): Integer;
-{ сканирует директорию Path и записывает в List список поддиректорий Path (без
-  полных путей), соответствующих маске Mask; если Mask = '', то принимаются все
-  поддиректории; возвращает количество найденных поддиректорий }
-{ scans the directory Path and writes names of subdirectories of Path matching
-  Mask to the List (without full paths); if Mask = '' then all subdirectories
-  are accepted; returns the number of the subdirectories found }
-
 {$IFDEF LINUX}
 function GetAnyCaseFileName(const FileName: String): String;
 {$ENDIF}
@@ -93,7 +83,7 @@ procedure ForceDeleteDirs(List: TStrLst; SubDirs: Boolean);
       Path:=IncludeTrailingPathDelimiter(Path);
       Dirs:=TStrLst.Create;
       try
-        GetDirList(Dirs, Path, '');
+        //GetDirList(Dirs, Path, '');
         for I:=0 to Dirs.Count - 1 do
           DeleteDir(Path + Dirs[I]);
       finally
@@ -180,7 +170,7 @@ var
     if SubDirs then begin
       SubDirList:=TStrLst.Create;
       try
-        GetDirList(SubDirList, CurPath, '*');
+        //GetDirList(SubDirList, CurPath, '*');
         for I:=0 to SubDirList.Count - 1 do
           AddToList(CurPath + SubDirList.Items[I] + PathDelim);
       finally

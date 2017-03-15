@@ -75,7 +75,7 @@
 }
 {$IFDEF V_FREEPASCAL}       { Free Pascal }
   {$DEFINE V_32}            { 32-bit environment }
-  {$DEFINE V_WIN}           {by zcad}
+  {DEFINE V_WIN}           {by zcad}
   {$IFDEF WIN32}
     {$DEFINE V_WIN32}
   {$ENDIF}

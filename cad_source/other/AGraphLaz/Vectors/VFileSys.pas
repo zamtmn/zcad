@@ -65,8 +65,7 @@ function ExtractFileNameW(const FileName: WideString): WideString;
 function ExpandFileNameW(const FileName: WideString): WideString;
 function IncludePathDelimiterW(const S: WideString): WideString;
 function ExcludePathDelimiterW(const S: WideString): WideString;
-function FileExistsW(const FileName: WideString;
-  pLastOSError: PUInt32{$IFDEF V_DEFAULTS} = nil{$ENDIF}): Boolean;
+
 { why use pLastOSError: GetLastError will be altered by WideString cleaning
   code (under Windows) }
 {$IFDEF V_WIN}
@@ -75,13 +74,10 @@ function FileSetAttrW(const FileName: WideString; Attr: DWORD): DWORD;
 {$ENDIF}
 
 {$IFDEF LINUX}
-function ExpandDirectoryName(const Directory: String): String;
 
-function GetHomeDirectory: String;
+//function UserName(uid: __uid_t): WideString;
 
-function UserName(uid: __uid_t): WideString;
-
-function GroupName(gid: __gid_t): WideString;
+//function GroupName(gid: __gid_t): WideString;
 {$ENDIF}
 
 function ValidateFileName(const FileName: String; MaxLen: Integer): String;
@@ -92,27 +88,15 @@ function IsAbsolutePathSyntaxValid(const Path: WideString): Boolean;
 
 function RenameFileW(const OldName, NewName: WideString): Boolean;
 
-function ApiCreateDirectoryW(const PathName: WideString): Boolean;
-
-function ApiDeleteFileW(const FileName: WideString): Boolean;
-
 function GetTempDir: String;
 
 type
   TFileLock = {$IFDEF V_WIN}THandle{$ENDIF}{$IFDEF LINUX}Integer{$ENDIF};
 
-function LockFileWrite(const FileName: String): TFileLock;
-function LockFileWriteW(const FileName: WideString): TFileLock;
 { блокирует файл на запись; в случае успеха возвращает дескриптор файла, иначе
   возвращает INVALID_HANDLE_VALUE (Linux: -1) }
 { write-locks the given file; returns a file handle if successful or
   INVALID_HANDLE_VALUE (Linux: -1) if failed }
-
-function UnlockFileWrite(var Handle: TFileLock): Boolean;
-{ снимает блокировку с файла, блокированного с помощью LockFileRead/Write[W] и
-  устанавливает Handle в INVALID_HANDLE_VALUE }
-{ unlocks the file locked with LockFileRead/Write[W] and sets Handle to
-  INVALID_HANDLE_VALUE }
 
 function ApiCopyFileW(const FromName, ToName: WideString;
   FailIfExists: Boolean): Boolean;
@@ -164,21 +148,6 @@ function DirectoryExistsW(const Name: WideString): Boolean;
 {$IFDEF V_DELPHI}{$IFNDEF V_D6}
 function ForceDirectories(Dir: String): Boolean;
 {$ENDIF}{$ENDIF}
-function ForceDirectoriesW(const Dir: WideString;
-  pError: PUInt32{$IFDEF V_DEFAULTS} = nil{$ENDIF}): Boolean;
-{ создает все директории на протяжении заданного пути директорий, если они еще
-  не существовали }
-{ creates all directories along the specified directory path if they don't exist
-  already }
-
-function ForceDeleteFile(const Name: String): Boolean;
-function ForceDeleteFileW(const Name: WideString): Boolean;
-function ForceDeleteDir(const Name: String): Boolean;
-function ForceDeleteDirW(const Name: WideString): Boolean;
-function ForceDeleteFileOrDir(const Name: String): Boolean;
-function ForceDeleteFileOrDirW(const Name: WideString): Boolean;
-{ удаляет файл и/или директорию, несмотря на наличие у них атрибута READONLY }
-{ deletes the specified file and/or directory even if it has READONLY attribute }
 
 function ExcludeFileExt(const Name: String): String;
 function ExcludeFileExtW(const Name: WideString): WideString;
@@ -190,7 +159,6 @@ function ShortenFileName(const FileName: String; MaxLen: Integer;
 function ShortenFileNameW(const FileName: WideString; MaxLen: Integer;
   DelimitChars: TCharSet{$IFDEF V_DEFAULTS} = []{$ENDIF}): WideString;
 
-function GetModuleName(Module: HMODULE): String;
 function GetModuleNameW(Module: HMODULE): WideString;
 { returns a name of a file which contains the specified module }
 
@@ -255,13 +223,6 @@ function GetLinkTarget(const PathOnly: String): String;
 
 {$ELSE}
 
-function GetFileProps(const FileName: String; pSize: PInt64; pModifyTime,
-  pCreationTime, pLastAccessTime: PDateTime; pAttributes,
-  pLastOSError: PDWORD): Boolean;
-
-function GetFilePropsW(const FileName: WideString; pSize: PInt64;
-  pModifyTime: PDateTime; pCreationTime: PDateTime; pLastAccessTime: PDateTime;
-  pAttributes, pLastOSError: PDWORD): Boolean;
 {$ENDIF} {V_DEFAULTS}
 
 function SetFileDate(const FileName: String; DateTime: TDateTime): Boolean;
@@ -514,32 +475,7 @@ begin
     SetLength(Result, L - 1);
 end;
 
-function FileExistsW(const FileName: WideString; pLastOSError: PUInt32): Boolean;
-{$IFDEF V_WIN}
-var
-  Code: DWORD;
-begin
-  if Win32Platform = VER_PLATFORM_WIN32_NT then
-    Code:=GetFileAttributesW(PWideChar(UNCPath(FileName)))
-  else
-    Code:=GetFileAttributes(PChar(String(FileName)));
-  Result:=Code and FILE_ATTRIBUTE_DIRECTORY = 0;
-  if pLastOSError <> nil then
-    pLastOSError^:=GetLastError;
-end;
-{$ENDIF}
-{$IFDEF LINUX}
-var
-  st: TStatBuf64;
-begin
-  if __xstat64(_STAT_VER, PChar(String(FileName)), st) = 0 then
-    Result:=S_ISREG(st.st_mode)
-  else
-    Result:=False;
-  if pLastOSError <> nil then
-    pLastOSError^:=GetLastError;
-end;
-{$ENDIF}
+
 
 {$IFDEF V_WIN}
 function FileGetAttrW(const FileName: WideString): DWORD;
@@ -575,57 +511,7 @@ begin
 end;
 
 {$IFDEF LINUX}
-function ExpandDirectoryName(const Directory: String): String;
-var
-  I: Integer;
-  PP: PPChar;
-  wet: wordexp_t;
-begin
-  if wordexp(PChar(Directory), wet, WRDE_NOCMD) = 0 then
-  try
-    PP:=wet.we_wordv;
-    Result:='';
-    for I:=0 to wet.we_wordc - 1 do begin
-      if I > 0 then
-        Result:=Result + ' ';
-      Result:=Result + LString(PP^, MAX_PATH);
-      Inc(PP);
-    end; {for}
-  finally
-    wordfree(wet);
-  end
-  else
-    Result:=Directory;
-  if Result <> PathDelim then
-    Result:=ExpandFileName(Result);
-  if Result = '' then
-    Result:='/';
-end;
 
-function GetHomeDirectory: String;
-begin
-  Result:=IncludeTrailingPathDelimiter(ExpandDirectoryName('$HOME'));
-end;
-
-function UserName(uid: __uid_t): WideString;
-var
-  PwdRec: PPasswordRecord;
-begin
-  Result:='?';
-  PwdRec:=getpwuid(uid);
-  if Assigned(PwdRec) then
-    Result:=PwdRec^.pw_name;
-end;
-
-function GroupName(gid: __gid_t): WideString;
-var
-  Group: PGroup;
-begin
-  Result:='?';
-  Group:=getgrgid(gid);
-  if Assigned(Group) then
-    Result:= Group.gr_name;
-end;
 {$ENDIF} {LINUX}
 
 function IsFileNameSyntaxValid(const FileName: WideString): Boolean;
@@ -682,32 +568,6 @@ begin
     Result:=RenameFile(OldName, NewName);
 end;
 
-function ApiCreateDirectoryW(const PathName: WideString): Boolean;
-begin
-  {$IFDEF V_WIN}
-  if Win32Platform = VER_PLATFORM_WIN32_NT then
-    Result:=CreateDirectoryW(PWideChar(UNCPath(PathName)), nil)
-  else
-    Result:=CreateDirectory(PChar(String(PathName)), nil);
-  {$ENDIF}
-  {$IFDEF LINUX}
-  Result:=__mkdir(PChar(String(PathName)), mode_t(-1)) = 0;
-  {$ENDIF}
-end;
-
-function ApiDeleteFileW(const FileName: WideString): Boolean;
-begin
-  {$IFDEF V_WIN}
-  if Win32Platform = VER_PLATFORM_WIN32_NT then
-    Result:=DeleteFileW(PWideChar(UNCPath(FileName)))
-  else
-    Result:=DeleteFile(PChar(String(FileName)));
-  {$ENDIF}
-  {$IFDEF LINUX}
-  Result:=unlink(PChar(String(FileName))) <> -1;
-  {$ENDIF}
-end;
-
 function GetTempDir: String;
 {$IFDEF V_WIN}
 var
@@ -721,93 +581,12 @@ begin
   SetString(Result, Buf, L);
   {$ENDIF}
   {$IFDEF LINUX}
-  Result:=GetEnv('TMPDIR');
+  Result:=GetTempDir;
   if Result = '' then
     Result:='/tmp/'
   else
     if Result[Length(Result)] <> '/' then
       Result:=Result + '/';
-  {$ENDIF}
-end;
-
-function LockFileWrite(const FileName: String): TFileLock;
-{$IFDEF LINUX}
-var
-  Flock: TFlock;
-{$ENDIF}
-begin
-  {$IFDEF V_WIN}
-  Result:=CreateFile(PChar(FileName), GENERIC_READ, FILE_SHARE_READ, nil,
-    OPEN_EXISTING, FILE_FLAG_NO_BUFFERING, 0);
-  {$ENDIF}
-  {$IFDEF LINUX}{$WARN SYMBOL_PLATFORM OFF}
-  Result:=THandle(open64(PChar(FileName), O_RDONLY, FileAccessRights));
-  if Result = TFileLock(-1) then
-    Exit;
-  With Flock do begin
-    l_whence:=SEEK_SET;
-    l_start:=0;
-    l_len:=0;
-    l_type:=F_RDLCK or F_UNLCK;
-  end;
-  if fcntl(Result, F_SETLK, Flock) = -1 then begin
-    __close(Result);
-    Result:=TFileLock(-1);
-  end;
-  {$WARN SYMBOL_PLATFORM ON}{$ENDIF}
-end;
-
-function LockFileWriteW(const FileName: WideString): TFileLock;
-{$IFDEF V_WIN}
-var
-  L: Integer;
-  P1, P2: PWideChar;
-  BufW: array [0..2047] of WideChar;
-{$ENDIF}
-begin
-  {$IFDEF V_WIN}
-  if Win32Platform = VER_PLATFORM_WIN32_NT then begin
-    // don't call UNCPath to prevent clearing last error code by SysFreeString
-    L:=Length(FileName);
-    P1:=@BufW;
-    P2:=Pointer(FileName);
-    if (L >= MAX_PATH) and (FileName[1] <> '.') and (L < SizeOf(BufW) - 7) then begin
-      BufW[0]:='\';
-      BufW[1]:='\';
-      BufW[2]:='?';
-      BufW[3]:='\';
-      Inc(P1, 4);
-      if (FileName[1] = '\') and (FileName[2] = '\') then begin
-        BufW[4]:='U';
-        BufW[5]:='N';
-        BufW[6]:='C';
-        Inc(P1, 3);
-        Inc(P2);
-        Dec(L);
-      end;
-    end;
-    Move(P2^, P1^, L * 2);
-    P1[L]:=#0;
-    Result:=CreateFileW(BufW, GENERIC_READ, FILE_SHARE_READ, nil, OPEN_EXISTING,
-      FILE_FLAG_NO_BUFFERING, 0);
-  end
-  else
-    Result:=LockFileWrite(FileName);
-  {$ENDIF}
-  {$IFDEF LINUX}
-  Result:=LockFileWrite(FileName);
-  {$ENDIF}
-end;
-
-function UnlockFileWrite(var Handle: TFileLock): Boolean;
-begin
-  {$IFDEF V_WIN}
-  Result:=(Handle <> INVALID_HANDLE_VALUE) and CloseHandle(THandle(Handle));
-  Handle:=INVALID_HANDLE_VALUE;
-  {$ENDIF}
-  {$IFDEF LINUX}
-  Result:=(Handle <> -1) and (__close(Handle) = 0);
-  Handle:=-1;
   {$ENDIF}
 end;
 
@@ -1208,234 +987,6 @@ begin
 end;
 {$ENDIF}{$ENDIF}
 
-function ForceDirectoriesW(const Dir: WideString; pError: PUInt32): Boolean;
-
-  {$IFDEF V_WIN}
-  function DoForce(W: WideString): Boolean;
-  var
-    L: Integer;
-    Path: WideString;
-  begin
-    L:=Length(W);
-    if W[L] = '\' then begin
-      Dec(L);
-      SetLength(W, L);
-    end;
-    Path:=ExtractFilePathW(W);
-    if (L < 3) or (L = Length(Path)) or DirectoryExistsW(W) then begin
-      Result:=True;
-      Exit; // avoid 'xyz:\' problem.
-    end;
-    Result:=DoForce(Path);
-    if Result then begin
-      Result:=CreateDirectoryW(Pointer(W), nil);
-      if not Result and (pError <> nil) then
-        pError^:=GetLastError;
-    end;
-  end;
-  {$ENDIF}
-
-begin
-  if pError <> nil then
-    pError^:=0;
-  {$IFDEF V_WIN}
-  if Win32Platform = VER_PLATFORM_WIN32_NT then begin
-    if Dir = '' then
-      raise Exception.CreateFmt(SDirCreateError_s, ['']);
-    Result:=DoForce(UNCPath(Dir));
-  end
-  else
-  {$ENDIF}
-  begin
-    Result:=ForceDirectories(Dir);
-    if pError <> nil then
-      pError^:=UInt32(GetLastError);
-  end;
-end;
-
-function ForceDeleteFile(const Name: String): Boolean;
-{$IFDEF V_WIN}
-var
-  Attr: DWORD;
-  P: PChar;
-begin
-  Result:=False;
-  if Name = '' then
-    Exit;
-  P:=@Name[1];
-  Attr:=GetFileAttributes(P);
-  if (Attr <> DWORD(-1)) and (Attr and FILE_ATTRIBUTE_DIRECTORY = 0) then begin
-    if Attr and FILE_ATTRIBUTE_READONLY <> 0 then
-      SetFileAttributes(P, Attr and not FILE_ATTRIBUTE_READONLY);
-    Result:=Windows.DeleteFile(P);
-  end;
-end;
-{$ENDIF}
-{$IFDEF LINUX}
-var
-  st: TStatBuf;
-begin
-  Result:=DeleteFile(Name);
-  if Result then
-    Exit;
-  if (stat(PChar(Name), st) <> 0) or S_ISDIR(st.st_mode) then
-    Exit;
-  Result:=(chmod(PChar(Name), st.st_mode or (S_IWUSR or S_IWGRP or S_IWOTH)) = 0) and
-    DeleteFile(Name);
-end;
-{$ENDIF}
-
-function ForceDeleteFileW(const Name: WideString): Boolean;
-{$IFDEF V_WIN}
-var
-  L: Integer;
-  Attr: DWORD;
-  P: PWideChar;
-{$ENDIF}
-begin
-  {$IFDEF V_WIN}
-  if Win32Platform = VER_PLATFORM_WIN32_NT then begin
-    Result:=False;
-    L:=Length(Name);
-    if L < MAX_PATH then begin
-      if L = 0 then
-        Exit;
-      P:=Pointer(Name);
-    end
-    else
-      P:=Pointer(UNCPath(Name));
-    Attr:=GetFileAttributesW(P);
-    if (Attr <> DWORD(-1)) and (Attr and FILE_ATTRIBUTE_DIRECTORY = 0) then begin
-      if Attr and FILE_ATTRIBUTE_READONLY <> 0 then
-        SetFileAttributesW(P, Attr and not FILE_ATTRIBUTE_READONLY);
-      Result:=DeleteFileW(P);
-    end;
-  end
-  else
-  {$ENDIF}
-    Result:=ForceDeleteFile(Name);
-end;
-
-function ForceDeleteDir(const Name: String): Boolean;
-{$IFDEF V_WIN}
-var
-  Attr: DWORD;
-  P: PChar;
-begin
-  Result:=False;
-  P:=PChar(Name);
-  Attr:=GetFileAttributes(P);
-  if (Attr <> DWORD($FFFFFFFF)) and (Attr and FILE_ATTRIBUTE_DIRECTORY <> 0) then begin
-    if Attr and FILE_ATTRIBUTE_READONLY <> 0 then
-      SetFileAttributes(P, Attr and not FILE_ATTRIBUTE_READONLY);
-    Result:=RemoveDirectory(P);
-  end;
-end;
-{$ENDIF}
-{$IFDEF LINUX}
-var
-  st: TStatBuf;
-begin
-  Result:=RemoveDir(Name);
-  if Result then
-    Exit;
-  if (stat(PChar(Name), st) <> 0) or not S_ISDIR(st.st_mode) then
-    Exit;
-  Result:=(chmod(PChar(Name), st.st_mode or (S_IWUSR or S_IWGRP or S_IWOTH)) = 0) and
-    RemoveDir(Name);
-end;
-{$ENDIF}
-
-function ForceDeleteDirW(const Name: WideString): Boolean;
-{$IFDEF V_WIN}
-var
-  L: Integer;
-  Attr: DWORD;
-  P: PWideChar;
-{$ENDIF}
-begin
-  {$IFDEF V_WIN}
-  if Win32Platform = VER_PLATFORM_WIN32_NT then begin
-    Result:=False;
-    L:=Length(Name);
-    if L < MAX_PATH then begin
-      if L = 0 then
-        Exit;
-      P:=Pointer(Name);
-    end
-    else
-      P:=Pointer(UNCPath(Name));
-    Attr:=GetFileAttributesW(P);
-    if (Attr <> DWORD($FFFFFFFF)) and (Attr and FILE_ATTRIBUTE_DIRECTORY <> 0) then begin
-      if Attr and FILE_ATTRIBUTE_READONLY <> 0 then
-        SetFileAttributesW(P, Attr and not FILE_ATTRIBUTE_READONLY);
-      Result:=RemoveDirectoryW(P);
-    end;
-  end
-  else
-  {$ENDIF}
-    Result:=ForceDeleteDir(Name);
-end;
-
-function ForceDeleteFileOrDir(const Name: String): Boolean;
-{$IFDEF V_WIN}
-var
-  Attr: DWORD;
-  P: PChar;
-begin
-  Result:=False;
-  P:=PChar(Name);
-  Attr:=GetFileAttributes(P);
-  if Attr <> DWORD($FFFFFFFF) then begin
-    if Attr and FILE_ATTRIBUTE_READONLY <> 0 then
-      SetFileAttributes(P, Attr and not FILE_ATTRIBUTE_READONLY);
-    if Attr and FILE_ATTRIBUTE_DIRECTORY = 0 then
-      Result:=Windows.DeleteFile(P)
-    else
-      Result:=RemoveDirectory(P);
-  end;
-end;
-{$ENDIF}
-{$IFDEF LINUX}
-begin
-  Result:=ForceDeleteFile(Name) or ForceDeleteDir(Name);
-end;
-{$ENDIF}
-
-function ForceDeleteFileOrDirW(const Name: WideString): Boolean;
-{$IFDEF V_WIN}
-var
-  L: Integer;
-  Attr: DWORD;
-  P: PWideChar;
-{$ENDIF}
-begin
-  {$IFDEF V_WIN}
-  if Win32Platform = VER_PLATFORM_WIN32_NT then begin
-    Result:=False;
-    L:=Length(Name);
-    if L < MAX_PATH then begin
-      if L = 0 then
-        Exit;
-      P:=Pointer(Name);
-    end
-    else
-      P:=Pointer(UNCPath(Name));
-    Attr:=GetFileAttributesW(P);
-    if Attr <> DWORD($FFFFFFFF) then begin
-      if Attr and FILE_ATTRIBUTE_READONLY <> 0 then
-        SetFileAttributesW(P, Attr and not FILE_ATTRIBUTE_READONLY);
-      if Attr and FILE_ATTRIBUTE_DIRECTORY = 0 then
-        Result:=DeleteFileW(P)
-      else
-        Result:=RemoveDirectoryW(P);
-    end;
-  end
-  else
-  {$ENDIF}
-    Result:=ForceDeleteFileOrDir(Name);
-end;
-
 function ExcludeFileExt(const Name: String): String;
 begin
   Result:=Name;
@@ -1541,13 +1092,6 @@ begin
     SetLength(Result, MaxLen);
     SetDots(MaxLen);
   end;
-end;
-
-function GetModuleName(Module: HMODULE): String; // from SysUtils implementation
-var
-  Buf: TFileBuf;
-begin
-  SetString(Result, Buf, GetModuleFileName(Module, Buf, SizeOf(Buf)));
 end;
 
 function GetModuleNameW(Module: HMODULE): WideString;
@@ -1793,55 +1337,7 @@ end;
 {$ENDIF}
 
 {$IFDEF LINUX}
-function GetFileProps(const FileName: String; pSize: PInt64; pModifyTime,
-  pLastStatusChangeTime, pLastAccessTime: PDateTime; pAttributes, pUser,
-  pGroup: PUInt32): Boolean;
-var
-  st: TStatBuf64;
-begin
-  Result:=False;
-  if __lxstat64(_STAT_VER, PChar(FileName), st) <> 0 then
-    Exit;
-  if pSize <> nil then
-    pSize^:=st.st_size;
-  if pModifyTime <> nil then
-    pModifyTime^:=FileDateToDateTime(st.st_mtime);
-  if pLastStatusChangeTime <> nil then
-    pLastStatusChangeTime^:=FileDateToDateTime(st.st_ctime);
-  if pLastAccessTime <> nil then
-    pLastAccessTime^:=FileDateToDateTime(st.st_atime);
-  if pAttributes <> nil then
-    pAttributes^:=st.st_mode;
-  if pUser <> nil then
-    pUser^:=st.st_uid;
-  if pGroup <> nil then
-    pGroup^:=st.st_gid;
-  Result:= True;
-end;
 
-function GetFilePropsW(const FileName: WideString; pSize: PInt64;
-  pModifyTime, pLastStatusChangeTime, pLastAccessTime: PDateTime;
-  pAttributes, pUser, pGroup: PUInt32): Boolean;
-begin
-  Result:=GetFileProps(FileName, pSize, pModifyTime, pLastStatusChangeTime,
-    pLastAccessTime, pAttributes, pUser, pGroup);
-end;
-
-function GetLinkTarget(const PathOnly: String): String;
-var
-  BufSize: UInt32;
-  Buf: array [0.._POSIX_PATH_MAX - 1] of Char;
-begin
-  BufSize:=readlink(PChar(PathOnly), Buf, SizeOf(Buf));
-  if BufSize > 0 then begin
-    SetString(Result, Buf, BufSize);
-    if IsRelativePath(Result) then
-      Result:=GetItemPathW(PathOnly) + '/' + Result;
-    Result:=ExpandFileName(Result);
-  end
-  else
-    Result:='';
-end;
 {$ENDIF} {LINUX}
 
 function SetFileDate(const FileName: String; DateTime: TDateTime): Boolean;

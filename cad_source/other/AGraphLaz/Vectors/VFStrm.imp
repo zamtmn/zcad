@@ -28,7 +28,9 @@ begin
   Ex:=EVFileStream.Create('Class ' + ClassName + ' (file "' + FileName + '"): ' + S);
   Ex.Code:=Code;
   {$IFDEF V_32}
+  {$IFNDEF LINUX}
   Ex.LastOSError:=GetLastError;
+  {$ENDIF}
   {$ENDIF}
   Ex.FileName:={$IFDEF W_STREAM_WIN}FileNameW{$ELSE}FileName{$ENDIF};
   Ex.RaisedByClass:=ClassName;
@@ -363,14 +365,14 @@ end;
 
 {$IFDEF LINUX}
 function TVFileStream.GetLastWriteTime: TDateTime;
-var
-  st: TStatBuf;
+//var
+//  st: TStatBuf;
 begin
-  if FHandle = BadHandle then
+{  if FHandle = BadHandle then
     ReopenHandle;
   if fstat(FHandle, st) = 0 then
     Result:=UTCToLocalDateTime(UnixDateTimeToDateTime(st.st_mtime))
-  else
+  else}
     Result:=0;
 end;
 {$ENDIF} {LINUX}

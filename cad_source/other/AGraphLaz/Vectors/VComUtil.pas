@@ -5,9 +5,9 @@ unit VComUtil;
 interface
 
 {$I VCheck.inc}
-
+(*
 uses
-  Windows, ActiveX, SysUtils;
+  {$IFNDEF Linux} Windows, ActiveX,{$ENDIF} SysUtils;
 
 {$IFDEF V_D7}
   {$WARN UNSAFE_CODE OFF}
@@ -39,9 +39,9 @@ procedure IStreamSetSize(stm: IStream; NewSize: Integer);
 
 procedure IStreamSeek64(stm: IStream; Ofs: Largeint);
 procedure IStreamSetSize64(stm: IStream; NewSize: Largeint);
-
+*)
 implementation
-
+(*
 constructor EComError.Create(ACode: HRESULT; const FileName: String);
 var
   S: String;
@@ -121,5 +121,5 @@ procedure IStreamSetSize64(stm: IStream; NewSize: Largeint);
 begin
   ComCheck(stm.SetSize(NewSize));
 end;
-
+*)
 end.

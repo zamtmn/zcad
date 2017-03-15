@@ -1,0 +1,489 @@
+{ Version 040228. Copyright © Alexey A.Chernobaev, 1996-2004 }
+{
+  Разреженные числовые векторы (реализация).
+  Перед включением данного файла необходимо определить типы NumberType,
+  TSparseVector и TGenericNumberVector.
+
+  Sparse numeral vectors (implementation part).
+  Types NumberType, TSparseVector and TGenericNumberVector must be defined
+  before including this file.
+}
+
+procedure TSparseVector.ExpandHelper(I: Integer);
+begin
+  Expand(I);
+end;
+
+procedure TSparseVector.SortHelper(I, J: Integer);
+var
+  T: NumberType;
+begin
+  T:=PArrayType(FItems)^[I];
+  PArrayType(FItems)^[I]:=PArrayType(FItems)^[J];
+  PArrayType(FItems)^[J]:=T;
+end;
+
+constructor TSparseVector.Create(ElemCount: Integer; ADefaultValue: NumberType);
+begin
+  inherited Create(0, ADefaultValue);
+  FIndex:=TSVIndexVector.Create(0, ExpandHelper, SortHelper);
+  FSparseCount:=ElemCount;
+end;
+
+destructor TSparseVector.Destroy;
+begin
+  FIndex.Free;
+  inherited Destroy;
+end;
+
+{$IFDEF NOWARN}{$WARNINGS OFF}{$ENDIF}
+function TSparseVector.EqualTo(V: TVector): Bool;
+var
+  I: Integer;
+begin
+  if V is TSparseVector then
+    Result:=(FSparseCount = TSparseVector(V).FSparseCount) and
+      (FDefaultValue = TSparseVector(V).FDefaultValue) and
+      FIndex.EqualTo(TSparseVector(V).FIndex) and
+      RawEqualTo(V)
+  else
+    if V is TGenericNumberVector then begin
+      Result:=False;
+      if FSparseCount = V.Count then begin
+        for I:=0 to FSparseCount - 1 do
+          if Items[I] <> TGenericNumberVector(V)[I] then
+            Exit;
+        Result:=True;
+      end;
+    end
+    else
+      Error(SIncompatibleClasses);
+end;
+{$IFDEF NOWARN}{$WARNINGS ON}{$ENDIF}
+
+function TSparseVector.GetValue(I: Integer): NumberType;
+var
+  J: Integer;
+begin
+  {$IFDEF CHECK_VECTORS}
+  if (I < 0) or (I >= FSparseCount) then ErrorFmt(SRangeError_d, [I]);
+  {$ENDIF}
+  J:=FIndex.IndexOf(I);
+  if J < 0 then
+    Result:=DefaultValue
+  else
+    Result:=PArrayType(FItems)^[J];
+end;
+
+procedure TSparseVector.SetValue(I: Integer; Value: NumberType);
+var
+  J: Integer;
+begin
+  {$IFDEF CHECK_VECTORS}
+  if (I < 0) or (I >= FSparseCount) then ErrorFmt(SRangeError_d, [I]);
+  {$ENDIF}
+  if Value <> DefaultValue then begin
+    J:=FIndex.FindOrAdd(I); { FindOrAdd method can change FItems implicitly }
+    PArrayType(FItems)^[J]:=Value;
+  end
+  else begin
+    J:=FIndex.IndexOf(I);
+    if J >= 0 then begin
+      inherited Delete(J);
+      FIndex.Delete(J);
+    end;
+  end;
+end;
+
+function TSparseVector.GetCount: Integer;
+begin
+  Result:=FSparseCount;
+end;
+
+procedure TSparseVector.SetCount(ACount: Integer);
+var
+  I: Integer;
+begin
+  if (ACount < FSparseCount) and (FCount > 0) then begin
+    I:=FIndex.IndexOfLastLessThen(ACount);
+    if I < 0 then
+      I:=0;
+    inherited SetCount(I);
+    FIndex.Count:=I;
+  end;
+  FSparseCount:=ACount;
+end;
+
+procedure TSparseVector.GetUntyped(I: Integer; var Result);
+begin
+  NumberType(Result):=Items[I];
+end;
+
+function TSparseVector.NumberOfValues(Value: NumberType): Integer;
+begin
+  if Value = DefaultValue then
+    Result:=FSparseCount - FIndex.Count
+  else
+    Result:=CountValuesEqualTo(TBase(Value));
+end;
+
+procedure TSparseVector.WriteToStream(VStream: TVStream);
+begin
+  inherited WriteToStream(VStream);
+  FIndex.WriteToStream(VStream);
+  VStream.WriteProc(FSparseCount, SizeOf(FSparseCount));
+end;
+
+procedure TSparseVector.ReadFromStream(VStream: TVStream);
+begin
+  inherited ReadFromStream(VStream);
+  FIndex.ReadFromStream(VStream);
+  VStream.ReadProc(FSparseCount, SizeOf(FSparseCount));
+end;
+
+procedure TSparseVector.Assign(Source: TVector);
+var
+  I, J: Integer;
+begin
+  if Source is TGenericNumberVector then
+    if Source is TSparseVector then begin
+      FSparseCount:=TSparseVector(Source).FSparseCount;
+      FDefaultValue:=TSparseVector(Source).FDefaultValue;
+      FIndex.Assign(TSparseVector(Source).FIndex);
+      RawAssign(Source);
+    end
+    else
+      if DefaultValue = TGenericNumberVector(Source).DefaultValue then begin
+        Clear;
+        FSparseCount:=TGenericNumberVector(Source).Count;
+        for I:=0 to FSparseCount - 1 do
+          if TGenericNumberVector(Source)[I] <> DefaultValue then begin
+            J:=FIndex.Add(I); { Add method can change FItems implicitly }
+            PArrayType(FItems)^[J]:=TGenericNumberVector(Source)[I];
+          end;
+        Capacity:=FCount;
+        FIndex.Capacity:=FCount;
+      end
+      else
+        inherited Assign(Source)
+  else
+    Error(SAssignError);
+end;
+
+procedure TSparseVector.SetToDefault;
+var
+  I: Integer;
+begin
+  I:=FSparseCount;
+  inherited SetCount(0);
+  FIndex.Clear;
+  FSparseCount:=I;
+end;
+
+procedure TSparseVector.FillValue(Value: NumberType);
+begin
+  if Value = FDefaultValue then
+    SetToDefault
+  else
+    inherited FillValue(Value);
+end;
+
+procedure TSparseVector.Clear;
+begin
+  inherited SetCount(0);
+  FIndex.Clear;
+  FSparseCount:=0;
+end;
+
+function TSparseVector.SizeInBytes: Integer;
+begin
+  Result:=inherited SizeInBytes + SizeOf(FSparseCount) + SizeOf(FIndex) +
+    FIndex.SizeInBytes;
+end;
+
+procedure TSparseVector.Delete(I: Integer);
+var
+  J: Integer;
+begin
+  {$IFDEF CHECK_VECTORS}
+  if (I < 0) or (I >= FSparseCount) then ErrorFmt(SRangeError_d, [I]);
+  {$ENDIF}
+  J:=FIndex.DecreaseGreater(I);
+  if J >= 0 then begin
+    inherited Delete(J);
+    FIndex.Delete(J);
+  end;
+  Dec(FSparseCount);
+end;
+
+procedure TSparseVector.DeleteRange(I, ACount: Integer);
+var
+  J: Integer;
+begin
+  for J:=0 to ACount - 1 do Delete(I);
+end;
+
+procedure TSparseVector.Insert(I: Integer; Value: NumberType);
+var
+  J: Integer;
+begin
+  {$IFDEF CHECK_VECTORS}
+  if (I < 0) or (I > FSparseCount) then ErrorFmt(SRangeError_d, [I]);
+  {$ENDIF}
+  J:=FIndex.IncreaseGreaterEqual(I);
+  if Value <> DefaultValue then begin
+    FIndex.Insert(J, I);
+    PArrayType(FItems)^[J]:=Value;
+  end;
+  Inc(FSparseCount);
+end;
+
+function TSparseVector.IndexFrom(I: Integer; Value: NumberType): Integer;
+begin
+  if I < 0 then
+    I:=0;
+  if I < FSparseCount then begin
+    Result:=FIndex.IndexOf(I);
+    if Value = DefaultValue then begin
+      if Result >= 0 then begin { ищем первую "дырку" в FIndex после I-го элемента }
+        I:=FIndex[Result];
+        repeat
+          Inc(Result);
+          Inc(I);
+          if Result >= FCount then begin
+            if (Result < FSparseCount) and (I < FSparseCount) then
+              Result:=I
+            else
+              Result:=-1;
+            Exit;
+          end
+        until FIndex[Result] <> I;
+        Result:=I;
+      end
+      else
+        if FSparseCount > 0 then
+          Result:=I { не нашли => I-ый элемент и есть DefaultValue }
+    end
+    else begin
+      if Result < 0 then begin { не нашли => ищем первый FIndex, больший I }
+        Result:=-1;
+        repeat
+          Inc(Result);
+          if Result >= FCount then begin
+            Result:=-1;
+            Exit;
+          end;
+        until FIndex[Result] > I;
+      end;
+      Result:=IndexOfBaseValue(Result, TBase(Value));
+      if Result >= 0 then
+        Result:=FIndex[Result];
+    end;
+  end
+  else
+    Result:=-1;
+end;
+
+function TSparseVector.LastIndexFrom(I: Integer; Value: NumberType): Integer;
+begin
+  if I >= FSparseCount then
+    I:=FSparseCount - 1;
+  if I >= 0 then begin
+    Result:=FIndex.IndexOf(I);
+    if Value = DefaultValue then begin
+      if Result >= 0 then begin { ищем первую "дырку" в FIndex перед I-ым элементом }
+        I:=FIndex[Result];
+        repeat
+          Dec(Result);
+          Dec(I);
+        until (Result < 0) or (FIndex[Result] <> I);
+        Result:=I;
+      end
+      else
+        if FSparseCount > 0 then
+          Result:=I { не нашли => I-ый элемент и есть DefaultValue }
+    end
+    else begin
+      if Result < 0 then begin { не нашли => ищем первый FIndex, меньший I }
+        Result:=FCount;
+        repeat
+          Dec(Result);
+          if Result < 0 then begin
+            Result:=-1;
+            Exit;
+          end;
+        until FIndex[Result] < I;
+      end;
+      Result:=LastIndexOfBaseValue(Result, TBase(Value));
+      if Result >= 0 then
+        Result:=FIndex[Result];
+    end;
+  end
+  else
+    Result:=-1;
+end;
+
+function TSparseVector.Filling: Integer;
+begin
+  Result:=NonDefaultCount * 100 div FSparseCount;
+end;
+
+function TSparseVector.Valid: Boolean;
+begin
+  Result:=SizeInBytes < SizeOf(FCount) + SizeOf(FElemSize) + SizeOf(FItems) +
+    FSparseCount * FElemSize;
+end;
+
+{$IFDEF NOWARN}{$WARNINGS OFF}{$ENDIF}
+function TSparseVector.Min: NumberType;
+var
+  I, From: Integer;
+  T: NumberType;
+begin
+  if FSparseCount > 0 then begin
+    if FIndex.Count < FSparseCount then begin
+      Result:=DefaultValue;
+      From:=0;
+    end
+    else begin
+      Result:=PArrayType(FItems)^[0];
+      From:=1;
+    end;
+    for I:=From to FCount - 1 do begin
+      T:=PArrayType(FItems)^[I];
+      if T < Result then
+        Result:=T;
+    end;
+  end
+  else
+    ErrorFmt(SWrongVectorSize_d, [0]);
+end;
+
+function TSparseVector.Max: NumberType;
+var
+  I, From: Integer;
+  T: NumberType;
+begin
+  if FSparseCount > 0 then begin
+    if FIndex.Count < FSparseCount then begin
+      Result:=DefaultValue;
+      From:=0;
+    end
+    else begin
+      Result:=PArrayType(FItems)^[0];
+      From:=1;
+    end;
+    for I:=From to FCount - 1 do begin
+      T:=PArrayType(FItems)^[I];
+      if T > Result then
+        Result:=T;
+    end;
+  end
+  else
+    ErrorFmt(SWrongVectorSize_d, [0]);
+end;
+
+function TSparseVector.MinIndexFrom(I: Integer; var MinValue: NumberType): Integer;
+var
+  J, From: Integer;
+  T: NumberType;
+begin
+  if FSparseCount > 0 then begin
+    {$IFDEF CHECK_VECTORS}
+    if (I < 0) or (I >= Count) then ErrorFmt(SRangeError_d, [I]);
+    {$ENDIF}
+    From:=I;
+    if FIndex.Count < FSparseCount then begin
+      Result:=IndexFrom(From, DefaultValue);
+      FIndex.FindValue(From, From);
+      if Result >= 0 then
+        MinValue:=DefaultValue
+      else begin
+        Result:=I;
+        MinValue:=PArrayType(FItems)^[From];
+        Inc(From);
+      end;
+    end
+    else begin
+      MinValue:=PArrayType(FItems)^[I];
+      Result:=I;
+      Inc(From);
+    end;
+    for J:=From to FCount - 1 do begin
+      T:=PArrayType(FItems)^[J];
+      if T < MinValue then begin
+        MinValue:=T;
+        Result:=FIndex[J];
+      end;
+    end;
+  end
+  else
+    ErrorFmt(SWrongVectorSize_d, [0]);
+end;
+
+function TSparseVector.MaxIndexFrom(I: Integer; var MaxValue: NumberType): Integer;
+var
+  J, From: Integer;
+  T: NumberType;
+begin
+  if FSparseCount > 0 then begin
+    {$IFDEF CHECK_VECTORS}
+    if (I < 0) or (I >= Count) then ErrorFmt(SRangeError_d, [I]);
+    {$ENDIF}
+    From:=I;
+    if FIndex.Count < FSparseCount then begin
+      Result:=IndexFrom(From, DefaultValue);
+      FIndex.FindValue(From, From);
+      if Result >= 0 then
+        MaxValue:=DefaultValue
+      else begin
+        Result:=I;
+        MaxValue:=PArrayType(FItems)^[From];
+        Inc(From);
+      end;
+    end
+    else begin
+      MaxValue:=PArrayType(FItems)^[0];
+      Result:=I;
+      Inc(From);
+    end;
+    for J:=From to FCount - 1 do begin
+      T:=PArrayType(FItems)^[J];
+      if T > MaxValue then begin
+        MaxValue:=T;
+        Result:=FIndex[J];
+      end;
+    end;
+  end
+  else
+    ErrorFmt(SWrongVectorSize_d, [0]);
+end;
+{$IFDEF NOWARN}{$WARNINGS ON}{$ENDIF}
+
+function TSparseVector.Sum:
+{$IFDEF FLOAT} Float80 {$ELSE}
+  {$IFDEF INT64_VECT} Int64 {$ELSE}
+    {$IFDEF UINT} UInt32 {$ELSE} Int32 {$ENDIF} {$ENDIF} {$ENDIF};
+var
+  I: Integer;
+begin
+  Result:={$IFDEF UINT}UInt32{$ENDIF}({$IFDEF UINT}UInt32{$ENDIF}
+    (FSparseCount - FIndex.Count) * DefaultValue);
+  for I:=0 to FIndex.Count - 1 do Result:=Result + PArrayType(FItems)^[I];
+end;
+
+function TSparseVector.SqrSum:
+{$IFDEF FLOAT} Float80 {$ELSE}
+  {$IFDEF INT64_VECT} Int64 {$ELSE} UInt32 {$ENDIF} {$ENDIF};
+var
+  I: Integer;
+begin
+  Result:={$IFNDEF FLOAT}{$IFNDEF INT64_VECT}UInt32{$ENDIF}{$ENDIF}
+    (FSparseCount - FIndex.Count) * {$IFNDEF FLOAT}{$IFNDEF INT64_VECT}UInt32{$ENDIF}{$ENDIF}
+    (Sqr(DefaultValue));
+  for I:=0 to FIndex.Count - 1 do
+    Result:=Result + {$IFNDEF FLOAT}{$IFNDEF INT64_VECT}UInt32{$ENDIF}{$ENDIF}
+      (Sqr(PArrayType(FItems)^[I]));
+end;
+
+{ end }

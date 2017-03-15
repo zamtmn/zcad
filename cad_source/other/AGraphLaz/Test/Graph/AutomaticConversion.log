@@ -1,0 +1,12 @@
+Hint: * Converting file C:\TEMP\AGraph\Test\Graph\GraphTestRings.dpr *
+Hint: Changed encoding from cp1251 to UTF-8
+Hint: Added defines -dBorland -dVer150 -dDelphi7 -dCompiler6_Up -dPUREPASCAL in custom options
+Hint: Found all unit files
+Hint: * Fixing used units for file C:\TEMP\AGraph\Test\Graph\GraphTestRings.dpr *
+Hint: 
+Hint: *** Converting unit files belonging to project/package ***
+Hint: * Converting file C:\TEMP\AGraph\Test\Graph\TestRings.pas *
+Hint: 
+Hint: *** Converting unit files found during conversion ***
+Hint: Conversion took: 00:00:14
+Hint: Conversion Aborted.

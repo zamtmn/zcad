@@ -1,0 +1,771 @@
+{
+  This code was converted from C-language free sources and modified by
+  A.Chernobaev, 040212.
+
+  Красно-черные деревья (реализация).
+
+  Red-black tree (implementation part).
+}
+
+{ TRBTree }
+
+{$IFDEF NOWARN}{$WARNINGS OFF}{$ENDIF}
+{$IFDEF RBTREE_USER_COMPARE}
+constructor TRBTree.Create(CMPFunc: TRBTreeCompareFunc);
+{$ELSE}
+constructor TRBTree.Create;
+{$ENDIF}
+begin
+  {$IFDEF CHECK_OBJECTS_FREE}
+  RegisterObjectCreate(Self);
+  {$ENDIF}
+  inherited Create;
+  {$IFDEF RBTREE_USER_COMPARE}
+  CMP:=CMPFunc;
+  {$ENDIF}
+  New(TNIL);
+  SetNull(TNIL^, SizeOf(TNIL^));
+  TNIL^.left:=TNIL;
+  TNIL^.right:=TNIL;
+  { TNIL^.color = BLACK }
+  root:=TNIL;
+end;
+{$IFDEF NOWARN}{$WARNINGS ON}{$ENDIF}
+
+destructor TRBTree.Destroy;
+begin
+  {$IFDEF CHECK_OBJECTS_FREE}
+  RegisterObjectFree(Self);
+  {$ENDIF}
+  Clear;
+  Dispose(TNIL);
+  inherited Destroy;
+end;
+
+procedure TRBTree.WriteItem(VStream: TVStream; const Item: TTreeData);
+begin
+  VStream.WriteProc(Item, SizeOf(Item));
+end;
+
+function TRBTree.ReadItem(VStream: TVStream): TTreeData;
+begin
+  VStream.ReadProc(Result, SizeOf(Result));
+end;
+
+procedure TRBTree.WriteToStream(VStream: TVStream);
+var
+  It: TRBTreeIterator;
+begin
+  VStream.WriteInt32(Count);
+  It:=TRBTreeIterator.Create(Self);
+  try
+    while not It.Eof do begin
+      WriteItem(VStream, It.Data);
+      It.Next;
+    end;
+  finally
+    It.Free;
+  end;
+end;
+
+procedure TRBTree.ReadFromStream(VStream: TVStream);
+var
+  I: Integer;
+begin
+  Clear;
+  for I:=0 to VStream.ReadInt32 - 1 do
+    Add(ReadItem(VStream));
+end;
+
+procedure TRBTree.Clear;
+
+  procedure FreeTree(current: PNode);
+  begin
+    if current <> TNIL then begin
+      FreeTree(current^.left);
+      FreeTree(current^.right);
+      Dispose(current);
+    end;
+  end;
+
+begin
+  FreeTree(root);
+  root:=TNIL;
+  FCount:=0;
+end;
+
+function TRBTree.IsEmpty: Boolean;
+begin
+  Result:=FCount = 0; { root = TNIL }
+end;
+
+procedure TRBTree.RotateLeft(x: PNode);
+var
+  y, xParent: PNode;
+begin
+  y:=x^.right;
+  x^.right:=y^.left;
+  if y^.left <> TNIL then { SetParent(y^.left^.parent, x) }
+    y^.left^.parent:=Int32(x) or y^.left^.parent and 1;
+  { establish y->parent link }
+  xParent:=PNode(x^.parent and not 1);
+  if y <> TNIL then { SetParent(y^.parent, xParent) }
+    y^.parent:=Int32(xParent) or y^.parent and 1;
+  if xParent <> nil then
+    if x = xParent^.left then
+      xParent^.left:=y
+    else
+      xParent^.right:=y
+  else
+    root:=y;
+  { link x and y }
+  y^.left:=x;
+  if x <> TNIL then { SetParent(x^.parent, y) }
+    x^.parent:=Int32(y) or x^.parent and 1;
+end;
+
+procedure TRBTree.RotateRight(x: PNode);
+var
+  y, xParent: PNode;
+begin
+  y:=x^.left;
+  { establish x->left link }
+  x^.left:=y^.right;
+  if y^.right <> TNIL then { SetParent(y^.right^.parent, x) }
+    y^.right^.parent:=Int32(x) or y^.right^.parent and 1;
+  { establish y->parent link }
+  xParent:=PNode(x^.parent and not 1);
+  if y <> TNIL then { SetParent(y^.parent, xParent) }
+    y^.parent:=Int32(xParent) or y^.parent and 1;
+  if xParent <> nil then
+    if x = xParent^.right then
+      xParent^.right:=y
+    else
+      xParent^.left:=y
+  else
+    root:=y;
+  { link x and y }
+  y^.right:=x;
+  if x <> TNIL then { SetParent(x^.parent, y) }
+    x^.parent:=Int32(y) or x^.parent and 1;
+end;
+
+function TRBTree.FFindNode(const Item: TTreeData; var Node: PNode): Boolean;
+var
+  CMPResult: Integer;
+  x, current: PNode;
+begin
+  { find where node belongs }
+  Result:=False;
+  current:=root;
+  x:=nil;
+  while current <> TNIL do begin
+    x:=current;
+    CMPResult:=CMP(Item, current^.data);
+    if CMPResult = 0 then begin
+      Result:=True;
+      Break;
+    end;
+    if CMPResult < 0 then
+      current:=current^.left
+    else
+      current:=current^.right;
+  end;
+  Node:=x;
+end;
+
+function TRBTree.InsertNode(const Item: TTreeData; var NewNode: Boolean): PNode;
+begin
+  if FFindNode(Item, Result) then begin
+    NewNode:=False;
+    Exit;
+  end;
+  NewNode:=True;
+  Result:=FInsertNode(Item, Result);
+end;
+
+function TRBTree.FInsertNode(const Item: TTreeData; Current: PNode): PNode;
+var
+  B: Boolean;
+  x, y, xParent, xParentParent: PNode;
+begin
+  { setup new node }
+  New(x);
+  Result:=x;
+  x^.left:=TNIL;
+  x^.right:=TNIL;
+  x^.parent:=Int32(Current) or RED; { x^.color:=RED; }
+  x^.data:=Item;
+  { insert node in tree }
+  if Current <> nil then
+    if CMP(x^.data, Current^.data) < 0 then
+      Current^.left:=x
+    else
+      Current^.right:=x
+  else
+    root:=x;
+  { maintain Red-Black tree balance after inserting node x }
+  while x <> root do begin
+    xParent:=PNode(x^.parent and not 1);
+    if xParent^.parent and 1 { Color(xParent) } = BLACK then Break;
+    { we have a violation }
+    xParentParent:=PNode(xParent^.parent and not 1);
+    B:=xParent = xParentParent^.left;
+    if B then
+      y:=xParentParent^.right
+    else
+      y:=xParentParent^.left;
+    if y^.parent and 1 { Color(y) } = RED then begin { uncle is RED }
+      xParent^.parent:=xParent^.parent and not 1; { x^.parent^.color:=BLACK; }
+      y^.parent:=y^.parent and not 1; { y^.color:=BLACK; }
+      xParentParent^.parent:=xParentParent^.parent or RED; { x^.parent^.parent^.color:=RED; }
+      x:=xParentParent;
+    end
+    else { uncle is BLACK }
+      if B then begin
+        if x = xParent^.right then begin
+          { make x a left child }
+          x:=xParent;
+          RotateLeft(x);
+          xParent:=PNode(x^.parent and not 1);
+          xParentParent:=PNode(xParent^.parent and not 1);
+        end;
+        { recolor and rotate }
+        xParent^.parent:=xParent^.parent and not 1; { x^.parent^.color:=BLACK; }
+        xParentParent^.parent:=xParentParent^.parent or RED; { x^.parent^.parent^.color:=RED; }
+        RotateRight(xParentParent);
+      end
+      else begin
+        { uncle is BLACK }
+        if x = xParent^.left then begin
+          x:=xParent;
+          RotateRight(x);
+          xParent:=PNode(x^.parent and not 1);
+          xParentParent:=PNode(xParent^.parent and not 1);
+        end;
+        xParent^.parent:=xParent^.parent and not 1; { x^.parent^.color:=BLACK; }
+        xParentParent^.parent:=xParentParent^.parent or RED; { x^.parent^.parent^.color:=RED; }
+        RotateLeft(xParentParent);
+      end;
+  end; {while}
+  root^.parent:=root^.parent and not 1; { root^.color:=BLACK; }
+  Inc(FCount);
+end;
+
+procedure TRBTree.DeleteNode(z: PNode);
+{ delete node z from tree }
+var
+  wLeftColor, wRightColor: Integer;
+  B: Boolean;
+  x, y, w, xParent: PNode;
+begin
+  if (z = nil) or (z = TNIL) then
+    raise ERBTreeError.Create('TRBTree.DeleteNode: invalid node');
+  if (z^.left = TNIL) or (z^.right = TNIL) then begin
+    { y has a TNIL node as a child }
+    y:=z;
+    { x is y's only child }
+    if y^.left <> TNIL then x:=y^.left else x:=y^.right;
+  end
+  else begin
+    { find tree successor with a TNIL node as a child }
+    y:=z^.right;
+    while y^.left <> TNIL do y:=y^.left;
+    { x is y's only child }
+    x:=y^.right;
+  end;
+  { remove y from the parent chain }
+  w:=PNode(y^.parent and not 1);
+  x^.parent:=Int32(w) or x^.parent and 1; { SetParent(x^.parent, w) }
+  if w <> nil then
+    if y = w^.left then
+      w^.left:=x
+    else
+      w^.right:=x
+  else
+    root:=x;
+  if y^.parent and 1 { Color(y) } = BLACK then begin
+    { DeleteFixup: maintain Red-Black tree balance after deleting node x }
+    while (x <> root) and (x^.parent and 1 { Color(x) } = BLACK) do begin
+      xParent:=PNode(x^.parent and not 1);
+      B:=x = xParent^.left;
+      if B then
+        w:=xParent^.right
+      else
+        w:=xParent^.left;
+      if w^.parent and 1 { Color(w) } = RED then begin
+        w^.parent:=w^.parent and not 1; { w^.color:=BLACK; }
+        xParent^.parent:=xParent^.parent or RED; { x^.parent^.color:=RED; }
+        if B then begin
+          RotateLeft(xParent);
+          w:=PNode(x^.parent and not 1)^.right;
+        end
+        else begin
+          RotateRight(xParent);
+          w:=PNode(x^.parent and not 1)^.left;
+        end;
+      end;
+      wLeftColor:=w^.left^.parent and 1; { Color(w^.left); }
+      wRightColor:=w^.right^.parent and 1; { Color(w^.right); }
+      if (wLeftColor = BLACK) and (wRightColor = BLACK) then begin
+        w^.parent:=w^.parent or RED; { w^.color:=RED; }
+        x:=xParent;
+      end
+      else begin
+        if B then begin
+          if wRightColor = BLACK then begin
+            w^.left^.parent:=w^.left^.parent and not 1; { w^.left^.color:=BLACK; }
+            w^.parent:=w^.parent or RED; { w^.color:=RED; }
+            RotateRight(w);
+            xParent:=PNode(x^.parent and not 1);
+            w:=xParent^.right;
+          end;
+          w^.parent:=w^.parent and not 1 or xParent^.parent and 1; { w^.color:=x^.parent^.color; }
+          xParent^.parent:=xParent^.parent and not 1; { x^.parent^.color:=BLACK; }
+          w^.right^.parent:=w^.right^.parent and not 1; { w^.right^.color:=BLACK; }
+          RotateLeft(xParent);
+        end
+        else begin
+          if wLeftColor = BLACK then begin
+            w^.right^.parent:=w^.right^.parent and not 1; { w^.right^.color:=BLACK; }
+            w^.parent:=w^.parent or RED; { w^.color:=RED; }
+            RotateLeft(w);
+            xParent:=PNode(x^.parent and not 1);
+            w:=xParent^.left;
+          end;
+          w^.parent:=w^.parent and not 1 or xParent^.parent and 1; { w^.color:=x^.parent^.color; }
+          xParent^.parent:=xParent^.parent and not 1; { x^.parent^.color:=BLACK; }
+          w^.left^.parent:=w^.left^.parent and not 1; { w^.left^.color:=BLACK; }
+          RotateRight(xParent);
+        end;
+        x:=root;
+      end;
+    end; { while }
+    x^.parent:=x^.parent and not 1; { x^.color:=BLACK; }
+    { DeleteFixup end }
+  end;
+  if y <> z then begin
+    w:=PNode(z^.parent and not 1);
+    if w <> nil then
+      if w^.left = z then w^.left:=y else w^.right:=y;
+    z^.left^.parent:=Int32(y) or z^.left^.parent and 1; { SetParent(z^.left^.parent, y) }
+    z^.right^.parent:=Int32(y) or z^.right^.parent and 1; { SetParent(z^.right^.parent, y) }
+    y^.left:=z^.left;
+    y^.right:=z^.right;
+    y^.parent:=Int32(w) or y^.parent and 1; { SetParent(y^.parent, w) }
+    y^.parent:=y^.parent and not 1 or z^.parent and 1; { y^.color:=z^.color; }
+    if root = z then root:=y;
+  end;
+  Dispose(z);
+  Dec(FCount);
+end;
+
+function TRBTree.FindNode(const Item: TTreeData): PNode;
+begin
+  if not FFindNode(Item, Result) then Result:=nil;
+end;
+
+function TRBTree.AddNode(const Item: TTreeData): PNode;
+var
+  B: Boolean;
+begin
+  Result:=InsertNode(Item, B);
+end;
+
+function TRBTree.MinNode: PNode;
+begin
+  if FCount > 0 then begin
+    Result:=root;
+    while Result^.left <> TNIL do Result:=Result^.left;
+  end
+  else
+    Result:=nil;
+end;
+
+function TRBTree.MaxNode: PNode;
+begin
+  if FCount > 0 then begin
+    Result:=root;
+    while Result^.right <> TNIL do Result:=Result^.right;
+  end
+  else
+    Result:=nil;
+end;
+
+function TRBTree.Add(const Item: TTreeData): Boolean;
+begin
+  InsertNode(Item, Result);
+end;
+
+function TRBTree.Find(const Item: TTreeData): Boolean;
+begin
+  Result:=FindNode(Item) <> nil;
+end;
+
+function TRBTree.FindLessEqual(const Item: TTreeData; var FoundItem: TTreeData): Boolean;
+var
+  current: PNode;
+  CMPResult: Integer;
+begin
+  Result:=False;
+  current:=root;
+  while current <> TNIL do begin
+    { consider 7 variants: 1)  Item < current^.left; 2) Item = current^.left;
+      3) current^.left < Item < current; 4) Item = current;
+      5) current < Item < current^.right; 6) Item = current^.right;
+      7) Item > current^.right}
+    CMPResult:=CMP(Item, current^.data);
+    if CMPResult = 0 then begin { 4 }
+      FoundItem:=current^.data;
+      Result:=True;
+      Exit;
+    end
+    else if CMPResult < 0 then begin
+      current:=current^.left;
+      if current <> TNIL then begin
+        CMPResult:=CMP(Item, current^.data);
+        if CMPResult = 0 then begin { 2 }
+          FoundItem:=current^.data;
+          Result:=True;
+          Exit;
+        end
+        else if CMPResult < 0 then { 1 }
+          current:=current^.left
+        else begin { 3 }
+          FoundItem:=current^.data;
+          current:=current^.right;
+          Result:=True;
+        end
+      end;
+    end
+    else begin
+      Result:=True;
+      FoundItem:=current^.data;
+      current:=current^.right;
+      if current <> TNIL then begin
+        CMPResult:=CMP(Item, current^.data);
+        if CMPResult = 0 then begin { 6 }
+          FoundItem:=current^.data;
+          Exit;
+        end
+        else if CMPResult < 0 then { 5 }
+          current:=current^.left
+        else begin { 7 }
+          FoundItem:=current^.data;
+          current:=current^.right;
+        end;
+      end;
+    end
+  end;
+end;
+
+function TRBTree.FindGreaterEqual(const Item: TTreeData; var FoundItem: TTreeData): Boolean;
+var
+  current: PNode;
+  CMPResult: Integer;
+begin
+  Result:=False;
+  current:=root;
+  while current <> TNIL do begin
+    { consider 7 variants: 1)  Item < current^.left; 2) Item = current^.left;
+      3) current^.left < Item < current; 4) Item = current;
+      5) current < Item < current^.left; 6) Item = current^.left;
+      7) Item > current^.left}
+    CMPResult:=CMP(Item, current^.data);
+    if CMPResult = 0 then begin { 4 }
+      FoundItem:=current^.data;
+      Result:=True;
+      Exit;
+    end
+    else if CMPResult > 0 then begin
+      current:=current^.right;
+      if current <> TNIL then begin
+        CMPResult:=CMP(Item, current^.data);
+        if CMPResult = 0 then begin { 6 }
+          FoundItem:=current^.data;
+          Result:=True;
+          Exit;
+        end
+        else if CMPResult > 0 then { 7 }
+          current:=current^.right
+        else begin { 5 }
+          FoundItem:=current^.data;
+          current:=current^.left;
+          Result:=True;
+        end
+      end;
+    end
+    else begin
+      Result:=True;
+      FoundItem:=current^.data;
+      current:=current^.left;
+      if current <> TNIL then begin
+        CMPResult:=CMP(Item, current^.data);
+        if CMPResult = 0 then begin { 2 }
+          FoundItem:=current^.data;
+          Exit;
+        end
+        else if CMPResult > 0 then { 3}
+          current:=current^.right
+        else begin { 1 }
+          FoundItem:=current^.data;
+          current:=current^.left;
+        end;
+      end;
+    end
+  end;
+end;
+
+procedure TRBTree.Delete(const Item: TTreeData);
+var
+  Node: PNode;
+begin
+  Node:=FindNode(Item);
+  DeleteNode(Node);
+end;
+
+function TRBTree.SafeDelete(const Item: TTreeData): Boolean;
+var
+  Node: PNode;
+begin
+  Node:=FindNode(Item);
+  if Node <> nil then begin
+    DeleteNode(Node);
+    Result:=True;
+  end
+  else
+    Result:=False;
+end;
+
+function TRBTree.ChangeItem(const OldItem, NewItem: TTreeData): Boolean;
+begin
+  Delete(OldItem);
+  Result:=Add(NewItem);
+end;
+
+function TRBTree.Min: TTreeData;
+begin
+  Result:=MinNode^.data;
+end;
+
+function TRBTree.Max: TTreeData;
+begin
+  Result:=MaxNode^.data;
+end;
+
+procedure TRBTree.Traversal(TraverseProc: TTraverseProc);
+
+  procedure DoTraversal(current: PNode);
+  begin
+    if current <> TNIL then begin
+      TraverseProc(current^.data);
+      DoTraversal(current^.left);
+      DoTraversal(current^.right);
+    end;
+  end;
+
+begin
+  DoTraversal(root);
+end;
+
+procedure TRBTree.UpwardTraversal(TraverseProc: TTraverseProc);
+
+  procedure DoTraversal(current: PNode);
+  begin
+    if current <> TNIL then begin
+      DoTraversal(current^.left);
+      TraverseProc(current^.data);
+      DoTraversal(current^.right);
+    end;
+  end;
+
+begin
+  DoTraversal(root);
+end;
+
+procedure TRBTree.DownwardTraversal(TraverseProc: TTraverseProc);
+
+  procedure DoTraversal(current: PNode);
+  begin
+    if current <> TNIL then begin
+      DoTraversal(current^.right);
+      TraverseProc(current^.data);
+      DoTraversal(current^.left);
+    end;
+  end;
+
+begin
+  DoTraversal(root);
+end;
+
+function TRBTree.FindDepth: Integer;
+
+  procedure DoTraversal(current: PNode; MaxDepth: Integer);
+  begin
+    if current <> TNIL then begin
+      if MaxDepth > Result then Result:=MaxDepth;
+      Inc(MaxDepth);
+      DoTraversal(current^.left, MaxDepth);
+      DoTraversal(current^.right, MaxDepth);
+    end;
+  end;
+
+begin
+  Result:=0;
+  DoTraversal(root, 0);
+end;
+
+(*// non-recursive traversal using stack - for reference only
+
+type
+  NumberType = TStackData;
+
+  {$I VStack.def}
+  end;
+
+{$I VStack.imp}
+
+type
+  TTraversalStack = TVGenericStack;
+
+procedure TRBTree.UpwardTraversal1(TraverseProc: TTraverseProc);
+var
+  S: TTraversalStack;
+  T, T1, T2: TStackData;
+begin
+  if root <> TNIL then begin
+    S:=TTraversalStack.Create;
+    try
+      T1.Recursive:=True;
+      T2.Recursive:=True;
+      T1.Node:=root;
+      S.Push(T1);
+      repeat
+        T:=S.Pop;
+        if T.Recursive then begin
+          T1.Node:=T.Node^.right;
+          if T1.Node <> TNIL then S.Push(T1);
+          T.Recursive:=False;
+          S.Push(T);
+          T2.Node:=T.Node^.left;
+          if T2.Node <> TNIL then S.Push(T2);
+        end
+        else
+          TraverseProc(T.Node^.data);
+      until S.IsEmpty;
+    finally
+      S.Free;
+    end;
+  end;
+end;*)
+
+{ TRBTreeIterator }
+
+constructor TRBTreeIterator.Create(ARBTree: TRBTree);
+begin
+  {$IFDEF CHECK_OBJECTS_FREE}
+  RegisterObjectCreate(Self);
+  {$ENDIF}
+  inherited Create;
+  FRBTree:=ARBTree;
+  First;
+end;
+
+{$IFDEF CHECK_OBJECTS_FREE}
+destructor TRBTreeIterator.Destroy;
+begin
+  RegisterObjectFree(Self);
+  inherited Destroy;
+end;
+{$ENDIF}
+
+procedure TRBTreeIterator.First;
+begin
+  FCurrent:=FRBTree.MinNode;
+  FBOF:=FCurrent = nil;
+  FEOF:=FCurrent = nil;
+end;
+
+procedure TRBTreeIterator.Last;
+begin
+  FCurrent:=FRBTree.MaxNode;
+  FBOF:=FCurrent = nil;
+  FEOF:=FCurrent = nil;
+end;
+
+function TRBTreeIterator.Next: Boolean;
+var
+  Node1, Node2: PNode;
+begin
+  if Eof then raise ERBTreeError.Create(SEOF);
+  FBOF:=False;
+  Result:=True;
+  if FCurrent^.right <> FRBTree.TNIL then begin
+    FCurrent:=FCurrent^.right;
+    while FCurrent^.left <> FRBTree.TNIL do FCurrent:=FCurrent^.left;
+  end
+  else begin
+    if PNode(FCurrent^.parent and not 1) <> FRBTree.TNIL then begin
+      Node1:=FCurrent;
+      while Node1 <> FRBTree.root do begin
+        Node2:=Node1;
+        Node1:=PNode(Node1^.parent and not 1);
+        if Node2 = Node1^.left then begin
+          FCurrent:=Node1;
+          Exit;
+        end;
+      end;
+    end;
+    FEOF:=True;
+    Result:=False;
+  end;
+end;
+
+function TRBTreeIterator.Prior: Boolean;
+var
+  Node1, Node2: PNode;
+begin
+  if BOF then raise ERBTreeError.Create(SBOF);
+  FEOF:=False;
+  Result:=True;
+  if FCurrent^.left <> FRBTree.TNIL then begin
+    FCurrent:=FCurrent^.left;
+    while FCurrent^.right <> FRBTree.TNIL do FCurrent:=FCurrent^.right;
+  end
+  else begin
+    if PNode(FCurrent^.parent and not 1) <> FRBTree.TNIL then begin
+      Node1:=FCurrent;
+      while Node1 <> FRBTree.root do begin
+        Node2:=Node1;
+        Node1:=PNode(Node1^.parent and not 1);
+        if Node2 = Node1^.right then begin
+          FCurrent:=Node1;
+          Exit;
+        end;
+      end;
+    end;
+    FBOF:=True;
+    Result:=False;
+  end;
+end;
+
+function TRBTreeIterator.Find(const Item: TTreeData): Boolean;
+var
+  Node: PNode;
+begin
+  Node:=FRBTree.FindNode(Item);
+  if Node <> nil then begin
+    FCurrent:=Node;
+    FBOF:=False;
+    FEOF:=False;
+    Result:=True;
+  end
+  else
+    Result:=False;
+end;
+
+function TRBTreeIterator.Data: TTreeData;
+begin
+  if FCurrent = nil then raise ERBTreeError.Create(SNoCurrentValue);
+  Result:=FCurrent^.data;
+end;

@@ -1,0 +1,43 @@
+package pkMath;
+
+{$R *.RES}
+{$ALIGN ON}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO OFF}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'Math Library Package (C) A.Chernobaev v.030514'}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  VCL50,
+  pkVector;
+
+contains
+  Gauss in '..\Math\Gauss.pas',
+  Geom_2d in '..\Math\Geom_2d.pas',
+  Geom_3d in '..\Math\Geom_3d.pas',
+  Grevil in '..\Math\Grevil.pas',
+  MathErr in '..\Math\MathErr.pas',
+  Optimize in '..\Math\Optimize.pas',
+  SLS_Iter in '..\Math\SLS_Iter.pas',
+  SVD in '..\Math\SVD.pas';
+
+end.

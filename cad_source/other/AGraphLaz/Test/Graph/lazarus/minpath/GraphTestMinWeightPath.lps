@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="4">
+      <Unit0>
+        <Filename Value="GraphTestMinWeightPath.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <CursorPos X="3" Y="10"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="..\..\TestMinWeightPath.pas"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="16"/>
+        <CursorPos X="29" Y="30"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="..\..\..\..\Graphs\Graphs.pas"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="2271"/>
+        <CursorPos X="29" Y="2296"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="..\..\..\..\Attrs\AttrType.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="20"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit3>
+    </Units>
+    <JumpHistory Count="7" HistoryIndex="6">
+      <Position1>
+        <Filename Value="..\..\..\..\Graphs\Graphs.pas"/>
+      </Position1>
+      <Position2>
+        <Filename Value="GraphTestMinWeightPath.lpr"/>
+        <Caret Line="18" Column="36"/>
+      </Position2>
+      <Position3>
+        <Filename Value="..\..\TestMinWeightPath.pas"/>
+        <Caret Line="32" Column="34" TopLine="16"/>
+      </Position3>
+      <Position4>
+        <Filename Value="..\..\..\..\Graphs\Graphs.pas"/>
+        <Caret Line="594" Column="26" TopLine="572"/>
+      </Position4>
+      <Position5>
+        <Filename Value="..\..\..\..\Graphs\Graphs.pas"/>
+        <Caret Line="2022" Column="14" TopLine="1985"/>
+      </Position5>
+      <Position6>
+        <Filename Value="..\..\..\..\Graphs\Graphs.pas"/>
+        <Caret Line="2083" Column="14" TopLine="2046"/>
+      </Position6>
+      <Position7>
+        <Filename Value="..\..\..\..\Graphs\Graphs.pas"/>
+        <Caret Line="2096" Column="14" TopLine="2059"/>
+      </Position7>
+    </JumpHistory>
+  </ProjectSession>
+  <SkipCheckLCLInterfaces Value="True"/>
+</CONFIG>

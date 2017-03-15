@@ -1,0 +1,24 @@
+{ Version 040118. Copyright © Alexey A.Chernobaev, 1996-2004 }
+
+protected
+  FObjects: TClassList;
+  procedure SetCount(ACount: Integer); override;
+  function GetObject(I: Integer): TObject;
+  procedure SetObject(I: Integer; Value: TObject);
+public
+  function CreateCompatibleVector: TPointerVector; override;
+  destructor Destroy; override;
+  procedure Assign(Source: TVector); override;
+  function EqualTo(V: TVector): Bool; override;
+  procedure Insert(I: Integer; const Value: TString); override;
+  procedure Delete(I: Integer); override;
+  procedure Exchange(I, J: Integer); override;
+  procedure Move(CurIndex, NewIndex: Integer); override;
+  procedure ConcatenateWith(V: TPointerVector); override;
+  procedure FreeItems; override;
+  procedure ClearObjects;
+  function AddObject(const S: TString; AObject: TObject): Integer;
+  function IndexOfObject(AObject: TObject): Integer;
+  procedure InsertObject(Index: Integer; const S: TString; AObject: TObject);
+  property Objects[I: Integer]: TObject read GetObject write SetObject;
+end;

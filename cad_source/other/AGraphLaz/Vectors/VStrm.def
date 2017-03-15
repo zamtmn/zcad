@@ -1,0 +1,426 @@
+{ Version 050702. Copyright © Alexey A.Chernobaev, 1996-2005 }
+{
+  Потоки (интерфейс).
+
+  Streams (interface part).
+}
+
+{ Delphi 2005 has a bug leading to AV when calling WriteInt8, etc. }
+{$UNDEF V_INLINE}
+
+type
+  TVStream = class;
+
+  TReadFilter = class
+    procedure OnRead(AStream: TVStream; var Buffer; Count: Int32); virtual; abstract;
+    { вызывается после чтения очередной порции данных из AStream.ReadFunc }
+    { is called after reading the next portion of data from AStream.ReadFunc }
+  end;
+
+  TVStream = class
+  protected
+    FReadFilter: TReadFilter;
+    function GetPos: ILong; virtual; abstract;
+    function GetSize: ILong; virtual; abstract;
+    procedure SetSize(NewSize: ILong); virtual; abstract;
+    procedure SetReadFilter(Filter: TReadFilter); virtual;
+  public
+    class procedure Error(const Msg: String);
+    procedure Seek(Offset: ILong); virtual; abstract;
+    { изменяет текущую позицию потока (то же, что и свойство Position) }
+    { changes the stream current position (the same as the Position property) }
+    function SafeSeek(Offset: ILong): Boolean;
+    { если Offset <= Size, то выполняет Seek(Offset) и возвращает True, иначе
+      возвращает False}
+    { if Offset <= Size then seeks to Offset and returns True else returns False }
+    function BytesLeft: ILong;
+    { Result:=Size - Position }
+    procedure SeekBy(Offset: ILong); {$IFDEF V_INLINE}inline;{$ENDIF}
+    { Seek(Position + Offset) }
+    function SafeSeekBy(Offset: ILong): Boolean;
+    { Result:=SafeSeek(Position + Offset) }
+    function Eof: Boolean; virtual;
+    { возвращает True, если текущая позиция находится в конце потока, иначе
+      False }
+    { returns True if the current position is at the end of the stream,
+      otherwise False }
+    procedure WriteProc(const Buffer; Count: Int32); virtual; abstract;
+    { записывает Count байт из буфера Buffer в поток }
+    { writes Count bytes from the buffer Buffer to the stream }
+    {$IFDEF V_INTERFACE}
+    function WriteProgress(const Buffer; Count, BlockSize: Int32;
+      Progress: IProgress): Boolean;
+    { записывает Count байт из буфера Buffer в поток; операция может быть
+      прервана интерфейсом Progress, метод Progress которого вызывается после
+      записи каждых BlockSize байт; возвращает True, если Count байт были
+      записаны, и False, если операция была прервана }
+    { writes Count bytes from the buffer Buffer to the stream; the operation
+      can be canceled by Progress interface which Progress method is being
+      called after writing every BlockSize bytes; returns True if Count bytes
+      were written and False if the operation was canceled }
+    {$ENDIF}
+    function ReadFunc(var Buffer; Count: Int32): Int32; virtual; abstract;
+    { читает не более, чем Count байт из потока в буфер Buffer (если достигнут
+      конец потока, то будет прочитано менее, чем Count байт); возвращает
+      количество реально прочитанных байт; если ReadFilter <> nil, то перед
+      выходом вызывает ReadFilter.OnRead(Self, Buffer, Result) }
+    { reads up to Count bytes from the stream to the buffer Buffer (if the end
+      of the stream has been reached then less than Count bytes will be read);
+      returns the number of bytes read; if ReadFilter <> nil then calls
+      ReadFilter.OnRead(Self, Buffer, Result) before exit }
+    procedure ReadProc(var Buffer; Count: Integer);
+    { читает ровно Count байт из потока в буфер Buffer; если было прочитано
+      менее Count байт или произошла ошибка, то возбуждает исключение }
+    { reads exactly Count bytes from the stream to the buffer Buffer; if less
+      then Count bytes were read then raises an exception }
+    function SafeRead(var Buffer; Count: Integer): Boolean;
+    { читает ровно Count байт из потока в буфер Buffer; если было прочитано
+      менее Count байт, то возвращает False, иначе возвращает True }
+    { reads exactly Count bytes from the stream to the buffer Buffer; if less
+      then Count bytes were read then returns False, otherwise returns True }
+    procedure AppendTo(DestinStream: TVStream);
+    { добавляет все данные данного потока в конец потока DestinStream; текущая
+      позиция (Position) потока не сохраняется! }
+    { appends all data from the current stream to the end of the stream
+      DestinStream; doesn't preserve the stream position (Position)! }
+    function AppendFromCurrentTo(DestinStream: TVStream; Count: ILong): ILong;
+    { добавляет не более, чем Count байт из потока Self, начиная с текущей
+      позиции, в конец потока DestinStream (если достигнут конец потока Self, то
+      будет скопировано менее, чем Count байт); возвращает количество реально
+      скопированных байт; текущая позиция (Position) потока не сохраняется! }
+    { appends up to Count bytes from the stream Self starting from it's current
+      position to the end of the stream DestinStream (if the end of Self stream
+      has been reached then less than Count bytes will be copied); returns the
+      number of bytes copied; doesn't preserve the stream position (Position)! }
+    function CopyFromCurrent(DestinStream: TVStream; Count: ILong): ILong;
+    { аналог AppendFromCurrentTo, который записывет данные, начиная с текущей
+      позиции DestinStream (а не в конец) }
+    { analog of AppendFromCurrentTo which writes data starting from the current
+      position of DestinStream (not to the end) }
+    function CopyUsingBuffer(DestinStream: TVStream; Count: ILong;
+      Buffer: Pointer; BufferSize: Int32): ILong;
+    { аналог CopyFromCurrent, позволяющий задать внешний буфер, используемый
+      при копировании }
+    { analog of CopyFromCurrent which allows to set external buffer which is
+      used during copying }
+    procedure CopyTo(DestinStream: TVStream);
+    { перезаписывает поток DestinStream и копирует в него все данные; текущая
+      позиция (Position) потока не сохраняется! }
+    { rewrites the stream DestinStream and copies all data to it; doesn't
+      preserve the stream position (Position)! }
+    procedure WriteString(const S: String);
+    { записывает в поток строку }
+    { writes the string to the stream }
+    procedure WriteShortString(const S: String);
+    { записывает в поток короткую строку }
+    { writes the short string to the stream }
+    procedure WriteChars(const S: String);
+    { WriteProc(<characters of S>, Length(S)) }
+    procedure WriteLine(const S: String{$IFDEF V_D4} = ''{$ENDIF});
+    { WriteChars(S + #13#10) }
+    {$IFDEF V_WIDESTRINGS}
+    procedure WriteWideString(const WS: WideString);
+    { записывает в поток строку }
+    { writes the string to the stream }
+    procedure WriteWideChars(const WS: WideString);
+    { WriteProc(<characters of WS>, 2 * Length(WS)) }
+    procedure WriteWideLine(const WS: WideString{$IFDEF V_D4} = ''{$ENDIF});
+    { WriteWideChars(WS + #13#10) }
+    {$ENDIF} {V_WIDESTRINGS}
+    procedure WriteInt8(I: Int8); {$IFDEF V_INLINE}inline;{$ENDIF}
+    { записывает в поток 8-разрядное целое }
+    { writes 8-bit integer to the stream }
+    procedure WriteInt16(I: Int16); {$IFDEF V_INLINE}inline;{$ENDIF}
+    { записывает в поток 16-разрядное целое }
+    { writes 16-bit integer to the stream }
+    procedure WriteInt32(I: Int32); {$IFDEF V_INLINE}inline;{$ENDIF}
+    { записывает в поток 32-разрядное целое }
+    { writes 32-bit integer to the stream }
+    procedure WriteInt64(I: Int64); {$IFDEF V_INLINE}inline;{$ENDIF}
+    { записывает в поток 64-разрядное целое }
+    { writes 64-bit integer to the stream }
+    procedure WriteFloat32(F: Float32); {$IFDEF V_INLINE}inline;{$ENDIF}
+    { записывает в поток 32-разрядное вещественное число }
+    { writes 32-bit floating-point value to the stream }
+    procedure WriteFloat64(F: Float64); {$IFDEF V_INLINE}inline;{$ENDIF}
+    { записывает в поток 64-разрядное вещественное число }
+    { writes 64-bit floating-point value to the stream }
+    procedure WriteFloat80(F: Float80); {$IFDEF V_INLINE}inline;{$ENDIF}
+    { записывает в поток 80-разрядное вещественное число }
+    { writes 80-bit floating-point value to the stream }
+    function ReadString: String;
+    { читает из потока строку }
+    { reads a string from the stream }
+    function ReadShortString: String;
+    { читает из потока короткую строку }
+    { reads a short string from the stream }
+    function ReadFixedString(Len: Integer): String;
+    { читает из потока строку фиксированной длины }
+    { reads a fixed-length string from the stream }
+    {$IFDEF V_WIDESTRINGS}
+    function ReadWideString: WideString;
+    { читает из потока строку }
+    { reads a string from the stream }
+    {$ENDIF} {V_WIDESTRINGS}
+    function ReadInt8: Int8; {$IFDEF V_INLINE}inline;{$ENDIF}
+    { читает из потока 8-разрядное целое }
+    { reads a 8-bit integer from the stream }
+    function ReadBoolean: Boolean; {$IFDEF V_INLINE}inline;{$ENDIF}
+    { Result:=ReadInt8 <> 0 }
+    function ReadInt16: Int16; {$IFDEF V_INLINE}inline;{$ENDIF}
+    { читает из потока 16-разрядное целое }
+    { reads a 16-bit integer from the stream }
+    function ReadInt32: Int32; {$IFDEF V_INLINE}inline;{$ENDIF}
+    { читает из потока 32-разрядное целое }
+    { reads a 32-bit integer from the stream }
+    function ReadInt64: Int64; {$IFDEF V_INLINE}inline;{$ENDIF}
+    { читает из потока 64-разрядное целое }
+    { reads a 64-bit integer from the stream }
+    function ReadFloat32: Float32; {$IFDEF V_INLINE}inline;{$ENDIF}
+    { читает из потока 32-разрядное вещественное число }
+    { reads a 32-bit floating-point value from the stream }
+    function ReadFloat64: Float64; {$IFDEF V_INLINE}inline;{$ENDIF}
+    { читает из потока 64-разрядное вещественное число }
+    { reads a 64-bit floating-point value from the stream }
+    function ReadFloat80: Float80; {$IFDEF V_INLINE}inline;{$ENDIF}
+    { читает из потока 80-разрядное вещественное число }
+    { reads a 80-bit floating-point value from the stream }
+    function SafeCheckStringMatch(const S: String): Boolean;
+    { читает из потока не более, чем Length(S) символов; возвращает True, если
+      прочитано ровно Length(S) символов и они совпадают со строкой S, иначе
+      возвращает False }
+    { reads up to Length(S) characters from the stream; returns True if exactly
+      Length(S) characters were read and they match the string S, otherwise
+      returns False }
+    function Search(const SearchBytes; SearchCount: Integer;
+      MaxBytesRead: ILong): Boolean; virtual;
+    function SearchBuf(const SearchBytes; SearchCount: Integer;
+      Buf: Pointer; BufSize: Integer; MaxBytesRead: ILong): Boolean;
+    { ищет первое вхождение последовательности байт SearchBytes длины SearchCount
+      байт среди первых MaxBytesRead байт в потоке, начиная с текущей позиции;
+      если искомая последовательность найдена, то позиционирует указатель потока
+      на ее начало и возвращает True, иначе оставляет указатель на месте и
+      возвращает False }
+    { searches for the first occurrence of the pattern SearchBytes of length
+      SearchCount in the first MaxBytesRead bytes in the stream starting from
+      the current position; if the pattern is found then positions the stream
+      pointer to the start of the pattern and returns True, otherwise doesn't
+      change the position of the stream pointer and returns False }
+    function SearchString(const S: String; MaxBytesRead: ILong): Boolean;
+    { Result:=Search(<characters of S>, Length(S), MaxBytesRead) }
+    property Position: ILong read GetPos write Seek;
+    { текущая позиция в потоке }
+    { the current position in the stream }
+    property Size: ILong read GetSize write SetSize;
+    { размер потока }
+    { the stream size }
+    property ReadFilter: TReadFilter read FReadFilter write SetReadFilter;
+    { фильтр чтения }
+    { read filter }
+  end;
+
+  TVNullStream = class(TVStream)
+  protected
+    function GetPos: ILong; override;
+    function GetSize: ILong; override;
+    procedure SetSize(NewSize: ILong); override;
+  public
+    procedure Seek(Offset: ILong); override;
+    procedure WriteProc(const Buffer; Count: Int32); override;
+    function ReadFunc(var Buffer; Count: Int32): Int32; override;
+  end;
+
+  TVBaseMemStream = class(TVStream)
+  protected
+    FBuffer: Pointer;
+    FPosition, FSize, FCapacity: Int32;
+    function GetPos: ILong; override;
+    function GetSize: ILong; override;
+    procedure SetSize(NewSize: ILong); override;
+    procedure ReAllocate(NewSize: Int32); virtual;
+    procedure SetCapacity(NewCapacity: Int32);
+  public
+    destructor Destroy; override;
+    procedure Seek(Offset: ILong); override;
+    procedure WriteProc(const Buffer; Count: Int32); override;
+    function ReadFunc(var Buffer; Count: Int32): Int32; override;
+    function Search(const SearchBytes; SearchCount: Integer;
+      MaxBytesRead: ILong): Boolean; override;
+    procedure Delete(Count: Int32);
+    { удаляет Count байт (или меньше, если до конца потока осталось менее Count
+      байт), начиная с текущей позиции) }
+    { deletes Count bytes (or less if the number of bytes up to the end of the
+      stream is lesser then Count) from the current position }
+    property Memory: Pointer read FBuffer;
+    property Capacity: Int32 read FCapacity write SetCapacity;
+  end;
+
+  TVMemStream = class(TVBaseMemStream)
+    function GrabMemory(var P: Pointer): Int32;
+    { захватывает память потока (P:=FBuffer), после чего делает размер потока
+      равным 0 и устанавливает FBuffer в nil (но не освобождает память!);
+      возвращает FCapacity }
+    { grabs the stream's memory (P:=FBuffer) then sets the stream's size to 0
+      and assigns nil to FBuffer (but doesn't free the memory!); returns
+      FCapacity }
+    procedure SetData(Data: Pointer; ASize: Int32);
+  end;
+
+  TVReadOnlyMemStream = class(TVMemStream)
+  protected
+    procedure SetSize(NewSize: ILong); override;
+  public
+    constructor Create(ABuffer: Pointer; ASize: ILong);
+    destructor Destroy; override;
+    procedure WriteProc(const Buffer; Count: Int32); override;
+  end;
+
+  {$IFDEF V_32}
+  TGMEMStream = class(TVBaseMemStream)
+  protected
+    {$IFDEF V_WIN}
+    FData: HGLOBAL;
+    {$ENDIF}
+    FFlags: DWORD;
+    procedure SetSize(NewSize: ILong); override;
+    procedure FReAllocate(NewSize: Int32);
+    procedure ReAllocate(NewSize: Int32); override;
+  public
+    {$IFDEF V_WIN}
+    constructor Create(ASize: Integer; uFlags: DWORD);
+    {$ENDIF}
+    {$IFDEF LINUX}
+    constructor Create(ASize: Integer);
+    {$ENDIF}
+    function GrabMemory(var Mem: TGMEM): Int32;
+    { захватывает память потока (Mem:=FData), после чего делает размер потока
+      равным 0 и устанавливает FData в 0 (но не освобождает память!);
+      возвращает FCapacity }
+    { grabs the stream's memory (Mem:=FData) then sets the stream's size to 0
+      and assigns 0 to FData (but doesn't free the memory!); returns FCapacity }
+    procedure SetData(Data: TGMEM; ASize: Int32);
+  end;
+  {$ENDIF}
+
+  TVStreamOnStream = class(TVStream)
+  { поток, делигирующий всю функциональность в другой поток, передаваемый
+    в качестве параметра }
+  { a stream which delegates all functionality to another stream which is
+    given as a parameter }
+  protected
+    FStream: TVStream;
+    function GetPos: ILong; override;
+    function GetSize: ILong; override;
+    procedure SetSize(NewSize: ILong); override;
+  public
+    Ownership: Boolean;
+    constructor Create(AStream: TVStream);
+    destructor Destroy; override;
+    procedure Seek(Offset: ILong); override;
+    function Eof: Boolean; override;
+    procedure WriteProc(const Buffer; Count: Int32); override;
+    function ReadFunc(var Buffer; Count: Int32): Int32; override;
+    property Stream: TVStream read FStream;
+  end;
+
+  TVSelfPosStreamOnStream = class(TVStreamOnStream)
+  protected
+    FSelfPos: ILong;
+    function GetPos: ILong; override;
+  public
+    procedure Seek(Offset: ILong); override;
+    function Eof: Boolean; override;
+    procedure WriteProc(const Buffer; Count: Int32); override;
+    function ReadFunc(var Buffer; Count: Int32): Int32; override;
+  end;
+
+  TVLimitedStream = class(TVStreamOnStream)
+  protected
+    FRangeStart, FRangeSize: ILong;
+    function GetPos: ILong; override;
+    function GetSize: ILong; override;
+    procedure SetSize(NewSize: ILong); override;
+  public
+    constructor Create(AStream: TVStream; ARangeStart, ARangeSize: ILong);
+    procedure SetRange(ARangeStart, ARangeSize: ILong);
+    procedure Seek(Offset: ILong); override;
+    function Eof: Boolean; override;
+    procedure WriteProc(const Buffer; Count: Int32); override;
+    function ReadFunc(var Buffer; Count: Int32): Int32; override;
+    property RangeStart: ILong read FRangeStart;
+    property RangeSize: ILong read FRangeSize;
+  end;
+
+  TVReadCharStream = class(TVStreamOnStream)
+  { поток с оптимизированной функцией посимвольного чтения (ReadChar) }
+  { a stream with optimized character-by-character read function (ReadChar) }
+  protected
+    FBuf: array [0..511] of Char;
+    FCur, FLimit: PChar;
+    function GetPos: ILong; override;
+    procedure SetSize(NewSize: ILong); override;
+    procedure SetReadFilter(Filter: TReadFilter); override;
+  public
+    constructor Create(AStream: TVStream);
+    procedure Seek(Offset: ILong); override;
+    function Eof: Boolean; override;
+    procedure WriteProc(const Buffer; Count: Int32); override;
+    function ReadFunc(var Buffer; Count: Int32): Int32; override;
+    function ReadChar: Char;
+    {$IFDEF V_32}
+    function ReadWideChar: WideChar;
+    {$ENDIF}
+    function ReadInt32Buf: Int32;
+  end;
+
+  TVWriteCharStream = class(TVStreamOnStream)
+  { поток с оптимизированным процедурой посимвольной записи (WriteChar) }
+  { a stream with optimized character-by-character write procedure (WriteChar) }
+  protected
+    FBuf: array [0..511] of Char;
+    FCur, FLimit: PChar;
+    function GetPos: ILong; override;
+    procedure SetSize(NewSize: ILong); override;
+  public
+    constructor Create(AStream: TVStream);
+    destructor Destroy; override;
+    procedure FreeNoFlush;
+    procedure Seek(Offset: ILong); override;
+    function Eof: Boolean; override;
+    procedure WriteProc(const Buffer; Count: Int32); override;
+    function ReadFunc(var Buffer; Count: Int32): Int32; override;
+    procedure WriteChar(C: Char);
+    {$IFDEF V_32}
+    procedure WriteWideChar(WC: WideChar);
+    {$ENDIF}
+    procedure WriteInt32Buf(I: Int32);
+    procedure Flush;
+  end;
+
+  TVReadReverseStream = class(TVStreamOnStream)
+  protected
+    function GetPos: ILong; override;
+    procedure SetSize(NewSize: ILong); override;
+  public
+    procedure Seek(Offset: ILong); override;
+    function Eof: Boolean; override;
+    procedure WriteProc(const Buffer; Count: Int32); override;
+    function ReadFunc(var Buffer; Count: Int32): Int32; override;
+  end;
+
+  TChainedFilter = class(TReadFilter)
+    PrevFilter: TReadFilter;
+    procedure OnRead(AStream: TVStream; var Buffer; Count: Int32); override;
+  end;
+
+  TLowerCaseFilter = class(TChainedFilter)
+    procedure OnRead(AStream: TVStream; var Buffer; Count: Int32); override;
+  end;
+
+  TUpperCaseFilter = class(TChainedFilter)
+    procedure OnRead(AStream: TVStream; var Buffer; Count: Int32); override;
+  end;
+
+  TBigEndianFilter = class(TChainedFilter)
+    procedure OnRead(AStream: TVStream; var Buffer; Count: Int32); override;
+  end;

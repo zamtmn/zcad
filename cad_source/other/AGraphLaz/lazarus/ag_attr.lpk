@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <PathDelim Value="\"/>
+    <Name Value="ag_attr"/>
+    <Type Value="RunAndDesignTime"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <PathDelim Value="\"/>
+      <SearchPaths>
+        <OtherUnitFiles Value="..\Attrs"/>
+        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)\"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Files Count="4">
+      <Item1>
+        <Filename Value="..\Attrs\AttrErr.pas"/>
+        <UnitName Value="AttrErr"/>
+      </Item1>
+      <Item2>
+        <Filename Value="..\Attrs\AttrMap.pas"/>
+        <UnitName Value="AttrMap"/>
+      </Item2>
+      <Item3>
+        <Filename Value="..\Attrs\AttrSet.pas"/>
+        <UnitName Value="AttrSet"/>
+      </Item3>
+      <Item4>
+        <Filename Value="..\Attrs\AttrType.pas"/>
+        <UnitName Value="AttrType"/>
+      </Item4>
+    </Files>
+    <RequiredPkgs Count="2">
+      <Item1>
+        <PackageName Value="ag_vectors"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="FCL"/>
+      </Item2>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>

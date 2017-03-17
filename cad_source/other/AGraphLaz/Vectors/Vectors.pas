@@ -278,7 +278,13 @@ begin
     NewSize:=NewCount * FElemSize;
     if NewSize > MaxBytes then ErrorFmt(SDataTooLarge_d, [NewSize]);
     {$IFDEF V_32}
-    ReAllocMem(FItems, NewSize);
+    if NewSize<>0 then
+                      ReAllocMem(FItems, NewSize)
+                  else
+                    begin
+                      Freemem(FItems);
+                      FItems:=nil;
+                    end;
     {$ELSE}
     FItems:=ReAllocMem(FItems, FCapacity * FElemSize, NewSize);
     {$ENDIF}

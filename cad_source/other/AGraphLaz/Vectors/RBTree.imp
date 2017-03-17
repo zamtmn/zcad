@@ -7,20 +7,20 @@
   Red-black tree (implementation part).
 }
 
-{function Parent(X: Int32): PNode;
+(*function Parent(X: {Int32}PtrInt): PNode;
 begin
   Result:=PNode(X and not 1);
 end;
 
-function Color(P: PNode): Int32;
+function Color(P: PNode): {Int32}PtrInt;
 begin
   Result:=P.parent and 1;
 end;
 
-procedure SetParent(var X: Int32; Value: PNode);
+procedure SetParent(var X: {Int32}PtrInt; Value: PNode);
 begin
-  X:=Int32(Value) or X and 1;
-end;}
+  X:={Int32}PtrInt(Value) or X and 1;
+end;*)
 
 { TRBTree }
 
@@ -157,11 +157,11 @@ begin
   y:=x.right;
   x.right:=y.left;
   if y.left <> TNIL then { SetParent(y.left.parent, x) }
-    y.left.parent:=Int32(x) or y.left.parent and 1;
+    y.left.parent:={Int32}PtrInt(x) or y.left.parent and 1;
   { establish y->parent link }
   xParent:=PNode(x.parent and not 1);
   if y <> TNIL then { SetParent(y.parent, xParent) }
-    y.parent:=Int32(xParent) or y.parent and 1;
+    y.parent:={Int32}PtrInt(xParent) or y.parent and 1;
   if xParent <> nil then
     if x = xParent.left then
       xParent.left:=y
@@ -172,7 +172,7 @@ begin
   { link x and y }
   y.left:=x;
   if x <> TNIL then { SetParent(x.parent, y) }
-    x.parent:=Int32(y) or x.parent and 1;
+    x.parent:={Int32}PtrInt(y) or x.parent and 1;
 end;
 
 procedure TRBTree.RotateRight(x: PNode);
@@ -183,11 +183,11 @@ begin
   { establish x->left link }
   x.left:=y.right;
   if y.right <> TNIL then { SetParent(y.right.parent, x) }
-    y.right.parent:=Int32(x) or y.right.parent and 1;
+    y.right.parent:={Int32}PtrInt(x) or y.right.parent and 1;
   { establish y->parent link }
   xParent:=PNode(x.parent and not 1);
   if y <> TNIL then { SetParent(y.parent, xParent) }
-    y.parent:=Int32(xParent) or y.parent and 1;
+    y.parent:={Int32}PtrInt(xParent) or y.parent and 1;
   if xParent <> nil then
     if x = xParent.right then
       xParent.right:=y
@@ -198,7 +198,7 @@ begin
   { link x and y }
   y.right:=x;
   if x <> TNIL then { SetParent(x.parent, y) }
-    x.parent:=Int32(y) or x.parent and 1;
+    x.parent:={Int32}PtrInt(y) or x.parent and 1;
 end;
 
 function TRBTree.FFindNode(const Item: TTreeData; var Node: PNode): Boolean;
@@ -249,7 +249,7 @@ begin
   Result:=x;
   x.left:=TNIL;
   x.right:=TNIL;
-  x.parent:=Int32(Current) or RED; { x^.color:=RED; }
+  x.parent:={Int32}PtrInt(Current) or RED; { x^.color:=RED; }
   {$IFNDEF NODE_IS_CLASS}
   x.data:=Item;
   {$ELSE}
@@ -335,7 +335,7 @@ begin
   end;
   { remove y from the parent chain }
   w:=PNode(y.parent and not 1);
-  x.parent:=Int32(w) or x.parent and 1; { SetParent(x.parent, w) }
+  x.parent:={Int32}PtrInt(w) or x.parent and 1; { SetParent(x.parent, w) }
   if w <> nil then
     if y = w.left then
       w.left:=x
@@ -407,11 +407,11 @@ begin
     w:=PNode(z.parent and not 1);
     if w <> nil then
       if w.left = z then w.left:=y else w.right:=y;
-    z.left.parent:=Int32(y) or z.left.parent and 1; { SetParent(z.left.parent, y) }
-    z.right.parent:=Int32(y) or z.right.parent and 1; { SetParent(z.right.parent, y) }
+    z.left.parent:={Int32}PtrInt(y) or z.left.parent and 1; { SetParent(z.left.parent, y) }
+    z.right.parent:={Int32}PtrInt(y) or z.right.parent and 1; { SetParent(z.right.parent, y) }
     y.left:=z.left;
     y.right:=z.right;
-    y.parent:=Int32(w) or y.parent and 1; { SetParent(y.parent, w) }
+    y.parent:={Int32}PtrInt(w) or y.parent and 1; { SetParent(y.parent, w) }
     y.parent:=y.parent and not 1 or z.parent and 1; { y^.color:=z^.color; }
     if root = z then root:=y;
   end;

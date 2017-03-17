@@ -163,6 +163,10 @@ procedure FillValue16(var X; Value: Int16; Count: Integer);
 { fills the memory block X of length (Count * 2) bytes with Count copies of
   Value; it's recommended to cast Value to Int16 (to avoid Range Check Error) }
 procedure FillValue32(var X; Value: Int32; Count: Integer);
+
+procedure FillValuePointers(var X; Value: PtrInt; Count: Integer);
+
+
   {$IFDEF DYNAMIC_NLS}external DLLName index 307{$ENDIF}
 { заполнить блок памяти X длины (Count * 4) байт, повторив Count раз Value;
   при вызове желательно явно приводить Value к типу Int32 (во избежание
@@ -1034,7 +1038,10 @@ asm     // eax = @X; dx = Value; ecx = Count
         pop      edi
 end{$IFDEF V_FREEPASCAL} ['eax','ecx','edx']{$ENDIF};
 {$ENDIF}
-
+procedure FillValuePointers(var X; Value: PtrInt; Count: Integer);
+begin
+  FillPattern(X, Count * sizeof(pointer), Value, sizeof(pointer));
+end;
 procedure FillValue32(var X; Value: Int32; Count: Integer);
 {$IFNDEF USE_ASM}
 begin

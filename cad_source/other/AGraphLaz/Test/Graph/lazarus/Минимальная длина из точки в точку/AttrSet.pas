@@ -10,8 +10,8 @@ interface
 
 uses
   SysUtils, Vectors, ExtType, ExtSys, AttrType, AttrMap, VStream, VTxtStrm,
-  VFormat, VectStr, VectErr, AttrErr{$IFDEF V_WIDESTRINGS}{$IFNDEF LINUX},
-  {$IFNDEF DYNAMIC_NLS}VUnicode{$ELSE}NLSProcsDyn{$ENDIF}{$ENDIF}{$ENDIF};
+  VFormat, VectStr, VectErr, AttrErr(*{$IFDEF V_WIDESTRINGS}{$IFNDEF LINUX},
+  {$IFNDEF DYNAMIC_NLS}VUnicode{$ELSE}NLSProcsDyn{$ENDIF}{$ENDIF}{$ENDIF}*);
 
 function CompareSets(AttrSet1, AttrSet2: Pointer): Integer;
 { сравнивает наборы атрибутов AttrSet1 и AttrSet2 в алфавитном порядке; если
@@ -707,7 +707,7 @@ begin
     AttrWideString:
       if Params = 0 then
         {$IFNDEF LINUX}
-        Result:=CompareTextWide(AsWideStringByOfs[Ofs1], AttrSet2.AsWideStringByOfs[Ofs2])
+        Result:={CompareTextWide}WideCompareText(AsWideStringByOfs[Ofs1], AttrSet2.AsWideStringByOfs[Ofs2])
         {$ELSE}
         Result:=WideCompareText(AsWideStringByOfs[Ofs1], AttrSet2.AsWideStringByOfs[Ofs2])
         {$ENDIF}

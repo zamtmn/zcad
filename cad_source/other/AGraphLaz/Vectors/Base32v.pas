@@ -51,7 +51,7 @@ end;
 
 procedure TBase32Vector.GetUntyped(I: Integer; var Result);
 begin
-  Int32(Result):=FItems^.Int32Array[I];
+  {Int32}PtrInt(Result):=FItems^.Int32Array[I];
 end;
 
 end.

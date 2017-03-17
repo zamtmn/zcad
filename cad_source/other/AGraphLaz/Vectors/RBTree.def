@@ -48,7 +48,7 @@ type
   {$ENDIF}
   TNode = {$IFDEF NODE_IS_CLASS}class protected{$ELSE}record{$ENDIF}
     left, right: PNode;
-    parent: Int32;
+    parent: {Int32}PtrInt;
     {$IFNDEF NODE_IS_CLASS}
     data: TTreeData;
     {$ELSE}

@@ -96,10 +96,10 @@ begin
     if a.Priority > b.Priority then
       Result:=1
     else
-      if Int32(a.Value) < Int32(b.Value) then
+      if {Int32}PtrInt(a.Value) < {Int32}PtrInt(b.Value) then
         Result:=-1
       else
-        if Int32(a.Value) > Int32(b.Value) then
+        if {Int32}PtrInt(a.Value) > {Int32}PtrInt(b.Value) then
           Result:=1
         else
           Result:=0;

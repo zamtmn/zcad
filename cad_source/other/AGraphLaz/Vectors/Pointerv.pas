@@ -7,7 +7,7 @@ interface
 {$I VCheck.inc}
 
 uses
-  ExtType, Vectors, Base32v, Int32g,
+  ExtType, Vectors, {$IFNDEF CPU64}Base32v,{$ELSE} Base64v,{$ENDIF} Int32g,
   {$IFDEF USE_STREAM64}VStrm64{$ELSE}VStream{$ENDIF}, VectErr;
 
 type
@@ -19,7 +19,7 @@ type
   { используется в методах SortByObject/ConservativeSortByObject }
   { used in the SortByObject/ConservativeSortByObject methods }
 
-  TPointerVector = class(TBase32Vector)
+  TPointerVector = class({$IFNDEF CPU64}TBase32Vector{$ELSE}TBase64Vector{$ENDIF})
   protected
     procedure InitMemory(Offset, InitCount: Integer); override;
     function GetValue(I: Integer): Pointer; {$IFDEF V_INLINE}inline;{$ENDIF}
@@ -207,7 +207,7 @@ var
   P: Pointer;
 begin
   P:=nil;
-  FillMem(Offset, InitCount, TBase32(integer(P)));{by zcad}
+  FillMem(Offset, InitCount, TBase(P));{by zcad}
 end;
 
 function TPointerVector.GetValue(I: Integer): Pointer;
@@ -329,13 +329,13 @@ end;
 
 function TPointerVector.Compare(I: Integer; const V): Int32;
 var
-  T: Int32;
+  T: {Int32}PtrInt;
 begin
-  T:=Int32(PPointerArray(FItems)^[I]);
-  if T < Int32(Pointer(V)) then
+  T:={Int32}PtrInt(PPointerArray(FItems)^[I]);
+  if T < {Int32}PtrInt(Pointer(V)) then
     Result:=-1
   else
-    if T > Int32(Pointer(V)) then
+    if T > {Int32}PtrInt(Pointer(V)) then
       Result:=1
     else
       Result:=0;
@@ -510,7 +510,7 @@ end;
 
 function TPointerVector.IndexFrom(I: Integer; Value: Pointer): Integer;
 begin
-  Result:=IndexOfBaseValue(I, TBase(integer(Value)));{by zcad}
+  Result:=IndexOfBaseValue(I, TBase(Value));
 end;
 
 function TPointerVector.IndexOf(Value: Pointer): Integer;
@@ -520,7 +520,7 @@ end;
 
 function TPointerVector.LastIndexFrom(I: Integer; Value: Pointer): Integer;
 begin
-  Result:=LastIndexOfBaseValue(I, TBase(integer(Value)));{by zcad}
+  Result:=LastIndexOfBaseValue(I, TBase(Value));
 end;
 
 function TPointerVector.LastIndexOf(Value: Pointer): Integer;
@@ -530,7 +530,7 @@ end;
 
 function TPointerVector.NumberOfValues(Value: Pointer): Integer;
 begin
-  Result:=CountValuesEqualTo(TBase(integer(Value)));{by zcad}
+  Result:=CountValuesEqualTo(TBase(Value));
 end;
 
 function TPointerVector.FindInSortedRange(Value: Pointer; L, H: Integer): Integer;

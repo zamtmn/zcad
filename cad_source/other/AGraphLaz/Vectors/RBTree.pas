@@ -31,7 +31,7 @@ begin
   if a = b then
     Result:=0
   else
-    if Int32(a) < Int32(b) then
+    if {Int32}PtrInt(a) < {Int32}PtrInt(b) then
       Result:=-1
     else
       Result:=1;

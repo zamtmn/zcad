@@ -364,17 +364,7 @@ end;
 {$ENDIF} {V_WIN}
 
 {$IFDEF LINUX}
-function TVFileStream.GetLastWriteTime: TDateTime;
-//var
-//  st: TStatBuf;
-begin
-{  if FHandle = BadHandle then
-    ReopenHandle;
-  if fstat(FHandle, st) = 0 then
-    Result:=UTCToLocalDateTime(UnixDateTimeToDateTime(st.st_mtime))
-  else}
-    Result:=0;
-end;
+
 {$ENDIF} {LINUX}
 
 {$ENDIF} {V_32}

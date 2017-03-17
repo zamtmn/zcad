@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
-    <Version Value="9"/>
+    <Version Value="10"/>
     <PathDelim Value="\"/>
     <General>
       <Flags>
@@ -18,9 +18,6 @@
     <i18n>
       <EnableI18N LFM="False"/>
     </i18n>
-    <VersionInfo>
-      <StringTable ProductVersion=""/>
-    </VersionInfo>
     <BuildModes Count="1">
       <Item1 Name="Default" Default="True"/>
     </BuildModes>
@@ -32,12 +29,15 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="1">
+    <RequiredPackages Count="2">
       <Item1>
-        <PackageName Value="LCL"/>
+        <PackageName Value="ag_graph"/>
       </Item1>
+      <Item2>
+        <PackageName Value="LCL"/>
+      </Item2>
     </RequiredPackages>
-    <Units Count="6">
+    <Units Count="2">
       <Unit0>
         <Filename Value="GraphTestMinWeightPath.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -46,22 +46,6 @@
         <Filename Value="TestMinWeightPath.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit1>
-      <Unit2>
-        <Filename Value="Graphs.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit2>
-      <Unit3>
-        <Filename Value="AttrMap.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit3>
-      <Unit4>
-        <Filename Value="AttrSet.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit4>
-      <Unit5>
-        <Filename Value="..\..\..\..\Vectors\ExtType.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit5>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -69,7 +53,7 @@
     <PathDelim Value="\"/>
     <SearchPaths>
       <IncludeFiles Value="..\..\..\Graphs;..\..\..\Vectors;..\..\..\Attrs"/>
-      <OtherUnitFiles Value="..\..\..\Graphs;..\..\..\Vectors;..\..\..\Attrs;..\..\..\..\Graphs;..\..\..\..\Vectors"/>
+      <OtherUnitFiles Value="..\..\..\Graphs;..\..\..\Vectors;..\..\..\Attrs;..\..\..\..\Graphs"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>

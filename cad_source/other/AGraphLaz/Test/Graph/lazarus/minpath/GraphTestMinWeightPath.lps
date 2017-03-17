@@ -2,13 +2,14 @@
 <CONFIG>
   <ProjectSession>
     <PathDelim Value="\"/>
-    <Version Value="9"/>
+    <Version Value="10"/>
     <BuildModes Active="Default"/>
     <Units Count="4">
       <Unit0>
         <Filename Value="GraphTestMinWeightPath.lpr"/>
         <IsPartOfProject Value="True"/>
-        <CursorPos X="3" Y="10"/>
+        <IsVisibleTab Value="True"/>
+        <CursorPos X="19" Y="2"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -16,35 +17,30 @@
       <Unit1>
         <Filename Value="..\..\TestMinWeightPath.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="16"/>
-        <CursorPos X="29" Y="30"/>
+        <CursorPos X="3" Y="8"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
       <Unit2>
+        <Filename Value="..\..\..\..\Attrs\AttrType.pas"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="20"/>
+      </Unit2>
+      <Unit3>
         <Filename Value="..\..\..\..\Graphs\Graphs.pas"/>
         <EditorIndex Value="2"/>
         <TopLine Value="2271"/>
         <CursorPos X="29" Y="2296"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit2>
-      <Unit3>
-        <Filename Value="..\..\..\..\Attrs\AttrType.pas"/>
-        <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="20"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
     </Units>
-    <JumpHistory Count="7" HistoryIndex="6">
+    <JumpHistory Count="11" HistoryIndex="10">
       <Position1>
         <Filename Value="..\..\..\..\Graphs\Graphs.pas"/>
       </Position1>
@@ -72,7 +68,22 @@
         <Filename Value="..\..\..\..\Graphs\Graphs.pas"/>
         <Caret Line="2096" Column="14" TopLine="2059"/>
       </Position7>
+      <Position8>
+        <Filename Value="..\..\TestMinWeightPath.pas"/>
+        <Caret Line="30" Column="29" TopLine="16"/>
+      </Position8>
+      <Position9>
+        <Filename Value="..\..\TestMinWeightPath.pas"/>
+        <Caret Line="8" Column="3"/>
+      </Position9>
+      <Position10>
+        <Filename Value="GraphTestMinWeightPath.lpr"/>
+        <Caret Line="10" Column="3"/>
+      </Position10>
+      <Position11>
+        <Filename Value="GraphTestMinWeightPath.lpr"/>
+        <Caret Line="12" Column="2"/>
+      </Position11>
     </JumpHistory>
   </ProjectSession>
-  <SkipCheckLCLInterfaces Value="True"/>
 </CONFIG>

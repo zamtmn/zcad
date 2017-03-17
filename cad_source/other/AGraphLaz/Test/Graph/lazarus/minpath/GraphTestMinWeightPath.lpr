@@ -1,5 +1,5 @@
 program GraphTestMinWeightPath;
-
+{$APPTYPE CONSOLE}
 {$MODE Delphi}
 
 {
@@ -8,8 +8,6 @@ program GraphTestMinWeightPath;
 
 uses
   TestMinWeightPath;
-
-{$APPTYPE CONSOLE}
 
 begin
   Test;

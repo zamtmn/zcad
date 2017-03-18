@@ -7,7 +7,7 @@ interface
 
 uses
   LazUTF8,Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  ComCtrls, StdCtrls, ActnList, Menus,
+  ComCtrls, StdCtrls, ActnList, Menus, LCLIntf,
 
   zcobjectinspectorui,uzctypesdecorations,uzedimensionaltypes,zcobjectinspector,Varman,uzbtypes,uzemathutils,UUnitManager,varmandef,zcobjectinspectoreditors,UEnumDescriptor,
 
@@ -20,6 +20,7 @@ uses
   { TForm1 }
 
   TForm1 = class(TForm)
+    OpenWebGraphviz: TAction;
     SaveGML: TAction;
     GDBobjinsp1: TGDBobjinsp;
     ImportLPI: TAction;
@@ -42,12 +43,14 @@ uses
     ToolButton2: TToolButton;
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
     procedure _SaveGML(Sender: TObject);
     procedure _ImportLPI(Sender: TObject);
     procedure _onClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure _onCreate(Sender: TObject);
     procedure _Save(Sender: TObject);
     procedure _Scan(Sender: TObject);
+    procedure _OpenWebGraphviz(Sender: TObject);
     procedure _SetOptionFromUI(Sender: TObject);
     procedure _SetUIFromOption(Sender: TObject);
   private
@@ -158,6 +161,10 @@ begin
    else
     ScanDirectory(Options.Paths._File,Options,ScanResult,DummyWriteToLog);//пытаемся читать директорию с исходниками
    {$IFDEF CHECKLOOPS}CheckGraph(Options,ScanResult,DummyWriteToLog);{$ENDIF}//проверяем граф
+end;
+procedure TForm1._OpenWebGraphviz(Sender: TObject);
+begin
+  OpenURL('http://www.webgraphviz.com');
 end;
 procedure TForm1.DummyWriteToLog(msg:string);
 begin

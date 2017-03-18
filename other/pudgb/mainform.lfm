@@ -51,6 +51,11 @@ object Form1: TForm1
       Action = SaveGML
       Visible = False
     end
+    object ToolButton5: TToolButton
+      Left = 212
+      Top = 2
+      Action = OpenWebGraphviz
+    end
   end
   object Splitter1: TSplitter
     Left = 353
@@ -108,6 +113,11 @@ object Form1: TForm1
       Caption = 'SaveGML'
       Hint = 'не реализовано'
       OnExecute = _SaveGML
+    end
+    object OpenWebGraphviz: TAction
+      Caption = 'OpenWebGraphviz'
+      Hint = 'WebGraphViz'
+      OnExecute = _OpenWebGraphviz
     end
   end
   object MainMenu1: TMainMenu

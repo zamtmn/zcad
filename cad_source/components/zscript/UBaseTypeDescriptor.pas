@@ -80,44 +80,60 @@ BaseTypeDescriptor<T,TManipulator>=object(TUserTypeDescriptor)
                          function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;var addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                          procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
                    end;
-GDBBooleanDescriptor=object(BaseTypeDescriptor<boolean,TBoolTypeManipulator<boolean>>)
+TBTM_Boolean=TBoolTypeManipulator<Boolean>;
+GDBBooleanDescriptor=object(BaseTypeDescriptor<boolean,{TBoolTypeManipulator<boolean>}TBTM_Boolean>)
                     end;
-TFundamentalShortIntDescriptor=object(BaseTypeDescriptor<shortint,TOrdinalTypeManipulator<shortint>>)
+TOTM_ShortInt=TOrdinalTypeManipulator<ShortInt>;
+TFundamentalShortIntDescriptor=object(BaseTypeDescriptor<shortint,{TOrdinalTypeManipulator<shortint>}TOTM_ShortInt>)
                     end;
-TFundamentalByteDescriptor=object(BaseTypeDescriptor<byte,TOrdinalTypeManipulator<byte>>)
+TOTM_Byte=TOrdinalTypeManipulator<Byte>;
+TFundamentalByteDescriptor=object(BaseTypeDescriptor<byte,{TOrdinalTypeManipulator<byte>}TOTM_Byte>)
                     end;
-TFundamentalSmallIntDescriptor=object(BaseTypeDescriptor<smallint,TOrdinalTypeManipulator<smallint>>)
+TOTM_SmallInt=TOrdinalTypeManipulator<SmallInt>;
+TFundamentalSmallIntDescriptor=object(BaseTypeDescriptor<smallint,{TOrdinalTypeManipulator<smallint>}TOTM_SmallInt>)
                     end;
-TFundamentalWordDescriptor=object(BaseTypeDescriptor<word,TOrdinalTypeManipulator<word>>)
+TOTM_Word=TOrdinalTypeManipulator<Word>;
+TFundamentalWordDescriptor=object(BaseTypeDescriptor<word,{TOrdinalTypeManipulator<word>}TOTM_Word>)
                     end;
-GDBIntegerDescriptor=object(BaseTypeDescriptor<Integer,TOrdinalTypeManipulator<Integer>>)
+TOTM_Integer=TOrdinalTypeManipulator<Integer>;
+GDBIntegerDescriptor=object(BaseTypeDescriptor<Integer,{TOrdinalTypeManipulator<Integer>}TOTM_Integer>)
                     end;
-TFundamentalLongWordDescriptor=object(BaseTypeDescriptor<Longword,TOrdinalTypeManipulator<Longword>>)
+TOTM_LongWord=TOrdinalTypeManipulator<LongWord>;
+TFundamentalLongWordDescriptor=object(BaseTypeDescriptor<Longword,{TOrdinalTypeManipulator<Longword>}TOTM_LongWord>)
                     end;
-TFundamentalLongIntDescriptor=object(BaseTypeDescriptor<LongInt,TOrdinalTypeManipulator<LongInt>>)
+TOTM_LongInt=TOrdinalTypeManipulator<LongInt>;
+TFundamentalLongIntDescriptor=object(BaseTypeDescriptor<LongInt,{TOrdinalTypeManipulator<LongInt>}TOTM_LongInt>)
                     end;
-TFundamentalQWordDescriptor=object(BaseTypeDescriptor<qword,TOrdinalTypeManipulator<qword>>)
+TOTM_QWord=TOrdinalTypeManipulator<QWord>;
+TFundamentalQWordDescriptor=object(BaseTypeDescriptor<qword,{TOrdinalTypeManipulator<qword>}TOTM_QWord>)
                     end;
-TFundamentalInt64Descriptor=object(BaseTypeDescriptor<Int64,TOrdinalTypeManipulator<Int64>>)
+TOTM_Int64=TOrdinalTypeManipulator<Int64>;
+TFundamentalInt64Descriptor=object(BaseTypeDescriptor<Int64,{TOrdinalTypeManipulator<Int64>}TOTM_Int64>)
                     end;
-GDBDoubleDescriptor=object(BaseTypeDescriptor<double,TFloatTypeManipulator<double>>)
+TFTM_Double=TOrdinalTypeManipulator<Double>;
+GDBDoubleDescriptor=object(BaseTypeDescriptor<double,{TFloatTypeManipulator<double>}TFTM_Double>)
                     end;
-GDBFloatDescriptor=object(BaseTypeDescriptor<float,TFloatTypeManipulator<float>>)
+TFTM_float=TOrdinalTypeManipulator<float>;
+GDBFloatDescriptor=object(BaseTypeDescriptor<float,{TFloatTypeManipulator<TFTM_float>}TFTM_float>)
                     end;
 GDBStringGeneralDescriptor<T,TManipulator>=object(BaseTypeDescriptor<T,TManipulator>)
                           procedure CopyInstanceTo(source,dest:pointer);virtual;
                           procedure MagicFreeInstance(PInstance:Pointer);virtual;
                           procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
                     end;
-GDBStringDescriptor=object(GDBStringGeneralDescriptor<string,TStringTypeManipulator<string>>)
+TSTM_String=TStringTypeManipulator<String>;
+GDBStringDescriptor=object(GDBStringGeneralDescriptor<string,{TStringTypeManipulator<string>}TSTM_String>)
                           procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                     end;
-GDBAnsiStringDescriptor=object(GDBStringGeneralDescriptor<string,TAnsiStringTypeManipulator<string>>)
+TASTM_String=TAnsiStringTypeManipulator<String>;
+GDBAnsiStringDescriptor=object(GDBStringGeneralDescriptor<string,{TAnsiStringTypeManipulator<string>}TASTM_String>)
                           procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                     end;
-PointerDescriptor=object(BaseTypeDescriptor<pointer,TPointerTypeManipulator<Pointer>>)
+TPTM_Pointer=TPointerTypeManipulator<Pointer>;
+PointerDescriptor=object(BaseTypeDescriptor<pointer,{TPointerTypeManipulator<Pointer>}TPTM_Pointer>)
                     end;
-TEnumDataDescriptor=object(BaseTypeDescriptor<TEnumData,TOrdinalTypeManipulator<PtrUint>>)
+TOTM_PtrUint=TOrdinalTypeManipulator<PtrUint>;
+TEnumDataDescriptor=object(BaseTypeDescriptor<TEnumData,{TOrdinalTypeManipulator<PtrUint>}TOTM_PtrUint>)
                      constructor init;
                      function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                      procedure SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);virtual;

@@ -174,7 +174,7 @@ begin
    for i:=0 to l.Count-1 do
     begin
     s:=l.Strings[i];
-    if lowercase(s)='fpdpansi' then
+    if lowercase(s)='ucodeparser' then
                       s:=s;
     if not ScanResult.isUnitInfoPresent(l.Strings[i],j)then
     begin
@@ -191,6 +191,7 @@ begin
                   end
               else
                   begin
+                       if assigned(LogWriter) then LogWriter(format('Unit not found: "%s"',[l.Strings[i]]));
                        ScanResult.TryCreateNewUnitInfo(l.Strings[i],j);
                        ScanResult.UnitInfoArray.Mutable[j]^.UnitPath:='';
                        uarr.PushBack(j);

@@ -179,6 +179,7 @@ begin
             GetPartOfPath(ts,s,';');
             if not DirectoryExists(utf8tosys(ts)) then
                                                       ts:=basepath+ts;
+            DoDirSeparators(ts);
             if DirectoryExists(utf8tosys(ts)) then
                                                   opt:=opt+';'+ts
       until s='';

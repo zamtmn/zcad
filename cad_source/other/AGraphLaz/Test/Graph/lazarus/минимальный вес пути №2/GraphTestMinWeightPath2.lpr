@@ -4,7 +4,6 @@ program GraphTestMinWeightPath2;
 
 uses
   SysUtils,
-  ExtSys,
   TestMinWeightPath2;
 
 {$APPTYPE CONSOLE}

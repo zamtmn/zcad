@@ -52,12 +52,12 @@
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <SearchPaths>
-      <IncludeFiles Value="..\..\..\Graphs;..\..\..\Vectors;..\..\..\Attrs"/>
-      <OtherUnitFiles Value="..\..\..\Graphs;..\..\..\Vectors;..\..\..\Attrs;..\..\..\..\Graphs"/>
+      <IncludeFiles Value="$(ProjOutDir)"/>
+      <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>
-        <SyntaxMode Value="delphi"/>
+        <SyntaxMode Value="Delphi"/>
       </SyntaxOptions>
     </Parsing>
     <Other>

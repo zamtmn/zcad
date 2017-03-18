@@ -24,7 +24,7 @@
             {$Z1}
             {IMPLICITEXCEPTIONS OFF}
 {IF FPC_FULlVERSION>=20701}
-{$modeswitch systemcodepage-}
+{modeswitch systemcodepage-}
 {ENDIF}
 
 {$ENDIF}

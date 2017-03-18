@@ -80,6 +80,7 @@ procedure TForm1._onCreate(Sender: TObject);
 begin
    Options:=DefaultOptions;
    UnitsFormat:=CreateDefaultUnitsFormat;
+   INTFObjInspShowOnlyHotFastEditors:=false;
 
    RunTimeUnit:=units.CreateUnit('',nil,'RunTimeUnit');//create empty zscript unit
    RunTimeUnit^.RegisterType(TypeInfo(TOptions));//register rtti types in zscript unit

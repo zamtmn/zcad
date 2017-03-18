@@ -3633,7 +3633,7 @@ type
                AxisLen:GDBDouble;
          end;
   POGLWndtype = ^OGLWndtype;
-  OGLWndtype = packed record
+  OGLWndtype = packed object(GDBaseObject)
     polarlinetrace: GDBInteger;
     pointnum, axisnum: GDBInteger;
     CSIcon:TCSIcon;
@@ -3666,6 +3666,8 @@ type
     ShowDebugBoundingBbox:GDBBoolean;
     DebugBoundingBbox:TBoundingBox;
     processObjConstruct:GDBBoolean;
+    constructor init;
+    destructor done;virtual;abstract;
   end;
 //Generate on E:/zcad/cad_source/components/zscript/UUnitManager.pas
     PTUnitManager=^TUnitManager;

@@ -178,8 +178,10 @@ begin
                       s:=s;
     if not ScanResult.isUnitInfoPresent(l.Strings[i],j)then
     begin
-      s:='/'+l.Strings[i]+'.pas';
-      s:=FindInSupportPath(Options.Paths._Paths,s);
+      //s:='/'+l.Strings[i]+'.pas';
+      s:=FindInSupportPath(Options.Paths._Paths,PathDelim+l.Strings[i]+'.pas');
+      if s=''then
+        s:=FindInSupportPath(Options.Paths._Paths,PathDelim+lowercase(l.Strings[i])+'.pas');
       if s<>''then
                   begin
                     ScanModule(s,Options,ScanResult,LogWriter);

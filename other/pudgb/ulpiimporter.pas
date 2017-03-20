@@ -33,7 +33,12 @@ var
  LazarusPackageFilesConfig:string;
 begin
  inherited;
+ {$IFDEF WINDOWS}
  LazarusPackageFilesConfig:=AppendPathDelim(ExtractFilePath(ChompPathDelim(GetAppConfigDirUTF8(False)))+'lazarus')+'packagefiles.xml';
+ {$Else}
+ LazarusPackageFilesConfig:=ExpandFileNameUTF8('~/.lazarus/packagefiles.xml');
+ //SecondaryConfigPath:='/etc/lazarus';
+ {$ENDIF}
  packagefiles:=TXMLConfig.Create(LazarusPackageFilesConfig);
 end;
 
@@ -61,6 +66,7 @@ begin
     UCParam:=uppercase(param);
     Result:='Something wrong';
     node:=packagefiles.FindNode('UserPkgLinks',false);
+    if not assigned(node) then exit;
     deb:=node.NodeValue;
     deb:=node.NodeName;
     deb:=node.TextContent;

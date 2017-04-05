@@ -5,7 +5,6 @@ unit Unit2;
 interface
 
 uses
-  Classes, SysUtils,
   Unit3, Unit4;
 
 implementation

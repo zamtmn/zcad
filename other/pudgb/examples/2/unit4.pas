@@ -4,9 +4,6 @@ unit Unit4;
 
 interface
 
-uses
-  Classes, SysUtils;
-
 implementation
 uses
   unit1;

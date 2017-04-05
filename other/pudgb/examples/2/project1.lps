@@ -8,20 +8,20 @@
       <Unit0>
         <Filename Value="project1.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="4"/>
+        <CursorPos X="29" Y="6"/>
         <UsageCount Value="20"/>
+        <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="unit1.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
-        <IsVisibleTab Value="True"/>
-        <CursorPos X="57" Y="8"/>
+        <CursorPos X="5" Y="7"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -31,7 +31,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Unit2"/>
         <EditorIndex Value="1"/>
-        <CursorPos X="15" Y="9"/>
+        <CursorPos Y="8"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
       </Unit2>
@@ -40,7 +40,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Unit3"/>
         <EditorIndex Value="2"/>
-        <CursorPos Y="11"/>
+        <CursorPos Y="6"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
       </Unit3>
@@ -49,7 +49,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Unit4"/>
         <EditorIndex Value="3"/>
-        <CursorPos Y="13"/>
+        <CursorPos Y="6"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
       </Unit4>

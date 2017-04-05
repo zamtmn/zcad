@@ -517,26 +517,22 @@ begin
       last:=false;
       if (ppd^.IsVisible) then
       begin
+        y:=y++rowh;
         if ppd^.SubNode<>nil
           then
         begin
-          y:=y++rowh;
           if not ppd^.Collapsed^ then
             begin
             calctreeh(pointer(ppd.SubNode),y);
-            y:=y+rowh;
+            y:=y+INTFObjInspSpaceHeight;
             last:=true;
             end;
-        end
-        else
-        begin
-          y:=y++rowh;
         end;
       end;
       ppd:=ppa^.iterate(ir);
     until ppd=nil;
   if last then
-              y:=y-rowh;
+              y:=y-INTFObjInspSpaceHeight;
 end;
 procedure drawfasteditor(ppd:PPropertyDeskriptor;canvas:tcanvas;var FastEditorRT:TFastEditorRunTimeData;var r:trect);
 var

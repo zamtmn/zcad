@@ -33,7 +33,7 @@ type
 
   TTempVar = packed record
     case Byte of
-      0: (AsInt32: Int32);
+      0: (AsPtrInt: PtrInt);
       1: (AsPointer: Pointer);
   end;
 
@@ -149,7 +149,7 @@ type
     { упорядочивает инцидентные ребра графа по возрастанию согласно CompareEdges }
     procedure SortIncidentEdgesByObject(CompareEdges: TCompareEvent);
     { упорядочивает инцидентные ребра графа по возрастанию согласно CompareEdges }
-    property TimeMark: Int32 read FTemp.AsInt32;
+    property TimeMark: PtrInt read FTemp.AsPtrInt;
     { временн'ая метка вершины; значение определено только непосредственно после
       вызова метода DFSFromVertex или методов семейства BFSFromVertexXXXX;
       другие методы могут изменить это значение произвольным образом }
@@ -2337,16 +2337,16 @@ begin
   Source.BFSFromVertex(V);
   for I:=0 to Source.VertexCount - 1 do begin
     V:=Source.FVertices[I];
-    if V.FTemp.AsInt32 >= 0 then begin
+    if V.FTemp.AsPtrInt >= 0 then begin
       U:=AddVertex;
-      U.FTemp.AsInt32:=V.Index;
-      V.FTemp.AsInt32:=U.Index;
+      U.FTemp.AsPtrInt:=V.Index;
+      V.FTemp.AsPtrInt:=U.Index;
     end;
   end;
   for I:=0 to Source.EdgeCount - 1 do begin
     E:=Source.FEdges[I];
-    if E.V1.FTemp.AsInt32 >= 0 then
-      AddEdgeI(E.V1.FTemp.AsInt32, E.V2.FTemp.AsInt32);
+    if E.V1.FTemp.AsPtrInt >= 0 then
+      AddEdgeI(E.V1.FTemp.AsPtrInt, E.V2.FTemp.AsPtrInt);
   end;
 end;
 
@@ -2452,7 +2452,7 @@ var
   I: Integer;
 begin
   for I:=0 to FVertices.Count - 1 do
-    TVertex(FVertices[I]).FTemp.AsInt32:=Value;
+    TVertex(FVertices[I]).FTemp.AsPtrInt:=Value;
 end;
 
 procedure TGraph.SetTempForEdges(Value: Int32);
@@ -2460,7 +2460,7 @@ var
   I: Integer;
 begin
   for I:=0 to FEdges.Count - 1 do
-    TEdge(FEdges[I]).FTemp.AsInt32:=Value;
+    TEdge(FEdges[I]).FTemp.AsPtrInt:=Value;
 end;
 
 procedure TGraph.SetTempFromVertex(V: TVertex; Value: Int32);
@@ -2474,18 +2474,18 @@ begin
   Front:=TClassList.Create;
   OldFront:=TClassList.Create;
   try
-    V.FTemp.AsInt32:=Value;
+    V.FTemp.AsPtrInt:=Value;
     OldFront.Add(V);
     repeat
       for I:=0 to OldFront.Count - 1 do begin
         V1:=OldFront[I];
         for J:=0 to V1.NeighbEdges.Count - 1 do begin
           E:=V1.NeighbEdges[J];
-          if E.FTemp.AsInt32 <> 0 then begin
+          if E.FTemp.AsPtrInt <> 0 then begin
             V2:=E.OtherVertex(V1);
-            V2.FTemp.AsInt32:=Value;
+            V2.FTemp.AsPtrInt:=Value;
             Front.Add(V2);
-            E.FTemp.AsInt32:=0;
+            E.FTemp.AsPtrInt:=0;
           end;
         end;
       end;
@@ -2514,14 +2514,14 @@ begin
   S2:=TIntegerStack.Create;
   try
   L1:
-    V.FTemp.AsInt32:=Result;
+    V.FTemp.AsPtrInt:=Result;
     Inc(Result);
     I:=0;
   L2:
     while I < V.NeighbEdges.Count do begin
       Neighbour:=V.Neighbour[I];
       Inc(I);
-      if Neighbour.FTemp.AsInt32 < 0 then begin
+      if Neighbour.FTemp.AsPtrInt < 0 then begin
         S1.Push(V);
         S2.Push(I);
         V:=Neighbour;
@@ -2555,7 +2555,7 @@ begin
   Front:=TClassList.Create;
   OldFront:=TClassList.Create;
   try
-    V.FTemp.AsInt32:=0;
+    V.FTemp.AsPtrInt:=0;
     OldFront.Add(V);
     Time:=1;
     repeat
@@ -2563,8 +2563,8 @@ begin
         V1:=OldFront[I];
         for J:=0 to V1.NeighbEdges.Count - 1 do begin
           V2:=TEdge(V1.NeighbEdges[J]).OtherVertex(V1);
-          if V2.FTemp.AsInt32 = -1 then begin
-            V2.FTemp.AsInt32:=Time;
+          if V2.FTemp.AsPtrInt = -1 then begin
+            V2.FTemp.AsPtrInt:=Time;
             Inc(Result);
             Front.Add(V2);
             if Assigned(VisitProc) then
@@ -2600,7 +2600,7 @@ begin
   Front:=TClassList.Create;
   OldFront:=TClassList.Create;
   try
-    V.FTemp.AsInt32:=0;
+    V.FTemp.AsPtrInt:=0;
     OldFront.Add(V);
     Time:=1;
     repeat
@@ -2608,18 +2608,18 @@ begin
         V1:=OldFront[I];
         for J:=0 to V1.NeighbEdges.Count - 1 do begin
           V2:=TEdge(V1.NeighbEdges[J]).OtherVertex(V1);
-          if V2.FTemp.AsInt32 = -1 then begin
-            V2.FTemp.AsInt32:=Time;
+          if V2.FTemp.AsPtrInt = -1 then begin
+            V2.FTemp.AsPtrInt:=Time;
             Inc(Result);
             Front.Add(V2);
           end
           else { запоминаем места встреч на вершинах / ребрах }
             if Assigned(VertexMeetings) then
-              if V2.FTemp.AsInt32 = Time then
+              if V2.FTemp.AsPtrInt = Time then
                 VertexMeetings.Add(V2)
               else
                 if Assigned(EdgeMeetings) then
-                  if (V2.FTemp.AsInt32 = Time - 1) and (V1.Index < V2.Index) then
+                  if (V2.FTemp.AsPtrInt = Time - 1) and (V1.Index < V2.Index) then
                     EdgeMeetings.Add(V1.NeighbEdges[J]);
         end; {for}
       end; {for}
@@ -2656,7 +2656,7 @@ begin
   Front:=TClassList.Create;
   OldFront:=TClassList.Create;
   try
-    V.FTemp.AsInt32:=0;
+    V.FTemp.AsPtrInt:=0;
     OldFront.Add(V);
     Time:=1;
     repeat
@@ -2666,8 +2666,8 @@ begin
           E:=V1.NeighbEdges[J];
           if E.V1 = V1 then begin
             V2:=E.V2;
-            if V2.FTemp.AsInt32 = -1 then begin
-              V2.FTemp.AsInt32:=Time;
+            if V2.FTemp.AsPtrInt = -1 then begin
+              V2.FTemp.AsPtrInt:=Time;
               Front.Add(V2);
             end;
           end;
@@ -2739,12 +2739,12 @@ begin
   if not (gsValidSeparates in FStates) or
     (Vertex1.SeparateIndex = Vertex2.SeparateIndex) then
   begin
-    Vertex2.FTemp.AsInt32:=-1;
+    Vertex2.FTemp.AsPtrInt:=-1;
     if DirectedGraph then
       BFSFromVertexDirected(Vertex1)
     else
       BFSFromVertex(Vertex1);
-    Time:=Vertex2.FTemp.AsInt32;
+    Time:=Vertex2.FTemp.AsPtrInt;
     if Time > 0 then begin
       EdgePaths.Grow(1);
       OldEdgePaths:=EdgePaths;
@@ -2767,7 +2767,7 @@ begin
                   Continue
               else
                 Neighbour:=E.OtherVertex(V);
-              if Neighbour.FTemp.AsInt32 = Time then begin
+              if Neighbour.FTemp.AsPtrInt = Time then begin
                 if Front.IndexOf(Neighbour) < 0 then
                   Front.Add(Neighbour);
                 for K:=0 to OldEdgePaths.Count - 1 do begin
@@ -3341,7 +3341,7 @@ begin
       NewFront:=TClassList.Create;
       try
         NumFired:=1;
-        TVertex(FVertices[0]).FTemp.AsInt32:=0;
+        TVertex(FVertices[0]).FTemp.AsPtrInt:=0;
         OldFront.Add(FVertices[0]);
         repeat
           NoProgress:=True;
@@ -3349,9 +3349,9 @@ begin
             V1:=OldFront[I];
             for J:=0 to V1.NeighbEdges.Count - 1 do begin
               V2:=V1.Neighbour[J];
-              if V2.FTemp.AsInt32 = -1 then begin
+              if V2.FTemp.AsPtrInt = -1 then begin
                 Inc(NumFired);
-                V2.FTemp.AsInt32:=0;
+                V2.FTemp.AsPtrInt:=0;
                 NewFront.Add(V2);
                 NoProgress:=False;
               end;
@@ -3405,8 +3405,8 @@ begin
       try
         for I:=0 to FVertices.Count - 1 do begin
           V1:=FVertices[I];
-          if V1.FTemp.AsInt32 = -1 then begin
-            V1.FTemp.AsInt32:=FSeparateCount;
+          if V1.FTemp.AsPtrInt = -1 then begin
+            V1.FTemp.AsPtrInt:=FSeparateCount;
             OldFront.Clear;
             OldFront.Add(V1);
             repeat
@@ -3415,8 +3415,8 @@ begin
                 V1:=OldFront[J];
                 for K:=0 to V1.NeighbEdges.Count - 1 do begin
                   V2:=V1.Neighbour[K];
-                  if V2.FTemp.AsInt32 = -1 then begin
-                    V2.FTemp.AsInt32:=FSeparateCount;
+                  if V2.FTemp.AsPtrInt = -1 then begin
+                    V2.FTemp.AsPtrInt:=FSeparateCount;
                     NewFront.Add(V2);
                     NoProgress:=False;
                   end;
@@ -3437,7 +3437,7 @@ begin
         SeparateOffset:=FVertexAttrMap.Offset(GAttrSeparateIndex);
         for I:=0 to FVertices.Count - 1 do begin
           V1:=FVertices[I];
-          V1.AsInt32ByOfs[SeparateOffset]:=V1.FTemp.AsInt32;
+          V1.AsInt32ByOfs[SeparateOffset]:=V1.FTemp.AsPtrInt;
         end;
       finally
         OldFront.Free;
@@ -3479,7 +3479,7 @@ begin
       { если временн'ые метки концов совпадают, то ребро является кольцевым
         ("встреча волны на ребре") }
       for I:=0 to FEdges.Count - 1 do With TEdge(FEdges[I]) do
-        FTemp.AsInt32:=Ord(V1.TimeMark = V2.TimeMark);
+        FTemp.AsPtrInt:=Ord(V1.TimeMark = V2.TimeMark);
       { если противоположные концы более чем двух инцидентных ребер вершины
         имеют меньшие временн'ые метки, чем эта вершина, то ребра - кольцевые
         ("встреча волны на вершине") }
@@ -3492,8 +3492,8 @@ begin
             if SaveOne = nil then
               SaveOne:=E
             else begin
-              SaveOne.FTemp.AsInt32:=1;
-              E.FTemp.AsInt32:=1;
+              SaveOne.FTemp.AsPtrInt:=1;
+              E.FTemp.AsPtrInt:=1;
             end;
         end;
       end;
@@ -3504,7 +3504,7 @@ begin
     RingOffset:=FEdgeAttrMap.Offset(GAttrRingEdge);
     for I:=0 to FEdges.Count - 1 do begin
       E:=FEdges[I];
-      if E.Temp.AsInt32 = 1 then
+      if E.Temp.AsPtrInt = 1 then
         B:=True
       { степень одного из концов равна единице => заведомо некольцевое }
       else if (E.V1.NeighbEdges.Count = 1) or (E.V2.NeighbEdges.Count = 1) then
@@ -3566,7 +3566,7 @@ begin
     SetTempFromVertex(V1, 0);
     for I:=1 to FVertices.Count - 1 do begin
       V2:=FVertices[I];
-      if V2.FTemp.AsInt32 < 0 then begin
+      if V2.FTemp.AsPtrInt < 0 then begin
         SetTempFromVertex(V2, 0);
         E:=AddEdge(V1, V2);
         Inc(Result);
@@ -3591,7 +3591,7 @@ var
     U, Neighbour: TVertex;
   begin
     Result:=False;
-    V.FTemp.AsInt32:=Counter;
+    V.FTemp.AsPtrInt:=Counter;
     LowPt[V.Index]:=Counter;
     Inc(Counter);
     U:=nil;
@@ -3600,14 +3600,14 @@ var
       if Neighbour <> V then begin
         if U = nil then
           U:=Neighbour;
-        if Neighbour.FTemp.AsInt32 < 0 then begin
+        if Neighbour.FTemp.AsPtrInt < 0 then begin
           Parents[Neighbour.Index]:=V;
           if FindFrom(Neighbour) then begin
             Result:=True;
             if Points = nil then
               Exit;
           end;
-          if (LowPt[Neighbour.Index] = V.FTemp.AsInt32) and
+          if (LowPt[Neighbour.Index] = V.FTemp.AsPtrInt) and
             ((Neighbour <> U) or (Parents[V.Index] <> nil)) then
           begin
             { V - узел сочленения (удаление V приведет к потере связности) }
@@ -3619,7 +3619,7 @@ var
           LowPt[V.Index]:=IntMin(LowPt[V.Index], LowPt[Neighbour.Index]);
         end
         else
-          LowPt[V.Index]:=IntMin(LowPt[V.Index], Neighbour.FTemp.AsInt32);
+          LowPt[V.Index]:=IntMin(LowPt[V.Index], Neighbour.FTemp.AsPtrInt);
       end;
     end;
   end;
@@ -3660,7 +3660,7 @@ var
     U, Neighbour: TVertex;
     E: TEdge;
   begin
-    V.FTemp.AsInt32:=Counter;
+    V.FTemp.AsPtrInt:=Counter;
     LowPt[V.Index]:=Counter;
     Inc(Counter);
     U:=nil;
@@ -3669,10 +3669,10 @@ var
       if Neighbour <> V then begin
         if U = nil then
           U:=Neighbour;
-        if Neighbour.FTemp.AsInt32 < 0 then begin
+        if Neighbour.FTemp.AsPtrInt < 0 then begin
           Parents[Neighbour.Index]:=V;
           MakeFrom(Neighbour);
-          if LowPt[Neighbour.Index] = V.FTemp.AsInt32 then
+          if LowPt[Neighbour.Index] = V.FTemp.AsPtrInt then
             if Neighbour = U then
               if Parents[V.Index] <> nil then begin
                { V - узел сочленения }
@@ -3692,7 +3692,7 @@ var
           LowPt[V.Index]:=IntMin(LowPt[V.Index], LowPt[Neighbour.Index]);
         end
         else
-          LowPt[V.Index]:=IntMin(LowPt[V.Index], Neighbour.FTemp.AsInt32);
+          LowPt[V.Index]:=IntMin(LowPt[V.Index], Neighbour.FTemp.AsPtrInt);
       end;
     end;
   end;
@@ -3731,7 +3731,7 @@ function TGraph.Bipartite(A: TBoolVector): Bool;
     V, Neighbour: TVertex;
     Q: TPointerQueue;
   begin
-    FromVertex.FTemp.AsInt32:=0;
+    FromVertex.FTemp.AsPtrInt:=0;
     Q:=TPointerQueue.Create;
     try
       Q.AddAfter(FromVertex);
@@ -3739,12 +3739,12 @@ function TGraph.Bipartite(A: TBoolVector): Bool;
         V:=Q.Head;
         for I:=0 to V.NeighbEdges.Count - 1 do begin
           Neighbour:=V.Neighbour[I];
-          if Neighbour.FTemp.AsInt32 = -1 then begin
+          if Neighbour.FTemp.AsPtrInt = -1 then begin
             Q.AddAfter(Neighbour);
-            Neighbour.FTemp.AsInt32:=1 - V.FTemp.AsInt32;
+            Neighbour.FTemp.AsPtrInt:=1 - V.FTemp.AsPtrInt;
           end
           else
-            if Neighbour.FTemp.AsInt32 = V.FTemp.AsInt32 then begin
+            if Neighbour.FTemp.AsPtrInt = V.FTemp.AsPtrInt then begin
               Result:=False;
               Exit;
             end;
@@ -3764,7 +3764,7 @@ begin
   SetTempForVertices(-1);
   for I:=0 to FVertices.Count - 1 do begin
     V:=FVertices[I];
-    if (V.FTemp.AsInt32 = -1) and not BipartiteDFS(V) then begin
+    if (V.FTemp.AsPtrInt = -1) and not BipartiteDFS(V) then begin
       Result:=False;
       Exit;
     end;
@@ -3772,7 +3772,7 @@ begin
   if A <> nil then begin
     A.Count:=FVertices.Count;
     for I:=0 to FVertices.Count - 1 do
-      A[I]:=TVertex(FVertices[I]).FTemp.AsInt32 <> 0;
+      A[I]:=TVertex(FVertices[I]).FTemp.AsPtrInt <> 0;
   end;
   Result:=True;
 end;
@@ -4078,12 +4078,12 @@ var
     Result:=0;
     for I:=0 to V.NeighbEdges.Count - 1 do begin
       E:=V.NeighbEdges[I];
-      if E.FTemp.AsInt32 = -2 then begin
-        E.FTemp.AsInt32:=-1;
+      if E.FTemp.AsPtrInt = -2 then begin
+        E.FTemp.AsPtrInt:=-1;
         Inc(Result, CountSubTrees(E.OtherVertex(V)) + 1);
       end;
     end;
-    V.FTemp.AsInt32:=Result;
+    V.FTemp.AsPtrInt:=Result;
   end;
 
 begin
@@ -4091,10 +4091,10 @@ begin
   for I:=0 to FEdges.Count - 1 do begin
     E:=FEdges[I];
     { исключаем петли и "горизонтальные" ребра }
-    if E.V1.FTemp.AsInt32 <> E.V2.FTemp.AsInt32 then
-      E.FTemp.AsInt32:=-2
+    if E.V1.FTemp.AsPtrInt <> E.V2.FTemp.AsPtrInt then
+      E.FTemp.AsPtrInt:=-2
     else
-      E.FTemp.AsInt32:=0;
+      E.FTemp.AsPtrInt:=0;
   end;
   CountSubTrees(FromVertex);
 end;
@@ -4108,10 +4108,10 @@ procedure TGraph.TreeTraversal(FromVertex: TVertex; VertexPath: TClassList);
     Neighbour: TVertex;
   begin
     VertexPath.Add(V);
-    VTemp:=V.FTemp.AsInt32;
+    VTemp:=V.FTemp.AsPtrInt;
     for I:=0 to V.NeighbEdges.Count - 1 do begin
       Neighbour:=V.Neighbour[I];
-      if Neighbour.FTemp.AsInt32 > VTemp then
+      if Neighbour.FTemp.AsPtrInt > VTemp then
         DoTraversal(Neighbour);
     end;
   end;
@@ -4159,17 +4159,17 @@ var
       E: TEdge;
     begin
       DownEdges.Clear;
-      VTemp:=From.FTemp.AsInt32;
+      VTemp:=From.FTemp.AsPtrInt;
       for I:=0 to From.NeighbEdges.Count - 1 do begin
         E:=From.NeighbEdges[I];
-        if (E.FTemp.AsInt32 = -1) and (E.OtherVertex(From).FTemp.AsInt32 < VTemp) then
+        if (E.FTemp.AsPtrInt = -1) and (E.OtherVertex(From).FTemp.AsPtrInt < VTemp) then
           DownEdges.Add(E);
       end;
     end;
 
   begin
     { сравнить количество вершин в поддеревьях }
-    Result:=From1.FTemp.AsInt32 - From2.FTemp.AsInt32;
+    Result:=From1.FTemp.AsPtrInt - From2.FTemp.AsPtrInt;
     if Result = 0 then begin
       { сравнить степени корней }
       Result:=From1.NeighbEdges.Count - From2.NeighbEdges.Count;
@@ -4212,8 +4212,8 @@ begin
   if Edge1 <> Edge2 then begin
     V1:=TEdge(Edge1).OtherVertex(CurrentVertex);
     V2:=TEdge(Edge2).OtherVertex(CurrentVertex);
-    B:=V1.FTemp.AsInt32 < Limit;
-    if B and (V2.FTemp.AsInt32 < Limit) then
+    B:=V1.FTemp.AsPtrInt < Limit;
+    if B and (V2.FTemp.AsPtrInt < Limit) then
       Result:=CompareSubtrees(V1, V2)
     else { одно из ребер - ссылка "вверх" }
       if B then
@@ -4237,12 +4237,12 @@ var
   begin
     for I:=0 to V.NeighbEdges.Count - 1 do begin
       E:=V.NeighbEdges[I];
-      if E.FTemp.AsInt32 = -1 then begin
-        E.FTemp.AsInt32:=-2;
+      if E.FTemp.AsPtrInt = -1 then begin
+        E.FTemp.AsPtrInt:=-2;
         DoArrange(E.OtherVertex(V));
       end;
     end;
-    ArrangeHelper.Limit:=V.FTemp.AsInt32;
+    ArrangeHelper.Limit:=V.FTemp.AsPtrInt;
     ArrangeHelper.CurrentVertex:=V;
     V.NeighbEdges.ConservativeSortByObject(ArrangeHelper.CompareEdges);
   end;
@@ -4391,7 +4391,7 @@ begin
       for I:=0 to N - 1 do begin
         BFSFromVertexDirected(FVertices[I]);
         for J:=0 to N - 1 do
-          Result[I, J]:=TVertex(FVertices[J]).FTemp.AsInt32;
+          Result[I, J]:=TVertex(FVertices[J]).FTemp.AsPtrInt;
       end;
     end
     else begin
@@ -4399,7 +4399,7 @@ begin
       for I:=0 to N - 1 do begin
         BFSFromVertex(FVertices[I]);
         for J:=I + 1 to N - 1 do
-          Result[I, J]:=TVertex(FVertices[J]).FTemp.AsInt32;
+          Result[I, J]:=TVertex(FVertices[J]).FTemp.AsPtrInt;
       end;
     end;
   except
@@ -4554,7 +4554,7 @@ begin
     ((Directed in Features) = (Directed in G.Features)) then
   begin
     for I:=0 to FVertices.Count - 1 do
-      TVertex(FVertices[I]).FTemp.AsInt32:=IsomorphousMap[I];
+      TVertex(FVertices[I]).FTemp.AsPtrInt:=IsomorphousMap[I];
     InNeighbIndexes1:=TIntegerVector.Create(0, 0);
     InNeighbIndexes2:=TIntegerVector.Create(0, 0);
     IsDirected:=Directed in Features;
@@ -4590,11 +4590,11 @@ begin
               E:=V1.NeighbEdges[J];
               if E.V1 = V1 then begin
                 OutNeighbEdges1.Add(E);
-                OutNeighbIndexes1.Add(E.V2.FTemp.AsInt32);
+                OutNeighbIndexes1.Add(E.V2.FTemp.AsPtrInt);
               end
               else begin
                 InNeighbEdges1.Add(E);
-                InNeighbIndexes1.Add(E.V1.FTemp.AsInt32);
+                InNeighbIndexes1.Add(E.V1.FTemp.AsPtrInt);
               end;
             end;
             InNeighbIndexes2.Clear;
@@ -4621,7 +4621,7 @@ begin
             InNeighbIndexes1.Count:=N;
             InNeighbIndexes2.Count:=N;
             for J:=0 to N - 1 do begin
-              InNeighbIndexes1[J]:=V1.Neighbour[J].FTemp.AsInt32;
+              InNeighbIndexes1[J]:=V1.Neighbour[J].FTemp.AsPtrInt;
               InNeighbIndexes2[J]:=V2.Neighbour[J].Index;
             end;
             if Assigned(CompareEdges) then begin
@@ -4935,7 +4935,7 @@ begin
       E1:=SSTList[I];
       E2:=AddEdgeI(E1.V1.Index, E1.V2.Index);
       E2.Weight:=E1.Weight;
-      E2.FTemp.AsInt32:=E1.Index;
+      E2.FTemp.AsPtrInt:=E1.Index;
     end;
   finally
     SSTList.Free;
@@ -5116,7 +5116,7 @@ var
     Inc(Counter1);
     SearchNumbers.IncItem(FromVertex.Index, Counter1);
     Unfinished.Push(FromVertex);
-    FromVertex.FTemp.AsInt32:=0;
+    FromVertex.FTemp.AsPtrInt:=0;
     Roots.Add(FromVertex);
     for I:=0 to FromVertex.NeighbEdges.Count - 1 do begin
       E:=FromVertex.NeighbEdges[I];
@@ -5126,7 +5126,7 @@ var
         if SearchNumber = -1 then
           Search(V)
         else
-          if V.FTemp.AsInt32 = 0 then { <=> Unfinished.IndexOf(V) >= 0 }
+          if V.FTemp.AsPtrInt = 0 then { <=> Unfinished.IndexOf(V) >= 0 }
             while SearchNumbers[TVertex(Roots.Last).Index] > SearchNumber do
               Roots.Pop;
       end;
@@ -5134,7 +5134,7 @@ var
     if FromVertex = Roots.Last then begin
       repeat
         V:=Unfinished.Pop;
-        V.FTemp.AsInt32:=-1;
+        V.FTemp.AsPtrInt:=-1;
         if ComponentNumbers <> nil then
           ComponentNumbers[V.Index]:=Counter2;
       until FromVertex = V;
@@ -5195,10 +5195,10 @@ procedure TGraph.CorrectTree;
     VTemp: Int32;
     Neighbour: TVertex;
   begin
-    VTemp:=V.FTemp.AsInt32;
+    VTemp:=V.FTemp.AsPtrInt;
     for I:=0 to V.NeighbEdges.Count - 1 do begin
       Neighbour:=V.Neighbour[I];
-      if Neighbour.FTemp.AsInt32 > VTemp then begin
+      if Neighbour.FTemp.AsPtrInt > VTemp then begin
         Neighbour.SafeSetParent(V);
         DoCorrect(Neighbour);
       end;

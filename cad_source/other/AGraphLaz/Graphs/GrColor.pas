@@ -62,7 +62,7 @@ begin
           Component.GetSeparateOf(G, V);
           if Colors <> nil then
             for K:=0 to Component.VertexCount - 1 do
-              VertexMap[K]:=Component[K].Temp.AsInt32;
+              VertexMap[K]:=Component[K].Temp.AsPtrInt;
           K:=ColorConnectedGraph(Component, ComponentColors);
           if K > Result then Result:=K;
           if Colors <> nil then

@@ -950,7 +950,7 @@ end;
 
 function TGDBobjinsp.gettreeh;
 begin
-  result:=0;
+  result:=1;
   calctreeh(@pda,result);
 end;
 {procedure TGDBobjinsp.WMVScroll(var Message : TLMVScroll);

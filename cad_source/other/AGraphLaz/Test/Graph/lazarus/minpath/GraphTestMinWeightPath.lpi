@@ -29,13 +29,10 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="2">
+    <RequiredPackages Count="1">
       <Item1>
-        <PackageName Value="ag_graph"/>
+        <PackageName Value="ag_vectors"/>
       </Item1>
-      <Item2>
-        <PackageName Value="LCL"/>
-      </Item2>
     </RequiredPackages>
     <Units Count="2">
       <Unit0>
@@ -52,7 +49,7 @@
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <SearchPaths>
-      <IncludeFiles Value="..\..;$(ProjOutDir)"/>
+      <IncludeFiles Value="$(ProjOutDir)"/>
       <OtherUnitFiles Value="..\.."/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>

@@ -119,6 +119,15 @@ object Form1: TForm1
       Hint = 'WebGraphViz'
       OnExecute = _OpenWebGraphviz
     end
+    object doExit: TAction
+      Caption = 'Exit'
+      Hint = 'Exit'
+      OnExecute = _Exit
+      SecondaryShortCuts.Strings = (
+        'Alt+X'
+      )
+      ShortCut = 16465
+    end
   end
   object MainMenu1: TMainMenu
     Left = 416
@@ -141,7 +150,7 @@ object Form1: TForm1
         Caption = '-'
       end
       object MenuItem7: TMenuItem
-        Caption = 'MenuItem7'
+        Action = doExit
       end
     end
   end

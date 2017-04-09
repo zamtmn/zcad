@@ -20,6 +20,7 @@ uses
   { TForm1 }
 
   TForm1 = class(TForm)
+    doExit: TAction;
     OpenWebGraphviz: TAction;
     SaveGML: TAction;
     GDBobjinsp1: TGDBobjinsp;
@@ -44,6 +45,7 @@ uses
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
     ToolButton5: TToolButton;
+    procedure _Exit(Sender: TObject);
     procedure _SaveGML(Sender: TObject);
     procedure _ImportLPI(Sender: TObject);
     procedure _onClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -144,6 +146,11 @@ procedure TForm1._SaveGML(Sender: TObject);
 begin
     Memo1.Clear;
     WriteGML(Options,ScanResult,DummyWriteToLog);//пишем то что унас есть в результате
+end;
+
+procedure TForm1._Exit(Sender: TObject);
+begin
+  close;
 end;
 
 procedure TForm1._Save(Sender: TObject);

@@ -52,9 +52,14 @@ object Form1: TForm1
       Visible = False
     end
     object ToolButton5: TToolButton
-      Left = 212
+      Left = 301
       Top = 2
       Action = OpenWebGraphviz
+    end
+    object ToolButton6: TToolButton
+      Left = 212
+      Top = 2
+      Action = CodeExplorer
     end
   end
   object Splitter1: TSplitter
@@ -127,6 +132,10 @@ object Form1: TForm1
         'Alt+X'
       )
       ShortCut = 16465
+    end
+    object CodeExplorer: TAction
+      Caption = 'CodeExplorer'
+      OnExecute = _CodeExplorer
     end
   end
   object MainMenu1: TMainMenu

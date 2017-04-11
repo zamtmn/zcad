@@ -13,13 +13,14 @@ uses
 
 
   {$IFDEF CHECKLOOPS}uchecker,{$ENDIF}
-  uoptions,uscaner,uscanresult,uwriter,yEdWriter,ulpiimporter;
+  uoptions,uscaner,uscanresult,uwriter,yEdWriter,ulpiimporter,uexplorer;
   {$INCLUDE revision.inc}
   type
 
   { TForm1 }
 
   TForm1 = class(TForm)
+    CodeExplorer: TAction;
     doExit: TAction;
     OpenWebGraphviz: TAction;
     SaveGML: TAction;
@@ -45,6 +46,8 @@ uses
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
     ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    procedure _CodeExplorer(Sender: TObject);
     procedure _Exit(Sender: TObject);
     procedure _SaveGML(Sender: TObject);
     procedure _ImportLPI(Sender: TObject);
@@ -150,7 +153,12 @@ end;
 
 procedure TForm1._Exit(Sender: TObject);
 begin
-  close;
+ close;
+end;
+
+procedure TForm1._CodeExplorer(Sender: TObject);
+begin
+ ExploreCode(Options,ScanResult,DummyWriteToLog);
 end;
 
 procedure TForm1._Save(Sender: TObject);

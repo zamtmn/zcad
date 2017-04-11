@@ -5,7 +5,7 @@ unit uscanresult;
 interface
 
 uses
-  Classes, SysUtils, gvector, ghashmap;
+  Classes, SysUtils, gvector, ghashmap, PasTree, PParser;
 
 type
   TUnitName=String;    //алиас для имени юнита
@@ -26,15 +26,23 @@ type
   TNodeState=(NSNotCheced,NSCheced,NSFiltredOut);
   TUnitType=(UTProgram,UTUnit);
   TUsesArray=specialize TVector<TUnitIndex>;//вектор индексов
-  TUnitInfo=record //информация о юните, пока тут почти пусто
+  TUnitInfo=object //информация о юните, пока тут почти пусто
     NodeState:TNodeState;                       //Метка "уже обработан" при записи в граф. для записи одноразовой информации
     UnitName:TUnitName;                         //имя юнита
     UnitPath:string;                            //путь к юниту;
     UnitType:TUnitType;                         //тип юнита
     UnitFlags:TUnitFlags;
     InterfaceUses,ImplementationUses:TUsesArray;//массив индексов юнитов которые есть в усес этого юнита
+
+    PasModule:TPasModule;
+    PasTreeContainer:TPasTreeContainer;
+
+    constructor init(const un:TUnitName);
+    destructor done;
   end;
-  TUnitInfoArray=specialize TVector<TUnitInfo>;//вектор элементов типа TUnitInfo
+  TUnitInfoArray=class (specialize TVector<TUnitInfo>)//вектор элементов типа TUnitInfo
+    destructor destroy;override;
+  end;
 
   TScanResult=class
     private
@@ -59,6 +67,28 @@ type
   end;
 
 implementation
+destructor TUnitInfoArray.destroy;
+var
+  i:integer;
+begin
+  for i:=0 to size-1 do
+   Mutable[i]^.done;
+end;
+constructor TUnitInfo.init(const un:TUnitName);
+begin
+  UnitName:=un;
+  InterfaceUses:=TUsesArray.Create;
+  ImplementationUses:=TUsesArray.Create;
+  UnitFlags:=[];
+  PasModule:=nil;
+  PasTreeContainer:=nil;
+end;
+destructor TUnitInfo.done;
+begin
+  if assigned(PasModule) then PasModule.Free;
+  if assigned(PasTreeContainer) then PasTreeContainer.Free;
+end;
+
 {$IF FPC_FULLVERSION<030001}
 function TUnitName2IndexMap.GetValue(key:TUnitName;out value:TUnitIndex): boolean;
 var i,bs:SizeUInt;
@@ -112,10 +142,7 @@ begin
 end;
 function TScanResult.CreateEmptyUnitInfo(const un:TUnitName):TUnitInfo;
 begin
-  result.UnitName:=un;
-  result.InterfaceUses:=TUsesArray.Create;
-  result.ImplementationUses:=TUsesArray.Create;
-  result.UnitFlags:=[];
+  result.init(un);
 end;
 
 function TScanResult.TryCreateNewUnitInfo(const un:TUnitName;var UnitIindex:TUnitIndex):boolean;

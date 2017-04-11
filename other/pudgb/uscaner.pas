@@ -40,7 +40,7 @@ begin
   { dummy implementation, see TFPDocEngine.FindElement for a real example }
   Result := nil;
 end;
-procedure PrepareModule(M:TPasModule;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure PrepareModule(var M:TPasModule;var E:TPasTreeContainer;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 var
    UnitIndex:TUnitIndex;
 begin
@@ -65,6 +65,10 @@ begin
         GetDecls(PMImplementation,M.ImplementationSection as TPasDeclarations,Options,ScanResult,UnitIndex,LogWriter);
        end;
     end;
+   ScanResult.UnitInfoArray.Mutable[UnitIndex]^.PasModule:=M;
+   ScanResult.UnitInfoArray.Mutable[UnitIndex]^.PasTreeContainer:=E;
+   M:=nil;
+   E:=nil;
    end;
 end;
 
@@ -72,14 +76,17 @@ procedure ScanModule(mn:String;Options:TOptions;ScanResult:TScanResult;const Log
 var
   M:TPasModule;
   E:TPasTreeContainer;
+  myTime:TDateTime;
 begin
    E := TSimpleEngine.Create;
    //if assigned(LogWriter) then LogWriter(format('Process file: "%s"',[mn]));
    try
+     myTime:=now;
      M := ParseSource(E,mn+' '+Options.ParserOptions._CompilerOptions,Options.ParserOptions.TargetOS,Options.ParserOptions.TargetCPU,False);
-     PrepareModule(M,Options,ScanResult,LogWriter);
-     E.Free;
-     M.Free;
+     PrepareModule(M,E,Options,ScanResult,LogWriter);
+     LogWriter(format('Time to parse first module %fsec',[(now-myTime)*10e4]));
+     if assigned(E) then E.Free;
+     if assigned(M) then M.Free;
    except
      on excep:EParserError do
        begin

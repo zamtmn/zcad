@@ -99,6 +99,9 @@ uses
   Pointerv,
   Graphs,
 
+   uzestyleslayers,
+   //uzcdrawings,
+
    uzcenitiesvariablesextender,
    UUnitManager,
    uzbpaths,
@@ -108,9 +111,38 @@ uses
 
   function testTempDrawText(p1:GDBVertex;mText:GDBString):TCommandResult;
   function testTempDrawLine(p1:GDBVertex;p2:GDBVertex):TCommandResult;
+
+  function testTempDrawLineColor(p1:GDBVertex;p2:GDBVertex;color:integer):TCommandResult;
+  function testTempDraw2dLineColor(pt1:GDBVertex2D;pt2:GDBVertex2D;color:integer):TCommandResult;
+
   function testTempDrawPLCross(point:GDBVertex;rr:double;color:Integer):TCommandResult;
   function testDrawCircle(p1:GDBVertex;rr:GDBDouble;color:integer):TCommandResult;
+
+  function getTestLayer():PGDBLayerProp;
 implementation
+
+  function getTestLayer():PGDBLayerProp;
+  var
+      pproglayer:PGDBLayerProp;
+      pnevlayer:PGDBLayerProp;
+      pe:PGDBObjEntity;
+  const
+      createdlayername='systemTempVisualLayer';
+  begin
+      result:=nil;
+      //if commandmanager.getentity(rscmSelectSourceEntity,pe) then
+      //begin
+        pproglayer:=BlockBaseDWG^.LayerTable.getAddres(createdlayername);//ищем описание слоя в библиотеке
+                                                                        //возможно оно найдется, а возможно вернется nil
+        result:=drawings.GetCurrentDWG^.LayerTable.createlayerifneedbyname(createdlayername,pproglayer);//эта процедура сначала ищет описание слоя в чертеже
+                                                                                                          //если нашла - возвращает его
+                                                                                                          //не нашла, если pproglayer не nil - создает такойде слой в чертеже
+                                                                                                          //и только если слой в чертеже не найден pproglayer=nil то возвращает nil
+        if result=nil then //предидущие попытки обламались. в чертеже и в библиотеке слоя нет, тогда создаем новый
+          result:=drawings.GetCurrentDWG^.LayerTable.addlayer(createdlayername{имя},ClWhite{цвет},-1{вес},true{on},false{lock},true{print},'???'{описание},TLOLoad{режим создания - в данном случае неважен});
+        //pe^.vp.Layer:=pnevlayer;
+      //end;
+  end;
 
   //Визуализация круга его p1-координата, rr-радиус, color-цвет
   function testDrawCircle(p1:GDBVertex;rr:GDBDouble;color:integer):TCommandResult;
@@ -124,6 +156,7 @@ implementation
         zcSetEntPropFromCurrentDrawingProp(pcircle);                                        //присваиваем текущие слой, вес и т.п
         pcircle^.vp.LineWeight:=LnWt100;
         pcircle^.vp.Color:=color;
+        pcircle^.vp.Layer:=getTestLayer();
         zcAddEntToCurrentDrawingWithUndo(pcircle);                                    //добавляем в чертеж
       end;
       result:=cmd_ok;
@@ -138,6 +171,7 @@ implementation
         ptext^.TXTStyleIndex:=drawings.GetCurrentDWG^.GetCurrentTextStyle; //добавляет тип стиля текста, дефаултные свойства его не добавляют
         ptext^.Local.P_insert:=p1;  // координата
         ptext^.Template:=mText;     // сам текст
+        ptext^.vp.Layer:=getTestLayer();
         zcAddEntToCurrentDrawingWithUndo(ptext);   //добавляем в чертеж
         result:=cmd_ok;
   end;
@@ -153,6 +187,51 @@ implementation
         zcSetEntPropFromCurrentDrawingProp(pline);//присваиваем текущие слой, вес и т.п
         pline^.vp.LineWeight:=LnWt200;
         pline^.vp.Color:=6;
+        pline^.vp.Layer:=getTestLayer();
+        zcAddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
+      end;
+      result:=cmd_ok;
+  end;
+  //быстрое рисование линии с цветом
+  function testTempDrawLineColor(p1:GDBVertex;p2:GDBVertex;color:integer):TCommandResult;
+  var
+      pline:PGDBObjLine;
+  begin
+      begin
+        pline := AllocEnt(GDBLineID);                                             //выделяем память
+        pline^.init(nil,nil,0,p1,p2);                                             //инициализируем и сразу создаем
+
+        zcSetEntPropFromCurrentDrawingProp(pline);//присваиваем текущие слой, вес и т.п
+        pline^.vp.LineWeight:=LnWt200;
+        pline^.vp.Color:=color;
+        pline^.vp.Layer:=getTestLayer();
+        zcAddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
+      end;
+      result:=cmd_ok;
+  end;
+
+  //быстрое рисование 2d point линии с цветом
+  function testTempDraw2dLineColor(pt1:GDBVertex2D;pt2:GDBVertex2D;color:integer):TCommandResult;
+  var
+      pline:PGDBObjLine;
+      p1,p2:gdbvertex;
+  begin
+      begin
+        p1.x:=pt1.x;
+        p1.y:=pt1.y;
+        p1.z:=0;
+
+        p2.x:=pt2.x;
+        p2.y:=pt2.y;
+        p2.z:=0;
+
+        pline := AllocEnt(GDBLineID);                                             //выделяем память
+        pline^.init(nil,nil,0,p1,p2);                                             //инициализируем и сразу создаем
+
+        zcSetEntPropFromCurrentDrawingProp(pline);//присваиваем текущие слой, вес и т.п
+        pline^.vp.LineWeight:=LnWt200;
+        pline^.vp.Color:=color;
+        pline^.vp.Layer:=getTestLayer();
         zcAddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
       end;
       result:=cmd_ok;
@@ -171,6 +250,8 @@ implementation
        polyObj^.Closed:=false;
        polyObj^.vp.Color:=color;
        polyObj^.vp.LineWeight:=LnWt200;
+       polyObj^.vp.Layer:=getTestLayer();
+
        tempPoint.x:=point.x-rr;
        tempPoint.y:=point.y+rr;
        tempPoint.z:=0;

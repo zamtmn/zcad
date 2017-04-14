@@ -309,6 +309,8 @@ PTDeviceInfoSubGraph=^TDeviceInfoSubGraph;
  function visualGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;color:Integer;numHead:integer;numGroup:integer;accuracy:double):TCommandResult;
  function cablingGroupLine(listHeadDevice:TListHeadDevice;ourGraph:TGraphBuilder;numHead:integer;numGroup:integer):TCommandResult;
 
+ procedure metricNumeric(metric:boolean;dev:PGDBObjDevice);
+
 implementation
  type
        TListString=specialize TVector<string>;
@@ -744,7 +746,7 @@ begin
      polyObj^.Closed:=false;
      polyObj^.vp.Color:=color;
      polyObj^.vp.LineWeight:=LnWt050;
-
+     polyObj^.vp.Layer:=uzvtestdraw.getTestLayer();
      for i:=0 to myVertex.Size-1 do
      begin
          polyObj^.VertexArrayInOCS.PushBackData(ourGraph.listVertex[myVertex[i]].centerPoint);
@@ -768,6 +770,7 @@ begin
       ptext^.Template:=mText;     // сам текст
       ptext^.vp.LineWeight:=LnWt100;
       ptext^.vp.Color:=color;
+      ptext^.vp.Layer:=uzvtestdraw.getTestLayer();
       ptext^.textprop.size:=heightText;
       zcAddEntToCurrentDrawingWithUndo(ptext);   //добавляем в чертеж
       result:=cmd_ok;
@@ -785,6 +788,7 @@ begin
       zcSetEntPropFromCurrentDrawingProp(pcircle);                                        //присваиваем текущие слой, вес и т.п
       pcircle^.vp.LineWeight:=LnWt100;
       pcircle^.vp.Color:=color;
+      pcircle^.vp.Layer:=uzvtestdraw.getTestLayer();
       zcAddEntToCurrentDrawingWithUndo(pcircle);                                    //добавляем в чертеж
     end;
     result:=cmd_ok;
@@ -813,6 +817,7 @@ begin
      polyObj^.Closed:=false;
      polyObj^.vp.Color:=color;
      polyObj^.vp.LineWeight:=LnWt050;
+     polyObj^.vp.Layer:=uzvtestdraw.getTestLayer();
 
 
      //визуализация коробок распределения
@@ -1038,6 +1043,29 @@ function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
   begin
 
   end;
+
+
+//рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
+procedure metricNumeric(metric:boolean;dev:PGDBObjDevice);
+var
+    pvd:pvardesk;
+    name:string;
+begin
+
+    name:='';
+    if metric then begin
+     pvd:=FindVariableInEnt(dev,'NMO_BaseName');
+     if pvd<>nil then
+       name:=pgdbstring(pvd^.data.Instance)^;
+     end;
+
+     pvd:=FindVariableInEnt(dev,'GC_InGroup_Metric');
+       if pvd<>nil then
+        begin
+           pgdbstring(pvd^.data.Instance)^:=name ;
+        end;
+end;
+
 
 //** Получаем количество кабелей подключения данного устройства к головным устройствам, с последующим разбором
 

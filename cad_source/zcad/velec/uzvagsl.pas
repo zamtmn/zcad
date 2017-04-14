@@ -181,6 +181,9 @@ type
   //**Список вершин
   TListVertex=specialize TVector<GDBVertex>;
 
+  //**Список номеров
+  TListNum=specialize TVector<integer>;
+
   //** список колонн
   TInfoColumnDev=class
                    listLineDev:TListVertexDevice;
@@ -238,7 +241,7 @@ type
  function getListDeviceinRoom(contourRoom:PGDBObjPolyLine):TListVertexDevice;
 
  //**получаем постоянные элементы при авто пракладки, список вершин перпендикуляра и список вершин внутреннего контура прокладки кабеля внутри помещения
- function mainElementAutoEmbedSL(contourRoom:PGDBObjPolyLine;out contourRoomEmbedSL:TListVertex;out perpendListVertex:TListVertex;out anglePerpendCos:double):boolean;
+ function mainElementAutoEmbedSL(contour2dRoom:pgdbobjlwpolyline;out contourRoomEmbedSL:TListVertex;out perpendListVertex:TListVertex;out anglePerpendCos:double;cableDistWall:double):boolean;
 
 implementation
  type
@@ -321,9 +324,11 @@ implementation
     end;
 
     //**поиск перпендикуляра к комнате и к внутреннему контуру прокладки
-    function getVertexPerpendicularRoom(contourRoom:PGDBObjPolyLine;contourRoomEmbedSL:TListVertex;stPoint:gdbvertex;out perpendListVertex:TListVertex):boolean;
+    function getVertexPerpendicularRoom(contour2dRoom:pgdbobjlwpolyline;contourRoomEmbedSL:TListVertex;stPoint:gdbvertex;out perpendListVertex:TListVertex):boolean;
     var
        pt1,pta,ptb,tempVertex,tempVertex2:gdbvertex;
+       vertb2d,verta2d:GDBVertex2d;
+       vertb,verta:GDBVertex;
        i, num:integer;
     begin
        result:=false;
@@ -343,13 +348,34 @@ implementation
        //** если перпендикуляра к контуру прокладки кабеля нет, но есть к контуру помещения
        if not result then
         begin
-         for i:=1 to contourRoom^.VertexArrayInOCS.GetRealCount-1 do begin
-            if uzvsgeom.perpendToLine(contourRoom^.VertexArrayInOCS.getdata(i-1),contourRoom^.VertexArrayInOCS.getdata(i),stPoint,tempVertex) then begin
+         for i:=1 to contour2dRoom^.Vertex2D_in_OCS_Array.GetRealCount-1 do begin
+            vertb2d:=contour2dRoom^.Vertex2D_in_OCS_Array.getdata(i-1);
+            vertb.x:=vertb2d.x;
+            vertb.y:=vertb2d.y;
+            vertb.z:=0;
+            verta2d:=contour2dRoom^.Vertex2D_in_OCS_Array.getdata(i);
+            
+            verta.x:=verta2d.x;
+            verta.y:=verta2d.y;
+            verta.z:=0;
+
+            if uzvsgeom.perpendToLine(vertb,verta,stPoint,tempVertex) then begin
               perpendListVertex.PushBack(tempVertex);
               result:=true;
               end;
          end;
-         if uzvsgeom.perpendToLine(contourRoom^.VertexArrayInOCS.getdata(contourRoom^.VertexArrayInOCS.GetRealCount-1),contourRoom^.VertexArrayInOCS.getdata(0),stPoint,tempVertex) then begin
+
+            vertb2d:=contour2dRoom^.Vertex2D_in_OCS_Array.getdata(contour2dRoom^.Vertex2D_in_OCS_Array.GetRealCount-1);
+            vertb.x:=vertb2d.x;
+            vertb.y:=vertb2d.y;
+            vertb.z:=0;
+            verta2d:=contour2dRoom^.Vertex2D_in_OCS_Array.getdata(0);
+
+            verta.x:=verta2d.x;
+            verta.y:=verta2d.y;
+            verta.z:=0;
+
+         if uzvsgeom.perpendToLine(vertb,verta,stPoint,tempVertex) then begin
            perpendListVertex.PushBack(tempVertex);
            result:=true;
          end;
@@ -388,29 +414,46 @@ implementation
 
     end;
     //**Получить внутренний контур прокладки кабеля по стенам внутри помещения (тот же контур комнаты, только с отступом от стены, для наглядности на чертеже)
-    function getcontourRoomEmbedSL(contourRoom:PGDBObjPolyLine;offsetFromWall:double):TListVertex;
+    function getcontourRoomEmbedSL(contour2dRoom:pgdbobjlwpolyline;offsetFromWall:double):TListVertex;
     var
-         pt,pta,ptb:gdbvertex;
+         pt2d,pta2d,ptb2d:gdbvertex2d;
+         pt,pta,ptb,newVert:gdbvertex;
          i:integer;
     begin
          result:=TListVertex.Create;
-         for i:=0 to contourRoom^.VertexArrayInOCS.GetRealCount-1 do begin
-          pt:=contourRoom^.VertexArrayInOCS.getdata(i);
-          if i=0 then
-            ptb:=contourRoom^.VertexArrayInOCS.getdata(contourRoom^.VertexArrayInOCS.GetRealCount-1)
-            else
-            ptb:=contourRoom^.VertexArrayInOCS.getdata(i-1);
-          if i=contourRoom^.VertexArrayInOCS.GetRealCount-1 then
-            pta:=contourRoom^.VertexArrayInOCS.getdata(0)
-            else
-            pta:=contourRoom^.VertexArrayInOCS.getdata(i+1);
 
-         result.PushBack(uzvsgeom.getPointRelativeTwoLines(pt,ptb,pt,pta,offsetFromWall,offsetFromWall));
+         for i:=0 to contour2dRoom^.Vertex2D_in_OCS_Array.GetRealCount-1 do begin
+          pt2d:=contour2dRoom^.Vertex2D_in_OCS_Array.getdata(i);
+
+          //historyoutstr('i='+inttostr(i));
+          //historyoutstr('GetRealCount='+inttostr(contour2dRoom^.Vertex2D_in_OCS_Array.GetRealCount-1));
+
+          ptb2d:=contour2dRoom^.Vertex2D_in_OCS_Array.getdata(i-1);
+          if i=0 then
+            ptb2d:=contour2dRoom^.Vertex2D_in_OCS_Array.getdata(contour2dRoom^.Vertex2D_in_OCS_Array.GetRealCount-1);
+
+          pta2d:=contour2dRoom^.Vertex2D_in_OCS_Array.getdata(i+1);
+          if i=contour2dRoom^.Vertex2D_in_OCS_Array.GetRealCount-1 then
+            pta2d:=contour2dRoom^.Vertex2D_in_OCS_Array.getdata(0);
+
+          pt:=uzegeometry.CreateVertex(pt2d.x,pt2d.y,0);
+          pta:=uzegeometry.CreateVertex(pta2d.x,pta2d.y,0);
+          ptb:=uzegeometry.CreateVertex(ptb2d.x,ptb2d.y,0);
+
+         newVert:=uzvsgeom.getPointRelativeTwoLines(pt,ptb,pt,pta,offsetFromWall,offsetFromWall);
+
+         //uzvtestdraw.testDrawCircle(newVert,2,4);
+
+         if contour2dRoom^.isPointInside(newVert) then
+           result.PushBack(newVert)
+           else
+           result.PushBack(uzvsgeom.extendedLine(newVert,pt,uzegeometry.Vertexlength(newVert,pt)));
+
          end;
     end;
     //**Поиск перпендикуляра, угла повернутости помещения и получения отступа от контура помещени
 
-    function mainElementAutoEmbedSL(contourRoom:PGDBObjPolyLine;out contourRoomEmbedSL:TListVertex;out perpendListVertex:TListVertex;out anglePerpendCos:double):boolean;
+    function mainElementAutoEmbedSL(contour2dRoom:pgdbobjlwpolyline;out contourRoomEmbedSL:TListVertex;out perpendListVertex:TListVertex;out anglePerpendCos:double;cableDistWall:double):boolean;
     var
       stPoint,tempVertex:GDBVertex;
       //perpendListVertex:TListVertex;
@@ -424,8 +467,8 @@ implementation
       result:=false;
       if commandmanager.get3dpoint('Start point automatic placement of super lines:',stPoint) then
       begin
-         contourRoomEmbedSL:=getcontourRoomEmbedSL(contourRoom,50); // получаем контур прокладки кабеля
-         if getVertexPerpendicularRoom(contourRoom,contourRoomEmbedSL,stPoint,perpendListVertex) then    //получаем список вершин перпендикуляра
+         contourRoomEmbedSL:=getcontourRoomEmbedSL(contour2dRoom,cableDistWall); // получаем контур прокладки кабеля
+         if getVertexPerpendicularRoom(contour2dRoom,contourRoomEmbedSL,stPoint,perpendListVertex) then    //получаем список вершин перпендикуляра
          begin
             xyline:=uzegeometry.Vertexlength(perpendListVertex[0],perpendListVertex[1]) ;
             tempVertex.x:=perpendListVertex[1].x;
@@ -440,8 +483,10 @@ implementation
 
             //for i:=1 to perpendListVertex.size-1 do
             //  uzvtestdraw.testTempDrawLine(perpendListVertex[i-1],perpendListVertex[i]);
+            //
+
             //for i:=1 to contourRoomEmbedSL.size-1 do
-            //  uzvtestdraw.testTempDrawLine(contourRoomEmbedSL[i-1],contourRoomEmbedSL[i]);
+            //  uzvtestdraw.testTempDrawLineColor(contourRoomEmbedSL[i-1],contourRoomEmbedSL[i],2);
             //uzvtestdraw.testTempDrawLine(contourRoomEmbedSL[contourRoomEmbedSL.size-1],contourRoomEmbedSL.front);
             //
             result:=true;
@@ -524,6 +569,31 @@ implementation
        end;
        uzvtestdraw.testTempDrawLine(result.LBN,result.RTF);
     end;
+
+    //** Получение контура помещения описаннного 2D полилинией из 3D полилинии
+    //** для поиска вхождения точки внутрь контура
+    function getContour2DRoom(contourRoom:PGDBObjPolyLine):pgdbobjlwpolyline;
+    var
+        i:integer;
+        pt:gdbvertex;
+        vertexLWObj:GDBvertex2D; //для двух серной полилинии
+        widthObj:GLLWWidth;      //переменная для добавления веса линии в начале и конце пути
+    begin
+
+       result:=GDBObjLWPolyline.CreateInstance;
+       result^.Closed:=true;
+       zcAddEntToCurrentDrawingConstructRoot(result);
+       widthObj.endw:=0.1;
+       widthObj.startw:=0.1;
+       for i:=0 to contourRoom^.VertexArrayInOCS.GetRealCount-1 do begin
+          pt:=contourRoom^.VertexArrayInOCS.getdata(i);
+          vertexLWObj.x:=pt.x;
+          vertexLWObj.y:=pt.y;
+          result^.Vertex2D_in_OCS_Array.PushBackData(vertexLWObj);
+          result^.Width2D_in_OCS_Array.PushBackData(widthObj);
+       end;
+    end;
+
     //**Получаем список извещателей находящихся внутри контура помещения
     function getListDeviceinRoom(contourRoom:PGDBObjPolyLine):TListVertexDevice;
     var
@@ -715,8 +785,104 @@ implementation
     end;
   end;
 
+  //** Получение правильно сформировоного списка устройств (столбцы-строки)
+  function getColumnLineListDevice(mpd:devcoordarray):TListColumnDev;
+    var
+       i,count:integer;
+       infoColumnDev:TInfoColumnDev; //информация одной строки
+       infoVertexDevice:TVertexDevice;
+    begin
+          //***превращение правильно сортированого списка в список колонн и строк, для удобной автопрокладки трассы
+          count:=0;
+          result:=TListColumnDev.Create;
+          infoColumnDev:=TInfoColumnDev.Create;
+          //if mpd.Size > 0 then begin
+          for i:=1 to mpd.Size-1 do
+           begin
+             if not thisLinePlaceDev(mpd[i-1],mpd[i]) then
+               begin
+                    //historyoutstr('device######'+inttostr(count));
+
+                  infoVertexDevice.coord:=mpd[i-1].coord;
+                  infoVertexDevice.pdev:=mpd[i-1].pdev;
+                  infoVertexDevice.num:=count;
+                  infoColumnDev.listLineDev.PushBack(infoVertexDevice);
+                  inc(count);
+
+               end
+             else
+             begin
+
+                  infoVertexDevice.coord:=mpd[i-1].coord;
+                  infoVertexDevice.pdev:=mpd[i-1].pdev;
+                  infoVertexDevice.num:=count;
+                  inc(count);
+                  infoColumnDev.listLineDev.PushBack(infoVertexDevice);
+
+                  infoColumnDev.orient:=3;
+                  result.PushBack(infoColumnDev);
+                  infoColumnDev:=nil;
+                  infoColumnDev:=TInfoColumnDev.Create;
+             end;
+           end;
+
+          infoVertexDevice.coord:=mpd[mpd.Size-1].coord;
+          infoVertexDevice.pdev:=mpd[mpd.Size-1].pdev;
+          infoVertexDevice.num:=count;
+          inc(count);
+          infoColumnDev.listLineDev.PushBack(infoVertexDevice);
+
+          infoColumnDev.orient:=3;
+          result.PushBack(infoColumnDev);
+          infoColumnDev:=nil;
+
+  end;
+
+  //** Получение правильно сформировоного списка устройств (столбцы-строки)
+  function getMatrixListDevice(horList,vertList:TListColumnDev):TListColumnDev;
+    var
+       i,j,k,l,count:integer;
+       infoColumnDev:TInfoColumnDev; //информация одной строки
+       infoVertexDevice:TVertexDevice;
+       columns,lines:integer;
+
+    begin
+          //***превращение правильно сортированого списка в список колонн и строк, для удобной автопрокладки трассы
+          //count:=0;
+          result:=TListColumnDev.Create;
+          infoColumnDev:=TInfoColumnDev.Create;
+          //if mpd.Size > 0 then begin
+          columns:=horList.Size;
+          lines:=vertList.Size;
+          //historyoutstr('column######'+inttostr(columns)+'---lines######'+inttostr(lines));
+          for i:=0 to columns+1 do begin
+            for j:=0 to lines+1 do begin
+                infoVertexDevice.coord:=uzegeometry.CreateVertex(-1,-1,-1);
+                infoVertexDevice.pdev:=nil;
+                infoVertexDevice.num:=-1;
+                infoColumnDev.listLineDev.PushBack(infoVertexDevice);
+            end;
+            infoColumnDev.orient:=-1;
+            result.PushBack(infoColumnDev)  ;
+            infoColumnDev:=nil;
+            infoColumnDev:=TInfoColumnDev.Create;
+          end;
+
+          for i:=0 to horList.size-1 do
+           for j:=0 to horList[i].listLineDev.Size-1 do
+            for k:=0 to vertList.size-1 do
+             for l:=0 to vertList[k].listLineDev.Size-1 do
+               if horList[i].listLineDev[j].pdev = vertList[k].listLineDev[l].pdev then
+                  begin
+                    result.mutable[i+1]^.listLineDev.mutable[k+1]^.pdev:=horList[i].listLineDev[j].pdev;
+                    result.mutable[i+1]^.listLineDev.mutable[k+1]^.coord:=horList[i].listLineDev[j].pdev^.GetCenterPoint;
+                    //result.mutable[i+1]^.listLineDev.mutable[k+1]^.coord:=horList[i].listLineDev[j].coord;
+                    result.mutable[i+1]^.listLineDev.mutable[k+1]^.num:=horList[i].listLineDev[j].num;
+                  end;
+
+  end;
   //**Получения матрицы(списка) устройств по строкам и колоннам, для правильной прокладки кабелей
-  procedure get2DListDevice(listDeviceinRoom:TListVertexDevice;contourRoom:PGDBObjPolyLine;perpendListVertex:TListVertex;anglePerpendCos:double);
+  function get2DListDevice(listDeviceinRoom:TListVertexDevice;contourRoom:PGDBObjPolyLine;perpendListVertex:TListVertex;anglePerpendCos:double;out hor2DListDevice:TListColumnDev;out vert2DListDevice:TListColumnDev):TListColumnDev;
     var
         psd:PSelectedObjDesc;
         ir:itrec;
@@ -731,12 +897,13 @@ implementation
         DC:TDrawContext;
         pdevvarext:PTVariablesExtender;
         angle:double;
-         listColumnDev:TListColumnDev; //список устройст
-         infoColumnDev:TInfoColumnDev; //информация одной строки
+         //hor2DListDevice,vert2DListDevice:TListColumnDev; //список устройст
+         //infoColumnDev:TInfoColumnDev; //информация одной строки
          infoVertexDevice:TVertexDevice;
          //strNameDev:string;
+         tempforinfo:string;
     begin
-         HistoryOutStr('Заработалоssssss');
+         //HistoryOutStr('Заработалоssssss');
 
          mpd:=devcoordarray.Create;  //**создания списока устройств и координат
          dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
@@ -751,15 +918,18 @@ implementation
          if (perpendListVertex.front.x <= perpendListVertex[1].x) and (perpendListVertex.front.y <= perpendListVertex[1].y) then
             angle:=arccos(anglePerpendCos)+3*1.5707963267949;
 
+         //angle:=angle+1.5707963267949;
+         //historyoutstr('angle######'+floattostr(angle));
 
+          //** Получение горизонтального расположение нумерации
                for i:=0 to listDeviceinRoom.Size-1 do
                begin
                    dcoord.coordOld:=listDeviceinRoom[i].coord;
 
-                   tempvert.x:=perpendListVertex.front.X+ (listDeviceinRoom[i].coord.X-perpendListVertex.front.X) * Cos(angle) + (listDeviceinRoom[i].coord.Y-perpendListVertex.front.Y) * Sin(angle) ;
-                   tempvert.y:=perpendListVertex.front.Y-(listDeviceinRoom[i].coord.X -perpendListVertex.front.X)* Sin(angle) + (listDeviceinRoom[i].coord.Y -perpendListVertex.front.Y)* Cos(angle);
+                   tempvert.x:=perpendListVertex.front.X + (listDeviceinRoom[i].coord.X-perpendListVertex.front.X) * Cos(angle) + (listDeviceinRoom[i].coord.Y-perpendListVertex.front.Y) * Sin(angle) ;
+                   tempvert.y:=perpendListVertex.front.Y - (listDeviceinRoom[i].coord.X -perpendListVertex.front.X)* Sin(angle) + (listDeviceinRoom[i].coord.Y -perpendListVertex.front.Y)* Cos(angle);
                    tempvert.z:=0;
-                   dcoord.coord:=tempvert;
+                   dcoord.coord:=uzegeometry.CreateVertex(tempvert.x,tempvert.y,tempvert.z);
 
                    //uzvtestdraw.testDrawCircle(tempvert,5,4);
                    dcoord.pdev:=listDeviceinRoom[i].pdev;    // получить устройство
@@ -772,8 +942,54 @@ implementation
          devcoordsort.Sort(mpd,mpd.Size);  // запуск сортировка
 
           //***превращение правильно сортированого списка в список колонн и строк, для удобной автопрокладки трассы
+          hor2DListDevice:=getColumnLineListDevice(mpd);
+
+          //** получение вертикального расположения нумерации
+               mpd.Destroy;
+
+               mpd:=devcoordarray.Create;
+               angle:=angle+1.5707963267949;
+               for i:=0 to listDeviceinRoom.Size-1 do
+               begin
+                   dcoord.coordOld:=listDeviceinRoom[i].coord;
+
+                   tempvert.x:=perpendListVertex.front.X + (listDeviceinRoom[i].coord.X-perpendListVertex.front.X) * Cos(angle) + (listDeviceinRoom[i].coord.Y-perpendListVertex.front.Y) * Sin(angle) ;
+                   tempvert.y:=perpendListVertex.front.Y - (listDeviceinRoom[i].coord.X -perpendListVertex.front.X)* Sin(angle) + (listDeviceinRoom[i].coord.Y -perpendListVertex.front.Y)* Cos(angle);
+                   tempvert.z:=0;
+                   dcoord.coord:=uzegeometry.CreateVertex(tempvert.x,tempvert.y,tempvert.z);
+
+                   //uzvtestdraw.testDrawCircle(tempvert,5,4);
+                   dcoord.pdev:=listDeviceinRoom[i].pdev;    // получить устройство
+                   dcoord.angleRoom:=anglePerpendCos;
+                   mpd.PushBack(dcoord);
+               end;
+
+         index:=1;
+
+         devcoordsort.Sort(mpd,mpd.Size);  // запуск сортировка
+
+         vert2DListDevice:=getColumnLineListDevice(mpd);
+
+         result:=getMatrixListDevice(hor2DListDevice,vert2DListDevice);
+
+         tempforinfo:='*';
+         historyoutstr('cs######'+inttostr(result.Size-1));
+         historyoutstr('ls######'+inttostr(result[0].listLineDev.Size-1));
+         for i:=0 to result.Size-1 do  begin
+           for j:=0 to result[i].listLineDev.Size-1 do
+           begin
+                tempforinfo:=tempforinfo + inttostr(result[i].listLineDev[j].num)+'*';
+           end;
+           historyoutstr('##'+tempforinfo);
+           tempforinfo:='*';
+         end;
+
+         //historyoutstr('angle######'+floattostr(angle));
+
+         //result:= hor2DListDevice;
+                    {*
           count:=0;
-          listColumnDev:=TListColumnDev.Create;
+          result:=TListColumnDev.Create;
           infoColumnDev:=TInfoColumnDev.Create;
           //if mpd.Size > 0 then begin
           for i:=1 to mpd.Size-1 do
@@ -797,7 +1013,7 @@ implementation
                   infoColumnDev.listLineDev.PushBack(infoVertexDevice);
 
                   infoColumnDev.orient:=3;
-                  listColumnDev.PushBack(infoColumnDev);
+                  result.PushBack(infoColumnDev);
                   infoColumnDev:=nil;
                   infoColumnDev:=TInfoColumnDev.Create;
              end;
@@ -809,22 +1025,23 @@ implementation
           infoColumnDev.listLineDev.PushBack(infoVertexDevice);
 
           infoColumnDev.orient:=3;
-          listColumnDev.PushBack(infoColumnDev);
+          result.PushBack(infoColumnDev);
           infoColumnDev:=nil;
           //end;
-
+                *}
          //*****///
          //** Заполнение нумерации в устройствах  времменое
+          {*
          count:=0;
-         for i:=0 to listColumnDev.Size-1 do
-           for j:=0 to listColumnDev[i].listLineDev.Size-1 do
+         for i:=0 to result.Size-1 do
+           for j:=0 to result[i].listLineDev.Size-1 do
          //    InsertDevice(listColumnDev[i].listLineDev[j].point);
          //for i:=0 to mpd.Size-1 do
            begin
              historyoutstr('0000');
                 //dcoord:=mpd[i];
                 //pdev:=dcoord.pdev;
-                infoVertexDevice:=listColumnDev[i].listLineDev[j];
+                infoVertexDevice:=result[i].listLineDev[j];
                 pdev:=infoVertexDevice.pdev;
                 pdevvarext:=pdev^.GetExtension(typeof(TVariablesExtender));
 //
@@ -860,7 +1077,7 @@ implementation
                        inc(index);
                        inc(count);
                        pdev^.FormatEntity(drawings.GetCurrentDWG^,dc);
-                       historyoutstr('56546');
+                       //historyoutstr('56546');
                   end
                      else
                      historyoutstr('In device not found numbering variable');
@@ -871,6 +1088,8 @@ implementation
          historyoutstr(sysutils.format(rscmNEntitiesProcessed,[inttostr(count)]));
          //if NumberingParams.SaveStart then
          //                                 NumberingParams.StartNumber:=index;
+
+         *}
          mpd.Destroy;
          Commandmanager.executecommandend;
 
@@ -1042,90 +1261,403 @@ end;
 //**Создания графа устройств и связей между устройствами
 //**В данной функции организуется сам граф и присваиваются базовые вещи,
 //**которые одинаковы для разных методов расскладки
-procedure getGraphASL(out graphASL:TGraphASL;listDeviceinRoom:TListVertexDevice;perpendListVertex:TListVertex);
+function getGraphASL(listColumnDev:TListColumnDev;perpendListVertex:TListVertex):TGraphASL;
 var
-  listEdge:TListEdgeGraph;
-  listVertex:TListGraphVertex;
-
   infoVertex:TGraphInfoVertex;
   infoEdge:TInfoEdgeGraph;
+  i,j,num:integer;
 
-  angleper,anglewall,xlineper,xylineper,xlinewall,xylinewall:double;
-  tempVertex,perp1,perp2:gdbvertex;
-  i,num:integer;
-  iwall:Twallinfo;
 begin
 
-   graphASL:=TGraphASL.create;            //организация графа
-   listVertex := TListGraphVertex.Create; //Список вершин
-   listEdge := TListEdgeGraph.Create;     //Список ребер
+   result:=TGraphASL.create;            //организация графа
+   //listVertex := TListGraphVertex.Create; //Список вершин
+   //listEdge := TListEdgeGraph.Create;     //Список ребер
 
    //**создаем вершины графа по вершинам устройств, так что бы номера вершин графа соответсвовали номерам в списке устройств
-   for i:=0 to listDeviceinRoom.size-1 do
-   begin
-      infoVertex.pt:=listDeviceinRoom[i].coord;
-      infoVertex.devEnt:=listDeviceinRoom[i].pdev;
-      listVertex.PushBack(infoVertex);
-   end;
+   for i:=0 to listColumnDev.size-1 do
+     for j:=listColumnDev[i].listLineDev.size-1 downto 0 do
+       if listColumnDev[i].listLineDev[j].num >= 0 then
+       begin
+          infoVertex.pt:=listColumnDev[i].listLineDev[j].coord;
+          infoVertex.devEnt:=listColumnDev[i].listLineDev[j].pdev;
+          result.listVertex.PushBack(infoVertex);
+       end;
+
+   //begin
+   //   infoVertex.pt:=listDeviceinRoom[i].coord;
+   //   infoVertex.devEnt:=listDeviceinRoom[i].pdev;
+   //   result.listVertex.PushBack(infoVertex);
+   //end;
    //**Создаем вершины и ребра перпендикуляра
    num:=0;
    for i:=0 to perpendListVertex.size-1 do
    begin
       infoVertex.pt:=perpendListVertex[i];
       infoVertex.devEnt:=nil;
-      listVertex.PushBack(infoVertex);
+      result.listVertex.PushBack(infoVertex);
       if num = 0 then
-        num:=listVertex.size-1
+        num:=result.listVertex.size-1
       else
         begin
            infoEdge.VIndex1:=num;
-           infoEdge.VIndex2:=listVertex.size-1;
-           infoEdge.VPoint1:=listVertex[infoEdge.VIndex1].pt;
-           infoEdge.VPoint2:=listVertex[infoEdge.VIndex2].pt;
+           infoEdge.VIndex2:=result.listVertex.size-1;
+           infoEdge.VPoint1:=result.listVertex[infoEdge.VIndex1].pt;
+           infoEdge.VPoint2:=result.listVertex[infoEdge.VIndex2].pt;
            infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
-           listEdge.PushBack(infoEdge);
-           num:=listVertex.size-1;
+           result.listEdge.PushBack(infoEdge);
+           num:=result.listVertex.size-1;
         end;
    end;
-   graphASL.listVertex:=listVertex;
-   graphASL.listEdge:=listEdge;
+end;
+      //*** Сортировка списка вершин, внутри списка, так что бы вершины распологались по отдаленности от начальной точки линии которую в данный момент расматриваем
+procedure listSortVertexAtStPtLine(var listNumVertex:TListNum;listVertex:TListGraphVertex;stVertLine:GDBVertex);
+var
+   //tempNumVertex:TInfoTempNumVertex;
+   IsExchange:boolean;
+   j,tempNum:integer;
+begin
+   repeat
+    IsExchange := False;
+    for j := 0 to listNumVertex.Size-2 do begin
+      if uzegeometry.Vertexlength(stVertLine,listVertex[listNumVertex[j]].pt) > uzegeometry.Vertexlength(stVertLine,listVertex[listNumVertex[j+1]].pt) then begin
+        tempNum := listNumVertex[j];
+        listNumVertex.Mutable[j]^ := listNumVertex[j+1];
+        listNumVertex.Mutable[j+1]^ := tempNum;
+        IsExchange := True;
+      end;
+    end;
+  until not IsExchange;
+
+end;
+
+//Проверка списка на дубликаты, при добавлении новой вершины, с учетом погрешности
+function dublicateVertex(listVertex:TListGraphVertex;addVertex:GDBVertex;inaccuracy:GDBDouble):Boolean;
+var
+    i:integer;
+begin
+    result:=false;
+    for i:=0 to listVertex.Size-1 do
+        if ((addVertex.x >= listVertex[i].pt.x-inaccuracy) and (addVertex.x <= listVertex[i].pt.x+inaccuracy) and (addVertex.y >= listVertex[i].pt.y-inaccuracy) and (addVertex.y <= listVertex[i].pt.y+inaccuracy)) then
+           result:=true;
+end;
+
+//**Добавление вершин контура прокладки кабеля по периметру помещения
+procedure graphVertexContourRoomEmbedSL(var graphASL:TGraphASL;listWall:TListWallOrient;accuracy:double);
+var
+ i:integer;
+ infoVertex:TGraphInfoVertex;
+begin
+    for i:=0 to listWall.Size-1 do
+    begin
+       if dublicateVertex(graphASL.listVertex,listWall[i].p1,accuracy) = false then
+       begin
+         infoVertex.devEnt:=nil;
+         infoVertex.pt:=listWall[i].p1;
+         graphASL.listVertex.PushBack(infoVertex);
+       end;
+       if dublicateVertex(graphASL.listVertex,listWall[i].p2,accuracy) = false then
+       begin
+         infoVertex.devEnt:=nil;
+         infoVertex.pt:=listWall[i].p2;
+         graphASL.listVertex.PushBack(infoVertex);
+       end;
+    end;
+end;
+
+//** добавление в граф ребер контура прокладки кабеля внутри помещения, с учетом вершин лежайших на контуре
+procedure graphEdgeContourRoomEmbedSL(var graphASL:TGraphASL;listWall:TListWallOrient;accuracy:double);
+var
+ i,j,k:integer;
+ areaLine, areaVertex:TBoundingBox;
+ infoEdge:TInfoEdgeGraph;
+ listNumVertex:TListNum;
+ inAddEdge:boolean;
+
+begin
+
+    for i:=0 to listWall.Size-1 do
+    begin
+       listNumVertex:=TListNum.Create;                                    //создаем временный список номеров вершин
+       areaLine:=uzvsgeom.getAreaLine(listWall[i].p1,listWall[i].p2,accuracy);       //получаем область линии с учетом погрешности
+       inAddEdge:=false;
+       for j:=0 to graphASL.listVertex.Size-1 do                                           //перебираем все вершины и ищем те которые попали в область линии грубый вариант (но быстрый) 1-я отсев
+       begin
+         areaVertex:=uzvsgeom.getAreaVertex(graphASL.listVertex[j].pt,0);                  // получаем область поиска около вершины
+         if boundingintersect(areaLine,areaVertex) then                                 // лежит ли вершина внутри прямоугольника линии
+         begin
+               //определяем лежит ли вершина на линии
+               if uzvsgeom.isPointInAreaLine(listWall[i].p1,listWall[i].p2,graphASL.listVertex[j].pt,accuracy) then
+               begin
+                   listNumVertex.PushBack(j);
+                   inAddEdge:=true;
+               end;
+         end;
+       end;
+
+       listSortVertexAtStPtLine(listNumVertex,graphASL.listVertex,listWall[i].p1);
+       if (inAddEdge) and (listNumVertex.Size > 1) then
+       begin
+         for k:=1 to listNumVertex.Size-1 do
+         begin
+             infoEdge.VIndex1:=listNumVertex[k-1];
+             infoEdge.VPoint1:=graphASL.listVertex[listNumVertex[k-1]].pt;
+             infoEdge.VPoint1.z:=0;
+             infoEdge.VIndex2:=listNumVertex[k];
+             infoEdge.VPoint2:=graphASL.listVertex[listNumVertex[k]].pt;
+             infoEdge.VPoint2.z:=0;
+             infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
+             graphASL.listEdge.PushBack(infoEdge);
+         end;
+       end;
+       listNumVertex.Clear;
+    end;
+    listNumVertex.destroy;
+end;
+
+procedure graphVerticalNearASL(var graphASL:TGraphASL;listColumnDev:TListColumnDev;listWall:TListWallOrient;perpendListVertex:TListVertex);
+var
+  infoVertex:TGraphInfoVertex;
+  infoEdge:TInfoEdgeGraph;
+  listPerp,listPerp1:TListVertex;
+  tempVertex:GDBVertex;
+  i,j,k,l,num:integer;
+  interceptWall,betweenWall:boolean;
+
+begin
+
+   //**прокладываем кабели между устройствами и стенами
+  for i:=1 to listColumnDev.size-1 do
+   begin
+     for j:=0 to listColumnDev[i].listLineDev.Size-1 do
+       begin
+         //есть ли в данной позиции устройство
+         if listColumnDev[i].listLineDev[j].num >= 0 then
+         begin
+           //historyoutstr('-num+'+ inttostr(listColumnDev[i].listLineDev[j].num)+'-');
+           //uzvtestdraw.testTempDrawText(listColumnDev[i].listLineDev[j].coord,inttostr(listColumnDev[i].listLineDev[j].num));
+           //если предыдущая ячейка в столбце так же устройство
+           if listColumnDev[i-1].listLineDev[j].num >= 0 then
+           begin
+
+               infoEdge.VIndex1:=listColumnDev[i-1].listLineDev[j].num;
+               infoEdge.VIndex2:=listColumnDev[i].listLineDev[j].num;
+               //historyoutstr('-v1+'+ inttostr(infoEdge.VIndex1)+'-');
+               //historyoutstr('-v2+'+ inttostr(infoEdge.VIndex2)+'-');
+               infoEdge.VPoint1:=graphASL.listVertex[infoEdge.VIndex1].pt;
+               infoEdge.VPoint2:=graphASL.listVertex[infoEdge.VIndex2].pt;
+               infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
+               graphASL.listEdge.PushBack(infoEdge);
+           end
+           else
+           //если предыдущая ячейка в столбце -1 ничего нет, стена или датчик но далее
+           begin
+              //если ниже по столбцу после -1 идет снова датчик проверяем есть ли между ними стена
+              //если стены нет то соединяем два датчика между собой минуя -1
+              betweenWall:=true;
+              for k:=i-1 downto 0 do begin
+                 if listColumnDev[k].listLineDev[j].num >= 0 then
+                 begin
+                   num:=0;
+                   for l:=0 to listWall.size-1 do begin
+                       interceptWall:=false;
+                       interceptWall:=uzegeometry.intercept3d(listColumnDev[i].listLineDev[j].coord,listColumnDev[k].listLineDev[j].coord,listWall[l].p1,listWall[l].p2).isintercept;
+                       if interceptWall then
+                           inc(num);
+                   end;
+                   if num = 0 then
+                   begin
+                     infoEdge.VIndex1:=listColumnDev[k].listLineDev[j].num;
+                     infoEdge.VIndex2:=listColumnDev[i].listLineDev[j].num;
+                     historyoutstr('-v1+'+ inttostr(infoEdge.VIndex1)+'-');
+                     historyoutstr('-v2+'+ inttostr(infoEdge.VIndex2)+'-');
+                     infoEdge.VPoint1:=graphASL.listVertex[infoEdge.VIndex1].pt;
+                     infoEdge.VPoint2:=graphASL.listVertex[infoEdge.VIndex2].pt;
+                     infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
+                     graphASL.listEdge.PushBack(infoEdge);
+                     betweenWall:=false;
+                   end;
+                 end;
+              end;
+              // если между датчиками стена
+              if betweenWall then begin
+               listPerp1 := TListVertex.Create;
+               listPerp := TListVertex.Create;
+
+               //Создаем 1-й список всех возможных перпендикуляров к стенам
+               for k:=0 to listWall.size-1 do begin
+                  if (listWall[k].paralel = false) and (uzvsgeom.perpendToLine(listWall[k].p1,listWall[k].p2,listColumnDev[i].listLineDev[j].coord,tempVertex)) then
+                    listPerp1.PushBack(tempVertex);
+               end;
+
+               //создание другого списка в котором учитывается только те перпендикуляры между которыми нет других стен
+               for k:=0 to listPerp1.size-1 do
+               begin
+                 num:=0;
+                  for l:=0 to listWall.size-1 do begin
+                       interceptWall:=false;
+                       interceptWall:=uzegeometry.intercept3d(listColumnDev[i].listLineDev[j].coord,listPerp1[k],listWall[l].p1,listWall[l].p2).isintercept;
+                       if interceptWall then
+                           inc(num);
+                   end;
+                  if num = 1  then
+                     listPerp.PushBack(listPerp1[k]);
+               end;
+               listPerp1.destroy; //уничтожаем список
+
+               //получем перпендикуляр ближайший к главному перпендикуляру
+               tempVertex:=listPerp[0];
+               for k:=1 to listPerp.size-1 do
+                 if uzegeometry.Vertexlength(tempVertex,perpendListVertex.front) > uzegeometry.Vertexlength(listPerp[k],perpendListVertex.front) then
+                   tempVertex:=listPerp[k];
+               listPerp.destroy;   //очищаем ненужные вершины перпендикуляров
+
+                  //добавляем вершину и ребро
+                 infoVertex.pt:=tempVertex;
+                 infoVertex.devEnt:=nil;
+                 graphASL.listVertex.PushBack(infoVertex);
+
+                 infoEdge.VIndex1:=graphASL.listVertex.size-1;
+                 infoEdge.VIndex2:=listColumnDev[i].listLineDev[j].num;
+                 infoEdge.VPoint1:=graphASL.listVertex[infoEdge.VIndex1].pt;
+                 infoEdge.VPoint2:=graphASL.listVertex[infoEdge.VIndex2].pt;
+                 infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
+                 graphASL.listEdge.PushBack(infoEdge);
+                     //uzvtestdraw.testDrawCircle(tempVertex,55,4);
+
+               end;
+           end;
+         end;
+       end;
+   end;
+end;
+
+//**проверка является ли комната прямоугольной
+function isOriMatrixDev(listColumnDev:TListColumnDev;perpendListVertex:TListVertex):boolean;
+var
+  i,j,k,count:integer;
+  length1,length2:double;
+begin
+  result:=true;
+  k:=0;
+  count:=0;
+  for i:=0 to listColumnDev.size-1 do
+   begin
+     k:=0;
+     for j:=0 to listColumnDev[i].listLineDev.Size-1 do
+       begin
+         //uzvtestdraw.testTempDrawText();
+         if listColumnDev[i].listLineDev[j].pdev = nil then
+            k:=0
+           else begin
+            inc(count);
+            uzvtestdraw.testTempDrawText(listColumnDev[i].listLineDev[j].coord,inttostr(count));
+            inc(k);
+           end;
+         if k >= 2 then begin
+           length1:=uzegeometry.Vertexlength(perpendListVertex.Front,listColumnDev[i].listLineDev[j-1].coord);
+           length2:=uzegeometry.Vertexlength(perpendListVertex.Front,listColumnDev[i].listLineDev[j].coord);
+           if length1 > length2 then
+             result:=false;
+         end;
+       end;
+   end;
 end;
 
 function Test111sl(operands:TCommandOperands):TCommandResult;
+const
+  accuracy=0.001;
+  indent=5;
 var
  contourRoom:PGDBObjPolyLine;
+ contour2DRoom:pgdbobjlwpolyline;
+
  listDeviceinRoom:TListVertexDevice;
+
  listWallOrient:TListWallOrient;
+
  contourRoomEmbedSL,perpendListVertex:TListVertex;
  stPoint:gdbvertex;
+
+ v2d1,v2d2:GDBvertex2D;
+ hor2DListDevice,vert2DListDevice:TListColumnDev; //список устройст
+
+ oriMatrixDev:boolean;
+
  anglePerpendCos:double;
  graphASL:TGraphASL;
+ listColumnDev:TListColumnDev;
  i:integer;
+
+  UndoMarcerIsPlazed:boolean;
 begin
   //if commandmanager.get3dpoint('Specify insert point:',stPoint) then
+   UndoMarcerIsPlazed:=false;
+   zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'AutoGenerated SuperLine');
+
    if uzvagsl.getContourRoom(contourRoom) then                  // получить контур помещения
-      if uzvagsl.isRectangelRoom(contourRoom) then        //это прямоугольная комната?
+   begin
+      contour2DRoom:=getContour2DRoom(contourRoom)  ;
+      //for i:=1 to contour2DRoom^.Vertex2D_in_OCS_Array.GetRealCount-1 do begin
+      //  v2d1:=contour2DRoom^.Vertex2D_in_OCS_Array.getdata(i-1);
+      //  v2d2:=contour2DRoom^.Vertex2D_in_OCS_Array.getdata(i);
+      //  uzvtestdraw.testTempDraw2dLineColor(v2d1,v2d2,4);
+      //end;
+     // if uzvagsl.isRectangelRoom(contourRoom) then        //это прямоугольная комната?
          //historyoutstr('проверки пройдены');
-          if mainElementAutoEmbedSL(contourRoom,contourRoomEmbedSL,perpendListVertex,anglePerpendCos) then  begin
+          if mainElementAutoEmbedSL(contour2DRoom,contourRoomEmbedSL,perpendListVertex,anglePerpendCos,indent) then  begin
            listDeviceinRoom:=uzvagsl.getListDeviceinRoom(contourRoom);  //получен список извещателей внутри помещения
+
            historyoutstr('Количество выделяных извещателей = ' + inttostr(listDeviceinRoom.Size));
            listWallOrient:=getWallInfoOrient(contourRoomEmbedSL,perpendListVertex);
            //for i:=0 to listWallOrient.size-1 do
            // if listWallOrient[i].paralel then
            //   uzvtestdraw.testTempDrawLine(listWallOrient[i].p1,listWallOrient[i].p2);
-           get2DListDevice(listDeviceinRoom,contourRoom,perpendListVertex,anglePerpendCos); //получаем двухмерный список устройств правильной сортировки
+
+           //получаем двухмерный список устройств правильной сортировки
+           listColumnDev:=get2DListDevice(listDeviceinRoom,contourRoom,perpendListVertex,anglePerpendCos,hor2DListDevice, vert2DListDevice);
+
+           //Ориентирована ли полученная матрица устройств, т.е. она так же разложена по отношению к перпендикуляру
+           //навсякий случай оставил вдруг понадобится):))
+           //oriMatrixDev:=isOriMatrixDev(listColumnDev,perpendListVertex);
+           // if oriMatrixDev then
+           //   historyoutstr('Перпендикуля правильно');
+           // if not oriMatrixDev then
+           //   historyoutstr('Перпендикуля НЕ правильно');
+
            //** начало графовой работы
-           //** метод когда кабели от стартовой точки перпендикуляра вверх
-           //getGraphASL(graphASL,listDeviceinRoom,perpendListVertex);
-           //for i:=0 to graphASL.listEdge.size-1 do
-           //   uzvtestdraw.testTempDrawLine(graphASL.listEdge[i].VPoint1,graphASL.listEdge[i].VPoint2);
+           //** здесь для всех одинаково
+           graphASL:=getGraphASL(listColumnDev,perpendListVertex);
+
+           //** метод когда кабели от стартовой точки перпендикулярно вверх
+           graphVerticalNearASL(graphASL,listColumnDev,listWallOrient,perpendListVertex);
+
+           //**Добавление вершин контура прокладки кабеля по периметру помещения
+           graphVertexContourRoomEmbedSL(graphASL,listWallOrient,accuracy);
+
+           //** добавление в граф контура прокладки кабеля внутри помещения, с учетом вершин лежайших на контуре
+           graphEdgeContourRoomEmbedSL(graphASL,listWallOrient,accuracy);
+
+
+           historyoutstr('Количество вершин графа= ' + inttostr(graphASL.listVertex.size));
+           for i:=0 to graphASL.listEdge.size-1 do
+              uzvtestdraw.testTempDrawLineColor(graphASL.listEdge[i].VPoint1,graphASL.listEdge[i].VPoint2,5);
+           for i:=0 to graphASL.listVertex.size-1 do
+             begin
+              uzvtestdraw.testDrawCircle(graphASL.listVertex[i].pt,5,5);
+              uzvtestdraw.testTempDrawText(graphASL.listVertex[i].pt,'graph='+ inttostr(i));
+             end;
 
          end;
+   end;
          //uzvagsl.autoNumberDevice(uzvagslComParams);
+   zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
+   zcRedrawCurrentDrawing;
+
    Commandmanager.executecommandend;
 
 end;
 initialization
   CreateCommandFastObjectPlugin(@Test111sl,'t111',CADWG,0);
 end.
+
 

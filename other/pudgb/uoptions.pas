@@ -57,6 +57,13 @@ begin
  {$ifdef WIN32}adddef('WIN32');{$endif}
  {$ifdef LCLWIN32}adddef('LCLWIN32');{$endif}
  {$ifdef FPC}adddef('FPC');{$endif}
+ {$ifdef CPU64}adddef('CPU64');{$endif}
+ {$ifdef CPU32}adddef('CPU32');{$endif}
+
+ {$ifdef LCLWIN32}adddef('LCLWIN32');{$endif}
+ {$ifdef LCLQT}adddef('LCLQT');{$endif}
+ {$ifdef LCLQT5}adddef('LCLQT5');{$endif}
+ {$ifdef LCLGTK2}adddef('LCLGTK2');{$endif}
 end;
 
 function DefaultOptions:TOptions;

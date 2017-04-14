@@ -109,6 +109,7 @@ var
  IDEMacros: TIDEMacros;
  tmm:TMacroMethods;
  Swith:string;
+ cd:ansistring;
 begin
  IDEMacros:=TLazIDEMacros.Create;
  GlobalMacroList:=TTransferMacroList.Create;
@@ -159,6 +160,8 @@ begin
       if not FileExists(MainFilename) then MainFilename:=basepath+MainFilename;
       Options.Paths._File:=MainFilename;
  end;
+ cd:=GetCurrentDir;
+ SetCurrentDir(ExtractFileDir(filename));
  if IncludeFiles<>'' then
  begin
       s:=IncludeFiles;
@@ -177,6 +180,10 @@ begin
  end
  else
   Options.ParserOptions._CompilerOptions:=Swith+' -Fi'+basepath;
+ if Options.ParserOptions._CompilerOptions='' then
+                                                  Options.ParserOptions._CompilerOptions:=GetCompilerDefs
+                                              else
+                                                  Options.ParserOptions._CompilerOptions:=Options.ParserOptions._CompilerOptions+' '+GetCompilerDefs;
  if OtherUnitFiles<>'' then
  begin
       s:=OtherUnitFiles;
@@ -193,6 +200,7 @@ begin
  end
  else
   Options.Paths._Paths:=basepath;
+ SetCurrentDir(cd);
 end;
 
 end.

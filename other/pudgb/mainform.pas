@@ -167,7 +167,11 @@ begin
    WriteGraph(Options,ScanResult,DummyWriteToLog);//пишем то что унас есть в результате
 end;
 procedure TForm1._Scan(Sender: TObject);
+var
+  cd:ansistring;
 begin
+   cd:=GetCurrentDir;
+   SetCurrentDir(ExtractFileDir(Options.Paths._File));
    Memo1.Clear;
    if assigned(ScanResult)then FreeAndNil(ScanResult);           //чистим прошлый результат
    ScanResult:=TScanResult.Create;                               //создаем новый результат
@@ -175,6 +179,7 @@ begin
     ScanModule(Options.Paths._File,Options,ScanResult,DummyWriteToLog)//пытаемся читать файл исходников
    else
     ScanDirectory(Options.Paths._File,Options,ScanResult,DummyWriteToLog);//пытаемся читать директорию с исходниками
+   SetCurrentDir(cd);
    {$IFDEF CHECKLOOPS}CheckGraph(Options,ScanResult,DummyWriteToLog);{$ENDIF}//проверяем граф
 end;
 procedure TForm1._OpenWebGraphviz(Sender: TObject);

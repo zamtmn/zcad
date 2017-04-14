@@ -116,6 +116,8 @@ uses
   Pointerv,
   Graphs,
 
+  uzvsgeom,
+
   uzvtestdraw; // тестовые рисунки
 
 
@@ -173,10 +175,10 @@ type
       end;
 
       //Применяется для функции возврата прямоугольника построенного по линии
-      PTRectangleLine=^TRectangleLine;
-      TRectangleLine=record
-                         Pt1,Pt2,Pt3,Pt4:GDBVertex;
-      end;
+      //PTRectangleLine=^TRectangleLine;
+      //TRectangleLine=record
+      //                   Pt1,Pt2,Pt3,Pt4:GDBVertex;
+      //end;
 
       //** Создания списка номеров вершин для построение ребер (временный список  )
       PTInfoTempNumVertex=^TInfoTempNumVertex;
@@ -228,7 +230,8 @@ type
 
 
       function graphBulderFunc(Epsilon:double;nameCable:string):TGraphBuilder;
-      function testTempDrawLine(p1:GDBVertex;p2:GDBVertex):TCommandResult;
+      function visualGraphEdge(p1:GDBVertex;p2:GDBVertex;color:integer):TCommandResult;
+
       function testTempDrawCircle(p1:GDBVertex;rr:GDBDouble):TCommandResult;
       function testTempDrawPolyLine(listVertex:GListVertexPoint;color:Integer):TCommandResult;
       function testTempDrawText(p1:GDBVertex;mText:GDBString):TCommandResult;
@@ -391,33 +394,19 @@ begin
     result:=cmd_ok;
 end;
 
-//function testTempDrawCicle(prompt1,prompt2:GDBString;var p1,p2:GDBVertex):TCommandResult;
-function testTempDrawLine(p1:GDBVertex;p2:GDBVertex):TCommandResult;
+//Визуализация линий графа для наглядности того что получилось построить в графе
+function visualGraphEdge(p1:GDBVertex;p2:GDBVertex;color:integer):TCommandResult;
 var
     pline:PGDBObjLine;
-   // pe:T3PointCircleModePentity;
-   // p1,p2:gdbvertex;
 begin
-    begin
-      //старый способ
+    pline := AllocEnt(GDBLineID);                                             //выделяем память
+    pline^.init(nil,nil,0,p1,p2);                                             //инициализируем и сразу создаем
 
-      pline := AllocEnt(GDBLineID);                                             //выделяем память
-      pline^.init(nil,nil,0,p1,p2);                                             //инициализируем и сразу создаем
-
-
-
-      //конец старого способа
-
-
-      //новый способ
-      //pline:=pointer(ENTF_CreateLine(nil,nil,[p1.x,p1.y,p1.z,p2.x,p2.y,p2.z])); //создаем примитив с зпданой геометрией, не указывая владельца и список во владельце
-      //конец нового способа
-
-      zcSetEntPropFromCurrentDrawingProp(pline);//присваиваем текущие слой, вес и т.п
-      pline^.vp.LineWeight:=LnWt200;
-      pline^.vp.Color:=6;
-      zcAddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
-    end;
+    zcSetEntPropFromCurrentDrawingProp(pline);//присваиваем текущие слой, вес и т.п
+    pline^.vp.LineWeight:=LnWt200;
+    pline^.vp.Color:=color;
+    pline^.vp.Layer:=uzvtestdraw.getTestLayer();
+    zcAddEntToCurrentDrawingWithUndo(pline);                                    //добавляем в чертеж
     result:=cmd_ok;
 end;
 //рисуем прямоугольник с цветом

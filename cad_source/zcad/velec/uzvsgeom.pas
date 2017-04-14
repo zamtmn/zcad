@@ -15,6 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
+
 {$mode objfpc}
 
 unit uzvsgeom;
@@ -102,46 +103,228 @@ uses
    uzcenitiesvariablesextender,
    UUnitManager,
    uzbpaths,
-   uzctranslations,
-
-  uzvcom;
-
-
-//type
-//
-//      //**создаем список в списке вершин координат
-//      TListLineDev=specialize TVector<GDBVertex>;
-//
-//      TInfoColumnDev=class
-//                         listLineDev:TListLineDev;
-//                         public
-//                         constructor Create;
-//                         destructor Destroy;virtual;
-//      end;
-//      TListColumnDev=specialize TVector<TInfoColumnDev>;
-//
-//      //** Создания списка ребер графа
-//      PTInfoBuildLine=^TInfoBuildLine;
-//      TInfoBuildLine=record
-//                         p1:GDBVertex;
-//                         p2:GDBVertex;
-//                         p3:GDBVertex;
-//                         p4:GDBVertex;
-//      end;
-//      TVector = record
-//        X,Y:extended;
-//      end;
+   uzctranslations;
+ 
+type
+//**Применяется для функции возврата прямоугольника построенного по линии
+PTRectangleLine=^TRectangleLine;
+TRectangleLine=record
+                   Pt1,Pt2,Pt3,Pt4:GDBVertex;
+end;
 
 //**Перпендикуляр из точки на отрезок. Поиск точки перпендикуляра на линию. Координата Z-обнуляется
 //**p1,p2 - точки отрезка,рр - точка от который прокладывается пенпендикуляр
 //**pointToLine - точка на отрезки перпендикуляра, сама функция возвращает лежит перпендикуляр на отрезке или нет
 function perpendToLine(p1,p2:GDBVertex;pp:GDBVertex;out pointToLine:GDBVertex):boolean;
+
 //**Смещение по направлению линии
 //**pline11,pline21 - одна и таже центральная точка, pline12 точка до центральной точки, pline22 после, если по часовой стрелки рассматривать фигуру
 //**relatLine1,relatLine2 - смещение по одной линии и смещение по ругой линии
 function getPointRelativeTwoLines(pline11,pline12,pline21,pline22:GDBVertex;relatLine1,relatLine2:double):GDBVertex;
 
+//**Удлинение линии по ее направлению, от первой ко второй точки **//
+function extendedLine(point1:GDBVertex;point2:GDBVertex;lengthLine:double):GDBVertex;
+
+//** Получение области поиска около вершины, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка
+function getAreaVertex(vertexPoint:GDBVertex;accuracy:double):TBoundingBox;
+
+//** Получение области поиска по всей линии, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка
+function getAreaLine(point1:GDBVertex;point2:GDBVertex;accuracy:double):TBoundingBox;
+
+//**Новый метод путем поворота и линии и пространства, более точный чем герон, но математических операций гораздо больше
+//**Работает только с 2D пространством
+//** Определение попадает ли точка внутрь прямоугольника полученого линиией с учетом погрешности
+function isPointInAreaLine(linePt1,linePt2,vertexPt:GDBVertex;accuracy:double):boolean;
+
 implementation
+
+
+  //** Получение области поиска около вершины, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка
+  function getAreaVertex(vertexPoint:GDBVertex;accuracy:double):TBoundingBox;
+  begin
+      result.LBN.x:=vertexPoint.x - accuracy;
+      result.LBN.y:=vertexPoint.y - accuracy;
+      result.LBN.z:=0;
+
+      result.RTF.x:=vertexPoint.x + accuracy;
+      result.RTF.y:=vertexPoint.y + accuracy;
+      result.RTF.z:=0;
+
+  end;
+
+  //** Получение области поиска по всей линии, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка
+  function getAreaLine(point1:GDBVertex;point2:GDBVertex;accuracy:double):TBoundingBox;
+  begin
+       if point1.x <= point2.x  then
+         begin
+           result.LBN.x:=point1.x - accuracy;
+           result.RTF.x:=point2.x + accuracy;
+         end
+       else
+         begin
+             result.LBN.x:=point2.x - accuracy;
+             result.RTF.x:=point1.x + accuracy;
+         end;
+       if point1.y <= point2.y then
+         begin
+           result.LBN.y:=point1.y - accuracy;
+           result.RTF.y:=point2.y + accuracy;
+         end
+       else
+         begin
+           result.LBN.y:=point2.y - accuracy;
+           result.RTF.y:=point1.y + accuracy;
+         end;
+
+      result.LBN.z:=0;
+      result.RTF.z:=0;
+  end;
+  
+//**преобразование линии в прямоугольник (4 точки) с учетом ее направления и погрешности попадания. Т.е. если погрешность равна нулю то получится прямоугольник в виде линии :) **//
+function convertLineInRectangleWithAccuracy(point1:GDBVertex;point2:GDBVertex;accuracy:double):TRectangleLine;
+var
+   xline,yline,xyline,xylinenew,xlinenew,ylinenew,xdiffline,ydiffline:double;
+   pt1new,pt2new,pt3new,pt4new:GDBVertex;
+
+begin
+     xline:=abs(point2.x - point1.x);
+     yline:=abs(point2.y - point1.y);
+     xyline:=sqrt(sqr(xline) + sqr(yline));
+     xylinenew:=xyline + accuracy;
+     xlinenew:=(xline*xylinenew)/xyline;
+     ylinenew:=(yline*xylinenew)/xyline;
+     xdiffline:= xlinenew - xline;
+     ydiffline:= ylinenew - yline;
+
+     if point1.x <= point2.x then
+            begin
+              pt1new.x := point1.x - xdiffline + ydiffline;
+              pt2new.x := point1.x - xdiffline - ydiffline;
+              pt3new.x := point2.x + xdiffline - ydiffline;
+              pt4new.x := point2.x + xdiffline + ydiffline;
+            end
+     else
+            begin
+               pt1new.x := point1.x + xdiffline - ydiffline;
+               pt2new.x := point1.x + xdiffline + ydiffline;
+               pt3new.x := point2.x - xdiffline + ydiffline;
+               pt4new.x := point2.x - xdiffline - ydiffline;
+            end;
+     if point1.y <= point2.y then
+            begin
+               pt1new.y := point1.y - ydiffline - xdiffline;
+               pt2new.y := point1.y - ydiffline + xdiffline;
+               pt3new.y := point2.y + ydiffline + xdiffline;
+               pt4new.y := point2.y + ydiffline - xdiffline;
+            end
+     else
+            begin
+               pt1new.y := point1.y + ydiffline + xdiffline;
+               pt2new.y := point1.y + ydiffline - xdiffline;
+               pt3new.y := point2.y - ydiffline - xdiffline;
+               pt4new.y := point2.y - ydiffline + xdiffline;
+            end;
+
+     // не стал вводит 3-ю ось, может позже.
+     pt1new.z:=0;
+     pt2new.z:=0;
+     pt3new.z:=0;
+     pt4new.z:=0;
+     result.Pt1:=pt1new;
+     result.Pt2:=pt2new;
+     result.Pt3:=pt3new;
+     result.Pt4:=pt4new;
+end;
+
+  //**Новый метод путем поворота и линии и пространства, более точный чем герон, но математических операций гораздо больше
+  //**Работает только с 2D пространством
+  //** Определение попадает ли точка внутрь прямоугольника полученого линиией с учетом погрешности
+  function isPointInAreaLine(linePt1,linePt2,vertexPt:GDBVertex;accuracy:double):boolean;
+  var
+     //areaLine:TBoundingBox;
+     //areaRect,areaTriangle,sumAreaTriangle:double; //площадь прямоугольника
+     tempvert,tempVertex,newEdPtLine:GDBVertex;
+     xline,yline,xyline,angle,anglePerpendCos:double;
+     vertexRectangleLine:TRectangleLine;
+  begin
+
+      result:=false;
+       xyline:=uzegeometry.Vertexlength(linePt1,linePt2) ;
+       tempVertex.x:=linePt2.x;
+       tempVertex.y:=linePt1.y;
+       tempVertex.z:=0;
+       xline:=uzegeometry.Vertexlength(linePt1,tempVertex);
+
+       anglePerpendCos:=xline/xyline;
+
+       //** подбор правильного угла поворота относительно перпендикуляра
+           angle:=arccos(anglePerpendCos)+1.5707963267949;
+
+           if (linePt1.x <= linePt2.x) and (linePt1.y >= linePt2.y) then
+              angle:=-arccos(anglePerpendCos)-1.5707963267949;
+           if (linePt1.x >= linePt2.x) and (linePt1.y <= linePt2.y) then
+              angle:=-arccos(anglePerpendCos)-3*1.5707963267949;
+           if (linePt1.x <= linePt2.x) and (linePt1.y <= linePt2.y) then
+              angle:=arccos(anglePerpendCos)+3*1.5707963267949;
+
+           newEdPtLine.x:=linePt1.X+ (linePt2.X-linePt1.X) * Cos(angle) + (linePt2.Y-linePt1.Y) * Sin(angle) ;
+           newEdPtLine.y:=linePt1.Y-(linePt2.X -linePt1.X)* Sin(angle) + (linePt2.Y -linePt1.Y)* Cos(angle);
+           newEdPtLine.z:=0;
+
+           tempvert.x:=linePt1.X+ (vertexPt.X-linePt1.X) * Cos(angle) + (vertexPt.Y-linePt1.Y) * Sin(angle) ;
+           tempvert.y:=linePt1.Y-(vertexPt.X -linePt1.X)* Sin(angle) + (vertexPt.Y -linePt1.Y)* Cos(angle);
+           tempvert.z:=0;
+
+
+           if linePt1.y >= newEdPtLine.y then
+               vertexRectangleLine:=convertLineInRectangleWithAccuracy(linePt1,newEdPtLine,accuracy)
+           else
+               vertexRectangleLine:=convertLineInRectangleWithAccuracy(newEdPtLine,linePt1,accuracy);
+
+           if vertexRectangleLine.pt1.x >= vertexRectangleLine.pt2.x then
+             begin
+                tempVertex:=vertexRectangleLine.pt2;
+                vertexRectangleLine.pt2:=vertexRectangleLine.pt1;
+                vertexRectangleLine.pt1:=tempVertex;
+
+                tempVertex:=vertexRectangleLine.pt3;
+                vertexRectangleLine.pt3:=vertexRectangleLine.pt4;
+                vertexRectangleLine.pt4:=tempVertex;
+             end;
+
+           if (vertexRectangleLine.Pt1.x <= tempvert.x) and (vertexRectangleLine.Pt1.y >= tempvert.y) then
+             if (vertexRectangleLine.Pt2.x >= tempvert.x) and (vertexRectangleLine.Pt2.y >= tempvert.y) then
+               if (vertexRectangleLine.Pt3.x >= tempvert.x) and (vertexRectangleLine.Pt3.y <= tempvert.y) then
+                 if (vertexRectangleLine.Pt4.x <= tempvert.x) and (vertexRectangleLine.Pt4.y <= tempvert.y) then
+                      result:=true;
+
+  end;
+
+
+//*** Сортировка списка вершин, внутри списка, так что бы вершины распологались по отдаленности от начальной точки линии которую в данный момент расматриваем
+//procedure listSortVertexAtStPtLine(var listNumVertex:TListTempNumVertex;listDevice:TListDeviceLine;stVertLine:GDBVertex);
+//var
+//   tempNumVertex:TInfoTempNumVertex;
+//   IsExchange:boolean;
+//   j:integer;
+//begin
+//   repeat
+//    IsExchange := False;
+//    for j := 0 to listNumVertex.Size-2 do begin
+//      if uzegeometry.Vertexlength(stVertLine,listDevice[listNumVertex[j].num].centerPoint) > uzegeometry.Vertexlength(stVertLine,listDevice[listNumVertex[j+1].num].centerPoint) then begin
+//        tempNumVertex := listNumVertex[j];
+//        listNumVertex.Mutable[j]^ := listNumVertex[j+1];
+//        listNumVertex.Mutable[j+1]^ := tempNumVertex;
+//        IsExchange := True;
+//      end;
+//    end;
+//  until not IsExchange;
+//
+//end;
+
+
+
+
 
   //**Перпендикуляр из точки на отрезок. Поиск точки перпендикуляра на линию. Координата Z-обнуляется
   //**p1,p2 - точки отрезка,рр - точка от который прокладывается пенпендикуляр
@@ -251,7 +434,7 @@ begin
 
      //result:=offsetOfFirstPointInSecondPointToLine(pt1new,pt2new,xlinenew2,ylinenew2);
      result:=extendedLine(pline11,centerPt,centerline);
-     //result.x:=
+
 end;
 //function TestModul_com(operands:TCommandOperands):TCommandResult;
 //var

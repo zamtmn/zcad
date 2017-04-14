@@ -41,8 +41,8 @@ Tuzvslagcab_com=object(CommandRTEdObject)//определяем тип - объ�
              procedure visualInspectionGroupHeadGraph(pdata:GDBPlatformint); virtual;//построение графа и его визуализация
              procedure cablingGroupHeadGraph(pdata:GDBPlatformint); virtual;//прокладка кабелей по трассе полученной в результате поисков пути и т.д.
 
-             procedure DoSomething(pdata:GDBPlatformint); virtual;//реализация какогото действия
-             procedure DoSomething2(pdata:GDBPlatformint); virtual;//реализация какогото другого действия
+             //procedure DoSomething(pdata:GDBPlatformint); virtual;//реализация какогото действия
+             //procedure DoSomething2(pdata:GDBPlatformint); virtual;//реализация какогото другого действия
             end;
 PTuzvslagcabComParams=^TuzvslagcabComParams;//указатель на тип данных параметров команды. зкад работает с ними через указатель
 TuzvslagcabComParams=packed record       //определяем параметры команды которые будут видны в инспекторе во время выполнения команды
@@ -50,7 +50,7 @@ TuzvslagcabComParams=packed record       //определяем параметр
                                       //не через экспорт исходников и парсинг файла с определениями типов
   nameSL:gdbstring;
   accuracy:gdbdouble;
-  option2:gdbboolean;
+  metricDev:gdbboolean;
 
 end;
 const
@@ -72,8 +72,8 @@ begin
   commandmanager.DMAddMethod('Создать граф и визуал. его','Создает предварительный вид графа для его визуального анализа',visualInspectionGraph);
   commandmanager.DMAddMethod('Создать граф и визуал. шлейфы подключения','Создать граф и визуал. шлейфы подключения',visualInspectionGroupHeadGraph);
   commandmanager.DMAddMethod('Прокладка кабелей по группам','Прокладка кабелей по группам',cablingGroupHeadGraph);
-  commandmanager.DMAddMethod('DoSomething1','DoSomething1 hint',DoSomething);
-  commandmanager.DMAddMethod('DoSomething2','DoSomething2 hint)',DoSomething2);
+  //commandmanager.DMAddMethod('DoSomething1','DoSomething1 hint',DoSomething);
+  //commandmanager.DMAddMethod('DoSomething2','DoSomething2 hint)',DoSomething2);
   //показываем командное меню
   commandmanager.DMShow;
   //не забываем вызвать метод родителя, там еще много что должно выполниться
@@ -102,7 +102,7 @@ begin
   //
   for i:=0 to graphCable.listEdge.Size-1 do
     begin
-       uzvcom.testTempDrawLine(graphCable.listEdge[i].VPoint1,graphCable.listEdge[i].VPoint2);
+       uzvcom.visualGraphEdge(graphCable.listEdge[i].VPoint1,graphCable.listEdge[i].VPoint2,2);
     end;
   zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
   zcRedrawCurrentDrawing;
@@ -138,13 +138,14 @@ begin
         end;
   end;
   zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
-    zcRedrawCurrentDrawing;
+  zcRedrawCurrentDrawing;
+
   //Commandmanager.executecommandend;
 end;
 
 procedure Tuzvslagcab_com.cablingGroupHeadGraph(pdata:GDBPlatformint);
 var
- i,j:integer;
+ i,j,k:integer;
  UndoMarcerIsPlazed:boolean;
 begin
   //тут делаем чтонибудь что будет усполнено по нажатию DoSomething2
@@ -164,44 +165,57 @@ begin
              uzvnum.cablingGroupLine(listHeadDevice,graphCable,i,j);
         end;
   end;
+    //заупстить метрику для всех датчиков (зависимости от их имени)
+      for i:=0 to listHeadDevice.Size-1 do
+        begin
+           for j:=0 to listHeadDevice[i].listGroup.Size -1 do
+              begin
+                 for k:=0 to listHeadDevice[i].listGroup[j].listDevice.size -1 do
+                    begin
+                         uzvnum.metricNumeric(uzvslagcabComParams.metricDev,graphCable.listVertex[listHeadDevice[i].listGroup[j].listDevice[k].num].deviceEnt);
+                    end;
+              end;
+        end;
+
     zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
-   // Commandmanager.executecommandend;
-end;
-
-
-procedure Tuzvslagcab_com.DoSomething(pdata:GDBPlatformint);
-var
- k:integer;
-begin
-  //тут делаем чтонибудь что будет выполнено по нажатию DoSomething
-  //если тут не вызывать Commandmanager.executecommandend;
-  //то выполнение команды не завершится и кнопку можно жать много раз
-  //для примера просто играем параметрами
- // inc(ExampleComParams.option1);
-  k:=uzvagensl.autoGenSLBetweenDevices('победа');
+    zcRedrawCurrentDrawing;
     Commandmanager.executecommandend;
-
-
-
 end;
 
-procedure Tuzvslagcab_com.DoSomething2(pdata:GDBPlatformint);
-begin
-  //тут делаем чтонибудь что будет усполнено по нажатию DoSomething2
-  //выполним Commandmanager.executecommandend;
-  //эту кнопку можно нажать 1 раз
-  Commandmanager.executecommandend;
-end;
+
+//procedure Tuzvslagcab_com.DoSomething(pdata:GDBPlatformint);
+//var
+// k:integer;
+//begin
+//  //тут делаем чтонибудь что будет выполнено по нажатию DoSomething
+//  //если тут не вызывать Commandmanager.executecommandend;
+//  //то выполнение команды не завершится и кнопку можно жать много раз
+//  //для примера просто играем параметрами
+// // inc(ExampleComParams.option1);
+//  k:=uzvagensl.autoGenSLBetweenDevices('победа');
+//    Commandmanager.executecommandend;
+//
+//
+//
+//end;
+//
+//procedure Tuzvslagcab_com.DoSomething2(pdata:GDBPlatformint);
+//begin
+//  //тут делаем чтонибудь что будет усполнено по нажатию DoSomething2
+//  //выполним Commandmanager.executecommandend;
+//  //эту кнопку можно нажать 1 раз
+//  Commandmanager.executecommandend;
+//end;
 
 initialization
   //начальные значения параметров
   uzvslagcabComParams.nameSL:='-';
   uzvslagcabComParams.accuracy:=0.3;
-  uzvslagcabComParams.option2:=false;
+  uzvslagcabComParams.metricDev:=false;
 
 
   SysUnit.RegisterType(TypeInfo(PTuzvslagcabComParams));//регистрируем тип данных в зкадном RTTI
-  SysUnit.SetTypeDesk(TypeInfo(TuzvslagcabComParams),['Имя суперлинии','Погрешность','Параметр2']);//Даем человечьи имена параметрам
+  SysUnit.SetTypeDesk(TypeInfo(TuzvslagcabComParams),['Имя суперлинии','Погрешность','Метрика нумерации по типам датчиков']);//Даем человечьи имена параметрам
   uzvslagcab_com.init('slagcab',CADWG,0);//инициализируем команду
   uzvslagcab_com.SetCommandParam(@uzvslagcabComParams,'PTuzvslagcabComParams');//привязываем параметры к команде
 end.

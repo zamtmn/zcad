@@ -641,7 +641,7 @@ var
 
           for i:=0 to listEdgeGraph.Size-1 do
             begin
-               uzvcom.testTempDrawLine(listEdgeGraph[i].VPoint1,listEdgeGraph[i].VPoint2);
+               uzvtestdraw.testTempDrawLine(listEdgeGraph[i].VPoint1,listEdgeGraph[i].VPoint2);
             end;
           zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
 

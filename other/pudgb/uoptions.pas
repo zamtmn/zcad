@@ -38,16 +38,35 @@ type
   TLogWriter=procedure(msg:string) of object;
 
 function DefaultOptions:TOptions;
+function GetCompilerDefs:String;
 
 implementation
+function GetCompilerDefs:String;
+procedure adddef(def:string);
+begin
+ if result='' then
+                  result:=format('-d%s',[def])
+              else
+                  result:=result+format(' -d%s',[def]);
+end;
+begin
+ result:='';
+ {$ifdef LINUX}adddef('LINUX');{$endif}
+ {$ifdef WINDOWS}adddef('WINDOWS');{$endif}
+ {$ifdef MSWINDOWS}adddef('MSWINDOWS');{$endif}
+ {$ifdef WIN32}adddef('WIN32');{$endif}
+ {$ifdef LCLWIN32}adddef('LCLWIN32');{$endif}
+ {$ifdef FPC}adddef('FPC');{$endif}
+end;
+
 function DefaultOptions:TOptions;
 begin
  result.Paths._File:='?? import or edit this';
  result.Paths._Paths:='?? import or edit this';
 
- result.ParserOptions._CompilerOptions:='-Sc';
- result.ParserOptions.TargetOS:='linux';
- result.ParserOptions.TargetCPU:='i386';
+ result.ParserOptions._CompilerOptions:='-Sc '+GetCompilerDefs;
+ result.ParserOptions.TargetOS:={$I %FPCTARGETOS%};
+ result.ParserOptions.TargetCPU:={$I %FPCTARGETCPU%};
 
  result.GraphBulding.IncludeNotFoundedUnits:=false;
  result.GraphBulding.IncludeInterfaceUses:=true;

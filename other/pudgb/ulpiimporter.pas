@@ -149,7 +149,7 @@ begin
  Case Uppercase(SwithKey) of
       'DELPHI':Swith:='-Sd'
  end;
- SwithKey:=Doc.GetValue('CompilerOptions/Parsing/SyntaxOptions/SyntaxMode/CPPInline','False');
+ SwithKey:=Doc.GetValue('CompilerOptions/Parsing/SyntaxOptions/SyntaxMode/CPPInline','True');
  Case Uppercase(SwithKey) of
       'TRUE':Swith:=Swith+' -Sc'
  end;

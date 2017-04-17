@@ -188,7 +188,13 @@ begin
       //s:='/'+l.Strings[i]+'.pas';
       s:=FindInSupportPath(Options.Paths._Paths,PathDelim+l.Strings[i]+'.pas');
       if s=''then
+        s:=FindInSupportPath(Options.Paths._Paths,PathDelim+l.Strings[i]+'.pp');
+      if s=''then
+        s:=FindInSupportPath(Options.Paths._Paths,PathDelim+l.Strings[i]+'.PP');
+      if s=''then
         s:=FindInSupportPath(Options.Paths._Paths,PathDelim+lowercase(l.Strings[i])+'.pas');
+      if s=''then
+        s:=FindInSupportPath(Options.Paths._Paths,PathDelim+lowercase(l.Strings[i])+'.pp');
       if s<>''then
                   begin
                     ScanModule(s,Options,ScanResult,LogWriter);

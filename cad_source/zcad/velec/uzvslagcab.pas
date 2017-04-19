@@ -106,7 +106,7 @@ begin
     end;
   zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
   zcRedrawCurrentDrawing;
-  //Commandmanager.executecommandend;
+  Commandmanager.executecommandend;
 end;
 
 
@@ -140,7 +140,7 @@ begin
   zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
   zcRedrawCurrentDrawing;
 
-  //Commandmanager.executecommandend;
+  Commandmanager.executecommandend;
 end;
 
 procedure Tuzvslagcab_com.cablingGroupHeadGraph(pdata:GDBPlatformint);

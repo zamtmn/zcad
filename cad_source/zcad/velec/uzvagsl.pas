@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{$mode objfpc}
+{$mode objfpc}{$h+}
 
 unit uzvagsl;
 {$INCLUDE def.inc}
@@ -239,7 +239,7 @@ type
 
 
       TMyRouteType=(MRT_ByWal,MRT_Sboku,MRT_Zigzag);
-      TautogenSuperLine=record
+      TautogenSuperLine=packed record
          param1:TMyRouteType;
          iii:integer;
          sss:string;

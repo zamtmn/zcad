@@ -123,6 +123,8 @@ uses
                       //<**система логирования
   uzcvariablesutils, // для работы с ртти
 
+   gzctnrvectortypes,                  //itrec
+
   //для работы графа
   ExtType,
   Pointerv,

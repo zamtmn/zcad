@@ -56,7 +56,7 @@ uses
   URecordDescriptor,TypeDescriptors,
 
   Forms, //gzctnrvectortypes,
-    uzcfblockinsert, //старое временно
+  //  uzcfblockinsert, //старое временно
    uzcfarrayinsert,
 
   uzeentblockinsert,      //unit describes blockinsert entity
@@ -125,6 +125,7 @@ uses
                       //<**система логирования
   uzcvariablesutils, // для работы с ртти
 
+     gzctnrvectortypes,                  //itrec
   //для работы графа
   ExtType,
   Pointerv,
@@ -178,6 +179,13 @@ type
          paralel:boolean;
   end;
   TListWallOrient=specialize TVector<TWallInfo>;
+  //**Список суперлиний
+  TSLInfo=record
+         p1,p2:GDBVertex;
+  end;
+  TListSL=specialize TVector<TSLInfo>;
+
+
   //**Список вершин
   TListVertex=specialize TVector<GDBVertex>;
 
@@ -223,13 +231,21 @@ type
       TGraphASL=class
                          listEdge:TListEdgeGraph;   //список реальных и виртуальных линий
                          listVertex:TListGraphVertex;
-                        // nameSuperLine:string;
+                         numStart:integer;
                          public
                          constructor Create;
                          destructor Destroy;virtual;
       end;
 
- procedure autoNumberDevice(comParams:TuzvagslComParams);
+
+      TMyRouteType=(MRT_ByWal,MRT_Sboku,MRT_Zigzag);
+      TautogenSuperLine=record
+         param1:TMyRouteType;
+         iii:integer;
+         sss:string;
+      end;
+
+ //procedure autoNumberDevice(comParams:TuzvagslComParams);
 
  //**Поиск прямоугольного контура помещения
  function getContourRoom(out contourRoom:PGDBObjPolyLine):boolean;
@@ -243,6 +259,8 @@ type
  //**получаем постоянные элементы при авто пракладки, список вершин перпендикуляра и список вершин внутреннего контура прокладки кабеля внутри помещения
  function mainElementAutoEmbedSL(contour2dRoom:pgdbobjlwpolyline;out contourRoomEmbedSL:TListVertex;out perpendListVertex:TListVertex;out anglePerpendCos:double;cableDistWall:double):boolean;
 
+ var
+   autogenSuperLine:TautogenSuperLine;
 implementation
  type
        //TListString=specialize TVector<string>;
@@ -567,7 +585,7 @@ implementation
           if result.RTF.y < pt.y then
              result.RTF.y := pt.y;
        end;
-       uzvtestdraw.testTempDrawLine(result.LBN,result.RTF);
+       //uzvtestdraw.testTempDrawLine(result.LBN,result.RTF);
     end;
 
     //** Получение контура помещения описаннного 2D полилинией из 3D полилинии
@@ -606,7 +624,7 @@ implementation
         pobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
         pd:PGDBObjDevice;
 
-        i:integer;
+        i,num:integer;
 
         polyLWObj:pgdbobjlwpolyline;
         pt:gdbvertex;
@@ -641,7 +659,7 @@ implementation
           polyLWObj^.Width2D_in_OCS_Array.PushBackData(widthObj);
        end;
        //***//
-
+       num:=0;
        if drawings.GetCurrentROOT^.FindObjectsInVolume(areaSelectRoom,NearObjects)then //ищем примитивы оболочка которых пересекается с volume
        begin
          pobj:=NearObjects.beginiterate(ir);//получаем первый примитив из списка
@@ -655,7 +673,8 @@ implementation
                    begin
                       infoDevice.pdev:=pd;
                       infoDevice.coord:=pd^.GetCenterPoint; //получаем центр устройства
-                      infoDevice.num:=0;
+                      infoDevice.num:=num;
+                      inc(num);
                       result.PushBack(infoDevice);
                    end;
                end;
@@ -717,10 +736,6 @@ implementation
          angleper:=3.1416-angleper;
 
       //historyoutstr('angleper='+floattostr(angleper)+'--- anglewall='+floattostr(anglewall));
-
-
-      //angleper:=arccos(angleper)*180/3.1416 ;
-      //anglewall:=arccos(anglewall)*180/3.1416 ;
       anglecenter:=3.1416;
       zonaAngleMin2:=-1;
       zonaAngleMax2:=-1;
@@ -747,7 +762,7 @@ implementation
         if ((anglewall<=zonaAngleMax) and (anglewall>=zonaAngleMin)) then
            result:=true;
 
-      historyoutstr('angleper='+floattostr(angleper)+'--- anglewall='+floattostr(anglewall));
+      //historyoutstr('angleper='+floattostr(angleper)+'--- anglewall='+floattostr(anglewall));
 
     end;
 
@@ -796,7 +811,6 @@ implementation
           count:=0;
           result:=TListColumnDev.Create;
           infoColumnDev:=TInfoColumnDev.Create;
-          //if mpd.Size > 0 then begin
           for i:=1 to mpd.Size-1 do
            begin
              if not thisLinePlaceDev(mpd[i-1],mpd[i]) then
@@ -841,17 +855,15 @@ implementation
   //** Получение правильно сформировоного списка устройств (столбцы-строки)
   function getMatrixListDevice(horList,vertList:TListColumnDev):TListColumnDev;
     var
-       i,j,k,l,count:integer;
+       i,j,k,l:integer;
        infoColumnDev:TInfoColumnDev; //информация одной строки
        infoVertexDevice:TVertexDevice;
        columns,lines:integer;
 
     begin
           //***превращение правильно сортированого списка в список колонн и строк, для удобной автопрокладки трассы
-          //count:=0;
           result:=TListColumnDev.Create;
           infoColumnDev:=TInfoColumnDev.Create;
-          //if mpd.Size > 0 then begin
           columns:=horList.Size;
           lines:=vertList.Size;
           //historyoutstr('column######'+inttostr(columns)+'---lines######'+inttostr(lines));
@@ -876,7 +888,6 @@ implementation
                   begin
                     result.mutable[i+1]^.listLineDev.mutable[k+1]^.pdev:=horList[i].listLineDev[j].pdev;
                     result.mutable[i+1]^.listLineDev.mutable[k+1]^.coord:=horList[i].listLineDev[j].pdev^.GetCenterPoint;
-                    //result.mutable[i+1]^.listLineDev.mutable[k+1]^.coord:=horList[i].listLineDev[j].coord;
                     result.mutable[i+1]^.listLineDev.mutable[k+1]^.num:=horList[i].listLineDev[j].num;
                   end;
 
@@ -897,10 +908,7 @@ implementation
         DC:TDrawContext;
         pdevvarext:PTVariablesExtender;
         angle:double;
-         //hor2DListDevice,vert2DListDevice:TListColumnDev; //список устройст
-         //infoColumnDev:TInfoColumnDev; //информация одной строки
          infoVertexDevice:TVertexDevice;
-         //strNameDev:string;
          tempforinfo:string;
     begin
          //HistoryOutStr('Заработалоssssss');
@@ -918,7 +926,6 @@ implementation
          if (perpendListVertex.front.x <= perpendListVertex[1].x) and (perpendListVertex.front.y <= perpendListVertex[1].y) then
             angle:=arccos(anglePerpendCos)+3*1.5707963267949;
 
-         //angle:=angle+1.5707963267949;
          //historyoutstr('angle######'+floattostr(angle));
 
           //** Получение горизонтального расположение нумерации
@@ -973,8 +980,8 @@ implementation
          result:=getMatrixListDevice(hor2DListDevice,vert2DListDevice);
 
          tempforinfo:='*';
-         historyoutstr('cs######'+inttostr(result.Size-1));
-         historyoutstr('ls######'+inttostr(result[0].listLineDev.Size-1));
+         //historyoutstr('cs######'+inttostr(result.Size-1));
+         //historyoutstr('ls######'+inttostr(result[0].listLineDev.Size-1));
          for i:=0 to result.Size-1 do  begin
            for j:=0 to result[i].listLineDev.Size-1 do
            begin
@@ -984,280 +991,174 @@ implementation
            tempforinfo:='*';
          end;
 
-         //historyoutstr('angle######'+floattostr(angle));
-
-         //result:= hor2DListDevice;
-                    {*
-          count:=0;
-          result:=TListColumnDev.Create;
-          infoColumnDev:=TInfoColumnDev.Create;
-          //if mpd.Size > 0 then begin
-          for i:=1 to mpd.Size-1 do
-           begin
-             if not thisLinePlaceDev(mpd[i-1],mpd[i]) then
-               begin
-                    //historyoutstr('device######'+inttostr(count));
-                  inc(count);
-                  infoVertexDevice.coord:=mpd[i-1].coord;
-                  infoVertexDevice.pdev:=mpd[i-1].pdev;
-                  infoVertexDevice.num:=count;
-                  infoColumnDev.listLineDev.PushBack(infoVertexDevice);
-
-               end
-             else
-             begin
-                  inc(count);
-                  infoVertexDevice.coord:=mpd[i-1].coord;
-                  infoVertexDevice.pdev:=mpd[i-1].pdev;
-                  infoVertexDevice.num:=count;
-                  infoColumnDev.listLineDev.PushBack(infoVertexDevice);
-
-                  infoColumnDev.orient:=3;
-                  result.PushBack(infoColumnDev);
-                  infoColumnDev:=nil;
-                  infoColumnDev:=TInfoColumnDev.Create;
-             end;
-           end;
-          inc(count);
-          infoVertexDevice.coord:=mpd[mpd.Size-1].coord;
-          infoVertexDevice.pdev:=mpd[mpd.Size-1].pdev;
-          infoVertexDevice.num:=count;
-          infoColumnDev.listLineDev.PushBack(infoVertexDevice);
-
-          infoColumnDev.orient:=3;
-          result.PushBack(infoColumnDev);
-          infoColumnDev:=nil;
-          //end;
-                *}
-         //*****///
-         //** Заполнение нумерации в устройствах  времменое
-          {*
-         count:=0;
-         for i:=0 to result.Size-1 do
-           for j:=0 to result[i].listLineDev.Size-1 do
-         //    InsertDevice(listColumnDev[i].listLineDev[j].point);
-         //for i:=0 to mpd.Size-1 do
-           begin
-             historyoutstr('0000');
-                //dcoord:=mpd[i];
-                //pdev:=dcoord.pdev;
-                infoVertexDevice:=result[i].listLineDev[j];
-                pdev:=infoVertexDevice.pdev;
-                pdevvarext:=pdev^.GetExtension(typeof(TVariablesExtender));
-//
-//                if comParams.BaseName<>'' then
-//                begin
-                  //pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('NMO_BaseName');
-                  pvd:=pdevvarext^.entityunit.FindVariable('NMO_BaseName');
-                  if pvd<>nil then
-                  begin
-                    if uppercase(pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Instance))=
-                       uppercase('BTH'{*comParams.BaseName*}) then
-                                                               process:=true
-                                                           else
-                                                               process:=false;
-                  end
-                     else
-                         begin
-                              process:=true;
-                              historyoutstr('In device not found BaseName variable. Processed');
-                         end;
-                //end
-                //   else
-                //       process:=true;
-                if process then
-                begin
-                  //pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable(NumberingParams.NumberVar);
-                  pvd:=pdevvarext^.entityunit.FindVariable('GC_NumberInGroup'{*comParams.NumberVar*});
-                  if pvd<>nil then
-                  begin
-                       pvd^.data.PTD^.SetValueFromString(pvd^.data.Instance,inttostr(index));
-                       historyoutstr('device'+inttostr(index)+'==='+inttostr(i)+'##'+inttostr(j));
-                       //inc(index,NumberingParams.Increment);
-                       inc(index);
-                       inc(count);
-                       pdev^.FormatEntity(drawings.GetCurrentDWG^,dc);
-                       //historyoutstr('56546');
-                  end
-                     else
-                     historyoutstr('In device not found numbering variable');
-                end
-                else
-                    historyoutstr('Device with basename "'+pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Instance)+'" filtred out');
-           end;
-         historyoutstr(sysutils.format(rscmNEntitiesProcessed,[inttostr(count)]));
-         //if NumberingParams.SaveStart then
-         //                                 NumberingParams.StartNumber:=index;
-
-         *}
          mpd.Destroy;
          Commandmanager.executecommandend;
 
   end;
-  //**первый вариант автонумерации
-procedure autoNumberDevice(comParams:TuzvagslComParams);
-  var
-      psd:PSelectedObjDesc;
-      ir:itrec;
-      mpd:devcoordarray;
-      pdev:PGDBObjDevice;
-      //key:GDBVertex;
-      index:integer;
-      pvd:pvardesk;
-      dcoord:tdevcoord;
-      i,j,count:integer;
-      process:boolean;
-      DC:TDrawContext;
-      pdevvarext:PTVariablesExtender;
-
-       listColumnDev:TListColumnDev; //список устройст
-       infoColumnDev:TInfoColumnDev; //информация одной строки
-       infoVertexDevice:TVertexDevice;
-       //strNameDev:string;
-  begin
-       HistoryOutStr('Заработало');
-
-       mpd:=devcoordarray.Create;  //**создания списока устройств и координат
-       psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);  //перебор выбраных объектов
-       count:=0;
-       dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-       //** получение списка устройств
-       if psd<>nil then
-       repeat
-             if psd^.objaddr^.GetObjType=GDBDeviceID then
-             begin
-                 dcoord.coord:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS;
-                 //if comParams.InverseX then
-                 //                                dcoord.coord.x:=-dcoord.coord.x;
-                 //if comParams.InverseY then
-                                                 dcoord.coord.y:=-dcoord.coord.y;
-
-                  dcoord.pdev:=pointer(psd^.objaddr);    // получить устройство
-                  inc(count);
-                  mpd.PushBack(dcoord);
-             end;
-       psd:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
-       until psd=nil;
-       //***//
-       //** если ничего не выделено и не обработано то остановка функции
-       if count=0 then
-                      begin
-                           historyoutstr('In selection not found devices');
-                           mpd.Destroy;
-                           Commandmanager.executecommandend;
-                           exit;
-                      end;
-       //index:=NumberingParams.StartNumber;
-       index:=1;
-       //if NumberingParams.SortMode<>TST_UNSORTED then
-       //                                              devcoordsort.Sort(mpd,mpd.Size);
-       devcoordsort.Sort(mpd,mpd.Size);  // запуск сортировка
-
-
-
-
-        //***превращение правильно сортированого списка в список колонн и строк, для удобной автопрокладки трассы
-        count:=0;
-        listColumnDev:=TListColumnDev.Create;
-        infoColumnDev:=TInfoColumnDev.Create;
-        //if mpd.Size > 0 then begin
-        for i:=1 to mpd.Size-1 do
-         begin
-           if not thisLinePlaceDev(mpd[i-1],mpd[i]) then
-             begin
-                  //historyoutstr('device######'+inttostr(count));
-                inc(count);
-                infoVertexDevice.coord:=mpd[i-1].coord;
-                infoVertexDevice.pdev:=mpd[i-1].pdev;
-                infoVertexDevice.num:=count;
-                infoColumnDev.listLineDev.PushBack(infoVertexDevice);
-
-             end
-           else
-           begin
-                inc(count);
-                infoVertexDevice.coord:=mpd[i-1].coord;
-                infoVertexDevice.pdev:=mpd[i-1].pdev;
-                infoVertexDevice.num:=count;
-                infoColumnDev.listLineDev.PushBack(infoVertexDevice);
-
-                infoColumnDev.orient:=3;
-                listColumnDev.PushBack(infoColumnDev);
-                infoColumnDev:=nil;
-                infoColumnDev:=TInfoColumnDev.Create;
-           end;
-         end;
-        inc(count);
-        infoVertexDevice.coord:=mpd[mpd.Size-1].coord;
-        infoVertexDevice.pdev:=mpd[mpd.Size-1].pdev;
-        infoVertexDevice.num:=count;
-        infoColumnDev.listLineDev.PushBack(infoVertexDevice);
-
-        infoColumnDev.orient:=3;
-        listColumnDev.PushBack(infoColumnDev);
-        infoColumnDev:=nil;
-        //end;
-
-       //*****///
-       //** Заполнение нумерации в устройствах  времменое
-       count:=0;
-       for i:=0 to listColumnDev.Size-1 do
-         for j:=0 to listColumnDev[i].listLineDev.Size-1 do
-       //    InsertDevice(listColumnDev[i].listLineDev[j].point);
-       //for i:=0 to mpd.Size-1 do
-         begin
-              //dcoord:=mpd[i];
-              //pdev:=dcoord.pdev;
-              infoVertexDevice:=listColumnDev[i].listLineDev[j];
-              pdev:=infoVertexDevice.pdev;
-              pdevvarext:=pdev^.GetExtension(typeof(TVariablesExtender));
-
-              if comParams.BaseName<>'' then
-              begin
-                //pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('NMO_BaseName');
-                pvd:=pdevvarext^.entityunit.FindVariable('NMO_BaseName');
-                if pvd<>nil then
-                begin
-                  if uppercase(pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Instance))=
-                     uppercase(comParams.BaseName) then
-                                                             process:=true
-                                                         else
-                                                             process:=false;
-                end
-                   else
-                       begin
-                            process:=true;
-                            historyoutstr('In device not found BaseName variable. Processed');
-                       end;
-              end
-                 else
-                     process:=true;
-              if process then
-              begin
-                //pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable(NumberingParams.NumberVar);
-                pvd:=pdevvarext^.entityunit.FindVariable(comParams.NumberVar);
-                if pvd<>nil then
-                begin
-                     pvd^.data.PTD^.SetValueFromString(pvd^.data.Instance,inttostr(index));
-                     historyoutstr('device'+inttostr(index)+'==='+inttostr(i)+'##'+inttostr(j));
-                     //inc(index,NumberingParams.Increment);
-                     inc(index);
-                     inc(count);
-                     pdev^.FormatEntity(drawings.GetCurrentDWG^,dc);
-                end
-                   else
-                   historyoutstr('In device not found numbering variable');
-              end
-              else
-                  historyoutstr('Device with basename "'+pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Instance)+'" filtred out');
-         end;
-       historyoutstr(sysutils.format(rscmNEntitiesProcessed,[inttostr(count)]));
-       //if NumberingParams.SaveStart then
-       //                                 NumberingParams.StartNumber:=index;
-       mpd.Destroy;
-       Commandmanager.executecommandend;
-
-end;
+//  //**первый вариант автонумерации
+//procedure autoNumberDevice(comParams:TuzvagslComParams);
+//  var
+//      psd:PSelectedObjDesc;
+//      ir:itrec;
+//      mpd:devcoordarray;
+//      pdev:PGDBObjDevice;
+//      //key:GDBVertex;
+//      index:integer;
+//      pvd:pvardesk;
+//      dcoord:tdevcoord;
+//      i,j,count:integer;
+//      process:boolean;
+//      DC:TDrawContext;
+//      pdevvarext:PTVariablesExtender;
+//
+//       listColumnDev:TListColumnDev; //список устройст
+//       infoColumnDev:TInfoColumnDev; //информация одной строки
+//       infoVertexDevice:TVertexDevice;
+//       //strNameDev:string;
+//  begin
+//       HistoryOutStr('Заработало');
+//
+//       mpd:=devcoordarray.Create;  //**создания списока устройств и координат
+//       psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);  //перебор выбраных объектов
+//       count:=0;
+//       dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+//       //** получение списка устройств
+//       if psd<>nil then
+//       repeat
+//             if psd^.objaddr^.GetObjType=GDBDeviceID then
+//             begin
+//                 dcoord.coord:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS;
+//                 //if comParams.InverseX then
+//                 //                                dcoord.coord.x:=-dcoord.coord.x;
+//                 //if comParams.InverseY then
+//                                                 dcoord.coord.y:=-dcoord.coord.y;
+//
+//                  dcoord.pdev:=pointer(psd^.objaddr);    // получить устройство
+//                  inc(count);
+//                  mpd.PushBack(dcoord);
+//             end;
+//       psd:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
+//       until psd=nil;
+//       //***//
+//       //** если ничего не выделено и не обработано то остановка функции
+//       if count=0 then
+//                      begin
+//                           historyoutstr('In selection not found devices');
+//                           mpd.Destroy;
+//                           Commandmanager.executecommandend;
+//                           exit;
+//                      end;
+//       //index:=NumberingParams.StartNumber;
+//       index:=1;
+//       //if NumberingParams.SortMode<>TST_UNSORTED then
+//       //                                              devcoordsort.Sort(mpd,mpd.Size);
+//       devcoordsort.Sort(mpd,mpd.Size);  // запуск сортировка
+//
+//
+//
+//
+//        //***превращение правильно сортированого списка в список колонн и строк, для удобной автопрокладки трассы
+//        count:=0;
+//        listColumnDev:=TListColumnDev.Create;
+//        infoColumnDev:=TInfoColumnDev.Create;
+//        //if mpd.Size > 0 then begin
+//        for i:=1 to mpd.Size-1 do
+//         begin
+//           if not thisLinePlaceDev(mpd[i-1],mpd[i]) then
+//             begin
+//                  //historyoutstr('device######'+inttostr(count));
+//                inc(count);
+//                infoVertexDevice.coord:=mpd[i-1].coord;
+//                infoVertexDevice.pdev:=mpd[i-1].pdev;
+//                infoVertexDevice.num:=count;
+//                infoColumnDev.listLineDev.PushBack(infoVertexDevice);
+//
+//             end
+//           else
+//           begin
+//                inc(count);
+//                infoVertexDevice.coord:=mpd[i-1].coord;
+//                infoVertexDevice.pdev:=mpd[i-1].pdev;
+//                infoVertexDevice.num:=count;
+//                infoColumnDev.listLineDev.PushBack(infoVertexDevice);
+//
+//                infoColumnDev.orient:=3;
+//                listColumnDev.PushBack(infoColumnDev);
+//                infoColumnDev:=nil;
+//                infoColumnDev:=TInfoColumnDev.Create;
+//           end;
+//         end;
+//        inc(count);
+//        infoVertexDevice.coord:=mpd[mpd.Size-1].coord;
+//        infoVertexDevice.pdev:=mpd[mpd.Size-1].pdev;
+//        infoVertexDevice.num:=count;
+//        infoColumnDev.listLineDev.PushBack(infoVertexDevice);
+//
+//        infoColumnDev.orient:=3;
+//        listColumnDev.PushBack(infoColumnDev);
+//        infoColumnDev:=nil;
+//        //end;
+//
+//       //*****///
+//       //** Заполнение нумерации в устройствах  времменое
+//       count:=0;
+//       for i:=0 to listColumnDev.Size-1 do
+//         for j:=0 to listColumnDev[i].listLineDev.Size-1 do
+//       //    InsertDevice(listColumnDev[i].listLineDev[j].point);
+//       //for i:=0 to mpd.Size-1 do
+//         begin
+//              //dcoord:=mpd[i];
+//              //pdev:=dcoord.pdev;
+//              infoVertexDevice:=listColumnDev[i].listLineDev[j];
+//              pdev:=infoVertexDevice.pdev;
+//              pdevvarext:=pdev^.GetExtension(typeof(TVariablesExtender));
+//
+//              if comParams.BaseName<>'' then
+//              begin
+//                //pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('NMO_BaseName');
+//                pvd:=pdevvarext^.entityunit.FindVariable('NMO_BaseName');
+//                if pvd<>nil then
+//                begin
+//                  if uppercase(pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Instance))=
+//                     uppercase(comParams.BaseName) then
+//                                                             process:=true
+//                                                         else
+//                                                             process:=false;
+//                end
+//                   else
+//                       begin
+//                            process:=true;
+//                            historyoutstr('In device not found BaseName variable. Processed');
+//                       end;
+//              end
+//                 else
+//                     process:=true;
+//              if process then
+//              begin
+//                //pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable(NumberingParams.NumberVar);
+//                pvd:=pdevvarext^.entityunit.FindVariable(comParams.NumberVar);
+//                if pvd<>nil then
+//                begin
+//                     pvd^.data.PTD^.SetValueFromString(pvd^.data.Instance,inttostr(index));
+//                     historyoutstr('device'+inttostr(index)+'==='+inttostr(i)+'##'+inttostr(j));
+//                     //inc(index,NumberingParams.Increment);
+//                     inc(index);
+//                     inc(count);
+//                     pdev^.FormatEntity(drawings.GetCurrentDWG^,dc);
+//                end
+//                   else
+//                   historyoutstr('In device not found numbering variable');
+//              end
+//              else
+//                  historyoutstr('Device with basename "'+pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Instance)+'" filtred out');
+//         end;
+//       historyoutstr(sysutils.format(rscmNEntitiesProcessed,[inttostr(count)]));
+//       //if NumberingParams.SaveStart then
+//       //                                 NumberingParams.StartNumber:=index;
+//       mpd.Destroy;
+//       Commandmanager.executecommandend;
+//
+//end;
 //**Создания графа устройств и связей между устройствами
 //**В данной функции организуется сам граф и присваиваются базовые вещи,
 //**которые одинаковы для разных методов расскладки
@@ -1290,11 +1191,16 @@ begin
    //end;
    //**Создаем вершины и ребра перпендикуляра
    num:=0;
+   result.numStart:=-1;
    for i:=0 to perpendListVertex.size-1 do
    begin
       infoVertex.pt:=perpendListVertex[i];
       infoVertex.devEnt:=nil;
       result.listVertex.PushBack(infoVertex);
+
+      if result.numStart < 0 then
+        result.numStart:=result.listVertex.Size-1;
+
       if num = 0 then
         num:=result.listVertex.size-1
       else
@@ -1468,8 +1374,8 @@ begin
                    begin
                      infoEdge.VIndex1:=listColumnDev[k].listLineDev[j].num;
                      infoEdge.VIndex2:=listColumnDev[i].listLineDev[j].num;
-                     historyoutstr('-v1+'+ inttostr(infoEdge.VIndex1)+'-');
-                     historyoutstr('-v2+'+ inttostr(infoEdge.VIndex2)+'-');
+                     //historyoutstr('-v1+'+ inttostr(infoEdge.VIndex1)+'-');
+                     //historyoutstr('-v2+'+ inttostr(infoEdge.VIndex2)+'-');
                      infoEdge.VPoint1:=graphASL.listVertex[infoEdge.VIndex1].pt;
                      infoEdge.VPoint2:=graphASL.listVertex[infoEdge.VIndex2].pt;
                      infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
@@ -1563,6 +1469,155 @@ begin
    end;
 end;
 
+//**копирование списка нумеров
+procedure copyListNum(listBase:TListNum;var copyList:TListNum);
+var
+  i:integer;
+begin
+    for i:=0 to listBase.size-1 do begin
+      copyList.PushBack(listBase[i]);
+    end;
+end;
+
+
+//**Создания списка супер линий с координатами для последующей их отрисовки
+function getListSL(var graphASL:TGraphASL;listDeviceinRoom:TListVertexDevice):TListSL;
+var
+ infoSL:TSLInfo;
+ analisListVert,tempListVertex,beforeListVert:TListNum;
+ mathGraph:TGraph;
+ T: Float;
+ EdgePath,VertexPath:TClassList;
+ i,j,k,m,count:integer;
+ isClone,isFirst:boolean;
+ tempNum,beforeNum:integer;
+ tempLength,beforeLength:double;
+ infoVertex:TGraphInfoVertex;
+ tempListDevice:TListVertexDevice;
+begin
+    // Подключение созданного граффа к библиотеке Аграф
+    mathGraph:=TGraph.Create;
+    mathGraph.Features:=[Weighted];
+    mathGraph.AddVertices(graphASL.listVertex.Size);
+    for i:=0 to graphASL.listEdge.Size-1 do
+    begin
+      mathGraph.AddEdges([graphASL.listEdge[i].VIndex1, graphASL.listEdge[i].VIndex2]);
+      mathGraph.Edges[i].Weight:=graphASL.listEdge[i].edgeLength;
+    end;
+
+    // Заполнение в списка у подчиненных устройств минимальная длина в графе, для последующего анализа
+    // и прокладки группового кабеля, его длины, как то так
+      result:=TListSL.Create;
+      analisListVert:=TListNum.Create;
+      tempListVertex:=TListNum.Create;
+      beforeListVert:=TListNum.Create;
+
+      //копируем список во временный список который будет удаляться изменяться
+      tempListDevice:=TListVertexDevice.Create;
+      for i:=0 to listDeviceinRoom.size-1 do begin
+        tempListDevice.PushBack(listDeviceinRoom[i]);
+      end;
+
+      analisListVert.PushBack(graphASL.numStart);
+      count:=0;
+      beforeLength:=-1;
+      REPEAT
+      tempNum:=-1;
+      for i:=0 to tempListDevice.Size-1 do
+      begin
+         //HistoryOutStr('номер' + IntToStr(tempListDevice[i].num)) ;
+         for j:=0 to analisListVert.Size-1 do
+            begin
+              //**работа с библиотекой Аграф
+              EdgePath:=TClassList.Create;     //Создаем реберный путь
+              VertexPath:=TClassList.Create;   //Создаем вершиный путь
+              //**Получение ребер минимального пути в графи из одной точки в другую
+              T:=mathGraph.FindMinWeightPath(mathGraph[analisListVert[j]], mathGraph[tempListDevice[i].num], EdgePath);
+              //**Получение вершин минимального пути в графи на основе минимального пути в ребер, указывается из какой точки старт
+              mathGraph.EdgePathToVertexPath(mathGraph[analisListVert[j]], EdgePath, VertexPath);
+
+              //**На основе полученых результатов библиотекой Аграф
+              //**изучаем минимальные пути простраиваем каждый путь
+              if VertexPath.Count > 1 then
+                for k:=0 to VertexPath.Count - 1 do  begin
+                  tempListVertex.PushBack(TVertex(VertexPath[k]).Index);
+                end
+                else
+                  HistoryOutStr('АВАРИЯ');
+                //**смотрем его длину
+                tempLength:=0;
+                for k:=1 to tempListVertex.size - 1 do  begin
+                  tempLength:=tempLength+uzegeometry.Vertexlength(graphASL.listVertex[tempListVertex[k-1]].pt,graphASL.listVertex[tempListVertex[k]].pt);
+                end;
+
+                //HistoryOutStr('Длина' + FloatToStr(tempLength));
+
+                //** проверяем был ли вообще создано начально значение длины и сравниваем длины, соответствено присваиваем промежуточные значения
+                //HistoryOutStr('длина1 before=' + IntToStr(beforeListVert.size));
+                if tempLength <>0 then
+                if beforeListVert.Size > 0 then begin
+                    if beforeLength > tempLength then begin
+                       beforeLength:=tempLength;
+                       beforeListVert.Clear;
+                       copyListNum(tempListVertex,beforeListVert);
+                       tempNum:=i;
+                    end;
+                end
+                else begin
+                   beforeLength:=tempLength;
+                   beforeListVert.Clear;
+                   copyListNum(tempListVertex,beforeListVert);
+                    tempNum:=i;
+                end;
+              EdgePath.Free;
+              VertexPath.Free;
+              //HistoryOutStr('длина2 before=' + IntToStr(beforeListVert.size));
+              tempListVertex.Clear;
+              //HistoryOutStr('длина3 before=' + IntToStr(beforeListVert.size));
+            end;
+      end;
+
+      //**добавляем вершины прокладки
+      //HistoryOutStr('длина= before' + IntToStr(beforeListVert.size));
+       isFirst:=true;
+       for i:=0 to beforeListVert.size - 1 do
+       begin
+        isClone:=false;
+        for j:=0 to analisListVert.size -1 do
+          if beforeListVert[i] = analisListVert[j] then
+           isClone:=true;
+
+          if isFirst then begin
+             infoSL.p1:=graphASL.listVertex[beforeListVert[i]].pt;
+             isFirst:=false;
+          end
+          else begin
+             infoSL.p1:=infoSL.p2;
+          end;
+          infoSL.p2:=graphASL.listVertex[beforeListVert[i]].pt;
+          result.PushBack(infoSL);
+
+          if not isClone then begin
+            analisListVert.PushBack(beforeListVert[i]);
+          end;
+       end;
+       beforeListVert.Clear;
+
+       //HistoryOutStr('кол-во = ' + IntToStr(tempListDevice.size)+'tempNum='+ IntToStr(tempNum));
+       //**удаляем из списка то извещатель который мы соеденили с началом поиска
+       tempListDevice.Erase(tempNum);
+
+      inc(count);
+      //HistoryOutStr('счетчик' + IntToStr(count)+'listDeviceinRoom='+ IntToStr(listDeviceinRoom.Size));
+
+      UNTIL count>listDeviceinRoom.Size;
+
+      //for i:=0 to analisListVert.size - 1 do  begin
+      //  HistoryOutStr('счетчик analisis' + IntToStr(i));
+      //    uzvtestdraw.testTempDrawText(graphASL.listVertex[analisListVert[i]].pt,'i='+ inttostr(i));
+      // end;
+end;
+
 function Test111sl(operands:TCommandOperands):TCommandResult;
 const
   accuracy=0.001;
@@ -1574,14 +1629,13 @@ var
  listDeviceinRoom:TListVertexDevice;
 
  listWallOrient:TListWallOrient;
+ listSL:TListSL;
 
  contourRoomEmbedSL,perpendListVertex:TListVertex;
- stPoint:gdbvertex;
+ //stPoint:gdbvertex;
 
- v2d1,v2d2:GDBvertex2D;
+ //v2d1,v2d2:GDBvertex2D;
  hor2DListDevice,vert2DListDevice:TListColumnDev; //список устройст
-
- oriMatrixDev:boolean;
 
  anglePerpendCos:double;
  graphASL:TGraphASL;
@@ -1591,38 +1645,30 @@ var
   UndoMarcerIsPlazed:boolean;
 begin
   //if commandmanager.get3dpoint('Specify insert point:',stPoint) then
+
+     SysUnit^.RegisterType(TypeInfo(TautogenSuperLine));//регистрируем тип данных в зкадном RTTI
+     SysUnit^.SetTypeDesk(TypeInfo(TautogenSuperLine),['SuperLineUnit','Layer name prefix','Layer change']);//даем человеческие имена параметрам
+     //psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
+    //DrawSuperlineParams.pu:=psu;
+    zcShowCommandParams(pointer(SysUnit^.TypeName2PTD('TautogenSuperLine')),@autogenSuperLine);
+
    UndoMarcerIsPlazed:=false;
    zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'AutoGenerated SuperLine');
 
    if uzvagsl.getContourRoom(contourRoom) then                  // получить контур помещения
    begin
-      contour2DRoom:=getContour2DRoom(contourRoom)  ;
-      //for i:=1 to contour2DRoom^.Vertex2D_in_OCS_Array.GetRealCount-1 do begin
-      //  v2d1:=contour2DRoom^.Vertex2D_in_OCS_Array.getdata(i-1);
-      //  v2d2:=contour2DRoom^.Vertex2D_in_OCS_Array.getdata(i);
-      //  uzvtestdraw.testTempDraw2dLineColor(v2d1,v2d2,4);
-      //end;
+      contour2DRoom:=getContour2DRoom(contourRoom);
      // if uzvagsl.isRectangelRoom(contourRoom) then        //это прямоугольная комната?
          //historyoutstr('проверки пройдены');
+
           if mainElementAutoEmbedSL(contour2DRoom,contourRoomEmbedSL,perpendListVertex,anglePerpendCos,indent) then  begin
            listDeviceinRoom:=uzvagsl.getListDeviceinRoom(contourRoom);  //получен список извещателей внутри помещения
 
            historyoutstr('Количество выделяных извещателей = ' + inttostr(listDeviceinRoom.Size));
            listWallOrient:=getWallInfoOrient(contourRoomEmbedSL,perpendListVertex);
-           //for i:=0 to listWallOrient.size-1 do
-           // if listWallOrient[i].paralel then
-           //   uzvtestdraw.testTempDrawLine(listWallOrient[i].p1,listWallOrient[i].p2);
 
            //получаем двухмерный список устройств правильной сортировки
            listColumnDev:=get2DListDevice(listDeviceinRoom,contourRoom,perpendListVertex,anglePerpendCos,hor2DListDevice, vert2DListDevice);
-
-           //Ориентирована ли полученная матрица устройств, т.е. она так же разложена по отношению к перпендикуляру
-           //навсякий случай оставил вдруг понадобится):))
-           //oriMatrixDev:=isOriMatrixDev(listColumnDev,perpendListVertex);
-           // if oriMatrixDev then
-           //   historyoutstr('Перпендикуля правильно');
-           // if not oriMatrixDev then
-           //   historyoutstr('Перпендикуля НЕ правильно');
 
            //** начало графовой работы
            //** здесь для всех одинаково
@@ -1637,15 +1683,20 @@ begin
            //** добавление в граф контура прокладки кабеля внутри помещения, с учетом вершин лежайших на контуре
            graphEdgeContourRoomEmbedSL(graphASL,listWallOrient,accuracy);
 
+           //**Получения списка суперлиний для последующей отрисовки
+           listSL:=getListSL(graphASL,listDeviceinRoom);
 
            historyoutstr('Количество вершин графа= ' + inttostr(graphASL.listVertex.size));
-           for i:=0 to graphASL.listEdge.size-1 do
-              uzvtestdraw.testTempDrawLineColor(graphASL.listEdge[i].VPoint1,graphASL.listEdge[i].VPoint2,5);
-           for i:=0 to graphASL.listVertex.size-1 do
-             begin
-              uzvtestdraw.testDrawCircle(graphASL.listVertex[i].pt,5,5);
-              uzvtestdraw.testTempDrawText(graphASL.listVertex[i].pt,'graph='+ inttostr(i));
-             end;
+           for i:=0 to listSL.size-1 do
+              uzvtestdraw.testTempDrawLineColor(listSL[i].p1,listSL[i].p2,5);
+
+           //for i:=0 to graphASL.listEdge.size-1 do
+           //   uzvtestdraw.testTempDrawLineColor(graphASL.listEdge[i].VPoint1,graphASL.listEdge[i].VPoint2,5);
+           //for i:=0 to graphASL.listVertex.size-1 do
+           //  begin
+           //   uzvtestdraw.testDrawCircle(graphASL.listVertex[i].pt,5,5);
+           //   //uzvtestdraw.testTempDrawText(graphASL.listVertex[i].pt,'graph='+ inttostr(i));
+           //  end;
 
          end;
    end;

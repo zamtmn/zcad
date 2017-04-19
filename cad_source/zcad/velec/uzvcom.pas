@@ -41,7 +41,7 @@ uses
   uzbgeomtypes,URecordDescriptor,TypeDescriptors,
 
   Forms, //gzctnrvectortypes,
-  uzcfblockinsert,  //старое временно
+  //uzcfblockinsert,  //старое временно
   uzcfarrayinsert,
 
   uzeentblockinsert,      //unit describes blockinsert entity
@@ -117,7 +117,7 @@ uses
   Graphs,
 
   uzvsgeom,
-
+    gzctnrvectortypes,                  //itrec
   uzvtestdraw; // тестовые рисунки
 
 

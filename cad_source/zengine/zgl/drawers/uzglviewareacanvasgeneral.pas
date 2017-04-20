@@ -23,6 +23,9 @@ uses
      {$IFDEF LCLQT}
      qtwidgets,qt4,
      {$ENDIF}
+     {$IFDEF LCLQT5}
+     qtwidgets,qt5,
+     {$ENDIF}
      uzgldrawergdi,uzglviewareaabstract,sysutils,uzbmemman,uzbtypes,
      uzegeometry,{$IFNDEF DELPHI}LCLType,LMessages,{$ENDIF}{$IFDEF DELPHI}windows,messages,{$ENDIF}
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,uzglbackendmanager;
@@ -78,7 +81,7 @@ begin
 end;
 procedure TGeneralCanvasViewArea.getareacaps;
 begin
-  {$IFDEF LCLQT}
+  {$if DEFINED(LCLQt)}
   TQtWidget(getviewcontrol.Handle).setAttribute(QtWA_PaintOutsidePaintEvent);
   //TQtWidget(getviewcontrol.Handle).setAttribute(QtWA_PaintOnScreen);
   //TQtWidget(getviewcontrol.Handle).setAttribute(QtWA_OpaquePaintEvent);
@@ -94,7 +97,7 @@ begin
 end;
 function TGeneralCanvasViewArea.NeedDrawInsidePaintEvent:boolean;
 begin
-     result:={$IFDEF LCLQT}True{$ELSE}False{$ENDIF};
+     result:={$if DEFINED(LCLQt) OR DEFINED(LCLQt5)}True{$ELSE}False{$ENDIF};
 end;
 begin
 end.

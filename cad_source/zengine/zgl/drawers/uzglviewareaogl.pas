@@ -23,9 +23,9 @@ uses
      {$IFDEF LCLGTK2}
      gtk2,gdk2,
      {$ENDIF}
-     {$IFDEF LCLQT}
+     (*{$IFDEF LCLQT}
      qt4,
-     {$ENDIF}
+     {$ENDIF}*)
      LCLProc,uzgldrawergdi,uzglviewareaabstract,uzgldrawerogl,sysutils,uzbmemman,
      uzgloglstatemanager,uzbtypesbase,uzbtypes,
      uzglviewareadata,uzgldrawcontext,uzegeometry,LCLType,

@@ -28,7 +28,7 @@ uses
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
-    {$IFDEF LCLQT}
+    {$if DEFINED(LCLQt) OR DEFINED(LCLQt5)}
     qtobjects,
     {$ENDIF}
     {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
@@ -504,7 +504,7 @@ var
    point,spoint:GDBVertex3S;
    x,y:integer;
    s:AnsiString;
-   {$IFDEF LCLQT}_transminusM2,{$ENDIF}_transminusM,_obliqueM,_transplusM,_scaleM,_rotateM:DMatrix4D;
+   {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM2,{$ENDIF}_transminusM,_obliqueM,_transplusM,_scaleM,_rotateM:DMatrix4D;
    {gdiDrawYOffset,}txtOblique,txtRotate,txtSx,txtSy:single;
 
    lfcp:TLogFont;
@@ -573,7 +573,7 @@ begin
   txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.descent;
   txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.height;}
   txtSy:=PSymbolsParam^.NeededFontHeight/(rc.DrawingContext.zoom)/(deffonth);
-  {$IFDEF LCLQT}txtSy:=txtSy*(deffonth)/(TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.height-1);{$ENDIF}
+  {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}txtSy:=txtSy*(deffonth)/(TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.height-1);{$ENDIF}
   txtSx:=txtSy*PSymbolsParam^.sx;
 
   SetBkMode(TZGLGDIDrawer(drawer).OffScreedDC,TRANSPARENT);
@@ -583,7 +583,7 @@ begin
                                                                                SetTextColor(TZGLGDIDrawer(drawer).OffScreedDC,TZGLGDIDrawer(drawer).ClearColor);
 
   SetTextAlignToBaseLine(TZGLGDIDrawer(drawer).OffScreedDC);
-  {$IFDEF LCLQT}_transminusM2:=CreateTranslationMatrix(CreateVertex(0,-TQtDeviceContext(TZGLGDIDrawer(drawer).OffScreedDC).Metrics.ascent,0));{$ENDIF}
+  {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM2:=CreateTranslationMatrix(CreateVertex(0,-TQtDeviceContext(TZGLGDIDrawer(drawer).OffScreedDC).Metrics.ascent,0));{$ENDIF}
   _transminusM:=CreateTranslationMatrix(CreateVertex(-x,-y,0));
   _scaleM:=CreateScaleMatrix(CreateVertex(txtSx,txtSy,1));
   _obliqueM:=OneMatrix;
@@ -592,7 +592,7 @@ begin
   _transplusM:=CreateTranslationMatrix(CreateVertex(x,y,0));
   _rotateM:=CreateRotationMatrixZ(sin(-txtRotate),cos(-txtRotate));
 
-  {$IFDEF LCLQT}_transminusM:=MatrixMultiply(_transminusM,_transminusM2);{$ENDIF}
+  {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM:=MatrixMultiply(_transminusM,_transminusM2);{$ENDIF}
   _transminusM:=MatrixMultiply(_transminusM,_scaleM);
   _transminusM:=MatrixMultiply(_transminusM,_obliqueM);
   _transminusM:=MatrixMultiply(_transminusM,_rotateM);

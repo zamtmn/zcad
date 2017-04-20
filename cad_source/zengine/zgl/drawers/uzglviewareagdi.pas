@@ -26,6 +26,9 @@ uses
      {$IFDEF LCLQT}
      qt4,qtint,
      {$ENDIF}
+     {$IFDEF LCLQT5}
+     qt5,qtint,
+     {$ENDIF}
      uzgldrawergdi,uzglviewareaabstract,uzgldrawerogl,sysutils,uzbmemman,uzbtypesbase,uzbtypes,
      uzbgeomtypes,uzegeometry,{$IFNDEF DELPHI}LCLType,{$ENDIF}{$IFDEF DELPHI}Types,{$ENDIF}
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,uzglbackendmanager,uzglviewareacanvasgeneral;
@@ -63,7 +66,7 @@ begin
                             else
                                 GDIData.RD_Version:=inttostr(Win32MajorVersion)+'.'+inttostr(Win32MinorVersion)+' build '+inttostr(Win32BuildNumber);
      {$ENDIF}
-     {$IFDEF LCLQt}
+     {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}
      GDIData.RD_Renderer:='Qt';
      GDIData.RD_Version:=inttostr(QtVersionMajor)+'.'+inttostr(QtVersionMinor)+'.'+inttostr(QtVersionMicro);
      {$ENDIF}

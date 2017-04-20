@@ -23,6 +23,7 @@ interface
 uses
  {$IFDEF WINDOWS}windows,{$ENDIF}
  {$IFDEF LCLQT}qt4,qtobjects,{$ENDIF}
+ {$IFDEF LCLQT5}qt5,qtobjects,{$ENDIF}
  {$IFNDEF DELPHI}LCLType,LCLIntf,{$ENDIF}
  {$IFDEF DELPHI}windows,types,{$ENDIF}
  uzbgeomtypes,uzbtypes;
@@ -46,7 +47,7 @@ begin
   {$IFDEF WINDOWS}
     result:=SetTextAlign(hdc,TA_BASELINE{ or TA_LEFT});
   {$ENDIF}
-  {$IFDEF LCLQT}
+  {$if DEFINED(LCLQt) OR DEFINED(LCLQt5)}
   TQtDeviceContext(hdc).translate(0,-TQtDeviceContext(hdc).Metrics.ascent)
   {$ENDIF}
 end;
@@ -71,7 +72,7 @@ function SetWorldTransform_(hdc:HDC; const tm:DMatrix4D):WINBOOL;
   var
     _m:XFORM;
 {$ENDIF}
-{$IFDEF LCLQT}
+{$if DEFINED(LCLQt) OR DEFINED(LCLQt5)}
   var
   //QtDC: TQtDeviceContext absolute hdc;
   matr:QMatrixH;
@@ -86,7 +87,7 @@ begin
   _m.eDy:=tm[3,1];
   result:=SetWorldTransform(hdc,_m);
   {$ENDIF}
-  {$IFDEF LCLQT}
+  {$if DEFINED(LCLQt) OR DEFINED(LCLQt5)}
     //QtDC.pa;
     matr:=QMatrix_create(tm[0,0],tm[0,1],tm[1,0],tm[1,1],tm[3,0],tm[3,1]);
     QPainter_setWorldMatrix(TQtDeviceContext(hdc).Widget,matr,false);

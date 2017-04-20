@@ -20,9 +20,9 @@ unit uzglviewareacanvas;
 {$INCLUDE def.inc}
 interface
 uses
-     {$IFDEF LCLQT}
+     (*{$IFDEF LCLQT}
      qt4,
-     {$ENDIF}
+     {$ENDIF}*)
      uzgldrawercanvas,uzglviewareaabstract,sysutils,uzbmemman,
      uzbtypesbase,uzbtypes,
      varmandef,uzccommandsmanager,uzcsysvars,uzegeometry,uzcshared,LCLType,

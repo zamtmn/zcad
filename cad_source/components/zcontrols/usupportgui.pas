@@ -141,7 +141,7 @@ end;
 
 function ListViewDrawSubItem(State: TCustomDrawState;canvas:tcanvas;Item: TListItem;SubItem: Integer): TRect;
 begin
-     {$IFNDEF LCLQT}
+     {$IF not (defined(LCLQt) or defined(LCLQt5))}
      if (cdsSelected in state) {or (cdsFocused in state)}{or Item.Selected} then
      {if (cdsSelected in state) or (cdsGrayed in state) or (cdsDisabled in state)
      or (cdsChecked in state) or (cdsFocused in state) or (cdsDefault in state)

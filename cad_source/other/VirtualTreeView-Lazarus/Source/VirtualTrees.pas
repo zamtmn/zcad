@@ -98,7 +98,7 @@ const
     {$define ManualClipNeeded}
   {$endif}
 
-  {$if defined(LCLGtk2) or defined(LCLCarbon) or defined(LCLQt)}
+  {$if defined(LCLGtk2) or defined(LCLCarbon) or defined(LCLQt) or defined(LCLQt5)}
     {$define ContextMenuBeforeMouseUp}
   {$endif}
 
@@ -16277,7 +16277,7 @@ begin
     SB_THUMBTRACK:
       begin
         DoStateChange([tsThumbTracking]);
-        {$if DEFINED(LCLQt) OR DEFINED(LCLCarbon)}
+        {$if DEFINED(LCLQt) OR DEFINED(LCLQt5) OR DEFINED(LCLCarbon)}
         if UseRightToLeftAlignment then
           SetOffsetX(-Integer(FRangeX) + ClientWidth + Message.Pos)
         else
@@ -17588,7 +17588,7 @@ begin
     SB_THUMBTRACK:
       begin
         DoStateChange([tsThumbTracking]);
-        {$if DEFINED(LCLQt) OR DEFINED(LCLCarbon)}
+        {$if DEFINED(LCLQt) OR DEFINED(LCLQt5) OR DEFINED(LCLCarbon)}
         SetOffsetY(-Message.Pos);
         {$else}
         SetOffsetY(-GetRealScrollPosition);
@@ -20385,7 +20385,7 @@ begin
             {$ifdef DEBUG_VTV}Logger.Send([lcScroll], 'Rect to Scroll', R);{$endif}
             //todo: temporary hack to avoid some drawing problems.
             //Will be removed when scrollwindowex is properly implemented in all widgets
-            {$ifdef LCLQt}
+            {$if DEFINED(LCLQt) OR DEFINED(LCLQt5)}
             ScrollWindow(Handle, DeltaX, DeltaY, @R, @R);
             {$else}
             {$ifdef Gtk}

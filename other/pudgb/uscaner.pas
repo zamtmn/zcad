@@ -82,9 +82,9 @@ begin
    //if assigned(LogWriter) then LogWriter(format('Process file: "%s"',[mn]));
    try
      myTime:=now;
-     M := ParseSource(E,mn+' '+Options.ParserOptions._CompilerOptions,Options.ParserOptions.TargetOS,Options.ParserOptions.TargetCPU,False);
+     M := ParseSource(E,mn+' '+Options.ParserOptions._CompilerOptions,Options.ParserOptions.TargetOS,Options.ParserOptions.TargetCPU,[poSkipDefaultDefs]);
      PrepareModule(M,E,Options,ScanResult,LogWriter);
-     LogWriter(format('Time to parse first module %fsec',[(now-myTime)*10e4]));
+     LogWriter(format('Time to parse "%s" %fsec',[mn,(now-myTime)*10e4]));
      if assigned(E) then E.Free;
      if assigned(M) then M.Free;
    except

@@ -108,21 +108,26 @@ begin
                                   LogWriter(' edge [style=dotted]')
                               else
                                   LogWriter(' edge [style=solid]');
-       te:=G.Edges[i];
-       te.Hide;
-       CurrentEdgesWithLoops:=0;
+       if Options.GraphBulding.CalcEdgesWeight then
        begin
-       for j:=0 to G.EdgeCount - 1 do
-       if G.Edges[j].RingEdge then
-         inc(CurrentEdgesWithLoops);
-       end;
-       if StrongEdgeWeight>CurrentEdgesWithLoops then
-       begin
-         StrongEdgeWeight:=CurrentEdgesWithLoops;
-         StrongEdge:=i;
-       end;
-       te.Restore;
-       LogWriter(format(' %s -> %s [label=%d]',[getDecoratedUnnitname(G.Edges[i].V1.Index),getDecoratedUnnitname(G.Edges[i].V2.Index),CurrentEdgesWithLoops]));
+         te:=G.Edges[i];
+         te.Hide;
+         CurrentEdgesWithLoops:=0;
+         begin
+         for j:=0 to G.EdgeCount - 1 do
+         if G.Edges[j].RingEdge then
+           inc(CurrentEdgesWithLoops);
+         end;
+         if StrongEdgeWeight>CurrentEdgesWithLoops then
+         begin
+           StrongEdgeWeight:=CurrentEdgesWithLoops;
+           StrongEdge:=i;
+         end;
+         te.Restore;
+         LogWriter(format(' %s -> %s [label=%d]',[getDecoratedUnnitname(G.Edges[i].V1.Index),getDecoratedUnnitname(G.Edges[i].V2.Index),CurrentEdgesWithLoops]))
+       end
+          else
+              LogWriter(format(' %s -> %s',[getDecoratedUnnitname(G.Edges[i].V1.Index),getDecoratedUnnitname(G.Edges[i].V2.Index)]));
       end;
     end;
     LogWriter('}');

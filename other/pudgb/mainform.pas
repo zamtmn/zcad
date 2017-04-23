@@ -95,7 +95,7 @@ begin
    RunTimeUnit^.SetTypeDesk(TypeInfo(TOptions),['Paths','Parser options','Graph bulding']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TPaths),['File','Paths']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TParser),['Compiler options','Target OS','Target CPU']);
-   RunTimeUnit^.SetTypeDesk(TypeInfo(TGraphBulding),['Include not founded units','Include interface uses','Interface uses edge type','Include implementation uses','Implementation uses edge type','Only looped edges']);
+   RunTimeUnit^.SetTypeDesk(TypeInfo(TGraphBulding),['Include not founded units','Include interface uses','Interface uses edge type','Include implementation uses','Implementation uses edge type','Only looped edges','Calc edges weight']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TEdgeType),['Continuous','Dotted']);
 
    Options.Paths._File:=ExtractFileDir(ParamStr(0))+pathdelim+'passrcerrors.pas';

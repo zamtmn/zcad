@@ -28,6 +28,7 @@ type
     IncludeImplementationUses:Boolean;
     ImplementationUsesEdgeType:TEdgeType;
     IncludeOnlyLoops:Boolean;
+    CalcEdgesWeight:Boolean;
   end;
   TOptions=packed record
     Paths:TPaths;
@@ -81,6 +82,7 @@ begin
  result.GraphBulding.IncludeImplementationUses:=true;
  result.GraphBulding.ImplementationUsesEdgeType:=ETDotted;
  result.GraphBulding.IncludeOnlyLoops:=false;
+ result.GraphBulding.CalcEdgesWeight:=false;
 end;
 
 end.

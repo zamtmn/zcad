@@ -13,13 +13,15 @@ uses
 
 
   {$IFDEF CHECKLOOPS}uchecker,{$ENDIF}
-  uoptions,uscaner,uscanresult,uwriter,yEdWriter,ulpiimporter,uexplorer;
+  uoptions,uscaner,uscanresult,uwriter,yEdWriter,ulpiimporter,udpropener,uexplorer;
   {$INCLUDE revision.inc}
   type
 
   { TForm1 }
 
   TForm1 = class(TForm)
+    MenuItem8: TMenuItem;
+    OpenDPR: TAction;
     CodeExplorer: TAction;
     doExit: TAction;
     OpenWebGraphviz: TAction;
@@ -47,10 +49,12 @@ uses
     ToolButton4: TToolButton;
     ToolButton5: TToolButton;
     ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
     procedure _CodeExplorer(Sender: TObject);
     procedure _Exit(Sender: TObject);
     procedure _SaveGML(Sender: TObject);
     procedure _ImportLPI(Sender: TObject);
+    procedure _OpenDPR(Sender: TObject);
     procedure _onClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure _onCreate(Sender: TObject);
     procedure _Save(Sender: TObject);
@@ -158,6 +162,22 @@ begin
    _SetUIFromOption(nil);
 end;
 
+procedure TForm1._OpenDPR(Sender: TObject);
+var
+  od:TOpenDialog;
+begin
+   od:=TOpenDialog.Create(nil);
+   od.Title:='Open Dlphi project file';
+   od.Filter:='Dlphi project files (*.dpr)|*.dpr|All files (*.*)|*.*';
+   od.DefaultExt:='dpr';
+   od.FilterIndex := 1;
+   if od.Execute then
+   begin
+     DPROpen(Options,od.FileName,DummyWriteToLog);
+   end;
+   od.Free;
+   _SetUIFromOption(nil);
+end;
 procedure TForm1._SaveGML(Sender: TObject);
 begin
     Memo1.Clear;

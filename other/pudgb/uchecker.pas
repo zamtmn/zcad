@@ -24,8 +24,6 @@ begin
 end;
 
 var
-  G: TGraph;
-  M: TMultiList;
   i,j,k,mmm:integer;
   TotalUnitsWithImplUses,
   TotalFoundedUnits,
@@ -34,11 +32,15 @@ var
   ts:string;
   te:TEdge;
 begin
-  G:=TGraph.Create;
-  G.Features:=[Directed,Weighted];
-  M:=TMultiList.Create(TClassList);
+  if assigned(ScanResult.G)then
+                               ScanResult.G.Destroy;
+  if assigned(ScanResult.M)then
+                               ScanResult.M.Destroy;
+  ScanResult.G:=TGraph.Create;
+  ScanResult.G.Features:=[Directed,Weighted];
+  ScanResult.M:=TMultiList.Create(TClassList);
   try
-    G.AddVertices(ScanResult.UnitInfoArray.Size);
+    ScanResult.G.AddVertices(ScanResult.UnitInfoArray.Size);
 
     TotalUnitsWithImplUses:=0;
     TotalFoundedUnits:=0;
@@ -47,14 +49,14 @@ begin
        if ScanResult.UnitInfoArray[i].UnitPath<>'' then inc(TotalFoundedUnits);
        for j:=0 to ScanResult.UnitInfoArray[i].InterfaceUses.Size-1 do
        begin
-         G.AddEdgeI(i,ScanResult.UnitInfoArray[i].InterfaceUses[j]).Weight:=4;
+         ScanResult.G.AddEdgeI(i,ScanResult.UnitInfoArray[i].InterfaceUses[j]).Weight:=4;
        end;
        if ScanResult.UnitInfoArray[i].ImplementationUses.Size>0 then
        begin
          inc(TotalUnitsWithImplUses);
          for j:=0 to ScanResult.UnitInfoArray[i].ImplementationUses.Size-1 do
          begin
-           G.AddEdgeI(i,ScanResult.UnitInfoArray[i].ImplementationUses[j]).Weight:=2;
+           ScanResult.G.AddEdgeI(i,ScanResult.UnitInfoArray[i].ImplementationUses[j]).Weight:=2;
          end;
        end;
     end;
@@ -95,27 +97,27 @@ begin
       ScanResult.UnitInfoArray.mutable[i]^.NodeState:=NSNotCheced;
     LogWriter('Loop graph by edges:');
     LogWriter('DiGraph Classes {');
-    for i:=0 to G.EdgeCount - 1 do
+    for i:=0 to ScanResult.G.EdgeCount - 1 do
     begin
-      if G.Edges[i].RingEdge then
+      if ScanResult.G.Edges[i].RingEdge then
       begin
        inc(TotaEdgesWithLoops);
-       include(ScanResult.UnitInfoArray.mutable[G.Edges[i].V1.Index]^.UnitFlags,UFLoop);
-       include(ScanResult.UnitInfoArray.mutable[G.Edges[i].V2.Index]^.UnitFlags,UFLoop);
-       ProcessNode(Options,ScanResult.UnitInfoArray.mutable[G.Edges[i].V1.Index]^,G.Edges[i].V1.Index,LogWriter,true);
-       ProcessNode(Options,ScanResult.UnitInfoArray.mutable[G.Edges[i].V2.Index]^,G.Edges[i].V1.Index,LogWriter,true);
-       if G.Edges[i].Weight<3 then
+       include(ScanResult.UnitInfoArray.mutable[ScanResult.G.Edges[i].V1.Index]^.UnitFlags,UFLoop);
+       include(ScanResult.UnitInfoArray.mutable[ScanResult.G.Edges[i].V2.Index]^.UnitFlags,UFLoop);
+       ProcessNode(Options,ScanResult,ScanResult.UnitInfoArray.mutable[ScanResult.G.Edges[i].V1.Index]^,ScanResult.G.Edges[i].V1.Index,LogWriter,true);
+       ProcessNode(Options,ScanResult,ScanResult.UnitInfoArray.mutable[ScanResult.G.Edges[i].V2.Index]^,ScanResult.G.Edges[i].V1.Index,LogWriter,true);
+       if ScanResult.G.Edges[i].Weight<3 then
                                   LogWriter(' edge [style=dotted]')
                               else
                                   LogWriter(' edge [style=solid]');
        if Options.GraphBulding.Circ.CalcEdgesWeight then
        begin
-         te:=G.Edges[i];
+         te:=ScanResult.G.Edges[i];
          te.Hide;
          CurrentEdgesWithLoops:=0;
          begin
-         for j:=0 to G.EdgeCount - 1 do
-         if G.Edges[j].RingEdge then
+         for j:=0 to ScanResult.G.EdgeCount - 1 do
+         if ScanResult.G.Edges[j].RingEdge then
            inc(CurrentEdgesWithLoops);
          end;
          if StrongEdgeWeight>CurrentEdgesWithLoops then
@@ -124,10 +126,10 @@ begin
            StrongEdge:=i;
          end;
          te.Restore;
-         LogWriter(format(' %s -> %s [label=%d]',[getDecoratedUnnitname(G.Edges[i].V1.Index),getDecoratedUnnitname(G.Edges[i].V2.Index),CurrentEdgesWithLoops]))
+         LogWriter(format(' %s -> %s [label=%d]',[getDecoratedUnnitname(ScanResult.G.Edges[i].V1.Index),getDecoratedUnnitname(ScanResult.G.Edges[i].V2.Index),CurrentEdgesWithLoops]))
        end
           else
-              LogWriter(format(' %s -> %s',[getDecoratedUnnitname(G.Edges[i].V1.Index),getDecoratedUnnitname(G.Edges[i].V2.Index)]));
+              LogWriter(format(' %s -> %s',[getDecoratedUnnitname(ScanResult.G.Edges[i].V1.Index),getDecoratedUnnitname(ScanResult.G.Edges[i].V2.Index)]));
       end;
     end;
     LogWriter('}');
@@ -153,11 +155,11 @@ begin
     LogWriter(format('Total units with Implimentation uses: %d ',[TotalUnitsWithImplUses]));
     LogWriter(format('Total units in loops: %d ',[TotaUnitsWithLoops]));
 
-    LogWriter(format('Total dependencies: %d ',[G.EdgeCount]));
+    LogWriter(format('Total dependencies: %d ',[ScanResult.G.EdgeCount]));
     LogWriter(format('Total dependencies in loops: %d ',[TotaEdgesWithLoops]));
     if StrongEdgeWeight<>maxint then
     begin
-      LogWriter(format('The worst addiction from "%s" to "%s" with %d ',[ScanResult.UnitInfoArray[G.Edges[StrongEdge].V1.Index].UnitName,ScanResult.UnitInfoArray[G.Edges[StrongEdge].V2.Index].UnitName,StrongEdgeWeight]));
+      LogWriter(format('The worst addiction from "%s" to "%s" with %d ',[ScanResult.UnitInfoArray[ScanResult.G.Edges[StrongEdge].V1.Index].UnitName,ScanResult.UnitInfoArray[ScanResult.G.Edges[StrongEdge].V2.Index].UnitName,StrongEdgeWeight]));
     StrongEdgeWeight:=CurrentEdgesWithLoops;
     StrongEdge:=i;
     end;
@@ -165,8 +167,8 @@ begin
 
     if ts<>'' then LogWriter(format('Implimentation uses can be move to interface in %s ',[ts]));
   finally
-    G.Free;
-    M.Free;
+    //G.Free;
+    //M.Free;
   end;
 
 end;

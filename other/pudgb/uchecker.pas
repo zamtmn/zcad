@@ -108,7 +108,7 @@ begin
                                   LogWriter(' edge [style=dotted]')
                               else
                                   LogWriter(' edge [style=solid]');
-       if Options.GraphBulding.CalcEdgesWeight then
+       if Options.GraphBulding.Circ.CalcEdgesWeight then
        begin
          te:=G.Edges[i];
          te.Hide;

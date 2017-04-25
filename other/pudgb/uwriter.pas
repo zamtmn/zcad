@@ -18,9 +18,9 @@ implementation
 function IncludeToGraph(Options:TOptions;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter):boolean;
 begin
   result:=false;
-  if not Options.GraphBulding.IncludeNotFoundedUnits then
+  if not Options.GraphBulding.FullG.IncludeNotFoundedUnits then
     if (node.UnitPath='')and(index<>0) then exit;
-  if Options.GraphBulding.IncludeOnlyLoops and not(UFLoop in node.UnitFlags) then exit;
+  if Options.GraphBulding.FullG.IncludeOnlyLoops and not(UFLoop in node.UnitFlags) then exit;
   result:=true;
 end;
 
@@ -54,7 +54,7 @@ begin
       for i:=0 to ScanResult.UnitInfoArray.Size-1 do
        ScanResult.UnitInfoArray.mutable[i]^.NodeState:=NSNotCheced;
 
-    if Options.GraphBulding.IncludeInterfaceUses then
+    if Options.GraphBulding.FullG.IncludeInterfaceUses then
     for i:=0 to ScanResult.UnitInfoArray.Size-1 do
     begin
      if ScanResult.UnitInfoArray[i].InterfaceUses.Size>0 then
@@ -76,7 +76,7 @@ begin
      end;
     end;
 
-    if Options.GraphBulding.IncludeImplementationUses then
+    if Options.GraphBulding.FullG.IncludeImplementationUses then
     for i:=0 to ScanResult.UnitInfoArray.Size-1 do
     begin
      if ScanResult.UnitInfoArray[i].NodeState<>NSFiltredOut then

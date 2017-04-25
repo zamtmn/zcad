@@ -20,20 +20,33 @@ type
     _CompilerOptions:String;
     TargetOS,TargetCPU:String;
   end;
-  TEdgeType=(ETContinuous,ETDotted);
-  TGraphBulding=packed record
+  TCircularG=packed record
+    CalcEdgesWeight:Boolean;
+  end;
+  TFullG=packed record
     IncludeNotFoundedUnits:Boolean;
     IncludeInterfaceUses:Boolean;
-    InterfaceUsesEdgeType:TEdgeType;
     IncludeImplementationUses:Boolean;
-    ImplementationUsesEdgeType:TEdgeType;
     IncludeOnlyLoops:Boolean;
-    CalcEdgesWeight:Boolean;
+  end;
+  TEdgeType=(ETContinuous,ETDotted);
+  TGraphBulding=packed record
+    Circ:TCircularG;
+    FullG:TFullG;
+    InterfaceUsesEdgeType:TEdgeType;
+    ImplementationUsesEdgeType:TEdgeType;
+  end;
+  TLogger=packed record
+    ScanerMessages:Boolean;
+    ParserMessages:Boolean;
+    Timer:Boolean;
+    Notfounded:Boolean;
   end;
   TOptions=packed record
     Paths:TPaths;
     ParserOptions:TParser;
     GraphBulding:TGraphBulding;
+    Logger:TLogger;
   end;
 
   TLogWriter=procedure(msg:string) of object;
@@ -76,13 +89,13 @@ begin
  result.ParserOptions.TargetOS:={$I %FPCTARGETOS%};
  result.ParserOptions.TargetCPU:={$I %FPCTARGETCPU%};
 
- result.GraphBulding.IncludeNotFoundedUnits:=false;
- result.GraphBulding.IncludeInterfaceUses:=true;
+ result.GraphBulding.FullG.IncludeNotFoundedUnits:=false;
+ result.GraphBulding.FullG.IncludeInterfaceUses:=true;
  result.GraphBulding.InterfaceUsesEdgeType:=ETContinuous;
- result.GraphBulding.IncludeImplementationUses:=true;
+ result.GraphBulding.FullG.IncludeImplementationUses:=true;
  result.GraphBulding.ImplementationUsesEdgeType:=ETDotted;
- result.GraphBulding.IncludeOnlyLoops:=false;
- result.GraphBulding.CalcEdgesWeight:=false;
+ result.GraphBulding.FullG.IncludeOnlyLoops:=false;
+ result.GraphBulding.Circ.CalcEdgesWeight:=false;
 end;
 
 end.

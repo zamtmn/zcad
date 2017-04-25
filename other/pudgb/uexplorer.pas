@@ -5,7 +5,7 @@ unit uexplorer;
 interface
 
 uses
-  Classes, SysUtils,
+  Classes, SysUtils,Forms,
   uoptions,uscanresult,PasTree,Generics.Collections;
 type
   TNodeName=string;
@@ -96,6 +96,7 @@ begin
 end;
 procedure ExploreCode(Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 begin
+  Application.MessageBox('Not yet implemented!','Error!');
   if assigned(ScanResult) then
   if ScanResult.UnitInfoArray.Size>0 then
     ExploreUnit(ScanResult.UnitInfoArray.mutable[0]^,Options,ScanResult,LogWriter);

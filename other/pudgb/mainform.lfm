@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 50
+  Left = 83
   Height = 682
-  Top = 336
+  Top = 416
   Width = 737
   Caption = 'Form1'
   ClientHeight = 659
@@ -9,7 +9,7 @@ object Form1: TForm1
   Menu = MainMenu1
   OnClose = _onClose
   OnCreate = _onCreate
-  LCLVersion = '1.7'
+  LCLVersion = '1.9.0.0'
   object StatusBar1: TStatusBar
     Left = 0
     Height = 28
@@ -31,12 +31,12 @@ object Form1: TForm1
     ShowHint = True
     TabOrder = 1
     object ToolButton1: TToolButton
-      Left = 74
+      Left = 142
       Top = 2
       Action = Scan
     end
     object ToolButton2: TToolButton
-      Left = 110
+      Left = 178
       Top = 2
       Action = Save
     end
@@ -46,20 +46,25 @@ object Form1: TForm1
       Action = ImportLPI
     end
     object ToolButton4: TToolButton
-      Left = 146
+      Left = 214
       Top = 2
       Action = SaveGML
       Visible = False
     end
     object ToolButton5: TToolButton
-      Left = 301
+      Left = 369
       Top = 2
       Action = OpenWebGraphviz
     end
     object ToolButton6: TToolButton
-      Left = 212
+      Left = 280
       Top = 2
       Action = CodeExplorer
+    end
+    object ToolButton7: TToolButton
+      Left = 74
+      Top = 2
+      Action = OpenDPR
     end
   end
   object Splitter1: TSplitter
@@ -137,6 +142,10 @@ object Form1: TForm1
       Caption = 'CodeExplorer'
       OnExecute = _CodeExplorer
     end
+    object OpenDPR: TAction
+      Caption = 'OpenDPR'
+      OnExecute = _OpenDPR
+    end
   end
   object MainMenu1: TMainMenu
     Left = 416
@@ -154,6 +163,9 @@ object Form1: TForm1
       end
       object MenuItem5: TMenuItem
         Action = ImportLPI
+      end
+      object MenuItem8: TMenuItem
+        Action = OpenDPR
       end
       object MenuItem6: TMenuItem
         Caption = '-'

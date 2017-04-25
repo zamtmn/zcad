@@ -92,14 +92,24 @@ begin
 
    RunTimeUnit:=units.CreateUnit('',nil,'RunTimeUnit');//create empty zscript unit
    RunTimeUnit^.RegisterType(TypeInfo(TOptions));//register rtti types in zscript unit
-   RunTimeUnit^.SetTypeDesk(TypeInfo(TOptions),['Paths','Parser options','Graph bulding']);
+   RunTimeUnit^.SetTypeDesk(TypeInfo(TOptions),['Paths','Parser options','Graph bulding','Log']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TPaths),['File','Paths']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TParser),['Compiler options','Target OS','Target CPU']);
-   RunTimeUnit^.SetTypeDesk(TypeInfo(TGraphBulding),['Include not founded units','Include interface uses','Interface uses edge type','Include implementation uses','Implementation uses edge type','Only looped edges','Calc edges weight']);
+   RunTimeUnit^.SetTypeDesk(TypeInfo(TGraphBulding),['Circular graph','Full graph','Interface uses edge type','Implementation uses edge type','Calc edges weight']);
+   RunTimeUnit^.SetTypeDesk(TypeInfo(TCircularG),['Calc edges weight']);
+   RunTimeUnit^.SetTypeDesk(TypeInfo(TFullG),['Include not founded units','Include interface uses','Include implementation uses','Only looped edges']);
+
+   RunTimeUnit^.SetTypeDesk(TypeInfo(TLogger),['Scaner messages','Parser messages','Timer','Not founded units']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TEdgeType),['Continuous','Dotted']);
 
    Options.Paths._File:=ExtractFileDir(ParamStr(0))+pathdelim+'passrcerrors.pas';
    Options.Paths._Paths:=ExtractFileDir(ParamStr(0));
+
+   Options.Logger.ScanerMessages:=false;
+   Options.Logger.ParserMessages:=false;
+   Options.Logger.Timer:=true;
+   Options.Logger.Notfounded:=false;
+
    {tp:='Z:\hdd\src\fpc\lazarus-ccr\applications\cactusjukebox\';//путь к тестику
   Options.Paths._File:=tp+'source\cactusjukebox.pas';                //главный файл
   Options.Paths._Paths:=tp+'source';                                 //путь к исходникам

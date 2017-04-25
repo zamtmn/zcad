@@ -6,11 +6,16 @@ interface
 uses
   LazUTF8,Classes, SysUtils,
   uoptions,uscanresult,ufileutils,
-  PParser, PasTree, Masks;
+  PScanner, PParser, PasTree, Masks;
 
 type
     TSimpleEngine = class(TPasTreeContainer)
     public
+    LogWriter:TLogWriter;
+
+    constructor Create(const Options:TOptions);
+    Procedure Log(Sender : TObject; Const Msg : String);
+
     function CreateElement(AClass: TPTreeElement; const AName: String;
       AParent: TPasElement; AVisibility: TPasMemberVisibility;
       const ASourceFilename: String; ASourceLinenumber: Integer): TPasElement;
@@ -34,7 +39,18 @@ begin
   Result.SourceFilename := ASourceFilename;
   Result.SourceLinenumber := ASourceLinenumber;
 end;
-
+constructor TSimpleEngine.Create(const Options:TOptions);
+begin
+  if Options.Logger.ScanerMessages then
+    ScannerLogEvents:=[sleFile,sleLineNumber,sleConditionals];
+  if Options.Logger.ParserMessages then
+    ParserLogEvents:=[pleInterface,pleImplementation];
+  OnLog:=@Log;
+end;
+procedure TSimpleEngine.Log(Sender : TObject; Const Msg : String);
+begin
+  LogWriter(Msg);
+end;
 function TSimpleEngine.FindElement(const AName: String): TPasElement;
 begin
   { dummy implementation, see TFPDocEngine.FindElement for a real example }
@@ -75,16 +91,18 @@ end;
 procedure ScanModule(mn:String;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 var
   M:TPasModule;
-  E:TPasTreeContainer;
+  E:TSimpleEngine;
   myTime:TDateTime;
 begin
-   E := TSimpleEngine.Create;
+   E := TSimpleEngine.Create(Options);
+   E.LogWriter:=LogWriter;
    //if assigned(LogWriter) then LogWriter(format('Process file: "%s"',[mn]));
    try
      myTime:=now;
      M := ParseSource(E,mn+' '+Options.ParserOptions._CompilerOptions,Options.ParserOptions.TargetOS,Options.ParserOptions.TargetCPU,[poSkipDefaultDefs]);
-     PrepareModule(M,E,Options,ScanResult,LogWriter);
-     LogWriter(format('Time to parse "%s" %fsec',[mn,(now-myTime)*10e4]));
+     PrepareModule(M,TPasTreeContainer(E),Options,ScanResult,LogWriter);
+     if Options.Logger.Timer then
+       LogWriter(format('Time to parse "%s" %fsec',[mn,(now-myTime)*10e4]));
      if assigned(E) then E.Free;
      if assigned(M) then M.Free;
    except
@@ -206,7 +224,8 @@ begin
                   end
               else
                   begin
-                       if assigned(LogWriter) then LogWriter(format('Unit not found: "%s"',[l.Strings[i]]));
+                       if Options.Logger.Notfounded then
+                         if assigned(LogWriter) then LogWriter(format('Unit not found: "%s"',[l.Strings[i]]));
                        ScanResult.TryCreateNewUnitInfo(l.Strings[i],j);
                        ScanResult.UnitInfoArray.Mutable[j]^.UnitPath:='';
                        uarr.PushBack(j);

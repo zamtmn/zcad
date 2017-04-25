@@ -5,7 +5,7 @@ unit uwriter;
 interface
 
 uses
-  Classes, SysUtils,
+  Classes, SysUtils, Forms,
   uoptions,uscanresult;
 
 
@@ -15,6 +15,8 @@ procedure ProcessNode(Options:TOptions;var Node:TUnitInfo;const index:integer;co
 function IncludeToGraph(Options:TOptions;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter):boolean;
 
 implementation
+var
+  SourceUnitIndex,DestUnitIndex:Integer;
 function IncludeToGraph(Options:TOptions;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter):boolean;
 begin
   result:=false;
@@ -46,6 +48,25 @@ var
   i,j:integer;
   s:string;
 begin
+  SourceUnitIndex:=-1;
+  DestUnitIndex:=-1;
+
+  if Options.GraphBulding.FullG.SourceUnit<>'' then
+  begin
+    if ScanResult.isUnitInfoPresent(Options.GraphBulding.FullG.SourceUnit,i) then
+      SourceUnitIndex:=i;
+    if SourceUnitIndex=-1 then
+      Application.MessageBox('Source unit not found in graph','Error!');
+  end;
+
+  if Options.GraphBulding.FullG.DestUnit<>'' then
+  begin
+    if ScanResult.isUnitInfoPresent(Options.GraphBulding.FullG.DestUnit,i) then
+      DestUnitIndex:=i;
+    if DestUnitIndex=-1 then
+      Application.MessageBox('Destination unit not found in graph','Error!');
+  end;
+
   if assigned(LogWriter) then
   begin
     LogWriter('DiGraph Classes {');

@@ -5,7 +5,8 @@ unit uscanresult;
 interface
 
 uses
-  Classes, SysUtils, gvector, ghashmap, PasTree, PParser;
+  Classes, SysUtils, gvector, ghashmap, PasTree, PParser,
+  Graphs,MultiLst;
 
 type
   TUnitName=String;    //алиас для имени юнита
@@ -50,6 +51,8 @@ type
     public
       UnitInfoArray:TUnitInfoArray;        //массив юнитов
       UnitName2IndexMap:TUnitName2IndexMap;//хэшмап для быстрого перевода имени юнита в индекс в UnitInfoArray
+      G: TGraph;
+      M: TMultiList;
       constructor create;
       destructor destroy;override;
 
@@ -127,6 +130,8 @@ constructor TScanResult.create;
 begin
   UnitName2IndexMap:=TUnitName2IndexMap.create;
   UnitInfoArray:=TUnitInfoArray.Create;
+  G:=Nil;
+  M:=Nil;
 end;
 destructor TScanResult.destroy;
 var
@@ -139,6 +144,10 @@ begin
     UnitInfoArray.Mutable[i]^.InterfaceUses.Destroy;
   end;
   UnitInfoArray.destroy;
+  if assigned(G) then
+                     FreeAndNil(G);
+  if assigned(M) then
+                     FreeAndNil(M);
 end;
 function TScanResult.CreateEmptyUnitInfo(const un:TUnitName):TUnitInfo;
 begin

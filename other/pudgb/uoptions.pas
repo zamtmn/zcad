@@ -28,6 +28,8 @@ type
     IncludeInterfaceUses:Boolean;
     IncludeImplementationUses:Boolean;
     IncludeOnlyLoops:Boolean;
+    SourceUnit:string;
+    DestUnit:string;
   end;
   TEdgeType=(ETContinuous,ETDotted);
   TGraphBulding=packed record

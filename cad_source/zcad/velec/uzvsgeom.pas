@@ -136,8 +136,24 @@ function getAreaLine(point1:GDBVertex;point2:GDBVertex;accuracy:double):TBoundin
 //** Определение попадает ли точка внутрь прямоугольника полученого линиией с учетом погрешности
 function isPointInAreaLine(linePt1,linePt2,vertexPt:GDBVertex;accuracy:double):boolean;
 
+//** Получение реальной координаты точки расположенной внутри устройства
+//** ptdev-точка поиска
+//** insertDev - мировая точка вставленного блока
+//**scale - масштаб блока
+function getRealPointDevice(ptdev,insertDev,scale:GDBVertex):GDBVertex;
+
 implementation
 
+  //** Получение реальной координаты точки расположенной внутри устройства
+  //** ptdev-точка поиска
+  //** insertDev - мировая точка вставленного блока
+  //**scale - масштаб блока
+  function getRealPointDevice(ptdev,insertDev,scale:GDBVertex):GDBVertex;
+  begin
+       result.x:=ptdev.x*scale.x + insertDev.x;
+       result.y:=ptdev.y*scale.y + insertDev.y;
+       result.x:=ptdev.z*scale.z + insertDev.z;
+  end;
 
   //** Получение области поиска около вершины, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка
   function getAreaVertex(vertexPoint:GDBVertex;accuracy:double):TBoundingBox;

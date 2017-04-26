@@ -130,6 +130,7 @@ uses
   ExtType,
   Pointerv,
   Graphs,
+   uzccomexample,
 
    uzcenitiesvariablesextender,
    UUnitManager,
@@ -238,11 +239,14 @@ type
       end;
 
 
-      TMyRouteType=(MRT_ByWal,MRT_Sboku,MRT_Zigzag);
-      TautogenSuperLine=packed record
-         param1:TMyRouteType;
-         iii:integer;
-         sss:string;
+      TSetTypeAGSL=(Var1,Var2,Var3);
+      TAutogenSuperLine=packed record
+         nameSL:string;
+         setTypeAGSL:TSetTypeAGSL;
+         accuracy:double;
+         indent:double;
+         ProcessLayer:boolean;  //выключатель
+         LayerNamePrefix:string;//префикс
       end;
 
  //procedure autoNumberDevice(comParams:TuzvagslComParams);
@@ -260,7 +264,7 @@ type
  function mainElementAutoEmbedSL(contour2dRoom:pgdbobjlwpolyline;out contourRoomEmbedSL:TListVertex;out perpendListVertex:TListVertex;out anglePerpendCos:double;cableDistWall:double):boolean;
 
  var
-   autogenSuperLine:TautogenSuperLine;
+   autogenSuperLine:TAutogenSuperLine;
 implementation
  type
        //TListString=specialize TVector<string>;
@@ -1618,10 +1622,153 @@ begin
       // end;
 end;
 
+
+//** получение новой координаты суперлинии
+//** смотрим есть ли устройство на конце линии и если да то начинаем смотреть обрязной контур
+function getVertexSL(pt,stpt:GDBVertex;listDeviceinRoom:TListVertexDevice;accuracy:double):GDBVertex;
+var
+ i:integer;
+ pd,pObjDevice,pObjDevice2,currentSubObj,currentSubObj2:PGDBObjDevice;
+
+ ir,ir_inDevice,ir_inDevice2:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
+
+ NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
+ areaVertex:TBoundingBox;
+ pobj: pGDBObjEntity;
+ pcdev:PGDBObjLine;
+ interceptVertex,firstPoint,pConnect:GDBVertex;
+ psldb:Pointer;
+
+ listVertex:TListVertex;
+
+ drawing:PTSimpleDrawing; //для работы с чертежом
+begin
+   //extMainLine:= extendedLineFunc(listCable[i].stPoint,listCable[i].edPoint,Epsilon) ; // увиличиваем длину кабеля для исключения погрешности
+
+    listVertex:= TListVertex.Create;
+
+    areaVertex:= uzvsgeom.getAreaVertex(pt,accuracy) ; // находим зону в которой будет находится наша суперлиния
+
+    psldb:=drawing^.GetLayerTable^.{drawings.GetCurrentDWG.LayerTable.}getAddres('SYS_DEVICE_BORDER');
+
+    NearObjects.init(100); //инициализируем список
+
+    if drawings.GetCurrentROOT^.FindObjectsInVolume(areaVertex,NearObjects)then //ищем примитивы оболочка которых пересекается с volume
+    begin
+       pobj:=NearObjects.beginiterate(ir);//получаем первый примитив из списка
+       if pobj<>nil then                  //если он есть то
+       repeat
+         if pobj^.GetObjType=GDBDeviceID then //если это устройство тогда
+         begin
+            pObjDevice:=PGDBObjDevice(pobj);
+            //поиск пересечений суперлинии с девайсом, аккуратная прокладка (ищет обрезные линии)
+            //pObjDevice:= PGDBObjDevice(listDeviceinRoom[i].pdev); // передача объекта в девайсы
+
+            currentSubObj:=pObjDevice^.VarObjArray.beginiterate(ir_inDevice); //иследование содержимого девайса
+            if (currentSubObj<>nil) then
+            repeat
+                  if currentSubObj^.GetLayer=psldb then BEGIN      // если на слои который отсекаит линию psldb  какая то глобальная константа
+                   //**для линии
+                    if currentSubObj^.GetObjType=GDBLineID then begin   //если тип линия, это когда усекающая контур состоит из линий
+                     pcdev:= PGDBObjLine(currentSubObj);
+
+                     //HistoryOutStr('lBegin-х = ' + FloatToStr(pcdev^.CoordInOCS.lBegin.x));
+
+                     if uzegeometry.intercept3d(pt,stpt,uzvsgeom.getRealPointDevice(pcdev^.CoordInOCS.lBegin,pObjDevice^.GetCenterPoint,pObjDevice^.scale),uzvsgeom.getRealPointDevice(pcdev^.CoordInOCS.lEnd,pObjDevice^.GetCenterPoint,pObjDevice^.scale)).isintercept then
+                        begin
+                          interceptVertex:=uzegeometry.intercept3d(pt,stpt,uzvsgeom.getRealPointDevice(pcdev^.CoordInOCS.lBegin,pObjDevice^.GetCenterPoint,pObjDevice^.scale),uzvsgeom.getRealPointDevice(pcdev^.CoordInOCS.lEnd,pObjDevice^.GetCenterPoint,pObjDevice^.scale)).interceptcoord;
+                          listVertex.PushBack(interceptVertex);
+                        end;
+                    end;
+                  end;
+               currentSubObj:=pObjDevice^.VarObjArray.iterate(ir_inDevice);
+             until currentSubObj=nil;
+           end;
+         pobj:=NearObjects.iterate(ir);//получаем следующий примитив из списка
+       until pobj=nil;
+      end;
+
+    result:=listVertex[0];
+    for i:=1 to listVertex.size-1 do Begin
+        if  uzegeometry.Vertexlength(stpt,result)>=uzegeometry.Vertexlength(stpt,listVertex[i]) then
+          result:=listVertex[i]
+    end;
+
+    NearObjects.Clear;
+    NearObjects.Done;//убиваем список
+    listVertex.Destroy;
+end;
+
+//**обрезаем суперлинии по линиям обрезки, у устройства
+procedure cropSLonBorder(var listSL:TListSL;listDeviceinRoom:TListVertexDevice;accuracy:double);
+var
+   i:integer;
+   //scaleDev:GDBVertex;
+   //pd,pObjDevice,pObjDevice2,currentSubObj,currentSubObj2:PGDBObjDevice;
+   //ir,ir_inDevice,ir_inDevice2:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
+begin
+   for i:=0 to listSL.size-1 do
+   begin
+      //scaleDev:=listDeviceinRoom[i].pdev^.scale;
+      //HistoryOutStr('scale' + FloatToStr(scaleDev.x));
+
+      listSL.Mutable[i]^.p1:=getVertexSL(listSL[i].p1,listSL[i].p2,listDeviceinRoom,accuracy);
+      listSL.Mutable[i]^.p2:=getVertexSL(listSL[i].p2,listSL[i].p1,listDeviceinRoom,accuracy);
+
+
+     //поиск пересечений суперлинии с девайсом, аккуратная прокладка
+       // pObjDevice:= PGDBObjDevice(listDeviceinRoom[i].pdev); // передача объекта в девайсы
+       // currentSubObj:=pObjDevice^.VarObjArray.beginiterate(ir_inDevice); //иследование содержимого девайса
+       // if (currentSubObj<>nil) then
+       // repeat
+       //       if currentSubObj^.GetLayer=psldb then BEGIN      // если на слои который отсекаит линию psldb  какая то глобальная константа
+       //        //**для линии
+       //         if currentSubObj^.GetObjType=GDBLineID then begin   //если тип линия, это когда усекающая контур состоит из линий
+       //          pcdev:= PGDBObjLine(currentSubObj);
+       //
+       //          tempPoint1.x:= pcdev^.CoordInOCS.lBegin.x + pObjDevice^.GetCenterPoint.x;
+       //          tempPoint1.y:= pcdev^.CoordInOCS.lBegin.y + pObjDevice^.GetCenterPoint.y;
+       //          tempPoint1.z:= 0;
+       //
+       //          tempPoint2.x:= pcdev^.CoordInOCS.lEnd.x + pObjDevice^.GetCenterPoint.x;
+       //          tempPoint2.y:= pcdev^.CoordInOCS.lEnd.y + pObjDevice^.GetCenterPoint.y;
+       //          tempPoint2.z:= 0;
+       //          //extNextLine:=extendedLineFunc(tempPoint1,tempPoint2,Epsilon);
+       //          //testTempDrawLine(extNextLine.stPoint,extNextLine.edPoint); // визуализация
+       //
+       //          if uzegeometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).isintercept then
+       //             begin
+       //               interceptVertex:=uzegeometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).interceptcoord;
+       //               //проверка есть ли уже такая вершина, если нет то добавляем вершину и сразу создаем ребро
+       //                if dublicateVertex({listDevice}result.listVertex,interceptVertex,Epsilon) = false then begin
+       //                 infoDevice.deviceEnt:=nil;
+       //                 infoDevice.centerPoint:=interceptVertex;
+       //                 result.listVertex{listDevice}.PushBack(infoDevice);
+       //
+       //                 infoEdge.VIndex1:=result.listVertex{listDevice}.Size-1;
+       //                 infoEdge.VIndex2:=getNumDeviceInListDevice(result.listVertex{listDevice},pObjDevice);
+       //                 infoEdge.VPoint1:=interceptVertex;
+       //                 infoEdge.VPoint2:=pObjDevice^.GetCenterPoint;
+       //                 infoEdge.edgeLength:=uzegeometry.Vertexlength(interceptVertex,pObjDevice^.GetCenterPoint);
+       //                 result.listEdge.PushBack(infoEdge);
+       //               end;
+       //             end;
+       //         end;
+       //         //**//
+       //
+       //
+       //         end;
+       //  currentSubObj:=pObjDevice^.VarObjArray.iterate(ir_inDevice);
+       //until currentSubObj=nil;
+
+
+   end;
+end;
+
 function Test111sl(operands:TCommandOperands):TCommandResult;
-const
-  accuracy=0.001;
-  indent=5;
+//const
+  //accuracy=0.001;
+  //indent=5;
 var
  contourRoom:PGDBObjPolyLine;
  contour2DRoom:pgdbobjlwpolyline;
@@ -1646,11 +1793,12 @@ var
 begin
   //if commandmanager.get3dpoint('Specify insert point:',stPoint) then
 
-     SysUnit^.RegisterType(TypeInfo(TautogenSuperLine));//регистрируем тип данных в зкадном RTTI
-     SysUnit^.SetTypeDesk(TypeInfo(TautogenSuperLine),['SuperLineUnit','Layer name prefix','Layer change']);//даем человеческие имена параметрам
+     SysUnit^.RegisterType(TypeInfo(TAutogenSuperLine));//регистрируем тип данных в зкадном RTTI
+
+     SysUnit^.SetTypeDesk(TypeInfo(TAutogenSuperLine),['NameSuperLine','Cable laying type','Accuracy','Distance from the wall','Layer change','Layer name prefix']);//даем человеческие имена параметрам
      //psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
     //DrawSuperlineParams.pu:=psu;
-    zcShowCommandParams(pointer(SysUnit^.TypeName2PTD('TautogenSuperLine')),@autogenSuperLine);
+    zcShowCommandParams(pointer(SysUnit^.TypeName2PTD('TAutogenSuperLine')),@autogenSuperLine);
 
    UndoMarcerIsPlazed:=false;
    zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'AutoGenerated SuperLine');
@@ -1661,7 +1809,7 @@ begin
      // if uzvagsl.isRectangelRoom(contourRoom) then        //это прямоугольная комната?
          //historyoutstr('проверки пройдены');
 
-          if mainElementAutoEmbedSL(contour2DRoom,contourRoomEmbedSL,perpendListVertex,anglePerpendCos,indent) then  begin
+          if mainElementAutoEmbedSL(contour2DRoom,contourRoomEmbedSL,perpendListVertex,anglePerpendCos,autogenSuperLine.indent) then  begin
            listDeviceinRoom:=uzvagsl.getListDeviceinRoom(contourRoom);  //получен список извещателей внутри помещения
 
            historyoutstr('Количество выделяных извещателей = ' + inttostr(listDeviceinRoom.Size));
@@ -1678,17 +1826,21 @@ begin
            graphVerticalNearASL(graphASL,listColumnDev,listWallOrient,perpendListVertex);
 
            //**Добавление вершин контура прокладки кабеля по периметру помещения
-           graphVertexContourRoomEmbedSL(graphASL,listWallOrient,accuracy);
+           graphVertexContourRoomEmbedSL(graphASL,listWallOrient,autogenSuperLine.accuracy);
 
            //** добавление в граф контура прокладки кабеля внутри помещения, с учетом вершин лежайших на контуре
-           graphEdgeContourRoomEmbedSL(graphASL,listWallOrient,accuracy);
+           graphEdgeContourRoomEmbedSL(graphASL,listWallOrient,autogenSuperLine.accuracy);
 
            //**Получения списка суперлиний для последующей отрисовки
            listSL:=getListSL(graphASL,listDeviceinRoom);
 
+           //**обрезаем суперлинии по линиям обрезки, у устройства
+           cropSLonBorder(listSL,listDeviceinRoom,autogenSuperLine.accuracy);
+
            historyoutstr('Количество вершин графа= ' + inttostr(graphASL.listVertex.size));
            for i:=0 to listSL.size-1 do
-              uzvtestdraw.testTempDrawLineColor(listSL[i].p1,listSL[i].p2,5);
+           uzccomexample.createSuperLine(listSL[i].p1,listSL[i].p2,autogenSuperLine.nameSL,autogenSuperLine.ProcessLayer,autogenSuperLine.LayerNamePrefix);
+              //uzvtestdraw.testTempDrawLineColor(listSL[i].p1,listSL[i].p2,5);
 
            //for i:=0 to graphASL.listEdge.size-1 do
            //   uzvtestdraw.testTempDrawLineColor(graphASL.listEdge[i].VPoint1,graphASL.listEdge[i].VPoint2,5);
@@ -1702,12 +1854,19 @@ begin
    end;
          //uzvagsl.autoNumberDevice(uzvagslComParams);
    zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);
+   zcHideCommandParams; //< Возвращает инспектор в значение по умолчанию
    zcRedrawCurrentDrawing;
 
    Commandmanager.executecommandend;
 
 end;
 initialization
+  autogenSuperLine.nameSL:='??';
+  //autogenSuperLine.setTypeAGSL:='Var1';
+  autogenSuperLine.accuracy:=0.001;
+  autogenSuperLine.indent:=5;
+  autogenSuperLine.LayerNamePrefix:='SYS_SL_';
+  autogenSuperLine.ProcessLayer:=true;
   CreateCommandFastObjectPlugin(@Test111sl,'t111',CADWG,0);
 end.
 

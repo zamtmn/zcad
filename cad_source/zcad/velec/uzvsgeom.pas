@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-{$mode objfpc}
+{$mode objfpc}{$h+}
 
 unit uzvsgeom;
 {$INCLUDE def.inc}
@@ -139,7 +139,7 @@ function isPointInAreaLine(linePt1,linePt2,vertexPt:GDBVertex;accuracy:double):b
 //** Получение реальной координаты точки расположенной внутри устройства
 //** ptdev-точка поиска
 //** insertDev - мировая точка вставленного блока
-//**scale - масштаб блока
+//** scale - масштаб блока
 function getRealPointDevice(ptdev,insertDev,scale:GDBVertex):GDBVertex;
 
 implementation
@@ -150,9 +150,10 @@ implementation
   //**scale - масштаб блока
   function getRealPointDevice(ptdev,insertDev,scale:GDBVertex):GDBVertex;
   begin
-       result.x:=ptdev.x*scale.x + insertDev.x;
-       result.y:=ptdev.y*scale.y + insertDev.y;
-       result.x:=ptdev.z*scale.z + insertDev.z;
+       result.x:=(ptdev.x * scale.x) + insertDev.x;
+       HistoryOutStr('result-х = ' + FloatToStr(result.x));
+       result.y:=(ptdev.y * scale.y) + insertDev.y;
+       result.x:=(ptdev.z * scale.z) + insertDev.z;
   end;
 
   //** Получение области поиска около вершины, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка

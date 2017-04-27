@@ -1636,7 +1636,7 @@ var
  areaVertex:TBoundingBox;
  pobj: pGDBObjEntity;
  pcdev:PGDBObjLine;
- interceptVertex,firstPoint,pConnect:GDBVertex;
+ interceptVertex,firstPoint,pConnect,tempvert:GDBVertex;
  psldb:Pointer;
 
  listVertex:TListVertex;
@@ -1648,6 +1648,8 @@ begin
     listVertex:= TListVertex.Create;
 
     areaVertex:= uzvsgeom.getAreaVertex(pt,accuracy) ; // находим зону в которой будет находится наша суперлиния
+    result:=pt;
+    drawing:=drawings.CurrentDWG;
 
     psldb:=drawing^.GetLayerTable^.{drawings.GetCurrentDWG.LayerTable.}getAddres('SYS_DEVICE_BORDER');
 
@@ -1672,7 +1674,11 @@ begin
                     if currentSubObj^.GetObjType=GDBLineID then begin   //если тип линия, это когда усекающая контур состоит из линий
                      pcdev:= PGDBObjLine(currentSubObj);
 
-                     //HistoryOutStr('lBegin-х = ' + FloatToStr(pcdev^.CoordInOCS.lBegin.x));
+                     HistoryOutStr('lBegin-х = ' + FloatToStr(pcdev^.CoordInOCS.lBegin.x));
+                     HistoryOutStr('lgetcenter-х = ' + FloatToStr(pObjDevice^.GetCenterPoint.x));
+                     HistoryOutStr('lscale-х = ' + FloatToStr(pObjDevice^.scale.x));
+                     tempvert:=uzvsgeom.getRealPointDevice(pcdev^.CoordInOCS.lBegin,pObjDevice^.GetCenterPoint,pObjDevice^.scale);
+                     HistoryOutStr('lrealBegintemp-х = ' + FloatToStr(tempvert.x));
 
                      if uzegeometry.intercept3d(pt,stpt,uzvsgeom.getRealPointDevice(pcdev^.CoordInOCS.lBegin,pObjDevice^.GetCenterPoint,pObjDevice^.scale),uzvsgeom.getRealPointDevice(pcdev^.CoordInOCS.lEnd,pObjDevice^.GetCenterPoint,pObjDevice^.scale)).isintercept then
                         begin
@@ -1688,8 +1694,11 @@ begin
        until pobj=nil;
       end;
 
-    result:=listVertex[0];
-    for i:=1 to listVertex.size-1 do Begin
+    HistoryOutStr('dlina listvert = ' + intToStr(listVertex.size));
+
+    //if listVertex.size>0 then
+    //   result:=listVertex[0];
+    for i:=0 to listVertex.size-1 do Begin
         if  uzegeometry.Vertexlength(stpt,result)>=uzegeometry.Vertexlength(stpt,listVertex[i]) then
           result:=listVertex[i]
     end;

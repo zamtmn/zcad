@@ -148,6 +148,8 @@ var
    RectangParam:TRectangParam;     //**< Переменная содержащая опции команды Rectangle
    DrawSuperlineParams:TDrawSuperlineParams;
 
+   function createSuperLine(p1,p2:GDBVertex;nameSL:string;changeLayer:boolean;LayerNamePrefix:string):TCommandResult;
+
 implementation
 //** блаблабла
 function isRDIMHorisontal(p1,p2,p3,nevp3:gdbvertex):integer;
@@ -831,6 +833,54 @@ begin
     zcHideCommandParams; //< Возвращает инспектор в значение по умолчанию
     result:=cmd_ok;
 end;
+function createSuperLine(p1,p2:GDBVertex;nameSL:string;changeLayer:boolean;LayerNamePrefix:string):TCommandResult;
+var
+    psuperline:PGDBObjSuperLine;
+    pvarext:PTVariablesExtender;
+    psu:ptunit;
+    pvd:pvardesk;        //для нахождения имени суперлинии
+    layername:gdbstring; //имя слоя куда будет помещена супелиния
+    player:PGDBLayerProp;//указатель на слой куда будет помещена супелиния
+begin
+    psuperline := AllocEnt(GDBSuperLineID);
+    psuperline^.init(nil,nil,0,p1,p2);
+    pvarext:=psuperline^.GetExtension(typeof(TVariablesExtender));
+    if pvarext<>nil then
+    begin
+      psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
+      if psu<>nil then
+        pvarext^.entityunit.copyfrom(psu);
+    end;
+    zcSetEntPropFromCurrentDrawingProp(psuperline);           //присваиваем умолчательные значения
+
+
+    //если манипуляции со слоем включены и ранее был найден "юнит" с параметрами
+    if (changeLayer)and(psu<>nil) then
+    begin
+      //ищем переменную 'NMO_Name'
+      pvd:=psu.FindVariable('NMO_Name');
+      pgdbstring(pvd^.data.Instance)^:=nameSL;
+      //если найдена
+      if pvd<>nil then
+      begin
+        //получаем желаемое имя слоя
+        layername:=LayerNamePrefix+nameSL;
+        //pvd.data.PTD^.GetValueAsString(pvd.data.Instance);
+        //ищем описание слоя по имени
+
+        player:=drawings.GetCurrentDWG.LayerTable.getAddres(Tria_Utf8ToAnsi(layername));
+        //если найден - присваиваем, иначе ругаемя
+        if player<>nil then
+                           psuperline.vp.Layer:=player
+                       else
+                           if assigned(HistoryOutStr) then HistoryOutStr(format('Layer "%s" not found',[layername]));
+      end;
+    end;
+    //zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'DrawSuperLine');
+    zcAddEntToCurrentDrawingWithUndo(psuperline);
+    zcRedrawCurrentDrawing;
+end;
+
 function DrawSuperLine_com(operands:TCommandOperands):TCommandResult;
 var
     psuperline:PGDBObjSuperLine;

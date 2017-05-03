@@ -30,6 +30,7 @@ type
     IncludeOnlyLoops:Boolean;
     SourceUnit:string;
     DestUnit:string;
+    CalcEdgesWeight:Boolean;
   end;
   TEdgeType=(ETContinuous,ETDotted);
   TGraphBulding=packed record
@@ -37,6 +38,7 @@ type
     FullG:TFullG;
     InterfaceUsesEdgeType:TEdgeType;
     ImplementationUsesEdgeType:TEdgeType;
+    PathClusters:Boolean;
   end;
   TLogger=packed record
     ScanerMessages:Boolean;
@@ -96,8 +98,13 @@ begin
  result.GraphBulding.InterfaceUsesEdgeType:=ETContinuous;
  result.GraphBulding.FullG.IncludeImplementationUses:=true;
  result.GraphBulding.ImplementationUsesEdgeType:=ETDotted;
+ result.GraphBulding.PathClusters:=true;
  result.GraphBulding.FullG.IncludeOnlyLoops:=false;
+ result.GraphBulding.FullG.CalcEdgesWeight:=true;
  result.GraphBulding.Circ.CalcEdgesWeight:=false;
+
+ result.GraphBulding.FullG.SourceUnit:='uzeentity';
+ result.GraphBulding.FullG.DestUnit:='uzeenttext';
 end;
 
 end.

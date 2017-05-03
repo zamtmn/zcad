@@ -59,12 +59,14 @@ end;
 procedure PrepareModule(var M:TPasModule;var E:TPasTreeContainer;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 var
    UnitIndex:TUnitIndex;
+   s:string;
 begin
    if ScanResult.TryCreateNewUnitInfo(M.Name,UnitIndex)then
    begin
    if M is TPasProgram then
     begin
      ScanResult.UnitInfoArray.Mutable[UnitIndex]^.UnitType:=TUnitType.UTProgram;
+     ScanResult.UnitInfoArray.Mutable[UnitIndex]^.UnitPath:=extractfilepath(M.SourceFilename);
      GetDecls(PMProgram,(M as TPasProgram).ProgramSection as TPasDeclarations,Options,ScanResult,UnitIndex,LogWriter);
      if assigned(M.ImplementationSection) then
        begin
@@ -74,6 +76,7 @@ begin
    else
     begin
       ScanResult.UnitInfoArray.Mutable[UnitIndex]^.UnitType:=TUnitType.UTUnit;
+      ScanResult.UnitInfoArray.Mutable[UnitIndex]^.UnitPath:=extractfilepath(M.SourceFilename);
       GetDecls(PMInterface,M.InterfaceSection as TPasDeclarations,Options,ScanResult,UnitIndex,LogWriter);
       if assigned(M.ImplementationSection) then
        begin
@@ -86,23 +89,34 @@ begin
    M:=nil;
    E:=nil;
    end;
+   s:=ScanResult.UnitInfoArray.Mutable[UnitIndex]^.UnitPath;
 end;
-
+function MemoryUsed: Cardinal;
+ begin
+   Result := GetFPCHeapStatus.CurrHeapUsed;
+end;
 procedure ScanModule(mn:String;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 var
   M:TPasModule;
   E:TSimpleEngine;
   myTime:TDateTime;
+  memused:Cardinal;
 begin
    E := TSimpleEngine.Create(Options);
    E.LogWriter:=LogWriter;
    //if assigned(LogWriter) then LogWriter(format('Process file: "%s"',[mn]));
    try
-     myTime:=now;
-     M := ParseSource(E,mn+' '+Options.ParserOptions._CompilerOptions,Options.ParserOptions.TargetOS,Options.ParserOptions.TargetCPU,[poSkipDefaultDefs]);
-     PrepareModule(M,TPasTreeContainer(E),Options,ScanResult,LogWriter);
      if Options.Logger.Timer then
-       LogWriter(format('Time to parse "%s" %fsec',[mn,(now-myTime)*10e4]));
+      begin
+       myTime:=now;
+       memused:=MemoryUsed;
+      end;
+     M := ParseSource(E,mn+' '+Options.ParserOptions._CompilerOptions,Options.ParserOptions.TargetOS,Options.ParserOptions.TargetCPU,[poSkipDefaultDefs]);
+     if Options.Logger.Timer then
+      begin
+       LogWriter(format('Parse "%s" %fsec, %db',[mn,(now-myTime)*10e4,(MemoryUsed-memused)]));
+      end;
+     PrepareModule(M,TPasTreeContainer(E),Options,ScanResult,LogWriter);
      if assigned(E) then E.Free;
      if assigned(M) then M.Free;
    except
@@ -218,7 +232,7 @@ begin
                     ScanModule(s,Options,ScanResult,LogWriter);
                     if ScanResult.UnitName2IndexMap.GetValue(lowercase(l.Strings[i]),j) then
                     begin
-                      ScanResult.UnitInfoArray.Mutable[j]^.UnitPath:='s';
+                      //ScanResult.UnitInfoArray.Mutable[j]^.UnitPath:='s';
                       uarr.PushBack(j);
                     end;
                   end

@@ -100,11 +100,12 @@ begin
    RunTimeUnit^.SetTypeDesk(TypeInfo(TPaths),['File','Paths']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TParser),['Compiler options','Target OS','Target CPU']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TGraphBulding),['Circular graph','Full graph','Interface uses edge type',
-                                                     'Implementation uses edge type','Calc edges weight']);
+                                                     'Implementation uses edge type',{'Calc edges weight',}
+                                                     'Path clusters']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TCircularG),['Calc edges weight']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TFullG),['Include not founded units','Include interface uses',
                                               'Include implementation uses','Only looped edges',
-                                              'Source unit','Dest unit']);
+                                              'Source unit','Dest unit','Calc edges weight']);
 
    RunTimeUnit^.SetTypeDesk(TypeInfo(TLogger),['Scaner messages','Parser messages','Timer','Not founded units']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TEdgeType),['Continuous','Dotted']);

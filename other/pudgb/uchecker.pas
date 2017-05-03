@@ -15,14 +15,7 @@ uses
 procedure CheckGraph(Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 
 implementation
-
 procedure CheckGraph(Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
-function getDecoratedUnnitname(index:integer):string;
-begin
-  //result:=ScanResult.UnitInfoArray[index].UnitName;
-  result:=format('%s_%d_%d',[ScanResult.UnitInfoArray[index].UnitName,ScanResult.UnitInfoArray[index].InterfaceUses.Size,ScanResult.UnitInfoArray[index].ImplementationUses.Size])
-end;
-
 var
   i,j,k,mmm:integer;
   TotalUnitsWithImplUses,
@@ -126,10 +119,10 @@ begin
            StrongEdge:=i;
          end;
          te.Restore;
-         LogWriter(format(' %s -> %s [label=%d]',[getDecoratedUnnitname(ScanResult.G.Edges[i].V1.Index),getDecoratedUnnitname(ScanResult.G.Edges[i].V2.Index),CurrentEdgesWithLoops]))
+         LogWriter(format(' %s -> %s [label=%d]',[getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.G.Edges[i].V1.Index]),getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.G.Edges[i].V2.Index]),CurrentEdgesWithLoops]))
        end
           else
-              LogWriter(format(' %s -> %s',[getDecoratedUnnitname(ScanResult.G.Edges[i].V1.Index),getDecoratedUnnitname(ScanResult.G.Edges[i].V2.Index)]));
+              LogWriter(format(' %s -> %s',[getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.G.Edges[i].V1.Index]),getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.G.Edges[i].V2.Index])]));
       end;
     end;
     LogWriter('}');

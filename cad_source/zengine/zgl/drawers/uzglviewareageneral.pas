@@ -166,7 +166,6 @@ var
    sysvarDrawInsidePaintMessage:TGDB3StateBool=T3SB_Default;
    sysvarDWGPolarMode:GDBBoolean=false;
    SysVarRDLineSmooth:GDBBoolean=false;
-   SysVarRDPanObjectDegradation:GDBBoolean=false;
    sysvarRDUseStencil:GDBBoolean=false;
    sysvarRDLastRenderTime:integer=0;
    sysvarRDLastUpdateTime:integer=0;

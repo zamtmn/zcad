@@ -19,8 +19,9 @@ unit uzeentabstracttext;
 {$INCLUDE def.inc}
 
 interface
-uses uzglviewareageneral,uzgldrawcontext,uzeentity,uzecamera,gzctnrvectorpobjects,
-     uzbstrproc,sysutils,uzeentplainwithox,uzbtypesbase,UGDBSelectedObjArray,
+uses {эти нужно убрать}{uzglviewareageneral,}UGDBSelectedObjArray,
+     uzgldrawcontext,uzeentity,uzecamera,gzctnrvectorpobjects,
+     uzbstrproc,sysutils,uzeentplainwithox,uzbtypesbase,
      UGDBOutbound2DIArray,uzbgeomtypes,uzbtypes,uzeconsts,uzegeometry,math;
 type
 //jstm(*'TopCenter'*)=2,
@@ -58,6 +59,8 @@ GDBObjAbstractText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlainWithOX)
                          procedure transform(const t_matrix:DMatrix4D);virtual;
                    end;
 {EXPORT-}
+var
+   SysVarRDPanObjectDegradation:GDBBoolean=false;
 implementation
 //uses
 //   log;

@@ -1,0 +1,248 @@
+object Form1: TForm1
+  Left = 83
+  Height = 771
+  Top = 79
+  Width = 717
+  Caption = 'Form1'
+  ClientHeight = 771
+  ClientWidth = 717
+  DesignTimePPI = 113
+  OnCreate = _onCreate
+  LCLVersion = '1.9.0.0'
+  object ListBox1: TListBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Splitter2
+    AnchorSideBottom.Control = Splitter1
+    AnchorSideBottom.Side = asrBottom
+    Left = 0
+    Height = 510
+    Top = 0
+    Width = 208
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    ItemHeight = 0
+    OnSelectionChange = _SelectMainItem
+    Options = [lboDrawFocusRect]
+    TabOrder = 0
+  end
+  object ListBox2: TListBox
+    AnchorSideLeft.Control = Splitter2
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Splitter3
+    AnchorSideBottom.Control = Splitter1
+    AnchorSideBottom.Side = asrBottom
+    Left = 214
+    Height = 510
+    Top = 0
+    Width = 322
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    ItemHeight = 0
+    OnSelectionChange = SelectSubItem
+    Options = [lboDrawFocusRect]
+    TabOrder = 1
+  end
+  object GroupBox1: TGroupBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Splitter1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 0
+    Height = 261
+    Top = 510
+    Width = 717
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    Caption = 'Preview'
+    ClientHeight = 237
+    ClientWidth = 713
+    TabOrder = 2
+    object PaintBox1: TPaintBox
+      Left = 0
+      Height = 237
+      Top = 0
+      Width = 713
+      Align = alClient
+      OnPaint = PBpaint
+    end
+  end
+  object Splitter1: TSplitter
+    AnchorSideLeft.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Cursor = crVSplit
+    Left = 0
+    Height = 6
+    Top = 504
+    Width = 717
+    Align = alNone
+    Anchors = [akTop, akLeft, akRight]
+    ResizeAnchor = akBottom
+  end
+  object Splitter2: TSplitter
+    AnchorSideTop.Control = Owner
+    AnchorSideBottom.Control = Splitter1
+    Left = 208
+    Height = 504
+    Top = 0
+    Width = 6
+    Align = alNone
+    Anchors = [akTop, akLeft, akBottom]
+  end
+  object CheckBox1: TCheckBox
+    AnchorSideLeft.Control = LabeledEdit1
+    AnchorSideTop.Control = LabeledEdit1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 547
+    Height = 19
+    Top = 51
+    Width = 170
+    Anchors = [akTop, akLeft, akRight]
+    AutoSize = False
+    Caption = 'Draw text'
+    Checked = True
+    OnChange = _dtchange
+    State = cbChecked
+    TabOrder = 5
+  end
+  object LabeledEdit1: TLabeledEdit
+    AnchorSideLeft.Control = Splitter3
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 547
+    Height = 27
+    Top = 24
+    Width = 170
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 5
+    EditLabel.AnchorSideLeft.Control = LabeledEdit1
+    EditLabel.AnchorSideRight.Control = LabeledEdit1
+    EditLabel.AnchorSideRight.Side = asrBottom
+    EditLabel.AnchorSideBottom.Control = LabeledEdit1
+    EditLabel.Left = 547
+    EditLabel.Height = 19
+    EditLabel.Top = 2
+    EditLabel.Width = 170
+    EditLabel.Caption = 'GetDetailSize'
+    EditLabel.ParentColor = False
+    ReadOnly = True
+    TabOrder = 6
+    Text = 'LabeledEdit1'
+  end
+  object Splitter3: TSplitter
+    AnchorSideTop.Control = Owner
+    AnchorSideBottom.Control = Splitter1
+    Left = 536
+    Height = 504
+    Top = 0
+    Width = 6
+    Align = alNone
+    Anchors = [akTop, akLeft, akBottom]
+  end
+  object Label1: TLabel
+    AnchorSideLeft.Control = LabeledEdit1
+    AnchorSideTop.Control = CheckBox1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 547
+    Height = 19
+    Top = 70
+    Width = 170
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Custom size:'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    AnchorSideLeft.Control = LabeledEdit1
+    AnchorSideTop.Control = Label1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = SpinEdit1
+    AnchorSideBottom.Side = asrBottom
+    Left = 547
+    Height = 27
+    Top = 89
+    Width = 40
+    Anchors = [akTop, akLeft, akBottom]
+    Caption = 'Width:'
+    Layout = tlCenter
+    ParentColor = False
+  end
+  object SpinEdit1: TSpinEdit
+    AnchorSideLeft.Control = SpinEdit2
+    AnchorSideTop.Control = Label1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 591
+    Height = 27
+    Top = 89
+    Width = 126
+    Anchors = [akTop, akLeft, akRight]
+    MaxValue = 1000
+    MinValue = -1
+    OnChange = _dtchange
+    TabOrder = 8
+    Value = 100
+  end
+  object Label3: TLabel
+    AnchorSideLeft.Control = LabeledEdit1
+    AnchorSideTop.Control = Label2
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = SpinEdit2
+    AnchorSideBottom.Side = asrBottom
+    Left = 547
+    Height = 27
+    Top = 116
+    Width = 44
+    Anchors = [akTop, akLeft, akBottom]
+    Caption = 'Height:'
+    Layout = tlCenter
+    ParentColor = False
+  end
+  object SpinEdit2: TSpinEdit
+    AnchorSideLeft.Control = Label3
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Label2
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 591
+    Height = 27
+    Top = 116
+    Width = 126
+    Anchors = [akTop, akLeft, akRight]
+    MaxValue = 1000
+    MinValue = -1
+    OnChange = _dtchange
+    TabOrder = 9
+    Value = 100
+  end
+  object CheckBox2: TCheckBox
+    AnchorSideLeft.Control = LabeledEdit1
+    AnchorSideTop.Control = SpinEdit2
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 547
+    Height = 19
+    Top = 143
+    Width = 170
+    Anchors = [akTop, akLeft, akRight]
+    AutoSize = False
+    Caption = 'White background'
+    Checked = True
+    OnChange = _dtchange
+    State = cbChecked
+    TabOrder = 10
+  end
+end

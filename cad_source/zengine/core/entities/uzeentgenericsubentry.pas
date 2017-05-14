@@ -42,8 +42,8 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                             //ObjTree:TEntTreeNode;
                             function AddObjectToObjArray(p:GDBPointer):GDBInteger;virtual;
                             procedure GoodAddObjectToObjArray(const obj:GDBObjEntity);virtual;
-                            {function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;virtual;
-                            function CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;virtual;}
+                            //function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;virtual;
+                            //function CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;virtual;
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
                             procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;
@@ -60,7 +60,7 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                             procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;
                             procedure RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:GDBInteger);virtual;
                             procedure GoodRemoveMiFromArray(const obj:GDBObjEntity);virtual;
-                            {function SubMi(pobj:pGDBObjEntity):GDBInteger;virtual;}
+                            //function SubMi(pobj:pGDBObjEntity):GDBInteger;virtual;
                             //** Добавляет объект в область ConstructObjRoot или mainObjRoot или итд. Пример добавления gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@sampleObj);
                             procedure AddMi(pobj:PGDBObjSubordinated);virtual;
                             procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;

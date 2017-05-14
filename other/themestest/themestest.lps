@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="10"/>
+    <BuildModes Active="Default"/>
+    <Units Count="14">
+      <Unit0>
+        <Filename Value="themestest.pas"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <UsageCount Value="39"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="umainform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <CursorPos X="146" Y="191"/>
+        <UsageCount Value="39"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="E:\lazarus\lcl\themes.pas"/>
+        <TopLine Value="432"/>
+        <CursorPos X="14" Y="453"/>
+        <UsageCount Value="9"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="E:\src\fpcsrc\rtl\objpas\typinfo.pp"/>
+        <TopLine Value="400"/>
+        <CursorPos X="42" Y="421"/>
+        <UsageCount Value="8"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="E:\lazarus\lcl\stdctrls.pp"/>
+        <TopLine Value="1263"/>
+        <CursorPos X="14" Y="1281"/>
+        <UsageCount Value="8"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="E:\lazarus\lcl\include\customlistbox.inc"/>
+        <TopLine Value="542"/>
+        <CursorPos Y="572"/>
+        <UsageCount Value="8"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="E:\src\fpcsrc\rtl\objpas\classes\classesh.inc"/>
+        <TopLine Value="1765"/>
+        <CursorPos X="14" Y="1784"/>
+        <UsageCount Value="8"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="E:\src\fpcsrc\rtl\objpas\types.pp"/>
+        <TopLine Value="271"/>
+        <CursorPos X="47" Y="292"/>
+        <UsageCount Value="8"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="E:\src\fpcsrc\rtl\win\wininc\struct.inc"/>
+        <TopLine Value="2927"/>
+        <CursorPos X="6" Y="2948"/>
+        <UsageCount Value="8"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="E:\home\zamtmn\hdd\src\lazarus\lcl\stdctrls.pp"/>
+        <TopLine Value="524"/>
+        <CursorPos X="15" Y="546"/>
+        <UsageCount Value="8"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="E:\lazarus\lcl\lcltype.pp"/>
+        <TopLine Value="113"/>
+        <CursorPos X="3" Y="133"/>
+        <UsageCount Value="9"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="E:\src\lazarus\lcl\graphics.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="256"/>
+        <CursorPos X="10" Y="282"/>
+        <UsageCount Value="11"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="E:\src\lazarus\lcl\themes.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="477"/>
+        <CursorPos X="39" Y="494"/>
+        <UsageCount Value="10"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="E:\src\lazarus\lcl\lcltype.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="226"/>
+        <CursorPos X="12" Y="245"/>
+        <UsageCount Value="10"/>
+      </Unit13>
+    </Units>
+    <JumpHistory HistoryIndex="-1"/>
+  </ProjectSession>
+</CONFIG>

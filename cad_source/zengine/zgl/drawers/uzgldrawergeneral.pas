@@ -21,7 +21,7 @@ unit uzgldrawergeneral;
 interface
 uses uzbgeomtypes,uzgvertex3sarray,uzgprimitivescreatorabstract,uzgprimitivescreator,
      uzgldrawerabstract,uzepalette,types,Classes,Graphics,
-     uzbtypesbase,uzbtypes,uzecamera,uzegeometry;
+     uzbtypesbase,uzbtypes,uzecamera,uzegeometry,UGDBPoint3DArray;
 type
 TPaintState=(TPSBufferNotSaved,TPSBufferSaved);
 TZGLGeneralDrawer=class(TZGLAbstractDrawer)
@@ -62,6 +62,7 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
                         procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
                         procedure DrawAABB3DInModelSpace(const BoundingBox:TBoundingBox;var matrixs:tmatrixs);override;
+                        procedure DrawClosedContour3DInModelSpace(const pa:GDBPoint3dArray;var matrixs:tmatrixs);override;
                         procedure WorkAreaResize(rect:trect);override;
                         procedure SaveBuffers;override;
                         procedure RestoreBuffers;override;
@@ -218,6 +219,23 @@ begin
                                createvertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),matrixs);
         DrawLine3DInModelSpace(createvertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),
                                createvertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),matrixs);
+end;
+procedure TZGLGeneralDrawer.DrawClosedContour3DInModelSpace(const pa:GDBPoint3dArray;var matrixs:tmatrixs);
+var p,pold,pstart:PGDBVertex;
+    i:GDBInteger;
+begin
+  if pa.count<2 then exit;
+  p:=pa.GetParrayAsPointer;
+  pold:=p;
+  pstart:=p;
+  inc(p);
+  for i:=0 to pa.count-3 do
+  begin
+     DrawLine3DInModelSpace(pold^,p^,matrixs);
+     inc(p);
+     inc(pold);
+  end;
+  DrawLine3DInModelSpace(pold^,pstart^,matrixs);
 end;
 procedure TZGLGeneralDrawer.WorkAreaResize;
 begin

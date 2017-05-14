@@ -19,7 +19,7 @@
 unit uzgldrawerabstract;
 {$INCLUDE def.inc}
 interface
-uses uzgindexsarray,uzgvertex3sarray,{$IFDEF DELPHI}types,{$ENDIF}uzgprimitivescreatorabstract,
+uses uzgindexsarray,uzgvertex3sarray,UGDBPoint3DArray,{$IFDEF DELPHI}types,{$ENDIF}uzgprimitivescreatorabstract,
      uzepalette,Classes,Graphics,uzbtypes,uzecamera,uzbgeomtypes,uzegeometry;
 type
 TRenderMode=(TRM_ModelSpace,TRM_DisplaySpace,TRM_WindowSpace);
@@ -78,6 +78,7 @@ TZGLAbstractDrawer=class
                         procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);overload;virtual;abstract;
                         procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);overload;virtual;abstract;
                         procedure DrawAABB3DInModelSpace(const BoundingBox:TBoundingBox;var matrixs:tmatrixs);virtual;abstract;
+                        procedure DrawClosedContour3DInModelSpace(const pa:GDBPoint3dArray;var matrixs:tmatrixs);virtual;abstract;
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);virtual;abstract;
                         procedure PostRenderDraw;virtual;abstract;
 

@@ -424,28 +424,10 @@ procedure GDBObjEllipse.DrawGeometry;
 //var
 //  i: GDBInteger;
 begin
-  {oglsm.myglpushmatrix;
-  glscaledf(r, r, 1);
-  gltranslatef(p_insert.x / r, p_insert.y / r, p_insert.z);
-  angle := endangle - startangle;
-  if angle < 0 then angle := 2 * pi + angle;
-  myglbegin(GL_line_strip);
-  glVertex3d(cos(startangle), sin(startangle), 0);
-  for i := 1 to arccount do
-  begin
-    glVertex3d(cos(startangle + i / arccount * angle), sin(startangle + i / arccount * angle), 0);
-  end;
-  myglend;
-  oglsm.myglpopmatrix;}
 
+  DC.drawer.DrawClosedContour3DInModelSpace(Vertex3D_in_WCS_Array,DC.DrawingContext.matrixs);
+  //Vertex3D_in_WCS_Array.drawgeometry;
 
-  //oglsm.myglpushmatrix;
-  //glmultmatrixd(@objmatrix);
-  Vertex3D_in_WCS_Array.drawgeometry;
-  //myglbegin(gl_points);
-  //ppoint.iterategl(@glvertex2dv);
-  //myglend;
-  //oglsm.myglpopmatrix;
   inherited;
 
 end;

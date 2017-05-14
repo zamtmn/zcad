@@ -20,7 +20,7 @@ unit UGDBPoint3DArray;
 {$INCLUDE def.inc}
 interface
 uses uzbgeomtypes,uzbtypesbase,gzctnrvectordata,sysutils,uzbtypes,uzbmemman,math,
-     gzctnrvectortypes,uzgloglstatemanager,uzegeometry;
+     gzctnrvectortypes,{uzgloglstatemanager,}uzegeometry;
 type
 {REGISTEROBJECTTYPE GDBPoint3dArray}
 {Export+}
@@ -29,9 +29,9 @@ GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(GZVectorData{-}<GDBVertex>
                 function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
                 function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;
                 function CalcTrueInFrustum(frustum:ClipArray):TInBoundingVolume;virtual;
-                procedure DrawGeometry;virtual;
+                {procedure DrawGeometry;virtual;
                 procedure DrawGeometry2;virtual;
-                procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;
+                procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;}
                 function getoutbound:TBoundingBox;virtual;
              end;
 {Export-}
@@ -77,7 +77,7 @@ begin
   end;
 end;
 
-procedure GDBPoint3DArray.drawgeometry;
+(*procedure GDBPoint3DArray.drawgeometry;
 var p:PGDBVertex;
     i:GDBInteger;
 begin
@@ -140,7 +140,7 @@ begin
   oglsm.myglend;
   end
      else drawgeometry;
-end;
+end;*)
 function GDBPoint3DArray.CalcTrueInFrustum;
 var i,{counter,}emptycount:GDBInteger;
 //    d:GDBDouble;

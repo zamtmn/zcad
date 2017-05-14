@@ -1344,7 +1344,6 @@ TOSMode=packed record
     username: TInternalScriptString;
     data: TTypedData;
     attrib:TVariableAttributes;
-    class operator =(a, b: vardesk): Boolean;
   end;
 ptypemanagerdef=^typemanagerdef;
 typemanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -2255,8 +2254,8 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                             //ObjTree:TEntTreeNode;
                             function AddObjectToObjArray(p:GDBPointer):GDBInteger;virtual;abstract;
                             procedure GoodAddObjectToObjArray(const obj:GDBObjEntity);virtual;abstract;
-                            {function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;virtual;abstract;
-                            function CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;virtual;}abstract;
+                            //function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;virtual;abstract;
+                            //function CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;virtual;abstract;
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
                             procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:GDBDouble):GDBBoolean;virtual;abstract;
@@ -2273,7 +2272,7 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                             procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;abstract;
                             procedure RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:GDBInteger);virtual;abstract;
                             procedure GoodRemoveMiFromArray(const obj:GDBObjEntity);virtual;abstract;
-                            {function SubMi(pobj:pGDBObjEntity):GDBInteger;virtual;}abstract;
+                            //function SubMi(pobj:pGDBObjEntity):GDBInteger;virtual;abstract;
                             //** Добавляет объект в область ConstructObjRoot или mainObjRoot или итд. Пример добавления gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@sampleObj);
                             procedure AddMi(pobj:PGDBObjSubordinated);virtual;abstract;
                             procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;var drawing:TDrawingDef);virtual;abstract;
@@ -3637,12 +3636,9 @@ type
     polarlinetrace: GDBInteger;
     pointnum, axisnum: GDBInteger;
     CSIcon:TCSIcon;
-    //CSIconCoord: GDBvertex;
-    //CSX, CSY, CSZ: GDBvertex2DI;
     BLPoint,CPoint,TRPoint:GDBvertex2D;
     ViewHeight:GDBDouble;
     projtype: GDBInteger;
-    clipx, clipy: GDBDouble;
     firstdraw: GDBBoolean;
     md: mousedesc;
     gluetocp: GDBBoolean;
@@ -3650,11 +3646,9 @@ type
     ospoint, oldospoint: os_record;
     height, width: GDBInteger;
     SelDesc: Selectiondesc;
-    pglscreen: GDBPointer;
     otracktimerwork: GDBInteger;
     scrollmode:GDBBoolean;
     lastcp3dpoint,lastpoint: GDBVertex;
-    //cslen:GDBDouble;
     lastonmouseobject:GDBPointer;
     nearesttcontrolpoint:tcontrolpointdist;
     startgluepoint:pcontrolpointdesc;

@@ -18,8 +18,6 @@
 
 unit varmandef;
 {$INCLUDE def.inc}
-{$modeswitch advancedrecords}
-{MODE objfpc}{H+}
 
 interface
 uses
@@ -243,7 +241,6 @@ TOSMode=packed record
     username: TInternalScriptString;
     data: TTypedData;
     attrib:TVariableAttributes;
-    class operator =(a, b: vardesk): Boolean;
   end;
 ptypemanagerdef=^typemanagerdef;
 typemanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -331,10 +328,6 @@ begin
                          rt.destroy;
      rt:=nil;
    end;
-end;
-class operator vardesk.=(a, b: vardesk): Boolean;
-begin
-  Result := (a.name=b.name);
 end;
 procedure ProcessVariableAttributes(var attr:TVariableAttributes; const setattrib,resetattrib:TVariableAttributes);
 begin

@@ -94,7 +94,7 @@ procedure NodeGML(Options: TOptions;ScanResult:TScanResult; var Node: TUnitInfo;
 begin
    if node.NodeState=NSNotCheced then
   begin
-    if ForceInclude or IncludeToGraph(-1,-1,Options,ScanResult,Node,index,LogWriter)then
+    if ForceInclude or IncludeToGraph(nil,nil,Options,ScanResult,Node,index,LogWriter)then
     begin
         if Node.UnitType=UTProgram then   // здесь заполняется первый этап
           LogWriter(format(' %s [shape=box]',[Node.UnitName]));

@@ -97,8 +97,8 @@ begin
        inc(TotaEdgesWithLoops);
        include(ScanResult.UnitInfoArray.mutable[ScanResult.G.Edges[i].V1.Index]^.UnitFlags,UFLoop);
        include(ScanResult.UnitInfoArray.mutable[ScanResult.G.Edges[i].V2.Index]^.UnitFlags,UFLoop);
-       ProcessNode(Options,ScanResult,ScanResult.UnitInfoArray.mutable[ScanResult.G.Edges[i].V1.Index]^,ScanResult.G.Edges[i].V1.Index,LogWriter,true);
-       ProcessNode(Options,ScanResult,ScanResult.UnitInfoArray.mutable[ScanResult.G.Edges[i].V2.Index]^,ScanResult.G.Edges[i].V1.Index,LogWriter,true);
+       ProcessNode(nil,nil,Options,ScanResult,ScanResult.UnitInfoArray.mutable[ScanResult.G.Edges[i].V1.Index]^,ScanResult.G.Edges[i].V1.Index,LogWriter,true);
+       ProcessNode(nil,nil,Options,ScanResult,ScanResult.UnitInfoArray.mutable[ScanResult.G.Edges[i].V2.Index]^,ScanResult.G.Edges[i].V1.Index,LogWriter,true);
        if ScanResult.G.Edges[i].Weight<3 then
                                   LogWriter(' edge [style=dotted]')
                               else

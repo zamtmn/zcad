@@ -14,52 +14,94 @@ type
   TDecoratedUnitNameModeSet=set of TDecoratedUnitNameMode;
 
 
-  TClusterInfo=class(specialize TVector<string>)
-  end;
+  TClusterInfo=specialize TVector<string>;
+  TNodeIndexes=specialize TVector<integer>;
   TClusters=specialize TDictionary<string,TClusterInfo>;
   TClusterInfoPair=specialize TPair<string,TClusterInfo>;
 
+  TIncludeToGraph=(ITG_Include,ITG_Exclude);
+
 procedure WriteGraph(Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
-procedure ProcessNode(Options:TOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;ForceInclude:boolean=false);
-function IncludeToGraph(_SourceUnitIndex,_DestUnitIndex:Integer;Options:TOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter):boolean;
+procedure ProcessNode(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;Options:TOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;ForceInclude:boolean=false);
+function IncludeToGraph(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;const Options:TOptions;const ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter):boolean;
 function getDecoratedUnnitname(const UI:TUnitInfo;DecoratedUnitNameMode:TDecoratedUnitNameModeSet=[TDUNM_AddUsesCount]):string;
 
 implementation
-var
-  SourceUnitIndex,DestUnitIndex:Integer;
 function getDecoratedUnnitname(const UI:TUnitInfo;DecoratedUnitNameMode:TDecoratedUnitNameModeSet=[TDUNM_AddUsesCount]):string;
 begin
   //result:=UI.UnitName;
   result:=format('%s_%d_%d',[UI.UnitName,UI.InterfaceUses.Size,UI.ImplementationUses.Size]);
   result:=StringReplace(result,'.','_',[rfReplaceAll]);
 end;
-function IncludeToGraph(_SourceUnitIndex,_DestUnitIndex:Integer;Options:TOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter):boolean;
+
+function CheckIncludeOptions(const Options:TOptions;const UnitName:string):TIncludeToGraph;
+begin
+  if Options.GraphBulding.FullG.IncludeToGraph<>'' then
+    if not MatchesMaskList(UnitName,Options.GraphBulding.FullG.IncludeToGraph) then
+      begin
+        result:=ITG_Exclude;
+        exit;
+      end;
+  if Options.GraphBulding.FullG.ExcludeFromGraph<>'' then
+    if MatchesMaskList(UnitName,Options.GraphBulding.FullG.ExcludeFromGraph) then
+      begin
+        result:=ITG_Exclude;
+        exit;
+      end;
+  result:=ITG_Include;
+end;
+
+function IncludeToGraph(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;const Options:TOptions;const ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter):boolean;
 var
-  subresult:integer;
+  i,j:integer;
+  connected:boolean;
 begin
   result:=false;
   if not Options.GraphBulding.FullG.IncludeNotFoundedUnits then
     if (node.UnitPath='')and(index<>0) then exit;
-  if Options.GraphBulding.FullG.IncludeToGraph<>'' then
-    if not MatchesMaskList(Node.UnitName,Options.GraphBulding.FullG.IncludeToGraph) then exit;
-  if Options.GraphBulding.FullG.ExcludeFromGraph<>'' then
-    if MatchesMaskList(Node.UnitName,Options.GraphBulding.FullG.ExcludeFromGraph) then exit;
+  if CheckIncludeOptions(Options,Node.UnitName)=ITG_Exclude then exit;
   if Options.GraphBulding.FullG.IncludeOnlyLoops and not(UFLoop in node.UnitFlags) then exit;
-  subresult:=0;
-  if _SourceUnitIndex<>-1 then
-     if ScanResult.G.FindMinPathDirected(ScanResult.G.Vertices[index],ScanResult.G.Vertices[_SourceUnitIndex],nil)<0 then
-      exit;
-  if _DestUnitIndex<>-1 then
-     if ScanResult.G.FindMinPathDirected(ScanResult.G.Vertices[_DestUnitIndex],ScanResult.G.Vertices[index],nil)<0 then
-      exit;
-  result:=true;
+  if node.UnitName='uzestrconsts' then
+                                      Node:=Node;
+  connected:=true;
+  if assigned(_SourceUnitIndex) then
+  if _SourceUnitIndex.Size>0 then
+  begin
+    connected:=false;
+    for i:=0 to _SourceUnitIndex.Size-1 do
+    begin
+     j:=ScanResult.G.FindMinPathDirected(ScanResult.G.Vertices[index],ScanResult.G.Vertices[_SourceUnitIndex[i]],nil);
+     if ScanResult.G.FindMinPathDirected(ScanResult.G.Vertices[index],ScanResult.G.Vertices[_SourceUnitIndex[i]],nil)>=0 then
+     begin
+      connected:=true;
+      break;
+     end;
+    end;
+    if not connected then exit;
+  end;
+  if assigned(_DestUnitIndex) then
+  if _DestUnitIndex.Size>0 then
+  begin
+    connected:=false;
+    for i:=0 to _DestUnitIndex.Size-1 do
+    begin
+     j:=ScanResult.G.FindMinPathDirected(ScanResult.G.Vertices[_DestUnitIndex[i]],ScanResult.G.Vertices[index],nil);
+     if ScanResult.G.FindMinPathDirected(ScanResult.G.Vertices[_DestUnitIndex[i]],ScanResult.G.Vertices[index],nil)>=0 then
+     begin
+      connected:=true;
+      break;
+     end;
+    end;
+  end;
+  if connected then
+    result:=true;
 end;
 
-procedure ProcessNode(Options:TOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;ForceInclude:boolean=false);
+procedure ProcessNode(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;Options:TOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;ForceInclude:boolean=false);
 begin
   if node.NodeState=NSNotCheced then
   begin
-    if ForceInclude or IncludeToGraph(SourceUnitIndex,DestUnitIndex,Options,ScanResult,Node,index,LogWriter)then
+    if ForceInclude or IncludeToGraph(_SourceUnitIndex,_DestUnitIndex,Options,ScanResult,Node,index,LogWriter)then
     begin
         if Node.UnitType=UTProgram then
           LogWriter(format(' %s [shape=box]',[getDecoratedUnnitname(Node)]));
@@ -88,23 +130,32 @@ var
   Clusters:TClusters;
   ClusterInfo:TClusterInfo;
   ClusterInfoPair:TClusterInfoPair;
+  SourceUnitIndexs,DestUnitIndexs:TNodeIndexes;
 begin
-  SourceUnitIndex:=-1;
-  DestUnitIndex:=-1;
+  SourceUnitIndexs:=nil;
+  DestUnitIndexs:=nil;
 
   if Options.GraphBulding.FullG.SourceUnit<>'' then
   begin
-    if ScanResult.isUnitInfoPresent(Options.GraphBulding.FullG.SourceUnit,i) then
-      SourceUnitIndex:=i;
-    if SourceUnitIndex=-1 then
+    SourceUnitIndexs:=TNodeIndexes.create;
+    for i:=0 to ScanResult.UnitInfoArray.Size-1 do
+      if CheckIncludeOptions(Options,ScanResult.UnitInfoArray.mutable[i]^.UnitName)=ITG_Include then
+         if MatchesMaskList(ScanResult.UnitInfoArray.mutable[i]^.UnitName,Options.GraphBulding.FullG.SourceUnit) then
+           SourceUnitIndexs.PushBack(i);
+
+    if SourceUnitIndexs.size<=0 then
       Application.MessageBox('Source unit not found in graph','Error!');
   end;
 
   if Options.GraphBulding.FullG.DestUnit<>'' then
   begin
-    if ScanResult.isUnitInfoPresent(Options.GraphBulding.FullG.DestUnit,i) then
-      DestUnitIndex:=i;
-    if DestUnitIndex=-1 then
+    DestUnitIndexs:=TNodeIndexes.create;
+    for i:=0 to ScanResult.UnitInfoArray.Size-1 do
+      if CheckIncludeOptions(Options,ScanResult.UnitInfoArray.mutable[i]^.UnitName)=ITG_Include then
+         if MatchesMaskList(ScanResult.UnitInfoArray.mutable[i]^.UnitName,Options.GraphBulding.FullG.DestUnit) then
+           DestUnitIndexs.PushBack(i);
+
+    if DestUnitIndexs.size<=0 then
       Application.MessageBox('Destination unit not found in graph','Error!');
   end;
 
@@ -121,14 +172,14 @@ begin
     begin
      if ScanResult.UnitInfoArray[i].InterfaceUses.Size>0 then
      begin
-       ProcessNode(Options,ScanResult,ScanResult.UnitInfoArray.Mutable[i]^,i,LogWriter);
+       ProcessNode(SourceUnitIndexs,DestUnitIndexs,Options,ScanResult,ScanResult.UnitInfoArray.Mutable[i]^,i,LogWriter);
        if ScanResult.UnitInfoArray[i].NodeState<>NSFiltredOut then
        for j:=0 to ScanResult.UnitInfoArray[i].InterfaceUses.Size-1 do
        begin
-         ProcessNode(Options,ScanResult,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].InterfaceUses[j]]^,ScanResult.UnitInfoArray[i].InterfaceUses[j],LogWriter);
+         ProcessNode(SourceUnitIndexs,DestUnitIndexs,Options,ScanResult,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].InterfaceUses[j]]^,ScanResult.UnitInfoArray[i].InterfaceUses[j],LogWriter);
          if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].NodeState<>NSFiltredOut then
          begin
-         if Options.GraphBulding.FullG.CalcEdgesWeight then
+         {if Options.GraphBulding.FullG.CalcEdgesWeight then
          if (SourceUnitIndex<>-1)and(DestUnitIndex<>-1)then
          begin
            v1:=ScanResult.G.Vertices[i];
@@ -142,7 +193,7 @@ begin
            paths:=ScanResult.G.FindMinPathsDirected(v2,v1,0,EdgePaths);
            EdgePaths.Clear;
            te.Restore;
-         end;
+         end;}
          if Options.GraphBulding.InterfaceUsesEdgeType=ETDotted then
                                                                     LogWriter(' edge [style=dotted]')
                                                                 else
@@ -165,10 +216,10 @@ begin
      begin
        for j:=0 to ScanResult.UnitInfoArray[i].ImplementationUses.Size-1 do
        begin
-         ProcessNode(Options,ScanResult,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].ImplementationUses[j]]^,ScanResult.UnitInfoArray[i].ImplementationUses[j],LogWriter);
+         ProcessNode(SourceUnitIndexs,DestUnitIndexs,Options,ScanResult,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].ImplementationUses[j]]^,ScanResult.UnitInfoArray[i].ImplementationUses[j],LogWriter);
          if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].NodeState<>NSFiltredOut then
          begin
-         if Options.GraphBulding.FullG.CalcEdgesWeight then
+         {if Options.GraphBulding.FullG.CalcEdgesWeight then
          if (SourceUnitIndex<>-1)and(DestUnitIndex<>-1)then
          begin
          v1:=ScanResult.G.Vertices[i];
@@ -182,7 +233,7 @@ begin
          paths:=ScanResult.G.FindMinPathsDirected(v2,v1,0,EdgePaths);
          EdgePaths.Clear;
          te.Restore;
-         end;
+         end;}
          if Options.GraphBulding.ImplementationUsesEdgeType=ETDotted then
                                                                          LogWriter(' edge [style=dotted]')
                                                                      else

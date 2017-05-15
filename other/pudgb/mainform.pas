@@ -105,6 +105,7 @@ begin
    RunTimeUnit^.SetTypeDesk(TypeInfo(TCircularG),['Calc edges weight']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TFullG),['Include not founded units','Include interface uses',
                                               'Include implementation uses','Only looped edges',
+                                              'Include to graph','Exclude from graph',
                                               'Source unit','Dest unit','Calc edges weight']);
 
    RunTimeUnit^.SetTypeDesk(TypeInfo(TLogger),['Scaner messages','Parser messages','Timer','Not founded units']);
@@ -117,6 +118,9 @@ begin
    Options.Logger.ParserMessages:=false;
    Options.Logger.Timer:=true;
    Options.Logger.Notfounded:=false;
+
+   Options.GraphBulding.FullG.IncludeToGraph:='';
+   Options.GraphBulding.FullG.ExcludeFromGraph:='';
 
    {tp:='Z:\hdd\src\fpc\lazarus-ccr\applications\cactusjukebox\';//путь к тестику
   Options.Paths._File:=tp+'source\cactusjukebox.pas';                //главный файл

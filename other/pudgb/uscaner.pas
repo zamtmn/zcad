@@ -42,7 +42,7 @@ end;
 constructor TSimpleEngine.Create(const Options:TOptions);
 begin
   if Options.Logger.ScanerMessages then
-    ScannerLogEvents:=[sleFile,sleLineNumber,sleConditionals];
+    ScannerLogEvents:=[sleFile,sleLineNumber,sleConditionals,sleDirective];
   if Options.Logger.ParserMessages then
     ParserLogEvents:=[pleInterface,pleImplementation];
   OnLog:=@Log;

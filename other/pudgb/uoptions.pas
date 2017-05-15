@@ -28,6 +28,8 @@ type
     IncludeInterfaceUses:Boolean;
     IncludeImplementationUses:Boolean;
     IncludeOnlyLoops:Boolean;
+    IncludeToGraph:string;
+    ExcludeFromGraph:string;
     SourceUnit:string;
     DestUnit:string;
     CalcEdgesWeight:Boolean;

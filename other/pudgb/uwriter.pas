@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms,
   Graphs,MultiLst,Pointerv,
-  uoptions,uscanresult,generics.Collections,gvector;
+  uoptions,uscanresult,generics.Collections,gvector,masks;
 
 type
   TDecoratedUnitNameMode=(TDUNM_AddUsesCount);
@@ -40,6 +40,10 @@ begin
   result:=false;
   if not Options.GraphBulding.FullG.IncludeNotFoundedUnits then
     if (node.UnitPath='')and(index<>0) then exit;
+  if Options.GraphBulding.FullG.IncludeToGraph<>'' then
+    if not MatchesMaskList(Node.UnitName,Options.GraphBulding.FullG.IncludeToGraph) then exit;
+  if Options.GraphBulding.FullG.ExcludeFromGraph<>'' then
+    if MatchesMaskList(Node.UnitName,Options.GraphBulding.FullG.ExcludeFromGraph) then exit;
   if Options.GraphBulding.FullG.IncludeOnlyLoops and not(UFLoop in node.UnitFlags) then exit;
   subresult:=0;
   if _SourceUnitIndex<>-1 then

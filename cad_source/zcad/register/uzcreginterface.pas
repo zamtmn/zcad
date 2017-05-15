@@ -19,11 +19,20 @@
 unit uzcreginterface;
 {$INCLUDE def.inc}
 interface
-uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,uzcoidecorations;
+uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,
+     Varman,uzcoidecorations,uzegluinterface;
 implementation
 
 initialization
   DecorateSysTypes;
+  units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_GLUVersion','String',@GLUVersion);
+  SysVarUnit.AssignToSymbol(SysVar.RD.RD_GLUVersion,'RD_GLUVersion');
+  sysvar.RD.RD_GLUVersion^:=GLUVersion;
+
+  units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_GLUExtensions','String',@GLUExtensions);
+  SysVarUnit.AssignToSymbol(SysVar.RD.RD_GLUExtensions,'RD_GLUExtensions');
+  sysvar.RD.RD_GLUExtensions^:=GLUExtensions;
+
 finalization
 end.
 

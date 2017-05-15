@@ -31,7 +31,7 @@ uses
        lineinfo,
   {ZCAD BASE}
        gzctnrvectortypes,uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,uzemathutils,uzelongprocesssupport,
-       uzegluinterface,uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
+       {uzegluinterface,}uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
        uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzcinterface,
        UGDBOpenArrayOfByte,uzbmemman,uzbtypesbase,uzbtypes,
        uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,UGDBNamedObjectsArray,uzclog,
@@ -47,8 +47,8 @@ uses
        uzctextenteditor,{uzcoidecorations,}uzcfcommandline,uzctreenode,uzcflineweights,uzcctrllayercombobox,uzcctrlcontextmenu,
        uzcfcolors,uzcimagesmanager,uzcgui2textstyles,usupportgui,uzcgui2dimstyles,
   {}
-       zcchangeundocommand,uzgldrawcontext,uzgldrawerogl,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
-       uzcenitiesvariablesextender,uzglviewareageneral,uzglviewareaogl;
+       zcchangeundocommand,uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
+       uzcenitiesvariablesextender,uzglviewareageneral;
   {}
 type
   TComboFiller=procedure(cb:TCustomComboBox) of object;
@@ -636,17 +636,17 @@ var
    pint:PGDBInteger;
    mem:GDBOpenArrayOfByte;
    i:integer;
-   poglwnd:TOGLWnd;
+   GVA:TGeneralViewArea;
 begin
      result:=false;
      if ZCADMainWindow.PageControl<>nil then
      begin
           for i:=0 to ZCADMainWindow.PageControl.PageCount-1 do
           begin
-               TControl(poglwnd):=FindControlByType(TTabSheet(ZCADMainWindow.PageControl.Pages[i]),TOGLWnd);
-               if poglwnd<>nil then
+               GVA:=TGeneralViewArea(FindComponentByType(TTabSheet(ZCADMainWindow.PageControl.Pages[i]),TGeneralViewArea));
+               if {poglwnd}GVA<>nil then
                                    begin
-                                        if poglwnd.wa.PDWG.GetChangeStampt then
+                                        if {poglwnd.wa}GVA.PDWG.GetChangeStampt then
                                                                             begin
                                                                                  result:=true;
                                                                                  system.break;
@@ -1440,11 +1440,6 @@ begin
                                 else
                                     CreateAnchorDockingInterface;
 
-  if assigned(sysvar.RD.RD_GLUVersion) then
-  sysvar.RD.RD_GLUVersion^:=GLUVersion;
-
-  if assigned(sysvar.RD.RD_GLUExtensions) then
-  sysvar.RD.RD_GLUExtensions^:=GLUExtensions;
   OnResize:=_onResize;
 end;
 procedure TZCADMainWindow._onResize(Sender: TObject);
@@ -3108,7 +3103,7 @@ begin
 end;
 procedure updatevisible; export;
 var
-   poglwnd:toglwnd;
+   GVA:TGeneralViewArea;
    name:gdbstring;
    i,k:Integer;
    pdwg:PTSimpleDrawing;
@@ -3185,15 +3180,15 @@ begin
   end;
   for i:=0 to ZCADMainWindow.PageControl.PageCount-1 do
     begin
-         tobject(poglwnd):=FindControlByType(ZCADMainWindow.PageControl.Pages[i]{.PageControl},TOGLwnd);
-           if assigned(poglwnd) then
-            if poglwnd.wa.PDWG<>nil then
+         GVA:=TGeneralViewArea(FindComponentByType(ZCADMainWindow.PageControl.Pages[i],TGeneralViewArea));
+           if assigned(GVA) then
+            if GVA.PDWG<>nil then
             begin
-                name:=extractfilename(PTZCADDrawing(poglwnd.wa.PDWG)^.FileName);
-                if @PTZCADDrawing(poglwnd.wa.PDWG).mainObjRoot=(PTZCADDrawing(poglwnd.wa.PDWG).pObjRoot) then
+                name:=extractfilename(PTZCADDrawing(GVA.PDWG)^.FileName);
+                if @PTZCADDrawing(GVA.PDWG).mainObjRoot=(PTZCADDrawing(GVA.PDWG).pObjRoot) then
                                                                      ZCADMainWindow.PageControl.Pages[i].caption:=(name)
                                                                  else
-                                                                     ZCADMainWindow.PageControl.Pages[i].caption:='BEdit('+name+':'+Tria_AnsiToUtf8(PGDBObjBlockdef(PTZCADDrawing(poglwnd.wa.PDWG).pObjRoot).Name)+')';
+                                                                     ZCADMainWindow.PageControl.Pages[i].caption:='BEdit('+name+':'+Tria_AnsiToUtf8(PGDBObjBlockdef(PTZCADDrawing(GVA.PDWG).pObjRoot).Name)+')';
 
                 if k<=high(ZCADMainWindow.OpenedDrawings) then
                 begin

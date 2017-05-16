@@ -31,39 +31,39 @@ object Form1: TForm1
     ShowCaptions = True
     ShowHint = True
     TabOrder = 1
-    object ToolButton1: TToolButton
+    object btnScan: TToolButton
       Left = 142
       Top = 2
       Action = Scan
     end
-    object ToolButton2: TToolButton
+    object btnGenerate: TToolButton
       Left = 178
       Top = 2
       Action = Save
       Caption = 'Generate graph'
     end
-    object ToolButton3: TToolButton
+    object btnImportLPI: TToolButton
       Left = 1
       Top = 2
       Action = ImportLPI
     end
-    object ToolButton4: TToolButton
+    object btnGenerateGML: TToolButton
       Left = 282
       Top = 2
       Action = SaveGML
       Visible = False
     end
-    object ToolButton5: TToolButton
+    object btnOpenWebGraViz: TToolButton
       Left = 437
       Top = 2
       Action = OpenWebGraphviz
     end
-    object ToolButton6: TToolButton
+    object btnCodeExplorer: TToolButton
       Left = 348
       Top = 2
       Action = CodeExplorer
     end
-    object ToolButton7: TToolButton
+    object btnOpenDPR: TToolButton
       Left = 74
       Top = 2
       Action = OpenDPR

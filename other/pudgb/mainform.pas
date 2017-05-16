@@ -142,7 +142,7 @@ begin
   EnumGlobalEditor:=TBaseTypesEditors.EnumDescriptorCreateEditor;//register standart editor to all enum types
 
   GDBobjinsp1.setptr(nil,UnitsFormat,RunTimeUnit^.TypeName2PTD('TOptions'),@Options,nil);//show data variable in inspector
-  caption:='pudgb v 0.1 rev:'+RevisionStr;
+  caption:='pudgb v 0.99 rev:'+RevisionStr;
 end;
 
 procedure TForm1._onClose(Sender: TObject; var CloseAction: TCloseAction);

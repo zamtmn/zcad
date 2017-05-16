@@ -1,10 +1,11 @@
 object Form1: TForm1
-  Left = 83
-  Height = 682
-  Top = 416
+  Left = 444
+  Height = 659
+  Top = 249
   Width = 737
+  ActiveControl = Memo1
   Caption = 'Form1'
-  ClientHeight = 659
+  ClientHeight = 636
   ClientWidth = 737
   Menu = MainMenu1
   OnClose = _onClose
@@ -13,7 +14,7 @@ object Form1: TForm1
   object StatusBar1: TStatusBar
     Left = 0
     Height = 28
-    Top = 631
+    Top = 608
     Width = 737
     Panels = <>
   end
@@ -39,6 +40,7 @@ object Form1: TForm1
       Left = 178
       Top = 2
       Action = Save
+      Caption = 'Generate graph'
     end
     object ToolButton3: TToolButton
       Left = 1
@@ -46,18 +48,18 @@ object Form1: TForm1
       Action = ImportLPI
     end
     object ToolButton4: TToolButton
-      Left = 214
+      Left = 282
       Top = 2
       Action = SaveGML
       Visible = False
     end
     object ToolButton5: TToolButton
-      Left = 369
+      Left = 437
       Top = 2
       Action = OpenWebGraphviz
     end
     object ToolButton6: TToolButton
-      Left = 280
+      Left = 348
       Top = 2
       Action = CodeExplorer
     end
@@ -69,19 +71,19 @@ object Form1: TForm1
   end
   object Splitter1: TSplitter
     Left = 353
-    Height = 603
+    Height = 580
     Top = 28
     Width = 5
   end
   object GDBobjinsp1: TGDBobjinsp
     Left = 0
-    Height = 603
+    Height = 580
     Top = 28
     Width = 353
     HorzScrollBar.Page = 1
     VertScrollBar.Increment = 200
-    VertScrollBar.Page = 603
-    VertScrollBar.Range = 603
+    VertScrollBar.Page = 580
+    VertScrollBar.Range = 580
     Align = alLeft
     AutoScroll = False
     BorderStyle = bsNone
@@ -89,7 +91,7 @@ object Form1: TForm1
   end
   object Memo1: TMemo
     Left = 358
-    Height = 603
+    Height = 580
     Top = 28
     Width = 379
     Align = alClient
@@ -150,27 +152,27 @@ object Form1: TForm1
   object MainMenu1: TMainMenu
     Left = 416
     Top = 32
-    object MenuItem1: TMenuItem
+    object mniFile: TMenuItem
       Caption = 'File'
-      object MenuItem2: TMenuItem
+      object mniScan: TMenuItem
         Action = Scan
       end
-      object MenuItem3: TMenuItem
+      object mniGenerate: TMenuItem
         Action = Save
       end
-      object MenuItem4: TMenuItem
+      object mniSeparator: TMenuItem
         Caption = '-'
       end
-      object MenuItem5: TMenuItem
+      object mniImportLPI: TMenuItem
         Action = ImportLPI
       end
-      object MenuItem8: TMenuItem
+      object mniOpenDPR: TMenuItem
         Action = OpenDPR
       end
-      object MenuItem6: TMenuItem
+      object mniSeparator2: TMenuItem
         Caption = '-'
       end
-      object MenuItem7: TMenuItem
+      object mniExit: TMenuItem
         Action = doExit
       end
     end

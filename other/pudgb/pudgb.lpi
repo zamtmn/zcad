@@ -92,11 +92,11 @@
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="pudgb"/>
+      <Filename Value="bin\pudgb"/>
     </Target>
     <SearchPaths>
-      <IncludeFiles Value="$(ProjOutDir);..\..\cad_source\other\AGraph\Vectors"/>
-      <OtherUnitFiles Value="..\..\cad_source\other\AGraph\Vectors;..\..\cad_source\other\AGraph\Graphs;..\..\cad_source\other\AGraph\Attrs;$(LazarusDir)\ide"/>
+      <IncludeFiles Value="$(ProjOutDir)"/>
+      <OtherUnitFiles Value="$(LazarusDir)\ide"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

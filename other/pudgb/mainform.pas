@@ -20,36 +20,36 @@ uses
   { TForm1 }
 
   TForm1 = class(TForm)
-    MenuItem8: TMenuItem;
     OpenDPR: TAction;
     CodeExplorer: TAction;
     doExit: TAction;
     OpenWebGraphviz: TAction;
     SaveGML: TAction;
-    GDBobjinsp1: TGDBobjinsp;
     ImportLPI: TAction;
-    MainMenu1: TMainMenu;
-    Memo1: TMemo;
-    MenuItem1: TMenuItem;
-    MenuItem2: TMenuItem;
-    MenuItem3: TMenuItem;
-    MenuItem4: TMenuItem;
-    MenuItem5: TMenuItem;
-    MenuItem6: TMenuItem;
-    MenuItem7: TMenuItem;
     Scan: TAction;
     Save: TAction;
     ActionList1: TActionList;
+    GDBobjinsp1: TGDBobjinsp;
+    MainMenu1: TMainMenu;
+    Memo1: TMemo;
+    mniFile: TMenuItem;
+    mniScan: TMenuItem;
+    mniGenerate: TMenuItem;
+    mniSeparator: TMenuItem;
+    mniImportLPI: TMenuItem;
+    mniSeparator2: TMenuItem;
+    mniExit: TMenuItem;
+    mniOpenDPR: TMenuItem;
     Splitter1: TSplitter;
     StatusBar1: TStatusBar;
     ToolBar1: TToolBar;
-    ToolButton1: TToolButton;
-    ToolButton2: TToolButton;
-    ToolButton3: TToolButton;
-    ToolButton4: TToolButton;
-    ToolButton5: TToolButton;
-    ToolButton6: TToolButton;
-    ToolButton7: TToolButton;
+    btnScan: TToolButton;
+    btnGenerate: TToolButton;
+    btnImportLPI: TToolButton;
+    btnGenerateGML: TToolButton;
+    btnOpenWebGraViz: TToolButton;
+    btnCodeExplorer: TToolButton;
+    btnOpenDPR: TToolButton;
     procedure _CodeExplorer(Sender: TObject);
     procedure _Exit(Sender: TObject);
     procedure _SaveGML(Sender: TObject);
@@ -147,7 +147,9 @@ end;
 
 procedure TForm1._onClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
-  if assigned(ScanResult)then FreeAndNil(ScanResult);//чистим прошлый результат
+  if assigned(ScanResult)then FreeAndNil(ScanResult);
+  //ru: чистим прошлый результат
+  //en: cleaned the last result
 end;
 
 procedure TForm1._ImportLPI(Sender: TObject);
@@ -186,7 +188,9 @@ end;
 procedure TForm1._SaveGML(Sender: TObject);
 begin
     Memo1.Clear;
-    WriteGML(Options,ScanResult,DummyWriteToLog);//пишем то что унас есть в результате
+    //ru: пишем то что унас есть в результате
+    //en: write something that is a result of UNAs
+    WriteGML(Options,ScanResult,DummyWriteToLog);
 end;
 
 procedure TForm1._Exit(Sender: TObject);
@@ -202,7 +206,9 @@ end;
 procedure TForm1._Save(Sender: TObject);
 begin
    Memo1.Clear;
-   WriteGraph(Options,ScanResult,DummyWriteToLog);//пишем то что унас есть в результате
+   //ru: пишем то что унас есть в результате
+   //en: write something that is a result of UNAs
+   WriteGraph(Options,ScanResult,DummyWriteToLog);
 end;
 procedure TForm1._Scan(Sender: TObject);
 var

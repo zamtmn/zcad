@@ -114,6 +114,7 @@ TFastEditorsRunTimeVector=specialize TMyVector<TFastEditorRunTimeData>;
     r,w:GDBString;
     Decorators:TDecoratedProcs;
     FastEditors:{TFastEditorsVector}TFastEditorsRunTimeVector;
+    procedure free;virtual;
   end;
   propdeskptr = ^propdesk;
   propdesk = record
@@ -275,6 +276,11 @@ procedure ProcessVariableAttributes(var attr:TVariableAttributes; const setattri
 implementation
 //uses log;
 {for hide exttype}
+procedure BasePropertyDeskriptor.free;
+begin
+   inherited;
+   freeandnil(FastEditors);
+end;
 procedure clearRTd(rtv:TFastEditorsRunTimeVector);
 var
   i:integer;

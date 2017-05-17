@@ -472,10 +472,10 @@ end;
 
 destructor TGDBobjinsp.Destroy;
 begin
-    if peditor<>nil then
-    begin
-         peditor.Free;
-    end;
+  if peditor<>nil then
+  begin
+    peditor.Free;
+  end;
   inherited;
   pda.cleareraseobj;
   pda.done;

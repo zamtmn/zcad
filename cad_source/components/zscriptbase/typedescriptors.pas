@@ -182,6 +182,8 @@ begin
          PTPropertyDeskriptorArray(SubNode)^.Done;
          gdbfreemem(GDBPointer(SubNode));
     end;
+    if assigned(FastEditors) then
+                                 freeandnil(FastEditors);
 end;
 function PropertyDeskriptor.IsVisible;
 begin

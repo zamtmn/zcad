@@ -194,7 +194,6 @@ end;
 procedure TForm1._SaveGML(Sender: TObject);
 begin
     //this not implemed yet
-    Memo1.Clear;
     WriteGML(Options,ScanResult,DummyWriteToLog);
 end;
 
@@ -212,21 +211,18 @@ end;
 procedure TForm1._Save(Sender: TObject);
 begin
    //write full graph to memo
-   Memo1.Clear;
    WriteGraph(Options,ScanResult,DummyWriteToLog);
 end;
 procedure TForm1._Scan(Sender: TObject);
 var
   cd:ansistring;
 begin
-   Memo1.Clear;
-
    cd:=GetCurrentDir;
    SetCurrentDir(ExtractFileDir(Options.Paths._File));
 
    if assigned(ScanResult)then FreeAndNil(ScanResult);//clean last scan result
    ScanResult:=TScanResult.Create;//create new scan result
-
+   DummyWriteToLog('Start scan sources!',[LD_Clear,LD_Report]);
    if FileExists(Options.Paths._File)then
     ScanModule(Options.Paths._File,Options,ScanResult,DummyWriteToLog)//try parse main sources file
    else

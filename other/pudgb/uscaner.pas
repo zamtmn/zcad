@@ -35,7 +35,7 @@ implementation
 
 destructor TSimpleEngine.Destroy;
 begin
-  LogWriter(uname,[LD_Report]);
+  LogWriter(format('unit(%s).Destroy',[uname]),[]);
   if uname='other/uniqueinstance/uniqueinstancebase.pas'{'zengine\core\uzeentityfactory.pas'}{'zengine\core\objects\uzeentitiestree.pas'} then
     uname:=uname;
   if assigned(FPackage) then
@@ -120,7 +120,6 @@ begin
    E.uname:=mn;
    //if assigned(LogWriter) then LogWriter(format('Process file: "%s"',[mn]));
    try
-     LogWriter('Start scan sources!',[LD_Clear,LD_Report]);
      if Options.Logger.Timer then
       begin
        myTime:=now;
@@ -139,8 +138,8 @@ begin
        E.uname:=E.uname;
      E.LogWriter:=LogWriter;
      PrepareModule(M,TPasTreeContainer(E),Options,ScanResult,LogWriter);
+     if assigned(M) then M.Release;
      if assigned(E) then E.Free;
-     if assigned(M) then M.Free;
    except
      on excep:EParserError do
        begin

@@ -10,10 +10,13 @@ uses
 
 type
     TSimpleEngine = class(TPasTreeContainer)
+    private
+    uname:string;
     public
     LogWriter:TLogWriter;
 
     constructor Create(const Options:TOptions);
+    destructor Destroy;override;
     Procedure Log(Sender : TObject; Const Msg : String);
 
     function CreateElement(AClass: TPTreeElement; const AName: String;
@@ -29,6 +32,16 @@ procedure ScanModule(mn:String;Options:TOptions;ScanResult:TScanResult;const Log
 procedure ScanDirectory(mn:String;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 
 implementation
+
+destructor TSimpleEngine.Destroy;
+begin
+  LogWriter(uname,[LD_Report]);
+  if uname='other/uniqueinstance/uniqueinstancebase.pas'{'zengine\core\uzeentityfactory.pas'}{'zengine\core\objects\uzeentitiestree.pas'} then
+    uname:=uname;
+  if assigned(FPackage) then
+    FPackage.Destroy;
+  inherited;
+end;
 
 function TSimpleEngine.CreateElement(AClass: TPTreeElement; const AName: String;
   AParent: TPasElement; AVisibility: TPasMemberVisibility;
@@ -46,10 +59,11 @@ begin
   if Options.Logger.ParserMessages then
     ParserLogEvents:=[pleInterface,pleImplementation];
   OnLog:=@Log;
+  FPackage:=TPasPackage.Create('',nil);
 end;
 procedure TSimpleEngine.Log(Sender : TObject; Const Msg : String);
 begin
-  LogWriter(Msg);
+  LogWriter(Msg,[LD_Report]);
 end;
 function TSimpleEngine.FindElement(const AName: String): TPasElement;
 begin
@@ -103,36 +117,44 @@ var
   memused:Cardinal;
 begin
    E := TSimpleEngine.Create(Options);
-   E.LogWriter:=LogWriter;
+   E.uname:=mn;
    //if assigned(LogWriter) then LogWriter(format('Process file: "%s"',[mn]));
    try
+     LogWriter('Start scan sources!',[LD_Clear,LD_Report]);
      if Options.Logger.Timer then
       begin
        myTime:=now;
        memused:=MemoryUsed;
       end;
+     if E.uname='/media/zamtmn/apps/zcad/other/pudgb//uchecker.pas' then
+       E.uname:=E.uname;
      M := ParseSource(E,mn+' '+Options.ParserOptions._CompilerOptions,Options.ParserOptions.TargetOS,Options.ParserOptions.TargetCPU,[poSkipDefaultDefs]);
      if Options.Logger.Timer then
       begin
-       LogWriter(format('Parse "%s" %fsec, %db',[mn,(now-myTime)*10e4,(MemoryUsed-memused)]));
+       LogWriter(format('Parse "%s" %fsec, %db',[mn,(now-myTime)*10e4,(MemoryUsed-memused)]),[LD_Report]);
       end;
+     if E.uname='zengine\geomlib\uzgeomproxy.pas' then
+       E.uname:=E.uname;
+     if E.uname='zengine\core\uzeentityfactory.pas' then
+       E.uname:=E.uname;
+     E.LogWriter:=LogWriter;
      PrepareModule(M,TPasTreeContainer(E),Options,ScanResult,LogWriter);
      if assigned(E) then E.Free;
      if assigned(M) then M.Free;
    except
      on excep:EParserError do
        begin
-         if assigned(LogWriter) then LogWriter(format('Parser error: "%s" line:%d column:%d  file:%s',[excep.message,excep.row,excep.column,excep.filename]));
+         if assigned(LogWriter) then LogWriter(format('Parser error: "%s" line:%d column:%d  file:%s',[excep.message,excep.row,excep.column,excep.filename]),[LD_Report]);
          //raise;
        end;
      on excep:Exception do
        begin
-         if assigned(LogWriter) then LogWriter(format('Exception: "%s" in file "%s"',[excep.message,mn]));
+         if assigned(LogWriter) then LogWriter(format('Exception: "%s" in file "%s"',[excep.message,mn]),[LD_Report]);
          //raise;
        end;
      else
       begin
-        if assigned(LogWriter) then LogWriter(format('Error in file "%s"',[mn]));
+        if assigned(LogWriter) then LogWriter(format('Error in file "%s"',[mn]),[LD_Report]);
       end;
    end;
     //if assigned(LogWriter) then LogWriter(format('Done file: "%s"',[mn]));
@@ -239,7 +261,7 @@ begin
               else
                   begin
                        if Options.Logger.Notfounded then
-                         if assigned(LogWriter) then LogWriter(format('Unit not found: "%s"',[l.Strings[i]]));
+                         if assigned(LogWriter) then LogWriter(format('Unit not found: "%s"',[l.Strings[i]]),[LD_Report]);
                        ScanResult.TryCreateNewUnitInfo(l.Strings[i],j);
                        ScanResult.UnitInfoArray.Mutable[j]^.UnitPath:='';
                        uarr.PushBack(j);

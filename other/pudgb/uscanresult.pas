@@ -88,8 +88,24 @@ begin
 end;
 destructor TUnitInfo.done;
 begin
-  if assigned(PasModule) then PasModule.Free;
-  if assigned(PasTreeContainer) then PasTreeContainer.Free;
+  if assigned(PasModule) then
+  begin
+  //writeln(PasModule.SOURCEFILENAME);
+  if PasModule.SOURCEFILENAME='zengine\geomlib\uzgeomproxy.pas' then
+    PasModule:=PasModule;
+  if PasModule.SOURCEFILENAME='zengine\core\uzeentityfactory.pas' then
+    PasModule:=PasModule;
+  if PasModule.SOURCEFILENAME='/media/zamtmn/apps/zcad/other/pudgb//uchecker.pas' then
+      PasModule:=PasModule;
+  if assigned(PasModule) then
+                             PasModule.Release;
+  if assigned(PasTreeContainer) then
+                                    PasTreeContainer.Free;
+  {if assigned(InterfaceUses) then
+                                 InterfaceUses.Free;
+  if assigned(ImplementationUses) then
+                                      ImplementationUses.Free;}
+  end;
 end;
 
 {$IF FPC_FULLVERSION<030001}

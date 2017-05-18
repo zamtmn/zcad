@@ -23,6 +23,7 @@ type
       function MacroFuncPkgDir (const {%H-}Param: string; const Data: PtrInt;
                                   var {%H-}Abort: boolean): string;
       constructor create;
+      destructor destroy;override;
   end;
 
 procedure LPIImport(var Options:TOptions;const filename:string;const LogWriter:TLogWriter);
@@ -41,7 +42,11 @@ begin
  {$ENDIF}
  packagefiles:=TXMLConfig.Create(LazarusPackageFilesConfig);
 end;
-
+destructor TMacroMethods.destroy;
+begin
+ inherited;
+ packagefiles.Destroy;
+end;
 function TMacroMethods.MacroFuncTargetCPU(const Param: string;
   const Data: PtrInt; var Abort: boolean): string;
 begin
@@ -126,23 +131,23 @@ begin
 
  Doc:=TXMLConfig.Create(filename);
  FileVersion:=Doc.GetValue('CompilerOptions/Version/Value', 0);
- LogWriter('Version='+inttostr(FileVersion));
+ LogWriter('Version='+inttostr(FileVersion),[LD_Report]);
 
  tmm.UnitOutputDirectory:=Doc.GetValue('CompilerOptions/SearchPaths/UnitOutputDirectory/Value','');
- LogWriter('UnitOutputDirectory='+tmm.UnitOutputDirectory);
+ LogWriter('UnitOutputDirectory='+tmm.UnitOutputDirectory,[LD_Report]);
  if IDEMacros.SubstituteMacros(tmm.UnitOutputDirectory) then
-                                                    LogWriter('Resolve to UnitOutputDirectory='+tmm.UnitOutputDirectory);
+                                                    LogWriter('Resolve to UnitOutputDirectory='+tmm.UnitOutputDirectory,[LD_Report]);
 
  IncludeFiles:=Doc.GetValue('CompilerOptions/SearchPaths/IncludeFiles/Value','');
- LogWriter('IncludeFiles='+IncludeFiles);
+ LogWriter('IncludeFiles='+IncludeFiles,[LD_Report]);
  if IDEMacros.SubstituteMacros(IncludeFiles) then
-                                                 LogWriter('Resolve to IncludeFiles='+IncludeFiles);
+                                                 LogWriter('Resolve to IncludeFiles='+IncludeFiles,[LD_Report]);
  OtherUnitFiles:=Doc.GetValue('CompilerOptions/SearchPaths/OtherUnitFiles/Value','');
- LogWriter('OtherUnitFiles='+OtherUnitFiles);
+ LogWriter('OtherUnitFiles='+OtherUnitFiles,[LD_Report]);
  if IDEMacros.SubstituteMacros(OtherUnitFiles) then
-                                                   LogWriter('Resolve to OtherUnitFiles='+OtherUnitFiles);
+                                                   LogWriter('Resolve to OtherUnitFiles='+OtherUnitFiles,[LD_Report]);
  MainFilename:=Doc.GetValue('ProjectOptions/Units/Unit0/Filename/Value','');
- LogWriter('Unit0='+MainFilename);
+ LogWriter('Unit0='+MainFilename,[LD_Report]);
 
  Swith:='';
  SwithKey:=Doc.GetValue('CompilerOptions/Parsing/SyntaxOptions/SyntaxMode/Value','');
@@ -201,6 +206,9 @@ begin
  else
   Options.Paths._Paths:=basepath;
  SetCurrentDir(cd);
+ tmm.free;
+ GlobalMacroList.Free;
+ IDEMacros.free;
 end;
 
 end.

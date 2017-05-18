@@ -27,14 +27,14 @@ begin
   if assigned(LogWriter) then
   begin
   //шапка файла
-    LogWriter(Title);
-    LogWriter(Vers);
-    LogWriter('Graph');
-    LogWriter(BracketLeft);
+    LogWriter(Title,[]);
+    LogWriter(Vers,[]);
+    LogWriter('Graph',[]);
+    LogWriter(BracketLeft,[]);
     Tabs:=tab; // отступ от начала строки   выставляем на один таб т. к. начинается шапка graph
-    LogWriter(Tabs + yEdMode + Tab + '1');
-    LogWriter(Tabs + yEdLabel +Tab + '""');
-    LogWriter(Tabs + yEdDirected + Tab + '1');
+    LogWriter(Tabs + yEdMode + Tab + '1',[]);
+    LogWriter(Tabs + yEdLabel +Tab + '""',[]);
+    LogWriter(Tabs + yEdDirected + Tab + '1',[]);
     // конец шапки
 
     if assigned(ScanResult) then
@@ -56,8 +56,8 @@ begin
          if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].NodeState<>NSFiltredOut then
          begin
          if Options.GraphBulding.InterfaceUsesEdgeType=ETDotted then //изменить
-                                                                    LogWriter(' edge [style=dotted]');
-         LogWriter(format(' %s -> %s',[ScanResult.UnitInfoArray[i].UnitName,ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].UnitName]));
+                                                                    LogWriter(' edge [style=dotted]',[]);
+         LogWriter(format(' %s -> %s',[ScanResult.UnitInfoArray[i].UnitName,ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].UnitName]),[]);
          end;
        end;
      end;
@@ -75,15 +75,15 @@ begin
          if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].NodeState<>NSFiltredOut then
          begin
          if Options.GraphBulding.ImplementationUsesEdgeType=ETDotted then  //изменить
-                                                                         LogWriter(' edge [style=dotted]');
-           LogWriter(format(' %s -> %s',[ScanResult.UnitInfoArray[i].UnitName,ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].UnitName]));
+                                                                         LogWriter(' edge [style=dotted]',[]);
+           LogWriter(format(' %s -> %s',[ScanResult.UnitInfoArray[i].UnitName,ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].UnitName]),[]);
          end;
        end;
      end;
     end;
     end;
 
-    LogWriter(BracketRight);      //конец файла потом проверить
+    LogWriter(BracketRight,[]);      //конец файла потом проверить
 
 
   end;
@@ -97,9 +97,9 @@ begin
     if ForceInclude or IncludeToGraph(nil,nil,Options,ScanResult,Node,index,LogWriter)then
     begin
         if Node.UnitType=UTProgram then   // здесь заполняется первый этап
-          LogWriter(format(' %s [shape=box]',[Node.UnitName]));
+          LogWriter(format(' %s [shape=box]',[Node.UnitName]),[]);
         if (Node.UnitPath='')and(index<>0) then
-          LogWriter(format(' %s [style=dashed]',[Node.UnitName]));
+          LogWriter(format(' %s [style=dashed]',[Node.UnitName]),[]);
         node.NodeState:=NSCheced;
     end
     else

@@ -43,8 +43,8 @@ begin
           handler(pe,PrevNode,CurrentNode,NNSeed,Options,LogWriter,NeedConnectToPrev)
         else
           DefaultProcessPasImpl(pe,CurrentNode);
-        LogWriter(format(' %s [shape=box] [label="%s"]',[CurrentNode.Name,CurrentNode.Text]));
-        if NeedConnectToPrev then LogWriter(format(' %s -> %s',[PrevNode.Name,CurrentNode.Name]));
+        LogWriter(format(' %s [shape=box] [label="%s"]',[CurrentNode.Name,CurrentNode.Text]),[LD_Explorer]);
+        if NeedConnectToPrev then LogWriter(format(' %s -> %s',[PrevNode.Name,CurrentNode.Name]),[LD_Explorer]);
         PrevNode:=CurrentNode;
        end;
      end;
@@ -68,8 +68,8 @@ begin
           handler(PasImplElement,PrevNode,CurrentNode,NNSeed,Options,LogWriter,NeedConnectToPrev)
         else
           DefaultProcessPasImpl(PasImplElement,CurrentNode);
-        LogWriter(format(' %s [shape=box] [label="%s"]',[CurrentNode.Name,CurrentNode.Text]));
-        if NeedConnectToPrev then LogWriter(format(' %s -> %s',[PrevNode.Name,CurrentNode.Name]));
+        LogWriter(format(' %s [shape=box] [label="%s"]',[CurrentNode.Name,CurrentNode.Text]),[LD_Explorer]);
+        if NeedConnectToPrev then LogWriter(format(' %s -> %s',[PrevNode.Name,CurrentNode.Name]),[LD_Explorer]);
         PrevNode:=CurrentNode;
        end;
      end;
@@ -82,17 +82,17 @@ var
   NeedConnectToPrev:boolean;
 begin
      NNSeed:=0;
-     LogWriter('DiGraph Classes {');
+     LogWriter('DiGraph Classes {',[LD_Explorer]);
      CurrentNode.Name:='Start';
      CurrentNode.Text:='Start';
      NeedConnectToPrev:=true;
-     LogWriter(format(' %s [shape=box] [label="%s"]',[CurrentNode.Name,CurrentNode.Text]));
+     LogWriter(format(' %s [shape=box] [label="%s"]',[CurrentNode.Name,CurrentNode.Text]),[LD_Explorer]);
      PrevNode:=ExplorePasImplBlock(CurrentNode,UnitInfo.PasModule.InitializationSection,NNSeed,Options,LogWriter,NeedConnectToPrev);
      CurrentNode.Name:='End';
      CurrentNode.Text:='End';
-     LogWriter(format(' %s [shape=box] [label="%s"]',[CurrentNode.Name,CurrentNode.Text]));
-     LogWriter(format(' %s -> %s',[PrevNode.Name,CurrentNode.Name]));
-     LogWriter('}');
+     LogWriter(format(' %s [shape=box] [label="%s"]',[CurrentNode.Name,CurrentNode.Text]),[LD_Explorer]);
+     LogWriter(format(' %s -> %s',[PrevNode.Name,CurrentNode.Name]),[LD_Explorer]);
+     LogWriter('}',[LD_Explorer]);
 end;
 procedure ExploreCode(Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 begin
@@ -128,8 +128,8 @@ begin
   ltIn:Node.Text:=format('For %s:=%s to %s downto',[pe.Variable.GetDeclaration(true),pe.StartExpr.GetDeclaration(true),pe.EndExpr.GetDeclaration(true)]);
   end;
 
-  LogWriter(format(' %s [shape="house"] [label="%s"]',[Node.Name,Node.Text]));
-  LogWriter(format(' %s -> %s',[PrevNode.Name,Node.Name]));
+  LogWriter(format(' %s [shape="house"] [label="%s"]',[Node.Name,Node.Text]),[LD_Explorer]);
+  LogWriter(format(' %s -> %s',[PrevNode.Name,Node.Name]),[LD_Explorer]);
 
   fakeNeedConnectToPrev:=false;
   PrevNode:=ExplorePasImplElement(Node,pe.Body,NNSeed,Options,LogWriter,fakeNeedConnectToPrev);
@@ -137,9 +137,9 @@ begin
   Node.Text:='End ForLoop';
   Node.Name:=GetNodeName(NNSeed);
 
-  LogWriter(format(' %s [shape="invhouse" label="%s"]',[Node.Name,Node.Text]));
-  LogWriter(format(' %s -> %s',[PrevNode.Name,Node.Name]));
-  LogWriter(format(' %s -> %s',[Node.Name,startnodename]));
+  LogWriter(format(' %s [shape="invhouse" label="%s"]',[Node.Name,Node.Text]),[LD_Explorer]);
+  LogWriter(format(' %s -> %s',[PrevNode.Name,Node.Name]),[LD_Explorer]);
+  LogWriter(format(' %s -> %s',[Node.Name,startnodename]),[LD_Explorer]);
 
   NeedConnectToPrev:=false;
 end;
@@ -149,8 +149,8 @@ var
 begin
   fakeNeedConnectToPrev:=false;
   Node.Text:=format('if %s',[pe.ConditionExpr.GetDeclaration(true)]);
-  LogWriter(format(' %s [shape="diamond" label="%s"]',[Node.Name,Node.Text]));
-  if NeedConnectToPrev then LogWriter(format(' %s -> %s',[PrevNode.Name,Node.Name]));
+  LogWriter(format(' %s [shape="diamond" label="%s"]',[Node.Name,Node.Text]),[LD_Explorer]);
+  if NeedConnectToPrev then LogWriter(format(' %s -> %s',[PrevNode.Name,Node.Name]),[LD_Explorer]);
   Node:=ExplorePasImplElement(Node,pe.IfBranch,NNSeed,Options,LogWriter,{NeedConnectToPrev}fakeNeedConnectToPrev);
   if assigned(pe.ElseBranch) then PrevNode:=ExplorePasImplElement(Node,pe.IfBranch,NNSeed,Options,LogWriter,NeedConnectToPrev);
   NeedConnectToPrev:=false;

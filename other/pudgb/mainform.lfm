@@ -3,7 +3,6 @@ object Form1: TForm1
   Height = 659
   Top = 249
   Width = 737
-  ActiveControl = Memo1
   Caption = 'Form1'
   ClientHeight = 636
   ClientWidth = 737
@@ -89,17 +88,71 @@ object Form1: TForm1
     BorderStyle = bsNone
     TabOrder = 3
   end
-  object Memo1: TMemo
+  object PageControl1: TPageControl
     Left = 358
     Height = 580
     Top = 28
     Width = 379
+    ActivePage = TabReport
     Align = alClient
-    Lines.Strings = (
-      'Memo1'
-    )
-    ScrollBars = ssAutoBoth
+    TabIndex = 0
     TabOrder = 4
+    object TabReport: TTabSheet
+      Caption = 'TabReport'
+      ClientHeight = 548
+      ClientWidth = 371
+      object Memo2: TMemo
+        Left = 0
+        Height = 548
+        Top = 0
+        Width = 371
+        Align = alClient
+        ScrollBars = ssAutoBoth
+        TabOrder = 0
+      end
+    end
+    object TabCircularGraph: TTabSheet
+      Caption = 'TabCircularGraph'
+      ClientHeight = 548
+      ClientWidth = 371
+      object Memo3: TMemo
+        Left = 0
+        Height = 548
+        Top = 0
+        Width = 371
+        Align = alClient
+        ScrollBars = ssAutoBoth
+        TabOrder = 0
+      end
+    end
+    object TabFullGraph: TTabSheet
+      Caption = 'TabFullGraph'
+      ClientHeight = 548
+      ClientWidth = 371
+      object Memo4: TMemo
+        Left = 0
+        Height = 548
+        Top = 0
+        Width = 371
+        Align = alClient
+        ScrollBars = ssAutoBoth
+        TabOrder = 0
+      end
+    end
+    object TabAll: TTabSheet
+      Caption = 'TabAll'
+      ClientHeight = 548
+      ClientWidth = 371
+      object Memo1: TMemo
+        Left = 0
+        Height = 548
+        Top = 0
+        Width = 371
+        Align = alClient
+        ScrollBars = ssAutoBoth
+        TabOrder = 0
+      end
+    end
   end
   object ActionList1: TActionList
     Left = 456

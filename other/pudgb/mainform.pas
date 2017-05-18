@@ -20,10 +20,14 @@ uses
   { TForm1 }
 
   TForm1 = class(TForm)
+    Memo2: TMemo;
+    Memo3: TMemo;
+    Memo4: TMemo;
     OpenDPR: TAction;
     CodeExplorer: TAction;
     doExit: TAction;
     OpenWebGraphviz: TAction;
+    PageControl1: TPageControl;
     SaveGML: TAction;
     ImportLPI: TAction;
     Scan: TAction;
@@ -42,6 +46,10 @@ uses
     mniOpenDPR: TMenuItem;
     Splitter1: TSplitter;
     StatusBar1: TStatusBar;
+    TabAll: TTabSheet;
+    TabReport: TTabSheet;
+    TabCircularGraph: TTabSheet;
+    TabFullGraph: TTabSheet;
     ToolBar1: TToolBar;
     btnScan: TToolButton;
     btnGenerate: TToolButton;
@@ -69,7 +77,7 @@ uses
     RunTimeUnit:ptunit;//Need for register types in object inspector
     UnitsFormat:TzeUnitsFormat;//Need for object inspector (number formats)
   public
-    procedure DummyWriteToLog(msg:string);
+    procedure DummyWriteToLog(msg:string; const LogOpt:TLogOpt);
   end;
 
 var
@@ -231,10 +239,35 @@ procedure TForm1._OpenWebGraphviz(Sender: TObject);
 begin
   OpenURL('http://www.webgraphviz.com');
 end;
-procedure TForm1.DummyWriteToLog(msg:string);
+procedure TForm1.DummyWriteToLog(msg:string; const LogOpt:TLogOpt);
+var
+  NeedClear:boolean;
 begin
-   //remap log messages to memo
+   //remap log messages to memo`s
+   if LD_Clear in LogOpt then
+    NeedClear:=true
+   else
+    NeedClear:=false;
+
    Memo1.Append(msg);
+   if LD_Report in LogOpt then
+     begin
+       if NeedClear then
+         Memo2.Lines.Clear;
+       Memo2.Append(msg);
+     end;
+   if LD_FullGraph in LogOpt then
+     begin
+       if NeedClear then
+         Memo4.Lines.Clear;
+       Memo4.Append(msg);
+     end;
+   if LD_CircGraph in LogOpt then
+     begin
+       if NeedClear then
+         Memo3.Lines.Clear;
+       Memo3.Append(msg);
+     end;
 end;
 end.
 

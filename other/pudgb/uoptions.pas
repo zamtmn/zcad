@@ -55,7 +55,9 @@ type
     Logger:TLogger;
   end;
 
-  TLogWriter=procedure(msg:string) of object;
+  TLogDir=(LD_Clear,LD_Report,LD_FullGraph,LD_CircGraph,LD_Explorer);
+  TLogOpt=set of TLogDir;
+  TLogWriter=procedure(msg:string; const LogOpt:TLogOpt) of object;
 
 function DefaultOptions:TOptions;
 function GetCompilerDefs:String;

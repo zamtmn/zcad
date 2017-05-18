@@ -88,8 +88,8 @@ begin
     StrongEdgeWeight:=maxint;
     for i:=0 to ScanResult.UnitInfoArray.Size-1 do
       ScanResult.UnitInfoArray.mutable[i]^.NodeState:=NSNotCheced;
-    LogWriter('Loop graph by edges:');
-    LogWriter('DiGraph Classes {');
+    //LogWriter('Loop graph by edges:',[LD_CircGraph]);
+    LogWriter('DiGraph Classes {',[LD_Clear,LD_CircGraph]);
     for i:=0 to ScanResult.G.EdgeCount - 1 do
     begin
       if ScanResult.G.Edges[i].RingEdge then
@@ -97,12 +97,12 @@ begin
        inc(TotaEdgesWithLoops);
        include(ScanResult.UnitInfoArray.mutable[ScanResult.G.Edges[i].V1.Index]^.UnitFlags,UFLoop);
        include(ScanResult.UnitInfoArray.mutable[ScanResult.G.Edges[i].V2.Index]^.UnitFlags,UFLoop);
-       ProcessNode(nil,nil,Options,ScanResult,ScanResult.UnitInfoArray.mutable[ScanResult.G.Edges[i].V1.Index]^,ScanResult.G.Edges[i].V1.Index,LogWriter,true);
-       ProcessNode(nil,nil,Options,ScanResult,ScanResult.UnitInfoArray.mutable[ScanResult.G.Edges[i].V2.Index]^,ScanResult.G.Edges[i].V1.Index,LogWriter,true);
+       ProcessNode(nil,nil,Options,ScanResult,ScanResult.UnitInfoArray.mutable[ScanResult.G.Edges[i].V1.Index]^,ScanResult.G.Edges[i].V1.Index,LogWriter,[LD_CircGraph],true);
+       ProcessNode(nil,nil,Options,ScanResult,ScanResult.UnitInfoArray.mutable[ScanResult.G.Edges[i].V2.Index]^,ScanResult.G.Edges[i].V1.Index,LogWriter,[LD_CircGraph],true);
        if ScanResult.G.Edges[i].Weight<3 then
-                                  LogWriter(' edge [style=dotted]')
+                                  LogWriter(' edge [style=dotted]',[LD_CircGraph])
                               else
-                                  LogWriter(' edge [style=solid]');
+                                  LogWriter(' edge [style=solid]',[LD_CircGraph]);
        if Options.GraphBulding.Circ.CalcEdgesWeight then
        begin
          te:=ScanResult.G.Edges[i];
@@ -119,13 +119,13 @@ begin
            StrongEdge:=i;
          end;
          te.Restore;
-         LogWriter(format(' %s -> %s [label=%d]',[getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.G.Edges[i].V1.Index]),getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.G.Edges[i].V2.Index]),CurrentEdgesWithLoops]))
+         LogWriter(format(' %s -> %s [label=%d]',[getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.G.Edges[i].V1.Index]),getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.G.Edges[i].V2.Index]),CurrentEdgesWithLoops]),[LD_CircGraph])
        end
           else
-              LogWriter(format(' %s -> %s',[getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.G.Edges[i].V1.Index]),getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.G.Edges[i].V2.Index])]));
+              LogWriter(format(' %s -> %s',[getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.G.Edges[i].V1.Index]),getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.G.Edges[i].V2.Index])]),[LD_CircGraph]);
       end;
     end;
-    LogWriter('}');
+    LogWriter('}',[LD_CircGraph]);
 
     TotaUnitsWithLoops:=0;
     for i:=0 to ScanResult.UnitInfoArray.Size-1 do
@@ -143,22 +143,22 @@ begin
     end;
     if ts<>'' then ts:=ts+';';
 
-    LogWriter(format('Total units: %d ',[ScanResult.UnitInfoArray.Size]));
-    LogWriter(format('Total founded units: %d ',[TotalFoundedUnits]));
-    LogWriter(format('Total units with Implimentation uses: %d ',[TotalUnitsWithImplUses]));
-    LogWriter(format('Total units in loops: %d ',[TotaUnitsWithLoops]));
+    LogWriter(format('Total units: %d ',[ScanResult.UnitInfoArray.Size]),[LD_Report]);
+    LogWriter(format('Total founded units: %d ',[TotalFoundedUnits]),[LD_Report]);
+    LogWriter(format('Total units with Implimentation uses: %d ',[TotalUnitsWithImplUses]),[LD_Report]);
+    LogWriter(format('Total units in loops: %d ',[TotaUnitsWithLoops]),[LD_Report]);
 
-    LogWriter(format('Total dependencies: %d ',[ScanResult.G.EdgeCount]));
-    LogWriter(format('Total dependencies in loops: %d ',[TotaEdgesWithLoops]));
+    LogWriter(format('Total dependencies: %d ',[ScanResult.G.EdgeCount]),[LD_Report]);
+    LogWriter(format('Total dependencies in loops: %d ',[TotaEdgesWithLoops]),[LD_Report]);
     if StrongEdgeWeight<>maxint then
     begin
-      LogWriter(format('The worst addiction from "%s" to "%s" with %d ',[ScanResult.UnitInfoArray[ScanResult.G.Edges[StrongEdge].V1.Index].UnitName,ScanResult.UnitInfoArray[ScanResult.G.Edges[StrongEdge].V2.Index].UnitName,StrongEdgeWeight]));
+      LogWriter(format('The worst addiction from "%s" to "%s" with %d ',[ScanResult.UnitInfoArray[ScanResult.G.Edges[StrongEdge].V1.Index].UnitName,ScanResult.UnitInfoArray[ScanResult.G.Edges[StrongEdge].V2.Index].UnitName,StrongEdgeWeight]),[LD_Report]);
     StrongEdgeWeight:=CurrentEdgesWithLoops;
     StrongEdge:=i;
     end;
 
 
-    if ts<>'' then LogWriter(format('Implimentation uses can be move to interface in %s ',[ts]));
+    if ts<>'' then LogWriter(format('Implimentation uses can be move to interface in %s ',[ts]),[LD_Report]);
   finally
     //G.Free;
     //M.Free;

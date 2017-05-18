@@ -22,7 +22,7 @@ type
   TIncludeToGraph=(ITG_Include,ITG_Exclude);
 
 procedure WriteGraph(Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
-procedure ProcessNode(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;Options:TOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;ForceInclude:boolean=false);
+procedure ProcessNode(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;Options:TOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;const LogOpt:TLogOpt;ForceInclude:boolean=false);
 function IncludeToGraph(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;const Options:TOptions;const ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter):boolean;
 function getDecoratedUnnitname(const UI:TUnitInfo;DecoratedUnitNameMode:TDecoratedUnitNameModeSet=[TDUNM_AddUsesCount]):string;
 
@@ -97,16 +97,16 @@ begin
     result:=true;
 end;
 
-procedure ProcessNode(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;Options:TOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;ForceInclude:boolean=false);
+procedure ProcessNode(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;Options:TOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;const LogOpt:TLogOpt;ForceInclude:boolean=false);
 begin
   if node.NodeState=NSNotCheced then
   begin
     if ForceInclude or IncludeToGraph(_SourceUnitIndex,_DestUnitIndex,Options,ScanResult,Node,index,LogWriter)then
     begin
         if Node.UnitType=UTProgram then
-          LogWriter(format(' %s [shape=box]',[getDecoratedUnnitname(Node)]));
+          LogWriter(format(' %s [shape=box]',[getDecoratedUnnitname(Node)]),LogOpt);
         if (Node.UnitPath='')and(index<>0) then
-          LogWriter(format(' %s [style=dashed]',[getDecoratedUnnitname(Node)]));
+          LogWriter(format(' %s [style=dashed]',[getDecoratedUnnitname(Node)]),LogOpt);
         node.NodeState:=NSCheced;
     end
     else
@@ -161,7 +161,7 @@ begin
 
   if assigned(LogWriter) then
   begin
-    LogWriter('DiGraph Classes {');
+    LogWriter('DiGraph Classes {',[LD_FullGraph]);
     if assigned(ScanResult) then
     begin
       for i:=0 to ScanResult.UnitInfoArray.Size-1 do
@@ -172,11 +172,11 @@ begin
     begin
      if ScanResult.UnitInfoArray[i].InterfaceUses.Size>0 then
      begin
-       ProcessNode(SourceUnitIndexs,DestUnitIndexs,Options,ScanResult,ScanResult.UnitInfoArray.Mutable[i]^,i,LogWriter);
+       ProcessNode(SourceUnitIndexs,DestUnitIndexs,Options,ScanResult,ScanResult.UnitInfoArray.Mutable[i]^,i,LogWriter,[LD_FullGraph]);
        if ScanResult.UnitInfoArray[i].NodeState<>NSFiltredOut then
        for j:=0 to ScanResult.UnitInfoArray[i].InterfaceUses.Size-1 do
        begin
-         ProcessNode(SourceUnitIndexs,DestUnitIndexs,Options,ScanResult,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].InterfaceUses[j]]^,ScanResult.UnitInfoArray[i].InterfaceUses[j],LogWriter);
+         ProcessNode(SourceUnitIndexs,DestUnitIndexs,Options,ScanResult,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].InterfaceUses[j]]^,ScanResult.UnitInfoArray[i].InterfaceUses[j],LogWriter,[LD_FullGraph]);
          if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]].NodeState<>NSFiltredOut then
          begin
          {if Options.GraphBulding.FullG.CalcEdgesWeight then
@@ -195,14 +195,14 @@ begin
            te.Restore;
          end;}
          if Options.GraphBulding.InterfaceUsesEdgeType=ETDotted then
-                                                                    LogWriter(' edge [style=dotted]')
+                                                                    LogWriter(' edge [style=dotted]',[LD_FullGraph])
                                                                 else
-                                                                    LogWriter(' edge [style=solid]');
+                                                                    LogWriter(' edge [style=solid]',[LD_FullGraph]);
          if paths<0 then
            LogWriter(format(' %s -> %s',
-           [getDecoratedUnnitname(ScanResult.UnitInfoArray[i]),getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]])]))
+           [getDecoratedUnnitname(ScanResult.UnitInfoArray[i]),getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]])]),[LD_FullGraph])
          else
-           LogWriter(format({' %s -> %s [label=%d]'}' %s -> %s',[getDecoratedUnnitname(ScanResult.UnitInfoArray[i]),getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]]){,paths}]));
+           LogWriter(format({' %s -> %s [label=%d]'}' %s -> %s',[getDecoratedUnnitname(ScanResult.UnitInfoArray[i]),getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].InterfaceUses[j]]){,paths}]),[LD_FullGraph]);
          end;
        end;
      end;
@@ -216,7 +216,7 @@ begin
      begin
        for j:=0 to ScanResult.UnitInfoArray[i].ImplementationUses.Size-1 do
        begin
-         ProcessNode(SourceUnitIndexs,DestUnitIndexs,Options,ScanResult,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].ImplementationUses[j]]^,ScanResult.UnitInfoArray[i].ImplementationUses[j],LogWriter);
+         ProcessNode(SourceUnitIndexs,DestUnitIndexs,Options,ScanResult,ScanResult.UnitInfoArray.Mutable[ScanResult.UnitInfoArray[i].ImplementationUses[j]]^,ScanResult.UnitInfoArray[i].ImplementationUses[j],LogWriter,[LD_FullGraph]);
          if ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]].NodeState<>NSFiltredOut then
          begin
          {if Options.GraphBulding.FullG.CalcEdgesWeight then
@@ -235,13 +235,13 @@ begin
          te.Restore;
          end;}
          if Options.GraphBulding.ImplementationUsesEdgeType=ETDotted then
-                                                                         LogWriter(' edge [style=dotted]')
+                                                                         LogWriter(' edge [style=dotted]',[LD_FullGraph])
                                                                      else
-                                                                         LogWriter(' edge [style=solid]');
+                                                                         LogWriter(' edge [style=solid]',[LD_FullGraph]);
          if paths<0 then
-           LogWriter(format(' %s -> %s',[getDecoratedUnnitname(ScanResult.UnitInfoArray[i]),getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]])]))
+           LogWriter(format(' %s -> %s',[getDecoratedUnnitname(ScanResult.UnitInfoArray[i]),getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]])]),[LD_FullGraph])
          else
-           LogWriter(format({' %s -> %s [label=%d]'}' %s -> %s',[getDecoratedUnnitname(ScanResult.UnitInfoArray[i]),getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]]){,paths}]));
+           LogWriter(format({' %s -> %s [label=%d]'}' %s -> %s',[getDecoratedUnnitname(ScanResult.UnitInfoArray[i]),getDecoratedUnnitname(ScanResult.UnitInfoArray[ScanResult.UnitInfoArray[i].ImplementationUses[j]]){,paths}]),[LD_FullGraph]);
          end;
        end;
      end;
@@ -270,22 +270,28 @@ begin
      j:=1;
      for ClusterInfoPair in Clusters do
      begin
-       LogWriter(format('  subgraph cluster_%d {',[j]));
+       LogWriter(format('  subgraph cluster_%d {',[j]),[LD_FullGraph]);
        inc(j);
-       LogWriter('   style=filled;');
-       LogWriter('   color=lightgrey;');
-       LogWriter(format('   label = "%s";',[PathToSubGraphName(ClusterInfoPair.key)]));
+       LogWriter('   style=filled;',[LD_FullGraph]);
+       LogWriter('   color=lightgrey;',[LD_FullGraph]);
+       LogWriter(format('   label = "%s";',[PathToSubGraphName(ClusterInfoPair.key)]),[LD_FullGraph]);
        for i:=0 to ClusterInfoPair.Value.Size-1 do
        begin
          if i<>ClusterInfoPair.Value.Size-1 then
-           LogWriter(format('   %S;',[ClusterInfoPair.Value[i]]))
+           LogWriter(format('   %S;',[ClusterInfoPair.Value[i]]),[LD_FullGraph])
          else
-           LogWriter(format('   %S;',[ClusterInfoPair.Value[i]]));
+           LogWriter(format('   %S;',[ClusterInfoPair.Value[i]]),[LD_FullGraph]);
        end;
-       LogWriter('  }');
+       LogWriter('  }',[LD_FullGraph]);
      end;
+     Clusters.free;
+     ClusterInfo.Free
     end;
-    LogWriter('}');
+    LogWriter('}',[LD_FullGraph]);
+    if assigned(SourceUnitIndexs)then
+      SourceUnitIndexs.Free;
+    if assigned(DestUnitIndexs)then
+      DestUnitIndexs.Free;
     //LogWriter('CUT HERE 8x----------------------');
 
   end;

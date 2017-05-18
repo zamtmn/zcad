@@ -20,6 +20,8 @@ uses
   { TForm1 }
 
   TForm1 = class(TForm)
+    Save: TAction;
+    Check: TAction;
     Memo2: TMemo;
     Memo3: TMemo;
     Memo4: TMemo;
@@ -31,7 +33,7 @@ uses
     SaveGML: TAction;
     ImportLPI: TAction;
     Scan: TAction;
-    Save: TAction;
+    GenerateFullGraph: TAction;
     ActionList1: TActionList;
     GDBobjinsp1: TGDBobjinsp;
     MainMenu1: TMainMenu;
@@ -52,24 +54,29 @@ uses
     TabFullGraph: TTabSheet;
     ToolBar1: TToolBar;
     btnScan: TToolButton;
-    btnGenerate: TToolButton;
+    btnGenerateFullGraph: TToolButton;
     btnImportLPI: TToolButton;
     btnGenerateGML: TToolButton;
     btnOpenWebGraViz: TToolButton;
     btnCodeExplorer: TToolButton;
     btnOpenDPR: TToolButton;
+    btnCheckCircularDependecies: TToolButton;
+    btnSave: TToolButton;
     procedure _CodeExplorer(Sender: TObject);
     procedure _Exit(Sender: TObject);
+    procedure _SaveCurrentGraph(Sender: TObject);
     procedure _SaveGML(Sender: TObject);
     procedure _ImportLPI(Sender: TObject);
     procedure _OpenDPR(Sender: TObject);
     procedure _onClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure _onCreate(Sender: TObject);
-    procedure _Save(Sender: TObject);
+    procedure _GenerateFullGraph(Sender: TObject);
     procedure _Scan(Sender: TObject);
+    procedure _Check(Sender: TObject);
     procedure _OpenWebGraphviz(Sender: TObject);
     procedure _SetOptionFromUI(Sender: TObject);
     procedure _SetUIFromOption(Sender: TObject);
+    procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
   private
     Options:TOptions;//Record with params, show in object inspector
     ScanResult:TScanResult;
@@ -100,6 +107,20 @@ begin
    //this need to old removed interface
    GDBobjinsp1.updateinsp;
 end;
+
+procedure TForm1.ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
+begin
+   Handled:=true;
+   if AAction=Save then
+     begin
+       if (PageControl1.PageIndex=TabCircularGraph.TabIndex)or
+          (PageControl1.PageIndex=TabFullGraph.TabIndex) then
+                                                             TAction(AAction).Enabled:=true
+                                                         else
+                                                             TAction(AAction).Enabled:=false;
+     end;
+end;
+
 procedure TForm1._onCreate(Sender: TObject);
 begin
    Options:=DefaultOptions;
@@ -202,13 +223,33 @@ begin
  close;
 end;
 
+procedure TForm1._SaveCurrentGraph(Sender: TObject);
+var
+  sd:TSaveDialog;
+begin
+   //Show save current graph dialog
+   sd:=TSaveDialog.Create(nil);
+   sd.Title:='Save *.dot graph file';
+   sd.Filter:='Dot files (*.dot)|*.dot|All files (*.*)|*.*';
+   sd.DefaultExt:='dot';
+   sd.FilterIndex := 1;
+   if sd.Execute then
+   begin
+     if PageControl1.PageIndex=TabCircularGraph.TabIndex then
+       Memo3.Lines.SaveToFile(sd.FileName)
+else if PageControl1.PageIndex=TabFullGraph.TabIndex then
+       Memo4.Lines.SaveToFile(sd.FileName);
+   end;
+   sd.Free;
+end;
+
 procedure TForm1._CodeExplorer(Sender: TObject);
 begin
  //this not implemed yet
  ExploreCode(Options,ScanResult,DummyWriteToLog);
 end;
 
-procedure TForm1._Save(Sender: TObject);
+procedure TForm1._GenerateFullGraph(Sender: TObject);
 begin
    //write full graph to memo
    WriteGraph(Options,ScanResult,DummyWriteToLog);
@@ -229,6 +270,9 @@ begin
     ScanDirectory(Options.Paths._File,Options,ScanResult,DummyWriteToLog);//try parse sources folder
 
    SetCurrentDir(cd);
+end;
+procedure TForm1._Check(Sender: TObject);
+begin
    {$IFDEF CHECKLOOPS}CheckGraph(Options,ScanResult,DummyWriteToLog);{$ENDIF}//check  result graph (for loops), and write loops to memo
 end;
 procedure TForm1._OpenWebGraphviz(Sender: TObject);

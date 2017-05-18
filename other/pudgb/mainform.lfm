@@ -35,11 +35,10 @@ object Form1: TForm1
       Top = 2
       Action = Scan
     end
-    object btnGenerate: TToolButton
-      Left = 178
+    object btnGenerateFullGraph: TToolButton
+      Left = 223
       Top = 2
-      Action = Save
-      Caption = 'Generate graph'
+      Action = GenerateFullGraph
     end
     object btnImportLPI: TToolButton
       Left = 1
@@ -47,18 +46,18 @@ object Form1: TForm1
       Action = ImportLPI
     end
     object btnGenerateGML: TToolButton
-      Left = 282
+      Left = 385
       Top = 2
       Action = SaveGML
       Visible = False
     end
     object btnOpenWebGraViz: TToolButton
-      Left = 437
+      Left = 540
       Top = 2
       Action = OpenWebGraphviz
     end
     object btnCodeExplorer: TToolButton
-      Left = 348
+      Left = 451
       Top = 2
       Action = CodeExplorer
     end
@@ -66,6 +65,16 @@ object Form1: TForm1
       Left = 74
       Top = 2
       Action = OpenDPR
+    end
+    object btnCheckCircularDependecies: TToolButton
+      Left = 178
+      Top = 2
+      Action = Check
+    end
+    object btnSave: TToolButton
+      Left = 349
+      Top = 2
+      Action = Save
     end
   end
   object Splitter1: TSplitter
@@ -155,6 +164,7 @@ object Form1: TForm1
     end
   end
   object ActionList1: TActionList
+    OnUpdate = ActionUpdate
     Left = 456
     Top = 32
     object Scan: TAction
@@ -163,10 +173,10 @@ object Form1: TForm1
       OnExecute = _Scan
       ShortCut = 16467
     end
-    object Save: TAction
-      Caption = 'Save'
-      Hint = 'Save graph'
-      OnExecute = _Save
+    object GenerateFullGraph: TAction
+      Caption = 'Generate full graph'
+      Hint = 'Generate full graph'
+      OnExecute = _GenerateFullGraph
       ShortCut = 113
     end
     object ImportLPI: TAction
@@ -176,7 +186,7 @@ object Form1: TForm1
     end
     object SaveGML: TAction
       Caption = 'SaveGML'
-      Hint = 'не реализовано'
+      Hint = 'Not implement yet'
       OnExecute = _SaveGML
     end
     object OpenWebGraphviz: TAction
@@ -201,6 +211,15 @@ object Form1: TForm1
       Caption = 'OpenDPR'
       OnExecute = _OpenDPR
     end
+    object Check: TAction
+      Caption = 'Check'
+      Hint = 'Generate circular graph'
+      OnExecute = _Check
+    end
+    object Save: TAction
+      Caption = 'Save'
+      OnExecute = _SaveCurrentGraph
+    end
   end
   object MainMenu1: TMainMenu
     Left = 416
@@ -211,7 +230,7 @@ object Form1: TForm1
         Action = Scan
       end
       object mniGenerate: TMenuItem
-        Action = Save
+        Action = GenerateFullGraph
       end
       object mniSeparator: TMenuItem
         Caption = '-'

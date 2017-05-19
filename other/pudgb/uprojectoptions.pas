@@ -5,16 +5,13 @@ unit uprojectoptions;
 interface
 
 uses
-  Classes, SysUtils,
-  uzbtypesbase;
+  Classes, SysUtils;
 
 type
   {$Z1}
-  TPaths=packed record
+  TPasPaths=packed record
     _File:String;
     _Paths:String;
-  end;
-  TFileSearhing=packed record
   end;
   TParser=packed record
     _CompilerOptions:String;
@@ -49,7 +46,7 @@ type
     Notfounded:Boolean;
   end;
   TProjectOptions=packed record
-    Paths:TPaths;
+    Paths:TPasPaths;
     ParserOptions:TParser;
     GraphBulding:TGraphBulding;
     Logger:TLogger;

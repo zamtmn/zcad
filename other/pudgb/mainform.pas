@@ -13,13 +13,15 @@ uses
 
 
   {$IFDEF CHECKLOOPS}uchecker,{$ENDIF}
-  uprojectoptions,uprogramoptions,uoptions,uscaner,uscanresult,uwriter,yEdWriter,ulpiimporter,udpropener,uexplorer;
+  uvizualizer,uprojectoptions,uprogramoptions,uoptions,uscaner,uscanresult,uwriter,yEdWriter,ulpiimporter,udpropener,uexplorer;
   {$INCLUDE revision.inc}
   type
 
   { TForm1 }
 
   TForm1 = class(TForm)
+    btnVizualize: TToolButton;
+    Vizualize: TAction;
     Save: TAction;
     Check: TAction;
     Memo2: TMemo;
@@ -77,6 +79,7 @@ uses
     procedure _SetOptionFromUI(Sender: TObject);
     procedure _SetUIFromOption(Sender: TObject);
     procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
+    procedure _Vizualize(Sender: TObject);
   private
     Options:TOptions;//Record with PProject and PProgram params, show in object inspector
     ScanResult:TScanResult;
@@ -227,6 +230,13 @@ procedure TForm1._SaveGML(Sender: TObject);
 begin
     //this not implemed yet
     WriteGML(Options.ProjectOptions,ScanResult,DummyWriteToLog);
+end;
+
+procedure TForm1._Vizualize(Sender: TObject);
+begin
+   VizualiserForm:=TVizualiserForm.Create(nil);
+   VizualiserForm.ShowModal;
+   VizualiserForm.Free;
 end;
 
 procedure TForm1._Exit(Sender: TObject);

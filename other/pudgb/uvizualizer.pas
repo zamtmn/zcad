@@ -82,7 +82,6 @@ type
     procedure _DestroyApp(Sender: TObject);
     procedure _FormCreate(Sender: TObject);
     procedure _KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure _FormShow(Sender: TObject);
 
     procedure _StartLongProcess(TotalProgressCount:Integer{unused in this example};ProcessName:string);//proc for start time interval measure
     procedure _EndLongProcess;//proc for end time interval measure
@@ -141,11 +140,6 @@ begin
        BtnEraseSelClick(nil);
        Key:=0;
   end;
-end;
-
-procedure TVizualiserForm._FormShow(Sender: TObject);
-begin
-    //_FormCreate(nil);
 end;
 
 procedure TVizualiserForm._FormCreate(Sender: TObject);//Create drawings and view areas

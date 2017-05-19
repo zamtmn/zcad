@@ -11,7 +11,6 @@ object VizualiserForm: TVizualiserForm
   OnCreate = _FormCreate
   OnDestroy = _DestroyApp
   OnKeyDown = _KeyDown
-  OnShow = _FormShow
   LCLVersion = '1.9.0.0'
   object Panel1: TPanel
     Left = 0

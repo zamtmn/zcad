@@ -39,17 +39,11 @@ type
     ImplementationUsesEdgeType:TEdgeType;
     PathClusters:Boolean;
   end;
-  TLogger=packed record
-    ScanerMessages:Boolean;
-    ParserMessages:Boolean;
-    Timer:Boolean;
-    Notfounded:Boolean;
-  end;
+  PTProjectOptions=^TProjectOptions;
   TProjectOptions=packed record
     Paths:TPasPaths;
     ParserOptions:TParser;
     GraphBulding:TGraphBulding;
-    Logger:TLogger;
   end;
 
   TLogDir=(LD_Clear,LD_Report,LD_FullGraph,LD_CircGraph,LD_Explorer);

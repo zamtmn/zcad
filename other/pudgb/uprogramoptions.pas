@@ -12,6 +12,10 @@ type
   TProgPaths=packed record
     _PathToDot:String;
   end;
+  TVisBackend=(VB_GDI,VB_Opengl);
+  TVisualizer=packed record
+    VisBackend:TVisBackend;
+  end;
   TLogger=packed record
     ScanerMessages:Boolean;
     ParserMessages:Boolean;
@@ -21,6 +25,7 @@ type
   PTProgramOptions=^TProgramOptions;
   TProgramOptions=packed record
     ProgPaths:TProgPaths;
+    Visualizer:TVisualizer;
     Logger:TLogger;
   end;
 implementation

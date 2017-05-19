@@ -139,6 +139,7 @@ begin
 
    //setup default ProgramOptions
    Options.ProgramOptions.ProgPaths._PathToDot:='PathToDot place here';
+   Options.ProgramOptions.Visualizer.VisBackend:=VB_GDI;
    Options.ProgramOptions.Logger.ScanerMessages:=false;
    Options.ProgramOptions.Logger.ParserMessages:=false;
    Options.ProgramOptions.Logger.Timer:=true;

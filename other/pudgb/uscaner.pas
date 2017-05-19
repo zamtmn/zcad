@@ -5,7 +5,7 @@ unit uscaner;
 interface
 uses
   LazUTF8,Classes, SysUtils,
-  uprojectoptions,uscanresult,ufileutils,
+  uoptions,uprojectoptions,uscanresult,ufileutils,
   PScanner, PParser, PasTree, Masks;
 
 type
@@ -15,7 +15,7 @@ type
     public
     LogWriter:TLogWriter;
 
-    constructor Create(const Options:TProjectOptions;const _LogWriter:TLogWriter);
+    constructor Create(const Options:TOptions;const _LogWriter:TLogWriter);
     destructor Destroy;override;
     Procedure Log(Sender : TObject; Const Msg : String);
 
@@ -27,9 +27,9 @@ type
     end;
     TPrepareMode = (PMProgram,PMInterface,PMImplementation);
 
-procedure GetDecls(PM:TPrepareMode;Decl:TPasDeclarations;Options:TProjectOptions;ScanResult:TScanResult;UnitIndex:TUnitIndex;const LogWriter:TLogWriter);
-procedure ScanModule(mn:String;Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
-procedure ScanDirectory(mn:String;Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure GetDecls(PM:TPrepareMode;Decl:TPasDeclarations;Options:TOptions;ScanResult:TScanResult;UnitIndex:TUnitIndex;const LogWriter:TLogWriter);
+procedure ScanModule(mn:String;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure ScanDirectory(mn:String;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 
 implementation
 
@@ -52,11 +52,11 @@ begin
   Result.SourceFilename := ASourceFilename;
   Result.SourceLinenumber := ASourceLinenumber;
 end;
-constructor TSimpleEngine.Create(const Options:TProjectOptions;const _LogWriter:TLogWriter);
+constructor TSimpleEngine.Create(const Options:TOptions;const _LogWriter:TLogWriter);
 begin
-  if Options.Logger.ScanerMessages then
+  if Options.ProgramOptions.Logger.ScanerMessages then
     ScannerLogEvents:=[sleFile,sleLineNumber,sleConditionals,sleDirective];
-  if Options.Logger.ParserMessages then
+  if Options.ProgramOptions.Logger.ParserMessages then
     ParserLogEvents:=[pleInterface,pleImplementation];
   OnLog:=@Log;
   FPackage:=TPasPackage.Create('',nil);
@@ -71,7 +71,7 @@ begin
   { dummy implementation, see TFPDocEngine.FindElement for a real example }
   Result := nil;
 end;
-procedure PrepareModule(var M:TPasModule;var E:TPasTreeContainer;Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure PrepareModule(var M:TPasModule;var E:TPasTreeContainer;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 var
    UnitIndex:TUnitIndex;
    s:string;
@@ -110,7 +110,7 @@ function MemoryUsed: Cardinal;
  begin
    Result := GetFPCHeapStatus.CurrHeapUsed;
 end;
-procedure ScanModule(mn:String;Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure ScanModule(mn:String;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 var
   M:TPasModule;
   E:TSimpleEngine;
@@ -121,15 +121,15 @@ begin
    E.uname:=mn;
    //if assigned(LogWriter) then LogWriter(format('Process file: "%s"',[mn]));
    try
-     if Options.Logger.Timer then
+     if Options.ProgramOptions.Logger.Timer then
       begin
        myTime:=now;
        memused:=MemoryUsed;
       end;
      if E.uname='/media/zamtmn/apps/zcad/other/pudgb//uchecker.pas' then
        E.uname:=E.uname;
-     M := ParseSource(E,mn+' '+Options.ParserOptions._CompilerOptions,Options.ParserOptions.TargetOS,Options.ParserOptions.TargetCPU,[poSkipDefaultDefs]);
-     if Options.Logger.Timer then
+     M := ParseSource(E,mn+' '+Options.ProjectOptions.ParserOptions._CompilerOptions,Options.ProjectOptions.ParserOptions.TargetOS,Options.ProjectOptions.ParserOptions.TargetCPU,[poSkipDefaultDefs]);
+     if Options.ProgramOptions.Logger.Timer then
       begin
        LogWriter(format('Parse "%s" %fsec, %db',[mn,(now-myTime)*10e4,(MemoryUsed-memused)]),[LD_Report]);
       end;
@@ -159,7 +159,7 @@ begin
    end;
     //if assigned(LogWriter) then LogWriter(format('Done file: "%s"',[mn]));
 end;
-procedure ScanDirectory(mn:String;Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure ScanDirectory(mn:String;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 var
   path,mask,s:string;
   i:integer;
@@ -195,7 +195,7 @@ begin
    end;
 
 end;
-procedure GetDecls(PM:TPrepareMode;Decl:TPasDeclarations;Options:TProjectOptions;ScanResult:TScanResult;UnitIndex:TUnitIndex;const LogWriter:TLogWriter);
+procedure GetDecls(PM:TPrepareMode;Decl:TPasDeclarations;Options:TOptions;ScanResult:TScanResult;UnitIndex:TUnitIndex;const LogWriter:TLogWriter);
  var i,j:integer;
      pe:TPasElement;
      pp:TPasProcedure;
@@ -240,15 +240,15 @@ begin
     if not ScanResult.isUnitInfoPresent(l.Strings[i],j)then
     begin
       //s:='/'+l.Strings[i]+'.pas';
-      s:=FindInSupportPath(Options.Paths._Paths,PathDelim+l.Strings[i]+'.pas');
+      s:=FindInSupportPath(Options.ProjectOptions.Paths._Paths,PathDelim+l.Strings[i]+'.pas');
       if s=''then
-        s:=FindInSupportPath(Options.Paths._Paths,PathDelim+l.Strings[i]+'.pp');
+        s:=FindInSupportPath(Options.ProjectOptions.Paths._Paths,PathDelim+l.Strings[i]+'.pp');
       if s=''then
-        s:=FindInSupportPath(Options.Paths._Paths,PathDelim+l.Strings[i]+'.PP');
+        s:=FindInSupportPath(Options.ProjectOptions.Paths._Paths,PathDelim+l.Strings[i]+'.PP');
       if s=''then
-        s:=FindInSupportPath(Options.Paths._Paths,PathDelim+lowercase(l.Strings[i])+'.pas');
+        s:=FindInSupportPath(Options.ProjectOptions.Paths._Paths,PathDelim+lowercase(l.Strings[i])+'.pas');
       if s=''then
-        s:=FindInSupportPath(Options.Paths._Paths,PathDelim+lowercase(l.Strings[i])+'.pp');
+        s:=FindInSupportPath(Options.ProjectOptions.Paths._Paths,PathDelim+lowercase(l.Strings[i])+'.pp');
       if s<>''then
                   begin
                     ScanModule(s,Options,ScanResult,LogWriter);
@@ -260,7 +260,7 @@ begin
                   end
               else
                   begin
-                       if Options.Logger.Notfounded then
+                       if Options.ProgramOptions.Logger.Notfounded then
                          if assigned(LogWriter) then LogWriter(format('Unit not found: "%s"',[l.Strings[i]]),[LD_Report]);
                        ScanResult.TryCreateNewUnitInfo(l.Strings[i],j);
                        ScanResult.UnitInfoArray.Mutable[j]^.UnitPath:='';

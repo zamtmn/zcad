@@ -13,7 +13,7 @@ uses
 
 
   {$IFDEF CHECKLOOPS}uchecker,{$ENDIF}
-  uprojectoptions,uscaner,uscanresult,uwriter,yEdWriter,ulpiimporter,udpropener,uexplorer;
+  uprojectoptions,uprogramoptions,uoptions,uscaner,uscanresult,uwriter,yEdWriter,ulpiimporter,udpropener,uexplorer;
   {$INCLUDE revision.inc}
   type
 
@@ -78,7 +78,7 @@ uses
     procedure _SetUIFromOption(Sender: TObject);
     procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
   private
-    Options:TProjectOptions;//Record with params, show in object inspector
+    Options:TOptions;//Record with PProject and PProgram params, show in object inspector
     ScanResult:TScanResult;
 
     RunTimeUnit:ptunit;//Need for register types in object inspector
@@ -123,11 +123,22 @@ end;
 
 procedure TForm1._onCreate(Sender: TObject);
 begin
-   Options:=DefaultOptions;
+   Options.ProjectOptions:=DefaultOptions;
    UnitsFormat:=CreateDefaultUnitsFormat;
    INTFObjInspShowOnlyHotFastEditors:=false;
 
    RunTimeUnit:=units.CreateUnit('',nil,'RunTimeUnit');//create empty zscript unit
+
+   //register TProgramOptions in zscript unit
+   RunTimeUnit^.RegisterType(TypeInfo(TProgramOptions));
+
+   //setup default ProgramOptions
+   Options.ProgramOptions.ProgPaths._PathToDot:='PathToDot place here';
+   Options.ProgramOptions.Logger.ScanerMessages:=false;
+   Options.ProgramOptions.Logger.ParserMessages:=false;
+   Options.ProgramOptions.Logger.Timer:=true;
+   Options.ProgramOptions.Logger.Notfounded:=false;
+
 
    //register TProjectOptions in zscript unit
    RunTimeUnit^.RegisterType(TypeInfo(TProjectOptions));
@@ -144,19 +155,14 @@ begin
                                               'Include to graph','Exclude from graph',
                                               'Source unit','Dest unit','Calc edges weight']);
 
-   RunTimeUnit^.SetTypeDesk(TypeInfo(TLogger),['Scaner messages','Parser messages','Timer','Not founded units']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TEdgeType),['Continuous','Dotted']);
 
-   //setup default options
-   Options.Paths._File:=ExtractFileDir(ParamStr(0))+pathdelim+'passrcerrors.pas';
-   Options.Paths._Paths:=ExtractFileDir(ParamStr(0));
-   Options.Logger.ScanerMessages:=false;
-   Options.Logger.ParserMessages:=false;
-   Options.Logger.Timer:=true;
-   Options.Logger.Notfounded:=false;
+   //setup default ProjectOptions
+   Options.ProjectOptions.Paths._File:=ExtractFileDir(ParamStr(0))+pathdelim+'passrcerrors.pas';
+   Options.ProjectOptions.Paths._Paths:=ExtractFileDir(ParamStr(0));
 
-   Options.GraphBulding.FullG.IncludeToGraph:='';
-   Options.GraphBulding.FullG.ExcludeFromGraph:='';
+   Options.ProjectOptions.GraphBulding.FullG.IncludeToGraph:='';
+   Options.ProjectOptions.GraphBulding.FullG.ExcludeFromGraph:='';
 
    //Add standart and 'fast' editors for types showed in object inspector
    AddEditorToType(RunTimeUnit^.TypeName2PTD('Integer'),TBaseTypesEditors.BaseCreateEditor);//register standart editor to integer type
@@ -167,7 +173,12 @@ begin
    AddFastEditorToType(RunTimeUnit^.TypeName2PTD('Boolean'),@OIUI_FE_BooleanGetPrefferedSize,@OIUI_FE_BooleanDraw,@OIUI_FE_BooleanInverse);
    EnumGlobalEditor:=TBaseTypesEditors.EnumDescriptorCreateEditor;//register standart editor to all enum types
 
-   GDBobjinsp1.setptr(nil,UnitsFormat,RunTimeUnit^.TypeName2PTD('TProjectOptions'),@Options,nil);//show data variable in inspector
+   //register TOptions in zscript unit
+   RunTimeUnit^.RegisterType(TypeInfo(TOptions));
+   RunTimeUnit^.SetTypeDesk(TypeInfo(TOptions),['Program options','Project options']);
+   RunTimeUnit^.SetTypeDesk(TypeInfo(TLogger),['Scaner messages','Parser messages','Timer','Not founded units']);
+
+   GDBobjinsp1.setptr(nil,UnitsFormat,RunTimeUnit^.TypeName2PTD('TOptions'),@Options,nil);//show data variable in inspector
    caption:='pudgb v 0.99 rev:'+RevisionStr;
 end;
 
@@ -189,7 +200,7 @@ begin
    od.FilterIndex := 1;
    if od.Execute then
    begin
-     LPIImport(Options,od.FileName,DummyWriteToLog);
+     LPIImport(Options.ProjectOptions,od.FileName,DummyWriteToLog);
    end;
    od.Free;
    _SetUIFromOption(nil);
@@ -207,7 +218,7 @@ begin
    od.FilterIndex := 1;
    if od.Execute then
    begin
-     DPROpen(Options,od.FileName,DummyWriteToLog);
+     DPROpen(Options.ProjectOptions,od.FileName,DummyWriteToLog);
    end;
    od.Free;
    _SetUIFromOption(nil);
@@ -215,7 +226,7 @@ end;
 procedure TForm1._SaveGML(Sender: TObject);
 begin
     //this not implemed yet
-    WriteGML(Options,ScanResult,DummyWriteToLog);
+    WriteGML(Options.ProjectOptions,ScanResult,DummyWriteToLog);
 end;
 
 procedure TForm1._Exit(Sender: TObject);
@@ -246,34 +257,34 @@ end;
 procedure TForm1._CodeExplorer(Sender: TObject);
 begin
  //this not implemed yet
- ExploreCode(Options,ScanResult,DummyWriteToLog);
+ ExploreCode(Options.ProjectOptions,ScanResult,DummyWriteToLog);
 end;
 
 procedure TForm1._GenerateFullGraph(Sender: TObject);
 begin
    //write full graph to memo
-   WriteGraph(Options,ScanResult,DummyWriteToLog);
+   WriteGraph(Options.ProjectOptions,ScanResult,DummyWriteToLog);
 end;
 procedure TForm1._Scan(Sender: TObject);
 var
   cd:ansistring;
 begin
    cd:=GetCurrentDir;
-   SetCurrentDir(ExtractFileDir(Options.Paths._File));
+   SetCurrentDir(ExtractFileDir(Options.ProjectOptions.Paths._File));
 
    if assigned(ScanResult)then FreeAndNil(ScanResult);//clean last scan result
    ScanResult:=TScanResult.Create;//create new scan result
    DummyWriteToLog('Start scan sources!',[LD_Clear,LD_Report]);
-   if FileExists(Options.Paths._File)then
-    ScanModule(Options.Paths._File,Options,ScanResult,DummyWriteToLog)//try parse main sources file
+   if FileExists(Options.ProjectOptions.Paths._File)then
+    ScanModule(Options.ProjectOptions.Paths._File,Options,ScanResult,DummyWriteToLog)//try parse main sources file
    else
-    ScanDirectory(Options.Paths._File,Options,ScanResult,DummyWriteToLog);//try parse sources folder
+    ScanDirectory(Options.ProjectOptions.Paths._File,Options,ScanResult,DummyWriteToLog);//try parse sources folder
 
    SetCurrentDir(cd);
 end;
 procedure TForm1._Check(Sender: TObject);
 begin
-   {$IFDEF CHECKLOOPS}CheckGraph(Options,ScanResult,DummyWriteToLog);{$ENDIF}//check  result graph (for loops), and write loops to memo
+   {$IFDEF CHECKLOOPS}CheckGraph(Options.ProjectOptions,ScanResult,DummyWriteToLog);{$ENDIF}//check  result graph (for loops), and write loops to memo
 end;
 procedure TForm1._OpenWebGraphviz(Sender: TObject);
 begin

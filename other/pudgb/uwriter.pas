@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms,
   Graphs,MultiLst,Pointerv,
-  uoptions,uscanresult,generics.Collections,gvector,masks;
+  uprojectoptions,uscanresult,generics.Collections,gvector,masks;
 
 type
   TDecoratedUnitNameMode=(TDUNM_AddUsesCount);
@@ -21,9 +21,9 @@ type
 
   TIncludeToGraph=(ITG_Include,ITG_Exclude);
 
-procedure WriteGraph(Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
-procedure ProcessNode(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;Options:TOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;const LogOpt:TLogOpt;ForceInclude:boolean=false);
-function IncludeToGraph(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;const Options:TOptions;const ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter):boolean;
+procedure WriteGraph(Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure ProcessNode(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;Options:TProjectOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;const LogOpt:TLogOpt;ForceInclude:boolean=false);
+function IncludeToGraph(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;const Options:TProjectOptions;const ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter):boolean;
 function getDecoratedUnnitname(const UI:TUnitInfo;DecoratedUnitNameMode:TDecoratedUnitNameModeSet=[TDUNM_AddUsesCount]):string;
 
 implementation
@@ -34,7 +34,7 @@ begin
   result:=StringReplace(result,'.','_',[rfReplaceAll]);
 end;
 
-function CheckIncludeOptions(const Options:TOptions;const UnitName:string):TIncludeToGraph;
+function CheckIncludeOptions(const Options:TProjectOptions;const UnitName:string):TIncludeToGraph;
 begin
   if Options.GraphBulding.FullG.IncludeToGraph<>'' then
     if not MatchesMaskList(UnitName,Options.GraphBulding.FullG.IncludeToGraph) then
@@ -51,7 +51,7 @@ begin
   result:=ITG_Include;
 end;
 
-function IncludeToGraph(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;const Options:TOptions;const ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter):boolean;
+function IncludeToGraph(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;const Options:TProjectOptions;const ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter):boolean;
 var
   i,j:integer;
   connected:boolean;
@@ -97,7 +97,7 @@ begin
     result:=true;
 end;
 
-procedure ProcessNode(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;Options:TOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;const LogOpt:TLogOpt;ForceInclude:boolean=false);
+procedure ProcessNode(_SourceUnitIndex,_DestUnitIndex:TNodeIndexes;Options:TProjectOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;const LogOpt:TLogOpt;ForceInclude:boolean=false);
 begin
   if node.NodeState=NSNotCheced then
   begin
@@ -120,7 +120,7 @@ begin
   result:=StringReplace(result,'\','_',[rfReplaceAll]);
 end;
 
-procedure WriteGraph(Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure WriteGraph(Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 var
   i,j,paths:integer;
   s:string;

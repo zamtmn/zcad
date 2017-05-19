@@ -45,7 +45,7 @@
         <PackageName Value="LCL"/>
       </Item7>
     </RequiredPackages>
-    <Units Count="9">
+    <Units Count="12">
       <Unit0>
         <Filename Value="pudgb.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -62,7 +62,7 @@
         <IsPartOfProject Value="True"/>
       </Unit2>
       <Unit3>
-        <Filename Value="uoptions.pas"/>
+        <Filename Value="uprojectoptions.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit3>
       <Unit4>
@@ -86,6 +86,18 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="yEdWriter"/>
       </Unit8>
+      <Unit9>
+        <Filename Value="uchecker.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="uexplorer.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="udpropener.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit11>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

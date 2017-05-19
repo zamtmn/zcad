@@ -13,7 +13,7 @@ uses
 
 
   {$IFDEF CHECKLOOPS}uchecker,{$ENDIF}
-  uoptions,uscaner,uscanresult,uwriter,yEdWriter,ulpiimporter,udpropener,uexplorer;
+  uprojectoptions,uscaner,uscanresult,uwriter,yEdWriter,ulpiimporter,udpropener,uexplorer;
   {$INCLUDE revision.inc}
   type
 
@@ -78,7 +78,7 @@ uses
     procedure _SetUIFromOption(Sender: TObject);
     procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
   private
-    Options:TOptions;//Record with params, show in object inspector
+    Options:TProjectOptions;//Record with params, show in object inspector
     ScanResult:TScanResult;
 
     RunTimeUnit:ptunit;//Need for register types in object inspector
@@ -129,10 +129,10 @@ begin
 
    RunTimeUnit:=units.CreateUnit('',nil,'RunTimeUnit');//create empty zscript unit
 
-   //register TOptions in zscript unit
-   RunTimeUnit^.RegisterType(TypeInfo(TOptions));
+   //register TProjectOptions in zscript unit
+   RunTimeUnit^.RegisterType(TypeInfo(TProjectOptions));
    //Set params names
-   RunTimeUnit^.SetTypeDesk(TypeInfo(TOptions),['Paths','Parser options','Graph bulding','Log']);
+   RunTimeUnit^.SetTypeDesk(TypeInfo(TProjectOptions),['Paths','Parser options','Graph bulding','Log']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TPaths),['File','Paths']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TParser),['Compiler options','Target OS','Target CPU']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TGraphBulding),['Circular graph','Full graph','Interface uses edge type',
@@ -167,7 +167,7 @@ begin
    AddFastEditorToType(RunTimeUnit^.TypeName2PTD('Boolean'),@OIUI_FE_BooleanGetPrefferedSize,@OIUI_FE_BooleanDraw,@OIUI_FE_BooleanInverse);
    EnumGlobalEditor:=TBaseTypesEditors.EnumDescriptorCreateEditor;//register standart editor to all enum types
 
-   GDBobjinsp1.setptr(nil,UnitsFormat,RunTimeUnit^.TypeName2PTD('TOptions'),@Options,nil);//show data variable in inspector
+   GDBobjinsp1.setptr(nil,UnitsFormat,RunTimeUnit^.TypeName2PTD('TProjectOptions'),@Options,nil);//show data variable in inspector
    caption:='pudgb v 0.99 rev:'+RevisionStr;
 end;
 

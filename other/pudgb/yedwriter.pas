@@ -6,19 +6,19 @@ interface
 
 uses
   Classes, SysUtils,
-  uoptions,uscanresult,uwriter;
+  uprojectoptions,uscanresult,uwriter;
 
 {$I yed.inc}
 // потом продумаю подробнее параметры
-procedure WriteGML (Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
-procedure NodeGML (Options:TOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;ForceInclude:boolean=false);
-procedure GraphGML (Options:TOptions; var Node:TUnitInfo); //проставление связей. (второй проход по узлам) параметры пока не ставлю специально.
+procedure WriteGML (Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure NodeGML (Options:TProjectOptions;ScanResult:TScanResult;var Node:TUnitInfo;const index:integer;const LogWriter:TLogWriter;ForceInclude:boolean=false);
+procedure GraphGML (Options:TProjectOptions; var Node:TUnitInfo); //проставление связей. (второй проход по узлам) параметры пока не ставлю специально.
 
 
 implementation
 
 
-procedure WriteGML(Options: TOptions; ScanResult: TScanResult;
+procedure WriteGML(Options: TProjectOptions; ScanResult: TScanResult;
   const LogWriter: TLogWriter);
 var
   i,j:integer;
@@ -89,7 +89,7 @@ begin
   end;
 end;
 
-procedure NodeGML(Options: TOptions;ScanResult:TScanResult; var Node: TUnitInfo; const index: integer;
+procedure NodeGML(Options: TProjectOptions;ScanResult:TScanResult; var Node: TUnitInfo; const index: integer;
   const LogWriter: TLogWriter; ForceInclude: boolean);
 begin
    if node.NodeState=NSNotCheced then
@@ -107,7 +107,7 @@ begin
   end;
 end;
 
-procedure GraphGML(Options: TOptions; var Node: TUnitInfo);
+procedure GraphGML(Options: TProjectOptions; var Node: TUnitInfo);
 begin
 
 end;

@@ -6,16 +6,16 @@ interface
 
 uses
   Classes, SysUtils,
-  uoptions,uscanresult,uwriter,
+  uprojectoptions,uscanresult,uwriter,
   MultiLst,
   Pointerv,
   Graphs;
 
 
-procedure CheckGraph(Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure CheckGraph(Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 
 implementation
-procedure CheckGraph(Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure CheckGraph(Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 var
   i,j,k,mmm:integer;
   TotalUnitsWithImplUses,

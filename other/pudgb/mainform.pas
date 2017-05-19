@@ -2,6 +2,7 @@ unit mainform;
 
 {$mode delphi}{$H+}
 {$DEFINE CHECKLOOPS}
+{.$DEFINE GRAPHVIZUALIZER}
 
 interface
 
@@ -13,7 +14,8 @@ uses
 
 
   {$IFDEF CHECKLOOPS}uchecker,{$ENDIF}
-  uvizualizer,uprojectoptions,uprogramoptions,uoptions,uscaner,uscanresult,uwriter,yEdWriter,ulpiimporter,udpropener,uexplorer;
+  {$IFDEF GRAPHVIZUALIZER}uvizualizer,{$ENDIF}uprojectoptions,uprogramoptions,
+  uoptions,uscaner,uscanresult,uwriter,yEdWriter,ulpiimporter,udpropener,uexplorer;
   {$INCLUDE revision.inc}
   type
 
@@ -234,9 +236,13 @@ end;
 
 procedure TForm1._Vizualize(Sender: TObject);
 begin
+   {$IFDEF GRAPHVIZUALIZER}
    VizualiserForm:=TVizualiserForm.Create(nil);
    VizualiserForm.ShowModal;
    VizualiserForm.Free;
+   {$ELSE}
+   Application.MessageBox('Please set "GRAPHVIZUALIZER" conditional def in mainform.pas','');
+   {$ENDIF}
 end;
 
 procedure TForm1._Exit(Sender: TObject);

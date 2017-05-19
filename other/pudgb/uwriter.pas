@@ -284,7 +284,7 @@ begin
        end;
        LogWriter('  }',[LD_FullGraph]);
      end;
-     Clusters.free;
+     Clusters.Free;
      ClusterInfo.Free
     end;
     LogWriter('}',[LD_FullGraph]);

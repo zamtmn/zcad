@@ -15,7 +15,7 @@ type
     public
     LogWriter:TLogWriter;
 
-    constructor Create(const Options:TOptions);
+    constructor Create(const Options:TOptions;const _LogWriter:TLogWriter);
     destructor Destroy;override;
     Procedure Log(Sender : TObject; Const Msg : String);
 
@@ -52,7 +52,7 @@ begin
   Result.SourceFilename := ASourceFilename;
   Result.SourceLinenumber := ASourceLinenumber;
 end;
-constructor TSimpleEngine.Create(const Options:TOptions);
+constructor TSimpleEngine.Create(const Options:TOptions;const _LogWriter:TLogWriter);
 begin
   if Options.Logger.ScanerMessages then
     ScannerLogEvents:=[sleFile,sleLineNumber,sleConditionals,sleDirective];
@@ -60,6 +60,7 @@ begin
     ParserLogEvents:=[pleInterface,pleImplementation];
   OnLog:=@Log;
   FPackage:=TPasPackage.Create('',nil);
+  LogWriter:=_LogWriter;
 end;
 procedure TSimpleEngine.Log(Sender : TObject; Const Msg : String);
 begin
@@ -116,7 +117,7 @@ var
   myTime:TDateTime;
   memused:Cardinal;
 begin
-   E := TSimpleEngine.Create(Options);
+   E := TSimpleEngine.Create(Options,LogWriter);
    E.uname:=mn;
    //if assigned(LogWriter) then LogWriter(format('Process file: "%s"',[mn]));
    try

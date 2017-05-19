@@ -22,30 +22,33 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="7">
+    <RequiredPackages Count="8">
       <Item1>
-        <PackageName Value="ag_graph"/>
+        <PackageName Value="LazOpenGLContext"/>
       </Item1>
       <Item2>
-        <PackageName Value="ag_vectors"/>
+        <PackageName Value="ag_graph"/>
       </Item2>
       <Item3>
-        <PackageName Value="CodeTools"/>
+        <PackageName Value="ag_vectors"/>
       </Item3>
       <Item4>
-        <PackageName Value="IDEIntf"/>
+        <PackageName Value="CodeTools"/>
       </Item4>
       <Item5>
-        <PackageName Value="zobjectinspector"/>
+        <PackageName Value="IDEIntf"/>
       </Item5>
       <Item6>
-        <PackageName Value="FCL"/>
+        <PackageName Value="zobjectinspector"/>
       </Item6>
       <Item7>
-        <PackageName Value="LCL"/>
+        <PackageName Value="FCL"/>
       </Item7>
+      <Item8>
+        <PackageName Value="LCL"/>
+      </Item8>
     </RequiredPackages>
-    <Units Count="12">
+    <Units Count="11">
       <Unit0>
         <Filename Value="pudgb.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -78,26 +81,22 @@
         <IsPartOfProject Value="True"/>
       </Unit6>
       <Unit7>
-        <Filename Value="passrcerrors.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit7>
-      <Unit8>
         <Filename Value="yedwriter.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="yEdWriter"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="uchecker.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit8>
       <Unit9>
-        <Filename Value="uchecker.pas"/>
+        <Filename Value="uexplorer.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit9>
       <Unit10>
-        <Filename Value="uexplorer.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit10>
-      <Unit11>
         <Filename Value="udpropener.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit11>
+      </Unit10>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -108,9 +107,14 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="$(LazarusDir)\ide"/>
+      <OtherUnitFiles Value="$(LazarusDir)\ide;..\..\cad_source\zengine\containers;..\..\cad_source\zengine;..\..\cad_source\zengine\core;..\..\cad_source\zengine\core\utils;..\..\cad_source\zengine\core\objects;..\..\cad_source\zengine\core\entities;..\..\cad_source\zengine\zgl;..\..\cad_source\zengine\geomlib;..\..\cad_source\zengine\styles;..\..\cad_source\zengine\zgl\drawers;..\..\cad_source\zengine\misc;..\..\cad_source\zengine\fileformats;..\..\cad_source\zengine\fonts;..\..\cad_source\zengine\core\drawings"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
+    <Parsing>
+      <SyntaxOptions>
+        <SyntaxMode Value="Delphi"/>
+      </SyntaxOptions>
+    </Parsing>
     <Linking>
       <Options>
         <Win32>

@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 444
+  Left = 583
   Height = 659
-  Top = 249
+  Top = 239
   Width = 737
   Caption = 'Form1'
   ClientHeight = 636
@@ -52,12 +52,12 @@ object Form1: TForm1
       Visible = False
     end
     object btnOpenWebGraViz: TToolButton
-      Left = 540
+      Left = 600
       Top = 2
       Action = OpenWebGraphviz
     end
     object btnCodeExplorer: TToolButton
-      Left = 451
+      Left = 511
       Top = 2
       Action = CodeExplorer
     end
@@ -75,6 +75,11 @@ object Form1: TForm1
       Left = 349
       Top = 2
       Action = Save
+    end
+    object btnVizualize: TToolButton
+      Left = 451
+      Top = 2
+      Action = Vizualize
     end
   end
   object Splitter1: TSplitter
@@ -219,6 +224,10 @@ object Form1: TForm1
     object Save: TAction
       Caption = 'Save'
       OnExecute = _SaveCurrentGraph
+    end
+    object Vizualize: TAction
+      Caption = 'Vizualize'
+      OnExecute = _Vizualize
     end
   end
   object MainMenu1: TMainMenu

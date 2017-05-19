@@ -6,13 +6,13 @@ interface
 
 uses
   Classes, SysUtils,LazFileUtils,
-  uoptions;
+  uprojectoptions;
 
-procedure DPROpen(var Options:TOptions;const filename:string;const LogWriter:TLogWriter);
+procedure DPROpen(var Options:TProjectOptions;const filename:string;const LogWriter:TLogWriter);
 
 implementation
 
-procedure DPROpen(var Options:TOptions;const filename:string;const LogWriter:TLogWriter);
+procedure DPROpen(var Options:TProjectOptions;const filename:string;const LogWriter:TLogWriter);
 begin
   Options.Paths._File:=filename;
   Options.Paths._Paths:=ExtractFilePath(filename);

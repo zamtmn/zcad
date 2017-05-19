@@ -6,12 +6,12 @@ interface
 
 uses
   Classes, SysUtils,Laz2_XMLCfg,LazUTF8,
-  uoptions,ufileutils,LazFileUtils,Laz2_DOM,
+  uprojectoptions,ufileutils,LazFileUtils,Laz2_DOM,
   MacroIntf,TransferMacros,MacroDefIntf;//From lazarus ide
 
 type
   TMacroMethods=class
-      Options:TOptions;
+      Options:TProjectOptions;
       UnitOutputDirectory:string;
       packagefiles:TXMLConfig;
       function MacroFuncTargetCPU(const {%H-}Param: string; const Data: PtrInt;
@@ -26,7 +26,7 @@ type
       destructor destroy;override;
   end;
 
-procedure LPIImport(var Options:TOptions;const filename:string;const LogWriter:TLogWriter);
+procedure LPIImport(var Options:TProjectOptions;const filename:string;const LogWriter:TLogWriter);
 
 implementation
 constructor TMacroMethods.create;
@@ -103,7 +103,7 @@ begin
     end;
 end;
 
-procedure LPIImport(var Options:TOptions;const filename:string;const LogWriter:TLogWriter);
+procedure LPIImport(var Options:TProjectOptions;const filename:string;const LogWriter:TLogWriter);
 var
  Doc:TXMLConfig;
  j:integer;

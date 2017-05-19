@@ -6,18 +6,18 @@ interface
 
 uses
   Classes, SysUtils,Forms,
-  uoptions,uscanresult,PasTree,Generics.Collections;
+  uprojectoptions,uscanresult,PasTree,Generics.Collections;
 type
   TNodeName=string;
   TNodeData=record
     Name:TNodeName;
     Text:String;
   end;
-  TPasElementHandler=procedure(const pe:TPasElement; var PrevNode,Node:TNodeData;var NNSeed:integer;Options:TOptions;const LogWriter:TLogWriter;var NeedConnectToPrev:boolean);
+  TPasElementHandler=procedure(const pe:TPasElement; var PrevNode,Node:TNodeData;var NNSeed:integer;Options:TProjectOptions;const LogWriter:TLogWriter;var NeedConnectToPrev:boolean);
   TPasElementPasHandlers=specialize TDictionary<pointer,TPasElementHandler>;
 var
   PasElementPasHandlers:TPasElementPasHandlers;
-procedure ExploreCode(Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure ExploreCode(Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 procedure DefaultProcessPasImpl(const pe:TPasElement; var Node:TNodeData);
 implementation
 function GetNodeName(var NodeSeed:integer):TNodeName;
@@ -25,7 +25,7 @@ begin
   result:=format('Node_%d',[NodeSeed]);
   inc(NodeSeed);
 end;
-function ExplorePasImplBlock(PrevNode:TNodeData;PasImplBlock:TPasImplBlock;var NNSeed:integer;Options:TOptions;const LogWriter:TLogWriter;NeedConnectToPrev:boolean):TNodeData;
+function ExplorePasImplBlock(PrevNode:TNodeData;PasImplBlock:TPasImplBlock;var NNSeed:integer;Options:TProjectOptions;const LogWriter:TLogWriter;NeedConnectToPrev:boolean):TNodeData;
 var
   i:integer;
   pe:TPasElement;
@@ -50,7 +50,7 @@ begin
      end;
      result:=CurrentNode;
 end;
-function ExplorePasImplElement(PrevNode:TNodeData;PasImplElement:TPasImplElement;var NNSeed:integer;Options:TOptions;const LogWriter:TLogWriter;NeedConnectToPrev:boolean):TNodeData;
+function ExplorePasImplElement(PrevNode:TNodeData;PasImplElement:TPasImplElement;var NNSeed:integer;Options:TProjectOptions;const LogWriter:TLogWriter;NeedConnectToPrev:boolean):TNodeData;
 var
   i:integer;
   pe:TPasElement;
@@ -75,7 +75,7 @@ begin
      end;
      result:=CurrentNode;
 end;
-procedure ExploreUnit(var UnitInfo:TUnitInfo;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure ExploreUnit(var UnitInfo:TUnitInfo;Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 var
   NNSeed:integer;
   CurrentNode,PrevNode:TNodeData;
@@ -94,7 +94,7 @@ begin
      LogWriter(format(' %s -> %s',[PrevNode.Name,CurrentNode.Name]),[LD_Explorer]);
      LogWriter('}',[LD_Explorer]);
 end;
-procedure ExploreCode(Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure ExploreCode(Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 begin
   Application.MessageBox('Not yet implemented!','Error!');
   if assigned(ScanResult) then
@@ -105,18 +105,18 @@ procedure DefaultProcessPasImpl(const pe:TPasElement; var Node:TNodeData);
 begin
   Node.Text:=format('Not implement for ''%s''',[pe.ClassName]);
 end;
-procedure ProcessPasImplAssign(const pe:TPasImplAssign; var PrevNode,Node:TNodeData;var NNSeed:integer;Options:TOptions;const LogWriter:TLogWriter;var NeedConnectToPrev:boolean);
+procedure ProcessPasImplAssign(const pe:TPasImplAssign; var PrevNode,Node:TNodeData;var NNSeed:integer;Options:TProjectOptions;const LogWriter:TLogWriter;var NeedConnectToPrev:boolean);
 begin
   Node.Text:=format('%s:=%s',[pe.left.GetDeclaration(true),pe.right.GetDeclaration(true)]);
 end;
-procedure ProcessPasImplSimple(const pe:TPasImplSimple; var PrevNode,Node:TNodeData;var NNSeed:integer;Options:TOptions;const LogWriter:TLogWriter;var NeedConnectToPrev:boolean);
+procedure ProcessPasImplSimple(const pe:TPasImplSimple; var PrevNode,Node:TNodeData;var NNSeed:integer;Options:TProjectOptions;const LogWriter:TLogWriter;var NeedConnectToPrev:boolean);
 begin
   if pe.expr is tparamsexpr then
     Node.Text:=tparamsexpr(pe.expr).Value.GetDeclaration(true)+pe.expr.GetDeclaration(true)
   else
     Node.Text:=pe.expr.GetDeclaration(true);
 end;
-procedure ProcessPasImplForLoop(const pe:TPasImplForLoop; var PrevNode,Node:TNodeData;var NNSeed:integer;Options:TOptions;const LogWriter:TLogWriter;var NeedConnectToPrev:boolean);
+procedure ProcessPasImplForLoop(const pe:TPasImplForLoop; var PrevNode,Node:TNodeData;var NNSeed:integer;Options:TProjectOptions;const LogWriter:TLogWriter;var NeedConnectToPrev:boolean);
 var
   startnodename:string;
   fakeNeedConnectToPrev:boolean;
@@ -143,7 +143,7 @@ begin
 
   NeedConnectToPrev:=false;
 end;
-procedure ProcessPasImplIfElse(const pe:TPasImplIfElse; var PrevNode,Node:TNodeData;var NNSeed:integer;Options:TOptions;const LogWriter:TLogWriter;var NeedConnectToPrev:boolean);
+procedure ProcessPasImplIfElse(const pe:TPasImplIfElse; var PrevNode,Node:TNodeData;var NNSeed:integer;Options:TProjectOptions;const LogWriter:TLogWriter;var NeedConnectToPrev:boolean);
 var
   fakeNeedConnectToPrev:boolean;
 begin

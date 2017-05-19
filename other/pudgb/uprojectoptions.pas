@@ -1,4 +1,4 @@
-unit uoptions;
+unit uprojectoptions;
 
 {$mode objfpc}{$H+}
 
@@ -48,7 +48,7 @@ type
     Timer:Boolean;
     Notfounded:Boolean;
   end;
-  TOptions=packed record
+  TProjectOptions=packed record
     Paths:TPaths;
     ParserOptions:TParser;
     GraphBulding:TGraphBulding;
@@ -59,7 +59,7 @@ type
   TLogOpt=set of TLogDir;
   TLogWriter=procedure(msg:string; const LogOpt:TLogOpt) of object;
 
-function DefaultOptions:TOptions;
+function DefaultOptions:TProjectOptions;
 function GetCompilerDefs:String;
 
 implementation
@@ -88,7 +88,7 @@ begin
  {$ifdef LCLGTK2}adddef('LCLGTK2');{$endif}
 end;
 
-function DefaultOptions:TOptions;
+function DefaultOptions:TProjectOptions;
 begin
  result.Paths._File:='?? import or edit this';
  result.Paths._Paths:='?? import or edit this';

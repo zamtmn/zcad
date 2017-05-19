@@ -5,7 +5,7 @@ unit uscaner;
 interface
 uses
   LazUTF8,Classes, SysUtils,
-  uoptions,uscanresult,ufileutils,
+  uprojectoptions,uscanresult,ufileutils,
   PScanner, PParser, PasTree, Masks;
 
 type
@@ -15,7 +15,7 @@ type
     public
     LogWriter:TLogWriter;
 
-    constructor Create(const Options:TOptions;const _LogWriter:TLogWriter);
+    constructor Create(const Options:TProjectOptions;const _LogWriter:TLogWriter);
     destructor Destroy;override;
     Procedure Log(Sender : TObject; Const Msg : String);
 
@@ -27,9 +27,9 @@ type
     end;
     TPrepareMode = (PMProgram,PMInterface,PMImplementation);
 
-procedure GetDecls(PM:TPrepareMode;Decl:TPasDeclarations;Options:TOptions;ScanResult:TScanResult;UnitIndex:TUnitIndex;const LogWriter:TLogWriter);
-procedure ScanModule(mn:String;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
-procedure ScanDirectory(mn:String;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure GetDecls(PM:TPrepareMode;Decl:TPasDeclarations;Options:TProjectOptions;ScanResult:TScanResult;UnitIndex:TUnitIndex;const LogWriter:TLogWriter);
+procedure ScanModule(mn:String;Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure ScanDirectory(mn:String;Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 
 implementation
 
@@ -52,7 +52,7 @@ begin
   Result.SourceFilename := ASourceFilename;
   Result.SourceLinenumber := ASourceLinenumber;
 end;
-constructor TSimpleEngine.Create(const Options:TOptions;const _LogWriter:TLogWriter);
+constructor TSimpleEngine.Create(const Options:TProjectOptions;const _LogWriter:TLogWriter);
 begin
   if Options.Logger.ScanerMessages then
     ScannerLogEvents:=[sleFile,sleLineNumber,sleConditionals,sleDirective];
@@ -71,7 +71,7 @@ begin
   { dummy implementation, see TFPDocEngine.FindElement for a real example }
   Result := nil;
 end;
-procedure PrepareModule(var M:TPasModule;var E:TPasTreeContainer;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure PrepareModule(var M:TPasModule;var E:TPasTreeContainer;Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 var
    UnitIndex:TUnitIndex;
    s:string;
@@ -110,7 +110,7 @@ function MemoryUsed: Cardinal;
  begin
    Result := GetFPCHeapStatus.CurrHeapUsed;
 end;
-procedure ScanModule(mn:String;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure ScanModule(mn:String;Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 var
   M:TPasModule;
   E:TSimpleEngine;
@@ -159,7 +159,7 @@ begin
    end;
     //if assigned(LogWriter) then LogWriter(format('Done file: "%s"',[mn]));
 end;
-procedure ScanDirectory(mn:String;Options:TOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
+procedure ScanDirectory(mn:String;Options:TProjectOptions;ScanResult:TScanResult;const LogWriter:TLogWriter);
 var
   path,mask,s:string;
   i:integer;
@@ -195,7 +195,7 @@ begin
    end;
 
 end;
-procedure GetDecls(PM:TPrepareMode;Decl:TPasDeclarations;Options:TOptions;ScanResult:TScanResult;UnitIndex:TUnitIndex;const LogWriter:TLogWriter);
+procedure GetDecls(PM:TPrepareMode;Decl:TPasDeclarations;Options:TProjectOptions;ScanResult:TScanResult;UnitIndex:TUnitIndex;const LogWriter:TLogWriter);
  var i,j:integer;
      pe:TPasElement;
      pp:TPasProcedure;

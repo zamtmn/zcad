@@ -133,7 +133,7 @@ begin
    RunTimeUnit^.RegisterType(TypeInfo(TProjectOptions));
    //Set params names
    RunTimeUnit^.SetTypeDesk(TypeInfo(TProjectOptions),['Paths','Parser options','Graph bulding','Log']);
-   RunTimeUnit^.SetTypeDesk(TypeInfo(TPaths),['File','Paths']);
+   RunTimeUnit^.SetTypeDesk(TypeInfo(TPasPaths),['File','Paths']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TParser),['Compiler options','Target OS','Target CPU']);
    RunTimeUnit^.SetTypeDesk(TypeInfo(TGraphBulding),['Circular graph','Full graph','Interface uses edge type',
                                                      'Implementation uses edge type',{'Calc edges weight',}

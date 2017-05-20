@@ -239,6 +239,7 @@ procedure TForm1._Vizualize(Sender: TObject);
 begin
    {$IFDEF GRAPHVIZUALIZER}
    VizualiserForm:=TVizualiserForm.Create(nil);
+   VizualiserForm.VisBackend:=Options.ProgramOptions.Visualizer.VisBackend;
    VizualiserForm.ShowModal;
    VizualiserForm.Free;
    {$ELSE}

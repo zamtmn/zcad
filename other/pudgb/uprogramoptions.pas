@@ -11,6 +11,7 @@ type
   {$Z1}
   TProgPaths=packed record
     _PathToDot:String;
+    _Temp:String;
   end;
   TVisBackend=(VB_GDI,VB_Opengl);
   TVisualizer=packed record

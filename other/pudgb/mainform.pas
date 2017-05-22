@@ -8,7 +8,7 @@ interface
 
 uses
   LazUTF8,Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  ComCtrls, StdCtrls, ActnList, Menus, LCLIntf,
+  ComCtrls, StdCtrls, ActnList, Menus, LCLIntf, Process,
 
   zcobjectinspectorui,uzctypesdecorations,uzedimensionaltypes,zcobjectinspector,Varman,uzbtypes,uzemathutils,UUnitManager,varmandef,zcobjectinspectoreditors,UEnumDescriptor,
 
@@ -138,7 +138,8 @@ begin
    RunTimeUnit^.RegisterType(TypeInfo(TProgramOptions));
 
    //setup default ProgramOptions
-   Options.ProgramOptions.ProgPaths._PathToDot:='PathToDot place here';
+   Options.ProgramOptions.ProgPaths._PathToDot:='E:\Program Files (x86)\Graphviz2.38\bin\dot.exe';
+   Options.ProgramOptions.ProgPaths._Temp:=GetTempDir;
    Options.ProgramOptions.Visualizer.VisBackend:=VB_GDI;
    Options.ProgramOptions.Logger.ScanerMessages:=false;
    Options.ProgramOptions.Logger.ParserMessages:=false;
@@ -236,10 +237,30 @@ begin
 end;
 
 procedure TForm1._Vizualize(Sender: TObject);
+var
+  gvp:tprocess;
+  AStringList:TStringList;
+  infilename,outfilename:string;
 begin
    {$IFDEF GRAPHVIZUALIZER}
-   VizualiserForm:=TVizualiserForm.Create(nil);
+   infilename:=options.ProgramOptions.ProgPaths._Temp+'pudgb.dot';
+   outfilename:=options.ProgramOptions.ProgPaths._Temp+'pudgb.svg';
+   memo3.Lines.SaveToFile(infilename);
+
+   gvp:=TProcess.Create(nil);
+   gvp.Executable:=Options.ProgramOptions.ProgPaths._PathToDot;
+   gvp.Parameters.Add('-Tsvg');
+   gvp.Parameters.Add('-o'+outfilename);
+   gvp.Parameters.Add(infilename);
+   gvp.Options := gvp.Options + [poUsePipes,poStderrToOutPut,poNoConsole,poWaitOnExit];
+   gvp.Execute;
+   gvp.Free;
+
+   VizualiserForm:=TVizualiserForm(TVizualiserForm.NewInstance);
+   VizualiserForm.InFile:=TMemoryStream.Create;
+   VizualiserForm.InFile.LoadFromFile(outfilename);
    VizualiserForm.VisBackend:=Options.ProgramOptions.Visualizer.VisBackend;
+   VizualiserForm.Create(nil);
    VizualiserForm.ShowModal;
    VizualiserForm.Free;
    {$ELSE}

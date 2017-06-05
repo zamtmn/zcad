@@ -41,7 +41,7 @@ uses
 const
   fastEditorOffset={$IFDEF LCLQT}2{$ELSE}2{$ENDIF} ;
   spliterhalfwidth=4;
-  subtab=8;
+  subtab=1;
   PlusMinusDetailArray: array[Boolean,Boolean] of TThemedTreeview =
   (
     (ttGlyphClosed,
@@ -585,7 +585,6 @@ begin
      for i:=0 to ppd.FastEditors.Size-1 do
       drawfasteditor(ppd,canvas,ppd.FastEditors.Mutable[i]^,r);
 end;
-procedure drawheader(Canvas:tcanvas;ppd:PPropertyDeskriptor;r:trect;name:string;onm:boolean;TextDetails: TThemedElementDetails);
 function GetSizeTreeIcon(Minus,hot: Boolean):TSize;
 var
   Details: TThemedElementDetails;
@@ -593,6 +592,7 @@ begin
   Details := ThemeServices.GetElementDetails(PlusMinusDetail(Minus,hot));
   result := ThemeServices.GetDetailSize(Details);
 end;
+procedure drawheader(Canvas:tcanvas;ppd:PPropertyDeskriptor;r:trect;name:string;onm:boolean;TextDetails: TThemedElementDetails);
 procedure DrawTreeIcon(X, Y: Integer; Minus, hot: Boolean);
 var
   Details: TThemedElementDetails;
@@ -822,7 +822,7 @@ begin
       if (ppd^.IsVisible) then
       begin
         OnMouseProp:=(ppd=onmousepp);
-        r.Left:=arect.Left+2+subtab*sub{arect.Left};
+        r.Left:=arect.Left+{2+}(subtab+GetSizeTreeIcon(not ppd^.Collapsed^,false).cx)*sub;
         r.Top:=y;
         if NeedShowSeparator then
                                  r.Right:=namecol-spliterhalfwidth
@@ -844,7 +844,8 @@ begin
                                     if not NeedShowSeparator then
                                                              r.Right:=arect.Right-1;
                                     TextDetails:=drawrect(canvas,r,false,OnMouseProp,(ppd^.Attr and FA_READONLY)<>0);
-                                    r.Left:={r.Left+3}arect.Left+5+subtab*sub;
+                                    //r.Left:={r.Left+3}arect.Left+5+subtab*sub;
+                                    r.Left:=arect.Left+{2+}(subtab+GetSizeTreeIcon(not ppd^.Collapsed^,false).cx)*sub;
                                     r.Top:=r.Top+3;
                                     if (ppd^.Attr and FA_READONLY)<>0 then
                                                                           begin

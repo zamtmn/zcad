@@ -3040,7 +3040,7 @@ begin
                                                   end;
 
 
-                                                 riser2:=net.riserarray.iterate(ir_riser2);
+                                                 riser2:=net2.riserarray.iterate(ir_riser2);
                                             until riser2=nil;
 
 
